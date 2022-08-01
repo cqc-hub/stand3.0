@@ -3,11 +3,11 @@
 	"version": "0.0.0",
 	"scripts": {
 		"dev:h5": "uni",
-		"build:h5": "uni build",
-		"dev:mp-alipay": "uni -p mp-alipay",
-		"build:mp-alipay": "uni build -p mp-alipay",
 		"dev:mp-weixin": "uni -p mp-weixin",
+		"dev:mp-alipay": "uni -p mp-alipay",
+		"build:h5": "uni build",
 		"build:mp-weixin": "uni build -p mp-weixin",
+		"build:mp-alipay": "uni build -p mp-alipay",
 		"dev:app": "uni -p app",
 		"dev:custom": "uni -p",
 		"dev:h5:ssr": "uni --ssr",
@@ -45,6 +45,7 @@
 		"@dcloudio/uni-mp-weixin": "3.0.0-alpha-3040820220424001",
 		"@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3040820220424001",
 		"crypto-js": "^4.1.1",
+		"pinia": "^2.0.17",
 		"vue": "^3.2.37",
 		"vuex": "^4.0.2"
 	},
