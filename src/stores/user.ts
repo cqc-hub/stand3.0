@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export default defineStore('user', {
+const userStore = defineStore('user', {
 	persist: {
 		key: 'user',
 		paths: ['age', 'name']
@@ -32,3 +32,7 @@ export default defineStore('user', {
 		}
 	}
 })
+
+export const useUserStore = function () {
+	return userStore()
+}

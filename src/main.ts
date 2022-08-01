@@ -1,6 +1,6 @@
 import { createSSRApp } from 'vue'
-import App from './App.vue'
 import { painaInstall } from '@/stores/plugins'
+import App from './App.vue'
 
 export function createApp() {
 	const app = createSSRApp(App)
