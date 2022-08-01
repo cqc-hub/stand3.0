@@ -2,22 +2,19 @@
   <view class="">
     {{ userState.name }}
     {{ userState.age }}
+    {{ userState.double }}
   </view>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
 import useUserStore from '@/stores/user';
 
 
 const userState = useUserStore();
-console.log({
-  userState
-});
 
 setInterval(() => {
   userState.updateAge(++userState.age)
-}, 1000)
+}, 5000)
 
 
 </script>

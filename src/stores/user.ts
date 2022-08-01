@@ -2,9 +2,9 @@ import { defineStore } from 'pinia'
 
 export default defineStore('user', {
 	persist: {
-		enabled: true,
+		key: 'user',
+		paths: ['age', 'name']
 	},
-
 	state: () => {
 		return {
 			name: '张三',
@@ -18,6 +18,10 @@ export default defineStore('user', {
 		},
 
 		updateAge(age: number) {
+			console.log({
+				age
+			})
+
 			this.age = age
 		}
 	},
