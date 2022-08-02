@@ -1,5 +1,5 @@
 import { pinia } from './plugins'
-export * from './user'
-export * from './globalMessage'
+export * from './modules/user'
+export * from './modules/globalMessage'
 
 export default pinia

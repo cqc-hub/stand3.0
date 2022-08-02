@@ -5,8 +5,8 @@ const messageStore = defineStore('message', {
 	state() {
 		return {
 			isShow: false,
-			msg: 'dklajhsfklh短发话费四叔贷款累计话费了可视电话减肥了噶三闾大夫共同i他人风口浪尖和大嫂李开复黄金时代了咖啡馆,ghfkljhdsludlsk;ahj;djshah',
-			duration: 2000
+			msg: '',
+			duration: 0
 		}
 	},
 

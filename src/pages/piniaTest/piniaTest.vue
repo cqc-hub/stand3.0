@@ -16,6 +16,11 @@
 import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app'
 
+const props = defineProps({
+  name: String,
+  p: String,
+});
+
 
 const userState = useUserStore();
 const messageStore = useMessageStore();
@@ -23,13 +28,19 @@ const messageStore = useMessageStore();
 const ageIncre = () => {
   userState.updateAge(++userState.age)
   const d = new Date().getTime() + ''
-  messageStore.showMessage(d, 2000 )
+  messageStore.showMessage(d, 2000)
 }
+console.log({
+  props,
+  name: props.name
+});
+
 
 onLoad(opt => {
   console.log({
     opt
   });
+
   messageStore.showMessage('dskad的苦瓜撒接口都会感慨')
 
   setTimeout(() => {

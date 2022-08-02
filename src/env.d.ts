@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 import { ComponentCustomProperties } from 'vue'
-import { ButtonHTMLAttributes } from 'vue'
 import global from './config/global'
 
 declare module '*.vue' {
@@ -13,9 +12,6 @@ declare module '*.vue' {
 }
 declare module '@vue/runtime-core' {
 	interface ComponentCustomProperties {
-		/**
-		 * @arg1 do some thing
-		 */
 		$global: typeof global
 	}
 }
