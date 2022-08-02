@@ -2,9 +2,10 @@ import { defineStore } from 'pinia'
 
 const userStore = defineStore('user', {
 	persist: {
-		key: 'user',
-		paths: ['age', 'name']
+		key: '_user',
+		paths: ['age']
 	},
+
 	state: () => {
 		return {
 			name: '张三',
@@ -18,10 +19,6 @@ const userStore = defineStore('user', {
 		},
 
 		updateAge(age: number) {
-			console.log({
-				age
-			})
-
 			this.age = age
 		}
 	},

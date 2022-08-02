@@ -4,26 +4,37 @@
     {{ userState.age }}
     {{ userState.double }}
 
-    <button @click="ageIncre">age increment</button>
+    {{ $global.SYS_CODE }}
+
+    <button _type="primary" @click="ageIncre">age increment</button>
+
+    <g-message />
   </view>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores';
+import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app'
 
 
 const userState = useUserStore();
+const messageStore = useMessageStore();
 
 const ageIncre = () => {
   userState.updateAge(++userState.age)
+  const d = new Date().getTime() + ''
+  messageStore.showMessage(d, 2000 )
 }
 
 onLoad(opt => {
   console.log({
     opt
   });
+  messageStore.showMessage('dskad的苦瓜撒接口都会感慨')
 
+  setTimeout(() => {
+    messageStore.showMessage('都会感慨', 3000)
+  }, 2000)
 })
 
 

@@ -46,6 +46,7 @@
 		"@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3040820220424001",
 		"@nuxt/devalue": "^2.0.0",
 		"crypto-js": "^4.1.1",
+		"node-sass": "^7.0.1",
 		"pinia": "^2.0.17",
 		"pinia-plugin-persistedstate": "^2.0.1",
 		"vue": "^3.2.37",
@@ -57,12 +58,14 @@
 		"@dcloudio/uni-cli-shared": "3.0.0-alpha-3040820220424001",
 		"@dcloudio/vite-plugin-uni": "3.0.0-alpha-3040820220424001",
 		"@types/crypto-js": "^4.1.1",
+		"@types/node": "^18.6.3",
 		"@typescript-eslint/eslint-plugin": "^5.31.0",
 		"@typescript-eslint/parser": "^5.31.0",
 		"eslint": "^8.20.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"eslint-plugin-vue": "^9.3.0",
+		"sass": "^1.54.0",
 		"typescript": "^4.7.4",
 		"vite": "^2.9.14"
 	}
