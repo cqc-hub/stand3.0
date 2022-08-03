@@ -1,3 +1,19 @@
+/**
+ * 加载动画
+ * @param tips 提示语句
+ * @returns 关闭loading
+ */
+export const showLoading = (tips: string = '加载中...') => {
+  uni.showLoading({
+    title: tips,
+    mask: true,
+  })
+  uni.showNavigationBarLoading()
+}
+export const hideLoading = () => {
+  uni.hideLoading()
+  uni.hideNavigationBarLoading()
+}
 export function cloneUtil(target) {
   // [object Array]  [object Object]  [object Function]
   const type = Object.prototype.toString.call(target);

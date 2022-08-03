@@ -1,6 +1,6 @@
 import service from './index'
 import { getSysCode, getToken, getHosId } from '@/utils/useToken';
-
+import { IResponseWrapper } from './type'
 
 //请求的额外配置
 const options = {
@@ -31,7 +31,7 @@ let parm = (data: any) => {
 const baseApi = {
   // 系统长信息协议详情
   getSysAppMore: (data) =>
-    service.post('/phs-base/sysCode/getSysAppMore', parm(data), { showLoading: false })
+    service.post('/phs-base/sysCode/getSysAppMore', parm(data), { showLoading: true, noShowMessage: true })
 }
 
 

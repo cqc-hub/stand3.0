@@ -2,7 +2,7 @@ const config = Symbol('config')
 const isCompleteURL = Symbol('isCompleteURL')
 const requestBefore = Symbol('requestBefore')
 const requestAfter = Symbol('requestAfter')
-
+const requestErr = Symbol('requestErr')
 interface Fn<T = any, R = T> {
   (...arg: T[]): R
 }
@@ -31,12 +31,19 @@ class requestClass {
         requestClass[requestBefore] = (request) => request
       }
     },
-    response: (func: Fn) => {
+    response: (func: Fn, errFun: (err: any) => any) => {
       if (func) {
         requestClass[requestAfter] = func
       } else {
         requestClass[requestAfter] = (response) => response
       }
+
+      if (errFun) {
+        requestClass[requestErr] = errFun
+      } else {
+        requestClass[requestErr] = () => { }
+      }
+
     },
   }
 
@@ -65,10 +72,19 @@ class requestClass {
 
     return new Promise((resolve, reject) => {
       options.success = function (res) {
-        resolve(requestClass[requestAfter](res))
+        console.log(3333, res);
+        if (res.statusCode === 200) {
+          resolve(requestClass[requestAfter]({ res, options }))
+        } else {
+          reject(requestClass[requestErr](res))
+        }
       }
       options.fail = function (err) {
-        reject(requestClass[requestAfter](err))
+        uni.showToast({
+          title: '系统压力有点大~',
+          icon: 'none',
+          duration: 1500
+        })
       }
       uni.request(options)
     })
