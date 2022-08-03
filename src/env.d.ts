@@ -21,3 +21,5 @@ declare module '@vue/runtime-dom' {
 		_type?: 'primary'
 	}
 }
+
+

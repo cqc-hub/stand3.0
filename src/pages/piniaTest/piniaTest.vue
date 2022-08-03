@@ -7,6 +7,7 @@
     {{ $global.SYS_CODE }}
 
     <button _type="primary" @click="ageIncre">age increment</button>
+    <button _type="primary" @click="goTest">router jump</button>
 
     <g-message />
   </view>
@@ -30,17 +31,19 @@ const ageIncre = () => {
   const d = new Date().getTime() + ''
   messageStore.showMessage(d, 2000)
 }
-console.log({
-  props,
-  name: props.name
-});
+// console.log({
+//   props,
+//   name: props.name
+// });
+
+const goTest = function() {
+  uni
+  console.log(uni);
+
+}
 
 
 onLoad(opt => {
-  console.log({
-    opt
-  });
-
   messageStore.showMessage('dskad的苦瓜撒接口都会感慨')
 
   setTimeout(() => {
