@@ -1,6 +1,6 @@
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
 
-const defaultKey = 'qWeRt4u7'
+const defaultKey = 'qWeRt4u7';
 
 // AES 加密
 // export const encryptedAes = (val: string, key1 = defaultKey) => {
@@ -11,8 +11,6 @@ const defaultKey = 'qWeRt4u7'
 //   }).toString()
 //   return encryptedStr
 // }
-
-
 
 // // aes 解密
 // export function decrypt(val: string, key = defaultKey) {
@@ -28,10 +26,10 @@ const defaultKey = 'qWeRt4u7'
 
 // DES 加密
 export const encryptDes = (message: string, key = defaultKey) => {
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7,
-  });
-  return encrypted.toString();
+	const keyHex = CryptoJS.enc.Utf8.parse(key);
+	const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+		mode: CryptoJS.mode.ECB,
+		padding: CryptoJS.pad.Pkcs7
+	});
+	return encrypted.toString();
 };

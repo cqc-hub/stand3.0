@@ -16,7 +16,19 @@ export function setupRouter(app) {
 	bindInterceptLogin()
 
 	beforeEach(async (to, from, next) => {
-		console.log('233');
+		console.log({to, from, next});
+		if (to.url === 'pages/index/index') {
+			afterNotNext(() => {
+				uni.navigateTo({
+					url: '/pages/routerTest/routerTest',
+					passedParams: {
+						info: '因为page2不存在，拦截跳转到此'
+					}
+				})
+			})
+			return
+		}
+
 
 		// 逻辑代码
 		if (to.url === 'pages/index/page2') {
@@ -36,6 +48,11 @@ export function setupRouter(app) {
 
 	afterEach((to, from) => {
 		// 逻辑代码
+		console.log('after', {
+			to,
+
+			from
+			});
 	})
 
 	// 除了在beforeEach钩子里没有使用next导致的无法跳转的情况外，其他情况导致的跳转失败都会触发onError

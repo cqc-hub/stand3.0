@@ -3,6 +3,8 @@ let intercept
 export function bindInterceptLogin() {
 	destroyInterceptLogin()
 	intercept = beforeEach(async (to, from, next) => {
+		console.log(to, 'to');
+
 		if (to.url === 'pages/login') {
 			if (uni.getStorageSync('isLogin')) {
 				afterNotNext(() => {

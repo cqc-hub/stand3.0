@@ -1,8 +1,6 @@
 import { beforeEach, afterNotNext } from '@/js_sdk/crazy-router'
 let intercept
 export function bindInterceptEveryone() {
-  console.log(2333);
-
 	destroyInterceptEveryone()
 	intercept = beforeEach(async (to, from, next) => {
 		if (to.url === 'pages/login') {
