@@ -1,9 +1,9 @@
 import { App } from 'vue'
-import { createPinia } from 'pinia'
-import { createPersistedState } from 'pinia-plugin-persistedstate'
-import devalue from '@nuxt/devalue'
+// import { createPinia } from 'pinia'
+// import { createPersistedState } from 'pinia-plugin-persistedstate'
+// import devalue from '@nuxt/devalue'
 
-import { setLocalStorage, getLocalStorage } from '@/utils'
+// import { setLocalStorage, getLocalStorage } from '@/utils'
 
 // export const pinia = createPinia()
 
