@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-// import { useUserStore, useMessageStore } from '@/stores';
+import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 
 const props = defineProps({
@@ -22,13 +22,13 @@ const props = defineProps({
   p: String
 });
 
-// const userState = useUserStore();
-// const messageStore = useMessageStore();
+const userState = useUserStore();
+const messageStore = useMessageStore();
 
 const ageIncre = () => {
-  // userState.updateAge(++userState.age);
-  // const d = new Date().getTime() + '';
-  // messageStore.showMessage(d, 2000);
+  userState.updateAge(++userState.age);
+  const d = new Date().getTime() + '';
+  messageStore.showMessage(d, 2000);
 };
 // console.log({
 //   props,
@@ -42,10 +42,10 @@ const goTest = function () {
 };
 
 onLoad((opt) => {
-  // messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
+  messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
 
   setTimeout(() => {
-    // messageStore.showMessage('都会感慨', 2000);
+    messageStore.showMessage('都会感慨', 2000);
   }, 2000);
 });
 </script>
