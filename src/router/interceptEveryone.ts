@@ -1,4 +1,4 @@
-import { beforeEach, afterNotNext } from 'js_sdk/crazy-router';
+import { beforeEach, afterNotNext } from '@/js_sdk/crazy-router';
 let intercept
 export function bindInterceptEveryone() {
 	destroyInterceptEveryone()
