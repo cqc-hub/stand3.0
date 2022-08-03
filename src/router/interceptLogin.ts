@@ -1,10 +1,8 @@
-import { beforeEach, afterNotNext } from 'uni-crazy-router'
-let intercept
+import { beforeEach, afterNotNext } from 'uni-crazy-router';
+let intercept;
 export function bindInterceptLogin() {
-	destroyInterceptLogin()
+	destroyInterceptLogin();
 	intercept = beforeEach(async (to, from, next) => {
-		console.log(to, 'to');
-
 		if (to.url === 'pages/login') {
 			if (uni.getStorageSync('isLogin')) {
 				afterNotNext(() => {
@@ -14,22 +12,22 @@ export function bindInterceptLogin() {
 						passedParams: {
 							info: '已登录'
 						}
-					})
-				})
+					});
+				});
 			} else {
 				uni.showToast({
 					title: '没有登录，不能访问！',
 					icon: 'none'
-				})
+				});
 			}
-			return // 拦截路由，不执行next
+			return; // 拦截路由，不执行next
 		}
-		next()
-	})
+		next();
+	});
 }
 export function destroyInterceptLogin() {
 	if (intercept) {
-		intercept() // 销毁拦截
-		intercept = null
+		intercept(); // 销毁拦截
+		intercept = null;
 	}
 }
