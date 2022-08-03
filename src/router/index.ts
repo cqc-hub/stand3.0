@@ -3,7 +3,7 @@ import uniCrazyRouter, {
 	afterEach,
 	onError,
 	afterNotNext
-} from '@/js_sdk/crazy-router'
+} from 'uni-crazy-router'
 
 import { bindInterceptLogin, destroyInterceptLogin } from './interceptLogin'
 
