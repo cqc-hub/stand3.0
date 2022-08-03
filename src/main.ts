@@ -8,7 +8,7 @@ import global from './config/global'
 export function createApp() {
   const app = createSSRApp(App).use(painaInstall)
 
-  // setupRouter(app)
+  setupRouter(app)
 
   app.config.globalProperties.$global = global
 

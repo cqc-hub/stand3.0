@@ -2,7 +2,7 @@
 	[key: string]: any
 }
 
-// declare module 'uni-crazy-router'
+declare module 'js_sdk/crazy-router'
 
  declare namespace UniNamespace {
 	interface NavigateToOptions {
