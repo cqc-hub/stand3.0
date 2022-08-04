@@ -4,7 +4,7 @@
 	},
 	"pages": [
 		{
-			"path": "pages/home/LoginCenter",
+			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}

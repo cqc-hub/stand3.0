@@ -34,7 +34,6 @@ const ageIncre = () => {
 //   props,
 //   name: props.name
 // });
-
 const goTest = function () {
   uni.navigateTo({
     'url': '/pages/index/index'

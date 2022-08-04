@@ -11,7 +11,7 @@ const userStore = defineStore('user', {
 			name: '张三',
 			age: 20,
 			sex: '',
-			avatar: ''
+			patientId: '46375274563284564637527456328456'
 		};
 	},
 
@@ -31,7 +31,7 @@ const userStore = defineStore('user', {
 		},
 
 		getAvatar(): string {
-			return '';
+			return 'https://phsdevoss.eheren.com/pcloud/image/img_boy_110px@3x.png';
 		}
 	}
 });
