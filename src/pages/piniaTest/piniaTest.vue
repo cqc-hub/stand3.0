@@ -1,8 +1,8 @@
 <template>
   <view class="">
-    <!-- {{ userState.name }}
+    {{ userState.name }}
     {{ userState.age }}
-    {{ userState.double }} -->
+    {{ userState.double }}
 
     {{ $global.SYS_CODE }}
 
