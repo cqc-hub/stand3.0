@@ -1,7 +1,16 @@
 <template>
 	<view class="login-center">
 		<view class="top-bg" />
+
 		<personRecord />
+
+		<uni-group mode="card">
+			<view>分组内容</view>
+			<view>分组内容</view>
+			<view>分组内容</view>
+			<view>分组内容</view>
+		</uni-group>
+
 		<!-- <text class="re icon-font img_announcement"></text> -->
 	</view>
 </template>

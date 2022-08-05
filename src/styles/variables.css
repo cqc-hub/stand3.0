@@ -2,12 +2,16 @@
   /* 颜色 */
   --h-color-dark: #111111;
   --h-color-grey: #666666;
+  --h-color-white: #FFFFFF;
+
+  --h-color-light-blue: #CCDDFF;
 
 
   /* 字体粗细 */
   --h-weight-1: 500;
 
   /* 字体大小 */
-  --h-size-1: 48upx;
-  --h-size-2: 28upx;
+  --h-size-48: 48upx;
+  --h-size-28: 28upx;
+  --h-size-32: 32upx;
 }
