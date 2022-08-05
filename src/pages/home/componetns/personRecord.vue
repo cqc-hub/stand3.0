@@ -53,7 +53,6 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
-import { IRoute } from '../homeTypes';
 import global from '@/config/global';
 
 const userSore = useUserStore();

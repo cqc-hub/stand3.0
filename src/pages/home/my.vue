@@ -6,10 +6,11 @@
 		<personRecord />
 
 		<uni-group mode="card">
-			<view @click="msg">分组内容</view>
-			<view>分组内容</view>
-			<view>分组内容</view>
-			<view>分组内容</view>
+			<g-grid />
+		</uni-group>
+
+		<uni-group mode="card">
+			<g-grid />
 		</uni-group>
 
 		<!-- <text class="re icon-font img_announcement"></text> -->
@@ -27,13 +28,6 @@ const messageStore = useMessageStore();
 const msg = () => {
 	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
 };
-
-onLoad((opt) => {
-	messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
-	setTimeout(() => {
-		messageStore.showMessage('都会感慨', 2000);
-	}, 2000);
-});
 </script>
 
 <style lang="scss" scoped>

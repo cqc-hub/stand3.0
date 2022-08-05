@@ -34,8 +34,6 @@ const messageStore = defineStore('message', {
 				clearTimeout(timer);
 			}
 			this.isShow = false;
-			console.log('close');
-
 			uni.$emit('closeMessage');
 		}
 	}
