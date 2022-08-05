@@ -27,6 +27,36 @@ const props = withDefaults(defineProps<IGridProps>(), {
 			label: '医院介绍',
 			url: '/xxx',
 			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
+		},
+		{
+			label: '医院介绍',
+			url: '/xxx',
+			icon: 'ico_sy_paper5'
 		}
 	]
 });
@@ -49,11 +79,10 @@ const props = withDefaults(defineProps<IGridProps>(), {
 	justify-content: center;
 	padding: 15px 0;
 
-
-  .grid-label {
-    margin-top: 12upx;
-    font-size: var(--h-size-26);
-  }
+	.grid-label {
+		margin-top: 12upx;
+		font-size: var(--h-size-26);
+	}
 }
 
 .grid-dot {
