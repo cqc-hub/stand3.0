@@ -42,9 +42,9 @@ const goTest = function () {
 
 onLoad((opt) => {
   messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
-
   setTimeout(() => {
     messageStore.showMessage('都会感慨', 2000);
+	
   }, 2000);
 });
 </script>

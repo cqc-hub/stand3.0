@@ -1,5 +1,6 @@
 <template>
 	<view>
+		23435343645e645
 		<uni-popup @maskClick="maskClick" ref="popup">
 			<view
 				:style="containerStyle"
@@ -44,6 +45,7 @@ export default defineComponent({
 		watch(
 			() => messageStore.isShow,
 			() => {
+				console.log('watch')
 				usePopup(messageStore.isShow);
 			},
 			{
