@@ -42,16 +42,23 @@ export default defineComponent({
 			});
 		};
 
-		watch(
-			() => messageStore.isShow,
-			() => {
-				console.log('watch')
-				usePopup(messageStore.isShow);
-			},
-			{
-				immediate: true
-			}
-		);
+		// watch(
+		// 	() => messageStore.isShow,
+		// 	() => {
+		// 		console.log('watch');
+		// 		usePopup(messageStore.isShow);
+		// 	},
+		// 	{
+		// 		immediate: true
+		// 	}
+		// );
+
+		uni.$on('showMessage', function () {
+			usePopup(messageStore.isShow);
+		});
+		uni.$on('closeMessage', function () {
+			usePopup(messageStore.isShow);
+		});
 
 		const maskClick = function () {
 			messageStore.closeMessage();
@@ -82,4 +89,3 @@ export default defineComponent({
 	}
 });
 </script>
-

@@ -1,41 +1,46 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-let timer: null | number = null
+let timer: null | number = null;
 const messageStore = defineStore('message', {
 	state() {
 		return {
 			isShow: false,
 			msg: '',
 			duration: 0
-		}
+		};
 	},
 
 	actions: {
 		showMessage(message: string, duration = 0) {
-			this.isShow = true
-			this.duration = duration
-			this.msg = message
+			this.isShow = true;
+			this.duration = duration;
+			this.msg = message;
+
+			uni.$emit('showMessage');
 
 			if (timer) {
-				clearTimeout(timer)
+				clearTimeout(timer);
 			}
 
 			if (duration) {
 				timer = setTimeout(() => {
-					this.closeMessage()
-				}, duration)
+					this.closeMessage();
+				}, duration);
 			}
 		},
 
 		closeMessage() {
 			if (timer) {
-				clearTimeout(timer)
+				clearTimeout(timer);
 			}
-			this.isShow = false
+			this.isShow = false;
+			console.log('close');
+
+			uni.$emit('closeMessage');
 		}
 	}
-})
+});
 
 export const useMessageStore = function () {
-	return messageStore()
-}
+	return messageStore();
+};
