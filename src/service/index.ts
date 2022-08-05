@@ -8,21 +8,19 @@ const Request = new requestClass()
 Request.interceptors.request((request: IRequest) => {
   //loading 默认有
 
-  if (!request.noShowLoading)
+  if (!request.hideLoading)
     showLoading()
-  if (request.method === 'GET') {
-    request.data = JSON.stringify(request.data)
-    request.url = request.url + '?' + request.data
-  }
+  // if (request.method === 'GET') {
+  //   request.data = JSON.stringify(request.data)
+  //   request.url = request.url + '?' + request.data
+  // }
   return request
 })
 
 // 响应拦截器
 Request.interceptors.response((response: IResponseWrapper) => {
-
   const responseData = response.res.data;
   const responseOptions = response.options;
-  console.log(333, response);
   //判断返回状态 执行相应操作
   hideLoading()
   // 请根据后端规定的状态码判定
@@ -32,15 +30,23 @@ Request.interceptors.response((response: IResponseWrapper) => {
     console.log(response);
     //判断是否成功响应 code:200 成功 401:token失效 4001 需要重新登录
     console.log(3333, responseOptions);
-
     if (responseData.code !== 200 && responseData.message) {
-      if (!responseOptions.noShowMessage) {
+      if (responseOptions && !responseOptions.hideMessage) {
         uni.showToast({
           title: responseData.message,
           icon: 'none',
           duration: 1500
         })
       }
+      //判断token
+      if ([4001].includes(responseData.code)) {
+        setTimeout(() => {
+          uni.redirectTo({
+            url: '/pages/home/my'
+          })
+        }, 1800)
+      }
+
     }
     // else if (res.code != '0') {
     // uni.showToast({
@@ -48,14 +54,6 @@ Request.interceptors.response((response: IResponseWrapper) => {
     //   icon: 'none',
     //   duration: 1500
     // })
-    //判断token
-    // if (['4001'].includes(res.code)) {
-    //   setTimeout(() => {
-    //     uni.redirectTo({
-    //     	url: '/pages/home/my'
-    //     })
-    //   }, 1800)
-    // }
 
     // return Promise.reject({
     //   success: false,
