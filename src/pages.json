@@ -3,10 +3,17 @@
 		"^g-(.*)": "components/g-$1/g-$1.vue"
 	},
 	"pages": [
+		//新增extend扩展属性，选填：
+		//-- login：该页面是否要登录，默认false；
+		//-- patient：该页面是否要就诊人，默认false；
 		{
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
+			},
+			"extend": {
+				"login": true,
+				"patient": true
 			}
 		},
 		{

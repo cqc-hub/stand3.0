@@ -1,53 +1,55 @@
 <template>
-  <view class="">
-    {{ userState.name }}
-    {{ userState.age }}
-    {{ userState.double }}
+	<view class="">
+		{{ userState.name }}
+		{{ userState.age }}
+		{{ userState.double }}
 
-    {{ $global.SYS_CODE }}
+		{{ $global.SYS_CODE }}
 
-    <button _type="primary" @click="ageIncre">age increment</button>
-    <button _type="primary" @click="goTest">router jump</button>
+		<button _type="primary" @click="ageIncre">age increment</button>
+		<button _type="primary" @click="goTest">router jump</button>
 
-    <g-message />
-  </view>
+		<g-message />
+	</view>
 </template>
 
 <script setup lang="ts">
-import { useUserStore, useMessageStore } from '@/stores';
+import { useUserStore, useMessageStore, useGlobalStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 
 const props = defineProps({
-  name: String,
-  p: String
+	name: String,
+	p: String
 });
 
 const userState = useUserStore();
 const messageStore = useMessageStore();
+const globalStore = useGlobalStore();
 
 const ageIncre = () => {
-  userState.updateAge(++userState.age);
-  const d = new Date().getTime() + '';
-  messageStore.showMessage(d, 2000);
+	userState.updateAge(++userState.age);
+	const d = new Date().getTime() + '';
+	messageStore.showMessage(d, 2000);
+	globalStore.updateToken({
+		accessToken: '111111'
+	});
 };
 // console.log({
 //   props,
 //   name: props.name
 // });
 const goTest = function () {
-  uni.navigateTo({
-    'url': '/pages/index/index'
-  })
+	uni.navigateTo({
+		url: '/pages/index/index'
+	});
 };
 
 onLoad((opt) => {
-  messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
-  setTimeout(() => {
-    messageStore.showMessage('都会感慨', 2000);
-	
-  }, 2000);
+	messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
+	setTimeout(() => {
+		messageStore.showMessage('都会感慨', 2000);
+	}, 2000);
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

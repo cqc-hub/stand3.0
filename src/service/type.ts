@@ -10,7 +10,7 @@ interface IdDtaType {
   timeTaken: number;
 }
 
-interface IResponse extends UniApp.ResponseOptions {
+interface IResponse extends UniApp.RequestSuccessCallbackResult {
   data: IdDtaType;
 }
 export interface IResponseWrapper<T = any> {

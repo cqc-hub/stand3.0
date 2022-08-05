@@ -72,7 +72,6 @@ class requestClass {
 
     return new Promise((resolve, reject) => {
       options.success = function (res) {
-        console.log(3333, res);
         if (res.statusCode === 200) {
           resolve(requestClass[requestAfter]({ res, options }))
         } else {

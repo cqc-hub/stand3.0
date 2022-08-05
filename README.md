@@ -68,3 +68,9 @@ cmd: iconfont-tools
 @import url('~@/static/iconfont-demo-icon.css');
 
 然后就可以在页面通过`<text class="xxx1 xxxx"></text>`引入啦
+
+## 开发规范
+
+网络请求图片大小控制在 100k 以内 建议 svg 或 webP 格式
+尽量减少用同步的方式缓存
+减少重复的 JSAPI 调用

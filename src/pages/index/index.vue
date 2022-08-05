@@ -10,13 +10,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import api from '@/service/api';
+
 const title = ref('Hello');
+
 const dataLoad = () => {
 	api.getSysAppMore({
 		typeFlag: 1
-	}).then((data) => {
-		console.log(31312, data);
-	});
+	}).then((data) => {});
 };
 dataLoad();
 </script>

@@ -1,5 +1,5 @@
 import service from './index'
-import { getSysCode, getToken, getHosId } from '@/utils/useToken';
+import { getToken, getSysCode } from '@/common/useToken';
 import { IResponseWrapper } from './type'
 
 //请求的额外配置

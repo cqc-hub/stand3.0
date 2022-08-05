@@ -1,3 +1,4 @@
+//公用方法
 /**
  * 加载动画
  * @param tips 提示语句
@@ -14,6 +15,7 @@ export const hideLoading = () => {
   uni.hideLoading()
   uni.hideNavigationBarLoading()
 }
+
 export function cloneUtil(target) {
   // [object Array]  [object Object]  [object Function]
   const type = Object.prototype.toString.call(target);

@@ -1,6 +1,6 @@
 import requestClass from './request'
 import env from '@/config/env'
-import { encryptDes, getSysCode, getToken, showLoading, hideLoading } from '@/utils'
+import { encryptDes, getSysCode, getToken, showLoading, hideLoading } from '@/common'
 import { IRequest, IResponseWrapper } from './type'
 
 const Request = new requestClass()
@@ -14,6 +14,7 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
+  console.log('接口入参', request);
   return request
 })
 
@@ -29,7 +30,7 @@ Request.interceptors.response((response: IResponseWrapper) => {
   } else {
     console.log(response);
     //判断是否成功响应 code:200 成功 401:token失效 4001 需要重新登录
-    console.log(3333, responseOptions);
+    console.log('接口出参', responseOptions);
     if (responseData.code !== 200 && responseData.message) {
       if (responseOptions && !responseOptions.hideMessage) {
         uni.showToast({
@@ -62,7 +63,6 @@ Request.interceptors.response((response: IResponseWrapper) => {
     // }
   }
 
-  console.log(222, response)
   return responseData;
 }, (err) => {
   uni.showToast({
