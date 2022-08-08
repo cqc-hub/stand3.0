@@ -65,7 +65,7 @@ const recordList = ref<IRoute[]>([
 		label: '就诊卡二维码',
 		url: '/xxx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-jzk.png',
+		icon: global.BASE_IMG + 'v3-my-jzk.png'
 	},
 
 	{
@@ -73,7 +73,7 @@ const recordList = ref<IRoute[]>([
 		label: '医保电子凭证',
 		url: 'https://xx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-pz.png',
+		icon: global.BASE_IMG + 'v3-my-pz.png'
 	}
 ]);
 
