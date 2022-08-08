@@ -8,16 +8,19 @@
 			/>
 
 			<view class="info">
-				<text class="user-name">
-					{{ userSore.name }}
-				</text>
+				<block v-if="isLogin">
+					<text class="user-name">
+						{{ userSore.name }}
+					</text>
 
-				<text class="user-id text-ellipsis">
-					就诊卡号：{{ userSore.patientId }}
-				</text>
+					<text class="user-id text-ellipsis">
+						就诊卡号：{{ userSore.patientId }}
+					</text>
+				</block>
+				<text v-else class="user-name">请登录</text>
 			</view>
 
-			<view class="user-out">
+			<view v-if="isLogin" class="user-out">
 				<view class="out-btn">退出登陆</view>
 			</view>
 		</view>
@@ -62,18 +65,21 @@ const recordList = ref<IRoute[]>([
 		label: '就诊卡二维码',
 		url: '/xxx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-jzk.png'
+		icon: global.BASE_IMG + 'v3-my-jzk.png',
 	},
 
 	{
+		isNet: true,
 		label: '医保电子凭证',
-		httpUrl: 'https://xx',
+		url: 'https://xx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-pz.png'
+		icon: global.BASE_IMG + 'v3-my-pz.png',
 	}
 ]);
 
 const recordColors = ['#296FFF', '#00b39e'];
+
+const isLogin = false;
 </script>
 
 <style lang="scss" scoped>
@@ -151,7 +157,7 @@ const recordColors = ['#296FFF', '#00b39e'];
 			.icon-size {
 				margin-left: 20upx;
 				font-size: var(--h-size-32);
-				opacity: .6;
+				opacity: 0.6;
 			}
 		}
 	}

@@ -1,5 +1,8 @@
 <template>
 	<view class="">
+		<view class="search-input">
+			<g-input />
+		</view>
 		{{ userState.name }}
 		{{ userState.age }}
 		{{ userState.double }}
@@ -43,13 +46,29 @@ const goTest = function () {
 		url: '/pages/index/index'
 	});
 };
-
-onLoad((opt) => {
-	messageStore.showMessage('dskad的苦瓜撒接口都会感慨');
-	setTimeout(() => {
-		messageStore.showMessage('都会感慨', 2000);
-	}, 2000);
-});
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.search-input {
+	// padding: 0 40upx !important;
+	margin: 40upx;
+	// width: 80% !important;
+}
+
+
+input,
+textarea {
+    font-size: 24px;
+    padding: 10px;
+
+    color: red;
+    text-shadow: 0px 0px 0px #000;
+    -webkit-text-fill-color: transparent;
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder{
+    // color:
+    text-shadow: none;
+    -webkit-text-fill-color: initial;
+}
+</style>

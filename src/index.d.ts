@@ -4,14 +4,32 @@ interface BaseObject {
 	[key: string]: any;
 }
 
-interface IRoute {
-	url?: `/${string}`;
+interface IRouteBase {
 	label: string;
 	icon?: string;
 	query?: BaseObject;
 	description?: string;
-	httpUrl?: `http${string}`;
 }
+
+interface IRouterLocal extends IRouteBase {
+	isNet?: false,
+	url: `/${string}`;
+}
+
+interface IRouterNet extends IRouteBase {
+	isNet: true,
+	url: `http${string}`;
+}
+
+type IRoute = IRouterNet | IRouterLocal
+// interface IRoute {
+// 	url?: `/${string}`;
+// 	label: string;
+// 	icon?: string;
+// 	query?: BaseObject;
+// 	description?: string;
+// 	httpUrl?: `http${string}`;
+// }
 
 // declare module 'js_sdk/crazy-router'
 

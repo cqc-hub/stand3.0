@@ -7,6 +7,12 @@
 		//-- login：该页面是否要登录，默认false；
 		//-- patient：该页面是否要就诊人，默认false；
 		{
+			"path": "pages/piniaTest/piniaTest",
+			"style": {
+				"navigationBarTitleText": "uni-app "
+			}
+		},
+		{
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -16,12 +22,7 @@
 				"patient": true
 			}
 		},
-		{
-			"path": "pages/piniaTest/piniaTest",
-			"style": {
-				"navigationBarTitleText": "uni-app "
-			}
-		},
+
 		{
 			"path": "pages/index/index",
 			"style": {
