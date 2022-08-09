@@ -9,9 +9,7 @@
 
 			<view class="info">
 				<block v-if="globalStore.isLogin">
-					<text
-						class="user-name animate__animated animate__fadeIn"
-					>
+					<text class="user-name animate__animated animate__fadeIn">
 						{{ userSore.name }}
 					</text>
 

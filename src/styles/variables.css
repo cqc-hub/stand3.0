@@ -54,6 +54,7 @@ page {
   --hr-font-size-xxxs: 24rpx;
 
   --h-size-40: 40rpx;
+  --h-size-18: 18rpx;
 
 
   /* 图标大小 */
@@ -69,7 +70,7 @@ page {
 
 
   --animate-duration: 800ms;
-  --animate-delay: 0.9s;
+  --animate-delay   : 0.9s;
 
 }
 
@@ -83,4 +84,9 @@ page {
 .flex-normal {
   display    : flex;
   align-items: center;
+}
+
+.flex-normal-between {
+  display        : flex;
+  justify-content: space-between;
 }
