@@ -8,7 +8,7 @@
 			/>
 
 			<view class="info">
-				<block v-if="isLogin">
+				<block v-if="globalStore.isLogin">
 					<text class="user-name">
 						{{ userSore.name }}
 					</text>
@@ -36,7 +36,7 @@
 				</block>
 			</view>
 
-			<view v-if="isLogin" class="user-out">
+			<view v-if="globalStore.isLogin" class="user-out">
 				<view class="out-btn">退出登陆</view>
 			</view>
 		</view>
@@ -71,12 +71,13 @@
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useUserStore, useMessageStore } from '@/stores';
+import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
 import { aliLogin, wxLogin } from '@/pages/home/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
+const globalStore = useGlobalStore();
 
 const recordList = ref<IRoute[]>([
 	{
@@ -96,8 +97,6 @@ const recordList = ref<IRoute[]>([
 ]);
 
 const recordColors = ['#296FFF', '#00b39e'];
-
-const isLogin = false;
 </script>
 
 <style lang="scss" scoped>
@@ -120,38 +119,14 @@ const isLogin = false;
 		display: flex;
 		flex-direction: column;
 		.user-name {
-			color: var(--h-color-dark);
+			color: var(--hr-neutral-color-10);
 			font-weight: var(--h-weight-1);
-			font-size: var(--h-size-48);
+			font-size: var(--hr-font-size-xxl);
 		}
 
 		.user-id {
-			color: var(--h-color-grey);
-			font-size: var(--h-size-28);
-		}
-
-		.login-btn {
-			border: none !important;
-			background-color: transparent;
-			box-shadow: none !important;
-			& button,
-			& uni-button:after,
-			& button:after {
-				border: none !important;
-				background-color: transparent;
-				box-shadow: none !important;
-			}
-		}
-
-		button {
-			margin-left: 0;
-			text-align: left;
-		}
-
-		button:after {
-			border: none !important;
-			background-color: transparent;
-			box-shadow: none !important;
+			color: var(--hr-neutral-color-8);
+			font-size: var(--hr-font-size-xs);
 		}
 	}
 
@@ -161,14 +136,14 @@ const isLogin = false;
 		justify-content: flex-end;
 
 		.out-btn {
-			background-color: var(--h-color-light-blue);
+			background-color: var(--hr-brand-color-2);
 			border-radius: 32upx 0px 0px 32upx;
 			text-align: center;
 			padding: 10upx;
 			// margin-right: 30upx;
 			white-space: nowrap;
-			color: var(--h-color-dark);
-			font-size: var(--h-size-28);
+			color: var(--hr-neutral-color-10);
+			font-size: var(--hr-font-size-xs);
 		}
 	}
 }
@@ -188,7 +163,7 @@ const isLogin = false;
 		background-size: 200upx;
 		background-repeat: no-repeat;
 		background-position: right 0 bottom 0;
-		font-size: var(--h-size-32);
+		font-size: var(--hr-font-size-base);
 
 		.record-label {
 			margin-top: 48upx;
@@ -198,7 +173,7 @@ const isLogin = false;
 
 			.icon-size {
 				margin-left: 20upx;
-				font-size: var(--h-size-32);
+				font-size: var(--hr-font-size-base);
 				opacity: 0.6;
 			}
 		}

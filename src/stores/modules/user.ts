@@ -3,14 +3,15 @@ import { defineStore } from 'pinia';
 const userStore = defineStore('user', {
 	persist: {
 		key: '_user',
-		paths: ['age']
+		paths: ['name', 'sex', 'idNo', 'cellPhoneNum', 'patientId']
 	},
 
 	state: () => {
 		return {
-			name: '张三',
-			age: 20,
+			name: '',
 			sex: '',
+			idNo: '',
+			cellPhoneNum: '',
 			patientId: '46375274563284564637527456328456'
 		};
 	},
@@ -20,14 +21,30 @@ const userStore = defineStore('user', {
 			this.name = name;
 		},
 
-		updateAge(age: number) {
-			this.age = age;
+		updateSex(sex: string) {
+			this.sex = sex;
+		},
+
+		updateIdNo(id: string) {
+			this.idNo = id;
+		},
+
+		updatePhone(phone: string) {
+			this.cellPhoneNum = phone;
+		},
+
+		clearStore() {
+			this.name = '';
+			this.sex = '';
+			this.idNo = '';
+			this.cellPhoneNum = '';
+			this.patientId = '';
 		}
 	},
 
 	getters: {
 		double(): number {
-			return this.age * 2;
+			return this.name.length * 2;
 		},
 
 		getAvatar(): string {

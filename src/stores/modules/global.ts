@@ -50,9 +50,23 @@ const globalStore = defineStore('global', {
 		},
 		getBrowser(): any {
 			return this.browser;
+		},
+
+		isLogin(): boolean {
+			if (this.token.accessToken) {
+				return true;
+			}
+			return false;
 		}
 	},
 	actions: {
+		clearStore() {
+			this.token = {
+				accessToken: '',
+				refreshToken: ''
+			};
+		},
+
 		getSysTermLabel(v: string): string {
 			const item = this.sysTerms.find((o) => o.value === v);
 			if (item) {

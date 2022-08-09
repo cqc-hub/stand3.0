@@ -2,6 +2,8 @@ import requestClass from './request'
 import env from '@/config/env'
 import { encryptDes, getSysCode, getToken, showLoading, hideLoading } from '@/common'
 import { IRequest, IResponseWrapper } from './type'
+import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+
 
 const Request = new requestClass()
 // 请求拦截器
@@ -14,7 +16,6 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
-  console.log('接口入参', request);
   return request
 })
 
@@ -22,22 +23,17 @@ Request.interceptors.request((request: IRequest) => {
 Request.interceptors.response((response: IResponseWrapper) => {
   const responseData = response.res.data;
   const responseOptions = response.options;
+  const messageStore = useMessageStore();
   //判断返回状态 执行相应操作
   hideLoading()
   // 请根据后端规定的状态码判定
   if (responseData.code === 401) {//token失效
     // return responseData = await doRequest(response, url)//动态刷新token,并重新完成request请求
   } else {
-    console.log(response);
     //判断是否成功响应 code:200 成功 401:token失效 4001 需要重新登录
-    console.log('接口出参', responseOptions);
     if (responseData.code !== 200 && responseData.message) {
-      if (responseOptions && !responseOptions.hideMessage) {
-        uni.showToast({
-          title: responseData.message,
-          icon: 'none',
-          duration: 1500
-        })
+      if (responseOptions && responseOptions.showMessage) {
+        messageStore.showMessage(responseData.message, 1500)
       }
       //判断token
       if ([4001].includes(responseData.code)) {
@@ -65,11 +61,8 @@ Request.interceptors.response((response: IResponseWrapper) => {
 
   return responseData;
 }, (err) => {
-  uni.showToast({
-    title: err.data.message,
-    icon: 'none',
-    duration: 1500
-  })
+  const messageStore = useMessageStore();
+  messageStore.showMessage( err.data.message, 2000)
   return err.data
 })
 
