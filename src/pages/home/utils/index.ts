@@ -36,7 +36,11 @@ export const wxLogin = function (e) {
 
 			if (result) {
 				const { openId, sessionKey } = result;
-				const { encryptedData: encrypData, iv: ivData, code: phoneNumberCode } = target;
+				const {
+					encryptedData: encrypData,
+					iv: ivData,
+					code: phoneNumberCode
+				} = target;
 
 				globalStore.setOpenId(openId);
 
@@ -49,7 +53,8 @@ export const wxLogin = function (e) {
 					encrypData
 				};
 
-				const { result: loginResult } = await api.wxLoginByPhoneNumberCode(requestData);
+				const { result: loginResult } =
+					await api.wxLoginByPhoneNumberCode(requestData);
 
 				if (loginResult) {
 					const { accessToken, refreshToken } = loginResult;
@@ -105,6 +110,17 @@ const getUerInfo = async function () {
 		userStore.updateIdNo(idNo);
 		userStore.updatePhone(cellPhoneNum);
 
-		globalStore.setHerenId(herenId)
+		globalStore.setHerenId(herenId);
 	}
+};
+
+export const outLogin = function () {
+	const messageStore = useMessageStore();
+	const userStore = useUserStore();
+	const globalStore = useGlobalStore();
+
+	userStore.clearStore();
+	globalStore.clearStore();
+
+	messageStore.showMessage('退出成功', 1500);
 };

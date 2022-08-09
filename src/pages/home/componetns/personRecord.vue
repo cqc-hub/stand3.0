@@ -37,7 +37,7 @@
 			</view>
 
 			<view v-if="globalStore.isLogin" class="user-out">
-				<view class="out-btn">退出登陆</view>
+				<view @click="outLogin" class="out-btn">退出登陆</view>
 			</view>
 		</view>
 
@@ -73,7 +73,7 @@
 import { defineComponent, ref } from 'vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
-import { aliLogin, wxLogin } from '@/pages/home/utils';
+import { aliLogin, wxLogin, outLogin } from '@/pages/home/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
@@ -127,6 +127,31 @@ const recordColors = ['#296FFF', '#00b39e'];
 		.user-id {
 			color: var(--hr-neutral-color-8);
 			font-size: var(--hr-font-size-xs);
+			margin-top: 10upx;
+		}
+
+		.login-btn {
+			border: none !important;
+			background-color: transparent;
+			box-shadow: none !important;
+			& button,
+			& uni-button:after,
+			& button:after {
+				border: none !important;
+				background-color: transparent;
+				box-shadow: none !important;
+			}
+		}
+
+		button {
+			margin-left: 0;
+			text-align: left;
+		}
+
+		button:after {
+			border: none !important;
+			background-color: transparent;
+			box-shadow: none !important;
 		}
 	}
 

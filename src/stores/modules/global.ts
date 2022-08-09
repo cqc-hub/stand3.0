@@ -65,6 +65,10 @@ const globalStore = defineStore('global', {
 				accessToken: '',
 				refreshToken: ''
 			};
+
+			this.openId = '';
+			this.h5OpenId = '';
+			this.herenId = '';
 		},
 
 		getSysTermLabel(v: string): string {
