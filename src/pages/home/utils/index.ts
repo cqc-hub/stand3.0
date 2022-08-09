@@ -14,6 +14,10 @@ export const aliLogin = function () {
 	});
 };
 
+export const wxLogin = function (e) {
+	console.log(e);
+};
+
 const inLogin = async function ({ codeType, code }) {
 	const globalStore = useGlobalStore();
 	const userStore = useUserStore();
@@ -41,4 +45,6 @@ const inLogin = async function ({ codeType, code }) {
 	if (authHerenId) {
 		globalStore.setHerenId(authHerenId);
 	}
+
+	await api.userInfoByToken({});
 };

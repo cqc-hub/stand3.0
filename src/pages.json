@@ -54,14 +54,14 @@
 		"list": [
 			{
 				"pagePath": "pages/home/home",
-				"iconPath": "/static/image/home.svg",
-				"selectedIconPath": "/static/image/home_active.svg",
+				"iconPath": "/static/image/home.png",
+				"selectedIconPath": "/static/image/home_active.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/home/my",
-				"iconPath": "/static/image/my.svg",
-				"selectedIconPath": "/static/image/my_active.svg",
+				"iconPath": "/static/image/my.png",
+				"selectedIconPath": "/static/image/my_active.png",
 				"text": "我的"
 			}
 		]

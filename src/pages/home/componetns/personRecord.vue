@@ -23,6 +23,16 @@
 						请登录
 					</button>
 					<!-- #endif -->
+
+					<!-- #ifdef MP-WEIXIN -->
+					<button
+						open-type="getPhoneNumber"
+						@getphonenumber="wxLogin"
+						class="user-name login-btn"
+					>
+						请登录
+					</button>
+					<!-- #endif -->
 				</block>
 			</view>
 
@@ -63,7 +73,7 @@
 import { defineComponent, ref } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
 
-import { aliLogin } from '@/pages/home/utils';
+import { aliLogin, wxLogin } from '@/pages/home/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
