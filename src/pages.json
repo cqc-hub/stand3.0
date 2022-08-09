@@ -7,28 +7,15 @@
 		//-- login：该页面是否要登录，默认false；
 		//-- patient：该页面是否要就诊人，默认false；
 		{
-<<<<<<< HEAD
-=======
-			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/piniaTest/piniaTest",
-			"style": {
-				"navigationBarTitleText": "uni-app "
-			}
-		},
-		{
->>>>>>> daa6d41d71cfba21d0f2339ae3da9e6bd093a1d0
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
-			},
-			"extend": {
-				"login": true,
-				"patient": true
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
