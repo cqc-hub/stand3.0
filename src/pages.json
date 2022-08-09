@@ -3,9 +3,6 @@
 		"^g-(.*)": "components/g-$1/g-$1.vue"
 	},
 	"pages": [
-		//新增extend扩展属性，选填：
-		//-- login：该页面是否要登录，默认false；
-		//-- patient：该页面是否要就诊人，默认false；
 		{
 			"path": "pages/home/my",
 			"style": {
@@ -38,6 +35,25 @@
 			}
 		}
 	],
+
+	"subPackages": [
+		{
+			"root": "pagesC",
+			"pages": [
+				{
+					"path": "queueNumber/queueNumber",
+					"extend": {
+						"login": true,
+						"patient": true
+					},
+					"style": {
+						"navigationBarTitleText": "排队叫号"
+					}
+				}
+			]
+		}
+	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -46,6 +62,7 @@
 		"navigationBarBackgroundColor": "#f8f8f8"
 		// #endif
 	},
+
 	"tabBar": {
 		"color": "#666666",
 		"selectedColor": "#111111",
