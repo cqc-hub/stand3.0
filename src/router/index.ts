@@ -33,10 +33,23 @@ router.beforeEach(async (to, from) => {
 
   const pageIntercept = mapCurrentRoute(to.path)
   //统一拦截方法
+  console.log(88, pageIntercept);
 
   pagesInterceptEveryone(pageIntercept, to)
 
 })
+
+// router.beforeEach((to, from) => {
+//   console.log('beforeEach 2 begin', to, from)
+//   if (to.path != '/pages/login/login') { //如果返回的是Promise，则会等待执行完成才进行下一步
+//     return new Promise((success, fail) => {
+//       setTimeout(function () {
+//         console.log('beforeEach 2 end')
+//         success({ path: '/pages/login/login' })
+//       }, 1000)
+//     })
+//   }
+// })
 
 router.afterEach(async (to, from) => {
   // console.log('afterEach 2 ,', to, from)

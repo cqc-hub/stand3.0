@@ -5,7 +5,7 @@
 			v-model="value"
 			:suffixIcon="suffixIcon"
 			:styles="styles"
-			placeholder="右侧图标"
+			:placeholder="props.searchPlaceholder"
 			@iconClick="iconClick"
 			@focus="inputFocus"
 			@blur="inputBlur"
@@ -16,11 +16,14 @@
 <script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 
+const props = defineProps<{
+	searchPlaceholder: string;
+}>();
 const suffixIcon = ref('search');
 const value = ref('');
 const styles = ref({
-	color: '#2979FF',
-	borderColor: '#2979FF',
+	color: '#BBBBBB',
+	borderColor: '#444'
 });
 const iconClick = () => {
 	console.log('233');
@@ -40,5 +43,9 @@ const inputBlur = () => {
 <style lang="scss" scoped>
 :deep(input.custom) {
 	caret-color: red;
+}
+.uni-easyinput {
+	// border: 3rpx solid #444444;
+	border-radius: 16rpx;
 }
 </style>
