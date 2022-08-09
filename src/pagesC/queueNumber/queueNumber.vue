@@ -1,5 +1,7 @@
 <template>
-	<view class="">
+	<view class="page">
+		<g-choose-pat />
+
 		<g-tabs
 			v-model:value="tabCurrent"
 			:tabs="tabs"
@@ -10,7 +12,27 @@
 			@change="tabChange"
 		/>
 
-		{{ tabCurrent }}
+		<swiper :current="tabCurrent" @change="swiperChange" class="container">
+			<swiper-item>
+				<scroll-view scroll-y class="scroll-container">
+					<view>cscsadsad</view>
+				</scroll-view>
+			</swiper-item>
+
+			<swiper-item>
+				<view class="scroll-container">
+					<g-empty :current="1" />
+				</view>
+			</swiper-item>
+
+			<swiper-item>
+				<view class="uni-bg-red">c</view>
+			</swiper-item>
+
+			<swiper-item>
+				<view class="uni-bg-red">d</view>
+			</swiper-item>
+		</swiper>
 	</view>
 </template>
 
@@ -19,19 +41,44 @@ import { defineComponent, ref } from 'vue';
 
 const tabs = [
 	{
-		name: '症状',
-		myKey: '0' // [0部位,1科室,2人群]
+		name: '全部'
 	},
 	{
-		name: '疾病',
-		myKey: '0'
+		name: '门诊'
+	},
+	{
+		name: '检查'
+	},
+	{
+		name: '药房'
 	}
 ];
 
-const tabCurrent = ref(0);
+const tabCurrent = ref(1);
 const tabChange = function (i) {
 	console.log(i);
 };
+const swiperChange = ({ detail: { current } }) => {
+	tabCurrent.value = current;
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.page {
+	width: 100%;
+	height: 100vh;
+	background-color: var(--hr-neutral-color-1);
+
+	display: flex;
+	flex-direction: column;
+
+	.container {
+		flex: 1;
+		height: 1px;
+
+		.scroll-container {
+			height: 100%;
+		}
+	}
+}
+</style>

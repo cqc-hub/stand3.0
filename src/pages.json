@@ -55,6 +55,7 @@
 	],
 
 	"globalStyle": {
+		"app-plus": {"titleNView": false},
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"backgroundColor": "#F8F8F8",
