@@ -42,8 +42,8 @@ const ageIncre = () => {
 //   name: props.name
 // });
 const goTest = function () {
-	uni.navigateTo({
-		url: '/pages/index/index'
+	uni.switchTab({
+		url: '/pages/home/home'
 	});
 };
 </script>
@@ -55,20 +55,19 @@ const goTest = function () {
 	// width: 80% !important;
 }
 
-
 input,
 textarea {
-    font-size: 24px;
-    padding: 10px;
+	font-size: 24px;
+	padding: 10px;
 
-    color: red;
-    text-shadow: 0px 0px 0px #000;
-    -webkit-text-fill-color: transparent;
+	color: red;
+	text-shadow: 0px 0px 0px #000;
+	-webkit-text-fill-color: transparent;
 }
 input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder{
-    // color:
-    text-shadow: none;
-    -webkit-text-fill-color: initial;
+textarea::-webkit-input-placeholder {
+	// color:
+	text-shadow: none;
+	-webkit-text-fill-color: initial;
 }
 </style>
