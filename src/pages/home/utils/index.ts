@@ -11,6 +11,11 @@ export const aliLogin = function () {
 				code: authCode,
 				codeType: 2
 			});
+		},
+
+		fail({ errorMessage }) {
+			const messageStore = useMessageStore();
+			messageStore.showMessage(errorMessage);
 		}
 	});
 };
@@ -23,7 +28,7 @@ export const wxLogin = function (e) {
 	const { target, detail } = e;
 
 	if (detail.errMsg !== 'getPhoneNumber:ok') {
-		messageStore.showMessage('未授权', 1500);
+		messageStore.showMessage('用户取消授权', 1500);
 		return;
 	}
 
@@ -122,5 +127,7 @@ export const outLogin = function () {
 	userStore.clearStore();
 	globalStore.clearStore();
 
-	messageStore.showMessage('退出成功', 1500);
+	setTimeout(() => {
+		messageStore.showMessage('退出成功', 1500);
+	}, 500);
 };

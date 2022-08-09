@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { BASE_IMG } from '@/config/global';
 
 const userStore = defineStore('user', {
 	persist: {
@@ -48,10 +49,22 @@ const userStore = defineStore('user', {
 		},
 
 		getAvatar(): string {
-			return 'https://phsdevoss.eheren.com/pcloud/image/img_boy_110px@3x.png';
+			return getAvatar(this.sex);
 		}
 	}
 });
+
+const getAvatar = function (sex) {
+	let path = '';
+	if (sex === '男') {
+		path = 'home-my-avatar-nan.png.png';
+	} else if (sex === '女') {
+		path = 'home-my-avatar-nv.png';
+	} else {
+		path = 'home-my-avatar-outlogin.png';
+	}
+	return BASE_IMG + path;
+};
 
 export const useUserStore = function () {
 	return userStore();

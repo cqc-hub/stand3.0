@@ -4,7 +4,6 @@
 			<g-input />
 		</view>
 		{{ userState.name }}
-		{{ userState.age }}
 		{{ userState.double }}
 
 		{{ $global.SYS_CODE }}
@@ -30,7 +29,6 @@ const messageStore = useMessageStore();
 const globalStore = useGlobalStore();
 
 const ageIncre = () => {
-	userState.updateAge(++userState.age);
 	const d = new Date().getTime() + '';
 	messageStore.showMessage(d, 2000);
 	globalStore.updateToken({

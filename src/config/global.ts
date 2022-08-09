@@ -4,7 +4,7 @@ import manifest from '@/manifest.json';
 const wxAppid = manifest['mp-weixin'].appid
 
 type TEnv = 'dev' | 'test' | 'prod';
-const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
+export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
 const YMD = '20220506'; //年月日，每次版本更新必须同步更新
 const HM = '0955'; //时分，每次版本更新必须同步更新
 const version = '0.0.1'; //暂定

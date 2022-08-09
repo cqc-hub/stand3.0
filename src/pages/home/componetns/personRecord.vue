@@ -111,13 +111,16 @@ const recordColors = ['#296FFF', '#00b39e'];
 	.user-avatar {
 		width: 120upx;
 		height: 120upx;
-		margin-left: 20upx;
+		margin: 0 35upx;
+		border-radius: 60upx;
+		border: 3rpx solid var(--hr-neutral-color-1);
 	}
 
 	.info {
 		max-width: 370upx;
 		display: flex;
 		flex-direction: column;
+		margin-left: 20upx;
 		.user-name {
 			color: var(--hr-neutral-color-10);
 			font-weight: var(--h-weight-1);

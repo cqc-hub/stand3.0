@@ -3,7 +3,7 @@
 		<uni-grid :showBorder="false" :column="4">
 			<uni-grid-item v-for="(item, i) in list" :key="i">
 				<view class="grid-item-box">
-					<text :class="`icon-font grid-resize ${item.icon}`"></text>
+					<text :class="`icon-font grid-resize ${item.icon}`" />
 					<view class="grid-label">{{ item.label }}</view>
 				</view>
 
