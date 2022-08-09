@@ -17,7 +17,13 @@
 						就诊卡号：{{ userSore.patientId }}
 					</text>
 				</block>
-				<text v-else class="user-name">请登录</text>
+				<block v-else>
+					<!-- #ifdef MP-ALIPAY -->
+					<button @click="aliLogin" class="user-name login-btn">
+						请登录
+					</button>
+					<!-- #endif -->
+				</block>
 			</view>
 
 			<view v-if="isLogin" class="user-out">
@@ -56,6 +62,8 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
+
+import { aliLogin } from '@/pages/home/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
@@ -65,7 +73,7 @@ const recordList = ref<IRoute[]>([
 		label: '就诊卡二维码',
 		url: '/xxx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-jzk.png',
+		icon: global.BASE_IMG + 'v3-my-jzk.png'
 	},
 
 	{
@@ -73,7 +81,7 @@ const recordList = ref<IRoute[]>([
 		label: '医保电子凭证',
 		url: 'https://xx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-pz.png',
+		icon: global.BASE_IMG + 'v3-my-pz.png'
 	}
 ]);
 
@@ -110,6 +118,30 @@ const isLogin = false;
 		.user-id {
 			color: var(--h-color-grey);
 			font-size: var(--h-size-28);
+		}
+
+		.login-btn {
+			border: none !important;
+			background-color: transparent;
+			box-shadow: none !important;
+			& button,
+			& uni-button:after,
+			& button:after {
+				border: none !important;
+				background-color: transparent;
+				box-shadow: none !important;
+			}
+		}
+
+		button {
+			margin-left: 0;
+			text-align: left;
+		}
+
+		button:after {
+			border: none !important;
+			background-color: transparent;
+			box-shadow: none !important;
 		}
 	}
 

@@ -7,6 +7,13 @@ interface Fn<T = any, R = T> {
   (...arg: T[]): R
 }
 type Recordable<T = any> = Record<string, T>
+interface IResData<T = any> {
+  code: string;
+  message: string;
+  respCode: string;
+  result: T;
+  timeTaken: number;
+}
 
 class requestClass {
   // 默认配置
@@ -60,7 +67,7 @@ class requestClass {
     return /(http|https):\/\/([\w.]+\/?)\S*/.test(url)
   }
 
-  request(options: UniApp.RequestOptions & { baseURL?: string }) {
+  request(options: UniApp.RequestOptions & { baseURL?: string }): Promise<IResData> {
     options.baseURL = options.baseURL || this[config].baseURL
     options.dataType = options.dataType || this[config].dataType
     options.url = requestClass[isCompleteURL](options.url) ? options.url : (options.baseURL + options.url)

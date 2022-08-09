@@ -1,5 +1,9 @@
 /// <reference path="@dcloudio/types/uni-app/uni.d.ts" />
 
+
+declare var wx: any;
+declare var my:any;
+
 interface BaseObject {
 	[key: string]: any;
 }
