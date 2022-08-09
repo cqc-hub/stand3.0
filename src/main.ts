@@ -1,6 +1,7 @@
 import { createSSRApp } from 'vue';
 import { painaInstall } from '@/stores/plugins';
 import router from '@/router';
+import 'animate.css';
 
 import App from './App.vue';
 import global from './config/global';

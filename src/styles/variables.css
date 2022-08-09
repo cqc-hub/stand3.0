@@ -66,6 +66,11 @@ page {
   /* 页面上下边距 */
   --h-margin-24: 24rpx;
 
+
+
+  --animate-duration: 800ms;
+  --animate-delay: 0.9s;
+
 }
 
 

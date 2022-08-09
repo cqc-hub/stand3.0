@@ -9,17 +9,24 @@
 
 			<view class="info">
 				<block v-if="globalStore.isLogin">
-					<text class="user-name">
+					<text
+						class="user-name animate__animated animate__fadeIn"
+					>
 						{{ userSore.name }}
 					</text>
 
-					<text class="user-id text-ellipsis">
+					<text
+						class="user-id text-ellipsis animate__animated animate__fadeIn"
+					>
 						就诊卡号：{{ userSore.patientId }}
 					</text>
 				</block>
 				<block v-else>
 					<!-- #ifdef MP-ALIPAY -->
-					<button @click="aliLogin" class="user-name login-btn">
+					<button
+						@click="aliLogin"
+						class="user-name login-btn animate__animated animate__fadeIn"
+					>
 						请登录
 					</button>
 					<!-- #endif -->
@@ -28,7 +35,7 @@
 					<button
 						open-type="getPhoneNumber"
 						@getphonenumber="wxLogin"
-						class="user-name login-btn"
+						class="user-name login-btn animate__animated animate__fadeIn"
 					>
 						请登录
 					</button>
@@ -36,7 +43,10 @@
 				</block>
 			</view>
 
-			<view v-if="globalStore.isLogin" class="user-out">
+			<view
+				v-if="globalStore.isLogin"
+				class="user-out animate__animated animate__slideInRight"
+			>
 				<view @click="outLogin" class="out-btn">退出登陆</view>
 			</view>
 		</view>
