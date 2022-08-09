@@ -41,6 +41,9 @@ export default {
     sysCode: '1001033',
     homeConfig: {
       //页面栏目配置
+    },
+    myConfig: {
+
     }
   }
 }

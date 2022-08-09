@@ -7,6 +7,21 @@
 		//-- login：该页面是否要登录，默认false；
 		//-- patient：该页面是否要就诊人，默认false；
 		{
+<<<<<<< HEAD
+=======
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/piniaTest/piniaTest",
+			"style": {
+				"navigationBarTitleText": "uni-app "
+			}
+		},
+		{
+>>>>>>> daa6d41d71cfba21d0f2339ae3da9e6bd093a1d0
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -44,13 +59,23 @@
 		"navigationBarBackgroundColor": "#f8f8f8"
 		// #endif
 	},
-	"condition": {
-		"current": 0,
+	"tabBar": {
+		"color": "#666666",
+		"selectedColor": "#111111",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
 		"list": [
 			{
-				"name": "piniaTestc",
-				"path": "pages/piniaTest/piniaTest",
-				"query": "name=piniaTest&p=oq"
+				"pagePath": "pages/home/home",
+				"iconPath": "/static/image/home.svg",
+				"selectedIconPath": "/static/image/home_active.svg",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/home/my",
+				"iconPath": "/static/image/my.svg",
+				"selectedIconPath": "/static/image/my_active.svg",
+				"text": "我的"
 			}
 		]
 	}

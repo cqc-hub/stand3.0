@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
 
 const title = ref('Hello');
@@ -18,6 +19,10 @@ const dataLoad = () => {
 		typeFlag: 1
 	}).then((data) => {});
 };
+
+onLoad(() => {
+	// console.log(1111, this.$Route.query);
+});
 dataLoad();
 </script>
 
