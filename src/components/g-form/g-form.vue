@@ -18,34 +18,43 @@
 
 				<view
 					:class="{
-						[`form-item-${item.field}`]: true
+						[`form-item-${item.field}`]: true,
+						'my-disabled': item.disabled
 					}"
+					class="container-body"
 				>
 					<uni-easyinput
-						v-if="item.field === 'input-text'"
+						v-if="['input-text'].includes(item.field)"
 						:placeholder="item.placeholder"
-						:disabled="item.disabled"
 						:inputBorder="false"
 						:clearable="false"
 						:placeholderStyle="inputPlaceHolderStyle"
 						:value="value[item.key]"
+						@input="(e) => changeInput(item, e)"
+						:class="{
+							'my-disabled': item.disabled
+						}"
 						class="form-input"
 					/>
 
 					<view
 						v-if="item.field === 'select'"
 						@tap.prevent.stop="chooseOption(item)"
+						class=""
 					>
-						<uni-easyinput
-							:placeholder="item.placeholder"
-							:inputBorder="false"
-							:clearable="false"
-							:placeholderStyle="inputPlaceHolderStyle"
-							:disabled="true"
-							:value="findOptionLabel(item, value[item.key])"
-							class="form-input"
-						/>
+						<view class="my-disabled">
+							<uni-easyinput
+								:placeholder="item.placeholder"
+								:inputBorder="false"
+								:clearable="false"
+								:placeholderStyle="inputPlaceHolderStyle"
+								:value="findOptionLabel(item, value[item.key])"
+								class="form-input"
+							/>
+						</view>
 					</view>
+
+					<view>233</view>
 				</view>
 			</view>
 		</view>
@@ -83,7 +92,7 @@ export default defineComponent({
 		}
 	},
 
-	emits: ['update:value'],
+	emits: ['update:value', 'submit'],
 
 	setup(props, ctx) {
 		const inputPlaceHolderStyle = `
@@ -97,6 +106,7 @@ export default defineComponent({
 		const actionSheetOpt = ref<ISelectOptions[]>([]);
 		const list = ref<TInstance[]>([]);
 		const messageStore = useMessageStore();
+		let cacheItem: null | TInstance = null;
 
 		const setList = function (initList: TInstance[]) {
 			list.value = initList;
@@ -121,12 +131,20 @@ export default defineComponent({
 			if (item.field === 'select') {
 				const { options } = item;
 				actionSheetOpt.value = options;
+				cacheItem = item;
 
 				actionSheet.value.showActionSheet();
 			}
 		};
 
-		const actionItemClick = function () {};
+		const actionItemClick = function ({ item }: { item: ISelectOptions }) {
+			if (!cacheItem) return;
+
+			if (cacheItem.field === 'select') {
+				changeSelect(cacheItem, item.value);
+				cacheItem = null;
+			}
+		};
 
 		const setData = function (value: BaseObject) {
 			emits('update:value', {
@@ -158,19 +176,9 @@ export default defineComponent({
 				const _rule = r.rule;
 				const _r = value.match(_rule);
 
-				console.log({
-					_r,
-					value,
-					_rule
-				});
-
 				if (_r) {
 					const [_matchValue] = _r;
-					if (_matchValue !== value) {
-						return false;
-					} else {
-						return true;
-					}
+					return _matchValue === value;
 				} else {
 					return false;
 				}
@@ -191,7 +199,6 @@ export default defineComponent({
 			const data = props.value;
 			const len = list.value.length >>> 0;
 			let k = 0;
-			let isErr = false;
 
 			while (k < len) {
 				const item = list.value[k++];
@@ -199,26 +206,27 @@ export default defineComponent({
 				const v = data[key];
 
 				if (rule) {
-					const flag = ruleMatch(rule, v, item);
-					console.log(233);
-
-					// if (Array.isArray(rule)) {
-					// 	rule.map(({ rule }) => {
-					// 		const flag = ruleMatch(rule, v);
-					// 		if (!flag) {
-					// 			isErr = true;
-					// 			throw new Error(item.label + '校验错误');
-					// 		}
-					// 	});
-					// } else {
-					// 	rule;
-					// }
-				}
-
-				if (isErr) {
-					break;
+					ruleMatch(rule, v, item);
 				}
 			}
+
+			emits('submit', {
+				data
+			});
+		};
+
+		const changeInput = (item: TInstance, v: string) => {
+			setData({
+				[item.key]: v
+			});
+		};
+
+		const changeSelect = function (item: TInstance, v: any) {
+			if (item.field !== 'select') return;
+
+			setData({
+				[item.key]: v
+			});
 		};
 
 		return {
@@ -231,7 +239,8 @@ export default defineComponent({
 			actionItemClick,
 			inputPlaceHolderStyle,
 			findOptionLabel,
-			submit
+			submit,
+			changeInput
 		};
 	}
 });
@@ -261,13 +270,24 @@ export default defineComponent({
 	}
 
 	:deep(input) {
-		color: var(--hr-neutral-color-10);
+		color: var(--hr-neutral-color-10) !important;
 		font-size: var(--hr-font-size-base);
 		background-color: var(--h-color-white) !important;
+		opacity: 1;
+	}
+
+	.container-body {
+		display: flex;
+		align-items: center;
+    justify-content: space-between;
+
+		&:first-child {
+			flex: 1;
+		}
 	}
 }
 
 .my-disabled {
-	pointer-events: none;
+	pointer-events: none !important;
 }
 </style>

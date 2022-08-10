@@ -1,7 +1,7 @@
 <template>
 	<view class="">
-		{{ formData }}
-		<g-form v-model:value="formData" ref="gform" />
+		{{ JSON.stringify(formData) }}
+		<g-form v-model:value="formData" @submit="formSubmit" ref="gform" />
 
 		<view @tap="testSubmit">ttt</view>
 		<g-message />
@@ -15,8 +15,10 @@ import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
 const gform = ref();
 const formData = ref<BaseObject>({
-	name: '233'
+	name: 'cq'
 });
+
+
 
 const formList: TInstance[] = [
 	{
@@ -54,6 +56,10 @@ const formList: TInstance[] = [
 
 const testSubmit = () => {
 	gform.value.submit();
+};
+
+const formSubmit = ({ data }) => {
+	console.log(data, 'success');
 };
 
 onMounted(() => {
