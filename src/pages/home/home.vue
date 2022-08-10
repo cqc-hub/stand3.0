@@ -24,11 +24,16 @@
 		<view class="banner-menu">
 			<homeBanner />
 		</view>
+		<view class="fun-list">
+			<homeMenu />
+		</view>
 	</view>
 </template>
 
 <script setup lang="ts">
 import homeBanner from './componetns/homeBanner.vue';
+import homeMenu from './componetns/homeMenu.vue';
+
 const searchPlaceholder = '搜索科室、医生或疾病';
 const topMenuList = [
 	{
@@ -45,12 +50,12 @@ const topMenuList = [
 		title: '预约挂号',
 		url: '/xxx',
 		iconfont: 'ico_sy_calendar1'
+	},
+	{
+		title: '预约挂号',
+		url: '/xxx',
+		iconfont: 'ico_sy_calendar1'
 	}
-	// {
-	// 	title: '预约挂号',
-	// 	url: '/xxx',
-	// 	iconfont: 'ico_sy_calendar1'
-	// }
 ];
 </script>
 
@@ -116,7 +121,7 @@ const topMenuList = [
 				border-radius: 200rpx 0 0 200rpx;
 				font-size: var(--hr-font-size-xs);
 				font-weight: 400;
-				color: var(--h-color-white);
+				color: var(--hr-brand-color-6);
 				line-height: 64rpx;
 				text-align: center;
 			}
@@ -156,6 +161,9 @@ const topMenuList = [
 		}
 	}
 	.banner-menu {
+		margin-top: var(--h-margin-24);
+	}
+	.fun-list {
 		margin-top: var(--h-margin-24);
 	}
 }

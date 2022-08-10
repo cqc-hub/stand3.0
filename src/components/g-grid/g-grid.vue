@@ -1,6 +1,6 @@
 <template>
 	<view :class="props.type == 2 ? 'normal' : 'diff'">
-		<uni-grid :showBorder="false" :square="false" :column="3">
+		<uni-grid :showBorder="false" :square="false" :column="4">
 			<uni-grid-item v-for="(item, i) in list" :key="i">
 				<view class="grid-item-box">
 					<!-- 绿色能量角标 -->
@@ -72,9 +72,6 @@ const props = withDefaults(defineProps<IGridProps>(), {
 <style lang="scss" scoped>
 // 样式一
 .diff {
-	.uni-grid-wrap {
-		padding: 60rpx 0 40rpx 0;
-	}
 	.grid-item-box {
 		flex: 1;
 		/* #ifndef APP-NVUE */
