@@ -4,7 +4,7 @@
 			v-for="(item, i) in list"
 			@tap.stop="itemClick(item, i)"
 			:key="item.id"
-			:class="`item ${i === 0 && 'item-first'}`"
+			class="item"
 		>
 			<view class="container">
 				<view class="label text-ellipsis">{{ item.label }}</view>
@@ -48,7 +48,7 @@ const itemClick = function (item, index) {
 	justify-content: space-between;
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 
-	&.item-first {
+	&:first-child {
 		border-radius: 20rpx 20rpx 0px 0px;
 	}
 
@@ -102,7 +102,7 @@ const itemClick = function (item, index) {
 	width: 30rpx;
 	display: inline-block;
 	border: 1rpx solid var(--hr-brand-color-6);
-	border-width: 0 0 4rpx 4rpx;
-	transform: rotate(-45deg);
+	border-width: 4rpx 4rpx 0 0;
+	transform: rotate(135deg);
 }
 </style>

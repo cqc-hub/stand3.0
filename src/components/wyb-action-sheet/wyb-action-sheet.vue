@@ -4,7 +4,7 @@
 		@tap.stop.prevent
 		@touchmove.stop.prevent
 	>
-			<!-- :bg-color="type === 'material' ? '#eaeaea' : 'rgba(0,0,0,0)'" -->
+		<!-- :bg-color="type === 'material' ? '#eaeaea' : 'rgba(0,0,0,0)'" -->
 		<wyb-popup
 			ref="popup"
 			height="10"
@@ -12,7 +12,7 @@
 			:mask-alpha="maskAlpha"
 			@show="onActionSheetShow"
 			@hide="onActionSheetHide"
-      bg-color="rgba(0,0,0,0)"
+			bg-color="rgba(0,0,0,0)"
 		>
 			<view
 				class="wyb-action-sheet-content"
@@ -27,53 +27,55 @@
 						myType !== 'choosePat' && 'wyb-action-sheet-options-arr'
 					"
 				>
-					<block v-if="myType === 'choosePat'">
-						<pat-List
-							@pat-click="
-								({ index, item }) => onItemsTap(index, item)
-							"
-							:list="options"
-						/>
-					</block>
-					<block v-else>
-						<view
-							v-for="(item, index) in options"
-							:key="index"
-							@tap.stop="onItemsTap(index, item)"
-							:class="autoOptionsItemClass"
-							:style="{
-								'--hover': item.disabled
-									? type === 'ios'
-										? 'rgba(255, 255, 255, 0.9)'
-										: '#fff'
-									: type === 'ios'
-									? 'rgba(241, 241, 241, 0.9)'
-									: '#f1f1f1',
-								color: autoItemColor(item),
-								fontSize: item.fontSize || '35rpx',
-								borderTopLeftRadius:
-									index === 0 && type === 'ios'
-										? '6px'
-										: '0px',
-								borderTopRightRadius:
-									index === 0 && type === 'ios'
-										? '6px'
-										: '0px',
-								borderBottomLeftRadius:
-									index === options.length - 1 &&
-									type === 'ios'
-										? '6px'
-										: '0px',
-								borderBottomRightRadius:
-									index === options.length - 1 &&
-									type === 'ios'
-										? '6px'
-										: '0px'
-							}"
-						>
-							{{ autoItemLabel(item) }}
-						</view>
-					</block>
+					<scroll-view class="container" scroll-y>
+						<block v-if="myType === 'choosePat'">
+							<pat-List
+								@pat-click="
+									({ index, item }) => onItemsTap(index, item)
+								"
+								:list="options"
+							/>
+						</block>
+						<block v-else>
+							<view
+								v-for="(item, index) in options"
+								:key="index"
+								@tap.stop="onItemsTap(index, item)"
+								:class="autoOptionsItemClass"
+								:style="{
+									'--hover': item.disabled
+										? type === 'ios'
+											? 'rgba(255, 255, 255, 0.9)'
+											: '#fff'
+										: type === 'ios'
+										? 'rgba(241, 241, 241, 0.9)'
+										: '#f1f1f1',
+									color: autoItemColor(item),
+									fontSize: item.fontSize || '35rpx',
+									borderTopLeftRadius:
+										index === 0 && type === 'ios'
+											? '6px'
+											: '0px',
+									borderTopRightRadius:
+										index === 0 && type === 'ios'
+											? '6px'
+											: '0px',
+									borderBottomLeftRadius:
+										index === options.length - 1 &&
+										type === 'ios'
+											? '6px'
+											: '0px',
+									borderBottomRightRadius:
+										index === options.length - 1 &&
+										type === 'ios'
+											? '6px'
+											: '0px'
+								}"
+							>
+								{{ autoItemLabel(item) }}
+							</view>
+						</block>
+					</scroll-view>
 				</view>
 				<view
 					v-if="showCancel"
@@ -380,5 +382,10 @@ export default {
 .wyb-action-sheet-highlight-i:active,
 .wyb-action-sheet-highlight-m:active {
 	background-color: var(--hover);
+}
+
+.container {
+	width: 100%;
+	max-height: 1119rpx;
 }
 </style>
