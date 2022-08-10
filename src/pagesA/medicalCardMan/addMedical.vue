@@ -1,6 +1,5 @@
 <template>
 	<view class="">
-		{{ JSON.stringify(formData) }}
 		<g-form v-model:value="formData" @submit="formSubmit" ref="gform" />
 
 		<view @tap="testSubmit">ttt</view>
@@ -17,8 +16,6 @@ const gform = ref();
 const formData = ref<BaseObject>({
 	name: 'cq'
 });
-
-
 
 const formList: TInstance[] = [
 	{

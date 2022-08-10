@@ -98,7 +98,7 @@
 <script setup lang="ts">
 import { withDefaults, ref } from 'vue';
 
-const type = ref(3);
+const type = ref(2);
 
 // const props = withDefaults(
 // 	defineProps<{
@@ -131,14 +131,15 @@ const type = ref(3);
 	.uni-margin-wrap {
 		width: 100%;
 	}
-	.swiper {
-		height: 160rpx;
-		border: 2rpx solid #d9e5ff;
-		border-radius: 16rpx;
-	}
+	// .swiper {
+	// 	// height: 160rpx;
+	// 	height: 100% !important;
+	// 	border: 2rpx solid #d9e5ff;
+	// 	border-radius: 16rpx;
+	// }
 	swiper-item {
 		display: block;
-		height: 160rpx;
+		// height: 160rpx;
 
 		image {
 			width: 100%;

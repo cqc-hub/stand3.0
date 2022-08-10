@@ -96,13 +96,4 @@ const itemClick = function (item, index) {
 		margin-right: 20rpx;
 	}
 }
-
-.icon-choose {
-	height: 15rpx;
-	width: 30rpx;
-	display: inline-block;
-	border: 1rpx solid var(--hr-brand-color-6);
-	border-width: 4rpx 4rpx 0 0;
-	transform: rotate(135deg);
-}
 </style>

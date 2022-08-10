@@ -54,7 +54,10 @@
 						</view>
 					</view>
 
-					<view class="a">233</view>
+					<view
+						v-if="['select'].includes(item.field)"
+						class="icon-arrow"
+					/>
 				</view>
 			</view>
 		</view>
@@ -279,7 +282,7 @@ export default defineComponent({
 	.container-body {
 		display: flex;
 		align-items: center;
-    justify-content: space-between;
+		justify-content: space-between;
 
 		&:first-child {
 			flex: 1;
