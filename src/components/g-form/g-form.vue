@@ -54,7 +54,7 @@
 						</view>
 					</view>
 
-					<view>233</view>
+					<view class="a">233</view>
 				</view>
 			</view>
 		</view>

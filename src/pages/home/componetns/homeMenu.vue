@@ -1,98 +1,82 @@
 <template>
 	<view class="menu-list">
 		<view class="menu-tap">
-			<text class="active">门诊就医</text>
-			<text>门诊就医</text>
-			<text>门诊就医</text>
+			<text
+				v-for="(item, index) in props.list"
+				:class="{ active: index == tabIndex }"
+				@tap="activeMenu(index)"
+				:key="index"
+			>
+				{{ item.typeName }}
+			</text>
 		</view>
-		<view>
-			<g-grid :list="homeGrid" />
-		</view>
+		<swiper
+			class="swiper"
+			:indicator-dots="false"
+			:current="tabIndex"
+			@change="changeIndex"
+			:duration="300"
+		>
+			<swiper-item v-for="(item, index) in props.list" :key="index">
+				<g-grid :list="item.functionList" />
+			</swiper-item>
+		</swiper>
 	</view>
 </template>
 
 <script setup lang="ts">
-import { withDefaults } from 'vue';
+import { withDefaults, ref } from 'vue';
+
+let tabIndex = ref(0);
 interface IhomeMenu {
 	typeName: string;
 	functionList: IRoute[];
 }
 const props = withDefaults(
 	defineProps<{
-		list: IhomeMenu[];
+		list?: IhomeMenu[];
 	}>(),
 	{
 		list: () => [
 			{
-				typeName: '',
-				functionList: []
+				typeName: '门诊就医',
+				functionList: [
+					{
+						title: '门诊就医',
+						url: '/xxx',
+						iconfont: 'ico_sy_calendar1'
+					}
+				]
+			},
+			{
+				typeName: '住院助手',
+				functionList: [
+					{
+						title: '住院助手',
+						url: '/xxx',
+						iconfont: 'ico_sy_calendar1'
+					}
+				]
+			},
+			{
+				typeName: '智慧医院',
+				functionList: [
+					{
+						title: '智慧医院',
+						url: '/xxx',
+						iconfont: 'ico_sy_calendar1'
+					}
+				]
 			}
 		]
 	}
 );
-
-const homeGrid = [
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	}
-];
+const activeMenu = (index) => {
+	tabIndex.value = index;
+};
+const changeIndex = (e) => {
+	tabIndex.value = e.detail.current;
+};
 </script>
 
 <style scoped lang="scss">
@@ -104,6 +88,10 @@ const homeGrid = [
 		height: 88rpx;
 		background: var(--hr-neutral-color-1);
 		border-radius: 16rpx 16rpx 0px 0px;
+		position: relative;
+		white-space: nowrap;
+		overflow: hidden;
+		overflow-x: scroll;
 		text {
 			display: inline-block;
 			font-size: var(--hr-font-size-base);
@@ -116,9 +104,12 @@ const homeGrid = [
 		.active {
 			color: var(--hr-neutral-color-10);
 			background: var(--h-color-white);
-			// border: 2rpx solid #f3f3f3;
-			box-shadow: 0px 84px 24rpx 0px rgba(0, 0, 0, 0.05);
-			// padding-bottom: 8rpx;
+			border: 2rpx solid #f3f3f3;
+			// padding-top: 8rpx;
+			position: relative;
+			top: -8rpx;
+			animation: pulse;
+			animation-duration: 1s;
 		}
 	}
 }
