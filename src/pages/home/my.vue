@@ -4,16 +4,21 @@
 		<view class="top-bg" />
 
 		<personRecord />
+		<view class="my-menu">
+			<view class="list">
+				<view class="title">我的订单</view>
+				<g-grid />
+			</view>
+			<view class="list">
+				<view class="title">我的服务</view>
+				<g-grid />
+			</view>
+			 <view class="list">
+			 	<view class="title">我的工具</view>
+			 	<g-grid />
+			 </view>
 
-		<uni-group mode="card">
-			<g-grid />
-		</uni-group>
-
-		<uni-group mode="card">
-			<g-grid />
-		</uni-group>
-
-		<!-- <text class="re icon-font img_announcement"></text> -->
+		</view>
 	</view>
 </template>
 
@@ -45,9 +50,23 @@ const msg = () => {
 		pointer-events: none;
 	}
 }
+ 
 
-.re {
-	width: 100rpx;
-	height: 50rpx;
+.my-menu {
+	padding: 0 32rpx;
+	.list {
+		background: var(--h-color-white);
+		border: 2px solid #f3f3f3;
+		border-radius: 16rpx;
+		box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+		padding-bottom: 12rpx;
+		margin-bottom: 16rpx;
+
+		.title {
+			padding: 32rpx 32rpx 16rpx 32rpx;
+			color: var(--hr-neutral-color-10);
+			font-weight: var(--h-weight-2);
+		}
+	}
 }
 </style>
