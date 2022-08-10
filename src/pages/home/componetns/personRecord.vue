@@ -58,13 +58,13 @@
 				v-for="(record, i) in recordList"
 				:key="i"
 				:style="{
-					'background-image': `url(${record.icon})`,
+					'background-image': `url(${record.iconfont})`,
 					'background-color': recordColors[i]
 				}"
 				:class="`record-item ${recordList.length === 1 && 'cr-center'}`"
 			>
 				<view class="record-label">
-					<text>{{ record.label }}</text>
+					<text>{{ record.title }}</text>
 					<view
 						v-if="recordList.length === 1"
 						class="iconfont icon-size"
@@ -89,18 +89,18 @@ const globalStore = useGlobalStore();
 
 const recordList = ref<IRoute[]>([
 	{
-		label: '就诊卡二维码',
-		url: '/xxx',
+		title: '就诊卡二维码',
+		path: '/xxx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-jzk.png'
+		iconfont: global.BASE_IMG + 'v3-my-jzk.png'
 	},
 
 	{
-		isNet: true,
-		label: '医保电子凭证',
-		url: 'https://xx',
+		// isNet: true,
+		title: '医保电子凭证',
+		path: 'https://xx',
 		query: {},
-		icon: global.BASE_IMG + 'v3-my-pz.png'
+		iconfont: global.BASE_IMG + 'v3-my-pz.png'
 	}
 ]);
 

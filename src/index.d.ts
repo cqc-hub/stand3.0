@@ -36,6 +36,8 @@ interface IRouteBase {
 // type IRoute = IRouterNet | IRouterLocal
 type IRoute = IRouteBase
 
+
+
 // declare namespace UniNamespace {
 // 	interface NavigateToOptions {
 // 		passedParams?: {
