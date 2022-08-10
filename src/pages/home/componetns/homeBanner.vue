@@ -131,12 +131,7 @@ const type = ref(2);
 	.uni-margin-wrap {
 		width: 100%;
 	}
-	// .swiper {
-	// 	// height: 160rpx;
-	// 	height: 100% !important;
-	// 	border: 2rpx solid #d9e5ff;
-	// 	border-radius: 16rpx;
-	// }
+
 	swiper-item {
 		display: block;
 		// height: 160rpx;

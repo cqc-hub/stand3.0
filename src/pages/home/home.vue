@@ -27,7 +27,7 @@
 		<view class="fun-list">
 			<homeMenu />
 		</view>
-		<choose-pat-action ref="actionSheet" />
+		<!-- <choose-pat-action ref="actionSheet" /> -->
 	</view>
 </template>
 
@@ -40,12 +40,12 @@
 	import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 
 	// 就诊人
-	const actionSheet = ref < InstanceType < typeof ChoosePat >> ();
-	const chooseAction = () => {
-		if (actionSheet.value) {
-			actionSheet.value.show();
-		}
-	};
+	// const actionSheet = ref < InstanceType < typeof ChoosePat >> ();
+	// const chooseAction = () => {
+	// 	if (actionSheet.value) {
+	// 		actionSheet.value.show();
+	// 	}
+	// };
 
 	const searchPlaceholder = '搜索科室、医生或疾病';
 	const topMenuList = [{
