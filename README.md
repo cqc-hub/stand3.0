@@ -69,6 +69,17 @@ cmd: iconfont-tools
 
 然后就可以在页面通过`<text class="xxx1 xxxx"></text>`引入啦
 
+```
+.icon-font {
+ display: inline-block;
+ width: 30rpx;
+ height: 30rpx;
+ background-repeat: no-repeat !important;
+ background-position: center;
+ background-size: 100% 100%;
+}
+```
+
 ## 开发规范
 
 网络请求图片大小控制在 100k 以内 建议 svg 或 webP 格式

@@ -6,7 +6,8 @@ const messageStore = defineStore('message', {
 		return {
 			isShow: false,
 			msg: '',
-			duration: 0
+			duration: 0,
+			popupDuration: 500
 		};
 	},
 

@@ -1,6 +1,10 @@
 <template>
 	<view>
-		<uni-popup @maskClick="maskClick" ref="popup">
+		<uni-popup
+			:duration="messageStore.popupDuration"
+			@maskClick="maskClick"
+			ref="popup"
+		>
 			<view
 				:style="containerStyle"
 				class="popup-content uni-popup__wrapper center"
@@ -55,6 +59,7 @@ export default defineComponent({
 		uni.$on('showMessage', function () {
 			usePopup(messageStore.isShow);
 		});
+
 		uni.$on('closeMessage', function () {
 			usePopup(messageStore.isShow);
 		});
