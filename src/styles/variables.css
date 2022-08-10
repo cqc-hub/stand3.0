@@ -72,6 +72,8 @@ page {
   --animate-duration: 800ms;
   --animate-delay   : 0.9s;
 
+
+  font-size: var(--hr-font-size-base);
 }
 
 

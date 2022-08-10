@@ -87,7 +87,7 @@ import global from '@/config/global';
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
 
-const recordList = ref<IRoute[]>([
+const recordList = ref([
 	{
 		label: '就诊卡二维码',
 		url: '/xxx',

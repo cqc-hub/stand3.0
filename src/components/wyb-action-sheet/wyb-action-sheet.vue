@@ -51,7 +51,9 @@
 										? 'rgba(241, 241, 241, 0.9)'
 										: '#f1f1f1',
 									color: autoItemColor(item),
-									fontSize: item.fontSize || '35rpx',
+									fontSize:
+										item.fontSize ||
+										'var(--hr-font-size-base)',
 									borderTopLeftRadius:
 										index === 0 && type === 'ios'
 											? '6px'
@@ -153,7 +155,9 @@ export default {
 				} else {
 					resultColor =
 						item.color ||
-						(this.type === 'ios' ? '#2979ff' : '#333');
+						(this.type === 'ios'
+							? '#2979ff'
+							: 'var(--hr-neutral-color-10)');
 				}
 				return resultColor;
 			};
@@ -321,7 +325,7 @@ export default {
 	color: #666666;
 	background-color: #fff;
 	padding: 20upx 30upx;
-	border-bottom: 2upx solid #e6e6e6;
+	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 	width: 100%;
 	text-align: center;
 }
@@ -344,7 +348,28 @@ export default {
 	justify-content: center;
 	padding: 25rpx 0;
 	background-color: #fff;
-	border-bottom: 1px solid #eaeaea;
+	border-bottom: 1rpx solid var(--hr-neutral-color-2);
+
+	position: relative;
+
+	&:first-child {
+		border-radius: 20rpx 20rpx 0px 0px !important;
+	}
+
+	&:last-child {
+		padding-bottom: 75rpx;
+
+		&::after {
+			content: '';
+			display: block;
+			position: absolute;
+			right: 0;
+			left: 0;
+			bottom: 50rpx;
+			height: 2rpx;
+			background-color: var(--hr-neutral-color-2);
+		}
+	}
 }
 
 .wyb-action-sheet-cancel-m {

@@ -38,6 +38,21 @@
 
 	"subPackages": [
 		{
+			"root": "pagesA",
+			"pages": [
+				{
+					"path": "medicalCardMan/addMedical",
+					"extend": {
+						"login": true
+					},
+					"style": {
+						"navigationBarTitleText": "添加就诊人"
+					}
+				}
+			]
+		},
+
+		{
 			"root": "pagesC",
 			"pages": [
 				{

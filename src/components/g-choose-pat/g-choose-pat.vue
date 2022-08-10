@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
-import ChoosePat from './choose-pat.vue';
+import ChoosePat from './choose-pat-action.vue';
 
 const userSore = useUserStore();
 const actionSheet = ref<InstanceType<typeof ChoosePat>>();
