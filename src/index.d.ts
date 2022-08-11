@@ -9,6 +9,8 @@ interface BaseObject {
 }
 
 interface IRouteBase {
+  id?: number;
+  showNo?: number;//后端的排序
   title: string;//主标题
   detail?: string;//副标题
   iconfont?: string;//图标

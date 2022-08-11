@@ -100,30 +100,30 @@ import { withDefaults, ref } from 'vue';
 
 const type = ref(2);
 
-// const props = withDefaults(
-// 	defineProps<{
-// 		leftFunctionList: IRoute[];
-// 		functionList: IRoute[];
-// 	}>(),
-// 	{
-// 		//左侧轮播数组
-// 		leftFunctionList: () => [
-// 			{
-// 				title: '住院助手',
-// 				url: '/xxx',
-// 				iconfont: 'ico_sy_calendar1'
-// 			}
-// 		],
-// 		//右侧数组
-// 		functionList: () => [
-// 			{
-// 				title: '住院助手',
-// 				url: '/xxx',
-// 				iconfont: 'ico_sy_calendar1'
-// 			}
-// 		]
-// 	}
-// );
+const props = withDefaults(
+	defineProps<{
+		leftFunctionList: IRoute[];
+		functionList: IRoute[];
+	}>(),
+	{
+		//左侧轮播数组
+		leftFunctionList: () => [
+			{
+				title: '住院助手',
+				url: '/xxx',
+				iconfont: 'ico_sy_calendar1'
+			}
+		],
+		//右侧数组
+		functionList: () => [
+			{
+				title: '住院助手',
+				url: '/xxx',
+				iconfont: 'ico_sy_calendar1'
+			}
+		]
+	}
+);
 </script>
 
 <style lang="scss" scoped>
