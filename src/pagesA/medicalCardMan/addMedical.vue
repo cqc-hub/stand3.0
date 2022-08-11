@@ -3,6 +3,8 @@
 		<g-form v-model:value="formData" @submit="formSubmit" ref="gform" />
 
 		<view @tap="testSubmit">ttt</view>
+
+		{{JSON.stringify(formData)}}
 		<g-message />
 	</view>
 </template>
@@ -19,7 +21,7 @@ const formData = ref<BaseObject>({
 
 const formList: TInstance[] = [
 	{
-		required: true,
+		// required: true,
 		label: '真实姓名',
 		field: 'input-text',
 		placeholder: '请输入真实姓名',
@@ -37,7 +39,8 @@ const formList: TInstance[] = [
 	},
 
 	{
-		required: true,
+		// required: true,
+		showSuffixArrowIcon: true,
 		label: '就诊人类型',
 		placeholder: '请选择',
 		key: 'medicalType',
@@ -62,7 +65,11 @@ const formList: TInstance[] = [
 		key: 'verify',
 		verifyBtnText: '获取验证码',
 		inputType: 'number',
-		verifySecond: 5
+		verifySecond: 5,
+		rule: {
+			message: '验证码必须是数字',
+			rule: /\d+/
+		}
 	}
 ];
 

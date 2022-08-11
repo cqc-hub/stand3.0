@@ -24,6 +24,7 @@ interface IBaseInstance {
 	emptyMessage?: string;
 	disabled?: boolean;
 	rule?: IRule | IRule[];
+	showSuffixArrowIcon?: boolean;
 }
 
 interface IInputInstance extends IBaseInstance {

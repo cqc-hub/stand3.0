@@ -3,6 +3,8 @@
 		<g-message />
 		<view class="top-bg" />
 
+		<view @click="goRoute">2333</view>
+
 		<personRecord />
 		<view class="my-menu">
 			<view class="list">
@@ -33,6 +35,12 @@ const messageStore = useMessageStore();
 const msg = () => {
 	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
 };
+
+const goRoute = function() {
+	uni.navigateTo({
+		url: '/pagesA/medicalCardMan/addMedical'
+	})
+}
 </script>
 
 <style lang="scss" scoped>
@@ -50,7 +58,7 @@ const msg = () => {
 		pointer-events: none;
 	}
 }
- 
+
 
 .my-menu {
 	padding: 0 32rpx;

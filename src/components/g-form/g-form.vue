@@ -70,10 +70,7 @@
 						{{ verifyTip || item.verifyBtnText }}
 					</view>
 
-					<view
-						v-if="['select'].includes(item.field)"
-						class="icon-arrow"
-					/>
+					<view v-if="item.showSuffixArrowIcon" class="icon-arrow" />
 				</view>
 			</view>
 		</view>
@@ -143,7 +140,7 @@ export default defineComponent({
 				clearTimer();
 			} else {
 				uni.showLoading({
-					title: '',
+					title: '请求中...',
 					mask: true
 				});
 
@@ -332,9 +329,8 @@ export default defineComponent({
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 
 	.label {
+		color: var(--hr-neutral-color-8);
 		&.item-require {
-			color: var(--hr-neutral-color-8);
-
 			&::before {
 				content: '*';
 				color: var(--hr-error-color-6);
