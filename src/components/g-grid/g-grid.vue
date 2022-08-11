@@ -24,44 +24,29 @@
 import { withDefaults, ref } from 'vue';
 interface IGridProps {
 	list: IRoute[];
-	type: 1 | 2; //首页图标样式1 默认2
+	type?: 1 | 2; //首页图标样式1 默认2
 }
 
 const props = withDefaults(defineProps<IGridProps>(), {
 	list: () => [
 		{
 			title: '医院介绍',
-			url: '/xxx',
+			path: '/xxx',
 			iconfont: 'ico_sy_paper5'
 		},
 		{
 			title: '医院介绍',
-			url: '/xxx',
+			path: '/xxx',
 			iconfont: 'ico_sy_paper5'
 		},
 		{
 			title: '医院介绍',
-			url: '/xxx',
+			path: '/xxx',
 			iconfont: 'ico_sy_paper5'
 		},
 		{
 			title: '医院介绍',
-			url: '/xxx',
-			iconfont: 'ico_sy_paper5'
-		},
-		{
-			title: '医院介绍',
-			url: '/xxx',
-			iconfont: 'ico_sy_paper5'
-		},
-		{
-			title: '医院介绍',
-			url: '/xxx',
-			iconfont: 'ico_sy_paper5'
-		},
-		{
-			title: '医院介绍',
-			url: '/xxx',
+			path: '/xxx',
 			iconfont: 'ico_sy_paper5'
 		}
 	],
