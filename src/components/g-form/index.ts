@@ -16,6 +16,9 @@ export interface IRule {
 	message: string;
 }
 
+/**
+ * rowStyle: 'margin-bottom: 16rpx;'
+ */
 interface IBaseInstance {
 	key: string;
 	label: string;
@@ -25,11 +28,18 @@ interface IBaseInstance {
 	disabled?: boolean;
 	rule?: IRule | IRule[];
 	showSuffixArrowIcon?: boolean;
+	rowStyle?: string;
+	labelWidth?: string;
 }
 
 interface IInputInstance extends IBaseInstance {
 	field: 'input-text';
 	inputType?: TInputType;
+	maxlength?: number;
+}
+
+export interface ISwitchInstance extends Omit<IBaseInstance, 'placeholder'> {
+	field: 'switch';
 }
 
 /**
@@ -37,11 +47,10 @@ interface IInputInstance extends IBaseInstance {
  *
  * verifySecond  倒计时 s
  */
-export interface IInputVerifyInstance extends IBaseInstance {
+export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
 	field: 'input-verify';
 	verifyBtnText: string;
 	verifySecond: number;
-	inputType?: TInputType;
 }
 
 interface ISelectInstance extends IBaseInstance {
@@ -49,4 +58,8 @@ interface ISelectInstance extends IBaseInstance {
 	options: ISelectOptions[];
 }
 
-export type TInstance = IInputInstance | ISelectInstance | IInputVerifyInstance;
+export type TInstance =
+	| IInputInstance
+	| ISelectInstance
+	| IInputVerifyInstance
+	| ISwitchInstance;

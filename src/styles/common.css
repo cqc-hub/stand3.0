@@ -32,3 +32,18 @@
 	border-width: 4rpx 4rpx 0 0;
 	transform: rotate(135deg);
 }
+
+/* 按钮 */
+.btn {
+	color: var(--h-color-white);
+	border-radius: 16rpx;
+}
+
+.btn.btn-primary {
+	background-color: var(--hr-brand-color-6);
+}
+
+.btn.btn-disabled {
+	pointer-events: none;
+	background-color: #9ebeff;
+}

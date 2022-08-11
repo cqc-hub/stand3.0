@@ -1,12 +1,16 @@
 <template>
 	<view class="">
 		<view v-if="list.length" class="container">
+			<!-- ${(item.rowStyle && item.rowStyle) || ''} -->
 			<view
 				v-for="item in list"
 				:key="item.key"
 				:class="{
 					'form-item-icon': item.field === 'select'
 				}"
+				:style="`--label-width: ${item.labelWidth || '190rpx'}; ${
+					(item.rowStyle && item.rowStyle) || ''
+				}`"
 				class="form-item"
 			>
 				<view
@@ -34,6 +38,7 @@
 						:placeholderStyle="inputPlaceHolderStyle"
 						:value="value[item.key]"
 						:type="item.inputType"
+						:maxlength="item.maxlength"
 						@input="(e) => changeInput(item, e)"
 						:class="{
 							'my-disabled': item.disabled
@@ -44,7 +49,6 @@
 					<view
 						v-if="item.field === 'select'"
 						@tap.prevent.stop="chooseOption(item)"
-						class=""
 					>
 						<view class="my-disabled">
 							<uni-easyinput
@@ -56,6 +60,18 @@
 								class="form-input"
 							/>
 						</view>
+					</view>
+
+					<view
+						v-if="item.field === 'switch'"
+						class="container-body-switch"
+					>
+						<switch
+							:checked="!!value[item.key]"
+							:disabled="item.disabled"
+							@change="(e: any) => changeSwitch(item, e)"
+							color="var(--hr-brand-color-6)"
+						/>
 					</view>
 
 					<view
@@ -92,10 +108,15 @@ import type {
 	TInstance,
 	ISelectOptions,
 	IRule,
-	IInputVerifyInstance
+	IInputVerifyInstance,
+	ISwitchInstance
 } from '@/components/g-form/index';
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+
+/**
+ * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
+ */
 
 export default defineComponent({
 	components: {
@@ -109,7 +130,7 @@ export default defineComponent({
 		}
 	},
 
-	emits: ['update:value', 'submit'],
+	emits: ['update:value', 'submit', 'change'],
 
 	setup(props, ctx) {
 		const inputPlaceHolderStyle = `
@@ -160,18 +181,18 @@ export default defineComponent({
 		};
 
 		const setList = function (initList: TInstance[]) {
-			list.value = initList;
-
+			const defaultKeys = Reflect.ownKeys(props.value);
 			const cache: BaseObject = {};
-			list.value.map((o) => {
-				const { key } = o;
 
-				if (!props.value[key]) {
+			initList.map((o) => {
+				const { key } = o;
+				if (!defaultKeys.includes(key)) {
 					cache[key] = '';
 				}
 			});
 
 			setData(cache);
+			list.value = initList;
 		};
 
 		const chooseOption = function (item: TInstance) {
@@ -197,11 +218,19 @@ export default defineComponent({
 			}
 		};
 
-		const setData = function (value: BaseObject) {
+		const setData = function (value: BaseObject, item?: TInstance) {
 			emits('update:value', {
 				...props.value,
 				...value
 			});
+
+			if (item) {
+				const key = Object.keys(value)[0];
+				emits('change', {
+					item,
+					value: value[key]
+				});
+			}
 		};
 
 		const findOptionLabel = function (item: TInstance, value) {
@@ -284,17 +313,32 @@ export default defineComponent({
 		};
 
 		const changeInput = (item: TInstance, v: string) => {
-			setData({
-				[item.key]: v
-			});
+			setData(
+				{
+					[item.key]: v
+				},
+				item
+			);
 		};
 
 		const changeSelect = function (item: TInstance, v: any) {
 			if (item.field !== 'select') return;
 
-			setData({
-				[item.key]: v
-			});
+			setData(
+				{
+					[item.key]: v
+				},
+				item
+			);
+		};
+
+		const changeSwitch = function (item: ISwitchInstance, { detail }) {
+			setData(
+				{
+					[item.key]: detail.value
+				},
+				item
+			);
 		};
 
 		return {
@@ -310,7 +354,8 @@ export default defineComponent({
 			submit,
 			changeInput,
 			requestVerify,
-			verifyTip
+			verifyTip,
+			changeSwitch
 		};
 	}
 });
@@ -320,16 +365,14 @@ export default defineComponent({
 .form-item {
 	display: grid;
 
-	grid-template-columns: 220rpx 1fr;
+	grid-template-columns: var(--label-width) 1fr;
 	align-items: center;
 	background-color: var(--h-color-white);
-	padding: 26rpx;
-	padding-left: 14rpx;
-	padding-right: 32rpx;
+	padding: 26rpx 32rpx;
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
+	color: var(--hr-neutral-color-8);
 
 	.label {
-		color: var(--hr-neutral-color-8);
 		&.item-require {
 			&::before {
 				content: '*';
@@ -349,6 +392,12 @@ export default defineComponent({
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+
+		.container-body-switch {
+			flex: 1;
+			display: flex;
+			flex-direction: row-reverse;
+		}
 
 		&:first-child {
 			flex: 1;
