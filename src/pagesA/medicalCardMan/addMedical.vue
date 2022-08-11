@@ -14,7 +14,7 @@ import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
 const gform = ref();
 const formData = ref<BaseObject>({
-	name: 'cq'
+	name: ''
 });
 
 const formList: TInstance[] = [
@@ -26,8 +26,12 @@ const formList: TInstance[] = [
 		key: 'name',
 		rule: [
 			{
-				rule: /233/,
-				message: 'dsad'
+				rule: /[\w\W]{3,}/,
+				message: '长度3'
+			},
+			{
+				rule: /cqc/,
+				message: 'not cqc'
 			}
 		]
 	},
@@ -48,6 +52,17 @@ const formList: TInstance[] = [
 				value: 234
 			}
 		]
+	},
+
+	{
+		required: true,
+		label: '验证码',
+		field: 'input-verify',
+		placeholder: '请输入验证码',
+		key: 'verify',
+		verifyBtnText: '获取验证码',
+		inputType: 'number',
+		verifySecond: 5
 	}
 ];
 

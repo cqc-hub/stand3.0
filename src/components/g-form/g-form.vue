@@ -24,12 +24,16 @@
 					class="container-body"
 				>
 					<uni-easyinput
-						v-if="['input-text'].includes(item.field)"
+						v-if="
+							item.field === 'input-text' ||
+							item.field === 'input-verify'
+						"
 						:placeholder="item.placeholder"
 						:inputBorder="false"
 						:clearable="false"
 						:placeholderStyle="inputPlaceHolderStyle"
 						:value="value[item.key]"
+						:type="item.inputType"
 						@input="(e) => changeInput(item, e)"
 						:class="{
 							'my-disabled': item.disabled
@@ -52,6 +56,18 @@
 								class="form-input"
 							/>
 						</view>
+					</view>
+
+					<view
+						v-if="item.field === 'input-verify'"
+						@tap="requestVerify(item)"
+						:class="{
+							'form-item-verify-disabled': verifyTip,
+							'my-disabled': verifyTip
+						}"
+						class="verify-btn"
+					>
+						{{ verifyTip || item.verifyBtnText }}
 					</view>
 
 					<view
@@ -78,7 +94,8 @@ import { defineComponent, ref, PropType } from 'vue';
 import type {
 	TInstance,
 	ISelectOptions,
-	IRule
+	IRule,
+	IInputVerifyInstance
 } from '@/components/g-form/index';
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
@@ -104,12 +121,46 @@ export default defineComponent({
 `;
 
 		const emits = ctx.emit;
-
 		const actionSheet = ref();
 		const actionSheetOpt = ref<ISelectOptions[]>([]);
 		const list = ref<TInstance[]>([]);
 		const messageStore = useMessageStore();
+
+		const verifyTip = ref<string>('');
 		let cacheItem: null | TInstance = null;
+		let timer: null | number = null;
+		const wait = (n: number) => new Promise((r) => setTimeout(r, n));
+
+		const clearTimer = () => {
+			if (timer) {
+				clearTimeout(timer);
+				timer = null;
+				verifyTip.value = '';
+			}
+		};
+		const requestVerify = async (item: IInputVerifyInstance) => {
+			if (timer) {
+				clearTimer();
+			} else {
+				uni.showLoading({
+					title: '',
+					mask: true
+				});
+
+				await wait(1500);
+				let waitTime = item.verifySecond;
+
+				verifyTip.value = `${waitTime--}s后重新发送`;
+				timer = setInterval(() => {
+					verifyTip.value = `${waitTime--}s后重新发送`;
+
+					if (waitTime <= -1) {
+						clearTimer();
+					}
+				}, 1000);
+				uni.hideLoading();
+			}
+		};
 
 		const setList = function (initList: TInstance[]) {
 			list.value = initList;
@@ -192,9 +243,15 @@ export default defineComponent({
 					const flag = matchValue(o);
 					if (!flag) {
 						messageStore.showMessage(o.message, 1500);
-						throw new Error(item.label + ': 校验失败');
+						throw new Error(item.label + ': 校验失败(rule)');
 					}
 				});
+			} else {
+				const flag = matchValue(rule);
+				if (!flag) {
+					messageStore.showMessage(rule.message, 1500);
+					throw new Error(item.label + ': 校验失败(rule)');
+				}
 			}
 		};
 
@@ -205,10 +262,21 @@ export default defineComponent({
 
 			while (k < len) {
 				const item = list.value[k++];
-				const { rule, key } = item;
+				const { rule, key, required, emptyMessage } = item;
 				const v = data[key];
 
-				if (rule) {
+				const isFillValue = !!(v || v === 0);
+
+				if (required && !isFillValue) {
+					const defaultEmptyMessage = item.label + ' 不能为空';
+					messageStore.showMessage(
+						emptyMessage || defaultEmptyMessage,
+						1500
+					);
+					throw new Error(item.label + ': 校验失败(empty)');
+				}
+
+				if (rule && isFillValue) {
 					ruleMatch(rule, v, item);
 				}
 			}
@@ -243,7 +311,9 @@ export default defineComponent({
 			inputPlaceHolderStyle,
 			findOptionLabel,
 			submit,
-			changeInput
+			changeInput,
+			requestVerify,
+			verifyTip
 		};
 	}
 });
@@ -286,6 +356,14 @@ export default defineComponent({
 
 		&:first-child {
 			flex: 1;
+		}
+
+		.verify-btn {
+			color: var(--hr-brand-color-6);
+		}
+
+		.form-item-verify-disabled {
+			color: var(--hr-neutral-color-5);
 		}
 	}
 }
