@@ -47,3 +47,8 @@
 	pointer-events: none;
 	background-color: #9ebeff;
 }
+
+
+.scroll-page {
+	height: 100vh;
+}

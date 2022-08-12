@@ -37,6 +37,7 @@ const globalStore = defineStore('global', {
 			'herenId',
 			'sysTerms',
 			'nationTerms',
+			'patientTypeTerms',
 			'browser'
 		]
 	},
@@ -214,9 +215,31 @@ const globalStore = defineStore('global', {
 				}
 			}
 
-			await api.getParamsMoreBySysCode({
-				paramCode: 'PATIENT_TYPE'
-			});
+			if (!this.patientTypeTerms.length) {
+				uni.showLoading({
+					title: '获取系统配置中',
+					mask: true
+				});
+				const { result } = await api.getParamsMoreBySysCode({
+					paramCode: 'PATIENT_TYPE'
+				});
+				const PATIENT_TYPE = result.PATIENT_TYPE;
+
+				try {
+					this.patientTypeTerms = JSON.parse(PATIENT_TYPE).map(
+						(o) => {
+							return {
+								label: o.value,
+								value: o.code
+							};
+						}
+					);
+				} catch (err) {
+					console.error('获取就诊人类型失败: ', err);
+				}
+
+				uni.hideLoading();
+			}
 		}
 	}
 });

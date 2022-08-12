@@ -4,6 +4,7 @@
 			:duration="messageStore.popupDuration"
 			@maskClick="maskClick"
 			ref="popup"
+			mask-background-color="rgba(0,0,0,0)"
 		>
 			<view
 				:style="containerStyle"

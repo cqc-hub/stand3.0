@@ -86,7 +86,10 @@
 						{{ verifyTip || item.verifyBtnText }}
 					</view>
 
-					<view v-if="item.showSuffixArrowIcon" class="icon-arrow" />
+					<view
+						v-if="item.showSuffixArrowIcon"
+						class="icon-font icon-resize ico_arrow"
+					/>
 				</view>
 			</view>
 		</view>
@@ -415,5 +418,11 @@ export default defineComponent({
 
 .my-disabled {
 	pointer-events: none !important;
+}
+
+
+.icon-resize {
+	width: 60rpx;
+	height: 60rpx;
 }
 </style>

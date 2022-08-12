@@ -1,26 +1,34 @@
 <template>
 	<view class="login-center">
+		<scroll-view class="scroll-container" scroll-y>
+			<view class="top-bg" />
+
+			<!-- <view @click="goRoute">2333</view>
+			<view @click="msg">eeee</view> -->
+
+			<personRecord />
+			<view class="my-menu">
+				<view class="list">
+					<view class="title">我的订单</view>
+					<g-grid />
+				</view>
+				<view class="list">
+					<view class="title">我的服务</view>
+					<g-grid />
+				</view>
+				<view class="list">
+					<view class="title">我的工具</view>
+					<g-grid />
+				</view>
+				<view class="list">
+					<view class="title">我的工具</view>
+					<g-grid />
+				</view>
+			</view>
+		</scroll-view>
+
+		<home-Tabbar />
 		<g-message />
-		<view class="top-bg" />
-
-		<view @click="goRoute">2333</view>
-		<view @click="msg">eeee</view>
-
-		<personRecord />
-		<view class="my-menu">
-			<view class="list">
-				<view class="title">我的订单</view>
-				<g-grid />
-			</view>
-			<view class="list">
-				<view class="title">我的服务</view>
-				<g-grid />
-			</view>
-			<view class="list">
-				<view class="title">我的工具</view>
-				<g-grid />
-			</view>
-		</view>
 	</view>
 </template>
 
@@ -29,6 +37,7 @@ import { defineComponent, ref, nextTick, onMounted } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 import personRecord from './componetns/personRecord.vue';
+import homeTabbar from './componetns/homeTabbar.vue';
 
 const props = defineProps<{
 	isWarningLogin?: '1';
@@ -58,6 +67,14 @@ onMounted(() => {
 	width: 100%;
 	height: 100vh;
 	position: relative;
+	flex-direction: column;
+
+	display: flex;
+
+	.scroll-container {
+		height: 1px;
+		flex: 1;
+	}
 
 	.top-bg {
 		height: 500upx;
@@ -71,6 +88,7 @@ onMounted(() => {
 
 .my-menu {
 	padding: 0 32rpx;
+	margin-bottom: 188rpx;
 	.list {
 		background: var(--h-color-white);
 		border: 2px solid #f3f3f3;

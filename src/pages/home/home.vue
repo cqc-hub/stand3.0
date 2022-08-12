@@ -1,35 +1,43 @@
 <template>
-	<view class="homePage">
-		<view>
-			<g-search :searchPlaceholder="searchPlaceholder"></g-search>
-		</view>
-		<view class="card">
-			<view class="top-card flex-normal-between">
-				<view class="flex-normal">
-					<view class="iconfont icon-size">&#xe6a7;</view>
-					<text>张三三</text>
+	<view>
+		<scroll-view class="scroll-page">
+			<view class="homePage">
+				<view>
+					<g-search :searchPlaceholder="searchPlaceholder"></g-search>
 				</view>
-				<view class="switchPatient" @tap="chooseAction">
-					切换就诊人
+				<view class="card">
+					<view class="top-card flex-normal-between">
+						<view class="flex-normal">
+							<view class="iconfont icon-size">&#xe6a7;</view>
+							<text>张三三</text>
+						</view>
+						<view class="switchPatient" @tap="chooseAction">
+							切换就诊人
+						</view>
+					</view>
+					<view class="top-menu">
+						<view class="box">
+							<g-grid :list="topMenuList" :type="1" />
+						</view>
+						<view class="notice flex-normal">
+							<text
+								class="icon-font img_announcement icon-size"
+							></text>
+							<text>浙江省人民医院互联网医院使用指南指南…</text>
+						</view>
+					</view>
+				</view>
+				<view class="banner-menu">
+					<homeBanner />
+				</view>
+				<view class="fun-list">
+					<homeMenu />
 				</view>
 			</view>
-			<view class="top-menu">
-				<view class="box">
-					<g-grid :list="topMenuList" :type="1" />
-				</view>
-				<view class="notice flex-normal">
-					<text class="icon-font img_announcement icon-size"></text>
-					<text>浙江省人民医院互联网医院使用指南指南…</text>
-				</view>
-			</view>
-		</view>
-		<view class="banner-menu">
-			<homeBanner />
-		</view>
-		<view class="fun-list">
-			<homeMenu />
-		</view>
+		</scroll-view>
+
 		<choose-pat-action ref="actionSheet" />
+		<homeTabbar />
 	</view>
 </template>
 
@@ -38,6 +46,7 @@ import { ref } from 'vue';
 import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
+import homeTabbar from './componetns/homeTabbar.vue';
 import { useViewConfigStore } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
@@ -85,6 +94,8 @@ onLoad(() => {
 <style lang="scss" scoped>
 .homePage {
 	padding: 16rpx 32rpx;
+	padding-bottom: 60rpx;
+	padding-bottom: 350rpx;
 
 	.card {
 		margin-top: var(--h-margin-24);

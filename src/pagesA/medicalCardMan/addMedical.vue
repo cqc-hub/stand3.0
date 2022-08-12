@@ -10,9 +10,8 @@
 		<view class="aa">
 			{{ JSON.stringify(formData) }}
 		</view>
-		<view class="aa"></view>
-		<g-message />
 
+		<g-message />
 		<view class="footer">
 			<button
 				@click="gform.submit"
@@ -33,8 +32,8 @@ import type { TInstance } from '@/components/g-form/index';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
 const props = defineProps<{
-	name?: 'string'
-}>()
+	name?: 'string';
+}>();
 const globalStore = useGlobalStore();
 const gform = ref<any>('');
 const formData = ref<BaseObject>({
@@ -69,16 +68,7 @@ const formList: TInstance[] = [
 		placeholder: '请选择',
 		key: 'medicalType',
 		field: 'select',
-		options: [
-			{
-				label: 'type1',
-				value: 233
-			},
-			{
-				label: 'type2',
-				value: 234
-			}
-		]
+		options: globalStore.patientTypeTerms
 	},
 
 	{
@@ -125,8 +115,7 @@ onMounted(() => {
 	gform.value.setList(formList);
 	setTimeout(() => {
 		console.log('wsgajsgjagksjghasjgh');
-
-	}, 3000)
+	}, 3000);
 });
 </script>
 
