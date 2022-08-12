@@ -13,7 +13,7 @@ const userStore = defineStore('user', {
 			sex: '',
 			idNo: '',
 			cellPhoneNum: '',
-			patientId: '46375274563284564637527456328456'
+			patientId: ''
 		};
 	},
 

@@ -1,11 +1,11 @@
 import { createRouter, BeforeEachResult } from '@gowiny/uni-router';
 import PAGE_DATA from '@/pages.json';
-import global from '@/config/global';
-import GS from '@/common/globalState';
-import { IPageRoute, IExtend } from './type';
-import { pagesInterceptEveryone } from './intercept';
+import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { joinQuery } from '@/common';
 
-const mapRouterPages = new Map();
+import { IPageRoute, IExtend } from './type';
+
+const pageAdmin = new Map();
 const routerPages = [...PAGE_DATA.pages];
 const subPackages = PAGE_DATA.subPackages;
 
@@ -20,13 +20,17 @@ if (subPackages) {
 	});
 }
 
+uni.reLaunch = () => {
+	console.log('23333');
+};
 
 routerPages.map((o) => {
-	mapRouterPages.set('/' + o.path, o);
+	pageAdmin.set('/' + o.path, o);
 });
+
 //获取路由extend额外参数的方法
-const mapCurrentRoute = (path: String | undefined) => {
-	return mapRouterPages.get(path).extends;
+const getCurrentRoute = (path: String | undefined) => {
+	return pageAdmin.get(path);
 };
 
 //初始化
@@ -34,43 +38,74 @@ const router = createRouter({
 	pageData: PAGE_DATA
 });
 
+const jumpRouter = function (route: {
+	url: string;
+	query?: BaseObject;
+	navType: 'replace' | 'push';
+}) {
+	const { url, query, navType } = route;
+
+	const dUrl = query ? joinQuery(url, query) : url;
+	const uniRouteKey = navType === 'replace' ? 'reLaunch' : 'navigateTo';
+
+	// #ifdef MP-WEIXIN
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+	setTimeout(() => {
+		uni[uniRouteKey]({
+			url: dUrl,
+			complete: uni.hideLoading
+		});
+	}, 500);
+	// #endif
+
+	// #ifdef MP-ALIPAY
+	return {
+		to: {
+			path: url,
+			query
+		},
+		navType
+	};
+	// #endif
+};
+
 //全局路由前置守卫
 router.beforeEach(async (to, from) => {
-	console.log('beforeEach----守卫', to, from);
-	//判断是否是该项目对应的sysCode，否则清除缓存
-	// if (!uni.getStorageSync('sysCode') || (uni.getStorageSync('sysCode') != global.SYS_CODE)) {
-	//   GS.clearData();
-	// }
-	// //设置全局状态
-	// GS.setState()
+	const currentRoute = getCurrentRoute(to.path);
+	const globalStore = useGlobalStore();
+	const { extend } = currentRoute;
 
-	const pageIntercept = mapCurrentRoute(to.path);
-	//统一拦截方法
-	console.log(88, pageIntercept);
+	console.log({
+		to,
+		from,
+		currentRoute,
+		pageAdmin,
+		globalStore,
+		isLogin: globalStore.isLogin
+	});
 
-	pagesInterceptEveryone(pageIntercept, to);
+	if (extend) {
+		const { login } = extend;
+
+		if (login) {
+			if (!globalStore.isLogin) {
+				console.log('需要登录----');
+
+				return jumpRouter({
+					navType: 'replace',
+					url: '/pages/home/my',
+					query: {
+						isWarningLogin: '1'
+					}
+				});
+			}
+		}
+	}
 });
 
-// router.beforeEach((to, from) => {
-//   console.log('beforeEach 2 begin', to, from)
-//   if (to.path != '/pages/login/login') { //如果返回的是Promise，则会等待执行完成才进行下一步
-//     return new Promise((success, fail) => {
-//       setTimeout(function () {
-//         console.log('beforeEach 2 end')
-//         success({ path: '/pages/login/login' })
-//       }, 1000)
-//     })
-//   }
-// })
-
-router.afterEach(async (to, from) => {
-	// console.log('afterEach 2 ,', to, from)
-	// return new Promise<BeforeEachResult>((success, fail) => {
-	//   setTimeout(function () {
-	//     console.log('afterEach 已等待3秒，开始下一步')
-	//     success(true)
-	//   }, 100)
-	// })
-});
+router.afterEach(async (to, from) => {});
 
 export default router;

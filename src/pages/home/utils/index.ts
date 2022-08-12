@@ -101,12 +101,13 @@ const aliInLogin = async function ({ codeType, code }) {
 	getUerInfo();
 };
 
-const getUerInfo = async function () {
+export const getUerInfo = async function () {
 	const { result } = await api.userInfoByToken({});
 
 	if (result) {
 		const userStore = useUserStore();
 		const globalStore = useGlobalStore();
+		const messageStore = useMessageStore();
 
 		const { cellPhoneNum, herenId, idNo, name, sex } = result;
 
@@ -116,6 +117,15 @@ const getUerInfo = async function () {
 		userStore.updatePhone(cellPhoneNum);
 
 		globalStore.setHerenId(herenId);
+
+		if (!herenId) {
+			messageStore.showMessage('未完善，请先完善', 1000);
+			setTimeout(() => {
+				uni.reLaunch({
+					url: '/pagesA/medicalCardMan/addMedical'
+				});
+			}, 1200);
+		}
 	}
 };
 

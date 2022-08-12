@@ -78,7 +78,7 @@ const topMenuList = [
 ];
 
 onLoad(() => {
-	viewConfigStore.updateHomeConfig();
+	// viewConfigStore.updateHomeConfig();
 });
 </script>
 

@@ -16,13 +16,29 @@ interface IStateGlobal {
 	openId: string;
 	h5OpenId: string;
 	herenId: string;
-	sysTerms: { label: string; value: string }[];
+	sysTerms: IOptions[];
+	nationTerms: IOptions[];
+	patientTypeTerms: IOptions[];
 }
 //页面存储token brower等
 const globalStore = defineStore('global', {
+	/**
+	 * 数据存在 storage 中
+	 * 大小存在限制
+	 * 所有 storage 10mb
+	 * 单个 storage key   wx 1mb  alipay  200kb
+	 */
 	persist: {
 		key: 'global',
-		paths: ['token', 'openId', 'h5OpenId', 'herenId', 'sysTerms']
+		paths: [
+			'token',
+			'openId',
+			'h5OpenId',
+			'herenId',
+			'sysTerms',
+			'nationTerms',
+			'browser'
+		]
 	},
 
 	state: (): IStateGlobal => {
@@ -41,13 +57,17 @@ const globalStore = defineStore('global', {
 			openId: '',
 			h5OpenId: '',
 			herenId: '',
-			sysTerms: []
+			sysTerms: [],
+			nationTerms: [],
+			patientTypeTerms: []
 		};
 	},
+
 	getters: {
 		getToken(): any {
 			return this.token;
 		},
+
 		getBrowser(): any {
 			return this.browser;
 		},
@@ -59,6 +79,7 @@ const globalStore = defineStore('global', {
 			return false;
 		}
 	},
+
 	actions: {
 		clearStore() {
 			this.token = {
@@ -145,27 +166,57 @@ const globalStore = defineStore('global', {
 			this.herenId = id;
 		},
 
-		// 获取术语
+		// 获取后台静态数据
 		async getSysTerm() {
-			if (this.sysTerms.length) {
-				return;
-			}
-
-			const { result } = await api.getParamsMoreBySysCode({
-				paramCode: 'REG_ORDER_STATUS'
-			});
-
-			let list = result && result.REG_ORDER_STATUS;
-			if (list) {
-				list = JSON.parse(list).map((item) => {
-					return {
-						label: item.label,
-						value: item.code
-					};
+			// label: "已预约", value: "0"
+			if (!this.sysTerms.length) {
+				uni.showLoading({
+					title: '获取系统配置中',
+					mask: true
+				});
+				const { result } = await api.getParamsMoreBySysCode({
+					paramCode: 'REG_ORDER_STATUS'
 				});
 
-				this.sysTerms = list;
+				uni.hideLoading();
+
+				let list = result && result.REG_ORDER_STATUS;
+				if (list) {
+					list = JSON.parse(list).map((item) => {
+						return {
+							label: item.label,
+							value: item.code
+						};
+					});
+
+					this.sysTerms = list;
+				}
 			}
+
+			if (!this.nationTerms.length) {
+				uni.showLoading({
+					title: '获取系统配置中',
+					mask: true
+				});
+				const { result } = await api.getTermsBySysAndCode({
+					domainCode: 'CHINESE_NATION'
+				});
+
+				uni.hideLoading();
+
+				const list = result && result.length && result[0].terms;
+
+				if (list) {
+					this.nationTerms = list.map((o) => ({
+						label: o.label,
+						value: o.code
+					}));
+				}
+			}
+
+			await api.getParamsMoreBySysCode({
+				paramCode: 'PATIENT_TYPE'
+			});
 		}
 	}
 });

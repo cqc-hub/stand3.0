@@ -10,7 +10,7 @@
 			<view class="info">
 				<block v-if="globalStore.isLogin">
 					<text class="user-name animate__animated animate__fadeIn">
-						{{ userSore.name }}
+						{{ userSore.name || userSore.cellPhoneNum }}
 					</text>
 
 					<text

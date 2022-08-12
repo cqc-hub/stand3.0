@@ -4,6 +4,7 @@
 		<view class="top-bg" />
 
 		<view @click="goRoute">2333</view>
+		<view @click="msg">eeee</view>
 
 		<personRecord />
 		<view class="my-menu">
@@ -15,20 +16,23 @@
 				<view class="title">我的服务</view>
 				<g-grid />
 			</view>
-			 <view class="list">
-			 	<view class="title">我的工具</view>
-			 	<g-grid />
-			 </view>
-
+			<view class="list">
+				<view class="title">我的工具</view>
+				<g-grid />
+			</view>
 		</view>
 	</view>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, nextTick, onMounted } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 import personRecord from './componetns/personRecord.vue';
+
+const props = defineProps<{
+	isWarningLogin?: '1';
+}>();
 
 const messageStore = useMessageStore();
 
@@ -36,11 +40,17 @@ const msg = () => {
 	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
 };
 
-const goRoute = function() {
+const goRoute = function () {
 	uni.navigateTo({
-		url: '/pagesA/medicalCardMan/addMedical'
-	})
-}
+		url: '/pagesA/medicalCardMan/addMedical?name=cqc'
+	});
+};
+
+onMounted(() => {
+	if (props.isWarningLogin) {
+		messageStore.showMessage('未登录,请先登陆', 1000);
+	}
+});
 </script>
 
 <style lang="scss" scoped>
@@ -58,7 +68,6 @@ const goRoute = function() {
 		pointer-events: none;
 	}
 }
-
 
 .my-menu {
 	padding: 0 32rpx;

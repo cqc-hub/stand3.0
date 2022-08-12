@@ -368,13 +368,13 @@ export default defineComponent({
 	grid-template-columns: var(--label-width) 1fr;
 	align-items: center;
 	background-color: var(--h-color-white);
-	padding: 26rpx 32rpx;
+	padding: 18rpx 32rpx;
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 	color: var(--hr-neutral-color-8);
 
 	.label {
 		&.item-require {
-			&::before {
+			&::after {
 				content: '*';
 				color: var(--hr-error-color-6);
 			}
