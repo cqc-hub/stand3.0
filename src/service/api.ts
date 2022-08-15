@@ -38,6 +38,9 @@ const baseApi = {
 	getSysAppMore: (data) =>
 		service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
 
+	getAllDivision: (data) =>
+		service.post('/phs-base/division/getAllDivision', parm(data)),
+
 	getTermsBySysAndCode: (data) =>
 		service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
 

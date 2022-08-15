@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import api from '@/service/api';
 
+import { getLocalStorage, setLocalStorage } from '@/common';
+
 interface IStateGlobal {
 	token: {
 		accessToken: string;
@@ -239,6 +241,17 @@ const globalStore = defineStore('global', {
 				}
 
 				uni.hideLoading();
+			}
+
+			const addressCity = getLocalStorage('addressCity');
+			if (!addressCity) {
+				const { result } = await api.getAllDivision({});
+
+				if (result && result.length) {
+					setLocalStorage({
+						addressCity: result
+					});
+				}
 			}
 		}
 	}

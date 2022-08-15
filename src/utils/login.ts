@@ -5,7 +5,7 @@ import api from '@/service/api';
 
 const packageAuthParams = (
 	args,
-	url,
+	url: `/${string}`,
 	payload: {
 		isOutArgs?: boolean;
 	} = {}
