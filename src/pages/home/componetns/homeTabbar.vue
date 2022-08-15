@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 
 const current = ref('');
 const tabBars = [

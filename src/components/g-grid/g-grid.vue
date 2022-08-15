@@ -1,7 +1,7 @@
 <template>
-	<view :class="props.type == 2 ? 'normal' : 'diff'">
+	<view :class="options.type == 2 ? 'normal' : 'diff'">
 		<uni-grid :showBorder="false" :square="false" :column="4">
-			<uni-grid-item v-for="(item, i) in list" :key="i">
+			<uni-grid-item v-for="(item, i) in options.list" :key="i">
 				<view class="grid-item-box">
 					<!-- 绿色能量角标 -->
 					<!-- <view class="gree-label">绿色能量</view> -->
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefaults, ref } from 'vue';
+import { withDefaults, computed } from 'vue';
 interface IGridProps {
 	list: IRoute[];
 	type?: 1 | 2; //首页图标样式1 默认2
@@ -51,6 +51,15 @@ const props = withDefaults(defineProps<IGridProps>(), {
 		}
 	],
 	type: 2
+});
+
+const options = computed(() => {
+	console.log(999, props.list);
+
+	return {
+		list: props.list,
+		type: props.type
+	};
 });
 </script>
 

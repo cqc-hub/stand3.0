@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="home">
 		<scroll-view class="scroll-page">
 			<view class="homePage">
 				<view>
@@ -9,7 +9,11 @@
 					<view class="top-card flex-normal-between">
 						<view class="flex-normal">
 							<view class="iconfont icon-size">&#xe6a7;</view>
-							<text>张三三</text>
+							<!-- <text>张三三</text> -->
+							<view class="patient">
+								<text>张三三</text>
+								<text>ID：644567882</text>
+							</view>
 						</view>
 						<view class="switchPatient" @tap="chooseAction">
 							切换就诊人
@@ -23,12 +27,32 @@
 							<text
 								class="icon-font img_announcement icon-size"
 							></text>
-							<text>浙江省人民医院互联网医院使用指南指南…</text>
+							<swiper
+								autoplay="false"
+								display-multiple-items="1"
+								vertical="true"
+								circular
+								interval="3000"
+								class="bar-swiper"
+							>
+								<swiper-item
+									v-for="(item, index) in noticeMenu"
+									:key="index"
+									class="swiper-item"
+								>
+									<view class="item_box">
+										{{ item.title }}
+									</view>
+								</swiper-item>
+							</swiper>
 						</view>
 					</view>
 				</view>
 				<view class="banner-menu">
-					<homeBanner />
+					<homeBanner
+						:leftFunctionList="bannerLeftFunctionList"
+						:bannerFunctionList="bannerFunctionList"
+					/>
 				</view>
 				<view class="fun-list">
 					<homeMenu />
@@ -63,35 +87,30 @@ const chooseAction = () => {
 const viewConfigStore = useViewConfigStore();
 
 const searchPlaceholder = '搜索科室、医生或疾病';
-const topMenuList = [
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	},
-	{
-		title: '预约挂号',
-		url: '/xxx',
-		iconfont: 'ico_sy_calendar1'
-	}
-];
+let topMenuList = ref({}); //首页顶部menu
+const noticeMenu = ref({}); //通知列表
+const bannerLeftFunctionList = ref([]); //banner列表
+const bannerFunctionList = ref([]); //通知列表
 
 onLoad(() => {
-	// viewConfigStore.updateHomeConfig();
+	viewConfigStore.updateHomeConfig();
+	const homeConfig = viewConfigStore.getHomeConfig;
+	topMenuList.value = homeConfig[0].functionList;
+	noticeMenu.value = homeConfig[1].functionList;
+	bannerFunctionList.value = homeConfig[2].functionList;
+	bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
 });
 </script>
 
 <style lang="scss" scoped>
+.home {
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	flex-direction: column;
+	display: flex;
+}
+
 .homePage {
 	padding: 16rpx 32rpx;
 	padding-bottom: 60rpx;
@@ -114,6 +133,19 @@ onLoad(() => {
 			border-radius: 24rpx;
 
 			height: 100rpx;
+
+			.patient {
+				text {
+					display: block;
+					font-size: var(--hr-font-size-base);
+					line-height: 44rpx;
+
+					&:last-child {
+						font-size: var(--hr-font-size-xs);
+						line-height: 40rpx;
+					}
+				}
+			}
 
 			:after {
 				width: 100%;
@@ -173,6 +205,26 @@ onLoad(() => {
 			.box {
 				padding: 60rpx 0 40rpx 0;
 			}
+
+			.bar-swiper {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				flex: 1;
+
+				.swiper-item {
+					display: flex;
+					align-items: center;
+					word-break: break-all;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					color: var(--hr-neutral-color-9);
+					font-size: var(--hr-font-size-xs);
+					width: 100%;
+				}
+			}
 		}
 
 		.notice {
@@ -186,7 +238,6 @@ onLoad(() => {
 				width: 64rpx;
 				height: 64rpx;
 				margin-right: 16rpx;
-				// margin-top: rpx;
 			}
 
 			text {
@@ -196,7 +247,6 @@ onLoad(() => {
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-				// width: 100%;
 			}
 		}
 	}
@@ -208,6 +258,11 @@ onLoad(() => {
 	.fun-list {
 		margin-top: var(--h-margin-24);
 	}
+}
+
+.uni-noticebar {
+	margin: 0;
+	width: 100%;
 }
 </style>
 +

@@ -19,11 +19,7 @@
 				<view class="list">
 					<view class="title">我的工具</view>
 					<g-grid />
-				</view>
-				<view class="list">
-					<view class="title">我的工具</view>
-					<g-grid />
-				</view>
+				</view> 
 			</view>
 		</scroll-view>
 

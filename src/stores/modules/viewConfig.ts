@@ -7,7 +7,7 @@ import api from '@/service/api';
 const viewConfigStore = defineStore('viewConfig', {
   persist: {
     key: 'viewConfig',
-    paths: ['token', 'openId', 'h5OpenId', 'herenId', 'sysTerms']
+    paths: ['homeConfig']
   },
 
   state: () => {

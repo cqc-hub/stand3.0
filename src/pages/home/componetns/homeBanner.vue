@@ -96,9 +96,10 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, ref } from 'vue';
+import { withDefaults, ref, computed } from 'vue';
 
-const type = ref(2);
+// 2/3
+// const type = ref(2);
 
 const props = withDefaults(
 	defineProps<{
@@ -124,6 +125,16 @@ const props = withDefaults(
 		]
 	}
 );
+
+const type = computed(() => {
+	//type 2 常规banner+三个入口   3 首页 三个纯入口
+	//左侧有数据
+	if (props.leftFunctionList.length > 0 && props.functionList.length == 3) {
+		return 3;
+	} else {
+		return 2;
+	}
+});
 </script>
 
 <style lang="scss" scoped>
