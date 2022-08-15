@@ -1,5 +1,39 @@
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { getSysCode } from '@/common';
+
 import api from '@/service/api';
+
+const packageAuthParams = (
+	args,
+	url,
+	payload: {
+		isOutArgs?: boolean;
+	} = {}
+) => {
+	const globalStore = useGlobalStore();
+	const argsDefault = {
+		...args,
+		sysCode: getSysCode()
+	};
+	const { isOutArgs } = payload;
+	let authParam = argsDefault;
+	let outParam: BaseObject = {};
+
+	if (isOutArgs) {
+		authParam = undefined;
+		outParam = argsDefault;
+	}
+
+	return {
+		authParam: {
+			args: authParam,
+			...outParam,
+			token: globalStore.getToken
+		},
+		sysCode: undefined,
+		url
+	};
+};
 
 enum LoginType {
 	WeChat,
@@ -18,7 +52,9 @@ class GStores {
 
 class LoginUtils extends GStores {
 	async getUerInfo() {
-		const { result } = await api.userInfoByToken({});
+		const { result } = await api.allinoneAuthApi(
+			packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
+		);
 
 		if (result) {
 			const { cellPhoneNum, herenId, idNo, name, sex } = result;
@@ -66,10 +102,18 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 			success: async ({ code }) => {
 				const accountType = this.globalStore.browser.accountType;
 
-				const { result } = await api.getAppletsOpenId({
-					code,
-					accountType
-				});
+				const { result } = await api.allinoneAuthApi(
+					packageAuthParams(
+						{
+							code,
+							accountType
+						},
+						'/wx/getAppletsOpenId',
+						{
+							isOutArgs: true
+						}
+					)
+				);
 
 				if (result) {
 					const { openId, sessionKey } = result;
@@ -114,11 +158,22 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 			scopes: 'auth_user',
 			success: async ({ authCode }) => {
 				const accountType = this.globalStore.browser.accountType;
-				const { result } = await api.getTPAlipayUserInfoShare({
-					code: authCode,
-					codeType: 2,
-					accountType
-				});
+				const { result } = await api.allinoneAuthApi(
+					packageAuthParams(
+						{
+							code: authCode,
+							codeType: 2,
+							accountType
+						},
+						'/aliUserLogin/getTPAlipayUserInfoShare'
+					)
+				);
+
+				// const { result } = await api.getTPAlipayUserInfoShare({
+				// 	code: authCode,
+				// 	codeType: 2,
+				// 	accountType
+				// });
 
 				const { userId, accessToken, refreshToken, authHerenId } =
 					result;

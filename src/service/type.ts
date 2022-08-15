@@ -2,6 +2,7 @@
 export interface IRequest extends UniApp.RequestOptions {
   hideLoading?: boolean;
   showMessage?: boolean;
+  isAuth?: boolean;
 }
 interface IdDtaType {
   code: number;

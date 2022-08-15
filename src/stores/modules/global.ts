@@ -66,7 +66,7 @@ const globalStore = defineStore('global', {
 
 	getters: {
 		getToken(): any {
-			return this.token;
+			return this.token.accessToken;
 		},
 
 		getBrowser(): any {

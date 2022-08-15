@@ -44,6 +44,11 @@ const baseApi = {
 	getParamsMoreBySysCode: (data) =>
 		service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
 
+	allinoneAuthApi: (data) =>
+		service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
+			isAuth: true
+		}),
+
 	authLogin: (data) => {
 		return service.post('/login/authLogin', parm(data), {
 			baseURL: global.authUrl

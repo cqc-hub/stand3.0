@@ -81,7 +81,7 @@
 import { defineComponent, ref } from 'vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 
-import { aliLogin, wxLogin, outLogin } from '@/pages/home/utils';
+import { aliLogin, wxLogin, outLogin } from '@/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
