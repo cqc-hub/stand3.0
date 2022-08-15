@@ -84,8 +84,6 @@ Request.interceptors.response(
 		return responseData;
 	},
 	(err) => {
-    console.log('23232323');
-
 		const messageStore = useMessageStore();
 		messageStore.showMessage(err.data.message, 2000);
 		return err.data;

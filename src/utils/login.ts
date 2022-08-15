@@ -174,14 +174,25 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 					)
 				);
 
-				// const { result } = await api.getTPAlipayUserInfoShare({
-				// 	code: authCode,
-				// 	codeType: 2,
-				// 	accountType
-				// });
+				const {
+					userId,
+					accessToken,
+					refreshToken,
+					authHerenId,
+					certNo,
+					certType,
+					gender,
+					mobile,
+					userName
+				} = result;
 
-				const { userId, accessToken, refreshToken, authHerenId } =
-					result;
+				this.userStore.updateCacheUser({
+					certNo,
+					certType,
+					gender,
+					mobile,
+					userName
+				});
 
 				if (accountType === 1) {
 					this.globalStore.setH5OpenId(userId);
@@ -204,7 +215,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 	}
 }
 
-class Login {
+export class Login extends LoginUtils {
 	public static handlerMap: Record<LoginType, LoginHandler> = {
 		[LoginType.WeChat]: new WeChatLoginHandler(),
 		[LoginType.AliPay]: new AliPayLoginHandler()
@@ -212,6 +223,83 @@ class Login {
 
 	static handler(type: LoginType, payload?: any) {
 		Login.handlerMap[type].handler(payload);
+	}
+}
+
+export class PatientUtils extends LoginUtils {
+	/**
+	 * 完善
+	 */
+	async registerUser(payload: BaseObject) {
+		const {
+			cardNumber,
+			idCard: idNo,
+			idType,
+			patientName,
+			patientPhone
+		} = payload;
+		const accountType = this.globalStore.browser.accountType;
+
+		const requestData = {
+			accountType,
+			idNo,
+			idType,
+			name: patientName,
+			cellphone: patientPhone
+		};
+
+		const { result } = await api.allinoneAuthApi(
+			packageAuthParams(requestData, '/register/bindRegisterUser')
+		);
+
+		if (result) {
+			const { accessToken, refreshToken } = result;
+			this.globalStore.setToken({
+				accessToken,
+				refreshToken
+			});
+
+			await this.getUerInfo();
+
+			this.addPatient({
+				defaultFalg: '1',
+				herenId: this.globalStore.herenId,
+				patientName,
+				patientPhone,
+				source: this.globalStore.browser.source,
+				verifyCode: '1'
+			});
+		}
+	}
+
+	/**
+	 * 新增
+	 */
+
+	async addPatient(
+		data: Partial<{
+			defaultFalg: '0' | '1';
+			herenId: number | string;
+			openIds: { openId: string; source: string }[];
+			patientName: string;
+			patientPhone: string;
+			patientType: string;
+			source: string | number;
+			upIdCard: string;
+			upName: string;
+			verifyCode: string;
+		}>
+	) {
+		await api.addPatientByHasBeenTreated(data);
+	}
+
+	async getPatCardList() {
+		const requestArg = {
+			herenId: this.globalStore.herenId,
+			source: this.globalStore.browser.source
+		};
+
+		api.getPatCardList(requestArg);
 	}
 }
 

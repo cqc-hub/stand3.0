@@ -42,7 +42,8 @@
 						:maxlength="item.maxlength"
 						@input="(e) => changeInput(item, e)"
 						:class="{
-							'my-disabled': item.disabled
+							'my-disabled': item.disabled,
+							'my-disabled-color': item.disabled
 						}"
 						class="form-input"
 					/>
@@ -220,7 +221,7 @@ export default defineComponent({
 					cache[key] = '';
 				}
 
-				if (field === 'address') {
+				if (field === 'address' && !o.options) {
 					const address = await ServerStaticData.getAddressData();
 					o.options = address;
 				}
@@ -455,6 +456,12 @@ export default defineComponent({
 		opacity: 1;
 	}
 
+	.my-disabled {
+		:deep(input) {
+			color: var(--hr-neutral-color-8) !important;
+		}
+	}
+
 	.container-body {
 		display: flex;
 		align-items: center;
@@ -486,6 +493,10 @@ export default defineComponent({
 
 .my-disabled {
 	pointer-events: none !important;
+}
+
+.my-disabled-color {
+	color: red !important;
 }
 
 .icon-resize {

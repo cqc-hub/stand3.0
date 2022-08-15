@@ -4,7 +4,7 @@ import { BASE_IMG } from '@/config/global';
 const userStore = defineStore('user', {
 	persist: {
 		key: '_user',
-		paths: ['name', 'sex', 'idNo', 'cellPhoneNum', 'patientId']
+		paths: ['name', 'sex', 'idNo', 'cellPhoneNum', 'patientId', 'cacheUser']
 	},
 
 	state: () => {
@@ -13,7 +13,15 @@ const userStore = defineStore('user', {
 			sex: '',
 			idNo: '',
 			cellPhoneNum: '',
-			patientId: ''
+			patientId: '',
+
+			cacheUser: {
+				userName: '',
+				mobile: '',
+				certNo: '',
+				certType: '',
+				gender: ''
+			}
 		};
 	},
 
@@ -32,6 +40,22 @@ const userStore = defineStore('user', {
 
 		updatePhone(phone: string) {
 			this.cellPhoneNum = phone;
+		},
+
+		updateCacheUser(
+			cache: Partial<{
+				userName: string;
+				mobile: string;
+				certNo: string;
+				certType: string;
+				gender: string;
+			}>
+		) {
+			Object.entries(cache).map(([key, value]) => {
+				if (value) {
+					this.cacheUser[key] = value;
+				}
+			});
 		},
 
 		clearStore() {

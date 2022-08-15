@@ -24,6 +24,7 @@ let parm = (data: any, payload: any = {}) => {
 
 	return {
 		args: body,
+		// token: '1'
 		token: globalStore.token.accessToken
 		// token: 'a6e8289c389d8ece73750fe57fc12011f75c7558a06d87cc127fee52ce594e0dbf4996051b4ba4126f4f643e03fa3bee4e642af1ac30f0c07c1b567cfdf11b599c968d4faefc96d548b04f62abfe54aaf315033472b3a8f4a4ede91d9df046e92bc7bc7a86e690bcc8263a89c4f2100cd36c74c7faaeb90a428f3789811edd9f698e56eda0e7bca200b5d59ef551b6ed0eb1a6d3a1da5b8a29a2c6c427926d9caf9960e4d3049c77fe852a0f425767d72a3de7d67911ae2338aeced63421ceb55fc00ed68823cbfbe0e9b2e0682558f0f873865b3bab0d814aeab5eccfbebc773902356253a88c5bd7de346708b9d0f4'
 	};
@@ -37,6 +38,21 @@ const baseApi = {
 	// 系统长信息协议详情
 	getSysAppMore: (data) =>
 		service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
+
+	addPatientByHasBeenTreated: (data) =>
+		service.post(
+			'/phs-user/relevantPatient/addPatientByHasBeenTreated',
+			parm(data)
+		),
+
+	getPatCardList: (data) =>
+		service.post('/phs-user/relevantPatient/getPatCardList', parm(data)),
+
+	getPatCardInfoByHospital: (data) =>
+		service.post(
+			'/phs-user/relevantPatient/getPatCardInfoByHospital',
+			parm(data)
+		),
 
 	getAllDivision: (data) =>
 		service.post('/phs-base/division/getAllDivision', parm(data)),
