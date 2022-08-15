@@ -242,17 +242,6 @@ const globalStore = defineStore('global', {
 
 				uni.hideLoading();
 			}
-
-			const addressCity = getLocalStorage('addressCity');
-			if (!addressCity) {
-				const { result } = await api.getAllDivision({});
-
-				if (result && result.length) {
-					setLocalStorage({
-						addressCity: result
-					});
-				}
-			}
 		}
 	}
 });
