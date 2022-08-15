@@ -9,6 +9,8 @@ type TInputType =
 export interface ISelectOptions {
 	label: string;
 	value: any;
+
+	children?: ISelectOptions[];
 }
 
 export interface IRule {
@@ -58,8 +60,14 @@ interface ISelectInstance extends IBaseInstance {
 	options: ISelectOptions[];
 }
 
+interface IAddressInstance extends IBaseInstance {
+	field: 'address';
+	options?: ISelectOptions[];
+}
+
 export type TInstance =
 	| IInputInstance
 	| ISelectInstance
+	| IAddressInstance
 	| IInputVerifyInstance
 	| ISwitchInstance;

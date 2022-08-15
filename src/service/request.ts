@@ -91,6 +91,8 @@ class requestClass {
           icon: 'none',
           duration: 1500
         })
+
+        reject(err)
       }
       uni.request(options)
     })

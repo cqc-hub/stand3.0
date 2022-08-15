@@ -73,6 +73,15 @@ const formList: TInstance[] = [
 
 	{
 		required: true,
+		showSuffixArrowIcon: true,
+		label: '常驻地址',
+		placeholder: '请选择常驻地址',
+		key: 'address',
+		field: 'address'
+	},
+
+	{
+		required: true,
 		maxlength: 4,
 		label: '验证码',
 		field: 'input-verify',

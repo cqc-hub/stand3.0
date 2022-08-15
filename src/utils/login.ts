@@ -52,28 +52,33 @@ class GStores {
 
 class LoginUtils extends GStores {
 	async getUerInfo() {
-		const { result } = await api.allinoneAuthApi(
-			packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
-		);
+		try {
+			const { result } = await api.allinoneAuthApi(
+				packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
+			);
 
-		if (result) {
-			const { cellPhoneNum, herenId, idNo, name, sex } = result;
+			if (result) {
+				const { cellPhoneNum, herenId, idNo, name, sex } = result;
 
-			this.userStore.updateName(name);
-			this.userStore.updateSex(sex);
-			this.userStore.updateIdNo(idNo);
-			this.userStore.updatePhone(cellPhoneNum);
+				this.userStore.updateName(name);
+				this.userStore.updateSex(sex);
+				this.userStore.updateIdNo(idNo);
+				this.userStore.updatePhone(cellPhoneNum);
 
-			this.globalStore.setHerenId(herenId);
+				this.globalStore.setHerenId(herenId);
 
-			if (!herenId) {
-				this.messageStore.showMessage('未完善，请先完善', 1000);
-				setTimeout(() => {
-					uni.reLaunch({
-						url: '/pagesA/medicalCardMan/addMedical'
-					});
-				}, 1200);
+				if (!herenId) {
+					this.messageStore.showMessage('未完善，请先完善', 1000);
+					setTimeout(() => {
+						uni.reLaunch({
+							url: '/pagesA/medicalCardMan/addMedical'
+						});
+					}, 1200);
+				}
 			}
+		} catch (error) {
+			uni.hideLoading();
+			return Promise.reject(error);
 		}
 	}
 

@@ -26,6 +26,7 @@
 						'my-disabled': item.disabled
 					}"
 					class="container-body"
+					@tap.prevent.stop="clickContainer(item)"
 				>
 					<uni-easyinput
 						v-if="
@@ -46,10 +47,7 @@
 						class="form-input"
 					/>
 
-					<view
-						v-if="item.field === 'select'"
-						@tap.prevent.stop="chooseOption(item)"
-					>
+					<view v-if="item.field === 'select'" class="full-item">
 						<view class="my-disabled">
 							<uni-easyinput
 								:placeholder="item.placeholder"
@@ -57,6 +55,19 @@
 								:clearable="false"
 								:placeholderStyle="inputPlaceHolderStyle"
 								:value="findOptionLabel(item, value[item.key])"
+								class="form-input"
+							/>
+						</view>
+					</view>
+
+					<view v-if="item.field === 'address'" class="full-item">
+						<view class="my-disabled">
+							<uni-easyinput
+								:placeholder="item.placeholder"
+								:inputBorder="false"
+								:clearable="false"
+								:placeholderStyle="inputPlaceHolderStyle"
+								:value="value[item.key]"
 								class="form-input"
 							/>
 						</view>
@@ -94,6 +105,16 @@
 			</view>
 		</view>
 
+		<view class="form-picker">
+			<uni-data-picker
+				:map="{ text: 'label', value: 'value' }"
+				:localdata="actionSheetOpt"
+				:clear-icon="false"
+				@change="pickerChange"
+				ref="dataPicker"
+			/>
+		</view>
+
 		<wyb-action-sheet
 			ref="actionSheet"
 			:options="actionSheetOpt"
@@ -116,6 +137,7 @@ import type {
 } from '@/components/g-form/index';
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { ServerStaticData } from '@/utils';
 
 /**
  * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -133,7 +155,7 @@ export default defineComponent({
 		}
 	},
 
-	emits: ['update:value', 'submit', 'change'],
+	emits: ['update:value', 'submit', 'change', 'picker-change'],
 
 	setup(props, ctx) {
 		const inputPlaceHolderStyle = `
@@ -142,6 +164,7 @@ export default defineComponent({
 `;
 
 		const emits = ctx.emit;
+		const dataPicker = ref();
 		const actionSheet = ref();
 		const actionSheetOpt = ref<ISelectOptions[]>([]);
 		const list = ref<TInstance[]>([]);
@@ -183,32 +206,51 @@ export default defineComponent({
 			}
 		};
 
-		const setList = function (initList: TInstance[]) {
+		const setList = async function (initList: TInstance[]) {
 			const defaultKeys = Reflect.ownKeys(props.value);
 			const cache: BaseObject = {};
 
-			initList.map((o) => {
-				const { key } = o;
+			const len = initList.length >>> 0;
+			let k = 0;
+
+			while (k < len) {
+				const o = initList[k++];
+				const { key, field } = o;
 				if (!defaultKeys.includes(key)) {
 					cache[key] = '';
 				}
-			});
+
+				if (field === 'address') {
+					const address = await ServerStaticData.getAddressData();
+					o.options = address;
+				}
+			}
 
 			setData(cache);
 			list.value = initList;
 		};
 
-		const chooseOption = function (item: TInstance) {
+		const clickContainer = function (item: TInstance) {
 			if (item.disabled) {
 				return;
 			}
-
-			if (item.field === 'select') {
+			if (item.field === 'select' || item.field === 'address') {
 				const { options } = item;
+
+				if (!options) {
+					return;
+				}
+
 				actionSheetOpt.value = options;
 				cacheItem = item;
 
-				actionSheet.value.showActionSheet();
+				if (item.field === 'select') {
+					actionSheet.value.showActionSheet();
+				}
+
+				if (item.field === 'address') {
+					dataPicker.value.show();
+				}
 			}
 		};
 
@@ -218,6 +260,26 @@ export default defineComponent({
 			if (cacheItem.field === 'select') {
 				changeSelect(cacheItem, item.value);
 				cacheItem = null;
+			}
+		};
+
+		const pickerChange = function (e: {
+			detail: { value: { text: string; value: any }[] };
+		}) {
+			if (!cacheItem) return;
+			const { value: choose } = e.detail;
+			const { key, field } = cacheItem;
+
+			if (field === 'address') {
+				const selLabels = choose.map((o) => o.text).join('');
+				setData({
+					[key]: selLabels
+				});
+
+				emits('picker-change', {
+					item: cacheItem,
+					choose
+				});
 			}
 		};
 
@@ -346,12 +408,14 @@ export default defineComponent({
 
 		return {
 			setData,
+			dataPicker,
 			actionSheet,
 			actionSheetOpt,
 			list,
 			setList,
-			chooseOption,
+			clickContainer,
 			actionItemClick,
+			pickerChange,
 			inputPlaceHolderStyle,
 			findOptionLabel,
 			submit,
@@ -416,13 +480,26 @@ export default defineComponent({
 	}
 }
 
+.full-item {
+	width: 100%;
+}
+
 .my-disabled {
 	pointer-events: none !important;
 }
 
-
 .icon-resize {
 	width: 60rpx;
 	height: 60rpx;
+}
+
+.form-picker {
+	:deep(.uni-data-tree-input) {
+		visibility: hidden !important;
+	}
+
+	:deep(.selected-area) {
+		flex: none !important;
+	}
 }
 </style>

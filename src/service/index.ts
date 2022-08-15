@@ -20,11 +20,6 @@ Request.interceptors.request((request: IRequest) => {
 	//   request.data = JSON.stringify(request.data)
 	//   request.url = request.url + '?' + request.data
 	// }
-
-	console.log({
-		request
-	});
-
 	return request;
 });
 
