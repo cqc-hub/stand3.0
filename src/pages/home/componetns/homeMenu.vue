@@ -92,6 +92,7 @@ const changeIndex = (e) => {
 		white-space: nowrap;
 		overflow: hidden;
 		overflow-x: scroll;
+		margin-bottom: 40rpx;
 		text {
 			display: inline-block;
 			font-size: var(--hr-font-size-base);
