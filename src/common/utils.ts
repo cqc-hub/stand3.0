@@ -24,6 +24,8 @@ export function cloneUtil<T>(target): T {
 		res = [];
 	} else if (type.includes('Object')) {
 		res = {};
+	} else {
+		res = target;
 	}
 
 	for (let i in target) {

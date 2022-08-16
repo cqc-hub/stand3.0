@@ -239,6 +239,9 @@ export default defineComponent({
 		const setList = async function (initList: TInstance[]) {
 			const defaultKeys = Reflect.ownKeys(props.value);
 			const cache: BaseObject = {};
+			console.log({
+				value: props.value
+			});
 
 			const len = initList.length >>> 0;
 			let k = 0;
@@ -247,7 +250,11 @@ export default defineComponent({
 				const o = initList[k++];
 				const { key, field } = o;
 				if (!defaultKeys.includes(key)) {
-					cache[key] = '';
+					if (field === 'switch') {
+						cache[key] = false;
+					} else {
+						cache[key] = '';
+					}
 				}
 
 				if (field === 'address' && !o.options) {
@@ -344,6 +351,8 @@ export default defineComponent({
 		};
 
 		const setData = function (value: BaseObject, item?: TInstance) {
+			const oldValue = item ? props.value[item.key] : undefined;
+
 			emits('update:value', {
 				...props.value,
 				...value
@@ -353,7 +362,8 @@ export default defineComponent({
 				const key = Object.keys(value)[0];
 				emits('change', {
 					item,
-					value: value[key]
+					value: value[key],
+					oldValue
 				});
 			}
 		};

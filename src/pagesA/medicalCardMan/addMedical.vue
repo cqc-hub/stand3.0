@@ -37,48 +37,101 @@ import { GStores } from '@/utils';
 import api from '@/service/api';
 
 const props = defineProps<{
-	[FormKey.patientName]?: 'string';
+	patientName: 'string';
+	medicalType: 'string';
+	verify: 'string';
+	defaultFalg: 'string';
+	patientPhone: 'string';
 }>();
 const gStores = new GStores();
 const gform = ref<any>('');
-const formData = ref<BaseObject>({
-	patientName: '',
-	patientPhone: ''
-});
+const formData = ref<BaseObject>({});
 
-const formList = pickTempItem([FormKey.medicalType]);
+let formList = pickTempItem([
+	FormKey.medicalType,
+	FormKey.patientName,
+	FormKey.patientPhone,
+	FormKey.verify,
+	FormKey.defaultFalg
+]);
 
 const formSubmit = async ({ data }) => {
 	console.log('success', data);
 };
 
-const formChange = ({ item, value }) => {
-	console.log({
-		item,
-		value
-	});
+const formChange = ({ item, value, oldValue }) => {
+	if (item.key === FormKey.medicalType && oldValue !== value) {
+		medicalTypeChange(value);
+	}
+};
+
+/**
+ *
+ * @param value
+ * 	-1  成人、儿童（有证件）
+ * 	0  新生儿（无证件)
+ *  1  军人
+ *  2  军属
+ */
+const medicalTypeChange = (value: '-1' | '0' | '1' | '2') => {
+	console.log(value, 'ssss');
+	const listArr: FormKey[] = [FormKey.medicalType];
+
+	switch (value) {
+		case '-1':
+			listArr.push(
+				...[
+					FormKey.patientName,
+					FormKey.idType,
+					FormKey.idCard,
+					FormKey.nation,
+					FormKey.patientPhone,
+					FormKey.address,
+					FormKey.location,
+					FormKey.defaultFalg
+				]
+			);
+			break;
+
+		case '1':
+			listArr.push(...[FormKey.defaultFalg]);
+			break;
+
+		default:
+			break;
+	}
+
+	formList = pickTempItem(listArr);
+	gform.value.setList(formList);
 };
 
 const btnDisabled = computed(() => {
-	return !Object.values(formData.value).every((v) => v !== '');
+	let isDisabled = false;
+	const formKeys = formList.map((o) => o.key);
+	Object.entries(formData.value).map(([key, value]) => {
+		if (formKeys.includes(key) && value === '') {
+			isDisabled = true;
+		}
+	});
+
+	return isDisabled;
 });
 
 onMounted(() => {
-	const { userName, mobile } = gStores.userStore.cacheUser;
-	// 只有支付宝有
-	if (userName && mobile) {
-		formData.value.patientName = userName;
-		formData.value.patientPhone = mobile;
+	console.log('props----', props);
 
-		formList.map((o) => {
-			const { key } = o;
-			if (['patientName', 'patientPhone'].includes(key)) {
-				o.disabled = true;
+	formData.value = Object.fromEntries(
+		Object.entries(props).map(([key, value]) => {
+			if (key === FormKey.defaultFalg) {
+				(value as any) = (value as unknown) === 'false' ? false : true;
 			}
-		});
-	}
-
-	gform.value.setList(formList);
+			return [key, value];
+		})
+	);
+	nextTick(() => {
+		// gform.value.setList(formList);
+		medicalTypeChange('-1');
+	});
 });
 </script>
 

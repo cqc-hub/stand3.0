@@ -14,7 +14,8 @@ export enum FormKey {
 	address = 'address',
 	location = 'location',
 	verify = 'verify',
-	defaultFalg = 'defaultFalg'
+	defaultFalg = 'defaultFalg',
+	nation = 'nation',
 }
 
 type TFormKeys = keyof typeof FormKey;
@@ -29,6 +30,17 @@ export const tempList: TInstance[] = [
 		field: 'select',
 		options: [],
 		autoOptions: 'patientTypeTerms'
+	},
+
+	{
+		required: true,
+		showSuffixArrowIcon: true,
+		label: '民族',
+		placeholder: '请选择',
+		key: FormKey.nation,
+		field: 'select',
+		options: [],
+		autoOptions: 'nationTerms'
 	},
 
 	{
@@ -122,8 +134,8 @@ export const tempList: TInstance[] = [
 	{
 		required: true,
 		showSuffixArrowIcon: true,
-		label: '常驻地址',
-		placeholder: '请选择常驻地址',
+		label: '常住地址',
+		placeholder: '请选择常住地址',
 		key: FormKey.address,
 		field: 'address'
 	},
@@ -149,20 +161,24 @@ export const tempList: TInstance[] = [
 		rule: {
 			message: '验证码必须是数字',
 			rule: /\d+/
-		},
-		rowStyle: 'margin-bottom: 16rpx;'
+		}
 	},
 
 	{
 		field: 'switch',
 		key: FormKey.defaultFalg,
 		label: '设为默认就诊人',
-		labelWidth: '260rpx'
+		labelWidth: '260rpx',
+		rowStyle: 'margin-top: 16rpx;'
 	}
 ];
 
 export const pickTempItem = function (keys: TFormKeys[]): TInstance[] {
-	return cloneUtil<TInstance[]>(tempList).filter((item) =>
-		keys.includes(<TFormKeys>item.key)
-	);
+	return cloneUtil<TInstance[]>(tempList)
+		.filter((item) => keys.includes(<TFormKeys>item.key))
+		.sort((a, b) => {
+			const aIndex = keys.findIndex((key) => key === a.key);
+			const bIndex = keys.findIndex((key) => key === b.key);
+			return aIndex - bIndex;
+		});
 };

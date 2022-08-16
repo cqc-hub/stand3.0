@@ -30,24 +30,34 @@
 import { ref, nextTick, onMounted, computed } from 'vue';
 import { PatientUtils, GStores } from '@/utils';
 import { FormKey, tempList, pickTempItem } from './utils';
+import { joinQuery } from '@/common';
 
 import api from '@/service/api';
 
 const gStores = new GStores();
 const gform = ref<any>('');
 const formData = ref<BaseObject>({
-	patientName: '',
-	patientPhone: ''
+	patientName: '大钢炮',
+	patientPhone: '13868529891',
+	[FormKey.verify]: '2313',
+	[FormKey.medicalType]: '1',
+	[FormKey.defaultFalg]: true
 });
 
 const formList = pickTempItem([
 	FormKey.medicalType,
 	FormKey.patientName,
 	FormKey.patientPhone,
-	FormKey.verify
+	FormKey.verify,
+	FormKey.defaultFalg
 ]);
 
 const formSubmit = async ({ data }) => {
+	uni.navigateTo({
+		url: joinQuery('/pagesA/medicalCardMan/addMedical', data)
+	});
+
+	return;
 	const { result } = await api.getPatCardInfoByHospital(data);
 	if (result) {
 		const { jump, cardNumber, idCard, idType, patientSex } = result;
@@ -61,34 +71,42 @@ const formSubmit = async ({ data }) => {
 				patientPhone,
 				patientName
 			});
-
-			patientUtil.getPatCardList();
 		} else {
 		}
 	}
 };
 
 const formChange = ({ item, value }) => {
-	console.log({
-		item,
-		value
-	});
 };
 
+
+
 const btnDisabled = computed(() => {
-	return !Object.values(formData.value).every((v) => v !== '');
+	let isDisabled = false;
+	const formKeys = formList.map((o) => o.key);
+	Object.entries(formData.value).map(([key, value]) => {
+		if (formKeys.includes(key) && value === '') {
+			isDisabled = true;
+		}
+	});
+
+	return isDisabled;
 });
 
 onMounted(() => {
 	const { userName, mobile } = gStores.userStore.cacheUser;
 	// 只有支付宝有
 	if (userName && mobile) {
-		formData.value.patientName = userName;
-		formData.value.patientPhone = mobile;
+		formData.value[FormKey.patientName] = userName;
+		formData.value[FormKey.patientPhone] = mobile;
 
 		formList.map((o) => {
 			const { key } = o;
-			if (['patientName', 'patientPhone'].includes(key)) {
+			if (
+				[FormKey.patientName, FormKey.patientPhone].includes(
+					key as FormKey
+				)
+			) {
 				o.disabled = true;
 			}
 		});
