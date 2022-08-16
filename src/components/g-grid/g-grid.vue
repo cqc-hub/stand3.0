@@ -8,9 +8,15 @@
 			<uni-grid-item v-for="(item, i) in options.list" :key="i">
 				<view class="grid-item-box">
 					<!-- 绿色能量角标 -->
-					<!-- <view class="gree-label">绿色能量</view> -->
 					<!-- v-if="item.enabled == 0 "  -->
-					<!-- <view class="weihu">维护中</view> -->
+					<!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
+					<view class="weihu" v-if="item.gridLabel == '3'">
+						维护中
+					</view>
+					<view class="gree-label" v-if="item.gridLabel == '1'">
+						绿色能量
+					</view>
+
 					<text :class="`icon-font grid-resize ${item.iconfont}`" />
 					<view class="grid-label">{{ item.title }}</view>
 					<text class="grid-title">{{ item.detail }}</text>
@@ -136,7 +142,7 @@ const options = computed(() => {
 	font-size: var(--h-size-18);
 	padding: 0 8rpx;
 	z-index: 100;
-	right: 5rpx;
+	right: 10rpx;
 	top: 5rpx;
 	background-color: var(--h-color-white);
 	box-sizing: border-box;
