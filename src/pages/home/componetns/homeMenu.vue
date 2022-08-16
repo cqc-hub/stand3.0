@@ -34,7 +34,7 @@ interface IhomeMenu {
 }
 const props = withDefaults(
 	defineProps<{
-		list?: IhomeMenu[];
+		list: IhomeMenu[];
 	}>(),
 	{
 		list: () => [

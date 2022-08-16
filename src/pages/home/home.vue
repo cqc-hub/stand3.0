@@ -1,24 +1,58 @@
 <template>
 	<view class="home">
-		<scroll-view class="scroll-page">
+		<scroll-view class="scroll-page" scroll-y>
 			<view class="homePage">
 				<view>
 					<g-search :searchPlaceholder="searchPlaceholder"></g-search>
 				</view>
 				<view class="card">
-					<view class="top-card flex-normal-between">
-						<view class="flex-normal">
-							<view class="iconfont icon-size">&#xe6a7;</view>
-							<!-- <text>张三三</text> -->
-							<view class="patient">
-								<text>张三三</text>
-								<text>ID：644567882</text>
+					<!-- 登录之后 -->
+					<block v-if="globalStore.isLogin">
+						<view class="top-card flex-normal-between">
+							<view class="flex-normal">
+								<view class="iconfont icon-size">&#xe6a7;</view>
+								<!-- 没有就诊人时 -->
+								<text>
+									{{ userSore.name || userSore.cellPhoneNum }}
+								</text>
+								<!-- 有就诊人时 -->
+								<!-- <view class="patient">
+									<text>张三三</text>
+									<text>ID：644567882</text>
+								</view> -->
+							</view>
+							<view class="switchPatient" @tap="chooseAction">
+								切换就诊人
 							</view>
 						</view>
-						<view class="switchPatient" @tap="chooseAction">
-							切换就诊人
+					</block>
+					<block v-else>
+						<!-- 未登录 -->
+						<view class="top-card flex-normal-between">
+							<view class="flex-normal no-login">
+								<text>请登录</text>
+								<text>登录后享受更多服务</text>
+							</view>
+							<!-- #ifdef MP-ALIPAY -->
+							<view
+								class="switchPatient no-login-tip animate__animated animate__fadeIn"
+								@tap="aliLogin"
+							>
+								去登录
+							</view>
+							<!-- #endif -->
+							<!-- #ifdef MP-WEIXIN -->
+							<button
+								open-type="getPhoneNumber"
+								@getphonenumber="wxLogin"
+								class="login-btn animate__animated animate__fadeIn"
+							>
+								请登录
+							</button>
+							<!-- #endif -->
 						</view>
-					</view>
+					</block>
+
 					<view class="top-menu">
 						<view class="box">
 							<g-grid :list="topMenuList" :type="1" />
@@ -27,8 +61,9 @@
 							<text
 								class="icon-font img_announcement icon-size"
 							></text>
+
 							<swiper
-								autoplay="false"
+								autoplay="true"
 								display-multiple-items="1"
 								vertical="true"
 								circular
@@ -40,7 +75,7 @@
 									:key="index"
 									class="swiper-item"
 								>
-									<view class="item_box">
+									<view class="item-box">
 										{{ item.title }}
 									</view>
 								</swiper-item>
@@ -51,11 +86,11 @@
 				<view class="banner-menu">
 					<homeBanner
 						:leftFunctionList="bannerLeftFunctionList"
-						:bannerFunctionList="bannerFunctionList"
+						:functionList="bannerFunctionList"
 					/>
 				</view>
 				<view class="fun-list">
-					<homeMenu />
+					<homeMenu :list="menuList" />
 				</view>
 			</view>
 		</scroll-view>
@@ -71,10 +106,14 @@ import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
-import { useViewConfigStore } from '@/stores';
+import { useGlobalStore, useViewConfigStore, useUserStore } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
+import { aliLogin, wxLogin, outLogin } from '@/utils';
+const userSore = useUserStore();
+
+const globalStore = useGlobalStore();
 
 // 就诊人
 const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
@@ -91,14 +130,18 @@ let topMenuList = ref({}); //首页顶部menu
 const noticeMenu = ref({}); //通知列表
 const bannerLeftFunctionList = ref([]); //banner列表
 const bannerFunctionList = ref([]); //通知列表
+const menuList = ref([]); //业务模块
 
 onLoad(() => {
 	viewConfigStore.updateHomeConfig();
 	const homeConfig = viewConfigStore.getHomeConfig;
-	topMenuList.value = homeConfig[0].functionList;
-	noticeMenu.value = homeConfig[1].functionList;
-	bannerFunctionList.value = homeConfig[2].functionList;
-	bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
+	if (homeConfig) {
+		topMenuList.value = homeConfig[0].functionList;
+		noticeMenu.value = homeConfig[1].functionList;
+		bannerFunctionList.value = homeConfig[2].functionList;
+		bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
+		menuList.value = homeConfig[3].typeList;
+	}
 });
 </script>
 
@@ -118,16 +161,12 @@ onLoad(() => {
 
 	.card {
 		margin-top: var(--h-margin-24);
-		// color:var(--h-color-white)
-
-		// background-color: #dfe9ff;
 		.top-card {
 			padding-top: var(--h-margin-24);
 			margin: 0 26rpx;
 			position: relative;
 			box-sizing: border-box;
 
-			// width: 100%;
 			border: 2rpx solid #dfe9ff;
 			backdrop-filter: blur(30rpx);
 			border-radius: 24rpx;
@@ -146,7 +185,6 @@ onLoad(() => {
 					}
 				}
 			}
-
 			:after {
 				width: 100%;
 				height: 112rpx;
@@ -155,11 +193,18 @@ onLoad(() => {
 				top: 0;
 				z-index: -1;
 				content: '';
-				// border-radius: 24rpx;
 
 				border-radius: 24rpx 24rpx 15% 15%;
 
 				background: var(--hr-brand-color-6);
+			}
+			.no-login {
+				text {
+					font-size: var(--hr-font-size-base);
+					&:last-child {
+						font-size: var(--hr-font-size-xxxs);
+					}
+				}
 			}
 
 			.icon-size {
@@ -179,7 +224,6 @@ onLoad(() => {
 			}
 
 			view.switchPatient {
-				// margin-right: 56rpx;
 				width: 180rpx;
 				height: 64rpx;
 				background: linear-gradient(
@@ -193,6 +237,41 @@ onLoad(() => {
 				color: var(--hr-brand-color-6);
 				line-height: 64rpx;
 				text-align: center;
+			}
+			view.no-login-tip {
+				width: 124rpx;
+			}
+		}
+
+		.login-btn {
+			border: none !important;
+			background-color: transparent;
+			box-shadow: none !important;
+			margin: 0;
+			height: 64rpx;
+			background: linear-gradient(
+				180deg,
+				rgba(255, 255, 255, 0.9),
+				rgba(255, 255, 255, 0.5)
+			);
+			border-radius: 200rpx 0 0 200rpx;
+			font-size: var(--hr-font-size-xs);
+			font-weight: 400;
+			color: var(--hr-brand-color-6);
+			line-height: 64rpx;
+			text-align: center;
+			& button,
+			& uni-button:after,
+			& button:after {
+				border: none !important;
+				background-color: transparent;
+				box-shadow: none !important;
+				padding: 0;
+			}
+			&:after {
+				background: none;
+				border: none;
+				padding: 0;
 			}
 		}
 
@@ -216,13 +295,15 @@ onLoad(() => {
 				.swiper-item {
 					display: flex;
 					align-items: center;
-					word-break: break-all;
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
 					color: var(--hr-neutral-color-9);
 					font-size: var(--hr-font-size-xs);
-					width: 100%;
+					.item-box {
+						word-break: break-all;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						width: 100%;
+					}
 				}
 			}
 		}

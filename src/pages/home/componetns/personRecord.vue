@@ -58,7 +58,7 @@
 				v-for="(record, i) in recordList"
 				:key="i"
 				:style="{
-					'background-image': `url(${record.iconfont})`,
+					'background-image': `url(${backImg[i]})`,
 					'background-color': recordColors[i]
 				}"
 				:class="`record-item ${recordList.length === 1 && 'cr-center'}`"
@@ -78,8 +78,13 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { defineComponent, ref, onMounted } from 'vue';
+import {
+	useGlobalStore,
+	useUserStore,
+	useMessageStore,
+	useViewConfigStore
+} from '@/stores';
 
 import { aliLogin, wxLogin, outLogin } from '@/utils';
 import global from '@/config/global';
@@ -87,23 +92,34 @@ import global from '@/config/global';
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
 
-const recordList = ref([
-	{
-		title: '就诊卡二维码',
-		path: '/xxx',
-		query: {},
-		iconfont: global.BASE_IMG + 'v3-my-jzk.png'
-	},
+const viewConfigStore = useViewConfigStore();
+const recordList = ref([]); //就医凭证
 
-	{
-		// isNet: true,
-		title: '医保电子凭证',
-		path: 'https://xx',
-		query: {},
-		iconfont: global.BASE_IMG + 'v3-my-pz.png'
-	}
-]);
+const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
+const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
 
+onMounted(() => {
+	const homeConfig = viewConfigStore.getHomeConfig;
+	recordList.value = homeConfig[4].functionList;
+});
+// const recordList = ref([
+// 	{
+// 		title: '就诊卡二维码',
+// 		path: '/xxx',
+// 		query: {},
+// 		iconfont: global.BASE_IMG + 'v3-my-jzk.png'
+// 	},
+
+// 	{
+// 		// isNet: true,
+// 		title: '医保电子凭证',
+// 		path: 'https://xx',
+// 		query: {},
+// 		iconfont: global.BASE_IMG + 'v3-my-pz.png'
+// 	}
+// ]);
+
+const backImg = [jzIcon, ybIcon];
 const recordColors = ['#296FFF', '#00b39e'];
 </script>
 

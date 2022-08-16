@@ -2,92 +2,87 @@
 	<view>
 		<view class="banner-grid">
 			<!-- 只有一个banner时 -->
-			<view v-if="type == 1" class="uni-margin-wrap">
+			<view  class="uni-margin-wrap" v-if="props.leftFunctionList.length>0&&props.functionList.length==0">
 				<swiper class="swiper" circular indicator-dots="true">
-					<swiper-item>
-						<image mode="scaleToFill" src="/static/logo.png" />
-					</swiper-item>
-					<swiper-item>
-						<image mode="scaleToFill" src="/static/logo.png" />
-					</swiper-item>
+					<swiper-item 	v-for="(item, i) in props.leftFunctionList" :key="i">
+						<image mode="scaleToFill" :src="item.iconfont" />
+					</swiper-item> 
 				</swiper>
 			</view>
 			<!-- 常规banner+三个入口 -->
-			<view class="banner" v-if="type == 2">
+			<!-- <view class="banner" v-if="type == 2">
 				<view class="parent">
 					<view class="view1">
 						<swiper class="swiper" circular indicator-dots="true">
-							<swiper-item>
+							<swiper-item
+								v-for="(item, i) in props.leftFunctionList"
+								:key="i"
+							>
 								<image
 									mode="scaleToFill"
-									src="/static/logo.png"
-								/>
-							</swiper-item>
-							<swiper-item>
-								<image
-									mode="scaleToFill"
-									src="/static/logo.png"
+									:src="item.iconfont"
 								/>
 							</swiper-item>
 						</swiper>
 					</view>
-					<view class="view2 banner-back1 flex-between banner-common">
-						<text>网络医院</text>
-						<view class="iconfont icon-size1">&#xe6a0;</view>
-					</view>
-					<view class="view3 banner-back2 flex-between banner-common">
-						<text>药品百科</text>
-						<view class="iconfont icon-size1">&#xe6a0;</view>
-					</view>
-					<view class="view4 banner-back1 flex-between banner-common">
-						<text>物价查询</text>
+					<view
+						v-for="(item, i) in props.functionList"
+						:key="i"
+						:class="`view${i + 2} banner-back${
+							i + 1
+						} flex-between banner-common`"
+					>
+						<text>{{ item.title }}</text>
 						<view class="iconfont icon-size1">&#xe6a0;</view>
 					</view>
 				</view>
-			</view>
-			<!-- 首页 三个纯入口 支持第一个是否是banner -->
-			<view class="banner2" v-if="type == 3">
+			</view> -->
+			<!-- 常规banner+三个入口 首页 三个纯入口 支持第一个是否是banner -->
+			<view class="banner2">
+				<!-- v-if="type == 3" -->
 				<view class="parent">
 					<!-- 只有一个入口 -->
-					<view class="view1 banner-back1 banner-common">
+					<view
+						class="view1 banner-back1 banner-common"
+						v-if="props.leftFunctionList.length == 1"
+					>
 						<view class="flex-between">
-							<text>入口一</text>
+							<text>{{props.leftFunctionList[0].title}}</text>
 						</view>
-						<text class="details">副标题副标题</text>
-						<view class="iconfont icon-size-back1">&#xe6a5;</view>
+						<text class="details">{{props.leftFunctionList[0].detail}}</text>
+						<view class="iconfont  icon-size-back1">&#xe6a5;</view>
 					</view>
 					<!-- 第一组是多个banner -->
-					<!-- <view class="view1">
+					<view v-else class="view1">
 						<swiper class="swiper" circular indicator-dots="true">
-							<swiper-item>
+							<swiper-item
+								v-for="(item, i) in props.leftFunctionList"
+								:key="i"
+							>
 								<image
 									mode="scaleToFill"
-									src="/static/logo.png"
-								/>
-							</swiper-item>
-							<swiper-item>
-								<image
-									mode="scaleToFill"
-									src="/static/logo.png"
+									:src="item.iconfont"
 								/>
 							</swiper-item>
 						</swiper>
-					</view> -->
-					<view class="view2 banner-back2 banner-common">
-						<view class="flex-between">
-							<text>入口二</text>
-							<view class="iconfont icon-size2">&#xe6a0;</view>
-						</view>
-						<!-- <text class="details">副标题副标题</text> -->
-						<view class="iconfont icon-size-back2">&#xe6a5;</view>
 					</view>
-					<view class="view3 banner-back1 banner-common">
+					<view
+						v-for="(item, i) in props.functionList"
+						:key="i"
+						:class="`view${i + 2} banner-back${
+							i + 1
+						} banner-common`"
+					>
 						<view class="flex-between">
-							<text>入口三</text>
-							<view class="iconfont icon-size1">&#xe6a0;</view>
+							<text>{{ item.title }}</text>
+							<view :class="`iconfont icon-size${i+1}`">&#xe6a0;</view>
 						</view>
-						<!-- <text class="details">副标题副标题</text> -->
-						<view class="iconfont icon-size-back1">&#xe6a5;</view>
+						<text class="details">
+							{{ item.detail }}
+						</text>
+						<view :class="`iconfont icon-size-back${i + 1}`">
+							&#xe6a5;
+						</view>
 					</view>
 				</view>
 			</view>
@@ -113,7 +108,7 @@ const props = withDefaults(
 				title: '住院助手',
 				url: '/xxx',
 				iconfont: 'ico_sy_calendar1'
-			}
+			},
 		],
 		//右侧数组
 		functionList: () => [
@@ -126,26 +121,27 @@ const props = withDefaults(
 	}
 );
 
-const type = computed(() => {
-	//type 2 常规banner+三个入口   3 首页 三个纯入口
-	//左侧有数据
-	if (props.leftFunctionList.length > 0 && props.functionList.length == 3) {
-		return 3;
-	} else {
-		return 2;
-	}
-});
+// const type = computed(() => {
+// 	//type 2 常规banner+三个入口   3 首页 三个纯入口
+// 	//左侧有数据
+// 	if (props.leftFunctionList.length > 2 && props.functionList.length > 1) {
+// 		return 2;
+// 	} else {
+// 		return 3;
+// 	}
+// });
 </script>
 
 <style lang="scss" scoped>
 .banner-grid {
 	.uni-margin-wrap {
 		width: 100%;
+    height: 160rpx;
 	}
 
 	swiper-item {
 		display: block;
-		// height: 160rpx;
+
 
 		image {
 			width: 100%;
@@ -153,33 +149,29 @@ const type = computed(() => {
 			will-change: transform;
 		}
 	}
-	.banner {
-		// .swiper {
-		// 	height: 324rpx;
-		// 	border: 2rpx solid #d9e5ff;
-		// }
-		.parent {
-			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: repeat(3, 1fr);
-			grid-column-gap: 12rpx;
-			grid-row-gap: 12rpx;
-		}
+	// .banner { 
+	// 	.parent {
+	// 		display: grid;
+	// 		grid-template-columns: repeat(4, 1fr);
+	// 		grid-template-rows: repeat(3, 1fr);
+	// 		grid-column-gap: 12rpx;
+	// 		grid-row-gap: 12rpx;
+	// 	}
 
-		.view1 {
-			grid-area: 1 / 1 / 4 / 3;
-			border-radius: 16rpx;
-		}
-		.view2 {
-			grid-area: 1 / 3 / 2 / 5;
-		}
-		.view3 {
-			grid-area: 2 / 3 / 3 / 5;
-		}
-		.view4 {
-			grid-area: 3 / 3 / 4 / 5;
-		}
-	}
+	// 	.view1 {
+	// 		grid-area: 1 / 1 / 4 / 3;
+	// 		border-radius: 16rpx;
+	// 	}
+	// 	.view2 {
+	// 		grid-area: 1 / 3 / 2 / 5;
+	// 	}
+	// 	.view3 {
+	// 		grid-area: 2 / 3 / 3 / 5;
+	// 	}
+	// 	.view4 {
+	// 		grid-area: 3 / 3 / 4 / 5;
+	// 	}
+	// }
 
 	// 公用样式
 
@@ -215,9 +207,18 @@ const type = computed(() => {
 		color: var(--hr-success-color-6);
 		font-weight: 400;
 	}
+  .icon-size3 {
+		font-size: var(--h-size-40);
+		color: var(--hr-brand-color-6);
+		font-weight: 400;
+	}
 	.banner-back2 {
 		background: #effbfa;
 		border: 2rpx solid #cfeae6;
+	}
+	.banner-back3 {
+		background: #eef3ff;
+		border: 2rpx solid #d9e5ff;
 	}
 	// 背景样式
 	.icon-size-back1 {
@@ -231,6 +232,16 @@ const type = computed(() => {
 	}
 	.icon-size-back2 {
 		color: var(--hr-success-color-6);
+		font-size: 90rpx;
+		font-weight: 400;
+		opacity: 0.15;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+	}
+
+	.icon-size-back3 {
+		color: var(--hr-brand-color-6);
 		font-size: 90rpx;
 		font-weight: 400;
 		opacity: 0.15;
@@ -267,6 +278,11 @@ const type = computed(() => {
 		.view3 {
 			margin-top: 6rpx;
 			grid-area: 2 / 3 / 3 / 5;
+			position: relative;
+		}
+    	.view4 {
+			margin-top: 12rpx;
+			grid-area: 3 / 3 / 4 / 5;
 			position: relative;
 		}
 	}
