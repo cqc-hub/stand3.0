@@ -18,8 +18,8 @@ if ((env as string) === 'prod') {
 	authUrl = 'https://auth.eheren.com/service-authentication';
 }
 
-export const SYS_CODE = '1001033'; //系统码
-// export const SYS_CODE = '1001038'; //系统码
+export const SYS_CODE = '1001033'; //系统码 台州
+// export const SYS_CODE = '1001038'; //系统码 嘉二
 
 export default {
 	SYS_CODE,

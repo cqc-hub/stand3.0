@@ -5,7 +5,6 @@ onLaunch(() => {
 	// console.log('App Launch');
 	const globalStore = useGlobalStore();
 	globalStore.initBrowser();
-	globalStore.getSysTerm();
 });
 onShow(() => {
 	// console.log('App Show');

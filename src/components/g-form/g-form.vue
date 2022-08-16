@@ -1,7 +1,6 @@
 <template>
 	<view class="">
 		<view v-if="list.length" class="container">
-			<!-- ${(item.rowStyle && item.rowStyle) || ''} -->
 			<view
 				v-for="item in list"
 				:key="item.key"
@@ -41,6 +40,7 @@
 						:type="item.inputType"
 						:maxlength="item.maxlength"
 						@input="(e) => changeInput(item, e)"
+						@blur="inputBlur(item, $event)"
 						:class="{
 							'my-disabled': item.disabled,
 							'my-disabled-color': item.disabled
@@ -55,7 +55,12 @@
 								:inputBorder="false"
 								:clearable="false"
 								:placeholderStyle="inputPlaceHolderStyle"
-								:value="findOptionLabel(item, value[item.key])"
+								:value="
+									ServerStaticData.getOptionsLabel(
+										item.options,
+										value[item.key]
+									)
+								"
 								class="form-input"
 							/>
 						</view>
@@ -72,6 +77,28 @@
 								class="form-input"
 							/>
 						</view>
+					</view>
+
+					<view v-if="item.field === 'time-picker'" class="full-item">
+						<uni-datetime-picker
+							:modelValue="value[item.key]"
+							:type="item.type"
+							:start="item.start"
+							:end="item.end"
+							:disabled="item.disabled"
+							@change="changeTimePicker(item, $event)"
+						>
+							<view class="my-disabled">
+								<uni-easyinput
+									:placeholder="item.placeholder"
+									:inputBorder="false"
+									:clearable="false"
+									:placeholderStyle="inputPlaceHolderStyle"
+									:value="value[item.key]"
+									class="form-input"
+								/>
+							</view>
+						</uni-datetime-picker>
 					</view>
 
 					<view
@@ -113,7 +140,9 @@
 				:clear-icon="false"
 				@change="pickerChange"
 				ref="dataPicker"
-			/>
+			>
+				<view />
+			</uni-data-picker>
 		</view>
 
 		<wyb-action-sheet
@@ -137,7 +166,7 @@ import type {
 	ISwitchInstance
 } from '@/components/g-form/index';
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
-import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { useMessageStore } from '@/stores';
 import { ServerStaticData } from '@/utils';
 
 /**
@@ -156,7 +185,7 @@ export default defineComponent({
 		}
 	},
 
-	emits: ['update:value', 'submit', 'change', 'picker-change'],
+	emits: ['update:value', 'submit', 'change', 'picker-change', 'input-blur'],
 
 	setup(props, ctx) {
 		const inputPlaceHolderStyle = `
@@ -222,8 +251,38 @@ export default defineComponent({
 				}
 
 				if (field === 'address' && !o.options) {
-					const address = await ServerStaticData.getAddressData();
-					o.options = address;
+					o.options = await ServerStaticData.getAddressData();
+				}
+
+				if (field === 'select') {
+					const { autoOptions, options } = o;
+
+					if (!options.length && autoOptions) {
+						switch (autoOptions) {
+							case 'nationTerms':
+								o.options =
+									await ServerStaticData.getNationTerms();
+								break;
+
+							case 'patientTypeTerms':
+								o.options =
+									await ServerStaticData.getPatientTypeTerms();
+								break;
+
+							case 'sysTerms':
+								o.options =
+									await ServerStaticData.getSystemTerms();
+								break;
+
+							case 'idTypeTerms':
+								o.options =
+									await ServerStaticData.getIdTypeTerms();
+								break;
+
+							default:
+								break;
+						}
+					}
 				}
 			}
 
@@ -296,20 +355,6 @@ export default defineComponent({
 					item,
 					value: value[key]
 				});
-			}
-		};
-
-		const findOptionLabel = function (item: TInstance, value) {
-			if (item.field === 'select') {
-				const opt = item.options.find((o) => o.value === value);
-
-				if (opt) {
-					return opt.label;
-				} else {
-					return '';
-				}
-			} else {
-				return '';
 			}
 		};
 
@@ -387,12 +432,34 @@ export default defineComponent({
 			);
 		};
 
+		const inputBlur = (item: TInstance, e) => {
+			const {
+				detail: { value }
+			} = e;
+
+			emits('input-blur', {
+				item,
+				value
+			});
+		};
+
 		const changeSelect = function (item: TInstance, v: any) {
 			if (item.field !== 'select') return;
 
 			setData(
 				{
 					[item.key]: v
+				},
+				item
+			);
+		};
+
+		const changeTimePicker = function (item: TInstance, v: any) {
+			const value = typeof v == 'string' ? v : v.join(' - ');
+
+			setData(
+				{
+					[item.key]: value
 				},
 				item
 			);
@@ -418,12 +485,14 @@ export default defineComponent({
 			actionItemClick,
 			pickerChange,
 			inputPlaceHolderStyle,
-			findOptionLabel,
 			submit,
 			changeInput,
+			inputBlur,
 			requestVerify,
 			verifyTip,
-			changeSwitch
+			changeSwitch,
+			changeTimePicker,
+			ServerStaticData
 		};
 	}
 });
@@ -505,8 +574,9 @@ export default defineComponent({
 }
 
 .form-picker {
-	:deep(.uni-data-tree-input) {
-		visibility: hidden !important;
+	:deep(.uni-data-tree .uni-data-tree-input) {
+		display: none !important;
+		// color: red !important;
 	}
 
 	:deep(.selected-area) {

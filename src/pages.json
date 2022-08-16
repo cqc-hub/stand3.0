@@ -4,15 +4,15 @@
 	},
 	"pages": [
 		{
-			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
@@ -42,6 +42,15 @@
 			"pages": [
 				{
 					"path": "medicalCardMan/addMedical",
+					"extend": {
+						"login": true
+					},
+					"style": {
+						"navigationBarTitleText": "添加就诊人"
+					}
+				},
+				{
+					"path": "medicalCardMan/perfectReal",
 					"extend": {
 						"login": true
 					},

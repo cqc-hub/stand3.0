@@ -44,7 +44,7 @@ abstract class LoginHandler {
 	abstract handler(payload?: any);
 }
 
-class GStores {
+export class GStores {
 	messageStore = useMessageStore();
 	userStore = useUserStore();
 	globalStore = useGlobalStore();
@@ -71,7 +71,7 @@ class LoginUtils extends GStores {
 					this.messageStore.showMessage('未完善，请先完善', 1000);
 					setTimeout(() => {
 						uni.reLaunch({
-							url: '/pagesA/medicalCardMan/addMedical'
+							url: '/pagesA/medicalCardMan/perfectReal'
 						});
 					}, 1200);
 				}
@@ -232,7 +232,6 @@ export class PatientUtils extends LoginUtils {
 	 */
 	async registerUser(payload: BaseObject) {
 		const {
-			cardNumber,
 			idCard: idNo,
 			idType,
 			patientName,
@@ -247,6 +246,10 @@ export class PatientUtils extends LoginUtils {
 			name: patientName,
 			cellphone: patientPhone
 		};
+		uni.showLoading({
+			title: '完善就诊人中...',
+			mask: true
+		});
 
 		const { result } = await api.allinoneAuthApi(
 			packageAuthParams(requestData, '/register/bindRegisterUser')
@@ -259,9 +262,19 @@ export class PatientUtils extends LoginUtils {
 				refreshToken
 			});
 
+			uni.showLoading({
+				title: '获取就诊人数据...',
+				mask: true
+			});
+
 			await this.getUerInfo();
 
-			this.addPatient({
+			uni.showLoading({
+				title: '添加就诊人中...',
+				mask: true
+			});
+
+			await this.addPatient({
 				defaultFalg: '1',
 				herenId: this.globalStore.herenId,
 				patientName,
@@ -269,6 +282,8 @@ export class PatientUtils extends LoginUtils {
 				source: this.globalStore.browser.source,
 				verifyCode: '1'
 			});
+
+			await this.getPatCardList();
 		}
 	}
 
@@ -299,7 +314,7 @@ export class PatientUtils extends LoginUtils {
 			source: this.globalStore.browser.source
 		};
 
-		api.getPatCardList(requestArg);
+		await api.getPatCardList(requestArg);
 	}
 }
 

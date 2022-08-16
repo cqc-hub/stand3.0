@@ -55,9 +55,17 @@ export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
 	verifySecond: number;
 }
 
+/**
+ * @autoOptions 快速获取服务器上的静态列表数据
+ */
 interface ISelectInstance extends IBaseInstance {
 	field: 'select';
 	options: ISelectOptions[];
+	autoOptions?:
+		| 'sysTerms'
+		| 'nationTerms'
+		| 'patientTypeTerms'
+		| 'idTypeTerms';
 }
 
 interface IAddressInstance extends IBaseInstance {
@@ -65,9 +73,17 @@ interface IAddressInstance extends IBaseInstance {
 	options?: ISelectOptions[];
 }
 
+interface ITimePickerInstance extends IBaseInstance {
+	field: 'time-picker';
+	type: 'date' | 'daterange' | 'datetime' | 'datetimerange';
+	start?: string | number;
+	end?: string | number;
+}
+
 export type TInstance =
 	| IInputInstance
 	| ISelectInstance
 	| IAddressInstance
 	| IInputVerifyInstance
+	| ITimePickerInstance
 	| ISwitchInstance;

@@ -1,44 +1,38 @@
 <template>
 	<view>
-		<scroll-view class="scroll-container" scroll-y>
-			<view class="form-container">
-				<g-form
-					v-model:value="formData"
-					@submit="formSubmit"
-					@change="formChange"
-					ref="gform"
-				/>
-			</view>
+		<g-form
+			v-model:value="formData"
+			@submit="formSubmit"
+			@change="formChange"
+			ref="gform"
+		/>
 
-			<view class="aa">
-				{{ JSON.stringify(formData) }}
-			</view>
+		<view class="aa">
+			{{ JSON.stringify(formData) }}
+		</view>
 
-			<g-message />
-			<view class="footer">
-				<button
-					@click="gform.submit"
-					:class="{
-						'btn-disabled': btnDisabled
-					}"
-					class="btn btn-primary"
-				>
-					保存
-				</button>
-			</view>
-		</scroll-view>
+		<g-message />
+		<view class="footer">
+			<button
+				@click="gform.submit"
+				:class="{
+					'btn-disabled': btnDisabled
+				}"
+				class="btn btn-primary"
+			>
+				保存
+			</button>
+		</view>
 	</view>
 </template>
 
 <script lang="ts" setup>
 import { ref, nextTick, onMounted, computed } from 'vue';
-import { FormKey, pickTempItem } from './utils';
-import { GStores } from '@/utils';
+import { PatientUtils, GStores } from '@/utils';
+import { FormKey, tempList, pickTempItem } from './utils';
+
 import api from '@/service/api';
 
-const props = defineProps<{
-	[FormKey.patientName]?: 'string';
-}>();
 const gStores = new GStores();
 const gform = ref<any>('');
 const formData = ref<BaseObject>({
@@ -46,10 +40,32 @@ const formData = ref<BaseObject>({
 	patientPhone: ''
 });
 
-const formList = pickTempItem([FormKey.medicalType]);
+const formList = pickTempItem([
+	FormKey.medicalType,
+	FormKey.patientName,
+	FormKey.patientPhone,
+	FormKey.verify
+]);
 
 const formSubmit = async ({ data }) => {
-	console.log('success', data);
+	const { result } = await api.getPatCardInfoByHospital(data);
+	if (result) {
+		const { jump, cardNumber, idCard, idType, patientSex } = result;
+		const { patientPhone, patientName } = data;
+
+		if (jump === 0) {
+			const patientUtil = new PatientUtils();
+			await patientUtil.registerUser({
+				idCard,
+				idType,
+				patientPhone,
+				patientName
+			});
+
+			patientUtil.getPatCardList();
+		} else {
+		}
+	}
 };
 
 const formChange = ({ item, value }) => {
@@ -83,16 +99,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.scroll-container {
-	height: 100vh;
-
-	.form-container {
-		margin-bottom: 100rpx;
-	}
-}
-
 .footer {
-	position: fixed;
+	position: absolute;
 	bottom: 0;
 	right: 0;
 	left: 0;

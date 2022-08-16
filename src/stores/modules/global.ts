@@ -18,9 +18,6 @@ interface IStateGlobal {
 	openId: string;
 	h5OpenId: string;
 	herenId: string;
-	sysTerms: IOptions[];
-	nationTerms: IOptions[];
-	patientTypeTerms: IOptions[];
 }
 //页面存储token brower等
 const globalStore = defineStore('global', {
@@ -60,9 +57,6 @@ const globalStore = defineStore('global', {
 			openId: '',
 			h5OpenId: '',
 			herenId: '',
-			sysTerms: [],
-			nationTerms: [],
-			patientTypeTerms: []
 		};
 	},
 
@@ -95,14 +89,6 @@ const globalStore = defineStore('global', {
 			this.herenId = '';
 		},
 
-		getSysTermLabel(v: string): string {
-			const item = this.sysTerms.find((o) => o.value === v);
-			if (item) {
-				return item.label;
-			} else {
-				return '';
-			}
-		},
 
 		updateToken(token) {
 			this.token = token;
@@ -168,81 +154,6 @@ const globalStore = defineStore('global', {
 		setHerenId(id: string) {
 			this.herenId = id;
 		},
-
-		// 获取后台静态数据
-		async getSysTerm() {
-			// label: "已预约", value: "0"
-			if (!this.sysTerms.length) {
-				uni.showLoading({
-					title: '获取系统配置中',
-					mask: true
-				});
-				const { result } = await api.getParamsMoreBySysCode({
-					paramCode: 'REG_ORDER_STATUS'
-				});
-
-				uni.hideLoading();
-
-				let list = result && result.REG_ORDER_STATUS;
-				if (list) {
-					list = JSON.parse(list).map((item) => {
-						return {
-							label: item.label,
-							value: item.code
-						};
-					});
-
-					this.sysTerms = list;
-				}
-			}
-
-			if (!this.nationTerms.length) {
-				uni.showLoading({
-					title: '获取系统配置中',
-					mask: true
-				});
-				const { result } = await api.getTermsBySysAndCode({
-					domainCode: 'CHINESE_NATION'
-				});
-
-				uni.hideLoading();
-
-				const list = result && result.length && result[0].terms;
-
-				if (list) {
-					this.nationTerms = list.map((o) => ({
-						label: o.label,
-						value: o.code
-					}));
-				}
-			}
-
-			if (!this.patientTypeTerms.length) {
-				uni.showLoading({
-					title: '获取系统配置中',
-					mask: true
-				});
-				const { result } = await api.getParamsMoreBySysCode({
-					paramCode: 'PATIENT_TYPE'
-				});
-				const PATIENT_TYPE = result.PATIENT_TYPE;
-
-				try {
-					this.patientTypeTerms = JSON.parse(PATIENT_TYPE).map(
-						(o) => {
-							return {
-								label: o.value,
-								value: o.code
-							};
-						}
-					);
-				} catch (err) {
-					console.error('获取就诊人类型失败: ', err);
-				}
-
-				uni.hideLoading();
-			}
-		}
 	}
 });
 
