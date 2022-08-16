@@ -1,6 +1,10 @@
 <template>
 	<view :class="options.type == 2 ? 'normal' : 'diff'">
-		<uni-grid :showBorder="false" :square="false" :column="4">
+		<uni-grid
+			:showBorder="false"
+			:square="false"
+			:column="type == 1 ? options.list.length : 4"
+		>
 			<uni-grid-item v-for="(item, i) in options.list" :key="i">
 				<view class="grid-item-box">
 					<!-- 绿色能量角标 -->
@@ -54,8 +58,6 @@ const props = withDefaults(defineProps<IGridProps>(), {
 });
 
 const options = computed(() => {
-	console.log(999, props.list);
-
 	return {
 		list: props.list,
 		type: props.type

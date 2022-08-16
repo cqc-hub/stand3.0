@@ -10,15 +10,15 @@
 			<view class="my-menu">
 				<view class="list">
 					<view class="title">我的订单</view>
-					<g-grid />
+					<g-grid :list="menu1List" />
 				</view>
 				<view class="list">
 					<view class="title">我的服务</view>
-					<g-grid />
+					<g-grid :list="menu2List"  />
 				</view>
 				<view class="list">
 					<view class="title">我的工具</view>
-					<g-grid />
+					<g-grid :list="menu3List" />
 				</view> 
 			</view>
 		</scroll-view>
@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { defineComponent, ref, nextTick, onMounted } from 'vue';
-import { useUserStore, useMessageStore } from '@/stores';
+import { useUserStore, useMessageStore,useViewConfigStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 import personRecord from './componetns/personRecord.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
@@ -45,13 +45,25 @@ const msg = () => {
 	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
 };
 
+const viewConfigStore = useViewConfigStore();
+
 const goRoute = function () {
 	uni.navigateTo({
 		url: '/pagesA/medicalCardMan/addMedical?name=cqc'
 	});
 };
 
+
+const menu1List = ref([]); //我的订单
+const menu2List = ref([]); //我的服务
+const menu3List = ref([]); //我的工具
+
 onMounted(() => {
+  const homeConfig = viewConfigStore.getHomeConfig; 
+  menu1List.value = homeConfig[5].functionList;
+  menu2List.value = homeConfig[6].functionList;
+  menu3List.value = homeConfig[7].functionList;
+
 	if (props.isWarningLogin) {
 		messageStore.showMessage('未登录,请先登陆', 1000);
 	}
