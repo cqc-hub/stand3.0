@@ -113,12 +113,7 @@ export class ServerStaticData {
 			const PATIENT_TYPE = result.PATIENT_TYPE;
 
 			try {
-				const patientTypeTerms = JSON.parse(PATIENT_TYPE).map((o) => {
-					return {
-						label: o.value,
-						value: o.code
-					};
-				});
+				const patientTypeTerms = JSON.parse(PATIENT_TYPE);
 
 				setLocalStorage({
 					patientTypeTerms
