@@ -170,7 +170,6 @@ onLoad(() => {
 const getHomeConfig = async () => {
 	skeletonProps.loading = true;
 	const homeConfig = await ServerStaticData.getHomeConfig();
-	console.log(888, homeConfig);
 	if (homeConfig) {
 		topMenuList.value = homeConfig[0].functionList;
 		noticeMenu.value = homeConfig[1].functionList;

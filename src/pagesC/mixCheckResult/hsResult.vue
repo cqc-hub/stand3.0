@@ -1,6 +1,7 @@
 <template>
 	<view class="page">
 		<scroll-view class="scroll-page" scroll-y>
+			<g-flag class="tip" typeFg="104" isShowFg />
 			<g-choose-pat />
 			<view class="box">
 				<view class="item-box">
@@ -31,7 +32,10 @@
 	</view>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const arr1: string[] = [];
+const arr2: Array<string> = [];
+</script>
 
 <style scoped lang="scss">
 .box {

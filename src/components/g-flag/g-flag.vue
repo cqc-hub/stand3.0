@@ -19,10 +19,10 @@ import api from '@/service/api';
 import HTMLParser from '@/common/html-parser';
 
 interface IProps {
-	typeFg: string;
+	typeFg: string; //协议编号
 	value?: string;
-	isShowFg?: boolean;
-	isShowFgTip?: boolean;
+	isShowFg?: boolean; //顶部
+	isShowFgTip?: boolean; //底部
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -54,24 +54,25 @@ api.getSysAppMore({
 
 <style lang="scss" scoped>
 .real-top {
-	// min-height: 56upx;
-	padding: 10upx 30upx;
-	background: rgba(255, 163, 78, 0.0706);
+	// min-height: 56rpx;
+	padding: 12rpx 32rpx;
+	background: var(--hr-brand-color-1);
 	text-align: left;
-	color: #ff8053;
-	font-size: 28upx;
+	color: var(--hr-brand-color-6);
+	font-size: 28rpx;
+	line-height: 40rpx;
 }
 
 .tip {
 	.title {
-		margin-bottom: 10upx;
+		margin-bottom: 10rpx;
 	}
 
-	padding: 0 20upx;
-	font-size: 28upx;
-	line-height: 40upx;
+	padding: 0 20rpx;
+	font-size: 28rpx;
+	line-height: 40rpx;
 	color: #999;
-	padding-bottom: 50upx;
+	padding-bottom: 50rpx;
 	word-break: break-all;
 }
 </style>
