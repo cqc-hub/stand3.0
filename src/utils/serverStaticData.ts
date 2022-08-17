@@ -151,10 +151,6 @@ export class ServerStaticData {
 
 			try {
 				const idTypeTerms = JSON.parse(ID_CARD_TYPE)
-				console.log({
-					idTypeTerms
-				});
-
 
 				setLocalStorage({
 					idTypeTerms

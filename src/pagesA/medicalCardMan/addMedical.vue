@@ -45,7 +45,9 @@ const props = defineProps<{
 }>();
 const gStores = new GStores();
 const gform = ref<any>('');
-const formData = ref<BaseObject>({});
+const formData = ref<BaseObject>({
+	// [FormKey.medicalType]: '-1'
+});
 
 let formList = pickTempItem([
 	FormKey.medicalType,
@@ -93,7 +95,7 @@ const medicalTypeChange = (value: '-1' | '0' | '1' | '2') => {
 			);
 			break;
 
-		case '1':
+		case '0':
 			listArr.push(...[FormKey.defaultFalg]);
 			break;
 
@@ -118,7 +120,7 @@ const btnDisabled = computed(() => {
 });
 
 onMounted(() => {
-	console.log('props----', props);
+	console.log(props, 'props---');
 
 	formData.value = Object.fromEntries(
 		Object.entries(props).map(([key, value]) => {
@@ -128,9 +130,12 @@ onMounted(() => {
 			return [key, value];
 		})
 	);
+
 	nextTick(() => {
 		// gform.value.setList(formList);
-		medicalTypeChange('-1');
+		console.log(formData.value, 'cqccc');
+
+		medicalTypeChange(formData.value[FormKey.medicalType] || '-1');
 	});
 });
 </script>
