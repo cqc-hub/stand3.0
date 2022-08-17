@@ -1,98 +1,114 @@
 <template>
 	<view class="home">
 		<scroll-view class="scroll-page" scroll-y>
-			<view class="homePage">
-				<view>
-					<g-search :searchPlaceholder="searchPlaceholder"></g-search>
-				</view>
-				<view class="card">
-					<!-- 登录之后 -->
-					<block v-if="globalStore.isLogin">
-						<view class="top-card flex-normal-between">
-							<view class="flex-normal">
-								<view class="iconfont icon-size">&#xe6a7;</view>
-								<!-- 没有就诊人时 -->
-								<text>
-									{{ userSore.name || userSore.cellPhoneNum }}
-								</text>
-								<!-- 有就诊人时 -->
-								<!-- <view class="patient">
+			<ls-skeleton
+				:skeleton="skeletonProps.skeleton"
+				:loading="skeletonProps.loading"
+			>
+				<view class="homePage">
+					<view>
+						<g-search
+							:searchPlaceholder="searchPlaceholder"
+						></g-search>
+					</view>
+					<view class="card">
+						<!-- 登录之后 -->
+						<block v-if="globalStore.isLogin">
+							<view
+								class="top-card flex-normal-between animate__animated animate__fadeIn"
+							>
+								<view class="flex-normal">
+									<view class="iconfont icon-size">
+										&#xe6a7;
+									</view>
+									<!-- 没有就诊人时 -->
+									<text>
+										{{
+											userSore.name ||
+											userSore.cellPhoneNum
+										}}
+									</text>
+									<!-- 有就诊人时 -->
+									<!-- <view class="patient">
 									<text>张三三</text>
 									<text>ID：644567882</text>
 								</view> -->
+								</view>
+								<view class="switchPatient" @tap="chooseAction">
+									切换就诊人
+								</view>
 							</view>
-							<view class="switchPatient" @tap="chooseAction">
-								切换就诊人
-							</view>
-						</view>
-					</block>
-					<block v-else>
-						<!-- 未登录 -->
-						<view class="top-card flex-normal-between">
-							<view class="flex-normal no-login">
-								<text>请登录</text>
-								<text>登录后享受更多服务</text>
-							</view>
-							<!-- #ifdef MP-ALIPAY -->
+						</block>
+						<block v-else>
+							<!-- 未登录 -->
 							<view
-								class="switchPatient no-login-tip animate__animated animate__fadeIn"
-								@tap="aliLogin"
+								class="top-card flex-normal-between animate__animated animate__fadeIn"
 							>
-								去登录
-							</view>
-							<!-- #endif -->
-							<!-- #ifdef MP-WEIXIN -->
-							<button
-								open-type="getPhoneNumber"
-								@getphonenumber="wxLogin"
-								class="login-btn animate__animated animate__fadeIn"
-							>
-								请登录
-							</button>
-							<!-- #endif -->
-						</view>
-					</block>
-
-					<view class="top-menu">
-						<view class="box">
-							<g-grid :list="topMenuList" :type="1" />
-						</view>
-						<view class="notice flex-normal">
-							<text
-								class="icon-font img_announcement icon-size"
-							></text>
-
-							<swiper
-								autoplay="true"
-								display-multiple-items="1"
-								vertical="true"
-								circular
-								interval="3000"
-								class="bar-swiper"
-							>
-								<swiper-item
-									v-for="(item, index) in noticeMenu"
-									:key="index"
-									class="swiper-item"
+								<view class="flex-normal no-login">
+									<text>请登录</text>
+									<text>登录后享受更多服务</text>
+								</view>
+								<!-- #ifdef MP-ALIPAY -->
+								<view
+									class="switchPatient no-login-tip"
+									@tap="aliLogin"
 								>
-									<view class="item-box">
-										{{ item.title }}
-									</view>
-								</swiper-item>
-							</swiper>
+									请登录
+								</view>
+								<!-- #endif -->
+								<!-- #ifdef MP-WEIXIN -->
+								<button
+									open-type="getPhoneNumber"
+									@getphonenumber="wxLogin"
+									class="login-btn"
+								>
+									请登录
+								</button>
+								<!-- #endif -->
+							</view>
+						</block>
+
+						<view class="top-menu">
+							<view class="box">
+								<g-grid :list="topMenuList" :type="1" />
+							</view>
+							<view class="notice flex-normal">
+								<text
+									class="icon-font img_announcement icon-size"
+								></text>
+
+								<swiper
+									autoplay="true"
+									display-multiple-items="1"
+									vertical="true"
+									circular
+									interval="3000"
+									class="bar-swiper"
+								>
+									<swiper-item
+										v-for="(item, index) in noticeMenu"
+										:key="index"
+										class="swiper-item"
+									>
+										<view class="item-box">
+											{{ item.title }}
+										</view>
+									</swiper-item>
+								</swiper>
+							</view>
 						</view>
 					</view>
+					<view class="banner-menu">
+						<homeBanner
+							:leftFunctionList="bannerLeftFunctionList"
+							:functionList="bannerFunctionList"
+						/>
+					</view>
+					<view class="fun-list">
+						<homeMenu :list="menuList" />
+					</view>
 				</view>
-				<view class="banner-menu">
-					<homeBanner
-						:leftFunctionList="bannerLeftFunctionList"
-						:functionList="bannerFunctionList"
-					/>
-				</view>
-				<view class="fun-list">
-					<homeMenu :list="menuList" />
-				</view>
-			</view>
+			</ls-skeleton>
 		</scroll-view>
 
 		<choose-pat-action ref="actionSheet" />
@@ -115,6 +131,23 @@ const userSore = useUserStore();
 
 const globalStore = useGlobalStore();
 
+//骨架屏配置
+const skeletonProps = {
+	loading: true,
+	skeleton: [
+		'line-lg',
+		24,
+		'line-lg',
+		'card+card+card+card',
+		24,
+		'card-lg+card-lg',
+		32,
+		'line-lg',
+		'card-sm+card-sm+card-sm+card-sm',
+		0,
+		'card-sm+card-sm+card-sm+card-sm'
+	]
+};
 // 就诊人
 const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
 const chooseAction = () => {
@@ -135,6 +168,7 @@ onLoad(() => {
 });
 //获取配置数据
 const getHomeConfig = async () => {
+	skeletonProps.loading = true;
 	const homeConfig = await ServerStaticData.getHomeConfig();
 	console.log(888, homeConfig);
 	if (homeConfig) {
@@ -143,6 +177,7 @@ const getHomeConfig = async () => {
 		bannerFunctionList.value = homeConfig[2].functionList;
 		bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
 		menuList.value = homeConfig[3].typeList;
+		skeletonProps.loading = false;
 	}
 };
 </script>
@@ -157,8 +192,6 @@ const getHomeConfig = async () => {
 }
 
 .homePage {
-	padding: 16rpx 32rpx;
-	padding-bottom: 60rpx;
 	padding-bottom: 350rpx;
 
 	.card {

@@ -1,26 +1,27 @@
 <template>
 	<view class="login-center">
 		<scroll-view class="scroll-container" scroll-y>
-			<view class="top-bg" />
-
-			<!-- <view @click="goRoute">2333</view>
-			<view @click="msg">eeee</view> -->
-
-			<personRecord />
-			<view class="my-menu">
-				<view class="list">
-					<view class="title">我的订单</view>
-					<g-grid :list="menu1List" />
+			<ls-skeleton
+				:skeleton="skeletonProps.skeleton"
+				:loading="skeletonProps.loading"
+			>
+				<view class="top-bg" />
+				<personRecord />
+				<view class="my-menu">
+					<view class="list">
+						<view class="title">我的订单</view>
+						<g-grid :list="menu1List" />
+					</view>
+					<view class="list">
+						<view class="title">我的服务</view>
+						<g-grid :list="menu2List" />
+					</view>
+					<view class="list">
+						<view class="title">我的工具</view>
+						<g-grid :list="menu3List" />
+					</view>
 				</view>
-				<view class="list">
-					<view class="title">我的服务</view>
-					<g-grid :list="menu2List" />
-				</view>
-				<view class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-			</view>
+			</ls-skeleton>
 		</scroll-view>
 
 		<home-Tabbar />
@@ -36,22 +37,30 @@ import personRecord from './componetns/personRecord.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
 import { ServerStaticData } from '@/utils';
 
+//骨架屏配置
+const skeletonProps = {
+	loading: true,
+	skeleton: [
+		'circle+line-sm*2',
+		56,
+		'card+card',
+		24,
+		'line-sm',
+		'card+card+card+card',
+		16,
+		'line-sm',
+		'card+card+card+card',
+		16,
+		'line-sm',
+		'card+card+card+card'
+	]
+};
+
 const props = defineProps<{
 	isWarningLogin?: '1';
 }>();
 
 const messageStore = useMessageStore();
-
-const msg = () => {
-	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
-};
-
-
-const goRoute = function () {
-	uni.navigateTo({
-		url: '/pagesA/medicalCardMan/addMedical?name=cqc'
-	});
-};
 
 const menu1List = ref([]); //我的订单
 const menu2List = ref([]); //我的服务
@@ -65,17 +74,20 @@ onMounted(() => {
 });
 //获取配置数据
 const getHomeConfig = async () => {
+	skeletonProps.loading = true;
 	const homeConfig = await ServerStaticData.getHomeConfig();
 	if (homeConfig) {
 		menu1List.value = homeConfig[5].functionList;
 		menu2List.value = homeConfig[6].functionList;
 		menu3List.value = homeConfig[7].functionList;
+		skeletonProps.loading = false;
 	}
 };
 </script>
 
 <style lang="scss" scoped>
 .login-center {
+	background-color: var(--h-color-white);
 	width: 100%;
 	height: 100vh;
 	position: relative;
@@ -99,7 +111,7 @@ const getHomeConfig = async () => {
 }
 
 .my-menu {
-	padding: 0 32rpx;
+	// padding: 0 32rpx;
 	margin-bottom: 188rpx;
 	.list {
 		background: var(--h-color-white);
@@ -115,5 +127,8 @@ const getHomeConfig = async () => {
 			font-weight: var(--h-weight-2);
 		}
 	}
+}
+.page {
+	margin: 32rpx;
 }
 </style>
