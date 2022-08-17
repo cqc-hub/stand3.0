@@ -79,29 +79,30 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import {
-	useGlobalStore,
-	useUserStore,
-	useMessageStore,
-	useViewConfigStore
-} from '@/stores';
+import { useGlobalStore, useUserStore } from '@/stores';
 
-import { aliLogin, wxLogin, outLogin } from '@/utils';
+import { aliLogin, wxLogin, outLogin, ServerStaticData } from '@/utils';
 import global from '@/config/global';
 
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
 
-const viewConfigStore = useViewConfigStore();
 const recordList = ref([]); //就医凭证
 
 const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
 const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
 
 onMounted(() => {
-	const homeConfig = viewConfigStore.getHomeConfig;
-	recordList.value = homeConfig[4].functionList;
+	getHomeConfig();
 });
+
+//获取配置数据
+const getHomeConfig = async () => {
+	const homeConfig = await ServerStaticData.getHomeConfig();
+	if (homeConfig) {
+		recordList.value = homeConfig[4].functionList;
+	}
+};
 // const recordList = ref([
 // 	{
 // 		title: '就诊卡二维码',

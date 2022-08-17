@@ -106,11 +106,11 @@ import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
-import { useGlobalStore, useViewConfigStore, useUserStore } from '@/stores';
+import { useGlobalStore, useUserStore } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
-import { aliLogin, wxLogin, outLogin } from '@/utils';
+import { aliLogin, wxLogin, ServerStaticData } from '@/utils';
 const userSore = useUserStore();
 
 const globalStore = useGlobalStore();
@@ -123,8 +123,6 @@ const chooseAction = () => {
 	}
 };
 
-const viewConfigStore = useViewConfigStore();
-
 const searchPlaceholder = '搜索科室、医生或疾病';
 let topMenuList = ref({}); //首页顶部menu
 const noticeMenu = ref({}); //通知列表
@@ -133,8 +131,12 @@ const bannerFunctionList = ref([]); //通知列表
 const menuList = ref([]); //业务模块
 
 onLoad(() => {
-	viewConfigStore.updateHomeConfig();
-	const homeConfig = viewConfigStore.getHomeConfig;
+	getHomeConfig();
+});
+//获取配置数据
+const getHomeConfig = async () => {
+	const homeConfig = await ServerStaticData.getHomeConfig();
+	console.log(888, homeConfig);
 	if (homeConfig) {
 		topMenuList.value = homeConfig[0].functionList;
 		noticeMenu.value = homeConfig[1].functionList;
@@ -142,7 +144,7 @@ onLoad(() => {
 		bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
 		menuList.value = homeConfig[3].typeList;
 	}
-});
+};
 </script>
 
 <style lang="scss" scoped>

@@ -150,7 +150,7 @@ export class ServerStaticData {
 			const ID_CARD_TYPE = result.ID_CARD_TYPE;
 
 			try {
-				const idTypeTerms = JSON.parse(ID_CARD_TYPE)
+				const idTypeTerms = JSON.parse(ID_CARD_TYPE);
 
 				setLocalStorage({
 					idTypeTerms
@@ -173,6 +173,32 @@ export class ServerStaticData {
 			return item.label;
 		} else {
 			return '';
+		}
+	}
+
+	/**
+	 * 首页配置的数据
+	 */
+	static async getHomeConfig(): Promise<any[]> {
+		const viewConfig = getLocalStorage('viewConfig');
+
+		if (!viewConfig) {
+			const { result } = await api.queryHospitalPattern({
+				version: '',
+				source: 1
+			});
+
+			if (result && result.length) {
+				setLocalStorage({
+					viewConfig: result
+				});
+
+				return result;
+			} else {
+				return [];
+			}
+		} else {
+			return viewConfig;
 		}
 	}
 

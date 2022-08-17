@@ -14,12 +14,12 @@
 				</view>
 				<view class="list">
 					<view class="title">我的服务</view>
-					<g-grid :list="menu2List"  />
+					<g-grid :list="menu2List" />
 				</view>
 				<view class="list">
 					<view class="title">我的工具</view>
 					<g-grid :list="menu3List" />
-				</view> 
+				</view>
 			</view>
 		</scroll-view>
 
@@ -30,10 +30,11 @@
 
 <script lang="ts" setup>
 import { defineComponent, ref, nextTick, onMounted } from 'vue';
-import { useUserStore, useMessageStore,useViewConfigStore } from '@/stores';
+import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 import personRecord from './componetns/personRecord.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
+import { ServerStaticData } from '@/utils';
 
 const props = defineProps<{
 	isWarningLogin?: '1';
@@ -45,7 +46,6 @@ const msg = () => {
 	messageStore.showMessage('dskad的苦瓜撒接口都会感111慨', 1000);
 };
 
-const viewConfigStore = useViewConfigStore();
 
 const goRoute = function () {
 	uni.navigateTo({
@@ -53,21 +53,25 @@ const goRoute = function () {
 	});
 };
 
-
 const menu1List = ref([]); //我的订单
 const menu2List = ref([]); //我的服务
 const menu3List = ref([]); //我的工具
 
 onMounted(() => {
-  const homeConfig = viewConfigStore.getHomeConfig; 
-  menu1List.value = homeConfig[5].functionList;
-  menu2List.value = homeConfig[6].functionList;
-  menu3List.value = homeConfig[7].functionList;
-
+	getHomeConfig();
 	if (props.isWarningLogin) {
 		messageStore.showMessage('未登录,请先登陆', 1000);
 	}
 });
+//获取配置数据
+const getHomeConfig = async () => {
+	const homeConfig = await ServerStaticData.getHomeConfig();
+	if (homeConfig) {
+		menu1List.value = homeConfig[5].functionList;
+		menu2List.value = homeConfig[6].functionList;
+		menu3List.value = homeConfig[7].functionList;
+	}
+};
 </script>
 
 <style lang="scss" scoped>

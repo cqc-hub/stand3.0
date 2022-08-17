@@ -1,87 +1,73 @@
 :root,
 page {
-	/* 颜色 */
-	--hr-neutral-color-1: #f6f6f6;
-	--hr-neutral-color-2: #e6e6e6;
-	--hr-neutral-color-3: #dddddd;
-	--hr-neutral-color-4: #cccccc;
-	--hr-neutral-color-5: #bbbbbb;
-	--hr-neutral-color-7: #888888;
-	--hr-neutral-color-8: #666666;
-	--hr-neutral-color-9: #444444;
-	--hr-neutral-color-10: #111111;
+  /* 颜色 */
+  --hr-neutral-color-1 : #f6f6f6;
+  --hr-neutral-color-2 : #e6e6e6;
+  --hr-neutral-color-3 : #dddddd;
+  --hr-neutral-color-4 : #cccccc;
+  --hr-neutral-color-5 : #bbbbbb;
+  --hr-neutral-color-7 : #888888;
+  --hr-neutral-color-8 : #666666;
+  --hr-neutral-color-9 : #444444;
+  --hr-neutral-color-10: #111111;
 
-	--h-color-white: #ffffff;
+  --h-color-white : #ffffff;
+  /* 边框颜色 */
+  --h-color-border: #f1f1f1;
 
-	/* 主要颜色 */
+  /* 主要颜色 */
 
-	/* 品牌色/主色-6  浅色-1 click状态-7 */
-	--hr-brand-color-6: #296fff;
-	--hr-brand-color-1: #e9f0ff;
-	--hr-brand-color-7: #0050f5;
-	--hr-brand-color-2: #ccddff;
+  /* 品牌色/主色-6  浅色-1 click状态-7 */
+  --hr-brand-color-6: #296fff;
+  --hr-brand-color-1: #e9f0ff;
+  --hr-brand-color-7: #0050f5;
+  --hr-brand-color-2: #ccddff;
 
-	/* 警示 warning  主色-6  浅色-1 click状态-7 */
-	--hr-warning-color-6: #ff8a00;
-	--hr-warning-color-1: #fff3e0;
-	--hr-warning-color-7: #d26900;
+  /* 警示 warning  主色-6  浅色-1 click状态-7 */
+  --hr-warning-color-6: #ff8a00;
+  --hr-warning-color-1: #fff3e0;
+  --hr-warning-color-7: #d26900;
 
-	/* 错误 error 主色-6  浅色-1 click状态-7  */
-	--hr-error-color-6: #ff5040;
-	--hr-error-color-1: #ffeee8;
-	--hr-error-color-7: #d23028;
+  /* 错误 error 主色-6  浅色-1 click状态-7  */
+  --hr-error-color-6: #ff5040;
+  --hr-error-color-1: #ffeee8;
+  --hr-error-color-7: #d23028;
 
-	/* 成功 success 主色-6  浅色-1 click状态-7 */
-	--hr-success-color-6: #00b39e;
-	--hr-success-color-1: #e7fff8;
-	--hr-success-color-7: #00998d;
+  /* 成功 success 主色-6  浅色-1 click状态-7 */
+  --hr-success-color-6: #00b39e;
+  --hr-success-color-1: #e7fff8;
+  --hr-success-color-7: #00998d;
 
-	/* Radius圆角 */
+  /* Radius圆角 */
 
-	/* 字体粗细 */
-	--h-weight-1: 500;
-	--h-weight-2: 600;
+  /* 字体粗细 */
+  --h-weight-1: 500;
+  --h-weight-2: 600;
 
-	/* 字体大小 */
-	--hr-font-size-xxl: 48rpx;
-	--hr-font-size-xl: 36rpx;
-	--hr-font-size-base: 32rpx;
-	--hr-font-size-s: 30rpx;
-	--hr-font-size-xs: 28rpx;
-	--hr-font-size-xxs: 26rpx;
-	--hr-font-size-xxxs: 24rpx;
+  /* 字体大小 */
+  --hr-font-size-xxl : 48rpx;
+  --hr-font-size-xl  : 36rpx;
+  --hr-font-size-base: 32rpx;
+  --hr-font-size-s   : 30rpx;
+  --hr-font-size-xs  : 28rpx;
+  --hr-font-size-xxs : 26rpx;
+  --hr-font-size-xxxs: 24rpx;
 
-	--h-size-40: 40rpx;
-	--h-size-18: 18rpx;
+  --h-size-40: 40rpx;
+  --h-size-18: 18rpx;
 
-	/* 图标大小 */
-	--h-iconfont-48: 48rpx;
-	--h-iconfont-60: 60rpx;
-	--h-iconfont-64: 64rpx;
+  /* 图标大小 */
+  --h-iconfont-48: 48rpx;
+  --h-iconfont-60: 60rpx;
+  --h-iconfont-64: 64rpx;
 
-	/* 页面边距 */
-	/* 页面上下边距 */
-	--h-margin-24: 24rpx;
+  /* 页面边距 */
+  /* 页面上下边距 */
+  --h-margin-24: 24rpx;
 
-	--animate-duration: 800ms;
-	--animate-delay: 0.9s;
+  --animate-duration: 800ms;
+  --animate-delay   : 0.9s;
 
-	font-size: var(--hr-font-size-base);
-	background-color: var(--hr-neutral-color-1);
-}
-
-.flex-between {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.flex-normal {
-	display: flex;
-	align-items: center;
-}
-
-.flex-normal-between {
-	display: flex;
-	justify-content: space-between;
+  font-size       : var(--hr-font-size-base);
+  background-color: var(--hr-neutral-color-1);
 }
