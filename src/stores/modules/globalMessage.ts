@@ -7,12 +7,20 @@ const messageStore = defineStore('message', {
 			isShow: false,
 			msg: '',
 			duration: 0,
-			popupDuration: 500
+			popupDuration: 500,
+			maskClickCallBack: () => {}
 		};
 	},
 
 	actions: {
-		showMessage(message: string, duration = 0) {
+		showMessage(
+			message: string,
+			duration = 0,
+			options: Partial<{
+				maskClickCallBack: () => void;
+			}> = {}
+		) {
+			const { maskClickCallBack } = options;
 			this.isShow = true;
 			this.duration = duration;
 			this.msg = message;
@@ -28,6 +36,8 @@ const messageStore = defineStore('message', {
 					this.closeMessage();
 				}, duration);
 			}
+
+			this.maskClickCallBack = maskClickCallBack || (() => {});
 		},
 
 		closeMessage() {

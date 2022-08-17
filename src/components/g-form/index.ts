@@ -32,6 +32,19 @@ interface IBaseInstance {
 	showSuffixArrowIcon?: boolean;
 	rowStyle?: string;
 	labelWidth?: string;
+	validator?: (
+		v: unknown,
+		item: TInstance
+	) => Promise<
+		| {
+				success: false;
+				message: string;
+		  }
+		| {
+				success: true;
+				message?: string;
+		  }
+	>;
 }
 
 interface IInputInstance extends IBaseInstance {

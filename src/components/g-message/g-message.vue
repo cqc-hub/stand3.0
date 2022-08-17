@@ -67,6 +67,7 @@ export default defineComponent({
 
 		const maskClick = function () {
 			messageStore.closeMessage();
+			messageStore.maskClickCallBack();
 		};
 
 		const containerStyle = `
