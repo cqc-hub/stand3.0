@@ -6,12 +6,11 @@
 					v-model:value="formData"
 					@submit="formSubmit"
 					@change="formChange"
+					@input-blur="formInputBlur"
+					@select-change="selectChange"
+					@address-change="addressChange"
 					ref="gform"
 				/>
-			</view>
-
-			<view class="aa">
-				{{ JSON.stringify(formData) }}
 			</view>
 
 			<g-message />
@@ -32,8 +31,10 @@
 
 <script lang="ts" setup>
 import { ref, nextTick, onMounted, computed } from 'vue';
-import { FormKey, pickTempItem } from './utils';
-import { GStores } from '@/utils';
+import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
+import { GStores, idValidator, PatientUtils } from '@/utils';
+
+import dayjs from 'dayjs';
 import api from '@/service/api';
 
 const props = defineProps<{
@@ -43,18 +44,23 @@ const props = defineProps<{
 	defaultFalg: 'string';
 	patientPhone: 'string';
 }>();
+const patientUtils = new PatientUtils();
 const gStores = new GStores();
 const gform = ref<any>('');
-const formData = ref<BaseObject>({
-	// [FormKey.medicalType]: '-1'
-});
+const formData = ref<Partial<Record<TFormKeys, any>>>({});
+const addressChoose = {
+	addressProvince: '',
+	addressCity: '',
+	addressCounty: '',
+	addressCountyCode: ''
+};
 
 let formList = pickTempItem([
-	FormKey.medicalType,
-	FormKey.patientName,
-	FormKey.patientPhone,
-	FormKey.verify,
-	FormKey.defaultFalg
+	'medicalType',
+	'patientName',
+	'patientPhone',
+	'verify',
+	'defaultFalg'
 ]);
 
 const formSubmit = async ({ data }) => {
@@ -62,8 +68,44 @@ const formSubmit = async ({ data }) => {
 };
 
 const formChange = ({ item, value, oldValue }) => {
-	if (item.key === FormKey.medicalType && oldValue !== value) {
+	if (item.key === formKey.medicalType && oldValue !== value) {
 		medicalTypeChange(value);
+	}
+};
+
+const selectChange = (e) => {
+	const { item, value } = e;
+
+	if (item.key == formKey.idType) {
+		idCardChange();
+	}
+};
+
+const addressChange = (e) => {
+	const { value } = e;
+	const [addressProvince, addressCity, addressCounty] = value;
+
+	addressChoose.addressProvince = addressProvince.text;
+	addressChoose.addressCity = addressCity.text;
+	addressChoose.addressCounty = addressCounty.text;
+	addressChoose.addressCountyCode = addressCounty.value;
+};
+
+// 证件类型变化
+const idCardChange = () => {
+	nextTick(() => {
+		medicalTypeChange(formData.value[formKey.medicalType]);
+	});
+};
+
+const formInputBlur = (e) => {
+	const { item, value } = e;
+
+	if (
+		item.key == [formKey.idCard] &&
+		formData.value[formKey.medicalType] === '-1'
+	) {
+		medicalTypeChange('-1');
 	}
 };
 
@@ -75,35 +117,80 @@ const formChange = ({ item, value, oldValue }) => {
  *  1  军人
  *  2  军属
  */
-const medicalTypeChange = (value: '-1' | '0' | '1' | '2') => {
-	console.log(value, 'ssss');
-	const listArr: FormKey[] = [FormKey.medicalType];
+const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
+	const listArr: TFormKeys[] = [formKey.medicalType];
+	const _sexAndBirth = [formKey.sex, formKey.birthday];
+	const _parentInfo = [formKey.upName, formKey.upIdCard];
 
 	switch (value) {
 		case '-1':
+			let lessThenSix: boolean = false;
+
+			// 证件类型： 身份证
+			if (formData.value[formKey.idType] === '01') {
+				const idCard = formData.value[formKey.idCard];
+
+				// 有身份证不需要填写 生日、性别
+				_sexAndBirth.length = 0;
+
+				if (idCard && idValidator.checkIdCardNo(idCard)) {
+					const cardInfo = idValidator.getIdCardInfo(idCard);
+					if (cardInfo.age <= 6) {
+						lessThenSix = true;
+					}
+				}
+			} else {
+				const birthday = formData.value[formKey.birthday] as string;
+
+				if (birthday) {
+					lessThenSix = dayjs().diff(dayjs(birthday), 'year') <= 6;
+				}
+			}
+
+			// 显示监护人
+			if (!lessThenSix) {
+				_parentInfo.length = 0;
+			}
+
 			listArr.push(
 				...[
-					FormKey.patientName,
-					FormKey.idType,
-					FormKey.idCard,
-					FormKey.nation,
-					FormKey.patientPhone,
-					FormKey.address,
-					FormKey.location,
-					FormKey.defaultFalg
+					formKey.patientName,
+					..._sexAndBirth,
+					formKey.idType,
+					formKey.idCard,
+					..._parentInfo,
+					formKey.nation,
+					formKey.patientPhone,
+					formKey.address,
+					formKey.location,
+					formKey.defaultFalg
+				]
+			);
+
+			break;
+
+		case '0':
+			listArr.push(
+				...[
+					formKey.patientName,
+					..._sexAndBirth,
+					..._parentInfo,
+					formKey.nation,
+					formKey.patientPhone,
+					formKey.address,
+					formKey.location,
+					formKey.defaultFalg
 				]
 			);
 			break;
 
-		case '0':
-			listArr.push(...[FormKey.defaultFalg]);
-			break;
-
 		default:
+			gStores.messageStore.showMessage('未知的就诊人类型');
 			break;
 	}
 
 	formList = pickTempItem(listArr);
+	formList[0].disabled = true;
 	gform.value.setList(formList);
 };
 
@@ -120,22 +207,20 @@ const btnDisabled = computed(() => {
 });
 
 onMounted(() => {
-	console.log(props, 'props---');
-
 	formData.value = Object.fromEntries(
 		Object.entries(props).map(([key, value]) => {
-			if (key === FormKey.defaultFalg) {
+			if (key === formKey.defaultFalg) {
 				(value as any) = (value as unknown) === 'false' ? false : true;
 			}
 			return [key, value];
 		})
 	);
 
-	nextTick(() => {
-		// gform.value.setList(formList);
-		console.log(formData.value, 'cqccc');
+	// 默认身份证
+	formData.value[formKey.idType] = '01';
 
-		medicalTypeChange(formData.value[FormKey.medicalType] || '-1');
+	nextTick(() => {
+		medicalTypeChange(formData.value[formKey.medicalType]);
 	});
 });
 </script>

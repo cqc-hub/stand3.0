@@ -45,6 +45,9 @@ const baseApi = {
 			parm(data)
 		),
 
+	addPat: (data) =>
+		service.post('/phs-user/relevantPatient/addPat', parm(data)),
+
 	getPatCardList: (data) =>
 		service.post('/phs-user/relevantPatient/getPatCardList', parm(data)),
 

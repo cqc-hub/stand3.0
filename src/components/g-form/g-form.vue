@@ -185,7 +185,15 @@ export default defineComponent({
 		}
 	},
 
-	emits: ['update:value', 'submit', 'change', 'picker-change', 'input-blur'],
+	emits: [
+		'update:value',
+		'submit',
+		'change',
+		'picker-change',
+		'input-blur',
+		'select-change',
+		'address-change'
+	],
 
 	setup(props, ctx) {
 		const inputPlaceHolderStyle = `
@@ -212,6 +220,7 @@ export default defineComponent({
 				verifyTip.value = '';
 			}
 		};
+
 		const requestVerify = async (item: IInputVerifyInstance) => {
 			if (timer) {
 				clearTimer();
@@ -239,9 +248,6 @@ export default defineComponent({
 		const setList = async function (initList: TInstance[]) {
 			const defaultKeys = Reflect.ownKeys(props.value);
 			const cache: BaseObject = {};
-			console.log({
-				value: props.value
-			});
 
 			const len = initList.length >>> 0;
 			let k = 0;
@@ -323,9 +329,15 @@ export default defineComponent({
 
 		const actionItemClick = function ({ item }: { item: ISelectOptions }) {
 			if (!cacheItem) return;
+			const { value } = item;
+
+			emits('select-change', {
+				item: { ...cacheItem },
+				value
+			});
 
 			if (cacheItem.field === 'select') {
-				changeSelect(cacheItem, item.value);
+				changeSelect(cacheItem, value);
 				cacheItem = null;
 			}
 		};
@@ -338,14 +350,27 @@ export default defineComponent({
 			const { key, field } = cacheItem;
 
 			if (field === 'address') {
-				const selLabels = choose.map((o) => o.text).join('');
+				addressChange(cacheItem, choose);
+			} else {
+				emits('picker-change', {
+					item: cacheItem,
+					value: choose
+				});
+			}
+		};
+
+		const addressChange = (item: TInstance, v) => {
+			const { key, field } = item;
+
+			if (field === 'address') {
+				const selLabels = v.map((o) => o.text).join('');
 				setData({
 					[key]: selLabels
 				});
 
-				emits('picker-change', {
-					item: cacheItem,
-					choose
+				emits('address-change', {
+					item: item,
+					value: v
 				});
 			}
 		};
@@ -402,14 +427,14 @@ export default defineComponent({
 			}
 		};
 
-		const submit = function () {
+		const submit = async function () {
 			const data = props.value;
 			const len = list.value.length >>> 0;
 			let k = 0;
 
 			while (k < len) {
 				const item = list.value[k++];
-				const { rule, key, required, emptyMessage } = item;
+				const { rule, key, required, emptyMessage, validator } = item;
 				const v = data[key];
 
 				const isFillValue = !!(v || v === 0);
@@ -426,6 +451,15 @@ export default defineComponent({
 				if (rule && isFillValue) {
 					ruleMatch(rule, v, item);
 				}
+
+				if (validator) {
+					const { success, message } = await validator(v, item);
+
+					if (!success) {
+						messageStore.showMessage(message, 1500);
+						throw new Error(item.label + ': 校验失败(validator)');
+					}
+				}
 			}
 
 			emits('submit', {
@@ -434,12 +468,15 @@ export default defineComponent({
 		};
 
 		const changeInput = (item: TInstance, v: string) => {
-			setData(
-				{
-					[item.key]: v
-				},
-				item
-			);
+			// 微信有bug 需要判断下
+			if (typeof v === 'string') {
+				setData(
+					{
+						[item.key]: v
+					},
+					item
+				);
+			}
 		};
 
 		const inputBlur = (item: TInstance, e) => {

@@ -94,6 +94,7 @@ Request.interceptors.response(
 	(err) => {
 		const messageStore = useMessageStore();
 		messageStore.showMessage(err.data.message);
+		uni.hideLoading();
 		return err.data;
 	}
 );

@@ -7,9 +7,9 @@
 			ref="gform"
 		/>
 
-		<view class="aa">
+		<!-- <view class="aa">
 			{{ JSON.stringify(formData) }}
-		</view>
+		</view> -->
 
 		<g-message />
 		<view class="footer">
@@ -27,59 +27,75 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { PatientUtils, GStores } from '@/utils';
-import { FormKey, tempList, pickTempItem } from './utils';
+import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
 import { joinQuery } from '@/common';
 
 import api from '@/service/api';
 
+const patientUtil = new PatientUtils();
 const gStores = new GStores();
 const gform = ref<any>('');
 const formData = ref<BaseObject>({
 	patientName: '大钢炮',
 	patientPhone: '13868529891',
-	[FormKey.verify]: '2313',
-	[FormKey.medicalType]: '1',
-	[FormKey.defaultFalg]: true
+	[formKey.verify]: '2313',
+	[formKey.medicalType]: '-1',
+	[formKey.defaultFalg]: true
 });
 
 const formList = pickTempItem([
-	FormKey.medicalType,
-	FormKey.patientName,
-	FormKey.patientPhone,
-	FormKey.verify,
-	FormKey.defaultFalg
+	'medicalType',
+	'patientName',
+	'patientPhone',
+	'verify',
+	'defaultFalg'
 ]);
 
 const formSubmit = async ({ data }) => {
-	uni.navigateTo({
-		url: joinQuery('/pagesA/medicalCardMan/addMedical', data)
-	});
+	try {
+		const { result } = await api.getPatCardInfoByHospital(data);
+		if (result) {
+			const { jump, cardNumber, idCard, idType, patientSex } = result;
+			const { patientPhone, patientName } = data;
 
-	return;
-	const { result } = await api.getPatCardInfoByHospital(data);
-	if (result) {
-		const { jump, cardNumber, idCard, idType, patientSex } = result;
-		const { patientPhone, patientName } = data;
+			if (jump === 0) {
+				await patientUtil.registerUser({
+					idCard,
+					idType,
+					patientPhone,
+					patientName
+				});
+			} else {
+				uni.navigateTo({
+					url: joinQuery('/pagesA/medicalCardMan/addMedical', data)
+				});
+			}
+		}
+	} catch (error) {
+		const err = error as { respCode: number; message: string };
 
-		if (jump === 0) {
-			const patientUtil = new PatientUtils();
-			await patientUtil.registerUser({
-				idCard,
-				idType,
-				patientPhone,
-				patientName
-			});
-		} else {
+		if (err) {
+			const { respCode, message } = err;
+
+			if (respCode === 999301) {
+				gStores.messageStore.showMessage(message, 0, {
+					maskClickCallBack: () => {
+						uni.navigateTo({
+							url: joinQuery(
+								'/pagesA/medicalCardMan/addMedical',
+								data
+							)
+						});
+					}
+				});
+			}
 		}
 	}
 };
 
-const formChange = ({ item, value }) => {
-};
-
-
+const formChange = ({ item, value }) => {};
 
 const btnDisabled = computed(() => {
 	let isDisabled = false;
@@ -97,15 +113,13 @@ onMounted(() => {
 	const { userName, mobile } = gStores.userStore.cacheUser;
 	// 只有支付宝有
 	if (userName && mobile) {
-		formData.value[FormKey.patientName] = userName;
-		formData.value[FormKey.patientPhone] = mobile;
+		formData.value[formKey.patientName] = userName;
+		formData.value[formKey.patientPhone] = mobile;
 
 		formList.map((o) => {
 			const { key } = o;
 			if (
-				[FormKey.patientName, FormKey.patientPhone].includes(
-					key as FormKey
-				)
+				[formKey.patientName, formKey.patientPhone].includes(key as any)
 			) {
 				o.disabled = true;
 			}

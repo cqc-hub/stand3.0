@@ -231,12 +231,7 @@ export class PatientUtils extends LoginUtils {
 	 * 完善
 	 */
 	async registerUser(payload: BaseObject) {
-		const {
-			idCard: idNo,
-			idType,
-			patientName,
-			patientPhone
-		} = payload;
+		const { idCard: idNo, idType, patientName, patientPhone } = payload;
 		const accountType = this.globalStore.browser.accountType;
 
 		const requestData = {
@@ -307,6 +302,32 @@ export class PatientUtils extends LoginUtils {
 	) {
 		await api.addPatientByHasBeenTreated(data);
 	}
+
+	async addRelevantPatient(
+		data: Partial<{
+			addressCity: string;
+			addressCounty: string;
+			addressCountyCode: string;
+			addressProvince: string;
+			birthday: string; //非身份证类型/儿童必填
+			defaultFalg: '0' | '1';
+			herenId: string;
+			idCard: string;
+			idType: string;
+			location: string;
+			nation: string;
+			openIds: { openId: string; source: string }[];
+			patientName: string;
+			patientPhone: string;
+			patientType: string;
+			sex: string; // 非身份证类型/儿童必填
+			source: string;
+			upIdCard: string; // 儿童必填
+			upName: string; // 儿童必填
+			verifyCode: string;
+			verifyType: string; // （1或空）不开启验证  2:开启验证
+		}>
+	) {}
 
 	async getPatCardList() {
 		const requestArg = {
