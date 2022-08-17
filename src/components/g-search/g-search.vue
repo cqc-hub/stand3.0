@@ -48,4 +48,7 @@ const inputBlur = () => {
 	// border: 3rpx solid #444444;
 	border-radius: 16rpx;
 }
+.uniui-search {
+	margin-right: 20rpx;
+}
 </style>
