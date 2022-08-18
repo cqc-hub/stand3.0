@@ -32,10 +32,7 @@
 	</view>
 </template>
 
-<script setup lang="ts">
-const arr1: string[] = [];
-const arr2: Array<string> = [];
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .box {

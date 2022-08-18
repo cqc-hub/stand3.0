@@ -87,7 +87,7 @@ import global from '@/config/global';
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
 
-const recordList = ref([]); //就医凭证
+const recordList = ref<IRoute[]>([]); //就医凭证
 
 const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
 const ybIcon = global.BASE_IMG + 'v3-my-pz.png';

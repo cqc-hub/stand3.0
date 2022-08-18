@@ -6,7 +6,7 @@
 			:column="type == 1 ? options.list.length : 4"
 		>
 			<uni-grid-item v-for="(item, i) in options.list" :key="i">
-				<view class="grid-item-box">
+				<view class="grid-item-box" @tap="gotoPath(item)">
 					<!-- 绿色能量角标 -->
 					<!-- v-if="item.enabled == 0 "  -->
 					<!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
@@ -69,6 +69,61 @@ const options = computed(() => {
 		type: props.type
 	};
 });
+
+//跳转对应地址
+const gotoPath = (item) => {
+	my.navigateToMiniProgram({
+		appId: '2018070960585195', // 16 位数字
+		path: 'page/map-index/map-index?query=source=alipay_yiyuan_shengrenmin&unifiedProtocol=true',
+		query: {
+			source: 'alipay_yiyuan_shengrenmin',
+			unifiedProtocol: true
+		}
+	});
+
+	//terminalType h5 mini
+	// let path = item.query ? joinQuery(item.path, item.query) : item.path;
+	//支付宝小程序
+	// if (miniprogram.value) {
+	// 	my.navigateTo({ url: item.path });
+	// } else {
+	// 	if (item.terminalType == 'h5') {
+	// 		window.location.href = item.path;
+	// 	} else if (item.terminalType == 'mini') {
+	// 		wx.miniProgram.navigateTo({
+	// 			url: item.path
+	// 		});
+	// 	}
+	// }
+	// terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研
+	// switch (item.terminalType) {
+	// 	case 'h5':
+	// 		uni.navigateTo({
+	// 			url: item.path
+	// 		});
+	// 		break;
+	// 	case 'mini':
+	// 		uni.navigateToMiniProgram({
+	// 			appId: item.appId,
+	// 			path: item.url,
+	// 			extraData: JSON.parse(item.query)
+	// 		});
+	// 		break;
+	// 	case 'alipay':
+	// 		my.navigateToMiniProgram({
+	// 			appId: item.appId,
+	// 			path: item.path,
+	// 			query: JSON.parse(item.query)
+	// 		});
+	// 		break;
+	// 	default:
+	// 		//自研或者其他直接跳转的
+	// 		uni.navigateTo({
+	// 			url: item.path
+	// 		});
+	// 		break;
+	// }
+};
 </script>
 
 <style lang="scss" scoped>
