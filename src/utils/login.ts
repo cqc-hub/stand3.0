@@ -358,7 +358,6 @@ export class PatientUtils extends LoginUtils {
 	) {
 		console.log('23333');
 
-
 		const requestArg = {
 			...data,
 			defaultFalg: data.defaultFalg ? '1' : '0',
@@ -376,7 +375,13 @@ export class PatientUtils extends LoginUtils {
 			source: this.globalStore.browser.source
 		};
 
-		await api.getPatCardList(requestArg);
+		const { result } = await api.getPatCardList(requestArg);
+
+		if (result && result.length) {
+			this.userStore.updatePatList(result);
+		} else {
+			this.userStore.updatePatList([]);
+		}
 	}
 }
 

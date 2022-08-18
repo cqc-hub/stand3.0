@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia';
 import { BASE_IMG } from '@/config/global';
+import { IPat } from '@/stores/type';
 
 const userStore = defineStore('user', {
 	persist: {
 		key: '_user',
-		paths: ['name', 'sex', 'idNo', 'cellPhoneNum', 'patientId', 'cacheUser']
+		paths: [
+			'name',
+			'sex',
+			'idNo',
+			'cellPhoneNum',
+			'patientId',
+			'cacheUser',
+			'patList'
+		]
 	},
 
 	state: () => {
@@ -14,6 +23,7 @@ const userStore = defineStore('user', {
 			idNo: '',
 			cellPhoneNum: '',
 			patientId: '',
+			patList: <IPat[]>[],
 
 			cacheUser: {
 				userName: '',
@@ -56,6 +66,10 @@ const userStore = defineStore('user', {
 					this.cacheUser[key] = value;
 				}
 			});
+		},
+
+		updatePatList(patList: IPat[]) {
+			this.patList = patList;
 		},
 
 		clearStore() {

@@ -126,10 +126,16 @@ import { useGlobalStore, useUserStore } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
-import { aliLogin, wxLogin, ServerStaticData } from '@/utils';
+import { aliLogin, wxLogin, ServerStaticData, PatientUtils } from '@/utils';
+
+
 const userSore = useUserStore();
 
 const globalStore = useGlobalStore();
+
+if (globalStore.herenId) {
+	new PatientUtils().getPatCardList();
+}
 
 //骨架屏配置
 const skeletonProps = {
