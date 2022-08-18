@@ -33,6 +33,7 @@
 import { ref, nextTick, onMounted, computed } from 'vue';
 import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
 import { GStores, idValidator, PatientUtils } from '@/utils';
+import { onReady } from '@dcloudio/uni-app';
 
 import dayjs from 'dayjs';
 import api from '@/service/api';
@@ -40,9 +41,10 @@ import api from '@/service/api';
 const props = defineProps<{
 	patientName: 'string';
 	medicalType: 'string';
-	verify: 'string';
+	verifyCode: 'string';
 	defaultFalg: 'string';
 	patientPhone: 'string';
+	pageType: 'addPatient' | 'perfectReal';
 }>();
 const patientUtils = new PatientUtils();
 const gStores = new GStores();
@@ -54,6 +56,7 @@ const addressChoose = {
 	addressCounty: '',
 	addressCountyCode: ''
 };
+let verifyCode = '';
 
 let formList = pickTempItem([
 	'medicalType',
@@ -64,7 +67,19 @@ let formList = pickTempItem([
 ]);
 
 const formSubmit = async ({ data }) => {
-	console.log('success', data);
+	const requestData = {
+		...data,
+		...addressChoose,
+		verifyCode
+	};
+
+	if (props.pageType === 'perfectReal') {
+		patientUtils.registerUser(requestData, {
+			addPatInterface: 'relevantPatient'
+		});
+	} else {
+		patientUtils.addRelevantPatient(requestData);
+	}
 };
 
 const formChange = ({ item, value, oldValue }) => {
@@ -76,8 +91,13 @@ const formChange = ({ item, value, oldValue }) => {
 const selectChange = (e) => {
 	const { item, value } = e;
 
-	if (item.key == formKey.idType) {
-		idCardChange();
+	switch (item.key) {
+		case formKey.idType:
+			idCardChange();
+			break;
+
+		default:
+			break;
 	}
 };
 
@@ -93,6 +113,8 @@ const addressChange = (e) => {
 
 // 证件类型变化
 const idCardChange = () => {
+	formData.value[formKey.idCard] = '';
+
 	nextTick(() => {
 		medicalTypeChange(formData.value[formKey.medicalType]);
 	});
@@ -190,7 +212,21 @@ const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
 	}
 
 	formList = pickTempItem(listArr);
-	formList[0].disabled = true;
+
+	formList.map((o) => {
+		const { key } = o;
+		if (
+			[
+				formKey.medicalType,
+				formKey.patientName,
+				formKey.patientPhone
+			].includes(key as any)
+		) {
+			if (formData.value[key]) {
+				o.disabled = true;
+			}
+		}
+	});
 	gform.value.setList(formList);
 };
 
@@ -206,6 +242,14 @@ const btnDisabled = computed(() => {
 	return isDisabled;
 });
 
+onReady(() => {
+	if (props.pageType === 'perfectReal') {
+		uni.setNavigationBarTitle({
+			title: '完善账号实名信息'
+		});
+	}
+});
+
 onMounted(() => {
 	formData.value = Object.fromEntries(
 		Object.entries(props).map(([key, value]) => {
@@ -218,6 +262,7 @@ onMounted(() => {
 
 	// 默认身份证
 	formData.value[formKey.idType] = '01';
+	verifyCode = formData.value[formKey.verify];
 
 	nextTick(() => {
 		medicalTypeChange(formData.value[formKey.medicalType]);

@@ -27,13 +27,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, withDefaults } from 'vue';
 import { PatientUtils, GStores } from '@/utils';
 import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
 import { joinQuery } from '@/common';
+import { onReady } from '@dcloudio/uni-app';
 
 import api from '@/service/api';
 
+const props = withDefaults(
+	defineProps<{
+		pageType: 'addPatient' | 'perfectReal';
+	}>(),
+	{
+		pageType: 'addPatient'
+	}
+);
 const patientUtil = new PatientUtils();
 const gStores = new GStores();
 const gform = ref<any>('');
@@ -61,15 +70,32 @@ const formSubmit = async ({ data }) => {
 			const { patientPhone, patientName } = data;
 
 			if (jump === 0) {
-				await patientUtil.registerUser({
-					idCard,
-					idType,
-					patientPhone,
-					patientName
-				});
+				if (props.pageType === 'perfectReal') {
+					await patientUtil.registerUser({
+						idCard,
+						idType,
+						patientPhone,
+						patientName
+					});
+				} else {
+					const value = formData.value;
+					await patientUtil.addPatient({
+						defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
+						herenId: patientUtil.globalStore.herenId,
+						patientName: value[formKey.patientName],
+						patientPhone: value[formKey.patientPhone],
+						source: patientUtil.globalStore.browser.source,
+						verifyCode: '1'
+					});
+
+					await patientUtil.getPatCardList();
+				}
 			} else {
 				uni.navigateTo({
-					url: joinQuery('/pagesA/medicalCardMan/addMedical', data)
+					url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+						...data,
+						pageType: props.pageType
+					})
 				});
 			}
 		}
@@ -85,7 +111,10 @@ const formSubmit = async ({ data }) => {
 						uni.navigateTo({
 							url: joinQuery(
 								'/pagesA/medicalCardMan/addMedical',
-								data
+								{
+									...data,
+									pageType: props.pageType
+								}
 							)
 						});
 					}
@@ -107,6 +136,14 @@ const btnDisabled = computed(() => {
 	});
 
 	return isDisabled;
+});
+
+onReady(() => {
+	if (props.pageType === 'perfectReal') {
+		uni.setNavigationBarTitle({
+			title: '完善账号实名信息'
+		});
+	}
 });
 
 onMounted(() => {

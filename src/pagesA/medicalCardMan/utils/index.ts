@@ -1,6 +1,7 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
 
+// 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
 	medicalType: 'medicalType',
 	idType: 'idType',
@@ -16,22 +17,8 @@ export const formKey = <const>{
 	verify: 'verifyCode',
 	defaultFalg: 'defaultFalg',
 	nation: 'nation'
-
-	// medicalType = 'medicalType',
-	// idType = 'idType',
-	// idCard = 'idCard',
-	// patientName = 'patientName',
-	// patientPhone = 'patientPhone',
-	// birthday = 'birthday',
-	// sex = 'sex',
-	// upName = 'upName',
-	// upIdCard = 'upIdCard',
-	// address = 'address',
-	// location = 'location',
-	// verify = 'verifyCode',
-	// defaultFalg = 'defaultFalg',
-	// nation = 'nation'
 };
+
 export type FormKey = typeof formKey;
 
 export type TFormKeys = keyof FormKey;
@@ -190,11 +177,13 @@ export const tempList: TInstance[] = [
 ];
 
 export const pickTempItem = function (keys: TFormKeys[]): TInstance[] {
+	const dKeys = keys.map((key) => formKey[key]);
+
 	return cloneUtil<TInstance[]>(tempList)
-		.filter((item) => keys.includes(<TFormKeys>item.key))
+		.filter((item) => dKeys.includes(<any>item.key))
 		.sort((a, b) => {
-			const aIndex = keys.findIndex((key) => key === a.key);
-			const bIndex = keys.findIndex((key) => key === b.key);
+			const aIndex = dKeys.findIndex((key) => key === a.key);
+			const bIndex = dKeys.findIndex((key) => key === b.key);
 			return aIndex - bIndex;
 		});
 };

@@ -1,5 +1,6 @@
 <template>
 	<view class="login-center">
+		<view @click="ttt">2333</view>
 		<scroll-view class="scroll-container" scroll-y>
 			<ls-skeleton
 				:skeleton="skeletonProps.skeleton"
@@ -82,6 +83,12 @@ const getHomeConfig = async () => {
 		menu3List.value = homeConfig[7].functionList;
 		skeletonProps.loading = false;
 	}
+};
+
+const ttt = () => {
+	uni.reLaunch({
+		url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
+	});
 };
 </script>
 

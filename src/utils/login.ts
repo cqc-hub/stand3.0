@@ -50,7 +50,7 @@ export class GStores {
 	globalStore = useGlobalStore();
 }
 
-class LoginUtils extends GStores {
+export class LoginUtils extends GStores {
 	async getUerInfo() {
 		try {
 			const { result } = await api.allinoneAuthApi(
@@ -71,7 +71,7 @@ class LoginUtils extends GStores {
 					this.messageStore.showMessage('未完善，请先完善', 1000);
 					setTimeout(() => {
 						uni.reLaunch({
-							url: '/pagesA/medicalCardMan/perfectReal'
+							url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
 						});
 					}, 1200);
 				}
@@ -82,12 +82,31 @@ class LoginUtils extends GStores {
 		}
 	}
 
-	outLogin() {
+	outLogin(
+		options: Partial<{
+			isHideMessage: boolean;
+			isGoLoginPage: boolean;
+		}> = {}
+	) {
+		const { isHideMessage, isGoLoginPage } = options;
 		this.userStore.clearStore();
 		this.globalStore.clearStore();
 
 		setTimeout(() => {
-			this.messageStore.showMessage('退出成功', 1500);
+			if (!isHideMessage) {
+				this.messageStore.showMessage('退出成功', 1500);
+			}
+
+			if (isGoLoginPage) {
+				uni.reLaunch({
+					url: '/pages/home/my',
+					complete: () => {
+						setTimeout(() => {
+							this.messageStore.showMessage('请登录', 1500);
+						}, 500);
+					}
+				});
+			}
 		}, 500);
 	}
 }
@@ -230,7 +249,15 @@ export class PatientUtils extends LoginUtils {
 	/**
 	 * 完善
 	 */
-	async registerUser(payload: BaseObject) {
+	async registerUser(
+		payload: BaseObject,
+		options: Partial<{
+			addPatInterface: 'hasBeenTreated' | 'relevantPatient';
+		}> = {
+			addPatInterface: 'hasBeenTreated'
+		}
+	) {
+		const { addPatInterface } = options;
 		const { idCard: idNo, idType, patientName, patientPhone } = payload;
 		const accountType = this.globalStore.browser.accountType;
 
@@ -269,14 +296,18 @@ export class PatientUtils extends LoginUtils {
 				mask: true
 			});
 
-			await this.addPatient({
-				defaultFalg: '1',
-				herenId: this.globalStore.herenId,
-				patientName,
-				patientPhone,
-				source: this.globalStore.browser.source,
-				verifyCode: '1'
-			});
+			if (addPatInterface === 'hasBeenTreated') {
+				await this.addPatient({
+					defaultFalg: '1',
+					herenId: this.globalStore.herenId,
+					patientName,
+					patientPhone,
+					source: this.globalStore.browser.source,
+					verifyCode: '1'
+				});
+			} else {
+				await this.addRelevantPatient(payload);
+			}
 
 			await this.getPatCardList();
 		}
@@ -285,7 +316,6 @@ export class PatientUtils extends LoginUtils {
 	/**
 	 * 新增
 	 */
-
 	async addPatient(
 		data: Partial<{
 			defaultFalg: '0' | '1';
@@ -310,8 +340,7 @@ export class PatientUtils extends LoginUtils {
 			addressCountyCode: string;
 			addressProvince: string;
 			birthday: string; //非身份证类型/儿童必填
-			defaultFalg: '0' | '1';
-			herenId: string;
+			defaultFalg: boolean;
 			idCard: string;
 			idType: string;
 			location: string;
@@ -321,13 +350,25 @@ export class PatientUtils extends LoginUtils {
 			patientPhone: string;
 			patientType: string;
 			sex: string; // 非身份证类型/儿童必填
-			source: string;
 			upIdCard: string; // 儿童必填
 			upName: string; // 儿童必填
 			verifyCode: string;
 			verifyType: string; // （1或空）不开启验证  2:开启验证
 		}>
-	) {}
+	) {
+		console.log('23333');
+
+
+		const requestArg = {
+			...data,
+			defaultFalg: data.defaultFalg ? '1' : '0',
+			source: this.globalStore.browser.source,
+			herenId: this.globalStore.herenId,
+			verifyType: '1'
+		};
+
+		await api.addPat(requestArg);
+	}
 
 	async getPatCardList() {
 		const requestArg = {

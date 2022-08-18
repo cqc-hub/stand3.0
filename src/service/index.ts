@@ -9,6 +9,7 @@ import {
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { LoginUtils } from '@/utils';
 
 const Request = new requestClass();
 // 请求拦截器
@@ -48,10 +49,23 @@ Request.interceptors.response(
 		// 	}
 		// }
 
-		const { code, message } = responseData;
+		const { code, message, respCode } = responseData;
 
 		if (code === 1) {
-			messageStore.showMessage(message);
+			// 登录过期
+			if (respCode === 999101) {
+				messageStore.showMessage(message, 0, {
+					maskClickCallBack: () => {
+						console.log('过期了');
+						new LoginUtils().outLogin({
+							isHideMessage: true,
+							isGoLoginPage: true
+						});
+					}
+				});
+			} else {
+				messageStore.showMessage(message);
+			}
 
 			return Promise.reject(responseData);
 		}
