@@ -22,17 +22,27 @@
 										&#xe6a7;
 									</view>
 									<!-- 没有就诊人时 -->
-									<text>
+									<!-- <text>
 										{{
 											userSore.name ||
 											userSore.cellPhoneNum
 										}}
-									</text>
+									</text> -->
 									<!-- 有就诊人时 -->
-									<!-- <view class="patient">
-									<text>张三三</text>
-									<text>ID：644567882</text>
-								</view> -->
+									<view class="patient">
+										<text>
+											{{
+												gStores.userStore.patChoose
+													.patientName
+											}}
+										</text>
+										<text>
+											ID：{{
+												gStores.userStore.patChoose
+													._showId
+											}}
+										</text>
+									</view>
 								</view>
 								<view class="switchPatient" @tap="chooseAction">
 									切换就诊人
@@ -111,7 +121,7 @@
 			</ls-skeleton>
 		</scroll-view>
 
-		<choose-pat-action ref="actionSheet" />
+		<choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 		<homeTabbar />
 	</view>
 </template>
@@ -122,14 +132,20 @@ import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
-import { useGlobalStore, useUserStore } from '@/stores';
+import { useGlobalStore, useUserStore, IPat } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
-import { aliLogin, wxLogin, ServerStaticData, PatientUtils } from '@/utils';
+import {
+	aliLogin,
+	wxLogin,
+	ServerStaticData,
+	PatientUtils,
+	GStores
+} from '@/utils';
 
 const userSore = useUserStore();
-
+const gStores = new GStores();
 const globalStore = useGlobalStore();
 
 if (globalStore.herenId) {
@@ -154,11 +170,15 @@ const skeletonProps = {
 	]
 };
 // 就诊人
+
 const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
 const chooseAction = () => {
 	if (actionSheet.value) {
 		actionSheet.value.show();
 	}
+};
+const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+	gStores.userStore.updatePatChoose(item);
 };
 
 const searchPlaceholder = '搜索科室、医生或疾病';
