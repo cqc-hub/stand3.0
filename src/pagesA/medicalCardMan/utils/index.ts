@@ -212,6 +212,7 @@ export const patCardDetailTempList: TInstance[] = [
 		key: patCardDetailFormKey.patientType,
 		field: 'select',
 		disabled: true,
+		isForShow: true,
 		options: [],
 		autoOptions: 'patientTypeTerms'
 	},
@@ -220,49 +221,56 @@ export const patCardDetailTempList: TInstance[] = [
 		label: '真实姓名',
 		field: 'input-text',
 		disabled: true,
-		key: patCardDetailFormKey.patientName
+		key: patCardDetailFormKey.patientName,
+		isForShow: true
 	},
 
 	{
 		label: '证件号码',
 		field: 'input-text',
 		disabled: true,
-		key: patCardDetailFormKey.idCard
+		key: patCardDetailFormKey.idCard,
+		isForShow: true
 	},
 
 	{
 		label: '手机号',
 		field: 'input-text',
 		disabled: true,
-		key: patCardDetailFormKey.patientPhone
+		key: patCardDetailFormKey.patientPhone,
+		isForShow: true
 	},
 
 	{
 		label: '民族',
 		field: 'input-text',
 		key: patCardDetailFormKey.nation,
-		disabled: true
+		disabled: true,
+		isForShow: true
 	},
 
 	{
 		label: '详细地址',
 		field: 'input-text',
 		key: patCardDetailFormKey.address,
-		disabled: true
+		disabled: true,
+		isForShow: true
 	},
 
 	{
 		label: '性别',
 		field: 'input-text',
 		key: patCardDetailFormKey.patientSex,
-		disabled: true
+		disabled: true,
+		isForShow: true
 	},
 
 	{
 		label: '监护人姓名',
 		field: 'input-text',
 		key: patCardDetailFormKey.upName,
-		disabled: true
+		disabled: true,
+		isForShow: true
 	},
 
 	{
@@ -270,7 +278,8 @@ export const patCardDetailTempList: TInstance[] = [
 		field: 'input-text',
 		key: patCardDetailFormKey.upIdCard,
 		labelWidth: '260rpx',
-		disabled: true
+		disabled: true,
+		isForShow: true
 	},
 
 	{

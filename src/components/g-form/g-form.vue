@@ -5,7 +5,8 @@
 				v-for="item in list"
 				:key="item.key"
 				:class="{
-					'form-item-icon': item.field === 'select'
+					'form-item-icon': item.field === 'select',
+					'item-for-show': item.isForShow
 				}"
 				:style="`--label-width: ${item.labelWidth || '190rpx'}; ${
 					(item.rowStyle && item.rowStyle) || ''
@@ -13,7 +14,9 @@
 				class="form-item"
 			>
 				<view
-					:class="`${item.required && 'item-require'}`"
+					:class="{
+						'item-require': item.required
+					}"
 					class="label"
 				>
 					{{ item.label }}
@@ -27,67 +30,60 @@
 					class="container-body"
 					@tap.prevent.stop="clickContainer(item)"
 				>
-					<uni-easyinput
-						v-if="
-							item.field === 'input-text' ||
-							item.field === 'input-verify'
-						"
-						:placeholder="item.placeholder"
-						:inputBorder="false"
-						:clearable="false"
-						:placeholderStyle="inputPlaceHolderStyle"
-						:value="value[item.key]"
-						:type="item.inputType"
-						:maxlength="item.maxlength"
-						@input="(e) => changeInput(item, e)"
-						@blur="inputBlur(item, $event)"
-						:class="{
-							'my-disabled': item.disabled,
-							'my-disabled-color': item.disabled
-						}"
-						class="form-input"
-					/>
-
-					<view v-if="item.field === 'select'" class="full-item">
-						<view class="my-disabled">
-							<uni-easyinput
-								:placeholder="item.placeholder"
-								:inputBorder="false"
-								:clearable="false"
-								:placeholderStyle="inputPlaceHolderStyle"
-								:value="
-									ServerStaticData.getOptionsLabel(
-										item.options,
-										value[item.key]
-									)
-								"
-								class="form-input"
-							/>
+					<block v-if="item.isForShow">
+						<view class="content-show">
+							{{
+								item.field === 'select'
+									? ServerStaticData.getOptionsLabel(
+											item.options,
+											value[item.key]
+									  )
+									: value[item.key]
+							}}
 						</view>
-					</view>
+					</block>
 
-					<view v-if="item.field === 'address'" class="full-item">
-						<view class="my-disabled">
-							<uni-easyinput
-								:placeholder="item.placeholder"
-								:inputBorder="false"
-								:clearable="false"
-								:placeholderStyle="inputPlaceHolderStyle"
-								:value="value[item.key]"
-								class="form-input"
-							/>
+					<block v-else>
+						<uni-easyinput
+							v-if="
+								item.field === 'input-text' ||
+								item.field === 'input-verify'
+							"
+							:placeholder="item.placeholder"
+							:inputBorder="false"
+							:clearable="false"
+							:placeholderStyle="inputPlaceHolderStyle"
+							:value="value[item.key]"
+							:type="item.inputType"
+							:maxlength="item.maxlength"
+							@input="(e) => changeInput(item, e)"
+							@blur="inputBlur(item, $event)"
+							:class="{
+								'my-disabled': item.disabled,
+								'my-disabled-color': item.disabled
+							}"
+							class="form-input"
+						/>
+
+						<view v-if="item.field === 'select'" class="full-item">
+							<view class="my-disabled">
+								<uni-easyinput
+									:placeholder="item.placeholder"
+									:inputBorder="false"
+									:clearable="false"
+									:placeholderStyle="inputPlaceHolderStyle"
+									:value="
+										ServerStaticData.getOptionsLabel(
+											item.options,
+											value[item.key]
+										)
+									"
+									class="form-input"
+								/>
+							</view>
 						</view>
-					</view>
 
-					<view v-if="item.field === 'time-picker'" class="full-item">
-						<uni-datetime-picker
-							:modelValue="value[item.key]"
-							:type="item.type"
-							:start="item.start"
-							:end="item.end"
-							:disabled="item.disabled"
-							@change="changeTimePicker(item, $event)"
-						>
+						<view v-if="item.field === 'address'" class="full-item">
 							<view class="my-disabled">
 								<uni-easyinput
 									:placeholder="item.placeholder"
@@ -98,32 +94,59 @@
 									class="form-input"
 								/>
 							</view>
-						</uni-datetime-picker>
-					</view>
+						</view>
 
-					<view
-						v-if="item.field === 'switch'"
-						class="container-body-switch"
-					>
-						<switch
-							:checked="!!value[item.key]"
-							:disabled="item.disabled"
-							@change="(e: any) => changeSwitch(item, e)"
-							color="var(--hr-brand-color-6)"
-						/>
-					</view>
+						<view
+							v-if="item.field === 'time-picker'"
+							class="full-item"
+						>
+							<uni-datetime-picker
+								:modelValue="value[item.key]"
+								:type="item.type"
+								:start="item.start"
+								:end="item.end"
+								:disabled="item.disabled"
+								@change="changeTimePicker(item, $event)"
+							>
+								<view class="my-disabled">
+									<uni-easyinput
+										:placeholder="item.placeholder"
+										:inputBorder="false"
+										:clearable="false"
+										:placeholderStyle="
+											inputPlaceHolderStyle
+										"
+										:value="value[item.key]"
+										class="form-input"
+									/>
+								</view>
+							</uni-datetime-picker>
+						</view>
 
-					<view
-						v-if="item.field === 'input-verify'"
-						@tap="requestVerify(item)"
-						:class="{
-							'form-item-verify-disabled': verifyTip,
-							'my-disabled': verifyTip
-						}"
-						class="verify-btn"
-					>
-						{{ verifyTip || item.verifyBtnText }}
-					</view>
+						<view
+							v-if="item.field === 'switch'"
+							class="container-body-switch"
+						>
+							<switch
+								:checked="!!value[item.key]"
+								:disabled="item.disabled"
+								@change="(e: any) => changeSwitch(item, e)"
+								color="var(--hr-brand-color-6)"
+							/>
+						</view>
+
+						<view
+							v-if="item.field === 'input-verify'"
+							@tap="requestVerify(item)"
+							:class="{
+								'form-item-verify-disabled': verifyTip,
+								'my-disabled': verifyTip
+							}"
+							class="verify-btn"
+						>
+							{{ verifyTip || item.verifyBtnText }}
+						</view>
+					</block>
 
 					<view
 						v-if="item.showSuffixArrowIcon"
@@ -552,9 +575,16 @@ export default defineComponent({
 	grid-template-columns: var(--label-width) 1fr;
 	align-items: center;
 	background-color: var(--h-color-white);
-	padding: 18rpx 32rpx;
+	padding: 16rpx 32rpx;
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 	color: var(--hr-neutral-color-8);
+
+	&.item-for-show {
+		padding: 28rpx 32rpx;
+		.label {
+			height: 100%;
+		}
+	}
 
 	.label {
 		&.item-require {
@@ -599,6 +629,12 @@ export default defineComponent({
 
 		.form-item-verify-disabled {
 			color: var(--hr-neutral-color-5);
+		}
+
+		.content-show {
+			width: 100%;
+			text-align: right;
+			color: var(--hr-neutral-color-10);
 		}
 	}
 }
