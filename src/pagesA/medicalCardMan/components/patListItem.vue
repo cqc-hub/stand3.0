@@ -68,6 +68,10 @@ export default defineComponent({
 	border-radius: 16rpx;
 	padding: 32rpx;
 
+	-webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+	animation-duration: .5s;
+
 	.pat-profile {
 		color: var(--hr-neutral-color-10);
 		font-size: var(--hr-font-size-xl);

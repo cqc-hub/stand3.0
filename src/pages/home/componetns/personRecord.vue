@@ -45,7 +45,7 @@
 				v-if="globalStore.isLogin"
 				class="user-out animate__animated animate__slideInRight"
 			>
-				<view @click="outLogin" class="out-btn">退出登陆</view>
+				<view @click="outLogin" class="out-btn">退出登录</view>
 			</view>
 		</view>
 
@@ -168,6 +168,13 @@ const recordColors = ['#296FFF', '#00b39e'];
 				border: none !important;
 				background-color: transparent;
 				box-shadow: none !important;
+			}
+
+			&:active {
+				-webkit-animation-timing-function: ease-in-out;
+				animation-timing-function: ease-in-out;
+				-webkit-animation-name: headShake;
+				animation-name: headShake;
 			}
 		}
 
