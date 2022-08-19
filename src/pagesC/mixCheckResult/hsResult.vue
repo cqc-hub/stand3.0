@@ -32,7 +32,23 @@
 	</view>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import api from '@/service/api';
+import { onLoad } from '@dcloudio/uni-app';
+onLoad(() => {
+	getNucleicResult();
+});
+
+//获取列表数据
+const getNucleicResult = async () => {
+	const { result } = await api.getNucleicResult({
+		patientId: '822868244',
+		pageNumber: 1,
+		pageSize: 10
+	});
+	console.log(3333, result);
+};
+</script>
 
 <style scoped lang="scss">
 .box {

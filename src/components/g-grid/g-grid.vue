@@ -73,14 +73,13 @@ const options = computed(() => {
 //跳转对应地址
 const gotoPath = (item) => {
 	my.navigateToMiniProgram({
-		appId: '2018070960585195', // 16 位数字
+		appId: '2018070960585195',
 		path: 'page/map-index/map-index?query=source=alipay_yiyuan_shengrenmin&unifiedProtocol=true',
 		query: {
 			source: 'alipay_yiyuan_shengrenmin',
 			unifiedProtocol: true
 		}
 	});
-
 	//terminalType h5 mini
 	// let path = item.query ? joinQuery(item.path, item.query) : item.path;
 	//支付宝小程序
