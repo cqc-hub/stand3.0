@@ -9,7 +9,10 @@
 			<view class="container">
 				<view class="label text-ellipsis">{{ item.patientName }}</view>
 				<view class="id text-ellipsis">{{ item._showId }}</view>
-				<!-- <view class="iconfont icon-size suffix-icon">&#xe6a6;</view> -->
+				<view :class="{
+					blue: item.patientSex === '男',
+					pink: item.patientSex === '女',
+				}" class="iconfont icon-size">{{ item.patientSex === '男' ? '&#xe6aa;' : '&#xe6a9;' }}</view>
 			</view>
 
 			<view class="suffix-icon g-flex-rc-cc">
@@ -93,10 +96,19 @@ const itemClick = function (item, index) {
 	}
 
 	.id {
-		width: 30%;
-		flex: 1;
+		// width: 30%;
+		// flex: 1;
 		font-size: var(--hr-font-size-xs);
 		color: var(--hr-neutral-color-10);
+		margin-right: 16rpx;
+	}
+
+	.blue {
+		color: var(--hr-brand-color-6);
+	}
+
+	.pink {
+		color: var(--hr-error-color-6);
 	}
 
 	.suffix-icon {

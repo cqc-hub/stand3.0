@@ -13,7 +13,8 @@ const userStore = defineStore('user', {
 			'patientId',
 			'cacheUser',
 			'patList',
-			'patChoose'
+			'patChoose',
+			'clickPat'
 		]
 	},
 
@@ -26,6 +27,9 @@ const userStore = defineStore('user', {
 			patientId: '',
 			patList: <IPat[]>[],
 			patChoose: <IPat>{},
+
+			// 页面传递时候用
+			clickPat: <IPat>{},
 
 			cacheUser: {
 				userName: '',
@@ -83,6 +87,10 @@ const userStore = defineStore('user', {
 
 		updatePatChoose(pat: IPat) {
 			this.patChoose = pat;
+		},
+
+		updatePatClick(pat: IPat) {
+			this.clickPat = pat;
 		},
 
 		clearStore() {

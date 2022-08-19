@@ -15,7 +15,7 @@ export interface IPat {
 	patientId: string;
 	patientName: string;
 	patientPhone: string;
-	patientSex: string;
+	patientSex: '男' | '女';
 	patientType: string;
 	relationship: string;
 	sysCode: string;

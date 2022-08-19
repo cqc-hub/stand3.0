@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="pat-profile">
+		<view class="pat-profile" @click="profileClick">
 			<view class="pat-label">
 				<text class="pat-name">{{ pat.patientName }}</text>
 				<text class="pat-sex">{{ pat.patientSex }}</text>
@@ -14,7 +14,7 @@
 			<view class="iconfont icon-resize">&#xe66b;</view>
 		</view>
 
-		<view class="pat-card">
+		<view class="pat-card" @click="cardClick">
 			<view class="card">
 				<view class="card-content">
 					<view class="card-label">电子就诊卡</view>
@@ -41,10 +41,23 @@ export default defineComponent({
 		}
 	},
 
-	setup(props) {
-		console.log(props.pat);
+	emits: ['profile-click', 'card-click'],
 
-		return {};
+	setup(props, ctx) {
+		const { emit } = ctx;
+
+		const profileClick = () => {
+			emit('profile-click', props.pat);
+		};
+
+		const cardClick = () => {
+			emit('card-click', props.pat);
+		};
+
+		return {
+			profileClick,
+			cardClick
+		};
 	}
 });
 </script>

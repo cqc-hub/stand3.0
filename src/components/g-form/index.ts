@@ -32,6 +32,7 @@ interface IBaseInstance {
 	showSuffixArrowIcon?: boolean;
 	rowStyle?: string;
 	labelWidth?: string;
+	isForShow?: boolean;
 	validator?: (
 		v: unknown,
 		item: TInstance
@@ -53,7 +54,7 @@ interface IInputInstance extends IBaseInstance {
 	maxlength?: number;
 }
 
-export interface ISwitchInstance extends Omit<IBaseInstance, 'placeholder'> {
+export interface ISwitchInstance extends IBaseInstance {
 	field: 'switch';
 }
 

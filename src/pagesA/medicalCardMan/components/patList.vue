@@ -1,7 +1,11 @@
 <template>
 	<view class="list-container">
-		<view v-for="pat in list" :key="pat.patientId" >
-			<list-Item :pat="pat" />
+		<view v-for="pat in list" :key="pat.patientId">
+			<list-Item
+				:pat="pat"
+				@card-click="cardClick"
+				@profile-click="profileClick"
+			/>
 		</view>
 	</view>
 </template>
@@ -22,6 +26,8 @@ export default defineComponent({
 		styleIsolation: 'shared'
 	},
 
+	emits: ['profile-click', 'card-click'],
+
 	props: {
 		list: {
 			type: Array as PropType<IPat[]>,
@@ -29,8 +35,21 @@ export default defineComponent({
 		}
 	},
 
-	setup() {
-		return {};
+	setup(props, ctx) {
+		const { emit } = ctx;
+
+		const profileClick = (pat: IPat) => {
+			emit('profile-click', pat);
+		};
+
+		const cardClick = (pat: IPat) => {
+			emit('card-click', pat);
+		};
+
+		return {
+			profileClick,
+			cardClick
+		};
 	}
 });
 </script>

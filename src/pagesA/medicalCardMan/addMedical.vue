@@ -220,6 +220,30 @@ const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
 
 	formList = pickTempItem(listArr);
 
+	const idCardItem = formList.find((o) => o.key === formKey.idCard);
+	if (idCardItem) {
+		idCardItem.validator = (v) => {
+			const value = v as string;
+			let isErr = false;
+			if (formData.value[formKey.idType] === '01') {
+				if (!idValidator.checkIdCardNo(value)) {
+					isErr = true;
+				}
+			}
+
+			if (isErr) {
+				return Promise.resolve({
+					success: false,
+					message: '请确认证件号码是否有误'
+				});
+			} else {
+				return Promise.resolve({
+					success: true
+				});
+			}
+		};
+	}
+
 	formList.map((o) => {
 		const { key } = o;
 		if (

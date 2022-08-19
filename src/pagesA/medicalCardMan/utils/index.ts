@@ -176,7 +176,9 @@ export const tempList: TInstance[] = [
 	}
 ];
 
-export const pickTempItem = function (keys: TFormKeys[]): TInstance[] {
+export const pickTempItem = function <T = TFormKeys>(
+	keys: TFormKeys[]
+): TInstance[] {
 	const dKeys = keys.map((key) => formKey[key]);
 
 	return cloneUtil<TInstance[]>(tempList)
@@ -187,3 +189,95 @@ export const pickTempItem = function (keys: TFormKeys[]): TInstance[] {
 			return aIndex - bIndex;
 		});
 };
+
+// -----------------
+export const patCardDetailFormKey = <const>{
+	patientType: 'patientType',
+	patientName: 'patientName',
+	idCard: 'idCard',
+	patientPhone: 'patientPhone',
+	nation: 'nation',
+	address: 'address',
+	patientSex: 'patientSex',
+	upName: 'upName',
+	upIdCard: 'upIdCard',
+	defaultFlag: 'defaultFlag'
+};
+
+export type PatCardKeys = keyof typeof patCardDetailFormKey;
+
+export const patCardDetailTempList: TInstance[] = [
+	{
+		label: '就诊人类型',
+		key: patCardDetailFormKey.patientType,
+		field: 'select',
+		disabled: true,
+		options: [],
+		autoOptions: 'patientTypeTerms'
+	},
+
+	{
+		label: '真实姓名',
+		field: 'input-text',
+		disabled: true,
+		key: patCardDetailFormKey.patientName
+	},
+
+	{
+		label: '证件号码',
+		field: 'input-text',
+		disabled: true,
+		key: patCardDetailFormKey.idCard
+	},
+
+	{
+		label: '手机号',
+		field: 'input-text',
+		disabled: true,
+		key: patCardDetailFormKey.patientPhone
+	},
+
+	{
+		label: '民族',
+		field: 'input-text',
+		key: patCardDetailFormKey.nation,
+		disabled: true
+	},
+
+	{
+		label: '详细地址',
+		field: 'input-text',
+		key: patCardDetailFormKey.address,
+		disabled: true
+	},
+
+	{
+		label: '性别',
+		field: 'input-text',
+		key: patCardDetailFormKey.patientSex,
+		disabled: true
+	},
+
+	{
+		label: '监护人姓名',
+		field: 'input-text',
+		key: patCardDetailFormKey.upName,
+		disabled: true
+	},
+
+	{
+		label: '监护人身份证号',
+		field: 'input-text',
+		key: patCardDetailFormKey.upIdCard,
+		labelWidth: '260rpx',
+		disabled: true
+	},
+
+	{
+		field: 'switch',
+		key: patCardDetailFormKey.defaultFlag,
+		label: '设为默认就诊人',
+		labelWidth: '260rpx',
+		rowStyle: 'margin-top: 16rpx;',
+	}
+];

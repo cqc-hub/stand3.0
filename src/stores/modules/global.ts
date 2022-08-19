@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import api from '@/service/api';
 
 import { getLocalStorage, setLocalStorage } from '@/common';
-
 interface IStateGlobal {
 	token: {
 		accessToken: string;

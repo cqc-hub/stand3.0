@@ -58,6 +58,7 @@
 						"navigationBarTitleText": "添加就诊人"
 					}
 				},
+
 				{
 					"path": "medicalCardMan/medicalCardMan",
 					"extend": {
@@ -65,6 +66,16 @@
 					},
 					"style": {
 						"navigationBarTitleText": "就诊人管理"
+					}
+				},
+
+				{
+					"path": "medicalCardMan/medicalCardDetail",
+					"extend": {
+						"login": true
+					},
+					"style": {
+						"navigationBarTitleText": "就诊人详情"
 					}
 				}
 			]
