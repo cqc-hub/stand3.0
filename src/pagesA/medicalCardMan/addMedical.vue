@@ -67,8 +67,15 @@ let formList = pickTempItem([
 ]);
 
 const formSubmit = async ({ data }) => {
+	const formKeyNow = formList.map((o) => o.key);
+	const filterData = Object.fromEntries(
+		Object.entries(data).map(([key, value]) => {
+			return [key, formKeyNow.includes(key) ? value : undefined];
+		})
+	);
+
 	const requestData = {
-		...data,
+		...filterData,
 		...addressChoose,
 		verifyCode
 	};

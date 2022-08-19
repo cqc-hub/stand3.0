@@ -1,6 +1,6 @@
 <template>
-	<view class="">
-		<view v-for="pat in list" :key="pat.patientId" class="list-container">
+	<view class="list-container">
+		<view v-for="pat in list" :key="pat.patientId" >
 			<list-Item :pat="pat" />
 		</view>
 	</view>

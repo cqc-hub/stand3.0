@@ -2,7 +2,7 @@ import service from './index';
 import { getToken, getSysCode } from '@/common/useToken';
 import { IResponseWrapper } from './type';
 import global from '@/config/global';
-import { useGlobalStore, useUserStore } from '@/stores';
+import { useGlobalStore, useUserStore, IPat } from '@/stores';
 
 //请求的额外配置
 const options = {
@@ -49,7 +49,10 @@ const baseApi = {
 		service.post('/phs-user/relevantPatient/addPat', parm(data)),
 
 	getPatCardList: (data) =>
-		service.post('/phs-user/relevantPatient/getPatCardList', parm(data)),
+		service.post<IPat[]>(
+			'/phs-user/relevantPatient/getPatCardList',
+			parm(data)
+		),
 
 	getPatCardInfoByHospital: (data) =>
 		service.post(

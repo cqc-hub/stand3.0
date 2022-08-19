@@ -87,7 +87,7 @@ const getHomeConfig = async () => {
 
 const ttt = () => {
 	uni.reLaunch({
-		url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
+		url: '/pagesA/medicalCardMan/medicalCardMan'
 	});
 };
 </script>

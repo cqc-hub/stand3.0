@@ -3,32 +3,40 @@
 		<view
 			v-for="(item, i) in list"
 			@tap.stop="itemClick(item, i)"
-			:key="item.id"
+			:key="item.patientId"
 			class="item"
 		>
 			<view class="container">
-				<view class="label text-ellipsis">{{ item.label }}</view>
-				<view class="id text-ellipsis">{{ item.id }}</view>
+				<view class="label text-ellipsis">{{ item.patientName }}</view>
+				<view class="id text-ellipsis">{{ item._showId }}</view>
 				<!-- <view class="iconfont icon-size suffix-icon">&#xe6a6;</view> -->
 			</view>
 
 			<view class="suffix-icon g-flex-rc-cc">
-				<view v-show="i === 1" class="icon-choose" />
+				<view
+					v-show="
+						gStores.userStore.patChoose.patientId === item.patientId
+					"
+					class="icon-choose"
+				/>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script lang="ts" setup>
+import { IPat } from '@/stores';
+import { GStores } from '@/utils';
+
 withDefaults(
 	defineProps<{
-		list: { label: string; id: string; [key: string]: any }[];
+		list: IPat[];
 	}>(),
 	{
 		list: () => []
 	}
 );
-
+const gStores = new GStores();
 const emits = defineEmits(['pat-click']);
 
 const itemClick = function (item, index) {
@@ -71,7 +79,7 @@ const itemClick = function (item, index) {
 		display: flex;
 		padding: 20rpx 32rpx;
 		flex: 1;
-    align-items: center;
+		align-items: center;
 	}
 	.icon-size {
 		font-size: 42rpx;
@@ -81,14 +89,14 @@ const itemClick = function (item, index) {
 		width: 30%;
 		font-weight: 600;
 		font-size: var(--hr-font-size-xl);
-    color: var(--hr-neutral-color-10);
+		color: var(--hr-neutral-color-10);
 	}
 
 	.id {
 		width: 30%;
 		flex: 1;
 		font-size: var(--hr-font-size-xs);
-    color: var(--hr-neutral-color-10);
+		color: var(--hr-neutral-color-10);
 	}
 
 	.suffix-icon {

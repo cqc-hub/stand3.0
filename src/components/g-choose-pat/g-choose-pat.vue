@@ -3,35 +3,49 @@
 		<view class="container" @click="chooseAction">
 			<image
 				class="user-avatar"
-				:src="userSore.getAvatar"
+				:src="getAvatar(gStores.userStore.patChoose.patientSex)"
 				mode="widthFix"
 			/>
 
 			<view class="user-info text-ellipsis">
 				{{
-					`${userSore.name}  233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234233213235gdgdf4234`
+					`${gStores.userStore.patChoose.patientName}  ${gStores.userStore.patChoose._showId}`
 				}}
 			</view>
 
 			<text :class="`icon-font icon-resize ico_arrow`" />
 		</view>
 
-		<Choose-Pat ref="actionSheet" />
+		<Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
 	</view>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref } from 'vue';
-import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { ref } from 'vue';
+import { getAvatar, IPat } from '@/stores';
 import ChoosePat from './choose-pat-action.vue';
+import { GStores } from '@/utils';
 
-const userSore = useUserStore();
+const gStores = new GStores();
 const actionSheet = ref<InstanceType<typeof ChoosePat>>();
+const emits = defineEmits(['choose-pat']);
 
 const chooseAction = () => {
+	const patList = gStores.userStore.patList;
+
+	if (!patList.length) {
+		gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
+		return;
+	}
+
 	if (actionSheet.value) {
 		actionSheet.value.show();
 	}
+};
+
+const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+	gStores.userStore.updatePatChoose(item);
+	emits('choose-pat', { item });
 };
 </script>
 

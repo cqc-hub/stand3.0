@@ -149,7 +149,7 @@ onReady(() => {
 onMounted(() => {
 	const { userName, mobile } = gStores.userStore.cacheUser;
 	// 只有支付宝有
-	if (userName && mobile) {
+	if (userName && mobile && props.pageType === 'perfectReal') {
 		formData.value[formKey.patientName] = userName;
 		formData.value[formKey.patientPhone] = mobile;
 

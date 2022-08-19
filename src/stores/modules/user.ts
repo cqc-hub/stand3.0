@@ -12,7 +12,8 @@ const userStore = defineStore('user', {
 			'cellPhoneNum',
 			'patientId',
 			'cacheUser',
-			'patList'
+			'patList',
+			'patChoose'
 		]
 	},
 
@@ -24,6 +25,7 @@ const userStore = defineStore('user', {
 			cellPhoneNum: '',
 			patientId: '',
 			patList: <IPat[]>[],
+			patChoose: <IPat>{},
 
 			cacheUser: {
 				userName: '',
@@ -70,6 +72,17 @@ const userStore = defineStore('user', {
 
 		updatePatList(patList: IPat[]) {
 			this.patList = patList;
+
+			if (!Object.keys(this.patChoose).length) {
+				const patDefault = patList.find((o) => o.defaultFlag === '1');
+				if (patDefault) {
+					this.updatePatChoose(patDefault);
+				}
+			}
+		},
+
+		updatePatChoose(pat: IPat) {
+			this.patChoose = pat;
 		},
 
 		clearStore() {
@@ -92,7 +105,7 @@ const userStore = defineStore('user', {
 	}
 });
 
-const getAvatar = function (sex) {
+export const getAvatar = function (sex) {
 	let path = '';
 	if (sex === '男') {
 		path = 'home-my-avatar-nan.png.png';

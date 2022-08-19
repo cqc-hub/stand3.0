@@ -22,4 +22,5 @@ export interface IPat {
 	thirdOpenId: string;
 	upIdCard: string;
 	upName: string;
+	_showId: string;
 }

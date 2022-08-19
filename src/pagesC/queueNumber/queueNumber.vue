@@ -33,6 +33,8 @@
 				<view class="uni-bg-red">d</view>
 			</swiper-item>
 		</swiper>
+
+		<g-message />
 	</view>
 </template>
 

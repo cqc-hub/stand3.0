@@ -23,8 +23,8 @@
 			</view>
 
 			<view class="card-container">
-        <image class="qr-code" src="/static/image/v-qrcode.png"></image>
-      </view>
+				<image class="qr-code" src="/static/image/v-qrcode.png"></image>
+			</view>
 		</view>
 	</view>
 </template>
@@ -94,11 +94,11 @@ export default defineComponent({
 		.card-content {
 			color: var(--hr-neutral-color-9);
 			font-size: var(--hr-font-size-xs);
-      margin-left: 32rpx;
+			margin-left: 32rpx;
 
-      .card-label {
-        margin-bottom: 8rpx;
-      }
+			.card-label {
+				margin-bottom: 8rpx;
+			}
 		}
 
 		.card-container {
@@ -110,19 +110,7 @@ export default defineComponent({
 			position: relative;
 
 			background-image: radial-gradient(
-					circle at left 0,
-					transparent,
-					transparent 0,
-					transparent
-				),
-				radial-gradient(
-					circle at right 0,
-					transparent,
-					transparent 0,
-					transparent 0
-				),
-				radial-gradient(
-					circle at 20rpx top,
+					circle at 20rpx 0,
 					#fff,
 					#fff 10rpx,
 					transparent 11rpx
@@ -134,13 +122,12 @@ export default defineComponent({
 					transparent 11rpx
 				);
 
-
-        .qr-code {
-          width: 72rpx;
-          height: 72rpx;
-          position: relative;
-          left: 10rpx;
-        }
+			.qr-code {
+				width: 72rpx;
+				height: 72rpx;
+				position: relative;
+				left: 10rpx;
+			}
 
 			&::before {
 				content: '';

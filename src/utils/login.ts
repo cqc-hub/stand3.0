@@ -1,4 +1,4 @@
-import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
+import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
 import { getSysCode } from '@/common';
 
 import api from '@/service/api';
@@ -356,8 +356,6 @@ export class PatientUtils extends LoginUtils {
 			verifyType: string; // （1或空）不开启验证  2:开启验证
 		}>
 	) {
-		console.log('23333');
-
 		const requestArg = {
 			...data,
 			defaultFalg: data.defaultFalg ? '1' : '0',
@@ -367,6 +365,7 @@ export class PatientUtils extends LoginUtils {
 		};
 
 		await api.addPat(requestArg);
+		await this.getPatCardList();
 	}
 
 	async getPatCardList() {
@@ -378,6 +377,10 @@ export class PatientUtils extends LoginUtils {
 		const { result } = await api.getPatCardList(requestArg);
 
 		if (result && result.length) {
+			result.map((o) => {
+				o._showId = o.cardNumber;
+			});
+
 			this.userStore.updatePatList(result);
 		} else {
 			this.userStore.updatePatList([]);
