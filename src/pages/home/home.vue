@@ -128,7 +128,6 @@ import { onLoad } from '@dcloudio/uni-app';
 import api from '@/service/api';
 import { aliLogin, wxLogin, ServerStaticData, PatientUtils } from '@/utils';
 
-
 const userSore = useUserStore();
 
 const globalStore = useGlobalStore();
@@ -164,7 +163,7 @@ const chooseAction = () => {
 
 const searchPlaceholder = '搜索科室、医生或疾病';
 let topMenuList = ref({}); //首页顶部menu
-const noticeMenu = ref({}); //通知列表
+const noticeMenu = ref<IRoute[]>([]); //通知列表
 const bannerLeftFunctionList = ref([]); //banner列表
 const bannerFunctionList = ref([]); //通知列表
 const menuList = ref([]); //业务模块
