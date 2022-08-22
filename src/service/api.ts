@@ -51,6 +51,11 @@ const baseApi = {
 			hideLoading: true
 		}),
 
+	deletePat: (data) =>
+		service.post('/phs-user/relevantPatient/deletePat', parm(data), {
+			hideLoading: true
+		}),
+
 	addPat: (data) =>
 		service.post('/phs-user/relevantPatient/addPat', parm(data)),
 

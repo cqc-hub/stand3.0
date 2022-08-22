@@ -7,7 +7,7 @@
 			content="是否删除该就诊人"
 			:show="isShow"
 			@cancelButton="isShow = false"
-			@confirmButton="isShow = false"
+			@confirmButton="deletePat"
 		/>
 
 		<g-message />
@@ -43,6 +43,17 @@ const changeDefault = (value: boolean) => {
 	patientUtils.changeDefault({
 		defaultFalg: value,
 		patientId: pat.patientId
+	});
+};
+
+const deletePat = async () => {
+	isShow.value = false;
+	await patientUtils.deletePat({
+		patientId: gStore.userStore.clickPat.patientId
+	});
+
+	uni.reLaunch({
+		url: '/pagesA/medicalCardMan/medicalCardMan'
 	});
 };
 

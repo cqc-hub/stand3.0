@@ -126,6 +126,33 @@ const userStore = defineStore('user', {
 			}
 		},
 
+		deletePat(patientId: string) {
+			const oldPat = <IPat>(
+				this.patList.find((o) => o.patientId === patientId)
+			);
+
+			this.patList.splice(
+				this.patList.findIndex((o) => o.patientId === patientId),
+				1
+			);
+
+			if (this.patList.length) {
+				const pat = this.patList[0];
+				if (oldPat.defaultFlag === '1') {
+					this.updatePatListDefault({
+						defaultFalg: true,
+						patientId: pat.patientId
+					});
+				}
+
+				if (oldPat.patientId === this.clickPat.patientId) {
+					this.updatePatChoose(pat);
+				}
+			} else {
+				this.updatePatChoose(<IPat>{});
+			}
+		},
+
 		clearStore() {
 			this.name = '';
 			this.sex = '';

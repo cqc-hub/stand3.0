@@ -411,6 +411,26 @@ export class PatientUtils extends LoginUtils {
 			defaultFalg
 		});
 	}
+
+	/**
+	 * 删除就诊人
+	 */
+	async deletePat(data: { patientId: string }) {
+		const { patientId } = data;
+
+		uni.showLoading({
+			title: '请求中...',
+			mask: true
+		});
+
+		await api.deletePat({
+			patientId,
+			source: this.globalStore.browser.source
+		});
+
+		uni.hideLoading();
+		this.userStore.deletePat(patientId);
+	}
 }
 
 export const aliLogin = function () {
