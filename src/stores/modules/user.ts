@@ -138,14 +138,15 @@ const userStore = defineStore('user', {
 
 			if (this.patList.length) {
 				const pat = this.patList[0];
-				if (oldPat.defaultFlag === '1') {
-					this.updatePatListDefault({
-						defaultFalg: true,
-						patientId: pat.patientId
-					});
-				}
+				// 切换默认人
+				// if (oldPat.defaultFlag === '1') {
+				// 	this.updatePatListDefault({
+				// 		defaultFalg: true,
+				// 		patientId: pat.patientId
+				// 	});
+				// }
 
-				if (oldPat.patientId === this.clickPat.patientId) {
+				if (oldPat.patientId === this.patChoose.patientId) {
 					this.updatePatChoose(pat);
 				}
 			} else {

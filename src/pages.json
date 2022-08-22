@@ -1,6 +1,7 @@
 {
 	"easycom": {
-		"^g-(.*)": "components/g-$1/g-$1.vue"
+		"^g-(.*)": "components/g-$1/g-$1.vue",
+		"^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
 	},
 	"pages": [
 		{
@@ -31,7 +32,8 @@
 		{
 			"path": "pages/routerTest/routerTest",
 			"style": {
-				"navigationBarTitleText": "uni-routerTest"
+				"navigationBarTitleText": "uni-routerTest",
+				"backgroundColor": "#e43130"
 			}
 		}
 	],
@@ -76,6 +78,16 @@
 					},
 					"style": {
 						"navigationBarTitleText": "就诊人详情"
+					}
+				},
+
+				{
+					"path": "medicalCardMan/electronicMedicalCard",
+					"extend": {
+						"login": true
+					},
+					"style": {
+						"navigationBarTitleText": "电子就诊卡"
 					}
 				}
 			]

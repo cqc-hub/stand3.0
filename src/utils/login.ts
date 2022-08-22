@@ -418,6 +418,10 @@ export class PatientUtils extends LoginUtils {
 	async deletePat(data: { patientId: string }) {
 		const { patientId } = data;
 
+		const pat = <IPat>(
+			this.userStore.patList.find((o) => o.patientId === patientId)
+		);
+
 		uni.showLoading({
 			title: '请求中...',
 			mask: true
@@ -430,6 +434,17 @@ export class PatientUtils extends LoginUtils {
 
 		uni.hideLoading();
 		this.userStore.deletePat(patientId);
+
+		if (this.userStore.patList.length) {
+			// 自动切换默认就诊人 （产品拒绝加上）
+			// if (pat.defaultFlag === '1') {
+			// 	const newDefaultPat = this.userStore.patList[0];
+			// 	this.changeDefault({
+			// 		patientId: newDefaultPat.patientId,
+			// 		defaultFalg: true
+			// 	});
+			// }
+		}
 	}
 }
 

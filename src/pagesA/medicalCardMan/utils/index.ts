@@ -1,6 +1,9 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
 
+/**
+ * 完善、 新增就诊人页面
+ */
 // 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
 	medicalType: 'medicalType',
@@ -190,7 +193,9 @@ export const pickTempItem = function <T = TFormKeys>(
 		});
 };
 
-// -----------------
+/**
+ * 就诊人详情页面
+ */
 export const patCardDetailFormKey = <const>{
 	patientType: 'patientType',
 	patientName: 'patientName',
@@ -287,6 +292,28 @@ export const patCardDetailTempList: TInstance[] = [
 		key: patCardDetailFormKey.defaultFlag,
 		label: '设为默认就诊人',
 		labelWidth: '260rpx',
-		rowStyle: 'margin-top: 16rpx;',
+		rowStyle: 'margin-top: 16rpx;'
+	}
+];
+
+/**
+ * 电子就诊卡详情页面
+ */
+export const patCardDetailList: TInstance[] = [
+	{
+		label: '姓名',
+		key: 'patientName',
+		field: 'input-text',
+		disabled: true,
+		isForShow: true
+	},
+
+	{
+		label: '院内ID/卡号',
+		key: 'patientId',
+		field: 'input-text',
+		disabled: true,
+		isForShow: true,
+		rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
 	}
 ];

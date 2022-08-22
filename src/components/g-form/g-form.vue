@@ -400,9 +400,7 @@ export default defineComponent({
 		};
 
 		const setData = function (value: BaseObject, item?: TInstance) {
-			const oldValue = item
-				? cloneUtil(props.value[item.key])
-				: undefined;
+			const oldValue = item ? props.value[item.key] : undefined;
 
 			emits('update:value', {
 				...props.value,

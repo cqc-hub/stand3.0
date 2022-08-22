@@ -69,8 +69,8 @@ export default defineComponent({
 	padding: 32rpx;
 
 	-webkit-animation-name: fadeInRight;
-  animation-name: fadeInRight;
-	animation-duration: .5s;
+	animation-name: fadeInRight;
+	animation-duration: 0.5s;
 
 	.pat-profile {
 		color: var(--hr-neutral-color-10);

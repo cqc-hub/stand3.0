@@ -37,7 +37,12 @@ const profileClick = (pat: IPat) => {
 	});
 };
 
-const cardClick = (pat: IPat) => {};
+const cardClick = (pat: IPat) => {
+	gStore.userStore.updatePatClick(pat);
+	uni.navigateTo({
+		url: '/pagesA/medicalCardMan/electronicMedicalCard'
+	});
+};
 </script>
 
 <style lang="scss" scoped>
