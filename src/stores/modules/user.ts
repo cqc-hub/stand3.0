@@ -93,6 +93,39 @@ const userStore = defineStore('user', {
 			this.clickPat = pat;
 		},
 
+		updatePatListDefault(data: {
+			patientId: string;
+			defaultFalg: boolean;
+		}) {
+			const { patientId, defaultFalg } = data;
+			const pat = <IPat>(
+				this.patList.find((o) => o.patientId === patientId)
+			);
+
+			if (defaultFalg) {
+				this.patList.map((o) => {
+					o.defaultFlag = '0';
+				});
+
+				pat.defaultFlag = '1';
+				this.updatePatChoose(pat);
+			} else {
+				if (this.clickPat.patientId === patientId) {
+					this.patList.map((o) => {
+						o.defaultFlag = '0';
+					});
+
+					const pat =
+						this.patList[0].patientId === patientId
+							? this.patList[1]
+							: this.patList[0];
+
+					pat.defaultFlag = '1';
+					this.updatePatChoose(pat);
+				}
+			}
+		},
+
 		clearStore() {
 			this.name = '';
 			this.sex = '';

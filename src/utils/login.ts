@@ -386,6 +386,31 @@ export class PatientUtils extends LoginUtils {
 			this.userStore.updatePatList([]);
 		}
 	}
+
+	/**
+	 * 切换默认人
+	 */
+	async changeDefault(data: { defaultFalg: boolean; patientId: string }) {
+		const { patientId, defaultFalg } = data;
+
+		uni.showLoading({
+			title: '请求中...',
+			mask: true
+		});
+
+		await api.updateDefaultPat({
+			patientId,
+			defaultFalg: defaultFalg ? '1' : '0',
+			herenId: this.globalStore.herenId
+		});
+
+		uni.hideLoading();
+
+		this.userStore.updatePatListDefault({
+			patientId,
+			defaultFalg
+		});
+	}
 }
 
 export const aliLogin = function () {

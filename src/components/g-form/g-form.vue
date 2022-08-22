@@ -191,6 +191,7 @@ import type {
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 import { useMessageStore } from '@/stores';
 import { ServerStaticData } from '@/utils';
+import { cloneUtil } from '@/common';
 
 /**
  * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -399,7 +400,9 @@ export default defineComponent({
 		};
 
 		const setData = function (value: BaseObject, item?: TInstance) {
-			const oldValue = item ? props.value[item.key] : undefined;
+			const oldValue = item
+				? cloneUtil(props.value[item.key])
+				: undefined;
 
 			emits('update:value', {
 				...props.value,

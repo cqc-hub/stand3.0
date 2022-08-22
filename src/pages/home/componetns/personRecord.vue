@@ -169,13 +169,6 @@ const recordColors = ['#296FFF', '#00b39e'];
 				background-color: transparent;
 				box-shadow: none !important;
 			}
-
-			&:active {
-				-webkit-animation-timing-function: ease-in-out;
-				animation-timing-function: ease-in-out;
-				-webkit-animation-name: headShake;
-				animation-name: headShake;
-			}
 		}
 
 		button {

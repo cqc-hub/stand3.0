@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<g-form v-model:value="formData" ref="gform" />
+		<g-form v-model:value="formData" @change="formChange" ref="gform" />
 
 		<xy-dialog
 			title=""
@@ -10,6 +10,8 @@
 			@confirmButton="isShow = false"
 		/>
 
+		<g-message />
+
 		<view @click="isShow = true" class="btn del-btn btn-primary">
 			<view class="del-btn-label">删除就诊人</view>
 		</view>
@@ -18,7 +20,11 @@
 
 <script lang="ts" setup>
 import { nextTick, ref, onMounted } from 'vue';
-import { patCardDetailTempList, PatCardKeys } from './utils';
+import {
+	patCardDetailTempList,
+	PatCardKeys,
+	patCardDetailFormKey
+} from './utils';
 import { GStores, PatientUtils } from '@/utils';
 import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
 
@@ -26,9 +32,26 @@ type PagePropType = Record<PatCardKeys, any>;
 const isShow = ref(false);
 
 const gStore = new GStores();
+const patientUtils = new PatientUtils();
 const formData = ref<PagePropType>({} as PagePropType);
 const gform = ref<any>('');
 let formList = patCardDetailTempList;
+
+const changeDefault = (value: boolean) => {
+	const pat = gStore.userStore.clickPat;
+
+	patientUtils.changeDefault({
+		defaultFalg: value,
+		patientId: pat.patientId
+	});
+};
+
+const formChange = (e) => {
+	const { item, value } = e;
+	if (item.key === patCardDetailFormKey.defaultFlag) {
+		changeDefault(value);
+	}
+};
 
 onMounted(() => {
 	const pat = gStore.userStore.clickPat;
