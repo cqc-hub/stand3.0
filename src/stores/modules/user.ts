@@ -120,8 +120,10 @@ const userStore = defineStore('user', {
 							? this.patList[1]
 							: this.patList[0];
 
-					pat.defaultFlag = '1';
-					this.updatePatChoose(pat);
+					if (pat) {
+						pat.defaultFlag = '1';
+						this.updatePatChoose(pat);
+					}
 				}
 			}
 		},

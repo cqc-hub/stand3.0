@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { GStores, PatientUtils } from '@/utils';
+import { GStores } from '@/utils';
 import { patCardDetailList } from './utils';
 
 const gform = ref<any>('');
@@ -31,15 +31,6 @@ const { clickPat } = storeToRefs(gStore.userStore);
 const options = ref({
 	// 二维码
 	size: 320,
-	// 二维码log配置 非必传
-	// img: {
-	// 	src: '/static/logo.png', //可以是本地的或者网络 建议统一使用 uni.getImageInfo 获取图片地址
-	// 	size: 60, // 图片大小
-	// 	degree: 15, // 圆角大小 如果type为round生效
-	// 	type: 'round', //图片展示类型 默认none 可选值  round圆角  circle圆 如果为round 可以传入degree设置圆角大小 默认 5
-	// 	color: '#ffffff', //图片周围的白色边框
-	// 	width: 8 //图片周围白色边框的宽度 默认5
-	// }
 
 	// 条形码
 	width: 600, // 宽度 单位rpx
