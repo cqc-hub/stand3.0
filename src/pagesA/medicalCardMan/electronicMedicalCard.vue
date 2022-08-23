@@ -56,11 +56,6 @@ onMounted(() => {
 }
 
 .card-content {
-	-webkit-animation-name: fadeInRight;
-	animation-name: fadeInRight;
-
-	animation-duration: 0.5s;
-
 	padding: 32rpx;
 	.card-header {
 		background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));

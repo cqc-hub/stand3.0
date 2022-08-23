@@ -313,7 +313,8 @@ export const patCardDetailList: TInstance[] = [
 		key: 'patientId',
 		field: 'input-text',
 		disabled: true,
-		isForShow: true,
-		rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
+		rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
+		labelWidth: '200rpx',
+		isForShow: true
 	}
 ];

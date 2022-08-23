@@ -1,49 +1,11 @@
 <template>
 	<view class="">
-		<view class="search-input">
-			<g-input />
-		</view>
-		{{ userState.name }}
-		{{ userState.double }}
-
-		{{ $global.SYS_CODE }}
-
-		<button _type="primary" @click="ageIncre">age increment</button>
-		<button _type="primary" @click="goTest">router jump</button>
-
-		<g-message />
+		<web-view src="http://10.10.83.126:3000/#/pagesA/healthAdvisory/healthAdvisory" />
 	</view>
 </template>
 
 <script setup lang="ts">
-import { useUserStore, useMessageStore, useGlobalStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
-
-const props = defineProps({
-	name: String,
-	p: String
-});
-
-const userState = useUserStore();
-const messageStore = useMessageStore();
-const globalStore = useGlobalStore();
-
-const ageIncre = () => {
-	const d = new Date().getTime() + '';
-	messageStore.showMessage(d, 2000);
-	globalStore.updateToken({
-		accessToken: '111111'
-	});
-};
-// console.log({
-//   props,
-//   name: props.name
-// });
-const goTest = function () {
-	uni.switchTab({
-		url: '/pages/home/home'
-	});
-};
 </script>
 
 <style lang="scss" scoped>

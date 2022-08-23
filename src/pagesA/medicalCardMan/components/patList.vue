@@ -22,7 +22,6 @@ export default defineComponent({
 	},
 
 	options: {
-		// 微信样式穿透需要配置
 		styleIsolation: 'shared'
 	},
 
