@@ -148,9 +148,10 @@ const userSore = useUserStore();
 const gStores = new GStores();
 const globalStore = useGlobalStore();
 
-if (globalStore.herenId) {
-	new PatientUtils().getPatCardList();
-}
+//刷新就诊人列表
+// if (globalStore.herenId) {
+// 	new PatientUtils().getPatCardList();
+// }
 
 //骨架屏配置
 const skeletonProps = {
@@ -213,6 +214,7 @@ const getHomeConfig = async () => {
 	position: relative;
 	flex-direction: column;
 	display: flex;
+	background: #ffffff;
 }
 
 .homePage {

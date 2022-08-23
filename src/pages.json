@@ -115,6 +115,12 @@
 					"style": {
 						"navigationBarTitleText": "核酸结果查询"
 					}
+				},
+				{
+					"path": "externalPath/myPath",
+					"style": {
+						"navigationBarTitleText": "查询"
+					}
 				}
 			]
 		}

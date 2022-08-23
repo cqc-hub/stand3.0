@@ -12,7 +12,7 @@
 		</view>
 		<swiper
 			class="swiper"
-			:indicator-dots="false"
+			:indicator-dots="true"
 			:current="tabIndex"
 			@change="changeIndex"
 			:duration="300"
@@ -108,10 +108,14 @@ const changeIndex = (e) => {
 			border: 2rpx solid #f3f3f3;
 			// padding-top: 8rpx;
 			position: relative;
-			top: -8rpx;
+			// top: -8rpx;
 			animation: pulse;
 			animation-duration: 1s;
 		}
+	}
+	.swiper {
+		height: 260px;
+		padding-bottom: 20rpx;
 	}
 }
 </style>

@@ -2,7 +2,7 @@ import global from './global';
 const env = {
   dev: {
     // baseApi: 'https://yyldevwwz.eheren.com' as const  //api
-    baseApi: 'http://10.10.76.230:9002/gateway' as const  //api
+    baseApi: 'https://devphs.eheren.com/gateway' as const  //api
   },
   test: {
     baseApi: 'https://testphs.eheren.com' as const

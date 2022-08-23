@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { withDefaults, computed } from 'vue';
+import { useCommonTo } from '@/common';
 interface IGridProps {
 	list: IRoute[];
 	type?: 1 | 2; //首页图标样式1 默认2
@@ -72,56 +73,22 @@ const options = computed(() => {
 
 //跳转对应地址
 const gotoPath = (item) => {
-	my.navigateToMiniProgram({
-		appId: '2018070960585195',
-		path: 'page/map-index/map-index?query=source=alipay_yiyuan_shengrenmin&unifiedProtocol=true',
-		query: {
-			source: 'alipay_yiyuan_shengrenmin',
-			unifiedProtocol: true
-		}
-	});
-	//terminalType h5 mini
-	// let path = item.query ? joinQuery(item.path, item.query) : item.path;
-	//支付宝小程序
-	// if (miniprogram.value) {
-	// 	my.navigateTo({ url: item.path });
-	// } else {
-	// 	if (item.terminalType == 'h5') {
-	// 		window.location.href = item.path;
-	// 	} else if (item.terminalType == 'mini') {
-	// 		wx.miniProgram.navigateTo({
-	// 			url: item.path
-	// 		});
+	useCommonTo(item);
+	//打车
+	// uni.navigateToMiniProgram({
+	// 	appId: '2018070960585195',
+	// 	path: 'page/map-index/map-index?query=source=alipay_yiyuan_shengrenmin&unifiedProtocol=true',
+	// 	extraData: {
+	// 		source: 'alipay_yiyuan_shengrenmin',
+	// 		unifiedProtocol: true
 	// 	}
-	// }
-	// terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研
-	// switch (item.terminalType) {
-	// 	case 'h5':
-	// 		uni.navigateTo({
-	// 			url: item.path
-	// 		});
-	// 		break;
-	// 	case 'mini':
-	// 		uni.navigateToMiniProgram({
-	// 			appId: item.appId,
-	// 			path: item.url,
-	// 			extraData: JSON.parse(item.query)
-	// 		});
-	// 		break;
-	// 	case 'alipay':
-	// 		my.navigateToMiniProgram({
-	// 			appId: item.appId,
-	// 			path: item.path,
-	// 			query: JSON.parse(item.query)
-	// 		});
-	// 		break;
-	// 	default:
-	// 		//自研或者其他直接跳转的
-	// 		uni.navigateTo({
-	// 			url: item.path
-	// 		});
-	// 		break;
-	// }
+	// });
+	// let path = 'pages/hospitalGuide/hospitalGuide&query=["sysCode","hosId"]';
+	// let url = '/pagesC/externalPath/myPath?path=' + path;
+	// uni.navigateTo({
+	// 	url: url
+	// });
+	// terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研 my-h5自研h5
 };
 </script>
 
@@ -138,8 +105,8 @@ const gotoPath = (item) => {
 		justify-content: center;
 
 		.grid-resize {
-			width: 88upx;
-			height: 88upx;
+			width: 100upx;
+			height: 100upx;
 			position: relative;
 		}
 

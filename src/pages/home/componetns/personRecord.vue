@@ -62,6 +62,7 @@
 					'background-color': recordColors[i]
 				}"
 				:class="`record-item ${recordList.length === 1 && 'cr-center'}`"
+				@tap="gotopath(record)"
 			>
 				<view class="record-label">
 					<text>{{ record.title }}</text>
@@ -83,6 +84,7 @@ import { useGlobalStore, useUserStore } from '@/stores';
 
 import { aliLogin, wxLogin, outLogin, ServerStaticData } from '@/utils';
 import global from '@/config/global';
+import { useCommonTo } from '@/common';
 
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
@@ -102,6 +104,10 @@ const getHomeConfig = async () => {
 	if (homeConfig) {
 		recordList.value = homeConfig[4].functionList;
 	}
+};
+
+const gotopath = (item) => {
+	useCommonTo(item);
 };
 // const recordList = ref([
 // 	{

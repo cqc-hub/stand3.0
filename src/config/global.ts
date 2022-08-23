@@ -15,19 +15,18 @@ const env: TEnv = 'dev'; // dev 开发； test 测试； prod 生产
 let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
 if ((env as string) === 'prod') {
-	authUrl = 'https://auth.eheren.com/service-authentication';
+  authUrl = 'https://auth.eheren.com/service-authentication';
 }
 
 export const SYS_CODE = '1001033'; //系统码 台州
-// export const SYS_CODE = '1001038'; //系统码 嘉二
 
 export default {
-	SYS_CODE,
-	BASE_IMG,
-	VERSION,
-	TIMESTAMP,
-	env,
+  SYS_CODE,
+  BASE_IMG,
+  VERSION,
+  TIMESTAMP,
+  env,
   authUrl,
-	wxAppid
-	// HTMLParser
+  wxAppid
+  // HTMLParser
 };

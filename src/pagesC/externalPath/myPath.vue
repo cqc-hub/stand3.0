@@ -1,0 +1,74 @@
+<template>
+	<view>
+		<web-view
+			:src="src"
+			:webview-styles="webviewStyles"
+			@message="handleMessage"
+		></web-view>
+		<g-message />
+	</view>
+</template>
+
+<script setup lang="ts">
+import { onLoad } from '@dcloudio/uni-app';
+import global from '@/config/global';
+import { getToken, getSysCode } from '@/common/useToken';
+import { ref } from 'vue';
+import { useMessageStore } from '@/stores';
+
+const messageStore = useMessageStore();
+const webviewStyles = {
+	progress: {
+		color: '#4C8FFF'
+	}
+};
+const src = ref();
+const hosId = '1282';
+const token = getToken();
+const sysCode = getSysCode();
+const allData = {
+	// sysCode: getSysCode(),
+	sysCode: '1001047',
+	token: getToken(),
+	hosId: '12882'
+} as const;
+type A = keyof typeof allData;
+
+onLoad((options) => {
+	let queryArray: A[] = JSON.parse(options.query as string);
+	let query = '?';
+	queryArray.map((item) => {
+		if (item in allData) {
+			console.log(999, item, allData[item]);
+			query = query + item + '=' + allData[item] + '&';
+		} else {
+			// messageStore.showMessage(`携带${item}参数有误`, 1000);
+			console.log(`携带${item}参数有误`);
+		}
+	});
+	const baseUrl =
+		(global.env as any) === 'prod'
+			? 'https://h5.eheren.com/v3/#/'
+			: 'https://health.eheren.com/v3/#/';
+	src.value = `${baseUrl}${options.path}${query}`;
+	console.log('v3页面路径', src.value);
+});
+const handleMessage = (evt) => {
+	// #ifdef MP-WEIXIN
+	console.log('返回数据', evt);
+	var data = evt.target.data;
+	var V3PageData = data[0];
+	uni.openLocation({
+		latitude: Number(V3PageData.gisLat),
+		longitude: Number(V3PageData.gisLng),
+		name: V3PageData.hosName,
+		address: V3PageData.address,
+		success: () => {
+			console.log('成功打开地图');
+		}
+	});
+	// #endif
+};
+</script>
+
+<style scoped></style>

@@ -10,102 +10,116 @@ const routerPages = [...PAGE_DATA.pages];
 const subPackages = PAGE_DATA.subPackages;
 
 if (subPackages) {
-	subPackages.map(({ root, pages }) => {
-		pages.map((o) => {
-			routerPages.push({
-				...o,
-				path: root + '/' + o.path
-			});
-		});
-	});
+  subPackages.map(({ root, pages }) => {
+    pages.map((o) => {
+      routerPages.push({
+        ...o,
+        path: root + '/' + o.path
+      });
+    });
+  });
 }
 
 uni.reLaunch = () => {
-	console.log('23333');
+  console.log('23333');
 };
 
 routerPages.map((o) => {
-	pageAdmin.set('/' + o.path, o);
+  pageAdmin.set('/' + o.path, o);
 });
 
 //获取路由extend额外参数的方法
 const getCurrentRoute = (path: String | undefined) => {
-	return pageAdmin.get(path);
+  return pageAdmin.get(path);
 };
 
 //初始化
 const router = createRouter({
-	pageData: PAGE_DATA
+  pageData: PAGE_DATA
 });
 
 const jumpRouter = function (route: {
-	url: string;
-	query?: BaseObject;
-	navType: 'replace' | 'push';
+  url: string;
+  query?: BaseObject;
+  navType: 'replace' | 'push';
 }) {
-	const { url, query, navType } = route;
+  const { url, query, navType } = route;
 
-	const dUrl = query ? joinQuery(url, query) : url;
-	const uniRouteKey = navType === 'replace' ? 'reLaunch' : 'navigateTo';
+  const dUrl = query ? joinQuery(url, query) : url;
+  const uniRouteKey = navType === 'replace' ? 'reLaunch' : 'navigateTo';
 
-	// #ifdef MP-WEIXIN
-	uni.showLoading({
-		title: '加载中...',
-		mask: true
-	});
-	setTimeout(() => {
-		uni[uniRouteKey]({
-			url: dUrl,
-			complete: uni.hideLoading
-		});
-	}, 500);
-	// #endif
+  // #ifdef MP-WEIXIN
+  uni.showLoading({
+    title: '加载中...',
+    mask: true
+  });
+  setTimeout(() => {
+    uni[uniRouteKey]({
+      url: dUrl,
+      complete: uni.hideLoading
+    });
+  }, 500);
+  // #endif
 
-	// #ifdef MP-ALIPAY
-	return {
-		to: {
-			path: url,
-			query
-		},
-		navType
-	};
-	// #endif
+  // #ifdef MP-ALIPAY
+  return {
+    to: {
+      path: url,
+      query
+    },
+    navType
+  };
+  // #endif
 };
+
+router.beforeEach((to, from) => {
+  console.log('beforeEach 2 begin', to, from)
+  // if (to.path != '/pages/login/login') {
+  //   //如果返回的是Promise，则会等待执行完成才进行下一步 
+  //   return new Promise((success, fail) => {
+  //     setTimeout(function () {
+  //       console.log('beforeEach 2 end')
+  //       success({
+  //         path: '/pages/login/login'
+  //       })
+  //     }, 1000)
+  //   })
+  // }
+})
 
 //全局路由前置守卫
 router.beforeEach(async (to, from) => {
-	const currentRoute = getCurrentRoute(to.path);
-	const globalStore = useGlobalStore();
-	const { extend } = currentRoute;
+  const currentRoute = getCurrentRoute(to.path);
+  const globalStore = useGlobalStore();
+  const { extend } = currentRoute;
 
-	console.log({
-		to,
-		from,
-		currentRoute,
-		pageAdmin,
-		globalStore,
-		isLogin: globalStore.isLogin
-	});
+  console.log({
+    to,
+    from,
+    currentRoute,
+    pageAdmin,
+    globalStore,
+    isLogin: globalStore.isLogin
+  });
 
-	if (extend) {
-		const { login } = extend;
+  if (extend) {
+    const { login } = extend;
 
-		if (login) {
-			if (!globalStore.isLogin) {
-				console.log('需要登录----');
-
-				return jumpRouter({
-					navType: 'replace',
-					url: '/pages/home/my',
-					query: {
-						isWarningLogin: '1'
-					}
-				});
-			}
-		}
-	}
+    if (login) {
+      if (!globalStore.isLogin) {
+        console.log('需要登录----');
+        return jumpRouter({
+          navType: 'replace',
+          url: '/pages/home/my',
+          query: {
+            isWarningLogin: '1'
+          }
+        });
+      }
+    }
+  }
 });
 
-router.afterEach(async (to, from) => {});
+router.afterEach(async (to, from) => { });
 
 export default router;
