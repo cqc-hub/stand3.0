@@ -1,7 +1,6 @@
 <template>
 	<view class="">
-		233
-		<!-- <web-view ></web-view> -->
+		<web-view src="http://10.10.83.126:3000/#/pagesA/healthAdvisory/healthAdvisory" />
 	</view>
 </template>
 

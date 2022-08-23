@@ -5,6 +5,13 @@
 	},
 	"pages": [
 		{
+			"path": "pages/piniaTest/piniaTest",
+			"style": {
+				"navigationBarTitleText": "uni-app "
+			}
+		},
+
+		{
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -14,12 +21,6 @@
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/piniaTest/piniaTest",
-			"style": {
-				"navigationBarTitleText": "uni-app "
 			}
 		},
 
