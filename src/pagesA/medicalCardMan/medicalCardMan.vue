@@ -18,7 +18,6 @@
 <script lang="ts" setup>
 import patList from './components/patList.vue';
 
-import { joinQuery } from '@/common';
 import { GStores, PatientUtils } from '@/utils';
 import { IPat } from '@/stores';
 
@@ -43,6 +42,8 @@ const cardClick = (pat: IPat) => {
 		url: '/pagesA/medicalCardMan/electronicMedicalCard'
 	});
 };
+
+new PatientUtils().getPatCardList();
 </script>
 
 <style lang="scss" scoped>

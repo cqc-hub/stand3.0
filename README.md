@@ -85,3 +85,9 @@ cmd: iconfont-tools
 网络请求图片大小控制在 100k 以内 建议 svg 或 webP 格式
 尽量减少用同步的方式缓存
 减少重复的 JSAPI 调用
+
+## h5 功能页汇总
+
+| 功能 | 页面 | 参数 |
+| :-- | :--: | :--|
+| 健康咨询      | pagesA/healthAdvisory/healthAdvisory  | sysCode |

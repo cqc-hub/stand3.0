@@ -86,8 +86,8 @@ const getHomeConfig = async () => {
 };
 
 const ttt = () => {
-	uni.reLaunch({
-		url: '/pagesA/medicalCardMan/medicalCardMan'
+	uni.navigateTo({
+		url: '/pages/piniaTest/piniaTest'
 	});
 };
 </script>

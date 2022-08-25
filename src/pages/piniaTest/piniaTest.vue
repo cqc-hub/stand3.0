@@ -1,11 +1,17 @@
 <template>
 	<view class="">
-		<web-view src="http://10.10.83.126:3000/#/pagesA/healthAdvisory/healthAdvisory" />
+		<web-view :src="src" />
 	</view>
 </template>
 
 <script setup lang="ts">
 import { onLoad } from '@dcloudio/uni-app';
+import { ref } from 'vue';
+import { getToken, getSysCode } from '@/common/useToken';
+
+const src =
+	'http://10.10.83.71:3000/#/pagesA/healthAdvisory/healthAdvisory?sysCode=' +
+	getSysCode();
 </script>
 
 <style lang="scss" scoped>
