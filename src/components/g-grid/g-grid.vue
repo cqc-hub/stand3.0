@@ -84,7 +84,7 @@ const gotoPath = (item) => {
 	// 	}
 	// });
 	// let path = 'pages/hospitalGuide/hospitalGuide&query=["sysCode","hosId"]';
-	// let url = '/pagesC/externalPath/myPath?path=' + path;
+	// let url = '/pagesC/cloudHospital/myPath?path=' + path;
 	// uni.navigateTo({
 	// 	url: url
 	// });

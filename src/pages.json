@@ -5,15 +5,16 @@
 	},
 	"pages": [
 		{
-			"path": "pages/home/my",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
 			"path": "pages/piniaTest/piniaTest",
 			"style": {
 				"navigationBarTitleText": "uni-app "
+			}
+		},
+
+		{
+			"path": "pages/home/my",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
@@ -117,9 +118,21 @@
 					}
 				},
 				{
-					"path": "externalPath/myPath",
+					"path": "cloudHospital/myPath",
 					"style": {
 						"navigationBarTitleText": "查询"
+					}
+				},
+				{
+					"path": "cloudHospital/cloudHospital",
+					"style": {
+						"navigationBarTitleText": "网络门诊"
+					}
+				},
+				{
+					"path": "cloudHospital/cachePage",
+					"style": {
+						"navigationBarTitleText": "网络门诊"
 					}
 				}
 			]

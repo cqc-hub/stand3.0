@@ -15,7 +15,7 @@ import global from '@/config/global';
 import { getToken, getSysCode } from '@/common/useToken';
 import { ref } from 'vue';
 import { useMessageStore } from '@/stores';
-
+// 自研h5页面统一入口
 const messageStore = useMessageStore();
 const webviewStyles = {
 	progress: {

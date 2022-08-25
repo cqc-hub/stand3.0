@@ -37,6 +37,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import personRecord from './componetns/personRecord.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
 import { ServerStaticData } from '@/utils';
+import { encryptDes, getSysCode, joinQuery } from '@/common';
 
 //骨架屏配置
 const skeletonProps = {
@@ -87,8 +88,15 @@ const getHomeConfig = async () => {
 
 const ttt = () => {
 	uni.navigateTo({
-		url: '/pages/piniaTest/piniaTest'
+		// url: '/pages/piniaTest/piniaTest'
+		url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
 	});
+	// uni.navigateTo({
+	// 	url: joinQuery('/pagesC/cloudHospital/cloudHospital', {
+	// 		path: 'https://testwechatnethos.eheren.com/static/nhs/',
+	// 		loginInterception: 1
+	// 	})
+	// });
 };
 </script>
 
