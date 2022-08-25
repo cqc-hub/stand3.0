@@ -88,6 +88,6 @@ cmd: iconfont-tools
 
 ## h5 功能页汇总
 
-| 功能 | 页面 | 参数 |
-| :-- | :--: | :--|
-| 健康咨询      | pagesA/healthAdvisory/healthAdvisory  | sysCode |
+ 功能 | 页面 | 参数
+ :-- | :--: | :--
+健康咨询 | pagesA/healthAdvisory/healthAdvisory | sysCode
