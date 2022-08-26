@@ -4,7 +4,7 @@ import { getSysCode } from '@/common';
 import api from '@/service/api';
 
 const packageAuthParams = (
-	args,
+	args: {},
 	url: `/${string}`,
 	payload: {
 		isOutArgs?: boolean;
@@ -20,7 +20,7 @@ const packageAuthParams = (
 	let outParam: BaseObject = {};
 
 	if (isOutArgs) {
-		authParam = undefined;
+		(authParam as any) = undefined;
 		outParam = argsDefault;
 	}
 
