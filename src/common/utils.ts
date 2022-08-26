@@ -56,6 +56,7 @@ export const joinQuery = function (url, query) {
  * 公用得跳转方法
  */
 export const useCommonTo = (item) => {
+
   switch (item.terminalType) {
     case 'h5':
       uni.navigateTo({

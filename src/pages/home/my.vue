@@ -9,15 +9,15 @@
 				<view class="top-bg" />
 				<personRecord />
 				<view class="my-menu">
-					<view class="list">
+					<view v-if="menu1List.length" class="list">
 						<view class="title">我的订单</view>
 						<g-grid :list="menu1List" />
 					</view>
-					<view class="list">
+					<view v-if="menu1List.length" class="list">
 						<view class="title">我的服务</view>
 						<g-grid :list="menu2List" />
 					</view>
-					<view class="list">
+					<view v-if="menu3List.length" class="list">
 						<view class="title">我的工具</view>
 						<g-grid :list="menu3List" />
 					</view>

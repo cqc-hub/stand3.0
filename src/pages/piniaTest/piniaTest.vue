@@ -8,10 +8,23 @@
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import { getToken, getSysCode } from '@/common/useToken';
+import { joinQuery } from '@/common';
+import { GStores } from '@/utils';
 
+const gStores = new GStores();
+const base = 'http://10.10.83.120:3000/#/';
 const src =
-	'http://10.10.83.71:3000/#/pagesA/healthAdvisory/healthAdvisory?sysCode=' +
-	getSysCode();
+	base +
+	// 'pagesA/healthAdvisory/healthAdvisory?sysCode=' + getSysCode();  // 健康咨询
+
+	// 用药管家
+	joinQuery('pagesC/medicationManager/medicationList', {
+		sysCode: getSysCode(),
+		token: gStores.globalStore.token.accessToken,
+		herenId: gStores.globalStore.herenId
+	});
+
+console.log(src);
 </script>
 
 <style lang="scss" scoped>
