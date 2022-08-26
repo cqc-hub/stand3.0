@@ -60,7 +60,7 @@ export const useCommonTo = (item) => {
   switch (item.terminalType) {
     case 'h5':
       uni.navigateTo({
-        url: item.path
+        url: '/pagesC/cloudHospital/h5Path?path=' + item.path
       });
       break;
     case 'mini':
@@ -75,6 +75,16 @@ export const useCommonTo = (item) => {
         appId: item.appId,
         path: item.path,
         extraData: JSON.parse(item.query)
+      });
+      break;
+    case 'my-h5':
+      uni.navigateTo({
+        url: '/pagesC/cloudHospital/myPath?path=' + item.path
+      });
+      break;
+    case 'netHospital':
+      uni.navigateTo({
+        url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path
       });
       break;
     default:

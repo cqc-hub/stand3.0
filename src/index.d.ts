@@ -19,7 +19,7 @@ interface IRouteBase {
   title: string;//主标题
   detail?: string;//副标题
   iconfont?: string;//图标
-  terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研
+  terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研 netHospital:网络医院
   appId?: string;//appid
   path?: string;//路径
   // query?: BaseObject;//参数
