@@ -53,50 +53,6 @@ export const joinQuery = function (url, query) {
 };
 
 /**
- * 公用得跳转方法
- */
-export const useCommonTo = (item) => {
-  switch (item.terminalType) {
-    case 'h5':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/h5Path?path=' + item.path
-      });
-      break;
-    case 'mini':
-      uni.navigateToMiniProgram({
-        appId: item.appId,
-        path: item.url,
-        extraData: JSON.parse(item.query)
-      });
-      break;
-    case 'alipay':
-      uni.navigateToMiniProgram({
-        appId: item.appId,
-        path: item.path,
-        extraData: JSON.parse(item.query)
-      });
-      break;
-    case 'my-h5':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?path=' + item.path
-      });
-      break;
-    case 'netHospital':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path
-      });
-      break;
-    default:
-      //自研或者其他直接跳转的
-      uni.navigateTo({
-        url: item.path
-      });
-      break;
-  }
-}
-
-
-/**
  * 节流函数
  */
 export const throttle = function (func: Function, wait: number) {

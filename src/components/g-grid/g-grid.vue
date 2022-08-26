@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import { withDefaults, computed } from 'vue';
-import { useCommonTo } from '@/common';
+import { useCommonTo } from '@/common/checkJump';
 interface IGridProps {
 	list: IRoute[];
 	type?: 1 | 2; //首页图标样式1 默认2

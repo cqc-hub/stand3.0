@@ -8,6 +8,7 @@ import { setLocalStorage, getLocalStorage } from '@/common'
 export const pinia = createPinia()
 
 export const painaInstall = (app: App) => {
+
   pinia
     .use(
       createPersistedState({

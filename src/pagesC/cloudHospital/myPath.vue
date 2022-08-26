@@ -35,24 +35,42 @@ const allData = {
 type A = keyof typeof allData;
 
 onLoad((options) => {
-	let queryArray: A[] = JSON.parse(options.query as string);
-	let query = '?';
-	queryArray.map((item) => {
-		if (item in allData) {
-			console.log(999, item, allData[item]);
-			query = query + item + '=' + allData[item] + '&';
-		} else {
-			// messageStore.showMessage(`携带${item}参数有误`, 1000);
-			console.log(`携带${item}参数有误`);
-		}
-	});
-	const baseUrl =
-		(global.env as any) === 'prod'
-			? 'https://h5.eheren.com/v3/#/'
-			: 'https://health.eheren.com/v3/#/';
-	src.value = `${baseUrl}${options.path}${query}`;
-	console.log('v3页面路径', src.value);
+	getQueryPath(options);
+	let query = getQueryPath(options);
+	if (options.type == '1') {
+		//第三方的h5
+		src.value = `${options.path}${query}`;
+		console.log('第三方页面路径', src.value);
+	} else {
+		//自研h5
+		const baseUrl =
+			(global.env as any) === 'prod'
+				? 'https://h5.eheren.com/v3/#'
+				: 'https://health.eheren.com/v3/#';
+		src.value = `${baseUrl}${options.path}${query}`;
+		console.log('v3页面路径', src.value);
+	}
 });
+const getQueryPath = (options) => {
+	// path里面需要传参的时候['sysCode'] options.query有值得时候
+	let query = '?';
+	if (options.query) {
+		let queryArray: A[] = JSON.parse(options.query as string);
+		queryArray.map((item) => {
+			if (item in allData) {
+				console.log(999, item, allData[item]);
+				query = query + item + '=' + allData[item] + '&';
+			} else {
+				// messageStore.showMessage(`携带${item}参数有误`, 1000);
+				console.log(`携带${item}参数有误`);
+			}
+		});
+		return query;
+	} else {
+		return '';
+	}
+};
+
 const handleMessage = (evt) => {
 	// #ifdef MP-WEIXIN
 	console.log('返回数据', evt);

@@ -5,7 +5,9 @@
 </template>
 <script setup lang="ts">
 //第三方h5页面入口——网络医院
-const src = '';
+import { onLoad } from '@dcloudio/uni-app';
+import { ref } from 'vue';
+const src = ref();
 const handleMessage = (evt) => {
 	// #ifdef MP-WEIXIN
 	console.log('返回数据', evt);

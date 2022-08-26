@@ -84,7 +84,7 @@ import { useGlobalStore, useUserStore } from '@/stores';
 
 import { aliLogin, wxLogin, outLogin, ServerStaticData } from '@/utils';
 import global from '@/config/global';
-import { useCommonTo } from '@/common';
+import { useCommonTo } from '@/common/checkJump';
 
 const userSore = useUserStore();
 const globalStore = useGlobalStore();
