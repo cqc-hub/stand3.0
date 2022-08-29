@@ -120,7 +120,7 @@
 				</view>
 			</ls-skeleton>
 		</scroll-view>
-
+		<g-message />
 		<choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 		<homeTabbar />
 	</view>

@@ -2,11 +2,20 @@
 	<view>
 		<view class="banner-grid">
 			<!-- 只有一个banner时 -->
-			<view  class="uni-margin-wrap" v-if="props.leftFunctionList.length>0&&props.functionList.length==0">
+			<view
+				class="uni-margin-wrap"
+				v-if="
+					props.leftFunctionList.length > 0 &&
+					props.functionList.length == 0
+				"
+			>
 				<swiper class="swiper" circular indicator-dots="true">
-					<swiper-item 	v-for="(item, i) in props.leftFunctionList" :key="i">
+					<swiper-item
+						v-for="(item, i) in props.leftFunctionList"
+						:key="i"
+					>
 						<image mode="scaleToFill" :src="item.iconfont" />
-					</swiper-item> 
+					</swiper-item>
 				</swiper>
 			</view>
 			<!-- 常规banner+三个入口 -->
@@ -45,12 +54,15 @@
 					<view
 						class="view1 banner-back1 banner-common"
 						v-if="props.leftFunctionList.length == 1"
+						@tap="gotoPath(props.leftFunctionList[0])"
 					>
 						<view class="flex-between">
-							<text>{{props.leftFunctionList[0].title}}</text>
+							<text>{{ props.leftFunctionList[0].title }}</text>
 						</view>
-						<text class="details">{{props.leftFunctionList[0].detail}}</text>
-						<view class="iconfont  icon-size-back1">&#xe6a5;</view>
+						<text class="details">
+							{{ props.leftFunctionList[0].detail }}
+						</text>
+						<view class="iconfont icon-size-back1">&#xe6a5;</view>
 					</view>
 					<!-- 第一组是多个banner -->
 					<view v-else class="view1">
@@ -58,6 +70,7 @@
 							<swiper-item
 								v-for="(item, i) in props.leftFunctionList"
 								:key="i"
+								@tap="gotoPath(item)"
 							>
 								<image
 									mode="scaleToFill"
@@ -72,10 +85,13 @@
 						:class="`view${i + 2} banner-back${
 							i + 1
 						} banner-common`"
+						@tap="gotoPath(item)"
 					>
 						<view class="flex-between">
 							<text>{{ item.title }}</text>
-							<view :class="`iconfont icon-size${i+1}`">&#xe6a0;</view>
+							<view :class="`iconfont icon-size${i + 1}`">
+								&#xe6a0;
+							</view>
 						</view>
 						<text class="details">
 							{{ item.detail }}
@@ -92,7 +108,7 @@
 
 <script setup lang="ts">
 import { withDefaults, ref, computed } from 'vue';
-
+import { useCommonTo } from '@/common/checkJump';
 // 2/3
 // const type = ref(2);
 
@@ -108,7 +124,7 @@ const props = withDefaults(
 				title: '住院助手',
 				url: '/xxx',
 				iconfont: 'ico_sy_calendar1'
-			},
+			}
 		],
 		//右侧数组
 		functionList: () => [
@@ -120,6 +136,10 @@ const props = withDefaults(
 		]
 	}
 );
+//跳转对应地址
+const gotoPath = (item) => {
+	useCommonTo(item);
+};
 
 // const type = computed(() => {
 // 	//type 2 常规banner+三个入口   3 首页 三个纯入口
@@ -136,12 +156,11 @@ const props = withDefaults(
 .banner-grid {
 	.uni-margin-wrap {
 		width: 100%;
-    height: 160rpx;
+		height: 160rpx;
 	}
 
 	swiper-item {
 		display: block;
-
 
 		image {
 			width: 100%;
@@ -149,7 +168,7 @@ const props = withDefaults(
 			will-change: transform;
 		}
 	}
-	// .banner { 
+	// .banner {
 	// 	.parent {
 	// 		display: grid;
 	// 		grid-template-columns: repeat(4, 1fr);
@@ -207,7 +226,7 @@ const props = withDefaults(
 		color: var(--hr-success-color-6);
 		font-weight: 400;
 	}
-  .icon-size3 {
+	.icon-size3 {
 		font-size: var(--h-size-40);
 		color: var(--hr-brand-color-6);
 		font-weight: 400;
@@ -280,7 +299,7 @@ const props = withDefaults(
 			grid-area: 2 / 3 / 3 / 5;
 			position: relative;
 		}
-    	.view4 {
+		.view4 {
 			margin-top: 12rpx;
 			grid-area: 3 / 3 / 4 / 5;
 			position: relative;

@@ -3,14 +3,14 @@ const gStores = new GStores();
 
 // //拦截-登录
 export const checkLogin = () => {
-  if (!gStores.globalStore.isLogin) {
-    gStores.messageStore.showMessage('未登录，请先登录', 1000);
-    setTimeout(() => {
-      uni.reLaunch({
-        url: '/pages/home/my'
-      })
-    }, 1200);
-  }
+  gStores.messageStore.showMessage('未登录，请先登录', 1000);
+  console.log(333);
+  setTimeout(() => {
+    console.log(999);
+    uni.reLaunch({
+      url: '/pages/home/my'
+    })
+  }, 1000);
 }
 
 //拦截-就诊人
@@ -21,12 +21,16 @@ export const checkPatient = () => {
       uni.reLaunch({
         url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
       });
-    }, 1200);
+    }, 1000);
   } else {
     const patList = gStores.userStore.patList;
     if (!patList.length) {
       gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
-      return;
+      setTimeout(() => {
+        uni.reLaunch({
+          url: '/pagesA/medicalCardMan/perfectReal'
+        });
+      }, 1000);
     }
   }
 }
@@ -35,13 +39,17 @@ export const checkPatient = () => {
 // loginInterception?: string,  //是否登录拦截 1拦截 0 不拦截
 //   patientInterception?: string,//就诊人拦截  1拦截 0 不拦截
 //   selectPatientPage?: string,//跳转第三方是否需要就诊人选择页面
-
-export const checkGrid = (item: IRoute) => {
-  if (item.loginInterception) {
-    checkLogin()
+// gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
+export const checkGrid = async (item: IRoute) => {
+  if (item.gridLabel === '3') {
+    return;
+  }
+  if (item.loginInterception && !gStores.globalStore.isLogin) {
+    await checkLogin()
+    return;
   }
   if (item.patientInterception) {
-    checkPatient()
+    await checkPatient()
   }
   if (item.selectPatientPage) {
     //跳转my-h5选择就诊人页面
@@ -53,43 +61,48 @@ export const checkGrid = (item: IRoute) => {
 export const useCommonTo = (item) => {
   console.log('跳转入参', item);
   //拦截判断 
-  checkGrid(item)
-  switch (item.terminalType) {
-    case 'h5':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.path
-      });
-      break;
-    case 'mini':
-      uni.navigateToMiniProgram({
-        appId: item.appId,
-        path: item.url,
-        extraData: JSON.parse(item.query)
-      });
-      break;
-    case 'alipay':
-      uni.navigateToMiniProgram({
-        appId: item.appId,
-        path: item.path,
-        extraData: JSON.parse(item.query)
-      });
-      break;
-    case 'my-h5':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?path=' + item.path
-      });
-      break;
-    case 'netHospital':
-      uni.navigateTo({
-        url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path
-      });
-      break;
-    default:
-      //自研或者其他直接跳转的
-      uni.navigateTo({
-        url: item.path
-      });
-      break;
-  }
+  checkGrid(item).then(() => {
+    setTimeout(() => {
+      switch (item.terminalType) {
+        case 'h5':
+          uni.navigateTo({
+            url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.path
+          });
+          break;
+        case 'mini':
+          uni.navigateToMiniProgram({
+            appId: item.appId,
+            path: item.url,
+            extraData: JSON.parse(item.query)
+          });
+          break;
+        case 'alipay':
+          uni.navigateToMiniProgram({
+            appId: item.appId,
+            path: item.path,
+            extraData: JSON.parse(item.query)
+          });
+          break;
+        case 'my-h5':
+          uni.navigateTo({
+            url: '/pagesC/cloudHospital/myPath?path=' + item.path
+          });
+          break;
+        case 'netHospital':
+          uni.navigateTo({
+            url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path
+          });
+          break;
+        default:
+          //自研或者其他直接跳转的
+          uni.navigateTo({
+            url: item.path
+          });
+          break;
+      }
+    }, 1000);
+
+  })
+
 }
 

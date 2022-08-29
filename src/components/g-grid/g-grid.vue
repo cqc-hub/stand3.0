@@ -16,6 +16,9 @@
 					<view class="gree-label" v-if="item.gridLabel == '1'">
 						绿色能量
 					</view>
+					<view class="warn-label" v-if="item.gridLabel == '2'">
+						立减5元
+					</view>
 
 					<text :class="`icon-font grid-resize ${item.iconfont}`" />
 					<view class="grid-label">{{ item.title }}</view>
@@ -159,6 +162,22 @@ const gotoPath = (item) => {
 	border: 1rpx solid var(--hr-success-color-6);
 	border-radius: 17rpx;
 	color: var(--hr-success-color-6);
+	line-height: 32rpx;
+	font-size: var(--h-size-18);
+	padding: 0 8rpx;
+	z-index: 100;
+	right: 10rpx;
+	top: 5rpx;
+	background-color: var(--h-color-white);
+	box-sizing: border-box;
+}
+
+.warn-label {
+	position: absolute;
+	background: #ffffff;
+	border: 1rpx solid var(--hr-error-color-6);
+	border-radius: 17rpx;
+	color: var(--hr-error-color-6);
 	line-height: 32rpx;
 	font-size: var(--h-size-18);
 	padding: 0 8rpx;

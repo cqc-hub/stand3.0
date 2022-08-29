@@ -13,11 +13,11 @@
 						{{ userSore.name || userSore.cellPhoneNum }}
 					</text>
 
-					<text
+					<!-- <text
 						class="user-id text-ellipsis animate__animated animate__fadeIn"
 					>
 						就诊卡号：{{ userSore.patientId }}
-					</text>
+					</text> -->
 				</block>
 				<block v-else>
 					<!-- #ifdef MP-ALIPAY -->
