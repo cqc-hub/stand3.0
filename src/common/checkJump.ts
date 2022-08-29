@@ -33,6 +33,7 @@ export const checkPatient = () => {
       }, 1000);
     }
   }
+  return
 }
 
 // grid配置化拦截判断
@@ -44,14 +45,14 @@ export const checkGrid = async (item: IRoute) => {
   if (item.gridLabel === '3') {
     return;
   }
-  if (item.loginInterception && !gStores.globalStore.isLogin) {
+  if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
     await checkLogin()
     return;
   }
-  if (item.patientInterception) {
+  if (item.patientInterception === '1') {
     await checkPatient()
   }
-  if (item.selectPatientPage) {
+  if (item.selectPatientPage === '1') {
     //跳转my-h5选择就诊人页面
 
   }

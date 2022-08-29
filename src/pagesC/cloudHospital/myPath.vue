@@ -15,22 +15,22 @@ import global from '@/config/global';
 import { getToken, getSysCode } from '@/common/useToken';
 import { ref } from 'vue';
 import { useMessageStore } from '@/stores';
+import { GStores } from '@/utils';
 // 自研h5页面统一入口
 const messageStore = useMessageStore();
+const gStores = new GStores();
+
 const webviewStyles = {
 	progress: {
 		color: '#4C8FFF'
 	}
 };
 const src = ref();
-const hosId = '1282';
-const token = getToken();
-const sysCode = getSysCode();
 const allData = {
-	// sysCode: getSysCode(),
-	sysCode: '1001047',
-	token: getToken(),
-	hosId: '12882'
+	sysCode: getSysCode(),
+	token: gStores.globalStore.token.accessToken,
+	hosId: '12882',
+	herenId: gStores.globalStore.herenId
 } as const;
 type A = keyof typeof allData;
 
