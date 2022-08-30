@@ -1,8 +1,5 @@
 <template>
-  <view
-    class="collapse-box"
-    :class="{ boxShadow: boxShadow, borderRadius: borderRadius }"
-  >
+  <view class="collapse-box" :class="{ boxShadow: boxShadow, borderRadius: borderRadius }">
     <view
       class="title"
       :class="{ border: border, borderRadius: borderRadius }"
@@ -17,19 +14,22 @@
       <slot name="title">
         <text>{{ title }}</text>
       </slot>
-        <!-- :src="rightIcon ? rightIcon : require('./img/arrow-right.png')" -->
-      <image
+      <!-- :src="rightIcon ? rightIcon : require('./img/arrow-right.png')" -->
+      <!-- <image
         :src="rightIcon ? rightIcon : img_url + 'ic_youjiantou@3x.png'"
         :class="{
           arrowBottom: isShow,
         }"
         class="right-icon"
+      /> -->
+      <view
+        :class="{
+          arrowBottom: isShow,
+        }"
+        class="iconfont ico_arrow right-icon"
       />
     </view>
-    <view
-      class="content-box"
-      :style="{ height: isShow ? contentHeight + 'px' : '0' }"
-    >
+    <view class="content-box" :style="{ height: isShow ? contentHeight + 'px' : '0' }">
       <view id="content" class="content">
         <slot>{{ content }}</slot>
       </view>
@@ -106,8 +106,8 @@ export default {
 
     offsetContentHeight: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
@@ -170,12 +170,11 @@ export default {
   }
 
   .right-icon {
-    width: 18rpx;
-    height: 32rpx;
     transform: rotate(90deg);
     transition: 0.4s all;
     position: relative;
     right: 10upx;
+    font-size: 48rpx;
 
     &.arrowBottom {
       transform: rotate(-90deg);
