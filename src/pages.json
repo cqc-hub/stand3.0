@@ -35,6 +35,12 @@
 				"navigationBarTitleText": "uni-routerTest",
 				"backgroundColor": "#e43130"
 			}
+		},
+		{
+			"path": "pages/piniaTest/piniaTest",
+			"style": {
+				"navigationBarTitleText": "uni-app "
+			}
 		}
 	],
 
