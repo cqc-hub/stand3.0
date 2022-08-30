@@ -88,7 +88,7 @@ const getHomeConfig = async () => {
 
 const ttt = () => {
 	uni.navigateTo({
-		url: '/pagesC/mixCheckResult/hsResult'
+		url: '/pages/piniaTest/piniaTest'
 		// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
 	});
 	// uni.navigateTo({

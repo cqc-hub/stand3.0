@@ -65,7 +65,7 @@ const getQueryPath = (options) => {
 				console.log(`携带${item}参数有误`);
 			}
 		});
-		return query;
+		return query.slice(0, -1);
 	} else {
 		return '';
 	}
