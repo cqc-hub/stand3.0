@@ -659,7 +659,6 @@ export default defineComponent({
 .form-picker {
 	:deep(.uni-data-tree .uni-data-tree-input) {
 		display: none !important;
-		// color: red !important;
 	}
 
 	:deep(.selected-area) {
