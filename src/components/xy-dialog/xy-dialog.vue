@@ -1,262 +1,347 @@
 <template>
-	<view
-		class="xy-dialog"
-		:class="{ 'xy-dialog__show': isShow }"
-		@touchmove.stop.prevent="bindTouchmove"
-	>
-		<view class="xy-dialog__mask"></view>
-		<view class="xy-dialog__container">
-			<view class="xy-dialog__header" v-if="title.length > 0">
-				{{ title }}
-			</view>
-			<view
-				class="xy-dialog__content"
-				:style="{ 'text-align': textalign }"
-			>
-				<template v-if="content">
-					<view class="modal-content">{{ content }}</view>
-				</template>
-				<template v-else>
-					<slot />
-				</template>
-			</view>
-			<view class="xy-dialog__footer">
-				<view
-					v-if="isShowCancel"
-					class="xy-dialog__btn xy-dialog__footer-cancel"
-					:style="{ color: cancelColor }"
-					@click="clickCancel"
-				>
-					{{ cancelText }}
-				</view>
-				<view
-					class="xy-dialog__btn xy-dialog__footer-confirm"
-					:style="{ color: confirmColor }"
-					:class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
-					@click="clickConfirm"
-				>
-					{{ confirmText }}
-				</view>
-			</view>
-		</view>
-	</view>
+  <view :id="elId" class="v-tabs">
+    <scroll-view
+      id="scrollContainer"
+      :scroll-x="scroll"
+      :scroll-left="scroll ? scrollLeft : 0"
+      :scroll-with-animation="scroll"
+      :style="{ position: fixed ? 'fixed' : 'relative', zIndex: 1993 }"
+    >
+      <view
+        class="v-tabs__container"
+        :style="{
+          display: scroll ? 'inline-flex' : 'flex',
+          whiteSpace: scroll ? 'nowrap' : 'normal',
+          background: bgColor,
+          height,
+          padding,
+        }"
+      >
+        <view
+          class="v-tabs__container-item"
+          v-for="(v, i) in tabs"
+          :key="i"
+          :style="{
+            color: current == i ? activeColor : color,
+            fontSize: current == i ? fontSize : fontSize,
+            fontWeight: (allBlod && 'blod') || (bold && current == i) ? 'bold' : '',
+            justifyContent: !scroll ? 'center' : '',
+            flex: scroll ? '' : 1,
+            padding: paddingItem,
+          }"
+          @click="change(i)"
+        >
+          {{ field ? v[field] : v }}
+        </view>
+        <view
+          v-if="!pills"
+          class="v-tabs__container-line"
+          :style="{
+            background: lineColor,
+            width: lineWidth + 'px',
+            height: lineHeight,
+            borderRadius: lineRadius,
+            left: lineLeft + 'px',
+            transform: `translateX(-${lineWidth / 2}px)`,
+          }"
+        ></view>
+        <view
+          v-else
+          class="v-tabs__container-pills"
+          :style="{
+            background: pillsColor,
+            borderRadius: pillsBorderRadius,
+            left: pillsLeft + 'px',
+            width: currentWidth + 'px',
+            height,
+          }"
+        ></view>
+      </view>
+    </scroll-view>
+    <view
+      class="v-tabs__placeholder"
+      :style="{
+        height: fixed ? height : '0',
+        padding,
+      }"
+    ></view>
+  </view>
 </template>
 
 <script>
+import { wait } from '@/utils';
+/**
+ * v-tabs
+ * @property {Number} value 选中的下标
+ * @property {Array} tabs tabs 列表
+ * @property {String} bgColor = '#fff' 背景颜色
+ * @property {String} color = '#333' 默认颜色
+ * @property {String} activeColor = '#2979ff' 选中文字颜色
+ * @property {String} fontSize = '28rpx' 默认文字大小
+ * @property {String} activeFontSize = '28rpx' 选中文字大小
+ * @property {Boolean} bold = [true | false] 选中文字是否加粗
+ * @property {Boolean} scroll = [true | false] 是否滚动
+ * @property {String} height = '60rpx' tab 的高度
+ * @property {String} lineHeight = '10rpx' 下划线的高度
+ * @property {String} lineColor = '#2979ff' 下划线的颜色
+ * @property {Number} lineScale = 0.5 下划线的宽度缩放比例
+ * @property {String} lineRadius = '10rpx' 下划线圆角
+ * @property {Boolean} pills = [true | false] 是否胶囊样式
+ * @property {String} pillsColor = '#2979ff' 胶囊背景色
+ * @property {String} pillsBorderRadius = '10rpx' 胶囊圆角大小
+ * @property {String} field 如果是对象，显示的键名
+ * @property {Boolean} fixed = [true | false] 是否固定
+ * @property {String} paddingItem = '0 22rpx' 选项的边距
+ *
+ * @event {Function(current)} change 改变标签触发
+ */
 export default {
-	props: {
-		// 标题
-		title: {
-			type: String,
-			default: ''
-		},
+  props: {
+    value: {
+      type: Number,
+      default: 0,
+    },
+    allBlod: {
+      type: Boolean,
+      default: true,
+    },
+    tabs: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    bgColor: {
+      type: String,
+      default: '#fff',
+    },
+    padding: {
+      type: String,
+      default: '0',
+    },
+    color: {
+      type: String,
+      default: '#888888',
+    },
+    activeColor: {
+      type: String,
+      default: '#111111',
+    },
+    fontSize: {
+      type: String,
+      default: '32rpx',
+    },
+    activeFontSize: {
+      type: String,
+      default: '32rpx',
+    },
+    bold: {
+      type: Boolean,
+      default: true,
+    },
+    scroll: {
+      type: Boolean,
+      default: true,
+    },
+    height: {
+      type: String,
+      default: '88rpx',
+    },
+    lineColor: {
+      type: String,
+      default: 'linear-gradient(270deg,#53a8ff, #296fff)',
+    },
+    lineHeight: {
+      type: String,
+      default: '10rpx',
+    },
+    lineScale: {
+      type: Number,
+      default: 0.5,
+    },
+    lineRadius: {
+      type: String,
+      default: '10rpx',
+    },
+    pills: {
+      type: Boolean,
+      deafult: false,
+    },
+    pillsColor: {
+      type: String,
+      default: '#2979ff',
+    },
+    pillsBorderRadius: {
+      type: String,
+      default: '10rpx',
+    },
+    field: {
+      type: String,
+      default: '',
+    },
+    fixed: {
+      type: Boolean,
+      default: false,
+    },
+    paddingItem: {
+      type: String,
+      default: '0 22rpx',
+    },
+  },
+  data() {
+    return {
+      elId: '',
+      lineWidth: 30,
+      currentWidth: 0, // 当前选项的宽度
+      lineLeft: 0, // 滑块距离左侧的位置
+      pillsLeft: 0, // 胶囊距离左侧的位置
+      scrollLeft: 0, // 距离左边的位置
+      containerWidth: 0, // 容器的宽度
+      current: 0, // 当前选中项
+    };
+  },
+  watch: {
+    value(newVal) {
+      this.current = newVal;
+      this.$nextTick(() => {
+        this.getTabItemWidth();
+      });
+    },
+    current(newVal) {
+      this.$emit('input', newVal);
+      this.$emit('update:value', newVal);
+    },
+    tabs(newVal) {
+      this.$nextTick(() => {
+        this.getTabItemWidth();
+      });
+    },
+  },
+  methods: {
+    // 产生随机字符串
+    randomString(len) {
+      len = len || 32;
+      let $chars =
+        'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+      let maxPos = $chars.length;
+      let pwd = '';
+      for (let i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+      }
+      return pwd;
+    },
+    // 切换事件
+    change(index) {
+      if (this.current !== index) {
+        this.current = index;
 
-		// 内容
-		content: String,
+        this.$emit('change', index);
+      }
+    },
+    // 获取左移动位置
+    async getTabItemWidth() {
+      await wait(200);
+      let query = uni.createSelectorQuery().in(this);
+      // 获取容器的宽度
+      query
+        .select(`#scrollContainer`)
+        .boundingClientRect((data) => {
+          if (!this.containerWidth && data) {
+            this.containerWidth = data.width;
+          }
+        })
+        .exec();
+      // 获取所有的 tab-item 的宽度
+      query
+        .selectAll('.v-tabs__container-item')
+        .boundingClientRect(async (data) => {
+          if (!data) {
+            return;
+          }
+          let lineLeft = 0;
+          let currentWidth = 0;
+          if (data) {
+            for (let i = 0; i < data.length; i++) {
+              if (i < this.current) {
+                lineLeft += data[i].width;
+              } else if (i == this.current) {
+                currentWidth = data[i].width;
+              } else {
+                break;
+              }
+            }
+          }
+          // 当前滑块的宽度
+          this.currentWidth = currentWidth;
+          // 缩放后的滑块宽度
+          this.lineWidth = currentWidth * this.lineScale * 1;
+          // 滑块作移动的位置
+          this.lineLeft = lineLeft + currentWidth / 2;
+          // 胶囊距离左侧的位置
+          this.pillsLeft = lineLeft;
+          // 计算滚动的距离左侧的位置
+          if (this.scroll) {
+            this.scrollLeft = this.lineLeft - this.containerWidth / 2;
+          }
 
-		// 对齐方式
-		textalign: {
-			type: String,
-			default: 'center'
-		},
-
-		// 取消文字
-		cancelText: {
-			type: String,
-			default: '取消'
-		},
-
-		// 取消颜色
-		cancelColor: {
-			type: String,
-			default: '#909399'
-		},
-
-		// 确定文字
-		confirmText: {
-			type: String,
-			default: '确定'
-		},
-
-		// 确定文字颜色
-		confirmColor: {
-			type: String,
-			default: '#409EFF'
-		},
-
-		// 是否显示取消按钮
-		isShowCancel: {
-			type: Boolean,
-			default: true
-		},
-
-		// 是否显示弹出框
-		show: {
-			type: Boolean,
-			default: false
-		}
-	},
-	data() {
-		return {
-			isShow: false
-		};
-	},
-	watch: {
-		show(val) {
-			this.isShow = val;
-		}
-	},
-	methods: {
-		// 禁止穿透
-		bindTouchmove() {},
-
-		show() {
-			this.isShow = true;
-		},
-
-		// 取消方法
-		clickCancel() {
-			setTimeout(() => {
-				this.$emit('cancelButton');
-			}, 200);
-			this.closeDialog();
-		},
-
-		// 确定方法
-		clickConfirm() {
-			setTimeout(() => {
-				this.$emit('confirmButton');
-			}, 200);
-			this.closeDialog();
-		},
-
-		// 关闭弹窗
-		closeDialog() {
-			this.isShow = false;
-			this.$emit('close');
-		}
-	}
+          if (this.currentWidth < 15) {
+            await wait(1000);
+            getTabItemWidth();
+          }
+        })
+        .exec();
+    },
+  },
+  mounted() {
+    this.elId = 'xfjpeter_' + this.randomString();
+    this.current = this.value;
+    this.$nextTick(() => {
+      this.getTabItemWidth();
+    });
+  },
 };
 </script>
 
-<style lang="scss">
-.xy-dialog {
-	position: fixed;
-	visibility: hidden;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 1500;
-	transition: visibility 200ms ease-in;
-	&.xy-dialog__show {
-		visibility: visible;
-	}
+<style lang="scss" scoped>
+.v-tabs {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
-	&__container {
-		position: absolute;
-		z-index: 1010;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -75%);
-		transition: transform 0.3s;
-		width: 540upx;
-		border-radius: 10upx;
-		background-color: #fff;
-		overflow: hidden;
-		opacity: 0;
-		transition: opacity 200ms ease-in;
-		padding-top: 30upx;
-	}
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-	&__header {
-		position: relative;
-		overflow: auto;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		padding: 0 24upx 24upx;
-		line-height: 1.5;
-		color: #303133;
-		font-weight: bold;
-		font-size: 40upx;
-		text-align: center;
-	}
+  &__container {
+    min-width: 100%;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
 
-	&__content {
-		position: relative;
-		color: #303133;
-		font-size: 36upx;
-		box-sizing: border-box;
-		line-height: 1.5;
-		.modal-content {
-			padding: 0 30upx 30upx;
-		}
-		&::after {
-			content: ' ';
-			position: absolute;
-			left: 0;
-			bottom: -1px;
-			right: 0;
-			height: 1px;
-			border-bottom: 1px solid #ebeef5;
-			transform-origin: 0 0;
-			transform: scaleY(0.5);
-		}
-	}
+    &-item {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      position: relative;
+      z-index: 10;
+      // padding: 0 11px;
+      transition: all 0.4s;
+      white-space: nowrap;
+    }
 
-	&__footer {
-		position: relative;
-		overflow: auto;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		color: #303133;
-		font-size: 36upx;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		.xy-dialog__btn {
-			width: 50%;
-			text-align: center;
-			padding: 20upx 0;
-			&.xy-dialog__footer-cancel {
-				color: #909399;
-			}
-			&.xy-dialog__footer-confirm {
-				color: #409eff;
-			}
-			&.xy-dialog__btn-row {
-				width: 100%;
-				text-align: center;
-				padding: 20upx 0;
-				&.xy-dialog__footer-confirm {
-					color: #409eff;
-				}
-			}
-		}
-	}
+    &-line {
+      position: absolute;
+      bottom: 0;
+      transition: all 0.4s linear;
+    }
 
-	&__mask {
-		display: block;
-		position: absolute;
-		z-index: 1000;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.2);
-		opacity: 0;
-		transition: opacity 200ms ease-in;
-	}
-	&__show {
-		.xy-dialog__container,
-		.xy-dialog__mask {
-			opacity: 1;
-		}
-	}
+    &-pills {
+      position: absolute;
+      transition: all 0.4s linear;
+      z-index: 9;
+    }
+  }
 }
 </style>

@@ -28,6 +28,17 @@ export class ServerStaticData {
 		}
 	}
 
+	static async getAddMedicalData() {
+		let addMedicalData = getLocalStorage('addMedicalData');
+
+		if (!addMedicalData) {
+			await api.getTermsBySysAndCode({
+				domainCode:
+					'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
+			});
+		}
+	}
+
 	/**
 	 * label: "已预约", value: "0"
 	 */

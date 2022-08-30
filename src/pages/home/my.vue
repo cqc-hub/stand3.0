@@ -88,9 +88,13 @@ const getHomeConfig = async () => {
 
 const ttt = () => {
 	uni.navigateTo({
-		url: '/pagesC/mixCheckResult/hsResult'
+		url: '/pages/piniaTest/piniaTest'
 		// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
 	});
+	// uni.navigateTo({
+	// 	url: '/pagesC/mixCheckResult/hsResult'
+	// 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+	// });
 	// uni.navigateTo({
 	// 	url: joinQuery('/pagesC/cloudHospital/cloudHospital', {
 	// 		path: 'https://testwechatnethos.eheren.com/static/nhs/',

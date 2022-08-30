@@ -5,16 +5,15 @@
 	},
 	"pages": [
 		{
-			"path": "pages/piniaTest/piniaTest",
-			"style": {
-				"navigationBarTitleText": "uni-app "
-			}
-		},
-
-		{
 			"path": "pages/home/my",
 			"style": {
 				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/piniaTest/piniaTest",
+			"style": {
+				"navigationBarTitleText": "uni-app "
 			}
 		},
 		{
