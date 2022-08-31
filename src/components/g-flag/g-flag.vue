@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<slot :title="mTitle" :text="text">
-			<view v-if="isShowFg" class="real-top">
+			<view v-if="isShowFg && text" class="real-top">
 				<rich-text :nodes="text" />
 			</view>
 
-			<view v-if="isShowFgTip" class="tip">
+			<view v-if="isShowFgTip && text" class="tip">
 				<view class="title">温馨提示</view>
 				<rich-text :nodes="text" />
 			</view>

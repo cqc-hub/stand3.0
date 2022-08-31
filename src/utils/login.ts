@@ -5,6 +5,7 @@ import api from '@/service/api';
 import {
   ServerStaticData,
 } from '@/utils';
+import { toRouterPath } from '@/common/checkJump';
 
 const packageAuthParams = (
   args: {},
@@ -70,6 +71,10 @@ export class LoginUtils extends GStores {
 
         this.globalStore.setHerenId(herenId);
 
+
+        // if (herenId) new PatientUtils().getPatCardList();
+
+        // toRouterPath()
         if (!herenId) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {

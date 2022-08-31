@@ -18,7 +18,7 @@
 			:duration="300"
 		>
 			<swiper-item v-for="(item, index) in props.list" :key="index">
-				<g-grid :list="item.functionList" />
+				<homeGrid :list="item.functionList"></homeGrid>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import { withDefaults, ref } from 'vue';
+import homeGrid from './homeGrid.vue';
 
 let tabIndex = ref(0);
 interface IhomeMenu {
