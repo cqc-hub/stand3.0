@@ -1,4 +1,6 @@
 import { useMessageStore } from '@/stores/modules/globalMessage';
+import { useGlobalStore } from '@/stores/modules/global';
+import api from '@/service/api';
 
 type GreaterThan<
 	T extends number,
@@ -148,19 +150,32 @@ export const chooseImg = (
 	});
 };
 
+const ocrForWX = async () => {
+	const globalStore = useGlobalStore();
+	const e = await chooseImg({
+		extension: ['image', 'jpeg', 'jpg'],
+		fileSize: 2 * 1024 * 1024
+	});
+
+	if (e.success) {
+		const requestData = {
+			source: globalStore.browser.source,
+			fileName: 'cssc',
+			base64: e.base64
+		};
+
+		api.ocrIdCard(requestData);
+	} else {
+		throw new Error(e.evt);
+	}
+};
+
 export const useOcr = async () => {
 	const messageStore = useMessageStore();
+	// #ifdef MP-WEIXIN
+	return ocrForWX();
+	// #endif
 	try {
-		const e = await chooseImg({
-			extension: ['image', 'jpeg', 'jpg'],
-			fileSize: 2 * 1024 * 1024
-		});
-
-		if (e.success) {
-			e.base64;
-		} else {
-			throw new Error(e.evt);
-		}
 	} catch (error) {
 		messageStore.showMessage(error as string);
 	}
