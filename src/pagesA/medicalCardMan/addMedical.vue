@@ -9,6 +9,7 @@
 					@input-blur="formInputBlur"
 					@select-change="selectChange"
 					@address-change="addressChange"
+					bodyBold
 					ref="gform"
 				/>
 			</view>
@@ -36,7 +37,6 @@ import { GStores, idValidator, PatientUtils } from '@/utils';
 import { onReady } from '@dcloudio/uni-app';
 
 import dayjs from 'dayjs';
-import api from '@/service/api';
 
 const props = defineProps<{
 	patientName: 'string';
@@ -306,6 +306,7 @@ onMounted(() => {
 	height: 100vh;
 
 	.form-container {
+		margin: 16rpx 32rpx;
 		margin-bottom: 100rpx;
 	}
 }

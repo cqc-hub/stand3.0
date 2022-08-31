@@ -91,3 +91,4 @@ cmd: iconfont-tools
  功能 | 页面 | 参数
  :-- | :--: | :--
 健康咨询 | pagesA/healthAdvisory/healthAdvisory | sysCode
+用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId

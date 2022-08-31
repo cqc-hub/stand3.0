@@ -1,11 +1,14 @@
 <template>
 	<view>
-		<g-form
-			v-model:value="formData"
-			@submit="formSubmit"
-			@change="formChange"
-			ref="gform"
-		/>
+		<view class="container">
+			<g-form
+				v-model:value="formData"
+				@submit="formSubmit"
+				@change="formChange"
+				bodyBold
+				ref="gform"
+			/>
+		</view>
 
 		<!-- <view class="aa">
 			{{ JSON.stringify(formData) }}
@@ -168,6 +171,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.container {
+	margin: 16rpx 32rpx;
+}
 .footer {
 	position: absolute;
 	bottom: 0;
@@ -175,8 +181,5 @@ onMounted(() => {
 	left: 0;
 	background-color: var(--h-color-white);
 	padding: 32rpx 32rpx 68rpx;
-}
-.aa {
-	word-break: break-all;
 }
 </style>

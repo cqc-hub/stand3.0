@@ -35,7 +35,8 @@ export const tempList: TInstance[] = [
 		key: formKey.medicalType,
 		field: 'select',
 		options: [],
-		autoOptions: 'patientTypeTerms'
+		autoOptions: 'patientTypeTerms',
+		rowStyle: 'border-radius: 16rpx 16rpx 0 0;'
 	},
 
 	{
@@ -151,7 +152,8 @@ export const tempList: TInstance[] = [
 		label: '详细地址',
 		field: 'input-text',
 		placeholder: '具体到门牌号',
-		key: formKey.location
+		key: formKey.location,
+		rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
 	},
 
 	{
@@ -175,7 +177,7 @@ export const tempList: TInstance[] = [
 		key: formKey.defaultFalg,
 		label: '设为默认就诊人',
 		labelWidth: '260rpx',
-		rowStyle: 'margin-top: 16rpx;'
+		rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;'
 	}
 ];
 

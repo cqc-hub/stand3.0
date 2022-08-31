@@ -6,7 +6,8 @@
 				:key="item.key"
 				:class="{
 					'form-item-icon': item.field === 'select',
-					'item-for-show': item.isForShow
+					'item-for-show': item.isForShow,
+					'form-item-bold': bodyBold
 				}"
 				:style="`--label-width: ${item.labelWidth || '190rpx'}; ${
 					(item.rowStyle && item.rowStyle) || ''
@@ -66,7 +67,7 @@
 						/>
 
 						<view v-if="item.field === 'select'" class="full-item">
-							<view class="my-disabled">
+							<view class="select-item">
 								<uni-easyinput
 									:placeholder="item.placeholder"
 									:inputBorder="false"
@@ -205,6 +206,12 @@ export default defineComponent({
 		value: {
 			type: Object as PropType<BaseObject>,
 			default: () => ({})
+		},
+
+		// 加粗内容
+		bodyBold: {
+			type: Boolean,
+			default: false
 		}
 	},
 
@@ -587,24 +594,13 @@ export default defineComponent({
 	}
 
 	.label {
+		height: 100%;
+		padding-top: 16rpx;
 		&.item-require {
 			&::after {
 				content: '*';
 				color: var(--hr-error-color-6);
 			}
-		}
-	}
-
-	:deep(input) {
-		color: var(--hr-neutral-color-10) !important;
-		font-size: var(--hr-font-size-base);
-		background-color: var(--h-color-white) !important;
-		opacity: 1;
-	}
-
-	.my-disabled {
-		:deep(input) {
-			color: var(--hr-neutral-color-8) !important;
 		}
 	}
 
@@ -635,6 +631,32 @@ export default defineComponent({
 			width: 100%;
 			text-align: right;
 			color: var(--hr-neutral-color-10);
+		}
+	}
+
+	:deep(input) {
+		color: var(--hr-neutral-color-10) !important;
+		font-size: var(--hr-font-size-base);
+		background-color: var(--h-color-white) !important;
+		opacity: 1;
+	}
+
+	.select-item {
+		pointer-events: none;
+		:deep(input) {
+			color: var(--hr-neutral-color-10) !important;
+		}
+	}
+
+	.my-disabled {
+		:deep(input) {
+			color: var(--hr-neutral-color-8) !important;
+		}
+	}
+
+	&.form-item-bold {
+		:deep(input) {
+			font-weight: 600;
 		}
 	}
 }
