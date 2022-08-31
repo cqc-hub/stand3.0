@@ -2,27 +2,27 @@
 	<view class="login-center">
 		<view @click="ttt">2333</view>
 		<scroll-view class="scroll-container" scroll-y>
-			<ls-skeleton
+			<!-- <ls-skeleton
 				:skeleton="skeletonProps.skeleton"
 				:loading="skeletonProps.loading"
-			>
-				<view class="top-bg" />
-				<personRecord />
-				<view class="my-menu">
-					<view v-if="menu1List.length" class="list">
-						<view class="title">我的订单</view>
-						<g-grid :list="menu1List" />
-					</view>
-					<view v-if="menu1List.length" class="list">
-						<view class="title">我的服务</view>
-						<g-grid :list="menu2List" />
-					</view>
-					<view v-if="menu3List.length" class="list">
-						<view class="title">我的工具</view>
-						<g-grid :list="menu3List" />
-					</view>
+			> -->
+			<view class="top-bg" />
+			<personRecord />
+			<view class="my-menu">
+				<view v-if="menu1List.length" class="list">
+					<view class="title">我的订单</view>
+					<g-grid :list="menu1List" />
 				</view>
-			</ls-skeleton>
+				<view v-if="menu1List.length" class="list">
+					<view class="title">我的服务</view>
+					<g-grid :list="menu2List" />
+				</view>
+				<view v-if="menu3List.length" class="list">
+					<view class="title">我的工具</view>
+					<g-grid :list="menu3List" />
+				</view>
+			</view>
+			<!-- </ls-skeleton> -->
 		</scroll-view>
 
 		<home-Tabbar />
@@ -38,6 +38,7 @@ import personRecord from './componetns/personRecord.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
 import { ServerStaticData } from '@/utils';
 import { encryptDes, getSysCode, joinQuery } from '@/common';
+import { formKey } from '../../pagesA/medicalCardMan/utils/index';
 
 //骨架屏配置
 const skeletonProps = {
@@ -71,7 +72,7 @@ const menu3List = ref([]); //我的工具
 onMounted(() => {
 	getHomeConfig();
 	if (props.isWarningLogin) {
-		messageStore.showMessage('未登录,请先登陆', 0);
+		messageStore.showMessage('未登录,请先登陆', 1000);
 	}
 });
 //获取配置数据
@@ -107,7 +108,6 @@ const ttt = () => {
 <style lang="scss" scoped>
 .login-center {
 	background-color: var(--h-color-white);
-	width: 100%;
 	height: 100vh;
 	position: relative;
 	flex-direction: column;
@@ -130,7 +130,7 @@ const ttt = () => {
 }
 
 .my-menu {
-	// padding: 0 32rpx;
+	padding: 0 32rpx;
 	margin-bottom: 188rpx;
 	.list {
 		background: var(--h-color-white);
@@ -147,7 +147,5 @@ const ttt = () => {
 		}
 	}
 }
-.page {
-	margin: 32rpx;
-}
+
 </style>

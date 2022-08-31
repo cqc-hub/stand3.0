@@ -208,7 +208,7 @@ const recordColors = ['#296FFF', '#00b39e'];
 }
 
 .record-container {
-	margin: 48upx 0;
+	margin: 48upx 32rpx;
 
 	display: flex;
 	gap: 16upx;
