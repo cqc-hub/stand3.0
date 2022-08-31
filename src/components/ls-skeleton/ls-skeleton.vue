@@ -1,6 +1,6 @@
 <template>
-	<view class="page">
-		<view v-if="loading">
+	<view>
+		<view v-if="loading" class="ls-page">
 			<block v-for="(item, index) in elements" :key="index">
 				<!-- 横向并列布局 -->
 				<view class="ls_skeleton-group" v-if="item.type == 'flex'">

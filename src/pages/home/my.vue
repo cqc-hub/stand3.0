@@ -6,30 +6,30 @@
 				:skeleton="skeletonProps.skeleton"
 				:loading="skeletonProps.loading"
 			>
-			<view class="top-bg" />
-			<personRecord />
-			<view class="my-menu">
-				<view v-if="menu1List.length" class="list">
-					<view class="title">我的订单</view>
-					<g-grid :list="menu1List" />
+				<view class="top-bg" />
+				<personRecord />
+				<view class="my-menu">
+					<view v-if="menu1List.length" class="list">
+						<view class="title">我的订单</view>
+						<homeGrid :list="menu1List"></homeGrid>
+					</view>
+					<view v-if="menu2List.length" class="list">
+						<view class="title">我的服务</view>
+						<homeGrid :list="menu2List"></homeGrid>
+					</view>
+					<view v-if="menu3List.length" class="list">
+						<view class="title">我的工具</view>
+						<homeGrid :list="menu3List"></homeGrid>
+					</view>
+					<view v-if="menu3List.length" class="list">
+						<view class="title">我的工具</view>
+						<g-grid :list="menu3List" />
+					</view>
+					<view v-if="menu3List.length" class="list">
+						<view class="title">我的工具</view>
+						<g-grid :list="menu3List" />
+					</view>
 				</view>
-				<view v-if="menu1List.length" class="list">
-					<view class="title">我的服务</view>
-					<g-grid :list="menu2List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-			</view>
 			</ls-skeleton>
 
 			<view class="save-hight" />
@@ -49,6 +49,7 @@ import homeTabbar from './componetns/homeTabbar.vue';
 import { ServerStaticData } from '@/utils';
 import { encryptDes, getSysCode, joinQuery } from '@/common';
 import { formKey } from '../../pagesA/medicalCardMan/utils/index';
+import homeGrid from './componetns/homeGrid.vue';
 
 //骨架屏配置
 const skeletonProps = {
@@ -162,5 +163,4 @@ const ttt = () => {
 		}
 	}
 }
-
 </style>

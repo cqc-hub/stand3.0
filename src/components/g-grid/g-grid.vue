@@ -6,7 +6,7 @@
 			:column="type == 1 ? options.list.length : 4"
 		>
 			<uni-grid-item v-for="(item, i) in options.list" :key="i">
-				<view class="grid-item-box" @tap="gotoPath(item)">
+				<view class="grid-item-box" @tap="gridClick(item)">
 					<!-- 绿色能量角标 -->
 					<!-- v-if="item.enabled == 0 "  -->
 					<!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
@@ -24,18 +24,24 @@
 					<view class="grid-label">{{ item.title }}</view>
 					<text class="grid-title">{{ item.detail }}</text>
 				</view>
-
-				<!-- <view class="grid-dot">
-						disabled
-					</view> -->
 			</uni-grid-item>
 		</uni-grid>
 	</view>
 </template>
 
 <script lang="ts" setup>
-import { withDefaults, computed } from 'vue';
-import { useCommonTo } from '@/common/checkJump';
+import { withDefaults, computed, defineEmits } from 'vue';
+
+/**
+ * g-grid 网格布局
+ * @description 用于页面中，网格布局使用
+ * @property {Array} list 网格展示的数据
+ * @property {Boolean} type = [1|2] 两种样式
+ * @event {Function} gridclick 点击网格的方法
+ */
+
+const emit = defineEmits(['gridClick']);
+
 interface IGridProps {
 	list: IRoute[];
 	type?: 1 | 2; //首页图标样式1 默认2
@@ -74,24 +80,8 @@ const options = computed(() => {
 	};
 });
 
-//跳转对应地址
-const gotoPath = (item) => {
-	useCommonTo(item);
-	//打车
-	// uni.navigateToMiniProgram({
-	// 	appId: '2018070960585195',
-	// 	path: 'page/map-index/map-index?query=source=alipay_yiyuan_shengrenmin&unifiedProtocol=true',
-	// 	extraData: {
-	// 		source: 'alipay_yiyuan_shengrenmin',
-	// 		unifiedProtocol: true
-	// 	}
-	// });
-	// let path = 'pages/hospitalGuide/hospitalGuide&query=["sysCode","hosId"]';
-	// let url = '/pagesC/cloudHospital/myPath?path=' + path;
-	// uni.navigateTo({
-	// 	url: url
-	// });
-	// terminalType?: string;//终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研 my-h5自研h5
+const gridClick = (item) => {
+	emit('gridClick', item);
 };
 </script>
 

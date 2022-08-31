@@ -1,22 +1,25 @@
 import { defineStore } from 'pinia';
 
 //页面存储token brower等
-const routerStore = defineStore('global', {
-	persist: {
-		key: 'router',
-		paths: []
-	},
+const routerStore = defineStore('router', {
+  persist: {
+    key: 'router',
+    paths: ['itemUrl']
+  },
 
-	state: () => {
-		return {
+  state: () => {
+    return {
+      itemUrl: ''
+    };
+  },
 
-		};
-	},
-
-	actions: {
-	}
+  actions: {
+    updateItemUrl(itemUrl) {
+      this.itemUrl = itemUrl
+    }
+  }
 });
 
 export const useRouterStore = function () {
-	return routerStore();
+  return routerStore();
 };

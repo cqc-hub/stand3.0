@@ -79,8 +79,11 @@
 						</block>
 
 						<view class="top-menu">
-							<view class="box">
-								<g-grid :list="topMenuList" :type="1" />
+							<view class="box" v-if="topMenuList">
+								<homeGrid
+									:list="topMenuList"
+									:type="1"
+								></homeGrid>
 							</view>
 							<view class="notice flex-normal">
 								<text
@@ -114,7 +117,7 @@
 							:functionList="bannerFunctionList"
 						/>
 					</view>
-					<view class="fun-list">
+					<view class="fun-list" v-if="menuList">
 						<homeMenu :list="menuList" />
 					</view>
 				</view>
@@ -132,6 +135,7 @@ import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
+import homeGrid from './componetns/homeGrid.vue';
 import { useGlobalStore, useUserStore, IPat } from '@/stores';
 
 import { onLoad } from '@dcloudio/uni-app';
@@ -183,7 +187,7 @@ const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
 };
 
 const searchPlaceholder = '搜索科室、医生或疾病';
-let topMenuList = ref({}); //首页顶部menu
+let topMenuList = ref<IRoute[]>([]); //首页顶部menu
 const noticeMenu = ref<IRoute[]>([]); //通知列表
 const bannerLeftFunctionList = ref([]); //banner列表
 const bannerFunctionList = ref([]); //通知列表
