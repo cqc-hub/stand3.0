@@ -9,6 +9,7 @@
 					@input-blur="formInputBlur"
 					@select-change="selectChange"
 					@address-change="addressChange"
+					:show-require-icon="false"
 					bodyBold
 					ref="gform"
 				/>
@@ -242,6 +243,15 @@ const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
 				});
 			}
 		};
+
+		const patientNameItem = formList.find(
+			(o) => o.key === formKey.patientName
+		);
+
+		if (patientNameItem) {
+			patientNameItem.ocr = true;
+			// patientNameItem.showSuffixArrowIcon = true;
+		}
 	}
 
 	formList.map((o) => {
@@ -258,6 +268,9 @@ const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
 			}
 		}
 	});
+
+	console.log(formList);
+
 	gform.value.setList(formList);
 };
 
@@ -296,7 +309,8 @@ onMounted(() => {
 	verifyCode = formData.value[formKey.verify];
 
 	nextTick(() => {
-		medicalTypeChange(formData.value[formKey.medicalType]);
+		medicalTypeChange('-1');
+		// medicalTypeChange(formData.value[formKey.medicalType]);
 	});
 });
 </script>
@@ -306,7 +320,7 @@ onMounted(() => {
 	height: 100vh;
 
 	.form-container {
-		margin: 16rpx 32rpx;
+		// margin: 16rpx 32rpx;
 		margin-bottom: 100rpx;
 	}
 }
@@ -318,8 +332,5 @@ onMounted(() => {
 	left: 0;
 	background-color: var(--h-color-white);
 	padding: 32rpx 32rpx 68rpx;
-}
-.aa {
-	word-break: break-all;
 }
 </style>

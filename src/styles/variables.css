@@ -17,26 +17,33 @@ page {
 
 	/* 主要颜色 */
 
-	/* 品牌色/主色-6  浅色-1 click状态-7 */
+	/* 品牌色/主色-6  浅色-1 click状态-7 不可点击-3 */
 	--hr-brand-color-6: #296fff;
+	--hr-brand-color-6-light: #2970ff0a;
 	--hr-brand-color-1: #e9f0ff;
 	--hr-brand-color-7: #0050f5;
 	--hr-brand-color-2: #ccddff;
+	--hr-brand-color-3: #9ebeff;
+	/* tab页面选中背景色 */
+	--hr-brand-color-3-light: #ebf1ff;
 
-	/* 警示 warning  主色-6  浅色-1 click状态-7 */
+	/* 警示 warning  主色-6  浅色-1 click状态-7 不可点击-3 */
 	--hr-warning-color-6: #ff8a00;
 	--hr-warning-color-1: #fff3e0;
 	--hr-warning-color-7: #d26900;
+	--hr-warning-color-3: #ffd58b;
 
-	/* 错误 error 主色-6  浅色-1 click状态-7  */
+	/* 错误 error 主色-6  浅色-1 click状态-7 不可点击-3 */
 	--hr-error-color-6: #ff5040;
 	--hr-error-color-1: #ffeee8;
 	--hr-error-color-7: #d23028;
+	--hr-error-color-3: #ffb5a5;
 
-	/* 成功 success 主色-6  浅色-1 click状态-7 */
+	/* 成功 success 主色-6  浅色-1 click状态-7 不可点击-3 */
 	--hr-success-color-6: #00b39e;
 	--hr-success-color-1: #e7fff8;
 	--hr-success-color-7: #00998d;
+	--hr-success-color-3: #7be2cb;
 
 	/* Radius圆角 */
 
@@ -70,6 +77,7 @@ page {
 
 	font-size: var(--hr-font-size-base);
 	background-color: var(--hr-neutral-color-1);
+	color: var(--hr-neutral-color-10);
 
 	height: 100%;
 }

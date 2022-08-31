@@ -50,6 +50,11 @@
 					"style": {
 						"navigationBarTitleText": "添加就诊人"
 					}
+					// "usingComponents": {
+					// 	// #ifdef MP-ALIPAY
+					// 	"ocr-id": "plugin://ocrPlugin/ocr-id"
+					// 	// #endif
+					// }
 				},
 				{
 					"path": "medicalCardMan/perfectReal",

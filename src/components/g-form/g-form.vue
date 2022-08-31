@@ -16,7 +16,7 @@
 			>
 				<view
 					:class="{
-						'item-require': item.required
+						'item-require': item.required && showRequireIcon
 					}"
 					class="label"
 				>
@@ -149,6 +149,11 @@
 						</view>
 					</block>
 
+					<view v-if="item.ocr" @click="useOcrAction" class="ocr">
+						<view class="iconfont icon-camera">&#xe6be;</view>
+						<view>身份证识别</view>
+					</view>
+
 					<view
 						v-if="item.showSuffixArrowIcon"
 						class="icon-font icon-resize ico_arrow"
@@ -191,7 +196,7 @@ import type {
 } from '@/components/g-form/index';
 import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 import { useMessageStore } from '@/stores';
-import { ServerStaticData } from '@/utils';
+import { ServerStaticData, useOcr } from '@/utils';
 
 /**
  * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -212,6 +217,12 @@ export default defineComponent({
 		bodyBold: {
 			type: Boolean,
 			default: false
+		},
+
+		// 是否展示必填的 * 号
+		showRequireIcon: {
+			type: Boolean,
+			default: true
 		}
 	},
 
@@ -249,6 +260,10 @@ export default defineComponent({
 				timer = null;
 				verifyTip.value = '';
 			}
+		};
+
+		const useOcrAction = () => {
+			useOcr();
 		};
 
 		const requestVerify = async (item: IInputVerifyInstance) => {
@@ -569,122 +584,13 @@ export default defineComponent({
 			verifyTip,
 			changeSwitch,
 			changeTimePicker,
-			ServerStaticData
+			ServerStaticData,
+			useOcrAction
 		};
 	}
 });
 </script>
 
 <style lang="scss" scoped>
-.form-item {
-	display: grid;
-
-	grid-template-columns: var(--label-width) 1fr;
-	align-items: center;
-	background-color: var(--h-color-white);
-	padding: 16rpx 32rpx;
-	border-bottom: 1rpx solid var(--hr-neutral-color-2);
-	color: var(--hr-neutral-color-8);
-
-	&.item-for-show {
-		padding: 28rpx 32rpx;
-		.label {
-			height: 100%;
-		}
-	}
-
-	.label {
-		height: 100%;
-		padding-top: 16rpx;
-		&.item-require {
-			&::after {
-				content: '*';
-				color: var(--hr-error-color-6);
-			}
-		}
-	}
-
-	.container-body {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		.container-body-switch {
-			flex: 1;
-			display: flex;
-			flex-direction: row-reverse;
-		}
-
-		&:first-child {
-			flex: 1;
-		}
-
-		.verify-btn {
-			color: var(--hr-brand-color-6);
-		}
-
-		.form-item-verify-disabled {
-			color: var(--hr-neutral-color-5);
-		}
-
-		.content-show {
-			width: 100%;
-			text-align: right;
-			color: var(--hr-neutral-color-10);
-		}
-	}
-
-	:deep(input) {
-		color: var(--hr-neutral-color-10) !important;
-		font-size: var(--hr-font-size-base);
-		background-color: var(--h-color-white) !important;
-		opacity: 1;
-	}
-
-	.select-item {
-		pointer-events: none;
-		:deep(input) {
-			color: var(--hr-neutral-color-10) !important;
-		}
-	}
-
-	.my-disabled {
-		:deep(input) {
-			color: var(--hr-neutral-color-8) !important;
-		}
-	}
-
-	&.form-item-bold {
-		:deep(input) {
-			font-weight: 600;
-		}
-	}
-}
-
-.full-item {
-	width: 100%;
-}
-
-.my-disabled {
-	pointer-events: none !important;
-}
-
-.my-disabled-color {
-	color: red !important;
-}
-
-.icon-resize {
-	width: 60rpx;
-	height: 60rpx;
-}
-
-.form-picker {
-	:deep(.uni-data-tree .uni-data-tree-input) {
-		display: none !important;
-	}
-
-	:deep(.selected-area) {
-		flex: none !important;
-	}
-}
+@import './css';
 </style>

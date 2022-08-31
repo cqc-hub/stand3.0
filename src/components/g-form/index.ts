@@ -26,6 +26,7 @@ interface IBaseInstance {
 	label: string;
 	placeholder?: string;
 	required?: boolean;
+	ocr?: boolean;
 	emptyMessage?: string;
 	disabled?: boolean;
 	rule?: IRule | IRule[];

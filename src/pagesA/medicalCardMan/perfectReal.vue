@@ -50,7 +50,7 @@ const patientUtil = new PatientUtils();
 const gStores = new GStores();
 const gform = ref<any>('');
 const formData = ref<BaseObject>({
-	patientName: '大钢炮',
+	patientName: '大钢炮22',
 	patientPhone: '13868529891',
 	[formKey.verify]: '2313',
 	[formKey.medicalType]: '-1',
@@ -172,7 +172,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .container {
-	margin: 16rpx 32rpx;
+	// margin: 16rpx 32rpx;
 }
 .footer {
 	position: absolute;

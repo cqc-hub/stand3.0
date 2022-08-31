@@ -1,0 +1,138 @@
+.form-item {
+  display: grid;
+
+  grid-template-columns: var(--label-width) 1fr;
+  align-items: center;
+  background-color: var(--h-color-white);
+  padding: 16rpx 32rpx;
+  border-bottom: 1rpx solid var(--hr-neutral-color-2);
+  color: var(--hr-neutral-color-8);
+
+  &.item-for-show {
+    padding: 28rpx 32rpx;
+
+    .label {
+      height: 100%;
+    }
+  }
+
+  .label {
+    height: 100%;
+    position: relative;
+    top: 10rpx;
+    // #ifdef MP-ALIPAY
+    top: 18rpx;
+
+    // #endif
+    &.item-require {
+      &::after {
+        content: '*';
+        color: var(--hr-error-color-6);
+      }
+    }
+  }
+
+  .container-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .container-body-switch {
+      flex: 1;
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    &:first-child {
+      flex: 1;
+    }
+
+    .verify-btn {
+      color: var(--hr-brand-color-6);
+    }
+
+    .form-item-verify-disabled {
+      color: var(--hr-neutral-color-5);
+    }
+
+    .content-show {
+      width: 100%;
+      text-align: right;
+      color: var(--hr-neutral-color-10);
+    }
+
+    .ocr {
+      color: var(--hr-brand-color-6);
+      background-color: var(--hr-brand-color-1);
+      border-radius: 28rpx;
+      padding: 6rpx 24rpx;
+      font-size: var(--hr-font-size-xxs);
+      font-weight: 600;
+
+      display: flex;
+      align-items: center;
+
+      .icon-camera {
+        font-size: var(--hr-font-size-xl);
+        margin-right: 5rpx;
+        font-weight: 500;
+        position: relative;
+        top: 2rpx;
+      }
+    }
+  }
+
+  :deep(input) {
+    color: var(--hr-neutral-color-10) !important;
+    font-size: var(--hr-font-size-base);
+    background-color: var(--h-color-white) !important;
+    opacity: 1;
+  }
+
+  .select-item {
+    pointer-events: none;
+
+    :deep(input) {
+      color: var(--hr-neutral-color-10) !important;
+    }
+  }
+
+  .my-disabled {
+    :deep(input) {
+      color: var(--hr-neutral-color-8) !important;
+    }
+  }
+
+  &.form-item-bold {
+    :deep(input) {
+      font-weight: 600;
+    }
+  }
+}
+
+.full-item {
+  width: 100%;
+}
+
+.my-disabled {
+  pointer-events: none !important;
+}
+
+.my-disabled-color {
+  color: red !important;
+}
+
+.icon-resize {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.form-picker {
+  :deep(.uni-data-tree .uni-data-tree-input) {
+    display: none !important;
+  }
+
+  :deep(.selected-area) {
+    flex: none !important;
+  }
+}

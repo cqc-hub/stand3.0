@@ -35,8 +35,7 @@ export const tempList: TInstance[] = [
 		key: formKey.medicalType,
 		field: 'select',
 		options: [],
-		autoOptions: 'patientTypeTerms',
-		rowStyle: 'border-radius: 16rpx 16rpx 0 0;'
+		autoOptions: 'patientTypeTerms'
 	},
 
 	{
@@ -47,7 +46,8 @@ export const tempList: TInstance[] = [
 		key: formKey.nation,
 		field: 'select',
 		options: [],
-		autoOptions: 'nationTerms'
+		autoOptions: 'nationTerms',
+		rowStyle: 'margin-bottom: 16rpx;'
 	},
 
 	{

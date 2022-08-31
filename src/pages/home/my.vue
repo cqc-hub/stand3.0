@@ -6,30 +6,22 @@
 				:skeleton="skeletonProps.skeleton"
 				:loading="skeletonProps.loading"
 			>
-			<view class="top-bg" />
-			<personRecord />
-			<view class="my-menu">
-				<view v-if="menu1List.length" class="list">
-					<view class="title">我的订单</view>
-					<g-grid :list="menu1List" />
+				<view class="top-bg" />
+				<personRecord />
+				<view class="my-menu">
+					<view v-if="menu1List.length" class="list">
+						<view class="title">我的订单</view>
+						<g-grid :list="menu1List" />
+					</view>
+					<view v-if="menu1List.length" class="list">
+						<view class="title">我的服务</view>
+						<g-grid :list="menu2List" />
+					</view>
+					<view v-if="menu3List.length" class="list">
+						<view class="title">我的工具</view>
+						<g-grid :list="menu3List" />
+					</view>
 				</view>
-				<view v-if="menu1List.length" class="list">
-					<view class="title">我的服务</view>
-					<g-grid :list="menu2List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-				<view v-if="menu3List.length" class="list">
-					<view class="title">我的工具</view>
-					<g-grid :list="menu3List" />
-				</view>
-			</view>
 			</ls-skeleton>
 
 			<view class="save-hight" />
@@ -129,8 +121,8 @@ const ttt = () => {
 		flex: 1;
 
 		.save-hight {
-			height: 100rpx;
-			width: 100%;
+			height: 20rpx;
+			width: 1px;
 		}
 	}
 
@@ -162,5 +154,4 @@ const ttt = () => {
 		}
 	}
 }
-
 </style>
