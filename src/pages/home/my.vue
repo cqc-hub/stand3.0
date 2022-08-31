@@ -71,7 +71,7 @@ const menu3List = ref([]); //我的工具
 onMounted(() => {
 	getHomeConfig();
 	if (props.isWarningLogin) {
-		messageStore.showMessage('未登录,请先登陆', 1000);
+		messageStore.showMessage('未登录,请先登陆', 0);
 	}
 });
 //获取配置数据
