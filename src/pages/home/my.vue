@@ -11,31 +11,16 @@
 				<view class="my-menu">
 					<view v-if="menu1List.length" class="list">
 						<view class="title">我的订单</view>
-<<<<<<< HEAD
 						<g-grid :list="menu1List" />
 					</view>
 					<view v-if="menu1List.length" class="list">
 						<view class="title">我的服务</view>
 						<g-grid :list="menu2List" />
-=======
 						<homeGrid :list="menu1List"></homeGrid>
-					</view>
-					<view v-if="menu2List.length" class="list">
-						<view class="title">我的服务</view>
-						<homeGrid :list="menu2List"></homeGrid>
 					</view>
 					<view v-if="menu3List.length" class="list">
 						<view class="title">我的工具</view>
 						<homeGrid :list="menu3List"></homeGrid>
-					</view>
-					<view v-if="menu3List.length" class="list">
-						<view class="title">我的工具</view>
-						<g-grid :list="menu3List" />
->>>>>>> cfb3520e965a9a30c9b082c799fb9c5c5b8d8402
-					</view>
-					<view v-if="menu3List.length" class="list">
-						<view class="title">我的工具</view>
-						<g-grid :list="menu3List" />
 					</view>
 				</view>
 			</ls-skeleton>
