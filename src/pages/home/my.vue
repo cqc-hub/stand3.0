@@ -2,10 +2,10 @@
 	<view class="login-center">
 		<view @click="ttt">2333</view>
 		<scroll-view class="scroll-container" scroll-y>
-			<!-- <ls-skeleton
+			<ls-skeleton
 				:skeleton="skeletonProps.skeleton"
 				:loading="skeletonProps.loading"
-			> -->
+			>
 			<view class="top-bg" />
 			<personRecord />
 			<view class="my-menu">
@@ -21,8 +21,18 @@
 					<view class="title">我的工具</view>
 					<g-grid :list="menu3List" />
 				</view>
+				<view v-if="menu3List.length" class="list">
+					<view class="title">我的工具</view>
+					<g-grid :list="menu3List" />
+				</view>
+				<view v-if="menu3List.length" class="list">
+					<view class="title">我的工具</view>
+					<g-grid :list="menu3List" />
+				</view>
 			</view>
-			<!-- </ls-skeleton> -->
+			</ls-skeleton>
+
+			<view class="save-hight" />
 		</scroll-view>
 
 		<home-Tabbar />
@@ -117,6 +127,11 @@ const ttt = () => {
 	.scroll-container {
 		height: 1px;
 		flex: 1;
+
+		.save-hight {
+			height: 100rpx;
+			width: 100%;
+		}
 	}
 
 	.top-bg {
