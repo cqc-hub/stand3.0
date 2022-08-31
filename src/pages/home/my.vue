@@ -65,6 +65,13 @@ const skeletonProps = {
 
 const props = defineProps<{
 	isWarningLogin?: '1';
+
+	_id?: string; // viewConfig 对应 id
+	_url?: string;
+	_query?: string; // 额外参数(待定)
+	_type?: '1' | '2'; // 1主体 2 h5
+	_isOutLogin?: '1'; // 1 过期
+	_pageInfo?: '1' | '2'; // 1 需要完善 2就诊人
 }>();
 
 const messageStore = useMessageStore();
