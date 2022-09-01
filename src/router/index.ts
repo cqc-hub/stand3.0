@@ -97,7 +97,7 @@ router.beforeEach(async (to, from) => {
 					url: '/pages/home/my',
 					query: {
 						isWarningLogin: '1',
-						_url: to.fullPath
+						_url: encodeURIComponent(<string>to.fullPath)
 					}
 				});
 			}
