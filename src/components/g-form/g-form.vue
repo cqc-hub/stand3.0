@@ -181,6 +181,7 @@
 							<view>身份证识别</view>
 						</view>
 					</block>
+					<slot name="suffix" :item="item" />
 
 					<view
 						v-if="item.showSuffixArrowIcon"
