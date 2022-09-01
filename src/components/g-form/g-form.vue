@@ -8,7 +8,7 @@
 					'form-item-icon': item.field === 'select',
 					'item-for-show': item.isForShow,
 					'form-item-bold': bodyBold,
-					'form-item-disabled': item.disabled,
+					'form-item-disabled': item.disabled
 				}"
 				:style="`--label-width: ${item.labelWidth || '190rpx'}; ${
 					(item.rowStyle && item.rowStyle) || ''
@@ -168,19 +168,19 @@
 						>
 							{{ verifyTip || item.verifyBtnText }}
 						</view>
-					</block>
 
-					<view
-						v-if="item.ocr"
-						@click="useOcrAction"
-						:class="{
-							'my-disabled': item.ocrDisabled
-						}"
-						class="ocr"
-					>
-						<view class="iconfont icon-camera">&#xe6be;</view>
-						<view>身份证识别</view>
-					</view>
+						<view
+							v-if="item.ocr"
+							@click="useOcrAction"
+							:class="{
+								'my-disabled': item.ocrDisabled
+							}"
+							class="ocr"
+						>
+							<view class="iconfont icon-camera">&#xe6be;</view>
+							<view>身份证识别</view>
+						</view>
+					</block>
 
 					<view
 						v-if="item.showSuffixArrowIcon"

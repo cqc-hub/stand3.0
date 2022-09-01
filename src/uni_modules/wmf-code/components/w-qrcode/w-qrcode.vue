@@ -1,19 +1,19 @@
 <template>
 	<view @longtap.stop="longtap">
-		<canvas 
-			:width="info.destWidth" 
-			:height="info.destHeight" 
-			:canvas-id="item.id" 
-			:id="item.id" 
-			:style="{width:info.width,height: info.height}" 
-			v-for="item in info.listCode" 
-			:key="item.id" 
+		<canvas
+			:width="info.destWidth"
+			:height="info.destHeight"
+			:canvas-id="item.id"
+			:id="item.id"
+			:style="{width:info.width,height: info.height}"
+			v-for="item in info.listCode"
+			:key="item.id"
 			@error="handleError"></canvas>
 	</view>
 </template>
  <!-- #ifdef  VUE3 -->
 <script setup name="WQrcode">
-	import {reactive, watch,onMounted,nextTick,getCurrentInstance ,defineExpose } from 'vue';
+	import {reactive, watch,onMounted,nextTick,getCurrentInstance } from 'vue';
 	import { QRCode, GetImg,GetPixelRatio,GetPx } from '@/uni_modules/wmf-code/js_sdk/index.js';
 	import { getUUid, deepClone,platform } from '../../common/helper.js'
 	//定义props
@@ -36,7 +36,7 @@
 		width: SIZE + 'px',
 		height: SIZE + 'px',
 		listCode:[],
-		id: getUUid(),  
+		id: getUUid(),
 	})
 	onMounted(()=>{
 		SpecialTreatment(opt);
@@ -99,7 +99,7 @@
 				required: true,
 				default: () =>{
 					return {
-						
+
 					}
 				}
 			}

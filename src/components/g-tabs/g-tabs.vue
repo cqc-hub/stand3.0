@@ -14,7 +14,7 @@
           whiteSpace: scroll ? 'nowrap' : 'normal',
           background: bgColor,
           height,
-          padding
+          padding,
         }"
       >
         <view
@@ -24,10 +24,10 @@
           :style="{
             color: current == i ? activeColor : color,
             fontSize: current == i ? fontSize : fontSize,
-            fontWeight: allBlod && 'blod' || bold && current == i ? 'bold' : '',
+            fontWeight: (allBlod && 'blod') || (bold && current == i) ? 'bold' : '',
             justifyContent: !scroll ? 'center' : '',
             flex: scroll ? '' : 1,
-            padding: paddingItem
+            padding: paddingItem,
           }"
           @click="change(i)"
         >
@@ -42,7 +42,7 @@
             height: lineHeight,
             borderRadius: lineRadius,
             left: lineLeft + 'px',
-            transform: `translateX(-${lineWidth / 2}px)`
+            transform: `translateX(-${lineWidth / 2}px)`,
           }"
         ></view>
         <view
@@ -53,7 +53,7 @@
             borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
-            height
+            height,
           }"
         ></view>
       </view>
@@ -62,13 +62,14 @@
       class="v-tabs__placeholder"
       :style="{
         height: fixed ? height : '0',
-        padding
+        padding,
       }"
     ></view>
   </view>
 </template>
 
 <script>
+import { wait } from '@/utils';
 /**
  * v-tabs
  * @property {Number} value 选中的下标
@@ -98,94 +99,94 @@ export default {
   props: {
     value: {
       type: Number,
-      default: 0
+      default: 0,
     },
     allBlod: {
       type: Boolean,
-      default: true
+      default: true,
     },
     tabs: {
       type: Array,
       default() {
-        return []
-      }
+        return [];
+      },
     },
     bgColor: {
       type: String,
-      default: '#fff'
+      default: '#fff',
     },
     padding: {
       type: String,
-      default: '0'
+      default: '0',
     },
     color: {
       type: String,
-      default: '#888888'
+      default: '#888888',
     },
     activeColor: {
       type: String,
-      default: '#111111'
+      default: '#111111',
     },
     fontSize: {
       type: String,
-      default: '32rpx'
+      default: '32rpx',
     },
     activeFontSize: {
       type: String,
-      default: '32rpx'
+      default: '32rpx',
     },
     bold: {
       type: Boolean,
-      default: true
+      default: true,
     },
     scroll: {
       type: Boolean,
-      default: true
+      default: true,
     },
     height: {
       type: String,
-      default: '88rpx'
+      default: '88rpx',
     },
     lineColor: {
       type: String,
-      default: 'linear-gradient(270deg,#53a8ff, #296fff)'
+      default: 'linear-gradient(270deg,#53a8ff, #296fff)',
     },
     lineHeight: {
       type: String,
-      default: '10rpx'
+      default: '10rpx',
     },
     lineScale: {
       type: Number,
-      default: 0.5
+      default: 0.5,
     },
     lineRadius: {
       type: String,
-      default: '10rpx'
+      default: '10rpx',
     },
     pills: {
       type: Boolean,
-      deafult: false
+      deafult: false,
     },
     pillsColor: {
       type: String,
-      default: '#2979ff'
+      default: '#2979ff',
     },
     pillsBorderRadius: {
       type: String,
-      default: '10rpx'
+      default: '10rpx',
     },
     field: {
       type: String,
-      default: ''
+      default: '',
     },
     fixed: {
       type: Boolean,
-      default: false
+      default: false,
     },
     paddingItem: {
       type: String,
-      default: '0 22rpx'
-    }
+      default: '0 22rpx',
+    },
   },
   data() {
     return {
@@ -196,107 +197,109 @@ export default {
       pillsLeft: 0, // 胶囊距离左侧的位置
       scrollLeft: 0, // 距离左边的位置
       containerWidth: 0, // 容器的宽度
-      current: 0 // 当前选中项
-    }
+      current: 0, // 当前选中项
+    };
   },
   watch: {
     value(newVal) {
-      this.current = newVal
+      this.current = newVal;
       this.$nextTick(() => {
-        this.getTabItemWidth()
-      })
+        this.getTabItemWidth();
+      });
     },
     current(newVal) {
-      this.$emit('input', newVal)
-      this.$emit('update:value', newVal)
+      this.$emit('input', newVal);
+      this.$emit('update:value', newVal);
     },
     tabs(newVal) {
       this.$nextTick(() => {
-        this.getTabItemWidth()
-      })
-    }
+        this.getTabItemWidth();
+      });
+    },
   },
   methods: {
     // 产生随机字符串
     randomString(len) {
-      len = len || 32
+      len = len || 32;
       let $chars =
-        'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678' /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-      let maxPos = $chars.length
-      let pwd = ''
+        'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+      let maxPos = $chars.length;
+      let pwd = '';
       for (let i = 0; i < len; i++) {
-        pwd += $chars.charAt(Math.floor(Math.random() * maxPos))
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
       }
-      return pwd
+      return pwd;
     },
     // 切换事件
     change(index) {
       if (this.current !== index) {
-        this.current = index
+        this.current = index;
 
-        this.$emit('change', index)
+        this.$emit('change', index);
       }
     },
     // 获取左移动位置
-    getTabItemWidth() {
-      let query = uni
-        .createSelectorQuery()
-        // #ifndef MP-ALIPAY
-        .in(this)
-      // #endif
+    async getTabItemWidth() {
+      await wait(200);
+      let query = uni.createSelectorQuery().in(this);
       // 获取容器的宽度
       query
         .select(`#scrollContainer`)
         .boundingClientRect((data) => {
           if (!this.containerWidth && data) {
-            this.containerWidth = data.width
+            this.containerWidth = data.width;
           }
         })
-        .exec()
+        .exec();
       // 获取所有的 tab-item 的宽度
       query
         .selectAll('.v-tabs__container-item')
-        .boundingClientRect((data) => {
+        .boundingClientRect(async (data) => {
           if (!data) {
-            return
+            return;
           }
-          let lineLeft = 0
-          let currentWidth = 0
+          let lineLeft = 0;
+          let currentWidth = 0;
           if (data) {
             for (let i = 0; i < data.length; i++) {
               if (i < this.current) {
-                lineLeft += data[i].width
+                lineLeft += data[i].width;
               } else if (i == this.current) {
-                currentWidth = data[i].width
+                currentWidth = data[i].width;
               } else {
-                break
+                break;
               }
             }
           }
           // 当前滑块的宽度
-          this.currentWidth = currentWidth
+          this.currentWidth = currentWidth;
           // 缩放后的滑块宽度
-          this.lineWidth = currentWidth * this.lineScale * 1
+          this.lineWidth = currentWidth * this.lineScale * 1;
           // 滑块作移动的位置
-          this.lineLeft = lineLeft + currentWidth / 2
+          this.lineLeft = lineLeft + currentWidth / 2;
           // 胶囊距离左侧的位置
-          this.pillsLeft = lineLeft
+          this.pillsLeft = lineLeft;
           // 计算滚动的距离左侧的位置
           if (this.scroll) {
-            this.scrollLeft = this.lineLeft - this.containerWidth / 2
+            this.scrollLeft = this.lineLeft - this.containerWidth / 2;
+          }
+
+          if (this.currentWidth < 15) {
+            await wait(1000);
+            this.getTabItemWidth();
           }
         })
-        .exec()
-    }
+        .exec();
+    },
   },
   mounted() {
-    this.elId = 'xfjpeter_' + this.randomString()
-    this.current = this.value
+    this.elId = 'xfjpeter_' + this.randomString();
+    this.current = this.value;
     this.$nextTick(() => {
-      this.getTabItemWidth()
-    })
-  }
-}
+      this.getTabItemWidth();
+    });
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -324,19 +327,19 @@ export default {
       position: relative;
       z-index: 10;
       // padding: 0 11px;
-      transition: all 0.3s;
+      transition: all 0.4s;
       white-space: nowrap;
     }
 
     &-line {
       position: absolute;
       bottom: 0;
-      transition: all 0.3s linear;
+      transition: all 0.4s linear;
     }
 
     &-pills {
       position: absolute;
-      transition: all 0.3s linear;
+      transition: all 0.4s linear;
       z-index: 9;
     }
   }

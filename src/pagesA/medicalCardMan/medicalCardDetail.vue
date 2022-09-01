@@ -2,6 +2,12 @@
 	<view class="">
 		<g-form v-model:value="formData" @change="formChange" ref="gform" />
 
+		<g-message />
+
+		<view @click="isShow = true" class="btn del-btn btn-primary">
+			<view class="del-btn-label">删除就诊人</view>
+		</view>
+
 		<xy-dialog
 			title=""
 			content="是否删除该就诊人"
@@ -9,12 +15,6 @@
 			@cancelButton="isShow = false"
 			@confirmButton="deletePat"
 		/>
-
-		<g-message />
-
-		<view @click="isShow = true" class="btn del-btn btn-primary">
-			<view class="del-btn-label">删除就诊人</view>
-		</view>
 	</view>
 </template>
 
@@ -73,6 +73,8 @@ onMounted(() => {
 	};
 
 	nextTick(() => {
+		console.log(formList);
+
 		gform.value.setList(formList);
 	});
 });

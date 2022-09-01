@@ -1,34 +1,33 @@
 <template>
 	<view @longtap.stop="longtap">
-		<canvas 
-			:width="info.orient == 'vertical' ? info.destHeight : info.destWidth " 
-			:height="info.orient == 'vertical' ? info.destWidth : info.destHeight" 
-			:canvas-id="item.id" 
-			:id="item.id" 
-			:style="{width:info.orient == 'vertical' ? info.height : info.width,height: info.orient == 'vertical' ? info.width : info.height}" 
-			v-for="item in info.listCode" 
+		<canvas
+			:width="info.orient == 'vertical' ? info.destHeight : info.destWidth "
+			:height="info.orient == 'vertical' ? info.destWidth : info.destHeight"
+			:canvas-id="item.id"
+			:id="item.id"
+			:style="{width:info.orient == 'vertical' ? info.height : info.width,height: info.orient == 'vertical' ? info.width : info.height}"
+			v-for="item in info.listCode"
 			:key="item.id"
 			@error="handleError"></canvas>
 	</view>
 </template>
  <!-- #ifdef  VUE3 -->
 <script setup name="WBarcode">
-	import { 
+	import {
 		reactive,
 		watch,
 		onMounted,
 		nextTick,
 		getCurrentInstance,
-		defineExpose
 	} from 'vue';
-	import { 
-		BarCode, 
+	import {
+		BarCode,
 		GetImg,
 		GetPixelRatio,
 		GetPx ,
 	} from '../../js_sdk/index.js';
-	import { 
-		getUUid, 
+	import {
+		getUUid,
 		deepClone,
 		platform,
 	} from '../../common/helper.js'
@@ -118,7 +117,7 @@
 				required: true,
 				default: () =>{
 					return {
-						
+
 					}
 				}
 			}
