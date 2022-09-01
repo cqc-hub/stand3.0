@@ -50,7 +50,7 @@ export const checkGrid = async (item: IRoute) => {
   if (item.gridLabel === '3') {
     return;
   } else {
-    routerStore.updateItemUrl(item)
+    routerStore.updateId(item.id)
   }
 
   if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
@@ -94,7 +94,7 @@ export const useToPath = (item) => {
   switch (item.terminalType) {
     case 'h5':
       uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.path
+        url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.path + '&p=' + item.id
       });
       break;
     case 'mini':
@@ -113,7 +113,7 @@ export const useToPath = (item) => {
       break;
     case 'my-h5':
       uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?path=' + item.path
+        url: '/pagesC/cloudHospital/myPath?path=' + item.path + '&p=' + item.id
       });
       break;
     case 'netHospital':

@@ -35,6 +35,8 @@ const allData = {
 type A = keyof typeof allData;
 
 onLoad((options) => {
+	console.log(999, options);
+
 	getQueryPath(options);
 	let query = getQueryPath(options);
 	if (options.type == '1') {
@@ -53,12 +55,11 @@ onLoad((options) => {
 });
 const getQueryPath = (options) => {
 	// path里面需要传参的时候['sysCode'] options.query有值得时候
-	let query = '?';
+	let query = '?p=' + options.p + '&';
 	if (options.query) {
 		let queryArray: A[] = JSON.parse(options.query as string);
 		queryArray.map((item) => {
 			if (item in allData) {
-				console.log(999, item, allData[item]);
 				query = query + item + '=' + allData[item] + '&';
 			} else {
 				// messageStore.showMessage(`携带${item}参数有误`, 1000);
@@ -67,7 +68,7 @@ const getQueryPath = (options) => {
 		});
 		return query.slice(0, -1);
 	} else {
-		return '';
+		return query;
 	}
 };
 

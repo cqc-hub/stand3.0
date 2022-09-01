@@ -15,8 +15,7 @@
 					</view>
 					<view v-if="menu1List.length" class="list">
 						<view class="title">我的服务</view>
-						<g-grid :list="menu2List" />
-						<homeGrid :list="menu1List"></homeGrid>
+						<homeGrid :list="menu2List"></homeGrid>
 					</view>
 					<view v-if="menu3List.length" class="list">
 						<view class="title">我的工具</view>

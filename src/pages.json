@@ -138,6 +138,24 @@
 					"style": {
 						"navigationBarTitleText": "网络门诊"
 					}
+				},
+				{
+					"path": "shippingAddress/addressList",
+					"style": {
+						"navigationBarTitleText": "收货地址"
+					}
+				},
+				{
+					"path": "shippingAddress/patientAddress",
+					"style": {
+						"navigationBarTitleText": "就诊人地址"
+					}
+				},
+				{
+					"path": "shippingAddress/addAddess",
+					"style": {
+						"navigationBarTitleText": "新增收货地址"
+					}
 				}
 			]
 		}
