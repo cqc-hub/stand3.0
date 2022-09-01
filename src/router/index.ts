@@ -40,7 +40,7 @@ const router = createRouter({
 
 const jumpRouter = function (route: {
 	url: string;
-	query?: BaseObject;
+	query?: ILoginBack & BaseObject;
 	navType: 'replace' | 'push';
 }) {
 	const { url, query, navType } = route;
@@ -96,7 +96,8 @@ router.beforeEach(async (to, from) => {
 					navType: 'replace',
 					url: '/pages/home/my',
 					query: {
-						isWarningLogin: '1'
+						isWarningLogin: '1',
+						_url: to.fullPath
 					}
 				});
 			}
