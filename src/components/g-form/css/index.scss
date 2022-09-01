@@ -17,13 +17,12 @@
   }
 
   .label {
+    padding-top: 32rpx;
     height: 100%;
     position: relative;
-    top: 10rpx;
-    // #ifdef MP-ALIPAY
-    top: 18rpx;
+    display: flex;
+    align-items: flex-start;
 
-    // #endif
     &.item-require {
       &::after {
         content: '*';
@@ -82,32 +81,47 @@
     }
   }
 
-  :deep(input) {
+  :deep(input),
+  :deep(textarea) {
     color: var(--hr-neutral-color-10) !important;
     font-size: var(--hr-font-size-base);
     background-color: var(--h-color-white) !important;
     opacity: 1;
   }
 
-  .select-item {
-    pointer-events: none;
-
-    :deep(input) {
-      color: var(--hr-neutral-color-10) !important;
-    }
-  }
-
-  .my-disabled {
-    :deep(input) {
-      color: var(--hr-neutral-color-8) !important;
-    }
-  }
-
   &.form-item-bold {
-    :deep(input) {
+
+    :deep(input),
+    :deep(textarea) {
       font-weight: 600;
     }
   }
+
+  .select-item {
+    pointer-events: none;
+  }
+
+
+  &.form-item-disabled {
+
+    // wx
+    :deep(input),
+    :deep(textarea) {
+      color: var(--hr-neutral-color-8) !important;
+    }
+
+
+    // alipay
+    &:deep(.is-disabled) {
+      opacity: 1 !important;
+
+      input,
+      textarea {
+        color: var(--hr-neutral-color-8) !important;
+      }
+    }
+  }
+
 }
 
 .full-item {

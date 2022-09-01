@@ -309,8 +309,8 @@ onMounted(() => {
 	verifyCode = formData.value[formKey.verify];
 
 	nextTick(() => {
-		medicalTypeChange('-1');
-		// medicalTypeChange(formData.value[formKey.medicalType]);
+		// medicalTypeChange('-1');
+		medicalTypeChange(formData.value[formKey.medicalType]);
 	});
 });
 </script>
