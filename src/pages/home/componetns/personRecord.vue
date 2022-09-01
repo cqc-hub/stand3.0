@@ -22,7 +22,7 @@
 				<block v-else>
 					<!-- #ifdef MP-ALIPAY -->
 					<button
-						@click="aliLogin"
+						@click="goLogin"
 						class="user-name login-btn animate__animated animate__fadeIn"
 					>
 						请登录
@@ -32,7 +32,7 @@
 					<!-- #ifdef MP-WEIXIN -->
 					<button
 						open-type="getPhoneNumber"
-						@getphonenumber="wxLogin"
+						@getphonenumber="goLogin"
 						class="user-name login-btn animate__animated animate__fadeIn"
 					>
 						请登录
@@ -62,7 +62,7 @@
 					'background-color': recordColors[i]
 				}"
 				:class="`record-item ${recordList.length === 1 && 'cr-center'}`"
-				@tap="gotopath(record)"
+				@tap="useCommonTo(record)"
 			>
 				<view class="record-label">
 					<text>{{ record.title }}</text>
@@ -82,7 +82,13 @@
 import { ref, onMounted } from 'vue';
 import { useGlobalStore, useUserStore } from '@/stores';
 
-import { aliLogin, wxLogin, outLogin, ServerStaticData } from '@/utils';
+import {
+	aliLogin,
+	wxLogin,
+	outLogin,
+	ServerStaticData,
+	routerJump
+} from '@/utils';
 import global from '@/config/global';
 import { useCommonTo } from '@/common/checkJump';
 
@@ -106,9 +112,18 @@ const getHomeConfig = async () => {
 	}
 };
 
-const gotopath = (item) => {
-	useCommonTo(item);
+const goLogin = async (e: any) => {
+	// #ifdef MP-ALIPAY
+	await aliLogin();
+	// #endif
+
+	// #ifdef MP-WEIXIN
+	await wxLogin(e);
+	// #endif
+
+	routerJump();
 };
+
 // const recordList = ref([
 // 	{
 // 		title: '就诊卡二维码',

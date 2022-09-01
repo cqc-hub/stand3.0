@@ -34,7 +34,7 @@
 <script lang="ts" setup>
 import { ref, nextTick, onMounted, computed } from 'vue';
 import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
-import { GStores, idValidator, PatientUtils } from '@/utils';
+import { GStores, idValidator, PatientUtils, routerJump } from '@/utils';
 import { onReady } from '@dcloudio/uni-app';
 
 import dayjs from 'dayjs';
@@ -82,12 +82,14 @@ const formSubmit = async ({ data }) => {
 	};
 
 	if (props.pageType === 'perfectReal') {
-		patientUtils.registerUser(requestData, {
+		await patientUtils.registerUser(requestData, {
 			addPatInterface: 'relevantPatient'
 		});
 	} else {
-		patientUtils.addRelevantPatient(requestData);
+		await patientUtils.addRelevantPatient(requestData);
 	}
+
+	routerJump('/pagesA/medicalCardMan/medicalCardMan');
 };
 
 const formChange = ({ item, value, oldValue }) => {

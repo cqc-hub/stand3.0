@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import { defineComponent, ref, nextTick, onMounted } from 'vue';
-import { useUserStore, useMessageStore } from '@/stores';
+import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
 import { ServerStaticData } from '@/utils';
 import { encryptDes, getSysCode, joinQuery } from '@/common';
@@ -65,17 +65,27 @@ const skeletonProps = {
 
 interface TPageType extends ILoginBack {
 	isWarningLogin?: '1';
+
+	// 微信小程序必须显示写出来， 否则接收不到
+	_id?: string;
+	_url?: string;
+	_query?: string;
+	_type?: '1' | '2';
+	_isOutLogin?: '1';
+	_pageInfo?: '1' | '2';
 }
 
 const props = defineProps<TPageType>();
-
 const messageStore = useMessageStore();
+const routeStore = useRouterStore();
 
 const menu1List = ref([]); //我的订单
 const menu2List = ref([]); //我的服务
 const menu3List = ref([]); //我的工具
 
 onMounted(() => {
+	routeStore.receiveQuery(props);
+
 	getHomeConfig();
 	if (props.isWarningLogin) {
 		messageStore.showMessage('未登录,请先登陆', 1000);

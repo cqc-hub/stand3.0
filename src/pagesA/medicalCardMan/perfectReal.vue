@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, computed, withDefaults } from 'vue';
-import { PatientUtils, GStores } from '@/utils';
+import { PatientUtils, GStores, routerJump } from '@/utils';
 import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
 import { joinQuery } from '@/common';
 import { onReady } from '@dcloudio/uni-app';
@@ -92,6 +92,7 @@ const formSubmit = async ({ data }) => {
 					});
 
 					await patientUtil.getPatCardList();
+					routerJump('/pagesA/medicalCardMan/medicalCardMan');
 				}
 			} else {
 				uni.navigateTo({
@@ -171,9 +172,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.container {
-	// margin: 16rpx 32rpx;
-}
 .footer {
 	position: absolute;
 	bottom: 0;
