@@ -37,11 +37,11 @@
 import { defineComponent, ref, nextTick, onMounted } from 'vue';
 import { useUserStore, useMessageStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
-import personRecord from './componetns/personRecord.vue';
-import homeTabbar from './componetns/homeTabbar.vue';
 import { ServerStaticData } from '@/utils';
 import { encryptDes, getSysCode, joinQuery } from '@/common';
-import { formKey } from '../../pagesA/medicalCardMan/utils/index';
+
+import personRecord from './componetns/personRecord.vue';
+import homeTabbar from './componetns/homeTabbar.vue';
 import homeGrid from './componetns/homeGrid.vue';
 
 //骨架屏配置
@@ -63,16 +63,11 @@ const skeletonProps = {
 	]
 };
 
-const props = defineProps<{
+interface TPageType extends ILoginBack {
 	isWarningLogin?: '1';
+}
 
-	_id?: string; // viewConfig 对应 id
-	_url?: string;
-	_query?: string; // 额外参数(待定)
-	_type?: '1' | '2'; // 1主体 2 h5
-	_isOutLogin?: '1'; // 1 过期
-	_pageInfo?: '1' | '2'; // 1 需要完善 2就诊人
-}>();
+const props = defineProps<TPageType>();
 
 const messageStore = useMessageStore();
 
@@ -100,9 +95,12 @@ const getHomeConfig = async () => {
 
 const ttt = () => {
 	uni.navigateTo({
-		url: '/pages/piniaTest/piniaTest'
-		// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+		url: '/pagesA/medicalCardMan/medicalCardMan'
 	});
+	// uni.navigateTo({
+	// 	url: '/pages/piniaTest/piniaTest'
+	// 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+	// });
 	// uni.navigateTo({
 	// 	url: '/pagesC/mixCheckResult/hsResult'
 	// 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'

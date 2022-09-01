@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefaults, computed, defineEmits } from 'vue';
+import { withDefaults, computed } from 'vue';
 
 /**
  * g-grid 网格布局

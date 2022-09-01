@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { useCommonTo } from '@/common/checkJump';
 
 interface IGridProps {

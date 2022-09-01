@@ -157,11 +157,7 @@ const userStore = defineStore('user', {
 		},
 
 		clearStore() {
-			this.name = '';
-			this.sex = '';
-			this.idNo = '';
-			this.cellPhoneNum = '';
-			this.patientId = '';
+			this.$reset();
 		}
 	},
 
