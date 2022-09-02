@@ -61,7 +61,7 @@
 								<!-- #ifdef MP-ALIPAY -->
 								<view
 									class="switchPatient no-login-tip"
-									@tap="aliLogin"
+									@tap="goLogin"
 								>
 									请登录
 								</view>
@@ -69,7 +69,7 @@
 								<!-- #ifdef MP-WEIXIN -->
 								<button
 									open-type="getPhoneNumber"
-									@getphonenumber="wxLogin"
+									@getphonenumber="goLogin"
 									class="login-btn"
 								>
 									请登录
@@ -145,7 +145,8 @@ import {
 	wxLogin,
 	ServerStaticData,
 	PatientUtils,
-	GStores
+	GStores,
+	routerJump
 } from '@/utils';
 
 const userSore = useUserStore();
@@ -196,6 +197,18 @@ const menuList = ref([]); //业务模块
 onLoad(() => {
 	getHomeConfig();
 });
+const goLogin = async (e: any) => {
+	// #ifdef MP-ALIPAY
+	await aliLogin();
+	// #endif
+
+	// #ifdef MP-WEIXIN
+	await wxLogin(e);
+	// #endif
+
+	routerJump();
+};
+
 //获取配置数据
 const getHomeConfig = async () => {
 	skeletonProps.loading = true;
@@ -219,6 +232,8 @@ const getHomeConfig = async () => {
 	flex-direction: column;
 	display: flex;
 	background: #ffffff;
+	padding: 32rpx;
+	box-sizing: border-box;
 }
 
 .homePage {
