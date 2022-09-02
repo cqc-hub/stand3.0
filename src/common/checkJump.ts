@@ -16,7 +16,7 @@ export const checkLogin = () => {
 //拦截-就诊人
 export const checkPatient = () => {
   return new Promise((resolve, reject) => {
-    if (gStores.globalStore.herenId) {
+    if (!gStores.globalStore.herenId) {
       gStores.messageStore.showMessage('未完善，请先完善', 1000, {
         closeCallBack: () => {
           uni.reLaunch({
@@ -37,6 +37,7 @@ export const checkPatient = () => {
         });
         reject('暂无就诊人， 请先添加就诊人')
       }
+      resolve('成功')
     }
   })
 };
@@ -47,12 +48,13 @@ export const checkPatient = () => {
 //   selectPatientPage?: string,//跳转第三方是否需要就诊人选择页面
 // gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
 export const checkGrid = async (item: IRoute) => {
+  console.log(111);
+
   if (item.gridLabel === '3') {
     return;
   } else {
     routerStore.updateId(item.id)
   }
-
   if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
     await checkLogin();
     return;
@@ -60,9 +62,9 @@ export const checkGrid = async (item: IRoute) => {
   if (item.patientInterception === '1') {
     await checkPatient();
   }
-  if (item.selectPatientPage === '1') {
-    //跳转my-h5选择就诊人页面
-  }
+  // if (item.selectPatientPage === '1') {
+  //   //跳转my-h5选择就诊人页面
+  // }
 };
 
 //grid的登录完善就诊人的拦截跳转方法
@@ -76,8 +78,6 @@ export const useCommonTo = (item) => {
 
 // 登录 完善 添加就诊人页面 带回调的跳转方法
 export const toRouterPath = () => {
-  console.log(8888);
-
   // if (routerStore.itemUrl) {
   //   useCommonTo(routerStore.itemUrl)
   //   //清除回调url

@@ -147,7 +147,7 @@ const recordColors = ['#296FFF', '#00b39e'];
 
 <style lang="scss" scoped>
 .container {
-	padding-top: 16upx;
+	padding-top: 48upx;
 	display: grid;
 	grid-template-columns: 160upx 1fr 160upx;
 	gap: 10upx;
