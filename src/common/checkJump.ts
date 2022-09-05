@@ -4,23 +4,23 @@ import { useRouterStore } from '@/stores';
 const gStores = new GStores();
 const routerStore = useRouterStore();
 // //拦截-登录
-export const checkLogin = () => {
+export const checkLogin = (item: IRoute) => {
   return new Promise((resolve, reject) => {
     uni.reLaunch({
-      url: '/pages/home/my?isWarningLogin=1',
+      url: '/pages/home/my?isWarningLogin=1&_p=1',
     });
     reject('未登录')
   })
 };
 
 //拦截-就诊人
-export const checkPatient = () => {
+export const checkPatient = (item: IRoute) => {
   return new Promise((resolve, reject) => {
     if (!gStores.globalStore.herenId) {
       gStores.messageStore.showMessage('未完善，请先完善', 1000, {
         closeCallBack: () => {
           uni.reLaunch({
-            url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
+            url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal&_p=1'
           });
         }
       });
@@ -31,7 +31,7 @@ export const checkPatient = () => {
         gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1000, {
           closeCallBack: () => {
             uni.reLaunch({
-              url: '/pagesA/medicalCardMan/perfectReal'
+              url: '/pagesA/medicalCardMan/perfectReal&_p=1'
             });
           }
         });
@@ -48,19 +48,17 @@ export const checkPatient = () => {
 //   selectPatientPage?: string,//跳转第三方是否需要就诊人选择页面
 // gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
 export const checkGrid = async (item: IRoute) => {
-  console.log(111);
-
   if (item.gridLabel === '3') {
     return;
   } else {
     routerStore.updateId(item.id)
   }
   if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
-    await checkLogin();
+    await checkLogin(item);
     return;
   }
   if (item.patientInterception === '1') {
-    await checkPatient();
+    await checkPatient(item);
   }
   // if (item.selectPatientPage === '1') {
   //   //跳转my-h5选择就诊人页面
@@ -69,7 +67,6 @@ export const checkGrid = async (item: IRoute) => {
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = (item) => {
-  console.log('跳转入参', item);
   //拦截判断
   checkGrid(item).then(() => {
     useToPath(item)

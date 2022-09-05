@@ -478,6 +478,11 @@ export const wxLogin = async function (e) {
 	await Login.handler(LoginType.WeChat, e);
 };
 
-export const outLogin = function () {
-	new LoginUtils().outLogin();
+export const outLogin = function (
+	payload: Partial<{
+		isHideMessage: boolean;
+		isGoLoginPage: boolean;
+	}> = {}
+) {
+	new LoginUtils().outLogin(payload);
 };

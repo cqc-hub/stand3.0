@@ -66,7 +66,7 @@ interface TPageType extends ILoginBack {
 	isWarningLogin?: '1';
 
 	// 微信小程序必须显示写出来， 否则接收不到
-	_id?: string;
+	_p?: string;
 	_url?: string;
 	_query?: string;
 	_type?: '1' | '2';
@@ -88,6 +88,8 @@ onMounted(() => {
 	getHomeConfig();
 	if (props.isWarningLogin) {
 		messageStore.showMessage('未登录,请先登陆', 1000);
+	} else if (props._isOutLogin) {
+		messageStore.showMessage('登录过期,请重新登陆', 1000);
 	}
 });
 //获取配置数据
@@ -103,13 +105,13 @@ const getHomeConfig = async () => {
 };
 
 const ttt = () => {
-	uni.navigateTo({
-		url: '/pagesA/medicalCardMan/medicalCardMan'
-	});
 	// uni.navigateTo({
-	// 	url: '/pages/piniaTest/piniaTest'
-	// 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+	// 	url: '/pagesA/medicalCardMan/medicalCardMan'
 	// });
+	uni.navigateTo({
+		url: '/pages/piniaTest/piniaTest'
+		// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+	});
 	// uni.navigateTo({
 	// 	url: '/pagesC/mixCheckResult/hsResult'
 	// 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'

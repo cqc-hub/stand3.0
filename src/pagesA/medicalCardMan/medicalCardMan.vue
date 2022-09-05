@@ -1,9 +1,11 @@
 <template>
 	<view class="">
-		<view class="add-pat-box" @click="addPatPage">
-			<view class="add-pat g-flex-rc-cc">
-				<view class="iconfont icon-resize">&#xe6ab;</view>
-				<text>添加就诊人</text>
+		<view class="pat-box">
+			<view class="add-pat-box" @click="addPatPage">
+				<view class="add-pat g-flex-rc-cc">
+					<view class="iconfont icon-resize">&#xe6ab;</view>
+					<text>添加就诊人</text>
+				</view>
 			</view>
 		</view>
 
@@ -47,8 +49,18 @@ new PatientUtils().getPatCardList();
 </script>
 
 <style lang="scss" scoped>
+.pat-box {
+	&::after,
+	&::before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 16rpx;
+	}
+}
+
 .add-pat-box {
-	margin: 16rpx 32rpx;
+	margin: 0 32rpx;
 	padding: 40rpx 0;
 	background-color: var(--h-color-white);
 	border-radius: 16rpx;
