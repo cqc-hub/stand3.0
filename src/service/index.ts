@@ -33,76 +33,26 @@ Request.interceptors.response(
     //判断返回状态 执行相应操作
     hideLoading();
 
-    // const { options } = response;
-
-    // if (options) {
-    // 	const { isAuth } = options;
-
-    // 	if (isAuth) {
-    // 		const { code, message } = responseData;
-
-    // 		if (code === 1) {
-    // 			messageStore.showMessage(message, 1500);
-
-    // 			return Promise.reject(responseData);
-    // 		}
-    // 	}
-    // }
-
     const { code, message, respCode } = responseData;
-
-    if (code === 1) {
-      // 登录过期
-      if (respCode === 999101) {
-        messageStore.showMessage(message, 0, {
-          maskClickCallBack: () => {
-            console.log('过期了');
-            new LoginUtils().outLogin({
-              isHideMessage: true,
-              isGoLoginPage: true
-            });
-          }
-        });
-      } else {
-
-        messageStore.showMessage(message);
-      }
-
-      return Promise.reject(responseData);
-    }
-
-    // 请根据后端规定的状态码判定
-    if (responseData.code === 401) {
-      //token失效
-      // return responseData = await doRequest(response, url)//动态刷新token,并重新完成request请求
-    } else {
-      //判断是否成功响应 code:200 成功 401:token失效 4001 需要重新登录
-      if (responseData.code !== 200 && responseData.message) {
-        if (responseOptions && responseOptions.showMessage) {
-          messageStore.showMessage(responseData.message);
+    // 请根据后端规定的状态码判定 
+    if (code === 4000) {
+      //  需要重新登录4000  0 成功
+      messageStore.showMessage(message, 0, {
+        maskClickCallBack: () => {
+          console.log('过期了');
+          uni.redirectTo({
+            url: '/pages/home/my?_p=1&_isOutLogin=1'
+          });
+          // new LoginUtils().outLogin({
+          //   isHideMessage: true,
+          //   isGoLoginPage: true
+          // });
         }
-        //判断token
-        if ([4001].includes(responseData.code)) {
-          setTimeout(() => {
-            uni.redirectTo({
-              url: '/pages/home/my'
-            });
-          }, 1800);
-        }
-      }
-      // else if (res.code != '0') {
-      // uni.showToast({
-      //   title: res.message,
-      //   icon: 'none',
-      //   duration: 1500
-      // })
-
-      // return Promise.reject({
-      //   success: false,
-      //   data: res
-      // })
-      // }
+      });
+    } else if (code !== 0) {
+      messageStore.showMessage(message);
     }
+    // return Promise.reject(responseData);
 
     return responseData;
   },

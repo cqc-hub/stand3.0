@@ -7,28 +7,28 @@ import { hideLoading } from '../common/utils';
 
 //请求的额外配置
 const options = {
-	showLoading: false
+  showLoading: false
 };
 
 // 参数的额外配置
 let parm = (data: any, payload: any = {}) => {
-	const { outArg } = payload;
-	const globalStore = useGlobalStore();
-	const body = {
-		sysCode: getSysCode(),
-		...data
-	};
+  const { outArg } = payload;
+  const globalStore = useGlobalStore();
+  const body = {
+    sysCode: getSysCode(),
+    ...data
+  };
 
-	if (outArg) {
-		return body;
-	}
+  if (outArg) {
+    return body;
+  }
 
-	return {
-		args: body,
-		// token: '1'
-		token: globalStore.token.accessToken
-		// token: 'a6e8289c389d8ece73750fe57fc12011f75c7558a06d87cc127fee52ce594e0dbf4996051b4ba4126f4f643e03fa3bee4e642af1ac30f0c07c1b567cfdf11b599c968d4faefc96d548b04f62abfe54aaf315033472b3a8f4a4ede91d9df046e92bc7bc7a86e690bcc8263a89c4f2100cd36c74c7faaeb90a428f3789811edd9f698e56eda0e7bca200b5d59ef551b6ed0eb1a6d3a1da5b8a29a2c6c427926d9caf9960e4d3049c77fe852a0f425767d72a3de7d67911ae2338aeced63421ceb55fc00ed68823cbfbe0e9b2e0682558f0f873865b3bab0d814aeab5eccfbebc773902356253a88c5bd7de346708b9d0f4'
-	};
+  return {
+    args: body,
+    // token: '1'
+    token: globalStore.token.accessToken
+    // token: 'a6e8289c389d8ece73750fe57fc12011f75c7558a06d87cc127fee52ce594e0dbf4996051b4ba4126f4f643e03fa3bee4e642af1ac30f0c07c1b567cfdf11b599c968d4faefc96d548b04f62abfe54aaf315033472b3a8f4a4ede91d9df046e92bc7bc7a86e690bcc8263a89c4f2100cd36c74c7faaeb90a428f3789811edd9f698e56eda0e7bca200b5d59ef551b6ed0eb1a6d3a1da5b8a29a2c6c427926d9caf9960e4d3049c77fe852a0f425767d72a3de7d67911ae2338aeced63421ceb55fc00ed68823cbfbe0e9b2e0682558f0f873865b3bab0d814aeab5eccfbebc773902356253a88c5bd7de346708b9d0f4'
+  };
 };
 
 /**
@@ -36,145 +36,130 @@ let parm = (data: any, payload: any = {}) => {
  */
 // 基础服务
 const baseApi = {
-	// 系统长信息协议详情
-	getSysAppMore: (data) =>
-		service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
-
-	ocrIdCard: (data) =>
-		service.post('/phs-user/authUser/ocrIdCard', parm(data)),
-
-	addPatientByHasBeenTreated: (data) =>
-		service.post(
-			'/phs-user/relevantPatient/addPatientByHasBeenTreated',
-			parm(data)
-		),
-
-	updateDefaultPat: (data) =>
-		service.post('/phs-user/relevantPatient/updateDefaultPat', parm(data), {
-			hideLoading: true
-		}),
-
-	deletePat: (data) =>
-		service.post('/phs-user/relevantPatient/deletePat', parm(data), {
-			hideLoading: true
-		}),
-
-	addPat: (data) =>
-		service.post('/phs-user/relevantPatient/addPat', parm(data)),
-
-	getPatCardList: (data) =>
-		service.post<IPat[]>(
-			'/phs-user/relevantPatient/getPatCardList',
-			parm(data)
-		),
-
-	getPatCardInfoByHospital: (data) =>
-		service.post(
-			'/phs-user/relevantPatient/getPatCardInfoByHospital',
-			parm(data)
-		),
-
-	getAllDivision: (data) =>
-		service.post('/phs-base/division/getAllDivision', parm(data)),
-
-	getTermsBySysAndCode: (data) =>
-		service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
-
-	getParamsMoreBySysCode: (data) =>
-		service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
-
-	allinoneAuthApi: (data) =>
-		service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
-			isAuth: true
-		}),
-
-	authLogin: (data) => {
-		return service.post('/login/authLogin', parm(data), {
-			baseURL: global.authUrl
-		});
-	},
-
-	getTPAlipayUserInfoShare: (data) => {
-		return service.post(
-			'/aliUserLogin/getTPAlipayUserInfoShare',
-			parm(data),
-			{
-				baseURL: global.authUrl
-			}
-		);
-	},
-
-	userInfoByToken: (data) => {
-		return service.post('/modifyUserInfo/userInfoByToken', parm(data), {
-			baseURL: global.authUrl
-		});
-	},
-
-	getAppletsOpenId: (data) => {
-		return service.post(
-			'/wx/getAppletsOpenId',
-			parm(data, { outArg: true }),
-			{
-				baseURL: global.authUrl
-			}
-		);
-	},
-
-	wxLoginByPhoneNumberCode: (data) => {
-		return service.post('/wx/wxLoginByPhoneNumberCode', parm(data), {
-			baseURL: global.authUrl
-		});
-	},
-	//查询医院样式
-	queryHospitalPattern: (data) => {
-		return service.post(
-			'/phs-base/firstPage/queryHospitalPattern',
-			parm(data)
-		);
-	}
+  // 系统长信息协议详情
+  getSysAppMore: (data) =>
+    service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
+  //行政区划列表
+  getAllDivision: (data) =>
+    service.post('/phs-base/division/getAllDivision', parm(data)),
+  //根据系统码与值域码查询术语域
+  getTermsBySysAndCode: (data) =>
+    service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
+  //sysCode查询多个系统配置参数
+  getParamsMoreBySysCode: (data) =>
+    service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
+  //查询医院样式
+  queryHospitalPattern: (data) => service.post('/phs-base/firstPage/queryHospitalPattern', parm(data)),
+  //添加快递地址
+  addExpressAddress: (data) =>
+    service.post('/phs-base/expressAddress/addExpressAddress', parm(data)),
+  //删除快递地址
+  delExpressAddress: (data) =>
+    service.post('/phs-base/expressAddress/delExpressAddress', parm(data)),
+  //查询快递地址
+  queryExpressAddress: (data) =>
+    service.post('/phs-base/expressAddress/queryExpressAddress', parm(data)),
+  //修改快递地址
+  updateExpressAddress: (data) =>
+    service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
 };
-
 // 查询服务
 const queryApi = {
-	// 获取填写过问卷
-	getRiskCode(data) {
-		return service.post('/phs-query/escort/getRiskCode', parm(data));
-	},
-
-	// 发送产科问卷
-	sendQuestionnaireInfo(data) {
-		return service.post(
-			'/phs-query/hospital/sendObstetricsQuestionnaire',
-			parm(data)
-		);
-	},
-	//核酸混检结果查询
-	getNucleicResult(data) {
-		return service.post('/phs-query/test/getNucleicResult', parm(data));
-	}
+  // 获取填写过问卷
+  getRiskCode: (data) => service.post('/phs-query/escort/getRiskCode', parm(data)),
+  // 发送产科问卷
+  sendQuestionnaireInfo: (data) =>
+    service.post(
+      '/phs-query/hospital/sendObstetricsQuestionnaire',
+      parm(data)
+    ),
 };
 
 // 挂号服务
 const regApi = {
-	// 预问诊留言提交
-	subPreinquiryMessage: (data: any) =>
-		service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data))
+  // 预问诊留言提交
+  subPreinquiryMessage: (data: any) =>
+    service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data))
 };
 
-// export function testGet(data: any) {
-//   return service.get('/testGet', data)
-// }
+// 用户服务
+const userApi = {
+  //转发统一认证接口
+  allinoneAuthApi: (data) =>
+    service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
+      isAuth: true
+    }),
+  //身份证OCR识别
+  ocrIdCard: (data) =>
+    service.post('/phs-user/authUser/ocrIdCard', parm(data)),
+  //添加已就诊就诊人
+  addPatientByHasBeenTreated: (data) =>
+    service.post(
+      '/phs-user/relevantPatient/addPatientByHasBeenTreated',
+      parm(data)
+    ),
+  //设置默认就诊人
+  updateDefaultPat: (data) =>
+    service.post('/phs-user/relevantPatient/updateDefaultPat', parm(data), {
+      hideLoading: true
+    }),
+  //删除相关就诊人
+  deletePat: (data) =>
+    service.post('/phs-user/relevantPatient/deletePat', parm(data), {
+      hideLoading: true
+    }),
+  //添加相关就诊人
+  addPat: (data) =>
+    service.post('/phs-user/relevantPatient/addPat', parm(data)),
+  //获取就诊人列表
+  getPatCardList: (data) =>
+    service.post<IPat[]>(
+      '/phs-user/relevantPatient/getPatCardList',
+      parm(data)
+    ),
+  //获取就诊人信息（院内）
+  getPatCardInfoByHospital: (data) =>
+    service.post(
+      '/phs-user/relevantPatient/getPatCardInfoByHospital',
+      parm(data)
+    ),
+};
+//统一认证服务
+const authApi = {
+  authLogin: (data) => service.post('/login/authLogin', parm(data), {
+    baseURL: global.authUrl
+  }),
 
-// export function testPost(data: any) {
-//   return service.post('/testPost', data, options)
-// }
+  getTPAlipayUserInfoShare: (data) => {
+    return service.post(
+      '/aliUserLogin/getTPAlipayUserInfoShare',
+      parm(data),
+      {
+        baseURL: global.authUrl
+      }
+    );
+  },
 
-// export function testPut(data: any) {
-//   return service.post('/testPut', data)
-// }
+  userInfoByToken: (data) => {
+    return service.post('/modifyUserInfo/userInfoByToken', parm(data), {
+      baseURL: global.authUrl
+    });
+  },
 
-// export function testDelete(data: any) {
-//   return service.delete('/testDelete', data)
-// }
+  getAppletsOpenId: (data) => {
+    return service.post(
+      '/wx/getAppletsOpenId',
+      parm(data, { outArg: true }),
+      {
+        baseURL: global.authUrl
+      }
+    );
+  },
 
-export default { ...baseApi, ...queryApi, ...regApi };
+  wxLoginByPhoneNumberCode: (data) => {
+    return service.post('/wx/wxLoginByPhoneNumberCode', parm(data), {
+      baseURL: global.authUrl
+    });
+  },
+}
+export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };

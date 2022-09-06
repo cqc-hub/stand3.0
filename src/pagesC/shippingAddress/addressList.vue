@@ -13,7 +13,7 @@
 		<view class="address-box">
 			<view class="box-item">
 				<view class="item-title flex-between">
-					<view class="item-title-left">
+					<view class="item-title-left flex-normal">
 						<text>陆强强</text>
 						<text>16544346789</text>
 						<g-tag type="yellow" text="默认" />
@@ -28,6 +28,11 @@
 				</text>
 			</view>
 		</view>
+		<view class="footer">
+			<button @click="gotoAdd" class="btn btn-primary">
+				新增收货地址
+			</button>
+		</view>
 	</view>
 </template>
 
@@ -35,6 +40,11 @@
 const gotoPatient = () => {
 	uni.navigateTo({
 		url: '/pagesC/shippingAddress/patientAddress'
+	});
+};
+const gotoAdd = () => {
+	uni.navigateTo({
+		url: '/pagesC/shippingAddress/addAddess?pageType=add'
 	});
 };
 </script>
@@ -97,6 +107,14 @@ const gotoPatient = () => {
 				color: var(--hr-neutral-color-10);
 			}
 		}
+	}
+	.footer {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		background-color: var(--h-color-white);
+		padding: 32rpx 32rpx 68rpx;
 	}
 }
 </style>
