@@ -58,8 +58,7 @@ Request.interceptors.response(
 
 
     if (code !== 0) {
-      // return Promise.reject(responseData);
-      return responseData;
+      return Promise.reject(responseData);
     } else {
 
       return responseData;

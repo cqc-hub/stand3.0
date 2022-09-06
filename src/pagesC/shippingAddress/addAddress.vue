@@ -28,9 +28,7 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults } from 'vue';
-  import { PatientUtils, GStores, routerJump } from '@/utils';
-  import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
-  import { joinQuery } from '@/common';
+  import { GStores } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
 
   import api from '@/service/api';
@@ -43,7 +41,6 @@
       pageType: 'add'
     }
   );
-  const patientUtil = new PatientUtils();
   const gStores = new GStores();
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
@@ -52,7 +49,7 @@
     address: '123',
     detailedAddress: '',
     postcode: '123',
-    defaultFalg: '1'
+    defaultFlag: '1'
   });
   const addressChoose = {
     province: '',
@@ -60,7 +57,60 @@
     county: ''
   };
 
-  const formList = pickTempItem(['senderName', 'senderPhone', 'address', 'detailedAddress', 'postcode', 'defaultFalg']);
+  const formList = [
+    {
+      required: true,
+      label: '收货人',
+      field: 'input-text',
+      placeholder: '请输入收货人姓名',
+      key: 'senderName'
+    },
+    {
+      required: true,
+      label: '手机号码',
+      field: 'input-text',
+      placeholder: '请输入收货人手机号码',
+      key: 'senderPhone',
+      rule: [
+        {
+          message: '请确认手机号是否有误',
+          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+        }
+      ]
+    },
+    {
+      required: true,
+      showSuffixArrowIcon: true,
+      label: '所在地区',
+      placeholder: '请选择',
+      key: 'address',
+      field: 'address'
+    },
+
+    {
+      required: true,
+      label: '详细地址',
+      field: 'input-text',
+      placeholder: '请输入详细地址',
+      key: 'detailedAddress',
+      rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
+    },
+    {
+      required: true,
+      maxlength: 6,
+      label: '邮政编码',
+      field: 'input-text',
+      placeholder: '请输入邮政编码',
+      key: 'postcode'
+    },
+    {
+      field: 'switch',
+      key: 'defaultFlag',
+      label: '设为默认地址',
+      labelWidth: '260rpx',
+      rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;'
+    }
+  ];
 
   const addressChange = (e) => {
     const { value } = e;
