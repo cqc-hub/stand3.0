@@ -71,6 +71,7 @@ new PatientUtils().getPatCardList();
 	.icon-resize {
 		font-size: 48rpx;
 		margin-right: 10rpx;
+		font-weight: 500;
 	}
 }
 </style>
