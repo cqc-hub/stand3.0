@@ -36,7 +36,7 @@
 import { defineComponent, ref, nextTick, onMounted } from 'vue';
 import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
 import { onLoad } from '@dcloudio/uni-app';
-import { ServerStaticData } from '@/utils';
+import { ServerStaticData, wait } from '@/utils';
 import { encryptDes, getSysCode, joinQuery } from '@/common';
 
 import personRecord from './componetns/personRecord.vue';
@@ -82,7 +82,7 @@ const menu1List = ref([]); //我的订单
 const menu2List = ref([]); //我的服务
 const menu3List = ref([]); //我的工具
 
-onMounted(() => {
+onMounted(async () => {
 	routeStore.receiveQuery(props);
 
 	getHomeConfig();
