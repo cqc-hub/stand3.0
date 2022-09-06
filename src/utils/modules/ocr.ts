@@ -164,19 +164,64 @@ const ocrForWX = async () => {
 			base64: e.base64
 		};
 
-		api.ocrIdCard(requestData);
+		await api.ocrIdCard(requestData);
 	} else {
 		throw new Error(e.evt);
 	}
 };
 
+const findSuccess = ({ name, sex, nation, birth, idCard, address }) => {
+	if (nation) {
+		if (!nation.includes('族')) {
+			nation += '族';
+		}
+	}
+
+	return {
+		name,
+		sex,
+		nation,
+		birth,
+		idCard,
+		address
+	};
+};
+
+const ocrForAlipay = async () => {
+	const messageStore = useMessageStore();
+
+	const { readIDCard, IDCardTypes } = requirePlugin('ocrPlugin');
+	const bizId = 'emblem';
+
+	const res = await readIDCard({ bizId, type: IDCardTypes.FRONT });
+	console.log(res);
+	const { error, data } = res;
+
+	if (error) {
+		messageStore.showMessage(error.errorMessage, 1500);
+		return Promise.reject(error);
+	} else {
+		const { name, sex, nationality, birth, num: idCard, address } = data;
+
+		return findSuccess({
+			name: name.data,
+			sex: sex.data,
+			nation: nationality.data,
+			birth: birth.data,
+			idCard: idCard.data,
+			address: address.data
+		});
+	}
+};
+
 export const useOcr = async () => {
 	const messageStore = useMessageStore();
+
 	// #ifdef MP-WEIXIN
-	return ocrForWX();
+	await ocrForWX();
 	// #endif
-	try {
-	} catch (error) {
-		messageStore.showMessage(error as string);
-	}
+
+	// #ifdef MP-ALIPAY
+	return await ocrForAlipay();
+	// #endif
 };

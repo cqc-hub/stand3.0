@@ -253,7 +253,8 @@ const emits = defineEmits([
 	'picker-change',
 	'input-blur',
 	'select-change',
-	'address-change'
+	'address-change',
+	'ocr-ident'
 ]);
 
 const inputPlaceHolderStyle = `
@@ -280,8 +281,11 @@ const clearTimer = () => {
 	}
 };
 
+
 const useOcrAction = () => {
-	useOcr();
+	useOcr().then((res) => {
+		emits('ocr-ident', res);
+	});
 };
 
 const requestVerify = async (item: IInputVerifyInstance) => {

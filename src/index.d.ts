@@ -2,6 +2,7 @@
 
 declare var wx: any;
 declare var my: any;
+declare var requirePlugin: any;
 
 interface IOptions {
 	label: string;

@@ -9,6 +9,7 @@
 					@input-blur="formInputBlur"
 					@select-change="selectChange"
 					@address-change="addressChange"
+					@ocr-ident="ocrIdent"
 					:show-require-icon="false"
 					bodyBold
 					ref="gform"
@@ -134,11 +135,15 @@ const formInputBlur = (e) => {
 	const { item, value } = e;
 
 	if (
-		item.key == [formKey.idCard] &&
+		item.key == formKey.idCard &&
 		formData.value[formKey.medicalType] === '-1'
 	) {
 		medicalTypeChange('-1');
 	}
+};
+
+const ocrIdent = (res) => {
+	console.log('ocr', res);
 };
 
 /**

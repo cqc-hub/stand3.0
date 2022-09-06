@@ -54,10 +54,10 @@
 		"usingComponents": true,
 		"appid": ":2021002133632822",
 		"plugins": {
-			// "ocrPlugin": {
-			// 	"version": "*",
-			// 	"provider": "2021001130678316"
-			// }
+			"ocrPlugin": {
+				"version": "*",
+				"provider": "2021001130678316"
+			}
 		}
 	},
 	"mp-baidu": {
