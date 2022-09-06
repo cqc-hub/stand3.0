@@ -1,7 +1,7 @@
 // .prettierrc.js
 module.exports = {
 	// 最大长度80个字符
-	printWidth: 80,
+	printWidth: 120,
 	// 使用单引号, 默认false(在jsx中配置无效, 默认都是双引号)
 	singleQuote: true,
 	// 行末分号, 默认true
@@ -25,7 +25,7 @@ module.exports = {
 	// html空格敏感度
 	htmlWhitespaceSensitivity: 'ignore',
 	// tab缩进大小,默认为2
-	tabWidth: 4,
+	tabWidth: 2,
 	// 使用tab缩进还是空格，默认false
 	useTabs: false,
 	// vue缩进脚本和样式

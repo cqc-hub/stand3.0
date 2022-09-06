@@ -87,9 +87,9 @@ onMounted(async () => {
 
 	getHomeConfig();
 	if (props.isWarningLogin) {
-		messageStore.showMessage('未登录,请先登陆', 1000);
+		messageStore.showMessage('未登录,请先登录', 1000);
 	} else if (props._isOutLogin) {
-		messageStore.showMessage('登录过期,请重新登陆', 1000);
+		messageStore.showMessage('登录过期,请重新登录', 1000);
 	}
 });
 //获取配置数据

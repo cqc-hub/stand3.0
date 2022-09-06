@@ -33,8 +33,10 @@ Request.interceptors.response(
     //判断返回状态 执行相应操作
     hideLoading();
 
-    const { code, message, respCode } = responseData;
+    const { code, message } = responseData;
     // 请根据后端规定的状态码判定 
+    console.log(responseData);
+
     if (code === 4000) {
       //  需要重新登录4000  0 成功
       messageStore.showMessage(message, 0, {
@@ -43,18 +45,25 @@ Request.interceptors.response(
           uni.redirectTo({
             url: '/pages/home/my?_p=1&_isOutLogin=1'
           });
-          // new LoginUtils().outLogin({
-          //   isHideMessage: true,
-          //   isGoLoginPage: true
-          // });
+          //清除缓存？
+          new LoginUtils().outLogin({
+            isHideMessage: true,
+            isGoLoginPage: true
+          });
         }
       });
     } else if (code !== 0) {
       messageStore.showMessage(message);
     }
-    // return Promise.reject(responseData);
 
-    return responseData;
+
+    if (code !== 0) {
+      // return Promise.reject(responseData);
+      return responseData;
+    } else {
+
+      return responseData;
+    }
   },
   (err) => {
     const messageStore = useMessageStore();
