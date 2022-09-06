@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<g-form v-model:value="formData" @change="formChange" ref="gform" />
+		<g-form v-model:value="formData" @change="formChange" bodyBold ref="gform" />
 
 		<g-message />
 

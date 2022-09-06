@@ -9,7 +9,7 @@
   color: var(--hr-neutral-color-8);
 
   &.item-for-show {
-    padding: 28rpx 32rpx;
+    // padding: 28rpx 32rpx;
 
     .label {
       height: 100%;
@@ -92,7 +92,8 @@
   &.form-item-bold {
 
     :deep(input),
-    :deep(textarea) {
+    :deep(textarea),
+    .content-show {
       font-weight: 600;
     }
   }
