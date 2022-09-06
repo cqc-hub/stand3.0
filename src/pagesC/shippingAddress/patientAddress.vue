@@ -40,13 +40,11 @@
 import { ref } from 'vue';
 const isAddShow = ref(false);
 const clickSelect = () => {
-	console.log(3232);
-
 	isAddShow.value = true;
 };
 const clickConfirm = () => {
 	uni.navigateTo({
-		url: '/pagesC/shippingAddress/addressList'
+		url: '/pagesC/shippingAddress/addAddess?pageType=edit'
 	});
 };
 </script>
@@ -89,7 +87,7 @@ const clickConfirm = () => {
 			font-size: var(--h-size-40);
 			position: absolute;
 			right: 0;
-			bottom: -4rpx;
+			bottom: -12rpx;
 		}
 	}
 }

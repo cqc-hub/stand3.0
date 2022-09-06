@@ -18,9 +18,6 @@
 								class="top-card flex-normal-between animate__animated animate__fadeIn"
 							>
 								<view class="flex-normal">
-									<view class="iconfont icon-size">
-										&#xe6a7;
-									</view>
 									<!-- 没有就诊人时 -->
 									<!-- <text>
 										{{
@@ -29,6 +26,9 @@
 										}}
 									</text> -->
 									<!-- 有就诊人时 -->
+									<view class="iconfont icon-size">
+										&#xe6a7;
+									</view>
 									<view class="patient">
 										<text>
 											{{

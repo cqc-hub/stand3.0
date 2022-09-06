@@ -69,7 +69,7 @@ export default {
 		// 取消颜色
 		cancelColor: {
 			type: String,
-			default: '#909399'
+			default: '#111111'
 		},
 
 		// 确定文字
@@ -81,7 +81,7 @@ export default {
 		// 确定文字颜色
 		confirmColor: {
 			type: String,
-			default: '#409EFF'
+			default: '#296FFF'
 		},
 
 		// 是否显示取消按钮
@@ -162,13 +162,13 @@ export default {
 		left: 50%;
 		transform: translate(-50%, -75%);
 		transition: transform 0.3s;
-		width: 540upx;
-		border-radius: 10upx;
+		width: 582upx;
+		border-radius: 16upx;
 		background-color: #fff;
 		overflow: hidden;
 		opacity: 0;
 		transition: opacity 200ms ease-in;
-		padding-top: 30upx;
+		padding-top: 64rpx;
 	}
 
 	&__header {
@@ -178,20 +178,20 @@ export default {
 		white-space: nowrap;
 		padding: 0 24upx 24upx;
 		line-height: 1.5;
-		color: #303133;
+		color: #111111;
 		font-weight: bold;
-		font-size: 40upx;
+		font-size: 36upx;
 		text-align: center;
 	}
 
 	&__content {
 		position: relative;
-		color: #303133;
 		font-size: 36upx;
 		box-sizing: border-box;
 		line-height: 1.5;
 		.modal-content {
-			padding: 0 30upx 30upx;
+			padding: 0 32rpx 64rpx 32rpx;
+			color: #444;
 		}
 		&::after {
 			content: ' ';
@@ -222,17 +222,18 @@ export default {
 			text-align: center;
 			padding: 20upx 0;
 			&.xy-dialog__footer-cancel {
-				color: #909399;
+				color: #111111;
 			}
 			&.xy-dialog__footer-confirm {
-				color: #409eff;
+				color: #296fff;
+				font-weight: bold;
 			}
 			&.xy-dialog__btn-row {
 				width: 100%;
 				text-align: center;
 				padding: 20upx 0;
 				&.xy-dialog__footer-confirm {
-					color: #409eff;
+					color: #296fff;
 				}
 			}
 		}
