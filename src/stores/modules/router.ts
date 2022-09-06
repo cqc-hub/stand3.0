@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { joinQuery } from '@/common';
-import { outLogin } from '@/utils';
+// import { outLogin } from '@/utils';
 const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
 	const { _url, _query } = prop;
 
@@ -48,9 +48,9 @@ const routerStore = defineStore('router', {
 			if (!(prop._p || prop._url)) return;
 			console.log(prop, '接受----');
 			if (prop._isOutLogin) {
-				outLogin({
-					isHideMessage: true
-				});
+				// outLogin({
+				// 	isHideMessage: true
+				// });
 			}
 
 			this.backRoute = prop;

@@ -9,7 +9,6 @@ const getMenuById = (_id: string, _list: any[]) => {
 		for (let i = 0; i < list.length; i++) {
 			const item = list[i];
 			if (item.id == id) {
-				console.log('233333');
 
 				source.value = item;
 				break;
