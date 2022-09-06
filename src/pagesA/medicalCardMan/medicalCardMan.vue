@@ -14,6 +14,7 @@
 			@profile-click="profileClick"
 			@card-click="cardClick"
 		/>
+		<g-message />
 	</view>
 </template>
 

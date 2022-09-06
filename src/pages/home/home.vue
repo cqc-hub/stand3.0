@@ -17,36 +17,51 @@
 							<view
 								class="top-card flex-normal-between animate__animated animate__fadeIn"
 							>
-								<view class="flex-normal">
-									<!-- 没有就诊人时 -->
-									<!-- <text>
-										{{
-											userSore.name ||
-											userSore.cellPhoneNum
-										}}
-									</text> -->
-									<!-- 有就诊人时 -->
-									<view class="iconfont icon-size">
-										&#xe6a7;
+								<!-- 有就诊人时 -->
+								<block
+									v-if="gStores.userStore.patChoose._showId"
+								>
+									<view class="flex-normal">
+										<view class="iconfont icon-size">
+											&#xe6a7;
+										</view>
+										<view class="patient">
+											<text>
+												{{
+													gStores.userStore.patChoose
+														.patientName
+												}}
+											</text>
+											<text>
+												ID
+												{{
+													gStores.userStore.patChoose
+														._showId
+												}}
+											</text>
+										</view>
 									</view>
-									<view class="patient">
-										<text>
-											{{
-												gStores.userStore.patChoose
-													.patientName
-											}}
-										</text>
-										<text>
-											ID：{{
-												gStores.userStore.patChoose
-													._showId
-											}}
-										</text>
+									<view
+										class="switchPatient"
+										@tap="chooseAction"
+									>
+										切换就诊人
 									</view>
-								</view>
-								<view class="switchPatient" @tap="chooseAction">
-									切换就诊人
-								</view>
+								</block>
+								<!-- 没有就诊人时 -->
+								<block v-else>
+									<view class="flex-normal">
+										<view class="patient">
+											<text>暂无就诊人</text>
+										</view>
+									</view>
+									<view
+										class="switchPatient"
+										@tap="addPatient"
+									>
+										添加就诊人
+									</view>
+								</block>
 							</view>
 						</block>
 						<block v-else>
@@ -207,6 +222,11 @@ const goLogin = async (e: any) => {
 	// #endif
 
 	routerJump();
+};
+const addPatient = () => {
+	uni.navigateTo({
+		url: '/pagesA/medicalCardMan/medicalCardMan'
+	});
 };
 
 //获取配置数据
