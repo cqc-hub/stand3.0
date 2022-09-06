@@ -27,7 +27,7 @@ module.exports = {
 	// tab缩进大小,默认为2
 	tabWidth: 4,
 	// 使用tab缩进还是空格，默认false
-	useTabs: true,
+	useTabs: false,
 	// vue缩进脚本和样式
 	vueIndentScriptAndStyle: false
 	// > 标签放在最后一行的末尾，而不是单独放在下一行 默认false

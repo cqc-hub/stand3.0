@@ -225,3 +225,5 @@ export const useOcr = async () => {
 	return await ocrForAlipay();
 	// #endif
 };
+
+export type OcrRes = ReturnType<typeof findSuccess>;
