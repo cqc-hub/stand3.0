@@ -48,6 +48,8 @@ const routerStore = defineStore('router', {
 
     receiveQuery(prop: ILoginBack) {
       console.log(prop, 'prop----');
+      console.log(this._id);
+
 
       if (!(prop._p || prop._url)) return;
 

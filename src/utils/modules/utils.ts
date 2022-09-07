@@ -53,20 +53,20 @@ export const routerJump = async (url?: `/${string}`) => {
       uni.redirectTo({
         url: routerStore.fullUrl
       });
+
+      routerStore.clear();
     } else {
       const menus = await ServerStaticData.getHomeConfig();
 
       const menuItem = getMenuById(routerStore._id, menus);
-      console.log(menuItem, 'menuItem', routerStore._id, routerStore);
 
       if (menuItem) {
         useCommonTo(menuItem);
+        routerStore.clear();
       } else {
         messageStore.showMessage('未找到对应menuId 的 menu：' + routerStore._id);
       }
     }
-
-    routerStore.clear();
   } else {
     if (url) {
       uni.redirectTo({

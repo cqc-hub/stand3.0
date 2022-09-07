@@ -35,7 +35,6 @@ Request.interceptors.response(
 
     const { code, message } = responseData;
     // 请根据后端规定的状态码判定
-    console.log(responseData);
 
     if (code === 4000) {
       //  需要重新登录4000  0 成功

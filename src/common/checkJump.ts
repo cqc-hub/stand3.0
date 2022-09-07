@@ -1,6 +1,8 @@
 import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
 
+const routerStore = useRouterStore();
+
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
 	const gStores = new GStores();
@@ -16,7 +18,6 @@ export const checkLogin = (item: IRoute) => {
 //拦截-就诊人
 export const checkPatient = (item: IRoute) => {
 	const gStores = new GStores();
-	const routerStore = useRouterStore();
 	return new Promise((resolve, reject) => {
 		if (!gStores.globalStore.herenId) {
 			gStores.messageStore.showMessage('未完善，请先完善', 1000, {
@@ -55,7 +56,6 @@ export const checkPatient = (item: IRoute) => {
 // gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
 export const checkGrid = async (item: IRoute) => {
 	const gStores = new GStores();
-	const routerStore = useRouterStore();
 	if (item.gridLabel === '3') {
 		return;
 	} else {

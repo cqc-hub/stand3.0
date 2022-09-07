@@ -67,9 +67,6 @@ export class LoginUtils extends GStores {
 
         this.globalStore.setHerenId(herenId);
 
-        // if (herenId) new PatientUtils().getPatCardList();
-
-        // toRouterPath()
         if (!herenId) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {
@@ -77,6 +74,8 @@ export class LoginUtils extends GStores {
               url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
             });
           }, 1200);
+
+          return Promise.reject('未完善');
         } else {
           //获取就诊人列表
           await new PatientUtils().getPatCardList();
