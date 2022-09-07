@@ -4,90 +4,92 @@ import { LoginUtils } from '@/utils';
 import { useGlobalStore, useUserStore } from '@/stores';
 
 const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
-	const { _url, _query } = prop;
+  const { _url, _query } = prop;
 
-	const dealQuery = Object.fromEntries(
-		Object.entries(_query).filter(([key, value]) => value)
-	);
+  const dealQuery = Object.fromEntries(Object.entries(_query).filter(([key, value]) => value));
 
-	if (_url.includes('?')) {
-		return _url + '&' + joinQuery('', dealQuery).slice(1);
-	} else {
-		return joinQuery(_url, dealQuery);
-	}
+  if (_url.includes('?')) {
+    return _url + '&' + joinQuery('', dealQuery).slice(1);
+  } else {
+    return joinQuery(_url, dealQuery);
+  }
 };
 
 const routerStore = defineStore('router', {
-	persist: {
-		key: 'router',
-		paths: ['_id', 'fullUrl', 'backRoute', '_p']
-	},
+  persist: {
+    key: '__router',
+    paths: ['_id', 'fullUrl', 'backRoute', '_p']
+  },
 
-	state: () => {
-		return {
-			_p: '',
-			_id: '',
-			fullUrl: '',
+  state: () => {
+    return {
+      _p: '',
+      _id: '',
+      fullUrl: '',
 
-			backRoute: <ILoginBack>{}
-		};
-	},
+      backRoute: <ILoginBack>{}
+    };
+  },
 
-	actions: {
-		update_P() {
-			this._p = '1';
-		},
+  actions: {
+    update_P() {
+      this._p = '1';
+    },
 
-		updateId(id) {
-			this._id = id;
-		},
+    updateId(id) {
+      console.log('更新id', id);
 
-		updateFullUrl(url: string) {
-			this.fullUrl = url;
-		},
+      this._id = id;
+    },
 
-		receiveQuery(prop: ILoginBack) {
-			if (!(prop._p || prop._url)) return;
+    updateFullUrl(url: string) {
+      this.fullUrl = url;
+    },
 
-			if (prop._isOutLogin) {
-				useGlobalStore().clearStore();
-				useUserStore().clearStore();
-			}
+    receiveQuery(prop: ILoginBack) {
+      console.log(prop, 'prop----');
 
-			this.backRoute = prop;
-			if (prop._p) {
-				// ...
-				this.update_P();
-			} else {
-				const { _url, _query } = prop;
+      if (!(prop._p || prop._url)) return;
 
-				let fullUrl = decodeURIComponent(<string>_url);
+      if (prop._isOutLogin) {
+        useGlobalStore().clearStore();
+        useUserStore().clearStore();
+      }
 
-				if (fullUrl) {
-					if (_query) {
-						fullUrl = spliceUrl({
-							_url: fullUrl,
-							_query
-						});
-					}
+      this.backRoute = prop;
+      if (prop._p) {
+        // ...
+        this.update_P();
+      } else {
+        const { _url, _query } = prop;
 
-					this.fullUrl = fullUrl;
-				}
-			}
-		},
+        let fullUrl = decodeURIComponent(<string>_url);
 
-		clear() {
-			this.$reset();
-		}
-	},
+        if (fullUrl) {
+          if (_query) {
+            fullUrl = spliceUrl({
+              _url: fullUrl,
+              _query
+            });
+          }
 
-	getters: {
-		isWork(): boolean {
-			return !!(this.backRoute._p || this.backRoute._url);
-		}
-	}
+          this.fullUrl = fullUrl;
+        }
+      }
+    },
+
+    clear() {
+      this.$reset();
+    }
+  },
+
+  getters: {
+    isWork(): boolean {
+      return !!(this.backRoute._p || this.backRoute._url);
+    }
+  }
 });
 
 export const useRouterStore = function () {
-	return routerStore();
+  return routerStore();
 };

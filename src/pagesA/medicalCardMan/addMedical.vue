@@ -37,17 +37,29 @@
   import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
   import { GStores, idValidator, PatientUtils, ServerStaticData, routerJump, OcrRes } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
+  import { useRouterStore } from '@/stores';
 
   import dayjs from 'dayjs';
 
-  const props = defineProps<{
+  const routeStore = useRouterStore();
+
+  interface TPageType extends ILoginBack {
     patientName: 'string';
     medicalType: 'string';
     verifyCode: 'string';
     defaultFalg: 'string';
     patientPhone: 'string';
     pageType: 'addPatient' | 'perfectReal';
-  }>();
+
+    // 微信小程序必须显示写出来， 否则接收不到
+    _p?: string;
+    _url?: string;
+    _query?: string;
+    _type?: '1' | '2';
+    _isOutLogin?: '1';
+    _pageInfo?: '1' | '2';
+  }
+  const props = defineProps<TPageType>();
   const patientUtils = new PatientUtils();
   const gStores = new GStores();
   const gform = ref<any>('');
@@ -308,6 +320,7 @@
   });
 
   onMounted(() => {
+    routeStore.receiveQuery(props);
     formData.value = Object.fromEntries(
       Object.entries(props).map(([key, value]) => {
         if (key === formKey.defaultFalg) {

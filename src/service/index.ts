@@ -34,7 +34,7 @@ Request.interceptors.response(
     hideLoading();
 
     const { code, message } = responseData;
-    // 请根据后端规定的状态码判定 
+    // 请根据后端规定的状态码判定
     console.log(responseData);
 
     if (code === 4000) {
@@ -58,8 +58,8 @@ Request.interceptors.response(
 
 
     if (code !== 0) {
-      // return Promise.reject(responseData);
-      return responseData;
+      return Promise.reject(responseData);
+      // return responseData;
     } else {
 
       return responseData;

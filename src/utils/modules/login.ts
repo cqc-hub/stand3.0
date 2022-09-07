@@ -79,7 +79,7 @@ export class LoginUtils extends GStores {
           }, 1200);
         } else {
           //获取就诊人列表
-          new PatientUtils().getPatCardList();
+          await new PatientUtils().getPatCardList();
         }
       }
     } catch (error) {
@@ -166,7 +166,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
               encrypData
             };
 
-            // const { result: loginResult } = await api.wxLoginByPhoneNumberCode(requestData);
             const { result: loginResult } = await api.allinoneAuthApi(
               packageAuthParams(requestData, '/wx/wxLoginByPhoneNumberCode')
             );
