@@ -1,173 +1,173 @@
 {
-	"easycom": {
-		"^g-(.*)": "components/g-$1/g-$1.vue",
-		"^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
-	},
-	"pages": [
-		{
-			"path": "pages/home/my",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
-			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
+  "easycom": {
+    "^g-(.*)": "components/g-$1/g-$1.vue",
+    "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
+  },
+  "pages": [
+    {
+      "path": "pages/home/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
 
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
-		{
-			"path": "pages/routerTest/routerTest",
-			"style": {
-				"navigationBarTitleText": "uni-routerTest",
-				"backgroundColor": "#e43130"
-			}
-		},
-		{
-			"path": "pages/piniaTest/piniaTest",
-			"style": {
-				"navigationBarTitleText": "uni-app "
-			}
-		}
-	],
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "uni-app"
+      }
+    },
+    {
+      "path": "pages/routerTest/routerTest",
+      "style": {
+        "navigationBarTitleText": "uni-routerTest",
+        "backgroundColor": "#e43130"
+      }
+    },
+    {
+      "path": "pages/piniaTest/piniaTest",
+      "style": {
+        "navigationBarTitleText": "uni-app "
+      }
+    }
+  ],
 
-	"subPackages": [
-		{
-			"root": "pagesA",
-			"pages": [
-				{
-					"path": "medicalCardMan/addMedical",
-					"extend": {
-						"login": true
-					},
-					"style": {
-						"navigationBarTitleText": "添加就诊人"
-					}
-					// "usingComponents": {
-					// 	// #ifdef MP-ALIPAY
-					// 	"ocr-id": "plugin://ocrPlugin/ocr-id"
-					// 	// #endif
-					// }
-				},
-				{
-					"path": "medicalCardMan/perfectReal",
-					"extend": {
-						"login": true
-					},
-					"style": {
-						"navigationBarTitleText": "添加就诊人"
-					}
-				},
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [
+        {
+          "path": "medicalCardMan/addMedical",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+          // "usingComponents": {
+          // 	// #ifdef MP-ALIPAY
+          // 	"ocr-id": "plugin://ocrPlugin/ocr-id"
+          // 	// #endif
+          // }
+        },
+        {
+          "path": "medicalCardMan/perfectReal",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+        },
 
-				{
-					"path": "medicalCardMan/medicalCardMan",
-					"extend": {
-						"login": true
-					},
-					"style": {
-						"navigationBarTitleText": "就诊人管理"
-					}
-				},
+        {
+          "path": "medicalCardMan/medicalCardMan",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "就诊人管理"
+          }
+        },
 
-				{
-					"path": "medicalCardMan/medicalCardDetail",
-					"extend": {
-						"login": true
-					},
-					"style": {
-						"navigationBarTitleText": "就诊人详情"
-					}
-				},
+        {
+          "path": "medicalCardMan/medicalCardDetail",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "就诊人详情"
+          }
+        },
 
-				{
-					"path": "medicalCardMan/electronicMedicalCard",
-					"extend": {
-						"login": true
-					},
-					"style": {
-						"navigationBarTitleText": "电子就诊卡"
-					}
-				}
-			]
-		},
+        {
+          "path": "medicalCardMan/electronicMedicalCard",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "电子就诊卡"
+          }
+        }
+      ]
+    },
 
-		{
-			"root": "pagesC",
-			"pages": [
-				{
-					"path": "queueNumber/queueNumber",
-					"extend": {
-						"login": true,
-						"patient": true
-					},
-					"style": {
-						"navigationBarTitleText": "排队叫号"
-					}
-				},
-				{
-					"path": "mixCheckResult/hsResult",
-					"extend": {
-						"login": true,
-						"patient": true
-					},
-					"style": {
-						"navigationBarTitleText": "核酸结果查询"
-					}
-				},
-				{
-					"path": "cloudHospital/myPath",
-					"style": {
-						"navigationBarTitleText": "跳转中..."
-					}
-				},
-				{
-					"path": "cloudHospital/cloudHospital",
-					"style": {
-						"navigationBarTitleText": "网络门诊"
-					}
-				},
-				{
-					"path": "cloudHospital/cachePage",
-					"style": {
-						"navigationBarTitleText": "网络门诊"
-					}
-				},
-				{
-					"path": "shippingAddress/addressList",
-					"style": {
-						"navigationBarTitleText": "收货地址"
-					}
-				},
-				{
-					"path": "shippingAddress/patientAddress",
-					"style": {
-						"navigationBarTitleText": "就诊人地址"
-					}
-				},
-				{
-					"path": "shippingAddress/addAddess",
-					"style": {
-						"navigationBarTitleText": "新增收货地址"
-					}
-				}
-			]
-		}
-	],
+    {
+      "root": "pagesC",
+      "pages": [
+        {
+          "path": "queueNumber/queueNumber",
+          "extend": {
+            "login": true,
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "排队叫号"
+          }
+        },
+        {
+          "path": "mixCheckResult/hsResult",
+          "extend": {
+            "login": true,
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "核酸结果查询"
+          }
+        },
+        {
+          "path": "cloudHospital/myPath",
+          "style": {
+            "navigationBarTitleText": "跳转中..."
+          }
+        },
+        {
+          "path": "cloudHospital/cloudHospital",
+          "style": {
+            "navigationBarTitleText": "网络门诊"
+          }
+        },
+        {
+          "path": "cloudHospital/cachePage",
+          "style": {
+            "navigationBarTitleText": "网络门诊"
+          }
+        },
+        {
+          "path": "shippingAddress/addressList",
+          "style": {
+            "navigationBarTitleText": "收货地址"
+          }
+        },
+        {
+          "path": "shippingAddress/patientAddress",
+          "style": {
+            "navigationBarTitleText": "就诊人地址"
+          }
+        },
+        {
+          "path": "shippingAddress/addAddress",
+          "style": {
+            "navigationBarTitleText": "新增收货地址"
+          }
+        }
+      ]
+    }
+  ],
 
-	"globalStyle": {
-		"app-plus": { "titleNView": false },
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"backgroundColor": "#F8F8F8",
-		// #ifdef MP-WEIXIN || H5
-		"navigationBarBackgroundColor": "#f8f8f8"
-		// #endif
-	}
+  "globalStyle": {
+    "app-plus": { "titleNView": false },
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "backgroundColor": "#F8F8F8",
+    // #ifdef MP-WEIXIN || H5
+    "navigationBarBackgroundColor": "#f8f8f8"
+    // #endif
+  }
 }
