@@ -62,6 +62,9 @@ const baseApi = {
   //修改快递地址
   updateExpressAddress: (data) =>
     service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
+  //获取就诊人地址
+  queryExpressAddressByPatient: (data) =>
+    service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data)),
 };
 // 查询服务
 const queryApi = {

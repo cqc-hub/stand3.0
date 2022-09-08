@@ -5,35 +5,47 @@
         <text class="icon-font ico_people" />
         <text>获取就诊人地址</text>
       </view>
-      <view class="item g-flex-rc-cc">
+      <!-- #ifdef MP-WEIXIN -->
+      <view class="item g-flex-rc-cc" @tap="getWX">
         <text class="icon-font ico_wechat" />
         <text>获取就诊人地址</text>
       </view>
+      <!-- #endif -->
+      <!-- #ifdef MP-ALIPAY -->
+      <view class="item g-flex-rc-cc" @tap="getWX">
+        <text class="icon-font ico_wechat" />
+        <text>获取就诊人地址</text>
+      </view>
+      <!-- #endif -->
     </view>
-    <block v-if="addressList.length < 0">
-      <view class="address-box">
-        <view class="box-item" v-for="(item, i) in addressList" :key="i">
-          <view class="item-title flex-between">
-            <view class="item-title-left flex-normal">
-              <text>{{ item.senderName }}</text>
-              <text>{{ item.senderPhone }}</text>
-              <g-tag v-if="item.defaultFlag === '1'" type="yellow" text="默认" />
+    <block v-if="addressList.length > 0">
+      <scroll-view class="address-box-container" scroll-y>
+        <view class="address-box">
+          <view class="box-item" v-for="(item, i) in addressList" :key="i">
+            <view class="item-title flex-between">
+              <view class="item-title-left flex-normal">
+                <text>{{ item.senderName }}</text>
+                <text>{{ item.senderPhone }}</text>
+                <g-tag v-if="item.defaultFlag === '1'" type="yellow" text="默认" />
+              </view>
+              <view class="item-title-right flex-normal" @tap="gotoAdd('edit', item)">
+                <view class="iconfont">&#xe6b9;</view>
+                编辑
+              </view>
             </view>
-            <view class="item-title-right flex-normal">
-              <view class="iconfont">&#xe6b9;</view>
-              编辑
-            </view>
+            <text class="box-content">{{ item.province + item.city + item.county + item.detailedAddress }}</text>
           </view>
-          <text class="box-content">{{ item.province + item.city + item.county + item.detailedAddress }}</text>
         </view>
-      </view>
-      <view class="footer">
-        <button @click="gotoAdd" class="btn btn-primary">新增收货地址</button>
-      </view>
+      </scroll-view>
     </block>
     <block v-else>
-      <g-empty :current="1" />
+      <view v-if="pageLoading" class="scroll-container">
+        <g-empty :current="1" />
+      </view>
     </block>
+    <view class="footer">
+      <button @click="gotoAdd('add')" class="btn btn-primary">新增收货地址</button>
+    </view>
   </view>
 </template>
 
@@ -42,31 +54,21 @@
   import api from '@/service/api';
   import { GStores } from '@/utils';
   import { ref } from 'vue';
+  import { useMessageStore } from '@/stores';
+  import { joinQuery } from '@/common';
 
-  interface IAddress {
-    city: string;
-    county: string;
-    createTime: string;
-    defaultFlag: '1' | '0';
-    detailedAddress: string;
-    herenId: string;
-    id: number;
-    postcode: string;
-    province: string;
-    senderName: string;
-    senderPhone: string;
-    sysCode: string;
-    updateTime: string;
-  }
-
+  const pageLoading = ref(false);
   const gStores = new GStores();
+  const messageStore = useMessageStore();
   const addressList = ref<IAddress[]>([]);
   onLoad(() => {
     getQueryExpressAddress();
   });
   const getQueryExpressAddress = async () => {
+    pageLoading.value = false;
     const { result } = await api.queryExpressAddress({ herenId: gStores.globalStore.herenId });
     addressList.value = result;
+    pageLoading.value = true;
   };
 
   const gotoPatient = () => {
@@ -74,9 +76,69 @@
       url: '/pagesC/shippingAddress/patientAddress'
     });
   };
-  const gotoAdd = () => {
+
+  const gotoAdd = (type, item) => {
+    // uni.navigateBack({ delta: 1 });
+
     uni.navigateTo({
-      url: '/pagesC/shippingAddress/addAddress?pageType=add'
+      url: joinQuery('/pagesC/shippingAddress/addAddress', {
+        ...item,
+        pageType: type
+      })
+    });
+  };
+  const getAddress = async (data) => {
+    const { result } = await api.addExpressAddress({
+      herenId: gStores.globalStore.herenId,
+      senderName: data.userName,
+      senderPhone: data.telNumber,
+      detailedAddress: data.detailInfo,
+      postcode: data.postalCode,
+      province: data.provinceName,
+      city: data.cityName,
+      county: data.countyName,
+      defaultFlag: '1'
+    });
+    messageStore.showMessage('添加成功', 1000, {
+      closeCallBack: () => {
+        getQueryExpressAddress();
+      }
+    });
+  };
+
+  const getWX = () => {
+    //获取用户的当前设置
+    uni.getSetting({
+      success(res) {
+        console.log(res.authSetting);
+        if (res.authSetting['scope.address']) {
+          uni.chooseAddress({
+            success(res) {
+              getAddress(res);
+              console.log('地址信息', res);
+            }
+          });
+        } else {
+          //未授权 取消地址授权 需要打开设置
+          if (res.authSetting['scope.address'] == false) {
+            console.log('222');
+            wx.openSetting({
+              success(res) {
+                console.log(res.authSetting);
+              }
+            });
+          } else {
+            //第一次打开
+            console.log('eee');
+            uni.chooseAddress({
+              success(res) {
+                console.log('地址信息', res);
+                getAddress(res);
+              }
+            });
+          }
+        }
+      }
     });
   };
 </script>
@@ -106,6 +168,9 @@
         }
       }
     }
+    .address-box-container {
+      height: calc(100vh - 367rpx);
+    }
     .address-box {
       .box-item {
         background: var(--h-color-white);
@@ -126,8 +191,7 @@
           .item-title-right {
             color: var(--hr-brand-color-6);
             .iconfont {
-              width: 40rpx;
-              height: 40rpx;
+              font-size: var(-h-size-40);
               color: var(--hr-brand-color-6);
             }
           }
@@ -139,6 +203,9 @@
           color: var(--hr-neutral-color-10);
         }
       }
+    }
+    .scroll-container {
+      margin-top: 40%;
     }
     .footer {
       position: absolute;

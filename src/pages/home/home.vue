@@ -83,8 +83,9 @@
           <view class="fun-list" v-if="menuList">
             <homeMenu :list="menuList" />
           </view>
-          123
-          <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
+          <view class="bg-back">
+            <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
+          </view>
         </view>
       </ls-skeleton>
     </scroll-view>
@@ -373,6 +374,15 @@
 
     .fun-list {
       margin-top: var(--h-margin-24);
+    }
+    .bg-back {
+      margin-top: 80rpx;
+      text-align: center;
+
+      image {
+        width: 180rpx;
+        height: 80rpx;
+      }
     }
   }
 

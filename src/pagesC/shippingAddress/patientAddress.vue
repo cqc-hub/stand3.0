@@ -1,28 +1,37 @@
 <template>
   <view class="page">
-    <view class="address-box">
-      <view class="box-item active" @tap="clickSelect">
-        <view class="svg">
-          <text class="icon-font ico_selected" />
-        </view>
-        <view class="item-title flex-between">
-          <view class="item-title-left">
-            <text>陆强强</text>
-            <text>16544346789</text>
+    <block v-if="addressList.length > 0">
+      <scroll-view class="address-box-container" scroll-y>
+        <view class="address-box">
+          {{ currentIndex }}
+          <view
+            class="box-item"
+            :class="i == currentIndex ? 'active' : ''"
+            @tap="clickSelect(i, item)"
+            v-for="(item, i) in addressList"
+            :key="i"
+          >
+            <view class="svg" v-if="i == currentIndex">
+              <text class="icon-font ico_selected" />
+            </view>
+            <view class="item-title flex-between">
+              <view class="item-title-left">
+                <text>{{ item.senderName }}</text>
+                <text>{{ item.senderPhone }}</text>
+              </view>
+            </view>
+            <text v-if="item.province || item.detailedAddress" class="box-content">
+              {{ item.province + item.city + item.county + item.detailedAddress }}
+            </text>
           </view>
         </view>
-        <text class="box-content">浙江省杭州市滨江区新联路625号和仁科技大厦17楼</text>
+      </scroll-view>
+    </block>
+    <block v-else>
+      <view v-if="pageLoading" class="scroll-container">
+        <g-empty :current="1" />
       </view>
-      <view class="box-item">
-        <view class="item-title flex-between">
-          <view class="item-title-left">
-            <text>陆强强</text>
-            <text>16544346789</text>
-          </view>
-        </view>
-        <text class="box-content">浙江省杭州市滨江区新联路625号和仁科技大厦17楼</text>
-      </view>
-    </view>
+    </block>
     <xy-dialog
       :show="isAddShow"
       content="请补充地址信息"
@@ -34,9 +43,32 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { GStores } from '@/utils';
+  import api from '@/service/api';
+
   const isAddShow = ref(false);
-  const clickSelect = () => {
-    isAddShow.value = true;
+  const addressList = ref<IAddress[]>([]);
+  const gStores = new GStores();
+  const pageLoading = ref(false);
+  const currentIndex = ref();
+
+  onLoad(() => {
+    getQueryExpressAddress();
+  });
+
+  const getQueryExpressAddress = async () => {
+    pageLoading.value = false;
+    const { result } = await api.queryExpressAddressByPatient({ herenId: gStores.globalStore.herenId });
+    addressList.value = result;
+    pageLoading.value = true;
+  };
+
+  const clickSelect = (e, item) => {
+    currentIndex.value = e;
+    if (!item.province || !item.detailedAddress) {
+      isAddShow.value = true;
+    }
   };
   const clickConfirm = () => {
     uni.navigateTo({
