@@ -1,52 +1,80 @@
 <template>
-	<view class="">
-		<wyb-action-sheet
-			ref="actionSheet"
-			:options="gStores.userStore.patList"
-			:showCancel="false"
-			:duration="100"
-			@itemclick="actionSheetItemClick"
-			my-type="choosePat"
-			title=""
-		/>
-	</view>
+  <view class="choose-pat">
+    <g-popup title="切换就诊人" ref="actionSheet">
+      <view class="choose-pat-container g-flex-rc-cc">
+        <view style="width: 100%">
+          <Pat-List @choose-pat="actionSheetItemClick" />
+        </view>
+
+        <view class="add-pat-box">
+          <view class="add-pat g-flex-rc-cc">
+            <view class="iconfont icon-resize">&#xe6ab;</view>
+            <text>添加就诊人</text>
+          </view>
+        </view>
+      </view>
+    </g-popup>
+  </view>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
-import { GStores } from '@/utils';
-import { IPat } from '@/stores';
+  import { defineComponent, ref } from 'vue';
+  import { GStores } from '@/utils';
+  import { IPat } from '@/stores';
 
-export default defineComponent({
-	components: {
-		wybActionSheet
-	},
+  import PatList from './choose-pat-list.vue';
 
-	emits: ['choose-pat'],
+  export default defineComponent({
+    emits: ['choose-pat'],
 
-	setup(props, ctx) {
-		const actionSheet = ref();
-		const gStores = new GStores();
+    components: {
+      PatList
+    },
 
-		const actionSheetItemClick = (e: { index: number; item: IPat }) => {
-			ctx.emit('choose-pat', e);
-		};
+    setup(props, ctx) {
+      const actionSheet = ref();
+      const gStores = new GStores();
 
-		const show = () => {
-			if (actionSheet.value) {
-				actionSheet.value.showActionSheet();
-			}
-		};
+      const actionSheetItemClick = (e: { index: number; item: IPat }) => {
+        ctx.emit('choose-pat', e);
+        actionSheet.value.hide();
+      };
 
-		return {
-			actionSheet,
-			actionSheetItemClick,
-			show,
-			gStores
-		};
-	}
-});
+      const show = () => {
+        if (actionSheet.value) {
+          actionSheet.value.show();
+        }
+      };
+
+      return {
+        actionSheet,
+        actionSheetItemClick,
+        show,
+        gStores
+      };
+    }
+  });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .choose-pat {
+    .choose-pat-container {
+      margin-top: 32rpx;
+      flex-direction: column;
+    }
+
+    .add-pat-box {
+      margin: 0 32rpx;
+      padding: 40rpx 0;
+      border-radius: 16rpx;
+      color: var(--hr-brand-color-6);
+      font-weight: var(--h-weight-2);
+
+      .icon-resize {
+        font-size: 48rpx;
+        margin-right: 10rpx;
+        font-weight: 500;
+      }
+    }
+  }
+</style>

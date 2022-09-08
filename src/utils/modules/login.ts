@@ -339,6 +339,8 @@ export class PatientUtils extends LoginUtils {
 
   async addRelevantPatient(
     data: Partial<{
+      _autoSetDefault: string;
+
       addressCity: string;
       addressCounty: string;
       addressCountyCode: string;
@@ -368,8 +370,18 @@ export class PatientUtils extends LoginUtils {
       verifyType: '1'
     };
 
-    await api.addPat(requestArg);
-    await this.getPatCardList();
+    const {
+      result: { patientId }
+    } = await api.addPat(requestArg);
+
+    if (data._autoSetDefault) {
+      await this.changeDefault({
+        patientId,
+        defaultFalg: true
+      });
+    } else {
+      await this.getPatCardList();
+    }
   }
 
   async getPatCardList() {

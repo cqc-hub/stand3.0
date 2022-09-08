@@ -46,15 +46,11 @@ export const routerJump = async (url?: `/${string}`) => {
   const messageStore = useMessageStore();
 
   if (routerStore.isWork) {
-    console.log('routerStore.isWork-------');
-
     const _p = routerStore._p;
     if (!_p) {
       uni.redirectTo({
         url: routerStore.fullUrl
       });
-
-      routerStore.clear();
     } else {
       const menus = await ServerStaticData.getHomeConfig();
 
@@ -62,10 +58,11 @@ export const routerJump = async (url?: `/${string}`) => {
 
       if (menuItem) {
         useCommonTo(menuItem);
-        routerStore.clear();
       } else {
         messageStore.showMessage('未找到对应menuId 的 menu：' + routerStore._id);
       }
+
+      routerStore.clear();
     }
   } else {
     if (url) {
