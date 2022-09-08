@@ -7,7 +7,7 @@
         </view>
 
         <view class="add-pat-box">
-          <view class="add-pat g-flex-rc-cc">
+          <view class="add-pat g-flex-rc-cc" @click="goAddPat">
             <view class="iconfont icon-resize">&#xe6ab;</view>
             <text>添加就诊人</text>
           </view>
@@ -46,11 +46,21 @@
         }
       };
 
+      const goAddPat = () => {
+        const pages = getCurrentPages();
+        const fullPathNow = (pages[pages.length - 1] as any).$page.fullPath as string;
+
+        uni.navigateTo({
+          url: '/pagesA/medicalCardMan/perfectReal?_url=' + encodeURIComponent(fullPathNow)
+        });
+      };
+
       return {
         actionSheet,
         actionSheetItemClick,
         show,
-        gStores
+        gStores,
+        goAddPat
       };
     }
   });
