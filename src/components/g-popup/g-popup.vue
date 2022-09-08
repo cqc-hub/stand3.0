@@ -85,7 +85,7 @@
 
 <style lang="scss" scoped>
   .popup-container {
-    background-color: var(--hr-neutral-color-1);
+    background-color: #fff;
     border-radius: 24rpx 24rpx 0px 0px;
     display: flex;
     flex-direction: column;
