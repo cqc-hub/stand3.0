@@ -9,6 +9,13 @@
 		</view> -->
 
     <g-message />
+    <xy-dialog
+      :show="dialogShow"
+      :content="dialogContent"
+      @confirmButton="dialogConfirmRRR"
+      @cancelButton="dialogShow = false"
+    />
+
     <view class="footer">
       <button
         @click="gform.submit"
@@ -62,11 +69,19 @@
 
   const formList = pickTempItem(['medicalType', 'patientName', 'patientPhone', 'verify', 'defaultFalg']);
 
+  const dialogShow = ref(false);
+  const dialogContent = ref('');
+  let dialogConfirm = () => {};
+  const dialogConfirmRRR = () => {
+    dialogShow.value = false;
+    dialogConfirm();
+  };
+
   const formSubmit = async ({ data }) => {
     try {
       const { result } = await api.getPatCardInfoByHospital(data);
       if (result) {
-        const { jump, cardNumber, idCard, idType, patientSex } = result;
+        const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } = result;
         const { patientPhone, patientName } = data;
 
         if (jump === 0) {
@@ -94,12 +109,17 @@
             routerJump('/pagesA/medicalCardMan/medicalCardMan');
           }
         } else {
-          uni.navigateTo({
-            url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-              ...data,
-              pageType: props.pageType
-            })
-          });
+          dialogContent.value = jumpMsg;
+          dialogShow.value = true;
+
+          dialogConfirm = () => {
+            uni.navigateTo({
+              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                ...data,
+                pageType: props.pageType
+              })
+            });
+          };
         }
       }
     } catch (error) {
@@ -109,16 +129,18 @@
         const { respCode, message } = err;
 
         if (respCode === 999301) {
-          gStores.messageStore.showMessage(message, 0, {
-            maskClickCallBack: () => {
-              uni.navigateTo({
-                url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-                  ...data,
-                  pageType: props.pageType
-                })
-              });
-            }
-          });
+          dialogContent.value = message;
+          dialogShow.value = true;
+          dialogConfirm = () => {
+            uni.navigateTo({
+              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                ...data,
+                pageType: props.pageType
+              })
+            });
+          };
+        } else {
+          gStores.messageStore.showMessage(message, 1500);
         }
       }
     }

@@ -1,12 +1,6 @@
 import requestClass from './request';
 import env from '@/config/env';
-import {
-  encryptDes,
-  getSysCode,
-  getToken,
-  showLoading,
-  hideLoading
-} from '@/common';
+import { encryptDes, getSysCode, getToken, showLoading, hideLoading } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
@@ -27,6 +21,10 @@ Request.interceptors.request((request: IRequest) => {
 // 响应拦截器
 Request.interceptors.response(
   (response: IResponseWrapper) => {
+    console.log({
+      response
+    });
+
     const responseData = response.res.data;
     const responseOptions = response.options;
     const messageStore = useMessageStore();
@@ -52,15 +50,20 @@ Request.interceptors.response(
         }
       });
     } else if (code !== 0) {
-      messageStore.showMessage(message);
-    }
+      let showMessage = responseOptions && responseOptions.showMessage;
+      if (showMessage === undefined) {
+        showMessage = true;
+      }
 
+      if (showMessage) {
+        messageStore.showMessage(message);
+      }
+    }
 
     if (code !== 0) {
       return Promise.reject(responseData);
       // return responseData;
     } else {
-
       return responseData;
     }
   },
@@ -79,10 +82,7 @@ Request.setConfig((config: any) => {
     // "Authorization": getToken(),
     hrCode: getSysCode(),
     phsId: '81681688',
-    phsSign: encryptDes(
-      getSysCode() + '_' + new Date().getTime(),
-      'W7ZEgfnv'
-    )
+    phsSign: encryptDes(getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv')
   };
   //判断是否携带token校验
   if (config.token) {

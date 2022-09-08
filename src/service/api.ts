@@ -37,52 +37,39 @@ let parm = (data: any, payload: any = {}) => {
 // 基础服务
 const baseApi = {
   // 系统长信息协议详情
-  getSysAppMore: (data) =>
-    service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
+  getSysAppMore: (data) => service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
   //行政区划列表
-  getAllDivision: (data) =>
-    service.post('/phs-base/division/getAllDivision', parm(data)),
+  getAllDivision: (data) => service.post('/phs-base/division/getAllDivision', parm(data)),
   //根据系统码与值域码查询术语域
-  getTermsBySysAndCode: (data) =>
-    service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
+  getTermsBySysAndCode: (data) => service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
   //sysCode查询多个系统配置参数
-  getParamsMoreBySysCode: (data) =>
-    service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
+  getParamsMoreBySysCode: (data) => service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
   //查询医院样式
   queryHospitalPattern: (data) => service.post('/phs-base/firstPage/queryHospitalPattern', parm(data)),
   //添加快递地址
-  addExpressAddress: (data) =>
-    service.post('/phs-base/expressAddress/addExpressAddress', parm(data)),
+  addExpressAddress: (data) => service.post('/phs-base/expressAddress/addExpressAddress', parm(data)),
   //删除快递地址
-  delExpressAddress: (data) =>
-    service.post('/phs-base/expressAddress/delExpressAddress', parm(data)),
+  delExpressAddress: (data) => service.post('/phs-base/expressAddress/delExpressAddress', parm(data)),
   //查询快递地址
-  queryExpressAddress: (data) =>
-    service.post('/phs-base/expressAddress/queryExpressAddress', parm(data)),
+  queryExpressAddress: (data) => service.post('/phs-base/expressAddress/queryExpressAddress', parm(data)),
   //修改快递地址
-  updateExpressAddress: (data) =>
-    service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
+  updateExpressAddress: (data) => service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
   //获取就诊人地址
   queryExpressAddressByPatient: (data) =>
-    service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data)),
+    service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data))
 };
 // 查询服务
 const queryApi = {
   // 获取填写过问卷
   getRiskCode: (data) => service.post('/phs-query/escort/getRiskCode', parm(data)),
   // 发送产科问卷
-  sendQuestionnaireInfo: (data) =>
-    service.post(
-      '/phs-query/hospital/sendObstetricsQuestionnaire',
-      parm(data)
-    ),
+  sendQuestionnaireInfo: (data) => service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data))
 };
 
 // 挂号服务
 const regApi = {
   // 预问诊留言提交
-  subPreinquiryMessage: (data: any) =>
-    service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data))
+  subPreinquiryMessage: (data: any) => service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data))
 };
 
 // 用户服务
@@ -93,14 +80,10 @@ const userApi = {
       isAuth: true
     }),
   //身份证OCR识别
-  ocrIdCard: (data) =>
-    service.post('/phs-user/authUser/ocrIdCard', parm(data)),
+  ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
-    service.post(
-      '/phs-user/relevantPatient/addPatientByHasBeenTreated',
-      parm(data)
-    ),
+    service.post('/phs-user/relevantPatient/addPatientByHasBeenTreated', parm(data)),
   //设置默认就诊人
   updateDefaultPat: (data) =>
     service.post('/phs-user/relevantPatient/updateDefaultPat', parm(data), {
@@ -112,35 +95,26 @@ const userApi = {
       hideLoading: true
     }),
   //添加相关就诊人
-  addPat: (data) =>
-    service.post('/phs-user/relevantPatient/addPat', parm(data)),
+  addPat: (data) => service.post('/phs-user/relevantPatient/addPat', parm(data)),
   //获取就诊人列表
-  getPatCardList: (data) =>
-    service.post<IPat[]>(
-      '/phs-user/relevantPatient/getPatCardList',
-      parm(data)
-    ),
+  getPatCardList: (data) => service.post<IPat[]>('/phs-user/relevantPatient/getPatCardList', parm(data)),
   //获取就诊人信息（院内）
   getPatCardInfoByHospital: (data) =>
-    service.post(
-      '/phs-user/relevantPatient/getPatCardInfoByHospital',
-      parm(data)
-    ),
+    service.post('/phs-user/relevantPatient/getPatCardInfoByHospital', parm(data), {
+      showMessage: false
+    })
 };
 //统一认证服务
 const authApi = {
-  authLogin: (data) => service.post('/login/authLogin', parm(data), {
-    baseURL: global.authUrl
-  }),
+  authLogin: (data) =>
+    service.post('/login/authLogin', parm(data), {
+      baseURL: global.authUrl
+    }),
 
   getTPAlipayUserInfoShare: (data) => {
-    return service.post(
-      '/aliUserLogin/getTPAlipayUserInfoShare',
-      parm(data),
-      {
-        baseURL: global.authUrl
-      }
-    );
+    return service.post('/aliUserLogin/getTPAlipayUserInfoShare', parm(data), {
+      baseURL: global.authUrl
+    });
   },
 
   userInfoByToken: (data) => {
@@ -150,19 +124,15 @@ const authApi = {
   },
 
   getAppletsOpenId: (data) => {
-    return service.post(
-      '/wx/getAppletsOpenId',
-      parm(data, { outArg: true }),
-      {
-        baseURL: global.authUrl
-      }
-    );
+    return service.post('/wx/getAppletsOpenId', parm(data, { outArg: true }), {
+      baseURL: global.authUrl
+    });
   },
 
   wxLoginByPhoneNumberCode: (data) => {
     return service.post('/wx/wxLoginByPhoneNumberCode', parm(data), {
       baseURL: global.authUrl
     });
-  },
-}
+  }
+};
 export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };
