@@ -3,13 +3,14 @@
     <view class="container">
       <g-form
         v-model:value="formData"
+        :showRequireIcon="true"
         @submit="formSubmit"
-        @change="formChange"
         @address-change="addressChange"
         bodyBold
         ref="gform"
       />
     </view>
+    <g-flag class="tip" typeFg="104" isShowFgTip />
 
     <g-message />
     <view class="footer">
@@ -30,8 +31,10 @@
   import { ref, onMounted, computed, withDefaults } from 'vue';
   import { GStores } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
-
+  import { useMessageStore } from '@/stores';
   import api from '@/service/api';
+
+  const messageStore = useMessageStore();
 
   const props = withDefaults(
     defineProps<{
@@ -44,11 +47,11 @@
   const gStores = new GStores();
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
-    senderName: '大钢炮22',
-    senderPhone: '13868529891',
-    address: '123',
+    senderName: '',
+    senderPhone: '',
+    address: '',
     detailedAddress: '',
-    postcode: '123',
+    postcode: '',
     defaultFlag: '1'
   });
   const addressChoose = {
@@ -67,6 +70,7 @@
     },
     {
       required: true,
+      maxlength: 11,
       label: '手机号码',
       field: 'input-text',
       placeholder: '请输入收货人手机号码',
@@ -96,7 +100,6 @@
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
     },
     {
-      required: true,
       maxlength: 6,
       label: '邮政编码',
       field: 'input-text',
@@ -117,20 +120,23 @@
     const [addressProvince, addressCity, addressCounty] = value;
     addressChoose.province = addressProvince.text;
     addressChoose.city = addressCity.text;
-    addressChoose.county = addressCounty.value;
+    addressChoose.county = addressCounty.text;
   };
 
   const formSubmit = async ({ data }) => {
     console.log(999, data);
-
     const { result } = await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
       ...data,
       ...addressChoose
     });
+    uni.navigateBack({ delta: 2 });
+    // messageStore.showMessage('添加成功', 1000, {
+    //   closeCallBack: () => {
+    //     uni.navigateBack({ delta: 2 });
+    //   }
+    // });
   };
-
-  const formChange = ({ item, value }) => {};
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
