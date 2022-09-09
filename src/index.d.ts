@@ -58,7 +58,7 @@ interface IAddress {
   city: string;
   county: string;
   createTime: string;
-  defaultFlag: '1' | '0';
+  defaultFlag: 1 | 0;
   detailedAddress: string;
   herenId: string;
   id: number;

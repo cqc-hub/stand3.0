@@ -26,7 +26,7 @@
               <view class="item-title-left flex-normal">
                 <text>{{ item.senderName }}</text>
                 <text>{{ item.senderPhone }}</text>
-                <g-tag v-if="item.defaultFlag === '1'" type="yellow" text="默认" />
+                <g-tag v-if="item.defaultFlag === 1" type="yellow" text="默认" />
               </view>
               <view class="item-title-right flex-normal" @tap="gotoAdd('edit', item)">
                 <view class="iconfont">&#xe6b9;</view>
@@ -77,18 +77,28 @@
     });
   };
 
-  const gotoAdd = (type, item) => {
-    // uni.navigateBack({ delta: 1 });
-
+  const gotoAdd = (type, item?) => {
+    let obj = {};
+    if (item) {
+      item.address = [item.province + item.county + item.city];
+      obj = {
+        senderName: item.senderName,
+        senderPhone: item.senderPhone,
+        address: [item.province, item.county, item.city],
+        detailedAddress: item.detailedAddress,
+        postcode: item.postcode,
+        id: item.id
+      };
+    }
     uni.navigateTo({
       url: joinQuery('/pagesC/shippingAddress/addAddress', {
-        ...item,
+        item: JSON.stringify(obj),
         pageType: type
       })
     });
   };
   const getAddress = async (data) => {
-    const { result } = await api.addExpressAddress({
+    await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
       senderName: data.userName,
       senderPhone: data.telNumber,
@@ -97,7 +107,7 @@
       province: data.provinceName,
       city: data.cityName,
       county: data.countyName,
-      defaultFlag: '1'
+      defaultFlag: 1
     });
     messageStore.showMessage('添加成功', 1000, {
       closeCallBack: () => {
@@ -115,13 +125,11 @@
           uni.chooseAddress({
             success(res) {
               getAddress(res);
-              console.log('地址信息', res);
             }
           });
         } else {
           //未授权 取消地址授权 需要打开设置
           if (res.authSetting['scope.address'] == false) {
-            console.log('222');
             wx.openSetting({
               success(res) {
                 console.log(res.authSetting);
@@ -129,10 +137,8 @@
             });
           } else {
             //第一次打开
-            console.log('eee');
             uni.chooseAddress({
               success(res) {
-                console.log('地址信息', res);
                 getAddress(res);
               }
             });

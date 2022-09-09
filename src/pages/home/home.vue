@@ -3,7 +3,7 @@
     <scroll-view class="scroll-page" scroll-y>
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="homePage">
-          <view>
+          <view class="search">
             <g-search :searchPlaceholder="searchPlaceholder"></g-search>
           </view>
           <view class="card">
@@ -54,7 +54,7 @@
             </block>
 
             <view class="top-menu">
-              <view class="box" v-if="topMenuList">
+              <view class="box" v-if="topMenuList.length">
                 <homeGrid :list="topMenuList" :type="1"></homeGrid>
               </view>
               <view class="notice flex-normal">
@@ -80,7 +80,7 @@
           <view class="banner-menu">
             <homeBanner :leftFunctionList="bannerLeftFunctionList" :functionList="bannerFunctionList" />
           </view>
-          <view class="fun-list" v-if="menuList">
+          <view class="fun-list" v-if="menuList.length">
             <homeMenu :list="menuList" />
           </view>
           <view class="bg-back">
@@ -196,12 +196,14 @@
     flex-direction: column;
     display: flex;
     background: #ffffff;
-    padding: 32rpx;
     box-sizing: border-box;
   }
 
   .homePage {
-    padding-bottom: 350rpx;
+    padding: 0 32rpx 300rpx 32rpx;
+    .search {
+      padding-top: 32rpx;
+    }
 
     .card {
       margin-top: var(--h-margin-24);
@@ -318,7 +320,7 @@
         box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
 
         .box {
-          padding: 60rpx 0 40rpx 0;
+          padding: 30rpx 0 20rpx 0;
         }
 
         .bar-swiper {

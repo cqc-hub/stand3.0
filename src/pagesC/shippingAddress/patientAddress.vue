@@ -3,7 +3,6 @@
     <block v-if="addressList.length > 0">
       <scroll-view class="address-box-container" scroll-y>
         <view class="address-box">
-          {{ currentIndex }}
           <view
             class="box-item"
             :class="i == currentIndex ? 'active' : ''"
@@ -38,6 +37,7 @@
       confirmText="立即补充"
       @confirmButton="clickConfirm"
     ></xy-dialog>
+    <g-message />
   </view>
 </template>
 
@@ -46,12 +46,14 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores } from '@/utils';
   import api from '@/service/api';
+  import { useMessageStore } from '@/stores';
 
   const isAddShow = ref(false);
   const addressList = ref<IAddress[]>([]);
   const gStores = new GStores();
   const pageLoading = ref(false);
   const currentIndex = ref();
+  const messageStore = useMessageStore();
 
   onLoad(() => {
     getQueryExpressAddress();
@@ -64,10 +66,23 @@
     pageLoading.value = true;
   };
 
+  const getAddress = async (data) => {
+    await api.addExpressAddress(data);
+    messageStore.showMessage('添加成功', 1000, {
+      closeCallBack: () => {
+        uni.navigateBack({
+          delta: 1
+        });
+      }
+    });
+  };
   const clickSelect = (e, item) => {
     currentIndex.value = e;
     if (!item.province || !item.detailedAddress) {
       isAddShow.value = true;
+    } else {
+      //直接添加
+      getAddress(item);
     }
   };
   const clickConfirm = () => {

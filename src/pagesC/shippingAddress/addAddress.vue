@@ -8,7 +8,11 @@
         @address-change="addressChange"
         bodyBold
         ref="gform"
-      />
+      >
+        <template #suffix="{ item }">
+          <view></view>
+        </template>
+      </g-form>
     </view>
     <g-flag class="tip" typeFg="104" isShowFgTip />
 
@@ -23,6 +27,7 @@
       >
         保存
       </button>
+      <button v-if="props.pageType === 'edit'" @click="deleteAddress" class="btn btn-border">删除收货地址</button>
     </view>
   </view>
 </template>
@@ -39,6 +44,7 @@
   const props = withDefaults(
     defineProps<{
       pageType: 'edit' | 'add';
+      item: string;
     }>(),
     {
       pageType: 'add'
@@ -100,11 +106,12 @@
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
     },
     {
+      required: false,
       maxlength: 6,
       label: '邮政编码',
       field: 'input-text',
       placeholder: '请输入邮政编码',
-      key: 'postcode'
+      key: 'postCode'
     },
     {
       field: 'switch',
@@ -123,26 +130,33 @@
     addressChoose.county = addressCounty.text;
   };
 
+  const deleteAddress = async () => {
+    const item = JSON.parse(props.item);
+    await api.delExpressAddress({
+      herenId: gStores.globalStore.herenId,
+      id: item.id
+    });
+    messageStore.showMessage('删除成功', 1000);
+  };
+
   const formSubmit = async ({ data }) => {
-    console.log(999, data);
-    const { result } = await api.addExpressAddress({
+    await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
       ...data,
       ...addressChoose
     });
-    uni.navigateBack({ delta: 2 });
-    // messageStore.showMessage('添加成功', 1000, {
-    //   closeCallBack: () => {
-    //     uni.navigateBack({ delta: 2 });
-    //   }
-    // });
+    messageStore.showMessage('操作成功', 1000, {
+      closeCallBack: () => {
+        uni.navigateBack({ delta: 2 });
+      }
+    });
   };
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
     const formKeys = formList.map((o) => o.key);
     Object.entries(formData.value).map(([key, value]) => {
-      if (formKeys.includes(key) && value === '') {
+      if (formKeys.includes(key) && value === '' && key !== 'postCode') {
         isDisabled = true;
       }
     });
@@ -158,20 +172,10 @@
   });
 
   onMounted(() => {
-    // const { userName, mobile } = gStores.userStore.cacheUser;
-    // // 只有支付宝有
-    // if (userName && mobile && props.pageType === 'perfectReal') {
-    // 	formData.value[formKey.patientName] = userName;
-    // 	formData.value[formKey.patientPhone] = mobile;
-    // 	formList.map((o) => {
-    // 		const { key } = o;
-    // 		if (
-    // 			[formKey.patientName, formKey.patientPhone].includes(key as any)
-    // 		) {
-    // 			o.disabled = true;
-    // 		}
-    // 	});
-    // }
+    if (props.pageType === 'edit') {
+      const item = JSON.parse(props.item);
+      formData.value = { ...item };
+    }
     gform.value.setList(formList);
   });
 </script>

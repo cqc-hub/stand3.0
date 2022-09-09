@@ -6,7 +6,7 @@
       </view>
 
       <view v-if="isShowFgTip && text" class="tip">
-        <view class="title">温馨提示</view>
+        <view class="title">{{ mTitle }}</view>
         <rich-text :nodes="text" />
       </view>
     </slot>
@@ -66,14 +66,15 @@
   }
 
   .tip {
+    margin-top: 40rpx;
     .title {
       margin-bottom: 10rpx;
     }
 
-    padding: 0 20rpx;
+    padding: 0 32rpx;
     font-size: 28rpx;
     line-height: 40rpx;
-    color: #999;
+    color: #888;
     padding-bottom: 50rpx;
     word-break: break-all;
   }
