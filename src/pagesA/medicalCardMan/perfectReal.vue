@@ -195,6 +195,6 @@
     right: 0;
     left: 0;
     background-color: var(--h-color-white);
-    padding: 32rpx 32rpx 68rpx;
+    padding: 24rpx 32rpx 48rpx;
   }
 </style>

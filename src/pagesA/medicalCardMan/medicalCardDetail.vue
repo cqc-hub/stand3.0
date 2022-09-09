@@ -89,7 +89,7 @@ onMounted(() => {
 	display: flex;
 	justify-content: center;
 	margin-top: 16rpx;
-	padding: 26rpx 0;
+	padding: 23rpx 0;
 	border-bottom: 1rpx solid var(--hr-neutral-color-2);
 	border-radius: 0;
 }

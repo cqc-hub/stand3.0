@@ -17,7 +17,7 @@ const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
 
 const routerStore = defineStore('router', {
   persist: {
-    key: '__router',
+    key: '__ROUTER',
     paths: ['_id', 'fullUrl', 'backRoute', '_p']
   },
 
@@ -37,8 +37,6 @@ const routerStore = defineStore('router', {
     },
 
     updateId(id) {
-      console.log('更新id', id);
-
       this._id = id;
     },
 
@@ -47,10 +45,6 @@ const routerStore = defineStore('router', {
     },
 
     receiveQuery(prop: ILoginBack) {
-      console.log(prop, 'prop----');
-      console.log(this._id);
-
-
       if (!(prop._p || prop._url)) return;
 
       if (prop._isOutLogin) {

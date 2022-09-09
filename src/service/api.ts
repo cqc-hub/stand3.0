@@ -81,6 +81,8 @@ const userApi = {
     }),
   //身份证OCR识别
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
+
+  getHospital: (data) => service.post('/phs-base/hospital/getHospital', parm(data)),
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post('/phs-user/relevantPatient/addPatientByHasBeenTreated', parm(data)),
@@ -108,7 +110,7 @@ const userApi = {
 const authApi = {
   authLogin: (data) =>
     service.post('/login/authLogin', parm(data), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     }),
 
   getTPAlipayUserInfoShare: (data) => {

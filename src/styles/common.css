@@ -55,6 +55,7 @@
 .btn {
   color: var(--h-color-white);
   border-radius: 16rpx;
+  font-size: var(--hr-font-size-xl);
 }
 
 .btn.btn-primary {

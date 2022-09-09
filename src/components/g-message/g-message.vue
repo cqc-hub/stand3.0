@@ -74,7 +74,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 10px;
+    padding: 20rpx 40rpx;
     color: #fff;
     border-radius: 10rpx;
     background-color: rgba(0, 0, 0, 0.6);
@@ -82,7 +82,6 @@ export default defineComponent({
     max-width: 450rpx;
     position: relative;
     top: -160rpx;
-    font-size: 26upx;
     word-break: break-all;
     `;
 
@@ -95,3 +94,10 @@ export default defineComponent({
 	}
 });
 </script>
+
+
+<style lang="scss" scoped>
+  .text {
+		font-size: var(--hr-font-size-base);
+	}
+</style>

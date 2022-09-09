@@ -4,209 +4,232 @@ import { GStores } from './login';
 import api from '@/service/api';
 
 const gStores = new GStores();
+
+export interface IHosInfo {
+  address: string;
+  aliasName: string;
+  hosId: string;
+  hosName: string;
+  hosPhoto: string;
+  hosType: string;
+  ifClick: string;
+  intro: string;
+  sender: string;
+  senderAddress: string;
+  senderPhone: string;
+}
 export class ServerStaticData {
-	/**
-	 * 选择地址的数据
-	 */
-	static async getAddressData(): Promise<ISelectOptions[]> {
-		const addressCity = getLocalStorage('addressCity');
+  /**
+   * 医院列表
+   */
+  static async getHosList(): Promise<IHosInfo[]> {
+    let hosList = getLocalStorage('hosList');
 
-		if (!addressCity) {
-			const { result } = await api.getAllDivision({});
+    if (!(hosList && hosList.length)) {
+      const { result } = await api.getHospital({});
+      hosList = result;
 
-			if (result && result.length) {
-				setLocalStorage({
-					addressCity: result
-				});
+      setLocalStorage({
+        hosList: result
+      });
+    }
 
-				return result;
-			} else {
-				return [];
-			}
-		} else {
-			return addressCity;
-		}
-	}
+    return hosList;
+  }
 
-	static async getAddMedicalData() {
-		let addMedicalData = getLocalStorage('addMedicalData');
+  /**
+   * 选择地址的数据
+   */
+  static async getAddressData(): Promise<ISelectOptions[]> {
+    const addressCity = getLocalStorage('addressCity');
 
-		if (!addMedicalData) {
-			await api.getTermsBySysAndCode({
-				domainCode:
-					'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
-			});
-		}
-	}
+    if (!addressCity) {
+      const { result } = await api.getAllDivision({});
 
-	/**
-	 * label: "已预约", value: "0"
-	 */
-	static async getSystemTerms(): Promise<ISelectOptions[]> {
-		const sysTerms = <ISelectOptions[] | undefined>(
-			getLocalStorage('sysTerms')
-		);
+      if (result && result.length) {
+        setLocalStorage({
+          addressCity: result
+        });
 
-		if (!sysTerms) {
-			const { result } = await api.getParamsMoreBySysCode({
-				paramCode: 'REG_ORDER_STATUS'
-			});
+        return result;
+      } else {
+        return [];
+      }
+    } else {
+      return addressCity;
+    }
+  }
 
-			const list = result && result.REG_ORDER_STATUS;
+  static async getAddMedicalData() {
+    let addMedicalData = getLocalStorage('addMedicalData');
 
-			if (list) {
-				const res = JSON.parse(list).map((item) => {
-					return {
-						label: item.label,
-						value: item.code
-					};
-				});
+    if (!addMedicalData) {
+      await api.getTermsBySysAndCode({
+        domainCode: 'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
+      });
+    }
+  }
 
-				setLocalStorage({
-					sysTerms: res
-				});
+  /**
+   * label: "已预约", value: "0"
+   */
+  static async getSystemTerms(): Promise<ISelectOptions[]> {
+    const sysTerms = <ISelectOptions[] | undefined>getLocalStorage('sysTerms');
 
-				return res;
-			} else {
-				return [];
-			}
-		} else {
-			return sysTerms;
-		}
-	}
+    if (!sysTerms) {
+      const { result } = await api.getParamsMoreBySysCode({
+        paramCode: 'REG_ORDER_STATUS'
+      });
 
-	/**
-	 * 民族
-	 */
-	static async getNationTerms(): Promise<ISelectOptions[]> {
-		const nationTerms = <ISelectOptions[] | undefined>(
-			getLocalStorage('nationTerms')
-		);
+      const list = result && result.REG_ORDER_STATUS;
 
-		if (!nationTerms) {
-			const { result } = await api.getTermsBySysAndCode({
-				domainCode: 'CHINESE_NATION'
-			});
+      if (list) {
+        const res = JSON.parse(list).map((item) => {
+          return {
+            label: item.label,
+            value: item.code
+          };
+        });
 
-			const list = result && result.length && result[0].terms;
+        setLocalStorage({
+          sysTerms: res
+        });
 
-			if (list) {
-				const res = list.map((o) => ({
-					label: o.label,
-					value: o.code
-				}));
+        return res;
+      } else {
+        return [];
+      }
+    } else {
+      return sysTerms;
+    }
+  }
 
-				setLocalStorage({
-					nationTerms: res
-				});
+  /**
+   * 民族
+   */
+  static async getNationTerms(): Promise<ISelectOptions[]> {
+    const nationTerms = <ISelectOptions[] | undefined>getLocalStorage('nationTerms');
 
-				return res;
-			} else {
-				return [];
-			}
-		} else {
-			return nationTerms;
-		}
-	}
+    if (!nationTerms) {
+      const { result } = await api.getTermsBySysAndCode({
+        domainCode: 'CHINESE_NATION'
+      });
 
-	/**
-	 * 就诊人类型
-	 */
-	static async getPatientTypeTerms(): Promise<ISelectOptions[]> {
-		const patientTypeTerms = <ISelectOptions[] | undefined>(
-			getLocalStorage('patientTypeTerms')
-		);
+      const list = result && result.length && result[0].terms;
 
-		if (!patientTypeTerms) {
-			const { result } = await api.getParamsMoreBySysCode({
-				paramCode: 'PATIENT_TYPE'
-			});
-			const PATIENT_TYPE = result.PATIENT_TYPE;
+      if (list) {
+        const res = list.map((o) => ({
+          label: o.label,
+          value: o.code
+        }));
 
-			try {
-				const patientTypeTerms = JSON.parse(PATIENT_TYPE);
+        setLocalStorage({
+          nationTerms: res
+        });
 
-				setLocalStorage({
-					patientTypeTerms
-				});
+        return res;
+      } else {
+        return [];
+      }
+    } else {
+      return nationTerms;
+    }
+  }
 
-				return patientTypeTerms;
-			} catch (err) {
-				gStores.messageStore.showMessage('获取就诊人类型失败');
-				console.error('获取就诊人类型失败: ', err);
-				return [];
-			}
-		} else {
-			return patientTypeTerms;
-		}
-	}
+  /**
+   * 就诊人类型
+   */
+  static async getPatientTypeTerms(): Promise<ISelectOptions[]> {
+    const patientTypeTerms = <ISelectOptions[] | undefined>getLocalStorage('patientTypeTerms');
 
-	/**
-	 * 01身份证 02居民户口簿 03护照 031中国籍普通护照
-	 */
-	static async getIdTypeTerms(): Promise<ISelectOptions[]> {
-		const idTypeTerms = <ISelectOptions[] | undefined>(
-			getLocalStorage('idTypeTerms')
-		);
+    if (!patientTypeTerms) {
+      const { result } = await api.getParamsMoreBySysCode({
+        paramCode: 'PATIENT_TYPE'
+      });
+      const PATIENT_TYPE = result.PATIENT_TYPE;
 
-		if (!idTypeTerms) {
-			const { result } = await api.getParamsMoreBySysCode({
-				paramCode: 'ID_CARD_TYPE'
-			});
-			const ID_CARD_TYPE = result.ID_CARD_TYPE;
+      try {
+        const patientTypeTerms = JSON.parse(PATIENT_TYPE);
 
-			try {
-				const idTypeTerms = JSON.parse(ID_CARD_TYPE);
+        setLocalStorage({
+          patientTypeTerms
+        });
 
-				setLocalStorage({
-					idTypeTerms
-				});
+        return patientTypeTerms;
+      } catch (err) {
+        gStores.messageStore.showMessage('获取就诊人类型失败');
+        console.error('获取就诊人类型失败: ', err);
+        return [];
+      }
+    } else {
+      return patientTypeTerms;
+    }
+  }
 
-				return idTypeTerms;
-			} catch (err) {
-				gStores.messageStore.showMessage('获取卡类型失败');
-				console.error('获取卡类型失败: ', err);
-				return [];
-			}
-		} else {
-			return idTypeTerms;
-		}
-	}
+  /**
+   * 01身份证 02居民户口簿 03护照 031中国籍普通护照
+   */
+  static async getIdTypeTerms(): Promise<ISelectOptions[]> {
+    const idTypeTerms = <ISelectOptions[] | undefined>getLocalStorage('idTypeTerms');
 
-	static getOptionsLabel(list: ISelectOptions[], value) {
-		const item = list.find((o) => o.value === value);
-		if (item) {
-			return item.label;
-		} else {
-			return '';
-		}
-	}
+    if (!idTypeTerms) {
+      const { result } = await api.getParamsMoreBySysCode({
+        paramCode: 'ID_CARD_TYPE'
+      });
+      const ID_CARD_TYPE = result.ID_CARD_TYPE;
 
-	/**
-	 * 首页配置的数据
-	 */
-	static async getHomeConfig(): Promise<any[]> {
-		const viewConfig = getLocalStorage('viewConfig');
+      try {
+        const idTypeTerms = JSON.parse(ID_CARD_TYPE);
 
-		if (!viewConfig) {
-			const { result } = await api.queryHospitalPattern({
-				version: '',
-				source: 1
-			});
+        setLocalStorage({
+          idTypeTerms
+        });
 
-			if (result && result.length) {
-				setLocalStorage({
-					viewConfig: result
-				});
+        return idTypeTerms;
+      } catch (err) {
+        gStores.messageStore.showMessage('获取卡类型失败');
+        console.error('获取卡类型失败: ', err);
+        return [];
+      }
+    } else {
+      return idTypeTerms;
+    }
+  }
 
-				return result;
-			} else {
-				return [];
-			}
-		} else {
-			return viewConfig;
-		}
-	}
+  static getOptionsLabel(list: ISelectOptions[], value) {
+    const item = list.find((o) => o.value === value);
+    if (item) {
+      return item.label;
+    } else {
+      return '';
+    }
+  }
 
-	private constructor() {}
+  /**
+   * 首页配置的数据
+   */
+  static async getHomeConfig(): Promise<any[]> {
+    const viewConfig = getLocalStorage('viewConfig');
+
+    if (!viewConfig) {
+      const { result } = await api.queryHospitalPattern({
+        version: '',
+        source: 1
+      });
+
+      if (result && result.length) {
+        setLocalStorage({
+          viewConfig: result
+        });
+
+        return result;
+      } else {
+        return [];
+      }
+    } else {
+      return viewConfig;
+    }
+  }
+
+  private constructor() {}
 }

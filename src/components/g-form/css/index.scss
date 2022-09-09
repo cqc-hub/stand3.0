@@ -8,13 +8,6 @@
   border-bottom: 1rpx solid var(--hr-neutral-color-2);
   color: var(--hr-neutral-color-8);
 
-  &.item-for-show {
-    // padding: 28rpx 32rpx;
-
-    .label {
-      height: 100%;
-    }
-  }
 
   .label {
     padding-top: 32rpx;
@@ -29,6 +22,11 @@
         color: var(--hr-error-color-6);
       }
     }
+  }
+
+
+  &.item-for-show {
+    padding: 10rpx 32rpx;
   }
 
   .container-body {
@@ -91,10 +89,13 @@
 
   &.form-item-bold {
 
-    :deep(input),
-    :deep(textarea),
-    .content-show {
-      font-weight: 600;
+    &.form-item-filled {
+
+      :deep(input),
+      :deep(textarea),
+      .content-show {
+        font-weight: 600;
+      }
     }
   }
 

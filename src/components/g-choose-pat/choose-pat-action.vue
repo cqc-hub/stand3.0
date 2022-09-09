@@ -84,6 +84,7 @@
         font-size: 48rpx;
         margin-right: 10rpx;
         font-weight: 500;
+        color: var(--hr-brand-color-6);
       }
     }
   }

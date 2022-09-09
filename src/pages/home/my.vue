@@ -5,6 +5,9 @@
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="top-bg" />
         <personRecord />
+
+
+
         <view class="my-menu">
           <view v-if="menu1List.length" class="list">
             <view class="title">我的订单</view>
@@ -156,7 +159,7 @@
     margin-bottom: 188rpx;
     .list {
       background: var(--h-color-white);
-      border: 2px solid #f3f3f3;
+      border: 2rpx solid var(--hr-neutral-color-11);
       border-radius: 16rpx;
       box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
       padding-bottom: 12rpx;
@@ -174,6 +177,6 @@
     position: relative;
     font-size: 40px;
     color: red;
-    -webkit-mask: linear-gradient(to bottom, #283237, transparent);
+    mask: linear-gradient(to bottom, #283237, transparent);
   }
 </style>

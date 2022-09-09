@@ -59,9 +59,9 @@ current.value = currentPath;
 	left: 0;
 	background-color: var(--h-color-white);
 	// padding: 32rpx 32rpx 68rpx;
-	height: 188rpx;
+	height: 180rpx;
 	border-top: 1rpx solid var(--hr-neutral-color-2);
-	box-shadow: 2px 0 4px rgba(0, 0, 0, 0.12);
+	box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
 
 	.tabbar-container {
 		display: flex;

@@ -177,7 +177,7 @@ export const tempList: TInstance[] = [
 		key: formKey.defaultFalg,
 		label: '设为默认就诊人',
 		labelWidth: '260rpx',
-		rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;'
+		rowStyle: 'margin-top: 16rpx;'
 	}
 ];
 
@@ -294,7 +294,7 @@ export const patCardDetailTempList: TInstance[] = [
 		key: patCardDetailFormKey.defaultFlag,
 		label: '设为默认就诊人',
 		labelWidth: '260rpx',
-		rowStyle: 'margin-top: 16rpx;'
+		rowStyle: 'margin-top: 16rpx; padding: 10rpx 32rpx;'
 	}
 ];
 

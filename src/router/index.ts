@@ -72,14 +72,14 @@ router.beforeEach(async (to, from) => {
   const currentRoute = getCurrentRoute(to.path);
   const globalStore = useGlobalStore();
 
-  console.log({
-    to,
-    from,
-    currentRoute,
-    pageAdmin,
-    globalStore,
-    isLogin: globalStore.isLogin
-  });
+  // console.log({
+  //   to,
+  //   from,
+  //   currentRoute,
+  //   pageAdmin,
+  //   globalStore,
+  //   isLogin: globalStore.isLogin
+  // });
 
   if (currentRoute) {
     const { extend } = currentRoute;
