@@ -10,11 +10,15 @@
         ref="gform"
       >
         <template #suffix="{ item }">
-          <view></view>
+          {{ item }}
+          <view v-if="item.key == 'detailedAddress'" @click="getCurrentAdd">
+            1
+            <view class="iconfont icon-resize">&#xe6d7;</view>
+          </view>
         </template>
       </g-form>
     </view>
-    <g-flag class="tip" typeFg="104" isShowFgTip />
+    <g-flag class="tip" typeFg="62" isShowFgTip />
 
     <g-message />
     <view class="footer">
@@ -27,8 +31,28 @@
       >
         保存
       </button>
-      <button v-if="props.pageType === 'edit'" @click="deleteAddress" class="btn btn-border">删除收货地址</button>
+      <button
+        v-if="props.pageType === 'edit'"
+        @click="
+          () => {
+            showDialog = true;
+          }
+        "
+        class="btn btn-border btn-normal"
+      >
+        删除收货地址
+      </button>
     </view>
+    <xy-dialog
+      content="您确定要删除所选地址吗？"
+      :show="showDialog"
+      @cancelButton="
+        () => {
+          showDialog = false;
+        }
+      "
+      @confirmButton="deleteAddress"
+    ></xy-dialog>
   </view>
 </template>
 
@@ -58,7 +82,7 @@
     address: '',
     detailedAddress: '',
     postcode: '',
-    defaultFlag: '1'
+    defaultFlag: true
   });
   const addressChoose = {
     province: '',
@@ -121,6 +145,7 @@
       rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;'
     }
   ];
+  const showDialog = ref(false);
 
   const addressChange = (e) => {
     const { value } = e;
@@ -130,24 +155,38 @@
     addressChoose.county = addressCounty.text;
   };
 
+  //获取当前位置
+  const getCurrentAdd = async () => {
+    uni.chooseAddress({
+      success(res) {
+        console.log(888, res);
+      }
+    });
+  };
+
   const deleteAddress = async () => {
     const item = JSON.parse(props.item);
     await api.delExpressAddress({
       herenId: gStores.globalStore.herenId,
       id: item.id
     });
-    messageStore.showMessage('删除成功', 1000);
+    messageStore.showMessage('删除成功', 1000, {
+      closeCallBack: () => {
+        uni.navigateBack({ delta: 1 });
+      }
+    });
   };
 
   const formSubmit = async ({ data }) => {
     await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
+      ...addressChoose,
       ...data,
-      ...addressChoose
+      defaultFlag: data.defaultFlag ? 1 : 0
     });
     messageStore.showMessage('操作成功', 1000, {
       closeCallBack: () => {
-        uni.navigateBack({ delta: 2 });
+        uni.navigateBack({ delta: 1 });
       }
     });
   };
@@ -174,13 +213,21 @@
   onMounted(() => {
     if (props.pageType === 'edit') {
       const item = JSON.parse(props.item);
-      formData.value = { ...item };
+      console.log(888, item);
+
+      formData.value = { ...item, defaultFlag: item.defaultFlag === 0 ? false : true };
     }
+    console.log(999, formData.value);
+
     gform.value.setList(formList);
   });
 </script>
 
 <style lang="scss" scoped>
+  .icon-resize {
+    width: 48rpx;
+    height: 48rpx;
+  }
   .footer {
     position: absolute;
     bottom: 0;
@@ -188,5 +235,10 @@
     left: 0;
     background-color: var(--h-color-white);
     padding: 32rpx 32rpx 68rpx;
+    button {
+      &:first-child {
+        margin-bottom: 24rpx;
+      }
+    }
   }
 </style>

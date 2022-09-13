@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onShow } from '@dcloudio/uni-app';
   import api from '@/service/api';
   import { GStores } from '@/utils';
   import { ref } from 'vue';
@@ -61,7 +61,8 @@
   const gStores = new GStores();
   const messageStore = useMessageStore();
   const addressList = ref<IAddress[]>([]);
-  onLoad(() => {
+
+  onShow(() => {
     getQueryExpressAddress();
   });
   const getQueryExpressAddress = async () => {
@@ -87,7 +88,11 @@
         address: [item.province, item.county, item.city],
         detailedAddress: item.detailedAddress,
         postcode: item.postcode,
-        id: item.id
+        id: item.id,
+        city: item.city,
+        county: item.county,
+        province: item.province,
+        defaultFlag: item.defaultFlag
       };
     }
     uni.navigateTo({
