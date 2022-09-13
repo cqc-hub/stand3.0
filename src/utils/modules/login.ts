@@ -3,7 +3,6 @@ import { getSysCode } from '@/common';
 
 import api from '@/service/api';
 import { ServerStaticData } from '@/utils';
-import { toRouterPath } from '@/common/checkJump';
 
 const packageAuthParams = (
   args: {},

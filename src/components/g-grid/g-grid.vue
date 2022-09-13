@@ -145,7 +145,7 @@
     line-height: 32rpx;
     font-size: var(--h-size-18);
     padding: 0 8rpx;
-    z-index: 100;
+    z-index: 1;
     right: 10rpx;
     top: 5rpx;
     background-color: var(--h-color-white);
@@ -161,7 +161,7 @@
     line-height: 32rpx;
     font-size: var(--h-size-18);
     padding: 0 8rpx;
-    z-index: 100;
+    z-index: 1;
     right: 10rpx;
     top: 5rpx;
     background-color: var(--h-color-white);
@@ -181,7 +181,7 @@
     text-align: center;
     font-size: var(--hr-font-size-xxxs);
     position: absolute;
-    z-index: 100;
+    z-index: 1;
     right: 5rpx;
     top: 5rpx;
   }

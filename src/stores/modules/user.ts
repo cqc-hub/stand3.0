@@ -71,6 +71,10 @@ const userStore = defineStore('user', {
         const patDefault = patList.find((o) => o.defaultFlag === '1');
         if (patDefault) {
           this.updatePatChoose(patDefault);
+        } else {
+          if (patList.length) {
+            this.updatePatChoose(patList[0]);
+          }
         }
       }
     },
