@@ -16,11 +16,14 @@
         placeholderStyle="font-size: 28rpx;color: #bbbbbb;"
         ref="easyinput"
       >
+        <template #prefix>
+          <view>
+            <view v-if="!value" class="iconfont icon-search prefix-icon">&#xe6e4;</view>
+          </view>
+        </template>
         <template #suffixIcon>
           <view @click.stop="clear" class="suffix-icon">
             <view v-if="value" class="iconfont icon-search">&#xe6de;</view>
-
-            <view v-else class="iconfont icon-search">&#xe6e4;</view>
           </view>
         </template>
 
@@ -36,11 +39,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue';
-  import easyInput from './easyInput.vue'
+  import easyInput from './easyInput.vue';
 
   export default defineComponent({
     components: {
-      easyInput,
+      easyInput
     },
 
     props: {
@@ -129,5 +132,9 @@
   .icon-search {
     font-size: var(--hr-font-size-xl);
     color: var(--hr-neutral-color-9);
+  }
+
+  .prefix-icon {
+    padding-left: 20rpx;
   }
 </style>

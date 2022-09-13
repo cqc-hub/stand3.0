@@ -10,6 +10,7 @@ export interface IHosInfo {
   aliasName: string;
   hosId: string;
   hosName: string;
+  hosLevelName: string;
   hosPhoto: string;
   hosType: string;
   ifClick: string;

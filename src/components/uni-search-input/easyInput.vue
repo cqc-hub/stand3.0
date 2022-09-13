@@ -17,13 +17,11 @@
         'background-color': disabled ? styles.disableColor : ''
       }"
     >
-      <uni-icons
-        v-if="prefixIcon"
-        class="content-clear-icon"
-        :type="prefixIcon"
-        color="#c0c4cc"
-        @click="onClickIcon('prefix')"
-      ></uni-icons>
+      <view @click="onClickIcon('prefix')">
+        <slot name="prefix">
+          <uni-icons v-if="prefixIcon" class="content-clear-icon" :type="prefixIcon" color="#c0c4cc"></uni-icons>
+        </slot>
+      </view>
       <textarea
         v-if="type === 'textarea'"
         class="uni-easyinput__content-textarea"
