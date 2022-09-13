@@ -42,8 +42,6 @@
   const imgClick = () => {
     emits('img-click', props.item);
   };
-
-  console.log(props.item);
 </script>
 
 <style lang="scss" scoped>

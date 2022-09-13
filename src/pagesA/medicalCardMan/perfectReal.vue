@@ -60,11 +60,11 @@
   const gStores = new GStores();
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
-    patientName: '大钢炮22',
-    patientPhone: '13868529891',
-    [formKey.verify]: '2313',
-    [formKey.medicalType]: '-1',
-    [formKey.defaultFalg]: true
+    // patientName: '大钢炮22',
+    // patientPhone: '13868529891',
+    // [formKey.verify]: '2313',
+    // [formKey.medicalType]: '-1',
+    // [formKey.defaultFalg]: true
   });
 
   const formList = pickTempItem(['medicalType', 'patientName', 'patientPhone', 'verify', 'defaultFalg']);
@@ -156,6 +156,8 @@
         isDisabled = true;
       }
     });
+
+    return 0
 
     return isDisabled;
   });

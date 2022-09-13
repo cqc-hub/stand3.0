@@ -10,6 +10,7 @@
           'form-item-bold': bodyBold,
           'form-item-disabled': item.disabled,
           'form-item-filled': !!value[item.key],
+          'form-item-error': warningKeys.includes(item.key),
           [`form-item-${item.field}`]: true
         }"
         :style="`--label-width: ${item.labelWidth || '190rpx'}; ${(item.rowStyle && item.rowStyle) || ''}`"
@@ -41,7 +42,7 @@
               :placeholder="item.placeholder"
               :inputBorder="false"
               :clearable="false"
-              :placeholderStyle="inputPlaceHolderStyle"
+              :placeholderStyle="inputPlaceHolderStyle(item)"
               :value="value[item.key]"
               :type="item.inputType"
               :maxlength="item.maxlength"
@@ -68,7 +69,7 @@
                   :placeholder="item.placeholder"
                   :inputBorder="false"
                   :clearable="false"
-                  :placeholderStyle="inputPlaceHolderStyle"
+                  :placeholderStyle="inputPlaceHolderStyle(item)"
                   :value="ServerStaticData.getOptionsLabel(item.options, value[item.key])"
                   class="form-input"
                 />
@@ -87,7 +88,7 @@
                   :placeholder="item.placeholder"
                   :inputBorder="false"
                   :clearable="false"
-                  :placeholderStyle="inputPlaceHolderStyle"
+                  :placeholderStyle="inputPlaceHolderStyle(item)"
                   :value="value[item.key]"
                   class="form-input"
                 />
@@ -114,7 +115,7 @@
                     :placeholder="item.placeholder"
                     :inputBorder="false"
                     :clearable="false"
-                    :placeholderStyle="inputPlaceHolderStyle"
+                    :placeholderStyle="inputPlaceHolderStyle(item)"
                     :value="value[item.key]"
                     class="form-input"
                   />
@@ -192,7 +193,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, withDefaults } from 'vue';
+  import { ref, withDefaults, watchEffect } from 'vue';
   import type {
     TInstance,
     ISelectOptions,
@@ -223,6 +224,8 @@
     }
   );
 
+  const warningKeys = ref<string[]>([]);
+
   const emits = defineEmits([
     'update:value',
     'submit',
@@ -234,10 +237,23 @@
     'ocr-ident'
   ]);
 
-  const inputPlaceHolderStyle = `
-    color: var(--hr-neutral-color-5);
-		font-size: var(--hr-font-size-base);
-`;
+  const inputPlaceHolderStyle = (item: TInstance) => {
+    const key = item.key;
+    if (warningKeys.value.includes(key)) {
+      if (props.value[item.key]) {
+        return `color: var(--hr-neutral-color-5);
+  		font-size: var(--hr-font-size-base);`;
+      } else {
+        return `
+        font-size: var(--hr-font-size-base);
+        color: red;
+        `;
+      }
+    } else {
+      return `color: var(--hr-neutral-color-5);
+  		font-size: var(--hr-font-size-base);`;
+    }
+  };
 
   const dataPicker = ref();
   const actionSheet = ref();
@@ -422,6 +438,15 @@
 
     if (item) {
       const key = Object.keys(value)[0];
+
+      if (warningKeys.value.length) {
+        const idx = warningKeys.value.findIndex((o) => o === key);
+
+        if (idx !== -1) {
+          warningKeys.value.splice(idx, 1);
+        }
+      }
+
       emits('change', {
         item,
         value: value[key],
@@ -448,6 +473,11 @@
         const flag = matchValue(o);
         if (!flag) {
           messageStore.showMessage(o.message, 1500);
+          const key = item.key;
+
+          if (!warningKeys.value.includes(key)) {
+            warningKeys.value.push(key);
+          }
           throw new Error(item.label + ': 校验失败(rule)');
         }
       });
@@ -455,6 +485,11 @@
       const flag = matchValue(rule);
       if (!flag) {
         messageStore.showMessage(rule.message, 1500);
+        const key = item.key;
+
+        if (!warningKeys.value.includes(key)) {
+          warningKeys.value.push(key);
+        }
         throw new Error(item.label + ': 校验失败(rule)');
       }
     }
@@ -475,6 +510,10 @@
       if (required && !isFillValue) {
         const defaultEmptyMessage = item.label + ' 不能为空';
         messageStore.showMessage(emptyMessage || defaultEmptyMessage, 1500);
+
+        if (!warningKeys.value.includes(key)) {
+          warningKeys.value.push(key);
+        }
         throw new Error(item.label + ': 校验失败(empty)');
       }
 
@@ -487,6 +526,9 @@
 
         if (!success) {
           messageStore.showMessage(message, 1500);
+          if (!warningKeys.value.includes(key)) {
+            warningKeys.value.push(key);
+          }
           throw new Error(item.label + ': 校验失败(validator)');
         }
       }

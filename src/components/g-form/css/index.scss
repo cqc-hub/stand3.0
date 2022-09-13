@@ -126,6 +126,16 @@
 
 }
 
+.form-item-error {
+
+  :deep(input),
+  :deep(textarea),
+  input,
+  textarea {
+    color: var(--hr-error-color-6) !important;
+  }
+}
+
 .full-item {
   width: 100%;
 }

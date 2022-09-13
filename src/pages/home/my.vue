@@ -6,8 +6,6 @@
         <view class="top-bg" />
         <personRecord />
 
-
-
         <view class="my-menu">
           <view v-if="menu1List.length" class="list">
             <view class="title">我的订单</view>
@@ -105,13 +103,14 @@
   };
 
   const ttt = () => {
-    // uni.navigateTo({
-    // 	url: '/pagesA/medicalCardMan/medicalCardMan'
-    // });
     uni.navigateTo({
-      url: '/pages/piniaTest/piniaTest'
-      // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+      url: '/pagesA/MyRegistration/Register'
     });
+
+    // uni.navigateTo({
+    //   url: '/pages/piniaTest/piniaTest'
+    //   // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+    // });
     // uni.navigateTo({
     // 	url: '/pagesC/mixCheckResult/hsResult'
     // 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
