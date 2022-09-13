@@ -1,25 +1,25 @@
 /* 布局 */
 .flex-between {
-  display: flex;
+  display        : flex;
   justify-content: space-between;
-  align-items: center;
+  align-items    : center;
 }
 
 .flex-normal {
-  display: flex;
+  display    : flex;
   align-items: center;
 }
 
 .flex-normal-between {
-  display: flex;
+  display        : flex;
   justify-content: space-between;
 }
 
 .text-ellipsis {
-  display: -webkit-box;
+  display           : -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
-  overflow: hidden;
+  overflow          : hidden;
 }
 
 .g-border {
@@ -27,39 +27,40 @@
 }
 
 .g-flex-rc-cc {
-  display: flex;
+  display        : flex;
   justify-content: center;
-  align-items: center;
+  align-items    : center;
 }
 
 .icon-arrow {
-  height: 20rpx;
-  width: 20rpx;
-  display: inline-block;
-  border: 1rpx solid var(--hr-neutral-color-7);
+  height      : 20rpx;
+  width       : 20rpx;
+  display     : inline-block;
+  border      : 1rpx solid var(--hr-neutral-color-7);
   border-width: 4rpx 4rpx 0 0;
 
-  transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
+  transform        : rotate(45deg);
+  -ms-transform    : rotate(45deg);
+  -moz-transform   : rotate(45deg);
   -webkit-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
+  -o-transform     : rotate(45deg);
 }
 
 .icon-choose {
-  height: 15rpx;
-  width: 30rpx;
-  display: inline-block;
-  border: 1rpx solid var(--hr-brand-color-6);
+  height      : 15rpx;
+  width       : 30rpx;
+  display     : inline-block;
+  border      : 1rpx solid var(--hr-brand-color-6);
   border-width: 4rpx 4rpx 0 0;
-  transform: rotate(135deg);
+  transform   : rotate(135deg);
 }
 
 /* 按钮 */
 .btn {
-  color: var(--h-color-white);
+  color        : var(--h-color-white);
   border-radius: 16rpx;
-  font-size: var(--hr-font-size-xl);
+  font-size    : var(--hr-font-size-xl);
+  font-weight  : 600;
 }
 
 .btn.btn-primary {
@@ -67,8 +68,9 @@
 }
 
 .btn.btn-disabled {
-  pointer-events: none;
-  background-color: #9ebeff;
+  pointer-events  : none;
+  background-color: var(--hr-brand-color-3);
+  ;
 }
 
 .btn.btn-plain {
@@ -79,16 +81,14 @@
   border: 2rpx solid var(--hr-neutral-color-4);
 }
 
-.scroll-page {
-  height: 100vh;
+.btn.btn-normal {
+  color           : var(--hr-neutral-color-10);
+  background-color: #fff;
 }
 
-/* scroll-view {
-  height: 100vh;
-} */
 
 ::-webkit-scrollbar {
-  width: 0;
+  width : 0;
   height: 0;
-  color: transparent;
+  color : transparent;
 }
