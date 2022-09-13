@@ -22,6 +22,10 @@
   overflow: hidden;
 }
 
+.g-border {
+  border: 1rpx solid var(--hr-neutral-color-2);
+}
+
 .g-flex-rc-cc {
   display: flex;
   justify-content: center;
@@ -82,3 +86,9 @@
 /* scroll-view {
   height: 100vh;
 } */
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
