@@ -291,6 +291,10 @@
         if (formData.value[key]) {
           o.disabled = true;
         }
+
+        if (key === formKey.medicalType) {
+          o.showSuffixArrowIcon = false;
+        }
       }
     });
 

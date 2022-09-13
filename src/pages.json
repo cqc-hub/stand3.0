@@ -180,6 +180,11 @@
         "name": "选择院区",
         "path": "pagesA/MyRegistration/Register",
         "query": "name=cqc&op=233"
+      },
+      {
+        "name": "piniaTest",
+        "path": "pages/piniaTest/piniaTest",
+        "query": "name=cqc&op=233"
       }
     ]
   }

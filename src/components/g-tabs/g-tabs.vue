@@ -121,7 +121,7 @@ export default {
     },
     color: {
       type: String,
-      default: '#888888',
+      default: '#999',
     },
     activeColor: {
       type: String,
@@ -161,7 +161,7 @@ export default {
     },
     lineRadius: {
       type: String,
-      default: '10rpx',
+      default: '0',
     },
     pills: {
       type: Boolean,
@@ -173,7 +173,8 @@ export default {
     },
     pillsBorderRadius: {
       type: String,
-      default: '10rpx',
+      // default: '10rpx',
+      default: '0',
     },
     field: {
       type: String,
@@ -274,7 +275,9 @@ export default {
           // 当前滑块的宽度
           this.currentWidth = currentWidth;
           // 缩放后的滑块宽度
-          this.lineWidth = currentWidth * this.lineScale * 1;
+          // this.lineWidth = currentWidth * this.lineScale * 1;
+
+          this.lineWidth = 24;
           // 滑块作移动的位置
           this.lineLeft = lineLeft + currentWidth / 2;
           // 胶囊距离左侧的位置

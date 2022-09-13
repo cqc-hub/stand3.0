@@ -3,22 +3,19 @@
 
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-	font-family: 'iconfont'; /* Project id 3235998 */
-	src: url('//at.alicdn.com/t/c/font_3235998_xd82j1vecqf.woff2?t=1661915657789')
-			format('woff2'),
-		url('//at.alicdn.com/t/c/font_3235998_xd82j1vecqf.woff?t=1661915657789')
-			format('woff'),
-		url('//at.alicdn.com/t/c/font_3235998_xd82j1vecqf.ttf?t=1661915657789')
-			format('truetype');
+  font-family: 'iconfont'; /* Project id 3235998 */
+  src: url('//at.alicdn.com/t/c/font_3235998_0sz59cf24f9e.woff2?t=1663034099577') format('woff2'),
+    url('//at.alicdn.com/t/c/font_3235998_0sz59cf24f9e.woff?t=1663034099577') format('woff'),
+    url('//at.alicdn.com/t/c/font_3235998_0sz59cf24f9e.ttf?t=1663034099577') format('truetype');
 }
 
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 
 .iconfont {
-	font-family: 'iconfont' !important;
-	font-size: 16px;
-	font-style: normal;
-	-webkit-font-smoothing: antialiased;
-	-webkit-text-stroke-width: 0.2px;
-	-moz-osx-font-smoothing: grayscale;
+  font-family: 'iconfont' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
 }

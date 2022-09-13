@@ -4,7 +4,8 @@
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="homePage">
           <view class="search">
-            <g-search :searchPlaceholder="searchPlaceholder"></g-search>
+            <uni-search-input v-model:value="aaa" inputBorder :placeholder="searchPlaceholder"  />
+            <!-- <g-search :searchPlaceholder="searchPlaceholder"></g-search> -->
           </view>
           <view class="card">
             <!-- 登录之后 -->
@@ -147,6 +148,7 @@
   };
 
   const searchPlaceholder = '搜索科室、医生或疾病';
+  const aaa = ref('')
   let topMenuList = ref<IRoute[]>([]); //首页顶部menu
   const noticeMenu = ref<IRoute[]>([]); //通知列表
   const bannerLeftFunctionList = ref([]); //banner列表
