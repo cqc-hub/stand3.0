@@ -1,10 +1,11 @@
 <template>
   <view class="">
     <view>
-      <uni-easyinput
+      <easy-input
         :value="value"
         :styles="{
-          color: '#111111'
+          color: 'var(--hr-neutral-color-10)',
+          borderColor: 'var(--hr-neutral-color-9)'
         }"
         :placeholder="placeholder"
         :inputBorder="inputBorder"
@@ -28,15 +29,20 @@
             <view v-if="value" @click="cancel" class="suffix-right">取消</view>
           </view>
         </template>
-      </uni-easyinput>
+      </easy-input>
     </view>
   </view>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue';
+  import easyInput from './easyInput.vue'
 
   export default defineComponent({
+    components: {
+      easyInput,
+    },
+
     props: {
       placeholder: {
         type: String,
@@ -97,7 +103,7 @@
 
 <style lang="scss" scoped>
   :deep(.uni-easyinput__content) {
-    background-color: #f6f6f6;
+    background-color: var(--hr-neutral-color-1);
     height: 80rpx;
     border-radius: 16rpx;
   }
@@ -109,7 +115,7 @@
 
   :deep(.uni-easyinput__content .uni-icons) {
     font-size: var(--hr-font-size-xxl) !important;
-    color: #444444 !important;
+    color: var(--hr-neutral-color-9) !important;
   }
 
   .suffix-icon {
@@ -122,6 +128,6 @@
 
   .icon-search {
     font-size: var(--hr-font-size-xl);
-    color: #444;
+    color: var(--hr-neutral-color-9);
   }
 </style>

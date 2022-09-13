@@ -25,7 +25,7 @@
                       </text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="chooseAction">切换就诊人</view>
+                  <view class="switchPatient" @tap="chooseAction">更换就诊人</view>
                 </block>
                 <!-- 没有就诊人时 -->
                 <block v-else>
