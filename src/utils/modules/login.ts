@@ -98,8 +98,7 @@ export class LoginUtils extends GStores {
 
     setTimeout(() => {
       if (!isHideMessage) {
-        this.messageStore.showMessage('退出成功退出成功退出成功退出成功退出成功退出成功退出成功退出成功退出成功退出成功', 0);
-        // this.messageStore.showMessage('退出成功', 1500);
+        this.messageStore.showMessage('退出成功', 1500);
       }
 
       if (isGoLoginPage) {
@@ -260,8 +259,8 @@ export class PatientUtils extends LoginUtils {
     options: Partial<{
       addPatInterface: 'hasBeenTreated' | 'relevantPatient';
     }> = {
-      addPatInterface: 'hasBeenTreated'
-    }
+        addPatInterface: 'hasBeenTreated'
+      }
   ) {
     const { addPatInterface } = options;
     const { idCard: idNo, idType, patientName, patientPhone } = payload;

@@ -13,7 +13,7 @@
       <!-- #endif -->
       <!-- #ifdef MP-ALIPAY -->
       <view class="item g-flex-rc-cc" @tap="getWX">
-        <text class="icon-font ico_wechat" />
+        <text class="icon-font ico_alipay" />
         <text>获取就诊人地址</text>
       </view>
       <!-- #endif -->
@@ -21,14 +21,14 @@
     <block v-if="addressList.length > 0">
       <scroll-view class="address-box-container" scroll-y>
         <view class="address-box">
-          <view class="box-item" v-for="(item, i) in addressList" :key="i">
+          <view class="box-item" v-for="(item, i) in addressList" :key="i" @tap="gotoAdd('edit', item)">
             <view class="item-title flex-between">
               <view class="item-title-left flex-normal">
                 <text>{{ item.senderName }}</text>
                 <text>{{ item.senderPhone }}</text>
                 <g-tag v-if="item.defaultFlag === 1" type="yellow" text="默认" />
               </view>
-              <view class="item-title-right flex-normal" @tap="gotoAdd('edit', item)">
+              <view class="item-title-right flex-normal">
                 <view class="iconfont">&#xe6b9;</view>
                 编辑
               </view>
@@ -82,11 +82,10 @@
   const gotoAdd = (type, item?) => {
     let obj = {};
     if (item) {
-      item.address = [item.province + item.county + item.city];
       obj = {
         senderName: item.senderName,
         senderPhone: item.senderPhone,
-        address: [item.province, item.county, item.city],
+        address: item.province + item.county + item.city,
         detailedAddress: item.detailedAddress,
         postcode: item.postcode,
         id: item.id,
@@ -126,7 +125,6 @@
     //获取用户的当前设置
     uni.getSetting({
       success(res) {
-        console.log(res.authSetting);
         if (res.authSetting['scope.address']) {
           uni.chooseAddress({
             success(res) {
@@ -137,9 +135,7 @@
           //未授权 取消地址授权 需要打开设置
           if (res.authSetting['scope.address'] == false) {
             wx.openSetting({
-              success(res) {
-                console.log(res.authSetting);
-              }
+              success(res) {}
             });
           } else {
             //第一次打开
