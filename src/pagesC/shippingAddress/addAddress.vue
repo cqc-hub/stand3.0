@@ -11,7 +11,7 @@
       >
         <template #suffix="{ item }">
           <view v-if="item.key == 'detailedAddress'" @click="getCurrentAdd">
-            <view class="iconfont icon-resize">&#xe6d7;</view>
+            <view class="iconfont icon-resize">&#xe6b6;</view>
           </view>
         </template>
       </g-form>
@@ -212,12 +212,9 @@
   onMounted(() => {
     if (props.pageType === 'edit') {
       const item = JSON.parse(props.item);
-      console.log(888, item);
 
       formData.value = { ...item, defaultFlag: item.defaultFlag === 0 ? false : true };
     }
-    console.log(999, formData.value);
-
     gform.value.setList(formList);
   });
 </script>

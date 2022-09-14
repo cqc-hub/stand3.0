@@ -88,7 +88,12 @@ cmd: iconfont-tools
 
 ## h5 功能页汇总
 
- 功能 | 页面 | 参数
- :-- | :--: | :--
-健康咨询 | pagesA/healthAdvisory/healthAdvisory | sysCode
-用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId
+| 功能     |                  页面                   | 参数                  |
+| :------- | :-------------------------------------: | :-------------------- |
+| 健康咨询 |  pagesA/healthAdvisory/healthAdvisory   | sysCode               |
+| 用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId |
+| 服务电话 |        pages/helplines/helplines        | sysCode               |
+| 预问诊   |        pages/inquiries/inquiries        | sysCode token         |
+| 医院指南 |    pages/hospitalGuide/hospitalGuide    | sysCode hosId         |
+| 用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId |
+| 我的医生 |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
