@@ -9,6 +9,8 @@
 <script lang="ts" setup>
   import { defineComponent, ref, onMounted } from 'vue';
   import { ServerStaticData, IHosInfo } from '@/utils';
+  import { joinQuery } from '@/common';
+
   import hosListVue from './components/hosList/hosList.vue';
 
   import api from '@/service/api';
@@ -19,7 +21,15 @@
 
   const hosList = ref<IHosInfo[]>([]);
 
-  const itemClick = (item: IHosInfo) => {};
+  const itemClick = (item: IHosInfo) => {
+    const url = decodeURIComponent(props._url);
+
+    uni.navigateTo({
+      url: joinQuery(url, {
+        hosId: item.hosId
+      })
+    });
+  };
 
   const locationClick = (item: IHosInfo) => {};
 

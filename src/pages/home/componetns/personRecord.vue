@@ -131,8 +131,8 @@
       width: 120upx;
       height: 120upx;
       margin: 0 35upx;
-      border-radius: 60upx;
-      border: 3rpx solid var(--hr-neutral-color-1);
+      border-radius: 600upx;
+      border: 4rpx solid #fff;
     }
 
     .info {
@@ -197,6 +197,8 @@
 
   .record-container {
     margin: 48upx 32rpx;
+
+    margin-bottom: 24rpx;
 
     display: flex;
     gap: 16upx;

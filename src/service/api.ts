@@ -69,7 +69,10 @@ const queryApi = {
 // 挂号服务
 const regApi = {
   // 预问诊留言提交
-  subPreinquiryMessage: (data: any) => service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data))
+  subPreinquiryMessage: (data: any) => service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
+
+  // 科室列表
+  getDeptList: (data: any) => service.post('/phs-reg/reg/getDeptList', parm(data))
 };
 
 // 用户服务
@@ -110,7 +113,7 @@ const userApi = {
 const authApi = {
   authLogin: (data) =>
     service.post('/login/authLogin', parm(data), {
-      baseURL: global.authUrl,
+      baseURL: global.authUrl
     }),
 
   getTPAlipayUserInfoShare: (data) => {
