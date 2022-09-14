@@ -6,7 +6,7 @@
  */
 export const showLoading = (tips: string = '加载中...') => {
   uni.showLoading({
-    title: tips,
+    title: tips
     // mask: true
   });
   uni.showNavigationBarLoading();
@@ -44,16 +44,19 @@ export function cloneUtil<T>(target): T {
  * @param query 对象
  * @returns 对象数据拼接在参数上
  */
-export const joinQuery = function (url, query) {
+export const joinQuery = function (url: string, query) {
   const strQuery = Object.entries(query)
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  return url + '?' + strQuery;
+  if (url.includes('?')) {
+    return url + strQuery;
+  } else {
+    return url + '?' + strQuery;
+  }
 };
 
-
-/** 
+/**
  * 节流函数
  */
 export const throttle = function (func: Function, wait: number) {
@@ -93,10 +96,7 @@ export const getQueryUrl = function (url: string): BaseObject {
  * @param target
  * @returns target
  */
-export const insertObject = (
-  opt: { key: string; value: any },
-  target: BaseObject
-) => {
+export const insertObject = (opt: { key: string; value: any }, target: BaseObject) => {
   const { key, value } = opt;
   const keySlice = key.split('.');
   const len = keySlice.length;

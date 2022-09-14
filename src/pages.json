@@ -50,6 +50,13 @@
         },
 
         {
+          "path": "MyRegistration/selDepartment",
+          "style": {
+            "navigationBarTitleText": "选择科室"
+          }
+        },
+
+        {
           "path": "medicalCardMan/addMedical",
           "extend": {
             "login": true
@@ -179,7 +186,7 @@
       {
         "name": "选择院区",
         "path": "pagesA/MyRegistration/Register",
-        "query": "name=cqc&op=233"
+        "query": "_url=%2FpagesA%2FMyRegistration%2FselDepartment"
       },
       {
         "name": "piniaTest",

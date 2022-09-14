@@ -158,7 +158,7 @@
     margin-bottom: 188rpx;
     .list {
       background: var(--h-color-white);
-      border: 2rpx solid var(--hr-neutral-color-11);
+      border: 1rpx solid var(--hr-neutral-color-2);
       border-radius: 16rpx;
       box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
       padding-bottom: 12rpx;

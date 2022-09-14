@@ -46,9 +46,9 @@
 
     .pat-item {
       flex: 1;
-      border: 4rpx solid var(--hr-neutral-color-4);
+      border: 2rpx solid var(--hr-neutral-color-4);
       border-radius: 16rpx;
-      padding: 40rpx 32rpx;
+      padding: 32rpx;
       background-color: #fff;
 
       display: grid;
