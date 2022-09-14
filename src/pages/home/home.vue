@@ -4,8 +4,7 @@
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="homePage">
           <view class="search">
-            <uni-search-input v-model:value="aaa" inputBorder :placeholder="searchPlaceholder" />
-            <!-- <g-search :searchPlaceholder="searchPlaceholder"></g-search> -->
+            <uni-search-input v-model:value="aaa" :type="'2'" inputBorder :placeholder="searchPlaceholder" />
           </view>
           <view class="card">
             <!-- 登录之后 -->
@@ -205,7 +204,7 @@
   }
 
   .homePage {
-    padding: 0 32rpx 300rpx 32rpx;
+    padding: 0 32rpx 188rpx 32rpx;
     .search {
       padding-top: 32rpx;
     }
@@ -383,7 +382,7 @@
       margin-top: var(--h-margin-24);
     }
     .bg-back {
-      margin-top: 80rpx;
+      margin: 80rpx auto;
       text-align: center;
 
       image {

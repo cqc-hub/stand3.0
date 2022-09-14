@@ -142,7 +142,7 @@
     border: 1rpx solid var(--hr-success-color-6);
     border-radius: 17rpx;
     color: var(--hr-success-color-6);
-    line-height: 32rpx;
+    line-height: 28rpx;
     font-size: var(--h-size-18);
     padding: 0 8rpx;
     z-index: 1;
@@ -158,7 +158,7 @@
     border: 1rpx solid var(--hr-error-color-6);
     border-radius: 17rpx;
     color: var(--hr-error-color-6);
-    line-height: 32rpx;
+    line-height: 28rpx;
     font-size: var(--h-size-18);
     padding: 0 8rpx;
     z-index: 1;
@@ -166,23 +166,5 @@
     top: 5rpx;
     background-color: var(--h-color-white);
     box-sizing: border-box;
-  }
-  .weihu {
-    width: 90rpx;
-    height: 32rpx;
-    line-height: 32rpx;
-    color: var(--h-color-white);
-    background: var(--hr-error-color-6);
-    border: 2rpx solid var(--h-color-white);
-    border-radius: 200rpx;
-    // box-shadow: 0 4rpx 8rpx 0 rgba(210, 1, 1, 0.5);
-    box-shadow: 0 8rpx 40rpx 0r rgba(0, 0, 0, 0.06);
-    border-radius: 24rpx;
-    text-align: center;
-    font-size: var(--hr-font-size-xxxs);
-    position: absolute;
-    z-index: 1;
-    right: 5rpx;
-    top: 5rpx;
   }
 </style>

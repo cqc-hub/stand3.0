@@ -196,7 +196,7 @@
   }
 
   .record-container {
-    margin: 48upx 32rpx;
+    margin: 48upx 32rpx 24rpx 32rpx;
 
     display: flex;
     gap: 16upx;
