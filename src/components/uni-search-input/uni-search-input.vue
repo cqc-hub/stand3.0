@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <view>
+    <view :class="{ 'bg-home': type === '2' }">
       <easy-input
         :value="value"
         :styles="{
@@ -18,27 +18,27 @@
       >
         <template #prefix>
           <view>
-            <view v-if="!value" class="iconfont icon-search prefix-icon">&#xe6e4;</view>
+            <view class="iconfont icon-search prefix-icon">&#xe6e4;</view>
           </view>
         </template>
         <template #suffixIcon>
           <view @click.stop="clear" class="suffix-icon">
-            <view v-if="value" class="iconfont icon-search">&#xe6de;</view>
+            <view v-if="value" class="iconfont icon-search icon-searchColor">&#xe6de;</view>
           </view>
         </template>
 
-        <template #right>
+        <!-- <template #right>
           <view>
             <view v-if="value" @click="cancel" class="suffix-right">取消</view>
           </view>
-        </template>
+        </template> -->
       </easy-input>
     </view>
   </view>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import easyInput from './easyInput.vue';
 
   export default defineComponent({
@@ -47,6 +47,11 @@
     },
 
     props: {
+      //type：1:默认无边框  2:默认有边框(首页)
+      type: {
+        type: String,
+        default: '1'
+      },
       placeholder: {
         type: String,
         default: ''
@@ -105,6 +110,14 @@
 </script>
 
 <style lang="scss" scoped>
+  .bg-home {
+    :deep(.uni-easyinput__content) {
+      background-color: #fff;
+      height: 80rpx;
+      border-radius: 16rpx;
+    }
+  }
+
   :deep(.uni-easyinput__content) {
     background-color: var(--hr-neutral-color-1);
     height: 80rpx;
@@ -132,6 +145,9 @@
   .icon-search {
     font-size: var(--hr-font-size-xl);
     color: var(--hr-neutral-color-9);
+  }
+  .icon-searchColor {
+    color: var(--hr-neutral-color-7);
   }
 
   .prefix-icon {

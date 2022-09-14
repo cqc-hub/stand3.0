@@ -46,6 +46,7 @@
     <view class="footer">
       <button @click="gotoAdd('add')" class="btn btn-primary">新增收货地址</button>
     </view>
+    <g-message />
   </view>
 </template>
 
@@ -108,7 +109,7 @@
       senderName: data.userName,
       senderPhone: data.telNumber,
       detailedAddress: data.detailInfo,
-      postcode: data.postalCode,
+      postcode: data.postcode,
       province: data.provinceName,
       city: data.cityName,
       county: data.countyName,

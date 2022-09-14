@@ -10,9 +10,7 @@
         ref="gform"
       >
         <template #suffix="{ item }">
-          {{ item }}
           <view v-if="item.key == 'detailedAddress'" @click="getCurrentAdd">
-            1
             <view class="iconfont icon-resize">&#xe6d7;</view>
           </view>
         </template>
@@ -135,7 +133,7 @@
       label: '邮政编码',
       field: 'input-text',
       placeholder: '请输入邮政编码',
-      key: 'postCode'
+      key: 'postcode'
     },
     {
       field: 'switch',
@@ -157,9 +155,10 @@
 
   //获取当前位置
   const getCurrentAdd = async () => {
-    uni.chooseAddress({
+    uni.chooseLocation({
       success(res) {
         console.log(888, res);
+        formData.value.detailedAddress = res.address;
       }
     });
   };
@@ -195,7 +194,7 @@
     let isDisabled = false;
     const formKeys = formList.map((o) => o.key);
     Object.entries(formData.value).map(([key, value]) => {
-      if (formKeys.includes(key) && value === '' && key !== 'postCode') {
+      if (formKeys.includes(key) && value === '' && key !== 'postcode') {
         isDisabled = true;
       }
     });
@@ -225,8 +224,7 @@
 
 <style lang="scss" scoped>
   .icon-resize {
-    width: 48rpx;
-    height: 48rpx;
+    font-size: 48rpx;
   }
   .footer {
     position: absolute;
