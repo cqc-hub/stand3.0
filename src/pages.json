@@ -184,6 +184,11 @@
     "current": 0,
     "list": [
       {
+        "name": "选择科室",
+        "path": "pagesA/MyRegistration/selDepartment",
+        "query": "_url=%2FpagesA%2FMyRegistration%2FselDepartment"
+      },
+      {
         "name": "选择院区",
         "path": "pagesA/MyRegistration/Register",
         "query": "_url=%2FpagesA%2FMyRegistration%2FselDepartment"

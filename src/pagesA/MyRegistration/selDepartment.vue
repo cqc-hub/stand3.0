@@ -1,6 +1,5 @@
 <template>
   <view class="page">
-    <g-tabs v-model:value="tabCurrent" :tabs="tabs" :scroll="false" :line-scale="0.18" field="name" all-blod />
     <view class="container" scroll-y>
       <Department-List :list="depList" :level="depLevel" />
     </view>
@@ -15,22 +14,6 @@
   import api from '@/service/api';
 
   import DepartmentList from './components/departmentList/departmentList.vue';
-
-  const tabCurrent = ref(0);
-  const tabs = [
-    {
-      name: '全部'
-    },
-    {
-      name: '门诊'
-    },
-    {
-      name: '检查'
-    },
-    {
-      name: '药房'
-    }
-  ];
 
   const props = defineProps<{
     hosId: string;

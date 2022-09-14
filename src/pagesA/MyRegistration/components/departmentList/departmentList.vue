@@ -29,7 +29,13 @@
         @click="itemClickLv1(item, indexLv1)"
         class="item-lv1 g-flex-rc-cc"
       >
-        <text>{{ item.deptName }}</text>
+        <text class="text-ellipsis">{{ item.deptName }}</text>
+      </view>
+    </scroll-view>
+
+    <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
+      <view v-for="(itemLv2, i) in deptListLv2" :key="itemLv2.hosDeptId" class="dept-list-lv2-collapse-container">
+        <Dept-Collapse :item="itemLv2" :myId="i" />
       </view>
     </scroll-view>
   </view>
@@ -37,7 +43,9 @@
 
 <script lang="ts" setup>
   import { watch, ref, computed, getCurrentInstance } from 'vue';
-  import { IDeptLv1 } from '../../utils';
+  import { isLev1, IDeptLv1, IDeptLv2 } from '../../utils';
+
+  import DeptCollapse from '../dept-collapse/dept-collapse.vue';
 
   const props = withDefaults(
     defineProps<{
@@ -56,28 +64,34 @@
   const activeLV1 = ref(0);
 
   const isLv2 = computed(() => ['2', '3'].includes(props.level));
+  const deptListLv2 = ref<IDeptLv2[]>([]);
 
   watch(
     () => props.list,
     () => {
-      console.log(props.list);
-      getPillPosition();
+      if (props.list.length) {
+        itemClickLv1(props.list[0], 0);
+      }
     }
   );
 
   const itemClickLv1 = (item: IDeptLv1, index: number) => {
     activeLV1.value = index;
+
+    if (isLev1(item) && isLv2.value) {
+      deptListLv2.value = item.children || [];
+    }
+
     getPillPosition();
   };
 
   const inst = getCurrentInstance();
 
-  const getPillPosition = () => {
+  const getPillPosition = async () => {
     if (!isLv2.value) {
       return;
     }
     const query = uni.createSelectorQuery().in(inst);
-
     query
       .selectAll(`.item-lv1`)
       .boundingClientRect((data: any) => {
@@ -108,6 +122,8 @@
   .container {
     height: 100%;
 
+    display: flex;
+
     &.dept-list-lv2 {
       display: flex;
     }
@@ -127,6 +143,7 @@
     padding-right: 40rpx;
 
     justify-content: flex-start;
+    color: var(--hr-neutral-color-9);
 
     &-active {
       background-color: #fff;
@@ -141,6 +158,18 @@
     }
 
     &.dept-list-lv2 {
+    }
+  }
+
+  #dept-list-lv1-scrollContainer {
+    position: relative;
+  }
+
+  .dept-list-lv2-scrollContainer {
+    flex: 1;
+
+    .dept-list-lv2-collapse-container {
+      box-shadow: 0px -1px 0px 0px #f3f3f3 inset;
     }
   }
 </style>

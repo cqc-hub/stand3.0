@@ -36,15 +36,15 @@ export interface IDeptLv3 {
   visitingArea: string;
 }
 
-const isLev1 = (item): item is IDeptLv1 => {
+export const isLev1 = (item): item is IDeptLv1 => {
   return !!item.firstHosDeptId;
 };
 
-const isLev2 = (item): item is IDeptLv2 => {
+export const isLev2 = (item): item is IDeptLv2 => {
   return !!item.secondHosDeptId;
 };
 
-const isLev3 = (item): item is IDeptLv3 => {
+export const isLev3 = (item): item is IDeptLv3 => {
   return !!item.hosDeptId;
 };
 
