@@ -121,16 +121,6 @@
           }
         },
         {
-          "path": "mixCheckResult/hsResult",
-          "extend": {
-            "login": true,
-            "patient": true
-          },
-          "style": {
-            "navigationBarTitleText": "核酸结果查询"
-          }
-        },
-        {
           "path": "cloudHospital/myPath",
           "style": {
             "navigationBarTitleText": "跳转中..."
