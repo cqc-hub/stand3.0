@@ -1,5 +1,11 @@
 <template>
   <view class="page">
+    <view class="bread-crumbs" @click="toggleHos">
+      <view class="hos-label">当前医院：</view>
+      <view class="hos-name text-ellipsis">{{ getHosName }}</view>
+      <view class="iconfont ico-arrow">&#xe66b;</view>
+    </view>
+
     <view class="container" scroll-y>
       <Department-List
         :list="depList"
@@ -12,12 +18,15 @@
         @item-click-lv3="itemClickLv3"
       />
     </view>
+
+    <!-- <g-select v-model:value="hosId" title="切换医院" /> -->
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-  import { GStores } from '@/utils';
+  import { computed, ref } from 'vue';
+  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { IDeptLv1, IDeptLv2, IDeptLv3, loopDeptList, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
@@ -32,9 +41,18 @@
   const depLevel = ref('1');
   const gStores = new GStores();
   const deptStore = useDeptStore();
+  const hosList = ref<IHosInfo[]>([]);
+  const hosId = ref(props.hosId);
+  const isToggleDialogShow = ref(false);
 
   const init = () => {
+    getHosList();
     getDepList();
+  };
+
+  const getHosList = async () => {
+    const list = await ServerStaticData.getHosList();
+    hosList.value = list;
   };
 
   const getDepList = async () => {
@@ -89,8 +107,34 @@
     }
   };
 
+  const getHosName = computed(() => {
+    if (hosList.value.length) {
+      const item = hosList.value.find((o) => o.hosId == hosId.value);
+      if (item) {
+        return item.hosName;
+      } else {
+        return hosId.value;
+      }
+    } else {
+      return '';
+    }
+  });
+
   const registerContinue = (item: IDeptLv3) => {
     console.log(item);
+  };
+
+  const toggleHos = () => {
+    const len = hosList.value.length;
+    if (len) {
+      if (len === 1) {
+        gStores.messageStore.showMessage('没有可切换的院区', 1500);
+      } else {
+        isToggleDialogShow.value = true;
+      }
+    } else {
+      gStores.messageStore.showMessage('请求医院列表中， 请稍后点击', 1500);
+    }
   };
 
   init();
@@ -103,6 +147,28 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
+
+    .bread-crumbs {
+      display: flex;
+
+      font-size: var(--hr-font-size-xs);
+      color: var(--hr-neutral-color-7);
+      align-items: center;
+      padding: 14rpx 30rpx;
+
+      .hos-name {
+        // flex: 1;
+        color: var(--hr-neutral-color-10);
+      }
+
+      .ico-arrow {
+        font-size: var(--hr-font-size-xl);
+      }
+
+      .hos-label {
+        white-space: nowrap;
+      }
+    }
 
     .container {
       flex: 1;

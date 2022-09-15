@@ -19,7 +19,7 @@
         :class="{
           arrowBottom: isShow
         }"
-        class="iconfont ico_arrow right-icon"
+        class="iconfont ico-arrow right-icon"
       >
         &#xe66b;
       </view>
@@ -195,7 +195,7 @@
     padding: 26rpx 32rpx;
     font-size: var(--hr-font-size-base);
 
-    box-shadow: 0px -2rpx 0px 0px var(--hr-neutral-color-11) inset;
+    border-bottom: 1rpx solid var(--hr-neutral-color-2);
 
     &-active {
       color: var(--hr-brand-color-6);

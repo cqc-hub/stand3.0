@@ -3,6 +3,7 @@
     <scroll-view class="scroll-container" scroll-y>
       <hos-List-Vue :list="hosList" @img-click="imgClick" @location-click="locationClick" @item-click="itemClick" />
     </scroll-view>
+    <g-message />
   </view>
 </template>
 

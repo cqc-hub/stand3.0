@@ -36,7 +36,11 @@
     </scroll-view>
 
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
-      <view v-for="(itemLv2, i) in deptListLv2" :key="itemLv2.hosDeptId" class="dept-list-lv2-collapse-container">
+      <view
+        v-for="(itemLv2, i) in deptListLv2"
+        :key="itemLv2.hosDeptId"
+        class="dept-list-lv2-collapse-container animate__animated animate__fadeIn"
+      >
         <Dept-Collapse
           :item="itemLv2"
           :myId="i"
@@ -169,7 +173,6 @@
     height: 100%;
 
     display: flex;
-
   }
 
   .dept-list {

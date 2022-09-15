@@ -104,7 +104,7 @@
 
   const ttt = () => {
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/Register'
+      url: '/pagesA/MyRegistration/Register?_url=%2FpagesA%2FMyRegistration%2FselDepartment'
     });
 
     // uni.navigateTo({
