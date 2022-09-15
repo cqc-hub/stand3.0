@@ -2,16 +2,20 @@
   <view class="collapse-box" :class="{ boxShadow: boxShadow, borderRadius: borderRadius }">
     <view
       class="title my-row"
-      :class="{ border: border, borderRadius: borderRadius }"
+      :class="{
+        border: border,
+        borderRadius: borderRadius,
+        'my-row-active': !item.children && activeLv2.hosDeptId === item.hosDeptId
+      }"
       :style="{
         backgroundColor: !disabled && isShow ? activebg : '',
         color: !disabled && isShow ? activeColor : ''
       }"
       @click="headerClick"
     >
-      <!-- @click="disabled ? '' : show()" -->
-      <view class="title-label">{{ item.deptName }}</view>
+      <view class="title-label">{{ item.deptName || '没有名字' }}</view>
       <view
+        v-show="item.children"
         :class="{
           arrowBottom: isShow
         }"
@@ -21,8 +25,18 @@
       </view>
     </view>
     <view class="content-box" :style="{ height: isShow ? contentHeight + 'px' : '0' }">
-      <view id="content" class="content">
-        <slot>{{ content }}</slot>
+      <view v-if="item.children" id="content" class="content">
+        <view
+          v-for="_item in item.children"
+          @click="itemClickLv3(_item)"
+          :key="_item.hosDeptId"
+          :class="{
+            'my-row-active': activeLv3.hosDeptId === _item.hosDeptId
+          }"
+          class="my-row my-row-collapse"
+        >
+          {{ _item.deptName }}
+        </view>
       </view>
     </view>
   </view>
@@ -30,11 +44,13 @@
 
 <script lang="ts" setup>
   import { PropType, ref, onMounted, getCurrentInstance, nextTick } from 'vue';
-  import { isLev1, IDeptLv1, IDeptLv2 } from '../../utils';
+  import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
 
   const props = withDefaults(
     defineProps<{
       item: IDeptLv2;
+      activeLv2: IDeptLv2;
+      activeLv3: IDeptLv3;
       myId: number;
       title?: string;
       content?: string;
@@ -66,6 +82,8 @@
     }
   );
 
+  const emits = defineEmits(['show', 'item-click-lv2', 'item-click-lv3', 'open-now']);
+
   const isShow = ref(props.open);
   const contentHeight = ref(0);
   const inst = getCurrentInstance();
@@ -82,7 +100,7 @@
       query
         .select('#content')
         .boundingClientRect((res) => {
-          if (res.height) {
+          if (res && res.height) {
             contentHeight.value = res.height + props.offsetContentHeight;
           }
         })
@@ -90,8 +108,16 @@
     });
   };
 
-  const show = () => {
-    isShow.value = !isShow.value;
+  const show = (type?: boolean) => {
+    if (type === undefined) {
+      isShow.value = !isShow.value;
+    } else {
+      isShow.value = type;
+    }
+
+    if (isShow.value) {
+      emits('open-now', props.myId);
+    }
   };
 
   const headerClick = () => {
@@ -99,9 +125,23 @@
       return;
     }
 
+    itemClickLv2(props.item);
+
     if (props.item.children) {
       show();
+
+      if (isShow.value) {
+        emits('show', props.myId);
+      }
     }
+  };
+
+  const itemClickLv2 = (item: IDeptLv2) => {
+    emits('item-click-lv2', item);
+  };
+
+  const itemClickLv3 = (item: IDeptLv3) => {
+    emits('item-click-lv3', item);
   };
 
   onMounted(() => {
@@ -115,13 +155,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .collapse-box {
-  }
-
-  .boxShadow {
-    // box-shadow: 0 4rpx 6rpx rgba($color: #bbb, $alpha: 0.6);
-  }
-
   .borderRadius {
     border-radius: 16upx;
   }
@@ -149,22 +182,28 @@
     }
   }
 
-  .border {
-    // border-bottom: 2rpx solid #eee;
-  }
-
   .content-box {
     transition: 0.4s all;
     overflow: hidden;
 
     .content {
-      // padding: 0 24rpx;
-      // padding: 32rpx 24rpx;
+      background-color: var(--hr-brand-color-1);
     }
   }
 
   .my-row {
     padding: 26rpx 32rpx;
     font-size: var(--hr-font-size-base);
+
+    box-shadow: 0px -2rpx 0px 0px var(--hr-neutral-color-11) inset;
+
+    &-active {
+      color: var(--hr-brand-color-6);
+      font-weight: 600;
+    }
+  }
+
+  .my-row-collapse {
+    margin: 0 32rpx 0 72rpx;
   }
 </style>

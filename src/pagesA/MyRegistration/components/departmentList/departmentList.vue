@@ -3,7 +3,8 @@
     <scroll-view
       class="dept-list"
       :class="{
-        'dept-list-lv2': isLv2
+        'dept-list-lv2': isLv2,
+        'dept-list-lv1-scrollContainer': !isLv2
       }"
       id="dept-list-lv1-scrollContainer"
       scroll-y
@@ -24,18 +25,29 @@
         :key="item.firstHosDeptId"
         :class="{
           'dept-list-lv2': isLv2,
-          'item-lv1-active': activeLV1 === indexLv1
+          'item-lv1-active': activeLV1 === indexLv1,
+          'item-lv1-border': !isLv2
         }"
-        @click="itemClickLv1(item, indexLv1)"
+        @click="itemClickLv1(item)"
         class="item-lv1 g-flex-rc-cc"
       >
-        <text class="text-ellipsis">{{ item.deptName }}</text>
+        <text>{{ item.deptName }}</text>
       </view>
     </scroll-view>
 
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
       <view v-for="(itemLv2, i) in deptListLv2" :key="itemLv2.hosDeptId" class="dept-list-lv2-collapse-container">
-        <Dept-Collapse :item="itemLv2" :myId="i" />
+        <Dept-Collapse
+          :item="itemLv2"
+          :myId="i"
+          :active-lv2="activeLv2"
+          :active-lv3="activeLv3"
+          @show="collapseShow"
+          @open-now="(e) => (openNow = e)"
+          @item-click-lv2="itemClickLv2"
+          @item-click-lv3="itemClickLv3"
+          ref="collapseRef"
+        />
       </view>
     </scroll-view>
   </view>
@@ -43,7 +55,8 @@
 
 <script lang="ts" setup>
   import { watch, ref, computed, getCurrentInstance } from 'vue';
-  import { isLev1, IDeptLv1, IDeptLv2 } from '../../utils';
+  import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
+  import { wait } from '@/utils';
 
   import DeptCollapse from '../dept-collapse/dept-collapse.vue';
 
@@ -52,16 +65,26 @@
       list: IDeptLv1[];
       level: '1' | '2' | '3'; //  科室列表层级 1、一级科室 2、二级科室 3、三级科室
       lineColor?: string;
+      activeLv1: IDeptLv1;
+      activeLv2: IDeptLv2;
+      activeLv3: IDeptLv3;
     }>(),
     {
       lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)'
     }
   );
 
+  const scrollHeight = ref(0);
+
+  const emits = defineEmits(['item-click-lv1', 'item-click-lv2', 'item-click-lv3']);
+
+  const collapseRef = ref<any>('');
+
   const pillHeight = ref(0);
   const pillOffsetTop = ref(0);
 
-  const activeLV1 = ref(0);
+  const activeLV1 = ref(-1);
+  const openNow = ref(-1);
 
   const isLv2 = computed(() => ['2', '3'].includes(props.level));
   const deptListLv2 = ref<IDeptLv2[]>([]);
@@ -70,25 +93,15 @@
     () => props.list,
     () => {
       if (props.list.length) {
-        itemClickLv1(props.list[0], 0);
+        itemClickLv1(props.list[0]);
       }
     }
   );
 
-  const itemClickLv1 = (item: IDeptLv1, index: number) => {
-    activeLV1.value = index;
-
-    if (isLev1(item) && isLv2.value) {
-      deptListLv2.value = item.children || [];
-    }
-
-    getPillPosition();
-  };
-
   const inst = getCurrentInstance();
 
   const getPillPosition = async () => {
-    if (!isLv2.value) {
+    if (!isLv2.value || activeLV1.value < 0) {
       return;
     }
     const query = uni.createSelectorQuery().in(inst);
@@ -116,6 +129,39 @@
       })
       .exec();
   };
+
+  const collapseShow = (id: number) => {
+    if (collapseRef.value) {
+      collapseRef.value.map((collapseInst, i) => {
+        if (i !== id) {
+          collapseInst.show(false);
+        }
+      });
+    }
+  };
+
+  const itemClickLv1 = async (item: IDeptLv1) => {
+    emits('item-click-lv1', item);
+    await wait(0);
+
+    const idx = props.list.findIndex((o) => o.hosDeptId === props.activeLv1.hosDeptId);
+    if (idx !== -1) {
+      activeLV1.value = idx;
+    }
+    if (isLev1(item) && isLv2.value) {
+      deptListLv2.value = item.children || [];
+      getPillPosition();
+    }
+  };
+
+  const itemClickLv2 = (item: IDeptLv2) => {
+    emits('item-click-lv2', item);
+    openNow.value = -1;
+  };
+
+  const itemClickLv3 = (item: IDeptLv3) => {
+    emits('item-click-lv3', item);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -124,9 +170,6 @@
 
     display: flex;
 
-    &.dept-list-lv2 {
-      display: flex;
-    }
   }
 
   .dept-list {
@@ -144,6 +187,14 @@
 
     justify-content: flex-start;
     color: var(--hr-neutral-color-9);
+    transition: all 0.3s;
+
+    &.item-lv1-border {
+      border-bottom: 1rpx solid var(--hr-neutral-color-11);
+      margin: 0 32rpx;
+      padding-right: 0;
+      padding-left: 0;
+    }
 
     &-active {
       background-color: #fff;
@@ -156,20 +207,17 @@
       transition: all 0.3s linear;
       z-index: 9;
     }
-
-    &.dept-list-lv2 {
-    }
   }
 
   #dept-list-lv1-scrollContainer {
     position: relative;
+
+    &.dept-list-lv1-scrollContainer {
+      width: 100%;
+    }
   }
 
   .dept-list-lv2-scrollContainer {
     flex: 1;
-
-    .dept-list-lv2-collapse-container {
-      box-shadow: 0px -1px 0px 0px #f3f3f3 inset;
-    }
   }
 </style>

@@ -1,7 +1,16 @@
 <template>
   <view class="page">
     <view class="container" scroll-y>
-      <Department-List :list="depList" :level="depLevel" />
+      <Department-List
+        :list="depList"
+        :level="depLevel"
+        :active-lv1="deptStore.activeLv1"
+        :active-lv2="deptStore.activeLv2"
+        :active-lv3="deptStore.activeLv3"
+        @item-click-lv1="itemClickLv1"
+        @item-click-lv2="itemClickLv2"
+        @item-click-lv3="itemClickLv3"
+      />
     </view>
   </view>
 </template>
@@ -9,7 +18,7 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { GStores } from '@/utils';
-  import { IDeptLv1, loopDeptList } from './utils';
+  import { IDeptLv1, IDeptLv2, IDeptLv3, loopDeptList, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
 
@@ -22,6 +31,7 @@
   const depList = ref<IDeptLv1[]>([]);
   const depLevel = ref('1');
   const gStores = new GStores();
+  const deptStore = useDeptStore();
 
   const init = () => {
     getDepList();
@@ -40,11 +50,47 @@
 
     const { result } = await api.getDeptList(requestArg);
 
-    const { firstDeptList, deptListLevel } = result;
-    loopDeptList(firstDeptList);
+    let { firstDeptList, deptListLevel } = result;
+
+    // deptListLevel = '1'
+    loopDeptList(firstDeptList, deptListLevel);
+
+    // depList.value = [
+    //   ...firstDeptList,
+    //   ...firstDeptList,
+    //   ...firstDeptList,
+    //   ...firstDeptList,
+    //   ...firstDeptList,
+    //   ...firstDeptList
+    // ];
 
     depList.value = firstDeptList;
     depLevel.value = deptListLevel;
+  };
+
+  const itemClickLv1 = (item: IDeptLv1) => {
+    deptStore.changeActiveLv1(item);
+    if (depLevel.value === '1') {
+      registerContinue(item);
+    }
+  };
+
+  const itemClickLv2 = (item: IDeptLv2) => {
+    deptStore.changeActiveLv2(item);
+    if (depLevel.value === '2') {
+      registerContinue(item);
+    }
+  };
+
+  const itemClickLv3 = (item: IDeptLv3) => {
+    deptStore.changeActiveLv3(item);
+    if (depLevel.value === '3') {
+      registerContinue(item);
+    }
+  };
+
+  const registerContinue = (item: IDeptLv3) => {
+    console.log(item);
   };
 
   init();
@@ -53,7 +99,7 @@
 <style lang="scss" scoped>
   .page {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background-color: #fff;
