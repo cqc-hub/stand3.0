@@ -103,9 +103,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       const obj = {
         url:
           '/pagesC/cloudHospital/myPath?type=1&path=' +
-          item.path +
-          '&p=' +
-          item.id
+          item.path
       }
       typeNavigate(obj, type)
       break;
@@ -127,9 +125,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       const obj1 = {
         url:
           '/pagesC/cloudHospital/myPath?path=' +
-          item.path +
-          '&p=' +
-          item.id
+          item.path
       }
       typeNavigate(obj1, type)
       break;

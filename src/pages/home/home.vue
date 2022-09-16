@@ -200,7 +200,7 @@
     box-sizing: border-box;
   }
   .scroll-page {
-    height: 100%;
+    height: 100vh;
   }
 
   .homePage {

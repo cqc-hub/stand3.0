@@ -47,6 +47,7 @@
       };
 
       const goAddPat = () => {
+        actionSheet.value.hide();
         const pages = getCurrentPages();
         const fullPathNow = (pages[pages.length - 1] as any).$page.fullPath as string;
 
