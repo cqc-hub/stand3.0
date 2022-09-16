@@ -14,7 +14,7 @@
           <view class="popup-title text-ellipsis">
             {{ title }}
           </view>
-          <view @click="popup.hide" class="iconfont ico-close">&#xe63a;</view>
+          <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
         </view>
 
         <view class="popup-box">

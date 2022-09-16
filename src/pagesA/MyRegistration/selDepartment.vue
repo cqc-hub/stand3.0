@@ -19,7 +19,16 @@
       />
     </view>
 
-    <!-- <g-select v-model:value="hosId" title="切换医院" /> -->
+    <g-select
+      v-model:value="hosId"
+      v-model:show="isToggleDialogShow"
+      :option="hosList"
+      :field="{
+        label: 'hosName',
+        value: 'hosId'
+      }"
+      title="切换医院"
+    />
     <g-message />
   </view>
 </template>
@@ -127,6 +136,8 @@
   const toggleHos = () => {
     const len = hosList.value.length;
     if (len) {
+      isToggleDialogShow.value = true;
+      return;
       if (len === 1) {
         gStores.messageStore.showMessage('没有可切换的院区', 1500);
       } else {
