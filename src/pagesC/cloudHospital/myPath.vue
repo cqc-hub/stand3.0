@@ -12,6 +12,7 @@
   import { ref } from 'vue';
   import { useMessageStore } from '@/stores';
   import { GStores } from '@/utils';
+  import { encryptDesParam } from '@/common/des';
   // 自研h5页面统一入口
   const messageStore = useMessageStore();
   const gStores = new GStores();
@@ -30,9 +31,8 @@
   } as const;
   type A = keyof typeof allData;
 
+  // 页面固定携带 sysCode  加密参数（herenId patientid）
   onLoad((options) => {
-    console.log(999, options);
-
     getQueryPath(options);
     let query = getQueryPath(options);
     if (options.type == '1') {
@@ -48,7 +48,17 @@
   });
   const getQueryPath = (options) => {
     // path里面需要传参的时候['sysCode'] options.query有值得时候
-    let query = '?';
+    //获取当前默认就诊人的patientid
+    const patientId = gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
+    const herenId = gStores.globalStore && gStores.globalStore.herenId;
+
+    //默认加密参数
+    let desObj = {
+      _patientId: patientId,
+      _herenId: herenId
+    };
+    let _d = encryptDesParam(desObj);
+    let query = '?_d=' + _d + '&sysCode=' + allData.sysCode + '&';
     if (options.query) {
       let queryArray: A[] = JSON.parse(options.query as string);
       queryArray.map((item) => {
@@ -61,13 +71,13 @@
       });
       return query.slice(0, -1);
     } else {
-      return query;
+      return query.slice(0, -1);
     }
   };
 
   const handleMessage = (evt) => {
-    // #ifdef MP-WEIXIN
     console.log('返回数据', evt);
+    // #ifdef MP-WEIXIN
     var data = evt.target.data;
     var V3PageData = data[0];
     uni.openLocation({

@@ -56,7 +56,11 @@ const baseApi = {
   updateExpressAddress: (data) => service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
   //获取就诊人地址
   queryExpressAddressByPatient: (data) =>
-    service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data))
+    service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data)),
+  //获取拆分后的地址
+  getAddress: (data) =>
+    service.post('/phs-base/division/getAddress', parm(data))
+
 };
 // 查询服务
 const queryApi = {

@@ -36,7 +36,7 @@ Request.interceptors.response(
 
     if (code === 4000) {
       //  需要重新登录4000  0 成功
-      messageStore.showMessage(message, 0, {
+      messageStore.showMessage(message, 1500, {
         closeCallBack: () => {
           console.log('过期了');
           uni.redirectTo({
