@@ -4,6 +4,13 @@ import { GStores } from './login';
 import api from '@/service/api';
 
 const gStores = new GStores();
+export interface ISystemConfig {
+  // 预约挂号
+  order: {
+    // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
+    chooseDay: number;
+  };
+}
 
 export interface IHosInfo {
   address: string;
@@ -230,6 +237,16 @@ export class ServerStaticData {
     } else {
       return viewConfig;
     }
+  }
+
+  static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
+    const res = {
+      order: {
+        chooseDay: 20
+      }
+    } as ISystemConfig;
+
+    return res[key];
   }
 
   private constructor() {}

@@ -57,6 +57,13 @@
         },
 
         {
+          "path": "MyRegistration/order",
+          "style": {
+            "navigationBarTitleText": "挂号"
+          }
+        },
+
+        {
           "path": "medicalCardMan/addMedical",
           "extend": {
             "login": true
@@ -173,6 +180,11 @@
   "condition": {
     "current": 0,
     "list": [
+      {
+        "name": "医生挂号",
+        "path": "pagesA/MyRegistration/order",
+        "query": "hosId=1279&hosDeptId=2000011&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A411"
+      },
       {
         "name": "选择科室",
         "path": "pagesA/MyRegistration/selDepartment",

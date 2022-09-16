@@ -157,7 +157,6 @@
       }
     });
 
-    return 0
 
     return isDisabled;
   });

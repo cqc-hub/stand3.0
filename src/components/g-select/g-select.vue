@@ -2,9 +2,19 @@
   <view class="">
     <Gl-Popup ref="popup" :title="title" @hide="hide">
       <view>
-        <view v-for="(item, i) in option" :key="i" class="popup-row">
-          <view class="popup-row-label">{{ item[field.label] }}</view>
-          <view>233</view>
+        <view
+          v-for="(item, i) in option"
+          :key="i"
+          :class="{
+            'popup-row-active': isActive(item)
+          }"
+          @click="change(item)"
+          class="popup-row"
+        >
+          <view class="popup-row-label text-ellipsis">
+            {{ item[field.label] }}
+          </view>
+          <view v-if="isActive(item)" class="iconfont ico-check">&#xe6cc;</view>
         </view>
       </view>
     </Gl-Popup>
@@ -36,10 +46,32 @@
   );
 
   const popup = ref<InstanceType<typeof GlPopup>>();
-  const emits = defineEmits(['update:show', 'update:value']);
+  const emits = defineEmits(['update:show', 'update:value', 'change']);
+
+  const isActive = (item) => {
+    return item[props.field.value] === props.value;
+  };
 
   const hide = () => {
     emits('update:show', false);
+  };
+
+  const change = (item) => {
+    const value = item[props.field.value];
+
+    if (value === props.value) {
+      return;
+    }
+
+    close();
+    emits('update:value', value);
+    emits('change', {
+      item
+    });
+  };
+
+  const close = () => {
+    popup.value?.hide();
   };
 
   watch(
@@ -47,8 +79,6 @@
     () => {
       if (props.show) {
         popup.value?.show();
-      } else {
-        popup.value?.hide();
       }
     }
   );
@@ -56,11 +86,21 @@
 
 <style lang="scss" scoped>
   .popup-row {
-    display: flex;
+    display: grid;
     align-items: center;
+    padding: 24rpx 32rpx;
 
-    &-label {
-      flex: 1;
+    grid-template-columns: 1fr 40rpx;
+
+    color: var(--hr-neutral-color-10);
+
+    &-active {
+      color: var(--hr-brand-color-6);
+      font-weight: 600;
+    }
+
+    .ico-check {
+      font-size: var(--hr-font-size-xxl);
     }
   }
 </style>

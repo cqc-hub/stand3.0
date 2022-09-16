@@ -36,6 +36,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import { joinQuery } from '@/common';
   import { IDeptLv1, IDeptLv2, IDeptLv3, loopDeptList, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
@@ -79,7 +80,7 @@
 
     let { firstDeptList, deptListLevel } = result;
 
-    // deptListLevel = '1'
+    // deptListLevel = '1';
     loopDeptList(firstDeptList, deptListLevel);
 
     // depList.value = [
@@ -130,14 +131,18 @@
   });
 
   const registerContinue = (item: IDeptLv3) => {
-    console.log(item);
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/order', {
+        hosId: props.hosId,
+        hosDeptId: encodeURIComponent(item.hosDeptId),
+        deptName: encodeURIComponent(item.deptName)
+      })
+    });
   };
 
   const toggleHos = () => {
     const len = hosList.value.length;
     if (len) {
-      isToggleDialogShow.value = true;
-      return;
       if (len === 1) {
         gStores.messageStore.showMessage('没有可切换的院区', 1500);
       } else {
