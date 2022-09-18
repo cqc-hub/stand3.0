@@ -4,13 +4,12 @@
       :value="checkedDay"
       :choose-days="chooseDays"
       :enable-days="chooseDaysEnabled"
-
       @change="dateChange"
     />
 
     <scroll-view class="container" scroll-y>
       <!-- <view>233</view> -->
-      {{chooseDaysEnabled}}
+      {{ chooseDaysEnabled }}
     </scroll-view>
 
     <g-message />
@@ -41,7 +40,7 @@
   });
 
   const dateChange = (item: IChooseDays) => {
-    checkedDay.value = item.day;
+    checkedDay.value = item.fullDay;
   };
 
   init();

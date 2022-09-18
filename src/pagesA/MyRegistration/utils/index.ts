@@ -18,7 +18,7 @@ export const useOrder = () => {
   });
 
   const chooseDays = ref<IChooseDays[]>([]);
-  const chooseDaysEnabled = ref<string[]>(['09-18', '09-21', '09-22']);
+  const chooseDaysEnabled = ref<string[]>(['2022-09-21', '2022-09-22', '2022-09-25', '2022-10-02']);
   const checkedDay = ref('');
 
   const init = async () => {

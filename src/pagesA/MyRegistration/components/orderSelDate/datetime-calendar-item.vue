@@ -1,8 +1,9 @@
+import { computed } from 'vue';
 <template>
   <view
     class="uni-calendar-item__weeks-box"
     :class="{
-      'uni-calendar-item--disable': weeks.disable || !enableDays.includes(weeks.fullDate),
+      'uni-calendar-item--disable': weeks.disable || !isHasOrder,
       'uni-calendar-item--before-checked-x': weeks.beforeMultiple,
       'uni-calendar-item--multiple': weeks.multiple,
       'uni-calendar-item--after-checked-x': weeks.afterMultiple
@@ -13,7 +14,8 @@
     <view
       class="uni-calendar-item__weeks-box-item"
       :class="{
-        'uni-calendar-item--checked': calendar.fullDate === weeks.fullDate && (calendar.userChecked || !checkHover),
+        'uni-calendar-item--checked':
+          calendar.fullDate === weeks.fullDate && (calendar.userChecked || !checkHover) && isHasOrder,
         'uni-calendar-item--checked-range-text': checkHover,
         'uni-calendar-item--before-checked': weeks.beforeMultiple,
         'uni-calendar-item--multiple': weeks.multiple,
@@ -26,7 +28,14 @@
         class="uni-calendar-item__weeks-box-text uni-calendar-item__weeks-box-text-disable uni-calendar-item--checked-text g-flex-rc-cc item-content"
       >
         <view>{{ addPlaceHolder(weeks.date) }}</view>
-        <view>有号</view>
+        <view
+          :class="{
+            'item-content-order-active': isHasOrder
+          }"
+          class="item-content-order"
+        >
+          {{ isHasOrder ? '有号' : '无号' }}
+        </view>
       </view>
     </view>
     <!-- <view :class="{'uni-calendar-item--isDay': weeks.isDay}"></view> -->
@@ -67,6 +76,13 @@
         default: false
       }
     },
+
+    computed: {
+      isHasOrder() {
+        return this.enableDays.includes(this.weeks.fullDate);
+      }
+    },
+
     methods: {
       choiceDate(weeks) {
         this.$emit('change', weeks);
@@ -139,6 +155,7 @@
 
   .uni-calendar-item--disable .uni-calendar-item__weeks-box-text-disable {
     color: #d1d1d1;
+    pointer-events: none;
   }
 
   .uni-calendar-item--isDay {
@@ -204,5 +221,14 @@
 
   .item-content {
     flex-direction: column;
+
+    &-order {
+      font-weight: 400;
+      font-size: 20rpx;
+
+      &-active {
+        color: var(--hr-brand-color-6);
+      }
+    }
   }
 </style>

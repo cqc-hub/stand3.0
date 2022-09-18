@@ -71,6 +71,7 @@
         <calendar
           ref="pcSingle"
           :showMonth="false"
+          :enableDays="enableDays"
           :start-date="caleRange.startDate"
           :end-date="caleRange.endDate"
           :date="defSingleDate"
@@ -147,11 +148,13 @@
             @change="leftChange"
             :pleStatus="endMultipleStatus"
             @firstEnterCale="updateRightCale"
+            :enableDays="enableDays"
             @monthSwitch="leftMonthSwitch"
             style="padding: 0 8px"
           />
           <calendar
             ref="right"
+            :enableDays="enableDays"
             :showMonth="false"
             :start-date="caleRange.startDate"
             :end-date="caleRange.endDate"
@@ -182,6 +185,7 @@
       :showMonth="false"
       :range="isRange"
       :typeHasTime="hasTime"
+      :enableDays="enableDays"
       :insert="false"
       :hideSecond="hideSecond"
       @confirm="mobileChange"

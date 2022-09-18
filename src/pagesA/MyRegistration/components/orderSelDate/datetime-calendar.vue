@@ -135,6 +135,7 @@
   import timePicker from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue';
   import { initVueI18n } from '@dcloudio/uni-i18n';
   import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
+  import { GStores } from '@/utils';
   const { t } = initVueI18n(messages);
   /**
    * Calendar 日历
@@ -516,7 +517,7 @@
        */
       confirm() {
         this.setEmit('confirm');
-        this.close();
+        // this.close();
       },
       /**
        * 变化触发
@@ -542,6 +543,12 @@
        */
       setEmit(name) {
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
+
+        if (!this.enableDays.includes(fullDate)) {
+          new GStores().messageStore.showMessage('当日无医生排班', 1500);
+          return;
+        }
+
         this.$emit(name, {
           range: this.cale.multipleStatus,
           year,
@@ -560,6 +567,9 @@
        */
       choiceDate(weeks) {
         if (weeks.disable) return;
+        if (!this.enableDays.includes(weeks.fullDate)) {
+          return;
+        }
         this.calendar = weeks;
         this.calendar.userChecked = true;
         // 设置多选

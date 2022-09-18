@@ -1,6 +1,5 @@
 <template>
   <view class="choose-day">
-    <!-- {{ chooseDays }} -->
     <view class="choose-day-container">
       <view
         :class="{
@@ -19,15 +18,16 @@
         <view>日期</view>
       </view>
 
-      <scroll-view class="choose-day-container-scroll" scroll-x>
+      <scroll-view class="choose-day-container-scroll" :scroll-into-view="scrollToId" @scroll="scrollEvt" scroll-x>
         <view class="scroll-content">
           <view
             v-for="item in chooseDays"
             :class="{
-              'item-active': item.day === value,
-              'item-disabled': !enableDays.includes(item.day)
+              'item-active': item.fullDay === value,
+              'item-disabled': !enableDays.includes(item.fullDay)
             }"
             :key="item.day"
+            :id="'day-' + item.fullDay"
             @click="change(item)"
             class="choose-day-item g-flex-rc-cc item"
           >
@@ -44,17 +44,28 @@
       </view>
     </view>
 
-    <Datetime-Picker ref="calendarRef" type="date" :enableDays="enableDays" :clear-icon="false">
+    <Datetime-Picker
+      ref="calendarRef"
+      type="date"
+      :modelValue="value"
+      :enableDays="enableDays"
+      :clear-icon="false"
+      @change="dateTimeChange"
+    >
       <view />
     </Datetime-Picker>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, reactive } from 'vue';
+  import { nextTick, ref, getCurrentInstance, watch } from 'vue';
   import { IChooseDays } from '../../utils';
+  import isoWeek from 'dayjs/plugin/isoWeek';
+  import dayjs from 'dayjs';
 
   import DatetimePicker from './datetime-picker.vue';
+
+  dayjs.extend(isoWeek);
 
   const props = withDefaults(
     defineProps<{
@@ -64,14 +75,76 @@
     }>(),
     {
       chooseDays: () => [],
-      enableDays: () => []
+      enableDays: () => [],
+      value: ''
     }
   );
 
   const emits = defineEmits(['change']);
   const calendarRef = ref<any>('');
+  const scrollToId = ref('');
+  const scrollLeft = ref(0);
+  const inst = getCurrentInstance();
+
   const change = (item: IChooseDays) => {
     emits('change', item);
+  };
+
+  const scrollEvt = (e) => {
+    scrollLeft.value = e.detail.scrollLeft;
+  };
+
+  const dateTimeChange = (fullDay) => {
+    const dayMap = {
+      1: '周一',
+      2: '周二',
+      3: '周三',
+      4: '周四',
+      5: '周五',
+      6: '周六',
+      7: '周日'
+    };
+    const _date = dayjs(fullDay);
+
+    change({
+      day: _date.format('MM-DD'),
+      fullDay: fullDay,
+      weekday: dayMap[_date.isoWeekday()]
+    });
+
+    watch(
+      () => props.value,
+      () => {
+        nextTick(async () => {
+          const query = uni.createSelectorQuery().in(inst);
+          let scrollWidth = 0;
+          await new Promise((resolve) => {
+            query
+              .select('.choose-day-container-scroll')
+              .boundingClientRect((data) => {
+                if (data && data.width) {
+                  scrollWidth = data.width;
+                }
+
+                resolve(void 0);
+              })
+              .exec();
+          });
+
+          query
+            .select(`#day-` + props.value)
+            .boundingClientRect((data) => {
+              if (data) {
+                const itemLeft = (data as any).left;
+                if (!(scrollLeft.value < itemLeft && scrollLeft.value + scrollWidth > itemLeft)) {
+                  scrollToId.value = 'day-' + props.value;
+                }
+              }
+            })
+            .exec();
+        });
+      }
+    );
   };
 </script>
 
