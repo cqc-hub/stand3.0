@@ -26,7 +26,8 @@
         :class="{
           'dept-list-lv2': isLv2,
           'item-lv1-active': activeLV1 === indexLv1,
-          'item-lv1-border': !isLv2
+          'item-lv1-border': !isLv2,
+          'g-border-bottom': !isLv2
         }"
         @click="itemClickLv1(item)"
         class="item-lv1 g-flex-rc-cc"
@@ -78,9 +79,11 @@
     }
   );
 
-  const scrollHeight = ref(0);
-
-  const emits = defineEmits(['item-click-lv1', 'item-click-lv2', 'item-click-lv3']);
+  const emits = defineEmits([
+    'item-click-lv1',
+    'item-click-lv2',
+    'item-click-lv3'
+  ]);
 
   const collapseRef = ref<any>('');
 
@@ -96,7 +99,7 @@
   watch(
     () => props.list,
     () => {
-      if (props.list.length) {
+      if (props.list.length && props.level !== '1') {
         itemClickLv1(props.list[0]);
       }
     }
@@ -148,7 +151,9 @@
     emits('item-click-lv1', item);
     await wait(0);
 
-    const idx = props.list.findIndex((o) => o.hosDeptId === props.activeLv1.hosDeptId);
+    const idx = props.list.findIndex(
+      (o) => o.hosDeptId === props.activeLv1.hosDeptId
+    );
     if (idx !== -1) {
       activeLV1.value = idx;
     }
@@ -193,7 +198,6 @@
     transition: all 0.3s;
 
     &.item-lv1-border {
-      border-bottom: 1rpx solid var(--hr-neutral-color-11);
       margin: 0 32rpx;
       padding-right: 0;
       padding-left: 0;

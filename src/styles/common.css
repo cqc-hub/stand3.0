@@ -26,6 +26,14 @@
   border: 1rpx solid var(--hr-neutral-color-2);
 }
 
+.g-border-top {
+  border-top: 1rpx solid var(--hr-neutral-color-11);
+}
+
+.g-border-bottom {
+  border-bottom: 1rpx solid var(--hr-neutral-color-11);
+}
+
 .g-flex-rc-cc {
   display        : flex;
   justify-content: center;

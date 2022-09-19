@@ -183,7 +183,7 @@
       {
         "name": "医生挂号",
         "path": "pagesA/MyRegistration/order",
-        "query": "hosId=1279&hosDeptId=2000011&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A411"
+        "query": "hosId=1279&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A42&hosDeptId=1000033%257C10206000&firstHosDeptId=A101&secondHosDeptId=1000002&isExpertDeptId=0"
       },
       {
         "name": "选择科室",

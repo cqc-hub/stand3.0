@@ -1,7 +1,7 @@
 // .prettierrc.js
 module.exports = {
   // 最大长度80个字符
-  printWidth: 120,
+  printWidth: 80,
   // 使用单引号, 默认false(在jsx中配置无效, 默认都是双引号)
   singleQuote: true,
   // 行末分号, 默认true

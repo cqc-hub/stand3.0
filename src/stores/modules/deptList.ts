@@ -7,7 +7,7 @@ export interface IDeptLv1 extends IDeptLv3 {
   firstShowNo: string;
   firstStandardDeptCode: string;
   firstStandardDeptName: string;
-  isExpertDeptId: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
+  isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
   secondDeptList?: IDeptLv2[];
   children?: IDeptLv2[];
 }

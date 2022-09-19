@@ -37,7 +37,7 @@
         </view>
       </scroll-view>
 
-      <view class="choose-day-all choose-day-calendar" @click="calendarRef.show">
+      <view v-if="chooseDays.length >= 20" class="choose-day-all choose-day-calendar" @click="calendarRef.show">
         <view>展开</view>
         <view>日历</view>
         <view class="iconfont ico-arrow">&#xe6c4;</view>
@@ -47,6 +47,7 @@
     <Datetime-Picker
       ref="calendarRef"
       type="date"
+      v-if="chooseDays.length >= 20"
       :modelValue="value"
       :enableDays="enableDays"
       :clear-icon="false"

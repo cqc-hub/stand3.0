@@ -58,9 +58,7 @@ const baseApi = {
   queryExpressAddressByPatient: (data) =>
     service.post('/phs-base/expressAddress/queryExpressAddressByPatient', parm(data)),
   //获取拆分后的地址
-  getAddress: (data) =>
-    service.post('/phs-base/division/getAddress', parm(data))
-
+  getAddress: (data) => service.post('/phs-base/division/getAddress', parm(data))
 };
 // 查询服务
 const queryApi = {
@@ -76,7 +74,11 @@ const regApi = {
   subPreinquiryMessage: (data: any) => service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
   // 科室列表
-  getDeptList: (data: any) => service.post('/phs-reg/reg/getDeptList', parm(data))
+  getDeptList: (data: any) => service.post('/phs-reg/reg/getDeptList', parm(data)),
+  // 科室排班-按医生挂号
+  getDeptSchForDoc: <T>(data: any) => service.post<T>('/phs-reg/reg/getDeptSchForDoc', parm(data)),
+  // 科室排班-按日期挂号
+  getDeptSchByDate: (data: any) => service.post('/phs-reg/reg/getDeptSchByDate', parm(data))
 };
 
 // 用户服务

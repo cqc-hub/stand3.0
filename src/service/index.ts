@@ -56,7 +56,7 @@ Request.interceptors.response(
       }
 
       if (showMessage) {
-        messageStore.showMessage(message);
+        messageStore.showMessage(message, 1500);
       }
     }
 

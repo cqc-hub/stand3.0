@@ -37,7 +37,7 @@
   import { computed, ref } from 'vue';
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { joinQuery } from '@/common';
-  import { IDeptLv1, IDeptLv2, IDeptLv3, loopDeptList, useDeptStore } from '@/stores';
+  import { IDeptLv1, IDeptLv2, IDeptLv3, isLev1, isLev2, loopDeptList, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
 
@@ -45,6 +45,7 @@
 
   const props = defineProps<{
     hosId: string;
+    clinicalType?: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
   }>();
 
   const depList = ref<IDeptLv1[]>([]);
@@ -71,16 +72,16 @@
     const requestArg = {
       source,
       sysCode: '1001017',
-      hosId: '449'
+      hosId: '449',
+      clinicalType: props.clinicalType
       // resType   // 预约类型：1.预约挂号，2.当日挂号
-      // clinicalType   // 门诊类型 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
     };
 
     const { result } = await api.getDeptList(requestArg);
 
     let { firstDeptList, deptListLevel } = result;
 
-    // deptListLevel = '1';
+    // deptListLevel = '2';
     loopDeptList(firstDeptList, deptListLevel);
 
     // depList.value = [
@@ -98,23 +99,22 @@
 
   const itemClickLv1 = (item: IDeptLv1) => {
     deptStore.changeActiveLv1(item);
-    if (depLevel.value === '1') {
+    if (!item.children) {
       registerContinue(item);
     }
   };
 
   const itemClickLv2 = (item: IDeptLv2) => {
     deptStore.changeActiveLv2(item);
-    if (depLevel.value === '2') {
+
+    if (!item.children) {
       registerContinue(item);
     }
   };
 
   const itemClickLv3 = (item: IDeptLv3) => {
     deptStore.changeActiveLv3(item);
-    if (depLevel.value === '3') {
-      registerContinue(item);
-    }
+    registerContinue(item);
   };
 
   const getHosName = computed(() => {
@@ -130,13 +130,28 @@
     }
   });
 
-  const registerContinue = (item: IDeptLv3) => {
+  const registerContinue = (item: IDeptLv3 | IDeptLv2 | IDeptLv1) => {
+    // item.
+    const queryArg = {
+      hosId: props.hosId,
+      deptName: encodeURIComponent(item.deptName),
+      hosDeptId: '',
+      firstHosDeptId: encodeURIComponent(deptStore.activeLv1.firstHosDeptId),
+      secondHosDeptId: '',
+      isExpertDeptId: deptStore.activeLv1.isExpertDeptId ? deptStore.activeLv1.isExpertDeptId : '0'
+    };
+
+    if (isLev1(item)) {
+      queryArg.firstHosDeptId = encodeURIComponent(item.firstHosDeptId);
+    } else if (isLev2(item)) {
+      queryArg.secondHosDeptId = encodeURIComponent(item.secondHosDeptId);
+    } else {
+      queryArg.secondHosDeptId = encodeURIComponent(deptStore.activeLv2.secondHosDeptId);
+      queryArg.hosDeptId = encodeURIComponent(item.hosDeptId);
+    }
+
     uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/order', {
-        hosId: props.hosId,
-        hosDeptId: encodeURIComponent(item.hosDeptId),
-        deptName: encodeURIComponent(item.deptName)
-      })
+      url: joinQuery('/pagesA/MyRegistration/order', queryArg)
     });
   };
 
