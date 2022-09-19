@@ -9,11 +9,13 @@
         bodyBold
         ref="gform"
       >
+        <!-- #ifdef MP-WEIXIN -->
         <template #suffix="{ item }">
           <view v-if="item.key == 'detailedAddress'" @click="getCurrentAdd">
             <view class="iconfont icon-resize">&#xe6b6;</view>
           </view>
         </template>
+        <!-- #endif -->
       </g-form>
     </view>
     <g-flag class="tip" typeFg="62" isShowFgTip />
@@ -82,11 +84,6 @@
     postcode: '',
     defaultFlag: true
   });
-  const addressChoose = {
-    province: '',
-    city: '',
-    county: ''
-  };
 
   const formList = [
     {
@@ -148,19 +145,31 @@
   const addressChange = (e) => {
     const { value } = e;
     const [addressProvince, addressCity, addressCounty] = value;
-    addressChoose.province = addressProvince.text;
-    addressChoose.city = addressCity.text;
-    addressChoose.county = addressCounty.text;
+    formData.value.province = addressProvince.text;
+    formData.value.city = addressCity.text;
+    formData.value.county = addressCounty.text;
   };
 
   //获取当前位置
   const getCurrentAdd = async () => {
     uni.chooseLocation({
       success(res) {
-        console.log(888, res);
-        formData.value.detailedAddress = res.address;
+        getAddress(res);
       }
     });
+  };
+  //获取拆分后的地址
+
+  const getAddress = async (data) => {
+    const { result } = await api.getAddress({
+      addressName: data.name,
+      allAddress: data.address
+    });
+    formData.value.detailedAddress = result.detailedAddress;
+    formData.value.address = result.province + result.city + result.county;
+    formData.value.province = result.province;
+    formData.value.city = result.city;
+    formData.value.county = result.county;
   };
 
   const deleteAddress = async () => {
@@ -179,7 +188,6 @@
   const formSubmit = async ({ data }) => {
     await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
-      ...addressChoose,
       ...data,
       defaultFlag: data.defaultFlag ? 1 : 0
     });

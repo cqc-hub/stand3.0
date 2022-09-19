@@ -97,6 +97,7 @@ interface IPayLoad {
 
 //不拦截 直接跳转的方法
 export const useToPath = (item, payload: IPayLoad = {}) => {
+  const gStores = new GStores();
   const type = payload.type
   switch (item.terminalType) {
     case 'h5':
