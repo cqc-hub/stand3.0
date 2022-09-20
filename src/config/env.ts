@@ -5,10 +5,10 @@ const env = {
     baseApi: 'https://devphs.eheren.com/gateway' as const
   },
   test: {
-    baseApi: 'https://testphs.eheren.com' as const
+    baseApi: 'https://testphs.eheren.com/gateway' as const
   },
   prod: {
-    baseApi: 'https://netphs.eheren.com' as const
+    baseApi: 'https://netphs.eheren.com/gateway' as const
   }
 }
 export default env[global.env]

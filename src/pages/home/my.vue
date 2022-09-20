@@ -1,6 +1,6 @@
 <template>
   <view class="login-center">
-    <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view>
+    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
     <scroll-view class="scroll-container" scroll-y>
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="top-bg" />
