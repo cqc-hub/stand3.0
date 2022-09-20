@@ -72,7 +72,6 @@
 <style lang="scss" scoped>
   .date-container {
     padding-top: 24rpx;
-
     display: flex;
 
     .sel-date {

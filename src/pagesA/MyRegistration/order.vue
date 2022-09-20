@@ -9,7 +9,9 @@
 
     <scroll-view class="container" scroll-y>
       <view class="container-contract">
-        <Order-Doc-Item v-for="(item, i) in allDocList" :item="item" :key="i" />
+        <view v-for="(item, i) in allDocList" :key="i" class="item-content">
+          <Order-Doc-Item :item="item" />
+        </view>
       </view>
     </scroll-view>
 
@@ -88,6 +90,10 @@
       .container-contract {
         padding: 0 32rpx;
         padding-top: 24rpx;
+
+        .item-content {
+          margin-bottom: 16rpx;
+        }
       }
     }
   }
