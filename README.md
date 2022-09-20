@@ -97,3 +97,15 @@ cmd: iconfont-tools
 | 医院指南 |    pages/hospitalGuide/hospitalGuide    | sysCode hosId         |
 | 用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId |
 | 我的医生 |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
+
+## 单独 2.0 迁移 3.0 的
+
+测试环境 https://health.eheren.com/V3/h5/#/
+正式环境 https://h5.eheren.com/V3/h5/#
+
+| 功能     |                    页面                     | 参数          |
+| :------- | :-----------------------------------------: | :------------ |
+| 健康自测 |    pagesA/healthSelfTest/healthSelfTest     |               |
+| 药品百科 | pages/drugsEncyclopedias/drugsEncyclopedias |               |
+| 疾病百科 |       pagesA/diseaseCyclopedia/index        | sysCode       |
+| otc 商城 |                    暂无                     | sysCode token |

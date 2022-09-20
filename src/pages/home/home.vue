@@ -80,6 +80,13 @@
           <view class="banner-menu">
             <homeBanner :leftFunctionList="bannerLeftFunctionList" :functionList="bannerFunctionList" />
           </view>
+          <!-- #ifdef MP-WEIXIN -->
+          <view>
+            <!-- <image v-if="isShow" class="official-list" :src="img_url + 'bianji@3x.png'" mode=""></image> -->
+            <official-account></official-account>
+          </view>
+          <!-- #endif -->
+
           <view class="fun-list" v-if="menuList.length">
             <homeMenu :list="menuList" />
           </view>
@@ -375,7 +382,14 @@
     }
 
     .banner-menu {
-      margin-top: var(--h-margin-24);
+      margin: var(--h-margin-24) 0;
+    }
+
+    .official-list {
+      height: 82rpx;
+      width: 100%;
+      margin-bottom: -17rpx;
+      margin-top: 10rpx;
     }
 
     .fun-list {

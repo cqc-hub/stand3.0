@@ -41,7 +41,7 @@
       console.log('第三方页面路径', src.value);
     } else {
       //自研h5
-      const baseUrl = (global.env as any) === 'prod' ? 'https://h5.eheren.com/v3/#' : 'http://10.10.117.70:3000/#';
+      const baseUrl = (global.env as any) === 'prod' ? 'https://h5.eheren.com/v3/#' : 'https://health.eheren.com/v3/#';
       src.value = `${baseUrl}${options.path}${query}`;
       console.log('v3页面路径', src.value);
     }
