@@ -6,11 +6,23 @@
       <view class="doc-info-introduce">
         <view class="doc-info-introduce-header">
           <view class="doc-info-introduce-name">{{ item.docName }}</view>
-          <view class="doc-info-introduce-title">{{ item.docTitleName }}</view>
+          <view class="doc-info-introduce-title">
+            {{ item.schQukCategor || item.docTitleName }}
+          </view>
         </view>
 
         <view class="doc-info-introduce-goodat text-ellipsis">
-          {{ item.goodAt }}
+          <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
+
+          <block v-else>
+            <text class="doc-job-name">
+              {{ item.docJobName }}
+            </text>
+
+            <text>
+              {{ item.docTitleName }}
+            </text>
+          </block>
         </view>
       </view>
     </view>
@@ -74,6 +86,22 @@
         .doc-info-introduce-goodat {
           color: var(--hr-neutral-color-9);
           font-weight: 400;
+
+          .doc-job-name {
+            margin-right: 26rpx;
+            position: relative;
+
+            &::after {
+              content: '';
+              display: inline-block;
+              background-color: var(--hr-neutral-color-2);
+              width: 1rpx;
+              height: 30rpx;
+              position: absolute;
+              right: -14rpx;
+              top: 5rpx;
+            }
+          }
         }
       }
     }

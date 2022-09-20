@@ -66,10 +66,13 @@
 /* 按钮 */
 .btn {
   color        : var(--h-color-white);
-  border-radius: 16rpx;
+  border-radius: 10rpx;
   font-size    : var(--hr-font-size-xl);
   font-weight  : 600;
+  position: relative;
+
 }
+
 
 .btn.btn-primary {
   background-color: var(--hr-brand-color-6);

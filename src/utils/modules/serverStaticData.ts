@@ -242,7 +242,7 @@ export class ServerStaticData {
   static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
     const res = {
       order: {
-        chooseDay: 20
+        chooseDay: 30
       }
     } as ISystemConfig;
 

@@ -2,7 +2,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import dayjs from 'dayjs';
 import api from '@/service/api';
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 
 dayjs.extend(isoWeek);
@@ -13,23 +13,87 @@ export interface IChooseDays {
   fullDay: string;
 }
 
-export interface IDocListAll {
+interface IDocRow {
   deptName: string;
   docJobName: string;
-  docName: string;
-  docNamePinYin: string;
   docPhoto: string;
   docTitleName: string;
   goodAt: string;
+  docName: string;
   hosDeptId: string;
-  hosDocId: string;
   hosId: string;
   hosName: string;
-  intro: string;
   showNo: string;
+  intro: string;
+  hosDocId: string;
+
+  // 快捷号别
+  schQukCategor?: string;
+}
+
+export interface IDocListAll extends IDocRow {
+  docNamePinYin: string;
   schDocSubResultList: {
     schDate: string;
     schState: '0' | '1';
+  }[];
+}
+
+export interface IDocListByDate {
+  schDate: string;
+  schDateList: {
+    categor: string;
+    categorName: string;
+    schDate: string;
+    schemeList: {
+      docName: string;
+      schemeList: ({
+        // 上下午标志 1上午 2下午 3白天 4夜晚 5昼夜 6中午 7白昼 8前夜 9后夜 10全天
+        ampm: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
+        // 上下午标志名称
+        ampmName: string;
+        // 公务员是否可报销 1都可报销 2仅公务员可报销
+        canCivilServantInsurance?: '1' | '2';
+        // 医保是否可报销 1可报销 0不可报销
+        canInsurance?: '1' | '0';
+        // 号别编号
+        categor: string;
+        categorName: string;
+        // 门诊类型：1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
+        clinicalType?:
+          | '1'
+          | '2'
+          | '3'
+          | '4'
+          | '5'
+          | '6'
+          | '7'
+          | '8'
+          | '9'
+          | '10'
+          | '11';
+
+        empNo: string;
+        // 挂号费
+        fee: string;
+        // 号源总数
+        numCount: string;
+        // 已预约数
+        numHadReg: string;
+        // 可预约数
+        numRemain: string;
+        // 查看医生电子名片 0 不查看 1 查看
+        queryDocImage?: '0' | '1';
+        // 排班日期
+        schDate: string;
+        schId: string;
+
+        // 排班状态 0有号 1停诊 2约满 3未放号
+        schState: '0' | '1' | '2' | '3';
+        // 排班状态名称
+        schStateName: string;
+      } & IDocRow)[];
+    }[];
   }[];
 }
 
@@ -39,13 +103,20 @@ export const useOrder = () => {
   });
 
   const allDocList = ref<IDocListAll[]>([]);
+  const dateDocList = ref<IDocListByDate[]>([]);
   const chooseDays = ref<IChooseDays[]>([]);
-  // const chooseDaysEnabled = ref<string[]>(['2022-09-21', '2022-09-22', '2022-09-25', '2022-10-02']);
   const chooseDaysEnabled = ref<string[]>([]);
   const checkedDay = ref('');
   const gStores = new GStores();
+  const dateDocListFilterByDate = computed(() => {
+    if (checkedDay.value) {
+      return dateDocList.value.filter((o) => o.schDate === checkedDay.value);
+    } else {
+      return [];
+    }
+  });
 
-  const getList = async (
+  const getListAll = async (
     date: string,
     payload: {
       hosId: string;
@@ -56,7 +127,14 @@ export const useOrder = () => {
       isExpertDeptId?: string;
     }
   ) => {
-    const { hosId, clinicalType, hosDeptId, firstHosDeptId, secondHosDeptId, isExpertDeptId } = payload;
+    const {
+      hosId,
+      clinicalType,
+      hosDeptId,
+      firstHosDeptId,
+      secondHosDeptId,
+      isExpertDeptId
+    } = payload;
     const args = {
       source: gStores.globalStore.browser.source,
       hosId,
@@ -87,6 +165,38 @@ export const useOrder = () => {
     chooseDaysEnabled.value = eDaysEnabled;
   };
 
+  const getListByDate = async (payload: {
+    hosId: string;
+    clinicalType?: string;
+    hosDeptId?: string;
+    firstHosDeptId?: string;
+    secondHosDeptId?: string;
+    isExpertDeptId?: string;
+  }) => {
+    const {
+      hosId,
+      clinicalType,
+      hosDeptId,
+      firstHosDeptId,
+      secondHosDeptId,
+      isExpertDeptId
+    } = payload;
+
+    const args = {
+      source: gStores.globalStore.browser.source,
+      hosId,
+      clinicalType,
+      hosDeptId,
+      firstHosDeptId,
+      secondHosDeptId,
+      isExpertDeptId
+    };
+
+    const { result } = await api.getDeptSchByDate<IDocListByDate[]>(args);
+
+    dateDocList.value = result;
+  };
+
   const init = async (query: {
     hosId: string;
     hosDeptId?: string;
@@ -98,7 +208,7 @@ export const useOrder = () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
 
-    getList(checkedDay.value, query);
+    getListAll(checkedDay.value, query);
   };
 
   return {
@@ -107,7 +217,10 @@ export const useOrder = () => {
     chooseDays,
     checkedDay,
     chooseDaysEnabled,
-    allDocList
+    allDocList,
+    dateDocList,
+    getListByDate,
+    dateDocListFilterByDate
   };
 };
 

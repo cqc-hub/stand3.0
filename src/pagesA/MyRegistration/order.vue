@@ -6,15 +6,36 @@
       :enable-days="chooseDaysEnabled"
       @change="dateChange"
     />
-
+    <view @click="aaa">cqccccc</view>
     <scroll-view class="container" scroll-y>
-      <view class="container-contract">
+      <view
+        v-if="!checkedDay"
+        class="container-contract animate__animated animate__fadeIn"
+      >
         <view v-for="(item, i) in allDocList" :key="i" class="item-content">
-          <Order-Doc-Item :item="item" />
+          <Order-Doc-Item-All :item="item" />
+        </view>
+      </view>
+
+      <view v-if="checkedDay" class="container-contract">
+        <view
+          v-for="(item, i) in dateDocListFilterByDate"
+          :key="i"
+          class="item-content animate__animated animate__fadeIn"
+        >
+          <view v-for="(_item, _i) in item.schDateList" :key="_i">
+            <view>{{ _item.categorName }}</view>
+            <view v-for="(__item, __i) in _item.schemeList" :key="__i">
+              <view v-for="(___item, ___i) in __item.schemeList" :key="___i">
+                <Order-Doc-Item-Date :item="___item" />
+              </view>
+            </view>
+          </view>
         </view>
       </view>
     </scroll-view>
 
+    <Order-Reg-Confirm ref="regDialogConfirm" />
     <g-message />
   </view>
 </template>
@@ -25,7 +46,9 @@
   import { useOrder, IChooseDays } from './utils';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
-  import OrderDocItem from './components/orderDocList/orderDocItem.vue';
+  import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
+  import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
+  import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = defineProps<{
     hosId: string;
@@ -53,7 +76,10 @@
     chooseDays,
     checkedDay,
     chooseDaysEnabled,
-    allDocList
+    getListByDate,
+    allDocList,
+    dateDocList,
+    dateDocListFilterByDate
   } = useOrder();
 
   onReady(() => {
@@ -64,6 +90,15 @@
 
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;
+
+    if (!dateDocList.value.length) {
+      getListByDate({
+        ...props,
+        hosDeptId: hosDeptId.value,
+        firstHosDeptId: firstHosDeptId.value,
+        secondHosDeptId: secondHosDeptId.value
+      });
+    }
   };
 
   init({
@@ -73,7 +108,10 @@
     secondHosDeptId: secondHosDeptId.value
   });
 
-  console.log(props);
+  const regDialogConfirm = ref<any>('');
+  const aaa = () => {
+    regDialogConfirm.value.show();
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -87,13 +125,17 @@
       flex: 1;
       height: 1px;
 
-      .container-contract {
-        padding: 0 32rpx;
-        padding-top: 24rpx;
+      .animate__animated {
+        animation-duration: 0.3s;
+      }
+    }
 
-        .item-content {
-          margin-bottom: 16rpx;
-        }
+    .container-contract {
+      padding: 0 32rpx;
+      padding-top: 24rpx;
+
+      .item-content {
+        padding-bottom: 16rpx;
       }
     }
   }

@@ -6,8 +6,10 @@
  */
 export const showLoading = (tips: string = '加载中...') => {
   uni.showLoading({
-    title: tips
-    // mask: true
+    title: tips,
+    // #ifndef MP-ALIPAY
+    mask: true
+    // #endif
   });
   uni.showNavigationBarLoading();
 };

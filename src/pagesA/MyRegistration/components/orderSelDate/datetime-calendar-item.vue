@@ -1,4 +1,3 @@
-import { computed } from 'vue';
 <template>
   <view
     class="uni-calendar-item__weeks-box"

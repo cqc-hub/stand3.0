@@ -8,7 +8,6 @@ import { LoginUtils } from '@/utils';
 const Request = new requestClass();
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
-  //loading 默认有
 
   if (!request.hideLoading) showLoading();
   // if (request.method === 'GET') {
