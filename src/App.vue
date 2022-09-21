@@ -1,15 +1,22 @@
 <script setup lang="ts">
   import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
   import { useGlobalStore } from '@/stores';
+  import { beforeEach } from '@/router';
+  import { joinQuery } from './common';
   import '@/router/customRouter';
 
-  onLaunch(() => {
-    // console.log('App Launch');
+  onLaunch((opt) => {
+    // console.log('App Launch', opt);
     const globalStore = useGlobalStore();
     globalStore.initBrowser();
   });
-  onShow(() => {
-    // console.log('App Show');
+  onShow(async (opt) => {
+    // console.log('App Show', opt);
+    setTimeout(() => {
+      beforeEach({
+        url: joinQuery('/' + opt.path, opt.query || {})
+      });
+    }, 600);
   });
   onHide(() => {
     // console.log('App Hide');

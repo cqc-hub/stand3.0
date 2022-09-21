@@ -1,7 +1,12 @@
 <template>
   <view class="">
     <view class="container">
-      <image class="user-avatar" :src="userSore.getAvatar" mode="widthFix" />
+      <image
+        :src="userSore.getAvatar"
+        @click="avatarClick"
+        mode="widthFix"
+        class="user-avatar"
+      />
 
       <view class="info">
         <block v-if="globalStore.isLogin">
@@ -117,11 +122,17 @@
     routerJump();
   };
 
+  const avatarClick = () => {
+    if (globalStore.isLogin) {
+      console.log('cqc');
+    }
+  };
+
   const jumpFor = (record: IRoute) => {
-    // useCommonTo(record);
-    uni.navigateTo({
-      url: '/pagesA/medicalCardMan/medicalCardMan'
-    });
+    useCommonTo(record);
+    // uni.navigateTo({
+    //   url: '/pagesA/medicalCardMan/medicalCardMan'
+    // });
   };
 
   // const recordList = ref([

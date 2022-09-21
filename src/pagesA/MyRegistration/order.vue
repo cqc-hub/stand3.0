@@ -6,7 +6,7 @@
       :enable-days="chooseDaysEnabled"
       @change="dateChange"
     />
-    <view @click="aaa">cqccccc</view>
+    <view @click="regDialogConfirm.show">cqccccc</view>
     <scroll-view class="container" scroll-y>
       <view
         v-if="!checkedDay"
@@ -24,11 +24,9 @@
           class="item-content animate__animated animate__fadeIn"
         >
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
-            <view>{{ _item.categorName }}</view>
+            <view class="item-scheme-date">{{ _item.categorName }}</view>
             <view v-for="(__item, __i) in _item.schemeList" :key="__i">
-              <view v-for="(___item, ___i) in __item.schemeList" :key="___i">
-                <Order-Doc-Item-Date :item="___item" />
-              </view>
+              <Order-Doc-Item-Date :item="__item" />
             </view>
           </view>
         </view>
@@ -109,9 +107,6 @@
   });
 
   const regDialogConfirm = ref<any>('');
-  const aaa = () => {
-    regDialogConfirm.value.show();
-  };
 </script>
 
 <style lang="scss" scoped>
@@ -136,6 +131,12 @@
 
       .item-content {
         padding-bottom: 16rpx;
+
+        .item-scheme-date {
+          color: var(--hr-neutral-color-7);
+          font-size: var(--hr-font-size-xs);
+          margin-bottom: 16rpx;
+        }
       }
     }
   }

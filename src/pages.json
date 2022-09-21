@@ -205,6 +205,11 @@
         "name": "piniaTest",
         "path": "pages/piniaTest/piniaTest",
         "query": "name=cqc&op=233"
+      },
+      {
+        "name": "my",
+        "path": "pages/home/my",
+        "query": ""
       }
     ]
   }

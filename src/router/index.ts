@@ -78,7 +78,7 @@ export const beforeEach = async (
       }
 
       // #ifdef MP-WEIXIN
-      if (url === 'pagesA/medicalCardMan/perfectReal') {
+      if (url === '/pagesA/medicalCardMan/perfectReal') {
         if (!globalStore.h5OpenId) {
           uni.reLaunch({
             url: '/pages/home/startCome'

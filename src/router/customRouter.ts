@@ -1,4 +1,6 @@
+import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
 import { beforeEach } from './index';
+
 const reLaunch = uni.reLaunch;
 const navigateTo = uni.navigateTo;
 const redirectTo = uni.redirectTo;

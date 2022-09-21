@@ -6,7 +6,7 @@ import { routerJump } from '@/utils';
 const getH5OpenidParam = function (data) {
   // #ifdef MP-WEIXIN
   const globalStore = useGlobalStore();
-  data.othersOpenId = [
+  data.openIds = [
     {
       openId: globalStore.h5OpenId,
       source: '3'

@@ -45,7 +45,7 @@ export interface IDocListByDate {
     categor: string;
     categorName: string;
     schDate: string;
-    schemeList: {
+    schemeList: ({
       docName: string;
       schemeList: ({
         // 上下午标志 1上午 2下午 3白天 4夜晚 5昼夜 6中午 7白昼 8前夜 9后夜 10全天
@@ -93,7 +93,7 @@ export interface IDocListByDate {
         // 排班状态名称
         schStateName: string;
       } & IDocRow)[];
-    }[];
+    } & IDocRow)[];
   }[];
 }
 
