@@ -6,7 +6,6 @@ const pageAdmin = new Map();
 const routerPages = [...PAGE_DATA.pages];
 const subPackages = PAGE_DATA.subPackages;
 
-
 if (subPackages) {
   subPackages.map(({ root, pages }) => {
     pages.map((o) => {
@@ -37,7 +36,6 @@ export const beforeEach = async (
   const currentRoute = getCurrentRoute(url);
   const globalStore = useGlobalStore();
   const userStore = useUserStore();
-
 
   if (currentRoute) {
     const { extend } = currentRoute;
@@ -78,6 +76,17 @@ export const beforeEach = async (
           }
         }
       }
+
+      // #ifdef MP-WEIXIN
+      if (url === 'pagesA/medicalCardMan/perfectReal') {
+        if (!globalStore.h5OpenId) {
+          uni.reLaunch({
+            url: '/pages/home/startCome'
+          });
+          return Promise.reject('需要 h5openid');
+        }
+      }
+      // #endif
     }
   }
 };
