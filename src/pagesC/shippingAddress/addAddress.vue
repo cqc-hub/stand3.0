@@ -218,10 +218,15 @@
   });
 
   onMounted(() => {
+    console.log(8888, props);
+
     if (props.pageType === 'edit') {
       const item = JSON.parse(props.item);
 
-      formData.value = { ...item, defaultFlag: item.defaultFlag === 0 ? false : true };
+      formData.value = {
+        ...item,
+        defaultFlag: item.defaultFlag === 0 ? false : true
+      };
     }
     gform.value.setList(formList);
   });
