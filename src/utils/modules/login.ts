@@ -1,6 +1,5 @@
 import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
-import { getSysCode } from '@/common';
-
+import { getSysCode, setLocalStorage } from '@/common';
 import api from '@/service/api';
 import { ServerStaticData } from '@/utils';
 
@@ -95,6 +94,9 @@ export class LoginUtils extends GStores {
     const { isHideMessage, isGoLoginPage } = options;
     this.userStore.clearStore();
     this.globalStore.clearStore();
+
+    //清除首页配置缓存
+    uni.removeStorageSync('viewConfig');
 
     setTimeout(() => {
       if (!isHideMessage) {
