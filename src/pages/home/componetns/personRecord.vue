@@ -17,7 +17,12 @@
         </block>
         <block v-else>
           <!-- #ifdef MP-ALIPAY -->
-          <button @click="goLogin" class="user-name login-btn animate__animated animate__fadeIn">请登录</button>
+          <button
+            @click="goLogin"
+            class="user-name login-btn animate__animated animate__fadeIn"
+          >
+            请登录
+          </button>
           <!-- #endif -->
 
           <!-- #ifdef MP-WEIXIN -->
@@ -32,12 +37,19 @@
         </block>
       </view>
 
-      <view v-if="globalStore.isLogin" class="user-out animate__animated animate__slideInRight">
-        <view @click="outLogin" class="out-btn">退出登录</view>
+      <view
+        v-if="globalStore.isLogin"
+        class="user-out animate__animated animate__slideInRight"
+      >
+        <view @click="outLogin({})" class="out-btn">退出登录</view>
       </view>
     </view>
 
-    <view :class="`record-container ${recordList.length === 1 && 'record-container-row1'}`">
+    <view
+      :class="`record-container ${
+        recordList.length === 1 && 'record-container-row1'
+      }`"
+    >
       <view
         v-for="(record, i) in recordList"
         :key="i"
@@ -46,11 +58,13 @@
           'background-color': recordColors[i]
         }"
         :class="`record-item ${recordList.length === 1 && 'cr-center'}`"
-        @tap="useCommonTo(record)"
+        @tap="jumpFor(record)"
       >
         <view class="record-label">
           <text>{{ record.title }}</text>
-          <view v-if="recordList.length === 1" class="iconfont icon-size">&#xe6a6;</view>
+          <view v-if="recordList.length === 1" class="iconfont icon-size">
+            &#xe6a6;
+          </view>
         </view>
       </view>
     </view>
@@ -61,7 +75,13 @@
   import { ref, onMounted } from 'vue';
   import { useGlobalStore, useUserStore } from '@/stores';
 
-  import { aliLogin, wxLogin, outLogin, ServerStaticData, routerJump } from '@/utils';
+  import {
+    aliLogin,
+    wxLogin,
+    outLogin,
+    ServerStaticData,
+    routerJump
+  } from '@/utils';
   import global from '@/config/global';
   import { useCommonTo } from '@/common/checkJump';
 
@@ -95,6 +115,13 @@
     // #endif
 
     routerJump();
+  };
+
+  const jumpFor = (record: IRoute) => {
+    // useCommonTo(record);
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/medicalCardMan'
+    });
   };
 
   // const recordList = ref([

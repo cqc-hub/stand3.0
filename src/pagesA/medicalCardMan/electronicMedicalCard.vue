@@ -51,7 +51,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page {
 	width: 100%;
-	height: 100%;
+	height: 100vh;
 	background-color: var(--hr-brand-color-6);
 }
 

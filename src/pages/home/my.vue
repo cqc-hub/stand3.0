@@ -103,9 +103,12 @@
   };
 
   const ttt = () => {
-    uni.navigateTo({
-      url: '/pagesA/MyRegistration/Register?_url=%2FpagesA%2FMyRegistration%2FselDepartment'
-    });
+    const a = uni.getStorageSync('global')
+    console.log({a});
+
+    // uni.navigateTo({
+    //   url: '/pagesA/MyRegistration/Register?_url=%2FpagesA%2FMyRegistration%2FselDepartment'
+    // });
 
     // uni.navigateTo({
     //   url: '/pages/piniaTest/piniaTest'
