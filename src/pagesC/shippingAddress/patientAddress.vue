@@ -19,8 +19,13 @@
                 <text>{{ item.senderPhone }}</text>
               </view>
             </view>
-            <text v-if="item.province || item.detailedAddress" class="box-content">
-              {{ item.province + item.city + item.county + item.detailedAddress }}
+            <text
+              v-if="item.province || item.detailedAddress"
+              class="box-content"
+            >
+              {{
+                item.province + item.city + item.county + item.detailedAddress
+              }}
             </text>
           </view>
         </view>
@@ -47,6 +52,7 @@
   import { GStores } from '@/utils';
   import api from '@/service/api';
   import { useMessageStore } from '@/stores';
+  import { joinQuery } from '@/common';
 
   const isAddShow = ref(false);
   const addressList = ref<IAddress[]>([]);
@@ -54,6 +60,7 @@
   const pageLoading = ref(false);
   const currentIndex = ref();
   const messageStore = useMessageStore();
+  const clickItem = ref();
 
   onLoad(() => {
     getQueryExpressAddress();
@@ -61,7 +68,9 @@
 
   const getQueryExpressAddress = async () => {
     pageLoading.value = false;
-    const { result } = await api.queryExpressAddressByPatient({ herenId: gStores.globalStore.herenId });
+    const { result } = await api.queryExpressAddressByPatient({
+      herenId: gStores.globalStore.herenId
+    });
     addressList.value = result;
     pageLoading.value = true;
   };
@@ -80,6 +89,7 @@
     currentIndex.value = e;
     if (!item.province || !item.detailedAddress) {
       isAddShow.value = true;
+      clickItem.value = item;
     } else {
       //直接添加
       getAddress(item);
@@ -87,7 +97,10 @@
   };
   const clickConfirm = () => {
     uni.navigateTo({
-      url: '/pagesC/shippingAddress/addAddress?pageType=edit'
+      url: joinQuery('/pagesC/shippingAddress/addAddress', {
+        item: JSON.stringify(clickItem.value),
+        pageType: 'edit'
+      })
     });
   };
 </script>

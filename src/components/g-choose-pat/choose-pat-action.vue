@@ -1,6 +1,6 @@
 <template>
   <view class="choose-pat">
-    <g-popup title="切换就诊人" ref="actionSheet">
+    <g-popup title="更换就诊人" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
           <Pat-List @choose-pat="actionSheetItemClick" />
@@ -49,10 +49,13 @@
       const goAddPat = () => {
         actionSheet.value.hide();
         const pages = getCurrentPages();
-        const fullPathNow = (pages[pages.length - 1] as any).$page.fullPath as string;
+        const fullPathNow = (pages[pages.length - 1] as any).$page
+          .fullPath as string;
 
         uni.navigateTo({
-          url: '/pagesA/medicalCardMan/perfectReal?_url=' + encodeURIComponent(fullPathNow)
+          url:
+            '/pagesA/medicalCardMan/perfectReal?_url=' +
+            encodeURIComponent(fullPathNow)
         });
       };
 
