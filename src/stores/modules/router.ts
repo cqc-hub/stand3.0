@@ -18,13 +18,14 @@ const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
 const routerStore = defineStore('router', {
   persist: {
     key: '__ROUTER',
-    paths: ['_id', 'fullUrl', 'backRoute', '_p']
+    paths: ['_id', 'fullUrl', 'backRoute', '_p', '_url']
   },
 
   state: () => {
     return {
       _p: '',
       _id: '',
+      _url: '',
       fullUrl: '',
 
       backRoute: <ILoginBack>{}
@@ -34,6 +35,10 @@ const routerStore = defineStore('router', {
   actions: {
     update_P() {
       this._p = '1';
+    },
+
+    update_url(url: string) {
+      this._url = url;
     },
 
     updateId(id) {

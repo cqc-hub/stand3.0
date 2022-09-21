@@ -68,7 +68,7 @@ Request.interceptors.response(
   },
   (err) => {
     const messageStore = useMessageStore();
-    messageStore.showMessage(err.data.message);
+    messageStore.showMessage(err.data.message, 1500);
     uni.hideLoading();
     return err.data;
   }

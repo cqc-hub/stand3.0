@@ -3,7 +3,6 @@ import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
 import api from '@/service/api';
 
-const gStores = new GStores();
 export interface ISystemConfig {
   // 预约挂号
   order: {
@@ -73,7 +72,8 @@ export class ServerStaticData {
 
     if (!addMedicalData) {
       await api.getTermsBySysAndCode({
-        domainCode: 'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
+        domainCode:
+          'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
       });
     }
   }
@@ -116,7 +116,9 @@ export class ServerStaticData {
    * 民族
    */
   static async getNationTerms(): Promise<ISelectOptions[]> {
-    const nationTerms = <ISelectOptions[] | undefined>getLocalStorage('nationTerms');
+    const nationTerms = <ISelectOptions[] | undefined>(
+      getLocalStorage('nationTerms')
+    );
 
     if (!nationTerms) {
       const { result } = await api.getTermsBySysAndCode({
@@ -148,7 +150,11 @@ export class ServerStaticData {
    * 就诊人类型
    */
   static async getPatientTypeTerms(): Promise<ISelectOptions[]> {
-    const patientTypeTerms = <ISelectOptions[] | undefined>getLocalStorage('patientTypeTerms');
+    const gStores = new GStores();
+
+    const patientTypeTerms = <ISelectOptions[] | undefined>(
+      getLocalStorage('patientTypeTerms')
+    );
 
     if (!patientTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({
@@ -178,7 +184,11 @@ export class ServerStaticData {
    * 01身份证 02居民户口簿 03护照 031中国籍普通护照
    */
   static async getIdTypeTerms(): Promise<ISelectOptions[]> {
-    const idTypeTerms = <ISelectOptions[] | undefined>getLocalStorage('idTypeTerms');
+    const gStores = new GStores();
+
+    const idTypeTerms = <ISelectOptions[] | undefined>(
+      getLocalStorage('idTypeTerms')
+    );
 
     if (!idTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({

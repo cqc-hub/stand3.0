@@ -2,7 +2,19 @@ import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
 import { getSysCode } from '@/common';
 
 import api from '@/service/api';
-import { ServerStaticData } from '@/utils';
+import { routerJump } from '@/utils';
+
+const getH5OpenidParam = function (data) {
+  // #ifdef MP-WEIXIN
+  const globalStore = useGlobalStore();
+  data.othersOpenId = [
+    {
+      openId: globalStore.h5OpenId,
+      source: '3'
+    }
+  ];
+  // #endif
+};
 
 const packageAuthParams = (
   args: {},
@@ -11,6 +23,10 @@ const packageAuthParams = (
     isOutArgs?: boolean;
   } = {}
 ) => {
+  if (['/register/bindRegisterUser'].includes(url)) {
+    getH5OpenidParam(args);
+  }
+
   const globalStore = useGlobalStore();
   const argsDefault = {
     ...args,
@@ -54,7 +70,9 @@ export class GStores {
 export class LoginUtils extends GStores {
   async getUerInfo() {
     try {
-      const { result } = await api.allinoneAuthApi(packageAuthParams({}, '/modifyUserInfo/userInfoByToken'));
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
+      );
 
       if (result) {
         const { cellPhoneNum, herenId, idNo, name, sex } = result;
@@ -65,6 +83,16 @@ export class LoginUtils extends GStores {
         this.userStore.updatePhone(cellPhoneNum);
 
         this.globalStore.setHerenId(herenId);
+
+        // #ifdef MP-WEIXIN
+        if (!this.globalStore.h5OpenId) {
+          uni.reLaunch({
+            url: '/pages/home/startCome'
+          });
+
+          return Promise.reject('未获取 h5openid');
+        }
+        // #endif
 
         if (!herenId) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
@@ -78,12 +106,54 @@ export class LoginUtils extends GStores {
         } else {
           //获取就诊人列表
           await new PatientUtils().getPatCardList();
+          routerJump();
         }
       }
     } catch (error) {
       uni.hideLoading();
       return Promise.reject(error);
     }
+  }
+
+  // 微信获取公众号 openid
+  async getNoPublicOpenId(code: string) {
+    const {
+      result: { openId }
+    } = await api.allinoneAuthApi(
+      packageAuthParams(
+        {
+          accountType: 1,
+          code
+        },
+        '/wx/getNoPublicOpenId',
+        {
+          isOutArgs: true
+        }
+      )
+    );
+
+    this.globalStore.setH5OpenId(openId);
+
+    const herenId = this.globalStore.herenId;
+
+    if (herenId) {
+      await api.sysPatOpenIdAssignment({
+        herenId,
+        openIds: [
+          {
+            openId: this.globalStore.openId,
+            source: 19 //微信小程序openid
+          },
+
+          {
+            openId,
+            source: 3 //公众号openid
+          }
+        ]
+      });
+    }
+
+    await this.getUerInfo();
   }
 
   outLogin(
@@ -151,7 +221,11 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
           if (result) {
             const { openId, sessionKey } = result;
-            const { encryptedData: encrypData, iv: ivData, code: phoneNumberCode } = target;
+            const {
+              encryptedData: encrypData,
+              iv: ivData,
+              code: phoneNumberCode
+            } = target;
 
             this.globalStore.setOpenId(openId);
 
@@ -205,7 +279,17 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             )
           );
 
-          const { userId, accessToken, refreshToken, authHerenId, certNo, certType, gender, mobile, userName } = result;
+          const {
+            userId,
+            accessToken,
+            refreshToken,
+            authHerenId,
+            certNo,
+            certType,
+            gender,
+            mobile,
+            userName
+          } = result;
 
           this.userStore.updateCacheUser({
             certNo,
@@ -259,8 +343,8 @@ export class PatientUtils extends LoginUtils {
     options: Partial<{
       addPatInterface: 'hasBeenTreated' | 'relevantPatient';
     }> = {
-        addPatInterface: 'hasBeenTreated'
-      }
+      addPatInterface: 'hasBeenTreated'
+    }
   ) {
     const { addPatInterface } = options;
     const { idCard: idNo, idType, patientName, patientPhone } = payload;
@@ -278,7 +362,9 @@ export class PatientUtils extends LoginUtils {
       mask: true
     });
 
-    const { result } = await api.allinoneAuthApi(packageAuthParams(requestData, '/register/bindRegisterUser'));
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(requestData, '/register/bindRegisterUser')
+    );
 
     if (result) {
       const { accessToken, refreshToken } = result;
@@ -333,6 +419,7 @@ export class PatientUtils extends LoginUtils {
       verifyCode: string;
     }>
   ) {
+    getH5OpenidParam(data);
     await api.addPatientByHasBeenTreated(data);
   }
 
@@ -368,6 +455,8 @@ export class PatientUtils extends LoginUtils {
       herenId: this.globalStore.herenId,
       verifyType: '1'
     };
+
+    getH5OpenidParam(requestArg);
 
     const {
       result: { patientId }
@@ -433,7 +522,9 @@ export class PatientUtils extends LoginUtils {
   async deletePat(data: { patientId: string }) {
     const { patientId } = data;
 
-    const pat = <IPat>this.userStore.patList.find((o) => o.patientId === patientId);
+    const pat = <IPat>(
+      this.userStore.patList.find((o) => o.patientId === patientId)
+    );
 
     uni.showLoading({
       title: '请求中...',

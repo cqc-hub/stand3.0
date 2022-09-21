@@ -1,7 +1,13 @@
 <template>
   <view>
     <view class="container">
-      <g-form v-model:value="formData" @submit="formSubmit" @change="formChange" bodyBold ref="gform" />
+      <g-form
+        v-model:value="formData"
+        @submit="formSubmit"
+        @change="formChange"
+        bodyBold
+        ref="gform"
+      />
     </view>
 
     <!-- <view class="aa">
@@ -63,11 +69,17 @@
     // patientName: '大钢炮22',
     // patientPhone: '13868529891',
     // [formKey.verify]: '2313',
-    // [formKey.medicalType]: '-1',
-    // [formKey.defaultFalg]: true
+    [formKey.medicalType]: '-1',
+    [formKey.defaultFalg]: true
   });
 
-  const formList = pickTempItem(['medicalType', 'patientName', 'patientPhone', 'verify', 'defaultFalg']);
+  const formList = pickTempItem([
+    'medicalType',
+    'patientName',
+    'patientPhone',
+    'verify',
+    'defaultFalg'
+  ]);
 
   const dialogShow = ref(false);
   const dialogContent = ref('');
@@ -81,7 +93,8 @@
     try {
       const { result } = await api.getPatCardInfoByHospital(data);
       if (result) {
-        const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } = result;
+        const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } =
+          result;
         const { patientPhone, patientName } = data;
 
         if (jump === 0) {
@@ -156,7 +169,6 @@
         isDisabled = true;
       }
     });
-
 
     return isDisabled;
   });

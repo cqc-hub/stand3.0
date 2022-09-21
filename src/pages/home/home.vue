@@ -1,15 +1,25 @@
 <template>
   <view class="home">
     <scroll-view class="scroll-page" scroll-y>
-      <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
+      <ls-skeleton
+        :skeleton="skeletonProps.skeleton"
+        :loading="skeletonProps.loading"
+      >
         <view class="homePage">
           <view class="search">
-            <uni-search-input v-model:value="aaa" :type="'2'" inputBorder :placeholder="searchPlaceholder" />
+            <uni-search-input
+              v-model:value="aaa"
+              :type="'2'"
+              inputBorder
+              :placeholder="searchPlaceholder"
+            />
           </view>
           <view class="card">
             <!-- 登录之后 -->
             <block v-if="globalStore.isLogin">
-              <view class="top-card flex-normal-between animate__animated animate__fadeIn">
+              <view
+                class="top-card flex-normal-between animate__animated animate__fadeIn"
+              >
                 <!-- 有就诊人时 -->
                 <block v-if="gStores.userStore.patChoose._showId">
                   <view class="flex-normal">
@@ -24,7 +34,9 @@
                       </text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="chooseAction">更换就诊人</view>
+                  <view class="switchPatient" @tap="chooseAction">
+                    更换就诊人
+                  </view>
                 </block>
                 <!-- 没有就诊人时 -->
                 <block v-else>
@@ -33,22 +45,34 @@
                       <text>暂无就诊人</text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="addPatient">添加就诊人</view>
+                  <view class="switchPatient" @tap="addPatient">
+                    添加就诊人
+                  </view>
                 </block>
               </view>
             </block>
             <block v-else>
               <!-- 未登录 -->
-              <view class="top-card flex-normal-between animate__animated animate__fadeIn">
+              <view
+                class="top-card flex-normal-between animate__animated animate__fadeIn"
+              >
                 <view class="flex-normal no-login">
                   <text>请登录</text>
                   <text>登录后享受更多服务</text>
                 </view>
                 <!-- #ifdef MP-ALIPAY -->
-                <view class="switchPatient no-login-tip" @tap="goLogin">请登录</view>
+                <view class="switchPatient no-login-tip" @tap="goLogin">
+                  请登录
+                </view>
                 <!-- #endif -->
                 <!-- #ifdef MP-WEIXIN -->
-                <button open-type="getPhoneNumber" @getphonenumber="goLogin" class="login-btn">请登录</button>
+                <button
+                  open-type="getPhoneNumber"
+                  @getphonenumber="goLogin"
+                  class="login-btn"
+                >
+                  请登录
+                </button>
                 <!-- #endif -->
               </view>
             </block>
@@ -68,7 +92,11 @@
                   interval="3000"
                   class="bar-swiper"
                 >
-                  <swiper-item v-for="(item, index) in noticeMenu" :key="index" class="swiper-item">
+                  <swiper-item
+                    v-for="(item, index) in noticeMenu"
+                    :key="index"
+                    class="swiper-item"
+                  >
                     <view class="item-box">
                       {{ item.title }}
                     </view>
@@ -78,7 +106,10 @@
             </view>
           </view>
           <view class="banner-menu">
-            <homeBanner :leftFunctionList="bannerLeftFunctionList" :functionList="bannerFunctionList" />
+            <homeBanner
+              :leftFunctionList="bannerLeftFunctionList"
+              :functionList="bannerFunctionList"
+            />
           </view>
           <!-- #ifdef MP-WEIXIN -->
           <view>
@@ -91,7 +122,10 @@
             <homeMenu :list="menuList" />
           </view>
           <view class="bg-back">
-            <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
+            <image
+              :src="$global.BASE_IMG + 'img_logo@3x.png'"
+              mode="widthFix"
+            />
           </view>
         </view>
       </ls-skeleton>
@@ -113,8 +147,19 @@
 
   import { onLoad } from '@dcloudio/uni-app';
   import api from '@/service/api';
-  import { aliLogin, wxLogin, ServerStaticData, PatientUtils, GStores, routerJump } from '@/utils';
+  import {
+    aliLogin,
+    wxLogin,
+    ServerStaticData,
+    PatientUtils,
+    GStores,
+    routerJump,
+    LoginUtils
+  } from '@/utils';
 
+  const props = defineProps<{
+    code?: string;
+  }>();
   const userSore = useUserStore();
   const gStores = new GStores();
   const globalStore = useGlobalStore();
@@ -163,6 +208,15 @@
 
   onLoad(() => {
     getHomeConfig();
+
+    console.log({
+      props
+    });
+    // #ifdef MP-WEIXIN
+    if (props.code) {
+      new LoginUtils().getNoPublicOpenId(props.code);
+    }
+    // #endif
   });
   const goLogin = async (e: any) => {
     // #ifdef MP-ALIPAY
@@ -283,7 +337,11 @@
         view.switchPatient {
           width: 180rpx;
           height: 64rpx;
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.5)
+          );
           border-radius: 200rpx 0 0 200rpx;
           font-size: var(--hr-font-size-xs);
           font-weight: 400;
@@ -302,7 +360,11 @@
         box-shadow: none !important;
         margin: 0;
         height: 64rpx;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.5)
+        );
         border-radius: 200rpx 0 0 200rpx;
         font-size: var(--hr-font-size-xs);
         font-weight: 400;

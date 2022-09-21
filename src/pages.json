@@ -18,6 +18,13 @@
     },
 
     {
+      "path": "pages/home/startCome",
+      "style": {
+        "navigationBarTitleText": "欢迎页"
+      }
+    },
+
+    {
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "uni-app"

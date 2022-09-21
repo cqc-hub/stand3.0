@@ -84,7 +84,7 @@ const globalStore = defineStore('global', {
 			};
 
 			this.openId = '';
-			this.h5OpenId = '';
+			// this.h5OpenId = '';
 			this.herenId = '';
 		},
 

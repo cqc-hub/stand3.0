@@ -1,10 +1,11 @@
 import PAGE_DATA from '@/pages.json';
-import { useGlobalStore } from '@/stores';
+import { useGlobalStore, useUserStore } from '@/stores';
 import { joinQuery } from '@/common';
 
 const pageAdmin = new Map();
 const routerPages = [...PAGE_DATA.pages];
 const subPackages = PAGE_DATA.subPackages;
+
 
 if (subPackages) {
   subPackages.map(({ root, pages }) => {
@@ -35,24 +36,17 @@ export const beforeEach = async (
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url);
   const globalStore = useGlobalStore();
+  const userStore = useUserStore();
+
 
   if (currentRoute) {
     const { extend } = currentRoute;
 
     if (extend) {
-      const { login } = extend;
+      const { login, patient, herenId } = extend;
 
       if (login) {
         if (!globalStore.isLogin) {
-          // return jumpRouter({
-          //   navType: 'replace',
-          //   url: '/pages/home/my',
-          //   query: {
-          //     isWarningLogin: '1',
-          //     _url: encodeURIComponent(<string>fullUrl)
-          //   }
-          // });
-
           uni.reLaunch({
             url: joinQuery('/pages/home/my', {
               isWarningLogin: '1',
@@ -61,6 +55,27 @@ export const beforeEach = async (
           });
 
           return Promise.reject('需要登录----');
+        } else if (herenId) {
+          if (!globalStore.herenId) {
+            uni.reLaunch({
+              url: joinQuery('/pagesA/medicalCardMan/perfectReal', {
+                pageType: 'perfectReal',
+                _url: encodeURIComponent(<string>fullUrl)
+              })
+            });
+
+            return Promise.reject('需要完善----');
+          }
+        } else if (patient) {
+          if (!userStore.patList.length) {
+            uni.reLaunch({
+              url: joinQuery('/pagesA/medicalCardMan/perfectReal', {
+                _url: encodeURIComponent(<string>fullUrl)
+              })
+            });
+
+            return Promise.reject('需要就诊人----');
+          }
         }
       }
     }

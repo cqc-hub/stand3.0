@@ -109,7 +109,8 @@ const userApi = {
   //转发统一认证接口
   allinoneAuthApi: (data) =>
     service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
-      isAuth: true
+      isAuth: true,
+      hideLoading: false
     }),
   //身份证OCR识别
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
@@ -121,6 +122,15 @@ const userApi = {
     service.post(
       '/phs-user/relevantPatient/addPatientByHasBeenTreated',
       parm(data)
+    ),
+  //更新就诊人OpenId
+  sysPatOpenIdAssignment: (data) =>
+    service.post(
+      '/phs-user/relevantPatient/sysPatOpenIdAssignment',
+      parm(data),
+      {
+        hideLoading: false
+      }
     ),
   //设置默认就诊人
   updateDefaultPat: (data) =>
