@@ -101,7 +101,8 @@
         {
           "path": "medicalCardMan/medicalCardMan",
           "extend": {
-            "login": true
+            "login": true,
+            "herenId": true
           },
           "style": {
             "navigationBarTitleText": "就诊人管理"

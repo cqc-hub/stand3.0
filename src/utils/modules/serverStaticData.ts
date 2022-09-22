@@ -11,6 +11,15 @@ export interface ISystemConfig {
   };
 }
 
+type TEnv = 'dev' | 'test' | 'prod';
+export interface IGlobalConfig {
+  // 根据sysCode的全局配置
+  sysCode: string,
+  title: string,
+  logo: string,
+  env:TEnv,
+}
+
 export interface IHosInfo {
   address: string;
   aliasName: string;
@@ -259,5 +268,17 @@ export class ServerStaticData {
     return res[key];
   }
 
-  private constructor() {}
+  static async getGlobalConfig<T extends keyof IGlobalConfig>(key: T) {
+    const res = {
+     sysCode:'1001033',
+     title: '台州第一人民医院',
+     logo: '',
+     env:'dev',
+
+    } as IGlobalConfig;
+
+    return res[key];
+  }
+
+  private constructor() { }
 }

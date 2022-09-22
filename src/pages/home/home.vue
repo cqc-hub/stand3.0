@@ -23,7 +23,9 @@
                 <!-- 有就诊人时 -->
                 <block v-if="gStores.userStore.patChoose._showId">
                   <view class="flex-normal">
-                    <view class="iconfont icon-size">&#xe6a7;</view>
+                    <view @tap="cardClick" class="iconfont icon-size">
+                      &#xe6a7;
+                    </view>
                     <view class="patient">
                       <text>
                         {{ gStores.userStore.patChoose.patientName }}
@@ -229,6 +231,13 @@
   const addPatient = () => {
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/medicalCardMan'
+    });
+  };
+
+  const cardClick = (pat: IPat) => {
+    gStores.userStore.updatePatClick(gStores.userStore.patChoose);
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/electronicMedicalCard'
     });
   };
 

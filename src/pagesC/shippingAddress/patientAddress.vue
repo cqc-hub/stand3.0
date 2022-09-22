@@ -41,6 +41,11 @@
       content="请补充地址信息"
       confirmText="立即补充"
       @confirmButton="clickConfirm"
+      @cancelButton="
+        () => {
+          isAddShow = false;
+        }
+      "
     ></xy-dialog>
     <g-message />
   </view>
@@ -87,19 +92,30 @@
   };
   const clickSelect = (e, item) => {
     currentIndex.value = e;
-    if (!item.province || !item.detailedAddress) {
+    if (
+      !item.province ||
+      !item.province ||
+      !item.province ||
+      !item.detailedAddress ||
+      !item.senderName ||
+      !item.senderPhone
+    ) {
       isAddShow.value = true;
       clickItem.value = item;
     } else {
       //直接添加
       getAddress(item);
+      isAddShow.value = false;
     }
   };
   const clickConfirm = () => {
+    isAddShow.value = false;
+    clickItem.value.address =
+      clickItem.value.province + clickItem.value.city + clickItem.value.county;
     uni.navigateTo({
       url: joinQuery('/pagesC/shippingAddress/addAddress', {
         item: JSON.stringify(clickItem.value),
-        pageType: 'edit'
+        pageType: 'editPatient'
       })
     });
   };

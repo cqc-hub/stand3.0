@@ -1,7 +1,6 @@
 import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
 
-const routerStore = useRouterStore();
 
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -37,7 +36,7 @@ export const checkPatient = (item: IRoute) => {
           {
             closeCallBack: () => {
               uni.reLaunch({
-                url: '/pagesA/medicalCardMan/perfectReal&_p=1'
+                url: '/pagesA/medicalCardMan/perfectReal?_p=1'
               });
             }
           }
@@ -55,6 +54,7 @@ export const checkPatient = (item: IRoute) => {
 //   selectPatientPage?: string,//跳转第三方是否需要就诊人选择页面
 // gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
 export const checkGrid = async (item: IRoute) => {
+  const routerStore = useRouterStore();
   const gStores = new GStores();
   if (item.gridLabel === '3') {
     return;
@@ -104,7 +104,10 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       const obj = {
         url:
           '/pagesC/cloudHospital/myPath?type=1&path=' +
-          item.path
+          item.path,
+        fail: () => {
+          gStores.messageStore.showMessage('请确认跳转地址正确性', 1000)
+        }
       }
       typeNavigate(obj, type)
       break;
@@ -126,20 +129,29 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       const obj1 = {
         url:
           '/pagesC/cloudHospital/myPath?path=' +
-          item.path
+          item.path,
+        fail: () => {
+          gStores.messageStore.showMessage('请确认跳转地址正确性', 1000)
+        }
       }
       typeNavigate(obj1, type)
       break;
     case 'netHospital':
       const obj2 = {
-        url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path
+        url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path,
+        fail: () => {
+          gStores.messageStore.showMessage('请确认跳转地址正确性', 1000)
+        }
       }
       typeNavigate(obj2, type)
       break;
     default:
       //自研或者其他直接跳转的
       const obj3 = {
-        url: item.path
+        url: item.path,
+        fail: () => {
+          gStores.messageStore.showMessage('请确认跳转地址正确性', 1000)
+        }
       }
       typeNavigate(obj3, type)
       break;

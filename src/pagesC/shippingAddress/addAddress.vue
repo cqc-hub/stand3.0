@@ -67,7 +67,7 @@
 
   const props = withDefaults(
     defineProps<{
-      pageType: 'edit' | 'add';
+      pageType: 'edit' | 'add' | 'editPatient';
       item: string;
     }>(),
     {
@@ -91,7 +91,8 @@
       label: '收货人',
       field: 'input-text',
       placeholder: '请输入收货人姓名',
-      key: 'senderName'
+      key: 'senderName',
+      emptyMessage: '请填写收货人姓名'
     },
     {
       required: true,
@@ -100,9 +101,10 @@
       field: 'input-text',
       placeholder: '请输入收货人手机号码',
       key: 'senderPhone',
+      emptyMessage: '请填写手机号',
       rule: [
         {
-          message: '请确认手机号是否有误',
+          message: '请填写正确的手机号',
           rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
         }
       ]
@@ -113,6 +115,7 @@
       label: '所在地区',
       placeholder: '请选择',
       key: 'address',
+      emptyMessage: '请选择所在地区',
       field: 'address'
     },
 
@@ -122,6 +125,7 @@
       field: 'input-text',
       placeholder: '请输入详细地址',
       key: 'detailedAddress',
+      emptyMessage: '请填写详细地址',
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
     },
     {
@@ -152,9 +156,14 @@
 
   //获取当前位置
   const getCurrentAdd = async () => {
+    console.log(333);
+
     uni.chooseLocation({
       success(res) {
         getAddress(res);
+      },
+      fail(res) {
+        console.log(3333, res);
       }
     });
   };
@@ -193,7 +202,7 @@
     });
     messageStore.showMessage('操作成功', 1000, {
       closeCallBack: () => {
-        uni.navigateBack({ delta: 1 });
+        uni.navigateBack({ delta: props.pageType === 'editPatient' ? 2 : 1 });
       }
     });
   };
@@ -218,9 +227,7 @@
   });
 
   onMounted(() => {
-    console.log(8888, props);
-
-    if (props.pageType === 'edit') {
+    if (props.pageType !== 'add') {
       const item = JSON.parse(props.item);
 
       formData.value = {
