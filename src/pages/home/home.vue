@@ -209,9 +209,6 @@
   onLoad(() => {
     getHomeConfig();
 
-    console.log({
-      props
-    });
     // #ifdef MP-WEIXIN
     if (props.code) {
       new LoginUtils().getNoPublicOpenId(props.code);

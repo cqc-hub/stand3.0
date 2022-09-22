@@ -24,12 +24,18 @@
             </view>
           </view>
 
-          <view class="icon-arrow1" @click="toggleCollapse">
+          <view class="arrow-content">
             <view
-              :class="{ 'open-arrow': isCollapse }"
-              class="iconfont ico-arrow"
+              class="icon-arrow1"
+              v-if="item.schDocSubResultList.length > 3"
+              @click="toggleCollapse"
             >
-              &#xe6c4;
+              <view
+                :class="{ 'open-arrow': isCollapse }"
+                class="iconfont ico-arrow"
+              >
+                &#xe6c4;
+              </view>
             </view>
           </view>
         </view>
@@ -104,7 +110,11 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
+    }
+
+    .arrow-content {
       margin-left: 10rpx;
+      min-width: 48rpx;
     }
 
     .ico-arrow {

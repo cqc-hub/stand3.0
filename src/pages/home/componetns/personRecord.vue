@@ -169,6 +169,8 @@
     gap: 10upx;
     align-items: center;
     width: 100%;
+    position: relative;
+    z-index: 2;
 
     .user-avatar {
       width: 120upx;

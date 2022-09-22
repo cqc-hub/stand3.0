@@ -2,7 +2,10 @@
   <view class="login-center">
     <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
     <scroll-view class="scroll-container" scroll-y>
-      <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
+      <ls-skeleton
+        :skeleton="skeletonProps.skeleton"
+        :loading="skeletonProps.loading"
+      >
         <view class="top-bg" />
         <personRecord />
 
@@ -31,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, nextTick, onMounted } from 'vue';
+  import { defineComponent, ref, nextTick, onMounted, reactive } from 'vue';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
   import { onLoad } from '@dcloudio/uni-app';
   import { ServerStaticData, wait } from '@/utils';
@@ -103,8 +106,8 @@
   };
 
   const ttt = () => {
-    const a = uni.getStorageSync('global')
-    console.log({a});
+    const a = uni.getStorageSync('global');
+    console.log({ a });
 
     // uni.navigateTo({
     //   url: '/pagesA/MyRegistration/Register?_url=%2FpagesA%2FMyRegistration%2FselDepartment'
@@ -149,10 +152,22 @@
     .top-bg {
       height: 500upx;
       width: 100%;
-      box-shadow: 0 200upx 500upx 30upx #13b8ff32;
       position: absolute;
-      top: -500upx;
       pointer-events: none;
+      z-index: 1;
+
+      background: linear-gradient(
+          160deg,
+          #13b8ff2a,
+          #13b8ff2a,
+          rgba(255, 0, 0, 0) 50%
+        ),
+        linear-gradient(
+          -160deg,
+          #c1d4ff97,
+          #c1d4ff59,
+          rgba(0, 255, 0, 0) 50%
+        );
     }
   }
 
