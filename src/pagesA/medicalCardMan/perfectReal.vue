@@ -89,7 +89,8 @@
     dialogConfirm();
   };
 
-  const formSubmit = async ({ data }) => {
+  const formSubmit = async ({}) => {
+    const data = formData.value;
     try {
       const { result } = await api.getPatCardInfoByHospital(data);
       if (result) {

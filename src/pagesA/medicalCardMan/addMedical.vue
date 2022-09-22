@@ -35,7 +35,14 @@
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
   import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
-  import { GStores, idValidator, PatientUtils, ServerStaticData, routerJump, OcrRes } from '@/utils';
+  import {
+    GStores,
+    idValidator,
+    PatientUtils,
+    ServerStaticData,
+    routerJump,
+    OcrRes
+  } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
 
@@ -72,7 +79,13 @@
   };
   let verifyCode = '';
 
-  let formList = pickTempItem(['medicalType', 'patientName', 'patientPhone', 'verify', 'defaultFalg']);
+  let formList = pickTempItem([
+    'medicalType',
+    'patientName',
+    'patientPhone',
+    'verify',
+    'defaultFalg'
+  ]);
 
   const formSubmit = async ({ data }) => {
     const formKeyNow = formList.map((o) => o.key);
@@ -140,7 +153,10 @@
   const formInputBlur = (e) => {
     const { item, value } = e;
 
-    if (item.key == formKey.idCard && formData.value[formKey.medicalType] === '-1') {
+    if (
+      item.key == formKey.idCard &&
+      formData.value[formKey.medicalType] === '-1'
+    ) {
       medicalTypeChange('-1');
     }
   };
@@ -272,7 +288,9 @@
         }
       };
 
-      const patientNameItem = formList.find((o) => o.key === formKey.patientName);
+      const patientNameItem = formList.find(
+        (o) => o.key === formKey.patientName
+      );
 
       if (patientNameItem) {
         patientNameItem.ocr = true;
@@ -287,7 +305,13 @@
 
     formList.map((o) => {
       const { key } = o;
-      if ([formKey.medicalType, formKey.patientName, formKey.patientPhone].includes(key as any)) {
+      if (
+        [
+          formKey.medicalType,
+          formKey.patientName,
+          formKey.patientPhone
+        ].includes(key as any)
+      ) {
         if (formData.value[key]) {
           o.disabled = true;
         }
@@ -337,6 +361,12 @@
     // 默认身份证
     formData.value[formKey.idType] = '01';
     verifyCode = formData.value[formKey.verify];
+
+    if ((props.medicalType as string) === '-1') {
+      // #ifdef MP-ALIPAY
+      formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
+      // #endif
+    }
 
     nextTick(() => {
       // medicalTypeChange('-1');

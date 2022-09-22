@@ -1,7 +1,10 @@
 <template>
   <view class="doc-info">
     <view class="doc-info-container">
-      <image :src="item.docPhoto" class="doc-info-avatar" />
+      <image
+        :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+        class="doc-info-avatar"
+      />
 
       <view class="doc-info-introduce">
         <view class="doc-info-introduce-header">
