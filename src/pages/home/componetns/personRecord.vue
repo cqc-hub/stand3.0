@@ -112,7 +112,6 @@
     const homeConfig = await ServerStaticData.getHomeConfig();
     if (homeConfig) {
       recordList.value = homeConfig[4].functionList;
-      recordList.value.length = 1;
     }
   };
 
