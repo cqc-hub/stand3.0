@@ -2,16 +2,16 @@
   <view class="">
     <view class="container">
       <image
-        :src="userSore.getAvatar"
+        :src="gStores.userStore.getAvatar"
         @click="avatarClick"
         mode="widthFix"
         class="user-avatar"
       />
 
       <view class="info">
-        <block v-if="globalStore.isLogin">
+        <block v-if="gStores.globalStore.isLogin">
           <text class="user-name animate__animated animate__fadeIn">
-            {{ userSore.name || userSore.cellPhoneNum }}
+            {{ gStores.userStore.name || gStores.userStore.cellPhoneNum }}
           </text>
 
           <!-- <text
@@ -43,7 +43,7 @@
       </view>
 
       <view
-        v-if="globalStore.isLogin"
+        v-if="gStores.globalStore.isLogin"
         class="user-out animate__animated animate__slideInRight"
       >
         <view @click="outLogin({})" class="out-btn">退出登录</view>
@@ -78,20 +78,19 @@
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { useGlobalStore, useUserStore } from '@/stores';
 
   import {
     aliLogin,
     wxLogin,
     outLogin,
     ServerStaticData,
-    routerJump
+    routerJump,
+    GStores
   } from '@/utils';
   import global from '@/config/global';
   import { useCommonTo } from '@/common/checkJump';
 
-  const userSore = useUserStore();
-  const globalStore = useGlobalStore();
+  const gStores = new GStores();
 
   const recordList = ref<IRoute[]>([]); //就医凭证
 
@@ -123,8 +122,10 @@
   };
 
   const avatarClick = () => {
-    if (globalStore.isLogin) {
+    if (gStores.globalStore.isLogin) {
       console.log('cqc');
+    } else {
+      gStores.messageStore.showMessage('未登录， 请先登录', 1500);
     }
   };
 
