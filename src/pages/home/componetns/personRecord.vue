@@ -74,7 +74,7 @@
         <view class="record-label">
           <text>{{ record.title }}</text>
           <view v-if="recordList.length === 1" class="iconfont icon-size">
-            &#xe6a6;
+            &#xe6c8;
           </view>
         </view>
       </view>
@@ -112,6 +112,7 @@
     const homeConfig = await ServerStaticData.getHomeConfig();
     if (homeConfig) {
       recordList.value = homeConfig[4].functionList;
+      recordList.value.length = 1;
     }
   };
 
@@ -267,7 +268,7 @@
 
         .icon-size {
           margin-left: 20upx;
-          font-size: var(--hr-font-size-base);
+          font-size: var(--hr-font-size-xl);
           opacity: 0.6;
         }
       }
@@ -292,5 +293,4 @@
       margin-right: 16rpx;
     }
   }
-
 </style>
