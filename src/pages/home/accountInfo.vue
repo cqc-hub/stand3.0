@@ -20,13 +20,14 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, onMounted } from 'vue';
-  import { GStores, PatientUtils } from '@/utils';
+  import { GStores, LoginUtils } from '@/utils';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
   import type { TInstance } from '@/components/g-form/index';
 
   const isShow = ref(false);
 
   const gStore = new GStores();
+  const loginUtils = new LoginUtils();
   const gform = ref<any>('');
   const formData = ref({});
 
@@ -65,10 +66,18 @@
   ];
 
   const deletePat = async () => {
-
     // uni.reLaunch({
     //   url: '/pagesA/medicalCardMan/medicalCardMan'
     // });
+    await loginUtils.logoutUser();
+    gStore.messageStore.showMessage('注销账号成功', 1000, {
+      closeCallBack: () => {
+        loginUtils.outLogin({
+          isHideMessage: true,
+          isGoLoginPage: true
+        });
+      }
+    });
   };
 
   onMounted(() => {

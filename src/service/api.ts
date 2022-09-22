@@ -112,6 +112,13 @@ const userApi = {
       isAuth: true,
       hideLoading: false
     }),
+
+  // 注销用户
+  logoutUser: (data) =>
+    service.post('/phs-user/authUser/logoutUser', parm(data), {
+      isAuth: true,
+      hideLoading: false
+    }),
   //身份证OCR识别
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
 

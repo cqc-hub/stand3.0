@@ -185,6 +185,13 @@ export class LoginUtils extends GStores {
       }
     }, 500);
   }
+
+  // 注销用户
+  async logoutUser() {
+    await api.logoutUser({
+      source: this.globalStore.browser.source
+    });
+  }
 }
 
 class WeChatLoginHandler extends LoginUtils implements LoginHandler {
