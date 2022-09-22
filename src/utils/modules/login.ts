@@ -105,7 +105,6 @@ export class LoginUtils extends GStores {
         } else {
           //获取就诊人列表
           await new PatientUtils().getPatCardList();
-          routerJump();
         }
       }
     } catch (error) {
@@ -153,6 +152,7 @@ export class LoginUtils extends GStores {
     }
 
     await this.getUerInfo();
+    routerJump();
   }
 
   outLogin(
