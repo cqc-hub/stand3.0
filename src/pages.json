@@ -17,6 +17,16 @@
       }
     },
     {
+      "path": "pages/home/accountInfo",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      },
+      "extend": {
+        "login": true,
+        "herenId": true
+      }
+    },
+    {
       "path": "pages/home/startCome",
       "style": {
         "navigationBarTitleText": "欢迎页"

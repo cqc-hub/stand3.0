@@ -52,7 +52,9 @@
 
     <view
       :class="`record-container ${
-        recordList.length === 1 && 'record-container-row1'
+        recordList.length === 1
+          ? 'record-container-row1'
+          : 'record-container-row2'
       }`"
     >
       <view
@@ -62,7 +64,11 @@
           'background-image': `url(${backImg[i]})`,
           'background-color': recordColors[i]
         }"
-        :class="`record-item ${recordList.length === 1 && 'cr-center'}`"
+        :class="{
+          'cr-center': recordList.length === 1,
+          'record-item-first': recordList.length === 2 && i === 0
+        }"
+        class="record-item"
         @tap="jumpFor(record)"
       >
         <view class="record-label">
@@ -87,13 +93,13 @@
     routerJump,
     GStores
   } from '@/utils';
-  import global from '@/config/global';
   import { useCommonTo } from '@/common/checkJump';
+  import { useRouterStore } from '@/stores';
+  import global from '@/config/global';
 
   const gStores = new GStores();
-
+  const routerStore = useRouterStore();
   const recordList = ref<IRoute[]>([]); //就医凭证
-
   const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
   const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
 
@@ -122,11 +128,9 @@
   };
 
   const avatarClick = () => {
-    if (gStores.globalStore.isLogin) {
-      console.log('cqc');
-    } else {
-      gStores.messageStore.showMessage('未登录， 请先登录', 1500);
-    }
+    uni.navigateTo({
+      url: '/pages/home/accountInfo'
+    });
   };
 
   const jumpFor = (record: IRoute) => {
@@ -240,7 +244,7 @@
     margin-bottom: 24rpx;
 
     display: flex;
-    gap: 16upx;
+    // gap: 16upx;
     height: 160upx;
 
     .record-item {
@@ -280,4 +284,11 @@
       }
     }
   }
+
+  .record-container-row2 {
+    .record-item-first {
+      margin-right: 16rpx;
+    }
+  }
+
 </style>
