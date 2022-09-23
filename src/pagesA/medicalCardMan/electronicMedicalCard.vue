@@ -36,7 +36,7 @@ const options = ref({
 	width: 600, // 宽度 单位rpx
 	height: 184, // 高度 单位rpx
 
-	code: clickPat.value.patientId
+	code: clickPat.value._showId
 });
 
 const formData = ref({

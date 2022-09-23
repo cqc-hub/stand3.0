@@ -356,13 +356,20 @@ export class PatientUtils extends LoginUtils {
     }
   ) {
     const { addPatInterface } = options;
-    const { idCard: idNo, idType, patientName, patientPhone } = payload;
+    const {
+      idCard: idNo,
+      idType,
+      patientName,
+      patientPhone,
+      patientType: patientType
+    } = payload;
     const accountType = this.globalStore.browser.accountType;
 
     const requestData = {
       accountType,
       idNo,
       idType,
+      patientType,
       name: patientName,
       cellphone: patientPhone
     };
@@ -400,6 +407,7 @@ export class PatientUtils extends LoginUtils {
           herenId: this.globalStore.herenId,
           patientName,
           patientPhone,
+          patientType,
           source: this.globalStore.browser.source,
           verifyCode: '1'
         });

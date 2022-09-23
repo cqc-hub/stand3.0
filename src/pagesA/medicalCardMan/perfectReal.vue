@@ -69,12 +69,12 @@
     // patientName: '大钢炮22',
     // patientPhone: '13868529891',
     // [formKey.verify]: '2313',
-    [formKey.medicalType]: '-1',
+    [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true
   });
 
   const formList = pickTempItem([
-    'medicalType',
+    'patientType',
     'patientName',
     'patientPhone',
     'verify',
@@ -101,6 +101,7 @@
         if (jump === 0) {
           if (props.pageType === 'perfectReal') {
             await patientUtil.registerUser({
+              ...data,
               idCard,
               idType,
               patientPhone,
@@ -111,11 +112,13 @@
           } else {
             const value = formData.value;
             await patientUtil.addPatient({
+              ...data,
               defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
               herenId: patientUtil.globalStore.herenId,
               patientName: value[formKey.patientName],
               patientPhone: value[formKey.patientPhone],
               source: patientUtil.globalStore.browser.source,
+              patientType: formData.value[formKey.patientType],
               verifyCode: '1'
             });
 
@@ -203,7 +206,7 @@
       }
 
       const medicalTypeItem = formList.find(
-        (o) => o.key === formKey.medicalType
+        (o) => o.key === formKey.patientType
       );
 
       // 完善时候只能有证件号的类型

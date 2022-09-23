@@ -52,7 +52,8 @@
 
   interface TPageType extends ILoginBack {
     patientName: 'string';
-    medicalType: 'string';
+    // patientType: 'string';
+    patientType: 'string';
     verifyCode: 'string';
     defaultFalg: 'string';
     patientPhone: 'string';
@@ -80,7 +81,7 @@
   let verifyCode = '';
 
   let formList = pickTempItem([
-    'medicalType',
+    'patientType',
     'patientName',
     'patientPhone',
     'verify',
@@ -105,15 +106,16 @@
       await patientUtils.registerUser(requestData, {
         addPatInterface: 'relevantPatient'
       });
+
+      routerJump('/pages/home/my');
     } else {
       await patientUtils.addRelevantPatient(requestData);
+      routerJump('/pagesA/medicalCardMan/medicalCardMan');
     }
-
-    routerJump('/pagesA/medicalCardMan/medicalCardMan');
   };
 
   const formChange = ({ item, value, oldValue }) => {
-    if (item.key === formKey.medicalType && oldValue !== value) {
+    if (item.key === formKey.patientType && oldValue !== value) {
       medicalTypeChange(value);
     }
   };
@@ -146,7 +148,7 @@
     formData.value[formKey.idCard] = '';
 
     nextTick(() => {
-      medicalTypeChange(formData.value[formKey.medicalType]);
+      medicalTypeChange(formData.value[formKey.patientType]);
     });
   };
 
@@ -155,7 +157,7 @@
 
     if (
       item.key == formKey.idCard &&
-      formData.value[formKey.medicalType] === '-1'
+      formData.value[formKey.patientType] === '-1'
     ) {
       medicalTypeChange('-1');
     }
@@ -192,7 +194,7 @@
    *  2  军属
    */
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
-    const listArr: TFormKeys[] = [formKey.medicalType];
+    const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
 
@@ -307,7 +309,7 @@
       const { key } = o;
       if (
         [
-          formKey.medicalType,
+          formKey.patientType,
           formKey.patientName,
           formKey.patientPhone
         ].includes(key as any)
@@ -316,7 +318,7 @@
           o.disabled = true;
         }
 
-        if (key === formKey.medicalType) {
+        if (key === formKey.patientType) {
           o.showSuffixArrowIcon = false;
         }
       }
@@ -363,15 +365,17 @@
     formData.value[formKey.idType] = '01';
     verifyCode = formData.value[formKey.verify];
 
-    if ((props.medicalType as string) === '-1') {
+    if ((props.patientType as string) === '-1') {
       // #ifdef MP-ALIPAY
-      formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
+      if (props.pageType === 'perfectReal') {
+        formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
+      }
       // #endif
     }
 
     nextTick(() => {
       // medicalTypeChange('-1');
-      medicalTypeChange(formData.value[formKey.medicalType]);
+      medicalTypeChange(formData.value[formKey.patientType]);
     });
   });
 </script>

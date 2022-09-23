@@ -18,7 +18,7 @@
 			<view class="card">
 				<view class="card-content">
 					<view class="card-label">电子就诊卡</view>
-					<view class="card-value">{{ pat.patientId }}</view>
+					<view class="card-value">{{ pat._showId }}</view>
 				</view>
 			</view>
 

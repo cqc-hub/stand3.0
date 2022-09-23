@@ -79,7 +79,6 @@
 
     nextTick(() => {
       gform.value.setList(formList);
-
       Object.keys(formData.value).map((key) => {
         if (formData.value[key] === '') {
           formData.value[key] = '无';

@@ -68,7 +68,7 @@ export const routerJump = async (url?: `/${string}`) => {
   if (routerStore.isWork) {
     const _p = routerStore._p;
     if (!_p) {
-      uni.redirectTo({
+      uni.reLaunch({
         url: routerStore.fullUrl
       });
     } else {
@@ -87,7 +87,7 @@ export const routerJump = async (url?: `/${string}`) => {
     routerStore.clear();
   } else {
     if (url) {
-      uni.redirectTo({
+      uni.reLaunch({
         url
       });
     }

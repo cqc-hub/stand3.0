@@ -6,7 +6,8 @@ import { idValidator } from '@/utils';
  */
 // 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
-  medicalType: 'medicalType',
+  patientType: 'patientType',
+  // patientType: 'patientType',
   idType: 'idType',
   idCard: 'idCard',
   patientName: 'patientName',
@@ -32,7 +33,7 @@ export const tempList: TInstance[] = [
     showSuffixArrowIcon: true,
     label: '就诊人类型',
     placeholder: '请选择',
-    key: formKey.medicalType,
+    key: formKey.patientType,
     field: 'select',
     options: [],
     autoOptions: 'patientTypeTerms',
@@ -337,7 +338,7 @@ export const patCardDetailList: TInstance[] = [
 
   {
     label: '院内ID/卡号',
-    key: 'patientId',
+    key: '_showId',
     field: 'input-text',
     disabled: true,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
