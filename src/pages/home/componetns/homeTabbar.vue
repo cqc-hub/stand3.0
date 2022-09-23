@@ -41,9 +41,13 @@
   const currentPath = '/' + currentPage.route;
 
   const changeTab = (item) => {
-    uni.reLaunch({
-      url: item.url
-    });
+    const url = item.url;
+
+    if (url !== currentPath) {
+      uni.reLaunch({
+        url: item.url
+      });
+    }
   };
 
   current.value = currentPath;

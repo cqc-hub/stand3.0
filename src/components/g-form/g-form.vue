@@ -13,7 +13,9 @@
           'form-item-error': warningKeys.includes(item.key),
           [`form-item-${item.field}`]: true
         }"
-        :style="`--label-width: ${item.labelWidth || '190rpx'}; ${(item.rowStyle && item.rowStyle) || ''}`"
+        :style="`--label-width: ${item.labelWidth || '190rpx'}; ${
+          (item.rowStyle && item.rowStyle) || ''
+        }`"
         class="form-item"
       >
         <view
@@ -30,7 +32,10 @@
             <view class="content-show">
               {{
                 item.field === 'select'
-                  ? ServerStaticData.getOptionsLabel(item.options, value[item.key])
+                  ? ServerStaticData.getOptionsLabel(
+                      item.options,
+                      value[item.key]
+                    )
                   : value[item.key]
               }}
             </view>
@@ -38,7 +43,9 @@
 
           <block v-else>
             <uni-easyinput
-              v-if="item.field === 'input-text' || item.field === 'input-verify'"
+              v-if="
+                item.field === 'input-text' || item.field === 'input-verify'
+              "
               :placeholder="item.placeholder"
               :inputBorder="false"
               :clearable="false"
@@ -70,7 +77,12 @@
                   :inputBorder="false"
                   :clearable="false"
                   :placeholderStyle="inputPlaceHolderStyle(item)"
-                  :value="ServerStaticData.getOptionsLabel(item.options, value[item.key])"
+                  :value="
+                    ServerStaticData.getOptionsLabel(
+                      item.options,
+                      value[item.key]
+                    )
+                  "
                   class="form-input"
                 />
               </view>
@@ -164,7 +176,10 @@
           </block>
           <slot name="suffix" :item="item" />
 
-          <view v-if="item.showSuffixArrowIcon" class="icon-font icon-resize ico_arrow" />
+          <view
+            v-if="item.showSuffixArrowIcon"
+            class="icon-font icon-resize ico_arrow"
+          />
         </view>
       </view>
     </view>
@@ -386,6 +401,8 @@
     if (!cacheItem) return;
     const { value } = item;
 
+    clearItemWarning(cacheItem.key);
+
     emits('select-change', {
       item: { ...cacheItem },
       value
@@ -397,11 +414,14 @@
     }
   };
 
-  const pickerChange = function (e: { detail: { value: { text: string; value: any }[] } }) {
+  const pickerChange = function (e: {
+    detail: { value: { text: string; value: any }[] };
+  }) {
     if (!cacheItem) return;
     const { value: choose } = e.detail;
     const { key, field } = cacheItem;
 
+    clearItemWarning(cacheItem.key);
     if (field === 'address') {
       addressChange(cacheItem, choose);
     } else {
@@ -428,6 +448,16 @@
     }
   };
 
+  const clearItemWarning = (key: string) => {
+    if (warningKeys.value.length) {
+      const idx = warningKeys.value.findIndex((o) => o === key);
+
+      if (idx !== -1) {
+        warningKeys.value.splice(idx, 1);
+      }
+    }
+  };
+
   const setData = function (value: BaseObject, item?: TInstance) {
     const oldValue = item ? props.value[item.key] : undefined;
 
@@ -439,13 +469,7 @@
     if (item) {
       const key = Object.keys(value)[0];
 
-      if (warningKeys.value.length) {
-        const idx = warningKeys.value.findIndex((o) => o === key);
-
-        if (idx !== -1) {
-          warningKeys.value.splice(idx, 1);
-        }
-      }
+      clearItemWarning(key);
 
       emits('change', {
         item,

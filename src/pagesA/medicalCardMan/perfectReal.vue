@@ -107,7 +107,7 @@
               patientName
             });
 
-            routerJump('/pagesA/medicalCardMan/medicalCardMan');
+            routerJump('/pages/home/home');
           } else {
             const value = formData.value;
             await patientUtil.addPatient({
@@ -185,18 +185,41 @@
   onMounted(() => {
     routeStore.receiveQuery(props);
     const { userName, mobile } = gStores.userStore.cacheUser;
-    // 只有支付宝有
-    if (userName && mobile && props.pageType === 'perfectReal') {
-      formData.value[formKey.patientName] = userName;
-      formData.value[formKey.patientPhone] = mobile;
+    if (props.pageType === 'perfectReal') {
+      // 只有支付宝有
+      if (userName && mobile) {
+        formData.value[formKey.patientName] = userName;
+        formData.value[formKey.patientPhone] = mobile;
 
-      formList.map((o) => {
-        const { key } = o;
-        if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
-          o.disabled = true;
-        }
-      });
+        formList.map((o) => {
+          const { key } = o;
+          o.labelWidth = undefined;
+          if (
+            [formKey.patientName, formKey.patientPhone].includes(key as any)
+          ) {
+            o.disabled = true;
+          }
+        });
+      }
+
+      const medicalTypeItem = formList.find(
+        (o) => o.key === formKey.medicalType
+      );
+
+      // 完善时候只能有证件号的类型
+      if (medicalTypeItem) {
+        medicalTypeItem.disabled = true;
+        medicalTypeItem.showSuffixArrowIcon = false;
+      }
     }
+
+    formList.map((o) => {
+      const { key } = o;
+
+      if (key !== formKey.defaultFalg) {
+        o.labelWidth = undefined;
+      }
+    });
 
     gform.value.setList(formList);
   });

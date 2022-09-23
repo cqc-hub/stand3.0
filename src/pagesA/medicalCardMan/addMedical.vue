@@ -246,11 +246,11 @@
       case '0':
         listArr.push(
           ...[
-            formKey.patientName,
-            ..._sexAndBirth,
-            ..._parentInfo,
-            formKey.nation,
-            formKey.patientPhone,
+            // formKey.patientName,
+            // ..._sexAndBirth,
+            // ..._parentInfo,
+            // formKey.nation,
+            // formKey.patientPhone,
             formKey.address,
             formKey.location,
             formKey.defaultFalg
@@ -336,7 +336,8 @@
       }
     });
 
-    return isDisabled;
+    return false;
+    // return isDisabled;
   });
 
   onReady(() => {
@@ -367,6 +368,8 @@
       formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
       // #endif
     }
+
+    formData.value[formKey.medicalType] = '0'
 
     nextTick(() => {
       // medicalTypeChange('-1');
