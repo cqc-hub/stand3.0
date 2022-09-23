@@ -368,7 +368,8 @@ export class PatientUtils extends LoginUtils {
     const requestData = {
       accountType,
       idNo,
-      idType,
+      // 统一认证不区分 国内外 护照， 只有护照
+      idType: ['031', '032'].includes(idType) ? '03' : idType,
       patientType,
       name: patientName,
       cellphone: patientPhone

@@ -9,7 +9,11 @@
       </view>
     </view>
 
-    <pat-List :list="gStore.userStore.patList" @profile-click="profileClick" @card-click="cardClick" />
+    <pat-List
+      :list="gStore.userStore.patList"
+      @profile-click="profileClick"
+      @card-click="cardClick"
+    />
     <g-message />
   </view>
 </template>
@@ -24,7 +28,9 @@
 
   const addPatPage = () => {
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/perfectReal'
+      url:
+        '/pagesA/medicalCardMan/perfectReal?_directUrl=' +
+        encodeURIComponent('/pagesA/medicalCardMan/medicalCardMan')
     });
   };
 

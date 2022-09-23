@@ -1,6 +1,7 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
-import { idValidator } from '@/utils';
+import { idValidator, ServerStaticData } from '@/utils';
+
 /**
  * 完善、 新增就诊人页面
  */
@@ -148,15 +149,28 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
+        const { ageGuardian } = await ServerStaticData.getSystemConfig(
+          'person'
+        );
+
+        const info = idValidator.getIdCardInfo(v);
+
+        if (info.age < ageGuardian) {
+          return Promise.resolve({
+            success: false,
+            message: `监护人年龄必须大于: ${ageGuardian}岁`
+          });
+        }
+
         return Promise.resolve({
           success: true
         });
-      } else {
-        return Promise.resolve({
-          success: false,
-          message: '请确认证件号码是否有误'
-        });
       }
+
+      return Promise.resolve({
+        success: false,
+        message: '请确认证件号码是否有误'
+      });
     },
     labelWidth: '220rpx'
   },

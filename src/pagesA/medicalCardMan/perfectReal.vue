@@ -56,6 +56,7 @@
     _type?: '1' | '2';
     _isOutLogin?: '1';
     _pageInfo?: '1' | '2';
+    _directUrl?: string;
   }
 
   const routeStore = useRouterStore();
@@ -123,7 +124,11 @@
             });
 
             await patientUtil.getPatCardList();
-            routerJump('/pagesA/medicalCardMan/medicalCardMan');
+            if (props._directUrl) {
+              routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+            } else {
+              routerJump('/pages/home/home');
+            }
           }
         } else {
           dialogContent.value = jumpMsg;

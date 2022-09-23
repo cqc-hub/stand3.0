@@ -9,15 +9,23 @@ export interface ISystemConfig {
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
   };
+
+  // 就诊人
+  person: {
+    // 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁）
+    ageGuardian: number;
+    // 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月）
+    ageChildren: number;
+  };
 }
 
 type TEnv = 'dev' | 'test' | 'prod';
 export interface IGlobalConfig {
   // 根据sysCode的全局配置
-  sysCode: string,
-  title: string,
-  logo: string,
-  env:TEnv,
+  sysCode: string;
+  title: string;
+  logo: string;
+  env: TEnv;
 }
 
 export interface IHosInfo {
@@ -262,23 +270,27 @@ export class ServerStaticData {
     const res = {
       order: {
         chooseDay: 30
+      },
+
+      person: {
+        ageChildren: 6,
+        ageGuardian: 18
       }
     } as ISystemConfig;
 
     return res[key];
   }
 
-  static async getGlobalConfig<T extends keyof IGlobalConfig>(key: T) {
+  static async getGlobalConfig(key): Promise<IGlobalConfig> {
     const res = {
-     sysCode:'1001033',
-     title: '台州第一人民医院',
-     logo: '',
-     env:'dev',
-
+      sysCode: '1001033',
+      title: '台州第一人民医院',
+      logo: '',
+      env: 'dev'
     } as IGlobalConfig;
 
     return res[key];
   }
 
-  private constructor() { }
+  private constructor() {}
 }

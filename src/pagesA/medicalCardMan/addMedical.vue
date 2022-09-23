@@ -66,6 +66,7 @@
     _type?: '1' | '2';
     _isOutLogin?: '1';
     _pageInfo?: '1' | '2';
+    _directUrl?: string;
   }
   const props = defineProps<TPageType>();
   const patientUtils = new PatientUtils();
@@ -107,10 +108,18 @@
         addPatInterface: 'relevantPatient'
       });
 
-      routerJump('/pages/home/my');
+      if (props._directUrl) {
+        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      } else {
+        routerJump('/pages/home/home');
+      }
     } else {
       await patientUtils.addRelevantPatient(requestData);
-      routerJump('/pagesA/medicalCardMan/medicalCardMan');
+      if (props._directUrl) {
+        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      } else {
+        routerJump('/pages/home/home');
+      }
     }
   };
 
@@ -338,7 +347,8 @@
       }
     });
 
-    return isDisabled;
+    // return isDisabled;
+    return false;
   });
 
   onReady(() => {
@@ -374,8 +384,8 @@
     }
 
     nextTick(() => {
-      medicalTypeChange('-1');
-      // medicalTypeChange(formData.value[formKey.patientType]);
+      // medicalTypeChange('-1');
+      medicalTypeChange(formData.value[formKey.patientType]);
     });
   });
 </script>
