@@ -331,11 +331,32 @@
           o.showSuffixArrowIcon = false;
         }
       }
+
+      if (value === '0' && key === formKey.birthday) {
+        o.validator = async (v) => {
+          const { ageChildren } = await ServerStaticData.getSystemConfig(
+            'person'
+          );
+
+          if (dayjs().diff(dayjs(v as string), 'month') >= ageChildren) {
+            return Promise.resolve({
+              success: false,
+              message: '新生儿年龄不能大于' + ageChildren + '个月'
+            });
+          }
+
+          return {
+            success: true
+          };
+        };
+      }
     });
 
     console.log(formList);
 
-    gform.value.setList(formList);
+    nextTick(() => {
+      gform.value.setList(formList);
+    });
   };
 
   const btnDisabled = computed(() => {
@@ -371,8 +392,8 @@
     );
 
     // 默认身份证
-    // formData.value[formKey.idType] = '01';
-    formData.value[formKey.idType] = '02';
+    formData.value[formKey.idType] = '01';
+    // formData.value[formKey.idType] = '02';
     verifyCode = formData.value[formKey.verify];
 
     if ((props.patientType as string) === '-1') {
