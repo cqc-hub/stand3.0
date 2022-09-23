@@ -43,7 +43,6 @@
 					:end-date="caleRange.endDate" :date="defSingleDate" @change="singleChange"
 					style="padding: 0 8px;" />
 				<view v-if="hasTime" class="popup-x-footer">
-					<!-- <text class="">此刻</text> -->
 					<text class="confirm" @click="confirmSingleChange">{{okText}}</text>
 				</view>
 				<view class="uni-date-popper__arrow"></view>
@@ -541,8 +540,8 @@
 						}
 					}
 				}
-				
-				
+
+
 				this.$emit('change', value)
 				this.$emit('input', value)
 				this.$emit('update:modelValue', value)

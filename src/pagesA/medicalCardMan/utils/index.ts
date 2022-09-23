@@ -107,6 +107,7 @@ export const tempList: TInstance[] = [
     field: 'time-picker',
     type: 'date',
     end: new Date().getTime(),
+    start: '1900-01-01',
     labelWidth: '220rpx'
   },
 

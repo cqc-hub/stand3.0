@@ -338,8 +338,7 @@
       }
     });
 
-    return false;
-    // return isDisabled;
+    return isDisabled;
   });
 
   onReady(() => {
@@ -362,7 +361,8 @@
     );
 
     // 默认身份证
-    formData.value[formKey.idType] = '01';
+    // formData.value[formKey.idType] = '01';
+    formData.value[formKey.idType] = '02';
     verifyCode = formData.value[formKey.verify];
 
     if ((props.patientType as string) === '-1') {
@@ -374,8 +374,8 @@
     }
 
     nextTick(() => {
-      // medicalTypeChange('-1');
-      medicalTypeChange(formData.value[formKey.patientType]);
+      medicalTypeChange('-1');
+      // medicalTypeChange(formData.value[formKey.patientType]);
     });
   });
 </script>

@@ -8,7 +8,7 @@
 				<view v-if="left" class="uni-calendar__header-btn-box" @click.stop="pre">
 					<view class="uni-calendar__header-btn uni-calendar--left"></view>
 				</view>
-				<picker mode="date" :value="date" fields="month" @change="bindDateChange">
+				<picker mode="date" :value="date" fields="month" :start="startDate" @change="bindDateChange">
 					<text
 						class="uni-calendar__header-text">{{ (nowDate.year||'') + yearText + ( nowDate.month||'') + monthText}}</text>
 				</picker>
