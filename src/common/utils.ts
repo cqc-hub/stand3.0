@@ -59,6 +59,68 @@ export const joinQuery = function (url: string, query) {
 };
 
 /**
+ * 
+ * @param func 支付宝、微信获取地址
+ * @param wait 
+ * @returns 
+ */
+export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
+  return new Promise((resolve, reject) => {
+    uni.chooseAddress({
+      success(res) {
+        console.log('获取的地址信息', res);
+        // #ifdef MP-ALIPAY
+        if ((res as any).resultStatus == '9000') {
+          // 针对支付宝单独处理
+          res.countyName = (res as any).result.area;
+          res.detailInfo = res.detailInfo.split('-').pop() as string;
+          resolve(res)
+        } else {
+          reject('未选择地址')
+        }
+        // #endif 
+        // #ifdef MP-WEIXIN
+        resolve(res)
+        // #endif 
+      },
+      fail(err) {
+        console.log(err);
+        reject(err)
+      }
+    });
+  })
+
+}
+
+//授权选取地址 
+export const getScopeAddress = (): Promise<UniApp.ChooseAddressRes> => {
+  //获取用户的当前设置
+  return new Promise((resolve, reject) => {
+    uni.getSetting({
+      success: async (res) => {
+        if (res.authSetting['scope.address']) {
+          const data = await getChooseAddress()
+          resolve(data)
+        } else {
+          //未授权 取消地址授权 需要打开设置
+          if (res.authSetting['scope.address'] == false) {
+            wx.openSetting({
+              fail: (err) => {
+                reject(err)
+              }
+            });
+          } else {
+            //第一次打开
+            const data = await getChooseAddress()
+            resolve(data)
+          }
+        }
+      }
+    });
+  })
+};
+
+/**
  * 节流函数
  */
 export const throttle = function (func: Function, wait: number) {

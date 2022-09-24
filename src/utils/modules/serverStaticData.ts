@@ -249,7 +249,16 @@ export class ServerStaticData {
     if (!viewConfig) {
       const { result } = await api.queryHospitalPattern({
         version: '',
-        source: 1
+        //1微信小程序  2 支付宝小程序 3 微信公众号 4支付宝生活号？
+        // #ifdef MP-WEIXIN
+        source: 1,
+        // #endif
+        // #ifdef MP-ALIPAY
+        source: 2,
+        // #endif
+        // #ifdef H5
+        source: 3,
+        // #endif
       });
 
       if (result && result.length) {
@@ -292,5 +301,5 @@ export class ServerStaticData {
     return res[key];
   }
 
-  private constructor() {}
+  private constructor() { }
 }

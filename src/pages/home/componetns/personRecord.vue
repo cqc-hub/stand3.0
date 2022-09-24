@@ -52,7 +52,7 @@
 
     <view
       :class="`record-container ${
-        recordList.length === 1
+        recordList && recordList.length === 1
           ? 'record-container-row1'
           : 'record-container-row2'
       }`"
@@ -65,7 +65,7 @@
           'background-color': recordColors[i]
         }"
         :class="{
-          'cr-center': recordList.length === 1,
+          'cr-center': recordList && recordList.length === 1,
           'record-item-first': recordList.length === 2 && i === 0
         }"
         class="record-item"
@@ -73,7 +73,10 @@
       >
         <view class="record-label">
           <text>{{ record.title }}</text>
-          <view v-if="recordList.length === 1" class="iconfont icon-size">
+          <view
+            v-if="recordList && recordList.length === 1"
+            class="iconfont icon-size"
+          >
             &#xe6c8;
           </view>
         </view>

@@ -10,15 +10,15 @@
         <personRecord />
 
         <view class="my-menu">
-          <view v-if="menu1List.length" class="list">
+          <view v-if="menu1List && menu1List.length" class="list">
             <view class="title">我的订单</view>
-            <g-grid :list="menu1List" />
+            <homeGrid :list="menu1List"></homeGrid>
           </view>
-          <view v-if="menu1List.length" class="list">
+          <view v-if="menu2List && menu2List.length" class="list">
             <view class="title">我的服务</view>
             <homeGrid :list="menu2List"></homeGrid>
           </view>
-          <view v-if="menu3List.length" class="list">
+          <view v-if="menu3List && menu3List.length" class="list">
             <view class="title">我的工具</view>
             <homeGrid :list="menu3List"></homeGrid>
           </view>
@@ -162,12 +162,7 @@
           #13b8ff2a,
           rgba(255, 0, 0, 0) 50%
         ),
-        linear-gradient(
-          -160deg,
-          #c1d4ff97,
-          #c1d4ff59,
-          rgba(0, 255, 0, 0) 50%
-        );
+        linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
     }
   }
 

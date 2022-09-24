@@ -11,7 +11,6 @@ const version = '0.0.1'; //暂定
 const VERSION = version + '.' + YMD; //版本号
 const TIMESTAMP = version + '.' + YMD + HM; //时间戳，修改时间戳会清理项目缓存
 const env: TEnv = 'dev'; // dev 开发； test 测试； prod 生产
-// import HTMLParser from '@/common/html-parser'
 let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
 if ((env as string) === 'prod') {
@@ -28,5 +27,4 @@ export default {
   env,
   authUrl,
   wxAppid
-  // HTMLParser
 };

@@ -159,7 +159,6 @@
     LoginUtils
   } from '@/utils';
 
-
   const props = defineProps<{
     code?: string;
   }>();
@@ -400,7 +399,7 @@
         box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
 
         .box {
-          padding: 30rpx 0 20rpx 0;
+          padding: 40rpx 0 35rpx 0;
         }
 
         .bar-swiper {

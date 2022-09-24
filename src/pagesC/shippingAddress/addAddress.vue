@@ -62,7 +62,6 @@
   import { onReady } from '@dcloudio/uni-app';
   import { useMessageStore } from '@/stores';
   import api from '@/service/api';
-
   const messageStore = useMessageStore();
 
   const props = withDefaults(
@@ -88,6 +87,7 @@
   const formList = [
     {
       required: true,
+      maxlength: 50,
       label: '收货人',
       field: 'input-text',
       placeholder: '请输入收货人姓名',
@@ -102,6 +102,7 @@
       placeholder: '请输入收货人手机号码',
       key: 'senderPhone',
       emptyMessage: '请填写手机号',
+      inputType: 'number',
       rule: [
         {
           message: '请填写正确的手机号',
@@ -121,8 +122,11 @@
 
     {
       required: true,
+      maxlength: 200,
       label: '详细地址',
       field: 'input-text',
+      inputType: 'textarea',
+      autoHeight: true,
       placeholder: '请输入详细地址',
       key: 'detailedAddress',
       emptyMessage: '请填写详细地址',
@@ -133,6 +137,7 @@
       maxlength: 6,
       label: '邮政编码',
       field: 'input-text',
+      inputType: 'number',
       placeholder: '请输入邮政编码',
       key: 'postcode'
     },
@@ -156,8 +161,6 @@
 
   //获取当前位置
   const getCurrentAdd = async () => {
-    console.log(333);
-
     uni.chooseLocation({
       success(res) {
         getAddress(res);
@@ -195,12 +198,21 @@
   };
 
   const formSubmit = async ({ data }) => {
-    await api.addExpressAddress({
+    const params = {
       herenId: gStores.globalStore.herenId,
       ...data,
       defaultFlag: data.defaultFlag ? 1 : 0
-    });
-    messageStore.showMessage('操作成功', 1000, {
+    };
+    delete params.address;
+    let title = '地址保存成功';
+    if (props.pageType == 'edit') {
+      title = '地址修改成功';
+      await api.updateExpressAddress(params);
+    } else {
+      await api.addExpressAddress(params);
+    }
+
+    messageStore.showMessage(title, 1000, {
       closeCallBack: () => {
         uni.navigateBack({ delta: props.pageType === 'editPatient' ? 2 : 1 });
       }

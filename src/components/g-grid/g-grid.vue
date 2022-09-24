@@ -1,6 +1,10 @@
 <template>
   <view :class="options.type == 2 ? 'normal' : 'diff'">
-    <uni-grid :showBorder="false" :square="false" :column="type == 1 ? options.list.length : 4">
+    <uni-grid
+      :showBorder="false"
+      :square="false"
+      :column="type == 1 ? options.list.length : 4"
+    >
       <uni-grid-item v-for="(item, i) in options.list" :key="i">
         <view class="grid-item-box" @tap="gridClick(item)">
           <!-- 绿色能量角标 -->
@@ -11,8 +15,8 @@
           <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
 
           <text :class="`icon-font grid-resize ${item.iconfont}`" />
-          <view class="grid-label">{{ item.title }}</view>
-          <text class="grid-title">{{ item.detail }}</text>
+          <view class="grid-label text-ellipsis">{{ item.title }}</view>
+          <text class="grid-title text-ellipsis">{{ item.detail }}</text>
         </view>
       </uni-grid-item>
     </uni-grid>
@@ -88,8 +92,8 @@
       justify-content: center;
 
       .grid-resize {
-        width: 100upx;
-        height: 100upx;
+        width: 88upx;
+        height: 88upx;
         position: relative;
       }
 

@@ -53,7 +53,7 @@
     </block>
     <block v-else>
       <view v-if="pageLoading" class="scroll-container">
-        <g-empty :current="1" />
+        <g-empty :current="1" text="未查询到相关信息!" />
       </view>
     </block>
     <view class="footer">
@@ -72,6 +72,7 @@
   import { ref } from 'vue';
   import { useMessageStore } from '@/stores';
   import { joinQuery } from '@/common';
+  import { getScopeAddress } from '@/common/utils';
 
   const pageLoading = ref(false);
   const gStores = new GStores();
@@ -129,59 +130,19 @@
       province: data.provinceName,
       city: data.cityName,
       county: data.countyName,
-      defaultFlag: 1
+      defaultFlag: 0
     });
-    messageStore.showMessage('添加成功', 1000, {
+    messageStore.showMessage('地址保存成功', 1000, {
       closeCallBack: () => {
         getQueryExpressAddress();
       }
     });
   };
 
-  const getWX = () => {
-    //获取用户的当前设置
-    uni.getSetting({
-      success(res) {
-        if (res.authSetting['scope.address']) {
-          uni.chooseAddress({
-            success(res) {
-              // #ifdef MP-ALIPAY
-              if ((res as any).resultStatus == '9000') {
-                getAddress(res);
-              }
-              // #endif
-              // #ifdef MP-WEIXIN
-              getAddress(res);
-              // #endif
-            },
-            fail(err) {
-              console.log(err);
-            }
-          });
-        } else {
-          //未授权 取消地址授权 需要打开设置
-          if (res.authSetting['scope.address'] == false) {
-            wx.openSetting({
-              success(res) {}
-            });
-          } else {
-            //第一次打开
-            uni.chooseAddress({
-              success(res) {
-                // #ifdef MP-ALIPAY
-                if ((res as any).resultStatus == '9000') {
-                  getAddress(res);
-                }
-                // #endif
-                // #ifdef MP-WEIXIN
-                getAddress(res);
-                // #endif
-              }
-            });
-          }
-        }
-      }
-    });
+  const getWX = async () => {
+    const data = await getScopeAddress();
+    console.log(888, data);
+    getAddress(data);
   };
 </script>
 
@@ -230,6 +191,9 @@
               color: var(--hr-neutral-color-9);
               margin-right: 16rpx;
               line-height: 44rpx;
+              &:first-child {
+                word-break: break-all;
+              }
             }
           }
           .item-title-right {
