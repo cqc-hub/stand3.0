@@ -1,5 +1,3 @@
-/// <reference path="../../index.d.ts" />
-
 import manifest from '@/manifest.json';
 import systemConfig from './config.json';
 const wxAppid = manifest['mp-weixin'].appid;

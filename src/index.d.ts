@@ -53,7 +53,6 @@ interface ILoginBack {
   _pageInfo?: '1' | '2'; // 1 需要完善 2就诊人 (没用上， 待定)
 }
 
-
 interface IAddress {
   city: string;
   county: string;
@@ -68,6 +67,19 @@ interface IAddress {
   senderPhone: string;
   sysCode: string;
   updateTime: string;
+}
+
+interface ISystemGlobalItem {
+  wxAppid: string;
+  alipayAppid: string;
+  h5Appid: string;
+}
+
+interface ISystemGlobalConfig {
+  sysCode: string;
+  sysConfig: {
+    [key: string]: ISystemGlobalItem;
+  };
 }
 
 // declare namespace UniNamespace {

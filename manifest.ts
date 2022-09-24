@@ -1,4 +1,4 @@
-/// <reference path="./index.d.ts" />
+/// <reference path="./src/index.d.ts" />
 
 const fs = require('fs');
 
