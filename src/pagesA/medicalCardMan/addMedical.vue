@@ -104,14 +104,22 @@
     };
 
     if (props.pageType === 'perfectReal') {
-      await patientUtils.registerUser(requestData, {
-        addPatInterface: 'relevantPatient'
-      });
+      try {
+        await patientUtils.registerUser(requestData, {
+          addPatInterface: 'relevantPatient'
+        });
 
-      if (props._directUrl) {
-        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
-      } else {
-        routerJump('/pages/home/home');
+        if (props._directUrl) {
+          routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+        } else {
+          routerJump('/pages/home/home');
+        }
+      } catch (error) {
+        if ((error as any)?.errorType === 'add') {
+          uni.reLaunch({
+            url: '/pages/home/home'
+          });
+        }
       }
     } else {
       await patientUtils.addRelevantPatient(requestData);

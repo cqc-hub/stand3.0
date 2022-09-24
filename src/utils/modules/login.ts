@@ -379,9 +379,16 @@ export class PatientUtils extends LoginUtils {
       mask: true
     });
 
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(requestData, '/register/bindRegisterUser')
-    );
+    const { result } = await api
+      .allinoneAuthApi(
+        packageAuthParams(requestData, '/register/bindRegisterUser')
+      )
+      .catch((err) => {
+        return Promise.reject({
+          errorType: 'add',
+          err
+        });
+      });
 
     if (result) {
       const { accessToken, refreshToken } = result;
@@ -413,7 +420,12 @@ export class PatientUtils extends LoginUtils {
           verifyCode: '1'
         });
       } else {
-        await this.addRelevantPatient(payload);
+        await this.addRelevantPatient(payload).catch((err) => {
+          return Promise.reject({
+            err,
+            errorType: 'add'
+          });
+        });
       }
 
       await this.getPatCardList();

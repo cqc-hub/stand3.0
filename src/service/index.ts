@@ -1,6 +1,12 @@
 import requestClass from './request';
 import env from '@/config/env';
-import { encryptDes, getSysCode, getToken, showLoading, hideLoading } from '@/common';
+import {
+  encryptDes,
+  getSysCode,
+  getToken,
+  showLoading,
+  hideLoading
+} from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
@@ -8,7 +14,6 @@ import { LoginUtils } from '@/utils';
 const Request = new requestClass();
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
-
   if (!request.hideLoading) showLoading();
   // if (request.method === 'GET') {
   //   request.data = JSON.stringify(request.data)

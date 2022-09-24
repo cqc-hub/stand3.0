@@ -101,15 +101,23 @@
 
         if (jump === 0) {
           if (props.pageType === 'perfectReal') {
-            await patientUtil.registerUser({
-              ...data,
-              idCard,
-              idType,
-              patientPhone,
-              patientName
-            });
+            try {
+              await patientUtil.registerUser({
+                ...data,
+                idCard,
+                idType,
+                patientPhone,
+                patientName
+              });
 
-            routerJump('/pages/home/home');
+              routerJump('/pages/home/home');
+            } catch (error) {
+              if ((error as any)?.errorType === 'add') {
+                uni.reLaunch({
+                  url: '/pages/home/home'
+                });
+              }
+            }
           } else {
             const value = formData.value;
             await patientUtil.addPatient({
