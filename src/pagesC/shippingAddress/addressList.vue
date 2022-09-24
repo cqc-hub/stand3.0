@@ -153,6 +153,9 @@
               // #ifdef MP-WEIXIN
               getAddress(res);
               // #endif
+            },
+            fail(err) {
+              console.log(err);
             }
           });
         } else {
@@ -231,6 +234,7 @@
           }
           .item-title-right {
             color: var(--hr-brand-color-6);
+            white-space: nowrap;
             .iconfont {
               font-size: var(-h-size-40);
               color: var(--hr-brand-color-6);

@@ -82,7 +82,7 @@
     address: '',
     detailedAddress: '',
     postcode: '',
-    defaultFlag: true
+    defaultFlag: false
   });
 
   const formList = [
