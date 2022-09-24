@@ -6,8 +6,9 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+  import global from '@/config/global';
 
-  const appId = 'wxac2942d44e7c2bd9'; // 核桃仁
+  const appId = global.systemInfo.h5Appid;
   const src = ref('');
 
   src.value = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${encodeURIComponent(

@@ -1,7 +1,10 @@
-// import  {version} from '../package.json'
-import manifest from '@/manifest.json';
+/// <reference path="../../index.d.ts" />
 
-const wxAppid = manifest['mp-weixin'].appid
+import manifest from '@/manifest.json';
+import systemConfig from './config.json';
+const wxAppid = manifest['mp-weixin'].appid;
+
+console.log(systemConfig);
 
 type TEnv = 'dev' | 'test' | 'prod';
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
@@ -17,14 +20,26 @@ if ((env as string) === 'prod') {
   authUrl = 'https://auth.eheren.com/service-authentication';
 }
 
-export const SYS_CODE = '1001033'; //系统码 台州
+export const SYS_CODE = systemConfig.sysCode; //系统码 台州
+const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
+const h5AppId = systemConfig;
 
-export default {
+// systemInfo.
+
+const global = {
   SYS_CODE,
   BASE_IMG,
   VERSION,
   TIMESTAMP,
   env,
   authUrl,
-  wxAppid
+  wxAppid,
+  h5AppId,
+  systemInfo
 };
+
+export default global;
+
+// module.export = {
+//   global
+// }
