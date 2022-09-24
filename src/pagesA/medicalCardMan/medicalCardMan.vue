@@ -1,5 +1,6 @@
 <template>
   <view class="">
+    <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
       <view class="add-pat-box" @click="addPatPage">
         <view class="add-pat g-flex-rc-cc">

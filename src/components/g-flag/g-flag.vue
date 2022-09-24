@@ -49,7 +49,7 @@
       },
       () => {
         uni.hideLoading();
-        text.value = '未获取到协议' + props.typeFg;
+        text.value = HTMLParser('未获取到协议' + props.typeFg);
         emit('update:value', text.value);
       }
     );

@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="page">
     <scroll-view class="scroll-container" scroll-y>
       <view class="form-container">
         <g-form
@@ -16,19 +16,22 @@
         />
       </view>
 
-      <g-message />
-      <view class="footer">
-        <button
-          @click="gform.submit"
-          :class="{
-            'btn-disabled': btnDisabled
-          }"
-          class="btn btn-primary"
-        >
-          保存
-        </button>
-      </view>
+      <g-flag typeFg="51" isShowFgTip />
     </scroll-view>
+
+    <g-message />
+
+    <view class="footer">
+      <button
+        @click="gform.submit"
+        :class="{
+          'btn-disabled': btnDisabled
+        }"
+        class="btn btn-primary"
+      >
+        保存
+      </button>
+    </view>
   </view>
 </template>
 
@@ -420,20 +423,19 @@
 </script>
 
 <style lang="scss" scoped>
-  .scroll-container {
+  .page {
     height: 100vh;
-
-    .form-container {
-      // margin: 16rpx 32rpx;
-      margin-bottom: 100rpx;
-    }
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .scroll-container {
+    width: 100%;
+    height: 1px;
+    flex: 1;
   }
 
   .footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
     background-color: var(--h-color-white);
     padding: 32rpx 32rpx 68rpx;
   }

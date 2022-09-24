@@ -1,6 +1,6 @@
 <template>
-  <view>
-    <view class="container">
+  <view class="page">
+    <scroll-view class="container" scroll-y>
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -8,7 +8,8 @@
         bodyBold
         ref="gform"
       />
-    </view>
+      <g-flag typeFg="51" isShowFgTip />
+    </scroll-view>
 
     <!-- <view class="aa">
 			{{ JSON.stringify(formData) }}
@@ -23,6 +24,23 @@
     />
 
     <view class="footer">
+      <view @click="isCheck = !isCheck" class="fg-agree">
+        <view
+          :class="{
+            'is-check': isCheck
+          }"
+          class="iconfont check-box"
+        >
+          &#xe6d0;
+        </view>
+        <view>
+          <text>我已阅读并同意</text>
+          <text @click.stop="goAgrement" class="fg-agree-name">
+            《用户条款和隐私政策》
+          </text>
+          <text>这个是协议配置编号待定（不支持富文本）</text>
+        </view>
+      </view>
       <button
         @click="gform.submit"
         :class="{
@@ -81,6 +99,11 @@
     'verify',
     'defaultFalg'
   ]);
+
+  const isCheck = ref(false);
+  const goAgrement = () => {
+    console.log('cqc');
+  };
 
   const dialogShow = ref(false);
   const dialogContent = ref('');
@@ -180,6 +203,11 @@
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
+
+    if (!isCheck.value) {
+      return true;
+    }
+
     const formKeys = formList.map((o) => o.key);
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
@@ -242,12 +270,42 @@
 </script>
 
 <style lang="scss" scoped>
+  .page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    height: 1px;
+    flex: 1;
+  }
+
   .footer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
     background-color: var(--h-color-white);
     padding: 24rpx 32rpx 48rpx;
+  }
+
+  .fg-agree {
+    display: flex;
+    font-size: var(--hr-font-size-xs);
+    align-items: flex-start;
+    margin-bottom: 24rpx;
+
+    .fg-agree-name {
+      color: var(--hr-brand-color-6);
+    }
+
+    .check-box {
+      color: var(--hr-neutral-color-7);
+      font-size: 40rpx;
+      margin-right: 4rpx;
+      transform: translateY(-5rpx);
+
+      &.is-check {
+        color: var(--hr-brand-color-6);
+      }
+    }
   }
 </style>
