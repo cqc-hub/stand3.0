@@ -294,7 +294,7 @@
 	}
 </script>
 
-<style >
+<style lang="scss">
 	.uni-data-tree {
 		flex: 1;
 		position: relative;
@@ -362,7 +362,7 @@
 		white-space: nowrap;
 		/* #endif */
 	}
-	
+
 	.text-color {
 		color: #333;
 	}
@@ -485,7 +485,7 @@
 		flex: 1;
 		overflow: hidden;
 	}
-	
+
 	.icon-clear {
 		display: flex;
 		align-items: center;

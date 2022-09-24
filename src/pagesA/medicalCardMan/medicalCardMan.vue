@@ -9,11 +9,17 @@
       </view>
     </view>
 
-    <pat-List
-      :list="gStore.userStore.patList"
-      @profile-click="profileClick"
-      @card-click="cardClick"
-    />
+    <view v-if="gStore.userStore.patList.length">
+      <pat-List
+        :list="gStore.userStore.patList"
+        @profile-click="profileClick"
+        @card-click="cardClick"
+      />
+    </view>
+
+    <view class="empty-list" v-else>
+      <g-empty :current="1" />
+    </view>
     <g-message />
   </view>
 </template>
@@ -75,5 +81,9 @@
       margin-right: 10rpx;
       font-weight: 500;
     }
+  }
+
+  .empty-list {
+    transform: translateY(100%);
   }
 </style>
