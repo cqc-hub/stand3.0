@@ -1,56 +1,45 @@
 <template>
   <view>
     <view class="banner-grid">
-      <!-- 只有一个banner时 -->
-      <view class="uni-margin-wrap" v-if="props.leftFunctionList.length > 0 && props.functionList.length == 0">
-        <swiper class="swiper" circular indicator-dots="true">
-          <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i">
+      <!-- 首页一个入口  leftFunctionList >0 且  functionList =0 -->
+      <view
+        class="uni-margin-wrap"
+        v-if="
+          props.leftFunctionList.length > 0 && props.functionList.length == 0
+        "
+      >
+        <swiper
+          class="swiper"
+          circular
+          :indicator-dots="props.leftFunctionList.length > 0 ? true : false"
+        >
+          <swiper-item
+            v-for="(item, i) in props.leftFunctionList"
+            :key="i"
+            @tap="gotoPath(item)"
+          >
             <image mode="scaleToFill" :src="item.iconfont" />
           </swiper-item>
         </swiper>
       </view>
-      <!-- 常规banner+三个入口 -->
-      <!-- <view class="banner" v-if="type == 2">
-				<view class="parent">
-					<view class="view1">
-						<swiper class="swiper" circular indicator-dots="true">
-							<swiper-item
-								v-for="(item, i) in props.leftFunctionList"
-								:key="i"
-							>
-								<image
-									mode="scaleToFill"
-									:src="item.iconfont"
-								/>
-							</swiper-item>
-						</swiper>
-					</view>
-					<view
-						v-for="(item, i) in props.functionList"
-						:key="i"
-						:class="`view${i + 2} banner-back${
-							i + 1
-						} flex-between banner-common`"
-					>
-						<text>{{ item.title }}</text>
-						<view class="iconfont icon-size1">&#xe6a0;</view>
-					</view>
-				</view>
-			</view> -->
       <!-- 常规banner+三个入口 首页 三个纯入口 支持第一个是否是banner -->
-      <view class="banner2">
-        <!-- v-if="type == 3" -->
-        <view class="parent">
+      <view class="banner2" v-if="props.functionList.length>0">
+        <view :class="props.functionList.length >2 ? 'parent1':'parent'">
           <!-- 只有一个入口 -->
           <view
-            class="view1 banner-back1 banner-common"
+            class=" banner-back2 banner-common2"
+            :class="props.functionList.length >2 ? 'view1':'view6'"
+            :style="props.functionList.length == 1 ? '' : 'height:auto'"
             v-if="props.leftFunctionList.length == 1"
             @tap="gotoPath(props.leftFunctionList[0])"
           >
             <view class="flex-between">
-              <text>{{ props.leftFunctionList[0].title }}</text>
+              <text class="text-ellipsis">
+                {{ props.leftFunctionList[0].title }}
+              </text>
+              <view class="iconfont icon-size2">&#xe6ca;</view>
             </view>
-            <text class="details">
+            <text class="text-ellipsis details">
               {{ props.leftFunctionList[0].detail }}
             </text>
             <view class="iconfont icon-size-back1">&#xe6a5;</view>
@@ -58,26 +47,48 @@
           <!-- 第一组是多个banner -->
           <view v-else class="view1">
             <swiper class="swiper" circular indicator-dots="true">
-              <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i" @tap="gotoPath(item)">
+              <swiper-item
+                v-for="(item, i) in props.leftFunctionList"
+                :key="i"
+                @tap="gotoPath(item)"
+              >
                 <image mode="scaleToFill" :src="item.iconfont" />
               </swiper-item>
             </swiper>
           </view>
-          <view
-            v-for="(item, i) in props.functionList"
-            :key="i"
-            :class="`view${i + 2} banner-back${i + 1} banner-common`"
-            @tap="gotoPath(item)"
-          >
-            <view class="flex-between">
-              <text>{{ item.title }}</text>
-              <view :class="`iconfont icon-size${i + 1}`">&#xe6a0;</view>
+          <!-- 右边是一个数据还是多个数据 -->
+          <block v-if="props.functionList.length == 1">
+            <view
+              v-for="(item, i) in props.functionList"
+              :key="i"
+              :class="`view5 banner-back${i + 1} banner-common2`"
+              @tap="gotoPath(item)"
+            >
+              <view class="flex-between">
+                <text class="text-ellipsis">{{ item.title }}</text>
+                <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+              </view>
+              <text class="text-ellipsis details">
+                {{ item.detail }}
+              </text>
+              <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
             </view>
-            <text class="details">
-              {{ item.detail }}
-            </text>
-            <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
-          </view>
+          </block>
+          <block v-else>
+            <view
+              v-for="(item, i) in props.functionList"
+              :key="i"
+              :class="`view${i + 2} banner-back${i + 1} banner-common`"
+              :style="(props.leftFunctionList.length == 1&& props.functionList.length ==2)? 'margin-top:0':''"
+              @tap="gotoPath(item)"
+            >
+              <view class="flex-between">
+                <text>{{ item.title }}</text>
+                <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+              </view>
+              <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
+            </view>
+          </block>
         </view>
       </view>
     </view>
@@ -118,16 +129,6 @@
   const gotoPath = (item) => {
     useCommonTo(item);
   };
-
-  // const type = computed(() => {
-  // 	//type 2 常规banner+三个入口   3 首页 三个纯入口
-  // 	//左侧有数据
-  // 	if (props.leftFunctionList.length > 2 && props.functionList.length > 1) {
-  // 		return 2;
-  // 	} else {
-  // 		return 3;
-  // 	}
-  // });
 </script>
 
 <style lang="scss" scoped>
@@ -145,29 +146,6 @@
         will-change: transform;
       }
     }
-    // .banner {
-    // 	.parent {
-    // 		display: grid;
-    // 		grid-template-columns: repeat(4, 1fr);
-    // 		grid-template-rows: repeat(3, 1fr);
-    // 		grid-column-gap: 12rpx;
-    // 		grid-row-gap: 12rpx;
-    // 	}
-
-    // 	.view1 {
-    // 		grid-area: 1 / 1 / 4 / 3;
-    // 		border-radius: 16rpx;
-    // 	}
-    // 	.view2 {
-    // 		grid-area: 1 / 3 / 2 / 5;
-    // 	}
-    // 	.view3 {
-    // 		grid-area: 2 / 3 / 3 / 5;
-    // 	}
-    // 	.view4 {
-    // 		grid-area: 3 / 3 / 4 / 5;
-    // 	}
-    // }
 
     // 公用样式
 
@@ -180,6 +158,17 @@
         will-change: transform;
       }
     }
+    //2倍高度
+    .banner-common2 {
+      height: 160rpx;
+      box-sizing: border-box;
+      border-radius: 16rpx;
+      font-size: var(--hr-font-size-s);
+      font-weight: var(--h-weight-2);
+      color: var(--hr-neutral-color-10);
+      padding: 32rpx 16rpx 32rpx 32rpx;
+    }
+    //标准高度
     .banner-common {
       height: 91rpx;
       box-sizing: border-box;
@@ -250,9 +239,13 @@
 
     // 副标题
     .details {
-      font-size: var(--hr-font-size-xxxs);
+      font-size: var(--hr-font-size-xxxs) !important;
       color: var(--hr-neutral-color-7);
       margin-top: 12rpx;
+    }
+    .text-ellipsis {
+      -webkit-line-clamp: 2;
+      font-size: 32rpx;
     }
 
     .banner2 {
@@ -260,6 +253,15 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 12rpx;
+        grid-row-gap: 0;
+      }
+
+      //  3个的样式
+      .parent1 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
         grid-column-gap: 12rpx;
         grid-row-gap: 0;
       }
@@ -281,6 +283,16 @@
       .view4 {
         margin-top: 12rpx;
         grid-area: 3 / 3 / 4 / 5;
+        position: relative;
+      }
+      //右边只有一个数据的时候 2行四列
+      .view5 {
+        grid-area: 1 / 3 / 3 / 5;
+        position: relative;
+      }
+      .view6 {
+        grid-area: 1 / 1 / 3 / 3;
+        margin-bottom: 6rpx;
         position: relative;
       }
     }
