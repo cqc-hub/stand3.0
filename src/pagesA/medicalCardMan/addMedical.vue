@@ -379,8 +379,7 @@
       }
     });
 
-    // return isDisabled;
-    return false;
+    return isDisabled;
   });
 
   onReady(() => {
