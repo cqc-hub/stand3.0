@@ -2,8 +2,6 @@ import manifest from '@/manifest.json';
 import systemConfig from './config.json';
 const wxAppid = manifest['mp-weixin'].appid;
 
-console.log(systemConfig);
-
 type TEnv = 'dev' | 'test' | 'prod';
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
 const YMD = '20220506'; //年月日，每次版本更新必须同步更新
@@ -20,11 +18,9 @@ if ((env as string) === 'prod') {
 
 export const SYS_CODE = systemConfig.sysCode; //系统码 台州
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
-const h5AppId = systemConfig;
+const h5AppId = systemInfo.h5Appid;
 
-// systemInfo.
-
-const global = {
+const globalGl = {
   SYS_CODE,
   BASE_IMG,
   VERSION,
@@ -36,8 +32,4 @@ const global = {
   systemInfo
 };
 
-export default global;
-
-// module.export = {
-//   global
-// }
+export default globalGl;

@@ -25,3 +25,5 @@ manifestFileDataObj['mp-alipay']['appid'] = sysConfig.alipayAppid;
 fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
   encoding: 'utf8'
 });
+
+module.exports = {};
