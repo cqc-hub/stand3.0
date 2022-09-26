@@ -10,6 +10,8 @@ import {
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
+import { beforeEach } from '@/router';
+import { joinQuery } from '@/common';
 
 const Request = new requestClass();
 // 请求拦截器
@@ -39,18 +41,27 @@ Request.interceptors.response(
     // 请根据后端规定的状态码判定
 
     if (code === 4000) {
+      const pages = getCurrentPages();
+
       //  需要重新登录4000  0 成功
       messageStore.showMessage(message, 1500, {
         closeCallBack: () => {
-          console.log('过期了');
-          uni.redirectTo({
-            url: '/pages/home/my?_p=1&_isOutLogin=1'
-          });
-          //清除缓存？
+          const fullUrl: string = (pages[pages.length - 1] as any).$page
+            .fullPath;
           new LoginUtils().outLogin({
             isHideMessage: true,
-            isGoLoginPage: true
+            isGoLoginPage: false
           });
+
+          beforeEach({
+            url: fullUrl
+          });
+
+          // console.log('过期了');
+          // uni.redirectTo({
+          //   url: '/pages/home/my?_p=1&_isOutLogin=1'
+          // });
+          //清除缓存？
         }
       });
     } else if (code !== 0) {

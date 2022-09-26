@@ -254,7 +254,7 @@ export class ServerStaticData {
         source: 1,
         // #endif
         // #ifdef MP-ALIPAY
-        source: 2,
+        source: 1,
         // #endif
         // #ifdef H5
         source: 3,

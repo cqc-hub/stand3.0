@@ -91,7 +91,7 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
   });
 };
 
-// 回调 h5跳转的方法 
+// 回调 h5跳转的方法
 export const typeNavigate = (obj, type) => {
   if (type == 'reLaunch') {
     uni.reLaunch(obj)

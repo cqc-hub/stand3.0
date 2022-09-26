@@ -374,6 +374,9 @@ export class PatientUtils extends LoginUtils {
       name: patientName,
       cellphone: patientPhone
     };
+
+    console.log(payload, 'payloadpayloadpayload');
+
     uni.showLoading({
       title: '完善就诊人中...',
       mask: true
