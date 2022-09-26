@@ -1,19 +1,21 @@
 import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
 
-
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
   const gStores = new GStores();
   const routerStore = useRouterStore();
   //获取当前的来源地址
   const pages = getCurrentPages();
-  const fullPathNow = (pages[pages.length - 1] as any).$page
-    .fullPath as string;
+  const fullPathNow = (pages[pages.length - 1] as any).$page.fullPath as string;
   return new Promise((resolve, reject) => {
+    // else if (fullPathNow === '/pages/home/home') {
+    //   gStores.messageStore.showMessage('未登录,请先登录', 1000);
+    // }
     if (fullPathNow === '/pages/home/my') {
-      gStores.messageStore.showMessage('未登录,请先登录', 1000);
-    } else if (fullPathNow === '/pages/home/home') {
+      routerStore.receiveQuery({
+        _p: 1
+      });
       gStores.messageStore.showMessage('未登录,请先登录', 1000);
     } else {
       uni.reLaunch({
@@ -40,17 +42,13 @@ export const checkPatient = (item: IRoute) => {
     } else {
       const patList = gStores.userStore.patList;
       if (!patList.length) {
-        gStores.messageStore.showMessage(
-          '暂无就诊人， 请先添加就诊人',
-          1000,
-          {
-            closeCallBack: () => {
-              uni.reLaunch({
-                url: '/pagesA/medicalCardMan/perfectReal?_p=1'
-              });
-            }
+        gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1000, {
+          closeCallBack: () => {
+            uni.reLaunch({
+              url: '/pagesA/medicalCardMan/perfectReal?_p=1'
+            });
           }
-        );
+        });
         reject('暂无就诊人， 请先添加就诊人');
       }
       resolve('成功');
@@ -94,7 +92,7 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
 // 回调 h5跳转的方法
 export const typeNavigate = (obj, type) => {
   if (type == 'reLaunch') {
-    uni.reLaunch(obj)
+    uni.reLaunch(obj);
   } else if (type == 'redirectTo') {
     uni.redirectTo(obj);
   } else {
@@ -102,24 +100,25 @@ export const typeNavigate = (obj, type) => {
   }
 };
 interface IPayLoad {
-  type?: 'reLaunch' | 'redirectTo' | ''
+  type?: 'reLaunch' | 'redirectTo' | '';
 }
 
 //不拦截 直接跳转的方法
 export const useToPath = (item, payload: IPayLoad = {}) => {
   const gStores = new GStores();
-  const type = payload.type
+  const type = payload.type;
   switch (item.terminalType) {
     case 'h5':
       const obj = {
-        url:
-          '/pagesC/cloudHospital/myPath?type=1&path=' +
-          item.path,
+        url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.path,
         fail: () => {
-          gStores.messageStore.showMessage(`请确认跳转地址正确性${item.path}`, 1000)
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${item.path}`,
+            1000
+          );
         }
-      }
-      typeNavigate(obj, type)
+      };
+      typeNavigate(obj, type);
       break;
     case 'mini':
       uni.navigateToMiniProgram({
@@ -137,33 +136,40 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       break;
     case 'my-h5':
       const obj1 = {
-        url:
-          '/pagesC/cloudHospital/myPath?path=' +
-          item.path,
+        url: '/pagesC/cloudHospital/myPath?path=' + item.path,
         fail: () => {
-          gStores.messageStore.showMessage(`请确认跳转地址正确性${item.path}`, 1000)
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${item.path}`,
+            1000
+          );
         }
-      }
-      typeNavigate(obj1, type)
+      };
+      typeNavigate(obj1, type);
       break;
     case 'netHospital':
       const obj2 = {
         url: '/pagesC/cloudHospital/cloudHospital?path=' + item.path,
         fail: () => {
-          gStores.messageStore.showMessage(`请确认跳转地址正确性${item.path}`, 1000)
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${item.path}`,
+            1000
+          );
         }
-      }
-      typeNavigate(obj2, type)
+      };
+      typeNavigate(obj2, type);
       break;
     default:
       //自研或者其他直接跳转的
       const obj3 = {
         url: item.path,
         fail: () => {
-          gStores.messageStore.showMessage(`请确认跳转地址正确性${item.path}`, 1000)
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${item.path}`,
+            1000
+          );
         }
-      }
-      typeNavigate(obj3, type)
+      };
+      typeNavigate(obj3, type);
       break;
   }
 };
