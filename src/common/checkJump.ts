@@ -12,9 +12,12 @@ export const checkLogin = (item: IRoute) => {
     // else if (fullPathNow === '/pages/home/home') {
     //   gStores.messageStore.showMessage('未登录,请先登录', 1000);
     // }
-    if (fullPathNow === '/pages/home/my') {
+    if (
+      fullPathNow === '/pages/home/my' ||
+      fullPathNow === '/pages/home/home'
+    ) {
       routerStore.receiveQuery({
-        _p: 1
+        _p: '1'
       });
       gStores.messageStore.showMessage('未登录,请先登录', 1000);
     } else {
