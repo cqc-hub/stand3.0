@@ -9,9 +9,6 @@ export const checkLogin = (item: IRoute) => {
   const pages = getCurrentPages();
   const fullPathNow = (pages[pages.length - 1] as any).$page.fullPath as string;
   return new Promise((resolve, reject) => {
-    // else if (fullPathNow === '/pages/home/home') {
-    //   gStores.messageStore.showMessage('未登录,请先登录', 1000);
-    // }
     if (
       fullPathNow === '/pages/home/my' ||
       fullPathNow === '/pages/home/home'

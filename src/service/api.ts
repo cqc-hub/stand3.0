@@ -77,7 +77,10 @@ const baseApi = {
     ),
   //获取拆分后的地址
   getAddress: (data) =>
-    service.post('/phs-base/division/getAddress', parm(data))
+    service.post('/phs-base/division/getAddress', parm(data)),
+  //获取公告资讯
+  getAnnouncementCms: (data) =>
+    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data))
 };
 // 查询服务
 const queryApi = {
