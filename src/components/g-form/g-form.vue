@@ -219,6 +219,7 @@
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
   import { useMessageStore } from '@/stores';
   import { ServerStaticData, useOcr } from '@/utils';
+  import api from '@/service/api';
 
   /**
    * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -228,9 +229,9 @@
     defineProps<{
       value: BaseObject;
       // 加粗内容
-      bodyBold: boolean;
+      bodyBold?: boolean;
       // 是否展示必填的 * 号
-      showRequireIcon: boolean;
+      showRequireIcon?: boolean;
     }>(),
     {
       value: () => ({}),
@@ -299,23 +300,37 @@
     if (timer) {
       clearTimer();
     } else {
-      uni.showLoading({
-        title: '请求中...',
-        mask: true
-      });
+      const { phoneKey } = item;
 
-      await wait(1500);
-      let waitTime = item.verifySecond;
+      const phoneItem = list.value.find((o) => o.key === phoneKey);
 
-      verifyTip.value = `${waitTime--}s后重新发送`;
-      timer = setInterval(() => {
+      if (phoneItem) {
+        const phone = props.value[phoneItem.key];
+        await validatorItem(phoneItem, phone);
+
+        uni.showLoading({
+          title: '请求中...',
+          mask: true
+        });
+
+        await api.sendVerifyCode({
+          patientPhone: phone
+        });
+
+        let waitTime = item.verifySecond;
+
         verifyTip.value = `${waitTime--}s后重新发送`;
+        timer = setInterval(() => {
+          verifyTip.value = `${waitTime--}s后重新发送`;
 
-        if (waitTime <= -1) {
-          clearTimer();
-        }
-      }, 1000);
-      uni.hideLoading();
+          if (waitTime <= -1) {
+            clearTimer();
+          }
+        }, 1000) as unknown as number;
+        uni.hideLoading();
+      } else {
+        messageStore.showMessage('请检查 短信对应 phone 字段是否存在', 1500);
+      }
     }
   };
 
@@ -519,6 +534,37 @@
     }
   };
 
+  const validatorItem = async (item: TInstance, v: any) => {
+    const { rule, key, required, emptyMessage, validator } = item;
+    const isFillValue = !!(v || v === 0);
+
+    if (required && !isFillValue) {
+      const defaultEmptyMessage = item.label + ' 不能为空';
+      messageStore.showMessage(emptyMessage || defaultEmptyMessage, 1500);
+
+      if (!warningKeys.value.includes(key)) {
+        warningKeys.value.push(key);
+      }
+      throw new Error(item.label + ': 校验失败(empty)');
+    }
+
+    if (rule && isFillValue) {
+      ruleMatch(rule, v, item);
+    }
+
+    if (validator) {
+      const { success, message } = await validator(v, item);
+
+      if (!success) {
+        messageStore.showMessage(message, 1500);
+        if (!warningKeys.value.includes(key)) {
+          warningKeys.value.push(key);
+        }
+        throw new Error(item.label + ': 校验失败(validator)');
+      }
+    }
+  };
+
   const submit = async function () {
     const data = props.value;
     const len = list.value.length >>> 0;
@@ -526,36 +572,8 @@
 
     while (k < len) {
       const item = list.value[k++];
-      const { rule, key, required, emptyMessage, validator } = item;
-      const v = data[key];
 
-      const isFillValue = !!(v || v === 0);
-
-      if (required && !isFillValue) {
-        const defaultEmptyMessage = item.label + ' 不能为空';
-        messageStore.showMessage(emptyMessage || defaultEmptyMessage, 1500);
-
-        if (!warningKeys.value.includes(key)) {
-          warningKeys.value.push(key);
-        }
-        throw new Error(item.label + ': 校验失败(empty)');
-      }
-
-      if (rule && isFillValue) {
-        ruleMatch(rule, v, item);
-      }
-
-      if (validator) {
-        const { success, message } = await validator(v, item);
-
-        if (!success) {
-          messageStore.showMessage(message, 1500);
-          if (!warningKeys.value.includes(key)) {
-            warningKeys.value.push(key);
-          }
-          throw new Error(item.label + ': 校验失败(validator)');
-        }
-      }
+      await validatorItem(item, data[item.key]);
     }
 
     emits('submit', {

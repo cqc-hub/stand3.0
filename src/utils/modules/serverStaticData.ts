@@ -12,10 +12,15 @@ export interface ISystemConfig {
 
   // 就诊人
   person: {
+    // 开启短信验证？
+    isSmsVerify?: '0' | '1';
     // 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁）
     ageGuardian: number;
     // 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月）
     ageChildren: number;
+
+    // 新增就诊人页面有证件且证件类型 身份证时候 小于6岁 是否监护人？
+    isGuardianWithIdCard?: '0' | '1';
   };
 }
 
@@ -247,19 +252,16 @@ export class ServerStaticData {
     const viewConfig = getLocalStorage('viewConfig');
 
     if (!viewConfig) {
-      const { result } = await api.queryHospitalPattern({
+      const arg = {
         version: '',
-        //1微信小程序  2 支付宝小程序 3 微信公众号 4支付宝生活号？
-        // #ifdef MP-WEIXIN
-        source: 1,
-        // #endif
-        // #ifdef MP-ALIPAY
-        source: 1,
-        // #endif
-        // #ifdef H5
-        source: 3,
-        // #endif
-      });
+        source: 1
+      };
+
+      // #ifdef H5
+      arg.source = 3;
+      // #endif
+
+      const { result } = await api.queryHospitalPattern(arg);
 
       if (result && result.length) {
         setLocalStorage({
@@ -283,7 +285,9 @@ export class ServerStaticData {
 
       person: {
         ageChildren: 6,
-        ageGuardian: 18
+        ageGuardian: 18,
+        isGuardianWithIdCard: '1',
+        isSmsVerify: '1'
       }
     } as ISystemConfig;
 
@@ -301,5 +305,5 @@ export class ServerStaticData {
     return res[key];
   }
 
-  private constructor() { }
+  private constructor() {}
 }

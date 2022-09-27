@@ -2,6 +2,7 @@
   <view class="choose-day">
     <view class="choose-day-container">
       <view
+        v-if="isShowAllDate"
         :class="{
           'item-active': value === ''
         }"
@@ -18,7 +19,12 @@
         <view>日期</view>
       </view>
 
-      <scroll-view class="choose-day-container-scroll" :scroll-into-view="scrollToId" @scroll="scrollEvt" scroll-x>
+      <scroll-view
+        class="choose-day-container-scroll"
+        :scroll-into-view="scrollToId"
+        @scroll="scrollEvt"
+        scroll-x
+      >
         <view class="scroll-content">
           <view
             v-for="item in chooseDays"
@@ -37,7 +43,11 @@
         </view>
       </scroll-view>
 
-      <view v-if="chooseDays.length >= 20" class="choose-day-all choose-day-calendar" @click="calendarRef.show">
+      <view
+        v-if="chooseDays.length >= 20"
+        class="choose-day-all choose-day-calendar"
+        @click="calendarRef.show"
+      >
         <view>展开</view>
         <view>日历</view>
         <view class="iconfont ico-arrow">&#xe6c4;</view>
@@ -73,11 +83,13 @@
       chooseDays: IChooseDays[];
       enableDays: string[];
       value: string;
+      isShowAllDate?: boolean;
     }>(),
     {
       chooseDays: () => [],
       enableDays: () => [],
-      value: ''
+      value: '',
+      isShowAllDate: false
     }
   );
 
@@ -122,7 +134,7 @@
           await new Promise((resolve) => {
             query
               .select('.choose-day-container-scroll')
-              .boundingClientRect((data) => {
+              .boundingClientRect((data: any) => {
                 if (data && data.width) {
                   scrollWidth = data.width;
                 }
@@ -137,7 +149,12 @@
             .boundingClientRect((data) => {
               if (data) {
                 const itemLeft = (data as any).left;
-                if (!(scrollLeft.value < itemLeft && scrollLeft.value + scrollWidth > itemLeft)) {
+                if (
+                  !(
+                    scrollLeft.value < itemLeft &&
+                    scrollLeft.value + scrollWidth > itemLeft
+                  )
+                ) {
                   scrollToId.value = 'day-' + props.value;
                 }
               }

@@ -5,6 +5,7 @@
       :choose-days="chooseDays"
       :enable-days="chooseDaysEnabled"
       @change="dateChange"
+      isShowAllDate
     />
     <view @click="regDialogConfirm.show">cqccccc</view>
     <scroll-view class="container" scroll-y>
@@ -18,32 +19,6 @@
       </view>
 
       <view v-if="checkedDay" class="container-contract">
-        <view v-for="(item, i) in dateDocListFilterByDate" :key="i" class="">
-          <view v-for="(_item, _i) in item.schDateList" :key="_i">
-            <view class="item-scheme-date">{{ _item.categorName }}</view>
-            <view
-              v-for="(__item, __i) in _item.schemeList"
-              class="item-content animate__animated animate__fadeIn"
-              :key="__i"
-            >
-              <Order-Doc-Item-Date :item="__item" />
-            </view>
-          </view>
-        </view>
-
-        <view v-for="(item, i) in dateDocListFilterByDate" :key="i" class="">
-          <view v-for="(_item, _i) in item.schDateList" :key="_i">
-            <view class="item-scheme-date">{{ _item.categorName }}</view>
-            <view
-              v-for="(__item, __i) in _item.schemeList"
-              class="item-content animate__animated animate__fadeIn"
-              :key="__i"
-            >
-              <Order-Doc-Item-Date :item="__item" />
-            </view>
-          </view>
-        </view>
-
         <view v-for="(item, i) in dateDocListFilterByDate" :key="i" class="">
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
             <view class="item-scheme-date">{{ _item.categorName }}</view>

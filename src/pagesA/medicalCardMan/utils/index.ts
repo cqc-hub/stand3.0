@@ -210,6 +210,7 @@ export const tempList: TInstance[] = [
       message: '验证码必须是数字',
       rule: /\d+/
     },
+    phoneKey: formKey.patientPhone,
     labelWidth: '220rpx'
   },
 

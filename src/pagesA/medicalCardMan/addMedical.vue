@@ -230,17 +230,20 @@
           _sexAndBirth.length = 0;
 
           if (idCard && idValidator.checkIdCardNo(idCard)) {
+            const { isGuardianWithIdCard } =
+              await ServerStaticData.getSystemConfig('person');
+
             const cardInfo = idValidator.getIdCardInfo(idCard);
-            if (cardInfo.age <= 6) {
+            if (cardInfo.age <= 6 && isGuardianWithIdCard === '1') {
               lessThenSix = true;
             }
           }
         } else {
-          const birthday = formData.value[formKey.birthday] as string;
-
-          if (birthday) {
-            lessThenSix = dayjs().diff(dayjs(birthday), 'year') <= 6;
-          }
+          // 不是身份证类型的证件号通过选择生日来判断要不要监护人
+          // const birthday = formData.value[formKey.birthday] as string;
+          // if (birthday) {
+          //   lessThenSix = dayjs().diff(dayjs(birthday), 'year') <= 6;
+          // }
         }
 
         // 显示监护人

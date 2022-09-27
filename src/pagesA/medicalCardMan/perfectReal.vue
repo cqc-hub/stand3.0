@@ -56,11 +56,12 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults } from 'vue';
-  import { PatientUtils, GStores, routerJump } from '@/utils';
+  import { PatientUtils, GStores, routerJump, ServerStaticData } from '@/utils';
   import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
+  import type { TInstance } from '@/components/g-form/index';
 
   import api from '@/service/api';
 
@@ -92,13 +93,7 @@
     [formKey.defaultFalg]: true
   });
 
-  const formList = pickTempItem([
-    'patientType',
-    'patientName',
-    'patientPhone',
-    'verify',
-    'defaultFalg'
-  ]);
+  let formList: TInstance[] = [];
 
   const isCheck = ref(false);
   const goAgrement = () => {
@@ -151,7 +146,7 @@
               patientPhone: value[formKey.patientPhone],
               source: patientUtil.globalStore.browser.source,
               patientType: formData.value[formKey.patientType],
-              verifyCode: '1'
+              verifyCode: formData.value[formKey.verify] || '1'
             });
 
             await patientUtil.getPatCardList();
@@ -226,7 +221,21 @@
     }
   });
 
-  onMounted(() => {
+  onMounted(async () => {
+    let formListKeys: TFormKeys[] = [
+      'patientType',
+      'patientName',
+      'patientPhone',
+      'verify',
+      'defaultFalg'
+    ];
+    const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
+    if (isSmsVerify === '0') {
+      formListKeys = formListKeys.filter((key) => key !== 'verify');
+    }
+
+    formList = pickTempItem(formListKeys);
+
     routeStore.receiveQuery(props);
     const { userName, mobile } = gStores.userStore.cacheUser;
     if (props.pageType === 'perfectReal') {
@@ -256,6 +265,8 @@
         medicalTypeItem.showSuffixArrowIcon = false;
       }
     }
+
+    console.log(formList);
 
     formList.map((o) => {
       const { key } = o;

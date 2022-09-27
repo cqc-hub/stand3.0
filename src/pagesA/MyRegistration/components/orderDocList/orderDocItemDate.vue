@@ -9,7 +9,10 @@
             @click="schemeClick(_item)"
             class="scheme-item"
           >
-            <view class="scheme-item-ampm-name">{{ _item.ampmName }}</view>
+            <view class="scheme-item-ampm-name">
+              <view class="ampm-name">{{ _item.ampmName }}</view>
+              <view class="ampm-fee">{{ _item.fee }}元</view>
+            </view>
             <view class="scheme-item-detail">
               <view class="scheme-item-detail-num">
                 <text>总{{ _item.numCount }}个</text>
@@ -57,6 +60,14 @@
     .scheme-item-ampm-name {
       font-weight: 600;
       font-size: var(--hr-font-size-xs);
+      display: flex;
+
+      .ampm-name {
+        margin-right: 40rpx;
+      }
+      .ampm-fee {
+        color: var(--hr-error-color-6);
+      }
     }
 
     .scheme-item-detail {

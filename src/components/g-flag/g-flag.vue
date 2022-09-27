@@ -34,7 +34,6 @@
   const mTitle = ref('');
 
   const emit = defineEmits(['update:value']);
-  console.log(9999, props);
 
   api
     .getSysAppMore({

@@ -1,7 +1,7 @@
 import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
 import { getSysCode, setLocalStorage } from '@/common';
 import api from '@/service/api';
-import { routerJump } from '@/utils';
+import { routerJump, ServerStaticData } from '@/utils';
 
 const getH5OpenidParam = function (data) {
   // #ifdef MP-WEIXIN
@@ -361,8 +361,10 @@ export class PatientUtils extends LoginUtils {
       idType,
       patientName,
       patientPhone,
-      patientType: patientType
+      patientType: patientType,
+      verifyCode
     } = payload;
+    console.log(payload);
     const accountType = this.globalStore.browser.accountType;
 
     const requestData = {
@@ -418,7 +420,7 @@ export class PatientUtils extends LoginUtils {
           patientPhone,
           patientType,
           source: this.globalStore.browser.source,
-          verifyCode: '1'
+          verifyCode: verifyCode || '1'
         });
       } else {
         await this.addRelevantPatient(payload).catch((err) => {
@@ -484,7 +486,7 @@ export class PatientUtils extends LoginUtils {
       defaultFalg: data.defaultFalg ? '1' : '0',
       source: this.globalStore.browser.source,
       herenId: this.globalStore.herenId,
-      verifyType: '1'
+      verifyType: data.verifyType || '1'
     };
 
     getH5OpenidParam(requestArg);

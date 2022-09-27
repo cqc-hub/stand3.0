@@ -119,6 +119,13 @@ const userApi = {
       isAuth: true,
       hideLoading: false
     }),
+
+  // 发送短信验证码
+  sendVerifyCode: (data) =>
+    service.post('/phs-user/message/sendVerifyCode', parm(data), {
+      hideLoading: false
+    }),
+
   //身份证OCR识别
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
 
