@@ -34,6 +34,10 @@
   border-bottom: 1rpx solid var(--hr-neutral-color-11);
 }
 
+.g-border-right {
+  border-right: 1rpx solid var(--hr-neutral-color-11);
+}
+
 .g-check {
   margin-right: 5px;
   border: 2px solid var(--hr-brand-color-6);

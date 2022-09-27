@@ -127,6 +127,13 @@
           "style": {
             "navigationBarTitleText": "电子就诊卡"
           }
+        },
+
+        {
+          "path": "serviceCenter/serviceCenter",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
         }
       ]
     },

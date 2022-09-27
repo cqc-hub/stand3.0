@@ -38,16 +38,22 @@ let parm = (data: any, payload: any = {}) => {
 const baseApi = {
   // 系统长信息协议详情
   getSysAppMore: (data) =>
-    service.post('/phs-base/sysCode/getSysAppMore', parm(data)),
+    service.post('/phs-base/sysCode/getSysAppMore', parm(data), {}),
   //行政区划列表
   getAllDivision: (data) =>
-    service.post('/phs-base/division/getAllDivision', parm(data)),
+    service.post('/phs-base/division/getAllDivision', parm(data), {
+      hideLoading: false
+    }),
   //根据系统码与值域码查询术语域
   getTermsBySysAndCode: (data) =>
-    service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data)),
+    service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data), {
+      hideLoading: false
+    }),
   //sysCode查询多个系统配置参数
   getParamsMoreBySysCode: (data) =>
-    service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data)),
+    service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data), {
+      hideLoading: false
+    }),
   //查询医院样式
   queryHospitalPattern: (data) =>
     service.post('/phs-base/firstPage/queryHospitalPattern', parm(data)),
@@ -130,7 +136,9 @@ const userApi = {
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
 
   getHospital: (data) =>
-    service.post('/phs-base/hospital/getHospital', parm(data)),
+    service.post('/phs-base/hospital/getHospital', parm(data), {
+      hideLoading: false
+    }),
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post(

@@ -59,10 +59,10 @@ export const joinQuery = function (url: string, query) {
 };
 
 /**
- * 
+ *
  * @param func 支付宝、微信获取地址
- * @param wait 
- * @returns 
+ * @param wait
+ * @returns
  */
 export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
   return new Promise((resolve, reject) => {
@@ -74,50 +74,49 @@ export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
           // 针对支付宝单独处理
           res.countyName = (res as any).result.area;
           res.detailInfo = res.detailInfo.split('-').pop() as string;
-          resolve(res)
+          resolve(res);
         } else {
-          reject('未选择地址')
+          reject('未选择地址');
         }
-        // #endif 
+        // #endif
         // #ifdef MP-WEIXIN
-        resolve(res)
-        // #endif 
+        resolve(res);
+        // #endif
       },
       fail(err) {
         console.log(err);
-        reject(err)
+        reject(err);
       }
     });
-  })
+  });
+};
 
-}
-
-//授权选取地址 
+//授权选取地址
 export const getScopeAddress = (): Promise<UniApp.ChooseAddressRes> => {
   //获取用户的当前设置
   return new Promise((resolve, reject) => {
     uni.getSetting({
       success: async (res) => {
         if (res.authSetting['scope.address']) {
-          const data = await getChooseAddress()
-          resolve(data)
+          const data = await getChooseAddress();
+          resolve(data);
         } else {
           //未授权 取消地址授权 需要打开设置
           if (res.authSetting['scope.address'] == false) {
             wx.openSetting({
               fail: (err) => {
-                reject(err)
+                reject(err);
               }
             });
           } else {
             //第一次打开
-            const data = await getChooseAddress()
-            resolve(data)
+            const data = await getChooseAddress();
+            resolve(data);
           }
         }
       }
     });
-  })
+  });
 };
 
 /**
@@ -129,6 +128,7 @@ export const throttle = function (func: Function, wait: number) {
 
   return function () {
     const now = +new Date();
+    // @ts-ignore
     context = this;
     args = arguments;
 
@@ -151,7 +151,12 @@ export const getQueryUrl = function (url: string): BaseObject {
       return [key, value];
     });
 
-  return Object.fromEntries(aArg);
+  return aArg.reduce((p, c) => {
+    const [key, value] = c;
+
+    p[key] = value;
+    return p;
+  }, {});
 };
 
 /**
@@ -160,7 +165,10 @@ export const getQueryUrl = function (url: string): BaseObject {
  * @param target
  * @returns target
  */
-export const insertObject = (opt: { key: string; value: any }, target: BaseObject) => {
+export const insertObject = (
+  opt: { key: string; value: any },
+  target: BaseObject
+) => {
   const { key, value } = opt;
   const keySlice = key.split('.');
   const len = keySlice.length;

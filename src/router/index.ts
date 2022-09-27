@@ -1,4 +1,5 @@
 import PAGE_DATA from '@/pages.json';
+import globalGl from '@/config/global';
 import { useGlobalStore, useUserStore } from '@/stores';
 import { joinQuery } from '@/common';
 
@@ -79,7 +80,7 @@ export const beforeEach = async (
 
       // #ifdef MP-WEIXIN
       if (url === '/pagesA/medicalCardMan/perfectReal') {
-        if (!globalStore.h5OpenId) {
+        if (!globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
             url: '/pages/home/startCome'
           });

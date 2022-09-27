@@ -1,6 +1,6 @@
 <template>
   <view class="page">
-    <scroll-view class="container" scroll-y>
+    <view class="container" scroll-y>
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -9,7 +9,7 @@
         ref="gform"
       />
       <g-flag typeFg="51" isShowFgTip />
-    </scroll-view>
+    </view>
 
     <!-- <view class="aa">
 			{{ JSON.stringify(formData) }}
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults } from 'vue';
+  import { ref, onMounted, computed, withDefaults, reactive } from 'vue';
   import { PatientUtils, GStores, routerJump, ServerStaticData } from '@/utils';
   import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
   import { joinQuery } from '@/common';
@@ -291,11 +291,14 @@
   .container {
     height: 1px;
     flex: 1;
+    overflow-y: scroll;
   }
 
   .footer {
     background-color: var(--h-color-white);
     padding: 24rpx 32rpx 48rpx;
+    position: reactive;
+    z-index: 1;
   }
 
   .fg-agree {

@@ -1,7 +1,8 @@
 import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
 import { getSysCode, setLocalStorage } from '@/common';
-import api from '@/service/api';
 import { routerJump, ServerStaticData } from '@/utils';
+import api from '@/service/api';
+import globalGl from '@/config/global';
 
 const getH5OpenidParam = function (data) {
   // #ifdef MP-WEIXIN
@@ -84,7 +85,7 @@ export class LoginUtils extends GStores {
         this.globalStore.setHerenId(herenId);
 
         // #ifdef MP-WEIXIN
-        if (!this.globalStore.h5OpenId) {
+        if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
             url: '/pages/home/startCome'
           });

@@ -1,6 +1,6 @@
 <template>
 	<view v-if="isShow">
-		<view 
+		<view
 		 @tap.stop.prevent
 		 @touchmove.stop.prevent
 		 class="wyb-popup-box"
@@ -37,7 +37,7 @@
 			 			 height: closeIconSize + 'rpx'}" />
 			 	<view v-if="showCloseIcon&&!closeIcon" class="iconfont icon-close" @tap="hide" />
 			</view>
-			
+
 			<scroll-view
 			 class="wyb-popup-container"
 			 :style="{
@@ -300,7 +300,7 @@
 					this.contentIn()
 					this.wait(this.duration + 1).then(() => {
 						this.$emit('show', {
-							pageScroll: false, 
+							pageScroll: false,
 							overflow: 'hidden'
 						})
 					})
@@ -312,7 +312,7 @@
 					this.contentIn()
 					this.wait(this.duration + 1).then(() => {
 						this.$emit('show', {
-							pageScroll: false, 
+							pageScroll: false,
 							overflow: 'hidden'
 						})
 					})
@@ -325,7 +325,7 @@
 				this.wait(this.duration + 1).then(() => {
 					this.isShow = false
 					this.$emit('hide', {
-						pageScroll: true, 
+						pageScroll: true,
 						overflow: 'scroll'
 					})
 				})
@@ -383,18 +383,19 @@
 		position: fixed;
 		transition-timing-function: ease-out;
 		transition-property: opacity, transform;
+		z-index: 999;
 	}
-	
+
 	.wyb-popup-container {
 		position: relative;
 		box-sizing: border-box;
 	}
-	
+
 	.wyb-popup-slot {
 		width: 100%;
 		height: 100%;
 	}
-	
+
 	.wyb-popup-mask {
 		position: fixed;
 		top: 0;
@@ -404,14 +405,14 @@
 		transition-timing-function: ease;
 		transition-property: opacity, transform;
 	}
-	
+
 	.wyb-popup-close {
 		position: absolute;
 		fontSize: 40rpx;
 		color: #808080;
 		z-index: 20000;
 	}
-	
+
 	.wyb-popup-custom-close {
 		left: 0;
 		top: 0;

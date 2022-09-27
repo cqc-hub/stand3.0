@@ -1,6 +1,6 @@
 <template>
   <view class="page">
-    <scroll-view class="scroll-container" scroll-y>
+    <view class="scroll-container" scroll-y>
       <view class="form-container">
         <g-form
           v-model:value="formData"
@@ -17,7 +17,7 @@
       </view>
 
       <g-flag typeFg="51" isShowFgTip />
-    </scroll-view>
+    </view>
 
     <g-message />
 
@@ -214,6 +214,8 @@
    *  2  军属
    */
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
+    console.log('medicalTypeChange', value);
+
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
@@ -395,19 +397,29 @@
 
   onMounted(() => {
     routeStore.receiveQuery(props);
-    formData.value = Object.fromEntries(
-      Object.entries(props).map(([key, value]) => {
-        if (key === formKey.defaultFalg) {
-          (value as any) = (value as unknown) === 'false' ? false : true;
-        }
-        return [key, value];
-      })
-    );
+    Object.keys(props).map((key) => {
+      let value = props[key];
+      if (key === formKey.defaultFalg) {
+        (value as any) = (value as unknown) === 'false' ? false : true;
+      }
+
+      formData.value[key] = value;
+    });
+    // formData.value = Object.fromEntries(
+    //   Object.entries(props).map(([key, value]) => {
+    //     if (key === formKey.defaultFalg) {
+    //       (value as any) = (value as unknown) === 'false' ? false : true;
+    //     }
+    //     return [key, value];
+    //   })
+    // );
 
     // 默认身份证
     formData.value[formKey.idType] = '01';
     // formData.value[formKey.idType] = '02';
     verifyCode = formData.value[formKey.verify];
+
+    console.log('onLoad', formData);
 
     if ((props.patientType as string) === '-1') {
       // #ifdef MP-ALIPAY
@@ -435,6 +447,7 @@
     width: 100%;
     height: 1px;
     flex: 1;
+    overflow-y: scroll;
   }
 
   .footer {

@@ -76,9 +76,9 @@ export class ServerStaticData {
       const { result } = await api.getAllDivision({});
 
       if (result && result.length) {
-        // setLocalStorage({
-        //   addressCity: result
-        // });
+        setLocalStorage({
+          addressCity: result
+        });
 
         return result;
       } else {
