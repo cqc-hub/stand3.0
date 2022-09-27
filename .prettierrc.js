@@ -11,7 +11,7 @@ module.exports = {
   // 尽可能使用尾随逗号（包括函数参数）,默认 none,可选 none|es5|all
   // es5 包括es5中的数组、对象
   // all 包括函数对象等所有可选
-  trailingComma: 'none',
+  trailingComma: 'es5',
   // 在对象文字中打印括号之间的空格。 默认true
   bracketSpacing: true,
   // 箭头函数参数括号 默认avoid 可选 avoid| always

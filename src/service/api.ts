@@ -7,7 +7,7 @@ import { hideLoading } from '../common/utils';
 
 //请求的额外配置
 const options = {
-  showLoading: false
+  showLoading: false,
 };
 
 // 参数的额外配置
@@ -16,7 +16,7 @@ let parm = (data: any, payload: any = {}) => {
   const globalStore = useGlobalStore();
   const body = {
     sysCode: getSysCode(),
-    ...data
+    ...data,
   };
 
   if (outArg) {
@@ -26,7 +26,7 @@ let parm = (data: any, payload: any = {}) => {
   return {
     args: body,
     // token: '1'
-    token: globalStore.token.accessToken
+    token: globalStore.token.accessToken,
     // token: 'a6e8289c389d8ece73750fe57fc12011f75c7558a06d87cc127fee52ce594e0dbf4996051b4ba4126f4f643e03fa3bee4e642af1ac30f0c07c1b567cfdf11b599c968d4faefc96d548b04f62abfe54aaf315033472b3a8f4a4ede91d9df046e92bc7bc7a86e690bcc8263a89c4f2100cd36c74c7faaeb90a428f3789811edd9f698e56eda0e7bca200b5d59ef551b6ed0eb1a6d3a1da5b8a29a2c6c427926d9caf9960e4d3049c77fe852a0f425767d72a3de7d67911ae2338aeced63421ceb55fc00ed68823cbfbe0e9b2e0682558f0f873865b3bab0d814aeab5eccfbebc773902356253a88c5bd7de346708b9d0f4'
   };
 };
@@ -39,57 +39,81 @@ const baseApi = {
   // 系统长信息协议详情
   getSysAppMore: (data) =>
     service.post('/phs-base/sysCode/getSysAppMore', parm(data), {}),
+
   //行政区划列表
   getAllDivision: (data) =>
     service.post('/phs-base/division/getAllDivision', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
+
+  //获取客服子标题列表
+  getSubTypeList: (data) =>
+    service.post('/phs-base/customerService/getSubTypeList', parm(data), {
+      hideLoading: false,
+    }),
+
+  //获取客服资讯列表
+  getCmsListBySubType: (data) =>
+    service.post('/phs-base/customerService/getCmsListBySubType', parm(data), {
+      hideLoading: false,
+    }),
+
   //根据系统码与值域码查询术语域
   getTermsBySysAndCode: (data) =>
     service.post('/phs-base/sysCode/getTermsBySysAndCode', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
+
   //sysCode查询多个系统配置参数
   getParamsMoreBySysCode: (data) =>
     service.post('/phs-base/sysCode/getParamsMoreBySysCode', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
+
   //查询医院样式
   queryHospitalPattern: (data) =>
     service.post('/phs-base/firstPage/queryHospitalPattern', parm(data)),
+
   //添加快递地址
   addExpressAddress: (data) =>
     service.post('/phs-base/expressAddress/addExpressAddress', parm(data)),
+
   //删除快递地址
   delExpressAddress: (data) =>
     service.post('/phs-base/expressAddress/delExpressAddress', parm(data)),
+
   //查询快递地址
   queryExpressAddress: (data) =>
     service.post('/phs-base/expressAddress/queryExpressAddress', parm(data)),
+
   //修改快递地址
   updateExpressAddress: (data) =>
     service.post('/phs-base/expressAddress/updateExpressAddress', parm(data)),
+
   //获取就诊人地址
   queryExpressAddressByPatient: (data) =>
     service.post(
       '/phs-base/expressAddress/queryExpressAddressByPatient',
       parm(data)
     ),
+
   //获取拆分后的地址
   getAddress: (data) =>
     service.post('/phs-base/division/getAddress', parm(data)),
+
   //获取公告资讯
   getAnnouncementCms: (data) =>
-    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data))
+    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data)),
 };
 // 查询服务
 const queryApi = {
   // 获取填写过问卷
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
-    service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data))
+    service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),
 };
 
 // 挂号服务
@@ -101,16 +125,18 @@ const regApi = {
   // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data)),
+
   // 科室排班-按医生挂号
   getDeptSchForDoc: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getDeptSchForDoc', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
+
   // 科室排班-按日期挂号
   getDeptSchByDate: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getDeptSchByDate', parm(data), {
-      hideLoading: false
-    })
+      hideLoading: false,
+    }),
 };
 
 // 用户服务
@@ -119,20 +145,20 @@ const userApi = {
   allinoneAuthApi: (data) =>
     service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
       isAuth: true,
-      hideLoading: false
+      hideLoading: false,
     }),
 
   // 注销用户
   logoutUser: (data) =>
     service.post('/phs-user/authUser/logoutUser', parm(data), {
       isAuth: true,
-      hideLoading: false
+      hideLoading: false,
     }),
 
   // 发送短信验证码
   sendVerifyCode: (data) =>
     service.post('/phs-user/message/sendVerifyCode', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
 
   //身份证OCR识别
@@ -140,81 +166,88 @@ const userApi = {
 
   getHospital: (data) =>
     service.post('/phs-base/hospital/getHospital', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
+
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatientByHasBeenTreated',
       parm(data)
     ),
+
   //更新就诊人OpenId
   sysPatOpenIdAssignment: (data) =>
     service.post(
       '/phs-user/relevantPatient/sysPatOpenIdAssignment',
       parm(data),
       {
-        hideLoading: false
+        hideLoading: false,
       }
     ),
+
   //设置默认就诊人
   updateDefaultPat: (data) =>
     service.post('/phs-user/relevantPatient/updateDefaultPat', parm(data), {
-      hideLoading: true
+      hideLoading: true,
     }),
+
   //删除相关就诊人
   deletePat: (data) =>
     service.post('/phs-user/relevantPatient/deletePat', parm(data), {
-      hideLoading: true
+      hideLoading: true,
     }),
+
   //添加相关就诊人
   addPat: (data) =>
     service.post('/phs-user/relevantPatient/addPat', parm(data)),
+
   //获取就诊人列表
   getPatCardList: (data) =>
     service.post<IPat[]>(
       '/phs-user/relevantPatient/getPatCardList',
       parm(data)
     ),
+
   //获取就诊人信息（院内）
   getPatCardInfoByHospital: (data) =>
     service.post(
       '/phs-user/relevantPatient/getPatCardInfoByHospital',
       parm(data),
       {
-        showMessage: false
+        showMessage: false,
       }
-    )
+    ),
 };
 //统一认证服务
 const authApi = {
   authLogin: (data) =>
     service.post('/login/authLogin', parm(data), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     }),
 
   getTPAlipayUserInfoShare: (data) => {
     return service.post('/aliUserLogin/getTPAlipayUserInfoShare', parm(data), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     });
   },
 
   userInfoByToken: (data) => {
     return service.post('/modifyUserInfo/userInfoByToken', parm(data), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     });
   },
 
   getAppletsOpenId: (data) => {
     return service.post('/wx/getAppletsOpenId', parm(data, { outArg: true }), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     });
   },
 
   wxLoginByPhoneNumberCode: (data) => {
     return service.post('/wx/wxLoginByPhoneNumberCode', parm(data), {
-      baseURL: global.authUrl
+      baseURL: global.authUrl,
     });
-  }
+  },
 };
 export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };

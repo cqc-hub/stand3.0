@@ -8,7 +8,7 @@ export const showLoading = (tips: string = '加载中...') => {
   uni.showLoading({
     title: tips,
     // #ifndef MP-ALIPAY
-    mask: true
+    mask: true,
     // #endif
   });
   uni.showNavigationBarLoading();
@@ -86,7 +86,7 @@ export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
       fail(err) {
         console.log(err);
         reject(err);
-      }
+      },
     });
   });
 };
@@ -106,7 +106,7 @@ export const getScopeAddress = (): Promise<UniApp.ChooseAddressRes> => {
             wx.openSetting({
               fail: (err) => {
                 reject(err);
-              }
+              },
             });
           } else {
             //第一次打开
@@ -114,7 +114,7 @@ export const getScopeAddress = (): Promise<UniApp.ChooseAddressRes> => {
             resolve(data);
           }
         }
-      }
+      },
     });
   });
 };
@@ -136,7 +136,6 @@ export const throttle = function (func: Function, wait: number) {
       func.apply(context, args);
       previous = now;
     }
-    // eslint enable
   };
 };
 
@@ -151,12 +150,7 @@ export const getQueryUrl = function (url: string): BaseObject {
       return [key, value];
     });
 
-  return aArg.reduce((p, c) => {
-    const [key, value] = c;
-
-    p[key] = value;
-    return p;
-  }, {});
+  return Object.fromEntries(aArg);
 };
 
 /**

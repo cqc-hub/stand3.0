@@ -21,7 +21,7 @@ export const formKey = <const>{
   location: 'location',
   verify: 'verifyCode',
   defaultFalg: 'defaultFalg',
-  nation: 'nation'
+  nation: 'nation',
 };
 
 export type FormKey = typeof formKey;
@@ -38,7 +38,7 @@ export const tempList: TInstance[] = [
     field: 'select',
     options: [],
     autoOptions: 'patientTypeTerms',
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -51,7 +51,7 @@ export const tempList: TInstance[] = [
     options: [],
     autoOptions: 'nationTerms',
     rowStyle: 'margin-bottom: 16rpx;',
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -63,7 +63,7 @@ export const tempList: TInstance[] = [
     field: 'select',
     options: [],
     autoOptions: 'idTypeTerms',
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -72,7 +72,7 @@ export const tempList: TInstance[] = [
     field: 'input-text',
     placeholder: '请输入',
     key: formKey.idCard,
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -81,7 +81,7 @@ export const tempList: TInstance[] = [
     field: 'input-text',
     placeholder: '请输入',
     key: formKey.patientName,
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -89,14 +89,15 @@ export const tempList: TInstance[] = [
     label: '手机号',
     field: 'input-text',
     placeholder: '请输入',
+    maxlength: 11,
     key: formKey.patientPhone,
     rule: [
       {
         message: '请确认手机号是否有误',
-        rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
-      }
+        rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+      },
     ],
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -109,7 +110,7 @@ export const tempList: TInstance[] = [
     type: 'date',
     end: new Date().getTime(),
     start: '1900-01-01',
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -122,14 +123,14 @@ export const tempList: TInstance[] = [
     options: [
       {
         label: '男',
-        value: '男'
+        value: '男',
       },
       {
         label: '女',
-        value: '女'
-      }
+        value: '女',
+      },
     ],
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -138,7 +139,7 @@ export const tempList: TInstance[] = [
     field: 'input-text',
     placeholder: '请输入',
     key: formKey.upName,
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -158,21 +159,21 @@ export const tempList: TInstance[] = [
         if (info.age < ageGuardian) {
           return Promise.resolve({
             success: false,
-            message: `监护人年龄必须大于: ${ageGuardian}岁`
+            message: `监护人年龄必须大于: ${ageGuardian}岁`,
           });
         }
 
         return Promise.resolve({
-          success: true
+          success: true,
         });
       }
 
       return Promise.resolve({
         success: false,
-        message: '请确认证件号码是否有误'
+        message: '请确认证件号码是否有误',
       });
     },
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -182,7 +183,7 @@ export const tempList: TInstance[] = [
     placeholder: '请选择',
     key: formKey.address,
     field: 'address',
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -193,7 +194,7 @@ export const tempList: TInstance[] = [
     key: formKey.location,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
     maxlength: 200,
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -208,10 +209,10 @@ export const tempList: TInstance[] = [
     verifySecond: 60,
     rule: {
       message: '验证码必须是数字',
-      rule: /\d+/
+      rule: /\d+/,
     },
     phoneKey: formKey.patientPhone,
-    labelWidth: '220rpx'
+    labelWidth: '220rpx',
   },
 
   {
@@ -219,8 +220,8 @@ export const tempList: TInstance[] = [
     key: formKey.defaultFalg,
     label: '设为默认就诊人',
     labelWidth: '260rpx',
-    rowStyle: 'margin-top: 16rpx;'
-  }
+    rowStyle: 'margin-top: 16rpx;',
+  },
 ];
 
 export const pickTempItem = function <T = TFormKeys>(
@@ -250,7 +251,7 @@ export const patCardDetailFormKey = <const>{
   patientSex: 'patientSex',
   upName: 'upName',
   upIdCard: 'upIdCard',
-  defaultFlag: 'defaultFlag'
+  defaultFlag: 'defaultFlag',
 };
 
 export type PatCardKeys = keyof typeof patCardDetailFormKey;
@@ -263,7 +264,7 @@ export const patCardDetailTempList: TInstance[] = [
     disabled: true,
     isForShow: true,
     options: [],
-    autoOptions: 'patientTypeTerms'
+    autoOptions: 'patientTypeTerms',
   },
 
   {
@@ -271,7 +272,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     disabled: true,
     key: patCardDetailFormKey.patientName,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -279,7 +280,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     disabled: true,
     key: patCardDetailFormKey.idCard,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -287,7 +288,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     disabled: true,
     key: patCardDetailFormKey.patientPhone,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -295,7 +296,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     key: patCardDetailFormKey.nation,
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -303,7 +304,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     key: patCardDetailFormKey.address,
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -311,7 +312,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     key: patCardDetailFormKey.patientSex,
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -319,7 +320,7 @@ export const patCardDetailTempList: TInstance[] = [
     field: 'input-text',
     key: patCardDetailFormKey.upName,
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -328,7 +329,7 @@ export const patCardDetailTempList: TInstance[] = [
     key: patCardDetailFormKey.upIdCard,
     labelWidth: '260rpx',
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -336,8 +337,8 @@ export const patCardDetailTempList: TInstance[] = [
     key: patCardDetailFormKey.defaultFlag,
     label: '设为默认就诊人',
     labelWidth: '260rpx',
-    rowStyle: 'margin-top: 16rpx; padding: 10rpx 32rpx;'
-  }
+    rowStyle: 'margin-top: 16rpx; padding: 10rpx 32rpx;',
+  },
 ];
 
 /**
@@ -349,7 +350,7 @@ export const patCardDetailList: TInstance[] = [
     key: 'patientName',
     field: 'input-text',
     disabled: true,
-    isForShow: true
+    isForShow: true,
   },
 
   {
@@ -359,6 +360,6 @@ export const patCardDetailList: TInstance[] = [
     disabled: true,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
     labelWidth: '200rpx',
-    isForShow: true
-  }
+    isForShow: true,
+  },
 ];

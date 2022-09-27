@@ -3,6 +3,7 @@
   import { useGlobalStore } from '@/stores';
   import { beforeEach } from '@/router';
   import { joinQuery } from './common';
+  import 'polyfill-object.fromentries';
   import '@/router/customRouter';
 
   onLaunch((opt) => {
@@ -14,7 +15,7 @@
     // console.log('App Show', opt);
     setTimeout(() => {
       beforeEach({
-        url: joinQuery('/' + opt.path, opt.query || {})
+        url: joinQuery('/' + opt.path, opt.query || {}),
       });
     }, 600);
   });
