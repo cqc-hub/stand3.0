@@ -20,6 +20,7 @@ let manifestFileDataObj = JSON.parse(manifestFileData);
 
 manifestFileDataObj['mp-weixin']['appid'] = sysConfig.wxAppid;
 manifestFileDataObj['mp-alipay']['appid'] = sysConfig.alipayAppid;
+manifestFileDataObj['name'] = sysConfig.name;
 
 fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
   encoding: 'utf8'

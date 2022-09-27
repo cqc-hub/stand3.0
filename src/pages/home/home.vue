@@ -83,7 +83,7 @@
               <view class="box" v-if="topMenuList.length">
                 <homeGrid :list="topMenuList" :type="1"></homeGrid>
               </view>
-              <view class="notice flex-normal">
+              <view class="notice flex-normal" v-if="noticeMenu&&noticeMenu.length>0">
                 <text class="icon-font img_announcement icon-size"></text>
 
                 <swiper
@@ -148,7 +148,8 @@
   import { useGlobalStore, useUserStore, IPat } from '@/stores';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import api from '@/service/api';
+  import global from '@/config/global';
+
   import {
     aliLogin,
     wxLogin,
@@ -158,6 +159,7 @@
     routerJump,
     LoginUtils
   } from '@/utils';
+import api from '@/service/api';
 
   const props = defineProps<{
     code?: string;
@@ -209,14 +211,22 @@
   const menuList = ref([]); //业务模块
 
   onLoad(() => {
+    //设置顶部标题
+    uni.setNavigationBarTitle({
+      title:global.systemInfo.name
+    })
     getHomeConfig();
-
     // #ifdef MP-WEIXIN
     if (props.code) {
       new LoginUtils().getNoPublicOpenId(props.code);
     }
     // #endif
   });
+  const getNotice = async ()=>{
+    const {result } = await api.getAnnouncementCms({})
+
+  }
+
   const goLogin = async (e: any) => {
     // #ifdef MP-ALIPAY
     await aliLogin();
@@ -247,7 +257,13 @@
     const homeConfig = await ServerStaticData.getHomeConfig();
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
-      noticeMenu.value = homeConfig[1].functionList;
+      // 新增公告展示判断 showFlag为1展示
+      if(homeConfig[1].showFlag==='1'){
+        noticeMenu.value = homeConfig[1].functionList;
+        getNotice()
+      }else{
+        noticeMenu.value =[]
+      }
       bannerFunctionList.value = homeConfig[2].functionList;
       bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
       menuList.value = homeConfig[3].typeList;

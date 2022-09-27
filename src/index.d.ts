@@ -73,6 +73,7 @@ interface ISystemGlobalItem {
   wxAppid: string;
   alipayAppid: string;
   h5Appid: string;
+  name:string;
 }
 
 interface ISystemGlobalConfig {
