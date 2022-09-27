@@ -98,6 +98,7 @@
                     v-for="(item, index) in noticeMenu"
                     :key="index"
                     class="swiper-item"
+                    @tap="goToNotice(item)"
                   >
                     <view class="item-box">
                       {{ item.title }}
@@ -149,6 +150,7 @@
 
   import { onLoad } from '@dcloudio/uni-app';
   import global from '@/config/global';
+  import { useCommonTo } from '@/common/checkJump';
 
   import {
     aliLogin,
@@ -160,6 +162,7 @@
     LoginUtils
   } from '@/utils';
 import api from '@/service/api';
+import { isTemplateElement } from '@babel/types';
 
   const props = defineProps<{
     code?: string;
@@ -224,7 +227,24 @@ import api from '@/service/api';
   });
   const getNotice = async ()=>{
     const {result } = await api.getAnnouncementCms({})
-
+    noticeMenu.value = result;
+  }
+  const goToNotice = (item)=>{
+    if(item.informationLink){
+      //跳链接
+    }else{
+      let path = '/pagesA/healthAdvisory/healthAdvisoryDetail?id='+item.informationId+'&sysCode='+global.SYS_CODE
+      //跳咨询详情页面
+      uni.navigateTo({
+        url: '/pagesC/cloudHospital/myPath?type=2&path=' + encodeURIComponent(path),
+        fail: () => {
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${path}`,
+            1500
+          );
+        }
+      })
+    }
   }
 
   const goLogin = async (e: any) => {
@@ -258,8 +278,7 @@ import api from '@/service/api';
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
       // 新增公告展示判断 showFlag为1展示
-      if(homeConfig[1].showFlag==='1'){
-        noticeMenu.value = homeConfig[1].functionList;
+      if(homeConfig[1].showFlag==='0'){
         getNotice()
       }else{
         noticeMenu.value =[]

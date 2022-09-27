@@ -33,6 +33,7 @@
 
   // 页面固定携带 sysCode  加密参数（herenId patientid）
   onLoad((options) => {
+
     getQueryPath(options);
     let query = getQueryPath(options);
     if (options.type == '1') {
@@ -42,7 +43,13 @@
     } else {
       //自研h5
       const baseUrl = (global.env as any) === 'prod' ? 'https://h5.eheren.com/v3/#' : 'https://health.eheren.com/v3/#';
-      src.value = `${baseUrl}${options.path}${query}`;
+      //公告跳转的咨询
+      if(options.type == '2'){
+        let path = decodeURIComponent(options.path as string)
+        src.value = `${baseUrl}${path}`;
+      }else{
+        src.value = `${baseUrl}${options.path}${query}`;
+      }
       console.log('v3页面路径', src.value);
     }
   });

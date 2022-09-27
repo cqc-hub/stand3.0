@@ -16,7 +16,7 @@ export const checkLogin = (item: IRoute) => {
       routerStore.receiveQuery({
         _p: '1'
       });
-      gStores.messageStore.showMessage('未登录,请先登录', 1000);
+      gStores.messageStore.showMessage('未登录,请先登录', 1500);
     } else {
       uni.reLaunch({
         url: '/pages/home/my?isWarningLogin=1&_p=1'
@@ -31,7 +31,7 @@ export const checkPatient = (item: IRoute) => {
   const gStores = new GStores();
   return new Promise((resolve, reject) => {
     if (!gStores.globalStore.herenId) {
-      gStores.messageStore.showMessage('未完善，请先完善', 1000, {
+      gStores.messageStore.showMessage('未完善，请先完善', 1500, {
         closeCallBack: () => {
           uni.reLaunch({
             url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal&_p=1'
@@ -42,7 +42,7 @@ export const checkPatient = (item: IRoute) => {
     } else {
       const patList = gStores.userStore.patList;
       if (!patList.length) {
-        gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1000, {
+        gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1500, {
           closeCallBack: () => {
             uni.reLaunch({
               url: '/pagesA/medicalCardMan/perfectReal?_p=1'
@@ -114,7 +114,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1000
+            1500
           );
         }
       };
@@ -140,7 +140,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1000
+            1500
           );
         }
       };
@@ -152,7 +152,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1000
+            1500
           );
         }
       };
@@ -165,7 +165,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1000
+            1500
           );
         }
       };
