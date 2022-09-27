@@ -58,9 +58,9 @@ export class ServerStaticData {
       const { result } = await api.getHospital({});
       hosList = result;
 
-      setLocalStorage({
-        hosList: result
-      });
+      // setLocalStorage({
+      //   hosList: result
+      // });
     }
 
     return hosList;
@@ -76,9 +76,9 @@ export class ServerStaticData {
       const { result } = await api.getAllDivision({});
 
       if (result && result.length) {
-        setLocalStorage({
-          addressCity: result
-        });
+        // setLocalStorage({
+        //   addressCity: result
+        // });
 
         return result;
       } else {
@@ -121,9 +121,9 @@ export class ServerStaticData {
           };
         });
 
-        setLocalStorage({
-          sysTerms: res
-        });
+        // setLocalStorage({
+        //   sysTerms: res
+        // });
 
         return res;
       } else {
@@ -155,9 +155,9 @@ export class ServerStaticData {
           value: o.code
         }));
 
-        setLocalStorage({
-          nationTerms: res
-        });
+        // setLocalStorage({
+        //   nationTerms: res
+        // });
 
         return res;
       } else {
@@ -187,9 +187,9 @@ export class ServerStaticData {
       try {
         const patientTypeTerms = JSON.parse(PATIENT_TYPE);
 
-        setLocalStorage({
-          patientTypeTerms
-        });
+        // setLocalStorage({
+        //   patientTypeTerms
+        // });
 
         return patientTypeTerms;
       } catch (err) {
@@ -221,9 +221,9 @@ export class ServerStaticData {
       try {
         const idTypeTerms = JSON.parse(ID_CARD_TYPE);
 
-        setLocalStorage({
-          idTypeTerms
-        });
+        // setLocalStorage({
+        //   idTypeTerms
+        // });
 
         return idTypeTerms;
       } catch (err) {

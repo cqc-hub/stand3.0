@@ -198,7 +198,7 @@ export const tempList: TInstance[] = [
 
   {
     required: true,
-    maxlength: 4,
+    maxlength: 6,
     label: '验证码',
     field: 'input-verify',
     placeholder: '请输入',
