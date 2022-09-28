@@ -1,7 +1,7 @@
 <template>
   <view class="page">
     <scroll-view class="container" scroll-y>
-      <view>
+      <view v-if="isComplete && list.length">
         <view class="title g-border-bottom text-ellipsis">
           {{ subType || '常见问题' }}
         </view>
@@ -11,24 +11,28 @@
           @item-click="itemClick"
         />
       </view>
+
+      <view v-else-if="isComplete && !list.length" class="empty-list">
+        <g-empty :current="1" />
+      </view>
     </scroll-view>
 
-    <view class="footer" v-if="!getLv">
-      <view class="g-border-right">
-        <view class="iconfont icon-kefu">&#xe6e2;</view>
-        <view>
-          <view class="title">咨询客服</view>
-          <view class="desc">请在工作时间咨询</view>
+    <view class="footer" v-if="isShowFooter">
+      <button open-type="feedback" class="s-btn g-border-right">
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe6e2;</text>
+          <text class="title">咨询客服</text>
+          <text class="desc">请在工作时间咨询</text>
         </view>
-      </view>
+      </button>
 
-      <view>
-        <view class="iconfont icon-kefu">&#xe6b9;</view>
-        <view>
-          <view class="title">意见反馈</view>
-          <view class="desc">我们会尽快给予回复</view>
+      <button open-type="contact" bindcontact="handleContact" class="s-btn">
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe6b9;</text>
+          <text class="title">意见反馈</text>
+          <text class="desc">我们会尽快给予回复</text>
         </view>
-      </view>
+      </button>
     </view>
     <g-message />
   </view>
@@ -43,39 +47,17 @@
   import serviceList from './components/serviceList.vue';
   import { ISecondItemService } from './utils/index';
 
-  // api.getSubTypeList = () =>
-  //   Promise.resolve({
-  //     code: 0,
-  //     respCode: 999002,
-  //     message: 'success',
-  //     result: ['注册相关', '忘记密码'],
-  //   });
-
-  // api.getCmsListBySubType = () =>
-  //   Promise.resolve({
-  //     code: 0,
-  //     respCode: 999002,
-  //     message: 'success',
-  //     result: [
-  //       {
-  //         id: 421,
-  //         typeId: '4',
-  //         title: '怎么注册？',
-  //         titleImg: '',
-  //         subType: '注册相关',
-  //         informationLink: '',
-  //         source: '客服',
-  //         createTime: '2022-05-24',
-  //       },
-  //     ],
-  //   });
-
   const props = defineProps<{
     subType?: string;
   }>();
   const subType = props.subType && decodeURIComponent(props.subType!);
-
+  const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
+  const isWx = ref(false);
+
+  // #ifdef MP-WEIXIN
+  isWx.value = true;
+  // #endif
 
   // true 二级
   const getLv = computed(() => !!props.subType);
@@ -84,6 +66,13 @@
       return 'padding: 28rpx 32rpx 20rpx; color: var(--hr-neutral-color-9); font-size: var(--hr-font-size-base);';
     } else {
       return 'padding: 28rpx 32rpx 20rpx; color: var(--hr-neutral-color-10); font-size: var(--hr-font-size-xl);';
+    }
+  });
+  const isShowFooter = computed(() => {
+    if (!isWx.value) {
+      return false;
+    } else {
+      return !getLv.value;
     }
   });
 
@@ -101,19 +90,18 @@
     const { result } = await api.getCmsListBySubType({
       subType,
     });
-    list.value = result;
 
-    console.log({
-      result,
-    });
+    list.value = result;
   };
 
-  const init = () => {
+  const init = async () => {
     if (getLv.value) {
-      getSecondList();
+      await getSecondList();
     } else {
-      getFirstList();
+      await getFirstList();
     }
+
+    isComplete.value = true;
   };
 
   const itemClick = ({
@@ -131,7 +119,6 @@
       });
     } else {
       const { id, informationLink } = target;
-      console.log(target);
 
       if (informationLink) {
         uni.navigateTo({
@@ -174,34 +161,62 @@
       background-color: #fff;
       box-shadow: 16rpx 0 30rpx rgba($color: #000, $alpha: 0.06);
       font-size: var(--hr-font-size-xl);
-      > view {
+
+      .s-btn {
         flex: 1;
-        padding: 24rpx 0;
-        display: flex;
+        display: flex !important;
         justify-content: center;
+        align-items: center;
         border-radius: 0;
+        // padding-top: 0;
+        margin-top: 0;
 
         box-sizing: content-box;
-        padding-bottom: 68rpx;
+        padding-bottom: 108rpx;
+        position: relative;
 
         &:after {
           border: none;
         }
-      }
 
-      .icon-kefu {
-        font-size: 56rpx;
-        color: var(--hr-neutral-color-10);
-        margin-right: 8rpx;
+        .icon-kefu {
+          font-size: 56rpx;
+          color: var(--hr-neutral-color-10);
+          margin-right: 8rpx;
+          height: auto;
+          position: absolute;
+
+          // #ifdef MP-WEIXIN
+          transform: translate(calc(-100% - 10rpx), -30rpx);
+          // #endif
+
+          // #ifndef MP-WEIXIN
+          transform: translate(calc(-100% - 10rpx));
+          // #endif
+        }
+
+        .s-btn-container {
+          display: flex;
+          align-items: flex-start;
+          flex-direction: column;
+          transform: translateY(50%);
+          margin-left: 50rpx;
+        }
       }
 
       .title {
         font-weight: 600;
+        line-height: 50rpx;
       }
       .desc {
         font-size: 20rpx;
         color: var(--hr-neutral-color-7);
+        line-height: 30rpx;
       }
     }
+  }
+
+  .empty-list {
+    transform: translateY(100%);
   }
 </style>

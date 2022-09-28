@@ -19,13 +19,6 @@
   let formList: TInstance[] = [];
   const gform = ref<any>();
 
-  watch(
-    () => props.list,
-    (v) => {
-      init();
-    }
-  );
-
   const init = () => {
     formList = props.list.map((o, i) => {
       const label = typeof o === 'string' ? o : o.title;
@@ -46,10 +39,23 @@
       if (gform.value) {
         gform.value.setList(formList);
       } else {
-        setTimeout(gform.value.setList(formList), 500);
+        setTimeout(() => {
+          if (gform.value) {
+            gform.value.setList(formList);
+          }
+        }, 800);
       }
     });
   };
+  watch(
+    () => props.list,
+    (v) => {
+      init();
+    },
+    {
+      immediate: true,
+    }
+  );
 
   const itemClick = ({ item }) => {
     emits('item-click', { item });

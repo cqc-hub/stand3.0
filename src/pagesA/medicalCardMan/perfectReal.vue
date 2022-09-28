@@ -21,6 +21,7 @@
       :content="dialogContent"
       @confirmButton="dialogConfirmRRR"
       @cancelButton="dialogShow = false"
+      confirmText="立即补充"
     />
 
     <view class="footer">
