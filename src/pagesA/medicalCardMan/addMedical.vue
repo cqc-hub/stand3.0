@@ -188,7 +188,7 @@
     const { name, nation, address, idCard, findResult } = res;
 
     if (address) {
-      formData.value.location = address;
+      formData.value[formKey.location] = address;
     }
 
     if (name) {
@@ -215,6 +215,7 @@
 
       addressChoose.addressCountyCode = lastAddressItem?.value;
       formData.value[formKey.location] = detailedAddress;
+      formData.value[formKey.address] = `${province}${city}${county}`;
     }
   };
 
