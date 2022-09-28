@@ -40,6 +40,12 @@ const baseApi = {
   getSysAppMore: (data) =>
     service.post('/phs-base/sysCode/getSysAppMore', parm(data), {}),
 
+  // 资讯详情
+  getCmsInfo: (data) =>
+    service.post('/phs-base/cms/getCmsInfo', parm(data), {
+      hideLoading: false,
+    }),
+
   //行政区划列表
   getAllDivision: (data) =>
     service.post('/phs-base/division/getAllDivision', parm(data), {

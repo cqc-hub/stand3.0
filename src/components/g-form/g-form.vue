@@ -11,23 +11,24 @@
           'form-item-disabled': item.disabled,
           'form-item-filled': !!value[item.key],
           'form-item-error': warningKeys.includes(item.key),
-          [`form-item-${item.field}`]: true
+          [`form-item-${item.field}`]: true,
         }"
         :style="`--label-width: ${item.labelWidth || '190rpx'}; ${
           (item.rowStyle && item.rowStyle) || ''
         }`"
-        class="form-item"
+        @tap.prevent.stop="clickContainer(item)"
+        class="form-item g-border-bottom"
       >
         <view
           :class="{
-            'item-require': item.required && showRequireIcon
+            'item-require': item.required && showRequireIcon,
           }"
           class="label"
         >
           {{ item.label }}
         </view>
 
-        <view class="container-body" @tap.prevent.stop="clickContainer(item)">
+        <view class="container-body">
           <block v-if="item.isForShow">
             <view class="content-show">
               {{
@@ -58,7 +59,7 @@
               @blur="inputBlur(item, $event)"
               :class="{
                 'my-disabled': item.disabled,
-                'my-disabled-color': item.disabled
+                'my-disabled-color': item.disabled,
               }"
               class="form-input"
             />
@@ -66,7 +67,7 @@
             <view
               v-if="item.field === 'select'"
               :class="{
-                'my-disabled': item.disabled
+                'my-disabled': item.disabled,
               }"
               class="full-item"
             >
@@ -91,7 +92,7 @@
             <view
               v-if="item.field === 'address'"
               :class="{
-                'my-disabled': item.disabled
+                'my-disabled': item.disabled,
               }"
               class="full-item"
             >
@@ -110,7 +111,7 @@
             <view
               v-if="item.field === 'time-picker'"
               :class="{
-                'my-disabled': item.disabled
+                'my-disabled': item.disabled,
               }"
               class="full-item"
             >
@@ -138,7 +139,7 @@
             <view
               v-if="item.field === 'switch'"
               :class="{
-                'my-disabled': item.disabled
+                'my-disabled': item.disabled,
               }"
               class="container-body-switch"
             >
@@ -155,7 +156,7 @@
               @tap="requestVerify(item)"
               :class="{
                 'form-item-verify-disabled': verifyTip || item.disabled,
-                'my-disabled': verifyTip || item.disabled
+                'my-disabled': verifyTip || item.disabled,
               }"
               class="verify-btn"
             >
@@ -166,7 +167,7 @@
               v-if="item.ocr"
               @click="useOcrAction"
               :class="{
-                'my-disabled': item.ocrDisabled
+                'my-disabled': item.ocrDisabled,
               }"
               class="ocr"
             >
@@ -178,8 +179,10 @@
 
           <view
             v-if="item.showSuffixArrowIcon"
-            class="icon-font icon-resize ico_arrow"
-          />
+            class="iconfont icon-resize icon_arrow"
+          >
+            &#xe66b;
+          </view>
         </view>
       </view>
     </view>
@@ -214,7 +217,7 @@
     ISelectOptions,
     IRule,
     IInputVerifyInstance,
-    ISwitchInstance
+    ISwitchInstance,
   } from '@/components/g-form/index';
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
   import { useMessageStore } from '@/stores';
@@ -236,7 +239,7 @@
     {
       value: () => ({}),
       bodyBold: false,
-      showRequireIcon: false
+      showRequireIcon: false,
     }
   );
 
@@ -250,7 +253,8 @@
     'input-blur',
     'select-change',
     'address-change',
-    'ocr-ident'
+    'ocr-ident',
+    'row-click',
   ]);
 
   const inputPlaceHolderStyle = (item: TInstance) => {
@@ -310,11 +314,11 @@
 
         uni.showLoading({
           title: '请求中...',
-          mask: true
+          mask: true,
         });
 
         await api.sendVerifyCode({
-          patientPhone: phone
+          patientPhone: phone,
         });
 
         let waitTime = item.verifySecond;
@@ -392,6 +396,8 @@
     if (item.disabled) {
       return;
     }
+
+    emits('row-click', { item });
     if (item.field === 'select' || item.field === 'address') {
       const { options } = item;
 
@@ -420,7 +426,7 @@
 
     emits('select-change', {
       item: { ...cacheItem },
-      value
+      value,
     });
 
     if (cacheItem.field === 'select') {
@@ -442,7 +448,7 @@
     } else {
       emits('picker-change', {
         item: cacheItem,
-        value: choose
+        value: choose,
       });
     }
   };
@@ -453,12 +459,12 @@
     if (field === 'address') {
       const selLabels = v.map((o) => o.text).join('');
       setData({
-        [key]: selLabels
+        [key]: selLabels,
       });
 
       emits('address-change', {
         item: item,
-        value: v
+        value: v,
       });
     }
   };
@@ -478,7 +484,7 @@
 
     emits('update:value', {
       ...props.value,
-      ...value
+      ...value,
     });
 
     if (item) {
@@ -489,7 +495,7 @@
       emits('change', {
         item,
         value: value[key],
-        oldValue
+        oldValue,
       });
     }
   };
@@ -577,7 +583,7 @@
     }
 
     emits('submit', {
-      data
+      data,
     });
   };
 
@@ -586,7 +592,7 @@
     if (typeof v === 'string') {
       setData(
         {
-          [item.key]: v
+          [item.key]: v,
         },
         item
       );
@@ -595,12 +601,12 @@
 
   const inputBlur = (item: TInstance, e) => {
     const {
-      detail: { value }
+      detail: { value },
     } = e;
 
     emits('input-blur', {
       item,
-      value
+      value,
     });
   };
 
@@ -609,7 +615,7 @@
 
     setData(
       {
-        [item.key]: v
+        [item.key]: v,
       },
       item
     );
@@ -620,7 +626,7 @@
 
     setData(
       {
-        [item.key]: value
+        [item.key]: value,
       },
       item
     );
@@ -629,7 +635,7 @@
   const changeSwitch = function (item: ISwitchInstance, { detail }) {
     setData(
       {
-        [item.key]: detail.value
+        [item.key]: detail.value,
       },
       item
     );
@@ -637,7 +643,7 @@
 
   defineExpose({
     setList,
-    submit
+    submit,
   });
 </script>
 

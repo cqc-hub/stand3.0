@@ -134,6 +134,20 @@
           "style": {
             "navigationBarTitleText": "客服中心"
           }
+        },
+
+        {
+          "path": "serviceCenter/serviceCenterDetail",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
+        },
+
+        {
+          "path": "webView/webView",
+          "style": {
+            "navigationBarTitleText": " "
+          }
         }
       ]
     },

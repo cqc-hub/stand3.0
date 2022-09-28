@@ -5,7 +5,7 @@
   align-items: center;
   background-color: var(--h-color-white);
   padding: 16rpx 32rpx;
-  border-bottom: 1rpx solid var(--hr-neutral-color-2);
+  // border-bottom: 1rpx solid var(--hr-neutral-color-2);
   color: var(--hr-neutral-color-8);
 
 
@@ -24,10 +24,6 @@
     }
   }
 
-
-  &.item-for-show {
-    padding: 10rpx 32rpx;
-  }
 
   .container-body {
     display: flex;
@@ -124,6 +120,16 @@
     }
   }
 
+  &.item-for-show {
+    padding: 10rpx 32rpx;
+
+    .container-body {
+      align-items: flex-start;
+      height: 100%;
+      padding-top: 24rpx;
+    }
+  }
+
 }
 
 .form-item-error {
@@ -149,8 +155,12 @@
 }
 
 .icon-resize {
-  width: 60rpx;
-  height: 60rpx;
+  font-size: var(--hr-font-size-xxl);
+  background-repeat: no-repeat;
+}
+
+.icon_arrow {
+  color: var(--hr-neutral-color-8);
 }
 
 .form-picker {

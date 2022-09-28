@@ -77,7 +77,7 @@ export class ServerStaticData {
 
       if (result && result.length) {
         setLocalStorage({
-          addressCity: result
+          addressCity: result,
         });
 
         return result;
@@ -95,7 +95,7 @@ export class ServerStaticData {
     if (!addMedicalData) {
       await api.getTermsBySysAndCode({
         domainCode:
-          'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY'
+          'USE_DRUG_UNIT|USE_DRUG_USES|USE_DRUG_WAY|USE_DRUG_FREQUENCY',
       });
     }
   }
@@ -108,7 +108,7 @@ export class ServerStaticData {
 
     if (!sysTerms) {
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'REG_ORDER_STATUS'
+        paramCode: 'REG_ORDER_STATUS',
       });
 
       const list = result && result.REG_ORDER_STATUS;
@@ -117,7 +117,7 @@ export class ServerStaticData {
         const res = JSON.parse(list).map((item) => {
           return {
             label: item.label,
-            value: item.code
+            value: item.code,
           };
         });
 
@@ -144,7 +144,7 @@ export class ServerStaticData {
 
     if (!nationTerms) {
       const { result } = await api.getTermsBySysAndCode({
-        domainCode: 'CHINESE_NATION'
+        domainCode: 'CHINESE_NATION',
       });
 
       const list = result && result.length && result[0].terms;
@@ -152,7 +152,7 @@ export class ServerStaticData {
       if (list) {
         const res = list.map((o) => ({
           label: o.label,
-          value: o.code
+          value: o.code,
         }));
 
         // setLocalStorage({
@@ -180,7 +180,7 @@ export class ServerStaticData {
 
     if (!patientTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PATIENT_TYPE'
+        paramCode: 'PATIENT_TYPE',
       });
       const PATIENT_TYPE = result.PATIENT_TYPE;
 
@@ -214,7 +214,7 @@ export class ServerStaticData {
 
     if (!idTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'ID_CARD_TYPE'
+        paramCode: 'ID_CARD_TYPE',
       });
       const ID_CARD_TYPE = result.ID_CARD_TYPE;
 
@@ -254,7 +254,7 @@ export class ServerStaticData {
     if (!viewConfig) {
       const arg = {
         version: '',
-        source: 1
+        source: 1,
       };
 
       // #ifdef H5
@@ -265,7 +265,7 @@ export class ServerStaticData {
 
       if (result && result.length) {
         setLocalStorage({
-          viewConfig: result
+          viewConfig: result,
         });
 
         return result;
@@ -278,18 +278,18 @@ export class ServerStaticData {
   }
 
   static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
-    const res = {
+    const res: ISystemConfig = {
       order: {
-        chooseDay: 30
+        chooseDay: 30,
       },
 
       person: {
         ageChildren: 6,
         ageGuardian: 18,
         isGuardianWithIdCard: '1',
-        isSmsVerify: '1'
-      }
-    } as ISystemConfig;
+        isSmsVerify: '1',
+      },
+    };
 
     return res[key];
   }
@@ -299,7 +299,7 @@ export class ServerStaticData {
       sysCode: '1001033',
       title: '台州第一人民医院',
       logo: '',
-      env: 'dev'
+      env: 'dev',
     } as IGlobalConfig;
 
     return res[key];

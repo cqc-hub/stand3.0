@@ -27,7 +27,7 @@
       <view @click="isCheck = !isCheck" class="fg-agree">
         <view
           :class="{
-            'is-check': isCheck
+            'is-check': isCheck,
           }"
           class="iconfont check-box"
         >
@@ -44,7 +44,7 @@
       <button
         @click="gform.submit"
         :class="{
-          'btn-disabled': btnDisabled
+          'btn-disabled': btnDisabled,
         }"
         class="btn btn-primary"
       >
@@ -79,8 +79,9 @@
   }
 
   const routeStore = useRouterStore();
+  const messageStore = useMessageStore();
   const props = withDefaults(defineProps<TPageType>(), {
-    pageType: 'addPatient'
+    pageType: 'addPatient',
   });
   const patientUtil = new PatientUtils();
   const gStores = new GStores();
@@ -90,7 +91,7 @@
     // patientPhone: '13868529891',
     // [formKey.verify]: '2313',
     [formKey.patientType]: '-1',
-    [formKey.defaultFalg]: true
+    [formKey.defaultFalg]: true,
   });
 
   let formList: TInstance[] = [];
@@ -109,6 +110,12 @@
   };
 
   const formSubmit = async ({}) => {
+    if (!isCheck.value) {
+      messageStore.showMessage('请勾选下方同意书', 1500);
+
+      return;
+    }
+
     const data = formData.value;
     try {
       const { result } = await api.getPatCardInfoByHospital(data);
@@ -125,14 +132,14 @@
                 idCard,
                 idType,
                 patientPhone,
-                patientName
+                patientName,
               });
 
               routerJump('/pages/home/home');
             } catch (error) {
               if ((error as any)?.errorType === 'add') {
                 uni.reLaunch({
-                  url: '/pages/home/home'
+                  url: '/pages/home/home',
                 });
               }
             }
@@ -146,7 +153,7 @@
               patientPhone: value[formKey.patientPhone],
               source: patientUtil.globalStore.browser.source,
               patientType: formData.value[formKey.patientType],
-              verifyCode: formData.value[formKey.verify] || '1'
+              verifyCode: formData.value[formKey.verify] || '1',
             });
 
             await patientUtil.getPatCardList();
@@ -164,8 +171,8 @@
             uni.navigateTo({
               url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                 ...data,
-                pageType: props.pageType
-              })
+                pageType: props.pageType,
+              }),
             });
           };
         }
@@ -183,8 +190,8 @@
             uni.navigateTo({
               url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                 ...data,
-                pageType: props.pageType
-              })
+                pageType: props.pageType,
+              }),
             });
           };
         } else {
@@ -198,11 +205,6 @@
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
-
-    if (!isCheck.value) {
-      return true;
-    }
-
     const formKeys = formList.map((o) => o.key);
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
@@ -216,7 +218,7 @@
   onReady(() => {
     if (props.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
-        title: '完善账号实名信息'
+        title: '完善账号实名信息',
       });
     }
   });
@@ -227,7 +229,7 @@
       'patientName',
       'patientPhone',
       'verify',
-      'defaultFalg'
+      'defaultFalg',
     ];
     const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
     if (isSmsVerify === '0') {

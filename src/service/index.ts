@@ -5,7 +5,7 @@ import {
   getSysCode,
   getToken,
   showLoading,
-  hideLoading
+  hideLoading,
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
@@ -28,7 +28,7 @@ Request.interceptors.request((request: IRequest) => {
 Request.interceptors.response(
   (response: IResponseWrapper) => {
     console.log({
-      response
+      response,
     });
 
     const responseData = response.res.data;
@@ -48,13 +48,16 @@ Request.interceptors.response(
         closeCallBack: () => {
           const fullUrl: string = (pages[pages.length - 1] as any).$page
             .fullPath;
+
           new LoginUtils().outLogin({
             isHideMessage: true,
-            isGoLoginPage: false
+            isGoLoginPage: false,
           });
 
-          beforeEach({
-            url: fullUrl
+          setTimeout(() => {
+            beforeEach({
+              url: fullUrl,
+            });
           });
 
           // console.log('过期了');
@@ -62,7 +65,7 @@ Request.interceptors.response(
           //   url: '/pages/home/my?_p=1&_isOutLogin=1'
           // });
           //清除缓存？
-        }
+        },
       });
     } else if (code !== 0) {
       let showMessage = responseOptions && responseOptions.showMessage;
@@ -97,7 +100,7 @@ Request.setConfig((config: any) => {
     // "Authorization": getToken(),
     hrCode: getSysCode(),
     phsId: '81681688',
-    phsSign: encryptDes(getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv')
+    phsSign: encryptDes(getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv'),
   };
   //判断是否携带token校验
   if (config.token) {
