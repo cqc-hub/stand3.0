@@ -25,7 +25,7 @@
       <button
         @click="gform.submit"
         :class="{
-          'btn-disabled': btnDisabled
+          'btn-disabled': btnDisabled,
         }"
         class="btn btn-primary"
       >
@@ -44,12 +44,13 @@
     PatientUtils,
     ServerStaticData,
     routerJump,
-    OcrRes
+    OcrFindRes,
   } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
 
   import dayjs from 'dayjs';
+  import api from '@/service/api';
 
   const routeStore = useRouterStore();
 
@@ -80,7 +81,7 @@
     addressProvince: '',
     addressCity: '',
     addressCounty: '',
-    addressCountyCode: ''
+    addressCountyCode: '',
   };
   let verifyCode = '';
 
@@ -89,7 +90,7 @@
     'patientName',
     'patientPhone',
     'verify',
-    'defaultFalg'
+    'defaultFalg',
   ]);
 
   const formSubmit = async ({ data }) => {
@@ -103,13 +104,13 @@
     const requestData = {
       ...filterData,
       ...addressChoose,
-      verifyCode
+      verifyCode,
     };
 
     if (props.pageType === 'perfectReal') {
       try {
         await patientUtils.registerUser(requestData, {
-          addPatInterface: 'relevantPatient'
+          addPatInterface: 'relevantPatient',
         });
 
         if (props._directUrl) {
@@ -120,7 +121,7 @@
       } catch (error) {
         if ((error as any)?.errorType === 'add') {
           uni.reLaunch({
-            url: '/pages/home/home'
+            url: '/pages/home/home',
           });
         }
       }
@@ -183,8 +184,8 @@
     }
   };
 
-  const ocrIdent = async (res: OcrRes) => {
-    const { name, nation, address, idCard } = res;
+  const ocrIdent = async (res: OcrFindRes) => {
+    const { name, nation, address, idCard, findResult } = res;
 
     if (address) {
       formData.value.location = address;
@@ -202,6 +203,18 @@
       const list = await ServerStaticData.getNationTerms();
       const item = list.find((o) => o.label === nation);
       formData.value.nation = item?.value || nation;
+    }
+
+    if (findResult && Object.keys(findResult).length) {
+      const { detailedAddress, lastAddressItem, city, county, province } =
+        findResult;
+
+      addressChoose.addressProvince = province;
+      addressChoose.addressCity = city;
+      addressChoose.addressCounty = county;
+
+      addressChoose.addressCountyCode = lastAddressItem?.value;
+      formData.value[formKey.location] = detailedAddress;
     }
   };
 
@@ -264,7 +277,7 @@
             formKey.patientPhone,
             formKey.address,
             formKey.location,
-            formKey.defaultFalg
+            formKey.defaultFalg,
           ]
         );
 
@@ -280,7 +293,7 @@
             formKey.patientPhone,
             formKey.address,
             formKey.location,
-            formKey.defaultFalg
+            formKey.defaultFalg,
           ]
         );
         break;
@@ -306,11 +319,11 @@
         if (isErr) {
           return Promise.resolve({
             success: false,
-            message: '请确认证件号码是否有误'
+            message: '请确认证件号码是否有误',
           });
         } else {
           return Promise.resolve({
-            success: true
+            success: true,
           });
         }
       };
@@ -336,7 +349,7 @@
         [
           formKey.patientType,
           formKey.patientName,
-          formKey.patientPhone
+          formKey.patientPhone,
         ].includes(key as any)
       ) {
         if (formData.value[key]) {
@@ -357,12 +370,12 @@
           if (dayjs().diff(dayjs(v as string), 'month') >= ageChildren) {
             return Promise.resolve({
               success: false,
-              message: '新生儿年龄不能大于' + ageChildren + '个月'
+              message: '新生儿年龄不能大于' + ageChildren + '个月',
             });
           }
 
           return {
-            success: true
+            success: true,
           };
         };
       }
@@ -390,29 +403,21 @@
   onReady(() => {
     if (props.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
-        title: '完善账号实名信息'
+        title: '完善账号实名信息',
       });
     }
   });
 
-  onMounted(() => {
+  onMounted(async () => {
     routeStore.receiveQuery(props);
-    Object.keys(props).map((key) => {
-      let value = props[key];
-      if (key === formKey.defaultFalg) {
-        (value as any) = (value as unknown) === 'false' ? false : true;
-      }
-
-      formData.value[key] = value;
-    });
-    // formData.value = Object.fromEntries(
-    //   Object.entries(props).map(([key, value]) => {
-    //     if (key === formKey.defaultFalg) {
-    //       (value as any) = (value as unknown) === 'false' ? false : true;
-    //     }
-    //     return [key, value];
-    //   })
-    // );
+    formData.value = Object.fromEntries(
+      Object.entries(props).map(([key, value]) => {
+        if (key === formKey.defaultFalg) {
+          (value as any) = (value as unknown) === 'false' ? false : true;
+        }
+        return [key, value];
+      })
+    );
 
     // 默认身份证
     formData.value[formKey.idType] = '01';

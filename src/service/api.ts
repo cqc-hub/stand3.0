@@ -105,7 +105,9 @@ const baseApi = {
 
   //获取拆分后的地址
   getAddress: (data) =>
-    service.post('/phs-base/division/getAddress', parm(data)),
+    service.post('/phs-base/division/getAddress', parm(data), {
+      hideLoading: false,
+    }),
 
   //获取公告资讯
   getAnnouncementCms: (data) =>
