@@ -177,15 +177,6 @@ const findSuccess = async ({ name, sex, nation, birth, idCard, address }) => {
     }
   }
 
-  console.log({
-    name,
-    sex,
-    nation,
-    birth,
-    idCard,
-    address,
-  });
-
   const { result } = await api.getAddress({
     allAddress: address,
   });
