@@ -14,7 +14,7 @@
         class="container-contract animate__animated animate__fadeIn"
       >
         <view v-for="(item, i) in allDocList" :key="i" class="item-content">
-          <Order-Doc-Item-All :item="item" />
+          <Order-Doc-Item-All :item="item" @date-click="dateClick" />
         </view>
       </view>
 
@@ -35,6 +35,11 @@
     </scroll-view>
 
     <Order-Reg-Confirm ref="regDialogConfirm" />
+    <OrderSelectSource
+      v-model:show="isSelectOrderSourceShow"
+      v-model:selectSchInfo="selectSchInfo"
+      ref="selectOrderSource"
+    />
     <g-message />
   </view>
 </template>
@@ -48,6 +53,7 @@
   import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
+  import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
 
   const props = defineProps<{
     hosId: string;
@@ -71,19 +77,22 @@
   const deptName = ref(decodeURIComponent(props.deptName));
   const {
     init,
-    orderConfig,
     chooseDays,
     checkedDay,
     chooseDaysEnabled,
     getListByDate,
     allDocList,
     dateDocList,
-    dateDocListFilterByDate
+    dateDocListFilterByDate,
+    dateClick,
+    isSelectOrderSourceShow,
+    selectOrderSource,
+    selectSchInfo,
   } = useOrder();
 
   onReady(() => {
     uni.setNavigationBarTitle({
-      title: `选择${decodeURIComponent(deptName.value)}医生`
+      title: `选择${decodeURIComponent(deptName.value)}医生`,
     });
   });
 
@@ -95,7 +104,7 @@
         ...props,
         hosDeptId: hosDeptId.value,
         firstHosDeptId: firstHosDeptId.value,
-        secondHosDeptId: secondHosDeptId.value
+        secondHosDeptId: secondHosDeptId.value,
       });
     }
   };
@@ -104,7 +113,7 @@
     ...props,
     hosDeptId: hosDeptId.value,
     firstHosDeptId: firstHosDeptId.value,
-    secondHosDeptId: secondHosDeptId.value
+    secondHosDeptId: secondHosDeptId.value,
   });
 
   const regDialogConfirm = ref<any>('');

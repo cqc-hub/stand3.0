@@ -145,6 +145,12 @@ const regApi = {
     service.post<T>('/phs-reg/reg/getDeptSchByDate', parm(data), {
       hideLoading: false,
     }),
+
+  // 科室排班-分时段号源
+  getNumberSource: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/getNumberSource', parm(data), {
+      hideLoading: false,
+    }),
 };
 
 // 用户服务

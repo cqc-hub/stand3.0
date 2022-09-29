@@ -11,6 +11,7 @@
               :class="{
                 animate__fadeIn: !isCollapse
               }"
+              @click="dateClick(date)"
               class="date-item g-flex-rc-cc animate__animated"
             >
               <view
@@ -55,6 +56,8 @@
     item: IDocListAll;
   }>();
 
+  const emits = defineEmits(['date-click'])
+
   const isCollapse = ref(true);
 
   const getSelectData = computed(() => {
@@ -73,6 +76,13 @@
   const toggleCollapse = () => {
     isCollapse.value = !isCollapse.value;
   };
+
+  const dateClick = (schInfo: any) => {
+    emits('date-click', {
+      item: props.item,
+      schInfo
+    })
+  }
 </script>
 
 <style lang="scss" scoped>
