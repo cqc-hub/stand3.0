@@ -99,7 +99,9 @@
 
   const isCheck = ref(false);
   const goAgrement = () => {
-    console.log('cqc');
+    uni.navigateTo({
+      url: '/pagesA/mySet/userPolicy',
+    });
   };
 
   const dialogShow = ref(false);
