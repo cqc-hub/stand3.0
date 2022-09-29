@@ -82,8 +82,6 @@
     background-color: var(--h-color-white) !important;
     opacity: 1;
     //! TODO: 不建议在这里定死高度， 如果页面需要自定义行样式 可以使用 rowStyle 参数注入 或者样式穿透
-    // min-height: 90rpx !important;
-    // height: 90rpx !important;
   }
 
   &.form-item-bold {

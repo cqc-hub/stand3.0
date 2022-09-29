@@ -268,4 +268,8 @@
       }
     }
   }
+  :deep(textarea) {
+    min-height: 90rpx !important;
+    height: 90rpx !important;
+  }
 </style>
