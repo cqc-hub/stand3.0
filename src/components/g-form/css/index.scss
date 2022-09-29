@@ -81,6 +81,8 @@
     font-size: var(--hr-font-size-base);
     background-color: var(--h-color-white) !important;
     opacity: 1;
+    min-height: 90rpx !important;
+    height: 90rpx !important;
   }
 
   &.form-item-bold {

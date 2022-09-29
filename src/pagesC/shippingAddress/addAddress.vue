@@ -122,7 +122,7 @@
 
     {
       required: true,
-      maxlength: 200,
+      // maxlength: 200,
       label: '详细地址',
       field: 'input-text',
       inputType: 'textarea',

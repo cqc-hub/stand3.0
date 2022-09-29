@@ -109,3 +109,9 @@ cmd: iconfont-tools
 | 药品百科 | pages/drugsEncyclopedias/drugsEncyclopedias |               |
 | 疾病百科 |       pagesA/diseaseCyclopedia/index        | sysCode       |
 | otc 商城 |                    暂无                     | sysCode token |
+
+
+## 缓存规范
+ 名族地址类别的缓存：退出登录时清除
+ 首页配置+按照模块调用的配置: 根据后端返回版本号判断清楚对应模块缓存
+ 页面调用接口的配置:每次进入调用

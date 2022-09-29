@@ -185,6 +185,10 @@
         },
         {
           "path": "shippingAddress/addressList",
+          "extend": {
+            "login": true,
+            "herenId": true
+          },
           "style": {
             "navigationBarTitleText": "收货地址"
           }
