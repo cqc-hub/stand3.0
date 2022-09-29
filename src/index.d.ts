@@ -1,4 +1,5 @@
 /// <reference path="@dcloudio/types/uni-app/uni.d.ts" />
+/// <reference types="vite/client" />
 
 declare var wx: any;
 declare var my: any;
@@ -73,7 +74,7 @@ interface ISystemGlobalItem {
   wxAppid: string;
   alipayAppid: string;
   h5Appid: string;
-  name:string;
+  name: string;
 }
 
 interface ISystemGlobalConfig {

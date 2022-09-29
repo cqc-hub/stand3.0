@@ -59,6 +59,20 @@
       "root": "pagesA",
       "pages": [
         {
+          "path": "mySet/getMore",
+          "style": {
+            "navigationBarTitleText": "更多"
+          }
+        },
+
+        {
+          "path": "mySet/userPolicy",
+          "style": {
+            "navigationBarTitleText": "隐私条款"
+          }
+        },
+
+        {
           "path": "MyRegistration/Register",
           "style": {
             "navigationBarTitleText": "选择院区"
@@ -88,6 +102,7 @@
             "navigationBarTitleText": "添加就诊人"
           }
         },
+
         {
           "path": "medicalCardMan/perfectReal",
           "extend": {
