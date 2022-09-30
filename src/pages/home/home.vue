@@ -232,6 +232,15 @@ import { isTemplateElement } from '@babel/types';
   const goToNotice = (item)=>{
     if(item.informationLink){
       //跳链接
+      uni.navigateTo({
+        url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.informationLink,
+        fail: () => {
+          gStores.messageStore.showMessage(
+            `请确认跳转地址正确性${item.informationLink}`,
+            1500
+          );
+        }
+      })
     }else{
       let path = '/pagesA/healthAdvisory/healthAdvisoryDetail?id='+item.informationId+'&sysCode='+global.SYS_CODE
       //跳咨询详情页面
