@@ -47,16 +47,21 @@ export interface IHosInfo {
   senderAddress: string;
   senderPhone: string;
 }
+
+const _cacheMap = new WeakMap();
+
 export class ServerStaticData {
   /**
    * 医院列表
    */
   static async getHosList(): Promise<IHosInfo[]> {
-    let hosList = getLocalStorage('hosList');
+    let hosList = getLocalStorage('hosList') || _cacheMap.get(this.getHosList);
 
     if (!(hosList && hosList.length)) {
       const { result } = await api.getHospital({});
       hosList = result;
+
+      _cacheMap.set(this.getHosList, result);
 
       // setLocalStorage({
       //   hosList: result
@@ -70,7 +75,8 @@ export class ServerStaticData {
    * 选择地址的数据
    */
   static async getAddressData(): Promise<ISelectOptions[]> {
-    const addressCity = getLocalStorage('addressCity');
+    const addressCity =
+      getLocalStorage('addressCity') || _cacheMap.get(this.getAddressData);
 
     if (!addressCity) {
       const { result } = await api.getAllDivision({});
@@ -79,6 +85,8 @@ export class ServerStaticData {
         setLocalStorage({
           addressCity: result,
         });
+
+        _cacheMap.set(this.getAddressData, result);
 
         return result;
       } else {
@@ -104,7 +112,9 @@ export class ServerStaticData {
    * label: "已预约", value: "0"
    */
   static async getSystemTerms(): Promise<ISelectOptions[]> {
-    const sysTerms = <ISelectOptions[] | undefined>getLocalStorage('sysTerms');
+    const sysTerms =
+      <ISelectOptions[] | undefined>getLocalStorage('sysTerms') ||
+      _cacheMap.get(this.getSystemTerms);
 
     if (!sysTerms) {
       const { result } = await api.getParamsMoreBySysCode({
@@ -125,6 +135,8 @@ export class ServerStaticData {
         //   sysTerms: res
         // });
 
+        _cacheMap.set(this.getSystemTerms, res);
+
         return res;
       } else {
         return [];
@@ -138,9 +150,9 @@ export class ServerStaticData {
    * 民族
    */
   static async getNationTerms(): Promise<ISelectOptions[]> {
-    const nationTerms = <ISelectOptions[] | undefined>(
-      getLocalStorage('nationTerms')
-    );
+    const nationTerms =
+      <ISelectOptions[] | undefined>getLocalStorage('nationTerms') ||
+      _cacheMap.get(this.getNationTerms);
 
     if (!nationTerms) {
       const { result } = await api.getTermsBySysAndCode({
@@ -155,6 +167,7 @@ export class ServerStaticData {
           value: o.code,
         }));
 
+        _cacheMap.set(this.getNationTerms, res);
         // setLocalStorage({
         //   nationTerms: res
         // });
@@ -174,9 +187,9 @@ export class ServerStaticData {
   static async getPatientTypeTerms(): Promise<ISelectOptions[]> {
     const gStores = new GStores();
 
-    const patientTypeTerms = <ISelectOptions[] | undefined>(
-      getLocalStorage('patientTypeTerms')
-    );
+    const patientTypeTerms =
+      <ISelectOptions[] | undefined>getLocalStorage('patientTypeTerms') ||
+      _cacheMap.get(this.getPatientTypeTerms);
 
     if (!patientTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({
@@ -190,6 +203,7 @@ export class ServerStaticData {
         // setLocalStorage({
         //   patientTypeTerms
         // });
+        _cacheMap.set(this.getPatientTypeTerms, patientTypeTerms);
 
         return patientTypeTerms;
       } catch (err) {
@@ -208,9 +222,9 @@ export class ServerStaticData {
   static async getIdTypeTerms(): Promise<ISelectOptions[]> {
     const gStores = new GStores();
 
-    const idTypeTerms = <ISelectOptions[] | undefined>(
-      getLocalStorage('idTypeTerms')
-    );
+    const idTypeTerms =
+      <ISelectOptions[] | undefined>getLocalStorage('idTypeTerms') ||
+      _cacheMap.get(this.getIdTypeTerms);
 
     if (!idTypeTerms) {
       const { result } = await api.getParamsMoreBySysCode({
@@ -224,6 +238,7 @@ export class ServerStaticData {
         // setLocalStorage({
         //   idTypeTerms
         // });
+        _cacheMap.set(this.getIdTypeTerms, idTypeTerms);
 
         return idTypeTerms;
       } catch (err) {
