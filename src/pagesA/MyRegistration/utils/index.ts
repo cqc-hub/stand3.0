@@ -107,7 +107,8 @@ export const useOrder = () => {
 
   const selectOrderSource = ref<any>('');
   const isSelectOrderSourceShow = ref(false);
-  const selectSchInfo = ref({} as TSchInfo);
+  const selectSchInfos = ref([] as TSchInfo[]);
+
   const allDocList = ref<IDocListAll[]>([]);
   const dateDocList = ref<IDocListByDate[]>([]);
   const chooseDays = ref<IChooseDays[]>([]);
@@ -211,6 +212,10 @@ export const useOrder = () => {
     isSelectOrderSourceShow.value = true;
 
     const amPmResults = schInfo.amPmResults;
+    selectSchInfos.value = amPmResults;
+
+    console.log(amPmResults);
+
 
     if (amPmResults && amPmResults.length) {
       await getOrderSource(amPmResults[0]);
@@ -218,11 +223,6 @@ export const useOrder = () => {
   };
 
   const getOrderSource = async (schInfo: TSchInfo) => {
-    console.log({
-      schInfo,
-    });
-    selectSchInfo.value = schInfo;
-
     const {
       ampm,
       categor,
@@ -277,7 +277,7 @@ export const useOrder = () => {
     dateClick,
     selectOrderSource,
     isSelectOrderSourceShow,
-    selectSchInfo
+    selectSchInfos,
   };
 };
 

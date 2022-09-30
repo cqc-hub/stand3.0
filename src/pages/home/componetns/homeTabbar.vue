@@ -64,6 +64,7 @@
     height: 180rpx;
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
+    z-index: 2;
 
     .tabbar-container {
       display: flex;

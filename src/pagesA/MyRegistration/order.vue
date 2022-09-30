@@ -37,7 +37,7 @@
     <Order-Reg-Confirm ref="regDialogConfirm" />
     <OrderSelectSource
       v-model:show="isSelectOrderSourceShow"
-      v-model:selectSchInfo="selectSchInfo"
+      v-model:selectSchInfos="selectSchInfos"
       ref="selectOrderSource"
     />
     <g-message />
@@ -87,7 +87,7 @@
     dateClick,
     isSelectOrderSourceShow,
     selectOrderSource,
-    selectSchInfo,
+    selectSchInfos,
   } = useOrder();
 
   onReady(() => {

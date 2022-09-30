@@ -102,9 +102,9 @@
     );
 
     const requestData = {
+      verifyCode,
       ...filterData,
       ...addressChoose,
-      verifyCode,
     };
 
     if (props.pageType === 'perfectReal') {
@@ -233,6 +233,8 @@
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
+    const { isGuardianWithIdCard, ocr } =
+      await ServerStaticData.getSystemConfig('person');
 
     switch (value) {
       case '-1':
@@ -246,9 +248,6 @@
           _sexAndBirth.length = 0;
 
           if (idCard && idValidator.checkIdCardNo(idCard)) {
-            const { isGuardianWithIdCard } =
-              await ServerStaticData.getSystemConfig('person');
-
             const cardInfo = idValidator.getIdCardInfo(idCard);
             if (cardInfo.age <= 6 && isGuardianWithIdCard === '1') {
               lessThenSix = true;
@@ -333,7 +332,7 @@
         (o) => o.key === formKey.patientName
       );
 
-      if (patientNameItem) {
+      if (patientNameItem && ocr === '1') {
         patientNameItem.ocr = true;
         // patientNameItem.showSuffixArrowIcon = true;
       }

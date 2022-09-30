@@ -12,7 +12,7 @@ export interface ISystemConfig {
 
   // 就诊人
   person: {
-    // 开启短信验证？
+    // 开启短信验证？ 完善时候没有
     isSmsVerify?: '0' | '1';
     // 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁）
     ageGuardian: number;
@@ -21,6 +21,8 @@ export interface ISystemConfig {
 
     // 新增就诊人页面有证件且证件类型 身份证时候 小于6岁 是否监护人？
     isGuardianWithIdCard?: '0' | '1';
+
+    ocr?: '0' | '1';
   };
 }
 
@@ -303,6 +305,7 @@ export class ServerStaticData {
         ageGuardian: 18,
         isGuardianWithIdCard: '1',
         isSmsVerify: '1',
+        ocr: '1',
       },
     };
 

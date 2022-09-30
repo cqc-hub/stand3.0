@@ -10,8 +10,8 @@ const getH5OpenidParam = function (data) {
   data.openIds = [
     {
       openId: globalStore.h5OpenId,
-      source: '3'
-    }
+      source: '3',
+    },
   ];
   // #endif
 };
@@ -30,7 +30,7 @@ const packageAuthParams = (
   const globalStore = useGlobalStore();
   const argsDefault = {
     ...args,
-    sysCode: getSysCode()
+    sysCode: getSysCode(),
   };
   const { isOutArgs } = payload;
   let authParam = argsDefault;
@@ -45,16 +45,16 @@ const packageAuthParams = (
     authParam: {
       args: authParam,
       ...outParam,
-      token: globalStore.getToken
+      token: globalStore.getToken,
     },
     sysCode: undefined,
-    url
+    url,
   };
 };
 
 enum LoginType {
   WeChat,
-  AliPay
+  AliPay,
 }
 
 abstract class LoginHandler {
@@ -87,7 +87,7 @@ export class LoginUtils extends GStores {
         // #ifdef MP-WEIXIN
         if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
-            url: '/pages/home/startCome'
+            url: '/pages/home/startCome',
           });
 
           return Promise.reject('未获取 h5openid');
@@ -98,7 +98,7 @@ export class LoginUtils extends GStores {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {
             uni.reLaunch({
-              url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal'
+              url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal',
             });
           }, 1200);
 
@@ -117,16 +117,16 @@ export class LoginUtils extends GStores {
   // 微信获取公众号 openid
   async getNoPublicOpenId(code: string) {
     const {
-      result: { openId }
+      result: { openId },
     } = await api.allinoneAuthApi(
       packageAuthParams(
         {
           accountType: 1,
-          code
+          code,
         },
         '/wx/getNoPublicOpenId',
         {
-          isOutArgs: true
+          isOutArgs: true,
         }
       )
     );
@@ -141,14 +141,14 @@ export class LoginUtils extends GStores {
         openIds: [
           {
             openId: this.globalStore.openId,
-            source: 19 //微信小程序openid
+            source: 19, //微信小程序openid
           },
 
           {
             openId,
-            source: 3 //公众号openid
-          }
-        ]
+            source: 3, //公众号openid
+          },
+        ],
       });
     }
 
@@ -181,7 +181,7 @@ export class LoginUtils extends GStores {
             setTimeout(() => {
               this.messageStore.showMessage('请登录', 1500);
             }, 500);
-          }
+          },
         });
       }
     }, 500);
@@ -190,7 +190,7 @@ export class LoginUtils extends GStores {
   // 注销用户
   async logoutUser() {
     await api.logoutUser({
-      source: this.globalStore.browser.source
+      source: this.globalStore.browser.source,
     });
   }
 }
@@ -220,11 +220,11 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
             packageAuthParams(
               {
                 code,
-                accountType
+                accountType,
               },
               '/wx/getAppletsOpenId',
               {
-                isOutArgs: true
+                isOutArgs: true,
               }
             )
           );
@@ -234,7 +234,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
             const {
               encryptedData: encrypData,
               iv: ivData,
-              code: phoneNumberCode
+              code: phoneNumberCode,
             } = target;
 
             this.globalStore.setOpenId(openId);
@@ -245,7 +245,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
               sessionKey,
               phoneNumberCode,
               ivData,
-              encrypData
+              encrypData,
             };
 
             const { result: loginResult } = await api.allinoneAuthApi(
@@ -256,7 +256,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
               const { accessToken, refreshToken } = loginResult;
               this.globalStore.setToken({
                 accessToken,
-                refreshToken
+                refreshToken,
               });
 
               await this.getUerInfo();
@@ -265,7 +265,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
           } else {
             reject();
           }
-        }
+        },
       });
     });
   }
@@ -283,7 +283,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
               {
                 code: authCode,
                 codeType: 2,
-                accountType
+                accountType,
               },
               '/aliUserLogin/getTPAlipayUserInfoShare'
             )
@@ -298,7 +298,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             certType,
             gender,
             mobile,
-            userName
+            userName,
           } = result;
 
           this.userStore.updateCacheUser({
@@ -306,7 +306,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             certType,
             gender,
             mobile,
-            userName
+            userName,
           });
 
           if (accountType === 1) {
@@ -317,7 +317,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
           this.globalStore.setToken({
             accessToken,
-            refreshToken
+            refreshToken,
           });
 
           await this.getUerInfo();
@@ -327,7 +327,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         fail: ({ errorMessage }) => {
           this.messageStore.showMessage(errorMessage);
           reject();
-        }
+        },
       });
     });
   }
@@ -336,7 +336,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
-    [LoginType.AliPay]: new AliPayLoginHandler()
+    [LoginType.AliPay]: new AliPayLoginHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {
@@ -353,7 +353,7 @@ export class PatientUtils extends LoginUtils {
     options: Partial<{
       addPatInterface: 'hasBeenTreated' | 'relevantPatient';
     }> = {
-      addPatInterface: 'hasBeenTreated'
+      addPatInterface: 'hasBeenTreated',
     }
   ) {
     const { addPatInterface } = options;
@@ -363,9 +363,9 @@ export class PatientUtils extends LoginUtils {
       patientName,
       patientPhone,
       patientType: patientType,
-      verifyCode
+      verifyCode,
+      verifyType,
     } = payload;
-    console.log(payload);
     const accountType = this.globalStore.browser.accountType;
 
     const requestData = {
@@ -375,59 +375,60 @@ export class PatientUtils extends LoginUtils {
       idType: ['031', '032'].includes(idType) ? '03' : idType,
       patientType,
       name: patientName,
-      cellphone: patientPhone
+      cellphone: patientPhone,
     };
 
     uni.showLoading({
       title: '完善就诊人中...',
-      mask: true
+      mask: true,
     });
 
-    const { result } = await api
-      .allinoneAuthApi(
-        packageAuthParams(requestData, '/register/bindRegisterUser')
-      )
-      .catch((err) => {
-        return Promise.reject({
-          errorType: 'add',
-          err
-        });
-      });
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(requestData, '/register/bindRegisterUser')
+    );
+    // .catch((err) => {
+    //   return Promise.reject({
+    //     errorType: 'add',
+    //     err,
+    //   });
+    // });
 
     if (result) {
       const { accessToken, refreshToken } = result;
       this.globalStore.setToken({
         accessToken,
-        refreshToken
+        refreshToken,
       });
 
       uni.showLoading({
         title: '获取就诊人数据...',
-        mask: true
+        mask: true,
       });
 
       await this.getUerInfo();
 
       uni.showLoading({
         title: '添加就诊人中...',
-        mask: true
+        mask: true,
       });
 
       if (addPatInterface === 'hasBeenTreated') {
         await this.addPatient({
+          ...payload,
           defaultFalg: '1',
           herenId: this.globalStore.herenId,
           patientName,
           patientPhone,
           patientType,
           source: this.globalStore.browser.source,
-          verifyCode: verifyCode || '1'
+          verifyCode: verifyCode || '1',
+          verifyType,
         });
       } else {
         await this.addRelevantPatient(payload).catch((err) => {
           return Promise.reject({
             err,
-            errorType: 'add'
+            errorType: 'add',
           });
         });
       }
@@ -451,6 +452,7 @@ export class PatientUtils extends LoginUtils {
       upIdCard: string;
       upName: string;
       verifyCode: string;
+      verifyType: string;
     }>
   ) {
     getH5OpenidParam(data);
@@ -487,19 +489,19 @@ export class PatientUtils extends LoginUtils {
       defaultFalg: data.defaultFalg ? '1' : '0',
       source: this.globalStore.browser.source,
       herenId: this.globalStore.herenId,
-      verifyType: data.verifyType || '1'
+      verifyType: data.verifyType || '1',
     };
 
     getH5OpenidParam(requestArg);
 
     const {
-      result: { patientId }
+      result: { patientId },
     } = await api.addPat(requestArg);
 
     if (data._autoSetDefault) {
       await this.changeDefault({
         patientId,
-        defaultFalg: true
+        defaultFalg: true,
       });
     } else {
       await this.getPatCardList();
@@ -509,7 +511,7 @@ export class PatientUtils extends LoginUtils {
   async getPatCardList() {
     const requestArg = {
       herenId: this.globalStore.herenId,
-      source: this.globalStore.browser.source
+      source: this.globalStore.browser.source,
     };
 
     const { result } = await api.getPatCardList(requestArg);
@@ -533,20 +535,20 @@ export class PatientUtils extends LoginUtils {
 
     uni.showLoading({
       title: '请求中...',
-      mask: true
+      mask: true,
     });
 
     await api.updateDefaultPat({
       patientId,
       defaultFalg: defaultFalg ? '1' : '0',
-      herenId: this.globalStore.herenId
+      herenId: this.globalStore.herenId,
     });
 
     uni.hideLoading();
 
     this.userStore.updatePatListDefault({
       patientId,
-      defaultFalg
+      defaultFalg,
     });
   }
 
@@ -562,12 +564,12 @@ export class PatientUtils extends LoginUtils {
 
     uni.showLoading({
       title: '请求中...',
-      mask: true
+      mask: true,
     });
 
     await api.deletePat({
       patientId,
-      source: this.globalStore.browser.source
+      source: this.globalStore.browser.source,
     });
 
     uni.hideLoading();

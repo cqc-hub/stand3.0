@@ -21,7 +21,7 @@
       :content="dialogContent"
       @confirmButton="dialogConfirmRRR"
       @cancelButton="dialogShow = false"
-      confirmText="立即补充"
+      :confirmText="pageType === 'perfectReal' ? '立即补充' : '添加'"
     />
 
     <view class="footer">
@@ -119,16 +119,46 @@
       return;
     }
 
-    const data = formData.value;
-    try {
-      const { result } = await api.getPatCardInfoByHospital(data);
-      if (result) {
-        const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } =
-          result;
-        const { patientPhone, patientName } = data;
+    // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
-        if (jump === 0) {
-          if (props.pageType === 'perfectReal') {
+    // formData 值和页面渲染列表key 对应
+    const data: any = {
+      ...formData.value,
+      verifyType: formData.value[formKey.verify] && '2', // '2' 开启 短信验证
+    };
+
+    /**
+
+    const value = formData.value;
+      await patientUtil.addPatient({
+        ...data,
+        defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
+        herenId: patientUtil.globalStore.herenId,
+        patientName: value[formKey.patientName],
+        patientPhone: value[formKey.patientPhone],
+        source: patientUtil.globalStore.browser.source,
+        patientType: formData.value[formKey.patientType],
+        verifyCode: formData.value[formKey.verify],
+      });
+
+      await patientUtil.getPatCardList();
+      if (props._directUrl) {
+        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      } else {
+        routerJump('/pages/home/home');
+      }
+     */
+
+    // 完善逻辑
+    if (props.pageType === 'perfectReal') {
+      try {
+        const { result } = await api.getPatCardInfoByHospital(data);
+        if (result) {
+          const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } =
+            result;
+          const { patientPhone, patientName } = data;
+
+          if (jump === 0) {
             try {
               await patientUtil.registerUser({
                 ...data,
@@ -136,6 +166,8 @@
                 idType,
                 patientPhone,
                 patientName,
+                verifyCode: formData.value[formKey.verify],
+                verifyType: '',
               });
 
               routerJump('/pages/home/home');
@@ -147,60 +179,75 @@
               }
             }
           } else {
-            const value = formData.value;
-            await patientUtil.addPatient({
-              ...data,
-              defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
-              herenId: patientUtil.globalStore.herenId,
-              patientName: value[formKey.patientName],
-              patientPhone: value[formKey.patientPhone],
-              source: patientUtil.globalStore.browser.source,
-              patientType: formData.value[formKey.patientType],
-              verifyCode: formData.value[formKey.verify] || '1',
-            });
+            dialogContent.value = jumpMsg;
+            // dialogShow.value = true;
 
-            await patientUtil.getPatCardList();
-            if (props._directUrl) {
-              routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
-            } else {
-              routerJump('/pages/home/home');
-            }
+            dialogConfirm = () => {
+              uni.navigateTo({
+                url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                  ...data,
+                  pageType: props.pageType,
+                }),
+              });
+            };
+
+            dialogConfirm();
           }
-        } else {
-          dialogContent.value = jumpMsg;
-          dialogShow.value = true;
+        }
+      } catch (error) {
+        const err = error as { respCode: number; message: string };
 
-          dialogConfirm = () => {
-            uni.navigateTo({
-              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-                ...data,
-                pageType: props.pageType,
-              }),
-            });
-          };
+        if (err) {
+          const { respCode, message } = err;
+
+          if (respCode === 999301) {
+            dialogContent.value = message;
+            // dialogShow.value = true;
+            dialogConfirm = () => {
+              uni.navigateTo({
+                url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                  ...data,
+                  pageType: props.pageType,
+                }),
+              });
+            };
+
+            dialogConfirm();
+          } else {
+            gStores.messageStore.showMessage(message, 1500);
+          }
         }
       }
-    } catch (error) {
-      const err = error as { respCode: number; message: string };
-
-      if (err) {
-        const { respCode, message } = err;
-
-        if (respCode === 999301) {
-          dialogContent.value = message;
-          dialogShow.value = true;
-          dialogConfirm = () => {
-            uni.navigateTo({
-              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-                ...data,
-                pageType: props.pageType,
-              }),
-            });
-          };
-        } else {
-          gStores.messageStore.showMessage(message, 1500);
-        }
-      }
+    } else {
+      // 新增就诊人
+      const value = formData.value;
+      await patientUtil
+        .addPatient({
+          ...data,
+          defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
+          herenId: patientUtil.globalStore.herenId,
+          patientName: value[formKey.patientName],
+          patientPhone: value[formKey.patientPhone],
+          source: patientUtil.globalStore.browser.source,
+          patientType: formData.value[formKey.patientType],
+          verifyCode: formData.value[formKey.verify],
+        })
+        .then(async () => {
+          // await patientUtil.getPatCardList();
+          if (props._directUrl) {
+            routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+          } else {
+            routerJump('/pages/home/home');
+          }
+        })
+        .catch(() => {
+          uni.navigateTo({
+            url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+              ...data,
+              pageType: props.pageType,
+            }),
+          });
+        });
     }
   };
 
@@ -235,7 +282,16 @@
       'defaultFalg',
     ];
     const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
-    if (isSmsVerify === '0') {
+    let isAlipayEnv = false;
+    // #ifdef MP-ALIPAY
+    isAlipayEnv = true;
+    // #endif
+
+    // 关闭手机验证码
+    if (
+      isSmsVerify === '0' ||
+      (props.pageType === 'perfectReal' && isAlipayEnv)
+    ) {
       formListKeys = formListKeys.filter((key) => key !== 'verify');
     }
 
@@ -251,7 +307,6 @@
 
         formList.map((o) => {
           const { key } = o;
-          o.labelWidth = undefined;
           if (
             [formKey.patientName, formKey.patientPhone].includes(key as any)
           ) {
