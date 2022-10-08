@@ -84,6 +84,14 @@ interface ISystemGlobalConfig {
   };
 }
 
+interface IHOptionItem {
+  label: string;
+  value: string;
+  children?: IHOptionItem;
+}
+
+type IHOption = IHOptionItem[];
+
 // declare namespace UniNamespace {
 // 	interface NavigateToOptions {
 // 		passedParams?: {

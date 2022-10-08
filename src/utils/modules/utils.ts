@@ -7,6 +7,7 @@ export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 export const debounce = function (func, wait = 1000, immediate = true): any {
   let timer;
   return function () {
+     // @ts-ignore
     let context = this,
       args = arguments;
     if (timer) clearTimeout(timer);

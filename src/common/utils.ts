@@ -58,6 +58,32 @@ export const joinQuery = function (url: string, query) {
   }
 };
 
+export const joinQueryForUrl = (url: string, pageArg) => {
+  const p = Object.entries(pageArg)
+    .filter(([key, value]) => value !== undefined)
+    .map(([key, value]) => {
+      return [key, encodeURIComponent(value! + '')];
+    });
+
+  const unpackArg = Object.fromEntries(p);
+
+  return joinQuery(url, unpackArg);
+};
+
+export const deQueryForUrl = <T = BaseObject>(props): T => {
+  if (props) {
+    const dePropList =
+      (props && Object.entries(props)).map(([key, value]) => [
+        key,
+        decodeURIComponent(value),
+      ]) || [];
+
+    return <T>Object.fromEntries(dePropList);
+  } else {
+    return <T>{};
+  }
+};
+
 /**
  *
  * @param func 支付宝、微信获取地址

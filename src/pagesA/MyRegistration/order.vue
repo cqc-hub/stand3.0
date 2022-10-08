@@ -27,7 +27,7 @@
               class="item-content animate__animated animate__fadeIn"
               :key="__i"
             >
-              <Order-Doc-Item-Date :item="__item" />
+              <Order-Doc-Item-Date :item="__item" @reg-click="regClick" />
             </view>
           </view>
         </view>
@@ -35,9 +35,16 @@
     </scroll-view>
 
     <Order-Reg-Confirm ref="regDialogConfirm" />
+
     <OrderSelectSource
       v-model:show="isSelectOrderSourceShow"
       v-model:selectSchInfos="selectSchInfos"
+      v-model:value="selectOrderSourceNumId"
+      :orderSourceList="orderSourceList"
+      :column="orderConfig.selOrderColumn"
+      :isOrderBlur="orderConfig.isOrderBlur"
+      @item-click="orderSourceChoose"
+      @am-change="amChange"
       ref="selectOrderSource"
     />
     <g-message />
@@ -54,6 +61,7 @@
   import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
+
 
   const props = defineProps<{
     hosId: string;
@@ -88,6 +96,12 @@
     isSelectOrderSourceShow,
     selectOrderSource,
     selectSchInfos,
+    orderSourceList,
+    orderConfig,
+    orderSourceChoose,
+    selectOrderSourceNumId,
+    amChange,
+    regClick
   } = useOrder();
 
   onReady(() => {

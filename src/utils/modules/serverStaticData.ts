@@ -8,6 +8,10 @@ export interface ISystemConfig {
   order: {
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
+    // 选择号源时候显示几列
+    selOrderColumn: number;
+    // 精确号源?
+    isOrderBlur: '0' | '1';
   };
 
   // 就诊人
@@ -298,6 +302,8 @@ export class ServerStaticData {
     const res: ISystemConfig = {
       order: {
         chooseDay: 30,
+        selOrderColumn: 3,
+        isOrderBlur: '1',
       },
 
       person: {

@@ -76,6 +76,8 @@ page {
 	--animate-duration: 800ms;
 	--animate-delay: 0.9s;
 
+	--h-popup-max-height: max(80vh, 999rpx);
+
 	font-size: var(--hr-font-size-base);
 	background-color: var(--hr-neutral-color-1);
 	color: var(--hr-neutral-color-10);

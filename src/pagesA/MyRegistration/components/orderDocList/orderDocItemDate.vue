@@ -19,7 +19,9 @@
                 <text>剩{{ _item.numRemain }}个</text>
               </view>
 
-              <button class="btn btn-primary btn-reg">挂号</button>
+              <button class="btn btn-primary btn-reg" @click="regClick(_item)">
+                挂号
+              </button>
             </view>
           </view>
         </view>
@@ -34,15 +36,22 @@
   import dayjs from 'dayjs';
 
   import OrderDocListContainer from './orderDocListContainer.vue';
+  const emits = defineEmits(['reg-click']);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;
   }>();
 
   const schemeClick = (item: IItem['schemeList'][number]) => {
-    console.log({
-      item,
-      pItem: props.item
+    // console.log({
+    //   item,
+    //   pItem: props.item,
+    // });
+  };
+
+  const regClick = (scheme: IItem['schemeList'][number]) => {
+    emits('reg-click', {
+      scheme,
     });
   };
 </script>

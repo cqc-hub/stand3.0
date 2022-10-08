@@ -20,61 +20,14 @@
 
           <scroll-view class="popup-scroll" scroll-y>
             <view class="popup-padding">
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
-              <view>23322</view>
+              <slot />
             </view>
           </scroll-view>
 
           <view class="popup-footer g-border-top">
             <view class="popup-footer-container popup-padding">
-              <button class="btn btn-normal">取消</button>
-              <button class="btn btn-primary">同意须知</button>
+              <button class="btn btn-normal" @click="hide">取消</button>
+              <button class="btn btn-primary" @click="confirm">同意须知</button>
             </view>
           </view>
         </view>
@@ -95,13 +48,13 @@
       headerIcon?: string;
     }>(),
     {
-      title: '预约挂号须知',
+      title: '须知',
       maskClickClose: true,
-      headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png'
+      headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png',
     }
   );
 
-  const emits = defineEmits(['show', 'hide']);
+  const emits = defineEmits(['show', 'hide', 'confirm']);
 
   const popup = ref<any>('');
 
@@ -121,8 +74,13 @@
     popup.value.close();
   };
 
+  const confirm = () => {
+    emits('confirm');
+    hide();
+  };
+
   defineExpose({
-    show
+    show,
   });
 </script>
 

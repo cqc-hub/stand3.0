@@ -94,6 +94,18 @@
         },
 
         {
+          "path": "MyRegistration/RegConfirm",
+          "style": {
+            "navigationBarTitleText": "确认挂号信息"
+          },
+          "extend": {
+            "login": true,
+            "herenId": true,
+            "patient": true
+          }
+        },
+
+        {
           "path": "medicalCardMan/addMedical",
           "extend": {
             "login": true
@@ -238,6 +250,11 @@
     "current": 0,
     "list": [
       {
+        "name": "确认挂号",
+        "path": "pagesA/MyRegistration/RegConfirm",
+        "query": "disNo=3&numId=2022102932020060500000000004513&timeDesc=08%253A00&ampmName=%25E4%25B8%258A%25E5%258D%2588&ampm=1&categor=2&categorName=%25E6%2599%25AE%25E9%2580%259A&deptName=%25E7%259C%25BC%25E7%25A7%2591&docName=%25E6%259E%2597%25E4%25BC%2598&docPhoto=http%253A%252F%252Feheren-dev.oss-cn-hangzhou.aliyuncs.com%252Fhr-hos-mg%252F100104420210357.jpg&fee=12.00&hosDeptId=10206000&hosDocId=0000003060&hosId=1279&schDate=2022-10-20&schId=20200605000000000045&schQukCategor=%25E7%259C%25BC%25E7%25A7%2591%25E6%259E%2597%25E4%25BC%2598%255B%25E6%2599%25AE%255D"
+      },
+      {
         "name": "医生挂号",
         "path": "pagesA/MyRegistration/order",
         "query": "hosId=1279&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A42&hosDeptId=1000033%257C10206000&firstHosDeptId=A101&secondHosDeptId=1000002&isExpertDeptId=0"
@@ -256,11 +273,6 @@
         "name": "piniaTest",
         "path": "pages/piniaTest/piniaTest",
         "query": "name=cqc&op=233"
-      },
-      {
-        "name": "my",
-        "path": "pages/home/my",
-        "query": ""
       }
     ]
   }

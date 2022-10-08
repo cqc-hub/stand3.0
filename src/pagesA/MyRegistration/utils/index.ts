@@ -4,6 +4,7 @@ import api from '@/service/api';
 
 import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
+import { joinQueryForUrl, joinQuery } from '@/common/utils';
 
 dayjs.extend(isoWeek);
 
@@ -11,6 +12,12 @@ export interface IChooseDays {
   day: string;
   weekday: string;
   fullDay: string;
+}
+
+export interface IOrderSource {
+  disNo: string;
+  numId: string;
+  timeDesc: string;
 }
 
 interface IDocRow {
@@ -103,11 +110,16 @@ export type TSchInfo = {
 export const useOrder = () => {
   const orderConfig = ref<ISystemConfig['order']>({
     chooseDay: 0,
+    selOrderColumn: 3,
+    isOrderBlur: '1',
   });
 
+  // ref
   const selectOrderSource = ref<any>('');
+  const selectOrderSourceNumId = ref('');
   const isSelectOrderSourceShow = ref(false);
   const selectSchInfos = ref([] as TSchInfo[]);
+  const orderSourceList = ref<IOrderSource[]>([]);
 
   const allDocList = ref<IDocListAll[]>([]);
   const dateDocList = ref<IDocListByDate[]>([]);
@@ -157,11 +169,19 @@ export const useOrder = () => {
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
+        const { docPhoto } = docInfo;
+
         docInfo.schDocSubResultList.map((o) => {
-          const { schDate } = o;
+          const { schDate, amPmResults } = o;
 
           if (!eDaysEnabled.includes(schDate)) {
             eDaysEnabled.push(schDate);
+          }
+
+          if (amPmResults && amPmResults.length) {
+            amPmResults.map((amPmItem) => {
+              amPmItem.docPhoto = docPhoto;
+            });
           }
         });
       });
@@ -201,7 +221,24 @@ export const useOrder = () => {
 
     const { result } = await api.getDeptSchByDate<IDocListByDate[]>(args);
 
-    dateDocList.value = result;
+    // if (result && result.length) {
+    //   result.map((o) => {
+    //     const { schDateList } = o;
+    //     if (schDateList && schDateList.length) {
+    //       schDateList.map((schDate) => {
+    //         const { schemeList } = schDate;
+
+    //         if (schemeList && schemeList.length) {
+    //           schemeList.map((scheme) => {
+    //             const { docPhoto } = scheme;
+    //           });
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+
+    dateDocList.value = result || [];
   };
 
   const dateClick = async (e: {
@@ -209,17 +246,25 @@ export const useOrder = () => {
     schInfo: IDocListAll['schDocSubResultList'][number];
   }) => {
     const { item, schInfo } = e;
-    isSelectOrderSourceShow.value = true;
 
     const amPmResults = schInfo.amPmResults;
     selectSchInfos.value = amPmResults;
 
-    console.log(amPmResults);
-
-
     if (amPmResults && amPmResults.length) {
       await getOrderSource(amPmResults[0]);
+      isSelectOrderSourceShow.value = true;
     }
+  };
+
+  // 某天点击 某个时间段(上午...)
+  const regClick = async ({ scheme }: { scheme: TSchInfo }) => {
+    selectSchInfos.value = [scheme];
+    await getOrderSource(scheme);
+    isSelectOrderSourceShow.value = true;
+  };
+
+  const amChange = async (schInfo: TSchInfo) => {
+    getOrderSource(schInfo);
   };
 
   const getOrderSource = async (schInfo: TSchInfo) => {
@@ -248,7 +293,65 @@ export const useOrder = () => {
       source,
     };
 
-    await api.getNumberSource(arg);
+    orderSourceList.value = [];
+    const { result } = await api.getNumberSource(arg);
+
+    orderSourceList.value = <IOrderSource[]>result || [];
+  };
+
+  // 点击某个号源
+  const orderSourceChoose = ({
+    item,
+    selectSchInfo,
+  }: {
+    item: IOrderSource;
+    selectSchInfo: TSchInfo;
+  }) => {
+    console.log({ item, selectSchInfo });
+
+    const {
+      ampmName,
+      ampm,
+      categor,
+      categorName,
+      deptName,
+      docName,
+      docPhoto,
+      fee,
+      hosDeptId,
+      hosDocId,
+      hosId,
+      schDate,
+      schId,
+      schQukCategor,
+    } = selectSchInfo;
+
+    const { disNo, numId, timeDesc } = item;
+
+    const pageArg = {
+      disNo,
+      numId,
+      timeDesc,
+      ampmName,
+      ampm,
+      categor,
+      categorName,
+      deptName,
+      docName,
+      docPhoto,
+      fee,
+      hosDeptId,
+      hosDocId,
+      hosId,
+      schDate,
+      schId,
+      schQukCategor,
+    };
+    selectOrderSourceNumId.value = numId;
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/RegConfirm', pageArg),
+    });
   };
 
   const init = async (query: {
@@ -259,13 +362,20 @@ export const useOrder = () => {
     isExpertDeptId?: string;
     clinicalType?: string;
   }) => {
-    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+    const config = await ServerStaticData.getSystemConfig('order');
+
+    if (config) {
+      Object.entries(config).map(([key, value]) => {
+        orderConfig.value[key] = value;
+      });
+    }
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
 
     getListAll(checkedDay.value, query);
   };
 
   return {
+    orderConfig,
     init,
     chooseDays,
     checkedDay,
@@ -278,6 +388,11 @@ export const useOrder = () => {
     selectOrderSource,
     isSelectOrderSourceShow,
     selectSchInfos,
+    orderSourceList,
+    orderSourceChoose,
+    selectOrderSourceNumId,
+    amChange,
+    regClick,
   };
 };
 

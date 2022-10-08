@@ -11,10 +11,6 @@
       <g-flag typeFg="51" isShowFgTip />
     </view>
 
-    <!-- <view class="aa">
-			{{ JSON.stringify(formData) }}
-		</view> -->
-
     <g-message />
     <xy-dialog
       :show="dialogShow"

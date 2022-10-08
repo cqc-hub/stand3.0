@@ -6,7 +6,7 @@
       </view>
 
       <view v-if="isShowFgTip && text" class="tip">
-        <view class="title">{{ mTitle }}</view>
+        <view class="title" v-if="!isHideTitle">{{ mTitle }}</view>
         <rich-text :nodes="text" />
       </view>
     </slot>
@@ -23,21 +23,22 @@
     value?: string;
     isShowFg?: boolean; //顶部
     isShowFgTip?: boolean; //底部
+    isHideTitle?: boolean;
   }
 
   const props = withDefaults(defineProps<IProps>(), {
     value: '',
-    isShowFg: false
+    isShowFg: false,
   });
 
   const text = ref<any>('');
   const mTitle = ref('');
 
-  const emit = defineEmits(['update:value']);
+  const emit = defineEmits(['update:value', 'update:title']);
 
   api
     .getSysAppMore({
-      typeFlag: props.typeFg
+      typeFlag: props.typeFg,
     })
     .then(
       ({ result }) => {
@@ -45,6 +46,7 @@
         text.value = HTMLParser(content);
         mTitle.value = title;
         emit('update:value', text.value);
+        emit('update:title', title);
       },
       () => {
         uni.hideLoading();

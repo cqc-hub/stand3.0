@@ -41,6 +41,8 @@
   const props = defineProps<{
     item: IDocListAll;
   }>();
+
+
 </script>
 
 <style lang="scss" scoped>
