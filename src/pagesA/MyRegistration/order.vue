@@ -7,7 +7,6 @@
       @change="dateChange"
       isShowAllDate
     />
-    <view @click="regDialogConfirm.show">cqccccc</view>
     <scroll-view class="container" scroll-y>
       <view
         v-if="!checkedDay"
@@ -15,6 +14,10 @@
       >
         <view v-for="(item, i) in allDocList" :key="i" class="item-content">
           <Order-Doc-Item-All :item="item" @date-click="dateClick" />
+        </view>
+
+        <view v-if="!allDocList.length && isComplete" class="empty-list">
+          <g-empty :current="1" />
         </view>
       </view>
 
@@ -33,8 +36,6 @@
         </view>
       </view>
     </scroll-view>
-
-    <Order-Reg-Confirm ref="regDialogConfirm" />
 
     <OrderSelectSource
       v-model:show="isSelectOrderSourceShow"
@@ -59,9 +60,7 @@
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
-  import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
-
 
   const props = defineProps<{
     hosId: string;
@@ -101,7 +100,8 @@
     orderSourceChoose,
     selectOrderSourceNumId,
     amChange,
-    regClick
+    regClick,
+    isComplete,
   } = useOrder();
 
   onReady(() => {
@@ -129,8 +129,6 @@
     firstHosDeptId: firstHosDeptId.value,
     secondHosDeptId: secondHosDeptId.value,
   });
-
-  const regDialogConfirm = ref<any>('');
 </script>
 
 <style lang="scss" scoped>
@@ -163,5 +161,9 @@
       font-size: var(--hr-font-size-xs);
       margin: 16rpx 0;
     }
+  }
+
+  .empty-list {
+    transform: translateY(100%);
   }
 </style>

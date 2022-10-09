@@ -118,6 +118,7 @@ export const useOrder = () => {
   const selectOrderSource = ref<any>('');
   const selectOrderSourceNumId = ref('');
   const isSelectOrderSourceShow = ref(false);
+  const isComplete = ref(false);
   const selectSchInfos = ref([] as TSchInfo[]);
   const orderSourceList = ref<IOrderSource[]>([]);
 
@@ -165,7 +166,12 @@ export const useOrder = () => {
     };
 
     const eDaysEnabled: string[] = [];
-    const { result: allList } = await api.getDeptSchForDoc<IDocListAll[]>(args);
+    isComplete.value = false;
+    const { result: allList } = await api
+      .getDeptSchForDoc<IDocListAll[]>(args)
+      .finally(() => {
+        isComplete.value = true;
+      });
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
@@ -218,9 +224,14 @@ export const useOrder = () => {
       secondHosDeptId,
       isExpertDeptId,
     };
+    isComplete.value = false;
 
-    const { result } = await api.getDeptSchByDate<IDocListByDate[]>(args);
-
+    const { result } = await api
+      .getDeptSchByDate<IDocListByDate[]>(args)
+      .finally(() => {
+        isComplete.value = true;
+      });
+    dateDocList.value = result || [];
     // if (result && result.length) {
     //   result.map((o) => {
     //     const { schDateList } = o;
@@ -237,8 +248,6 @@ export const useOrder = () => {
     //     }
     //   });
     // }
-
-    dateDocList.value = result || [];
   };
 
   const dateClick = async (e: {
@@ -307,8 +316,6 @@ export const useOrder = () => {
     item: IOrderSource;
     selectSchInfo: TSchInfo;
   }) => {
-    console.log({ item, selectSchInfo });
-
     const {
       ampmName,
       ampm,
@@ -350,7 +357,7 @@ export const useOrder = () => {
     selectOrderSourceNumId.value = numId;
 
     uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/RegConfirm', pageArg),
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', pageArg),
     });
   };
 
@@ -393,6 +400,7 @@ export const useOrder = () => {
     selectOrderSourceNumId,
     amChange,
     regClick,
+    isComplete,
   };
 };
 

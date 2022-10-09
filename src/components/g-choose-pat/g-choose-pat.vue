@@ -23,73 +23,74 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { getAvatar, IPat } from '@/stores';
-import ChoosePat from './choose-pat-action.vue';
-import { GStores } from '@/utils';
+  import { ref } from 'vue';
+  import { getAvatar, IPat } from '@/stores';
+  import { GStores } from '@/utils';
 
-const gStores = new GStores();
-const actionSheet = ref<InstanceType<typeof ChoosePat>>();
-const emits = defineEmits(['choose-pat']);
+  import ChoosePat from './choose-pat-action.vue';
 
-const isLoad = ref(false);
+  const gStores = new GStores();
+  const actionSheet = ref<InstanceType<typeof ChoosePat>>();
+  const emits = defineEmits(['choose-pat']);
 
-const chooseAction = () => {
-  const patList = gStores.userStore.patList;
+  const isLoad = ref(false);
 
-  if (!patList.length) {
-    gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
-    return;
-  }
+  const chooseAction = () => {
+    const patList = gStores.userStore.patList;
 
-  if (actionSheet.value) {
-    actionSheet.value.show();
-  }
-};
+    if (!patList.length) {
+      gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
+      return;
+    }
 
-const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
-  gStores.userStore.updatePatChoose(item);
-  emits('choose-pat', { item });
-};
+    if (actionSheet.value) {
+      actionSheet.value.show();
+    }
+  };
 
-const loadImg = () => {
-  isLoad.value = true;
-};
+  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+    gStores.userStore.updatePatChoose(item);
+    emits('choose-pat', { item });
+  };
+
+  const loadImg = () => {
+    isLoad.value = true;
+  };
 </script>
 
 <style lang="scss" scoped>
-.choose-pat {
-  &::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1rpx;
-    background-color: #eee;
+  .choose-pat {
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1rpx;
+      background-color: #eee;
+    }
   }
-}
-.container {
-  padding: 20rpx 40rpx;
-  padding-right: 20rpx;
-  background-color: var(--h-color-white);
+  .container {
+    padding: 20rpx 40rpx;
+    padding-right: 20rpx;
+    background-color: var(--h-color-white);
 
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  .user-avatar {
-    width: 48rpx;
-    border-radius: 100px;
-    margin-right: 20rpx;
+    .user-avatar {
+      width: 48rpx;
+      border-radius: 100px;
+      margin-right: 20rpx;
+    }
+
+    .user-info {
+      flex: 1;
+      width: 1px;
+    }
+
+    .icon-resize {
+      width: 48rpx;
+      height: 48rpx;
+      font-size: 48rpx;
+    }
   }
-
-  .user-info {
-    flex: 1;
-    width: 1px;
-  }
-
-  .icon-resize {
-    width: 48rpx;
-    height: 48rpx;
-    font-size: 48rpx;
-  }
-}
 </style>

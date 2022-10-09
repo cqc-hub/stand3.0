@@ -86,7 +86,7 @@
 
 <style lang="scss" scoped>
   .container {
-    height: 85vh;
+    height: 90vh;
     position: relative;
   }
   .popup-container {

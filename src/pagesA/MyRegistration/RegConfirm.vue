@@ -5,12 +5,14 @@
         <view class="container-view-card">
           <Reg-Confirm-Card :my-props="props" />
         </view>
+
+        <view>
+          <Reg-Confirm-ChoosePat />
+        </view>
       </view>
 
       <g-flag typeFg="4" isShowFgTip />
     </view>
-
-    <g-message />
 
     <Order-Reg-Confirm
       :title="flagTitle9"
@@ -21,17 +23,18 @@
     </Order-Reg-Confirm>
 
     <view class="footer">
-      <view @click="isCheck = !isCheck" class="fg-agree">
+      <view class="fg-agree">
         <view
           :class="{
             'is-check': isCheck,
           }"
+          @click="isCheck = !isCheck"
           class="iconfont check-box"
         >
           &#xe6d0;
         </view>
         <view>
-          <text>我已阅读并同意</text>
+          <text @click="isCheck = !isCheck">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
             《预约挂号须知》
           </text>
@@ -39,19 +42,25 @@
       </view>
       <button class="btn btn-primary" @click="regConfirm">确定预约</button>
     </view>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
 
-  import { deQueryForUrl } from '@/common/utils';
   import { onLoad } from '@dcloudio/uni-app';
+
+  import { IPageProps } from './utils/regConfirm';
+  import { GStores } from '@/utils';
+  import { deQueryForUrl } from '@/common/utils';
 
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
-  import { IPageProps } from './utils/regConfirm';
+  import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
 
+  const gStores = new GStores();
   const props = ref<IPageProps>({} as IPageProps);
   const isCheck = ref(false);
   const regDialogConfirm = ref<any>('');
@@ -62,6 +71,65 @@
       regDialogConfirm.value.show();
       return;
     }
+
+    /**
+     * 未填写参数
+     *
+     * aliRegisterId
+     * clinicalType
+     * diseaseId
+     * promptMessage
+     * resType
+     * thRegisterId
+     * timePoint
+     * visitingArea
+     */
+
+    const {
+      ampm,
+      categor,
+      categorName,
+      deptName,
+      disNo,
+      docName,
+      fee,
+      hosDeptId,
+      hosDocId,
+      hosId,
+      numId,
+      schDate,
+      schId,
+      schQukCategor,
+      timeDesc,
+    } = props.value;
+    const { herenId, patientId } = gStores.userStore.patChoose;
+    const { source } = gStores.globalStore.browser;
+
+    const requestArg = {
+      ampm,
+      categor,
+      categorName,
+      deptName,
+      disNo,
+      docName,
+      fee,
+      hosDeptId,
+      hosDocId,
+      hosId,
+      numId,
+      schDate,
+      schId,
+      schQukCategor,
+      timeDesc,
+      herenId,
+      patientId,
+      source,
+    };
+
+    console.log({
+      requestArg,
+      p: props.value,
+    });
   };
 
   onLoad((p) => {
