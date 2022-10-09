@@ -353,6 +353,7 @@ export const patCardDetailList: TInstance[] = [
     field: 'input-text',
     disabled: true,
     isForShow: true,
+    rowStyle: 'font-size: var(--hr-font-size-base);',
   },
 
   {
@@ -360,7 +361,8 @@ export const patCardDetailList: TInstance[] = [
     key: '_showId',
     field: 'input-text',
     disabled: true,
-    rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
+    rowStyle:
+      'border-radius: 0 0 16rpx 16rpx; font-size: var(--hr-font-size-base);',
     labelWidth: '200rpx',
     isForShow: true,
   },

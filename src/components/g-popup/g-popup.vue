@@ -17,110 +17,110 @@
           <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
         </view>
 
-        <view class="popup-box">
+        <scroll-view scroll-y class="popup-box">
           <slot />
-        </view>
+        </scroll-view>
       </view>
     </wyb-popup>
   </view>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
-  import wybPopup from '@/components/wyb-popup/wyb-popup.vue';
+import { defineComponent, ref, reactive } from 'vue';
+import wybPopup from '@/components/wyb-popup/wyb-popup.vue';
 
-  export default defineComponent({
-    components: {
-      wybPopup
+export default defineComponent({
+  components: {
+    wybPopup,
+  },
+
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false,
     },
 
-    props: {
-      disabled: {
-        type: Boolean,
-        default: false
-      },
+    maskClickClose: {
+      type: Boolean,
+      default: true,
+    },
 
-      maskClickClose: {
-        type: Boolean,
-        default: true
-      },
+    title: {
+      type: String,
+      default: '',
+    },
+  },
 
-      title: {
-        type: String,
-        default: ''
+  setup(props, { emit }) {
+    const popup = ref<any>('');
+
+    const onActionSheetShow = () => {
+      emit('show');
+    };
+
+    const onActionSheetHide = () => {
+      emit('hide');
+    };
+
+    const show = () => {
+      if (!props.disabled) {
+        popup.value.show();
       }
-    },
+    };
 
-    setup(props, { emit }) {
-      const popup = ref<any>('');
+    const hide = () => {
+      popup.value.close();
+    };
 
-      const onActionSheetShow = () => {
-        emit('show');
-      };
-
-      const onActionSheetHide = () => {
-        emit('hide');
-      };
-
-      const show = () => {
-        if (!props.disabled) {
-          popup.value.show();
-        }
-      };
-
-      const hide = () => {
-        popup.value.close();
-      };
-
-      return {
-        onActionSheetShow,
-        onActionSheetHide,
-        show,
-        popup,
-        hide
-      };
-    }
-  });
+    return {
+      onActionSheetShow,
+      onActionSheetHide,
+      show,
+      popup,
+      hide,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
-  .popup-container {
-    background-color: #fff;
-    border-radius: 24rpx 24rpx 0px 0px;
+.popup-container {
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0px 0px;
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+  z-index: 999;
+  .header {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    border-bottom: 1rpx solid var(--hr-neutral-color-2);
+    padding: 28rpx 32rpx;
 
-    position: relative;
-    z-index: 999;
-    .header {
-      display: flex;
-      align-items: center;
-      border-bottom: 1rpx solid var(--hr-neutral-color-2);
-      padding: 28rpx 32rpx;
+    font-size: var(--hr-font-size-xl);
+    font-weight: 600;
 
-      font-size: var(--hr-font-size-xl);
-      font-weight: 600;
-
-      .popup-title {
-        width: calc(100% - 48rpx);
-        text-align: center;
-        transform: translateX(24rpx);
-      }
-
-      .ico-close {
-        color: var(--hr-neutral-color-7);
-        position: absolute;
-        right: 24rpx;
-        font-size: 48rpx;
-        font-weight: 400;
-      }
+    .popup-title {
+      width: calc(100% - 48rpx);
+      text-align: center;
+      transform: translateX(24rpx);
     }
 
-    .popup-box {
-      max-height: var(--h-popup-max-height);
-      min-height: min(233rpx, 30vh);
-      overflow-y: scroll;
-      margin-bottom: 48rpx;
+    .ico-close {
+      color: var(--hr-neutral-color-7);
+      position: absolute;
+      right: 24rpx;
+      font-size: 48rpx;
+      font-weight: 400;
     }
   }
+
+  .popup-box {
+    max-height: var(--h-popup-max-height);
+    min-height: min(233rpx, 30vh);
+    overflow-y: scroll;
+    margin-bottom: 48rpx;
+  }
+}
 </style>

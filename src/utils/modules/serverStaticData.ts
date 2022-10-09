@@ -313,7 +313,7 @@ export class ServerStaticData {
         ageChildren: 6,
         ageGuardian: 18,
         isGuardianWithIdCard: '1',
-        isSmsVerify: '1',
+        isSmsVerify: '0',
         ocr: '1',
       },
     };

@@ -31,7 +31,7 @@
           @click="isCheck = !isCheck"
           class="iconfont check-box"
         >
-          &#xe6d0;
+          {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
         <view>
           <text @click="isCheck = !isCheck">我已阅读并同意</text>

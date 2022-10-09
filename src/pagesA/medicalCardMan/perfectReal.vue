@@ -28,7 +28,7 @@
           }"
           class="iconfont check-box"
         >
-          &#xe6d0;
+          {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
         <view>
           <text>我已阅读并同意</text>
@@ -183,6 +183,7 @@
                 url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                   ...data,
                   pageType: props.pageType,
+                  _directUrl: props._directUrl,
                 }),
               });
             };
@@ -204,6 +205,7 @@
                 url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                   ...data,
                   pageType: props.pageType,
+                  _directUrl: props._directUrl,
                 }),
               });
             };
@@ -242,6 +244,7 @@
               url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                 ...data,
                 pageType: props.pageType,
+                _directUrl: props._directUrl,
               }),
             });
           }

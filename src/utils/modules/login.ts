@@ -365,6 +365,7 @@ export class PatientUtils extends LoginUtils {
       patientType: patientType,
       verifyCode,
       verifyType,
+      sex,
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
@@ -376,6 +377,7 @@ export class PatientUtils extends LoginUtils {
       patientType,
       name: patientName,
       cellphone: patientPhone,
+      sex,
     };
 
     uni.showLoading({

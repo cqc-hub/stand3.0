@@ -64,6 +64,7 @@ onMounted(() => {
 		font-weight: 600;
 		color: var(--h-color-white);
 		padding: 32rpx;
+		font-size: var(--hr-font-size-xl);
 	}
 
 	.card-body {

@@ -107,6 +107,8 @@
       ...addressChoose,
     };
 
+
+
     if (props.pageType === 'perfectReal') {
       try {
         await patientUtils.registerUser(requestData, {

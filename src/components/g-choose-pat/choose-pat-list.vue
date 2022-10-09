@@ -15,7 +15,7 @@
         ({{ pat._showId }})
       </view>
 
-      <view v-if="gStores.userStore.patChoose.patientId === pat.patientId" class="iconfont ico-checkbox">&#xe63e;</view>
+      <view v-if="gStores.userStore.patChoose.patientId === pat.patientId" class="iconfont ico-checkbox">&#xe6d0;</view>
     </view>
   </view>
 </template>
@@ -78,6 +78,7 @@
 
       &.pat-active {
         border-color: var(--hr-brand-color-6);
+        border-width: 4rpx;
       }
     }
   }
