@@ -262,7 +262,7 @@
       {
         "name": "选择科室",
         "path": "pagesA/MyRegistration/selDepartment",
-        "query": "hosId=1279"
+        "query": "clinicalType=1&hosId=1279"
       },
       {
         "name": "选择院区",

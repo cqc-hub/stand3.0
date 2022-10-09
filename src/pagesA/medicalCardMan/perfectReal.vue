@@ -236,13 +236,15 @@
             routerJump('/pages/home/home');
           }
         })
-        .catch(() => {
-          uni.navigateTo({
-            url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-              ...data,
-              pageType: props.pageType,
-            }),
-          });
+        .catch((err) => {
+          if (err?.respCode === 999301) {
+            uni.navigateTo({
+              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                ...data,
+                pageType: props.pageType,
+              }),
+            });
+          }
         });
     }
   };

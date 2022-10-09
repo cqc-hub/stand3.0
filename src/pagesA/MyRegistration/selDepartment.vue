@@ -220,8 +220,4 @@
       height: 1px;
     }
   }
-
-  .empty-list {
-    transform: translateY(100%);
-  }
 </style>

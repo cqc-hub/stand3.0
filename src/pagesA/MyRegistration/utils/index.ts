@@ -122,6 +122,7 @@ export const useOrder = (props: IOrderProps) => {
     chooseDay: 0,
     selOrderColumn: 3,
     isOrderBlur: '1',
+    isHideOutTimeOrderSource: '1',
   });
 
   // ref
@@ -313,9 +314,24 @@ export const useOrder = (props: IOrderProps) => {
     };
 
     orderSourceList.value = [];
-    const { result } = await api.getNumberSource(arg);
+    isComplete.value = false;
+    let { result } = await api
+      .getNumberSource<IOrderSource[]>(arg)
+      .finally(() => {
+        isComplete.value = true;
+      });
 
-    orderSourceList.value = <IOrderSource[]>result || [];
+    if (result && result.length) {
+      // 过滤剩余号源数为零的(精确号源是从 1 开始的)
+      result.filter((o) => o.disNo != '0');
+    }
+
+    orderSourceList.value = result || [];
+
+    // if (!orderSourceList.value.length) {
+    //   gStores.messageStore.showMessage('该时段无可以选择的号源', 1500);
+    //   return Promise.reject(void 0);
+    // }
   };
 
   // 点击某个号源

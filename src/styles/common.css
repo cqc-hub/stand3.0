@@ -112,6 +112,10 @@
   background-color: #fff;
 }
 
+.empty-list {
+  transform: translateY(100%);
+}
+
 ::-webkit-scrollbar {
   width: 0;
   height: 0;

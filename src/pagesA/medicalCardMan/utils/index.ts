@@ -82,6 +82,7 @@ export const tempList: TInstance[] = [
     placeholder: '请输入',
     key: formKey.patientName,
     labelWidth: '220rpx',
+    maxlength: 50,
   },
 
   {
@@ -140,6 +141,7 @@ export const tempList: TInstance[] = [
     placeholder: '请输入',
     key: formKey.upName,
     labelWidth: '220rpx',
+    maxlength: 50,
   },
 
   {
@@ -193,7 +195,7 @@ export const tempList: TInstance[] = [
     placeholder: '具体到门牌号',
     key: formKey.location,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
-    maxlength: 200,
+    maxlength: 150,
     labelWidth: '220rpx',
   },
 

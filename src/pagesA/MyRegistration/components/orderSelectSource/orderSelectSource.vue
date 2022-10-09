@@ -15,7 +15,10 @@
             style="width: 100%"
           />
         </view>
-        <scroll-view class="container" scroll-y>
+        <scroll-view
+          class="container"
+          :scroll-y="!(!orderSourceList.length && isComplete)"
+        >
           <view class="order-info">
             <view>{{ selectSchInfo.docName }}</view>
             <view>{{ selectSchInfo.schDate }}</view>
@@ -23,6 +26,13 @@
           </view>
 
           <view class="container-source">
+            <view
+              v-if="!orderSourceList.length && isComplete"
+              class="empty-list"
+            >
+              <g-empty :current="1" text="暂无号源" />
+            </view>
+
             <orderSelectSourceList
               :column="column"
               :orderSourceList="orderSourceList"
@@ -46,6 +56,7 @@
   const popup = ref<any>('');
   const props = defineProps<{
     show: boolean;
+    isComplete: boolean;
     column: number;
     value: string;
     isOrderBlur: '0' | '1';
@@ -101,7 +112,7 @@
 <style lang="scss" scoped>
   .container {
     max-height: calc(var(--h-popup-max-height) - 90rpx);
-    min-height: 300rpx;
+    min-height: 400rpx;
     padding: 0 32rpx;
 
     .order-info {
@@ -118,6 +129,10 @@
       // #ifdef MP-WEIXIN
       width: calc(100% - 64rpx);
       // #endif
+    }
+
+    .empty-list {
+      transform: translateY(25%);
     }
   }
 </style>
