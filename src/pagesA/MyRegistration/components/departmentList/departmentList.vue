@@ -4,7 +4,7 @@
       class="dept-list"
       :class="{
         'dept-list-lv2': isLv2,
-        'dept-list-lv1-scrollContainer': !isLv2
+        'dept-list-lv1-scrollContainer': !isLv2,
       }"
       id="dept-list-lv1-scrollContainer"
       scroll-y
@@ -15,7 +15,7 @@
           width: '10rpx',
           height: pillHeight + 'px',
           left: '0',
-          transform: `translateY(${pillOffsetTop}px)`
+          transform: `translateY(${pillOffsetTop}px)`,
         }"
         class="item-lv1-pills"
       />
@@ -25,9 +25,10 @@
         :key="item.firstHosDeptId"
         :class="{
           'dept-list-lv2': isLv2,
+          'dept-list-lv2-alone': level === '2',
           'item-lv1-active': activeLV1 === indexLv1,
           'item-lv1-border': !isLv2,
-          'g-border-bottom': !isLv2
+          'g-border-bottom': !isLv2,
         }"
         @click="itemClickLv1(item)"
         class="item-lv1 g-flex-rc-cc"
@@ -75,14 +76,14 @@
       activeLv3: IDeptLv3;
     }>(),
     {
-      lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)'
+      lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)',
     }
   );
 
   const emits = defineEmits([
     'item-click-lv1',
     'item-click-lv2',
-    'item-click-lv3'
+    'item-click-lv3',
   ]);
 
   const collapseRef = ref<any>('');
@@ -95,15 +96,6 @@
 
   const isLv2 = computed(() => ['2', '3'].includes(props.level));
   const deptListLv2 = ref<IDeptLv2[]>([]);
-
-  watch(
-    () => props.list,
-    () => {
-      if (props.list.length && props.level !== '1') {
-        itemClickLv1(props.list[0]);
-      }
-    }
-  );
 
   const inst = getCurrentInstance();
 
@@ -171,6 +163,19 @@
   const itemClickLv3 = (item: IDeptLv3) => {
     emits('item-click-lv3', item);
   };
+
+  watch(
+    () => props.list,
+    () => {
+      if (props.list.length && props.level !== '1') {
+        itemClickLv1(props.list[0]);
+      }
+    },
+
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
@@ -190,12 +195,16 @@
   }
 
   .item-lv1 {
-    padding: 26rpx 32rpx;
+    padding: 28rpx 32rpx;
     padding-right: 40rpx;
 
     justify-content: flex-start;
     color: var(--hr-neutral-color-9);
     transition: all 0.3s;
+
+    &.dept-list-lv2-alone {
+      padding: 24rpx 32rpx;
+    }
 
     &.item-lv1-border {
       margin: 0 32rpx;

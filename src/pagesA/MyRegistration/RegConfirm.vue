@@ -56,6 +56,8 @@
   import { GStores } from '@/utils';
   import { deQueryForUrl } from '@/common/utils';
 
+  import dayjs from 'dayjs';
+
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
@@ -76,7 +78,6 @@
      * 未填写参数
      *
      * aliRegisterId
-     * clinicalType
      * diseaseId
      * promptMessage
      * resType
@@ -101,9 +102,12 @@
       schId,
       schQukCategor,
       timeDesc,
+      clinicalType,
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
+    // 预约类型：1.预约挂号，2.当日挂号
+    const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
 
     const requestArg = {
       ampm,
@@ -124,6 +128,8 @@
       herenId,
       patientId,
       source,
+      clinicalType,
+      resType,
     };
 
     console.log({

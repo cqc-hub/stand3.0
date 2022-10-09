@@ -1,6 +1,6 @@
 <template>
   <view class="login-center">
-    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
+    <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view>
     <scroll-view class="scroll-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
@@ -109,9 +109,9 @@
     const a = uni.getStorageSync('global');
     console.log({ a });
 
-    // uni.navigateTo({
-    //   url: '/pagesA/MyRegistration/Register?_url=%2FpagesA%2FMyRegistration%2FselDepartment'
-    // });
+    uni.navigateTo({
+      url: '/pagesA/MyRegistration/Register?_url=' + encodeURIComponent('/pagesA/MyRegistration/selDepartment?clinicalType=1')
+    });
 
     // uni.navigateTo({
     //   url: '/pages/piniaTest/piniaTest'

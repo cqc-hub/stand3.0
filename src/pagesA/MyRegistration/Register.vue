@@ -24,7 +24,6 @@
 
   const itemClick = (item: IHosInfo) => {
     const url = decodeURIComponent(props._url);
-
     uni.navigateTo({
       url: joinQuery(url, {
         hosId: item.hosId

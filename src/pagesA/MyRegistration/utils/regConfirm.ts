@@ -16,4 +16,5 @@ export interface IPageProps {
   schDate: string;
   schId: string;
   schQukCategor: string;
+  clinicalType: string;
 }

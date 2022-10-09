@@ -8,6 +8,7 @@
 
     <view class="container" scroll-y>
       <Department-List
+        v-if="depList.length"
         :list="depList"
         :level="depLevel"
         :active-lv1="deptStore.activeLv1"
@@ -17,6 +18,10 @@
         @item-click-lv2="itemClickLv2"
         @item-click-lv3="itemClickLv3"
       />
+
+      <view v-if="!depList.length && isComplete" class="empty-list">
+        <g-empty :current="1" />
+      </view>
     </view>
 
     <g-select
@@ -25,7 +30,7 @@
       :option="hosList"
       :field="{
         label: 'hosName',
-        value: 'hosId'
+        value: 'hosId',
       }"
       title="切换医院"
     />
@@ -37,7 +42,15 @@
   import { computed, ref } from 'vue';
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { joinQuery } from '@/common';
-  import { IDeptLv1, IDeptLv2, IDeptLv3, isLev1, isLev2, loopDeptList, useDeptStore } from '@/stores';
+  import {
+    IDeptLv1,
+    IDeptLv2,
+    IDeptLv3,
+    isLev1,
+    isLev2,
+    loopDeptList,
+    useDeptStore,
+  } from '@/stores';
 
   import api from '@/service/api';
 
@@ -45,7 +58,7 @@
 
   const props = defineProps<{
     hosId: string;
-    clinicalType?: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
+    clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
   }>();
 
   const depList = ref<IDeptLv1[]>([]);
@@ -54,6 +67,7 @@
   const deptStore = useDeptStore();
   const hosList = ref<IHosInfo[]>([]);
   const hosId = ref(props.hosId);
+  const isComplete = ref(false);
   const isToggleDialogShow = ref(false);
 
   const init = () => {
@@ -71,30 +85,25 @@
 
     const requestArg = {
       source,
-      sysCode: '1001017',
-      hosId: '449',
-      clinicalType: props.clinicalType
+      hosId: props.hosId,
+      clinicalType: props.clinicalType,
       // resType   // 预约类型：1.预约挂号，2.当日挂号
     };
 
-    const { result } = await api.getDeptList(requestArg);
+    isComplete.value = false;
+    const { result } = await api.getDeptList(requestArg).finally(() => {
+      isComplete.value = true;
+    });
 
-    let { firstDeptList, deptListLevel } = result;
-
-    // deptListLevel = '2';
-    loopDeptList(firstDeptList, deptListLevel);
-
-    // depList.value = [
-    //   ...firstDeptList,
-    //   ...firstDeptList,
-    //   ...firstDeptList,
-    //   ...firstDeptList,
-    //   ...firstDeptList,
-    //   ...firstDeptList
-    // ];
-
-    depList.value = firstDeptList;
-    depLevel.value = deptListLevel;
+    if (result) {
+      let { firstDeptList, deptListLevel } = result;
+      // deptListLevel = '1'
+      if (firstDeptList && firstDeptList.length) {
+        loopDeptList(firstDeptList, deptListLevel);
+        depList.value = firstDeptList;
+        depLevel.value = deptListLevel;
+      }
+    }
   };
 
   const itemClickLv1 = (item: IDeptLv1) => {
@@ -134,11 +143,14 @@
     // item.
     const queryArg = {
       hosId: props.hosId,
+      clinicalType: props.clinicalType,
       deptName: encodeURIComponent(item.deptName),
       hosDeptId: '',
       firstHosDeptId: encodeURIComponent(deptStore.activeLv1.firstHosDeptId),
       secondHosDeptId: '',
-      isExpertDeptId: deptStore.activeLv1.isExpertDeptId ? deptStore.activeLv1.isExpertDeptId : '0'
+      isExpertDeptId: deptStore.activeLv1.isExpertDeptId
+        ? deptStore.activeLv1.isExpertDeptId
+        : '0',
     };
 
     if (isLev1(item)) {
@@ -146,12 +158,14 @@
     } else if (isLev2(item)) {
       queryArg.secondHosDeptId = encodeURIComponent(item.secondHosDeptId);
     } else {
-      queryArg.secondHosDeptId = encodeURIComponent(deptStore.activeLv2.secondHosDeptId);
+      queryArg.secondHosDeptId = encodeURIComponent(
+        deptStore.activeLv2.secondHosDeptId
+      );
       queryArg.hosDeptId = encodeURIComponent(item.hosDeptId);
     }
 
     uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/order', queryArg)
+      url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
   };
 
@@ -205,5 +219,9 @@
       flex: 1;
       height: 1px;
     }
+  }
+
+  .empty-list {
+    transform: translateY(100%);
   }
 </style>

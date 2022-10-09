@@ -267,7 +267,7 @@
       {
         "name": "选择院区",
         "path": "pagesA/MyRegistration/Register",
-        "query": "_url=%2FpagesA%2FMyRegistration%2FselDepartment"
+        "query": "_url=%252FpagesA%252FMyRegistration%252FselDepartment%253FclinicalType%253D1"
       },
       {
         "name": "piniaTest",

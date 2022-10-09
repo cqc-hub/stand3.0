@@ -99,7 +99,7 @@
       const query = uni.createSelectorQuery().in(inst);
       query
         .select('#content')
-        .boundingClientRect((res) => {
+        .boundingClientRect((res: any) => {
           if (res && res.height) {
             contentHeight.value = res.height + props.offsetContentHeight;
           }
@@ -192,7 +192,7 @@
   }
 
   .my-row {
-    padding: 26rpx 32rpx;
+    padding: 24rpx 32rpx;
     font-size: var(--hr-font-size-base);
 
     border-bottom: 1rpx solid var(--hr-neutral-color-2);

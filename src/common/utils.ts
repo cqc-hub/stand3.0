@@ -52,7 +52,7 @@ export const joinQuery = function (url: string, query) {
     .join('&');
 
   if (url.includes('?')) {
-    return url + strQuery;
+    return url + '&' + strQuery;
   } else {
     return url + '?' + strQuery;
   }
