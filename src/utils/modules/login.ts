@@ -506,6 +506,9 @@ export class PatientUtils extends LoginUtils {
         defaultFalg: true,
       });
     } else {
+      if (data.defaultFalg) {
+        this.userStore.updatePatChoose({} as any);
+      }
       await this.getPatCardList();
     }
   }

@@ -19,7 +19,7 @@ export interface ISystemConfig {
 
   // 就诊人
   person: {
-    // 查询院内信息(新增 | 完善)页面是否有 '就诊人类型' 一行
+    // 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行
     isHidePatientTypeInPerfect?: '0' | '1';
     // 开启短信验证？ 完善时候没有
     isSmsVerify?: '0' | '1';

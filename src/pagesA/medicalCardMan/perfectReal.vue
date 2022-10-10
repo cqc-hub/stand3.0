@@ -231,7 +231,12 @@
           verifyCode: formData.value[formKey.verify],
         })
         .then(async () => {
+          // 切换默认就诊人
+          if (value[formKey.defaultFalg]) {
+            gStores.userStore.updatePatChoose({} as any);
+          }
           await patientUtil.getPatCardList();
+
           if (props._directUrl) {
             routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
           } else {
@@ -331,7 +336,6 @@
         medicalTypeItem.showSuffixArrowIcon = false;
       }
     }
-
 
     formList.map((o) => {
       const { key } = o;
