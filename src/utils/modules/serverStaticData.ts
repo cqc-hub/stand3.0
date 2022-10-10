@@ -19,6 +19,8 @@ export interface ISystemConfig {
 
   // 就诊人
   person: {
+    // 查询院内信息(新增 | 完善)页面是否有 '就诊人类型' 一行
+    isHidePatientTypeInPerfect?: '0' | '1';
     // 开启短信验证？ 完善时候没有
     isSmsVerify?: '0' | '1';
     // 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁）
@@ -310,6 +312,7 @@ export class ServerStaticData {
       },
 
       person: {
+        isHidePatientTypeInPerfect: '1',
         ageChildren: 6,
         ageGuardian: 18,
         isGuardianWithIdCard: '1',

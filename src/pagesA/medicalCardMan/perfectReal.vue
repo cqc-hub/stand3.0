@@ -231,7 +231,7 @@
           verifyCode: formData.value[formKey.verify],
         })
         .then(async () => {
-          // await patientUtil.getPatCardList();
+          await patientUtil.getPatCardList();
           if (props._directUrl) {
             routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
           } else {
@@ -282,11 +282,16 @@
       'verify',
       'defaultFalg',
     ];
-    const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
+    const { isSmsVerify, isHidePatientTypeInPerfect } =
+      await ServerStaticData.getSystemConfig('person');
     let isAlipayEnv = false;
     // #ifdef MP-ALIPAY
     isAlipayEnv = true;
     // #endif
+
+    if (isHidePatientTypeInPerfect === '1') {
+      formListKeys = formListKeys.filter((key) => key !== 'patientType');
+    }
 
     // 关闭手机验证码
     if (
@@ -327,7 +332,6 @@
       }
     }
 
-    console.log(formList);
 
     formList.map((o) => {
       const { key } = o;

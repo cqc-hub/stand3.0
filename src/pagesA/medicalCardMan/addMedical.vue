@@ -107,8 +107,6 @@
       ...addressChoose,
     };
 
-
-
     if (props.pageType === 'perfectReal') {
       try {
         await patientUtils.registerUser(requestData, {
@@ -235,7 +233,7 @@
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
-    const { isGuardianWithIdCard, ocr } =
+    const { isGuardianWithIdCard, ocr, isHidePatientTypeInPerfect } =
       await ServerStaticData.getSystemConfig('person');
 
     switch (value) {
@@ -347,19 +345,10 @@
 
     formList.map((o) => {
       const { key } = o;
-      if (
-        [
-          formKey.patientType,
-          formKey.patientName,
-          formKey.patientPhone,
-        ].includes(key as any)
-      ) {
-        if (formData.value[key]) {
+      const iValue = formData.value[key];
+      if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
+        if (iValue) {
           o.disabled = true;
-        }
-
-        if (key === formKey.patientType) {
-          o.showSuffixArrowIcon = false;
         }
       }
 
@@ -380,6 +369,13 @@
             success: true,
           };
         };
+      }
+
+      if (key === formKey.patientType) {
+        if (iValue && isHidePatientTypeInPerfect === '0') {
+          o.disabled = true;
+          o.showSuffixArrowIcon = false;
+        }
       }
     });
 
@@ -423,7 +419,10 @@
 
     // 默认身份证
     formData.value[formKey.idType] = '01';
-    // formData.value[formKey.idType] = '02';
+
+    // 默认成人,儿童 有证件
+    formData.value[formKey.patientType] =
+      formData.value[formKey.patientType] || '0';
     verifyCode = formData.value[formKey.verify];
 
     console.log('onLoad', formData);
