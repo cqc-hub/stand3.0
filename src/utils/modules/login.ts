@@ -378,6 +378,7 @@ export class PatientUtils extends LoginUtils {
       verifyType,
       sex,
       birthday,
+      wechatCode, // 微信电子健康卡时候有
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
@@ -477,6 +478,7 @@ export class PatientUtils extends LoginUtils {
   async addRelevantPatient(
     data: Partial<{
       _autoSetDefault: string;
+      wechatCode: string; // 微信电子健康卡时候有
 
       addressCity: string;
       addressCounty: string;
@@ -499,6 +501,7 @@ export class PatientUtils extends LoginUtils {
       verifyType: string; // （1或空）不开启验证  2:开启验证
     }>
   ) {
+    const { wechatCode } = data;
     const requestArg = {
       ...data,
       defaultFalg: data.defaultFalg ? '1' : '0',
@@ -522,6 +525,15 @@ export class PatientUtils extends LoginUtils {
       if (data.defaultFalg) {
         this.userStore.updatePatChoose({} as any);
       }
+
+      if (wechatCode) {
+        await api.registerHealthCard({
+          patientId,
+          wechatCode,
+          source: this.globalStore.browser.source,
+        });
+      }
+
       await this.getPatCardList();
     }
   }

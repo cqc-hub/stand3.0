@@ -111,7 +111,12 @@
             "login": true
           },
           "style": {
-            "navigationBarTitleText": "添加就诊人"
+            "navigationBarTitleText": "添加就诊人",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              // #endif
+            }
           }
         },
 

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001049",
+  "sysCode": "1001047",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -10,11 +10,20 @@
       "isSearchInHos": true
     },
 
-    "1001049": {
-      "wxAppid": "wx5e97c199ecf8b8c3",
-      "alipayAppid": "2021002140666342",
+    "2001011": {
+      "wxAppid": "wx101158c57640d854",
+      "alipayAppid": "",
       "h5Appid": "wxac2942d44e7c2bd9",
       "name": "渭南市中心医院",
+      "isOpenHealthCard": true,
+      "isSearchInHos": false
+    },
+
+    "1001047": {
+      "wxAppid": "wxe0e2a3b290ad96b5",
+      "alipayAppid": "",
+      "h5Appid": "wxac2942d44e7c2bd9",
+      "name": "宝鸡市中医医院",
       "isOpenHealthCard": true,
       "isSearchInHos": false
     }

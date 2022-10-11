@@ -23,6 +23,7 @@
 
     <view class="footer">
       <button
+        v-if="!isShowHealthLogin"
         @click="gform.submit"
         :class="{
           'btn-disabled': btnDisabled,
@@ -31,6 +32,27 @@
       >
         保存
       </button>
+
+      <!-- #ifdef MP-WEIXIN -->
+      <block v-else>
+        <health-card-login
+          :authLogin="false"
+          :hidden="!isShowHealthLogin"
+          @authSucess="wechatCodeloginSuccess"
+          @authCancel="isShowHealthLogin = false"
+          wechatcode
+        >
+          <button
+            :class="{
+              'btn-disabled': btnDisabled,
+            }"
+            class="btn btn-primary"
+          >
+            授权电子健康卡
+          </button>
+        </health-card-login>
+      </block>
+      <!-- #endif -->
     </view>
   </view>
 </template>
@@ -43,6 +65,7 @@
     formKey,
     TFormKeys,
     getDefaultFormData,
+    getHealthCardCode,
   } from './utils';
   import {
     GStores,
@@ -82,6 +105,9 @@
   const props = defineProps<TPageType>();
   const patientUtils = new PatientUtils();
   const gStores = new GStores();
+
+  const isShowHealthLogin = ref(false);
+
   const gform = ref<any>('');
   const formData = ref<Partial<Record<TFormKeys, any>>>({});
   const addressChoose = {
@@ -109,6 +135,7 @@
     );
 
     const requestData = {
+      wechatCode: '',
       verifyType: '',
       verifyCode,
       ...filterData,
@@ -116,6 +143,27 @@
     };
 
     requestData.verifyType = requestData.verifyCode ? '2' : '1';
+    // #ifdef MP-WEIXIN
+    if (globalGl.systemInfo.isOpenHealthCard) {
+      const { success, res } = await getHealthCardCode();
+
+      if (success) {
+        isShowHealthLogin.value = false;
+        const {
+          result: { wechatCode },
+        } = res;
+
+        requestData.wechatCode = wechatCode;
+      } else {
+        gStores.messageStore.showMessage(
+          '未授权， 请再次点击按钮进行授权',
+          1500
+        );
+        isShowHealthLogin.value = true;
+        return Promise.reject(void 0);
+      }
+    }
+    // #endif
 
     if (props.pageType === 'perfectReal') {
       try {
@@ -230,6 +278,11 @@
     }
   };
 
+  const wechatCodeloginSuccess = (e) => {
+    isShowHealthLogin.value = false;
+    gform.value.submit();
+  };
+
   /**
    *
    * @param value
@@ -259,7 +312,14 @@
 
     if (!globalGl.systemInfo.isSearchInHos) {
       if (isSmsVerify === '1' && props.pageType !== 'perfectReal') {
-        _patientInfo.splice(2, 0, formKey.verifyCode);
+        const phone_idx = _patientInfo.findIndex(
+          (key) => key === formKey.patientPhone
+        );
+
+        if (phone_idx !== -1) {
+          // 验证码
+          _patientInfo.splice(phone_idx + 1, 0, formKey.verifyCode);
+        }
       }
     }
 

@@ -433,3 +433,42 @@ export const getDefaultFormData = async (
 
   return data;
 };
+
+export const getHealthCardCode = async (): Promise<{
+  success: boolean;
+  res: any;
+}> => {
+  // #ifdef  MP-WEIXIN
+  const plugin = requirePlugin('healthCardPlugins');
+
+  return new Promise((resolve) => {
+    uni.showLoading({
+      title: '请求授权中',
+      mask: true,
+    });
+
+    plugin.login(
+      (isok, res) => {
+        uni.hideLoading();
+        if (res.result.type !== 3) {
+          // 用户在微信授权过，可直接获取登录信息
+          resolve({
+            success: true,
+            res,
+          });
+        } else {
+          // 用户未授权，需要用户同意授权
+          // 显示 healthCardLogin 登录组件，引导用户同意授权
+          resolve({
+            success: false,
+            res,
+          });
+        }
+      },
+      {
+        wechatcode: true,
+      }
+    );
+  });
+  // #endif
+};

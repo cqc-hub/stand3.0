@@ -178,6 +178,10 @@ const userApi = {
   //身份证OCR识别
   ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
 
+  // 注册电子健康卡
+  registerHealthCard: (data) =>
+    service.post('/phs-user/healthCard/registerHealthCard', parm(data)),
+
   getHospital: (data) =>
     service.post('/phs-base/hospital/getHospital', parm(data), {
       hideLoading: false,
