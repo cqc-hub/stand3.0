@@ -54,7 +54,13 @@
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults, reactive } from 'vue';
   import { PatientUtils, GStores, routerJump, ServerStaticData } from '@/utils';
-  import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
+  import {
+    FormKey,
+    pickTempItem,
+    formKey,
+    TFormKeys,
+    getDefaultFormData,
+  } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
@@ -285,6 +291,8 @@
   });
 
   onMounted(async () => {
+    routeStore.receiveQuery(props);
+
     let formListKeys: TFormKeys[] = [
       'patientType',
       'patientName',
@@ -305,25 +313,19 @@
     }
 
     formList = pickTempItem(formListKeys);
+    const defaultValue = await getDefaultFormData(
+      props.pageType || 'addPatient'
+    );
+    Object.assign(formData.value, defaultValue);
 
-    routeStore.receiveQuery(props);
-    const { userName, mobile } = gStores.userStore.cacheUser;
-    if (props.pageType === 'perfectReal') {
-      // 只有支付宝有
-      if (userName && mobile) {
-        formData.value[formKey.patientName] = userName;
-        formData.value[formKey.patientPhone] = mobile;
-
-        formList.map((o) => {
-          const { key } = o;
-          if (
-            [formKey.patientName, formKey.patientPhone].includes(key as any)
-          ) {
-            o.disabled = true;
-          }
-        });
+    formList.map((o) => {
+      const { key } = o;
+      if (formData.value[key] !== undefined) {
+        o.disabled = true;
       }
+    });
 
+    if (props.pageType === 'perfectReal') {
       const medicalTypeItem = formList.find(
         (o) => o.key === formKey.patientType
       );
@@ -333,22 +335,6 @@
         medicalTypeItem.disabled = true;
         medicalTypeItem.showSuffixArrowIcon = false;
       }
-
-      // #ifdef MP-WEIXIN
-      const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
-      console.log({
-        wxPhone,
-        p: gStores.userStore.phoneNum,
-      });
-
-      if (wxPhone) {
-        const phoneItem = formList.find((o) => o.key === formKey.patientPhone);
-        formData.value[formKey.patientPhone] = wxPhone;
-        if (phoneItem) {
-          phoneItem.disabled = true;
-        }
-      }
-      // # endif
     }
 
     formList.map((o) => {

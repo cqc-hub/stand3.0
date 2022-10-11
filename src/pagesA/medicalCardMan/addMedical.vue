@@ -37,7 +37,13 @@
 
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
-  import { FormKey, pickTempItem, formKey, TFormKeys } from './utils';
+  import {
+    FormKey,
+    pickTempItem,
+    formKey,
+    TFormKeys,
+    getDefaultFormData,
+  } from './utils';
   import {
     GStores,
     idValidator,
@@ -51,6 +57,7 @@
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   const routeStore = useRouterStore();
 
@@ -429,6 +436,11 @@
       formData.value[formKey.patientType] || '0';
     verifyCode = formData.value[formKey.verify];
 
+    const defaultValue = await getDefaultFormData(
+      props.pageType || 'addPatient'
+    );
+    Object.assign(formData.value, defaultValue);
+
     console.log('onLoad', formData);
 
     if ((props.patientType as string) === '-1') {
@@ -437,6 +449,12 @@
         formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
       }
       // #endif
+    }
+
+    if (!globalGl.systemInfo.isSearchInHos) {
+      if (props.pageType === 'perfectReal') {
+        formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
+      }
     }
 
     nextTick(() => {

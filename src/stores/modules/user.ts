@@ -10,6 +10,7 @@ const userStore = defineStore('user', {
       'sex',
       'idNo',
       'cellPhoneNum',
+      'phoneNum',
       'patientId',
       'cacheUser',
       'patList',

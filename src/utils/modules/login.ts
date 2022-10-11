@@ -87,6 +87,7 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
+
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -108,7 +109,7 @@ export class LoginUtils extends GStores {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {
             uni.reLaunch({
-              url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal',
+              url: globalGl.addPersonUrl + '?pageType=perfectReal',
             });
           }, 1200);
 

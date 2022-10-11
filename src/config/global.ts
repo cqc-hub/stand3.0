@@ -29,7 +29,10 @@ const globalGl = {
   authUrl,
   wxAppid,
   h5AppId,
-  systemInfo
+  systemInfo,
+  addPersonUrl: systemInfo.isSearchInHos
+    ? '/pagesA/medicalCardMan/perfectReal'
+    : '/pagesA/medicalCardMan/addMedical',
 };
 
 export default globalGl;

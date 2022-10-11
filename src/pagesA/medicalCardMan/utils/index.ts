@@ -1,6 +1,7 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
-import { idValidator, ServerStaticData } from '@/utils';
+import { idValidator, ServerStaticData, GStores } from '@/utils';
+import { decryptDes } from '@/common/des';
 
 /**
  * 完善、 新增就诊人页面
@@ -401,3 +402,32 @@ export const patCardDetailList: TInstance[] = [
     isForShow: true,
   },
 ];
+
+// 获取姓名、手机号
+export const getDefaultFormData = async (
+  pageType: 'addPatient' | 'perfectReal'
+) => {
+  const data: Record<string, any> = {};
+
+  if (pageType === 'perfectReal') {
+    const gStores = new GStores();
+    // #ifdef MP-ALIPAY
+    const { userName, mobile } = gStores.userStore.cacheUser;
+    data[formKey.patientName] = userName;
+    data[formKey.patientPhone] = mobile;
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    console.log(gStores.userStore.phoneNum, 'wwww');
+
+    const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
+    data[formKey.patientPhone] = wxPhone;
+    // #endif
+  }
+
+  console.log({
+    data
+  });
+
+  return data;
+};

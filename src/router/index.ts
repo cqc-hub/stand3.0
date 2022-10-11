@@ -12,7 +12,7 @@ if (subPackages) {
     pages.map((o) => {
       routerPages.push({
         ...o,
-        path: root + '/' + o.path
+        path: root + '/' + o.path,
       });
     });
   });
@@ -49,18 +49,18 @@ export const beforeEach = async (
           uni.reLaunch({
             url: joinQuery('/pages/home/my', {
               isWarningLogin: '1',
-              _url: encodeURIComponent(<string>fullUrl)
-            })
+              _url: encodeURIComponent(<string>fullUrl),
+            }),
           });
 
           return Promise.reject('需要登录----');
         } else if (herenId) {
           if (!globalStore.herenId) {
             uni.reLaunch({
-              url: joinQuery('/pagesA/medicalCardMan/perfectReal', {
+              url: joinQuery(globalGl.addPersonUrl + '', {
                 pageType: 'perfectReal',
-                _url: encodeURIComponent(<string>fullUrl)
-              })
+                _url: encodeURIComponent(<string>fullUrl),
+              }),
             });
 
             return Promise.reject('需要完善----');
@@ -68,9 +68,9 @@ export const beforeEach = async (
         } else if (patient) {
           if (!userStore.patList.length) {
             uni.reLaunch({
-              url: joinQuery('/pagesA/medicalCardMan/perfectReal', {
-                _url: encodeURIComponent(<string>fullUrl)
-              })
+              url: joinQuery(globalGl.addPersonUrl + '', {
+                _url: encodeURIComponent(<string>fullUrl),
+              }),
             });
 
             return Promise.reject('需要就诊人----');
@@ -79,10 +79,15 @@ export const beforeEach = async (
       }
 
       // #ifdef MP-WEIXIN
-      if (url === '/pagesA/medicalCardMan/perfectReal') {
+      if (
+        [
+          '/pagesA/medicalCardMan/perfectReal',
+          '/pagesA/medicalCardMan/addMedical',
+        ].includes(url)
+      ) {
         if (!globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
-            url: '/pages/home/startCome'
+            url: '/pages/home/startCome',
           });
           return Promise.reject('需要 h5openid');
         }

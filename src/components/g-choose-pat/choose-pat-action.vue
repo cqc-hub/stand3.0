@@ -21,6 +21,7 @@
   import { defineComponent, ref } from 'vue';
   import { GStores } from '@/utils';
   import { IPat } from '@/stores';
+  import globalGl from '@/config/global';
 
   import PatList from './choose-pat-list.vue';
 
@@ -28,7 +29,7 @@
     emits: ['choose-pat'],
 
     components: {
-      PatList
+      PatList,
     },
 
     setup(props, ctx) {
@@ -54,8 +55,7 @@
 
         uni.navigateTo({
           url:
-            '/pagesA/medicalCardMan/perfectReal?_url=' +
-            encodeURIComponent(fullPathNow)
+            globalGl.addPersonUrl + '?_url=' + encodeURIComponent(fullPathNow),
         });
       };
 
@@ -64,9 +64,9 @@
         actionSheetItemClick,
         show,
         gStores,
-        goAddPat
+        goAddPat,
       };
-    }
+    },
   });
 </script>
 

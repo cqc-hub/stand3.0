@@ -1,5 +1,6 @@
 import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
+import globalGl from '@/config/global';
 
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -34,7 +35,7 @@ export const checkPatient = (item: IRoute) => {
       gStores.messageStore.showMessage('未完善，请先完善', 1500, {
         closeCallBack: () => {
           uni.reLaunch({
-            url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal&_p=1',
+            url: globalGl.addPersonUrl + '?pageType=perfectReal&_p=1',
           });
         },
       });
@@ -45,7 +46,7 @@ export const checkPatient = (item: IRoute) => {
         gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1500, {
           closeCallBack: () => {
             uni.reLaunch({
-              url: '/pagesA/medicalCardMan/perfectReal?_p=1',
+              url: globalGl.addPersonUrl + '?_p=1',
             });
           },
         });

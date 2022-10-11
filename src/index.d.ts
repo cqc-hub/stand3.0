@@ -77,6 +77,9 @@ interface ISystemGlobalItem {
   name: string;
   // 电子健康卡?
   isOpenHealthCard: boolean;
+
+  // 新增、完善就诊人 要跳 perfectReal 页面?
+  isSearchInHos: boolean;
 }
 
 interface ISystemGlobalConfig {

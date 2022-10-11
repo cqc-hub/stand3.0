@@ -30,28 +30,30 @@
 
   import { GStores, PatientUtils } from '@/utils';
   import { IPat } from '@/stores';
+  import globalGl from '@/config/global';
 
   const gStore = new GStores();
 
   const addPatPage = () => {
     uni.navigateTo({
       url:
-        '/pagesA/medicalCardMan/perfectReal?_directUrl=' +
-        encodeURIComponent('/pagesA/medicalCardMan/medicalCardMan')
+        globalGl.addPersonUrl +
+        '?_directUrl=' +
+        encodeURIComponent('/pagesA/medicalCardMan/medicalCardMan'),
     });
   };
 
   const profileClick = (pat: IPat) => {
     gStore.userStore.updatePatClick(pat);
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/medicalCardDetail'
+      url: '/pagesA/medicalCardMan/medicalCardDetail',
     });
   };
 
   const cardClick = (pat: IPat) => {
     gStore.userStore.updatePatClick(pat);
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard'
+      url: '/pagesA/medicalCardMan/electronicMedicalCard',
     });
   };
 
