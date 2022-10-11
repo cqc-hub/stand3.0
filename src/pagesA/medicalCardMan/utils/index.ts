@@ -83,6 +83,40 @@ export const tempList: TInstance[] = [
     key: formKey.patientName,
     labelWidth: '220rpx',
     maxlength: 50,
+    validator(value) {
+      const v = <string>value;
+      if (v) {
+        const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
+
+        if (isEng) {
+          return Promise.resolve({
+            success: true,
+          });
+        } else {
+          // const result = v.match(
+          //   /^[\u4e00-\u9fa5]{1,10}\.?\·?[\u4e00-\u9fa5]{1,10}$/
+          // );
+
+          // if (!result) {
+          //   return Promise.resolve({
+          //     success: false,
+          //     message: '中文名字不能大于 20 个字符',
+          //   });
+          // }
+
+          if (v.length > 20) {
+            return Promise.resolve({
+              success: false,
+              message: '真实姓名不能大于 20 个字符',
+            });
+          }
+        }
+      }
+
+      return Promise.resolve({
+        success: true,
+      });
+    },
   },
 
   {
@@ -195,7 +229,7 @@ export const tempList: TInstance[] = [
     placeholder: '具体到门牌号',
     key: formKey.location,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
-    maxlength: 150,
+    maxlength: 100,
     labelWidth: '220rpx',
   },
 
