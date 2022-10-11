@@ -230,7 +230,7 @@ import { isTemplateElement } from '@babel/types';
     noticeMenu.value = result;
   }
   const goToNotice = (item)=>{
-    if(item.informationLink){
+    if(item.informationLink!=''){
       //跳链接
       uni.navigateTo({
         url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.informationLink,
@@ -287,7 +287,7 @@ import { isTemplateElement } from '@babel/types';
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
       // 新增公告展示判断 showFlag为1展示
-      if(homeConfig[1].showFlag==='0'){
+      if(homeConfig[1].showFlag == '1'){
         getNotice()
       }else{
         noticeMenu.value =[]

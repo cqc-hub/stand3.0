@@ -88,15 +88,16 @@ cmd: iconfont-tools
 
 ## h5 功能页汇总 默认携带 sysCode herenId patientId 下列参数作为记录 第三方跳转时
 
-| 功能     |                  页面                   | 参数                  |
-| :------- | :-------------------------------------: | :-------------------- |
-| 健康咨询 |  pagesA/healthAdvisory/healthAdvisory   | sysCode               |
-| 用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId |
-| 服务电话 |        pages/helplines/helplines        | sysCode               |
-| 预问诊   |        pages/inquiries/inquiries        | sysCode token         |
-| 医院指南 |    pages/hospitalGuide/hospitalGuide    | sysCode hosId         |
-| 用药提醒 | pagesC/medicationManager/medicationList | sysCode token herenId |
-| 我的医生 |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
+| 功能         |                  页面                   | 参数                  |
+| :----------- | :-------------------------------------: | :-------------------- |
+| 健康咨询     |  pagesA/healthAdvisory/healthAdvisory   | sysCode               |
+| 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
+| 服务电话     |        pages/helplines/helplines        | sysCode               |
+| 预问诊       |        pages/inquiries/inquiries        | sysCode token         |
+| 医院指南     |    pages/hospitalGuide/hospitalGuide    | sysCode hosId         |
+| 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
+| 我的医生     |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
+| 核酸结果查询 |     pagesC/mixCheckResult/hsResult      | sysCode token herenId |
 
 ## 单独 2.0 迁移 3.0 的
 
@@ -110,8 +111,8 @@ cmd: iconfont-tools
 | 疾病百科 |       pagesA/diseaseCyclopedia/index        | sysCode       |
 | otc 商城 |                    暂无                     | sysCode token |
 
-
 ## 缓存规范
- 名族地址类别的缓存：退出登录时清除
- 首页配置+按照模块调用的配置: 根据后端返回版本号判断清楚对应模块缓存
- 页面调用接口的配置:每次进入调用
+
+名族地址类别的缓存：退出登录时清除
+首页配置+按照模块调用的配置: 根据后端返回版本号判断清楚对应模块缓存
+页面调用接口的配置:每次进入调用

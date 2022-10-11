@@ -14,12 +14,12 @@ export const checkLogin = (item: IRoute) => {
       fullPathNow === '/pages/home/home'
     ) {
       routerStore.receiveQuery({
-        _p: '1'
+        _p: '1',
       });
       gStores.messageStore.showMessage('未登录,请先登录', 1500);
     } else {
       uni.reLaunch({
-        url: '/pages/home/my?isWarningLogin=1&_p=1'
+        url: '/pages/home/my?isWarningLogin=1&_p=1',
       });
     }
     reject('未登录');
@@ -34,9 +34,9 @@ export const checkPatient = (item: IRoute) => {
       gStores.messageStore.showMessage('未完善，请先完善', 1500, {
         closeCallBack: () => {
           uni.reLaunch({
-            url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal&_p=1'
+            url: '/pagesA/medicalCardMan/perfectReal?pageType=perfectReal&_p=1',
           });
-        }
+        },
       });
       reject('未完善，请先完善');
     } else {
@@ -45,9 +45,9 @@ export const checkPatient = (item: IRoute) => {
         gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1500, {
           closeCallBack: () => {
             uni.reLaunch({
-              url: '/pagesA/medicalCardMan/perfectReal?_p=1'
+              url: '/pagesA/medicalCardMan/perfectReal?_p=1',
             });
-          }
+          },
         });
         reject('暂无就诊人， 请先添加就诊人');
       }
@@ -83,10 +83,13 @@ export const checkGrid = async (item: IRoute) => {
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = (item, payload: IPayLoad = {}) => {
+  console.log(item);
   //拦截判断
+  if (item.path != '') {
   checkGrid(item).then(() => {
-    useToPath(item, payload);
+      useToPath(item, payload);
   });
+}
 };
 
 // 回调 h5跳转的方法
@@ -107,6 +110,7 @@ interface IPayLoad {
 export const useToPath = (item, payload: IPayLoad = {}) => {
   const gStores = new GStores();
   const type = payload.type;
+
   switch (item.terminalType) {
     case 'h5':
       const obj = {
@@ -116,7 +120,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
             `请确认跳转地址正确性${item.path}`,
             1500
           );
-        }
+        },
       };
       typeNavigate(obj, type);
       break;
@@ -124,14 +128,14 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       uni.navigateToMiniProgram({
         appId: item.appId,
         path: item.url,
-        extraData: JSON.parse(item.query)
+        extraData: JSON.parse(item.query),
       });
       break;
     case 'alipay':
       uni.navigateToMiniProgram({
         appId: item.appId,
         path: item.path,
-        extraData: JSON.parse(item.query)
+        extraData: JSON.parse(item.query),
       });
       break;
     case 'my-h5':
@@ -142,7 +146,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
             `请确认跳转地址正确性${item.path}`,
             1500
           );
-        }
+        },
       };
       typeNavigate(obj1, type);
       break;
@@ -154,7 +158,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
             `请确认跳转地址正确性${item.path}`,
             1500
           );
-        }
+        },
       };
       typeNavigate(obj2, type);
       break;
@@ -167,7 +171,7 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
             `请确认跳转地址正确性${item.path}`,
             1500
           );
-        }
+        },
       };
       typeNavigate(obj3, type);
       break;
