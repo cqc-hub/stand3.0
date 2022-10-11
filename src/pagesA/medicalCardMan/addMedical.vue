@@ -96,7 +96,7 @@
     'patientType',
     'patientName',
     'patientPhone',
-    'verify',
+    'verifyCode',
     'defaultFalg',
   ]);
 
@@ -109,10 +109,13 @@
     );
 
     const requestData = {
+      verifyType: '',
       verifyCode,
       ...filterData,
       ...addressChoose,
     };
+
+    requestData.verifyType = requestData.verifyCode ? '2' : '1';
 
     if (props.pageType === 'perfectReal') {
       try {
@@ -120,6 +123,7 @@
           addPatInterface: 'relevantPatient',
         });
 
+        // await patientUtils.getPatCardList();
         if (props._directUrl) {
           routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
         } else {
@@ -235,13 +239,29 @@
    *  2  军属
    */
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
-    console.log('medicalTypeChange', value);
-
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
-    const { isGuardianWithIdCard, ocr, isHidePatientTypeInPerfect } =
-      await ServerStaticData.getSystemConfig('person');
+    const _patientInfo: TFormKeys[] = [
+      formKey.nation,
+      formKey.patientPhone,
+      formKey.address,
+      formKey.location,
+      formKey.defaultFalg,
+    ];
+
+    const {
+      isGuardianWithIdCard,
+      ocr,
+      isHidePatientTypeInPerfect,
+      isSmsVerify,
+    } = await ServerStaticData.getSystemConfig('person');
+
+    if (!globalGl.systemInfo.isSearchInHos) {
+      if (isSmsVerify === '1' && props.pageType !== 'perfectReal') {
+        _patientInfo.splice(2, 0, formKey.verifyCode);
+      }
+    }
 
     switch (value) {
       case '-1':
@@ -280,11 +300,7 @@
             formKey.idType,
             formKey.idCard,
             ..._parentInfo,
-            formKey.nation,
-            formKey.patientPhone,
-            formKey.address,
-            formKey.location,
-            formKey.defaultFalg,
+            ..._patientInfo,
           ]
         );
 
@@ -296,11 +312,7 @@
             formKey.patientName,
             ..._sexAndBirth,
             ..._parentInfo,
-            formKey.nation,
-            formKey.patientPhone,
-            formKey.address,
-            formKey.location,
-            formKey.defaultFalg,
+            ..._patientInfo,
           ]
         );
         break;
@@ -345,16 +357,27 @@
       }
     }
 
-    const patientNameItem = formList.find((o) => o.key === formKey.patientName);
-    if (patientNameItem) {
-      patientNameItem.disabled = true;
-    }
-
     formList.map((o) => {
       const { key } = o;
       const iValue = formData.value[key];
       if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
-        if (iValue) {
+        if (iValue && props[key]) {
+          o.disabled = true;
+        }
+      }
+
+      if (props.pageType === 'perfectReal') {
+        // #ifdef MP-ALIPAY
+        if (key === formKey.idCard) {
+          o.disabled = true;
+        }
+
+        if (key === formKey.patientName) {
+          o.disabled = true;
+        }
+        // #endif
+
+        if (key === formKey.patientPhone) {
           o.disabled = true;
         }
       }
@@ -433,8 +456,8 @@
 
     // 默认成人,儿童 有证件
     formData.value[formKey.patientType] =
-      formData.value[formKey.patientType] || '0';
-    verifyCode = formData.value[formKey.verify];
+      formData.value[formKey.patientType] || '-1';
+    verifyCode = formData.value[formKey.verifyCode];
 
     const defaultValue = await getDefaultFormData(
       props.pageType || 'addPatient'

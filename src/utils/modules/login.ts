@@ -536,7 +536,7 @@ export class PatientUtils extends LoginUtils {
 
     if (result && result.length) {
       result.map((o) => {
-        o._showId = o.cardNumber;
+        o._showId = o.cardNumber || o.patientId;
       });
 
       this.userStore.updatePatList(result);

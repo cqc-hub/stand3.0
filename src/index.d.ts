@@ -76,7 +76,7 @@ interface ISystemGlobalItem {
   h5Appid: string;
   name: string;
   // 电子健康卡?
-  isOpenHealthCard: boolean;
+  isOpenHealthCard: boolean;  // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxee969de81bba9a45&token=&lang=zh_CN
 
   // 新增、完善就诊人 要跳 perfectReal 页面?
   isSearchInHos: boolean;

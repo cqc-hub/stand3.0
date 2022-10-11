@@ -20,7 +20,7 @@ export const formKey = <const>{
   upIdCard: 'upIdCard',
   address: 'address',
   location: 'location',
-  verify: 'verifyCode',
+  verifyCode: 'verifyCode',
   defaultFalg: 'defaultFalg',
   nation: 'nation',
 };
@@ -240,7 +240,7 @@ export const tempList: TInstance[] = [
     label: '验证码',
     field: 'input-verify',
     placeholder: '请输入',
-    key: formKey.verify,
+    key: formKey.verifyCode,
     verifyBtnText: '获取验证码',
     inputType: 'number',
     verifySecond: 60,
@@ -403,7 +403,11 @@ export const patCardDetailList: TInstance[] = [
   },
 ];
 
-// 获取姓名、手机号
+/**
+ * 获取姓名、手机号 默认值
+ * @param pageType
+ * @returns
+ */
 export const getDefaultFormData = async (
   pageType: 'addPatient' | 'perfectReal'
 ) => {
@@ -418,15 +422,13 @@ export const getDefaultFormData = async (
     // #endif
 
     // #ifdef MP-WEIXIN
-    console.log(gStores.userStore.phoneNum, 'wwww');
-
     const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
     data[formKey.patientPhone] = wxPhone;
     // #endif
   }
 
   console.log({
-    data
+    data,
   });
 
   return data;

@@ -15,7 +15,7 @@
       "alipayAppid": "2021002140666342",
       "h5Appid": "wxac2942d44e7c2bd9",
       "name": "渭南市中心医院",
-      "isOpenHealthCard": false,
+      "isOpenHealthCard": true,
       "isSearchInHos": false
     }
   }

@@ -127,7 +127,7 @@
     // formData 值和页面渲染列表key 对应
     const data: any = {
       ...formData.value,
-      verifyType: formData.value[formKey.verify] && '2', // '2' 开启 短信验证
+      verifyType: formData.value[formKey.verifyCode] && '2', // '2' 开启 短信验证
     };
 
     /**
@@ -169,7 +169,7 @@
                 idType,
                 patientPhone,
                 patientName,
-                verifyCode: formData.value[formKey.verify],
+                verifyCode: formData.value[formKey.verifyCode],
                 verifyType: '',
               });
 
@@ -235,7 +235,7 @@
           patientPhone: value[formKey.patientPhone],
           source: patientUtil.globalStore.browser.source,
           patientType: formData.value[formKey.patientType],
-          verifyCode: formData.value[formKey.verify],
+          verifyCode: formData.value[formKey.verifyCode],
         })
         .then(async () => {
           // 切换默认就诊人
@@ -297,7 +297,7 @@
       'patientType',
       'patientName',
       'patientPhone',
-      'verify',
+      'verifyCode',
       'defaultFalg',
     ];
     const { isSmsVerify, isHidePatientTypeInPerfect } =
@@ -309,7 +309,7 @@
 
     // 关闭手机验证码
     if (isSmsVerify === '0' || props.pageType === 'perfectReal') {
-      formListKeys = formListKeys.filter((key) => key !== 'verify');
+      formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
     }
 
     formList = pickTempItem(formListKeys);
