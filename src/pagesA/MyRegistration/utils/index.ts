@@ -242,23 +242,58 @@ export const useOrder = (props: IOrderProps) => {
       .finally(() => {
         isComplete.value = true;
       });
-    dateDocList.value = result || [];
-    // if (result && result.length) {
-    //   result.map((o) => {
-    //     const { schDateList } = o;
-    //     if (schDateList && schDateList.length) {
-    //       schDateList.map((schDate) => {
-    //         const { schemeList } = schDate;
 
-    //         if (schemeList && schemeList.length) {
-    //           schemeList.map((scheme) => {
-    //             const { docPhoto } = scheme;
-    //           });
-    //         }
-    //       });
-    //     }
-    //   });
-    // }
+    if (result && result.length) {
+      result.map((o) => {
+        const { schDateList } = o;
+        if (schDateList && schDateList.length) {
+          schDateList.map((schDate) => {
+            const { schemeList } = schDate;
+
+            if (schemeList && schemeList.length) {
+              schemeList.map((scheme) => {
+                const { schemeList: _schemeList } = scheme;
+
+                if (_schemeList && _schemeList.length) {
+                  const schInfo = _schemeList[0];
+
+                  const {
+                    deptName,
+                    docJobName,
+                    docName,
+                    docPhoto,
+                    docTitleName,
+                    goodAt,
+                    hosDeptId,
+                    hosDocId,
+                    hosId,
+                    hosName,
+                    intro,
+                    schQukCategor,
+                  } = schInfo;
+
+                  Object.assign(scheme, {
+                    deptName,
+                    docJobName,
+                    docName,
+                    docPhoto,
+                    docTitleName,
+                    goodAt,
+                    hosDeptId,
+                    hosDocId,
+                    hosId,
+                    hosName,
+                    intro,
+                    schQukCategor,
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+    dateDocList.value = result || [];
   };
 
   const dateClick = async (e: {

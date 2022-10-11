@@ -372,7 +372,11 @@
       }
 
       if (key === formKey.patientType) {
-        if (iValue && isHidePatientTypeInPerfect === '0') {
+        // 完善信息只支持 有证件的(使用默认值就好)
+        if (
+          (iValue && isHidePatientTypeInPerfect === '0') ||
+          props.pageType === 'perfectReal'
+        ) {
           o.disabled = true;
           o.showSuffixArrowIcon = false;
         }

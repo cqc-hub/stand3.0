@@ -75,19 +75,20 @@ interface ISystemGlobalItem {
   alipayAppid: string;
   h5Appid: string;
   name: string;
+  // 电子健康卡?
+  isOpenHealthCard: boolean;
 }
 
 interface ISystemGlobalConfig {
-  sysCode: string;
+  sysCode: phone;
   sysConfig: {
     [key: string]: ISystemGlobalItem;
   };
 }
-
 interface IHOptionItem {
   label: string;
   value: string;
-  children?: IHOptionItem;
+  children?: phone;
 }
 
 type IHOption = IHOptionItem[];

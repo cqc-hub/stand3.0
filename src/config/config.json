@@ -1,4 +1,3 @@
-
 {
   "sysCode": "1001033",
   "sysConfig": {
@@ -6,7 +5,16 @@
       "wxAppid": "wxe26143481567cb97",
       "alipayAppid": "2021002133632822",
       "h5Appid": "wxac2942d44e7c2bd9",
-      "name":"台州第一人民医院"
+      "name": "台州第一人民医院",
+      "isOpenHealthCard": false
+    },
+
+    "1001049": {
+      "wxAppid": "wx5e97c199ecf8b8c3",
+      "alipayAppid": "2021002140666342",
+      "h5Appid": "wxac2942d44e7c2bd9",
+      "name": "渭南市中心医院",
+      "isOpenHealthCard": false
     }
   }
 }

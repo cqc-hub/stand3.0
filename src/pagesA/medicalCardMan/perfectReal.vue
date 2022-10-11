@@ -32,7 +32,7 @@
         </view>
         <view>
           <text>我已阅读并同意</text>
-          <text @click.stop="goAgrement" class="fg-agree-name">
+          <text @click.stop="goAgreement" class="fg-agree-name">
             《用户条款和隐私政策》
           </text>
           <text>这个是协议配置编号待定（不支持富文本）</text>
@@ -59,6 +59,7 @@
   import { onReady } from '@dcloudio/uni-app';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
+  import { decryptDes } from '@/common/des';
 
   import api from '@/service/api';
 
@@ -94,7 +95,7 @@
   let formList: TInstance[] = [];
 
   const isCheck = ref(false);
-  const goAgrement = () => {
+  const goAgreement = () => {
     uni.navigateTo({
       url: '/pagesA/mySet/userPolicy',
     });
@@ -245,12 +246,16 @@
         })
         .catch((err) => {
           if (err?.respCode === 999301) {
-            uni.navigateTo({
-              url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-                ...data,
-                pageType: props.pageType,
-                _directUrl: props._directUrl,
-              }),
+            messageStore.showMessage(err.message, 1500, {
+              closeCallBack() {
+                uni.navigateTo({
+                  url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                    ...data,
+                    pageType: props.pageType,
+                    _directUrl: props._directUrl,
+                  }),
+                });
+              },
             });
           }
         });
@@ -289,20 +294,13 @@
     ];
     const { isSmsVerify, isHidePatientTypeInPerfect } =
       await ServerStaticData.getSystemConfig('person');
-    let isAlipayEnv = false;
-    // #ifdef MP-ALIPAY
-    isAlipayEnv = true;
-    // #endif
 
     if (isHidePatientTypeInPerfect === '1') {
       formListKeys = formListKeys.filter((key) => key !== 'patientType');
     }
 
     // 关闭手机验证码
-    if (
-      isSmsVerify === '0' ||
-      (props.pageType === 'perfectReal' && isAlipayEnv)
-    ) {
+    if (isSmsVerify === '0' || props.pageType === 'perfectReal') {
       formListKeys = formListKeys.filter((key) => key !== 'verify');
     }
 
@@ -335,6 +333,22 @@
         medicalTypeItem.disabled = true;
         medicalTypeItem.showSuffixArrowIcon = false;
       }
+
+      // #ifdef MP-WEIXIN
+      const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
+      console.log({
+        wxPhone,
+        p: gStores.userStore.phoneNum,
+      });
+
+      if (wxPhone) {
+        const phoneItem = formList.find((o) => o.key === formKey.patientPhone);
+        formData.value[formKey.patientPhone] = wxPhone;
+        if (phoneItem) {
+          phoneItem.disabled = true;
+        }
+      }
+      // # endif
     }
 
     formList.map((o) => {

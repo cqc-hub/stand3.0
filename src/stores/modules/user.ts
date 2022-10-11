@@ -5,7 +5,17 @@ import { IPat } from '@/stores/type';
 const userStore = defineStore('user', {
   persist: {
     key: '_user',
-    paths: ['name', 'sex', 'idNo', 'cellPhoneNum', 'patientId', 'cacheUser', 'patList', 'patChoose', 'clickPat']
+    paths: [
+      'name',
+      'sex',
+      'idNo',
+      'cellPhoneNum',
+      'patientId',
+      'cacheUser',
+      'patList',
+      'patChoose',
+      'clickPat',
+    ],
   },
 
   state: () => {
@@ -14,6 +24,7 @@ const userStore = defineStore('user', {
       sex: '',
       idNo: '',
       cellPhoneNum: '',
+      phoneNum: '', // 加密的手机号(微信才有)
       patientId: '',
       patList: <IPat[]>[],
       patChoose: <IPat>{},
@@ -26,8 +37,8 @@ const userStore = defineStore('user', {
         mobile: '',
         certNo: '',
         certType: '',
-        gender: ''
-      }
+        gender: '',
+      },
     };
   },
 
@@ -44,8 +55,9 @@ const userStore = defineStore('user', {
       this.idNo = id;
     },
 
-    updatePhone(phone: string) {
-      this.cellPhoneNum = phone;
+    updatePhone(data: { phone: string; phoneNum: string }) {
+      this.cellPhoneNum = data.phone;
+      this.phoneNum = data.phoneNum;
     },
 
     updateCacheUser(
@@ -104,7 +116,10 @@ const userStore = defineStore('user', {
             o.defaultFlag = '0';
           });
 
-          const pat = this.patList[0].patientId === patientId ? this.patList[1] : this.patList[0];
+          const pat =
+            this.patList[0].patientId === patientId
+              ? this.patList[1]
+              : this.patList[0];
 
           if (pat) {
             pat.defaultFlag = '1';
@@ -142,7 +157,7 @@ const userStore = defineStore('user', {
 
     clearStore() {
       this.$reset();
-    }
+    },
   },
 
   getters: {
@@ -152,8 +167,8 @@ const userStore = defineStore('user', {
 
     getAvatar(): string {
       return getAvatar(this.sex);
-    }
-  }
+    },
+  },
 });
 
 export const getAvatar = function (sex) {

@@ -17,13 +17,36 @@ let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
 manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
 
 let manifestFileDataObj = JSON.parse(manifestFileData);
+sysConfig.isOpenHealthCard;
+const { wxAppid, alipayAppid, name: sysName, isOpenHealthCard } = sysConfig;
 
-manifestFileDataObj['mp-weixin']['appid'] = sysConfig.wxAppid;
-manifestFileDataObj['mp-alipay']['appid'] = sysConfig.alipayAppid;
-manifestFileDataObj['name'] = sysConfig.name;
+const wxConfig = manifestFileDataObj['mp-weixin'];
+const aliConfig = manifestFileDataObj['mp-alipay'];
+const wxPlugin: any = {};
+const aliPlugin: any = {
+  // ocr
+  ocrPlugin: { version: '*', provider: '2021001130678316' },
+};
+
+if (isOpenHealthCard) {
+  // 电子健康卡
+  wxPlugin.healthCardPlugins = {
+    version: '3.1.5',
+    provider: 'wxee969de81bba9a45',
+  };
+}
+
+wxConfig.appid = wxAppid;
+aliConfig.appid = alipayAppid;
+
+wxConfig.plugins = wxPlugin;
+aliConfig.plugins = aliPlugin;
+manifestFileDataObj['mp-weixin'] = wxConfig;
+manifestFileDataObj['mp-alipay'] = aliConfig;
+manifestFileDataObj['name'] = sysName;
 
 fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
-  encoding: 'utf8'
+  encoding: 'utf8',
 });
 
 module.exports = {};

@@ -75,12 +75,22 @@ export class LoginUtils extends GStores {
       );
 
       if (result) {
-        const { cellPhoneNum, herenId, idNo, name, sex } = result;
+        const {
+          cellPhoneNum: phone,
+          herenId,
+          idNo,
+          name,
+          sex,
+          phoneNum,
+        } = result;
 
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        this.userStore.updatePhone(cellPhoneNum);
+        this.userStore.updatePhone({
+          phone,
+          phoneNum,
+        });
 
         this.globalStore.setHerenId(herenId);
 
@@ -366,6 +376,7 @@ export class PatientUtils extends LoginUtils {
       verifyCode,
       verifyType,
       sex,
+      birthday,
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
@@ -377,7 +388,8 @@ export class PatientUtils extends LoginUtils {
       patientType,
       name: patientName,
       cellphone: patientPhone,
-      sex,
+      sex: sex === '男' ? '1' : '2',
+      birthday,
     };
 
     uni.showLoading({
