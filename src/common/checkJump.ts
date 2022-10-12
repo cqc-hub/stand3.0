@@ -72,11 +72,11 @@ export const checkGrid = (item: IRoute) => {
       routerStore.updateId(item.id);
       if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
         await checkLogin(item);
-        reject('需要登录');
+        // reject('需要登录');
       }
       if (item.patientInterception === '1') {
         await checkPatient(item);
-        reject('需要就诊人');
+        // reject('需要就诊人');
       }
       resolve('成功');
     }
