@@ -5,6 +5,40 @@ declare var wx: any;
 declare var my: any;
 declare var requirePlugin: any;
 
+/**
+ * @wxAppid-微信appid
+ * @alipayAppid-支付宝appid
+ * @h5Appid-公众号appid
+ * @name-小程序名字
+ * @isSearchInHos-新增、完善就诊人 要跳 perfectReal 页面？
+ *
+ * @isOpenHealthCard-wx电子健康卡
+ *   - healthCardText 电子健康卡左上角卡面名称
+ *   - hospitalId 医院机构id
+ *
+ */
+interface ISystemGlobalItem {
+  wxAppid: string;
+  alipayAppid: string;
+  h5Appid: string;
+  name: string;
+
+  // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxee969de81bba9a45&token=&lang=zh_CN
+  isOpenHealthCard?: {
+    healthCardText: string;
+    hospitalId: string;
+  };
+
+  isSearchInHos: boolean;
+}
+
+interface ISystemGlobalConfig {
+  sysCode: phone;
+  sysConfig: {
+    [key: string]: ISystemGlobalItem;
+  };
+}
+
 interface IOptions {
   label: string;
   value: any;
@@ -70,24 +104,6 @@ interface IAddress {
   updateTime: string;
 }
 
-interface ISystemGlobalItem {
-  wxAppid: string;
-  alipayAppid: string;
-  h5Appid: string;
-  name: string;
-  // 电子健康卡(wx)  ?
-  isOpenHealthCard: boolean; // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxee969de81bba9a45&token=&lang=zh_CN
-
-  // 新增、完善就诊人 要跳 perfectReal 页面?
-  isSearchInHos: boolean;
-}
-
-interface ISystemGlobalConfig {
-  sysCode: phone;
-  sysConfig: {
-    [key: string]: ISystemGlobalItem;
-  };
-}
 interface IHOptionItem {
   label: string;
   value: string;

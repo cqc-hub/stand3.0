@@ -22,5 +22,6 @@ export interface IPat {
 	thirdOpenId: string;
 	upIdCard: string;
 	upName: string;
+	healthQrCodeText?: string;
 	_showId: string;
 }

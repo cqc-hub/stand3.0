@@ -10,7 +10,43 @@
       <view class="iconfont icon-resize">&#xe66b;</view>
     </view>
 
-    <view class="pat-card" @click="cardClick">
+    <view
+      v-if="pat.healthQrCodeText && $global.systemInfo.isOpenHealthCard"
+      @click="cardClick"
+      class="health-card"
+    >
+      <view class="health-card-container">
+        <view class="health-card-title">
+          <view class="card-top-org">
+            {{ $global.systemInfo.isOpenHealthCard?.healthCardText }}
+          </view>
+
+          <view class="card-top-icon">
+            <image :src="$global.BASE_IMG + 'health-card-icon.png'" mode="" />
+            <text>电子健康卡</text>
+          </view>
+        </view>
+
+        <view class="health-card-footer">
+          <view class="health-card-info flex-normal-between">
+            <view class="health-card-info-content">
+              <view>{{ pat.patientName }}</view>
+              <view>{{ pat.idCard }}</view>
+            </view>
+
+            <image
+              :src="$global.BASE_IMG + 'health-card-qrcode.png'"
+              class="health-card-qrcode"
+              mode=""
+            />
+          </view>
+
+          <view class="qx">中华人民共和国国家卫生健康委员会监制</view>
+        </view>
+      </view>
+    </view>
+
+    <view v-else class="pat-card" @click="cardClick">
       <view class="card">
         <view class="card-content">
           <view class="card-label">电子就诊卡</view>
@@ -26,7 +62,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref } from 'vue';
+  import { defineComponent, PropType, ref, reactive } from 'vue';
   import { IPat } from '@/stores/type';
 
   export default defineComponent({
@@ -149,6 +185,70 @@
           position: absolute;
           left: 18rpx;
           border-left: 4rpx dashed #fff;
+        }
+      }
+    }
+
+    .health-card {
+      height: 350rpx;
+      margin-top: 16rpx;
+      background: url(https://phsdevoss.eheren.com/pcloud/phs3.0/health-card-bg.png)
+        100%/100% no-repeat;
+      // border-radius: 16rpx;
+
+      .health-card-container {
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0 24rpx;
+
+        .health-card-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 24rpx;
+
+          .card-top-org {
+            font-size: var(--h-size-18);
+          }
+
+          .card-top-icon {
+            display: flex;
+            align-items: center;
+            font-size: var(--hr-font-size-s);
+            color: #2b2b2b;
+            margin-right: 12rpx;
+
+            image {
+              height: 55rpx;
+              width: 55rpx;
+              margin-right: 8rpx;
+            }
+          }
+        }
+
+        .health-card-footer {
+          display: flex;
+          flex-direction: column;
+          font-size: var(--hr-font-size-xl);
+          color: #2b2b2b;
+
+          .health-card-info {
+            align-items: flex-end;
+
+            .health-card-qrcode {
+              height: 154rpx;
+              width: 154rpx;
+            }
+          }
+
+          .qx {
+            font-size: var(--h-size-18);
+            text-align: center;
+            padding: 24rpx 0;
+          }
         }
       }
     }

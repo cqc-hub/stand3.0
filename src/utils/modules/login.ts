@@ -4,7 +4,7 @@ import { routerJump, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
-const getH5OpenidParam = function (data) {
+export const getH5OpenidParam = function (data) {
   // #ifdef MP-WEIXIN
   const globalStore = useGlobalStore();
   data.openIds = [
@@ -527,15 +527,24 @@ export class PatientUtils extends LoginUtils {
       }
 
       if (wechatCode) {
-        await api.registerHealthCard({
+        await this.registerHealthCard({
           patientId,
           wechatCode,
-          source: this.globalStore.browser.source,
         });
       }
 
       await this.getPatCardList();
     }
+  }
+
+  async registerHealthCard(data: { patientId: string; wechatCode: string }) {
+    const { patientId, wechatCode } = data;
+
+    await api.registerHealthCard({
+      patientId,
+      wechatCode,
+      source: this.globalStore.browser.source,
+    });
   }
 
   async getPatCardList() {

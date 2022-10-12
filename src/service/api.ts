@@ -182,6 +182,12 @@ const userApi = {
   registerHealthCard: (data) =>
     service.post('/phs-user/healthCard/registerHealthCard', parm(data)),
 
+  // 快速关联电子健康卡
+  quickLinkHealthCard: (data) =>
+    service.post('/phs-user/healthCard/quickLinkHealthCard', parm(data), {
+      hideLoading: false,
+    }),
+
   getHospital: (data) =>
     service.post('/phs-base/hospital/getHospital', parm(data), {
       hideLoading: false,

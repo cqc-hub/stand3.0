@@ -42,7 +42,14 @@ export const beforeEach = async (
     const { extend } = currentRoute;
 
     if (extend) {
-      const { login, patient, herenId } = extend;
+      let { login, patient, herenId } = extend;
+
+      if (patient) {
+        herenId = true;
+        login = true;
+      } else if (herenId) {
+        login = true;
+      }
 
       if (login) {
         if (!globalStore.isLogin) {

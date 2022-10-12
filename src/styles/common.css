@@ -121,3 +121,11 @@
   height: 0;
   color: transparent;
 }
+
+.color-blue {
+  color: var(--hr-brand-color-6);
+}
+
+.color-purple {
+  color: #7747ff;
+}
