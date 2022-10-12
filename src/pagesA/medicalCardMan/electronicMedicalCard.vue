@@ -3,11 +3,18 @@
     <view class="card-content">
       <view class="card-header">{{ title }}</view>
 
-      <view class="card-body">
+      <view
+        :class="{
+          'card-health': clickPat.healthQrCodeText,
+        }"
+        class="card-body"
+      >
         <view class="card-qrcode">
-          <w-barcode :options="barCodeOpt" />
+          <block v-if="!clickPat.healthQrCodeText">
+            <w-barcode :options="barCodeOpt" />
 
-          <view class="card-code">{{ barCodeOpt.code }}</view>
+            <view class="card-code">{{ barCodeOpt.code }}</view>
+          </block>
 
           <w-qrcode :options="options" />
         </view>
@@ -111,6 +118,10 @@
           padding-bottom: 40rpx;
         }
       }
+    }
+
+    .card-health {
+      padding-top: 80rpx;
     }
   }
 </style>
