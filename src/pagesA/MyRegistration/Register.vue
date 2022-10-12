@@ -41,8 +41,24 @@
   const imgClick = (item: IHosInfo) => {};
 
   const init = async () => {
-    const list = await ServerStaticData.getHosList();
-    hosList.value = list;
+    uni.getLocation({
+      async success(e) {
+        const { longitude, latitude } = e;
+        const hList = await ServerStaticData.getHosList(
+          {
+            gisLng: longitude,
+            gisLat: latitude,
+          },
+          { noCache: true }
+        );
+
+        hosList.value = hList;
+      },
+
+      async fail() {
+        hosList.value = await ServerStaticData.getHosList();
+      },
+    });
   };
 
   init();

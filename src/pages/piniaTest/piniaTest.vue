@@ -13,7 +13,7 @@
 
   const gStores = new GStores();
   // const base = 'https://health.eheren.com/v3/#/';
-  const base = 'http://10.10.83.86:3000/#/';
+  const base = 'http://10.10.83.90:3000/#/';
   const src =
     base +
     // 测试h5 回调

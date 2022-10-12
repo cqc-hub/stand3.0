@@ -313,6 +313,14 @@ export const patCardDetailTempList: TInstance[] = [
   },
 
   {
+    label: '性别',
+    field: 'input-text',
+    key: patCardDetailFormKey.patientSex,
+    disabled: true,
+    isForShow: true,
+  },
+
+  {
     label: '证件号码',
     field: 'input-text',
     disabled: true,
@@ -340,14 +348,6 @@ export const patCardDetailTempList: TInstance[] = [
     label: '详细地址',
     field: 'input-text',
     key: patCardDetailFormKey.address,
-    disabled: true,
-    isForShow: true,
-  },
-
-  {
-    label: '性别',
-    field: 'input-text',
-    key: patCardDetailFormKey.patientSex,
     disabled: true,
     isForShow: true,
   },

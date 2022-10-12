@@ -1,15 +1,22 @@
 <template>
-  <view class="collapse-box" :class="{ boxShadow: boxShadow, borderRadius: borderRadius }">
+  <view
+    class="collapse-box"
+    :class="{
+      boxShadow: boxShadow,
+      borderRadius: borderRadius,
+    }"
+  >
     <view
       class="title my-row"
       :class="{
         border: border,
         borderRadius: borderRadius,
-        'my-row-active': !item.children && activeLv2.hosDeptId === item.hosDeptId
+        'my-row-active':
+          !item.children && activeLv2.hosDeptId === item.hosDeptId,
       }"
       :style="{
         backgroundColor: !disabled && isShow ? activebg : '',
-        color: !disabled && isShow ? activeColor : ''
+        color: !disabled && isShow ? activeColor : '',
       }"
       @click="headerClick"
     >
@@ -17,21 +24,24 @@
       <view
         v-show="item.children"
         :class="{
-          arrowBottom: isShow
+          arrowBottom: isShow,
         }"
         class="iconfont ico-arrow right-icon"
       >
         &#xe66b;
       </view>
     </view>
-    <view class="content-box" :style="{ height: isShow ? contentHeight + 'px' : '0' }">
+    <view
+      class="content-box"
+      :style="{ height: isShow ? contentHeight + 'px' : '0' }"
+    >
       <view v-if="item.children" id="content" class="content">
         <view
           v-for="_item in item.children"
           @click="itemClickLv3(_item)"
           :key="_item.hosDeptId"
           :class="{
-            'my-row-active': activeLv3.hosDeptId === _item.hosDeptId
+            'my-row-active': activeLv3.hosDeptId === _item.hosDeptId,
           }"
           class="my-row my-row-collapse"
         >
@@ -78,11 +88,16 @@
       boxShadow: false,
       border: true,
       height: '90',
-      offsetContentHeight: 0
+      offsetContentHeight: 0,
     }
   );
 
-  const emits = defineEmits(['show', 'item-click-lv2', 'item-click-lv3', 'open-now']);
+  const emits = defineEmits([
+    'show',
+    'item-click-lv2',
+    'item-click-lv3',
+    'open-now',
+  ]);
 
   const isShow = ref(props.open);
   const contentHeight = ref(0);
@@ -150,7 +165,7 @@
 
   defineExpose({
     show,
-    init
+    init,
   });
 </script>
 
@@ -206,4 +221,5 @@
   .my-row-collapse {
     margin: 0 32rpx 0 72rpx;
   }
+
 </style>

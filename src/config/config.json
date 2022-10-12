@@ -6,6 +6,7 @@
       "alipayAppid": "2021002133632822",
       "h5Appid": "wxac2942d44e7c2bd9",
       "name": "台州第一人民医院",
+      "isStartComeTest": true,
       "isSearchInHos": true
     },
 

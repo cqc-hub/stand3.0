@@ -41,6 +41,9 @@
       <view
         v-for="(itemLv2, i) in deptListLv2"
         :key="itemLv2.hosDeptId"
+        :class="{
+          'fix-top': i === openNow,
+        }"
         class="dept-list-lv2-collapse-container animate__animated animate__fadeIn"
       >
         <Dept-Collapse
@@ -235,5 +238,11 @@
 
   .dept-list-lv2-scrollContainer {
     flex: 1;
+  }
+
+  .fix-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
 </style>

@@ -10,10 +10,13 @@
       </view>
     </view>
 
-    <view class="hos-location" @click.stop="locationClick">
+    <view
+      class="hos-location"
+      @click.stop="locationClick"
+    >
       <view class="g-flex-rc-cc hos-location-prefix">
         <view class="iconfont icon-location">&#xe6d7;</view>
-        <view>距离1.6km</view>
+        <view>距离{{ item.distanceFormat }}km</view>
       </view>
 
       <view class="hos-away text-ellipsis">{{ item.address }}</view>

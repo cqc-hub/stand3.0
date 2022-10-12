@@ -57,6 +57,10 @@ export interface IHosInfo {
   sender: string;
   senderAddress: string;
   senderPhone: string;
+  distance?: number; // 距离 （m）
+  distanceFormat?: string; // 距离 （km）
+  gisLat?: number; // 经度
+  gisLng?: number; // 纬度
 }
 
 const _cacheMap = new WeakMap();
@@ -65,11 +69,23 @@ export class ServerStaticData {
   /**
    * 医院列表
    */
-  static async getHosList(): Promise<IHosInfo[]> {
+  static async getHosList(
+    data = {},
+    opt: { noCache: boolean } = { noCache: false }
+  ): Promise<IHosInfo[]> {
     let hosList = getLocalStorage('hosList') || _cacheMap.get(this.getHosList);
 
-    if (!(hosList && hosList.length)) {
-      const { result } = await api.getHospital({});
+    if (!(hosList && hosList.length) || opt.noCache) {
+      const { result } = await api.getHospital<IHosInfo[]>(data);
+
+      result.map((o) => {
+        const { distance } = o;
+
+        if (distance) {
+          o.distanceFormat = (distance / 1000).toFixed(1);
+        }
+      });
+
       hosList = result;
 
       _cacheMap.set(this.getHosList, result);

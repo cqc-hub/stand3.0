@@ -132,7 +132,9 @@ const regApi = {
 
   // 科室列表
   getDeptList: (data: any) =>
-    service.post('/phs-reg/reg/getDeptList', parm(data)),
+    service.post('/phs-reg/reg/getDeptList', parm(data), {
+      hideLoading: false,
+    }),
 
   // 科室排班-按医生挂号
   getDeptSchForDoc: <T>(data: any) =>
@@ -188,8 +190,8 @@ const userApi = {
       hideLoading: false,
     }),
 
-  getHospital: (data) =>
-    service.post('/phs-base/hospital/getHospital', parm(data), {
+  getHospital: <T>(data) =>
+    service.post<T>('/phs-base/hospital/getHospital', parm(data), {
       hideLoading: false,
     }),
 
