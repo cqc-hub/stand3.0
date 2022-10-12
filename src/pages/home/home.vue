@@ -6,9 +6,8 @@
         :loading="skeletonProps.loading"
       >
         <view class="homePage">
-          <view class="search">
+          <view class="search" @tap="goSearch">
             <uni-search-input
-              v-model:value="aaa"
               :type="'2'"
               inputBorder
               :placeholder="searchPlaceholder"
@@ -83,7 +82,10 @@
               <view class="box" v-if="topMenuList.length">
                 <homeGrid :list="topMenuList" :type="1"></homeGrid>
               </view>
-              <view class="notice flex-normal" v-if="noticeMenu&&noticeMenu.length>0">
+              <view
+                class="notice flex-normal"
+                v-if="noticeMenu && noticeMenu.length > 0"
+              >
                 <text class="icon-font img_announcement icon-size"></text>
 
                 <swiper
@@ -159,10 +161,10 @@
     PatientUtils,
     GStores,
     routerJump,
-    LoginUtils
+    LoginUtils,
   } from '@/utils';
-import api from '@/service/api';
-import { isTemplateElement } from '@babel/types';
+  import api from '@/service/api';
+  import { isTemplateElement } from '@babel/types';
 
   const props = defineProps<{
     code?: string;
@@ -190,8 +192,8 @@ import { isTemplateElement } from '@babel/types';
       'line-lg',
       'card-sm+card-sm+card-sm+card-sm',
       0,
-      'card-sm+card-sm+card-sm+card-sm'
-    ]
+      'card-sm+card-sm+card-sm+card-sm',
+    ],
   };
   // 就诊人
 
@@ -216,8 +218,8 @@ import { isTemplateElement } from '@babel/types';
   onLoad(() => {
     //设置顶部标题
     uni.setNavigationBarTitle({
-      title:global.systemInfo.name
-    })
+      title: global.systemInfo.name,
+    });
     getHomeConfig();
     // #ifdef MP-WEIXIN
     if (props.code) {
@@ -225,12 +227,12 @@ import { isTemplateElement } from '@babel/types';
     }
     // #endif
   });
-  const getNotice = async ()=>{
-    const {result } = await api.getAnnouncementCms({})
+  const getNotice = async () => {
+    const { result } = await api.getAnnouncementCms({});
     noticeMenu.value = result;
-  }
-  const goToNotice = (item)=>{
-    if(item.informationLink!=''){
+  };
+  const goToNotice = (item) => {
+    if (item.informationLink != '') {
       //跳链接
       uni.navigateTo({
         url: '/pagesC/cloudHospital/myPath?type=1&path=' + item.informationLink,
@@ -239,22 +241,25 @@ import { isTemplateElement } from '@babel/types';
             `请确认跳转地址正确性${item.informationLink}`,
             1500
           );
-        }
-      })
-    }else{
-      let path = '/pagesA/healthAdvisory/healthAdvisoryDetail?id='+item.informationId+'&sysCode='+global.SYS_CODE
+        },
+      });
+    } else {
+      let path =
+        '/pagesA/healthAdvisory/healthAdvisoryDetail?id=' +
+        item.informationId +
+        '&sysCode=' +
+        global.SYS_CODE;
       //跳咨询详情页面
       uni.navigateTo({
-        url: '/pagesC/cloudHospital/myPath?type=2&path=' + encodeURIComponent(path),
+        url:
+          '/pagesC/cloudHospital/myPath?type=2&path=' +
+          encodeURIComponent(path),
         fail: () => {
-          gStores.messageStore.showMessage(
-            `请确认跳转地址正确性${path}`,
-            1500
-          );
-        }
-      })
+          gStores.messageStore.showMessage(`请确认跳转地址正确性${path}`, 1500);
+        },
+      });
     }
-  }
+  };
 
   const goLogin = async (e: any) => {
     // #ifdef MP-ALIPAY
@@ -269,14 +274,14 @@ import { isTemplateElement } from '@babel/types';
   };
   const addPatient = () => {
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/medicalCardMan'
+      url: '/pagesA/medicalCardMan/medicalCardMan',
     });
   };
 
   const cardClick = (pat: IPat) => {
     gStores.userStore.updatePatClick(gStores.userStore.patChoose);
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard'
+      url: '/pagesA/medicalCardMan/electronicMedicalCard',
     });
   };
 
@@ -287,16 +292,26 @@ import { isTemplateElement } from '@babel/types';
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
       // 新增公告展示判断 showFlag为1展示
-      if(homeConfig[1].showFlag == '1'){
-        getNotice()
-      }else{
-        noticeMenu.value =[]
+      if (homeConfig[1].showFlag == '1') {
+        getNotice();
+      } else {
+        noticeMenu.value = [];
       }
       bannerFunctionList.value = homeConfig[2].functionList;
       bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
       menuList.value = homeConfig[3].typeList;
       skeletonProps.loading = false;
     }
+  };
+
+  const goSearch = () => {
+    let url =
+      (global.env as string) === 'prod'
+        ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
+        : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
+    uni.navigateTo({
+      url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
+    });
   };
 </script>
 

@@ -27,6 +27,16 @@
         "hospitalId": "36076"
       },
       "isSearchInHos": false
+    },
+
+    "2001013": {
+      "wxAppid": " wxda3a65909cbc3e3c",
+      "alipayAppid": "2021002133632822",
+      "h5Appid": "wx12f8b744255a6f5d",
+      "name": "健康金湖",
+      "isOpenHealthCard": false,
+      "isStartComeTest": true,
+      "isSearchInHos":false
     }
   }
 }
