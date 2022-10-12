@@ -28,7 +28,7 @@
   import {
     patCardDetailTempList,
     PatCardKeys,
-    patCardDetailFormKey
+    patCardDetailFormKey,
   } from './utils';
   import { GStores, PatientUtils } from '@/utils';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
@@ -40,25 +40,25 @@
   const patientUtils = new PatientUtils();
   const formData = ref<PagePropType>({} as PagePropType);
   const gform = ref<any>('');
-  let formList = patCardDetailTempList;
+  let formList = [...patCardDetailTempList];
 
   const changeDefault = (value: boolean) => {
     const pat = gStore.userStore.clickPat;
 
     patientUtils.changeDefault({
       defaultFalg: value,
-      patientId: pat.patientId
+      patientId: pat.patientId,
     });
   };
 
   const deletePat = async () => {
     isShow.value = false;
     await patientUtils.deletePat({
-      patientId: gStore.userStore.clickPat.patientId
+      patientId: gStore.userStore.clickPat.patientId,
     });
 
     uni.reLaunch({
-      url: '/pagesA/medicalCardMan/medicalCardMan'
+      url: '/pagesA/medicalCardMan/medicalCardMan',
     });
   };
 
@@ -74,8 +74,21 @@
 
     formData.value = {
       ...pat,
-      defaultFlag: pat.defaultFlag === '0' ? false : true
+      defaultFlag: pat.defaultFlag === '0' ? false : true,
     };
+
+    // 非新生儿无证件的 不显示监护人信息
+    if (pat.patientType !== '0') {
+      formList = formList.filter(
+        (o) =>
+          !(
+            [
+              patCardDetailFormKey.upIdCard,
+              patCardDetailFormKey.upName,
+            ] as string[]
+          ).includes(o.key)
+      );
+    }
 
     nextTick(() => {
       gform.value.setList(formList);

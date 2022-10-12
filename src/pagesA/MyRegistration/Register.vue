@@ -1,7 +1,12 @@
 <template>
   <view class="page">
     <scroll-view class="scroll-container" scroll-y>
-      <hos-List-Vue :list="hosList" @img-click="imgClick" @location-click="locationClick" @item-click="itemClick" />
+      <hos-List-Vue
+        :list="hosList"
+        @img-click="imgClick"
+        @location-click="locationClick"
+        @item-click="itemClick"
+      />
     </scroll-view>
     <g-message />
   </view>
@@ -26,8 +31,8 @@
     const url = decodeURIComponent(props._url);
     uni.navigateTo({
       url: joinQuery(url, {
-        hosId: item.hosId
-      })
+        hosId: item.hosId,
+      }),
     });
   };
 
@@ -37,7 +42,7 @@
 
   const init = async () => {
     const list = await ServerStaticData.getHosList();
-    hosList.value = [...list, ...list, ...list, ...list, ...list, ...list];
+    hosList.value = list;
   };
 
   init();

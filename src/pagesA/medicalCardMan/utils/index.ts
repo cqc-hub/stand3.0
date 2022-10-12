@@ -427,10 +427,6 @@ export const getDefaultFormData = async (
     // #endif
   }
 
-  console.log({
-    data,
-  });
-
   return data;
 };
 
@@ -457,8 +453,7 @@ export const getHealthCardCode = async (): Promise<{
             res,
           });
         } else {
-          // 用户未授权，需要用户同意授权
-          // 显示 healthCardLogin 登录组件，引导用户同意授权
+          // 未授权 显示 healthCardLogin 登录组件，引导用户同意授权
           resolve({
             success: false,
             res,

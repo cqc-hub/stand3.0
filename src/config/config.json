@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001047",
+  "sysCode": "2001013",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -30,7 +30,7 @@
     },
 
     "2001013": {
-      "wxAppid": " wxda3a65909cbc3e3c",
+      "wxAppid": "wxda3a65909cbc3e3c",
       "alipayAppid": "2021002133632822",
       "h5Appid": "wx12f8b744255a6f5d",
       "name": "健康金湖",

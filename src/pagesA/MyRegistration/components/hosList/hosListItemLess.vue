@@ -5,17 +5,23 @@
     </view>
 
     <view class="content" @click="itemClick">
-      <view class="hos-name">{{ item.hosName }}</view>
+      <view>
+        <view class="hos-name">{{ item.hosName }}</view>
 
-      <view class="hos-address">{{ item.senderAddress && item.senderAddress.replace(/\s+/g, '') }}</view>
-
-      <view class="hos-location" @click.stop="locationClick">
-        <view class="g-flex-rc-cc">
-          <view class="iconfont icon-location">&#xe6d7;</view>
-          <view>地图导航</view>
+        <view class="hos-address">
+          {{ item.senderAddress && item.senderAddress.replace(/\s+/g, '') }}
         </view>
+      </view>
 
-        <view class="hos-away g-flex-rc-cc">距离1.6km</view>
+      <view>
+        <view class="hos-location" @click.stop="locationClick">
+          <view class="g-flex-rc-cc">
+            <view class="iconfont icon-location">&#xe6d7;</view>
+            <view>地图导航</view>
+          </view>
+
+          <view class="hos-away g-flex-rc-cc">距离1.6km</view>
+        </view>
       </view>
     </view>
   </view>
@@ -66,7 +72,10 @@
 
     .content {
       flex: 1;
-      height: 100%;
+      min-height: 200rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       .hos-name {
         font-size: var(--hr-font-size-xl);

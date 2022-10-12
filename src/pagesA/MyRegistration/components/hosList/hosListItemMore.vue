@@ -2,7 +2,7 @@
   <view class="item-more">
     <view class="header" @click="itemClick">
       <view class="hos-name text-ellipsis">
-        {{ item.hosName + item.hosName + item.hosName + item.hosName + item.hosName }}
+        {{ item.hosName }}
       </view>
 
       <view>

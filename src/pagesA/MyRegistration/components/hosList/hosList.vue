@@ -1,21 +1,29 @@
 <template>
   <view class="hos-list-container">
     <view v-for="(item, i) in list" :key="i">
-      <Item-Less
-        v-if="i % 2 === 0"
-        :item="item"
-        @img-click="imgClick"
-        @location-click="locationClick"
-        @item-click="itemClick"
-      />
+      <block v-if="hosLen < 40">
+        <Item-Less
+          :item="item"
+          @img-click="imgClick"
+          @location-click="locationClick"
+          @item-click="itemClick"
+        />
+      </block>
 
-      <Item-More v-else :item="item" @img-click="imgClick" @location-click="locationClick" @item-click="itemClick" />
+      <block v-else>
+        <Item-More
+          :item="item"
+          @img-click="imgClick"
+          @location-click="locationClick"
+          @item-click="itemClick"
+        />
+      </block>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { ServerStaticData, IHosInfo } from '@/utils';
   import ItemLess from './hosListItemLess.vue';
   import ItemMore from './hosListItemMore.vue';
@@ -23,6 +31,8 @@
   const props = defineProps<{
     list: IHosInfo[];
   }>();
+
+  const hosLen = computed(() => props.list.length);
 
   const emits = defineEmits(['img-click', 'location-click', 'item-click']);
 

@@ -473,8 +473,6 @@
       }
     });
 
-    console.log(formList);
-
     nextTick(() => {
       gform.value.setList(formList);
     });
@@ -523,8 +521,6 @@
       props.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
-
-    console.log('onLoad', formData);
 
     if ((props.patientType as string) === '-1') {
       // #ifdef MP-ALIPAY
