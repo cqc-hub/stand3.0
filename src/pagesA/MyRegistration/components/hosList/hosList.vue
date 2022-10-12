@@ -1,7 +1,7 @@
 <template>
   <view class="hos-list-container">
     <view v-for="(item, i) in list" :key="i">
-      <block v-if="hosLen < 40">
+      <block v-if="hosLen < 4">
         <Item-Less
           :item="item"
           @img-click="imgClick"
