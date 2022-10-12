@@ -11,6 +11,7 @@ declare var requirePlugin: any;
  * @h5Appid-公众号appid
  * @name-小程序名字
  * @isSearchInHos-新增、完善就诊人 要跳 perfectReal 页面？
+ * @isStartComeTest 欢迎页是否是测试
  *
  * @isOpenHealthCard-wx电子健康卡
  *   - healthCardText 电子健康卡左上角卡面名称
@@ -30,6 +31,7 @@ interface ISystemGlobalItem {
   };
 
   isSearchInHos: boolean;
+  isStartComeTest:boolean;
 }
 
 interface ISystemGlobalConfig {

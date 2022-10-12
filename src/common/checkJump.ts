@@ -62,21 +62,26 @@ export const checkPatient = (item: IRoute) => {
 //   patientInterception?: string,//就诊人拦截  1拦截 0 不拦截
 //   selectPatientPage?: string,//跳转第三方是否需要就诊人选择页面
 // gridLabel?: string,//角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
-export const checkGrid = async (item: IRoute) => {
-  const routerStore = useRouterStore();
-  const gStores = new GStores();
-  if (item.gridLabel === '3') {
-    return;
-  } else {
-    routerStore.updateId(item.id);
-  }
-  if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
-    await checkLogin(item);
-    return;
-  }
-  if (item.patientInterception === '1') {
-    await checkPatient(item);
-  }
+export const checkGrid = (item: IRoute) => {
+  return new Promise(async (resolve, reject) => {
+    const routerStore = useRouterStore();
+    const gStores = new GStores();
+    if (item.gridLabel == '3') {
+      reject('维护中');
+    } else {
+      routerStore.updateId(item.id);
+      if (item.loginInterception === '1' && !gStores.globalStore.isLogin) {
+        await checkLogin(item);
+        reject('需要登录');
+      }
+      if (item.patientInterception === '1') {
+        await checkPatient(item);
+        reject('需要就诊人');
+      }
+      resolve('成功');
+    }
+  });
+
   // if (item.selectPatientPage === '1') {
   //   //跳转my-h5选择就诊人页面
   // }
@@ -87,10 +92,10 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
   console.log(item);
   //拦截判断
   if (item.path != '') {
-  checkGrid(item).then(() => {
+    checkGrid(item).then(() => {
       useToPath(item, payload);
-  });
-}
+    });
+  }
 };
 
 // 回调 h5跳转的方法
