@@ -41,8 +41,6 @@ export const beforeEach = async (
   if (currentRoute) {
     const { extend } = currentRoute;
 
-    console.log(userStore.patList, 'userStore.patList');
-
     if (extend) {
       let { login, patient, herenId } = extend;
 
@@ -52,8 +50,6 @@ export const beforeEach = async (
       } else if (herenId) {
         login = true;
       }
-
-      console.log({ login, patient, herenId });
 
       if (login) {
         if (!globalStore.isLogin) {
