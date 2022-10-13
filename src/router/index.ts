@@ -41,6 +41,8 @@ export const beforeEach = async (
   if (currentRoute) {
     const { extend } = currentRoute;
 
+    console.log(userStore.patList, 'userStore.patList');
+
     if (extend) {
       let { login, patient, herenId } = extend;
 
@@ -50,6 +52,8 @@ export const beforeEach = async (
       } else if (herenId) {
         login = true;
       }
+
+      console.log({ login, patient, herenId });
 
       if (login) {
         if (!globalStore.isLogin) {
@@ -61,7 +65,9 @@ export const beforeEach = async (
           });
 
           return Promise.reject('需要登录----');
-        } else if (herenId) {
+        }
+
+        if (herenId) {
           if (!globalStore.herenId) {
             uni.reLaunch({
               url: joinQuery(globalGl.addPersonUrl + '', {
@@ -72,7 +78,9 @@ export const beforeEach = async (
 
             return Promise.reject('需要完善----');
           }
-        } else if (patient) {
+        }
+
+        if (patient) {
           if (!userStore.patList.length) {
             uni.reLaunch({
               url: joinQuery(globalGl.addPersonUrl + '', {

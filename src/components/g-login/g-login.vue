@@ -25,10 +25,14 @@
   import { defineComponent, ref } from 'vue';
   import { aliLogin, wxLogin, GStores } from '@/utils';
   import { useRouterStore } from '@/stores';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
   const routeStore = useRouterStore();
 
+  const props = defineProps<{
+    patient?: boolean;
+  }>();
   const emits = defineEmits(['handler-next']);
 
   const _env = ref<'wx' | 'alipay' | 'h5'>('wx');
@@ -74,6 +78,15 @@
   };
 
   const nextStep = () => {
+    if (props.patient) {
+      if (!gStores.userStore.patList.length) {
+        uni.reLaunch({
+          url: globalGl.addPersonUrl,
+        });
+        throw new Error('需要就诊人[g-login]');
+      }
+    }
+
     emits('handler-next');
   };
 </script>

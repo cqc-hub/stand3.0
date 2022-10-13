@@ -18,7 +18,7 @@
                 <text>剩{{ _item.numRemain }}个</text>
               </view>
 
-              <g-login @handler-next="regClick(_item)">
+              <g-login @handler-next="regClick(_item)" patient>
                 <button
                   class="btn btn-primary btn-reg"
                   @click="regClick(_item)"

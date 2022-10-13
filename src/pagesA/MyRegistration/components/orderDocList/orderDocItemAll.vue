@@ -9,6 +9,7 @@
               v-for="date in getSelectData"
               :key="date.schDate"
               @handler-next="dateClick(date)"
+              patient
             >
               <view
                 :class="{
