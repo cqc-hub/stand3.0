@@ -23,17 +23,28 @@
 
   const props = defineProps<{
     _url: string;
+    _type: number; //区分my-h5跳转 1:医院指南跳转
   }>();
 
   const hosList = ref<IHosInfo[]>([]);
 
   const itemClick = (item: IHosInfo) => {
     const url = decodeURIComponent(props._url);
-    uni.navigateTo({
-      url: joinQuery(url, {
-        hosId: item.hosId,
-      }),
-    });
+    if (props._type == 1) {
+      //医院指南
+      uni.navigateTo({
+        url:  joinQuery('/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide',{
+          hosId: item.hosId,
+        })
+      });
+    } else {
+      //小程序内部跳转
+      uni.navigateTo({
+        url: joinQuery(url, {
+          hosId: item.hosId,
+        }),
+      });
+    }
   };
 
   const locationClick = (item: IHosInfo) => {};

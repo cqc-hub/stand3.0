@@ -6,7 +6,7 @@
         :loading="skeletonProps.loading"
       >
         <view class="homePage">
-          <view class="search" @tap="goSearch">
+          <view class="search my-disabled" @tap="goSearch">
             <uni-search-input
               :type="'2'"
               inputBorder
@@ -207,7 +207,8 @@
     gStores.userStore.updatePatChoose(item);
   };
 
-  const searchPlaceholder = '搜索科室、医生或疾病';
+  // const searchPlaceholder = '搜索科室、医生或疾病';
+  const searchPlaceholder = '搜索疾病、症状或药品';
   const aaa = ref('');
   let topMenuList = ref<IRoute[]>([]); //首页顶部menu
   const noticeMenu = ref<IRoute[]>([]); //通知列表
