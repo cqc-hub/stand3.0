@@ -530,12 +530,6 @@
       // #endif
     }
 
-    if (!globalGl.systemInfo.isSearchInHos) {
-      if (props.pageType === 'perfectReal') {
-        formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
-      }
-    }
-
     nextTick(() => {
       // medicalTypeChange('-1');
       medicalTypeChange(formData.value[formKey.patientType]);

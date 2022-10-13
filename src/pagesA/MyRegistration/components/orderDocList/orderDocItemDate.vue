@@ -6,7 +6,6 @@
           <view
             v-for="(_item, i) in item.schemeList"
             :key="i"
-            @click="schemeClick(_item)"
             class="scheme-item"
           >
             <view class="scheme-item-ampm-name">
@@ -19,9 +18,14 @@
                 <text>剩{{ _item.numRemain }}个</text>
               </view>
 
-              <button class="btn btn-primary btn-reg" @click="regClick(_item)">
-                挂号
-              </button>
+              <g-login @handler-next="regClick(_item)">
+                <button
+                  class="btn btn-primary btn-reg"
+                  @click="regClick(_item)"
+                >
+                  挂号
+                </button>
+              </g-login>
             </view>
           </view>
         </view>
@@ -41,13 +45,6 @@
   const props = defineProps<{
     item: IItem;
   }>();
-
-  const schemeClick = (item: IItem['schemeList'][number]) => {
-    // console.log({
-    //   item,
-    //   pItem: props.item,
-    // });
-  };
 
   const regClick = (scheme: IItem['schemeList'][number]) => {
     emits('reg-click', {

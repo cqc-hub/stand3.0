@@ -1,10 +1,13 @@
 <template>
   <view class="doc-info">
     <view class="doc-info-container">
-      <image
-        :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
-        class="doc-info-avatar"
-      />
+      <g-login @handler-next="avatarClick">
+        <image
+          :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+          @click="avatarClick"
+          class="doc-info-avatar"
+        />
+      </g-login>
 
       <view class="doc-info-introduce">
         <view class="doc-info-introduce-header">
@@ -37,12 +40,17 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { IDocListAll } from '../../utils';
+  import { GStores } from '@/utils';
 
   const props = defineProps<{
     item: IDocListAll;
   }>();
 
+  const gStores = new GStores();
 
+  const avatarClick = () => {
+    console.log('去医生名片');
+  };
 </script>
 
 <style lang="scss" scoped>

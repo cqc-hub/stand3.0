@@ -130,6 +130,12 @@ const regApi = {
   subPreinquiryMessage: (data: any) =>
     service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
+  // 挂号
+  addReg: (data: any) =>
+    service.post('/phs-reg/reg/addReg', parm(data), {
+      hideLoading: false,
+    }),
+
   // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {

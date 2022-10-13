@@ -5,24 +5,28 @@
         <view class="date-container g-border-top">
           <view class="sel-date">
             <view class="sel-label g-flex-rc-cc">可约日期</view>
-            <view
+            <g-login
               v-for="date in getSelectData"
               :key="date.schDate"
-              :class="{
-                animate__fadeIn: !isCollapse
-              }"
-              @click="dateClick(date)"
-              class="date-item g-flex-rc-cc animate__animated"
+              @handler-next="dateClick(date)"
             >
               <view
                 :class="{
-                  animate__fadeIn: isCollapse
+                  animate__fadeIn: !isCollapse,
                 }"
-                class="animate__animated"
+                @click="dateClick(date)"
+                class="date-item g-flex-rc-cc animate__animated"
               >
-                {{ getDateFormatter(date.schDate) }}
+                <view
+                  :class="{
+                    animate__fadeIn: isCollapse,
+                  }"
+                  class="animate__animated"
+                >
+                  {{ getDateFormatter(date.schDate) }}
+                </view>
               </view>
-            </view>
+            </g-login>
           </view>
 
           <view class="arrow-content">
@@ -56,7 +60,7 @@
     item: IDocListAll;
   }>();
 
-  const emits = defineEmits(['date-click'])
+  const emits = defineEmits(['date-click']);
 
   const isCollapse = ref(true);
 
@@ -80,9 +84,9 @@
   const dateClick = (schInfo: any) => {
     emits('date-click', {
       item: props.item,
-      schInfo
-    })
-  }
+      schInfo,
+    });
+  };
 </script>
 
 <style lang="scss" scoped>

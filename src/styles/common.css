@@ -129,3 +129,8 @@
 .color-purple {
   color: #7747ff;
 }
+
+
+.my-disabled {
+  pointer-events: none !important;
+}

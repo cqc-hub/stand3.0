@@ -56,6 +56,7 @@
   import { GStores } from '@/utils';
   import { deQueryForUrl } from '@/common/utils';
 
+  import api from '@/service/api';
   import dayjs from 'dayjs';
 
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
@@ -68,7 +69,7 @@
   const regDialogConfirm = ref<any>('');
   const flagTitle9 = ref('');
 
-  const regConfirm = () => {
+  const regConfirm = async () => {
     if (!isCheck.value) {
       regDialogConfirm.value.show();
       return;
@@ -80,7 +81,6 @@
      * aliRegisterId
      * diseaseId
      * promptMessage
-     * resType
      * thRegisterId
      * timePoint
      * visitingArea
@@ -113,6 +113,7 @@
       ampm,
       categor,
       categorName,
+      clinicalType,
       deptName,
       disNo,
       docName,
@@ -128,7 +129,6 @@
       herenId,
       patientId,
       source,
-      clinicalType,
       resType,
     };
 
@@ -136,6 +136,10 @@
       requestArg,
       p: props.value,
     });
+
+    const {
+      result: { orderId },
+    } = await api.addReg(requestArg);
   };
 
   onLoad((p) => {
