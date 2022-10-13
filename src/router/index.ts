@@ -35,10 +35,11 @@ export const beforeEach = async (
   const fullUrl = options.url;
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url);
-  const globalStore = useGlobalStore();
-  const userStore = useUserStore();
 
   if (currentRoute) {
+    const globalStore = useGlobalStore();
+    const userStore = useUserStore();
+
     const { extend } = currentRoute;
 
     if (extend) {
