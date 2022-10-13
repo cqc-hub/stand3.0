@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { aliLogin, wxLogin, GStores } from '@/utils';
+  import { handlerLogin, GStores } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
 
@@ -60,19 +60,7 @@
       _url: encodeURIComponent(fullPathNow),
     });
 
-    switch (_env.value) {
-      case 'wx':
-        await wxLogin(e);
-        break;
-
-      case 'alipay':
-        await aliLogin();
-
-        break;
-
-      default:
-        break;
-    }
+    await handlerLogin(e);
 
     nextStep();
   };

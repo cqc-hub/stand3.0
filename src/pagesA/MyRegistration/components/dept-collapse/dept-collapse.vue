@@ -13,6 +13,8 @@
         borderRadius: borderRadius,
         'my-row-active':
           !item.children && activeLv2.hosDeptId === item.hosDeptId,
+        'my-row-children': item.children,
+        'my-row-alone': !item.children,
       }"
       :style="{
         backgroundColor: !disabled && isShow ? activebg : '',
@@ -22,9 +24,9 @@
     >
       <view class="title-label">{{ item.deptName || '没有名字' }}</view>
       <view
-        v-show="item.children"
         :class="{
           arrowBottom: isShow,
+          'icon-hide': !item.children,
         }"
         class="iconfont ico-arrow right-icon"
       >
@@ -207,10 +209,27 @@
   }
 
   .my-row {
-    padding: 24rpx 32rpx;
+    padding: 19rpx 32rpx;
+    // padding: 24rpx 32rpx;
+
+    // #ifdef  MP-WEIXIN
+    padding: 22rpx 32rpx;
+    // #endif
     font-size: var(--hr-font-size-base);
 
     border-bottom: 1rpx solid var(--hr-neutral-color-2);
+
+    &.my-row-children {
+      // #ifdef  MP-WEIXIN
+      padding: 24rpx 32rpx;
+      // #endif
+    }
+
+    &.my-row-alone {
+      // #ifdef MP-ALIPAY
+      padding: 17rpx 32rpx;
+      // #endif
+    }
 
     &-active {
       color: var(--hr-brand-color-6);
@@ -222,4 +241,7 @@
     margin: 0 32rpx 0 72rpx;
   }
 
+  .icon-hide {
+    opacity: 0 !important;
+  }
 </style>

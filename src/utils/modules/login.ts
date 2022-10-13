@@ -55,6 +55,7 @@ const packageAuthParams = (
 enum LoginType {
   WeChat,
   AliPay,
+  H5,
 }
 
 abstract class LoginHandler {
@@ -218,6 +219,9 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     }
 
     await new Promise<void>((resolve, reject) => {
+      uni.showLoading({
+        mask: true,
+      });
       wx.login({
         success: async ({ code }) => {
           if (!code) {
@@ -277,6 +281,8 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
             reject();
           }
         },
+
+        complete: uni.hideLoading,
       });
     });
   }
@@ -285,6 +291,9 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(): Promise<void> {
     await new Promise<void>((resolve, reject) => {
+      uni.showLoading({
+        mask: true,
+      });
       my.getAuthCode({
         scopes: 'auth_user',
         success: async ({ authCode }) => {
@@ -339,8 +348,16 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
           this.messageStore.showMessage(errorMessage);
           reject();
         },
+
+        complete: uni.hideLoading,
       });
     });
+  }
+}
+
+class WebLoginHandler extends LoginUtils implements LoginHandler {
+  async handler(payload?: any): Promise<void> {
+    this.messageStore.showMessage('暂未支持 h5 登录');
   }
 }
 
@@ -348,6 +365,7 @@ export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
     [LoginType.AliPay]: new AliPayLoginHandler(),
+    [LoginType.H5]: new WeChatLoginHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {
@@ -633,6 +651,20 @@ export const aliLogin = async function () {
 
 export const wxLogin = async function (e) {
   await Login.handler(LoginType.WeChat, e);
+};
+
+export const handlerLogin = async (e) => {
+  let _env = LoginType.WeChat;
+
+  // #ifdef MP-ALIPAY
+  _env = LoginType.AliPay;
+  // #endif
+
+  // #ifdef H5
+  _env = LoginType.H5;
+  // #endif
+
+  await Login.handler(_env, e);
 };
 
 export const outLogin = function (

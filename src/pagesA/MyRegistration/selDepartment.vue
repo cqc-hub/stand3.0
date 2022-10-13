@@ -97,7 +97,7 @@
 
     if (result) {
       let { firstDeptList, deptListLevel } = result;
-      // deptListLevel = '1'
+      // deptListLevel = '2'
       if (firstDeptList && firstDeptList.length) {
         loopDeptList(firstDeptList, deptListLevel);
         depList.value = firstDeptList;
@@ -220,4 +220,6 @@
       height: 1px;
     }
   }
+
+
 </style>
