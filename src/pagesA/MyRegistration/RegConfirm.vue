@@ -33,6 +33,7 @@
         >
           {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
+
         <view>
           <text @click="isCheck = !isCheck">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
@@ -54,7 +55,7 @@
 
   import { IPageProps } from './utils/regConfirm';
   import { GStores } from '@/utils';
-  import { deQueryForUrl } from '@/common/utils';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -62,6 +63,16 @@
   import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
+
+  api.addReg = () =>
+    Promise.resolve({
+      result: { orderId: '2210130519500014' },
+      timeTaken: 1161,
+      code: 0,
+      innerMessage: '成功',
+      message: '成功',
+      respCode: 0,
+    });
 
   const gStores = new GStores();
   const props = ref<IPageProps>({} as IPageProps);
@@ -140,6 +151,12 @@
     const {
       result: { orderId },
     } = await api.addReg(requestArg);
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        orderId,
+      }),
+    });
   };
 
   onLoad((p) => {

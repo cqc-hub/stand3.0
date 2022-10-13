@@ -5,6 +5,7 @@
         v-for="item in list"
         :key="item.key"
         :class="{
+          'g-border-bottom': !hideRowBorder,
           'form-item-icon': item.field === 'select',
           'item-for-show': item.isForShow,
           'form-item-bold': bodyBold,
@@ -14,10 +15,10 @@
           [`form-item-${item.field}`]: true,
         }"
         :style="`--label-width: ${item.labelWidth || '190rpx'}; ${
-          (item.rowStyle && item.rowStyle) || ''
+          item.rowStyle || ''
         }`"
         @tap.prevent.stop="clickContainer(item)"
-        class="form-item g-border-bottom"
+        class="form-item"
       >
         <view
           :class="{
@@ -28,9 +29,14 @@
           {{ item.label }}
         </view>
 
-        <view class="container-body">
+        <view class="container-body" :style="item.bodyStyle">
           <block v-if="item.isForShow">
-            <view class="content-show">
+            <view
+              class="content-show"
+              :style="{
+                'text-align': forShowBodyAlign || 'right',
+              }"
+            >
               {{
                 item.field === 'select'
                   ? ServerStaticData.getOptionsLabel(
@@ -233,8 +239,13 @@
       value: BaseObject;
       // 加粗内容
       bodyBold?: boolean;
+
+      hideRowBorder?: boolean;
       // 是否展示必填的 * 号
       showRequireIcon?: boolean;
+
+      // forShow时候的对齐方式
+      forShowBodyAlign?: 'right' | 'left';
     }>(),
     {
       value: () => ({}),

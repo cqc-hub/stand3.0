@@ -104,6 +104,16 @@
         },
 
         {
+          "path": "MyRegistration/RegDetail",
+          "style": {
+            "navigationBarTitleText": "挂号详情"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "medicalCardMan/addMedical",
           "extend": {
             "login": true

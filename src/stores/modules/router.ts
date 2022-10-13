@@ -6,7 +6,9 @@ import { useGlobalStore, useUserStore } from '@/stores';
 const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
   const { _url, _query } = prop;
 
-  const dealQuery = Object.fromEntries(Object.entries(_query).filter(([key, value]) => value));
+  const dealQuery = Object.fromEntries(
+    Object.entries(_query).filter(([key, value]) => value)
+  );
 
   if (_url.includes('?')) {
     return _url + '&' + joinQuery('', dealQuery).slice(1);
@@ -18,7 +20,7 @@ const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {
 const routerStore = defineStore('router', {
   persist: {
     key: '__ROUTER',
-    paths: ['_id', 'fullUrl', 'backRoute', '_p', '_url']
+    paths: ['_id', 'fullUrl', 'backRoute', '_p', '_url'],
   },
 
   state: () => {
@@ -28,7 +30,7 @@ const routerStore = defineStore('router', {
       _url: '',
       fullUrl: '',
 
-      backRoute: <ILoginBack>{}
+      backRoute: <ILoginBack>{},
     };
   },
 
@@ -46,6 +48,14 @@ const routerStore = defineStore('router', {
     },
 
     updateFullUrl(url: string) {
+      // token 过期可能会跳过来
+      if (
+        url.startsWith('/pagesA/medicalCardMan/perfectReal') ||
+        url.startsWith('/pagesA/medicalCardMan/addMedical')
+      ) {
+        return;
+      }
+
       this.fullUrl = url;
     },
 
@@ -70,7 +80,7 @@ const routerStore = defineStore('router', {
           if (_query) {
             fullUrl = spliceUrl({
               _url: fullUrl,
-              _query
+              _query,
             });
           }
 
@@ -81,14 +91,14 @@ const routerStore = defineStore('router', {
 
     clear() {
       this.$reset();
-    }
+    },
   },
 
   getters: {
     isWork(): boolean {
       return !!(this.backRoute._p || this.backRoute._url);
-    }
-  }
+    },
+  },
 });
 
 export const useRouterStore = function () {
