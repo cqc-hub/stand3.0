@@ -25,26 +25,35 @@
             'item-require': item.required && showRequireIcon,
           }"
           class="label"
+          :style="item.labelStyle"
         >
           {{ item.label }}
         </view>
 
-        <view class="container-body" :style="item.bodyStyle">
+        <view :style="item.bodyStyle" class="container-body">
           <block v-if="item.isForShow">
-            <view
-              class="content-show"
-              :style="{
-                'text-align': forShowBodyAlign || 'right',
-              }"
-            >
-              {{
-                item.field === 'select'
-                  ? ServerStaticData.getOptionsLabel(
-                      item.options,
-                      value[item.key]
-                    )
-                  : value[item.key]
-              }}
+            <view class="content-show" :style="item.showBodyStyle">
+              <slot
+                :item="item"
+                :value="
+                  item.field === 'select'
+                    ? ServerStaticData.getOptionsLabel(
+                        item.options,
+                        value[item.key]
+                      )
+                    : value[item.key]
+                "
+                name="showBody"
+              >
+                {{
+                  item.field === 'select'
+                    ? ServerStaticData.getOptionsLabel(
+                        item.options,
+                        value[item.key]
+                      )
+                    : value[item.key]
+                }}
+              </slot>
             </view>
           </block>
 
@@ -243,9 +252,6 @@
       hideRowBorder?: boolean;
       // 是否展示必填的 * 号
       showRequireIcon?: boolean;
-
-      // forShow时候的对齐方式
-      forShowBodyAlign?: 'right' | 'left';
     }>(),
     {
       value: () => ({}),
