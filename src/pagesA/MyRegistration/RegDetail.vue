@@ -158,7 +158,13 @@
       </view>
     </scroll-view>
 
-    <view class="footer">233</view>
+    <view class="footer">
+      <view @click="goHome" class="home g-flex-rc-cc">
+        <view class="iconfont home-icon">&#xe6df;</view>
+        <view>首页</view>
+      </view>
+      <button class="btn btn-primary">确定预约</button>
+    </view>
     <g-message />
   </view>
 </template>
@@ -255,8 +261,7 @@
     if (showQrCode.value) {
       return {
         ...qrCodeOpt.value,
-        width: 0, // 宽度 单位rpx
-        height: 0, // 高度 单位rpx
+        height: 0,
       };
     } else {
       return {
@@ -304,8 +309,6 @@
     setTimeout(() => {
       refForm.value.setList(regInfoTempList);
       refFormPatient.value.setList(patientTempList);
-
-      console.log(titleStatus.value);
     }, 300);
   };
 
@@ -315,6 +318,12 @@
     openLocation([gisLat!, gisLng!], {
       name: hosName,
       address,
+    });
+  };
+
+  const goHome = () => {
+    uni.reLaunch({
+      url: '/pages/home/home',
     });
   };
 
@@ -551,6 +560,29 @@
 
     .hide-icon {
       opacity: 0;
+    }
+
+    .footer {
+      background-color: var(--h-color-white);
+      padding: 24rpx 32rpx 48rpx;
+      position: reactive;
+      z-index: 1;
+
+      display: flex;
+
+      .home {
+        font-size: var(--hr-font-size-xxxs);
+        flex-direction: column;
+        margin-right: 32rpx;
+
+        .home-icon {
+          font-size: var(--hr-font-size-xxl);
+        }
+      }
+
+      .btn {
+        flex: 1;
+      }
     }
   }
 </style>
