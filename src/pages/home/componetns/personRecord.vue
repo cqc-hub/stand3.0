@@ -1,12 +1,14 @@
 <template>
   <view class="">
     <view class="container">
-      <image
-        :src="gStores.userStore.getAvatar"
-        @click="avatarClick"
-        mode="widthFix"
-        class="user-avatar"
-      />
+      <g-login @handler-next="avatarClick">
+        <image
+          :src="gStores.userStore.getAvatar"
+          @click="avatarClick"
+          mode="widthFix"
+          class="user-avatar"
+        />
+      </g-login>
 
       <view class="info">
         <block v-if="gStores.globalStore.isLogin">
@@ -62,11 +64,11 @@
         :key="i"
         :style="{
           'background-image': `url(${backImg[i]})`,
-          'background-color': recordColors[i]
+          'background-color': recordColors[i],
         }"
         :class="{
           'cr-center': recordList && recordList.length === 1,
-          'record-item-first': recordList.length === 2 && i === 0
+          'record-item-first': recordList.length === 2 && i === 0,
         }"
         class="record-item"
         @tap="jumpFor(record)"
@@ -94,7 +96,7 @@
     outLogin,
     ServerStaticData,
     routerJump,
-    GStores
+    GStores,
   } from '@/utils';
   import { useCommonTo } from '@/common/checkJump';
   import { useRouterStore } from '@/stores';
@@ -132,7 +134,7 @@
 
   const avatarClick = () => {
     uni.navigateTo({
-      url: '/pages/home/accountInfo'
+      url: '/pages/home/accountInfo',
     });
   };
 

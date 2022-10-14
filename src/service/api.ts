@@ -136,6 +136,12 @@ const regApi = {
       hideLoading: false,
     }),
 
+  // 挂号详情
+  getRegOrderInfo: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/getRegOrderInfo', parm(data), {
+      hideLoading: false,
+    }),
+
   // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {

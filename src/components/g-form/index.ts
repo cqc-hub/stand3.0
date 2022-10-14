@@ -33,6 +33,8 @@ interface IBaseInstance {
   rule?: IRule | IRule[];
   showSuffixArrowIcon?: boolean;
   rowStyle?: string;
+  bodyStyle?: string;
+  isHideRowBorder?: boolean;
   labelWidth?: string;
   isForShow?: boolean;
   validator?: (

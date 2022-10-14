@@ -8,7 +8,7 @@
 
     <block v-else>
       <button
-        :open-type="_env === 'wx' && 'getPhoneNumber'"
+        open-type="getPhoneNumber"
         @getphonenumber="goLogin"
         @click="handlerClick"
         class="login-btn"
@@ -84,7 +84,7 @@
     padding: 0;
     margin: 0;
     border: none;
-    background: none;
+    background: transparent;
 
     display: inline-block;
     line-height: 1em;
