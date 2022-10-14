@@ -1,6 +1,10 @@
 <template>
   <view>
-    <web-view :src="src" :webview-styles="webviewStyles" @message="handleMessage"></web-view>
+    <web-view
+      :src="src"
+      :webview-styles="webviewStyles"
+      @message="handleMessage"
+    ></web-view>
     <g-message />
   </view>
 </template>
@@ -13,28 +17,29 @@
   import { useMessageStore } from '@/stores';
   import { GStores } from '@/utils';
   import { encryptDesParam } from '@/common/des';
+  import { joinQuery } from '@/common';
   // 自研h5页面统一入口
   const messageStore = useMessageStore();
   const gStores = new GStores();
 
   const webviewStyles = {
     progress: {
-      color: '#4C8FFF'
-    }
+      color: '#4C8FFF',
+    },
   };
   const src = ref();
   const allData = {
     sysCode: getSysCode(),
     token: gStores.globalStore.token.accessToken,
-    hosId: '12882',
-    herenId: gStores.globalStore.herenId
-  } as const;
+    hosId: '',
+    herenId: gStores.globalStore.herenId,
+  } ;
   type A = keyof typeof allData;
 
   // 页面固定携带 sysCode  加密参数（herenId patientid）
   onLoad((options) => {
-
     getQueryPath(options);
+    allData.hosId = options.hosId || '';
     let query = getQueryPath(options);
     if (options.type == '1') {
       //第三方的h5
@@ -42,13 +47,25 @@
       console.log('第三方页面路径', src.value);
     } else {
       //自研h5
-      const baseUrl = (global.env as any) === 'prod' ? 'https://h5.eheren.com/v3/#' : 'https://health.eheren.com/v3/#';
+      const baseUrl =
+        (global.env as any) === 'prod'
+          ? 'https://h5.eheren.com/v3/#'
+          : 'https://health.eheren.com/v3/#';
       //公告跳转的咨询
-      if(options.type == '2'){
-        let path = decodeURIComponent(options.path as string)
+      if (options.type == '2') {
+        let path = decodeURIComponent(options.path as string);
         src.value = `${baseUrl}${path}`;
-      }else{
-        src.value = `${baseUrl}${options.path}${query}`;
+      } else {
+        //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
+        let newQuery = '';
+        let obj = JSON.parse(JSON.stringify(options));
+        delete obj.path;
+        delete obj.query;
+        // 携带参数的情况
+        if (JSON.stringify(obj) != '{}') {
+          newQuery += '&' + joinQuery('', obj).slice(1);
+        }
+        src.value = `${baseUrl}${options.path}${query}${newQuery}`;
       }
       console.log('v3页面路径', src.value);
     }
@@ -56,16 +73,16 @@
   const getQueryPath = (options) => {
     // path里面需要传参的时候['sysCode'] options.query有值得时候
     //获取当前默认就诊人的patientid
-    const patientId = gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
+    const patientId =
+      gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
     const herenId = gStores.globalStore && gStores.globalStore.herenId;
 
     //默认加密参数
     let desObj = {
       _patientId: patientId,
       _herenId: herenId,
-      _isHos:global.systemInfo.isSearchInHos // 是否区域项目 新增就诊人跳转的地址
+      _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
     };
-
     let _d = encryptDesParam(desObj);
     let query = '?_d=' + _d + '&sysCode=' + allData.sysCode + '&';
     if (options.query) {
@@ -96,7 +113,7 @@
       address: V3PageData.address,
       success: () => {
         console.log('成功打开地图');
-      }
+      },
     });
     // #endif
   };

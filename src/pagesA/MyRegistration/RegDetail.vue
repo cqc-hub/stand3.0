@@ -1,5 +1,5 @@
 <template>
-  <view class="reg-detail">
+  <view class="reg-detail header-blue">
     <view class="scroll-container">
       <view v-if="orderRegInfo.patientId" class="box">
         <view class="reg-header flex-between">
@@ -95,11 +95,16 @@
               ref="refFormPatient"
             />
           </view>
+
+          <view class="container-box order-patient g-border">
+            <g-flag typeFg="4" isShowFgTip />
+          </view>
         </view>
       </view>
     </view>
 
     <view class="footer">233</view>
+    <g-message />
   </view>
 </template>
 
@@ -114,6 +119,7 @@
     IRegInfo,
     regInfoTempList,
     patientTempList,
+    orderStatusMap,
   } from './utils/regDetail';
   import api from '@/service/api';
 
@@ -185,6 +191,10 @@
     };
   });
 
+  const titleStatus = computed(() => {
+    const statusInfo = orderStatusMap[orderRegInfo.value.orderStatus]
+  })
+
   const init = async () => {
     const orderId = pageProps.value.orderId;
     const { result } = await api.getRegOrderInfo<IRegInfo>({
@@ -236,17 +246,55 @@
       content: '';
       display: block;
       height: 400rpx;
-      background: linear-gradient(
-        0deg,
-        rgba(41, 111, 255, 0) 1%,
-        #296fff 38%,
-        #296fff 96%
-      );
 
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
+    }
+
+    &.header-blue {
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(41, 111, 255, 0) 1%,
+          #296fff 38%,
+          #296fff 96%
+        );
+      }
+    }
+
+    &.header-green {
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(0, 179, 158, 0) 1%,
+          #00b39e 38%,
+          #00b39e 96%
+        );
+      }
+    }
+
+    &.header-yellow {
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(253, 231, 191, 0) 1%,
+          #fde7bf 38%,
+          #fde7bf 96%
+        );
+      }
+    }
+
+    &.header-dark {
+      &::after {
+        background: linear-gradient(
+          0deg,
+          rgba(106, 125, 165, 0) 1%,
+          #6a7da5 38%,
+          #6a7da5 96%
+        );
+      }
     }
 
     .box {

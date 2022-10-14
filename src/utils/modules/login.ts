@@ -118,6 +118,12 @@ export class LoginUtils extends GStores {
         } else {
           //获取就诊人列表
           await new PatientUtils().getPatCardList();
+          // #ifdef MP-WEIXIN
+          //调用微信绑定openid的接口
+          if (this.globalStore.h5OpenId) {
+            this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
+          }
+          // #endif
         }
       }
     } catch (error) {
@@ -148,24 +154,29 @@ export class LoginUtils extends GStores {
     const herenId = this.globalStore.herenId;
 
     if (herenId) {
-      await api.sysPatOpenIdAssignment({
-        herenId,
-        openIds: [
-          {
-            openId: this.globalStore.openId,
-            source: 19, //微信小程序openid
-          },
-
-          {
-            openId,
-            source: 3, //公众号openid
-          },
-        ],
-      });
+      this.sysPatOpenIdAssignment(herenId, openId);
     }
 
     await this.getUerInfo();
     routerJump();
+  }
+
+  //微信绑定openid接口
+  async sysPatOpenIdAssignment(herenId, openId) {
+    await api.sysPatOpenIdAssignment({
+      herenId,
+      openIds: [
+        {
+          openId: this.globalStore.openId,
+          source: 19, //微信小程序openid
+        },
+
+        {
+          openId,
+          source: 3, //公众号openid
+        },
+      ],
+    });
   }
 
   outLogin(
@@ -365,7 +376,7 @@ export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
     [LoginType.AliPay]: new AliPayLoginHandler(),
-    [LoginType.H5]: new WeChatLoginHandler(),
+    [LoginType.H5]: new WebLoginHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {

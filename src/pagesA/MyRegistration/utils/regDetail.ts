@@ -105,8 +105,82 @@ const formatterTemp = (list: TInstance[]) => {
 formatterTemp(regInfoTempList);
 formatterTemp(patientTempList);
 
-enum EOrderStatus {
-  'ds' = 2,
-}
-
-console.log('EOrderStatus', EOrderStatus.ds);
+export const orderStatusMap: Record<
+  string,
+  {
+    headerClass:
+      | 'header-yellow'
+      | 'header-blue'
+      | 'header-green'
+      | 'header-dark';
+    headerBgIcon: string;
+    headerIcon: string;
+    color: string;
+    title: string;
+  }
+> = {
+  // 待支付
+  10: {
+    headerClass: 'header-yellow',
+    headerBgIcon: '',
+    headerIcon: '&#xe6ea;',
+    color: 'var( --hr-error-color-6)',
+    title: '待支付',
+  },
+  // 成功
+  0: {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '预约成功',
+  },
+  // 已挂号
+  100: {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已挂号',
+  },
+  // 已就诊
+  70: {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已就诊',
+  },
+  // 待就诊
+  75: {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '待就诊',
+  },
+  // 已退号
+  23: {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已退号',
+  },
+  // 挂号失败
+  20: {
+    headerClass: 'header-yellow',
+    color: 'var( --hr-error-color-6)',
+    headerIcon: '&#xe6d5;',
+    headerBgIcon: '',
+    title: '挂号失败',
+  },
+  // 已取消
+  45: {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已取消',
+  },
+};

@@ -20,7 +20,10 @@
             <view>地图导航</view>
           </view>
 
-          <view class="hos-away g-flex-rc-cc">距离1.6km</view>
+          <view v-if="item.distanceFormat" class="hos-away g-flex-rc-cc">
+            距离{{ item.distanceFormat }}km
+          </view>
+          <view v-else class="hos-away g-flex-rc-cc">导航</view>
         </view>
       </view>
     </view>
