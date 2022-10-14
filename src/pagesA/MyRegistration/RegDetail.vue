@@ -1,23 +1,77 @@
 <template>
-  <view class="reg-detail header-blue">
-    <view class="scroll-container">
+  <view :class="titleStatus.headerClass" class="reg-detail">
+    <scroll-view scroll-y class="scroll-container">
       <view v-if="orderRegInfo.patientId" class="box">
         <view class="reg-header flex-between">
-          <view class="flex-normal">
-            <view class="iconfont reg-header-icon">&#xe6c7;</view>
-            <view class="reg-header-label">预约成功</view>
+          <view
+            :style="{
+              color: titleStatus.color,
+            }"
+            class="flex-normal"
+          >
+            <view
+              v-if="titleStatus.headerIcon.includes('#xe6ea')"
+              class="iconfont reg-header-icon"
+            >
+              &#xe6ea;
+            </view>
+
+            <view
+              v-else-if="titleStatus.headerIcon.includes('#xe6c7')"
+              class="iconfont reg-header-icon"
+            >
+              &#xe6c7;
+            </view>
+
+            <view
+              v-else-if="titleStatus.headerIcon.includes('#xe6d5')"
+              class="iconfont reg-header-icon"
+            >
+              &#xe6d5;
+            </view>
+
+            <view class="reg-header-label">{{ titleStatus.title }}</view>
           </view>
 
-          <view>
-            <view class="iconfont reg-header-icon-bg">&#xe6d0;</view>
+          <view
+            :class="{
+              'hide-icon': !titleStatus.headerBgIcon,
+            }"
+          >
+            <view
+              v-if="titleStatus.headerBgIcon.includes('#xe6d0')"
+              class="iconfont reg-header-icon-bg"
+            >
+              &#xe6d0;
+            </view>
+
+            <view
+              v-else-if="titleStatus.headerBgIcon.includes('#xe6de')"
+              class="iconfont reg-header-icon-bg"
+            >
+              &#xe6de;
+            </view>
+
+            <view
+              v-else-if="titleStatus.headerBgIcon.includes('#xe6d5')"
+              class="iconfont reg-header-icon-bg"
+            >
+              &#xe6d5;
+            </view>
+
+            <view v-else class="iconfont reg-header-icon-bg">&#xe6c7;</view>
           </view>
         </view>
 
         <view class="container">
           <view class="container-box g-border">
-            <view class="qr-code g-flex-rc-cc g-border-bottom m32">
-              <w-qrcode v-if="showQrCode" :options="qrCodeOpt" />
-              <w-barcode v-else :options="qrCodeOpt" />
+            <view
+              v-if="isShowQr"
+              class="qr-code g-flex-rc-cc g-border-bottom m32"
+            >
+              <w-qrcode :options="_qrCodeOpt" />
+
+              <w-barcode :options="_qrCodeOpt" />
 
               <view class="qr-code-value">{{ orderRegInfo.patientId }}</view>
 
@@ -35,7 +89,8 @@
             </view>
 
             <view
-              v-if="hosInfo.hosName"
+              v-if="hosInfo.gisLat"
+              @click="openHosLocation"
               class="hos-navigation g-flex-rc-cc m32"
             >
               <view class="hos-info">
@@ -101,7 +156,7 @@
           </view>
         </view>
       </view>
-    </view>
+    </scroll-view>
 
     <view class="footer">233</view>
     <g-message />
@@ -109,10 +164,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, nextTick, onMounted } from 'vue';
+  import { computed, ref, nextTick, onMounted, reactive } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import { GStores, ServerStaticData, IHosInfo, openLocation } from '@/utils';
 
   import {
     IPageProps,
@@ -178,6 +233,11 @@
   const showQrCode = ref(false);
   const orderRegInfo = ref<IRegInfo>({} as IRegInfo);
   const hosInfo = ref<IHosInfo>({} as IHosInfo);
+  const isShowQr = computed(() => {
+    return ['0', '10', '100', '70', '75'].includes(
+      orderRegInfo.value.orderStatus
+    );
+  });
 
   const qrCodeOpt = computed(() => {
     return {
@@ -191,9 +251,34 @@
     };
   });
 
+  const _qrCodeOpt = computed(() => {
+    if (showQrCode.value) {
+      return {
+        ...qrCodeOpt.value,
+        width: 0, // 宽度 单位rpx
+        height: 0, // 高度 单位rpx
+      };
+    } else {
+      return {
+        ...qrCodeOpt.value,
+        size: 0,
+      };
+    }
+  });
+
   const titleStatus = computed(() => {
-    const statusInfo = orderStatusMap[orderRegInfo.value.orderStatus]
-  })
+    const statusInfo = orderStatusMap[orderRegInfo.value.orderStatus];
+
+    return (
+      statusInfo || {
+        title: '未知的状态',
+        headerClass: '',
+        color: 'var(--hr-error-color-6)',
+        headerBgIcon: '',
+        headerIcon: '&#xe6d5;',
+      }
+    );
+  });
 
   const init = async () => {
     const orderId = pageProps.value.orderId;
@@ -201,6 +286,8 @@
       orderId,
       source: gStores.globalStore.browser.source,
     });
+
+    // result.orderStatus = '233';
 
     const hosList = await ServerStaticData.getHosList();
     const hos = hosList.find((o) => o.hosId === result.hosId);
@@ -217,7 +304,18 @@
     setTimeout(() => {
       refForm.value.setList(regInfoTempList);
       refFormPatient.value.setList(patientTempList);
+
+      console.log(titleStatus.value);
     }, 300);
+  };
+
+  const openHosLocation = () => {
+    const { gisLat, gisLng, hosName, address } = hosInfo.value;
+
+    openLocation([gisLat!, gisLng!], {
+      name: hosName,
+      address,
+    });
   };
 
   onLoad((p) => {
@@ -240,6 +338,8 @@
       flex: 1;
       height: 1px;
       overflow-y: scroll;
+      position: reactive;
+      z-index: 2;
     }
 
     &::after {
@@ -353,8 +453,6 @@
           flex-direction: column;
           font-size: var(--hr-font-size-xs);
           margin-top: 40rpx;
-          margin-bottom: 40rpx;
-
           .qr-code-value {
             font-size: var(--hr-font-size-xs);
             color: var(--hr-neutral-color-7);
@@ -386,6 +484,7 @@
           height: 144rpx;
           justify-content: flex-start;
           padding-left: 32rpx;
+          margin-top: 40rpx;
 
           .hos-info {
             max-width: 70%;
@@ -448,6 +547,10 @@
     }
     .m32 {
       margin: 32rpx;
+    }
+
+    .hide-icon {
+      opacity: 0;
     }
   }
 </style>

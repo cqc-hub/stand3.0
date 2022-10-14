@@ -64,15 +64,15 @@
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
 
-  api.addReg = () =>
-    Promise.resolve({
-      result: { orderId: '2210130519500014' },
-      timeTaken: 1161,
-      code: 0,
-      innerMessage: '成功',
-      message: '成功',
-      respCode: 0,
-    });
+  // api.addReg = () =>
+  //   Promise.resolve({
+  //     result: { orderId: '2210130519500014' },
+  //     timeTaken: 1161,
+  //     code: 0,
+  //     innerMessage: '成功',
+  //     message: '成功',
+  //     respCode: 0,
+  //   });
 
   const gStores = new GStores();
   const props = ref<IPageProps>({} as IPageProps);
@@ -114,6 +114,7 @@
       schQukCategor,
       timeDesc,
       clinicalType,
+      promptMessage,
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -141,12 +142,8 @@
       patientId,
       source,
       resType,
+      promptMessage,
     };
-
-    console.log({
-      requestArg,
-      p: props.value,
-    });
 
     const {
       result: { orderId },

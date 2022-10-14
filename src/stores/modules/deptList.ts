@@ -7,6 +7,7 @@ export interface IDeptLv1 extends IDeptLv3 {
   firstShowNo: string;
   firstStandardDeptCode: string;
   firstStandardDeptName: string;
+  firstPromptMessage: string;
   isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
   secondDeptList?: IDeptLv2[];
   children?: IDeptLv2[];
@@ -21,6 +22,7 @@ export interface IDeptLv2 extends IDeptLv3 {
   secondShowNo: string;
   secondStandardDeptCode: string; // 国标科室编码
   secondStandardDeptName: string; // 国标科室名称
+  secondPromptMessage: string;
   visitingArea: string; // 就诊地址
   thirdDeptList?: IDeptLv3[];
   children?: IDeptLv3[];
@@ -61,6 +63,7 @@ export const loopDeptList = (list: IDeptLv1[] | IDeptLv2[] | IDeptLv3[], deptLis
       o.showNo = o.firstShowNo;
       o.standardDeptCode = o.firstStandardDeptCode;
       o.standardDeptName = o.firstStandardDeptName;
+      o.promptMessage = o.firstPromptMessage;
 
       if (_list && _list.length) {
         if (deptListLevel == 3 || deptListLevel == 2) {
@@ -77,6 +80,7 @@ export const loopDeptList = (list: IDeptLv1[] | IDeptLv2[] | IDeptLv3[], deptLis
       o.showNo = o.secondShowNo;
       o.standardDeptCode = o.secondStandardDeptCode;
       o.standardDeptName = o.secondStandardDeptName;
+      o.promptMessage = o.secondPromptMessage;
 
       if (_list && _list.length) {
         if (deptListLevel == 3) {

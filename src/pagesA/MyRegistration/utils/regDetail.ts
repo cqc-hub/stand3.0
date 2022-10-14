@@ -105,6 +105,89 @@ const formatterTemp = (list: TInstance[]) => {
 formatterTemp(regInfoTempList);
 formatterTemp(patientTempList);
 
+/**
+ //0 成功
+success("0","成功"),
+
+//01 挂号成功，转诊未成功
+success_refunded("01","挂号成功，转诊未成功"),
+
+//10 待支付
+read_to_payment("10","待支付"),
+
+//11 医保挂号
+success_medicare("11","医保挂号"),
+
+//16 当日挂号即唤起支付
+day_reg_pay("16","当日挂号即唤起支付"),
+
+//20 失败
+failuer("20","失败"),
+//30已退号待退费
+returned_schId_wait_to_return_fee("30","已退号待退费"),
+// 31 已退费待回执
+return_fee_wait_to_ACK("31","已退费待回执"),
+// 32已退费已回执
+return_fee_success_had_ACK("32","已退费已回执"),
+// 33已退号待退费
+returned_schId_wait_to_fee("33","已退号待退费"),
+//40 已受理退费、待退号
+return_fee_wait_to_return_schId("40","已受理退费、待退号"),
+//41 退费成功、待退号 、体检待通知院内
+return_fee_success_to_return_schId("41","退费成功、待退号 、体检待通知院内"),
+//42已退号、退费成功
+return_fee_success_and_return_schId_success("42","已退号、退费成功"),
+//43 已退号
+return_schId_no_payment("43","已退号"),
+//44、已退费，再次通知院内失败
+REFUNDED_NOTICE_HOS_FAILURE_AGAIN("44","已退费，再次通知院内失败"),
+//45 已取消
+cancel_success("45","已取消"),
+//HIS取消成功，转诊平台取消失败
+cancel_success_referral_failuer("4501","取消成功，转诊平台取消失败"),
+//46 逻辑删除 ,30分钟未支付逻辑删除
+del_order("46","逻辑删除 ,30分钟未支付逻辑删除"),
+//平台已取消,支付组件支付成功
+cancel_success_paid("47","平台已取消,支付组件支付成功"),
+//50 已支付待回执
+paid_wait_to_ack("50","已支付待回执"),
+//51 已支付已回执
+paid_had_ACK("51","已支付已回执"),
+//52 已支付充值失败
+paid_recharge_fail("52","已支付充值失败"),
+//53 已支付挂号失败
+paid_register_fail("53","已支付挂号失败"),
+//60 支付逾期
+payment_timeout("60","支付逾期"),
+//平台支付逾期，支付组件支付成功
+payment_timeout_paid("61","平台支付逾期，支付组件支付成功"),
+//70已就诊  、已体检
+visited("70","已就诊"),
+//75待就诊
+wait_visited("75","待就诊"),
+//80 未就诊 、未体检
+no_clinical_visit("80","未就诊"),
+//81 已过号
+passed("81","已过号"),
+//82 已结束
+finished("82","已结束"),
+//85已过号但患者已支付
+passed_paid("85","已过号但患者已支付"),
+//90 停诊
+stopping("90","停诊"),
+//100 已挂号
+is_registration("100","已挂号"),
+//101 待取号
+stay_payment("101","待取号"),
+//110 已预约
+is_already("110","已预约"),
+//其他终端已付费
+paid_other_client("210","其他终端已付费"),
+//其他终端退费
+refund_other_client("310","其他终端退费"),
+//怕闹事退费
+refund_trouble_client("410","怕闹事退费");
+ */
 export const orderStatusMap: Record<
   string,
   {

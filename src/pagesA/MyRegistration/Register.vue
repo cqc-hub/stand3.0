@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref, onMounted } from 'vue';
-  import { ServerStaticData, IHosInfo } from '@/utils';
+  import { ServerStaticData, IHosInfo, openLocation, GStores } from '@/utils';
   import { joinQuery } from '@/common';
 
   import hosListVue from './components/hosList/hosList.vue';
@@ -23,31 +23,32 @@
 
   const props = defineProps<{
     _url: string;
-    _type: number; //区分my-h5跳转 1:医院指南跳转
   }>();
+  const gStores = new GStores();
 
   const hosList = ref<IHosInfo[]>([]);
 
   const itemClick = (item: IHosInfo) => {
     const url = decodeURIComponent(props._url);
-    if (props._type == 1) {
-      //医院指南
-      uni.navigateTo({
-        url:  joinQuery('/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide',{
-          hosId: item.hosId,
-        })
-      });
-    } else {
-      //小程序内部跳转
-      uni.navigateTo({
-        url: joinQuery(url, {
-          hosId: item.hosId,
-        }),
-      });
-    }
+    uni.navigateTo({
+      url: joinQuery(url, {
+        hosId: item.hosId,
+      }),
+    });
   };
 
-  const locationClick = (item: IHosInfo) => {};
+  const locationClick = (item: IHosInfo) => {
+    const { gisLat, gisLng, hosName, address } = item;
+
+    if (gisLat) {
+      openLocation([gisLat!, gisLng!], {
+        name: hosName,
+        address,
+      });
+    } else {
+      gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 1500);
+    }
+  };
 
   const imgClick = (item: IHosInfo) => {};
 

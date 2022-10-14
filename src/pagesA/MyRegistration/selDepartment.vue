@@ -146,6 +146,7 @@
       clinicalType: props.clinicalType,
       deptName: encodeURIComponent(item.deptName),
       hosDeptId: '',
+      promptMessage: '',
       firstHosDeptId: encodeURIComponent(deptStore.activeLv1.firstHosDeptId),
       secondHosDeptId: '',
       isExpertDeptId: deptStore.activeLv1.isExpertDeptId
@@ -163,6 +164,8 @@
       );
       queryArg.hosDeptId = encodeURIComponent(item.hosDeptId);
     }
+
+    queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
 
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
@@ -220,6 +223,4 @@
       height: 1px;
     }
   }
-
-
 </style>
