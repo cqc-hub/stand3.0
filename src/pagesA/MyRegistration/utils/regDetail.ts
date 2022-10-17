@@ -8,28 +8,6 @@ export interface IPageProps {
  * @orderStatus
  *  dsds
  */
-export interface IRegInfo {
-  orderStatus: string;
-  patientId: string;
-  patientName: string;
-  patientPhone: string;
-  herenId: string;
-  idCard: string;
-  hosGisLat: string; // 纬度
-  hosGisLng: string; // 经度
-  hosId: string;
-  hosName: string;
-  hosOrderId: string;
-  orderId: string;
-  categorName: string;
-  schQukCategor: string;
-  _appointmentDate: string;
-  appointmentDate: string;
-  appointmentTime: string;
-  ampmName: string;
-  fee: string;
-  _fee: string;
-}
 
 export const regInfoTempList: TInstance[] = [
   {
@@ -193,22 +171,9 @@ refund_trouble_client("410","怕闹事退费");
  * 0 -》 取消 | 退号
  * 10 -》 立即支付
  */
-export const orderStatusMap: Record<
-  string,
-  {
-    headerClass:
-      | 'header-yellow'
-      | 'header-blue'
-      | 'header-green'
-      | 'header-dark';
-    headerBgIcon: string;
-    headerIcon: string;
-    color: string;
-    title: string;
-  }
-> = {
+export const orderStatusMap = {
   // 待支付
-  10: {
+  '10': {
     headerClass: 'header-yellow',
     headerBgIcon: '',
     headerIcon: '&#xe6ea;',
@@ -216,7 +181,7 @@ export const orderStatusMap: Record<
     title: '待支付',
   },
   // 成功
-  0: {
+  '0': {
     headerClass: 'header-blue',
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
@@ -224,7 +189,7 @@ export const orderStatusMap: Record<
     title: '预约成功',
   },
   // 已挂号
-  100: {
+  '100': {
     headerClass: 'header-blue',
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
@@ -232,7 +197,7 @@ export const orderStatusMap: Record<
     title: '已挂号',
   },
   // 已就诊
-  70: {
+  '70': {
     headerClass: 'header-green',
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
@@ -240,7 +205,7 @@ export const orderStatusMap: Record<
     title: '已就诊',
   },
   // 待就诊
-  75: {
+  '75': {
     headerClass: 'header-green',
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
@@ -248,7 +213,7 @@ export const orderStatusMap: Record<
     title: '待就诊',
   },
   // 已退号
-  23: {
+  '23': {
     headerClass: 'header-dark',
     color: '#fff',
     headerBgIcon: '&#xe6de;',
@@ -256,7 +221,7 @@ export const orderStatusMap: Record<
     title: '已退号',
   },
   // 挂号失败
-  20: {
+  '20': {
     headerClass: 'header-yellow',
     color: 'var( --hr-error-color-6)',
     headerIcon: '&#xe6d5;',
@@ -264,7 +229,7 @@ export const orderStatusMap: Record<
     title: '挂号失败',
   },
   // 已取消
-  45: {
+  '45': {
     headerClass: 'header-dark',
     color: '#fff',
     headerBgIcon: '&#xe6de;',
@@ -272,11 +237,34 @@ export const orderStatusMap: Record<
     title: '已取消',
   },
   // 已结束
-  82: {
+  '82': {
     headerClass: 'header-dark',
     color: '#fff',
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已结束',
   },
-};
+} as const;
+
+export interface IRegInfo {
+  orderStatus: keyof typeof orderStatusMap;
+  patientId: string;
+  patientName: string;
+  patientPhone: string;
+  herenId: string;
+  idCard: string;
+  hosGisLat: string; // 纬度
+  hosGisLng: string; // 经度
+  hosId: string;
+  hosName: string;
+  hosOrderId: string;
+  orderId: string;
+  categorName: string;
+  schQukCategor: string;
+  _appointmentDate: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  ampmName: string;
+  fee: string;
+  _fee: string;
+}

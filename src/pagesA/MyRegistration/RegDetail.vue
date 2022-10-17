@@ -159,12 +159,46 @@
     </scroll-view>
 
     <!-- 取消、退号 是两个概念 退号要退钱， 取消是取消锁号-->
-    <view v-if="orderRegInfo.patientId" class="footer">
+    <view
+      v-if="orderRegInfo.patientId && isShowFooter"
+      class="footer g-border-top"
+    >
       <view @click="goHome" class="home g-flex-rc-cc">
         <view class="iconfont home-icon">&#xe6df;</view>
         <view>首页</view>
       </view>
-      <button class="btn btn-primary">确定预约</button>
+      <button
+        v-if="orderRegInfo.orderStatus === '0'"
+        class="btn btn-plain btn-error g-border"
+      >
+        {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
+      </button>
+
+      <block v-if="orderRegInfo.orderStatus === '70'">
+        <button class="btn g-border btn-normal">再次预约</button>
+        <button class="btn g-border btn-primary">服务评价</button>
+      </block>
+
+      <block v-if="orderRegInfo.orderStatus === '10'">
+        <button class="btn g-border btn-normal">取消订单</button>
+        <button class="btn btn-warning pay-btn">
+          {{ orderRegInfo.fee }}元 立即支付
+        </button>
+      </block>
+
+      <button
+        v-if="orderRegInfo.orderStatus === '45'"
+        class="btn g-border btn-primary"
+      >
+        再次预约
+      </button>
+
+      <button
+        v-if="orderRegInfo.orderStatus === '23'"
+        class="btn g-border btn-primary"
+      >
+        再次预约
+      </button>
     </view>
     <g-message />
   </view>
@@ -190,7 +224,6 @@
     orderStatusMap,
   } from './utils/regDetail';
   import api from '@/service/api';
-
 
   // api.getRegOrderInfo = () =>
   //   Promise.resolve({
@@ -253,6 +286,9 @@
       orderRegInfo.value.orderStatus
     );
   });
+  const isShowFooter = computed(() =>
+    ['23', '45', '10', '70', '0'].includes(orderRegInfo.value.orderStatus)
+  );
 
   const qrCodeOpt = computed(() => {
     return {
@@ -314,6 +350,7 @@
     }`;
     result._fee = result.fee + '元';
     orderRegInfo.value = result;
+    // orderRegInfo.value.orderStatus = '23';
 
     setTimeout(() => {
       refForm.value.setList(regInfoTempList);
@@ -576,13 +613,14 @@
       padding: 24rpx 32rpx 48rpx;
       position: reactive;
       z-index: 1;
+      gap: 18rpx;
 
       display: flex;
 
       .home {
         font-size: var(--hr-font-size-xxxs);
         flex-direction: column;
-        margin-right: 32rpx;
+        margin-right: 10rpx;
 
         .home-icon {
           font-size: var(--hr-font-size-xxl);
@@ -591,6 +629,10 @@
 
       .btn {
         flex: 1;
+      }
+
+      .pay-btn {
+        flex: 2;
       }
     }
   }

@@ -112,6 +112,15 @@
   background-color: #fff;
 }
 
+.btn.btn-error {
+  color: var(--hr-error-color-6);
+  border-color: var(--hr-error-color-6);
+}
+
+.btn.btn-warning {
+  background-color: var(--hr-warning-color-6);
+}
+
 .empty-list {
   transform: translateY(100%);
 }
@@ -129,7 +138,6 @@
 .color-purple {
   color: #7747ff;
 }
-
 
 .my-disabled {
   pointer-events: none !important;
