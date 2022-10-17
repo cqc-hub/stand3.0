@@ -15,6 +15,8 @@ export interface ISystemConfig {
 
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
+    // 预约挂号时候付钱?
+    isOrderPay: '0' | '1';
   };
 
   // 就诊人
@@ -325,6 +327,7 @@ export class ServerStaticData {
         chooseDay: 30,
         selOrderColumn: 3,
         isOrderBlur: '1',
+        isOrderPay: '0',
       },
 
       person: {

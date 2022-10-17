@@ -124,6 +124,7 @@ export const useOrder = (props: IOrderProps) => {
     selOrderColumn: 3,
     isOrderBlur: '1',
     isHideOutTimeOrderSource: '1',
+    isOrderPay: '0',
   });
 
   // ref
@@ -417,7 +418,7 @@ export const useOrder = (props: IOrderProps) => {
       schId,
       schQukCategor,
       clinicalType,
-      promptMessage
+      promptMessage,
     };
     selectOrderSourceNumId.value = numId;
 

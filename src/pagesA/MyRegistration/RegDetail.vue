@@ -158,7 +158,8 @@
       </view>
     </scroll-view>
 
-    <view class="footer">
+    <!-- 取消、退号 是两个概念 退号要退钱， 取消是取消锁号-->
+    <view v-if="orderRegInfo.patientId" class="footer">
       <view @click="goHome" class="home g-flex-rc-cc">
         <view class="iconfont home-icon">&#xe6df;</view>
         <view>首页</view>
@@ -173,7 +174,13 @@
   import { computed, ref, nextTick, onMounted, reactive } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
-  import { GStores, ServerStaticData, IHosInfo, openLocation } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    openLocation,
+    ISystemConfig,
+  } from '@/utils';
 
   import {
     IPageProps,
@@ -183,6 +190,7 @@
     orderStatusMap,
   } from './utils/regDetail';
   import api from '@/service/api';
+
 
   // api.getRegOrderInfo = () =>
   //   Promise.resolve({
@@ -232,6 +240,7 @@
   //     respCode: 0,
   //   });
 
+  const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
   const refForm = ref<any>('');
   const refFormPatient = ref<any>('');
   const pageProps = ref<IPageProps>({} as IPageProps);
@@ -287,12 +296,12 @@
 
   const init = async () => {
     const orderId = pageProps.value.orderId;
+
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: gStores.globalStore.browser.source,
     });
-
-    // result.orderStatus = '233';
 
     const hosList = await ServerStaticData.getHosList();
     const hos = hosList.find((o) => o.hosId === result.hosId);

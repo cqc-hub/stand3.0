@@ -188,6 +188,11 @@ refund_other_client("310","其他终端退费"),
 //怕闹事退费
 refund_trouble_client("410","怕闹事退费");
  */
+
+/**
+ * 0 -》 取消 | 退号
+ * 10 -》 立即支付
+ */
 export const orderStatusMap: Record<
   string,
   {
@@ -265,5 +270,13 @@ export const orderStatusMap: Record<
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已取消',
+  },
+  // 已结束
+  82: {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已结束',
   },
 };
