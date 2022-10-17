@@ -6,13 +6,13 @@
           v-for="(item, i) in option"
           :key="i"
           :class="{
-            'popup-row-active': isActive(item)
+            'popup-row-active': isActive(item),
           }"
           @click="change(item)"
-          class="popup-row"
+          class="popup-row g-border-bottom"
         >
           <view class="popup-row-label text-ellipsis">
-            {{ item[field.label] }}
+            {{ field ? item[field.label] : item }}
           </view>
           <view v-if="isActive(item)" class="iconfont ico-check">&#xe6cc;</view>
         </view>
@@ -38,10 +38,6 @@
     }>(),
     {
       title: '',
-      field: () => ({
-        label: 'label',
-        value: 'value'
-      })
     }
   );
 
@@ -49,7 +45,7 @@
   const emits = defineEmits(['update:show', 'update:value', 'change']);
 
   const isActive = (item) => {
-    return item[props.field.value] === props.value;
+    return (props.field ? item[props.field.value] : item) === props.value;
   };
 
   const hide = () => {
@@ -57,7 +53,7 @@
   };
 
   const change = (item) => {
-    const value = item[props.field.value];
+    const value = props.field ? item[props.field.value] : item;
 
     if (value === props.value) {
       return;
@@ -66,7 +62,7 @@
     close();
     emits('update:value', value);
     emits('change', {
-      item
+      item,
     });
   };
 

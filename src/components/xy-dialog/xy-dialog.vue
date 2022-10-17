@@ -28,7 +28,7 @@
           :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
           @click="clickConfirm"
         >
-          {{ confirmText }}
+          <slot name="confirmBtn">{{ confirmText }}</slot>
         </view>
       </view>
     </view>

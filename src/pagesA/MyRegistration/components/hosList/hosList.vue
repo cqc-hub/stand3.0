@@ -1,7 +1,7 @@
 <template>
   <view class="hos-list-container">
     <view v-for="(item, i) in list" :key="i">
-      <block v-if="hosLen < 4">
+      <block v-if="isShowMoreItem">
         <Item-Less
           :item="item"
           @img-click="imgClick"
@@ -30,6 +30,7 @@
 
   const props = defineProps<{
     list: IHosInfo[];
+    isShowMoreItem: boolean;
   }>();
 
   const hosLen = computed(() => props.list.length);
