@@ -84,7 +84,7 @@
 /* 按钮 */
 .btn {
   color: var(--h-color-white);
-  border-radius: 10rpx;
+  border-radius: 16rpx;
   font-size: var(--hr-font-size-xl);
   font-weight: 600;
   position: relative;

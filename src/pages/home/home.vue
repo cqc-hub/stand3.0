@@ -6,7 +6,7 @@
         :loading="skeletonProps.loading"
       >
         <view class="homePage">
-          <view class="search my-disabled" @tap="goSearch">
+          <view class="search" @tap="goSearch">
             <uni-search-input
               :type="'2'"
               inputBorder
@@ -226,6 +226,10 @@
     if (props.code) {
       new LoginUtils().getNoPublicOpenId(props.code);
     }
+    wx.showShareMenu({
+      // 要求小程序返回分享目标信息
+      withShareTicket: true,
+    });
     // #endif
   });
   const getNotice = async () => {

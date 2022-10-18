@@ -59,8 +59,8 @@
       'card+card+card+card',
       16,
       'line-sm',
-      'card+card+card+card'
-    ]
+      'card+card+card+card',
+    ],
   };
 
   interface TPageType extends ILoginBack {
@@ -82,6 +82,15 @@
   const menu1List = ref([]); //我的订单
   const menu2List = ref([]); //我的服务
   const menu3List = ref([]); //我的工具
+
+  onLoad(() => {
+    // #ifdef MP-WEIXIN
+    wx.showShareMenu({
+      // 要求小程序返回分享目标信息
+      withShareTicket: true,
+    });
+    // #endif
+  });
 
   onMounted(async () => {
     routeStore.receiveQuery(props);
@@ -110,7 +119,11 @@
     console.log({ a });
 
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/Register?_url=' + encodeURIComponent('/pagesA/MyRegistration/selDepartment?clinicalType=1')
+      url:
+        '/pagesA/MyRegistration/Register?_url=' +
+        encodeURIComponent(
+          '/pagesA/MyRegistration/selDepartment?clinicalType=1'
+        ),
     });
 
     // uni.navigateTo({

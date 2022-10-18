@@ -11,6 +11,7 @@
         <swiper
           class="swiper"
           circular
+          :autoplay="autoplay"
           :indicator-dots="props.leftFunctionList.length > 0 ? true : false"
         >
           <swiper-item
@@ -46,7 +47,7 @@
           </view>
           <!-- 第一组是多个banner -->
           <view v-else class="view1">
-            <swiper class="swiper" circular indicator-dots="true">
+            <swiper class="swiper" circular  :autoplay="autoplay" indicator-dots="true" >
               <swiper-item
                 v-for="(item, i) in props.leftFunctionList"
                 :key="i"
@@ -125,6 +126,7 @@
       ]
     }
   );
+  const autoplay = ref(true)
   //跳转对应地址
   const gotoPath = (item) => {
     useCommonTo(item);
