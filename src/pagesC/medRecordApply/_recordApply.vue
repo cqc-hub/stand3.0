@@ -1,7 +1,13 @@
 <template>
   <view class="g-page">
     <view class="g-container">
-      <Record-Apply-List :list="list" />
+      <block v-if="isComplete && list.length">
+        <Record-Apply-List :list="list" />
+      </block>
+
+      <view class="empty-list" v-else-if="isComplete">
+        <g-empty :current="1" />
+      </view>
     </view>
   </view>
 </template>
@@ -14,6 +20,7 @@
   import RecordApplyList from './components/recordApplyList.vue';
 
   import api from '@/service/api';
+  import dayjs from 'dayjs';
 
   const gStores = new GStores();
   const list = ref<CaseCopyItem[]>([]);
@@ -27,11 +34,19 @@
     };
 
     isComplete.value = false;
-    const { result } = await api.getCaseCopyList(arg).finally(() => {
-      isComplete.value = true;
-    });
+    const { result } = await api
+      .getCaseCopyList<CaseCopyItem[]>(arg)
+      .finally(() => {
+        isComplete.value = true;
+      });
 
-    list.value = result;
+    if (result && result.length) {
+      result.map((o) => {
+        o._createTime = dayjs(o.createTime).format('YYYY-MM-DD');
+      });
+    }
+
+    list.value = result || [];
   };
 
   const init = () => {
@@ -41,4 +56,8 @@
   init();
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .g-container {
+    padding: 0 32rpx;
+  }
+</style>

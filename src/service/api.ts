@@ -128,8 +128,8 @@ const queryApi = {
     service.post('/phs-query/operation/getOutpatientHospitalList', parm(data)),
 
   // 获取病案复印申请记录
-  getCaseCopyList: (data) =>
-    service.post('/phs-query/caseCopy/getCaseCopyList', parm(data)),
+  getCaseCopyList: <T>(data) =>
+    service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data)),
 };
 
 // 挂号服务
