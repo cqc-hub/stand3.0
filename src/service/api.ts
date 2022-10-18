@@ -122,6 +122,10 @@ const queryApi = {
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),
+
+  // 门诊住院列表
+  getOutpatientHospitalList: (data) =>
+    service.post('/phs-query/operation/getOutpatientHospitalList', parm(data)),
 };
 
 // 挂号服务

@@ -1,10 +1,10 @@
 <template>
   <view class="page">
-    <view class="bread-crumbs" @click="toggleHos">
-      <view class="hos-label">当前医院：</view>
-      <view class="hos-name text-ellipsis">{{ getHosName }}</view>
-      <view class="iconfont ico-arrow">&#xe66b;</view>
-    </view>
+    <g-selhos
+      v-model:hosId="hosId"
+      @get-list="getHosList"
+      @change="getDepList"
+    />
 
     <view class="container" scroll-y>
       <Department-List
@@ -24,16 +24,6 @@
       </view>
     </view>
 
-    <g-select
-      v-model:value="hosId"
-      v-model:show="isToggleDialogShow"
-      :option="hosList"
-      :field="{
-        label: 'hosName',
-        value: 'hosId',
-      }"
-      title="切换医院"
-    />
     <g-message />
   </view>
 </template>
@@ -68,15 +58,12 @@
   const hosList = ref<IHosInfo[]>([]);
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
-  const isToggleDialogShow = ref(false);
 
   const init = () => {
-    getHosList();
     getDepList();
   };
 
-  const getHosList = async () => {
-    const list = await ServerStaticData.getHosList();
+  const getHosList = async ({ list }) => {
     hosList.value = list;
   };
 
@@ -85,7 +72,7 @@
 
     const requestArg = {
       source,
-      hosId: props.hosId,
+      hosId: hosId.value,
       clinicalType: props.clinicalType,
       // resType   // 预约类型：1.预约挂号，2.当日挂号
     };
@@ -126,23 +113,10 @@
     registerContinue(item);
   };
 
-  const getHosName = computed(() => {
-    if (hosList.value.length) {
-      const item = hosList.value.find((o) => o.hosId == hosId.value);
-      if (item) {
-        return item.hosName;
-      } else {
-        return hosId.value;
-      }
-    } else {
-      return '';
-    }
-  });
-
   const registerContinue = (item: IDeptLv3 | IDeptLv2 | IDeptLv1) => {
     // item.
     const queryArg = {
-      hosId: props.hosId,
+      hosId: hosId.value,
       clinicalType: props.clinicalType,
       deptName: encodeURIComponent(item.deptName),
       hosDeptId: '',
@@ -170,19 +144,6 @@
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
-  };
-
-  const toggleHos = () => {
-    const len = hosList.value.length;
-    if (len) {
-      if (len === 1) {
-        gStores.messageStore.showMessage('没有可切换的院区', 1500);
-      } else {
-        isToggleDialogShow.value = true;
-      }
-    } else {
-      gStores.messageStore.showMessage('请求医院列表中， 请稍后点击', 1500);
-    }
   };
 
   init();

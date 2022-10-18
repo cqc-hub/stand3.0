@@ -593,7 +593,7 @@ export class PatientUtils extends LoginUtils {
     if (result && result.length) {
       const isArea = isAreaProgram();
       result.map((o) => {
-        o._showId = (isArea && o.idCard) || o.cardNumber || o.patientId;
+        o._showId = (isArea && o.idCard) || o.cardNumber || '';
       });
 
       this.userStore.updatePatList(result);

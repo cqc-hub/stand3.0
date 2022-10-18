@@ -73,6 +73,8 @@ Request.interceptors.response(
         showMessage = true;
       }
 
+      console.log({ responseData, responseOptions, showMessage, message });
+
       if (showMessage) {
         messageStore.showMessage(message, 1500);
       }
@@ -80,15 +82,16 @@ Request.interceptors.response(
 
     if (code !== 0) {
       return Promise.reject(responseData);
-      // return responseData;
     } else {
       return responseData;
     }
   },
   (err) => {
+
     const messageStore = useMessageStore();
     messageStore.showMessage(err.data.message, 1500);
     uni.hideLoading();
+
     return err.data;
   }
 );

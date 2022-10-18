@@ -135,10 +135,30 @@
   color: var(--hr-brand-color-6);
 }
 
+.color-green {
+  color: var(--hr-success-color-6);
+}
+
 .color-purple {
   color: #7747ff;
 }
 
 .my-disabled {
   pointer-events: none !important;
+}
+
+.my-display-none {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.g-footer {
+  background-color: var(--h-color-white);
+  padding: 24rpx 32rpx 48rpx;
+  position: reactive;
+  z-index: 1;
+  gap: 18rpx;
+
+  display: flex;
 }

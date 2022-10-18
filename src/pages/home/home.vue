@@ -29,7 +29,7 @@
                       <text>
                         {{ gStores.userStore.patChoose.patientName }}
                       </text>
-                      <text>
+                      <text v-if="!isAreaProgram()">
                         ID
                         {{ gStores.userStore.patChoose._showId }}
                       </text>
@@ -148,7 +148,7 @@
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import homeTabbar from './componetns/homeTabbar.vue';
   import homeGrid from './componetns/homeGrid.vue';
-  import { useGlobalStore, useUserStore, IPat } from '@/stores';
+  import { useGlobalStore, useUserStore, IPat, isAreaProgram } from '@/stores';
 
   import { onLoad } from '@dcloudio/uni-app';
   import global from '@/config/global';

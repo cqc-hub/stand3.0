@@ -5,17 +5,29 @@
       :key="pat.patientId"
       @click="patClick(pat, i)"
       :class="{
-        'pat-active': gStores.userStore.patChoose.patientId === pat.patientId
+        'pat-active': gStores.userStore.patChoose.patientId === pat.patientId,
       }"
       class="pat-item"
     >
-      <image class="user-avatar" :src="getAvatar(pat.patientSex)" mode="widthFix" />
+      <image
+        class="user-avatar"
+        :src="getAvatar(pat.patientSex)"
+        mode="widthFix"
+      />
       <view class="user-label text-ellipsis">
         <text class="user-name">{{ pat.patientName }}</text>
-        ({{ pat._showId }})
+
+        <text v-if="!isAreaProgram()">
+          {{ (pat._showId && `(${pat._showId})`) || '' }}
+        </text>
       </view>
 
-      <view v-if="gStores.userStore.patChoose.patientId === pat.patientId" class="iconfont ico-checkbox">&#xe6d0;</view>
+      <view
+        v-if="gStores.userStore.patChoose.patientId === pat.patientId"
+        class="iconfont ico-checkbox"
+      >
+        &#xe6d0;
+      </view>
     </view>
   </view>
 </template>
@@ -23,7 +35,7 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { GStores } from '@/utils';
-  import { IPat, getAvatar } from '@/stores';
+  import { IPat, getAvatar, isAreaProgram } from '@/stores';
 
   const gStores = new GStores();
 
@@ -31,7 +43,7 @@
   const patClick = (pat: IPat, index: number) => {
     emits('choose-pat', {
       item: pat,
-      index
+      index,
     });
   };
 </script>

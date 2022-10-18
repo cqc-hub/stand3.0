@@ -625,6 +625,8 @@
       item,
       value,
     });
+
+    changeInput(item, value);
   };
 
   const changeSelect = function (item: TInstance, v: any) {
