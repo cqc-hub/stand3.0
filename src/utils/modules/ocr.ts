@@ -164,14 +164,7 @@ const ocrForWX = async () => {
       base64: e.base64,
     };
 
-    const { result } = await api.ocrIdCard<{
-      address: string;
-      idCard: string;
-      nation: string;
-      patientName: string;
-      patientSex: string;
-      type: string;
-    }>(requestData);
+    const { result } = await api.ocrIdCard<any>(requestData);
 
     if (result.type === 'Front') {
       const { address, idCard, nation, patientName, patientSex } = result;
@@ -287,7 +280,7 @@ export const useOcr = async (): Promise<OcrFindRes> => {
   const messageStore = useMessageStore();
 
   // #ifdef MP-WEIXIN
-  await ocrForWX();
+  return await ocrForWX();
   // #endif
 
   // #ifdef MP-ALIPAY
