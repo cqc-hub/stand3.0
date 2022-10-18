@@ -160,9 +160,8 @@ export class LoginUtils extends GStores {
     await this.getUerInfo();
     //调用微信绑定openid的接口
     if (this.globalStore.h5OpenId) {
-      this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
+      await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
     }
-    routerJump();
   }
 
   //微信绑定openid接口

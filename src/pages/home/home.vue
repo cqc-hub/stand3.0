@@ -224,7 +224,9 @@
     getHomeConfig();
     // #ifdef MP-WEIXIN
     if (props.code) {
-      new LoginUtils().getNoPublicOpenId(props.code);
+      new LoginUtils().getNoPublicOpenId(props.code).then(() => {
+        routerJump();
+      });
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息

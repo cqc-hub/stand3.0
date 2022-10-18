@@ -18,7 +18,7 @@
         <view>手动添加记录</view>
       </view>
 
-      <view class="g-flex-rc-cc g-border">
+      <view @click="goApplyRecord" class="g-flex-rc-cc g-border">
         <view class="iconfont color-green">&#xe6fc;</view>
         <view>查看申请记录</view>
       </view>
@@ -28,7 +28,7 @@
       <Out-Hos-List-Com :list="outHosList" :value="checkOutHosList" />
     </view>
 
-    <view class="g-footer">
+    <view class="g-footer g-border-top">
       <view class="footer-check flex-normal">
         <view class="iconfont">&#xe6ce;</view>
         <view>全选</view>
@@ -71,6 +71,12 @@
     isComplete.value = false;
     await api.getOutpatientHospitalList(requestArg);
     isComplete.value = true;
+  };
+
+  const goApplyRecord = () => {
+    uni.navigateTo({
+      url: '/pagesC/medRecordApply/_recordApply',
+    });
   };
 
   // gStores.userStore.patChoose

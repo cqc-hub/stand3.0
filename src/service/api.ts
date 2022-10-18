@@ -126,6 +126,10 @@ const queryApi = {
   // 门诊住院列表
   getOutpatientHospitalList: (data) =>
     service.post('/phs-query/operation/getOutpatientHospitalList', parm(data)),
+
+  // 获取病案复印申请记录
+  getCaseCopyList: (data) =>
+    service.post('/phs-query/caseCopy/getCaseCopyList', parm(data)),
 };
 
 // 挂号服务
@@ -194,7 +198,8 @@ const userApi = {
     }),
 
   //身份证OCR识别
-  ocrIdCard: (data) => service.post('/phs-user/authUser/ocrIdCard', parm(data)),
+  ocrIdCard: <T>(data) =>
+    service.post<T>('/phs-user/authUser/ocrIdCard', parm(data)),
 
   // 注册电子健康卡
   registerHealthCard: (data) =>

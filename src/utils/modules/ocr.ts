@@ -164,13 +164,47 @@ const ocrForWX = async () => {
       base64: e.base64,
     };
 
-    await api.ocrIdCard(requestData);
+    const { result } = await api.ocrIdCard<{
+      address: string;
+      idCard: string;
+      nation: string;
+      patientName: string;
+      patientSex: string;
+      type: string;
+    }>(requestData);
+
+    if (result.type === 'Front') {
+      const { address, idCard, nation, patientName, patientSex } = result;
+      return await findSuccess({
+        name: patientName,
+        sex: patientSex,
+        nation,
+        address,
+        idCard,
+      });
+    } else {
+      throw new Error('请使用身份证正面');
+    }
   } else {
     throw new Error(e.evt);
   }
 };
 
-const findSuccess = async ({ name, sex, nation, birth, idCard, address }) => {
+const findSuccess = async ({
+  name,
+  sex,
+  nation,
+  birth,
+  idCard,
+  address,
+}: {
+  name: string;
+  sex: string;
+  nation: string;
+  birth?: string;
+  idCard: string;
+  address: string;
+}) => {
   if (nation) {
     if (!nation.includes('族')) {
       nation += '族';

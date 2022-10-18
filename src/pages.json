@@ -214,6 +214,15 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "medRecordApply/_recordApply",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "申请记录"
+          }
+        },
+        {
           "path": "medRecordApply/recordApply",
           "extend": {
             "patient": true

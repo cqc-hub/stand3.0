@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <view v-for="(item, i) in list" :key="i" class="g-border item">
+    <view v-for="(item, idx) in list" :key="idx" class="g-border item">
       <view class="iconfont item-choose-icon">&#xe6ce;</view>
 
       <view class="item-container">
