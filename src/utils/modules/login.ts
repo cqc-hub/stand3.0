@@ -1,4 +1,10 @@
-import { useGlobalStore, useUserStore, useMessageStore, IPat } from '@/stores';
+import {
+  useGlobalStore,
+  useUserStore,
+  useMessageStore,
+  IPat,
+  isAreaProgram,
+} from '@/stores';
 import { getSysCode, setLocalStorage } from '@/common';
 import { routerJump, ServerStaticData } from '@/utils';
 import api from '@/service/api';
@@ -501,7 +507,7 @@ export class PatientUtils extends LoginUtils {
     }>
   ) {
     getH5OpenidParam(data);
-    await api.addPatientByHasBeenTreated(data);
+    await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
   }
 
   async addRelevantPatient(
@@ -585,8 +591,9 @@ export class PatientUtils extends LoginUtils {
     const { result } = await api.getPatCardList(requestArg);
 
     if (result && result.length) {
+      const isArea = isAreaProgram();
       result.map((o) => {
-        o._showId = o.cardNumber || o.patientId;
+        o._showId = (isArea && o.idCard) || o.cardNumber || o.patientId;
       });
 
       this.userStore.updatePatList(result);
@@ -684,6 +691,5 @@ export const outLogin = function (
     isGoLoginPage: boolean;
   }> = {}
 ) {
-
   new LoginUtils().outLogin(payload);
 };

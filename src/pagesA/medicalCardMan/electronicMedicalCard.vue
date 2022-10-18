@@ -13,7 +13,9 @@
           <block v-if="!clickPat.healthQrCodeText">
             <w-barcode :options="barCodeOpt" />
 
-            <view class="card-code">{{ barCodeOpt.code }}</view>
+            <view class="card-code">
+              {{ showCodeLabel || barCodeOpt.code }}
+            </view>
           </block>
 
           <w-qrcode :options="options" />
@@ -31,7 +33,7 @@
   import { GStores } from '@/utils';
   import { patCardDetailList } from './utils';
   import { onReady } from '@dcloudio/uni-app';
-  import globalGl from '@/config/global';
+  import { isAreaProgram } from '@/stores';
 
   const gform = ref<any>('');
   const gStore = new GStores();
@@ -46,7 +48,9 @@
     // 条形码
     width: 600, // 宽度 单位rpx
     height: 184, // 高度 单位rpx
-    code: clickPat.value.healthQrCodeText || clickPat.value._showId,
+    code: isAreaProgram()
+      ? clickPat.value.idCardEncry
+      : clickPat.value.healthQrCodeText || clickPat.value._showId,
     img: clickPat.value.healthQrCodeText
       ? {
           src: '/static/image/person/health-card-logo.png',
@@ -61,6 +65,10 @@
   const formData = ref({
     ...clickPat.value,
   });
+  const showCodeLabel = ref('');
+  if (isAreaProgram()) {
+    showCodeLabel.value = clickPat.value.idCard;
+  }
 
   onReady(() => {
     if (clickPat.value.healthQrCodeText) {

@@ -214,6 +214,15 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "medRecordApply/recordApply",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "选择住院记录"
+          }
+        },
+        {
           "path": "queueNumber/queueNumber",
           "extend": {
             "patient": true

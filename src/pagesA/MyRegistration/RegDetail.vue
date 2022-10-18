@@ -169,6 +169,7 @@
       </view>
       <button
         v-if="orderRegInfo.orderStatus === '0'"
+        @click="cancelOrder"
         class="btn btn-plain btn-error g-border"
       >
         {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
@@ -370,6 +371,12 @@
   const goHome = () => {
     uni.reLaunch({
       url: '/pages/home/home',
+    });
+  };
+
+  const cancelOrder = () => {
+    uni.reLaunch({
+      url: '/aaa',
     });
   };
 

@@ -101,6 +101,7 @@
       const isShowHealthLogin = ref(false);
       const patientUtils = new PatientUtils();
       const gStores = new GStores();
+      const showId = ref('');
 
       const profileClick = () => {
         emit('profile-click', props.pat);
@@ -147,6 +148,7 @@
         cardClick,
         isShowHealthLogin,
         upToHealthCord,
+        showId
       };
     },
   });

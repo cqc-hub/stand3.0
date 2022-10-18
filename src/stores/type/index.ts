@@ -8,6 +8,7 @@ export interface IPat {
 	defaultFlag: '1' | '0';
 	herenId: number;
 	idCard: string;
+	idCardEncry: string;
 	idType: string;
 	nation: string;
 	nationCode: string;

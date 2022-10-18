@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
-import api from '@/service/api';
 
-import { getLocalStorage, setLocalStorage } from '@/common';
 interface IStateGlobal {
   token: {
     accessToken: string;
@@ -36,8 +34,8 @@ const globalStore = defineStore('global', {
       'sysTerms',
       'nationTerms',
       'patientTypeTerms',
-      'browser'
-    ]
+      'browser',
+    ],
   },
 
   state: (): IStateGlobal => {
@@ -45,13 +43,13 @@ const globalStore = defineStore('global', {
       // 所有这些属性都将自动推断其类型
       token: {
         accessToken: '',
-        refreshToken: ''
+        refreshToken: '',
       },
       //来源
       browser: {
         source: 4,
         accountType: 2,
-        payType: 'ALI_WAP'
+        payType: 'ALI_WAP',
       },
       openId: '',
       h5OpenId: '',
@@ -73,21 +71,20 @@ const globalStore = defineStore('global', {
         return true;
       }
       return false;
-    }
+    },
   },
 
   actions: {
     clearStore() {
       this.token = {
         accessToken: '',
-        refreshToken: ''
+        refreshToken: '',
       };
 
       this.openId = '';
       // this.h5OpenId = '';
       this.herenId = '';
     },
-
 
     updateToken(token) {
       this.token = token;
@@ -102,19 +99,21 @@ const globalStore = defineStore('global', {
       const browser = navigator.userAgent.toLowerCase();
 
       if (browser) {
+        // @ts-ignore
         if (browser.match(/Alipay/i) == 'alipay') {
           updateBrowser({
             source: 4,
             accountType: 2,
-            payType: 'ALI_WAP'
+            payType: 'ALI_WAP',
           });
         } else if (
+          // @ts-ignore
           browser.match(/MicroMessenger/i) == 'micromessenger'
         ) {
           updateBrowser({
             source: 3,
             accountType: 1,
-            payType: 'WX_JSAPI'
+            payType: 'WX_JSAPI',
           });
         }
       }
@@ -123,14 +122,14 @@ const globalStore = defineStore('global', {
       // #ifdef MP-WEIXIN
       updateBrowser({
         source: 19,
-        accountType: 11
+        accountType: 11,
       });
       // #endif
 
       // #ifdef MP-ALIPAY
       updateBrowser({
         source: 21,
-        accountType: 22
+        accountType: 22,
       });
       // #endif
     },
@@ -146,14 +145,14 @@ const globalStore = defineStore('global', {
     setToken({ accessToken, refreshToken }) {
       this.token = {
         accessToken,
-        refreshToken
+        refreshToken,
       };
     },
 
     setHerenId(id: string) {
       this.herenId = id;
     },
-  }
+  },
 });
 
 export const useGlobalStore = function () {

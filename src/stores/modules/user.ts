@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { BASE_IMG } from '@/config/global';
 import { IPat } from '@/stores/type';
+import globalGl from '@/config/global';
 
 const userStore = defineStore('user', {
   persist: {
@@ -187,4 +187,9 @@ export const getAvatar = function (sex) {
 
 export const useUserStore = function () {
   return userStore();
+};
+
+// 是否区域项目 不显示id
+export const isAreaProgram = (): boolean => {
+  return globalGl.SYS_CODE.startsWith('2');
 };
