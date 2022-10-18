@@ -286,4 +286,6 @@ export const useOcr = async (): Promise<OcrFindRes> => {
   // #ifdef MP-ALIPAY
   return await ocrForAlipay();
   // #endif
+
+  return Promise.reject('未定义的 ocr');
 };

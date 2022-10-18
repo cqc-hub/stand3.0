@@ -1,20 +1,3 @@
-/* 布局 */
-.flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.flex-normal {
-  display: flex;
-  align-items: center;
-}
-
-.flex-normal-between {
-  display: flex;
-  justify-content: space-between;
-}
-
 .text-ellipsis {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -52,11 +35,6 @@
   transform: rotate(45deg);
 }
 
-.g-flex-rc-cc {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .icon-arrow {
   height: 20rpx;
@@ -79,46 +57,6 @@
   border: 1rpx solid var(--hr-brand-color-6);
   border-width: 4rpx 4rpx 0 0;
   transform: rotate(135deg);
-}
-
-/* 按钮 */
-.btn {
-  color: var(--h-color-white);
-  border-radius: 16rpx;
-  font-size: var(--hr-font-size-xl);
-  font-weight: 600;
-  position: relative;
-}
-
-.btn.btn-primary {
-  background-color: var(--hr-brand-color-6);
-}
-
-.btn.btn-disabled {
-  pointer-events: none;
-  background-color: var(--hr-brand-color-3);
-}
-
-.btn.btn-plain {
-  background-color: transparent;
-}
-
-.btn.btn-border {
-  border: 2rpx solid var(--hr-neutral-color-4);
-}
-
-.btn.btn-normal {
-  color: var(--hr-neutral-color-10);
-  background-color: #fff;
-}
-
-.btn.btn-error {
-  color: var(--hr-error-color-6);
-  border-color: var(--hr-error-color-6);
-}
-
-.btn.btn-warning {
-  background-color: var(--hr-warning-color-6);
 }
 
 .empty-list {
@@ -151,14 +89,4 @@
   opacity: 0;
   pointer-events: none;
   position: absolute;
-}
-
-.g-footer {
-  background-color: var(--h-color-white);
-  padding: 24rpx 32rpx 48rpx;
-  position: reactive;
-  z-index: 1;
-  gap: 18rpx;
-
-  display: flex;
 }

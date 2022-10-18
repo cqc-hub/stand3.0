@@ -1,0 +1,48 @@
+@mixin flex-normal {
+  display: flex;
+  align-items: center;
+}
+
+.flex-normal {
+  @include flex-normal;
+}
+
+.flex-between {
+  justify-content: space-between;
+  @extend .flex-normal;
+}
+
+
+
+.flex-normal-between {
+  justify-content: space-between;
+  @extend .flex-normal;
+}
+
+.g-flex-rc-cc {
+  justify-content: center;
+  @extend .flex-normal;
+}
+
+.g-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .g-container {
+    flex: 1;
+    height: 1px;
+  }
+}
+
+
+.g-footer {
+  background-color: var(--h-color-white);
+  padding: 24rpx 32rpx 48rpx;
+  position: reactive;
+  z-index: 1;
+  gap: 18rpx;
+
+  display: flex;
+}

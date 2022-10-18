@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { TOutHosInfo } from '../../utils/recordApply';
+  import { TOutHosInfo } from '../utils/recordApply';
 
   const props = defineProps<{
     list: TOutHosInfo[];

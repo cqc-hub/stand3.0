@@ -1,0 +1,39 @@
+.btn {
+  color: var(--h-color-white);
+  border-radius: 16rpx;
+  font-size: var(--hr-font-size-xl);
+  font-weight: 600;
+  position: relative;
+
+  &.btn-primary {
+    background-color: var(--hr-brand-color-6);
+  }
+
+  &.btn-disabled {
+    pointer-events: none;
+    background-color: var(--hr-brand-color-3);
+  }
+
+  &.btn-plain {
+    background-color: transparent;
+  }
+
+  &.btn-border {
+    border: 2rpx solid var(--hr-neutral-color-4);
+  }
+
+  &.btn-normal {
+    color: var(--hr-neutral-color-10);
+    background-color: #fff;
+  }
+
+  &.btn-error {
+    color: var(--hr-error-color-6);
+    border-color: var(--hr-error-color-6);
+  }
+
+  &.btn-warning {
+    background-color: var(--hr-warning-color-6);
+  }
+
+}

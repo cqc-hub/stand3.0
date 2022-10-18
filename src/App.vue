@@ -5,6 +5,7 @@
   import { joinQuery } from './common';
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
+  import './styles/index.scss';
 
   onLaunch((opt) => {
     // console.log('App Launch', opt);
@@ -25,5 +26,4 @@
 </script>
 <style lang="scss">
   @import url('~@/static/iconfont-icon.css');
-  @import url('~@/styles/index.css');
 </style>

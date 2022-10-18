@@ -1,15 +1,16 @@
+@import './buttom.scss';
+@import './layout.scss';
+@import './other.scss';
 @import url(./variables.css);
-@import url(./common.css);
+
 
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont'; /* Project id 3235998 */
-  src: url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.woff2?t=1666064953517')
-      format('woff2'),
-    url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.woff?t=1666064953517')
-      format('woff'),
-    url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.ttf?t=1666064953517')
-      format('truetype');
+  font-family: 'iconfont';
+  /* Project id 3235998 */
+  src: url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.woff2?t=1666064953517') format('woff2'),
+    url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.woff?t=1666064953517') format('woff'),
+    url('//at.alicdn.com/t/c/font_3235998_mtwzviv40wd.ttf?t=1666064953517') format('truetype');
 }
 
 .iconfont {

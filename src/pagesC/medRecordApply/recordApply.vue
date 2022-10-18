@@ -31,7 +31,7 @@
     <view class="g-footer g-border-top">
       <view class="footer-check flex-normal">
         <view class="iconfont">&#xe6ce;</view>
-        <view>全选</view>
+        <view class="flex-normal">全选</view>
       </view>
       <button class="btn g-border btn-primary btn-disabled">下一步</button>
     </view>
@@ -43,7 +43,7 @@
   import { defineComponent, ref } from 'vue';
   import api from '@/service/api';
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
-  import { TOutHosInfo } from '../utils/recordApply';
+  import { TOutHosInfo } from './utils/recordApply';
 
   import OutHosListCom from './components/outHosList.vue';
 
@@ -69,8 +69,9 @@
     };
 
     isComplete.value = false;
-    await api.getOutpatientHospitalList(requestArg);
-    isComplete.value = true;
+    await api.getOutpatientHospitalList(requestArg).finally(() => {
+      isComplete.value = true;
+    });
   };
 
   const goApplyRecord = () => {
