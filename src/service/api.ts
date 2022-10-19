@@ -130,6 +130,10 @@ const queryApi = {
   // 获取病案复印申请记录
   getCaseCopyList: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data)),
+
+  // 获取病案复印申请记录详情
+  getCaseCopyDetail: <T>(data) =>
+    service.post<T>('/phs-query/caseCopy/getCaseCopyDetail', parm(data)),
 };
 
 // 挂号服务

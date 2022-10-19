@@ -9,7 +9,12 @@
       @hide="onActionSheetHide"
       bg-color="rgba(0,0,0,0)"
     >
-      <view class="container">
+      <view
+        :style="{
+          height: height,
+        }"
+        class="container"
+      >
         <image :src="headerIcon" mode="heightFix" class="popup-header-icon" />
         <view class="popup-container">
           <view class="popup-header popup-padding">
@@ -25,10 +30,14 @@
           </scroll-view>
 
           <view class="popup-footer g-border-top">
-            <view class="popup-footer-container popup-padding">
-              <button class="btn btn-normal" @click="hide">取消</button>
-              <button class="btn btn-primary" @click="confirm">同意须知</button>
-            </view>
+            <slot name="footer">
+              <view class="popup-footer-container popup-padding">
+                <button class="btn btn-normal" @click="hide">取消</button>
+                <button class="btn btn-primary" @click="confirm">
+                  同意须知
+                </button>
+              </view>
+            </slot>
           </view>
         </view>
       </view>
@@ -46,11 +55,13 @@
       maskClickClose?: boolean;
       title?: string;
       headerIcon?: string;
+      height?: string;
     }>(),
     {
       title: '须知',
       maskClickClose: true,
       headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png',
+      height: '90vh',
     }
   );
 
@@ -68,6 +79,7 @@
 
   const show = () => {
     popup.value.show();
+    console.log('cqc');
   };
 
   const hide = () => {
@@ -81,12 +93,13 @@
 
   defineExpose({
     show,
+    hide,
   });
 </script>
 
 <style lang="scss" scoped>
   .container {
-    height: 90vh;
+    // height: 90vh;
     position: relative;
   }
   .popup-container {

@@ -1,6 +1,11 @@
 <template>
   <view class="">
-    <view v-for="item in list" :key="item.phsOrderNo" class="item g-border">
+    <view
+      v-for="item in list"
+      :key="item.phsOrderNo"
+      @click="itemClick(item)"
+      class="item g-border"
+    >
       <view class="title flex-between">
         <view class="text-ellipsis">
           {{ item.hosName }}
@@ -24,18 +29,20 @@
 
       <view v-if="item.orderStatus === '21'" class="row flex-normal">
         <view class="row-title">不通过原因</view>
-        <view class="row-content text-ellipsis">20210801201</view>
+        <view class="row-content text-ellipsis">{{ item.refundReason }}</view>
       </view>
 
       <view
         v-if="['12', '13'].includes(item.orderStatus)"
         class="express flex-between"
       >
-        <view class="flex-normal text-ellipsis express-row">
+        <view class="flex-normal express-row">
           <text class="iconfont arrow-icon press-icon">&#xe6fd;</text>
-          <text class="g-bold m10">09-21</text>
-          <text class="">
-            浙江省杭州市滨江区已发出浙江省杭州市滨江区已发出浙江省杭州市滨江区已发出
+          <text class="g-bold m10 express-date">
+            {{ item._expressTime || '' }}
+          </text>
+          <text class="express-color text-ellipsis">
+            {{ item._expressDesc || '' }}
           </text>
         </view>
 
@@ -53,6 +60,12 @@
   const props = defineProps<{
     list: CaseCopyItem[];
   }>();
+
+  const emits = defineEmits(['item-click']);
+
+  const itemClick = (item: CaseCopyItem) => {
+    emits('item-click', item);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -106,9 +119,12 @@
       font-size: var(--hr-font-size-xs);
       vertical-align: middle;
 
+      .express-date {
+        white-space: nowrap;
+      }
+
       .express-row {
         height: 100%;
-        background-color: red;
       }
 
       .iconfont {
@@ -121,6 +137,10 @@
 
       .text-ellipsis {
         -webkit-line-clamp: 1;
+      }
+
+      .express-color {
+        color: var(--hr-neutral-color-7);
       }
     }
   }

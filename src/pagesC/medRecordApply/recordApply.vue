@@ -25,7 +25,17 @@
     </view>
 
     <view class="container">
-      <Out-Hos-List-Com :list="outHosList" :value="checkOutHosList" />
+      <block v-if="isComplete && outHosList.length">
+        <Out-Hos-List-Com :list="outHosList" :value="checkOutHosList" />
+      </block>
+
+      <view class="empty-list" v-else-if="isComplete">
+        <g-empty :current="2" text="没有住院记录，去手动补充">
+          <button class="btn g-border btn-primary empty-btn">
+            手动添加记录
+          </button>
+        </g-empty>
+      </view>
     </view>
 
     <view class="g-footer g-border-top">
@@ -50,7 +60,7 @@
   const gStores = new GStores();
   const hosId = ref('');
   const isComplete = ref(false);
-  const outHosList = ref<TOutHosInfo[]>([{}, {}, {}, {}, {}, {}, {}, {}, {}]);
+  const outHosList = ref<TOutHosInfo[]>([]);
   const checkOutHosList = ref<TOutHosInfo[]>([]);
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
@@ -136,5 +146,9 @@
         flex: 1;
       }
     }
+  }
+
+  .empty-btn {
+    font-size: var(--hr-font-size-xs);
   }
 </style>

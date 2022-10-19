@@ -2,25 +2,28 @@
   <view class="g-page">
     <view class="g-container">
       <block v-if="isComplete && list.length">
-        <Record-Apply-List :list="list" />
+        <Record-Apply-List :list="list" @item-click="goApplyDetail" />
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
         <g-empty :current="1" />
       </view>
     </view>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { defineComponent, ref } from 'vue';
-  import { CaseCopyItem } from './utils/recordApply';
+  import { CaseCopyItem, isExpress1 } from './utils/recordApply';
 
   import RecordApplyList from './components/recordApplyList.vue';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
+  import { joinQuery } from '@/common';
 
   const gStores = new GStores();
   const list = ref<CaseCopyItem[]>([]);
@@ -42,11 +45,43 @@
 
     if (result && result.length) {
       result.map((o) => {
+        const { expressParam } = o;
+
+        if (expressParam) {
+          try {
+            o._expressParam = JSON.parse(expressParam);
+          } catch (error) {
+            gStores.messageStore.showMessage('expressParam 字段格式错误', 1500);
+          }
+        }
+
+        if (o._expressParam) {
+          if (isExpress1(o._expressParam)) {
+            const { opTime, opDesc } = o._expressParam;
+
+            o._expressTime = dayjs(opTime).format('MM-DD');
+            o._expressDesc = opDesc;
+          } else {
+            const { accept_date, remark } = o._expressParam;
+
+            o._expressDesc = remark;
+            o._expressTime = dayjs(accept_date).format('MM-DD');
+          }
+        }
+
         o._createTime = dayjs(o.createTime).format('YYYY-MM-DD');
       });
     }
 
     list.value = result || [];
+  };
+
+  const goApplyDetail = (item: CaseCopyItem) => {
+    uni.navigateTo({
+      url: joinQuery('/pagesC/medRecordApply/_recordApplyDetail', {
+        phsOrderNo: item.phsOrderNo,
+      }),
+    });
   };
 
   const init = () => {

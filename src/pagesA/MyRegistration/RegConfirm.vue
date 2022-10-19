@@ -60,7 +60,7 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
 
-  import OrderRegConfirm from './components/orderRegConfirm/orderRegConfirm.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
 

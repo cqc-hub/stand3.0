@@ -214,6 +214,15 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "medRecordApply/_recordApplyDetail",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "病案复印详情"
+          }
+        },
+        {
           "path": "medRecordApply/_recordApply",
           "extend": {
             "patient": true
