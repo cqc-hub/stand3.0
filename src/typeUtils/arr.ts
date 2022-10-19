@@ -6,7 +6,7 @@ export type Concurrence<A, B> = A | B;
 /**
  * 交集
  */
-export type intersection<A, B> = A extends B ? A : never;
+export type Intersection<A, B> = A extends B ? A : never;
 
 /**
  * 差集
