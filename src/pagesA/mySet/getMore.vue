@@ -46,7 +46,7 @@
 
       view {
         padding-right: 30upx;
-        border-bottom: 1px solid $uni-border-color;
+        // border-bottom: 1px solid $uni-border-color;
         height: 88upx;
         color: #333;
         font-size: 32upx;
