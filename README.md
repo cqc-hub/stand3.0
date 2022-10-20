@@ -101,8 +101,8 @@ cmd: iconfont-tools
 
 ## 单独 2.0 迁移 3.0 的
 
-测试环境 https://health.eheren.com/V3/h5/#/
-正式环境 https://h5.eheren.com/V3/h5/#
+测试环境 https://health.eheren.com/V3_h5/#/
+正式环境 https://h5.eheren.com/V3_h5/#
 
 | 功能     |                    页面                     | 参数          |
 | :------- | :-----------------------------------------: | :------------ |

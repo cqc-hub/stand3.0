@@ -6,13 +6,13 @@ import {
   getToken,
   showLoading,
   hideLoading,
+  getLocalStorage,
+  setLocalStorage
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
 import { beforeEach } from '@/router';
-import { joinQuery } from '@/common';
-
 const Request = new requestClass();
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
@@ -37,7 +37,14 @@ Request.interceptors.response(
     //判断返回状态 执行相应操作
     hideLoading();
 
-    const { code, message } = responseData;
+    const { code, message, functionVersion } = responseData;
+
+    //处理清除缓存的操作
+    console.log(4444, functionVersion);
+
+    if (functionVersion) {
+      cleanSession(functionVersion);
+    }
     // 请根据后端规定的状态码判定
 
     if (code === 4000) {
@@ -59,12 +66,6 @@ Request.interceptors.response(
               url: fullUrl,
             });
           });
-
-          // console.log('过期了');
-          // uni.redirectTo({
-          //   url: '/pages/home/my?_p=1&_isOutLogin=1'
-          // });
-          //清除缓存？
         },
       });
     } else if (code !== 0) {
@@ -87,7 +88,6 @@ Request.interceptors.response(
     }
   },
   (err) => {
-
     const messageStore = useMessageStore();
     messageStore.showMessage(err.data.message, 1500);
     uni.hideLoading();
@@ -101,7 +101,7 @@ Request.setConfig((config: any) => {
   config.baseURL = env.baseApi;
   config.header = {
     // "Authorization": getToken(),
-    hrCode: getSysCode(),
+    hrCode: encryptDes(getSysCode(),'hrtest22'),
     phsId: '81681688',
     phsSign: encryptDes(getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv'),
   };
@@ -112,5 +112,56 @@ Request.setConfig((config: any) => {
 
   return config;
 });
+
+//根据后端接口返回 清除缓存
+const cleanSession = (functionVersion) => {
+  const localVersion = getLocalStorage('systemConfigVersion');
+
+  try {
+    const newVersion = JSON.parse(functionVersion);
+    if (!localVersion) {
+      setLocalStorage({
+        systemConfigVersion: newVersion,
+      });
+    } else {
+      //对比不一致 清除缓存
+      if (!deepEqual(localVersion, newVersion)) {
+        //清除首页配置缓存
+        setLocalStorage({
+          systemConfigVersion: newVersion,
+        });
+        uni.removeStorageSync('systemConfig');
+      }
+    }
+  } catch {}
+};
+function deepEqual(object1, object2) {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (let index = 0; index < keys1.length; index++) {
+    const val1 = object1[keys1[index]];
+    const val2 = object2[keys2[index]];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      (areObjects && !deepEqual(val1, val2)) ||
+      (!areObjects && val1 !== val2)
+    ) {
+      console.log(2222, index, val1);
+
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isObject(object) {
+  return object != null && typeof object === 'object';
+}
 
 export default Request;
