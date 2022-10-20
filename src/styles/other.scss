@@ -120,13 +120,12 @@
   margin-bottom: 16rpx;
 }
 
-.p32 {
-  padding: 32rpx;
+.mt24 {
+  margin-top: 24rpx;
 }
 
-.p32v {
-  padding-top: 32rpx !important;
-  padding-bottom: 32rpx !important;
+.mr16 {
+  margin-right: 16rpx;
 }
 
 .m32v {
@@ -136,4 +135,27 @@
 
 .m32 {
   margin: 32rpx;
+}
+
+.p32 {
+  padding: 32rpx;
+}
+
+.p32v {
+  padding-top: 32rpx !important;
+  padding-bottom: 32rpx !important;
+}
+
+
+
+.f36 {
+  font-size: var(--hr-font-size-xl);
+}
+
+.f24 {
+  font-size: var(--hr-font-size-xxxs);
+}
+
+.f28 {
+  font-size: var(--hr-font-size-xs);
 }

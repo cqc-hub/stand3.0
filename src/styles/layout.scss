@@ -7,6 +7,10 @@
   @include flex-normal;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .flex-between {
   justify-content: space-between;
   @extend .flex-normal;

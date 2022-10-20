@@ -189,6 +189,14 @@ export const useUserStore = function () {
   return userStore();
 };
 
+export const getUserShowLabel = (pat: IPat) => {
+  if (isAreaProgram()) {
+    return pat.patientName;
+  } else {
+    return `${pat.patientName} ` + (pat._showId && `(${pat._showId})`) || '';
+  }
+};
+
 // 是否区域项目 不显示id
 export const isAreaProgram = (): boolean => {
   return globalGl.SYS_CODE.startsWith('2');

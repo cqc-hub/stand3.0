@@ -73,6 +73,64 @@ const getWeChatBase64ImageByUrl = function (
   });
 };
 
+const getAliPayBase64ImageByUrl = function (
+  imagePath,
+  imgCanvas
+): Promise<TChooseImgBase64Res> {
+  // 支付宝需要手动添加
+  /*
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
+
+  <canvas
+    v-show="false"
+    :width="imgWidth"
+    :height="imgHeight"
+    style="opacity: 0; position: absolute;pointer-events: none;"
+    id="canvasForBase64"
+  />
+  */
+
+  return new Promise((resolve, reject) => {
+    my.getImageInfo({
+      src: imagePath,
+      success: async (res) => {
+        const { width, height } = res;
+
+        imgCanvas.value.imgWidth = width;
+        imgCanvas.value.imgHeight = height;
+        let canvas = my.createCanvasContext('canvasForBase64');
+        canvas.drawImage(imagePath, 0, 0, width, height); // 1. 绘制图片至canvas
+        // 绘制完成后执行回调
+        canvas.draw(false, async () => {
+          let base64 = await canvas.toDataURL({
+            width,
+            height,
+            quality: 1,
+          });
+
+          resolve({
+            success: true,
+            base64: base64.split(',')[1],
+          });
+
+          // base64 = base64.replace("data:image/png;base64,", "");
+          // await this.uploadImageRequest(base64);
+        });
+      },
+
+      fail(e) {
+        resolve({
+          success: false,
+          evt: e,
+        });
+      },
+    });
+  });
+};
+
 const checkFileSize = ({
   filePath,
   fileSize,
@@ -106,12 +164,18 @@ const checkFileSize = ({
 
 // 获取 base64
 export const chooseImg = (
-  payload: Partial<{
-    extension: ('jpg' | 'jpeg' | 'image')[];
+  payload: {
+    extension?: ('jpg' | 'jpeg' | 'image')[];
     fileSize?: number;
-  }> = {}
+    imgCanvas?: any; // 支付宝必传
+  } = {}
 ): Promise<TChooseImgBase64Res> => {
-  const { extension, fileSize } = payload;
+  // const imgCanvas = ref({
+  //   imgWidth: 0,
+  //   imgHeight: 0,
+  // });
+
+  const { extension, fileSize, imgCanvas } = payload;
 
   return new Promise((resolve, reject) => {
     uni.chooseImage({
@@ -133,9 +197,15 @@ export const chooseImg = (
           return resolve(await getWeChatBase64ImageByUrl(tempFilePaths[0]));
           // #endif
 
+          // #ifdef MP-ALIPAY
+          return resolve(
+            await getAliPayBase64ImageByUrl(tempFilePaths[0], imgCanvas)
+          );
+          // #endif
+
           reject({
             success: false,
-            evt: '当前只有微信',
+            evt: '未定义的类型',
           });
         } else {
           reject({
