@@ -5,7 +5,7 @@ import api from '@/service/api';
 
 export interface ISystemConfig {
   // 预约挂号
-  order?: {
+  order: {
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
     // 选择号源时候显示几列
@@ -20,7 +20,7 @@ export interface ISystemConfig {
   };
 
   // 就诊人
-  person?: {
+  person: {
     // 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行
     isHidePatientTypeInPerfect?: '0' | '1';
     // 开启短信验证？ 完善时候没有
@@ -352,26 +352,20 @@ export class ServerStaticData {
       const { result } = await api.getParamsMoreBySysCode({
         paramCode: 'PERSON_FAMILY_CARDMAN',
       });
-      const PERSON_FAMILY_CARDMAN = result.PERSON_FAMILY_CARDMAN;
-      try {
-        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
-        systemConfig = {
-          person: person,
-          order: {
-            chooseDay: 30,
-            selOrderColumn: 3,
-            isOrderBlur: '1',
-            isOrderPay: '0',
-          },
-        };
-        setLocalStorage({
-          systemConfig,
-        });
-        return systemConfig[key];
-      } catch (err) {
-        gStores.messageStore.showMessage('获取配置数据失败');
-        return [];
-      }
+      const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
+      systemConfig = {
+        person: person,
+        order: {
+          chooseDay: 30,
+          selOrderColumn: 3,
+          isOrderBlur: '1',
+          isOrderPay: '0',
+        },
+      };
+      setLocalStorage({
+        systemConfig,
+      });
+      return systemConfig[key];
     } else {
       return systemConfig[key];
     }
