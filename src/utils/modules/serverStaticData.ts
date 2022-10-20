@@ -63,6 +63,8 @@ export interface IHosInfo {
   distanceFormat?: string; // 距离 （km）
   gisLat?: number; // 经度
   gisLng?: number; // 纬度
+  label: string;
+  value: string;
 }
 
 const _cacheMap = new WeakMap();
@@ -81,7 +83,10 @@ export class ServerStaticData {
       const { result } = await api.getHospital<IHosInfo[]>(data);
 
       result.map((o) => {
-        const { distance } = o;
+        const { distance, hosId, hosName } = o;
+
+        o.label = hosName;
+        o.value = hosId;
 
         if (distance) {
           o.distanceFormat = (distance / 1000).toFixed(1);

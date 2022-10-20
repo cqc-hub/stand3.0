@@ -22,10 +22,10 @@
       <scroll-view class="address-box-container" scroll-y>
         <view class="address-box">
           <view
+            @click="itemClick(item)"
             class="box-item"
             v-for="(item, i) in addressList"
             :key="i"
-            @tap="gotoAdd('edit', item)"
           >
             <view class="item-title flex-between">
               <view class="item-title-left flex-normal">
@@ -37,7 +37,10 @@
                   text="默认"
                 />
               </view>
-              <view class="item-title-right flex-normal">
+              <view
+                @tap.stop="gotoAdd('edit', item)"
+                class="item-title-right flex-normal"
+              >
                 <view class="iconfont">&#xe6b9;</view>
                 编辑
               </view>
@@ -74,6 +77,9 @@
   import { joinQuery } from '@/common';
   import { getScopeAddress } from '@/common/utils';
 
+  const props = defineProps<{
+    redir?: string;
+  }>();
   const pageLoading = ref(false);
   const gStores = new GStores();
   const messageStore = useMessageStore();
@@ -85,7 +91,7 @@
   const getQueryExpressAddress = async () => {
     pageLoading.value = false;
     const { result } = await api.queryExpressAddress({
-      herenId: gStores.globalStore.herenId
+      herenId: gStores.globalStore.herenId,
     });
     addressList.value = result;
     pageLoading.value = true;
@@ -93,8 +99,24 @@
 
   const gotoPatient = () => {
     uni.navigateTo({
-      url: '/pagesC/shippingAddress/patientAddress'
+      url: '/pagesC/shippingAddress/patientAddress',
     });
+  };
+
+  const itemClick = async (item) => {
+    if (props.redir) {
+      const params = {
+        herenId: gStores.globalStore.herenId,
+        ...item,
+        defaultFlag: 1,
+      };
+
+      await api.updateExpressAddress(params);
+
+      uni.navigateBack();
+    } else {
+      gotoAdd('edit', item);
+    }
   };
 
   const gotoAdd = (type, item?) => {
@@ -110,14 +132,14 @@
         city: item.city,
         county: item.county,
         province: item.province,
-        defaultFlag: item.defaultFlag
+        defaultFlag: item.defaultFlag,
       };
     }
     uni.navigateTo({
       url: joinQuery('/pagesC/shippingAddress/addAddress', {
         item: JSON.stringify(obj),
-        pageType: type
-      })
+        pageType: type,
+      }),
     });
   };
   const getAddress = async (data) => {
@@ -130,12 +152,12 @@
       province: data.provinceName,
       city: data.cityName,
       county: data.countyName,
-      defaultFlag: 0
+      defaultFlag: 0,
     });
     messageStore.showMessage('地址保存成功', 1000, {
       closeCallBack: () => {
         getQueryExpressAddress();
-      }
+      },
     });
   };
 

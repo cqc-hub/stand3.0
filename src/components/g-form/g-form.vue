@@ -222,11 +222,23 @@
       @itemclick="actionItemClick"
       title=""
     />
+
+    <view class="form-picker">
+      <uni-data-picker
+        :map="{ text: 'label', value: 'value' }"
+        :localdata="actionSheetOpt"
+        :clear-icon="false"
+        @change="pickerChange"
+        ref="_actionSheet"
+      >
+        <view />
+      </uni-data-picker>
+    </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, withDefaults, watchEffect } from 'vue';
+  import { ref, withDefaults, computed } from 'vue';
   import type {
     TInstance,
     ISelectOptions,
@@ -252,6 +264,10 @@
       hideRowBorder?: boolean;
       // 是否展示必填的 * 号
       showRequireIcon?: boolean;
+      // 使用 uni 的选择器
+      selectInUniDataPicker?: boolean;
+      // 使用 uni 的 toast
+      warningInUni?: boolean;
     }>(),
     {
       value: () => ({}),
@@ -261,6 +277,11 @@
   );
 
   const warningKeys = ref<string[]>([]);
+  const messageOptions = computed(() => {
+    return {
+      uniToast: props.warningInUni || false,
+    };
+  });
 
   const emits = defineEmits([
     'update:value',
@@ -292,6 +313,7 @@
     }
   };
 
+  const _actionSheet = ref();
   const dataPicker = ref();
   const actionSheet = ref();
   const actionSheetOpt = ref<ISelectOptions[]>([]);
@@ -350,7 +372,11 @@
         }, 1000) as unknown as number;
         uni.hideLoading();
       } else {
-        messageStore.showMessage('请检查 短信对应 phone 字段是否存在', 1500);
+        messageStore.showMessage(
+          '请检查 短信对应 phone 字段是否存在',
+          1500,
+          messageOptions.value
+        );
       }
     }
   };
@@ -426,7 +452,11 @@
       cacheItem = item;
 
       if (item.field === 'select') {
-        actionSheet.value.showActionSheet();
+        if (props.selectInUniDataPicker) {
+          _actionSheet.value.show();
+        } else {
+          actionSheet.value.showActionSheet();
+        }
       }
 
       if (item.field === 'address') {
@@ -438,6 +468,10 @@
   const actionItemClick = function ({ item }: { item: ISelectOptions }) {
     if (!cacheItem) return;
     const { value } = item;
+    console.log({
+      cacheItem,
+      item,
+    });
 
     clearItemWarning(cacheItem.key);
 
@@ -462,6 +496,10 @@
     clearItemWarning(cacheItem.key);
     if (field === 'address') {
       addressChange(cacheItem, choose);
+    } else if (field === 'select') {
+      actionItemClick({
+        item: choose[0] as any,
+      });
     } else {
       emits('picker-change', {
         item: cacheItem,
@@ -534,7 +572,7 @@
       rule.map((o) => {
         const flag = matchValue(o);
         if (!flag) {
-          messageStore.showMessage(o.message, 1500);
+          messageStore.showMessage(o.message, 1500, messageOptions.value);
           const key = item.key;
 
           if (!warningKeys.value.includes(key)) {
@@ -546,7 +584,7 @@
     } else {
       const flag = matchValue(rule);
       if (!flag) {
-        messageStore.showMessage(rule.message, 1500);
+        messageStore.showMessage(rule.message, 1500, messageOptions.value);
         const key = item.key;
 
         if (!warningKeys.value.includes(key)) {
@@ -563,7 +601,11 @@
 
     if (required && !isFillValue) {
       const defaultEmptyMessage = item.label + ' 不能为空';
-      messageStore.showMessage(emptyMessage || defaultEmptyMessage, 1500);
+      messageStore.showMessage(
+        emptyMessage || defaultEmptyMessage,
+        1500,
+        messageOptions.value
+      );
 
       if (!warningKeys.value.includes(key)) {
         warningKeys.value.push(key);
@@ -579,7 +621,7 @@
       const { success, message } = await validator(v, item);
 
       if (!success) {
-        messageStore.showMessage(message, 1500);
+        messageStore.showMessage(message, 1500, messageOptions.value);
         if (!warningKeys.value.includes(key)) {
           warningKeys.value.push(key);
         }

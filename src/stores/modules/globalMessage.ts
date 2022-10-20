@@ -8,8 +8,8 @@ const messageStore = defineStore('message', {
       msg: '',
       duration: 0,
       popupDuration: 500,
-      maskClickCallBack: () => { },
-      closeCallBack: () => { }
+      maskClickCallBack: () => {},
+      closeCallBack: () => {},
     };
   },
 
@@ -20,8 +20,18 @@ const messageStore = defineStore('message', {
       options: Partial<{
         maskClickCallBack: () => void;
         closeCallBack: () => void;
+        uniToast: boolean;
       }> = {}
     ) {
+      if (options.uniToast) {
+        uni.showToast({
+          title: message,
+          icon: 'none',
+          duration,
+        });
+
+        return;
+      }
       const { maskClickCallBack, closeCallBack } = options;
       this.isShow = true;
       this.duration = duration;
@@ -34,14 +44,14 @@ const messageStore = defineStore('message', {
       }
 
       if (duration) {
+        // @ts-ignore
         timer = setTimeout(() => {
           this.closeMessage();
         }, duration);
       }
 
-      this.maskClickCallBack = maskClickCallBack || (() => { });
-      this.closeCallBack = closeCallBack || (() => { });
-
+      this.maskClickCallBack = maskClickCallBack || (() => {});
+      this.closeCallBack = closeCallBack || (() => {});
     },
 
     closeMessage() {
@@ -51,8 +61,8 @@ const messageStore = defineStore('message', {
       this.isShow = false;
       uni.$emit('closeMessage');
       this.closeCallBack();
-    }
-  }
+    },
+  },
 });
 
 export const useMessageStore = function () {

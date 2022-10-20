@@ -55,7 +55,7 @@
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { TOutHosInfo } from './utils/recordApply';
 
-  import OutHosListCom from './components/outHosList.vue';
+  import OutHosListCom from './components/recordApplyOutHosList.vue';
 
   const gStores = new GStores();
   const hosId = ref('');

@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="popup">
     <uni-popup
       :duration="messageStore.popupDuration"
       @maskClick="maskClick"
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, watch, nextTick } from 'vue';
+  import { defineComponent, ref, watch, nextTick, reactive } from 'vue';
   import { useMessageStore } from '@/stores';
 
   interface IQ {
@@ -96,6 +96,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .popup {
+    position: reactive;
+    z-index: 1000;
+  }
   .text {
     font-size: var(--hr-font-size-base);
     word-break: break-all;

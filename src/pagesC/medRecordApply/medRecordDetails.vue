@@ -2,7 +2,7 @@
   <view class="g-page">
     <view class="g-container">
       <view class="container-box g-border mb16">
-        <Address-Box />
+        <Address-Box :addressList="addressList" />
       </view>
 
       <view class="container-box g-border mb16 box-padding">
@@ -45,7 +45,7 @@
           <text>朝晖院区</text>
         </view>
 
-        <view class="add-btn color-blue g-flex-rc-cc">
+        <view @click="addRecord" class="add-btn color-blue g-flex-rc-cc">
           <view class="iconfont add-icon">&#xe6fb;</view>
           <view class="f28 g-bold">手动添加记录</view>
         </view>
@@ -56,12 +56,20 @@
       <button class="btn g-border btn-primary dialog-btn">我知道了</button>
     </view>
 
+    <!-- #ifdef MP-ALIPAY -->
     <canvas
       v-show="false"
       :width="imgCanvas.imgWidth"
       :height="imgCanvas.imgHeight"
       style="opacity: 0; position: absolute; pointer-events: none"
       id="canvasForBase64"
+    />
+    <!-- #endif -->
+
+    <Add-Record-Dialog
+      v-model:value="addDialogValue"
+      @submit="recordSubmit"
+      ref="refAddDialog"
     />
 
     <g-message />
@@ -70,11 +78,18 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import AddressBox from './components/addressBox.vue';
+  import AddressBox from './components/medRecordDetailsAddressBox.vue';
+  import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
   import { chooseImg, GStores } from '@/utils';
+  import { onShow } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
+  import api from '@/service/api';
 
   const gStores = new GStores();
+  const refAddDialog = ref<any>('');
+  const addDialogValue = ref<BaseObject>({});
+  const addressList = ref<any>([]);
+
   const imgCanvas = ref({
     imgWidth: 0,
     imgHeight: 0,
@@ -101,6 +116,15 @@
     }
   };
 
+  const addRecord = () => {
+    addDialogValue.value.hosId = '1279';
+    refAddDialog.value.show();
+  };
+
+  const recordSubmit = (data: BaseObject) => {
+    console.log(data, 'dialogsubmit');
+  };
+
   const dealImg = (img: string) => {
     if (img.startsWith('http')) {
       return img;
@@ -108,6 +132,14 @@
       return 'data:image/png;base64,' + img;
     }
   };
+
+  onShow(async () => {
+    const { result } = await api.queryExpressAddress({
+      herenId: gStores.globalStore.herenId,
+    });
+
+    addressList.value = result || [];
+  });
 </script>
 
 <style lang="scss" scoped>
