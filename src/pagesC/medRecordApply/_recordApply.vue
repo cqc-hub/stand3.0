@@ -25,6 +25,10 @@
   import dayjs from 'dayjs';
   import { joinQuery } from '@/common';
 
+  const props = defineProps<{
+    hosId: string;
+  }>();
+
   const gStores = new GStores();
   const list = ref<CaseCopyItem[]>([]);
 
@@ -80,6 +84,7 @@
     uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/_recordApplyDetail', {
         phsOrderNo: item.phsOrderNo,
+        hosId: props.hosId,
       }),
     });
   };

@@ -50,6 +50,7 @@
           <view class="f28 g-bold">手动添加记录</view>
         </view>
       </view>
+
     </view>
 
     <view class="g-footer">
@@ -85,6 +86,9 @@
   import { getUserShowLabel } from '@/stores';
   import api from '@/service/api';
 
+  const props = defineProps<{
+    hosId: string;
+  }>();
   const gStores = new GStores();
   const refAddDialog = ref<any>('');
   const addDialogValue = ref<BaseObject>({});
@@ -117,7 +121,7 @@
   };
 
   const addRecord = () => {
-    addDialogValue.value.hosId = '1279';
+    addDialogValue.value.hosId = props.hosId;
     refAddDialog.value.show();
   };
 

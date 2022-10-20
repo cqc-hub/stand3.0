@@ -133,7 +133,10 @@ const cleanSession = (functionVersion) => {
         uni.removeStorageSync('systemConfig');
       }
     }
-  } catch {}
+  } catch(err) {
+    // catch 不获取异常 支付宝直接 💥
+    console.error(err);
+  }
 };
 function deepEqual(object1, object2) {
   const keys1 = Object.keys(object1);

@@ -91,6 +91,7 @@
     .address-content {
       -webkit-line-clamp: 2;
       font-size: var(--hr-font-size-xl);
+      word-wrap: break-all;
     }
 
     .icon-size {

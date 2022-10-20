@@ -2,7 +2,7 @@
   <view class="page">
     <view class="header">
       <!-- class="my-display-none" -->
-      <view class="g-border-bottom">
+      <view class="g-border-bottom my-display-none">
         <g-selhos
           v-model:hosId="hosId"
           @change="getOutPatientHosList"
@@ -13,7 +13,7 @@
     </view>
 
     <view class="header-btn flex-normal">
-      <view class="g-flex-rc-cc g-border">
+      <view @click="goAddRecord" class="g-flex-rc-cc g-border">
         <view class="iconfont color-blue">&#xe6fb;</view>
         <view>手动添加记录</view>
       </view>
@@ -31,7 +31,10 @@
 
       <view class="empty-list" v-else-if="isComplete">
         <g-empty :current="2" text="没有住院记录，去手动补充">
-          <button class="btn g-border btn-primary empty-btn">
+          <button
+            @click="goAddRecord"
+            class="btn g-border btn-primary empty-btn"
+          >
             手动添加记录
           </button>
         </g-empty>
@@ -56,16 +59,22 @@
   import { TOutHosInfo } from './utils/recordApply';
 
   import OutHosListCom from './components/recordApplyOutHosList.vue';
+  import { joinQuery } from '@/common/utils';
 
+  const props = defineProps<{
+    hosId?: string;
+  }>();
   const gStores = new GStores();
-  const hosId = ref('');
+  const hosId = ref(props.hosId || '');
   const isComplete = ref(false);
   const outHosList = ref<TOutHosInfo[]>([]);
   const checkOutHosList = ref<TOutHosInfo[]>([]);
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
     if (list.length) {
-      hosId.value = list[0].hosId;
+      if (!hosId.value) {
+        hosId.value = list[0].hosId;
+      }
       getOutPatientHosList();
     }
   };
@@ -86,7 +95,17 @@
 
   const goApplyRecord = () => {
     uni.navigateTo({
-      url: '/pagesC/medRecordApply/_recordApply',
+      url: joinQuery('/pagesC/medRecordApply/_recordApply', {
+        hosId: hosId.value,
+      }),
+    });
+  };
+
+  const goAddRecord = () => {
+    uni.navigateTo({
+      url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
+        hosId: hosId.value,
+      }),
     });
   };
 
