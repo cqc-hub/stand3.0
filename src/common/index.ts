@@ -1,6 +1,6 @@
-import { encryptDes } from './des'
+import { encryptDes,decryptDes } from './des'
 export * from './utils'
 export * from './useToken'
 
-export { encryptDes }
+export { encryptDes,decryptDes }
 

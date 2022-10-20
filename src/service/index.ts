@@ -2,18 +2,24 @@ import requestClass from './request';
 import env from '@/config/env';
 import {
   encryptDes,
+  decryptDes,
   getSysCode,
   getToken,
   showLoading,
   hideLoading,
   getLocalStorage,
-  setLocalStorage
+  setLocalStorage,
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
 import { beforeEach } from '@/router';
+import globalGl from '@/config/global';
+
 const Request = new requestClass();
+
+//是否加密
+const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   if (!request.hideLoading) showLoading();
@@ -21,6 +27,20 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
+  console.log(request.url, request.data);
+
+  const key = 'reqv3-' + new Date().getDate();
+  const data = JSON.parse(JSON.stringify(request.data));
+
+  if (isDes) {
+    const desData = {
+      args: {},
+      signContent: encryptDes(JSON.stringify(data.args), key),
+      token: data.token,
+    };
+
+    request.data = desData;
+  }
   return request;
 });
 
@@ -37,11 +57,15 @@ Request.interceptors.response(
     //判断返回状态 执行相应操作
     hideLoading();
 
-    const { code, message, functionVersion } = responseData;
+    const { code, message, functionVersion, signContent } = responseData;
+
+    //解密
+    if (isDes && signContent) {
+      const key = 'resv3-' + new Date().getDate();
+      responseData.result = JSON.parse(decryptDes(signContent, key));
+    }
 
     //处理清除缓存的操作
-    console.log(4444, functionVersion);
-
     if (functionVersion) {
       cleanSession(functionVersion);
     }
@@ -101,7 +125,7 @@ Request.setConfig((config: any) => {
   config.baseURL = env.baseApi;
   config.header = {
     // "Authorization": getToken(),
-    hrCode: encryptDes(getSysCode(),'hrtest22'),
+    hrCode: encryptDes(getSysCode(), 'hrtest22'),
     phsId: '81681688',
     phsSign: encryptDes(getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv'),
   };
@@ -125,46 +149,32 @@ const cleanSession = (functionVersion) => {
       });
     } else {
       //对比不一致 清除缓存
-      if (!deepEqual(localVersion, newVersion)) {
-        //清除首页配置缓存
-        setLocalStorage({
-          systemConfigVersion: newVersion,
-        });
-        uni.removeStorageSync('systemConfig');
-      }
+      deepEqualClean(localVersion, newVersion);
     }
-  } catch(err) {
+  } catch (err) {
     // catch 不获取异常 支付宝直接 💥
     console.error(err);
   }
 };
-function deepEqual(object1, object2) {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
-
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
+function deepEqualClean(localVersion, newVersion) {
+  const keys1 = Object.keys(localVersion);
+  const keys2 = Object.keys(newVersion);
 
   for (let index = 0; index < keys1.length; index++) {
-    const val1 = object1[keys1[index]];
-    const val2 = object2[keys2[index]];
-    const areObjects = isObject(val1) && isObject(val2);
-    if (
-      (areObjects && !deepEqual(val1, val2)) ||
-      (!areObjects && val1 !== val2)
-    ) {
-      console.log(2222, index, val1);
-
-      return false;
+    const val1 = localVersion[keys1[index]];
+    const val2 = newVersion[keys2[index]];
+    if (val1.version != val2.version) {
+      if (val1.functionType == 1) {
+        uni.removeStorageSync('systemConfig');
+      }
+      if (val1.functionType == 2) {
+        uni.removeStorageSync('viewConfig');
+      }
+      setLocalStorage({
+        systemConfigVersion: newVersion,
+      });
     }
   }
-
-  return true;
-}
-
-function isObject(object) {
-  return object != null && typeof object === 'object';
 }
 
 export default Request;

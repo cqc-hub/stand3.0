@@ -11,6 +11,8 @@ interface IdDtaType {
   respCode: number;
   timeTaken: number;
   functionVersion:string;
+  signContent:string;
+  result:any
 }
 
 interface IResponse extends UniApp.RequestSuccessCallbackResult {
