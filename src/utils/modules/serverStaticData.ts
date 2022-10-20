@@ -327,7 +327,7 @@ export class ServerStaticData {
   }
 
   static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
-    const gStores = new GStores();
+    // const gStores = new GStores();
     // const res: ISystemConfig = {
     //   order: {
     //     chooseDay: 30,
@@ -345,6 +345,9 @@ export class ServerStaticData {
     //     ocr: '1',
     //   },
     // };
+
+    // return res[key];
+
 
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
@@ -370,7 +373,6 @@ export class ServerStaticData {
       return systemConfig[key];
     }
 
-    // return res[key];
   }
 
   private constructor() {}

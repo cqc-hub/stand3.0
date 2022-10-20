@@ -1,5 +1,7 @@
 <template>
   <view class="g-page">
+    <g-flag typeFg="503" isShowFg />
+
     <view class="g-container">
       <view class="container-box g-border mb16">
         <Address-Box :addressList="addressList" />
@@ -13,6 +15,13 @@
             @click="chooseIdCardFront"
             class="up-idcard g-border g-flex-rc-cc"
           >
+            <view
+              v-if="idCardImg.front"
+              @click.stop="idCardImg.front = ''"
+              class="iconfont delete-icon"
+            >
+              &#xe6fa;
+            </view>
             <image v-if="idCardImg.front" :src="dealImg(idCardImg.front)" />
             <view v-else class="g-flex-rc-cc flex-column f24">
               <view class="iconfont camera-icon">&#xe6be;</view>
@@ -24,6 +33,13 @@
             @click="chooseIdCardBack"
             class="up-idcard g-border g-flex-rc-cc"
           >
+            <view
+              v-if="idCardImg.back"
+              @click.stop="idCardImg.back = ''"
+              class="iconfont delete-icon"
+            >
+              &#xe6fa;
+            </view>
             <image v-if="idCardImg.back" :src="dealImg(idCardImg.back)" />
 
             <view v-else class="g-flex-rc-cc flex-column f24">
@@ -42,7 +58,7 @@
             {{ getUserShowLabel(gStores.userStore.patChoose) }}
           </text>
 
-          <text>朝晖院区</text>
+          <text>{{ getGetHosName }}</text>
         </view>
 
         <view @click="addRecord" class="add-btn color-blue g-flex-rc-cc">
@@ -51,9 +67,19 @@
         </view>
       </view>
 
+      <view class="container-box g-border mb16 box-padding">
+        <view class="f36">
+          <text class="mr12 g-bold">请选择复印目的</text>
+          <text class="f28 color-light-dark">(多选)</text>
+        </view>
+      </view>
+
+      <view class="container-box g-border mb16">
+        <g-flag typeFg="32" isShowFgTip />
+      </view>
     </view>
 
-    <view class="g-footer">
+    <view class="g-footer g-border-top">
       <button class="btn g-border btn-primary dialog-btn">我知道了</button>
     </view>
 
@@ -73,15 +99,19 @@
       ref="refAddDialog"
     />
 
+    <view class="g-border-bottom my-display-none">
+      <g-selhos :hosId="hosId" @get-list="getHosList" />
+    </view>
+
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref, reactive } from 'vue';
   import AddressBox from './components/medRecordDetailsAddressBox.vue';
   import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
-  import { chooseImg, GStores } from '@/utils';
+  import { chooseImg, GStores, IHosInfo } from '@/utils';
   import { onShow } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
   import api from '@/service/api';
@@ -93,6 +123,7 @@
   const refAddDialog = ref<any>('');
   const addDialogValue = ref<BaseObject>({});
   const addressList = ref<any>([]);
+  const hosList = ref<IHosInfo[]>([]);
 
   const imgCanvas = ref({
     imgWidth: 0,
@@ -103,6 +134,18 @@
     front: '',
     back: '',
   });
+
+  const getGetHosName = computed(() => {
+    return (
+      hosList.value.find((o) => o.hosId == props.hosId)?.hosName ||
+      props.hosId ||
+      ''
+    );
+  });
+
+  const getHosList = ({ list }: { list: IHosInfo[] }) => {
+    hosList.value = list;
+  };
 
   const chooseIdCardFront = async () => {
     const res = await chooseImg({ imgCanvas });
@@ -164,9 +207,17 @@
         border-radius: 8px;
 
         border-style: dashed;
+        position: relative !important;
 
         &:first-child {
           margin-right: 16rpx;
+        }
+
+        .delete-icon {
+          font-size: var(--hr-font-size-xxl);
+          position: absolute;
+          top: 0;
+          right: 0;
         }
 
         .camera-icon {
