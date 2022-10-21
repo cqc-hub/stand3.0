@@ -33,7 +33,7 @@
     token: gStores.globalStore.token.accessToken,
     hosId: '',
     herenId: gStores.globalStore.herenId,
-  } ;
+  };
   type A = keyof typeof allData;
 
   // 页面固定携带 sysCode  加密参数（herenId patientid）
@@ -77,11 +77,15 @@
       gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
     const herenId = gStores.globalStore && gStores.globalStore.herenId;
 
+    //是否加密
+    const isDes = (global.env as string) === 'prod' ? true : global.isOpenDes;
+
     //默认加密参数
     let desObj = {
       _patientId: patientId,
       _herenId: herenId,
       _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
+      _isDes:isDes
     };
     let _d = encryptDesParam(desObj);
     let query = '?_d=' + _d + '&sysCode=' + allData.sysCode + '&';
