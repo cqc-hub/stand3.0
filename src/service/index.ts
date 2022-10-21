@@ -27,6 +27,8 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
+
+  //禁止删除
   console.log(request.url, request.data);
 
   const key = 'reqv3-' + new Date().getDate();
@@ -47,9 +49,6 @@ Request.interceptors.request((request: IRequest) => {
 // 响应拦截器
 Request.interceptors.response(
   (response: IResponseWrapper) => {
-    console.log({
-      response,
-    });
 
     const responseData = response.res.data;
     const responseOptions = response.options;
@@ -64,7 +63,8 @@ Request.interceptors.response(
       const key = 'resv3-' + new Date().getDate();
       responseData.result = JSON.parse(decryptDes(signContent, key));
     }
-
+   //禁止删除
+    console.log('出参',responseData.result);
     //处理清除缓存的操作
     if (functionVersion) {
       cleanSession(functionVersion);
