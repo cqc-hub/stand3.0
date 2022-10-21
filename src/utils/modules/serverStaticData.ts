@@ -39,7 +39,7 @@ export interface ISystemConfig {
   // 病案
   medRecord: {
     // 身份证上传要求 （人像、 背面、 手持）
-    sfz: ('front' | 'end' | 'handler')[];
+    sfz: ('front' | 'end' | 'handler')[]; // 后端说 人像、 背面 必填 设置时候每次都加下
 
     // 收钱方式 0 预收 1 按项目、目的
     isItemCount?: '0' | '1';

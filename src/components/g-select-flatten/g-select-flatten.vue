@@ -11,6 +11,7 @@
       :key="item[field.value]"
       :class="{
         'item-active-border': isAllActive || isActive(item[field.value]),
+        'g-bold': isAllActive || isActive(item[field.value]),
       }"
       class="g-flex-rc-cc"
     >

@@ -2,14 +2,15 @@
   <view class="g-page">
     <g-flag typeFg="503" isShowFg />
 
-    <view class="g-container">
-      <view class="container-box g-border mb16">
+    <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
+      <view id="_address" class="container-box g-border mb16">
         <Address-Box :addressList="addressList" />
       </view>
 
       <view
         v-if="pageConfig.sfz.length"
         class="container-box g-border mb16 box-padding"
+        id="_photo"
       >
         <view class="g-bold f36">请上传本人身份证</view>
 
@@ -111,7 +112,7 @@
         </view>
       </view>
 
-      <view class="container-box g-border mb16 box-padding">
+      <view id="_record" class="container-box g-border mb16 box-padding">
         <view class="g-bold f36">住院记录</view>
 
         <view class="flex-normal patient-info color-light-dark f28">
@@ -137,7 +138,7 @@
         </view>
       </view>
 
-      <view class="container-box g-border mb16 box-padding">
+      <view id="_aim" class="container-box g-border mb16 box-padding">
         <view class="f36">
           <text class="mr12 g-bold">请选择复印目的</text>
           <text class="f28 color-light-dark">(多选)</text>
@@ -168,14 +169,16 @@
       <view class="container-box g-border mb16">
         <g-flag typeFg="32" isShowFgTip />
       </view>
-    </view>
+    </scroll-view>
 
     <view class="g-footer g-border-top">
       <view class="fee-count flex-normal">
-        <text>合计</text>
-        <text>{{ getPayMoneyNum }}</text>
+        <text class="color-666 f28 mr12">合计</text>
+        <text class="color-error f36 g-bold">{{ getPayMoneyNum }}元</text>
       </view>
-      <button class="btn g-border btn-primary dialog-btn">我知道了</button>
+      <button @click="paySubmit" class="btn g-border btn-warning dialog-btn">
+        立即支付
+      </button>
     </view>
 
     <!-- #ifdef MP-ALIPAY -->
@@ -212,7 +215,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, onMounted } from 'vue';
+  import { computed, ref, onMounted, watch } from 'vue';
   import AddressBox from './components/medRecordDetailsAddressBox.vue';
   import recordCard from './components/recordCard.vue';
   import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
@@ -252,7 +255,19 @@
     isItemCount: '0',
   });
 
+  const scrollTo = ref('');
+  watch(
+    () => scrollTo.value,
+    () => {
+      setTimeout(() => {
+        scrollTo.value = '';
+      }, 100);
+    }
+  );
+
   const gStores = new GStores();
+  const showMessage = gStores.messageStore.showMessage;
+
   const refAddDialog = ref<any>('');
   const addDialogTitle = computed(() => {
     if (isAddDialogEdit.value) {
@@ -263,17 +278,27 @@
   });
   const addDialogValue = ref<BaseObject>({});
   const isAddDialogEdit = ref(false);
-  const addressList = ref<any>([]);
+  const addressList = ref<any[]>([]);
+  const getAddress = computed(() => {
+    if (addressList.value.length) {
+      return (
+        addressList.value.find((o) => o.defaultFlag == 1) ||
+        addressList.value[0]
+      );
+    } else {
+      return {};
+    }
+  });
   const hosList = ref<IHosInfo[]>([]);
   const remark = ref('');
   const recordRows = ref<TRecordRows[]>([
-    {
-      deptName: '科室233',
-      admissionTime: '2022-09-19',
-      outTime: '2022-09-19',
-      visitNo: '233222',
-      isOneself: '0',
-    },
+    // {
+    //   deptName: '科室233',
+    //   admissionTime: '2022-09-19',
+    //   outTime: '2022-09-19',
+    //   visitNo: '233222',
+    //   isOneself: '0',
+    // },
   ]);
 
   const getPayMoneyNum = computed(() => {
@@ -365,9 +390,12 @@
   };
 
   const recordSubmit = (data: TRecordRows) => {
-    console.log(data, 'dialogsubmit');
     data.isOneself = '0';
-    recordRows.value.push(data);
+    if (isAddDialogEdit.value) {
+      recordRows.value[_editRowIndex] = data;
+    } else {
+      recordRows.value.push(data);
+    }
   };
 
   const dealImg = (img: string) => {
@@ -378,12 +406,20 @@
     }
   };
 
-  const editRecord = ({ item }: { item: TRecordRows }) => {
+  let _editRowIndex = 0;
+  const editRecord = ({
+    item,
+    index,
+  }: {
+    item: TRecordRows;
+    index: number;
+  }) => {
     isAddDialogEdit.value = true;
     addDialogValue.value = {
       ...item,
       hosId: props.hosId,
     };
+    _editRowIndex = index;
 
     refAddDialog.value.show();
   };
@@ -407,6 +443,89 @@
 
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('medRecord');
+  };
+
+  const paySubmit = async () => {
+    const { sfz } = pageConfig.value;
+    const { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
+    if (!addressList.value.length) {
+      showMessage('请先选择收货地址', 1500);
+      scrollTo.value = '_address';
+      return;
+    }
+
+    if (sfz.includes('front') && !frontIdCardUrl) {
+      showMessage('请先上传身份证人像页', 1500);
+      scrollTo.value = '_photo';
+
+      return;
+    }
+
+    if (sfz.includes('end') && !endIdCardUrl) {
+      scrollTo.value = '_photo';
+      showMessage('请先上传身份证国徽页', 1500);
+      return;
+    }
+
+    if (sfz.includes('handler') && !handIdCardUrl) {
+      scrollTo.value = '_photo';
+      showMessage('请先上传手持身份证', 1500);
+      return;
+    }
+
+    if (!recordRows.value.length) {
+      scrollTo.value = '_record';
+      showMessage('请先添加住院记录', 1500);
+      return;
+    }
+
+    if (!aimValue.value.length) {
+      scrollTo.value = '_aim';
+      showMessage('请先选择复印目的', 1500);
+      return;
+    }
+
+    const { province, city, county, detailedAddress, senderName, senderPhone } =
+      getAddress.value;
+    const { hosId } = props;
+    const { patientId } = gStores.userStore.patChoose;
+
+    const division = `${province} ${city} ${county}`;
+    const copyAim = aimValue.value.join('、');
+
+    const args = {
+      address: detailedAddress,
+      addresseeName: senderName,
+      addresseePhone: senderPhone,
+      channel: gStores.globalStore.browser.source,
+      copyAim,
+      division,
+      frontIdCardUrl,
+      endIdCardUrl,
+      handIdCardUrl,
+      fee: getPayMoneyNum.value,
+      hosId,
+      outInfo: JSON.stringify(recordRows.value),
+      openId: '',
+      userId: '',
+      patientId,
+      remark: remark.value,
+      payType: '',
+      subopenId: '',
+      visitDate: '',
+    };
+
+    // #ifdef  MP-WEIXIN
+    args.openId = gStores.globalStore.openId;
+    args.payType = '37';
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    args.userId = gStores.globalStore.openId;
+    args.payType = '38';
+    // #endif
+
+    await api.copyOfCasePay(args);
   };
 
   const init = async () => {
@@ -433,6 +552,7 @@
 <style lang="scss" scoped>
   .g-container {
     padding: 0 32rpx;
+    width: calc(100% - 64rpx);
 
     .container-box {
       border-radius: 8px;
