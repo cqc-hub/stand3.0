@@ -113,9 +113,13 @@
   pointer-events: none !important;
 }
 
-.my-display-none {
+.my-hide {
+  @extend .my-disabled;
   opacity: 0;
-  pointer-events: none;
+}
+
+.my-display-none {
+  @extend .my-hide;
   position: absolute;
 }
 

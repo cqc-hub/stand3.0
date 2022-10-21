@@ -1,3 +1,4 @@
+import globalGl from '@/config/global';
 import { useMessageStore } from '@/stores/modules/globalMessage';
 import { useGlobalStore } from '@/stores/modules/global';
 import { ServerStaticData } from './serverStaticData';
@@ -358,4 +359,23 @@ export const useOcr = async (): Promise<OcrFindRes> => {
   // #endif
 
   return Promise.reject('未定义的 ocr');
+};
+
+// 图片上传
+export const upImgOss = (filePath: string, { header }) => {
+  const url = globalGl.authUrl;
+
+  uni.uploadFile({
+    url: url + '/phs-base/offsiteMedicalRecord/medicalRecordPhotoUpload',
+    filePath,
+    name: 'file',
+    header: header || {},
+    formData: {
+      imageName: filePath,
+      sysCode: globalGl.SYS_CODE,
+    },
+    success: function (res) {
+      console.log(res, 'rrrr');
+    },
+  });
 };

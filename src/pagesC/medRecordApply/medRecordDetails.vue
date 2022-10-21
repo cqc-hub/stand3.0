@@ -1,5 +1,8 @@
 <template>
   <view class="g-page">
+    <view @click="refaaa.show">23333</view>
+    <g-pay ref="refaaa" />
+
     <g-flag typeFg="503" isShowFg />
 
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
@@ -220,18 +223,20 @@
   import recordCard from './components/recordCard.vue';
   import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
   import {
-    chooseImg,
     GStores,
     IHosInfo,
     ISystemConfig,
     ServerStaticData,
+    upImgOss,
   } from '@/utils';
   import { onShow } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
   import { CaseCopeItemDetail } from './utils/recordApply';
-  import { NotNullable } from '@/typeUtils';
+  import { NotNullable, XOR } from '@/typeUtils';
 
   import api from '@/service/api';
+
+  const refaaa = ref<any>('');
 
   type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
 
@@ -264,6 +269,34 @@
       }, 100);
     }
   );
+
+  type TChoose = XOR<
+    { success: true; path: string },
+    { success: false; evt: any }
+  >;
+
+  const chooseImg = (): Promise<TChoose> => {
+    return new Promise((resolve) => {
+      uni.chooseImage({
+        count: 1,
+        sizeType: 'compressed',
+        async success(e) {
+          const { tempFilePaths, tempFiles } = e;
+          resolve({
+            success: true,
+            path: tempFilePaths[0],
+          });
+        },
+
+        fail(e) {
+          resolve({
+            success: false,
+            evt: e,
+          });
+        },
+      });
+    });
+  };
 
   const gStores = new GStores();
   const showMessage = gStores.messageStore.showMessage;
@@ -357,26 +390,26 @@
   };
 
   const chooseIdCardFront = async () => {
-    const res = await chooseImg({ imgCanvas });
+    const res = await chooseImg();
 
     if (res.success) {
-      idCardImg.value.frontIdCardUrl = res.base64;
+      idCardImg.value.frontIdCardUrl = res.path;
     }
   };
 
   const chooseIdCardBack = async () => {
-    const res = await chooseImg({ imgCanvas });
+    const res = await chooseImg();
 
     if (res.success) {
-      idCardImg.value.endIdCardUrl = res.base64;
+      idCardImg.value.endIdCardUrl = res.path;
     }
   };
 
   const chooseIdCardHandler = async () => {
-    const res = await chooseImg({ imgCanvas });
+    const res = await chooseImg();
 
     if (res.success) {
-      idCardImg.value.handIdCardUrl = res.base64;
+      idCardImg.value.handIdCardUrl = res.path;
     }
   };
 
@@ -399,11 +432,12 @@
   };
 
   const dealImg = (img: string) => {
-    if (img.startsWith('http')) {
-      return img;
-    } else {
-      return 'data:image/png;base64,' + img;
-    }
+    return img;
+    // if (img.startsWith('http')) {
+    //   return img;
+    // } else {
+    //   return 'data:image/png;base64,' + img;
+    // }
   };
 
   let _editRowIndex = 0;
@@ -573,12 +607,12 @@
         width: calc(50% - 12rpx);
 
         border-style: dashed;
-        position: relative !important;
+        position: relative;
         margin-bottom: 16rpx;
 
         .delete-icon {
           font-size: var(--hr-font-size-xxl);
-          position: absolute;
+          position: absolute !important;
           top: 0;
           right: 0;
         }
