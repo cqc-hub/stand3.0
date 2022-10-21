@@ -28,13 +28,12 @@ Request.interceptors.request((request: IRequest) => {
   //   request.url = request.url + '?' + request.data
   // }
 
-  //禁止删除
-  console.log(request.url, request.data);
-
   const key = 'reqv3-' + new Date().getDate();
   const data = JSON.parse(JSON.stringify(request.data));
 
   if (isDes) {
+    //禁止删除
+    console.log(request.url, request.data);
     const desData = {
       args: {},
       signContent: encryptDes(JSON.stringify(data.args), key),
@@ -49,7 +48,6 @@ Request.interceptors.request((request: IRequest) => {
 // 响应拦截器
 Request.interceptors.response(
   (response: IResponseWrapper) => {
-
     const responseData = response.res.data;
     const responseOptions = response.options;
     const messageStore = useMessageStore();
@@ -62,9 +60,11 @@ Request.interceptors.response(
     if (isDes && signContent) {
       const key = 'resv3-' + new Date().getDate();
       responseData.result = JSON.parse(decryptDes(signContent, key));
+      //禁止删除
+      console.log('出参', responseData.result);
+    }else{
+      console.log(responseData);
     }
-   //禁止删除
-    console.log('出参',responseData.result);
     //处理清除缓存的操作
     if (functionVersion) {
       cleanSession(functionVersion);

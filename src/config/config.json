@@ -1,5 +1,5 @@
 {
-  "sysCode": "2001013",
+  "sysCode": "2001004",
   "sysConfig": {
     "c": {
       "wxAppid": "wxe26143481567cb97",
@@ -10,11 +10,12 @@
       "isSearchInHos": true
     },
 
-    "2001011": {
+    "2001004": {
       "wxAppid": "wx101158c57640d854",
       "alipayAppid": "",
       "h5Appid": "wxac2942d44e7c2bd9",
-      "name": "渭南市中心医院",
+      "name": "渭南电子健康卡",
+      "isStartComeTest": true,
       "isSearchInHos": false
     },
 

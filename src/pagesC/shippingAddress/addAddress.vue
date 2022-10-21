@@ -12,7 +12,7 @@
         <!-- #ifdef MP-WEIXIN -->
         <template #suffix="{ item }">
           <view v-if="item.key == 'detailedAddress'" @click="getCurrentAdd">
-            <view class="iconfont icon-resize">&#xe6b6;</view>
+            <view class="icon-font icon-resize ico_location2"></view>
           </view>
         </template>
         <!-- #endif -->
@@ -253,7 +253,9 @@
 
 <style lang="scss" scoped>
   .icon-resize {
-    font-size: 48rpx;
+    height: 48rpx;
+    width:48rpx;
+    // color: var(--hr-brand-color-6);
   }
   .footer {
     position: absolute;
