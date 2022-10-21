@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <g-popup :maskClickClose="false" title="手动添加记录" ref="refAddDialog">
+    <g-popup :maskClickClose="false" :title="title" ref="refAddDialog">
       <view class="g-page">
         <view class="g-container">
           <g-form
@@ -38,6 +38,7 @@
   const refForm = ref<any>();
   const props = defineProps<{
     value: BaseObject;
+    title: string;
   }>();
   const emits = defineEmits(['update:value', 'submit']);
 
@@ -57,15 +58,15 @@
       label: '住院号',
       field: 'input-text',
       placeholder: '请输入(选填)',
-      key: 'no',
+      key: 'visitNo',
     },
 
     {
       required: true,
       label: '病区科室',
       field: 'input-text',
-      placeholder: '请输入(选填)',
-      key: 'no1',
+      placeholder: '请输入',
+      key: 'deptName',
     },
 
     {
@@ -74,7 +75,7 @@
       type: 'date',
       label: '入院日期',
       placeholder: '请选择',
-      key: 'd1',
+      key: 'admissionTime',
       field: 'time-picker',
       end: timeNow,
     },
@@ -85,9 +86,23 @@
       type: 'date',
       label: '出院日期',
       placeholder: '请选择',
-      key: 'd2',
+      key: 'outTime',
       field: 'time-picker',
       end: timeNow,
+      validator: async (v) => {
+        const admissionTime = props.value.admissionTime;
+
+        if (dayjs(admissionTime).isAfter(dayjs(v as string))) {
+          return {
+            success: false,
+            message: '出院时间不能早于入院时间',
+          };
+        }
+
+        return {
+          success: true,
+        };
+      },
     },
   ];
 
@@ -125,8 +140,11 @@
     refForm.value.submit();
   };
 
-  const submit = (e) => {
-    emits('submit', e);
+  const submit = ({ data }) => {
+    console.log(data);
+
+    emits('submit', data);
+    hide();
   };
 
   defineExpose({

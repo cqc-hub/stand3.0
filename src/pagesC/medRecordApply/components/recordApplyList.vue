@@ -78,6 +78,7 @@
     border-radius: 8px;
     padding: 40rpx 32rpx;
     margin-bottom: 16rpx;
+    min-height: 200rpx;
 
     &:first-child {
       margin-top: 24rpx;

@@ -80,6 +80,8 @@
   };
 
   const getOutPatientHosList = async () => {
+    isComplete.value = true;
+    return;
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
       patientId,
@@ -105,6 +107,7 @@
     uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
         hosId: hosId.value,
+        isManual: '1',
       }),
     });
   };
@@ -169,5 +172,9 @@
 
   .empty-btn {
     font-size: var(--hr-font-size-xs);
+    padding: 14rpx 24rpx;
+    line-height: 1em;
+    height: 100%;
+    width: 100%;
   }
 </style>

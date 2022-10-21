@@ -70,78 +70,7 @@
 
             <view class="container-box p32 g-border">
               <block v-if="info._outInfo && info._outInfo.length">
-                <view
-                  v-for="(item, idx) in info._outInfo"
-                  :key="idx"
-                  :class="{
-                    mb16: idx !== info._outInfo.length,
-                  }"
-                  class="container-card"
-                >
-                  <view
-                    v-if="item.outTime"
-                    class="container-card-header up-lv flex-normal g-border-bottom"
-                  >
-                    <view class="iconfont container-card-header-icon mr12">
-                      &#xe6f3;
-                    </view>
-
-                    <view>
-                      <text>{{ formatterTime(item.admissionTime) }}</text>
-                      <text class="timer-split">至</text>
-                      <text>{{ formatterTime(item.outTime) }}</text>
-                    </view>
-                  </view>
-
-                  <view v-if="item.isOneself === '0'" class="card-self-logo">
-                    <view class="_card-self-logo g-flex-rc-cc">
-                      <view>手动</view>
-                      <view>添加</view>
-                    </view>
-                  </view>
-
-                  <view
-                    v-if="item.visitNo"
-                    class="container-card-row flex-normal mt16"
-                  >
-                    <view class="label">住院号</view>
-
-                    <view class="content">{{ item.visitNo }}</view>
-                  </view>
-
-                  <view
-                    v-if="item.diagnosis"
-                    class="container-card-row flex-normal"
-                  >
-                    <view class="label">诊断</view>
-
-                    <view class="content">
-                      {{ item.diagnosis.join('、') }}
-                    </view>
-                  </view>
-
-                  <view
-                    v-if="item.attendingDoctor"
-                    class="container-card-row flex-normal"
-                  >
-                    <view class="label">医生</view>
-
-                    <view class="content">
-                      {{ item.hosName + item.attendingDoctor }}
-                    </view>
-                  </view>
-
-                  <view
-                    v-if="item.deptName"
-                    class="container-card-row flex-normal"
-                  >
-                    <view class="label">病区科室</view>
-
-                    <view class="content">
-                      {{ item.deptName }}
-                    </view>
-                  </view>
-                </view>
+                <record-Card :list="info._outInfo" />
               </block>
 
               <view v-if="info.copyAim" class="mt32 _row">
@@ -223,6 +152,7 @@
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import expressStep from './components/expressStep.vue';
+  import recordCard from './components/recordCard.vue';
   import dayjs from 'dayjs';
 
   const props = defineProps<{
@@ -304,6 +234,8 @@
       }
     }
 
+    console.log(result, 233);
+
     if (result._expressParam) {
       // 邮政
       if (isExpress1(result._expressParam)) {
@@ -330,15 +262,17 @@
           80: '已签收',
           125: '待取件',
           31: '运输中',
+          20: '运输中',
           70: '派送中',
         };
 
         const _title = opCodeMap[result._expressParam.opcode] || '未知的状态';
+        const _date = dayjs(result._expressParam.accept_date).format('MM-DD');
 
         expressInfo.value = {
           pointNow: {
             title: _title,
-            date: result._expressParam.accept_date,
+            date: _date,
             desc: result._expressParam.remark,
           },
         };
@@ -521,73 +455,6 @@
 
       .btn {
         flex: 1;
-      }
-    }
-
-    .container-card {
-      background-color: var(--hr-neutral-color-1);
-      border-radius: 4px;
-      padding: 32rpx;
-      padding-top: 24rpx;
-      overflow: hidden;
-      position: relative;
-
-      .card-self-logo {
-        color: #e9e9e9;
-        font-size: var(--hr-font-size-xxl);
-        border: solid 10rpx;
-        display: inline-block;
-        position: absolute;
-        right: -10rpx;
-        top: -10rpx;
-        z-index: 1;
-        pointer-events: none;
-
-        transform: rotate(25deg);
-
-        border-radius: 900rpx;
-        ._card-self-logo {
-          border-radius: 900rpx;
-          padding: 24rpx;
-          border: solid 2rpx;
-
-          margin: 10rpx;
-          flex-direction: column;
-
-          > view {
-            line-height: calc(var(--hr-font-size-xxl));
-          }
-        }
-      }
-
-      .container-card-header {
-        font-size: var(--hr-font-size-base);
-        font-weight: 600;
-        padding-bottom: 16rpx;
-        &-icon {
-          color: #43d5c0;
-          font-size: var(--hr-font-size-xl);
-          font-weight: normal;
-        }
-
-        .timer-split {
-          margin: 0 12rpx;
-        }
-      }
-
-      .container-card-row {
-        @extend .up-lv;
-        font-size: var(--hr-font-size-xs);
-        margin-top: 8rpx;
-
-        .label {
-          width: 120rpx;
-          color: var(--hr-neutral-color-7);
-        }
-
-        .content {
-          flex: 1;
-        }
       }
     }
   }
