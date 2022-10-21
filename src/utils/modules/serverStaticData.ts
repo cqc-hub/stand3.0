@@ -35,6 +35,18 @@ export interface ISystemConfig {
 
     ocr?: '0' | '1';
   };
+
+  // 病案
+  medRecord: {
+    // 身份证上传要求 （人像、 背面、 手持）
+    sfz: ('front' | 'end' | 'handler')[]; // 后端说 人像、 背面 必填 设置时候每次都加下
+
+    // 收钱方式 0 预收 1 按项目、目的
+    isItemCount?: '0' | '1';
+
+    // 收钱方式预收的金额 ｜ 单个项目金额
+    fee: number;
+  };
 }
 
 type TEnv = 'dev' | 'test' | 'prod';
@@ -327,52 +339,56 @@ export class ServerStaticData {
   }
 
   static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
-    // const gStores = new GStores();
-    // const res: ISystemConfig = {
-    //   order: {
-    //     chooseDay: 30,
-    //     selOrderColumn: 3,
-    //     isOrderBlur: '1',
-    //     isOrderPay: '0',
-    //   },
+    const gStores = new GStores();
+    const res: ISystemConfig = {
+      order: {
+        chooseDay: 30,
+        selOrderColumn: 3,
+        isOrderBlur: '1',
+        isOrderPay: '0',
+      },
 
-    //   person: {
-    //     isHidePatientTypeInPerfect: '1',
-    //     ageChildren: 6,
-    //     ageGuardian: 18,
-    //     isGuardianWithIdCard: '1',
-    //     isSmsVerify: '0',
-    //     ocr: '1',
-    //   },
-    // };
+      person: {
+        isHidePatientTypeInPerfect: '1',
+        ageChildren: 6,
+        ageGuardian: 18,
+        isGuardianWithIdCard: '1',
+        isSmsVerify: '0',
+        ocr: '1',
+      },
 
-    // return res[key];
+      medRecord: {
+        sfz: ['front', 'end'],
+        isItemCount: '1',
+        fee: 10,
+      },
+    };
 
+    return res[key];
 
-    let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
-    if (!systemConfig) {
-      //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
-      const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PERSON_FAMILY_CARDMAN',
-      });
-      const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
-      systemConfig = {
-        person: person,
-        order: {
-          chooseDay: 30,
-          selOrderColumn: 3,
-          isOrderBlur: '1',
-          isOrderPay: '0',
-        },
-      };
-      setLocalStorage({
-        systemConfig,
-      });
-      return systemConfig[key];
-    } else {
-      return systemConfig[key];
-    }
-
+    // let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
+    // if (!systemConfig) {
+    //   //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
+    //   const { result } = await api.getParamsMoreBySysCode({
+    //     paramCode: 'PERSON_FAMILY_CARDMAN',
+    //   });
+    //   const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
+    //   systemConfig = {
+    //     person: person,
+    //     order: {
+    //       chooseDay: 30,
+    //       selOrderColumn: 3,
+    //       isOrderBlur: '1',
+    //       isOrderPay: '0',
+    //     },
+    //   };
+    //   setLocalStorage({
+    //     systemConfig,
+    //   });
+    //   return systemConfig[key];
+    // } else {
+    //   return systemConfig[key];
+    // }
   }
 
   private constructor() {}

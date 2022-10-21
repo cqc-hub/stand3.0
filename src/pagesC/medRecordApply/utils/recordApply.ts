@@ -147,20 +147,21 @@ export type CaseCopeItemDetail = Flatten<
     outInfo: string;
     _outInfo?: {
       deptName: string;
-      hospitalWard: string;
-      inpatientBed: string;
-      diagnosis: string[];
-      hosId: string;
-      type: string;
-      diagnosisC: string;
-      docName: string;
-      attendingDoctor: string;
-      hosName: string;
+      hospitalWard?: string;
+      inpatientBed?: string;
+      diagnosis?: string[];
+      hosId?: string;
+      type?: string;
+      diagnosisC?: string;
+      docName?: string;
+      attendingDoctor?: string;
+      hosName?: string;
       visitNo: string;
       outTime: string;
-      isOneself: '0' | '1'; // 手动添加？ 0 shi 1 fou
+      isOneself?: '0' | '1'; // 手动添加？ 0 shi 1 fou
       admissionTime: string;
-      clinicOnLine: string;
+      clinicOnLine?: string;
+      inHosTime?: string;
     }[];
     refundFee?: string;
     refundReason: string;

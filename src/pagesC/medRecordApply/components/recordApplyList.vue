@@ -78,6 +78,7 @@
     border-radius: 8px;
     padding: 40rpx 32rpx;
     margin-bottom: 16rpx;
+    min-height: 100rpx;
 
     &:first-child {
       margin-top: 24rpx;
@@ -99,14 +100,18 @@
       margin-top: 16rpx;
 
       font-size: var(--hr-font-size-xs);
+      align-items: flex-start;
 
       .row-title {
         color: var(--hr-neutral-color-7);
-        width: 160rpx;
+        width: 150rpx;
+        white-space: nowrap;
       }
 
       .row-content {
         word-break: break-all;
+        text-align: left;
+        flex: 1;
       }
     }
 

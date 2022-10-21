@@ -1,7 +1,7 @@
 {
-  "sysCode": "2001004",
+  "sysCode": "1001033",
   "sysConfig": {
-    "c": {
+    "1001033": {
       "wxAppid": "wxe26143481567cb97",
       "alipayAppid": "2021002133632822",
       "h5Appid": "wxac2942d44e7c2bd9",

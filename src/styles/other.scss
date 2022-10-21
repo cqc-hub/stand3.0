@@ -97,13 +97,29 @@
   color: var(--hr-neutral-color-7);
 }
 
+.color-error {
+  color: var(--hr-error-color-6);
+}
+
+.color-444 {
+  color: var(--hr-neutral-color-9);
+}
+
+.color-666 {
+  color: var(--hr-neutral-color-8);
+}
+
 .my-disabled {
   pointer-events: none !important;
 }
 
-.my-display-none {
+.my-hide {
+  @extend .my-disabled;
   opacity: 0;
-  pointer-events: none;
+}
+
+.my-display-none {
+  @extend .my-hide;
   position: absolute;
 }
 
@@ -114,6 +130,10 @@
 
 .mb32 {
   margin-bottom: 32rpx !important;
+}
+
+.mt32 {
+  margin-top: 32rpx;
 }
 
 .mb16 {
@@ -128,9 +148,14 @@
   margin-right: 12rpx;
 }
 
+.mr60 {
+  margin-right: 60rpx;
+}
+
 .mr16 {
   margin-right: 16rpx;
 }
+
 
 .m32v {
   margin-top: 32rpx !important;
@@ -148,6 +173,10 @@
 .p32v {
   padding-top: 32rpx !important;
   padding-bottom: 32rpx !important;
+}
+
+.pb32 {
+  padding-bottom: 32rpx;
 }
 
 

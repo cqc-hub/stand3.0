@@ -10,19 +10,18 @@
       @click="itemClick(item)"
       :key="item[field.value]"
       :class="{
-        'item-active-border': isAllActive || isActive(item.numId),
+        'item-active-border': isAllActive || isActive(item[field.value]),
+        'g-bold': isAllActive || isActive(item[field.value]),
       }"
       class="g-flex-rc-cc"
     >
       <view
         :class="{
-          'item-active': isAllActive || isActive(item.numId),
+          'item-active': isAllActive || isActive(item[field.value]),
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
-        <text class="title">{{ item.timeDesc }}</text>
-
-        <text class="item-desc">xxx</text>
+        <view class="label f28">{{ item[field.label] }}</view>
       </view>
     </view>
 
@@ -37,6 +36,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, PropType, reactive } from 'vue';
+  import { GStores } from '@/utils';
 
   export default defineComponent({
     props: {
@@ -61,12 +61,15 @@
       },
 
       value: {
-        type: String as PropType<any>,
+        type: (String || Array) as PropType<any>,
         default: '',
       },
 
       field: {
-        type: Object,
+        type: Object as PropType<{
+          label: string;
+          value: string;
+        }>,
         default: () => ({
           label: 'label',
           value: 'value',
@@ -76,6 +79,11 @@
       multiple: {
         type: Boolean,
         default: false,
+      },
+
+      selectLength: {
+        type: Number,
+        default: 0,
       },
 
       showDelIcon: {
@@ -89,10 +97,11 @@
       },
     },
 
-    emits: ['item-click', 'item-delete'],
+    emits: ['item-click', 'item-delete', 'update:value'],
 
     setup(props, ctx) {
       const { emit } = ctx;
+      const gStores = new GStores();
       const isActive = (v: any) => {
         if (props.multiple) {
           if (Array.isArray(props.value)) {
@@ -107,6 +116,37 @@
 
       const itemClick = (item) => {
         emit('item-click', item);
+        const value = item[props.field.value];
+
+        if (props.multiple) {
+          if (props.value) {
+            const idx = props.value.findIndex((o) => o === value);
+
+            if (idx === -1) {
+              const maxLen = props.selectLength;
+              if (maxLen && props.value.length >= maxLen) {
+                gStores.messageStore.showMessage(
+                  '最多可以选择' + maxLen + '项'
+                );
+                return;
+              }
+
+              emit(
+                'update:value',
+                props.value ? [...props.value, value] : [value]
+              );
+            } else {
+              const _values = [...props.value];
+              _values.splice(idx, 1);
+
+              emit('update:value', _values);
+            }
+          } else {
+            emit('update:value', [value]);
+          }
+        } else {
+          emit('update:value', value);
+        }
       };
 
       const itemDelete = (item) => {
@@ -131,7 +171,7 @@
 
     .item {
       background-color: var(--hr-neutral-color-1);
-      min-height: 130rpx;
+      min-height: 0rpx;
       border-radius: 16rpx;
       font-size: var(--hr-font-size-xs);
       position: relative;
@@ -139,8 +179,13 @@
       width: calc(100% - 4rpx);
       height: calc(100% - 4rpx);
       z-index: 4;
+      gap: 16rpx;
 
       flex-direction: column;
+
+      .label {
+        padding: 18rpx 0;
+      }
 
       .icon-del {
         position: absolute;
@@ -149,17 +194,6 @@
         color: var(--hr-neutral-color-9);
         font-size: 48rpx;
         z-index: 2;
-      }
-
-      .title {
-        font-weight: 600;
-        font-size: var(--hr-font-size-base);
-        color: var(--hr-neutral-color-10);
-      }
-
-      .item-desc {
-        color: var(--hr-neutral-color-9);
-        font-size: var(--hr-font-size-xxxs);
       }
 
       &.item-active {
