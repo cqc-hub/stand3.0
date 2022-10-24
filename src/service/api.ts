@@ -90,7 +90,9 @@ const baseApi = {
 
   //查询快递地址
   queryExpressAddress: (data) =>
-    service.post('/phs-base/expressAddress/queryExpressAddress', parm(data)),
+    service.post('/phs-base/expressAddress/queryExpressAddress', parm(data), {
+      hideLoading: false,
+    }),
 
   //修改快递地址
   updateExpressAddress: (data) =>
@@ -302,6 +304,12 @@ const authApi = {
   wxLoginByPhoneNumberCode: (data) => {
     return service.post('/wx/wxLoginByPhoneNumberCode', parm(data), {
       baseURL: global.authUrl,
+    });
+  },
+
+  addHRPay: (data) => {
+    return service.post('/phs-pay/pay/addHRPay', parm(data), {
+      showMessage: false,
     });
   },
 };

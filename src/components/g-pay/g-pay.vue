@@ -5,7 +5,7 @@
         <view style="width: 100%">
           <pay-List :list="list" @choose-pat="choosePay" />
 
-          <!-- <g-flag typeFg="320" isShowFgTip /> -->
+          <slot />
         </view>
       </view>
     </g-popup>
@@ -44,6 +44,8 @@
     }
   );
 
+  const emits = defineEmits(['pay-click']);
+
   const hide = () => {
     refActionSheet.value.close();
   };
@@ -52,8 +54,14 @@
     refActionSheet.value.show();
   };
 
-  const choosePay = () => {
+  const choosePay = (e) => {
+    const { index, item } = e;
+
     hide();
+    emits('pay-click', {
+      index,
+      item,
+    });
   };
 
   defineExpose({

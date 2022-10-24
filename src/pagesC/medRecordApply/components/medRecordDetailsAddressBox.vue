@@ -53,6 +53,11 @@
   });
 
   const goAddressList = () => {
+    uni.setStorage({
+      data: '1',
+      key: 'back-address',
+    });
+
     uni.navigateTo({
       url: '/pagesC/shippingAddress/addressList?redir=1',
     });

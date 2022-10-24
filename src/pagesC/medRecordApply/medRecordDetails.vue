@@ -1,8 +1,5 @@
 <template>
   <view class="g-page">
-    <view @click="refaaa.show">23333</view>
-    <g-pay ref="refaaa" />
-
     <g-flag typeFg="503" isShowFg />
 
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
@@ -209,6 +206,10 @@
       @confirmButton="_xyDialogConfirm"
     />
 
+    <g-pay :list="refPayList" @pay-click="payOrder" ref="refPay">
+      <g-flag typeFg="32" isShowFgTip />
+    </g-pay>
+
     <view class="g-border-bottom my-display-none">
       <g-selhos :hosId="hosId" @get-list="getHosList" />
     </view>
@@ -235,40 +236,6 @@
   import { NotNullable, XOR } from '@/typeUtils';
 
   import api from '@/service/api';
-
-  const refaaa = ref<any>('');
-
-  type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
-
-  const _aimList = [
-    '医疗保险',
-    '了解病情',
-    '交通事故理赔',
-    '工伤鉴定',
-    '医学鉴定',
-    '其他',
-  ];
-
-  const props = defineProps<{
-    hosId: string;
-    isManual?: '1';
-  }>();
-
-  const pageConfig = ref<ISystemConfig['medRecord']>({
-    sfz: [],
-    fee: 10,
-    isItemCount: '0',
-  });
-
-  const scrollTo = ref('');
-  watch(
-    () => scrollTo.value,
-    () => {
-      setTimeout(() => {
-        scrollTo.value = '';
-      }, 100);
-    }
-  );
 
   type TChoose = XOR<
     { success: true; path: string },
@@ -297,6 +264,46 @@
       });
     });
   };
+
+  type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
+
+  const _aimList = [
+    '医疗保险',
+    '了解病情',
+    '交通事故理赔',
+    '工伤鉴定',
+    '医学鉴定',
+    '其他',
+  ];
+
+  const props = defineProps<{
+    hosId: string;
+    isManual?: '1';
+  }>();
+
+  const pageConfig = ref<ISystemConfig['medRecord']>({
+    sfz: [],
+    fee: 10,
+    isItemCount: '0',
+  });
+
+  const refPay = ref<any>('');
+  const refPayList = ref([
+    {
+      label: '在线支付',
+      key: 'online',
+    },
+  ]);
+
+  const scrollTo = ref('');
+  watch(
+    () => scrollTo.value,
+    () => {
+      setTimeout(() => {
+        scrollTo.value = '';
+      }, 100);
+    }
+  );
 
   const gStores = new GStores();
   const showMessage = gStores.messageStore.showMessage;
@@ -479,9 +486,10 @@
     pageConfig.value = await ServerStaticData.getSystemConfig('medRecord');
   };
 
+  let phsOrderNo = '';
   const paySubmit = async () => {
     const { sfz } = pageConfig.value;
-    const { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
+    let { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 1500);
       scrollTo.value = '_address';
@@ -519,6 +527,28 @@
       return;
     }
 
+    uni.showLoading({
+      mask: true,
+      title: '上传证件中...',
+    });
+
+    if (frontIdCardUrl && !frontIdCardUrl.startsWith('https')) {
+      const { url } = await upImgOss(frontIdCardUrl, {});
+      idCardImg.value.frontIdCardUrl = url;
+    }
+
+    if (endIdCardUrl && !endIdCardUrl.startsWith('https')) {
+      const { url } = await upImgOss(endIdCardUrl, {});
+      idCardImg.value.endIdCardUrl = url;
+    }
+
+    if (handIdCardUrl && !handIdCardUrl.startsWith('https')) {
+      const { url } = await upImgOss(handIdCardUrl, {});
+      idCardImg.value.handIdCardUrl = url;
+    }
+
+    uni.hideLoading();
+
     const { province, city, county, detailedAddress, senderName, senderPhone } =
       getAddress.value;
     const { hosId } = props;
@@ -534,9 +564,9 @@
       channel: gStores.globalStore.browser.source,
       copyAim,
       division,
-      frontIdCardUrl,
-      endIdCardUrl,
-      handIdCardUrl,
+      frontIdCardUrl: idCardImg.value.frontIdCardUrl,
+      endIdCardUrl: idCardImg.value.endIdCardUrl,
+      handIdCardUrl: idCardImg.value.handIdCardUrl,
       fee: getPayMoneyNum.value,
       hosId,
       outInfo: JSON.stringify(recordRows.value),
@@ -559,7 +589,44 @@
     args.payType = '38';
     // #endif
 
-    await api.copyOfCasePay(args);
+    const { result } = await api.copyOfCasePay<{
+      phsOrderNo: string;
+    }>(args);
+
+    phsOrderNo = result.phsOrderNo;
+    refPay.value.show();
+  };
+
+  const payOrder = async ({ item }) => {
+    if (item.key === 'online') {
+      const { cardNumber, patientId, patientName } =
+        gStores.userStore.patChoose;
+
+      const requestArg = {
+        phsOrderNo,
+        phsOrderSource: '4',
+        phsOrderSourceName: '4',
+        source: gStores.globalStore.browser.source,
+        totalFee: getPayMoneyNum.value,
+        cardNumber,
+        hosId: props.hosId,
+        hosName: getGetHosName.value,
+        patientId,
+        userId: '',
+        openId: '',
+        patientName,
+      };
+
+      // #ifdef  MP-WEIXIN
+      requestArg.openId = gStores.globalStore.openId;
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      requestArg.userId = gStores.globalStore.openId;
+      // #endif
+
+      api.addHRPay(requestArg);
+    }
   };
 
   const init = async () => {
@@ -568,12 +635,21 @@
 
   init();
 
+  let _firstLoaded = true;
   onShow(async () => {
-    const { result } = await api.queryExpressAddress({
-      herenId: gStores.globalStore.herenId,
-    });
+    const _backFromAddress = uni.getStorageSync('back-address');
+    if (_firstLoaded || _backFromAddress) {
+      _firstLoaded = false;
+      uni.removeStorage({
+        key: 'back-address',
+      });
 
-    addressList.value = result || [];
+      const { result } = await api.queryExpressAddress({
+        herenId: gStores.globalStore.herenId,
+      });
+
+      addressList.value = result || [];
+    }
   });
 
   onMounted(() => {

@@ -1,9 +1,9 @@
 import globalGl from '@/config/global';
-import { useMessageStore } from '@/stores/modules/globalMessage';
-import { useGlobalStore } from '@/stores/modules/global';
+import { useGlobalStore, useMessageStore } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { ISelectOptions } from '@/components/g-form';
 import api from '@/service/api';
+import _env from '@/config/env';
 
 type GreaterThan<
   T extends number,
@@ -362,20 +362,57 @@ export const useOcr = async (): Promise<OcrFindRes> => {
 };
 
 // 图片上传
-export const upImgOss = (filePath: string, { header }) => {
-  const url = globalGl.authUrl;
+export const upImgOss = (
+  filePath: string,
+  payload: {
+    header?: BaseObject;
+    data?: BaseObject;
+  } = {}
+) => {
+  const globalStore = useGlobalStore();
+  const messageStore = useMessageStore();
 
-  uni.uploadFile({
-    url: url + '/phs-base/offsiteMedicalRecord/medicalRecordPhotoUpload',
-    filePath,
-    name: 'file',
-    header: header || {},
-    formData: {
-      imageName: filePath,
-      sysCode: globalGl.SYS_CODE,
-    },
-    success: function (res) {
-      console.log(res, 'rrrr');
-    },
+  return new Promise<{
+    url: string;
+  }>((resolve, reject) => {
+    uni.uploadFile({
+      url: _env.baseApi + '/phs-base/upload/imageUpload',
+      filePath,
+      name: 'file',
+      fileType: 'image',
+      header: {
+        ...(payload.header || {}),
+      },
+      formData: {
+        imageName: filePath,
+        sysCode: globalGl.SYS_CODE,
+        Authorization: globalStore.getToken,
+        ...(payload.data || {}),
+      },
+      success: function (res) {
+        const { errMsg, data, statusCode } = res as any;
+
+        if (statusCode == 200 && data) {
+          const { result, message } = JSON.parse(data);
+
+          if (result) {
+            resolve({
+              url: result,
+            });
+          } else {
+            messageStore.showMessage(message || '上传图片失败', 1500);
+            reject(void 0);
+          }
+        } else {
+          messageStore.showMessage('上传图片失败', 1500);
+          reject(void 0);
+        }
+      },
+
+      fail(e) {
+        console.log('shibai', e);
+        reject(e);
+      },
+    });
   });
 };
