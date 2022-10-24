@@ -202,7 +202,7 @@
       .box-item {
         background: var(--h-color-white);
         margin-bottom: 16rpx;
-        border: 2rpx solid var(--hr-neutral-color-4);
+        border: 1rpx solid var(--hr-neutral-color-2);
         border-radius: 16rpx;
         padding: 32rpx;
         .item-title {
@@ -232,6 +232,7 @@
           font-weight: var(--h-weight-2);
           text-align: left;
           color: var(--hr-neutral-color-10);
+          word-break: break-all;
         }
       }
     }

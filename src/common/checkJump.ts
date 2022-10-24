@@ -132,14 +132,14 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       uni.navigateToMiniProgram({
         appId: item.appId,
         path: item.url,
-        extraData: JSON.parse(item.query),
+        extraData: item.query && JSON.parse(item.query),
       });
       break;
     case 'alipay':
       uni.navigateToMiniProgram({
         appId: item.appId,
         path: item.path,
-        extraData: JSON.parse(item.query),
+        extraData: item.query && JSON.parse(item.query),
       });
       break;
     case 'my-h5':
@@ -168,16 +168,31 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
       break;
     default:
       //自研或者其他直接跳转的
-      const obj3 = {
-        url: item.path,
-        fail: () => {
-          gStores.messageStore.showMessage(
-            `请确认跳转地址正确性${item.path}`,
-            1500
-          );
-        },
-      };
-      typeNavigate(obj3, type);
+      if (item.path == 'scanCode') {
+        //扫一扫
+        scanCode();
+      } else {
+        const obj3 = {
+          url: item.path,
+          fail: () => {
+            gStores.messageStore.showMessage(
+              `请确认跳转地址正确性${item.path}`,
+              1500
+            );
+          },
+        };
+        typeNavigate(obj3, type);
+      }
+
       break;
   }
+};
+
+const scanCode = () => {
+  uni.scanCode({
+    success: function (res) {
+      console.log('条码类型：' + res.scanType);
+      console.log('条码内容：' + res.result);
+    },
+  });
 };

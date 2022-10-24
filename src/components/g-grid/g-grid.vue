@@ -100,7 +100,7 @@
       .grid-label {
         margin-top: 8upx;
         font-size: var(--hr-font-size-s);
-        color: var(--hr-neutral-color-10);
+        color: var(--hr-neutral-color-9);
         font-weight: var(--h-weight-2);
       }
       .grid-title {
