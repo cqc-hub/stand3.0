@@ -483,7 +483,9 @@
   };
 
   const getConfig = async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('medRecord');
+    pageConfig.value = await ServerStaticData.getSystemConfig('medRecord', {
+      hosId: props.hosId,
+    });
   };
 
   let phsOrderNo = '';
@@ -573,7 +575,7 @@
       openId: '',
       userId: '',
       patientId,
-      remark: remark.value,
+      remark: remark.value || '无',
       payType: '',
       subopenId: '',
       visitDate: '',

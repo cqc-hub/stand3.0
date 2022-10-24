@@ -81,6 +81,17 @@ export interface IHosInfo {
 
 const _cacheMap = new WeakMap();
 
+const getMedRecordConfig = async (
+  hosId: string
+): Promise<ISystemConfig['medRecord']> => {
+  const { result } = await api.getParamsMoreBySysCode({
+    paramCode: 'MEDICAL_CASE_COPY',
+    hosId,
+  });
+
+  return result;
+};
+
 export class ServerStaticData {
   /**
    * 医院列表
@@ -338,8 +349,24 @@ export class ServerStaticData {
     }
   }
 
-  static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
+  static async getSystemConfig<T extends keyof ISystemConfig>(
+    key: T,
+    payload: {
+      hosId?: string;
+    } = {}
+  ) {
     const gStores = new GStores();
+
+    if (key === 'medRecord') {
+      const { hosId } = payload;
+
+      if (hosId) {
+        return await getMedRecordConfig(hosId);
+      } else {
+        return Promise.reject('未带入hosId');
+      }
+    }
+
     const res: ISystemConfig = {
       order: {
         chooseDay: 30,

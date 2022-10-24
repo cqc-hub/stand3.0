@@ -1,6 +1,6 @@
 <template>
   <view class="login-center">
-    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
+    <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view>
     <scroll-view class="scroll-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
@@ -119,11 +119,7 @@
     console.log({ a });
 
     uni.navigateTo({
-      url:
-        '/pagesA/MyRegistration/Register?_url=' +
-        encodeURIComponent(
-          '/pagesA/MyRegistration/selDepartment?clinicalType=1'
-        ),
+      url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&query=["token"]'
     });
 
     // uni.navigateTo({
