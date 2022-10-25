@@ -57,7 +57,13 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import { ServerStaticData, IHosInfo, openLocation, GStores } from '@/utils';
+  import {
+    ServerStaticData,
+    IHosInfo,
+    openLocation,
+    GStores,
+    ISystemConfig,
+  } from '@/utils';
   import { joinQuery } from '@/common';
 
   import hosListVue from './components/hosList/hosList.vue';
@@ -116,7 +122,20 @@
   const showMoreItem = ref(5);
   const isAuthLocation = ref(false);
 
+  const isMedCopy = ref(false);
+  const medCopyConfigList = ref<ISystemConfig['medRecord']>([]);
+
   const itemClick = (item: IHosInfo) => {
+    if (isMedCopy.value) {
+      const _idx = medCopyConfigList.value.findIndex(
+        (o) => o.hosId === item.hosId
+      );
+
+      if (_idx === -1) {
+        gStores.messageStore.showMessage('该院区暂未开通病案复印功能', 1500);
+        return;
+      }
+    }
     const url = decodeURIComponent(props._url);
     if (props._type == 1) {
       //医院指南
@@ -171,6 +190,14 @@
 
   const getList = async (isRequestApi: boolean = true) => {
     isWxRequestQxDialogShow.value = false;
+    const url = decodeURIComponent(props._url);
+    if (url.includes('/pagesC/medRecordApply/recordApply')) {
+      isMedCopy.value = true;
+      medCopyConfigList.value = await ServerStaticData.getSystemConfig(
+        'medRecord'
+      );
+    }
+
     if (isRequestApi) {
       uni.getLocation({
         async success(e) {

@@ -281,10 +281,11 @@
     isManual?: '1';
   }>();
 
-  const pageConfig = ref<ISystemConfig['medRecord']>({
+  const pageConfig = ref<ISystemConfig['medRecord'][number]>({
     sfz: [],
     fee: 10,
     isItemCount: '0',
+    hosId: '2',
   });
 
   const refPay = ref<any>('');
@@ -483,9 +484,8 @@
   };
 
   const getConfig = async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('medRecord', {
-      hosId: props.hosId,
-    });
+    const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+    pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
   };
 
   let phsOrderNo = '';

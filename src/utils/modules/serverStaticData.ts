@@ -46,7 +46,8 @@ export interface ISystemConfig {
 
     // 收钱方式预收的金额 ｜ 单个项目金额
     fee: number;
-  };
+    hosId: string;
+  }[];
 }
 
 type TEnv = 'dev' | 'test' | 'prod';
@@ -81,15 +82,48 @@ export interface IHosInfo {
 
 const _cacheMap = new WeakMap();
 
-const getMedRecordConfig = async (
-  hosId: string
-): Promise<ISystemConfig['medRecord']> => {
+const Med_Copy_Config = { name: 'Med_Copy_Config' };
+
+const getMedRecordConfig = async (): Promise<ISystemConfig['medRecord']> => {
+  const list = _cacheMap.get(Med_Copy_Config);
+
+  if (list) {
+    return list;
+  }
+
   const { result } = await api.getParamsMoreBySysCode({
     paramCode: 'MEDICAL_CASE_COPY',
-    hosId,
   });
 
-  return result;
+  if (result && result.MEDICAL_CASE_COPY) {
+    const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
+
+    if (_configList.length) {
+      const configList: any[] = [];
+      Object.entries(_configList[0]).map(([hosId, value]) => {
+        const { tollMode, price, isHandPhoto } = value as any;
+
+        const isItemCount = tollMode === '1' ? '1' : '0';
+
+        configList.push({
+          hosId,
+          isItemCount,
+          fee: price * 1,
+          sfz:
+            isHandPhoto === '1'
+              ? ['front', 'end', 'handler']
+              : ['front', 'end'],
+        });
+      });
+      _cacheMap.set(Med_Copy_Config, configList);
+
+      return configList;
+    } else {
+      throw new Error('未配置_medCopyList');
+    }
+  } else {
+    throw new Error('未配置_medCopy');
+  }
 };
 
 export class ServerStaticData {
@@ -351,20 +385,12 @@ export class ServerStaticData {
 
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
-    payload: {
-      hosId?: string;
-    } = {}
+    payload: {} = {}
   ) {
     const gStores = new GStores();
 
     if (key === 'medRecord') {
-      const { hosId } = payload;
-
-      if (hosId) {
-        return await getMedRecordConfig(hosId);
-      } else {
-        return Promise.reject('未带入hosId');
-      }
+      return await getMedRecordConfig();
     }
 
     const res: ISystemConfig = {
@@ -384,11 +410,14 @@ export class ServerStaticData {
         ocr: '1',
       },
 
-      medRecord: {
-        sfz: ['front', 'end'],
-        isItemCount: '1',
-        fee: 10,
-      },
+      medRecord: [
+        {
+          sfz: ['front', 'end'],
+          isItemCount: '1',
+          fee: 10,
+          hosId: '100',
+        },
+      ],
     };
 
     return res[key];
