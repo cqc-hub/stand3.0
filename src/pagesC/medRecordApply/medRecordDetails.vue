@@ -206,7 +206,13 @@
       @confirmButton="_xyDialogConfirm"
     />
 
-    <g-pay :list="refPayList" @pay-click="payOrder" ref="refPay">
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      auto
+      ref="refPay"
+    >
       <g-flag typeFg="32" isShowFgTip />
     </g-pay>
 
@@ -295,6 +301,7 @@
       key: 'online',
     },
   ]);
+  const payArg = ref<BaseObject>({});
 
   const scrollTo = ref('');
   watch(
@@ -489,7 +496,6 @@
     pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
   };
 
-  let phsOrderNo = '';
   const paySubmit = async () => {
     const { sfz } = pageConfig.value;
     let { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
@@ -596,40 +602,21 @@
       phsOrderNo: string;
     }>(args);
 
-    phsOrderNo = result.phsOrderNo;
+    payArg.value = {
+      phsOrderNo: result.phsOrderNo,
+      phsOrderSource: '4',
+      totalFee: getPayMoneyNum.value,
+      hosId: props.hosId,
+      hosName: getGetHosName.value,
+    };
+
     refPay.value.show();
   };
 
-  const payOrder = async ({ item }) => {
-    if (item.key === 'online') {
-      const { cardNumber, patientId, patientName } =
-        gStores.userStore.patChoose;
-
-      const requestArg = {
-        phsOrderNo,
-        phsOrderSource: '4',
-        source: gStores.globalStore.browser.source,
-        channel: gStores.globalStore.browser.source,
-        totalFee: getPayMoneyNum.value,
-        cardNumber,
-        hosId: props.hosId,
-        hosName: getGetHosName.value,
-        patientId,
-        userId: '',
-        openId: '',
-        patientName,
-      };
-
-      // #ifdef  MP-WEIXIN
-      requestArg.openId = gStores.globalStore.openId;
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      requestArg.userId = gStores.globalStore.openId;
-      // #endif
-
-      api.addHRPay(requestArg);
-    }
+  const payAfter = () => {
+    uni.reLaunch({
+      url: '/pagesC/medRecordApply/_recordApply?hosId=' + props.hosId,
+    });
   };
 
   const init = async () => {

@@ -307,8 +307,8 @@ const authApi = {
     });
   },
 
-  addHRPay: (data) => {
-    return service.post('/phs-pay/pay/addHRPay', parm(data), {
+  addHRPay: <T>(data) => {
+    return service.post<T>('/phs-pay/pay/addHRPay', parm(data), {
       showMessage: false,
     });
   },
