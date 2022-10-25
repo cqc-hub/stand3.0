@@ -59,6 +59,13 @@
       "root": "pagesA",
       "pages": [
         {
+          "path": "MyRegistration/MyRegistration",
+          "style": {
+            "navigationBarTitleText": "挂号记录"
+          }
+        },
+
+        {
           "path": "mySet/getMore",
           "style": {
             "navigationBarTitleText": "更多"

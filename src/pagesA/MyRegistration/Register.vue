@@ -1,12 +1,13 @@
 <template>
   <view class="page">
-    <view v-if="hosList.length > showMoreItem" class="flex-normal header">
-      <view @click="isShowHosSort = true" class="flex-normal">
+    <!-- v-if="hosList.length > showMoreItem" -->
+    <view class="flex-normal header">
+      <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
         <view>{{ hosSortNow }}</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
 
-      <view @click="isShowFilterHos = true" class="flex-normal">
+      <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
         <view>筛选</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
@@ -42,15 +43,45 @@
         value: 'value',
       }"
       title="筛选医院"
-    />
+      type="top"
+    >
+      <template #header>
+        <view class="flex-normal header">
+          <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
+            <view>{{ hosSortNow }}</view>
+            <view class="iconfont">&#xe6e8;</view>
+          </view>
+
+          <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
+            <view>筛选</view>
+            <view class="iconfont">&#xe6e8;</view>
+          </view>
+        </view>
+      </template>
+    </g-select>
 
     <g-select
       v-model:value="hosSortNow"
       v-model:show="isShowHosSort"
       :option="hosSortOpt"
       @change="hosSortChange"
+      type="top"
       title="医院排序"
-    />
+    >
+      <template #header>
+        <view class="flex-normal header">
+          <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
+            <view>{{ hosSortNow }}</view>
+            <view class="iconfont">&#xe6e8;</view>
+          </view>
+
+          <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
+            <view>筛选</view>
+            <view class="iconfont">&#xe6e8;</view>
+          </view>
+        </view>
+      </template>
+    </g-select>
     <g-message />
   </view>
 </template>

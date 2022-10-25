@@ -1,12 +1,17 @@
 <template>
   <view class="">
-    <Gl-Popup ref="popup" :title="title" @hide="hide">
+    <Gl-Popup ref="popup" :type="type" :title="title" @hide="hide">
+      <template v-if="$slots.header" #header>
+        <slot name="header" />
+      </template>
+
       <view>
         <view
           v-for="(item, i) in option"
           :key="i"
           :class="{
             'popup-row-active': isActive(item),
+            'g-border-top': type === 'top',
           }"
           @click="change(item)"
           class="popup-row g-border-bottom"
@@ -31,6 +36,7 @@
       title?: string;
       option: any[];
       value: any;
+      type?: 'top' | 'bottom';
       field?: {
         label: string;
         value: string;
@@ -38,8 +44,11 @@
     }>(),
     {
       title: '',
+      type: 'bottom',
     }
   );
+
+  const _id = new Date().getTime();
 
   const popup = ref<InstanceType<typeof GlPopup>>();
   const emits = defineEmits(['update:show', 'update:value', 'change']);
@@ -66,15 +75,28 @@
     });
   };
 
+  uni.$on('_CloseGlobalSelector', (e) => {
+    if (_id !== e) {
+      close();
+    }
+  });
+
   const close = () => {
     popup.value?.hide();
+  };
+
+  const show = () => {
+    uni.$emit('_CloseGlobalSelector', _id);
+    popup.value?.show();
   };
 
   watch(
     () => props.show,
     () => {
       if (props.show) {
-        popup.value?.show();
+        show();
+      } else {
+        close();
       }
     }
   );
