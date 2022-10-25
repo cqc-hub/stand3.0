@@ -267,4 +267,7 @@ export interface IRegInfo {
   ampmName: string;
   fee: string;
   _fee: string;
+  clinicalType: string;
+  deptName: string;
+  downTime?: number;
 }

@@ -33,33 +33,49 @@
             <view class="reg-header-label">{{ titleStatus.title }}</view>
           </view>
 
-          <view
-            :class="{
-              'hide-icon': !titleStatus.headerBgIcon,
-            }"
-          >
+          <view>
             <view
-              v-if="titleStatus.headerBgIcon.includes('#xe6d0')"
-              class="iconfont reg-header-icon-bg"
+              :class="{
+                'hide-icon': !titleStatus.headerBgIcon,
+              }"
             >
-              &#xe6d0;
+              <view
+                v-if="titleStatus.headerBgIcon.includes('#xe6d0')"
+                class="iconfont reg-header-icon-bg"
+              >
+                &#xe6d0;
+              </view>
+
+              <view
+                v-else-if="titleStatus.headerBgIcon.includes('#xe6de')"
+                class="iconfont reg-header-icon-bg"
+              >
+                &#xe6de;
+              </view>
+
+              <view
+                v-else-if="titleStatus.headerBgIcon.includes('#xe6d5')"
+                class="iconfont reg-header-icon-bg"
+              >
+                &#xe6d5;
+              </view>
+
+              <view v-else class="iconfont reg-header-icon-bg">&#xe6c7;</view>
             </view>
 
             <view
-              v-else-if="titleStatus.headerBgIcon.includes('#xe6de')"
-              class="iconfont reg-header-icon-bg"
+              v-if="orderRegInfo.orderStatus === '10'"
+              class="out-time-info f28"
             >
-              &#xe6de;
+              <text
+                :style="{
+                  color: titleStatus.color,
+                }"
+              >
+                {{ `${timeTravel.minute}分${timeTravel.second}秒` }}
+              </text>
+              <text class="color-444">后订单将失效</text>
             </view>
-
-            <view
-              v-else-if="titleStatus.headerBgIcon.includes('#xe6d5')"
-              class="iconfont reg-header-icon-bg"
-            >
-              &#xe6d5;
-            </view>
-
-            <view v-else class="iconfont reg-header-icon-bg">&#xe6c7;</view>
           </view>
         </view>
 
@@ -176,13 +192,23 @@
       </button>
 
       <block v-if="orderRegInfo.orderStatus === '70'">
-        <button class="btn g-border btn-normal">再次预约</button>
+        <button @click="againOrder" class="btn g-border btn-normal">
+          再次预约
+        </button>
         <button class="btn g-border btn-primary">服务评价</button>
       </block>
 
       <block v-if="orderRegInfo.orderStatus === '10'">
-        <button class="btn g-border btn-normal">取消订单</button>
-        <button class="btn btn-warning pay-btn">
+        <button @click="cancelOrder" class="btn g-border btn-normal">
+          取消订单
+        </button>
+        <button
+          @click="payOrder"
+          :class="{
+            'btn-disabled': timeTravel.downTime <= 0,
+          }"
+          class="btn btn-warning pay-btn"
+        >
           {{ orderRegInfo.fee }}元 立即支付
         </button>
       </block>
@@ -190,6 +216,7 @@
       <button
         v-if="orderRegInfo.orderStatus === '45'"
         class="btn g-border btn-primary"
+        @click="againOrder"
       >
         再次预约
       </button>
@@ -197,6 +224,7 @@
       <button
         v-if="orderRegInfo.orderStatus === '23'"
         class="btn g-border btn-primary"
+        @click="againOrder"
       >
         再次预约
       </button>
@@ -331,6 +359,36 @@
     );
   });
 
+  const timeTravel = ref({
+    downTime: 0,
+    minute: 0,
+    second: 0,
+  });
+
+  const startTimeTravel = () => {
+    const timeAction = () => {
+      const { downTime } = timeTravel.value;
+
+      if (downTime >= 0) {
+        timeTravel.value.minute = Math.floor(timeTravel.value.downTime / 60);
+        timeTravel.value.second = Math.floor(timeTravel.value.downTime % 60);
+        timeTravel.value.downTime = timeTravel.value.downTime - 1;
+      }
+    };
+
+    timeAction();
+
+    const _timeTravel = setInterval(() => {
+      const { downTime } = timeTravel.value;
+
+      if (downTime >= 0) {
+        timeAction();
+      } else {
+        clearInterval(_timeTravel);
+      }
+    }, 1000);
+  };
+
   const init = async () => {
     const orderId = pageProps.value.orderId;
 
@@ -344,6 +402,12 @@
     const hos = hosList.find((o) => o.hosId === result.hosId);
     if (hos) {
       hosInfo.value = hos;
+    }
+
+    const { downTime } = result;
+    if (downTime) {
+      timeTravel.value.downTime = downTime;
+      startTimeTravel();
     }
 
     result._appointmentDate = `${result.appointmentDate} ${
@@ -374,10 +438,23 @@
     });
   };
 
-  const cancelOrder = () => {
-    uni.reLaunch({
-      url: '/aaa',
+  const payOrder = () => {
+    console.log('payyyyy');
+  };
+
+  const cancelOrder = async () => {
+    const orderId = pageProps.value.orderId;
+
+    await api.cancelReg({
+      orderId,
+      source: gStores.globalStore.browser.source,
     });
+
+    init();
+  };
+
+  const againOrder = async () => {
+    // 跳到医生名片
   };
 
   onLoad((p) => {
@@ -470,6 +547,7 @@
         display: flex;
         align-items: center;
         color: #fff;
+        position: relative;
         .reg-header-label {
           font-weight: 600;
         }
@@ -485,6 +563,13 @@
           right: 0;
 
           mask: linear-gradient(180deg, #ffffff35, rgba(255, 255, 255, 0));
+        }
+
+        .out-time-info {
+          position: absolute;
+          top: 50%;
+          right: 32rpx;
+          transform: translateY(-50%);
         }
       }
 

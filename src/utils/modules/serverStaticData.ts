@@ -84,7 +84,7 @@ const _cacheMap = new WeakMap();
 
 const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
-const getMedRecordConfig = async (): Promise<ISystemConfig['medRecord']> => {
+const getMedRecordConfig = async <T>(): Promise<T> => {
   const list = _cacheMap.get(Med_Copy_Config);
 
   if (list) {
@@ -117,7 +117,7 @@ const getMedRecordConfig = async (): Promise<ISystemConfig['medRecord']> => {
       });
       _cacheMap.set(Med_Copy_Config, configList);
 
-      return configList;
+      return <T>configList;
     } else {
       throw new Error('未配置_medCopyList');
     }
@@ -386,11 +386,11 @@ export class ServerStaticData {
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
     payload: {} = {}
-  ) {
+  ): Promise<ISystemConfig[T]> {
     const gStores = new GStores();
 
     if (key === 'medRecord') {
-      return await getMedRecordConfig();
+      return await getMedRecordConfig<ISystemConfig[T]>();
     }
 
     const res: ISystemConfig = {
@@ -449,3 +449,7 @@ export class ServerStaticData {
 
   private constructor() {}
 }
+
+ServerStaticData.getSystemConfig('order').then((r) => {
+  r;
+});
