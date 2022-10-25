@@ -15,8 +15,12 @@
   onShow(async (opt) => {
     // console.log('App Show', opt);
     setTimeout(() => {
+      const pages = getCurrentPages();
+
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
       beforeEach({
-        url: joinQuery('/' + opt.path, opt.query || {}),
+        url: fullUrl,
       });
     }, 600);
   });

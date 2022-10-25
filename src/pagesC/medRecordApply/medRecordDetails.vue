@@ -1,5 +1,5 @@
 <template>
-  <view class="g-page">
+  <view class="g-page" v-if="pageConfig">
     <g-flag typeFg="503" isShowFg />
 
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
@@ -8,7 +8,7 @@
       </view>
 
       <view
-        v-if="pageConfig.sfz.length"
+        v-if="pageConfig.sfz && pageConfig.sfz.length"
         class="container-box g-border mb16 box-padding"
         id="_photo"
       >
@@ -485,6 +485,7 @@
 
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+
     pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
   };
 
@@ -607,8 +608,8 @@
       const requestArg = {
         phsOrderNo,
         phsOrderSource: '4',
-        phsOrderSourceName: '4',
         source: gStores.globalStore.browser.source,
+        channel: gStores.globalStore.browser.source,
         totalFee: getPayMoneyNum.value,
         cardNumber,
         hosId: props.hosId,

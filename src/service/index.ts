@@ -77,6 +77,7 @@ Request.interceptors.response(
       //  需要重新登录4000  0 成功
       messageStore.showMessage(message, 1500, {
         closeCallBack: () => {
+
           const fullUrl: string = (pages[pages.length - 1] as any).$page
             .fullPath;
 
