@@ -196,9 +196,6 @@ export class LoginUtils extends GStores {
     this.userStore.clearStore();
     this.globalStore.clearStore();
 
-    //清除首页配置缓存
-    uni.removeStorageSync('viewConfig');
-
     setTimeout(() => {
       if (!isHideMessage) {
         this.messageStore.showMessage('退出成功', 1500);

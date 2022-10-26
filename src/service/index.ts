@@ -20,6 +20,7 @@ const Request = new requestClass();
 
 //是否加密
 const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
+
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   if (!request.hideLoading) showLoading();
@@ -27,8 +28,10 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
-  //网关限流
-  request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
+  //网关限流——除开发环境
+  if ((globalGl.env as string) !== 'dev') {
+    request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
+  }
 
   if (isDes) {
     //禁止删除
@@ -78,7 +81,6 @@ Request.interceptors.response(
       //  需要重新登录4000  0 成功
       messageStore.showMessage(message, 1500, {
         closeCallBack: () => {
-
           const fullUrl: string = (pages[pages.length - 1] as any).$page
             .fullPath;
 
