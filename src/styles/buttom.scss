@@ -11,7 +11,8 @@
 
   &.btn-disabled {
     pointer-events: none;
-    background-color: var(--hr-brand-color-3);
+    // background-color: var(--hr-brand-color-3) !important;
+    opacity: .6;
   }
 
   &.btn-plain {

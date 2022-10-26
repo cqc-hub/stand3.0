@@ -1,5 +1,5 @@
 <template>
-  <view class="g-page">
+  <view class="g-page" v-if="pageConfig">
     <g-flag typeFg="503" isShowFg />
 
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
@@ -8,7 +8,7 @@
       </view>
 
       <view
-        v-if="pageConfig.sfz.length"
+        v-if="pageConfig.sfz && pageConfig.sfz.length"
         class="container-box g-border mb16 box-padding"
         id="_photo"
       >
@@ -206,7 +206,13 @@
       @confirmButton="_xyDialogConfirm"
     />
 
-    <g-pay :list="refPayList" @pay-click="payOrder" ref="refPay">
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      auto
+      ref="refPay"
+    >
       <g-flag typeFg="32" isShowFgTip />
     </g-pay>
 
@@ -281,10 +287,11 @@
     isManual?: '1';
   }>();
 
-  const pageConfig = ref<ISystemConfig['medRecord']>({
+  const pageConfig = ref<ISystemConfig['medRecord'][number]>({
     sfz: [],
     fee: 10,
     isItemCount: '0',
+    hosId: '2',
   });
 
   const refPay = ref<any>('');
@@ -294,6 +301,7 @@
       key: 'online',
     },
   ]);
+  const payArg = ref<BaseObject>({});
 
   const scrollTo = ref('');
   watch(
@@ -483,10 +491,11 @@
   };
 
   const getConfig = async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('medRecord');
+    const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+
+    pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
   };
 
-  let phsOrderNo = '';
   const paySubmit = async () => {
     const { sfz } = pageConfig.value;
     let { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
@@ -573,7 +582,7 @@
       openId: '',
       userId: '',
       patientId,
-      remark: remark.value,
+      remark: remark.value || '无',
       payType: '',
       subopenId: '',
       visitDate: '',
@@ -593,40 +602,21 @@
       phsOrderNo: string;
     }>(args);
 
-    phsOrderNo = result.phsOrderNo;
+    payArg.value = {
+      phsOrderNo: result.phsOrderNo,
+      phsOrderSource: '4',
+      totalFee: getPayMoneyNum.value,
+      hosId: props.hosId,
+      hosName: getGetHosName.value,
+    };
+
     refPay.value.show();
   };
 
-  const payOrder = async ({ item }) => {
-    if (item.key === 'online') {
-      const { cardNumber, patientId, patientName } =
-        gStores.userStore.patChoose;
-
-      const requestArg = {
-        phsOrderNo,
-        phsOrderSource: '4',
-        phsOrderSourceName: '4',
-        source: gStores.globalStore.browser.source,
-        totalFee: getPayMoneyNum.value,
-        cardNumber,
-        hosId: props.hosId,
-        hosName: getGetHosName.value,
-        patientId,
-        userId: '',
-        openId: '',
-        patientName,
-      };
-
-      // #ifdef  MP-WEIXIN
-      requestArg.openId = gStores.globalStore.openId;
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      requestArg.userId = gStores.globalStore.openId;
-      // #endif
-
-      api.addHRPay(requestArg);
-    }
+  const payAfter = () => {
+    uni.reLaunch({
+      url: '/pagesC/medRecordApply/_recordApply?hosId=' + props.hosId,
+    });
   };
 
   const init = async () => {

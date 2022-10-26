@@ -154,6 +154,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  cancelReg: (data: any) =>
+    service.post('/phs-reg/reg/cancelReg', parm(data), {
+      hideLoading: false,
+    }),
+
   // 挂号详情
   getRegOrderInfo: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderInfo', parm(data), {
@@ -307,8 +312,8 @@ const authApi = {
     });
   },
 
-  addHRPay: (data) => {
-    return service.post('/phs-pay/pay/addHRPay', parm(data), {
+  addHRPay: <T>(data) => {
+    return service.post<T>('/phs-pay/pay/addHRPay', parm(data), {
       showMessage: false,
     });
   },

@@ -52,6 +52,7 @@
       options: [],
       isForShow: true,
       showBodyStyle: 'text-align: left;margin-left:20rpx;',
+      disabled: true,
     },
 
     {

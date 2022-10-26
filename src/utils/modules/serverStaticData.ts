@@ -46,7 +46,8 @@ export interface ISystemConfig {
 
     // 收钱方式预收的金额 ｜ 单个项目金额
     fee: number;
-  };
+    hosId: string;
+  }[];
 }
 
 type TEnv = 'dev' | 'test' | 'prod';
@@ -80,6 +81,50 @@ export interface IHosInfo {
 }
 
 const _cacheMap = new WeakMap();
+
+const Med_Copy_Config = { name: 'Med_Copy_Config' };
+
+const getMedRecordConfig = async <T>(): Promise<T> => {
+  const list = _cacheMap.get(Med_Copy_Config);
+
+  if (list) {
+    return list;
+  }
+
+  const { result } = await api.getParamsMoreBySysCode({
+    paramCode: 'MEDICAL_CASE_COPY',
+  });
+
+  if (result && result.MEDICAL_CASE_COPY) {
+    const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
+
+    if (_configList.length) {
+      const configList: any[] = [];
+      Object.entries(_configList[0]).map(([hosId, value]) => {
+        const { tollMode, price, isHandPhoto } = value as any;
+
+        const isItemCount = tollMode === '1' ? '1' : '0';
+
+        configList.push({
+          hosId,
+          isItemCount,
+          fee: price * 1,
+          sfz:
+            isHandPhoto === '1'
+              ? ['front', 'end', 'handler']
+              : ['front', 'end'],
+        });
+      });
+      _cacheMap.set(Med_Copy_Config, configList);
+
+      return <T>configList;
+    } else {
+      throw new Error('未配置_medCopyList');
+    }
+  } else {
+    throw new Error('未配置_medCopy');
+  }
+};
 
 export class ServerStaticData {
   /**
@@ -338,8 +383,16 @@ export class ServerStaticData {
     }
   }
 
-  static async getSystemConfig<T extends keyof ISystemConfig>(key: T) {
+  static async getSystemConfig<T extends keyof ISystemConfig>(
+    key: T,
+    payload: {} = {}
+  ): Promise<ISystemConfig[T]> {
     const gStores = new GStores();
+
+    if (key === 'medRecord') {
+      return await getMedRecordConfig<ISystemConfig[T]>();
+    }
+
     const res: ISystemConfig = {
       order: {
         chooseDay: 30,
@@ -357,11 +410,14 @@ export class ServerStaticData {
         ocr: '1',
       },
 
-      medRecord: {
-        sfz: ['front', 'end'],
-        isItemCount: '1',
-        fee: 10,
-      },
+      medRecord: [
+        {
+          sfz: ['front', 'end'],
+          isItemCount: '1',
+          fee: 10,
+          hosId: '100',
+        },
+      ],
     };
 
     return res[key];
@@ -393,3 +449,7 @@ export class ServerStaticData {
 
   private constructor() {}
 }
+
+ServerStaticData.getSystemConfig('order').then((r) => {
+  r;
+});

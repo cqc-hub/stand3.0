@@ -18,13 +18,19 @@
   import { IPat } from '@/stores';
   import globalGl from '@/config/global';
   import payList from './payList.vue';
-  import { IGPay } from './index';
+  import { IGPay, payMoneyOnline, IPayRes, toPayPull } from './index';
+  import api from '@/service/api';
 
   const refActionSheet = ref<any>('');
+  const gStores = new GStores();
 
   const props = withDefaults(
     defineProps<{
       list?: IGPay[];
+      auto?: boolean;
+
+      // auto true 时候接口参数 (openId channel patientName patientId cardNumber source) 不用给
+      autoPayArg?: BaseObject;
     }>(),
     {
       list: () => [
@@ -41,10 +47,11 @@
           key: 'offline',
         },
       ],
+      autoPayArg: () => ({}),
     }
   );
 
-  const emits = defineEmits(['pay-click']);
+  const emits = defineEmits(['pay-click', 'pay-success']);
 
   const hide = () => {
     refActionSheet.value.close();
@@ -54,10 +61,53 @@
     refActionSheet.value.show();
   };
 
+  let requestBefore = async <T = BaseObject>(data: T): Promise<T> => {
+    return data;
+  };
+
+  const payMoney = async (item: IGPay) => {
+    const { key } = item;
+
+    const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
+
+    let requestArg: BaseObject = {
+      ...props.autoPayArg,
+      patientName,
+      patientId,
+      cardNumber,
+      source: gStores.globalStore.browser.source,
+    };
+
+    // #ifdef  MP-WEIXIN
+    requestArg.openId = gStores.globalStore.openId;
+    requestArg.channel = 'WX_MINI';
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    requestArg.userId = gStores.globalStore.openId;
+    requestArg.channel = 'ALI_MINI';
+    // #endif
+
+    requestArg = await requestBefore(requestArg);
+
+    if (key === 'online') {
+      const res = await payMoneyOnline(requestArg);
+
+      await toPayPull(res);
+      emits('pay-success', res);
+    }
+  };
+
   const choosePay = (e) => {
     const { index, item } = e;
 
     hide();
+
+    // 自动支付
+    if (props.auto) {
+      payMoney(item);
+    }
+
     emits('pay-click', {
       index,
       item,

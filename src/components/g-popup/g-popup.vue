@@ -7,17 +7,31 @@
       :mask-alpha="0.6"
       @show="onActionSheetShow"
       @hide="onActionSheetHide"
+      :type="type"
       bg-color="rgba(0,0,0,0)"
     >
-      <view class="popup-container">
-        <view class="header flex-between">
+      <view
+        :class="{
+          'border-radius-none': type === 'top',
+        }"
+        class="popup-container"
+      >
+        <view v-if="type !== 'top'" class="header flex-between">
           <view class="popup-title text-ellipsis">
             {{ title }}
           </view>
           <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
         </view>
 
-        <scroll-view scroll-y class="popup-box">
+        <slot name="header" />
+
+        <scroll-view
+          scroll-y
+          :class="{
+            'auto-height': type === 'top',
+          }"
+          class="popup-box"
+        >
           <slot />
         </scroll-view>
       </view>
@@ -38,6 +52,11 @@
       disabled: {
         type: Boolean,
         default: false,
+      },
+
+      type: {
+        type: String,
+        default: 'bottom',
       },
 
       maskClickClose: {
@@ -72,11 +91,10 @@
         popup.value.close();
       };
 
-
       // mask false 时候调这个
       const close = () => {
         popup.value.hide();
-      }
+      };
 
       return {
         onActionSheetShow,
@@ -84,7 +102,7 @@
         show,
         popup,
         hide,
-        close
+        close,
       };
     },
   });
@@ -99,6 +117,11 @@
 
     position: relative;
     z-index: 999;
+
+    &.border-radius-none {
+      border-radius: 0;
+    }
+
     .header {
       display: flex;
       align-items: center;
@@ -127,7 +150,11 @@
       max-height: var(--h-popup-max-height);
       min-height: min(233rpx, 30vh);
       overflow-y: scroll;
-      margin-bottom: 48rpx;
+      // margin-bottom: 48rpx;
+
+      &.auto-height {
+        min-height: auto;
+      }
     }
   }
 </style>

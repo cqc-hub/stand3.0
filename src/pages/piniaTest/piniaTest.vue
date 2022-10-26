@@ -12,8 +12,8 @@
   import { GStores } from '@/utils';
 
   const gStores = new GStores();
-  // const base = 'https://health.eheren.com/v3/#/';
-  const base = 'http://10.10.83.97:3000/#/';
+  const base = 'https://health.eheren.com/v3/#/';
+  // const base = 'http://10.10.83.135:3000/#/';
   const src =
     base +
     // 测试h5 回调
@@ -22,7 +22,14 @@
     // 'pagesA/healthAdvisory/healthAdvisory?sysCode=' + getSysCode();  // 健康咨询
 
     // 用药管家
-    joinQuery('pagesC/medicationManager/medicationList', {
+    // joinQuery('pagesC/medicationManager/medicationList', {
+    //   sysCode: getSysCode(),
+    //   token: gStores.globalStore.token.accessToken,
+    //   herenId: gStores.globalStore.herenId,
+    // });
+
+    // 选择就诊人
+    joinQuery('/pagesC/choosePat/choosePat', {
       sysCode: getSysCode(),
       token: gStores.globalStore.token.accessToken,
       herenId: gStores.globalStore.herenId,
