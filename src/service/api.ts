@@ -165,6 +165,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  getRegOrderList: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/getRegOrderList', parm(data), {
+      hideLoading: false,
+    }),
+
   // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {

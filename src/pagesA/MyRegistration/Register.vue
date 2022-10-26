@@ -1,7 +1,7 @@
 <template>
   <view class="page">
-    <!--   -->
-    <view v-if="hosList.length > showMoreItem" class="flex-normal header">
+    <!--  v-if="hosList.length > showMoreItem" -->
+    <view  class="flex-normal header">
       <view
         :class="{
           'sel-active': isShowHosSort,
