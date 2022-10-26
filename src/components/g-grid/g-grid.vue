@@ -13,8 +13,7 @@
           <view class="warn-label" v-if="item.gridLabel == '3'">维护中</view>
           <view class="gree-label" v-if="item.gridLabel == '1'">绿色能量</view>
           <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
-
-          <text :class="`icon-font grid-resize ${item.iconfont}`" />
+          <text :class="`icon-font ${(options.type == 1&&options.list.length==3)?'grid-resize1':'grid-resize'} ${item.iconfont}`" />
           <view class="grid-label text-ellipsis">{{ item.title }}</view>
           <text class="grid-title text-ellipsis">{{ item.detail }}</text>
         </view>
@@ -94,6 +93,11 @@
       .grid-resize {
         width: 88upx;
         height: 88upx;
+        position: relative;
+      }
+      .grid-resize1 {
+        width: 100upx;
+        height: 100upx;
         position: relative;
       }
 

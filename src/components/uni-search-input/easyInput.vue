@@ -472,7 +472,7 @@
     /* #endif */
     flex-direction: row;
     align-items: center;
-    border: 1px solid $uni-border-1;
+    border: 3rpx solid $uni-border-1;
     border-radius: 4px;
   }
 

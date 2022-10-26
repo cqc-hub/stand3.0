@@ -182,7 +182,7 @@
     }
     // 蓝色
     .icon-size1 {
-      font-size: var(--h-size-40);
+      font-size: var(--h-size-46);
       color: var(--hr-brand-color-6);
       font-weight: 400;
     }
@@ -192,12 +192,12 @@
     }
     // 绿色
     .icon-size2 {
-      font-size: var(--h-size-40);
+      font-size: var(--h-size-46);
       color: var(--hr-success-color-6);
       font-weight: 400;
     }
     .icon-size3 {
-      font-size: var(--h-size-40);
+      font-size: var(--h-size-46);
       color: var(--hr-brand-color-6);
       font-weight: 400;
     }
@@ -217,7 +217,7 @@
       opacity: 0.15;
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -6rpx;
     }
     .icon-size-back2 {
       color: var(--hr-success-color-6);
@@ -226,7 +226,7 @@
       opacity: 0.15;
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -6rpx;
     }
 
     .icon-size-back3 {
