@@ -90,9 +90,13 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
   console.log(item);
   //拦截判断
   if (item.path != '') {
+    if (item.query&&JSON.parse(item.query).templateId) {
+      sendMeg(item, payload);
+    }else{
     checkGrid(item).then(() => {
-      useToPath(item, payload);
+        useToPath(item, payload);
     });
+  }
   }
 };
 
@@ -188,11 +192,30 @@ export const useToPath = (item, payload: IPayLoad = {}) => {
   }
 };
 
+//扫一扫功能
 const scanCode = () => {
   uni.scanCode({
     success: function (res) {
-      console.log('条码类型：' + res.scanType);
-      console.log('条码内容：' + res.result);
+      console.log('条码内容：' + res);
+    },
+  });
+};
+
+//授权小程序消息推送模板
+const sendMeg = (item, payload) => {
+  console.log(22222);
+  const gStores = new GStores();
+  uni.requestSubscribeMessage({
+    tmplIds: JSON.parse(item.query).templateId,
+    success(res) {
+         //成功之后处理业务
+         console.log(111111);
+         checkGrid(item).then(() => {
+           useToPath(item, payload);
+       });
+    },
+    fail(res) {
+      gStores.messageStore.showMessage(res.errMsg,1500);
     },
   });
 };

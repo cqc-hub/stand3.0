@@ -27,13 +27,14 @@ Request.interceptors.request((request: IRequest) => {
   //   request.data = JSON.stringify(request.data)
   //   request.url = request.url + '?' + request.data
   // }
-
-  const key = 'reqv3-' + new Date().getDate();
-  const data = JSON.parse(JSON.stringify(request.data));
+  //网关限流
+  request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
 
   if (isDes) {
     //禁止删除
     console.log(request.url, request.data);
+    const key = 'reqv3-' + new Date().getDate();
+    const data = JSON.parse(JSON.stringify(request.data));
     const desData = {
       args: {},
       signContent: encryptDes(JSON.stringify(data.args), key),
@@ -62,7 +63,7 @@ Request.interceptors.response(
       responseData.result = JSON.parse(decryptDes(signContent, key));
       //禁止删除
       console.log('出参', responseData.result);
-    }else{
+    } else {
       console.log(responseData);
     }
     //处理清除缓存的操作

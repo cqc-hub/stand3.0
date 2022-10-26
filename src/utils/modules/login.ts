@@ -18,6 +18,10 @@ export const getH5OpenidParam = function (data) {
       openId: globalStore.h5OpenId,
       source: '3',
     },
+    {
+      openId: globalStore.openId,
+      source: '19',
+    },
   ];
   // #endif
 };
