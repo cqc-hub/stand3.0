@@ -5,7 +5,7 @@
         :value="value"
         :styles="{
           color: 'var(--hr-neutral-color-10)',
-          borderColor: 'var(--hr-neutral-color-9)'
+          borderColor: 'var(--hr-neutral-color-9)',
         }"
         :placeholder="placeholder"
         :inputBorder="inputBorder"
@@ -143,7 +143,7 @@
   }
 
   .icon-search {
-    font-size: var(--hr-font-size-xl);
+    font-size: var(--h-size-40);
     color: var(--hr-neutral-color-9);
   }
   .icon-searchColor {
