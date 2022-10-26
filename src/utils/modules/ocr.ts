@@ -4,26 +4,18 @@ import { ServerStaticData } from './serverStaticData';
 import { ISelectOptions } from '@/components/g-form';
 import api from '@/service/api';
 import _env from '@/config/env';
+import { XOR } from '../../typeUtils/obj';
 
-type GreaterThan<
-  T extends number,
-  U extends number,
-  R extends any[] = []
-> = T extends R['length']
-  ? false
-  : U extends R['length']
-  ? true
-  : GreaterThan<T, U, [...R, 1]>;
-
-type TChooseImgBase64Res =
-  | {
-      success: true;
-      base64: string;
-    }
-  | {
-      success: false;
-      evt: any;
-    };
+type TChooseImgBase64Res = XOR<
+  {
+    success: true;
+    base64: string;
+  },
+  {
+    success: false;
+    evt: any;
+  }
+>;
 
 const wxDownFileToLocal = function (url: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -348,7 +340,7 @@ type TGetPromiseType<T> = T extends Promise<infer R> ? R : any;
 export type OcrFindRes = TGetPromiseType<ReturnType<typeof findSuccess>>;
 
 export const useOcr = async (): Promise<OcrFindRes> => {
-  const messageStore = useMessageStore();
+  // const messageStore = useMessageStore();
 
   // #ifdef MP-WEIXIN
   return await ocrForWX();
@@ -367,7 +359,8 @@ export const upImgOss = (
   payload: {
     header?: BaseObject;
     data?: BaseObject;
-  } = {}
+  } = {},
+  url = _env.baseApi + '/phs-base/upload/imageUpload'
 ) => {
   const globalStore = useGlobalStore();
   const messageStore = useMessageStore();
@@ -376,7 +369,7 @@ export const upImgOss = (
     url: string;
   }>((resolve, reject) => {
     uni.uploadFile({
-      url: _env.baseApi + '/phs-base/upload/imageUpload',
+      url,
       filePath,
       name: 'file',
       fileType: 'image',
@@ -409,10 +402,7 @@ export const upImgOss = (
         }
       },
 
-      fail(e) {
-        console.log('shibai', e);
-        reject(e);
-      },
+      fail: reject,
     });
   });
 };
