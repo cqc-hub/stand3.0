@@ -118,8 +118,9 @@
     const a = uni.getStorageSync('global');
     console.log({ a });
 
+    // 选择就诊人
     uni.navigateTo({
-      url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&query=["token"]'
+      url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&name=cqc&query=["token"]'
     });
 
     // uni.navigateTo({

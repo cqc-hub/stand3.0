@@ -215,7 +215,7 @@
 
       <button
         v-if="orderRegInfo.orderStatus === '45'"
-        class="btn g-border btn-primary"
+        class="btn g-border btn-primary btn-plain"
         @click="againOrder"
       >
         再次预约
@@ -223,7 +223,7 @@
 
       <button
         v-if="orderRegInfo.orderStatus === '23'"
-        class="btn g-border btn-primary"
+        class="btn g-border btn-primary btn-plain"
         @click="againOrder"
       >
         再次预约
@@ -415,7 +415,7 @@
     }`;
     result._fee = result.fee + '元';
     orderRegInfo.value = result;
-    // orderRegInfo.value.orderStatus = '23';
+    // orderRegInfo.value.orderStatus = '45';
 
     setTimeout(() => {
       refForm.value.setList(regInfoTempList);

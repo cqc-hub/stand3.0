@@ -111,10 +111,13 @@
       </scroll-view>
 
       <view class="footer g-border-top">
-        <button class="btn g-border btn-primary">再次申请</button>
+        <button @click="applyAgain" class="btn g-border btn-primary">
+          再次申请
+        </button>
         <button
           v-if="['11', '15'].includes(info.orderStatus)"
           class="btn g-border btn-plain btn-error"
+          @click="applyCancel"
         >
           取消申请
         </button>
@@ -149,14 +152,48 @@
     CaseCopeItemDetail,
     isExpress1,
   } from './utils/recordApply';
+  import { joinQuery } from '@/common';
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import expressStep from './components/expressStep.vue';
   import recordCard from './components/recordCard.vue';
   import dayjs from 'dayjs';
 
+  // api.getCaseCopyDetail = () =>
+  //   Promise.resolve({
+  //     result: {
+  //       patientName: '大洒店',
+  //       refundFee: '',
+  //       addresseePhone: { value: '020****6788' },
+  //       frontIdCardUrl:
+  //         'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1666677159203-517884.jpg',
+  //       copyAim: '工伤鉴定',
+  //       idCard:
+  //         'FBF0795C4B2FA1BF2CF27C53D963175F6BEA0EFDFB1F11D74876152DFF09FAB6',
+  //       fee: '10.00',
+  //       endIdCardUrl:
+  //         'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1666677160009-754631.jpg',
+  //       orderStatus: '11',
+  //       addresseeName: { value: '张三' },
+  //       remark: '1',
+  //       addresseeAddress: { value: '广东省 广州市 海珠区' },
+  //       phsOrderNo: '1420221025144316668555059982',
+  //       createTime: '2022-10-25 14:43:16',
+  //       detailedAddress: { value: '新港中路397号' },
+  //       outInfo:
+  //         '[{"hosId":"1279","visitNo":"1","deptName":"kesh","admissionTime":"2022-10-25","outTime":"2022-10-25","isOneself":"0"}]',
+  //       cardNumber: '10831186',
+  //     },
+  //     timeTaken: 764,
+  //     code: 0,
+  //     functionVersion: '[{"functionType":"2","version":"v0.0.2"}]',
+  //     message: '成功',
+  //     respCode: 999002,
+  //   });
+
   const props = defineProps<{
     phsOrderNo: string;
+    hosId: string;
   }>();
   const gStores = new GStores();
 
@@ -234,8 +271,6 @@
       }
     }
 
-    console.log(result, 233);
-
     if (result._expressParam) {
       // 邮政
       if (isExpress1(result._expressParam)) {
@@ -283,6 +318,27 @@
   };
 
   const formatterTime = (time: string) => dayjs(time).format('YYYY-MM-DD');
+
+  const applyAgain = () => {
+    uni.navigateTo({
+      url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
+        hosId: props.hosId,
+        phsOrderNo: props.phsOrderNo,
+      }),
+    });
+  };
+
+  const applyCancel = async () => {
+    const { id, phsOrderNo } = info.value;
+
+    const args = {
+      id,
+      phsOrderNo,
+    };
+
+    await api.copyRefund(args);
+    init();
+  };
 
   const init = () => {
     getData();

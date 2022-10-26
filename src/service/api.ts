@@ -140,6 +140,10 @@ const queryApi = {
   // 病案复印保存申请记录
   copyOfCasePay: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/copyOfCasePay', parm(data)),
+
+  // 病案复印 tuifei
+  copyRefund: <T>(data) =>
+    service.post<T>('/phs-query/caseCopy/copyRefund', parm(data)),
 };
 
 // 挂号服务

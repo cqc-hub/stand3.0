@@ -142,9 +142,11 @@ export type CaseCopeItemDetail = Flatten<
     addresseePhone: deParams;
     copyAim: string;
     detailedAddress: deParams;
+    handIdCardUrl: string;
     endIdCardUrl: string;
     frontIdCardUrl: string;
     outInfo: string;
+    id: string;
     _outInfo?: {
       deptName: string;
       hospitalWard?: string;

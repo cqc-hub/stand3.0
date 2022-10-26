@@ -2,7 +2,6 @@
   <view>
     <view class="g-page" v-if="pageConfig && isConfigGet">
       <g-flag typeFg="503" isShowFg />
-
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
         <view id="_address" class="container-box g-border mb16">
           <Address-Box :addressList="addressList" />
@@ -226,7 +225,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, onMounted, watch } from 'vue';
+  import { computed, ref, onMounted, watch, nextTick } from 'vue';
   import AddressBox from './components/medRecordDetailsAddressBox.vue';
   import recordCard from './components/recordCard.vue';
   import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
@@ -237,7 +236,7 @@
     ServerStaticData,
     upImgOss,
   } from '@/utils';
-  import { onShow } from '@dcloudio/uni-app';
+  import { onShow, onLoad } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
   import { CaseCopeItemDetail } from './utils/recordApply';
   import { NotNullable, XOR } from '@/typeUtils';
@@ -286,6 +285,7 @@
   const props = defineProps<{
     hosId: string;
     isManual?: '1';
+    phsOrderNo?: string;
   }>();
 
   const isConfigGet = ref(false);
@@ -400,7 +400,7 @@
     }))
   );
 
-  const aimValue = ref<typeof aimList.value>([]);
+  const aimValue = ref<string[]>([]);
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
     hosList.value = list;
@@ -436,7 +436,11 @@
     };
     isAddDialogEdit.value = false;
 
-    refAddDialog.value.show();
+    nextTick(() => {
+      setTimeout(() => {
+        refAddDialog.value.show();
+      }, 300);
+    });
   };
 
   const recordSubmit = (data: TRecordRows) => {
@@ -496,6 +500,7 @@
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
 
     pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
+
     if (!pageConfig.value) {
       gStores.messageStore.showMessage(
         '未获取到该院区的配置' + `(${props.hosId})`
@@ -645,8 +650,53 @@
     });
   };
 
+  // 从记录点击再次申请进来默认赋值
+  const assignPageData = async (phsOrderNo: string) => {
+    const { patientId } = gStores.userStore.patChoose;
+    const arg = {
+      phsOrderNo,
+      patientId,
+    };
+
+    const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
+
+    const {
+      frontIdCardUrl,
+      endIdCardUrl,
+      handIdCardUrl,
+      outInfo,
+      copyAim,
+      remark: _remark,
+    } = result;
+
+    if (frontIdCardUrl) {
+      idCardImg.value.frontIdCardUrl = frontIdCardUrl;
+    }
+
+    if (endIdCardUrl) {
+      idCardImg.value.endIdCardUrl = endIdCardUrl;
+    }
+
+    if (handIdCardUrl) {
+      idCardImg.value.handIdCardUrl = handIdCardUrl;
+    }
+
+    aimValue.value = copyAim.split('、');
+
+    console.log(aimValue.value, 'aimValue.value');
+
+    recordRows.value = JSON.parse(outInfo);
+
+    remark.value = _remark || '';
+  };
+
   const init = async () => {
     await getConfig();
+
+    // 再次申请
+    if (props.phsOrderNo) {
+      assignPageData(props.phsOrderNo);
+    }
   };
 
   let _firstLoaded = true;
