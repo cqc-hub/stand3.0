@@ -1,13 +1,25 @@
 <template>
   <view class="page">
-    <!-- v-if="hosList.length > showMoreItem" -->
-    <view class="flex-normal header">
-      <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
+    <!--   -->
+    <view v-if="hosList.length > showMoreItem" class="flex-normal header">
+      <view
+        :class="{
+          'sel-active': isShowHosSort,
+        }"
+        @click="isShowHosSort = !isShowHosSort"
+        class="flex-normal"
+      >
         <view>{{ hosSortNow }}</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
 
-      <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
+      <view
+        :class="{
+          'sel-active': isShowFilterHos,
+        }"
+        @click="isShowFilterHos = !isShowFilterHos"
+        class="flex-normal"
+      >
         <view>筛选</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
@@ -47,12 +59,24 @@
     >
       <template #header>
         <view class="flex-normal header">
-          <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
+          <view
+            :class="{
+              'sel-active': isShowHosSort,
+            }"
+            @click="isShowHosSort = !isShowHosSort"
+            class="flex-normal"
+          >
             <view>{{ hosSortNow }}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
 
-          <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
+          <view
+            :class="{
+              'sel-active': isShowFilterHos,
+            }"
+            @click="isShowFilterHos = !isShowFilterHos"
+            class="flex-normal"
+          >
             <view>筛选</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
@@ -70,12 +94,24 @@
     >
       <template #header>
         <view class="flex-normal header">
-          <view @click="isShowHosSort = !isShowHosSort" class="flex-normal">
+          <view
+            :class="{
+              'sel-active': isShowHosSort,
+            }"
+            @click="isShowHosSort = !isShowHosSort"
+            class="flex-normal"
+          >
             <view>{{ hosSortNow }}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
 
-          <view @click="isShowFilterHos = !isShowFilterHos" class="flex-normal">
+          <view
+            :class="{
+              'sel-active': isShowFilterHos,
+            }"
+            @click="isShowFilterHos = !isShowFilterHos"
+            class="flex-normal"
+          >
             <view>筛选</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
@@ -324,6 +360,14 @@
         flex: 1;
         justify-content: center;
         padding: 24rpx 0;
+      }
+
+      .sel-active {
+        font-weight: 600;
+        color: var(--hr-brand-color-6);
+        .iconfont {
+          transform: rotate(0.5turn);
+        }
       }
     }
   }

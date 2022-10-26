@@ -162,10 +162,6 @@
       padding: 0 10rpx;
     }
 
-    .g-footer {
-      padding-bottom: 0;
-    }
-
     .dialog-btn {
       flex: 1;
     }

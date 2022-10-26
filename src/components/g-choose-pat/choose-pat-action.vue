@@ -28,6 +28,13 @@
   export default defineComponent({
     emits: ['choose-pat'],
 
+    props: {
+      autoStore: {
+        type: Boolean,
+        default: false,
+      },
+    },
+
     components: {
       PatList,
     },
@@ -37,8 +44,12 @@
       const gStores = new GStores();
 
       const actionSheetItemClick = (e: { index: number; item: IPat }) => {
-        ctx.emit('choose-pat', e);
         actionSheet.value.hide();
+
+        if (props.autoStore) {
+          gStores.userStore.updatePatChoose(e.item);
+        }
+        ctx.emit('choose-pat', e);
       };
 
       const show = () => {
