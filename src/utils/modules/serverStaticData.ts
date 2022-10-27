@@ -86,6 +86,7 @@ const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
 const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   const list = _cacheMap.get(Med_Copy_Config);
+  console.log({ result }, '11111111');
 
   if (list) {
     return list;
@@ -420,22 +421,28 @@ export class ServerStaticData {
     if (!systemConfig) {
       //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PERSON_FAMILY_CARDMAN|MEDICAL_CASE_COPY',
+        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY',
       });
-      const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
-      const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
-        result
-      );
-      systemConfig = {
-        person: person,
-        order: {
-          chooseDay: 30,
-          selOrderColumn: 3,
-          isOrderBlur: '1',
-          isOrderPay: '0',
-        },
-        medRecord,
-      };
+
+      try {
+        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
+        const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
+          result
+        );
+        systemConfig = {
+          person: person,
+          order: {
+            chooseDay: 30,
+            selOrderColumn: 3,
+            isOrderBlur: '1',
+            isOrderPay: '0',
+          },
+          medRecord,
+        };
+      } catch (error) {
+        throw new Error('序列化错误, 请检查全局的参数');
+      }
+
       setLocalStorage({
         systemConfig,
       });

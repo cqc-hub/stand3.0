@@ -498,7 +498,6 @@
 
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
-
     pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
 
     if (!pageConfig.value) {
