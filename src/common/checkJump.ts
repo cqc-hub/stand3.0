@@ -1,6 +1,8 @@
 import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
 import globalGl from '@/config/global';
+import { joinQuery } from '@/common';
+import { rejects } from 'assert';
 
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -90,13 +92,18 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
   console.log(item);
   //拦截判断
   if (item.path != '') {
-    if (item.query&&JSON.parse(item.query).templateId) {
+    //判断授权消息提醒
+    if (item.query && JSON.parse(item.query).templateId) {
       sendMeg(item, payload);
-    }else{
-    checkGrid(item).then(() => {
+    } else {
+      checkGrid(item).then(async () => {
+        //判断携带位置信息
+        if (item.query && JSON.parse(item.query).location) {
+          await getAddress(item)
+        }
         useToPath(item, payload);
-    });
-  }
+      });
+    }
   }
 };
 
@@ -115,10 +122,9 @@ interface IPayLoad {
 }
 
 //不拦截 直接跳转的方法
-export const useToPath = (item, payload: IPayLoad = {}) => {
+export const useToPath = async (item, payload: IPayLoad = {}) => {
   const gStores = new GStores();
   const type = payload.type;
-
   switch (item.terminalType) {
     case 'h5':
       const obj = {
@@ -203,19 +209,32 @@ const scanCode = () => {
 
 //授权小程序消息推送模板
 const sendMeg = (item, payload) => {
-  console.log(22222);
   const gStores = new GStores();
   uni.requestSubscribeMessage({
     tmplIds: JSON.parse(item.query).templateId,
     success(res) {
-         //成功之后处理业务
-         console.log(111111);
-         checkGrid(item).then(() => {
-           useToPath(item, payload);
-       });
+      //成功之后处理业务
+      checkGrid(item).then(() => {
+        useToPath(item, payload);
+      });
     },
     fail(res) {
-      gStores.messageStore.showMessage(res.errMsg,1500);
+      gStores.messageStore.showMessage(res.errMsg, 1500);
     },
   });
+};
+//获取地理位置
+const getAddress = (item) => {
+  return new Promise((resolve) =>
+    uni.getLocation({
+      complete: resolve,
+      success: function (res) {
+        const obj = {
+          latitude: res.latitude.toFixed(6),
+          longitude: res.longitude.toFixed(6),
+        };
+        item.path += '&' + joinQuery('', obj).slice(1);
+      },
+    })
+  );
 };
