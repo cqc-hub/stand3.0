@@ -84,16 +84,16 @@ const _cacheMap = new WeakMap();
 
 const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
-const getMedRecordConfig = async <T>(): Promise<T> => {
+const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   const list = _cacheMap.get(Med_Copy_Config);
 
   if (list) {
     return list;
   }
 
-  const { result } = await api.getParamsMoreBySysCode({
-    paramCode: 'MEDICAL_CASE_COPY',
-  });
+  // const { result } = await api.getParamsMoreBySysCode({
+  //   paramCode: 'MEDICAL_CASE_COPY',
+  // });
 
   if (result && result.MEDICAL_CASE_COPY) {
     const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
@@ -115,7 +115,7 @@ const getMedRecordConfig = async <T>(): Promise<T> => {
               : ['front', 'end'],
         });
       });
-      _cacheMap.set(Med_Copy_Config, configList);
+      // _cacheMap.set(Med_Copy_Config, configList);
 
       return <T>configList;
     } else {
@@ -387,64 +387,62 @@ export class ServerStaticData {
     key: T,
     payload: {} = {}
   ): Promise<ISystemConfig[T]> {
-    const gStores = new GStores();
+    // const res: ISystemConfig = {
+    //   order: {
+    //     chooseDay: 30,
+    //     selOrderColumn: 3,
+    //     isOrderBlur: '1',
+    //     isOrderPay: '0',
+    //   },
 
-    if (key === 'medRecord') {
-      return await getMedRecordConfig<ISystemConfig[T]>();
-    }
+    //   person: {
+    //     isHidePatientTypeInPerfect: '1',
+    //     ageChildren: 6,
+    //     ageGuardian: 18,
+    //     isGuardianWithIdCard: '1',
+    //     isSmsVerify: '0',
+    //     ocr: '1',
+    //   },
 
-    const res: ISystemConfig = {
-      order: {
-        chooseDay: 30,
-        selOrderColumn: 3,
-        isOrderBlur: '1',
-        isOrderPay: '0',
-      },
-
-      person: {
-        isHidePatientTypeInPerfect: '1',
-        ageChildren: 6,
-        ageGuardian: 18,
-        isGuardianWithIdCard: '1',
-        isSmsVerify: '0',
-        ocr: '1',
-      },
-
-      medRecord: [
-        {
-          sfz: ['front', 'end'],
-          isItemCount: '1',
-          fee: 10,
-          hosId: '100',
-        },
-      ],
-    };
-
-    return res[key];
-
-    // let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
-    // if (!systemConfig) {
-    //   //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
-    //   const { result } = await api.getParamsMoreBySysCode({
-    //     paramCode: 'PERSON_FAMILY_CARDMAN',
-    //   });
-    //   const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
-    //   systemConfig = {
-    //     person: person,
-    //     order: {
-    //       chooseDay: 30,
-    //       selOrderColumn: 3,
-    //       isOrderBlur: '1',
-    //       isOrderPay: '0',
+    //   medRecord: [
+    //     {
+    //       sfz: ['front', 'end'],
+    //       isItemCount: '1',
+    //       fee: 10,
+    //       hosId: '100',
     //     },
-    //   };
-    //   setLocalStorage({
-    //     systemConfig,
-    //   });
-    //   return systemConfig[key];
-    // } else {
-    //   return systemConfig[key];
-    // }
+    //   ],
+    // };
+
+    // return res[key];
+
+    let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
+    if (!systemConfig) {
+      //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
+      const { result } = await api.getParamsMoreBySysCode({
+        paramCode: 'PERSON_FAMILY_CARDMAN|MEDICAL_CASE_COPY',
+      });
+      const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
+      const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
+        result
+      );
+      systemConfig = {
+        person: person,
+        order: {
+          chooseDay: 30,
+          selOrderColumn: 3,
+          isOrderBlur: '1',
+          isOrderPay: '0',
+        },
+        medRecord,
+      };
+      setLocalStorage({
+        systemConfig,
+      });
+      return systemConfig[key];
+    } else {
+      return systemConfig[key];
+    }
   }
 
   private constructor() {}
