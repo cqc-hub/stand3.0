@@ -60,6 +60,8 @@
         //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
         let newQuery = '';
         let obj = JSON.parse(JSON.stringify(options));
+        console.log('path',obj);
+
         delete obj.path;
         delete obj.query;
         // 携带参数的情况
