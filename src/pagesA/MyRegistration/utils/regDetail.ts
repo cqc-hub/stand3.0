@@ -179,6 +179,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6ea;',
     color: 'var( --hr-error-color-6)',
     title: '待支付',
+    cardColr: 'var(--hr-warning-color-6)',
   },
   // 成功
   '0': {
@@ -187,6 +188,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6c7;',
     color: '#fff',
     title: '预约成功',
+    cardColr: 'var(--hr-brand-color-6)',
   },
   // 已挂号
   '100': {
@@ -195,6 +197,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6c7;',
     color: '#fff',
     title: '已挂号',
+    cardColr: 'var(--hr-brand-color-6)',
   },
   // 已就诊
   '70': {
@@ -203,6 +206,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6c7;',
     color: '#fff',
     title: '已就诊',
+    cardColr: 'var(--hr-success-color-6)',
   },
   // 待就诊
   '75': {
@@ -211,6 +215,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6c7;',
     color: '#fff',
     title: '待就诊',
+    cardColr: 'var(--hr-brand-color-6)',
   },
   // 已退号
   '23': {
@@ -219,6 +224,7 @@ export const orderStatusMap = {
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已退号',
+    cardColr: 'var(--hr-neutral-color-7)',
   },
   // 挂号失败
   '20': {
@@ -227,6 +233,7 @@ export const orderStatusMap = {
     headerIcon: '&#xe6d5;',
     headerBgIcon: '',
     title: '挂号失败',
+    cardColr: 'var(--hr-error-color-6)',
   },
   // 已取消
   '45': {
@@ -235,6 +242,7 @@ export const orderStatusMap = {
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已取消',
+    cardColr: 'var(--hr-neutral-color-7)',
   },
   // 已结束
   '82': {
@@ -243,11 +251,14 @@ export const orderStatusMap = {
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已结束',
+    cardColr: 'var(--hr-neutral-color-7)',
   },
 } as const;
 
+export type OrderStatus = keyof typeof orderStatusMap;
+
 export interface IRegInfo {
-  orderStatus: keyof typeof orderStatusMap;
+  orderStatus: OrderStatus;
   patientId: string;
   patientName: string;
   patientPhone: string;

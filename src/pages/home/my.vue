@@ -120,7 +120,7 @@
 
     // 选择就诊人
     uni.navigateTo({
-      url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&sysCode=1001017&_type=weinandk&query=["token"]'
+      url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&_type=weinandk&query=["token"]'
     });
 
     // uni.navigateTo({

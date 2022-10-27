@@ -17,6 +17,13 @@ export interface ISystemConfig {
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
+
+    /** 挂号记录 */
+    // 显示院内导航按钮? 挂号状态 string
+    isHosNavigation?: string[];
+    //
+    // isQueuing
+
   };
 
   // 就诊人
@@ -454,7 +461,3 @@ export class ServerStaticData {
 
   private constructor() {}
 }
-
-ServerStaticData.getSystemConfig('order').then((r) => {
-  r;
-});

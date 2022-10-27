@@ -138,6 +138,14 @@
         </template>
       </order-Reg-Confirm>
     </view>
+
+    <xy-dialog
+      title=""
+      content="确定取消?"
+      :show="isShowApplyCancelDialog"
+      @cancelButton="isShowApplyCancelDialog = false"
+      @confirmButton="applyCancelDialog"
+    />
     <g-message />
   </view>
 </template>
@@ -328,7 +336,19 @@
     });
   };
 
+  const isShowApplyCancelDialog = ref(false);
+  let applyCancelResolve: (args: any) => any = () => {};
+
+  const applyCancelDialog = () => {
+    applyCancelResolve(void 0);
+    isShowApplyCancelDialog.value = false;
+  };
+
   const applyCancel = async () => {
+    isShowApplyCancelDialog.value = true;
+    await new Promise((resolve) => {
+      applyCancelResolve = resolve;
+    });
     const { id, phsOrderNo } = info.value;
 
     const args = {

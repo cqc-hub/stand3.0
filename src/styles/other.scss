@@ -109,6 +109,10 @@
   color: var(--hr-neutral-color-8);
 }
 
+.color-888 {
+  color: var(--hr-neutral-color-7);
+}
+
 .my-disabled {
   pointer-events: none !important;
 }
@@ -142,6 +146,18 @@
 
 .mt24 {
   margin-top: 24rpx;
+}
+
+.mr24 {
+  margin-right: 24rpx;
+}
+
+.mb24 {
+  margin-bottom: 24px;
+}
+
+.mb12 {
+  margin-bottom: 12rpx;
 }
 
 .mr12 {
@@ -179,6 +195,17 @@
   padding-bottom: 32rpx;
 }
 
+.pb18 {
+  padding-bottom: 18rpx;
+}
+
+.pr12 {
+  padding-right: 12rpx;
+}
+
+.pr24 {
+  padding-right: 24rpx;
+}
 
 
 .f36 {

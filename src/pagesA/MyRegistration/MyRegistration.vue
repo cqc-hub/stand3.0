@@ -75,6 +75,7 @@
   import { GStores } from '@/utils';
   import { computed, ref } from 'vue';
   import api from '@/service/api';
+  import { OrderStatus, orderStatusMap } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
 
@@ -317,12 +318,23 @@
   const isSelStatus = ref(false);
   const isComplete = ref(false);
 
-  const list = ref<IRegistrationCardItem[]>([{}, {}, {}, {}, {}, {}]);
+  const list = ref<IRegistrationCardItem[]>([]);
+
+  const getStatusConfig = (status: OrderStatus) => {
+    if (orderStatusMap[status]) {
+      return orderStatusMap[status];
+    } else {
+      return {
+        title: '未知的状态',
+        cardColr: 'var(--hr-neutral-color-7)',
+      };
+    }
+  };
 
   const getList = async () => {
     isComplete.value = false;
     const { result } = await api
-      .getRegOrderList<any[]>({
+      .getRegOrderList<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
       })
@@ -330,7 +342,11 @@
         isComplete.value = true;
       });
 
-    list.value = result;
+    if (result && result.length) {
+      result.map((o) => {});
+    }
+
+    list.value = result || [];
   };
 
   const init = async () => {

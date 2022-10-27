@@ -172,7 +172,7 @@
 
   .empty-btn {
     font-size: var(--hr-font-size-xs);
-    padding: 14rpx 24rpx;
+    padding: 18rpx 24rpx;
     line-height: 1em;
     height: 100%;
     width: 100%;
