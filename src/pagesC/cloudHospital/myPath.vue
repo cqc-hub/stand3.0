@@ -50,8 +50,7 @@
       const baseUrl =
         (global.env as any) === 'prod'
           ? 'https://h5.eheren.com/v3/#'
-          : 'http://10.10.83.96:3000/#';
-          // : 'https://health.eheren.com/v3/#';
+          : 'https://health.eheren.com/v3/#';
       //公告跳转的咨询
       if (options.type == '2') {
         let path = decodeURIComponent(options.path as string);

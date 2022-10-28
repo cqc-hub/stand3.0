@@ -67,7 +67,7 @@ Request.interceptors.response(
       //禁止删除
       console.log('出参', responseData.result);
     } else {
-      console.log(responseData);
+      console.log(response);
     }
     //处理清除缓存的操作
     if (functionVersion) {
