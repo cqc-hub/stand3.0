@@ -4,6 +4,9 @@
   font-size: var(--hr-font-size-xl);
   font-weight: 600;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &.btn-primary {
     background-color: var(--hr-brand-color-6);
@@ -44,4 +47,19 @@
     }
   }
 
+  &.btn-round {
+    border-radius: 14px;
+  }
+
+  &.btn-size-small {
+    font-size: var(--hr-font-size-xs);
+    padding: 16rpx 24rpx;
+    line-height: 1em;
+    height: 100%;
+    width: 100%;
+
+    &::after {
+      display: none;
+    }
+  }
 }

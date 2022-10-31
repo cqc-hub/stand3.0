@@ -98,11 +98,12 @@ cmd: iconfont-tools
 | 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
 | 我的医生     |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
 | 核酸结果查询 |     pagesC/mixCheckResult/hsResult      | sysCode token herenId |
+| 渭南健康打卡 |     pagesC/choosePat/choosePat      | sysCode token herenId _type=weinandk |
 
 ## 单独 2.0 迁移 3.0 的
 
-测试环境 https://health.eheren.com/V3_h5/#/
-正式环境 https://h5.eheren.com/V3_h5/#
+测试环境 <https://health.eheren.com/V3_h5/#/>
+正式环境 <https://h5.eheren.com/V3_h5/>#
 
 | 功能     |                    页面                     | 参数          |
 | :------- | :-----------------------------------------: | :------------ |

@@ -20,7 +20,8 @@
           {{ getStatusConfig(item.orderStatus).title }}
         </view>
       </view>
-      <view class="content">
+
+      <view @click="goDetail(item)" class="content">
         <view class="row f28">
           <view class="label color-888">就诊人</view>
           <view class="body">{{ item.patientName }}</view>
@@ -50,17 +51,55 @@
           </view>
         </view>
       </view>
+
+      <view v-if="isShowFooter(item)" class="footer flex-between btn-normal">
+        <view class="f36 color-error g-bold">{{ item.fee }}元</view>
+
+        <view class="flex-normal footer-btns">
+          <button
+            v-if="isCancelOrder(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            取消订单
+          </button>
+
+          <button
+            v-if="isShowPaiDui(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            排队叫号
+          </button>
+
+          <button
+            v-if="isPayOrder(item)"
+            class="btn btn-round btn-size-small btn-warning"
+          >
+            去支付
+          </button>
+
+          <button
+            v-if="isFW(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            服务评价
+          </button>
+        </view>
+      </view>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
   import { orderStatusMap, OrderStatus } from '../../utils/regDetail';
+  import { joinQueryForUrl } from '@/common';
 
   const props = defineProps<{
     list: IRegistrationCardItem[];
+    showYuanNeiDaoHanBtn: string[];
+    showPaiDuiJiaoHaoBtn: string[];
+    showFWBtn: string[];
   }>();
 
   const getStatusConfig = (status: OrderStatus) => {
@@ -72,6 +111,49 @@
         cardColr: 'var(--hr-neutral-color-7)',
       };
     }
+  };
+
+  // 显示到院导航
+  const isShowDaohan = (item: IRegistrationCardItem) => {
+    return props.showYuanNeiDaoHanBtn.includes(item.orderStatus);
+  };
+
+  // 显示排队叫号
+  const isShowPaiDui = (item: IRegistrationCardItem) => {
+    return props.showPaiDuiJiaoHaoBtn.includes(item.orderStatus);
+  };
+
+  // 显示服务评价
+  const isFW = (item: IRegistrationCardItem) => {
+    return props.showFWBtn.includes(item.orderStatus);
+  };
+
+  // 显示取消订单
+  const isCancelOrder = (item: IRegistrationCardItem) => {
+    return ['0'].includes(item.orderStatus);
+  };
+
+  // 显示支付
+  const isPayOrder = (item: IRegistrationCardItem) => {
+    return ['10'].includes(item.orderStatus);
+  };
+
+  const goDetail = (item: IRegistrationCardItem) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        orderId: item.orderId,
+      }),
+    });
+  };
+
+  const isShowFooter = (item: IRegistrationCardItem) => {
+    return (
+      isShowDaohan(item) ||
+      isShowPaiDui(item) ||
+      isFW(item) ||
+      isCancelOrder(item) ||
+      isPayOrder(item)
+    );
   };
 </script>
 
@@ -118,10 +200,32 @@
             }
           }
 
-          &:last-child {
-            padding-bottom: 32rpx;
-            border-bottom: 1rpx solid var(--hr-neutral-color-11);
+          // &:last-child {
+          //   padding-bottom: 32rpx;
+          //   border-bottom: 1rpx solid var(--hr-neutral-color-11);
+          // }
+        }
+      }
+
+      .footer {
+        margin-top: 26rpx;
+        align-items: center;
+
+        padding-top: 26rpx;
+        border-top: 1rpx solid var(--hr-neutral-color-11);
+
+        .footer-btns {
+          button {
+            white-space: nowrap;
+            &:not(:last-child) {
+              margin-right: 16rpx;
+            }
           }
+        }
+
+        .cancel-btn {
+          background-color: #fff;
+          color: var(--hr-neutral-color-10);
         }
       }
     }

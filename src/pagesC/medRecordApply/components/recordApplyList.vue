@@ -27,7 +27,7 @@
         <view class="row-content text-ellipsis">{{ item._createTime }}</view>
       </view>
 
-      <view v-if="item.orderStatus === '21'" class="row flex-normal">
+      <view v-if="item.refundReason" class="row flex-normal">
         <view class="row-title">不通过原因</view>
         <view class="row-content text-ellipsis">{{ item.refundReason }}</view>
       </view>

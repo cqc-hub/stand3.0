@@ -143,7 +143,6 @@ export class LoginUtils extends GStores {
       wx.checkIsSupportFacialRecognition({
         checkAliveType: 2,
         success() {
-          //支持人脸检测
           wx.startFacialRecognitionVerify({
             checkAliveType: 2,
             name,
@@ -174,6 +173,13 @@ export class LoginUtils extends GStores {
     // #endif
   }
 
+  async checkNoPublicOpenId() {
+    if (this.globalStore.h5OpenId) {
+      const herenId = this.globalStore.herenId;
+      await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
+    }
+  }
+
   // 微信获取公众号 openid
   async getNoPublicOpenId(code: string) {
     const {
@@ -200,10 +206,6 @@ export class LoginUtils extends GStores {
     }
 
     await this.getUerInfo();
-    //调用微信绑定openid的接口
-    if (this.globalStore.h5OpenId) {
-      await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
-    }
   }
 
   //微信绑定openid接口
@@ -423,6 +425,7 @@ export class Login extends LoginUtils {
 
   static async handler(type: LoginType, payload?: any) {
     await Login.handlerMap[type].handler(payload);
+    new LoginUtils().checkNoPublicOpenId();
   }
 }
 

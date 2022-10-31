@@ -97,7 +97,7 @@
 
 <style lang="scss" scoped>
   .popup {
-    position: reactive;
+    position: relative;
     z-index: 1000;
   }
   .text {

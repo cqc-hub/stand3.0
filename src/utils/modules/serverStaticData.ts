@@ -21,8 +21,10 @@ export interface ISystemConfig {
     /** 挂号记录 */
     // 显示院内导航按钮? 挂号状态 string
     isHosNavigation?: string[];
-    //
-    // isQueuing
+    // 排队叫号?
+    isQueuing?: string[];
+    // 服务评价?
+    isFWBtn?: string[];
   };
 
   // 就诊人

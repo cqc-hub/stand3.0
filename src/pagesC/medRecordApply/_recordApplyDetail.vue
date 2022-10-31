@@ -68,7 +68,19 @@
               />
             </view>
 
-            <view class="container-box p32 g-border">
+            <view
+              v-if="info.refundReason"
+              class="container-box g-border mb16 p32"
+            >
+              <view class="_row">
+                <view class="_content f32">不通过原因</view>
+              </view>
+              <view class="_row mt16 color-444 f28">
+                {{ info.refundReason }}
+              </view>
+            </view>
+
+            <view class="container-box p32 g-border mb16">
               <block v-if="info._outInfo && info._outInfo.length">
                 <record-Card :list="info._outInfo" />
               </block>
@@ -88,7 +100,7 @@
 
             <view
               v-if="info.addresseeAddress.value"
-              class="container-box order-patient g-border p32"
+              class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">
                 <view class="_content">
@@ -511,7 +523,6 @@
 
       .order-patient {
         box-shadow: none;
-        margin-top: 32rpx;
         border-radius: 8px;
       }
     }

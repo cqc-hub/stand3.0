@@ -141,7 +141,7 @@
 }
 
 .mb16 {
-  margin-bottom: 16rpx;
+  margin-bottom: 16rpx !important;
 }
 
 .mt24 {
@@ -207,15 +207,35 @@
   padding-right: 24rpx;
 }
 
+.f24 {
+  font-size: var(--hr-font-size-xxxs);
+}
+
+.f26 {
+  font-size: var(--hr-font-size-xxs);
+}
+
+.f28 {
+  font-size: var(--hr-font-size-xs);
+}
+
+.f30 {
+  font-size: 30rpx;
+}
+
+.f32 {
+  font-size: var(--hr-font-size-base);
+}
 
 .f36 {
   font-size: var(--hr-font-size-xl);
 }
 
-.f24 {
-  font-size: var(--hr-font-size-xxxs);
+.f40 {
+  font-size: 40rpx;
 }
 
-.f28 {
-  font-size: var(--hr-font-size-xs);
+
+.f48 {
+  font-size: var(--hr-font-size-xxl);
 }

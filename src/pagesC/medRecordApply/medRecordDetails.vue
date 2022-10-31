@@ -610,6 +610,7 @@
       fee: getPayMoneyNum.value,
       hosId,
       outInfo: JSON.stringify(recordRows.value),
+      outTime: recordRows.value.map((o) => o.outTime).join(','),
       openId: '',
       userId: '',
       patientId,
@@ -653,7 +654,7 @@
     await wait(1000);
     uni.hideLoading();
 
-    uni.reLaunch({
+    uni.redirectTo({
       url: '/pagesC/medRecordApply/_recordApply?hosId=' + props.hosId,
     });
   };

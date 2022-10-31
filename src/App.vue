@@ -17,11 +17,13 @@
     setTimeout(() => {
       const pages = getCurrentPages();
 
-      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+      if (pages.length) {
+        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
 
-      beforeEach({
-        url: fullUrl,
-      });
+        beforeEach({
+          url: fullUrl,
+        });
+      }
     }, 600);
   });
   onHide(() => {

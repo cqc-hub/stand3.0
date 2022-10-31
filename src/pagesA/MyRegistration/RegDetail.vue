@@ -65,16 +65,22 @@
 
             <view
               v-if="orderRegInfo.orderStatus === '10'"
-              class="out-time-info f28"
+              class="out-time-info f28 color-error"
             >
-              <text
-                :style="{
-                  color: titleStatus.color,
-                }"
-              >
-                {{ `${timeTravel.minute}分${timeTravel.second}秒` }}
-              </text>
-              <text class="color-444">后订单将失效</text>
+              <block v-if="timeTravel.minute == 0 && timeTravel.second == 0">
+                <text>订单已失效</text>
+              </block>
+
+              <block v-else>
+                <text
+                  :style="{
+                    color: titleStatus.color,
+                  }"
+                >
+                  {{ `${timeTravel.minute}分${timeTravel.second}秒` }}
+                </text>
+                <text class="color-444">后订单将失效</text>
+              </block>
             </view>
           </view>
         </view>
@@ -229,6 +235,14 @@
         再次预约
       </button>
     </view>
+
+    <xy-dialog
+      title=""
+      :content="dialogContent"
+      :show="isCancelOrderDialogShow"
+      @cancelButton="isCancelOrderDialogShow = false"
+      @confirmButton="cancelOrderDialogConfirm"
+    />
     <g-message />
   </view>
 </template>
@@ -442,8 +456,19 @@
     console.log('payyyyy');
   };
 
+  const isCancelOrderDialogShow = ref(false);
+  const dialogContent = ref('');
+  let cancelOrderDialogConfirm: (any) => any = async () => {};
   const cancelOrder = async () => {
     const orderId = pageProps.value.orderId;
+    isCancelOrderDialogShow.value = true;
+    dialogContent.value = '确认取消该订单?';
+
+    await new Promise((confirm) => {
+      cancelOrderDialogConfirm = confirm;
+    });
+
+    isCancelOrderDialogShow.value = false;
 
     await api.cancelReg({
       orderId,
