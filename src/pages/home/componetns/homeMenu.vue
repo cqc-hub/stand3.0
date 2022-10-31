@@ -111,6 +111,9 @@
     }
     .swiper {
       height: 260px;
+      swiper-item {
+        overflow-y: scroll;
+      }
     }
   }
 </style>
