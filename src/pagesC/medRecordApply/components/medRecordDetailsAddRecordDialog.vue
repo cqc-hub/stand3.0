@@ -160,8 +160,6 @@
 
     .g-container {
       padding: 0 10rpx;
-      z-index: 99;
-      position: relative;
     }
 
     .dialog-btn {

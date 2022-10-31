@@ -23,7 +23,6 @@ export interface ISystemConfig {
     isHosNavigation?: string[];
     //
     // isQueuing
-
   };
 
   // 就诊人
@@ -41,6 +40,7 @@ export interface ISystemConfig {
     isGuardianWithIdCard?: '0' | '1';
 
     ocr?: '0' | '1';
+    isFace?: '1';
   };
 
   // 病案

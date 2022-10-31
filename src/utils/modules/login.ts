@@ -136,6 +136,44 @@ export class LoginUtils extends GStores {
     }
   }
 
+  // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
+  async faceVerify({ name, idCardNumber }) {
+    // #ifdef MP-WEIXIN
+    return new Promise((resolve, reject) => {
+      wx.checkIsSupportFacialRecognition({
+        checkAliveType: 2,
+        success() {
+          //支持人脸检测
+          wx.startFacialRecognitionVerify({
+            checkAliveType: 2,
+            name,
+            idCardNumber,
+            success(e) {
+              //识别成功
+              console.log('识别成功', e);
+              resolve(void 0);
+            },
+            fail(err) {
+              //识别失败
+              this.messageStore.showMessage('识别失败');
+              console.log('识别失败', err);
+              reject(err);
+            },
+          });
+        },
+
+        fail: (err) => {
+          //不支持人脸检测
+          this.messageStore.showMessage('该设备不支持人脸检测');
+          console.log('该设备不支持人脸检测', err);
+
+          reject(err);
+        },
+      });
+    });
+    // #endif
+  }
+
   // 微信获取公众号 openid
   async getNoPublicOpenId(code: string) {
     const {

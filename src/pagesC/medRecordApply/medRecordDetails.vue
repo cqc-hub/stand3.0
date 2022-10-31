@@ -235,6 +235,7 @@
     ISystemConfig,
     ServerStaticData,
     upImgOss,
+    wait,
   } from '@/utils';
   import { onShow, onLoad } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
@@ -643,7 +644,15 @@
     refPay.value.show();
   };
 
-  const payAfter = () => {
+  const payAfter = async () => {
+    uni.showLoading({
+      mask: true,
+      title: '加载中, 请稍后',
+    });
+
+    await wait(1000);
+    uni.hideLoading();
+
     uni.reLaunch({
       url: '/pagesC/medRecordApply/_recordApply?hosId=' + props.hosId,
     });
