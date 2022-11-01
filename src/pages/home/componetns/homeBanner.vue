@@ -34,6 +34,11 @@
             v-if="props.leftFunctionList.length == 1"
             @tap="gotoPath(props.leftFunctionList[0])"
           >
+          <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
+          <block v-if="props.leftFunctionList[0].iconfont">
+            <image mode="scaleToFill" :src="props.leftFunctionList[0].iconfont" />
+          </block>
+           <block v-else>
             <view class="flex-between">
               <text class="text-ellipsis">
                 {{ props.leftFunctionList[0].title }}
@@ -44,6 +49,7 @@
               {{ props.leftFunctionList[0].detail }}
             </text>
             <view class="iconfont icon-size-back1">&#xe6a5;</view>
+           </block>
           </view>
           <!-- 第一组是多个banner -->
           <view v-else class="view1">
@@ -251,6 +257,11 @@
     }
 
     .banner2 {
+      image{
+        width: 100%;
+        height: 100%;
+        will-change: transform;
+      }
       .parent {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
