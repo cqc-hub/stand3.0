@@ -31,7 +31,34 @@
         :list="gStore.userStore.patList"
         @profile-click="profileClick"
         @card-click="cardClick"
-      />
+      >
+        <template #footer="{ pat }">
+          <!-- #ifdef MP-WEIXIN -->
+          <block
+            v-if="$global.systemInfo.isOpenHealthCard && !pat.healthQrCodeText"
+          >
+            <view
+              v-if="!isShowHealthLogin"
+              @click="upToHealthCord(pat)"
+              class="jkk"
+            >
+              升级为电子健康卡
+            </view>
+
+            <health-card-login
+              v-else
+              :authLogin="false"
+              :hidden="!isShowHealthLogin"
+              @authSucess="upToHealthCord(pat)"
+              @authCancel="isShowHealthLogin = false"
+              wechatcode
+            >
+              <view class="jkk">再次点击授权</view>
+            </health-card-login>
+          </block>
+          <!-- #endif -->
+        </template>
+      </pat-List>
     </view>
 
     <view class="empty-list" v-else>
@@ -47,17 +74,52 @@
   import { GStores, PatientUtils } from '@/utils';
   import { IPat } from '@/stores';
   import { ref } from 'vue';
+  import { getHealthCardCode } from './utils/index';
 
   import globalGl from '@/config/global';
 
   const gStore = new GStores();
   const isShowHealthCardMode = ref(false);
+  const patientUtils = new PatientUtils();
 
   // #ifdef MP-WEIXIN
   if (globalGl.systemInfo.isOpenHealthCard) {
     isShowHealthCardMode.value = true;
   }
   // #endif
+
+  const isShowHealthLogin = ref(false);
+  const upToHealthCord = async (pat: IPat) => {
+    // #ifdef MP-WEIXIN
+    const { success, res } = await getHealthCardCode();
+    if (success) {
+      const {
+        result: { wechatCode },
+      } = res;
+      isShowHealthLogin.value = false;
+      const requestArg = {
+        wechatCode,
+        patientId: pat.patientId,
+      };
+
+      uni.showLoading({
+        mask: true,
+        title: '升级中..',
+      });
+      await patientUtils.registerHealthCard(requestArg);
+      uni.showLoading({
+        mask: true,
+        title: '升级成功， 正在刷新列表...',
+      });
+      await patientUtils.getPatCardList();
+      uni.hideLoading();
+    } else {
+      gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 1500);
+      isShowHealthLogin.value = true;
+      return Promise.reject(void 0);
+    }
+    // #endif
+  };
 
   const addPatPage = () => {
     uni.navigateTo({
@@ -88,7 +150,7 @@
     });
   };
 
-  new PatientUtils().getPatCardList();
+  patientUtils.getPatCardList();
 </script>
 
 <style lang="scss" scoped>
@@ -140,5 +202,12 @@
 
   .mr14 {
     margin-right: 14rpx;
+  }
+
+  .jkk {
+    color: #00a1d6;
+    text-align: center;
+    font-size: var(--hr-font-size-xs);
+    margin-top: 24rpx;
   }
 </style>
