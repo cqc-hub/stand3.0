@@ -29,7 +29,7 @@
             </view>
           </scroll-view>
 
-          <view class="popup-footer g-border-top">
+          <view v-if="!isHideFooter" class="popup-footer g-border-top">
             <slot name="footer">
               <view class="popup-footer-container popup-padding">
                 <button class="btn btn-normal" @click="hide">取消</button>
@@ -56,6 +56,7 @@
       title?: string;
       headerIcon?: string;
       height?: string;
+      isHideFooter?: boolean;
     }>(),
     {
       title: '须知',
