@@ -59,32 +59,13 @@
       </view>
     </view>
 
-    <!-- #ifdef MP-WEIXIN -->
-    <block v-if="$global.systemInfo.isOpenHealthCard && !pat.healthQrCodeText">
-      <view v-if="!isShowHealthLogin" @click="upToHealthCord" class="jkk">
-        升级为电子健康卡
-      </view>
-
-      <health-card-login
-        v-else
-        :authLogin="false"
-        :hidden="!isShowHealthLogin"
-        @authSucess="upToHealthCord"
-        @authCancel="isShowHealthLogin = false"
-        wechatcode
-      >
-        <view class="jkk">再次点击授权</view>
-      </health-card-login>
-    </block>
-    <!-- #endif -->
+    <slot name="footer" />
   </view>
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref, reactive } from 'vue';
+  import { defineComponent, PropType, ref } from 'vue';
   import { IPat } from '@/stores/type';
-  import { getHealthCardCode } from '../utils/index';
-  import { PatientUtils, GStores } from '@/utils';
 
   export default defineComponent({
     props: {
@@ -99,8 +80,6 @@
     setup(props, ctx) {
       const { emit } = ctx;
       const isShowHealthLogin = ref(false);
-      const patientUtils = new PatientUtils();
-      const gStores = new GStores();
       const showId = ref('');
 
       const profileClick = () => {
@@ -111,44 +90,11 @@
         emit('card-click', props.pat);
       };
 
-      const upToHealthCord = async () => {
-        // #ifdef MP-WEIXIN
-        const { success, res } = await getHealthCardCode();
-        if (success) {
-          const {
-            result: { wechatCode },
-          } = res;
-          isShowHealthLogin.value = false;
-          const requestArg = {
-            wechatCode,
-            patientId: props.pat.patientId,
-          };
-
-          uni.showLoading({
-            mask: true,
-            title: '升级中..',
-          });
-          await patientUtils.registerHealthCard(requestArg);
-          uni.showLoading({
-            mask: true,
-            title: '升级成功， 正在刷新列表...',
-          });
-          await patientUtils.getPatCardList();
-          uni.hideLoading();
-        } else {
-          gStores.messageStore.showMessage('未授权， 请再次点击进行授权', 1500);
-          isShowHealthLogin.value = true;
-          return Promise.reject(void 0);
-        }
-        // #endif
-      };
-
       return {
         profileClick,
         cardClick,
         isShowHealthLogin,
-        upToHealthCord,
-        showId
+        showId,
       };
     },
   });
@@ -316,12 +262,5 @@
 
   .bold {
     font-weight: 600;
-  }
-
-  .jkk {
-    color: #00a1d6;
-    text-align: center;
-    font-size: var(--hr-font-size-xs);
-    margin-top: 24rpx;
   }
 </style>

@@ -145,6 +145,10 @@
     requestData.verifyType = requestData.verifyCode ? '2' : '1';
 
     const { isFace } = await ServerStaticData.getSystemConfig('person');
+    console.log({
+      isFace
+    });
+
 
     if (isFace === '1') {
       if (formData.value[formKey.idType] === '01') {

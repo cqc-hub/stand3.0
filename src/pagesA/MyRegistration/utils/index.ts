@@ -427,7 +427,7 @@ export const useOrder = (props: IOrderProps) => {
     });
   };
 
-  const init = async (query: {
+  const init = async (query?: {
     hosId: string;
     hosDeptId?: string;
     firstHosDeptId?: string;
@@ -444,7 +444,9 @@ export const useOrder = (props: IOrderProps) => {
     }
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
 
-    getListAll(checkedDay.value, query);
+    if (query) {
+      getListAll(checkedDay.value, query);
+    }
   };
 
   return {
@@ -470,7 +472,7 @@ export const useOrder = (props: IOrderProps) => {
   };
 };
 
-const getChooseDays = (days: number) => {
+export const getChooseDays = (days: number) => {
   let _d = days - 1;
 
   const _arr: IChooseDays[] = [];

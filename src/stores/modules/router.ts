@@ -68,10 +68,8 @@ const routerStore = defineStore('router', {
       }
 
       this.backRoute = prop;
-      if (prop._p) {
-        // ...
-        this.update_P();
-      } else {
+
+      if (prop._url) {
         const { _url, _query } = prop;
 
         let fullUrl = decodeURIComponent(<string>_url);
@@ -86,6 +84,8 @@ const routerStore = defineStore('router', {
 
           this.fullUrl = fullUrl;
         }
+      } else {
+        this.update_P();
       }
     },
 

@@ -4,13 +4,13 @@
       <view
         v-if="isShowAllDate"
         :class="{
-          'item-active': value === ''
+          'item-active': value === '',
         }"
         @click="
           change({
             day: '',
             weekday: '全部日期',
-            fullDay: ''
+            fullDay: '',
           })
         "
         class="choose-day-all item"
@@ -30,7 +30,7 @@
             v-for="item in chooseDays"
             :class="{
               'item-active': item.fullDay === value,
-              'item-disabled': !enableDays.includes(item.fullDay)
+              'item-disabled': !enableDays.includes(item.fullDay),
             }"
             :key="item.day"
             :id="'day-' + item.fullDay"
@@ -89,7 +89,7 @@
       chooseDays: () => [],
       enableDays: () => [],
       value: '',
-      isShowAllDate: false
+      isShowAllDate: false,
     }
   );
 
@@ -115,14 +115,14 @@
       4: '周四',
       5: '周五',
       6: '周六',
-      7: '周日'
+      7: '周日',
     };
     const _date = dayjs(fullDay);
 
     change({
       day: _date.format('MM-DD'),
       fullDay: fullDay,
-      weekday: dayMap[_date.isoWeekday()]
+      weekday: dayMap[_date.isoWeekday()],
     });
 
     watch(
