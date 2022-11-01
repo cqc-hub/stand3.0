@@ -17,6 +17,13 @@ export type TOutHosInfo = any;
  */
 
 export const applyOrderStatusMap = {
+  '10': {
+    title: '未支付',
+    color: 'var(--hr-brand-color-6)',
+    detailColor: '#fff',
+    headerClass: 'header-blue',
+  },
+
   '11': {
     title: '审核中',
     color: 'var(--hr-brand-color-6)',
