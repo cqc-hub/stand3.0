@@ -144,21 +144,6 @@
 
     requestData.verifyType = requestData.verifyCode ? '2' : '1';
 
-    const { isFace } = await ServerStaticData.getSystemConfig('person');
-    console.log({
-      isFace
-    });
-
-
-    if (isFace === '1') {
-      if (formData.value[formKey.idType] === '01') {
-        await patientUtils.faceVerify({
-          idCardNumber: formData.value[formKey.idCard],
-          name: formData.value[formKey.patientName],
-        });
-      }
-    }
-
     // #ifdef MP-WEIXIN
     if (globalGl.systemInfo.isOpenHealthCard) {
       const { success, res } = await getHealthCardCode();
@@ -180,6 +165,17 @@
       }
     }
     // #endif
+
+    const { isFace } = await ServerStaticData.getSystemConfig('person');
+
+    if (isFace === '1') {
+      if (formData.value[formKey.idType] === '01') {
+        await patientUtils.faceVerify({
+          idCardNumber: formData.value[formKey.idCard],
+          name: formData.value[formKey.patientName],
+        });
+      }
+    }
 
     if (props.pageType === 'perfectReal') {
       try {

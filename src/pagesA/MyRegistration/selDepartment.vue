@@ -130,6 +130,7 @@
 
     if (isLev1(item)) {
       queryArg.firstHosDeptId = encodeURIComponent(item.firstHosDeptId);
+      queryArg.isExpertDeptId = '1';
     } else if (isLev2(item)) {
       queryArg.secondHosDeptId = encodeURIComponent(item.secondHosDeptId);
     } else {
@@ -140,6 +141,10 @@
     }
 
     queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
+    console.log({
+      item,
+      queryArg,
+    });
 
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
