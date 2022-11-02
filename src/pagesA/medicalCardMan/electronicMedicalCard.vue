@@ -24,6 +24,12 @@
         <g-form v-model:value="formData" ref="gform" />
       </view>
     </view>
+
+    <view class="p32">
+      <button @click="goDetail" class="btn btn-normal color-green">
+        <text class="color-green">更多信息</text>
+      </button>
+    </view>
   </view>
 </template>
 
@@ -69,6 +75,12 @@
   if (isAreaProgram()) {
     showCodeLabel.value = clickPat.value.idCard;
   }
+
+  const goDetail = () => {
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/medicalCardDetail',
+    });
+  };
 
   onReady(() => {
     if (clickPat.value.healthQrCodeText) {
@@ -131,5 +143,9 @@
     .card-health {
       padding-top: 80rpx;
     }
+  }
+
+  .btns {
+    padding: 32rpx;
   }
 </style>

@@ -9,6 +9,10 @@
   white-space: nowrap;
 }
 
+.g-break-word {
+  word-break: break-all;
+}
+
 .g-split-line {
   position: relative;
 
@@ -169,6 +173,10 @@
 
 .mb32 {
   margin-bottom: 32rpx !important;
+}
+
+.mb40 {
+  margin-bottom: 40rpx !important;
 }
 
 .mt24 {

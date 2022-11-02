@@ -158,8 +158,19 @@ const regApi = {
       hideLoading: false,
     }),
 
+  // 排班
+  getDocSch: (data: any) =>
+    service.post('/phs-reg/reg/getDocSch', parm(data), {
+      hideLoading: false,
+    }),
+
   cancelReg: (data: any) =>
     service.post('/phs-reg/reg/cancelReg', parm(data), {
+      hideLoading: false,
+    }),
+
+  findByDocId: (data: any) =>
+    service.post('/phs-reg/regDoc/findByDocId', parm(data), {
       hideLoading: false,
     }),
 

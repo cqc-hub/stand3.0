@@ -1,0 +1,40 @@
+<template>
+  <view class="">
+    <block v-if="detail.goodAt">
+      <view class="g-bold f36 mb16">
+        <text class="icon-font ico_doctor-diamond icon-size"></text>
+        <text>擅长</text>
+      </view>
+      <view class="color-444 f32 g-break-word mb40">{{ detail.goodAt }}</view>
+    </block>
+
+    <block v-if="detail.intro">
+      <view class="g-bold f36 mb16">
+        <text class="icon-font ico_doctor-diamond icon-size"></text>
+        <text>简介</text>
+      </view>
+      <view class="color-444 f32 g-break-word mb40">{{ detail.intro }}</view>
+    </block>
+
+    <block v-if="detail.academicAchievements">
+      <view class="g-bold f36 mb16">
+        <text class="icon-font ico_doctor-diamond icon-size"></text>
+        <text>学术成就</text>
+      </view>
+      <view class="color-444 f32 g-break-word mb40">
+        {{ detail.academicAchievements }}
+      </view>
+    </block>
+  </view>
+</template>
+
+<script lang="ts" setup>
+  import { defineComponent, ref } from 'vue';
+  import { type IDocDetail } from '../../utils/DoctorDetails';
+
+  const props = defineProps<{
+    detail: IDocDetail;
+  }>();
+</script>
+
+<style lang="scss" scoped></style>

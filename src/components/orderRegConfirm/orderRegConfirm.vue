@@ -80,7 +80,6 @@
 
   const show = () => {
     popup.value.show();
-    console.log('cqc');
   };
 
   const hide = () => {

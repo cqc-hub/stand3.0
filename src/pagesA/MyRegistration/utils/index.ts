@@ -40,6 +40,7 @@ interface IDocRow {
 
 export interface IDocListAll extends IDocRow {
   docNamePinYin: string;
+  specialClinicName?: string;
   schDocSubResultList: {
     schDate: string;
     schState: '0' | '1';

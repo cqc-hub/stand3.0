@@ -1,6 +1,9 @@
 <template>
   <view>
-    <Order-Doc-List-Container :item="item">
+    <Order-Doc-List-Container
+      :item="item"
+      @avatar-click="emits('avatar-click', item)"
+    >
       <template #footer>
         <view>
           <view
@@ -40,7 +43,7 @@
   import dayjs from 'dayjs';
 
   import OrderDocListContainer from './orderDocListContainer.vue';
-  const emits = defineEmits(['reg-click']);
+  const emits = defineEmits(['reg-click', 'avatar-click']);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;

@@ -13,7 +13,11 @@
         class="container-contract animate__animated animate__fadeIn"
       >
         <view v-for="(item, i) in allDocList" :key="i" class="item-content">
-          <Order-Doc-Item-All :item="item" @date-click="dateClick" />
+          <Order-Doc-Item-All
+            :item="item"
+            @date-click="dateClick"
+            @avatar-click="avatarClick"
+          />
         </view>
 
         <view v-if="!allDocList.length && isComplete" class="empty-list">
@@ -30,7 +34,11 @@
               class="item-content animate__animated animate__fadeIn"
               :key="__i"
             >
-              <Order-Doc-Item-Date :item="__item" @reg-click="regClick" />
+              <Order-Doc-Item-Date
+                :item="__item"
+                @reg-click="regClick"
+                @avatar-click="avatarClick"
+              />
             </view>
           </view>
         </view>
@@ -56,7 +64,8 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onReady } from '@dcloudio/uni-app';
-  import { useOrder, IChooseDays } from './utils';
+  import { useOrder, IChooseDays, type IDocListAll } from './utils';
+  import { joinQuery } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
@@ -123,6 +132,24 @@
         secondHosDeptId: secondHosDeptId.value,
       });
     }
+  };
+
+  const avatarClick = (item: IDocListAll) => {
+    const { deptName, docName, hosDocId, hosId, hosDeptId } = item;
+    // const { hosDeptId, firstHosDeptId, secondHosDeptId } = props;
+    const args = {
+      deptName,
+      docName,
+      hosDocId,
+      hosId,
+      // firstHosDeptId,
+      // secondHosDeptId,
+      hosDeptId,
+    };
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', args),
+    });
   };
 
   init({

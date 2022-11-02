@@ -5,14 +5,16 @@
       mode="widthFix"
       class="header-bg my-disabled"
     />
-
     <view class="content">
       <view class="header-box">
         <view class="content-box header-content-box g-border">
           <view class="header-transform">
             <view class="header mb16 flex-between">
               <image
-                :src="'/static/image/order/order-doctor-avatar.png'"
+                :src="
+                  docDetail.docPhoto ||
+                  '/static/image/order/order-doctor-avatar.png'
+                "
                 class="doc-avatar g-border"
               />
 
@@ -33,19 +35,25 @@
 
             <view class="p32c header-content">
               <view class="flex-normal">
-                <view class="doc-name mr24 f48 g-bold">王柏恒</view>
+                <view class="doc-name mr24 f48 g-bold">
+                  {{ docDetail.docName }}
+                </view>
 
                 <view class="color-444 f28 g-split-line mr12 pr12">
-                  荣誉职称
+                  {{ docDetail.docTitleName }}
                 </view>
-                <view class="color-444 f28">主任医师</view>
+                <view class="color-444 f28">
+                  {{ docDetail.docJobName }}
+                </view>
               </view>
 
               <view class="flex-normal">
                 <view class="color-444 f28 g-split-line mr12 pr12">
                   浙江省人民医院
                 </view>
-                <view class="color-444 f28">口腔科</view>
+                <view class="color-444 f28">
+                  {{ docDetail.deptName }}
+                </view>
               </view>
             </view>
 
@@ -57,7 +65,7 @@
               />
 
               <view class="color-666 f28 doc-goodat-content text-ellipsis">
-                口腔科副主任，2002年毕业于浙江大学口腔系，口腔正畸硕士副主任医师硕士生导师，口腔科副主任，2002年毕业于浙江大学口腔系，口腔正畸硕士副主任医师硕士生导师，
+                {{ docDetail.goodAt }}
 
                 <view
                   @click="regDialogConfirm.show"
@@ -101,23 +109,29 @@
     </view>
 
     <Order-Reg-Confirm title="医生简介" isHideFooter ref="regDialogConfirm">
-      <g-flag v-model:title="flagTitle9" typeFg="9" isShowFgTip isHideTitle />
+      <Doc-Details :detail="docDetail" />
     </Order-Reg-Confirm>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+
   import { useOrder, IChooseDays } from './utils';
+  import {
+    UseDoctorDetail,
+    type IProps,
+    type IDocDetail,
+  } from './utils/DoctorDetails';
+  import { deQueryForUrl } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import DocDetails from './components/DoctorDetails/docDetails.vue';
 
-  const props = defineProps<{
-    hosId: string;
-    hosDeptId: string;
-    hosDocId: string;
-  }>();
+  const props = ref({} as IProps);
+  let useDoctorDetail = {} as UseDoctorDetail;
 
   const {
     chooseDays,
@@ -126,10 +140,28 @@
     orderConfig,
     init: OrderInit,
   } = useOrder(props as any);
-  const flagTitle9 = ref('');
   const regDialogConfirm = ref<any>('');
 
-  OrderInit();
+  const docDetail = ref(<IDocDetail>{
+    docName: props.value.docName,
+    deptName: props.value.deptName,
+  });
+  // const docDetail = computed(() => useDoctorDetail.value.docDetail);
+
+  onLoad(async (opt) => {
+    props.value = deQueryForUrl(opt);
+    useDoctorDetail = new UseDoctorDetail(props.value);
+    init();
+
+    setTimeout(() => {
+      // regDialogConfirm.value.show();
+    }, 800);
+  });
+
+  const init = async () => {
+    await OrderInit();
+    docDetail.value = await useDoctorDetail.getDoctorDetail();
+  };
 </script>
 
 <style lang="scss" scoped>

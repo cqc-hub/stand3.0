@@ -1,6 +1,9 @@
 <template>
   <view>
-    <Order-Doc-List-Container :item="item">
+    <Order-Doc-List-Container
+      :item="item"
+      @avatar-click="emits('avatar-click', item)"
+    >
       <template #footer>
         <view class="date-container g-border-top">
           <view class="sel-date">
@@ -61,7 +64,7 @@
     item: IDocListAll;
   }>();
 
-  const emits = defineEmits(['date-click']);
+  const emits = defineEmits(['date-click', 'avatar-click']);
 
   const isCollapse = ref(true);
 

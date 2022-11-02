@@ -16,6 +16,19 @@
             {{ item.schQukCategor || item.docTitleName }}
           </view>
         </view>
+        <view v-if="item.specialClinicName" class="text-ellipsis">
+          <text
+            v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"
+            :key="i"
+            :class="{
+              'g-split-line':
+                i !== splitSpecialDeptName(item.specialClinicName).length - 1,
+            }"
+            class="color-888 f28 mr12 pr12"
+          >
+            {{ o }}
+          </text>
+        </view>
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
@@ -38,19 +51,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
   import { IDocListAll } from '../../utils';
-  import { GStores } from '@/utils';
 
   const props = defineProps<{
     item: IDocListAll;
   }>();
 
-  const gStores = new GStores();
+  const emits = defineEmits(['avatar-click']);
 
   const avatarClick = () => {
-    console.log('去医生名片');
+    emits('avatar-click', props.item);
   };
+
+  const splitSpecialDeptName = (name: string) => name.split(',');
 </script>
 
 <style lang="scss" scoped>
