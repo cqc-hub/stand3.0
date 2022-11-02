@@ -73,6 +73,21 @@ export class UseDoctorDetail extends GStores {
   }
 
   async getDocSch() {
-    const { clinicalType, docName } = this.props;
+    const { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
+    const { source } = this.globalStore.browser;
+
+    const args = {
+      clinicalType,
+      docName,
+      hosDeptId,
+      hosDocId,
+      hosId,
+      source,
+    };
+
+    const { result } = await api.getDocSch(args);
+
+    if (result && result.length) {
+    }
   }
 }

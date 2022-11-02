@@ -111,3 +111,32 @@ export const openLocation = async (
     address,
   });
 };
+
+/**
+ * 脱敏-name
+ */
+export const nameConvert = (name: string) => {
+  let userName = '';
+  if (name.length == 2) {
+    userName = name.substring(0, 1) + '*';
+  } else if (name.length == 3) {
+    userName = name.substring(0, 1) + '*' + name.substring(2, 3);
+  } else if (name.length > 3) {
+    userName = name.substring(0, 1) + '**' + name.slice(-1);
+  }
+  return userName;
+};
+
+export const previewImage = (
+  urls: string[],
+  payload: {
+    current?: number;
+    indicator?: 'none' | 'default' | 'number';
+    loop?: boolean;
+  } = {}
+) => {
+  uni.previewImage({
+    urls,
+    ...payload,
+  });
+};

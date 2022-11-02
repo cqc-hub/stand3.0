@@ -40,6 +40,7 @@
   import { patCardDetailList } from './utils';
   import { onReady } from '@dcloudio/uni-app';
   import { isAreaProgram } from '@/stores';
+  // 卡包  https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail
 
   const gform = ref<any>('');
   const gStore = new GStores();
@@ -86,6 +87,7 @@
     if (clickPat.value.healthQrCodeText) {
       title.value = '电子健康卡';
       barCodeOpt.value.code = clickPat.value._showId;
+      options.value.code = clickPat.value.healthQrCodeText;
       uni.setNavigationBarTitle({
         title: title.value,
       });

@@ -11,10 +11,9 @@
           <view class="header-transform">
             <view class="header mb16 flex-between">
               <image
-                :src="
-                  docDetail.docPhoto ||
-                  '/static/image/order/order-doctor-avatar.png'
-                "
+                :src="headerBg"
+                @click="previewImg"
+                mode="aspectFill"
                 class="doc-avatar g-border"
               />
 
@@ -25,6 +24,7 @@
                 </button>
 
                 <button
+                  @click="refDocShare.show"
                   class="btn btn-warning btn-round btn-size-small share-btn color-blue"
                 >
                   <text class="iconfont f36 mr12">&#xe6e0;</text>
@@ -111,6 +111,10 @@
     <Order-Reg-Confirm title="医生简介" isHideFooter ref="regDialogConfirm">
       <Doc-Details :detail="docDetail" />
     </Order-Reg-Confirm>
+
+    <Doc-Share ref="refDocShare" />
+
+    <g-message />
   </view>
 </template>
 
@@ -125,12 +129,17 @@
     type IDocDetail,
   } from './utils/DoctorDetails';
   import { deQueryForUrl } from '@/common';
+  import { previewImage } from '@/utils';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import DocDetails from './components/DoctorDetails/docDetails.vue';
+  import DocShare from './components/DoctorDetails/docShare.vue';
 
   const props = ref({} as IProps);
+
+  const refDocShare = ref<any>('');
+
   let useDoctorDetail = {} as UseDoctorDetail;
 
   const {
@@ -148,6 +157,18 @@
   });
   // const docDetail = computed(() => useDoctorDetail.value.docDetail);
 
+  const headerBg = computed(() => {
+    return (
+      docDetail.value.docPhoto || '/static/image/order/order-doctor-avatar.png'
+    );
+  });
+  const previewImg = () => {
+    const photo = docDetail.value.docPhoto;
+    if (photo) {
+      previewImage([photo]);
+    }
+  };
+
   onLoad(async (opt) => {
     props.value = deQueryForUrl(opt);
     useDoctorDetail = new UseDoctorDetail(props.value);
@@ -155,12 +176,17 @@
 
     setTimeout(() => {
       // regDialogConfirm.value.show();
+      refDocShare.value.show();
     }, 800);
   });
 
   const init = async () => {
     await OrderInit();
-    docDetail.value = await useDoctorDetail.getDoctorDetail();
+    useDoctorDetail.getDoctorDetail().then((r) => {
+      docDetail.value = r;
+    });
+
+    useDoctorDetail.getDocSch();
   };
 </script>
 
@@ -210,6 +236,7 @@
         width: 136rpx;
         height: 136rpx;
         border-radius: 50%;
+        overflow: hidden;
       }
 
       .header-btn {

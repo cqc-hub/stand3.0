@@ -30,7 +30,7 @@
         <view class="health-card-footer">
           <view class="health-card-info flex-normal-between">
             <view class="health-card-info-content">
-              <view>{{ pat.patientName }}</view>
+              <view>{{ nameConvert(pat.patientName) }}</view>
               <view>{{ pat.idCard }}</view>
             </view>
 
@@ -66,6 +66,7 @@
 <script lang="ts">
   import { defineComponent, PropType, ref } from 'vue';
   import { IPat } from '@/stores/type';
+  import { nameConvert } from '@/utils';
 
   export default defineComponent({
     props: {
@@ -95,6 +96,7 @@
         cardClick,
         isShowHealthLogin,
         showId,
+        nameConvert,
       };
     },
   });

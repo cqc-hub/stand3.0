@@ -86,7 +86,14 @@ export const tempList: TInstance[] = [
     maxlength: 50,
     validator(value) {
       const v = <string>value;
+
       if (v) {
+        if (v.length < 2) {
+          return Promise.resolve({
+            success: false,
+            message: '真实姓名需要大于2个字符',
+          });
+        }
         const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
 
         if (isEng) {
@@ -232,6 +239,22 @@ export const tempList: TInstance[] = [
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
     maxlength: 100,
     labelWidth: '220rpx',
+    validator(value) {
+      const v = <string>value;
+
+      if (v) {
+        if (v.length < 4) {
+          return Promise.resolve({
+            success: false,
+            message: '详细地址需要大于4个字符',
+          });
+        }
+      }
+
+      return Promise.resolve({
+        success: true,
+      });
+    },
   },
 
   {
