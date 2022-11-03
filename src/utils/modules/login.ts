@@ -79,7 +79,7 @@ export class GStores {
 }
 
 export class LoginUtils extends GStores {
-  async getUerInfo() {
+  async getUerInfo(type?: 'alone') {
     try {
       const { result } = await api.allinoneAuthApi(
         packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
@@ -126,8 +126,10 @@ export class LoginUtils extends GStores {
 
           return Promise.reject('未完善');
         } else {
-          //获取就诊人列表
-          await new PatientUtils().getPatCardList();
+          if (type !== 'alone') {
+            //获取就诊人列表
+            await new PatientUtils().getPatCardList();
+          }
         }
       }
     } catch (error) {
@@ -495,7 +497,7 @@ export class PatientUtils extends LoginUtils {
         mask: true,
       });
 
-      await this.getUerInfo();
+      await this.getUerInfo('alone');
 
       uni.showLoading({
         title: '添加就诊人中...',
@@ -547,6 +549,7 @@ export class PatientUtils extends LoginUtils {
   ) {
     getH5OpenidParam(data);
     await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+    // await this.getPatCardList();
   }
 
   async addRelevantPatient(
@@ -601,24 +604,36 @@ export class PatientUtils extends LoginUtils {
       }
 
       if (wechatCode) {
-        await this.registerHealthCard({
-          patientId,
-          wechatCode,
-        });
+        await this.registerHealthCard(
+          {
+            patientId,
+            wechatCode,
+          },
+          false
+        );
       }
-
-      await this.getPatCardList();
     }
   }
 
-  async registerHealthCard(data: { patientId: string; wechatCode: string }) {
+  async registerHealthCard(
+    data: { patientId: string; wechatCode: string },
+    isErr = true
+  ) {
     const { patientId, wechatCode } = data;
 
-    await api.registerHealthCard({
-      patientId,
-      wechatCode,
-      source: this.globalStore.browser.source,
-    });
+    await api
+      .registerHealthCard({
+        patientId,
+        wechatCode,
+        source: this.globalStore.browser.source,
+      })
+      .catch((err) => {
+        if (isErr) {
+          throw new Error(err);
+        } else {
+          console.error('此处不抛出错误', err);
+        }
+      });
   }
 
   async getPatCardList() {

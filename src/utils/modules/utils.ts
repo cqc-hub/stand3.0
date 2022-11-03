@@ -140,3 +140,14 @@ export const previewImage = (
     ...payload,
   });
 };
+
+export const downFile = (url: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    uni.downloadFile({
+      url,
+      success(e) {
+        resolve(e.tempFilePath);
+      },
+    });
+  });
+};

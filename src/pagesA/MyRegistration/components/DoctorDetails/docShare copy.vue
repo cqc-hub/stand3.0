@@ -72,17 +72,7 @@
           </view>
         </view>
 
-        <view class="popup-content g-flex-rc-cc">
-          <canvas
-            class="shareCanvas"
-            canvas-id="shareCanvas"
-            id="shareCanvas"
-            :style="{
-              width: canvasInfo.width + 'px',
-              height: canvasInfo.height + 'px',
-            }"
-          ></canvas>
-        </view>
+        <view>{{ qrImg }}</view>
       </view>
     </uni-popup>
 
@@ -97,7 +87,7 @@
       <view class="footer">
         <view class="g-flex-rc-cc g-bold f36 footer-title">分享到</view>
         <view class="share-content flex-normal">
-          <button @click="saveAsImg" class="share-btn">
+          <button pen-type="contact" class="share-btn">
             <view class="iconfont share-icon color-blue">&#xe705;</view>
             <view class="color-444 f28">保存图片</view>
           </button>
@@ -118,13 +108,7 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, ref, nextTick } from 'vue';
-  import { previewImage, downFile, wait, GStores } from '@/utils';
-  import { type IDocDetail } from '../../utils/DoctorDetails';
-  import globalGl from '@/config/global';
-
-  const props = defineProps<{
-    detail: IDocDetail;
-  }>();
+  import { previewImage } from '@/utils';
 
   const change = ({ show }) => {
     if (show) {
@@ -138,8 +122,6 @@
   const popupBottom = ref<any>('');
   const qrcode = ref<any>('');
   const bgHeadHeight = ref('400rpx');
-  const inst = getCurrentInstance();
-  const gStores = new GStores();
 
   const qrImg = ref('');
 
@@ -149,14 +131,8 @@
 
     setTimeout(async () => {
       await capture();
-      initCanvas();
     }, 100);
   };
-
-  const canvasInfo = ref({
-    width: 352,
-    height: 362,
-  });
 
   const options = ref({
     // 二维码
@@ -164,134 +140,12 @@
     code: 'cqc233fkjls',
   });
 
-  const getSysInfo = () => {
-    return new Promise((resolve, fail) => {
-      uni.getSystemInfo({
-        success(e) {
-          console.log(e);
-
-          const { screenWidth } = e;
-          canvasInfo.value.width = screenWidth;
-          resolve(e);
-        },
-
-        fail,
-      });
-    });
-  };
-
-  // https://uniapp.dcloud.net.cn/api/canvas/CanvasContext.html#canvascontext-shadowoffsetx-number
-  // https://blog.csdn.net/qq_30907845/article/details/126853488
-  const initCanvas = async () => {
-    const { docPhoto, docName } = props.detail;
-
-    // if (docPhoto) {
-    //   downFile(docPhoto);
-    // }
-    const qr_code_img = qrImg.value;
-    const avatar_img = '/static/image/order/order-doctor-avatar.png';
-
-    const [head_bg_img, good_at_img] = await Promise.all([
-      downFile(globalGl.BASE_IMG + 'v3_doctor_bg_share.png'),
-      downFile(globalGl.BASE_IMG + 'v3_doctor_card_major.png'),
-    ]);
-
-    await getSysInfo();
-
-    const ctx = uni.createCanvasContext('shareCanvas', inst);
-    //清空画布
-    ctx.clearRect(0, 0, canvasInfo.value.width, canvasInfo.value.height);
-
-    ctx.drawImage(head_bg_img, 0, 0, canvasInfo.value.width - 50, 200);
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(68, 70, 40, 0, 2 * Math.PI);
-    ctx.clip();
-    ctx.drawImage(avatar_img, 30, 32, 80, 80);
-    ctx.restore();
-
-    ctx.draw();
-  };
-
   const capture = async () => {
     const { tempFilePath } = await qrcode.value.GetCodeImg();
     if (tempFilePath) {
       qrImg.value = tempFilePath;
-      options.value.size = 0;
+      // previewImage([tempFilePath]);
     }
-  };
-
-  const saveAsImg = async () => {
-    // #ifdef  MP-WEIXIN
-    await new Promise((r) => {
-      uni.saveImageToPhotosAlbum({
-        filePath: '',
-        complete: r,
-      });
-    });
-    // #endif
-
-    uni.canvasToTempFilePath(
-      {
-        canvasId: 'shareCanvas',
-        success: async ({ tempFilePath }) => {
-          console.log({
-            tempFilePath,
-          });
-
-          if (tempFilePath) {
-            // #ifdef  MP-WEIXIN
-            await new Promise((resolve, reject) => {
-              // 需要用户手点...
-              uni.getSetting({
-                async success({ authSetting }) {
-                  if (authSetting['scope.writePhotosAlbum']) {
-                    resolve(void 0);
-                  } else {
-                    gStores.messageStore.showMessage(
-                      '未授权， 请先授权保存相册权限',
-                      1500,
-                      {
-                        closeCallBack() {
-                          wx.openSetting({
-                            success(settingdata) {
-                              console.log({
-                                settingdata,
-                              });
-
-                              if (
-                                settingdata.authSetting[
-                                  'scope.writePhotosAlbum'
-                                ]
-                              ) {
-                                resolve(void 0);
-                              } else {
-                                reject();
-                              }
-                            },
-                            complete(e) {
-                              console.log('开大会', e);
-                            },
-                          });
-                        },
-                      }
-                    );
-                  }
-                },
-              });
-            });
-
-            // #endif
-
-            uni.saveImageToPhotosAlbum({
-              filePath: tempFilePath,
-            });
-          }
-        },
-      },
-      inst
-    );
   };
 
   defineExpose({
@@ -302,8 +156,8 @@
 <style lang="scss" scoped>
   .popup-content {
     width: calc(100vw - 90rpx);
-    transform: translateY(-250rpx);
-    // background-color: #fff;
+    transform: translateY(-350rpx);
+    background-color: #fff;
     border-radius: 12px;
     box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.06);
 
@@ -445,11 +299,5 @@
       padding-bottom: 80rpx;
       margin-top: 20rpx;
     }
-  }
-
-  .shareCanvas {
-    position: relative;
-    z-index: 999;
-    border-radius: 12rpx;
   }
 </style>

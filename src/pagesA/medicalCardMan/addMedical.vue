@@ -198,6 +198,7 @@
       }
     } else {
       await patientUtils.addRelevantPatient(requestData);
+      await patientUtils.getPatCardList();
       if (props._directUrl) {
         routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
       } else {
