@@ -98,23 +98,23 @@
 }
 
 .color-blue {
-  color: var(--hr-brand-color-6);
+  color: var(--hr-brand-color-6) !important;
 }
 
 .color-dark {
-  color: var(--hr-neutral-color-10);
+  color: var(--hr-neutral-color-10) !important;
 }
 
 .color-green {
-  color: var(--hr-success-color-6);
+  color: var(--hr-success-color-6) !important;
 }
 
 .color-purple {
-  color: #7747ff;
+  color: #7747ff !important;
 }
 
 .color-light-dark {
-  color: var(--hr-neutral-color-7);
+  color: var(--hr-neutral-color-7) !important;
 }
 
 .color-error {

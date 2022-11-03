@@ -232,6 +232,12 @@ const userApi = {
       hideLoading: false,
     }),
 
+  // 获取卡包订单号
+  getCardPackOrderId: (data) =>
+    service.post('/phs-user/healthCard/getCardPackOrderId', parm(data), {
+      hideLoading: false,
+    }),
+
   //身份证OCR识别
   ocrIdCard: <T>(data) =>
     service.post<T>('/phs-user/authUser/ocrIdCard', parm(data)),

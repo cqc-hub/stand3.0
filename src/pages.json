@@ -197,7 +197,7 @@
         {
           "path": "medicalCardMan/electronicMedicalCard",
           "extend": {
-            "login": true
+            "patient": true
           },
           "style": {
             "navigationBarTitleText": "电子就诊卡"

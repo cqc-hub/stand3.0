@@ -4,10 +4,11 @@
       ref="popup"
       height="10"
       :mask-click-close="maskClickClose"
-      :mask-alpha="0.6"
       @show="onActionSheetShow"
       @hide="onActionSheetHide"
       :type="type"
+      :duration="duration"
+      :maskAlpha="maskAlpha"
       bg-color="rgba(0,0,0,0)"
     >
       <view
@@ -16,7 +17,7 @@
         }"
         class="popup-container"
       >
-        <view v-if="type !== 'top'" class="header flex-between">
+        <view v-if="type !== 'top' && !isHideNav" class="header flex-between">
           <view class="popup-title text-ellipsis">
             {{ title }}
           </view>
@@ -54,6 +55,11 @@
         default: false,
       },
 
+      isHideNav: {
+        type: Boolean,
+        default: false,
+      },
+
       type: {
         type: String,
         default: 'bottom',
@@ -67,6 +73,16 @@
       title: {
         type: String,
         default: '',
+      },
+
+      duration: {
+        type: Number,
+        default: 400,
+      },
+
+      maskAlpha: {
+        type: Number,
+        default: 0.5,
       },
     },
 

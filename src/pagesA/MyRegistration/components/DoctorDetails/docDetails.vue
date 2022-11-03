@@ -10,7 +10,7 @@
 
     <block v-if="detail.intro">
       <view class="g-bold f36 mb16">
-        <text class="icon-font ico_doctor-diamond icon-size"></text>
+        <text class="icon-font ico_doctor-document icon-size"></text>
         <text>简介</text>
       </view>
       <view class="color-444 f32 g-break-word mb40">{{ detail.intro }}</view>
@@ -18,7 +18,7 @@
 
     <block v-if="detail.academicAchievements">
       <view class="g-bold f36 mb16">
-        <text class="icon-font ico_doctor-diamond icon-size"></text>
+        <text class="icon-font ico_doctor-hat icon-size"></text>
         <text>学术成就</text>
       </view>
       <view class="color-444 f32 g-break-word mb40">
@@ -37,4 +37,12 @@
   }>();
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.icon-size {
+  width: 45rpx;
+  height: 45rpx;
+  position: relative;
+  top: 8rpx;
+  margin-right: 8rpx;
+}
+</style>

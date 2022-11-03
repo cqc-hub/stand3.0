@@ -1,118 +1,119 @@
 <template>
-  <view class="">
-    <image
-      :src="$global.BASE_IMG + 'v3_doctor_card_top.png'"
-      mode="widthFix"
-      class="header-bg my-disabled"
-    />
-    <view class="content">
-      <view class="header-box">
-        <view class="content-box header-content-box g-border">
-          <view class="header-transform">
-            <view class="header mb16 flex-between">
-              <image
-                :src="headerBg"
-                @click="previewImg"
-                mode="aspectFill"
-                class="doc-avatar g-border"
-              />
+  <view class="g-page">
+    <scroll-view class="g-container" scroll-y>
+      <image
+        :src="$global.BASE_IMG + 'v3_doctor_card_top.png'"
+        mode="widthFix"
+        class="header-bg my-disabled"
+      />
+      <view class="content">
+        <view class="header-box">
+          <view class="content-box header-content-box g-border">
+            <view class="header-transform">
+              <view class="header mb16 flex-between">
+                <image
+                  :src="headerBg"
+                  @click="previewImg"
+                  mode="aspectFill"
+                  class="doc-avatar g-border"
+                />
 
-              <view class="flex-normal header-btn">
-                <button class="btn btn-warning btn-round btn-size-small">
-                  <text class="iconfont f36 mr12">&#xe700;</text>
-                  <text>关注</text>
-                </button>
+                <view class="flex-normal header-btn">
+                  <button class="btn btn-warning btn-round btn-size-small">
+                    <text class="iconfont f36 mr12">&#xe700;</text>
+                    <text>关注</text>
+                  </button>
 
-                <button
-                  @click="refDocShare.show"
-                  class="btn btn-warning btn-round btn-size-small share-btn color-blue"
-                >
-                  <text class="iconfont f36 mr12">&#xe6e0;</text>
-                  <text>分享</text>
-                </button>
-              </view>
-            </view>
-
-            <view class="p32c header-content">
-              <view class="flex-normal">
-                <view class="doc-name mr24 f48 g-bold">
-                  {{ docDetail.docName }}
-                </view>
-
-                <view class="color-444 f28 g-split-line mr12 pr12">
-                  {{ docDetail.docTitleName }}
-                </view>
-                <view class="color-444 f28">
-                  {{ docDetail.docJobName }}
+                  <button
+                    @click="refDocShare.show"
+                    class="btn btn-warning btn-round btn-size-small share-btn color-blue"
+                  >
+                    <text class="iconfont f36 mr12">&#xe6e0;</text>
+                    <text>分享</text>
+                  </button>
                 </view>
               </view>
 
-              <view class="flex-normal">
-                <view class="color-444 f28 g-split-line mr12 pr12">
-                  浙江省人民医院
+              <view class="p32c header-content">
+                <view class="flex-normal">
+                  <view class="doc-name mr24 f48 g-bold">
+                    {{ docDetail.docName }}
+                  </view>
+
+                  <view class="color-444 f28 g-split-line mr12 pr12">
+                    {{ docDetail.docTitleName }}
+                  </view>
+                  <view class="color-444 f28">
+                    {{ docDetail.docJobName }}
+                  </view>
                 </view>
-                <view class="color-444 f28">
-                  {{ docDetail.deptName }}
+
+                <view class="flex-normal">
+                  <view class="color-444 f28 g-split-line mr12 pr12">
+                    浙江省人民医院
+                  </view>
+                  <view class="color-444 f28">
+                    {{ docDetail.deptName }}
+                  </view>
                 </view>
               </view>
-            </view>
 
-            <view class="flex-normal p32c doc-goodat">
-              <image
-                :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
-                class="doc-major-goodat mr12"
-                mode="widthFix"
-              />
+              <view class="flex-normal p32c doc-goodat">
+                <image
+                  :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
+                  class="doc-major-goodat mr12"
+                  mode="widthFix"
+                />
 
-              <view class="color-666 f28 doc-goodat-content text-ellipsis">
-                {{ docDetail.goodAt }}
+                <view class="color-666 f28 doc-goodat-content text-ellipsis">
+                  {{ docDetail.goodAt }}
 
-                <view
-                  @click="regDialogConfirm.show"
-                  class="doc-show-intro f26 color-blue"
-                >
-                  <text>查看简介</text>
-                  <text class="iconfont">&#xe66b;</text>
+                  <view
+                    @click="regDialogConfirm.show"
+                    class="doc-show-intro f26 color-blue"
+                  >
+                    <text>查看简介</text>
+                    <text class="iconfont">&#xe66b;</text>
+                  </view>
                 </view>
               </view>
             </view>
           </view>
         </view>
+
+        <view class="f36 g-bold mb16">门诊排班</view>
+        <view class="content-box">
+          <view class="content-sel-date mb16">
+            <Order-Sel-Date
+              :value="checkedDay"
+              :choose-days="chooseDays"
+              :enable-days="chooseDaysEnabled"
+            />
+          </view>
+
+          <text class="label-mark">
+            <text class="color-fff f28 label-mark-content">到院就诊</text>
+          </text>
+
+          <view class="p32c mt12">
+            <view class="f36 g-bold mb16">庆春院区</view>
+          </view>
+
+          <text class="label-mark mb8">
+            <text class="color-fff f28 label-mark-content">网络就诊</text>
+          </text>
+
+          <view class="p32c mt12">
+            <view class="f36 g-bold mb16">庆春院区</view>
+          </view>
+        </view>
       </view>
 
-      <view class="f36 g-bold mb16">门诊排班</view>
-      <view class="content-box">
-        <view class="content-sel-date mb16">
-          <Order-Sel-Date
-            :value="checkedDay"
-            :choose-days="chooseDays"
-            :enable-days="chooseDaysEnabled"
-          />
-        </view>
-
-        <text class="label-mark">
-          <text class="color-fff f28 label-mark-content">到院就诊</text>
-        </text>
-
-        <view class="p32c mt12">
-          <view class="f36 g-bold mb16">庆春院区</view>
-        </view>
-
-        <text class="label-mark mb8">
-          <text class="color-fff f28 label-mark-content">网络就诊</text>
-        </text>
-
-        <view class="p32c mt12">
-          <view class="f36 g-bold mb16">庆春院区</view>
-        </view>
-      </view>
-    </view>
-
-    <Order-Reg-Confirm title="医生简介" isHideFooter ref="regDialogConfirm">
-      <Doc-Details :detail="docDetail" />
-    </Order-Reg-Confirm>
-
-    <Doc-Share ref="refDocShare" />
+      <Order-Reg-Confirm title="医生简介" isHideFooter ref="regDialogConfirm">
+        <Doc-Details :detail="docDetail" />
+      </Order-Reg-Confirm>
+    </scroll-view>
+    <Doc-Share :detail="docDetail" ref="refDocShare" />
 
     <g-message />
   </view>
@@ -120,7 +121,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
   import { useOrder, IChooseDays } from './utils';
   import {
@@ -128,7 +129,7 @@
     type IProps,
     type IDocDetail,
   } from './utils/DoctorDetails';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery } from '@/common';
   import { previewImage } from '@/utils';
 
   import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
@@ -171,6 +172,11 @@
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(opt);
+    // 扫码进来, 不处理
+    if (props.value.q) {
+      return;
+    }
+
     useDoctorDetail = new UseDoctorDetail(props.value);
     init();
 
@@ -188,6 +194,13 @@
 
     useDoctorDetail.getDocSch();
   };
+
+  onShareAppMessage((res) => {
+    return {
+      title: `${docDetail.value.docName}医生`,
+      path: joinQuery('/pagesA/MyRegistration/DoctorDetails', props.value),
+    };
+  });
 </script>
 
 <style lang="scss" scoped>

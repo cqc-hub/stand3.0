@@ -14,6 +14,24 @@
   });
   onShow(async (opt) => {
     // console.log('App Show', opt);
+    if (opt && opt.query) {
+      const { query, path } = opt;
+
+      // wx 普通二维码
+      if (query && query.q) {
+        const _query = decodeURIComponent(query.q).split('?')[1];
+
+        if (_query) {
+          setTimeout(() => {
+            uni.reLaunch({
+              url: `/${path}?${_query}`,
+            });
+          }, 600);
+          return;
+        }
+      }
+    }
+
     setTimeout(() => {
       const pages = getCurrentPages();
 

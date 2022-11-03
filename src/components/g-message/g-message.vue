@@ -83,6 +83,7 @@
     position: relative;
     top: -160rpx;
     word-break: break-all;
+    z-index: 9999;
     `;
 
       return {
@@ -98,7 +99,7 @@
 <style lang="scss" scoped>
   .popup {
     position: relative;
-    z-index: 1000;
+    z-index: 9999;
   }
   .text {
     font-size: var(--hr-font-size-base);

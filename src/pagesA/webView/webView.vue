@@ -13,6 +13,8 @@
   const src = ref('');
 
   if (props.https) {
+    console.log(decodeURIComponent(props.https));
+
     src.value = decodeURIComponent(props.https);
   }
 </script>

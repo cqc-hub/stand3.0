@@ -26,10 +26,22 @@
     </view>
 
     <view class="p32">
+      <!-- #ifdef  MP-WEIXIN -->
+      <button
+        v-if="clickPat.healthQrCodeText"
+        @click="goHealCardPackage"
+        class="btn btn-normal color-green mb12"
+      >
+        <text class="color-green">添加到卡包</text>
+      </button>
+      <!-- #endif -->
+
       <button @click="goDetail" class="btn btn-normal color-green">
         <text class="color-green">更多信息</text>
       </button>
     </view>
+
+    <g-message />
   </view>
 </template>
 
@@ -40,7 +52,7 @@
   import { patCardDetailList } from './utils';
   import { onReady } from '@dcloudio/uni-app';
   import { isAreaProgram } from '@/stores';
-  // 卡包  https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail
+  import api from '@/service/api';
 
   const gform = ref<any>('');
   const gStore = new GStores();
@@ -83,6 +95,34 @@
     });
   };
 
+  // https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail
+  const goHealCardPackage = async () => {
+    const { patientId } = clickPat.value;
+    const {
+      browser: { source },
+    } = gStore.globalStore;
+
+    const arg = {
+      patientId,
+      source,
+    };
+
+    const { result } = await api.getCardPackOrderId(arg);
+
+    const orderId = result?.orderId;
+
+
+    if (orderId) {
+      const url = `https://03-h5-health.tengmed.com/api/open/takeMsCard?order_id=${orderId}&redirect_uri=back`;
+
+      uni.navigateTo({
+        url: '/pagesA/webView/webView?https=' + encodeURIComponent(url),
+      });
+    } else {
+      gStore.messageStore.showMessage('获取订单失败', 1500);
+    }
+  };
+
   onReady(() => {
     if (clickPat.value.healthQrCodeText) {
       title.value = '电子健康卡';
@@ -95,8 +135,6 @@
   });
 
   onMounted(() => {
-    console.log(options.value);
-
     gform.value.setList(patCardDetailList);
   });
 </script>
@@ -110,6 +148,8 @@
 
   .card-content {
     padding: 32rpx;
+    position: relative;
+    z-index: 1;
     .card-header {
       background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));
       border: 1px solid #548cff;

@@ -11,6 +11,7 @@ export interface IProps {
   // firstHosDeptId: string;
   // secondHosDeptId: string;
   hosDeptId: string;
+  q?: string;
 }
 
 export interface IDocDetail {

@@ -100,5 +100,9 @@
         padding: 0 24rpx;
       }
     }
+
+    &:not(:last-child) {
+      margin-bottom: 8rpx;
+    }
   }
 </style>
