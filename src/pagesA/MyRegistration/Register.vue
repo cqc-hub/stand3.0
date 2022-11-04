@@ -135,12 +135,15 @@
 
   import hosListVue from './components/hosList/hosList.vue';
 
-  import api from '@/service/api';
-
   const props = defineProps<{
     _url: string;
-    _type: number; //区分my-h5跳转 1:医院指南跳转
+    _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
   }>();
+
+  const pagesList = {
+    '1': '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide', //医院指南多院区
+    '2': '/pagesC/cloudHospital/myPath?path=pagesC/selfService/nucleicBilling&query=["token","openId"]',
+  };
   const gStores = new GStores();
 
   const isShowFilterHos = ref(false);
@@ -203,19 +206,16 @@
         return;
       }
     }
-    const url = decodeURIComponent(props._url);
-    if (props._type == 1) {
-      //医院指南
+    if (props._type) {
+      console.log(222,pagesList[props._type]);
       uni.navigateTo({
-        url: joinQuery(
-          '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide',
-          {
-            hosId: item.hosId,
-          }
-        ),
+        url: joinQuery(pagesList[props._type], {
+          hosId: item.hosId,
+          hosName: item.hosName,
+        }),
       });
     } else {
-      //小程序内部跳转
+      const url = decodeURIComponent(props._url);
       uni.navigateTo({
         url: joinQuery(url, {
           hosId: item.hosId,

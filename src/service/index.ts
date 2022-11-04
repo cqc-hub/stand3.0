@@ -36,7 +36,7 @@ Request.interceptors.request((request: IRequest) => {
   if (isDes) {
     //禁止删除
     console.log(request.url, request.data);
-    const key = 'reqv3-' + new Date().getDate();
+    const key = 'reqv3-' + ('0' + new Date().getDate()).slice(-2);
     const data = JSON.parse(JSON.stringify(request.data));
     const desData = {
       args: {},
@@ -62,7 +62,7 @@ Request.interceptors.response(
 
     //解密
     if (isDes && signContent) {
-      const key = 'resv3-' + new Date().getDate();
+       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
       responseData.result = JSON.parse(decryptDes(signContent, key));
       //禁止删除
       console.log('出参', responseData.result);
