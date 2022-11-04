@@ -113,7 +113,7 @@
         <Doc-Details :detail="docDetail" />
       </Order-Reg-Confirm>
     </scroll-view>
-    <Doc-Share :detail="docDetail" ref="refDocShare" />
+    <Doc-Share :pageProp="props" :detail="docDetail" ref="refDocShare" />
 
     <g-message />
   </view>
@@ -137,6 +137,9 @@
   import DocDetails from './components/DoctorDetails/docDetails.vue';
   import DocShare from './components/DoctorDetails/docShare.vue';
 
+  /**
+   * 医生名片分享:  后台新建普通链接二维码 https://h5.eheren.com/scan/${syscode}/DoctorDetails?${...props}
+   */
   const props = ref({} as IProps);
 
   const refDocShare = ref<any>('');
@@ -182,7 +185,7 @@
 
     setTimeout(() => {
       // regDialogConfirm.value.show();
-      refDocShare.value.show();
+      // refDocShare.value.show();
     }, 800);
   });
 

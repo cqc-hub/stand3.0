@@ -44,7 +44,7 @@ export const regInfoTempList: TInstance[] = [
     label: '就诊提示',
     field: 'input-text',
     rowStyle: 'border-radius: 8px;',
-    key: 'createTime11',
+    key: 'hisResult',
   },
 ];
 

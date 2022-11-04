@@ -45,14 +45,14 @@
       </view>
     </scroll-view>
 
-    <OrderSelectSource
+    <Order-Select-Source
       v-model:show="isSelectOrderSourceShow"
       v-model:selectSchInfos="selectSchInfos"
       v-model:value="selectOrderSourceNumId"
       :isComplete="isComplete"
       :orderSourceList="orderSourceList"
       :column="orderConfig.selOrderColumn"
-      :isOrderBlur="orderConfig.isOrderBlur"
+      :is-blur="orderConfig.isOrderBlur"
       @item-click="orderSourceChoose"
       @am-change="amChange"
       ref="selectOrderSource"

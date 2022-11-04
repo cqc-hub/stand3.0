@@ -16,6 +16,7 @@
           :style="{
             color: getStatusConfig(item.orderStatus).cardColr,
           }"
+          class="text-no-wrap"
         >
           {{ getStatusConfig(item.orderStatus).title }}
         </view>
@@ -52,7 +53,10 @@
         </view>
       </view>
 
-      <view v-if="isShowFooter(item) && false" class="footer flex-between btn-normal">
+      <view
+        v-if="isShowFooter(item) && false"
+        class="footer flex-between btn-normal"
+      >
         <view class="f36 color-error g-bold">{{ item.fee }}元</view>
 
         <view class="flex-normal footer-btns">

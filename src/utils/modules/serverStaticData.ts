@@ -443,7 +443,7 @@ export class ServerStaticData {
           order: {
             chooseDay: 30,
             selOrderColumn: 3,
-            isOrderBlur: '1',
+            isOrderBlur: '0',
             isOrderPay: '0',
           },
           medRecord,
