@@ -24,36 +24,45 @@
         </swiper>
       </view>
       <!-- 常规banner+三个入口 首页 三个纯入口 支持第一个是否是banner -->
-      <view class="banner2" v-if="props.functionList.length>0">
-        <view :class="props.functionList.length >2 ? 'parent1':'parent'">
+      <view class="banner2" v-if="props.functionList.length > 0">
+        <view :class="props.functionList.length > 2 ? 'parent1' : 'parent'">
           <!-- 只有一个入口 -->
+          <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
           <view
-            class=" banner-back2 banner-common2"
-            :class="props.functionList.length >2 ? 'view1':'view6'"
+            :class="`banner-back2 ${
+              props.functionList.length > 2 ? 'view1' : 'view6'
+            } ${props.leftFunctionList[0].iconfont ? '' : 'banner-common2'}`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
             v-if="props.leftFunctionList.length == 1"
             @tap="gotoPath(props.leftFunctionList[0])"
           >
-          <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
-          <block v-if="props.leftFunctionList[0].iconfont">
-            <image mode="scaleToFill" :src="props.leftFunctionList[0].iconfont" />
-          </block>
-           <block v-else>
-            <view class="flex-between">
-              <text class="text-ellipsis">
-                {{ props.leftFunctionList[0].title }}
+            <block v-if="props.leftFunctionList[0].iconfont">
+              <image
+                mode="scaleToFill"
+                :src="props.leftFunctionList[0].iconfont"
+              />
+            </block>
+            <block v-else>
+              <view class="flex-between">
+                <text class="text-ellipsis">
+                  {{ props.leftFunctionList[0].title }}
+                </text>
+                <view class="iconfont icon-size2">&#xe6ca;</view>
+              </view>
+              <text class="text-ellipsis details">
+                {{ props.leftFunctionList[0].detail }}
               </text>
-              <view class="iconfont icon-size2">&#xe6ca;</view>
-            </view>
-            <text class="text-ellipsis details">
-              {{ props.leftFunctionList[0].detail }}
-            </text>
-            <view class="iconfont icon-size-back1">&#xe6a5;</view>
-           </block>
+              <view class="iconfont icon-size-back1">&#xe6a5;</view>
+            </block>
           </view>
           <!-- 第一组是多个banner -->
           <view v-else class="view1">
-            <swiper class="swiper" circular  :autoplay="autoplay" indicator-dots="true" >
+            <swiper
+              class="swiper"
+              circular
+              :autoplay="autoplay"
+              indicator-dots="true"
+            >
               <swiper-item
                 v-for="(item, i) in props.leftFunctionList"
                 :key="i"
@@ -86,7 +95,12 @@
               v-for="(item, i) in props.functionList"
               :key="i"
               :class="`view${i + 2} banner-back${i + 1} banner-common`"
-              :style="(props.leftFunctionList.length == 1&& props.functionList.length ==2)? 'margin-top:0':''"
+              :style="
+                props.leftFunctionList.length == 1 &&
+                props.functionList.length == 2
+                  ? 'margin-top:0'
+                  : ''
+              "
               @tap="gotoPath(item)"
             >
               <view class="flex-between">
@@ -119,20 +133,20 @@
         {
           title: '住院助手',
           url: '/xxx',
-          iconfont: 'ico_sy_calendar1'
-        }
+          iconfont: 'ico_sy_calendar1',
+        },
       ],
       //右侧数组
       functionList: () => [
         {
           title: '住院助手',
           url: '/xxx',
-          iconfont: 'ico_sy_calendar1'
-        }
-      ]
+          iconfont: 'ico_sy_calendar1',
+        },
+      ],
     }
   );
-  const autoplay = ref(true)
+  const autoplay = ref(true);
   //跳转对应地址
   const gotoPath = (item) => {
     useCommonTo(item);
@@ -257,7 +271,7 @@
     }
 
     .banner2 {
-      image{
+      image {
         width: 100%;
         height: 100%;
         will-change: transform;

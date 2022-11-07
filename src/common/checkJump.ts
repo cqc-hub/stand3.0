@@ -94,12 +94,17 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
   if (item.path != '') {
     //判断授权消息提醒
     if (item.query && JSON.parse(item.query).templateId) {
+      //用药提醒
       sendMeg(item, payload);
-    } else {
+    }
+    //  else if (item.query && JSON.parse(item.query).questionId) {
+    //   //跳转问卷页面
+    // }
+    else {
       checkGrid(item).then(async () => {
         //判断携带位置信息
         if (item.query && JSON.parse(item.query).location) {
-          await getAddress(item)
+          await getAddress(item);
         }
         useToPath(item, payload);
       });
