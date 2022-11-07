@@ -6,10 +6,10 @@
 
     <view class="content" @click="itemClick">
       <view>
-        <view class="hos-name">{{ item.hosName }}</view>
+        <view class="hos-name">{{ item.aliasName }}</view>
 
         <view class="hos-address">
-          {{ item.senderAddress && item.senderAddress.replace(/\s+/g, '') }}
+          {{ item.address && item.address.replace(/\s+/g, '') }}
         </view>
       </view>
 

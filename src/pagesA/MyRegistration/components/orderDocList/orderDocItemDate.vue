@@ -18,10 +18,18 @@
             <view class="scheme-item-detail">
               <view class="scheme-item-detail-num">
                 <text>总{{ _item.numCount }}个</text>
-                <text>剩{{ _item.numRemain }}个</text>
+                <text v-if="!(_item.schState in warnSchStateMap)">
+                  剩{{ _item.numRemain }}个
+                </text>
               </view>
 
-              <g-login @handler-next="regClick(_item)" patient>
+              <view
+                v-if="_item.schState in warnSchStateMap"
+                class="f26 g-bold color-888"
+              >
+                {{ warnSchStateMap[_item.schState] }}
+              </view>
+              <g-login v-else @handler-next="regClick(_item)" patient>
                 <button
                   class="btn btn-primary btn-reg"
                   @click="regClick(_item)"
@@ -48,6 +56,12 @@
   const props = defineProps<{
     item: IItem;
   }>();
+
+  const warnSchStateMap = {
+    1: '停诊',
+    2: '约满',
+    3: '未放号',
+  };
 
   const regClick = (scheme: IItem['schemeList'][number]) => {
     emits('reg-click', {

@@ -1,6 +1,11 @@
 <template>
   <view class="page">
-    <!--   -->
+    <g-flag
+      v-if="dirUrl.includes('/pagesA/MyRegistration/selDepartment')"
+      isShowFg
+      typeFg="84"
+    />
+
     <view v-if="hosList.length > showMoreItem" class="flex-normal header">
       <view
         :class="{
@@ -140,6 +145,8 @@
     _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
   }>();
 
+  const dirUrl = decodeURIComponent(props._url);
+
   const pagesList = {
     '1': '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide', //医院指南多院区
     '2': '/pagesC/cloudHospital/myPath?path=pagesC/selfService/nucleicBilling&query=["token","openId"]',
@@ -207,7 +214,7 @@
       }
     }
     if (props._type) {
-      console.log(222,pagesList[props._type]);
+      console.log(222, pagesList[props._type]);
       uni.navigateTo({
         url: joinQuery(pagesList[props._type], {
           hosId: item.hosId,

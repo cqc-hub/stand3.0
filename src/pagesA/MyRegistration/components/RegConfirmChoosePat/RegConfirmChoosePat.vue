@@ -24,6 +24,14 @@
         {{ `${gStores.userStore.patChoose.patientPhone}` }}
       </text>
     </view>
+
+    <view class="choose-phone">
+      <text class="label">证件类型</text>
+
+      <text>
+        {{ `${gStores.userStore.patChoose.idCard}` }}
+      </text>
+    </view>
     <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
   </view>
 </template>
@@ -88,7 +96,8 @@
       margin-top: 18rpx;
       .label {
         color: var(--hr-neutral-color-7);
-        margin-right: 16rpx;
+        width: 140rpx;
+        display: inline-block;
       }
     }
 
