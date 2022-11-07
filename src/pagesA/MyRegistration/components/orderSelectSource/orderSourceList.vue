@@ -21,9 +21,8 @@
         class="item g-flex-rc-cc text-ellipsis"
       >
         <text class="title">{{ item.timeDesc }}</text>
-
-        <text v-if="isOrderBlur === '0'" class="item-desc">
-          {{ item.disNo }} 号
+        <text v-if="isBlur === '0'" class="item-desc">
+          第 {{ item.disNo }} 号
         </text>
         <text v-else class="item-desc">剩余 {{ item.disNo }} 个</text>
       </view>
@@ -64,9 +63,9 @@
         default: (): IHOption => [],
       },
 
-      isOrderBlur: {
+      isBlur: {
         type: String as PropType<'0' | '1'>,
-        default: '',
+        default: '1',
       },
 
       value: {

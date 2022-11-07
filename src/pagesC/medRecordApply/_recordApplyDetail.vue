@@ -29,7 +29,8 @@
                     <text>{{ info.fee }}元</text>
                   </view>
 
-                  <view v-if="info.refundFee">
+                  <!-- v-if="info.refundFee" -->
+                  <view>
                     <text class="mr12">退还金额:</text>
                     <text class="mr12">{{ info.refundFee }}元</text>
                     <text
@@ -135,10 +136,10 @@
         </button>
       </view>
 
-      <order-Reg-Confirm title="退还金额说明" height="auto" ref="refRefConfirm">
-        <template #default>
-          <view class="mb76 dialog-content">退还金额已原路返回，请查收。</view>
-        </template>
+      <order-Reg-Confirm title="退还金额说明" height="35vh" ref="refRefConfirm">
+        <view>
+          <view class="dialog-content mb76">退还金额已原路返回，请查收。</view>
+        </view>
 
         <template #footer>
           <button

@@ -443,6 +443,7 @@ export const useOrder = (props: IOrderProps) => {
         orderConfig.value[key] = value;
       });
     }
+
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
 
     if (query) {

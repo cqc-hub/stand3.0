@@ -37,6 +37,7 @@
               :column="column"
               :orderSourceList="orderSourceList"
               :value="value"
+              :isBlur="isBlur"
               @item-click="itemClick"
             />
           </view>
@@ -59,7 +60,7 @@
     isComplete: boolean;
     column: number;
     value: string;
-    isOrderBlur: '0' | '1';
+    isBlur: '0' | '1';
     selectSchInfos: TSchInfo[];
     orderSourceList: IOrderSource[];
   }>();
