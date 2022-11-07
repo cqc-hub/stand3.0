@@ -185,8 +185,8 @@
 
     setTimeout(() => {
       // regDialogConfirm.value.show();
-      // refDocShare.value.show();
-    }, 800);
+      refDocShare.value.show();
+    }, 1200);
   });
 
   const init = async () => {
