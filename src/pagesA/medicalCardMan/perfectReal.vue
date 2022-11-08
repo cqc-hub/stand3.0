@@ -21,23 +21,7 @@
     />
 
     <view class="footer">
-      <view @click="isCheck = !isCheck" class="fg-agree">
-        <view
-          :class="{
-            'is-check': isCheck,
-          }"
-          class="iconfont check-box"
-        >
-          {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
-        </view>
-        <view>
-          <text>我已阅读并同意</text>
-          <text @click.stop="goAgreement" class="fg-agree-name">
-            《用户条款和隐私政策》
-          </text>
-          <text>这个是协议配置编号待定（不支持富文本）</text>
-        </view>
-      </view>
+      <Fg-Agree v-model:isCheck="isCheck" />
       <button
         @click="gform.submit"
         :class="{
@@ -68,6 +52,9 @@
   import { decryptDes } from '@/common/des';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
+
+  import FgAgree from './components/fgAgree.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -101,11 +88,6 @@
   let formList: TInstance[] = [];
 
   const isCheck = ref(false);
-  const goAgreement = () => {
-    uni.navigateTo({
-      url: '/pagesA/mySet/userPolicy',
-    });
-  };
 
   const dialogShow = ref(false);
   const dialogContent = ref('');
@@ -368,27 +350,5 @@
     padding: 24rpx 32rpx 48rpx;
     position: reactive;
     z-index: 1;
-  }
-
-  .fg-agree {
-    display: flex;
-    font-size: var(--hr-font-size-xs);
-    align-items: flex-start;
-    margin-bottom: 24rpx;
-
-    .fg-agree-name {
-      color: var(--hr-brand-color-6);
-    }
-
-    .check-box {
-      color: var(--hr-neutral-color-7);
-      font-size: 40rpx;
-      margin-right: 4rpx;
-      transform: translateY(-5rpx);
-
-      &.is-check {
-        color: var(--hr-brand-color-6);
-      }
-    }
   }
 </style>

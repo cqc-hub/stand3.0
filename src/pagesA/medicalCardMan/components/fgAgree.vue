@@ -40,4 +40,26 @@
   };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .fg-agree {
+    display: flex;
+    font-size: var(--hr-font-size-xs);
+    align-items: flex-start;
+    margin-bottom: 24rpx;
+
+    .fg-agree-name {
+      color: var(--hr-brand-color-6);
+    }
+
+    .check-box {
+      color: var(--hr-neutral-color-7);
+      font-size: 40rpx;
+      margin-right: 4rpx;
+      transform: translateY(-5rpx);
+
+      &.is-check {
+        color: var(--hr-brand-color-6);
+      }
+    }
+  }
+</style>
