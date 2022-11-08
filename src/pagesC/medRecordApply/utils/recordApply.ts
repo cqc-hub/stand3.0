@@ -159,9 +159,7 @@ export type CaseCopyItem = {
   _outInfo: TOutInfo[];
 };
 
-type deParams = {
-  value: string;
-};
+type deParams = string;
 
 export type CaseCopeItemDetail = Flatten<
   Omit<CaseCopyItem, 'hosId' | 'hosName'> & {

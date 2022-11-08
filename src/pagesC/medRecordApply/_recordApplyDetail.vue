@@ -99,7 +99,7 @@
             </view>
 
             <view
-              v-if="info.addresseeAddress.value"
+              v-if="info.addresseeAddress"
               class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">
@@ -109,8 +109,8 @@
               </view>
               <view class="_row mt16">
                 <view class="_title w100 _name">
-                  <text class="mr12">{{ info.addresseeName.value }}</text>
-                  <text>{{ info.addresseePhone.value }}</text>
+                  <text class="mr12">{{ info.addresseeName }}</text>
+                  <text>{{ info.addresseePhone }}</text>
                 </view>
               </view>
             </view>
