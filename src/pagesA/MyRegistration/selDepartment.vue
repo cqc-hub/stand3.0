@@ -18,7 +18,6 @@
         @item-click-lv2="itemClickLv2"
         @item-click-lv3="itemClickLv3"
       />
-
       <view v-if="!depList.length && isComplete" class="empty-list">
         <g-empty :current="1" />
       </view>
@@ -26,12 +25,18 @@
 
     <!-- <g-flag typeFg="8" isShowFg /> -->
     <xy-dialog
+      :title="showRegTipTitle"
       :show="isShowRegTip"
       :isShowCancel="false"
       @confirmButton="isShowRegTip = false"
     >
       <view class="reg-tip">
-        <g-flag v-model:title="showRegTipTitle" isShowFgTip typeFg="8" />
+        <g-flag
+          v-model:title="showRegTipTitle"
+          isHideTitle
+          isShowFgTip
+          typeFg="8"
+        />
       </view>
     </xy-dialog>
 

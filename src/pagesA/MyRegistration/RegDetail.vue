@@ -95,7 +95,7 @@
 
               <w-barcode :options="_qrCodeOpt" />
 
-              <view class="qr-code-value">{{ orderRegInfo.patientId }}</view>
+              <view class="qr-code-value">{{ _qrCodeOpt.code }}</view>
 
               <view @click="showQrCode = !showQrCode" class="qr-code-toggle">
                 <text
@@ -145,14 +145,25 @@
                     v-else-if="item.key === 'docName'"
                     class="color-blue flex-normal doc-name"
                   >
-                    <view class="g-border-right doc-name-value">
+                    <view class="doc-name-value">
                       {{ value }}
                     </view>
 
-                    <view>
+                    <!-- <view>
                       {{
                         orderRegInfo.schQukCategor || orderRegInfo.categorName
                       }}
+                    </view>
+
+                    <view class="iconfont color-blue">&#xe6c8;</view> -->
+                  </view>
+
+                  <view
+                    v-else-if="item.key === '_category'"
+                    class="color-blue flex-normal doc-name"
+                  >
+                    <view>
+                      {{ orderRegInfo._category }}
                     </view>
 
                     <view class="iconfont color-blue">&#xe6c8;</view>
@@ -189,6 +200,7 @@
         <view class="iconfont home-icon">&#xe6df;</view>
         <view>首页</view>
       </view>
+
       <button
         v-if="orderRegInfo.orderStatus === '0'"
         @click="cancelOrder"
@@ -221,7 +233,7 @@
 
       <button
         v-if="orderRegInfo.orderStatus === '45'"
-        class="btn g-border btn-primary btn-plain"
+        class="btn g-border btn-primary"
         @click="againOrder"
       >
         再次预约
@@ -229,7 +241,15 @@
 
       <button
         v-if="orderRegInfo.orderStatus === '23'"
-        class="btn g-border btn-primary btn-plain"
+        class="btn g-border btn-primary"
+        @click="againOrder"
+      >
+        再次预约
+      </button>
+
+      <button
+        v-if="orderRegInfo.orderStatus === '20'"
+        class="btn g-border btn-primary"
         @click="againOrder"
       >
         再次预约
@@ -251,6 +271,7 @@
   import { computed, ref, nextTick, onMounted, reactive } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
+  import { cloneUtil } from '@/common/utils';
   import {
     GStores,
     ServerStaticData,
@@ -330,19 +351,17 @@
     );
   });
   const isShowFooter = computed(() =>
-    ['23', '45', '10', '70', '0'].includes(orderRegInfo.value.orderStatus)
+    ['23', '45', '10', '70', '0', '20'].includes(orderRegInfo.value.orderStatus)
   );
 
-  const qrCodeOpt = computed(() => {
-    return {
-      // 二维码
-      size: 350,
+  const qrCodeOpt = ref({
+    // 二维码
+    size: 350,
 
-      // 条形码
-      width: 600, // 宽度 单位rpx
-      height: 184, // 高度 单位rpx
-      code: orderRegInfo.value.patientId,
-    };
+    // 条形码
+    width: 600, // 宽度 单位rpx
+    height: 184, // 高度 单位rpx
+    code: '',
   });
 
   const _qrCodeOpt = computed(() => {
@@ -405,6 +424,7 @@
 
   const init = async () => {
     const orderId = pageProps.value.orderId;
+    let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
     const { result } = await api.getRegOrderInfo<IRegInfo>({
@@ -428,11 +448,15 @@
       result.ampmName + result.appointmentTime
     }`;
     result._fee = result.fee + '元';
+    result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
-    // orderRegInfo.value.orderStatus = '45';
+    orderRegInfo.value.orderStatus = '75';
+    qrCodeOpt.value.code = result.cardNumber;
+
+    _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
 
     setTimeout(() => {
-      refForm.value.setList(regInfoTempList);
+      refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(patientTempList);
     }, 300);
   };

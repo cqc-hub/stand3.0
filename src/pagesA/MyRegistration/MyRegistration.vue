@@ -1,5 +1,7 @@
 <template>
   <view class="g-page">
+    <g-flag typeFg="405" isShowFg />
+
     <view class="flex-normal header g-border-bottom">
       <view
         :class="{
@@ -24,7 +26,7 @@
       </view>
     </view>
     <view class="g-container">
-      <block v-if="list.length && isComplete">
+      <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
@@ -80,8 +82,8 @@
       v-model:show="isSelPatient"
       :option="patList"
       :field="{
-        label: 'patientName',
-        value: 'patientId',
+        label: '_showLabel',
+        value: '_showLabel',
       }"
       type="top"
     >
@@ -125,6 +127,8 @@
 <script lang="ts" setup>
   import { GStores, ServerStaticData } from '@/utils';
   import { computed, ref } from 'vue';
+  import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+
   import api from '@/service/api';
   import { OrderStatus, orderStatusMap } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
@@ -410,6 +414,7 @@
     list.value = result || [];
   };
 
+  let _firstIn = true;
   const getConfig = async () => {
     const { isHosNavigation, isQueuing, isFWBtn } =
       await ServerStaticData.getSystemConfig('order');
@@ -425,11 +430,27 @@
     if (isFWBtn) {
       showFWBtn.value = isFWBtn;
     }
+
+    if (_firstIn) {
+      const o = gStores.userStore.patChoose;
+      _firstIn = false;
+      selPatId.value =
+        o.patientName + (o.cardNumber ? `(${o.cardNumber})` : '');
+    }
   };
+
+  onPullDownRefresh(async () => {
+    await init();
+    uni.stopPullDownRefresh();
+  });
+
+  onShow(() => {
+    init();
+  });
 
   const init = async () => {
     await getConfig();
-    getList();
+    await getList();
   };
 
   const patList = computed(() => {
@@ -437,8 +458,12 @@
       {
         patientId: '',
         patientName: '所有就诊人',
+        _showLabel: '所有就诊人',
       },
-      ...gStores.userStore.patList,
+      ...gStores.userStore.patList.map((o) => ({
+        ...o,
+        _showLabel: o.patientName + (o.cardNumber ? `(${o.cardNumber})` : ''),
+      })),
     ];
   });
 
@@ -460,8 +485,9 @@
     ];
   });
   const selPatName = computed(() => {
-    return patList.value.find((o) => o.patientId === selPatId.value)
-      ?.patientName;
+    return selPatId.value;
+    // return patList.value.find((o) => o.patientId === selPatId.value)
+    //   ?.patientName;
   });
 
   const selStatusName = computed(() => {
@@ -474,7 +500,11 @@
     );
 
     const _filterPat = _filterStatus.filter((o) =>
-      selPatId.value ? o.patientId === selPatId.value : true
+      selPatId.value === '所有就诊人'
+        ? true
+        : selPatId.value
+        ? o.patientName === selPatId.value.split('(')[0]
+        : true
     );
     return _filterPat;
   });
@@ -505,5 +535,6 @@
 
   .g-container {
     padding: 0 32rpx;
+    width: calc(100% - 64rpx);
   }
 </style>

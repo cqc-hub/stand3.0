@@ -25,7 +25,9 @@
       <view @click="goDetail(item)" class="content">
         <view class="row f28">
           <view class="label color-888">就诊人</view>
-          <view class="body">{{ item.patientName }}</view>
+          <view class="body">
+            {{ item.patientName }}({{ item.cardNumber }})
+          </view>
         </view>
 
         <view class="row f28">

@@ -68,7 +68,8 @@
         {
           "path": "MyRegistration/MyRegistration",
           "style": {
-            "navigationBarTitleText": "挂号记录"
+            "navigationBarTitleText": "挂号记录",
+            "enablePullDownRefresh": true
           },
           "extend": {
             "patient": true
