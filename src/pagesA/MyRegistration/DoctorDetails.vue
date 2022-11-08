@@ -118,7 +118,7 @@
                   }"
                   class="sch-item mb8 animate__animated animate__fadeIn"
                 >
-                  <Doc-Sch-Item :item="item" />
+                  <Doc-Sch-Item :item="item" @reg-click="regClick" />
                 </view>
               </view>
             </view>
@@ -151,7 +151,7 @@
                     }"
                     class="sch-item mb8"
                   >
-                    <Doc-Sch-Item :item="item" />
+                    <Doc-Sch-Item :item="item" @reg-click="regClick" />
                   </view>
                 </view>
               </view>
@@ -169,6 +169,7 @@
       </Order-Reg-Confirm>
     </scroll-view>
     <Doc-Share :pageProp="props" :detail="docDetail" ref="refDocShare" />
+
     <Order-Select-Source
       v-model:show="isSelectOrderSourceShow"
       v-model:selectSchInfos="selectSchInfos"
@@ -480,6 +481,214 @@
       respCode: 0,
     } as any);
 
+  api.getNumberSource = () =>
+    Promise.resolve({
+      result: [
+        {
+          numId: '2022113132020060900000000002911',
+          timeDesc: '08:00',
+          disNo: '1',
+        },
+        {
+          numId: '2022113132020060900000000002912',
+          timeDesc: '08:00',
+          disNo: '2',
+        },
+        {
+          numId: '2022113132020060900000000002913',
+          timeDesc: '08:00',
+          disNo: '3',
+        },
+        {
+          numId: '2022113132020060900000000002914',
+          timeDesc: '08:00',
+          disNo: '4',
+        },
+        {
+          numId: '2022113132020060900000000002915',
+          timeDesc: '08:00',
+          disNo: '5',
+        },
+        {
+          numId: '2022113132020060900000000002917',
+          timeDesc: '08:30',
+          disNo: '7',
+        },
+        {
+          numId: '2022113132020060900000000002918',
+          timeDesc: '08:30',
+          disNo: '8',
+        },
+        {
+          numId: '2022113132020060900000000002919',
+          timeDesc: '08:30',
+          disNo: '9',
+        },
+        {
+          numId: '20221131320200609000000000029110',
+          timeDesc: '08:30',
+          disNo: '10',
+        },
+        {
+          numId: '20221131320200609000000000029111',
+          timeDesc: '08:30',
+          disNo: '11',
+        },
+        {
+          numId: '20221131320200609000000000029112',
+          timeDesc: '08:30',
+          disNo: '12',
+        },
+        {
+          numId: '20221131320200609000000000029113',
+          timeDesc: '09:00',
+          disNo: '13',
+        },
+        {
+          numId: '20221131320200609000000000029114',
+          timeDesc: '09:00',
+          disNo: '14',
+        },
+        {
+          numId: '20221131320200609000000000029115',
+          timeDesc: '09:00',
+          disNo: '15',
+        },
+        {
+          numId: '20221131320200609000000000029116',
+          timeDesc: '09:00',
+          disNo: '16',
+        },
+        {
+          numId: '20221131320200609000000000029117',
+          timeDesc: '09:00',
+          disNo: '17',
+        },
+        {
+          numId: '20221131320200609000000000029118',
+          timeDesc: '09:00',
+          disNo: '18',
+        },
+        {
+          numId: '20221131320200609000000000029119',
+          timeDesc: '09:30',
+          disNo: '19',
+        },
+        {
+          numId: '20221131320200609000000000029120',
+          timeDesc: '09:30',
+          disNo: '20',
+        },
+        {
+          numId: '20221131320200609000000000029121',
+          timeDesc: '09:30',
+          disNo: '21',
+        },
+        {
+          numId: '20221131320200609000000000029122',
+          timeDesc: '09:30',
+          disNo: '22',
+        },
+        {
+          numId: '20221131320200609000000000029123',
+          timeDesc: '09:30',
+          disNo: '23',
+        },
+        {
+          numId: '20221131320200609000000000029124',
+          timeDesc: '09:30',
+          disNo: '24',
+        },
+        {
+          numId: '20221131320200609000000000029125',
+          timeDesc: '10:00',
+          disNo: '25',
+        },
+        {
+          numId: '20221131320200609000000000029126',
+          timeDesc: '10:00',
+          disNo: '26',
+        },
+        {
+          numId: '20221131320200609000000000029127',
+          timeDesc: '10:00',
+          disNo: '27',
+        },
+        {
+          numId: '20221131320200609000000000029128',
+          timeDesc: '10:00',
+          disNo: '28',
+        },
+        {
+          numId: '20221131320200609000000000029129',
+          timeDesc: '10:00',
+          disNo: '29',
+        },
+        {
+          numId: '20221131320200609000000000029130',
+          timeDesc: '10:00',
+          disNo: '30',
+        },
+        {
+          numId: '20221131320200609000000000029131',
+          timeDesc: '10:30',
+          disNo: '31',
+        },
+        {
+          numId: '20221131320200609000000000029132',
+          timeDesc: '10:30',
+          disNo: '32',
+        },
+        {
+          numId: '20221131320200609000000000029133',
+          timeDesc: '10:30',
+          disNo: '33',
+        },
+        {
+          numId: '20221131320200609000000000029134',
+          timeDesc: '10:30',
+          disNo: '34',
+        },
+        {
+          numId: '20221131320200609000000000029135',
+          timeDesc: '10:30',
+          disNo: '35',
+        },
+        {
+          numId: '20221131320200609000000000029136',
+          timeDesc: '11:00',
+          disNo: '36',
+        },
+        {
+          numId: '20221131320200609000000000029137',
+          timeDesc: '11:00',
+          disNo: '37',
+        },
+        {
+          numId: '20221131320200609000000000029138',
+          timeDesc: '11:00',
+          disNo: '38',
+        },
+        {
+          numId: '20221131320200609000000000029139',
+          timeDesc: '11:00',
+          disNo: '39',
+        },
+        {
+          numId: '20221131320200609000000000029140',
+          timeDesc: '11:00',
+          disNo: '40',
+        },
+      ],
+      timeTaken: 92,
+      code: 0,
+      functionVersion:
+        '[{"functionType":"2","version":"v0.0.4"},{"functionType":"1","version":"v0.0.4"}]',
+      innerMessage: '成功',
+      message: '成功',
+      respCode: 0,
+    } as any);
+
   /**
    * 医生名片分享:  后台新建普通链接二维码 https://h5.eheren.com/scan/${syscode}/DoctorDetails?${...props}
    */
@@ -517,6 +726,7 @@
     orderSourceList,
     orderSourceChoose,
     amChange,
+    regClick,
   } = useOrder(props as any);
   const regDialogConfirm = ref<any>('');
 

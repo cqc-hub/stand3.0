@@ -58,14 +58,14 @@ export const applyOrderStatusMap = {
   '16': {
     title: '已取消',
     detailColor: '#fff',
-    color: 'var(--hr-brand-color-6)',
+    color: 'var(--hr-neutral-color-7)',
     headerClass: 'header-dark',
   },
   '17': {
     title: '已取消',
     detailColor: '#fff',
     headerClass: 'header-dark',
-    color: 'var(--hr-brand-color-6)',
+    color: 'var(--hr-neutral-color-7)',
   },
   '18': {
     title: '已结算',

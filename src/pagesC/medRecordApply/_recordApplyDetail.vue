@@ -123,9 +123,14 @@
       </scroll-view>
 
       <view class="footer g-border-top">
-        <button @click="applyAgain" class="btn g-border btn-primary">
+        <button
+          v-if="['20', '21', '16', '17'].includes(info.orderStatus)"
+          @click="applyAgain"
+          class="btn g-border btn-primary"
+        >
           再次申请
         </button>
+
         <button
           v-if="['11', '15'].includes(info.orderStatus)"
           class="btn g-border btn-plain btn-error"

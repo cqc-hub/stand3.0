@@ -41,7 +41,7 @@
       </view>
     </view>
 
-    <view class="g-footer g-border-top">
+    <view v-if="outHosList.length" class="g-footer g-border-top">
       <view class="footer-check flex-normal">
         <view class="iconfont">&#xe6ce;</view>
         <view class="flex-normal">全选</view>
