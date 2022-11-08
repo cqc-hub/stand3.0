@@ -247,7 +247,7 @@
 
   const patientAddress = computed(() => {
     if (Object.keys(info.value).length) {
-      return `${info.value.addresseeAddress.value}${info.value.detailedAddress.value}`;
+      return `${info.value.addresseeAddress}${info.value.detailedAddress}`;
     } else {
       return '';
     }
@@ -258,7 +258,7 @@
       pointNow: expressInfo.value?.pointNow,
       pointEnd: {
         title: patientAddress.value,
-        desc: `${info.value.addresseeName?.value} ${info.value.addresseePhone?.value}`,
+        desc: `${info.value.addresseeName} ${info.value.addresseePhone}`,
       },
     };
   });
@@ -272,7 +272,7 @@
 
     const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
 
-    const { outInfo, expressParam } = result;
+    const { outInfo, expressParam, expressStatus, acceptTime } = result;
     // result.orderStatus = '21';
     // result.refundFee = '21';
     if (outInfo) {
@@ -284,54 +284,29 @@
     }
 
     if (expressParam) {
-      try {
-        result._expressParam = JSON.parse(expressParam);
-      } catch (error) {
-        gStores.messageStore.showMessage('expressParam 字段格式错误', 1500);
-      }
-    }
+      // 派送中 40
+      // 已收寄 20
+      // 已签收  50
+      // 待取件 10
+      // 运输中 30
 
-    if (result._expressParam) {
-      // 邮政
-      if (isExpress1(result._expressParam)) {
-        const _date = dayjs(result._expressParam.opTime).format('MM-DD');
+      const _keyMap = {
+        40: '派送中',
+        20: '已收寄',
+        50: '已签收',
+        10: '待取件',
+        30: '运输中',
+      };
 
-        let _title = result._expressParam.opName;
+      const date = dayjs(acceptTime).format('MM-DD');
 
-        if (['妥投', '试投'].includes(_title)) {
-          _title = '派送中';
-        }
-
-        expressInfo.value = {
-          pointNow: {
-            title: _title,
-            date: _date,
-            desc: result._expressParam.opDesc,
-          },
-        };
-      } else {
-        // 顺丰
-        const opCodeMap = {
-          44: '派送中',
-          50: '已收寄',
-          80: '已签收',
-          125: '待取件',
-          31: '运输中',
-          20: '运输中',
-          70: '派送中',
-        };
-
-        const _title = opCodeMap[result._expressParam.opcode] || '未知的状态';
-        const _date = dayjs(result._expressParam.accept_date).format('MM-DD');
-
-        expressInfo.value = {
-          pointNow: {
-            title: _title,
-            date: _date,
-            desc: result._expressParam.remark,
-          },
-        };
-      }
+      expressInfo.value = {
+        pointNow: {
+          title: _keyMap[expressStatus] || '未知',
+          date,
+          desc: expressParam,
+        },
+      };
     }
 
     info.value = result;

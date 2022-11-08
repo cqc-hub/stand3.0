@@ -93,7 +93,6 @@ export const applyOrderStatusMap = {
   },
 } as const;
 
-
 type Express_1 = {
   opOrgCode: string;
   opGis: string;
@@ -120,11 +119,31 @@ type Express_2 = {
   accept_totaltime: string;
 };
 
+type TOutInfo = {
+  deptName: string;
+  hospitalWard?: string;
+  inpatientBed?: string;
+  diagnosis?: string[];
+  hosId?: string;
+  type?: string;
+  diagnosisC?: string;
+  docName?: string;
+  attendingDoctor?: string;
+  hosName?: string;
+  visitNo: string;
+  outTime: string;
+  isOneself?: '0' | '1'; // 手动添加？ 0 shi 1 fou
+  admissionTime: string;
+  clinicOnLine?: string;
+  inHosTime?: string;
+};
+
 export type CaseCopyItem = {
   cardNumber: string;
   createTime: string;
   refundReason: string;
   _createTime: string;
+  acceptTime: string;
   _expressTime?: string;
   _expressDesc?: string;
   fee: string;
@@ -136,6 +155,8 @@ export type CaseCopyItem = {
   phsOrderNo: string;
   expressParam?: string;
   _expressParam?: Express_1 | Express_2;
+  outInfo: string;
+  _outInfo: TOutInfo[];
 };
 
 type deParams = {
@@ -154,24 +175,8 @@ export type CaseCopeItemDetail = Flatten<
     frontIdCardUrl: string;
     outInfo: string;
     id: string;
-    _outInfo?: {
-      deptName: string;
-      hospitalWard?: string;
-      inpatientBed?: string;
-      diagnosis?: string[];
-      hosId?: string;
-      type?: string;
-      diagnosisC?: string;
-      docName?: string;
-      attendingDoctor?: string;
-      hosName?: string;
-      visitNo: string;
-      outTime: string;
-      isOneself?: '0' | '1'; // 手动添加？ 0 shi 1 fou
-      admissionTime: string;
-      clinicOnLine?: string;
-      inHosTime?: string;
-    }[];
+    expressStatus: string;
+    _outInfo?: TOutInfo[];
     refundFee?: string;
     refundReason: string;
     remark: string;
@@ -179,11 +184,10 @@ export type CaseCopeItemDetail = Flatten<
   }
 >;
 
-// 邮政
+/** 邮政 */
 export const isExpress1 = (item: any): item is Express_1 => {
   return item && item.traceNo;
 };
-
 
 // 顺丰
 export const isExpress2 = (item: any): item is Express_2 => {

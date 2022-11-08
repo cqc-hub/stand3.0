@@ -6,14 +6,27 @@
 
     <view class="content" @click="itemClick">
       <view>
-        <view class="hos-name">{{ item.aliasName }}</view>
+        <view
+          :class="{
+            'color-888': disabled,
+          }"
+          class="hos-name"
+        >
+          {{ item.aliasName }}
+        </view>
 
-        <view class="hos-address">
+        <view
+          :class="{
+            'color-888': disabled,
+          }"
+          class="hos-address"
+        >
           {{ item.address && item.address.replace(/\s+/g, '') }}
         </view>
       </view>
 
-      <view>
+      <view v-if="disabled" class="hos-location f26 color-888">暂未开通</view>
+      <view v-else>
         <view class="hos-location" @click.stop="locationClick">
           <view class="g-flex-rc-cc">
             <view class="iconfont icon-location">&#xe6d7;</view>
@@ -31,11 +44,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { IHosInfo } from '@/utils';
 
   const props = defineProps<{
     item: IHosInfo;
+    disabled?: boolean;
   }>();
 
   const emits = defineEmits(['img-click', 'location-click', 'item-click']);

@@ -1,7 +1,12 @@
 <template>
   <view class="item-more">
     <view class="header" @click="itemClick">
-      <view class="hos-name text-ellipsis">
+      <view
+        :class="{
+          'color-888': disabled,
+        }"
+        class="hos-name text-ellipsis"
+      >
         {{ item.aliasName }}
       </view>
 
@@ -10,7 +15,8 @@
       </view>
     </view>
 
-    <view class="hos-location" @click.stop="locationClick">
+    <view v-if="disabled" class="hos-location f26 color-888">暂未开通</view>
+    <view v-else class="hos-location" @click.stop="locationClick">
       <view class="g-flex-rc-cc hos-location-prefix">
         <view class="iconfont icon-location">&#xe6d7;</view>
         <view v-if="item.distanceFormat">距离{{ item.distanceFormat }}km</view>
@@ -28,15 +34,22 @@
 
   const props = defineProps<{
     item: IHosInfo;
+    disabled?: boolean;
   }>();
 
   const emits = defineEmits(['img-click', 'location-click', 'item-click']);
 
   const itemClick = () => {
+    if (props.disabled) {
+      return;
+    }
     emits('item-click', props.item);
   };
 
   const locationClick = () => {
+    if (props.disabled) {
+      return;
+    }
     emits('location-click', props.item);
   };
 

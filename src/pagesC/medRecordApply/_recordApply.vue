@@ -49,28 +49,47 @@
 
     if (result && result.length) {
       result.map((o) => {
-        const { expressParam } = o;
+        const { expressParam, acceptTime, outInfo } = o;
 
-        if (expressParam) {
+        // if (expressParam) {
+        //   try {
+        //     o._expressParam = JSON.parse(expressParam);
+        //   } catch (error) {
+        //     gStores.messageStore.showMessage('expressParam 字段格式错误', 1500);
+        //   }
+        // }
+
+        // if (o._expressParam) {
+        //   if (isExpress1(o._expressParam)) {
+        //     const { opTime, opDesc } = o._expressParam;
+
+        //     o._expressTime = dayjs(opTime).format('MM-DD');
+        //     o._expressDesc = opDesc;
+        //   } else {
+        //     const { accept_date, remark } = o._expressParam;
+
+        //     o._expressDesc = remark;
+        //     o._expressTime = dayjs(accept_date).format('MM-DD');
+        //   }
+        // }
+
+        if (outInfo) {
           try {
-            o._expressParam = JSON.parse(expressParam);
+            o._outInfo = JSON.parse(outInfo);
+            o._outInfo.map((o) => {
+              const { outTime, admissionTime } = o;
+              o.outTime = dayjs(outTime).format('YYYY-MM-DD');
+              o.admissionTime = dayjs(admissionTime).format('YYYY-MM-DD');
+            });
+            console.log(o._outInfo);
           } catch (error) {
-            gStores.messageStore.showMessage('expressParam 字段格式错误', 1500);
+            gStores.messageStore.showMessage('outInfo 字段格式错误', 1500);
           }
         }
 
-        if (o._expressParam) {
-          if (isExpress1(o._expressParam)) {
-            const { opTime, opDesc } = o._expressParam;
-
-            o._expressTime = dayjs(opTime).format('MM-DD');
-            o._expressDesc = opDesc;
-          } else {
-            const { accept_date, remark } = o._expressParam;
-
-            o._expressDesc = remark;
-            o._expressTime = dayjs(accept_date).format('MM-DD');
-          }
+        if (o.expressParam) {
+          o._expressTime = dayjs(o.acceptTime).format('MM-DD');
+          o._expressDesc = expressParam;
         }
 
         o._createTime = dayjs(o.createTime).format('YYYY-MM-DD');

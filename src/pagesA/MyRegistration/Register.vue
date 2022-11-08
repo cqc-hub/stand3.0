@@ -31,8 +31,9 @@
     </view>
     <scroll-view class="scroll-container" scroll-y>
       <hos-List-Vue
-        :list="__hosList"
+        :disabledKey="listDisableName"
         :isShowMoreItem="hosList.length <= showMoreItem"
+        :list="__hosList"
         @img-click="imgClick"
         @location-click="locationClick"
         @item-click="itemClick"
@@ -145,7 +146,32 @@
     _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
   }>();
 
-  const dirUrl = decodeURIComponent(props._url);
+  const dirUrl = ref(decodeURIComponent(props._url));
+  // const listDisableName = ref('ifClick');
+
+  const getTypeNow = computed(() => {
+    if (dirUrl.value.includes('/pagesA/MyRegistration/selDepartment')) {
+      return '预约挂号';
+    } else if (dirUrl.value.includes('/pagesC/medRecordApply/recordApply')) {
+      return '病案复印';
+    }
+
+    return '';
+  });
+
+  // 对应的值 '1' 禁
+  const listDisableName = computed(() => {
+    const _type = getTypeNow.value;
+    if (_type === '预约挂号') {
+      return 'ifClick';
+    }
+
+    if (_type === '病案复印') {
+      return 'ifClick';
+    }
+
+    return '';
+  });
 
   const pagesList = {
     '1': '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide', //医院指南多院区
@@ -209,12 +235,13 @@
       );
 
       if (_idx === -1) {
+        console.log(medCopyConfigList.value);
+
         gStores.messageStore.showMessage('该院区暂未开通病案复印功能', 1500);
         return;
       }
     }
     if (props._type) {
-      console.log(222, pagesList[props._type]);
       uni.navigateTo({
         url: joinQuery(pagesList[props._type], {
           hosId: item.hosId,
@@ -264,8 +291,7 @@
 
   const getList = async (isRequestApi: boolean = true) => {
     isWxRequestQxDialogShow.value = false;
-    const url = decodeURIComponent(props._url);
-    if (url.includes('/pagesC/medRecordApply/recordApply')) {
+    if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
       medCopyConfigList.value = await ServerStaticData.getSystemConfig(
         'medRecord'
@@ -294,6 +320,13 @@
       });
     } else {
       hosList.value = await ServerStaticData.getHosList();
+    }
+
+    if (getTypeNow.value === '病案复印') {
+      const hosIds = medCopyConfigList.value.map((o) => o.hosId);
+      hosList.value.map((o) => {
+        o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
+      });
     }
   };
 
