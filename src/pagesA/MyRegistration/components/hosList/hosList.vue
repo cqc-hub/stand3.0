@@ -3,6 +3,7 @@
     <view v-for="(item, i) in list" :key="i">
       <block v-if="isShowMoreItem">
         <Item-Less
+          :disabled="isDisabled(item)"
           :item="item"
           @img-click="imgClick"
           @location-click="locationClick"
@@ -12,6 +13,7 @@
 
       <block v-else>
         <Item-More
+          :disabled="isDisabled(item)"
           :item="item"
           @img-click="imgClick"
           @location-click="locationClick"
@@ -24,24 +26,49 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { ServerStaticData, IHosInfo } from '@/utils';
+  import { GStores, IHosInfo } from '@/utils';
   import ItemLess from './hosListItemLess.vue';
   import ItemMore from './hosListItemMore.vue';
 
   const props = defineProps<{
     list: IHosInfo[];
     isShowMoreItem: boolean;
+    disabledKey?: string;
   }>();
+  const gStores = new GStores();
+
+  const isDisabled = (item: IHosInfo) => {
+    const { disabledKey } = props;
+
+    if (disabledKey) {
+      if (item[disabledKey] == '1') {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const hosLen = computed(() => props.list.length);
 
   const emits = defineEmits(['img-click', 'location-click', 'item-click']);
 
   const itemClick = (item: IHosInfo) => {
+    if (isDisabled(item)) {
+      gStores.messageStore.showMessage('该院区暂未开通此功能', 1500);
+
+      return;
+    }
+
     emits('item-click', item);
   };
 
   const locationClick = (item: IHosInfo) => {
+    if (isDisabled(item)) {
+      gStores.messageStore.showMessage('该院区暂未开通此功能', 1500);
+
+      return;
+    }
     emits('location-click', item);
   };
 

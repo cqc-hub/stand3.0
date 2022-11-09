@@ -1,5 +1,6 @@
 import api from '@/service/api';
 import { GStores } from '@/utils';
+import { TSchInfo } from './index';
 
 export interface IProps {
   deptName: string;
@@ -27,6 +28,16 @@ export interface IDocDetail {
   hosDocId: string;
   hosId: string;
   intro: string;
+}
+
+export interface IDocSchListItem {
+  schDate: string;
+  schByHos: {
+    [x: string]: TSchInfo[];
+  };
+  schByNetHos: {
+    [x: string]: TSchInfo[];
+  };
 }
 
 const GetDocInfo = (): MethodDecorator => {
@@ -73,22 +84,49 @@ export class UseDoctorDetail extends GStores {
     return this.docDetail;
   }
 
-  async getDocSch() {
+  async getDocSch(): Promise<IDocSchListItem[]> {
     const { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
     const { source } = this.globalStore.browser;
 
     const args = {
-      clinicalType,
+      clinicalType, // 4 网络
       docName,
       hosDeptId,
       hosDocId,
-      hosId,
+      // hosId,
       source,
     };
 
     const { result } = await api.getDocSch(args);
 
     if (result && result.length) {
+      result.map((schByDate) => {
+        const { schDateList } = schByDate;
+
+        const _cache: BaseObject = {};
+        const _netHos: BaseObject = {};
+        if (schDateList.length) {
+          schDateList.map((o) => {
+            const { hosId, clinicalType } = o;
+            const cache = clinicalType == 4 ? _netHos : _cache;
+            const schByHosId = cache[hosId];
+
+            if (schByHosId) {
+              schByHosId.push(o);
+            } else {
+              cache[hosId] = [o];
+            }
+          });
+        }
+
+        schByDate.schByHos = _cache;
+        schByDate.schByNetHos = _netHos;
+      });
     }
+    console.log({
+      result,
+    });
+
+    return result;
   }
 }

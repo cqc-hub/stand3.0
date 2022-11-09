@@ -28,14 +28,14 @@
           :class="{
             'is-check': isCheck,
           }"
-          @click="isCheck = !isCheck"
+          @click.stop="flagClick"
           class="iconfont check-box"
         >
           {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
 
         <view>
-          <text @click="isCheck = !isCheck">我已阅读并同意</text>
+          <text @click.stop="flagClick">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
             《预约挂号须知》
           </text>
@@ -156,10 +156,16 @@
     });
   };
 
+  const flagClick = () => {
+    if (isCheck.value) {
+      isCheck.value = false;
+    } else {
+      regDialogConfirm.value.show();
+    }
+  };
+
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-
-    console.log(props.value);
   });
 </script>
 

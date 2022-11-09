@@ -18,11 +18,27 @@
         @item-click-lv2="itemClickLv2"
         @item-click-lv3="itemClickLv3"
       />
-
       <view v-if="!depList.length && isComplete" class="empty-list">
         <g-empty :current="1" />
       </view>
     </view>
+
+    <!-- <g-flag typeFg="8" isShowFg /> -->
+    <xy-dialog
+      :title="showRegTipTitle"
+      :show="isShowRegTip"
+      :isShowCancel="false"
+      @confirmButton="isShowRegTip = false"
+    >
+      <view class="reg-tip">
+        <g-flag
+          v-model:title="showRegTipTitle"
+          isHideTitle
+          isShowFgTip
+          typeFg="8"
+        />
+      </view>
+    </xy-dialog>
 
     <g-message />
   </view>
@@ -43,6 +59,7 @@
   } from '@/stores';
 
   import api from '@/service/api';
+  import { onLoad } from '@dcloudio/uni-app';
 
   import DepartmentList from './components/departmentList/departmentList.vue';
 
@@ -50,6 +67,8 @@
     hosId: string;
     clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
   }>();
+  const isShowRegTip = ref(false);
+  const showRegTipTitle = ref('');
 
   const depList = ref<IDeptLv1[]>([]);
   const depLevel = ref('1');
@@ -60,11 +79,17 @@
   const isComplete = ref(false);
 
   const init = () => {
-    getDepList();
+    if (hosId.value) {
+      getDepList();
+    }
   };
 
   const getHosList = async ({ list }) => {
     hosList.value = list;
+
+    if (!hosId.value) {
+      hosId.value = list[0]!.hosId;
+    }
   };
 
   const getDepList = async () => {
@@ -141,15 +166,21 @@
     }
 
     queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
-    console.log({
-      item,
-      queryArg,
-    });
 
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
   };
+
+  onLoad(() => {
+    deptStore.changeActiveLv1({} as any);
+    deptStore.changeActiveLv2({} as any);
+    deptStore.changeActiveLv3({} as any);
+
+    setTimeout(() => {
+      isShowRegTip.value = true;
+    }, 500);
+  });
 
   init();
 </script>

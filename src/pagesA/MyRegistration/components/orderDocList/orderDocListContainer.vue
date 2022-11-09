@@ -1,15 +1,15 @@
 <template>
   <view class="doc-info">
     <view class="doc-info-container">
-      <g-login @handler-next="avatarClick">
-        <image
-          :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
-          @click="avatarClick"
-          class="doc-info-avatar"
-        />
-      </g-login>
+      <!-- <g-login @handler-next="avatarClick"> -->
+      <image
+        :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+        @click="avatarClick"
+        class="doc-info-avatar"
+      />
+      <!-- </g-login> -->
 
-      <view class="doc-info-introduce">
+      <view @click="avatarClick" class="doc-info-introduce">
         <view class="doc-info-introduce-header">
           <view class="doc-info-introduce-name">{{ item.docName }}</view>
           <view class="doc-info-introduce-title">

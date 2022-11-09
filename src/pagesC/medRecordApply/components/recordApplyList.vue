@@ -7,8 +7,9 @@
       class="item g-border"
     >
       <view class="title flex-between">
-        <view class="text-ellipsis">
-          {{ item.hosName }}
+        <view class="text-ellipsis color-444 f28">
+          <text>申请时间:</text>
+          <text>{{ ` ${item._createTime}` }}</text>
         </view>
         <view
           :style="{
@@ -16,15 +17,29 @@
               applyOrderStatusMap[item.orderStatus].color ||
               'var(--hr-neutral-color-10)',
           }"
-          class="item-status"
+          class="item-status g-bold"
         >
           {{ applyOrderStatusMap[item.orderStatus].title }}
         </view>
       </view>
 
-      <view class="row flex-normal">
-        <view class="row-title">申请时间</view>
-        <view class="row-content text-ellipsis">{{ item._createTime }}</view>
+      <view v-if="item._outInfo" class="outinfo-box">
+        <view
+          v-for="(outinfo, i) in item._outInfo"
+          class="outinfo-item mb16"
+          :key="i"
+        >
+          <view class="flex-normal outinfo-item-r">
+            <text class="iconfont f28 mr12">&#xe6f3;</text>
+
+            <view>
+              <text class="g-bold f32">
+                {{ `${outinfo.admissionTime} 至 ${outinfo.outTime}` }}
+              </text>
+              <view class="f28 color-888">{{ outinfo.diagnosisC }}</view>
+            </view>
+          </view>
+        </view>
       </view>
 
       <view v-if="item.refundReason" class="row flex-normal">
@@ -85,7 +100,6 @@
     }
 
     .title {
-      font-weight: 600;
       margin-bottom: 24rpx;
       align-items: flex-start;
 
@@ -146,6 +160,24 @@
 
       .express-color {
         color: var(--hr-neutral-color-7);
+      }
+    }
+  }
+
+  .outinfo-box {
+    background-color: var(--hr-neutral-color-1);
+    border-radius: 4px;
+    padding: 24rpx 32rpx;
+    padding-bottom: 24rpx;
+
+    .outinfo-item {
+      .outinfo-item-r {
+        align-items: flex-start;
+
+        .iconfont {
+          transform: translateY(5rpx);
+          color: #43d5c0;
+        }
       }
     }
   }

@@ -72,7 +72,7 @@
           </view>
         </view>
 
-        <view class="popup-content g-flex-rc-cc">
+        <view class="g-flex-rc-cc">
           <canvas
             class="shareCanvas"
             canvas-id="shareCanvas"
@@ -211,14 +211,19 @@
     });
   };
 
+  let isAndroid = false;
   const getSysInfo = (): Promise<UniApp.GetSystemInfoResult> => {
     return new Promise((resolve, fail) => {
       uni.getSystemInfo({
         success(e) {
-          const { screenWidth } = e;
+          const { screenWidth, osName } = e;
           // canvasInfo.value.width = screenWidth;
           console.log('系统信息');
           console.log(e);
+          isAndroid = osName === 'android';
+          if (isAndroid) {
+            // canvasInfo.value.width = 342;
+          }
 
           resolve(e);
         },
@@ -399,6 +404,7 @@
       goodAt: _goodAt,
       deptName,
     } = props.detail;
+    docPhoto = '';
 
     docTitleName = docTitleName ?? '';
     uni.showLoading({
@@ -409,7 +415,7 @@
     if (_avatar_img) {
       avatar_img = _avatar_img;
     } else {
-      if (docPhoto) {
+      if (docPhoto && docPhoto.startsWith('https')) {
         avatar_img = await downFile(docPhoto);
         _avatar_img = avatar_img;
       }
@@ -543,37 +549,37 @@
 
     ctx.drawImage(good_at_img, 44, avatarBox.top + 24 + 24 + 53, 30, 12);
 
-    const _qr_dx = boxWidth / 2 - boxWidth / 8;
-    const _qr_dy = avatarBox.top + 24 + 24 + 160 + 10;
-    const _qr_width = 88;
+    const _qr_dx = boxWidth / 2 - boxWidth / 8 - 8;
+    const _qr_dy = avatarBox.top + 24 + 24 + 160 + 8;
+    const _qr_width = 105;
     const _qr_pad = 2;
 
     ctx.drawImage(qr_code_img, _qr_dx, _qr_dy, _qr_width, _qr_width);
 
-    ctx.beginPath();
-    ctx.setLineWidth(0.08);
-    ctx.setLineCap('round');
-    ctx.moveTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
-    ctx.lineTo(
-      _qr_dx - _qr_pad + -_qr_pad * 3,
-      _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
-    );
+    // ctx.beginPath();
+    // ctx.setLineWidth(0.08);
+    // ctx.setLineCap('round');
+    // ctx.moveTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
+    // ctx.lineTo(
+    //   _qr_dx - _qr_pad + -_qr_pad * 3,
+    //   _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
+    // );
 
-    ctx.lineTo(
-      _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
-      _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
-    );
+    // ctx.lineTo(
+    //   _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
+    //   _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
+    // );
 
-    ctx.lineTo(
-      _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
-      _qr_dy - _qr_pad * 3
-    );
+    // ctx.lineTo(
+    //   _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
+    //   _qr_dy - _qr_pad * 3
+    // );
 
-    // ctx.closePath();
+    // // ctx.closePath();
 
-    ctx.lineTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
+    // ctx.lineTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
 
-    ctx.stroke();
+    // ctx.stroke();
 
     ctx.save();
 
@@ -583,7 +589,7 @@
     ctx.fillText(
       '用微信/支付宝扫描二维码 关注我吧',
       80,
-      avatarBox.top + 24 + 24 + 260 + 20 + 10
+      avatarBox.top + 24 + 24 + 260 + 20 + 20
     );
 
     ctx.draw();
@@ -801,5 +807,6 @@
     position: relative;
     z-index: 999;
     border-radius: 12rpx;
+    transform: translateY(-188rpx);
   }
 </style>

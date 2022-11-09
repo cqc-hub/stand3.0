@@ -18,7 +18,7 @@ export const regInfoTempList: TInstance[] = [
   {
     label: '预约号别',
     field: 'input-text',
-    key: 'categorName',
+    key: '_category',
   },
   {
     label: '预约医生',
@@ -31,7 +31,12 @@ export const regInfoTempList: TInstance[] = [
     key: 'appointmentNumber',
   },
   {
-    label: '预约时间',
+    label: '就诊地址',
+    field: 'input-text',
+    key: 'visitingArea',
+  },
+  {
+    label: '就诊时间',
     field: 'input-text',
     key: '_appointmentDate',
   },
@@ -64,6 +69,11 @@ export const patientTempList: TInstance[] = [
     label: '手机号码',
     field: 'input-text',
     key: 'patientPhone',
+  },
+  {
+    label: '证件类型',
+    field: 'input-text',
+    key: 'idCard',
     rowStyle: 'border-radius: 8px;',
   },
 ];
@@ -244,7 +254,14 @@ export const orderStatusMap = {
     title: '已取消',
     cardColr: 'var(--hr-neutral-color-7)',
   },
-  // 已结束
+  '81': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已过号',
+    cardColr: 'var(--hr-neutral-color-7)',
+  },
   '82': {
     headerClass: 'header-dark',
     color: '#fff',
@@ -260,6 +277,7 @@ export type OrderStatus = keyof typeof orderStatusMap;
 export interface IRegInfo {
   orderStatus: OrderStatus;
   patientId: string;
+  cardNumber: string;
   patientName: string;
   patientPhone: string;
   herenId: string;
@@ -271,6 +289,7 @@ export interface IRegInfo {
   hosOrderId: string;
   orderId: string;
   categorName: string;
+  _category: string;
   schQukCategor: string;
   _appointmentDate: string;
   appointmentDate: string;
@@ -281,4 +300,6 @@ export interface IRegInfo {
   clinicalType: string;
   deptName: string;
   downTime?: number;
+  source?: number;
+  _source?: string;
 }

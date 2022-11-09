@@ -22,6 +22,8 @@
     <g-message />
 
     <view class="footer">
+      <Fg-Agree v-if="_isPageFirst" v-model:isCheck="isCheck" />
+
       <button
         v-if="!isShowHealthLogin"
         :class="{
@@ -82,7 +84,10 @@
   import api from '@/service/api';
   import globalGl from '@/config/global';
 
+  import FgAgree from './components/fgAgree.vue';
+
   const routeStore = useRouterStore();
+  const isCheck = ref(false);
 
   interface TPageType extends ILoginBack {
     patientName: 'string';
@@ -107,6 +112,7 @@
   const gStores = new GStores();
 
   const isShowHealthLogin = ref(false);
+  const _isPageFirst = !globalGl.systemInfo.isSearchInHos;
 
   const gform = ref<any>('');
   const formData = ref<Partial<Record<TFormKeys, any>>>({});
@@ -494,6 +500,12 @@
   const btnDisabled = computed(() => {
     let isDisabled = false;
     const formKeys = formList.map((o) => o.key);
+
+    if (_isPageFirst) {
+      if (!isCheck.value) {
+        return true;
+      }
+    }
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
         isDisabled = true;
