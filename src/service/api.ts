@@ -187,7 +187,7 @@ const regApi = {
   // 挂号详情
   getRegOrderInfo: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderInfo', parm(data), {
-      hideLoading: false,
+      hideLoading: false
     }),
 
   getRegOrderList: <T>(data: any) =>

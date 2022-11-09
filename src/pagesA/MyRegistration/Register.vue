@@ -236,8 +236,6 @@
       );
 
       if (_idx === -1) {
-        console.log(medCopyConfigList.value);
-
         gStores.messageStore.showMessage('该院区暂未开通病案复印功能', 1500);
         return;
       }
@@ -247,11 +245,14 @@
       if (props._questionId) {
         //跳转问卷页面-h5
         uni.navigateTo({
-          url: joinQuery('/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion', {
-            category: props._questionId,
-            url: props._url,
-            hosId: item.hosId,
-          }),
+          url: joinQuery(
+            '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion',
+            {
+              category: props._questionId,
+              url: props._url,
+              hosId: item.hosId,
+            }
+          ),
         });
       } else {
         uni.navigateTo({
@@ -312,24 +313,28 @@
     }
 
     if (isRequestApi) {
-      uni.getLocation({
-        async success(e) {
-          const { longitude, latitude } = e;
-          const hList = await ServerStaticData.getHosList(
-            {
-              gisLng: longitude,
-              gisLat: latitude,
-            },
-            { noCache: true }
-          );
+      await new Promise((resolve, reject) => {
+        uni.getLocation({
+          async success(e) {
+            const { longitude, latitude } = e;
+            const hList = await ServerStaticData.getHosList(
+              {
+                gisLng: longitude,
+                gisLat: latitude,
+              },
+              { noCache: true }
+            );
 
-          hosList.value = hList;
-          isAuthLocation.value = true;
-        },
+            hosList.value = hList;
+            isAuthLocation.value = true;
+            resolve(void 0);
+          },
 
-        async fail() {
-          hosList.value = await ServerStaticData.getHosList();
-        },
+          async fail() {
+            hosList.value = await ServerStaticData.getHosList();
+            resolve(void 0);
+          },
+        });
       });
     } else {
       hosList.value = await ServerStaticData.getHosList();
@@ -340,6 +345,10 @@
       hosList.value.map((o) => {
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
+
+      console.log(hosIds);
+
+      console.log(hosList.value);
     }
   };
 

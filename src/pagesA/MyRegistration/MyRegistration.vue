@@ -433,6 +433,8 @@
 
     if (_firstIn) {
       const o = gStores.userStore.patChoose;
+      console.log(gStores.userStore);
+
       _firstIn = false;
       selPatId.value =
         o.patientName + (o.cardNumber ? `(${o.cardNumber})` : '');
