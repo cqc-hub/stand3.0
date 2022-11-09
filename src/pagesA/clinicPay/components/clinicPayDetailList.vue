@@ -3,15 +3,22 @@
     <view
       v-for="(item, idx) in list"
       :key="idx"
+      :class="{
+        active: getIsActive(item),
+      }"
       class="item flex-normal mb16 g-border"
     >
-      <view @click="isActive = !isActive" class="iconfont check-box-icon">
+      <view
+        v-if="isCheck"
+        @click="isActive = !isActive"
+        class="iconfont check-box-icon"
+      >
         {{ getIsActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
       </view>
 
-      <view>
-        <view>
-          <view class="g-bold f36">新冠病毒核酸检测门诊</view>
+      <view class="content">
+        <view class="flex-between">
+          <view class="g-bold f36 flex1">新冠病毒核酸检测门诊</view>
         </view>
       </view>
     </view>
@@ -24,6 +31,7 @@
 
   const props = defineProps<{
     list: IPayListItem[];
+    isCheck?: boolean;
   }>();
 
   const isActive = ref(false);
@@ -47,6 +55,21 @@
       .check-box-icon {
         font-size: var(--hr-font-size-xxl);
         line-height: var(--hr-font-size-base);
+        position: relative;
+        top: 7rpx;
+        margin-right: 22rpx;
+        color: var(--hr-neutral-color-7);
+      }
+
+      .content {
+        flex: 1;
+      }
+
+      &.active {
+        border-color: var(--hr-brand-color-6);
+        .check-box-icon {
+          color: var(--hr-brand-color-6);
+        }
       }
     }
   }

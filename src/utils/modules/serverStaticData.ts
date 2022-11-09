@@ -480,6 +480,10 @@ export class ServerStaticData {
         paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER',
       });
 
+      console.log({
+        result,
+      });
+
       try {
         const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || "{}");
         const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(

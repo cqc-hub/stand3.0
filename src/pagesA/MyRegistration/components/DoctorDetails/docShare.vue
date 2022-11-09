@@ -97,13 +97,17 @@
         <view class="g-flex-rc-cc g-bold f36 footer-title">分享到</view>
         <view class="share-content flex-normal">
           <button @click="saveAsImg" class="share-btn">
-            <view class="iconfont share-icon color-blue">&#xe705;</view>
-            <view class="color-444 f28">保存图片</view>
+            <view class="g-flex-rc-cc footer-btn-content">
+              <view class="iconfont share-icon color-blue">&#xe705;</view>
+              <view class="color-444 f28">保存图片</view>
+            </view>
           </button>
 
           <button open-type="share" class="share-btn">
-            <view class="iconfont share-icon">&#xe704;</view>
-            <view class="color-444 f28">转发给好友</view>
+            <view class="g-flex-rc-cc footer-btn-content">
+              <view class="iconfont share-icon">&#xe704;</view>
+              <view class="color-444 f28">转发给好友</view>
+            </view>
           </button>
         </view>
 
@@ -349,7 +353,7 @@
 
     // 判断内容是否可以一行绘制完毕
     if (ctx.measureText(content).width <= lineMaxWidth) {
-      ctx.fillText(content.substring(drawIndex, -1), drawX, drawY);
+      ctx.fillText(content, drawX, drawY);
     } else {
       for (var i = 0; i < content.length; i++) {
         drawTxt += content[i];
@@ -405,6 +409,10 @@
       deptName,
     } = props.detail;
     docPhoto = '';
+
+    _goodAt = _goodAt || '暂无信息';
+    docName = docName || '';
+    docTitleName = docTitleName || '';
 
     docTitleName = docTitleName ?? '';
     uni.showLoading({
@@ -770,6 +778,11 @@
     .share-content {
       // height: 200rpx;
       padding: 0 32rpx;
+
+      .footer-btn-content {
+        flex-direction: column;
+        height: 150rpx;
+      }
     }
 
     .share-btn {
@@ -777,6 +790,7 @@
       margin: 0;
       border: none;
       background: transparent;
+      height: 500rpx;
 
       display: inline-block;
       line-height: 1em;
@@ -790,8 +804,8 @@
 
       .share-icon {
         color: var(--hr-success-color-6);
-        font-size: 68rpx;
-        padding-bottom: 30rpx;
+        font-size: 88rpx;
+        padding-bottom: 40rpx;
         transform: translateY(10rpx);
       }
     }
