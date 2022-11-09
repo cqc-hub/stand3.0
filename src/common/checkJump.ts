@@ -98,7 +98,10 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
       sendMeg(item, payload);
     }
     //  else if (item.query && JSON.parse(item.query).questionId) {
-    //   //跳转问卷页面
+    //   //跳转问卷页面-h5
+    //  uni.navigateTo( {
+    //   url: '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion' + item.path,
+    // })
     // }
     else {
       checkGrid(item).then(async () => {
@@ -205,11 +208,28 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
 
 //扫一扫功能
 const scanCode = () => {
-  uni.scanCode({
-    success: function (res) {
-      console.log('条码内容：' + res);
-    },
-  });
+  const gStores = new GStores();
+  return new Promise((resolve) => {
+    uni.scanCode({
+      success(res) {
+        console.log('扫码内容',res);
+        if(res.result.indexOf('https://')!=-1){
+          uni.navigateTo({
+            url: '/pagesC/cloudHospital/myPath?type=1&path='+res.result,
+          })
+        }else{
+          gStores.messageStore.showMessage( `扫码内容:${res.result}`);
+        }
+        resolve(res.result )
+      },
+      fail() {
+        console.log('获取失败')
+        gStores.messageStore.showMessage( '获取失败',
+          1500
+        );
+      }
+    })
+  })
 };
 
 //授权小程序消息推送模板
