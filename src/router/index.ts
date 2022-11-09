@@ -27,10 +27,14 @@ const getCurrentRoute = (path: String | undefined) => {
   return pageAdmin.get(path);
 };
 
+type TRoute = {
+  _isLogin?: boolean;
+};
 export const beforeEach = async (
   options: UniNamespace.ReLaunchOptions &
     UniNamespace.ReLaunchOptions &
-    UniApp.RedirectToOptions
+    UniApp.RedirectToOptions &
+    TRoute
 ) => {
   const fullUrl = options.url;
   const url = fullUrl.split('?')[0];
@@ -41,70 +45,86 @@ export const beforeEach = async (
     const userStore = useUserStore();
 
     const { extend } = currentRoute;
+    let [login, patient, herenId] = [false, false, false];
 
     if (extend) {
-      let { login, patient, herenId } = extend;
+      let { login: _login, patient: _patient, herenId: _herenId } = extend;
 
-      if (patient) {
-        herenId = true;
-        login = true;
-      } else if (herenId) {
-        login = true;
+      login = _login;
+      patient = _patient;
+      herenId = _herenId;
+    }
+
+    if (options._isLogin) {
+      login = true;
+    }
+
+    if (patient) {
+      herenId = true;
+      login = true;
+    } else if (herenId) {
+      login = true;
+    }
+
+    if (patient) {
+      herenId = true;
+      login = true;
+    } else if (herenId) {
+      login = true;
+    }
+
+    if (login) {
+      if (!globalStore.isLogin) {
+        uni.reLaunch({
+          url: joinQuery('/pages/home/my', {
+            isWarningLogin: '1',
+            _url: encodeURIComponent(<string>fullUrl),
+          }),
+        });
+
+        return Promise.reject('需要登录----');
       }
 
-      if (login) {
-        if (!globalStore.isLogin) {
+      if (herenId) {
+        if (!globalStore.herenId) {
           uni.reLaunch({
-            url: joinQuery('/pages/home/my', {
-              isWarningLogin: '1',
+            url: joinQuery(globalGl.addPersonUrl + '', {
+              pageType: 'perfectReal',
               _url: encodeURIComponent(<string>fullUrl),
             }),
           });
 
-          return Promise.reject('需要登录----');
-        }
-
-        if (herenId) {
-          if (!globalStore.herenId) {
-            uni.reLaunch({
-              url: joinQuery(globalGl.addPersonUrl + '', {
-                pageType: 'perfectReal',
-                _url: encodeURIComponent(<string>fullUrl),
-              }),
-            });
-
-            return Promise.reject('需要完善----');
-          }
-        }
-
-        if (patient) {
-          if (!userStore.patList.length) {
-            uni.reLaunch({
-              url: joinQuery(globalGl.addPersonUrl + '', {
-                _url: encodeURIComponent(<string>fullUrl),
-              }),
-            });
-
-            return Promise.reject('需要就诊人----');
-          }
+          return Promise.reject('需要完善----');
         }
       }
 
-      // #ifdef MP-WEIXIN
-      if (
-        [
-          '/pagesA/medicalCardMan/perfectReal',
-          '/pagesA/medicalCardMan/addMedical',
-        ].includes(url)
-      ) {
-        if (!globalStore.h5OpenId && globalGl.h5AppId) {
+      if (patient) {
+        if (!userStore.patList.length) {
           uni.reLaunch({
-            url: '/pages/home/startCome',
+            url: joinQuery(globalGl.addPersonUrl + '', {
+              _url: encodeURIComponent(<string>fullUrl),
+            }),
           });
-          return Promise.reject('需要 h5openid');
+
+          return Promise.reject('需要就诊人----');
         }
       }
-      // #endif
     }
+
+    // #ifdef MP-WEIXIN
+    if (
+      [
+        '/pagesA/medicalCardMan/perfectReal',
+        '/pagesA/medicalCardMan/addMedical',
+      ].includes(url)
+    ) {
+      if (!globalStore.h5OpenId && globalGl.h5AppId) {
+        uni.reLaunch({
+          url: '/pages/home/startCome',
+        });
+        return Promise.reject('需要 h5openid');
+      }
+    }
+    // #endif
   }
 };

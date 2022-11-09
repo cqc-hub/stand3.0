@@ -62,7 +62,7 @@ Request.interceptors.response(
 
     //解密
     if (isDes && signContent) {
-       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
+      const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
       responseData.result = JSON.parse(decryptDes(signContent, key));
       //禁止删除
       console.log('出参', responseData.result);
@@ -92,6 +92,7 @@ Request.interceptors.response(
           setTimeout(() => {
             beforeEach({
               url: fullUrl,
+              _isLogin: true,
             });
           });
         },
@@ -101,8 +102,6 @@ Request.interceptors.response(
       if (showMessage === undefined) {
         showMessage = true;
       }
-
-      console.log({ responseData, responseOptions, showMessage, message });
 
       if (showMessage) {
         messageStore.showMessage(message, 1500);

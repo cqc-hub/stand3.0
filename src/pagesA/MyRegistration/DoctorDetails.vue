@@ -856,7 +856,7 @@
       };
 
       api
-        .addCollect(args)
+        .delMyCollect(args)
         .then(() => {
           docDetail.value.collectState = '1';
         })

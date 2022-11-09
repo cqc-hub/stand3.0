@@ -253,8 +253,8 @@ const userApi = {
     service.post<T>('/phs-user/authUser/ocrIdCard', parm(data)),
 
   // 注册电子健康卡
-  registerHealthCard: (data) =>
-    service.post('/phs-user/healthCard/registerHealthCard', parm(data)),
+  registerHealthCard: (data, opt = {}) =>
+    service.post('/phs-user/healthCard/registerHealthCard', parm(data), opt),
 
   // 快速关联电子健康卡
   quickLinkHealthCard: (data) =>

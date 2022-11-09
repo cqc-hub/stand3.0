@@ -33,7 +33,7 @@
   const props = defineProps<{
     patient?: boolean;
   }>();
-  const emits = defineEmits(['handler-next']);
+  const emits = defineEmits(['handler-next', 'handler-login']);
 
   const _env = ref<'wx' | 'alipay' | 'h5'>('wx');
 
@@ -52,8 +52,6 @@
   };
 
   const goLogin = async (e: any) => {
-    console.log(233);
-
     const pages = getCurrentPages();
     const fullPathNow = (pages[pages.length - 1] as any).$page
       .fullPath as string;
@@ -62,6 +60,7 @@
       _url: encodeURIComponent(fullPathNow),
     });
 
+    emits('handler-login');
     await handlerLogin(e);
 
     nextStep();

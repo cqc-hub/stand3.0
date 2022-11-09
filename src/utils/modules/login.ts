@@ -609,6 +609,7 @@ export class PatientUtils extends LoginUtils {
             patientId,
             wechatCode,
           },
+          false,
           false
         );
       }
@@ -617,16 +618,22 @@ export class PatientUtils extends LoginUtils {
 
   async registerHealthCard(
     data: { patientId: string; wechatCode: string },
-    isErr = true
+    isErr = true,
+    showMessage = true
   ) {
     const { patientId, wechatCode } = data;
 
     await api
-      .registerHealthCard({
-        patientId,
-        wechatCode,
-        source: this.globalStore.browser.source,
-      })
+      .registerHealthCard(
+        {
+          patientId,
+          wechatCode,
+          source: this.globalStore.browser.source,
+        },
+        {
+          showMessage,
+        }
+      )
       .catch((err) => {
         if (isErr) {
           throw new Error(err);
