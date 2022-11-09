@@ -40,7 +40,6 @@ export interface ISystemConfig {
     isOrderBlur: '0' | '1';
     // 选科室上面 banner
     bannerOrder?: TBannerConfig;
-
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
@@ -476,9 +475,9 @@ export class ServerStaticData {
 
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
-      //PERSON_FAMILY_CARDMAN 家庭成员 order等写完再确定参数
+      //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY',
+        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER',
       });
 
       try {
@@ -486,22 +485,10 @@ export class ServerStaticData {
         const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
           result
         );
+        const order = JSON.parse(result.ORDER_REGISTER);
         systemConfig = {
-          person: person,
-          order: {
-            chooseDay: 30,
-            selOrderColumn: 3,
-            isOrderBlur: '0',
-            isOrderPay: '0',
-            bannerOrder: {
-              type: 'h5',
-              extraData: {
-                sysCode: '1001033',
-              },
-              path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
-              src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
-            },
-          },
+          person,
+          order,
           medRecord,
         };
       } catch (error) {
