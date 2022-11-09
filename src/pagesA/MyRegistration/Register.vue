@@ -138,11 +138,12 @@
   const props = defineProps<{
     _url: string;
     _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
+    _questionId: number; //问卷id
   }>();
 
   const pagesList = {
     '1': '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide', //医院指南多院区
-    '2': '/pagesC/cloudHospital/myPath?path=pagesC/selfService/nucleicBilling&query=["token","openId"]',
+    '2': '/pagesC/cloudHospital/myPath?path=pagesC/selfService/nucleicBilling&query=["token","openId"]', //核酸开单多院区
   };
   const gStores = new GStores();
 
@@ -207,13 +208,24 @@
       }
     }
     if (props._type) {
-      console.log(222,pagesList[props._type]);
-      uni.navigateTo({
-        url: joinQuery(pagesList[props._type], {
-          hosId: item.hosId,
-          hosName: item.hosName,
-        }),
-      });
+      //院区跳转问卷页面
+      if (props._questionId) {
+        //跳转问卷页面-h5
+        uni.navigateTo({
+          url: joinQuery('/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion', {
+            category: props._questionId,
+            url: props._url,
+            hosId: item.hosId,
+          }),
+        });
+      } else {
+        uni.navigateTo({
+          url: joinQuery(pagesList[props._type], {
+            hosId: item.hosId,
+            hosName: item.hosName,
+          }),
+        });
+      }
     } else {
       const url = decodeURIComponent(props._url);
       uni.navigateTo({

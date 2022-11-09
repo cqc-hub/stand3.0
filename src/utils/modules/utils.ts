@@ -80,9 +80,9 @@ export const routerJump = async (url?: `/${string}`) => {
       if (menuItem) {
         useCommonTo(menuItem, { type: 'reLaunch' });
       } else {
-        messageStore.showMessage(
-          '未找到对应menuId 的 menu：' + routerStore._id
-        );
+        // messageStore.showMessage(
+        //   '未找到对应menuId 的 menu：' + routerStore._id
+        // );
       }
     }
     routerStore.clear();
