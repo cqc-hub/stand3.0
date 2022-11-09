@@ -62,8 +62,13 @@
                 </view>
 
                 <view class="flex-normal">
-                  <view class="color-444 f28 g-split-line mr12 pr12">
-                    浙江省人民医院
+                  <view
+                    :class="{
+                      'g-split-line': docDetail.deptName,
+                    }"
+                    class="color-444 f28 g-split-line mr12 pr12"
+                  >
+                    {{ $global.systemInfo.name }}
                   </view>
                   <view class="color-444 f28">
                     {{ docDetail.deptName }}
@@ -73,15 +78,21 @@
 
               <view class="flex-normal p32c doc-goodat">
                 <image
+                  v-if="docDetail.goodAt"
                   :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
                   class="doc-major-goodat mr12"
                   mode="widthFix"
                 />
 
                 <view class="color-666 f28 doc-goodat-content text-ellipsis">
-                  {{ docDetail.goodAt }}
+                  <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text>
 
                   <view
+                    v-if="
+                      docDetail.goodAt ||
+                      docDetail.intro ||
+                      docDetail.academicAchievements
+                    "
                     @click="regDialogConfirm.show"
                     class="doc-show-intro f26 color-blue"
                   >
@@ -781,8 +792,6 @@
 
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;
-    console.log(schToday.value);
-
     // if (!dateDocList.value.length) {
     //   getListByDate({
     //     ...props,
@@ -816,6 +825,7 @@
   };
 
   const collectDoc = async () => {
+    await getDocDetail();
     const { collectState, docPhoto, docTitleName } = docDetail.value;
     const { deptName, docName, hosDocId, hosDeptId, hosId } = props.value;
     const {
@@ -843,6 +853,7 @@
         .addCollect(args)
         .then(() => {
           docDetail.value.collectState = '2';
+          gStores.messageStore.showMessage('关注成功', 1500);
         })
         .catch((err) => {
           console.log(err);
@@ -859,6 +870,7 @@
         .delMyCollect(args)
         .then(() => {
           docDetail.value.collectState = '1';
+          gStores.messageStore.showMessage('已经取消关注', 1500);
         })
         .catch((err) => {
           console.log(err);
@@ -866,12 +878,15 @@
     }
   };
 
-  const init = async () => {
-    await OrderInit();
-    useDoctorDetail.getDoctorDetail().then((r) => {
+  const getDocDetail = async () => {
+    await useDoctorDetail.getDoctorDetail().then((r) => {
       docDetail.value = r;
     });
+  };
 
+  const init = async () => {
+    await OrderInit();
+    getDocDetail();
     getSchData();
   };
 

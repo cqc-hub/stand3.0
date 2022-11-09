@@ -21,12 +21,14 @@
     >
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <Clinic-Pay-Detail-List :list="unPayList" />
+          <Clinic-Pay-Detail-List :list="unPayList" isCheck />
         </scroll-view>
       </swiper-item>
 
       <swiper-item>
-        <scroll-view scroll-y class="swiper-item uni-bg-red">A</scroll-view>
+        <scroll-view scroll-y class="swiper-item uni-bg-red">
+          <Clinic-Pay-Detail-List :list="unPayList" />
+        </scroll-view>
       </swiper-item>
     </swiper>
   </view>
@@ -54,7 +56,7 @@
   };
 
   const unPayList = ref<IPayListItem[]>([{}, {}, {}, {}]);
-  const payedList = ref<IPayListItem[]>([]);
+  const payedList = ref<IPayListItem[]>([{}, {}, {}, {}, {}]);
 </script>
 
 <style lang="scss" scoped>

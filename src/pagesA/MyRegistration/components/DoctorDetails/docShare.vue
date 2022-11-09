@@ -349,7 +349,7 @@
 
     // 判断内容是否可以一行绘制完毕
     if (ctx.measureText(content).width <= lineMaxWidth) {
-      ctx.fillText(content.substring(drawIndex, -1), drawX, drawY);
+      ctx.fillText(content, drawX, drawY);
     } else {
       for (var i = 0; i < content.length; i++) {
         drawTxt += content[i];
@@ -405,6 +405,10 @@
       deptName,
     } = props.detail;
     docPhoto = '';
+
+    _goodAt = _goodAt || '暂无信息';
+    docName = docName || '';
+    docTitleName = docTitleName || '';
 
     docTitleName = docTitleName ?? '';
     uni.showLoading({
