@@ -2,6 +2,32 @@ import { getLocalStorage, setLocalStorage } from '@/common';
 import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
 import api from '@/service/api';
+import { type XOR } from '@/typeUtils/obj';
+import { joinQuery } from '@/common';
+
+type TBannerConfigBase = {
+  src: `http${string}`;
+  extraData?: BaseObject;
+  path: string; // h5 跳转完整路径 其他跳转 如 home/my
+};
+
+type TBannerConfigH5 = {
+  type: 'h5';
+} & TBannerConfigBase;
+
+type TBannerConfigSelf = {
+  type: 'self';
+} & TBannerConfigBase;
+
+type TBannerConfigOtherProgram = {
+  type: 'otherProgram';
+  appId: string;
+} & TBannerConfigBase;
+
+export type TBannerConfig = XOR<
+  TBannerConfigOtherProgram,
+  XOR<TBannerConfigSelf, TBannerConfigH5>
+>;
 
 export interface ISystemConfig {
   // 预约挂号
@@ -12,6 +38,8 @@ export interface ISystemConfig {
     selOrderColumn: number;
     // 精确号源?
     isOrderBlur: '0' | '1';
+    // 选科室上面 banner
+    bannerOrder?: TBannerConfig;
 
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
@@ -59,15 +87,6 @@ export interface ISystemConfig {
   }[];
 }
 
-type TEnv = 'dev' | 'test' | 'prod';
-export interface IGlobalConfig {
-  // 根据sysCode的全局配置
-  sysCode: string;
-  title: string;
-  logo: string;
-  env: TEnv;
-}
-
 export interface IHosInfo {
   address: string;
   aliasName: string;
@@ -95,7 +114,6 @@ const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
 const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   const list = _cacheMap.get(Med_Copy_Config);
-  console.log({ result }, '11111111');
 
   if (list) {
     return list;
@@ -133,6 +151,36 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     }
   } else {
     throw new Error('未配置_medCopy');
+  }
+};
+
+export const useTBanner = (config: TBannerConfig) => {
+  const { type, extraData, path, appId } = config;
+
+  const fullUrl = joinQuery(path, extraData || {});
+
+  if (type === 'h5') {
+    // #ifdef H5
+    location.href = fullUrl;
+    // #endif
+
+    // #ifndef H5
+    uni.navigateTo({
+      url: joinQuery('/pagesA/webView/webView', {
+        https: encodeURIComponent(fullUrl),
+      }),
+    });
+    // #endif
+  } else if (type === 'self') {
+    uni.navigateTo({
+      url: `/${fullUrl}`,
+    });
+  } else {
+    uni.navigateToMiniProgram({
+      appId,
+      path,
+      extraData,
+    });
   }
 };
 
@@ -445,6 +493,14 @@ export class ServerStaticData {
             selOrderColumn: 3,
             isOrderBlur: '0',
             isOrderPay: '0',
+            bannerOrder: {
+              type: 'h5',
+              extraData: {
+                sysCode: '1001033',
+              },
+              path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
+              src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
+            },
           },
           medRecord,
         };

@@ -46,12 +46,14 @@
   // #endif
 
   const handlerClick = (e) => {
-    if (_env.value !== 'wx') {
+    if (_env.value === 'h5') {
       goLogin(e);
     }
   };
 
   const goLogin = async (e: any) => {
+    console.log(233);
+
     const pages = getCurrentPages();
     const fullPathNow = (pages[pages.length - 1] as any).$page
       .fullPath as string;

@@ -152,6 +152,16 @@ const regApi = {
   subPreinquiryMessage: (data: any) =>
     service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
+  addCollect: (data: any) =>
+    service.post('/phs-reg/collect/addCollect', parm(data), {
+      hideLoading: false,
+    }),
+
+  delMyCollect: (data: any) =>
+    service.post('/phs-reg/collect/delMyCollect', parm(data), {
+      hideLoading: false,
+    }),
+
   // 挂号
   addReg: (data: any) =>
     service.post('/phs-reg/reg/addReg', parm(data), {

@@ -6,6 +6,8 @@
       @change="getDepList"
     />
 
+    <g-tbanner :config="orderConfig.bannerOrder" />
+
     <view class="container" scroll-y>
       <Department-List
         v-if="depList.length"
@@ -46,7 +48,12 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    type ISystemConfig,
+  } from '@/utils';
   import { joinQuery } from '@/common';
   import {
     IDeptLv1,
@@ -69,6 +76,7 @@
   }>();
   const isShowRegTip = ref(false);
   const showRegTipTitle = ref('');
+  const orderConfig = ref({} as ISystemConfig['order']);
 
   const depList = ref<IDeptLv1[]>([]);
   const depLevel = ref('1');
@@ -78,7 +86,8 @@
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
 
-  const init = () => {
+  const init = async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
     if (hosId.value) {
       getDepList();
     }

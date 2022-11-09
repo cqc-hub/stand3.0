@@ -77,6 +77,16 @@
         },
 
         {
+          "path": "clinicPay/clinicPayDetail",
+          "style": {
+            "navigationBarTitleText": "门诊缴费"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "mySet/getMore",
           "style": {
             "navigationBarTitleText": "更多"
