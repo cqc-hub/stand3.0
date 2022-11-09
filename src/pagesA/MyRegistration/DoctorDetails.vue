@@ -786,7 +786,7 @@
 
     setTimeout(() => {
       // regDialogConfirm.value.show();
-      // refDocShare.value.show();
+      refDocShare.value.show();
     }, 1200);
   });
 
