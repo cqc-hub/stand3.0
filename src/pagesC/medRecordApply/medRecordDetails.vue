@@ -157,12 +157,17 @@
             <text class="mr12 g-bold">备注</text>
           </view>
 
-          <view class="mt32">
-            <textarea
+          <view class="remark-content">
+            <uni-easyinput
+              type="textarea"
               v-model="remark"
+              autoHeight
+              :inputBorder="false"
+              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
               placeholder="如还需以下说明的其他病历资料请备注"
-              auto-height
             />
+
+            <!-- auto-height -->
           </view>
         </view>
 
@@ -820,6 +825,18 @@
 
     .btn {
       flex: 1;
+    }
+  }
+
+  .remark-content {
+    :deep(input),
+    :deep(textarea),
+    input,
+    textarea {
+      color: var(--hr-neutral-color-10) !important;
+      font-size: var(--hr-font-size-base) !important;
+      background-color: var(--h-color-white) !important;
+      opacity: 1;
     }
   }
 </style>

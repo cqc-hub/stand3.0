@@ -3,6 +3,7 @@
     <view class="g-container">
       <block v-if="isComplete && list.length">
         <Record-Apply-List :list="list" @item-click="goApplyDetail" />
+        <view class="no-more g-flex-rc-cc color-888 f24">没有更多了</view>
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
@@ -118,5 +119,9 @@
 <style lang="scss" scoped>
   .g-container {
     padding: 0 32rpx;
+  }
+
+  .no-more {
+    margin: 80rpx 0;
   }
 </style>

@@ -468,10 +468,6 @@
   const actionItemClick = function ({ item }: { item: ISelectOptions }) {
     if (!cacheItem) return;
     const { value } = item;
-    console.log({
-      cacheItem,
-      item,
-    });
 
     clearItemWarning(cacheItem.key);
 

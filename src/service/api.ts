@@ -121,6 +121,12 @@ const queryApi = {
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
+  // 待缴费
+  getUnpaidClinicList: (data) =>
+    service.post('/phs-query/clinical/getUnpaidClinicList', parm(data), {
+      hideLoading: false,
+    }),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),
@@ -187,7 +193,7 @@ const regApi = {
   // 挂号详情
   getRegOrderInfo: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderInfo', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
 
   getRegOrderList: <T>(data: any) =>

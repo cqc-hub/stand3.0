@@ -492,6 +492,7 @@
       }
     });
 
+    gform.value.setList([]);
     nextTick(() => {
       gform.value.setList(formList);
     });
@@ -539,6 +540,7 @@
 
     // 默认成人,儿童 有证件
     formData.value[formKey.patientType] =
+      // formData.value[formKey.patientType] || '0';
       formData.value[formKey.patientType] || '-1';
     verifyCode = formData.value[formKey.verifyCode];
 

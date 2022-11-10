@@ -168,7 +168,7 @@
     background-color: var(--hr-neutral-color-1);
     border-radius: 4px;
     padding: 24rpx 32rpx;
-    padding-bottom: 24rpx;
+    padding-bottom: 1rpx;
 
     .outinfo-item {
       .outinfo-item-r {

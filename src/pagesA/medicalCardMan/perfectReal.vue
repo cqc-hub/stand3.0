@@ -282,13 +282,13 @@
       'verifyCode',
       'defaultFalg',
     ];
-    const { isSmsVerify, isHidePatientTypeInPerfect } =
+    let { isSmsVerify, isHidePatientTypeInPerfect } =
       await ServerStaticData.getSystemConfig('person');
 
     if (isHidePatientTypeInPerfect === '1') {
       formListKeys = formListKeys.filter((key) => key !== 'patientType');
     }
-
+    // isSmsVerify = '0';
     // 关闭手机验证码
     if (isSmsVerify === '0' || props.pageType === 'perfectReal') {
       formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
@@ -302,7 +302,7 @@
 
     formList.map((o) => {
       const { key } = o;
-      if (formData.value[key] !== undefined) {
+      if (formData.value[key] !== undefined && key !== formKey.defaultFalg) {
         o.disabled = true;
       }
     });
@@ -326,6 +326,7 @@
         o.labelWidth = undefined;
       }
     });
+    console.log(formList);
 
     gform.value.setList(formList);
   });
