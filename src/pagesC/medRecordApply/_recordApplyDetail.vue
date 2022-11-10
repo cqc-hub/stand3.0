@@ -284,7 +284,7 @@
       try {
         result._outInfo = JSON.parse(outInfo);
       } catch (error) {
-        gStores.messageStore.showMessage('outInfo 字段格式错误', 1500);
+        gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
       }
     }
 

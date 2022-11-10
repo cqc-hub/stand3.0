@@ -79,7 +79,7 @@ Request.interceptors.response(
       const pages = getCurrentPages();
 
       //  需要重新登录4000  0 成功
-      messageStore.showMessage(message, 1500, {
+      messageStore.showMessage(message, 3000, {
         closeCallBack: () => {
           const fullUrl: string = (pages[pages.length - 1] as any).$page
             .fullPath;
@@ -104,7 +104,7 @@ Request.interceptors.response(
       }
 
       if (showMessage) {
-        messageStore.showMessage(message, 1500);
+        messageStore.showMessage(message, 3000);
       }
     }
 
@@ -116,7 +116,7 @@ Request.interceptors.response(
   },
   (err) => {
     const messageStore = useMessageStore();
-    messageStore.showMessage(err.data.message, 1500);
+    messageStore.showMessage(err.data.message, 3000);
     uni.hideLoading();
 
     return err.data;

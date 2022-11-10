@@ -240,7 +240,7 @@ export class LoginUtils extends GStores {
 
     setTimeout(() => {
       if (!isHideMessage) {
-        this.messageStore.showMessage('退出成功', 1500);
+        this.messageStore.showMessage('退出成功', 3000);
       }
 
       if (isGoLoginPage) {
@@ -248,7 +248,7 @@ export class LoginUtils extends GStores {
           url: '/pages/home/my',
           complete: () => {
             setTimeout(() => {
-              this.messageStore.showMessage('请登录', 1500);
+              this.messageStore.showMessage('请登录', 3000);
             }, 500);
           },
         });
@@ -271,7 +271,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     const { target, detail } = payload;
 
     if (detail.errMsg !== 'getPhoneNumber:ok') {
-      this.messageStore.showMessage('用户取消授权', 1500);
+      this.messageStore.showMessage('用户取消授权', 3000);
       return Promise.reject();
     }
 

@@ -99,7 +99,7 @@
 
   const formSubmit = async ({}) => {
     if (!isCheck.value) {
-      messageStore.showMessage('请勾选下方同意书', 1500);
+      messageStore.showMessage('请勾选下方同意书', 3000);
 
       return;
     }
@@ -201,7 +201,7 @@
 
             dialogConfirm();
           } else {
-            gStores.messageStore.showMessage(message, 1500);
+            gStores.messageStore.showMessage(message, 3000);
           }
         }
       }
@@ -234,7 +234,7 @@
         })
         .catch((err) => {
           if (err?.respCode === 999301) {
-            messageStore.showMessage(err.message, 1500, {
+            messageStore.showMessage(err.message, 3000, {
               closeCallBack() {
                 uni.navigateTo({
                   url: joinQuery('/pagesA/medicalCardMan/addMedical', {

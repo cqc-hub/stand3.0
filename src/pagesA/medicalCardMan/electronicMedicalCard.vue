@@ -119,7 +119,7 @@
         url: '/pagesA/webView/webView?https=' + encodeURIComponent(url),
       });
     } else {
-      gStore.messageStore.showMessage('获取订单失败', 1500);
+      gStore.messageStore.showMessage('获取订单失败', 3000);
     }
   };
 

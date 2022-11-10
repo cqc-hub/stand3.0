@@ -55,7 +55,7 @@
 
   const itemClick = (item: IHosInfo) => {
     if (isDisabled(item)) {
-      gStores.messageStore.showMessage('该院区暂未开通此功能', 1500);
+      gStores.messageStore.showMessage('该院区暂未开通此功能', 3000);
 
       return;
     }
@@ -65,7 +65,7 @@
 
   const locationClick = (item: IHosInfo) => {
     if (isDisabled(item)) {
-      gStores.messageStore.showMessage('该院区暂未开通此功能', 1500);
+      gStores.messageStore.showMessage('该院区暂未开通此功能', 3000);
 
       return;
     }

@@ -60,12 +60,12 @@
     const len = hosList.value.length;
     if (len) {
       if (len === 1) {
-        gStores.messageStore.showMessage('没有可切换的院区', 1500);
+        gStores.messageStore.showMessage('没有可切换的院区', 3000);
       } else {
         isToggleDialogShow.value = true;
       }
     } else {
-      gStores.messageStore.showMessage('请求医院列表中， 请稍后点击', 1500);
+      gStores.messageStore.showMessage('请求医院列表中， 请稍后点击', 3000);
     }
   };
 

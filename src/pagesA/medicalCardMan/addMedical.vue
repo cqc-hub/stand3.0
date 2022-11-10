@@ -164,7 +164,7 @@
       } else {
         gStores.messageStore.showMessage(
           '未授权， 请再次点击按钮进行授权',
-          1500
+          3000
         );
         isShowHealthLogin.value = true;
         return Promise.reject(void 0);

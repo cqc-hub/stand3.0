@@ -367,7 +367,7 @@ export const useOrder = (props: IOrderProps) => {
     orderSourceList.value = result || [];
 
     // if (!orderSourceList.value.length) {
-    //   gStores.messageStore.showMessage('该时段无可以选择的号源', 1500);
+    //   gStores.messageStore.showMessage('该时段无可以选择的号源', 3000);
     //   return Promise.reject(void 0);
     // }
   };

@@ -142,7 +142,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1500;
+    z-index: 3000;
     transition: visibility 200ms ease-in;
     &.xy-dialog__show {
       visibility: visible;

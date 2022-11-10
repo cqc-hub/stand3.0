@@ -34,7 +34,7 @@
 
     await api.quickLinkHealthCard(requestArg);
 
-    gStores.messageStore.showMessage('关联成功', 1500, {
+    gStores.messageStore.showMessage('关联成功', 3000, {
       closeCallBack() {
         uni.reLaunch({
           url: '/pagesA/medicalCardMan/medicalCardMan',

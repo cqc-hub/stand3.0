@@ -318,7 +318,7 @@ const ocrForAlipay = async () => {
   if (error) {
     const msg = error.errorMessage;
     if (msg && typeof msg === 'string') {
-      messageStore.showMessage(error.errorMessage, 1500);
+      messageStore.showMessage(error.errorMessage, 3000);
     }
 
     return Promise.reject(error);
@@ -393,11 +393,11 @@ export const upImgOss = (
               url: result,
             });
           } else {
-            messageStore.showMessage(message || '上传图片失败', 1500);
+            messageStore.showMessage(message || '上传图片失败', 3000);
             reject(void 0);
           }
         } else {
-          messageStore.showMessage('上传图片失败', 1500);
+          messageStore.showMessage('上传图片失败', 3000);
           reject(void 0);
         }
       },

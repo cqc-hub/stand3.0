@@ -545,7 +545,7 @@
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
 
         if (!this.enableDays.includes(fullDate)) {
-          new GStores().messageStore.showMessage('当日无医生排班', 1500);
+          new GStores().messageStore.showMessage('当日无医生排班', 3000);
           return;
         }
 

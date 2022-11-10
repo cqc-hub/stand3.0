@@ -56,7 +56,7 @@
         //   try {
         //     o._expressParam = JSON.parse(expressParam);
         //   } catch (error) {
-        //     gStores.messageStore.showMessage('expressParam 字段格式错误', 1500);
+        //     gStores.messageStore.showMessage('expressParam 字段格式错误', 3000);
         //   }
         // }
 
@@ -84,7 +84,7 @@
             });
             console.log(o._outInfo);
           } catch (error) {
-            gStores.messageStore.showMessage('outInfo 字段格式错误', 1500);
+            gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
           }
         }
 

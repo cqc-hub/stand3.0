@@ -19,7 +19,7 @@ export const checkLogin = (item: IRoute) => {
       routerStore.receiveQuery({
         _p: '1',
       });
-      gStores.messageStore.showMessage('未登录,请先登录', 1500);
+      gStores.messageStore.showMessage('未登录,请先登录', 3000);
     } else {
       uni.reLaunch({
         url: '/pages/home/my?isWarningLogin=1&_p=1',
@@ -34,7 +34,7 @@ export const checkPatient = (item: IRoute) => {
   const gStores = new GStores();
   return new Promise((resolve, reject) => {
     if (!gStores.globalStore.herenId) {
-      gStores.messageStore.showMessage('未完善，请先完善', 1500, {
+      gStores.messageStore.showMessage('未完善，请先完善', 3000, {
         closeCallBack: () => {
           uni.reLaunch({
             url: globalGl.addPersonUrl + '?pageType=perfectReal&_p=1',
@@ -45,7 +45,7 @@ export const checkPatient = (item: IRoute) => {
     } else {
       const patList = gStores.userStore.patList;
       if (!patList.length) {
-        gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 1500, {
+        gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 3000, {
           closeCallBack: () => {
             uni.reLaunch({
               url: globalGl.addPersonUrl + '?_p=1',
@@ -140,7 +140,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1500
+            3000
           );
         },
       };
@@ -166,7 +166,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1500
+            3000
           );
         },
       };
@@ -178,7 +178,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
-            1500
+            3000
           );
         },
       };
@@ -195,7 +195,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
           fail: () => {
             gStores.messageStore.showMessage(
               `请确认跳转地址正确性${item.path}`,
-              1500
+              3000
             );
           },
         };
@@ -225,7 +225,7 @@ const scanCode = () => {
       fail() {
         console.log('获取失败')
         gStores.messageStore.showMessage( '获取失败',
-          1500
+          3000
         );
       }
     })
@@ -244,7 +244,7 @@ const sendMeg = (item, payload) => {
       });
     },
     fail(res) {
-      gStores.messageStore.showMessage(res.errMsg, 1500);
+      gStores.messageStore.showMessage(res.errMsg, 3000);
     },
   });
 };

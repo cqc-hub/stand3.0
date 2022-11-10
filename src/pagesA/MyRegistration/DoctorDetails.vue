@@ -853,7 +853,7 @@
         .addCollect(args)
         .then(() => {
           docDetail.value.collectState = '2';
-          gStores.messageStore.showMessage('关注成功', 1500);
+          gStores.messageStore.showMessage('关注成功', 3000);
         })
         .catch((err) => {
           console.log(err);
@@ -870,7 +870,7 @@
         .delMyCollect(args)
         .then(() => {
           docDetail.value.collectState = '1';
-          gStores.messageStore.showMessage('已经取消关注', 1500);
+          gStores.messageStore.showMessage('已经取消关注', 3000);
         })
         .catch((err) => {
           console.log(err);

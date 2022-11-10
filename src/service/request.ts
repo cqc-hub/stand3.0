@@ -92,7 +92,7 @@ class requestClass {
         uni.showToast({
           title: '系统压力有点大~',
           icon: 'none',
-          duration: 1500
+          duration: 3000
         });
 
         reject(err);

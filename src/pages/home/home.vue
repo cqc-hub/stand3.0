@@ -246,7 +246,7 @@
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.informationLink}`,
-            1500
+            3000
           );
         },
       });
@@ -262,7 +262,7 @@
           '/pagesC/cloudHospital/myPath?type=2&path=' +
           encodeURIComponent(path),
         fail: () => {
-          gStores.messageStore.showMessage(`请确认跳转地址正确性${path}`, 1500);
+          gStores.messageStore.showMessage(`请确认跳转地址正确性${path}`, 3000);
         },
       });
     }

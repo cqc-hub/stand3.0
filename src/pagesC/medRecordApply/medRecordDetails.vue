@@ -536,13 +536,13 @@
     const { sfz } = pageConfig.value;
     let { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
     if (!addressList.value.length) {
-      showMessage('请先选择收货地址', 1500);
+      showMessage('请先选择收货地址', 3000);
       scrollTo.value = '_address';
       return;
     }
 
     if (sfz.includes('front') && !frontIdCardUrl) {
-      showMessage('请先上传身份证人像页', 1500);
+      showMessage('请先上传身份证人像页', 3000);
       scrollTo.value = '_photo';
 
       return;
@@ -550,25 +550,25 @@
 
     if (sfz.includes('end') && !endIdCardUrl) {
       scrollTo.value = '_photo';
-      showMessage('请先上传身份证国徽页', 1500);
+      showMessage('请先上传身份证国徽页', 3000);
       return;
     }
 
     if (sfz.includes('handler') && !handIdCardUrl) {
       scrollTo.value = '_photo';
-      showMessage('请先上传手持身份证', 1500);
+      showMessage('请先上传手持身份证', 3000);
       return;
     }
 
     if (!recordRows.value.length) {
       scrollTo.value = '_record';
-      showMessage('请先添加住院记录', 1500);
+      showMessage('请先添加住院记录', 3000);
       return;
     }
 
     if (!aimValue.value.length) {
       scrollTo.value = '_aim';
-      showMessage('请先选择复印目的', 1500);
+      showMessage('请先选择复印目的', 3000);
       return;
     }
 

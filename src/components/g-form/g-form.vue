@@ -374,7 +374,7 @@
       } else {
         messageStore.showMessage(
           '请检查 短信对应 phone 字段是否存在',
-          1500,
+          3000,
           messageOptions.value
         );
       }
@@ -568,7 +568,7 @@
       rule.map((o) => {
         const flag = matchValue(o);
         if (!flag) {
-          messageStore.showMessage(o.message, 1500, messageOptions.value);
+          messageStore.showMessage(o.message, 3000, messageOptions.value);
           const key = item.key;
 
           if (!warningKeys.value.includes(key)) {
@@ -580,7 +580,7 @@
     } else {
       const flag = matchValue(rule);
       if (!flag) {
-        messageStore.showMessage(rule.message, 1500, messageOptions.value);
+        messageStore.showMessage(rule.message, 3000, messageOptions.value);
         const key = item.key;
 
         if (!warningKeys.value.includes(key)) {
@@ -599,7 +599,7 @@
       const defaultEmptyMessage = item.label + ' 不能为空';
       messageStore.showMessage(
         emptyMessage || defaultEmptyMessage,
-        1500,
+        3000,
         messageOptions.value
       );
 
@@ -617,7 +617,7 @@
       const { success, message } = await validator(v, item);
 
       if (!success) {
-        messageStore.showMessage(message, 1500, messageOptions.value);
+        messageStore.showMessage(message, 3000, messageOptions.value);
         if (!warningKeys.value.includes(key)) {
           warningKeys.value.push(key);
         }

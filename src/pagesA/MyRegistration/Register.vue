@@ -236,7 +236,7 @@
       );
 
       if (_idx === -1) {
-        gStores.messageStore.showMessage('该院区暂未开通病案复印功能', 1500);
+        gStores.messageStore.showMessage('该院区暂未开通病案复印功能', 3000);
         return;
       }
     }
@@ -281,7 +281,7 @@
         address,
       });
     } else {
-      gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 1500);
+      gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 3000);
     }
   };
 
@@ -290,7 +290,7 @@
       if (!isAuthLocation.value) {
         gStores.messageStore.showMessage(
           '未授权位置信息， 不支持按距离排序',
-          1500,
+          3000,
           {
             closeCallBack() {
               hosSortNow.value = '综合排序';

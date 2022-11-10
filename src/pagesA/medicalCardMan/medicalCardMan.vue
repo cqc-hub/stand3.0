@@ -114,7 +114,7 @@
       await patientUtils.getPatCardList();
       uni.hideLoading();
     } else {
-      gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 1500);
+      gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
       isShowHealthLogin.value = true;
       return Promise.reject(void 0);
     }
