@@ -145,6 +145,7 @@
     _url: string;
     _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
     _questionId: number; //问卷id
+    _isPay:number;
   }>();
 
   const dirUrl = ref(decodeURIComponent(props._url));
@@ -230,6 +231,7 @@
   const medCopyConfigList = ref<ISystemConfig['medRecord']>([]);
 
   const itemClick = (item: IHosInfo) => {
+    console.log(1111,props)
     if (isMedCopy.value) {
       const _idx = medCopyConfigList.value.findIndex(
         (o) => o.hosId === item.hosId
@@ -245,20 +247,19 @@
       if (props._questionId) {
         //跳转问卷页面-h5
         uni.navigateTo({
-          url: joinQuery(
-            '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion',
-            {
-              category: props._questionId,
-              url: props._url,
-              hosId: item.hosId,
-            }
-          ),
+          url: joinQuery('/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion', {
+            category: props._questionId,
+            url: props._url,
+            hosId: item.hosId,
+            hosName: item.hosName,
+          }),
         });
       } else {
         uni.navigateTo({
           url: joinQuery(pagesList[props._type], {
             hosId: item.hosId,
             hosName: item.hosName,
+            isPay:props._isPay
           }),
         });
       }

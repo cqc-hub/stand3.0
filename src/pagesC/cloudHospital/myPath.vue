@@ -18,6 +18,8 @@
   import { GStores } from '@/utils';
   import { encryptDesParam } from '@/common/des';
   import { joinQuery } from '@/common';
+  import { toPayPull } from '@/components/g-pay';
+
   // 自研h5页面统一入口
   const messageStore = useMessageStore();
   const gStores = new GStores();
@@ -33,8 +35,8 @@
     token: gStores.globalStore.token.accessToken,
     hosId: '',
     herenId: gStores.globalStore.herenId,
-    source:gStores.globalStore.browser.source,
-    openId: gStores.globalStore.openId
+    source: gStores.globalStore.browser.source,
+    openId: gStores.globalStore.openId,
   };
   type A = keyof typeof allData;
 
@@ -52,7 +54,7 @@
       const baseUrl =
         (global.env as any) === 'prod'
           ? 'https://h5.eheren.com/v3/#'
-          : 'https://health.eheren.com/v3/#';
+          : 'http://health.eheren.com/v3/#';
       //公告跳转的咨询
       if (options.type == '2') {
         let path = decodeURIComponent(options.path as string);
@@ -61,7 +63,7 @@
         //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
         let newQuery = '';
         let obj = JSON.parse(JSON.stringify(options));
-        console.log('path',obj);
+        console.log('path', obj);
 
         delete obj.path;
         delete obj.query;
@@ -107,21 +109,41 @@
 
   const handleMessage = (evt) => {
     console.log('返回数据', evt);
-    // #ifdef MP-WEIXIN
     var data = evt.target.data;
     var V3PageData = data[0];
-    uni.openLocation({
-      latitude: Number(V3PageData.gisLat),
-      longitude: Number(V3PageData.gisLng),
-      name: V3PageData.hosName,
-      address: V3PageData.address,
-      success: () => {
-        console.log('成功打开地图');
-      },
-    });
-
-
-    // #endif
+    var paymentData = data[0].invokeData;
+    if (paymentData) {
+      //拉起支付
+      toPayPull(V3PageData)
+        .then(() => {
+          //处理跳转
+          if (V3PageData.miniUrl) {
+            uni.navigateTo({
+              url: '/pagesC/cloudHospital/myPath?path=' + V3PageData.miniUrl,
+            });
+          }
+        })
+        .catch(() => {
+          if (V3PageData.cancelUrl) {
+            gStores.messageStore.showMessage('取消支付', 1500, {
+              closeCallBack: () => {
+                uni.reLaunch({
+                  url:
+                    '/pagesC/cloudHospital/myPath?path=' + V3PageData.cancelUrl,
+                });
+              },
+            });
+          }
+        });
+    } else {
+      //打开地图
+      uni.openLocation({
+        latitude: Number(V3PageData.gisLat),
+        longitude: Number(V3PageData.gisLng),
+        name: V3PageData.hosName,
+        address: V3PageData.address,
+      });
+    }
   };
 </script>
 

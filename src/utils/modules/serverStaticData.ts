@@ -485,11 +485,11 @@ export class ServerStaticData {
       });
 
       try {
-        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN);
+        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || "{}");
         const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
           result
         );
-        const order = JSON.parse(result.ORDER_REGISTER);
+        const order = JSON.parse(result.ORDER_REGISTER || "{}");
         systemConfig = {
           person,
           order,
