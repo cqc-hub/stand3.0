@@ -13,13 +13,13 @@
 
       <view
         v-if="item.schState in warnSchStateMap"
-        class="f26 g-bold color-888"
+        class="f26 g-bold color-888 klklk g-flex-rc-cc"
       >
         {{ warnSchStateMap[item.schState] }}
       </view>
 
       <g-login v-else @handler-next="regClick(item)" patient>
-        <button class="btn btn-primary btn-reg" @click="regClick(item)">
+        <button class="btn klklk btn-primary btn-reg" @click="regClick(item)">
           余{{ item.numRemain }}个
         </button>
       </g-login>
@@ -90,5 +90,9 @@
   .sch-label {
     width: 230rpx;
     display: -webkit-box;
+  }
+
+  .klklk {
+    width: 120rpx;
   }
 </style>

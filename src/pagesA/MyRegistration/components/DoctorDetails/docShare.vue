@@ -2,7 +2,7 @@
   <view class="">
     <uni-popup ref="popup" :isMaskClick="false" @change="change">
       <view>
-        <view class="popup-content my-display-none">
+        <!-- <view class="popup-content my-display-none">
           <image
             :src="$global.BASE_IMG + 'v3_doctor_bg_share.png'"
             class="head-bg"
@@ -58,7 +58,6 @@
             </view>
           </view>
 
-          <!--  transform: ` translateY(-${bgHeadHeight})`, -->
           <view class="p32 content-tail">
             <view class="tail-container g-flex-rc-cc">
               <view class="g-border qr-code">
@@ -70,9 +69,13 @@
               </view>
             </view>
           </view>
-        </view>
+        </view> -->
 
         <view class="g-flex-rc-cc">
+          <view class="my-display-none">
+            <w-qrcode :options="options" ref="qrcode" />
+          </view>
+
           <canvas
             class="shareCanvas"
             canvas-id="shareCanvas"
@@ -410,7 +413,7 @@
     } = props.detail;
     docPhoto = '';
 
-    _goodAt = _goodAt || '暂无信息';
+    _goodAt = _goodAt || '暂无';
     docName = docName || '';
     docTitleName = docTitleName || '';
 

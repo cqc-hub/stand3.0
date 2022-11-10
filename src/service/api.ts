@@ -127,6 +127,18 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  // 已缴费
+  getPrepaidClinicList: (data) =>
+    service.post('/phs-query/clinical/getPrepaidClinicList', parm(data), {
+      hideLoading: false,
+    }),
+
+  // 缴费详情
+  getClinicalPayDetailList: (data) =>
+    service.post('/phs-query/clinical/getClinicalPayDetailList', parm(data), {
+      hideLoading: false,
+    }),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),

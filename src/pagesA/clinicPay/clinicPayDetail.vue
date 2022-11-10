@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <!-- <g-flag isShowFg typeFg="15" /> -->
-    <g-choose-pat />
+    <g-choose-pat @choose-pat="getListData(true)" />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
@@ -21,42 +21,61 @@
     >
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <Clinic-Pay-Detail-List :list="unPayList" isCheck />
+          <block v-if="isPayListRequestComplete && unPayList.length">
+            <Clinic-Pay-Detail-List
+              :list="unPayList"
+              @click-item="goPayDetail"
+              @sel-item="selPayListItem"
+              isCheck
+            />
+          </block>
+
+          <view class="empty-list" v-else-if="isPayListRequestComplete">
+            <g-empty :current="1" />
+          </view>
         </scroll-view>
       </swiper-item>
 
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <Clinic-Pay-Detail-List :list="unPayList" />
+          <block v-if="isPayListRequestComplete && payedList.length">
+            <Clinic-Pay-Detail-List :list="payedList" />
+          </block>
+
+          <view class="empty-list" v-else-if="isPayListRequestComplete">
+            <g-empty :current="1" />
+          </view>
         </scroll-view>
       </swiper-item>
     </swiper>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { type IPayListItem } from './utils/clinicPayDetail';
+  import { usePayPage } from './utils/clinicPayDetail';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
 
-  const tabCurrent = ref(0);
-  const tabField = [
-    {
-      label: '待缴费',
-      key: 0,
-    },
-    {
-      label: '已缴费',
-      key: 1,
-    },
-  ];
-  const tabChange = (idx: number) => {
-    tabCurrent.value = idx;
+  const {
+    tabCurrent,
+    tabField,
+    tabChange,
+    unPayList,
+    payedList,
+    goPayDetail,
+    selPayListItem,
+    getListData,
+    isPayListRequestComplete,
+  } = usePayPage();
+
+  const init = async () => {
+    getListData();
   };
 
-  const unPayList = ref<IPayListItem[]>([{}, {}, {}, {}]);
-  const payedList = ref<IPayListItem[]>([{}, {}, {}, {}, {}]);
+  init();
 </script>
 
 <style lang="scss" scoped>

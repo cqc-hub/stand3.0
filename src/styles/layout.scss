@@ -16,6 +16,10 @@
   @extend .flex-normal;
 }
 
+.flex-start-r {
+  align-items: flex-start;
+}
+
 .flex1 {
   flex: 1;
 }

@@ -48,7 +48,7 @@ export function cloneUtil<T>(target): T {
  */
 export const joinQuery = function (url: string, query) {
   const strQuery = Object.entries(query)
-    .map(([key, value]) => `${key}=${value}`)
+    .map(([key, value]) => `${key}=${value ?? ''}`)
     .join('&');
 
   if (url.includes('?')) {

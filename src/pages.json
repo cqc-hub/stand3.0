@@ -87,6 +87,16 @@
         },
 
         {
+          "path": "clinicPay/payDetail",
+          "style": {
+            "navigationBarTitleText": "待缴费明细"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "mySet/getMore",
           "style": {
             "navigationBarTitleText": "更多"

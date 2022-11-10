@@ -6,19 +6,44 @@
       :class="{
         active: getIsActive(item),
       }"
+      @click="itemClick(item)"
       class="item flex-normal mb16 g-border"
     >
       <view
         v-if="isCheck"
-        @click="isActive = !isActive"
+        @click.stop="selItem(item)"
         class="iconfont check-box-icon"
       >
         {{ getIsActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
       </view>
 
       <view class="content">
-        <view class="flex-between">
-          <view class="g-bold f36 flex1">新冠病毒核酸检测门诊</view>
+        <view class="flex-between flex-start-r">
+          <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
+            新冠病毒核酸检测门诊新冠病毒核酸检测
+          </view>
+
+          <view class="g-flex-rc-cc">
+            <view v-if="isCheck" class="color-error g-bold f36">16元</view>
+            <view class="iconfont color-888 f48">&#xe66b;</view>
+          </view>
+        </view>
+
+        <view class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">就诊时间</view>
+            <view class="row-value g-break-word color-444">2022-08-12</view>
+          </view>
+
+          <view class="row flex-normal">
+            <view class="row-label color-888">就诊医院</view>
+            <view class="row-value g-break-word color-444">本院(线下门诊)</view>
+          </view>
+
+          <view class="row flex-normal">
+            <view class="row-label color-888">就诊医生</view>
+            <view class="row-value g-break-word color-444">陈俊国</view>
+          </view>
         </view>
       </view>
     </view>
@@ -34,9 +59,23 @@
     isCheck?: boolean;
   }>();
 
+  const emits = defineEmits(['sel-item', 'click-item']);
+
   const isActive = ref(false);
   const getIsActive = (item: IPayListItem) => {
     return isActive.value;
+  };
+
+  const selItem = (item) => {
+    if (props.isCheck) {
+      emits('sel-item', item);
+    } else {
+      itemClick(item);
+    }
+  };
+
+  const itemClick = (item) => {
+    emits('click-item', item);
   };
 </script>
 
@@ -63,6 +102,16 @@
 
       .content {
         flex: 1;
+
+        .item-box {
+          margin-top: 24rpx;
+        }
+
+        .row {
+          .row-label {
+            width: 130rpx;
+          }
+        }
       }
 
       &.active {
