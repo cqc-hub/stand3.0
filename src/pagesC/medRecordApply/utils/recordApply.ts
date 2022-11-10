@@ -4,7 +4,7 @@ export type TOutHosInfo = any;
 /**
  订单状态
  (11支付成功（审核中）、
-  12已邮寄（已邮寄）、
+  12已发货（已发货）、
   13已签收（已签收）、
   14复印中（待发货）、
   15支付成功但通知失败（审核中）、
@@ -32,7 +32,7 @@ export const applyOrderStatusMap = {
   },
 
   '12': {
-    title: '已邮寄',
+    title: '已发货',
     detailColor: '#fff',
     headerClass: 'header-blue',
     color: 'var(--hr-brand-color-6)',

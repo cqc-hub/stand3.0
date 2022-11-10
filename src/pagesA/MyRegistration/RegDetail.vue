@@ -142,12 +142,14 @@
                   </view>
 
                   <view
+                    @click="goDoctorCard"
                     v-else-if="item.key === 'docName'"
                     class="color-blue flex-normal doc-name"
                   >
                     <view class="doc-name-value">
                       {{ value }}
                     </view>
+                    <view class="iconfont color-blue">&#xe6c8;</view>
 
                     <!-- <view>
                       {{
@@ -270,8 +272,7 @@
 <script lang="ts" setup>
   import { computed, ref, nextTick, onMounted, reactive } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
-  import { cloneUtil } from '@/common/utils';
+  import { deQueryForUrl, joinQuery, cloneUtil } from '@/common/utils';
   import {
     GStores,
     ServerStaticData,
@@ -444,14 +445,16 @@
       startTimeTravel();
     }
 
+    const { qrCode } = result;
+
     result._appointmentDate = `${result.appointmentDate} ${
       result.ampmName + result.appointmentTime
     }`;
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
-    orderRegInfo.value.orderStatus = '75';
-    qrCodeOpt.value.code = result.cardNumber;
+    // orderRegInfo.value.orderStatus = '75';
+    qrCodeOpt.value.code = result[qrCode];
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
 
@@ -478,6 +481,21 @@
 
   const payOrder = () => {
     console.log('payyyyy');
+  };
+
+  const goDoctorCard = () => {
+    const { deptName, docName, hosDocId, hosId, clinicalType } =
+      orderRegInfo.value;
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
+        deptName,
+        docName,
+        hosDocId,
+        hosId,
+        clinicalType,
+      }),
+    });
   };
 
   const isCancelOrderDialogShow = ref(false);
@@ -704,8 +722,8 @@
 
           .doc-name {
             .doc-name-value {
-              padding-right: 12rpx;
-              margin-right: 12rpx;
+              // padding-right: 12rpx;
+              // margin-right: 12rpx;
             }
 
             .iconfont {

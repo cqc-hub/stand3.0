@@ -48,7 +48,7 @@
       </view>
 
       <view
-        v-if="['12', '13'].includes(item.orderStatus)"
+        v-if="['12', '13'].includes(item.orderStatus) && item._expressDesc"
         class="express flex-between"
       >
         <view class="flex-normal express-row">

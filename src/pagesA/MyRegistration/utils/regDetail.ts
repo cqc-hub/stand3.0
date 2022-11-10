@@ -286,8 +286,11 @@ export interface IRegInfo {
   hosGisLng: string; // 经度
   hosId: string;
   hosName: string;
+  hosDocId: string;
+  hosDeptId: string;
   hosOrderId: string;
   orderId: string;
+  docName: string;
   categorName: string;
   _category: string;
   schQukCategor: string;
@@ -299,6 +302,7 @@ export interface IRegInfo {
   _fee: string;
   clinicalType: string;
   deptName: string;
+  qrCode: string;
   downTime?: number;
   source?: number;
   _source?: string;
