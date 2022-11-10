@@ -247,23 +247,12 @@
       if (props._questionId) {
         //跳转问卷页面-h5
         uni.navigateTo({
-<<<<<<< HEAD
           url: joinQuery('/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion', {
             category: props._questionId,
             url: props._url,
             hosId: item.hosId,
             hosName: item.hosName,
           }),
-=======
-          url: joinQuery(
-            '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion',
-            {
-              category: props._questionId,
-              url: props._url,
-              hosId: item.hosId,
-            }
-          ),
->>>>>>> c8de81ad6ad5ecf68df320de59740994bbc1a12e
         });
       } else {
         uni.navigateTo({
