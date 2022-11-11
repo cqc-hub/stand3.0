@@ -19,21 +19,22 @@
                 :class="{
                   mb8: ci !== item.costList.length - 1,
                 }"
-                class="item-content f28 color-444"
               >
-                <view class="flex-between flex-start-r mb8">
-                  <view class="flex1">
-                    {{ citem.subCostTypeName }}
+                <view v-if="1" class="item-content f28 color-444">
+                  <view class="flex-between flex-start-r mb8">
+                    <view class="flex1">
+                      {{ citem.subCostTypeName }}
+                    </view>
+
+                    <view>{{ citem.subCost }}元</view>
                   </view>
 
-                  <view>{{ citem.subCost }}元</view>
-                </view>
-
-                <view class="color-888 f24">
-                  <text class="mr40">
-                    {{ `${citem.itemPrice}元/${citem.units}` }}
-                  </text>
-                  <text>{{ `x${citem.amount}` }}</text>
+                  <view class="color-888 f24">
+                    <text class="mr40">
+                      {{ `${citem.itemPrice}元/${citem.units}` }}
+                    </text>
+                    <text>{{ `x${citem.amount}` }}</text>
+                  </view>
                 </view>
               </view>
             </view>

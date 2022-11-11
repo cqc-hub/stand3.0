@@ -395,6 +395,7 @@ export const useOrder = (props: IOrderProps) => {
       schDate,
       schId,
       schQukCategor,
+      docTitleName
     } = selectSchInfo;
 
     const { disNo, numId, timeDesc } = item;
@@ -420,6 +421,7 @@ export const useOrder = (props: IOrderProps) => {
       schQukCategor,
       clinicalType,
       promptMessage,
+      docTitleName
     };
     selectOrderSourceNumId.value = numId;
 

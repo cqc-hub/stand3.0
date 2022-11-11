@@ -36,6 +36,7 @@
   const isToggleDialogShow = ref(false);
   const props = defineProps<{
     hosId: string;
+    type?: 'selDepartment';
   }>();
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);
 
@@ -70,7 +71,12 @@
   };
 
   const getHosList = async () => {
-    const list = await ServerStaticData.getHosList();
+    let list = await ServerStaticData.getHosList();
+
+    if (props.type === 'selDepartment') {
+      list = list.filter((o) => o.ifClick !== '1');
+    }
+
     hosList.value = list;
     emits('get-list', {
       list,

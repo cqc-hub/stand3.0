@@ -8,6 +8,7 @@ export interface IProps {
   hosDocId: string;
   hosId: string;
   clinicalType: string;
+  docTitleName?: string;
 
   // firstHosDeptId: string;
   // secondHosDeptId: string;

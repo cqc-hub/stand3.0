@@ -4,6 +4,7 @@
       v-model:hosId="hosId"
       @get-list="getHosList"
       @change="getDepList"
+      type="selDepartment"
     />
 
     <g-tbanner :config="orderConfig.bannerOrder" />
@@ -124,6 +125,8 @@
         loopDeptList(firstDeptList, deptListLevel);
         depList.value = firstDeptList;
         depLevel.value = deptListLevel;
+      } else {
+        depList.value = [];
       }
     }
   };

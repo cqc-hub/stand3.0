@@ -135,13 +135,14 @@
   };
 
   const avatarClick = (item: IDocListAll) => {
-    const { deptName, docName, hosDocId, hosId, hosDeptId } = item;
+    const { deptName, docName, hosDocId, hosId, hosDeptId, docTitleName } = item;
     // const { hosDeptId, firstHosDeptId, secondHosDeptId } = props;
     const args = {
       deptName,
       docName,
       hosDocId,
       hosId,
+      docTitleName,
       // firstHosDeptId,
       // secondHosDeptId,
       hosDeptId,

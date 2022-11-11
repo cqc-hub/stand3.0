@@ -26,6 +26,7 @@
               :list="unPayList"
               @click-item="goPayDetail"
               @sel-item="selPayListItem"
+              :isListShowClinicType="isListShowClinicType"
               isCheck
             />
           </block>
@@ -57,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { usePayPage } from './utils/clinicPayDetail';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
@@ -75,6 +76,10 @@
     pageConfig,
     getSysConfig,
   } = usePayPage();
+
+  const isListShowClinicType = computed(() => {
+    return pageConfig.value.isListShowClinicType === '1';
+  });
 
   const init = async () => {
     await getSysConfig();

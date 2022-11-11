@@ -115,6 +115,7 @@
       timeDesc,
       clinicalType,
       promptMessage,
+      docTitleName
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -128,6 +129,7 @@
       clinicalType,
       deptName,
       disNo,
+      docTitleName,
       docName,
       fee,
       hosDeptId,

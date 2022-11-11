@@ -20,11 +20,13 @@
       <view class="content">
         <view class="flex-between flex-start-r">
           <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
-            新冠病毒核酸检测门诊新冠病毒核酸检测
+            {{ item.deptName }}
           </view>
 
           <view class="g-flex-rc-cc">
-            <view v-if="isCheck" class="color-error g-bold f36">16元</view>
+            <view v-if="isCheck" class="color-error g-bold f36">
+              {{ item.totalCost }}元
+            </view>
             <view class="iconfont color-888 f48">&#xe66b;</view>
           </view>
         </view>
@@ -32,17 +34,30 @@
         <view class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">就诊时间</view>
-            <view class="row-value g-break-word color-444">2022-08-12</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.visitDate }}
+            </view>
           </view>
 
           <view class="row flex-normal">
             <view class="row-label color-888">就诊医院</view>
-            <view class="row-value g-break-word color-444">本院(线下门诊)</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.hosName }}
+            </view>
+          </view>
+
+          <view v-if="isListShowClinicType" class="row flex-normal">
+            <view class="row-label color-888">门诊类型</view>
+            <view class="row-value g-break-word color-444">
+              {{ item._clinicType }}
+            </view>
           </view>
 
           <view class="row flex-normal">
             <view class="row-label color-888">就诊医生</view>
-            <view class="row-value g-break-word color-444">陈俊国</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.docName }}
+            </view>
           </view>
         </view>
       </view>
@@ -56,6 +71,7 @@
 
   const props = defineProps<{
     list: IPayListItem[];
+    isListShowClinicType?: boolean;
     isCheck?: boolean;
   }>();
 
@@ -108,6 +124,7 @@
         }
 
         .row {
+          margin-bottom: 8rpx;
           .row-label {
             width: 130rpx;
           }

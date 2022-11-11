@@ -53,8 +53,15 @@
                     {{ docDetail.docName }}
                   </view>
 
-                  <view class="color-444 f28 g-split-line mr12 pr12">
-                    {{ docDetail.docTitleName }}
+                  <view
+                    :class="{
+                      'g-split-line':
+                        docDetail.docJobName &&
+                        (props.docTitleName || docDetail.docTitleName),
+                    }"
+                    class="color-444 f28 mr12 pr12"
+                  >
+                    {{ props.docTitleName || docDetail.docTitleName }}
                   </view>
                   <view class="color-444 f28">
                     {{ docDetail.docJobName }}

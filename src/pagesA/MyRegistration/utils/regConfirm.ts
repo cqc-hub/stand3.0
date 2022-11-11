@@ -8,6 +8,7 @@ export interface IPageProps {
   categorName: string;
   deptName: string;
   docName: string;
+  docTitleName: string;
   docPhoto: string;
   fee: string;
   hosDeptId: string;
