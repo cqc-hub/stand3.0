@@ -4,11 +4,10 @@
     :class="{ boxShadow: boxShadow, borderRadius: borderRadius }"
   >
     <view
-      class="title"
+      class="title f32"
       :class="{ border: border, borderRadius: borderRadius }"
       :style="{
         backgroundColor: !disabled && isShow ? activebg : '',
-        fontSize: fontSize + 'rpx',
         height: height + 'rpx',
         color: !disabled && isShow ? activeColor : '',
       }"
@@ -17,14 +16,7 @@
       <slot name="title">
         <text>{{ title }}</text>
       </slot>
-      <!-- :src="rightIcon ? rightIcon : require('./img/arrow-right.png')" -->
-      <!-- <image
-        :src="rightIcon ? rightIcon : img_url + 'ic_youjiantou@3x.png'"
-        :class="{
-          arrowBottom: isShow,
-        }"
-        class="right-icon"
-      /> -->
+
       <view
         :class="{
           arrowBottom: isShow,
@@ -170,7 +162,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24rpx;
+    // padding: 0 24rpx;
     transition: 0.8s linear;
 
     &.borderRadius {
@@ -181,8 +173,9 @@
       transform: rotate(90deg);
       transition: 0.4s all;
       position: relative;
-      right: 10upx;
+      // right: 0upx;
       font-size: 48rpx;
+
 
       &.arrowBottom {
         transform: rotate(-90deg);
@@ -199,7 +192,7 @@
     overflow: hidden;
 
     .content {
-      padding: 0 24rpx;
+      // padding: 0 24rpx;
       // padding: 32rpx 24rpx;
     }
   }

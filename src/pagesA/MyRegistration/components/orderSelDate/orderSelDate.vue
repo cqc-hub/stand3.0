@@ -235,7 +235,7 @@
       }
 
       &.item-disabled {
-        color: var(--hr-neutral-color-7);
+        color: var(--hr-neutral-color-5);
         pointer-events: none;
       }
     }

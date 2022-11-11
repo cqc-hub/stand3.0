@@ -113,7 +113,7 @@
       return orderStatusMap[status];
     } else {
       return {
-        title: '未知的状态',
+        title: '未知',
         cardColr: 'var(--hr-neutral-color-7)',
       };
     }

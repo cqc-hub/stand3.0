@@ -2,7 +2,43 @@
   <view class="g-page">
     <view class="g-container">
       <view class="head-bg" />
-      <view class="container">23</view>
+      <view class="container">
+        <view class="head-box g-border box">
+          <view class="head-title g-bold f40 g-break-word">
+            {{ props.deptName }}
+          </view>
+
+          <view class="head-content mt24 f28">
+            <view class="head-row flex-normal flex-start-r">
+              <view class="head-row-label text-no-wrap color-888 mr16">
+                就诊医院
+              </view>
+              <view class="head-row-value color-444">
+                {{
+                  `${detailData.hosName || ''}${
+                    pageConfig.isListShowClinicType === '1'
+                      ? `(${props._clinicType})`
+                      : ''
+                  }`
+                }}
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="box info-box mt16">
+          <view class="flex-between g-bold f36">
+            <view>费用总额</view>
+            <view class="color-error">{{ detailData.totalCost }}元</view>
+          </view>
+
+          <block v-if="detailData.costList && detailData.costList.length">
+            <view class="mt8">
+              <Pay-Detail-Cost-List :list="detailData.costList" />
+            </view>
+          </block>
+        </view>
+      </view>
     </view>
 
     <g-message />
@@ -20,13 +56,17 @@
   } from './utils/clinicPayDetail';
   import { deQueryForUrl } from '@/common';
 
+  import PayDetailCostList from './components/payDetailCostList.vue';
+
   const props = ref({} as TPayDetailProp);
 
   const { getDetailData, detailData } = usePayDetailPage();
+  const { pageConfig, getSysConfig } = usePayPage();
 
-  onLoad((opt) => {
+  onLoad(async (opt) => {
     props.value = deQueryForUrl(opt);
-    // getDetailData(props.value);
+    await getSysConfig();
+    getDetailData(props.value);
   });
 </script>
 
@@ -60,5 +100,30 @@
     position: relative;
     z-index: 2;
     padding: 0 32rpx;
+
+    .box {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 32rpx;
+    }
+
+    .head-box {
+      margin-top: 48rpx;
+
+      .head-content {
+        .head-row {
+          .head-row-label {
+            width: 120rpx;
+          }
+
+          &:not(:last-child) {
+            margin-bottom: 4rpx;
+          }
+        }
+      }
+    }
+
+    .info-box {
+    }
   }
 </style>

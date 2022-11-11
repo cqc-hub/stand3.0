@@ -388,7 +388,7 @@
       return orderStatusMap[status];
     } else {
       return {
-        title: '未知的状态',
+        title: '未知',
         cardColr: 'var(--hr-neutral-color-7)',
       };
     }
@@ -408,6 +408,9 @@
     if (result && result.length) {
       result.map((o) => {
         o._statusLabel = getStatusConfig(o.orderStatus).title;
+        if (o._statusLabel === '未知') {
+          o.orderStatus = '--';
+        }
       });
     }
 
@@ -514,7 +517,7 @@
   const selPatId = ref('');
   const selStatus = ref('');
 
-  init();
+  // init();
 </script>
 
 <style lang="scss" scoped>

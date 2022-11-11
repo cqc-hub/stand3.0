@@ -1,5 +1,10 @@
 import { ref } from 'vue';
-import { GStores, debounce } from '@/utils';
+import {
+  GStores,
+  debounce,
+  type ISystemConfig,
+  ServerStaticData,
+} from '@/utils';
 import { joinQuery } from '@/common';
 
 import api from '@/service/api';
@@ -8,7 +13,7 @@ export type IPayListItem = {
   childOrder: string;
   deptId: string;
   deptName: string;
-  payState?: string;
+  payState: '0' | '1'; // 支付状态 1待支付，0已支付
   clinicType?: string;
   hosOrderId?: string;
   phsOrderId?: string;
@@ -21,14 +26,17 @@ export type IPayListItem = {
   totalCost: string;
   visitDate: string;
   visitNo: string;
+  _clinicType: string;
 };
 
-export type TPayedListItem = any;
+export type TPayedListItem = {} & IPayListItem;
 
 export type TPayDetailProp = {
   hosId: string;
   payState: string;
   patientId: string;
+  deptName: string;
+  _clinicType: string;
 
   clinicType?: string;
   hosOrderId?: string;
@@ -39,7 +47,33 @@ export type TPayDetailProp = {
   visitNo?: string;
 };
 
+export type TCostList = {
+  subCost: string;
+  subCostTypeCode: string;
+  subCostTypeName: string;
+  costList: {
+    amount: string;
+    itemPrice: string;
+    itemSpec: string;
+    subCost: string;
+    subCostTypeCode: string;
+    subCostTypeName: string;
+    units: string;
+  }[];
+}[];
+
+export type TPayDetailInfo = {
+  costList?: TCostList;
+  hosId: string;
+  hosName: string;
+  medicalCost: string;
+  payState: string;
+  personCost: string;
+  totalCost: string;
+};
+
 export const usePayPage = () => {
+  const pageConfig = ref({} as ISystemConfig['pay']);
   const gStores = new GStores();
   const tabCurrent = ref(0);
   const isPayListRequestComplete = ref(false);
@@ -80,11 +114,17 @@ export const usePayPage = () => {
       hosId: '23',
     };
     isPayListRequestComplete.value = false;
-    const { result } = await api.getUnpaidClinicList(arg).finally(() => {
-      isPayListRequestComplete.value = true;
-    });
+    const { result } = await api
+      .getUnpaidClinicList<{
+        clinicalSettlementResultList: IPayListItem[];
+      }>(arg)
+      .finally(() => {
+        isPayListRequestComplete.value = true;
+      });
 
     const resList = (result && result.clinicalSettlementResultList) || [];
+
+    dealPayList(resList, { payState: '1' });
 
     unPayList.value = resList;
   };
@@ -104,11 +144,17 @@ export const usePayPage = () => {
       hosId: '23',
     };
     isPayListRequestComplete.value = false;
-    const { result } = await api.getPrepaidClinicList(arg).finally(() => {
-      isPayListRequestComplete.value = true;
-    });
+    const { result } = await api
+      .getPrepaidClinicList<{
+        clinicPayListDetailResults: TPayedListItem[];
+      }>(arg)
+      .finally(() => {
+        isPayListRequestComplete.value = true;
+      });
 
     const resList = (result && result.clinicPayListDetailResults) || [];
+
+    dealPayList(resList, { payState: '0' });
 
     payedList.value = resList;
   };
@@ -130,6 +176,8 @@ export const usePayPage = () => {
       serialNo,
       visitDate,
       visitNo,
+      deptName,
+      _clinicType,
     } = item;
 
     const pageData = {
@@ -143,7 +191,17 @@ export const usePayPage = () => {
       serialNo,
       visitDate,
       visitNo,
+      deptName,
+      _clinicType,
     };
+
+    // if (payState === '1') {
+    //   pageData.patientId = '10831203';
+    // } else {
+
+    // }
+
+    console.log(pageData);
 
     uni.navigateTo({
       url: joinQuery('/pagesA/clinicPay/payDetail', pageData),
@@ -163,7 +221,13 @@ export const usePayPage = () => {
     }
   };
 
+  const getSysConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('pay');
+  };
+
   return {
+    pageConfig,
+    getSysConfig,
     gStores,
     tabCurrent,
     tabField,
@@ -180,15 +244,26 @@ export const usePayPage = () => {
 };
 
 export const usePayDetailPage = () => {
-  const detailData = ref({});
+  const detailData = ref({} as TPayDetailInfo);
   const getDetailData = async (arg: TPayDetailProp) => {
-    await api.getClinicalPayDetailList({
+    const { result } = await api.getClinicalPayDetailList({
       ...arg,
     });
+
+    detailData.value = result;
   };
 
   return {
     detailData,
     getDetailData,
   };
+};
+
+const dealPayList = (resList: IPayListItem[], { payState }) => {
+  resList.map((o) => {
+    const { clinicType } = o;
+
+    o._clinicType = clinicType === '2' ? '网络医院' : '线下门诊';
+    o.payState = payState;
+  });
 };

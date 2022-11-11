@@ -162,13 +162,13 @@
 
                   <view
                     v-else-if="item.key === '_category'"
-                    class="color-blue flex-normal doc-name"
+                    class="flex-normal doc-name"
                   >
                     <view>
                       {{ orderRegInfo._category }}
                     </view>
 
-                    <view class="iconfont color-blue">&#xe6c8;</view>
+                    <!-- <view class="iconfont color-blue">&#xe6c8;</view> -->
                   </view>
                   <view v-else>{{ value }}</view>
                 </template>
@@ -458,6 +458,11 @@
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
 
+    patientTempList.map((o) => {
+      if (o.key === 'patientId') {
+        o.key = qrCode;
+      }
+    });
     setTimeout(() => {
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(patientTempList);

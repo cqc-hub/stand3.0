@@ -39,7 +39,10 @@
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
           <block v-if="isPayListRequestComplete && payedList.length">
-            <Clinic-Pay-Detail-List :list="payedList" />
+            <Clinic-Pay-Detail-List
+              :list="payedList"
+              @click-item="goPayDetail"
+            />
           </block>
 
           <view class="empty-list" v-else-if="isPayListRequestComplete">
@@ -69,9 +72,12 @@
     selPayListItem,
     getListData,
     isPayListRequestComplete,
+    pageConfig,
+    getSysConfig,
   } = usePayPage();
 
   const init = async () => {
+    await getSysConfig();
     getListData();
   };
 

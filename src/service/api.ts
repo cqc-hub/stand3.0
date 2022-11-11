@@ -122,14 +122,14 @@ const queryApi = {
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
   // 待缴费
-  getUnpaidClinicList: (data) =>
-    service.post('/phs-query/clinical/getUnpaidClinicList', parm(data), {
+  getUnpaidClinicList: <T>(data) =>
+    service.post<T>('/phs-query/clinical/getUnpaidClinicList', parm(data), {
       hideLoading: false,
     }),
 
   // 已缴费
-  getPrepaidClinicList: (data) =>
-    service.post('/phs-query/clinical/getPrepaidClinicList', parm(data), {
+  getPrepaidClinicList: <T>(data) =>
+    service.post<T>('/phs-query/clinical/getPrepaidClinicList', parm(data), {
       hideLoading: false,
     }),
 

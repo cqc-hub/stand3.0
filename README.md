@@ -56,9 +56,9 @@ npm i -g iconfont-tools
 
 cmd: iconfont-tools
 
-    设置输出文件夹名称: xxx
+    设置输出文件夹名称: xxx(随意)
     设置输出css文件名称: xxx
-    设置css文件的prefix: xxx1(就是后面要用的时候 class 的前缀)
+    设置css文件的prefix: icon-font(就是后面要用的时候 class 的前缀)
     是否生产小程序原生组件: true
 
 然后解压的文件夹里面就会出现一个 xxx 的文件，打开文件复制 xxx.css 文件添加到 uniapp 项目中的 static 里面

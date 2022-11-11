@@ -88,6 +88,7 @@
 
   const init = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
+
     if (hosId.value) {
       getDepList();
     }

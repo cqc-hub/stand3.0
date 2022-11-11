@@ -26,7 +26,7 @@
     </view>
 
     <view class="choose-phone">
-      <text class="label">证件类型</text>
+      <text class="label">证件号码</text>
 
       <text>
         {{ `${gStores.userStore.patChoose.idCard}` }}

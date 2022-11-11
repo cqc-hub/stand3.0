@@ -71,7 +71,7 @@ export const patientTempList: TInstance[] = [
     key: 'patientPhone',
   },
   {
-    label: '证件类型',
+    label: '证件号码',
     field: 'input-text',
     key: 'idCard',
     rowStyle: 'border-radius: 8px;',
@@ -197,7 +197,7 @@ export const orderStatusMap = {
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
     color: '#fff',
-    title: '预约成功',
+    title: '已预约',
     cardColr: 'var(--hr-brand-color-6)',
   },
   // 已挂号
@@ -242,7 +242,7 @@ export const orderStatusMap = {
     color: 'var( --hr-error-color-6)',
     headerIcon: '&#xe6d5;',
     headerBgIcon: '',
-    title: '挂号失败',
+    title: '失败',
     cardColr: 'var(--hr-error-color-6)',
   },
   // 已取消
@@ -272,7 +272,7 @@ export const orderStatusMap = {
   },
 } as const;
 
-export type OrderStatus = keyof typeof orderStatusMap;
+export type OrderStatus = keyof typeof orderStatusMap | '--';
 
 export interface IRegInfo {
   orderStatus: OrderStatus;

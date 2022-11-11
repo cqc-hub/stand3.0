@@ -233,6 +233,7 @@
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   // api.getDocSch = () =>
   //   Promise.resolve({
@@ -826,7 +827,7 @@
 
   const collectDoc = async () => {
     await getDocDetail();
-    const { collectState, docPhoto, docTitleName } = docDetail.value;
+    let { collectState, docPhoto, docTitleName } = docDetail.value;
     const { deptName, docName, hosDocId, hosDeptId, hosId } = props.value;
     const {
       herenId,
@@ -834,6 +835,8 @@
     } = gStores.globalStore;
 
     const collectType = 2;
+
+    docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar-default.png';
 
     if (collectState == '1') {
       const args = {

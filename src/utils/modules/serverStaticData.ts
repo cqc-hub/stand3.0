@@ -29,6 +29,7 @@ export type TBannerConfig = XOR<
   XOR<TBannerConfigSelf, TBannerConfigH5>
 >;
 
+// 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
   order: {
@@ -84,6 +85,16 @@ export interface ISystemConfig {
     fee: number;
     hosId: string;
   }[];
+
+  // 门诊缴费
+  pay: {
+    /**
+     * 列表页
+     */
+
+    // 门诊类型  网络医院/线下门诊 (是否展示)
+    isListShowClinicType?: '1';
+  };
 }
 
 export interface IHosInfo {
@@ -485,15 +496,18 @@ export class ServerStaticData {
       });
 
       try {
-        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || "{}");
+        const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || '{}');
         const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
           result
         );
-        const order = JSON.parse(result.ORDER_REGISTER || "{}");
+        const order = JSON.parse(result.ORDER_REGISTER || '{}');
         systemConfig = {
           person,
           order,
           medRecord,
+          pay: {
+            isListShowClinicType: '1',
+          },
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');
