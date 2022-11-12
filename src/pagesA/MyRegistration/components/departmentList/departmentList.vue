@@ -170,7 +170,10 @@
     () => props.list,
     () => {
       if (props.list.length && props.level !== '1') {
-        itemClickLv1(props.list[0]);
+        const defaultChoose = props.list[0];
+        if (defaultChoose.children && defaultChoose.children.length) {
+          itemClickLv1(props.list[0]);
+        }
       }
     },
 

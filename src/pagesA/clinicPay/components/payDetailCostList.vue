@@ -12,10 +12,29 @@
           </template>
 
           <template #default>
-            <view>
+            <view
+              v-if="item.subCostTypeCode === 'B'"
+              class="medical-content flex-between"
+            >
               <view
                 v-for="(citem, ci) in item.costList"
-                :key="citem.subCostTypeCode"
+                :key="ci"
+                class="medical-item flex-normal f28"
+              >
+                <view class="text-ellipsis color-444 mr8">
+                  {{ citem.subCostTypeName }}
+                </view>
+
+                <view class="text-no-wrap color-888">
+                  {{ `${citem.amount}${citem.units}` }}
+                </view>
+              </view>
+            </view>
+
+            <view v-else>
+              <view
+                v-for="(citem, ci) in item.costList"
+                :key="ci"
                 :class="{
                   mb8: ci !== item.costList.length - 1,
                 }"
@@ -26,12 +45,14 @@
                       {{ citem.subCostTypeName }}
                     </view>
 
-                    <view>{{ citem.subCost }}元</view>
+                    <view>{{ citem.sumSubCost }}元</view>
                   </view>
 
                   <view class="color-888 f24">
                     <text class="mr40">
-                      {{ `${citem.itemPrice}元/${citem.units}` }}
+                      {{
+                        `${citem.itemPrice || citem.subCost}元/${citem.units}`
+                      }}
                     </text>
                     <text>{{ `x${citem.amount}` }}</text>
                   </view>
@@ -62,6 +83,8 @@
   const props = defineProps<{
     list: TCostList;
   }>();
+
+  console.log(props.list);
 </script>
 
 <style lang="scss" scoped>
@@ -77,6 +100,19 @@
     background: var(--hr-neutral-color-1);
     border-radius: 4px;
     padding: 16rpx 24rpx;
+  }
+
+  .medical-content {
+    @extend .item-content;
+    padding: 24rpx;
+
+    flex-wrap: wrap;
+
+    .medical-item {
+      width: 46%;
+
+      margin-bottom: 24rpx;
+    }
   }
 
   .cost-item-nochild {

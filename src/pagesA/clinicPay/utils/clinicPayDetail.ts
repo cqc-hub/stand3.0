@@ -33,9 +33,9 @@ export type TPayedListItem = {} & IPayListItem;
 
 export type TPayDetailProp = {
   hosId: string;
-  payState: string;
-  patientId: string;
+  payState: '0' | '1'; // 支付状态 1待支付，0已支付;
   deptName: string;
+  docName: string;
   _clinicType: string;
 
   clinicType?: string;
@@ -56,6 +56,7 @@ export type TCostList = {
     itemPrice: string;
     itemSpec: string;
     subCost: string;
+    sumSubCost: string;
     subCostTypeCode: string;
     subCostTypeName: string;
     units: string;
@@ -69,13 +70,15 @@ export type TPayDetailInfo = {
   medicalCost: string;
   payState: string;
   personCost: string;
+  hospitalCost: string;
   totalCost: string;
+  invoiceNumber: string; // 发票号
 };
 
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const gStores = new GStores();
-  const tabCurrent = ref(0);
+  const tabCurrent = ref(1);
   const isPayListRequestComplete = ref(false);
   const tabField = [
     {
@@ -88,25 +91,24 @@ export const usePayPage = () => {
     },
   ];
 
-  let tabChange = (idx: number) => {
+  const tabChange = debounce((idx: number) => {
     tabCurrent.value = idx;
-    getListData();
-  };
 
-  tabChange = debounce(tabChange, 20);
+    getListData();
+  }, 20);
 
   const unPayList = ref<IPayListItem[]>([]);
   const payedList = ref<TPayedListItem[]>([]);
 
   const getUnPayList = async () => {
-    if (payedList.value.length) {
+    if (unPayList.value.length) {
       return;
     }
     unPayList.value = [];
 
     let { patientId } = gStores.userStore.patChoose;
 
-    patientId = '10831203';
+    // patientId = '10831203';
     const arg = {
       patientId,
       visitDate: '23',
@@ -177,6 +179,7 @@ export const usePayPage = () => {
       visitDate,
       visitNo,
       deptName,
+      docName,
       _clinicType,
     } = item;
 
@@ -193,6 +196,7 @@ export const usePayPage = () => {
       visitNo,
       deptName,
       _clinicType,
+      docName,
     };
 
     // if (payState === '1') {
@@ -245,9 +249,14 @@ export const usePayPage = () => {
 
 export const usePayDetailPage = () => {
   const detailData = ref({} as TPayDetailInfo);
+  const gStores = new GStores();
+
   const getDetailData = async (arg: TPayDetailProp) => {
+    let { patientId } = gStores.userStore.patChoose;
+
     const { result } = await api.getClinicalPayDetailList({
       ...arg,
+      patientId,
     });
 
     detailData.value = result;
@@ -448,4 +457,4 @@ const detailRes = {
   respCode: '999002',
 };
 
-// api.getClinicalPayDetailList = () => Promise.resolve(detailRes as any);
+api.getClinicalPayDetailList = () => Promise.resolve(detailRes as any);

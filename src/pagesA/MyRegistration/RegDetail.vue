@@ -453,7 +453,7 @@
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
-    orderRegInfo.value.orderStatus = '75';
+    // orderRegInfo.value.orderStatus = '75';
     qrCodeOpt.value.code = result[qrCode];
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
