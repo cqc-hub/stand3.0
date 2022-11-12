@@ -1,6 +1,6 @@
 <template>
   <view class="g-page">
-    <!-- <g-flag isShowFg typeFg="15" /> -->
+    <g-flag isShowFg typeFg="15" />
     <g-choose-pat @choose-pat="getListData(true)" />
     <view class="g-border-bottom">
       <g-tabs
@@ -53,14 +53,27 @@
       </swiper-item>
     </swiper>
 
-    <view class="g-footer" v-if="tabCurrent === 0">233</view>
+    <view class="g-footer" v-if="tabCurrent === 0">
+      <view class="footer-check flex-normal">
+        <view class="iconfont">&#xe6ce;</view>
+        <view>全选</view>
+      </view>
+
+      <view class="flex1 flex-normal count-money">
+        <text class="color-444 f28 mr8">合计</text>
+        <text class="f36 g-bold color-error">16元</text>
+      </view>
+
+      <button class="btn g-border btn-warning pay-btn">缴费</button>
+    </view>
+
     <view
       class="g-footer"
       v-else-if="pageConfig.payedFooterBtn && tabCurrent === 1"
     >
       <button
         @click="useTBanner(pageConfig.payedFooterBtn!)"
-        class="btn btn-primary flex1"
+        class="btn btn-primary"
       >
         {{ pageConfig.payedFooterBtn.text }}
       </button>
@@ -97,7 +110,7 @@
 
   const init = async () => {
     await getSysConfig();
-    // getListData();
+    getListData();
   };
 
   init();
@@ -108,5 +121,33 @@
     height: 100%;
     padding: 0 32rpx;
     width: calc(100% - 64rpx);
+  }
+
+  .g-footer {
+    align-items: center;
+
+    .footer-check {
+      font-size: var(--hr-font-size-xs);
+      flex: 0.5;
+
+      .iconfont {
+        font-size: var(--hr-font-size-xxl);
+        color: var(--hr-neutral-color-7);
+        margin-right: 10rpx;
+      }
+    }
+
+    .count-money {
+      justify-content: flex-end;
+      margin-right: 24rpx;
+    }
+
+    .btn {
+      flex: 1;
+    }
+
+    .pay-btn {
+      flex: 0.8;
+    }
   }
 </style>

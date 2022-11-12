@@ -42,9 +42,7 @@ export const beforeEach = async (
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url);
 
-  console.log({ currentRoute, url }, pageAdmin);
   if (currentRoute) {
-
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 

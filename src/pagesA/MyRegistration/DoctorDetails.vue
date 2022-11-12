@@ -61,10 +61,10 @@
                     }"
                     class="color-444 f28 mr12 pr12"
                   >
-                    {{ props.docTitleName || docDetail.docTitleName }}
+                    {{ props.docTitleName || docDetail.docTitleName || '' }}
                   </view>
                   <view class="color-444 f28">
-                    {{ docDetail.docJobName }}
+                    {{ docDetail.docJobName || '' }}
                   </view>
                 </view>
 
@@ -75,10 +75,10 @@
                     }"
                     class="color-444 f28 g-split-line mr12 pr12"
                   >
-                    {{ $global.systemInfo.name }}
+                    {{ $global.systemInfo.name || '' }}
                   </view>
                   <view class="color-444 f28">
-                    {{ docDetail.deptName }}
+                    {{ docDetail.deptName || '' }}
                   </view>
                 </view>
               </view>
