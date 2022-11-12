@@ -18,7 +18,7 @@
   const states = [
     {
       icon: 'img_404_no content@3x.png',
-      label: '暂未查到相关结果',
+      label: '暂未查到相关信息',
     },
     {
       icon: 'img_404_no record@3x.png',
