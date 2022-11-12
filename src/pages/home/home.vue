@@ -408,7 +408,6 @@
 
         view.switchPatient {
           width: 180rpx;
-          height: 64rpx;
           background: linear-gradient(
             180deg,
             rgba(255, 255, 255, 0.9),

@@ -170,6 +170,9 @@
     }
 
     // 公用样式
+    .flex-between{
+      width: 100%;
+    }
 
     .swiper {
       height: 100%;
@@ -198,7 +201,9 @@
       font-size: var(--hr-font-size-s);
       font-weight: var(--h-weight-2);
       color: var(--hr-neutral-color-10);
-      padding: 24rpx 16rpx 20rpx 32rpx;
+      padding: 0 16rpx 0 32rpx;
+      display: flex;
+      overflow: hidden;
     }
     // 蓝色
     .icon-size1 {
@@ -256,7 +261,7 @@
       opacity: 0.15;
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: -6rpx;
     }
 
     // 副标题
