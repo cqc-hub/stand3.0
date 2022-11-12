@@ -251,14 +251,12 @@
             category: props._questionId,
             url: props._url,
             hosId: item.hosId,
-            hosName: item.hosName,
           }),
         });
       } else {
         uni.navigateTo({
           url: joinQuery(pagesList[props._type], {
             hosId: item.hosId,
-            hosName: item.hosName,
             isPay:props._isPay
           }),
         });
