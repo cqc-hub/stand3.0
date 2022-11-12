@@ -80,11 +80,9 @@
 
   import ListCollapse from './payDetailCostListCollapse.vue';
 
-  const props = defineProps<{
+  defineProps<{
     list: TCostList;
   }>();
-
-  console.log(props.list);
 </script>
 
 <style lang="scss" scoped>

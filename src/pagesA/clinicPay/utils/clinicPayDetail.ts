@@ -78,7 +78,7 @@ export type TPayDetailInfo = {
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const gStores = new GStores();
-  const tabCurrent = ref(1);
+  const tabCurrent = ref(0);
   const isPayListRequestComplete = ref(false);
   const tabField = [
     {

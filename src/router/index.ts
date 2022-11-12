@@ -29,6 +29,8 @@ const getCurrentRoute = (path: String | undefined) => {
 
 type TRoute = {
   _isLogin?: boolean;
+  _isPatient?: boolean;
+  _isHerenId?: boolean;
 };
 export const beforeEach = async (
   options: UniNamespace.ReLaunchOptions &
@@ -40,7 +42,9 @@ export const beforeEach = async (
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url);
 
+  console.log({ currentRoute, url }, pageAdmin);
   if (currentRoute) {
+
     const globalStore = useGlobalStore();
     const userStore = useUserStore();
 
@@ -57,6 +61,14 @@ export const beforeEach = async (
 
     if (options._isLogin) {
       login = true;
+    }
+
+    if (options._isHerenId) {
+      herenId = true;
+    }
+
+    if (options._isPatient) {
+      patient = true;
     }
 
     if (patient) {

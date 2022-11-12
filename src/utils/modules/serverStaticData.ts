@@ -4,11 +4,16 @@ import { GStores } from './login';
 import api from '@/service/api';
 import { type XOR } from '@/typeUtils/obj';
 import { joinQuery } from '@/common';
+import { beforeEach } from '@/router/index';
 
 type TBannerConfigBase = {
   src: `http${string}`;
   extraData?: BaseObject;
   path: string; // h5 跳转完整路径 其他跳转 如 home/my
+  addition?: {
+    token?: string;
+    patientId?: string;
+  }; // 固定的附加参数(动态值) 键值为新的键名
 };
 
 type TBannerConfigH5 = {
@@ -28,6 +33,10 @@ export type TBannerConfig = XOR<
   TBannerConfigOtherProgram,
   XOR<TBannerConfigSelf, TBannerConfigH5>
 >;
+
+export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
+  text: string;
+};
 
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
@@ -94,6 +103,7 @@ export interface ISystemConfig {
 
     // 门诊类型  网络医院/线下门诊 (是否展示)
     isListShowClinicType?: '1';
+    payedFooterBtn?: TButtonConfig;
   };
 }
 
@@ -164,10 +174,42 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   }
 };
 
-export const useTBanner = (config: TBannerConfig) => {
-  const { type, extraData, path, appId } = config;
+export const useTBanner = async (
+  config: Pick<
+    TBannerConfig,
+    'addition' | 'extraData' | 'appId' | 'path' | 'type'
+  >
+) => {
+  const { type, extraData = {}, path, appId, addition } = config;
+  let [isLogin, isPatient] = [false, false];
 
-  const fullUrl = joinQuery(path, extraData || {});
+  if (addition) {
+    const { token, patientId } = addition;
+    const gStores = new GStores();
+    if (patientId) {
+      extraData[patientId] = gStores.userStore.patChoose.patientId;
+      isPatient = true;
+    }
+
+    if (token) {
+      extraData[token] = gStores.globalStore.getToken;
+      isLogin = true;
+    }
+  }
+
+  const fullUrl = joinQuery(path, extraData);
+
+  const pages = getCurrentPages();
+
+  if (pages.length) {
+    const _fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+    await beforeEach({
+      url: _fullUrl,
+      _isLogin: isLogin,
+      _isPatient: isPatient,
+    });
+  }
 
   if (type === 'h5') {
     // #ifdef H5
@@ -175,19 +217,23 @@ export const useTBanner = (config: TBannerConfig) => {
     // #endif
 
     // #ifndef H5
+    const url = joinQuery('/pagesA/webView/webView', {
+      https: encodeURIComponent(fullUrl),
+    });
+
     uni.navigateTo({
-      url: joinQuery('/pagesA/webView/webView', {
-        https: encodeURIComponent(fullUrl),
-      }),
+      url,
     });
     // #endif
   } else if (type === 'self') {
+    const url = `/${fullUrl}`;
+
     uni.navigateTo({
-      url: `/${fullUrl}`,
+      url,
     });
   } else {
     uni.navigateToMiniProgram({
-      appId,
+      appId: appId!,
       path,
       extraData,
     });
@@ -507,6 +553,17 @@ export class ServerStaticData {
           medRecord,
           pay: {
             isListShowClinicType: '1',
+            payedFooterBtn: {
+              addition: {
+                patientId: 'patientId',
+              },
+              type: 'h5',
+              extraData: {
+                sysCode: '1001033',
+              },
+              path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
+              text: '导诊单',
+            },
           },
         };
       } catch (error) {

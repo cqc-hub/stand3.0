@@ -59,6 +59,13 @@
               {{ item.docName }}
             </view>
           </view>
+
+          <view v-if="!isCheck" class="row flex-normal">
+            <view class="row-label color-888">费用金额</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.totalCost }}元
+            </view>
+          </view>
         </view>
       </view>
     </view>

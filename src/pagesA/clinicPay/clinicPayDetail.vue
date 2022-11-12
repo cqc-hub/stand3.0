@@ -53,6 +53,19 @@
       </swiper-item>
     </swiper>
 
+    <view class="g-footer" v-if="tabCurrent === 0">233</view>
+    <view
+      class="g-footer"
+      v-else-if="pageConfig.payedFooterBtn && tabCurrent === 1"
+    >
+      <button
+        @click="useTBanner(pageConfig.payedFooterBtn!)"
+        class="btn btn-primary flex1"
+      >
+        {{ pageConfig.payedFooterBtn.text }}
+      </button>
+    </view>
+
     <g-message />
   </view>
 </template>
@@ -60,6 +73,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { usePayPage } from './utils/clinicPayDetail';
+  import { useTBanner } from '@/utils';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
 
@@ -83,7 +97,7 @@
 
   const init = async () => {
     await getSysConfig();
-    getListData();
+    // getListData();
   };
 
   init();
