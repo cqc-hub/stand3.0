@@ -194,7 +194,7 @@ const gridClick = (item) => {
       padding: 0 8rpx;
       z-index: 1;
       right: 8rpx;
-      top: 18rp;
+      top: 18rpx;
       background-color: var(--h-color-white);
       box-sizing: border-box;
     }
