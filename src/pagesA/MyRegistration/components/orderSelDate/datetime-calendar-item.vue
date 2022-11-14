@@ -224,6 +224,7 @@
     &-order {
       font-weight: 400;
       font-size: 20rpx;
+      margin-top: 4rpx;
 
       &-active {
         color: var(--hr-brand-color-6);

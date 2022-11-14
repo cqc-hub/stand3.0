@@ -38,7 +38,6 @@
     </scroll-view>
 
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
-      <!-- 'fix-top': i === openNow, -->
       <view
         v-for="(itemLv2, i) in deptListLv2"
         :key="itemLv2.hosDeptId"

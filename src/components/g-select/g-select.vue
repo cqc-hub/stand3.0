@@ -117,6 +117,10 @@
       font-weight: 600;
     }
 
+    &:last-child {
+      margin-bottom: 50rpx;
+    }
+
     .ico-check {
       font-size: var(--hr-font-size-xxl);
     }

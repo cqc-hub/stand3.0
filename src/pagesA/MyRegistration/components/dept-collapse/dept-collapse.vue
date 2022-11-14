@@ -28,7 +28,7 @@
           arrowBottom: isShow,
           'icon-hide': !item.children,
         }"
-        class="iconfont ico-arrow right-icon"
+        class="iconfont ico-arrow right-icon color-888"
       >
         &#xe66b;
       </view>

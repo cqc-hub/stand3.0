@@ -29,7 +29,7 @@
       <view v-else>
         <view class="hos-location" @click.stop="locationClick">
           <view class="g-flex-rc-cc">
-            <view class="iconfont icon-location">&#xe6d7;</view>
+            <view class="icon-font icon-location ico_location2" />
             <view>地图导航</view>
           </view>
 
@@ -93,11 +93,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-
       .hos-name {
         font-size: var(--hr-font-size-xl);
         font-weight: 600;
         color: var(--hr-neutral-color-10);
+        position: relative;
+        top: 8rpx;
       }
 
       .hos-address {
@@ -112,6 +113,8 @@
 
         justify-content: space-between;
         font-size: var(--hr-font-size-xxxs);
+        position: relative;
+        top: -8rpx;
 
         .icon-location {
           color: var(--hr-brand-color-6);

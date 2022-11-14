@@ -53,11 +53,10 @@
         <view class="iconfont ico-arrow">&#xe6c4;</view>
       </view>
     </view>
-
+    <!-- v-if="chooseDays.length >= 20" -->
     <Datetime-Picker
       ref="calendarRef"
       type="date"
-      v-if="chooseDays.length >= 20"
       :modelValue="value"
       :enableDays="enableDays"
       :clear-icon="false"
@@ -164,6 +163,10 @@
       }
     );
   };
+
+  setTimeout(() => {
+    calendarRef.value.show();
+  }, 1000);
 </script>
 
 <style lang="scss" scoped>
@@ -187,6 +190,9 @@
         color: var(--hr-neutral-color-8);
         position: relative;
         font-size: var(--hr-font-size-xxxs);
+        position: relative;
+        border-radius: 0 16rpx 16rpx 0;
+        box-shadow: -14rpx 0px 14rpx -14rpx #5e5e5e57;
 
         .ico-arrow {
           position: absolute;

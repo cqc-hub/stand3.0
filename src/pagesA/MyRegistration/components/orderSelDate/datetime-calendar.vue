@@ -12,25 +12,42 @@
       :class="{
         'uni-calendar--fixed': !insert,
         'uni-calendar--ani-show': aniMaskShow,
-        'uni-calendar__content-mobile': aniMaskShow
+        'uni-calendar__content-mobile': aniMaskShow,
       }"
     >
-      <view class="uni-calendar__header" :class="{ 'uni-calendar__header-mobile': !insert }">
-        <view v-if="left" class="uni-calendar__header-btn-box" @click.stop="pre">
+      <view
+        class="uni-calendar__header"
+        :class="{ 'uni-calendar__header-mobile': !insert }"
+      >
+        <view
+          v-if="left"
+          class="uni-calendar__header-btn-box"
+          @click.stop="pre"
+        >
           <view class="uni-calendar__header-btn uni-calendar--left"></view>
         </view>
-        <picker mode="date" :value="date" fields="month" @change="bindDateChange">
+        <picker
+          mode="date"
+          :value="date"
+          fields="month"
+          @change="bindDateChange"
+        >
           <text class="uni-calendar__header-text">
-            {{ (nowDate.year || '') + yearText + (nowDate.month || '') + monthText }}
+            {{
+              (nowDate.year || '') +
+              yearText +
+              (nowDate.month || '') +
+              monthText
+            }}
           </text>
         </picker>
-        <view v-if="right" class="uni-calendar__header-btn-box" @click.stop="next">
+        <view
+          v-if="right"
+          class="uni-calendar__header-btn-box"
+          @click.stop="next"
+        >
           <view class="uni-calendar__header-btn uni-calendar--right"></view>
         </view>
-        <!-- <view v-if="!insert" class="dialog-close" @click="clean">
-          <view class="dialog-close-plus" data-id="close"></view>
-          <view class="dialog-close-plus dialog-close-rotate" data-id="close"></view>
-        </view> -->
 
         <text class="uni-calendar__backtoday" @click="backtoday">回到今天</text>
       </view>
@@ -61,8 +78,16 @@
             <text class="uni-calendar__weeks-day-text">{{ SATText }}</text>
           </view>
         </view>
-        <view class="uni-calendar__weeks" v-for="(item, weekIndex) in weeks" :key="weekIndex">
-          <view class="uni-calendar__weeks-item" v-for="(weeks, weeksIndex) in item" :key="weeksIndex">
+        <view
+          class="uni-calendar__weeks my-calendar-row"
+          v-for="(item, weekIndex) in weeks"
+          :key="weekIndex"
+        >
+          <view
+            class="uni-calendar__weeks-item"
+            v-for="(weeks, weeksIndex) in item"
+            :key="weeksIndex"
+          >
             <calendar-item
               class="uni-calendar-item--hook"
               :weeks="weeks"
@@ -77,12 +102,15 @@
           </view>
         </view>
       </view>
+
       <view
         v-if="!insert && !range && typeHasTime"
         class="uni-date-changed uni-calendar--fixed-top"
         style="padding: 0 80px"
       >
-        <view class="uni-date-changed--time-date">{{ tempSingleDate ? tempSingleDate : selectDateText }}</view>
+        <view class="uni-date-changed--time-date">
+          {{ tempSingleDate ? tempSingleDate : selectDateText }}
+        </view>
         <time-picker
           type="time"
           :start="reactStartTime"
@@ -95,9 +123,14 @@
         ></time-picker>
       </view>
 
-      <view v-if="!insert && range && typeHasTime" class="uni-date-changed uni-calendar--fixed-top">
+      <view
+        v-if="!insert && range && typeHasTime"
+        class="uni-date-changed uni-calendar--fixed-top"
+      >
         <view class="uni-date-changed--time-start">
-          <view class="uni-date-changed--time-date">{{ tempRange.before ? tempRange.before : startDateText }}</view>
+          <view class="uni-date-changed--time-date">
+            {{ tempRange.before ? tempRange.before : startDateText }}
+          </view>
           <time-picker
             type="time"
             :start="reactStartTime"
@@ -108,9 +141,15 @@
             class="time-picker-style"
           ></time-picker>
         </view>
-        <uni-icons type="arrowthinright" color="#999" style="line-height: 50px"></uni-icons>
+        <uni-icons
+          type="arrowthinright"
+          color="#999"
+          style="line-height: 50px"
+        ></uni-icons>
         <view class="uni-date-changed--time-end">
-          <view class="uni-date-changed--time-date">{{ tempRange.after ? tempRange.after : endDateText }}</view>
+          <view class="uni-date-changed--time-date">
+            {{ tempRange.after ? tempRange.after : endDateText }}
+          </view>
           <time-picker
             type="time"
             :end="reactEndTime"
@@ -160,80 +199,80 @@
   export default {
     components: {
       calendarItem,
-      timePicker
+      timePicker,
     },
     props: {
       enableDays: {
         type: Array,
-        default: () => []
+        default: () => [],
       },
       date: {
         type: String,
-        default: ''
+        default: '',
       },
       defTime: {
         type: [String, Object],
-        default: ''
+        default: '',
       },
       selectableTimes: {
         type: [Object],
         default() {
           return {};
-        }
+        },
       },
       selected: {
         type: Array,
         default() {
           return [];
-        }
+        },
       },
       lunar: {
         type: Boolean,
-        default: false
+        default: false,
       },
       startDate: {
         type: String,
-        default: ''
+        default: '',
       },
       endDate: {
         type: String,
-        default: ''
+        default: '',
       },
       range: {
         type: Boolean,
-        default: false
+        default: false,
       },
       typeHasTime: {
         type: Boolean,
-        default: false
+        default: false,
       },
       insert: {
         type: Boolean,
-        default: true
+        default: true,
       },
       showMonth: {
         type: Boolean,
-        default: true
+        default: true,
       },
       clearDate: {
         type: Boolean,
-        default: true
+        default: true,
       },
       left: {
         type: Boolean,
-        default: true
+        default: true,
       },
       right: {
         type: Boolean,
-        default: true
+        default: true,
       },
       checkHover: {
         type: Boolean,
-        default: true
+        default: true,
       },
       hideSecond: {
         type: [Boolean],
-        default: false
+        default: false,
       },
       pleStatus: {
         type: Object,
@@ -242,10 +281,10 @@
             before: '',
             after: '',
             data: [],
-            fulldate: ''
+            fulldate: '',
           };
-        }
-      }
+        },
+      },
     },
     data() {
       return {
@@ -258,13 +297,13 @@
         time: '',
         timeRange: {
           startTime: '',
-          endTime: ''
+          endTime: '',
         },
         tempSingleDate: '',
         tempRange: {
           before: '',
-          after: ''
-        }
+          after: '',
+        },
       };
     },
     watch: {
@@ -277,7 +316,7 @@
               this.init(newVal);
             }, 100);
           }
-        }
+        },
       },
       defTime: {
         immediate: true,
@@ -289,7 +328,7 @@
             this.timeRange.startTime = newVal.start;
             this.timeRange.endTime = newVal.end;
           }
-        }
+        },
       },
       startDate(val) {
         this.cale.resetSatrtDate(val);
@@ -336,17 +375,22 @@
               this.cale.lastHover = true;
             }
           }, 16);
-        }
-      }
+        },
+      },
     },
     computed: {
       reactStartTime() {
-        const activeDate = this.range ? this.tempRange.before : this.calendar.fullDate;
-        const res = activeDate === this.startDate ? this.selectableTimes.start : '';
+        const activeDate = this.range
+          ? this.tempRange.before
+          : this.calendar.fullDate;
+        const res =
+          activeDate === this.startDate ? this.selectableTimes.start : '';
         return res;
       },
       reactEndTime() {
-        const activeDate = this.range ? this.tempRange.after : this.calendar.fullDate;
+        const activeDate = this.range
+          ? this.tempRange.after
+          : this.calendar.fullDate;
         const res = activeDate === this.endDate ? this.selectableTimes.end : '';
         return res;
       },
@@ -394,7 +438,7 @@
       },
       confirmText() {
         return t('uni-calender.confirm');
-      }
+      },
     },
     created() {
       // 获取日历方法实例
@@ -403,7 +447,7 @@
         selected: this.selected,
         startDate: this.startDate,
         endDate: this.endDate,
-        range: this.range
+        range: this.range,
         // multipleStatus: this.pleStatus
       });
       // 选中某一天
@@ -534,7 +578,7 @@
         let { year, month } = this.nowDate;
         this.$emit('monthSwitch', {
           year,
-          month: Number(month)
+          month: Number(month),
         });
       },
       /**
@@ -558,7 +602,7 @@
           timeRange: this.timeRange,
           fulldate: fullDate,
           lunar,
-          extraInfo: extraInfo || {}
+          extraInfo: extraInfo || {},
         });
       },
       /**
@@ -607,7 +651,11 @@
        * 上个月
        */
       pre() {
-        const preDate = this.cale.getDate(this.nowDate.fullDate, -1, 'month').fullDate;
+        const preDate = this.cale.getDate(
+          this.nowDate.fullDate,
+          -1,
+          'month'
+        ).fullDate;
         this.setDate(preDate);
         this.monthSwitch();
       },
@@ -615,7 +663,11 @@
        * 下个月
        */
       next() {
-        const nextDate = this.cale.getDate(this.nowDate.fullDate, +1, 'month').fullDate;
+        const nextDate = this.cale.getDate(
+          this.nowDate.fullDate,
+          +1,
+          'month'
+        ).fullDate;
         this.setDate(nextDate);
         this.monthSwitch();
       },
@@ -627,8 +679,8 @@
         this.cale.setDate(date);
         this.weeks = this.cale.weeks;
         this.nowDate = this.cale.getInfo(date);
-      }
-    }
+      },
+    },
   };
 </script>
 
@@ -786,6 +838,12 @@
     display: flex;
     /* #endif */
     flex-direction: row;
+  }
+
+  .my-calendar-row {
+    &:not(:last-child) {
+      margin-bottom: 24rpx;
+    }
   }
 
   .uni-calendar__weeks-item {
