@@ -64,7 +64,9 @@
         <text class="f36 g-bold color-error">16元</text>
       </view>
 
-      <button class="btn g-border btn-warning pay-btn">缴费</button>
+      <button class="btn g-border btn-warning pay-btn" @click="handlerPay">
+        缴费
+      </button>
     </view>
 
     <view
@@ -80,6 +82,37 @@
     </view>
 
     <g-message />
+
+    <Order-Reg-Confirm
+      v-if="pageConfig.confirmPayFg"
+      :title="confirmFgTitle"
+      @confirm="getPay"
+      height="50vh"
+      confirmText="确定"
+      cannerText="取消"
+      headerIcon=""
+      ref="regDialogConfirm"
+      isShowCloseIcon
+      footerBtnIsometric
+    >
+      <g-flag
+        v-model:title="confirmFgTitle"
+        :typeFg="pageConfig.confirmPayFg!"
+        isShowFgTip
+        isHideTitle
+      />
+    </Order-Reg-Confirm>
+
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      @pay-click="getPayInfo"
+      autoInOne
+      ref="refPay"
+    >
+      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+    </g-pay>
   </view>
 </template>
 
@@ -89,6 +122,7 @@
   import { useTBanner } from '@/utils';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const {
     tabCurrent,
@@ -102,6 +136,16 @@
     isPayListRequestComplete,
     pageConfig,
     getSysConfig,
+    regDialogConfirm,
+    handlerPay,
+    confirmFgTitle,
+    getPay,
+    refPay,
+    refPayList,
+    payArg,
+    payAfter,
+    getPayInfo,
+    toPay,
   } = usePayPage();
 
   const isListShowClinicType = computed(() => {
@@ -112,6 +156,10 @@
     await getSysConfig();
     getListData();
   };
+
+  setTimeout(() => {
+    // regDialogConfirm.value.show();
+  }, 1000);
 
   init();
 </script>

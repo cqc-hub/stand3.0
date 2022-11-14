@@ -1,6 +1,6 @@
 <template>
   <view class="choose-pat">
-    <g-popup title="选择支付方式" :maskClickClose="false" ref="refActionSheet">
+    <g-popup title="选择支付方式" ref="refActionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
           <pay-List :list="list" @choose-pat="choosePay" />
@@ -31,6 +31,8 @@
 
       // auto true 时候接口参数 (openId channel patientName patientId cardNumber source) 不用给
       autoPayArg?: BaseObject;
+      // 只有一个支付选择时候跳过选择
+      autoInOne?: boolean;
     }>(),
     {
       list: () => [
@@ -58,7 +60,16 @@
   };
 
   const show = () => {
-    refActionSheet.value.show();
+    if (props.autoInOne && props.list.length === 1) {
+      const item = props.list[0];
+
+      choosePay({
+        item,
+        index: 0,
+      });
+    } else {
+      refActionSheet.value.show();
+    }
   };
 
   let requestBefore = async <T = BaseObject>(data: T): Promise<T> => {

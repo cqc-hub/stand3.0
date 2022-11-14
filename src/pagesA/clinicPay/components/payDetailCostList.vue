@@ -13,7 +13,7 @@
 
           <template #default>
             <view
-              v-if="item.subCostTypeCode === 'B'"
+              v-if="item.subCostTypeCode === '4'"
               class="medical-content flex-between"
             >
               <view
@@ -39,19 +39,19 @@
                   mb8: ci !== item.costList.length - 1,
                 }"
               >
-                <view v-if="1" class="item-content f28 color-444">
+                <view class="item-content f28 color-444">
                   <view class="flex-between flex-start-r mb8">
                     <view class="flex1">
                       {{ citem.subCostTypeName }}
                     </view>
 
-                    <view>{{ citem.sumSubCost }}元</view>
+                    <view>{{ citem.subCost }}元</view>
                   </view>
 
                   <view class="color-888 f24">
                     <text class="mr40">
                       {{
-                        `${citem.itemPrice || citem.subCost}元/${citem.units}`
+                        `${citem.itemPrice}元/${citem.units}`
                       }}
                     </text>
                     <text>{{ `x${citem.amount}` }}</text>

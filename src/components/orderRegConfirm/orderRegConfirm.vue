@@ -17,9 +17,17 @@
       >
         <image :src="headerIcon" mode="heightFix" class="popup-header-icon" />
         <view class="popup-container">
-          <view class="popup-header popup-padding">
+          <view class="popup-header popup-padding flex-between">
             <view class="popup-header-title">
               {{ title }}
+            </view>
+
+            <view
+              v-if="isShowCloseIcon"
+              @click="closePopup"
+              class="iconfont close-icon color-888 f48"
+            >
+              &#xe6cd;
             </view>
           </view>
 
@@ -31,10 +39,18 @@
 
           <view v-if="!isHideFooter" class="popup-footer g-border-top">
             <slot name="footer">
-              <view class="popup-footer-container popup-padding">
-                <button class="btn btn-normal" @click="hide">取消</button>
+              <view
+                :class="{
+                  'btn-isometric': footerBtnIsometric,
+                }"
+                class="popup-footer-container popup-padding"
+              >
+                <button class="btn btn-normal" @click="hide">
+                  {{ cannerText }}
+                </button>
+
                 <button class="btn btn-primary" @click="confirm">
-                  同意须知
+                  {{ confirmText }}
                 </button>
               </view>
             </slot>
@@ -50,19 +66,26 @@
   import wybPopup from '@/components/wyb-popup/wyb-popup.vue';
   import global from '@/config/global';
 
-  const props = withDefaults(
+  withDefaults(
     defineProps<{
       maskClickClose?: boolean;
+      isShowCloseIcon?: boolean;
       title?: string;
       headerIcon?: string;
       height?: string;
       isHideFooter?: boolean;
+      cannerText?: string;
+      confirmText?: string;
+      // 按钮等长?
+      footerBtnIsometric?: boolean;
     }>(),
     {
       title: '须知',
       maskClickClose: true,
       headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png',
       height: '90vh',
+      cannerText: '取消',
+      confirmText: '同意须知',
     }
   );
 
@@ -84,6 +107,11 @@
 
   const hide = () => {
     popup.value.close();
+  };
+
+  const closePopup = () => {
+    console.log('close');
+    hide();
   };
 
   const confirm = () => {
@@ -123,6 +151,7 @@
       position: absolute;
       right: 0;
       left: 0;
+      pointer-events: none;
     }
 
     .popup-header {
@@ -153,6 +182,10 @@
         grid-template-columns: 1fr 2.3fr;
         gap: 0 16rpx;
         padding-top: 24rpx;
+
+        &.btn-isometric {
+          grid-template-columns: 0.9fr 1fr;
+        }
 
         > button {
           width: 100%;

@@ -56,7 +56,7 @@ export const toPayPull = async (data: IPayRes) => {
       uni.getProvider({
         service: 'payment',
         success(result) {
-          // @ts-ignore
+          // @ts-expect-error
           payData.provider = result.provider[0];
           resolve(void 0);
         },

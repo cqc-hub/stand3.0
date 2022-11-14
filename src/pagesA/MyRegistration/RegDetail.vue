@@ -91,9 +91,24 @@
               v-if="isShowQr"
               class="qr-code g-flex-rc-cc g-border-bottom m32"
             >
-              <w-qrcode :options="_qrCodeOpt" />
+              <view class="my-display-none">
+                <w-qrcode :options="_qrCodeOpt" ref="refqrcode" />
+                <w-barcode :options="_barCodeOpt" ref="refqrbarcode" />
+              </view>
 
-              <w-barcode :options="_qrCodeOpt" />
+              <view class="qr g-flex-rc-cc">
+                <image
+                  v-if="showQrCode"
+                  :src="qrCodeOpt._qrImg"
+                  class="qrcode-img"
+                />
+
+                <image
+                  v-if="!showQrCode"
+                  :src="qrCodeOpt._barImg"
+                  mode="widthFix"
+                />
+              </view>
 
               <view class="qr-code-value">{{ _qrCodeOpt.code }}</view>
 
@@ -363,20 +378,28 @@
     width: 600, // 宽度 单位rpx
     height: 184, // 高度 单位rpx
     code: '',
+
+    _barImg: '',
+    _qrImg: '',
   });
 
   const _qrCodeOpt = computed(() => {
-    if (showQrCode.value) {
-      return {
-        ...qrCodeOpt.value,
-        height: 0,
-      };
-    } else {
-      return {
-        ...qrCodeOpt.value,
-        size: 0,
-      };
-    }
+    const _v = qrCodeOpt.value;
+
+    return {
+      size: _v.size,
+      code: _v.code,
+    };
+  });
+
+  const _barCodeOpt = computed(() => {
+    const _v = qrCodeOpt.value;
+
+    return {
+      code: _v.code,
+      width: _v.width,
+      height: _v.height,
+    };
   });
 
   const titleStatus = computed(() => {
@@ -423,6 +446,19 @@
     }, 1000);
   };
 
+  const refqrcode = ref('' as any);
+  const refqrbarcode = ref('' as any);
+  const capture = async () => {
+    const { tempFilePath: qrCodeImg } = await refqrcode.value.GetCodeImg();
+    const { tempFilePath: barcodeImg } = await refqrbarcode.value.GetCodeImg();
+
+    qrCodeOpt.value._barImg = barcodeImg;
+    qrCodeOpt.value._qrImg = qrCodeImg;
+
+    qrCodeOpt.value.width = 0;
+    qrCodeOpt.value.size = 0;
+  };
+
   const init = async () => {
     const orderId = pageProps.value.orderId;
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
@@ -453,11 +489,15 @@
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
-    // orderRegInfo.value.orderStatus = '75';
+    orderRegInfo.value.orderStatus = '75';
     qrCodeOpt.value.code = result[qrCode];
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
-
+    nextTick(() => {
+      setTimeout(() => {
+        capture();
+      }, 120);
+    });
     patientTempList.map((o) => {
       if (o.key === 'patientId') {
         o.key = qrCode;
@@ -798,6 +838,13 @@
       .pay-btn {
         flex: 2;
       }
+    }
+  }
+
+  .qr {
+    .qrcode-img {
+      width: 320rpx;
+      height: 320rpx;
     }
   }
 </style>

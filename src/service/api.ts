@@ -368,7 +368,8 @@ const authApi = {
 
   addHRPay: <T>(data) => {
     return service.post<T>('/phs-pay/pay/addHRPay', parm(data), {
-      showMessage: false,
+      // showMessage: false,
+      hideLoading: false,
     });
   },
 };

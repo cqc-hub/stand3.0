@@ -103,7 +103,12 @@ export interface ISystemConfig {
 
     // 门诊类型  网络医院/线下门诊 (是否展示)
     isListShowClinicType?: '1';
+    // 待缴费点击缴费时候提示的协议 (不配没有)
+    confirmPayFg?: string;
+    // 已缴费底部的按钮
     payedFooterBtn?: TButtonConfig;
+    // 预结算
+    isPreSettle?: '1';
   };
 }
 
@@ -537,10 +542,6 @@ export class ServerStaticData {
         paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER',
       });
 
-      console.log({
-        result,
-      });
-
       try {
         const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || '{}');
         const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
@@ -564,6 +565,8 @@ export class ServerStaticData {
               path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
               text: '导诊单',
             },
+            confirmPayFg: '15',
+            // isPreSettle: '1',
           },
         };
       } catch (error) {
