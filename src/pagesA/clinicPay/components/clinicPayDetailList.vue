@@ -9,12 +9,12 @@
       @click="itemClick(item)"
       class="item flex-normal mb16 g-border"
     >
-      <view
-        v-if="isCheck"
-        @click.stop="selItem(item)"
-        class="iconfont check-box-icon"
-      >
-        {{ getIsActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
+      <view v-if="isCheck" class="icon-content">
+        <view @click.stop="selItem(item)" class="iconfont check-box-icon">
+          {{ getIsActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
+        </view>
+
+        <view class="icon-mask" @click.stop="selItem(item)" />
       </view>
 
       <view class="content">
@@ -73,20 +73,26 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { type IPayListItem } from '../utils/clinicPayDetail';
 
-  const props = defineProps<{
-    list: IPayListItem[];
-    isListShowClinicType?: boolean;
-    isCheck?: boolean;
-  }>();
-
+  const props = withDefaults(
+    defineProps<{
+      list: IPayListItem[];
+      selUnPayList: IPayListItem[];
+      isListShowClinicType?: boolean;
+      isCheck?: boolean;
+    }>(),
+    {
+      selUnPayList: () => [],
+    }
+  );
   const emits = defineEmits(['sel-item', 'click-item']);
 
-  const isActive = ref(false);
+  const selIds = computed(() => props.selUnPayList.map((o) => o.clinicId));
+
   const getIsActive = (item: IPayListItem) => {
-    return isActive.value;
+    return selIds.value.includes(item.clinicId);
   };
 
   const selItem = (item) => {
@@ -109,9 +115,22 @@
       border-radius: 8px;
       padding: 32rpx;
       align-items: flex-start;
+      position: relative;
 
       &:first-child {
         margin-top: 24rpx;
+      }
+
+      .icon-content {
+        height: 100%;
+
+        .icon-mask {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 120rpx;
+          left: -32rpx;
+        }
       }
 
       .check-box-icon {

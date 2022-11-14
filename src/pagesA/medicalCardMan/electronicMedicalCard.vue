@@ -30,14 +30,14 @@
       <button
         v-if="clickPat.healthQrCodeText"
         @click="goHealCardPackage"
-        class="btn btn-normal color-green mb12"
+        class="btn btn-normal mb12"
       >
-        <text class="color-green">添加到卡包</text>
+        <text>添加到卡包</text>
       </button>
       <!-- #endif -->
 
-      <button @click="goDetail" class="btn btn-normal color-green">
-        <text class="color-green">更多信息</text>
+      <button @click="goDetail" class="btn btn-normal">
+        <text>更多信息</text>
       </button>
     </view>
 
@@ -110,7 +110,6 @@
     const { result } = await api.getCardPackOrderId(arg);
 
     const orderId = result?.orderId;
-
 
     if (orderId) {
       const url = `https://03-h5-health.tengmed.com/api/open/takeMsCard?order_id=${orderId}&redirect_uri=back`;

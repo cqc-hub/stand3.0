@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import {
   GStores,
   debounce,
@@ -19,6 +19,8 @@ export type IPayListItem = {
   deptId: string;
   deptName: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付
+  clinicId: string; // 唯一
+  subIds: string; // 可合并 id
   clinicType?: string;
   hosOrderId?: string;
   phsOrderId?: string;
@@ -113,7 +115,36 @@ export const usePayPage = () => {
   }, 20);
 
   const unPayList = ref<IPayListItem[]>([]);
+  const selUnPayList = ref<IPayListItem[]>([]);
   const payedList = ref<TPayedListItem[]>([]);
+  const totalCost = computed(() => {
+    const _subCount = selUnPayList.value.reduce((prev, curr) => {
+      return prev + (curr.totalCost as unknown as number) * 1;
+    }, 0);
+
+    return Number((_subCount * 100).toFixed(2)) / 100;
+  });
+  const isShowSelectAll = computed(() => {
+    if (unPayList.value.length > 1) {
+      const sIds = [...new Set([...unPayList.value.map((o) => o.subIds)])];
+      return sIds.length === 1;
+    } else {
+      return false;
+    }
+  });
+  const isSelectAll = computed(
+    () =>
+      selUnPayList.value.length &&
+      selUnPayList.value.length === unPayList.value.length
+  );
+
+  const chooseAll = () => {
+    if (isSelectAll.value) {
+      selUnPayList.value = [];
+    } else {
+      selUnPayList.value = [...unPayList.value];
+    }
+  };
 
   const getUnPayList = async () => {
     if (unPayList.value.length) {
@@ -171,7 +202,23 @@ export const usePayPage = () => {
   };
 
   const selPayListItem = (item: IPayListItem) => {
-    console.log('sel', item);
+    const { clinicId } = item;
+
+    const idx = selUnPayList.value.findIndex((o) => o.clinicId === clinicId);
+
+    if (idx === -1) {
+      const sels = [
+        ...new Set([...selUnPayList.value, item].map((o) => o.subIds)),
+      ];
+
+      if (sels.length < 2) {
+        selUnPayList.value.push(item);
+      } else {
+        gStores.messageStore.showMessage('暂不支持跨院区缴费', 1500);
+      }
+    } else {
+      selUnPayList.value.splice(idx, 1);
+    }
   };
 
   const goPayDetail = (item: IPayListItem) => {
@@ -239,6 +286,11 @@ export const usePayPage = () => {
   };
 
   const handlerPay = async () => {
+    if (!selUnPayList.value.length) {
+      gStores.messageStore.showMessage('请选择某一项进行缴费', 3000);
+      return;
+    }
+
     if (pageConfig.value.confirmPayFg) {
       regDialogConfirm.value.show();
     } else {
@@ -261,7 +313,9 @@ export const usePayPage = () => {
     }
   };
 
-  const toPay = async () => {};
+  const toPay = async () => {
+    console.log('23');
+  };
 
   const payAfter = async () => {};
 
@@ -290,6 +344,11 @@ export const usePayPage = () => {
     payAfter,
     getPayInfo,
     toPay,
+    selUnPayList,
+    totalCost,
+    isShowSelectAll,
+    isSelectAll,
+    chooseAll,
   };
 };
 
@@ -322,3 +381,60 @@ const dealPayList = (resList: IPayListItem[], { payState }) => {
     o.payState = payState;
   });
 };
+
+const a: any = {
+  result: {
+    clinicalSettlementResultList: [
+      {
+        deptName: '眼科',
+        childOrder: '517',
+        clinicId: '0',
+        docName: '林优',
+        subIds: '0',
+        docId: '0000003060',
+        deptId: '10206000',
+        hosId: '10',
+        visitDate: '2022-11-14',
+        hosName: '横街路院区',
+        totalCost: '200.49',
+        visitNo: '20221114000007',
+      },
+      {
+        deptName: '眼科',
+        childOrder: '517',
+        clinicId: '01',
+        docName: '林优',
+        subIds: '0',
+        docId: '0000003060',
+        deptId: '10206000',
+        hosId: '10',
+        visitDate: '2022-11-14',
+        hosName: '横街路院区',
+        totalCost: '200.49',
+        visitNo: '20221114000007',
+      },
+      {
+        deptName: '眼科',
+        childOrder: '517',
+        clinicId: '02',
+        docName: '林优',
+        subIds: '0',
+        docId: '0000003060',
+        deptId: '10206000',
+        hosId: '10',
+        visitDate: '2022-11-14',
+        hosName: '横街路院区',
+        totalCost: '200.49',
+        visitNo: '20221114000007',
+      },
+    ],
+  },
+  timeTaken: 220,
+  code: 0,
+  functionVersion:
+    '[{"functionType":"2","version":"v0.0.8"},{"functionType":"1","version":"v0.0.5"}]',
+  message: '成功',
+  respCode: 999002,
+};
+
+api.getUnpaidClinicList = () => Promise.resolve(a);

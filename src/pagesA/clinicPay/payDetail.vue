@@ -156,7 +156,9 @@
     await getDetailData(props.value);
 
     setTimeout(() => {
-      capture();
+      if (props.value.payState === '0') {
+        capture();
+      }
     }, 120);
   });
 

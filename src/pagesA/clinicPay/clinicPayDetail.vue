@@ -26,6 +26,7 @@
               :list="unPayList"
               @click-item="goPayDetail"
               @sel-item="selPayListItem"
+              :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
               isCheck
             />
@@ -54,17 +55,39 @@
     </swiper>
 
     <view class="g-footer" v-if="tabCurrent === 0">
-      <view class="footer-check flex-normal">
-        <view class="iconfont">&#xe6ce;</view>
+      <view
+        v-if="isShowSelectAll"
+        @click="chooseAll"
+        class="footer-check flex-normal"
+      >
+        <view
+          :class="{
+            'color-blue': isSelectAll,
+          }"
+          class="iconfont"
+        >
+          {{ isSelectAll ? '&#xe6d0;' : '&#xe6ce;' }}
+        </view>
         <view>全选</view>
       </view>
 
-      <view class="flex1 flex-normal count-money">
+      <view
+        :class="{
+          'f-right': !isShowSelectAll,
+        }"
+        class="flex1 flex-normal count-money"
+      >
         <text class="color-444 f28 mr8">合计</text>
-        <text class="f36 g-bold color-error">16元</text>
+        <text class="f36 g-bold color-error">{{ totalCost }}元</text>
       </view>
 
-      <button class="btn g-border btn-warning pay-btn" @click="handlerPay">
+      <button
+        :class="{
+          'btn-disabled': !selUnPayList.length,
+        }"
+        class="btn g-border btn-warning pay-btn"
+        @click="handlerPay"
+      >
         缴费
       </button>
     </view>
@@ -146,6 +169,11 @@
     payAfter,
     getPayInfo,
     toPay,
+    selUnPayList,
+    totalCost,
+    isShowSelectAll,
+    isSelectAll,
+    chooseAll,
   } = usePayPage();
 
   const isListShowClinicType = computed(() => {
@@ -188,6 +216,10 @@
     .count-money {
       justify-content: flex-end;
       margin-right: 24rpx;
+    }
+
+    .f-right {
+      justify-content: flex-start;
     }
 
     .btn {

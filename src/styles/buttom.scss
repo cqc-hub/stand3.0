@@ -13,14 +13,6 @@
     background-color: var(--hr-brand-color-6);
   }
 
-  &.btn-disabled {
-    pointer-events: none;
-    // background-color: var(--hr-brand-color-3) !important;
-    opacity: .6;
-  }
-
-
-
   &.btn-border {
     border: 2rpx solid var(--hr-neutral-color-4);
   }
@@ -62,5 +54,11 @@
     &::after {
       display: none;
     }
+  }
+
+  &.btn-disabled {
+    pointer-events: none;
+    // background-color: var(--hr-brand-color-3) !important;
+    opacity: .6;
   }
 }

@@ -82,7 +82,6 @@
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
 
     let requestArg: BaseObject = {
-      ...props.autoPayArg,
       patientName,
       patientId,
       cardNumber,
@@ -98,6 +97,11 @@
     requestArg.userId = gStores.globalStore.openId;
     requestArg.channel = 'ALI_MINI';
     // #endif
+
+    requestArg = {
+      ...requestArg,
+      ...props.autoPayArg,
+    };
 
     requestArg = await requestBefore(requestArg);
 
