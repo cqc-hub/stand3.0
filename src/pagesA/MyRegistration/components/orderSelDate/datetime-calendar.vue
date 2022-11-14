@@ -30,6 +30,8 @@
           mode="date"
           :value="date"
           fields="month"
+          :start="start"
+          :end="end"
           @change="bindDateChange"
         >
           <text class="uni-calendar__header-text">

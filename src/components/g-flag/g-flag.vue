@@ -68,7 +68,7 @@
   }
 
   .tip {
-    margin-top: 40rpx;
+    margin-top: 32rpx;
     .title {
       margin-bottom: 10rpx;
     }

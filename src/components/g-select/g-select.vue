@@ -123,6 +123,7 @@
 
     .ico-check {
       font-size: var(--hr-font-size-xxl);
+      font-weight: normal;
     }
   }
 </style>

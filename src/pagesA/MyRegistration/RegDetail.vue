@@ -164,7 +164,9 @@
                     <view class="doc-name-value">
                       {{ value }}
                     </view>
-                    <view class="iconfont color-blue">&#xe6c8;</view>
+                    <view style="font-weight: 400" class="iconfont color-blue">
+                      &#xe6c8;
+                    </view>
 
                     <!-- <view>
                       {{
@@ -195,7 +197,6 @@
             <g-form
               :value="orderRegInfo"
               forShowBodyAlign="left"
-              bodyBold
               hideRowBorder
               ref="refFormPatient"
             />
@@ -763,7 +764,7 @@
         }
 
         .order-info {
-          margin-top: 32rpx;
+          margin-top: 16rpx;
 
           .doc-name {
             .doc-name-value {
@@ -792,7 +793,7 @@
 
       .order-patient {
         box-shadow: none;
-        margin-top: 32rpx;
+        margin-top: 16rpx;
         border-radius: 8px;
       }
     }
@@ -824,6 +825,7 @@
       .home {
         font-size: var(--hr-font-size-xxxs);
         flex-direction: column;
+        padding: 0 10rpx;
         margin-right: 10rpx;
 
         .home-icon {

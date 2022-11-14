@@ -534,6 +534,7 @@
       color: var(--hr-brand-color-6);
       .iconfont {
         transform: rotate(0.5turn);
+        color: var(--hr-neutral-color-9);
       }
     }
   }

@@ -163,10 +163,6 @@
       }
     );
   };
-
-  setTimeout(() => {
-    calendarRef.value.show();
-  }, 1000);
 </script>
 
 <style lang="scss" scoped>

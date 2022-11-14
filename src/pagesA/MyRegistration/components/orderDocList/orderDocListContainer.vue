@@ -11,7 +11,7 @@
 
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="doc-info-introduce-header">
-          <view class="doc-info-introduce-name">{{ item.docName }}</view>
+          <view class="doc-info-introduce-name f36">{{ item.docName }}</view>
           <view class="doc-info-introduce-title">
             {{ item.schQukCategor || item.docTitleName }}
           </view>
@@ -34,7 +34,11 @@
           <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
 
           <block v-else>
-            <text class="doc-job-name">
+            <text
+              :class="{
+                'doc-job-name': item.docJobName,
+              }"
+            >
               {{ item.docJobName }}
             </text>
 
@@ -92,16 +96,15 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        // justify-content: space-between;
 
         .doc-info-introduce-header {
           display: flex;
           align-items: center;
           .doc-info-introduce-name {
-            font-size: var(--hr-font-size-xl);
             font-weight: 600;
             color: var(--hr-neutral-color-10);
-            margin-right: 4rpx;
+            margin-right: 8rpx;
           }
 
           .doc-info-introduce-title {

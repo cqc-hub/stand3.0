@@ -1,5 +1,5 @@
 <template>
-  <view class="card">
+  <view class="card g-border">
     <view class="row-bold">
       <view>
         <text class="iconfont">&#xe6ea;</text>
@@ -95,7 +95,7 @@
   .card {
     background-color: #fff;
     padding: 32rpx;
-    border-radius: 16px;
+    border-radius: 16rpx;
 
     .row-bold {
       display: grid;
