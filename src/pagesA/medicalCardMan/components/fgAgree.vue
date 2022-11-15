@@ -9,14 +9,18 @@
       >
         {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
       </view>
-      <view>
+      <view class="flex-normal content">
         <text>我已阅读并同意</text>
         <text @click.stop="goAgreement" class="fg-agree-name">
           《用户条款和隐私政策》
         </text>
-        <text>这个是协议配置编号待定（不支持富文本）</text>
+
+        <!-- <text>{{ fg141 }}</text> -->
+        <!-- <rich-text :nodes="fg141" /> -->
       </view>
     </view>
+
+    <!-- <g-flag typeFg="141" v-model:value="fg141" /> -->
   </view>
 </template>
 
@@ -28,6 +32,7 @@
   }>();
 
   const emits = defineEmits(['update:isCheck']);
+  const fg141 = ref('');
 
   const changeCheck = () => {
     emits('update:isCheck', !props.isCheck);
@@ -61,5 +66,9 @@
         color: var(--hr-brand-color-6);
       }
     }
+  }
+
+  .content {
+    flex-wrap: wrap;
   }
 </style>

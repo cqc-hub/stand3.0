@@ -24,6 +24,7 @@
     isShowFg?: boolean; //顶部
     isShowFgTip?: boolean; //底部
     isHideTitle?: boolean;
+    disabledFormatterParse?: boolean;
   }
 
   const props = withDefaults(defineProps<IProps>(), {
@@ -43,14 +44,18 @@
     .then(
       ({ result }) => {
         const { content, title } = result;
-        text.value = HTMLParser(content);
+        text.value = props.disabledFormatterParse
+          ? content
+          : HTMLParser(content);
+
         mTitle.value = title;
         emit('update:value', text.value);
         emit('update:title', title);
       },
       () => {
         uni.hideLoading();
-        text.value = HTMLParser('未获取到协议' + props.typeFg);
+        const t = '未获取到协议' + props.typeFg;
+        text.value = props.disabledFormatterParse ? t : HTMLParser(t);
         emit('update:value', text.value);
       }
     );

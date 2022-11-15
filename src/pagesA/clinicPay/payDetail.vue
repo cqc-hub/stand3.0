@@ -16,7 +16,11 @@
 
             <view class="qr g-flex-rc-cc">
               <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
-              <image v-if="!showQrCode" :src="qrOpt._barImg" mode="widthFix" />
+              <image
+                v-if="!showQrCode"
+                :src="qrOpt._barImg"
+                class="barcode-img"
+              />
             </view>
 
             <view class="g-flex-rc-cc mt16 color-888 f24">{{ qrCode }}</view>
@@ -79,17 +83,80 @@
             </view>
           </block>
         </view>
+
+        <g-flag :typeFg="props.payState === '0' ? '38' : '0'" isShowFgTip />
       </view>
     </view>
 
-    <view class="g-footer">233</view>
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      @pay-click="getPayInfo"
+      autoInOne
+      ref="refPay"
+    >
+      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+    </g-pay>
+
+    <xy-dialog
+      title=""
+      content="是否确认取消缴费单?"
+      :show="isCannelShow"
+      @cancelButton="isCannelShow = false"
+      @confirmButton="cannelOrder"
+    />
+
+    <Order-Reg-Confirm
+      v-if="pageConfig.confirmPayFg"
+      :title="confirmFgTitle"
+      @confirm="getPay"
+      height="50vh"
+      confirmText="确定"
+      cannerText="取消"
+      headerIcon=""
+      ref="regDialogConfirm"
+      isShowCloseIcon
+      footerBtnIsometric
+    >
+      <g-flag
+        v-model:title="confirmFgTitle"
+        :typeFg="pageConfig.confirmPayFg!"
+        isShowFgTip
+        isHideTitle
+      />
+    </Order-Reg-Confirm>
+
+    <view class="g-footer">
+      <block v-if="props.payState === '1'">
+        <button
+          class="btn btn-normal btn-border cancel-btn"
+          @click="isCannelShow = true"
+        >
+          申请退单
+        </button>
+
+        <button @click="handlerPay" class="btn btn-warning confirm-btn">
+          {{ detailData.totalCost + `元 立即支付` }}
+        </button>
+      </block>
+
+      <block v-else>
+        <button
+          class="btn btn-plain btn-border btn-error cancel-btn"
+          @click="isCannelShow = true"
+        >
+          申请退单
+        </button>
+      </block>
+    </view>
 
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, onMounted } from 'vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import {
@@ -97,18 +164,36 @@
     usePayDetailPage,
     type TPayDetailProp,
   } from './utils/clinicPayDetail';
+  import {
+    type IGPay,
+    payMoneyOnline,
+    toPayPull,
+  } from '@/components/g-pay/index';
   import { deQueryForUrl } from '@/common';
   import { previewImage } from '@/utils';
 
+  import api from '@/service/api';
+
   import PayDetailCostList from './components/payDetailCostList.vue';
   import PayDetailHeadBoxDetail from './components/payDetailHeadBoxDetail.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
 
   const { getDetailData, detailData } = usePayDetailPage();
-  const { pageConfig, getSysConfig, gStores } = usePayPage();
+  const {
+    pageConfig,
+    getSysConfig,
+    gStores,
+    refPayList,
+    payArg,
+    refPay,
+    confirmFgTitle,
+    regDialogConfirm,
+    getPay,
+  } = usePayPage();
 
   const qrCode = ref('66443456899900');
   const qrOpt = ref({
@@ -136,6 +221,7 @@
   }));
 
   const showQrCode = ref(false);
+  const isCannelShow = ref(false);
 
   const capture = async () => {
     const { tempFilePath: qrCodeImg } = await refqrcode.value.GetCodeImg();
@@ -144,22 +230,98 @@
     qrOpt.value._barImg = barcodeImg;
     qrOpt.value._qrImg = qrCodeImg;
 
+    closeQrOpt();
+  };
+
+  const getPayInfo = async ({ item }: { item: IGPay }) => {
+    if (item.key === 'online') {
+      // 预结算
+      if (pageConfig.value.isPreSettle === '1') {
+        console.log('预结算');
+      } else {
+        toPay();
+      }
+    }
+  };
+
+  const handlerPay = () => {
+    if (pageConfig.value.confirmPayFg) {
+      regDialogConfirm.value.show();
+    } else {
+      getPay();
+    }
+  };
+
+  const toPay = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const totalCost = detailData.value.totalCost + '';
+    const source = gStores.globalStore.browser.source;
+    const {
+      childOrder,
+      deptId,
+      docId,
+      hosName,
+      deptName,
+      docName,
+      hosId,
+      visitDate,
+    } = props.value;
+
+    const args = {
+      businessType: '1',
+      patientId,
+      source,
+      totalCost,
+      mergeOrder: childOrder,
+      deptCode: deptId,
+      hosName,
+      deptName,
+      docCode: docId,
+      docName,
+      hosId,
+      visitDate,
+    };
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const res = await payMoneyOnline({
+      phsOrderNo,
+      totalFee: totalCost,
+      phsOrderSource: '2',
+      // hosId,
+      hosId: '1279',
+      hosName,
+    });
+
+    await toPayPull(res);
+    payAfter();
+  };
+
+  const closeQrOpt = () => {
     barOpt.value.width = 0;
     qrOpt.value.size = 0;
+  };
 
-    // previewImage([qrCodeImg, barcodeImg]);
+  const payAfter = () => {};
+
+  const cannelOrder = () => {
+    isCannelShow.value = false;
   };
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(opt);
+  });
+
+  onMounted(async () => {
     await getSysConfig();
     await getDetailData(props.value);
-
     setTimeout(() => {
       if (props.value.payState === '0') {
         capture();
       }
-    }, 120);
+    }, 80);
   });
 
   onReady(() => {
@@ -214,6 +376,11 @@
       width: 320rpx;
       height: 320rpx;
     }
+
+    .barcode-img {
+      height: 184rpx;
+      width: 600rpx;
+    }
   }
 
   .page-first-item {
@@ -232,6 +399,17 @@
         transform-origin: center center;
         transform: rotate(0.5turn);
       }
+    }
+  }
+
+  .g-footer {
+    // background-color: red;
+    .cancel-btn {
+      flex: 1;
+    }
+
+    .confirm-btn {
+      flex: 2;
     }
   }
 </style>

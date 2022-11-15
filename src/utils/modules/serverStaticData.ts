@@ -1,10 +1,12 @@
 import { getLocalStorage, setLocalStorage } from '@/common';
 import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
-import api from '@/service/api';
 import { type XOR } from '@/typeUtils/obj';
 import { joinQuery } from '@/common';
 import { beforeEach } from '@/router/index';
+
+import api from '@/service/api';
+import globalGl from '@/config/global';
 
 type TBannerConfigBase = {
   src: `http${string}`;
@@ -18,6 +20,7 @@ type TBannerConfigBase = {
 
 type TBannerConfigH5 = {
   type: 'h5';
+  isSelfH5?: '1'; // 我们的 h5 (v3)
 } & TBannerConfigBase;
 
 type TBannerConfigSelf = {
@@ -179,12 +182,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   }
 };
 
-export const useTBanner = async (
-  config: Pick<
-    TBannerConfig,
-    'addition' | 'extraData' | 'appId' | 'path' | 'type'
-  >
-) => {
+export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
@@ -202,7 +200,7 @@ export const useTBanner = async (
     }
   }
 
-  const fullUrl = joinQuery(path, extraData);
+  let fullUrl = joinQuery(path, extraData);
 
   const pages = getCurrentPages();
 
@@ -217,6 +215,13 @@ export const useTBanner = async (
   }
 
   if (type === 'h5') {
+    if (config.isSelfH5) {
+      const baseUrl =
+        (global.env as any) === 'prod'
+          ? 'https://h5.eheren.com/v3/#/'
+          : 'https://health.eheren.com/v3/#/';
+      fullUrl = baseUrl + fullUrl;
+    }
     // #ifdef H5
     location.href = fullUrl;
     // #endif

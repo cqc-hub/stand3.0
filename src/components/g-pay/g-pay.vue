@@ -72,42 +72,11 @@
     }
   };
 
-  let requestBefore = async <T = BaseObject>(data: T): Promise<T> => {
-    return data;
-  };
-
   const payMoney = async (item: IGPay) => {
     const { key } = item;
 
-    const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
-
-    let requestArg: BaseObject = {
-      patientName,
-      patientId,
-      cardNumber,
-      source: gStores.globalStore.browser.source,
-    };
-
-    // #ifdef  MP-WEIXIN
-    requestArg.openId = gStores.globalStore.openId;
-    requestArg.channel = 'WX_MINI';
-    // #endif
-
-    // #ifdef MP-ALIPAY
-    requestArg.userId = gStores.globalStore.openId;
-    requestArg.channel = 'ALI_MINI';
-    // #endif
-
-    requestArg = {
-      ...requestArg,
-      ...props.autoPayArg,
-    };
-
-    requestArg = await requestBefore(requestArg);
-
     if (key === 'online') {
-      const res = await payMoneyOnline(requestArg);
-
+      const res = await payMoneyOnline(props.autoPayArg);
       await toPayPull(res);
       emits('pay-success', res);
     }

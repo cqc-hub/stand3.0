@@ -14,6 +14,9 @@
           <template #default>
             <view
               v-if="item.subCostTypeCode === '4'"
+              :class="{
+                'less-content': item.costList.length < 3,
+              }"
               class="medical-content flex-between"
             >
               <view
@@ -50,9 +53,7 @@
 
                   <view class="color-888 f24">
                     <text class="mr40">
-                      {{
-                        `${citem.itemPrice}元/${citem.units}`
-                      }}
+                      {{ `${citem.itemPrice}元/${citem.units}` }}
                     </text>
                     <text>{{ `x${citem.amount}` }}</text>
                   </view>
@@ -111,6 +112,10 @@
 
       margin-bottom: 24rpx;
     }
+  }
+
+  .less-content {
+    padding-bottom: 0;
   }
 
   .cost-item-nochild {

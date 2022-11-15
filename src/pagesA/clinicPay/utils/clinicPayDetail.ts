@@ -18,6 +18,7 @@ export type IPayListItem = {
   childOrder: string;
   deptId: string;
   deptName: string;
+  docCode: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付
   clinicId: string; // 唯一
   subIds: string; // 可合并 id
@@ -52,6 +53,10 @@ export type TPayDetailProp = {
   serialNo?: string;
   visitDate?: string;
   visitNo?: string;
+  childOrder: string;
+  deptId: string;
+  docId: string;
+  hosName: string;
 };
 
 export type TCostList = {
@@ -181,7 +186,7 @@ export const usePayPage = () => {
     payedList.value = [];
     let { patientId } = gStores.userStore.patChoose;
 
-    patientId = '10831082';
+    // patientId = '10831082';
     const arg = {
       patientId,
     };
@@ -214,7 +219,10 @@ export const usePayPage = () => {
       if (sels.length < 2) {
         selUnPayList.value.push(item);
       } else {
-        gStores.messageStore.showMessage('暂不支持跨院区缴费', 1500);
+        gStores.messageStore.showMessage(
+          '不同院区的门诊缴费订单不支持合并支付！',
+          1500
+        );
       }
     } else {
       selUnPayList.value.splice(idx, 1);
@@ -237,6 +245,10 @@ export const usePayPage = () => {
       deptName,
       docName,
       _clinicType,
+      childOrder,
+      deptId,
+      docId,
+      hosName,
     } = item;
 
     const pageData = {
@@ -253,6 +265,11 @@ export const usePayPage = () => {
       deptName,
       _clinicType,
       docName,
+
+      childOrder,
+      deptId,
+      docId,
+      hosName,
     };
 
     // if (payState === '1') {
@@ -287,7 +304,7 @@ export const usePayPage = () => {
 
   const handlerPay = async () => {
     if (!selUnPayList.value.length) {
-      gStores.messageStore.showMessage('请选择某一项进行缴费', 3000);
+      gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
       return;
     }
 
@@ -314,10 +331,55 @@ export const usePayPage = () => {
   };
 
   const toPay = async () => {
-    console.log('23');
+    const selectList = selUnPayList.value;
+    const { patientId } = gStores.userStore.patChoose;
+
+    const _totalCost = totalCost.value + '';
+    const source = gStores.globalStore.browser.source;
+
+    const args = {
+      businessType: '1',
+      patientId,
+      source,
+      totalCost: _totalCost,
+      mergeOrder: selectList.map((o) => o.childOrder).join(','),
+      deptCode: selectList.map((o) => o.deptId).join(','),
+      deptName: selectList.map((o) => o.deptName).join(','),
+      docCode: selectList.map((o) => o.docId).join(','),
+      docName: selectList.map((o) => o.docName).join(','),
+      hosId: selectList.map((o) => o.hosId).join(','),
+      hosName: selectList.map((o) => o.hosName).join(','),
+      visitDate: selectList.map((o) => o.visitDate).join(','),
+    };
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const res = await payMoneyOnline({
+      phsOrderNo,
+      totalFee: _totalCost,
+      phsOrderSource: '2',
+      // hosId: selectList[0].hosId,
+      hosId: '1279',
+      hosName: selectList[0].hosName,
+    });
+
+    await toPayPull(res);
+    payAfter();
   };
 
-  const payAfter = async () => {};
+  const payAfter = async () => {
+    getListData(true);
+    if (selUnPayList.value.length === 1) {
+      // 跳
+      console.log('233');
+    } else {
+      tabCurrent.value = 1;
+    }
+
+    selUnPayList.value = [];
+  };
 
   return {
     pageConfig,
@@ -437,4 +499,4 @@ const a: any = {
   respCode: 999002,
 };
 
-api.getUnpaidClinicList = () => Promise.resolve(a);
+// api.getUnpaidClinicList = () => Promise.resolve(a);

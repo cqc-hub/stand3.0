@@ -133,6 +133,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  createClinicOrder: <T = any>(data) =>
+    service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), {
+      hideLoading: false,
+    }),
+
   // 缴费详情
   getClinicalPayDetailList: (data) =>
     service.post('/phs-query/clinical/getClinicalPayDetailList', parm(data), {

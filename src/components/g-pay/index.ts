@@ -1,4 +1,5 @@
 import api from '@/service/api';
+import { GStores } from '@/utils';
 
 export interface IGPay {
   label: string;
@@ -29,7 +30,32 @@ export interface IPayRes {
 }
 
 export const payMoneyOnline = async (data: BaseObject) => {
-  const { result } = await api.addHRPay<IPayRes>(data);
+  const gStores = new GStores();
+  const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
+
+  let requestArg: BaseObject = {
+    patientName,
+    patientId,
+    cardNumber,
+    source: gStores.globalStore.browser.source,
+  };
+
+  // #ifdef  MP-WEIXIN
+  requestArg.openId = gStores.globalStore.openId;
+  requestArg.channel = 'WX_MINI';
+  // #endif
+
+  // #ifdef MP-ALIPAY
+  requestArg.userId = gStores.globalStore.openId;
+  requestArg.channel = 'ALI_MINI';
+  // #endif
+
+  requestArg = {
+    ...requestArg,
+    ...data,
+  };
+
+  const { result } = await api.addHRPay<IPayRes>(requestArg);
 
   return result;
 };

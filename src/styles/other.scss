@@ -148,7 +148,8 @@
 
 .my-display-none {
   @extend .my-hide;
-  position: absolute;
+  position: fixed;
+  top: -9999999999999rpx;
 }
 
 .out-document {

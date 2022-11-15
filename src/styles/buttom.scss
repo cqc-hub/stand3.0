@@ -1,6 +1,7 @@
 .btn {
   color: var(--h-color-white);
   border-radius: 16rpx;
+
   font-size: var(--hr-font-size-xl);
   font-weight: 600;
   position: relative;
@@ -9,17 +10,29 @@
   align-items: center;
   white-space: nowrap;
 
+
+
+  &::after {
+    display: none;
+  }
+
   &.btn-primary {
     background-color: var(--hr-brand-color-6);
   }
 
   &.btn-border {
     border: 2rpx solid var(--hr-neutral-color-4);
+    // box-shadow:
+    //   inset 1rpx 1rpx 1rpx 0 rgba(0, 0, 255, .2),
+    //   inset 1rpx -1rpx 1rpx 0 rgba(0, 0, 255, .2),
+    //   inset -1rpx 1rpx 1rpx 0 rgba(0, 0, 255, .2),
+    //   inset -1rpx -1rpx 1rpx 0 rgba(0, 0, 255, .2);
   }
 
   &.btn-normal {
     color: var(--hr-neutral-color-10);
     background-color: #fff;
+    background-color: rgba(0, 0, 0, 0);
   }
 
   &.btn-error {
@@ -37,6 +50,10 @@
     &.btn-primary {
       color: var(--hr-brand-color-6);
       border-color: var(--hr-brand-color-6);
+    }
+
+    &.btn-error {
+      border-color: var(--hr-error-color-6);
     }
   }
 

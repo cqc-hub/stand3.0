@@ -65,6 +65,7 @@
               <express-Step
                 :pointEnd="_expressInfo.pointEnd"
                 :pointNow="_expressInfo.pointNow"
+                @go-detail="goDetailExpress"
               />
             </view>
 
@@ -169,8 +170,15 @@
 
 <script lang="ts" setup>
   import { computed, ref, reactive } from 'vue';
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    type TButtonConfig,
+    useTBanner,
+  } from '@/utils';
   import api from '@/service/api';
+  import globalGl from '@/config/global';
   import {
     CaseCopyItem,
     applyOrderStatusMap,
@@ -350,6 +358,26 @@
 
     await api.copyRefund(args);
     init();
+  };
+
+  const goDetailExpress = () => {
+    const { expressNo, expressCompany } = info.value;
+    const args: TButtonConfig = {
+      type: 'h5',
+      path: 'pagesC/myExpress/expressDetail',
+      text: '',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: globalGl.SYS_CODE,
+        expressNo,
+        expressCompany,
+      },
+      addition: {
+        token: 'token',
+      },
+    };
+
+    useTBanner(args);
   };
 
   const init = () => {
