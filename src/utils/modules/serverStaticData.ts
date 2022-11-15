@@ -15,12 +15,14 @@ type TBannerConfigBase = {
   addition?: {
     token?: string;
     patientId?: string;
+    herenId?: string;
   }; // 固定的附加参数(动态值) 键值为新的键名
 };
 
 type TBannerConfigH5 = {
   type: 'h5';
   isSelfH5?: '1'; // 我们的 h5 (v3)
+  isLocal?: '1'; // 当他不存在
 } & TBannerConfigBase;
 
 type TBannerConfigSelf = {
@@ -187,7 +189,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   let [isLogin, isPatient] = [false, false];
 
   if (addition) {
-    const { token, patientId } = addition;
+    const { token, patientId, herenId } = addition;
     const gStores = new GStores();
     if (patientId) {
       extraData[patientId] = gStores.userStore.patChoose.patientId;
@@ -197,6 +199,11 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
     if (token) {
       extraData[token] = gStores.globalStore.getToken;
       isLogin = true;
+    }
+
+    if (herenId) {
+      isLogin = true;
+      extraData[herenId] = gStores.globalStore.herenId;
     }
   }
 
@@ -216,10 +223,14 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
 
   if (type === 'h5') {
     if (config.isSelfH5) {
-      const baseUrl =
-        (global.env as any) === 'prod'
+      let baseUrl =
+        (globalGl.env as any) === 'prod'
           ? 'https://h5.eheren.com/v3/#/'
           : 'https://health.eheren.com/v3/#/';
+
+      if (config.isLocal) {
+        baseUrl = 'http://10.10.83.70:3000/#/';
+      }
       fullUrl = baseUrl + fullUrl;
     }
     // #ifdef H5

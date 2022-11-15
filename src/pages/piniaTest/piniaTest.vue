@@ -1,15 +1,16 @@
 <template>
   <view class="">
-    <web-view :src="src" />
+    <!-- <web-view :src="src" /> -->
   </view>
 </template>
 
 <script setup lang="ts">
   import { onLoad } from '@dcloudio/uni-app';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { getToken, getSysCode } from '@/common/useToken';
   import { joinQuery } from '@/common';
-  import { GStores } from '@/utils';
+  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
   const base = 'https://health.eheren.com/v3/#/';
@@ -37,6 +38,28 @@
 
   // const src = 'https://health.eheren.com/testicbc.html';
   //health.eheren.com/testicbc.html'
+
+  // 电子发票
+  const eletronicInvoice: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/eletronicInvoice/eletronicInvoice',
+    text: '电子发票',
+    extraData: {
+      sysCode: globalGl.SYS_CODE,
+    },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
+    isLocal: '1',
+  };
+
+  onMounted(() => {
+    setTimeout(() => {
+      useTBanner(eletronicInvoice);
+    }, 1000);
+  });
 
   console.log(src);
 </script>
