@@ -6,6 +6,7 @@
         :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
         @click="avatarClick"
         class="doc-info-avatar"
+        mode="aspectFill"
       />
       <!-- </g-login> -->
 

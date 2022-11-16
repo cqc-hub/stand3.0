@@ -410,8 +410,9 @@
       docTitleName,
       goodAt: _goodAt,
       deptName,
+      docJobName,
     } = props.detail;
-    docPhoto = '';
+    // docPhoto = '';
 
     _goodAt = _goodAt || '暂无';
     docName = docName || '';
@@ -494,10 +495,10 @@
 
     ctx.drawImage(
       avatar_img,
-      avatarBox.left - 35,
+      avatarBox.left - 30,
       avatarBox.top / 2 + 10,
-      painWidthAvatar,
-      painHeightAvatar
+      painWidthAvatar - 10,
+      painHeightAvatar - 10
     );
 
     ctx.restore();
@@ -526,6 +527,28 @@
 
     ctx.setFillStyle('#296fff');
     ctx.fillText(docTitle, 32, avatarBox.top + 24);
+
+    if (docJobName) {
+      if (docJobName.length > 10) {
+        docJobName = docJobName.substring(0, 10) + '..';
+      }
+
+      fillRoundRect(
+        ctx,
+        32 + ctx.measureText(docTitle).width + 10,
+        avatarBox.top + 11,
+        ctx.measureText(docJobName).width + 9,
+        16,
+        4,
+        '#ccddff'
+      );
+
+      ctx.fillText(
+        docJobName,
+        32 + ctx.measureText(docTitle).width + 10 + 5,
+        avatarBox.top + 24
+      );
+    }
 
     ctx.restore();
 
@@ -563,35 +586,8 @@
     const _qr_dx = boxWidth / 2 - boxWidth / 8 - 8;
     const _qr_dy = avatarBox.top + 24 + 24 + 160 + 8;
     const _qr_width = 105;
-    const _qr_pad = 2;
 
     ctx.drawImage(qr_code_img, _qr_dx, _qr_dy, _qr_width, _qr_width);
-
-    // ctx.beginPath();
-    // ctx.setLineWidth(0.08);
-    // ctx.setLineCap('round');
-    // ctx.moveTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
-    // ctx.lineTo(
-    //   _qr_dx - _qr_pad + -_qr_pad * 3,
-    //   _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
-    // );
-
-    // ctx.lineTo(
-    //   _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
-    //   _qr_dy + _qr_pad + _qr_width + _qr_pad * 2
-    // );
-
-    // ctx.lineTo(
-    //   _qr_dx - _qr_pad + -_qr_pad * 3 + _qr_width + _qr_pad * 7,
-    //   _qr_dy - _qr_pad * 3
-    // );
-
-    // // ctx.closePath();
-
-    // ctx.lineTo(_qr_dx - _qr_pad - _qr_pad * 3, _qr_dy - _qr_pad * 3);
-
-    // ctx.stroke();
-
     ctx.save();
 
     ctx.setFontSize(12);
@@ -651,6 +647,11 @@
 
             uni.saveImageToPhotosAlbum({
               filePath: tempFilePath,
+              success() {
+                gStores.messageStore.showMessage('已保存至相册', 3000, {
+                  uniToast: true,
+                });
+              },
             });
           }
         },

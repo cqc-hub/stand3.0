@@ -456,8 +456,14 @@
         }
         // #endif
 
-        if (key === formKey.patientPhone) {
+        if (key === formKey.patientPhone && globalGl.systemInfo.isSearchInHos) {
+          if (globalGl.systemInfo.isSearchInHos) {
+            o.disabled = true;
+          }
+
+          // #ifdef MP-ALIPAY
           o.disabled = true;
+          // #endif
         }
       }
 
