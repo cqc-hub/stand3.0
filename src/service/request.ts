@@ -13,11 +13,11 @@ interface IResData<T = any> {
   message: string;
   respCode: string;
   result: T;
+  data?: any; // 透传网络医院的..
   timeTaken: number;
 }
 
-
-type TRequestOption = Partial<IRequest>
+type TRequestOption = Partial<IRequest>;
 
 class requestClass {
   // 默认配置
@@ -25,12 +25,12 @@ class requestClass {
     baseURL: '',
     url: '',
     header: {
-      'content-type': 'application/json;charset=UTF-8'
+      'content-type': 'application/json;charset=UTF-8',
     },
     method: 'GET',
     // timeout: 3000,
     dataType: 'json',
-    responseType: 'text'
+    responseType: 'text',
   };
 
   // 拦截器
@@ -54,7 +54,7 @@ class requestClass {
       } else {
         requestClass[requestErr] = () => {};
       }
-    }
+    },
   };
 
   // 请求之前，是默认配置
@@ -70,10 +70,14 @@ class requestClass {
     return /(http|https):\/\/([\w.]+\/?)\S*/.test(url);
   }
 
-  request<T = any>(options: UniApp.RequestOptions & { baseURL?: string }): Promise<IResData<T>> {
+  request<T = any>(
+    options: UniApp.RequestOptions & { baseURL?: string }
+  ): Promise<IResData<T>> {
     options.baseURL = options.baseURL || this[config].baseURL;
     options.dataType = options.dataType || this[config].dataType;
-    options.url = requestClass[isCompleteURL](options.url) ? options.url : options.baseURL + options.url;
+    options.url = requestClass[isCompleteURL](options.url)
+      ? options.url
+      : options.baseURL + options.url;
     options.data = options.data;
     options.header = { ...options.header, ...this[config].header };
     options.method = options.method || this[config].method;
@@ -92,7 +96,7 @@ class requestClass {
         uni.showToast({
           title: '系统压力有点大~',
           icon: 'none',
-          duration: 3000
+          duration: 3000,
         });
 
         reject(err);

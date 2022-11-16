@@ -97,7 +97,7 @@ Request.interceptors.response(
           });
         },
       });
-    } else if (code !== 0) {
+    } else if (code != 0) {
       let showMessage = responseOptions && responseOptions.showMessage;
       if (showMessage === undefined) {
         showMessage = true;

@@ -67,7 +67,8 @@ export class UseDoctorDetail extends GStores {
 
   @GetDocInfo()
   async getDoctorDetail() {
-    const { deptName, docName, hosDeptId, hosDocId, hosId } = this.props;
+    const { deptName, docName, hosDeptId, hosDocId, hosId, docTitleName } =
+      this.props;
     const { herenId } = this.globalStore;
 
     const args = {
@@ -77,6 +78,7 @@ export class UseDoctorDetail extends GStores {
       hosDocId,
       hosId,
       herenId,
+      docTitleName,
     };
 
     const { result } = await api.findByDocId(args);
