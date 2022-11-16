@@ -577,22 +577,30 @@
       title: '上传证件中...',
     });
 
-    if (frontIdCardUrl && isUnImageUpLoaded(frontIdCardUrl)) {
-      const { url } = await upImgOss(frontIdCardUrl, {});
-      idCardImg.value.frontIdCardUrl = url;
-    }
+    try {
+      if (frontIdCardUrl && isUnImageUpLoaded(frontIdCardUrl)) {
+        const { url } = await upImgOss(frontIdCardUrl, {});
+        idCardImg.value.frontIdCardUrl = url;
+      }
 
-    if (endIdCardUrl && isUnImageUpLoaded(endIdCardUrl)) {
-      const { url } = await upImgOss(endIdCardUrl, {});
-      idCardImg.value.endIdCardUrl = url;
-    }
+      if (endIdCardUrl && isUnImageUpLoaded(endIdCardUrl)) {
+        const { url } = await upImgOss(endIdCardUrl, {});
+        idCardImg.value.endIdCardUrl = url;
+      }
 
-    if (handIdCardUrl && isUnImageUpLoaded(handIdCardUrl)) {
-      const { url } = await upImgOss(handIdCardUrl, {});
-      idCardImg.value.handIdCardUrl = url;
-    }
+      if (handIdCardUrl && isUnImageUpLoaded(handIdCardUrl)) {
+        const { url } = await upImgOss(handIdCardUrl, {});
+        idCardImg.value.handIdCardUrl = url;
+      }
+    } catch (error) {
+      console.error({
+        error,
+      });
 
-    uni.hideLoading();
+      throw new Error('上传图片失败');
+    } finally {
+      uni.hideLoading();
+    }
 
     const { province, city, county, detailedAddress, senderName, senderPhone } =
       getAddress.value;

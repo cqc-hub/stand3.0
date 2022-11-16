@@ -55,9 +55,11 @@
 .g-footer {
   background-color: var(--h-color-white);
   padding: 24rpx 32rpx 48rpx;
-  position: reactive;
+  position: relative;
   z-index: 1;
   gap: 18rpx;
 
   display: flex;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
 }

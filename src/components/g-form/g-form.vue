@@ -416,10 +416,6 @@
               o.options = await ServerStaticData.getPatientTypeTerms();
               break;
 
-            case 'sysTerms':
-              o.options = await ServerStaticData.getSystemTerms();
-              break;
-
             case 'idTypeTerms':
               o.options = await ServerStaticData.getIdTypeTerms();
               break;

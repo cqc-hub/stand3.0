@@ -229,7 +229,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
           : 'https://health.eheren.com/v3/#/';
 
       if (config.isLocal) {
-        baseUrl = 'http://10.10.83.70:3000/#/';
+        baseUrl = 'http://10.10.83.68:3000/#/';
       }
       fullUrl = baseUrl + fullUrl;
     }
