@@ -106,13 +106,11 @@ Request.interceptors.response(
       if (showMessage) {
         messageStore.showMessage(message, 3000);
       }
+
+      return Promise.reject(responseData);
     }
 
-    if (code !== 0) {
-      return Promise.reject(responseData);
-    } else {
-      return responseData;
-    }
+    return responseData;
   },
   (err) => {
     const messageStore = useMessageStore();

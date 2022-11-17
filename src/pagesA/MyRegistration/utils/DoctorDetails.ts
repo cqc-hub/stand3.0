@@ -41,6 +41,22 @@ export interface IDocSchListItem {
   };
 }
 
+export type TDocServiceItem = {
+  checked: number;
+  limitedQuantity: number;
+  servicePrice: number;
+  surplusCount: number;
+  registerCategory: string;
+  registerCategoryId: string;
+};
+
+export interface IDocService {
+  jsonParam?: TDocServiceItem;
+  pictureParam?: TDocServiceItem;
+  phoneParam?: TDocServiceItem;
+  videoParam?: TDocServiceItem;
+}
+
 const GetDocInfo = (): MethodDecorator => {
   return (target, propKey, desc) => {
     const originImpl = desc.value!;

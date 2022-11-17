@@ -193,10 +193,13 @@
         </view>
       </view>
 
-      <block v-if="pageConfig.isOpenDocCardOnlineService === '1'">
+      <block v-if="isDocServiceShow">
         <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view>
         <scroll-view class="service-content" scroll-x>
-          <Doc-Service />
+          <Doc-Service
+            :docService="docServiceInfo"
+            :hosDocId="docDetail.hosDocId"
+          />
         </scroll-view>
       </block>
     </scroll-view>
@@ -234,6 +237,7 @@
     type IProps,
     type IDocDetail,
     type IDocSchListItem,
+    type IDocService,
   } from './utils/DoctorDetails';
   import { deQueryForUrl, joinQuery } from '@/common';
   import {
@@ -260,6 +264,9 @@
   const props = ref({} as IProps);
   const gStores = new GStores();
   const pageConfig = ref({} as ISystemConfig['order']);
+
+  const docServiceInfo = ref({} as IDocService);
+  const isDocServiceShow = ref(false);
 
   const refDocShare = ref<any>('');
   const docSchList = ref<IDocSchListItem[]>([]);
@@ -440,6 +447,33 @@
     };
 
     const { data } = await api.sendNetHos(args);
+
+    if (data) {
+      const { receptionMode, jsonParam, pictureParam, videoParam, phoneParam } =
+        data;
+
+      if (receptionMode) {
+        try {
+          data.jsonParam =
+            jsonParam && JSON.parse(jsonParam)?.registerCategorys[0];
+          data.pictureParam =
+            pictureParam && JSON.parse(pictureParam)?.registerCategorys[0];
+          data.videoParam =
+            videoParam && JSON.parse(videoParam)?.registerCategorys[0];
+          data.phoneParam =
+            videoParam && JSON.parse(phoneParam)?.registerCategorys[0];
+        } catch (error) {
+          console.error(error);
+          throw new Error('医生在线服务参数异常');
+        }
+      }
+
+      if (jsonParam || pictureParam || videoParam) {
+        isDocServiceShow.value = true;
+      }
+
+      docServiceInfo.value = data;
+    }
   };
 
   const getPageConfig = async () => {

@@ -3,6 +3,7 @@
     <view
       v-for="(item, idx) in serList"
       :key="idx"
+      @click="goNetService(item)"
       class="item g-flex-rc-cc g-border"
     >
       <image :src="item.img" class="item-img" mode="" />
@@ -23,11 +24,22 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import globalGl from '@/config/global';
+
+  import {
+    type IDocService,
+    type TDocServiceItem,
+  } from '../../utils/DoctorDetails';
+  import { joinQuery } from '@/common';
 
   const burl = globalGl.BASE_IMG;
   const systemStyle = ref('normal');
+  const props = defineProps<{
+    docService: IDocService;
+    hosDocId: string;
+  }>();
+
   /**
    * 已上传图片(都有对应中医风格 名字后面加上_zy 即可)
    *
@@ -46,31 +58,50 @@
     {
       img: 'card_doctor_twzx_n',
       title: '图文咨询',
-      fee: '100',
+      fee: 0,
       util: '次',
+      key: 'pictureParam',
+      receptionMode: '1',
     },
     {
       img: 'card_doctor_dhwz_n',
       title: '电话问诊',
-      fee: '150',
+      fee: 0,
       util: '次',
+      key: 'phoneParam',
+      receptionMode: '2',
     },
     {
       img: 'card_doctor_spwz_n',
       title: '视频门诊',
-      fee: '150',
+      fee: 0,
       util: '次',
+      key: 'videoParam',
+      receptionMode: '4',
     },
     {
       img: 'card_doctor_mbfz_n',
       title: '复诊开药',
-      fee: '150',
+      fee: 0,
       util: '次',
+      key: 'jsonParam',
+      receptionMode: '8',
     },
   ]);
+  const isComplete = ref(false);
 
-  const init = () => {
+  const init = (item: IDocService) => {
     isComplete.value = false;
+    serList.value = serList.value.filter((o) => {
+      const { key } = o;
+
+      const v = <TDocServiceItem>item[key];
+      if (v) {
+        o.fee = v.servicePrice;
+      }
+
+      return v;
+    });
 
     serList.value.map((o) => {
       o.img = burl + o.img;
@@ -84,11 +115,28 @@
     isComplete.value = true;
   };
 
-  const isComplete = ref(false);
+  const goNetService = (item: typeof serList.value[number]) => {
+    const { receptionMode } = item;
 
-  onMounted(() => {
-    init();
-  });
+    const arg = {
+      receptionMode,
+      hosDocId: props.hosDocId,
+    };
+
+    uni.navigateTo({
+      url: joinQuery('/pagesC/cloudHospital/cloudHospital', arg),
+    });
+  };
+
+  watch(
+    () => props.docService,
+    (v) => {
+      init(v);
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
