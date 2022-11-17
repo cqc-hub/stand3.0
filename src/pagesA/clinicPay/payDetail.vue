@@ -290,8 +290,8 @@
       phsOrderNo,
       totalFee: totalCost,
       phsOrderSource: '2',
-      // hosId,
-      hosId: '1279',
+      hosId,
+      // hosId: '1279',
       hosName,
     });
 

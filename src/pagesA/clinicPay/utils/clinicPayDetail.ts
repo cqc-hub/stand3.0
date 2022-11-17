@@ -4,6 +4,7 @@ import {
   debounce,
   type ISystemConfig,
   ServerStaticData,
+  wait,
 } from '@/utils';
 import { joinQuery } from '@/common';
 import {
@@ -360,8 +361,8 @@ export const usePayPage = () => {
       phsOrderNo,
       totalFee: _totalCost,
       phsOrderSource: '2',
-      // hosId: selectList[0].hosId,
-      hosId: '1279',
+      hosId: selectList[0].hosId,
+      // hosId: '1279',
       hosName: selectList[0].hosName,
     });
 
@@ -370,6 +371,10 @@ export const usePayPage = () => {
   };
 
   const payAfter = async () => {
+    uni.showLoading({});
+    await wait(1000);
+    uni.hideLoading();
+
     getListData(true);
     if (selUnPayList.value.length === 1) {
       // 跳
@@ -443,60 +448,3 @@ const dealPayList = (resList: IPayListItem[], { payState }) => {
     o.payState = payState;
   });
 };
-
-const a: any = {
-  result: {
-    clinicalSettlementResultList: [
-      {
-        deptName: '眼科',
-        childOrder: '517',
-        clinicId: '0',
-        docName: '林优',
-        subIds: '0',
-        docId: '0000003060',
-        deptId: '10206000',
-        hosId: '10',
-        visitDate: '2022-11-14',
-        hosName: '横街路院区',
-        totalCost: '200.49',
-        visitNo: '20221114000007',
-      },
-      {
-        deptName: '眼科',
-        childOrder: '517',
-        clinicId: '01',
-        docName: '林优',
-        subIds: '0',
-        docId: '0000003060',
-        deptId: '10206000',
-        hosId: '10',
-        visitDate: '2022-11-14',
-        hosName: '横街路院区',
-        totalCost: '200.49',
-        visitNo: '20221114000007',
-      },
-      {
-        deptName: '眼科',
-        childOrder: '517',
-        clinicId: '02',
-        docName: '林优',
-        subIds: '0',
-        docId: '0000003060',
-        deptId: '10206000',
-        hosId: '10',
-        visitDate: '2022-11-14',
-        hosName: '横街路院区',
-        totalCost: '200.49',
-        visitNo: '20221114000007',
-      },
-    ],
-  },
-  timeTaken: 220,
-  code: 0,
-  functionVersion:
-    '[{"functionType":"2","version":"v0.0.8"},{"functionType":"1","version":"v0.0.5"}]',
-  message: '成功',
-  respCode: 999002,
-};
-
-// api.getUnpaidClinicList = () => Promise.resolve(a);
