@@ -279,8 +279,6 @@ export const usePayPage = () => {
 
     // }
 
-    console.log(pageData);
-
     uni.navigateTo({
       url: joinQuery('/pagesA/clinicPay/payDetail', pageData),
     });
@@ -376,12 +374,7 @@ export const usePayPage = () => {
     uni.hideLoading();
 
     getListData(true);
-    if (selUnPayList.value.length === 1) {
-      // 跳
-      console.log('233');
-    } else {
-      tabCurrent.value = 1;
-    }
+    tabCurrent.value = 1;
 
     selUnPayList.value = [];
   };

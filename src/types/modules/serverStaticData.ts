@@ -112,6 +112,8 @@ export interface ISystemConfig {
     payedFooterBtn?: TButtonConfig;
     // 预结算
     isPreSettle?: '1';
+    // 申请退单
+    isOpenChargeback?: '1';
   };
 }
 

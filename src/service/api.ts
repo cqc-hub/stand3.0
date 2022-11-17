@@ -40,7 +40,9 @@ let parm = (data: any, payload: any = {}) => {
 const baseApi = {
   // 系统长信息协议详情
   getSysAppMore: (data) =>
-    service.post('/phs-base/sysCode/getSysAppMore', parm(data), {}),
+    service.post('/phs-base/sysCode/getSysAppMore', parm(data), {
+      showMessage: false,
+    }),
 
   // 资讯详情
   getCmsInfo: (data) =>

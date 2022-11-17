@@ -454,6 +454,7 @@ export class ServerStaticData {
             },
             confirmPayFg: '15',
             // isPreSettle: '1',
+            // isOpenChargeback: '1',
           },
         };
       } catch (error) {
