@@ -122,7 +122,6 @@
             <official-account></official-account>
           </view>
           <!-- #endif -->
-
           <view class="fun-list" v-if="menuList.length">
             <homeMenu :list="menuList" />
           </view>
@@ -306,7 +305,7 @@
       }
       bannerFunctionList.value = homeConfig[2].functionList;
       bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
-      menuList.value = homeConfig[3].typeList;
+      menuList.value = homeConfig[3].typeList || [];
       skeletonProps.loading = false;
     }
   };
