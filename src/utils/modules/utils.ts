@@ -78,7 +78,7 @@ export const routerJump = async (url?: `/${string}`) => {
       const menuItem = getMenuById(routerStore._id, menus);
 
       if (menuItem) {
-        useCommonTo(menuItem, { type: 'reLaunch' });
+        useCommonTo(menuItem);
       } else {
         // messageStore.showMessage(
         //   '未找到对应menuId 的 menu：' + routerStore._id
