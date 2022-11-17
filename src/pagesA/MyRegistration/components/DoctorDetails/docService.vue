@@ -120,7 +120,7 @@
 
     const arg = {
       receptionMode,
-      hosDocId: props.hosDocId,
+      docId: props.hosDocId,
     };
 
     uni.navigateTo({
