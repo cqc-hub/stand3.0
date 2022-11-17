@@ -51,7 +51,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
       throw new Error('未配置_medCopyList');
     }
   } else {
-    throw new Error('未配置_medCopy');
+    return <T>{};
   }
 };
 
