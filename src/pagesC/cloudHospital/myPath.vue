@@ -54,6 +54,7 @@
       const baseUrl =
         (global.env as any) === 'prod'
           ? 'https://h5.eheren.com/v3/#'
+          // : 'http://10.10.117.70:3000/#';
           : 'https://health.eheren.com/v3/#';
       //公告跳转的咨询
       if (options.type == '2') {
