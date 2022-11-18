@@ -50,8 +50,6 @@
 <script lang="ts" setup>
   import { watch, ref, computed } from 'vue';
   import { TSchInfo, IOrderSource } from '../../utils/index';
-  import api from '@/service/api';
-
   import orderSelectSourceList from './orderSourceList.vue';
 
   const popup = ref<any>('');

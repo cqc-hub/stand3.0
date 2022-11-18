@@ -5,6 +5,7 @@ import api from '@/service/api';
 import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 import { joinQueryForUrl, joinQuery } from '@/common/utils';
+import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
@@ -107,6 +108,12 @@ export type TSchInfo = {
   // 排班状态名称
   schStateName: string;
 } & IDocRow;
+
+export type TAllDayTScInfo = {
+  schDate: string;
+  schState: string;
+  schDocAmPm: Pick<TSchInfo, 'ampm' | 'ampmName'> & {}[];
+};
 
 interface IOrderProps {
   hosId: string;
@@ -304,6 +311,8 @@ export const useOrder = (props: IOrderProps) => {
     schInfo: IDocListAll['schDocSubResultList'][number];
   }) => {
     const { item, schInfo } = e;
+    console.log(e);
+    return;
 
     const amPmResults = schInfo.amPmResults;
     selectSchInfos.value = amPmResults;
@@ -395,7 +404,7 @@ export const useOrder = (props: IOrderProps) => {
       schDate,
       schId,
       schQukCategor,
-      docTitleName
+      docTitleName,
     } = selectSchInfo;
 
     const { disNo, numId, timeDesc } = item;
@@ -421,7 +430,7 @@ export const useOrder = (props: IOrderProps) => {
       schQukCategor,
       clinicalType,
       promptMessage,
-      docTitleName
+      docTitleName,
     };
     selectOrderSourceNumId.value = numId;
 
