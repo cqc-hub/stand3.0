@@ -20,7 +20,7 @@
                 class="top-card flex-normal-between animate__animated animate__fadeIn"
               >
                 <!-- 有就诊人时 -->
-                <block v-if="gStores.userStore.patChoose._showId">
+                <block v-if="gStores.userStore.patChoose.patientName">
                   <view class="flex-normal">
                     <view @tap="cardClick" class="iconfont icon-size">
                       &#xe6a7;

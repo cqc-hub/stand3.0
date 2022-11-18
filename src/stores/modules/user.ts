@@ -199,5 +199,10 @@ export const getUserShowLabel = (pat: IPat) => {
 
 // 是否区域项目 不显示id
 export const isAreaProgram = (): boolean => {
+  const sysCode = globalGl.SYS_CODE;
+
+  if (sysCode === '1001049') {
+    return true;
+  }
   return globalGl.SYS_CODE.startsWith('2');
 };
