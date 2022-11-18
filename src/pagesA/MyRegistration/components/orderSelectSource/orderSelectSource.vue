@@ -19,28 +19,34 @@
           class="container"
           :scroll-y="!(!orderSourceList.length && isComplete)"
         >
-          <view class="order-info">
-            <view>{{ selectSchInfo.docName }}</view>
-            <view>{{ selectSchInfo.schDate }}</view>
-            <view>{{ selectSchInfo.fee }}元</view>
-          </view>
+          <block v-if="selectSchInfo.amPmResults">
 
-          <view class="container-source">
-            <view
-              v-if="!orderSourceList.length && isComplete"
-              class="empty-list"
-            >
-              <g-empty :current="1" text="暂无号源" />
+          </block>
+
+          <block v-else>
+            <view class="order-info">
+              <view>{{ selectSchInfo.docName }}</view>
+              <view>{{ selectSchInfo.schDate }}</view>
+              <view>{{ selectSchInfo.fee }}元</view>
             </view>
 
-            <orderSelectSourceList
-              :column="column"
-              :orderSourceList="orderSourceList"
-              :value="value"
-              :isBlur="isBlur"
-              @item-click="itemClick"
-            />
-          </view>
+            <view class="container-source">
+              <view
+                v-if="!orderSourceList.length && isComplete"
+                class="empty-list"
+              >
+                <g-empty :current="1" text="暂无号源" />
+              </view>
+
+              <orderSelectSourceList
+                :column="column"
+                :orderSourceList="orderSourceList"
+                :value="value"
+                :isBlur="isBlur"
+                @item-click="itemClick"
+              />
+            </view>
+          </block>
         </scroll-view>
       </view>
     </g-popup>
@@ -49,7 +55,7 @@
 
 <script lang="ts" setup>
   import { watch, ref, computed } from 'vue';
-  import { TSchInfo, IOrderSource } from '../../utils/index';
+  import { TSchInfo, IOrderSource, TSchInfoWhole } from '../../utils/index';
   import orderSelectSourceList from './orderSourceList.vue';
 
   const popup = ref<any>('');
@@ -59,7 +65,7 @@
     column: number;
     value: string;
     isBlur: '0' | '1';
-    selectSchInfos: TSchInfo[];
+    selectSchInfos: TSchInfoWhole[];
     orderSourceList: IOrderSource[];
   }>();
   const emits = defineEmits(['update:show', 'item-click', 'am-change']);
@@ -67,7 +73,7 @@
     if (props.selectSchInfos.length) {
       return props.selectSchInfos[tabCurrent.value];
     } else {
-      return {} as TSchInfo;
+      return {} as TSchInfoWhole;
     }
   });
 
@@ -91,6 +97,10 @@
     emits('am-change', props.selectSchInfos[e]);
   };
 
+  const setTabIndex = (idx: number) => {
+    tabCurrent.value = idx;
+  };
+
   watch(
     () => props.show,
     (v) => {
@@ -106,6 +116,10 @@
       tabCurrent.value = 0;
     }
   );
+
+  defineExpose({
+    setTabIndex,
+  });
 </script>
 
 <style lang="scss" scoped>

@@ -109,11 +109,17 @@ export type TSchInfo = {
   schStateName: string;
 } & IDocRow;
 
+type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {
+  amPmResults: TSchInfo[];
+};
+
 export type TAllDayTScInfo = {
   schDate: string;
   schState: string;
-  schDocAmPm: Pick<TSchInfo, 'ampm' | 'ampmName'> & {}[];
+  schDocAmPm: TSchDocAmPm[];
 };
+
+export type TSchInfoWhole = XOR<TSchDocAmPm, TSchInfo>;
 
 interface IOrderProps {
   hosId: string;
@@ -140,7 +146,7 @@ export const useOrder = (props: IOrderProps) => {
   const selectOrderSourceNumId = ref('');
   const isSelectOrderSourceShow = ref(false);
   const isComplete = ref(false);
-  const selectSchInfos = ref([] as TSchInfo[]);
+  const selectSchInfos = ref([] as TSchInfoWhole[]);
   const orderSourceList = ref<IOrderSource[]>([]);
 
   const allDocList = ref<IDocListAll[]>([]);
@@ -197,6 +203,9 @@ export const useOrder = (props: IOrderProps) => {
     if (allList && allList.length) {
       allList.map((docInfo) => {
         const { docPhoto } = docInfo;
+        docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
+          (o) => o.schState === '0'
+        );
 
         docInfo.schDocSubResultList.map((o) => {
           const { schDate, amPmResults } = o;
@@ -308,19 +317,21 @@ export const useOrder = (props: IOrderProps) => {
 
   const dateClick = async (e: {
     item: IDocListAll;
-    schInfo: IDocListAll['schDocSubResultList'][number];
+    schInfo: TAllDayTScInfo;
   }) => {
     const { item, schInfo } = e;
     console.log(e);
-    return;
 
-    const amPmResults = schInfo.amPmResults;
-    selectSchInfos.value = amPmResults;
+    // const amPmResults = schInfo.amPmResults;
+    // selectSchInfos.value = amPmResults;
 
-    if (amPmResults && amPmResults.length) {
-      await getOrderSource(amPmResults[0]);
-      isSelectOrderSourceShow.value = true;
-    }
+    // if (amPmResults && amPmResults.length) {
+    //   await getOrderSource(amPmResults[0]);
+    //   isSelectOrderSourceShow.value = true;
+    // }
+    const schDocAmPm = schInfo.schDocAmPm;
+    selectSchInfos.value = schDocAmPm;
+    isSelectOrderSourceShow.value = true;
   };
 
   // 某天点击 某个时间段(上午...)
@@ -330,8 +341,12 @@ export const useOrder = (props: IOrderProps) => {
     isSelectOrderSourceShow.value = true;
   };
 
-  const amChange = async (schInfo: TSchInfo) => {
-    getOrderSource(schInfo);
+  const amChange = async (schInfo: TSchInfoWhole) => {
+    if (schInfo.amPmResults) {
+      // nothing
+    } else {
+      getOrderSource(schInfo);
+    }
   };
 
   const getOrderSource = async (schInfo: TSchInfo) => {
