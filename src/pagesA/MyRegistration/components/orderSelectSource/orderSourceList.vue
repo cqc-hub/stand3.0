@@ -7,7 +7,7 @@
   >
     <view
       v-for="item in orderSourceList"
-      @click="itemClick(item)"
+      @click.stop="itemClick(item)"
       :key="item.numId"
       :class="{
         'item-active-border': isAllActive || isActive(item.numId),
@@ -17,6 +17,9 @@
       <view
         :class="{
           'item-active': isAllActive || isActive(item.numId),
+        }"
+        :style="{
+          'background-color': itemBgc
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
@@ -87,6 +90,11 @@
         type: Boolean,
         default: false,
       },
+
+      itemBgc: {
+        type: String,
+        default: 'var(--hr-neutral-color-1)'
+      }
     },
 
     emits: ['item-click', 'item-delete'],
@@ -130,7 +138,6 @@
     gap: 16rpx;
 
     .item {
-      background-color: var(--hr-neutral-color-1);
       min-height: 130rpx;
       border-radius: 16rpx;
       font-size: var(--hr-font-size-xs);
@@ -164,7 +171,7 @@
 
       &.item-active {
         color: var(--hr-brand-color-6);
-        background-color: var(--hr-brand-color-1);
+        background-color: var(--hr-brand-color-1) !important;
       }
     }
 

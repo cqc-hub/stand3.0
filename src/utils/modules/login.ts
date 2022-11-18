@@ -752,5 +752,6 @@ export const outLogin = function (
     isGoLoginPage: boolean;
   }> = {}
 ) {
+
   new LoginUtils().outLogin(payload);
 };
