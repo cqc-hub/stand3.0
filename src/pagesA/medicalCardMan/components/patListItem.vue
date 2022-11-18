@@ -84,21 +84,11 @@
       const showId = ref('');
 
       const profileClick = () => {
-        const pat = props.pat;
-        if (pat.healthQrCodeText) {
-          emit('card-click', props.pat);
-        } else {
-          emit('profile-click', props.pat);
-        }
+        emit('profile-click', props.pat);
       };
 
       const cardClick = () => {
-        const pat = props.pat;
-        if (pat.healthQrCodeText) {
-          emit('profile-click', props.pat);
-        } else {
-          emit('card-click', props.pat);
-        }
+        emit('card-click', props.pat);
       };
 
       return {

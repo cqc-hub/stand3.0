@@ -89,7 +89,6 @@ export const checkGrid = (item: IRoute) => {
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = (item, payload: IPayLoad = {}) => {
-  console.log(item);
   //拦截判断
   if (item.path != '') {
     //判断授权消息提醒

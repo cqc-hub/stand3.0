@@ -5,13 +5,19 @@
   >
     <view
       class="title f32"
-      :class="{ border: border, borderRadius: borderRadius }"
+      :class="{
+        border,
+        borderRadius,
+        activeTitleShadow: activeTitleShadow && isShow,
+        'title-stick': isTitleSticky,
+      }"
       :style="{
         backgroundColor: !disabled && isShow ? activebg : '',
-        height: height + 'rpx',
         color: !disabled && isShow ? activeColor : '',
+        background: titleBackGroundColor || '',
+        padding: titlePadding,
       }"
-      @click="disabled ? '' : show()"
+      @click.stop="disabled ? '' : show()"
     >
       <slot name="title">
         <text>{{ title }}</text>
@@ -26,6 +32,9 @@
         &#xe66b;
       </view>
     </view>
+
+    <slot name="title-next" />
+
     <view
       class="content-box"
       :style="{ height: isShow ? contentHeight + 'px' : '0' }"
@@ -53,6 +62,9 @@
    * @property {String} activeColor 面板打开时标题的颜色（默认#333）
    * @property {Boolean} border 标题是否显示下边框（默认true）
    */
+
+  import { debounce } from '@/utils';
+
   export default {
     props: {
       title: {
@@ -62,6 +74,34 @@
       content: {
         type: String,
         default: '内容',
+      },
+
+      titlePadding: String,
+
+      titleBackGroundColor: {
+        type: String,
+        default: '',
+      },
+
+      isTitleSticky: {
+        type: Boolean,
+        default: false,
+      },
+
+      // 手风琴模式 (必传 accordionId)
+      accordion: {
+        type: Boolean,
+        default: false,
+      },
+
+      accordionId: {
+        type: String,
+        default: '',
+      },
+
+      activeTitleShadow: {
+        type: Boolean,
+        default: false,
       },
       open: {
         type: Boolean,
@@ -78,10 +118,6 @@
       fontSize: {
         type: String,
         default: '28',
-      },
-      height: {
-        type: String,
-        default: '90',
       },
       rightIcon: {
         type: String,
@@ -116,9 +152,16 @@
         img_url: this.$global.BASE_IMG,
       };
     },
-    created() {},
     mounted() {
       this.init();
+
+      this.show = debounce(this.show, 80);
+
+      uni.$on('_close_collapse', (e) => {
+        if (this.accordionId === e) {
+          this.show(false);
+        }
+      });
     },
     methods: {
       // 异步获取内容，或者动态修改了内容时，需要重新初始化
@@ -139,17 +182,23 @@
             .exec();
         });
       },
-      show() {
-        this.isShow = !this.isShow;
+      show(type) {
+        if (type != undefined) {
+          this.isShow = type;
+        } else {
+          this.isShow = !this.isShow;
+        }
+        this.$emit('change', this.isShow);
+
+        if (this.isShow) {
+          uni.$emit('_close_collapse', this.accordionId);
+        }
       },
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  .collapse-box {
-  }
-
   .boxShadow {
     box-shadow: 0 4rpx 6rpx rgba($color: #bbb, $alpha: 0.6);
   }
@@ -163,7 +212,19 @@
     justify-content: space-between;
     align-items: center;
     // padding: 0 24rpx;
-    transition: 0.8s linear;
+    transition: 0.8s linear transform;
+    position: relative;
+    &.activeTitleShadow {
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 16rpx;
+        bottom: 0;
+        background: linear-gradient(0, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.02));
+      }
+    }
 
     &.borderRadius {
       border-radius: 16upx;
@@ -175,7 +236,6 @@
       position: relative;
       // right: 0upx;
       font-size: 48rpx;
-
 
       &.arrowBottom {
         transform: rotate(-90deg);
@@ -190,10 +250,11 @@
   .content-box {
     transition: 0.4s all;
     overflow: hidden;
+  }
 
-    .content {
-      // padding: 0 24rpx;
-      // padding: 32rpx 24rpx;
-    }
+  .title-stick {
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 </style>

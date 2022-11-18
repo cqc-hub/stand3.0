@@ -2,7 +2,7 @@
   <view class="">
     <view v-for="(item, idx) in list" :key="idx" class="">
       <block v-if="item.costList && item.costList.length">
-        <List-Collapse :border="false">
+        <g-collapse :border="false">
           <template #title>
             <view class="collapse-title flex-between g-bold">
               <view class="flex1 f32">{{ item.subCostTypeName }}</view>
@@ -61,7 +61,7 @@
               </view>
             </view>
           </template>
-        </List-Collapse>
+        </g-collapse>
       </block>
 
       <block v-else>
@@ -79,8 +79,6 @@
   import { defineComponent, ref } from 'vue';
   import { TCostList } from '../utils/clinicPayDetail';
 
-  import ListCollapse from './payDetailCostListCollapse.vue';
-
   defineProps<{
     list: TCostList;
   }>();
@@ -89,6 +87,7 @@
 <style lang="scss" scoped>
   .collapse-title {
     width: 100%;
+    padding: 24rpx 0;
 
     .item-fee {
       margin: 0 12rpx;
