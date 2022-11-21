@@ -24,6 +24,7 @@
       </slot>
 
       <view
+        v-if="!disabled"
         :class="{
           arrowBottom: isShow,
         }"
@@ -159,7 +160,7 @@
 
       uni.$on('_close_collapse', (e) => {
         if (this.accordionId === e) {
-          this.show(false);
+          this.show(false, 'no-emit');
         }
       });
     },
@@ -182,13 +183,15 @@
             .exec();
         });
       },
-      show(type) {
+      show(type, status) {
         if (type != undefined) {
           this.isShow = type;
         } else {
           this.isShow = !this.isShow;
         }
-        this.$emit('change', this.isShow);
+        if (status !== 'no-emit') {
+          this.$emit('change', this.isShow);
+        }
 
         if (this.isShow) {
           uni.$emit('_close_collapse', this.accordionId);

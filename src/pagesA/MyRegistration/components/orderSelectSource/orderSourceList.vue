@@ -19,7 +19,7 @@
           'item-active': isAllActive || isActive(item.numId),
         }"
         :style="{
-          'background-color': itemBgc
+          'background-color': itemBgc,
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
@@ -47,6 +47,11 @@
   export default defineComponent({
     props: {
       disabled: {
+        type: Boolean,
+        default: false,
+      },
+
+      disabledActiveStyle: {
         type: Boolean,
         default: false,
       },
@@ -93,8 +98,8 @@
 
       itemBgc: {
         type: String,
-        default: 'var(--hr-neutral-color-1)'
-      }
+        default: 'var(--hr-neutral-color-1)',
+      },
     },
 
     emits: ['item-click', 'item-delete'],
@@ -102,6 +107,10 @@
     setup(props, ctx) {
       const { emit } = ctx;
       const isActive = (v: any) => {
+        if (props.disabledActiveStyle) {
+          return false;
+        }
+
         if (props.multiple) {
           if (Array.isArray(props.value)) {
             return props.value.findIndex((o) => o === v) !== -1;

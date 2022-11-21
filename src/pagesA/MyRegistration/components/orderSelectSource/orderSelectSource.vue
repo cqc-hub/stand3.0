@@ -3,18 +3,33 @@
     <g-popup @hide="hide" title="请选择就诊时间" ref="popup">
       <view class="content">
         <view
-          v-if="selectSchInfos && selectSchInfos.length > 1"
+          v-if="
+            selectSchInfo.amPmResults &&
+            selectSchInfos &&
+            selectSchInfos.length === 1
+          "
           class="g-border-bottom"
         >
-          <g-tabs
-            v-model:value="tabCurrent"
-            :tabs="selectSchInfos"
-            :scroll="false"
-            @change="tabChange"
-            field="ampmName"
-            style="width: 100%"
-          />
+          <view :class="{}" class="collapse-title f32 g-bold pl32">
+            <text class="mr12">{{ selectSchInfos[0].ampmName }}</text>
+          </view>
         </view>
+
+        <block v-else>
+          <view
+            v-if="selectSchInfos && selectSchInfos.length > 1"
+            class="g-border-bottom"
+          >
+            <g-tabs
+              v-model:value="tabCurrent"
+              :tabs="selectSchInfos"
+              :scroll="false"
+              @change="tabChange"
+              field="ampmName"
+              style="width: 100%"
+            />
+          </view>
+        </block>
         <scroll-view
           class="container"
           :class="{
@@ -37,7 +52,8 @@
             >
               <g-collapse
                 :border="false"
-                :isTitleSticky="collapseOpens[idx]"
+                :isTitleSticky="collapseOpens['' + idx + tabCurrent]"
+                :disabled="selectSchInfo.amPmResults.length === 1"
                 @change="(b) => collapseChange(idx, b, _item)"
                 titlePadding="0 32rpx"
                 activebg="transparent"
@@ -72,6 +88,7 @@
                       :isBlur="isBlur"
                       @item-click="itemClick"
                       itemBgc="#fff"
+                      disabledActiveStyle
                     />
                   </view>
                 </template>
@@ -100,9 +117,11 @@
                 :value="value"
                 :isBlur="isBlur"
                 @item-click="itemClick"
+                disabledActiveStyle
               />
             </view>
           </block>
+          <view class="safe-height" />
         </scroll-view>
       </view>
     </g-popup>
@@ -151,7 +170,9 @@
 
   const currentSchInfo = ref({} as TSchInfo);
   const collapseChange = async (idx, type: boolean, _item: TSchInfo) => {
-    collapseOpens.value[idx] = type;
+    collapseOpens.value = {
+      ['' + idx + tabCurrent.value]: type,
+    };
     currentSchInfo.value = _item;
     if (type) {
       const scrollToView_id = 'collapse-item-' + idx;
@@ -233,7 +254,18 @@
 
     setTimeout(() => {
       refreshList.value = true;
+      initAmPmResList();
     }, 100);
+  };
+
+  const initAmPmResList = async () => {
+    const amPmResults = selectSchInfo.value.amPmResults;
+    if (amPmResults && amPmResults.length === 1) {
+      setTimeout(() => {
+        const refCollapseNow = refCollapse.value[0];
+        refCollapseNow.show(true);
+      }, 200);
+    }
   };
 
   const setTabIndex = (idx: number) => {
@@ -252,6 +284,7 @@
       if (v) {
         show();
         resetData();
+        initAmPmResList();
       }
     }
   );

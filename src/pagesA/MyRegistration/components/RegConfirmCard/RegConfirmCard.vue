@@ -38,6 +38,7 @@
       <image
         :src="myProps.docPhoto || '/static/image/order/order-doctor-avatar.png'"
         class="doc-avatar g-border"
+        mode="aspectFill"
       />
 
       <view>

@@ -42,11 +42,7 @@ interface IDocRow {
 export interface IDocListAll extends IDocRow {
   docNamePinYin: string;
   specialClinicName?: string;
-  schDocSubResultList: {
-    schDate: string;
-    schState: '0' | '1';
-    amPmResults: TSchInfo[];
-  }[];
+  schDocSubResultList: TAllDayTScInfo[];
 }
 
 export interface IDocListByDate {
@@ -208,21 +204,35 @@ export const useOrder = (props: IOrderProps) => {
         );
 
         docInfo.schDocSubResultList.map((o) => {
-          const { schDate, amPmResults } = o;
+          const { schDate, schDocAmPm } = o;
 
           if (!eDaysEnabled.includes(schDate)) {
             eDaysEnabled.push(schDate);
           }
 
-          if (amPmResults && amPmResults.length) {
-            amPmResults.map((amPmItem) => {
-              amPmItem.docPhoto = docPhoto;
+          if (schDocAmPm && schDocAmPm.length) {
+            schDocAmPm.map((orderList) => {
+              const { amPmResults } = orderList;
+
+              if (amPmResults && amPmResults.length) {
+                orderList.amPmResults = orderList.amPmResults.filter(
+                  (oi) => oi.schState === '0'
+                );
+
+                if (orderList.amPmResults.length) {
+                  orderList.amPmResults.map((amPmItem) => {
+                    amPmItem.docPhoto = docPhoto;
+                  });
+                }
+              }
             });
           }
         });
       });
 
-      allDocList.value = allList;
+      allDocList.value = allList.filter(
+        (o) => o.schDocSubResultList && o.schDocSubResultList.length
+      );
     }
 
     chooseDaysEnabled.value = eDaysEnabled;

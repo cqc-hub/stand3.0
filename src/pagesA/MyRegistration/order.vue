@@ -43,6 +43,8 @@
           </view>
         </view>
       </view>
+
+      <view class="safe-height" />
     </scroll-view>
 
     <Order-Select-Source
