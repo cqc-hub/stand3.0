@@ -121,53 +121,21 @@
             />
           </view>
 
-          <block v-if="Object.keys(schToday.schByHos).length">
-            <view v-if="isShowHosNet">
-              <text class="label-mark">
-                <text class="color-fff f28 label-mark-content">到院就诊</text>
-              </text>
-            </view>
-
-            <view
-              v-for="_hosId in Object.keys(schToday.schByHos)"
-              :key="_hosId"
-              class="p32c mt12"
-            >
-              <view
-                v-for="(item, idx) in schToday.schByHos[_hosId]"
-                :key="item.schId"
-              >
-                <view v-if="!idx" class="f36 g-bold mb16">
-                  {{ item.hosName }}
-                </view>
-
-                <view
-                  :class="{
-                    mb32: idx === schToday.schByHos[_hosId].length - 1,
-                  }"
-                  class="sch-item mb8 animate__animated animate__fadeIn"
-                >
-                  <Doc-Sch-Item :item="item" @reg-click="regClick" />
-                </view>
-              </view>
-            </view>
-          </block>
-
-          <block v-if="Object.keys(schToday.schByNetHos).length">
-            <view class="animate__animated animate__fadeIn">
-              <view>
-                <text class="label-mark mb8">
-                  <text class="color-fff f28 label-mark-content">网络就诊</text>
+          <block v-if="docSchList.length && isComplete">
+            <block v-if="Object.keys(schToday.schByHos).length">
+              <view v-if="isShowHosNet">
+                <text class="label-mark">
+                  <text class="color-fff f28 label-mark-content">到院就诊</text>
                 </text>
               </view>
 
               <view
-                v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                v-for="_hosId in Object.keys(schToday.schByHos)"
                 :key="_hosId"
                 class="p32c mt12"
               >
                 <view
-                  v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                  v-for="(item, idx) in schToday.schByHos[_hosId]"
                   :key="item.schId"
                 >
                   <view v-if="!idx" class="f36 g-bold mb16">
@@ -178,14 +146,57 @@
                     :class="{
                       mb32: idx === schToday.schByHos[_hosId].length - 1,
                     }"
-                    class="sch-item mb8"
+                    class="sch-item mb8 animate__animated animate__fadeIn"
                   >
-                    <Doc-Sch-Item :item="item" @reg-click="regClick" />
+                    <Doc-Sch-Item
+                      :item="item"
+                      @reg-click="(scheme) => regClick({ scheme })"
+                    />
                   </view>
                 </view>
               </view>
-            </view>
+            </block>
+
+            <block v-if="Object.keys(schToday.schByNetHos).length">
+              <view class="animate__animated animate__fadeIn">
+                <view>
+                  <text class="label-mark mb8">
+                    <text class="color-fff f28 label-mark-content">
+                      网络就诊
+                    </text>
+                  </text>
+                </view>
+
+                <view
+                  v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                  :key="_hosId"
+                  class="p32c mt12"
+                >
+                  <view
+                    v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                    :key="item.schId"
+                  >
+                    <view v-if="!idx" class="f36 g-bold mb16">
+                      {{ item.hosName }}
+                    </view>
+
+                    <view
+                      :class="{
+                        mb32: idx === schToday.schByHos[_hosId].length - 1,
+                      }"
+                      class="sch-item mb8"
+                    >
+                      <Doc-Sch-Item :item="item" @reg-click="regClick" />
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </block>
           </block>
+
+          <view class="empty-list" v-else-if="isComplete">
+            <g-empty :current="2" imgHeight="180rpx" text="没有排班" />
+          </view>
 
           <!-- <view class="p32c mt12">
             <view class="f36 g-bold mb16">庆春院区</view>
@@ -308,7 +319,6 @@
     docName: props.value.docName,
     deptName: props.value.deptName,
   });
-  // const docDetail = computed(() => useDoctorDetail.value.docDetail);
 
   const headerBg = computed(() => {
     return (
@@ -357,11 +367,15 @@
       isComplete.value = true;
     });
     const eDaysEnabled: string[] = [];
-
     if (schList.length) {
       schList.map((o) => {
         const { schDate } = o;
 
+        o.schDateList.map((p, i) => {
+          if (!i) {
+            // p.schState = '3';
+          }
+        });
         if (!eDaysEnabled.includes(schDate)) {
           eDaysEnabled.push(schDate);
         }
@@ -643,5 +657,9 @@
 
   .service-content {
     width: 100%;
+  }
+
+  .empty-list {
+    transform: translateY(25%);
   }
 </style>

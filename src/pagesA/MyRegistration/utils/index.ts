@@ -345,7 +345,15 @@ export const useOrder = (props: IOrderProps) => {
   };
 
   // 某天点击 某个时间段(上午...)
-  const regClick = async ({ scheme }: { scheme: TSchInfo }) => {
+  const regClick = async ({
+    scheme: { scheme },
+  }: {
+    scheme: { scheme: TSchInfo };
+  }) => {
+    console.log({
+      scheme,
+    });
+
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
     isSelectOrderSourceShow.value = true;

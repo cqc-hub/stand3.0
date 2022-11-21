@@ -1,28 +1,35 @@
 <template>
   <view class="scheme-item">
-    <view class="scheme-item-ampm-name">
-      <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
-      <view class="f24 color-666 sch-label">
-        <text class="text-ellipsis">
-          {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
-        </text>
+    <view class="flex-between">
+      <view class="scheme-item-ampm-name">
+        <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
+        <view class="ampm-fee f28 mr16 g-bold">{{ item.fee }}元</view>
+      </view>
+
+      <view class="scheme-item-detail">
+        <button
+          v-if="item.schState in warnSchStateMap"
+          class="btn klklk btn-primary btn-reg btn-disabled disabled-btn"
+        >
+          {{ warnSchStateMap[item.schState] }}
+        </button>
+
+        <g-login v-else @handler-next="regClick(item)" patient>
+          <button class="btn klklk btn-primary btn-reg" @click="regClick(item)">
+            挂号
+          </button>
+        </g-login>
       </view>
     </view>
-    <view class="scheme-item-detail">
-      <view class="ampm-fee f28 mr16 g-bold">{{ item.fee }}元</view>
 
-      <view
-        v-if="item.schState in warnSchStateMap"
-        class="f26 g-bold color-888 klklk g-flex-rc-cc"
-      >
-        {{ warnSchStateMap[item.schState] }}
+    <view class="f24 color-666 flex-between">
+      <view class="text-ellipsis mr12">
+        {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
       </view>
 
-      <g-login v-else @handler-next="regClick(item)" patient>
-        <button class="btn klklk btn-primary btn-reg" @click="regClick(item)">
-          余{{ item.numRemain }}个
-        </button>
-      </g-login>
+      <view class="color-888 text-no-wrap">
+        挂{{ item.numCount }} 个 余{{ item.numRemain }}个
+      </view>
     </view>
   </view>
 </template>
@@ -31,9 +38,10 @@
   import { defineComponent, ref } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
-  const props = defineProps<{
+  defineProps<{
     item: TSchInfo;
   }>();
+
   const emits = defineEmits(['reg-click', 'avatar-click']);
 
   const regClick = (scheme: TSchInfo) => {
@@ -53,10 +61,6 @@
     background-color: var(--hr-brand-color-1);
     border-radius: 8rpx;
     padding: 18rpx 24rpx;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
     .scheme-item-ampm-name {
       font-size: var(--hr-font-size-xs);
@@ -93,6 +97,10 @@
   }
 
   .klklk {
-    width: 120rpx;
+    // width: 120rpx;
+  }
+
+  .disabled-btn {
+    background-color: var(--hr-neutral-color-4);
   }
 </style>
