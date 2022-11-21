@@ -112,11 +112,14 @@
 
         <view class="f36 g-bold mb16">门诊排班</view>
         <view class="content-box content-box-sch">
-          <view class="content-sel-date mb16">
+          <view
+            v-if="docSchList.length && isComplete"
+            class="content-sel-date mb16"
+          >
             <Order-Sel-Date
               :value="checkedDay"
               :choose-days="chooseDays"
-              :enable-days="chooseDaysEnabled"
+              :enable-days="enabledDays"
               @change="dateChange"
             />
           </view>
@@ -312,6 +315,8 @@
     orderSourceChoose,
     amChange,
     regClick,
+    enabledDays,
+    filterChooseDays,
   } = useOrder(props as any);
   const regDialogConfirm = ref<any>('');
 
@@ -367,13 +372,19 @@
       isComplete.value = true;
     });
     const eDaysEnabled: string[] = [];
+    console.log('schList', schList);
+    const _enabledDays: Record<string, string> = {};
+
     if (schList.length) {
       schList.map((o) => {
         const { schDate } = o;
 
         o.schDateList.map((p, i) => {
-          if (!i) {
-            // p.schState = '3';
+          const { schState } = p;
+          const enabledDaysValue = _enabledDays[schDate];
+
+          if (enabledDaysValue !== '0') {
+            _enabledDays[schDate] = schState;
           }
         });
         if (!eDaysEnabled.includes(schDate)) {
@@ -381,10 +392,13 @@
         }
       });
 
-      chooseDaysEnabled.value = eDaysEnabled;
+      // chooseDaysEnabled.value = eDaysEnabled;
       checkedDay.value = schList[0].schDate;
       docSchList.value = schList;
     }
+
+    enabledDays.value = _enabledDays;
+    filterChooseDays();
   };
 
   const collectDoc = async () => {

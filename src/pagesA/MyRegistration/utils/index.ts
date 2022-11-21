@@ -518,6 +518,7 @@ export const useOrder = (props: IOrderProps) => {
     regClick,
     isComplete,
     enabledDays,
+    filterChooseDays
   };
 };
 
