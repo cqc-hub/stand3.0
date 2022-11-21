@@ -69,6 +69,7 @@
                 :enable-days="enableDays"
                 :checkHover="range"
                 :value="value"
+                :dateShow="dateShow"
                 @change="choiceDate"
                 @handleMouse="handleMouse"
               ></calendar-item>
@@ -101,6 +102,7 @@
                 :calendar="calendar"
                 :selected="selected"
                 :lunar="lunar"
+                :dateShow="dateShow"
                 :enable-days="enableDays"
                 :checkHover="range"
                 :value="value"
@@ -185,6 +187,7 @@
   import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
   import { GStores } from '@/utils';
   import { nextTick } from 'vue';
+
   const { t } = initVueI18n(messages);
   /**
    * Calendar 日历
@@ -212,6 +215,10 @@
       timePicker,
     },
     props: {
+      dateShow: {
+        type: Array,
+        default: () => [],
+      },
       enableDays: {
         type: Object,
         default: () => ({}),
@@ -695,10 +702,6 @@
         ).fullDate;
         this.setDate(nextDate);
         this.monthSwitch();
-        console.log({
-          weeks: this.weeks,
-          nextDate,
-        });
       },
 
       getNextMonth() {

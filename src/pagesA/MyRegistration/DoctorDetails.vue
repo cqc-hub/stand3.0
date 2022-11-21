@@ -234,7 +234,6 @@
       :is-blur="orderConfig.isOrderBlur"
       @item-click="orderSourceChoose"
       @am-change="amChange"
-      ref="selectOrderSource"
     />
     <g-message />
   </view>
@@ -372,7 +371,6 @@
       isComplete.value = true;
     });
     const eDaysEnabled: string[] = [];
-    console.log('schList', schList);
     const _enabledDays: Record<string, string> = {};
 
     if (schList.length) {
@@ -674,6 +672,6 @@
   }
 
   .empty-list {
-    transform: translateY(25%);
+    transform: translateY(40%);
   }
 </style>

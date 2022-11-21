@@ -210,6 +210,7 @@
       :insert="false"
       :hideSecond="hideSecond"
       :value="value"
+      :dateShow="dateShow"
       @confirm="mobileChange"
     />
   </view>
@@ -316,6 +317,10 @@
       type: {
         type: String,
         default: 'datetime',
+      },
+      dateShow: {
+        type: Array,
+        default: () => [],
       },
       enableDays: {
         type: Object,

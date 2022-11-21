@@ -1,6 +1,6 @@
 <template>
   <view
-    v-if="enableDays[weeks.fullDate]"
+    v-if="dateShow.includes(weeks.fullDate)"
     class="uni-calendar-item__weeks-box"
     :class="{
       'uni-calendar-item--disable': weeks.disable || !isHasOrder,
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+  import dayjs from 'dayjs';
+
   export default {
     props: {
       enableDays: {
@@ -56,6 +58,10 @@
         default() {
           return {};
         },
+      },
+      dateShow: {
+        type: Array,
+        default: () => [],
       },
       calendar: {
         type: Object,

@@ -61,6 +61,7 @@
       :modelValue="value"
       :value="value"
       :enableDays="enableDays"
+      :dateShow="dateShow"
       :clear-icon="false"
       @change="dateTimeChange"
     >
@@ -99,6 +100,7 @@
   const scrollToId = ref('');
   const scrollLeft = ref(0);
   const inst = getCurrentInstance();
+  const dateShow = ref<string[]>([]);
 
   const isOpenCalendar = computed(() => {
     return props.chooseDays.length > 6;
@@ -129,46 +131,77 @@
       fullDay: fullDay,
       weekday: dayMap[_date.isoWeekday()],
     });
+  };
 
-    watch(
-      () => props.value,
-      () => {
-        nextTick(async () => {
-          const query = uni.createSelectorQuery().in(inst);
-          let scrollWidth = 0;
-          await new Promise((resolve) => {
-            query
-              .select('.choose-day-container-scroll')
-              .boundingClientRect((data: any) => {
-                if (data && data.width) {
-                  scrollWidth = data.width;
-                }
-
-                resolve(void 0);
-              })
-              .exec();
-          });
-
+  watch(
+    () => props.value,
+    () => {
+      nextTick(async () => {
+        const query = uni.createSelectorQuery().in(inst);
+        let scrollWidth = 0;
+        await new Promise((resolve) => {
           query
-            .select(`#day-` + props.value)
-            .boundingClientRect((data) => {
-              if (data) {
-                const itemLeft = (data as any).left;
-                if (
-                  !(
-                    scrollLeft.value < itemLeft &&
-                    scrollLeft.value + scrollWidth > itemLeft
-                  )
-                ) {
-                  scrollToId.value = 'day-' + props.value;
-                }
+            .select('.choose-day-container-scroll')
+            .boundingClientRect((data: any) => {
+              if (data && data.width) {
+                scrollWidth = data.width;
               }
+
+              resolve(void 0);
             })
             .exec();
         });
+
+        query
+          .select(`#day-` + props.value)
+          .boundingClientRect((data) => {
+            if (data) {
+              const itemLeft = (data as any).left;
+              if (
+                !(
+                  scrollLeft.value < itemLeft &&
+                  scrollLeft.value + scrollWidth > itemLeft
+                )
+              ) {
+                scrollToId.value = 'day-' + props.value;
+              }
+            }
+          })
+          .exec();
+      });
+    }
+  );
+
+  watch(
+    () => props.chooseDays,
+    (v) => {
+      if (v.length > 1) {
+        const _first = v[0].fullDay;
+        const _last = v[v.length - 1].fullDay;
+        let dateNow = dayjs(_first);
+        const dates: string[] = [dateNow.format('YYYY-MM-DD')];
+
+        console.log({
+          _first,
+          _last,
+        });
+
+        const lastDate = dayjs(_last);
+
+        // dayjs(dateNow).add(1, 'day');
+
+        while (dayjs(dateNow).isBefore(lastDate)) {
+          dateNow = dateNow.add(1, 'day');
+          dates.push(dateNow.format('YYYY-MM-DD'));
+        }
+
+        dateShow.value = dates;
       }
-    );
-  };
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
