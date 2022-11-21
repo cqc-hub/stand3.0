@@ -180,15 +180,7 @@
         const _last = v[v.length - 1].fullDay;
         let dateNow = dayjs(_first);
         const dates: string[] = [dateNow.format('YYYY-MM-DD')];
-
-        console.log({
-          _first,
-          _last,
-        });
-
         const lastDate = dayjs(_last);
-
-        // dayjs(dateNow).add(1, 'day');
 
         while (dayjs(dateNow).isBefore(lastDate)) {
           dateNow = dateNow.add(1, 'day');

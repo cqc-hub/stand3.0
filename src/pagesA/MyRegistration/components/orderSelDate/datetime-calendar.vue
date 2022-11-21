@@ -355,7 +355,6 @@
           if (!this.range) {
             this.time = newVal;
           } else {
-            // console.log('-----', newVal);
             this.timeRange.startTime = newVal.start;
             this.timeRange.endTime = newVal.end;
           }
@@ -631,7 +630,7 @@
 
         if (this.enableDays[fullDate] !== '0') {
           new GStores().messageStore.showMessage('当日无医生排班', 3000);
-          // return;
+          return;
         }
 
         this.$emit(name, {

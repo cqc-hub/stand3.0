@@ -145,7 +145,7 @@
     _url: string;
     _type: number; //区分跳转h5的页面 0：医院指南 1：核酸开单
     _questionId: number; //问卷id
-    _isPay:number;
+    _isPay: number;
   }>();
 
   const dirUrl = ref(decodeURIComponent(props._url));
@@ -231,7 +231,7 @@
   const medCopyConfigList = ref<ISystemConfig['medRecord']>([]);
 
   const itemClick = (item: IHosInfo) => {
-    console.log(1111,props)
+    console.log(1111, props);
     if (isMedCopy.value) {
       const _idx = medCopyConfigList.value.findIndex(
         (o) => o.hosId === item.hosId
@@ -247,17 +247,20 @@
       if (props._questionId) {
         //跳转问卷页面-h5
         uni.navigateTo({
-          url: joinQuery('/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion', {
-            category: props._questionId,
-            url: props._url,
-            hosId: item.hosId,
-          }),
+          url: joinQuery(
+            '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion',
+            {
+              category: props._questionId,
+              url: props._url,
+              hosId: item.hosId,
+            }
+          ),
         });
       } else {
         uni.navigateTo({
           url: joinQuery(pagesList[props._type], {
             hosId: item.hosId,
-            isPay:props._isPay
+            isPay: props._isPay,
           }),
         });
       }
@@ -304,6 +307,22 @@
 
   const getList = async (isRequestApi: boolean = true) => {
     isWxRequestQxDialogShow.value = false;
+    // 类型-1预约挂号 2-病案复印 3-核酸开单
+    let type = '3';
+    switch (getTypeNow.value) {
+      case '病案复印':
+        type = '2';
+        break;
+
+      case '预约挂号':
+        type = '1';
+        break;
+
+      default:
+        type = '3';
+        break;
+    }
+
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
       medCopyConfigList.value = await ServerStaticData.getSystemConfig(
@@ -320,6 +339,7 @@
               {
                 gisLng: longitude,
                 gisLat: latitude,
+                type,
               },
               { noCache: true }
             );
@@ -336,7 +356,9 @@
         });
       });
     } else {
-      hosList.value = await ServerStaticData.getHosList();
+      hosList.value = await ServerStaticData.getHosList({
+        type,
+      });
     }
 
     if (getTypeNow.value === '病案复印') {
@@ -344,10 +366,6 @@
       hosList.value.map((o) => {
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
-
-      console.log(hosIds);
-
-      console.log(hosList.value);
     }
   };
 

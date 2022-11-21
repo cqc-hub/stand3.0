@@ -98,7 +98,6 @@
 
     methods: {
       choiceDate(weeks) {
-        console.log(this.weeks, this.value);
         this.$emit('change', weeks);
       },
       handleMousemove(weeks) {
