@@ -65,9 +65,10 @@
         let newQuery = '';
         let obj = JSON.parse(JSON.stringify(options));
         console.log('path', obj);
-
+     
         delete obj.path;
         delete obj.query;
+        delete obj._pd;
         // 携带参数的情况
         if (JSON.stringify(obj) != '{}') {
           newQuery += '&' + joinQuery('', obj).slice(1);
@@ -79,9 +80,8 @@
   });
   const getQueryPath = (options) => {
     // path里面需要传参的时候['sysCode'] options.query有值得时候
-    //获取当前默认就诊人的patientid
-    const patientId =
-      gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
+    //获取当前默认就诊人的patientid 或者是携带过来的_pd
+    const patientId =options._pd || gStores.userStore.patChoose && gStores.userStore.patChoose.patientId;
     const herenId = gStores.globalStore && gStores.globalStore.herenId;
 
     //默认加密参数
@@ -128,10 +128,15 @@
           if (V3PageData.cancelUrl) {
             gStores.messageStore.showMessage('取消支付', 1500, {
               closeCallBack: () => {
-                uni.reLaunch({
-                  url:
-                    '/pagesC/cloudHospital/myPath?path=' + V3PageData.cancelUrl,
-                });
+                // uni.navigateTo({
+                //   url:
+                //     '/pagesC/cloudHospital/myPath?path=' + V3PageData.cancelUrl,
+                // });
+                if (V3PageData.miniUrl) {
+            uni.navigateTo({
+              url: '/pagesC/cloudHospital/myPath?path=' + V3PageData.miniUrl,
+            });
+          }
               },
             });
           }
