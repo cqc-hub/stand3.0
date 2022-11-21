@@ -30,7 +30,7 @@
             v-for="item in chooseDays"
             :class="{
               'item-active': item.fullDay === value,
-              'item-disabled': !enableDays.includes(item.fullDay),
+              'item-disabled': enableDays[item.fullDay] !== '0',
             }"
             :key="item.day"
             :id="'day-' + item.fullDay"
@@ -44,8 +44,8 @@
       </scroll-view>
 
       <view
-        v-if="chooseDays.length >= 20"
         class="choose-day-all choose-day-calendar"
+        v-if="isOpenCalendar"
         @click="calendarRef.show"
       >
         <view>展开</view>
@@ -53,11 +53,13 @@
         <view class="iconfont ico-arrow">&#xe6c4;</view>
       </view>
     </view>
-    <!-- v-if="chooseDays.length >= 20" -->
+
     <Datetime-Picker
+      v-if="isOpenCalendar"
       ref="calendarRef"
       type="date"
       :modelValue="value"
+      :value="value"
       :enableDays="enableDays"
       :clear-icon="false"
       @change="dateTimeChange"
@@ -68,7 +70,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref, getCurrentInstance, watch } from 'vue';
+  import { nextTick, ref, getCurrentInstance, watch, computed } from 'vue';
   import { IChooseDays } from '../../utils';
   import isoWeek from 'dayjs/plugin/isoWeek';
   import dayjs from 'dayjs';
@@ -80,13 +82,13 @@
   const props = withDefaults(
     defineProps<{
       chooseDays: IChooseDays[];
-      enableDays: string[];
+      enableDays: Record<string, string>;
       value: string;
       isShowAllDate?: boolean;
     }>(),
     {
       chooseDays: () => [],
-      enableDays: () => [],
+      enableDays: () => ({}),
       value: '',
       isShowAllDate: false,
     }
@@ -97,6 +99,10 @@
   const scrollToId = ref('');
   const scrollLeft = ref(0);
   const inst = getCurrentInstance();
+
+  const isOpenCalendar = computed(() => {
+    return props.chooseDays.length > 6;
+  });
 
   const change = (item: IChooseDays) => {
     emits('change', item);
@@ -238,7 +244,7 @@
 
       &.item-disabled {
         color: var(--hr-neutral-color-5);
-        pointer-events: none;
+        // pointer-events: none;
       }
     }
   }

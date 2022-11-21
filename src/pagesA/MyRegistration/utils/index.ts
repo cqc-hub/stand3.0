@@ -148,7 +148,10 @@ export const useOrder = (props: IOrderProps) => {
   const allDocList = ref<IDocListAll[]>([]);
   const dateDocList = ref<IDocListByDate[]>([]);
   const chooseDays = ref<IChooseDays[]>([]);
-  const chooseDaysEnabled = ref<string[]>([]);
+  const enabledDays = ref<Record<string, string>>({}); // 值不是 '0' 的代表无号
+  const chooseDaysEnabled = computed(() => {
+    return Object.keys(enabledDays.value);
+  });
   const checkedDay = ref('');
   const gStores = new GStores();
   const dateDocListFilterByDate = computed(() => {
@@ -195,20 +198,31 @@ export const useOrder = (props: IOrderProps) => {
       .finally(() => {
         isComplete.value = true;
       });
+    const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
         const { docPhoto } = docInfo;
         docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
-          (o) => o.schState === '0'
+          (o, i) => {
+            const { schDate, schState } = o;
+
+            if (!eDaysEnabled.includes(schDate)) {
+              eDaysEnabled.push(schDate);
+            }
+
+            const enabledDaysValue = _enabledDays[schDate];
+
+            if (enabledDaysValue !== '0') {
+              _enabledDays[schDate] = schState;
+            }
+
+            return schState === '0';
+          }
         );
 
         docInfo.schDocSubResultList.map((o) => {
           const { schDate, schDocAmPm } = o;
-
-          if (!eDaysEnabled.includes(schDate)) {
-            eDaysEnabled.push(schDate);
-          }
 
           if (schDocAmPm && schDocAmPm.length) {
             schDocAmPm.map((orderList) => {
@@ -235,7 +249,15 @@ export const useOrder = (props: IOrderProps) => {
       );
     }
 
-    chooseDaysEnabled.value = eDaysEnabled;
+    // _enabledDays['2022-11-22'] = '3';
+    enabledDays.value = _enabledDays;
+    filterChooseDays();
+  };
+
+  const filterChooseDays = () => {
+    chooseDays.value = chooseDays.value.filter((o) => {
+      return enabledDays.value[o.fullDay];
+    });
   };
 
   const getListByDate = async (payload: {
@@ -274,7 +296,7 @@ export const useOrder = (props: IOrderProps) => {
 
     if (result && result.length) {
       result.map((o) => {
-        const { schDateList } = o;
+        const { schDateList, schDate } = o;
         if (schDateList && schDateList.length) {
           schDateList.map((schDate) => {
             const { schemeList } = schDate;
@@ -282,7 +304,6 @@ export const useOrder = (props: IOrderProps) => {
             if (schemeList && schemeList.length) {
               schemeList.map((scheme) => {
                 const { schemeList: _schemeList } = scheme;
-
                 if (_schemeList && _schemeList.length) {
                   const schInfo = _schemeList[0];
 
@@ -330,16 +351,8 @@ export const useOrder = (props: IOrderProps) => {
     schInfo: TAllDayTScInfo;
   }) => {
     const { item, schInfo } = e;
-    console.log(e);
-
-    // const amPmResults = schInfo.amPmResults;
-    // selectSchInfos.value = amPmResults;
-
-    // if (amPmResults && amPmResults.length) {
-    //   await getOrderSource(amPmResults[0]);
-    //   isSelectOrderSourceShow.value = true;
-    // }
     const schDocAmPm = schInfo.schDocAmPm;
+
     selectSchInfos.value = schDocAmPm;
     isSelectOrderSourceShow.value = true;
   };
@@ -350,19 +363,13 @@ export const useOrder = (props: IOrderProps) => {
   }: {
     scheme: { scheme: TSchInfo };
   }) => {
-    console.log({
-      scheme,
-    });
-
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
     isSelectOrderSourceShow.value = true;
   };
 
   const amChange = async (schInfo: TSchInfoWhole) => {
-    if (schInfo.amPmResults) {
-      // nothing
-    } else {
+    if (!schInfo.amPmResults) {
       getOrderSource(schInfo);
     }
   };
@@ -407,11 +414,6 @@ export const useOrder = (props: IOrderProps) => {
     }
 
     orderSourceList.value = result || [];
-
-    // if (!orderSourceList.value.length) {
-    //   gStores.messageStore.showMessage('该时段无可以选择的号源', 3000);
-    //   return Promise.reject(void 0);
-    // }
   };
 
   // 点击某个号源
@@ -515,6 +517,7 @@ export const useOrder = (props: IOrderProps) => {
     amChange,
     regClick,
     isComplete,
+    enabledDays,
   };
 };
 

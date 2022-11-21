@@ -15,44 +15,6 @@
         'uni-calendar__content-mobile': aniMaskShow,
       }"
     >
-      <view
-        class="uni-calendar__header"
-        :class="{ 'uni-calendar__header-mobile': !insert }"
-      >
-        <view
-          v-if="left"
-          class="uni-calendar__header-btn-box"
-          @click.stop="pre"
-        >
-          <view class="uni-calendar__header-btn uni-calendar--left"></view>
-        </view>
-        <picker
-          mode="date"
-          :value="date"
-          fields="month"
-          :start="start"
-          :end="end"
-          @change="bindDateChange"
-        >
-          <text class="uni-calendar__header-text">
-            {{
-              (nowDate.year || '') +
-              yearText +
-              (nowDate.month || '') +
-              monthText
-            }}
-          </text>
-        </picker>
-        <view
-          v-if="right"
-          class="uni-calendar__header-btn-box"
-          @click.stop="next"
-        >
-          <view class="uni-calendar__header-btn uni-calendar--right"></view>
-        </view>
-
-        <text class="uni-calendar__backtoday" @click="backtoday">回到今天</text>
-      </view>
       <view class="uni-calendar__box">
         <view v-if="showMonth" class="uni-calendar__box-bg">
           <text class="uni-calendar__box-bg-text">{{ nowDate.month }}</text>
@@ -80,29 +42,74 @@
             <text class="uni-calendar__weeks-day-text">{{ SATText }}</text>
           </view>
         </view>
-        <view
-          class="uni-calendar__weeks my-calendar-row"
-          v-for="(item, weekIndex) in weeks"
-          :key="weekIndex"
-        >
+
+        <view class="g-flex-rc-cc color-dark g-bold mb12">
+          {{
+            (nowDate.year || '') + yearText + (nowDate.month || '') + monthText
+          }}
+        </view>
+
+        <view :class="{ 'g-border-bottom': isSplitMoth }">
           <view
-            class="uni-calendar__weeks-item"
-            v-for="(weeks, weeksIndex) in item"
-            :key="weeksIndex"
+            class="uni-calendar__weeks my-calendar-row"
+            v-for="(item, weekIndex) in weeks"
+            :key="weekIndex"
           >
-            <calendar-item
-              class="uni-calendar-item--hook"
-              :weeks="weeks"
-              :calendar="calendar"
-              :selected="selected"
-              :lunar="lunar"
-              :enable-days="enableDays"
-              :checkHover="range"
-              @change="choiceDate"
-              @handleMouse="handleMouse"
-            ></calendar-item>
+            <view
+              class="uni-calendar__weeks-item"
+              v-for="(weeks, weeksIndex) in item"
+              :key="weeksIndex"
+            >
+              <calendar-item
+                class="uni-calendar-item--hook"
+                :weeks="weeks"
+                :calendar="calendar"
+                :selected="selected"
+                :lunar="lunar"
+                :enable-days="enableDays"
+                :checkHover="range"
+                :value="value"
+                @change="choiceDate"
+                @handleMouse="handleMouse"
+              ></calendar-item>
+            </view>
           </view>
         </view>
+        <!-- 第二个月  -->
+        <block v-if="isSplitMoth">
+          <view class="g-flex-rc-cc color-dark g-bold mt24 mb12">
+            {{
+              (nextNowDate.year || '') +
+              yearText +
+              (nextNowDate.month || '') +
+              monthText
+            }}
+          </view>
+          <view
+            class="uni-calendar__weeks my-calendar-row"
+            v-for="(item, weekIndex) in nextWeeks"
+            :key="weekIndex"
+          >
+            <view
+              class="uni-calendar__weeks-item"
+              v-for="(weeks, weeksIndex) in item"
+              :key="'_' + weeksIndex"
+            >
+              <calendar-item
+                class="uni-calendar-item--hook"
+                :weeks="weeks"
+                :calendar="calendar"
+                :selected="selected"
+                :lunar="lunar"
+                :enable-days="enableDays"
+                :checkHover="range"
+                :value="value"
+                @change="choiceDate"
+                @handleMouse="handleMouse"
+              ></calendar-item>
+            </view>
+          </view>
+        </block>
       </view>
 
       <view
@@ -177,6 +184,7 @@
   import { initVueI18n } from '@dcloudio/uni-i18n';
   import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
   import { GStores } from '@/utils';
+  import { nextTick } from 'vue';
   const { t } = initVueI18n(messages);
   /**
    * Calendar 日历
@@ -205,10 +213,14 @@
     },
     props: {
       enableDays: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
       },
       date: {
+        type: String,
+        default: '',
+      },
+      value: {
         type: String,
         default: '',
       },
@@ -292,8 +304,10 @@
       return {
         show: false,
         weeks: [],
+        nextWeeks: [],
         calendar: {},
         nowDate: '',
+        nextNowDate: '',
         aniMaskShow: false,
         firstEnter: true,
         time: '',
@@ -315,7 +329,15 @@
           if (!this.range) {
             this.tempSingleDate = newVal;
             setTimeout(() => {
-              this.init(newVal);
+              // 月份
+              const _month = newVal.slice(5, 7);
+
+              if (this.nextNowDate.month == _month) {
+                this.setNextMonth(newVal);
+                // this.nowDate =
+              } else {
+                this.init(newVal);
+              }
             }, 100);
           }
         },
@@ -441,11 +463,20 @@
       confirmText() {
         return t('uni-calender.confirm');
       },
+
+      // enableDays 是否分月
+      isSplitMoth() {
+        const months = [
+          ...new Set(Object.keys(this.enableDays).map((o) => o.slice(0, 7))),
+        ];
+
+        return months.length > 1;
+      },
     },
     created() {
       // 获取日历方法实例
       this.cale = new Calendar({
-        // date: new Date(),
+        date: new Date(),
         selected: this.selected,
         startDate: this.startDate,
         endDate: this.endDate,
@@ -456,6 +487,7 @@
       // this.cale.setDate(this.date)
       this.init(this.date);
       // this.setDay
+      this.getNextMonth();
     },
     methods: {
       leaveCale() {
@@ -590,9 +622,9 @@
       setEmit(name) {
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
 
-        if (!this.enableDays.includes(fullDate)) {
+        if (this.enableDays[fullDate] !== '0') {
           new GStores().messageStore.showMessage('当日无医生排班', 3000);
-          return;
+          // return;
         }
 
         this.$emit(name, {
@@ -613,9 +645,9 @@
        */
       choiceDate(weeks) {
         if (weeks.disable) return;
-        if (!this.enableDays.includes(weeks.fullDate)) {
-          return;
-        }
+        // if (this.enableDays[weeks.fullDate] !== '0') {
+        //   return;
+        // }
         this.calendar = weeks;
         this.calendar.userChecked = true;
         // 设置多选
@@ -624,15 +656,6 @@
         this.tempSingleDate = this.calendar.fullDate;
         this.tempRange.before = this.cale.multipleStatus.before;
         this.tempRange.after = this.cale.multipleStatus.after;
-        this.change();
-      },
-      /**
-       * 回到今天
-       */
-      backtoday() {
-        let date = this.cale.getDate(new Date()).fullDate;
-        // this.cale.setDate(date)
-        this.init(date);
         this.change();
       },
       /**
@@ -672,7 +695,37 @@
         ).fullDate;
         this.setDate(nextDate);
         this.monthSwitch();
+        console.log({
+          weeks: this.weeks,
+          nextDate,
+        });
       },
+
+      getNextMonth() {
+        const nextDate = this.cale.getDate(
+          this.nowDate.fullDate,
+          +1,
+          'month'
+        ).fullDate;
+
+        this.setNextMonth(nextDate);
+      },
+
+      setNextMonth(nextDate) {
+        const _cale = new Calendar({
+          selected: this.selected,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          range: this.range,
+        });
+
+        _cale.setDate(nextDate);
+
+        this.nextWeeks = _cale.weeks;
+        this.nextNowDate = _cale.getInfo(nextDate);
+        this.nowDate = this.calendar = _cale.getInfo(nextDate);
+      },
+
       /**
        * 设置日期
        * @param {Object} date
@@ -842,9 +895,13 @@
     flex-direction: row;
   }
 
+  .header-weeks {
+    background-color: #d8d8d8;
+  }
+
   .my-calendar-row {
     &:not(:last-child) {
-      margin-bottom: 24rpx;
+      // margin-bottom: 24rpx;
     }
   }
 
@@ -864,11 +921,12 @@
     border-bottom-color: #f5f5f5;
     border-bottom-style: solid;
     border-bottom-width: 1px;
+    background-color: var(--hr-neutral-color-1);
   }
 
   .uni-calendar__weeks-day-text {
-    font-size: 12px;
-    color: #b2b2b2;
+    font-size: var(--hr-font-size-xxxs);
+    color: var(--hr-neutral-color-8);
   }
 
   .uni-calendar__box {
