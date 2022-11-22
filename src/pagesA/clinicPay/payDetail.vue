@@ -127,11 +127,12 @@
       />
     </Order-Reg-Confirm>
 
-    <view class="g-footer">
-      <block v-if="props.payState === '1'">
+    <view v-if="props.payState === '1'" class="g-footer">
+      <block>
         <button
-          class="btn btn-normal btn-border cancel-btn"
+          v-if="pageConfig.isOpenChargeback === '1'"
           @click="isCannelShow = true"
+          class="btn btn-normal btn-border cancel-btn"
         >
           申请退单
         </button>
@@ -140,15 +141,18 @@
           {{ detailData.totalCost + `元 立即支付` }}
         </button>
       </block>
+    </view>
 
-      <block v-else>
-        <button
-          class="btn btn-plain btn-border btn-error cancel-btn"
-          @click="isCannelShow = true"
-        >
-          申请退单
-        </button>
-      </block>
+    <view
+      v-if="props.payState === '0' && pageConfig.isOpenChargeback === '1'"
+      class="g-footer"
+    >
+      <button
+        @click="isCannelShow = true"
+        class="btn btn-plain btn-border btn-error cancel-btn"
+      >
+        申请退单
+      </button>
     </view>
 
     <g-message />
@@ -170,7 +174,7 @@
     toPayPull,
   } from '@/components/g-pay/index';
   import { deQueryForUrl } from '@/common';
-  import { previewImage } from '@/utils';
+  import { wait } from '@/utils';
 
   import api from '@/service/api';
 
@@ -290,8 +294,7 @@
       phsOrderNo,
       totalFee: totalCost,
       phsOrderSource: '2',
-      // hosId,
-      hosId: '1279',
+      hosId,
       hosName,
     });
 
@@ -304,7 +307,15 @@
     qrOpt.value.size = 0;
   };
 
-  const payAfter = () => {};
+  const payAfter = async () => {
+    uni.showLoading({});
+    await wait(1000);
+    uni.hideLoading();
+
+    uni.reLaunch({
+      url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+    });
+  };
 
   const cannelOrder = () => {
     isCannelShow.value = false;

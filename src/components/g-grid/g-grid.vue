@@ -11,7 +11,7 @@
           <!-- 绿色能量角标 -->
           <!-- v-if="item.enabled == 0 "  -->
           <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
-          <view class="warn-label" v-if="item.gridLabel == '3'">维护中</view>
+          <view :class="`${options.type == 1 && options.list.length == 3?'warn-label3':'warn-label' }`" v-if="item.gridLabel == '3'">维护中</view>
           <view class="gree-label" v-if="item.gridLabel == '1'">绿色能量</view>
           <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
           <text
@@ -22,7 +22,7 @@
             } ${item.iconfont}`"
           />
           <view class="grid-label text-ellipsis">{{ item.title }}</view>
-          <text class="grid-title text-ellipsis">{{ item.detail }}</text>
+          <text v-if="type == 1" class="grid-title text-ellipsis">{{ item.detail }}</text>
         </view>
       </uni-grid-item>
     </uni-grid>
@@ -149,6 +149,36 @@ const gridClick = (item) => {
       z-index: 1;
       right: -6rpx;
       top: 0rpx;
+      background-color: var(--h-color-white);
+      box-sizing: border-box;
+    }
+    .warn-label3 {
+      position: absolute;
+      background: #ffffff;
+      border: 1rpx solid var(--hr-error-color-6);
+      border-radius: 17rpx;
+      color: var(--hr-error-color-6);
+      line-height: 28rpx;
+      font-size: var(--h-size-18);
+      padding: 0 8rpx;
+      z-index: 1;
+      right: 29rpx;
+      top: 4rpx;
+      background-color: var(--h-color-white);
+      box-sizing: border-box;
+    }
+    .gree-label3 {
+      position: absolute;
+      background: #ffffff;
+      border: 1rpx solid var(--hr-success-color-6);
+      border-radius: 17rpx;
+      color: var(--hr-success-color-6);
+      line-height: 28rpx;
+      font-size: var(--h-size-18);
+      padding: 0 8rpx;
+      z-index: 1;
+      right: 29rpx;
+      top: 4rpx;
       background-color: var(--h-color-white);
       box-sizing: border-box;
     }

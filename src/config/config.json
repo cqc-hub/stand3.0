@@ -21,7 +21,17 @@
       },
       "isSearchInHos": false
     },
-
+    "1001049": {
+      "wxAppid": "wx5e97c199ecf8b8c3",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "渭南市中心医院",
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "36784"
+      },
+      "isSearchInHos": false
+    },
     "1001047": {
       "wxAppid": "wxe0e2a3b290ad96b5",
       "alipayAppid": "",

@@ -1,11 +1,12 @@
 <template>
   <view
+    v-if="dateShow.includes(weeks.fullDate)"
     class="uni-calendar-item__weeks-box"
     :class="{
       'uni-calendar-item--disable': weeks.disable || !isHasOrder,
       'uni-calendar-item--before-checked-x': weeks.beforeMultiple,
       'uni-calendar-item--multiple': weeks.multiple,
-      'uni-calendar-item--after-checked-x': weeks.afterMultiple
+      'uni-calendar-item--after-checked-x': weeks.afterMultiple,
     }"
     @click="choiceDate(weeks)"
     @mouseenter="handleMousemove(weeks)"
@@ -13,23 +14,25 @@
     <view
       class="uni-calendar-item__weeks-box-item"
       :class="{
-        'uni-calendar-item--checked':
-          calendar.fullDate === weeks.fullDate && (calendar.userChecked || !checkHover) && isHasOrder,
+        'uni-calendar-item--checked': weeks.fullDate === value,
         'uni-calendar-item--checked-range-text': checkHover,
         'uni-calendar-item--before-checked': weeks.beforeMultiple,
         'uni-calendar-item--multiple': weeks.multiple,
         'uni-calendar-item--after-checked': weeks.afterMultiple,
-        'uni-calendar-item--disable': weeks.disable
+        'uni-calendar-item--disable': weeks.disable,
       }"
     >
-      <text v-if="selected && weeks.extraInfo" class="uni-calendar-item__weeks-box-circle"></text>
+      <text
+        v-if="selected && weeks.extraInfo"
+        class="uni-calendar-item__weeks-box-circle"
+      ></text>
       <view
         class="uni-calendar-item__weeks-box-text uni-calendar-item__weeks-box-text-disable uni-calendar-item--checked-text g-flex-rc-cc item-content"
       >
         <view>{{ addPlaceHolder(weeks.date) }}</view>
         <view
           :class="{
-            'item-content-order-active': isHasOrder
+            'item-content-order-active': isHasOrder,
           }"
           class="item-content-order"
         >
@@ -42,44 +45,55 @@
 </template>
 
 <script>
+  import dayjs from 'dayjs';
+
   export default {
     props: {
       enableDays: {
-        type: Array,
-        default: () => []
+        type: Object,
+        default: () => ({}),
       },
       weeks: {
         type: Object,
         default() {
           return {};
-        }
+        },
+      },
+      dateShow: {
+        type: Array,
+        default: () => [],
       },
       calendar: {
         type: Object,
         default: () => {
           return {};
-        }
+        },
       },
       selected: {
         type: Array,
         default: () => {
           return [];
-        }
+        },
       },
       lunar: {
         type: Boolean,
-        default: false
+        default: false,
       },
       checkHover: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
+      value: {
+        type: String,
+        default: '',
+      },
     },
 
     computed: {
       isHasOrder() {
-        return this.enableDays.includes(this.weeks.fullDate);
-      }
+        // return this.enableDays.includes(this.weeks.fullDate);
+        return this.enableDays[this.weeks.fullDate] === '0';
+      },
     },
 
     methods: {
@@ -92,8 +106,8 @@
       addPlaceHolder(text) {
         const _text = '00' + text;
         return _text.slice((text + '').length);
-      }
-    }
+      },
+    },
   };
 </script>
 
@@ -108,6 +122,7 @@
     align-items: center;
     margin: 1px 0;
     position: relative;
+    margin-bottom: 24rpx;
   }
 
   .uni-calendar-item__weeks-box-text {
@@ -154,7 +169,7 @@
 
   .uni-calendar-item--disable .uni-calendar-item__weeks-box-text-disable {
     color: #d1d1d1;
-    pointer-events: none;
+    // pointer-events: none;
   }
 
   .uni-calendar-item--isDay {

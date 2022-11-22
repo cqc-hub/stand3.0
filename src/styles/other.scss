@@ -152,6 +152,11 @@
   top: -9999999999999rpx;
 }
 
+.safe-height {
+  width: 1rpx;
+  height: 40rpx;
+}
+
 .out-document {
   position: absolute;
 }
@@ -250,6 +255,10 @@
 
 .pb32 {
   padding-bottom: 32rpx !important;
+}
+
+.pl32 {
+  padding-left: 32rpx !important;
 }
 
 .pb18 {

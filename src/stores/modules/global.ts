@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import globalGl from '@/config/global';
 
 interface IStateGlobal {
   token: {
@@ -15,6 +16,8 @@ interface IStateGlobal {
   openId: string;
   h5OpenId: string;
   herenId: string;
+
+  sysCode: typeof globalGl.SYS_CODE;
 }
 //页面存储token brower等
 const globalStore = defineStore('global', {
@@ -54,6 +57,8 @@ const globalStore = defineStore('global', {
       openId: '',
       h5OpenId: '',
       herenId: '',
+
+      sysCode: globalGl.SYS_CODE,
     };
   },
 

@@ -54,7 +54,7 @@
       </swiper-item>
     </swiper>
 
-    <view class="g-footer" v-if="tabCurrent === 0">
+    <view class="g-footer" v-if="tabCurrent === 0 && selUnPayList.length">
       <view
         v-if="isShowSelectAll"
         @click="chooseAll"
@@ -141,11 +141,20 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
+  import { onLoad, onReady } from '@dcloudio/uni-app';
+
   import { usePayPage } from './utils/clinicPayDetail';
   import { useTBanner } from '@/utils';
+  import { deQueryForUrl } from '@/common';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+
+  const pageProps = ref(
+    {} as {
+      tabIndex?: '1';
+    }
+  );
 
   const {
     tabCurrent,
@@ -189,7 +198,17 @@
     // regDialogConfirm.value.show();
   }, 1000);
 
-  init();
+  onLoad(async (opt) => {
+    if (opt) {
+      pageProps.value = deQueryForUrl(opt);
+    }
+
+    await init();
+
+    if (pageProps.value.tabIndex === '1') {
+      tabCurrent.value = 1;
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

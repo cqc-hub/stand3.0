@@ -5,6 +5,7 @@ import api from '@/service/api';
 import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 import { joinQueryForUrl, joinQuery } from '@/common/utils';
+import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
@@ -41,11 +42,7 @@ interface IDocRow {
 export interface IDocListAll extends IDocRow {
   docNamePinYin: string;
   specialClinicName?: string;
-  schDocSubResultList: {
-    schDate: string;
-    schState: '0' | '1';
-    amPmResults: TSchInfo[];
-  }[];
+  schDocSubResultList: TAllDayTScInfo[];
 }
 
 export interface IDocListByDate {
@@ -108,6 +105,18 @@ export type TSchInfo = {
   schStateName: string;
 } & IDocRow;
 
+type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {
+  amPmResults: TSchInfo[];
+};
+
+export type TAllDayTScInfo = {
+  schDate: string;
+  schState: string;
+  schDocAmPm: TSchDocAmPm[];
+};
+
+export type TSchInfoWhole = XOR<TSchDocAmPm, TSchInfo>;
+
 interface IOrderProps {
   hosId: string;
   clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
@@ -133,13 +142,16 @@ export const useOrder = (props: IOrderProps) => {
   const selectOrderSourceNumId = ref('');
   const isSelectOrderSourceShow = ref(false);
   const isComplete = ref(false);
-  const selectSchInfos = ref([] as TSchInfo[]);
+  const selectSchInfos = ref([] as TSchInfoWhole[]);
   const orderSourceList = ref<IOrderSource[]>([]);
 
   const allDocList = ref<IDocListAll[]>([]);
   const dateDocList = ref<IDocListByDate[]>([]);
   const chooseDays = ref<IChooseDays[]>([]);
-  const chooseDaysEnabled = ref<string[]>([]);
+  const enabledDays = ref<Record<string, string>>({}); // 值不是 '0' 的代表无号
+  const chooseDaysEnabled = computed(() => {
+    return Object.keys(enabledDays.value);
+  });
   const checkedDay = ref('');
   const gStores = new GStores();
   const dateDocListFilterByDate = computed(() => {
@@ -186,30 +198,66 @@ export const useOrder = (props: IOrderProps) => {
       .finally(() => {
         isComplete.value = true;
       });
+    const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
         const { docPhoto } = docInfo;
+        docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
+          (o, i) => {
+            const { schDate, schState } = o;
+
+            if (!eDaysEnabled.includes(schDate)) {
+              eDaysEnabled.push(schDate);
+            }
+
+            const enabledDaysValue = _enabledDays[schDate];
+
+            if (enabledDaysValue !== '0') {
+              _enabledDays[schDate] = schState;
+            }
+
+            return schState === '0';
+          }
+        );
 
         docInfo.schDocSubResultList.map((o) => {
-          const { schDate, amPmResults } = o;
+          const { schDate, schDocAmPm } = o;
 
-          if (!eDaysEnabled.includes(schDate)) {
-            eDaysEnabled.push(schDate);
-          }
+          if (schDocAmPm && schDocAmPm.length) {
+            schDocAmPm.map((orderList) => {
+              const { amPmResults } = orderList;
 
-          if (amPmResults && amPmResults.length) {
-            amPmResults.map((amPmItem) => {
-              amPmItem.docPhoto = docPhoto;
+              if (amPmResults && amPmResults.length) {
+                orderList.amPmResults = orderList.amPmResults.filter(
+                  (oi) => oi.schState === '0'
+                );
+
+                if (orderList.amPmResults.length) {
+                  orderList.amPmResults.map((amPmItem) => {
+                    amPmItem.docPhoto = docPhoto;
+                  });
+                }
+              }
             });
           }
         });
       });
 
-      allDocList.value = allList;
+      allDocList.value = allList.filter(
+        (o) => o.schDocSubResultList && o.schDocSubResultList.length
+      );
     }
 
-    chooseDaysEnabled.value = eDaysEnabled;
+    // _enabledDays['2022-11-22'] = '3';
+    enabledDays.value = _enabledDays;
+    filterChooseDays();
+  };
+
+  const filterChooseDays = () => {
+    chooseDays.value = chooseDays.value.filter((o) => {
+      return enabledDays.value[o.fullDay];
+    });
   };
 
   const getListByDate = async (payload: {
@@ -248,7 +296,7 @@ export const useOrder = (props: IOrderProps) => {
 
     if (result && result.length) {
       result.map((o) => {
-        const { schDateList } = o;
+        const { schDateList, schDate } = o;
         if (schDateList && schDateList.length) {
           schDateList.map((schDate) => {
             const { schemeList } = schDate;
@@ -256,7 +304,6 @@ export const useOrder = (props: IOrderProps) => {
             if (schemeList && schemeList.length) {
               schemeList.map((scheme) => {
                 const { schemeList: _schemeList } = scheme;
-
                 if (_schemeList && _schemeList.length) {
                   const schInfo = _schemeList[0];
 
@@ -301,28 +348,30 @@ export const useOrder = (props: IOrderProps) => {
 
   const dateClick = async (e: {
     item: IDocListAll;
-    schInfo: IDocListAll['schDocSubResultList'][number];
+    schInfo: TAllDayTScInfo;
   }) => {
     const { item, schInfo } = e;
+    const schDocAmPm = schInfo.schDocAmPm;
 
-    const amPmResults = schInfo.amPmResults;
-    selectSchInfos.value = amPmResults;
-
-    if (amPmResults && amPmResults.length) {
-      await getOrderSource(amPmResults[0]);
-      isSelectOrderSourceShow.value = true;
-    }
+    selectSchInfos.value = schDocAmPm;
+    isSelectOrderSourceShow.value = true;
   };
 
   // 某天点击 某个时间段(上午...)
-  const regClick = async ({ scheme }: { scheme: TSchInfo }) => {
+  const regClick = async ({
+    scheme: { scheme },
+  }: {
+    scheme: { scheme: TSchInfo };
+  }) => {
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
     isSelectOrderSourceShow.value = true;
   };
 
-  const amChange = async (schInfo: TSchInfo) => {
-    getOrderSource(schInfo);
+  const amChange = async (schInfo: TSchInfoWhole) => {
+    if (!schInfo.amPmResults) {
+      getOrderSource(schInfo);
+    }
   };
 
   const getOrderSource = async (schInfo: TSchInfo) => {
@@ -365,11 +414,6 @@ export const useOrder = (props: IOrderProps) => {
     }
 
     orderSourceList.value = result || [];
-
-    // if (!orderSourceList.value.length) {
-    //   gStores.messageStore.showMessage('该时段无可以选择的号源', 3000);
-    //   return Promise.reject(void 0);
-    // }
   };
 
   // 点击某个号源
@@ -395,7 +439,7 @@ export const useOrder = (props: IOrderProps) => {
       schDate,
       schId,
       schQukCategor,
-      docTitleName
+      docTitleName,
     } = selectSchInfo;
 
     const { disNo, numId, timeDesc } = item;
@@ -421,7 +465,7 @@ export const useOrder = (props: IOrderProps) => {
       schQukCategor,
       clinicalType,
       promptMessage,
-      docTitleName
+      docTitleName,
     };
     selectOrderSourceNumId.value = numId;
 
@@ -473,6 +517,8 @@ export const useOrder = (props: IOrderProps) => {
     amChange,
     regClick,
     isComplete,
+    enabledDays,
+    filterChooseDays
   };
 };
 

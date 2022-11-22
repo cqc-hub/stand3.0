@@ -3,7 +3,7 @@
     <Order-Sel-Date
       :value="checkedDay"
       :choose-days="chooseDays"
-      :enable-days="chooseDaysEnabled"
+      :enable-days="enabledDays"
       @change="dateChange"
       isShowAllDate
     />
@@ -43,6 +43,8 @@
           </view>
         </view>
       </view>
+
+      <view class="safe-height" />
     </scroll-view>
 
     <Order-Select-Source
@@ -113,6 +115,7 @@
     amChange,
     regClick,
     isComplete,
+    enabledDays,
   } = useOrder(props);
 
   onReady(() => {
@@ -135,7 +138,8 @@
   };
 
   const avatarClick = (item: IDocListAll) => {
-    const { deptName, docName, hosDocId, hosId, hosDeptId, docTitleName } = item;
+    const { deptName, docName, hosDocId, hosId, hosDeptId, docTitleName } =
+      item;
     // const { hosDeptId, firstHosDeptId, secondHosDeptId } = props;
     const args = {
       deptName,

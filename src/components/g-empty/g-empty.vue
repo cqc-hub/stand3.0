@@ -2,6 +2,9 @@
   <view class="page-state g-flex-rc-cc">
     <image
       :src="$global.BASE_IMG + states[current - 1].icon"
+      :style="{
+        height: imgHeight,
+      }"
       mode="heightFix"
     />
     <view class="alt">{{ text || states[current - 1].label }}</view>
@@ -62,10 +65,16 @@
     },
   ] as const;
 
-  defineProps<{
-    current: typeof states.length;
-    text?: string;
-  }>();
+  withDefaults(
+    defineProps<{
+      current: typeof states.length;
+      text?: string;
+      imgHeight?: string;
+    }>(),
+    {
+      imgHeight: '240rpx',
+    }
+  );
 
   // const a:  = 233
 </script>
@@ -77,9 +86,6 @@
 
     position: relative;
     transform: translateY(-25%);
-    image {
-      height: 240rpx;
-    }
     .alt {
       margin-top: 16rpx;
       color: #888;
@@ -87,7 +93,7 @@
     }
   }
 
-	.empty-content {
-		margin-top: 32rpx;
-	}
+  .empty-content {
+    margin-top: 32rpx;
+  }
 </style>

@@ -7,7 +7,7 @@
   >
     <view
       v-for="item in orderSourceList"
-      @click="itemClick(item)"
+      @click.stop="itemClick(item)"
       :key="item.numId"
       :class="{
         'item-active-border': isAllActive || isActive(item.numId),
@@ -17,6 +17,9 @@
       <view
         :class="{
           'item-active': isAllActive || isActive(item.numId),
+        }"
+        :style="{
+          'background-color': itemBgc,
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
@@ -44,6 +47,11 @@
   export default defineComponent({
     props: {
       disabled: {
+        type: Boolean,
+        default: false,
+      },
+
+      disabledActiveStyle: {
         type: Boolean,
         default: false,
       },
@@ -87,6 +95,11 @@
         type: Boolean,
         default: false,
       },
+
+      itemBgc: {
+        type: String,
+        default: 'var(--hr-neutral-color-1)',
+      },
     },
 
     emits: ['item-click', 'item-delete'],
@@ -94,6 +107,10 @@
     setup(props, ctx) {
       const { emit } = ctx;
       const isActive = (v: any) => {
+        if (props.disabledActiveStyle) {
+          return false;
+        }
+
         if (props.multiple) {
           if (Array.isArray(props.value)) {
             return props.value.findIndex((o) => o === v) !== -1;
@@ -130,7 +147,6 @@
     gap: 16rpx;
 
     .item {
-      background-color: var(--hr-neutral-color-1);
       min-height: 130rpx;
       border-radius: 16rpx;
       font-size: var(--hr-font-size-xs);
@@ -164,7 +180,7 @@
 
       &.item-active {
         color: var(--hr-brand-color-6);
-        background-color: var(--hr-brand-color-1);
+        background-color: var(--hr-brand-color-1) !important;
       }
     }
 

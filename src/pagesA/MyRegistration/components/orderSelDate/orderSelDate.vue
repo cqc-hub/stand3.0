@@ -30,7 +30,7 @@
             v-for="item in chooseDays"
             :class="{
               'item-active': item.fullDay === value,
-              'item-disabled': !enableDays.includes(item.fullDay),
+              'item-disabled': enableDays[item.fullDay] !== '0',
             }"
             :key="item.day"
             :id="'day-' + item.fullDay"
@@ -44,8 +44,8 @@
       </scroll-view>
 
       <view
-        v-if="chooseDays.length >= 20"
         class="choose-day-all choose-day-calendar"
+        v-if="isOpenCalendar"
         @click="calendarRef.show"
       >
         <view>展开</view>
@@ -53,12 +53,15 @@
         <view class="iconfont ico-arrow">&#xe6c4;</view>
       </view>
     </view>
-    <!-- v-if="chooseDays.length >= 20" -->
+
     <Datetime-Picker
+      v-if="isOpenCalendar"
       ref="calendarRef"
       type="date"
       :modelValue="value"
+      :value="value"
       :enableDays="enableDays"
+      :dateShow="dateShow"
       :clear-icon="false"
       @change="dateTimeChange"
     >
@@ -68,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref, getCurrentInstance, watch } from 'vue';
+  import { nextTick, ref, getCurrentInstance, watch, computed } from 'vue';
   import { IChooseDays } from '../../utils';
   import isoWeek from 'dayjs/plugin/isoWeek';
   import dayjs from 'dayjs';
@@ -80,13 +83,13 @@
   const props = withDefaults(
     defineProps<{
       chooseDays: IChooseDays[];
-      enableDays: string[];
+      enableDays: Record<string, string>;
       value: string;
       isShowAllDate?: boolean;
     }>(),
     {
       chooseDays: () => [],
-      enableDays: () => [],
+      enableDays: () => ({}),
       value: '',
       isShowAllDate: false,
     }
@@ -97,6 +100,11 @@
   const scrollToId = ref('');
   const scrollLeft = ref(0);
   const inst = getCurrentInstance();
+  const dateShow = ref<string[]>([]);
+
+  const isOpenCalendar = computed(() => {
+    return props.chooseDays.length > 6;
+  });
 
   const change = (item: IChooseDays) => {
     emits('change', item);
@@ -123,46 +131,69 @@
       fullDay: fullDay,
       weekday: dayMap[_date.isoWeekday()],
     });
+  };
 
-    watch(
-      () => props.value,
-      () => {
-        nextTick(async () => {
-          const query = uni.createSelectorQuery().in(inst);
-          let scrollWidth = 0;
-          await new Promise((resolve) => {
-            query
-              .select('.choose-day-container-scroll')
-              .boundingClientRect((data: any) => {
-                if (data && data.width) {
-                  scrollWidth = data.width;
-                }
-
-                resolve(void 0);
-              })
-              .exec();
-          });
-
+  watch(
+    () => props.value,
+    () => {
+      nextTick(async () => {
+        const query = uni.createSelectorQuery().in(inst);
+        let scrollWidth = 0;
+        await new Promise((resolve) => {
           query
-            .select(`#day-` + props.value)
-            .boundingClientRect((data) => {
-              if (data) {
-                const itemLeft = (data as any).left;
-                if (
-                  !(
-                    scrollLeft.value < itemLeft &&
-                    scrollLeft.value + scrollWidth > itemLeft
-                  )
-                ) {
-                  scrollToId.value = 'day-' + props.value;
-                }
+            .select('.choose-day-container-scroll')
+            .boundingClientRect((data: any) => {
+              if (data && data.width) {
+                scrollWidth = data.width;
               }
+
+              resolve(void 0);
             })
             .exec();
         });
+
+        query
+          .select(`#day-` + props.value)
+          .boundingClientRect((data) => {
+            if (data) {
+              const itemLeft = (data as any).left;
+              if (
+                !(
+                  scrollLeft.value < itemLeft &&
+                  scrollLeft.value + scrollWidth > itemLeft
+                )
+              ) {
+                scrollToId.value = 'day-' + props.value;
+              }
+            }
+          })
+          .exec();
+      });
+    }
+  );
+
+  watch(
+    () => props.chooseDays,
+    (v) => {
+      if (v.length > 1) {
+        const _first = v[0].fullDay;
+        const _last = v[v.length - 1].fullDay;
+        let dateNow = dayjs(_first);
+        const dates: string[] = [dateNow.format('YYYY-MM-DD')];
+        const lastDate = dayjs(_last);
+
+        while (dayjs(dateNow).isBefore(lastDate)) {
+          dateNow = dateNow.add(1, 'day');
+          dates.push(dateNow.format('YYYY-MM-DD'));
+        }
+
+        dateShow.value = dates;
       }
-    );
-  };
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
@@ -238,7 +269,7 @@
 
       &.item-disabled {
         color: var(--hr-neutral-color-5);
-        pointer-events: none;
+        // pointer-events: none;
       }
     }
   }

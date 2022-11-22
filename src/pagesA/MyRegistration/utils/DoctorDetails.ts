@@ -39,6 +39,8 @@ export interface IDocSchListItem {
   schByNetHos: {
     [x: string]: TSchInfo[];
   };
+
+  schDateList: TSchInfo[];
 }
 
 export type TDocServiceItem = {
@@ -142,9 +144,6 @@ export class UseDoctorDetail extends GStores {
         schByDate.schByNetHos = _netHos;
       });
     }
-    console.log({
-      result,
-    });
 
     return result;
   }
