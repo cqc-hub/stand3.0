@@ -128,15 +128,10 @@
           if (V3PageData.cancelUrl) {
             gStores.messageStore.showMessage('取消支付', 1500, {
               closeCallBack: () => {
-                // uni.navigateTo({
-                //   url:
-                //     '/pagesC/cloudHospital/myPath?path=' + V3PageData.cancelUrl,
-                // });
-                if (V3PageData.miniUrl) {
-            uni.navigateTo({
-              url: '/pagesC/cloudHospital/myPath?path=' + V3PageData.miniUrl,
-            });
-          }
+                uni.navigateTo({
+                  url:
+                    '/pagesC/cloudHospital/myPath?path=' + V3PageData.cancelUrl,
+                });
               },
             });
           }
