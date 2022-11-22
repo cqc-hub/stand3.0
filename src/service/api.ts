@@ -174,6 +174,18 @@ const queryApi = {
   // 病案复印 tuifei
   copyRefund: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/copyRefund', parm(data)),
+  // 获取住院信息
+  getInHospitalInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),
+  //获取住院费用日清单列表
+  getInHospitalDailyCostList: <T>(data) =>
+    service.post<T>(
+      '/phs-query/hospital/getInHospitalDailyCostList',
+      parm(data)
+    ),
+  //获取住院缴费记录
+  getInHospitalPayInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data)),
 };
 
 // 挂号服务
