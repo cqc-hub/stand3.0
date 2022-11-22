@@ -64,7 +64,24 @@
             "navigationBarTitleText": "医生名片"
           }
         },
-
+        {
+          "path": "hospitalCare/hospitalCare",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          }
+        },
+        {
+          "path": "hospitalCare/payRecord",
+          "style": {
+            "navigationBarTitleText": "预交记录"
+          }
+        },
+        {
+          "path": "hospitalCare/paymentPage",
+          "style": {
+            "navigationBarTitleText": "预缴费用"
+          }
+        },
         {
           "path": "MyRegistration/MyRegistration",
           "style": {
