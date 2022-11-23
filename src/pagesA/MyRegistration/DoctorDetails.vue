@@ -674,4 +674,8 @@
   .empty-list {
     transform: translateY(40%);
   }
+
+  .iconfont {
+    font-weight: normal;
+  }
 </style>
