@@ -43,16 +43,17 @@
   const eletronicInvoice: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    path: 'pagesA/eletronicInvoice/eletronicInvoice',
+    path: 'pagesA/eletronicInvoice/invoiceDetail',
+    // path: 'pagesA/eletronicInvoice/eletronicInvoice',
     text: '电子发票',
     extraData: {
       sysCode: globalGl.SYS_CODE,
     },
-    addition: {
-      token: 'token',
-      herenId: 'herenId',
-    },
-    isLocal: '1',
+    // addition: {
+    //   token: 'token',
+    //   herenId: 'herenId',
+    // },
+    // isLocal: '1',
   };
 
   onMounted(() => {
@@ -60,8 +61,6 @@
       useTBanner(eletronicInvoice);
     }, 1000);
   });
-
-  console.log(src);
 </script>
 
 <style lang="scss" scoped>
