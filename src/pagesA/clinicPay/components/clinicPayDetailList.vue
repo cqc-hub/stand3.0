@@ -60,6 +60,20 @@
             </view>
           </view>
 
+          <view v-if="item.diseaseTypeName" class="row flex-normal">
+            <view class="row-label color-888">病种</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.diseaseTypeName }}
+            </view>
+          </view>
+
+          <view v-if="item.costTypeName" class="row flex-normal">
+            <view class="row-label color-888">费用类型</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.costTypeName }}
+            </view>
+          </view>
+
           <view v-if="!isCheck" class="row flex-normal">
             <view class="row-label color-888">费用金额</view>
             <view class="row-value g-break-word color-444">

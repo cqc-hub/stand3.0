@@ -1,5 +1,10 @@
 <template>
-  <view class="page-state g-flex-rc-cc">
+  <view
+    :class="{
+      ty: !noTransformY,
+    }"
+    class="page-state g-flex-rc-cc"
+  >
     <image
       :src="$global.BASE_IMG + states[current - 1].icon"
       :style="{
@@ -70,6 +75,7 @@
       current: typeof states.length;
       text?: string;
       imgHeight?: string;
+      noTransformY?: boolean;
     }>(),
     {
       imgHeight: '240rpx',
@@ -82,10 +88,11 @@
 <style lang="scss" scoped>
   .page-state {
     flex-direction: column;
-    height: 100%;
-
     position: relative;
-    transform: translateY(-25%);
+
+    &.ty {
+      transform: translateY(-25%);
+    }
     .alt {
       margin-top: 16rpx;
       color: #888;
