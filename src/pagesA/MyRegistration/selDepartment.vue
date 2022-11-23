@@ -9,7 +9,7 @@
 
     <g-tbanner :config="orderConfig.bannerOrder" />
 
-    <view class="container" scroll-y>
+    <view class="container hidden-scrollbar" scroll-y>
       <Department-List
         v-if="depList.length"
         :list="depList"

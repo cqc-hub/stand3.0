@@ -3,176 +3,178 @@
     <view class="g-page" v-if="pageConfig && isConfigGet">
       <g-flag typeFg="503" isShowFg />
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
-        <view id="_address" class="container-box g-border mb16">
-          <Address-Box :addressList="addressList" />
-        </view>
+        <view class="content-box">
+          <view id="_address" class="container-box g-border mb16">
+            <Address-Box :addressList="addressList" />
+          </view>
 
-        <view
-          v-if="pageConfig.sfz && pageConfig.sfz.length"
-          class="container-box g-border mb16 box-padding"
-          id="_photo"
-        >
-          <view class="g-bold f36">请上传本人身份证</view>
+          <view
+            v-if="pageConfig.sfz && pageConfig.sfz.length"
+            class="container-box g-border mb16 box-padding"
+            id="_photo"
+          >
+            <view class="g-bold f36">请上传本人身份证</view>
 
-          <view class="mt24 flex-between id-card-container">
-            <view
-              v-if="pageConfig.sfz.includes('front')"
-              @click="chooseIdCardFront"
-              class="up-idcard g-border g-flex-rc-cc mb16"
-            >
+            <view class="mt24 flex-between id-card-container">
               <view
-                v-if="idCardImg.frontIdCardUrl"
-                @click.stop="idCardImg.frontIdCardUrl = ''"
-                class="iconfont delete-icon"
+                v-if="pageConfig.sfz.includes('front')"
+                @click="chooseIdCardFront"
+                class="up-idcard g-border g-flex-rc-cc mb16"
               >
-                &#xe6fa;
+                <view
+                  v-if="idCardImg.frontIdCardUrl"
+                  @click.stop="idCardImg.frontIdCardUrl = ''"
+                  class="iconfont delete-icon"
+                >
+                  &#xe6fa;
+                </view>
+                <image
+                  v-if="idCardImg.frontIdCardUrl"
+                  :src="dealImg(idCardImg.frontIdCardUrl)"
+                />
+                <image
+                  v-else
+                  :src="$global.BASE_IMG + 'ba_img_idcard-front.png'"
+                  class="idcard-bg my-disabled"
+                />
+
+                <view
+                  v-if="!idCardImg.frontIdCardUrl"
+                  class="g-flex-rc-cc flex-column f24"
+                >
+                  <view class="iconfont camera-icon">&#xe6be;</view>
+                  <view>身份证人像页</view>
+                </view>
               </view>
-              <image
-                v-if="idCardImg.frontIdCardUrl"
-                :src="dealImg(idCardImg.frontIdCardUrl)"
-              />
-              <image
-                v-else
-                :src="$global.BASE_IMG + 'ba_img_idcard-front.png'"
-                class="idcard-bg my-disabled"
-              />
 
               <view
-                v-if="!idCardImg.frontIdCardUrl"
-                class="g-flex-rc-cc flex-column f24"
+                v-if="pageConfig.sfz.includes('end')"
+                @click="chooseIdCardBack"
+                class="up-idcard g-border g-flex-rc-cc mb16"
               >
-                <view class="iconfont camera-icon">&#xe6be;</view>
-                <view>身份证人像页</view>
+                <view
+                  v-if="idCardImg.endIdCardUrl"
+                  @click.stop="idCardImg.endIdCardUrl = ''"
+                  class="iconfont delete-icon"
+                >
+                  &#xe6fa;
+                </view>
+                <image
+                  v-if="idCardImg.endIdCardUrl"
+                  :src="dealImg(idCardImg.endIdCardUrl)"
+                />
+
+                <image
+                  v-else
+                  :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
+                  class="idcard-bg my-disabled"
+                />
+
+                <view
+                  v-if="!idCardImg.endIdCardUrl"
+                  class="g-flex-rc-cc flex-column f24"
+                >
+                  <view class="iconfont camera-icon">&#xe6be;</view>
+                  <view>身份证国徽页</view>
+                </view>
+              </view>
+
+              <view
+                v-if="pageConfig.sfz.includes('handler')"
+                @click="chooseIdCardHandler"
+                class="up-idcard g-border g-flex-rc-cc mb16"
+              >
+                <view
+                  v-if="idCardImg.handIdCardUrl"
+                  @click.stop="idCardImg.handIdCardUrl = ''"
+                  class="iconfont delete-icon"
+                >
+                  &#xe6fa;
+                </view>
+                <image
+                  v-if="idCardImg.handIdCardUrl"
+                  :src="dealImg(idCardImg.handIdCardUrl)"
+                />
+
+                <image
+                  v-else
+                  :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
+                  class="idcard-bg my-disabled"
+                />
+
+                <view
+                  v-if="!idCardImg.handIdCardUrl"
+                  class="g-flex-rc-cc flex-column f24"
+                >
+                  <view class="iconfont camera-icon">&#xe6be;</view>
+                  <view>手持身份证照片</view>
+                </view>
               </view>
             </view>
+          </view>
 
-            <view
-              v-if="pageConfig.sfz.includes('end')"
-              @click="chooseIdCardBack"
-              class="up-idcard g-border g-flex-rc-cc mb16"
-            >
-              <view
-                v-if="idCardImg.endIdCardUrl"
-                @click.stop="idCardImg.endIdCardUrl = ''"
-                class="iconfont delete-icon"
-              >
-                &#xe6fa;
-              </view>
-              <image
-                v-if="idCardImg.endIdCardUrl"
-                :src="dealImg(idCardImg.endIdCardUrl)"
-              />
+          <view id="_record" class="container-box g-border mb16 box-padding">
+            <view class="g-bold f36">住院记录</view>
 
-              <image
-                v-else
-                :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
-                class="idcard-bg my-disabled"
-              />
+            <view class="flex-normal patient-info color-light-dark f28">
+              <text class="patient-name g-border-right">
+                {{ getUserShowLabel(gStores.userStore.patChoose) }}
+              </text>
 
-              <view
-                v-if="!idCardImg.endIdCardUrl"
-                class="g-flex-rc-cc flex-column f24"
-              >
-                <view class="iconfont camera-icon">&#xe6be;</view>
-                <view>身份证国徽页</view>
-              </view>
+              <text>{{ getGetHosName }}</text>
             </view>
 
-            <view
-              v-if="pageConfig.sfz.includes('handler')"
-              @click="chooseIdCardHandler"
-              class="up-idcard g-border g-flex-rc-cc mb16"
-            >
-              <view
-                v-if="idCardImg.handIdCardUrl"
-                @click.stop="idCardImg.handIdCardUrl = ''"
-                class="iconfont delete-icon"
-              >
-                &#xe6fa;
-              </view>
-              <image
-                v-if="idCardImg.handIdCardUrl"
-                :src="dealImg(idCardImg.handIdCardUrl)"
+            <view class="record-container mt32">
+              <record-Card
+                :list="recordRows"
+                @click-edit="editRecord"
+                @click-del="delRecord"
+                isEdit
               />
+            </view>
 
-              <image
-                v-else
-                :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
-                class="idcard-bg my-disabled"
-              />
-
-              <view
-                v-if="!idCardImg.handIdCardUrl"
-                class="g-flex-rc-cc flex-column f24"
-              >
-                <view class="iconfont camera-icon">&#xe6be;</view>
-                <view>手持身份证照片</view>
-              </view>
+            <view @click="addRecord" class="add-btn color-blue g-flex-rc-cc">
+              <view class="iconfont add-icon">&#xe6fb;</view>
+              <view class="f28 g-bold">手动添加记录</view>
             </view>
           </view>
-        </view>
 
-        <view id="_record" class="container-box g-border mb16 box-padding">
-          <view class="g-bold f36">住院记录</view>
+          <view id="_aim" class="container-box g-border mb16 box-padding">
+            <view class="f36">
+              <text class="mr12 g-bold">请选择复印目的</text>
+              <text class="f28 color-light-dark">(多选)</text>
+            </view>
 
-          <view class="flex-normal patient-info color-light-dark f28">
-            <text class="patient-name g-border-right">
-              {{ getUserShowLabel(gStores.userStore.patChoose) }}
-            </text>
+            <view class="mt24 pb32 g-border-bottom">
+              <g-select-flatten
+                :selectLength="3"
+                :list="aimList"
+                v-model:value="aimValue"
+                multiple
+              />
+            </view>
 
-            <text>{{ getGetHosName }}</text>
+            <view class="f36 mt32">
+              <text class="mr12 g-bold">备注</text>
+            </view>
+
+            <view class="remark-content">
+              <uni-easyinput
+                type="textarea"
+                v-model="remark"
+                autoHeight
+                :inputBorder="false"
+                :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+                placeholder="如还需以下说明的其他病历资料请备注"
+              />
+
+              <!-- auto-height -->
+            </view>
           </view>
 
-          <view class="record-container mt32">
-            <record-Card
-              :list="recordRows"
-              @click-edit="editRecord"
-              @click-del="delRecord"
-              isEdit
-            />
+          <view class="container-box g-border mb16">
+            <g-flag typeFg="32" isShowFgTip />
           </view>
-
-          <view @click="addRecord" class="add-btn color-blue g-flex-rc-cc">
-            <view class="iconfont add-icon">&#xe6fb;</view>
-            <view class="f28 g-bold">手动添加记录</view>
-          </view>
-        </view>
-
-        <view id="_aim" class="container-box g-border mb16 box-padding">
-          <view class="f36">
-            <text class="mr12 g-bold">请选择复印目的</text>
-            <text class="f28 color-light-dark">(多选)</text>
-          </view>
-
-          <view class="mt24 pb32 g-border-bottom">
-            <g-select-flatten
-              :selectLength="3"
-              :list="aimList"
-              v-model:value="aimValue"
-              multiple
-            />
-          </view>
-
-          <view class="f36 mt32">
-            <text class="mr12 g-bold">备注</text>
-          </view>
-
-          <view class="remark-content">
-            <uni-easyinput
-              type="textarea"
-              v-model="remark"
-              autoHeight
-              :inputBorder="false"
-              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
-              placeholder="如还需以下说明的其他病历资料请备注"
-            />
-
-            <!-- auto-height -->
-          </view>
-        </view>
-
-        <view class="container-box g-border mb16">
-          <g-flag typeFg="32" isShowFgTip />
         </view>
       </scroll-view>
 
@@ -748,8 +750,10 @@
 
 <style lang="scss" scoped>
   .g-container {
-    padding: 0 32rpx;
-    width: calc(100% - 64rpx);
+    .content-box {
+      padding: 0 32rpx;
+      width: calc(100% - 64rpx);
+    }
 
     .container-box {
       border-radius: 8px;
