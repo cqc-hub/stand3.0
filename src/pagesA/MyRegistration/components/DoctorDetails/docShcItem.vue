@@ -1,37 +1,35 @@
 <template>
-  <view class="scheme-item">
-    <view class="flex-between">
-      <view class="scheme-item-ampm-name">
-        <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
-        <view class="ampm-fee f28 mr16 g-bold">{{ item.fee }}元</view>
-      </view>
+  <g-login @handler-next="regClick(item)" patient>
+    <view @click="regClick(item)" class="scheme-item">
+      <view class="flex-between">
+        <view class="scheme-item-ampm-name">
+          <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
+          <view class="ampm-fee f28 mr16 g-bold">{{ item.fee }}元</view>
+        </view>
 
-      <view class="scheme-item-detail">
-        <button
-          v-if="item.schState in warnSchStateMap"
-          class="btn klklk btn-primary btn-reg btn-disabled disabled-btn"
-        >
-          {{ warnSchStateMap[item.schState] }}
-        </button>
-
-        <g-login v-else @handler-next="regClick(item)" patient>
-          <button class="btn klklk btn-primary btn-reg" @click="regClick(item)">
-            挂号
+        <view class="scheme-item-detail">
+          <button
+            v-if="item.schState in warnSchStateMap"
+            class="btn klklk btn-primary btn-reg btn-disabled disabled-btn"
+          >
+            {{ warnSchStateMap[item.schState] }}
           </button>
-        </g-login>
-      </view>
-    </view>
 
-    <view class="f24 color-666 flex-between">
-      <view class="text-ellipsis mr12">
-        {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
+          <button class="btn klklk btn-primary btn-reg">挂号</button>
+        </view>
       </view>
 
-      <view class="color-888 text-no-wrap">
-        挂{{ item.numCount }} 个 余{{ item.numRemain }}个
+      <view class="f24 color-666 flex-between">
+        <view class="text-ellipsis mr12">
+          {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
+        </view>
+
+        <view class="color-888 text-no-wrap">
+          挂{{ item.numCount }} 个 余{{ item.numRemain }}个
+        </view>
       </view>
     </view>
-  </view>
+  </g-login>
 </template>
 
 <script lang="ts" setup>
@@ -45,6 +43,10 @@
   const emits = defineEmits(['reg-click', 'avatar-click']);
 
   const regClick = (scheme: TSchInfo) => {
+    if (scheme.schState in warnSchStateMap) {
+      return;
+    }
+
     emits('reg-click', {
       scheme,
     });

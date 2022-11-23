@@ -210,10 +210,6 @@
               noTransformY
             />
           </view>
-
-          <!-- <view class="p32c mt12">
-            <view class="f36 g-bold mb16">庆春院区</view>
-          </view> -->
         </view>
       </view>
 
