@@ -4,6 +4,8 @@ export interface IRequest extends UniApp.RequestOptions {
   showMessage?: boolean;
   isAuth?: boolean;
   baseURL?: string;
+  monitorName?: string;
+  reportCmPV_YLName?: string;
 }
 interface IdDtaType {
   code: number;

@@ -15,6 +15,10 @@ import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
 import { LoginUtils } from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
+ // #ifdef MP-ALIPAY 
+ import monitor from '@/js_sdk/alipay/alipayLogger.js';
+ import {reportCmPV_YL} from '@/js_sdk/alipay/cloudMonitorHelper.js'
+ // #endif
 
 const Request = new requestClass();
 
@@ -73,8 +77,13 @@ Request.interceptors.response(
     if (functionVersion) {
       cleanSession(functionVersion);
     }
-    // 请根据后端规定的状态码判定
 
+    // #ifdef MP-ALIPAY
+      //支付宝埋点操作
+      alipayRequestTrack(response)
+  // #endif
+
+    // 请根据后端规定的状态码判定
     if (code === 4000) {
       const pages = getCurrentPages();
 
@@ -157,6 +166,31 @@ const cleanSession = (functionVersion) => {
     console.error(err);
   }
 };
+
+//支付宝埋点
+const alipayRequestTrack = (response:IResponseWrapper)=>{
+  const alipayPid =  globalGl.systemInfo.alipayPid;
+  const monitorName = response.options?.monitorName;
+  const reportCmPV_YLName = response.options?.reportCmPV_YLName 
+  const code  = response.res.data.code
+  if(alipayPid && ( monitorName || reportCmPV_YLName)){
+    if(monitorName){
+      monitor.api({
+      api: "门诊缴费",
+      success: code==0?true:false,
+      c1: "taSR_YL",
+      time: response.res.data.timeTaken,
+    });
+    }
+    if(reportCmPV_YLName){
+      reportCmPV_YL({
+        title: reportCmPV_YLName,
+      });
+    }
+    
+  }
+};
+
 function deepEqualClean(localVersion, newVersion) {
   const keys1 = Object.keys(localVersion);
   const keys2 = Object.keys(newVersion);
