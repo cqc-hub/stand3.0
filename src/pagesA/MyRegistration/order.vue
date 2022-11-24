@@ -21,7 +21,7 @@
         </view>
 
         <view v-if="!allDocList.length && isComplete" class="empty-list">
-          <g-empty :current="2" text="没有排班 请选择其他时间" />
+          <g-empty :current="2" text="当日未查询到医生排班信息" />
         </view>
       </view>
 

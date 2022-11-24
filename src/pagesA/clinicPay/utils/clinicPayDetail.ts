@@ -33,6 +33,10 @@ export type IPayListItem = {
   hosId: string;
   hosName: string;
   totalCost: string;
+  costTypeName: string;
+  costTypeCode: string;
+  diseaseTypeName: string;
+  diseaseTypeCode: string;
   visitDate: string;
   visitNo: string;
   _clinicType: string;
@@ -58,6 +62,8 @@ export type TPayDetailProp = {
   deptId: string;
   docId: string;
   hosName: string;
+  diseaseTypeName: string;
+  costTypeName: string;
 };
 
 export type TCostList = {
@@ -250,6 +256,8 @@ export const usePayPage = () => {
       deptId,
       docId,
       hosName,
+      costTypeName,
+      diseaseTypeName
     } = item;
 
     const pageData = {
@@ -271,6 +279,8 @@ export const usePayPage = () => {
       deptId,
       docId,
       hosName,
+      costTypeName,
+      diseaseTypeName
     };
 
     // if (payState === '1') {
@@ -364,7 +374,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
     });
 
-    await toPayPull(res);
+    await toPayPull(res,"门诊缴费");
     payAfter();
   };
 

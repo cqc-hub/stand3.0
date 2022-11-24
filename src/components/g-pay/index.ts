@@ -1,6 +1,9 @@
 import api from '@/service/api';
 import { GStores } from '@/utils';
-
+import global from '@/config/global';
+ // #ifdef MP-ALIPAY 
+ import monitor from '@/js_sdk/alipay/alipayLogger.js';
+ // #endif
 export interface IGPay {
   label: string;
   key: 'offline' | 'online' | 'medicare';
@@ -59,7 +62,9 @@ export const payMoneyOnline = async (data: BaseObject) => {
   return result;
 };
 
-export const toPayPull = async (data: IPayRes) => {
+type ITrackType = "门诊缴费" | "住院缴费";
+
+export const toPayPull = async (data: IPayRes,type?:ITrackType) => {
   return new Promise(async (resolve, reject) => {
     const { invokeData } = data;
 
@@ -91,14 +96,36 @@ export const toPayPull = async (data: IPayRes) => {
     uni.requestPayment({
       ...payData,
       success(e) {
+         // #ifdef MP-ALIPAY
+         alipayTrack(true,type)
+          // #endif
         resolve({
           payedRes: e,
           payRes: payData,
         });
       },
 
-      fail: reject,
+      fail(err){
+          // #ifdef MP-ALIPAY
+          alipayTrack(false,type)
+          // #endif
+        reject(err)
+      },
     });
     // #endif
   });
 };
+
+
+//支付宝埋点
+const alipayTrack = (isSuccess:boolean,type?:ITrackType)=>{
+  const alipayPid =  global.systemInfo.alipayPid
+  if(alipayPid){
+    monitor.api({
+      api: "门诊缴费",
+      success: isSuccess,
+      c1: "taSR_YL",
+      time: "200",
+    });
+  }
+}
