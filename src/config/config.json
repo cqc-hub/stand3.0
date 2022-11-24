@@ -53,7 +53,7 @@
       "alipayAppid": "2021002133632822",
       "h5Appid": "wx12f8b744255a6f5d",
       "name": "健康金湖",
-      "isOpenHealthCard": false,  
+      "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos":false,
       "isOpenOcr":false
@@ -63,7 +63,7 @@
       "alipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "name": "乐清市人民医院",
-      "isOpenHealthCard": false,  
+      "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos":false,
       "alipayPid":"kzpuhkg8pxqoeotz9agfzw==",
