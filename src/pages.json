@@ -83,6 +83,18 @@
           }
         },
         {
+          "path": "hospitalCare/choosePatient",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
+          "path": "hospitalCare/choosePatientInfo",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
           "path": "MyRegistration/MyRegistration",
           "style": {
             "navigationBarTitleText": "挂号记录",

@@ -39,7 +39,6 @@ export const payMoneyOnline = async (data: BaseObject) => {
     cardNumber,
     source: gStores.globalStore.browser.source,
   };
-
   // #ifdef  MP-WEIXIN
   requestArg.openId = gStores.globalStore.openId;
   requestArg.channel = 'WX_MINI';

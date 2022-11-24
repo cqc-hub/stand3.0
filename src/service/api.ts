@@ -188,6 +188,9 @@ const queryApi = {
   //获取住院缴费记录
   getInHospitalPayInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data)),
+  //创建住院缴费订单
+  createInHospitalPayOrder: <T>(data) =>
+    service.post<T>('/phs-query/hospital/createInHospitalPayOrder', parm(data)),
 };
 
 // 挂号服务

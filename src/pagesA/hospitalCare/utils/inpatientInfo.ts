@@ -65,7 +65,16 @@ export interface dailySecList {
   payTime?: string;
   paymentAmount?: string;
 }
-//缴费记录 出参
-// export interface payInfoResList {
-//   dailyResult: dailyResult[];
-// }
+//创建住院订单 出参
+export interface payOrderResult {
+  phsOrderNo: string;
+}
+//和仁支付 入参
+export interface payParam {
+  hosId: string;
+  patientId: string;
+  phsOrderSource: string;
+  source: string;
+  sysCode: string;
+  totalFee: string;
+}

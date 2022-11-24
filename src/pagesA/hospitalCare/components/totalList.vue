@@ -14,7 +14,7 @@
           <view class="dep-name">产科病区</view>
         </view>
       </view>
-      <text class='icon-font ico_time-circle-filled'></text>
+      <text class='iconfont date'>&#xe6c6;</text>
       <view class="line"></view>
     </view>
   </view>
@@ -71,28 +71,29 @@ const tabs = ref([
       }
     }
   }
-  .ico_time-circle-filled {
-    color: #ddd;
-    position: absolute;
-    font-size: 24rpx;
-    z-index: 999;
-    top: 40rpx;
-    left: 48rpx;
+  .iconfont {
+    &.date {
+      color: #ddd;
+      position: absolute;
+      font-size: 24rpx;
+      z-index: 999;
+      top: 40rpx;
+      left: 38rpx;
+    }
   }
   .line {
     position: absolute;
     border-right: 2px dotted #ddd;
     height: 100%;
     width: 1px;
-    left: 59rpx;
+    left: 45rpx;
     top: 50rpx;
     bottom: auto;
-    // padding: 40rpx 0 0 0;
   }
 }
-.stepsCon:last-child {
+.progress:last-child {
   .line {
-    height: 0%;
+    height: 80%;
   }
 }
 </style>
