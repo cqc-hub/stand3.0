@@ -641,7 +641,7 @@
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
 
         if (this.enableDays[fullDate] !== '0') {
-          new GStores().messageStore.showMessage('当日无医生排班', 3000);
+          new GStores().messageStore.showMessage('当日未查询到医生排班信息', 3000);
           return;
         }
 

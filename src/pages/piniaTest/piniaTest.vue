@@ -43,16 +43,16 @@
   const eletronicInvoice: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    path: 'pagesA/eletronicInvoice/invoiceDetail',
-    // path: 'pagesA/eletronicInvoice/eletronicInvoice',
+    // path: 'pagesA/eletronicInvoice/invoiceDetail',
+    path: 'pagesA/eletronicInvoice/eletronicInvoice',
     text: '电子发票',
     extraData: {
       sysCode: globalGl.SYS_CODE,
     },
-    // addition: {
-    //   token: 'token',
-    //   herenId: 'herenId',
-    // },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
     isLocal: '1',
   };
 

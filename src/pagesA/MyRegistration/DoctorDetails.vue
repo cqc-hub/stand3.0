@@ -206,7 +206,7 @@
             <g-empty
               :current="2"
               imgHeight="180rpx"
-              text="没有排班"
+              text="未查询到该医生排班信息"
               noTransformY
             />
           </view>
