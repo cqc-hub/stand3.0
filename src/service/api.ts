@@ -199,6 +199,9 @@ const queryApi = {
     service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data),{
       reportCmPV_YLName:"缴费记录查询"
     }),
+  //获取住院费用清单详情
+  getInHospitalCostInfo: <T>(data) =>
+    service.post<T>('/phs-query//hospital/getInHospitalCostInfo', parm(data)),
 };
 
 // 挂号服务
