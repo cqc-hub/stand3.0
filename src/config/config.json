@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "1001052",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -8,7 +8,8 @@
       "name": "台州第一人民医院",
       "isStartComeTest": true,
       "isSearchInHos": true,
-      "alipayPid":"kmbeseak9v648xt/41lmha=="
+      "alipayPid":"kmbeseak9v648xt/41lmha==",
+      "isOpenOcr":false
     },
 
     "2001004": {
@@ -20,7 +21,8 @@
         "healthCardText": "陕西省卫生健康委员会",
         "hospitalId": "36658"
       },
-      "isSearchInHos": false
+      "isSearchInHos": false,
+      "isOpenOcr":true
     },
     "1001049": {
       "wxAppid": "wx5e97c199ecf8b8c3",
@@ -31,7 +33,8 @@
         "healthCardText": "陕西省卫生健康委员会",
         "hospitalId": "36784"
       },
-      "isSearchInHos": false
+      "isSearchInHos": false,
+      "isOpenOcr":true
     },
     "1001047": {
       "wxAppid": "wxe0e2a3b290ad96b5",
@@ -39,20 +42,32 @@
       "h5Appid": "wxac2942d44e7c2bd9",
       "name": "宝鸡市中医医院",
       "isOpenHealthCard": {
-        "healthCardText": "陕西省卫生健康委员会",
+        "healthCardTexxt": "陕西省卫生健康委员会",
         "hospitalId": "36076"
       },
-      "isSearchInHos": false
+      "isSearchInHos": false,
+      "isOpenOcr":false
     },
-
     "2001013": {
       "wxAppid": "wxda3a65909cbc3e3c",
       "alipayAppid": "2021002133632822",
       "h5Appid": "wx12f8b744255a6f5d",
       "name": "健康金湖",
-      "isOpenHealthCard": false,
+      "isOpenHealthCard": false,  
       "isStartComeTest": true,
-      "isSearchInHos":false
+      "isSearchInHos":false,
+      "isOpenOcr":false
+    },
+    "1001052": {
+      "wxAppid": "wxf582e1fd4eb0142a",
+      "alipayAppid": "2021003159674187",
+      "h5Appid": "wxd57b91aafadc73a1",
+      "name": "乐清市人民医院",
+      "isOpenHealthCard": false,  
+      "isStartComeTest": true,
+      "isSearchInHos":false,
+      "alipayPid":"kzpuhkg8pxqoeotz9agfzw==",
+      "isOpenOcr":false
     }
   }
 }

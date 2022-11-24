@@ -18,15 +18,12 @@ manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
 
 let manifestFileDataObj = JSON.parse(manifestFileData);
 sysConfig.isOpenHealthCard;
-const { wxAppid, alipayAppid, name: sysName, isOpenHealthCard } = sysConfig;
+const { wxAppid, alipayAppid, name: sysName, isOpenHealthCard,isOpenOcr } = sysConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
 const wxPlugin: any = {};
-const aliPlugin: any = {
-  // ocr
-  ocrPlugin: { version: '*', provider: '2021001130678316' },
-};
+const aliPlugin: any = {};
 
 if (isOpenHealthCard) {
   // 电子健康卡
@@ -34,6 +31,14 @@ if (isOpenHealthCard) {
     version: '3.1.15',
     provider: 'wxee969de81bba9a45',
   };
+}
+
+if(isOpenOcr){
+  //支付宝ocr插件
+  aliPlugin.ocrPlugin ={
+    version: '*', 
+    provider: '2021001130678316'
+  }
 }
 
 wxConfig.appid = wxAppid;
