@@ -127,33 +127,35 @@
       />
     </Order-Reg-Confirm>
 
-    <view v-if="props.payState === '1'" class="g-footer">
-      <block>
+    <block v-if="isComplete">
+      <view v-if="props.payState === '1'" class="g-footer">
+        <block>
+          <button
+            v-if="pageConfig.isOpenChargeback === '1'"
+            @click="isCannelShow = true"
+            class="btn btn-normal btn-border cancel-btn"
+          >
+            申请退单
+          </button>
+
+          <button @click="handlerPay" class="btn btn-warning confirm-btn">
+            {{ detailData.totalCost + `元 立即支付` }}
+          </button>
+        </block>
+      </view>
+
+      <view
+        v-if="props.payState === '0' && pageConfig.isOpenChargeback === '1'"
+        class="g-footer"
+      >
         <button
-          v-if="pageConfig.isOpenChargeback === '1'"
           @click="isCannelShow = true"
-          class="btn btn-normal btn-border cancel-btn"
+          class="btn btn-plain btn-border btn-error cancel-btn"
         >
           申请退单
         </button>
-
-        <button @click="handlerPay" class="btn btn-warning confirm-btn">
-          {{ detailData.totalCost + `元 立即支付` }}
-        </button>
-      </block>
-    </view>
-
-    <view
-      v-if="props.payState === '0' && pageConfig.isOpenChargeback === '1'"
-      class="g-footer"
-    >
-      <button
-        @click="isCannelShow = true"
-        class="btn btn-plain btn-border btn-error cancel-btn"
-      >
-        申请退单
-      </button>
-    </view>
+      </view>
+    </block>
 
     <g-message />
   </view>
@@ -185,6 +187,7 @@
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
+  const isComplete = ref(false);
 
   const { getDetailData, detailData } = usePayDetailPage();
   const {
@@ -328,6 +331,8 @@
   onMounted(async () => {
     await getSysConfig();
     await getDetailData(props.value);
+    isComplete.value = true;
+
     setTimeout(() => {
       if (props.value.payState === '0') {
         capture();

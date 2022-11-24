@@ -913,11 +913,11 @@
     background-color: #d8d8d8;
   }
 
-  .my-calendar-row {
-    &:not(:last-child) {
-      // margin-bottom: 24rpx;
-    }
-  }
+  // .my-calendar-row {
+  //   &:not(:last-child) {
+  //     margin-bottom: 24rpx;
+  //   }
+  // }
 
   .uni-calendar__weeks-item {
     flex: 1;

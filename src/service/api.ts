@@ -4,7 +4,7 @@ import { IResponseWrapper } from './type';
 import global from '@/config/global';
 import { useGlobalStore, useUserStore, IPat } from '@/stores';
 import { hideLoading } from '../common/utils';
-
+// ss
 //请求的额外配置
 const options = {
   showLoading: false,
