@@ -368,7 +368,10 @@ export class ServerStaticData {
         version: '',
         source: 1,
       };
-
+       // #ifdef MP-ALIPAY
+       arg.source = 2;
+       // #endif
+       
       // #ifdef H5
       arg.source = 3;
       // #endif

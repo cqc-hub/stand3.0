@@ -374,7 +374,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
     });
 
-    await toPayPull(res);
+    await toPayPull(res,"门诊缴费");
     payAfter();
   };
 

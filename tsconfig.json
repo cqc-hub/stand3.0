@@ -23,6 +23,8 @@
 		"esModuleInterop": true,
 		//可以指定在项目中使用哪里库的类型
 		"lib": ["esnext", "dom"],
+		//允许js
+		"allowJs": true, 
 		//指定具体要解析使用的类型
 		"types": ["@dcloudio/types", "node"],
 		"suppressImplicitAnyIndexErrors": true,
@@ -35,12 +37,12 @@
 	},
 	//哪些代码需要解析
 	"include": [
+		"src/**/*.js",
 		"src/**/*.ts",
 		"src/**/*.d.ts",
 		"src/**/*.tsx",
 		"src/**/*.vue",
-		"src/env.d.ts"
-	],
+		"src/env.d.ts" ],
 	//排除
 	"exclude": ["node_modules"]
 }

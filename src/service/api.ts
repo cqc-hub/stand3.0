@@ -122,7 +122,10 @@ const baseApi = {
 
   //获取公告资讯
   getAnnouncementCms: (data) =>
-    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data)),
+    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data),{
+      monitorName:"预约挂号",
+      reportCmPV_YLName:""
+    }),
 };
 // 查询服务
 const queryApi = {
@@ -134,12 +137,14 @@ const queryApi = {
   getUnpaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getUnpaidClinicList', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"门诊缴费"
     }),
 
   // 已缴费
   getPrepaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getPrepaidClinicList', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"门诊缴费"
     }),
 
   createClinicOrder: <T = any>(data) =>
@@ -163,7 +168,9 @@ const queryApi = {
 
   // 获取病案复印申请记录
   getCaseCopyList: <T>(data) =>
-    service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data)),
+    service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data),{
+      reportCmPV_YLName:"病案复印"
+    }),
 
   // 获取病案复印申请记录详情
   getCaseCopyDetail: <T>(data) =>
@@ -183,11 +190,15 @@ const queryApi = {
   getInHospitalDailyCostList: <T>(data) =>
     service.post<T>(
       '/phs-query/hospital/getInHospitalDailyCostList',
-      parm(data)
+      parm(data),{
+        reportCmPV_YLName:"住院日清单查询"
+      }
     ),
   //获取住院缴费记录
   getInHospitalPayInfo: <T>(data) =>
-    service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data)),
+    service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data),{
+      reportCmPV_YLName:"缴费记录查询"
+    }),
 };
 
 // 挂号服务
@@ -210,12 +221,14 @@ const regApi = {
   addReg: (data: any) =>
     service.post('/phs-reg/reg/addReg', parm(data), {
       hideLoading: false,
+      monitorName:"预约挂号",
     }),
 
   // 排班
   getDocSch: (data: any) =>
     service.post('/phs-reg/reg/getDocSch', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"预约挂号"
     }),
 
   cancelReg: (data: any) =>
@@ -232,17 +245,20 @@ const regApi = {
   getRegOrderInfo: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderInfo', parm(data), {
       hideLoading: false,
+      monitorName:"挂号缴费",
     }),
 
   getRegOrderList: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderList', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"挂号记录查询"
     }),
 
   // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"科室介绍"
     }),
 
   // 科室排班-按医生挂号
@@ -304,11 +320,13 @@ const userApi = {
   quickLinkHealthCard: (data) =>
     service.post('/phs-user/healthCard/quickLinkHealthCard', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"电子健康卡"
     }),
 
   getHospital: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospital', parm(data), {
       hideLoading: false,
+      reportCmPV_YLName:"医院介绍"
     }),
 
   //添加已就诊就诊人

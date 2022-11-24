@@ -17,6 +17,7 @@ declare var requirePlugin: any;
  *   - healthCardText 电子健康卡左上角卡面名称
  *   - hospitalId 医院机构id
  *
+ * @alipayPid-支付宝云监控的pid
  */
 interface ISystemGlobalItem {
   wxAppid: string;
@@ -32,6 +33,7 @@ interface ISystemGlobalItem {
 
   isSearchInHos: boolean;
   isStartComeTest:boolean;
+  alipayPid: string;
 }
 
 interface ISystemGlobalConfig {
