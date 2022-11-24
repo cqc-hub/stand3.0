@@ -1,6 +1,7 @@
 <template>
   <view class="order">
     <Order-Sel-Date
+      v-if="allDocList.length && isComplete"
       :value="checkedDay"
       :choose-days="chooseDays"
       :enable-days="enabledDays"

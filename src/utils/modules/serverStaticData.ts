@@ -371,7 +371,7 @@ export class ServerStaticData {
        // #ifdef MP-ALIPAY
        arg.source = 2;
        // #endif
-       
+
       // #ifdef H5
       arg.source = 3;
       // #endif
@@ -456,7 +456,7 @@ export class ServerStaticData {
               text: '导诊单',
             },
             confirmPayFg: '15',
-            // isPreSettle: '1',
+            isPreSettle: '1',
             // isOpenChargeback: '1',
           },
         };
