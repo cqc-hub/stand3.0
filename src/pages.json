@@ -4,6 +4,194 @@
         "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
     },
     "pages": [{
+      "path": "pages/home/home",
+      "style": {
+          "navigationBarTitleText": ""
+      }
+  },
+  {
+      "path": "pages/home/my",
+      "style": {
+          "navigationBarTitleText": "我的"
+      }
+  },
+  {
+      "path": "pages/home/accountInfo",
+      "style": {
+          "navigationBarTitleText": "个人信息"
+      },
+      "extend": {
+          "login": true,
+          "herenId": true
+      }
+  },
+  {
+      "path": "pages/home/startCome",
+      "style": {
+          "navigationBarTitleText": "欢迎页"
+      }
+  },
+
+  {
+      "path": "pages/index/index",
+      "style": {
+          "navigationBarTitleText": "uni-app"
+      }
+  },
+  {
+      "path": "pages/routerTest/routerTest",
+      "style": {
+          "navigationBarTitleText": "uni-routerTest",
+          "backgroundColor": "#e43130"
+      }
+  },
+  {
+      "path": "pages/piniaTest/piniaTest",
+      "style": {
+          "navigationBarTitleText": "uni-app "
+      }
+  }
+],
+
+
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [
+        {
+          "path": "MyRegistration/DoctorDetails",
+          "style": {
+            "navigationBarTitleText": "医生名片"
+          }
+        },
+        {
+          "path": "hospitalCare/hospitalCare",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          }
+        },
+        {
+          "path": "hospitalCare/payRecord",
+          "style": {
+            "navigationBarTitleText": "预交记录"
+          }
+        },
+        {
+          "path": "hospitalCare/paymentPage",
+          "style": {
+            "navigationBarTitleText": "预缴费用"
+          }
+        },
+        {
+          "path": "hospitalCare/choosePatient",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
+          "path": "hospitalCare/choosePatientInfo",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
+          "path": "MyRegistration/MyRegistration",
+          "style": {
+            "navigationBarTitleText": "挂号记录",
+            "enablePullDownRefresh": true
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "clinicPay/clinicPayDetail",
+          "style": {
+            "navigationBarTitleText": "门诊缴费"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "clinicPay/payDetail",
+          "style": {
+            "navigationBarTitleText": "待缴费明细"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "mySet/getMore",
+          "style": {
+            "navigationBarTitleText": "更多"
+          }
+        },
+
+        {
+          "path": "mySet/userPolicy",
+          "style": {
+            "navigationBarTitleText": "隐私条款"
+          }
+        },
+
+        {
+          "path": "MyRegistration/Register",
+          "style": {
+            "navigationBarTitleText": "选择院区"
+          }
+        },
+
+        {
+          "path": "MyRegistration/selDepartment",
+          "style": {
+            "navigationBarTitleText": "选择科室"
+          }
+        },
+
+        {
+          "path": "MyRegistration/order",
+          "style": {
+            "navigationBarTitleText": "挂号"
+          }
+        },
+
+        {
+          "path": "MyRegistration/RegConfirm",
+          "style": {
+            "navigationBarTitleText": "确认挂号信息"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "MyRegistration/RegDetail",
+          "style": {
+            "navigationBarTitleText": "挂号详情"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "medicalCardMan/addMedical",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              // #endif
+    "pages": [{
             "path": "pages/home/home",
             "style": {
                 "navigationBarTitleText": ""

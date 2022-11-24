@@ -1,6 +1,6 @@
 <template>
   <!-- 日费用清单 -->
-  <view>
+  <view class="page">
     <view class="progress" v-for="(item,index) in dailyResList " :key="index">
       <view class="right">
         <view class="dates">{{item.date}}</view>
@@ -59,13 +59,18 @@ const gotoListExpenses=(data)=>{
 
 
 <style scoped lang="scss">
+.page {
+  padding-top: 40rpx;
+}
 // 步骤样式
 .progress {
   position: relative;
   padding: 0 24rpx 0px 90rpx;
   .right {
-    margin-top: 20rpx;
     height: 100%;
+    .dates {
+      padding-top: 10rpx;
+    }
     .detail-item {
       .details {
         background: #ffffff;
@@ -100,7 +105,7 @@ const gotoListExpenses=(data)=>{
       position: absolute;
       font-size: 24rpx;
       z-index: 999;
-      top: 40rpx;
+      top: 20rpx;
       left: 38rpx;
     }
   }
@@ -110,9 +115,8 @@ const gotoListExpenses=(data)=>{
     height: 100%;
     width: 1px;
     left: 45rpx;
-    top: 50rpx;
+    top: 30rpx;
     bottom: auto;
-    // padding: 40rpx 0 0 0;
   }
 }
 .progress:last-child {
