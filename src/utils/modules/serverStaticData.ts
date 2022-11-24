@@ -1,5 +1,5 @@
 import { getLocalStorage, setLocalStorage } from '@/common';
-import { ISelectOptions } from '@/components/g-form';
+import { ISelectOptions, hosParam } from '@/components/g-form';
 import { GStores } from './login';
 import { joinQuery } from '@/common';
 import { beforeEach } from '@/router/index';
@@ -240,6 +240,44 @@ export class ServerStaticData {
       }
     } else {
       return sysTerms;
+    }
+  }
+  /**
+   * 住院服务
+   */
+  static async getSystemHospital(): Promise<hosParam> {
+    const sysTermsHos =
+      <hosParam | undefined>getLocalStorage('sysTermsHos') ||
+      _cacheMap.get(this.getSystemHospital);
+
+    if (!sysTermsHos) {
+      const { result } = await api.getParamsMoreBySysCode({
+        paramCode: 'PATIENT__SERVICE_CONFIG',
+      });
+
+      const list = result && result.PATIENT__SERVICE_CONFIG;
+      console.log(list, 'list');
+
+      if (list) {
+        // const res = JSON.parse(list).map((item) => {
+        //   return {
+        //     label: item.label,
+        //     value: item.code,
+        //   };
+        // });
+        const res = JSON.parse(list);
+        console.log(res, 'res');
+        // setLocalStorage({
+        //   sysTermsHos: res,
+        // });
+        _cacheMap.set(this.getSystemHospital, res);
+
+        return res;
+      } else {
+        return {};
+      }
+    } else {
+      return sysTermsHos;
     }
   }
 

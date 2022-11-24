@@ -1,11 +1,11 @@
 <template>
   <!-- 日费用清单 -->
-  <view>
+  <view class="page">
     <view class="progress" v-for="(item,index) in dailyResList " :key="index">
       <view class="right">
         <view class="dates">{{item.date}}</view>
         <view class="detail-item" v-for="(i,j) in item.costSecondaries" :key="j">
-          <view class="details" v-for="(m,n) in i.costListResultList" :key="n">
+          <view class="details" v-for="(m,n) in i.costListResultList" :key="n" @click="gotoListExpenses(m)">
             <view class="date">{{m.costDate}}</view>
             <view class="details-right">
               <view class="money">{{m.cost}}元 </view>
@@ -40,6 +40,7 @@ const init = async () => {
     patientId: dailyInfoParam.value.patientId,
   });
   dailyResList.value = result;
+  console.log(dailyResList.value,'xxxxx')
 };
 onLoad(() => {
   init();
@@ -49,17 +50,27 @@ const tabs = ref([
   { name: '日费用清单', typeId: 1, date: '2022-12-12', money: '20' },
   { name: '总计清单', typeId: 2, date: '2022-12-12', money: '20' },
 ]);
+const gotoListExpenses=(data)=>{
+  uni.navigateTo({
+      url: '/pagesA/hospitalCare/listExpenses?costDate='+data.costDate+'&inpatientNo='+data.inHospitalId,
+    });
+}
 </script>
 
 
 <style scoped lang="scss">
+.page {
+  padding-top: 40rpx;
+}
 // 步骤样式
 .progress {
   position: relative;
   padding: 0 24rpx 0px 90rpx;
   .right {
-    margin-top: 20rpx;
     height: 100%;
+    .dates {
+      padding-top: 10rpx;
+    }
     .detail-item {
       .details {
         background: #ffffff;
@@ -94,7 +105,7 @@ const tabs = ref([
       position: absolute;
       font-size: 24rpx;
       z-index: 999;
-      top: 40rpx;
+      top: 20rpx;
       left: 38rpx;
     }
   }
@@ -104,9 +115,8 @@ const tabs = ref([
     height: 100%;
     width: 1px;
     left: 45rpx;
-    top: 50rpx;
+    top: 30rpx;
     bottom: auto;
-    // padding: 40rpx 0 0 0;
   }
 }
 .progress:last-child {

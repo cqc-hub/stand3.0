@@ -2,5 +2,11 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "vue3snippets.enable-compile-vue-file-on-did-save-code": false
+  "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
+  "i18n-ally.localesPaths": [
+    "src/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n",
+    "src/uni_modules/uni-load-more/components/uni-load-more/i18n",
+    "src/uni_modules/uni-popup/components/uni-popup/i18n"
+  ],
+  "vue-i18n.i18nPaths": "src\\uni_modules\\uni-datetime-picker\\components\\uni-datetime-picker\\i18n,src\\uni_modules\\uni-load-more\\components\\uni-load-more\\i18n,src\\uni_modules\\uni-popup\\components\\uni-popup\\i18n,dist\\dev\\mp-weixin\\uni_modules\\uni-datetime-picker\\components\\uni-datetime-picker\\i18n,dist\\dev\\mp-weixin\\uni_modules\\uni-load-more\\components\\uni-load-more\\i18n"
 }

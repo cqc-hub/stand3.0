@@ -10,7 +10,7 @@
     </block> -->
 
     <view class="tab-box">
-      <g-tabs v-model:value="tabCurrent" :tabs="tabs" :line-scale="0.8" field="name" all-blod @change="tabChange" />
+      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.patientTab" :line-scale="0.8" field="headerName" all-blod @change="tabChange" />
     </view>
     <!-- 内容区域 -->
     <view class="content-box">
@@ -38,24 +38,23 @@ import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import inpatientInfo from './components/inpatientInfo.vue';
 import dailyExpenseList from './components/dailyExpenseList.vue';
 import totalList from './components/totalList.vue';
-import { GStores } from '@/utils';
+import { GStores, ServerStaticData } from '@/utils';
+import { hosParam } from '@/components/g-form';
+import { log } from 'console';
 const gStores = new GStores();
 const tabCurrent = ref(0);
 const tabStatus = ref(0);
-
-const tabs = ref([
-  { name: '住院信息', typeId: 0 },
-  { name: '日费用清单', typeId: 1 },
-  { name: '总计清单', typeId: 2 },
-]);
+const resultHos = ref<hosParam>({
+  inPatientPrePay: '',
+  isHosDaylist: '',
+  isHosTotallist: '',
+  patientTab: [],
+});
 //切换就诊人
 const choosePat = () => {};
 const tabChange = (e: number) => {
   tabStatus.value = e;
-  console.log(tabStatus.value, 'eee');
-
   tabCurrent.value = e;
-  const tabNow = tabs.value[e];
 };
 const scrollOption = ref({
   auto: false,
@@ -63,7 +62,13 @@ const scrollOption = ref({
   loadFailText: '加载失败',
   noMoreText: '没有更多了',
 });
-onLoad(async () => {});
+const setData = async () => {
+  const result = await ServerStaticData.getSystemHospital();
+  resultHos.value = result;
+};
+onLoad(() => {
+  setData();
+});
 </script>
 
 <style scoped lang="scss">
