@@ -3,49 +3,56 @@
         "^g-(.*)": "components/g-$1/g-$1.vue",
         "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
     },
-    {
+    "pages": [{
+      "path": "pages/home/home",
+      "style": {
+          "navigationBarTitleText": ""
+      }
+  },
+  {
       "path": "pages/home/my",
       "style": {
-        "navigationBarTitleText": "我的"
+          "navigationBarTitleText": "我的"
       }
-    },
-    {
+  },
+  {
       "path": "pages/home/accountInfo",
       "style": {
-        "navigationBarTitleText": "个人信息"
+          "navigationBarTitleText": "个人信息"
       },
       "extend": {
-        "login": true,
-        "herenId": true
+          "login": true,
+          "herenId": true
       }
-    },
-    {
+  },
+  {
       "path": "pages/home/startCome",
       "style": {
-        "navigationBarTitleText": "欢迎页"
+          "navigationBarTitleText": "欢迎页"
       }
-    },
+  },
 
-    {
+  {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+          "navigationBarTitleText": "uni-app"
       }
-    },
-    {
+  },
+  {
       "path": "pages/routerTest/routerTest",
       "style": {
-        "navigationBarTitleText": "uni-routerTest",
-        "backgroundColor": "#e43130"
+          "navigationBarTitleText": "uni-routerTest",
+          "backgroundColor": "#e43130"
       }
-    },
-    {
+  },
+  {
       "path": "pages/piniaTest/piniaTest",
       "style": {
-        "navigationBarTitleText": "uni-app "
+          "navigationBarTitleText": "uni-app "
       }
-    }
-  ],
+  }
+],
+
 
   "subPackages": [
     {
