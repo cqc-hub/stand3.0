@@ -97,7 +97,11 @@
             @click="isSelStatus = !isSelStatus"
           >
             <view>{{ selStatusName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
+            <view
+              class="iconfont"
+            >
+              &#xe6e8;
+            </view>
           </view>
 
           <view
@@ -108,7 +112,11 @@
             class="flex-normal"
           >
             <view>{{ selPatName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
+            <view
+              class="iconfont"
+            >
+              &#xe6e8;
+            </view>
           </view>
         </view>
       </template>
@@ -534,7 +542,7 @@
       color: var(--hr-brand-color-6);
       .iconfont {
         transform: rotate(0.5turn);
-        color: var(--hr-neutral-color-9);
+        // color: var(--hr-neutral-color-9);
       }
     }
   }

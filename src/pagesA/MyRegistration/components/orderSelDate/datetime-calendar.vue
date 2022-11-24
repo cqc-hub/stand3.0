@@ -43,13 +43,19 @@
           </view>
         </view>
 
-        <view class="g-flex-rc-cc color-dark g-bold mb12">
+        <view
+          v-if="isRenderWeeks(nowDate.month)"
+          class="g-flex-rc-cc color-dark g-bold mb12"
+        >
           {{
             (nowDate.year || '') + yearText + (nowDate.month || '') + monthText
           }}
         </view>
 
-        <view :class="{ 'g-border-bottom': isSplitMoth }">
+        <view
+          v-if="isRenderWeeks(nowDate.month)"
+          :class="{ 'g-border-bottom': isSplitMoth }"
+        >
           <view
             class="uni-calendar__weeks my-calendar-row"
             v-for="(item, weekIndex) in weeks"
@@ -77,7 +83,7 @@
           </view>
         </view>
         <!-- 第二个月  -->
-        <block v-if="isSplitMoth">
+        <block v-if="isRenderWeeks(nextNowDate.month)">
           <view class="g-flex-rc-cc color-dark g-bold mt24 mb12">
             {{
               (nextNowDate.year || '') +
@@ -470,13 +476,15 @@
         return t('uni-calender.confirm');
       },
 
-      // enableDays 是否分月
-      isSplitMoth() {
-        const months = [
-          ...new Set(Object.keys(this.enableDays).map((o) => o.slice(0, 7))),
+      getSetMonth() {
+        return [
+          ...new Set(Object.keys(this.enableDays).map((o) => o.slice(5, 7))),
         ];
+      },
 
-        return months.length > 1;
+      // enableDays 是否分月(同时出现俩月)
+      isSplitMoth() {
+        return this.getSetMonth.length > 1;
       },
     },
     created() {
@@ -496,6 +504,10 @@
       this.getNextMonth();
     },
     methods: {
+      isRenderWeeks(month) {
+        return this.getSetMonth.includes(month + '');
+      },
+
       leaveCale() {
         this.firstEnter = true;
       },
@@ -629,7 +641,7 @@
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
 
         if (this.enableDays[fullDate] !== '0') {
-          new GStores().messageStore.showMessage('当日无医生排班', 3000);
+          new GStores().messageStore.showMessage('当日未查询到医生排班信息', 3000);
           return;
         }
 

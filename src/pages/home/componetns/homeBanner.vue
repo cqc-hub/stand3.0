@@ -31,7 +31,7 @@
           <view
             :class="`banner-back2 ${
               props.functionList.length > 2 ? 'view1' : 'view6'
-            } ${props.leftFunctionList[0].iconfont ? '' : 'banner-common2'}`"
+            } ${props.leftFunctionList[0].iconfont ? 'no-border' : 'banner-common2'}`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
             v-if="props.leftFunctionList.length == 1"
             @tap="gotoPath(props.leftFunctionList[0])"
@@ -192,7 +192,7 @@
       font-weight: var(--h-weight-2);
       color: var(--hr-neutral-color-10);
       padding: 32rpx 16rpx 32rpx 32rpx;
-    }
+    } 
     //标准高度
     .banner-common {
       height: 91rpx;
@@ -229,7 +229,7 @@
     .banner-back2 {
       background: #effbfa;
       border: 2rpx solid #cfeae6;
-    }
+    } 
     .banner-back3 {
       background: #eef3ff;
       border: 2rpx solid #d9e5ff;
@@ -327,6 +327,10 @@
         margin-bottom: 6rpx;
         position: relative;
       }
+    }
+    .no-border{
+      background: transparent;
+      border: none;
     }
   }
 </style>

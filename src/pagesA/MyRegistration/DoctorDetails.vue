@@ -111,10 +111,15 @@
         </view>
 
         <view class="f36 g-bold mb16">门诊排班</view>
-        <view class="content-box content-box-sch">
+        <view
+          :class="{
+            pb40: docSchList.length && isComplete,
+          }"
+          class="content-box"
+        >
           <view
             v-if="docSchList.length && isComplete"
-            class="content-sel-date mb16"
+            class="content-sel-date mb16 g-border-bottom"
           >
             <Order-Sel-Date
               :value="checkedDay"
@@ -141,7 +146,7 @@
                   v-for="(item, idx) in schToday.schByHos[_hosId]"
                   :key="item.schId"
                 >
-                  <view v-if="!idx" class="f36 g-bold mb16">
+                  <view v-if="!idx" class="f32 g-bold mb16">
                     {{ item.hosName }}
                   </view>
 
@@ -198,12 +203,13 @@
           </block>
 
           <view class="empty-list" v-else-if="isComplete">
-            <g-empty :current="2" imgHeight="180rpx" text="没有排班" />
+            <g-empty
+              :current="2"
+              imgHeight="180rpx"
+              text="未查询到该医生排班信息"
+              noTransformY
+            />
           </view>
-
-          <!-- <view class="p32c mt12">
-            <view class="f36 g-bold mb16">庆春院区</view>
-          </view> -->
         </view>
       </view>
 
@@ -216,9 +222,16 @@
           />
         </scroll-view>
       </block>
+
+      <view class="safe-height" />
     </scroll-view>
 
-    <Order-Reg-Confirm title="医生简介" isHideFooter ref="regDialogConfirm">
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      title="医生简介"
+      isHideFooter
+      ref="regDialogConfirm"
+    >
       <Doc-Details :detail="docDetail" />
     </Order-Reg-Confirm>
 
@@ -390,7 +403,6 @@
         }
       });
 
-      // chooseDaysEnabled.value = eDaysEnabled;
       checkedDay.value = schList[0].schDate;
       docSchList.value = schList;
     }
@@ -545,10 +557,6 @@
     .content-sel-date {
       padding: 8rpx 16rpx;
     }
-
-    &.content-box-sch {
-      padding-bottom: 40rpx;
-    }
   }
 
   .content {
@@ -603,6 +611,9 @@
         width: 60rpx;
         position: relative;
         top: 5rpx;
+        // #ifdef  MP-WEIXIN
+        top: 8rpx;
+        // #endif
       }
 
       .doc-goodat-content {
@@ -672,6 +683,11 @@
   }
 
   .empty-list {
-    transform: translateY(40%);
+    transform: translateY(10rpx);
+    padding: 20rpx 0;
+  }
+
+  .iconfont {
+    font-weight: normal;
   }
 </style>

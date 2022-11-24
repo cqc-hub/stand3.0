@@ -500,7 +500,7 @@
 
     // 医生名字
     ctx.setFillStyle('#111111');
-    ctx.setFontSize(24);
+    ctx.setFontSize(26);
     ctx.fillText(docName, 32, avatarBox.top);
     ctx.fillText(docName, 32, avatarBox.top);
     ctx.fillText(docName, 32, avatarBox.top);
@@ -508,7 +508,7 @@
     ctx.save();
 
     const docTitle = docTitleName;
-    ctx.setFontSize(12);
+    ctx.setFontSize(13);
 
     fillRoundRect(
       ctx,

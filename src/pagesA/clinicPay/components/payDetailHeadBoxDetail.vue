@@ -34,6 +34,20 @@
         </view>
       </view>
 
+      <view v-if="myprops.diseaseTypeName" class="head-row flex-normal flex-start-r">
+        <view class="head-row-label text-no-wrap color-888">病种</view>
+        <view class="head-row-value color-444">
+          {{ myprops.diseaseTypeName }}
+        </view>
+      </view>
+
+      <view v-if="myprops.costTypeName" class="head-row flex-normal flex-start-r">
+        <view class="head-row-label text-no-wrap color-888">费用类型</view>
+        <view class="head-row-value color-444">
+          {{ myprops.costTypeName }}
+        </view>
+      </view>
+
       <view class="head-row flex-normal flex-start-r">
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
@@ -89,6 +103,26 @@
           <view class="head-row-label text-no-wrap color-888">自费支付</view>
           <view class="head-row-value color-444">
             {{ detailData.personCost }}元
+          </view>
+        </view>
+
+        <view
+          v-if="myprops.diseaseTypeName"
+          class="head-row flex-normal flex-start-r"
+        >
+          <view class="head-row-label text-no-wrap color-888">病种</view>
+          <view class="head-row-value color-444">
+            {{ myprops.diseaseTypeName }}
+          </view>
+        </view>
+
+        <view
+          v-if="myprops.costTypeName"
+          class="head-row flex-normal flex-start-r"
+        >
+          <view class="head-row-label text-no-wrap color-888">费用类型</view>
+          <view class="head-row-value color-444">
+            {{ myprops.costTypeName }}
           </view>
         </view>
 
