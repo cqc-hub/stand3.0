@@ -5,7 +5,7 @@
       <view class="right">
         <view class="dates">{{item.date}}</view>
         <view class="detail-item" v-for="(i,j) in item.costSecondaries" :key="j">
-          <view class="details" v-for="(m,n) in i.costListResultList" :key="n">
+          <view class="details" v-for="(m,n) in i.costListResultList" :key="n" @click="gotoListExpenses(m)">
             <view class="date">{{m.costDate}}</view>
             <view class="details-right">
               <view class="money">{{m.cost}}元 </view>
@@ -40,6 +40,7 @@ const init = async () => {
     patientId: dailyInfoParam.value.patientId,
   });
   dailyResList.value = result;
+  console.log(dailyResList.value,'xxxxx')
 };
 onLoad(() => {
   init();
@@ -49,6 +50,11 @@ const tabs = ref([
   { name: '日费用清单', typeId: 1, date: '2022-12-12', money: '20' },
   { name: '总计清单', typeId: 2, date: '2022-12-12', money: '20' },
 ]);
+const gotoListExpenses=(data)=>{
+  uni.navigateTo({
+      url: '/pagesA/hospitalCare/listExpenses?costDate='+data.costDate+'&inpatientNo='+data.inHospitalId,
+    });
+}
 </script>
 
 
