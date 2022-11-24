@@ -1,400 +1,405 @@
 {
-    "easycom": {
-        "^g-(.*)": "components/g-$1/g-$1.vue",
-        "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
+  "easycom": {
+    "^g-(.*)": "components/g-$1/g-$1.vue",
+    "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
+  },
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    "pages": [{
-            "path": "pages/home/home",
-            "style": {
-                "navigationBarTitleText": ""
-            }
-        },
-        {
-            "path": "pages/home/my",
-            "style": {
-                "navigationBarTitleText": "我的"
-            }
-        },
-        {
-            "path": "pages/home/accountInfo",
-            "style": {
-                "navigationBarTitleText": "个人信息"
-            },
-            "extend": {
-                "login": true,
-                "herenId": true
-            }
-        },
-        {
-            "path": "pages/home/startCome",
-            "style": {
-                "navigationBarTitleText": "欢迎页"
-            }
-        },
-
-        {
-            "path": "pages/index/index",
-            "style": {
-                "navigationBarTitleText": "uni-app"
-            }
-        },
-        {
-            "path": "pages/routerTest/routerTest",
-            "style": {
-                "navigationBarTitleText": "uni-routerTest",
-                "backgroundColor": "#e43130"
-            }
-        },
-        {
-            "path": "pages/piniaTest/piniaTest",
-            "style": {
-                "navigationBarTitleText": "uni-app "
-            }
-        }
-    ],
-
-    "subPackages": [{
-            "root": "pagesA",
-            "pages": [{
-                    "path": "MyRegistration/DoctorDetails",
-                    "style": {
-                        "navigationBarTitleText": "医生名片"
-                    }
-                },
-                {
-                    "path": "hospitalCare/hospitalCare",
-                    "style": {
-                        "navigationBarTitleText": "住院服务"
-                    }
-                },
-                {
-                    "path": "hospitalCare/payRecord",
-                    "style": {
-                        "navigationBarTitleText": "预交记录"
-                    }
-                },
-                {
-                    "path": "hospitalCare/paymentPage",
-                    "style": {
-                        "navigationBarTitleText": "预缴费用"
-                    }
-                },
-                {
-                    "path": "MyRegistration/MyRegistration",
-                    "style": {
-                        "navigationBarTitleText": "挂号记录",
-                        "enablePullDownRefresh": true
-                    },
-                    "extend": {
-                        "patient": true
-                    }
-                },
-
-                {
-                    "path": "clinicPay/clinicPayDetail",
-                    "style": {
-                        "navigationBarTitleText": "门诊缴费"
-                    },
-                    "extend": {
-                        "patient": true
-                    }
-                },
-
-                {
-                    "path": "clinicPay/payDetail",
-                    "style": {
-                        "navigationBarTitleText": "待缴费明细"
-                    },
-                    "extend": {
-                        "patient": true
-                    }
-                },
-
-                {
-                    "path": "mySet/getMore",
-                    "style": {
-                        "navigationBarTitleText": "更多"
-                    }
-                },
-
-                {
-                    "path": "mySet/userPolicy",
-                    "style": {
-                        "navigationBarTitleText": "隐私条款"
-                    }
-                },
-
-                {
-                    "path": "MyRegistration/Register",
-                    "style": {
-                        "navigationBarTitleText": "选择院区"
-                    }
-                },
-
-                {
-                    "path": "MyRegistration/selDepartment",
-                    "style": {
-                        "navigationBarTitleText": "选择科室"
-                    }
-                },
-
-                {
-                    "path": "MyRegistration/order",
-                    "style": {
-                        "navigationBarTitleText": "挂号"
-                    }
-                },
-
-                {
-                    "path": "MyRegistration/RegConfirm",
-                    "style": {
-                        "navigationBarTitleText": "确认挂号信息"
-                    },
-                    "extend": {
-                        "patient": true
-                    }
-                },
-
-                {
-                    "path": "MyRegistration/RegDetail",
-                    "style": {
-                        "navigationBarTitleText": "挂号详情"
-                    },
-                    "extend": {
-                        "patient": true
-                    }
-                },
-
-                {
-                    "path": "medicalCardMan/addMedical",
-                    "extend": {
-                        "login": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "添加就诊人",
-                        "usingComponents": {
-                            // #ifdef  MP-WEIXIN
-                            "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
-                                // #endif
-                        }
-                    }
-                },
-                {
-                    "path": "medicalCardMan/easyAssociate",
-                    "extend": {
-                        "herenId": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "一键关联健康卡",
-                        "usingComponents": {
-                            // #ifdef  MP-WEIXIN
-                            "health-card-users": "plugin://healthCardPlugins/healthCardUsers"
-                                // #endif
-                        }
-                    }
-                },
-
-                {
-                    "path": "medicalCardMan/perfectReal",
-                    "extend": {
-                        "login": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "添加就诊人"
-                    }
-                },
-
-                {
-                    "path": "medicalCardMan/medicalCardMan",
-                    "extend": {
-                        "herenId": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "就诊人管理",
-                        "usingComponents": {
-                            // #ifdef  MP-WEIXIN
-                            "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
-                                // #endif
-                        }
-                    }
-                },
-
-                {
-                    "path": "medicalCardMan/medicalCardDetail",
-                    "extend": {
-                        "login": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "就诊人详情"
-                    }
-                },
-
-                {
-                    "path": "medicalCardMan/electronicMedicalCard",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "电子就诊卡"
-                    }
-                },
-
-                {
-                    "path": "serviceCenter/serviceCenter",
-                    "style": {
-                        "navigationBarTitleText": "客服中心"
-                    }
-                },
-
-                {
-                    "path": "serviceCenter/serviceCenterDetail",
-                    "style": {
-                        "navigationBarTitleText": "客服中心"
-                    }
-                },
-
-                {
-                    "path": "webView/webView",
-                    "style": {
-                        "navigationBarTitleText": " "
-                    }
-                },
-                {
-                    "path": "hospitalCare/listExpenses",
-                    "style": {
-                        "navigationBarTitleText": "住院服务"
-                    }
-                }
-            ]
-        },
-
-        {
-            "root": "pagesC",
-            "pages": [{
-                    "path": "medRecordApply/medRecordDetails",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "病案复印"
-                    }
-                },
-                {
-                    "path": "medRecordApply/_recordApplyDetail",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "病案复印详情"
-                    }
-                },
-                {
-                    "path": "medRecordApply/_recordApply",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "申请记录"
-                    }
-                },
-                {
-                    "path": "medRecordApply/recordApply",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "选择住院记录"
-                    }
-                },
-                {
-                    "path": "queueNumber/queueNumber",
-                    "extend": {
-                        "patient": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "排队叫号"
-                    }
-                },
-                {
-                    "path": "cloudHospital/myPath",
-                    "style": {
-                        "navigationBarTitleText": "跳转中..."
-                    }
-                },
-                {
-                    "path": "cloudHospital/cloudHospital",
-                    "style": {
-                        "navigationBarTitleText": "网络门诊"
-                    }
-                },
-                {
-                    "path": "cloudHospital/cachePage",
-                    "style": {
-                        "navigationBarTitleText": "网络门诊"
-                    }
-                },
-                {
-                    "path": "shippingAddress/addressList",
-                    "extend": {
-                        "herenId": true
-                    },
-                    "style": {
-                        "navigationBarTitleText": "收货地址"
-                    }
-                },
-                {
-                    "path": "shippingAddress/patientAddress",
-                    "style": {
-                        "navigationBarTitleText": "就诊人地址"
-                    }
-                },
-                {
-                    "path": "shippingAddress/addAddress",
-                    "style": {
-                        "navigationBarTitleText": "新增收货地址"
-                    }
-                }
-            ]
-        }
-    ],
-
-    "globalStyle": {
-        "app-plus": { "titleNView": false },
-        "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "uni-app",
-        "backgroundColor": "#F8F8F8",
-        // #ifdef MP-WEIXIN || H5
-        "navigationBarBackgroundColor": "#f8f8f8"
-            // #endif
+    {
+      "path": "pages/home/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/home/accountInfo",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      },
+      "extend": {
+        "login": true,
+        "herenId": true
+      }
+    },
+    {
+      "path": "pages/home/startCome",
+      "style": {
+        "navigationBarTitleText": "欢迎页"
+      }
     },
 
-    "condition": {
-        "current": 0,
-        "list": [{
-                "name": "确认挂号",
-                "path": "pagesA/MyRegistration/RegConfirm",
-                "query": "disNo=3&numId=2022102932020060500000000004513&timeDesc=08%253A00&ampmName=%25E4%25B8%258A%25E5%258D%2588&ampm=1&categor=2&categorName=%25E6%2599%25AE%25E9%2580%259A&deptName=%25E7%259C%25BC%25E7%25A7%2591&docName=%25E6%259E%2597%25E4%25BC%2598&docPhoto=http%253A%252F%252Feheren-dev.oss-cn-hangzhou.aliyuncs.com%252Fhr-hos-mg%252F100104420210357.jpg&fee=12.00&hosDeptId=10206000&hosDocId=0000003060&hosId=1279&schDate=2022-10-20&schId=20200605000000000045&schQukCategor=%25E7%259C%25BC%25E7%25A7%2591%25E6%259E%2597%25E4%25BC%2598%255B%25E6%2599%25AE%255D"
-            },
-            {
-                "name": "医生挂号",
-                "path": "pagesA/MyRegistration/order",
-                "query": "hosId=1279&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A42&hosDeptId=1000033%257C10206000&firstHosDeptId=A101&secondHosDeptId=1000002&isExpertDeptId=0"
-            },
-            {
-                "name": "选择科室",
-                "path": "pagesA/MyRegistration/selDepartment",
-                "query": "clinicalType=1&hosId=1279"
-            },
-            {
-                "name": "选择院区",
-                "path": "pagesA/MyRegistration/Register",
-                "query": "_url=%252FpagesA%252FMyRegistration%252FselDepartment%253FclinicalType%253D1"
-            },
-            {
-                "name": "piniaTest",
-                "path": "pages/piniaTest/piniaTest",
-                "query": "name=cqc&op=233"
-            }
-        ]
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "uni-app"
+      }
+    },
+    {
+      "path": "pages/routerTest/routerTest",
+      "style": {
+        "navigationBarTitleText": "uni-routerTest",
+        "backgroundColor": "#e43130"
+      }
+    },
+    {
+      "path": "pages/piniaTest/piniaTest",
+      "style": {
+        "navigationBarTitleText": "uni-app "
+      }
     }
+  ],
+
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [
+        {
+          "path": "MyRegistration/DoctorDetails",
+          "style": {
+            "navigationBarTitleText": "医生名片"
+          }
+        },
+        {
+          "path": "hospitalCare/hospitalCare",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          }
+        },
+        {
+          "path": "hospitalCare/payRecord",
+          "style": {
+            "navigationBarTitleText": "预交记录"
+          }
+        },
+        {
+          "path": "hospitalCare/paymentPage",
+          "style": {
+            "navigationBarTitleText": "预缴费用"
+          }
+        },
+        {
+          "path": "MyRegistration/MyRegistration",
+          "style": {
+            "navigationBarTitleText": "挂号记录",
+            "enablePullDownRefresh": true
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "clinicPay/clinicPayDetail",
+          "style": {
+            "navigationBarTitleText": "门诊缴费"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "clinicPay/payDetail",
+          "style": {
+            "navigationBarTitleText": "待缴费明细"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "mySet/getMore",
+          "style": {
+            "navigationBarTitleText": "更多"
+          }
+        },
+
+        {
+          "path": "mySet/userPolicy",
+          "style": {
+            "navigationBarTitleText": "隐私条款"
+          }
+        },
+
+        {
+          "path": "MyRegistration/Register",
+          "style": {
+            "navigationBarTitleText": "选择院区"
+          }
+        },
+
+        {
+          "path": "MyRegistration/selDepartment",
+          "style": {
+            "navigationBarTitleText": "选择科室"
+          }
+        },
+
+        {
+          "path": "MyRegistration/order",
+          "style": {
+            "navigationBarTitleText": "挂号"
+          }
+        },
+
+        {
+          "path": "MyRegistration/RegConfirm",
+          "style": {
+            "navigationBarTitleText": "确认挂号信息"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "MyRegistration/RegDetail",
+          "style": {
+            "navigationBarTitleText": "挂号详情"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "medicalCardMan/addMedical",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              // #endif
+            }
+          }
+        },
+        {
+          "path": "medicalCardMan/easyAssociate",
+          "extend": {
+            "herenId": true
+          },
+          "style": {
+            "navigationBarTitleText": "一键关联健康卡",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-users": "plugin://healthCardPlugins/healthCardUsers"
+              // #endif
+            }
+          }
+        },
+
+        {
+          "path": "medicalCardMan/perfectReal",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+        },
+
+        {
+          "path": "medicalCardMan/medicalCardMan",
+          "extend": {
+            "herenId": true
+          },
+          "style": {
+            "navigationBarTitleText": "就诊人管理",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              // #endif
+            }
+          }
+        },
+
+        {
+          "path": "medicalCardMan/medicalCardDetail",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "就诊人详情"
+          }
+        },
+
+        {
+          "path": "medicalCardMan/electronicMedicalCard",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "电子就诊卡"
+          }
+        },
+
+        {
+          "path": "serviceCenter/serviceCenter",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
+        },
+
+        {
+          "path": "serviceCenter/serviceCenterDetail",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
+        },
+
+        {
+          "path": "webView/webView",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+        {
+          "path": "hospitalCare/listExpenses",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          }
+        }
+      ]
+    },
+
+    {
+      "root": "pagesC",
+      "pages": [
+        {
+          "path": "medRecordApply/medRecordDetails",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "病案复印"
+          }
+        },
+        {
+          "path": "medRecordApply/_recordApplyDetail",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "病案复印详情"
+          }
+        },
+        {
+          "path": "medRecordApply/_recordApply",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "申请记录"
+          }
+        },
+        {
+          "path": "medRecordApply/recordApply",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "选择住院记录"
+          }
+        },
+        {
+          "path": "queueNumber/queueNumber",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "排队叫号"
+          }
+        },
+        {
+          "path": "cloudHospital/myPath",
+          "style": {
+            "navigationBarTitleText": "跳转中..."
+          }
+        },
+        {
+          "path": "cloudHospital/cloudHospital",
+          "style": {
+            "navigationBarTitleText": "网络门诊"
+          }
+        },
+        {
+          "path": "cloudHospital/cachePage",
+          "style": {
+            "navigationBarTitleText": "网络门诊"
+          }
+        },
+        {
+          "path": "shippingAddress/addressList",
+          "extend": {
+            "herenId": true
+          },
+          "style": {
+            "navigationBarTitleText": "收货地址"
+          }
+        },
+        {
+          "path": "shippingAddress/patientAddress",
+          "style": {
+            "navigationBarTitleText": "就诊人地址"
+          }
+        },
+        {
+          "path": "shippingAddress/addAddress",
+          "style": {
+            "navigationBarTitleText": "新增收货地址"
+          }
+        }
+      ]
+    }
+  ],
+
+  "globalStyle": {
+    "app-plus": { "titleNView": false },
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "backgroundColor": "#F8F8F8",
+    // #ifdef MP-WEIXIN || H5
+    "navigationBarBackgroundColor": "#f8f8f8"
+    // #endif
+  },
+
+  "condition": {
+    "current": 0,
+    "list": [
+      {
+        "name": "确认挂号",
+        "path": "pagesA/MyRegistration/RegConfirm",
+        "query": "disNo=3&numId=2022102932020060500000000004513&timeDesc=08%253A00&ampmName=%25E4%25B8%258A%25E5%258D%2588&ampm=1&categor=2&categorName=%25E6%2599%25AE%25E9%2580%259A&deptName=%25E7%259C%25BC%25E7%25A7%2591&docName=%25E6%259E%2597%25E4%25BC%2598&docPhoto=http%253A%252F%252Feheren-dev.oss-cn-hangzhou.aliyuncs.com%252Fhr-hos-mg%252F100104420210357.jpg&fee=12.00&hosDeptId=10206000&hosDocId=0000003060&hosId=1279&schDate=2022-10-20&schId=20200605000000000045&schQukCategor=%25E7%259C%25BC%25E7%25A7%2591%25E6%259E%2597%25E4%25BC%2598%255B%25E6%2599%25AE%255D"
+      },
+      {
+        "name": "医生挂号",
+        "path": "pagesA/MyRegistration/order",
+        "query": "hosId=1279&deptName=%25E4%25B8%2589%25E7%25BA%25A7%25E7%25A7%2591%25E5%25AE%25A42&hosDeptId=1000033%257C10206000&firstHosDeptId=A101&secondHosDeptId=1000002&isExpertDeptId=0"
+      },
+      {
+        "name": "选择科室",
+        "path": "pagesA/MyRegistration/selDepartment",
+        "query": "clinicalType=1&hosId=1279"
+      },
+      {
+        "name": "选择院区",
+        "path": "pagesA/MyRegistration/Register",
+        "query": "_url=%252FpagesA%252FMyRegistration%252FselDepartment%253FclinicalType%253D1"
+      },
+      {
+        "name": "piniaTest",
+        "path": "pages/piniaTest/piniaTest",
+        "query": "name=cqc&op=233"
+      }
+    ]
+  }
 }
