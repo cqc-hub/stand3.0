@@ -7,11 +7,11 @@
       @change="getDepList"
       type="selDepartment"
     />
-    <!-- <view class="search-input" @click.prevent="goSearch">
+    <view class="search-input" @click.prevent="goSearch">
       <view class="my-disabled">
         <uni-search-input placeholder="请输入医生/科室/症状" />
       </view>
-    </view> -->
+    </view>
 
     <view class="container hidden-scrollbar" scroll-y>
       <Department-List
@@ -195,13 +195,16 @@
     deptStore.changeActiveLv3({} as any);
 
     setTimeout(() => {
-      // isShowRegTip.value = true;
+      isShowRegTip.value = true;
     }, 500);
   });
 
   const goSearch = () => {
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/RegSearch',
+      url: joinQuery('/pagesA/MyRegistration/RegSearch', {
+        clinicalType: props.clinicalType,
+        hosId: hosId.value,
+      }),
     });
   };
 

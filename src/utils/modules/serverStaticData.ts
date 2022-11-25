@@ -2,6 +2,7 @@ import { getLocalStorage, setLocalStorage } from '@/common';
 import { ISelectOptions, hosParam } from '@/components/g-form';
 import { GStores } from './login';
 import { joinQuery } from '@/common';
+import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 
 import api from '@/service/api';
@@ -59,11 +60,19 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
+  const _d = {
+    _patientId: '',
+    _herenId: '',
+    _isHos: globalGl.systemInfo.isSearchInHos,
+  };
+
   if (addition) {
     const { token, patientId, herenId } = addition;
     const gStores = new GStores();
+
     if (patientId) {
       extraData[patientId] = gStores.userStore.patChoose.patientId;
+      _d._patientId = gStores.userStore.patChoose.patientId;
       isPatient = true;
     }
 
@@ -75,6 +84,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
     if (herenId) {
       isLogin = true;
       extraData[herenId] = gStores.globalStore.herenId;
+      _d._herenId = gStores.globalStore.herenId;
     }
   }
 
@@ -100,9 +110,14 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
           : 'https://health.eheren.com/v3/#/';
 
       if (config.isLocal) {
-        baseUrl = 'http://10.10.83.78:5173/#/';
+        baseUrl = 'http://10.10.83.79:5173/#/';
       }
+
       fullUrl = baseUrl + fullUrl;
+
+      fullUrl = joinQuery(fullUrl, {
+        _d: encryptDesParam(_d),
+      });
     }
     // #ifdef H5
     location.href = fullUrl;
@@ -406,9 +421,9 @@ export class ServerStaticData {
         version: '',
         source: 1,
       };
-       // #ifdef MP-ALIPAY
-       arg.source = 2;
-       // #endif
+      // #ifdef MP-ALIPAY
+      arg.source = 2;
+      // #endif
 
       // #ifdef H5
       arg.source = 3;

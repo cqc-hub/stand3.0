@@ -98,6 +98,7 @@ cmd: iconfont-tools
 | 用药提醒     | pagesC/medicationManager/medicationList | sysCode token herenId |
 | 我的医生     |        pagesC/myDoctor/myDoctor         | sysCode token herenId |
 | 核酸结果查询 |     pagesC/mixCheckResult/hsResult      | sysCode token herenId |
+| 电子发票 |     pagesA/eletronicInvoice/eletronicInvoice      | sysCode token herenId |
 | 渭南健康打卡 |     pagesC/choosePat/choosePat      | sysCode token herenId _type=weinandk |
 
 ## 单独 2.0 迁移 3.0 的

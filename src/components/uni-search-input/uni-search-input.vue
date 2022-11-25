@@ -11,6 +11,7 @@
         :inputBorder="inputBorder"
         :focus="focus"
         @input="changeInput"
+        @confirm="confirm"
         suffixIcon="ico_search1"
         confirmType="search"
         placeholderStyle="font-size: 28rpx;color: #bbbbbb;"
@@ -22,8 +23,14 @@
           </view>
         </template>
         <template #suffixIcon>
-          <view @click.stop="clear" class="suffix-icon">
-            <view v-if="value" class="iconfont icon-search icon-searchColor">&#xe6de;</view>
+          <view class="flex-normal">
+            <view @click.stop="clear" class="suffix-icon">
+              <view v-if="value" class="iconfont icon-search icon-searchColor">
+                &#xe6de;
+              </view>
+            </view>
+
+            <slot name="suffixRight" />
           </view>
         </template>
 
@@ -43,37 +50,37 @@
 
   export default defineComponent({
     components: {
-      easyInput
+      easyInput,
     },
 
     props: {
       //type：1:默认无边框  2:默认有边框(首页)
       type: {
         type: String,
-        default: '1'
+        default: '1',
       },
       placeholder: {
         type: String,
-        default: ''
+        default: '',
       },
 
       focus: {
         type: Boolean,
-        default: false
+        default: false,
       },
 
       inputBorder: {
         type: Boolean,
-        default: false
+        default: false,
       },
 
       value: {
         type: String,
-        default: ''
-      }
+        default: '',
+      },
     },
 
-    emits: ['update:value', 'cancel', 'clear'],
+    emits: ['update:value', 'cancel', 'clear', 'confirm', 'change'],
 
     setup(props, { emit }) {
       const easyinput = ref('');
@@ -81,12 +88,12 @@
       const changeInput = (e) => {
         if (typeof e === 'string') {
           emit('update:value', e);
+          emit('change', e);
         }
       };
 
       const clear = () => {
         changeInput('');
-
         emit('clear');
       };
 
@@ -94,18 +101,23 @@
         emit('cancel');
       };
 
+      const confirm = (e) => {
+        emit('confirm', e);
+      };
+
       return {
         changeInput,
         clear,
         cancel,
-        easyinput
+        confirm,
+        easyinput,
       };
     },
 
     options: {
       // 微信样式穿透需要配置
-      styleIsolation: 'shared'
-    }
+      styleIsolation: 'shared',
+    },
   });
 </script>
 
