@@ -83,6 +83,24 @@
           }
         },
         {
+          "path": "hospitalCare/choosePatient",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
+          "path": "hospitalCare/choosePatientInfo",
+          "style": {
+            "navigationBarTitleText": "预缴金代缴"
+          }
+        },
+        {
+          "path": "hospitalCare/listExpenses",
+          "style": {
+            "navigationBarTitleText": "住院服务日详情"
+          }
+        },
+        {
           "path": "MyRegistration/MyRegistration",
           "style": {
             "navigationBarTitleText": "挂号记录",

@@ -1,5 +1,5 @@
 <template>
-  <!-- 住院信息 -->
+  <!-- 预交金代缴信息页面 -->
   <view class="box">
     <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
       <view class="user">
@@ -45,11 +45,11 @@
         <text class="name">已产生费用</text>
         <text class="money">{{hosInfoResObj.totalCost}}元</text>
       </view>
-      <view class="card-detail-item" v-if="hosInfoResObj.insuranceFee">
+      <view class="card-detail-item">
         <text class="name">医保报销</text>
         <text class="money">{{hosInfoResObj.insuranceFee}}元</text>
       </view>
-      <view class="card-detail-item" v-if="hosInfoResObj.defrayFee">
+      <view class="card-detail-item">
         <text class="name">自费金额</text>
         <text class="money">{{hosInfoResObj.defrayFee}}元</text>
       </view>

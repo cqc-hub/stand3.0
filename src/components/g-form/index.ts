@@ -12,7 +12,16 @@ export interface ISelectOptions {
 
   children?: ISelectOptions[];
 }
-
+//住院 配置参数接口 类型定义
+export interface hosParam {
+  inPatientPrePay: string;
+  isHosDaylist?: string;
+  isHosTotallist?: string;
+  patientTab: nameList[];
+}
+export interface nameList {
+  headerName?: string;
+}
 export interface IRule {
   rule: RegExp;
   message: string;
