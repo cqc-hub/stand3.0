@@ -279,12 +279,6 @@
           "style": {
             "navigationBarTitleText": " "
           }
-        },
-        {
-          "path": "hospitalCare/listExpenses",
-          "style": {
-            "navigationBarTitleText": "住院服务"
-          }
         }
       ]
     },
