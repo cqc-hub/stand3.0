@@ -1,5 +1,4 @@
 <template>
-  <!-- 日费用清单 -->
   <view>
     <view class="progress" v-for="(item,index) in tabs " :key="index">
       <view class="right">

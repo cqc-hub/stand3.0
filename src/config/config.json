@@ -8,8 +8,8 @@
       "name": "台州第一人民医院",
       "isStartComeTest": true,
       "isSearchInHos": true,
-      "alipayPid":"kmbeseak9v648xt/41lmha==",
-      "isOpenOcr":false
+      "alipayPid": "kmbeseak9v648xt/41lmha==",
+      "isOpenOcr": false
     },
 
     "2001004": {
@@ -22,7 +22,7 @@
         "hospitalId": "36658"
       },
       "isSearchInHos": false,
-      "isOpenOcr":true
+      "isOpenOcr": true
     },
     "1001049": {
       "wxAppid": "wx5e97c199ecf8b8c3",
@@ -34,7 +34,7 @@
         "hospitalId": "36784"
       },
       "isSearchInHos": false,
-      "isOpenOcr":true
+      "isOpenOcr": true
     },
     "1001047": {
       "wxAppid": "wxe0e2a3b290ad96b5",
@@ -46,7 +46,7 @@
         "hospitalId": "36076"
       },
       "isSearchInHos": false,
-      "isOpenOcr":false
+      "isOpenOcr": false
     },
     "2001013": {
       "wxAppid": "wxda3a65909cbc3e3c",
@@ -55,8 +55,8 @@
       "name": "健康金湖",
       "isOpenHealthCard": false,
       "isStartComeTest": true,
-      "isSearchInHos":false,
-      "isOpenOcr":false
+      "isSearchInHos": false,
+      "isOpenOcr": false
     },
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
@@ -65,9 +65,9 @@
       "name": "乐清市人民医院",
       "isOpenHealthCard": false,
       "isStartComeTest": true,
-      "isSearchInHos":false,
-      "alipayPid":"kzpuhkg8pxqoeotz9agfzw==",
-      "isOpenOcr":false
+      "isSearchInHos": false,
+      "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
+      "isOpenOcr": false
     }
   }
 }

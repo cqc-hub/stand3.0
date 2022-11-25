@@ -4,7 +4,7 @@ import { IResponseWrapper } from './type';
 import global from '@/config/global';
 import { useGlobalStore, useUserStore, IPat } from '@/stores';
 import { hideLoading } from '../common/utils';
-
+// ss
 //请求的额外配置
 const options = {
   showLoading: false,
@@ -195,12 +195,14 @@ const queryApi = {
         reportCmPV_YLName: '住院日清单查询',
       }
     ),
-  //获取住院缴费记录
-  getInHospitalPayInfo: <T>(data) =>
-    service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data)),
   //创建住院缴费订单
   createInHospitalPayOrder: <T>(data) =>
     service.post<T>('/phs-query/hospital/createInHospitalPayOrder', parm(data)),
+  //获取住院缴费记录
+  getInHospitalPayInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data), {
+      reportCmPV_YLName: '缴费记录查询',
+    }),
   //获取住院费用清单详情
   getInHospitalCostInfo: <T>(data) =>
     service.post<T>('/phs-query//hospital/getInHospitalCostInfo', parm(data)),

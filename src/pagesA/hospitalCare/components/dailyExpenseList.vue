@@ -40,7 +40,7 @@ const init = async () => {
     patientId: dailyInfoParam.value.patientId,
   });
   dailyResList.value = result;
-  console.log(dailyResList.value,'xxxxx')
+  console.log(dailyResList.value, 'xxxxx');
 };
 onLoad(() => {
   init();
@@ -50,11 +50,11 @@ const tabs = ref([
   { name: '日费用清单', typeId: 1, date: '2022-12-12', money: '20' },
   { name: '总计清单', typeId: 2, date: '2022-12-12', money: '20' },
 ]);
-const gotoListExpenses=(data)=>{
+const gotoListExpenses = (data) => {
   uni.navigateTo({
-      url: '/pagesA/hospitalCare/listExpenses?costDate='+data.costDate+'&inpatientNo='+data.inHospitalId,
-    });
-}
+    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}`,
+  });
+};
 </script>
 
 

@@ -257,7 +257,7 @@ export const usePayPage = () => {
       docId,
       hosName,
       costTypeName,
-      diseaseTypeName
+      diseaseTypeName,
     } = item;
 
     const pageData = {
@@ -280,7 +280,7 @@ export const usePayPage = () => {
       docId,
       hosName,
       costTypeName,
-      diseaseTypeName
+      diseaseTypeName,
     };
 
     // if (payState === '1') {
@@ -374,7 +374,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
     });
 
-    await toPayPull(res,"门诊缴费");
+    await toPayPull(res, '门诊缴费');
     payAfter();
   };
 

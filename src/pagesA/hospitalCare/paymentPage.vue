@@ -68,7 +68,7 @@ const res = await payMoneyOnline({
         phsOrderNo:  payOrder.value.phsOrderNo,
      //  patientId:gStores.userStore.patChoose,
        patientId:'10763642',
-      totalFee:   payOrderParam.value.fee,
+      totalFee:payOrderParam.value.fee,
       phsOrderSource: '3',
       hosId:'1279',
       source: gStores.globalStore.browser.source,

@@ -85,6 +85,7 @@
         label: '_showLabel',
         value: '_showLabel',
       }"
+      @change="patientChange"
       type="top"
     >
       <template #header>
@@ -97,11 +98,7 @@
             @click="isSelStatus = !isSelStatus"
           >
             <view>{{ selStatusName }}</view>
-            <view
-              class="iconfont"
-            >
-              &#xe6e8;
-            </view>
+            <view class="iconfont">&#xe6e8;</view>
           </view>
 
           <view
@@ -112,11 +109,7 @@
             class="flex-normal"
           >
             <view>{{ selPatName }}</view>
-            <view
-              class="iconfont"
-            >
-              &#xe6e8;
-            </view>
+            <view class="iconfont">&#xe6e8;</view>
           </view>
         </view>
       </template>
@@ -402,12 +395,13 @@
     }
   };
 
-  const getList = async () => {
+  const getList = async (patientId = '') => {
     isComplete.value = false;
     const { result } = await api
       .getRegOrderList<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
+        patientId,
       })
       .finally(() => {
         isComplete.value = true;
@@ -423,6 +417,11 @@
     }
 
     list.value = result || [];
+  };
+
+  const patientChange = async ({ item }) => {
+    console.log(item);
+    await getList(item.patientId || '');
   };
 
   let _firstIn = true;
@@ -463,7 +462,13 @@
 
   const init = async () => {
     await getConfig();
-    await getList();
+    const item = patList.value.find(
+      (o: any) =>
+        o.patientName + (o.cardNumber ? `(${o.cardNumber})` : '') ===
+        selPatId.value
+    );
+
+    await getList(item?.patientId || '');
   };
 
   const patList = computed(() => {
@@ -497,6 +502,7 @@
       ..._listStatus,
     ];
   });
+
   const selPatName = computed(() => {
     return selPatId.value;
     // return patList.value.find((o) => o.patientId === selPatId.value)
@@ -512,14 +518,14 @@
       selStatus.value ? o.orderStatus === selStatus.value : true
     );
 
-    const _filterPat = _filterStatus.filter((o) =>
-      selPatId.value === '所有就诊人'
-        ? true
-        : selPatId.value
-        ? o.patientName === selPatId.value.split('(')[0]
-        : true
-    );
-    return _filterPat;
+    // const _filterPat = _filterStatus.filter((o) =>
+    //   selPatId.value === '所有就诊人'
+    //     ? true
+    //     : selPatId.value
+    //     ? o.patientName === selPatId.value.split('(')[0]
+    //     : true
+    // );
+    return _filterStatus;
   });
 
   const selPatId = ref('');
