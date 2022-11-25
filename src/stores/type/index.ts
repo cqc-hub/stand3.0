@@ -15,6 +15,7 @@ export interface IPat {
 	patientAge: string;
 	patientId: string;
 	patientName: string;
+	patientNameEncry: string;
 	patientPhone: string;
 	patientSex: '男' | '女';
 	patientType: string;
