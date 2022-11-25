@@ -160,6 +160,13 @@
         },
 
         {
+          "path": "MyRegistration/RegSearch",
+          "style": {
+            "navigationBarTitleText": "搜索"
+          }
+        },
+
+        {
           "path": "MyRegistration/order",
           "style": {
             "navigationBarTitleText": "挂号"
