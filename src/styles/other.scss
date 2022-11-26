@@ -5,6 +5,10 @@
   overflow: hidden;
 }
 
+.ellipsis-line-clamp2 {
+  -webkit-line-clamp: 2;
+}
+
 .text-no-wrap {
   white-space: nowrap;
 }
@@ -203,6 +207,10 @@
 
 .mt32 {
   margin-top: 32rpx !important;
+}
+
+.mt40 {
+  margin-top: 40rpx !important;
 }
 
 .mr8 {

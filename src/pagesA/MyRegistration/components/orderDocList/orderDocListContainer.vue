@@ -13,9 +13,9 @@
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="doc-info-introduce-header">
           <view class="doc-info-introduce-name f36">{{ item.docName }}</view>
-          <view class="doc-info-introduce-title">
-            {{ item.schQukCategor || item.docTitleName }}
-          </view>
+          <!-- <view v-if="item.docTitleName" class="doc-info-introduce-title">
+            {{ item.docTitleName }}
+          </view> -->
         </view>
         <view v-if="item.specialClinicName" class="text-ellipsis">
           <text

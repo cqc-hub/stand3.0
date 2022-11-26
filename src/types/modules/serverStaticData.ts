@@ -35,6 +35,11 @@ export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
 };
 
+export interface IRegSearchHistoryItem {
+  label: string;
+  hot?: '1'; // 标记 🔥
+}
+
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
@@ -65,6 +70,10 @@ export interface ISystemConfig {
     isQueuing?: string[];
     // 服务评价?
     isFWBtn?: string[];
+
+    /** 搜索 */
+    // 热门搜索
+    hosRegHistory?: IRegSearchHistoryItem[];
   };
 
   // 就诊人

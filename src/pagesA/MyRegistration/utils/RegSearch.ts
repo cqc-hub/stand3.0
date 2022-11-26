@@ -1,22 +1,20 @@
 import { nextTick, ref } from 'vue';
-import { debounce, GStores } from '@/utils';
+import { GStores, CDebounce } from '@/utils';
+import { setLocalStorage, getLocalStorage } from '@/common';
+import {
+  type IRegSearchHistoryItem,
+  ServerStaticData,
+  type ISystemConfig,
+} from '@/utils';
+
 import api from '@/service/api';
 
+export { type IRegSearchHistoryItem } from '@/utils';
 interface IPageProp {
   hosId: string;
   clinicalType: string;
 }
-
-// export const useRegSearch = () => {
-//   const whole = {
-//     searchText: ref(''),
-//     pageProp: ref(<IPageProp>{}),
-//   };
-
-//   return whole;
-// };
-
-interface IDocResItem {
+export interface IDocResItem {
   academicAchievements: string;
   docName: string;
   docPhoto: string;
@@ -25,25 +23,76 @@ interface IDocResItem {
   hosDeptId: string;
   hosDocId: string;
   intro: string;
+
+  schQukCategor: string;
+  specialClinicName: string;
+  docJobName: string;
 }
+
+const KEY_REG_SEARCH_HISTORY = 'orgsearchhistory';
+
+const setSearchHistory = (str: string) => {
+  const oldHistory: IRegSearchHistoryItem[] =
+    getLocalStorage(KEY_REG_SEARCH_HISTORY) || [];
+
+  const idx = oldHistory.findIndex((o) => o.label === str);
+  if (idx !== -1 && idx) {
+    const oldValue = oldHistory[idx];
+    oldHistory.splice(idx, 1);
+    oldHistory.unshift(oldValue);
+  } else if (idx !== 0) {
+    oldHistory.unshift({
+      label: str,
+    });
+  }
+
+  if (oldHistory.length > 6) {
+    oldHistory.length = 6;
+  }
+
+  setLocalStorage({
+    [KEY_REG_SEARCH_HISTORY]: oldHistory,
+  });
+};
+
+export const clearSearchHistory = () => {
+  setLocalStorage({
+    [KEY_REG_SEARCH_HISTORY]: [],
+  });
+};
 
 export class UseRegSearch extends GStores {
   pageProp = ref(<IPageProp>{});
   searchText = ref('');
   isComplete = ref(false);
+  tabCurrent = ref(0);
+  tabField = [
+    {
+      label: '医生',
+      key: 0,
+    },
+    {
+      label: '症状',
+      key: 1,
+    },
+    {
+      label: '科室',
+      key: 2,
+    },
+  ];
+  searchHistory = ref(<IRegSearchHistoryItem[]>[]);
+  hotSearchList = ref(<IRegSearchHistoryItem[]>[{ label: '哮喘', hot: '1' }]);
 
   deptResultList = ref([]);
   docInfoResultList = ref([]);
   symptomResultList = ref<IDocResItem[]>([]);
 
-  confirmSearch = debounce((str) => {
-    console.log({
-      str,
-    });
-
+  confirmSearch(str: string) {
+    this.searchText.value = str;
     this.searchList(str);
-  }, 1000);
+  }
 
+  @CDebounce(500)
   searchTextChange(str: string) {
     if (str.trim() === '') {
       this.resetResList();
@@ -65,7 +114,8 @@ export class UseRegSearch extends GStores {
       source,
     };
 
-    this.isComplete.value = false;
+    setSearchHistory(searchContent);
+
     this.resetResList();
 
     const { result } = await api.searchDocAndDeptByWords(args).finally(() => {
@@ -77,15 +127,41 @@ export class UseRegSearch extends GStores {
     this.deptResultList.value = deptResultList;
     this.docInfoResultList.value = docInfoResultList;
     this.symptomResultList.value = symptomResultList;
+
+    if (docInfoResultList.length) {
+      this.tabCurrent.value = 0;
+    } else if (symptomResultList.length) {
+      this.tabCurrent.value = 1;
+    } else if (deptResultList.length) {
+      this.tabCurrent.value = 2;
+    }
+  }
+
+  tabChange(idx: number) {
+    this.tabCurrent.value = idx;
   }
 
   resetResList() {
+    this.isComplete.value = false;
+    this.tabCurrent.value = 0;
     this.deptResultList.value = [];
     this.docInfoResultList.value = [];
     this.symptomResultList.value = [];
+    this.searchHistory.value = getLocalStorage(KEY_REG_SEARCH_HISTORY) || [];
   }
 
-  init(opt: IPageProp) {
+  async getConfig() {
+    const { hosRegHistory } = await ServerStaticData.getSystemConfig('order');
+
+    if (hosRegHistory && hosRegHistory.length) {
+      this.hotSearchList.value = hosRegHistory;
+    }
+  }
+
+  async init(opt: IPageProp) {
     this.pageProp.value = opt;
+
+    await this.getConfig();
+    this.resetResList();
   }
 }
