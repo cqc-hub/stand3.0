@@ -61,36 +61,15 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { IDocResItem } from '../../utils/RegSearch';
-  import { joinQuery } from '@/common';
 
-  const props = defineProps<{
+  defineProps<{
     list: IDocResItem[];
-    hosId: string;
   }>();
 
+  const emits = defineEmits(['item-click']);
+
   const avatarClick = (item: IDocResItem) => {
-    const {
-      // deptName,
-      docName,
-      hosDocId,
-      hosDeptId,
-      docTitleName,
-    } = item;
-
-    const { hosId } = props;
-
-    const args = {
-      // deptName,
-      docName,
-      hosDocId,
-      hosId,
-      docTitleName,
-      hosDeptId,
-    };
-
-    uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', args),
-    });
+    emits('item-click', item);
   };
 </script>
 

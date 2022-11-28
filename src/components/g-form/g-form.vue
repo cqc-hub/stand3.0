@@ -194,7 +194,7 @@
 
           <view
             v-if="item.showSuffixArrowIcon"
-            class="iconfont icon-resize icon_arrow"
+            class="iconfont icon-resize icon_arrow color-888"
           >
             &#xe66b;
           </view>

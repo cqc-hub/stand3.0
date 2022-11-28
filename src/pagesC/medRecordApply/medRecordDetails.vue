@@ -142,7 +142,7 @@
           <view id="_aim" class="container-box g-border mb16 box-padding">
             <view class="f36">
               <text class="mr12 g-bold">请选择复印目的</text>
-              <text class="f28 color-light-dark">(多选)</text>
+              <text class="f28 color-light-dark">(请选择1-3项)</text>
             </view>
 
             <view class="mt24 pb32 g-border-bottom">

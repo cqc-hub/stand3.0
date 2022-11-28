@@ -202,8 +202,8 @@
             />
           </view>
 
-          <view class="container-box order-patient g-border">
-            <g-flag typeFg="4" isShowFgTip />
+          <view class="container-box order-patient g-border p32">
+            <g-flag typeFg="4" isShowFgTip aaa />
           </view>
         </view>
       </view>

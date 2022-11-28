@@ -1,5 +1,9 @@
 <template>
-  <view>
+  <view
+    :class="{
+      aaa: !aaa,
+    }"
+  >
     <slot :title="mTitle" :text="text">
       <view v-if="isShowFg && text" class="real-top">
         <rich-text :nodes="text" />
@@ -25,6 +29,7 @@
     isShowFgTip?: boolean; //底部
     isHideTitle?: boolean;
     disabledFormatterParse?: boolean;
+    aaa?: boolean; // 不要 padding
   }
 
   const props = withDefaults(defineProps<IProps>(), {
@@ -73,16 +78,24 @@
   }
 
   .tip {
-    margin-top: 32rpx;
+    // margin-top: 32rpx;
     .title {
       margin-bottom: 10rpx;
     }
 
-    padding: 0 32rpx;
+    // padding: 0 32rpx;
     font-size: 28rpx;
     line-height: 40rpx;
     color: #888;
-    padding-bottom: 50rpx;
+    // padding-bottom: 50rpx;
     word-break: break-all;
+  }
+
+  .aaa {
+    .tip {
+      margin-top: 32rpx;
+      padding: 0 32rpx;
+      padding-bottom: 50rpx;
+    }
   }
 </style>

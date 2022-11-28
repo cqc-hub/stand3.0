@@ -48,16 +48,24 @@
               <block v-if="item.key === 0">
                 <Doc-List
                   :list="r.docInfoResultList.value"
-                  :hosId="r.pageProp.value.hosId"
+                  @item-click="goDocDetail"
                 />
               </block>
+
               <block v-if="item.key === 1">
                 <Doc-List
                   :list="r.symptomResultList.value"
-                  :hosId="r.pageProp.value.hosId"
+                  @item-click="goDocDetail"
                 />
               </block>
-              <block v-if="item.key === 2">3</block>
+
+              <block v-if="item.key === 2">
+                <Search-Dept-List
+                  :list="r.deptResultList.value"
+                  :hosId="r.pageProp.value.hosId"
+                  @item-click="goDeptList"
+                />
+              </block>
             </view>
 
             <view class="safe-height" />
@@ -122,6 +130,7 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import DocList from './components/RegSearch/docList.vue';
+  import SearchDeptList from './components/RegSearch/searchDeptList.vue';
   import SearchHisList from './components/RegSearch/searchHisList.vue';
 
   const r = new UseRegSearch();
@@ -155,6 +164,14 @@
 
     clearSearchHistory();
     r.resetResList();
+  };
+
+  const goDocDetail = (e) => {
+    r.goDocDetail(e);
+  };
+
+  const goDeptList = (e) => {
+    r.goDeptList(e);
   };
 
   const sechHistoryAgin = (item: IRegSearchHistoryItem) => {

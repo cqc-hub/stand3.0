@@ -1,6 +1,6 @@
 import { nextTick, ref } from 'vue';
 import { GStores, CDebounce } from '@/utils';
-import { setLocalStorage, getLocalStorage } from '@/common';
+import { setLocalStorage, getLocalStorage, joinQuery } from '@/common';
 import {
   type IRegSearchHistoryItem,
   ServerStaticData,
@@ -27,6 +27,11 @@ export interface IDocResItem {
   schQukCategor: string;
   specialClinicName: string;
   docJobName: string;
+}
+
+export interface IDeptItem {
+  deptName: string;
+  hosDeptId: string;
 }
 
 const KEY_REG_SEARCH_HISTORY = 'orgsearchhistory';
@@ -81,10 +86,11 @@ export class UseRegSearch extends GStores {
     },
   ];
   searchHistory = ref(<IRegSearchHistoryItem[]>[]);
-  hotSearchList = ref(<IRegSearchHistoryItem[]>[{ label: '哮喘', hot: '1' }]);
+  // hotSearchList = ref(<IRegSearchHistoryItem[]>[{ label: '哮喘', hot: '1' }]);
+  hotSearchList = ref(<IRegSearchHistoryItem[]>[]);
 
-  deptResultList = ref([]);
-  docInfoResultList = ref([]);
+  deptResultList = ref(<IDeptItem[]>[]);
+  docInfoResultList = ref<IDocResItem[]>([]);
   symptomResultList = ref<IDocResItem[]>([]);
 
   confirmSearch(str: string) {
@@ -101,6 +107,47 @@ export class UseRegSearch extends GStores {
         this.searchText.value = '';
       });
     }
+  }
+
+  goDocDetail(item: IDocResItem) {
+    const {
+      // deptName,
+      docName,
+      hosDocId,
+      hosDeptId,
+      docTitleName,
+    } = item;
+
+    const { hosId } = this.pageProp.value;
+
+    const args = {
+      // deptName,
+      docName,
+      hosDocId,
+      hosId,
+      docTitleName,
+      hosDeptId,
+    };
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', args),
+    });
+  }
+
+  goDeptList(item: IDeptItem) {
+    const { hosId, clinicalType } = this.pageProp.value;
+    const { hosDeptId, deptName } = item;
+
+    const args = {
+      deptName,
+      hosId,
+      hosDeptId,
+      clinicalType,
+    };
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/order', args),
+    });
   }
 
   async searchList(searchContent: string) {
