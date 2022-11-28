@@ -29,7 +29,7 @@
                       <text>
                         {{ gStores.userStore.patChoose.patientName }}
                       </text>
-                      <text v-if="!isAreaProgram()">
+                      <text v-if="gStores.userStore.patChoose._showId">
                         ID
                         {{ gStores.userStore.patChoose._showId }}
                       </text>
@@ -303,7 +303,7 @@
       } else {
         noticeMenu.value = [];
       }
-      bannerFunctionList.value = homeConfig[2].functionList;
+      bannerFunctionList.value = homeConfig[2].functionList.slice(0,2);
       bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
       menuList.value = homeConfig[3].typeList || [];
       skeletonProps.loading = false;

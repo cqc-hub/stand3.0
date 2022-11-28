@@ -191,7 +191,9 @@
       font-size: var(--hr-font-size-s);
       font-weight: var(--h-weight-2);
       color: var(--hr-neutral-color-10);
-      padding: 32rpx 16rpx 32rpx 32rpx;
+      padding: 0 16rpx 0 32rpx;
+      display: flex;
+      overflow: hidden;
     } 
     //标准高度
     .banner-common {
