@@ -303,7 +303,7 @@
       } else {
         noticeMenu.value = [];
       }
-      bannerFunctionList.value = homeConfig[2].functionList.slice(0,2);
+      bannerFunctionList.value = homeConfig[2].functionList;
       bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
       menuList.value = homeConfig[3].typeList || [];
       skeletonProps.loading = false;
