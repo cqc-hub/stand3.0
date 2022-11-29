@@ -497,17 +497,17 @@ export class ServerStaticData {
           medRecord,
           pay: {
             isListShowClinicType: '1',
-            payedFooterBtn: {
-              addition: {
-                patientId: 'patientId',
-              },
-              type: 'h5',
-              extraData: {
-                sysCode: '1001033',
-              },
-              path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
-              text: '导诊单',
-            },
+            // payedFooterBtn: {
+            //   addition: {
+            //     patientId: 'patientId',
+            //   },
+            //   type: 'h5',
+            //   extraData: {
+            //     sysCode: '1001033',
+            //   },
+            //   path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
+            //   text: '导诊单',
+            // },
             confirmPayFg: '15',
             isPreSettle: '1',
             // isOpenChargeback: '1',
