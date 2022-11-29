@@ -164,7 +164,10 @@ const queryApi = {
 
   // 门诊住院列表
   getOutpatientHospitalList: (data) =>
-    service.post('/phs-query/operation/getOutpatientHospitalList', parm(data)),
+    service.post('/phs-query/operation/getOutpatientHospitalList', parm(data), {
+      showMessage: false,
+      hideLoading: false,
+    }),
 
   // 获取病案复印申请记录
   getCaseCopyList: <T>(data) =>

@@ -303,6 +303,12 @@
           }
         },
         {
+          "path": "hrvideo/index",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+        {
           "path": "medRecordApply/_recordApplyDetail",
           "extend": {
             "patient": true

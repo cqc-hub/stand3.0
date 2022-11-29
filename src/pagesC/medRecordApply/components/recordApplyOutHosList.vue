@@ -1,28 +1,43 @@
 <template>
   <view class="">
-    <view v-for="(item, idx) in list" :key="idx" class="g-border item">
-      <view class="iconfont item-choose-icon">&#xe6ce;</view>
+    <view
+      v-for="(item, idx) in list"
+      :key="idx"
+      @click="itemClick(item)"
+      :class="{
+        active: isActive(item),
+      }"
+      class="g-border item"
+    >
+      <view
+        :class="{
+          'color-blue': isActive(item),
+        }"
+        class="iconfont item-choose-icon"
+      >
+        {{ isActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
+      </view>
 
       <view class="item-container">
         <view class="title g-border-bottom">
-          <text>2021-09-01</text>
+          <text>{{ item.admissionTime }}</text>
           <text class="time-split">至</text>
-          <text>2021-09-21</text>
+          <text>{{ item.outTime }}</text>
         </view>
 
         <view class="row flex-normal">
           <view class="row-title">住院号</view>
-          <view class="row-content">20210801201</view>
+          <view class="row-content">{{ item.visitNo }}</view>
         </view>
 
         <view class="row flex-normal">
           <view class="row-title">诊断</view>
-          <view class="row-content">肺部感染</view>
+          <view class="row-content">{{ item.diagnosis }}</view>
         </view>
 
         <view class="row flex-normal">
           <view class="row-title">医生</view>
-          <view class="row-content">朝晖院区施天明</view>
+          <view class="row-content">{{ item.hosName + item.docName }}</view>
         </view>
       </view>
     </view>
@@ -37,6 +52,16 @@
     list: TOutHosInfo[];
     value: TOutHosInfo[];
   }>();
+
+  const emits = defineEmits(['item-click']);
+
+  const isActive = (item: TOutHosInfo) => {
+    return props.value.findIndex((o) => o.visitNo === item.visitNo) !== -1;
+  };
+
+  const itemClick = (item) => {
+    emits('item-click', item);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -46,6 +71,10 @@
     padding: 32rpx;
     background-color: #fff;
     border-radius: 8px;
+
+    &.active {
+      border-color: var(--hr-brand-color-6);
+    }
 
     .item-choose-icon {
       font-size: var(--hr-font-size-xxl);

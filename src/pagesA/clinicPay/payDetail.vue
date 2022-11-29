@@ -202,7 +202,9 @@
     getPay,
   } = usePayPage();
 
-  const qrCode = ref('66443456899900');
+  const qrCode = computed(() => {
+    return detailData.value.qrCode || '';
+  });
   const qrOpt = ref({
     // 二维码
     size: 320,
@@ -337,7 +339,7 @@
       if (props.value.payState === '0') {
         capture();
       }
-    }, 80);
+    }, 200);
   });
 
   onReady(() => {
