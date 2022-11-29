@@ -62,7 +62,6 @@
               <block v-if="item.key === 2">
                 <Search-Dept-List
                   :list="r.deptResultList.value"
-                  :hosId="r.pageProp.value.hosId"
                   @item-click="goDeptList"
                 />
               </block>

@@ -11,7 +11,7 @@ import api from '@/service/api';
 
 export { type IRegSearchHistoryItem } from '@/utils';
 interface IPageProp {
-  hosId: string;
+  // hosId: string;
   clinicalType: string;
 }
 export interface IDocResItem {
@@ -23,6 +23,7 @@ export interface IDocResItem {
   hosDeptId: string;
   hosDocId: string;
   intro: string;
+  hosId: string;
 
   schQukCategor: string;
   specialClinicName: string;
@@ -32,6 +33,7 @@ export interface IDocResItem {
 export interface IDeptItem {
   deptName: string;
   hosDeptId: string;
+  hosId: string;
 }
 
 const KEY_REG_SEARCH_HISTORY = 'orgsearchhistory';
@@ -116,9 +118,10 @@ export class UseRegSearch extends GStores {
       hosDocId,
       hosDeptId,
       docTitleName,
+      hosId
     } = item;
 
-    const { hosId } = this.pageProp.value;
+    // const { hosId } = this.pageProp.value;
 
     const args = {
       // deptName,
@@ -135,8 +138,8 @@ export class UseRegSearch extends GStores {
   }
 
   goDeptList(item: IDeptItem) {
-    const { hosId, clinicalType } = this.pageProp.value;
-    const { hosDeptId, deptName } = item;
+    const { clinicalType } = this.pageProp.value;
+    const { hosDeptId, deptName, hosId } = item;
 
     const args = {
       deptName,
@@ -151,12 +154,12 @@ export class UseRegSearch extends GStores {
   }
 
   async searchList(searchContent: string) {
-    const { hosId, clinicalType } = this.pageProp.value;
+    const {  clinicalType } = this.pageProp.value;
     const { source } = this.globalStore.browser;
 
     const args = {
       searchContent,
-      hosId,
+      hosId: '',
       clinicalType,
       source,
     };

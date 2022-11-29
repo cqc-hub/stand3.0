@@ -153,6 +153,7 @@
   import global from '@/config/global';
   import { useCommonTo } from '@/common/checkJump';
 
+
   import {
     aliLogin,
     wxLogin,
@@ -311,12 +312,16 @@
   };
 
   const goSearch = () => {
-    let url =
-      (global.env as string) === 'prod'
-        ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
-        : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
+    // let url =
+    //   (global.env as string) === 'prod'
+    //     ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
+    //     : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
+    // uni.navigateTo({
+    //   url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
+    // });
+
     uni.navigateTo({
-      url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
+      url: '/pagesA/MyRegistration/RegSearch',
     });
   };
 </script>
