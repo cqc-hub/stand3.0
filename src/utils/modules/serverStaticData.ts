@@ -110,13 +110,13 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
           : 'https://health.eheren.com/v3/#/';
 
       if (config.isLocal) {
-        baseUrl = 'http://10.10.83.79:5173/#/';
+        baseUrl = 'http://10.10.83.88:5173/#/';
       }
 
       fullUrl = baseUrl + fullUrl;
 
       fullUrl = joinQuery(fullUrl, {
-        _d: encryptDesParam(_d),
+        _d: encodeURIComponent(encryptDesParam(_d)),
       });
     }
     // #ifdef H5
