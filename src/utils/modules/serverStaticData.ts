@@ -509,7 +509,7 @@ export class ServerStaticData {
             //   text: '导诊单',
             // },
             confirmPayFg: '15',
-            isPreSettle: '1',
+            // isPreSettle: '0',
             // isOpenChargeback: '1',
           },
         };
