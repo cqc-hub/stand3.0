@@ -162,7 +162,7 @@
         {
           "path": "MyRegistration/RegSearch",
           "style": {
-            "navigationBarTitleText": "搜索"
+            "navigationBarTitleText": "搜索挂号科室医生"
           }
         },
 
