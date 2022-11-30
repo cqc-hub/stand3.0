@@ -5,6 +5,10 @@
   overflow: hidden;
 }
 
+.ellipsis-line-clamp2 {
+  -webkit-line-clamp: 2;
+}
+
 .text-no-wrap {
   white-space: nowrap;
 }
@@ -205,6 +209,10 @@
   margin-top: 32rpx !important;
 }
 
+.mt40 {
+  margin-top: 40rpx !important;
+}
+
 .mr8 {
   margin-right: 8rpx !important;
 }
@@ -251,6 +259,10 @@
 
 .p24c {
   padding: 0 24rpx !important;
+}
+
+.p24 {
+  padding: 24rpx !important;
 }
 
 .pb32 {

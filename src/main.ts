@@ -5,8 +5,6 @@ import 'animate.css';
 import App from './App.vue';
 import global from './config/global';
 
-
-
 export function createApp() {
   const app = createSSRApp(App).use(painaInstall);
 
@@ -15,6 +13,6 @@ export function createApp() {
   app.config.globalProperties.$global = global;
 
   return {
-    app
+    app,
   };
 }

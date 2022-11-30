@@ -179,7 +179,7 @@
         width: 50%;
         height: 128rpx;
         background: var(--h-color-white);
-        border: 2rpx solid #cccccc;
+        border: 1rpx solid var(--hr-neutral-color-2);
         border-radius: 16rpx;
         &:first-child {
           margin-right: 14rpx;

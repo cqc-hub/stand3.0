@@ -13,7 +13,7 @@
 
           <template #default>
             <view
-              v-if="item.subCostTypeCode === '4'"
+              v-if="item.subCostTypeCode === 'chineseMedicine'"
               :class="{
                 'less-content': item.costList.length < 3,
               }"

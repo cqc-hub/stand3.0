@@ -202,8 +202,8 @@
             />
           </view>
 
-          <view class="container-box order-patient g-border">
-            <g-flag typeFg="4" isShowFgTip />
+          <view class="container-box order-patient g-border p32">
+            <g-flag typeFg="4" isShowFgTip aaa />
           </view>
         </view>
       </view>
@@ -450,6 +450,10 @@
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
   const capture = async () => {
+    if (!refqrcode.value) {
+      return;
+    }
+
     const { tempFilePath: qrCodeImg } = await refqrcode.value.GetCodeImg();
     const { tempFilePath: barcodeImg } = await refqrbarcode.value.GetCodeImg();
 
@@ -568,6 +572,7 @@
 
   const againOrder = async () => {
     // 跳到医生名片
+    goDoctorCard();
   };
 
   onLoad((p) => {

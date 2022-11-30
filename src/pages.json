@@ -160,6 +160,13 @@
         },
 
         {
+          "path": "MyRegistration/RegSearch",
+          "style": {
+            "navigationBarTitleText": "搜索挂号科室医生"
+          }
+        },
+
+        {
           "path": "MyRegistration/order",
           "style": {
             "navigationBarTitleText": "挂号"
@@ -293,6 +300,12 @@
           },
           "style": {
             "navigationBarTitleText": "病案复印"
+          }
+        },
+        {
+          "path": "hrvideo/index",
+          "style": {
+            "navigationBarTitleText": " "
           }
         },
         {

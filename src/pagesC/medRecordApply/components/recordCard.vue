@@ -38,7 +38,7 @@
         <view class="label">诊断</view>
 
         <view class="content">
-          {{ item.diagnosis.join('、') }}
+          {{ showDiagnosis(item.diagnosis) }}
         </view>
       </view>
 
@@ -82,7 +82,7 @@
   import dayjs from 'dayjs';
   import { NotNullable } from '@/typeUtils';
 
-  const props = defineProps<{
+  defineProps<{
     list: NotNullable<CaseCopeItemDetail['_outInfo']>;
     isEdit?: boolean;
   }>();
@@ -97,6 +97,14 @@
 
   const delClick = (item, index) => {
     emits('click-del', { item, index });
+  };
+
+  const showDiagnosis = (v: string | string[]) => {
+    if (typeof v === 'string') {
+      return v;
+    } else {
+      return v.join('、');
+    }
   };
 </script>
 

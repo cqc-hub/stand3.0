@@ -220,8 +220,6 @@
         success(e) {
           const { screenWidth, osName } = e;
           // canvasInfo.value.width = screenWidth;
-          console.log('系统信息');
-          console.log(e);
           isAndroid = osName === 'android';
           if (isAndroid) {
             // canvasInfo.value.width = 342;

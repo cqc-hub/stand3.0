@@ -54,7 +54,7 @@
       </swiper-item>
     </swiper>
 
-    <view class="g-footer" v-if="tabCurrent === 0 && selUnPayList.length">
+    <view class="g-footer" v-if="tabCurrent === 0 && unPayList.length">
       <view
         v-if="isShowSelectAll"
         @click="chooseAll"

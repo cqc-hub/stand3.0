@@ -1,13 +1,17 @@
 <template>
   <view class="page">
+    <g-tbanner :config="orderConfig.bannerOrder" />
     <g-selhos
       v-model:hosId="hosId"
       @get-list="getHosList"
       @change="getDepList"
       type="selDepartment"
     />
-
-    <g-tbanner :config="orderConfig.bannerOrder" />
+    <view class="search-input" @click.prevent="goSearch">
+      <view class="my-disabled">
+        <uni-search-input placeholder="请输入医生/科室/症状" />
+      </view>
+    </view>
 
     <view class="container hidden-scrollbar" scroll-y>
       <Department-List
@@ -195,6 +199,15 @@
     }, 500);
   });
 
+  const goSearch = () => {
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/RegSearch', {
+        clinicalType: props.clinicalType,
+        hosId: hosId.value,
+      }),
+    });
+  };
+
   init();
 </script>
 
@@ -232,5 +245,9 @@
       flex: 1;
       height: 1px;
     }
+  }
+
+  .search-input {
+    margin: 16rpx 32rpx;
   }
 </style>

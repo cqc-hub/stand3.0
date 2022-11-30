@@ -26,7 +26,11 @@
 
     <view class="container">
       <block v-if="isComplete && outHosList.length">
-        <Out-Hos-List-Com :list="outHosList" :value="checkOutHosList" />
+        <Out-Hos-List-Com
+          :list="outHosList"
+          :value="checkOutHosList"
+          @item-click="itemClick"
+        />
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
@@ -42,24 +46,43 @@
     </view>
 
     <view v-if="outHosList.length" class="g-footer g-border-top">
-      <view class="footer-check flex-normal">
-        <view class="iconfont">&#xe6ce;</view>
+      <view @click="chooseAll" class="footer-check flex-normal">
+        <view
+          :class="{
+            'color-blue': isCheckAll,
+          }"
+          class="iconfont"
+        >
+          {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
+        </view>
         <view class="flex-normal">全选</view>
       </view>
-      <button class="btn g-border btn-primary btn-disabled">下一步</button>
+      <button
+        :class="{
+          'btn-disabled': !checkOutHosList.length,
+        }"
+        @click="nextStep"
+        class="btn g-border btn-primary"
+      >
+        下一步
+      </button>
     </view>
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-  import api from '@/service/api';
+  import { computed, ref, nextTick } from 'vue';
+  import { onShow, onLoad } from '@dcloudio/uni-app';
+
   import { GStores, ServerStaticData, IHosInfo } from '@/utils';
-  import { TOutHosInfo } from './utils/recordApply';
+  import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
+  import { joinQuery } from '@/common/utils';
+  import { setLocalStorage, getLocalStorage } from '@/common';
+
+  import api from '@/service/api';
 
   import OutHosListCom from './components/recordApplyOutHosList.vue';
-  import { joinQuery } from '@/common/utils';
 
   const props = defineProps<{
     hosId?: string;
@@ -69,6 +92,44 @@
   const isComplete = ref(false);
   const outHosList = ref<TOutHosInfo[]>([]);
   const checkOutHosList = ref<TOutHosInfo[]>([]);
+
+  const itemClick = (item: TOutHosInfo) => {
+    const { visitNo } = item;
+
+    const idx = checkOutHosList.value.findIndex((o) => o.visitNo === visitNo);
+
+    if (idx === -1) {
+      checkOutHosList.value.push(item);
+    } else {
+      checkOutHosList.value.splice(idx, 1);
+    }
+  };
+
+  const nextStep = () => {
+    setLocalStorage({
+      [CACHE_KEY]: JSON.stringify(checkOutHosList.value),
+    });
+
+    nextTick(() => {
+      uni.navigateTo({
+        url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
+          hosId: hosId.value,
+        }),
+      });
+    });
+  };
+
+  const chooseAll = () => {
+    if (isCheckAll.value) {
+      checkOutHosList.value = [];
+    } else {
+      checkOutHosList.value = [...outHosList.value];
+    }
+  };
+
+  const isCheckAll = computed(() => {
+    return checkOutHosList.value.length === outHosList.value.length;
+  });
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
     if (list.length) {
@@ -81,7 +142,6 @@
 
   const getOutPatientHosList = async () => {
     isComplete.value = true;
-    return;
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
       patientId,
@@ -90,9 +150,13 @@
     };
 
     isComplete.value = false;
-    await api.getOutpatientHospitalList(requestArg).finally(() => {
-      isComplete.value = true;
-    });
+    let { result } = await api
+      .getOutpatientHospitalList(requestArg)
+      .finally(() => {
+        isComplete.value = true;
+      });
+
+    outHosList.value = result || [];
   };
 
   const goApplyRecord = () => {
@@ -111,6 +175,16 @@
       }),
     });
   };
+
+  onShow(() => {
+    if (getLocalStorage(CACHE_KEY)) {
+      setLocalStorage({
+        [CACHE_KEY]: '',
+      });
+
+      checkOutHosList.value = [];
+    }
+  });
 
   // gStores.userStore.patChoose
 </script>

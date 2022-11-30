@@ -2,7 +2,7 @@
   <view class="container">
     <view class="pat-profile" @click="profileClick">
       <view class="pat-label">
-        <text class="pat-name bold">{{ pat.patientName }}</text>
+        <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
         <g-tag v-if="pat.defaultFlag === '1'" type="yellow" text="默认" />
       </view>

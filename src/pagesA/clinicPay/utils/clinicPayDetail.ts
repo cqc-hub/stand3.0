@@ -92,6 +92,7 @@ export type TPayDetailInfo = {
   hospitalCost: string;
   totalCost: string;
   invoiceNumber: string; // 发票号
+  qrCode: string;
 };
 
 export const usePayPage = () => {
@@ -120,11 +121,13 @@ export const usePayPage = () => {
     },
   ]);
 
-  const tabChange = debounce((idx: number) => {
+  let tabChange = (idx: number) => {
     tabCurrent.value = idx;
 
     getListData();
-  }, 20);
+  };
+
+  tabChange = debounce(tabChange, 80);
 
   const unPayList = ref<IPayListItem[]>([]);
   const selUnPayList = ref<IPayListItem[]>([]);
@@ -257,7 +260,7 @@ export const usePayPage = () => {
       docId,
       hosName,
       costTypeName,
-      diseaseTypeName
+      diseaseTypeName,
     } = item;
 
     const pageData = {
@@ -280,7 +283,7 @@ export const usePayPage = () => {
       docId,
       hosName,
       costTypeName,
-      diseaseTypeName
+      diseaseTypeName,
     };
 
     // if (payState === '1') {
@@ -374,7 +377,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
     });
 
-    await toPayPull(res,"门诊缴费");
+    await toPayPull(res, '门诊缴费');
     payAfter();
   };
 

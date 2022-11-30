@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "2001004",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -63,6 +63,17 @@
       "alipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "name": "乐清市人民医院",
+      "isOpenHealthCard": false,
+      "isStartComeTest": true,
+      "isSearchInHos": true,
+      "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
+      "isOpenOcr": false
+    },
+    "1001055": {
+      "wxAppid": "wxd9a9c329edc6e2b0",
+      "alipayAppid": "2021003164669106",
+      "h5Appid": "",
+      "name": "联勤保障部队第987医院",
       "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos": false,

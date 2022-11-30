@@ -4,6 +4,7 @@ export type TBannerConfigBase = {
   src: `http${string}`;
   extraData?: BaseObject;
   path: string; // h5 跳转完整路径 其他跳转 如 home/my
+  isSelfH5?: '1'; // 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....)
   addition?: {
     token?: string;
     patientId?: string;
@@ -13,7 +14,6 @@ export type TBannerConfigBase = {
 
 type TBannerConfigH5 = {
   type: 'h5';
-  isSelfH5?: '1'; // 我们的 h5 (v3)
   isLocal?: '1'; // 当他不存在
 } & TBannerConfigBase;
 
@@ -34,6 +34,11 @@ export type TBannerConfig = XOR<
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
 };
+
+export interface IRegSearchHistoryItem {
+  label: string;
+  hot?: '1'; // 标记 🔥
+}
 
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
@@ -65,6 +70,10 @@ export interface ISystemConfig {
     isQueuing?: string[];
     // 服务评价?
     isFWBtn?: string[];
+
+    /** 搜索 */
+    // 热门搜索
+    hosRegHistory?: IRegSearchHistoryItem[];
   };
 
   // 就诊人

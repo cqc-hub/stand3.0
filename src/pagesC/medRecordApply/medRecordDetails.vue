@@ -125,7 +125,7 @@
             </view>
 
             <view class="record-container mt32">
-              <record-Card
+              <Record-Card
                 :list="recordRows"
                 @click-edit="editRecord"
                 @click-del="delRecord"
@@ -142,7 +142,7 @@
           <view id="_aim" class="container-box g-border mb16 box-padding">
             <view class="f36">
               <text class="mr12 g-bold">请选择复印目的</text>
-              <text class="f28 color-light-dark">(多选)</text>
+              <text class="f28 color-light-dark">(请选择1-3项)</text>
             </view>
 
             <view class="mt24 pb32 g-border-bottom">
@@ -233,9 +233,8 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted, watch, nextTick } from 'vue';
-  import AddressBox from './components/medRecordDetailsAddressBox.vue';
-  import recordCard from './components/recordCard.vue';
-  import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
+  import { onShow, onLoad } from '@dcloudio/uni-app';
+
   import {
     GStores,
     IHosInfo,
@@ -244,12 +243,16 @@
     upImgOss,
     wait,
   } from '@/utils';
-  import { onShow, onLoad } from '@dcloudio/uni-app';
   import { getUserShowLabel } from '@/stores';
-  import { CaseCopeItemDetail } from './utils/recordApply';
-  import { NotNullable, XOR } from '@/typeUtils';
+  import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
+  import { setLocalStorage, getLocalStorage } from '@/common';
+  import type { NotNullable, XOR } from '@/typeUtils';
 
   import api from '@/service/api';
+
+  import AddressBox from './components/medRecordDetailsAddressBox.vue';
+  import RecordCard from './components/recordCard.vue';
+  import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
 
   type TChoose = XOR<
     { success: true; path: string },
@@ -707,8 +710,6 @@
 
     aimValue.value = copyAim.split('、');
 
-    console.log(aimValue.value, 'aimValue.value');
-
     recordRows.value = JSON.parse(outInfo);
 
     remark.value = _remark || '';
@@ -737,6 +738,11 @@
       });
 
       addressList.value = result || [];
+    }
+
+    const selRecords = getLocalStorage(CACHE_KEY);
+    if (selRecords) {
+      recordRows.value = JSON.parse(selRecords);
     }
   });
 

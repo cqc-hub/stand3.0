@@ -69,14 +69,18 @@
     .tabbar-container {
       display: flex;
       justify-content: space-around;
+      height: 100%;
 
       .tabbar-item {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
+        margin-top: 20rpx;
+
         position: relative;
-        top: 20rpx;
+        flex: 1;
+        height: 100%;
 
         .label {
           font-size: 20rpx;
@@ -86,6 +90,7 @@
 
         image {
           width: 48rpx;
+          height: 48rpx;
         }
       }
     }

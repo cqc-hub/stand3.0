@@ -1,5 +1,16 @@
 import { Flatten } from '@/typeUtils';
-export type TOutHosInfo = any;
+export type TOutHosInfo = {
+  admissionTime: string;
+  deptName: string;
+  diagnosis: string;
+  docName: string;
+  hosId: string;
+  hosName: string;
+  hospitalWard: string;
+  inpatientBed: string;
+  outTime: string;
+  visitNo: string;
+};
 
 /**
  订单状态
@@ -182,6 +193,9 @@ export type CaseCopeItemDetail = Flatten<
     expressCompany: string;
   }
 >;
+
+export const CACHE_KEY = 'recordApply-list';
+
 
 /** 邮政 */
 export const isExpress1 = (item: any): item is Express_1 => {
