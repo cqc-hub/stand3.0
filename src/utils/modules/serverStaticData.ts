@@ -411,10 +411,10 @@ export class ServerStaticData {
   /**
    * 首页配置的数据
    */
-  static async getHomeConfig(): Promise<any[]> {
+  static async getHomeConfig(type?): Promise<any[]> {
     const viewConfig = getLocalStorage('viewConfig');
-
-    if (!viewConfig) {
+    //type:home 首页每次都调用一下
+    if (!viewConfig || type) {
       const arg = {
         version: '',
         source: 1,
