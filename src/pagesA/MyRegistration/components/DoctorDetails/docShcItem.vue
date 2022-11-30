@@ -25,13 +25,7 @@
         </view>
 
         <view class="color-888 text-no-wrap">
-          <block v-if="item.numHadReg">
-            挂{{ item.numHadReg }} 个 余{{ item.numRemain }}个
-          </block>
-
-          <block v-else>
-            总{{ item.numCount }} 个 余{{ item.numRemain }}个
-          </block>
+          总{{ item.numCount }} 个 余{{ item.numRemain }}个
         </view>
       </view>
     </view>

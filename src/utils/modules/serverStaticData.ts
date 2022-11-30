@@ -60,6 +60,8 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
+  const localUrl = 'http://10.10.83.76:5173/#/';
+
   const _d = {
     _patientId: '',
     _herenId: '',
@@ -110,7 +112,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
           : 'https://health.eheren.com/v3/#/';
 
       if (config.isLocal) {
-        baseUrl = 'http://10.10.83.88:5173/#/';
+        baseUrl = localUrl;
       }
 
       fullUrl = baseUrl + fullUrl;
