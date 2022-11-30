@@ -3,11 +3,11 @@ export interface getInHospitalInfoParam {
   cardNumber?: string;
   hosId?: string;
   idCard?: string;
-  patientId: string;
+  patientId?: string;
   patientName?: string;
   patientPhone?: string;
   phoneNumber?: string;
-  sysCode: string;
+  sysCode?: string;
 }
 //获取住院信息 出参类型
 export interface getInHospitalInfoResult {
@@ -38,20 +38,28 @@ export interface getInHospitalInfoResult {
 }
 //获取住院费用日清单列表
 export interface dailyParam {
+  costType: string;
   inHospitalId?: string;
   patientId: string;
   sysCode: string;
   timesHospitalization?: string;
   hosId?: string;
 }
-
+//预缴记录
+export interface hospitalPayResult {
+  hospitalPayResultList: dailyList[];
+}
 //获取住院费用日清单列表 出参
+// type IRoute = dailyResult;
 export interface dailyResult {
-  date?: string;
-  costSecondaries?: dailyList[];
-  hospitalPay?: dailyList[];
+  inHospitalDailyCostsResultList: dailyList[];
 }
 export interface dailyList {
+  date: string;
+  costSecondaries?: dailyLists[];
+  hospitalPay?: dailyLists[];
+}
+export interface dailyLists {
   hosName?: string;
   costListResultList: dailySecList[];
 }
@@ -64,6 +72,9 @@ export interface dailySecList {
   moneyType?: string;
   payTime?: string;
   paymentAmount?: string;
+  endTime?: string;
+  startTime?: string;
+  totalCost?: string;
 }
 //创建住院订单 出参
 export interface payOrderResult {
@@ -78,59 +89,68 @@ export interface payParam {
   sysCode: string;
   totalFee: string;
 }
-//缴费记录 出参
-// export interface payInfoResList {
-//   dailyResult: dailyResult[];
-// }
+export interface inHospitalCostInfoParam {
+  costDay?: string;
+  costType: string;
+  hosId: string;
+  hospitalId?: string;
+  patientId: string;
+  sysCode: string;
+  timesHospitalization?: string;
+  isHosTotallist?: string;
+  isHosDaylist?: string;
+  startTime?: string;
+  endTime?: string;
+}
 export interface inHospitalCostInfo {
-  balance: string;
+  balance?: string;
   //余额
-  costDay: string;
+  costDay?: string;
   //支付时间/创建时间
   costList: costList[];
-  costTypeCode: string;
+  costTypeCode?: string;
   //费用分类编码
-  costTypeName: string;
+  costTypeName?: string;
   //费用分类名称
-  deptId: string;
+  deptId?: string;
   //入院科室编号
-  deptName: string;
+  deptName?: string;
   //入院科室名称
-  hosName: string;
+  hosName?: string;
   //院区
-  hospitalDate: string;
+  hospitalDate?: string;
   //入院日期2015-07-01
-  hospitalWard: string;
+  hospitalWard?: string;
   //住院病区
-  inpatientBed: string;
+  inpatientBed?: string;
   //床位号
-  inpatientNo: string;
+  inpatientNo?: string;
   //住院号
-  patName: string;
+  patName?: string;
   //患者姓名
-  patientId: string;
+  patientId?: string;
   //院内患者ID
-  prepaidPayment: string;
+  prepaidPayment?: string;
   //预交金
-  totalCost: string;
+  totalCost?: string;
   //总费用
 }
 export interface costList {
-  category: string;
+  category?: string;
   //费用类别注射费、西药费、检查费等
-  categoryCost: string;
+  categoryCost?: string;
   //类别费用
   subCostList: subCostList[];
 }
 export interface subCostList {
-  costName: string;
+  costName?: string;
   //费用名称
-  quantity: string;
+  quantity?: string;
   //数量
-  unit: string;
+  unit?: string;
   //单位
-  unitPrice: string;
+  unitPrice?: string;
   //单价
-  valuationAmount: string;
+  valuationAmount?: string;
   //计价金额
 }

@@ -256,7 +256,6 @@ export class ServerStaticData {
       });
 
       const list = result && result.PATIENT__SERVICE_CONFIG;
-      console.log(list, 'list');
 
       if (list) {
         // const res = JSON.parse(list).map((item) => {
@@ -266,7 +265,6 @@ export class ServerStaticData {
         //   };
         // });
         const res = JSON.parse(list);
-        console.log(res, 'res');
         // setLocalStorage({
         //   sysTermsHos: res,
         // });
@@ -406,9 +404,9 @@ export class ServerStaticData {
         version: '',
         source: 1,
       };
-       // #ifdef MP-ALIPAY
-       arg.source = 2;
-       // #endif
+      // #ifdef MP-ALIPAY
+      arg.source = 2;
+      // #endif
 
       // #ifdef H5
       arg.source = 3;

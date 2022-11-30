@@ -1,66 +1,107 @@
 <template>
   <!-- 日费用清单 -->
-  <view class="page">
-    <view class="progress" v-for="(item,index) in dailyResList " :key="index">
-      <view class="right">
-        <view class="dates">{{item.date}}</view>
-        <view class="detail-item" v-for="(i,j) in item.costSecondaries" :key="j">
-          <view class="details" v-for="(m,n) in i.costListResultList" :key="n" @click="gotoListExpenses(m)">
-            <view class="date">{{m.costDate}}</view>
-            <view class="details-right">
-              <view class="money">{{m.cost}}元 </view>
-              <view class="iconfont right">&#xe66b;</view>
+  <view>
+    <view class="page" v-if="props.isHosDaylist=='1'&&dailyResList.inHospitalDailyCostsResultList.length>0">
+      <view class="progress" v-for="(item,index) in dailyResList.inHospitalDailyCostsResultList" :key="index">
+        <view class="right">
+          <view class="dates">{{item.date}}</view>
+          <view class="detail-item" v-for="(i,j) in item.costSecondaries" :key="j">
+            <view class="details" v-for="(m,n) in i.costListResultList" :key="n" @click="gotoListExpenses(m)">
+              <view class="date">{{m.costDate}}</view>
+              <view class="details-right">
+                <view class="money">{{m.cost}}元 </view>
+                <view class="iconfont right">&#xe66b;</view>
+              </view>
             </view>
           </view>
         </view>
+        <text class='iconfont date'>&#xe6c6;</text>
+        <view class="line"></view>
       </view>
-      <text class='iconfont date'>&#xe6c6;</text>
-      <view class="line"></view>
+    </view>
+
+    <view class="page" v-if="props.isHosDaylist=='2'&&InHospitalCostInfo>0">
+      <view class="datetime-picker">
+        <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
+        <view class="iconfont down">&#xe6e8;</view>
+      </view>
+      <inpatientInfo :costDay="costDay" :isHosDaylist="props.isHosDaylist" @detalResult='detalResult' />
+    </view>
+
+    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0||InHospitalCostInfo==0">
+      <g-empty :current="1" />
     </view>
   </view>
-
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { GStores } from '@/utils';
+import { GStores, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
+import { hosParam } from '@/components/g-form';
+import inpatientInfo from './dailyExpenseListDetial.vue';
+import dayjs from 'dayjs';
 const gStores = new GStores();
+const props = defineProps<{
+  isHosDaylist?: string;
+}>();
+const InHospitalCostInfo = ref(0);
+const timestamp = new Date().getTime();
+const yesterDayTime = timestamp - 24 * 60 * 60 * 1000;
+const costDay = ref(dayjs(yesterDayTime).format('YYYY-MM-DD'));
 const dailyInfoParam = ref({
   inHospitalId: '',
   timesHospitalization: '',
   patientId: '10763642',
   // patientId: gStores.userStore.patChoose.patientId,
 });
-const dailyResList = ref<dailyResult>({} as dailyResult);
+const dailyResList = ref<dailyResult>({
+  inHospitalDailyCostsResultList: [],
+});
 const init = async () => {
   const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: dailyInfoParam.value.patientId,
+    costType: '1',
   });
   dailyResList.value = result;
-  console.log(dailyResList.value, 'xxxxx');
 };
-onLoad(() => {
-  init();
-});
-const tabs = ref([
-  { name: '住院信息', typeId: 0, date: '2022-12-12', money: '20' },
-  { name: '日费用清单', typeId: 1, date: '2022-12-12', money: '20' },
-  { name: '总计清单', typeId: 2, date: '2022-12-12', money: '20' },
-]);
+const detalResult = (val) => {
+  InHospitalCostInfo.value = Object.keys(val).length;
+};
 const gotoListExpenses = (data) => {
   uni.navigateTo({
-    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}`,
+    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}&isHosDaylist='1'`,
   });
 };
-</script>
 
+onLoad(async () => {
+  await init();
+  await detalResult(InHospitalCostInfo);
+});
+</script>
 
 <style scoped lang="scss">
 .page {
   padding-top: 40rpx;
+  //日清单 详情模式 样式
+  .datetime-picker {
+    width: 244rpx;
+    height: 56rpx;
+    font-weight: 600;
+    font-size: 26rpx;
+    background-color: #fff;
+    border-radius: 12rpx;
+    margin-left: 32rpx;
+    text-align: center;
+    line-height: 56rpx;
+    margin-bottom: 16rpx;
+    display: flex;
+    .iconfont {
+      padding-right: 16rpx;
+    }
+  }
 }
 // 步骤样式
 .progress {
@@ -123,5 +164,8 @@ const gotoListExpenses = (data) => {
   .line {
     height: 80%;
   }
+}
+.empty-box {
+  margin-top: 200rpx;
 }
 </style>

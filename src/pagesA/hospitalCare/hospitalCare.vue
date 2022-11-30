@@ -14,9 +14,9 @@
     </view>
     <!-- 内容区域 -->
     <view class="content-box">
-      <inpatientInfo v-show="tabStatus == 0"></inpatientInfo>
-      <dailyExpenseList v-show="tabStatus == 1"></dailyExpenseList>
-      <totalList v-show="tabStatus == 2"></totalList>
+      <inpatientInfo v-show="tabStatus == 0" :isQueryPreRecord="resultHos.isQueryPreRecord"></inpatientInfo>
+      <dailyExpenseList v-show="tabStatus == 1" :isHosDaylist=" resultHos.isHosDaylist"></dailyExpenseList>
+      <totalList v-show="tabStatus == 2" :isHosTotallist="resultHos.isHosTotallist"></totalList>
     </view>
 
     <!-- <swiper
@@ -49,6 +49,7 @@ const resultHos = ref<hosParam>({
   isHosDaylist: '',
   isHosTotallist: '',
   patientTab: [],
+  isQueryPreRecord: '',
 });
 //切换就诊人
 const choosePat = () => {};

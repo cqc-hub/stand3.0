@@ -1,73 +1,134 @@
 <template>
+  <!-- 总计费用清单 -->
   <view>
-    <view class="progress" v-for="(item,index) in tabs " :key="index">
-      <view class="right">
-        <view class="date">{{item.date}}</view>
-        <view class="detail-item">
-          <view class="detail-item-dep">
-            <text class="date">{{item.name}}</text>
-            <text class="money">{{item.money}}元
-              <text class="iconfont right">&#xe66b;</text>
-            </text>
+    <view class="page" v-if="props.isHosTotallist=='1'&&dailyResList.inHospitalDailyCostsResultList.length>0">
+      <view class="progress" v-for="(item,index) in dailyResList.inHospitalDailyCostsResultList " :key="index">
+        <view class="right" v-for="(i,j) in item.costSecondaries" :key="j">
+          <view v-for="(m,n) in i.costListResultList" :key="n">
+            <view class="dates">{{m.startTime}}～{{m.endTime}}</view>
+            <view class="details" @click="gotoListExpenses(m)">
+              <view class="date">{{i.hosName}}</view>
+              <view class="details-right">
+                <view class="money">{{m.totalCost}}元 </view>
+                <view class="iconfont right">&#xe66b;</view>
+              </view>
+            </view>
           </view>
-          <view class="dep-name">产科病区</view>
-        </view>
-      </view>
-      <text class='iconfont date'>&#xe6c6;</text>
-      <view class="line"></view>
-    </view>
-  </view>
 
+        </view>
+        <text class='iconfont date'>&#xe6c6;</text>
+        <view class="line"></view>
+      </view>
+    </view>
+
+    <view class="page" v-if="props.isHosTotallist=='2'&&InHospitalCostInfo>0">
+      <inpatientInfo :isHosTotallist="props.isHosTotallist" @detalResult='detalResult' />
+    </view>
+
+    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0||InHospitalCostInfo==0">
+      <g-empty :current="1" />
+    </view>
+
+  </view>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-const tabs = ref([
-  { name: '住院信息', typeId: 0, date: '2022-12-12', money: '20' },
-  { name: '日费用清单', typeId: 1, date: '2022-12-12', money: '20' },
-  { name: '总计清单', typeId: 2, date: '2022-12-12', money: '20' },
-]);
+import { GStores, ServerStaticData } from '@/utils';
+import api from '@/service/api';
+import { dailyParam, dailyResult } from '../utils/inpatientInfo';
+import { onLoad } from '@dcloudio/uni-app';
+import inpatientInfo from './dailyExpenseListDetial.vue';
+import dayjs from 'dayjs';
+const gStores = new GStores();
+const props = defineProps<{
+  isHosTotallist?: string;
+}>();
+const dailyInfoParam = ref({
+  inHospitalId: '',
+  timesHospitalization: '',
+  patientId: '10763642',
+  // patientId: gStores.userStore.patChoose.patientId,
+});
+const InHospitalCostInfo = ref(0);
+const dailyResList = ref<dailyResult>({
+  inHospitalDailyCostsResultList: [],
+});
+const init = async () => {
+  const { result } = await api.getInHospitalDailyCostList<dailyResult>({
+    patientId: dailyInfoParam.value.patientId,
+    costType: '3',
+  });
+  dailyResList.value = result;
+};
+const detalResult = (val) => {
+  InHospitalCostInfo.value = Object.keys(val).length;
+};
+const gotoListExpenses = (data) => {
+  uni.navigateTo({
+    url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&inpatientNo=${data.inHospitalId}&isHosTotallist='2'`,
+  });
+};
+onLoad(async () => {
+  await init();
+  await detalResult(InHospitalCostInfo);
+});
 </script>
 
-
 <style scoped lang="scss">
+.page {
+  padding-top: 40rpx;
+  //日清单 详情模式 样式
+  .datetime-picker {
+    width: 244rpx;
+    height: 56rpx;
+    font-weight: 600;
+    font-size: 26rpx;
+    background-color: #fff;
+    border-radius: 12rpx;
+    margin-left: 32rpx;
+    text-align: center;
+    line-height: 56rpx;
+    margin-bottom: 16rpx;
+    display: flex;
+    .iconfont {
+      padding-right: 16rpx;
+    }
+  }
+}
 // 步骤样式
 .progress {
   position: relative;
   padding: 0 24rpx 0px 90rpx;
   .right {
     height: 100%;
-    padding-top: 30rpx;
-    .detail-item {
-      margin-top: 16rpx;
+    .dates {
+      padding-top: 10rpx;
+    }
+    .details {
       background: #ffffff;
       border: 1px solid #e6e6e6;
       border-radius: 16rpx;
       padding: 32rpx;
+      margin: 16rpx 0 20rpx;
       display: flex;
-      flex-direction: column;
-
-      .detail-item-dep {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .dep-name {
-        color: #888888;
-        font-size: 28rpx;
-        margin-top: 8rpx;
-      }
-      .date {
-        font-size: 36rpx;
-        font-weight: 600;
-      }
-      .money {
-        font-size: 36rpx;
-      }
-      .iconfont {
-        font-size: 48rpx;
-        margin: auto 0;
-      }
+      justify-content: space-between;
+      align-items: center;
+    }
+    .date {
+      font-size: 36rpx;
+      font-weight: 600;
+    }
+    .details-right {
+      display: flex;
+      align-items: center;
+    }
+    .money {
+      font-size: 36rpx;
+    }
+    .iconfont {
+      font-size: 48rpx;
+      // margin: auto 0;
     }
   }
   .iconfont {
@@ -76,7 +137,7 @@ const tabs = ref([
       position: absolute;
       font-size: 24rpx;
       z-index: 999;
-      top: 40rpx;
+      top: 20rpx;
       left: 38rpx;
     }
   }
@@ -86,7 +147,7 @@ const tabs = ref([
     height: 100%;
     width: 1px;
     left: 45rpx;
-    top: 50rpx;
+    top: 30rpx;
     bottom: auto;
   }
 }
@@ -94,5 +155,8 @@ const tabs = ref([
   .line {
     height: 80%;
   }
+}
+.empty-box {
+  padding-top: 200rpx;
 }
 </style>

@@ -51,19 +51,6 @@ const checkMoney = (item) => {
 const toPay =async () => {
   payOrderParam.value.fee = defalutMoney.value;
  await int();
-
-//     const { patientId } = gStores.userStore.patChoose;
-//     const source = gStores.globalStore.browser.source;
-// const totalFee=  payOrderParam.value.fee
-//     const args = {
-//       businessType: '1',
-//       patientId,
-//       source,
-//       hosId:'1279',
-//       phsOrderSource:3,
-//       totalFee:totalFee
-
-//     };
 const res = await payMoneyOnline({
         phsOrderNo:  payOrder.value.phsOrderNo,
      //  patientId:gStores.userStore.patChoose,
@@ -99,7 +86,6 @@ const int = async () => {
     patientId: payOrderParam.value.patientId,
   });
   payOrder.value = result;
-  console.log(payOrder.value, ' payOrder.value');
 };
 onLoad(() => {
   setData();

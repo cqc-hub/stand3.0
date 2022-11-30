@@ -35,10 +35,14 @@
     <view class="card-detail">
       <view class="card-detail-item">
         <text class="name">已预交金额 </text>
-        <view class="records" @click="toPayRecord">
-          <text class="text">查看记录</text>
-          <view class="iconfont right">&#xe66b;</view>
+        <view class="record">
+          <view class="triangle-left"></view>
+          <view class="records" @click="toPayRecord" v-if="props.isQueryPreRecord=='1'">
+            <text class="text">查看记录</text>
+            <view class="iconfont right">&#xe66b;</view>
+          </view>
         </view>
+
         <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
       </view>
       <view class="card-detail-item">
@@ -72,7 +76,9 @@ import {
   getInHospitalInfoResult,
 } from '../utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
-
+const props = defineProps<{
+  isQueryPreRecord?: string;
+}>();
 const gStores = new GStores();
 const isLoad = ref(false);
 const loadImg = () => {
@@ -202,6 +208,17 @@ onLoad(() => {
     .name {
       color: #888;
       font-size: 32rpx;
+    }
+    .triangle-left {
+      margin: auto 0;
+      width: 0;
+      height: 2rpx;
+      border-top: 10rpx solid transparent;
+      border-right: 16rpx solid #f3f3f3;
+      border-bottom: 10rpx solid transparent;
+    }
+    .record {
+      display: flex;
     }
     .records {
       width: 152rpx;

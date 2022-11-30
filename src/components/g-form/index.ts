@@ -16,8 +16,9 @@ export interface ISelectOptions {
 export interface hosParam {
   inPatientPrePay: string;
   isHosDaylist?: string;
-  isHosTotallist?: string;
-  patientTab: nameList[];
+  isHosTotallist: string;
+  patientTab?: nameList[];
+  isQueryPreRecord?: string;
 }
 export interface nameList {
   headerName?: string;
