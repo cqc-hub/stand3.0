@@ -9,7 +9,7 @@
           @get-list="getHosList"
         />
       </view>
-      <g-choose-pat />
+      <g-choose-pat @choose-pat="getOutPatientHosList"  />
     </view>
 
     <view class="header-btn flex-normal">
@@ -104,7 +104,7 @@
       checkOutHosList.value.splice(idx, 1);
     }
   };
-
+  
   const nextStep = () => {
     setLocalStorage({
       [CACHE_KEY]: JSON.stringify(checkOutHosList.value),
