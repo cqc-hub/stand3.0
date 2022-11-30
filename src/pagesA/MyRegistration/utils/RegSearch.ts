@@ -28,6 +28,7 @@ export interface IDocResItem {
   schQukCategor: string;
   specialClinicName: string;
   docJobName: string;
+  deptName: string;
 }
 
 export interface IDeptItem {
