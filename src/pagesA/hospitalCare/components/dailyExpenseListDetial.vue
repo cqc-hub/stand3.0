@@ -124,7 +124,8 @@ const init = async () => {
     hospitalId: param.value.hospitalId,
     costDay: costDate.value,
     costType: costType.value,
-    patientId: '10763642',
+    patientId: gStores.userStore.patChoose.patientId,
+    // patientId: '10763642',
   };
   const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
     params

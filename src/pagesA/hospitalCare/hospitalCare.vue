@@ -2,12 +2,6 @@
   <view class="page">
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat @choosePat="choosePat" />
-    <!-- <block v-if="expressList.length > 0">
-      <expressItem :expressList="expressList"></expressItem>
-    </block>
-    <block class="empty-box" v-else>
-      <page-state index="1" />
-    </block> -->
 
     <view class="tab-box">
       <g-tabs v-model:value="tabCurrent" :tabs="resultHos.patientTab" :line-scale="0.8" field="headerName" all-blod @change="tabChange" />
@@ -18,16 +12,6 @@
       <dailyExpenseList v-show="tabStatus == 1" :isHosDaylist=" resultHos.isHosDaylist"></dailyExpenseList>
       <totalList v-show="tabStatus == 2" :isHosTotallist="resultHos.isHosTotallist"></totalList>
     </view>
-
-    <!-- <swiper
-      :current="tabCurrent"
-      @change="(e) => tabChange(e.detail.current)"
-      class="container"
-    >
-      <swiper-item v-for="(tab, i) in tabs" :key="tab.typeId">
-        <view class="container-scroll"> </view>
-      </swiper-item>
-    </swiper> -->
   </view>
 </template>
 
@@ -40,7 +24,6 @@ import dailyExpenseList from './components/dailyExpenseList.vue';
 import totalList from './components/totalList.vue';
 import { GStores, ServerStaticData } from '@/utils';
 import { hosParam } from '@/components/g-form';
-import { log } from 'console';
 const gStores = new GStores();
 const tabCurrent = ref(0);
 const tabStatus = ref(0);

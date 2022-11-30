@@ -267,10 +267,10 @@ export class ServerStaticData {
 
     if (!sysTermsHos) {
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PATIENT__SERVICE_CONFIG',
+        paramCode: 'PATIENT_SERVICE_CONFIG',
       });
 
-      const list = result && result.PATIENT__SERVICE_CONFIG;
+      const list = result && result.PATIENT_SERVICE_CONFIG;
 
       if (list) {
         // const res = JSON.parse(list).map((item) => {
