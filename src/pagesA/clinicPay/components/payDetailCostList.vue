@@ -77,7 +77,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { TCostList } from '../utils/clinicPayDetail';
+  import { type TCostList } from '../utils/clinicPayDetail';
 
   defineProps<{
     list: TCostList;

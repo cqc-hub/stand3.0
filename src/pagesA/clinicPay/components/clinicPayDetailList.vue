@@ -39,13 +39,6 @@
             </view>
           </view>
 
-          <view class="row flex-normal">
-            <view class="row-label color-888">就诊医院</view>
-            <view class="row-value g-break-word color-444">
-              {{ item.hosName }}
-            </view>
-          </view>
-
           <view v-if="isListShowClinicType" class="row flex-normal">
             <view class="row-label color-888">门诊类型</view>
             <view class="row-value g-break-word color-444">
@@ -54,9 +47,13 @@
           </view>
 
           <view class="row flex-normal">
-            <view class="row-label color-888">就诊医生</view>
-            <view class="row-value g-break-word color-444">
-              {{ item.docName }}
+            <view class="row-label color-888 text-no-wrap">就诊医生</view>
+            <view class="row-value g-break-word color-444 text-ellipsis">
+              <text class="g-split-line mr12 pr12">{{ item.docName }}</text>
+              <text>
+                {{ item.hosName }}
+                {{ (item._clinicType && `(${item._clinicType})`) || '' }}
+              </text>
             </view>
           </view>
 
@@ -167,6 +164,10 @@
           margin-bottom: 8rpx;
           .row-label {
             width: 130rpx;
+          }
+
+          .row-value {
+            flex: 1;
           }
         }
       }

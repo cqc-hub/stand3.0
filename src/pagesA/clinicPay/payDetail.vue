@@ -84,7 +84,9 @@
           </block>
         </view>
 
-        <g-flag :typeFg="props.payState === '0' ? '38' : '0'" isShowFgTip />
+        <view class="mt24">
+          <g-flag :typeFg="props.payState === '0' ? '38' : '0'" isShowFgTip aaa />
+        </view>
       </view>
     </view>
 

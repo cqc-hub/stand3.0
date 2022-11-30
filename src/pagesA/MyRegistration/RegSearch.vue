@@ -118,7 +118,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, nextTick } from 'vue';
   import { deQueryForUrl } from '@/common';
   import {
     UseRegSearch,
@@ -162,7 +162,9 @@
     isDelHisShow.value = false;
 
     clearSearchHistory();
-    r.resetResList();
+    setTimeout(() => {
+      r.resetResList();
+    }, 200);
   };
 
   const goDocDetail = (e) => {

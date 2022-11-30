@@ -29,7 +29,7 @@
       <view
         class="uni-calendar-item__weeks-box-text uni-calendar-item__weeks-box-text-disable uni-calendar-item--checked-text g-flex-rc-cc item-content"
       >
-        <view>{{ addPlaceHolder(weeks.date) }}</view>
+        <view>{{ addPlaceHolder(weeks.date, weeks) }}</view>
         <view
           :class="{
             'item-content-order-active': isHasOrder,
@@ -103,9 +103,13 @@
       handleMousemove(weeks) {
         this.$emit('handleMouse', weeks);
       },
-      addPlaceHolder(text) {
-        const _text = '00' + text;
-        return _text.slice((text + '').length);
+      addPlaceHolder(text, weeks) {
+        if (weeks.isDay) {
+          return '今天';
+        } else {
+          const _text = '00' + text;
+          return _text.slice((text + '').length);
+        }
       },
     },
   };

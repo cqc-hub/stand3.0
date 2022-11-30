@@ -23,21 +23,9 @@
             </view>
 
             <view class="doc-info-introduce-goodat text-ellipsis">
-              <!-- <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
-
-            <block v-else>
-              <text
-                :class="{
-                  'doc-job-name': item.docJobName,
-                }"
-              >
-                {{ item.docJobName }}
+              <text v-if="item.deptName">
+                {{ item.deptName }}
               </text>
-
-              <text>
-                {{ item.docTitleName }}
-              </text>
-            </block> -->
             </view>
           </view>
         </view>
