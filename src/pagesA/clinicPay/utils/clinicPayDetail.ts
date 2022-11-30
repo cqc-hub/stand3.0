@@ -297,7 +297,7 @@ export const usePayPage = () => {
     });
   };
 
-  const getListData = async (isReset = false) => {
+  const getListData = async (isReset = true) => {
     if (isReset) {
       unPayList.value = [];
       payedList.value = [];

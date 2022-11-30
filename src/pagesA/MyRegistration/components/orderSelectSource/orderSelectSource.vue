@@ -35,7 +35,6 @@
           :class="{
             'container-all-day': selectSchInfo.amPmResults,
             'container-href-day': !selectSchInfo.amPmResults,
-            'container-padding': !selectSchInfo.amPmResults,
           }"
           :scroll-into-view="scrollToView"
           scroll-y
@@ -44,69 +43,90 @@
             v-if="selectSchInfo.amPmResults && refreshList"
             class="animate__animated animate__fadeIn"
           >
-            <view
-              v-for="(_item, idx) in selectSchInfo.amPmResults"
-              :key="getCollapseOrderSourceListKey(_item)"
-              :id="'collapse-item-' + idx"
-              class="collapse-item g-border-bottom"
-            >
-              <g-collapse
-                :border="false"
-                :isTitleSticky="collapseOpens['' + idx + tabCurrent]"
-                :disabled="selectSchInfo.amPmResults.length === 1"
-                @change="(b) => collapseChange(idx, b, _item)"
-                titlePadding="0 32rpx"
-                activebg="transparent"
-                titleBackGroundColor="#fff"
-                accordionId="order"
-                accordion
-                ref="refCollapse"
+            <block v-if="selectSchInfo.amPmResults.length">
+              <view
+                v-for="(_item, idx) in selectSchInfo.amPmResults"
+                :key="getCollapseOrderSourceListKey(_item)"
+                :id="'collapse-item-' + idx"
+                class="collapse-item g-border-bottom"
               >
-                <template #title>
-                  <view :class="{}" class="collapse-title f32 g-bold">
-                    <text class="mr12">
-                      {{ _item.schQukCategor || _item.categorName }}
-                    </text>
-                    <text>{{ _item.fee }}元</text>
-                  </view>
-                </template>
+                <g-collapse
+                  :border="false"
+                  :isTitleSticky="collapseOpens['' + idx + tabCurrent]"
+                  :disabled="selectSchInfo.amPmResults.length === 1"
+                  @change="(b) => collapseChange(idx, b, _item)"
+                  titlePadding="0 32rpx"
+                  activebg="transparent"
+                  titleBackGroundColor="#fff"
+                  accordionId="order"
+                  accordion
+                  ref="refCollapse"
+                >
+                  <template #title>
+                    <view :class="{}" class="collapse-title f32 g-bold">
+                      <text
+                        v-if="_item.schQukCategor || _item.categorName"
+                        class="mr12"
+                      >
+                        {{ _item.schQukCategor || _item.categorName }}
+                      </text>
+                      <text v-if="_item.fee">{{ _item.fee }}元</text>
+                    </view>
+                  </template>
 
-                <template #title-next>
-                  <view class="collapse-item-title-next" />
-                </template>
+                  <template #title-next>
+                    <view class="collapse-item-title-next" />
+                  </template>
 
-                <template #default>
-                  <view class="collapse-content">
-                    <orderSelectSourceList
-                      :column="column"
-                      :orderSourceList="
-                        collapseOrderSourceList[
-                          getCollapseOrderSourceListKey(_item)
-                        ]
-                      "
-                      :value="value"
-                      :isBlur="isBlur"
-                      @item-click="itemClick"
-                      itemBgc="#fff"
-                      disabledActiveStyle
-                    />
-                  </view>
-                </template>
-              </g-collapse>
+                  <template #default>
+                    <view class="collapse-content">
+                      <orderSelectSourceList
+                        :column="column"
+                        :orderSourceList="
+                          collapseOrderSourceList[
+                            getCollapseOrderSourceListKey(_item)
+                          ]
+                        "
+                        :value="value"
+                        :isBlur="isBlur"
+                        @item-click="itemClick"
+                        itemBgc="#fff"
+                        disabledActiveStyle
+                      />
+                    </view>
+                  </template>
+                </g-collapse>
+              </view>
+            </block>
+
+            <view v-else class="empty-list1">
+              <g-empty :current="1" text="暂无号源" />
             </view>
           </view>
 
           <block v-else>
-            <view class="order-info">
-              <view>{{ selectSchInfo.docName }}</view>
+            <view class="fix-top">
+              <view class="order-info g-border-bottom">{{ selectSchInfo.ampmName }}</view>
+              <view class="order-info mb24">
+                <!-- <view>{{ selectSchInfo.docName }}</view>
               <view>{{ selectSchInfo.schDate }}</view>
-              <view>{{ selectSchInfo.fee }}元</view>
+              <view>{{ selectSchInfo.fee }}元</view> -->
+
+                <text class="mr24">
+                  {{
+                    selectSchInfo.schQukCategor ||
+                    `${selectSchInfo.deptName}/${selectSchInfo.categorName}`
+                  }}
+                </text>
+
+                <text>{{ selectSchInfo.fee }}元</text>
+              </view>
             </view>
 
             <view class="container-source">
               <view
                 v-if="!orderSourceList.length && isComplete && refreshList"
-                class="empty-list"
+                class="empty-list1"
               >
                 <g-empty :current="1" text="暂无号源" />
               </view>
@@ -117,6 +137,7 @@
                 :value="value"
                 :isBlur="isBlur"
                 @item-click="itemClick"
+                itemBgc="#fff"
                 disabledActiveStyle
               />
             </view>
@@ -251,6 +272,7 @@
     emits('am-change', props.selectSchInfos[e]);
     resetData();
     refreshList.value = false;
+    console.log(props.selectSchInfos[e]);
 
     setTimeout(() => {
       refreshList.value = true;
@@ -303,9 +325,7 @@
 
 <style lang="scss" scoped>
   .container {
-    &.container-padding {
-      padding: 0 32rpx;
-    }
+    background-color: var(--hr-neutral-color-1);
 
     &.container-href-day {
       max-height: calc(var(--h-popup-max-height) - 90rpx);
@@ -316,20 +336,28 @@
       height: calc(var(--h-popup-max-height) - 90rpx);
     }
 
+    .fix-top {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+    }
+
     .order-info {
       font-weight: 600;
-      padding: 32rpx 0;
       display: flex;
+      background-color: #fff;
+      padding: 32rpx;
 
       > view {
-        margin-right: 24rpx;
+        padding-right: 24rpx;
       }
     }
 
     .container-source {
       // #ifdef MP-WEIXIN
-      width: calc(100% - 64rpx);
+      // width: calc(100% - 64rpx);
       // #endif
+      padding: 0 32rpx;
     }
 
     .empty-list {
@@ -379,5 +407,10 @@
     //   background-color: #fff;
     //   position: absolute;
     // }
+  }
+
+  .empty-list1 {
+    position: relative;
+    top: 200rpx;
   }
 </style>

@@ -15,7 +15,7 @@
             {{ warnSchStateMap[item.schState] }}
           </button>
 
-          <button class="btn klklk btn-primary btn-reg">挂号</button>
+          <button v-else class="btn klklk btn-primary btn-reg">挂号</button>
         </view>
       </view>
 
@@ -25,7 +25,13 @@
         </view>
 
         <view class="color-888 text-no-wrap">
-          挂{{ item.numCount }} 个 余{{ item.numRemain }}个
+          <block v-if="item.numHadReg">
+            挂{{ item.numHadReg }} 个 余{{ item.numRemain }}个
+          </block>
+
+          <block v-else>
+            总{{ item.numCount }} 个 余{{ item.numRemain }}个
+          </block>
         </view>
       </view>
     </view>

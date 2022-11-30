@@ -193,7 +193,7 @@
           this.$emit('change', this.isShow);
         }
 
-        if (this.isShow) {
+        if (this.isShow && this.accordion) {
           uni.$emit('_close_collapse', this.accordionId);
         }
       },
