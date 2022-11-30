@@ -34,7 +34,7 @@ const globalGl = {
   addPersonUrl: systemInfo.isSearchInHos
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',
-   isOpenDes
+  isOpenDes,
 };
 
 export default globalGl;

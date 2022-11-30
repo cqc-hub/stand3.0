@@ -1,13 +1,13 @@
 <template>
   <!-- 预交金代缴信息页面 -->
-  <view class="box">
+  <view class="box" v-if="Obj==false">
     <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
       <view class="user">
         <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
 
         <view class="user-info">
           <text class="user-info-name">
-            {{ gStores.userStore.patChoose.patientName }}</text>
+            {{ hosInfoResObj.patientName }}</text>
           <text class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
         </view>
 
@@ -61,6 +61,10 @@
       <view class="button" @click="toPayPage">预交费用</view>
     </view>
   </view>
+  <view class="empty-box" v-else>
+    <g-empty :current="1" />
+  </view>
+
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -70,15 +74,15 @@ import api from '@/service/api';
 import {
   getInHospitalInfoParam,
   getInHospitalInfoResult,
-} from '../utils/inpatientInfo';
+} from './utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
-
+const Obj = ref();
 const gStores = new GStores();
 const isLoad = ref(false);
 const loadImg = () => {
   isLoad.value = true;
 };
-const hosInfoParam = ref({
+const hosInfoParam = ref<getInHospitalInfoParam>({
   cardNumber: '',
   hosId: '1279',
   idCard: '',
@@ -103,12 +107,15 @@ const toPayRecord = () => {
 };
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
-    hosId: hosInfoParam.value.hosId,
-    patientId: hosInfoParam.value.patientId,
+    patientName: hosInfoParam.value.patientName,
+    patientPhone: hosInfoParam.value.patientPhone,
   });
   hosInfoResObj.value = result;
+  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
-onLoad(() => {
+onLoad((val) => {
+  hosInfoParam.value.patientName = val.patientName;
+  hosInfoParam.value.patientPhone = val.patientPhone;
   init();
 });
 </script>
@@ -240,5 +247,8 @@ onLoad(() => {
     line-height: 96rpx;
     margin-top: 28rpx;
   }
+}
+.empty-box {
+  padding-top: 200rpx;
 }
 </style>

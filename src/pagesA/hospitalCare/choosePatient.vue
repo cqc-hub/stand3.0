@@ -6,55 +6,67 @@
       <view class="input-item border">
         <text>就诊人姓名</text>
         <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" v-model="hosInfoParam.patientName" placeholder="请输入" />
+        <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
       </view>
       <view class="input-item">
         <text>手机号码</text>
-        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="number" v-model="hosInfoParam.patientPhone" placeholder="请输入" />
+        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="idcard" v-model="hosInfoParam.patientPhone"
+               @input="checkPatientPhone(hosInfoParam.patientPhone)" placeholder="请输入" />
       </view>
 
     </view>
-    <button :disabled="hosInfoParam.patientName==''?true:false"
-            :class="hosInfoParam.patientName!=''||hosInfoParam.patientPhone!=''?'activeSubmitBtn':'submitBtn'" @click="toSearch">查询
+    <button :disabled="hosInfoParam.patientName!=''&&hosInfoParam.patientPhone!=''&& phoneStatus==true?false:true"
+            :class="hosInfoParam.patientName!=''&&hosInfoParam.patientPhone!=''&& phoneStatus==true?'activeSubmitBtn':'submitBtn'"
+            @click="toSearch">查询
     </button>
+    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getAvatar, isAreaProgram } from '@/stores';
+import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
 import { getInHospitalInfoResult } from './utils/inpatientInfo';
+import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import { onLoad } from '@dcloudio/uni-app';
+import { decryptDes } from '@/common/des';
+import { assertTypeofTypeAnnotation } from '@babel/types';
+const phoneStatus = ref();
 const hosInfoParam = ref({
-  cardNumber: '',
-  hosId: '1279',
-  idCard: '',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
   patientName: '',
   patientPhone: '',
-  phoneNumber: '',
 });
-const hosInfoResObj = ref<getInHospitalInfoResult>(
-  {} as getInHospitalInfoResult
-);
+const userSore = useUserStore();
+const gStores = new GStores();
+const checkPatientPhone = (val) => {
+  phoneStatus.value = /^1[3-9]\d{9}$/.test(val);
+
+  return /^1[3-9]\d{9}$/.test(val);
+};
 const toSearch = () => {
   uni.navigateTo({
-    url: `choosePatientInfo`,
+    url: `choosePatientInfo?patientName=${hosInfoParam.value.patientName}&patientPhone=${hosInfoParam.value.patientPhone}`,
   });
 };
-
-const init = async () => {
-  const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
-    hosId: hosInfoParam.value.hosId,
-    patientId: hosInfoParam.value.patientId,
-  });
-  hosInfoResObj.value = result;
+// 就诊人
+const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+const chooseAction = () => {
+  if (actionSheet.value) {
+    actionSheet.value.show();
+  }
 };
-onLoad(() => {
-  init();
-});
+const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+  const key = 'hrtest22';
+  const phone = item.cellPhoneNumber;
+  const message = decryptDes(phone, key);
+  gStores.userStore.updatePatChoose(item);
+  hosInfoParam.value.patientName = item.patientName;
+  phoneStatus.value = /^1[3-9]\d{9}$/.test(message);
+  hosInfoParam.value.patientPhone = message;
+};
+onLoad(() => {});
 </script>
 
 <style scoped lang="scss">
@@ -85,6 +97,7 @@ onLoad(() => {
       }
     }
     .uni-input {
+      width: 250rpx;
     }
   }
   .submitBtn {
@@ -106,6 +119,17 @@ onLoad(() => {
     line-height: 96rpx;
     margin-top: 120rpx;
     font-size: 36rpx;
+  }
+  .pat-choose {
+    width: 180rpx;
+    height: 56rpx;
+    border-radius: 28rpx;
+    background-color: #e9f0ff;
+    color: #296fff;
+    font-weight: 600;
+    font-size: 26rpx;
+    line-height: 56rpx;
+    text-align: center;
   }
 }
 </style>

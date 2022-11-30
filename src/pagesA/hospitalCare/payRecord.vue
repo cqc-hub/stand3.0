@@ -1,7 +1,7 @@
 <template>
   <!-- 日费用清单 -->
-  <view>
-    <view class="progress" v-for="(item,index) in payResList " :key="index">
+  <view class="page">
+    <view class="progress" v-for="(item,index) in payResList.hospitalPayResultList " :key="index">
       <view class="right">
         <view class="date">{{item.date}}</view>
         <view class="detail" v-for="(i,j) in item.hospitalPay" :key="j">
@@ -29,22 +29,29 @@
 import { ref, watch } from 'vue';
 import { GStores } from '@/utils';
 import api from '@/service/api';
-import { dailyResult } from './utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
+import { hospitalPayResult } from './utils/inpatientInfo';
+import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 const gStores = new GStores();
 const payParam = ref({
   hosId: '1279',
   patientId: '10763642',
   // patientId: gStores.userStore.patChoose.patientId,
 });
-const payResList = ref<dailyResult>({} as dailyResult);
+const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const init = async () => {
-  const { result } = await api.getInHospitalPayInfo<dailyResult>({
+  const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
     patientId: payParam.value.patientId,
     hosId: payParam.value.hosId,
   });
   payResList.value = result;
 };
+//下拉刷新
+onPullDownRefresh(() => {
+  setTimeout(() => {
+    uni.stopPullDownRefresh();
+    init();
+  }, 1000);
+});
 onLoad(() => {
   init();
 });
@@ -52,6 +59,9 @@ onLoad(() => {
 
 
 <style scoped lang="scss">
+.page {
+  padding-bottom: 40rpx;
+}
 // 步骤样式
 .progress {
   position: relative;
@@ -75,13 +85,6 @@ onLoad(() => {
       font-size: 36rpx;
       font-weight: 600;
       margin-bottom: 8rpx;
-      // .date {
-      //   font-size: 36rpx;
-      //   font-weight: 600;
-      // }
-      // .money {
-      //   font-size: 36rpx;
-      // }
     }
     .detail-date {
       color: #888;
