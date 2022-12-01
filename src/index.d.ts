@@ -18,7 +18,8 @@ declare var requirePlugin: any;
  *   - hospitalId 医院机构id
  *
  * @alipayPid-支付宝云监控的pid
- * @ isOpenOcr-支付宝是否注册ocr插件 需要和就诊人配置接口同时设置
+ * @isOpenOcr-支付宝是否注册ocr插件 需要和就诊人配置接口同时设置
+ * @isHideHomeLogo-是否隐藏首页的底部herenLogo
  */
 interface ISystemGlobalItem {
   wxAppid: string;
@@ -36,6 +37,7 @@ interface ISystemGlobalItem {
   isStartComeTest:boolean;
   alipayPid: string;
   isOpenOcr: boolean;
+  isHideHomeLogo: boolean;
 }
 
 interface ISystemGlobalConfig {
