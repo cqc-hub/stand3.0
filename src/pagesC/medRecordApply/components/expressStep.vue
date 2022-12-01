@@ -9,9 +9,7 @@
         <view class="row-content flex-between">
           <view class="text-ellipsis color-blue">
             <text class="mr16 title">
-              {{
-                pointNow.desc === '等待快递员揽件' ? '已发货' : pointNow.title
-              }}
+              {{ pointNow.title }}
             </text>
             <text class="f-xs">{{ pointNow.date }}</text>
           </view>

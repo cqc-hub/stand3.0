@@ -12,9 +12,9 @@
         <!-- <view class="no-more g-flex-rc-cc color-888 f24">没有更多了</view> -->
       </block>
 
-      <view class="empty-list" v-else-if="isComplete">
+      <!-- <view class="empty-list" v-else-if="isComplete">
         <g-empty :current="1" />
-      </view>
+      </view> -->
     </scroll-list>
 
     <g-message />
@@ -42,6 +42,7 @@
   const scrollOpt = ref({
     auto: true,
     size: 1,
+    emptyText: '暂未查到相关信息'
   });
 
   const isComplete = ref(false);
@@ -61,6 +62,7 @@
         });
 
       if (result && result.length) {
+        // result.length = 0
         result.map((o) => {
           const { expressParam, acceptTime, outInfo } = o;
 
