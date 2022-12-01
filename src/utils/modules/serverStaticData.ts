@@ -289,7 +289,7 @@ export class ServerStaticData {
 
         return res;
       } else {
-        return {};
+        return <any>{};
       }
     } else {
       return sysTermsHos;

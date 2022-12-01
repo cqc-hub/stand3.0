@@ -298,7 +298,7 @@
   //获取配置数据
   const getHomeConfig = async () => {
     skeletonProps.loading = true;
-    const homeConfig = await ServerStaticData.getHomeConfig("home");
+    const homeConfig = await ServerStaticData.getHomeConfig('home');
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
       // 新增公告展示判断 showFlag为1展示

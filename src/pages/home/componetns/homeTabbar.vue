@@ -60,23 +60,24 @@
     right: 0;
     left: 0;
     background-color: var(--h-color-white);
-    // padding: 32rpx 32rpx 68rpx;
     height: 180rpx;
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
+    padding-top: 20rpx;
+
 
     .tabbar-container {
       display: flex;
       justify-content: space-around;
       height: 100%;
+      flex: 1;
 
       .tabbar-item {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        margin-top: 20rpx;
 
         position: relative;
         flex: 1;
