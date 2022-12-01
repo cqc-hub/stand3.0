@@ -106,6 +106,7 @@ const init = async () => {
     patientPhone: hosInfoParam.value.patientPhone,
   });
   hosInfoResObj.value = result;
+  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
 onLoad(async (val) => {
   hosInfoParam.value.patientName = val.patientName;
