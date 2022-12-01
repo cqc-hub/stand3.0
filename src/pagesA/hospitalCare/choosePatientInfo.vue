@@ -77,24 +77,19 @@ import {
 } from './utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
 const Obj = ref();
+const hosInfoResObj = ref<getInHospitalInfoResult>(
+  {} as getInHospitalInfoResult
+);
+const hosInfoParam = ref<getInHospitalInfoParam>({
+  patientName: '',
+  patientPhone: '',
+});
+
 const gStores = new GStores();
 const isLoad = ref(false);
 const loadImg = () => {
   isLoad.value = true;
 };
-const hosInfoParam = ref<getInHospitalInfoParam>({
-  cardNumber: '',
-  hosId: '1279',
-  idCard: '',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
-  patientName: '',
-  patientPhone: '',
-  phoneNumber: '',
-});
-const hosInfoResObj = ref<getInHospitalInfoResult>(
-  {} as getInHospitalInfoResult
-);
 const toPayPage = () => {
   uni.navigateTo({
     url: `paymentPage`,
@@ -111,12 +106,11 @@ const init = async () => {
     patientPhone: hosInfoParam.value.patientPhone,
   });
   hosInfoResObj.value = result;
-  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
-onLoad((val) => {
+onLoad(async (val) => {
   hosInfoParam.value.patientName = val.patientName;
   hosInfoParam.value.patientPhone = val.patientPhone;
-  init();
+  await init();
 });
 </script>
 

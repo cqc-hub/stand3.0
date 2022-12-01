@@ -67,7 +67,7 @@
 
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { getAvatar, isAreaProgram } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
@@ -116,6 +116,14 @@ const init = async () => {
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
+watch(
+  () => gStores.userStore.patChoose.patientId,
+  () => {
+    if (gStores.userStore.patChoose.patientId) {
+      init();
+    }
+  }
+);
 onLoad(() => {
   init();
 });

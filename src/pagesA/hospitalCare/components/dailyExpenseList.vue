@@ -75,7 +75,14 @@ const gotoListExpenses = (data) => {
     url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}&isHosDaylist='1'`,
   });
 };
-
+watch(
+  () => gStores.userStore.patChoose.patientId,
+  () => {
+    if (gStores.userStore.patChoose.patientId) {
+      init();
+    }
+  }
+);
 onLoad(async () => {
   await init();
   await detalResult(InHospitalCostInfo);

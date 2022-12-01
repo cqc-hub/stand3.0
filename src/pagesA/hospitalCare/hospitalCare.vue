@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 // import api from '@/api/api';
+import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
 import { ref, watch } from 'vue';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import inpatientInfo from './components/inpatientInfo.vue';
@@ -25,6 +26,7 @@ import totalList from './components/totalList.vue';
 import { GStores, ServerStaticData } from '@/utils';
 import { hosParam } from '@/components/g-form';
 const gStores = new GStores();
+const patList = ref(gStores.userStore.patChoose);
 const tabCurrent = ref(0);
 const tabStatus = ref(0);
 const resultHos = ref<hosParam>({
@@ -35,7 +37,10 @@ const resultHos = ref<hosParam>({
   isQueryPreRecord: '',
 });
 //切换就诊人
-const choosePat = () => {};
+const choosePat = ({ item }: { item: IPat; number: number }) => {
+  patList.value = item;
+  console.log(item, patList.value, 'patList');
+};
 const tabChange = (e: number) => {
   tabStatus.value = e;
   tabCurrent.value = e;
@@ -50,7 +55,11 @@ const setData = async () => {
   const result = await ServerStaticData.getSystemHospital();
   resultHos.value = result;
 };
-onLoad(() => {
+
+onLoad(async () => {
+  console.log(patList, 'patList');
+
+  // // await gStores.userStore.getPatList();
   setData();
 });
 </script>

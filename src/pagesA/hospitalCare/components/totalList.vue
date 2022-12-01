@@ -69,6 +69,14 @@ const gotoListExpenses = (data) => {
     url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&inpatientNo=${data.inHospitalId}&isHosTotallist='2'`,
   });
 };
+watch(
+  () => gStores.userStore.patChoose.patientId,
+  () => {
+    if (gStores.userStore.patChoose.patientId) {
+      init();
+    }
+  }
+);
 onLoad(async () => {
   await init();
   await detalResult(InHospitalCostInfo);
