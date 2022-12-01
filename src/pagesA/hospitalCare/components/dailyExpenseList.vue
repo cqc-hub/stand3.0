@@ -1,7 +1,7 @@
 <template>
   <!-- 日费用清单 -->
   <view>
-    <view class="page" v-if="props.isHosDaylist=='2'&&dailyResList.inHospitalDailyCostsResultList.length>0">
+    <view class="page" v-if="props.isHosDaylist=='1'&&dailyResList.inHospitalDailyCostsResultList.length>0">
       <view class="progress" v-for="(item,index) in dailyResList.inHospitalDailyCostsResultList" :key="index">
         <view class="right">
           <view class="dates">{{item.date}}</view>
@@ -20,7 +20,7 @@
       </view>
     </view>
 
-    <view class="page" v-if="props.isHosDaylist=='1'&&InHospitalCostInfo>0">
+    <view class="page" v-if="props.isHosDaylist=='2'&&InHospitalCostInfo>0">
       <view class="datetime-picker">
         <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
         <view class="iconfont down">&#xe6e8;</view>
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { GStores, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
@@ -46,6 +46,7 @@ import dayjs from 'dayjs';
 const gStores = new GStores();
 const props = defineProps<{
   isHosDaylist?: string;
+  tabCurrent?: number;
 }>();
 const InHospitalCostInfo = ref(0);
 const timestamp = new Date().getTime();
@@ -77,10 +78,12 @@ const gotoListExpenses = (data) => {
 };
 //下拉刷新
 onPullDownRefresh(() => {
-  setTimeout(() => {
-    uni.stopPullDownRefresh();
-    init();
-  }, 1000);
+  if (props.tabCurrent == 1) {
+    setTimeout(() => {
+      uni.stopPullDownRefresh();
+      init();
+    }, 1000);
+  }
 });
 watch(
   () => gStores.userStore.patChoose.patientId,
@@ -90,7 +93,7 @@ watch(
     }
   }
 );
-onLoad(async () => {
+onMounted(async () => {
   await init();
   await detalResult(InHospitalCostInfo);
 });
