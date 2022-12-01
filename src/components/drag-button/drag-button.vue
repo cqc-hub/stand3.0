@@ -14,10 +14,20 @@
         <text>{{ text }}</text>
       </slot>
     </view>
+    <view
+      :class="{
+        'mask-active': maskActive,
+      }"
+      class="mask"
+      @touchmove.stop.prevent="() => {}"
+    ></view>
   </view>
 </template>
 
 <script>
+  import { setLocalStorage, getLocalStorage } from '@/common';
+
+  const DRAG_LOCATION_KEY = 'DRAG_LOCATION_KEY';
   export default {
     name: 'drag-button',
     props: {
@@ -34,6 +44,16 @@
         type: Boolean,
         default: false,
       },
+
+      zid: {
+        type: String,
+        default: '',
+      },
+
+      edge: {
+        type: Number,
+        default: 10,
+      },
     },
     data() {
       return {
@@ -46,8 +66,8 @@
         windowWidth: 0,
         windowHeight: 0,
         isMove: true,
-        edge: 10,
         text: '按钮',
+        maskActive: true,
       };
     },
     mounted() {
@@ -62,7 +82,6 @@
       if (sys.windowTop) {
         this.windowHeight += sys.windowTop;
       }
-      console.log(sys);
 
       const query = uni.createSelectorQuery().in(this);
       query
@@ -70,10 +89,17 @@
         .boundingClientRect((data) => {
           this.width = data.width;
           this.height = data.height;
-          this.offsetWidth = data.width / 2;
+          // this.offsetWidth = data.width / 2;
           this.offsetHeight = data.height / 2;
-          this.left = this.windowWidth - this.width - this.edge;
-          this.top = this.windowHeight - this.height - this.edge;
+
+          const hisLocation = getLocalStorage(DRAG_LOCATION_KEY + this.zid);
+          if (hisLocation) {
+            this.left = hisLocation.left;
+            this.top = hisLocation.top;
+          } else {
+            this.left = this.windowWidth - this.width - this.edge;
+            this.top = this.windowHeight - this.height - this.edge;
+          }
         })
         .exec();
     },
@@ -82,6 +108,7 @@
         this.$emit('btnClick');
       },
       touchstart(e) {
+        this.maskActive = false;
         this.$emit('btnTouchstart');
       },
       touchmove(e) {
@@ -112,6 +139,8 @@
         }
       },
       touchend(e) {
+        this.maskActive = true;
+
         if (this.isDock) {
           let edgeRigth = this.windowWidth - this.width - this.edge;
 
@@ -125,6 +154,13 @@
         this.isMove = false;
 
         this.$emit('btnTouchend');
+
+        setLocalStorage({
+          [DRAG_LOCATION_KEY + this.zid]: {
+            top: this.top,
+            left: this.left,
+          },
+        });
       },
     },
   };
@@ -135,18 +171,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 6upx rgba(0, 0, 0, 0.4);
-    color: $uni-text-color-inverse;
-    width: 80upx;
-    height: 80upx;
-    border-radius: 50%;
-    font-size: $uni-font-size-sm;
     position: fixed;
     z-index: 999999;
 
     &.transition {
       transition: left 0.3s ease, top 0.3s ease;
+    }
+  }
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    // pointer-events: none;
+    // -webkit-user-drag: none;
+
+    &.mask-active {
+      pointer-events: none;
     }
   }
 </style>

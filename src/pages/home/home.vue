@@ -1,7 +1,5 @@
 <template>
   <view class="home">
-    <!-- <drag-button isDock scrollY /> -->
-
     <scroll-view class="scroll-page" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"

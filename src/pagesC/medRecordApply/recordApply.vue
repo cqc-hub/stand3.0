@@ -144,8 +144,8 @@
     isComplete.value = true;
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
-      // patientId,
-      patientId: 322989943,
+      patientId,
+      // patientId: 322989943,
       type: '1',
       hosId: hosId.value,
     };

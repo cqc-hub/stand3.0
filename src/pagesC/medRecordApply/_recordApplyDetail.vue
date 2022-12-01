@@ -184,6 +184,7 @@
       @confirmButton="applyCancelDialog"
     />
     <g-message />
+    <g-back-home />
   </view>
 </template>
 
