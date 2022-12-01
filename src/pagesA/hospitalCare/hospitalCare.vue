@@ -10,7 +10,7 @@
     <view class="content-box">
       <inpatientInfo v-show="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
       <dailyExpenseList v-show="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
-      <totalList v-show="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
+      <totalList v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
     </view>
   </view>
 </template>

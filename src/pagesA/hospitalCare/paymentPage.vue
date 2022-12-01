@@ -32,7 +32,7 @@ const resultHos = ref<hosParam>({
   inPatientPrePay: '',
   isHosDaylist: '',
   isHosTotallist: '',
-  patientTab: [],
+  tab: [],
 });
 
 const list = ref([]);
@@ -51,7 +51,7 @@ const toPay =async () => {
  await int();
 const res = await payMoneyOnline({
         phsOrderNo:  payOrder.value.phsOrderNo,
-       patientId:gStores.userStore.patChoose,
+       patientId:gStores.userStore.patChoose.patientId,
      //  patientId:'10763642',
       totalFee:payOrderParam.value.fee,
       phsOrderSource: '3',

@@ -63,7 +63,7 @@ const dailyResList = ref<dailyResult>({
 const init = async () => {
   const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: gStores.userStore.patChoose.patientId,
-    // patientId: '10763642',
+    //  patientId: '10763642',
     costType: '1',
   });
   dailyResList.value = result;
@@ -73,7 +73,7 @@ const detalResult = (val) => {
 };
 const gotoListExpenses = (data) => {
   uni.navigateTo({
-    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}&isHosDaylist='1'`,
+    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inpatientNo}&isHosDaylist='1'`,
   });
 };
 //下拉刷新

@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { GStores, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
@@ -66,7 +66,7 @@ const detalResult = (val) => {
 };
 const gotoListExpenses = (data) => {
   uni.navigateTo({
-    url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&inpatientNo=${data.inHospitalId}&isHosTotallist='2'`,
+    url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&inpatientNo=${data.inpatientNo}&isHosTotallist='2'`,
   });
 };
 watch(
@@ -77,9 +77,7 @@ watch(
     }
   }
 );
-onLoad(async () => {
-  console.log();
-
+onMounted(async () => {
   await init();
   await detalResult(InHospitalCostInfo);
 });
