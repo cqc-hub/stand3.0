@@ -47,8 +47,8 @@ const props = defineProps<{
 const dailyInfoParam = ref({
   inHospitalId: '',
   timesHospitalization: '',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
+  //patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
 });
 const InHospitalCostInfo = ref(0);
 const dailyResList = ref<dailyResult>({

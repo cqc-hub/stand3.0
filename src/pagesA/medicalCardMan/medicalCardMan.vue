@@ -21,7 +21,7 @@
 
         <view @click="addPatPage">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
-          <text>添加健康卡</text>
+          <text>申领健康卡</text>
         </view>
       </view>
     </view>
@@ -126,7 +126,7 @@
       url:
         globalGl.addPersonUrl +
         '?_directUrl=' +
-        encodeURIComponent('/pagesA/medicalCardMan/medicalCardMan'),
+        encodeURIComponent('/pages/home/home'),
     });
   };
 

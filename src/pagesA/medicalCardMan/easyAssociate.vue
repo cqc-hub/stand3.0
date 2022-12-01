@@ -11,37 +11,39 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-  import { GStores, getH5OpenidParam } from '@/utils';
-  import globalGl from '@/config/global';
-  import api from '@/service/api';
+import { defineComponent, ref } from "vue";
+import { GStores, getH5OpenidParam, PatientUtils } from "@/utils";
+import globalGl from "@/config/global";
+import api from "@/service/api";
 
-  const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
-  const gStores = new GStores();
-  const globalStore = gStores.globalStore;
+const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+const gStores = new GStores();
+const globalStore = gStores.globalStore;
 
-  const selectCard = async ({ detail }) => {
-    const { healthCode } = detail;
+const selectCard = async ({ detail }) => {
+  const { healthCode } = detail;
 
-    const requestArg = {
-      healthCode,
-      hospitalId,
-      herenId: globalStore.herenId,
-      source: globalStore.browser.source,
-    };
-
-    getH5OpenidParam(requestArg);
-
-    await api.quickLinkHealthCard(requestArg);
-
-    gStores.messageStore.showMessage('关联成功', 3000, {
-      closeCallBack() {
-        uni.reLaunch({
-          url: '/pagesA/medicalCardMan/medicalCardMan',
-        });
-      },
-    });
+  const requestArg = {
+    healthCode,
+    hospitalId,
+    herenId: globalStore.herenId,
+    source: globalStore.browser.source,
   };
+
+  getH5OpenidParam(requestArg);
+
+  await api.quickLinkHealthCard(requestArg);
+
+  gStores.messageStore.showMessage("关联成功", 1500, {
+    closeCallBack() {
+      //刷新就诊人列表 
+      new PatientUtils().getPatCardList();
+      uni.reLaunch({
+        url: "/pages/home/home",
+      });
+    },
+  });
+};
 </script>
 
 <style lang="scss" scoped></style>

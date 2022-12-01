@@ -54,8 +54,8 @@ const costDay = ref(dayjs(yesterDayTime).format('YYYY-MM-DD'));
 const dailyInfoParam = ref({
   inHospitalId: '',
   timesHospitalization: '',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
+  // patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
 });
 const dailyResList = ref<dailyResult>({
   inHospitalDailyCostsResultList: [],

@@ -34,8 +34,8 @@ import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 const gStores = new GStores();
 const payParam = ref({
   hosId: '1279',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
+  // patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
 });
 const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const init = async () => {

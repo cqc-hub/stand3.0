@@ -9,7 +9,7 @@
           @get-list="getHosList"
         />
       </view>
-      <g-choose-pat @choose-pat="getOutPatientHosList" />
+      <g-choose-pat @choose-pat="getOutPatientHosList"  />
     </view>
 
     <view class="header-btn flex-normal">

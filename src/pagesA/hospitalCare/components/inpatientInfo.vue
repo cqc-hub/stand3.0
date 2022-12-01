@@ -1,70 +1,70 @@
 <template>
   <!-- 住院信息 -->
-  <view class="box">
-    <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
-      <view class="user">
-        <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
+  <view>
+    <view class="box" v-if="Obj==false">
+      <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
+        <view class="user">
+          <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
 
-        <view class="user-info">
-          <text class="user-info-name">
-            {{ gStores.userStore.patChoose.patientName }}</text>
-          <text class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
-        </view>
-
-        <!-- {{
-            `${gStores.userStore.patChoose.patientName}  ${
-              (!isAreaProgram() && gStores.userStore.patChoose._showId) || ""
-            }`
-          }}
-        </view> -->
-      </view>
-      <view class="user-del yard">
-        <text>{{hosInfoResObj.hosName}}</text>
-        <text class="line"></text>
-        <text>{{hosInfoResObj.inpatientWard}}</text>
-        <text class="line"></text>
-        <text>{{hosInfoResObj.inpatientBed}}床</text>
-      </view>
-      <view class="user-del date">
-        <text>{{hosInfoResObj.beHosDate}} </text>
-        <text>入院</text>
-      </view>
-      <view v-if="hosInfoResObj.sexCode=='2'" class="iconfont woman">&#xe6a9;</view>
-      <view v-if="hosInfoResObj.sexCode=='1'" class="iconfont man">&#xe6aa;</view>
-    </view>
-    <view class="card-detail">
-      <view class="card-detail-item">
-        <text class="name">已预交金额 </text>
-        <view class="record">
-          <view class="triangle-left"></view>
-          <view class="records" @click="toPayRecord" v-if="props.isQueryPreRecord=='1'">
-            <text class="text">查看记录</text>
-            <view class="iconfont right">&#xe66b;</view>
+          <view class="user-info">
+            <text class="user-info-name">
+              {{ gStores.userStore.patChoose.patientName }}</text>
+            <text class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
           </view>
+
+        </view>
+        <view class="user-del yard">
+          <text>{{hosInfoResObj.hosName}}</text>
+          <text class="line"></text>
+          <text>{{hosInfoResObj.inpatientWard}}</text>
+          <text class="line"></text>
+          <text>{{hosInfoResObj.inpatientBed}}床</text>
+        </view>
+        <view class="user-del date">
+          <text>{{hosInfoResObj.beHosDate}} </text>
+          <text>入院</text>
+        </view>
+        <view v-if="hosInfoResObj.sexCode=='2'" class="iconfont woman">&#xe6a9;</view>
+        <view v-if="hosInfoResObj.sexCode=='1'" class="iconfont man">&#xe6aa;</view>
+      </view>
+      <view class="card-detail">
+        <view class="card-detail-item">
+          <text class="name">已预交金额 </text>
+          <view class="record">
+            <view class="triangle-left"></view>
+            <view class="records" @click="toPayRecord" v-if="props.isQueryPreRecord=='1'">
+              <text class="text">查看记录</text>
+              <view class="iconfont right">&#xe66b;</view>
+            </view>
+          </view>
+
+          <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
+        </view>
+        <view class="card-detail-item">
+          <text class="name">已产生费用</text>
+          <text class="money">{{hosInfoResObj.totalCost}}元</text>
+        </view>
+        <view class="card-detail-item" v-if="hosInfoResObj.insuranceFee">
+          <text class="name">医保报销</text>
+          <text class="money">{{hosInfoResObj.insuranceFee}}元</text>
+        </view>
+        <view class="card-detail-item" v-if="hosInfoResObj.defrayFee">
+          <text class="name">自费金额</text>
+          <text class="money">{{hosInfoResObj.defrayFee}}元</text>
+        </view>
+        <view class="card-detail-item last">
+          <text class="name">账户余额</text>
+          <text class="money">{{hosInfoResObj.accountBalance}}元</text>
         </view>
 
-        <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
+        <view class="button" @click="toPayPage">预交费用</view>
       </view>
-      <view class="card-detail-item">
-        <text class="name">已产生费用</text>
-        <text class="money">{{hosInfoResObj.totalCost}}元</text>
-      </view>
-      <view class="card-detail-item" v-if="hosInfoResObj.insuranceFee">
-        <text class="name">医保报销</text>
-        <text class="money">{{hosInfoResObj.insuranceFee}}元</text>
-      </view>
-      <view class="card-detail-item" v-if="hosInfoResObj.defrayFee">
-        <text class="name">自费金额</text>
-        <text class="money">{{hosInfoResObj.defrayFee}}元</text>
-      </view>
-      <view class="card-detail-item last">
-        <text class="name">账户余额</text>
-        <text class="money">{{hosInfoResObj.accountBalance}}元</text>
-      </view>
-
-      <view class="button" @click="toPayPage">预交费用</view>
+    </view>
+    <view class="empty-box" v-else>
+      <g-empty :current="1" />
     </view>
   </view>
+
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -76,6 +76,7 @@ import {
   getInHospitalInfoResult,
 } from '../utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
+const Obj = ref();
 const props = defineProps<{
   isQueryPreRecord?: string;
 }>();
@@ -88,8 +89,8 @@ const hosInfoParam = ref({
   cardNumber: '',
   hosId: '1279',
   idCard: '',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
+  // patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
   patientName: '',
   patientPhone: '',
   phoneNumber: '',
@@ -113,6 +114,7 @@ const init = async () => {
     patientId: hosInfoParam.value.patientId,
   });
   hosInfoResObj.value = result;
+  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
 onLoad(() => {
   init();
@@ -122,6 +124,9 @@ onLoad(() => {
 <style scoped lang="scss">
 .box {
   padding: 32rpx 32rpx 0 32rpx;
+}
+.empty-box {
+  padding-top: 200rpx;
 }
 .card {
   height: 244rpx;
