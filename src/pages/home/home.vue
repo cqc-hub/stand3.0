@@ -125,7 +125,7 @@
           <view class="fun-list" v-if="menuList.length">
             <homeMenu :list="menuList" />
           </view>
-          <view class="bg-back">
+          <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
             <image
               :src="$global.BASE_IMG + 'img_logo@3x.png'"
               mode="widthFix"

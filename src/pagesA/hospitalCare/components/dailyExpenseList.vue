@@ -1,7 +1,7 @@
 <template>
   <!-- 日费用清单 -->
   <view>
-    <view class="page" v-if="props.isHosDaylist=='1'&&dailyResList.inHospitalDailyCostsResultList.length>0">
+    <view class="page" v-if="props.isHosDaylist=='2'&&dailyResList.inHospitalDailyCostsResultList.length>0">
       <view class="progress" v-for="(item,index) in dailyResList.inHospitalDailyCostsResultList" :key="index">
         <view class="right">
           <view class="dates">{{item.date}}</view>
@@ -20,7 +20,7 @@
       </view>
     </view>
 
-    <view class="page" v-if="props.isHosDaylist=='2'&&InHospitalCostInfo>0">
+    <view class="page" v-if="props.isHosDaylist=='1'&&InHospitalCostInfo>0">
       <view class="datetime-picker">
         <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
         <view class="iconfont down">&#xe6e8;</view>
@@ -39,7 +39,7 @@ import { ref, watch } from 'vue';
 import { GStores, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import { hosParam } from '@/components/g-form';
 import inpatientInfo from './dailyExpenseListDetial.vue';
 import dayjs from 'dayjs';
@@ -54,7 +54,6 @@ const costDay = ref(dayjs(yesterDayTime).format('YYYY-MM-DD'));
 const dailyInfoParam = ref({
   inHospitalId: '',
   timesHospitalization: '',
-  // patientId: '10763642',
   patientId: gStores.userStore.patChoose.patientId,
 });
 const dailyResList = ref<dailyResult>({
@@ -62,7 +61,8 @@ const dailyResList = ref<dailyResult>({
 });
 const init = async () => {
   const { result } = await api.getInHospitalDailyCostList<dailyResult>({
-    patientId: dailyInfoParam.value.patientId,
+    patientId: gStores.userStore.patChoose.patientId,
+    // patientId: '10763642',
     costType: '1',
   });
   dailyResList.value = result;
@@ -75,7 +75,21 @@ const gotoListExpenses = (data) => {
     url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inHospitalId}&isHosDaylist='1'`,
   });
 };
-
+//下拉刷新
+onPullDownRefresh(() => {
+  setTimeout(() => {
+    uni.stopPullDownRefresh();
+    init();
+  }, 1000);
+});
+watch(
+  () => gStores.userStore.patChoose.patientId,
+  () => {
+    if (gStores.userStore.patChoose.patientId) {
+      init();
+    }
+  }
+);
 onLoad(async () => {
   await init();
   await detalResult(InHospitalCostInfo);

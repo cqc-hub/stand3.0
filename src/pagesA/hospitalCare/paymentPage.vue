@@ -1,17 +1,16 @@
 <template>
   <view class="box">
-    <view>
-      <view class="title">预缴费用</view>
-      <view class="buttons">
-        <view :class="list[index]==defalutMoney?'activeButton':'button'" v-for="(item,index) in list" :key="index" @click="checkMoney(item)">
-          ¥{{item}}</view>
-      </view>
-      <view class="pay-input">
-        <text>¥</text>
-        <input class="uni-input" placeholder-style="font-size:32rpx;color:#888" type="number" v-model="defalutMoney" placeholder="输入自定义金额" />
-      </view>
-      <button :disabled="defalutMoney==''?true:false" :class="defalutMoney==''?'submitBtn':'activeSubmitBtn'" @click="toPay">确定</button>
+    <view class="title">预缴费用</view>
+    <view class="buttons">
+      <view :class="list[index]==defalutMoney?'activeButton':'button'" v-for="(item,index) in list" :key="index" @click="checkMoney(item)">
+        ¥{{item}}</view>
     </view>
+    <view class="pay-input">
+      <text>¥</text>
+      <input class="uni-input" placeholder-style="font-size:32rpx;color:#888" type="number" v-model="defalutMoney" placeholder="输入自定义金额" />
+    </view>
+    <button :disabled="defalutMoney==''?true:false" :class="defalutMoney==''?'submitBtn':'activeSubmitBtn'" @click="toPay">确定</button>
+    <g-message />
   </view>
 </template>
 
@@ -41,8 +40,7 @@ const defalutMoney = ref('');
 const payOrderParam = ref({
   fee: '',
   orderType: '3',
-  patientId: '10763642',
-  // patientId: gStores.userStore.patChoose.patientId,
+   patientId: gStores.userStore.patChoose.patientId,
 });
 const payOrder = ref<payOrderResult>({} as payOrderResult);
 const checkMoney = (item) => {
@@ -54,7 +52,7 @@ const toPay =async () => {
 const res = await payMoneyOnline({
         phsOrderNo:  payOrder.value.phsOrderNo,
        patientId:gStores.userStore.patChoose,
-      // patientId:'10763642',
+     //  patientId:'10763642',
       totalFee:payOrderParam.value.fee,
       phsOrderSource: '3',
       hosId:'1279',

@@ -67,7 +67,7 @@
 
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { getAvatar, isAreaProgram } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
@@ -111,11 +111,20 @@ const toPayRecord = () => {
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
     hosId: hosInfoParam.value.hosId,
-    patientId: hosInfoParam.value.patientId,
+    //  patientId: '10763642',
+    patientId: gStores.userStore.patChoose.patientId,
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
+watch(
+  () => gStores.userStore.patChoose.patientId,
+  () => {
+    if (gStores.userStore.patChoose.patientId) {
+      init();
+    }
+  }
+);
 onLoad(() => {
   init();
 });

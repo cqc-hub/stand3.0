@@ -67,13 +67,15 @@
         {
           "path": "hospitalCare/hospitalCare",
           "style": {
-            "navigationBarTitleText": "住院服务"
+            "navigationBarTitleText": "住院服务",
+            "enablePullDownRefresh": true
           }
         },
         {
           "path": "hospitalCare/payRecord",
           "style": {
-            "navigationBarTitleText": "预交记录"
+            "navigationBarTitleText": "预交记录",
+            "enablePullDownRefresh": true
           }
         },
         {

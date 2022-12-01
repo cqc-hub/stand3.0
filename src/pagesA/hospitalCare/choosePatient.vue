@@ -20,6 +20,7 @@
             @click="toSearch">查询
     </button>
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+    <g-message />
   </view>
 </template>
 
@@ -28,27 +29,28 @@ import { ref } from 'vue';
 import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
-import { getInHospitalInfoResult } from './utils/inpatientInfo';
+import {
+  getInHospitalInfoResult,
+  getInHospitalInfoParam,
+} from './utils/inpatientInfo';
 import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { decryptDes } from '@/common/des';
 import { assertTypeofTypeAnnotation } from '@babel/types';
 const phoneStatus = ref();
-const hosInfoParam = ref({
+const hosInfoParam = ref<getInHospitalInfoParam>({
   patientName: '',
   patientPhone: '',
 });
+const hosInfoResObj = ref<getInHospitalInfoResult>(
+  {} as getInHospitalInfoResult
+);
 const userSore = useUserStore();
 const gStores = new GStores();
 const checkPatientPhone = (val) => {
   phoneStatus.value = /^1[3-9]\d{9}$/.test(val);
 
   return /^1[3-9]\d{9}$/.test(val);
-};
-const toSearch = () => {
-  uni.navigateTo({
-    url: `choosePatientInfo?patientName=${hosInfoParam.value.patientName}&patientPhone=${hosInfoParam.value.patientPhone}`,
-  });
 };
 // 就诊人
 const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
@@ -65,6 +67,19 @@ const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
   hosInfoParam.value.patientName = item.patientName;
   phoneStatus.value = /^1[3-9]\d{9}$/.test(message);
   hosInfoParam.value.patientPhone = message;
+};
+const init = async () => {
+  const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    patientName: hosInfoParam.value.patientName,
+    patientPhone: hosInfoParam.value.patientPhone,
+  });
+  hosInfoResObj.value = result;
+  uni.navigateTo({
+    url: `choosePatientInfo?patientName=${hosInfoParam.value.patientName}&patientPhone=${hosInfoParam.value.patientPhone}`,
+  });
+};
+const toSearch = async () => {
+  await init();
 };
 onLoad(() => {});
 </script>
@@ -91,6 +106,7 @@ onLoad(() => {});
         border-bottom: 2rpx solid #f3f3f3;
       }
       text {
+        width: 160rpx;
         padding-right: 32rpx;
         color: #666666;
         font-size: 32rpx;
