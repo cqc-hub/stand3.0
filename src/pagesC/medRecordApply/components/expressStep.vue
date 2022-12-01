@@ -8,7 +8,11 @@
       <view class="row-content">
         <view class="row-content flex-between">
           <view class="text-ellipsis color-blue">
-            <text class="mr16 title">{{ pointNow.title }}</text>
+            <text class="mr16 title">
+              {{
+                pointNow.desc === '等待快递员揽件' ? '已发货' : pointNow.title
+              }}
+            </text>
             <text class="f-xs">{{ pointNow.date }}</text>
           </view>
 
@@ -21,6 +25,16 @@
           </view>
         </view>
         <view class="color-light-dark text-ellipsis">{{ pointNow.desc }}</view>
+        <view v-if="expressNo" class="flex-normal">
+          <view
+            @click="copyExpressNo"
+            class="flex-normal color-444 f24 express-company"
+          >
+            <view class="mr8">{{ getPressCompanyLabel(expressCompany) }}</view>
+            <view class="mr8">{{ expressNo }}</view>
+            <view class="iconfont">&#xe706;</view>
+          </view>
+        </view>
       </view>
     </view>
 
@@ -46,7 +60,9 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
+  import { GStores } from '@/utils';
 
+  const gStores = new GStores();
   const props = withDefaults(
     defineProps<{
       pointNow: {
@@ -58,6 +74,9 @@
         title: string;
         desc: string;
       };
+
+      expressNo: string;
+      expressCompany: 1 | 2; // 快递公司1-顺丰快递  2-邮政
     }>(),
     {
       pointEnd: () => ({
@@ -74,6 +93,33 @@
   );
 
   const emits = defineEmits(['go-detail']);
+
+  const getPressCompanyLabel = (expressCompany) => {
+    switch (expressCompany) {
+      case 1:
+        return '顺丰快递';
+        break;
+
+      case 2:
+        return '邮政快递';
+        break;
+
+      default:
+        return '未知的快递公司';
+        break;
+    }
+  };
+
+  const copyExpressNo = () => {
+    uni.setClipboardData({
+      data: props.expressNo,
+      success() {
+        // #ifndef  MP-WEIXIN
+        gStores.messageStore.showMessage('复制单号成功', 3000);
+        // #endif
+      },
+    });
+  };
 
   const goDetail = () => {
     emits('go-detail');
@@ -140,5 +186,12 @@
 
   .f-xs {
     font-size: var(--hr-font-size-xs);
+  }
+
+  .express-company {
+    background-color: var(--hr-neutral-color-1);
+    border-radius: 4px;
+    margin-top: 8rpx;
+    padding: 4rpx 16rpx;
   }
 </style>

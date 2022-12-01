@@ -218,6 +218,7 @@
         :autoPayArg="payArg"
         @pay-success="payAfter"
         auto
+        autoInOne
         ref="refPay"
       >
         <g-flag typeFg="32" isShowFgTip />
@@ -227,6 +228,17 @@
         <g-selhos :hosId="hosId" @get-list="getHosList" />
       </view>
     </view>
+
+    <xy-dialog
+      :title="fgTitle32"
+      :show="isShowFg32"
+      :isShowCancel="false"
+      @confirmButton="getPay"
+    >
+      <view class="reg-tip">
+        <g-flag v-model:title="fgTitle32" isHideTitle isShowFgTip typeFg="32" />
+      </view>
+    </xy-dialog>
     <g-message />
   </view>
 </template>
@@ -315,6 +327,9 @@
     },
   ]);
   const payArg = ref<BaseObject>({});
+
+  const fgTitle32 = ref('');
+  const isShowFg32 = ref(false);
 
   const scrollTo = ref('');
   watch(
@@ -660,6 +675,14 @@
       hosName: getGetHosName.value,
     };
 
+    isShowFg32.value = true;
+    // setTimeout(() => {
+    //   refPay.value.show();
+    // }, 200);
+  };
+
+  const getPay = async () => {
+    isShowFg32.value = false;
     refPay.value.show();
   };
 

@@ -10,6 +10,7 @@ export type TOutHosInfo = {
   inpatientBed: string;
   outTime: string;
   visitNo: string;
+  _id: string;
 };
 
 /**

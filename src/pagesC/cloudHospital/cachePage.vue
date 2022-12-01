@@ -4,10 +4,11 @@
   </view>
 </template>
 <script setup lang="ts">
+  import { ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
+
   import { useGlobalStore } from '@/stores';
   import { encryptDes, getSysCode, joinQuery } from '@/common';
-  import { ref } from 'vue';
   import global from '@/config/global';
 
   //第三方h5页面入口——网络医院
@@ -21,21 +22,11 @@
   });
   //封装网络医院参数
   const getparams = (options) => {
-    let source; // 1 微信小程序 2 支付宝生活号 3 公众号 4 支付宝小程序  9 pc电脑端（5g云诊室）
-    // #ifdef MP-WEIXIN
-    source = 1;
-    // #endif
-    // #ifdef H5
-    source = 3;
-    // #endif
-    // #ifdef MP-ALIPAY
-    source = 4;
-    // #endif
 
     let para = {
       token: globalStore.getToken,
       openid: globalStore.openId,
-      source: source,
+      source: globalStore.browser.source,
       ...options,
       // payment: options.payment,
       // registerId: options.registerId,

@@ -56,7 +56,7 @@
   const emits = defineEmits(['item-click']);
 
   const isActive = (item: TOutHosInfo) => {
-    return props.value.findIndex((o) => o.visitNo === item.visitNo) !== -1;
+    return props.value.findIndex((o) => o._id === item._id) !== -1;
   };
 
   const itemClick = (item) => {

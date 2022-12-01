@@ -9,7 +9,7 @@
           @get-list="getHosList"
         />
       </view>
-      <g-choose-pat />
+      <g-choose-pat @choose-pat="getOutPatientHosList" />
     </view>
 
     <view class="header-btn flex-normal">
@@ -94,9 +94,9 @@
   const checkOutHosList = ref<TOutHosInfo[]>([]);
 
   const itemClick = (item: TOutHosInfo) => {
-    const { visitNo } = item;
+    const { _id } = item;
 
-    const idx = checkOutHosList.value.findIndex((o) => o.visitNo === visitNo);
+    const idx = checkOutHosList.value.findIndex((o) => o._id === _id);
 
     if (idx === -1) {
       checkOutHosList.value.push(item);
@@ -144,7 +144,8 @@
     isComplete.value = true;
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
-      patientId,
+      // patientId,
+      patientId: 322989943,
       type: '1',
       hosId: hosId.value,
     };
@@ -155,6 +156,11 @@
       .finally(() => {
         isComplete.value = true;
       });
+
+    const dataNow = new Date().getTime() + '';
+    result.map((o, i) => {
+      o._id = dataNow + '_' + i;
+    });
 
     outHosList.value = result || [];
   };

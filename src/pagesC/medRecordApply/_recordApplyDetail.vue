@@ -65,8 +65,27 @@
               <express-Step
                 :pointEnd="_expressInfo.pointEnd"
                 :pointNow="_expressInfo.pointNow"
+                :expressNo="info.expressNo"
+                :expressCompany="info.expressCompany"
                 @go-detail="goDetailExpress"
               />
+            </view>
+
+            <view
+              v-if="info.addresseeAddress && info.orderStatus === '12'"
+              class="container-box order-patient g-border p32 mb16"
+            >
+              <view class="_row">
+                <view class="_content">
+                  {{ patientAddress }}
+                </view>
+              </view>
+              <view class="_row mt16">
+                <view class="_title w100 _name">
+                  <text class="mr12">{{ info.addresseeName }}</text>
+                  <text>{{ info.addresseePhone }}</text>
+                </view>
+              </view>
             </view>
 
             <view
@@ -100,7 +119,7 @@
             </view>
 
             <view
-              v-if="info.addresseeAddress"
+              v-if="info.addresseeAddress && info.orderStatus !== '12'"
               class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">
@@ -170,27 +189,21 @@
 
 <script lang="ts" setup>
   import { computed, ref, reactive } from 'vue';
+  import dayjs from 'dayjs';
+
+  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import {
-    GStores,
-    ServerStaticData,
-    IHosInfo,
-    type TButtonConfig,
-    useTBanner,
-  } from '@/utils';
-  import api from '@/service/api';
-  import globalGl from '@/config/global';
-  import {
-    CaseCopyItem,
     applyOrderStatusMap,
-    CaseCopeItemDetail,
-    isExpress1,
+    type CaseCopeItemDetail,
   } from './utils/recordApply';
   import { joinQuery } from '@/common';
+
+  import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import expressStep from './components/expressStep.vue';
   import recordCard from './components/recordCard.vue';
-  import dayjs from 'dayjs';
 
   // api.getCaseCopyDetail = () =>
   //   Promise.resolve({
@@ -285,7 +298,7 @@
 
     const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
 
-    const { outInfo, expressParam, expressStatus, acceptTime } = result;
+    let { outInfo, expressParam, expressStatus, acceptTime } = result;
     // result.orderStatus = '21';
     // result.refundFee = '21';
     if (outInfo) {
@@ -295,6 +308,8 @@
         gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
       }
     }
+
+    // expressParam = '233'
 
     if (expressParam) {
       // 派送中 40
