@@ -57,9 +57,6 @@ const setData = async () => {
 };
 
 onLoad(async () => {
-  console.log(patList, 'patList');
-
-  // // await gStores.userStore.getPatList();
   setData();
 });
 </script>

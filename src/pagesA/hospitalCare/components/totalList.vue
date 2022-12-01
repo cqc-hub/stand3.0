@@ -56,7 +56,7 @@ const dailyResList = ref<dailyResult>({
 });
 const init = async () => {
   const { result } = await api.getInHospitalDailyCostList<dailyResult>({
-    patientId: dailyInfoParam.value.patientId,
+    patientId: gStores.userStore.patChoose.patientId,
     costType: '3',
   });
   dailyResList.value = result;
@@ -78,6 +78,8 @@ watch(
   }
 );
 onLoad(async () => {
+  console.log();
+
   await init();
   await detalResult(InHospitalCostInfo);
 });

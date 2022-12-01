@@ -111,7 +111,8 @@ const toPayRecord = () => {
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
     hosId: hosInfoParam.value.hosId,
-    patientId: hosInfoParam.value.patientId,
+    //  patientId: '10763642',
+    patientId: gStores.userStore.patChoose.patientId,
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
