@@ -1,6 +1,5 @@
 <template>
   <view class="home">
-    <g-back-home />
     <scroll-view class="scroll-page" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
