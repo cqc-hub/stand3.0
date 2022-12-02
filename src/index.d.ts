@@ -1,5 +1,5 @@
-/// <reference path="@dcloudio/types/uni-app/uni.d.ts" />
 /// <reference types="vite/client" />
+/// <reference types="@dcloudio/uni-app" />
 
 declare var wx: any;
 declare var my: any;
@@ -34,7 +34,7 @@ interface ISystemGlobalItem {
   };
 
   isSearchInHos: boolean;
-  isStartComeTest:boolean;
+  isStartComeTest: boolean;
   alipayPid: string;
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
@@ -127,3 +127,11 @@ type IHOption = IHOptionItem[];
 // 		};
 // 	}
 // }
+
+namespace UniNamespace {
+  type Uni = Omit<UniInterface, 'getSystemInfo'> & {
+    getSystemInfo(
+      options: UniNamespace.GetSystemInfoOptions
+    ): Promise<GetSystemInfoResult>;
+  };
+}

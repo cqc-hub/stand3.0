@@ -1,5 +1,10 @@
 <template>
-  <view class="tabbar">
+  <view
+    :class="{
+      ios: isIos,
+    }"
+    class="tabbar"
+  >
     <view class="tabbar-container">
       <view
         v-for="(item, i) in tabBars"
@@ -18,39 +23,62 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
 
+  import {
+    setLocalStorage,
+    getLocalStorage,
+    encryptDes,
+    decryptDes,
+  } from '@/common';
+
+  const SYS_TAB_KEY = 'SYS_TAB_KEY';
   const current = ref('');
   const tabBars = [
     {
       label: '首页',
       icon: '/static/image/home.png',
       iconActive: '/static/image/home_active.png',
-      url: '/pages/home/home'
+      url: '/pages/home/home',
     },
     {
       label: '我的',
       icon: '/static/image/my.png',
       iconActive: '/static/image/my_active.png',
-      url: '/pages/home/my'
-    }
+      url: '/pages/home/my',
+    },
   ];
 
   const pages = getCurrentPages();
   const currentPage = pages.slice(-1)[0];
   const currentPath = '/' + currentPage.route;
+  const isIos = ref(false);
 
   const changeTab = (item) => {
     const url = item.url;
 
     if (url !== currentPath) {
       uni.reLaunch({
-        url: item.url
+        url: item.url,
       });
     }
   };
 
   current.value = currentPath;
+
+  const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
+  isIos.value = systemInfo.startsWith('iOS');
+
+  onMounted(async () => {
+    if (!isIos.value) {
+      const { system } = await uni.getSystemInfo({});
+      isIos.value = system.startsWith('iOS');
+
+      setLocalStorage({
+        [SYS_TAB_KEY]: system,
+      });
+    }
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -60,12 +88,15 @@
     right: 0;
     left: 0;
     background-color: var(--h-color-white);
-    height: 180rpx;
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
     padding-top: 20rpx;
+    height: 120rpx;
 
+    &.ios {
+      height: 160rpx;
+    }
 
     .tabbar-container {
       display: flex;

@@ -27,8 +27,8 @@
 
       <view v-if="disabled" class="hos-location f26 color-888">暂未开通</view>
       <view v-else>
-        <view class="hos-location" @click.stop="locationClick">
-          <view class="g-flex-rc-cc">
+        <view class="hos-location">
+          <view @click.stop="locationClick" class="g-flex-rc-cc">
             <view class="icon-font icon-location ico_location2" />
             <view>地图导航</view>
           </view>

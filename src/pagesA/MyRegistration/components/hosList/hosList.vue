@@ -10,7 +10,7 @@
             <Item-Less
               :disabled="isDisabled(item)"
               :item="item"
-              @img-click="imgClick"
+              @img-click="itemClick"
               @location-click="locationClick"
               @item-click="itemClick"
             />
@@ -20,7 +20,7 @@
             <Item-More
               :disabled="isDisabled(item)"
               :item="item"
-              @img-click="imgClick"
+              @img-click="itemClick"
               @location-click="locationClick"
               @item-click="itemClick"
             />
@@ -56,8 +56,6 @@
 
     return false;
   };
-
-  const hosLen = computed(() => props.list.length);
 
   const emits = defineEmits(['img-click', 'location-click', 'item-click']);
 
