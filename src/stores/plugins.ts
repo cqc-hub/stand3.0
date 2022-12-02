@@ -1,28 +1,32 @@
-import { App } from 'vue'
-import { createPinia } from 'pinia'
-import { createPersistedState } from 'pinia-plugin-persistedstate'
-import devalue from '@nuxt/devalue'
+import { App } from 'vue';
+import { createPinia } from 'pinia';
+import { createPersistedState } from 'pinia-plugin-persistedstate';
+import devalue from '@nuxt/devalue';
 
-import { setLocalStorage, getLocalStorage } from '@/common'
+import {
+  setLocalStorage,
+  getLocalStorage,
+  encryptDes,
+  decryptDes,
+} from '@/common';
 
-export const pinia = createPinia()
+export const pinia = createPinia();
 
 export const painaInstall = (app: App) => {
-
   pinia
     .use(
       createPersistedState({
         storage: {
           getItem(key: string): string | null {
-            return getLocalStorage(key)
+            return decryptDes(getLocalStorage(key));
           },
 
           setItem(key: string, value: string) {
             setLocalStorage({
-              [key]: value
-            })
-          }
-        }
+              [key]: encryptDes(value),
+            });
+          },
+        },
       })
     )
     .use(({ options, store }) => {
@@ -30,9 +34,9 @@ export const painaInstall = (app: App) => {
       // 	options,
       // 	store
       // })
-    })
+    });
 
-  app.use(pinia)
+  app.use(pinia);
 
-  devalue(pinia.state.value)
-}
+  devalue(pinia.state.value);
+};

@@ -327,6 +327,7 @@
     //   url: '/pagesA/MyRegistration/RegSearch',
     // });
   };
+
 </script>
 
 <style lang="scss" scoped>
