@@ -87,7 +87,7 @@
     background: transparent;
 
     display: inline-block;
-    line-height: 1em;
+    line-height: inherit;
     height: 100%;
     width: 100%;
     vertical-align: middle;

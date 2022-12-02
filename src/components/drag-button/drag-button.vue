@@ -98,7 +98,7 @@
             this.top = hisLocation.top;
           } else {
             this.left = this.windowWidth - this.width - this.edge;
-            this.top = this.windowHeight - this.height - this.edge;
+            this.top = (this.windowHeight - this.height) / 2 - this.edge;
           }
         })
         .exec();

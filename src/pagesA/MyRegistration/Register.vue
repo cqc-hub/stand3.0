@@ -5,7 +5,6 @@
       isShowFg
       typeFg="84"
     />
-
     <view v-if="hosList.length > showMoreItem" class="flex-normal header">
       <view
         :class="{

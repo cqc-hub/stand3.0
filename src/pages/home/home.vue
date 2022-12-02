@@ -1,5 +1,6 @@
 <template>
   <view class="home">
+    <g-back-home />
     <scroll-view class="scroll-page" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
@@ -315,17 +316,17 @@
   };
 
   const goSearch = () => {
-    // let url =
-    //   (global.env as string) === 'prod'
-    //     ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
-    //     : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
-    // uni.navigateTo({
-    //   url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
-    // });
-
+    let url =
+      (global.env as string) === 'prod'
+        ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
+        : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/RegSearch',
+      url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
     });
+
+    // uni.navigateTo({
+    //   url: '/pagesA/MyRegistration/RegSearch',
+    // });
   };
 </script>
 

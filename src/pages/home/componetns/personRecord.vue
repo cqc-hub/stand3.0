@@ -178,9 +178,10 @@
     z-index: 2;
 
     .user-avatar {
-      width: 120upx;
-      height: 120upx;
+      width: 118upx;
+      height: 118upx;
       margin: 0 35upx;
+      // padding-left: 35rpx;
       border-radius: 600upx;
       border: 4rpx solid #fff;
     }
