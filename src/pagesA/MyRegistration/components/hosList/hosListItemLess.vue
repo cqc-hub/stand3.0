@@ -5,12 +5,12 @@
     </view>
 
     <view class="content" @click="itemClick">
-      <view>
+      <view class="row flex-normal">
         <view
           :class="{
             'color-888': disabled,
           }"
-          class="hos-name"
+          class="hos-name mb12"
         >
           {{ item.aliasName }}
         </view>
@@ -93,12 +93,20 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: left;
+      }
       .hos-name {
         font-size: var(--hr-font-size-xl);
         font-weight: 600;
         color: var(--hr-neutral-color-10);
         position: relative;
         top: 8rpx;
+        text-align: left;
       }
 
       .hos-address {

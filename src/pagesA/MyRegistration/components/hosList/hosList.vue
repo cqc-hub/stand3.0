@@ -1,25 +1,32 @@
 <template>
   <view class="hos-list-container">
     <view v-for="(item, i) in list" :key="i">
-      <block v-if="isShowMoreItem">
-        <Item-Less
-          :disabled="isDisabled(item)"
-          :item="item"
-          @img-click="imgClick"
-          @location-click="locationClick"
-          @item-click="itemClick"
-        />
-      </block>
+      <g-login
+        :disabled="!login || isDisabled(item)"
+        @handler-next="itemClick(item)"
+      >
+        <view>
+          <block v-if="isShowMoreItem">
+            <Item-Less
+              :disabled="isDisabled(item)"
+              :item="item"
+              @img-click="imgClick"
+              @location-click="locationClick"
+              @item-click="itemClick"
+            />
+          </block>
 
-      <block v-else>
-        <Item-More
-          :disabled="isDisabled(item)"
-          :item="item"
-          @img-click="imgClick"
-          @location-click="locationClick"
-          @item-click="itemClick"
-        />
-      </block>
+          <block v-else>
+            <Item-More
+              :disabled="isDisabled(item)"
+              :item="item"
+              @img-click="imgClick"
+              @location-click="locationClick"
+              @item-click="itemClick"
+            />
+          </block>
+        </view>
+      </g-login>
     </view>
   </view>
 </template>
@@ -33,6 +40,7 @@
   const props = defineProps<{
     list: IHosInfo[];
     isShowMoreItem: boolean;
+    login?: boolean;
     disabledKey?: string;
   }>();
   const gStores = new GStores();

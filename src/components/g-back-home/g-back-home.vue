@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <drag-button :edge="0" @btnClick="backHome" isDock scrollY zid="backhome">
+    <drag-button :edge="0" :zid="zid" @btnClick="backHome" isDock scrollY>
       <view class="out-btn f32 animate__animated animate__fadeIn">
         {{ text }}
       </view>
@@ -11,18 +11,22 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       text?: string;
+      zid?: string;
+      zurl?: string;
     }>(),
     {
       text: '返回首页',
+      zid: 'backhome',
+      zurl: '/pages/home/home',
     }
   );
 
   const backHome = () => {
     uni.reLaunch({
-      url: '/pages/home/home',
+      url: props.zurl,
     });
   };
 </script>

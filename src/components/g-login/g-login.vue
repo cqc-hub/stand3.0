@@ -1,10 +1,8 @@
 <template>
   <view>
-    <block v-if="gStores.globalStore.isLogin">
-      <view>
-        <slot />
-      </view>
-    </block>
+    <view v-if="gStores.globalStore.isLogin || disabled">
+      <slot />
+    </view>
 
     <block v-else>
       <button
@@ -32,6 +30,7 @@
 
   const props = defineProps<{
     patient?: boolean;
+    disabled?: boolean;
   }>();
   const emits = defineEmits(['handler-next', 'handler-login']);
 

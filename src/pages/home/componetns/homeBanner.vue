@@ -68,7 +68,7 @@
                 :key="i"
                 @tap="gotoPath(item)"
               >
-                <image mode="scaleToFill" :src="item.iconfont" />
+                <image class="banner-img" mode="scaleToFill" :src="item.iconfont" />
               </swiper-item>
             </swiper>
           </view>
@@ -182,6 +182,10 @@
         height: 100%;
         will-change: transform;
       }
+
+      .banner-img {
+        border-radius: 16rpx;
+      };
     }
     //2倍高度
     .banner-common2 {
@@ -194,7 +198,7 @@
       padding: 0 16rpx 0 32rpx;
       display: flex;
       overflow: hidden;
-    } 
+    }
     //标准高度
     .banner-common {
       height: 91rpx;
@@ -231,7 +235,7 @@
     .banner-back2 {
       background: #effbfa;
       border: 2rpx solid #cfeae6;
-    } 
+    }
     .banner-back3 {
       background: #eef3ff;
       border: 2rpx solid #d9e5ff;

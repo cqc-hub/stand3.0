@@ -1,7 +1,7 @@
 <template>
-  <view class="login-center">
+  <view class="g-page">
     <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
-    <scroll-view class="scroll-container" scroll-y>
+    <scroll-view class="g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
         :loading="skeletonProps.loading"
@@ -25,7 +25,7 @@
         </view>
       </ls-skeleton>
 
-      <view class="save-hight" />
+      <view class="safe-height" />
     </scroll-view>
 
     <home-Tabbar />
@@ -124,7 +124,7 @@
     // });
     // 选择就诊人
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/DoctorDetails'
+      url: '/pagesA/MyRegistration/DoctorDetails',
     });
 
     // uni.navigateTo({
@@ -145,41 +145,21 @@
 </script>
 
 <style lang="scss" scoped>
-  .login-center {
-    background-color: var(--h-color-white);
-    height: 100vh;
-    position: relative;
-    flex-direction: column;
+  .top-bg {
+    height: 500upx;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
 
-    display: flex;
-
-    .scroll-container {
-      height: 1px;
-      flex: 1;
-
-      .save-hight {
-        height: 20rpx;
-        width: 1px;
-      }
-    }
-
-    .top-bg {
-      height: 500upx;
-      width: 100%;
-      position: absolute;
-      pointer-events: none;
-      z-index: 1;
-
-      background: linear-gradient(
-          160deg,
-          #13b8ff2a,
-          #13b8ff2a,
-          rgba(255, 0, 0, 0) 50%
-        ),
-        linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
-    }
+    background: linear-gradient(
+        160deg,
+        #13b8ff2a,
+        #13b8ff2a,
+        rgba(255, 0, 0, 0) 50%
+      ),
+      linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
   }
-
   .my-menu {
     padding: 0 32rpx;
     margin-bottom: 188rpx;

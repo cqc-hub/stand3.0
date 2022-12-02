@@ -76,6 +76,8 @@
         color: var(--hr-neutral-color-10);
         -webkit-line-clamp: 2;
         flex: 1;
+        text-align: left;
+
       }
 
       .hos-level {
@@ -103,6 +105,7 @@
 
       .hos-away {
         flex: 1;
+        text-align: left;
       }
     }
   }
