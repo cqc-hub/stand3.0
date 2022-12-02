@@ -1,5 +1,7 @@
 <template>
   <view class="g-page">
+    <g-choose-pat @choose-pat="refreshListData" />
+
     <scroll-list
       :option="scrollOpt"
       @load="getListData"
@@ -9,12 +11,7 @@
     >
       <block v-if="isComplete && list.length">
         <Record-Apply-List :list="list" @item-click="goApplyDetail" />
-        <!-- <view class="no-more g-flex-rc-cc color-888 f24">没有更多了</view> -->
       </block>
-
-      <!-- <view class="empty-list" v-else-if="isComplete">
-        <g-empty :current="1" />
-      </view> -->
     </scroll-list>
 
     <g-message />
@@ -33,7 +30,7 @@
   import { joinQuery } from '@/common';
 
   const props = defineProps<{
-    hosId: string;
+    hosId?: string;
   }>();
 
   const gStores = new GStores();
@@ -42,7 +39,7 @@
   const scrollOpt = ref({
     auto: true,
     size: 1,
-    emptyText: '暂未查到相关信息'
+    emptyText: '暂未查到相关信息',
   });
 
   const isComplete = ref(false);
@@ -113,7 +110,7 @@
     uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/_recordApplyDetail', {
         phsOrderNo: item.phsOrderNo,
-        hosId: props.hosId,
+        hosId: item.hosId,
       }),
     });
   };
