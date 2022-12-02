@@ -142,7 +142,12 @@
         </view>
       </scroll-view>
 
-      <view class="footer g-border-top">
+      <view v-if="isShowFooter" class="footer g-border-top">
+        <view @click="goHome" class="home g-flex-rc-cc">
+          <view class="iconfont home-icon">&#xe6df;</view>
+          <view>首页</view>
+        </view>
+
         <button
           v-if="['20', '21', '16', '17'].includes(info.orderStatus)"
           @click="applyAgain"
@@ -184,7 +189,7 @@
       @confirmButton="applyCancelDialog"
     />
     <g-message />
-    <g-back-home />
+    <g-back-home v-if="!isShowFooter" />
   </view>
 </template>
 
@@ -243,6 +248,12 @@
     hosId: string;
   }>();
   const gStores = new GStores();
+
+  const isShowFooter = computed(() => {
+    return ['20', '21', '16', '17', '11', '15'].includes(
+      info.value.orderStatus
+    );
+  });
 
   const info = ref<CaseCopeItemDetail>({} as CaseCopeItemDetail);
   const expressInfo = ref<{
@@ -394,6 +405,12 @@
     };
 
     useTBanner(args);
+  };
+
+  const goHome = () => {
+    uni.reLaunch({
+      url: '/pages/home/home',
+    });
   };
 
   const init = () => {
@@ -626,5 +643,16 @@
 
   .dialog-content {
     color: var(--hr-neutral-color-9);
+  }
+
+  .home {
+    font-size: var(--hr-font-size-xxxs);
+    flex-direction: column;
+    padding: 0 10rpx;
+    margin-right: 10rpx;
+
+    .home-icon {
+      font-size: var(--hr-font-size-xxl);
+    }
   }
 </style>

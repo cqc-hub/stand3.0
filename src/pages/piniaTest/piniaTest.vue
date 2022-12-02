@@ -1,12 +1,12 @@
 <template>
   <view class="">
-    <web-view
+    <!-- <web-view
       src="http://10.10.83.76:5173/#/pagesC/queryCase/queryCase?sysCode=1001033&aaa=722999831&token=a6e8289c389d8ece73750fe57fc1201165583e5b6002435d80e41fc83233e33a4f831ac26c70856ef9d57ee32e5d1efa6946b8da14c24f0d78cc1164cee615da1b1a18197ff167796b4e07584a8895d894d6b3bf6f5fd2d8f333e95302f905643f75cc3cf7626a0afdd4e41313c590d6b906cc09e33f0f497ba24121a82dcdbccb7256b7d29181639b235ab41efcf494a79de7e7eca25c37ffdfc3cea6d1c3a7ac87ea773fefacb6b89ad1f47655feba3425ac16f21d4153ceaf87d78ee5c4446a466ef179fbe331e8351e1d8421cc0f9257623562d61e3d9fefd973468269d326bd97055a259cdf0f50aa3e3c7a5874&herenId=4276454&_d=f9%2F7ZB3FyR1gdCfyhNE6t%2BvZdA34HFpg4sxg0qs2m0PqYoQEGKXU%2BYYSWIPvDOoj8iFGw%2Fgs%2B5N8A1%2FsiqSORA%3D%3D"
       :class="{
         sss: 1,
       }"
       op="cqc"
-    />
+    /> -->
   </view>
 </template>
 
@@ -99,7 +99,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      // useTBanner(queryCase);
+      useTBanner(eletronicInvoice);
     }, 1000);
   });
 </script>

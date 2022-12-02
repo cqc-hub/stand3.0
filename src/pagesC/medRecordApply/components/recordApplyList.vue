@@ -7,10 +7,11 @@
       class="item g-border"
     >
       <view class="title flex-between">
-        <view class="text-ellipsis color-444 f28">
+        <view class="text-ellipsis g-bold f32">
           <text>申请时间:</text>
           <text>{{ ` ${item._createTime}` }}</text>
         </view>
+
         <view
           :style="{
             color:
@@ -21,6 +22,10 @@
         >
           {{ applyOrderStatusMap[item.orderStatus].title }}
         </view>
+      </view>
+
+      <view class="text-ellipsis color-888 f28 aaa">
+        <text>{{ item.hosName }}</text>
       </view>
 
       <view v-if="item._outInfo" class="outinfo-box">
@@ -100,13 +105,15 @@
     }
 
     .title {
-      margin-bottom: 24rpx;
       align-items: flex-start;
 
       .item-status {
         white-space: nowrap;
         margin-left: 66rpx;
       }
+    }
+    .aaa {
+      margin-bottom: 24rpx;
     }
 
     .row {

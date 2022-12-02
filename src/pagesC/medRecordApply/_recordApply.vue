@@ -71,7 +71,6 @@
                 o.outTime = dayjs(outTime).format('YYYY-MM-DD');
                 o.admissionTime = dayjs(admissionTime).format('YYYY-MM-DD');
               });
-              console.log(o._outInfo);
             } catch (error) {
               gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
             }
