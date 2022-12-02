@@ -4,13 +4,13 @@
     <g-choose-pat @choosePat="choosePat" />
 
     <view class="tab-box">
-      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.patientTab" :line-scale="0.8" field="headerName" all-blod @change="tabChange" />
+      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.tab" :line-scale="0.8" field="label" all-blod @change="tabChange" />
     </view>
     <!-- 内容区域 -->
     <view class="content-box">
-      <inpatientInfo v-show="tabStatus == 0" :isQueryPreRecord="resultHos.isQueryPreRecord"></inpatientInfo>
-      <dailyExpenseList v-show="tabStatus == 1" :isHosDaylist=" resultHos.isHosDaylist"></dailyExpenseList>
-      <totalList v-show="tabStatus == 2" :isHosTotallist="resultHos.isHosTotallist"></totalList>
+      <inpatientInfo v-show="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
+      <dailyExpenseList v-show="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
+      <totalList v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
     </view>
   </view>
 </template>
@@ -33,7 +33,7 @@ const resultHos = ref<hosParam>({
   inPatientPrePay: '',
   isHosDaylist: '',
   isHosTotallist: '',
-  patientTab: [],
+  tab: [],
   isQueryPreRecord: '',
 });
 //切换就诊人

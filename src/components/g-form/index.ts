@@ -17,11 +17,12 @@ export interface hosParam {
   inPatientPrePay: string;
   isHosDaylist?: string;
   isHosTotallist: string;
-  patientTab?: nameList[];
+  tab?: nameList[];
   isQueryPreRecord?: string;
 }
 export interface nameList {
-  headerName?: string;
+  value?: string;
+  label?: string;
 }
 export interface IRule {
   rule: RegExp;

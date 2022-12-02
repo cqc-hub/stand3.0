@@ -1,5 +1,5 @@
 <template>
-  <view class="page" v-if="costInfoDetal">
+  <view class="page" v-if="Obj==false">
     <view class="container">
       <view class="top">
         <view class="title">{{costInfoDetal.costTypeName}}</view>
@@ -64,6 +64,9 @@
       </view>
     </view>
   </view>
+  <view class="empty-box" v-else>
+    <g-empty :current="1" />
+  </view>
 </template>
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
@@ -76,6 +79,7 @@ import {
 import { onLoad } from '@dcloudio/uni-app';
 import { GStores, ServerStaticData } from '@/utils';
 import dayjs from 'dayjs';
+const Obj = ref();
 const costInfoDetal = ref<inHospitalCostInfo>({} as inHospitalCostInfo);
 const param = ref<inHospitalCostInfoParam>({
   costDay: '',
@@ -125,12 +129,13 @@ const init = async () => {
     costDay: costDate.value,
     costType: costType.value,
     patientId: gStores.userStore.patChoose.patientId,
-    //   patientId: '10763642',
+    // patientId: '10763642',
   };
   const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
     params
   );
   costInfoDetal.value = result;
+  Obj.value = JSON.stringify(costInfoDetal.value) == '{}';
 };
 
 const detalResultEvent = () => {
@@ -152,6 +157,8 @@ onMounted(async () => {
   }
 });
 onLoad((val) => {
+  console.log(val, '2222222222222222');
+
   param.value.costDay = val.costDate;
   param.value.hospitalId = val.inpatientNo;
   param.value.isHosTotallist = val.isHosTotallist;
@@ -296,5 +303,8 @@ onLoad((val) => {
       }
     }
   }
+}
+.empty-box {
+  padding-top: 200rpx;
 }
 </style>

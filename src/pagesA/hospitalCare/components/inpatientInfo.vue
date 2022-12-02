@@ -67,7 +67,7 @@
 
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { getAvatar, isAreaProgram } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
@@ -75,10 +75,11 @@ import {
   getInHospitalInfoParam,
   getInHospitalInfoResult,
 } from '../utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 const Obj = ref();
 const props = defineProps<{
   isQueryPreRecord?: string;
+  tabCurrent?: number;
 }>();
 const gStores = new GStores();
 const isLoad = ref(false);
@@ -108,6 +109,14 @@ const toPayRecord = () => {
     url: 'payRecord',
   });
 };
+onPullDownRefresh(() => {
+  if (props.tabCurrent == 0) {
+    setTimeout(() => {
+      uni.stopPullDownRefresh();
+      init();
+    }, 1000);
+  }
+});
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
     hosId: hosInfoParam.value.hosId,
@@ -125,7 +134,7 @@ watch(
     }
   }
 );
-onLoad(() => {
+onMounted(() => {
   init();
 });
 </script>
