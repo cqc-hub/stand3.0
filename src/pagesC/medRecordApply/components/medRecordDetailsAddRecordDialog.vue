@@ -1,5 +1,9 @@
 <template>
   <view class="">
+    <view class="my-display-none">
+      <g-selhos @get-list="getHosList" />
+    </view>
+
     <g-popup :zIndex="20" :title="title" ref="refAddDialog">
       <view class="g-page">
         <view class="g-container">
@@ -37,6 +41,16 @@
       >
         <view />
       </uni-datetime-picker>
+
+      <uni-data-picker
+        :map="{ text: 'hosName', value: 'hosId' }"
+        :localdata="localdata"
+        :clear-icon="false"
+        @change="pickerChange"
+        ref="dataPickerRef"
+      >
+        <view />
+      </uni-data-picker>
     </view>
   </view>
 </template>
@@ -44,7 +58,7 @@
 <script lang="ts" setup>
   import { onMounted, ref, nextTick } from 'vue';
   import type { TInstance } from '@/components/g-form/index';
-  import { ServerStaticData } from '@/utils';
+  import { ServerStaticData, type IHosInfo } from '@/utils';
   import dayjs from 'dayjs';
 
   const timeNow = dayjs().format('YYYY-MM-DD');
@@ -54,20 +68,49 @@
     value: BaseObject;
     title: string;
   }>();
-  const emits = defineEmits(['update:value', 'submit']);
+  const emits = defineEmits(['update:value', 'submit', 'hos-change']);
 
   const datePickerRef = ref<any>('');
+  const dataPickerRef = ref<any>('');
   const dateValue = ref('');
+  const hosList = ref<IHosInfo[]>([]);
+  const localdata = ref<any[]>([]);
 
-  let selItem = null;
+  let selItem: TInstance;
   let _firstIn = true;
-  const disabledClick = (item) => {
+  const disabledClick = (item: TInstance) => {
     selItem = item;
-    if (_firstIn) {
-      datePickerRef.value.clear();
-      _firstIn = false;
+    const { field, key } = item;
+
+    if (field === 'time-picker') {
+      if (_firstIn) {
+        datePickerRef.value.clear();
+        _firstIn = false;
+      }
+      datePickerRef.value.show();
+    } else if (field === 'select') {
+      if (key === 'hosId') {
+        localdata.value = hosList.value;
+        dataPickerRef.value.show();
+      }
     }
-    datePickerRef.value.show();
+  };
+
+  const pickerChange = (e) => {
+    const {
+      detail: { value },
+    } = e;
+
+    const { key } = selItem!;
+
+    change({
+      ...props.value,
+      [key]: value.map((o) => o.value).join(','),
+    });
+
+    if (key === 'hosId') {
+      emits('hos-change');
+    }
   };
 
   const dateChange = (date) => {
@@ -81,6 +124,14 @@
     }
   };
 
+  const getConfig = async () => {
+    const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+  };
+
+  const getHosList = ({ list }) => {
+    hosList.value = list;
+  };
+
   const tempList: TInstance[] = [
     {
       required: true,
@@ -92,6 +143,7 @@
       isForShow: true,
       showBodyStyle: 'text-align: left;margin-left:20rpx;',
       disabled: true,
+      showSuffixArrowIcon: true,
     },
 
     {
@@ -112,13 +164,12 @@
     {
       required: true,
       showSuffixArrowIcon: true,
-      // type: 'date',
+      type: 'date',
       label: '入院日期',
       placeholder: '请选择(必填)',
       key: 'admissionTime',
-      // field: 'time-picker',
-      field: 'input-text',
-      // end: timeNow,
+      field: 'time-picker',
+      end: timeNow,
       disabled: true,
     },
 
@@ -126,15 +177,12 @@
       required: true,
       showSuffixArrowIcon: true,
       disabled: true,
-
-      // type: 'date',
+      field: 'time-picker',
+      type: 'date',
       label: '出院日期',
       placeholder: '请选择(必填)',
       key: 'outTime',
-      // field: 'time-picker',
-      field: 'input-text',
-
-      // end: timeNow,
+      end: timeNow,
       validator: async (v) => {
         const admissionTime = props.value.admissionTime;
 

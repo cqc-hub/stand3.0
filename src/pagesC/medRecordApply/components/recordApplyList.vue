@@ -41,7 +41,7 @@
               <text class="g-bold f32">
                 {{ `${outinfo.admissionTime} 至 ${outinfo.outTime}` }}
               </text>
-              <view class="f28 color-888">{{ outinfo.diagnosisC }}</view>
+              <view class="f28 color-888">{{ outinfo.diagnosis || '无诊断' }}</view>
             </view>
           </view>
         </view>

@@ -173,7 +173,13 @@
         </button>
       </view>
 
-      <order-Reg-Confirm title="退还金额说明" height="35vh" ref="refRefConfirm">
+      <order-Reg-Confirm
+        headerIcon=""
+        title="退还金额说明"
+        height="35vh"
+        ref="refRefConfirm"
+        isShowCloseIcon
+      >
         <view>
           <view class="dialog-content mb76">退还金额已原路返回，请查收。</view>
         </view>

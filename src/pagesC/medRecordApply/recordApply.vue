@@ -197,7 +197,6 @@
       checkOutHosList.value = [];
     }
   });
-
   // gStores.userStore.patChoose
 </script>
 

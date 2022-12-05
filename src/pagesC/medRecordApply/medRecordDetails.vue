@@ -1,5 +1,9 @@
 <template>
   <view>
+    <view class="my-display-none">
+      <g-selhos :hosId="_hosId" @get-list="getHosList" />
+    </view>
+
     <view class="g-page" v-if="pageConfig && isConfigGet">
       <g-flag typeFg="503" isShowFg />
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
@@ -202,6 +206,7 @@
         v-model:value="addDialogValue"
         :title="addDialogTitle"
         @submit="recordSubmit"
+        @hos-change="hosChange"
         ref="refAddDialog"
       />
 
@@ -223,10 +228,6 @@
       >
         <g-flag typeFg="32" isShowFgTip />
       </g-pay>
-
-      <view class="g-border-bottom my-display-none">
-        <g-selhos :hosId="hosId" @get-list="getHosList" />
-      </view>
     </view>
 
     <xy-dialog
@@ -310,6 +311,8 @@
     isManual?: '1';
     phsOrderNo?: string;
   }>();
+
+  const _hosId = ref(props.hosId || '');
 
   const isConfigGet = ref(false);
   const pageConfig = ref<ISystemConfig['medRecord'][number]>({
@@ -413,8 +416,8 @@
 
   const getGetHosName = computed(() => {
     return (
-      hosList.value.find((o) => o.hosId == props.hosId)?.hosName ||
-      props.hosId ||
+      hosList.value.find((o) => o.hosId == _hosId.value)?.hosName ||
+      _hosId.value ||
       ''
     );
   });
@@ -428,8 +431,10 @@
 
   const aimValue = ref<string[]>([]);
 
-  const getHosList = ({ list }: { list: IHosInfo[] }) => {
+  const getHosList = async ({ list }: { list: IHosInfo[] }) => {
     hosList.value = list;
+
+    init();
   };
 
   const chooseIdCardFront = async () => {
@@ -458,7 +463,7 @@
 
   const addRecord = () => {
     addDialogValue.value = {
-      hosId: props.hosId,
+      hosId: _hosId.value,
     };
     isAddDialogEdit.value = false;
 
@@ -498,7 +503,7 @@
     isAddDialogEdit.value = true;
     addDialogValue.value = {
       ...item,
-      hosId: props.hosId,
+      hosId: _hosId.value,
     };
     _editRowIndex = index;
 
@@ -522,16 +527,23 @@
     recordRows.value.splice(index, 1);
   };
 
+
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
-    pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
+    if (_hosId.value) {
+      pageConfig.value = listConfig.find((o) => o.hosId === _hosId.value)!;
+    } else {
+      const configDetail = listConfig[0];
+      pageConfig.value = configDetail;
+      _hosId.value = configDetail.hosId;
+    }
 
     if (!pageConfig.value) {
       gStores.messageStore.showMessage(
-        '未获取到该院区的配置' + `(${props.hosId})`
+        '未获取到该院区的配置' + `(${_hosId.value})`
       );
 
-      throw new Error('未获取到该院区的配置' + `(${props.hosId})`);
+      throw new Error('未获取到该院区的配置' + `(${_hosId.value})`);
     }
     isConfigGet.value = true;
   };
@@ -624,7 +636,6 @@
 
     const { province, city, county, detailedAddress, senderName, senderPhone } =
       getAddress.value;
-    const { hosId } = props;
     const { patientId } = gStores.userStore.patChoose;
 
     const division = `${province} ${city} ${county}`;
@@ -641,7 +652,7 @@
       endIdCardUrl: idCardImg.value.endIdCardUrl,
       handIdCardUrl: idCardImg.value.handIdCardUrl,
       fee: getPayMoneyNum.value,
-      hosId,
+      hosId: _hosId.value,
       outInfo: JSON.stringify(recordRows.value),
       outTime: recordRows.value.map((o) => o.outTime).join(','),
       openId: '',
@@ -671,7 +682,7 @@
       phsOrderNo: result.phsOrderNo,
       phsOrderSource: '4',
       totalFee: getPayMoneyNum.value,
-      hosId: props.hosId,
+      hosId: _hosId.value,
       hosName: getGetHosName.value,
     };
 
@@ -696,7 +707,7 @@
     uni.hideLoading();
 
     uni.redirectTo({
-      url: '/pagesC/medRecordApply/_recordApply?hosId=' + props.hosId,
+      url: '/pagesC/medRecordApply/_recordApply?hosId=' + _hosId.value,
     });
   };
 
@@ -738,12 +749,21 @@
     remark.value = _remark || '';
   };
 
+  const hosChange = () => {
+    _hosId.value = addDialogValue.value.hosId;
+    getConfig();
+  };
+
   const init = async () => {
     await getConfig();
 
     // 再次申请
     if (props.phsOrderNo) {
       assignPageData(props.phsOrderNo);
+    }
+
+    if (props.isManual) {
+      addRecord();
     }
   };
 
@@ -769,12 +789,9 @@
     }
   });
 
-  onMounted(async () => {
-    await init();
-    if (props.isManual) {
-      addRecord();
-    }
-  });
+  // onMounted(async () => {
+  //   await init();
+  // });
 </script>
 
 <style lang="scss" scoped>

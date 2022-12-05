@@ -105,6 +105,9 @@ export interface ISystemConfig {
     // 收钱方式预收的金额 ｜ 单个项目金额
     fee: number;
     hosId: string;
+
+    // 是否支持自定义住院记录
+    // isCustomPatRecord?: '0' | '1';
   }[];
 
   // 门诊缴费

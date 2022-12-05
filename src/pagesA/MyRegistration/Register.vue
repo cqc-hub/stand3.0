@@ -125,6 +125,15 @@
         </view>
       </template>
     </g-select>
+
+    <Order-Reg-Confirm
+      :title="'医院介绍'"
+      height="80vh"
+      ref="regDialogConfirm"
+      isHideFooter
+    >
+      <view class="color-444 f32 g-break-word mb40">{{ hosIntro }}</view>
+    </Order-Reg-Confirm>
     <g-message />
   </view>
 </template>
@@ -155,6 +164,7 @@
 
   const dirUrl = ref(decodeURIComponent(props._url));
   // const listDisableName = ref('ifClick');
+  const hosIntro = ref('');
 
   const getTypeNow = computed(() => {
     if (dirUrl.value.includes('/pagesA/MyRegistration/selDepartment')) {
@@ -247,7 +257,6 @@
   const medCopyConfigList = ref<ISystemConfig['medRecord']>([]);
 
   const itemClick = (item: IHosInfo) => {
-    console.log(1111, props);
     if (isMedCopy.value) {
       const _idx = medCopyConfigList.value.findIndex(
         (o) => o.hosId === item.hosId
@@ -385,9 +394,11 @@
     }
   };
 
+  const regDialogConfirm = ref<any>('');
   const introClick = (item: IHosInfo) => {
-    console.log(item);
     const { intro } = item;
+    hosIntro.value = intro;
+    regDialogConfirm.value.show();
   };
 
   const requestWxQx = async () => {

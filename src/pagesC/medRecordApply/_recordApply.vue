@@ -19,15 +19,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
   import { onMounted, ref, nextTick } from 'vue';
-  import { CaseCopyItem, isExpress1 } from './utils/recordApply';
 
-  import RecordApplyList from './components/recordApplyList.vue';
+  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import { CaseCopyItem, isExpress1 } from './utils/recordApply';
+  import { joinQuery } from '@/common';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
-  import { joinQuery } from '@/common';
+
+  import RecordApplyList from './components/recordApplyList.vue';
 
   const props = defineProps<{
     hosId?: string;

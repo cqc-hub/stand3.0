@@ -201,4 +201,8 @@
     top: 0rpx;
     z-index: 9;
   }
+
+  .close-icon {
+    font-weight: normal;
+  }
 </style>
