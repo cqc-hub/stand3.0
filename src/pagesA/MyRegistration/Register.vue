@@ -37,6 +37,7 @@
         @img-click="imgClick"
         @location-click="locationClick"
         @item-click="itemClick"
+        @intro-click="introClick"
       />
     </scroll-view>
 
@@ -130,6 +131,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
+
   import {
     ServerStaticData,
     IHosInfo,
@@ -140,6 +142,7 @@
   import { joinQuery } from '@/common';
 
   import hosListVue from './components/hosList/hosList.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = defineProps<{
     _url: string;
@@ -207,6 +210,7 @@
     });
     return lvs;
   });
+
   const _hosList = computed(() => {
     if (!hosLvNow.value) {
       return hosList.value;
@@ -214,6 +218,7 @@
       return hosList.value.filter((o) => o.hosLevelName === hosLvNow.value);
     }
   });
+
   const __hosList = computed(() => {
     if (hosSortNow.value === '综合排序') {
       return _hosList.value;
@@ -227,6 +232,7 @@
       });
     }
   });
+
   const hosLvNow = ref('');
 
   const hosSortOpt = ref(['综合排序', '按距离排序']);
@@ -377,6 +383,11 @@
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
     }
+  };
+
+  const introClick = (item: IHosInfo) => {
+    console.log(item);
+    const { intro } = item;
   };
 
   const requestWxQx = async () => {

@@ -1,6 +1,8 @@
 <template>
   <view class="page">
     <view class="header">
+      <g-flag isShowFg typeFg="505" />
+
       <!-- class="my-display-none" -->
       <view class="g-border-bottom my-display-none">
         <g-selhos
@@ -9,7 +11,7 @@
           @get-list="getHosList"
         />
       </view>
-      <g-choose-pat @choose-pat="getOutPatientHosList"  />
+      <g-choose-pat @choose-pat="getOutPatientHosList" />
     </view>
 
     <view class="header-btn flex-normal">
@@ -44,18 +46,22 @@
         </g-empty>
       </view>
     </view>
-
     <view v-if="outHosList.length" class="g-footer g-border-top">
-      <view @click="chooseAll" class="footer-check flex-normal">
+      <view @click="chooseAll" class="footer-check flex-normal color-444">
         <view
           :class="{
             'color-blue': isCheckAll,
           }"
-          class="iconfont"
+          class="iconfont color-888"
         >
           {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
         </view>
-        <view class="flex-normal">全选</view>
+        <view class="flex-normal" v-if="isCheckAll">全选</view>
+        <view v-else>
+          <text class="mr8">已选择</text>
+          <text class="mr8 color-blue">{{ checkOutHosList.length }}</text>
+          <text>个</text>
+        </view>
       </view>
       <button
         :class="{
@@ -142,10 +148,10 @@
 
   const getOutPatientHosList = async () => {
     isComplete.value = true;
+    outHosList.value = [];
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
       patientId,
-      // patientId: 322989943,
       type: '1',
       hosId: hosId.value,
     };

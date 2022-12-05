@@ -37,7 +37,9 @@
 
         <view class="row flex-normal">
           <view class="row-title">医生</view>
-          <view class="row-content">{{ item.hosName + item.docName }}</view>
+          <view class="row-content">
+            {{ item.hosName + item.deptName + item.docName }}
+          </view>
         </view>
       </view>
     </view>

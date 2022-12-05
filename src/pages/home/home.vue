@@ -317,7 +317,7 @@
   const goSearch = () => {
     let url =
       (global.env as string) === 'prod'
-        ? 'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
+        ? 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
         : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
     uni.navigateTo({
       url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
@@ -327,7 +327,6 @@
     //   url: '/pagesA/MyRegistration/RegSearch',
     // });
   };
-
 </script>
 
 <style lang="scss" scoped>

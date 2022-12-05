@@ -239,6 +239,7 @@
 
 <script lang="ts" setup>
   import { ref, withDefaults, computed } from 'vue';
+
   import type {
     TInstance,
     ISelectOptions,
@@ -246,10 +247,11 @@
     IInputVerifyInstance,
     ISwitchInstance,
   } from '@/components/g-form/index';
-  import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
   import { useMessageStore } from '@/stores';
   import { ServerStaticData, useOcr } from '@/utils';
   import api from '@/service/api';
+
+  import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 
   /**
    * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
@@ -293,6 +295,7 @@
     'address-change',
     'ocr-ident',
     'row-click',
+    'disabled-click',
   ]);
 
   const inputPlaceHolderStyle = (item: TInstance) => {
@@ -433,6 +436,7 @@
 
   const clickContainer = function (item: TInstance) {
     if (item.disabled) {
+      emits('disabled-click', item);
       return;
     }
 

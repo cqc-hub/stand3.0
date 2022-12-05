@@ -1,6 +1,9 @@
 <template>
   <view class="item g-flex-rc-cc">
     <view class="hos-avatar">
+      <view v-if="item.intro" @click="introClick" class="hos-intro f24">
+        介绍
+      </view>
       <image @click="imgClick" :src="item.hosPhoto" />
     </view>
 
@@ -52,7 +55,12 @@
     disabled?: boolean;
   }>();
 
-  const emits = defineEmits(['img-click', 'location-click', 'item-click']);
+  const emits = defineEmits([
+    'img-click',
+    'location-click',
+    'item-click',
+    'intro-click',
+  ]);
 
   const itemClick = () => {
     emits('item-click', props.item);
@@ -64,6 +72,10 @@
 
   const imgClick = () => {
     emits('img-click', props.item);
+  };
+
+  const introClick = () => {
+    emits('intro-click', props.item);
   };
 </script>
 
@@ -84,6 +96,17 @@
         width: 100%;
         height: 100%;
         border-radius: 12rpx;
+      }
+
+      .hos-intro {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 6rpx 12rpx;
+        border-radius: 0px 4px 0px 4px;
+        opacity: 0.5;
+        background: #000000;
+        color: #ffffff;
       }
     }
 

@@ -771,9 +771,7 @@
     transition-property: opacity;
     transition-duration: 0.3s;
     opacity: 0;
-    /* #ifndef APP-NVUE */
-    z-index: 99;
-    /* #endif */
+    z-index: 9999;
   }
 
   .uni-calendar--mask-show {

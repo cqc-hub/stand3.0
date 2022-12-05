@@ -13,6 +13,7 @@
               @img-click="itemClick"
               @location-click="locationClick"
               @item-click="itemClick"
+              @intro-click="introClick"
             />
           </block>
 
@@ -57,7 +58,12 @@
     return false;
   };
 
-  const emits = defineEmits(['img-click', 'location-click', 'item-click']);
+  const emits = defineEmits([
+    'img-click',
+    'location-click',
+    'item-click',
+    'intro-click',
+  ]);
 
   const itemClick = (item: IHosInfo) => {
     if (isDisabled(item)) {
@@ -76,6 +82,10 @@
       return;
     }
     emits('location-click', item);
+  };
+
+  const introClick = (item: IHosInfo) => {
+    emits('intro-click', item);
   };
 
   const imgClick = (item: IHosInfo) => {

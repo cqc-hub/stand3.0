@@ -9,6 +9,7 @@
       :type="type"
       :duration="duration"
       :maskAlpha="maskAlpha"
+      :zIndex="zIndex"
       bg-color="rgba(0,0,0,0)"
     >
       <view
@@ -83,6 +84,11 @@
       maskAlpha: {
         type: Number,
         default: 0.5,
+      },
+
+      zIndex: {
+        type: [String, Number],
+        default: 10076,
       },
     },
 
@@ -163,8 +169,8 @@
     }
 
     .popup-box {
-      max-height: var(--h-popup-max-height);
-      min-height: min(233rpx, 30vh);
+      // max-height: var(--h-popup-max-height);
+      // min-height: min(233rpx, 30vh);
       overflow-y: scroll;
       // margin-bottom: 48rpx;
 

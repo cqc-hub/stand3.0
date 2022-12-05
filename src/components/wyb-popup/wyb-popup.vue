@@ -380,14 +380,15 @@
 <style>
 	@import "./iconfont.css";
 	.wyb-popup-box{
-		position: fixed;
+		/* position: fixed; */
+		position: relative;
 		transition-timing-function: ease-out;
 		transition-property: opacity, transform;
 		z-index: 999;
 	}
 
 	.wyb-popup-container {
-		position: relative;
+		/* position: relative; */
 		box-sizing: border-box;
 	}
 

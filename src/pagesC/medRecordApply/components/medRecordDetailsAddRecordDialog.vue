@@ -1,12 +1,13 @@
 <template>
   <view class="">
-    <g-popup :maskClickClose="false" :title="title" ref="refAddDialog">
+    <g-popup :zIndex="20" :title="title" ref="refAddDialog">
       <view class="g-page">
         <view class="g-container">
           <g-form
             :value="value"
             @update:value="change"
             @submit="submit"
+            @disabled-click="disabledClick"
             ref="refForm"
             selectInUniDataPicker
             warningInUni
@@ -24,6 +25,19 @@
         </view>
       </view>
     </g-popup>
+
+    <view class="date-ref">
+      <uni-datetime-picker
+        :modelValue="dateValue"
+        :type="'date'"
+        :end="timeNow"
+        @change="dateChange"
+        ref="datePickerRef"
+        hideFooter
+      >
+        <view />
+      </uni-datetime-picker>
+    </view>
   </view>
 </template>
 
@@ -41,6 +55,31 @@
     title: string;
   }>();
   const emits = defineEmits(['update:value', 'submit']);
+
+  const datePickerRef = ref<any>('');
+  const dateValue = ref('');
+
+  let selItem = null;
+  let _firstIn = true;
+  const disabledClick = (item) => {
+    selItem = item;
+    if (_firstIn) {
+      datePickerRef.value.clear();
+      _firstIn = false;
+    }
+    datePickerRef.value.show();
+  };
+
+  const dateChange = (date) => {
+    if (date) {
+      const { key } = selItem!;
+
+      change({
+        ...props.value,
+        [key]: date,
+      });
+    }
+  };
 
   const tempList: TInstance[] = [
     {
@@ -73,23 +112,29 @@
     {
       required: true,
       showSuffixArrowIcon: true,
-      type: 'date',
+      // type: 'date',
       label: '入院日期',
       placeholder: '请选择(必填)',
       key: 'admissionTime',
-      field: 'time-picker',
-      end: timeNow,
+      // field: 'time-picker',
+      field: 'input-text',
+      // end: timeNow,
+      disabled: true,
     },
 
     {
       required: true,
       showSuffixArrowIcon: true,
-      type: 'date',
+      disabled: true,
+
+      // type: 'date',
       label: '出院日期',
       placeholder: '请选择(必填)',
       key: 'outTime',
-      field: 'time-picker',
-      end: timeNow,
+      // field: 'time-picker',
+      field: 'input-text',
+
+      // end: timeNow,
       validator: async (v) => {
         const admissionTime = props.value.admissionTime;
 
@@ -142,8 +187,6 @@
   };
 
   const submit = ({ data }) => {
-    console.log(data);
-
     emits('submit', data);
     hide();
   };
@@ -165,5 +208,10 @@
     .dialog-btn {
       flex: 1;
     }
+  }
+
+  .date-ref {
+    position: relative;
+    z-index: 999;
   }
 </style>
