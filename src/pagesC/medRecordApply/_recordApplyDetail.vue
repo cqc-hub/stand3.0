@@ -50,7 +50,7 @@
               class="my-disabled"
             >
               <view
-                v-if="['12', '15', '14'].includes(info.orderStatus)"
+                v-if="['12', '15', '14', '11'].includes(info.orderStatus)"
                 class="iconfont reg-header-icon-bg"
               >
                 &#xe6c6;
@@ -159,7 +159,7 @@
         <button
           v-if="['20', '21', '16', '17'].includes(info.orderStatus)"
           @click="applyAgain"
-          class="btn g-border btn-primary"
+          class="btn g-border btn-primary btn-plain"
         >
           再次申请
         </button>
@@ -196,11 +196,12 @@
     </view>
 
     <xy-dialog
-      title=""
-      content="确定取消?"
+      title="确定取消申请?"
+      content="若取消申请,已缴纳的金额将会在7天内原路退回"
       :show="isShowApplyCancelDialog"
       @cancelButton="isShowApplyCancelDialog = false"
       @confirmButton="applyCancelDialog"
+      confirmText="确定取消"
     />
     <g-message />
     <g-back-home v-if="!isShowFooter" />
