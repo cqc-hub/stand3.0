@@ -15,9 +15,10 @@
           <swiper-item
             v-for="(item, i) in props.leftFunctionList"
             :key="i"
-            @tap="gotoPath(item)"
           >
-            <image mode="scaleToFill" :src="item.iconfont" />
+          <g-login @handler-next="gotoPath(item)">
+            <image mode="widthFix" :src="item.iconfont"  @tap="gotoPath(item)" />
+          </g-login>
           </swiper-item>
         </swiper>
       </view>
@@ -32,13 +33,10 @@
               props.leftFunctionList[0].iconfont ? 'no-border' : 'banner-common2'
             }`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
-            v-if="props.leftFunctionList.length == 1"
-            @tap="gotoPath(props.leftFunctionList[0])"
-          >
+            v-if="props.leftFunctionList.length == 1"  >
             <block v-if="props.leftFunctionList[0].iconfont">
               <g-login @handler-next="gotoPath(props.leftFunctionList[0])">
-              11
-                <image mode="scaleToFill" :src="props.leftFunctionList[0].iconfont" />
+                <image mode="widthFix" :src="props.leftFunctionList[0].iconfont"  @tap="gotoPath(props.leftFunctionList[0])" />
               </g-login>
             </block>
             <block v-else>
@@ -87,23 +85,28 @@
             </view>
           </block>
           <block v-else>
-            <view
-              v-for="(item, i) in props.functionList"
-              :key="i"
-              :class="`view${i + 2} banner-back${i + 1} banner-common`"
-              :style="
-                props.leftFunctionList.length == 1 && props.functionList.length == 2
-                  ? 'margin-top:0'
-                  : ''
-              "
-              @tap="gotoPath(item)"
-            >
-              <view class="flex-between">
-                <text>{{ item.title }}</text>
-                <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+            <block v-for="(item, i) in props.functionList" :key="i">
+              <!-- <g-login @handler-next="gotoPath(item)"> -->
+
+              <view
+                :class="`view${i + 2} banner-back${i + 1} banner-common`"
+                :style="
+                  props.leftFunctionList.length == 1 && props.functionList.length == 2
+                    ? 'margin-top:0'
+                    : ''
+                "
+                @tap="gotoPath(item)" 
+              >
+                <view class="flex-between">
+                  <text>{{ item.title }}</text>
+                  <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+                </view>
+                <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
+
               </view>
-              <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
-            </view>
+            <!-- </g-login> -->
+
+            </block>
           </block>
         </view>
       </view>
