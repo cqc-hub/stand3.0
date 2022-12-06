@@ -20,15 +20,17 @@
       </view>
     </view>
 
-    <view class="page" v-if="props.isHosDaylist=='2'&&InHospitalCostInfo>0">
-      <view class="datetime-picker">
-        <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
-        <view class="iconfont down">&#xe6e8;</view>
+    <view v-if="(props.isHosDaylist=='2')">
+      <view class="page">
+        <view class="datetime-picker">
+          <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
+          <view class="iconfont down">&#xe6e8;</view>
+        </view>
+        <inpatientInfo :costDay="costDay" :isHosDaylist="props.isHosDaylist" />
       </view>
-      <inpatientInfo :costDay="costDay" :isHosDaylist="props.isHosDaylist" @detalResult='detalResult' />
-    </view>
 
-    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0||InHospitalCostInfo==0">
+    </view>
+    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0">
       <g-empty :current="1" />
     </view>
   </view>
@@ -48,7 +50,8 @@ const props = defineProps<{
   isHosDaylist?: string;
   tabCurrent?: number;
 }>();
-const InHospitalCostInfo = ref(0);
+const InfoList = ref();
+const InfoObject = ref();
 const timestamp = new Date().getTime();
 const yesterDayTime = timestamp - 24 * 60 * 60 * 1000;
 const costDay = ref(dayjs(yesterDayTime).format('YYYY-MM-DD'));
@@ -63,14 +66,12 @@ const dailyResList = ref<dailyResult>({
 const init = async () => {
   const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: gStores.userStore.patChoose.patientId,
-    //  patientId: '10763642',
+    //patientId: '10763642',
     costType: '1',
   });
   dailyResList.value = result;
 };
-const detalResult = (val) => {
-  InHospitalCostInfo.value = Object.keys(val).length;
-};
+
 const gotoListExpenses = (data) => {
   uni.navigateTo({
     url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inpatientNo}&isHosDaylist='1'`,
@@ -86,7 +87,9 @@ onPullDownRefresh(() => {
   }
 });
 watch(
-  () => gStores.userStore.patChoose.patientId,
+  () => {
+    gStores.userStore.patChoose.patientId;
+  },
   () => {
     if (gStores.userStore.patChoose.patientId) {
       init();
@@ -95,7 +98,6 @@ watch(
 );
 onMounted(async () => {
   await init();
-  await detalResult(InHospitalCostInfo);
 });
 </script>
 
@@ -184,5 +186,17 @@ onMounted(async () => {
 }
 .empty-box {
   margin-top: 200rpx;
+}
+.no-data {
+  padding: 80rpx 0;
+  background-color: #fff;
+  text-align: center;
+  margin: 0 32rpx;
+  color: #888;
+  font-size: 28rpx;
+  .no-data-img {
+    width: 200rpx;
+    height: 200rpx;
+  }
 }
 </style>

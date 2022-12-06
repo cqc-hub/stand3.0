@@ -2,7 +2,7 @@
   <!-- 住院信息 -->
   <view>
     <view class="box" v-if="Obj==false">
-      <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
+      <view :class="gStores.userStore.patChoose.patientSex=='女'?'card card-lady':'card card-man'">
         <view class="user">
           <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
 
@@ -24,8 +24,8 @@
           <text>{{hosInfoResObj.beHosDate}} </text>
           <text>入院</text>
         </view>
-        <view v-if="hosInfoResObj.sexCode=='2'" class="iconfont woman">&#xe6a9;</view>
-        <view v-if="hosInfoResObj.sexCode=='1'" class="iconfont man">&#xe6aa;</view>
+        <view v-if="gStores.userStore.patChoose.patientSex=='女'" class="iconfont woman">&#xe6a9;</view>
+        <view v-if="gStores.userStore.patChoose.patientSex=='男'" class="iconfont man">&#xe6aa;</view>
       </view>
       <view class="card-detail">
         <view class="card-detail-item">
@@ -59,10 +59,13 @@
 
         <view class="button" @click="toPayPage">预交费用</view>
       </view>
+      <g-flag typeFg="17" isShowFg />
     </view>
     <view class="empty-box" v-else>
       <g-empty :current="1" />
     </view>
+    <g-message />
+
   </view>
 
 </template>
@@ -74,6 +77,7 @@ import api from '@/service/api';
 import {
   getInHospitalInfoParam,
   getInHospitalInfoResult,
+  hospitalPayResult,
 } from '../utils/inpatientInfo';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 const Obj = ref();
@@ -99,14 +103,25 @@ const hosInfoParam = ref({
 const hosInfoResObj = ref<getInHospitalInfoResult>(
   {} as getInHospitalInfoResult
 );
+const payParam = ref({
+  hosId: '1279',
+  // patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
+});
+const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
+const toPayRecord = async () => {
+  const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
+    patientId: payParam.value.patientId,
+    hosId: payParam.value.hosId,
+  });
+  payResList.value = result;
+  uni.navigateTo({
+    url: 'payRecord',
+  });
+};
 const toPayPage = () => {
   uni.navigateTo({
     url: `paymentPage`,
-  });
-};
-const toPayRecord = () => {
-  uni.navigateTo({
-    url: 'payRecord',
   });
 };
 onPullDownRefresh(() => {
@@ -120,7 +135,7 @@ onPullDownRefresh(() => {
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
     hosId: hosInfoParam.value.hosId,
-    //  patientId: '10763642',
+    // patientId: '10763642',
     patientId: gStores.userStore.patChoose.patientId,
   });
   hosInfoResObj.value = result;
@@ -152,7 +167,7 @@ onMounted(() => {
   border-radius: 16rpx;
   padding: 40rpx 32rpx 0;
   overflow: hidden;
-  & .card-man {
+  &.card-man {
     background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
   }
   &.card-lady {
@@ -218,7 +233,7 @@ onMounted(() => {
   background-color: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 16rpx;
-  margin-top: 16rpx;
+  margin: 16rpx 0 20rpx;
   padding: 40rpx 32rpx;
 
   .card-detail-item {

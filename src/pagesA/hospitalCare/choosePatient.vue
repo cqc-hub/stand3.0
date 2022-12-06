@@ -1,5 +1,6 @@
 <template>
   <!-- 选择就诊人 不绑定就诊人模式 -->
+  <g-flag typeFg="29" isShowFg />
   <view class="page">
     <view class="title">请查询就诊人</view>
     <view class="inputs">
@@ -10,7 +11,7 @@
       </view>
       <view class="input-item">
         <text>手机号码</text>
-        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="idcard" v-model="hosInfoParam.patientPhone"
+        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="number-" v-model="hosInfoParam.patientPhone"
                @input="checkPatientPhone(hosInfoParam.patientPhone)" placeholder="请输入" />
       </view>
 

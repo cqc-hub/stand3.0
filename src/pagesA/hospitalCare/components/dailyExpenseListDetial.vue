@@ -2,16 +2,16 @@
   <view class="page" v-if="Obj==false">
     <view class="container">
       <view class="top">
-        <view class="title">{{costInfoDetal.costTypeName}}</view>
+        <view class="title" v-if=" costType == '1'">{{costInfoDetal.hosName}}日费用清单</view>
+        <view class="title" v-if=" costType == '3'">{{costInfoDetal.hosName}}费用结算单</view>
         <view class="information">
           <view class="item">
             <view class="item-title">患者姓名</view>
             <view class="item-content">{{patName}}({{patientId}})</view>
           </view>
-          <view class="item">
+          <view class="item" v-if="param.isHosTotallist">
             <view class="item-title">费用时间</view>
-            <view class="item-content" v-if="param.isHosDaylist||props.isHosDaylist">{{costDate}}</view>
-            <view class="item-content" v-if="param.isHosTotallist">{{param.startTime}}～{{param.endTime}}</view>
+            <view class="item-content">{{param.startTime}}～{{param.endTime}}</view>
           </view>
           <view class="item">
             <view class="item-title">病区床号</view>
@@ -19,7 +19,7 @@
           </view>
           <view class="item" v-if="param.hospitalId">
             <view class="item-title">住院号</view>
-            <view class="item-content">{{costInfoDetal.inpatientNo}}</view>
+            <view class="item-content">{{param.hospitalId}}</view>
           </view>
           <view class="item">
             <view class="item-title">费用总额</view>
@@ -27,7 +27,7 @@
           </view>
         </view>
       </view>
-      <view class="bottom">
+      <view class="bottom" v-if="(costInfoDetal.costList&&costInfoDetal.costList.length>0)">
         <view class="title">费用明细</view>
         <template v-for="(item,index) in costInfoDetal.costList" :key="index">
           <view class="item">
@@ -61,6 +61,10 @@
             </template>
           </view>
         </template>
+      </view>
+      <view class="no-data" v-else>
+        <img class="no-data-img" src="../../../static/image/nodata.png" alt="">
+        <view>当天未产生住费用</view>
       </view>
     </view>
   </view>
@@ -137,11 +141,6 @@ const init = async () => {
   costInfoDetal.value = result;
   Obj.value = JSON.stringify(costInfoDetal.value) == '{}';
 };
-
-const detalResultEvent = () => {
-  emit('detalResult', costInfoDetal.value);
-};
-
 watch(
   () => (costDate.value = props.costDay),
   () => {
@@ -151,14 +150,9 @@ watch(
   }
 );
 onMounted(async () => {
-  if (props.isHosDaylist || props.isHosTotallist) {
-    await init();
-    detalResultEvent();
-  }
+  await init();
 });
 onLoad((val) => {
-  console.log(val, '2222222222222222');
-
   param.value.costDay = val.costDate;
   param.value.hospitalId = val.inpatientNo;
   param.value.isHosTotallist = val.isHosTotallist;
@@ -306,5 +300,17 @@ onLoad((val) => {
 }
 .empty-box {
   padding-top: 200rpx;
+}
+.no-data {
+  padding: 80rpx 0;
+  background-color: #fff;
+  text-align: center;
+
+  color: #888;
+  font-size: 28rpx;
+  .no-data-img {
+    width: 200rpx;
+    height: 200rpx;
+  }
 }
 </style>
