@@ -107,7 +107,7 @@ export interface ISystemConfig {
     hosId: string;
 
     // 是否支持自定义住院记录
-    // isCustomPatRecord?: '0' | '1';
+    isCustomPatRecord?: '0' | '1';
   }[];
 
   // 门诊缴费

@@ -530,6 +530,10 @@
     }
   };
 
+  const clearWarning = () => {
+    warningKeys.value = [];
+  };
+
   const setData = function (value: BaseObject, item?: TInstance) {
     const oldValue = item ? props.value[item.key] : undefined;
 
@@ -701,6 +705,7 @@
   defineExpose({
     setList,
     submit,
+    clearWarning
   });
 </script>
 

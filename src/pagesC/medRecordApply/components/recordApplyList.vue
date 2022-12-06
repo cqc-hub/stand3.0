@@ -41,7 +41,9 @@
               <text class="g-bold f32">
                 {{ `${outinfo.admissionTime} 至 ${outinfo.outTime}` }}
               </text>
-              <view class="f28 color-888">{{ outinfo.diagnosis || '无诊断' }}</view>
+              <view class="f28 color-888">
+                {{ outinfo.diagnosis || '无诊断' }}
+              </view>
             </view>
           </view>
         </view>
@@ -54,6 +56,7 @@
 
       <view
         v-if="['12', '13'].includes(item.orderStatus) && item._expressDesc"
+        @click.stop="goExpress(item)"
         class="express flex-between"
       >
         <view class="flex-normal express-row">
@@ -81,10 +84,14 @@
     list: CaseCopyItem[];
   }>();
 
-  const emits = defineEmits(['item-click']);
+  const emits = defineEmits(['item-click', 'express-click']);
 
   const itemClick = (item: CaseCopyItem) => {
     emits('item-click', item);
+  };
+
+  const goExpress = (item: CaseCopyItem) => {
+    emits('express-click', item);
   };
 </script>
 

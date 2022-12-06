@@ -10,7 +10,11 @@
       class="g-container"
     >
       <block v-if="isComplete && list.length">
-        <Record-Apply-List :list="list" @item-click="goApplyDetail" />
+        <Record-Apply-List
+          :list="list"
+          @item-click="goApplyDetail"
+          @express-click="expressClick"
+        />
       </block>
     </scroll-list>
 
@@ -21,10 +25,17 @@
 <script lang="ts" setup>
   import { onMounted, ref, nextTick } from 'vue';
 
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    type TButtonConfig,
+    useTBanner,
+  } from '@/utils';
   import { CaseCopyItem, isExpress1 } from './utils/recordApply';
   import { joinQuery } from '@/common';
 
+  import globalGl from '@/config/global';
   import api from '@/service/api';
   import dayjs from 'dayjs';
 
@@ -113,6 +124,26 @@
         hosId: item.hosId,
       }),
     });
+  };
+
+  const expressClick = (item: CaseCopyItem) => {
+    const { expressNo, expressCompany } = item;
+    const args: TButtonConfig = {
+      type: 'h5',
+      path: 'pagesC/myExpress/expressDetail',
+      text: '',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: globalGl.SYS_CODE,
+        expressNo,
+        expressCompany,
+      },
+      addition: {
+        token: 'token',
+      },
+    };
+
+    useTBanner(args);
   };
 
   // const init = () => {

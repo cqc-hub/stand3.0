@@ -30,7 +30,7 @@
     },
     {
       icon: 'img_404_no record@3x.png',
-      label: '您没有相关的订单',
+      label: '暂未查到相关信息',
     },
     {
       icon: 'img_404_network@3x.png',

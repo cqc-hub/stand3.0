@@ -4,7 +4,7 @@
       <g-selhos @get-list="getHosList" />
     </view>
 
-    <g-popup :zIndex="20" :title="title" ref="refAddDialog">
+    <g-popup :zIndex="20" :title="title" @hide="popupHide" ref="refAddDialog">
       <view class="g-page">
         <view class="g-container">
           <g-form
@@ -124,12 +124,13 @@
     }
   };
 
-  const getConfig = async () => {
+  const getHosList = async ({ list }) => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
-  };
 
-  const getHosList = ({ list }) => {
-    hosList.value = list;
+    if (listConfig && listConfig.length) {
+      const hos = listConfig.map((o) => o.hosId + '');
+      hosList.value = list.filter((o) => hos.includes(o.hosId));
+    }
   };
 
   const tempList: TInstance[] = [
@@ -205,6 +206,10 @@
     setTimeout(() => {
       initForm();
     }, 200);
+  };
+
+  const popupHide = () => {
+    refForm.value.clearWarning();
   };
 
   const hide = () => {

@@ -168,6 +168,8 @@ export type CaseCopyItem = {
   expressParam?: string;
   _expressParam?: Express_1 | Express_2;
   outInfo: string;
+  expressNo: string;
+  expressCompany: string;
   _outInfo: TOutInfo[];
 };
 

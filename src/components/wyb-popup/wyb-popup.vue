@@ -1,5 +1,5 @@
 <template>
-  <view v-if="isShow" class="uni-data-tree">
+  <view v-if="isShow">
     <view
       @tap.stop.prevent
       @touchmove.stop.prevent
@@ -430,10 +430,27 @@
   @import './iconfont.css';
   .wyb-popup-box {
     /* position: fixed; */
-    position: relative;
     transition-timing-function: ease-out;
     transition-property: opacity, transform;
     z-index: 999;
+
+    position: fixed;
+    left: 0;
+    top: 20%;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /* #ifndef APP-NVUE */
+    display: flex;
+    /* #endif */
+    flex-direction: column;
+    overflow: hidden;
+    /* #ifdef APP-NVUE */
+    width: 750rpx;
+    /* #endif */
+    justify-content: flex-end;
   }
 
   .wyb-popup-container {
@@ -467,26 +484,5 @@
     left: 0;
     top: 0;
     position: absolute;
-  }
-
-  .uni-data-tree {
-    position: fixed;
-    left: 0;
-    top: 20%;
-    right: 0;
-    bottom: 0;
-    background-color: transparent;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    /* #ifndef APP-NVUE */
-    display: flex;
-    /* #endif */
-    flex-direction: column;
-    z-index: 102;
-    overflow: hidden;
-    /* #ifdef APP-NVUE */
-    width: 750rpx;
-    /* #endif */
-		justify-content: flex-end;
   }
 </style>

@@ -15,7 +15,11 @@
     </view>
 
     <view class="header-btn flex-normal">
-      <view @click="goAddRecord" class="g-flex-rc-cc g-border">
+      <view
+        v-if="isShowAddRecord"
+        @click="goAddRecord"
+        class="g-flex-rc-cc g-border"
+      >
         <view class="iconfont color-blue">&#xe6fb;</view>
         <view>手动添加记录</view>
       </view>
@@ -36,8 +40,14 @@
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
-        <g-empty :current="2" text="没有住院记录，去手动补充">
+        <g-empty
+          :current="2"
+          :text="
+            isShowAddRecord ? '没有住院记录，去手动补充' : ''
+          "
+        >
           <button
+            v-if="isShowAddRecord"
             @click="goAddRecord"
             class="btn g-border btn-primary empty-btn"
           >
@@ -81,7 +91,7 @@
   import { computed, ref, nextTick } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import { GStores, ServerStaticData, IHosInfo, ISystemConfig } from '@/utils';
   import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
   import { joinQuery } from '@/common/utils';
   import { setLocalStorage, getLocalStorage } from '@/common';
@@ -142,8 +152,45 @@
       if (!hosId.value) {
         hosId.value = list[0].hosId;
       }
-      getOutPatientHosList();
+
+      init();
     }
+  };
+
+  const pageConfig = ref<ISystemConfig['medRecord'][number]>({
+    sfz: [],
+    fee: 10,
+    isItemCount: '0',
+    hosId: '2',
+  });
+
+  // 手动添加记录?
+  const isShowAddRecord = computed(() => {
+    return pageConfig.value.isItemCount === '1';
+  });
+
+  const getConfig = async () => {
+    const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+    if (hosId.value) {
+      pageConfig.value = listConfig.find((o) => o.hosId === hosId.value)!;
+    } else {
+      const configDetail = listConfig[0];
+      pageConfig.value = configDetail;
+      hosId.value = configDetail.hosId;
+    }
+
+    if (!pageConfig.value) {
+      gStores.messageStore.showMessage(
+        '未获取到该院区的配置' + `(${hosId.value})`
+      );
+
+      throw new Error('未获取到该院区的配置' + `(${hosId.value})`);
+    }
+  };
+
+  const init = async () => {
+    await getConfig();
+    getOutPatientHosList();
   };
 
   const getOutPatientHosList = async () => {

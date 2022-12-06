@@ -137,7 +137,11 @@
               />
             </view>
 
-            <view @click="addRecord" class="add-btn color-blue g-flex-rc-cc">
+            <view
+              v-if="pageConfig.isCustomPatRecord === '1'"
+              @click="addRecord"
+              class="add-btn color-blue g-flex-rc-cc"
+            >
               <view class="iconfont add-icon">&#xe6fb;</view>
               <view class="f28 g-bold">手动添加记录</view>
             </view>
@@ -526,7 +530,6 @@
 
     recordRows.value.splice(index, 1);
   };
-
 
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');

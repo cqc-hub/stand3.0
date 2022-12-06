@@ -72,11 +72,7 @@
             </view>
 
             <view
-              v-if="
-                info.addresseeAddress &&
-                info.orderStatus === '12' &&
-                !expressInfo
-              "
+              v-if="info.addresseeAddress && !expressInfo"
               class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">
@@ -123,11 +119,7 @@
             </view>
 
             <view
-              v-if="
-                info.addresseeAddress &&
-                info.orderStatus !== '12' &&
-                !!expressInfo
-              "
+              v-if="info.addresseeAddress && !!expressInfo"
               class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">
