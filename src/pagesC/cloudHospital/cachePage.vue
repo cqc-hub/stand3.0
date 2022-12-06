@@ -22,7 +22,6 @@
   });
   //封装网络医院参数
   const getparams = (options) => {
-
     let para = {
       token: globalStore.getToken,
       openid: globalStore.openId,
@@ -33,7 +32,9 @@
       // hosDocId: options.docId,
       // openHomePage: options.openHomePage,
       // receptionMode: options.receptionMode, //医生名片里面的跳转
-      payBackParams: options.payBackParams && JSON.parse(decodeURIComponent(options.payBackParams))
+      payBackParams:
+        options.payBackParams &&
+        JSON.parse(decodeURIComponent(options.payBackParams)),
     };
     getSrc(para);
   };
@@ -42,30 +43,21 @@
   const getSrc = (para) => {
     // 网络医院有老版本和3.0版本
     const sysCodeList = ['1001033'];
-    const sysCode = getSysCode();
+    // const sysCode = global.SYS_CODE;
+    const sysCode = '1001017';
     let netUrl = '';
     let params = '';
-    if (sysCodeList.indexOf(sysCode) < 0) {
-      //新的
-      netUrl =
-        (global.env as string) === 'prod'
-          ? 'https://interhos.eheren.com/static/nhs/#/'
-          : 'https://testwechatnethos.eheren.com/static/nhs/';
-      params = encodeURIComponent(encryptDes(JSON.stringify(para)));
-      src.value = `${netUrl}${sysCode}/#/?initSysCode=${sysCode}&params=` + params;
-    } else {
-      //老的
-      netUrl =
-        (global.env as string) === 'prod'
-          ? 'https://interhos.eheren.com/static/netHospital/#/'
-          : 'https://testwechatnethos.eheren.com/static/netHospital/#/';
-      //暂时写死台州
-      para.hospital = 'ty';
+    //新的
+    netUrl = global.netUrl;
+    params = encodeURIComponent(encryptDes(JSON.stringify(para)));
+    src.value =
+      netUrl + `${sysCode}/#/` + `?initSysCode=${sysCode}&params=` + params;
 
-      params = encodeURIComponent(encryptDes(JSON.stringify(para)));
-      src.value = `${netUrl}?params=` + params;
-    }
     isShow.value = true;
+    console.log({
+      netUrl,
+    });
+
     console.log('跳转网络医院携带数据', para);
     console.log('跳转网络医院的路径', src.value);
   };
@@ -76,7 +68,9 @@
     console.log('获取到返回--------------', data);
     var paymentData = data[0].invokeData;
     let registerId = data[0].registerId;
-    let payBackParams = encodeURIComponent(JSON.stringify(data[0].payBackParams));
+    let payBackParams = encodeURIComponent(
+      JSON.stringify(data[0].payBackParams)
+    );
     console.log('编码----------------');
     console.log(payBackParams);
     if (paymentData) {
@@ -91,32 +85,32 @@
             url: joinQuery('/pages/cloudHospital/cloudHospital', {
               payment: 'next',
               registerId: registerId,
-              payBackParams: payBackParams
-            })
+              payBackParams: payBackParams,
+            }),
           });
         },
         fail: () => {
           uni.showToast({
             title: '已取消',
-            icon: 'none'
+            icon: 'none',
           });
           setTimeout(() => {
             uni.navigateTo({
               url: joinQuery('/pages/cloudHospital/cloudHospital', {
                 payment: 'back',
                 registerId: registerId,
-                payBackParams: payBackParams
-              })
+                payBackParams: payBackParams,
+              }),
             });
           }, 1000);
         },
         provider: 'wxpay',
-        orderInfo: ''
+        orderInfo: '',
       });
     } else {
       uni.showToast({
         title: '数据错误',
-        icon: 'none'
+        icon: 'none',
       });
     }
     console.log(evt);

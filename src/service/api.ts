@@ -42,6 +42,7 @@ const baseApi = {
   getSysAppMore: (data) =>
     service.post('/phs-base/sysCode/getSysAppMore', parm(data), {
       showMessage: false,
+      hideLoading: true,
     }),
 
   // 资讯详情

@@ -17,9 +17,14 @@ if ((env as string) === 'prod') {
   authUrl = 'https://auth.eheren.com/service-authentication';
 }
 
-export const SYS_CODE = systemConfig.sysCode; //系统码 台州
+export const SYS_CODE = systemConfig.sysCode;
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
 const h5AppId = systemInfo.h5Appid;
+
+const netUrl =
+  <string>env === 'prod'
+    ? `https://interhos.eheren.com/static/nhs/`
+    : `https://testwechatnethos.eheren.com/static/nhs/`;
 
 const globalGl = {
   SYS_CODE,
@@ -35,6 +40,7 @@ const globalGl = {
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',
   isOpenDes,
+  netUrl,
 };
 
 export default globalGl;

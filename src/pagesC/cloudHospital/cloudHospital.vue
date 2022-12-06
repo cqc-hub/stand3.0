@@ -12,11 +12,12 @@
 </template>
 
 <script setup lang="ts">
-  import { BASE_IMG } from '@/config/global';
-
   import { onLoad } from '@dcloudio/uni-app';
+
+  import { BASE_IMG } from '@/config/global';
   import { joinQuery } from '@/common';
   import { useGlobalStore } from '@/stores';
+  import { beforeEach } from '@/router/index';
 
   const globalStore = useGlobalStore();
 
@@ -24,23 +25,23 @@
     setTimeout(() => {
       uni.navigateTo({
         url: joinQuery('/pagesC/cloudHospital/cachePage', {
-          ...options
-        })
+          ...options,
+        }),
       });
     }, 1000);
   };
-  onLoad((options) => {
+  onLoad(async (options) => {
     console.log(333, options);
     //先登录拦截
     if (options.loginInterception == '1') {
       if (!globalStore.isLogin) {
         uni.showToast({
           title: '未登录，请先登录!',
-          icon: 'none'
+          icon: 'none',
         });
         setTimeout(() => {
           uni.reLaunch({
-            url: '/pages/home/my'
+            url: '/pages/home/my',
           });
         }, 1000);
       } else {

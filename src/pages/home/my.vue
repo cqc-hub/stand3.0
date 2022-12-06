@@ -38,7 +38,8 @@
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
   import { onLoad } from '@dcloudio/uni-app';
   import { ServerStaticData, wait } from '@/utils';
-  import { encryptDes, getSysCode, joinQuery } from '@/common';
+  import { encryptDes, getSysCode, joinQuery, joinQueryForUrl } from '@/common';
+  import { beforeEach } from '@/router/index';
 
   import personRecord from './componetns/personRecord.vue';
   import homeTabbar from './componetns/homeTabbar.vue';
@@ -83,13 +84,51 @@
   const menu2List = ref([]); //我的服务
   const menu3List = ref([]); //我的工具
 
-  onLoad(() => {
+  // 互联网医院
+  const dealHosNet = async (opt: {
+    myhosType: '0' | '1';
+    query: string;
+    returnUrl: string;
+  }) => {
+    /**
+     * myhosType  '0' 需要登录  '1' 需要就诊人
+     * query: '{}'
+     * returnUrl  'pages/v3/collect/collectList'
+     */
+
+    let { myhosType, returnUrl, query } = opt;
+
+    query = (query && JSON.parse(query)) || {};
+
+    const fullUrl = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
+      _url: joinQuery(returnUrl, query),
+    });
+
+    console.log(fullUrl, 'fullUrl');
+
+    await beforeEach({
+      url: fullUrl,
+      _isLogin: myhosType === '0',
+      _isPatient: myhosType === '1',
+    });
+  };
+
+  onLoad((opt) => {
     // #ifdef MP-WEIXIN
     wx.showShareMenu({
       // 要求小程序返回分享目标信息
       withShareTicket: true,
     });
     // #endif
+
+    console.log('opt', opt);
+    if (opt) {
+      const { myEnvir } = opt;
+
+      if (myEnvir && myEnvir === 'hosnet') {
+        dealHosNet(<any>opt);
+      }
+    }
   });
 
   onMounted(async () => {

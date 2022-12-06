@@ -149,9 +149,9 @@
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
     if (list.length) {
-      if (!hosId.value) {
-        hosId.value = list[0].hosId;
-      }
+      // if (!hosId.value) {
+      //   hosId.value = list[0].hosId;
+      // }
 
       init();
     }
@@ -176,7 +176,6 @@
     } else {
       const configDetail = listConfig[0];
       pageConfig.value = configDetail;
-      hosId.value = configDetail.hosId;
     }
 
     if (!pageConfig.value) {
