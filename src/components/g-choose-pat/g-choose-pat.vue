@@ -11,8 +11,11 @@
 
       <view class="user-info text-ellipsis">
         {{
-          `${gStores.userStore.patChoose.patientName}  ${gStores.userStore.patChoose._showId}`
+          `${gStores.userStore.patChoose.patientName}  ${
+            (!isAreaProgram() && gStores.userStore.patChoose._showId) || ''
+          }`
         }}
+        
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow`" />
@@ -24,7 +27,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { getAvatar, IPat } from '@/stores';
+  import { getAvatar, IPat,isAreaProgram } from '@/stores';
   import { GStores } from '@/utils';
 
   import ChoosePat from './choose-pat-action.vue';

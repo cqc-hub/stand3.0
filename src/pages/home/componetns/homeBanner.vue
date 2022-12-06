@@ -49,9 +49,9 @@
                 </text>
                 <view class="iconfont icon-size2">&#xe6ca;</view>
               </view>
-              <text class="text-ellipsis details">
+              <!-- <text class="text-ellipsis details">
                 {{ props.leftFunctionList[0].detail }}
-              </text>
+              </text> -->
               <view class="iconfont icon-size-back1">&#xe6a5;</view>
             </block>
           </view>
