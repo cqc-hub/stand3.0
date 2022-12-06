@@ -108,6 +108,10 @@ export interface ISystemConfig {
 
     // 是否支持自定义住院记录
     isCustomPatRecord?: '0' | '1';
+
+
+    // 手动添加记录里面是否可以切换院区
+    isToggleHos?: '0' | '1';
   }[];
 
   // 门诊缴费

@@ -121,11 +121,11 @@
             <view class="g-bold f36">住院记录</view>
 
             <view class="flex-normal patient-info color-light-dark f28">
-              <text class="patient-name g-border-right">
+              <text class="patient-name">
                 {{ getUserShowLabel(gStores.userStore.patChoose) }}
               </text>
 
-              <text>{{ getGetHosName }}</text>
+              <!-- <text>{{ getGetHosName }}</text> -->
             </view>
 
             <view class="record-container mt32">
@@ -138,7 +138,7 @@
             </view>
 
             <view
-              v-if="pageConfig.isCustomPatRecord === '1'"
+              v-if="isShowAddRecord"
               @click="addRecord"
               class="add-btn color-blue g-flex-rc-cc"
             >
@@ -209,6 +209,7 @@
       <Add-Record-Dialog
         v-model:value="addDialogValue"
         :title="addDialogTitle"
+        :isShowAddRecord="isToggleHos"
         @submit="recordSubmit"
         @hos-change="hosChange"
         ref="refAddDialog"
@@ -324,6 +325,16 @@
     fee: 10,
     isItemCount: '0',
     hosId: '2',
+  });
+
+  // 手动添加记录?
+  const isShowAddRecord = computed(() => {
+    return pageConfig.value.isCustomPatRecord === '1';
+  });
+
+  // 切换院区?
+  const isToggleHos = computed(() => {
+    return pageConfig.value.isToggleHos === '1';
   });
 
   const refPay = ref<any>('');
@@ -762,7 +773,7 @@
 
     // 再次申请
     if (props.phsOrderNo) {
-      assignPageData(props.phsOrderNo);
+      await assignPageData(props.phsOrderNo);
     }
 
     if (props.isManual) {

@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick } from 'vue';
+  import { computed, ref, nextTick } from 'vue';
   import type { TInstance } from '@/components/g-form/index';
   import { ServerStaticData, type IHosInfo } from '@/utils';
   import dayjs from 'dayjs';
@@ -67,6 +67,7 @@
   const props = defineProps<{
     value: BaseObject;
     title: string;
+    isShowAddRecord: boolean; // 可以切换院区?
   }>();
   const emits = defineEmits(['update:value', 'submit', 'hos-change']);
 
@@ -89,7 +90,7 @@
       }
       datePickerRef.value.show();
     } else if (field === 'select') {
-      if (key === 'hosId') {
+      if (key === 'hosId' && props.isShowAddRecord) {
         localdata.value = hosList.value;
         dataPickerRef.value.show();
       }
@@ -133,7 +134,7 @@
     }
   };
 
-  const tempList: TInstance[] = [
+  const tempList = ref<TInstance[]>([
     {
       required: true,
       label: '院区',
@@ -199,7 +200,7 @@
         };
       },
     },
-  ];
+  ]);
 
   const show = () => {
     refAddDialog.value.show();
@@ -219,16 +220,21 @@
   const initForm = async () => {
     const hosList = await ServerStaticData.getHosList();
 
-    tempList.map((o) => {
+    tempList.value.map((o) => {
       const { key, field } = o;
       if (field === 'select' && key === 'hosId') {
         o.options = hosList;
+        if (props.isShowAddRecord) {
+          o.showSuffixArrowIcon = true;
+        } else {
+          o.showSuffixArrowIcon = false;
+        }
       }
 
       o.labelWidth = '140rpx';
     });
 
-    refForm.value.setList(tempList);
+    refForm.value.setList(tempList.value);
   };
 
   const change = (e) => {

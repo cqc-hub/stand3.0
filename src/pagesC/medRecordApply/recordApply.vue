@@ -62,7 +62,7 @@
           :class="{
             'color-blue': isCheckAll,
           }"
-          class="iconfont color-888"
+          class="iconfont "
         >
           {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
         </view>
@@ -166,7 +166,7 @@
 
   // 手动添加记录?
   const isShowAddRecord = computed(() => {
-    return pageConfig.value.isItemCount === '1';
+    return pageConfig.value.isCustomPatRecord === '1';
   });
 
   const getConfig = async () => {

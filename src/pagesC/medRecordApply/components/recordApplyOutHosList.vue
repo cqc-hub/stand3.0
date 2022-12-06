@@ -38,7 +38,9 @@
         <view class="row flex-normal">
           <view class="row-title">医生</view>
           <view class="row-content">
-            {{ item.hosName + item.deptName + item.docName }}
+            <text class="g-split-line mr12 pr12">{{ item.docName }}</text>
+            <text class="g-split-line mr12 pr12">{{ item.hosName }}</text>
+            <text>{{ item.deptName }}</text>
           </view>
         </view>
       </view>
@@ -109,6 +111,7 @@
       .row {
         display: flex;
         margin-top: 16rpx;
+        align-items: flex-start;
 
         font-size: var(--hr-font-size-xs);
 

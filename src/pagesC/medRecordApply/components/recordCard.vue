@@ -22,10 +22,16 @@
       </view>
 
       <view v-if="item.isOneself === '0'" class="card-self-logo">
-        <view class="_card-self-logo g-flex-rc-cc">
+        <view class="_card-self-logo g-flex-rc-cc g-bold">
           <view>手动</view>
           <view>添加</view>
         </view>
+      </view>
+
+      <view v-if="item.hosName" class="container-card-row flex-normal mt16">
+        <view class="label">院区</view>
+
+        <view class="content">{{ item.hosName }}</view>
       </view>
 
       <view v-if="item.visitNo" class="container-card-row flex-normal mt16">
