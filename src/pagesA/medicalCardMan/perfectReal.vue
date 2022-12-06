@@ -139,8 +139,16 @@
       try {
         const { result } = await api.getPatCardInfoByHospital(data);
         if (result) {
-          const { jump, cardNumber, idCard, idType, patientSex, jumpMsg } =
-            result;
+          const {
+            jump,
+            cardNumber,
+            idCard,
+            idType,
+            patientSex,
+            jumpMsg,
+            cellPhoneNumber,
+            idCardEncry,
+          } = result;
           const { patientPhone, patientName } = data;
 
           if (jump === 0) {
@@ -153,6 +161,8 @@
                 patientName,
                 verifyCode: formData.value[formKey.verifyCode],
                 verifyType: '',
+                cellPhoneNumber,
+                idCardEncry,
               });
 
               routerJump('/pages/home/home');
@@ -326,7 +336,6 @@
         o.labelWidth = undefined;
       }
     });
-    console.log(formList);
 
     gform.value.setList(formList);
   });

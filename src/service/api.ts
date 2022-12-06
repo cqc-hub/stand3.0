@@ -304,6 +304,12 @@ const userApi = {
       hideLoading: false,
     }),
 
+  allinoneAuthApi1: (data) =>
+    service.post('/phs-user/authUser/bindRegisterUserAuth', parm(data), {
+      isAuth: true,
+      hideLoading: false,
+    }),
+
   // 注销用户
   logoutUser: (data) =>
     service.post('/phs-user/authUser/logoutUser', parm(data), {
@@ -347,7 +353,7 @@ const userApi = {
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post(
-      '/phs-user/relevantPatient/addPatientByHasBeenTreated',
+      '/phs-user/relevantPatient/addPatByHasBeenTreatedEncry',
       parm(data)
     ),
 

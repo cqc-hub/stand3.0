@@ -455,6 +455,8 @@ export class PatientUtils extends LoginUtils {
       sex,
       birthday,
       wechatCode, // 微信电子健康卡时候有
+      cellPhoneNumber,
+      idCardEncry,
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
@@ -466,8 +468,11 @@ export class PatientUtils extends LoginUtils {
       patientType,
       name: patientName,
       cellphone: patientPhone,
-      sex: sex === '男' ? '1' : '2',
+      sex: (sex && (sex === '男' ? '1' : '2')) || '',
       birthday,
+      cellPhoneNumber,
+      idCardEncry,
+      source: this.globalStore.browser.source,
     };
 
     uni.showLoading({
@@ -475,9 +480,7 @@ export class PatientUtils extends LoginUtils {
       mask: true,
     });
 
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(requestData, '/register/bindRegisterUser')
-    );
+    const { result } = await api.allinoneAuthApi1(requestData);
     // .catch((err) => {
     //   return Promise.reject({
     //     errorType: 'add',
@@ -517,6 +520,7 @@ export class PatientUtils extends LoginUtils {
           verifyType,
         });
       } else {
+        // relevantPatient
         await this.addRelevantPatient(payload).catch((err) => {
           return Promise.reject({
             err,
@@ -752,6 +756,5 @@ export const outLogin = function (
     isGoLoginPage: boolean;
   }> = {}
 ) {
-
   new LoginUtils().outLogin(payload);
 };
