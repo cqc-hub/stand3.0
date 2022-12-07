@@ -11,7 +11,7 @@
       </view>
       <view class="input-item">
         <text>手机号码</text>
-        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="number-" v-model="hosInfoParam.patientPhone"
+        <input class="uni-input" placeholder-style="font-size:32rpx;color:#bbb" type="number" v-model="hosInfoParam.patientPhone"
                @input="checkPatientPhone(hosInfoParam.patientPhone)" placeholder="请输入" />
       </view>
 

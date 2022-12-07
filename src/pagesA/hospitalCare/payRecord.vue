@@ -1,6 +1,6 @@
 <template>
   <!-- 日费用清单 -->
-  <view class="page" v-if="payResList.hospitalPayResultList.length>0">
+  <view class="page" v-if="payResList.hospitalPayResultList && payResList.hospitalPayResultList.length>0">
     <view class="progress" v-for="(item,index) in payResList.hospitalPayResultList " :key="index">
       <view class="right">
         <view class="date">{{item.date}}</view>

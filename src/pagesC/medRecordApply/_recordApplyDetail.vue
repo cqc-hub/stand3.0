@@ -388,6 +388,7 @@
     const args = {
       id,
       phsOrderNo,
+      type: 3
     };
 
     await api.copyRefund(args);

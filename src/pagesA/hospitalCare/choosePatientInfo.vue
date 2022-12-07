@@ -39,26 +39,26 @@
         <text class="name">已预交金额 </text>
         <view class="record">
           <view class="triangle-left"></view>
-          <view class="records" @click="toPayRecord" v-if="resultHos.isQueryPreRecord=='1'">
+          <!-- <view class="records" @click="toPayRecord" v-if="resultHos.isQueryPreRecord=='1'">
             <text class="text">查看记录</text>
             <view class="iconfont right">&#xe66b;</view>
-          </view>
+          </view> -->
         </view>
         <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
       </view>
-      <view class="card-detail-item">
+      <view v-if="hosInfoResObj.totalCost" class="card-detail-item">
         <text class="name">已产生费用</text>
         <text class="money">{{hosInfoResObj.totalCost}}元</text>
       </view>
-      <view class="card-detail-item">
+      <view v-if="hosInfoResObj.insuranceFee" class="card-detail-item">
         <text class="name">医保报销</text>
         <text class="money">{{hosInfoResObj.insuranceFee}}元</text>
       </view>
-      <view class="card-detail-item">
+      <view v-if="hosInfoResObj.defrayFee"  class="card-detail-item">
         <text class="name">自费金额</text>
         <text class="money">{{hosInfoResObj.defrayFee}}元</text>
       </view>
-      <view class="card-detail-item last">
+      <view v-if="hosInfoResObj.accountBalance"  class="card-detail-item last">
         <text class="name">账户余额</text>
         <text class="money">{{hosInfoResObj.accountBalance}}元</text>
       </view>

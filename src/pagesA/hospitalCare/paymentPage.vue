@@ -5,9 +5,16 @@
       <view :class="list[index]==defalutMoney?'activeButton':'button'" v-for="(item,index) in list" :key="index" @click="checkMoney(item)">
         ¥{{item}}</view>
     </view>
-    <view class="pay-input">
-      <text>¥</text>
-      <input class="uni-input" placeholder-style="font-size:32rpx;color:#888" type="number" v-model="defalutMoney" placeholder="输入自定义金额" />
+    <view class="pay-input ">
+      <view class="g-border-left util-content mb8">
+        <text v-if="moneyUtil"  class="g-split-line mr8"></text>
+        <text v-if="moneyUtil" >{{ moneyUtil }}</text>
+      </view>
+
+      <view class="flex-normal">
+        <text class="m-util">¥</text>
+        <input class="uni-input" maxlength="13" placeholder-style="font-size:32rpx;color:#888" type="number" v-model="defalutMoney" placeholder="输入自定义金额" />
+      </view>
     </view>
     <button :disabled="defalutMoney==''?true:false" :class="defalutMoney==''?'submitBtn':'activeSubmitBtn'" @click="toPay">确定</button>
     <g-message />
@@ -15,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { GStores, ServerStaticData } from '@/utils';
 import { hosParam } from '@/components/g-form';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
@@ -69,7 +76,7 @@ const payAfter = async () => {
     uni.hideLoading();
 
     uni.reLaunch({
-      url: '/pagesA/hospitalCare/hospitalCare',
+      url: '/pagesA/hospitalCare/choosePatient',
     });
   };
 const setData = async () => {
@@ -85,6 +92,23 @@ const int = async () => {
   });
   payOrder.value = result;
 };
+
+const moneyUtil = computed(() => {
+  return transformUnit((defalutMoney.value) as unknown as number * 1)
+})
+
+const transformUnit = (val: number) => {
+  if (val) {
+    const unitList = ['','千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿', '兆'];
+    const v = (Math.floor(val / 1000) * 10).toString().length - 1;
+
+    return unitList.length > v ? unitList[v] : '兆'
+  } else {
+    return ''
+  }
+
+}
+
 onLoad(() => {
   setData();
 });
@@ -138,14 +162,22 @@ onLoad(() => {
     }
   }
   .pay-input {
-    display: flex;
-    align-items: center;
     height: 144rpx;
     background-color: #f6f6f6;
     border-radius: 16rpx;
-    text {
+    .m-util {
       padding: 0 32rpx;
       font-weight: 600;
+    }
+
+    .util-content {
+      // height: 64rpx;
+      width: 100%;
+      margin-left: 88rpx;
+      &::after {
+        content: '强';
+        opacity: 0;
+      }
     }
   }
   .submitBtn {
