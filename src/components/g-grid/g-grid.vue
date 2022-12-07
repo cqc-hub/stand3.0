@@ -7,7 +7,7 @@
       :column="type == 1 ? options.list.length : 4"
     >
       <uni-grid-item v-for="(item, i) in options.list" :key="i">
-        <g-login @handler-next="gridClick(item)">
+        <g-login @handler-next="gridClick(item)" :disabled="item.loginInterception === '0'" >
           <view class="grid-item-box" @tap="gridClick(item)">
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->

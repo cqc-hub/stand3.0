@@ -72,7 +72,7 @@
         }"
         class="record-item"
       >
-        <g-login @handler-next="jumpFor(record)">
+        <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'">
           <view class="record-label" @tap="jumpFor(record)">
             <text>{{ record.title }}</text>
             <view v-if="recordList && recordList.length === 1" class="iconfont icon-size">

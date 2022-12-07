@@ -20,7 +20,7 @@
                       <text>
                         {{ gStores.userStore.patChoose.patientName }}
                       </text>
-                      <text v-if="!isAreaProgram&&gStores.userStore.patChoose._showId">
+                      <text v-if="!isAreaProgram()&&gStores.userStore.patChoose._showId">
                         ID
                         {{ gStores.userStore.patChoose._showId }}
                       </text>

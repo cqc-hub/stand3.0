@@ -12,13 +12,10 @@
           :autoplay="autoplay"
           :indicator-dots="props.leftFunctionList.length > 0 ? true : false"
         >
-          <swiper-item
-            v-for="(item, i) in props.leftFunctionList"
-            :key="i"
-          >
-          <g-login @handler-next="gotoPath(item)">
-            <image mode="widthFix" :src="item.iconfont"  @tap="gotoPath(item)" />
-          </g-login>
+          <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i">
+            <g-login @handler-next="gotoPath(item)" :disabled="item.loginInterception === '0'">
+              <image mode="widthFix" :src="item.iconfont" @tap="gotoPath(item)" />
+            </g-login>
           </swiper-item>
         </swiper>
       </view>
@@ -33,10 +30,15 @@
               props.leftFunctionList[0].iconfont ? 'no-border' : 'banner-common2'
             }`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
-            v-if="props.leftFunctionList.length == 1"  >
+            v-if="props.leftFunctionList.length == 1"
+          >
             <block v-if="props.leftFunctionList[0].iconfont">
-              <g-login @handler-next="gotoPath(props.leftFunctionList[0])">
-                <image mode="widthFix" :src="props.leftFunctionList[0].iconfont"  @tap="gotoPath(props.leftFunctionList[0])" />
+              <g-login @handler-next="gotoPath(props.leftFunctionList[0])" :disabled="props.leftFunctionList[0].loginInterception === '0'">
+                <image
+                  mode="widthFix"
+                  :src="props.leftFunctionList[0].iconfont"
+                  @tap="gotoPath(props.leftFunctionList[0])"
+                />
               </g-login>
             </block>
             <block v-else>
@@ -86,26 +88,19 @@
           </block>
           <block v-else>
             <block v-for="(item, i) in props.functionList" :key="i">
-              <!-- <g-login @handler-next="gotoPath(item)"> -->
-
-              <view
-                :class="`view${i + 2} banner-back${i + 1} banner-common`"
-                :style="
-                  props.leftFunctionList.length == 1 && props.functionList.length == 2
-                    ? 'margin-top:0'
-                    : ''
-                "
-                @tap="gotoPath(item)" 
-              >
-                <view class="flex-between">
-                  <text>{{ item.title }}</text>
-                  <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+                <view
+                  :class="`view${i + 2} banner-back${i + 1} banner-common`"
+                  :style="
+                    props.leftFunctionList.length == 1 && props.functionList.length == 2
+                      ? 'margin-top:0': ''" @tap="gotoPath(item)">
+              <!-- <g-login @handler-next="gotoPath(item)" class="login-style" > -->
+                  <view class="flex-between">
+                    <text>{{ item.title }}</text>
+                    <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
+                  </view>
+                  <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
+              <!-- </g-login> -->
                 </view>
-                <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
-
-              </view>
-            <!-- </g-login> -->
-
             </block>
           </block>
         </view>
@@ -335,6 +330,11 @@ const gotoPath = (item) => {
   .no-border {
     background: transparent;
     border: none;
+  }
+  g-login{
+    width: 100%;
+    display: flex;
+    align-items: center;
   }
 }
 </style>
