@@ -31,7 +31,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     if (_configList.length) {
       const configList: any[] = [];
       Object.entries(_configList[0]).map(([hosId, value]) => {
-        const { tollMode, price, isHandPhoto } = value as any;
+        const { tollMode, price, isHandPhoto, isCustomPatRecord, isToggleHos } =
+          value as any;
 
         const isItemCount = tollMode === '1' ? '1' : '0';
 
@@ -43,6 +44,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isHandPhoto === '1'
               ? ['front', 'end', 'handler']
               : ['front', 'end'],
+          isCustomPatRecord,
+          isToggleHos,
         });
       });
       // _cacheMap.set(Med_Copy_Config, configList);

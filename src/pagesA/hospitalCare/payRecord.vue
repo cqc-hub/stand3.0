@@ -1,6 +1,6 @@
 <template>
   <!-- 日费用清单 -->
-  <view class="page">
+  <view class="page" v-if="payResList.hospitalPayResultList.length>0">
     <view class="progress" v-for="(item,index) in payResList.hospitalPayResultList " :key="index">
       <view class="right">
         <view class="date">{{item.date}}</view>
@@ -22,7 +22,9 @@
       <view class="line"></view>
     </view>
   </view>
-
+  <view class="empty-box" v-else>
+    <g-empty :current="1" />
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -34,7 +36,7 @@ import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 const gStores = new GStores();
 const payParam = ref({
   hosId: '1279',
-  // patientId: '10763642',
+  //  patientId: '10763642',
   patientId: gStores.userStore.patChoose.patientId,
 });
 const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
@@ -59,6 +61,9 @@ onLoad(() => {
 
 
 <style scoped lang="scss">
+.empty-box {
+  padding-top: 200rpx;
+}
 .page {
   padding-bottom: 40rpx;
 }

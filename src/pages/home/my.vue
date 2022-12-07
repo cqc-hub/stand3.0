@@ -87,7 +87,7 @@
   // 互联网医院
   const dealHosNet = async (opt: {
     myhosType: '0' | '1';
-    query: string;
+    query: any;
     returnUrl: string;
   }) => {
     /**
@@ -101,10 +101,8 @@
     query = (query && JSON.parse(query)) || {};
 
     const fullUrl = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
-      _url: joinQuery(returnUrl, query),
+      _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
     });
-
-    console.log(fullUrl, 'fullUrl');
 
     await beforeEach({
       url: fullUrl,
@@ -121,7 +119,6 @@
     });
     // #endif
 
-    console.log('opt', opt);
     if (opt) {
       const { myEnvir } = opt;
 

@@ -1,10 +1,12 @@
 <template>
+  <g-flag typeFg="600" isShowFg />
   <!-- 预交金代缴信息页面 -->
   <view class="box" v-if="Obj==false">
     <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
       <view class="user">
-        <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
-
+        <image class="user-avatar"
+               :src="hosInfoResObj.sexCode=='1'?'../../static/image/img_tx_patient_male.png':'/static/image/img_tx_patient_female.png'"
+               mode="widthFix"></image>
         <view class="user-info">
           <text class="user-info-name">
             {{ hosInfoResObj.patientName }}</text>
@@ -35,9 +37,12 @@
     <view class="card-detail">
       <view class="card-detail-item">
         <text class="name">已预交金额 </text>
-        <view class="records" @click="toPayRecord">
-          <text class="text">查看记录</text>
-          <view class="iconfont right">&#xe66b;</view>
+        <view class="record">
+          <view class="triangle-left"></view>
+          <view class="records" @click="toPayRecord" v-if="resultHos.isQueryPreRecord=='1'">
+            <text class="text">查看记录</text>
+            <view class="iconfont right">&#xe66b;</view>
+          </view>
         </view>
         <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
       </view>
@@ -64,19 +69,29 @@
   <view class="empty-box" v-else>
     <g-empty :current="1" />
   </view>
-
+  <g-message />
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getAvatar, isAreaProgram } from '@/stores';
-import { GStores } from '@/utils';
+import { isAreaProgram } from '@/stores';
 import api from '@/service/api';
+import { GStores, ServerStaticData } from '@/utils';
+import { hosParam } from '@/components/g-form';
 import {
   getInHospitalInfoParam,
   getInHospitalInfoResult,
+  hospitalPayResult,
 } from './utils/inpatientInfo';
 import { onLoad } from '@dcloudio/uni-app';
+const resultHos = ref<hosParam>({
+  inPatientPrePay: '',
+  isHosDaylist: '',
+  isHosTotallist: '',
+  tab: [],
+  isQueryPreRecord: '',
+});
 const Obj = ref();
+const gStores = new GStores();
 const hosInfoResObj = ref<getInHospitalInfoResult>(
   {} as getInHospitalInfoResult
 );
@@ -84,8 +99,12 @@ const hosInfoParam = ref<getInHospitalInfoParam>({
   patientName: '',
   patientPhone: '',
 });
-
-const gStores = new GStores();
+const payParam = ref({
+  hosId: '1279',
+  // patientId: '10763642',
+  patientId: gStores.userStore.patChoose.patientId,
+});
+const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const isLoad = ref(false);
 const loadImg = () => {
   isLoad.value = true;
@@ -93,11 +112,6 @@ const loadImg = () => {
 const toPayPage = () => {
   uni.navigateTo({
     url: `paymentPage`,
-  });
-};
-const toPayRecord = () => {
-  uni.navigateTo({
-    url: 'payRecord',
   });
 };
 const init = async () => {
@@ -108,10 +122,25 @@ const init = async () => {
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
+const toPayRecord = async () => {
+  const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
+    patientId: payParam.value.patientId,
+    hosId: payParam.value.hosId,
+  });
+  payResList.value = result;
+  uni.navigateTo({
+    url: 'payRecord',
+  });
+};
+const setData = async () => {
+  const result = await ServerStaticData.getSystemHospital();
+  resultHos.value = result;
+};
 onLoad(async (val) => {
   hosInfoParam.value.patientName = val.patientName;
   hosInfoParam.value.patientPhone = val.patientPhone;
   await init();
+  await setData();
 });
 </script>
 
@@ -125,7 +154,7 @@ onLoad(async (val) => {
   border-radius: 16rpx;
   padding: 40rpx 32rpx 0;
   overflow: hidden;
-  & .card-man {
+  &.card-man {
     background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
   }
   &.card-lady {
@@ -204,6 +233,17 @@ onLoad(async (val) => {
     .name {
       color: #888;
       font-size: 32rpx;
+    }
+    .triangle-left {
+      margin: auto 0;
+      width: 0;
+      height: 2rpx;
+      border-top: 10rpx solid transparent;
+      border-right: 16rpx solid #f3f3f3;
+      border-bottom: 10rpx solid transparent;
+    }
+    .record {
+      display: flex;
     }
     .records {
       width: 152rpx;

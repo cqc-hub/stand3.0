@@ -17,6 +17,7 @@
   import { BASE_IMG } from '@/config/global';
   import { joinQuery } from '@/common';
   import { useGlobalStore } from '@/stores';
+  import { wait } from '@/utils';
   import { beforeEach } from '@/router/index';
 
   const globalStore = useGlobalStore();
@@ -33,6 +34,7 @@
   onLoad(async (options) => {
     console.log(333, options);
     //先登录拦截
+    await wait(200);
     if (options.loginInterception == '1') {
       if (!globalStore.isLogin) {
         uni.showToast({

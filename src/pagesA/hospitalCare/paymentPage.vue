@@ -1,6 +1,6 @@
 <template>
   <view class="box">
-    <view class="title">预缴费用</view>
+    <view class="title">预交费用</view>
     <view class="buttons">
       <view :class="list[index]==defalutMoney?'activeButton':'button'" v-for="(item,index) in list" :key="index" @click="checkMoney(item)">
         ¥{{item}}</view>

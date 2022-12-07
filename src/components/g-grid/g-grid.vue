@@ -7,23 +7,35 @@
       :column="type == 1 ? options.list.length : 4"
     >
       <uni-grid-item v-for="(item, i) in options.list" :key="i">
-        <view class="grid-item-box" @tap="gridClick(item)">
-          <!-- 绿色能量角标 -->
-          <!-- v-if="item.enabled == 0 "  -->
-          <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
-          <view :class="`${options.type == 1 && options.list.length == 3?'warn-label3':'warn-label' }`" v-if="item.gridLabel == '3'">维护中</view>
-          <view class="gree-label" v-if="item.gridLabel == '1'">绿色能量</view>
-          <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
-          <text
-            :class="`icon-font ${
-              options.type == 1 && options.list.length == 3
-                ? 'grid-resize1'
-                : 'grid-resize'
-            } ${item.iconfont}`"
-          />
-          <view class="grid-label text-ellipsis">{{ item.title }}</view>
-          <text v-if="type == 1" class="grid-title text-ellipsis">{{ item.detail }}</text>
-        </view>
+        <g-login @handler-next="gridClick(item)">
+          <view class="grid-item-box" @tap="gridClick(item)">
+            <!-- 绿色能量角标 -->
+            <!-- v-if="item.enabled == 0 "  -->
+            <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
+            <view
+              :class="`${
+                options.type == 1 && options.list.length == 3
+                  ? 'warn-label3'
+                  : 'warn-label'
+              }`"
+              v-if="item.gridLabel == '3'"
+              >维护中</view
+            >
+            <view class="gree-label" v-if="item.gridLabel == '1'">绿色能量</view>
+            <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
+            <text
+              :class="`icon-font ${
+                options.type == 1 && options.list.length == 3
+                  ? 'grid-resize1'
+                  : 'grid-resize'
+              } ${item.iconfont}`"
+            />
+            <view class="grid-label text-ellipsis">{{ item.title }}</view>
+            <text v-if="type == 1" class="grid-title text-ellipsis">{{
+              item.detail
+            }}</text>
+          </view>
+        </g-login>
       </uni-grid-item>
     </uni-grid>
   </view>

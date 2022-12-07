@@ -47,11 +47,24 @@
     const sysCode = '1001017';
     let netUrl = '';
     let params = '';
+    let netPath = '';
+
+    if (para._url) {
+      netPath = decodeURIComponent(para._url);
+    }
     //新的
     netUrl = global.netUrl;
     params = encodeURIComponent(encryptDes(JSON.stringify(para)));
-    src.value =
-      netUrl + `${sysCode}/#/` + `?initSysCode=${sysCode}&params=` + params;
+
+    let fPath = netUrl + `${sysCode}/#/` + netPath;
+    if (fPath.includes('?')) {
+      fPath += '&';
+    } else {
+      fPath += '?';
+    }
+
+    fPath += `?initSysCode=${sysCode}&params=` + params;
+    src.value = fPath;
 
     isShow.value = true;
     console.log({

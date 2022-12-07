@@ -81,25 +81,25 @@
         {
           "path": "hospitalCare/paymentPage",
           "style": {
-            "navigationBarTitleText": "预缴费用"
+            "navigationBarTitleText": "预交费用"
           }
         },
         {
           "path": "hospitalCare/choosePatient",
           "style": {
-            "navigationBarTitleText": "预缴金代缴"
+            "navigationBarTitleText": "预交金代缴"
           }
         },
         {
           "path": "hospitalCare/choosePatientInfo",
           "style": {
-            "navigationBarTitleText": "预缴金代缴"
+            "navigationBarTitleText": "预交金代缴"
           }
         },
         {
           "path": "hospitalCare/listExpenses",
           "style": {
-            "navigationBarTitleText": "住院服务日详情"
+            "navigationBarTitleText": "住院服务"
           }
         },
         {
