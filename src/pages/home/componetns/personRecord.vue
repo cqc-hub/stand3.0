@@ -71,15 +71,16 @@
           'record-item-first': recordList.length === 2 && i === 0,
         }"
         class="record-item"
+        @tap="jumpFor(record)"
       >
-        <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'">
-          <view class="record-label" @tap="jumpFor(record)">
+        <!-- <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'"> -->
+          <view class="record-label">
             <text>{{ record.title }}</text>
             <view v-if="recordList && recordList.length === 1" class="iconfont icon-size">
               &#xe6c8;
             </view>
           </view>
-        </g-login>
+        <!-- </g-login> -->
       </view>
     </view>
   </view>

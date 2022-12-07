@@ -63,13 +63,13 @@
         </template>
       </view>
       <view class="no-data" v-else>
-        <img class="no-data-img" src="../../../static/image/nodata.png" alt="">
-        <view>当天未产生住费用</view>
+        <img class="no-data-img"  :src="$global.BASE_IMG + 'img_404_no record@3x.png'" alt="">
+        <view>当天未产生住院费用</view>
       </view>
     </view>
   </view>
   <view class="empty-box" v-else>
-    <g-empty :current="1" />
+    <g-empty :current="2" text="当天未产生住院费用，请选择其他日期" />
   </view>
 </template>
 <script setup lang="ts">
@@ -83,6 +83,8 @@ import {
 import { onLoad } from '@dcloudio/uni-app';
 import { GStores, ServerStaticData } from '@/utils';
 import dayjs from 'dayjs';
+
+
 const Obj = ref();
 const costInfoDetal = ref<inHospitalCostInfo>({} as inHospitalCostInfo);
 const param = ref<inHospitalCostInfoParam>({
@@ -110,7 +112,7 @@ const props = defineProps<{
   isHosTotallist?: string;
 }>();
 const emit = defineEmits(['detalResult']);
-
+ 
 const isShowBtn = (index) => {
   isShow.value[index] = !isShow.value[index];
 };
@@ -140,19 +142,16 @@ const init = async () => {
   );
   costInfoDetal.value = result;
   Obj.value = JSON.stringify(costInfoDetal.value) == '{}';
-};
-watch(
-  () => (costDate.value = props.costDay),
-  () => {
-    if (props.costDay) {
-      init();
-    }
-  }
-);
+}; 
+
 onMounted(async () => {
-  await init();
+  console.log('mount');
+  
+  // await init();
 });
 onLoad((val) => {
+  console.log(22222,'load');
+  
   param.value.costDay = val.costDate;
   param.value.hospitalId = val.inpatientNo;
   param.value.isHosTotallist = val.isHosTotallist;
@@ -168,6 +167,10 @@ onLoad((val) => {
     init();
   }
 });
+defineExpose({
+  init
+  });
+
 </script>
 <style scoped lang="scss">
 .page {

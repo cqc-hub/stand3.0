@@ -4,13 +4,13 @@
     <g-choose-pat @choosePat="choosePat" />
 
     <view class="tab-box">
-      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.tab" :line-scale="0.8" field="label" all-blod @change="tabChange" />
+      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.tab" :line-scale="0.8" field="label" zIndex="1" all-blod @change="tabChange" />
     </view>
     <!-- 内容区域 -->
     <view class="content-box">
-      <inpatientInfo v-show="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
-      <dailyExpenseList v-show="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
-      <totalList v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
+      <inpatientInfo ref="inpatientInfoRef" v-if="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
+      <dailyExpenseList ref="dailyExpenseListRef" v-if="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
+      <totalList ref="totalListRef" v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
     </view>
   </view>
 </template>
@@ -36,10 +36,19 @@ const resultHos = ref<hosParam>({
   tab: [],
   isQueryPreRecord: '',
 });
+const inpatientInfoRef = ref<any>('');
+const dailyExpenseListRef = ref<any>('');
+const totalListRef = ref<any>('');
 //切换就诊人
 const choosePat = ({ item }: { item: IPat; number: number }) => {
   patList.value = item;
-  console.log(item, patList.value, 'patList');
+  if(tabCurrent.value == 0){
+  inpatientInfoRef.value.init()
+  }else if(tabCurrent.value == 1){
+    dailyExpenseListRef.value.init()
+  }else if(tabCurrent.value == 2){
+    totalListRef.value.init()
+  }
 };
 const tabChange = (e: number) => {
   tabStatus.value = e;

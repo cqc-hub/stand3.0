@@ -5,7 +5,7 @@
       :scroll-x="scroll"
       :scroll-left="scroll ? scrollLeft : 0"
       :scroll-with-animation="scroll"
-      :style="{ position: fixed ? 'fixed' : 'relative', zIndex: 1993 }"
+      :style="{ position: fixed ? 'fixed' : 'relative', zIndex: zIndex }"
     >
       <view
         class="v-tabs__container"
@@ -187,6 +187,10 @@ export default {
     paddingItem: {
       type: String,
       default: '0 22rpx',
+    },
+    zIndex: {
+      type: String,
+      default: '999',
     },
   },
   data() {
