@@ -479,6 +479,7 @@
   const addRecord = () => {
     addDialogValue.value = {
       hosId: _hosId.value,
+      hosName: getGetHosName.value,
     };
     isAddDialogEdit.value = false;
 

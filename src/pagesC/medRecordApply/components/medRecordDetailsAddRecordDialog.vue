@@ -103,14 +103,22 @@
     } = e;
 
     const { key } = selItem!;
-
-    change({
-      ...props.value,
-      [key]: value.map((o) => o.value).join(','),
-    });
+    const v = value.map((o) => o.value).join(',');
 
     if (key === 'hosId') {
+      const hosName = hosList.value.find((o) => o.hosId === v)!.hosName;
+      change({
+        ...props.value,
+        hosName,
+        [key]: value.map((o) => o.value).join(','),
+      });
+
       emits('hos-change');
+    } else {
+      change({
+        ...props.value,
+        [key]: v,
+      });
     }
   };
 
