@@ -3,7 +3,10 @@
   <view class="page" v-if="payResList.hospitalPayResultList && payResList.hospitalPayResultList.length>0">
     <view class="progress" v-for="(item,index) in payResList.hospitalPayResultList " :key="index">
       <view class="right">
-        <view class="date">{{item.date}}</view>
+        <view class="date stick">
+          <text class='iconfont date '>&#xe6c6;</text>
+
+        {{item.date}}</view>
         <view class="detail" v-for="(i,j) in item.hospitalPay" :key="j">
           <view class="details" v-for="(m,n) in i.costListResultList" :key="n">
             <view class="detail-item">
@@ -18,7 +21,6 @@
           </view>
         </view>
       </view>
-      <text class='iconfont date'>&#xe6c6;</text>
       <view class="line"></view>
     </view>
   </view>
@@ -106,16 +108,7 @@ onLoad(() => {
       }
     }
   }
-  .iconfont {
-    &.date {
-      color: #ddd;
-      position: absolute;
-      font-size: 24rpx;
-      z-index: 999;
-      top: 40rpx;
-      left: 38rpx;
-    }
-  }
+
   .line {
     position: absolute;
     border-right: 2px dotted #ddd;
@@ -129,6 +122,24 @@ onLoad(() => {
 .progress:last-child {
   .line {
     height: 90%;
+  }
+}
+
+.stick {
+  position: sticky ;
+  top: -2rpx;
+  z-index: 10;
+  background-color: #f6f6f6;
+
+  .iconfont {
+    &.date {
+      color: #ddd;
+      position: relative;
+      font-size: 32rpx;
+      z-index: 999;
+      top: 0;
+      left: -56rpx;
+    }
   }
 }
 </style>
