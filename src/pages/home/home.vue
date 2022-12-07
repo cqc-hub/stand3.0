@@ -161,7 +161,7 @@
  // }
 
  //骨架屏配置
- const skeletonProps = {
+ const skeletonProps = ref({
    loading: true,
    skeleton: [
      'line-lg',
@@ -176,7 +176,7 @@
      0,
      'card-sm+card-sm+card-sm+card-sm',
    ],
- };
+ });
  // 就诊人
 
  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
@@ -276,8 +276,8 @@
 
  //获取配置数据
  const getHomeConfig = async () => {
-   skeletonProps.loading = true;
-   homeConfig = await ServerStaticData.getHomeConfig('home');
+   skeletonProps.value.loading = true;
+   homeConfig = await ServerStaticData.getHomeConfig();
    if (homeConfig) {
      topMenuList.value = homeConfig[0].functionList;
      // 新增公告展示判断 showFlag为1展示
@@ -289,7 +289,7 @@
      bannerFunctionList.value = homeConfig[2].functionList;
      bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
      menuList.value = homeConfig[3].typeList || [];
-     skeletonProps.loading = false;
+     skeletonProps.value.loading = false;
    }
  };
 

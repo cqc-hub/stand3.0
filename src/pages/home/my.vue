@@ -46,7 +46,7 @@
   import homeGrid from './componetns/homeGrid.vue';
 
   //骨架屏配置
-  const skeletonProps = {
+  const skeletonProps = ref({
     loading: true,
     skeleton: [
       'circle+line-sm*2',
@@ -62,7 +62,7 @@
       'line-sm',
       'card+card+card+card',
     ],
-  };
+  });
 
   interface TPageType extends ILoginBack {
     isWarningLogin?: '1';
@@ -140,13 +140,13 @@
   });
   //获取配置数据
   const getHomeConfig = async () => {
-    skeletonProps.loading = true;
+    skeletonProps.value.loading = true;
     const homeConfig = await ServerStaticData.getHomeConfig();
     if (homeConfig) {
       menu1List.value = homeConfig[5].functionList;
       menu2List.value = homeConfig[6].functionList;
       menu3List.value = homeConfig[7].functionList;
-      skeletonProps.loading = false;
+      skeletonProps.value.loading = false;
     }
   };
 
