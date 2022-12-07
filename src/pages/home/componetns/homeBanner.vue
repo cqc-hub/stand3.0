@@ -330,11 +330,6 @@ const gotoPath = (item) => {
   .no-border {
     background: transparent;
     border: none;
-  }
-  g-login{
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
+  } 
 }
 </style>
