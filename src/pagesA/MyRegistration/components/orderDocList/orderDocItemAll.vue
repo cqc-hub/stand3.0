@@ -3,6 +3,7 @@
     <Order-Doc-List-Container
       :item="item"
       @avatar-click="emits('avatar-click', item)"
+      isAllDate
     >
       <template #footer>
         <view class="date-container g-border-top">

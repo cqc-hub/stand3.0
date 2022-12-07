@@ -68,7 +68,7 @@
                         v-if="_item.schQukCategor || _item.categorName"
                         class="mr12"
                       >
-                        {{ _item.schQukCategor || _item.categorName }}
+                        {{ _item.schQukCategor || _item.categorName || '' }}
                       </text>
                       <text v-if="_item.fee">{{ _item.fee }}元</text>
                     </view>
@@ -106,7 +106,9 @@
 
           <block v-else>
             <view class="fix-top">
-              <view class="order-info g-border-bottom">{{ selectSchInfo.ampmName }}</view>
+              <view class="order-info g-border-bottom">
+                {{ selectSchInfo.ampmName }}
+              </view>
               <view class="order-info mb24">
                 <!-- <view>{{ selectSchInfo.docName }}</view>
               <view>{{ selectSchInfo.schDate }}</view>
@@ -115,7 +117,9 @@
                 <text class="mr24">
                   {{
                     selectSchInfo.schQukCategor ||
-                    `${selectSchInfo.deptName}/${selectSchInfo.categorName}`
+                    `${selectSchInfo.deptName || ''}/${
+                      selectSchInfo.categorName || ''
+                    }`
                   }}
                 </text>
 
