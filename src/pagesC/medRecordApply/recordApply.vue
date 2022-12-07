@@ -42,9 +42,7 @@
       <view class="empty-list" v-else-if="isComplete">
         <g-empty
           :current="2"
-          :text="
-            isShowAddRecord ? '没有住院记录，去手动补充' : ''
-          "
+          :text="isShowAddRecord ? '没有住院记录，去手动补充' : ''"
         >
           <button
             v-if="isShowAddRecord"
@@ -62,15 +60,21 @@
           :class="{
             'color-blue': isCheckAll,
           }"
-          class="iconfont "
+          class="iconfont"
         >
           {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
         </view>
-        <view class="flex-normal" v-if="isCheckAll">全选</view>
+        <view class="flex-normal" v-if="isCheckAll">
+          {{ '已选择全部' }}
+        </view>
         <view v-else>
-          <text class="mr8">已选择</text>
-          <text class="mr8 color-blue">{{ checkOutHosList.length }}</text>
-          <text>个</text>
+          <block v-if="checkOutHosList.length">
+            <text class="mr8">已选择</text>
+            <text class="mr8 color-blue">{{ checkOutHosList.length }}</text>
+            <text>个</text>
+          </block>
+
+          <text v-else>全选</text>
         </view>
       </view>
       <button
@@ -195,6 +199,7 @@
   const getOutPatientHosList = async () => {
     isComplete.value = true;
     outHosList.value = [];
+    checkOutHosList.value = [];
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
       patientId,

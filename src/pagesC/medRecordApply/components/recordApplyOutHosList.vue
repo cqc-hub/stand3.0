@@ -37,7 +37,7 @@
 
         <view class="row flex-normal">
           <view class="row-title">医生</view>
-          <view class="row-content">
+          <view class="row-content text-ellipsis">
             <text class="g-split-line mr12 pr12">{{ item.docName }}</text>
             <text class="g-split-line mr12 pr12">{{ item.hosName }}</text>
             <text>{{ item.deptName }}</text>
