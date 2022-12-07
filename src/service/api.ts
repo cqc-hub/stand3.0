@@ -355,9 +355,16 @@ const userApi = {
     }),
 
   //添加已就诊就诊人
-  addPatientByHasBeenTreated: (data) =>
+  addPatByHasBeenTreatedEncry: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatByHasBeenTreatedEncry',
+      parm(data)
+    ),
+
+  //添加已就诊就诊人
+  addPatientByHasBeenTreated: (data) =>
+    service.post(
+      '/phs-user/relevantPatient/addPatientByHasBeenTreated',
       parm(data)
     ),
 
