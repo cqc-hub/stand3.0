@@ -518,6 +518,7 @@ export class PatientUtils extends LoginUtils {
           source: this.globalStore.browser.source,
           verifyCode: verifyCode || '1',
           verifyType,
+          _type: 'perfect'
         });
       } else {
         // relevantPatient
@@ -549,10 +550,15 @@ export class PatientUtils extends LoginUtils {
       upName: string;
       verifyCode: string;
       verifyType: string;
+      _type?: 'perfect'
     }>
   ) {
     getH5OpenidParam(data);
-    await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+    if (data._type === 'perfect') {
+      await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
+    } else {
+      await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+    }
     // await this.getPatCardList();
   }
 
