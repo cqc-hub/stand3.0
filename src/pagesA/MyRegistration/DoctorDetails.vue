@@ -422,7 +422,7 @@
 
     const collectType = 2;
 
-    docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar-default.png';
+    docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar.png';
 
     if (collectState == '1') {
       const args = {
