@@ -30,9 +30,9 @@
       <view class="card-detail">
         <view class="card-detail-item">
           <text class="name">已预交金额 </text>
-          <view class="record">
+          <view class="record" v-if="props.isQueryPreRecord=='1'">
             <view class="triangle-left"></view>
-            <view class="records" @click="toPayRecord" v-if="props.isQueryPreRecord=='1'">
+            <view class="records" @click="toPayRecord" >
               <text class="text">查看记录</text>
               <view class="iconfont right">&#xe66b;</view>
             </view>
@@ -89,32 +89,11 @@ const gStores = new GStores();
 const isLoad = ref(false);
 const loadImg = () => {
   isLoad.value = true;
-};
-const hosInfoParam = ref({
-  cardNumber: '',
-  hosId: '1279',
-  idCard: '',
-  // patientId: '10763642',
-  patientId: gStores.userStore.patChoose.patientId,
-  patientName: '',
-  patientPhone: '',
-  phoneNumber: '',
-});
+}; 
 const hosInfoResObj = ref<getInHospitalInfoResult>(
   {} as getInHospitalInfoResult
-);
-const payParam = ref({
-  hosId: '1279',
-  // patientId: '10763642',
-  patientId: gStores.userStore.patChoose.patientId,
-});
-const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
-const toPayRecord = async () => {
-  const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
-    patientId: payParam.value.patientId,
-    hosId: payParam.value.hosId,
-  });
-  payResList.value = result;
+); 
+const toPayRecord = async () => { 
   uni.navigateTo({
     url: 'payRecord',
   });
@@ -134,24 +113,17 @@ onPullDownRefresh(() => {
 });
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
-    hosId: hosInfoParam.value.hosId,
-    // patientId: '10763642',
     patientId: gStores.userStore.patChoose.patientId,
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
-};
-watch(
-  () => gStores.userStore.patChoose.patientId,
-  () => {
-    if (gStores.userStore.patChoose.patientId) {
-      init();
-    }
-  }
-);
+}; 
 onMounted(() => {
   init();
 });
+defineExpose({
+  init
+  });
 </script>
 
 <style scoped lang="scss">

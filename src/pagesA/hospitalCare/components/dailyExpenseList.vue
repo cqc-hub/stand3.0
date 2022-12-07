@@ -26,11 +26,12 @@
           <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
           <view class="iconfont down">&#xe6e8;</view>
         </view>
-        <inpatientInfo :costDay="costDay" :isHosDaylist="props.isHosDaylist" />
+        <dailyExpenseListDetial ref="dailyExpenseRef" :costDay="costDay" :isHosDaylist="props.isHosDaylist" />
       </view>
 
     </view>
-    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0">
+
+    <view class="empty-box" v-if="props.isHosDaylist=='1'&&dailyResList.inHospitalDailyCostsResultList.length==0">
       <g-empty :current="1" />
     </view>
   </view>
@@ -43,7 +44,7 @@ import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import { hosParam } from '@/components/g-form';
-import inpatientInfo from './dailyExpenseListDetial.vue';
+import dailyExpenseListDetial from './dailyExpenseListDetial.vue';
 import dayjs from 'dayjs';
 const gStores = new GStores();
 const props = defineProps<{
@@ -63,13 +64,22 @@ const dailyInfoParam = ref({
 const dailyResList = ref<dailyResult>({
   inHospitalDailyCostsResultList: [],
 });
+
+const dailyExpenseRef = ref<any>('');
+
 const init = async () => {
-  const { result } = await api.getInHospitalDailyCostList<dailyResult>({
+  if(props.isHosDaylist == '1'){
+    //调用日费用清单列表
+    const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: gStores.userStore.patChoose.patientId,
-    //patientId: '10763642',
     costType: '1',
   });
   dailyResList.value = result;
+  }else if(props.isHosDaylist == '2'){
+   //调用日费用清单详情
+   dailyExpenseRef.value.init()
+  }
+ 
 };
 
 const gotoListExpenses = (data) => {
@@ -86,19 +96,24 @@ onPullDownRefresh(() => {
     }, 1000);
   }
 });
-watch(
-  () => {
-    gStores.userStore.patChoose.patientId;
-  },
-  () => {
-    if (gStores.userStore.patChoose.patientId) {
-      init();
-    }
-  }
-);
+// watch(
+//   () => {
+//     gStores.userStore.patChoose.patientId;
+//   },
+//   () => {
+//     if (gStores.userStore.patChoose.patientId) {
+//       console.log(2222,'watch');
+      
+//       init();
+//     }
+//   }
+// );
 onMounted(async () => {
   await init();
 });
+defineExpose({
+  init
+  });
 </script>
 
 <style scoped lang="scss">

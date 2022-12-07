@@ -68,19 +68,14 @@ const gotoListExpenses = (data) => {
   uni.navigateTo({
     url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&inpatientNo=${data.inpatientNo}&isHosTotallist='2'`,
   });
-};
-watch(
-  () => gStores.userStore.patChoose.patientId,
-  () => {
-    if (gStores.userStore.patChoose.patientId) {
-      init();
-    }
-  }
-);
+}; 
 onMounted(async () => {
   await init();
   await detalResult(InHospitalCostInfo);
 });
+defineExpose({
+  init
+  });
 </script>
 
 <style scoped lang="scss">
