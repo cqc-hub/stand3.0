@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001054",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -78,7 +78,19 @@
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isHideHomeLogo":true
+    },
+    "1001054": {
+      "wxAppid": "wx7acc3ecadc08f7ea",
+      "alipayAppid": "wxf57d660046a04f49",
+      "h5Appid": "wxf57d660046a04f49",
+      "name": "咸阳第一人民医院",
+      "isOpenHealthCard": false,
+      "isStartComeTest": true,
+      "isSearchInHos": true,
+      "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
+      "isOpenOcr": true
     }
   }
 }

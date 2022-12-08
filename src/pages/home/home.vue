@@ -143,6 +143,10 @@
 
  import global from '@/config/global';
  import api from '@/service/api';
+ import {
+  getLocalStorage,
+  setLocalStorage,
+} from '@/common';
 
  import homeBanner from './componetns/homeBanner.vue';
  import homeMenu from './componetns/homeMenu.vue';
@@ -191,8 +195,8 @@
    gStores.userStore.updatePatChoose(item);
  };
 
- const searchPlaceholder = '搜索科室、医生或疾病';
- // const searchPlaceholder = '搜索疾病、症状或药品';
+//  const searchPlaceholder = ref('搜索科室、医生或疾病');
+ const searchPlaceholder = ref('搜索疾病、症状或药品'); 
  let homeConfig:any[] = []; //首页配置总参数
  let topMenuList = ref<IRoute[]>([]); //首页顶部menu
  const noticeMenu = ref<IRoute[]>([]); //通知列表
@@ -276,10 +280,28 @@
    });
  };
 
+ //优化首页配置
+ const getVersion=async ()=>{
+  const { result } = await api.searchFunctionConfig({
+    functionType: "2",//首页配置
+  });
+  const localVersion = getLocalStorage('systemConfigVersion');
+  if(result !== localVersion[0].version){
+    return true
+  }else{
+    return false
+  }
+
+ }
+
  //获取配置数据
  const getHomeConfig = async () => {
    skeletonProps.value.loading = true;
+  //  if(await getVersion()){
+  //   homeConfig = await ServerStaticData.getHomeConfig('home');
+  //  }else{
    homeConfig = await ServerStaticData.getHomeConfig();
+  //  }
    if (homeConfig) {
      topMenuList.value = homeConfig[0].functionList;
      // 新增公告展示判断 showFlag为1展示
@@ -287,6 +309,12 @@
        getNotice();
      } else {
        noticeMenu.value = [];
+     }
+     // 新增搜索功能挑战判断 showFlag为1搜索医生 0和默认为搜索症状
+     if (homeConfig[8]?.showFlag == 1) {
+      searchPlaceholder.value = '搜索科室、医生或疾病';
+     } else {
+      searchPlaceholder.value = '搜索疾病、症状或药品';
      }
      bannerFunctionList.value = homeConfig[2].functionList;
      bannerLeftFunctionList.value = homeConfig[2].leftFunctionList;
@@ -296,7 +324,6 @@
  };
 
  const goSearch = () => {
-   // 新增搜索功能挑战判断 showFlag为1搜索医生 0和默认为搜索症状
    let searchConfig = homeConfig[8]?.showFlag;
    if(searchConfig == 1){
 uni.navigateTo({

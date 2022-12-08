@@ -2,83 +2,106 @@
   <view class="box">
     <view class="title">预交费用</view>
     <view class="buttons">
-      <view :class="list[index]==defalutMoney?'activeButton':'button'" v-for="(item,index) in list" :key="index" @click="checkMoney(item)">
-        ¥{{item}}</view>
+      <view
+        :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="checkMoney(item)"
+      >
+        ¥{{ item }}</view
+      >
     </view>
-    <view class="pay-input ">
+    <view class="pay-input">
       <view class="g-border-left util-content mb8">
-        <text v-if="moneyUtil"  class="g-split-line mr8"></text>
-        <text v-if="moneyUtil" >{{ moneyUtil }}</text>
+        <text v-if="moneyUtil" class="g-split-line mr8"></text>
+        <text v-if="moneyUtil">{{ moneyUtil }}</text>
       </view>
 
       <view class="flex-normal">
         <text class="m-util">¥</text>
-        <input class="uni-input" maxlength="13" placeholder-style="font-size:32rpx;color:#888" type="number" v-model="defalutMoney" placeholder="输入自定义金额" />
+        <input
+          class="uni-input"
+          maxlength="13"
+          placeholder-style="font-size:32rpx;color:#888"
+          type="number"
+          v-model="defalutMoney"
+          placeholder="输入自定义金额"
+        />
       </view>
     </view>
-    <button :disabled="defalutMoney==''?true:false" :class="defalutMoney==''?'submitBtn':'activeSubmitBtn'" @click="toPay">确定</button>
+    <button
+      :disabled="defalutMoney == '' ? true : false"
+      :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
+      @click="toPay"
+    >
+      确定
+    </button>
     <g-message />
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
-import { GStores, ServerStaticData } from '@/utils';
-import { hosParam } from '@/components/g-form';
-import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
-import api from '@/service/api';
-import { payOrderResult,payParam } from './utils/inpatientInfo';
-import {
-    type IGPay,
-    payMoneyOnline,
-    toPayPull,
-  } from '@/components/g-pay/index';
-  import { wait } from '@/utils';
+import { ref, computed } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+
+import api from "@/service/api";
+import { GStores, ServerStaticData, wait } from "@/utils";
+import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
+import { deQueryForUrl } from '@/common/utils';
+
+import { hosParam } from "@/components/g-form";
+import { payOrderResult } from "./utils/inpatientInfo";
+
+type IPageProps = {
+  hosId: string; 
+};
+
 const gStores = new GStores();
 const resultHos = ref<hosParam>({
-  inPatientPrePay: '',
-  isHosDaylist: '',
-  isHosTotallist: '',
+  inPatientPrePay: "",
+  isHosDaylist: "",
+  isHosTotallist: "",
   tab: [],
 });
 
 const list = ref([]);
-const defalutMoney = ref('');
+const defalutMoney = ref("");
 const payOrderParam = ref({
-  fee: '',
-  orderType: '3',
-   patientId: gStores.userStore.patChoose.patientId,
+  fee: "",
+  orderType: "3",
+  patientId: gStores.userStore.patChoose.patientId,
 });
 const payOrder = ref<payOrderResult>({} as payOrderResult);
+const pageProps = ref({} as IPageProps);
+
 const checkMoney = (item) => {
   defalutMoney.value = String(item);
 };
-const toPay =async () => {
+const toPay = async () => {
   payOrderParam.value.fee = defalutMoney.value;
- await int();
-const res = await payMoneyOnline({
-        phsOrderNo:  payOrder.value.phsOrderNo,
-       patientId:gStores.userStore.patChoose.patientId,
-     //  patientId:'10763642',
-      totalFee:payOrderParam.value.fee,
-      phsOrderSource: '3',
-      hosId:'1279',
-      source: gStores.globalStore.browser.source,
-    });
+  await int();
+  const res = await payMoneyOnline({
+    phsOrderNo: payOrder.value.phsOrderNo,
+    paySign: payOrder.value.paySign,
+    patientId: gStores.userStore.patChoose.patientId,
+    totalFee: payOrderParam.value.fee,
+    phsOrderSource: "3",
+    hosId: pageProps.value.hosId,
+    source: gStores.globalStore.browser.source,
+  });
 
-    await toPayPull(res);
-     payAfter();
-
+  await toPayPull(res);
+  payAfter();
 };
 const payAfter = async () => {
-    uni.showLoading({});
-    await wait(1000);
-    uni.hideLoading();
+  uni.showLoading({});
+  await wait(1000);
+  uni.hideLoading();
 
-    uni.reLaunch({
-      url: '/pagesA/hospitalCare/choosePatient',
-    });
-  };
+  uni.reLaunch({
+    url: "/pagesA/hospitalCare/choosePatient",
+  });
+};
 const setData = async () => {
   const result = await ServerStaticData.getSystemHospital();
   resultHos.value = result;
@@ -94,22 +117,34 @@ const int = async () => {
 };
 
 const moneyUtil = computed(() => {
-  return transformUnit((defalutMoney.value) as unknown as number * 1)
-})
+  return transformUnit(((defalutMoney.value as unknown) as number) * 1);
+});
 
 const transformUnit = (val: number) => {
   if (val) {
-    const unitList = ['','千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿', '兆'];
+    const unitList = [
+      "",
+      "千",
+      "万",
+      "十万",
+      "百万",
+      "千万",
+      "亿",
+      "十亿",
+      "百亿",
+      "千亿",
+      "兆",
+    ];
     const v = (Math.floor(val / 1000) * 10).toString().length - 1;
 
-    return unitList.length > v ? unitList[v] : '兆'
+    return unitList.length > v ? unitList[v] : "兆";
   } else {
-    return ''
+    return "";
   }
+};
 
-}
-
-onLoad(() => {
+onLoad((opt) => {
+  pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
   setData();
 });
 </script>
@@ -175,7 +210,7 @@ onLoad(() => {
       width: 100%;
       margin-left: 88rpx;
       &::after {
-        content: '强';
+        content: "强";
         opacity: 0;
       }
     }

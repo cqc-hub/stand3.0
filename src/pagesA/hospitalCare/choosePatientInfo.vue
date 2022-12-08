@@ -73,8 +73,10 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { isAreaProgram } from '@/stores';
+import { onLoad } from '@dcloudio/uni-app';
+
 import api from '@/service/api';
+import { isAreaProgram } from '@/stores';
 import { GStores, ServerStaticData } from '@/utils';
 import { hosParam } from '@/components/g-form';
 import {
@@ -82,7 +84,16 @@ import {
   getInHospitalInfoResult,
   hospitalPayResult,
 } from './utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
+import { deQueryForUrl} from '@/common/utils';
+
+type IPageProps = {
+  patientName?: string; 
+  patientPhone?: string; // 代缴的时候带
+  type?: string;  // 扫码时候带scan
+  params?: string; // 扫码时候带的加密参数
+};
+const pageProps = ref<IPageProps>({} as IPageProps);
+
 const resultHos = ref<hosParam>({
   inPatientPrePay: '',
   isHosDaylist: '',
@@ -90,58 +101,82 @@ const resultHos = ref<hosParam>({
   tab: [],
   isQueryPreRecord: '',
 });
+
 const Obj = ref();
 const gStores = new GStores();
 const hosInfoResObj = ref<getInHospitalInfoResult>(
   {} as getInHospitalInfoResult
-);
-const hosInfoParam = ref<getInHospitalInfoParam>({
-  patientName: '',
-  patientPhone: '',
-});
-const payParam = ref({
-  hosId: '1279',
-  // patientId: '10763642',
-  patientId: gStores.userStore.patChoose.patientId,
-});
-const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
+); 
+// const payParam = ref({
+//   hosId: '1279',
+//   // patientId: '10763642',
+//   patientId: gStores.userStore.patChoose.patientId,
+// });
+// const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const isLoad = ref(false);
+
 const loadImg = () => {
   isLoad.value = true;
 };
+
 const toPayPage = () => {
   uni.navigateTo({
-    url: `paymentPage`,
+    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}`,
   });
 };
+
+//根据姓名手机号查询的接口
 const init = async () => {
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
-    patientName: hosInfoParam.value.patientName,
-    patientPhone: hosInfoParam.value.patientPhone,
+    patientName: pageProps.value.patientName,
+    patientPhone: pageProps.value.patientPhone,
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
-const toPayRecord = async () => {
-  const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
-    patientId: payParam.value.patientId,
-    hosId: payParam.value.hosId,
+
+//根据扫码获取住院信息
+const getScanInHospitalInfo = async () => {
+  const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({
+    // desSecret: pageProps.value.params,
+    desSecret:"OP/5ULVnZpys/IGI9YDnyANGR4uXKxciOCBjXdjijgA="
   });
-  payResList.value = result;
-  uni.navigateTo({
-    url: 'payRecord',
-  });
+  hosInfoResObj.value = result;
+  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
 };
-const setData = async () => {
-  const result = await ServerStaticData.getSystemHospital();
-  resultHos.value = result;
-};
-onLoad(async (val) => {
-  hosInfoParam.value.patientName = val.patientName;
-  hosInfoParam.value.patientPhone = val.patientPhone;
-  await init();
-  await setData();
+
+//查看记录暂时注释
+// const toPayRecord = async () => {
+//   const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
+//     patientId: payParam.value.patientId,
+//     hosId: payParam.value.hosId,
+//   });
+//   payResList.value = result;
+//   uni.navigateTo({
+//     url: 'payRecord',
+//   });
+// };
+
+// //获取住院参数配置
+// const setData = async () => {
+//   const result = await ServerStaticData.getSystemHospital();
+//   resultHos.value = result;
+// };
+
+onLoad(async (opt) => {
+  pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt)); 
+  if(pageProps.value.params){//扫码进入
+    uni.setNavigationBarTitle({
+     title: "住院服务",
+   });
+   await getScanInHospitalInfo()
+  }else{
+    await init();
+    // await getScanInHospitalInfo()
+  }
+  // await setData();
 });
+
 </script>
 
 <style scoped lang="scss">
