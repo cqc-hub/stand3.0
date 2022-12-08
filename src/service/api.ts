@@ -146,6 +146,10 @@ const baseApi = {
       monitorName: '预约挂号',
       reportCmPV_YLName: '',
     }),
+
+    //查询对应版本号
+    searchFunctionConfig: (data) =>
+  service.post('/phs-base/hospital/searchFunctionConfig', parm(data)),
 };
 // 查询服务
 const queryApi = {
@@ -231,7 +235,7 @@ const queryApi = {
     service.post<T>('/phs-query//hospital/getInHospitalCostInfo', parm(data)),
  //扫码获取住院信息
  getScanInHospitalInfo: <T>(data) =>
- service.post<T>('/phs-query//hospital/getScanInHospitalInfo', parm(data)),
+ service.post<T>('/phs-query/hospital/getScanInHospitalInfo', parm(data)),
 };
 
 // 挂号服务

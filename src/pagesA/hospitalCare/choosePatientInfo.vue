@@ -139,7 +139,7 @@ const init = async () => {
 const getScanInHospitalInfo = async () => {
   const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({
     // desSecret: pageProps.value.params,
-    desSecret:"OP%2F5ULVnZpys%2FIGI9YDnyANGR4uXKxciOCBjXdjijgA%3D"
+    desSecret:"OP/5ULVnZpys/IGI9YDnyANGR4uXKxciOCBjXdjijgA="
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
@@ -171,8 +171,8 @@ onLoad(async (opt) => {
    });
    await getScanInHospitalInfo()
   }else{
-    // await init();
-    await getScanInHospitalInfo()
+    await init();
+    // await getScanInHospitalInfo()
   }
   // await setData();
 });
