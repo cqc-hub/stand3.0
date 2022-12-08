@@ -83,11 +83,11 @@
     },
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
-      "alipayAppid": "wx7acc3ecadc08f7ea",
+      "alipayAppid": "wxf57d660046a04f49",
       "h5Appid": "wxf57d660046a04f49",
       "name": "咸阳第一人民医院",
       "isOpenHealthCard": false,
-      "isStartComeTest": false,
+      "isStartComeTest": true,
       "isSearchInHos": true,
       "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
       "isOpenOcr": true
