@@ -1,5 +1,9 @@
 <template>
   <view class="g-page">
+    <view class="my-display-none">
+      <g-selhos :hosId="pageProps.hosId" @get-list="getHosList" />
+    </view>
+
     <view class="g-container">
       <view class="head-bg" />
 
@@ -9,7 +13,7 @@
 
           <view class="flex-normal f28 mt24">
             <text class="mr16 color-888">支付给</text>
-            <text class="color-444">湖州市中心医院</text>
+            <text class="color-444">{{ getHosName }}</text>
           </view>
         </view>
 
@@ -25,11 +29,11 @@
             <view class="label">{{ item.label }}</view>
             <view
               :class="{
-                'color-error': item.key === 'a3',
+                'color-error': item.key === 'totalNeedSelfpay',
               }"
               class="value g-bold"
             >
-              1621.97元
+              {{ info[item.key] || 0 }}元
             </view>
           </view>
         </view>
@@ -39,35 +43,106 @@
     <view class="g-footer">
       <view class="flex1 flex-normal count-money">
         <text class="color-444 f28 mr8">合计</text>
-        <text class="f36 g-bold color-error">{{ '233' }}元</text>
+        <text class="f36 g-bold color-error">
+          {{ info.totalNeedSelfpay || '' }}元
+        </text>
       </view>
 
       <button class="btn g-border btn-warning pay-btn">缴费</button>
     </view>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
 
+  import { type TPayConfirmPageProp } from './utils/clinicPayDetail';
+  import { deQueryForUrl } from '@/common';
+  import { GStores, type IHosInfo } from '@/utils';
+
+  import api from '@/service/api';
+
+  const pageProps = ref(<TPayConfirmPageProp>{});
+  const gStores = new GStores();
+  const isComplete = ref(false);
+  const hosList = ref<IHosInfo[]>([]);
   const details = ref([
     {
       label: '订单总额',
-      key: 'a',
+      key: 'totalCharges',
     },
     {
       label: '医保支付',
-      key: 'a1',
+      key: 'medicalMoney',
     },
     {
       label: '院内账户支付',
-      key: 'a2',
+      key: 'accountMoney',
     },
     {
       label: '自费支付',
-      key: 'a3',
+      key: 'totalNeedSelfpay',
     },
   ]);
+
+  const info = ref(
+    <
+      {
+        totalNeedSelfpay: string;
+        totalCharges: string;
+        visitNo: string;
+        serialNo: string;
+        cardNumber: string;
+      }
+    >{}
+  );
+
+  const getData = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const { hosId, serialNo, visitNo } = pageProps.value;
+
+    isComplete.value = false;
+    const { result } = await api
+      .getClinicReservePay<any>({
+        patientId,
+        hosId,
+        serialNo,
+        visitNo,
+      })
+      .finally(() => {
+        isComplete.value = true;
+      });
+
+    info.value = result;
+  };
+
+  const getHosName = computed(() => {
+    if (pageProps.value.hosId) {
+      return (
+        hosList.value.find((o) => o.hosId == pageProps.value.hosId)?.hosName ||
+        ''
+      );
+    } else {
+      return '';
+    }
+  });
+
+  const getHosList = ({ list }) => {
+    hosList.value = list;
+
+    init();
+  };
+
+  const init = () => {
+    getData();
+  };
+
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -117,6 +192,6 @@
   }
 
   .pay-btn {
-    flex: .8;
+    flex: 0.8;
   }
 </style>

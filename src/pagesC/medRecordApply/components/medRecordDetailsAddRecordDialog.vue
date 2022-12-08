@@ -137,6 +137,11 @@
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
 
     if (listConfig && listConfig.length) {
+      console.log({
+        listConfig,
+        list
+      });
+
       const hos = listConfig.map((o) => o.hosId + '');
       hosList.value = list.filter((o) => hos.includes(o.hosId));
     }

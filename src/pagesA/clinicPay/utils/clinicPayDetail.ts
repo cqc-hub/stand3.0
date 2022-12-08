@@ -6,7 +6,7 @@ import {
   ServerStaticData,
   wait,
 } from '@/utils';
-import { joinQuery } from '@/common';
+import { joinQuery, joinQueryForUrl } from '@/common';
 import {
   type IGPay,
   payMoneyOnline,
@@ -106,6 +106,12 @@ export type TPayDetailInfo = {
   totalCost: string;
   invoiceNumber: string; // 发票号
   qrCode: string;
+};
+
+export type TPayConfirmPageProp = {
+  hosId: string;
+  serialNo: string;
+  visitNo: string;
 };
 
 export const usePayPage = () => {
@@ -349,7 +355,13 @@ export const usePayPage = () => {
     if (item.key === 'online') {
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
-        // console.log('预结算');
+        const selList = selUnPayList.value;
+
+        goConfirmPage({
+          hosId: selList[0].hosId,
+          serialNo: selList.map((o) => o.serialNo).join(';'),
+          visitNo: selList.map((o) => o.visitNo).join(','),
+        });
       } else {
         toPay();
       }
@@ -459,6 +471,12 @@ export const usePayDetailPage = () => {
     detailData,
     getDetailData,
   };
+};
+
+export const goConfirmPage = (data: TPayConfirmPageProp) => {
+  uni.navigateTo({
+    url: joinQueryForUrl('/pagesA/clinicPay/payConfirm', data),
+  });
 };
 
 const dealPayList = (resList: IPayListItem[], { payState }) => {

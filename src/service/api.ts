@@ -146,6 +146,13 @@ const queryApi = {
       reportCmPV_YLName: '门诊缴费',
     }),
 
+  // 预决算
+  getClinicReservePay: <T>(data) =>
+    service.post<T>('/phs-query/clinical/getClinicReservePay', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '门诊缴费',
+    }),
+
   createClinicOrder: <T = any>(data) =>
     service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), {
       hideLoading: false,
@@ -208,9 +215,9 @@ const queryApi = {
   //获取住院费用清单详情
   getInHospitalCostInfo: <T>(data) =>
     service.post<T>('/phs-query//hospital/getInHospitalCostInfo', parm(data)),
- //扫码获取住院信息
- getScanInHospitalInfo: <T>(data) =>
- service.post<T>('/phs-query//hospital/getScanInHospitalInfo', parm(data)),
+  //扫码获取住院信息
+  getScanInHospitalInfo: <T>(data) =>
+    service.post<T>('/phs-query//hospital/getScanInHospitalInfo', parm(data)),
 };
 
 // 挂号服务
