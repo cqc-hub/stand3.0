@@ -78,7 +78,8 @@
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isHideHomeLogo":true
     },
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
