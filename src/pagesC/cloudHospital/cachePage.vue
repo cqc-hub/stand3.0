@@ -43,8 +43,7 @@
   const getSrc = (para) => {
     // 网络医院有老版本和3.0版本
     const sysCodeList = ['1001033'];
-    // const sysCode = global.SYS_CODE;
-    const sysCode = '1001017';
+    const sysCode = global.SYS_CODE;
     let netUrl = '';
     let params = '';
     let netPath = '';

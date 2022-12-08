@@ -4,50 +4,81 @@
     <g-choose-pat @choosePat="choosePat" />
 
     <view class="tab-box">
-      <g-tabs v-model:value="tabCurrent" :tabs="resultHos.tab" :line-scale="0.8" field="label" zIndex="1" all-blod @change="tabChange" />
+      <g-tabs
+        v-model:value="tabCurrent"
+        :tabs="resultHos.tab"
+        :line-scale="0.8"
+        field="label"
+        zIndex="1"
+        all-blod
+        @change="tabChange"
+      />
     </view>
     <!-- 内容区域 -->
-    <view class=" g-container ">
-      <inpatientInfo ref="inpatientInfoRef" v-if="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
-      <dailyExpenseList ref="dailyExpenseListRef" v-if="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
-      <totalList ref="totalListRef" v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
+    <view class="g-container">
+      <inpatientInfo
+        ref="inpatientInfoRef"
+        v-if="tabCurrent == 0"
+        :isQueryPreRecord="resultHos.isQueryPreRecord"
+        :tabCurrent="tabCurrent"
+      ></inpatientInfo>
+      <dailyExpenseList
+        ref="dailyExpenseListRef"
+        v-if="tabCurrent == 1"
+        :isHosDaylist="resultHos.isHosDaylist"
+        :tabCurrent="tabCurrent"
+      ></dailyExpenseList>
+      <totalList
+        ref="totalListRef"
+        v-if="tabCurrent == 2"
+        :isHosTotallist="resultHos.isHosTotallist"
+        :tabCurrent="tabCurrent"
+      ></totalList>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
 // import api from '@/api/api';
-import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
-import { ref, watch } from 'vue';
-import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
-import inpatientInfo from './components/inpatientInfo.vue';
-import dailyExpenseList from './components/dailyExpenseList.vue';
-import totalList from './components/totalList.vue';
-import { GStores, ServerStaticData } from '@/utils';
-import { hosParam } from '@/components/g-form';
+import { getAvatar, isAreaProgram, useUserStore, IPat } from "@/stores";
+import { ref, watch } from "vue";
+import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
+import inpatientInfo from "./components/inpatientInfo.vue";
+import dailyExpenseList from "./components/dailyExpenseList.vue";
+import totalList from "./components/totalList.vue";
+import { GStores, ServerStaticData } from "@/utils";
+import { hosParam } from "@/components/g-form";
+import { deQueryForUrl } from "@/common";
+
+const pageProps = ref(
+  {} as {
+    tabIndex?: 1 | 2;
+  }
+);
+
 const gStores = new GStores();
 const patList = ref(gStores.userStore.patChoose);
 const tabCurrent = ref(0);
 const tabStatus = ref(0);
 const resultHos = ref<hosParam>({
-  inPatientPrePay: '',
-  isHosDaylist: '',
-  isHosTotallist: '',
+  inPatientPrePay: "",
+  isHosDaylist: "",
+  isHosTotallist: "",
   tab: [],
-  isQueryPreRecord: '',
+  isQueryPreRecord: "",
 });
-const inpatientInfoRef = ref<any>('');
-const dailyExpenseListRef = ref<any>('');
-const totalListRef = ref<any>('');
+const inpatientInfoRef = ref<any>("");
+const dailyExpenseListRef = ref<any>("");
+const totalListRef = ref<any>("");
 //切换就诊人
 const choosePat = ({ item }: { item: IPat; number: number }) => {
   patList.value = item;
-  if(tabCurrent.value == 0){
-  inpatientInfoRef.value.init()
-  }else if(tabCurrent.value == 1){
-    dailyExpenseListRef.value.init()
-  }else if(tabCurrent.value == 2){
-    totalListRef.value.init()
+  if (tabCurrent.value == 0) {
+    inpatientInfoRef.value.init();
+  } else if (tabCurrent.value == 1) {
+    dailyExpenseListRef.value.init();
+  } else if (tabCurrent.value == 2) {
+    totalListRef.value.init();
   }
 };
 const tabChange = (e: number) => {
@@ -57,16 +88,22 @@ const tabChange = (e: number) => {
 const scrollOption = ref({
   auto: false,
   size: 15,
-  loadFailText: '加载失败',
-  noMoreText: '没有更多了',
+  loadFailText: "加载失败",
+  noMoreText: "没有更多了",
 });
 const setData = async () => {
   const result = await ServerStaticData.getSystemHospital();
   resultHos.value = result;
 };
 
-onLoad(async () => {
+onLoad(async (opt) => {
+  if (opt) {
+    pageProps.value = deQueryForUrl(opt);
+  }
   setData();
+  if (pageProps.value.tabIndex) {
+    tabCurrent.value = pageProps.value.tabIndex;
+  }
 });
 </script>
 
@@ -77,5 +114,5 @@ onLoad(async () => {
     flex: 1;
     justify-content: center;
   }
-} 
+}
 </style>
