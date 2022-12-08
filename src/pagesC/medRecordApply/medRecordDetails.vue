@@ -784,6 +784,11 @@
 
   let _firstLoaded = true;
   onShow(async () => {
+    const selRecords = getLocalStorage(CACHE_KEY);
+    if (selRecords && _firstLoaded) {
+      recordRows.value = JSON.parse(selRecords);
+    }
+
     const _backFromAddress = uni.getStorageSync('back-address');
     if (_firstLoaded || _backFromAddress) {
       _firstLoaded = false;
@@ -796,11 +801,6 @@
       });
 
       addressList.value = result || [];
-    }
-
-    const selRecords = getLocalStorage(CACHE_KEY);
-    if (selRecords) {
-      recordRows.value = JSON.parse(selRecords);
     }
   });
 
