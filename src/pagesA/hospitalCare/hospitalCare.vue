@@ -1,5 +1,5 @@
 <template>
-  <view class="page">
+  <view class="g-page">
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat @choosePat="choosePat" />
 
@@ -7,7 +7,7 @@
       <g-tabs v-model:value="tabCurrent" :tabs="resultHos.tab" :line-scale="0.8" field="label" zIndex="1" all-blod @change="tabChange" />
     </view>
     <!-- 内容区域 -->
-    <view class="content-box">
+    <view class=" g-container ">
       <inpatientInfo ref="inpatientInfoRef" v-if="tabCurrent == 0" :isQueryPreRecord="resultHos.isQueryPreRecord" :tabCurrent="tabCurrent"></inpatientInfo>
       <dailyExpenseList ref="dailyExpenseListRef" v-if="tabCurrent == 1" :isHosDaylist=" resultHos.isHosDaylist" :tabCurrent="tabCurrent"></dailyExpenseList>
       <totalList ref="totalListRef" v-if="tabCurrent == 2" :isHosTotallist="resultHos.isHosTotallist" :tabCurrent="tabCurrent"></totalList>
@@ -77,8 +77,5 @@ onLoad(async () => {
     flex: 1;
     justify-content: center;
   }
-}
-.content-box {
-  // padding: 32rpx 32rpx 0 32rpx;
-}
+} 
 </style>
