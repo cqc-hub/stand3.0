@@ -82,6 +82,7 @@ export type TCostList = {
   subCost: string;
   subCostTypeCode: string;
   subCostTypeName: string;
+  serialNo: string;
   costList: {
     amount: string;
     itemPrice: string;
@@ -313,6 +314,7 @@ export const usePayPage = () => {
     if (isReset) {
       unPayList.value = [];
       payedList.value = [];
+      selUnPayList.value = [];
     }
 
     if (tabCurrent.value === 0) {
@@ -347,7 +349,7 @@ export const usePayPage = () => {
     if (item.key === 'online') {
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
-        console.log('预结算');
+        // console.log('预结算');
       } else {
         toPay();
       }
@@ -374,6 +376,7 @@ export const usePayPage = () => {
       hosId: selectList.map((o) => o.hosId).join(','),
       hosName: selectList.map((o) => o.hosName).join(','),
       visitDate: selectList.map((o) => o.visitDate).join(','),
+      serialNo: selectList.map((o) => o.serialNo).join(';'),
     };
 
     const {

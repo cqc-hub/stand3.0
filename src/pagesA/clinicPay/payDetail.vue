@@ -79,13 +79,22 @@
 
           <block v-if="detailData.costList && detailData.costList.length">
             <view class="mt8">
-              <Pay-Detail-Cost-List :list="detailData.costList" />
+              <Pay-Detail-Cost-List
+                :list="detailData.costList"
+                :selList="selList"
+                :mulit="isCanSelServerFee"
+                @sel-item="selItem"
+              />
             </view>
           </block>
         </view>
 
         <view class="mt24">
-          <g-flag :typeFg="props.payState === '0' ? '38' : '0'" isShowFgTip aaa />
+          <g-flag
+            :typeFg="props.payState === '0' ? '38' : '0'"
+            isShowFgTip
+            aaa
+          />
         </view>
       </view>
     </view>
@@ -140,8 +149,14 @@
             申请退单
           </button>
 
-          <button @click="handlerPay" class="btn btn-warning confirm-btn">
-            {{ detailData.totalCost + `元 立即支付` }}
+          <button
+            @click="handlerPay"
+            :class="{
+              'btn-disabled': !isCanPay,
+            }"
+            class="btn btn-warning confirm-btn"
+          >
+            {{ getPayTotal + `元 立即支付` }}
           </button>
         </block>
       </view>
@@ -171,6 +186,7 @@
     usePayPage,
     usePayDetailPage,
     type TPayDetailProp,
+    type TCostList,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -186,10 +202,109 @@
   import PayDetailHeadBoxDetail from './components/payDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
+  // api.getClinicalPayDetailList = () =>
+  //   Promise.resolve(<any>{
+  //     result: {
+  //       costList: [
+  //         {
+  //           subCostTypeCode: '001',
+  //           subCost: '5.05',
+  //           subCostTypeName: '西药费',
+  //           costList: [
+  //             {
+  //               itemSpec: '10ml',
+  //               amount: '5',
+  //               subCostTypeCode: '202201250130',
+  //               subCost: '5.05',
+  //               subCostTypeName: '开塞露(含甘油)',
+  //               itemPrice: '1.01',
+  //               units: '支',
+  //             },
+  //           ],
+  //           serialNo: '499c75e933db4c6ea327d6936cde36d2',
+  //         },
+  //         {
+  //           subCostTypeCode: '013',
+  //           subCost: '20.0',
+  //           subCostTypeName: '其他费',
+  //           costList: [
+  //             {
+  //               itemSpec: '/',
+  //               amount: '1',
+  //               subCostTypeCode: 'F00037',
+  //               subCost: '20.0',
+  //               subCostTypeName: '数字影像服务费',
+  //               itemPrice: '20.00',
+  //               units: '人次',
+  //             },
+  //           ],
+  //           serialNo: '12a47895a3fc4376820008be6a864a9d',
+  //         },
+  //         {
+  //           subCostTypeCode: '005',
+  //           subCost: '167.0',
+  //           subCostTypeName: '检查费',
+  //           costList: [
+  //             {
+  //               itemSpec: '/',
+  //               amount: '1',
+  //               subCostTypeCode: 'F02003',
+  //               subCost: '117.0',
+  //               subCostTypeName: '螺旋CT平扫(一个部位）',
+  //               itemPrice: '117.00',
+  //               units: '次',
+  //             },
+  //             {
+  //               itemSpec: '/',
+  //               amount: '1',
+  //               subCostTypeCode: 'F02001',
+  //               subCost: '50.0',
+  //               subCostTypeName: '16层及以上多排螺旋CT扫描加收',
+  //               itemPrice: '50.00',
+  //               units: '人次',
+  //             },
+  //           ],
+  //           serialNo:
+  //             '12a47895a3fc4376820008be6a864a9d,12a47895a3fc4376820008be6a864a9d',
+  //         },
+  //         {
+  //           subCostTypeCode: 'chineseMedicine',
+  //           subCost: '21.55',
+  //           subCostTypeName: '中草药费',
+  //           costList: [
+  //             {
+  //               itemSpec: '1g',
+  //               amount: '63',
+  //               subCostTypeCode: '202201250716',
+  //               subCost: '21.55',
+  //               subCostTypeName: '金银花',
+  //               itemPrice: '0.34',
+  //               units: 'g',
+  //             },
+  //           ],
+  //           serialNo: '0a63c02a10fc44a6b1fab1ae2dca6a91',
+  //         },
+  //       ],
+  //       hosId: '13001',
+  //       payState: '1',
+  //       hosName: '乐清市人民医院',
+  //       totalCost: '213.6',
+  //       personCost: '',
+  //       medicalCost: '',
+  //     },
+  //     timeTaken: 260,
+  //     code: 0,
+  //     functionVersion:
+  //       '[{"functionType":"1","version":"V0.0.4"},{"functionType":"2","version":"V0.0.24"}]',
+  //     message: '成功',
+  //     respCode: 999002,
+  //   });
+
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
   const isComplete = ref(false);
+  const selList = ref<TCostList>([]);
 
   const { getDetailData, detailData } = usePayDetailPage();
   const {
@@ -242,6 +357,50 @@
     qrOpt.value._qrImg = qrCodeImg;
 
     closeQrOpt();
+  };
+
+  const isCanPay = computed(() => {
+    if (props.value.payState !== '1') {
+      return false;
+    } else if (pageConfig.value.isSubitemPay === '1') {
+      return selList.value.length;
+    } else {
+      return true;
+    }
+  });
+
+  const getPayTotal = computed(() => {
+    if (props.value.payState !== '1') {
+      return 0;
+    } else if (pageConfig.value.isSubitemPay === '1') {
+      const totalFee = selList.value.reduce((prev, curr) => {
+        const fee = (curr.subCost as any) * 1;
+        prev += fee;
+
+        return prev;
+      }, 0);
+
+      return Number((totalFee * 100).toFixed(2)) / 100;
+    } else {
+      return detailData.value.totalCost;
+    }
+  });
+
+  // 可以选择性支付
+  const isCanSelServerFee = computed(() => {
+    return (
+      props.value.payState === '1' && pageConfig.value.isSubitemPay === '1'
+    );
+  });
+  const selItem = (item: TCostList[number]) => {
+    const { serialNo } = item;
+    const idx = selList.value.findIndex((o) => o.serialNo === serialNo);
+
+    if (idx === -1) {
+      selList.value.push(item);
+    } else {
+      selList.value.splice(idx, 1);
+    }
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {

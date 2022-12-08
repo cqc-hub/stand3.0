@@ -203,7 +203,7 @@
     const { patientId } = gStores.userStore.patChoose;
     const requestArg = {
       patientId,
-      type: '1',
+      type: '11',
       hosId: hosId.value,
     };
 

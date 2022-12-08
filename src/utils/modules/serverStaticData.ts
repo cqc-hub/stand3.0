@@ -512,8 +512,9 @@ export class ServerStaticData {
             //   text: '导诊单',
             // },
             confirmPayFg: '15',
-            // isPreSettle: '0',
+            isPreSettle: '1',
             // isOpenChargeback: '1',
+            isSubitemPay: '1',
           },
         };
       } catch (error) {

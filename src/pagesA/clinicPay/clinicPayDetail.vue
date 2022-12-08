@@ -118,12 +118,15 @@
       isShowCloseIcon
       footerBtnIsometric
     >
-      <g-flag
-        v-model:title="confirmFgTitle"
-        :typeFg="pageConfig.confirmPayFg!"
-        isShowFgTip
-        isHideTitle
-      />
+      <view>
+        <g-flag
+          v-model:title="confirmFgTitle"
+          :typeFg="pageConfig.confirmPayFg!"
+          isShowFgTip
+          isHideTitle
+          aaa
+        />
+      </view>
     </Order-Reg-Confirm>
 
     <g-pay
@@ -153,20 +156,42 @@
   import api from '@/service/api';
 
   // api.getUnpaidClinicList = async () => {
-  //   await wait(500)
+  //   await wait(500);
   //   return Promise.resolve(<any>{
   //     result: {
   //       patientName: '陈钦川',
   //       clinicalSettlementResultList: [
   //         {
+  //           deptName: '神经内科',
+  //           clinicId: 'dbbc0285-0b15-43d8-8df0-40253050ffe6',
+  //           subIds: 'f7b85065-0154-498d-81cf-8d4c48700b1a',
+  //           docId: '00812',
+  //           deptId: 'A010228',
+  //           hosId: '13001',
+  //           costTypeCode: '1',
+  //           payState: '1',
+  //           serialNo:
+  //             '57ab80a78101435b81b88440a2ebb37e,7541ffefc1904ca69c15577cebf0cbf5,2ba76d5181944b56902b02718f18ee8f',
+  //           childOrder: '1165',
+  //           docName: '孙**',
+  //           costTypeName: '自费',
+  //           visitDate: '2022-12-08',
+  //           hosName: '乐清市人民医院',
+  //           totalCost: '213.6',
+  //           visitNo: '20221208000010',
+  //         },
+  //         {
   //           deptName: '耳鼻喉外科',
+  //           clinicId: '170db102-7474-4c32-9ac6-dd3ebe36e068',
+  //           subIds: 'da9f5ddd-82a9-4a3d-ac53-b52f4faef861',
   //           docId: 'ADMIN',
   //           deptId: 'A010217',
   //           hosId: '13001',
+  //           costTypeCode: '1',
   //           payState: '1',
   //           serialNo:
-  //             '303babaef694403d8ff40c8ad56462f2,11fd4647b2ee4e64989280d8b2a0ddf8',
-  //           childOrder: '1057',
+  //             '9d426ff4b1164ccab6f7c5afb728ce9c,d3dffe2f42834e00a8f8bba78700a98e',
+  //           childOrder: '1166',
   //           docName: '超****',
   //           costTypeName: '自费',
   //           visitDate: '2022-12-06',
@@ -176,27 +201,30 @@
   //         },
   //         {
   //           deptName: '呼吸内科',
-  //           childOrder: '1058',
-  //           costTypeName: '自费',
+  //           clinicId: 'de004ae3-bb45-4332-9c54-a5e0fb23f7f4',
+  //           subIds: '4cc65cd7-beeb-4543-a412-2636731778f4',
   //           deptId: 'A010221',
   //           hosId: '13001',
-  //           visitDate: '2022-11-16',
+  //           costTypeCode: '1',
   //           payState: '1',
+  //           serialNo: '41dc9b6ceda441dd9da742e0ee6e9f81',
+  //           childOrder: '1167',
+  //           costTypeName: '自费',
+  //           visitDate: '2022-11-16',
   //           hosName: '乐清市人民医院',
   //           totalCost: '14.0',
   //           visitNo: '20221116000020',
-  //           serialNo: 'e8e3cff99dca4d0bb50c9676d84dc90a',
   //         },
   //       ],
   //       cardNumber: '300087902',
   //     },
-  //     timeTaken: 307,
+  //     timeTaken: 534,
   //     code: 0,
   //     functionVersion:
-  //       '[{"functionType":"1","version":"V0.0.3"},{"functionType":"2","version":"V0.0.23"}]',
+  //       '[{"functionType":"1","version":"V0.0.6"},{"functionType":"2","version":"V0.0.26"}]',
   //     message: '成功',
   //     respCode: 999002,
-  //   })
+  //   });
   // };
 
   const pageProps = ref(
@@ -282,7 +310,6 @@
     }
 
     .count-money {
-      justify-content: flex-end;
       margin-right: 24rpx;
     }
 

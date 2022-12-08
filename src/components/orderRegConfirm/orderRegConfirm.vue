@@ -45,7 +45,7 @@
                 }"
                 class="popup-footer-container popup-padding"
               >
-                <button class="btn btn-normal" @click="hide">
+                <button class="btn btn-normal cannel-btn" @click="hide">
                   {{ cannerText }}
                 </button>
 
@@ -204,5 +204,9 @@
 
   .close-icon {
     font-weight: normal;
+  }
+
+  .cannel-btn {
+    border: solid black 2rpx;
   }
 </style>

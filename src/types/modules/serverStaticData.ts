@@ -130,6 +130,13 @@ export interface ISystemConfig {
     isPreSettle?: '1';
     // 申请退单
     isOpenChargeback?: '1';
+
+    /**
+     * 详情页
+     */
+
+    // 待缴费详情页面 的费用总额是否可以让用户选择缴费
+    isSubitemPay?: '1'
   };
 }
 

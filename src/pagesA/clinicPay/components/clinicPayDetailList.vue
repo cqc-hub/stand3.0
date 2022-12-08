@@ -150,6 +150,7 @@
 
       .icon-content {
         height: 100%;
+        padding-top: 4rpx;
 
         .icon-mask {
           position: absolute;
@@ -175,7 +176,7 @@
         .type-block {
           font-weight: normal;
           border-radius: 4rpx;
-          padding: 0 12rpx;
+          padding: 4rpx 12rpx;
 
           &.pay-medical {
             background: #747c94;

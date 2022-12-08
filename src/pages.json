@@ -134,6 +134,13 @@
         },
 
         {
+          "path": "clinicPay/payConfirm",
+          "style": {
+            "navigationBarTitleText": "付款确认"
+          }
+        },
+
+        {
           "path": "mySet/getMore",
           "style": {
             "navigationBarTitleText": "更多"
