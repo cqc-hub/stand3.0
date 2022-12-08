@@ -100,7 +100,7 @@ const toPayRecord = async () => {
 };
 const toPayPage = () => {
   uni.navigateTo({
-    url: `paymentPage`,
+    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}`,
   });
 };
 onPullDownRefresh(() => {

@@ -30,6 +30,27 @@ let parm = (data: any, payload: any = {}) => {
     funcode: data.funcode,
   };
 };
+//入参新增sysCode 仅限透传接口
+let parmsysCode = (data: any, payload: any = {}) => {
+  const { outArg } = payload;
+  const globalStore = useGlobalStore();
+  const body = {
+    sysCode: getSysCode(),
+    herenId: globalStore.herenId,
+    ...data,
+  };
+
+  if (outArg) {
+    return body;
+  }
+
+  return {
+    args: body,
+    sysCode: getSysCode(),
+    token: globalStore.token.accessToken,
+    funcode: data.funcode,
+  };
+};
 
 /**
  * @method 接口
@@ -50,7 +71,7 @@ const baseApi = {
     }),
 
   sendNetHos: (data) =>
-    service.post('/phs-base/transparent/sendNetHos', parm(data), {
+    service.post('/phs-base/transparent/sendNetHos', parmsysCode(data), {
       hideLoading: false,
     }),
 

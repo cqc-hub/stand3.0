@@ -79,6 +79,7 @@ export interface dailySecList {
 //创建住院订单 出参
 export interface payOrderResult {
   phsOrderNo: string;
+  paySign: string;
 }
 //和仁支付 入参
 export interface payParam {

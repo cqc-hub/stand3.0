@@ -128,7 +128,7 @@ const init = async () => {
     costType.value = '3';
     costDate.value = '';
   } else {
-    costDate.value = param.value.costDay;
+    costDate.value = param.value.costDay!;
   }
   const params = {
     hospitalId: param.value.hospitalId,
@@ -149,24 +149,24 @@ onMounted(async () => {
   
   // await init();
 });
-onLoad((val) => {
-  console.log(22222,'load');
+// onLoad((val) => {
+//   console.log(22222,'load');
   
-  param.value.costDay = val.costDate;
-  param.value.hospitalId = val.inpatientNo;
-  param.value.isHosTotallist = val.isHosTotallist;
-  param.value.isHosDaylist = val.isHosDaylist;
-  param.value.startTime = val.startTime;
-  param.value.endTime = val.endTime;
-  if (val.isHosDaylist) {
-    costType.value = '1';
-  } else if (val.isHosTotallist) {
-    costType.value = '3';
-  }
-  if (val.isHosTotallist || val.isHosDaylist) {
-    init();
-  }
-});
+//   param.value.costDay = val.costDate;
+//   param.value.hospitalId = val.inpatientNo;
+//   param.value.isHosTotallist = val.isHosTotallist;
+//   param.value.isHosDaylist = val.isHosDaylist;
+//   param.value.startTime = val.startTime;
+//   param.value.endTime = val.endTime;
+//   if (val.isHosDaylist) {
+//     costType.value = '1';
+//   } else if (val.isHosTotallist) {
+//     costType.value = '3';
+//   }
+//   if (val.isHosTotallist || val.isHosDaylist) {
+//     init();
+//   }
+// });
 defineExpose({
   init
   });
