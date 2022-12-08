@@ -15,6 +15,17 @@ import {
 
 import api from '@/service/api';
 
+export const tradeType = {
+  '1': '自费',
+  '2': '医保',
+  '3': '普通医保',
+  '4': '城乡门特医保',
+  '5': '城职门特医保',
+  '6': '浙江省医保',
+} as const;
+
+type TTradeType = keyof typeof tradeType;
+
 export type IPayListItem = {
   childOrder: string;
   deptId: string;
@@ -40,6 +51,7 @@ export type IPayListItem = {
   visitDate: string;
   visitNo: string;
   _clinicType: string;
+  tradeType: TTradeType;
 };
 
 export type TPayedListItem = {} & IPayListItem;

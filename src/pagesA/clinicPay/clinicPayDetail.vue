@@ -144,11 +144,60 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { usePayPage } from './utils/clinicPayDetail';
-  import { useTBanner } from '@/utils';
+  import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl } from '@/common';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+
+  import api from '@/service/api';
+
+  // api.getUnpaidClinicList = async () => {
+  //   await wait(500)
+  //   return Promise.resolve(<any>{
+  //     result: {
+  //       patientName: '陈钦川',
+  //       clinicalSettlementResultList: [
+  //         {
+  //           deptName: '耳鼻喉外科',
+  //           docId: 'ADMIN',
+  //           deptId: 'A010217',
+  //           hosId: '13001',
+  //           payState: '1',
+  //           serialNo:
+  //             '303babaef694403d8ff40c8ad56462f2,11fd4647b2ee4e64989280d8b2a0ddf8',
+  //           childOrder: '1057',
+  //           docName: '超****',
+  //           costTypeName: '自费',
+  //           visitDate: '2022-12-06',
+  //           hosName: '乐清市人民医院',
+  //           totalCost: '20.98',
+  //           visitNo: '20221206000010',
+  //         },
+  //         {
+  //           deptName: '呼吸内科',
+  //           childOrder: '1058',
+  //           costTypeName: '自费',
+  //           deptId: 'A010221',
+  //           hosId: '13001',
+  //           visitDate: '2022-11-16',
+  //           payState: '1',
+  //           hosName: '乐清市人民医院',
+  //           totalCost: '14.0',
+  //           visitNo: '20221116000020',
+  //           serialNo: 'e8e3cff99dca4d0bb50c9676d84dc90a',
+  //         },
+  //       ],
+  //       cardNumber: '300087902',
+  //     },
+  //     timeTaken: 307,
+  //     code: 0,
+  //     functionVersion:
+  //       '[{"functionType":"1","version":"V0.0.3"},{"functionType":"2","version":"V0.0.23"}]',
+  //     message: '成功',
+  //     respCode: 999002,
+  //   })
+  // };
 
   const pageProps = ref(
     {} as {

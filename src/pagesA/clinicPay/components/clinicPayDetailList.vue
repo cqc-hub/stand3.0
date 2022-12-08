@@ -19,8 +19,20 @@
 
       <view class="content">
         <view class="flex-between flex-start-r">
-          <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
-            {{ item.deptName }}
+          <view
+            @click.stop="selItem(item)"
+            class="g-bold f36 flex1 mr40 flex-normal"
+          >
+            <text
+              :class="{
+                'pay-self': isPaySelfItem(item),
+                'pay-medical': !isPaySelfItem(item),
+              }"
+              class="type-block f24 mr8"
+            >
+              {{ tradeType[item.tradeType] || '未知' }}
+            </text>
+            <text>{{ item.deptName }}</text>
           </view>
 
           <view class="g-flex-rc-cc">
@@ -85,7 +97,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { type IPayListItem } from '../utils/clinicPayDetail';
+  import { type IPayListItem, tradeType } from '../utils/clinicPayDetail';
 
   const props = withDefaults(
     defineProps<{
@@ -104,6 +116,10 @@
 
   const getIsActive = (item: IPayListItem) => {
     return selIds.value.includes(item.clinicId);
+  };
+
+  const isPaySelfItem = (item: IPayListItem) => {
+    return item.tradeType === '1';
   };
 
   const selItem = (item) => {
@@ -155,6 +171,22 @@
 
       .content {
         flex: 1;
+
+        .type-block {
+          font-weight: normal;
+          border-radius: 4rpx;
+          padding: 0 12rpx;
+
+          &.pay-medical {
+            background: #747c94;
+            color: #ffe2c1;
+          }
+
+          &.pay-self {
+            background: #ffe2c1;
+            color: #51555e;
+          }
+        }
 
         .item-box {
           margin-top: 24rpx;

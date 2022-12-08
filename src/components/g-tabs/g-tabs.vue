@@ -190,7 +190,7 @@ export default {
     },
     zIndex: {
       type: String,
-      default: '999',
+      default: '1996',
     },
   },
   data() {

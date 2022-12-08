@@ -14,22 +14,24 @@
           <template #default>
             <view
               v-if="item.subCostTypeCode === 'chineseMedicine'"
-              :class="{
-                'less-content': item.costList.length < 3,
-              }"
-              class="medical-content flex-between"
+              class="medical-content"
             >
               <view
                 v-for="(citem, ci) in item.costList"
                 :key="ci"
-                class="medical-item flex-normal f28"
+                class="medical-item flex-between f28 color-444"
               >
-                <view class="text-ellipsis color-444 mr8">
+                <view class="text-ellipsis mr8 label-medical">
                   {{ citem.subCostTypeName }}
                 </view>
 
+                <view class="color-888">
+                  {{ `${citem.itemPrice}元/${citem.units}` }}
+                </view>
+                <view class="color-888">{{ `x${citem.amount}` }}</view>
+
                 <view class="text-no-wrap color-888">
-                  {{ `${citem.amount}${citem.units}` }}
+                  {{ `${citem.subCost}元` }}
                 </view>
               </view>
             </view>
@@ -101,20 +103,15 @@
   }
 
   .medical-content {
-    @extend .item-content;
-    padding: 24rpx;
-
-    flex-wrap: wrap;
-
     .medical-item {
-      width: 46%;
+      @extend .item-content;
 
       margin-bottom: 24rpx;
-    }
-  }
 
-  .less-content {
-    padding-bottom: 0;
+      .label-medical {
+        max-width: 33%;
+      }
+    }
   }
 
   .cost-item-nochild {
