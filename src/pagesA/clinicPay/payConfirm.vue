@@ -42,15 +42,27 @@
 
     <view class="g-footer">
       <view class="flex1 flex-normal count-money">
-        <text class="color-444 f28 mr8">合计</text>
+        <text class="color-444 f28 mr8">自费支付</text>
         <text class="f36 g-bold color-error">
           {{ info.totalNeedSelfpay || '' }}元
         </text>
       </view>
 
-      <button class="btn g-border btn-warning pay-btn">缴费</button>
+      <button @click="toPay" class="btn g-border btn-warning pay-btn">
+        缴费
+      </button>
     </view>
 
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      @pay-click="getPayInfo"
+      autoInOne
+      ref="refPay"
+    >
+      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+    </g-pay>
     <g-message />
   </view>
 </template>
@@ -87,6 +99,13 @@
       key: 'totalNeedSelfpay',
     },
   ]);
+  const refPayList = ref([
+    {
+      label: '在线支付',
+      key: 'online',
+    },
+  ]);
+  const payArg = ref<BaseObject>({});
 
   const info = ref(
     <
@@ -136,12 +155,45 @@
     init();
   };
 
+  const getPayInfo = async ({ item }) => {
+    if (item.key === 'online') {
+    }
+  };
+
+  const toPay = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const _totalCost = info.value.totalNeedSelfpay + '';
+    const source = gStores.globalStore.browser.source;
+
+    const { hosId, serialNo, visitNo, visitDate } = pageProps.value;
+
+    const args = {
+      businessType: '1',
+      patientId,
+      source,
+      totalCost: _totalCost,
+      hosId,
+      hosName: getHosName.value,
+      visitDate,
+      serialNo,
+      visitNo,
+    };
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+    console.log(phsOrderNo);
+  };
+
+  const payAfter = () => {};
+
   const init = () => {
     getData();
   };
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log(pageProps.value);
   });
 </script>
 
