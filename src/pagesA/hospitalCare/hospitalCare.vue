@@ -73,14 +73,20 @@ const totalListRef = ref<any>("");
 //切换就诊人
 const choosePat = ({ item }: { item: IPat; number: number }) => {
   patList.value = item;
+  pageRequest();
+};
+
+//入口不同调用不同接口
+const pageRequest = () => {
   if (tabCurrent.value == 0) {
-    inpatientInfoRef.value.init();
+    inpatientInfoRef?.value.init();
   } else if (tabCurrent.value == 1) {
-    dailyExpenseListRef.value.init();
+    dailyExpenseListRef!.value.init();
   } else if (tabCurrent.value == 2) {
-    totalListRef.value.init();
+    totalListRef?.value.init();
   }
 };
+
 const tabChange = (e: number) => {
   tabStatus.value = e;
   tabCurrent.value = e;
@@ -103,6 +109,7 @@ onLoad(async (opt) => {
   setData();
   if (pageProps.value.tabIndex) {
     tabCurrent.value = pageProps.value.tabIndex;
+    // pageRequest();
   }
 });
 </script>

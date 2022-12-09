@@ -1,10 +1,10 @@
 <template>
     <view class="page">
-        <inpatientInfo class="inpatientInfo" />
+        <dailyExpenseListDetial  />
     </view>
 </template>
 <script setup lang="ts">
-import inpatientInfo from './components/dailyExpenseListDetial.vue';
+import dailyExpenseListDetial from './components/dailyExpenseListDetial.vue';
 </script>
 <style scoped lang="scss">
 .page{

@@ -1,61 +1,81 @@
 <template>
-  <view class="page" v-if="Obj==false">
+  <view class="page" v-if="Obj == false">
     <view class="container">
       <view class="top">
-        <view class="title" v-if=" costType == '1'">{{costInfoDetal.hosName}}日费用清单</view>
-        <view class="title" v-if=" costType == '3'">{{costInfoDetal.hosName}}费用结算单</view>
+        <view class="title" v-if="costType == '1'"
+          >{{ costInfoDetal.hosName }}日费用清单</view
+        >
+        <view class="title" v-if="costType == '3'"
+          >{{ costInfoDetal.hosName }}费用结算单</view
+        >
         <view class="information">
           <view class="item">
             <view class="item-title">患者姓名</view>
-            <view class="item-content">{{patName}}({{patientId}})</view>
+            <view class="item-content">{{ patName }}({{ patientId }})</view>
           </view>
           <view class="item" v-if="param.isHosTotallist">
             <view class="item-title">费用时间</view>
-            <view class="item-content">{{param.startTime}}～{{param.endTime}}</view>
+            <view class="item-content">{{ param.startTime }}～{{ param.endTime }}</view>
           </view>
           <view class="item">
             <view class="item-title">病区床号</view>
-            <view class="item-content">{{costInfoDetal.hospitalWard}} {{costInfoDetal.inpatientBed}}床</view>
+            <view class="item-content"
+              >{{ costInfoDetal.hospitalWard }} {{ costInfoDetal.inpatientBed }}床</view
+            >
           </view>
-          <view class="item" v-if="param.hospitalId">
+          <view class="item" v-if="costInfoDetal.inpatientNo">
             <view class="item-title">住院号</view>
-            <view class="item-content">{{param.hospitalId}}</view>
+            <view class="item-content">{{ costInfoDetal.inpatientNo }}</view>
           </view>
           <view class="item">
             <view class="item-title">费用总额</view>
-            <view class="item-content-money">{{costInfoDetal.totalCost}}元</view>
+            <view class="item-content-money">{{ costInfoDetal.totalCost }}元</view>
           </view>
         </view>
       </view>
-      <view class="bottom" v-if="(costInfoDetal.costList&&costInfoDetal.costList.length>0)">
+      <view
+        class="bottom"
+        v-if="costInfoDetal.costList && costInfoDetal.costList.length > 0"
+      >
         <view class="title">费用明细</view>
-        <template v-for="(item,index) in costInfoDetal.costList" :key="index">
+        <template v-for="(item, index) in costInfoDetal.costList" :key="index">
           <view class="item">
             <view @click="isShowBtn(index)" class="item-top">
-              <view class="type">{{item.category}}</view>
-              <view class="money">{{item.categoryCost}}元
-                <text v-if="!isShow[index]" style="color:#888888;" class="iconfont">&#xe6c4;</text>
-                <text v-else style="color:#888888;" class="iconfont">&#xe6c5;</text>
+              <view class="type">{{ item.category }}</view>
+              <view class="money"
+                >{{ item.categoryCost }}元
+                <text v-if="!isShow[index]" style="color: #888888" class="iconfont"
+                  >&#xe6c4;</text
+                >
+                <text v-else style="color: #888888" class="iconfont">&#xe6c5;</text>
               </view>
             </view>
-            <template v-if="item.category!='中药'">
-              <view v-show="isShow[index]" v-for="(sub,i) in item.subCostList" :key="i">
-                <view class="item-content" :class="{spacing:i>0}">
+            <template v-if="item.category != '中药'">
+              <view v-show="isShow[index]" v-for="(sub, i) in item.subCostList" :key="i">
+                <view class="item-content" :class="{ spacing: i > 0 }">
                   <view class="left">
-                    <view class="name">{{sub.costName}}</view>
+                    <view class="name">{{ sub.costName }}</view>
                     <view class="count">
-                      <view class="unit">{{sub.unitPrice}}元/{{sub.unit}}</view>
-                      <view class="quantity">x{{sub.quantity}}</view>
+                      <view class="unit">{{ sub.unitPrice }}元/{{ sub.unit }}</view>
+                      <view class="quantity">x{{ sub.quantity }}</view>
                     </view>
                   </view>
-                  <view class="right">{{sub.valuationAmount}}元</view>
+                  <view class="right">{{ sub.valuationAmount }}元</view>
                 </view>
               </view>
             </template>
             <template v-else>
-              <view class="zcy-content" :class="{padding:isShow[index]}">
-                <view v-show="isShow[index]" v-for="(sub,i) in item.subCostList" :key="i">
-                  <view class="zcy-name">{{sub.costName}}&nbsp;&nbsp;<text style="color:#888888">{{sub.quantity}}{{sub.unit}}</text></view>
+              <view class="zcy-content" :class="{ padding: isShow[index] }">
+                <view
+                  v-show="isShow[index]"
+                  v-for="(sub, i) in item.subCostList"
+                  :key="i"
+                >
+                  <view class="zcy-name"
+                    >{{ sub.costName }}&nbsp;&nbsp;<text style="color: #888888"
+                      >{{ sub.quantity }}{{ sub.unit }}</text
+                    ></view
+                  >
                 </view>
               </view>
             </template>
@@ -63,7 +83,11 @@
         </template>
       </view>
       <view class="no-data" v-else>
-        <img class="no-data-img"  :src="$global.BASE_IMG + 'img_404_no record@3x.png'" alt="">
+        <img
+          class="no-data-img"
+          :src="$global.BASE_IMG + 'img_404_no record@3x.png'"
+          alt=""
+        />
         <view>当天未产生住院费用</view>
       </view>
     </view>
@@ -71,39 +95,38 @@
   <view class="empty-box" v-else>
     <g-empty :current="2" text="当天未产生住院费用，请选择其他日期" />
   </view>
+  <g-message />
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import api from '@/service/api';
-import { getQueryUrl } from '@/common/utils';
-import {
-  inHospitalCostInfo,
-  inHospitalCostInfoParam,
-} from '../utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
-import { GStores, ServerStaticData } from '@/utils';
-import dayjs from 'dayjs';
+import { onMounted, ref, watch } from "vue";
+import api from "@/service/api";
+import { getQueryUrl } from "@/common/utils";
+import { inHospitalCostInfo, inHospitalCostInfoParam } from "../utils/inpatientInfo";
+import { onLoad } from "@dcloudio/uni-app";
+import { GStores, ServerStaticData } from "@/utils";
+import dayjs from "dayjs";
+import { deQueryForUrl } from "@/common/utils";
 
-
+const pageProps = ref<inHospitalCostInfoParam>({} as inHospitalCostInfoParam);
 const Obj = ref();
 const costInfoDetal = ref<inHospitalCostInfo>({} as inHospitalCostInfo);
 const param = ref<inHospitalCostInfoParam>({
-  costDay: '',
-  costType: '',
-  hosId: '',
-  hospitalId: '',
-  patientId: '',
-  sysCode: '',
-  timesHospitalization: '',
-  startTime: '',
-  endTime: '',
-  isHosTotallist: '',
-  isHosDaylist: '',
+  costDay: "",
+  costType: "",
+  hosId: "",
+  hospitalId: "",
+  patientId: "",
+  sysCode: "",
+  timesHospitalization: "",
+  startTime: "",
+  endTime: "",
+  isHosTotallist: "",
+  isHosDaylist: "",
 });
-const costDate = ref('');
-const costType = ref('');
-const patName = ref('');
-const patientId = ref('');
+const costDate = ref("");
+const costType = ref("");
+const patName = ref("");
+const patientId = ref("");
 const gStores = new GStores();
 let isShow = ref<boolean[]>([]);
 const props = defineProps<{
@@ -111,66 +134,55 @@ const props = defineProps<{
   isHosDaylist?: string;
   isHosTotallist?: string;
 }>();
-const emit = defineEmits(['detalResult']);
- 
+const emit = defineEmits(["detalResult"]);
+
 const isShowBtn = (index) => {
   isShow.value[index] = !isShow.value[index];
 };
-
 const init = async () => {
   patName.value = gStores.userStore.patChoose.patientName;
   patientId.value = gStores.userStore.patChoose._showId;
   // inpatientNo.value = param.value.hospitalId;
-  if (props.isHosDaylist == '2') {
-    costDate.value = dayjs(props.costDay).format('YYYY-MM-DD');
-    costType.value = '1';
-  } else if (props.isHosTotallist == '1') {
-    costType.value = '3';
-    costDate.value = '';
+  if (props.isHosDaylist == "2") {
+    costDate.value = dayjs(props.costDay).format("YYYY-MM-DD");
+    costType.value = "1";
+  } else if (props.isHosTotallist == "1") {
+    costType.value = "3";
+    costDate.value = "";
   } else {
     costDate.value = param.value.costDay!;
   }
   const params = {
-    hospitalId: param.value.hospitalId,
     costDay: costDate.value,
     costType: costType.value,
     patientId: gStores.userStore.patChoose.patientId,
-    // patientId: '10763642',
   };
-  const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
-    params
-  );
+  const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(params);
   costInfoDetal.value = result;
-  Obj.value = JSON.stringify(costInfoDetal.value) == '{}';
-}; 
+  Obj.value = JSON.stringify(costInfoDetal.value) == "{}";
+};
 
 onMounted(async () => {
-  console.log('mount');
-  
   // await init();
 });
-// onLoad((val) => {
-//   console.log(22222,'load');
-  
-//   param.value.costDay = val.costDate;
-//   param.value.hospitalId = val.inpatientNo;
-//   param.value.isHosTotallist = val.isHosTotallist;
-//   param.value.isHosDaylist = val.isHosDaylist;
-//   param.value.startTime = val.startTime;
-//   param.value.endTime = val.endTime;
-//   if (val.isHosDaylist) {
-//     costType.value = '1';
-//   } else if (val.isHosTotallist) {
-//     costType.value = '3';
-//   }
-//   if (val.isHosTotallist || val.isHosDaylist) {
-//     init();
-//   }
-// });
+onLoad((opt) => {
+  //日费用清单列表点进详情会走这块
+  pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
+  param.value = {
+    ...pageProps.value,
+  };
+  if (pageProps.value.isHosDaylist) {
+    costType.value = "1";
+  } else if (pageProps.value.isHosTotallist) {
+    costType.value = "3";
+  }
+  if (pageProps.value.isHosTotallist || pageProps.value.isHosDaylist) {
+    init();
+  } 
+});
 defineExpose({
-  init
-  });
-
+  init,
+});
 </script>
 <style scoped lang="scss">
 .page {
