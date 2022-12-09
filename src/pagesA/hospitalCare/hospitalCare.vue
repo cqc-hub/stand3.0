@@ -3,7 +3,7 @@
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat @choosePat="choosePat" />
 
-    <view class="tab-box">
+    <view class="tab-box" v-if="pageLoading">
       <g-tabs
         v-model:value="tabCurrent"
         :tabs="resultHos.tab"
@@ -15,7 +15,7 @@
       />
     </view>
     <!-- 内容区域 -->
-    <view class="g-container">
+    <view class="g-container" v-if="pageLoading">
       <inpatientInfo
         ref="inpatientInfoRef"
         v-if="tabCurrent == 0"
@@ -39,10 +39,9 @@
 </template>
 
 <script setup lang="ts">
-// import api from '@/api/api';
-import { getAvatar, isAreaProgram, useUserStore, IPat } from "@/stores";
-import { ref, watch } from "vue";
-import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
+import { IPat } from "@/stores";
+import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import inpatientInfo from "./components/inpatientInfo.vue";
 import dailyExpenseList from "./components/dailyExpenseList.vue";
 import totalList from "./components/totalList.vue";
@@ -70,10 +69,12 @@ const resultHos = ref<hosParam>({
 const inpatientInfoRef = ref<any>("");
 const dailyExpenseListRef = ref<any>("");
 const totalListRef = ref<any>("");
+const pageLoading = ref(false);
+
 //切换就诊人
 const choosePat = ({ item }: { item: IPat; number: number }) => {
   patList.value = item;
-  pageRequest();
+  pageRequest()
 };
 
 //入口不同调用不同接口
@@ -98,8 +99,10 @@ const scrollOption = ref({
   noMoreText: "没有更多了",
 });
 const setData = async () => {
+  pageLoading.value = false
   const result = await ServerStaticData.getSystemHospital();
   resultHos.value = result;
+  pageLoading.value = true
 };
 
 onLoad(async (opt) => {
