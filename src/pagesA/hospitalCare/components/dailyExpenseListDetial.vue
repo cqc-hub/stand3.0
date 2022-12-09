@@ -142,7 +142,6 @@ const isShowBtn = (index) => {
 const init = async () => {
   patName.value = gStores.userStore.patChoose.patientName;
   patientId.value = gStores.userStore.patChoose._showId;
-  // inpatientNo.value = param.value.hospitalId;
   if (props.isHosDaylist == "2") {
     costDate.value = dayjs(props.costDay).format("YYYY-MM-DD");
     costType.value = "1";
@@ -161,10 +160,7 @@ const init = async () => {
   costInfoDetal.value = result;
   Obj.value = JSON.stringify(costInfoDetal.value) == "{}";
 };
-
-onMounted(async () => {
-  // await init();
-});
+ 
 onLoad((opt) => {
   //日费用清单列表点进详情会走这块
   pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
