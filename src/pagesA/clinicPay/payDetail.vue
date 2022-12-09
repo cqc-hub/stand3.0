@@ -183,6 +183,7 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import {
+    goConfirmPage,
     usePayPage,
     usePayDetailPage,
     type TPayDetailProp,
@@ -407,7 +408,16 @@
     if (item.key === 'online') {
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
-        console.log('预结算');
+        const list = selList.value;
+        const { hosId, childOrder, visitDate, visitNo } = props.value;
+
+        goConfirmPage({
+          hosId,
+          serialNo: list.map((o) => o.serialNo).join(','),
+          mergeOrder: childOrder,
+          visitNo: visitNo!,
+          visitDate: visitDate!,
+        });
       } else {
         toPay();
       }

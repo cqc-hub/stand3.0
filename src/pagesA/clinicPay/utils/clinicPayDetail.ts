@@ -113,6 +113,7 @@ export type TPayConfirmPageProp = {
   serialNo: string;
   visitNo: string;
   visitDate: string;
+  mergeOrder: string;
 };
 
 export const usePayPage = () => {
@@ -363,6 +364,7 @@ export const usePayPage = () => {
           serialNo: selList.map((o) => o.serialNo).join(';'),
           visitNo: selList.map((o) => o.visitNo).join(','),
           visitDate: selList.map((o) => o.visitDate).join(','),
+          mergeOrder: selList.map((o) => o.childOrder).join(','),
         });
       } else {
         toPay();

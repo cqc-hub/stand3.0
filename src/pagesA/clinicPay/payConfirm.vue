@@ -7,7 +7,7 @@
     <view class="g-container">
       <view class="head-bg" />
 
-      <view class="container">
+      <view v-if="isComplete" class="container">
         <view class="g-border box page-first-item">
           <view class="g-bold f36 g-break-word">门诊医生支付订单</view>
 
@@ -40,7 +40,7 @@
       </view>
     </view>
 
-    <view class="g-footer">
+    <view v-if="isComplete" class="g-footer">
       <view class="flex1 flex-normal count-money">
         <text class="color-444 f28 mr8">自费支付</text>
         <text class="f36 g-bold color-error">
@@ -48,7 +48,7 @@
         </text>
       </view>
 
-      <button @click="toPay" class="btn g-border btn-warning pay-btn">
+      <button @click="refPay.show" class="btn g-border btn-warning pay-btn">
         缴费
       </button>
     </view>
@@ -73,7 +73,12 @@
 
   import { type TPayConfirmPageProp } from './utils/clinicPayDetail';
   import { deQueryForUrl } from '@/common';
-  import { GStores, type IHosInfo } from '@/utils';
+  import { GStores, type IHosInfo, wait } from '@/utils';
+  import {
+    type IGPay,
+    payMoneyOnline,
+    toPayPull,
+  } from '@/components/g-pay/index';
 
   import api from '@/service/api';
 
@@ -81,6 +86,7 @@
   const gStores = new GStores();
   const isComplete = ref(false);
   const hosList = ref<IHosInfo[]>([]);
+  const refPay = ref<any>('');
   const details = ref([
     {
       label: '订单总额',
@@ -124,17 +130,14 @@
     const { hosId, serialNo, visitNo } = pageProps.value;
 
     isComplete.value = false;
-    const { result } = await api
-      .getClinicReservePay<any>({
-        patientId,
-        hosId,
-        serialNo,
-        visitNo,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
+    const { result } = await api.getClinicReservePay<any>({
+      patientId,
+      hosId,
+      serialNo,
+      visitNo,
+    });
 
+    isComplete.value = true;
     info.value = result;
   };
 
@@ -155,8 +158,9 @@
     init();
   };
 
-  const getPayInfo = async ({ item }) => {
+  const getPayInfo = async ({ item }: { item: IGPay }) => {
     if (item.key === 'online') {
+      toPay();
     }
   };
 
@@ -165,7 +169,7 @@
     const _totalCost = info.value.totalNeedSelfpay + '';
     const source = gStores.globalStore.browser.source;
 
-    const { hosId, serialNo, visitNo, visitDate } = pageProps.value;
+    const { hosId, serialNo, visitNo, visitDate, mergeOrder } = pageProps.value;
 
     const args = {
       businessType: '1',
@@ -177,15 +181,35 @@
       visitDate,
       serialNo,
       visitNo,
+      mergeOrder,
     };
 
     const {
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
-    console.log(phsOrderNo);
+
+    const res = await payMoneyOnline({
+      phsOrderNo,
+      totalFee: _totalCost,
+      phsOrderSource: '2',
+      hosId,
+      hosName: getHosName.value,
+      // hosId: '1279',
+    });
+
+    await toPayPull(res, '门诊缴费');
+    payAfter();
   };
 
-  const payAfter = () => {};
+  const payAfter = async () => {
+    uni.showLoading({});
+    await wait(1000);
+    uni.hideLoading();
+
+    uni.reLaunch({
+      url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+    });
+  };
 
   const init = () => {
     getData();
