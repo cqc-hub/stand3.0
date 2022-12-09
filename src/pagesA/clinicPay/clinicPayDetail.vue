@@ -151,10 +151,10 @@
   import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import { encryptForPage, decryptForPage } from '@/common/des';
+  import { beforeEach } from '@/router';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-
 
   const {
     pageProps,
@@ -184,16 +184,35 @@
     isShowSelectAll,
     isSelectAll,
     chooseAll,
+    gStores,
   } = usePayPage();
 
   const isListShowClinicType = computed(() => {
     return pageConfig.value.isListShowClinicType === '1';
   });
 
+  const pageHook = async () => {
+    await wait(200);
+    const patList = gStores.userStore.patList;
+    if (!patList.length) {
+      const pages = getCurrentPages();
+
+      if (pages.length) {
+        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+        await beforeEach({
+          url: fullUrl,
+          _isPatient: true,
+        });
+      }
+    }
+  };
+
   const init = async () => {
     await getSysConfig();
-    console.log('pageProps', pageProps.value);
-
+    if (!pageProps.value.params) {
+      await pageHook();
+    }
     getListData();
   };
 
@@ -207,7 +226,6 @@
     const en = encryptForPage(a);
     console.log(en);
     console.log(decryptForPage(en));
-
   }, 1000);
 
   onLoad(async (opt) => {

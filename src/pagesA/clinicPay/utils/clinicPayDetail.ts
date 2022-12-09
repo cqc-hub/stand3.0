@@ -158,9 +158,6 @@ export const usePayPage = () => {
       deParams?: {
         cardNumber?: string;
         patientName?: string;
-        idCard?: string;
-        patientId?: string;
-        herenId?: string;
       };
     }
   );
@@ -211,11 +208,6 @@ export const usePayPage = () => {
       clinicalSettlementResultList: IPayListItem[];
     };
 
-    // if (condition) {
-
-    // }
-    console.log('开始全球', pageProps.value.params);
-
     const desSecret = pageProps.value.params;
     if (desSecret) {
       const { result: r } = await api
@@ -258,17 +250,37 @@ export const usePayPage = () => {
     let { patientId } = gStores.userStore.patChoose;
 
     // patientId = '10831082';
-    const arg = {
-      patientId,
-    };
     isPayListRequestComplete.value = false;
-    const { result } = await api
-      .getPrepaidClinicList<{
-        clinicPayListDetailResults: TPayedListItem[];
-      }>(arg)
-      .finally(() => {
-        isPayListRequestComplete.value = true;
-      });
+    let result: {
+      clinicPayListDetailResults: TPayedListItem[];
+    };
+    const desSecret = pageProps.value.params;
+
+    if (desSecret) {
+      const { result: r } = await api
+        .getScanPrepaidClinicList<{
+          clinicPayListDetailResults: TPayedListItem[];
+        }>({
+          desSecret,
+        })
+        .finally(() => {
+          isPayListRequestComplete.value = true;
+        });
+
+      result = r;
+    } else {
+      const { result: r } = await api
+        .getPrepaidClinicList<{
+          clinicPayListDetailResults: TPayedListItem[];
+        }>({
+          patientId,
+        })
+        .finally(() => {
+          isPayListRequestComplete.value = true;
+        });
+
+      result = r;
+    }
 
     const resList = (result && result.clinicPayListDetailResults) || [];
 
@@ -419,7 +431,7 @@ export const usePayPage = () => {
     const _totalCost = totalCost.value + '';
     const source = gStores.globalStore.browser.source;
 
-    const args = {
+    const args: BaseObject = {
       businessType: '1',
       patientId,
       source,
@@ -435,18 +447,28 @@ export const usePayPage = () => {
       serialNo: selectList.map((o) => o.serialNo).join(';'),
     };
 
+    if (pageProps.value.deParams) {
+      args.cardNumber = pageProps.value.deParams.cardNumber;
+    }
+
     const {
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
 
-    const res = await payMoneyOnline({
+    const payArg: BaseObject = {
       phsOrderNo,
       totalFee: _totalCost,
       phsOrderSource: '2',
       hosId: selectList[0].hosId,
       // hosId: '1279',
       hosName: selectList[0].hosName,
-    });
+    };
+
+    if (pageProps.value.deParams) {
+      payArg.patientName = pageProps.value.deParams.patientName;
+    }
+
+    const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '门诊缴费');
     payAfter();
