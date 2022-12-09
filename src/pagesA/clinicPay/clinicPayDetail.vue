@@ -150,15 +150,20 @@
   import { usePayPage } from './utils/clinicPayDetail';
   import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl } from '@/common';
+  import { encryptForPage, decryptForPage } from '@/common/des';
 
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
-  import api from '@/service/api';
-
   const pageProps = ref(
     {} as {
       tabIndex?: '1';
+
+      cardNumber?: string;
+      patientName?: string;
+      idCard?: string;
+      patientId?: string;
+      herenId?: string;
     }
   );
 
@@ -202,6 +207,17 @@
 
   setTimeout(() => {
     // regDialogConfirm.value.show();
+    const a = {
+      patientId: '422908727',
+      herenId: 4276792,
+      cardNumber: '300087902',
+      patientName: '陈钦川',
+    };
+
+    const b = { hosPatientId: '00152792' };
+    const en = encryptForPage(b);
+    console.log(en);
+    console.log(decryptForPage(en));
   }, 1000);
 
   onLoad(async (opt) => {

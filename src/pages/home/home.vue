@@ -196,7 +196,7 @@
  };
 
 //  const searchPlaceholder = ref('搜索科室、医生或疾病');
- const searchPlaceholder = ref('搜索疾病、症状或药品'); 
+ const searchPlaceholder = ref('搜索疾病、症状或药品');
  let homeConfig:any[] = []; //首页配置总参数
  let topMenuList = ref<IRoute[]>([]); //首页顶部menu
  const noticeMenu = ref<IRoute[]>([]); //通知列表

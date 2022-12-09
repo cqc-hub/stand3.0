@@ -29,7 +29,7 @@ export const encryptDes = (message: string, key = defaultKey) => {
   const keyHex = CryptoJS.enc.Utf8.parse(key);
   const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
     mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7
+    padding: CryptoJS.pad.Pkcs7,
   });
   return encrypted.toString();
 };
@@ -37,24 +37,35 @@ export const encryptDes = (message: string, key = defaultKey) => {
 // DES解密
 export const decryptDes = (ciphertext, key = defaultKey) => {
   const keyHex = CryptoJS.enc.Utf8.parse(key);
-  const decrypted = CryptoJS.DES.decrypt({
-    ciphertext: CryptoJS.enc.Base64.parse(ciphertext),
-  } as any,
-    keyHex, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7,
-  }
+  const decrypted = CryptoJS.DES.decrypt(
+    {
+      ciphertext: CryptoJS.enc.Base64.parse(ciphertext),
+    } as any,
+    keyHex,
+    {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    }
   );
   return decrypted.toString(CryptoJS.enc.Utf8);
 };
 
 //公用的Des加密规则方法
 export const encryptDesParam = function (query) {
-  return encodeURIComponent(encryptDes(JSON.stringify(query)))
+  return encodeURIComponent(encryptDes(JSON.stringify(query)));
 };
 
 //公用的Des解密规则方法
-export const decryptDesParam = function (query,) {
-  return JSON.parse(decryptDes(decodeURIComponent(query)))
+export const decryptDesParam = function (query) {
+  return JSON.parse(decryptDes(decodeURIComponent(query)));
 };
 
+// 页面扫码加解密
+const DES_PAGE = 'phsDesKey';
+export const encryptForPage = (query: BaseObject) => {
+  return encodeURIComponent(encryptDes(JSON.stringify(query), DES_PAGE));
+};
+
+export const decryptForPage = (str: string) => {
+  return decryptDes(decodeURIComponent(str), DES_PAGE);
+};
