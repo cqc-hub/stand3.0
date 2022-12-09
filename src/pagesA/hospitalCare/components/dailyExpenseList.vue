@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, nextTick } from 'vue';
 import { GStores, ServerStaticData } from '@/utils';
 import api from '@/service/api';
 import { dailyParam, dailyResult } from '../utils/inpatientInfo';
@@ -68,18 +68,25 @@ const dailyResList = ref<dailyResult>({
 const dailyExpenseRef = ref<any>('');
 
 const init = async () => {
-  if(props.isHosDaylist == '1'){
+
+
+  nextTick(async() => {
+    console.log({
+    props
+  });
+    if(props.isHosDaylist == '1'){
     //调用日费用清单列表
     const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: gStores.userStore.patChoose.patientId,
     costType: '1',
-  });
-  dailyResList.value = result;
-  }else if(props.isHosDaylist == '2'){
-   //调用日费用清单详情
-   dailyExpenseRef.value.init()
-  }
- 
+    });
+    dailyResList.value = result;
+    }else if(props.isHosDaylist == '2'){
+     //调用日费用清单详情
+     dailyExpenseRef.value.init()
+    }
+  })
+
 };
 
 const gotoListExpenses = (data) => {
@@ -103,7 +110,7 @@ onPullDownRefresh(() => {
 //   () => {
 //     if (gStores.userStore.patChoose.patientId) {
 //       console.log(2222,'watch');
-      
+
 //       init();
 //     }
 //   }

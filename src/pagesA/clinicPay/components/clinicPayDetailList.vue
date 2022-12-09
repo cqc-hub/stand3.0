@@ -30,7 +30,7 @@
               }"
               class="type-block f24 mr8"
             >
-              {{ tradeType[item.tradeType] || '未知' }}
+              {{ tradeType[item.costTypeCode] || '未知' }}
             </text>
             <text>{{ item.deptName }}</text>
           </view>
@@ -119,7 +119,7 @@
   };
 
   const isPaySelfItem = (item: IPayListItem) => {
-    return item.tradeType === '1';
+    return item.costTypeCode === '1';
   };
 
   const selItem = (item) => {

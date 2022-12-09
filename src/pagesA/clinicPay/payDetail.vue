@@ -460,6 +460,7 @@
       docName,
       hosId,
       visitDate,
+      serialNo: selList.value.map((o) => o.serialNo).join(','),
     };
 
     const {
@@ -497,15 +498,30 @@
     isCannelShow.value = false;
   };
 
+  const getData = async () => {
+    await getDetailData(props.value);
+
+    if (
+      props.value.payState === '1' &&
+      pageConfig.value.isSubitemPay !== '1' &&
+      detailData.value.costList
+    ) {
+      selList.value = [...detailData.value.costList];
+    }
+  };
+
+  const init = async () => {
+    await getSysConfig();
+    await getData();
+    isComplete.value = true;
+  };
+
   onLoad(async (opt) => {
     props.value = deQueryForUrl(opt);
   });
 
   onMounted(async () => {
-    await getSysConfig();
-    await getDetailData(props.value);
-    isComplete.value = true;
-
+    await init();
     setTimeout(() => {
       if (props.value.payState === '0') {
         capture();
