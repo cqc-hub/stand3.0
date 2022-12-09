@@ -117,9 +117,6 @@
           "path": "clinicPay/clinicPayDetail",
           "style": {
             "navigationBarTitleText": "门诊缴费"
-          },
-          "extend": {
-            "patient": true
           }
         },
 
@@ -127,9 +124,6 @@
           "path": "clinicPay/payDetail",
           "style": {
             "navigationBarTitleText": "待缴费明细"
-          },
-          "extend": {
-            "patient": true
           }
         },
 
@@ -137,9 +131,6 @@
           "path": "clinicPay/payConfirm",
           "style": {
             "navigationBarTitleText": "付款确认"
-          },
-          "extend": {
-            "patient": true
           }
         },
 
