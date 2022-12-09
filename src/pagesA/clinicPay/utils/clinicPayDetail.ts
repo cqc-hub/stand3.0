@@ -150,6 +150,21 @@ export const usePayPage = () => {
 
   tabChange = debounce(tabChange, 80);
 
+  const pageProps = ref(
+    {} as {
+      tabIndex?: '1';
+
+      params?: string;
+      deParams?: {
+        cardNumber?: string;
+        patientName?: string;
+        idCard?: string;
+        patientId?: string;
+        herenId?: string;
+      };
+    }
+  );
+
   const unPayList = ref<IPayListItem[]>([]);
   const selUnPayList = ref<IPayListItem[]>([]);
   const payedList = ref<TPayedListItem[]>([]);
@@ -191,17 +206,42 @@ export const usePayPage = () => {
     let { patientId } = gStores.userStore.patChoose;
 
     // patientId = '10831203';
-    const arg = {
-      patientId,
-    };
     isPayListRequestComplete.value = false;
-    const { result } = await api
-      .getUnpaidClinicList<{
-        clinicalSettlementResultList: IPayListItem[];
-      }>(arg)
-      .finally(() => {
-        isPayListRequestComplete.value = true;
-      });
+    let result: {
+      clinicalSettlementResultList: IPayListItem[];
+    };
+
+    // if (condition) {
+
+    // }
+    console.log('开始全球', pageProps.value.params);
+
+    const desSecret = pageProps.value.params;
+    if (desSecret) {
+      const { result: r } = await api
+        .getScanUnpaidClinicList<{
+          clinicalSettlementResultList: IPayListItem[];
+        }>({
+          desSecret,
+        })
+        .finally(() => {
+          isPayListRequestComplete.value = true;
+        });
+
+      result = r;
+    } else {
+      const { result: r } = await api
+        .getUnpaidClinicList<{
+          clinicalSettlementResultList: IPayListItem[];
+        }>({
+          patientId,
+        })
+        .finally(() => {
+          isPayListRequestComplete.value = true;
+        });
+
+      result = r;
+    }
 
     const resList = (result && result.clinicalSettlementResultList) || [];
 
@@ -424,6 +464,7 @@ export const usePayPage = () => {
   };
 
   return {
+    pageProps,
     pageConfig,
     getSysConfig,
     gStores,

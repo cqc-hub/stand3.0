@@ -183,6 +183,20 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  getScanPrepaidClinicList: <T = any>(data) =>
+    service.post<T>(
+      '/phs-query/clinical/getScanPrepaidClinicList',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
+
+  getScanUnpaidClinicList: <T = any>(data) =>
+    service.post<T>('/phs-query/clinical/getScanUnpaidClinicList', parm(data), {
+      hideLoading: false,
+    }),
+
   // 缴费详情
   getClinicalPayDetailList: (data) =>
     service.post('/phs-query/clinical/getClinicalPayDetailList', parm(data), {

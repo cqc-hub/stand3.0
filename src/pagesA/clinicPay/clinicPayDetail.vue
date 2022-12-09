@@ -155,22 +155,9 @@
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
-  const pageProps = ref(
-    {} as {
-      tabIndex?: '1';
-
-      params?: string;
-      deParams?: {
-        cardNumber?: string;
-        patientName?: string;
-        idCard?: string;
-        patientId?: string;
-        herenId?: string;
-      };
-    }
-  );
 
   const {
+    pageProps,
     tabCurrent,
     tabField,
     tabChange,
@@ -213,15 +200,14 @@
   setTimeout(() => {
     // regDialogConfirm.value.show();
     const a = {
-      patientId: '422908727',
-      herenId: 4276792,
-      cardNumber: '300087902',
+      cardNumber: '300088003',
       patientName: '陈钦川',
     };
 
     const en = encryptForPage(a);
-    // console.log(en);
-    // console.log(decryptForPage(en));
+    console.log(en);
+    console.log(decryptForPage(en));
+
   }, 1000);
 
   onLoad(async (opt) => {

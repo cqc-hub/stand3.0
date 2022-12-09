@@ -15,7 +15,6 @@
             (!isAreaProgram() && gStores.userStore.patChoose._showId) || ''
           }`
         }}
-        
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow`" />
