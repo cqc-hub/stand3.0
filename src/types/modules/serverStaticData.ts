@@ -109,7 +109,6 @@ export interface ISystemConfig {
     // 是否支持自定义住院记录
     isCustomPatRecord?: '0' | '1';
 
-
     // 手动添加记录里面是否可以切换院区
     isToggleHos?: '0' | '1';
   }[];
@@ -131,12 +130,15 @@ export interface ISystemConfig {
     // 申请退单
     isOpenChargeback?: '1';
 
+    // 页面顶部 banner
+    bannerPay?: TBannerConfig;
+
     /**
      * 详情页
      */
 
     // 待缴费详情页面 的费用总额是否可以让用户选择缴费
-    isSubitemPay?: '1'
+    isSubitemPay?: '1';
   };
 }
 

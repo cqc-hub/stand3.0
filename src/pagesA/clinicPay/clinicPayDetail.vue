@@ -1,6 +1,7 @@
 <template>
   <view class="g-page">
     <g-flag isShowFg typeFg="15" />
+    <g-tbanner :config="pageConfig.bannerPay" />
     <g-choose-pat @choose-pat="getListData(true)" />
     <view class="g-border-bottom">
       <g-tabs
