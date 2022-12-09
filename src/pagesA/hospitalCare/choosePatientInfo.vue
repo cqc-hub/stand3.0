@@ -37,13 +37,13 @@
     <view class="card-detail">
       <view class="card-detail-item">
         <text class="name">已预交金额 </text>
-        <view class="record">
+        <!-- <view class="record">
           <view class="triangle-left"></view>
-          <!-- <view class="records" @click="toPayRecord" v-if="resultHos.isQueryPreRecord=='1'">
+          <view class="records" @click="toPayRecord" v-if="resultHos.isQueryPreRecord=='1'">
             <text class="text">查看记录</text>
             <view class="iconfont right">&#xe66b;</view>
-          </view> -->
-        </view>
+          </view>
+        </view> -->
         <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
       </view>
       <view v-if="hosInfoResObj.totalCost" class="card-detail-item">
@@ -172,7 +172,7 @@ onLoad(async (opt) => {
    await getScanInHospitalInfo()
   }else{
     await init();
-    // await getScanInHospitalInfo()
+    await getScanInHospitalInfo()
   }
   // await setData();
 });

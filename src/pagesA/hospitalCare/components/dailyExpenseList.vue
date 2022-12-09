@@ -23,7 +23,7 @@
     <view v-if="(props.isHosDaylist=='2')">
       <view class="page">
         <view class="datetime-picker">
-          <uni-datetime-picker type="date" v-model="costDay">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
+          <uni-datetime-picker type="date" v-model="costDay" @change="changeTimePicker($event)">{{dayjs(costDay).format("YYYY-MM-DD")}}</uni-datetime-picker>
           <view class="iconfont down">&#xe6e8;</view>
         </view>
         <dailyExpenseListDetial ref="dailyExpenseRef" :costDay="costDay" :isHosDaylist="props.isHosDaylist" />
@@ -66,6 +66,14 @@ const dailyResList = ref<dailyResult>({
 });
 
 const dailyExpenseRef = ref<any>('');
+
+const changeTimePicker = async (day)=>{
+  costDay.value = day
+  //调用日费用清单详情
+  nextTick(()=>{
+    dailyExpenseRef.value.init()
+  })
+}
 
 const init = async () => {
   console.log(222,props);
