@@ -480,7 +480,18 @@ export class PatientUtils extends LoginUtils {
       mask: true,
     });
 
-    const { result } = await api.allinoneAuthApi1(requestData);
+    let result: any;
+
+    if (addPatInterface === 'hasBeenTreated') {
+      const { result: r } = await api.allinoneAuthApi1(requestData);
+      result = r;
+    } else {
+      const { result: r } = await api.allinoneAuthApi(
+        packageAuthParams(requestData, '/register/bindRegisterUser')
+      );
+      result = r;
+    }
+
     // .catch((err) => {
     //   return Promise.reject({
     //     errorType: 'add',
@@ -518,7 +529,7 @@ export class PatientUtils extends LoginUtils {
           source: this.globalStore.browser.source,
           verifyCode: verifyCode || '1',
           verifyType,
-          _type: 'perfect'
+          _type: 'perfect',
         });
       } else {
         // relevantPatient
@@ -550,7 +561,7 @@ export class PatientUtils extends LoginUtils {
       upName: string;
       verifyCode: string;
       verifyType: string;
-      _type?: 'perfect'
+      _type?: 'perfect';
     }>
   ) {
     getH5OpenidParam(data);
