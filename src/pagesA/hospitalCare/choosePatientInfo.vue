@@ -89,7 +89,6 @@ import { deQueryForUrl} from '@/common/utils';
 type IPageProps = {
   patientName?: string; 
   patientPhone?: string; // 代缴的时候带
-  type?: string;  // 扫码时候带scan
   params?: string; // 扫码时候带的加密参数
 };
 const pageProps = ref<IPageProps>({} as IPageProps);
@@ -121,7 +120,7 @@ const loadImg = () => {
 
 const toPayPage = () => {
   uni.navigateTo({
-    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}`,
+    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}&cardNumber=${hosInfoResObj.value.cardNumber}&patientName=${hosInfoResObj.value.patientName}`,
   });
 };
 
@@ -139,7 +138,8 @@ const init = async () => {
 const getScanInHospitalInfo = async () => {
   const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({
     // desSecret: pageProps.value.params,
-    desSecret:"OP/5ULVnZpys/IGI9YDnyANGR4uXKxciOCBjXdjijgA="
+    // desSecret:"OP/5ULVnZpys/IGI9YDnyANGR4uXKxciOCBjXdjijgA="
+    desSecret:decodeURIComponent(pageProps.value.params as string)
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
@@ -171,8 +171,7 @@ onLoad(async (opt) => {
    });
    await getScanInHospitalInfo()
   }else{
-    // await init();
-    await getScanInHospitalInfo()
+    await init();
   }
   // await setData();
 });

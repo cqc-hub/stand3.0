@@ -35,6 +35,7 @@ export interface getInHospitalInfoResult {
   totalCost?: string;
   treatDoc?: string;
   visitNo?: string;
+  cardNumber?: string;
 }
 //获取住院费用日清单列表
 export interface dailyParam {
