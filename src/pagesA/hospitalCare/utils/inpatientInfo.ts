@@ -134,7 +134,7 @@ export interface inHospitalCostInfo {
   prepaidPayment?: string;
   //预交金
   totalCost?: string;
-  //总费用
+  //总费用 
 }
 export interface costList {
   category?: string;

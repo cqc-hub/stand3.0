@@ -68,13 +68,9 @@ const dailyResList = ref<dailyResult>({
 const dailyExpenseRef = ref<any>('');
 
 const init = async () => {
+  console.log(222,props);
 
-
-  nextTick(async() => {
-    console.log({
-    props
-  });
-    if(props.isHosDaylist == '1'){
+  if(props.isHosDaylist == '1'){
     //调用日费用清单列表
     const { result } = await api.getInHospitalDailyCostList<dailyResult>({
     patientId: gStores.userStore.patChoose.patientId,
@@ -85,13 +81,12 @@ const init = async () => {
      //调用日费用清单详情
      dailyExpenseRef.value.init()
     }
-  })
 
 };
 
 const gotoListExpenses = (data) => {
   uni.navigateTo({
-    url: `listExpenses?costDate=${data.costDate}&inpatientNo=${data.inpatientNo}&isHosDaylist='1'`,
+    url: `listExpenses?costDay=${data.costDate}&isHosDaylist='1'`,
   });
 };
 //下拉刷新
@@ -116,6 +111,8 @@ onPullDownRefresh(() => {
 //   }
 // );
 onMounted(async () => {
+  console.log(2222,'mount',props);
+
   await init();
 });
 defineExpose({
