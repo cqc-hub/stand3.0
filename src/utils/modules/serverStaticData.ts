@@ -109,10 +109,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
 
   if (type === 'h5') {
     if (config.isSelfH5) {
-      let baseUrl =
-        (globalGl.env as any) === 'prod'
-          ? 'https://h5.eheren.com/v3/#/'
-          : 'https://health.eheren.com/v3/#/';
+      let baseUrl = globalGl.h5Url;
 
       if (config.isLocal) {
         baseUrl = localUrl;
@@ -415,13 +412,13 @@ export class ServerStaticData {
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
     payload: {} = {}
-  ): Promise<ISystemConfig[T]> { 
-
+  ): Promise<ISystemConfig[T]> {
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
-      //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG 
+      //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG ',
+        paramCode:
+          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG ',
       });
 
       try {
@@ -431,7 +428,7 @@ export class ServerStaticData {
         );
         const order = JSON.parse(result.ORDER_REGISTER || '{}');
         const hospitalCare = JSON.parse(result.PATIENT_SERVICE_CONFIG || '{}');
-        const pay = JSON.parse(result.CLINIC_PAY_CONFIG  || '{}');
+        const pay = JSON.parse(result.CLINIC_PAY_CONFIG || '{}');
         systemConfig = {
           person,
           order,

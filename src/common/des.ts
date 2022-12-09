@@ -67,5 +67,5 @@ export const encryptForPage = (query: BaseObject) => {
 };
 
 export const decryptForPage = (str: string) => {
-  return decryptDes(decodeURIComponent(str), DES_PAGE);
+  return JSON.parse(decryptDes(decodeURIComponent(str), DES_PAGE));
 };

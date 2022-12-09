@@ -26,6 +26,11 @@ const netUrl =
     ? `https://interhos.eheren.com/static/nhs/`
     : `https://testwechatnethos.eheren.com/static/nhs/`;
 
+const h5Url =
+  <string>env === 'prod'
+    ? 'https://h5.eheren.com/v3/#/'
+    : 'https://health.eheren.com/v3/#/';
+
 const globalGl = {
   SYS_CODE,
   BASE_IMG,
@@ -41,6 +46,7 @@ const globalGl = {
     : '/pagesA/medicalCardMan/addMedical',
   isOpenDes,
   netUrl,
+  h5Url
 };
 
 export default globalGl;

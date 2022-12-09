@@ -159,11 +159,14 @@
     {} as {
       tabIndex?: '1';
 
-      cardNumber?: string;
-      patientName?: string;
-      idCard?: string;
-      patientId?: string;
-      herenId?: string;
+      params?: string;
+      deParams?: {
+        cardNumber?: string;
+        patientName?: string;
+        idCard?: string;
+        patientId?: string;
+        herenId?: string;
+      };
     }
   );
 
@@ -202,6 +205,8 @@
 
   const init = async () => {
     await getSysConfig();
+    console.log('pageProps', pageProps.value);
+
     getListData();
   };
 
@@ -214,15 +219,28 @@
       patientName: '陈钦川',
     };
 
-    const b = { hosPatientId: '00152792' };
-    const en = encryptForPage(b);
-    console.log(en);
-    console.log(decryptForPage(en));
+    const en = encryptForPage(a);
+    // console.log(en);
+    // console.log(decryptForPage(en));
   }, 1000);
 
   onLoad(async (opt) => {
+    if (opt.q) {
+      return;
+    }
+
     if (opt) {
+      if (opt.q) {
+        return;
+      }
+
       pageProps.value = deQueryForUrl(opt);
+
+      if (pageProps.value.params) {
+        pageProps.value.deParams = decryptForPage(pageProps.value.params);
+
+        console.log('获取到加密参数', pageProps.value.params);
+      }
     }
 
     await init();
