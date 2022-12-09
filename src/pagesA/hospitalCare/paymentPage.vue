@@ -53,7 +53,7 @@ import { hosParam } from "@/components/g-form";
 import { payOrderResult } from "./utils/inpatientInfo";
 
 type IPageProps = {
-  hosId: string; 
+  hosId: string;
 };
 
 const gStores = new GStores();
@@ -98,9 +98,13 @@ const payAfter = async () => {
   await wait(1000);
   uni.hideLoading();
 
-  uni.reLaunch({
-    url: "/pagesA/hospitalCare/choosePatient",
-  });
+  // uni.reLaunch({
+  //   url: "/pagesA/hospitalCare/choosePatient",
+  // });
+
+  uni.navigateBack({
+    delta: 1
+  })
 };
 const setData = async () => {
   const result = await ServerStaticData.getSystemConfig('hospitalCare');
