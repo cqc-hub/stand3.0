@@ -20,7 +20,7 @@
 
 //   actions: {
 //     getSystemHospitalEvent() {
-//       const result = ServerStaticData.getSystemHospital();
+//       const result = ServerStaticData.getSystemConfig('hospitalCare');
 //       console.log(result, 'resultStrore');
 //     },
 //   },

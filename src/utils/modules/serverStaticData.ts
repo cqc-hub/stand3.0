@@ -262,42 +262,6 @@ export class ServerStaticData {
       return sysTerms;
     }
   }
-  /**
-   * 住院服务
-   */
-  static async getSystemHospital(): Promise<hosParam> {
-    const sysTermsHos =
-      <hosParam | undefined>getLocalStorage('sysTermsHos') ||
-      _cacheMap.get(this.getSystemHospital);
-
-    if (!sysTermsHos) {
-      const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PATIENT_SERVICE_CONFIG',
-      });
-
-      const list = result && result.PATIENT_SERVICE_CONFIG;
-
-      if (list) {
-        // const res = JSON.parse(list).map((item) => {
-        //   return {
-        //     label: item.label,
-        //     value: item.code,
-        //   };
-        // });
-        const res = JSON.parse(list);
-        // setLocalStorage({
-        //   sysTermsHos: res,
-        // });
-        _cacheMap.set(this.getSystemHospital, res);
-
-        return res;
-      } else {
-        return <any>{};
-      }
-    } else {
-      return sysTermsHos;
-    }
-  }
 
   /**
    * 民族
@@ -451,41 +415,13 @@ export class ServerStaticData {
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
     payload: {} = {}
-  ): Promise<ISystemConfig[T]> {
-    // const res: ISystemConfig = {
-    //   order: {
-    //     chooseDay: 30,
-    //     selOrderColumn: 3,
-    //     isOrderBlur: '1',
-    //     isOrderPay: '0',
-    //   },
-
-    //   person: {
-    //     isHidePatientTypeInPerfect: '1',
-    //     ageChildren: 6,
-    //     ageGuardian: 18,
-    //     isGuardianWithIdCard: '1',
-    //     isSmsVerify: '0',
-    //     ocr: '1',
-    //   },
-
-    //   medRecord: [
-    //     {
-    //       sfz: ['front', 'end'],
-    //       isItemCount: '1',
-    //       fee: 10,
-    //       hosId: '100',
-    //     },
-    //   ],
-    // };
-
-    // return res[key];
+  ): Promise<ISystemConfig[T]> { 
 
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
-      //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY
+      //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG 
       const { result } = await api.getParamsMoreBySysCode({
-        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER',
+        paramCode: 'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG ',
       });
 
       try {
@@ -494,28 +430,14 @@ export class ServerStaticData {
           result
         );
         const order = JSON.parse(result.ORDER_REGISTER || '{}');
+        const hospitalCare = JSON.parse(result.PATIENT_SERVICE_CONFIG || '{}');
+        const pay = JSON.parse(result.CLINIC_PAY_CONFIG  || '{}');
         systemConfig = {
           person,
           order,
           medRecord,
-          pay: {
-            isListShowClinicType: '1',
-            // payedFooterBtn: {
-            //   addition: {
-            //     patientId: 'patientId',
-            //   },
-            //   type: 'h5',
-            //   extraData: {
-            //     sysCode: '1001033',
-            //   },
-            //   path: 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
-            //   text: '导诊单',
-            // },
-            confirmPayFg: '15',
-            isPreSettle: '1',
-            // isOpenChargeback: '1',
-            isSubitemPay: '1',
-          },
+          hospitalCare,
+          pay,
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');

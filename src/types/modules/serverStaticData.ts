@@ -40,6 +40,11 @@ export interface IRegSearchHistoryItem {
   hot?: '1'; // 标记 🔥
 }
 
+export interface IConfigTab {
+  label: string;
+  value: string;
+}
+
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
@@ -113,6 +118,20 @@ export interface ISystemConfig {
     isToggleHos?: '0' | '1';
   }[];
 
+  //住院服务
+  hospitalCare:{
+    //顶部tab
+    tab:IRegSearchHistoryItem[];
+    //配置的预缴金额 [500,1000,2000,3000,5000,10000]
+    inPatientPrePay:string[];
+    //列表1 详情2 住院总计清单
+    isHosTotallist: '1' | '2';
+    //列表1 详情2 日费用清单模式
+    isHosDaylist: '1' | '2';
+    //0否 1 是 是否支持预交金记录查询
+    isQueryPreRecord?: '0' | '1';
+  }
+
   // 门诊缴费
   pay: {
     /**
@@ -121,7 +140,7 @@ export interface ISystemConfig {
 
     // 门诊类型  网络医院/线下门诊 (是否展示)
     isListShowClinicType?: '1';
-    // 待缴费点击缴费时候提示的协议 (不配没有)
+    // 待缴费点击缴费时候提示的协议编号 (不配没有)
     confirmPayFg?: string;
     // 已缴费底部的按钮
     payedFooterBtn?: TButtonConfig;

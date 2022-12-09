@@ -100,7 +100,7 @@ const scrollOption = ref({
 });
 const setData = async () => {
   pageLoading.value = false
-  const result = await ServerStaticData.getSystemHospital();
+  const result = await ServerStaticData.getSystemConfig('hospitalCare');
   resultHos.value = result;
   pageLoading.value = true
 };

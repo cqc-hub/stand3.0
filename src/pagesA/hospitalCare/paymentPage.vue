@@ -103,7 +103,7 @@ const payAfter = async () => {
   });
 };
 const setData = async () => {
-  const result = await ServerStaticData.getSystemHospital();
+  const result = await ServerStaticData.getSystemConfig('hospitalCare');
   resultHos.value = result;
   list.value = JSON.parse(resultHos.value.inPatientPrePay);
 };

@@ -159,7 +159,7 @@ const getScanInHospitalInfo = async () => {
 
 // //获取住院参数配置
 // const setData = async () => {
-//   const result = await ServerStaticData.getSystemHospital();
+//   const result = await ServerStaticData.getSystemConfig('hospitalCare');
 //   resultHos.value = result;
 // };
 
