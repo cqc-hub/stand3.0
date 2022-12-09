@@ -54,6 +54,8 @@ import { payOrderResult } from "./utils/inpatientInfo";
 
 type IPageProps = {
   hosId: string;
+  patientName?: string;//扫码的时候传 支付用
+  cardNumber?: string;
 };
 
 const gStores = new GStores();
@@ -83,11 +85,10 @@ const toPay = async () => {
   const res = await payMoneyOnline({
     phsOrderNo: payOrder.value.phsOrderNo,
     paySign: payOrder.value.paySign,
-    patientId: gStores.userStore.patChoose.patientId,
     totalFee: payOrderParam.value.fee,
-    phsOrderSource: "3",
-    hosId: pageProps.value.hosId,
+    phsOrderSource: "3", 
     source: gStores.globalStore.browser.source,
+    ...pageProps.value
   });
 
   await toPayPull(res);
@@ -116,6 +117,8 @@ const int = async () => {
     fee: payOrderParam.value.fee,
     orderType: payOrderParam.value.orderType,
     patientId: payOrderParam.value.patientId,
+    patientName:pageProps.value.patientName,
+    cardNumber:pageProps.value.cardNumber,
   });
   payOrder.value = result;
 };
