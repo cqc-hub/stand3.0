@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { handlerLogin, GStores } from '@/utils';
+  import { handlerLogin, GStores, routerJump } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
 
@@ -61,7 +61,6 @@
 
     emits('handler-login');
     await handlerLogin(e);
-
     nextStep();
   };
 

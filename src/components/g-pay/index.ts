@@ -1,8 +1,11 @@
+import { Login } from './../../utils/modules/login';
 import api from '@/service/api';
 import { GStores } from '@/utils';
 import global from '@/config/global';
+import { getSysCode } from '@/common';
 // #ifdef MP-ALIPAY
 import monitor from '@/js_sdk/alipay/alipayLogger.js';
+import { looseIndexOf } from '_@vue_shared@3.2.45@@vue/shared';
 // #endif
 export interface IGPay {
   label: string;
@@ -42,8 +45,19 @@ export const payMoneyOnline = async (data: BaseObject) => {
     cardNumber,
     source: gStores.globalStore.browser.source,
   };
+
+  //增加判断微信小程序扫码场景 无openId的情况 
+  console.log(2222,gStores.globalStore.openId);
+   
+
   // #ifdef  MP-WEIXIN
-  requestArg.openId = gStores.globalStore.openId;
+  if(gStores.globalStore.openId === ""){
+    await getOpenid().then((openId)=>{ 
+      requestArg.openId = openId;
+    })
+  }else{
+    requestArg.openId = gStores.globalStore.openId;
+  }  
   requestArg.channel = 'WX_MINI';
   // #endif
 
@@ -63,6 +77,70 @@ export const payMoneyOnline = async (data: BaseObject) => {
 };
 
 type ITrackType = '门诊缴费' | '住院缴费';
+
+const packageAuthParams = (
+  args: {},
+  url: `/${string}`,
+  payload: {
+    isOutArgs?: boolean;
+  } = {}
+) => { 
+
+  const gStores = new GStores();
+  const argsDefault = {
+    ...args,
+    sysCode: getSysCode(),
+  };
+  const { isOutArgs } = payload;
+  let authParam = argsDefault;
+  let outParam: BaseObject = {};
+
+  if (isOutArgs) {
+    (authParam as any) = undefined;
+    outParam = argsDefault;
+  }
+
+  return {
+    authParam: {
+      args: authParam,
+      ...outParam,
+      token: gStores.globalStore.getToken,
+    },
+    sysCode: undefined,
+    url,
+  };
+};
+
+//微信获取小程序的openid
+const getOpenid = async ()=>{
+  const gStores = new GStores();
+ return new Promise<void>((resolve, reject) => {
+  wx.login({
+    success: async ({ code }) => {
+      if (code) {
+        const accountType = gStores.globalStore.browser.accountType;
+        const { result } = await api.allinoneAuthApi(
+          packageAuthParams(
+            {
+              code,
+              accountType,
+            },
+            '/wx/getAppletsOpenId',
+            {
+              isOutArgs: true,
+            }
+          )
+        );  
+        if (result) {
+          const { openId, sessionKey } = result;
+          gStores.globalStore.setOpenId(openId);
+          resolve(openId)
+        }
+      }
+    }
+    })
+ })
+}
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
   return new Promise(async (resolve, reject) => {

@@ -10,7 +10,7 @@
         <view class="user-info">
           <text class="user-info-name">
             {{ hosInfoResObj.patientName }}</text>
-          <text class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
+          <text v-if="gStores.userStore.patChoose._showId " class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
         </view>
 
         <!-- {{
@@ -171,7 +171,7 @@ onLoad(async (opt) => {
    });
    await getScanInHospitalInfo()
   }else{
-    await init();
+    // await init();
     await getScanInHospitalInfo()
   }
   // await setData();
