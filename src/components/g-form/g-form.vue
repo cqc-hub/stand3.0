@@ -641,8 +641,18 @@
       await validatorItem(item, data[item.key]);
     }
 
+    const tramData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => {
+        let v = value;
+        if (typeof v === 'string') {
+          v = v.trim();
+        }
+        return [key, v];
+      })
+    );
+
     emits('submit', {
-      data,
+      tramData,
     });
   };
 
@@ -705,7 +715,7 @@
   defineExpose({
     setList,
     submit,
-    clearWarning
+    clearWarning,
   });
 </script>
 

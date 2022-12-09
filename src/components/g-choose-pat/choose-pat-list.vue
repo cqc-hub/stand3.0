@@ -1,10 +1,7 @@
 <template>
   <view class="pat-list">
     <view
-      v-for="(pat, i) in [
-        ...gStores.userStore.patList,
-
-      ]"
+      v-for="(pat, i) in gStores.userStore.patList"
       :key="pat.patientId"
       @click="patClick(pat, i)"
       :class="{

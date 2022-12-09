@@ -439,6 +439,7 @@
     formList.map((o) => {
       const { key } = o;
       const iValue = formData.value[key];
+
       if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
         if (iValue && props[key]) {
           o.disabled = true;
@@ -473,7 +474,7 @@
             'person'
           );
 
-          if (dayjs().diff(dayjs(v as string), 'month') >= ageChildren) {
+          if (dayjs().diff(dayjs(v as string), 'month') > ageChildren) {
             return Promise.resolve({
               success: false,
               message: '新生儿年龄不能大于' + ageChildren + '个月',
@@ -496,6 +497,13 @@
           o.showSuffixArrowIcon = false;
         }
       }
+
+      if (key === formKey.nation) {
+        const cardType = formData.value[formKey.idType];
+
+        // 证件类型身份证 , 新生儿 时候必填,  其余可选
+        o.required = cardType === '01' || value === '0' || false;
+      }
     });
 
     gform.value.setList([]);
@@ -513,11 +521,23 @@
         return true;
       }
     }
+    let count = 0;
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
         isDisabled = true;
+        count++;
       }
     });
+
+    const patientType = formData.value[formKey.patientType];
+    const idType = formData.value[formKey.idType];
+
+    if (isDisabled) {
+      // isDisabled = idType === '01' || nation === '0' || false;
+      if ((idType !== '01' || patientType === '0') && count === 1) {
+        isDisabled = false;
+      }
+    }
 
     return isDisabled;
   });

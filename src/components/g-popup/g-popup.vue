@@ -169,8 +169,8 @@
     }
 
     .popup-box {
-      // max-height: var(--h-popup-max-height);
-      // min-height: min(233rpx, 30vh);
+      max-height: var(--h-popup-max-height);
+      min-height: min(233rpx, 30vh);
       overflow-y: scroll;
       // margin-bottom: 48rpx;
 
