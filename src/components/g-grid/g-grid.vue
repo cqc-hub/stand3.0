@@ -7,7 +7,7 @@
       :column="type == 1 ? options.list.length : 4"
     >
       <uni-grid-item v-for="(item, i) in options.list" :key="i">
-        <g-login @handler-next="gridClick(item)" :disabled="item.loginInterception === '0'" >
+        <g-login @handler-login="updateIdFun(item)" @handler-next="gridClick(item)" :disabled="item.loginInterception === '0'" >
           <view class="grid-item-box" @tap="gridClick(item)">
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->
@@ -43,6 +43,7 @@
 
 <script lang="ts" setup>
 import { withDefaults, computed } from "vue";
+import { useRouterStore } from '@/stores';
 
 /**
  * g-grid 网格布局
@@ -95,6 +96,13 @@ const options = computed(() => {
 const gridClick = (item) => {
   emit("gridClick", item);
 };
+
+const updateIdFun = (item)=>{
+  const routerStore = useRouterStore();
+  console.log(3333,item);
+  routerStore.update_P();
+  routerStore.updateId(item.id);
+}
 </script>
 
 <style lang="scss" scoped>
