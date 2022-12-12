@@ -323,7 +323,7 @@
     ];
 
     const {
-      isGuardianWithIdCard,
+      isGuardianWithIdCard, 
       ocr,
       isHidePatientTypeInPerfect,
       isSmsVerify,
@@ -355,9 +355,9 @@
 
           if (idCard && idValidator.checkIdCardNo(idCard)) {
             const cardInfo = idValidator.getIdCardInfo(idCard);
-            if (cardInfo.age <= 6 && isGuardianWithIdCard === '1') {
+            if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1){
               lessThenSix = true;
-            }
+            } 
           }
         } else {
           // 不是身份证类型的证件号通过选择生日来判断要不要监护人
