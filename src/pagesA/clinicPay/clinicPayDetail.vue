@@ -216,17 +216,17 @@
     getListData();
   };
 
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    const a = {
-      cardNumber: '300088003',
-      patientName: '陈钦川',
-    };
+  // setTimeout(() => {
+  //   // regDialogConfirm.value.show();
+  //   const a = {
+  //     cardNumber: '300088003',
+  //     patientName: '陈钦川',
+  //   };
 
-    const en = encryptForPage(a);
-    console.log(en);
-    console.log(decryptForPage(en));
-  }, 1000);
+  //   const en = encryptForPage(a);
+  //   console.log(en);
+  //   console.log(decryptForPage(en));
+  // }, 1000);
 
   onLoad(async (opt) => {
     if (opt.q) {
