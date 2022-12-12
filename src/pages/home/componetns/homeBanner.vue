@@ -80,9 +80,9 @@
                 <text class="text-ellipsis">{{ item.title }}</text>
                 <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
               </view>
-              <text class="text-ellipsis details">
+              <!-- <text class="text-ellipsis details">
                 {{ item.detail }}
-              </text>
+              </text> -->
               <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
             </view>
           </block>
