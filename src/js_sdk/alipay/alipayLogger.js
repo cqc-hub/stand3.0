@@ -921,6 +921,6 @@ AlipayLogger.prototype = util.createObject(MiniProgramLogger.prototype), util.ex
   }
 });
 AlipayLogger._super = miniProgramLogger, AlipayLogger._root = miniProgramLogger._root, miniProgramLogger.AlipayLogger = AlipayLogger;
-const monitor = new AlipayLogger();
+var monitor = new AlipayLogger();
 export default monitor
 // module.exports = new AlipayLogger();
