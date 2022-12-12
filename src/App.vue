@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
-import { useGlobalStore } from "@/stores";
+import { useGlobalStore, useUserStore } from "@/stores";
 import { beforeEach } from "@/router";
+import { IPat } from "@/stores/type";
+import global from "@/config/global";
 import { joinQuery } from "./common";
 import "polyfill-object.fromentries";
 import "@/router/customRouter";
-import "./styles/index.scss"; 
-import global from '@/config/global';
+import "./styles/index.scss";
 
- // #ifdef MP-ALIPAY 
-import monitor from '@/js_sdk/alipay/alipayLogger.js';
+// #ifdef MP-ALIPAY
+import monitor from "@/js_sdk/alipay/alipayLogger.js";
 // #endif
 
 onLaunch((opt) => {
   // console.log('App Launch', opt);
   const globalStore = useGlobalStore();
   globalStore.initBrowser();
-  
+
   // #ifdef MP-ALIPAY
-  const alipayPid =  global.systemInfo.alipayPid
+  const alipayPid = global.systemInfo.alipayPid;
   monitor.init({
     pid: alipayPid,
     sample: 1,
@@ -32,9 +33,9 @@ onLaunch((opt) => {
   // #endif
 });
 onShow(async (opt) => {
-  // console.log('App Show', opt);
+  console.log("App Show", opt);
   if (opt && opt.query) {
-    const { query, path } = opt;
+    const { query, path, _pd } = opt;
 
     // wx 普通二维码
     if (query && query.q) {
@@ -47,6 +48,15 @@ onShow(async (opt) => {
           });
         }, 600);
         return;
+      }
+    }
+    
+    //携带就诊人数据和默认就诊人不一致的情况
+    if (query && query._pd) {
+      const userStore = useUserStore();
+      if (userStore.patList.length && userStore.patChoose.patientId != query._pd) {
+        const pat = <IPat>userStore.patList.find((o) => o.patientId === query._pd);
+        userStore.updatePatChoose(pat);
       }
     }
   }
