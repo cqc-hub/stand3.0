@@ -92,8 +92,8 @@ export interface ISystemConfig {
     // 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月）
     ageChildren: number;
 
-    // 新增就诊人页面有证件且证件类型 身份证时候 小于6岁 是否监护人？
-    isGuardianWithIdCard?: '0' | '1';
+    // 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？
+    isGuardianWithIdCard?: number; 
 
     ocr?: '0' | '1';
     isFace?: '1';

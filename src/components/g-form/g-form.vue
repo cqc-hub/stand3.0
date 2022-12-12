@@ -652,7 +652,7 @@
     );
 
     emits('submit', {
-      tramData,
+      data:tramData,
     });
   };
 
