@@ -148,6 +148,7 @@
             jumpMsg,
             cellPhoneNumber,
             idCardEncry,
+            birthday
           } = result;
           const { patientPhone, patientName } = data;
 
@@ -163,6 +164,8 @@
                 verifyType: '',
                 cellPhoneNumber,
                 idCardEncry,
+                sex: (patientSex && (patientSex === '男' ? '1' : '2')) || '',
+                birthday
               });
 
               routerJump('/pages/home/home');
