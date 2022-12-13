@@ -24,6 +24,7 @@
             class="g-bold f36 flex1 mr40 flex-normal"
           >
             <text
+              v-if="item.costTypeCode"
               :class="{
                 'pay-self': isPaySelfItem(item),
                 'pay-medical': !isPaySelfItem(item),

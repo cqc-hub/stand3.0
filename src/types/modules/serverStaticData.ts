@@ -93,7 +93,7 @@ export interface ISystemConfig {
     ageChildren: number;
 
     // 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？
-    isGuardianWithIdCard?: number; 
+    isGuardianWithIdCard?: number;
 
     ocr?: '0' | '1';
     isFace?: '1';
@@ -119,18 +119,18 @@ export interface ISystemConfig {
   }[];
 
   //住院服务
-  hospitalCare:{
+  hospitalCare: {
     //顶部tab
-    tab:IRegSearchHistoryItem[];
+    tab: IRegSearchHistoryItem[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
-    inPatientPrePay:string[];
+    inPatientPrePay: string[];
     //列表1 详情2 住院总计清单
     isHosTotallist: '1' | '2';
     //列表1 详情2 日费用清单模式
     isHosDaylist: '1' | '2';
     //0否 1 是 是否支持预交金记录查询
     isQueryPreRecord?: '0' | '1';
-  }
+  };
 
   // 门诊缴费
   pay: {

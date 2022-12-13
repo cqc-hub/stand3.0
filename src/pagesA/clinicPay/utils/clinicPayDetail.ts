@@ -206,8 +206,8 @@ export const usePayPage = () => {
     isPayListRequestComplete.value = false;
     let result: {
       clinicalSettlementResultList: IPayListItem[];
-      cardNumber:'',
-      patientName:''
+      cardNumber: '';
+      patientName: '';
     };
 
     const desSecret = pageProps.value.params;
@@ -215,8 +215,8 @@ export const usePayPage = () => {
       const { result: r } = await api
         .getScanUnpaidClinicList<{
           clinicalSettlementResultList: IPayListItem[];
-          cardNumber:'',
-          patientName:''
+          cardNumber: '';
+          patientName: '';
         }>({
           desSecret,
         })
@@ -226,17 +226,18 @@ export const usePayPage = () => {
 
       result = r;
 
-      pageProps.value.deParams = {
-        cardNumber:result.cardNumber,
-        patientName:result.patientName
+      if (result) {
+        pageProps.value.deParams = {
+          cardNumber: result.cardNumber,
+          patientName: result.patientName,
+        };
       }
-
     } else {
       const { result: r } = await api
         .getUnpaidClinicList<{
           clinicalSettlementResultList: IPayListItem[];
-          cardNumber:'',
-          patientName:''
+          cardNumber: '';
+          patientName: '';
         }>({
           patientId,
         })
@@ -473,9 +474,9 @@ export const usePayPage = () => {
       phsOrderSource: '2',
       hosId: selectList[0].hosId,
       // hosId: '1279',
-      hosName: selectList[0].hosName, 
+      hosName: selectList[0].hosName,
     };
-    
+
     if (pageProps.value.deParams) {
       payArg.patientName = pageProps.value.deParams.patientName;
       payArg.cardNumber = pageProps.value.deParams.cardNumber;
