@@ -31,13 +31,13 @@
             }`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
             v-if="props.leftFunctionList.length == 1"
+            @tap="gotoPath(props.leftFunctionList[0])"
           >
             <block v-if="props.leftFunctionList[0].iconfont">
               <!-- <g-login @handler-next="gotoPath(props.leftFunctionList[0])" :disabled="props.leftFunctionList[0].loginInterception === '0'"> -->
                 <image
                   mode="widthFix"
                   :src="props.leftFunctionList[0].iconfont"
-                  @tap="gotoPath(props.leftFunctionList[0])"
                 />
               <!-- </g-login> -->
             </block>

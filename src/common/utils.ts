@@ -228,3 +228,20 @@ export const insertObject = (
 
   return target;
 };
+
+//获取URL 携带的对应参数
+export const getQueryString = (url:string,key: string): string => { 
+  const after = url.split("?")[1];
+  if (after) {
+      var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+      var r = after.match(reg);
+      if (r != null) {
+          return decodeURIComponent(r[2]);
+      } else {
+          return '';
+      }
+  } else {
+    return ''
+  }
+}
+
