@@ -78,17 +78,17 @@
     };
 
     // 非新生儿无证件的 不显示监护人信息
-    if (pat.patientType !== '0') {
-      formList = formList.filter(
-        (o) =>
-          !(
-            [
-              patCardDetailFormKey.upIdCard,
-              patCardDetailFormKey.upName,
-            ] as string[]
-          ).includes(o.key)
-      );
-    }
+    // if (pat.patientType !== '0') {
+    //   formList = formList.filter(
+    //     (o) =>
+    //       !(
+    //         [
+    //           patCardDetailFormKey.upIdCard,
+    //           patCardDetailFormKey.upName,
+    //         ] as string[]
+    //       ).includes(o.key)
+    //   );
+    // }
 
     nextTick(() => {
       gform.value.setList(formList);
