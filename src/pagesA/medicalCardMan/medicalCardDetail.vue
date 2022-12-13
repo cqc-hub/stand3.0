@@ -77,18 +77,20 @@
       defaultFlag: pat.defaultFlag === '0' ? false : true,
     };
 
-    // 非新生儿无证件的 不显示监护人信息
-    // if (pat.patientType !== '0') {
-    //   formList = formList.filter(
-    //     (o) =>
-    //       !(
-    //         [
-    //           patCardDetailFormKey.upIdCard,
-    //           patCardDetailFormKey.upName,
-    //         ] as string[]
-    //       ).includes(o.key)
-    //   );
-    // }
+    // 非新生儿无证件的 不显示监护人信息 顾说去掉
+    // if (pat.patientType !== '0') { 
+      //判断无监护人信息
+      if (pat.upIdCard == "") { 
+      formList = formList.filter(
+        (o) =>
+          !(
+            [
+              patCardDetailFormKey.upIdCard,
+              patCardDetailFormKey.upName,
+            ] as string[]
+          ).includes(o.key)
+      );
+    }
 
     nextTick(() => {
       gform.value.setList(formList);
@@ -108,7 +110,7 @@
 
     background-color: var(--h-color-white);
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     margin-top: 16rpx;
     padding: 23rpx 0;
     border-bottom: 1rpx solid var(--hr-neutral-color-2);
