@@ -336,7 +336,7 @@
   };
 
   const toPay = async () => {
-    const { patientId } = gStores.userStore.patChoose;
+    const { patientId, patientName } = gStores.userStore.patChoose;
     const totalCost = detailData.value.totalCost + '';
     const source = gStores.globalStore.browser.source;
     const {
@@ -376,7 +376,7 @@
       phsOrderSource: '2',
       hosId,
       hosName,
-      patientName: props.value.patientName,
+      patientName: props.value.patientName || patientName,
     });
 
     await toPayPull(res);
