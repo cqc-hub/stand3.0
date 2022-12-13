@@ -63,7 +63,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
-  const localUrl = 'http://10.10.83.98:5173/#/';
+  const localUrl = 'http://10.10.83.94:5173/#/';
 
   const _d = {
     _patientId: '',

@@ -405,11 +405,7 @@
   const getData = async () => {
     await getDetailData(props.value);
 
-    if (
-      props.value.payState === '1' &&
-      pageConfig.value.isSubitemPay !== '1' &&
-      detailData.value.costList
-    ) {
+    if (props.value.payState === '1' && detailData.value.costList) {
       selList.value = [...detailData.value.costList];
     }
   };
