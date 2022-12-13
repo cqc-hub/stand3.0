@@ -37,7 +37,7 @@
               >
                 &#xe6f9;
               </text>
-              <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
+              <text>点击切换{{ (showQrCode && '二维码') || '条形码' }}</text>
             </view>
           </view>
 

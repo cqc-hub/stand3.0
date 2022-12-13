@@ -323,7 +323,7 @@
     ];
 
     const {
-      isGuardianWithIdCard, 
+      isGuardianWithIdCard,
       ocr,
       isHidePatientTypeInPerfect,
       isSmsVerify,
@@ -355,9 +355,12 @@
 
           if (idCard && idValidator.checkIdCardNo(idCard)) {
             const cardInfo = idValidator.getIdCardInfo(idCard);
-            if (isGuardianWithIdCard && cardInfo.age <= isGuardianWithIdCard * 1){
+            if (
+              isGuardianWithIdCard &&
+              cardInfo.age <= isGuardianWithIdCard * 1
+            ) {
               lessThenSix = true;
-            } 
+            }
           }
         } else {
           // 不是身份证类型的证件号通过选择生日来判断要不要监护人
@@ -474,7 +477,13 @@
             'person'
           );
 
-          if (dayjs().diff(dayjs(v as string), 'month') > ageChildren) {
+          const monthAgeAgo = dayjs()
+            .subtract(ageChildren, 'month')
+            .format('YYYY-MM-DD');
+          if (
+            monthAgeAgo !== v &&
+            dayjs(v as string).isBefore(dayjs(monthAgeAgo))
+          ) {
             return Promise.resolve({
               success: false,
               message: '新生儿年龄不能大于' + ageChildren + '个月',
@@ -566,7 +575,6 @@
 
     // 默认成人,儿童 有证件
     formData.value[formKey.patientType] =
-      // formData.value[formKey.patientType] || '0';
       formData.value[formKey.patientType] || '-1';
     verifyCode = formData.value[formKey.verifyCode];
 
@@ -584,7 +592,6 @@
     }
 
     nextTick(() => {
-      // medicalTypeChange('-1');
       medicalTypeChange(formData.value[formKey.patientType]);
     });
   });
