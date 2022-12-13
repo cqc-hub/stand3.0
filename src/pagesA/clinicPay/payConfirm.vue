@@ -121,6 +121,7 @@
         visitNo: string;
         serialNo: string;
         cardNumber: string;
+        patientName: string;
       }
     >{}
   );
@@ -135,6 +136,7 @@
       hosId,
       serialNo,
       visitNo,
+      cardNumber: pageProps.value.cardNumber,
     });
 
     isComplete.value = true;
@@ -167,6 +169,7 @@
   const toPay = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const _totalCost = info.value.totalNeedSelfpay + '';
+    const patientName = info.value.patientName;
     const source = gStores.globalStore.browser.source;
 
     const { hosId, serialNo, visitNo, visitDate, mergeOrder } = pageProps.value;
@@ -194,6 +197,7 @@
       phsOrderSource: '2',
       hosId,
       hosName: getHosName.value,
+      patientName,
       // hosId: '1279',
     });
 
