@@ -51,6 +51,7 @@ export type IPayListItem = {
   visitDate: string;
   visitNo: string;
   _clinicType: string;
+  cardNumber?: string;
   tradeType: TTradeType;
 };
 
@@ -76,6 +77,8 @@ export type TPayDetailProp = {
   hosName: string;
   diseaseTypeName: string;
   costTypeName: string;
+  cardNumber?: string;
+  patientName?: string;
 };
 
 export type TCostList = {
@@ -114,6 +117,7 @@ export type TPayConfirmPageProp = {
   visitNo: string;
   visitDate: string;
   mergeOrder: string;
+  cardNumber?: string;
 };
 
 export const usePayPage = () => {
@@ -370,6 +374,8 @@ export const usePayPage = () => {
       hosName,
       costTypeName,
       diseaseTypeName,
+      cardNumber: pageProps.value.deParams?.cardNumber,
+      patientName: pageProps.value.deParams?.patientName,
     };
 
     // if (payState === '1') {
@@ -430,6 +436,7 @@ export const usePayPage = () => {
           visitNo: selList.map((o) => o.visitNo).join(','),
           visitDate: selList.map((o) => o.visitDate).join(','),
           mergeOrder: selList.map((o) => o.childOrder).join(','),
+          cardNumber: pageProps.value.deParams?.cardNumber,
         });
       } else {
         toPay();
