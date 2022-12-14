@@ -4,8 +4,7 @@ import { GStores } from '@/utils';
 import global from '@/config/global';
 import { getSysCode } from '@/common';
 // #ifdef MP-ALIPAY
-import monitor from '@/js_sdk/alipay/alipayLogger.js';
-// import { looseIndexOf } from '_@vue_shared@3.2.45@@vue/shared';
+import monitor from '@/js_sdk/alipay/alipayLogger.js'; 
 // #endif
 export interface IGPay {
   label: string;
@@ -33,6 +32,7 @@ export interface IPayRes {
   appId: string;
   tradeStatus: string;
   msgInfo: string;
+  channelTradeNo: string;
 }
 
 export const payMoneyOnline = async (data: BaseObject) => {
@@ -139,15 +139,17 @@ const getOpenid = async () => {
 };
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
+  
   return new Promise(async (resolve, reject) => {
+
     const { invokeData } = data;
 
-    const { timeStamp, nonceStr, packAge, signType, paySign } = invokeData;
+    const { timeStamp, nonceStr, packAge, signType, paySign } = invokeData || {};
     let provider: 'alipay' | 'wxpay' | 'baidu' | 'appleiap' = 'wxpay';
 
     const payData = {
       provider,
-      orderInfo: data.appTradeNo,
+      orderInfo: data.channelTradeNo,
       timeStamp,
       nonceStr,
       package: packAge,

@@ -19,7 +19,8 @@ onLaunch((opt) => {
   globalStore.initBrowser();
 
   // #ifdef MP-ALIPAY
-  const alipayPid = global.systemInfo.alipayPid;
+  const alipayPid = global.systemInfo.alipayPid; 
+  
   monitor.init({
     pid: alipayPid,
     sample: 1,

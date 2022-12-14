@@ -589,14 +589,15 @@
       props.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
-
-    if ((props.patientType as string) === '-1') {
+    
+      //暂时注释 这个值是undifined
+    // if ((props.patientType as string) === '-1') {
       // #ifdef MP-ALIPAY
       if (props.pageType === 'perfectReal') {
         formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
       }
       // #endif
-    }
+    // }
 
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);

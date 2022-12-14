@@ -1,7 +1,8 @@
 
 // const monitor = require('./alipayLogger.js');
 import monitor from '@/js_sdk/alipay/alipayLogger';
-const queryString = require('query-string');
+// const queryString = require('query-string');
+import qs from 'query-string';
 
 let myAppId = null;
 
@@ -34,7 +35,7 @@ export function reportCmPV({ pageCode, title, query }, tag) {
   let encodedUrl;
   
   if (query && Object.keys(query).length > 0) {
-    encodedUrl =  encodeURIComponent(`${url}?${queryString.stringify(query)}`);
+    encodedUrl =  encodeURIComponent(`${url}?${qs.stringify(query)}`);
   } else {
     encodedUrl =  encodeURIComponent(`${url}`);
   }
