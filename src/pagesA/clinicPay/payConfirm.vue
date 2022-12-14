@@ -124,6 +124,7 @@
         cardNumber: string;
         patientName: string;
         hosId: string;
+        childOrder: string;
       }
     >{}
   );
@@ -200,7 +201,7 @@
     const source = gStores.globalStore.browser.source;
 
     const { visitDate, mergeOrder } = pageProps.value;
-    const { hosId, visitNo, serialNo } = info.value;
+    const { hosId, visitNo, serialNo, childOrder } = info.value;
     const args = {
       businessType: '1',
       patientId,
@@ -211,7 +212,7 @@
       visitDate,
       serialNo,
       visitNo,
-      mergeOrder,
+      mergeOrder: childOrder,
     };
 
     const {
