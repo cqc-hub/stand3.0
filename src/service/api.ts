@@ -203,6 +203,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  getDrugDelivery: (data) =>
+    service.post('/phs-query/delivery/getDrugDelivery', parm(data), {
+      hideLoading: false,
+    }),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),

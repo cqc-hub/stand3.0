@@ -99,7 +99,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      // useTBanner(eletronicInvoice);
+      useTBanner(eletronicInvoice);
     }, 1000);
   });
 </script>

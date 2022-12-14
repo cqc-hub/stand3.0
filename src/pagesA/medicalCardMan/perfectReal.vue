@@ -112,6 +112,10 @@
       verifyType: formData.value[formKey.verifyCode] && '2', // '2' 开启 短信验证
     };
 
+    if (data.patientName) {
+      data.patientName = data.patientName.trim();
+    }
+
     /**
 
     const value = formData.value;
@@ -148,7 +152,7 @@
             jumpMsg,
             cellPhoneNumber,
             idCardEncry,
-            birthday
+            birthday,
           } = result;
           const { patientPhone, patientName } = data;
 
@@ -165,7 +169,7 @@
                 cellPhoneNumber,
                 idCardEncry,
                 sex: (patientSex && (patientSex === '男' ? '1' : '2')) || '',
-                birthday
+                birthday,
               });
 
               routerJump('/pages/home/home');

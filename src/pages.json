@@ -294,6 +294,18 @@
     },
 
     {
+      "root": "pagesB",
+      "pages": [
+        {
+          "path": "medicationAssistant/medicalHelp",
+          "style": {
+            "navigationBarTitleText": "药品配送"
+          }
+        }
+      ]
+    },
+
+    {
       "root": "pagesC",
       "pages": [
         {

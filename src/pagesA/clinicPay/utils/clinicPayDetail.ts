@@ -446,7 +446,7 @@ export const usePayPage = () => {
 
   const toPay = async () => {
     const selectList = selUnPayList.value;
-    const { patientId } = gStores.userStore.patChoose;
+    const { patientId, patientName } = gStores.userStore.patChoose;
 
     const _totalCost = totalCost.value + '';
     const source = gStores.globalStore.browser.source;
@@ -487,6 +487,8 @@ export const usePayPage = () => {
     if (pageProps.value.deParams) {
       payArg.patientName = pageProps.value.deParams.patientName;
       payArg.cardNumber = pageProps.value.deParams.cardNumber;
+    } else {
+      payArg.patientName = patientName;
     }
 
     const res = await payMoneyOnline(payArg);
