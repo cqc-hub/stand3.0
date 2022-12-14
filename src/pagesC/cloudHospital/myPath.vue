@@ -118,11 +118,11 @@ const getQueryPath = (options) => {
 };
 
 const handleMessage = (evt) => {
-  console.log("返回数据11111", evt);
+  console.log("返回数据", evt);
   var data = evt.target.data;
   var V3PageData = data[0];
-
-  if (V3PageData) {
+  //表示支付
+  if (V3PageData.appId) {
     //拉起支付
     toPayPull(V3PageData)
       .then((res: any) => {
@@ -135,15 +135,9 @@ const handleMessage = (evt) => {
             });
           }
         } else {
-          if (V3PageData.cancelUrl) {
-            gStores.messageStore.showMessage("取消支付", 1500, {
-              closeCallBack: () => {
-                uni.navigateTo({
-                  url: "/pagesC/cloudHospital/myPath?path=" + V3PageData.cancelUrl,
-                });
-              },
-            });
-          }
+          gStores.messageStore.showMessage("取消支付", 1500, {
+            uniToast: true,
+          });
         }
         // #endif
 
