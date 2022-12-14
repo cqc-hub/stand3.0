@@ -72,6 +72,7 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import { type TPayConfirmPageProp } from './utils/clinicPayDetail';
+  import { encryptForPage, decryptForPage } from '@/common/des';
   import { deQueryForUrl } from '@/common';
   import { GStores, type IHosInfo, wait } from '@/utils';
   import {
@@ -122,14 +123,22 @@
         serialNo: string;
         cardNumber: string;
         patientName: string;
+        hosId: string;
       }
     >{}
   );
 
   const getData = async () => {
+    if (pageProps.value.deParams) {
+      getScanData();
+    } else {
+      getNormalData();
+    }
+  };
+
+  const getNormalData = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { hosId, serialNo, visitNo } = pageProps.value;
-
     isComplete.value = false;
     const { result } = await api.getClinicReservePay<any>({
       patientId,
@@ -143,11 +152,29 @@
     info.value = result;
   };
 
+  const getScanData = async () => {
+    const { serialNo, visitNo, cardNumber, hosId } = pageProps.value.deParams!;
+
+    isComplete.value = false;
+    const arg = {
+      serialNo,
+      visitNo,
+      cardNumber,
+      hosId,
+    };
+    const { result } = await api.getScanClinicReservePay<any>({
+      ...arg,
+      desSecret: pageProps.value.params,
+    });
+
+    isComplete.value = true;
+    info.value = result;
+  };
+
   const getHosName = computed(() => {
-    if (pageProps.value.hosId) {
+    if (info.value.hosId) {
       return (
-        hosList.value.find((o) => o.hosId == pageProps.value.hosId)?.hosName ||
-        ''
+        hosList.value.find((o) => o.hosId == info.value.hosId)?.hosName || ''
       );
     } else {
       return '';
@@ -172,8 +199,8 @@
     const patientName = info.value.patientName;
     const source = gStores.globalStore.browser.source;
 
-    const { hosId, serialNo, visitNo, visitDate, mergeOrder } = pageProps.value;
-
+    const { visitDate, mergeOrder } = pageProps.value;
+    const { hosId, visitNo, serialNo } = info.value;
     const args = {
       businessType: '1',
       patientId,
@@ -219,10 +246,35 @@
     getData();
   };
 
-  onLoad((opt) => {
-    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value);
+  onLoad(async (opt) => {
+    if (opt.q) {
+      return;
+    }
+
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+      if (pageProps.value.params) {
+        pageProps.value.deParams = decryptForPage(pageProps.value.params);
+      }
+    }
+
+    // console.log(pageProps.value);
   });
+
+  setTimeout(() => {
+    // regDialogConfirm.value.show();
+    const a = {
+      serialNo: 'eb2ad98ea4e847b092b875a560648d58',
+      visitNo: '20221213005816',
+      hosId: '13001',
+      cardNumber: '000001949',
+    };
+
+    const en = encryptForPage(a);
+    console.log(en);
+    console.log(decryptForPage(en));
+  }, 1000);
 </script>
 
 <style lang="scss" scoped>

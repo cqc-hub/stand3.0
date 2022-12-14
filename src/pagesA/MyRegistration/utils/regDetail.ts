@@ -237,6 +237,15 @@ export const orderStatusMap = {
     title: '已退号',
     cardColr: 'var(--hr-neutral-color-7)',
   },
+  // 已停诊
+  '90': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已停诊',
+    cardColr: 'var(--hr-neutral-color-7)',
+  },
   // 挂号失败
   '20': {
     headerClass: 'header-yellow',

@@ -178,6 +178,13 @@ const queryApi = {
       reportCmPV_YLName: '门诊缴费',
     }),
 
+  // 预决算-扫码
+  getScanClinicReservePay: <T>(data) =>
+    service.post<T>('/phs-query/clinical/getScanClinicReservePay', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '门诊缴费',
+    }),
+
   createClinicOrder: <T = any>(data) =>
     service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), {
       hideLoading: false,

@@ -113,7 +113,7 @@
     };
 
     if (data.patientName) {
-      data.patientName = data.patientName.trim();
+      formData.value[formKey.patientName] = data.patientName.trim();
     }
 
     /**

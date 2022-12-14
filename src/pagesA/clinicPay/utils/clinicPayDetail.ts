@@ -118,6 +118,14 @@ export type TPayConfirmPageProp = {
   visitDate: string;
   mergeOrder: string;
   cardNumber?: string;
+
+  params?: string; // 扫码时候
+  deParams?: {
+    serialNo: string;
+    visitNo: string;
+    cardNumber: string;
+    hosId: string;
+  };
 };
 
 export const usePayPage = () => {
@@ -572,6 +580,8 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 const dealPayList = (resList: IPayListItem[], { payState }) => {
   resList.map((o) => {
     const { clinicType } = o;
+
+    // o.costTypeCode = '';
 
     o._clinicType = clinicType === '2' ? '网络医院' : '线下门诊';
     o.payState = payState;

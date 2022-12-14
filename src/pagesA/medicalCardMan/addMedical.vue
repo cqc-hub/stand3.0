@@ -152,6 +152,7 @@
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
+      formData.value[formKey.patientName] = requestData.patientName.trim();
     }
 
     requestData.verifyType = requestData.verifyCode ? '2' : '1';
