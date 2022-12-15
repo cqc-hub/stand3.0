@@ -311,7 +311,7 @@
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
         const list = selList.value;
-        const { hosId, childOrder, visitDate, visitNo } = props.value;
+        const { hosId, childOrder, visitDate, visitNo, params } = props.value;
 
         goConfirmPage({
           hosId,
@@ -320,6 +320,7 @@
           visitNo: visitNo!,
           visitDate: visitDate!,
           cardNumber: props.value?.cardNumber,
+          params,
         });
       } else {
         toPay();

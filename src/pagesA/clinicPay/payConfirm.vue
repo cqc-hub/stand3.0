@@ -24,10 +24,10 @@
             :class="{
               mb32: idx !== details.length - 1,
             }"
-            class="row flex-between mb32"
+            class="row flex-between"
           >
             <view class="label">{{ item.label }}</view>
-            <view
+            <view v-if="item.key"
               :class="{
                 'color-error': item.key === 'totalNeedSelfpay',
               }"
@@ -35,7 +35,12 @@
             >
               {{ info[item.key] || 0 }}元
             </view>
-          </view>
+            <view v-if="item.value" 
+              class="value g-bold color-error"
+            >
+              {{ item.value || 0 }}元
+            </view>
+          </view> 
         </view>
       </view>
     </view>
@@ -83,24 +88,30 @@
 
   import api from '@/service/api';
 
+  interface IDetailInfo {
+    label:string;
+    value?:string;
+    key?:string;
+  }
+
   const pageProps = ref(<TPayConfirmPageProp>{});
   const gStores = new GStores();
   const isComplete = ref(false);
   const hosList = ref<IHosInfo[]>([]);
   const refPay = ref<any>('');
-  const details = ref([
+  const details = ref<IDetailInfo[]>([
     {
       label: '订单总额',
       key: 'totalCharges',
     },
-    {
-      label: '医保支付',
-      key: 'medicalMoney',
-    },
-    {
-      label: '院内账户支付',
-      key: 'accountMoney',
-    },
+    // {
+    //   label: '医保支付',
+    //   key: 'medicalMoney',
+    // },
+    // {
+    //   label: '院内账户支付',
+    //   key: 'accountMoney',
+    // },
     // {
     //   label: '自费支付',
     //   key: 'totalNeedSelfpay',
@@ -125,6 +136,7 @@
         patientName: string;
         hosId: string;
         childOrder: string;
+        costInfo:Object
       }
     >{}
   );
@@ -151,6 +163,16 @@
 
     isComplete.value = true;
     info.value = result;
+    //处理页面展示的参数 
+    if(result.costInfo != '{}'){
+    for(var key in JSON.parse(result.costInfo)){
+      console.log(key)
+      details.value.push({
+        label: key,
+        value: JSON.parse(result.costInfo)[key],
+      })
+    }
+    }
   };
 
   const getScanData = async () => {
@@ -200,9 +222,9 @@
     const patientName = info.value.patientName;
     const source = gStores.globalStore.browser.source;
 
-    const { visitDate, mergeOrder } = pageProps.value;
+    const { visitDate, mergeOrder,serialNo} = pageProps.value;
     
-    const { hosId, visitNo, serialNo, childOrder } = info.value;
+    const { hosId, visitNo, childOrder } = info.value;
 
     const args = {
       businessType: '1',
@@ -216,7 +238,8 @@
       visitNo,
       mergeOrder: mergeOrder || childOrder,
     };
-
+     console.log('serialNo',serialNo);
+     
     const {
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
@@ -238,10 +261,17 @@
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
-
-    uni.reLaunch({
-      url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-    });
+    
+    if (pageProps.value.params) {
+      //扫码进来的
+        uni.reLaunch({
+           url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params='+pageProps.value.params,
+         });
+      }else{
+        uni.reLaunch({
+           url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+         });
+      }
   };
 
   const init = () => {
@@ -254,8 +284,9 @@
     }
 
     if (opt) {
-      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt)); 
+      console.log('列表进',pageProps.value);
+      
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
       }
