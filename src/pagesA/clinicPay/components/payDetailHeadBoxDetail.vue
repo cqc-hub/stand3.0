@@ -112,7 +112,7 @@
           v-if="detailData.personCost"
           class="head-row flex-normal flex-start-r"
         >
-          <view class="head-row-label text-no-wrap color-888">自费支付</view>
+          <view class="head-row-label text-no-wrap color-888">现金支付</view>
           <view class="head-row-value color-444">
             {{ detailData.personCost }}元
           </view>

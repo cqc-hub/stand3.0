@@ -42,7 +42,7 @@
 
     <view v-if="isComplete" class="g-footer">
       <view class="flex1 flex-normal count-money">
-        <text class="color-444 f28 mr8">自费支付</text>
+        <text class="color-444 f28 mr8">还需支付</text>
         <text class="f36 g-bold color-error">
           {{ info.totalNeedSelfpay || '' }}元
         </text>
@@ -101,10 +101,10 @@
       label: '院内账户支付',
       key: 'accountMoney',
     },
-    {
-      label: '自费支付',
-      key: 'totalNeedSelfpay',
-    },
+    // {
+    //   label: '自费支付',
+    //   key: 'totalNeedSelfpay',
+    // },
   ]);
   const refPayList = ref([
     {
@@ -201,7 +201,9 @@
     const source = gStores.globalStore.browser.source;
 
     const { visitDate, mergeOrder } = pageProps.value;
+    
     const { hosId, visitNo, serialNo, childOrder } = info.value;
+
     const args = {
       businessType: '1',
       patientId,
@@ -212,7 +214,7 @@
       visitDate,
       serialNo,
       visitNo,
-      mergeOrder: childOrder,
+      mergeOrder: mergeOrder || childOrder,
     };
 
     const {
@@ -226,7 +228,6 @@
       hosId,
       hosName: getHosName.value,
       patientName,
-      // hosId: '1279',
     });
 
     await toPayPull(res, '门诊缴费');
@@ -263,19 +264,19 @@
     // console.log(pageProps.value);
   });
 
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    const a = {
-      serialNo: 'eb2ad98ea4e847b092b875a560648d58',
-      visitNo: '20221213005816',
-      hosId: '13001',
-      cardNumber: '000001949',
-    };
+  // setTimeout(() => {
+  //   // regDialogConfirm.value.show();
+  //   const a = {
+  //     serialNo: 'eb2ad98ea4e847b092b875a560648d58',
+  //     visitNo: '20221213005816',
+  //     hosId: '13001',
+  //     cardNumber: '000001949',
+  //   };
 
-    const en = encryptForPage(a);
-    console.log(en);
-    console.log(decryptForPage(en));
-  }, 1000);
+  //   const en = encryptForPage(a);
+  //   console.log(en);
+  //   console.log(decryptForPage(en));
+  // }, 1000);
 </script>
 
 <style lang="scss" scoped>

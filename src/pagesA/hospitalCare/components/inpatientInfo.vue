@@ -1,15 +1,15 @@
 <template>
   <!-- 住院信息 -->
   <view>
-    <view class="box" v-if="Obj==false">
+    <view class="box" v-if="Obj==false && hosInfoResObj">
       <view :class="gStores.userStore.patChoose.patientSex=='女'?'card card-lady':'card card-man'">
         <view class="user">
           <image v-show="isLoad" class="user-avatar" :src="getAvatar(gStores.userStore.patChoose.patientSex)" mode="widthFix" @load="loadImg"></image>
 
           <view class="user-info">
             <text class="user-info-name">
-              {{ gStores.userStore.patChoose.patientName }}</text>
-            <text class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
+              {{ hosInfoResObj.patientName }}</text>
+            <text class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
           </view>
 
         </view>
@@ -95,7 +95,7 @@ const hosInfoResObj = ref<getInHospitalInfoResult>(
 ); 
 const toPayRecord = async () => { 
   uni.navigateTo({
-    url: 'payRecord',
+    url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
   });
 };
 const toPayPage = () => {

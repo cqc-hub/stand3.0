@@ -255,6 +255,15 @@ export const orderStatusMap = {
     title: '失败',
     cardColr: 'var(--hr-error-color-6)',
   },
+  // 已退号
+  '42': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已退号',
+    cardColr: 'var(--hr-neutral-color-7)',
+  },
   // 已取消
   '45': {
     headerClass: 'header-dark',

@@ -91,7 +91,7 @@ const toPay = async () => {
     ...pageProps.value
   });
 
-  await toPayPull(res);
+  await toPayPull(res, '住院缴费');
   payAfter();
 };
 const payAfter = async () => {

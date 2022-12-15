@@ -30,22 +30,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { GStores } from '@/utils';
-import api from '@/service/api';
-import { hospitalPayResult } from './utils/inpatientInfo';
+import { ref } from 'vue';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
-const gStores = new GStores();
-const payParam = ref({
-  hosId: '1279',
-  //  patientId: '10763642',
-  patientId: gStores.userStore.patChoose.patientId,
-});
+
+import { GStores } from '@/utils';
+import { hospitalPayResult } from './utils/inpatientInfo';
+import { deQueryForUrl} from '@/common/utils';
+
+import api from '@/service/api';
+
+interface IPageProps {
+  hosId: string;
+}
+
+const gStores = new GStores(); 
+const pageProps = ref(<IPageProps>{});
 const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const init = async () => {
   const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
-    patientId: payParam.value.patientId,
-    hosId: payParam.value.hosId,
+    patientId: gStores.userStore.patChoose.patientId,
+    hosId: pageProps.value.hosId,
   });
   payResList.value = result;
 };
@@ -56,7 +60,8 @@ onPullDownRefresh(() => {
     init();
   }, 1000);
 });
-onLoad(() => {
+onLoad((opt) => {
+  pageProps.value = deQueryForUrl(opt);
   init();
 });
 </script>

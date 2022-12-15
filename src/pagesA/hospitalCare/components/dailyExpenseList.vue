@@ -76,8 +76,6 @@ const changeTimePicker = async (day)=>{
 }
 
 const init = async () => {
-  console.log(222,props);
-
   if(props.isHosDaylist == '1'){
     //调用日费用清单列表
     const { result } = await api.getInHospitalDailyCostList<dailyResult>({
@@ -105,22 +103,8 @@ onPullDownRefresh(() => {
       init();
     }, 1000);
   }
-});
-// watch(
-//   () => {
-//     gStores.userStore.patChoose.patientId;
-//   },
-//   () => {
-//     if (gStores.userStore.patChoose.patientId) {
-//       console.log(2222,'watch');
-
-//       init();
-//     }
-//   }
-// );
+}); 
 onMounted(async () => {
-  console.log(2222,'mount',props);
-
   await init();
 });
 defineExpose({

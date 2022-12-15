@@ -10,15 +10,8 @@
         <view class="user-info">
           <text class="user-info-name">
             {{ hosInfoResObj.patientName }}</text>
-          <text v-if="gStores.userStore.patChoose._showId " class="user-info-id">({{ gStores.userStore.patChoose._showId }})</text>
+          <text v-if="hosInfoResObj.cardNumber " class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
         </view>
-
-        <!-- {{
-            `${gStores.userStore.patChoose.patientName}  ${
-              (!isAreaProgram() && gStores.userStore.patChoose._showId) || ""
-            }`
-          }}
-        </view> -->
       </view>
       <view class="user-del yard">
         <text>{{hosInfoResObj.hosName}}</text>
@@ -73,7 +66,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 
 import api from '@/service/api';
 import { isAreaProgram } from '@/stores';
@@ -136,9 +129,7 @@ const init = async () => {
 
 //根据扫码获取住院信息
 const getScanInHospitalInfo = async () => {
-  const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({
-    // desSecret: pageProps.value.params,
-    // desSecret:"OP/5ULVnZpys/IGI9YDnyANGR4uXKxciOCBjXdjijgA="
+  const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({ 
     desSecret:decodeURIComponent(pageProps.value.params as string)
   });
   hosInfoResObj.value = result;
@@ -165,16 +156,22 @@ const getScanInHospitalInfo = async () => {
 
 onLoad(async (opt) => {
   pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt)); 
-  if(pageProps.value.params){//扫码进入
-    uni.setNavigationBarTitle({
-     title: "住院服务",
-   });
-   await getScanInHospitalInfo()
-  }else{
-    await init();
-  }
+  console.log(22222,'onload',pageProps.value );
   // await setData();
 });
+
+onShow(async()=>{
+  console.log(2222,'show',pageProps.value);
+  if(pageProps.value.params){//扫码进入
+      uni.setNavigationBarTitle({
+      title: "住院服务",
+    });
+    await getScanInHospitalInfo()
+    }
+    if(pageProps.value.patientName){
+      await init();
+    }
+})
 
 </script>
 

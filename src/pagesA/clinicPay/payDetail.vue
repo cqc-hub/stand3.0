@@ -379,7 +379,7 @@
       patientName: props.value.patientName || patientName,
     });
 
-    await toPayPull(res);
+    await toPayPull(res, '门诊缴费');
     payAfter();
   };
 

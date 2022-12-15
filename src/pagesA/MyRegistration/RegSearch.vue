@@ -120,6 +120,7 @@
 <script lang="ts" setup>
   import { ref, nextTick } from 'vue';
   import { deQueryForUrl } from '@/common';
+  import { GStores } from '@/utils';
   import {
     UseRegSearch,
     clearSearchHistory,
@@ -134,9 +135,14 @@
 
   const r = new UseRegSearch();
   const isDelHisShow = ref(false);
+  const gStores = new GStores();
 
   const confirmInput = (str) => {
-    r.confirmSearch(str);
+    if(str.match(/^[ ]*$/)){
+      gStores.messageStore.showMessage('搜索内容不能为空', 1500);
+    }else{
+      r.confirmSearch(str);
+    }
   };
 
   const changeInput = (str) => {
