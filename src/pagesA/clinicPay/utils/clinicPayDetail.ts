@@ -79,6 +79,7 @@ export type TPayDetailProp = {
   costTypeName: string;
   cardNumber?: string;
   patientName?: string;
+  params?: string;//扫码的加密参数
 };
 
 export type TCostList = {
@@ -447,6 +448,7 @@ export const usePayPage = () => {
           visitDate: selList.map((o) => o.visitDate).join(','),
           mergeOrder: selList.map((o) => o.childOrder).join(','),
           cardNumber: pageProps.value.deParams?.cardNumber,
+          params:pageProps.value.params
         });
       } else {
         toPay();

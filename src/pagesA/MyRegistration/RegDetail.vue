@@ -231,7 +231,7 @@
         <button @click="againOrder" class="btn g-border btn-normal">
           再次预约
         </button>
-        <button class="btn g-border btn-primary">服务评价</button>
+        <!-- <button class="btn g-border btn-primary">服务评价</button> -->
       </block>
 
       <block v-if="orderRegInfo.orderStatus === '10'">

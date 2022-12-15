@@ -1,8 +1,8 @@
 <template>
   <view class="g-page">
     <g-flag isShowFg typeFg="15" />
-    <g-tbanner :config="pageConfig.bannerPay" />
-    <g-choose-pat v-if="!pageProps.deParams" @choose-pat="getListData(true)" />
+    <g-tbanner :config="pageConfig.bannerPay" /> 
+    <g-choose-pat v-if="!pageProps.params" @choose-pat="getListData(true)" />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
