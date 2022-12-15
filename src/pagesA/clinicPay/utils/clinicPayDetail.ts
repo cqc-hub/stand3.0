@@ -384,6 +384,8 @@ export const usePayPage = () => {
       diseaseTypeName,
       cardNumber: pageProps.value.deParams?.cardNumber,
       patientName: pageProps.value.deParams?.patientName,
+
+      params: pageProps.value.params,
     };
 
     // if (payState === '1') {
