@@ -320,7 +320,7 @@
           visitNo: visitNo!,
           visitDate: visitDate!,
           cardNumber: props.value?.cardNumber,
-          params,
+          params
         });
       } else {
         toPay();

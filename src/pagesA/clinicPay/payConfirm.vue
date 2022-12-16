@@ -142,7 +142,7 @@
   );
 
   const getData = async () => {
-    if (pageProps.value.deParams) {
+    if (!pageProps.value.visitNo) {
       getScanData();
     } else {
       getNormalData();
@@ -224,7 +224,7 @@
 
     const { visitDate, mergeOrder,serialNo} = pageProps.value;
     
-    const { hosId, visitNo, childOrder } = info.value;
+    const { hosId, visitNo, childOrder,cardNumber} = info.value;
 
     const args = {
       businessType: '1',
@@ -236,6 +236,7 @@
       visitDate,
       serialNo,
       visitNo,
+      cardNumber,
       mergeOrder: mergeOrder || childOrder,
     };
      console.log('serialNo',serialNo);

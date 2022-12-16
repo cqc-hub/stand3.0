@@ -150,16 +150,17 @@ const handleMessage = (evt) => {
         }
         // #endif
       })
-      .catch(() => {
-        if (V3PageData.cancelUrl) {
-          gStores.messageStore.showMessage("取消支付", 1500, {
-            closeCallBack: () => {
+      .catch((err) => {
+        let msg = err.errMsg.indexOf('cancel')!='-1'?'取消支付':"err.errMsg" 
+        gStores.messageStore.showMessage(msg, 2000, {
+          closeCallBack: () => {
+            if (V3PageData.cancelUrl) {
               uni.navigateTo({
                 url: "/pagesC/cloudHospital/myPath?path=" + V3PageData.cancelUrl,
               });
-            },
-          });
-        }
+            }
+          },
+        });
       });
   } else {
     //打开地图

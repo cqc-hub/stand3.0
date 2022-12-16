@@ -74,11 +74,11 @@
       "alipayAppid": "2021003164669106",
       "h5Appid": "",
       "name": "联勤保障部队第987医院",
-      "isOpenHealthCard": false,
+      "isOpenHealthCard": true,
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "dl5dt/lx8x6q93cionolzw==",
-      "isOpenOcr": false,
+      "isOpenOcr": true,
       "isHideHomeLogo":true
     },
     "1001054": {

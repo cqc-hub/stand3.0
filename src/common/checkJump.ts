@@ -148,7 +148,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
     case 'mini':
       uni.navigateToMiniProgram({
         appId: item.appId,
-        path: item.url,
+        path: item.path,
         extraData: item.query && JSON.parse(item.query),
       });
       break;
