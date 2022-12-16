@@ -143,8 +143,7 @@ const baseApi = {
   //获取公告资讯
   getAnnouncementCms: (data) =>
     service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
-      monitorName: '预约挂号',
-      reportCmPV_YLName: '',
+      monitorName: '预约挂号', 
     }),
 
   //查询对应版本号
@@ -257,7 +256,10 @@ const queryApi = {
     ),
   //创建住院缴费订单
   createInHospitalPayOrder: <T>(data) =>
-    service.post<T>('/phs-query/hospital/createInHospitalPayOrder', parm(data)),
+    service.post<T>('/phs-query/hospital/createInHospitalPayOrder', parm(data),
+    {
+      reportCmPV_YLName: '住院缴费',
+    }),
   //获取住院缴费记录
   getInHospitalPayInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data), {
@@ -299,13 +301,14 @@ const regApi = {
     service.post('/phs-reg/reg/addReg', parm(data), {
       hideLoading: false,
       monitorName: '预约挂号',
+      reportCmPV_YLName: '挂号缴费'
     }),
 
   // 排班
   getDocSch: (data: any) =>
     service.post('/phs-reg/reg/getDocSch', parm(data), {
       hideLoading: false,
-      reportCmPV_YLName: '预约挂号',
+      reportCmPV_YLName: '预约挂号'
     }),
 
   cancelReg: (data: any) =>
@@ -421,14 +424,18 @@ const userApi = {
   addPatByHasBeenTreatedEncry: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatByHasBeenTreatedEncry',
-      parm(data)
+      parm(data), { 
+        reportCmPV_YLName: '在线建档',
+      }
     ),
 
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatientByHasBeenTreated',
-      parm(data)
+      parm(data), { 
+        reportCmPV_YLName: '在线建档',
+      }
     ),
 
   //更新就诊人OpenId
