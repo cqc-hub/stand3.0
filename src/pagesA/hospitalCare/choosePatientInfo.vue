@@ -9,7 +9,7 @@
                mode="widthFix"></image>
         <view class="user-info">
           <text class="user-info-name">
-            {{ hosInfoResObj.patientName }}</text>
+            {{ hosInfoResObj.patientNameDes }}</text>
           <text v-if="hosInfoResObj.cardNumber " class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
         </view>
       </view>
