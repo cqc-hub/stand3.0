@@ -84,15 +84,13 @@ const lists = ref<IHospitalAccountDetail>({} as IHospitalAccountDetail);
 const regDialogConfirm = ref<any>('');
 let getListData = async () => {
   const { patientId } = gStores.userStore.patChoose;
+  const { hosId } = pageProps.value
   const arg = {
     patientId,
-    hosId: pageProps.value.hosId,
-    // hosId: '13001'
+    hosId,
   };
-  // uni.startPullDownRefresh({});
 
   const { result } = await api.getHospitalAccountDetail<IHospitalAccountDetail>(arg).finally(() => {
-    // uni.stopPullDownRefresh();
   });
   lists.value = result || [];
 };
@@ -101,10 +99,11 @@ getListData = debounce(getListData, 80);
 
 let accountWithdrawal = async () => {
   const { patientId } = gStores.userStore.patChoose;
+  const { accountNo, allowOnLineCash: amount  } = lists.value
   const arg = {
     patientId,
-    accountNo: lists.value.accountNo,
-    amount: lists.value.allowOnLineCash,
+    accountNo,
+    amount,
   };
 
   await api.accountWithdrawal(arg).then((res) => {
@@ -126,6 +125,7 @@ let accountWithdrawal = async () => {
   });
 };
 accountWithdrawal = debounce(accountWithdrawal, 80);
+
 //下拉刷新
 //  onPullDownRefresh(async () => {
 //     await init();
@@ -133,21 +133,24 @@ accountWithdrawal = debounce(accountWithdrawal, 80);
 //   });
 
 const init = async () => {
-  // await gStores.userStore.getPatList();
   await getListData();
 };
+
 onLoad(async (opt) => {
   pageProps.value = deQueryForUrl(opt);
 });
+
 onShow(() => {
-    init();
-  });
+  init();
+});
+
 const confirmForm = () => {
   const { patientId } = gStores.userStore.patChoose;
-  const { cardNumber, patientName } = lists.value
+  const { cardNumber, patientName } = lists.value;
+  const { hosId } = pageProps.value
   uni.navigateTo({
     url: joinQuery("/pagesA/hospitalCare/paymentPage", {
-      hosId: pageProps.value.hosId,
+      hosId,
       cardNumber,
       patientName,
       hospitalAccount: '12',
@@ -159,15 +162,14 @@ const confirmForm1 = () => {
     regDialogConfirm.value.show();
   }else{
     uni.showToast({
-        title: '当前没有可提现金额',
-        icon: 'none',
-      });
+      title: '当前没有可提现金额',
+      icon: 'none',
+    });
   }
 };
 
 const goWithdrawal = () => {
   accountWithdrawal()
-
 };
 </script>
 
