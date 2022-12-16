@@ -109,23 +109,20 @@ let accountWithdrawal = async () => {
 
   await api.accountWithdrawal(arg).then((res) => {
     if(res.code == '0'){
-      setTimeout(() => {
         init();
         uni.showToast({
           title: '提现申请已提交，提现金额将原路返回，请耐心等待',
           icon: 'none',
+          duration: 3000,
         });
-      }, 600);
     }
   }).catch((err) => {
     console.log(err);
-    setTimeout(() => {
       init();
       uni.showToast({
         title: err.message,
         icon: 'none',
       });
-    }, 600);
   });
 };
 accountWithdrawal = debounce(accountWithdrawal, 80);
