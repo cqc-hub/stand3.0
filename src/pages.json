@@ -318,6 +318,15 @@
           }
         },
         {
+          "path": "hospitalAccount/hospitalAccount",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "院内账户"
+          }
+        },
+        {
           "path": "hrvideo/index",
           "style": {
             "navigationBarTitleText": " "

@@ -37,6 +37,10 @@
   font-weight: 600;
 }
 
+.g-bolder {
+  font-weight: 700;
+}
+
 .g-border {
   border: 1rpx solid var(--hr-neutral-color-2);
 }
@@ -213,6 +217,10 @@
   margin-top: 40rpx !important;
 }
 
+.ml8 {
+  margin-left: 8rpx !important;
+}
+
 .mr8 {
   margin-right: 8rpx !important;
 }
@@ -263,6 +271,10 @@
 
 .p24 {
   padding: 24rpx !important;
+}
+
+.p40 {
+  padding: 40rpx !important;
 }
 
 .pb32 {
@@ -320,4 +332,8 @@
 
 .f48 {
   font-size: var(--hr-font-size-xxl) !important;
+}
+
+.f80 {
+  font-size: 80rpx !important;
 }

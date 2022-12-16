@@ -1,6 +1,6 @@
 <template>
   <view class="box">
-    <view class="title">预交费用</view>
+    <view class="title">{{pageProps.hospitalAccount ? '充值金额' : '预交费用'}}</view>
     <view class="buttons">
       <view
         :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
@@ -42,13 +42,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { onLoad } from "@dcloudio/uni-app";
+import { onLoad, onReady } from "@dcloudio/uni-app";
 
 import api from "@/service/api";
 import { GStores, ServerStaticData, wait } from "@/utils";
 import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
 import { deQueryForUrl } from '@/common/utils';
-
 import { hosParam } from "@/components/g-form";
 import { payOrderResult } from "./utils/inpatientInfo";
 
@@ -56,8 +55,8 @@ type IPageProps = {
   hosId: string;
   patientName?: string;//扫码的时候传 支付用
   cardNumber?: string;
+  hospitalAccount?: string;
 };
-
 const gStores = new GStores();
 const resultHos = ref<hosParam>({
   inPatientPrePay: "",
@@ -68,25 +67,19 @@ const resultHos = ref<hosParam>({
 
 const list = ref([]);
 const defalutMoney = ref("");
-const payOrderParam = ref({
-  fee: "",
-  orderType: "3",
-  patientId: gStores.userStore.patChoose.patientId,
-});
+
 const payOrder = ref<payOrderResult>({} as payOrderResult);
 const pageProps = ref({} as IPageProps);
-
 const checkMoney = (item) => {
   defalutMoney.value = String(item);
 };
 const toPay = async () => {
-  payOrderParam.value.fee = defalutMoney.value;
   await int();
   const res = await payMoneyOnline({
     phsOrderNo: payOrder.value.phsOrderNo,
     paySign: payOrder.value.paySign,
-    totalFee: payOrderParam.value.fee,
-    phsOrderSource: "3", 
+    totalFee: defalutMoney.value,
+    phsOrderSource: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3", 
     source: gStores.globalStore.browser.source,
     ...pageProps.value
   });
@@ -114,9 +107,9 @@ const setData = async () => {
 };
 const int = async () => {
   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
-    fee: payOrderParam.value.fee,
-    orderType: payOrderParam.value.orderType,
-    patientId: payOrderParam.value.patientId,
+    fee: defalutMoney.value,
+    orderType: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3",
+    patientId: gStores.userStore.patChoose.patientId,
     patientName:pageProps.value.patientName,
     cardNumber:pageProps.value.cardNumber,
   });
@@ -149,9 +142,16 @@ const transformUnit = (val: number) => {
     return "";
   }
 };
-
+onReady(() => {
+    if (pageProps.value.hospitalAccount) {
+      uni.setNavigationBarTitle({
+        title: '充值',
+      });
+    }
+  });
 onLoad((opt) => {
-  pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
+  console.log("opt",opt)
+  pageProps.value = deQueryForUrl(opt);
   setData();
 });
 </script>

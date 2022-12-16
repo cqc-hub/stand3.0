@@ -269,6 +269,13 @@ const queryApi = {
   //扫码获取住院信息
   getScanInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getScanInHospitalInfo', parm(data)),
+  //查询患者院内账户
+  getHospitalAccountDetail: <T>(data) =>
+    service.post<T>('/phs-query/hospitalAccount/getHospitalAccountDetail', parm(data)),
+  //账号提现
+  accountWithdrawal: <T>(data) =>
+    service.post<T>('/phs-query/hospitalAccount/accountWithdrawal', parm(data)),
+    
 };
 
 // 挂号服务

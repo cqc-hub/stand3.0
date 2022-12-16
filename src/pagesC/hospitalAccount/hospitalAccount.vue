@@ -1,0 +1,236 @@
+<template>
+	<view class="g-page">
+    <g-flag typeFg="29" isShowFg />
+		<g-choose-pat
+      @choose-pat="getListData()"
+    />
+    <view class="bg">
+      <view class="container">
+        <view class="p40">
+          <view class="f28 color-888">账户余额(元)</view>
+          <view class="f80 g-bolder">{{lists.accountBalance}}</view>
+          <view class="f28 mt24 color-444"><text>患者：</text><text>{{lists.patientName}}</text><text v-if="lists.accountNo">&nbsp;<text
+              style="color: #e6e6e6"
+              >|</text
+            >&nbsp;<text>账户：</text><text>{{lists.accountNo}}</text></text></view>
+            <view class="f-button">
+              <button
+                @click="confirmForm1"
+                class="f-b1 mr8 btn btn-primary"
+              >
+                提现
+              </button>
+              <button
+                @click="confirmForm"
+                class="f-b2 ml8 btn btn-primary"
+              >
+                充值
+              </button>
+            </view>
+        </view>
+      </view>
+      <!-- <view class="sec-con">
+        <view class="content">
+          <view class="con-flex"><view class="iconfont icon-color mr8">&#xe6d6;</view><text class="color-444">您有一笔金额提现中</text></view>
+          <view class="iconfont">&#xe66b;</view>
+        </view>
+      </view> -->
+      <g-flag typeFg="30" isShowFgTip />
+    </view>
+    <Order-Reg-Confirm
+      :title="confirmFgTitle"
+      @confirm="goWithdrawal"
+      height="50vh"
+      confirmText="提现"
+      cannerText="取消"
+      headerIcon=""
+      ref="regDialogConfirm"
+      isShowCloseIcon
+      footerBtnIsometric
+    >
+      <view>
+        <view class="mb40">
+        <view class="dialog-t f32 mb32"><text class="dt-width color-888">当前可提现</text><text class="dt-red g-bolder">{{lists.allowOnLineCash ? lists.allowOnLineCash : '0'}}元</text></view>
+        <view class="dialog-t f32"><text class="dt-width color-888">到账账户</text><text class="g-bolder">原路返回</text></view>
+        </view>
+        <g-flag
+          v-model:title="confirmFgTitle"
+          typeFg="1017"
+          isShowFgTip
+          isHideTitle
+          aaa
+        />
+      </view>
+    </Order-Reg-Confirm>
+	</view>
+</template>
+
+<script lang="ts" setup>
+import { defineComponent, ref } from 'vue';
+import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+import { onLoad, onPullDownRefresh, onShow } from "@dcloudio/uni-app";
+import { GStores, debounce, ServerStaticData } from "@/utils";
+import api from "@/service/api";
+import { joinQuery } from '@/common';
+import { deQueryForUrl} from '@/common/utils';
+import { type IHospitalAccountDetail } from './utils/index';
+interface IPageProps {
+  hosId: string;
+}
+const pageProps = ref(<IPageProps>{});
+const gStores = new GStores();
+const confirmFgTitle = ref('');
+const lists = ref<IHospitalAccountDetail>({} as IHospitalAccountDetail);
+const regDialogConfirm = ref<any>('');
+let getListData = async () => {
+  const { patientId } = gStores.userStore.patChoose;
+  const arg = {
+    patientId,
+    hosId: pageProps.value.hosId,
+    // hosId: '13001'
+  };
+  // uni.startPullDownRefresh({});
+
+  const { result } = await api.getHospitalAccountDetail<IHospitalAccountDetail>(arg).finally(() => {
+    // uni.stopPullDownRefresh();
+  });
+  lists.value = result || [];
+};
+
+getListData = debounce(getListData, 80);
+
+let accountWithdrawal = async () => {
+  const { patientId } = gStores.userStore.patChoose;
+  const arg = {
+    patientId,
+    accountNo: lists.value.accountNo,
+    amount: lists.value.allowOnLineCash,
+  };
+
+  await api.accountWithdrawal(arg).then((res) => {
+    if(res.code == '0'){
+      setTimeout(() => {
+        init();
+        uni.showToast({
+          title: '提现申请已提交，提现金额将原路返回，请耐心等待',
+          icon: 'none',
+        });
+      }, 600);
+    }
+  }).catch((err) => {
+    console.log(err);
+    setTimeout(() => {
+      init();
+      uni.showToast({
+        title: err.message,
+        icon: 'none',
+      });
+    }, 600);
+  });
+};
+accountWithdrawal = debounce(accountWithdrawal, 80);
+//下拉刷新
+//  onPullDownRefresh(async () => {
+//     await init();
+//     uni.stopPullDownRefresh();
+//   });
+
+const init = async () => {
+  // await gStores.userStore.getPatList();
+  await getListData();
+};
+onLoad(async (opt) => {
+  pageProps.value = deQueryForUrl(opt);
+});
+onShow(() => {
+    init();
+  });
+const confirmForm = () => {
+  const { patientId } = gStores.userStore.patChoose;
+  const { cardNumber, patientName } = lists.value
+  uni.navigateTo({
+    url: joinQuery("/pagesA/hospitalCare/paymentPage", {
+      hosId: pageProps.value.hosId,
+      cardNumber,
+      patientName,
+      hospitalAccount: '12',
+    }),
+  });
+};
+const confirmForm1 = () => {
+  if(lists.value.accountNo && lists.value.allowOnLineCash != '0'){
+    regDialogConfirm.value.show();
+  }else{
+    uni.showToast({
+        title: '当前没有可提现金额',
+        icon: 'none',
+      });
+  }
+};
+
+const goWithdrawal = () => {
+  accountWithdrawal()
+
+};
+</script>
+
+<style lang="scss" scoped>
+.bg {
+  background: url($base-url + 'v3-hosAccount-bj.png') 100%/100%
+  no-repeat;
+  height: 1256rpx;
+  .container{
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
+    margin-top: 40rpx;
+    margin-bottom: 24rpx;
+    background: #ffffff;
+    border: 1rpx solid #e6e6e6;
+    border-radius: 16rpx;
+    .f-button{
+      margin-top: 104rpx;
+      display: flex;
+      .f-b1{
+        background: #e9f0ff;
+        color: #296FFF;
+        width: 100%;
+      }
+      .f-b2{
+        width: 100%;
+      }
+    }
+  }
+  .sec-con{
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
+    margin-top: 24rpx;
+    background: #ffffff;
+    border: 1rpx solid #e6e6e6;
+    border-radius: 8rpx;
+    .content{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10rpx 24rpx;
+      .con-flex{
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+      }
+      .icon-color{
+        font-size: 40rpx;
+        color: var(--hr-warning-color-6);
+      }
+    }
+  }
+}
+.dialog-t{
+  .dt-width{
+    display: inline-block;
+    width: 176rpx;
+  }
+  .dt-red{
+    color: #FF5040;
+  }
+}
+</style>
