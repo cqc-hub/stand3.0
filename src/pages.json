@@ -407,6 +407,15 @@
           "style": {
             "navigationBarTitleText": "新增收货地址"
           }
+        }, 
+        {
+          "path": "selfService/nucleicBilling",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "核酸开单"
+          }
         }
       ]
     }

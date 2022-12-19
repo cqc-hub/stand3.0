@@ -195,7 +195,6 @@
    gStores.userStore.updatePatChoose(item);
  };
 
-//  const searchPlaceholder = ref('搜索科室、医生或疾病');
  const searchPlaceholder = ref('搜索疾病、症状或药品');
  let homeConfig:any[] = []; //首页配置总参数
  let topMenuList = ref<IRoute[]>([]); //首页顶部menu
@@ -221,6 +220,11 @@
      withShareTicket: true,
    });
    // #endif
+
+   // #ifdef MP-ALIPAY
+    //对接支付宝首页消息提醒
+    globalStore.isLogin &&!uni.getStorageSync("hospital_order") && authorization();
+    // #endif
  });
  const getNotice = async () => {
    const { result } = await api.getAnnouncementCms({});
@@ -291,7 +295,6 @@
   }else{
     return false
   }
-
  }
 
  //获取配置数据
@@ -338,10 +341,21 @@ uni.navigateTo({
      url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
    });
    }
-
-
-
  };
+ //支付宝——首页消息推送
+ const authorization=()=> {
+      my.getAuthCode({
+        scopes: ["hospital_order"], // 主动授权：auth_user，静默授权：auth_base。或者其它scope
+        success: async (res) => {
+          // let resp = await api.authorization({
+          //   accountType: globalStore.browser.accountType,
+          //   code: res.authCode,
+          //   userId: globalStore.openId,
+          // });
+          // uni.setStorageSync("hospital_order", resp.result);
+        },
+      });
+    }
 </script>
 
 <style lang="scss" scoped>

@@ -11,6 +11,7 @@ import "./styles/index.scss";
 
 // #ifdef MP-ALIPAY
 import monitor from "@/js_sdk/alipay/alipayLogger.js";
+import { isGeneratorFunction } from "util/types";
 // #endif
 
 onLaunch((opt) => {
@@ -20,17 +21,19 @@ onLaunch((opt) => {
 
   // #ifdef MP-ALIPAY
   const alipayPid = global.systemInfo.alipayPid; 
-  
-  monitor.init({
-    pid: alipayPid,
-    sample: 1,
-    autoReportApi: true,
-    autoReportPage: true,
-    // Http请求返回数据中状态码字段名称
-    code: ["code"],
-    // Http返回数据中的error message字段名称
-    msg: [],
-  });
+  if(alipayPid){
+    console.log('支付宝入口埋点');
+    monitor.init({
+      pid: alipayPid,
+      sample: 1,
+      autoReportApi: true,
+      autoReportPage: true,
+      // Http请求返回数据中状态码字段名称
+      code: ["code"],
+      // Http返回数据中的error message字段名称
+      msg: [],
+    });
+  }
   // #endif
 });
 onShow(async (opt) => {

@@ -200,7 +200,7 @@
 
   const pagesList = {
     '1': '/pagesC/cloudHospital/myPath?path=pages/hospitalGuide/hospitalGuide', //医院指南多院区
-    '2': '/pagesC/cloudHospital/myPath?path=pagesC/selfService/nucleicBilling&query=["token","openId"]', //核酸开单多院区
+    '2': '/pagesC/selfService/nucleicBilling', //核酸开单多院区
   };
   const gStores = new GStores();
 

@@ -196,7 +196,6 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
 const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
   const alipayPid = global.systemInfo.alipayPid;
   console.log('缴费埋点',isSuccess,type);
-  
   if (alipayPid && type) {
     monitor.api({
       api: '门诊缴费',
