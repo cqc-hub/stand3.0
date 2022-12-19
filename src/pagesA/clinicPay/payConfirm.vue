@@ -158,7 +158,7 @@
 
   // 0 元缴费
   const payFeeZero = async () => {
-    const { serialNo, cardNumber, patientName, hosId } = info.value;
+    const { serialNo, cardNumber, patientName, hosId, visitNo } = info.value;
     const { patientId } = gStores.userStore.patChoose;
     const {
       browser: { source },
@@ -166,15 +166,21 @@
     } = gStores.globalStore;
 
     const args = {
-      mergeOrder: serialNo,
+      serialNo,
       cardNumber,
       patientName,
       patientId: cardNumber ? undefined : patientId,
       source,
       herenId,
-      businessType: '1',
+      // businessType: '1',
       hosId,
+      visitNo,
+      payType: 'WX_MINI',
     };
+
+    // #ifdef MP-ALIPAY
+    args.payType = 'ALI_MINI';
+    // #endif
 
     await api.clinicSpecialPayInform(args);
   };

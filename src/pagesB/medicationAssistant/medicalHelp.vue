@@ -51,6 +51,8 @@
       </button>
     </view>
 
+    <g-message />
+
     <sel-Way-Popup
       :sel-list="drayWaySelList"
       @item-click="wayClick"

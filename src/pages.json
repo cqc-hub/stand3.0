@@ -318,6 +318,14 @@
             "navigationBarTitleText": "病案复印"
           }
         },
+
+        {
+          "path": "medicationAssistant/helpChooseWay",
+          "style": {
+            "navigationBarTitleText": "确认快递信息"
+          }
+        },
+
         {
           "path": "hospitalAccount/hospitalAccount",
           "extend": {
@@ -407,7 +415,7 @@
           "style": {
             "navigationBarTitleText": "新增收货地址"
           }
-        }, 
+        },
         {
           "path": "selfService/nucleicBilling",
           "extend": {
