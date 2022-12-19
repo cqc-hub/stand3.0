@@ -223,7 +223,8 @@
 
    // #ifdef MP-ALIPAY
     //对接支付宝首页消息提醒
-    globalStore.isLogin &&!uni.getStorageSync("hospital_order") && authorization();
+    const alipayPid = global.systemInfo.alipayPid;
+    alipayPid&&globalStore.isLogin &&!uni.getStorageSync("hospital_order") && authorization();
     // #endif
  });
  const getNotice = async () => {
@@ -342,20 +343,22 @@ uni.navigateTo({
    });
    }
  };
+  // #ifdef MP-ALIPAY
  //支付宝——首页消息推送
  const authorization=()=> {
       my.getAuthCode({
         scopes: ["hospital_order"], // 主动授权：auth_user，静默授权：auth_base。或者其它scope
         success: async (res) => {
-          // let resp = await api.authorization({
-          //   accountType: globalStore.browser.accountType,
-          //   code: res.authCode,
-          //   userId: globalStore.openId,
-          // });
-          // uni.setStorageSync("hospital_order", resp.result);
+          let resp = await api.authorization({
+            accountType: globalStore.browser.accountType,
+            code: res.authCode,
+            userId: globalStore.openId,
+          });
+          uni.setStorageSync("hospital_order", resp.result);
         },
       });
     }
+   // #endif
 </script>
 
 <style lang="scss" scoped>
