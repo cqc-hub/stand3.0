@@ -291,13 +291,15 @@
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
-
-    if (pageProps.value.params) {
+    const { mzParams, deParams } = pageProps.value;
+    /**
+     * else if (deParams) {
+    }
+     */
+    if (mzParams) {
       //扫码进来的
       uni.reLaunch({
-        url:
-          '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=' +
-          pageProps.value.params,
+        url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=' + mzParams,
       });
     } else {
       uni.reLaunch({
