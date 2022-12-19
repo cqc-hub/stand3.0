@@ -329,7 +329,7 @@ export const usePayPage = () => {
         selUnPayList.value.push(item);
       } else {
         gStores.messageStore.showMessage(
-          '不同院区的门诊缴费订单不支持合并支付！',
+          '您选择的门诊缴费订单不支持合并支付',
           1500
         );
       }
