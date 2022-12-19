@@ -306,9 +306,12 @@
     const idx = selList.value.findIndex((o) => o.serialNo === serialNo);
 
     if (idx === -1) {
-      selList.value.push(item);
+      const allItem = detailData.value.costList!.filter(
+        (o) => o.serialNo === serialNo
+      );
+      selList.value.push(...allItem);
     } else {
-      selList.value.splice(idx, 1);
+      selList.value = selList.value.filter((o) => o.serialNo !== serialNo);
     }
   };
 

@@ -148,11 +148,35 @@
     }
   };
 
-  const payClick = () => {
+  const payClick = async () => {
     if (<any>info.value.totalNeedSelfpay * 1 === 0) {
+      await payFeeZero();
     } else {
       refPay.value.show();
     }
+  };
+
+  // 0 元缴费
+  const payFeeZero = async () => {
+    const { serialNo, cardNumber, patientName, hosId } = info.value;
+    const { patientId } = gStores.userStore.patChoose;
+    const {
+      browser: { source },
+      herenId,
+    } = gStores.globalStore;
+
+    const args = {
+      mergeOrder: serialNo,
+      cardNumber,
+      patientName,
+      patientId: cardNumber ? undefined : patientId,
+      source,
+      herenId,
+      businessType: '1',
+      hosId,
+    };
+
+    await api.clinicSpecialPayInform(args);
   };
 
   const getNormalData = async () => {
@@ -245,7 +269,6 @@
       cardNumber,
       mergeOrder: mergeOrder || childOrder,
     };
-    console.log('serialNo', serialNo);
 
     const {
       result: { phsOrderNo },

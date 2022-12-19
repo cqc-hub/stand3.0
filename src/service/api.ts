@@ -184,9 +184,14 @@ const queryApi = {
       // reportCmPV_YLName: '门诊缴费',
     }),
 
-   //门诊创建订单
+  //门诊创建订单
   createClinicOrder: <T = any>(data) =>
     service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), {
+      hideLoading: false,
+    }),
+
+  clinicSpecialPayInform: <T = any>(data) =>
+    service.post<T>('/phs-query/clinical/clinicSpecialPayInform', parm(data), {
       hideLoading: false,
     }),
 
@@ -284,15 +289,15 @@ const queryApi = {
   //账号提现
   accountWithdrawal: <T>(data) =>
     service.post<T>('/phs-query/hospitalAccount/accountWithdrawal', parm(data)),
-     //自助开单-获取开单项目列表
+  //自助开单-获取开单项目列表
   getItemList: <T>(data) =>
     service.post('/phs-query/billing/getItemList', parm(data)),
   //自助开单-创建开单订单
-  createBillingOrder:  <T = any>(data) =>
+  createBillingOrder: <T = any>(data) =>
     service.post('/phs-query/billing/createBillingOrder', parm(data), {
       reportCmPV_YLName: '核酸检测预约',
       hideLoading: false,
-    })
+    }),
 };
 
 // 挂号服务
