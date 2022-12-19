@@ -27,7 +27,8 @@
             class="row flex-between"
           >
             <view class="label">{{ item.label }}</view>
-            <view v-if="item.key"
+            <view
+              v-if="item.key"
               :class="{
                 'color-error': item.key === 'totalNeedSelfpay',
               }"
@@ -35,12 +36,10 @@
             >
               {{ info[item.key] || 0 }}元
             </view>
-            <view v-if="item.value" 
-              class="value g-bold color-error"
-            >
+            <view v-if="item.value" class="value g-bold color-error">
               {{ item.value || 0 }}元
             </view>
-          </view> 
+          </view>
         </view>
       </view>
     </view>
@@ -53,7 +52,7 @@
         </text>
       </view>
 
-      <button @click="refPay.show" class="btn g-border btn-warning pay-btn">
+      <button @click="payClick" class="btn g-border btn-warning pay-btn">
         缴费
       </button>
     </view>
@@ -89,9 +88,9 @@
   import api from '@/service/api';
 
   interface IDetailInfo {
-    label:string;
-    value?:string;
-    key?:string;
+    label: string;
+    value?: string;
+    key?: string;
   }
 
   const pageProps = ref(<TPayConfirmPageProp>{});
@@ -136,7 +135,7 @@
         patientName: string;
         hosId: string;
         childOrder: string;
-        costInfo:Object
+        costInfo: Object;
       }
     >{}
   );
@@ -146,6 +145,13 @@
       getScanData();
     } else {
       getNormalData();
+    }
+  };
+
+  const payClick = () => {
+    if (<any>info.value.totalNeedSelfpay * 1 === 0) {
+    } else {
+      refPay.value.show();
     }
   };
 
@@ -163,15 +169,15 @@
 
     isComplete.value = true;
     info.value = result;
-    //处理页面展示的参数 
-    if(result.costInfo != '{}'){
-    for(var key in JSON.parse(result.costInfo)){
-      console.log(key)
-      details.value.push({
-        label: key,
-        value: JSON.parse(result.costInfo)[key],
-      })
-    }
+    //处理页面展示的参数
+    if (result.costInfo != '{}') {
+      for (var key in JSON.parse(result.costInfo)) {
+        console.log(key);
+        details.value.push({
+          label: key,
+          value: JSON.parse(result.costInfo)[key],
+        });
+      }
     }
   };
 
@@ -222,9 +228,9 @@
     const patientName = info.value.patientName;
     const source = gStores.globalStore.browser.source;
 
-    const { visitDate, mergeOrder,serialNo} = pageProps.value;
-    
-    const { hosId, visitNo, childOrder,cardNumber} = info.value;
+    const { visitDate, mergeOrder, serialNo } = pageProps.value;
+
+    const { hosId, visitNo, childOrder, cardNumber } = info.value;
 
     const args = {
       businessType: '1',
@@ -239,8 +245,8 @@
       cardNumber,
       mergeOrder: mergeOrder || childOrder,
     };
-     console.log('serialNo',serialNo);
-     
+    console.log('serialNo', serialNo);
+
     const {
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
@@ -262,17 +268,19 @@
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
-    
+
     if (pageProps.value.params) {
       //扫码进来的
-        uni.reLaunch({
-           url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params='+pageProps.value.params,
-         });
-      }else{
-        uni.reLaunch({
-           url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-         });
-      }
+      uni.reLaunch({
+        url:
+          '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=' +
+          pageProps.value.params,
+      });
+    } else {
+      uni.reLaunch({
+        url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+      });
+    }
   };
 
   const init = () => {
@@ -285,9 +293,9 @@
     }
 
     if (opt) {
-      pageProps.value = deQueryForUrl(deQueryForUrl(opt)); 
-      console.log('列表进',pageProps.value);
-      
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      console.log('列表进', pageProps.value);
+
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
       }

@@ -281,6 +281,17 @@
       @cancelButton="isCancelOrderDialogShow = false"
       @confirmButton="cancelOrderDialogConfirm"
     />
+
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      @pay-click="getPayInfo"
+      autoInOne
+      ref="refPay"
+    >
+      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+    </g-pay>
     <g-message />
   </view>
 </template>
@@ -304,55 +315,13 @@
     patientTempList,
     orderStatusMap,
   } from './utils/regDetail';
-  import api from '@/service/api';
+  import {
+    type IGPay,
+    payMoneyOnline,
+    toPayPull,
+  } from '@/components/g-pay/index';
 
-  // api.getRegOrderInfo = () =>
-  //   Promise.resolve({
-  //     result: {
-  //       sysCode: '1001033',
-  //       deptName: '眼科',
-  //       hosGisLng: 121.264666,
-  //       ampm: '1',
-  //       orderId: '2210130519500014',
-  //       patientId: '5229890130',
-  //       numId: '2022102932020060500000000004513',
-  //       hosDeptId: '10206000',
-  //       idCard: '3303**********6713',
-  //       fee: 12,
-  //       ampmName: '上午',
-  //       hisResult: '',
-  //       orderStatus: '0',
-  //       source: 19,
-  //       upIdCard: '',
-  //       schId: '20200605000000000045',
-  //       visitingArea: '',
-  //       docName: '林优',
-  //       categorName: '普通',
-  //       appointmentTime: '08:00',
-  //       clinicalType: '1',
-  //       hosName: '台州第一人民医院',
-  //       patientName: '陈钦川',
-  //       cardType: '19',
-  //       appointmentNumber: '3',
-  //       hosId: '1279',
-  //       herenId: 4276138,
-  //       patientPhone: '138****9891',
-  //       filing: '',
-  //       hosOrderId: '2022102000000003',
-  //       createTime: '2022-10-13T01:26:35.000+0000',
-  //       categor: '2',
-  //       hosDocId: '0000003060',
-  //       hosGisLat: 28.643927,
-  //       appointmentDate: '2022-10-20',
-  //       cardNumber: '10830963',
-  //       schQukCategor: '眼科林优[普]',
-  //     },
-  //     timeTaken: 31,
-  //     code: 0,
-  //     innerMessage: '成功',
-  //     message: '成功',
-  //     respCode: 0,
-  //   });
+  import api from '@/service/api';
 
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -367,9 +336,17 @@
       orderRegInfo.value.orderStatus
     );
   });
+  const payArg = ref<BaseObject>({});
+  const refPay = ref<any>('');
   const isShowFooter = computed(() =>
     ['23', '45', '10', '70', '0', '20'].includes(orderRegInfo.value.orderStatus)
   );
+  const refPayList = ref([
+    {
+      label: '在线支付',
+      key: 'online',
+    },
+  ]);
 
   const qrCodeOpt = ref({
     // 二维码
@@ -480,13 +457,11 @@
       hosInfo.value = hos;
     }
 
-    const { downTime } = result;
+    const { downTime, qrCode } = result;
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
     }
-
-    const { qrCode } = result;
 
     result._appointmentDate = `${result.appointmentDate} ${
       result.ampmName + result.appointmentTime
@@ -529,8 +504,48 @@
     });
   };
 
-  const payOrder = () => {
-    console.log('payyyyy');
+  const payOrder = async () => {
+    const {
+      herenId,
+      browser: { source },
+    } = gStores.globalStore;
+    const { orderId } = pageProps.value;
+
+    const arg = {
+      herenId,
+      source,
+      orderId,
+    };
+
+    const { result } = await api.orderPayValid(arg);
+
+    if (result && result.paySign) {
+      // getPayInfo
+      const { hosId, fee } = orderRegInfo.value;
+      payArg.value = {
+        phsOrderNo: orderId,
+        sign: result.paySign,
+        totalFee: fee,
+        hosId,
+        phsOrderSource: '1',
+      };
+
+      refPay.value.show();
+    }
+  };
+
+  const getPayInfo = () => {
+    toPay();
+  };
+
+  const toPay = async () => {
+    const res = await payMoneyOnline({ ...payArg.value });
+    await toPayPull(res);
+    payAfter();
+  };
+
+  const payAfter = () => {
+    init();
   };
 
   const goDoctorCard = () => {

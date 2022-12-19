@@ -1,18 +1,62 @@
 <template>
   <view class="">
     <g-popup :zIndex="200" :title="'选择取药方式'" ref="refAddDialog">
-      <view class="g-container">233</view>
+      <view class="pat-list">
+        <view
+          v-for="(item, i) in selFiles"
+          :key="i"
+          :class="{
+            'pat-active': selList.includes(item.value),
+          }"
+          @click="itemClick(item)"
+          class="pat-item"
+        >
+          <view class="user-label color-111 f36 text-ellipsis">
+            {{ item.label }}
+          </view>
+        </view>
+
+        <view class="mt40">
+          <g-flag typeFg="32" isShowFgTip aaa />
+        </view>
+      </view>
     </g-popup>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { nextTick, ref } from 'vue';
 
+  defineProps<{
+    selList: string[];
+  }>();
+  const emits = defineEmits(['item-click']);
   const refAddDialog = ref<any>('');
+  const selFiles = [
+    {
+      label: '医院窗口取药',
+      value: '医院窗口取药',
+    },
+    {
+      label: '快递配送到家',
+      value: '快递配送到家',
+    },
+  ];
 
   const show = () => {
     refAddDialog.value.show();
+  };
+
+  const close = () => {
+    refAddDialog.value.close();
+  };
+
+  const itemClick = (item) => {
+    emits('item-click', item);
+
+    nextTick(() => {
+      close();
+    });
   };
 
   defineExpose({
@@ -20,4 +64,44 @@
   });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .pat-list {
+    width: calc(100% - 64rpx);
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+    padding: 32rpx;
+    padding-bottom: 40rpx;
+
+    .pat-item {
+      flex: 1;
+      border: 2rpx solid var(--hr-neutral-color-4);
+      border-radius: 16rpx;
+      padding: 32rpx;
+      background-color: #fff;
+
+      display: grid;
+      justify-content: center;
+      align-items: center;
+
+      .user-avatar {
+        border-radius: 300rpx;
+        width: 64rpx;
+      }
+
+      .user-label {
+        font-weight: 700;
+      }
+
+      .ico-checkbox {
+        color: var(--hr-brand-color-6);
+        font-size: 46rpx;
+      }
+
+      &.pat-active {
+        border-color: var(--hr-brand-color-6);
+        border-width: 4rpx;
+      }
+    }
+  }
+</style>

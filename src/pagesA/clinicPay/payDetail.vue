@@ -295,7 +295,13 @@
       props.value.payState === '1' && pageConfig.value.isSubitemPay === '1'
     );
   });
-  const selItem = (item: TCostList[number]) => {
+  const selItem = ({
+    item,
+    index,
+  }: {
+    item: TCostList[number];
+    index: number;
+  }) => {
     const { serialNo } = item;
     const idx = selList.value.findIndex((o) => o.serialNo === serialNo);
 
@@ -320,7 +326,7 @@
           visitNo: visitNo!,
           visitDate: visitDate!,
           cardNumber: props.value?.cardNumber,
-          params
+          params,
         });
       } else {
         toPay();

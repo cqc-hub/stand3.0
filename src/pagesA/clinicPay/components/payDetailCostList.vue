@@ -6,7 +6,7 @@
           <template #title>
             <view class="collapse-title flex-between g-bold">
               <view v-if="mulit" class="flex1 f32 flex-normal">
-                <view @click.stop="selItem(item)" class="flex-normal">
+                <view @click.stop="selItem(item, idx)" class="flex-normal">
                   <text
                     :class="{
                       'color-blue': isActive(item),
@@ -119,8 +119,11 @@
     return props.selList.findIndex((o) => o.serialNo === item.serialNo) !== -1;
   };
 
-  const selItem = (item) => {
-    emits('sel-item', item);
+  const selItem = (item, idx) => {
+    emits('sel-item', {
+      item,
+      index: idx,
+    });
   };
 </script>
 

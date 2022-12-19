@@ -143,7 +143,7 @@ const baseApi = {
   //获取公告资讯
   getAnnouncementCms: (data) =>
     service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
-      monitorName: '预约挂号', 
+      monitorName: '预约挂号',
     }),
 
   //查询对应版本号
@@ -256,10 +256,13 @@ const queryApi = {
     ),
   //创建住院缴费订单
   createInHospitalPayOrder: <T>(data) =>
-    service.post<T>('/phs-query/hospital/createInHospitalPayOrder', parm(data),
-    {
-      reportCmPV_YLName: '住院缴费',
-    }),
+    service.post<T>(
+      '/phs-query/hospital/createInHospitalPayOrder',
+      parm(data),
+      {
+        reportCmPV_YLName: '住院缴费',
+      }
+    ),
   //获取住院缴费记录
   getInHospitalPayInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalPayInfo', parm(data), {
@@ -273,11 +276,13 @@ const queryApi = {
     service.post<T>('/phs-query/hospital/getScanInHospitalInfo', parm(data)),
   //查询患者院内账户
   getHospitalAccountDetail: <T>(data) =>
-    service.post<T>('/phs-query/hospitalAccount/getHospitalAccountDetail', parm(data)),
+    service.post<T>(
+      '/phs-query/hospitalAccount/getHospitalAccountDetail',
+      parm(data)
+    ),
   //账号提现
   accountWithdrawal: <T>(data) =>
     service.post<T>('/phs-query/hospitalAccount/accountWithdrawal', parm(data)),
-    
 };
 
 // 挂号服务
@@ -291,6 +296,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  orderPayValid: (data: any) =>
+    service.post('/phs-reg/regNotify/orderPayValid', parm(data), {
+      hideLoading: false,
+    }),
+
   delMyCollect: (data: any) =>
     service.post('/phs-reg/collect/delMyCollect', parm(data), {
       hideLoading: false,
@@ -301,14 +311,14 @@ const regApi = {
     service.post('/phs-reg/reg/addReg', parm(data), {
       hideLoading: false,
       monitorName: '预约挂号',
-      reportCmPV_YLName: '挂号缴费'
+      reportCmPV_YLName: '挂号缴费',
     }),
 
   // 排班
   getDocSch: (data: any) =>
     service.post('/phs-reg/reg/getDocSch', parm(data), {
       hideLoading: false,
-      reportCmPV_YLName: '预约挂号'
+      reportCmPV_YLName: '预约挂号',
     }),
 
   cancelReg: (data: any) =>
@@ -424,7 +434,8 @@ const userApi = {
   addPatByHasBeenTreatedEncry: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatByHasBeenTreatedEncry',
-      parm(data), { 
+      parm(data),
+      {
         reportCmPV_YLName: '在线建档',
       }
     ),
@@ -433,7 +444,8 @@ const userApi = {
   addPatientByHasBeenTreated: (data) =>
     service.post(
       '/phs-user/relevantPatient/addPatientByHasBeenTreated',
-      parm(data), { 
+      parm(data),
+      {
         reportCmPV_YLName: '在线建档',
       }
     ),

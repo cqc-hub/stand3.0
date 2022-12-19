@@ -51,7 +51,11 @@
       </button>
     </view>
 
-    <sel-Way-Popup ref="refAddDialog" />
+    <sel-Way-Popup
+      :sel-list="drayWaySelList"
+      @item-click="wayClick"
+      ref="refAddDialog"
+    />
   </view>
 </template>
 
@@ -66,39 +70,6 @@
   import HtlpList from './components/htlpList.vue';
   import SelWayPopup from './components/selWayPopup.vue';
 
-  api.getDrugDelivery = () =>
-    Promise.resolve(<any>{
-      code: 0,
-      respCode: 999002,
-      message: '成功',
-      result: {
-        patientId: '000001978',
-        takenDrug: '0',
-        drugList: [
-          {
-            hosId: '13001',
-            hosName: '乐清市人民医院',
-            drugTypeCode: '0',
-            drugTypeName: '西药',
-            deliveryType: '1',
-            prescId: '20221215000000000203',
-            prescNo: '2022121500003949',
-            takenDrugType: '0',
-          },
-          {
-            hosId: '13001',
-            hosName: '乐清市人民医院',
-            drugTypeCode: '0',
-            drugTypeName: '西药',
-            deliveryType: '1',
-            prescId: '20221214000000000803',
-            prescNo: '2022121400005983',
-            takenDrugType: '0',
-          },
-        ],
-      },
-    });
-
   const gStores = new GStores();
   const tabCurrent = ref(0);
   const tabField = [
@@ -112,10 +83,15 @@
     },
   ] as const;
   const refAddDialog = ref<any>('');
+  const isComplete = ref({
+    '0': false,
+    '1': false,
+  });
 
   const waitSelList = ref<IWaitListItem[]>([]);
   const selList = ref<IWaitListItem[]>([]);
   const seledList = ref<IWaitListItem[]>([]);
+  const drayWaySelList = ref<IOptions[]>([]);
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
@@ -138,6 +114,7 @@
   // 0-未取药 1-已取药
   const getListData = async (takenDrug: '0' | '1') => {
     const listNow = takenDrug === '0' ? waitSelList : seledList;
+    isComplete.value[takenDrug] = false;
     listNow.value = [];
     selList.value = [];
 
@@ -147,7 +124,9 @@
       patientId,
     };
 
-    const { result } = await api.getDrugDelivery(args);
+    const { result } = await api.getDrugDelivery(args).finally(() => {
+      isComplete.value[takenDrug] = true;
+    });
 
     const rList = result && result.drugList;
     if (rList && rList.length) {
@@ -165,6 +144,15 @@
 
   const init = () => {
     getListData('0');
+  };
+
+  const wayClick = (item: IOptions) => {
+    drayWaySelList.value = [item.value];
+    if (item.value === '快递配送到家') {
+      console.log('233');
+    } else {
+      // 医院窗口取药
+    }
   };
 
   onMounted(() => {
