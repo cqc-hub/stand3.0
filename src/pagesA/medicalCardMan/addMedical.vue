@@ -317,6 +317,7 @@
    *  1  军人
    *  2  军属
    */
+  let oldFormList: any[] = [];
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
@@ -409,6 +410,13 @@
       default:
         gStores.messageStore.showMessage('未知的就诊人类型');
         break;
+    }
+
+    const completeFormList = listArr.join(',');
+    if (completeFormList === oldFormList.join(',')) {
+      return;
+    } else {
+      oldFormList = [...listArr];
     }
 
     formList = pickTempItem(listArr);
@@ -589,14 +597,14 @@
       props.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
-    
-      //暂时注释 这个值是undifined
+
+    //暂时注释 这个值是undifined
     // if ((props.patientType as string) === '-1') {
-      // #ifdef MP-ALIPAY
-      if (props.pageType === 'perfectReal') {
-        formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
-      }
-      // #endif
+    // #ifdef MP-ALIPAY
+    if (props.pageType === 'perfectReal') {
+      formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
+    }
+    // #endif
     // }
 
     nextTick(() => {

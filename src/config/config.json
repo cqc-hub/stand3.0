@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001055",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -74,11 +74,11 @@
       "alipayAppid": "2021003164669106",
       "h5Appid": "",
       "name": "联勤保障部队第987医院",
-      "isOpenHealthCard": true,
+      "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "dl5dt/lx8x6q93cionolzw==",
-      "isOpenOcr": true,
+      "isOpenOcr": false,
       "isHideHomeLogo":true
     },
     "1001054": {
