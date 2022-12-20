@@ -188,6 +188,7 @@
     // #endif
 
     await api.clinicSpecialPayInform(args);
+    payAfter();
   };
 
   const getNormalData = async () => {
