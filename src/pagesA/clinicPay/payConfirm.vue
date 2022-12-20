@@ -47,9 +47,7 @@
     <view v-if="isComplete" class="g-footer">
       <view class="flex1 flex-normal count-money">
         <text class="color-444 f28 mr8">还需支付</text>
-        <text class="f36 g-bold color-error">
-          {{ info.totalNeedSelfpay || '' }}元
-        </text>
+        <text class="f36 g-bold color-error">{{ info.payAmount || '' }}元</text>
       </view>
 
       <button @click="payClick" class="btn g-border btn-warning pay-btn">
@@ -136,6 +134,9 @@
         hosId: string;
         childOrder: string;
         costInfo: Object;
+        payAmount: string;
+        recipeNo: string;
+        otherPayWay: string;
       }
     >{}
   );
@@ -149,7 +150,7 @@
   };
 
   const payClick = async () => {
-    if (<any>info.value.totalNeedSelfpay * 1 === 0) {
+    if (<any>info.value.payAmount * 1 === 0) {
       await payFeeZero();
     } else {
       refPay.value.show();
@@ -158,7 +159,8 @@
 
   // 0 元缴费
   const payFeeZero = async () => {
-    const { serialNo, cardNumber, patientName, hosId, visitNo } = info.value;
+    const { serialNo, cardNumber, patientName, hosId, visitNo, payAmount, recipeNo, otherPayWay } =
+      info.value;
     const { patientId } = gStores.userStore.patChoose;
     const {
       browser: { source },
@@ -166,6 +168,7 @@
     } = gStores.globalStore;
 
     const args = {
+      ...info.value,
       serialNo,
       cardNumber,
       patientName,
@@ -175,7 +178,9 @@
       // businessType: '1',
       hosId,
       visitNo,
+      recipeNo,
       payType: 'WX_MINI',
+      otherPayWay
     };
 
     // #ifdef MP-ALIPAY
@@ -260,13 +265,14 @@
 
     const { visitDate, mergeOrder, serialNo } = pageProps.value;
 
-    const { hosId, visitNo, childOrder, cardNumber } = info.value;
+    const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
 
     const args = {
+      ...info.value,
       businessType: '1',
       patientId,
       source,
-      totalCost: _totalCost,
+      totalCost: payAmount,
       hosId,
       hosName: getHosName.value,
       visitDate,
@@ -282,7 +288,7 @@
 
     const res = await payMoneyOnline({
       phsOrderNo,
-      totalFee: _totalCost,
+      totalFee: payAmount,
       phsOrderSource: '2',
       hosId,
       hosName: getHosName.value,

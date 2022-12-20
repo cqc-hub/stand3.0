@@ -220,6 +220,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  addDrugDelivery: (data) =>
+    service.post('/phs-query/delivery/addDrugDelivery', parm(data), {
+      hideLoading: false,
+    }),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),
@@ -507,12 +512,9 @@ const userApi = {
         showMessage: false,
       }
     ),
-    //首页授权接口
-    authorization: (data) =>
-    service.post<IPat[]>(
-      '/phs-user/ali/authorization',
-      parm(data)
-    ),    
+  //首页授权接口
+  authorization: (data) =>
+    service.post<IPat[]>('/phs-user/ali/authorization', parm(data)),
 };
 //统一认证服务
 const authApi = {

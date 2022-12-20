@@ -15,10 +15,48 @@
         </view>
 
         <view class="container-box g-border mb16 box-padding">
-          <view class="g-bold f36">选择快递方式</view>
+          <view id="_express" class="g-bold f36">选择快递方式</view>
+
+          <view class="mt24 pb32 g-border-bottom">
+            <Sel-Express
+              :selectLength="3"
+              :list="aimList"
+              v-model:value="aimValue"
+              column="2"
+            />
+          </view>
+
+          <view class="mt24 f28">
+            <view class="flex-between">
+              <view class="color-888">支付方式</view>
+              <view class="g-bold">到付</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="container-box g-border mb16 box-padding">
+          <view class="g-bold f36">备注</view>
+
+          <view class="remark-content">
+            <uni-easyinput
+              type="textarea"
+              v-model="remark"
+              autoHeight
+              :inputBorder="false"
+              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+              placeholder="如还需以下说明的其他病历资料请备注"
+            />
+
+            <!-- auto-height -->
+          </view>
         </view>
       </view>
     </scroll-view>
+    <view class="g-footer">
+      <button @click="submit" class="btn btn-primary flex1">立即下单</button>
+    </view>
+
+    <g-message />
   </view>
 </template>
 
@@ -39,11 +77,72 @@
 
   import AddressBox from '../medRecordApply/components/medRecordDetailsAddressBox.vue';
   import HelpList from './components/helpList.vue';
+  import SelExpress from './components/selExpress.vue';
 
   const scrollTo = ref('');
+  const remark = ref('');
   const addressList = ref<any[]>([]);
   const gStores = new GStores();
-  const listData = ref<any[]>([{}, {}, {}]);
+  const listData = ref<any[]>([]);
+
+  const aimList = ref([
+    {
+      label: '顺丰快递',
+      value: '1',
+    },
+    {
+      label: '邮政快递',
+      value: '2',
+    },
+  ]);
+
+  const aimValue = ref([]);
+
+  const submit = async () => {
+    const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
+    const { herenId } = gStores.globalStore;
+
+    const deptName = listData.value.map((o) => o.deptName).join(',');
+    const hosId = listData.value[0].hosId;
+    const expressCompany = aimValue.value[0];
+    const detailsAddressData = addressList.value[0];
+    let detailsAddress = '';
+    let provinces = '';
+
+    if (detailsAddressData) {
+      const { province, city, county } = detailsAddressData;
+      detailsAddress = detailsAddressData.detailedAddress;
+      provinces = `${province} ${city} ${county} `;
+    } else {
+      gStores.messageStore.showMessage('请选择快递地址', 3000);
+      scrollTo.value = '_address';
+    }
+    if (!expressCompany) {
+      gStores.messageStore.showMessage('请选择快递方式', 3000);
+      scrollTo.value = '_express';
+    }
+
+    const { expressName, expressPhone } = detailsAddressData;
+
+    const args = {
+      deliveryType: '1',
+      detailsAddress,
+      deptName,
+      expressCompany,
+      expressName,
+      expressPhone,
+      cardNumber,
+      patientId,
+      patientName,
+      herenId,
+      hosId,
+      prescIdList: listData.value.map((o) => o.prescId),
+      prescNoList: listData.value.map((o) => o.prescNo),
+      provinces,
+      remark: remark.value,
+    };
+    await api.addDrugDelivery(args);
+  };
 
   let _firstLoaded = true;
   onShow(async () => {
@@ -60,6 +159,10 @@
 
       addressList.value = result || [];
     }
+  });
+
+  onLoad(() => {
+    listData.value = getLocalStorage('medicalHelp') || [];
   });
 </script>
 

@@ -73,11 +73,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, nextTick } from 'vue';
+  import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
 
   import { GStores, debounce } from '@/utils';
   import { type IWaitListItem } from './utils/medicalHelp';
-
+  import { setLocalStorage, getLocalStorage } from '@/common';
   import api from '@/service/api';
 
   import HtlpList from './components/htlpList.vue';
@@ -118,7 +119,14 @@
     const idx = selList.value.findIndex((o) => o._id === item._id);
 
     if (idx === -1) {
-      selList.value.push(item);
+      const list = [...selList.value, item];
+      const hosIds = [...new Set(list.map((o) => o.hosId))];
+
+      if (hosIds.length > 1) {
+        gStores.messageStore.showMessage('不支持跨院区配送');
+      } else {
+        selList.value.push(item);
+      }
     } else {
       selList.value.splice(idx, 1);
     }
@@ -163,11 +171,52 @@
   const wayClick = (item: IOptions) => {
     drayWaySelList.value = [item.value];
     if (item.value === '快递配送到家') {
-      console.log('233');
+      configToHome();
     } else {
       // 医院窗口取药
+      getMedicalInHos();
     }
   };
+
+  const configToHome = () => {
+    setLocalStorage({
+      medicalHelp: selList.value,
+    });
+    nextTick(() => {
+      uni.navigateTo({
+        url: '/pagesC/medicationAssistant/helpChooseWay',
+      });
+    });
+  };
+
+  const getMedicalInHos = async () => {
+    const hosId = selList.value[0].hosId;
+    const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
+    const { herenId } = gStores.globalStore;
+
+    const args = {
+      prescIdList: selList.value.map((o) => o.prescId),
+      prescNoList: selList.value.map((o) => o.prescNo),
+      deptName: selList.value.map((o) => o.deptName).join(','),
+      deliveryType: '1',
+      hosId,
+      cardNumber,
+      patientId,
+      patientName,
+      herenId,
+    };
+
+    await api.addDrugDelivery(args);
+  };
+
+  onShow(() => {
+    if (getLocalStorage('medicalHelp')) {
+      getListData(tabField[tabCurrent.value].key);
+      setLocalStorage({
+        medicalHelp: '',
+      });
+    }
+  });
 
   onMounted(() => {
     init();
