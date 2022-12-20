@@ -142,6 +142,10 @@
       remark: remark.value,
     };
     await api.addDrugDelivery(args);
+
+    uni.reLaunch({
+      url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
+    });
   };
 
   let _firstLoaded = true;

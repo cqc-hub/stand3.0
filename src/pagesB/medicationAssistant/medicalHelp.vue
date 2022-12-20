@@ -74,7 +74,7 @@
 
 <script lang="ts" setup>
   import { onMounted, ref, nextTick } from 'vue';
-  import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
+  import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
   import { GStores, debounce } from '@/utils';
   import { type IWaitListItem } from './utils/medicalHelp';
@@ -207,6 +207,11 @@
     };
 
     await api.addDrugDelivery(args);
+    gStores.messageStore.showMessage('您已选择为医院窗口取药', 3000, {
+      closeCallBack() {
+        tabCurrent.value = 1;
+      },
+    });
   };
 
   onShow(() => {
@@ -215,6 +220,16 @@
       setLocalStorage({
         medicalHelp: '',
       });
+    }
+  });
+
+  onLoad((opt) => {
+    if (opt) {
+      const { tabIndex } = opt;
+
+      if (tabIndex) {
+        tabCurrent.value = <any>tabIndex * 1;
+      }
     }
   });
 

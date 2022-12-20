@@ -168,7 +168,7 @@
     } = gStores.globalStore;
 
     const args = {
-      ...info.value,
+      extend: info.value,
       serialNo,
       cardNumber,
       patientName,
@@ -268,7 +268,8 @@
     const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
 
     const args = {
-      ...info.value,
+      extend: info.value,
+
       businessType: '1',
       patientId,
       source,
