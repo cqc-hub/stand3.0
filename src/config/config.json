@@ -1,9 +1,9 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
-      "alipayAppid": "2021002133632822",
+      "alipayAppid": "2021003154665105",
       "h5Appid": "wxac2942d44e7c2bd9",
       "name": "台州第一人民医院",
       "isStartComeTest": true,
@@ -72,10 +72,10 @@
     "1001055": {
       "wxAppid": "wxd9a9c329edc6e2b0",
       "alipayAppid": "2021003164669106",
-      "h5Appid": "",
+      "h5Appid": "wx0c53c7e83b3599c1",
       "name": "联勤保障部队第987医院",
       "isOpenHealthCard": false,
-      "isStartComeTest": true,
+      "isStartComeTest": false,
       "isSearchInHos": false,
       "alipayPid": "dl5dt/lx8x6q93cionolzw==",
       "isOpenOcr": false,
@@ -83,14 +83,14 @@
     },
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
-      "alipayAppid": "wxf57d660046a04f49",
+      "alipayAppid": "2021003167607056",
       "h5Appid": "wxf57d660046a04f49",
       "name": "咸阳市第一人民医院",
       "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos": false,
-      "alipayPid": "kzpuhkg8pxqoeotz9agfzw==",
-      "isOpenOcr": true
+      "alipayPid": "ze2exd3di9dbye6cc+hfia==",
+      "isOpenOcr": false
     }
   }
 }

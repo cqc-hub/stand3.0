@@ -1,6 +1,6 @@
 <template>
   <view class="g-page">
-    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
+    <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view>
     <scroll-view class="g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
@@ -155,13 +155,13 @@
     console.log({ a });
 
     // 选择就诊人
-    // uni.navigateTo({
-    //   url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&_type=weinandk&query=["token"]'
-    // });
-    // 选择就诊人
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/DoctorDetails',
+      url: '/pagesB/reportQuery/reportQuery'
     });
+    // 选择就诊人
+    // uni.navigateTo({
+    //   url: '/pagesA/MyRegistration/DoctorDetails',
+    // });
 
     // uni.navigateTo({
     //   url: '/pages/piniaTest/piniaTest'

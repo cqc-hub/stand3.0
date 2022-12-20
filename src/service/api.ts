@@ -303,6 +303,18 @@ const queryApi = {
       reportCmPV_YLName: '核酸检测预约',
       hideLoading: false,
     }),
+      // 获取检验、检查、体检列表
+  getReportsReportList: <T = any>(data) =>
+  service.post("/phs-query/examine/getReportsReportList", parm(data), {
+    reportCmPV_YLName: "检查检验报告查询",
+    monitorName: "报告查询",
+  }),
+getExamineReportDetails: <T = any>(data) =>
+  service.post("/phs-query/examine/getExamineReportDetails", parm(data)),
+getCheckoutReportDetails: <T = any>(data) =>
+  service.post("/phs-query/checkout/getCheckoutReportDetails", parm(data)),
+getScheme: <T = any>(data) =>
+  service.post("/phs-user/message/getScheme", parm(data)),
 };
 
 // 挂号服务

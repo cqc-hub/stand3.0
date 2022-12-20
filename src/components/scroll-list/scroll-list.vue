@@ -251,8 +251,9 @@
           this.$emit('refresh', paging);
         }, this.defaultOption.refreshDelayed);
       },
-      // 刷新成功
-      refreshSuccess(data) {
+      // 刷新成功-茹杰h5修复的
+      refreshSuccess(data, type) {
+        type == 'refresh' ? this.currentPage = 1 : ''
         // 解构数据
         const { list, total } = data;
         // 判断列表是否是数组
