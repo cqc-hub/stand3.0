@@ -1,6 +1,6 @@
 <template>
   <view class="g-page">
-    <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view>
+    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
     <scroll-view class="g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
