@@ -27,23 +27,40 @@
           </view>
 
           <view class="g-flex-rc-cc">
-            <!-- <view v-if="isCheck" class="color-error g-bold f36">3元</view>   -->
-            <view class="iconfont color-888 f48">&#xe66b;</view>
+            <view
+              v-if="
+                showStatus &&
+                item.takenDrugType &&
+                item.takenDrugType in statusLabel
+              "
+              :style="{
+                color: statusLabel[item.takenDrugType].color,
+              }"
+              class="f32 g-bold"
+            >
+              {{ statusLabel[item.takenDrugType].label }}
+            </view>
+            <view v-else class="iconfont color-888 f48">&#xe66b;</view>
           </view>
         </view>
 
         <view class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">就诊时间</view>
-            <view class="row-value g-break-word color-444">222</view>
+            <view class="row-value g-break-word color-444">
+              {{ item.prescTime }}
+            </view>
           </view>
         </view>
 
         <view v-if="item.deptName" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">开单科室</view>
-            <view class="row-value g-break-word color-444">
-              {{ item.deptName }}
+            <view class="row-value g-break-word color-444 flex-normal">
+              <view class="text-ellipsis">{{ item.deptName }}</view>
+              <view v-if="item.clinicType">
+                ({{ item.clinicType == '1' ? '线下就诊' : '网络问诊' }})
+              </view>
             </view>
           </view>
         </view>
@@ -62,6 +79,7 @@
       selUnPayList?: IWaitListItem[];
       isListShowClinicType?: boolean;
       isCheck?: boolean;
+      showStatus?: boolean;
     }>(),
     {
       selUnPayList: () => [],
@@ -70,6 +88,25 @@
   const emits = defineEmits(['sel-item', 'click-item']);
 
   const selIds = computed(() => props.selUnPayList.map((o) => o._id));
+
+  const statusLabel = {
+    '0': {
+      label: '窗口待取药',
+      color: 'var(--hr-brand-color-6)',
+    },
+    '1': {
+      label: '窗口待取药',
+      color: 'var(--hr-brand-color-6)',
+    },
+    '2': {
+      label: '待发货',
+      color: 'var(--hr-brand-color-6)',
+    },
+    '4': {
+      label: '窗口已取药',
+      color: 'var(--hr-neutral-color-7)',
+    },
+  };
 
   const getIsActive = (item: IWaitListItem) => {
     return selIds.value.includes(item._id);

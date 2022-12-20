@@ -9,5 +9,6 @@ export interface IWaitListItem {
   takenDrugType: string;
   prescTime: string;
   deptName: string;
+  clinicType?: string;
   _id: string;
 }

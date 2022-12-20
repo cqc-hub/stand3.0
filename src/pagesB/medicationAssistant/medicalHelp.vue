@@ -29,12 +29,23 @@
             @click-item="unSelItemClick"
             isCheck
           />
+
+          <view
+            class="empty-list"
+            v-if="isComplete['0'] && !waitSelList.length"
+          >
+            <g-empty :current="1" />
+          </view>
         </scroll-view>
       </swiper-item>
 
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <Htlp-List :list="seledList" @click-item="selItemClick" />
+          <Htlp-List :list="seledList" @click-item="selItemClick" show-status />
+
+          <view class="empty-list" v-if="isComplete['1'] && !seledList.length">
+            <g-empty :current="1" />
+          </view>
         </scroll-view>
       </swiper-item>
     </swiper>
@@ -124,6 +135,7 @@
     const args = {
       takenDrug,
       patientId,
+      clinicCate: 0,
     };
 
     const { result } = await api.getDrugDelivery(args).finally(() => {
