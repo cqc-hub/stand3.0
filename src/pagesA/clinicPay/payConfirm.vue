@@ -231,7 +231,8 @@
   };
 
   const getScanData = async () => {
-    const { serialNo, visitNo, cardNumber, branchHosp } = pageProps.value.deParams!;
+    const { serialNo, visitNo, cardNumber, branchHosp } =
+      pageProps.value.deParams!;
 
     isComplete.value = false;
     const arg = {
@@ -306,7 +307,7 @@
       hosId,
       hosName: getHosName.value,
       visitDate,
-      serialNo,
+      serialNo: serialNo || pageProps.value.deParams?.serialNo,
       visitNo,
       cardNumber,
       mergeOrder: mergeOrder || childOrder,

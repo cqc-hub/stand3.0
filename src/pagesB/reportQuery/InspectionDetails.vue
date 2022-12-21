@@ -30,7 +30,7 @@
               >报告时间<view class="subhead-detail">{{
                 checkoutReportList.repTime
               }}</view>
-              <button class="more-button">
+              <button class="more-button g-border">
                 <template v-if="!isShow && !checkoutReportList.reminder">
                   <view class="more">更多</view>
                   <text class="iconfont">&#xe6c4;</text>
@@ -69,7 +69,7 @@
                 >审核医生<view class="subhead-detail">{{
                   checkoutReportList.passDoc
                 }}</view>
-                <button class="more-button">
+                <button class="more-button g-border">
                   <template v-if="isShow && !checkoutReportList.reminder">
                     <view class="more">收起</view>
                     <text class="iconfont">&#xe6c5;</text>
@@ -84,7 +84,7 @@
               >
                 {{ checkoutReportList.reminder }}
               </view>
-              <button class="more-button">
+              <button class="more-button g-border">
                 <template v-if="!isShow">
                   <view class="more">更多</view>
                   <text class="iconfont">&#xe6c4;</text>
@@ -99,7 +99,7 @@
         </view>
         <view class="container-block-bottom">
           <!-- 细菌培养模块 -->
-          <template v-if="checkoutReportList.antiItemResult">
+          <template v-if="checkoutReportList.antiItemResult && checkoutReportList.antiItemResult.length">
             <view class="seen">
               <view class="title">细菌培养</view>
               <!-- 细菌培养存在 -->
@@ -157,7 +157,7 @@
           </template>
 
           <!-- 检验项目模块 -->
-          <template v-if="checkoutReportList.normalList">
+          <template v-if="checkoutReportList.normalList && checkoutReportList.normalList.length">
             <view class="seen">
               <view class="title">检验项目</view>
               <view v-if="checkoutReportList.normalList.length != 0" class="table">
@@ -297,7 +297,7 @@ const getTips = async () => {
     typeFlag: 7,
   });
   tips.value = result;
-}; 
+};
 
 const gStore = new GStores();
 const pat = gStore.userStore.patChoose;
@@ -338,7 +338,7 @@ const isDialogShow = ref();
 const isOperation = ref(false);
 const options = ref({
   // 二维码
-  size: 400, 
+  size: 400,
   code: '',
 });
 const shareReport = () => {
@@ -392,7 +392,7 @@ const goReportPdf = () => {
 onMounted(() => {
   getTips();
   getCheckoutReportDetails();
-  if ( pageProps.value.isWatermark &&  pageProps.value.watermarkText) { 
+  if ( pageProps.value.isWatermark &&  pageProps.value.watermarkText) {
     addWatermark( pageProps.value.watermarkText);
   }
 });
@@ -464,6 +464,8 @@ onMounted(() => {
               display: flex;
               z-index: 99;
               text-align: left;
+              justify-content: center;
+              align-items: center;
               .more {
                 height: 40rpx;
                 font-size: 24rpx;
@@ -471,6 +473,10 @@ onMounted(() => {
               }
               .iconfont {
                 font-size: 32rpx;
+              }
+
+              &::after {
+                border: none;
               }
             }
           }

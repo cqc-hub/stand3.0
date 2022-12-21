@@ -60,7 +60,7 @@ const slist = ref<any>('');
 const loading = ref(false);
 const gStores = new GStores();
 const patList = ref();
-const init = async () => { 
+const init = async () => {
   tabs.value = reportConfig.value.reportTab.map((item, index) => {
     item.typeId = index;
     return item;
@@ -75,9 +75,9 @@ const init = async () => {
       }
     });
   }
-  nextTick(() => {
+  setTimeout(() => {
     loadScrollList();
-  });
+  }, 500)
 };
 const totalList = ref([0, 0, 0]);
 const load = async (pageInfo) => {
@@ -169,8 +169,8 @@ const load = async (pageInfo) => {
   getCurrentLoadScrollInstance()?.loadSuccess(returnArg);
   return returnArg;
 };
-const loadScrollList = () => { 
-  if (tabs.value.length) { 
+const loadScrollList = () => {
+  if (tabs.value.length) {
     getCurrentLoadScrollInstance()?.load();
   }
 };
@@ -226,7 +226,7 @@ const goDetail = (data) => {
     isDownloadRepor,
     isGraphic,
   };
-  
+
   if (tabCurrent.value == 0) {
     uni.navigateTo({
       url: joinQuery('/pagesB/reportQuery/InspectionDetails', mq),
@@ -279,7 +279,7 @@ const getParamsMoreBySysCode = async () => {
 onLoad(async () => {
   // await gStores.userStore.getPatList();
   await getParamsMoreBySysCode();
-  patList.value = gStores.userStore.patChoose; 
+  patList.value = gStores.userStore.patChoose;
   init();
 });
 </script>
