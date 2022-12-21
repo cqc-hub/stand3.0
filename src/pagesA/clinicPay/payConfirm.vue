@@ -288,46 +288,63 @@
   };
 
   const toPay = async () => {
-    const { patientId } = gStores.userStore.patChoose;
-    const _totalCost = info.value.totalNeedSelfpay + '';
-    const patientName = info.value.patientName;
-    const source = gStores.globalStore.browser.source;
-
-    const { visitDate, mergeOrder, serialNo } = pageProps.value;
-
-    const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
-
-    const args = {
-      extend: JSON.stringify(info.value),
-
-      businessType: '1',
-      patientId,
-      source,
-      totalCost: payAmount,
-      hosId,
-      hosName: getHosName.value,
-      visitDate,
-      serialNo: serialNo || pageProps.value.deParams?.serialNo,
-      visitNo,
-      cardNumber,
-      mergeOrder: mergeOrder || childOrder,
-    };
-
-    const {
-      result: { phsOrderNo },
-    } = await api.createClinicOrder(args);
-
-    const res = await payMoneyOnline({
-      phsOrderNo,
-      totalFee: payAmount,
-      phsOrderSource: '2',
-      hosId,
-      hosName: getHosName.value,
-      patientName,
+    uni.showLoading({
+      mask: true,
+      title: '预结算中，请勿退出否则可能出现结算异常',
     });
+    try {
+      const { patientId } = gStores.userStore.patChoose;
+      const _totalCost = info.value.totalNeedSelfpay + '';
+      const patientName = info.value.patientName;
+      const source = gStores.globalStore.browser.source;
 
-    await toPayPull(res, '门诊缴费');
-    payAfter();
+      const { visitDate, mergeOrder, serialNo } = pageProps.value;
+
+      const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
+
+      const args = {
+        extend: JSON.stringify(info.value),
+
+        businessType: '1',
+        patientId,
+        source,
+        totalCost: payAmount,
+        hosId,
+        hosName: getHosName.value,
+        visitDate,
+        serialNo: serialNo || pageProps.value.deParams?.serialNo,
+        visitNo,
+        cardNumber,
+        mergeOrder: mergeOrder || childOrder,
+      };
+
+      const {
+        result: { phsOrderNo },
+      } = await api.createClinicOrder(args, {
+        hideLoading: true,
+      });
+
+      const res = await payMoneyOnline(
+        {
+          phsOrderNo,
+          totalFee: payAmount,
+          phsOrderSource: '2',
+          hosId,
+          hosName: getHosName.value,
+          patientName,
+        },
+        {
+          hideLoading: true,
+        }
+      );
+
+      await toPayPull(res, '门诊缴费');
+      payAfter();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      uni.hideLoading();
+    }
   };
 
   const payAfter = async () => {

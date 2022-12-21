@@ -185,10 +185,13 @@ const queryApi = {
     }),
 
   //门诊创建订单
-  createClinicOrder: <T = any>(data) =>
-    service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), {
+  createClinicOrder: <T = any>(
+    data,
+    opt = {
       hideLoading: false,
-    }),
+    }
+  ) =>
+    service.post<T>('/phs-query/clinical/createClinicOrder', parm(data), opt),
 
   clinicSpecialPayInform: <T = any>(data) =>
     service.post<T>('/phs-query/clinical/clinicSpecialPayInform', parm(data), {
@@ -566,11 +569,14 @@ const authApi = {
     });
   },
 
-  addHRPay: <T>(data) => {
-    return service.post<T>('/phs-pay/pay/addHRPay', parm(data), {
+  addHRPay: <T>(
+    data,
+    opt = {
       // showMessage: false,
       hideLoading: false,
-    });
+    }
+  ) => {
+    return service.post<T>('/phs-pay/pay/addHRPay', parm(data), opt);
   },
 };
 export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };

@@ -1,6 +1,13 @@
-import { useRouterStore, useMessageStore,useGlobalStore,useUserStore } from '@/stores';
+import {
+  useRouterStore,
+  useMessageStore,
+  useGlobalStore,
+  useUserStore,
+} from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
+import { GStores } from './login';
+import api from '@/service/api';
 
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
@@ -67,7 +74,6 @@ export const routerJump = async (url?: `/${string}`) => {
   const messageStore = useMessageStore();
   const globalStore = useGlobalStore();
   const userStore = useUserStore();
-
 
   if (routerStore.isWork) {
     const _p = routerStore._p;
@@ -149,6 +155,33 @@ export const downFile = (url: string): Promise<string> => {
       url,
       success(e) {
         resolve(e.tempFilePath);
+      },
+    });
+  });
+};
+
+// 支付宝蚂蚁能量
+export const getMyPowerQx = function (scopes = 'mfrstre') {
+  return new Promise((resolve, reject) => {
+    const gStores = new GStores();
+    my.getAuthCode({
+      scopes: [scopes], // 蚂蚁能量授权：mfrstre。或者其它scope
+      success: async (res) => {
+        if (res.authCode) {
+          await api.authorization({
+            accountType: gStores.globalStore.browser.accountType,
+            code: res.authCode,
+            userId: gStores.globalStore.openId,
+            scope: scopes,
+          });
+          resolve(res);
+        } else {
+          reject(res);
+        }
+      },
+
+      fail: (e) => {
+        reject(e);
       },
     });
   });

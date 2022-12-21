@@ -4,7 +4,7 @@ import { GStores } from '@/utils';
 import global from '@/config/global';
 import { getSysCode } from '@/common';
 // #ifdef MP-ALIPAY
-import monitor from '@/js_sdk/alipay/alipayLogger.js'; 
+import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
 export interface IGPay {
   label: string;
@@ -35,7 +35,13 @@ export interface IPayRes {
   channelTradeNo: string;
 }
 
-export const payMoneyOnline = async (data: BaseObject) => {
+export const payMoneyOnline = async (
+  data: BaseObject,
+  opt: BaseObject = {
+    // showMessage: false,
+    hideLoading: false,
+  }
+) => {
   const gStores = new GStores();
   const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
 
@@ -68,7 +74,7 @@ export const payMoneyOnline = async (data: BaseObject) => {
     ...data,
   };
 
-  const { result } = await api.addHRPay<IPayRes>(requestArg);
+  const { result } = await api.addHRPay<IPayRes>(requestArg, opt);
 
   return result;
 };
@@ -139,12 +145,11 @@ const getOpenid = async () => {
 };
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
-  
   return new Promise(async (resolve, reject) => {
-
     const { invokeData } = data;
 
-    const { timeStamp, nonceStr, packAge, signType, paySign } = invokeData || {};
+    const { timeStamp, nonceStr, packAge, signType, paySign } =
+      invokeData || {};
     let provider: 'alipay' | 'wxpay' | 'baidu' | 'appleiap' = 'wxpay';
 
     const payData = {
@@ -195,7 +200,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
 //支付宝埋点
 const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
   const alipayPid = global.systemInfo.alipayPid;
-  console.log('缴费埋点',isSuccess,type);
+  console.log('缴费埋点', isSuccess, type);
   if (alipayPid && type) {
     monitor.api({
       api: '门诊缴费',

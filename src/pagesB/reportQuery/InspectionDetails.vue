@@ -192,7 +192,7 @@
               </view>
               <view class="content" v-else>暂未查询到结果！</view>
             </view>
-            <view class="exegesis">
+            <view v-if="pageProps.repType == 1" class="exegesis">
               <view class="exegesis-content">
                 <view>注释：</view>
                 <view>S表示敏感，SDD表示剂量依赖性敏感</view>

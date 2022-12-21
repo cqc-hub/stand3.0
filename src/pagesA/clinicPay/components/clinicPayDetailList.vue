@@ -37,7 +37,7 @@
           </view>
 
           <view class="g-flex-rc-cc">
-            <view v-if="isCheck" class="color-error g-bold f36">
+            <view v-if="isCheck && item.totalCost" class="color-error g-bold f36">
               {{ item.totalCost }}元
             </view>
             <view class="iconfont color-888 f48">&#xe66b;</view>
@@ -52,7 +52,7 @@
             </view>
           </view>
 
-          <view v-if="isListShowClinicType" class="row flex-normal">
+          <view v-if="isListShowClinicType && item._clinicType" class="row flex-normal">
             <view class="row-label color-888">门诊类型</view>
             <view class="row-value g-break-word color-444">
               {{ item._clinicType }}
@@ -84,7 +84,7 @@
             </view>
           </view>
 
-          <view v-if="!isCheck" class="row flex-normal">
+          <view v-if="!isCheck && item.totalCost" class="row flex-normal">
             <view class="row-label color-888">费用金额</view>
             <view class="row-value g-break-word color-444">
               {{ item.totalCost }}元

@@ -139,6 +139,7 @@
    GStores,
    routerJump,
    LoginUtils,
+   getMyPowerQx
  } from '@/utils';
 
  import global from '@/config/global';
@@ -227,6 +228,7 @@
     //对接支付宝首页消息提醒
     const alipayPid = global.systemInfo.alipayPid;
     alipayPid&&globalStore.isLogin &&!uni.getStorageSync("hospital_order") && authorization();
+    // getMyPowerQx()
     // #endif
  });
  const getNotice = async () => {
