@@ -240,7 +240,8 @@
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
       <view class="popup-tki">
-        <uni-hr-qrcode class="qrcode" :val="qrVal" :size="400" />
+        <!-- <uni-hr-qrcode class="qrcode" :val="qrVal" :size="400" /> -->
+        <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
         <text> 检查报告链接有效期至{{ shareEndTime || "YYYY-MM-DD" }}。 </text>
@@ -335,6 +336,11 @@ const my_endDate = ref();
 const shareEndTime = ref();
 const isDialogShow = ref();
 const isOperation = ref(false);
+const options = ref({
+  // 二维码
+  size: 400, 
+  code: '',
+});
 const shareReport = () => {
   isOperation.value = false;
   getShareTotalUrl(
@@ -342,6 +348,7 @@ const shareReport = () => {
     "pagesB/reportQuery/InspectionDetails"
   ).then((url) => {
     qrVal.value = url;
+    options.value.code = url as string
     dateNow.value = new Date().getTime();
     my_endDate.value = 1000 * 60 * 60 * 24 * 7 + dateNow.value;
     shareEndTime.value = dayjs(my_endDate.value).format("YYYY-MM-DD");
@@ -379,7 +386,6 @@ const goReportPdf = () => {
       repName,
       repId,
       reportType,
-      sysCode: getSysCode(),
     }),
   });
 };

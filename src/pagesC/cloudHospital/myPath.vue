@@ -19,7 +19,7 @@ import { GStores } from "@/utils";
 import { encryptDesParam } from "@/common/des";
 import { joinQuery } from "@/common";
 import { toPayPull } from "@/components/g-pay";
-import { deQueryForUrl } from "@/common/utils";
+import { deQueryForUrl } from "@/common/utils"; 
 
 type IPageProps = {
   hosId?: string;
@@ -98,6 +98,7 @@ const getQueryPath = (options) => {
     _patientId: patientId,
     _herenId: herenId,
     _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
+    _isDes: global.isOpenDes
   };
   let _d = encryptDesParam(desObj);
   let query = "?_d=" + _d + "&sysCode=" + allData.sysCode + "&";
