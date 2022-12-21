@@ -324,9 +324,9 @@
     const _parentInfo = [formKey.upName, formKey.upIdCard];
     const _patientInfo: TFormKeys[] = [
       formKey.nation,
-      formKey.patientPhone,
       formKey.address,
       formKey.location,
+      formKey.patientPhone,
       formKey.defaultFalg,
     ];
 
@@ -338,7 +338,7 @@
     } = await ServerStaticData.getSystemConfig('person');
 
     if (!globalGl.systemInfo.isSearchInHos) {
-      if (isSmsVerify === '1' && props.pageType !== 'perfectReal') {
+      if (isSmsVerify === '0' && props.pageType !== 'perfectReal') {
         const phone_idx = _patientInfo.findIndex(
           (key) => key === formKey.patientPhone
         );

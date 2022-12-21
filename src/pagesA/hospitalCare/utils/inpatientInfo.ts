@@ -137,6 +137,14 @@ export interface inHospitalCostInfo {
   //预交金
   totalCost?: string;
   //总费用 
+  patientNameDes?: string;
+  //开始时间 
+  endTime?: string;
+  //结束时间  
+   startTime?: string;
+   //脱敏姓名
+   cardNumber?: string;
+   //卡号
 }
 export interface costList {
   category?: string;

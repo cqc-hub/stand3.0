@@ -11,11 +11,11 @@
         <view class="information">
           <view class="item">
             <view class="item-title">患者姓名</view>
-            <view class="item-content">{{ patName }}({{ patientId }})</view>
+            <view class="item-content">{{ costInfoDetal.patientNameDes }}{{ costInfoDetal.cardNumber?'('+costInfoDetal.cardNumber+')':'' }}</view>
           </view>
           <view class="item" v-if="param.isHosTotallist">
             <view class="item-title">费用时间</view>
-            <view class="item-content">{{ param.startTime }}～{{ param.endTime }}</view>
+            <view class="item-content">{{ costInfoDetal.startTime }}～{{ costInfoDetal.endTime }}</view>
           </view>
           <view class="item">
             <view class="item-title">病区床号</view>
@@ -149,7 +149,8 @@ const init = async () => {
     costType.value = "3";
     costDate.value = "";
   } else {
-    costDate.value = param.value.costDay!;
+    costType.value = "3";
+    // costDate.value = param.value.costDay!;
   }
   const params = {
     costDay: costDate.value,
@@ -176,6 +177,9 @@ onLoad((opt) => {
     init();
   } 
 });
+// onMounted(() => {
+//   init();
+// });
 defineExpose({
   init,
 });

@@ -127,9 +127,9 @@
       field: 'input-text',
       inputType: 'textarea',
       autoHeight: true,
-      placeholder: '请输入详细地址',
+      placeholder: '请输入街道、小区、门牌号等',
       key: 'detailedAddress',
-      emptyMessage: '请填写详细地址',
+      emptyMessage: '请输入街道、小区、门牌号等',
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
     },
     {
