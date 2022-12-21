@@ -122,15 +122,15 @@
       scrollTo.value = '_express';
     }
 
-    const { expressName, expressPhone } = detailsAddressData;
+    const { senderName, senderPhone } = detailsAddressData;
 
     const args = {
-      deliveryType: '1',
+      deliveryType: '2',
       detailsAddress,
       deptName,
       expressCompany,
-      expressName,
-      expressPhone,
+      expressName:senderName,
+      expressPhone:senderPhone,
       cardNumber,
       patientId,
       patientName,

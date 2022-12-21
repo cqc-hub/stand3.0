@@ -1,32 +1,23 @@
 <template>
-	<view class="g-page">
+  <view class="g-page">
     <g-flag typeFg="29" isShowFg />
-		<g-choose-pat
-      @choose-pat="getListData()"
-    />
+    <g-choose-pat @choose-pat="getListData()" />
     <view class="bg">
       <view class="container">
         <view class="p40">
           <view class="f28 color-888">账户余额(元)</view>
-          <view class="f80 g-bolder">{{lists.accountBalance}}</view>
-          <view class="f28 mt24 color-444"><text>患者：</text><text>{{lists.patientName}}</text><text v-if="lists.accountNo">&nbsp;<text
-              style="color: #e6e6e6"
-              >|</text
-            >&nbsp;<text>账户：</text><text>{{lists.accountNo}}</text></text></view>
-            <view class="f-button">
-              <button
-                @click="confirmForm1"
-                class="f-b1 mr8 btn btn-primary"
-              >
-                提现
-              </button>
-              <button
-                @click="confirmForm"
-                class="f-b2 ml8 btn btn-primary"
-              >
-                充值
-              </button>
-            </view>
+          <view class="f80 g-bolder">{{ lists.accountBalance }}</view>
+          <view class="f28 mt24 color-444"
+            ><text>患者：</text><text>{{ lists.patientName }}</text
+            ><text v-if="lists.accountNo"
+              >&nbsp;<text style="color: #e6e6e6">|</text>&nbsp;<text>账户：</text
+              ><text>{{ lists.accountNo }}</text></text
+            ></view
+          >
+          <view class="f-button">
+            <button @click="confirmForm1" class="f-b1 mr8 btn btn-primary">提现</button>
+            <button @click="confirmForm" class="f-b2 ml8 btn btn-primary">充值</button>
+          </view>
         </view>
       </view>
       <!-- <view class="sec-con">
@@ -50,8 +41,16 @@
     >
       <view>
         <view class="mb40">
-        <view class="dialog-t f32 mb32"><text class="dt-width color-888">当前可提现</text><text class="dt-red g-bolder">{{lists.allowOnLineCash ? lists.allowOnLineCash : '0'}}元</text></view>
-        <view class="dialog-t f32"><text class="dt-width color-888">到账账户</text><text class="g-bolder">原路返回</text></view>
+          <view class="dialog-t f32 mb32"
+            ><text class="dt-width color-888">当前可提现</text
+            ><text class="dt-red g-bolder"
+              >{{ lists.allowOnLineCash ? lists.allowOnLineCash : "0" }}元</text
+            ></view
+          >
+          <view class="dialog-t f32"
+            ><text class="dt-width color-888">到账账户</text
+            ><text class="g-bolder">原路返回</text></view
+          >
         </view>
         <g-flag
           v-model:title="confirmFgTitle"
@@ -62,7 +61,8 @@
         />
       </view>
     </Order-Reg-Confirm>
-	</view>
+    <g-message />
+  </view>
 </template>
 
 <script lang="ts" setup>
@@ -105,32 +105,17 @@ let accountWithdrawal = async () => {
     accountNo,
     amount,
   };
-
   await api.accountWithdrawal(arg).then((res) => {
     if(res.code == '0'){
         init();
-        uni.showToast({
-          title: '提现申请已提交，提现金额将原路返回，请耐心等待',
-          icon: 'none',
-          duration: 3000,
-        });
+        gStores.messageStore.showMessage('提现申请已提交，提现金额将原路返回，请耐心等待', 3000);
     }
   }).catch((err) => {
-    console.log(err);
       init();
-      uni.showToast({
-        title: err.message,
-        icon: 'none',
-      });
   });
 };
 accountWithdrawal = debounce(accountWithdrawal, 80);
 
-//下拉刷新
-//  onPullDownRefresh(async () => {
-//     await init();
-//     uni.stopPullDownRefresh();
-//   });
 
 const init = async () => {
   await getListData();
@@ -158,14 +143,14 @@ const confirmForm = () => {
   });
 };
 const confirmForm1 = () => {
-  if(lists.value.accountNo && lists.value.allowOnLineCash != '0'){
+  // if(lists.value.accountNo && lists.value.allowOnLineCash != '0'){
     regDialogConfirm.value.show();
-  }else{
-    uni.showToast({
-      title: '当前没有可提现金额',
-      icon: 'none',
-    });
-  }
+  // }else{
+  //   uni.showToast({
+  //     title: '当前没有可提现金额',
+  //     icon: 'none',
+  //   });
+  // }
 };
 
 const goWithdrawal = () => {
@@ -175,10 +160,9 @@ const goWithdrawal = () => {
 
 <style lang="scss" scoped>
 .bg {
-  background: url($base-url + 'v3-hosAccount-bj.png') 100%/100%
-  no-repeat;
+  background: url($base-url + "v3-hosAccount-bj.png") 100%/100% no-repeat;
   height: 1256rpx;
-  .container{
+  .container {
     width: calc(100% - 64rpx);
     margin-left: 32rpx;
     margin-top: 40rpx;
@@ -186,50 +170,50 @@ const goWithdrawal = () => {
     background: #ffffff;
     border: 1rpx solid #e6e6e6;
     border-radius: 16rpx;
-    .f-button{
+    .f-button {
       margin-top: 104rpx;
       display: flex;
-      .f-b1{
+      .f-b1 {
         background: #e9f0ff;
-        color: #296FFF;
+        color: #296fff;
         width: 100%;
       }
-      .f-b2{
+      .f-b2 {
         width: 100%;
       }
     }
   }
-  .sec-con{
+  .sec-con {
     width: calc(100% - 64rpx);
     margin-left: 32rpx;
     margin-top: 24rpx;
     background: #ffffff;
     border: 1rpx solid #e6e6e6;
     border-radius: 8rpx;
-    .content{
+    .content {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10rpx 24rpx;
-      .con-flex{
+      .con-flex {
         display: flex;
         justify-content: space-between;
         align-content: center;
       }
-      .icon-color{
+      .icon-color {
         font-size: 40rpx;
         color: var(--hr-warning-color-6);
       }
     }
   }
 }
-.dialog-t{
-  .dt-width{
+.dialog-t {
+  .dt-width {
     display: inline-block;
     width: 176rpx;
   }
-  .dt-red{
-    color: #FF5040;
+  .dt-red {
+    color: #ff5040;
   }
 }
 </style>

@@ -45,6 +45,10 @@ export interface IConfigTab {
   value: string;
 }
 
+export interface IReportConfigTab {
+  headerType: string;
+  headerName: string;
+}
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
@@ -121,7 +125,7 @@ export interface ISystemConfig {
   //住院服务
   hospitalCare: {
     //顶部tab
-    tab: IRegSearchHistoryItem[];
+    tab: IConfigTab[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
     inPatientPrePay: string[];
     //列表1 详情2 住院总计清单
@@ -158,7 +162,22 @@ export interface ISystemConfig {
 
     // 待缴费详情页面 的费用总额是否可以让用户选择缴费
     isSubitemPay?: '1';
-  };
+  }; 
+  //报告查询
+  reportQuery:{
+     //顶部tab
+     reportTab: IReportConfigTab[];
+     //0否 1 是 是否显示水印
+     isWatermark: '0' | '1';
+     //水印文案
+     watermarkText?: string;
+     //0否 1 是 是否开启医生名片入口
+     isDoctorCard:'0' | '1';
+     //0否 1 是 是否开启支持下载报告 开启这个配置且有图文的前提 页面才会实现
+     isDownloadRepor?:'0' | '1';
+     //0否 1 是 是否支持查看图文报告 有图文必有下载功能
+     isGraphic?: '0' | '1';
+  }
 }
 
 export interface IHosInfo {

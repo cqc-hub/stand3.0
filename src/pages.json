@@ -302,6 +302,29 @@
           "style": {
             "navigationBarTitleText": "药品配送"
           }
+        },  {
+          "path": "reportQuery/reportQuery",
+          "style": {
+            "navigationBarTitleText": "报告查询"
+          }
+        },
+        {
+          "path": "reportQuery/inspectionReport",
+          "style": {
+            "navigationBarTitleText": "检查报告"
+          }
+        },
+        {
+          "path": "reportQuery/InspectionDetails",
+          "style": {
+            "navigationBarTitleText": "检验报告"
+          }
+        },
+        {
+          "path": "reportQuery/medicalDetails",
+          "style": {
+            "navigationBarTitleText": "体检报告"
+          }
         }
       ]
     },

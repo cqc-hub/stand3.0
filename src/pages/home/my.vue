@@ -155,13 +155,13 @@
     console.log({ a });
 
     // 选择就诊人
-    // uni.navigateTo({
-    //   url: '/pagesC/cloudHospital/myPath?path=pagesC/choosePat/choosePat&_type=weinandk&query=["token"]'
-    // });
-    // 选择就诊人
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/DoctorDetails',
+      url: '/pagesB/reportQuery/reportQuery'
     });
+    // 选择就诊人
+    // uni.navigateTo({
+    //   url: '/pagesA/MyRegistration/DoctorDetails',
+    // });
 
     // uni.navigateTo({
     //   url: '/pages/piniaTest/piniaTest'

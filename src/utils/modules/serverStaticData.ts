@@ -416,9 +416,10 @@ export class ServerStaticData {
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
       //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG
+      //REPORT_QUERY_CONFIG报告查询
       const { result } = await api.getParamsMoreBySysCode({
         paramCode:
-          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG ',
+          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG',
       });
 
       try {
@@ -429,12 +430,14 @@ export class ServerStaticData {
         const order = JSON.parse(result.ORDER_REGISTER || '{}');
         const hospitalCare = JSON.parse(result.PATIENT_SERVICE_CONFIG || '{}');
         const pay = JSON.parse(result.CLINIC_PAY_CONFIG || '{}');
+        const reportQuery = JSON.parse(result.REPORT_QUERY_CONFIG || '{}');
         systemConfig = {
           person,
           order,
           medRecord,
           hospitalCare,
           pay,
+          reportQuery
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');
