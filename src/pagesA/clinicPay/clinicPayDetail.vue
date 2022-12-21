@@ -1,8 +1,11 @@
 <template>
   <view class="g-page">
     <g-flag isShowFg typeFg="15" />
-    <g-tbanner :config="pageConfig.bannerPay" /> 
-    <g-choose-pat v-if="!pageProps.params" @choose-pat="getListData(true)" />
+    <g-tbanner :config="pageConfig.bannerPay" />
+    <g-choose-pat
+      v-if="!pageProps.params && isShowPatComponent"
+      @choose-pat="getListData(true)"
+    />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
@@ -187,6 +190,8 @@
     gStores,
   } = usePayPage();
 
+  const isShowPatComponent = ref(false);
+
   const isListShowClinicType = computed(() => {
     return pageConfig.value.isListShowClinicType === '1';
   });
@@ -216,22 +221,26 @@
     getListData();
   };
 
-  // setTimeout(() => {
-  //   // regDialogConfirm.value.show();
-  //   const a = {
-  //     cardNumber: '300088003',
-  //     patientName: '陈钦川',
-  //   };
+  setTimeout(() => {
+    // regDialogConfirm.value.show();
+    const a = {
+      cardNumber: '000000143',
+      patientName: '郑迪',
+    };
 
-  //   const en = encryptForPage(a);
-  //   console.log(en);
-  //   console.log(decryptForPage(en));
-  // }, 1000);
+    const en = encryptForPage(a);
+    console.log(en);
+    console.log(decryptForPage(en));
+  }, 1000);
 
   onLoad(async (opt) => {
     if (opt.q) {
       return;
     }
+
+    setTimeout(() => {
+      isShowPatComponent.value = true;
+    }, 600);
 
     if (opt) {
       if (opt.q) {
