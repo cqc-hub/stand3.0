@@ -11,7 +11,7 @@
             </view>
 
             <view class="g-flex-rc-cc g-bold f32 mb32">
-              请凭二维码到药房窗口取药
+              <!-- 请凭二维码到药房窗口取药 -->
             </view>
 
             <view class="qr g-flex-rc-cc">
