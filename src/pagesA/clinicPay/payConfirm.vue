@@ -159,8 +159,16 @@
 
   // 0 元缴费
   const payFeeZero = async () => {
-    const { serialNo, cardNumber, patientName, hosId, visitNo, payAmount, recipeNo, otherPayWay } =
-      info.value;
+    const {
+      serialNo,
+      cardNumber,
+      patientName,
+      hosId,
+      visitNo,
+      payAmount,
+      recipeNo,
+      otherPayWay,
+    } = info.value;
     const { patientId } = gStores.userStore.patChoose;
     const {
       browser: { source },
@@ -180,7 +188,7 @@
       visitNo,
       recipeNo,
       payType: 'WX_MINI',
-      otherPayWay
+      otherPayWay,
     };
 
     // #ifdef MP-ALIPAY
@@ -314,6 +322,18 @@
       //扫码进来的
       uni.reLaunch({
         url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=' + mzParams,
+      });
+    } else if (deParams) {
+      const { cardNumber } = deParams;
+      const { patientName } = info.value;
+
+      uni.reLaunch({
+        url:
+          '/pagesA/clinicPay/clinicPayDetail?tabIndex=1' +
+          `params=${encryptForPage({
+            cardNumber,
+            patientName,
+          })}`,
       });
     } else {
       uni.reLaunch({

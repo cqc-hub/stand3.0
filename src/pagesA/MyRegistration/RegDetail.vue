@@ -221,7 +221,7 @@
 
       <button
         v-if="orderRegInfo.orderStatus === '0'"
-        @click="cancelOrder"
+        @click="refoundOrder"
         class="btn btn-plain btn-error g-border"
       >
         {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
@@ -583,6 +583,15 @@
     });
 
     init();
+  };
+
+  const refoundOrder = async () => {
+    if (orderConfig.value.isOrderPay !== '1') {
+      cancelOrder();
+      return;
+    }
+
+    api.refundOrder
   };
 
   const againOrder = async () => {
