@@ -133,7 +133,7 @@
         patientName: string;
         hosId: string;
         childOrder: string;
-        costInfo: Object;
+        costInfo: string;
         payAmount: string;
         recipeNo: string;
         otherPayWay: string;
@@ -214,8 +214,13 @@
     isComplete.value = true;
     info.value = result;
     //处理页面展示的参数
-    if (result.costInfo != '{}') {
-      for (var key in JSON.parse(result.costInfo)) {
+    if (result.costInfo) {
+      const costInfo = JSON.parse(result.costInfo);
+      info.value = {
+        ...result,
+        ...costInfo,
+      };
+      for (var key in costInfo) {
         console.log(key);
         details.value.push({
           label: key,
@@ -234,6 +239,7 @@
       visitNo,
       cardNumber,
       hosId,
+      scanCode: '0',
     };
     const { result } = await api.getScanClinicReservePay<any>({
       ...arg,
@@ -242,6 +248,20 @@
 
     isComplete.value = true;
     info.value = result;
+
+    if (info.value.costInfo) {
+      const costInfo = JSON.parse(info.value.costInfo);
+      info.value = {
+        ...result,
+        ...costInfo,
+      };
+      for (var key in costInfo) {
+        details.value.push({
+          label: key,
+          value: JSON.parse(result.costInfo)[key],
+        });
+      }
+    }
   };
 
   const getHosName = computed(() => {

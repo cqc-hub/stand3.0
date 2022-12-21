@@ -224,9 +224,15 @@
   // setTimeout(() => {
   //   // regDialogConfirm.value.show();
   //   const a = {
+  //     hosId: '13001',
+  //     visitNo: '20221221000017',
   //     cardNumber: '000000143',
-  //     patientName: '郑迪',
+  //     serialNo: '1480ccf2186d47778ef4c76c98a2ce5f,7ea18e5833b8446e8aaf0f5750ce0275'
   //   };
+  //   // const a = {
+  //   //   cardNumber: '000000143',
+  //   //   patientName: '郑迪',
+  //   // };
 
   //   const en = encryptForPage(a);
   //   console.log(en);

@@ -591,7 +591,13 @@
       return;
     }
 
-    api.refundOrder
+    const args = {
+      orderId: pageProps.value.orderId,
+      source: gStores.globalStore.browser.source,
+    };
+
+    await api.refundOrder(args);
+    init();
   };
 
   const againOrder = async () => {
