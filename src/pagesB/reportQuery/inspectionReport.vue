@@ -135,11 +135,19 @@
       </button>
       <text
         style="color: #e6e6e6"
-        v-if="pageProps.isDoctorCard && examineReportList.applyDocId && examineReportList.deptId"
+        v-if="
+          pageProps.isDoctorCard &&
+          examineReportList.applyDocId &&
+          examineReportList.deptId
+        "
         >|</text
       >
       <button
-        v-if="pageProps.isDoctorCard && examineReportList.applyDocId && examineReportList.deptId"
+        v-if="
+          pageProps.isDoctorCard &&
+          examineReportList.applyDocId &&
+          examineReportList.deptId
+        "
         class="footer-button"
         @click="goDoctor"
       >
@@ -151,8 +159,8 @@
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
-      <view class="popup-tki">
-        <uni-hr-qrcode class="qrcode" :val="qrVal" :size="400" />
+      <view class="popup-tki"> 
+        <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
         <text> 检验报告链接有效期至{{ shareEndTime || "YYYY-MM-DD" }}。 </text>
@@ -212,21 +220,16 @@
   </g-popup>
 </template>
 <script lang="ts" setup>
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad } from "@dcloudio/uni-app";
 import { ref, onMounted, computed, nextTick, onUpdated } from "vue";
 import { onPageScroll } from "@dcloudio/uni-app";
 import api from "@/service/api";
-import {
-  examineReportDetails,
-  getShareTotalUrl,
-  addWatermark,
-  getQueryUrl,
-} from "./utils";
+import { examineReportDetails, getShareTotalUrl, addWatermark } from "./utils";
 import { GStores } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
 import dayjs from "dayjs";
 import env from "@/config/env";
-import { deQueryForUrl } from '@/common';
+import { deQueryForUrl } from "@/common";
 
 const isDialogShow = ref();
 const isOperation = ref(false);
@@ -237,6 +240,14 @@ const top = ref(0);
 const isShow = ref<number[]>([]);
 const windowInfo = ref();
 const examineReportList = ref<examineReportDetails>({});
+const qrVal = ref();
+
+const options = ref({
+  // 二维码
+  size: 400, 
+  code: '',
+});
+
 const more = (index) => {
   // boxTop.value=[]
   // nextTick(()=>{
@@ -321,22 +332,16 @@ const getTips = async () => {
   tips.value = result;
 };
 const pageProps = ref(<any>{});
- 
 
 const gStore = new GStores();
 const pat = gStore.userStore.patChoose;
 
 onLoad((p) => {
-    pageProps.value = deQueryForUrl(deQueryForUrl(p));
-  });
+  pageProps.value = deQueryForUrl(deQueryForUrl(p));
+});
 
 const getInspectionReportList = async () => {
-  const {
-  repId,
-  examClassName,
-  hosId,
-  extend
-} = pageProps.value
+  const { repId, examClassName, hosId, extend } = pageProps.value;
   let params = {
     hosId: hosId,
     patientId: pat.patientId,
@@ -354,28 +359,24 @@ const getInspectionReportList = async () => {
 };
 const goReportPdf = (item) => {
   let { repId, repName } = item;
-  const {reportType} = pageProps.value
+  const { reportType } = pageProps.value;
   repId = encodeURIComponent(encryptDes(repId + "", "phsDesKey"));
   uni.navigateTo({
     url: joinQuery("/pagesC/cloudHospital/myPath?path=/pagesB/reportQuery/reportPdf", {
       repName,
       repId,
       reportType,
-      sysCode: getSysCode(),
     }),
   });
 };
-const qrVal = ref();
 const dateNow = ref();
 const my_endDate = ref();
 const shareEndTime = ref();
 const shareReport = () => {
   isOperation.value = false;
-  getShareTotalUrl(
-    pageProps.value,
-    "pagesB/reportQuery/inspectionReport"
-  ).then((url) => {
+  getShareTotalUrl(pageProps.value, "pagesB/reportQuery/inspectionReport").then((url) => {
     qrVal.value = url;
+    options.value.code = url as string
     dateNow.value = new Date().getTime();
     my_endDate.value = 1000 * 60 * 60 * 24 * 7 + dateNow.value;
     shareEndTime.value = dayjs(my_endDate.value).format("YYYY-MM-DD");
@@ -417,7 +418,7 @@ const downloadReport = () => {
   if (btnNumber.value && btnNumber.value > 1) {
     actionSheet.value.showActionSheet();
   } else {
-    let data = examineReportList.value.detailsResult
+    let data = examineReportList.value.detailsResult;
     goReportPdf(data[0]);
   }
 };
@@ -431,7 +432,7 @@ const actionSheetOpt = computed(() => {
 });
 
 const getPdfUrl = (repId) => {
-  const {reportType} = pageProps.value
+  const { reportType } = pageProps.value;
   return joinQuery(env.baseApi + `/phs-query/examine/getPdf`, {
     sysCode: getSysCode(),
     fileName: "bg",

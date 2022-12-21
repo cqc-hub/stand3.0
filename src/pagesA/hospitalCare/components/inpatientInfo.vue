@@ -18,7 +18,7 @@
           <text class="line"></text>
           <text>{{hosInfoResObj.inpatientWard}}</text>
           <text class="line"></text>
-          <text>{{hosInfoResObj.inpatientBed}}床</text>
+          <text class="g-nowrap">{{hosInfoResObj.inpatientBed}}床</text>
         </view>
         <view class="user-del date">
           <text>{{hosInfoResObj.beHosDate}} </text>

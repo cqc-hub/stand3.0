@@ -5,13 +5,13 @@
       <view class="right">
         <view class="date stick">
           <text class='iconfont date '>&#xe6c6;</text>
-
+ 
         {{item.date}}</view>
         <view class="detail" v-for="(i,j) in item.hospitalPay" :key="j">
           <view class="details" v-for="(m,n) in i.costListResultList" :key="n">
             <view class="detail-item">
               <text class="date">{{i.hosName}}</text>
-              <text class="money">{{m.paymentAmount}}元 </text>
+              <text class="g-nowrap">{{m.paymentAmount}}元 </text>
             </view>
             <view class="detail-date">
               <text>{{m.payTime}}</text>
@@ -96,7 +96,7 @@ onLoad((opt) => {
       align-items: center;
       font-size: 36rpx;
       font-weight: 600;
-      margin-bottom: 8rpx;
+      margin-bottom: 8rpx; 
     }
     .detail-date {
       color: #888;

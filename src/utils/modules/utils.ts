@@ -80,20 +80,7 @@ export const routerJump = async (url?: `/${string}`) => {
 
       const menuItem = getMenuById(routerStore._id, menus);
       if (menuItem) {
-        // #ifdef MP-WEIXIN
-        //单独判断一下 仅微信 待完善和无就诊人时 核酸开单因为拉起支付导致的问题 不需要回调 pagesC/selfService/nucleicBilling
-        if((globalStore.herenId||!userStore.patList.length)&&(menuItem as any).path.indexOf('pagesC/selfService/nucleicBilling')!=-1 ){
-          console.log('待完善和无就诊人时 核酸不回调 去首页');
-          uni.reLaunch({
-            url:'/pages/home/home'
-          })
-        }else{
-           useCommonTo(menuItem);
-        }
-        // #endif
-        // #ifdef MP-ALIPAY
         useCommonTo(menuItem);
-        // #endif
       } else {
         // messageStore.showMessage(
         //   '未找到对应menuId 的 menu：' + routerStore._id
