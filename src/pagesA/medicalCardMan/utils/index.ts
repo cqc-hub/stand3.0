@@ -223,7 +223,7 @@ export const tempList: TInstance[] = [
   {
     required: true,
     showSuffixArrowIcon: true,
-    label: '常住地址',
+    label: '所在地区',
     placeholder: '请选择',
     key: formKey.address,
     field: 'address',
@@ -234,7 +234,7 @@ export const tempList: TInstance[] = [
     required: true,
     label: '详细地址',
     field: 'input-text',
-    placeholder: '具体到门牌号',
+    placeholder: '请输入街道、小区、门牌号等',
     key: formKey.location,
     rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
     maxlength: 100,

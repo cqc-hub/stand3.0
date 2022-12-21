@@ -1,65 +1,87 @@
 <template>
   <!-- 总计费用清单 -->
   <view>
-    <view class="page" v-if="props.isHosTotallist=='1'&&dailyResList.inHospitalDailyCostsResultList.length>0">
-      <view class="progress" v-for="(item,index) in dailyResList.inHospitalDailyCostsResultList " :key="index">
-        <view class="right" v-for="(i,j) in item.costSecondaries" :key="j">
-          <view v-for="(m,n) in i.costListResultList" :key="n">
-            <view class="dates">{{m.startTime}}～{{m.endTime}}</view>
+    <view
+      class="page"
+      v-if="
+        props.isHosTotallist == '1' &&
+        dailyResList.inHospitalDailyCostsResultList.length > 0
+      "
+    >
+      <view
+        class="progress"
+        v-for="(item, index) in dailyResList.inHospitalDailyCostsResultList"
+        :key="index"
+      >
+        <view class="right" v-for="(i, j) in item.costSecondaries" :key="j">
+          <view v-for="(m, n) in i.costListResultList" :key="n">
+            <!-- <view class="dates">{{m.startTime}}～{{m.endTime}}</view> -->
+            <view class="dates">{{ item.date }}</view>
             <view class="details" @click="gotoListExpenses(m)">
-              <view class="date">{{i.hosName}}</view>
+              <view class="date">{{ i.hosName }}</view>
               <view class="details-right">
-                <view class="money">{{m.totalCost}}元 </view>
+                <view class="money">{{ m.cost }}元 </view>
                 <view class="iconfont right">&#xe66b;</view>
               </view>
             </view>
           </view>
-
         </view>
-        <text class='iconfont date'>&#xe6c6;</text>
+        <text class="iconfont date">&#xe6c6;</text>
         <view class="line"></view>
       </view>
     </view>
 
-    <view class="page" v-if="props.isHosTotallist=='2'&&InHospitalCostInfo>0">
-      <inpatientInfo :isHosTotallist="props.isHosTotallist" @detalResult='detalResult' />
+    <view class="page" v-if="props.isHosTotallist == '2'">
+      <dailyExpenseListDetial
+        ref="dailyExpenseListDetialRef"
+        :isHosTotallist="props.isHosTotallist"
+      />
     </view>
 
-    <view class="empty-box" v-if="dailyResList.inHospitalDailyCostsResultList.length==0||InHospitalCostInfo==0">
+    <view
+      class="empty-box"
+      v-if="
+        props.isHosTotallist == '1' &&
+        dailyResList.inHospitalDailyCostsResultList.length == 0
+      "
+    >
       <g-empty :current="1" />
     </view>
-
   </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { GStores, ServerStaticData } from '@/utils';
-import api from '@/service/api';
-import { dailyParam, dailyResult } from '../utils/inpatientInfo';
-import { onLoad } from '@dcloudio/uni-app';
-import inpatientInfo from './dailyExpenseListDetial.vue';
-import dayjs from 'dayjs';
+import { onMounted, ref } from "vue";
+import { GStores } from "@/utils";
+import api from "@/service/api";
+import { dailyResult } from "../utils/inpatientInfo";
+import dailyExpenseListDetial from "./dailyExpenseListDetial.vue";
 const gStores = new GStores();
 const props = defineProps<{
   isHosTotallist?: string;
 }>();
 const dailyInfoParam = ref({
-  inHospitalId: '',
-  timesHospitalization: '',
-  //patientId: '10763642',
+  inHospitalId: "",
+  timesHospitalization: "",
   patientId: gStores.userStore.patChoose.patientId,
 });
 const InHospitalCostInfo = ref(0);
+const dailyExpenseListDetialRef = ref<any>("");
 const dailyResList = ref<dailyResult>({
   inHospitalDailyCostsResultList: [],
 });
 const init = async () => {
-  const { result } = await api.getInHospitalDailyCostList<dailyResult>({
-    patientId: gStores.userStore.patChoose.patientId,
-    costType: '3',
-  });
-  dailyResList.value = result;
+  if (props.isHosTotallist == "1") {
+    //列表
+    const { result } = await api.getInHospitalDailyCostList<dailyResult>({
+      patientId: gStores.userStore.patChoose.patientId,
+      costType: "3",
+    });
+    dailyResList.value = result;
+  } else if (props.isHosTotallist == "2") {
+    //详情
+    dailyExpenseListDetialRef.value.init();
+  }
 };
 const detalResult = (val) => {
   InHospitalCostInfo.value = Object.keys(val).length;
@@ -68,14 +90,14 @@ const gotoListExpenses = (data) => {
   uni.navigateTo({
     url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&isHosTotallist='2'`,
   });
-}; 
+};
 onMounted(async () => {
   await init();
-  await detalResult(InHospitalCostInfo);
+  // await detalResult(InHospitalCostInfo);
 });
 defineExpose({
-  init
-  });
+  init,
+});
 </script>
 
 <style scoped lang="scss">
@@ -128,6 +150,7 @@ defineExpose({
     }
     .money {
       font-size: 36rpx;
+      white-space: nowrap;
     }
     .iconfont {
       font-size: 48rpx;
