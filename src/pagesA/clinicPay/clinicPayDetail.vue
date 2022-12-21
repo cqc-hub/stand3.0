@@ -221,17 +221,17 @@
     getListData();
   };
 
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    const a = {
-      cardNumber: '000000143',
-      patientName: '郑迪',
-    };
+  // setTimeout(() => {
+  //   // regDialogConfirm.value.show();
+  //   const a = {
+  //     cardNumber: '000000143',
+  //     patientName: '郑迪',
+  //   };
 
-    const en = encryptForPage(a);
-    console.log(en);
-    console.log(decryptForPage(en));
-  }, 1000);
+  //   const en = encryptForPage(a);
+  //   console.log(en);
+  //   console.log(decryptForPage(en));
+  // }, 1000);
 
   onLoad(async (opt) => {
     if (opt.q) {

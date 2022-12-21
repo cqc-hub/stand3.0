@@ -12,7 +12,7 @@ import {
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
-import { LoginUtils,ServerStaticData } from '@/utils';
+import { LoginUtils, ServerStaticData } from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
 // #ifdef MP-ALIPAY
@@ -113,6 +113,8 @@ Request.interceptors.response(
           });
         },
       });
+
+      return Promise.reject(responseData);
     } else if (code != 0) {
       let showMessage = responseOptions && responseOptions.showMessage;
       if (showMessage === undefined) {
@@ -206,12 +208,12 @@ function deepEqualClean(localVersion, newVersion) {
     const val2 = newVersion[keys2[index]];
     if (val1.version != val2.version) {
       if (val1.functionType == 1) {
-        uni.removeStorageSync('systemConfig'); 
+        uni.removeStorageSync('systemConfig');
       }
       if (val1.functionType == 2) {
         uni.removeStorageSync('viewConfig');
         //重新请求首页配置
-        ServerStaticData.getHomeConfig()
+        ServerStaticData.getHomeConfig();
       }
       setLocalStorage({
         systemConfigVersion: newVersion,
