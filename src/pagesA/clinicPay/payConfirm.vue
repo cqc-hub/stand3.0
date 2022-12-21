@@ -231,14 +231,14 @@
   };
 
   const getScanData = async () => {
-    const { serialNo, visitNo, cardNumber, hosId } = pageProps.value.deParams!;
+    const { serialNo, visitNo, cardNumber, branchHosp } = pageProps.value.deParams!;
 
     isComplete.value = false;
     const arg = {
       serialNo,
       visitNo,
       cardNumber,
-      hosId,
+      branchHosp,
       scanCode: '0',
     };
     const { result } = await api.getScanClinicReservePay<any>({

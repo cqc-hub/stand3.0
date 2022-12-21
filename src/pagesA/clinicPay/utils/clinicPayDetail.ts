@@ -125,7 +125,7 @@ export type TPayConfirmPageProp = {
     serialNo: string;
     visitNo: string;
     cardNumber: string;
-    hosId: string;
+    branchHosp: string; // 院内的院区id
   };
   mzParams?: string;
 };

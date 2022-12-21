@@ -258,7 +258,7 @@
       </button>
 
       <button
-        v-if="orderRegInfo.orderStatus === '23'"
+        v-if="['23', '43'].includes(orderRegInfo.orderStatus)"
         class="btn g-border btn-primary"
         @click="againOrder"
       >
@@ -339,7 +339,9 @@
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
   const isShowFooter = computed(() =>
-    ['23', '45', '10', '70', '0', '20'].includes(orderRegInfo.value.orderStatus)
+    ['23', '45', '10', '70', '0', '20', '43'].includes(
+      orderRegInfo.value.orderStatus
+    )
   );
   const refPayList = ref([
     {
@@ -381,7 +383,13 @@
   });
 
   const titleStatus = computed(() => {
-    const statusInfo = orderStatusMap[orderRegInfo.value.orderStatus];
+    let statusInfo = orderStatusMap[orderRegInfo.value.orderStatus];
+
+    if (orderRegInfo.value.orderStatus === '0') {
+      if (orderConfig.value.isOrderPay === '1') {
+        statusInfo.title = '已挂号';
+      }
+    }
 
     return (
       statusInfo || {
