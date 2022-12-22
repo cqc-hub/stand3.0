@@ -145,6 +145,7 @@ const getOpenid = async () => {
 };
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
+  const gStores = new GStores();
   return new Promise(async (resolve, reject) => {
     const { invokeData } = data;
 
@@ -178,18 +179,32 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       ...payData,
       success(e) {
         // #ifdef MP-ALIPAY
-        alipayTrack(true, type);
-        // #endif
-        resolve({
-          payedRes: e,
-          payRes: payData,
-        });
+        alipayTrack(true, type); 
+
+         if (e.resultCode == "9000") {
+          //支付宝成功支付
+          resolve({
+            payedRes: e,
+            payRes: payData,
+          });
+        } else {
+          gStores.messageStore.showMessage("取消支付", 1500);
+        }
+         // #endif 
+         
+          // #ifdef  MP-WEIXIN
+          resolve({
+            payedRes: e,
+            payRes: payData,
+          });
+          // #endif
       },
 
       fail(err) {
         // #ifdef MP-ALIPAY
         alipayTrack(false, type);
         // #endif
+        gStores.messageStore.showMessage("取消支付", 1500);
         reject(err);
       },
     });
