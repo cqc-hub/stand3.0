@@ -75,6 +75,12 @@ const baseApi = {
       hideLoading: false,
     }),
 
+  // 蚂蚁能量
+  energySendReg: (data) =>
+    service.post('/phs-base/ali/energySend/reg', parmsysCode(data), {
+      hideLoading: false,
+    }),
+
   //行政区划列表
   getAllDivision: (data) =>
     service.post('/phs-base/division/getAllDivision', parm(data), {
@@ -142,8 +148,7 @@ const baseApi = {
 
   //获取公告资讯
   getAnnouncementCms: (data) =>
-    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
-    }),
+    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {}),
 
   //查询对应版本号
   searchFunctionConfig: (data) =>

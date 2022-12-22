@@ -12,6 +12,15 @@
       </view>
 
       <g-flag typeFg="4" isShowFgTip />
+      <!--  #ifdef MP-ALIPAY -->
+      <Green-Power />
+      <Green-Toast
+        :contentTitle="contentTitle"
+        :duration="greenToastDuration"
+        v-model:content="greenToastContent"
+      />
+
+      <!--  #endif -->
     </view>
 
     <Order-Reg-Confirm
@@ -19,7 +28,7 @@
       @confirm="isCheck = true"
       ref="regDialogConfirm"
     >
-      <g-flag v-model:title="flagTitle9" typeFg="9" isShowFgTip isHideTitle />
+      <g-flag v-model:title="flagTitle9" typeFg="9" isShowFgTip isHideTitle aaa />
     </Order-Reg-Confirm>
 
     <view class="footer">
@@ -54,8 +63,9 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import { IPageProps } from './utils/regConfirm';
-  import { GStores } from '@/utils';
+  import { GStores, ServerStaticData, wait } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
+  import { getMyPowerQx } from '@/components/greenPower';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -63,22 +73,17 @@
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
-
-  // api.addReg = () =>
-  //   Promise.resolve({
-  //     result: { orderId: '2210130519500014' },
-  //     timeTaken: 1161,
-  //     code: 0,
-  //     innerMessage: '成功',
-  //     message: '成功',
-  //     respCode: 0,
-  //   });
+  import GreenPower from '@/components/greenPower/greenPower.vue';
+  import GreenToast from '@/components/greenPower/greenToast.vue';
 
   const gStores = new GStores();
   const props = ref<IPageProps>({} as IPageProps);
   const isCheck = ref(false);
   const regDialogConfirm = ref<any>('');
   const flagTitle9 = ref('');
+  const greenToastDuration = ref(1500);
+  const contentTitle = ref('');
+  const greenToastContent = ref(0);
 
   const regConfirm = async () => {
     if (!isCheck.value) {
@@ -115,7 +120,7 @@
       timeDesc,
       clinicalType,
       promptMessage,
-      docTitleName
+      docTitleName,
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -147,9 +152,42 @@
       promptMessage,
     };
 
+    let alipayAuthCode = '';
+    // #ifdef MP-ALIPAY
+    await getMyPowerQx()
+      .then((qxRes: any) => {
+        alipayAuthCode = qxRes.authCode;
+      })
+      .catch(() => {});
+    // #endif
+
     const {
       result: { orderId },
     } = await api.addReg(requestArg);
+
+    if (alipayAuthCode) {
+      await api
+        .energySendReg({
+          orderId,
+          scene: 'horegister', // 挂号 horegister
+          userId: gStores.globalStore.openId,
+        })
+        .then(async ({ result }) => {
+          // result.totalEnergy
+          if (result && result.totalEnergy && result.totalEnergy != 0) {
+            contentTitle.value =
+              (await ServerStaticData.getSystemConfig('order')).isOrderPay !==
+              '1'
+                ? '本次预约得绿色能量'
+                : '本次挂号得绿色能量';
+            greenToastContent.value = result.totalEnergy;
+            await wait(greenToastDuration.value);
+          }
+        })
+        .catch(async () => {
+          await wait(1000);
+        });
+    }
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {

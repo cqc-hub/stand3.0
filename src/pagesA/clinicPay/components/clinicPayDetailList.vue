@@ -66,7 +66,7 @@
             <view class="row-label color-888 text-no-wrap">就诊医生</view>
             <view class="row-value g-break-word color-444 text-ellipsis">
               <text class="g-split-line mr12 pr12">
-                {{ (item._clinicType && `(${item._clinicType})`) || '' }}
+                {{ (item.clinicTypeName && `(${item.clinicTypeName})`) || '' }}
                 {{ item.docName }}
               </text>
               <text>

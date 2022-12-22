@@ -49,8 +49,8 @@ export type IPayListItem = {
   diseaseTypeName: string;
   diseaseTypeCode: string;
   visitDate: string;
+  clinicTypeName: string;
   visitNo: string;
-  _clinicType: string;
   cardNumber?: string;
   tradeType: TTradeType;
 };
@@ -62,7 +62,7 @@ export type TPayDetailProp = {
   payState: '0' | '1'; // 支付状态 1待支付，0已支付;
   deptName: string;
   docName: string;
-  _clinicType: string;
+  clinicTypeName: string;
 
   clinicType?: string;
   hosOrderId?: string;
@@ -354,13 +354,13 @@ export const usePayPage = () => {
       visitNo,
       deptName,
       docName,
-      _clinicType,
       childOrder,
       deptId,
       docId,
       hosName,
       costTypeName,
       diseaseTypeName,
+      clinicTypeName
     } = item;
 
     const pageData = {
@@ -375,8 +375,8 @@ export const usePayPage = () => {
       visitDate,
       visitNo,
       deptName,
-      _clinicType,
       docName,
+      clinicTypeName,
 
       childOrder,
       deptId,
@@ -584,11 +584,11 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 
 const dealPayList = (resList: IPayListItem[], { payState }) => {
   resList.map((o) => {
-    const { clinicType } = o;
+    // const { clinicType } = o;
 
     // o.costTypeCode = '';
 
-    o._clinicType = clinicType === '2' ? '网络医院' : '线下门诊';
+    // o._clinicType = clinicType === '2' ? '网络医院' : '线下门诊';
     o.payState = payState;
   });
 };

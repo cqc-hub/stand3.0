@@ -298,7 +298,8 @@
       const patientName = info.value.patientName;
       const source = gStores.globalStore.browser.source;
 
-      const { visitDate, mergeOrder, serialNo } = pageProps.value;
+      const { visitDate, mergeOrder, serialNo, params, mzParams } =
+        pageProps.value;
 
       const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
 
@@ -306,7 +307,7 @@
         extend: JSON.stringify(info.value),
 
         businessType: '1',
-        patientId,
+        patientId: params || mzParams ? undefined : patientId,
         source,
         totalCost: payAmount,
         hosId,
