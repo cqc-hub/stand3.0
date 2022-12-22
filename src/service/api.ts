@@ -143,7 +143,6 @@ const baseApi = {
   //获取公告资讯
   getAnnouncementCms: (data) =>
     service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
-      monitorName: '预约挂号',
     }),
 
   //查询对应版本号
@@ -352,8 +351,6 @@ const regApi = {
   refundOrder: (data: any) =>
     service.post('/phs-reg/reg/refundOrder', parm(data), {
       hideLoading: false,
-      monitorName: '预约挂号',
-      reportCmPV_YLName: '挂号缴费',
     }),
 
   // 排班

@@ -185,16 +185,16 @@ const alipayRequestTrack = (response: IResponseWrapper) => {
   if (alipayPid && (monitorName || reportCmPV_YLName)) {
     if (monitorName) {
       monitor.api({
-        api: '门诊缴费',
+        api: monitorName,
         success: code == 0 ? true : false,
         c1: 'taSR_YL',
         time: response.res.data.timeTaken,
-      });
+      }); 
     }
     if (reportCmPV_YLName) {
       reportCmPV_YL({
         title: reportCmPV_YLName,
-      });
+      }); 
     }
   }
 };

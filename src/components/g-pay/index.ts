@@ -79,7 +79,7 @@ export const payMoneyOnline = async (
   return result;
 };
 
-type ITrackType = '门诊缴费' | '住院缴费';
+type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
 
 const packageAuthParams = (
   args: {},
@@ -145,6 +145,7 @@ const getOpenid = async () => {
 };
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
+  const gStores = new GStores();
   return new Promise(async (resolve, reject) => {
     const { invokeData } = data;
 
@@ -178,18 +179,32 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       ...payData,
       success(e) {
         // #ifdef MP-ALIPAY
-        alipayTrack(true, type);
-        // #endif
-        resolve({
-          payedRes: e,
-          payRes: payData,
-        });
+        alipayTrack(true, type); 
+
+         if (e.resultCode == "9000") {
+          //支付宝成功支付
+          resolve({
+            payedRes: e,
+            payRes: payData,
+          });
+        } else {
+          gStores.messageStore.showMessage("取消支付", 1500);
+        }
+         // #endif 
+         
+          // #ifdef  MP-WEIXIN
+          resolve({
+            payedRes: e,
+            payRes: payData,
+          });
+          // #endif
       },
 
       fail(err) {
         // #ifdef MP-ALIPAY
         alipayTrack(false, type);
         // #endif
+        gStores.messageStore.showMessage("取消支付", 1500);
         reject(err);
       },
     });
@@ -203,7 +218,7 @@ const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
   console.log('缴费埋点', isSuccess, type);
   if (alipayPid && type) {
     monitor.api({
-      api: '门诊缴费',
+      api: type,
       success: isSuccess,
       c1: 'taSR_YL',
       time: '200',
