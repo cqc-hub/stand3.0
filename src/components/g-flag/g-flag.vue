@@ -79,16 +79,19 @@
 
   .tip {
     // margin-top: 32rpx;
-    .title {
-      margin-bottom: 10rpx;
-    }
-
-    // padding: 0 32rpx;
     font-size: 28rpx;
     line-height: 40rpx;
     color: #888;
     // padding-bottom: 50rpx;
     word-break: break-all;
+    white-space: pre-line;
+    text-align: left;
+
+    .title {
+      margin-bottom: 10rpx;
+    }
+
+    // padding: 0 32rpx;
   }
 
   .aaa {

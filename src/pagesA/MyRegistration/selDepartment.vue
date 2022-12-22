@@ -37,14 +37,15 @@
       :isShowCancel="false"
       @confirmButton="isShowRegTip = false"
     >
-      <view class="reg-tip">
+      <scroll-view scroll-y class="reg-tip">
         <g-flag
           v-model:title="showRegTipTitle"
           isHideTitle
           isShowFgTip
           typeFg="8"
+          aaa
         />
-      </view>
+      </scroll-view>
     </xy-dialog>
 
     <g-message />
@@ -135,9 +136,8 @@
       console.log({
         result,
         depList: depList.value,
-        props
+        props,
       });
-
     }
   };
 
@@ -220,7 +220,12 @@
 <style lang="scss" scoped>
   .g-page {
     background-color: #fff;
+  }
 
+  .reg-tip {
+    max-height: 700rpx;
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
   }
 
   .search-input {
