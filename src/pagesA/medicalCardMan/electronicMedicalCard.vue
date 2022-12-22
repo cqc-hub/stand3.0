@@ -22,16 +22,18 @@
         </view>
 
         <g-form v-model:value="formData" ref="gform">
-          <!-- <template #suffix="{ item }">
-            <view>
+          <template #showBody="{ item }">
+            <view class="flex-normal form-row">
               <text
-                v-if="item.key == 'patientNameEncry'"
-                class="iconfont icon-resize"
+                v-if="item.key == '_name'"
+                @click="eyesClick"
+                class="iconfont eyes-icon"
               >
-                &#xe6db;
+                {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
               </text>
+              <text>{{ formData[item.key] }}</text>
             </view>
-          </template> -->
+          </template>
         </g-form>
       </view>
     </view>
@@ -94,7 +96,22 @@
 
   const formData = ref({
     ...clickPat.value,
+    _name: '',
   });
+  const isNameEncry = ref(true);
+  const eyesClick = () => {
+    isNameEncry.value = !isNameEncry.value;
+    changeShowName();
+  };
+
+  const changeShowName = () => {
+    if (isNameEncry.value) {
+      formData.value._name = formData.value.patientNameEncry;
+    } else {
+      formData.value._name = formData.value.patientName;
+    }
+  };
+
   const showCodeLabel = ref('');
   if (isAreaProgram()) {
     showCodeLabel.value = clickPat.value.idCard;
@@ -146,6 +163,7 @@
 
   onMounted(() => {
     gform.value.setList(patCardDetailList);
+    changeShowName();
   });
 </script>
 
@@ -199,5 +217,18 @@
 
   .btns {
     padding: 32rpx;
+  }
+
+  .form-row {
+    flex-direction: row-reverse;
+
+    .eyes-icon {
+      font-size: 48rpx;
+      margin-left: 30rpx;
+      position: relative;
+      // #ifdef  MP-WEIXIN
+      top: 5rpx;
+      // #endif
+    }
   }
 </style>

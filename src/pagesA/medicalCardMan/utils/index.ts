@@ -407,7 +407,7 @@ export const patCardDetailTempList: TInstance[] = [
 export const patCardDetailList: TInstance[] = [
   {
     label: '姓名',
-    key: 'patientNameEncry',
+    key: '_name',
     field: 'input-text',
     disabled: true,
     isForShow: true,

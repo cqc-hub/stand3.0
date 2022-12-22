@@ -29,7 +29,7 @@
                 'pay-self': isPaySelfItem(item),
                 'pay-medical': !isPaySelfItem(item),
               }"
-              class="type-block f24 mr8"
+              class="type-block f24 mr8 text-no-wrap"
             >
               {{ tradeType[item.costTypeCode] || '未知' }}
             </text>
@@ -37,7 +37,10 @@
           </view>
 
           <view class="g-flex-rc-cc">
-            <view v-if="isCheck && item.totalCost" class="color-error g-bold f36">
+            <view
+              v-if="isCheck && item.totalCost"
+              class="color-error g-bold f36"
+            >
               {{ item.totalCost }}元
             </view>
             <view class="iconfont color-888 f48">&#xe66b;</view>
@@ -52,20 +55,22 @@
             </view>
           </view>
 
-          <view v-if="isListShowClinicType && item._clinicType" class="row flex-normal">
+          <!-- <view v-if="isListShowClinicType && item._clinicType" class="row flex-normal">
             <view class="row-label color-888">门诊类型</view>
             <view class="row-value g-break-word color-444">
               {{ item._clinicType }}
             </view>
-          </view>
+          </view> -->
 
           <view class="row flex-normal">
             <view class="row-label color-888 text-no-wrap">就诊医生</view>
             <view class="row-value g-break-word color-444 text-ellipsis">
-              <text class="g-split-line mr12 pr12">{{ item.docName }}</text>
+              <text class="g-split-line mr12 pr12">
+                {{ (item._clinicType && `(${item._clinicType})`) || '' }}
+                {{ item.docName }}
+              </text>
               <text>
                 {{ item.hosName }}
-                {{ (item._clinicType && `(${item._clinicType})`) || '' }}
               </text>
             </view>
           </view>
@@ -77,12 +82,12 @@
             </view>
           </view>
 
-          <view v-if="item.costTypeName" class="row flex-normal">
+          <!-- <view v-if="item.costTypeName" class="row flex-normal">
             <view class="row-label color-888">费用类型</view>
             <view class="row-value g-break-word color-444">
               {{ item.costTypeName }}
             </view>
-          </view>
+          </view> -->
 
           <view v-if="!isCheck && item.totalCost" class="row flex-normal">
             <view class="row-label color-888">费用金额</view>
