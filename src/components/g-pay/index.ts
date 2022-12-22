@@ -74,7 +74,7 @@ export const payMoneyOnline = async (
     ...data,
   };
 
-  const { result } = await api.addHRPay<IPayRes>(requestArg, opt);
+  const { result } = await api.addHRPay<IPayRes>(requestArg, opt as any);
 
   return result;
 };
