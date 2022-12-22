@@ -1,6 +1,6 @@
 <template>
   <view class="box">
-    <view class="title">{{pageProps.hospitalAccount ? '充值金额' : '预交费用'}}</view>
+    <view class="title">{{ pageProps.hospitalAccount ? "充值金额" : "预交费用" }}</view>
     <view class="buttons">
       <view
         :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
@@ -47,15 +47,16 @@ import { onLoad, onReady } from "@dcloudio/uni-app";
 import api from "@/service/api";
 import { GStores, ServerStaticData, wait } from "@/utils";
 import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
-import { deQueryForUrl } from '@/common/utils';
+import { deQueryForUrl } from "@/common/utils";
 import { hosParam } from "@/components/g-form";
 import { payOrderResult } from "./utils/inpatientInfo";
 
 type IPageProps = {
   hosId: string;
-  patientName?: string;//扫码的时候传 支付用
+  patientName?: string; //扫码的时候传 支付用
   cardNumber?: string;
   hospitalAccount?: string;
+  params?: string; //有值代表扫码来的
 };
 const gStores = new GStores();
 const resultHos = ref<hosParam>({
@@ -79,12 +80,14 @@ const toPay = async () => {
     phsOrderNo: payOrder.value.phsOrderNo,
     paySign: payOrder.value.paySign,
     totalFee: defalutMoney.value,
-    phsOrderSource: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3", 
+    phsOrderSource: pageProps.value.hospitalAccount
+      ? pageProps.value.hospitalAccount
+      : "3",
     source: gStores.globalStore.browser.source,
-    ...pageProps.value
+    ...pageProps.value,
   });
 
-  await toPayPull(res, '住院缴费');
+  await toPayPull(res, "住院缴费");
   payAfter();
 };
 const payAfter = async () => {
@@ -97,11 +100,11 @@ const payAfter = async () => {
   // });
 
   uni.navigateBack({
-    delta: 1
-  })
+    delta: 1,
+  });
 };
 const setData = async () => {
-  const result = await ServerStaticData.getSystemConfig('hospitalCare');
+  const result = await ServerStaticData.getSystemConfig("hospitalCare");
   resultHos.value = result;
   list.value = JSON.parse(resultHos.value.inPatientPrePay);
 };
@@ -109,9 +112,9 @@ const int = async () => {
   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
     fee: defalutMoney.value,
     orderType: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3",
-    patientId: gStores.userStore.patChoose.patientId,
-    patientName:pageProps.value.patientName,
-    cardNumber:pageProps.value.cardNumber,
+    patientId: pageProps.value.params ? "" : gStores.userStore.patChoose.patientId,
+    patientName: pageProps.value.patientName,
+    cardNumber: pageProps.value.cardNumber,
   });
   payOrder.value = result;
 };
@@ -143,14 +146,14 @@ const transformUnit = (val: number) => {
   }
 };
 onReady(() => {
-    if (pageProps.value.hospitalAccount) {
-      uni.setNavigationBarTitle({
-        title: '充值',
-      });
-    }
-  });
+  if (pageProps.value.hospitalAccount) {
+    uni.setNavigationBarTitle({
+      title: "充值",
+    });
+  }
+});
 onLoad((opt) => {
-  console.log("opt",opt)
+  console.log("opt", opt);
   pageProps.value = deQueryForUrl(opt);
   setData();
 });
