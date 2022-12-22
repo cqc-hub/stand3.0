@@ -1,17 +1,18 @@
 <template>
-  <view class="choose g-border" @click="chooseAction">
+  <view class="choose g-border">
     <view class="choose-row">
-      <view class="user-info text-ellipsis">
+      <view class="user-info text-ellipsis" @tap="closeEyes">
         <text class="title">
-          {{ `${gStores.userStore.patChoose.patientName}` }}
+          {{ `${isClose?gStores.userStore.patChoose.patientNameEncry:gStores.userStore.patChoose.patientName}` }}
         </text>
 
         <text>
           {{ ` (${gStores.userStore.patChoose._showId})` }}
         </text>
+        <text :class="`iconfont icon-resize`" > {{isClose?'&#xe6d4;':'&#xe6db;'}}</text>
       </view>
 
-      <view class="choose-icon flex-normal">
+      <view class="choose-icon flex-normal" @click="chooseAction">
         <text>更换</text>
         <text class="iconfont">&#xe66b;</text>
       </view>
@@ -47,6 +48,7 @@
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
   const emits = defineEmits(['choose-pat']);
+  const isClose = ref(true)
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
@@ -65,6 +67,10 @@
     gStores.userStore.updatePatChoose(item);
     emits('choose-pat', { item });
   };
+
+  const closeEyes = ()=>{
+    isClose.value=!isClose.value
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -81,6 +87,13 @@
 
       .user-info {
         flex: 1;
+        display: flex;
+        align-items: center;
+      }
+      .icon-resize {
+        font-size: 48rpx; 
+        margin-left: 24rpx;
+        color: var(--hr-neutral-color-7);
       }
 
       .choose-icon {
