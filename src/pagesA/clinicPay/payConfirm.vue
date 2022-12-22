@@ -201,10 +201,10 @@
 
   const getNormalData = async () => {
     const { patientId } = gStores.userStore.patChoose;
-    const { hosId, serialNo, visitNo } = pageProps.value;
+    const { hosId, serialNo, visitNo, params, mzParams } = pageProps.value;
     isComplete.value = false;
     const { result } = await api.getClinicReservePay<any>({
-      patientId,
+      patientId: params || mzParams ? undefined : patientId,
       hosId,
       serialNo,
       visitNo,

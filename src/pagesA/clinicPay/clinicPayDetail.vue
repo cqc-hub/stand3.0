@@ -221,23 +221,23 @@
     getListData();
   };
 
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    const a = {
-      // branchHosp: '10',
-      // visitNo: '20221221000017',
-      cardNumber: '200693442',
-      // serialNo: '11d97a5a0dbf466d8942602e1fa848ad'
-    };
-    // const a = {
-    //   cardNumber: '000000143',
-    //   patientName: '郑迪',
-    // };
+  // setTimeout(() => {
+  //   // regDialogConfirm.value.show();
+  //   const a = {
+  //     // branchHosp: '10',
+  //     // visitNo: '20221221000017',
+  //     cardNumber: '200693442',
+  //     // serialNo: '11d97a5a0dbf466d8942602e1fa848ad'
+  //   };
+  //   // const a = {
+  //   //   cardNumber: '000000143',
+  //   //   patientName: '郑迪',
+  //   // };
 
-    const en = encryptForPage(a);
-    console.log(en);
-    console.log(decryptForPage(en));
-  }, 1000);
+  //   const en = encryptForPage(a);
+  //   console.log(en);
+  //   console.log(decryptForPage(en));
+  // }, 1000);
 
   onLoad(async (opt) => {
     if (opt.q) {

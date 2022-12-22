@@ -3,7 +3,7 @@
     <My-Popup
       :maskClick="false"
       maskBackgroundColor="transparent"
-      v-model="isGreenModelShow"
+      v-model:value="isGreenModelShow"
     >
       <view class="content">
         <image
@@ -26,7 +26,7 @@
 
   const props = withDefaults(
     defineProps<{
-      content: string;
+      content: number;
       contentTitle: string;
       duration?: number;
     }>(),
@@ -50,6 +50,7 @@
   watch(
     () => isGreenModelShow.value,
     (v) => {
+
       if (v) {
         setTimeout(() => {
           isGreenModelShow.value = false;

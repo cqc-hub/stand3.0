@@ -21,7 +21,7 @@
         <view class="flex-between flex-start-r">
           <view
             @click.stop="selItem(item)"
-            class="g-bold f36 flex1 mr40 flex-normal"
+            class="g-bold f36 flex1 mr40 flex-normal item-title"
           >
             <text
               v-if="item.costTypeCode"
@@ -152,6 +152,10 @@
 
       &:first-child {
         margin-top: 24rpx;
+      }
+
+      .item-title {
+        align-items: flex-start;
       }
 
       .icon-content {

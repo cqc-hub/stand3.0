@@ -77,7 +77,7 @@ const baseApi = {
 
   // 蚂蚁能量
   energySendReg: (data) =>
-    service.post('/phs-base/ali/energySend/reg', parmsysCode(data), {
+    service.post('/phs-user/ali/energySend/reg', parmsysCode(data), {
       hideLoading: false,
     }),
 

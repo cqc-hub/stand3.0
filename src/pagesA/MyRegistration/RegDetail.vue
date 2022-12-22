@@ -474,7 +474,6 @@
     result._appointmentDate = `${result.appointmentDate} ${
       result.ampmName + result.appointmentTime
     }`;
-    result[qrCode] = result[qrCode] + 'cqc'
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
