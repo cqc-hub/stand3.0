@@ -155,13 +155,14 @@
       left: 50%;
       transform: translate(-50%, -75%);
       transition: transform 0.3s;
-      width: 582upx;
+      width: calc(100vw - 150rpx);
+      // width: 582upx;
       border-radius: 16upx;
       background-color: #fff;
       overflow: hidden;
       opacity: 0;
       transition: opacity 200ms ease-in;
-      padding-top: 64rpx;
+      padding-top: 32rpx;
     }
 
     &__header {
@@ -169,7 +170,7 @@
       overflow: auto;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 0 24upx 24upx;
+      padding: 0 12upx 12upx;
       line-height: 1.5;
       color: #111111;
       font-weight: bold;
