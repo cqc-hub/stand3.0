@@ -75,6 +75,7 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import DepartmentList from './components/departmentList/departmentList.vue';
+  // import GreenPower from '@/components/greenPower/greenPower.vue';
 
   const props = defineProps<{
     hosId: string;
@@ -133,11 +134,6 @@
       } else {
         depList.value = [];
       }
-      console.log({
-        result,
-        depList: depList.value,
-        props,
-      });
     }
   };
 

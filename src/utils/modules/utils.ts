@@ -168,8 +168,8 @@ export const getMyPowerQx = function (scopes = 'mfrstre') {
       scopes: [scopes], // 蚂蚁能量授权：mfrstre。或者其它scope
       success: async (res) => {
 
-        console.log(res, 'qcqc');
-        return
+        // console.log(res, 'qcqc');
+        // return
 
         if (res.authCode) {
           await api.authorization({

@@ -44,7 +44,7 @@
                 </view>
                 <view class="subhead"
                   >报告单号<view class="subhead-detail">{{ item.repId }}</view>
-                  <button class="more-button">
+                  <button class="more-button g-border">
                     <template v-if="isShow[index] == 0">
                       <view class="more">更多</view>
                       <text class="iconfont">&#xe6c4;</text>
@@ -72,7 +72,7 @@
                   </view>
                   <view class="subhead"
                     >审核医生<view class="subhead-detail">{{ item.passDoc }}</view>
-                    <button class="more-button">
+                    <button class="more-button g-border">
                       <template v-if="isShow[index] != 0">
                         <view class="more">收起</view>
                         <text class="iconfont">&#xe6c5;</text>
@@ -159,7 +159,7 @@
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
-      <view class="popup-tki"> 
+      <view class="popup-tki">
         <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
@@ -244,7 +244,7 @@ const qrVal = ref();
 
 const options = ref({
   // 二维码
-  size: 400, 
+  size: 400,
   code: '',
 });
 
@@ -599,6 +599,8 @@ onUpdated(() => {
               display: flex;
               z-index: 99;
               text-align: left;
+              justify-content: center;
+              align-items: center;
               .more {
                 height: 40rpx;
                 font-size: 24rpx;
@@ -606,6 +608,10 @@ onUpdated(() => {
               }
               .iconfont {
                 font-size: 32rpx;
+              }
+
+              &::after {
+                border: none;
               }
             }
           }
