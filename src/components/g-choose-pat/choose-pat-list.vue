@@ -15,7 +15,7 @@
         mode="widthFix"
       />
       <view class="user-label text-ellipsis">
-        <text class="user-name">{{ pat.patientName }}</text>
+        <text class="user-name">{{ pat.patientNameEncry }}</text>
 
         <text v-if="!isAreaProgram()">
           {{ (pat._showId && `(${pat._showId})`) || '' }}

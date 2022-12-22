@@ -18,7 +18,7 @@
                     <view @tap="cardClick" class="iconfont icon-size"> &#xe6a7; </view>
                     <view class="patient">
                       <text>
-                        {{ gStores.userStore.patChoose.patientName }}
+                        {{ gStores.userStore.patChoose.patientNameEncry }}
                       </text>
                       <text
                         v-if="!isAreaProgram() && gStores.userStore.patChoose._showId"
