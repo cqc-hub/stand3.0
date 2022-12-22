@@ -98,9 +98,9 @@ const toPayRecord = async () => {
     url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
   });
 };
-const toPayPage = () => {
+const toPayPage = () => { 
   uni.navigateTo({
-    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}`,
+    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}&cardNumber=${hosInfoResObj.value.cardNumber}&patientName=${hosInfoResObj.value.patientName}`,
   });
 };
 onPullDownRefresh(() => {
