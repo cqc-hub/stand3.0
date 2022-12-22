@@ -1,5 +1,5 @@
 <template>
-  <view class="page">
+  <view class="g-page">
     <g-tbanner :config="orderConfig.bannerOrder" />
     <g-selhos
       v-model:hosId="hosId"
@@ -13,7 +13,7 @@
       </view>
     </view>
 
-    <view class="container hidden-scrollbar" scroll-y>
+    <view class="g-container hidden-scrollbar" scroll-y>
       <Department-List
         v-if="depList.length"
         :list="depList"
@@ -132,6 +132,12 @@
       } else {
         depList.value = [];
       }
+      console.log({
+        result,
+        depList: depList.value,
+        props
+      });
+
     }
   };
 
@@ -212,39 +218,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .page {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  .g-page {
     background-color: #fff;
 
-    .bread-crumbs {
-      display: flex;
-
-      font-size: var(--hr-font-size-xs);
-      color: var(--hr-neutral-color-7);
-      align-items: center;
-      padding: 14rpx 30rpx;
-
-      .hos-name {
-        // flex: 1;
-        color: var(--hr-neutral-color-10);
-      }
-
-      .ico-arrow {
-        font-size: var(--hr-font-size-xl);
-      }
-
-      .hos-label {
-        white-space: nowrap;
-      }
-    }
-
-    .container {
-      flex: 1;
-      height: 1px;
-    }
   }
 
   .search-input {

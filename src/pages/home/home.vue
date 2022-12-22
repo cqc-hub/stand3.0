@@ -205,7 +205,7 @@
  const menuList = ref([]); //业务模块
 
  onLoad(() => {
-  // console.log(gStores.globalStore.openId, 'cqc');
+  console.log(gStores.globalStore.openId, 'cqc');
 
    //设置顶部标题
    uni.setNavigationBarTitle({
@@ -228,7 +228,7 @@
     //对接支付宝首页消息提醒
     const alipayPid = global.systemInfo.alipayPid;
     alipayPid&&globalStore.isLogin &&!uni.getStorageSync("hospital_order") && authorization();
-    // getMyPowerQx()
+    getMyPowerQx()
     // #endif
  });
  const getNotice = async () => {
