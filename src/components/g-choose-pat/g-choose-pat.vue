@@ -11,7 +11,7 @@
 
       <view class="user-info text-ellipsis">
         {{
-          `${gStores.userStore.patChoose.patientName}  ${
+          `${gStores.userStore.patChoose.patientNameEncry}  ${
             (!isAreaProgram() && gStores.userStore.patChoose._showId) || ""
           }`
         }}

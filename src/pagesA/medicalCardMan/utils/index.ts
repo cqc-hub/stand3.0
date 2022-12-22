@@ -303,7 +303,7 @@ export const pickTempItem = function <T = TFormKeys>(
  */
 export const patCardDetailFormKey = <const>{
   patientType: 'patientType',
-  patientName: 'patientName',
+  patientName: 'patientNameEncry',
   idCard: 'idCard',
   patientPhone: 'patientPhone',
   nation: 'nation',
@@ -407,7 +407,7 @@ export const patCardDetailTempList: TInstance[] = [
 export const patCardDetailList: TInstance[] = [
   {
     label: '姓名',
-    key: 'patientName',
+    key: 'patientNameEncry',
     field: 'input-text',
     disabled: true,
     isForShow: true,
