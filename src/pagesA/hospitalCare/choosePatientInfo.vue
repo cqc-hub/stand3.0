@@ -1,31 +1,38 @@
 <template>
   <g-flag typeFg="600" isShowFg />
   <!-- 预交金代缴信息页面 -->
-  <view class="box" v-if="Obj==false">
-    <view :class="hosInfoResObj.sexCode=='2'?'card card-lady':'card card-man'">
+  <view class="box" v-if="Obj == false">
+    <view :class="hosInfoResObj.sexCode == '2' ? 'card card-lady' : 'card card-man'">
       <view class="user">
-        <image class="user-avatar"
-               :src="hosInfoResObj.sexCode=='1'?'../../static/image/img_tx_patient_male.png':'/static/image/img_tx_patient_female.png'"
-               mode="widthFix"></image>
+        <image
+          class="user-avatar"
+          :src="
+            hosInfoResObj.sexCode == '1'
+              ? '../../static/image/img_tx_patient_male.png'
+              : '/static/image/img_tx_patient_female.png'
+          "
+          mode="widthFix"
+        ></image>
         <view class="user-info">
-          <text class="user-info-name">
-            {{ hosInfoResObj.patientNameDes }}</text>
-          <text v-if="hosInfoResObj.cardNumber " class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
+          <text class="user-info-name"> {{ hosInfoResObj.patientNameDes }}</text>
+          <text v-if="hosInfoResObj.cardNumber" class="user-info-id"
+            >({{ hosInfoResObj.cardNumber }})</text
+          >
         </view>
       </view>
       <view class="user-del yard">
-        <text>{{hosInfoResObj.hosName}}</text>
+        <text>{{ hosInfoResObj.hosName }}</text>
         <text class="line"></text>
-        <text>{{hosInfoResObj.inpatientWard}}</text>
+        <text>{{ hosInfoResObj.inpatientWard }}</text>
         <text class="line"></text>
-        <text>{{hosInfoResObj.inpatientBed}}床</text>
+        <text>{{ hosInfoResObj.inpatientBed }}床</text>
       </view>
       <view class="user-del date">
-        <text>{{hosInfoResObj.beHosDate}} </text>
+        <text>{{ hosInfoResObj.beHosDate }} </text>
         <text>入院</text>
       </view>
-      <view v-if="hosInfoResObj.sexCode=='2'" class="iconfont woman">&#xe6a9;</view>
-      <view v-if="hosInfoResObj.sexCode=='1'" class="iconfont man">&#xe6aa;</view>
+      <view v-if="hosInfoResObj.sexCode == '2'" class="iconfont woman">&#xe6a9;</view>
+      <view v-if="hosInfoResObj.sexCode == '1'" class="iconfont man">&#xe6aa;</view>
     </view>
     <view class="card-detail">
       <view class="card-detail-item">
@@ -37,23 +44,23 @@
             <view class="iconfont right">&#xe66b;</view>
           </view>
         </view> -->
-        <text class="money">{{hosInfoResObj.prepaidCost}}元</text>
+        <text class="money">{{ hosInfoResObj.prepaidCost }}元</text>
       </view>
       <view v-if="hosInfoResObj.totalCost" class="card-detail-item">
         <text class="name">已产生费用</text>
-        <text class="money">{{hosInfoResObj.totalCost}}元</text>
+        <text class="money">{{ hosInfoResObj.totalCost }}元</text>
       </view>
       <view v-if="hosInfoResObj.insuranceFee" class="card-detail-item">
         <text class="name">医保报销</text>
-        <text class="money">{{hosInfoResObj.insuranceFee}}元</text>
+        <text class="money">{{ hosInfoResObj.insuranceFee }}元</text>
       </view>
-      <view v-if="hosInfoResObj.defrayFee"  class="card-detail-item">
+      <view v-if="hosInfoResObj.defrayFee" class="card-detail-item">
         <text class="name">自费金额</text>
-        <text class="money">{{hosInfoResObj.defrayFee}}元</text>
+        <text class="money">{{ hosInfoResObj.defrayFee }}元</text>
       </view>
-      <view v-if="hosInfoResObj.accountBalance"  class="card-detail-item last">
+      <view v-if="hosInfoResObj.accountBalance" class="card-detail-item last">
         <text class="name">账户余额</text>
-        <text class="money">{{hosInfoResObj.accountBalance}}元</text>
+        <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
       </view>
 
       <view class="button" @click="toPayPage">预交费用</view>
@@ -65,40 +72,40 @@
   <g-message />
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import { onLoad, onShow } from '@dcloudio/uni-app';
+import { ref } from "vue";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 
-import api from '@/service/api';
-import { isAreaProgram } from '@/stores';
-import { GStores, ServerStaticData } from '@/utils';
-import { hosParam } from '@/components/g-form';
+import api from "@/service/api";
+import { isAreaProgram } from "@/stores";
+import { GStores, ServerStaticData } from "@/utils";
+import { hosParam } from "@/components/g-form";
+import { joinQuery } from "@/common";
+
 import {
   getInHospitalInfoParam,
   getInHospitalInfoResult,
   hospitalPayResult,
-} from './utils/inpatientInfo';
-import { deQueryForUrl} from '@/common/utils';
+} from "./utils/inpatientInfo";
+import { deQueryForUrl } from "@/common/utils";
 
 type IPageProps = {
-  patientName?: string; 
+  patientName?: string;
   patientPhone?: string; // 代缴的时候带
   params?: string; // 扫码时候带的加密参数
 };
 const pageProps = ref<IPageProps>({} as IPageProps);
 
 const resultHos = ref<hosParam>({
-  inPatientPrePay: '',
-  isHosDaylist: '',
-  isHosTotallist: '',
+  inPatientPrePay: "",
+  isHosDaylist: "",
+  isHosTotallist: "",
   tab: [],
-  isQueryPreRecord: '',
+  isQueryPreRecord: "",
 });
 
 const Obj = ref();
 const gStores = new GStores();
-const hosInfoResObj = ref<getInHospitalInfoResult>(
-  {} as getInHospitalInfoResult
-); 
+const hosInfoResObj = ref<getInHospitalInfoResult>({} as getInHospitalInfoResult);
 // const payParam = ref({
 //   hosId: '1279',
 //   // patientId: '10763642',
@@ -112,8 +119,15 @@ const loadImg = () => {
 };
 
 const toPayPage = () => {
+  const { hosId, cardNumber, patientName } = hosInfoResObj.value;
+  const data = {
+    hosId,
+    cardNumber,
+    patientName,
+    params: pageProps.value.params, //表示扫码来的
+  };
   uni.navigateTo({
-    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}&cardNumber=${hosInfoResObj.value.cardNumber}&patientName=${hosInfoResObj.value.patientName}`,
+    url: joinQuery("/pagesA/hospitalCare/paymentPage", data),
   });
 };
 
@@ -124,16 +138,16 @@ const init = async () => {
     patientPhone: pageProps.value.patientPhone,
   });
   hosInfoResObj.value = result;
-  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
+  Obj.value = JSON.stringify(hosInfoResObj.value) == "{}";
 };
 
 //根据扫码获取住院信息
 const getScanInHospitalInfo = async () => {
-  const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({ 
-    desSecret:decodeURIComponent(pageProps.value.params as string)
+  const { result } = await api.getScanInHospitalInfo<getInHospitalInfoResult>({
+    desSecret: decodeURIComponent(pageProps.value.params as string),
   });
   hosInfoResObj.value = result;
-  Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
+  Obj.value = JSON.stringify(hosInfoResObj.value) == "{}";
 };
 
 //查看记录暂时注释
@@ -155,24 +169,24 @@ const getScanInHospitalInfo = async () => {
 // };
 
 onLoad(async (opt) => {
-  pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt)); 
-  console.log(22222,'onload',pageProps.value );
+  pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
+  console.log(22222, "onload", pageProps.value);
   // await setData();
 });
 
-onShow(async()=>{
-  console.log(2222,'show',pageProps.value);
-  if(pageProps.value.params){//扫码进入
-      uni.setNavigationBarTitle({
+onShow(async () => {
+  console.log(2222, "show", pageProps.value);
+  if (pageProps.value.params) {
+    //扫码进入
+    uni.setNavigationBarTitle({
       title: "住院服务",
     });
-    await getScanInHospitalInfo()
-    }
-    if(pageProps.value.patientName){
-      await init();
-    }
-})
-
+    await getScanInHospitalInfo();
+  }
+  if (pageProps.value.patientName) {
+    await init();
+  }
+});
 </script>
 
 <style scoped lang="scss">
