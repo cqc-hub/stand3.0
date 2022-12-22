@@ -213,7 +213,7 @@
 
       _firstIn = false;
       selPatId.value =
-        o.patientName + (o.cardNumber ? `(${o.cardNumber})` : '');
+        o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : '');
     }
   };
 
@@ -230,7 +230,7 @@
     await getConfig();
     const item = patList.value.find(
       (o: any) =>
-        o.patientName + (o.cardNumber ? `(${o.cardNumber})` : '') ===
+        o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : '') ===
         selPatId.value
     );
 
@@ -246,7 +246,7 @@
       },
       ...gStores.userStore.patList.map((o) => ({
         ...o,
-        _showLabel: o.patientName + (o.cardNumber ? `(${o.cardNumber})` : ''),
+        _showLabel: o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : ''),
       })),
     ];
   });

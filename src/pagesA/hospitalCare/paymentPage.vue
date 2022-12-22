@@ -245,6 +245,7 @@ onLoad((opt) => {
   .uni-input {
     font-weight: 600;
     font-size: 56rpx;
+    background: #f6f6f6;
   }
 }
 </style>

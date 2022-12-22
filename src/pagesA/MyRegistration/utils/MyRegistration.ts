@@ -23,6 +23,7 @@ export type IRegistrationCardItem = {
   clinicalType: string;
   hosName: string;
   patientName: string;
+  patientNameEncry: string;
   cardType: string;
   appointmentNumber: string;
   hosId: string;

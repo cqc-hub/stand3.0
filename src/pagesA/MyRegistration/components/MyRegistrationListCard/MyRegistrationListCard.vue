@@ -26,7 +26,7 @@
         <view class="row f28">
           <view class="label color-888">就诊人</view>
           <view class="body">
-            {{ item.patientName }}({{ item.cardNumber }})
+            {{ item.patientNameEncry }}({{ item.cardNumber }})
           </view>
         </view>
 

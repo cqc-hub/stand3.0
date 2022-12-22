@@ -79,7 +79,7 @@ export const payMoneyOnline = async (
   return result;
 };
 
-type ITrackType = '门诊缴费' | '住院缴费';
+type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
 
 const packageAuthParams = (
   args: {},
@@ -203,7 +203,7 @@ const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
   console.log('缴费埋点', isSuccess, type);
   if (alipayPid && type) {
     monitor.api({
-      api: '门诊缴费',
+      api: type,
       success: isSuccess,
       c1: 'taSR_YL',
       time: '200',
