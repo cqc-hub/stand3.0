@@ -44,8 +44,8 @@
                 </view>
                 <view class="subhead"
                   >报告单号<view class="subhead-detail">{{ item.repId }}</view>
-                  <button class="more-button g-border">
-                    <template v-if="isShow[index] == 0">
+                  <button v-if="isShow[index] == 0" class="more-button g-border">
+                    <template >
                       <view class="more">更多</view>
                       <text class="iconfont">&#xe6c4;</text>
                     </template>

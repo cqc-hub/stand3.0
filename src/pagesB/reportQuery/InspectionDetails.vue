@@ -30,8 +30,8 @@
               >报告时间<view class="subhead-detail">{{
                 checkoutReportList.repTime
               }}</view>
-              <button class="more-button g-border">
-                <template v-if="!isShow && !checkoutReportList.reminder">
+              <button v-if="!isShow && !checkoutReportList.reminder" class="more-button g-border">
+                <template >
                   <view class="more">更多</view>
                   <text class="iconfont">&#xe6c4;</text>
                 </template>

@@ -21,7 +21,18 @@
           <w-qrcode :options="options" />
         </view>
 
-        <g-form v-model:value="formData" ref="gform" />
+        <g-form v-model:value="formData" ref="gform">
+          <!-- <template #suffix="{ item }">
+            <view>
+              <text
+                v-if="item.key == 'patientNameEncry'"
+                class="iconfont icon-resize"
+              >
+                &#xe6db;
+              </text>
+            </view>
+          </template> -->
+        </g-form>
       </view>
     </view>
 
