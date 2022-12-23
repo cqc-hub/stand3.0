@@ -17,7 +17,7 @@ import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
 // #ifdef MP-ALIPAY
 import monitor from '@/js_sdk/alipay/alipayLogger.js';
-import { reportCmPV_YL } from '@/js_sdk/alipay/cloudMonitorHelper.js';
+// import { reportCmPV_YL } from '@/js_sdk/alipay/cloudMonitorHelper.js';
 // #endif
 
 const Request = new requestClass();
@@ -191,11 +191,12 @@ const alipayRequestTrack = (response: IResponseWrapper) => {
         time: response.res.data.timeTaken,
       }); 
     }
-    if (reportCmPV_YLName) {
-      reportCmPV_YL({
-        title: reportCmPV_YLName,
-      }); 
-    }
+    //支付宝新规则 不需要拆解埋点了
+    // if (reportCmPV_YLName) {
+    //   reportCmPV_YL({
+    //     title: reportCmPV_YLName,
+    //   }); 
+    // }
   }
 };
 

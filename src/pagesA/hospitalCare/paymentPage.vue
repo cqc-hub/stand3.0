@@ -93,11 +93,7 @@ const toPay = async () => {
 const payAfter = async () => {
   uni.showLoading({});
   await wait(1000);
-  uni.hideLoading();
-
-  // uni.reLaunch({
-  //   url: "/pagesA/hospitalCare/choosePatient",
-  // });
+  uni.hideLoading(); 
 
   uni.navigateBack({
     delta: 1,
@@ -153,7 +149,6 @@ onReady(() => {
   }
 });
 onLoad((opt) => {
-  console.log("opt", opt);
   pageProps.value = deQueryForUrl(opt);
   setData();
 });

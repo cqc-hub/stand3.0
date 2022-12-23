@@ -133,7 +133,8 @@ const props = defineProps<{
   costDay?: string;
   isHosDaylist?: string;
   isHosTotallist?: string;
-}>();
+}>(); 
+
 const emit = defineEmits(["detalResult"]);
 
 const isShowBtn = (index) => {
@@ -141,20 +142,10 @@ const isShowBtn = (index) => {
 };
 const init = async () => {
   patName.value = gStores.userStore.patChoose.patientName;
-  patientId.value = gStores.userStore.patChoose._showId;
-  if (props.isHosDaylist == "2") {
-    costDate.value = dayjs(props.costDay).format("YYYY-MM-DD");
-    costType.value = "1";
-  } else if (props.isHosTotallist == "1") {
-    costType.value = "3";
-    costDate.value = "";
-  } else {
-    costType.value = "3";
-    // costDate.value = param.value.costDay!;
-  }
+  patientId.value = gStores.userStore.patChoose._showId; 
   const params = {
-    costDay: costDate.value,
-    costType: costType.value,
+    costDay: props.costDay,
+    costType:props.isHosDaylist?'1':'3',
     patientId: gStores.userStore.patChoose.patientId,
   };
   const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(params);

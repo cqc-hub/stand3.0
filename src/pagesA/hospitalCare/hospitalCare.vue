@@ -112,9 +112,9 @@ onLoad(async (opt) => {
   setData();
   if (pageProps.value.tabIndex) {
     tabCurrent.value = pageProps.value.tabIndex;
-    // pageRequest();
   }
-});
+}); 
+
 </script>
 
 <style scoped lang="scss">
