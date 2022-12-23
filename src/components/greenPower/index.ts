@@ -35,14 +35,15 @@ export const getMyPowerQx = function (scopes = 'mfrstre') {
 // 报告查询
 const getReportPower = async function (repId) {
   const { authCode } = (await getMyPowerQx()) as any;
-  const sysCode = uni.getStorageSync('sysCode');
+  const gStores = new GStores();
+  const sysCode = gStores.globalStore.sysCode;
+
 
   if (authCode) {
     const { result } = await api.energySendReg({
       orderId: sysCode + repId,
-      sysCode,
       scene: 'hoinquire', // 挂号 horegister 报告 hoinquire
-      userId: uni.getStorageSync('openid'),
+      userId: gStores.globalStore.openId,
     });
 
     if (result && result.totalEnergy && result.totalEnergy != 0) {
