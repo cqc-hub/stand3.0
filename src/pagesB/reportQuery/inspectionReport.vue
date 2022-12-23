@@ -156,6 +156,15 @@
       </button>
     </view>
   </view>
+
+  <!--  #ifdef MP-ALIPAY -->
+      <Green-Toast
+        :contentTitle="contentTitle"
+        :duration="greenToastDuration"
+        v-model:content="greenToastContent"
+      />
+   <!--  #endif -->
+
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
@@ -230,7 +239,16 @@ import { joinQuery, encryptDes, getSysCode } from "@/common";
 import dayjs from "dayjs";
 import env from "@/config/env";
 import { deQueryForUrl } from "@/common";
+import { useReportPowerEnerg } from "@/components/greenPower";
 
+import GreenToast from '@/components/greenPower/greenToast.vue';
+
+const {
+  contentTitle,
+  greenToastContent,
+  greenToastDuration,
+  getPowerEnerg
+} = useReportPowerEnerg();
 const isDialogShow = ref();
 const isOperation = ref(false);
 
@@ -356,6 +374,7 @@ const getInspectionReportList = async () => {
   for (var i = 0; i < btnNumber.value; i++) {
     isShow.value.push(0);
   }
+  getPowerEnerg(repId)
 };
 const goReportPdf = (item) => {
   let { repId, repName } = item;

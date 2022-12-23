@@ -236,6 +236,15 @@
       </button>
     </view>
   </view>
+
+
+  <!--  #ifdef MP-ALIPAY -->
+      <Green-Toast
+        :contentTitle="contentTitle"
+        :duration="greenToastDuration"
+        v-model:content="greenToastContent"
+      />
+   <!--  #endif -->
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
@@ -282,6 +291,16 @@ import {
 import { GStores } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
 import { deQueryForUrl } from "@/common";
+import { useReportPowerEnerg } from "@/components/greenPower";
+
+import GreenToast from '@/components/greenPower/greenToast.vue';
+
+const {
+  contentTitle,
+  greenToastContent,
+  greenToastDuration,
+  getPowerEnerg
+} = useReportPowerEnerg();
 
 const isShow = ref(false);
 const checkoutReportList = ref<checkoutReportDetails>({});
@@ -319,6 +338,7 @@ const getCheckoutReportDetails = async () => {
   };
   const { result } = await api.getCheckoutReportDetails(params);
   checkoutReportList.value = result;
+  getPowerEnerg(repId);
   console.log(checkoutReportList.value);
 };
 const goDoctor = () => {

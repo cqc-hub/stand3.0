@@ -25,7 +25,9 @@
                   <view class="advisoryItem" :class="{ advisoryItemFirst: index == 0 }">
                     <template v-for="(data, i) in item.reportHosNameResults[0]
                         .reportList" :key="i">
-                      <advisoryItem @tap="goDetail(data)" :data="data" :type="tab.headerType" />
+                        <view @tap="goDetail(data)">
+                          <advisoryItem  :data="data" :type="tab.headerType" />
+                        </view>
                     </template>
                   </view>
                 </template>
