@@ -27,7 +27,7 @@
           </view>
 
           <view class="g-flex-rc-cc">
-            <view
+            <!-- <view
               v-if="
                 showStatus &&
                 item.takenDrugType &&
@@ -39,8 +39,10 @@
               class="f32 g-bold"
             >
               {{ statusLabel[item.takenDrugType].label }}
+            </view> -->
+            <view v-if="!showStatus" class="iconfont color-888 f48">
+              &#xe66b;
             </view>
-            <view v-else class="iconfont color-888 f48">&#xe66b;</view>
           </view>
         </view>
 
@@ -65,11 +67,14 @@
           </view>
         </view>
 
-        <view v-if="item.takenDrugType" class="item-box f28">
+        <view v-if="item.takenDrugType && !showStatus" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">取药状态</view>
             <view class="row-value g-break-word color-444">
-              {{ statusLabel[item.takenDrugType] && statusLabel[item.takenDrugType].label }}
+              {{
+                statusLabel[item.takenDrugType] &&
+                statusLabel[item.takenDrugType].label
+              }}
             </view>
           </view>
         </view>

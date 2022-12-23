@@ -116,19 +116,31 @@
   tabChange = debounce(tabChange, 80);
 
   const selPayListItem = (item: IWaitListItem) => {
-    const idx = selList.value.findIndex((o) => o._id === item._id);
+    const { takenDrugType } = item;
 
-    if (idx === -1) {
-      const list = [...selList.value, item];
-      const hosIds = [...new Set(list.map((o) => o.hosId))];
+    if (takenDrugType === '0') {
+      const idx = selList.value.findIndex((o) => o._id === item._id);
 
-      if (hosIds.length > 1) {
-        gStores.messageStore.showMessage('不支持跨院区配送');
+      if (idx === -1) {
+        const list = [...selList.value, item];
+        const hosIds = [...new Set(list.map((o) => o.hosId))];
+
+        if (hosIds.length > 1) {
+          gStores.messageStore.showMessage('不支持跨院区配送');
+        } else {
+          selList.value.push(item);
+        }
       } else {
-        selList.value.push(item);
+        selList.value.splice(idx, 1);
       }
     } else {
-      selList.value.splice(idx, 1);
+      let errWord = '该处方已选择取药方式，请前往窗口取药';
+
+      if (takenDrugType === '2') {
+        errWord = '该处方已选择取药方式，请等待快递员取药';
+      }
+
+      gStores.messageStore.showMessage(errWord, 3000);
     }
   };
 
