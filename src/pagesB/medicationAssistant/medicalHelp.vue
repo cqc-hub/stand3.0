@@ -88,11 +88,11 @@
   const tabCurrent = ref(0);
   const tabField = [
     {
-      label: '待选择',
+      label: '待取药',
       key: '0',
     },
     {
-      label: '已选择',
+      label: '已取药',
       key: '1',
     },
   ] as const;

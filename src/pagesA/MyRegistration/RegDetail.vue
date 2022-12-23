@@ -306,6 +306,7 @@
     IHosInfo,
     openLocation,
     ISystemConfig,
+    wait,
   } from '@/utils';
 
   import {
@@ -548,11 +549,18 @@
 
   const toPay = async () => {
     const res = await payMoneyOnline({ ...payArg.value });
-    await toPayPull(res,'挂号缴费');
+    await toPayPull(res, '挂号缴费');
     payAfter();
   };
 
-  const payAfter = () => {
+  const payAfter = async () => {
+    uni.showLoading({
+      mask: true,
+    });
+
+    await wait(2000);
+    uni.hideLoading();
+
     init();
   };
 

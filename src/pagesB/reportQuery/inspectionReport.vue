@@ -438,7 +438,7 @@ const downloadReport = () => {
     actionSheet.value.showActionSheet();
   } else {
     let data = examineReportList.value.detailsResult;
-    goReportPdf(data[0]);
+    goReportPdf(data![0]);
   }
 };
 const actionSheetOpt = computed(() => {

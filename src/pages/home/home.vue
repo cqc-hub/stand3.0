@@ -204,8 +204,6 @@
  const menuList = ref([]); //业务模块
 
  onLoad(() => {
-  console.log(gStores.globalStore.openId, 'cqc');
-
    //设置顶部标题
    uni.setNavigationBarTitle({
      title: global.systemInfo.name,

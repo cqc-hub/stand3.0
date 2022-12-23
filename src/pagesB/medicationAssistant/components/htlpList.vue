@@ -64,6 +64,15 @@
             </view>
           </view>
         </view>
+
+        <view v-if="item.takenDrugType" class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">取药状态</view>
+            <view class="row-value g-break-word color-444">
+              {{ statusLabel[item.takenDrugType] && statusLabel[item.takenDrugType].label }}
+            </view>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -91,15 +100,15 @@
 
   const statusLabel = {
     '0': {
-      label: '窗口待取药',
+      label: '待选择配送方式',
       color: 'var(--hr-brand-color-6)',
     },
     '1': {
-      label: '窗口待取药',
+      label: '窗口取药',
       color: 'var(--hr-brand-color-6)',
     },
     '2': {
-      label: '待发货',
+      label: '已填写配送信息窗口待取药',
       color: 'var(--hr-brand-color-6)',
     },
     '4': {

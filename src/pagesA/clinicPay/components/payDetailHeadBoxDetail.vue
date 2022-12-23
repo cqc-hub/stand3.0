@@ -13,7 +13,8 @@
           {{
             `${detailData.hosName || ''}${
               pageConfig.isListShowClinicType === '1'
-                ? `(${myprops.clinicTypeName})`
+                ? (myprops.clinicTypeName && `(${myprops.clinicTypeName})`) ||
+                  ''
                 : ''
             }`
           }}
