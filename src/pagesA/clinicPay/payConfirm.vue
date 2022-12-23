@@ -165,7 +165,6 @@
       patientName,
       hosId,
       visitNo,
-      payAmount,
       recipeNo,
       otherPayWay,
     } = info.value;
@@ -294,7 +293,6 @@
     });
     try {
       const { patientId } = gStores.userStore.patChoose;
-      const _totalCost = info.value.totalNeedSelfpay + '';
       const patientName = info.value.patientName;
       const source = gStores.globalStore.browser.source;
 
@@ -399,7 +397,6 @@
       }
     }
 
-    // console.log(pageProps.value);
   });
 
   // setTimeout(() => {

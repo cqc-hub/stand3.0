@@ -151,7 +151,7 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { usePayPage } from './utils/clinicPayDetail';
-  import { useTBanner, wait } from '@/utils';
+  import { useTBanner, wait, debounce } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import { encryptForPage, decryptForPage } from '@/common/des';
   import { beforeEach } from '@/router';
@@ -262,11 +262,11 @@
       }
     }
 
-    await init();
-
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
     }
+
+    await init();
   });
 </script>
 

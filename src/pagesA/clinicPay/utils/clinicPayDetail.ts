@@ -162,7 +162,7 @@ export const usePayPage = () => {
     getListData();
   };
 
-  tabChange = debounce(tabChange, 80);
+  tabChange = debounce(tabChange, 80, false);
 
   const pageProps = ref(
     {} as {
@@ -186,6 +186,7 @@ export const usePayPage = () => {
 
     return Number((_subCount * 100).toFixed(2)) / 100;
   });
+
   const isShowSelectAll = computed(() => {
     if (unPayList.value.length > 1) {
       const sIds = [...new Set([...unPayList.value.map((o) => o.subIds)])];
@@ -194,6 +195,7 @@ export const usePayPage = () => {
       return false;
     }
   });
+
   const isSelectAll = computed(
     () =>
       selUnPayList.value.length &&
@@ -360,7 +362,7 @@ export const usePayPage = () => {
       hosName,
       costTypeName,
       diseaseTypeName,
-      clinicTypeName
+      clinicTypeName,
     } = item;
 
     const pageData = {
@@ -401,7 +403,7 @@ export const usePayPage = () => {
     });
   };
 
-  const getListData = async (isReset = true) => {
+  let getListData = async (isReset = true) => {
     if (isReset) {
       unPayList.value = [];
       payedList.value = [];
@@ -414,6 +416,8 @@ export const usePayPage = () => {
       await getPayedList();
     }
   };
+
+  getListData = debounce(getListData, 120, false);
 
   const getSysConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('pay');
@@ -521,6 +525,9 @@ export const usePayPage = () => {
     selUnPayList.value = [];
   };
 
+  // 药品配送数据
+  const getDrugDeliveryList = async () => {};
+
   return {
     pageProps,
     pageConfig,
@@ -552,6 +559,7 @@ export const usePayPage = () => {
     isShowSelectAll,
     isSelectAll,
     chooseAll,
+    getDrugDeliveryList,
   };
 };
 
