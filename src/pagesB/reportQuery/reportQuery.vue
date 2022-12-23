@@ -51,8 +51,9 @@ import { ITab, ICms } from './utils';
 import advisoryItem from './components/advisoryItem.vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { GStores,ServerStaticData } from '@/utils';
-import { joinQuery } from "@/common";
+import { joinQuery, joinQueryForUrl } from "@/common";
 import api from '@/service/api';
+
 
 const tabs = ref<ITab[]>([]);
 const tabCurrent = ref(0);
@@ -207,7 +208,6 @@ const tabChange = async (e: number, type: string) => {
   }
 };
 const goDetail = (data) => {
-  console.log(22222,"跳转详情");
 
   const {
     isDoctorCard,
@@ -229,16 +229,17 @@ const goDetail = (data) => {
     isGraphic,
   };
 
+
   if (tabCurrent.value == 0) {
     uni.navigateTo({
-      url: joinQuery('/pagesB/reportQuery/InspectionDetails', mq),
+      url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', mq),
     });
     // uni.navigateTo({
     //   url: `/pagesB/reportQuery/InspectionDetails?mq=${JSON.stringify(mq)}`,
     // });
   } else if (tabCurrent.value == 1) {
     uni.navigateTo({
-      url: joinQuery('/pagesB/reportQuery/inspectionReport', mq),
+      url: joinQueryForUrl('/pagesB/reportQuery/inspectionReport', mq),
     });
     // uni.navigateTo({
     //   url: `/pagesB/reportQuery/inspectionReport?mq=${JSON.stringify(mq)}`,

@@ -250,7 +250,7 @@
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
-      <view class="popup-tki"> 
+      <view class="popup-tki">
         <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
