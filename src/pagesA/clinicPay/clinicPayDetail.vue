@@ -133,6 +133,22 @@
       </view>
     </Order-Reg-Confirm>
 
+    <Order-Reg-Confirm
+      :title="'温馨提示'"
+      @confirm="goDrugDelivery"
+      height="40vh"
+      confirmText="确定"
+      cannerText="取消"
+      headerIcon=""
+      ref="regDialogConfirmExpress"
+      isShowCloseIcon
+      footerBtnIsometric
+    >
+      <view class="color-444 f32">
+        已缴费项目中含有支持快递配送的药品，立即前往药品配送设置取药方式。
+      </view>
+    </Order-Reg-Confirm>
+
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -188,6 +204,9 @@
     isSelectAll,
     chooseAll,
     gStores,
+    getDrugDeliveryList,
+    goDrugDelivery,
+    regDialogConfirmExpress,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -229,14 +248,13 @@
     //   cardNumber: '000001949',
     //   // serialNo: '11d97a5a0dbf466d8942602e1fa848ad'
     // };
-    const a = {
-      cardNumber: '000001949',
-      patientName: '陈钦川',
-    };
-
-    const en = encryptForPage(a);
-    console.log(en);
-    console.log(decryptForPage(en));
+    // const a = {
+    //   cardNumber: '000001949',
+    //   patientName: '陈钦川',
+    // };
+    // const en = encryptForPage(a);
+    // console.log(en);
+    // console.log(decryptForPage(en));
   }, 1000);
 
   onLoad(async (opt) => {
@@ -264,6 +282,10 @@
 
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
+
+      if (!pageProps.value.params) {
+        getDrugDeliveryList();
+      }
     }
 
     await init();

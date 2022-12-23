@@ -133,6 +133,7 @@ export type TPayConfirmPageProp = {
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const regDialogConfirm = ref<any>('');
+  const regDialogConfirmExpress = ref<any>('');
   const confirmFgTitle = ref('');
   const gStores = new GStores();
   const tabCurrent = ref(0);
@@ -526,7 +527,32 @@ export const usePayPage = () => {
   };
 
   // 药品配送数据
-  const getDrugDeliveryList = async () => {};
+  const getDrugDeliveryList = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const args = {
+      takenDrug: '0',
+      patientId,
+      clinicCate: 0,
+    };
+
+    const { result } = await api.getDrugDelivery(args);
+    let rList = result && result.drugList;
+    if (rList && rList.length) {
+      rList = rList.filter((o) => o.takenDrugType === '0');
+
+      if (rList.length) {
+        setTimeout(() => {
+          regDialogConfirmExpress.value.show();
+        }, 500);
+      }
+    }
+  };
+
+  const goDrugDelivery = () => {
+    uni.navigateTo({
+      url: '/pagesB/medicationAssistant/medicalHelp',
+    });
+  };
 
   return {
     pageProps,
@@ -545,6 +571,7 @@ export const usePayPage = () => {
     selPayListItem,
     getListData,
     regDialogConfirm,
+    regDialogConfirmExpress,
     handlerPay,
     confirmFgTitle,
     getPay,
@@ -560,6 +587,7 @@ export const usePayPage = () => {
     isSelectAll,
     chooseAll,
     getDrugDeliveryList,
+    goDrugDelivery,
   };
 };
 
