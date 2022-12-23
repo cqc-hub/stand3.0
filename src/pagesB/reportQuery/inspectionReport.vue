@@ -158,11 +158,13 @@
   </view>
 
   <!--  #ifdef MP-ALIPAY -->
+  <template v-if="alipayPid">
       <Green-Toast
         :contentTitle="contentTitle"
         :duration="greenToastDuration"
         v-model:content="greenToastContent"
       />
+    </template>
    <!--  #endif -->
 
   <g-popup title="分享报告" ref="isDialogShow">
@@ -229,19 +231,23 @@
   </g-popup>
 </template>
 <script lang="ts" setup>
-import { onLoad } from "@dcloudio/uni-app";
+import { onLoad,onPageScroll} from "@dcloudio/uni-app";
 import { ref, onMounted, computed, nextTick, onUpdated } from "vue";
-import { onPageScroll } from "@dcloudio/uni-app";
+
+import global from '@/config/global';
 import api from "@/service/api";
+import dayjs from "dayjs";
+import env from "@/config/env";
+
 import { examineReportDetails, getShareTotalUrl, addWatermark } from "./utils";
 import { GStores } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
-import dayjs from "dayjs";
-import env from "@/config/env";
 import { deQueryForUrl } from "@/common";
 import { useReportPowerEnerg } from "@/components/greenPower";
 
 import GreenToast from '@/components/greenPower/greenToast.vue';
+
+const alipayPid = global.systemInfo.alipayPid;
 
 const {
   contentTitle,
@@ -374,7 +380,9 @@ const getInspectionReportList = async () => {
   for (var i = 0; i < btnNumber.value; i++) {
     isShow.value.push(0);
   }
-  getPowerEnerg(repId)
+  if(alipayPid) {
+    getPowerEnerg(repId);
+  }
 };
 const goReportPdf = (item) => {
   let { repId, repName } = item;

@@ -48,7 +48,7 @@
       <button class="btn btn-primary" @click="submit">确定开单</button>
     </view>
     <view v-if="pageLoading && NucleResult && NucleResult.length == 0" class="empty-box">
-      <page-state index="1"></page-state>
+      <g-empty :current="1" />
     </view>
     <g-message />
   </view>

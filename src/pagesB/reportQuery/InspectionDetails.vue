@@ -239,17 +239,18 @@
 
 
   <!--  #ifdef MP-ALIPAY -->
+    <template v-if="alipayPid">
       <Green-Toast
         :contentTitle="contentTitle"
         :duration="greenToastDuration"
         v-model:content="greenToastContent"
       />
+    </template>
    <!--  #endif -->
   <g-popup title="分享报告" ref="isDialogShow">
     <view v-if="qrVal" class="popup-content">
       <view class="title">截图保存二维码或复制链接分享报告</view>
-      <view class="popup-tki">
-        <!-- <uni-hr-qrcode class="qrcode" :val="qrVal" :size="400" /> -->
+      <view class="popup-tki"> 
         <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
@@ -281,12 +282,12 @@ import { onLoad } from "@dcloudio/uni-app";
 import { onMounted, ref } from "vue";
 import dayjs from "dayjs";
 import api from "@/service/api";
+import global from '@/config/global';
 
 import {
   checkoutReportDetails,
   getShareTotalUrl,
-  addWatermark,
-  getQueryUrl,
+  addWatermark
 } from "./utils";
 import { GStores } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
@@ -294,6 +295,8 @@ import { deQueryForUrl } from "@/common";
 import { useReportPowerEnerg } from "@/components/greenPower";
 
 import GreenToast from '@/components/greenPower/greenToast.vue';
+
+const alipayPid = global.systemInfo.alipayPid;
 
 const {
   contentTitle,
@@ -338,7 +341,9 @@ const getCheckoutReportDetails = async () => {
   };
   const { result } = await api.getCheckoutReportDetails(params);
   checkoutReportList.value = result;
-  getPowerEnerg(repId);
+  if(alipayPid) {
+    getPowerEnerg(repId);
+  }
   console.log(checkoutReportList.value);
 };
 const goDoctor = () => {

@@ -13,13 +13,14 @@
 
       <g-flag typeFg="4" isShowFgTip />
       <!--  #ifdef MP-ALIPAY -->
+      <template v-if="alipayPid">
       <Green-Power />
       <Green-Toast
         :contentTitle="contentTitle"
         :duration="greenToastDuration"
         v-model:content="greenToastContent"
       />
-
+    </template>
       <!--  #endif -->
     </view>
 
@@ -69,6 +70,8 @@
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
+  import global from '@/config/global';
+
 
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
@@ -84,6 +87,7 @@
   const greenToastDuration = ref(1500);
   const contentTitle = ref('');
   const greenToastContent = ref(0);
+  const alipayPid = global.systemInfo.alipayPid;
 
   const regConfirm = async () => {
     if (!isCheck.value) {
@@ -154,41 +158,47 @@
 
     let alipayAuthCode = '';
     // #ifdef MP-ALIPAY
-    await getMyPowerQx()
+    if(alipayPid){
+      await getMyPowerQx()
       .then((qxRes: any) => {
         alipayAuthCode = qxRes.authCode;
       })
       .catch(() => {});
+    }
     // #endif
 
     const {
       result: { orderId },
     } = await api.addReg(requestArg);
-
-    if (alipayAuthCode) {
-      await api
-        .energySendReg({
-          orderId,
-          scene: 'horegister', // 挂号 horegister
-          userId: gStores.globalStore.openId,
-        })
-        .then(async ({ result }) => {
-          // result.totalEnergy
-          if (result && result.totalEnergy && result.totalEnergy != 0) {
-            contentTitle.value =
-              (await ServerStaticData.getSystemConfig('order')).isOrderPay !==
-              '1'
-                ? '本次预约得绿色能量'
-                : '本次挂号得绿色能量';
-            greenToastContent.value = result.totalEnergy;
-            await wait(greenToastDuration.value);
-          }
-        })
-        .catch(async () => {
-          await wait(1000);
-        });
+    
+     // #ifdef MP-ALIPAY
+     if(alipayPid){//有埋点的情况
+        if (alipayAuthCode) {
+        await api
+          .energySendReg({
+            orderId,
+            scene: 'horegister', // 挂号 horegister
+            userId: gStores.globalStore.openId,
+          })
+          .then(async ({ result }) => {
+            // result.totalEnergy
+            if (result && result.totalEnergy && result.totalEnergy != 0) {
+              contentTitle.value =
+                (await ServerStaticData.getSystemConfig('order')).isOrderPay !==
+                '1'
+                  ? '本次预约得绿色能量'
+                  : '本次挂号得绿色能量';
+              greenToastContent.value = result.totalEnergy;
+              await wait(greenToastDuration.value);
+            }
+          })
+          .catch(async () => {
+            await wait(1000);
+          });
+      }
     }
-
+    // #endif
+  
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,

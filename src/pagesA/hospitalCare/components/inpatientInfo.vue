@@ -70,8 +70,8 @@
 
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { getAvatar, isAreaProgram } from '@/stores';
+import { onMounted, ref } from 'vue';
+import { getAvatar } from '@/stores';
 import { GStores } from '@/utils';
 import api from '@/service/api';
 import {
@@ -79,7 +79,7 @@ import {
   getInHospitalInfoResult,
   hospitalPayResult,
 } from '../utils/inpatientInfo';
-import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
+import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
 const Obj = ref();
 const props = defineProps<{
   isQueryPreRecord?: string;
@@ -121,6 +121,10 @@ const init = async () => {
 onMounted(() => {
   init();
 });
+onShow(() => {
+  init();
+  });
+
 defineExpose({
   init
   });

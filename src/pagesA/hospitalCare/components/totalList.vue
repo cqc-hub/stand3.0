@@ -88,7 +88,7 @@ const detalResult = (val) => {
 };
 const gotoListExpenses = (data) => {
   uni.navigateTo({
-    url: `listExpenses?startTime=${data.startTime}&endTime=${data.endTime}&isHosTotallist='2'`,
+    url: `listExpenses?isHosTotallist='2'`,
   });
 };
 onMounted(async () => {
