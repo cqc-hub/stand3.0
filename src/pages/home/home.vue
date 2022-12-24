@@ -291,7 +291,8 @@
     functionType: "2",//首页配置
   });
   const localVersion = getLocalStorage('systemConfigVersion');
-  if(result !== localVersion[0].version){
+  const item = localVersion.find((o) => o.functionType == 2);
+  if(result !== item?.version){
     return true
   }else{
     return false
@@ -301,11 +302,11 @@
  //获取配置数据
  const getHomeConfig = async () => {
    skeletonProps.value.loading = true;
-  //  if(await getVersion()){
-  //   homeConfig = await ServerStaticData.getHomeConfig('home');
-  //  }else{
+   if(await getVersion()){
+    homeConfig = await ServerStaticData.getHomeConfig('home');
+   }else{
    homeConfig = await ServerStaticData.getHomeConfig();
-  //  }
+   }
    if (homeConfig) {
      topMenuList.value = homeConfig[0].functionList;
      // 新增公告展示判断 showFlag为1展示
