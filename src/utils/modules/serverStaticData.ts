@@ -416,7 +416,7 @@ export class ServerStaticData {
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
       //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG
-      //REPORT_QUERY_CONFIG报告查询
+      //REPORT_QUERY_CONFIG报告查询 药品配送 DRUG_DELIVERY_CONFIG
       const { result } = await api.getParamsMoreBySysCode({
         paramCode:
           'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG',
