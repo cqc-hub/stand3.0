@@ -241,25 +241,40 @@
       branchHosp,
       scanCode: '0',
     };
-    const { result } = await api.getScanClinicReservePay<any>({
-      ...arg,
-      desSecret: pageProps.value.params,
-    });
 
-    isComplete.value = true;
-    info.value = result;
+    try {
+      const { result } = await api.getScanClinicReservePay<any>({
+        ...arg,
+        desSecret: pageProps.value.params,
+      });
 
-    if (info.value.costInfo) {
-      const costInfo = JSON.parse(info.value.costInfo);
-      info.value = {
-        ...result,
-        ...costInfo,
-      };
-      for (var key in costInfo) {
-        details.value.push({
-          label: key,
-          value: JSON.parse(result.costInfo)[key],
-        });
+      isComplete.value = true;
+      info.value = result;
+
+      if (info.value.costInfo) {
+        const costInfo = JSON.parse(info.value.costInfo);
+        info.value = {
+          ...result,
+          ...costInfo,
+        };
+        for (var key in costInfo) {
+          details.value.push({
+            label: key,
+            value: JSON.parse(result.costInfo)[key],
+          });
+        }
+      }
+    } catch (error: any) {
+      if (error) {
+        const { message } = error;
+
+        if (message) {
+          gStores.messageStore.showMessage(message, 3000, {
+            closeCallBack() {
+              payAfter();
+            },
+          });
+        }
       }
     }
   };
@@ -351,6 +366,7 @@
     await wait(1000);
     uni.hideLoading();
     const { mzParams, deParams } = pageProps.value;
+
     /**
      * else if (deParams) {
     }
@@ -366,7 +382,7 @@
 
       uni.reLaunch({
         url:
-          '/pagesA/clinicPay/clinicPayDetail?tabIndex=1' +
+          '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&' +
           `params=${encryptForPage({
             cardNumber,
             patientName,
@@ -396,7 +412,6 @@
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
       }
     }
-
   });
 
   // setTimeout(() => {
