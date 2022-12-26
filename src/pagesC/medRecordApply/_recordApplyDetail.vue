@@ -388,7 +388,7 @@
     const args = {
       id,
       phsOrderNo,
-      type: 3
+      type: 3,
     };
 
     await api.copyRefund(args);
@@ -409,6 +409,7 @@
       },
       addition: {
         token: 'token',
+        herenId: 'herenId',
       },
     };
 
