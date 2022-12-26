@@ -15,16 +15,29 @@
         </view>
 
         <view class="container-box g-border mb16 box-padding">
-          <view id="_express" class="g-bold f36">选择快递方式</view>
+          <block v-if="aimList.length > 1">
+            <view id="_express" class="g-bold f36">选择快递方式</view>
 
-          <view class="mt24 pb32 g-border-bottom">
-            <Sel-Express
-              :selectLength="3"
-              :list="aimList"
-              v-model:value="aimValue"
-              column="2"
-            />
-          </view>
+            <view class="mt24 pb32 g-border-bottom">
+              <Sel-Express
+                :selectLength="3"
+                :list="aimList"
+                v-model:value="aimValue"
+                column="2"
+              />
+            </view>
+          </block>
+
+          <block v-if="aimList.length === 1">
+            <view id="_express" class="g-bold f36">快递方式</view>
+
+            <view class="mt24 f28">
+              <view class="flex-between">
+                <view class="color-888">快递方式</view>
+                <view class="g-bold">{{ aimList[0].label }}</view>
+              </view>
+            </view>
+          </block>
 
           <view class="mt24 f28">
             <view class="flex-between">
@@ -44,7 +57,7 @@
               autoHeight
               :inputBorder="false"
               :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
-              placeholder="如还需以下说明的其他病历资料请备注"
+              placeholder="请输入备注内容"
             />
 
             <!-- auto-height -->
@@ -84,19 +97,20 @@
   const addressList = ref<any[]>([]);
   const gStores = new GStores();
   const listData = ref<any[]>([]);
+  const pageConfig = ref<ISystemConfig['drugDelivery']>({});
 
-  const aimList = ref([
-    {
-      label: '顺丰快递',
-      value: '1',
-    },
-    {
-      label: '邮政快递',
-      value: '2',
-    },
+  const aimList = ref<IOptions[]>([
+    // {
+    //   label: '顺丰快递',
+    //   value: '1',
+    // },
+    // {
+    //   label: '邮政快递',
+    //   value: '2',
+    // },
   ]);
 
-  const aimValue = ref([]);
+  const aimValue = ref<any[]>([]);
 
   const submit = async () => {
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
@@ -129,8 +143,8 @@
       detailsAddress,
       deptName,
       expressCompany,
-      expressName:senderName,
-      expressPhone:senderPhone,
+      expressName: senderName,
+      expressPhone: senderPhone,
       cardNumber,
       patientId,
       patientName,
@@ -165,7 +179,29 @@
     }
   });
 
-  onLoad(() => {
+  const getConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
+
+    const companyList = pageConfig.value.company;
+    const len = companyList && companyList.length;
+
+    if (len) {
+      aimList.value = companyList;
+
+      if (len === 1) {
+        aimValue.value = [companyList[0].value];
+      }
+    } else {
+      gStores.messageStore.showMessage('未配置快递信息');
+    }
+  };
+
+  const init = async () => {
+    await getConfig();
+  };
+
+  onLoad(async () => {
+    await init();
     listData.value = getLocalStorage('medicalHelp') || [];
   });
 </script>
