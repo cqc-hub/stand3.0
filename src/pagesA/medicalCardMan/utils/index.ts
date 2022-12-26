@@ -435,9 +435,9 @@ export const getDefaultFormData = async (
   pageType: 'addPatient' | 'perfectReal'
 ) => {
   const data: Record<string, any> = {};
+  const gStores = new GStores();
 
   if (pageType === 'perfectReal') {
-    const gStores = new GStores();
     // #ifdef MP-ALIPAY
     const { userName, mobile } = gStores.userStore.cacheUser;
     data[formKey.patientName] = userName;
@@ -447,6 +447,18 @@ export const getDefaultFormData = async (
     // #ifdef MP-WEIXIN
     const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
     data[formKey.patientPhone] = wxPhone;
+    // #endif
+  } else {
+    // #ifdef MP-ALIPAY
+    const patList = gStores.userStore.patList;
+
+    if (!patList.length) {
+      const { userName, mobile, certNo } = gStores.userStore.cacheUser;
+
+      data[formKey.patientName] = userName;
+      data[formKey.patientPhone] = mobile;
+      data[formKey.idCard] = certNo;
+    }
     // #endif
   }
 
