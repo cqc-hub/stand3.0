@@ -166,7 +166,10 @@ const payAfter = async (patientId) => {
 </script>
 <style lang="scss" scoped>
 .g-page {
-  .box {
+
+  .empty-box {
+  padding-top: 200rpx;
+}  .box {
     box-sizing: border-box;
     padding: 24rpx 32rpx 40rpx;
     width: 100%;
