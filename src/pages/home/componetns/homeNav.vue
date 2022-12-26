@@ -31,7 +31,7 @@
     flex-direction: column;
     height: $nav-height;
     font-size: 12px;
-    background-color: var(--hr-brand-color-6);
+    background-color: #fff;
 
     // padding-top: 100rpx;
 
