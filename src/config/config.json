@@ -88,7 +88,8 @@
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "ze2exd3di9dbye6cc+hfia==",
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
     }
   }
 }
