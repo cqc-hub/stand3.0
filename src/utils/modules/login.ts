@@ -11,8 +11,9 @@ import api from '@/service/api';
 import globalGl from '@/config/global';
 
 export const getH5OpenidParam = function (data) {
-  // #ifdef MP-WEIXIN
   const globalStore = useGlobalStore();
+
+  // #ifdef MP-WEIXIN
   data.openIds = [
     {
       openId: globalStore.h5OpenId,
@@ -24,6 +25,15 @@ export const getH5OpenidParam = function (data) {
     },
   ];
   // #endif
+
+  // #ifdef MP-ALIPAY 
+  data.openIds = [
+    {
+      openId: globalStore.openId,
+      source: '21',
+    }
+  ];
+// #endif
 };
 
 const packageAuthParams = (

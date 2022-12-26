@@ -148,7 +148,8 @@
       verifyCode,
       ...filterData,
       ...addressChoose,
-    };
+    }; 
+    
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
