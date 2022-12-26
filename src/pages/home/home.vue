@@ -1,6 +1,7 @@
 <template>
-  <view class="home">
-    <scroll-view class="scroll-page" scroll-y>
+  <view class="home g-page">
+    <home-Nav />
+    <scroll-view class="scroll-page g-container" scroll-y>
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="skeletonProps.loading">
         <view class="homePage">
           <view class="search" @tap="goSearch">
@@ -153,6 +154,7 @@
  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
  import homeTabbar from './componetns/homeTabbar.vue';
  import homeGrid from './componetns/homeGrid.vue';
+ import homeNav from './componetns/homeNav.vue';
 
  const props = defineProps<{
    code?: string;
@@ -373,7 +375,7 @@ uni.navigateTo({
   box-sizing: border-box;
 }
 .scroll-page {
-  height: 100vh;
+  // height: 100vh;
 }
 
 .homePage {

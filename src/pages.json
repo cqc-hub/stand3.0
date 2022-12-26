@@ -7,8 +7,8 @@
     {
       "path": "pages/home/home",
       "style": {
-        "navigationBarTitleText": ""
-        // "navigationStyle": "custom"
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom"
       }
     },
     {

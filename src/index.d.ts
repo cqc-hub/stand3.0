@@ -38,6 +38,7 @@ interface ISystemGlobalItem {
   alipayPid: string;
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
+  homeNavTitleLogo?: string;
 }
 
 interface ISystemGlobalConfig {
