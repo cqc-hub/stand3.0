@@ -117,7 +117,7 @@
 
         .row-title {
           color: var(--hr-neutral-color-7);
-          width: 96rpx;
+          width: 120rpx;
         }
 
         .row-content {

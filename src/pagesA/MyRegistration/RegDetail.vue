@@ -565,7 +565,7 @@
   };
 
   const goDoctorCard = () => {
-    const { deptName, docName, hosDocId, hosId, clinicalType } =
+    const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
       orderRegInfo.value;
 
     uni.navigateTo({
@@ -575,6 +575,7 @@
         hosDocId,
         hosId,
         clinicalType,
+        hosDeptId,
       }),
     });
   };
