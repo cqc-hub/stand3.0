@@ -238,20 +238,14 @@
         <button @click="cancelOrder" class="btn g-border btn-normal">
           取消订单
         </button>
+
         <button
-          @click="init"
-          :class="{
-            'btn-disabled': timeTravel.downTime <= 0,
-          }"
-          class="btn btn-warning pay-btn"
-        >
-          <!-- <button
           @click="payOrder"
           :class="{
             'btn-disabled': timeTravel.downTime <= 0,
           }"
           class="btn btn-warning pay-btn"
-        > -->
+        >
           {{ orderRegInfo.fee }}元 立即支付
         </button>
       </block>
@@ -460,6 +454,7 @@
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
     qrCodeOpt.value.code = '';
+    orderRegInfo.value = {} as any;
     const orderId = pageProps.value.orderId;
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
