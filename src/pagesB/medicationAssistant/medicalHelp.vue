@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <!-- <g-flag isShowFg typeFg="48" /> -->
-    <g-choose-pat />
+    <g-choose-pat @choose-pat="tabChange(tabCurrent)" />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
