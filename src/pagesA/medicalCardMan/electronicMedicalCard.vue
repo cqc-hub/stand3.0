@@ -1,7 +1,9 @@
 <template>
   <view class="page">
     <view class="card-content">
-      <view class="card-header">{{ title }}</view>
+      <view class="card-header flex-between">
+        <view>{{ title }}</view>
+      </view>
 
       <view
         :class="{

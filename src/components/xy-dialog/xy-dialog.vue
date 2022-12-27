@@ -1,5 +1,9 @@
 <template>
-  <view class="xy-dialog" :class="{ 'xy-dialog__show': isShow }" @touchmove.stop.prevent="bindTouchmove">
+  <view
+    class="xy-dialog"
+    :class="{ 'xy-dialog__show': isShow }"
+    @touchmove.stop.prevent="bindTouchmove"
+  >
     <view class="xy-dialog__mask" @click="maskClick"></view>
     <view class="xy-dialog__container">
       <view class="xy-dialog__header" v-if="title.length > 0">
@@ -15,6 +19,16 @@
       </view>
       <view class="xy-dialog__footer">
         <view
+          v-if="isReverseBtn"
+          class="xy-dialog__btn xy-dialog__footer-confirm xy-dialog__btn-confirm-left"
+          :style="{ color: confirmColor }"
+          :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
+          @click="clickConfirm"
+        >
+          <slot name="confirmBtn">{{ confirmText }}</slot>
+        </view>
+
+        <view
           v-if="isShowCancel"
           class="xy-dialog__btn xy-dialog__footer-cancel"
           :style="{ color: cancelColor }"
@@ -23,6 +37,7 @@
           {{ cancelText }}
         </view>
         <view
+          v-if="!isReverseBtn"
           class="xy-dialog__btn xy-dialog__footer-confirm"
           :style="{ color: confirmColor }"
           :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
@@ -41,7 +56,7 @@
       // 标题
       title: {
         type: String,
-        default: ''
+        default: '',
       },
 
       // 内容
@@ -50,59 +65,66 @@
       // 对齐方式
       textalign: {
         type: String,
-        default: 'center'
+        default: 'center',
       },
 
       // 取消文字
       cancelText: {
         type: String,
-        default: '取消'
+        default: '取消',
       },
 
       // 取消颜色
       cancelColor: {
         type: String,
-        default: '#111111'
+        default: '#111111',
       },
 
       // 确定文字
       confirmText: {
         type: String,
-        default: '确定'
+        default: '确定',
       },
 
       // 确定文字颜色
       confirmColor: {
         type: String,
-        default: '#296FFF'
+        default: '#296FFF',
       },
 
       // 是否显示取消按钮
       isShowCancel: {
         type: Boolean,
-        default: true
+        default: true,
       },
 
       // 是否显示弹出框
       show: {
         type: Boolean,
-        default: false
+        default: false,
       },
 
       isMaskClick: {
         type: Boolean,
-        default: false
+        default: false,
+      },
+
+
+      // 确认按钮在前
+      isReverseBtn: {
+        type: Boolean,
+        default: false,
       },
     },
     data() {
       return {
-        isShow: false
+        isShow: false,
       };
     },
     watch: {
       show(val) {
         this.isShow = val;
-      }
+      },
     },
     methods: {
       // 禁止穿透
@@ -134,8 +156,8 @@
       closeDialog() {
         this.isShow = false;
         this.$emit('close');
-      }
-    }
+      },
+    },
   };
 </script>
 
@@ -222,6 +244,9 @@
         width: 50%;
         text-align: center;
         padding: 20upx 0;
+        &.xy-dialog__btn-confirm-left {
+          border-right: 2rpx solid #e6e6e6;
+        }
         &.xy-dialog__footer-cancel {
           color: #111111;
           border-right: 2rpx solid #e6e6e6;

@@ -41,8 +41,8 @@
 
           <view class="mt24 f28">
             <view class="flex-between">
-              <view class="color-888">支付方式</view>
-              <view class="g-bold">到付</view>
+              <view class="color-888">快递费支付方式</view>
+              <view class="g-bold color-error">到付</view>
             </view>
           </view>
         </view>
@@ -62,6 +62,10 @@
 
             <!-- auto-height -->
           </view>
+        </view>
+
+        <view class="container-box g-border mb16">
+          <g-flag typeFg="38" isShowFgTip />
         </view>
       </view>
     </scroll-view>

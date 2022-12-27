@@ -113,7 +113,7 @@
       color: 'var(--hr-brand-color-6)',
     },
     '2': {
-      label: '已填写配送信息窗口待取药',
+      label: '已填写配送信息待快递员取药',
       color: 'var(--hr-brand-color-6)',
     },
     '4': {

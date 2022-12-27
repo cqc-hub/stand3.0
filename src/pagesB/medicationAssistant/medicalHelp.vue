@@ -1,6 +1,6 @@
 <template>
   <view class="g-page">
-    <!-- <g-flag isShowFg typeFg="48" /> -->
+    <g-flag isShowFg typeFg="48" />
     <g-choose-pat @choose-pat="tabChange(tabCurrent)" />
     <view class="g-border-bottom">
       <g-tabs
@@ -64,11 +64,25 @@
 
     <g-message />
 
-    <sel-Way-Popup
-      :sel-list="drayWaySelList"
-      @item-click="wayClick"
-      ref="refAddDialog"
-    />
+    <!-- :sel-list="drayWaySelList" -->
+    <sel-Way-Popup :sel-list="[]" @item-click="wayClick" ref="refAddDialog" />
+    <xy-dialog
+      :title="fgTitle54"
+      :show="isFgShow54"
+      @confirmButton="_getMedicalInHos"
+      isMaskClick
+      isReverseBtn
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag
+          v-model:title="fgTitle54"
+          isHideTitle
+          isShowFgTip
+          typeFg="54"
+          aaa
+        />
+      </scroll-view>
+    </xy-dialog>
   </view>
 </template>
 
@@ -101,6 +115,8 @@
     '0': false,
     '1': false,
   });
+  const fgTitle54 = ref('');
+  const isFgShow54 = ref(false);
 
   const waitSelList = ref<IWaitListItem[]>([]);
   const selList = ref<IWaitListItem[]>([]);
@@ -186,8 +202,15 @@
       configToHome();
     } else {
       // 医院窗口取药
-      getMedicalInHos();
+      // getMedicalInHos();
+
+      isFgShow54.value = true;
     }
+  };
+
+  const _getMedicalInHos = () => {
+    isFgShow54.value = false;
+    getMedicalInHos();
   };
 
   const configToHome = () => {
@@ -255,5 +278,11 @@
     height: 100%;
     padding: 0 32rpx;
     width: calc(100% - 64rpx);
+  }
+
+  .reg-tip {
+    max-height: 550rpx;
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
   }
 </style>

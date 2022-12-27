@@ -230,5 +230,5 @@
   .search-input {
     margin: 16rpx 32rpx;
   }
- 
+
 </style>

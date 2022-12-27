@@ -17,7 +17,7 @@
         </view>
 
         <view class="mt40">
-          <g-flag typeFg="32" isShowFgTip aaa />
+          <g-flag typeFg="37" isShowFgTip aaa />
         </view>
       </view>
     </g-popup>
