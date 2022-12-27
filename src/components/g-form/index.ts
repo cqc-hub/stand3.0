@@ -63,7 +63,7 @@ interface IBaseInstance {
         message?: string;
       }
   >;
-  inputMask?: (v: unknown, item: TInstance) => string;
+  inputMask?: (v: string, item: TInstance) => string;
 }
 
 interface IInputInstance extends IBaseInstance {

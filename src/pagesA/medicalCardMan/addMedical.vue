@@ -76,12 +76,12 @@
     ServerStaticData,
     routerJump,
     OcrFindRes,
+    nameConvert,
   } from '@/utils';
   import { onReady } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
 
   import dayjs from 'dayjs';
-  import api from '@/service/api';
   import globalGl from '@/config/global';
 
   import FgAgree from './components/fgAgree.vue';
@@ -110,6 +110,7 @@
   const props = defineProps<TPageType>();
   const patientUtils = new PatientUtils();
   const gStores = new GStores();
+  const patList = gStores.userStore.patList;
 
   const isShowHealthLogin = ref(false);
   const _isPageFirst = !globalGl.systemInfo.isSearchInHos;
@@ -148,8 +149,7 @@
       verifyCode,
       ...filterData,
       ...addressChoose,
-    }; 
-    
+    };
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
@@ -485,6 +485,54 @@
           o.disabled = true;
           // #endif
         }
+      } else {
+        // #ifdef MP-ALIPAY
+        // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
+        if (!patList.length) {
+          if (key === formKey.patientName) {
+            o.disabled = true;
+            o.inputMask = (v, item) => {
+              return nameConvert(v);
+            };
+          }
+
+          if (key === formKey.idCard) {
+            o.disabled = true;
+
+            o.inputMask = (v, item) => {
+              if (v) {
+                const idReg = /(\d{4})\d*(\d{4})/;
+                return v.replace(idReg, '$1***********$2');
+              } else {
+                return '';
+              }
+            };
+          }
+
+          if (key === formKey.patientPhone) {
+            o.disabled = true;
+
+            o.inputMask = (v, item) => {
+              if (v) {
+                const idReg = /(\d{3})\d*(\d{4})/;
+                return v.replace(idReg, '$1******$2');
+              } else {
+                return '';
+              }
+            };
+          }
+
+          if (key === formKey.patientType) {
+            o.disabled = true;
+            o.showSuffixArrowIcon = false;
+          }
+
+          if (key === formKey.idType) {
+            o.disabled = true;
+            o.showSuffixArrowIcon = false;
+          }
+        }
+        // #endif
       }
 
       if (value === '0' && key === formKey.birthday) {

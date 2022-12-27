@@ -66,7 +66,7 @@
               :inputBorder="false"
               :clearable="false"
               :placeholderStyle="inputPlaceHolderStyle(item)"
-              :value="value[item.key]"
+              :value="maskValueItem(item)"
               :type="item.inputType"
               :maxlength="item.maxlength"
               :disabled="item.disabled"
@@ -297,6 +297,17 @@
     'row-click',
     'disabled-click',
   ]);
+
+  const maskValueItem = (item: TInstance) => {
+    const { key, inputMask } = item;
+
+    const v = props.value[key];
+    if (inputMask) {
+      return inputMask(v, item);
+    } else {
+      return v;
+    }
+  };
 
   const inputPlaceHolderStyle = (item: TInstance) => {
     const key = item.key;
