@@ -239,12 +239,19 @@
           取消订单
         </button>
         <button
-          @click="payOrder"
+          @click="init"
           :class="{
             'btn-disabled': timeTravel.downTime <= 0,
           }"
           class="btn btn-warning pay-btn"
         >
+          <!-- <button
+          @click="payOrder"
+          :class="{
+            'btn-disabled': timeTravel.downTime <= 0,
+          }"
+          class="btn btn-warning pay-btn"
+        > -->
           {{ orderRegInfo.fee }}元 立即支付
         </button>
       </block>
@@ -372,7 +379,6 @@
       code: _v.code,
     };
   });
-
   const _barCodeOpt = computed(() => {
     const _v = qrCodeOpt.value;
 
@@ -451,6 +457,9 @@
   };
 
   const init = async () => {
+    qrCodeOpt.value.width = 600;
+    qrCodeOpt.value.size = 350;
+    qrCodeOpt.value.code = '';
     const orderId = pageProps.value.orderId;
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
@@ -485,7 +494,7 @@
     nextTick(() => {
       setTimeout(() => {
         capture();
-      }, 120);
+      }, 300);
     });
     patientTempList.map((o) => {
       if (o.key === 'patientId') {
