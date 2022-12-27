@@ -14,7 +14,7 @@
         >
           <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i">
             <!-- <g-login @handler-next="gotoPath(item)" :disabled="item.loginInterception === '0'"> -->
-              <image mode="widthFix" :src="item.iconfont" @tap="gotoPath(item)" />
+              <image mode="scaleToFill" :src="item.iconfont" @tap="gotoPath(item)" />
             <!-- </g-login> -->
           </swiper-item>
         </swiper>
@@ -36,7 +36,7 @@
             <block v-if="props.leftFunctionList[0].iconfont">
               <!-- <g-login @handler-next="gotoPath(props.leftFunctionList[0])" :disabled="props.leftFunctionList[0].loginInterception === '0'"> -->
                 <image
-                  mode="widthFix"
+                  mode="scaleToFill"
                   :src="props.leftFunctionList[0].iconfont"
                 />
               <!-- </g-login> -->
