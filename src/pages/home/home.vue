@@ -197,7 +197,7 @@
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;
     if (len) {
-      return noticeMenu.value.map((o) => o.title).join('     ');
+      return noticeMenu.value.map((o) => o.title).join('  ');
     } else {
       return '';
     }
@@ -409,13 +409,13 @@
 
 <style lang="scss" scoped>
   .home {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    flex-direction: column;
-    display: flex;
+    // width: 100%;
+    // height: 100%;
+    // position: relative;
+    // flex-direction: column;
+    // display: flex;
     background: #ffffff;
-    box-sizing: border-box;
+    // box-sizing: border-box;
   }
   .scroll-page {
     // height: 100vh;
