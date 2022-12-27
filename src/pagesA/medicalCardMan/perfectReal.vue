@@ -37,7 +37,13 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults, reactive } from 'vue';
-  import { PatientUtils, GStores, routerJump, ServerStaticData } from '@/utils';
+  import {
+    PatientUtils,
+    GStores,
+    routerJump,
+    ServerStaticData,
+    nameConvert,
+  } from '@/utils';
   import {
     FormKey,
     pickTempItem,
@@ -76,6 +82,7 @@
   });
   const patientUtil = new PatientUtils();
   const gStores = new GStores();
+  const patList = gStores.userStore.patList;
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
     // patientName: '大钢炮22',
@@ -334,6 +341,35 @@
         medicalTypeItem.disabled = true;
         medicalTypeItem.showSuffixArrowIcon = false;
       }
+    } else {
+      // #ifdef MP-ALIPAY
+      // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
+      if (!patList.length) {
+        formList.map((o) => {
+          const { key } = o;
+
+          if (key === formKey.patientName) {
+            o.disabled = true;
+            o.inputMask = (v, item) => {
+              return nameConvert(v);
+            };
+          }
+
+          if (key === formKey.patientPhone) {
+            o.disabled = true;
+
+            o.inputMask = (v, item) => {
+              if (v) {
+                const idReg = /(\d{3})\d*(\d{4})/;
+                return v.replace(idReg, '$1******$2');
+              } else {
+                return '';
+              }
+            };
+          }
+        });
+      }
+      // #endif
     }
 
     formList.map((o) => {
