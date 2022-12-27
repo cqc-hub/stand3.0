@@ -36,6 +36,7 @@
       :show="isShowRegTip"
       :isShowCancel="false"
       @confirmButton="isShowRegTip = false"
+      isMaskClick
     >
       <scroll-view scroll-y class="reg-tip">
         <g-flag

@@ -1,6 +1,6 @@
 <template>
   <view class="xy-dialog" :class="{ 'xy-dialog__show': isShow }" @touchmove.stop.prevent="bindTouchmove">
-    <view class="xy-dialog__mask"></view>
+    <view class="xy-dialog__mask" @click="maskClick"></view>
     <view class="xy-dialog__container">
       <view class="xy-dialog__header" v-if="title.length > 0">
         {{ title }}
@@ -87,7 +87,12 @@
       show: {
         type: Boolean,
         default: false
-      }
+      },
+
+      isMaskClick: {
+        type: Boolean,
+        default: false
+      },
     },
     data() {
       return {
@@ -103,8 +108,10 @@
       // 禁止穿透
       bindTouchmove() {},
 
-      show() {
-        this.isShow = true;
+      maskClick() {
+        if (this.isMaskClick) {
+          this.clickCancel();
+        }
       },
 
       // 取消方法
