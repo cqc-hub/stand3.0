@@ -216,6 +216,9 @@
 <style lang="scss" scoped>
   .g-page {
     background-color: #fff;
+    :deep(.xy-dialog__container){
+    top: 900rpx !important;
+  }
   }
 
   .reg-tip {
@@ -227,4 +230,5 @@
   .search-input {
     margin: 16rpx 32rpx;
   }
+ 
 </style>

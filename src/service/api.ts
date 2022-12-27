@@ -288,7 +288,7 @@ const queryApi = {
     }),
   //获取住院费用清单详情
   getInHospitalCostInfo: <T>(data) =>
-    service.post<T>('/phs-query//hospital/getInHospitalCostInfo', parm(data)),
+    service.post<T>('/phs-query/hospital/getInHospitalCostInfo', parm(data)),
   //扫码获取住院信息
   getScanInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getScanInHospitalInfo', parm(data)),
