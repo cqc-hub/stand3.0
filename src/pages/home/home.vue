@@ -336,7 +336,7 @@
       functionType: '2', //首页配置
     });
     const localVersion = getLocalStorage('systemConfigVersion');
-    const item = localVersion.find((o) => o.functionType == 2);
+    const item = localVersion&&localVersion.find((o) => o.functionType == 2);
     if (result !== item?.version) {
       return true;
     } else {
