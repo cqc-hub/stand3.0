@@ -10,7 +10,7 @@
         <view class="scheme-item-detail">
           <button
             v-if="item.schState in warnSchStateMap"
-            class="btn klklk btn-primary btn-reg btn-disabled disabled-btn"
+            class="btn klklk btn-primary btn-reg disabled-btn"
           >
             {{ warnSchStateMap[item.schState] }}
           </button>
