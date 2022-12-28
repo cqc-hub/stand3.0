@@ -20,6 +20,16 @@
             {{ item.docTitleName }}
           </view>
         </view>
+
+        <view
+          v-if="item.docJobName && isAllDate"
+          class="doc-info-introduce-goodat text-ellipsis"
+        >
+          <text>
+            {{ item.docJobName }}
+          </text>
+        </view>
+
         <view v-if="item.specialClinicName" class="text-ellipsis">
           <text
             v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"
@@ -37,7 +47,7 @@
         <view class="doc-info-introduce-goodat text-ellipsis">
           <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
 
-          <block v-else>
+          <!-- <block v-else>
             <text
               :class="{
                 'doc-job-name': item.docJobName,
@@ -49,7 +59,7 @@
             <text>
               {{ item.docTitleName }}
             </text>
-          </block>
+          </block> -->
         </view>
       </view>
     </view>

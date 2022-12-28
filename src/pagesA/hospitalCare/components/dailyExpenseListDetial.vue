@@ -140,7 +140,19 @@ const emit = defineEmits(["detalResult"]);
 const isShowBtn = (index) => {
   isShow.value[index] = !isShow.value[index];
 };
-const init = async () => {
+const init = async (opt) => {
+  pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
+  param.value = {
+    ...pageProps.value,
+  };
+  if (pageProps.value.isHosDaylist) {
+    costType.value = "1";
+  } else if (pageProps.value.isHosTotallist) {
+    costType.value = "3";
+  }
+
+
+
   patName.value = gStores.userStore.patChoose.patientName;
   patientId.value = gStores.userStore.patChoose._showId;
   const params = {
@@ -155,22 +167,14 @@ const init = async () => {
 
 onLoad((opt) => {
   //日费用清单列表点进详情会走这块
-  pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
-  param.value = {
-    ...pageProps.value,
-  };
-  if (pageProps.value.isHosDaylist) {
-    costType.value = "1";
-  } else if (pageProps.value.isHosTotallist) {
-    costType.value = "3";
-  }
+
   if (pageProps.value.isHosTotallist || pageProps.value.isHosDaylist) {
-    init();
+    // init();
   }
 });
 onMounted(() => {
   // #ifdef  MP-ALIPAY
-  init();
+  // init();
   // #endif
 });
 defineExpose({
