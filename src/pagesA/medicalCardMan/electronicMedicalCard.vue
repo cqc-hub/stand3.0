@@ -3,6 +3,22 @@
     <view class="card-content">
       <view class="card-header flex-between">
         <view>{{ title }}</view>
+
+        <view
+          @click="toggleQrCode"
+          class="flex-normal g-border toggle-card color-blue f26"
+        >
+          <text
+            :class="{
+              'icon-reverse': showHealthCode,
+            }"
+            class="iconfont qr-toggle-icon color-blue"
+          >
+            &#xe6f9;
+          </text>
+
+          <view class="f26">切换电子就诊卡</view>
+        </view>
       </view>
 
       <view
@@ -73,6 +89,7 @@
   const gStore = new GStores();
   const { clickPat } = storeToRefs(gStore.userStore);
   const title = ref('电子就诊卡');
+  const showHealthCode = ref(false);
 
   // https://meet-ui.com/#/
   const options = ref({
@@ -123,6 +140,10 @@
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/medicalCardDetail',
     });
+  };
+
+  const toggleQrCode = () => {
+    showHealthCode.value = !showHealthCode.value;
   };
 
   // https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail
@@ -231,6 +252,24 @@
       // #ifdef  MP-WEIXIN
       top: 5rpx;
       // #endif
+    }
+  }
+  .toggle-card {
+    font-weight: normal;
+    background-color: #fff;
+    border-radius: 666rpx;
+    padding: 8rpx 24rpx;
+
+    .qr-toggle-icon {
+      transition: all 0.4s;
+      color: var(--hr-neutral-color-9);
+      font-size: var(--hr-font-size-xl);
+      margin-right: 8rpx;
+      display: inline-block;
+      &.icon-reverse {
+        transform-origin: center center;
+        transform: rotate(0.5turn);
+      }
     }
   }
 </style>
