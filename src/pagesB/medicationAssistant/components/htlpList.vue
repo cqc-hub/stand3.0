@@ -1,12 +1,13 @@
 <template>
   <view class="clinic-pay-list">
+  <!-- @click="itemClick(item)" -->
     <view
       v-for="(item, idx) in list"
       :key="idx"
       :class="{
         active: getIsActive(item),
       }"
-      @click="itemClick(item)"
+      @click="selItem(item)"
       class="item flex-normal mb16 g-border"
     >
       <view v-if="isCheck" class="icon-content">
@@ -40,9 +41,9 @@
             >
               {{ statusLabel[item.takenDrugType].label }}
             </view> -->
-            <view v-if="!showStatus" class="iconfont color-888 f48">
+            <!-- <view v-if="!showStatus" class="iconfont color-888 f48">
               &#xe66b;
-            </view>
+            </view> -->
           </view>
         </view>
 
