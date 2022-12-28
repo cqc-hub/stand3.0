@@ -140,7 +140,7 @@ const emit = defineEmits(["detalResult"]);
 const isShowBtn = (index) => {
   isShow.value[index] = !isShow.value[index];
 };
-const init = async (opt) => {
+const init = async (opt = {}) => {
   pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
   param.value = {
     ...pageProps.value,
