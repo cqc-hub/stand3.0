@@ -5,6 +5,7 @@
         <view>{{ title }}</view>
 
         <view
+          v-if="isHasHealthCode"
           @click="toggleQrCode"
           class="flex-normal g-border toggle-card color-blue f26"
         >
@@ -17,59 +18,57 @@
             &#xe6f9;
           </text>
 
-          <view class="f26">切换电子就诊卡</view>
+          <view class="f26">
+            切换{{ showHealthCode ? '电子就诊卡' : '电子健康卡' }}
+          </view>
         </view>
       </view>
 
       <view
         :class="{
-          'card-health': clickPat.healthQrCodeText,
+          'card-health': showHealthCode,
         }"
         class="card-body"
       >
         <view class="card-qrcode">
-          <block v-if="!clickPat.healthQrCodeText">
-            <w-barcode :options="barCodeOpt" />
-
-            <view class="card-code">
-              {{ showCodeLabel || barCodeOpt.code }}
-            </view>
+          <block v-if="!showHealthCode">
+            <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
           </block>
 
           <w-qrcode :options="options" />
         </view>
 
-        <g-form v-model:value="formData" ref="gform">
-          <template #showBody="{ item }">
-            <view class="flex-normal form-row">
-              <text
-                v-if="item.key == '_name'"
-                @click="eyesClick"
-                class="iconfont eyes-icon"
-              >
-                {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
-              </text>
-              <text>{{ formData[item.key] }}</text>
+        <view class="info-content">
+          <view class="g-flex-rc-cc info-name mb12">
+            <view class="f32">
+              {{
+                isNameEncry ? clickPat.patientNameEncry : clickPat.patientName
+              }}
             </view>
-          </template>
-        </g-form>
+
+            <text @click="eyesClick" class="iconfont eyes-icon color-888">
+              {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
+            </text>
+          </view>
+
+          <view class="g-flex-rc-cc color-888 f28 mb12">
+            {{ clickPat._showId }}
+          </view>
+
+          <view class="g-flex-rc-cc mt32">
+            <text @click="goDetail" class="color-blue f28">更多信息</text>
+          </view>
+        </view>
+        <!-- #ifdef  MP-WEIXIN -->
+        <view
+          v-if="showHealthCode"
+          @click="goHealCardPackage"
+          class="color-blue g-bold g-flex-rc-cc p24 g-border-top"
+        >
+          添加到卡包
+        </view>
+        <!-- #endif -->
       </view>
-    </view>
-
-    <view class="p32">
-      <!-- #ifdef  MP-WEIXIN -->
-      <button
-        v-if="clickPat.healthQrCodeText"
-        @click="goHealCardPackage"
-        class="btn btn-normal mb12"
-      >
-        <text>添加到卡包</text>
-      </button>
-      <!-- #endif -->
-
-      <button @click="goDetail" class="btn btn-normal">
-        <text>更多信息</text>
-      </button>
     </view>
 
     <g-message />
@@ -77,22 +76,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { GStores } from '@/utils';
-  import { patCardDetailList } from './utils';
   import { onReady } from '@dcloudio/uni-app';
+
   import { isAreaProgram } from '@/stores';
+  import { GStores, wait } from '@/utils';
+
+  import { setLocalStorage, getLocalStorage } from '@/common';
+
   import api from '@/service/api';
 
-  const gform = ref<any>('');
   const gStore = new GStores();
   const { clickPat } = storeToRefs(gStore.userStore);
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
 
   // https://meet-ui.com/#/
-  const options = ref({
+  const options = ref<any>({
     // 二维码
     size: 350,
 
@@ -102,13 +103,7 @@
     code: isAreaProgram()
       ? clickPat.value.idCardEncry
       : clickPat.value.healthQrCodeText || clickPat.value._showId,
-    img: clickPat.value.healthQrCodeText
-      ? {
-          src: '/static/image/person/health-card-logo.png',
-          size: 80,
-          type: 'round',
-        }
-      : undefined,
+    img: '',
   });
 
   const barCodeOpt = ref({ ...options.value });
@@ -122,6 +117,9 @@
     isNameEncry.value = !isNameEncry.value;
     changeShowName();
   };
+  const isHasHealthCode = computed(() => {
+    return !!clickPat.value.healthQrCodeText;
+  });
 
   const changeShowName = () => {
     if (isNameEncry.value) {
@@ -142,8 +140,42 @@
     });
   };
 
-  const toggleQrCode = () => {
+  const toggleQrCode = async () => {
     showHealthCode.value = !showHealthCode.value;
+    setLocalStorage({
+      showHealthCodeHis: showHealthCode.value,
+    });
+    setStatus();
+    uni.showLoading({
+      mask: true,
+      title: '切换中',
+    });
+
+    await wait(700);
+
+    uni.hideLoading();
+  };
+
+  const setStatus = async () => {
+    if (showHealthCode.value) {
+      title.value = '电子健康卡';
+      options.value.img = {
+        src: '/static/image/person/health-card-logo.png',
+        size: 80,
+        type: 'round',
+      };
+
+      options.value.code = clickPat.value.healthQrCodeText!;
+    } else {
+      title.value = '电子就诊卡';
+      options.value.img = undefined;
+      options.value.code = clickPat.value._showId!;
+      barCodeOpt.value.code = clickPat.value._showId!;
+    }
+
+    uni.setNavigationBarTitle({
+      title: title.value,
+    });
   };
 
   // https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail
@@ -174,18 +206,21 @@
   };
 
   onReady(() => {
+    const showHealthCodeHis = getLocalStorage('showHealthCodeHis');
     if (clickPat.value.healthQrCodeText) {
-      title.value = '电子健康卡';
-      barCodeOpt.value.code = clickPat.value._showId;
-      options.value.code = clickPat.value.healthQrCodeText;
-      uni.setNavigationBarTitle({
-        title: title.value,
-      });
+      if (showHealthCodeHis === '') {
+        showHealthCode.value = !!clickPat.value.healthQrCodeText;
+      } else {
+        showHealthCode.value = showHealthCodeHis;
+      }
+    } else {
+      showHealthCode.value = false;
     }
+
+    setStatus();
   });
 
   onMounted(() => {
-    gform.value.setList(patCardDetailList);
     changeShowName();
   });
 </script>
@@ -218,7 +253,7 @@
 
       .card-qrcode {
         padding-top: 40rpx;
-        padding-bottom: 120rpx;
+        padding-bottom: 40rpx;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -236,24 +271,16 @@
     .card-health {
       padding-top: 80rpx;
     }
+
+    .bar-code {
+      margin-bottom: 40rpx;
+    }
   }
 
   .btns {
     padding: 32rpx;
   }
 
-  .form-row {
-    flex-direction: row-reverse;
-
-    .eyes-icon {
-      font-size: 48rpx;
-      margin-left: 30rpx;
-      position: relative;
-      // #ifdef  MP-WEIXIN
-      top: 5rpx;
-      // #endif
-    }
-  }
   .toggle-card {
     font-weight: normal;
     background-color: #fff;
@@ -269,6 +296,20 @@
       &.icon-reverse {
         transform-origin: center center;
         transform: rotate(0.5turn);
+      }
+    }
+  }
+
+  .info-content {
+    padding-bottom: 72rpx;
+    .info-name {
+      position: relative;
+
+      .eyes-icon {
+        font-size: 48rpx;
+        margin-left: 30rpx;
+        position: absolute;
+        transform: translateX(88rpx);
       }
     }
   }

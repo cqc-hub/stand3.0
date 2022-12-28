@@ -402,31 +402,6 @@ export const patCardDetailTempList: TInstance[] = [
 ];
 
 /**
- * 电子就诊卡详情页面
- */
-export const patCardDetailList: TInstance[] = [
-  {
-    label: '姓名',
-    key: '_name',
-    field: 'input-text',
-    disabled: true,
-    isForShow: true,
-    rowStyle: 'font-size: var(--hr-font-size-base);',
-  },
-
-  {
-    label: '院内ID/卡号',
-    key: '_showId',
-    field: 'input-text',
-    disabled: true,
-    rowStyle:
-      'border-radius: 0 0 16rpx 16rpx; font-size: var(--hr-font-size-base);',
-    labelWidth: '200rpx',
-    isForShow: true,
-  },
-];
-
-/**
  * 获取姓名、手机号 默认值
  * @param pageType
  * @returns
