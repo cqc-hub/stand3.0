@@ -26,7 +26,7 @@ export const getH5OpenidParam = function (data) {
   ];
   // #endif
 
-  // #ifdef MP-ALIPAY 
+  // #ifdef MP-ALIPAY
   data.openIds = [
     {
       openId: globalStore.openId,
@@ -470,6 +470,7 @@ export class PatientUtils extends LoginUtils {
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
+    const _sex = (sex && (sex === '男' ? '1' : '2')) || ''
     const requestData = {
       accountType,
       idNo,
@@ -478,7 +479,8 @@ export class PatientUtils extends LoginUtils {
       patientType,
       name: patientName,
       cellphone: patientPhone,
-      sex: (sex && (sex === '男' ? '1' : '2')) || '',
+      sex: _sex,
+      gender: _sex,
       birthday,
       cellPhoneNumber,
       idCardEncry,
