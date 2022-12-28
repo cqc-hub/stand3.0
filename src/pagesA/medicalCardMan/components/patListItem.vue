@@ -23,7 +23,7 @@
           </view>
 
           <view class="card-top-icon">
-            <image :src="$global.BASE_IMG + 'health-card-icon.png'" mode="" />
+            <image :src="$global.BASE_IMG + 'health-card-icon.png'" mode="widthFix" />
             <text>电子健康卡</text>
           </view>
         </view>
@@ -38,7 +38,7 @@
             <image
               :src="$global.BASE_IMG + 'health-card-qrcode.png'"
               class="health-card-qrcode"
-              mode=""
+              mode="widthFix"
             />
           </view>
 
