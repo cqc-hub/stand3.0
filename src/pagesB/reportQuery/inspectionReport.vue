@@ -229,6 +229,7 @@
       </view>
     </view>
   </g-popup>
+  <g-message />
 </template>
 <script lang="ts" setup>
 import { onLoad,onPageScroll} from "@dcloudio/uni-app";
