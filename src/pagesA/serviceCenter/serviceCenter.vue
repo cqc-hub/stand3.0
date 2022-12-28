@@ -18,7 +18,11 @@
     </scroll-view>
 
     <view class="footer" v-if="isShowFooter">
-      <button open-type="feedback" class="s-btn g-border-right">
+      <button
+        open-type="contact"
+        bindcontact="handleContact"
+        class="s-btn g-border-right"
+      >
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6e2;</text>
           <text class="title">咨询客服</text>
@@ -26,7 +30,7 @@
         </view>
       </button>
 
-      <button open-type="contact" bindcontact="handleContact" class="s-btn">
+      <button open-type="feedback" class="s-btn">
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6b9;</text>
           <text class="title">意见反馈</text>
