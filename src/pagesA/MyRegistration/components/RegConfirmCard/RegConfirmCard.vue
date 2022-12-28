@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref, toRaw, onMounted } from 'vue';
-  import { ServerStaticData } from '@/utils';
+  import { ServerStaticData, wait } from '@/utils';
   import { IPageProps } from '../../utils/regConfirm';
 
   const props = withDefaults(
@@ -78,8 +78,10 @@
 
   const hosLabel = ref('');
 
-  onMounted(() => {
-    const hosId = toRaw(props.myProps.hosId);
+  onMounted(async () => {
+    await wait(500);
+    const hosId = props.myProps.hosId;
+
     if (hosId) {
       ServerStaticData.getHosList().then((list) => {
         list.map((o) => {

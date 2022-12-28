@@ -170,7 +170,7 @@
     const {
       result: { orderId },
     } = await api.addReg(requestArg);
-    
+
      // #ifdef MP-ALIPAY
      if(alipayPid){//有埋点的情况
         if (alipayAuthCode) {
@@ -198,7 +198,7 @@
       }
     }
     // #endif
-  
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,
@@ -216,6 +216,8 @@
 
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    console.log(props.value, 'props.value');
+
   });
 </script>
 
