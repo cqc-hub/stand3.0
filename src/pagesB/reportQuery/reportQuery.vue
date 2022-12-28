@@ -1,5 +1,5 @@
 <template>
-  <view class="page">
+  <view class="page g-page">
     <g-flag typeFg="41" isShowFg />
     <g-choose-pat @choose-pat="choosePat" />
     <g-message />
@@ -311,10 +311,6 @@
 </script>
 <style lang="scss" scoped>
   .page {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
     background-color: #ffffff;
     touch-action: none;
     .tab-box {

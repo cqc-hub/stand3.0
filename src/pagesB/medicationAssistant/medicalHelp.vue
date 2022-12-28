@@ -70,6 +70,7 @@
       :title="fgTitle54"
       :show="isFgShow54"
       @confirmButton="_getMedicalInHos"
+      @cancelButton="isFgShow54 = false"
       isMaskClick
       isReverseBtn
     >
