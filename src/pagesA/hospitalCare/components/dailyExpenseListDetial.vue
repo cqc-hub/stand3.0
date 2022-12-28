@@ -133,7 +133,7 @@ const props = defineProps<{
   costDay?: string;
   isHosDaylist?: string;
   isHosTotallist?: string;
-}>(); 
+}>();
 
 const emit = defineEmits(["detalResult"]);
 
@@ -142,7 +142,7 @@ const isShowBtn = (index) => {
 };
 const init = async () => {
   patName.value = gStores.userStore.patChoose.patientName;
-  patientId.value = gStores.userStore.patChoose._showId; 
+  patientId.value = gStores.userStore.patChoose._showId;
   const params = {
     costDay: props.costDay,
     costType:props.isHosDaylist?'1':'3',
@@ -152,7 +152,7 @@ const init = async () => {
   costInfoDetal.value = result;
   Obj.value = JSON.stringify(costInfoDetal.value) == "{}";
 };
- 
+
 onLoad((opt) => {
   //日费用清单列表点进详情会走这块
   pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
@@ -166,7 +166,7 @@ onLoad((opt) => {
   }
   if (pageProps.value.isHosTotallist || pageProps.value.isHosDaylist) {
     init();
-  } 
+  }
 });
 // onMounted(() => {
 //   init();
@@ -205,7 +205,7 @@ defineExpose({
           margin-top: 12rpx;
           display: flex;
           .item-title {
-            width: 112rpx;
+            width: 130rpx;
             height: 44rpx;
             color: #888888;
           }
