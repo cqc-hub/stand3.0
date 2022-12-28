@@ -93,7 +93,7 @@ const toPay = async () => {
 const payAfter = async () => {
   uni.showLoading({});
   await wait(1000);
-  uni.hideLoading(); 
+  uni.hideLoading();
 
   uni.navigateBack({
     delta: 1,
@@ -242,7 +242,7 @@ onLoad((opt) => {
   }
   .uni-input {
     font-weight: 600;
-    font-size: 56rpx;
+    font-size: 36rpx;
     background: #f6f6f6;
   }
 }
