@@ -115,9 +115,7 @@ const submit = async () => {
   const source = gStores.globalStore.browser.source;
   const reBillingUrl = `/pagesC/selfService/nucleicBilling?hosId=${props.hosId}&isPay=${props.isPay}`;
   const miniUrl = `/pagesC/selfService/myOrder&_pd=${patientId}`;
-  const {
-    result: { phsOrderNo },
-  } = await api.createBillingOrder({
+  const res1 = await api.createBillingOrder({
     hosId: props.hosId,
     patientId: patientId,
     items: [NucleResult.value[currentIndex.value]],
@@ -126,14 +124,14 @@ const submit = async () => {
     hosName: props.hosName,
     reBillingUrl: reBillingUrl,//再次开单路径
   });
-
+ 
   if (props.isPay == "1") {
     const data = {
       businessType: "",
       hosId: props.hosId,
       hosName: props.hosName,
       patientId: patientId,
-      phsOrderNo: phsOrderNo,
+      phsOrderNo: res1.result.phsOrderNo,
       phsOrderSource: 11,
       totalFee: NucleResult.value[currentIndex.value].fee,
       patientName,
@@ -148,7 +146,7 @@ const submit = async () => {
       closeCallBack: () => {
         //跳转门诊缴费页面
         uni.reLaunch({
-          url: `/pagesA/clinicPay/clinicPayDetail?_pd=${patientId}&tabIndex=1`,
+          url: `/pagesA/clinicPay/clinicPayDetail?_pd=${patientId}`,
         });
       },
     });

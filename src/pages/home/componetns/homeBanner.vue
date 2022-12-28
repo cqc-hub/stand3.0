@@ -61,9 +61,8 @@
               <swiper-item
                 v-for="(item, i) in props.leftFunctionList"
                 :key="i"
-                @tap="gotoPath(item)"
               >
-                <image class="banner-img" mode="scaleToFill" :src="item.iconfont" />
+                <image  @tap="gotoPath(item)" class="banner-img" mode="scaleToFill" :src="item.iconfont" />
               </swiper-item>
             </swiper>
           </view>
@@ -93,13 +92,11 @@
                   :style="
                     props.leftFunctionList.length == 1 && props.functionList.length == 2
                       ? 'margin-top:0': ''" @tap="gotoPath(item)">
-              <!-- <g-login @handler-next="gotoPath(item)" class="login-style" > -->
                   <view class="flex-between">
                     <text>{{ item.title }}</text>
                     <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
                   </view>
                   <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
-              <!-- </g-login> -->
                 </view>
             </block>
           </block>
@@ -142,6 +139,8 @@ const props = withDefaults(
 const autoplay = ref(true);
 //跳转对应地址
 const gotoPath = (item) => {
+  console.log('跳转');
+  
   useCommonTo(item);
 };
 </script>
