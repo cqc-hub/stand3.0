@@ -168,9 +168,11 @@ onLoad((opt) => {
     init();
   }
 });
-// onMounted(() => {
-//   init();
-// });
+onMounted(() => {
+  // #ifdef  MP-ALIPAY
+  init();
+  // #endif
+});
 defineExpose({
   init,
 });

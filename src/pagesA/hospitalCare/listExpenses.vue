@@ -11,6 +11,7 @@ const props = defineProps<{
   isHosDaylist?: string;
   isHosTotallist?: string;
 }>();
+
 </script>
 <style scoped lang="scss">
 .page{
