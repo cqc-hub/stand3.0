@@ -131,12 +131,12 @@
               class="hos-navigation g-flex-rc-cc m32"
             >
               <view class="hos-info">
-                <text class="text-ellipsis hos-name">
+                <view class="text-ellipsis hos-name">
                   {{ hosInfo.hosName }}
-                </text>
-                <text class="text-ellipsis hos-address">
+                </view>
+                <view class="text-ellipsis hos-address">
                   {{ hosInfo.address }}
-                </text>
+                </view>
               </view>
             </view>
             <view class="order-info p32v">
