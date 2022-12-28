@@ -72,6 +72,9 @@ export interface checkoutReportDetails {
   patientName?: string;
   //患者姓名
 
+  patientNameEncry?: string;
+  //患者脱敏姓名
+
   regTime?: string;
   //采集或登记时间
 
@@ -222,6 +225,9 @@ export interface examineReportDetails {
 
   patientName?: string;
   //患者姓名
+
+  patientNameEncry?: string;
+  //患者脱敏姓名
 
   pdfPath?: string;
   //关键图文地址

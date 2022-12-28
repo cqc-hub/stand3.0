@@ -10,7 +10,7 @@
           <view class="patient-information">
             <view class="subhead"
               >患者信息<view class="subhead-detail">
-                {{ checkoutReportList.patientName || pat.patientName }}({{
+                {{ nameConvert(pat.patientName) }}({{
                   checkoutReportList.cardNumber || pat._showId
                 }})&nbsp;&nbsp;<text style="color: #e6e6e6">|</text>&nbsp;&nbsp;{{
                   checkoutReportList.sex || pat.patientSex
@@ -289,7 +289,7 @@ import {
   getShareTotalUrl,
   addWatermark
 } from "./utils";
-import { GStores } from "@/utils";
+import { GStores,nameConvert } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
 import { deQueryForUrl } from "@/common";
 import { useReportPowerEnerg } from "@/components/greenPower";

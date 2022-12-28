@@ -33,7 +33,7 @@
               <view class="patient-information">
                 <view class="subhead"
                   >患者信息<view class="subhead-detail">
-                    {{ examineReportList.patientName || pat.patientName }}({{
+                    {{ nameConvert(pat.patientName) }}({{
                       examineReportList.cardNumber || pat._showId
                     }})&nbsp;&nbsp;<text style="color: #e6e6e6">|</text>&nbsp;&nbsp;{{
                       examineReportList.sex || pat.patientSex
@@ -240,7 +240,7 @@ import dayjs from "dayjs";
 import env from "@/config/env";
 
 import { examineReportDetails, getShareTotalUrl, addWatermark } from "./utils";
-import { GStores } from "@/utils";
+import { GStores,nameConvert } from "@/utils"; 
 import { joinQuery, encryptDes, getSysCode } from "@/common";
 import { deQueryForUrl } from "@/common";
 import { useReportPowerEnerg } from "@/components/greenPower";

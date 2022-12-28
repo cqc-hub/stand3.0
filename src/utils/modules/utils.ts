@@ -124,12 +124,14 @@ export const openLocation = async (
  */
 export const nameConvert = (name: string) => {
   let userName = '';
-  if (name.length == 2) {
-    userName = name.substring(0, 1) + '*';
-  } else if (name.length == 3) {
-    userName = name.substring(0, 1) + '*' + name.substring(2, 3);
-  } else if (name.length > 3) {
-    userName = name.substring(0, 1) + '**' + name.slice(-1);
+  if (name.length == 1) {
+    userName = '*';
+  }else if (name.length > 1 ) {
+    userName = ''
+    for (let i = 1; i < name.length; i++) {
+      userName += '*'
+    }
+    userName += name.slice(-1);
   }
   return userName;
 };
