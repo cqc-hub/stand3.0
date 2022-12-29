@@ -108,7 +108,7 @@ const int = async () => {
   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
     fee: defalutMoney.value,
     orderType: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3",
-    patientId: pageProps.value.params ? "" : gStores.userStore.patChoose.patientId,
+    // patientId: pageProps.value.params ? "" : gStores.userStore.patChoose.patientId,
     patientName: pageProps.value.patientName,
     cardNumber: pageProps.value.cardNumber,
   });
