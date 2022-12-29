@@ -25,6 +25,8 @@ const Request = new requestClass();
 //是否加密
 const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 
+const getShowUrl = (url, baseUrl) =>
+  url.slice(baseUrl?.length || 0).split('=')[0];
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   if (!request.hideLoading) showLoading();
@@ -39,7 +41,10 @@ Request.interceptors.request((request: IRequest) => {
 
   if (isDes) {
     //禁止删除
-    console.log(request.url, request.data);
+    console.log(
+      getShowUrl(request.url, request.baseURL?.length || 0),
+      request.data
+    );
     const key = 'reqv3-' + ('0' + new Date().getDate()).slice(-2);
     const data = JSON.parse(JSON.stringify(request.data));
     const desData = {
@@ -76,7 +81,11 @@ Request.interceptors.response(
       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
       responseData.result = JSON.parse(decryptDes(signContent, key));
       //禁止删除
-      console.log('出参', responseData.result);
+      console.log(
+        '出参----',
+        getShowUrl(responseOptions?.url, responseOptions?.baseURL),
+        responseData.result
+      );
     } else {
       console.log(response);
     }
@@ -189,13 +198,13 @@ const alipayRequestTrack = (response: IResponseWrapper) => {
         success: code == 0 ? true : false,
         c1: 'taSR_YL',
         time: response.res.data.timeTaken,
-      }); 
+      });
     }
     //支付宝新规则 不需要拆解埋点了
     // if (reportCmPV_YLName) {
     //   reportCmPV_YL({
     //     title: reportCmPV_YLName,
-    //   }); 
+    //   });
     // }
   }
 };

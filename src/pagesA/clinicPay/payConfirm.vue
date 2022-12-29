@@ -75,7 +75,7 @@
 
   import { type TPayConfirmPageProp } from './utils/clinicPayDetail';
   import { encryptForPage, decryptForPage } from '@/common/des';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { GStores, type IHosInfo, wait } from '@/utils';
   import {
     type IGPay,
@@ -368,14 +368,13 @@
     uni.hideLoading();
     const { mzParams, deParams } = pageProps.value;
 
-    /**
-     * else if (deParams) {
-    }
-     */
     if (mzParams) {
       //扫码进来的
       uni.reLaunch({
-        url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=' + mzParams,
+        url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+          tabIndex: '1',
+          params: mzParams,
+        }),
       });
     } else if (deParams) {
       const { cardNumber } = deParams;
@@ -433,7 +432,6 @@
     //   hosId: '13001',
     //   cardNumber: '000001766',
     // };
-
     // const en = encryptForPage(a);
     // console.log(en);
     // console.log(decryptForPage(en));

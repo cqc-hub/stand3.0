@@ -12,22 +12,23 @@
 
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="doc-info-introduce-header">
-          <view class="doc-info-introduce-name f36">{{ item.docName }}</view>
+          <view class="doc-info-introduce-name f36 text-no-wrap">{{ item.docName }}</view>
           <view
             v-if="item.docTitleName && isAllDate"
-            class="doc-info-introduce-title"
+            class="doc-info-introduce-title flex-normal"
           >
-            {{ item.docTitleName }}
+            <view
+              :class="{
+                'g-split-line': item.docJobName,
+              }"
+              class="mr12 pr12 text-no-wrap"
+            >
+              {{ item.docTitleName }}
+            </view>
+            <view v-if="item.docJobName" class="text-ellipsis">
+              {{ item.docJobName }}
+            </view>
           </view>
-        </view>
-
-        <view
-          v-if="item.docJobName && isAllDate"
-          class="doc-info-introduce-goodat text-ellipsis"
-        >
-          <text>
-            {{ item.docJobName }}
-          </text>
         </view>
 
         <view v-if="item.specialClinicName" class="text-ellipsis">
@@ -47,6 +48,7 @@
         <view class="doc-info-introduce-goodat text-ellipsis">
           <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
 
+          <!-- 按天的荣誉职称 -->
           <block v-else>
             <text
               :class="{

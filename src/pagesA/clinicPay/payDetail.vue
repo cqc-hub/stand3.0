@@ -194,7 +194,7 @@
     payMoneyOnline,
     toPayPull,
   } from '@/components/g-pay/index';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { wait } from '@/utils';
 
   import api from '@/service/api';
@@ -329,7 +329,7 @@
           visitNo: visitNo!,
           visitDate: visitDate!,
           cardNumber: props.value?.cardNumber,
-          params,
+          mzParams: params,
         });
       } else {
         toPay();
@@ -404,7 +404,10 @@
     uni.hideLoading();
 
     uni.reLaunch({
-      url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+      url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+        tabIndex: '1',
+        params: props.value.params,
+      }),
     });
   };
 
