@@ -10,7 +10,7 @@
         <text class="row-title-mr">
           {{ myProps.ampmName + myProps.timeDesc }}
         </text>
-        <text>{{ myProps.disNo }}号</text>
+        <!-- <text>{{ myProps.disNo }}号</text> -->
       </view>
     </view>
 

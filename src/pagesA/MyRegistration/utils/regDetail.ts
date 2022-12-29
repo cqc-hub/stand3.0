@@ -53,6 +53,7 @@ export const regInfoTempList: TInstance[] = [
   },
 ];
 
+
 export const patientTempList: TInstance[] = [
   {
     label: '就诊人',
@@ -81,10 +82,10 @@ export const patientTempList: TInstance[] = [
 const formatterTemp = (list: TInstance[]) => {
   list.map((o) => {
     o.labelWidth = '150rpx';
-    o.showBodyStyle = 'margin-top: 4rpx; text-align: left;';
+    o.showBodyStyle = 'text-align: left;';
     o.labelStyle = 'padding-top: 0;';
     o.bodyStyle = 'padding-top: 0;';
-    o.rowStyle = 'margin-top: -15rpx;'
+    o.rowStyle = 'margin-top: -15rpx;';
 
     o.disabled = true;
     o.isForShow = true;
