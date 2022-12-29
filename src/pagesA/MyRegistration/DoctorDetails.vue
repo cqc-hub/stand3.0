@@ -49,7 +49,7 @@
 
               <view class="p32c header-content">
                 <view class="flex-normal">
-                  <view class="doc-name mr24 f48 g-bold">
+                  <view class="doc-name mr24 f48 g-bold text-no-wrap">
                     {{ docDetail.docName }}
                   </view>
 
@@ -57,11 +57,11 @@
                     :class="{
                       'g-split-line': docDetail.docJobName,
                     }"
-                    class="color-444 f28 mr12 pr12"
+                    class="color-444 f28 mr12 pr12 text-no-wrap"
                   >
                     {{ docDetail.docJobName || '' }}
                   </view>
-                  <view class="color-444 f28">
+                  <view class="color-444 f28 text-no-wrap">
                     {{ props.docTitleName || docDetail.docTitleName || '' }}
                   </view>
                 </view>

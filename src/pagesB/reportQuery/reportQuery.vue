@@ -329,7 +329,7 @@
         height: 100%;
         .empty-box {
           position: relative;
-          transform: translateY(50%);
+          transform: translateY(100%);
         }
         .list-block {
           border-left: 2rpx dashed #dddddd;

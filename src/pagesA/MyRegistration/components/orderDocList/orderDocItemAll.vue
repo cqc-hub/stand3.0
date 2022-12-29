@@ -9,29 +9,35 @@
         <view class="date-container g-border-top">
           <view class="sel-date">
             <view class="sel-label g-flex-rc-cc">可约日期</view>
-            <g-login
-              v-for="date in getSelectData"
-              :key="date.schDate"
-              @handler-next="dateClick(date)"
-              patient
-            >
-              <view
-                :class="{
-                  animate__fadeIn: !isCollapse,
-                }"
-                @click="dateClick(date)"
-                class="date-item g-flex-rc-cc animate__animated"
+            <block v-if="getSelectData && getSelectData.length">
+              <g-login
+                v-for="date in getSelectData"
+                :key="date.schDate"
+                @handler-next="dateClick(date)"
+                patient
               >
                 <view
                   :class="{
-                    animate__fadeIn: isCollapse,
+                    animate__fadeIn: !isCollapse,
                   }"
-                  class="animate__animated"
+                  @click="dateClick(date)"
+                  class="date-item g-flex-rc-cc animate__animated"
                 >
-                  {{ getDateFormatter(date.schDate) }}
+                  <view
+                    :class="{
+                      animate__fadeIn: isCollapse,
+                    }"
+                    class="animate__animated"
+                  >
+                    {{ getDateFormatter(date.schDate) }}
+                  </view>
                 </view>
-              </view>
-            </g-login>
+              </g-login>
+            </block>
+
+            <view v-else>
+              <text class="f24 color-888">无号</text>
+            </view>
           </view>
 
           <view class="arrow-content">

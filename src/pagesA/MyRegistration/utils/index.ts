@@ -244,9 +244,10 @@ export const useOrder = (props: IOrderProps) => {
         });
       });
 
-      allDocList.value = allList.filter(
-        (o) => o.schDocSubResultList && o.schDocSubResultList.length
-      );
+      allDocList.value = allList.filter((o) => {
+        return true;
+        // return o.schDocSubResultList && o.schDocSubResultList.length
+      });
     }
 
     // _enabledDays['2022-11-22'] = '3';

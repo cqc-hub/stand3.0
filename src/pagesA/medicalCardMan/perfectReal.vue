@@ -313,8 +313,23 @@
       formListKeys = formListKeys.filter((key) => key !== 'patientType');
     }
     // isSmsVerify = '0';
+
+    let isFilterSmsVerify = false;
+    if (props.pageType !== 'perfectReal') {
+      // #ifdef MP-ALIPAY
+      // 支付宝第一个就诊人自动带入信息 不需要验证码
+      if (!patList.length) {
+        // isFilterSmsVerify = true;
+      }
+      // #endif
+    }
+
     // 关闭手机验证码
-    if (isSmsVerify === '0' || props.pageType === 'perfectReal') {
+    if (
+      isSmsVerify === '0' ||
+      props.pageType === 'perfectReal' ||
+      isFilterSmsVerify
+    ) {
       formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
     }
 
@@ -323,13 +338,6 @@
       props.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
-
-    formList.map((o) => {
-      const { key } = o;
-      if (formData.value[key] !== undefined && key !== formKey.defaultFalg) {
-        o.disabled = true;
-      }
-    });
 
     if (props.pageType === 'perfectReal') {
       const medicalTypeItem = formList.find(
@@ -377,6 +385,10 @@
 
       if (key !== formKey.defaultFalg) {
         o.labelWidth = undefined;
+      }
+
+      if (formData.value[key] !== undefined && key !== formKey.defaultFalg) {
+        o.disabled = true;
       }
     });
 
