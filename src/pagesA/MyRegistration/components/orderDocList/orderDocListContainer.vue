@@ -47,7 +47,7 @@
         <view class="doc-info-introduce-goodat text-ellipsis">
           <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
 
-          <!-- <block v-else>
+          <block v-else>
             <text
               :class="{
                 'doc-job-name': item.docJobName,
@@ -59,7 +59,7 @@
             <text>
               {{ item.docTitleName }}
             </text>
-          </block> -->
+          </block>
         </view>
       </view>
     </view>
