@@ -233,8 +233,6 @@
   };
 
   const init = async () => {
-    console.log('init---', pageProps.value);
-
     await getSysConfig();
     if (!pageProps.value.params) {
       await pageHook();

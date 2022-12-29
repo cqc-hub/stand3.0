@@ -283,6 +283,8 @@ export const usePayPage = () => {
     isPayListRequestComplete.value = false;
     let result: {
       clinicPayListDetailResults: TPayedListItem[];
+      patientName?: string;
+      cardNumber?: string;
     };
     const desSecret = pageProps.value.params;
 
@@ -317,6 +319,13 @@ export const usePayPage = () => {
     dealPayList(resList, { payState: '0' });
 
     payedList.value = resList;
+
+    if (result && result.patientName) {
+      pageProps.value.deParams = {
+        cardNumber: result.cardNumber,
+        patientName: result.patientName,
+      };
+    }
   };
 
   const selPayListItem = (item: IPayListItem) => {
