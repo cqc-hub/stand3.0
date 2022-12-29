@@ -417,24 +417,27 @@
       console.log('列表进', pageProps.value);
 
       if (pageProps.value.params) {
+        console.log(pageProps.value.params);
+
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
+        console.log(pageProps.value.deParams, '---');
       }
     }
   });
 
-  // setTimeout(() => {
-  //   // regDialogConfirm.value.show();
-  //   const a = {
-  //     serialNo: 'eb2ad98ea4e847b092b875a560648d58',
-  //     visitNo: '20221213005816',
-  //     hosId: '13001',
-  //     cardNumber: '000001949',
-  //   };
+  setTimeout(() => {
+    // regDialogConfirm.value.show();
+    // const a = {
+    //   serialNo: 'cbdbe77a32b54b74989e7007def84bf1',
+    //   visitNo: '20221229000040',
+    //   hosId: '13001',
+    //   cardNumber: '000001766',
+    // };
 
-  //   const en = encryptForPage(a);
-  //   console.log(en);
-  //   console.log(decryptForPage(en));
-  // }, 1000);
+    // const en = encryptForPage(a);
+    // console.log(en);
+    // console.log(decryptForPage(en));
+  }, 1000);
 </script>
 
 <style lang="scss" scoped>
