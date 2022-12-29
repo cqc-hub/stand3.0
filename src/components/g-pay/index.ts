@@ -66,6 +66,9 @@ export const payMoneyOnline = async (
 
   // #ifdef MP-ALIPAY
   requestArg.userId = gStores.globalStore.openId;
+  if (!gStores.globalStore.openId) {
+    requestArg.userId = await getOpenid2();
+  }
   requestArg.channel = 'ALI_MINI';
   // #endif
 
@@ -80,8 +83,6 @@ export const payMoneyOnline = async (
 };
 
 type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
-
-
 
 //微信获取小程序的openid
 const getOpenid = async () => {
@@ -109,6 +110,36 @@ const getOpenid = async () => {
             resolve(openId);
           }
         }
+      },
+    });
+  });
+};
+
+// alipay
+const getOpenid2 = async () => {
+  const gStores = new GStores();
+
+  return new Promise((resolve, reject) => {
+    my.getAuthCode({
+      fail: reject,
+
+      success: async ({ authCode }) => {
+        const accountType = gStores.globalStore.browser.accountType;
+
+        const { result } = await api.allinoneAuthApi(
+          packageAuthParams(
+            {
+              code: authCode,
+              codeType: 2,
+              accountType,
+            },
+            '/aliUserLogin/getTPAlipayUserInfoShare'
+          )
+        );
+
+        const userid = result && result.userId;
+
+        userid ? resolve(userid) : reject();
       },
     });
   });
@@ -151,30 +182,30 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
         // #ifdef MP-ALIPAY
         alipayTrack(true, type);
 
-         if (e.resultCode == "9000") {
+        if (e.resultCode == '9000') {
           //支付宝成功支付
           resolve({
             payedRes: e,
             payRes: payData,
           });
         } else {
-          gStores.messageStore.showMessage("取消支付", 1500);
+          gStores.messageStore.showMessage('取消支付', 1500);
         }
-         // #endif
+        // #endif
 
-          // #ifdef  MP-WEIXIN
-          resolve({
-            payedRes: e,
-            payRes: payData,
-          });
-          // #endif
+        // #ifdef  MP-WEIXIN
+        resolve({
+          payedRes: e,
+          payRes: payData,
+        });
+        // #endif
       },
 
       fail(err) {
         // #ifdef MP-ALIPAY
         alipayTrack(false, type);
         // #endif
-        gStores.messageStore.showMessage("取消支付", 1500);
+        gStores.messageStore.showMessage('取消支付', 1500);
         reject(err);
       },
     });
