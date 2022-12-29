@@ -217,10 +217,10 @@
         <view class="title">下载报告</view>
       </button> -->
       <!-- <text style="color: #e6e6e6">|</text> -->
-      <button class="footer-button" @click="shareReport">
+      <!-- <button class="footer-button" @click="shareReport">
         <view class="icon-font ico_share-blue"></view>
         <view class="title">分享报告</view>
-      </button>
+      </button> -->
       <text
         v-if="pageProps.isDoctorCard && checkoutReportList.applyDocId && checkoutReportList.deptId"
         style="color: #e6e6e6"
