@@ -1,6 +1,6 @@
 import { Login } from './../../utils/modules/login';
 import api from '@/service/api';
-import { GStores } from '@/utils';
+import { GStores, packageAuthParams } from '@/utils';
 import global from '@/config/global';
 import { getSysCode } from '@/common';
 // #ifdef MP-ALIPAY
@@ -81,37 +81,7 @@ export const payMoneyOnline = async (
 
 type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
 
-const packageAuthParams = (
-  args: {},
-  url: `/${string}`,
-  payload: {
-    isOutArgs?: boolean;
-  } = {}
-) => {
-  const gStores = new GStores();
-  const argsDefault = {
-    ...args,
-    sysCode: getSysCode(),
-  };
-  const { isOutArgs } = payload;
-  let authParam = argsDefault;
-  let outParam: BaseObject = {};
 
-  if (isOutArgs) {
-    (authParam as any) = undefined;
-    outParam = argsDefault;
-  }
-
-  return {
-    authParam: {
-      args: authParam,
-      ...outParam,
-      token: gStores.globalStore.getToken,
-    },
-    sysCode: undefined,
-    url,
-  };
-};
 
 //微信获取小程序的openid
 const getOpenid = async () => {
@@ -179,7 +149,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       ...payData,
       success(e) {
         // #ifdef MP-ALIPAY
-        alipayTrack(true, type); 
+        alipayTrack(true, type);
 
          if (e.resultCode == "9000") {
           //支付宝成功支付
@@ -190,8 +160,8 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
         } else {
           gStores.messageStore.showMessage("取消支付", 1500);
         }
-         // #endif 
-         
+         // #endif
+
           // #ifdef  MP-WEIXIN
           resolve({
             payedRes: e,

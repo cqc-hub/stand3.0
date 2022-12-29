@@ -34,7 +34,10 @@
             <view class="mt24 f28">
               <view class="flex-between">
                 <view class="color-888">快递方式</view>
-                <view class="g-bold">{{ aimList[0].label }}</view>
+                <!-- <view class="g-bold">{{ aimList[0].label }}</view> -->
+                <view class="g-bold">
+                  <image :src="getSrc(aimList[0].value)" class="express-icon" />
+                </view>
               </view>
             </view>
           </block>
@@ -90,6 +93,7 @@
     upImgOss,
     wait,
   } from '@/utils';
+  import { getSrc } from './utils';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/medRecordDetailsAddressBox.vue';
@@ -312,5 +316,12 @@
       background-color: var(--h-color-white) !important;
       opacity: 1;
     }
+  }
+
+  .express-icon {
+    width: 190rpx;
+    height: 52rpx;
+
+    transform: translateX(20rpx);
   }
 </style>

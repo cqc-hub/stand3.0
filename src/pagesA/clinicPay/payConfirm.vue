@@ -142,6 +142,7 @@
   );
 
   const getData = async () => {
+    await wait(800);
     if (!pageProps.value.visitNo) {
       getScanData();
     } else {
@@ -400,10 +401,9 @@
   };
 
   onLoad(async (opt) => {
-    const enter = uni.getEnterOptionsSync();
-    const queryParams = enter?.query?.qrCode;
+    console.log('预结算参数', opt);
 
-    if (queryParams && !opt.params) {
+    if (!(opt && Object.keys(opt).length)) {
       return;
     }
     await wait(650);

@@ -26,7 +26,10 @@
             isAllActive || isActive(item[field.value]) ? '&#xe6d0;' : '&#xe6ce;'
           }}
         </view>
-        <view class="label f28">{{ item[field.label] }}</view>
+        <view class="label f28">
+          <image :src="getSrc(item.value)" />
+        </view>
+        <!-- <view class="label f28">{{ item[field.label] }}</view> -->
       </view>
     </view>
 
@@ -42,6 +45,7 @@
 <script lang="ts">
   import { defineComponent, ref, PropType, reactive } from 'vue';
   import { GStores } from '@/utils';
+  import { getSrc } from '../utils/index';
 
   export default defineComponent({
     props: {
@@ -162,6 +166,7 @@
         isActive,
         itemClick,
         itemDelete,
+        getSrc,
       };
     },
   });
@@ -175,7 +180,8 @@
     gap: 16rpx;
 
     .item {
-      background-color: var(--hr-neutral-color-1);
+      // background-color: var(--hr-neutral-color-1);
+      background-color: #fff;
       min-height: 0rpx;
       border-radius: 16rpx;
       font-size: var(--hr-font-size-xs);
@@ -193,6 +199,11 @@
 
       .label {
         padding: 18rpx 0;
+
+        image {
+          width: 190rpx;
+          height: 52rpx;
+        }
       }
 
       .icon-del {
@@ -206,7 +217,7 @@
 
       &.item-active {
         color: var(--hr-brand-color-6);
-        background-color: var(--hr-brand-color-1);
+        // background-color: var(--hr-brand-color-1);
       }
     }
 
@@ -215,5 +226,4 @@
       border-radius: 16rpx;
     }
   }
-
 </style>

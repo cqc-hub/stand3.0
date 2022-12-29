@@ -36,7 +36,7 @@ export const getH5OpenidParam = function (data) {
 // #endif
 };
 
-const packageAuthParams = (
+export const packageAuthParams = (
   args: {},
   url: `/${string}`,
   payload: {
