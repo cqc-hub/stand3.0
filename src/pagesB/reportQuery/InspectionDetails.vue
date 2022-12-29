@@ -212,10 +212,10 @@
       <view>{{ tips.content }}</view>
     </view>
     <view class="footer">
-        <button class="footer-button"  v-if="pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1" @click="goReportPdf">
+        <!-- <button class="footer-button"  v-if="pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1" @click="goReportPdf">
         <view class="icon-font ico_download-blue"></view>
         <view class="title">下载报告</view>
-      </button> 
+      </button>  -->
       <!-- <text style="color: #e6e6e6">|</text> -->
       <!-- <button class="footer-button" @click="shareReport">
         <view class="icon-font ico_share-blue"></view>

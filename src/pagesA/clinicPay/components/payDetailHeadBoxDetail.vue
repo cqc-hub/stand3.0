@@ -59,12 +59,12 @@
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
           <text v-if="myprops.patientName">
-            {{ myprops.patientName + ` (${myprops.cardNumber})` }}
+            {{ nameConvert(myprops.patientName)+ ` (${myprops.cardNumber})` }}
           </text>
 
           <text v-else>
             {{
-              gStores.userStore.patChoose.patientName +
+              nameConvert(gStores.userStore.patChoose.patientName) +
               `${
                 gStores.userStore.patChoose._showId
                   ? ` (${gStores.userStore.patChoose._showId})`
@@ -159,7 +159,7 @@
     type TPayDetailInfo,
   } from '../utils/clinicPayDetail';
 
-  import { GStores, type ISystemConfig } from '@/utils';
+  import { GStores, type ISystemConfig,nameConvert } from '@/utils';
 
   defineProps<{
     myprops: TPayDetailProp;
