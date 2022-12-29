@@ -121,6 +121,7 @@ const getOpenid2 = async () => {
 
   return new Promise((resolve, reject) => {
     my.getAuthCode({
+      scopes: ['auth_user'],
       fail: reject,
 
       success: async ({ authCode }) => {
