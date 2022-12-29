@@ -117,10 +117,12 @@
                   <uni-notice-bar
                     v-if="noticeText"
                     :text="noticeText"
+                    speed="80"
                     scrollable
                     color="--hr-neutral-color-10"
                     style="width: 100%"
                     background-color="transparent"
+                    @click="goToNotice1"
                   />
                 </view>
               </view>
@@ -305,6 +307,13 @@
       });
     }
   };
+  const goToNotice1 = ()=>{
+     //跳咨询列表页面
+     uni.navigateTo({
+        url:
+          '/pagesC/cloudHospital/myPath?type=2&path=/pagesA/healthAdvisory/healthAdvisory',
+      });
+  }
 
   const goLogin = async (e: any) => {
     // #ifdef MP-ALIPAY
