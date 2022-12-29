@@ -39,18 +39,20 @@
         ref="datePickerRef"
         hideFooter
       >
-        <view />
+        <view class="my-display-none">233</view>
       </uni-datetime-picker>
 
-      <uni-data-picker
-        :map="{ text: 'hosName', value: 'hosId' }"
-        :localdata="localdata"
-        :clear-icon="false"
-        @change="pickerChange"
-        ref="dataPickerRef"
-      >
-        <view />
-      </uni-data-picker>
+      <view class="my-display-none">
+        <uni-data-picker
+          :map="{ text: 'hosName', value: 'hosId' }"
+          :localdata="localdata"
+          :clear-icon="false"
+          @change="pickerChange"
+          ref="dataPickerRef"
+        >
+          <view class="my-display-none">233</view>
+        </uni-data-picker>
+      </view>
     </view>
   </view>
 </template>
@@ -139,7 +141,7 @@
     if (listConfig && listConfig.length) {
       console.log({
         listConfig,
-        list
+        list,
       });
 
       const hos = listConfig.map((o) => o.hosId + '');
