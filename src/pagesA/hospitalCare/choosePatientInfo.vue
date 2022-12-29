@@ -124,7 +124,7 @@ const toPayPage = () => {
     hosId,
     cardNumber,
     patientName,
-    params: pageProps.value.params, //表示扫码来的
+    type: 1, //表示预交来的
   };
   uni.navigateTo({
     url: joinQuery("/pagesA/hospitalCare/paymentPage", data),

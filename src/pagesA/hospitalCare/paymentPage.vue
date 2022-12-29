@@ -56,7 +56,7 @@ type IPageProps = {
   patientName?: string; //扫码的时候传 支付用
   cardNumber?: string;
   hospitalAccount?: string;
-  params?: string; //有值代表扫码来的
+  type?: string; //有值1代表预交来的
 };
 const gStores = new GStores();
 const resultHos = ref<hosParam>({
@@ -85,6 +85,7 @@ const toPay = async () => {
       : "3",
     source: gStores.globalStore.browser.source,
     ...pageProps.value,
+    patientId: pageProps.value.type == "1" ? "" : gStores.userStore.patChoose.patientId,
   });
 
   await toPayPull(res, "住院缴费");
