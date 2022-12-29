@@ -400,6 +400,14 @@
   };
 
   onLoad(async (opt) => {
+    const enter = uni.getEnterOptionsSync();
+    const queryParams = enter?.query?.qrCode;
+
+    if (queryParams && !opt.params) {
+      return;
+    }
+    await wait(650);
+
     if (opt.q) {
       return;
     }

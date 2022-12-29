@@ -136,7 +136,7 @@
                           >{{ item.antiResult }}</view
                         >
                         <view v-else class="table-title3 table-title-common"
-                          >暂未查询到结果！</view
+                          ></view
                         >
                         <view class="table-title4 table-title-common">{{
                           item.itemUnits
@@ -179,7 +179,7 @@
                       ><text class="up" v-if="item.flag == 'H'">↑</text></view
                     >
                     <view v-else class="table-title3 table-title-common"
-                      >暂未查询到结果！</view
+                      ></view
                     >
                     <view class="table-title6 table-title-common">{{
                       item.normalVal
@@ -190,7 +190,7 @@
                   </view>
                 </template>
               </view>
-              <view class="content" v-else>暂未查询到结果！</view>
+              <view class="content" v-else></view>
             </view>
             <view v-if="pageProps.repType == 1" class="exegesis">
               <view class="exegesis-content">

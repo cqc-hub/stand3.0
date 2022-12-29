@@ -233,6 +233,8 @@
   };
 
   const init = async () => {
+    console.log('init---', pageProps.value);
+
     await getSysConfig();
     if (!pageProps.value.params) {
       await pageHook();
@@ -258,10 +260,19 @@
   }, 1000);
 
   onLoad(async (opt) => {
-    if (opt.q) {
+    const enter = uni.getEnterOptionsSync();
+    const queryParams = enter?.query?.qrCode;
+
+
+    if (queryParams && !opt.params) {
       return;
     }
 
+    await wait(650);
+
+    if (opt.q) {
+      return;
+    }
     setTimeout(() => {
       isShowPatComponent.value = true;
     }, 600);
@@ -276,7 +287,11 @@
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
 
-        console.log('获取到加密参数', pageProps.value.params);
+        console.log(
+          '获取到加密参数',
+          pageProps.value.params,
+          pageProps.value.deParams
+        );
       }
     }
 

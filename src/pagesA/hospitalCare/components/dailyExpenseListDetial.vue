@@ -42,7 +42,7 @@
           <view class="item">
             <view @click="isShowBtn(index)" class="item-top">
               <view class="type">{{ item.category }}</view>
-              <view class="money"
+              <view class="money text-no-wrap"
                 >{{ item.categoryCost }}元
                 <text v-if="!isShow[index]" style="color: #888888" class="iconfont"
                   >&#xe6c4;</text

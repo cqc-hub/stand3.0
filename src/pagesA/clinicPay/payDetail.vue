@@ -249,7 +249,7 @@
     code: qrCode.value,
   }));
 
-  const showQrCode = ref(false);
+  const showQrCode = ref(true);
   const isCannelShow = ref(false);
 
   const capture = async () => {
