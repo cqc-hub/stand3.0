@@ -172,6 +172,8 @@
   import { encryptForPage, decryptForPage } from '@/common/des';
   import { beforeEach } from '@/router';
 
+  import globalGl from '@/config/global';
+
   import ClinicPayDetailList from './components/clinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
@@ -261,7 +263,6 @@
     const enter = uni.getEnterOptionsSync();
     const queryParams = enter?.query?.qrCode;
 
-
     if (queryParams && !opt.params) {
       return;
     }
@@ -296,7 +297,7 @@
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
 
-      if (!pageProps.value.params) {
+      if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
       }
     }
