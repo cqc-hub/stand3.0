@@ -160,7 +160,7 @@
         pageList.value[typeId] = [...pageList.value[typeId], ...result.result];
       }
     }
-    let list: Object[] = [];
+    let list: any[] = [];
     let arr = JSON.parse(JSON.stringify(pageList.value[typeId]));
     arr.map((item1) => {
       item1.reportHosNameResults.map((item2) => {

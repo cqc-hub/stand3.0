@@ -149,11 +149,11 @@
               >
                 <template #showBody="{ item, value }">
                   <view
-                    class="flex-normal color-blue"
+                    class="flex-normal"
                     v-if="item.key === 'deptName'"
                   >
                     <text>{{ value }}</text>
-                    <text class="ico_location2 icon-font size-icon"></text>
+                    <!-- <text class="ico_location2 icon-font size-icon"></text> -->
                   </view>
 
                   <view

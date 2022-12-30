@@ -1,4 +1,5 @@
 import { getSysCode } from '@/common';
+import globalGl from '@/config/global';
 
 import api from '@/service/api';
 
@@ -270,14 +271,11 @@ export const getShareTotalUrl = (query, path) => {
 
   // const data = cloneUtil(query);
   const data = query;
-  const bUrl =
-    process.env.NODE_ENV === 'development'
-      ? 'https://health.eheren.com/note'
-      : 'https://h5.eheren.com/note';
+  const bUrl = globalGl.env === 'prod' ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
 
   const outTime = 7;
   return new Promise((resolve, reject) => {
-    const envWx = process.env.NODE_ENV === 'development' ? 'trial' : 'release'; // develop | release | trial
+    const envWx = globalGl.env !== 'prod' ? 'trial' : 'release'; // develop | release | trial
     uni.showLoading({
       title: '请求中..',
       mask: true,
@@ -359,7 +357,6 @@ export const getQueryUrl = function (url: string): BaseObject {
         const [key, value] = o.split('=');
         return [key, value];
       });
-  
+
     return Object.fromEntries(aArg);
   };
-  
