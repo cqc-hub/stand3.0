@@ -70,6 +70,9 @@
           "style": {
             "navigationBarTitleText": "住院服务",
             "enablePullDownRefresh": true
+          },
+          "extend": {
+            "patient": true
           }
         },
         {
@@ -306,12 +309,18 @@
           "path": "medicationAssistant/medicalHelp",
           "style": {
             "navigationBarTitleText": "药品配送"
+          },
+          "extend": {
+            "patient": true
           }
         },
         {
           "path": "reportQuery/reportQuery",
           "style": {
             "navigationBarTitleText": "报告查询"
+          },
+          "extend": {
+            "patient": true
           }
         },
         {
