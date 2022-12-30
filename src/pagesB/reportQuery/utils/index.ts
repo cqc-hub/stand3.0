@@ -278,7 +278,7 @@ export const getShareTotalUrl = (query, path) => {
 
   const outTime = 7;
   return new Promise((resolve, reject) => {
-    const envWx = globalGl.env as string === 'prod' ? 'release': 'develop'; // develop | release | trial
+    const envWx = globalGl.env as string === 'prod' ? 'release': 'trial'; // develop | release | trial
     uni.showLoading({
       title: '请求中..',
       mask: true,
@@ -297,8 +297,8 @@ export const getShareTotalUrl = (query, path) => {
       .then(({ result, message }) => {
         uni.hideLoading();
         if (result) {
-          // resolve(bUrl + '?' + result.split('?')[1]);
-          resolve(result);
+          resolve(bUrl + '?' + result.split('?')[1]);
+          // resolve(result);
         } else {
           reject(message);
         }
