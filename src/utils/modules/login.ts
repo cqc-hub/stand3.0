@@ -31,9 +31,9 @@ export const getH5OpenidParam = function (data) {
     {
       openId: globalStore.openId,
       source: '21',
-    }
+    },
   ];
-// #endif
+  // #endif
 };
 
 export const packageAuthParams = (
@@ -280,6 +280,11 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     if (!payload) return;
     const { target, detail } = payload;
 
+    if (!target.code) {
+      this.messageStore.showMessage('未获取到 code, 请重新点击', 3000);
+      return Promise.reject();
+    }
+
     if (detail.errMsg !== 'getPhoneNumber:ok') {
       this.messageStore.showMessage('用户取消授权', 3000);
       return Promise.reject();
@@ -470,7 +475,7 @@ export class PatientUtils extends LoginUtils {
     } = payload;
     const accountType = this.globalStore.browser.accountType;
 
-    const _sex = (sex && (sex === '男' ? '1' : '2')) || ''
+    const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
     const requestData = {
       accountType,
       idNo,
