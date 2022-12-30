@@ -4,13 +4,13 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
 
-    <view class="block-top" v-if="examineReportList.yunUrl">
+    <view
+      class="block-top"
+      @click="gotoMedical"
+      v-if="examineReportList.yunUrl"
+    >
       <!-- 底部banner -->
-      <image
-        @tap="gotoMedical"
-        class="nav"
-        :src="$global.BASE_IMG + 'yun_banner.png'"
-      />
+      <image class="nav" :src="$global.BASE_IMG + 'yun_banner.png'" />
     </view>
     <view
       class="top"
@@ -875,6 +875,8 @@
 
   .block-top {
     margin-top: -20rpx;
+    position: relative;
+    z-index: 10;
 
     image {
       width: 100%;

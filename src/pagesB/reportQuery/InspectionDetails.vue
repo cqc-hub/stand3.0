@@ -331,7 +331,7 @@ const pageProps = ref(<any>{});
 onLoad((p) => {
   console.log('---p', p);
 
-  pageProps.value = deQueryForUrl(p);
+  pageProps.value = deQueryForUrl(deQueryForUrl(p));
 
 });
 
