@@ -12,7 +12,9 @@
 
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="doc-info-introduce-header">
-          <view class="doc-info-introduce-name f36 text-no-wrap">{{ item.docName }}</view>
+          <view class="doc-info-introduce-name f36 text-no-wrap">
+            {{ item.docName }}
+          </view>
           <view
             v-if="item.docTitleName && isAllDate"
             class="doc-info-introduce-title flex-normal"
@@ -46,7 +48,12 @@
         </view>
 
         <view class="doc-info-introduce-goodat text-ellipsis">
-          <text v-if="!item.schQukCategor">{{ item.goodAt }}</text>
+          <view
+            v-if="!item.schQukCategor"
+            class="text-ellipsis ellipsis-line-clamp2"
+          >
+            {{ item.goodAt }}
+          </view>
 
           <!-- 按天的荣誉职称 -->
           <block v-else>
