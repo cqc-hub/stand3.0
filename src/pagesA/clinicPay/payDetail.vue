@@ -156,7 +156,7 @@
             }"
             class="btn btn-warning confirm-btn"
           >
-            {{ getPayTotal + `元 立即支付` }}
+            立即支付
           </button>
         </block>
       </view>
