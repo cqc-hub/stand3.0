@@ -361,6 +361,7 @@
     } = props.value;
 
     const args = {
+      patientName: props.value.patientName,
       businessType: '1',
       patientId,
       source,

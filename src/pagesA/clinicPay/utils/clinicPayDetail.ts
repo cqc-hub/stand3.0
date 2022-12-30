@@ -479,6 +479,7 @@ export const usePayPage = () => {
     const source = gStores.globalStore.browser.source;
 
     const args: BaseObject = {
+      patientName: pageProps.value.deParams?.patientName,
       businessType: '1',
       patientId,
       source,

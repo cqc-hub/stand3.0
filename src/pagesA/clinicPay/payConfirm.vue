@@ -319,7 +319,7 @@
 
       const args = {
         extend: JSON.stringify(info.value),
-
+        patientName,
         businessType: '1',
         patientId: params || mzParams ? undefined : patientId,
         source,
