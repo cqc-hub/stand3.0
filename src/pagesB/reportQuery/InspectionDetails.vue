@@ -216,11 +216,13 @@
         <view class="icon-font ico_download-blue"></view>
         <view class="title">下载报告</view>
       </button>
+      <!-- #ifdef MP-WEIXIN -->
       <text style="color: #e6e6e6">|</text>
       <button class="footer-button" @click="shareReport">
         <view class="icon-font ico_share-blue"></view>
         <view class="title">分享报告</view>
       </button>
+      <!-- #endif -->
       <text
         v-if="pageProps.isDoctorCard && checkoutReportList.applyDocId && checkoutReportList.deptId"
         style="color: #e6e6e6"
@@ -327,7 +329,10 @@ const pat = gStore.userStore.patChoose;
 const pageProps = ref(<any>{});
 
 onLoad((p) => {
+  console.log('---p', p);
+
   pageProps.value = deQueryForUrl(p);
+
 });
 
 const getCheckoutReportDetails = async () => {

@@ -265,17 +265,20 @@ export interface examineReportDetails {
   impression?: string;
   deptId?: string;
   diagnosis?: string;
+
+  // 云影像
+  yunUrl?: string;
 }
 export const getShareTotalUrl = (query, path) => {
   // const source = getBrowser().source;
 
   // const data = cloneUtil(query);
   const data = query;
-  const bUrl = globalGl.env === 'prod' ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
+  const bUrl = (globalGl.env as string === 'prod')  ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
 
   const outTime = 7;
   return new Promise((resolve, reject) => {
-    const envWx = globalGl.env !== 'prod' ? 'trial' : 'release'; // develop | release | trial
+    const envWx = globalGl.env as string !== 'prod' ? 'trial' : 'release'; // develop | release | trial
     uni.showLoading({
       title: '请求中..',
       mask: true,

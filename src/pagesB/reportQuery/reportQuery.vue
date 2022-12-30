@@ -241,11 +241,11 @@
       watermarkText,
     } = reportConfig.value;
     const mq = {
-      repId: data.repId,
+      repId: data.repId && encodeURIComponent(data.repId) || '',
       repType: data.repType || '',
       reportType: data.reportType || '',
       hosId: data.hosId || '',
-      extend: encodeURIComponent(data.extend) || '',
+      extend: data.extend && encodeURIComponent(data.extend) || '',
       isDoctorCard,
       isWatermark,
       watermarkText,
