@@ -409,7 +409,7 @@ export const usePayPage = () => {
     // }
 
     uni.navigateTo({
-      url: joinQuery('/pagesA/clinicPay/payDetail', pageData),
+      url: joinQueryForUrl('/pagesA/clinicPay/payDetail', pageData),
     });
   };
 

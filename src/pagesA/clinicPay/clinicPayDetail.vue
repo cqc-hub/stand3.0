@@ -281,7 +281,7 @@
         return;
       }
 
-      pageProps.value = deQueryForUrl(opt);
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);

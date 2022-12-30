@@ -430,7 +430,7 @@
   };
 
   onLoad(async (opt) => {
-    props.value = deQueryForUrl(opt);
+    props.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
   onMounted(async () => {
