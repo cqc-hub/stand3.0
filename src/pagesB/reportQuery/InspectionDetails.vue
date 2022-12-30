@@ -392,7 +392,7 @@ const shareReport = () => {
   });
 };
 const forShare = () => {
-  const data = `${checkoutReportList.value.repName}的检查报告,分享链接有效期至${
+  const data = `${gStore.userStore.patChoose.patientName}的检查报告,分享链接有效期至${
     shareEndTime.value || "YYYY-MM-DD"
   }。 ${qrVal.value}`;
   uni.setClipboardData({

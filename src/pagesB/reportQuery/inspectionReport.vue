@@ -474,7 +474,7 @@
   };
   const forShare = () => {
     const data = `${
-      examineReportList.value.patientName
+      gStore.userStore.patChoose.patientName
     }的检查报告,分享链接有效期至${shareEndTime.value || 'YYYY-MM-DD'}。 ${
       qrVal.value
     }`;
