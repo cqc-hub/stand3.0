@@ -137,6 +137,7 @@
         payAmount: string;
         recipeNo: string;
         otherPayWay: string;
+        costTypeName: string;
       }
     >{}
   );
@@ -315,7 +316,15 @@
       const { visitDate, mergeOrder, serialNo, params, mzParams } =
         pageProps.value;
 
-      const { hosId, visitNo, childOrder, cardNumber, payAmount } = info.value;
+      const {
+        hosId,
+        visitNo,
+        childOrder,
+        cardNumber,
+        payAmount,
+        costTypeName,
+        totalCharges,
+      } = info.value;
 
       const args = {
         extend: JSON.stringify(info.value),
@@ -331,6 +340,9 @@
         visitNo,
         cardNumber,
         mergeOrder: mergeOrder || childOrder,
+        personalPayFee:
+          ((!costTypeName || costTypeName === '自费') && totalCharges) ||
+          undefined,
       };
 
       const {

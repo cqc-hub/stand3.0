@@ -358,9 +358,12 @@
       docName,
       hosId,
       visitDate,
+      costTypeCode,
     } = props.value;
 
     const args = {
+      personalPayFee:
+        ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
       patientName: props.value.patientName,
       businessType: '1',
       patientId,

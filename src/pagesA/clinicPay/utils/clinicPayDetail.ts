@@ -79,6 +79,7 @@ export type TPayDetailProp = {
   costTypeName: string;
   cardNumber?: string;
   patientName?: string;
+  costTypeCode?: string;
   params?: string; //扫码的加密参数
 };
 
@@ -373,6 +374,7 @@ export const usePayPage = () => {
       costTypeName,
       diseaseTypeName,
       clinicTypeName,
+      costTypeCode
     } = item;
 
     const pageData = {
@@ -400,6 +402,7 @@ export const usePayPage = () => {
       patientName: pageProps.value.deParams?.patientName,
 
       params: pageProps.value.params,
+      costTypeCode
     };
 
     // if (payState === '1') {
@@ -477,8 +480,18 @@ export const usePayPage = () => {
 
     const _totalCost = totalCost.value + '';
     const source = gStores.globalStore.browser.source;
+    // const costTypeCode = selectList[0].costTypeCode;
+    const personalPayFee = selectList.reduce((p, o) => {
+      const { costTypeCode } = o;
+
+      if (!costTypeCode || costTypeCode === '1') {
+        p += (o.totalCost as any) * 1;
+      }
+      return p;
+    }, 0);
 
     const args: BaseObject = {
+      personalPayFee: personalPayFee || undefined,
       patientName: pageProps.value.deParams?.patientName,
       businessType: '1',
       patientId,
