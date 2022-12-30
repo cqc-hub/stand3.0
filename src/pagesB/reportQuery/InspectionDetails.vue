@@ -8,7 +8,7 @@
         <view class="container-block-top" @click="more">
           <view class="title">{{ checkoutReportList.repName }}</view>
           <view class="patient-information">
-            <view class="subhead"
+            <view v-if="pageProps._scan !== '1'" class="subhead"
               >患者信息<view class="subhead-detail">
                 {{ nameConvert(pat.patientName) }}({{
                   checkoutReportList.cardNumber || pat._showId
@@ -217,11 +217,13 @@
         <view class="title">下载报告</view>
       </button>
       <!-- #ifdef MP-WEIXIN -->
-      <text style="color: #e6e6e6">|</text>
-      <button class="footer-button" @click="shareReport">
-        <view class="icon-font ico_share-blue"></view>
-        <view class="title">分享报告</view>
-      </button>
+      <block v-if="pageProps._scan !== '1'">
+        <text style="color: #e6e6e6">|</text>
+        <button class="footer-button" @click="shareReport">
+          <view class="icon-font ico_share-blue"></view>
+          <view class="title">分享报告</view>
+        </button>
+      </block>
       <!-- #endif -->
       <text
         v-if="pageProps.isDoctorCard && checkoutReportList.applyDocId && checkoutReportList.deptId"
@@ -292,7 +294,7 @@ import {
   getShareTotalUrl,
   addWatermark
 } from "./utils";
-import { GStores,nameConvert } from "@/utils";
+import { GStores,nameConvert, wait } from "@/utils";
 import { joinQuery, encryptDes, getSysCode } from "@/common";
 import { deQueryForUrl } from "@/common";
 import { useReportPowerEnerg } from "@/components/greenPower";
@@ -329,7 +331,7 @@ const pat = gStore.userStore.patChoose;
 const pageProps = ref(<any>{});
 
 onLoad((p) => {
-  console.log('---p', p);
+  console.log('获得参数-----', p);
 
   pageProps.value = deQueryForUrl(deQueryForUrl(p));
 
@@ -342,7 +344,6 @@ const getCheckoutReportDetails = async () => {
     patientId: pat.patientId,
     repId: repId,
     repType: repType,
-    sysCode: pat.sysCode,
     extend: decodeURIComponent(extend),
   };
   const { result } = await api.getCheckoutReportDetails(params);
@@ -375,7 +376,11 @@ const options = ref({
 const shareReport = () => {
   isOperation.value = false;
   getShareTotalUrl(
-    pageProps.value,
+    {
+      ...pageProps.value,
+      watermarkText: undefined,
+    }
+    ,
     "pagesB/reportQuery/InspectionDetails"
   ).then((url) => {
     qrVal.value = url;
@@ -420,11 +425,12 @@ const goReportPdf = () => {
     }),
   });
 };
-onMounted(() => {
+onMounted(async () => {
+  await wait(600);
   getTips();
   getCheckoutReportDetails();
-  if ( pageProps.value.isWatermark &&  pageProps.value.watermarkText) {
-    addWatermark( pageProps.value.watermarkText);
+  if ( pageProps.value.isWatermark === '1') {
+    addWatermark( global.systemInfo.name);
   }
 });
 </script>

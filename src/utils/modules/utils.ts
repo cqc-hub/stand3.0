@@ -123,6 +123,9 @@ export const openLocation = async (
  * 脱敏-name
  */
 export const nameConvert = (name: string) => {
+  if (!name) {
+    return ''
+  }
   let userName = '';
   if (name.length == 1) {
     userName = '*';

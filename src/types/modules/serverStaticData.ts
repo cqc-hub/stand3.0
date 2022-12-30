@@ -170,8 +170,8 @@ export interface ISystemConfig {
     reportTab: IReportConfigTab[];
     //0否 1 是 是否显示水印
     isWatermark: '0' | '1';
-    //水印文案
-    watermarkText?: string;
+    //水印文案 (二维码不支持中文 取消该字段, 取医院名字)
+    // watermarkText?: string;
     //0否 1 是 是否开启医生名片入口
     isDoctorCard: '0' | '1';
     //0否 1 是 是否开启支持下载报告 开启这个配置且有图文的前提 页面才会实现

@@ -1,4 +1,4 @@
-import { getSysCode } from '@/common';
+import { getSysCode, joinQueryForUrl } from '@/common';
 import globalGl from '@/config/global';
 
 import api from '@/service/api';
@@ -273,12 +273,12 @@ export const getShareTotalUrl = (query, path) => {
   // const source = getBrowser().source;
 
   // const data = cloneUtil(query);
-  const data = query;
+  const data = {...query, _scan: '1'};
   const bUrl = (globalGl.env as string === 'prod')  ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
 
   const outTime = 7;
   return new Promise((resolve, reject) => {
-    const envWx = globalGl.env as string !== 'prod' ? 'trial' : 'release'; // develop | release | trial
+    const envWx = globalGl.env as string === 'prod' ? 'release': 'develop'; // develop | release | trial
     uni.showLoading({
       title: '请求中..',
       mask: true,
@@ -291,12 +291,14 @@ export const getShareTotalUrl = (query, path) => {
         envVersion: envWx,
         path,
         sysCode: getSysCode(),
-        query: 'mq' + encodeURIComponent(JSON.stringify(data)),
+        // query: 'mq' + encodeURIComponent(JSON.stringify(data)),
+        query: joinQueryForUrl('', data).slice(1),
       })
       .then(({ result, message }) => {
         uni.hideLoading();
         if (result) {
-          resolve(bUrl + '?' + result.split('?')[1]);
+          // resolve(bUrl + '?' + result.split('?')[1]);
+          resolve(result);
         } else {
           reject(message);
         }

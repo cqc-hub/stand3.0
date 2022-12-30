@@ -51,7 +51,7 @@
             <view class="container-top-click" @click="more(index)">
               <view class="title">{{ item.repName }}</view>
               <view class="patient-information">
-                <view class="subhead">
+                <view v-if="pageProps._scan !== '1'" class="subhead">
                   患者信息
                   <view class="subhead-detail">
                     {{ nameConvert(pat.patientName) }}({{
@@ -171,11 +171,15 @@
         <view class="icon-font ico_download-blue"></view>
         <view class="title">下载报告</view>
       </button>
-      <!-- <text style="color: #e6e6e6">|</text>
-      <button class="footer-button" @click="shareReport">
-        <view class="icon-font ico_share-blue"></view>
-        <view class="title">分享报告</view>
-      </button> -->
+      <!-- #ifdef MP-WEIXIN -->
+      <block v-if="pageProps._scan !== '1'">
+        <text style="color: #e6e6e6">|</text>
+        <button class="footer-button" @click="shareReport">
+          <view class="icon-font ico_share-blue"></view>
+          <view class="title">分享报告</view>
+        </button>
+      </block>
+      <!-- #endif -->
       <text
         style="color: #e6e6e6"
         v-if="
@@ -289,7 +293,7 @@
     getShareTotalUrl,
     addWatermark,
   } from './utils';
-  import { GStores, nameConvert } from '@/utils';
+  import { GStores, nameConvert, wait } from '@/utils';
   import { joinQuery, encryptDes, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
@@ -409,6 +413,8 @@
   const pat = gStore.userStore.patChoose;
 
   onLoad((p) => {
+    console.log('获得参数-----', p);
+
     pageProps.value = deQueryForUrl(deQueryForUrl(p));
   });
 
@@ -419,7 +425,6 @@
       patientId: pat.patientId,
       repId: repId,
       examClassName: examClassName,
-      sysCode: getSysCode(),
       extend: decodeURIComponent(extend),
     };
     const { result } = await api.getExamineReportDetails(params);
@@ -453,7 +458,10 @@
   const shareReport = () => {
     isOperation.value = false;
     getShareTotalUrl(
-      pageProps.value,
+      {
+        ...pageProps.value,
+        watermarkText: undefined,
+      },
       'pagesB/reportQuery/inspectionReport'
     ).then((url) => {
       qrVal.value = url;
@@ -567,12 +575,14 @@
     });
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    await wait(600);
+
     windowInfo.value = uni.getSystemInfoSync();
     getTips();
     getInspectionReportList();
-    if (pageProps.value.isWatermark && pageProps.value.watermarkText) {
-      addWatermark(pageProps.value.watermarkText);
+    if (pageProps.value.isWatermark === '1') {
+      addWatermark(global.systemInfo.name);
     }
   });
   onUpdated(() => {
