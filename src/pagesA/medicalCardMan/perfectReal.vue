@@ -114,13 +114,23 @@
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
     // formData 值和页面渲染列表key 对应
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
     const data: any = {
       ...formData.value,
       verifyType: formData.value[formKey.verifyCode] && '2', // '2' 开启 短信验证
+      source,
     };
 
     if (data.patientName) {
       formData.value[formKey.patientName] = data.patientName.trim();
+    }
+
+    const { authPhoneVerify } = gStores.userStore;
+    if (!formData.value[formKey.verifyCode]) {
+      data.authPhoneVerify = authPhoneVerify;
     }
 
     /**

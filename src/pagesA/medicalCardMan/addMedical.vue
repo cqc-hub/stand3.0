@@ -140,16 +140,27 @@
         return [key, formKeyNow.includes(key) ? value : undefined];
       })
     );
+    const {
+      browser: { source },
+    } = gStores.globalStore;
 
     const requestData = {
       wechatCode: '',
       verifyType: '',
       patientName: '',
+      authPhoneVerify: '',
+      source,
 
       verifyCode,
       ...filterData,
       ...addressChoose,
     };
+
+    const { authPhoneVerify } = gStores.userStore;
+
+    if (!requestData.verifyCode) {
+      requestData.authPhoneVerify = authPhoneVerify;
+    }
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();

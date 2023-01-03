@@ -91,8 +91,14 @@ export class GStores {
 export class LoginUtils extends GStores {
   async getUerInfo(type?: 'alone') {
     try {
+      const { source } = this.globalStore.browser;
       const { result } = await api.allinoneAuthApi(
-        packageAuthParams({}, '/modifyUserInfo/userInfoByToken')
+        packageAuthParams(
+          {
+            source,
+          },
+          '/modifyUserInfo/userInfoByToken'
+        )
       );
 
       if (result) {
@@ -103,7 +109,7 @@ export class LoginUtils extends GStores {
           name,
           sex,
           phoneNum,
-          authPhoneVerify
+          authPhoneVerify,
         } = result;
 
         this.userStore.updateName(name);
@@ -475,7 +481,8 @@ export class PatientUtils extends LoginUtils {
       cellPhoneNumber,
       idCardEncry,
     } = payload;
-    const accountType = this.globalStore.browser.accountType;
+    const { accountType, source } = this.globalStore.browser;
+    const { authPhoneVerify } = this.userStore;
 
     const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
     const requestData = {
@@ -491,8 +498,14 @@ export class PatientUtils extends LoginUtils {
       birthday,
       cellPhoneNumber,
       idCardEncry,
-      source: this.globalStore.browser.source,
+      authPhoneVerify: '',
+      source,
     };
+
+    if (!verifyCode) {
+      requestData.authPhoneVerify = authPhoneVerify;
+      payload.authPhoneVerify = authPhoneVerify;
+    }
 
     uni.showLoading({
       title: '完善就诊人中...',
@@ -580,6 +593,7 @@ export class PatientUtils extends LoginUtils {
       upName: string;
       verifyCode: string;
       verifyType: string;
+      authPhoneVerify?: string;
       _type?: 'perfect';
     }>
   ) {
@@ -589,7 +603,6 @@ export class PatientUtils extends LoginUtils {
     } else {
       await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
-    // await this.getPatCardList();
   }
 
   async addRelevantPatient(
