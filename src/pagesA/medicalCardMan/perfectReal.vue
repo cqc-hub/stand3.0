@@ -114,12 +114,9 @@
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
     // formData 值和页面渲染列表key 对应
-    const { authPhoneVerify } = gStores.userStore;
-
     const data: any = {
       ...formData.value,
       verifyType: formData.value[formKey.verifyCode] && '2', // '2' 开启 短信验证
-      authPhoneVerify: formData.value[formKey.verifyCode] && authPhoneVerify,
     };
 
     if (data.patientName) {

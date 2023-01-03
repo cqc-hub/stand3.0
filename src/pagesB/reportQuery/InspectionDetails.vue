@@ -333,8 +333,9 @@ const pageProps = ref(<any>{});
 onLoad((p) => {
   console.log('获得参数-----', p);
 
-  pageProps.value = deQueryForUrl(deQueryForUrl(p));
-
+  pageProps.value = deQueryForUrl(p);
+  pageProps.value = deQueryForUrl(pageProps.value);
+  pageProps.value = deQueryForUrl(pageProps.value);
 });
 
 const getCheckoutReportDetails = async () => {

@@ -242,11 +242,11 @@
       watermarkText,
     } = reportConfig.value;
     const mq1 = {
-      repId: data.repId && encodeURIComponent(data.repId) || '',
+      repId: data.repId || '',
       repType: data.repType || '',
       reportType: data.reportType || '',
       hosId: data.hosId || '',
-      extend: data.extend && encodeURIComponent(data.extend) || '',
+      extend: data.extend || '',
       isDoctorCard,
       isWatermark,
       watermarkText,
@@ -255,10 +255,10 @@
     };
 
     const mq: any = {};
-      for(const key in mq1) {
-        const v = mq1[key];
-        mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
-      }
+    for (const key in mq1) {
+      const v = mq1[key];
+      mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+    }
 
     if (tabCurrent.value == 0) {
       uni.navigateTo({

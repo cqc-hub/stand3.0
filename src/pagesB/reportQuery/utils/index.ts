@@ -282,6 +282,13 @@ export const getShareTotalUrl = (query, path) => {
   const bUrl = (globalGl.env as string === 'prod')  ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
 
   const outTime = 7;
+  const _query = joinQueryForUrl('', data).slice(1);
+  console.log({
+    pppp: _query,
+    len: _query.length,
+    query
+  });
+
   return new Promise((resolve, reject) => {
     const envWx = globalGl.env as string === 'prod' ? 'release': 'trial'; // develop | release | trial
     uni.showLoading({
@@ -296,7 +303,7 @@ export const getShareTotalUrl = (query, path) => {
         envVersion: envWx,
         path,
         // query: 'mq' + encodeURIComponent(JSON.stringify(data)),
-        query: joinQueryForUrl('', data).slice(1),
+        query: _query,
       })
       .then(({ result, message }) => {
         uni.hideLoading();

@@ -121,7 +121,6 @@
             <view class="button-list">
               <button
                 class="button"
-
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
               >
@@ -413,7 +412,9 @@
   onLoad((p) => {
     console.log('获得参数-----', p);
 
-    pageProps.value = deQueryForUrl(deQueryForUrl(p));
+    pageProps.value = deQueryForUrl(p);
+    pageProps.value = deQueryForUrl(pageProps.value);
+    pageProps.value = deQueryForUrl(pageProps.value);
   });
 
   const getInspectionReportList = async () => {
