@@ -273,7 +273,12 @@ export const getShareTotalUrl = (query, path) => {
   // const source = getBrowser().source;
 
   // const data = cloneUtil(query);
-  const data = {...query, _scan: '1'};
+  const args: any = {}
+  for(const key in query) {
+    const v = query[key];
+    args[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+  }
+  const data = {...args, _scan: '1'};
   const bUrl = (globalGl.env as string === 'prod')  ? 'https://h5.eheren.com/note' : 'https://health.eheren.com/note'
 
   const outTime = 7;
@@ -290,7 +295,6 @@ export const getShareTotalUrl = (query, path) => {
         days: outTime,
         envVersion: envWx,
         path,
-        sysCode: getSysCode(),
         // query: 'mq' + encodeURIComponent(JSON.stringify(data)),
         query: joinQueryForUrl('', data).slice(1),
       })

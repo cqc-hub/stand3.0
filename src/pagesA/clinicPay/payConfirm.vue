@@ -351,19 +351,23 @@
         hideLoading: true,
       });
 
-      const res = await payMoneyOnline(
-        {
-          phsOrderNo,
-          totalFee: payAmount,
-          phsOrderSource: '2',
-          hosId,
-          hosName: getHosName.value,
-          patientName,
-        },
-        {
-          hideLoading: true,
-        }
-      );
+      const onlineArg = {
+        phsOrderNo,
+        totalFee: payAmount,
+        phsOrderSource: '2',
+        hosId,
+        hosName: getHosName.value,
+        patientName,
+      };
+
+      if (cardNumber) {
+        // @ts-expect-error
+        onlineArg.cardNumber = cardNumber;
+      }
+
+      const res = await payMoneyOnline(onlineArg, {
+        hideLoading: true,
+      });
 
       await toPayPull(res, '门诊缴费');
       payAfter();

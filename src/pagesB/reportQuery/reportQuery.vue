@@ -137,9 +137,10 @@
     };
     let returnArg;
     loading.value = true;
-    const result = await api.getReportsReportList(params);
+    const result = await api.getReportsReportList(params).finally(() => {
+      loading.value = false;
+    });
     const currentResult = JSON.parse(JSON.stringify(result));
-    loading.value = false;
     if (result.result && result.result.length) {
       let array = JSON.parse(JSON.stringify(pageList.value[typeId]));
       if (
@@ -240,7 +241,7 @@
       isWatermark,
       watermarkText,
     } = reportConfig.value;
-    const mq = {
+    const mq1 = {
       repId: data.repId && encodeURIComponent(data.repId) || '',
       repType: data.repType || '',
       reportType: data.reportType || '',
@@ -252,6 +253,12 @@
       isDownloadRepor,
       isGraphic,
     };
+
+    const mq: any = {};
+      for(const key in mq1) {
+        const v = mq1[key];
+        mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+      }
 
     if (tabCurrent.value == 0) {
       uni.navigateTo({
