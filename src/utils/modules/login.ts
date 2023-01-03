@@ -103,11 +103,13 @@ export class LoginUtils extends GStores {
           name,
           sex,
           phoneNum,
+          authPhoneVerify,
         } = result;
 
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
+        this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
         this.userStore.updatePhone({
           phone,
@@ -458,6 +460,7 @@ export class PatientUtils extends LoginUtils {
       addPatInterface: 'hasBeenTreated',
     }
   ) {
+    const { authPhoneVerify } = this.userStore;
     const { addPatInterface } = options;
     const {
       idCard: idNo,
@@ -474,6 +477,10 @@ export class PatientUtils extends LoginUtils {
       idCardEncry,
     } = payload;
     const accountType = this.globalStore.browser.accountType;
+
+    if (verifyCode) {
+      payload.authPhoneVerify = authPhoneVerify;
+    }
 
     const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
     const requestData = {
@@ -578,9 +585,17 @@ export class PatientUtils extends LoginUtils {
       upName: string;
       verifyCode: string;
       verifyType: string;
+      authPhoneVerify?: string;
       _type?: 'perfect';
     }>
   ) {
+    const { authPhoneVerify } = this.userStore;
+    const { verifyCode } = data;
+
+    if (verifyCode && verifyCode !== '1') {
+      data.authPhoneVerify = authPhoneVerify;
+    }
+
     getH5OpenidParam(data);
     if (data._type === 'perfect') {
       await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });

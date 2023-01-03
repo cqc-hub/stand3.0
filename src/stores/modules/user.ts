@@ -21,6 +21,7 @@ const userStore = defineStore('user', {
 
   state: () => {
     return {
+      authPhoneVerify: '',
       name: '',
       sex: '',
       idNo: '',
@@ -46,6 +47,10 @@ const userStore = defineStore('user', {
   actions: {
     updateName(name: string) {
       this.name = name;
+    },
+
+    updateAuthPhoneVerify(code: string) {
+      this.authPhoneVerify = code;
     },
 
     updateSex(sex: string) {

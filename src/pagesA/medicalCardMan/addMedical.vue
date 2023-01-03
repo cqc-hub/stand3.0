@@ -144,6 +144,7 @@
     const requestData = {
       wechatCode: '',
       verifyType: '',
+      authPhoneVerify: '',
       patientName: '',
 
       verifyCode,
@@ -151,12 +152,19 @@
       ...addressChoose,
     };
 
+    const { authPhoneVerify } = gStores.userStore;
+
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
       formData.value[formKey.patientName] = requestData.patientName.trim();
     }
 
-    requestData.verifyType = requestData.verifyCode ? '2' : '1';
+    if (requestData.verifyCode) {
+      requestData.verifyType = '2';
+      requestData.authPhoneVerify = authPhoneVerify;
+    } else {
+      requestData.verifyType = '1';
+    }
 
     // #ifdef MP-WEIXIN
     if (globalGl.systemInfo.isOpenHealthCard) {

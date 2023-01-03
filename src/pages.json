@@ -167,6 +167,13 @@
         },
 
         {
+          "path": "MyRegistration/DepartmentCard",
+          "style": {
+            "navigationBarTitleText": "科室名片"
+          }
+        },
+
+        {
           "path": "MyRegistration/RegSearch",
           "style": {
             "navigationBarTitleText": "搜索挂号科室医生"

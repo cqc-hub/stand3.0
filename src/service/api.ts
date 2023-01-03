@@ -539,6 +539,21 @@ const userApi = {
   //首页授权接口
   authorization: (data) =>
     service.post<IPat[]>('/phs-user/ali/authorization', parm(data)),
+
+  getDeptCardList: (data: any) =>
+    service.post('/phs-reg/deptDoc/getDeptList', parm(data), {
+      hideLoading: false,
+    }),
+
+  getDeptCardListSearch: (data: any) =>
+    service.post('/phs-reg/deptDoc/searchDeptDocByWord', parm(data), {
+      hideLoading: false,
+    }),
+
+  getDeptCardDetail: (data: any) =>
+    service.post('/phs-reg/deptDoc/getDeptDetail', parm(data), {
+      hideLoading: false,
+    }),
 };
 //统一认证服务
 const authApi = {

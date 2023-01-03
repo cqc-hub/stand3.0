@@ -121,9 +121,7 @@
             <view class="button-list">
               <button
                 class="button"
-                v-if="
-                  pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1
-                "
+
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
               >
