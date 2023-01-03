@@ -28,6 +28,7 @@
   .nav {
     display: flex;
     padding: 0 10px;
+    padding-left: 32rpx;
     flex-direction: column;
     height: $nav-height;
     font-size: 12px;
