@@ -4,14 +4,13 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
 
-    <view
+    <!-- <view
       class="block-top"
       @click="gotoMedical"
       v-if="examineReportList.yunUrl"
     >
-      <!-- 底部banner -->
       <image class="nav" :src="$global.BASE_IMG + 'yun_banner.png'" />
-    </view>
+    </view> -->
     <view
       class="top"
       :class="{ bgc: top > 0 }"
@@ -123,11 +122,18 @@
                 class="button"
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
+                v-if="
+                  pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1
+                "
               >
                 <view class="icon-font ico_sy_paper1"></view>
                 图文报告
               </button>
-              <button class="button" v-if="item.dicomList">
+              <button
+                class="button"
+                v-if="examineReportList.yunUrl"
+                @click="gotoMedical"
+              >
                 <view class="icon-font ico_cloud"></view>
                 云影像
               </button>

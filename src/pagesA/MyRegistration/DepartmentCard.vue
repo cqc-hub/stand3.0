@@ -8,7 +8,15 @@
     </view>
 
     <view class="g-container hidden-scrollbar" scroll-y>
-      <view class="content-lv1"></view>
+      <view class="content-lv1">
+        <g-side-list
+          :list="list"
+          :field="fieldLv1"
+          :value="clickLv1"
+          @item-click="itemClick"
+          defaultChoose
+        />
+      </view>
       <view class="flex1"></view>
     </view>
     <g-message />
@@ -28,6 +36,11 @@
   });
   const searchValue = ref('');
   const list = ref<ListItem[]>([]);
+  const clickLv1 = ref('');
+  const fieldLv1 = {
+    label: 'deptName',
+    value: 'id',
+  };
 
   const getList = async () => {
     const { hosId } = pageProp.value;
@@ -37,7 +50,19 @@
       hosId,
     });
 
+    result.length = 30;
+    result.fill(JSON.parse(JSON.stringify({ deptName: '眼科病院', id: '23' })));
+    result.map((o, i) => {
+      o.id = '' + o.id + i;
+    });
+
+    console.log(result);
+
     list.value = (result && result.length && result) || [];
+  };
+
+  const itemClick = ({ item }) => {
+    clickLv1.value = item[fieldLv1.value];
   };
 
   const init = async () => {
@@ -61,6 +86,7 @@
 
       .content-lv1 {
         width: 33%;
+        height: 100%;
       }
     }
   }
