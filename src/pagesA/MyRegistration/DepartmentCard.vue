@@ -18,7 +18,6 @@
         class="content-lv1 animate__animated"
       >
         <g-side-list
-          v-if="isComplete"
           :list="list"
           :field="fieldLv1"
           :value="clickLv1"
@@ -32,6 +31,10 @@
           :list="listLv2"
           @item-click="itemClickLv2"
         />
+
+        <view v-if="isComplete && !listLv2.length" class="empty-list">
+          <g-empty :current="4" text="未查询到相关科室" noTransformY />
+        </view>
       </scroll-view>
     </view>
     <g-message />
@@ -75,13 +78,20 @@
       })
       .finally(() => {
         isComplete.value = true;
+
+        setTimeout(() => {
+          if (!list.value.length) {
+            isHideLv1.value = true;
+          }
+        }, 80);
       });
 
-    list.value = (result && result.length && result) || [];
+    list.value = result || [];
   };
 
   const clearData = () => {
     isComplete.value = false;
+    isHideLv1.value = false;
     list.value = [];
     listLv2.value = [];
   };
@@ -92,12 +102,14 @@
   };
 
   const itemClickLv2 = (item: TDeptItem) => {
-    console.log(item);
-    // uni.navigateTo({
-    //   url: joinQueryForUrl('', {
+    const { id, deptName } = item;
 
-    //   })
-    // })
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/DepartmentCardDetail', {
+        id,
+        deptName,
+      }),
+    });
   };
 
   let searchList = async () => {
@@ -117,7 +129,9 @@
       const { result } = await api
         .getDeptCardListSearch(requestArg)
         .finally(() => {
-          isComplete.value = true;
+          setTimeout(() => {
+            isComplete.value = true;
+          }, 300);
         });
 
       setTimeout(() => {

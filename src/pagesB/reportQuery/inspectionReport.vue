@@ -96,17 +96,19 @@
                     申请单号
                     <view class="subhead-detail">{{ item.serialNo }}</view>
                   </view>
-                  <view class="subhead">
+                  <view v-if="item.applyDoc" class="subhead">
                     申请医生
                     <view class="subhead-detail">{{ item.applyDoc }}</view>
                   </view>
-                  <view class="subhead">
+                  <view v-if="item.reportDoc" class="subhead">
                     报告医生
                     <view class="subhead-detail">{{ item.reportDoc }}</view>
                   </view>
                   <view class="subhead">
-                    审核医生
-                    <view class="subhead-detail">{{ item.passDoc }}</view>
+                    <text v-if="item.passDoc">审核医生</text>
+                    <view v-if="item.passDoc" class="subhead-detail">
+                      {{ item.passDoc }}
+                    </view>
                     <button class="more-button g-border">
                       <template v-if="isShow[index] != 0">
                         <view class="more">收起</view>
