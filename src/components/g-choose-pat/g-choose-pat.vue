@@ -66,6 +66,7 @@ onMounted(() => {
   if (pages.length) {
     const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
     let _pd = getQueryString(fullUrl, "_pd");
+    let _hosPd = getQueryString(fullUrl, "_hosPd");
     if (
       _pd &&
       gStores.userStore.patList.length &&
@@ -73,6 +74,16 @@ onMounted(() => {
     ) {
       console.log('携带就诊人不一致的情况');
       const pat = <IPat>gStores.userStore.patList.find((o) => o.patientId === _pd);
+      gStores.userStore.updatePatChoose(pat);
+    }
+
+    if (
+      _hosPd &&
+      gStores.userStore.patList.length &&
+      gStores.userStore.patChoose.cardNumber != _hosPd
+    ) {
+      console.log('携带院内就诊人不一致的情况');
+      const pat = <IPat>gStores.userStore.patList.find((o) => o.cardNumber === _hosPd);
       gStores.userStore.updatePatChoose(pat);
     }
   }
