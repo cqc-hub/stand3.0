@@ -23,4 +23,5 @@ export type TDepartmentDetail = {
   deptPhoto: string;
   docList: TDepartmentDocItem[];
   netHosUrl: string;
+  recommendation: string;
 };

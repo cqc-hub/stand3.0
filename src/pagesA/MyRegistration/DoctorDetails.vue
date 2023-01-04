@@ -351,7 +351,13 @@
   };
 
   onLoad(async (opt) => {
-    props.value = deQueryForUrl(deQueryForUrl(opt));
+    try {
+      props.value = deQueryForUrl(opt);
+      props.value = deQueryForUrl(props.value);
+    } catch (error) {
+      console.error('prop parse 报错');
+    }
+
     // 扫码进来, 不处理
     if (props.value.q) {
       return;

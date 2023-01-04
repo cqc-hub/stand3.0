@@ -103,11 +103,14 @@
 
   const itemClickLv2 = (item: TDeptItem) => {
     const { id, deptName } = item;
+    const { hosId } = pageProp.value;
+
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DepartmentCardDetail', {
         id,
         deptName,
+        hosId
       }),
     });
   };

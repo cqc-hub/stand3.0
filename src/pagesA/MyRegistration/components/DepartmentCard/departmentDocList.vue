@@ -1,6 +1,11 @@
 <template>
   <view class="">
-    <view v-for="(item, i) in list" :key="i" class="doc-info g-border">
+    <view
+      v-for="(item, i) in list"
+      :key="i"
+      @click="itemClick(item)"
+      class="doc-info g-border"
+    >
       <view class="doc-info-container">
         <image
           :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
@@ -26,7 +31,7 @@
       <view>
         <view
           v-if="item.intro"
-          class=" doc-intro text-ellipsis ellipsis-line-clamp2"
+          class="doc-intro text-ellipsis ellipsis-line-clamp2"
         >
           <image
             :src="$global.BASE_IMG + 'department-doc-intro-text.png'"
@@ -45,11 +50,16 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import { TDepartmentDocItem } from '../../utils/DepartmentCard';
+  import { type TDepartmentDocItem } from '../../utils/DepartmentCard';
 
-  const props = defineProps<{
+  defineProps<{
     list: TDepartmentDocItem[];
   }>();
+  const emits = defineEmits(['item-click']);
+
+  const itemClick = (item) => {
+    emits('item-click', item);
+  };
 </script>
 
 <style lang="scss" scoped>

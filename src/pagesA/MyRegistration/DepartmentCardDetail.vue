@@ -15,12 +15,11 @@
             mode="widthFix"
           />
           <text>
-            {{
-              '心血管内科一病区是以冠心病、心律失常、难治性心衰、难治性高血压病、心肌病、心脏瓣膜病、代谢性疾病及心血管介入为专业的临床综合学科。国家高血压医联体咸阳分中心，心血管内科一病区是以冠心病、心律失常、难治性心衰、难治性高血压病、心肌病、心脏瓣膜病、代谢性疾病及心血管介入为专业的临床综合学科。国家高血压医联体咸阳分中心，'
-            }}
+            {{ detailInfo.recommendation }}
           </text>
 
           <view
+            v-if="detailInfo.recommendation"
             @click="regDialogConfirm.show"
             class="doc-show-intro f26 color-blue"
           >
@@ -36,12 +35,18 @@
           <view class="f32 g-bold">健康科普</view>
         </view>
 
-        <view class="g-flex-rc-cc g-border department-pro-item">
+        <view
+          @click="goDiseaseCyclopedia"
+          class="g-flex-rc-cc g-border department-pro-item"
+        >
           <view class="icon-font ico_sy_search" />
           <view class="f32 g-bold">疾病知识库</view>
         </view>
 
-        <view class="g-flex-rc-cc g-border department-pro-item">
+        <view
+          @click="goOrder"
+          class="g-flex-rc-cc g-border department-pro-item"
+        >
           <view class="icon-font ico_sy_dialogue" />
           <view class="f32 g-bold">在线咨询</view>
         </view>
@@ -53,7 +58,10 @@
         </view>
 
         <view class="mt16">
-          <Department-Doc-List :list="detailInfo.docList" />
+          <Department-Doc-List
+            :list="detailInfo.docList"
+            @item-click="docItemClick"
+          />
         </view>
       </block>
     </view>
@@ -64,8 +72,21 @@
       isHideFooter
       ref="regDialogConfirm"
     >
-      <view>233</view>
+      <view>
+        <view class="mb16 flex-normal">
+          <text class="ico_doctor-hat icon-font intro-popup-logo"></text>
+          <text class="f36 g-bold">科室介绍</text>
+        </view>
+
+        <view class="color-444 f32">
+          <text>
+            {{ detailInfo.recommendation }}
+          </text>
+        </view>
+      </view>
     </Order-Reg-Confirm>
+
+    <g-message />
   </view>
 </template>
 
@@ -73,10 +94,15 @@
   import { defineComponent, ref } from 'vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
-  import { deQueryForUrl } from '@/common';
-  import { TDepartmentDetail } from './utils/DepartmentCard';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import {
+    type TDepartmentDetail,
+    type TDepartmentDocItem,
+  } from './utils/DepartmentCard';
+  import { type TBannerConfig, useTBanner, GStores } from '@/utils';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import DepartmentDocList from './components/DepartmentCard/departmentDocList.vue';
@@ -84,6 +110,7 @@
   const pageProps = ref({
     id: '',
     deptName: '',
+    hosId: '',
   });
   const isComplete = ref(false);
   const detailBg = ref(
@@ -91,6 +118,7 @@
   );
   const regDialogConfirm = ref<any>('');
   const detailInfo = ref({} as TDepartmentDetail);
+  const gStores = new GStores();
 
   const getDetailData = async () => {
     const { id } = pageProps.value;
@@ -105,6 +133,49 @@
       });
 
     detailInfo.value = result;
+  };
+
+  const docItemClick = (item: TDepartmentDocItem) => {
+    const { docName } = item;
+    const { deptName, hosId } = pageProps.value;
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+        docName,
+        deptName,
+        hosId,
+      }),
+    });
+  };
+
+  const goOrder = () => {
+    const { deptName, hosId } = pageProps.value;
+
+    const queryArg = {
+      deptName,
+      hosId,
+    };
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
+    });
+  };
+
+  const goDiseaseCyclopedia = () => {
+    const { sysCode } = gStores.globalStore;
+
+    const arg: TBannerConfig = {
+      type: 'h5',
+      extraData: {
+        sysCode,
+      },
+      path:
+        'https://' +
+        ((globalGl.env as string) === 'prod' ? 'h5' : 'health') +
+        '.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index',
+      src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
+    };
+
+    useTBanner(arg);
   };
 
   const init = async () => {
@@ -204,5 +275,13 @@
         margin-top: 64rpx;
       }
     }
+  }
+
+  .intro-popup-logo {
+    width: 48rpx;
+    height: 48rpx;
+    margin-right: 12rpx;
+    position: relative;
+    top: -5rpx;
   }
 </style>
