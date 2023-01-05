@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001054",
+  "sysCode": "2001016",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -89,6 +89,25 @@
       "alipayPid": "ze2exd3di9dbye6cc+hfia==",
       "isOpenOcr": false,
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
+    },
+    "2001012": {
+      "wxAppid": "wx15abd81c31993d20",
+      "alipayAppid": "",
+      "h5Appid": "wx941119f41e867811",
+      "name": "健康清丰",
+      "isOpenHealthCard": false,
+      "isSearchInHos": false,
+      "isOpenOcr": false
+    },
+    "2001016": {
+      "wxAppid": "wx4d8f68fdc6b6831c",
+      "alipayAppid": "",
+      "h5Appid": "wxe8692caf9ede57e1",
+      "name": "中国人民解放军新疆军区总医院",
+      "isOpenHealthCard": false,
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
     }
   }
 }
