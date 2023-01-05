@@ -7,7 +7,10 @@
       @click="itemClick(item)"
       class="item animate__animated animate__fadeIn"
     >
-      <view class="g-bold f32 text-ellipsis">{{ item.deptName }}</view>
+      <view class="g-bold f32 text-ellipsis mb12">{{ item.deptName }}</view>
+      <view class="color-888 f26 text-ellipsis ellipsis-line-clamp2">
+      {{ item.recommendation }}
+      </view>
 
       <image
         :src="$global.BASE_IMG + 'department-card-list-bg1.png'"
@@ -46,7 +49,7 @@
     border: 1rpx solid #296fff;
     border-radius: 16rpx;
 
-    min-height: 144rpx;
+    min-height: 100rpx;
     position: relative;
 
     .bg-logo {
