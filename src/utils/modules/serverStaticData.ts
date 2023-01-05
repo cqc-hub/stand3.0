@@ -31,8 +31,14 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     if (_configList.length) {
       const configList: any[] = [];
       Object.entries(_configList[0]).map(([hosId, value]) => {
-        const { tollMode, price, isHandPhoto, isCustomPatRecord, isToggleHos } =
-          value as any;
+        const {
+          tollMode,
+          price,
+          sfz,
+          isCustomPatRecord,
+          isToggleHos,
+          isHandPhoto,
+        } = value as any;
 
         const isItemCount = tollMode === '1' ? '1' : '0';
 
@@ -43,7 +49,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
           sfz:
             isHandPhoto === '1'
               ? ['front', 'end', 'handler']
-              : ['front', 'end'],
+              : sfz || ['front', 'end'],
           isCustomPatRecord,
           isToggleHos,
         });
@@ -439,7 +445,7 @@ export class ServerStaticData {
           hospitalCare,
           pay,
           reportQuery,
-          drugDelivery
+          drugDelivery,
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');

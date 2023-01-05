@@ -49,6 +49,8 @@ export interface IReportConfigTab {
   headerType: string;
   headerName: string;
 }
+
+type TMedRecordSfz = 'front' | 'end' | 'handler' | 'hkb';
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
@@ -106,7 +108,10 @@ export interface ISystemConfig {
   // 病案
   medRecord: {
     // 身份证上传要求 （人像、 背面、 手持）
-    sfz: ('front' | 'end' | 'handler')[]; // 后端说 人像、 背面 必填 设置时候每次都加下
+    sfz: TMedRecordSfz[]; // 后端说 人像、 背面 必填 设置时候每次都加下
+    isOcrSfz?: '1'; // sfz 配置中 front 的进行 ocr认证
+    requireSfz?: TMedRecordSfz[]; // 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传
+    purpose?: string[]; // 复印目的 不配置使用原来的那几个目的
 
     // 收钱方式 0 预收 1 按项目、目的
     isItemCount?: '0' | '1';
