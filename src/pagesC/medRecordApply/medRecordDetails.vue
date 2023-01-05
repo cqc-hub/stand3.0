@@ -17,7 +17,11 @@
             class="container-box g-border mb16 box-padding"
             id="_photo"
           >
-            <view class="g-bold f36">请上传本人身份证</view>
+            <!-- <view class="g-bold f36">请上传本人身份证</view> -->
+            <view class="g-bold f36">
+              <rich-text :nodes="fg1020" />
+              <g-flag v-model:value="fg1020" typeFg="1020" />
+            </view>
 
             <view class="mt24 flex-between id-card-container">
               <view
@@ -80,6 +84,38 @@
                 >
                   <view class="iconfont camera-icon">&#xe6be;</view>
                   <view>身份证国徽页</view>
+                </view>
+              </view>
+
+              <view
+                v-if="pageConfig.sfz.includes('hkb')"
+                @click="chooseIdCardHkb"
+                class="up-idcard g-border g-flex-rc-cc mb16"
+              >
+                <view
+                  v-if="idCardImg.censusRegisterUrl"
+                  @click.stop="idCardImg.censusRegisterUrl = ''"
+                  class="iconfont delete-icon"
+                >
+                  &#xe6fa;
+                </view>
+                <image
+                  v-if="idCardImg.censusRegisterUrl"
+                  :src="dealImg(idCardImg.censusRegisterUrl)"
+                />
+
+                <image
+                  v-else
+                  :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
+                  class="idcard-bg my-disabled"
+                />
+
+                <view
+                  v-if="!idCardImg.censusRegisterUrl"
+                  class="g-flex-rc-cc flex-column f24"
+                >
+                  <view class="iconfont camera-icon">&#xe6be;</view>
+                  <view>户口本单页</view>
                 </view>
               </view>
 
@@ -150,19 +186,40 @@
           <view id="_aim" class="container-box g-border mb16 box-padding">
             <view class="f36">
               <text class="mr12 g-bold">请选择复印目的</text>
-              <text class="f28 color-light-dark">(请选择1-3项)</text>
+              <text class="f28 color-light-dark">
+                {{
+                  selPurposeLen === 1
+                    ? '可选1项'
+                    : `(请选择 1-${selPurposeLen} 项)`
+                }}
+              </text>
             </view>
 
-            <view class="mt24 pb32 g-border-bottom">
+            <view class="mt24">
               <g-select-flatten
-                :selectLength="3"
+                v-if="pageConfig.isItemCount === '1'"
+                :selectLength="selPurposeLen"
                 :list="aimList"
                 v-model:value="aimValue"
-                multiple
+                :multiple="selPurposeLen != 1"
               />
-            </view>
+              <view v-else>
+                <view class="color-888 f28 mb16">
+                  <rich-text :nodes="fg1021" />
+                  <g-flag v-model:value="fg1021" typeFg="1021" />
+                </view>
 
-            <view class="f36 mt32">
+                <Purpose-Count
+                  v-model:value="purposeCount"
+                  :selectLength="selPurposeLen"
+                  :list="aimList"
+                />
+              </view>
+            </view>
+          </view>
+
+          <view class="container-box g-border mb16 box-padding">
+            <view class="f36">
               <text class="mr12 g-bold">备注</text>
             </view>
 
@@ -260,6 +317,7 @@
     ServerStaticData,
     upImgOss,
     wait,
+    useOcr,
   } from '@/utils';
   import { getUserShowLabel } from '@/stores';
   import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
@@ -271,11 +329,17 @@
   import AddressBox from './components/medRecordDetailsAddressBox.vue';
   import RecordCard from './components/recordCard.vue';
   import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
+  import PurposeCount from './components/purposeCount.vue';
 
   type TChoose = XOR<
     { success: true; path: string },
     { success: false; evt: any }
   >;
+
+  const fg1020 = ref('');
+  const fg1021 = ref('');
+  const selPurposeLen = ref(3);
+  const purposeCount = ref<{ purpose: string; count: number }[]>([]);
 
   const chooseImg = (): Promise<TChoose> => {
     return new Promise((resolve) => {
@@ -302,14 +366,14 @@
 
   type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
 
-  const _aimList = [
+  const _aimList = ref([
     '医疗保险',
     '了解病情',
     '交通事故理赔',
     '工伤鉴定',
     '医学鉴定',
     '其他',
-  ];
+  ]);
 
   const props = defineProps<{
     hosId: string;
@@ -413,6 +477,7 @@
     frontIdCardUrl: '',
     endIdCardUrl: '',
     handIdCardUrl: '',
+    censusRegisterUrl: '',
   });
 
   const isXyDialogShow = ref(false);
@@ -437,12 +502,12 @@
     );
   });
 
-  const aimList = ref(
-    _aimList.map((o) => ({
+  const aimList = computed(() => {
+    return _aimList.value.map((o) => ({
       label: o,
       value: o,
-    }))
-  );
+    }));
+  });
 
   const aimValue = ref<string[]>([]);
 
@@ -453,10 +518,19 @@
   };
 
   const chooseIdCardFront = async () => {
-    const res = await chooseImg();
+    const { isOcrSfz } = pageConfig.value;
 
-    if (res.success) {
-      idCardImg.value.frontIdCardUrl = res.path;
+    if (isOcrSfz === '1') {
+      // const res = await useOcr();
+      // console.log({
+      //   res,
+      // });
+    } else {
+      const res = await chooseImg();
+
+      if (res.success) {
+        idCardImg.value.frontIdCardUrl = res.path;
+      }
     }
   };
 
@@ -473,6 +547,14 @@
 
     if (res.success) {
       idCardImg.value.handIdCardUrl = res.path;
+    }
+  };
+
+  const chooseIdCardHkb = async () => {
+    const res = await chooseImg();
+
+    if (res.success) {
+      idCardImg.value.censusRegisterUrl = res.path;
     }
   };
 
@@ -544,9 +626,12 @@
   };
 
   const getConfig = async () => {
-    const listConfig = await ServerStaticData.getSystemConfig('medRecord');
+    const listConfig =
+      (await ServerStaticData.getSystemConfig('medRecord')) || [];
     if (_hosId.value) {
       pageConfig.value = listConfig.find((o) => o.hosId === _hosId.value)!;
+
+      console.log('---', pageConfig.value);
     } else {
       const configDetail = listConfig[0];
       pageConfig.value = configDetail;
@@ -560,6 +645,13 @@
 
       throw new Error('未获取到该院区的配置' + `(${_hosId.value})`);
     }
+
+    const { selPurposeLen: _selPurposeLen } = pageConfig.value;
+
+    if (_selPurposeLen) {
+      selPurposeLen.value = _selPurposeLen * 1;
+    }
+
     isConfigGet.value = true;
   };
 
@@ -580,32 +672,67 @@
   };
 
   const paySubmit = async () => {
-    const { sfz } = pageConfig.value;
-    let { frontIdCardUrl, endIdCardUrl, handIdCardUrl } = idCardImg.value;
+    const { sfz, requireSfz, isItemCount } = pageConfig.value;
+    let { frontIdCardUrl, endIdCardUrl, handIdCardUrl, censusRegisterUrl } =
+      idCardImg.value;
+    const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
+
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 3000);
       scrollTo.value = '_address';
       return;
     }
 
-    if (sfz.includes('front') && !frontIdCardUrl) {
-      showMessage('请先上传身份证人像页', 3000);
-      scrollTo.value = '_photo';
+    const idCardUrlInfo = {
+      front: {
+        url: frontIdCardUrl,
+        message: '身份证人像页',
+      },
+      end: {
+        url: endIdCardUrl,
+        message: '身份证国徽页',
+      },
+      handler: {
+        url: handIdCardUrl,
+        message: '手持身份证',
+      },
+      hkb: {
+        url: censusRegisterUrl,
+        message: '户口本单页',
+      },
+    };
 
-      return;
-    }
+    isRequireSfz.map((key) => {
+      const keys = key.split('|');
 
-    if (sfz.includes('end') && !endIdCardUrl) {
-      scrollTo.value = '_photo';
-      showMessage('请先上传身份证国徽页', 3000);
-      return;
-    }
+      const values = keys
+        .map((_key) => {
+          const v = idCardUrlInfo[_key as keyof typeof idCardUrlInfo];
+          if (!v) {
+            showMessage(`配置错误,检查 '${key}'  是否配置正确`, 3000);
+            throw new Error(`配置错误,检查 '${key}'  是否配置正确`);
+          }
 
-    if (sfz.includes('handler') && !handIdCardUrl) {
-      scrollTo.value = '_photo';
-      showMessage('请先上传手持身份证', 3000);
-      return;
-    }
+          return v.url;
+        })
+        .filter((o) => o);
+
+      if (!values.length) {
+        const [key1, ...rest] = keys;
+
+        let tip = '请先上传' + idCardUrlInfo[key1].message;
+        const restTip = rest.map((o) => {
+          return '或' + idCardUrlInfo[o].message;
+        });
+
+        tip += restTip.join('');
+        scrollTo.value = '_photo';
+
+        showMessage(tip, 3000);
+
+        throw new Error(tip);
+      }
+    });
 
     if (!recordRows.value.length) {
       scrollTo.value = '_record';
@@ -613,10 +740,18 @@
       return;
     }
 
-    if (!aimValue.value.length) {
-      scrollTo.value = '_aim';
-      showMessage('请先选择复印目的', 3000);
-      return;
+    if (isItemCount === '1') {
+      if (!aimValue.value.length) {
+        scrollTo.value = '_aim';
+        showMessage('请先选择复印目的', 3000);
+        return;
+      }
+    } else {
+      if (!purposeCount.value.length) {
+        scrollTo.value = '_aim';
+        showMessage('请先选择复印目的', 3000);
+        return;
+      }
     }
 
     uni.showLoading({
@@ -639,6 +774,11 @@
         const { url } = await upImgOss(handIdCardUrl, {});
         idCardImg.value.handIdCardUrl = url;
       }
+
+      if (censusRegisterUrl && isUnImageUpLoaded(censusRegisterUrl)) {
+        const { url } = await upImgOss(censusRegisterUrl, {});
+        idCardImg.value.censusRegisterUrl = url;
+      }
     } catch (error) {
       console.error({
         error,
@@ -655,6 +795,7 @@
 
     const division = `${province} ${city} ${county}`;
     const copyAim = aimValue.value.join('、');
+    const printCount = JSON.stringify(purposeCount);
 
     const args = {
       address: detailedAddress,
@@ -662,10 +803,12 @@
       addresseePhone: senderPhone,
       channel: gStores.globalStore.browser.source,
       copyAim,
+      printCount,
       division,
       frontIdCardUrl: idCardImg.value.frontIdCardUrl,
       endIdCardUrl: idCardImg.value.endIdCardUrl,
       handIdCardUrl: idCardImg.value.handIdCardUrl,
+      censusRegisterUrl: idCardImg.value.censusRegisterUrl,
       fee: getPayMoneyNum.value,
       hosId: _hosId.value,
       outInfo: JSON.stringify(recordRows.value),

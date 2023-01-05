@@ -38,6 +38,10 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
           isCustomPatRecord,
           isToggleHos,
           isHandPhoto,
+          purpose,
+          selPurposeLen,
+          isOcrSfz,
+          requireSfz,
         } = value as any;
 
         const isItemCount = tollMode === '1' ? '1' : '0';
@@ -52,6 +56,10 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
               : sfz || ['front', 'end'],
           isCustomPatRecord,
           isToggleHos,
+          purpose,
+          selPurposeLen,
+          isOcrSfz,
+          requireSfz,
         });
       });
       // _cacheMap.set(Med_Copy_Config, configList);
