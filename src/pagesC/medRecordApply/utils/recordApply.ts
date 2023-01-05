@@ -183,12 +183,15 @@ export type CaseCopeItemDetail = Flatten<
     copyAim: string;
     detailedAddress: deParams;
     handIdCardUrl: string;
+    censusRegisterUrl: string;
     endIdCardUrl: string;
     frontIdCardUrl: string;
     outInfo: string;
     id: string;
+    printCount?: { purpose: string; count: number }[];
     expressStatus: string;
     _outInfo?: TOutInfo[];
+    expressFee?: string;
     refundFee?: string;
     refundReason: string;
     remark: string;
@@ -198,7 +201,6 @@ export type CaseCopeItemDetail = Flatten<
 >;
 
 export const CACHE_KEY = 'recordApply-list';
-
 
 /** 邮政 */
 export const isExpress1 = (item: any): item is Express_1 => {

@@ -26,7 +26,12 @@
                 >
                   <view v-if="info.fee" class="mr24">
                     <text class="mr12">支付金额:</text>
-                    <text>{{ info.fee }}元</text>
+                    <text>
+                      {{ info.fee }}元
+                      <text v-if="info.expressFee">
+                        (含快递费{{ info.expressFee }}元)
+                      </text>
+                    </text>
                   </view>
 
                   <view v-if="info.refundFee">
@@ -109,6 +114,13 @@
                 <view class="_title">复印目的</view>
                 <view class="_content">
                   {{ info.copyAim }}
+                </view>
+              </view>
+
+              <view v-if="info.printCount" class="mt32 _row">
+                <view class="_title">复印目的</view>
+                <view class="_content">
+                  {{ getPrintCount }}
                 </view>
               </view>
 
@@ -218,38 +230,6 @@
   import expressStep from './components/expressStep.vue';
   import recordCard from './components/recordCard.vue';
 
-  // api.getCaseCopyDetail = () =>
-  //   Promise.resolve({
-  //     result: {
-  //       patientName: '大洒店',
-  //       refundFee: '',
-  //       addresseePhone: { value: '020****6788' },
-  //       frontIdCardUrl:
-  //         'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1666677159203-517884.jpg',
-  //       copyAim: '工伤鉴定',
-  //       idCard:
-  //         'FBF0795C4B2FA1BF2CF27C53D963175F6BEA0EFDFB1F11D74876152DFF09FAB6',
-  //       fee: '10.00',
-  //       endIdCardUrl:
-  //         'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1666677160009-754631.jpg',
-  //       orderStatus: '11',
-  //       addresseeName: { value: '张三' },
-  //       remark: '1',
-  //       addresseeAddress: { value: '广东省 广州市 海珠区' },
-  //       phsOrderNo: '1420221025144316668555059982',
-  //       createTime: '2022-10-25 14:43:16',
-  //       detailedAddress: { value: '新港中路397号' },
-  //       outInfo:
-  //         '[{"hosId":"1279","visitNo":"1","deptName":"kesh","admissionTime":"2022-10-25","outTime":"2022-10-25","isOneself":"0"}]',
-  //       cardNumber: '10831186',
-  //     },
-  //     timeTaken: 764,
-  //     code: 0,
-  //     functionVersion: '[{"functionType":"2","version":"v0.0.2"}]',
-  //     message: '成功',
-  //     respCode: 999002,
-  //   });
-
   const props = defineProps<{
     phsOrderNo: string;
     hosId: string;
@@ -260,6 +240,13 @@
     return ['20', '21', '16', '17', '11', '15'].includes(
       info.value.orderStatus
     );
+  });
+  const getPrintCount = computed(() => {
+    if (info.value.printCount) {
+      return info.value.printCount.map((o) => o.purpose).join('、');
+    } else {
+      return '';
+    }
   });
 
   const info = ref<CaseCopeItemDetail>({} as CaseCopeItemDetail);
@@ -317,7 +304,8 @@
 
     const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
 
-    let { outInfo, expressParam, expressStatus, acceptTime } = result;
+    let { outInfo, expressParam, expressStatus, acceptTime, printCount } =
+      result;
     // result.orderStatus = '21';
     // result.refundFee = '21';
     if (outInfo) {
@@ -326,6 +314,12 @@
       } catch (error) {
         gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
       }
+    }
+
+    // result.expressFee = '10';
+
+    if (printCount) {
+      result.printCount = JSON.parse(printCount as any);
     }
 
     // expressParam = '233'

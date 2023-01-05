@@ -136,14 +136,16 @@
   };
 
   const docItemClick = (item: TDepartmentDocItem) => {
-    const { docName } = item;
+    const { docName, hosDocId } = item;
     const { deptName, hosId } = pageProps.value;
+
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         docName,
         deptName,
         hosId,
+        hosDocId
       }),
     });
   };

@@ -795,7 +795,7 @@
 
     const division = `${province} ${city} ${county}`;
     const copyAim = aimValue.value.join('、');
-    const printCount = JSON.stringify(purposeCount);
+    const printCount = JSON.stringify(purposeCount.value);
 
     const args = {
       address: detailedAddress,
@@ -883,13 +883,23 @@
       frontIdCardUrl,
       endIdCardUrl,
       handIdCardUrl,
+      censusRegisterUrl,
       outInfo,
       copyAim,
+      printCount,
       remark: _remark,
     } = result;
 
+    if (printCount) {
+      purposeCount.value = JSON.parse(printCount);
+    }
+
     if (frontIdCardUrl) {
       idCardImg.value.frontIdCardUrl = frontIdCardUrl;
+    }
+
+    if (censusRegisterUrl) {
+      idCardImg.value.censusRegisterUrl = censusRegisterUrl;
     }
 
     if (endIdCardUrl) {

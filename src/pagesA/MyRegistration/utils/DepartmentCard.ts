@@ -15,6 +15,7 @@ export type TDepartmentDocItem = {
   docTitleName: string;
   intro: string;
   showNo: string;
+  hosDocId: string;
 };
 
 export type TDepartmentDetail = {
