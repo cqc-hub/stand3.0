@@ -22,7 +22,7 @@
                       ? 'var(--hr-neutral-color-9)'
                       : '#fff',
                   }"
-                  class="header-desc flex-normal"
+                  class="header-desc f26 flex-normal"
                 >
                   <view v-if="info.fee" class="mr24">
                     <text class="mr12">支付金额:</text>
@@ -243,7 +243,9 @@
   });
   const getPrintCount = computed(() => {
     if (info.value.printCount) {
-      return info.value.printCount.map((o) => o.purpose).join('、');
+      return info.value.printCount
+        .map((o) => o.purpose + `(${o.count})`)
+        .join('、');
     } else {
       return '';
     }
@@ -510,8 +512,7 @@
           }
 
           .header-desc {
-            font-size: var(--hr-font-size-xs);
-            white-space: nowrap;
+            // white-space: nowrap;
             position: absolute;
             // #ifdef  MP-ALIPAY
             transform: translateY(5rpx);
