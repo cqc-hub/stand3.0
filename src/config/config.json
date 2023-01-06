@@ -55,7 +55,6 @@
       "alipayAppid": "2021002133632822",
       "h5Appid": "wx12f8b744255a6f5d",
       "name": "健康金湖",
-      "isOpenHealthCard": false,
       "isStartComeTest": true,
       "isSearchInHos": false,
       "isOpenOcr": false
@@ -66,7 +65,6 @@
       "alipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "name": "乐清市人民医院",
-      "isOpenHealthCard": false,
       "isSearchInHos": true,
       "isOpenOcr": false
     },
@@ -76,7 +74,6 @@
       "alipayAppid": "2021003164669106",
       "h5Appid": "wx56d1a143ff27e903",
       "name": "联勤保障部队第987医院",
-      "isOpenHealthCard": false,
       "isStartComeTest": false,
       "isSearchInHos": false,
       "alipayPid": "dl5dt/lx8x6q93cionolzw==",
@@ -89,7 +86,10 @@
       "alipayAppid": "2021003167607056",
       "h5Appid": "wxf57d660046a04f49",
       "name": "咸阳市第一人民医院",
-      "isOpenHealthCard": true,
+      "isOpenHealthCard": {
+        "healthCardTexxt": "陕西省卫生健康委员会",
+        "hospitalId": "36076"
+      },
       "isStartComeTest": true,
       "isSearchInHos": false,
       "alipayPid": "ze2exd3di9dbye6cc+hfia==",
@@ -102,17 +102,15 @@
       "alipayAppid": "",
       "h5Appid": "wx941119f41e867811",
       "name": "健康清丰",
-      "isOpenHealthCard": false,
       "isSearchInHos": false,
       "isOpenOcr": false
     },
 
-    "2001016": {
+    "1001056": {
       "wxAppid": "wx4d8f68fdc6b6831c",
       "alipayAppid": "",
       "h5Appid": "wxe8692caf9ede57e1",
       "name": "中国人民解放军新疆军区总医院",
-      "isOpenHealthCard": false,
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false
