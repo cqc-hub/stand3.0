@@ -71,7 +71,7 @@
                       <view class="quantity">x{{ sub.quantity }}</view>
                     </view>
                   </view>
-                  <view class="right">{{ sub.valuationAmount }}元</view>
+                  <view class="right text-no-wrap">{{ sub.valuationAmount }}元</view>
                 </view>
               </view>
             </template>
