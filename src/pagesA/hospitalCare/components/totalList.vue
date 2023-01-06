@@ -45,7 +45,7 @@
         dailyResList.inHospitalDailyCostsResultList.length == 0
       "
     >
-      <g-empty :current="1" />
+      <g-empty :current="1"  />
     </view>
   </view>
 </template>
@@ -73,10 +73,14 @@ const dailyResList = ref<dailyResult>({
 const init = async () => {
   if (props.isHosTotallist == "1") {
     //列表
+    dailyResList.value = {
+      inHospitalDailyCostsResultList: [],
+    }
     const { result } = await api.getInHospitalDailyCostList<dailyResult>({
       patientId: gStores.userStore.patChoose.patientId,
       costType: "3",
     });
+
     dailyResList.value = result;
   } else if (props.isHosTotallist == "2") {
     //详情

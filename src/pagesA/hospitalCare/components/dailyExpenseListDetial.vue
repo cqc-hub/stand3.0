@@ -13,9 +13,20 @@
             <view class="item-title">患者姓名</view>
             <view class="item-content">{{ costInfoDetal.patientNameDes }}{{ costInfoDetal.cardNumber?'('+costInfoDetal.cardNumber+')':'' }}</view>
           </view>
-          <view class="item" v-if="param.isHosTotallist">
+          <view class="item" v-if="param.isHosTotallist && (costInfoDetal.startTime || costInfoDetal.endTime)">
             <view class="item-title">费用时间</view>
-            <view class="item-content">{{ costInfoDetal.startTime }}～{{ costInfoDetal.endTime }}</view>
+            <view class="item-content">
+            <text>
+              {{ costInfoDetal.startTime }}
+            </text>
+            <text v-if="costInfoDetal.startTime && costInfoDetal.endTime">
+              ~
+            </text>
+            <text>
+              {{ costInfoDetal.endTime }}
+            </text>
+
+            </view>
           </view>
           <view class="item">
             <view class="item-title">病区床号</view>
@@ -93,7 +104,7 @@
     </view>
   </view>
   <view class="empty-box" v-else>
-    <g-empty :current="2" text="当天未产生住院费用，请选择其他日期" />
+    <g-empty :current="2" text="未查询到总计清单信息" />
   </view>
   <g-message />
 </template>

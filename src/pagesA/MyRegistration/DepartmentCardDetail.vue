@@ -171,6 +171,7 @@
 
   const goZiXun = () => {
     const { sysCode } = gStores.globalStore;
+    const { deptId } = detailInfo.value;
 
     const arg: TBannerConfig = {
       type: 'h5',
@@ -178,10 +179,11 @@
       extraData: {
         sysCode,
         entranceType: '2',
+        deptId,
       },
       path: 'pagesA/healthAdvisory/healthAdvisory',
       src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
-      isLocal: '1',
+      // isLocal: '1',
     };
 
     useTBanner(arg);

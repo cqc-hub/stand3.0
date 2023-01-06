@@ -101,7 +101,7 @@ const scrollOption = ref({
 const setData = async () => {
   pageLoading.value = false
   const result = await ServerStaticData.getSystemConfig('hospitalCare');
-  resultHos.value = result;
+  resultHos.value = result as any;
   pageLoading.value = true
 };
 
@@ -113,7 +113,7 @@ onLoad(async (opt) => {
   if (pageProps.value.tabIndex) {
     tabCurrent.value = pageProps.value.tabIndex;
   }
-}); 
+});
 
 </script>
 

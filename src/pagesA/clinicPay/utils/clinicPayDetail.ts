@@ -14,6 +14,7 @@ import {
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
+import globalGl from '@/config/global';
 
 export const tradeType = {
   '1': '自费',
@@ -374,7 +375,7 @@ export const usePayPage = () => {
       costTypeName,
       diseaseTypeName,
       clinicTypeName,
-      costTypeCode
+      costTypeCode,
     } = item;
 
     const pageData = {
@@ -402,7 +403,7 @@ export const usePayPage = () => {
       patientName: pageProps.value.deParams?.patientName,
 
       params: pageProps.value.params,
-      costTypeCode
+      costTypeCode,
     };
 
     // if (payState === '1') {
@@ -548,6 +549,11 @@ export const usePayPage = () => {
     tabCurrent.value = 1;
 
     selUnPayList.value = [];
+    setTimeout(async () => {
+      if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
+        getDrugDeliveryList();
+      }
+    }, 500);
   };
 
   // 药品配送数据
