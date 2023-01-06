@@ -345,6 +345,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  queryDeptInfo: (data: any) =>
+    service.post('/phs-reg/regIntelligence/queryDeptInfo', parm(data), {
+      hideLoading: true,
+    }),
+
   // 挂号
   addReg: (data: any) =>
     service.post('/phs-reg/reg/addReg', parm(data), {

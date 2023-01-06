@@ -230,7 +230,7 @@ export const insertObject = (
 };
 
 //获取URL 携带的对应参数
-export const getQueryString = (url:string,key: string): string => { 
+export const getQueryString = (url:string,key: string): string => {
   const after = url.split("?")[1];
   if (after) {
       var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");

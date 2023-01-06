@@ -4,7 +4,7 @@ import api from '@/service/api';
 
 import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
-import { joinQueryForUrl, joinQuery } from '@/common/utils';
+import { joinQueryForUrl, joinQuery, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
@@ -347,6 +347,43 @@ export const useOrder = (props: IOrderProps) => {
     dateDocList.value = result || [];
   };
 
+  const deptInfo = ref(
+    {} as {
+      recommendation?: string;
+      deptName: string;
+    }
+  );
+  const getDeptInfo = async (data: {
+    clinicalType: string;
+    hosDeptId?: string;
+    firstHosDeptId?: string;
+    secondHosDeptId?: string;
+    hosId: string;
+  }) => {
+    if (data && Object.keys(data).length) {
+      const {
+        clinicalType,
+        hosDeptId: _hosDeptId,
+        firstHosDeptId,
+        secondHosDeptId,
+        hosId,
+      } = deQueryForUrl<typeof data>(data);
+      const { source } = gStores.globalStore.browser;
+
+      const hosDeptId = _hosDeptId || secondHosDeptId || firstHosDeptId;
+
+      const requestArg = {
+        hosDeptId,
+        hosId,
+        clinicalType,
+        source,
+      };
+      const { result } = await api.queryDeptInfo(requestArg);
+
+      deptInfo.value = result;
+    }
+  };
+
   const dateClick = async (e: {
     item: IDocListAll;
     schInfo: TAllDayTScInfo;
@@ -520,6 +557,8 @@ export const useOrder = (props: IOrderProps) => {
     isComplete,
     enabledDays,
     filterChooseDays,
+    getDeptInfo,
+    deptInfo
   };
 };
 

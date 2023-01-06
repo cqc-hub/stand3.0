@@ -1,5 +1,6 @@
 <template>
-  <view class="order">
+  <view class="g-page">
+    <Order-Recommendation :dept-info="deptInfo" />
     <Order-Sel-Date
       v-if="allDocList.length"
       :value="checkedDay"
@@ -8,7 +9,7 @@
       @change="dateChange"
       isShowAllDate
     />
-    <scroll-view class="container" scroll-y>
+    <scroll-view class="g-container" scroll-y>
       <view
         v-if="!checkedDay"
         class="container-contract animate__animated animate__fadeIn"
@@ -74,6 +75,7 @@
   import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
+  import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
 
   const props = defineProps<{
     hosId: string;
@@ -117,6 +119,8 @@
     regClick,
     isComplete,
     enabledDays,
+    getDeptInfo,
+    deptInfo,
   } = useOrder(props);
 
   onReady(() => {
@@ -158,6 +162,9 @@
     });
   };
 
+  // 科室推荐
+  // getDeptInfo({ ...props });
+
   init({
     ...props,
     hosDeptId: hosDeptId.value,
@@ -167,35 +174,25 @@
 </script>
 
 <style lang="scss" scoped>
-  .order {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-
-    .container {
-      flex: 1;
-      height: 1px;
-
-      .animate__animated {
-        animation-duration: 0.3s;
-      }
+  .g-container {
+    .animate__animated {
+      animation-duration: 0.3s;
     }
+  }
 
-    .container-contract {
-      padding: 0 32rpx;
-      padding-top: 24rpx;
+  .container-contract {
+    padding: 0 32rpx;
+    padding-top: 24rpx;
 
-      .item-content {
-        padding-bottom: 16rpx;
-      }
+    .item-content {
+      padding-bottom: 16rpx;
     }
+  }
 
-    .item-scheme-date {
-      color: var(--hr-neutral-color-7);
-      font-size: var(--hr-font-size-xs);
-      margin: 16rpx 0;
-    }
+  .item-scheme-date {
+    color: var(--hr-neutral-color-7);
+    font-size: var(--hr-font-size-xs);
+    margin: 16rpx 0;
   }
 
   .empty-list {
