@@ -30,7 +30,10 @@
       </view>
 
       <view class="department-pro">
-        <view class="g-flex-rc-cc g-border department-pro-item">
+        <view
+          @click="goZiXun"
+          class="g-flex-rc-cc g-border department-pro-item"
+        >
           <view class="icon-font ico_sy_paper4" />
           <view class="f32 g-bold">健康科普</view>
         </view>
@@ -99,7 +102,12 @@
     type TDepartmentDetail,
     type TDepartmentDocItem,
   } from './utils/DepartmentCard';
-  import { type TBannerConfig, useTBanner, GStores } from '@/utils';
+  import {
+    type TBannerConfig,
+    type TBannerConfigBase,
+    useTBanner,
+    GStores,
+  } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -139,13 +147,12 @@
     const { docName, hosDocId } = item;
     const { deptName, hosId } = pageProps.value;
 
-
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         docName,
         deptName,
         hosId,
-        hosDocId
+        hosDocId,
       }),
     });
   };
@@ -160,6 +167,24 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
     });
+  };
+
+  const goZiXun = () => {
+    const { sysCode } = gStores.globalStore;
+
+    const arg: TBannerConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      extraData: {
+        sysCode,
+        entranceType: '2',
+      },
+      path: 'pagesA/healthAdvisory/healthAdvisory',
+      src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
+      isLocal: '1',
+    };
+
+    useTBanner(arg);
   };
 
   const goDiseaseCyclopedia = () => {
