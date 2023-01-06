@@ -1,5 +1,5 @@
 {
-  "sysCode": "2001016",
+  "sysCode": "1001052",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -23,6 +23,7 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
+
     "1001049": {
       "wxAppid": "wx5e97c199ecf8b8c3",
       "alipayAppid": "",
@@ -35,6 +36,7 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
+
     "1001047": {
       "wxAppid": "wxe0e2a3b290ad96b5",
       "alipayAppid": "",
@@ -47,6 +49,7 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
+
     "2001013": {
       "wxAppid": "wxda3a65909cbc3e3c",
       "alipayAppid": "2021002133632822",
@@ -57,6 +60,7 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
+
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
       "alipayAppid": "2021003159674187",
@@ -66,6 +70,7 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
+
     "1001055": {
       "wxAppid": "wxd9a9c329edc6e2b0",
       "alipayAppid": "2021003164669106",
@@ -78,6 +83,7 @@
       "isOpenOcr": false,
       "isHideHomeLogo": true
     },
+
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
       "alipayAppid": "2021003167607056",
@@ -90,6 +96,7 @@
       "isOpenOcr": false,
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
     },
+
     "2001012": {
       "wxAppid": "wx15abd81c31993d20",
       "alipayAppid": "",
@@ -99,6 +106,7 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
+
     "2001016": {
       "wxAppid": "wx4d8f68fdc6b6831c",
       "alipayAppid": "",
