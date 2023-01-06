@@ -105,48 +105,50 @@
     const { id, deptName } = item;
     const { hosId } = pageProp.value;
 
-
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DepartmentCardDetail', {
         id,
         deptName,
-        hosId
+        hosId,
       }),
     });
   };
 
-  let searchList = async () => {
-    const searchContent = searchValue.value;
-    clearData();
-    isHideLv1.value = false;
+  const searchList = debounce(
+    async () => {
+      const searchContent = searchValue.value;
+      clearData();
+      isHideLv1.value = false;
 
-    if (searchContent) {
-      const { hosId } = pageProp.value;
+      if (searchContent) {
+        const { hosId } = pageProp.value;
 
-      const requestArg = {
-        searchContent,
-        hosId,
-      };
-      isCollapseListLv1.value = true;
+        const requestArg = {
+          searchContent,
+          hosId,
+        };
+        isCollapseListLv1.value = true;
 
-      const { result } = await api
-        .getDeptCardListSearch(requestArg)
-        .finally(() => {
-          setTimeout(() => {
-            isComplete.value = true;
-          }, 300);
-        });
+        const { result } = await api
+          .getDeptCardListSearch(requestArg)
+          .finally(() => {
+            setTimeout(() => {
+              isComplete.value = true;
+            }, 300);
+          });
 
-      setTimeout(() => {
-        isHideLv1.value = true;
-        listLv2.value = result || [];
-      }, 300);
-    } else {
-      isCollapseListLv1.value = false;
-      await getList();
-    }
-  };
-  searchList = debounce(searchList, 600, false);
+        setTimeout(() => {
+          isHideLv1.value = true;
+          listLv2.value = result || [];
+        }, 300);
+      } else {
+        isCollapseListLv1.value = false;
+        await getList();
+      }
+    },
+    600,
+    false
+  );
 
   const init = async () => {
     await getList();
