@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <view class="header-bg">
-      <image v-if="detailBg" :src="detailBg" />
+      <image v-if="detailInfo.deptPhoto" :src="detailInfo.deptPhoto" />
     </view>
 
     <view class="container">
@@ -30,7 +30,10 @@
       </view>
 
       <view class="department-pro">
-        <view class="g-flex-rc-cc g-border department-pro-item">
+        <view
+          @click="goZiXun"
+          class="g-flex-rc-cc g-border department-pro-item"
+        >
           <view class="icon-font ico_sy_paper4" />
           <view class="f32 g-bold">健康科普</view>
         </view>
@@ -44,6 +47,7 @@
         </view>
 
         <view
+          v-if="detailInfo.netHosUrl"
           @click="goOrder"
           class="g-flex-rc-cc g-border department-pro-item"
         >
@@ -99,7 +103,12 @@
     type TDepartmentDetail,
     type TDepartmentDocItem,
   } from './utils/DepartmentCard';
-  import { type TBannerConfig, useTBanner, GStores } from '@/utils';
+  import {
+    type TBannerConfig,
+    type TBannerConfigBase,
+    useTBanner,
+    GStores,
+  } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -113,9 +122,9 @@
     hosId: '',
   });
   const isComplete = ref(false);
-  const detailBg = ref(
-    'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1667555460090-164027.jpg'
-  );
+  // const detailBg = ref(
+  //   'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1667555460090-164027.jpg'
+  // );
   const regDialogConfirm = ref<any>('');
   const detailInfo = ref({} as TDepartmentDetail);
   const gStores = new GStores();
@@ -139,27 +148,52 @@
     const { docName, hosDocId } = item;
     const { deptName, hosId } = pageProps.value;
 
-
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         docName,
         deptName,
         hosId,
-        hosDocId
+        hosDocId,
       }),
     });
   };
 
   const goOrder = () => {
-    const { deptName, hosId } = pageProps.value;
+    // const { deptName, hosId } = pageProps.value;
 
-    const queryArg = {
-      deptName,
-      hosId,
-    };
+    // const queryArg = {
+    //   deptName,
+    //   hosId,
+    // };
+    // uni.navigateTo({
+    //   url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
+    // });
+
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
+      url:
+        '/pagesA/webView/webView?https=' +
+        encodeURIComponent(detailInfo.value.netHosUrl),
     });
+  };
+
+  const goZiXun = () => {
+    const { sysCode } = gStores.globalStore;
+    const { deptId } = detailInfo.value;
+
+    const arg: TBannerConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      extraData: {
+        sysCode,
+        entranceType: '2',
+        deptId,
+      },
+      path: 'pagesA/healthAdvisory/healthAdvisory',
+      src: 'https://phsdevoss.eheren.com/pcloud/image/jbbk-index.png',
+      // isLocal: '1',
+    };
+
+    useTBanner(arg);
   };
 
   const goDiseaseCyclopedia = () => {

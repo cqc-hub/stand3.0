@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <web-view :src="src" v-if="src" @message="getMessage"></web-view>
+    <web-view v-if="src" :src="src" @message="getMessage"></web-view>
   </view>
 </template>
 
@@ -33,10 +33,4 @@
 </script>
 
 <style lang="scss" scoped>
-  .operation-list {
-    position: fixed;
-    top: 100rpx;
-    left: 0;
-    z-index: 999999;
-  }
 </style>

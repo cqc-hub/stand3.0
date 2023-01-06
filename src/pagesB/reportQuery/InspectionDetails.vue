@@ -229,7 +229,8 @@
               </view>
               <view class="content" v-else></view>
             </view>
-            <view v-if="pageProps.repType == 1" class="exegesis">
+            <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
+            <view v-if="pageProps.repType == 2" class="exegesis">
               <view class="exegesis-content">
                 <view>注释：</view>
                 <view>S表示敏感，SDD表示剂量依赖性敏感</view>

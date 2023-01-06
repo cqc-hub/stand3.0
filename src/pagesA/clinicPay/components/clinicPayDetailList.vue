@@ -7,7 +7,7 @@
         active: getIsActive(item),
       }"
       @click="itemClick(item)"
-      class="item flex-normal mb16 g-border"
+      class="item flex-normal mb16"
     >
       <view v-if="isCheck" class="icon-content">
         <view @click.stop="selItem(item)" class="iconfont check-box-icon">
@@ -149,6 +149,7 @@
       padding: 32rpx;
       align-items: flex-start;
       position: relative;
+      border: 2rpx solid var(--hr-neutral-color-2);
 
       &:first-child {
         margin-top: 24rpx;

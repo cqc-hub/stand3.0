@@ -373,8 +373,10 @@
           // 有身份证不需要填写 生日、性别
           _sexAndBirth.length = 0;
 
+
           if (idCard && idValidator.checkIdCardNo(idCard)) {
             const cardInfo = idValidator.getIdCardInfo(idCard);
+
             if (
               isGuardianWithIdCard &&
               cardInfo.age <= isGuardianWithIdCard * 1
