@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <view class="header-bg">
-      <image v-if="detailBg" :src="detailBg" />
+      <image v-if="detailInfo.deptPhoto" :src="detailInfo.deptPhoto" />
     </view>
 
     <view class="container">
@@ -47,6 +47,7 @@
         </view>
 
         <view
+          v-if="detailInfo.netHosUrl"
           @click="goOrder"
           class="g-flex-rc-cc g-border department-pro-item"
         >
@@ -121,9 +122,9 @@
     hosId: '',
   });
   const isComplete = ref(false);
-  const detailBg = ref(
-    'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1667555460090-164027.jpg'
-  );
+  // const detailBg = ref(
+  //   'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1667555460090-164027.jpg'
+  // );
   const regDialogConfirm = ref<any>('');
   const detailInfo = ref({} as TDepartmentDetail);
   const gStores = new GStores();
@@ -158,14 +159,20 @@
   };
 
   const goOrder = () => {
-    const { deptName, hosId } = pageProps.value;
+    // const { deptName, hosId } = pageProps.value;
 
-    const queryArg = {
-      deptName,
-      hosId,
-    };
+    // const queryArg = {
+    //   deptName,
+    //   hosId,
+    // };
+    // uni.navigateTo({
+    //   url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
+    // });
+
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
+      url:
+        '/pagesA/webView/webView?https=' +
+        encodeURIComponent(detailInfo.value.netHosUrl),
     });
   };
 
