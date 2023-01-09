@@ -2,7 +2,12 @@
   <view>
     <!-- #ifdef MP-WEIXIN -->
     <view class="nav">
-      <view class="nav-safe-h"></view>
+      <view
+        :class="{
+          'is-ios': isIos,
+        }"
+        class="nav-safe-h"
+      ></view>
       <image
         v-if="$global.systemInfo.homeNavTitleLogo"
         class="logo"
@@ -20,6 +25,22 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+
+  const isIos = ref(false);
+
+  uni.getSystemInfo({
+    success(e) {
+      const { system } = e;
+      console.log({
+        system
+      });
+
+
+      if (system.includes('iOS')) {
+        isIos.value = true;
+      }
+    },
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -37,8 +58,12 @@
     // padding-top: 100rpx;
 
     .nav-safe-h {
-      height: 4.5em;
+      height: 3rem;
       width: 1px;
+
+      &.is-ios {
+        height: 3.5rem;
+      }
     }
 
     .logo {

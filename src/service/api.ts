@@ -148,11 +148,15 @@ const baseApi = {
 
   //获取公告资讯
   getAnnouncementCms: (data) =>
-    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {}),
+    service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
+      hideLoading: true
+    }),
 
   //查询对应版本号
   searchFunctionConfig: (data) =>
-    service.post('/phs-base/hospital/searchFunctionConfig', parm(data)),
+    service.post('/phs-base/hospital/searchFunctionConfig', parm(data), {
+      hideLoading: true
+    }),
 };
 // 查询服务
 const queryApi = {

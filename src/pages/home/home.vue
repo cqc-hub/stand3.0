@@ -1,6 +1,5 @@
 <template>
   <view class="home g-page">
-  <view class="color-blue">从上海开始看</view>
     <home-Nav />
     <scroll-view class="scroll-page g-container" scroll-y>
       <ls-skeleton
@@ -348,6 +347,7 @@
     const localVersion = getLocalStorage('systemConfigVersion');
     const item = localVersion&&localVersion.find((o) => o.functionType == 2);
     if (result !== item?.version) {
+      homeConfig = await ServerStaticData.getHomeConfig('home');
       return true;
     } else {
       return false;
@@ -357,11 +357,13 @@
   //获取配置数据
   const getHomeConfig = async () => {
     skeletonProps.value.loading = true;
-    if (await getVersion()) {
-      homeConfig = await ServerStaticData.getHomeConfig('home');
-    } else {
-      homeConfig = await ServerStaticData.getHomeConfig();
-    }
+    homeConfig = await ServerStaticData.getHomeConfig();
+    getVersion();
+    // if (await getVersion()) {
+    //   homeConfig = await ServerStaticData.getHomeConfig('home');
+    // } else {
+    //   homeConfig = await ServerStaticData.getHomeConfig();
+    // }
     if (homeConfig) {
       topMenuList.value = homeConfig[0].functionList;
       // 新增公告展示判断 showFlag为1展示
