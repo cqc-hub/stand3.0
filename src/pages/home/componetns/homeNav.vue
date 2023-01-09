@@ -31,9 +31,6 @@
   uni.getSystemInfo({
     success(e) {
       const { system } = e;
-      console.log({
-        system
-      });
 
 
       if (system.includes('iOS')) {

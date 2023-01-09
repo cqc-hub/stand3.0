@@ -38,7 +38,7 @@
 
           <view class="g-flex-rc-cc">
             <view
-              v-if="isCheck && item.totalCost"
+              v-if="isCheck && item.totalCost && !isHidePrice"
               class="color-error g-bold f36"
             >
               {{ item.totalCost }}元
@@ -111,6 +111,7 @@
       selUnPayList: IPayListItem[];
       isListShowClinicType?: boolean;
       isCheck?: boolean;
+      isHidePrice?: boolean;
     }>(),
     {
       selUnPayList: () => [],

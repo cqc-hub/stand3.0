@@ -367,7 +367,6 @@
 
         if (phone_idx !== -1 && !isFilterSmsVerify) {
           _patientInfo.splice(phone_idx + 1, 0, formKey.verifyCode);
-          console.log('_patientInfo', _patientInfo);
         }
       }
     }

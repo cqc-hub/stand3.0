@@ -437,6 +437,13 @@ export const usePayPage = () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('pay');
   };
 
+  // 待缴费列表页面是否隐藏金额
+  const isWaitPayListHidePrice = computed(() => {
+    return (
+      pageConfig.value.isScanListHideMoney === '1' && pageProps.value.params
+    );
+  });
+
   const handlerPay = async () => {
     if (!selUnPayList.value.length) {
       gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
@@ -618,6 +625,7 @@ export const usePayPage = () => {
     chooseAll,
     getDrugDeliveryList,
     goDrugDelivery,
+    isWaitPayListHidePrice
   };
 };
 

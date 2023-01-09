@@ -32,6 +32,7 @@
               @sel-item="selPayListItem"
               :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
+              :isHidePrice="isWaitPayListHidePrice"
               isCheck
             />
           </block>
@@ -76,6 +77,7 @@
       </view>
 
       <view
+        v-if="!isWaitPayListHidePrice"
         :class="{
           'f-right': !isShowSelectAll,
         }"
@@ -88,6 +90,7 @@
       <button
         :class="{
           'btn-disabled': !selUnPayList.length,
+          flex1: isWaitPayListHidePrice,
         }"
         class="btn g-border btn-warning pay-btn"
         @click="handlerPay"
@@ -209,6 +212,7 @@
     getDrugDeliveryList,
     goDrugDelivery,
     regDialogConfirmExpress,
+    isWaitPayListHidePrice,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);

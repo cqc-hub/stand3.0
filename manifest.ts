@@ -18,7 +18,13 @@ manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
 
 let manifestFileDataObj = JSON.parse(manifestFileData);
 sysConfig.isOpenHealthCard;
-const { wxAppid, alipayAppid, name: sysName, isOpenHealthCard,isOpenOcr } = sysConfig;
+const {
+  wxAppid,
+  alipayAppid,
+  name: sysName,
+  isOpenHealthCard,
+  isOpenOcr,
+} = sysConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
@@ -33,12 +39,12 @@ if (isOpenHealthCard) {
   };
 }
 
-if(isOpenOcr){
+if (isOpenOcr) {
   //支付宝ocr插件
-  aliPlugin.ocrPlugin ={
-    version: '*', 
-    provider: '2021001130678316'
-  }
+  aliPlugin.ocrPlugin = {
+    version: '*',
+    provider: '2021001130678316',
+  };
 }
 
 wxConfig.appid = wxAppid;
@@ -50,8 +56,13 @@ manifestFileDataObj['mp-weixin'] = wxConfig;
 manifestFileDataObj['mp-alipay'] = aliConfig;
 manifestFileDataObj['name'] = sysName;
 
-fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
-  encoding: 'utf8',
-});
+// fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
+  // encoding: 'utf8',
+// });
+
+// const appVueFileUrl = `${__dirname}/src/App.vue`;
+// const appVueData = fs.readFileSync(appVueFileUrl, { encoding: 'utf8' });
+
+// console.log(appVueData);
 
 module.exports = {};
