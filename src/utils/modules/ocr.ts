@@ -213,7 +213,7 @@ export const chooseImg = (
   });
 };
 
-const ocrForWX = async () => {
+const ocrForWX = async (imageOutput = false) => {
   const globalStore = useGlobalStore();
   const e = await chooseImg({
     extension: ['image', 'jpeg', 'jpg'],
@@ -237,6 +237,7 @@ const ocrForWX = async () => {
         nation,
         address,
         idCard,
+        image: e.base64,
       });
     } else {
       throw new Error('请使用身份证正面');
@@ -253,6 +254,7 @@ const findSuccess = async ({
   birth,
   idCard,
   address,
+  image,
 }: {
   name: string;
   sex: string;
@@ -260,6 +262,7 @@ const findSuccess = async ({
   birth?: string;
   idCard: string;
   address: string;
+  image?: string;
 }) => {
   if (nation) {
     if (!nation.includes('族')) {
@@ -290,6 +293,7 @@ const findSuccess = async ({
   }
 
   return {
+    image: image ? 'data:image/png;base64,' + image : undefined,
     name,
     sex,
     nation,
@@ -306,14 +310,18 @@ const findSuccess = async ({
   };
 };
 
-const ocrForAlipay = async () => {
+const ocrForAlipay = async (imageOutput = false) => {
   const messageStore = useMessageStore();
 
   const { readIDCard, IDCardTypes } = requirePlugin('ocrPlugin');
   const bizId = 'emblem';
 
-  const res = await readIDCard({ bizId, type: IDCardTypes.FRONT });
-  const { error, data } = res;
+  const res = await readIDCard({
+    bizId,
+    type: IDCardTypes.FRONT,
+    imageOutput: imageOutput ? 'global' : undefined,
+  });
+  const { error, data, image } = res;
 
   if (error) {
     const msg = error.errorMessage;
@@ -339,15 +347,15 @@ const ocrForAlipay = async () => {
 type TGetPromiseType<T> = T extends Promise<infer R> ? R : any;
 export type OcrFindRes = TGetPromiseType<ReturnType<typeof findSuccess>>;
 
-export const useOcr = async (): Promise<OcrFindRes> => {
+export const useOcr = async (imageOutput = false): Promise<OcrFindRes> => {
   // const messageStore = useMessageStore();
 
   // #ifdef MP-WEIXIN
-  return await ocrForWX();
+  return await ocrForWX(imageOutput);
   // #endif
 
   // #ifdef MP-ALIPAY
-  return await ocrForAlipay();
+  return await ocrForAlipay(imageOutput);
   // #endif
 
   return Promise.reject('未定义的 ocr');
@@ -405,4 +413,51 @@ export const upImgOss = (
       fail: reject,
     });
   });
+};
+
+// export const baseToUrl = async (base64data: string) => {
+//   return new Promise((resolve, reject) => {
+//     const [, format, bodyData] =
+//       /data:image\/(\w+);base64,(.*)/.exec(base64data) || [];
+//     if (!format) {
+//       return new Error('ERROR_BASE64SRC_PARSE');
+//     }
+
+//     const fsm = uni.getFileSystemManager();
+//     const FILE_BASE_NAME = 'tmp_base64src'; //自定义文件名
+
+//     const { microapp, common } = uni.getEnvInfoSync();
+//     uni.getAppBaseInfo
+//     const filePath = `${common.USER_DATA_PATH}/${FILE_BASE_NAME}.${format}`;
+//     const buffer = uni.base64ToArrayBuffer(bodyData);
+
+//     fsm.writeFile({
+//       filePath,
+//       data: buffer,
+//       encoding: 'binary',
+//       success() {
+//         resolve(filePath)
+//       },
+//       fail() {
+//         return new Error('ERROR_BASE64SRC_WRITE');
+//       },
+//     });
+//   });
+// };
+
+export const wxBase64src = async (base64data) => {
+  const base64 = base64data;
+  const time = new Date().getTime();
+  const imgPath = wx.env.USER_DATA_PATH + '/poster' + time + 'share' + '.png';
+  const imageData = base64.replace(/^data:image\/\w+;base64,/, '');
+  const file = wx.getFileSystemManager();
+  file.writeFileSync(imgPath, imageData, 'base64');
+
+  return imgPath;
+};
+
+export const base64Src = async (base64data: string) => {
+  // #ifdef MP-WEIXIN
+  return await wxBase64src(base64data);
+  // #endif
 };

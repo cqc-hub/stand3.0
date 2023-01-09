@@ -307,7 +307,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, onMounted, watch, nextTick } from 'vue';
+  import { computed, ref, getCurrentInstance, watch, nextTick } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
   import {
@@ -318,6 +318,7 @@
     upImgOss,
     wait,
     useOcr,
+    base64Src,
   } from '@/utils';
   import { getUserShowLabel } from '@/stores';
   import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
@@ -380,6 +381,8 @@
     isManual?: '1';
     phsOrderNo?: string;
   }>();
+  const imgWidth = ref(200);
+  const imgHeight = ref(200);
 
   const _hosId = ref(props.hosId || '');
 
@@ -519,12 +522,27 @@
 
   const chooseIdCardFront = async () => {
     const { isOcrSfz } = pageConfig.value;
+    let iswx = false;
+    // #ifdef MP-WEIXIN
+    iswx = true
+    // #endif
 
-    if (isOcrSfz === '1') {
-      // const res = await useOcr();
-      // console.log({
-      //   res,
-      // });
+
+    // 支付宝暂时没得测试, 先不走
+    if (isOcrSfz === '1' && iswx) {
+      const res = await useOcr(true);
+      const { image, name } = res;
+
+      if (image) {
+        if (name === gStores.userStore.patChoose.patientName) {
+          idCardImg.value.frontIdCardUrl = await base64Src(image);
+        } else {
+          gStores.messageStore.showMessage(
+            '上传的身份证信息与就诊人身份信息不一致，请重新上传！',
+            3000
+          );
+        }
+      }
     } else {
       const res = await chooseImg();
 
@@ -891,7 +909,7 @@
     } = result;
 
     if (printCount) {
-      purposeCount.value = JSON.parse(printCount);
+      purposeCount.value = JSON.parse(printCount as any);
     }
 
     if (frontIdCardUrl) {

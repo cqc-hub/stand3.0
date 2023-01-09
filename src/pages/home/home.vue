@@ -1,5 +1,6 @@
 <template>
   <view class="home g-page">
+  <view class="color-blue">从上海开始看</view>
     <home-Nav />
     <scroll-view class="scroll-page g-container" scroll-y>
       <ls-skeleton

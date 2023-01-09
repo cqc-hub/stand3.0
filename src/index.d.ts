@@ -36,6 +36,7 @@ interface ISystemGlobalItem {
   isSearchInHos: boolean;
   isStartComeTest: boolean;
   alipayPid: string;
+  // https://open.alipay.com/plugin/order-page?serviceCode=MP2020122300100215
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
   homeNavTitleLogo?: string;
