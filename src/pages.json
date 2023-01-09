@@ -372,6 +372,13 @@
         },
 
         {
+          "path": "commonHosNet/commonHosNet",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+
+        {
           "path": "medicationAssistant/helpChooseWay",
           "style": {
             "navigationBarTitleText": "确认快递信息"
