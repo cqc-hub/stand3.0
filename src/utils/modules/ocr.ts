@@ -293,7 +293,7 @@ const findSuccess = async ({
   }
 
   return {
-    image: image ? 'data:image/png;base64,' + image : undefined,
+    image,
     name,
     sex,
     nation,
@@ -340,6 +340,7 @@ const ocrForAlipay = async (imageOutput = false) => {
       birth: birth.data,
       idCard: idCard.data,
       address: address.data,
+      image
     });
   }
 };

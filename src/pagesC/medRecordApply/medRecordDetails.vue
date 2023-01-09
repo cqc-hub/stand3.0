@@ -524,18 +524,21 @@
     const { isOcrSfz } = pageConfig.value;
     let iswx = false;
     // #ifdef MP-WEIXIN
-    iswx = true
+    iswx = true;
     // #endif
 
-
-    // 支付宝暂时没得测试, 先不走
-    if (isOcrSfz === '1' && iswx) {
+    if (isOcrSfz === '1') {
       const res = await useOcr(true);
+
       const { image, name } = res;
 
       if (image) {
         if (name === gStores.userStore.patChoose.patientName) {
-          idCardImg.value.frontIdCardUrl = await base64Src(image);
+          if (iswx) {
+            idCardImg.value.frontIdCardUrl = await base64Src(image);
+          } else {
+            idCardImg.value.frontIdCardUrl = image;
+          }
         } else {
           gStores.messageStore.showMessage(
             '上传的身份证信息与就诊人身份信息不一致，请重新上传！',
