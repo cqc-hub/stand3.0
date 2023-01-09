@@ -4,6 +4,7 @@
     <health-card-users
       :hospitalId="$global.systemInfo.isOpenHealthCard!.hospitalId"
       @select="selectCard"
+      @addCard="addCard"
     />
     <!-- #endif -->
     <g-message />
@@ -36,12 +37,18 @@ const selectCard = async ({ detail }) => {
 
   gStores.messageStore.showMessage("关联成功", 1500, {
     closeCallBack() {
-      //刷新就诊人列表 
+      //刷新就诊人列表
       new PatientUtils().getPatCardList();
       uni.reLaunch({
         url: "/pages/home/home",
       });
     },
+  });
+};
+
+const addCard = () => {
+  uni.reLaunch({
+    url: "/pagesA/medicalCardMan/addMedical",
   });
 };
 </script>

@@ -158,6 +158,8 @@ export interface ISystemConfig {
     isPreSettle?: '1';
     // 申请退单
     isOpenChargeback?: '1';
+    // 扫码缴费是否隐藏列表金额
+    isScanListHideMoney?: '1';
 
     // 页面顶部 banner
     bannerPay?: TBannerConfig;
