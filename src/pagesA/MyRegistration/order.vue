@@ -163,7 +163,7 @@
   };
 
   // 科室推荐
-  // getDeptInfo({ ...props });
+  getDeptInfo({ ...props });
 
   init({
     ...props,

@@ -23,7 +23,38 @@
         isHideFooter
       >
         <view>
-          <view></view>
+          <view v-if="deptInfo.recommendation" class="mb40">
+            <view class="flex-normal mb16">
+              <view class="icon-font ico_doctor-hat mr12 title-icon" />
+              <view class="g-bold f36">科室介绍</view>
+            </view>
+
+            <view class="color-444 f32 g-break-word">
+              <rich-text :nodes="parseHtml(deptInfo.recommendation)" />
+            </view>
+          </view>
+
+          <view v-if="deptInfo.featuredTreatment" class="mb40">
+            <view class="flex-normal mb16">
+              <view class="icon-font ico_doctor-diamond mr12 title-icon" />
+              <view class="g-bold f36">专科特色</view>
+            </view>
+
+            <view class="color-444 f32 g-break-word">
+              <rich-text :nodes="parseHtml(deptInfo.featuredTreatment)" />
+            </view>
+          </view>
+
+          <view v-if="deptInfo.promptMessage" class="mb40">
+            <view class="flex-normal mb16">
+              <view class="icon-font ico_doctor-document mr12 title-icon" />
+              <view class="g-bold f36">就诊须知</view>
+            </view>
+
+            <view class="color-444 f32 g-break-word">
+              <rich-text :nodes="parseHtml(deptInfo.promptMessage)" />
+            </view>
+          </view>
         </view>
       </Order-Reg-Confirm>
     </block>
@@ -32,6 +63,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
+  import HTMLParser from '@/common/html-parser';
 
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
@@ -56,6 +88,15 @@
         props.deptInfo.featuredTreatment)
     );
   });
+
+  const parseHtml = (str: string) => {
+    if (!str) {
+      return '';
+    }
+    const _str = str.replace(/\\n/g, '<br></br>');
+
+    return HTMLParser(_str);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -71,5 +112,10 @@
     .arrow-icon {
       line-height: 28rpx;
     }
+  }
+
+  .title-icon {
+    width: 48rpx;
+    height: 48rpx;
   }
 </style>
