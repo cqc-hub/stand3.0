@@ -529,7 +529,6 @@
 
     if (isOcrSfz === '1') {
       const res = await useOcr(true);
-
       const { image, name } = res;
 
       if (image) {
