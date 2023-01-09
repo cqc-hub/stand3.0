@@ -56,15 +56,19 @@ manifestFileDataObj['mp-weixin'] = wxConfig;
 manifestFileDataObj['mp-alipay'] = aliConfig;
 manifestFileDataObj['name'] = sysName;
 
-fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj), {
+fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj, null, 2), {
   encoding: 'utf8',
 });
 
-// -----------------------------------------------
+// -----------------------------------------------s
 
-const appVueFileUrl = `${__dirname}/src/App.vue`;
-const appVueData = fs.readFileSync(appVueFileUrl, { encoding: 'utf8' });
+// const appVueFileUrl = `${__dirname}/src/App.vue`;
+// const appVueData = fs.readFileSync(appVueFileUrl, { encoding: 'utf8' });
 
-console.log(appVueData);
+// console.log(appVueData);
+// console.log('-------------');
+// const appVueDataStrArr = appVueData.split(';')
+// console.log(appVueDataStrArr);
+
 
 module.exports = {};

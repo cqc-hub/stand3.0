@@ -1,5 +1,5 @@
 <template>
-  <view class="home g-page">
+  <view class="g-page">
     <home-Nav />
     <scroll-view class="scroll-page g-container" scroll-y>
       <ls-skeleton
@@ -420,17 +420,8 @@
 </script>
 
 <style lang="scss" scoped>
-  .home {
-    // width: 100%;
-    // height: 100%;
-    // position: relative;
-    // flex-direction: column;
-    // display: flex;
+  .g-page {
     background: #ffffff;
-    // box-sizing: border-box;
-  }
-  .scroll-page {
-    // height: 100vh;
   }
 
   .homePage {
