@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001054",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -87,8 +87,8 @@
       "h5Appid": "wxf57d660046a04f49",
       "name": "咸阳市第一人民医院",
       "isOpenHealthCard": {
-        "healthCardTexxt": "陕西省卫生健康委员会",
-        "hospitalId": "36076"
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "37133"
       },
       "isStartComeTest": true,
       "isSearchInHos": false,
