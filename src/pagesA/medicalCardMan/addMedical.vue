@@ -350,14 +350,24 @@
     } = await ServerStaticData.getSystemConfig('person');
 
     if (!globalGl.systemInfo.isSearchInHos) {
+      // 插入验证码(框)
       if (isSmsVerify === '1' && props.pageType !== 'perfectReal') {
+        let isFilterSmsVerify = false;
+
+        // #ifdef MP-ALIPAY
+        // 支付宝第一个就诊人自动带入信息 不需要验证码
+        if (!patList.length) {
+          isFilterSmsVerify = true;
+        }
+        // #endif
+
         const phone_idx = _patientInfo.findIndex(
           (key) => key === formKey.patientPhone
         );
 
-        if (phone_idx !== -1) {
-          // 验证码
+        if (phone_idx !== -1 && !isFilterSmsVerify) {
           _patientInfo.splice(phone_idx + 1, 0, formKey.verifyCode);
+          console.log('_patientInfo', _patientInfo);
         }
       }
     }
@@ -372,7 +382,6 @@
 
           // 有身份证不需要填写 生日、性别
           _sexAndBirth.length = 0;
-
 
           if (idCard && idValidator.checkIdCardNo(idCard)) {
             const cardInfo = idValidator.getIdCardInfo(idCard);

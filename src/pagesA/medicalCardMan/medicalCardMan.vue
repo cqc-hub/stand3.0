@@ -69,14 +69,14 @@
 </template>
 
 <script lang="ts" setup>
-  import patList from './components/patList.vue';
-
   import { GStores, PatientUtils } from '@/utils';
   import { IPat } from '@/stores';
   import { ref } from 'vue';
   import { getHealthCardCode } from './utils/index';
 
   import globalGl from '@/config/global';
+
+  import patList from './components/patList.vue';
 
   const gStore = new GStores();
   const isShowHealthCardMode = ref(false);

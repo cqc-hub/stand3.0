@@ -55,10 +55,8 @@
   import { onReady } from '@dcloudio/uni-app';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
-  import { decryptDes } from '@/common/des';
 
   import api from '@/service/api';
-  import globalGl from '@/config/global';
 
   import FgAgree from './components/fgAgree.vue';
 
@@ -329,7 +327,7 @@
       // #ifdef MP-ALIPAY
       // 支付宝第一个就诊人自动带入信息 不需要验证码
       if (!patList.length) {
-        // isFilterSmsVerify = true;
+        isFilterSmsVerify = true;
       }
       // #endif
     }
