@@ -223,6 +223,10 @@
         </scroll-view>
       </block>
 
+      <block>
+        <!-- <view class="mt32">233</view> -->
+      </block>
+
       <view class="safe-height" />
     </scroll-view>
 

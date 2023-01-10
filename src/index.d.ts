@@ -40,6 +40,9 @@ interface ISystemGlobalItem {
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
   homeNavTitleLogo?: string;
+
+  // 中医样式
+  systemStyle?: '1';
 }
 
 interface ISystemGlobalConfig {

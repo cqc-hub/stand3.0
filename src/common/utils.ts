@@ -72,13 +72,19 @@ export const joinQueryForUrl = (url: string, pageArg) => {
 
 export const deQueryForUrl = <T = BaseObject>(props): T => {
   if (props) {
-    const dePropList =
-      (props && Object.entries(props)).map(([key, value]) => [
-        key,
-        decodeURIComponent(value),
-      ]) || [];
+    try {
+      const dePropList =
+        (props && Object.entries(props)).map(([key, value]) => [
+          key,
+          decodeURIComponent(value),
+        ]) || [];
 
-    return <T>Object.fromEntries(dePropList);
+      return <T>Object.fromEntries(dePropList);
+    } catch (error) {
+      console.error('deQueryForUrl 序列化数据 失败', error);
+
+      return props;
+    }
   } else {
     return <T>{};
   }
@@ -230,18 +236,17 @@ export const insertObject = (
 };
 
 //获取URL 携带的对应参数
-export const getQueryString = (url:string,key: string): string => {
-  const after = url.split("?")[1];
+export const getQueryString = (url: string, key: string): string => {
+  const after = url.split('?')[1];
   if (after) {
-      var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
-      var r = after.match(reg);
-      if (r != null) {
-          return decodeURIComponent(r[2]);
-      } else {
-          return '';
-      }
+    var reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)');
+    var r = after.match(reg);
+    if (r != null) {
+      return decodeURIComponent(r[2]);
+    } else {
+      return '';
+    }
   } else {
-    return ''
+    return '';
   }
-}
-
+};

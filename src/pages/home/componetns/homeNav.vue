@@ -31,6 +31,7 @@
   uni.getSystemInfo({
     success(e) {
       const { system } = e;
+      console.log('system---', system);
 
 
       if (system.includes('iOS')) {
@@ -55,11 +56,10 @@
     // padding-top: 100rpx;
 
     .nav-safe-h {
-      height: 3rem;
+      height: 3em;
       width: 1px;
-
       &.is-ios {
-        height: 3.5rem;
+        height: 4.5em;
       }
     }
 

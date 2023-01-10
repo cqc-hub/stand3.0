@@ -18,6 +18,10 @@
             <view class="doc-info-introduce-name f36 text-no-wrap">
               {{ item.docName }}
             </view>
+
+            <view v-if="item.isCharge === '1'" class="charge-icon f24">
+              组长
+            </view>
           </view>
 
           <view class="doc-info-introduce-goodat text-ellipsis">
@@ -100,6 +104,13 @@
             font-weight: 600;
             color: var(--hr-neutral-color-10);
             margin-right: 8rpx;
+          }
+
+          .charge-icon {
+            background-color: #747c94;
+            color: #ffe2c1;
+            padding: 0 12rpx;
+            border-radius: 2px;
           }
 
           .doc-info-introduce-title {

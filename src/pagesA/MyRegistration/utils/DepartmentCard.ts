@@ -16,6 +16,7 @@ export type TDepartmentDocItem = {
   intro: string;
   showNo: string;
   hosDocId: string;
+  isCharge: '0' | '1';
 };
 
 export type TDepartmentDetail = {

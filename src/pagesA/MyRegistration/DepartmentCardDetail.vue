@@ -1,7 +1,11 @@
 <template>
   <view class="g-page">
     <view class="header-bg">
-      <image v-if="detailInfo.deptPhoto" :src="detailInfo.deptPhoto" />
+      <image
+        v-if="detailInfo.deptPhoto"
+        :src="detailInfo.deptPhoto"
+        @click="previewImage([detailInfo.deptPhoto])"
+      />
     </view>
 
     <view class="container">
@@ -105,9 +109,9 @@
   } from './utils/DepartmentCard';
   import {
     type TBannerConfig,
-    type TBannerConfigBase,
     useTBanner,
     GStores,
+    previewImage,
   } from '@/utils';
 
   import api from '@/service/api';
@@ -122,9 +126,6 @@
     hosId: '',
   });
   const isComplete = ref(false);
-  // const detailBg = ref(
-  //   'https://phs-v3-dev.oss-cn-hangzhou.aliyuncs.com/phs-images/image1667555460090-164027.jpg'
-  // );
   const regDialogConfirm = ref<any>('');
   const detailInfo = ref({} as TDepartmentDetail);
   const gStores = new GStores();
@@ -246,7 +247,7 @@
 
       image {
         width: 100%;
-        height: 100%;
+        height: 422rpx;
       }
     }
 
