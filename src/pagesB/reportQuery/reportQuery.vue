@@ -61,8 +61,9 @@
             </template>
 
             <template #empty>
-              <view class="empty-box">
-                <g-empty v-if="!loading" :current="1" />
+            <!-- v-if="!loading" -->
+              <view v-if="!loading" class="empty-box">
+                <g-empty  :current="1" />
               </view>
             </template>
           </scroll-list>
@@ -76,7 +77,7 @@
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, ServerStaticData } from '@/utils';
+  import { GStores, ServerStaticData, wait } from '@/utils';
   import { joinQuery, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
@@ -85,7 +86,7 @@
   const pageList = ref<Record<string, ICms[]>>({});
   const _typeId = ref('');
   const slist = ref<any>('');
-  const loading = ref(false);
+  const loading = ref(true);
   const gStores = new GStores();
   const patList = ref();
   const init = async () => {
@@ -109,6 +110,7 @@
   };
   const totalList = ref([0, 0, 0]);
   const load = async (pageInfo) => {
+    await wait(600);
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
@@ -137,9 +139,13 @@
     };
     let returnArg;
     loading.value = true;
-    const result = await api.getReportsReportList(params).finally(() => {
+    const result = await api.getReportsReportList(params)
+    .finally(async () => {
       loading.value = false;
     });
+
+
+
     const currentResult = JSON.parse(JSON.stringify(result));
     if (result.result && result.result.length) {
       let array = JSON.parse(JSON.stringify(pageList.value[typeId]));

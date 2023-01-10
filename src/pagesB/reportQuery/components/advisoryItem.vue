@@ -50,7 +50,7 @@ import { onMounted } from "vue";
 const props = defineProps({
   data: {
     type: Object,
-    default: "",
+    default: () => ({}),
   },
   type: {
     type: String,
