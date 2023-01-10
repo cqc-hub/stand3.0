@@ -119,10 +119,10 @@
   );
   const emits = defineEmits(['sel-item', 'click-item']);
 
-  const selIds = computed(() => props.selUnPayList.map((o) => o.clinicId));
+  const selIds = computed(() => props.selUnPayList.map((o) => o.childOrder));
 
   const getIsActive = (item: IPayListItem) => {
-    return selIds.value.includes(item.clinicId);
+    return selIds.value.includes(item.childOrder);
   };
 
   const isPaySelfItem = (item: IPayListItem) => {

@@ -33,7 +33,6 @@ export type IPayListItem = {
   deptName: string;
   docCode: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付
-  clinicId: string; // 唯一
   subIds: string; // 可合并 id
   clinicType?: string;
   hosOrderId?: string;
@@ -331,9 +330,9 @@ export const usePayPage = () => {
   };
 
   const selPayListItem = (item: IPayListItem) => {
-    const { clinicId } = item;
+    const { childOrder } = item;
 
-    const idx = selUnPayList.value.findIndex((o) => o.clinicId === clinicId);
+    const idx = selUnPayList.value.findIndex((o) => o.childOrder === childOrder);
 
     if (idx === -1) {
       const sels = [
