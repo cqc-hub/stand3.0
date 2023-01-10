@@ -173,7 +173,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       break;
     case 'netHospital':
       const obj2 = {
-        url: joinQuery("/pagesC/cloudHospital/cloudHospital",  JSON.parse(item.query)),
+        url: joinQuery("/pagesC/cloudHospital/cloudHospital", item.query && JSON.parse(item.query)),
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
