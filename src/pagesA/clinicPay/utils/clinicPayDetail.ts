@@ -28,7 +28,7 @@ export const tradeType = {
 type TTradeType = keyof typeof tradeType;
 
 export type IPayListItem = {
-  childOrder: string;
+  childOrder: string; // 唯一 !!
   deptId: string;
   deptName: string;
   docCode: string;
