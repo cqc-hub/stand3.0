@@ -369,7 +369,9 @@
         hideLoading: true,
       });
 
-      await toPayPull(res, '门诊缴费');
+      await toPayPull(res, '门诊缴费').finally(() => {
+        uni.hideLoading();
+      });
       payAfter();
     } catch (error) {
       console.error(error);

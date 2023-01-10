@@ -150,34 +150,6 @@
     }
   };
 
-  const ttt = () => {
-    const a = uni.getStorageSync('global');
-    console.log({ a });
-
-    // 选择就诊人
-    uni.navigateTo({
-      url: '/pagesB/reportQuery/reportQuery'
-    });
-    // 选择就诊人
-    // uni.navigateTo({
-    //   url: '/pagesA/MyRegistration/DoctorDetails',
-    // });
-
-    // uni.navigateTo({
-    //   url: '/pages/piniaTest/piniaTest'
-    //   // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
-    // });
-    // uni.navigateTo({
-    // 	url: '/pagesC/mixCheckResult/hsResult'
-    // 	// url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
-    // });
-    // uni.navigateTo({
-    // 	url: joinQuery('/pagesC/cloudHospital/cloudHospital', {
-    // 		path: 'https://testwechatnethos.eheren.com/static/nhs/',
-    // 		loginInterception: 1
-    // 	})
-    // });
-  };
 </script>
 
 <style lang="scss" scoped>

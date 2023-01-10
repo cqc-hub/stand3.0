@@ -62,13 +62,11 @@ fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj, null, 2), 
 
 // -----------------------------------------------s
 
-// const appVueFileUrl = `${__dirname}/src/App.vue`;
-// const appVueData = fs.readFileSync(appVueFileUrl, { encoding: 'utf8' });
+const appVueFileUrl = `${__dirname}/src/App.vue`;
+const appVueData = fs.readFileSync(appVueFileUrl, { encoding: 'utf8' });
 
-// console.log(appVueData);
-// console.log('-------------');
-// const appVueDataStrArr = appVueData.split(';')
-// console.log(appVueDataStrArr);
+console.log(appVueData);
+console.log('-------------');
 
 
 module.exports = {};

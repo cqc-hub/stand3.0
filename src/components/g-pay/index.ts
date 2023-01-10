@@ -174,6 +174,8 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
           payData.provider = result.provider[0];
           resolve(void 0);
         },
+
+        fail: reject
       });
     });
 
