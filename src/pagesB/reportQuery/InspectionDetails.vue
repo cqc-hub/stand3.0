@@ -229,6 +229,8 @@
               </view>
               <view class="content" v-else></view>
             </view>
+          </template>
+
             <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
             <view v-if="pageProps.repType == 2" class="exegesis">
               <view class="exegesis-content">
@@ -241,7 +243,6 @@
                 <view>Etest浓度梯度琼脂扩散实验</view>
               </view>
             </view>
-          </template>
         </view>
       </view>
     </view>
