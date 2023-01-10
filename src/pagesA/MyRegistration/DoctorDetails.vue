@@ -223,8 +223,14 @@
         </scroll-view>
       </block>
 
-      <block>
-        <!-- <view class="mt32">233</view> -->
+      <block v-if="false">
+        <view class="mt32 f36 g-bold mb16 service-onlione p32c">
+          近一年大数据
+        </view>
+
+        <view class="table-content">
+          <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData" />
+        </view>
       </block>
 
       <view class="safe-height" />
@@ -284,6 +290,7 @@
   import DocSchItem from './components/DoctorDetails/docShcItem.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
   import DocService from './components/DoctorDetails/docService.vue';
+  import DocBigDataTable from './components/DoctorDetails/docBigDataTable.vue';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -314,6 +321,56 @@
   const isShowHosNet = computed(() => {
     return !!Object.keys(schToday.value.schByNetHos).length;
   });
+
+  const tableData = ref([
+    {
+      name: '王柏恒',
+      time: '7.84',
+      fee: '155.32',
+      pl: '-',
+    },
+    {
+      name: '王柏恒',
+      time: '7.84',
+      fee: '155.32',
+      pl: '-',
+    },
+    {
+      name: '王柏恒',
+      time: '7.84',
+      fee: '155.32',
+      pl: '-',
+    },
+    {
+      name: '王柏恒',
+      time: '7.84',
+      fee: '155.32',
+      pl: '-',
+    },
+  ] as any[]);
+  const tableColumns = ref([
+    {
+      label: '分类',
+      key: 'name',
+      width: '188rpx',
+    },
+    {
+      label: '日均就诊次数(次)',
+      key: 'time',
+      width: '150rpx',
+    },
+    {
+      label: '均次费用(元)',
+      key: 'fee',
+      width: '150rpx',
+    },
+    {
+      label: '满意度',
+      key: 'pl',
+      width: '150rpx',
+      align: 'center',
+    },
+  ]);
 
   let useDoctorDetail = {} as UseDoctorDetail;
 
@@ -548,6 +605,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .g-page {
+    background-color: #fff;
+  }
   .header-bg {
     width: 100%;
     position: absolute;
@@ -699,5 +759,10 @@
 
   .iconfont {
     font-weight: normal;
+  }
+
+  .table-content {
+    background-color: #fff;
+    margin: 0 32rpx;
   }
 </style>
