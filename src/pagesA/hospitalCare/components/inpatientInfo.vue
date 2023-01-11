@@ -89,16 +89,16 @@ const gStores = new GStores();
 const isLoad = ref(false);
 const loadImg = () => {
   isLoad.value = true;
-}; 
+};
 const hosInfoResObj = ref<getInHospitalInfoResult>(
   {} as getInHospitalInfoResult
-); 
-const toPayRecord = async () => { 
+);
+const toPayRecord = async () => {
   uni.navigateTo({
     url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
   });
 };
-const toPayPage = () => { 
+const toPayPage = () => {
   uni.navigateTo({
     url: `paymentPage?hosId=${hosInfoResObj.value.hosId}&cardNumber=${hosInfoResObj.value.cardNumber}&patientName=${hosInfoResObj.value.patientName}`,
   });
@@ -112,12 +112,14 @@ onPullDownRefresh(() => {
   }
 });
 const init = async () => {
+  Obj.value = undefined;
+  hosInfoResObj.value = {} as any
   const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
     patientId: gStores.userStore.patChoose.patientId,
   });
   hosInfoResObj.value = result;
   Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
-}; 
+};
 onMounted(() => {
   init();
 });

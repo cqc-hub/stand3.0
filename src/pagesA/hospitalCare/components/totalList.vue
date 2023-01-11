@@ -71,6 +71,9 @@ const dailyResList = ref<dailyResult>({
   inHospitalDailyCostsResultList: [],
 });
 const init = async () => {
+  dailyResList.value = {
+  inHospitalDailyCostsResultList: [],
+}
   if (props.isHosTotallist == "1") {
     //列表
     dailyResList.value = {

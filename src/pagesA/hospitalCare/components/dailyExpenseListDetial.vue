@@ -14,7 +14,7 @@
             <view class="item-content">{{ costInfoDetal.patientNameDes }}{{ costInfoDetal.cardNumber?'('+costInfoDetal.cardNumber+')':'' }}</view>
           </view>
           <view class="item" v-if="param.isHosTotallist && (costInfoDetal.startTime || costInfoDetal.endTime)">
-            <view class="item-title">费用时间</view>
+            <view class="item-title">结算时间</view>
             <view class="item-content">
             <text>
               {{ costInfoDetal.startTime }}
@@ -152,6 +152,7 @@ const isShowBtn = (index) => {
   isShow.value[index] = !isShow.value[index];
 };
 const init = async (opt = {}) => {
+  Obj.value = undefined
   pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
   param.value = {
     ...pageProps.value,

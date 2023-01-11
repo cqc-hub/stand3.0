@@ -9,6 +9,10 @@ const scJson: {
   1001052: {
     isDrugDelivery: '1',
   },
+
+  1001054: {
+    isDrugDelivery: '1',
+  },
 };
 
 export const getSConfig = (sysCode: string) => {

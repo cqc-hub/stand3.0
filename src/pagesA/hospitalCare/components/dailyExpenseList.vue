@@ -76,6 +76,9 @@ const changeTimePicker = async (day)=>{
 }
 
 const init = async () => {
+  dailyResList.value = {
+    inHospitalDailyCostsResultList: [],
+  }
   if(props.isHosDaylist == '1'){
     //调用日费用清单列表
     const { result } = await api.getInHospitalDailyCostList<dailyResult>({
@@ -103,7 +106,7 @@ onPullDownRefresh(() => {
       init();
     }, 1000);
   }
-}); 
+});
 onMounted(async () => {
   await init();
 });
