@@ -7,7 +7,7 @@
         :loading="skeletonProps.loading"
       >
         <view class="homePage">
-          <view class="search" @tap="goSearch">
+          <view class="search" @tap="goSearch" v-if="global.sConfig.isHideHomeSearch!='1'">
             <uni-search-input
               :type="'2'"
               inputBorder
@@ -180,7 +180,7 @@
   } from '@/utils';
 
   import global from '@/config/global';
-  import api from '@/service/api';
+  import api from '@/service/api'; 
   import { getLocalStorage, setLocalStorage } from '@/common';
 
   import homeBanner from './componetns/homeBanner.vue';

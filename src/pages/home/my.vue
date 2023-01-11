@@ -149,6 +149,18 @@
       skeletonProps.value.loading = false;
     }
   };
+  const ttt = () => { 
+
+    // 选择就诊人
+    uni.navigateTo({
+      url: '/pagesA/MyRegistration/order?deptName=眼科病院&clinicalType=1&hosId=13002&firstHosDeptId=A02&secondHosDeptId=A020201'
+    }); 
+
+    // uni.navigateTo({
+    //   url: '/pages/piniaTest/piniaTest'
+    //   // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
+    // }); 
+  };
 
 </script>
 
