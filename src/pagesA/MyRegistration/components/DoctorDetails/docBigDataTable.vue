@@ -21,7 +21,9 @@
           :align="col.align || 'left'"
           :rowStyle="rowStyle"
         >
-          <text v-if="row[col.key] !== undefined">{{ row[col.key] }}</text>
+          <slot name="td" :row="row" :field="col.key" :rowIndex="idx">
+            <text v-if="row[col.key] !== undefined">{{ row[col.key] }}</text>
+          </slot>
         </uni-td>
       </uni-tr>
     </uni-table>
@@ -43,8 +45,7 @@
       headerRowStyle?: string;
       rowStyle?: string;
     }>(),
-    {
-    }
+    {}
   );
 </script>
 

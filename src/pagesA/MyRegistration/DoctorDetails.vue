@@ -223,13 +223,29 @@
         </scroll-view>
       </block>
 
-      <block v-if="false">
+      <block v-if="1">
         <view class="mt32 f36 g-bold mb16 service-onlione p32c">
-          近一年大数据
+          近一年大数据233
         </view>
 
         <view class="table-content">
-          <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData" />
+          <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData">
+            <template #td="{ row, field, rowIndex }">
+              <view v-if="field === 'name'" class="flex-normal">
+                <view
+                  :class="{
+                    'bg-yellow': !rowIndex,
+                  }"
+                  class="category-icon f24 g-flex-rc-cc"
+                >
+                  {{ row._label }}
+                </view>
+                <view>{{ row[field] }}</view>
+              </view>
+
+              <text v-else>{{ row[field] }}</text>
+            </template>
+          </Doc-Big-Data-Table>
         </view>
       </block>
 
@@ -328,24 +344,28 @@
       time: '7.84',
       fee: '155.32',
       pl: '-',
+      _label: '医',
     },
     {
       name: '王柏恒',
       time: '7.84',
       fee: '155.32',
       pl: '-',
+      _label: '科',
     },
     {
       name: '王柏恒',
-      time: '7.84',
-      fee: '155.32',
+      time: '-',
+      fee: '-',
       pl: '-',
+      _label: '院',
     },
     {
-      name: '王柏恒',
-      time: '7.84',
-      fee: '155.32',
+      name: '金湖县',
+      time: '-',
+      fee: '-',
       pl: '-',
+      _label: '区',
     },
   ] as any[]);
   const tableColumns = ref([
@@ -764,5 +784,20 @@
   .table-content {
     background-color: #fff;
     margin: 0 32rpx;
+
+    .category-icon {
+      border-radius: 999px;
+      background-color: #22c4ad;
+      width: 40rpx;
+      height: 40rpx;
+      color: #fff;
+      margin-right: 8rpx;
+      position: relative;
+      top: -2rpx;
+
+      &.bg-yellow {
+        background-color: var(--hr-warning-color-6);
+      }
+    }
   }
 </style>

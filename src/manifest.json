@@ -93,6 +93,9 @@
   "vueVersion": "3",
   "name": "咸阳市第一人民医院",
   "h5": {
+    "router": {
+      "base": "./"
+    },
     "sdkConfigs": {
       "maps": {
         "qqmap": {

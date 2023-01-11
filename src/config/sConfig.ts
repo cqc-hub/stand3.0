@@ -11,7 +11,7 @@ const scJson: {
   },
 
   1001054: {
-    isDrugDelivery: '1',
+    // isDrugDelivery: '1',
   },
 };
 
