@@ -2,7 +2,7 @@
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useGlobalStore, useUserStore } from "@/stores";
 import { beforeEach } from "@/router";
-import { IPat } from "@/stores/type";
+// import { IPat } from "@/stores/type";
 import global from "@/config/global";
 import { joinQuery } from "./common";
 import "polyfill-object.fromentries";
@@ -74,8 +74,8 @@ onShow(async (opt) => {
       if (query._pd) {
         const userStore = useUserStore();
         if (userStore.patList.length && userStore.patChoose.patientId != query._pd){
-          const pat = <IPat>userStore.patList.find((o) => o.patientId === query._pd);
-          userStore.updatePatChoose(pat);
+          const pat = userStore.patList.find((o) => o.patientId === query._pd);
+          userStore.updatePatChoose(pat!);
         }
       }
 
@@ -83,8 +83,8 @@ onShow(async (opt) => {
       if (query._hosPd) {
         const userStore = useUserStore();
         if (userStore.patList.length && userStore.patChoose.cardNumber != query._hosPd) {
-          const pat = <IPat>userStore.patList.find((o) => o.cardNumber === query._hosPd);
-          userStore.updatePatChoose(pat);
+          const pat = userStore.patList.find((o) => o.cardNumber === query._hosPd);
+          userStore.updatePatChoose(pat!);
         }
       }
     }

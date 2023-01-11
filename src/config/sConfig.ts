@@ -15,13 +15,12 @@ const scJson: {
   },
 
   1001054: {
-    isDrugDelivery: '1',
+    // isDrugDelivery: '1',
     isOpenButtom:{
       appId:'wxdaadb2180235cdcc',
       path:'/pages/index/index'
     },
     isHideHomeSearch:'1'
-
   },
 };
 
