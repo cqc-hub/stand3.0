@@ -41,8 +41,36 @@
               <text class="g-bold f32">
                 {{ `${outinfo.admissionTime} 至 ${outinfo.outTime}` }}
               </text>
+
               <view class="f28 color-888">
                 {{ outinfo.diagnosis || '无诊断' }}
+              </view>
+
+              <view
+                v-if="outinfo.docName || outinfo.deptName || outinfo.hosName"
+                class="f28 color-888 text-ellipsis ellipsis-1"
+              >
+                <text
+                  v-if="outinfo.docName"
+                  :class="{
+                    'g-split-line': outinfo.hosName || outinfo.deptName,
+                  }"
+                  class="mr12 pr12"
+                >
+                  {{ outinfo.docName }}
+                </text>
+
+                <text
+                  v-if="outinfo.deptName"
+                  :class="{
+                    'g-split-line': outinfo.hosName,
+                  }"
+                  class="mr12 pr12"
+                >
+                  {{ outinfo.deptName }}
+                </text>
+
+                <text>{{ outinfo.hosName }}</text>
               </view>
             </view>
           </view>
@@ -98,6 +126,9 @@
 <style lang="scss" scoped>
   .text-ellipsis {
     -webkit-line-clamp: 2;
+  }
+  .ellipsis-1 {
+    -webkit-line-clamp: 1;
   }
 
   .item {

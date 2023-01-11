@@ -19,18 +19,23 @@
       </view>
 
       <view class="item-container">
-        <view class="title g-border-bottom">
-          <text>{{ item.admissionTime }}</text>
-          <text class="time-split">至</text>
-          <text>{{ item.outTime }}</text>
+        <view
+          v-if="item.admissionTime || item.outTime"
+          class="title g-border-bottom"
+        >
+          <text v-if="item.admissionTime">{{ item.admissionTime }}</text>
+          <text v-if="item.admissionTime && item.outTime" class="time-split">
+            至
+          </text>
+          <text v-if="item.outTime">{{ item.outTime }}</text>
         </view>
 
-        <view class="row flex-normal">
+        <view v-if="item.visitNo" class="row flex-normal">
           <view class="row-title">住院号</view>
           <view class="row-content">{{ item.visitNo }}</view>
         </view>
 
-        <view class="row flex-normal">
+        <view v-if="item.diagnosis" class="row flex-normal">
           <view class="row-title">诊断</view>
           <view class="row-content">{{ item.diagnosis }}</view>
         </view>
@@ -38,9 +43,11 @@
         <view class="row flex-normal">
           <view class="row-title">医生</view>
           <view class="row-content text-ellipsis">
-            <text class="g-split-line mr12 pr12">{{ item.docName }}</text>
-            <text class="g-split-line mr12 pr12">{{ item.hosName }}</text>
-            <text>{{ item.deptName }}</text>
+            <text v-if="item.docName" class="g-split-line mr12 pr12">
+              {{ item.docName }}
+            </text>
+            <text class="g-split-line mr12 pr12">{{ item.deptName }}</text>
+            <text>{{ item.hosName }}</text>
           </view>
         </view>
       </view>

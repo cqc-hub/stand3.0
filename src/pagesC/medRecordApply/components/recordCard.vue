@@ -28,7 +28,10 @@
         </view>
       </view>
 
-      <view v-if="item.hosName" class="container-card-row flex-normal mt16">
+      <view
+        v-if="item.hosName && item.isOneself === '0'"
+        class="container-card-row flex-normal mt16"
+      >
         <view class="label">院区</view>
 
         <view class="content">{{ item.hosName }}</view>
@@ -48,15 +51,42 @@
         </view>
       </view>
 
-      <view v-if="item.attendingDoctor" class="container-card-row flex-normal">
+      <view
+        v-if="item.docName || item.deptName || item.hosName"
+        class="container-card-row flex-normal"
+      >
         <view class="label">医生</view>
 
-        <view class="content">
-          {{ item.hosName + item.attendingDoctor }}
+        <view class="content text-ellipsis">
+          <text
+            v-if="item.docName"
+            :class="{
+              'g-split-line': item.hosName || item.deptName,
+            }"
+            class="mr12 pr12"
+          >
+            {{ item.docName }}
+          </text>
+
+          <text
+            v-if="item.deptName"
+            :class="{
+              'g-split-line': item.hosName,
+            }"
+            class="mr12 pr12"
+          >
+            {{ item.deptName }}
+          </text>
+
+          <text>{{ item.hosName }}</text>
+          <!-- {{ item.attendingDoctor + item.hosName }} -->
         </view>
       </view>
 
-      <view v-if="item.deptName" class="container-card-row flex-normal">
+      <view
+        v-if="item.deptName && item.isOneself === '0'"
+        class="container-card-row flex-normal"
+      >
         <view class="label">病区科室</view>
 
         <view class="content">
