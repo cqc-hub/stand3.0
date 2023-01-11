@@ -1,190 +1,157 @@
 <template>
   <view class="g-page">
     <scroll-view class="g-container" scroll-y>
-      <image
-        :src="$global.BASE_IMG + 'v3_doctor_card_top.png'"
-        mode="widthFix"
-        class="header-bg my-disabled"
-      />
-      <view class="content">
-        <view class="header-box">
-          <view class="content-box header-content-box g-border">
-            <view class="header-transform">
-              <view class="header mb16 flex-between">
-                <image
-                  :src="headerBg"
-                  @click="previewImg"
-                  mode="aspectFill"
-                  class="doc-avatar g-border"
-                />
+      <view class="href-content">
+        <image
+          :src="$global.BASE_IMG + 'v3_doctor_card_top.png'"
+          mode="widthFix"
+          class="header-bg my-disabled"
+        />
+        <view class="content">
+          <view class="header-box">
+            <view class="content-box header-content-box g-border">
+              <view class="header-transform">
+                <view class="header mb16 flex-between">
+                  <image
+                    :src="headerBg"
+                    @click="previewImg"
+                    mode="aspectFill"
+                    class="doc-avatar g-border"
+                  />
 
-                <view class="flex-normal header-btn">
-                  <g-login @handler-next="collectDoc">
+                  <view class="flex-normal header-btn">
+                    <g-login @handler-next="collectDoc">
+                      <button
+                        @click="collectDoc"
+                        class="btn btn-warning btn-round btn-size-small"
+                      >
+                        <text class="iconfont f36 mr12">
+                          {{
+                            docDetail.collectState == '2'
+                              ? '&#xe6ff;'
+                              : '&#xe700;'
+                          }}
+                        </text>
+                        <text class="text-no-wrap">
+                          {{
+                            docDetail.collectState == '2' ? '已关注' : '关注'
+                          }}
+                        </text>
+                      </button>
+                    </g-login>
+
                     <button
-                      @click="collectDoc"
-                      class="btn btn-warning btn-round btn-size-small"
+                      @click="refDocShare.show"
+                      class="btn btn-warning btn-round btn-size-small share-btn color-blue"
                     >
-                      <text class="iconfont f36 mr12">
-                        {{
-                          docDetail.collectState == '2'
-                            ? '&#xe6ff;'
-                            : '&#xe700;'
-                        }}
-                      </text>
-                      <text class="text-no-wrap">
-                        {{ docDetail.collectState == '2' ? '已关注' : '关注' }}
-                      </text>
+                      <text class="iconfont f36 mr12">&#xe6e0;</text>
+                      <text>分享</text>
                     </button>
-                  </g-login>
-
-                  <button
-                    @click="refDocShare.show"
-                    class="btn btn-warning btn-round btn-size-small share-btn color-blue"
-                  >
-                    <text class="iconfont f36 mr12">&#xe6e0;</text>
-                    <text>分享</text>
-                  </button>
-                </view>
-              </view>
-
-              <view class="p32c header-content">
-                <view class="flex-normal">
-                  <view class="doc-name mr24 f48 g-bold text-no-wrap">
-                    {{ docDetail.docName }}
-                  </view>
-
-                  <view
-                    :class="{
-                      'g-split-line': docDetail.docJobName,
-                    }"
-                    class="color-444 f28 mr12 pr12 text-no-wrap"
-                  >
-                    {{ docDetail.docJobName || '' }}
-                  </view>
-                  <view class="color-444 f28 text-no-wrap">
-                    {{ props.docTitleName || docDetail.docTitleName || '' }}
                   </view>
                 </view>
 
-                <view class="flex-normal">
-                  <view
-                    :class="{
-                      'g-split-line': docDetail.deptName,
-                    }"
-                    class="color-444 f28 g-split-line mr12 pr12"
-                  >
-                    {{ $global.systemInfo.name || '' }}
+                <view class="p32c header-content">
+                  <view class="flex-normal">
+                    <view class="doc-name mr24 f48 g-bold text-no-wrap">
+                      {{ docDetail.docName }}
+                    </view>
+
+                    <view
+                      :class="{
+                        'g-split-line': docDetail.docJobName,
+                      }"
+                      class="color-444 f28 mr12 pr12 text-no-wrap"
+                    >
+                      {{ docDetail.docJobName || '' }}
+                    </view>
+                    <view class="color-444 f28 text-no-wrap">
+                      {{ props.docTitleName || docDetail.docTitleName || '' }}
+                    </view>
                   </view>
-                  <view class="color-444 f28">
-                    {{ docDetail.deptName || '' }}
+
+                  <view class="flex-normal">
+                    <view
+                      :class="{
+                        'g-split-line': docDetail.deptName,
+                      }"
+                      class="color-444 f28 g-split-line mr12 pr12"
+                    >
+                      {{ $global.systemInfo.name || '' }}
+                    </view>
+                    <view class="color-444 f28">
+                      {{ docDetail.deptName || '' }}
+                    </view>
                   </view>
                 </view>
-              </view>
 
-              <view class="flex-normal p32c doc-goodat">
-                <image
-                  v-if="docDetail.goodAt"
-                  :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
-                  class="doc-major-goodat mr12"
-                  mode="widthFix"
-                />
+                <view class="flex-normal p32c doc-goodat">
+                  <image
+                    v-if="docDetail.goodAt"
+                    :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
+                    class="doc-major-goodat mr12"
+                    mode="widthFix"
+                  />
 
-                <view class="color-666 f28 doc-goodat-content text-ellipsis">
-                  <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text>
+                  <view class="color-666 f28 doc-goodat-content text-ellipsis">
+                    <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text>
 
-                  <view
-                    v-if="
-                      docDetail.goodAt ||
-                      docDetail.intro ||
-                      docDetail.academicAchievements
-                    "
-                    @click="regDialogConfirm.show"
-                    class="doc-show-intro f26 color-blue"
-                  >
-                    <text>查看简介</text>
-                    <text class="iconfont">&#xe66b;</text>
+                    <view
+                      v-if="
+                        docDetail.goodAt ||
+                        docDetail.intro ||
+                        docDetail.academicAchievements
+                      "
+                      @click="regDialogConfirm.show"
+                      class="doc-show-intro f26 color-blue"
+                    >
+                      <text>查看简介</text>
+                      <text class="iconfont">&#xe66b;</text>
+                    </view>
                   </view>
                 </view>
               </view>
             </view>
           </view>
-        </view>
 
-        <view class="f36 g-bold mb16">门诊排班</view>
-        <view
-          :class="{
-            pb40: docSchList.length && isComplete,
-          }"
-          class="content-box"
-        >
+          <view class="f36 g-bold mb16">门诊排班</view>
           <view
-            v-if="docSchList.length && isComplete"
-            class="content-sel-date mb16 g-border-bottom"
+            :class="{
+              pb40: docSchList.length && isComplete,
+            }"
+            class="content-box"
           >
-            <Order-Sel-Date
-              :value="checkedDay"
-              :choose-days="chooseDays"
-              :enable-days="enabledDays"
-              @change="dateChange"
-            />
-          </view>
+            <view
+              v-if="docSchList.length && isComplete"
+              class="content-sel-date mb16 g-border-bottom"
+            >
+              <Order-Sel-Date
+                :value="checkedDay"
+                :choose-days="chooseDays"
+                :enable-days="enabledDays"
+                @change="dateChange"
+              />
+            </view>
 
-          <block v-if="docSchList.length && isComplete">
-            <block v-if="Object.keys(schToday.schByHos).length">
-              <view v-if="isShowHosNet">
-                <text class="label-mark">
-                  <text class="color-fff f28 label-mark-content">到院就诊</text>
-                </text>
-              </view>
-
-              <view
-                v-for="_hosId in Object.keys(schToday.schByHos)"
-                :key="_hosId"
-                class="p32c mt12"
-              >
-                <view
-                  v-for="(item, idx) in schToday.schByHos[_hosId]"
-                  :key="item.schId"
-                >
-                  <view v-if="!idx" class="f32 g-bold mb16">
-                    {{ item.hosName }}
-                  </view>
-
-                  <view
-                    :class="{
-                      mb32: idx === schToday.schByHos[_hosId].length - 1,
-                    }"
-                    class="sch-item mb8 animate__animated animate__fadeIn"
-                  >
-                    <Doc-Sch-Item
-                      :item="item"
-                      @reg-click="(scheme) => regClick({ scheme })"
-                    />
-                  </view>
-                </view>
-              </view>
-            </block>
-
-            <block v-if="Object.keys(schToday.schByNetHos).length">
-              <view class="animate__animated animate__fadeIn">
-                <view>
-                  <text class="label-mark mb8">
+            <block v-if="docSchList.length && isComplete">
+              <block v-if="Object.keys(schToday.schByHos).length">
+                <view v-if="isShowHosNet">
+                  <text class="label-mark">
                     <text class="color-fff f28 label-mark-content">
-                      网络就诊
+                      到院就诊
                     </text>
                   </text>
                 </view>
 
                 <view
-                  v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                  v-for="_hosId in Object.keys(schToday.schByHos)"
                   :key="_hosId"
                   class="p32c mt12"
                 >
                   <view
-                    v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                    v-for="(item, idx) in schToday.schByHos[_hosId]"
                     :key="item.schId"
                   >
-                    <view v-if="!idx" class="f36 g-bold mb16">
+                    <view v-if="!idx" class="f32 g-bold mb16">
                       {{ item.hosName }}
                     </view>
 
@@ -192,64 +159,109 @@
                       :class="{
                         mb32: idx === schToday.schByHos[_hosId].length - 1,
                       }"
-                      class="sch-item mb8"
+                      class="sch-item mb8 animate__animated animate__fadeIn"
                     >
-                      <Doc-Sch-Item :item="item" @reg-click="regClick" />
+                      <Doc-Sch-Item
+                        :item="item"
+                        @reg-click="(scheme) => regClick({ scheme })"
+                      />
                     </view>
                   </view>
                 </view>
-              </view>
-            </block>
-          </block>
+              </block>
 
-          <view class="empty-list" v-else-if="isComplete">
-            <g-empty
-              :current="2"
-              imgHeight="180rpx"
-              text="未查询到该医生排班信息"
-              noTransformY
-            />
+              <block v-if="Object.keys(schToday.schByNetHos).length">
+                <view class="animate__animated animate__fadeIn">
+                  <view>
+                    <text class="label-mark mb8">
+                      <text class="color-fff f28 label-mark-content">
+                        网络就诊
+                      </text>
+                    </text>
+                  </view>
+
+                  <view
+                    v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                    :key="_hosId"
+                    class="p32c mt12"
+                  >
+                    <view
+                      v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                      :key="item.schId"
+                    >
+                      <view v-if="!idx" class="f36 g-bold mb16">
+                        {{ item.hosName }}
+                      </view>
+
+                      <view
+                        :class="{
+                          mb32: idx === schToday.schByHos[_hosId].length - 1,
+                        }"
+                        class="sch-item mb8"
+                      >
+                        <Doc-Sch-Item :item="item" @reg-click="regClick" />
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </block>
+            </block>
+
+            <view class="empty-list" v-else-if="isComplete">
+              <g-empty
+                :current="2"
+                imgHeight="180rpx"
+                text="未查询到该医生排班信息"
+                noTransformY
+              />
+            </view>
           </view>
         </view>
+
+        <block v-if="isDocServiceShow">
+          <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view>
+          <scroll-view class="service-content" scroll-x>
+            <Doc-Service
+              :docService="docServiceInfo"
+              :hosDocId="docDetail.hosDocId"
+            />
+          </scroll-view>
+        </block>
+
+        <block v-if="pageConfig.isOpenBigDataNearlyYear === '1'">
+          <view class="mt32 f36 g-bold mb16 service-onlione p32c">
+            近一年大数据
+          </view>
+
+          <view class="table-content">
+            <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData">
+              <template #td="{ row, field, rowIndex }">
+                <view v-if="field === 'name'" class="flex-normal">
+                  <view
+                    :class="{
+                      'bg-yellow': !rowIndex,
+                    }"
+                    class="category-icon f24 g-flex-rc-cc"
+                  >
+                    {{ row._label }}
+                  </view>
+                  <view class="flex1 text-ellipsis">{{ row[field] }}</view>
+                </view>
+
+                <text v-else>{{ row[field] }}</text>
+              </template>
+            </Doc-Big-Data-Table>
+          </view>
+        </block>
+        <view class="safe-height" />
       </view>
 
-      <block v-if="isDocServiceShow">
-        <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view>
-        <scroll-view class="service-content" scroll-x>
-          <Doc-Service
-            :docService="docServiceInfo"
-            :hosDocId="docDetail.hosDocId"
-          />
-        </scroll-view>
-      </block>
-
-      <block v-if="1">
-        <view class="mt32 f36 g-bold mb16 service-onlione p32c">
-          近一年大数据233
+      <view v-if="pageConfig.isOpenComment === '1'" class="doc-comment">
+        <view class="p32c">
+          <g-comment />
         </view>
-
-        <view class="table-content">
-          <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData">
-            <template #td="{ row, field, rowIndex }">
-              <view v-if="field === 'name'" class="flex-normal">
-                <view
-                  :class="{
-                    'bg-yellow': !rowIndex,
-                  }"
-                  class="category-icon f24 g-flex-rc-cc"
-                >
-                  {{ row._label }}
-                </view>
-                <view>{{ row[field] }}</view>
-              </view>
-
-              <text v-else>{{ row[field] }}</text>
-            </template>
-          </Doc-Big-Data-Table>
-        </view>
-      </block>
-
-      <view class="safe-height" />
+        <view class="safe-height" />
+      </view>
     </scroll-view>
 
     <Order-Reg-Confirm
@@ -338,46 +350,49 @@
     return !!Object.keys(schToday.value.schByNetHos).length;
   });
 
-  const tableData = ref([
-    {
-      name: '王柏恒',
-      time: '7.84',
-      fee: '155.32',
-      pl: '-',
-      _label: '医',
-    },
-    {
-      name: '王柏恒',
-      time: '7.84',
-      fee: '155.32',
-      pl: '-',
-      _label: '科',
-    },
-    {
-      name: '王柏恒',
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '院',
-    },
-    {
-      name: '金湖县',
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '区',
-    },
-  ] as any[]);
+  const tableData = computed(() => {
+    return [
+      {
+        name: docDetail.value.docName,
+        time: '7.84',
+        fee: '155.32',
+        pl: '-',
+        _label: '医',
+      },
+      {
+        name: docDetail.value.deptName,
+        time: '4.33',
+        fee: '128.98',
+        pl: '98.9%',
+        _label: '科',
+      },
+      {
+        name: globalGl.systemInfo.name,
+        time: '6.55',
+        fee: '146.78',
+        pl: '98.9%',
+        _label: '院',
+      },
+      {
+        name: '金湖县',
+        time: '6.37',
+        fee: '287.21',
+        pl: '97.32%',
+        _label: '区',
+      },
+    ];
+  });
+
   const tableColumns = ref([
     {
       label: '分类',
       key: 'name',
-      width: '188rpx',
+      width: '270rpx',
     },
     {
       label: '日均就诊次数(次)',
       key: 'time',
-      width: '150rpx',
+      width: '160rpx',
     },
     {
       label: '均次费用(元)',
@@ -387,7 +402,7 @@
     {
       label: '满意度',
       key: 'pl',
-      width: '150rpx',
+      width: '100rpx',
       align: 'center',
     },
   ]);
@@ -626,8 +641,13 @@
 
 <style lang="scss" scoped>
   .g-page {
-    background-color: #fff;
+    background-color: var(--hr-neutral-color-1);
+
+    .href-content {
+      background-color: #fff;
+    }
   }
+
   .header-bg {
     width: 100%;
     position: absolute;
@@ -799,5 +819,11 @@
         background-color: var(--hr-warning-color-6);
       }
     }
+  }
+
+  .doc-comment {
+    // border-top: var(--hr-neutral-color-1) solid 16rpx;
+    margin-top: 16rpx;
+    background-color: #fff;
   }
 </style>

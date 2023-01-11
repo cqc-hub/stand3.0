@@ -73,6 +73,10 @@ export interface ISystemConfig {
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
     // 开启在线服务?
     isOpenDocCardOnlineService?: '1';
+    // 近一年大数据
+    isOpenBigDataNearlyYear?: '1';
+    // 评论
+    isOpenComment?: '1';
 
     /** 挂号记录 */
     // 显示院内导航按钮? 挂号状态 string
