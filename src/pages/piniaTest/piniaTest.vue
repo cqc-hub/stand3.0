@@ -114,9 +114,25 @@
     isLocal: '1',
   };
 
+  // 家医签约
+  const qinfenSignDocTeam: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/qinfen/signDocTeam',
+    text: '病历查询',
+    extraData: {
+      sysCode: globalGl.SYS_CODE,
+    },
+    addition: {
+      herenId: 'herenId',
+      token: 'token',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(yonyao);
+      useTBanner(qinfenSignDocTeam);
     }, 1000);
   });
 </script>

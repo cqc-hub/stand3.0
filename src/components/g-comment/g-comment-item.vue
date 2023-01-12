@@ -68,7 +68,7 @@
         border-radius: 8rpx;
         background-color: var(--hr-neutral-color-1);
         margin-right: 8rpx;
-        padding: 0 16rpx;
+        padding: 4rpx 16rpx;
       }
     }
   }
