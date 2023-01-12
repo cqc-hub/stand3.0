@@ -1,4 +1,5 @@
 <template>
+  {{}}
   <view class="page" v-if="Obj == false">
     <view class="container">
       <view class="top">
@@ -104,7 +105,8 @@
     </view>
   </view>
   <view class="empty-box" v-else>
-    <g-empty :current="2" text="未查询到总计清单信息" />
+    <g-empty  v-if="props.isHosDaylist"  :current="2"  text="当天未产生住院费用,请选择其他日期" />
+    <g-empty  v-if="props.isHosTotallist" :current="2" text="未查询到总计清单信息" />
   </view>
   <g-message />
 </template>
