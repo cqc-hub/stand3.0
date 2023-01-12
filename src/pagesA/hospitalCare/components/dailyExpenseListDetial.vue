@@ -1,4 +1,5 @@
 <template>
+  {{}}
   <view class="page" v-if="Obj == false">
     <view class="container">
       <view class="top">
@@ -13,17 +14,17 @@
             <view class="item-title">患者姓名</view>
             <view class="item-content">{{ costInfoDetal.patientNameDes }}{{ costInfoDetal.cardNumber?'('+costInfoDetal.cardNumber+')':'' }}</view>
           </view>
-          <view class="item" v-if="param.isHosTotallist && (costInfoDetal.startTime || costInfoDetal.endTime)">
+          <view class="item" v-if="param.isHosTotallist && (costInfoDetal.inDay || costInfoDetal.endDay)">
             <view class="item-title">结算时间</view>
             <view class="item-content">
             <text>
-              {{ costInfoDetal.startTime }}
+              {{ costInfoDetal.inDay }}
             </text>
-            <text v-if="costInfoDetal.startTime && costInfoDetal.endTime">
+            <text v-if="costInfoDetal.inDay && costInfoDetal.inDay">
               ~
             </text>
             <text>
-              {{ costInfoDetal.endTime }}
+              {{ costInfoDetal.endDay }}
             </text>
 
             </view>
@@ -104,7 +105,8 @@
     </view>
   </view>
   <view class="empty-box" v-else>
-    <g-empty :current="2" text="未查询到总计清单信息" />
+    <g-empty  v-if="props.isHosDaylist"  :current="2"  text="当天未产生住院费用,请选择其他日期" />
+    <g-empty  v-if="props.isHosTotallist" :current="2" text="未查询到总计清单信息" />
   </view>
   <g-message />
 </template>
