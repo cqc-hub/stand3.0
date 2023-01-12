@@ -119,13 +119,14 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/qinfen/signDocTeam',
-    text: '病历查询',
+    text: '家医签约',
     extraData: {
       sysCode: globalGl.SYS_CODE,
     },
     addition: {
       herenId: 'herenId',
       token: 'token',
+      patientId: 'a',
     },
     isLocal: '1',
   };

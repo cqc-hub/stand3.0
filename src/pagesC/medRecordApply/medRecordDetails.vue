@@ -505,12 +505,12 @@
     );
   });
 
-  const aimList = computed(() => {
-    return _aimList.value.map((o) => ({
+  const aimList = ref(
+    _aimList.value.map((o) => ({
       label: o,
       value: o,
-    }));
-  });
+    }))
+  );
 
   const aimValue = ref<string[]>([]);
 
@@ -666,10 +666,18 @@
       throw new Error('未获取到该院区的配置' + `(${_hosId.value})`);
     }
 
-    const { selPurposeLen: _selPurposeLen } = pageConfig.value;
+    const { selPurposeLen: _selPurposeLen, aimList: _aimList } =
+      pageConfig.value;
 
     if (_selPurposeLen) {
       selPurposeLen.value = _selPurposeLen * 1;
+    }
+
+    if (_aimList) {
+      aimList.value = _aimList.map((o) => ({
+        label: o,
+        value: o,
+      }));
     }
 
     isConfigGet.value = true;

@@ -43,6 +43,11 @@
         pageArg._url = returnUrl;
       }
 
+      console.log({
+        pageArg,
+        options
+      });
+
       gotoNext(pageArg);
     }
   });
