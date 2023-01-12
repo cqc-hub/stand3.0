@@ -42,7 +42,6 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
           selPurposeLen,
           isOcrSfz,
           requireSfz,
-          aimList
         } = value as any;
 
         const isItemCount = tollMode === '1' ? '1' : '0';
@@ -61,7 +60,6 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
           selPurposeLen,
           isOcrSfz,
           requireSfz,
-          aimList
         });
       });
       // _cacheMap.set(Med_Copy_Config, configList);

@@ -666,7 +666,7 @@
       throw new Error('未获取到该院区的配置' + `(${_hosId.value})`);
     }
 
-    const { selPurposeLen: _selPurposeLen, aimList: _aimList } =
+    const { selPurposeLen: _selPurposeLen, purpose: _aimList } =
       pageConfig.value;
 
     if (_selPurposeLen) {
