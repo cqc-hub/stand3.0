@@ -148,7 +148,7 @@
             </view>
             <view
               class="seen"
-              v-if="item.impression || examineReportList.diagnosis"
+              v-if="item.diagnosis || examineReportList.diagnosis"
             >
               <view class="title">印象</view>
               <view class="content">
@@ -418,11 +418,13 @@
   const pat = gStore.userStore.patChoose;
 
   onLoad((p) => {
-    console.log('获得参数-----', p);
 
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);
+
+    console.log('获得参数-----', pageProps.value);
+
   });
 
   const getInspectionReportList = async () => {
