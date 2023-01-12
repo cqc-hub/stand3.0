@@ -295,8 +295,9 @@
     <xy-dialog
       :title="fgTitle32"
       :show="isShowFg32"
-      :isShowCancel="false"
       @confirmButton="getPay"
+      @cancelButton="isShowFg32 = false"
+      isReverseBtn
     >
       <view class="reg-tip">
         <g-flag v-model:title="fgTitle32" isHideTitle isShowFgTip typeFg="32" />

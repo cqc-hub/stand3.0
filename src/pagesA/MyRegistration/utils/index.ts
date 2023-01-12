@@ -9,6 +9,11 @@ import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
+// api.getDeptSchForDoc = () => Promise.resolve()
+
+
+
+
 export interface IChooseDays {
   day: string;
   weekday: string;
@@ -201,6 +206,8 @@ export const useOrder = (props: IOrderProps) => {
     const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {
+      console.log('allList', allList);
+
       allList.map((docInfo) => {
         const { docPhoto } = docInfo;
         docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(

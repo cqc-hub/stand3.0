@@ -50,7 +50,6 @@
   const eletronicInvoice: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    // path: 'pagesA/eletronicInvoice/invoiceDetail',
     path: 'pagesA/eletronicInvoice/eletronicInvoice',
     text: '电子发票',
     extraData: {
