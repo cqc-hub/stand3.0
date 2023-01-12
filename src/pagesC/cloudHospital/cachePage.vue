@@ -22,11 +22,12 @@
   });
   //封装网络医院参数
   const getparams = (options) => {
+    const opt = options._outPara ? {} : options
     let para = {
       token: globalStore.getToken,
       openid: globalStore.openId,
       source: globalStore.browser.source,
-      ...options,
+      ...opt,
       // payment: options.payment,
       // registerId: options.registerId,
       // hosDocId: options.docId,
@@ -36,11 +37,19 @@
         options.payBackParams &&
         JSON.parse(decodeURIComponent(options.payBackParams)),
     };
-    getSrc(para);
+    getSrc(para, options);
   };
 
   //两种网络医院
-  const getSrc = (para) => {
+  const getSrc = (para, _payload: any = {}) => {
+    console.log(para, '---------');
+    const payload = {};
+    for(const key in _payload) {
+      if (!(key in para)) {
+        payload[key] = _payload[key]
+      }
+    }
+
     // 网络医院有老版本和3.0版本
     const sysCodeList = ['1001033'];
     const sysCode = global.SYS_CODE;
@@ -50,19 +59,22 @@
 
     if (para._url) {
       netPath = decodeURIComponent(para._url);
+      delete para._url;
+    } else if(_payload._url) {
+      netPath = decodeURIComponent(_payload._url);
+      delete _payload._url;
     }
     //新的
     netUrl = global.netUrl;
     params = encodeURIComponent(encryptDes(JSON.stringify(para)));
 
     let fPath = netUrl + `${sysCode}/#/` + netPath;
-    if (fPath.includes('?')) {
-      fPath += '&';
-    } else {
-      fPath += '?';
-    }
+    fPath = joinQuery(fPath, {
+      initSysCode: sysCode,
+      params,
+      ...payload
+    })
 
-    fPath += `?initSysCode=${sysCode}&params=` + params;
     src.value = fPath;
 
     isShow.value = true;
