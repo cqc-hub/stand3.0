@@ -27,6 +27,7 @@
       uni.navigateTo({
         url: joinQuery('/pagesC/cloudHospital/cachePage', {
           ...options,
+          _outPara: '1'
         }),
       });
     }, 1000);
@@ -43,9 +44,11 @@
         pageArg._url = returnUrl;
       }
 
+      delete pageArg.returnUrl;
+
       console.log({
         pageArg,
-        options
+        options,
       });
 
       gotoNext(pageArg);
