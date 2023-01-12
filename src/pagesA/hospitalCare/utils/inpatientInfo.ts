@@ -74,8 +74,8 @@ export interface dailySecList {
   moneyType?: string;
   payTime?: string;
   paymentAmount?: string;
-  endTime?: string;
-  startTime?: string;
+  endDay?: string;
+  inDay?: string;
   totalCost?: string;
 }
 //创建住院订单 出参
@@ -139,9 +139,9 @@ export interface inHospitalCostInfo {
   //总费用 
   patientNameDes?: string;
   //开始时间 
-  endTime?: string;
+  inDay?: string;
   //结束时间  
-   startTime?: string;
+  endDay?: string;
    //脱敏姓名
    cardNumber?: string;
    //卡号

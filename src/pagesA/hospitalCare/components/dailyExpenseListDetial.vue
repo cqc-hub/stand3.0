@@ -14,17 +14,17 @@
             <view class="item-title">患者姓名</view>
             <view class="item-content">{{ costInfoDetal.patientNameDes }}{{ costInfoDetal.cardNumber?'('+costInfoDetal.cardNumber+')':'' }}</view>
           </view>
-          <view class="item" v-if="param.isHosTotallist && (costInfoDetal.startTime || costInfoDetal.endTime)">
+          <view class="item" v-if="param.isHosTotallist && (costInfoDetal.inDay || costInfoDetal.endDay)">
             <view class="item-title">结算时间</view>
             <view class="item-content">
             <text>
-              {{ costInfoDetal.startTime }}
+              {{ costInfoDetal.inDay }}
             </text>
-            <text v-if="costInfoDetal.startTime && costInfoDetal.endTime">
+            <text v-if="costInfoDetal.inDay && costInfoDetal.inDay">
               ~
             </text>
             <text>
-              {{ costInfoDetal.endTime }}
+              {{ costInfoDetal.endDay }}
             </text>
 
             </view>

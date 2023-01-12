@@ -15,8 +15,7 @@
       >
         <view class="right" v-for="(i, j) in item.costSecondaries" :key="j">
           <view v-for="(m, n) in i.costListResultList" :key="n">
-            <!-- <view class="dates">{{m.startTime}}～{{m.endTime}}</view> -->
-            <view class="dates">{{ item.date }}</view>
+            <view class="dates">{{m.inDay}}～{{m.endDay}}</view>
             <view class="details" @click="gotoListExpenses(m)">
               <view class="date">{{ i.hosName }}</view>
               <view class="details-right">
