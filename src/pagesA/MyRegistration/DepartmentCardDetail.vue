@@ -160,21 +160,21 @@
   };
 
   const goOrder = () => {
-    // const { deptName, hosId } = pageProps.value;
+    try {
+      const pageQuery = JSON.parse(
+        decodeURIComponent(detailInfo.value.netHosUrl)
+      );
 
-    // const queryArg = {
-    //   deptName,
-    //   hosId,
-    // };
-    // uni.navigateTo({
-    //   url: joinQueryForUrl('/pagesA/MyRegistration/order', queryArg),
-    // });
-
-    uni.navigateTo({
-      url:
-        '/pagesA/webView/webView?https=' +
-        encodeURIComponent(detailInfo.value.netHosUrl),
-    });
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesC/commonHosNet/commonHosNet', {
+          returnUrl: 'pages/v3/searchDoc/searchDoc',
+          ...pageQuery,
+        }),
+      });
+    } catch (error) {
+      gStores.messageStore.showMessage('网络医院地址参数配置错误', 3000);
+      console.error('网络医院地址参数配置错误', error);
+    }
   };
 
   const goZiXun = () => {
