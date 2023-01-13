@@ -311,7 +311,7 @@
      //跳咨询列表页面
      uni.navigateTo({
         url:
-          '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory',
+          '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
       });
   }
 
