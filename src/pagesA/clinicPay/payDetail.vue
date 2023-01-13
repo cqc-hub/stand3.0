@@ -359,6 +359,7 @@
       hosId,
       visitDate,
       costTypeCode,
+      cardNumber
     } = props.value;
 
     const args = {
@@ -377,6 +378,7 @@
       docName,
       hosId,
       visitDate,
+      cardNumber,
       serialNo: selList.value.map((o) => o.serialNo).join(','),
     };
 
