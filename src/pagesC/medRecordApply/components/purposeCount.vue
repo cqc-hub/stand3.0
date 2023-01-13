@@ -19,7 +19,7 @@
     </view>
 
     <view
-      v-if="list.length > selectLength"
+      v-if="list.length > 3"
       @click="isShowMore = !isShowMore"
       class="show-more g-flex-rc-cc color-blue f28"
     >
