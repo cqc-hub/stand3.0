@@ -87,17 +87,6 @@
         <text class="f36 g-bold color-error">{{ totalCost }}元</text>
       </view>
 
-      <!-- <button
-        :class="{
-          'btn-disabled': !selUnPayList.length,
-          flex1: isWaitPayListHidePrice,
-        }"
-        class="btn g-border btn-warning pay-btn"
-        @click="payAfter"
-      >
-        缴费
-      </button> -->
-
       <button
         :class="{
           'btn-disabled': !selUnPayList.length,
@@ -254,7 +243,6 @@
     if (!pageProps.value.params) {
       await pageHook();
     }
-    getListData();
   };
 
   setTimeout(() => {
@@ -309,15 +297,17 @@
       }
     }
 
+    await init();
+
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
 
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
       }
+    } else {
+      getListData();
     }
-
-    await init();
   });
 </script>
 
