@@ -74,6 +74,10 @@
       "alipayAppid": "2021003164669106",
       "h5Appid": "wx56d1a143ff27e903",
       "name": "联勤保障部队第987医院",
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "37139"
+      },
       "isStartComeTest": false,
       "isSearchInHos": false,
       "alipayPid": "dl5dt/lx8x6q93cionolzw==",
