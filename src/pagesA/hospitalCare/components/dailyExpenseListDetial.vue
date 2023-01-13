@@ -100,7 +100,7 @@
           :src="$global.BASE_IMG + 'img_404_no record@3x.png'"
           alt=""
         />
-        <view>当天未产生住院费用</view>
+        <view>未查询到总计清单信息</view>
       </view>
     </view>
   </view>
