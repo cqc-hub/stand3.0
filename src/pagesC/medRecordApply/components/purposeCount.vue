@@ -19,7 +19,7 @@
     </view>
 
     <view
-      v-if="list.length > 3"
+      v-if="list.length > showLen"
       @click="isShowMore = !isShowMore"
       class="show-more g-flex-rc-cc color-blue f28"
     >
@@ -41,6 +41,7 @@
 
   import { GStores } from '@/utils';
 
+  const showLen = 3;
   const props = defineProps<{
     list: IOptions[];
     selectLength: number;
@@ -53,7 +54,7 @@
     if (isShowMore.value) {
       return props.list;
     } else {
-      return props.list.filter((o, i) => i <= 2);
+      return props.list.filter((o, i) => i <= showLen);
     }
   });
 
