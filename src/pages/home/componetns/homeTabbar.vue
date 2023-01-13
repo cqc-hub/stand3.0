@@ -54,18 +54,18 @@ const changeTab = (item) => {
   const url = item.url;
 
   if (url !== currentPath) {
-    if (item.url == "netHospital") {
-      //目前只有咸阳对接是小程序
-      let obj = global.sConfig.isOpenButtom as any;
-      uni.navigateToMiniProgram({
-        appId: obj.appId,
-        path: obj.path,
-      });
-    } else {
+    // if (item.url == "netHospital") {
+    //   //目前只有咸阳对接是小程序
+    //   let obj = global.sConfig.isOpenButtom as any;
+    //   uni.navigateToMiniProgram({
+    //     appId: obj.appId,
+    //     path: obj.path,
+    //   });
+    // } else {
       uni.reLaunch({
         url: item.url,
       });
-    }
+    // }
   }
 };
 
@@ -87,7 +87,7 @@ onMounted(async () => {
         label: "互联网医院",
         icon: "/static/image/wlyy.png",
         iconActive: "/static/image/wlyy_active.png",
-        url: "netHospital",
+        url: "/pagesC/cloudHospital/cloudHospital",
       },
       {
         label: "我的",

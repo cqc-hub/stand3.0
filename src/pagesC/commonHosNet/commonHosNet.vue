@@ -21,7 +21,6 @@
   import { beforeEach } from '@/router/index';
 
   const globalStore = useGlobalStore();
-
   const gotoNext = (options) => {
     setTimeout(() => {
       uni.navigateTo({
