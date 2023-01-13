@@ -106,7 +106,7 @@
 
                 <image
                   v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
+                  :src="$global.BASE_IMG + 'ba_img_idcard-hkb.png'"
                   class="idcard-bg my-disabled"
                 />
 

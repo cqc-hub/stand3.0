@@ -15,13 +15,8 @@
           <text class="user-name animate__animated animate__fadeIn">
             {{ gStores.userStore.name || gStores.userStore.cellPhoneNum }}
           </text>
-
-          <!-- <text
-						class="user-id text-ellipsis animate__animated animate__fadeIn"
-					>
-						就诊卡号：{{ userSore.patientId }}
-					</text> -->
         </block>
+
         <block v-else>
           <!-- #ifdef MP-ALIPAY -->
           <button
@@ -74,12 +69,15 @@
         @tap="jumpFor(record)"
       >
         <!-- <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'"> -->
-          <view class="record-label">
-            <text>{{ record.title }}</text>
-            <view v-if="recordList && recordList.length === 1" class="iconfont icon-size">
-              &#xe6c8;
-            </view>
+        <view class="record-label">
+          <text>{{ record.title }}</text>
+          <view
+            v-if="recordList && recordList.length === 1"
+            class="iconfont icon-size"
+          >
+            &#xe6c8;
           </view>
+        </view>
         <!-- </g-login> -->
       </view>
     </view>
@@ -87,215 +85,195 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+  import { ref, onMounted } from 'vue';
 
-import {
-  aliLogin,
-  wxLogin,
-  outLogin,
-  ServerStaticData,
-  routerJump,
-  GStores,
-} from "@/utils";
-import { useCommonTo } from "@/common/checkJump";
-import { useRouterStore } from "@/stores";
-import global from "@/config/global";
+  import {
+    aliLogin,
+    wxLogin,
+    outLogin,
+    ServerStaticData,
+    routerJump,
+    GStores,
+  } from '@/utils';
+  import { useCommonTo } from '@/common/checkJump';
+  import { useRouterStore } from '@/stores';
+  import global from '@/config/global';
 
-const gStores = new GStores();
-const routerStore = useRouterStore();
-const recordList = ref<IRoute[]>([]); //就医凭证
-const jzIcon = global.BASE_IMG + "v3-my-jzk.png";
-const ybIcon = global.BASE_IMG + "v3-my-pz.png";
+  const gStores = new GStores();
+  const routerStore = useRouterStore();
+  const recordList = ref<IRoute[]>([]); //就医凭证
+  const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
+  const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
 
-onMounted(() => {
-  getHomeConfig();
-});
-
-//获取配置数据
-const getHomeConfig = async () => {
-  const homeConfig = await ServerStaticData.getHomeConfig();
-  if (homeConfig) {
-    recordList.value = homeConfig[4].functionList;
-  }
-};
-
-const goLogin = async (e: any) => {
-  // #ifdef MP-ALIPAY
-  await aliLogin();
-  // #endif
-
-  // #ifdef MP-WEIXIN
-  await wxLogin(e);
-  // #endif
-
-  routerJump();
-};
-
-const avatarClick = () => {
-  uni.navigateTo({
-    url: "/pages/home/accountInfo",
+  onMounted(() => {
+    getHomeConfig();
   });
-};
 
-const jumpFor = (record: IRoute) => {
-  useCommonTo(record);
-  // uni.navigateTo({
-  //   url: '/pagesA/medicalCardMan/medicalCardMan'
-  // });
-};
+  //获取配置数据
+  const getHomeConfig = async () => {
+    const homeConfig = await ServerStaticData.getHomeConfig();
+    if (homeConfig) {
+      recordList.value = homeConfig[4].functionList;
+    }
+  };
 
-// const recordList = ref([
-// 	{
-// 		title: '就诊卡二维码',
-// 		path: '/xxx',
-// 		query: {},
-// 		iconfont: global.BASE_IMG + 'v3-my-jzk.png'
-// 	},
+  const goLogin = async (e: any) => {
+    // #ifdef MP-ALIPAY
+    await aliLogin();
+    // #endif
 
-// 	{
-// 		// isNet: true,
-// 		title: '医保电子凭证',
-// 		path: 'https://xx',
-// 		query: {},
-// 		iconfont: global.BASE_IMG + 'v3-my-pz.png'
-// 	}
-// ]);
+    // #ifdef MP-WEIXIN
+    await wxLogin(e);
+    // #endif
 
-const backImg = [jzIcon, ybIcon];
-const recordColors = ["#296FFF", "#00b39e"];
+    routerJump();
+  };
+
+  const avatarClick = () => {
+    uni.navigateTo({
+      url: '/pages/home/accountInfo',
+    });
+  };
+
+  const jumpFor = (record: IRoute) => {
+    useCommonTo(record);
+  };
+
+  const backImg = [jzIcon, ybIcon];
+  const recordColors = ['#296FFF', '#00b39e'];
 </script>
 
 <style lang="scss" scoped>
-.container {
-  padding-top: 48upx;
-  display: grid;
-  grid-template-columns: 160upx 1fr 160upx;
-  gap: 10upx;
-  align-items: center;
-  width: 100%;
-  position: relative;
-  z-index: 2;
+  .container {
+    padding-top: 48upx;
+    display: grid;
+    grid-template-columns: 160upx 1fr 160upx;
+    gap: 10upx;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 2;
 
-  .user-avatar {
-    width: 118upx;
-    height: 118upx;
-    margin: 0 35upx;
-    // padding-left: 35rpx;
-    border-radius: 600upx;
-    border: 4rpx solid #fff;
-  }
-
-  .info {
-    max-width: 370upx;
-    display: flex;
-    flex-direction: column;
-    margin-left: 20upx;
-    .user-name {
-      color: var(--hr-neutral-color-10);
-      font-weight: var(--h-weight-1);
-      font-size: var(--hr-font-size-xxl);
+    .user-avatar {
+      width: 118upx;
+      height: 118upx;
+      margin: 0 35upx;
+      // padding-left: 35rpx;
+      border-radius: 600upx;
+      border: 4rpx solid #fff;
     }
 
-    .user-id {
-      color: var(--hr-neutral-color-8);
-      font-size: var(--hr-font-size-xs);
-      margin-top: 10upx;
-    }
+    .info {
+      max-width: 370upx;
+      display: flex;
+      flex-direction: column;
+      margin-left: 20upx;
+      .user-name {
+        color: var(--hr-neutral-color-10);
+        font-weight: var(--h-weight-1);
+        font-size: var(--hr-font-size-xxl);
+      }
 
-    .login-btn {
-      border: none !important;
-      background-color: transparent;
-      box-shadow: none !important;
-      & button,
-      & uni-button:after,
-      & button:after {
+      .user-id {
+        color: var(--hr-neutral-color-8);
+        font-size: var(--hr-font-size-xs);
+        margin-top: 10upx;
+      }
+
+      .login-btn {
+        border: none !important;
+        background-color: transparent;
+        box-shadow: none !important;
+        & button,
+        & uni-button:after,
+        & button:after {
+          border: none !important;
+          background-color: transparent;
+          box-shadow: none !important;
+        }
+      }
+
+      button {
+        margin-left: 0;
+        text-align: left;
+      }
+
+      button:after {
         border: none !important;
         background-color: transparent;
         box-shadow: none !important;
       }
     }
 
-    button {
-      margin-left: 0;
-      text-align: left;
-    }
+    .user-out {
+      height: 100%;
+      // display: flex;
+      justify-content: flex-end;
 
-    button:after {
-      border: none !important;
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  }
-
-  .user-out {
-    height: 100%;
-    // display: flex;
-    justify-content: flex-end;
-
-    .out-btn {
-      background-color: var(--hr-brand-color-2);
-      border-radius: 32upx 0px 0px 32upx;
-      text-align: center;
-      padding: 12rpx 24rpx;
-      // margin-right: 30upx;
-      white-space: nowrap;
-      color: var(--hr-neutral-color-10);
-      font-size: var(--hr-font-size-xs);
-    }
-  }
-}
-
-.record-container {
-  margin: 48upx 32rpx 24rpx 32rpx;
-
-  margin-bottom: 24rpx;
-
-  display: flex;
-  // gap: 16upx;
-  height: 160upx;
-
-  .record-item {
-    flex: 1;
-    height: 100%;
-    color: var(--h-color-white);
-    border-radius: 16upx;
-    background-size: 200upx;
-    background-repeat: no-repeat;
-    background-position: right 0 bottom 0;
-    font-size: var(--hr-font-size-base);
-
-    .record-label {
-      margin-top: 48upx;
-      padding-left: 24upx;
-      display: flex;
-      align-items: center;
-      color: #fff;
-
-      .icon-size {
-        margin-left: 20upx;
-        font-size: var(--hr-font-size-xl);
-        opacity: 0.6;
+      .out-btn {
+        background-color: var(--hr-brand-color-2);
+        border-radius: 32upx 0px 0px 32upx;
+        text-align: center;
+        padding: 12rpx 24rpx;
+        // margin-right: 30upx;
+        white-space: nowrap;
+        color: var(--hr-neutral-color-10);
+        font-size: var(--hr-font-size-xs);
       }
     }
   }
-}
 
-.record-container-row1 {
-  height: 120upx;
+  .record-container {
+    margin: 48upx 32rpx 24rpx 32rpx;
 
-  .record-item {
+    margin-bottom: 24rpx;
+
     display: flex;
-    align-items: center;
-    .record-label {
-      margin-top: 0;
-      padding-left: 44upx;
+    // gap: 16upx;
+    height: 160upx;
+
+    .record-item {
+      flex: 1;
+      height: 100%;
+      color: var(--h-color-white);
+      border-radius: 16upx;
+      background-size: 200upx;
+      background-repeat: no-repeat;
+      background-position: right 0 bottom 0;
+      font-size: var(--hr-font-size-base);
+
+      .record-label {
+        margin-top: 48upx;
+        padding-left: 24upx;
+        display: flex;
+        align-items: center;
+        color: #fff;
+
+        .icon-size {
+          margin-left: 20upx;
+          font-size: var(--hr-font-size-xl);
+          opacity: 0.6;
+        }
+      }
     }
   }
-}
 
-.record-container-row2 {
-  .record-item-first {
-    margin-right: 16rpx;
+  .record-container-row1 {
+    height: 120upx;
+
+    .record-item {
+      display: flex;
+      align-items: center;
+      .record-label {
+        margin-top: 0;
+        padding-left: 44upx;
+      }
+    }
   }
-}
+
+  .record-container-row2 {
+    .record-item-first {
+      margin-right: 16rpx;
+    }
+  }
 </style>

@@ -8,7 +8,7 @@
       </view>
     </scroll-view>
 
-    <!-- <image
+    <image
       :class="{
         'sel-no': !a,
       }"
@@ -21,7 +21,7 @@
       :class="{
         'sel-no': a,
       }"
-    /> -->
+    />
   </view>
 </template>
 
