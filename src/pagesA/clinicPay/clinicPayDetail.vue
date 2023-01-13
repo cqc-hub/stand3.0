@@ -87,6 +87,17 @@
         <text class="f36 g-bold color-error">{{ totalCost }}元</text>
       </view>
 
+      <!-- <button
+        :class="{
+          'btn-disabled': !selUnPayList.length,
+          flex1: isWaitPayListHidePrice,
+        }"
+        class="btn g-border btn-warning pay-btn"
+        @click="payAfter"
+      >
+        缴费
+      </button> -->
+
       <button
         :class="{
           'btn-disabled': !selUnPayList.length,

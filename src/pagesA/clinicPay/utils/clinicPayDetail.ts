@@ -332,7 +332,9 @@ export const usePayPage = () => {
   const selPayListItem = (item: IPayListItem) => {
     const { childOrder } = item;
 
-    const idx = selUnPayList.value.findIndex((o) => o.childOrder === childOrder);
+    const idx = selUnPayList.value.findIndex(
+      (o) => o.childOrder === childOrder
+    );
 
     if (idx === -1) {
       const sels = [
@@ -550,11 +552,10 @@ export const usePayPage = () => {
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
-
-    getListData(true);
+    selUnPayList.value = [];
+    payedList.value = [];
     tabCurrent.value = 1;
 
-    selUnPayList.value = [];
     setTimeout(async () => {
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
@@ -624,7 +625,7 @@ export const usePayPage = () => {
     chooseAll,
     getDrugDeliveryList,
     goDrugDelivery,
-    isWaitPayListHidePrice
+    isWaitPayListHidePrice,
   };
 };
 
