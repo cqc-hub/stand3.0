@@ -77,6 +77,7 @@ export interface dailySecList {
   endDay?: string;
   inDay?: string;
   totalCost?: string;
+  wardName?: string;
 }
 //创建住院订单 出参
 export interface payOrderResult {
@@ -136,11 +137,11 @@ export interface inHospitalCostInfo {
   prepaidPayment?: string;
   //预交金
   totalCost?: string;
-  //总费用 
+  //总费用
   patientNameDes?: string;
-  //开始时间 
+  //开始时间
   inDay?: string;
-  //结束时间  
+  //结束时间
   endDay?: string;
    //脱敏姓名
    cardNumber?: string;
