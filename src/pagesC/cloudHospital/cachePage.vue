@@ -106,7 +106,7 @@
         paySign: paymentData.paySign,
         success: () => {
           uni.navigateTo({
-            url: joinQuery('/pages/cloudHospital/cloudHospital', {
+            url: joinQuery('/pagesC/cloudHospital/cachePage', {
               payment: 'next',
               registerId: registerId,
               payBackParams: payBackParams,
@@ -120,7 +120,7 @@
           });
           setTimeout(() => {
             uni.navigateTo({
-              url: joinQuery('/pages/cloudHospital/cloudHospital', {
+              url: joinQuery('/pagesC/cloudHospital/cachePage', {
                 payment: 'back',
                 registerId: registerId,
                 payBackParams: payBackParams,
