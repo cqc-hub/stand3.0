@@ -116,6 +116,15 @@
             "patient": true
           }
         },
+        {
+          "path": "MyRegistration/RegComment",
+          "style": {
+            "navigationBarTitleText": "服务评价"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
 
         {
           "path": "clinicPay/clinicPayDetail",

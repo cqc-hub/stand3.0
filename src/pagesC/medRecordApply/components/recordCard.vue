@@ -52,7 +52,10 @@
       </view>
 
       <view
-        v-if="item.docName || item.deptName || item.hosName"
+        v-if="
+          (item.docName || item.deptName || item.hosName) &&
+          item.isOneself !== '0'
+        "
         class="container-card-row flex-normal"
       >
         <view class="label">医生</view>

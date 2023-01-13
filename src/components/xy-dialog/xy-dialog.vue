@@ -30,7 +30,7 @@
 
         <view
           v-if="isShowCancel"
-          class="xy-dialog__btn xy-dialog__footer-cancel"
+          class="xy-dialog__btn xy-dialog__footer-cancel g-bold"
           :style="{ color: cancelColor }"
           @click="clickCancel"
         >
@@ -77,7 +77,7 @@
       // 取消颜色
       cancelColor: {
         type: String,
-        default: '#111111',
+        default: '#888',
       },
 
       // 确定文字
