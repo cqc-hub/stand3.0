@@ -54,7 +54,7 @@
     if (isShowMore.value) {
       return props.list;
     } else {
-      return props.list.filter((o, i) => i <= showLen);
+      return props.list.filter((o, i) => i < showLen);
     }
   });
 
