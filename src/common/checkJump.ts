@@ -172,15 +172,29 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       typeNavigate(obj1, type);
       break;
     case 'netHospital':
-      const obj2 = {
-        url: joinQuery("/pagesC/cloudHospital/cloudHospital", item.query && JSON.parse(item.query)),
-        fail: () => {
-          gStores.messageStore.showMessage(
-            `请确认跳转地址正确性${item.path}`,
-            3000
-          );
-        },
-      };
+      let obj2 = {}
+      if(item.query && JSON.parse(item.query)._type == '1'){
+        //网络医院外部携带路径和参数
+         obj2 = {
+          url: item.path,
+          fail: () => {
+            gStores.messageStore.showMessage(
+              `请确认跳转地址正确性${item.path}`,
+              3000
+            );
+          },
+        };
+      }else{
+         obj2 = {
+          url: joinQuery("/pagesC/cloudHospital/cloudHospital", item.query && JSON.parse(item.query)),
+          fail: () => {
+            gStores.messageStore.showMessage(
+              `请确认跳转地址正确性${item.path}`,
+              3000
+            );
+          },
+        };
+      }
       typeNavigate(obj2, type);
       break;
     default:
