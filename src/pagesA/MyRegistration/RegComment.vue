@@ -3,25 +3,10 @@
     <scroll-view class="g-container" scroll-y>
       <view class="pt24">
         <view class="comment-card">
-          <Reg-Comment-Rate />
+          <Reg-Comment-Rate v-model:value="r" />
         </view>
       </view>
     </scroll-view>
-
-    <image
-      :class="{
-        'sel-no': !a,
-      }"
-      :src="$global.BASE_IMG + '1-order-comment-sel.png'"
-      class="sel"
-    />
-    <image
-      @click="a = !a"
-      :src="$global.BASE_IMG + '1-order-comment-sel.png'"
-      :class="{
-        'sel-no': a,
-      }"
-    />
   </view>
 </template>
 
@@ -37,16 +22,10 @@
    */
 
   const a = ref(false);
+  const r = ref(0);
 </script>
 
 <style lang="scss" scoped>
-  .sel-no {
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-    filter: grayscale(100%);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
-  }
 
   .g-page {
     background-color: var(--hr-neutral-color-1);

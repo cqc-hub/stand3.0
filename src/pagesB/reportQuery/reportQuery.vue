@@ -61,9 +61,9 @@
             </template>
 
             <template #empty>
-            <!-- v-if="!loading" -->
+              <!-- v-if="!loading" -->
               <view v-if="!loading" class="empty-box">
-                <g-empty  :current="1" />
+                <g-empty :current="1" />
               </view>
             </template>
           </scroll-list>
@@ -88,7 +88,6 @@
   const slist = ref<any>('');
   const loading = ref(true);
   const gStores = new GStores();
-  const patList = ref();
   const init = async () => {
     tabs.value = reportConfig.value.reportTab.map((item, index) => {
       item.typeId = index;
@@ -114,11 +113,12 @@
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
+    const { cardNumber, patientId } = gStores.userStore.patChoose;
     let params = {
       headerType: headerType,
       headerName: headerName,
-      patientId: patList.value.patientId,
-      cardNumber: patList.value.cardNumber,
+      patientId,
+      cardNumber,
       pageNumber: page,
       pageSize: size,
       //检查传参
@@ -139,12 +139,9 @@
     };
     let returnArg;
     loading.value = true;
-    const result = await api.getReportsReportList(params)
-    .finally(async () => {
+    const result = await api.getReportsReportList(params).finally(async () => {
       loading.value = false;
     });
-
-
 
     const currentResult = JSON.parse(JSON.stringify(result));
     if (result.result && result.result.length) {
@@ -292,7 +289,6 @@
   });
   //切换就诊人
   const choosePat = ({ item }) => {
-    patList.value = item;
     pageList.value = { '0': [], '1': [], '2': [] };
     totalList.value = [0, 0, 0];
     isRefresh.value = [true, true, true];
@@ -318,7 +314,6 @@
   onLoad(async () => {
     // await gStores.userStore.getPatList();
     await getParamsMoreBySysCode();
-    patList.value = gStores.userStore.patChoose;
     init();
   });
 </script>

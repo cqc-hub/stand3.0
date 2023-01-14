@@ -88,7 +88,7 @@
                     采集时间
                     <view class="subhead-detail">{{ item.regTime }}</view>
                   </view>
-                  <view class="subhead">
+                  <view v-if="item.repTime" class="subhead">
                     报告时间
                     <view class="subhead-detail">{{ item.repTime }}</view>
                   </view>
