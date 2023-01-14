@@ -23,7 +23,7 @@
 <style lang="scss" scoped>
   .nav {
     width: 100%;
-    height: 154upx;
+    height: 128upx;
     background: #fff;
   }
 </style>
