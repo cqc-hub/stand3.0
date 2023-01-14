@@ -334,7 +334,7 @@
   const orderRegInfo = ref<IRegInfo>({} as IRegInfo);
   const hosInfo = ref<IHosInfo>({} as IHosInfo);
   const isShowQr = computed(() => {
-    return ['0', '10', '100', '70', '75'].includes(
+    return ['0', '100', '70', '75'].includes(
       orderRegInfo.value.orderStatus
     );
   });

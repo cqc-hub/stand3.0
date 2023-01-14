@@ -3,6 +3,7 @@
     <scroll-view class="g-container" scroll-y>
       <view class="pt24">
         <view class="comment-card">
+          <view class="mb40 f36 g-bold">您对就医服务满意吗？</view>
           <Reg-Comment-Rate v-model:value="r" />
         </view>
       </view>
@@ -26,7 +27,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   .g-page {
     background-color: var(--hr-neutral-color-1);
 
