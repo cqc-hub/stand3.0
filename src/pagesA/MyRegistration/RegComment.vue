@@ -3,7 +3,14 @@
     <scroll-view class="g-container" scroll-y>
       <view class="pt24">
         <view class="comment-card">
-          <view class="mb40 f36 g-bold">您对就医服务满意吗？</view>
+          <view class="f36 g-bold pb32 g-border-bottom mb16">
+            您对就诊医生满意吗？
+          </view>
+
+          <view>
+            <Reg-Comment-Doc-Card :item="docDetail" />
+          </view>
+
           <view class="mb40">
             <Reg-Comment-Rate v-model:value="r" />
           </view>
@@ -44,19 +51,38 @@
         </view>
       </view>
     </scroll-view>
+
+    <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
+
+  import { deQueryForUrl } from '@/common';
+  import { GStores } from '@/utils';
+  import { type IDocDetail } from './utils/DoctorDetails';
+
+  import api from '@/service/api';
 
   import RegCommentRate from './components/RegComment/RegCommentRate.vue';
+  import RegCommentDocCard from './components/RegComment/RegCommentDocCard.vue';
 
-  /**
-   *
-   * [1-5]-order-comment-sel.png
-   * [1-5]-order-comment-unsel.png
-   */
+  type TPageProp = {
+    orderId: string;
+    deptName: string;
+    docName: string;
+    appointmentDate: string;
+    hosDocId: string;
+    hosId: string;
+    hosDeptId: string;
+    rateFlag: '0' | string;
+  };
+  const pageProps = ref({} as TPageProp);
+  const gStores = new GStores();
+
+  const docDetail = ref({} as IDocDetail);
 
   const _aimList = [''];
   const aimList = ref([]);
@@ -65,6 +91,32 @@
   const a = ref(false);
   const r = ref(5);
   const b = ref('');
+
+  const getDocDetail = async () => {
+    const { deptName, docName, hosDeptId, hosDocId, hosId } = pageProps.value;
+
+    const args = {
+      deptName,
+      docName,
+      hosDeptId,
+      hosDocId,
+      hosId,
+    };
+
+    const { result } = await api.findByDocId(args);
+    docDetail.value = result;
+  };
+
+  const init = async () => {
+    getDocDetail();
+  };
+
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    init();
+
+    console.log(pageProps.value);
+  });
 </script>
 
 <style lang="scss" scoped>

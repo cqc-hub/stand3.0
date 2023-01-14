@@ -231,6 +231,7 @@
 
         <button
           v-if="orderRegInfo.rateFlag !== 1"
+          @click="goRatePage"
           class="btn g-border btn-primary"
         >
           {{ orderRegInfo.rateFlag === 0 ? '查看评价' : '服务评价' }}
@@ -624,9 +625,27 @@
   };
 
   const goRatePage = () => {
+    const orderId = pageProps.value.orderId;
+    const {
+      deptName,
+      docName,
+      hosDocId,
+      hosId,
+      hosDeptId,
+      rateFlag,
+      appointmentDate
+    } = orderRegInfo.value;
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegComment', {
-
+        orderId,
+        deptName,
+        docName,
+        hosDocId,
+        hosId,
+        hosDeptId,
+        rateFlag,
+        appointmentDate
       }),
     });
   };
