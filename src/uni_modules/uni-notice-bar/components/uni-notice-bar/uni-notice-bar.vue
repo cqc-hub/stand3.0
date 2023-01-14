@@ -15,11 +15,11 @@
 					'uni-noticebar__content--single': !scrollable && (single || moreText)
 				}"
 			>
-				<text :id="elId" ref="animationEle" class="uni-noticebar__content-text" 
+				<text :id="elId" ref="animationEle" class="uni-noticebar__content-text"
 					:class="{
 						'uni-noticebar__content-text--scrollable': scrollable,
 						'uni-noticebar__content-text--single': !scrollable && (single || showGetMore)
-					}" 
+					}"
 					:style="{
 						color: color,
 						fontSize: fontSize + 'px',
@@ -32,6 +32,8 @@
 						animationDelay: animationDelay,
 						'-webkit-animationDelay': animationDelay
 					}"
+					space="emsp"
+					decode
 				>{{text}}</text>
 			</view>
 		</view>
@@ -155,7 +157,7 @@
 				return this.showGetMore === true || this.showGetMore === 'true'
 			},
 			isShowClose() {
-				return (this.showClose === true || this.showClose === 'true') 
+				return (this.showClose === true || this.showClose === 'true')
 					&& (this.showGetMore === false || this.showGetMore === 'false')
 			}
 		},
@@ -176,7 +178,7 @@
 			})
 		},
 		// #ifdef APP-NVUE
-		beforeDestroy() {
+		beforeUnmount() {
 			this.stopAnimation = true
 		},
 		// #endif

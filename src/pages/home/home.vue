@@ -7,7 +7,11 @@
         :loading="skeletonProps.loading"
       >
         <view class="homePage">
-          <view class="search" @tap="goSearch" v-if="global.sConfig.isHideHomeSearch!='1'">
+          <view
+            class="search"
+            @tap="goSearch"
+            v-if="global.sConfig.isHideHomeSearch != '1'"
+          >
             <uni-search-input
               :type="'2'"
               inputBorder
@@ -128,7 +132,6 @@
               </view>
             </view>
           </view>
-
           <view class="banner-menu">
             <homeBanner
               :leftFunctionList="bannerLeftFunctionList"
@@ -180,7 +183,7 @@
   } from '@/utils';
 
   import global from '@/config/global';
-  import api from '@/service/api'; 
+  import api from '@/service/api';
   import { getLocalStorage, setLocalStorage } from '@/common';
 
   import homeBanner from './componetns/homeBanner.vue';
@@ -199,7 +202,7 @@
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;
     if (len) {
-      return noticeMenu.value.map((o) => o.title).join('  ');
+      return noticeMenu.value.map((o) => o.title).join('         ');
     } else {
       return '';
     }
@@ -307,13 +310,12 @@
       });
     }
   };
-  const goToNotice1 = ()=>{
-     //跳咨询列表页面
-     uni.navigateTo({
-        url:
-          '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
-      });
-  }
+  const goToNotice1 = () => {
+    //跳咨询列表页面
+    uni.navigateTo({
+      url: '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
+    });
+  };
 
   const goLogin = async (e: any) => {
     // #ifdef MP-ALIPAY
@@ -345,7 +347,7 @@
       functionType: '2', //首页配置
     });
     const localVersion = getLocalStorage('systemConfigVersion');
-    const item = localVersion&&localVersion.find((o) => o.functionType == 2);
+    const item = localVersion && localVersion.find((o) => o.functionType == 2);
     if (result !== item?.version) {
       homeConfig = await ServerStaticData.getHomeConfig('home');
       return true;

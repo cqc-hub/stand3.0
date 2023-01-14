@@ -393,6 +393,7 @@
       hosId,
       hosName,
       patientName: props.value.patientName || patientName,
+      cardNumber
     });
 
     await toPayPull(res, '门诊缴费');
