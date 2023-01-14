@@ -53,6 +53,7 @@ import { payOrderResult } from "./utils/inpatientInfo";
 
 type IPageProps = {
   hosId: string;
+  hosName: string;
   patientName?: string; //扫码的时候传 支付用
   cardNumber?: string;
   hospitalAccount?: string;
@@ -106,12 +107,15 @@ const setData = async () => {
   list.value = JSON.parse(resultHos.value.inPatientPrePay);
 };
 const int = async () => {
+  const { patientName, cardNumber, hosId, hosName } = pageProps.value
   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
     fee: defalutMoney.value,
     orderType: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3",
     // patientId: pageProps.value.params ? "" : gStores.userStore.patChoose.patientId,
-    patientName: pageProps.value.patientName,
-    cardNumber: pageProps.value.cardNumber,
+    patientName,
+    cardNumber,
+    hosId,
+    hosName
   });
   payOrder.value = result;
 };
