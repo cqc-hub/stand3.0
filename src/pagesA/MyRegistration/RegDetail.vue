@@ -148,10 +148,7 @@
                 ref="refForm"
               >
                 <template #showBody="{ item, value }">
-                  <view
-                    class="flex-normal"
-                    v-if="item.key === 'deptName'"
-                  >
+                  <view class="flex-normal" v-if="item.key === 'deptName'">
                     <text>{{ value }}</text>
                     <!-- <text class="ico_location2 icon-font size-icon"></text> -->
                   </view>
@@ -231,7 +228,13 @@
         <button @click="againOrder" class="btn g-border btn-normal">
           再次预约
         </button>
-        <!-- <button class="btn g-border btn-primary">服务评价</button> -->
+
+        <button
+          v-if="orderRegInfo.rateFlag !== 1"
+          class="btn g-border btn-primary"
+        >
+          {{ orderRegInfo.rateFlag === 0 ? '查看评价' : '服务评价' }}
+        </button>
       </block>
 
       <block v-if="orderRegInfo.orderStatus === '10'">
@@ -299,7 +302,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, nextTick, onMounted, reactive } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { deQueryForUrl, joinQuery, cloneUtil } from '@/common/utils';
   import {
     GStores,
@@ -324,6 +327,7 @@
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
+  import { joinQueryForUrl } from '../../common/utils';
 
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -334,9 +338,7 @@
   const orderRegInfo = ref<IRegInfo>({} as IRegInfo);
   const hosInfo = ref<IHosInfo>({} as IHosInfo);
   const isShowQr = computed(() => {
-    return ['0', '100', '70', '75'].includes(
-      orderRegInfo.value.orderStatus
-    );
+    return ['0', '100', '70', '75'].includes(orderRegInfo.value.orderStatus);
   });
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
@@ -621,6 +623,14 @@
     init();
   };
 
+  const goRatePage = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegComment', {
+
+      }),
+    });
+  };
+
   const againOrder = async () => {
     // 跳到医生名片
     goDoctorCard();
@@ -630,8 +640,7 @@
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
   });
 
-  // 执行时机比 onLoad 晚
-  onMounted(() => {
+  onShow(() => {
     init();
   });
 </script>

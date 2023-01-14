@@ -503,7 +503,7 @@
     "navigationBarTitleText": "uni-app",
     "backgroundColor": "#F8F8F8",
     // #ifdef MP-WEIXIN || H5
-    "navigationBarBackgroundColor": "#f8f8f8"
+    "navigationBarBackgroundColor": "#fff"
     // #endif
   },
 

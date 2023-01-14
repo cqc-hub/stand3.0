@@ -119,12 +119,13 @@ const loadImg = () => {
 };
 
 const toPayPage = () => {
-  const { hosId, cardNumber, patientName } = hosInfoResObj.value;
+  const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
   const data = {
     hosId,
     cardNumber,
     patientName,
     type: 1, //表示预交来的
+    hosName
   };
   uni.navigateTo({
     url: joinQuery("/pagesA/hospitalCare/paymentPage", data),

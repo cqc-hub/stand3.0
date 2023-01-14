@@ -73,6 +73,7 @@
 import { onMounted, ref } from 'vue';
 import { getAvatar } from '@/stores';
 import { GStores } from '@/utils';
+import { joinQuery } from '@/common';
 import api from '@/service/api';
 import {
   getInHospitalInfoParam,
@@ -99,8 +100,15 @@ const toPayRecord = async () => {
   });
 };
 const toPayPage = () => {
+  const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
+  const args = {
+    hosId,
+    cardNumber,
+    patientName,
+    hosName
+  }
   uni.navigateTo({
-    url: `paymentPage?hosId=${hosInfoResObj.value.hosId}&cardNumber=${hosInfoResObj.value.cardNumber}&patientName=${hosInfoResObj.value.patientName}`,
+    url: joinQuery('/pagesA/hospitalCare/paymentPage', args)
   });
 };
 onPullDownRefresh(() => {

@@ -8,7 +8,7 @@
         class="flex-normal rate-item"
       >
         <image
-          :src="item.src"
+          :src="getGradeSrc(item.value)"
           :class="{
             'img-filter': !getShow(item.value),
           }"
@@ -42,7 +42,6 @@
     <
       {
         value: number;
-        src: string;
         label: string;
       }[]
     >[]
@@ -59,7 +58,6 @@
   for (let i = 1; i < 6; i++) {
     gradeList.value.push({
       value: i,
-      src: globalGl.BASE_IMG + `${i}-order-comment-sel.png`,
       label: labelMap[i],
     });
   }
@@ -70,6 +68,16 @@
     } else {
       return false;
     }
+  };
+
+  const getGradeSrc = (v: number) => {
+    let idx = v;
+
+    if (props.value && v <= props.value) {
+      idx = props.value;
+    }
+
+    return globalGl.BASE_IMG + `${idx}-order-comment-sel.png`;
   };
 
   const rateClick = (item) => {
