@@ -373,14 +373,14 @@
         _label: '科',
       },
       {
-        name: globalGl.systemInfo.name,
+        name: '清丰中医院',
         time: '-',
         fee: '-',
         pl: '-',
         _label: '院',
       },
       {
-        name: '金湖县',
+        name: '清丰县',
         time: '-',
         fee: '-',
         pl: '-',

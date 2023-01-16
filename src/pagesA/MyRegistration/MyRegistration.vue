@@ -130,9 +130,10 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 
-  import api from '@/service/api';
   import { OrderStatus, orderStatusMap } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
+  import { isAreaProgram } from '@/stores';
+  import api from '@/service/api';
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
 
   const gStores = new GStores();
@@ -212,8 +213,7 @@
       console.log(gStores.userStore);
 
       _firstIn = false;
-      selPatId.value =
-        o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : '');
+      selPatId.value = getPatLabel(o);
     }
   };
 
@@ -226,12 +226,17 @@
     init();
   });
 
+  const getPatLabel = (o) => {
+    return (
+      o.patientNameEncry +
+      (isAreaProgram() ? '' : o.cardNumber ? `(${o.cardNumber})` : '')
+    );
+  };
+
   const init = async () => {
     await getConfig();
     const item = patList.value.find(
-      (o: any) =>
-        o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : '') ===
-        selPatId.value
+      (o: any) => getPatLabel(o) === selPatId.value
     );
 
     await getList(item?.patientId || '');
@@ -246,7 +251,7 @@
       },
       ...gStores.userStore.patList.map((o) => ({
         ...o,
-        _showLabel: o.patientNameEncry + (o.cardNumber ? `(${o.cardNumber})` : ''),
+        _showLabel: getPatLabel(o),
       })),
     ];
   });
@@ -271,8 +276,6 @@
 
   const selPatName = computed(() => {
     return selPatId.value;
-    // return patList.value.find((o) => o.patientId === selPatId.value)
-    //   ?.patientName;
   });
 
   const selStatusName = computed(() => {
@@ -284,13 +287,6 @@
       selStatus.value ? o.orderStatus === selStatus.value : true
     );
 
-    // const _filterPat = _filterStatus.filter((o) =>
-    //   selPatId.value === '所有就诊人'
-    //     ? true
-    //     : selPatId.value
-    //     ? o.patientName === selPatId.value.split('(')[0]
-    //     : true
-    // );
     return _filterStatus;
   });
 
