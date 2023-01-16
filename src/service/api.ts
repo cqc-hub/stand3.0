@@ -149,13 +149,13 @@ const baseApi = {
   //获取公告资讯
   getAnnouncementCms: (data) =>
     service.post('/phs-base/firstPage/getAnnouncementCms', parm(data), {
-      hideLoading: true
+      hideLoading: true,
     }),
 
   //查询对应版本号
   searchFunctionConfig: (data) =>
     service.post('/phs-base/hospital/searchFunctionConfig', parm(data), {
-      hideLoading: true
+      hideLoading: true,
     }),
 };
 // 查询服务
@@ -336,6 +336,21 @@ const regApi = {
 
   addCollect: (data: any) =>
     service.post('/phs-reg/collect/addCollect', parm(data), {
+      hideLoading: false,
+    }),
+
+  addRegSatisfaction: (data: any) =>
+    service.post('/phs-reg/regSatisfaction/addRegSatisfaction', parm(data), {
+      hideLoading: false,
+    }),
+
+  findSatisfactionInfo: (data: any) =>
+    service.post('/phs-reg/regSatisfaction/findSatisfactionInfo', parm(data), {
+      hideLoading: false,
+    }),
+
+  getAllSatisfactions: (data: any) =>
+    service.post('/phs-reg/regSatisfaction/getAllSatisfactions', parm(data), {
       hideLoading: false,
     }),
 

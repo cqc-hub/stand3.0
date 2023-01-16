@@ -444,9 +444,7 @@ export const usePayPage = () => {
 
   // 待缴费列表页面是否隐藏金额
   const isWaitPayListHidePrice = computed(() => {
-    return (
-      pageConfig.value.isScanListHideMoney === '1' && pageProps.value.params
-    );
+    return pageConfig.value.isScanListHideMoney === '1';
   });
 
   const handlerPay = async () => {

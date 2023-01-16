@@ -55,9 +55,9 @@
     5: '很满意',
   };
 
-  for (let i = 1; i < 6; i++) {
+  for (let i = 0; i < 5; ) {
     gradeList.value.push({
-      value: i,
+      value: ++i,
       label: labelMap[i],
     });
   }

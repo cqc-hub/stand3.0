@@ -1,63 +1,120 @@
 <template>
   <view class="g-page">
-    <scroll-view class="g-container" scroll-y>
+    <scroll-view :scroll-into-view="scrollTo" class="g-container" scroll-y>
       <view class="pt24">
         <view class="comment-card">
-          <view class="f36 g-bold pb32 g-border-bottom mb16">
+          <view id="rate_doc" class="f36 g-bold pb32 g-border-bottom mb16">
             您对就诊医生满意吗？
           </view>
 
           <view>
-            <Reg-Comment-Doc-Card :item="docDetail" />
+            <Reg-Comment-Doc-Card
+              :item="docDetail"
+              :appointmentDate="pageProps.appointmentDate"
+            />
           </view>
 
           <view class="mb40">
-            <Reg-Comment-Rate v-model:value="r" />
+            <Reg-Comment-Rate v-model:value="docGrade" />
           </view>
 
-          <view>
+          <view
+            v-if="DOC_EVALUATION_CONTENT && DOC_EVALUATION_CONTENT.length"
+            class="mb40"
+          >
             <g-select-flatten
               :selectLength="99"
-              :list="aimList"
-              v-model:value="aimValue"
+              :list="DOC_EVALUATION_CONTENT"
+              :field="flattenField"
+              :column="2"
+              v-model:value="docEvlContentList"
               multiple
             />
           </view>
 
-          <view class="comment-input mb32">
+          <view class="comment-input">
             <uni-easyinput
               type="textarea"
-              v-model="b"
+              v-model="adviseForDoc"
               autoHeight
               :maxlength="200"
               :inputBorder="false"
               :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
-              placeholder="请输入您对医院的建议和意见"
-              disabled
-            />
-          </view>
-
-          <view class="comment-input height-href">
-            <uni-easyinput
-              type="textarea"
-              v-model="b"
-              :maxlength="200"
-              :inputBorder="false"
-              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
-              placeholder="请输入您的其他意见或建议"
-              autoHeight
+              placeholder="说说您对医生的意见和建议"
             />
           </view>
         </view>
       </view>
+
+      <view class="comment-card mt24">
+        <view id="rate_hos" class="f36 g-bold pb32 mb16">
+          您对就医服务满意吗？
+        </view>
+
+        <view class="mb40">
+          <Reg-Comment-Rate v-model:value="serviceSatisfactionGrade" />
+        </view>
+
+        <view
+          v-if="
+            DOC_SERVICE_SATISFACTION_CONTENT &&
+            DOC_SERVICE_SATISFACTION_CONTENT.length &&
+            serviceSatisfactionGrade &&
+            serviceSatisfactionGrade < 3
+          "
+          class="mb40"
+        >
+          <g-select-flatten
+            :selectLength="99"
+            :list="DOC_SERVICE_SATISFACTION_CONTENT"
+            :field="flattenField"
+            :column="2"
+            v-model:value="rateInfoList"
+            multiple
+          />
+        </view>
+
+        <view class="comment-input mb32">
+          <uni-easyinput
+            type="textarea"
+            v-model="adviseForHos"
+            autoHeight
+            :maxlength="200"
+            :inputBorder="false"
+            :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+            placeholder="说说您对医院的意见和建议"
+          />
+        </view>
+
+        <view class="comment-input height-href">
+          <uni-easyinput
+            type="textarea"
+            v-model="otherSuggestions"
+            :maxlength="200"
+            :inputBorder="false"
+            :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+            placeholder="其他意见和建议"
+            autoHeight
+          />
+        </view>
+      </view>
+
+      <view class="safe-height" />
     </scroll-view>
 
     <g-message />
+
+    <view class="footer g-border-top">
+      <!-- btn-disabled -->
+      <button @click="submitComment" class="btn g-border btn-primary">
+        提交评价
+      </button>
+    </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { watch, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { deQueryForUrl } from '@/common';
@@ -79,18 +136,39 @@
     hosDeptId: string;
     rateFlag: '0' | string;
   };
+  type TFalttenList = {
+    label: string;
+    code: string;
+  }[];
+
   const pageProps = ref({} as TPageProp);
   const gStores = new GStores();
 
   const docDetail = ref({} as IDocDetail);
 
-  const _aimList = [''];
-  const aimList = ref([]);
-  const aimValue = ref('');
+  const flattenField = {
+    label: 'label',
+    value: 'code',
+  };
+  const DOC_EVALUATION_CONTENT = ref([] as TFalttenList);
+  const DOC_SERVICE_SATISFACTION_CONTENT = ref([] as TFalttenList);
+  const docEvlContentList = ref([] as string[]);
+  const rateInfoList = ref([] as string[]);
 
-  const a = ref(false);
-  const r = ref(5);
-  const b = ref('');
+  const docGrade = ref(0);
+  const serviceSatisfactionGrade = ref(0);
+  const adviseForDoc = ref('');
+  const adviseForHos = ref('');
+  const otherSuggestions = ref('');
+  const scrollTo = ref('');
+  watch(
+    () => scrollTo.value,
+    () => {
+      setTimeout(() => {
+        scrollTo.value = '';
+      }, 100);
+    }
+  );
 
   const getDocDetail = async () => {
     const { deptName, docName, hosDeptId, hosDocId, hosId } = pageProps.value;
@@ -107,8 +185,70 @@
     docDetail.value = result;
   };
 
+  const getConfig = async () => {
+    const { result } = await api.getTermsBySysAndCode({
+      domainCode: 'DOC_EVALUATION_CONTENT|DOC_SERVICE_SATISFACTION_CONTENT',
+    });
+
+    if (result && result.length) {
+      const [EVALUATION, SERVICE] = result;
+
+      DOC_EVALUATION_CONTENT.value = EVALUATION.terms;
+      DOC_SERVICE_SATISFACTION_CONTENT.value = SERVICE.terms;
+    }
+  };
+
   const init = async () => {
+    await getConfig();
     getDocDetail();
+  };
+
+  const submitComment = async () => {
+    const { orderId } = pageProps.value;
+    // const {} = gStores
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
+    if (!docGrade.value) {
+      scrollTo.value = '"rate_doc';
+      gStores.messageStore.showMessage('请选择医生评分', 3000);
+
+      return;
+    }
+
+    if (!serviceSatisfactionGrade.value) {
+      gStores.messageStore.showMessage('请选择就医服务评分', 3000);
+      scrollTo.value = '"rate_hos';
+
+      return;
+    } else {
+      if (serviceSatisfactionGrade.value < 3) {
+        if (!rateInfoList.value.length) {
+          scrollTo.value = '"rate_hos';
+          gStores.messageStore.showMessage(
+            '请选择本次就医服务不满意的地方',
+            3000
+          );
+
+          return;
+        }
+      }
+    }
+
+    const requestArg = {
+      orderId,
+      adviseForDoc: adviseForDoc.value,
+      adviseForHos: adviseForHos.value,
+      otherSuggestions: otherSuggestions.value,
+      docEvlContentList: docEvlContentList.value,
+      docGrade: docGrade.value,
+      rateInfoList: rateInfoList.value,
+      serviceSatisfactionGrade: serviceSatisfactionGrade.value,
+      source,
+    };
+
+    await api.addRegSatisfaction(requestArg);
   };
 
   onLoad((opt) => {
@@ -160,6 +300,14 @@
           }
         }
       }
+    }
+
+    .footer {
+      background-color: var(--h-color-white);
+      padding: 24rpx 32rpx 48rpx;
+      position: reactive;
+      z-index: 1;
+      gap: 18rpx;
     }
   }
 </style>

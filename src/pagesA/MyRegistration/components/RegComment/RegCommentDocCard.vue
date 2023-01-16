@@ -31,18 +31,9 @@
           </view>
         </view>
 
-        <view v-if="item.specialClinicName" class="text-ellipsis">
-          <text
-            v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"
-            :key="i"
-            :class="{
-              'g-split-line':
-                i !== splitSpecialDeptName(item.specialClinicName).length - 1,
-            }"
-            class="color-888 f28 mr12 pr12"
-          >
-            {{ o }}
-          </text>
+        <view v-if="appointmentDate" class="flex-normal color-444 f24">
+          <view>服务完成时间:</view>
+          <view>{{ appointmentDate }}</view>
         </view>
       </view>
     </view>
@@ -56,6 +47,7 @@
 
   const props = defineProps<{
     item: IDocListAll;
+    appointmentDate?: string;
   }>();
 
   const emits = defineEmits(['avatar-click']);
