@@ -1,56 +1,5 @@
 import { type XOR } from '@/typeUtils/obj';
 
-export type TBannerConfigBase = {
-  src: `http${string}`;
-  extraData?: BaseObject;
-  path: string; // h5 跳转完整路径 其他跳转 如 home/my
-  isSelfH5?: '1'; // 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....)
-  addition?: {
-    token?: string;
-    patientId?: string;
-    herenId?: string;
-  }; // 固定的附加参数(动态值) 键值为新的键名
-};
-
-type TBannerConfigH5 = {
-  type: 'h5';
-  isLocal?: '1'; // 当他不存在
-} & TBannerConfigBase;
-
-type TBannerConfigSelf = {
-  type: 'self';
-} & TBannerConfigBase;
-
-type TBannerConfigOtherProgram = {
-  type: 'otherProgram';
-  appId: string;
-} & TBannerConfigBase;
-
-export type TBannerConfig = XOR<
-  TBannerConfigOtherProgram,
-  XOR<TBannerConfigSelf, TBannerConfigH5>
->;
-
-export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
-  text: string;
-};
-
-export interface IRegSearchHistoryItem {
-  label: string;
-  hot?: '1'; // 标记 🔥
-}
-
-export interface IConfigTab {
-  label: string;
-  value: string;
-}
-
-export interface IReportConfigTab {
-  headerType: string;
-  headerName: string;
-}
-
-type TMedRecordSfz = 'front' | 'end' | 'handler' | 'hkb';
 // 未指定说明的 '0' 均为 false '1' true
 export interface ISystemConfig {
   // 预约挂号
@@ -151,6 +100,8 @@ export interface ISystemConfig {
     /**
      * 列表页
      */
+    // 可以切换院区?
+    isListToggleHos?: '1';
 
     // 门诊类型  网络医院/线下门诊 (是否展示)
     isListShowClinicType?: '1';
@@ -218,3 +169,55 @@ export interface IHosInfo {
   label: string;
   value: string;
 }
+
+export type TBannerConfigBase = {
+  src: `http${string}`;
+  extraData?: BaseObject;
+  path: string; // h5 跳转完整路径 其他跳转 如 home/my
+  isSelfH5?: '1'; // 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....)
+  addition?: {
+    token?: string;
+    patientId?: string;
+    herenId?: string;
+  }; // 固定的附加参数(动态值) 键值为新的键名
+};
+
+type TBannerConfigH5 = {
+  type: 'h5';
+  isLocal?: '1'; // 当他不存在
+} & TBannerConfigBase;
+
+type TBannerConfigSelf = {
+  type: 'self';
+} & TBannerConfigBase;
+
+type TBannerConfigOtherProgram = {
+  type: 'otherProgram';
+  appId: string;
+} & TBannerConfigBase;
+
+export type TBannerConfig = XOR<
+  TBannerConfigOtherProgram,
+  XOR<TBannerConfigSelf, TBannerConfigH5>
+>;
+
+export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
+  text: string;
+};
+
+export interface IRegSearchHistoryItem {
+  label: string;
+  hot?: '1'; // 标记 🔥
+}
+
+export interface IConfigTab {
+  label: string;
+  value: string;
+}
+
+export interface IReportConfigTab {
+  headerType: string;
+  headerName: string;
+}
+
+type TMedRecordSfz = 'front' | 'end' | 'handler' | 'hkb';

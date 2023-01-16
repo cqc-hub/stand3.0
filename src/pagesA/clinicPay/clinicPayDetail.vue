@@ -6,6 +6,13 @@
       v-if="!pageProps.params && isShowPatComponent"
       @choose-pat="getListData(true)"
     />
+    <g-selhos
+      v-if="pageConfig.isListToggleHos === '1'"
+      v-model:hosId="hosId"
+      :autoGetData="false"
+      @change="getListData(true)"
+      ref="selHosRef"
+    />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
@@ -213,6 +220,8 @@
     goDrugDelivery,
     regDialogConfirmExpress,
     isWaitPayListHidePrice,
+    hosId,
+    selHosRef,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -240,6 +249,10 @@
 
   const init = async () => {
     await getSysConfig();
+    if (pageConfig.value.isListToggleHos === '1') {
+      await wait(300);
+      await selHosRef.value.init();
+    }
     if (!pageProps.value.params) {
       await pageHook();
     }

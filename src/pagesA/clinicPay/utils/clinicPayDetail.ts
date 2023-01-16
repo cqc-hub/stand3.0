@@ -137,6 +137,8 @@ export const usePayPage = () => {
   const regDialogConfirmExpress = ref<any>('');
   const confirmFgTitle = ref('');
   const gStores = new GStores();
+  const hosId = ref<string>();
+  const selHosRef = ref('' as any);
   const tabCurrent = ref(0);
   const isPayListRequestComplete = ref(false);
   const tabField = [
@@ -258,6 +260,7 @@ export const usePayPage = () => {
           patientName: '';
         }>({
           patientId,
+          hosId: hosId.value,
         })
         .finally(() => {
           isPayListRequestComplete.value = true;
@@ -307,6 +310,7 @@ export const usePayPage = () => {
           clinicPayListDetailResults: TPayedListItem[];
         }>({
           patientId,
+          hosId: hosId.value,
         })
         .finally(() => {
           isPayListRequestComplete.value = true;
@@ -592,6 +596,8 @@ export const usePayPage = () => {
   };
 
   return {
+    hosId,
+    selHosRef,
     pageProps,
     pageConfig,
     getSysConfig,

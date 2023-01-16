@@ -4,12 +4,18 @@
       :class="{
         'my-display-none': hosList.length < 2,
       }"
-      class="bread-crumbs"
+      class="bread-crumbs flex-between"
       @click="toggleHos"
     >
-      <view class="hos-label">当前医院：</view>
-      <view class="hos-name text-ellipsis">{{ getHosName }}</view>
-      <view class="iconfont ico-arrow">&#xe66b;</view>
+      <view class="flex-normal">
+        <image
+          :src="$global.BASE_IMG + 'v3-gsel-hos-icon.png'"
+          class="hos-icon mr24"
+        />
+        <view class="f32 text-ellipsis">{{ getHosName }}</view>
+      </view>
+
+      <text :class="`icon-font icon-resize ico_arrow`" />
     </view>
 
     <g-select
@@ -34,10 +40,16 @@
   const gStores = new GStores();
   const hosList = ref<IHosInfo[]>([]);
   const isToggleDialogShow = ref(false);
-  const props = defineProps<{
-    hosId: string;
-    type?: 'selDepartment';
-  }>();
+  const props = withDefaults(
+    defineProps<{
+      hosId: string;
+      type?: 'selDepartment';
+      autoGetData?: boolean;
+    }>(),
+    {
+      autoGetData: true,
+    }
+  );
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);
 
   const getHosName = computed(() => {
@@ -78,9 +90,16 @@
     }
 
     hosList.value = list;
-    emits('get-list', {
-      list,
-    });
+
+    if (list && list.length) {
+      if (!props.hosId) {
+        emits('update:hosId', list[0].hosId);
+      }
+
+      emits('get-list', {
+        list,
+      });
+    }
   };
 
   const changeValue = (v) => {
@@ -88,11 +107,17 @@
   };
 
   const init = async () => {
-    getHosList();
+    await getHosList();
   };
 
   onMounted(() => {
-    init();
+    if (props.autoGetData) {
+      init();
+    }
+  });
+
+  defineExpose({
+    init,
   });
 </script>
 
@@ -103,18 +128,20 @@
     font-size: var(--hr-font-size-xs);
     color: var(--hr-neutral-color-7);
     align-items: center;
-    padding: 14rpx 30rpx;
+    padding: 22rpx 30rpx;
+    padding-right: 20rpx;
+    background-color: #fff;
+    box-shadow: 0px -0.5px 0px 0px #e6e6e6 inset;
+  }
 
-    .hos-name {
-      color: var(--hr-neutral-color-10);
-    }
+  .hos-icon {
+    width: 48rpx;
+    height: 48rpx;
+  }
 
-    .ico-arrow {
-      font-size: var(--hr-font-size-xl);
-    }
-
-    .hos-label {
-      white-space: nowrap;
-    }
+  .icon-resize {
+    width: 48rpx;
+    height: 48rpx;
+    font-size: 48rpx;
   }
 </style>
