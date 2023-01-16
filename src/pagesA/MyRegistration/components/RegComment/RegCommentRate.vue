@@ -1,6 +1,11 @@
 <template>
   <view class="">
-    <view class="comment-rate flex-normal">
+    <view
+      :class="{
+        'my-disabled': disabled,
+      }"
+      class="comment-rate flex-normal"
+    >
       <view
         v-for="item in gradeList"
         :key="item.value"
@@ -35,6 +40,7 @@
 
   const props = defineProps<{
     value: number;
+    disabled?: boolean;
   }>();
   const emits = defineEmits(['update:value']);
 

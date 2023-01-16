@@ -66,6 +66,12 @@
           }
         },
         {
+          "path": "MyRegistration/DoctorDetailsComment",
+          "style": {
+            "navigationBarTitleText": "全部评论"
+          }
+        },
+        {
           "path": "hospitalCare/hospitalCare",
           "style": {
             "navigationBarTitleText": "住院服务",

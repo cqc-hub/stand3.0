@@ -72,13 +72,14 @@
 
   withDefaults(
     defineProps<{
-      current: typeof states.length;
+      current: number;
       text?: string;
       imgHeight?: string;
       noTransformY?: boolean;
     }>(),
     {
       imgHeight: '240rpx',
+      current: 1
     }
   );
 

@@ -258,7 +258,11 @@
 
       <view v-if="pageConfig.isOpenComment === '1'" class="doc-comment">
         <view class="p32c">
-          <g-comment />
+          <Doc-Comment
+            :list="commentList"
+            :total="commentTotal"
+            @show-all-click="goAllComment"
+          />
         </view>
         <view class="safe-height" />
       </view>
@@ -302,6 +306,7 @@
     type IDocDetail,
     type IDocSchListItem,
     type IDocService,
+    type ICommentItem,
   } from './utils/DoctorDetails';
   import { deQueryForUrl, joinQuery } from '@/common';
   import {
@@ -319,6 +324,7 @@
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
   import DocService from './components/DoctorDetails/docService.vue';
   import DocBigDataTable from './components/DoctorDetails/docBigDataTable.vue';
+  import DocComment from './components/DoctorDetails/DocComment.vue';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -447,12 +453,7 @@
   };
 
   onLoad(async (opt) => {
-    try {
-      props.value = deQueryForUrl(opt);
-      props.value = deQueryForUrl(props.value);
-    } catch (error) {
-      console.error('prop parse 报错');
-    }
+    props.value = deQueryForUrl(deQueryForUrl(opt));
 
     // 扫码进来, 不处理
     if (props.value.q) {
@@ -620,11 +621,40 @@
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
 
+  const commentTotal = ref('0');
+  const commentList = ref<ICommentItem[]>([]);
+  const getCommentList = async () => {
+    const { hosDocId } = docDetail.value;
+
+    const { result } = await api.getAllSatisfactions({
+      hosDocId,
+      pageSize: 6,
+      index: 1,
+    });
+
+    if (result) {
+      const { satisfactionResultList, totalNum } = result;
+
+      commentTotal.value = totalNum;
+      commentList.value = satisfactionResultList || [];
+    }
+  };
+  const goAllComment = () => {
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetailsComment', {
+        hosDocId: docDetail.value.hosDocId,
+      }),
+    });
+  };
+
   const init = async () => {
     await getPageConfig();
     await OrderInit();
     getSchData();
     await getDocDetail();
+    if (pageConfig.value.isOpenComment === '1') {
+      getCommentList();
+    }
 
     if (pageConfig.value.isOpenDocCardOnlineService === '1') {
       getDocService();

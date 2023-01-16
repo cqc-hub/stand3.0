@@ -2,6 +2,16 @@ import api from '@/service/api';
 import { GStores } from '@/utils';
 import { TSchInfo } from './index';
 
+export interface ICommentItem {
+  adviseForDoc: string;
+  createTime: string;
+  deptName: string;
+  docEvlContentList: number[];
+  docGrade: number;
+  docName: string;
+  patName: string;
+}
+
 export interface IProps {
   deptName: string;
   docName: string;

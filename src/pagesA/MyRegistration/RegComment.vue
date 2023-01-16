@@ -11,11 +11,12 @@
             <Reg-Comment-Doc-Card
               :item="docDetail"
               :appointmentDate="pageProps.appointmentDate"
+              @avatar-click="goDoctorCard"
             />
           </view>
 
           <view class="mb40">
-            <Reg-Comment-Rate v-model:value="docGrade" />
+            <Reg-Comment-Rate v-model:value="docGrade" :disabled="isForShow" />
           </view>
 
           <view
@@ -23,10 +24,12 @@
             class="mb40"
           >
             <g-select-flatten
+              v-if="isRender(docEvlContentList)"
               :selectLength="99"
               :list="DOC_EVALUATION_CONTENT"
               :field="flattenField"
-              :column="2"
+              :column="3"
+              :disabled="isForShow"
               v-model:value="docEvlContentList"
               multiple
             />
@@ -35,8 +38,10 @@
           <view class="comment-input">
             <uni-easyinput
               type="textarea"
+              v-if="isRender(adviseForDoc)"
               v-model="adviseForDoc"
               autoHeight
+              :disabled="isForShow"
               :maxlength="200"
               :inputBorder="false"
               :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
@@ -52,7 +57,11 @@
         </view>
 
         <view class="mb40">
-          <Reg-Comment-Rate v-model:value="serviceSatisfactionGrade" />
+          <Reg-Comment-Rate
+            v-model:value="serviceSatisfactionGrade"
+            v-if="isRender(serviceSatisfactionGrade)"
+            :disabled="isForShow"
+          />
         </view>
 
         <view
@@ -60,7 +69,8 @@
             DOC_SERVICE_SATISFACTION_CONTENT &&
             DOC_SERVICE_SATISFACTION_CONTENT.length &&
             serviceSatisfactionGrade &&
-            serviceSatisfactionGrade < 3
+            serviceSatisfactionGrade < 3 &&
+            isRender(rateInfoList)
           "
           class="mb40"
         >
@@ -69,6 +79,7 @@
             :list="DOC_SERVICE_SATISFACTION_CONTENT"
             :field="flattenField"
             :column="2"
+            :disabled="isForShow"
             v-model:value="rateInfoList"
             multiple
           />
@@ -77,8 +88,10 @@
         <view class="comment-input mb32">
           <uni-easyinput
             type="textarea"
+            v-if="isRender(adviseForHos)"
             v-model="adviseForHos"
             autoHeight
+            :disabled="isForShow"
             :maxlength="200"
             :inputBorder="false"
             :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
@@ -90,6 +103,8 @@
           <uni-easyinput
             type="textarea"
             v-model="otherSuggestions"
+            v-if="isRender(otherSuggestions)"
+            :disabled="isForShow"
             :maxlength="200"
             :inputBorder="false"
             :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
@@ -104,7 +119,7 @@
 
     <g-message />
 
-    <view class="footer g-border-top">
+    <view v-if="!isForShow" class="footer g-border-top">
       <!-- btn-disabled -->
       <button @click="submitComment" class="btn g-border btn-primary">
         提交评价
@@ -114,10 +129,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref } from 'vue';
+  import { watch, ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery } from '@/common';
   import { GStores } from '@/utils';
   import { type IDocDetail } from './utils/DoctorDetails';
 
@@ -134,7 +149,7 @@
     hosDocId: string;
     hosId: string;
     hosDeptId: string;
-    rateFlag: '0' | string;
+    rateFlag?: '0';
   };
   type TFalttenList = {
     label: string;
@@ -170,6 +185,21 @@
     }
   );
 
+  const isForShow = computed(() => {
+    return pageProps.value.rateFlag === '0';
+  });
+  const isRender = (v: any) => {
+    if (isForShow.value) {
+      if (typeof v === 'object') {
+        return !!v.length;
+      } else {
+        return !!v;
+      }
+    } else {
+      return true;
+    }
+  };
+
   const getDocDetail = async () => {
     const { deptName, docName, hosDeptId, hosDocId, hosId } = pageProps.value;
 
@@ -193,19 +223,76 @@
     if (result && result.length) {
       const [EVALUATION, SERVICE] = result;
 
+      EVALUATION.terms.map((o) => {
+        o.code = o.code * 1;
+      });
+      SERVICE.terms.map((o) => {
+        o.code = o.code * 1;
+      });
+
       DOC_EVALUATION_CONTENT.value = EVALUATION.terms;
       DOC_SERVICE_SATISFACTION_CONTENT.value = SERVICE.terms;
+    }
+  };
+
+  const getCommentHis = async () => {
+    const { orderId } = pageProps.value;
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
+    const { result } = await api.findSatisfactionInfo({
+      orderId,
+      source,
+    });
+
+    if (result) {
+      const {
+        adviseForDoc: _adviseForDoc,
+        adviseForHos: _adviseForHos,
+        docEvlContentList: _docEvlContentList,
+        docGrade: _docGrade,
+        otherSuggestions: _otherSuggestions,
+        rateInfoList: _rateInfoList,
+        serviceSatisfactionGrade: _serviceSatisfactionGrade,
+      } = result;
+
+      adviseForDoc.value = _adviseForDoc;
+      adviseForHos.value = _adviseForDoc;
+      docEvlContentList.value = _docEvlContentList;
+      docGrade.value = _docGrade;
+      otherSuggestions.value = _otherSuggestions;
+      rateInfoList.value = _rateInfoList;
+      serviceSatisfactionGrade.value = _serviceSatisfactionGrade;
+    }
+  };
+
+  const goDoctorCard = () => {
+    const { deptName, docName, hosDocId, hosId, hosDeptId } = docDetail.value;
+    if (hosDocId) {
+      uni.navigateTo({
+        url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
+          deptName,
+          docName,
+          hosDocId,
+          hosId,
+          hosDeptId,
+        }),
+      });
     }
   };
 
   const init = async () => {
     await getConfig();
     getDocDetail();
+
+    if (isForShow.value) {
+      getCommentHis();
+    }
   };
 
   const submitComment = async () => {
     const { orderId } = pageProps.value;
-    // const {} = gStores
     const {
       browser: { source },
     } = gStores.globalStore;
@@ -249,6 +336,24 @@
     };
 
     await api.addRegSatisfaction(requestArg);
+
+    gStores.messageStore.showMessage(
+      '您的评价已提交，请等待系统审核通过',
+      3000,
+      {
+        closeCallBack() {
+          const pages = getCurrentPages();
+
+          if (pages.length > 1) {
+            uni.navigateBack();
+          } else {
+            uni.reLaunch({
+              url: '/pages/home/home',
+            });
+          }
+        },
+      }
+    );
   };
 
   onLoad((opt) => {

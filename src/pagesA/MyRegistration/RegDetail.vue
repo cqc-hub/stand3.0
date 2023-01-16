@@ -230,7 +230,9 @@
         </button>
 
         <button
-          v-if="orderRegInfo.rateFlag !== 1"
+          v-if="
+            orderRegInfo.rateFlag !== 1 && orderConfig.isOpenComment === '1'
+          "
           @click="goRatePage"
           class="btn g-border btn-primary"
         >
@@ -633,7 +635,7 @@
       hosId,
       hosDeptId,
       rateFlag,
-      appointmentDate
+      appointmentDate,
     } = orderRegInfo.value;
 
     uni.navigateTo({
@@ -645,7 +647,7 @@
         hosId,
         hosDeptId,
         rateFlag,
-        appointmentDate
+        appointmentDate,
       }),
     });
   };

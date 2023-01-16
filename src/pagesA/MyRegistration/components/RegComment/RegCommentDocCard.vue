@@ -37,8 +37,6 @@
         </view>
       </view>
     </view>
-
-    <slot name="footer" :item="item" />
   </view>
 </template>
 

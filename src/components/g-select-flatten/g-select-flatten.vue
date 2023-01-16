@@ -3,6 +3,9 @@
     :style="{
       'grid-template-columns': `repeat(${column}, 1fr)`,
     }"
+    :class="{
+      'my-disabled': disabled,
+    }"
     class="selpopup-container"
   >
     <view
