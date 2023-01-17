@@ -318,6 +318,10 @@
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
       }
+
+      // #ifdef MP-ALIPAY
+      getListData();
+      // #endif
     } else {
       getListData();
     }

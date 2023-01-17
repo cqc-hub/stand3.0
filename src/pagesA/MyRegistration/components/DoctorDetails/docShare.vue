@@ -2,77 +2,7 @@
   <view class="">
     <uni-popup ref="popup" :isMaskClick="false" @change="change">
       <view>
-        <!-- <view class="popup-content my-display-none">
-          <image
-            :src="$global.BASE_IMG + 'v3_doctor_bg_share.png'"
-            class="head-bg"
-            :style="{
-              height: bgHeadHeight,
-            }"
-          />
-
-          <view class="p32 content">
-            <view class="head flex-between">
-              <view class="doc-info">
-                <view class="g-bold f48 mb12">王柏恒</view>
-                <view class="doc-honor flex-normal">
-                  <view class="doc-honor-item text-no-wrap f24 color-blue">
-                    副主任医师
-                  </view>
-
-                  <view class="doc-honor-item text-no-wrap f24 color-blue">
-                    副主任
-                  </view>
-
-                  <view class="doc-honor-item text-no-wrap f24 color-blue">
-                    副主任医师副主任医师副主任医师
-                  </view>
-                </view>
-              </view>
-
-              <image
-                :src="'/static/image/order/order-doctor-avatar.png'"
-                class="doc-avatar"
-                mode="aspectFill"
-              />
-            </view>
-
-            <view class="f24 g-break-word text-ellipsis doc-pos">
-              浙江省人民医院·口腔科
-            </view>
-
-            <view id="doc-goodat" class="doc-goodat p32 g-border mt24">
-              <view
-                class="g-break-word text-ellipsis doc-goodat-content color-444 f28"
-              >
-                <image
-                  :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
-                  class="doc-major-goodat"
-                  mode="widthFix"
-                />
-                <text>
-                  口腔科副主任，2002年毕业于浙江大学口腔系，口腔正畸硕士，副主任医师，硕士生导师，浙江省
-                  口腔科副主任，2002年毕业于浙江大学口腔系，口腔正畸硕士，副主任医师，硕士生导师，浙江省
-                </text>
-              </view>
-            </view>
-          </view>
-
-          <view class="p32 content-tail">
-            <view class="tail-container g-flex-rc-cc">
-              <view class="g-border qr-code">
-                <w-qrcode :options="options" ref="qrcode" />
-              </view>
-
-              <view @click="capture" class="color-888 f24 mt16 share-label">
-                用微信/支付宝扫描二维码 关注我吧
-              </view>
-            </view>
-          </view>
-        </view> -->
-
         <view class="g-flex-rc-cc">
-          <!--   -->
           <view class="my-display-none">
             <w-qrcode :options="options" ref="qrcode" />
           </view>

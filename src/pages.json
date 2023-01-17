@@ -377,6 +377,16 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "takeNumber/takeNumber",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "门诊取号"
+          }
+        },
+
+        {
           "path": "medRecordApply/medRecordDetails",
           "extend": {
             "patient": true
