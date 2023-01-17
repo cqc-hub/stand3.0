@@ -6,8 +6,9 @@
       class="reg-detail"
     >
       <scroll-view scroll-y class="scroll-container">
+        <view class="safe-height" />
         <view class="box">
-          <view class="reg-header flex-between">
+          <view class="reg-header">
             <view
               :style="{
                 color: titleStatus.detailColor,
@@ -24,7 +25,7 @@
                   }"
                   class="header-desc f26 flex-normal"
                 >
-                  <view v-if="info.fee" class="mr24">
+                  <view v-if="info.fee" class="mr24 text-no-wrap">
                     <text class="mr12">支付金额:</text>
                     <text>
                       {{ info.fee }}元
@@ -35,8 +36,8 @@
                   </view>
 
                   <view v-if="info.refundFee">
-                    <text class="mr12">退还金额:</text>
-                    <text class="mr12">{{ info.refundFee }}元</text>
+                    <text class="mr12 text-no-wrap">退还金额:</text>
+                    <text class="mr12 g-break-word">{{ info.refundFee }}元</text>
                     <text
                       @click.stop="refRefConfirm.show"
                       class="iconfont refund-fee-icon"
@@ -65,7 +66,7 @@
             </view>
           </view>
 
-          <view class="container">
+          <view class="container mt24">
             <view v-if="expressInfo" class="container-box p32 mb32 g-border">
               <express-Step
                 :pointEnd="_expressInfo.pointEnd"
@@ -506,17 +507,17 @@
         align-items: center;
         color: #fff;
         .reg-header-label {
-          height: 150rpx;
+          // height: 150rpx;
           .title {
             font-weight: 600;
           }
 
           .header-desc {
-            // white-space: nowrap;
-            position: absolute;
             // #ifdef  MP-ALIPAY
             transform: translateY(5rpx);
             // #endif
+            align-items: flex-start;
+            flex-wrap: wrap;
 
             .refund-fee-icon {
               font-size: var(--hr-font-size-xl);
@@ -539,30 +540,19 @@
           right: 0;
 
           mask: linear-gradient(180deg, #ffffff35, rgba(255, 255, 255, 0));
+          // transform: translateY(20rpx);
+          position: absolute;
+          top: -50rpx;
+          right: 0;
         }
       }
 
-      .container {
-        transform: translateY(-60rpx);
-        // #ifdef  MP-WEIXIN
-        transform: translateY(-50rpx);
-        // #endif
-
-        // &::before {
-        //   content: '';
-        //   display: block;
-        //   height: 40rpx;
-        //   margin: 0 12rpx;
-        //   background-color: rgba(0, 0, 0, 0.2);
-        //   border-radius: 60rpx;
-        // }
-      }
 
       .container-box {
         background-color: #fff;
         // box-shadow: inset 0 18rpx 5px rgba(0, 0, 0, 0.07);
         margin: 0 32rpx;
-        transform: translateY(-20rpx);
+        // transform: translateY(-20rpx);
         border-radius: 8px;
       }
 

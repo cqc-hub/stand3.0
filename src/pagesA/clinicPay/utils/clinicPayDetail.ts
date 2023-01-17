@@ -215,6 +215,8 @@ export const usePayPage = () => {
   };
 
   const getUnPayList = async () => {
+    console.log('gStores.userStore.patChoose', gStores.userStore.patChoose);
+
     if (unPayList.value.length) {
       return;
     }
