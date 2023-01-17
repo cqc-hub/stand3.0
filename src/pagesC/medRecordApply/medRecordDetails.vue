@@ -529,22 +529,28 @@
     // #endif
 
     if (isOcrSfz === '1') {
-      const res = await useOcr(true);
-      const { image, name } = res;
+      try {
+        const res = await useOcr(true);
+        const { image, name } = res;
 
-      if (image) {
-        if (name === gStores.userStore.patChoose.patientName) {
-          if (iswx) {
-            idCardImg.value.frontIdCardUrl = await base64Src(image);
+        if (image) {
+          if (name === gStores.userStore.patChoose.patientName) {
+            if (iswx) {
+              idCardImg.value.frontIdCardUrl = await base64Src(image);
+            } else {
+              idCardImg.value.frontIdCardUrl = image;
+            }
           } else {
-            idCardImg.value.frontIdCardUrl = image;
+            gStores.messageStore.showMessage(
+              '上传的身份证信息与就诊人身份信息不一致，请重新上传！',
+              3000
+            );
           }
-        } else {
-          gStores.messageStore.showMessage(
-            '上传的身份证信息与就诊人身份信息不一致，请重新上传！',
-            3000
-          );
         }
+      } catch (error) {
+        // #ifdef MP-ALIPAY
+        gStores.messageStore.showMessage('请上传身份证正面图片', 3000);
+        //#endif
       }
     } else {
       const res = await chooseImg();
