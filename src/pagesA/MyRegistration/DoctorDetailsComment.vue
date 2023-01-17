@@ -7,14 +7,20 @@
         @load="loadList"
         @refresh="refreshList"
       >
-        <view class="list-content">
-          <view class="safe-height"></view>
-          <view v-for="(item, i) in list" :key="i">
-            <Doc-Comment-Item :item="item" :tagList="tagList" />
+        <template #default>
+          <view class="list-content">
+            <view class="safe-height"></view>
+            <view v-for="(item, i) in list" :key="i">
+              <Doc-Comment-Item :item="item" :tagList="tagList" />
+            </view>
           </view>
+        </template>
 
-          <!-- <Doc-Comment :list="list" :total="total" /> -->
-        </view>
+        <template #empty>
+          <view class="empty-list">
+            <g-empty :current="5" text="暂无患者评价" noTransformY />
+          </view>
+        </template>
       </Scroll-List>
     </view>
   </view>
@@ -45,6 +51,7 @@
   const option = ref({
     size: 10,
     auto: true,
+    emptyText: '暂无患者评价',
   });
 
   const getList = async (pageInfo) => {
@@ -111,9 +118,10 @@
 
 <style lang="scss" scoped>
   .g-page {
+    background-color: #fff;
+
     .list-content {
       padding: 0 32rpx;
-      background-color: #fff;
     }
   }
 </style>
