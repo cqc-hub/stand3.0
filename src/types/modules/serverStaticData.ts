@@ -66,6 +66,7 @@ export interface ISystemConfig {
     requireSfz?: string[]; // 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式
     purpose?: string[]; // 复印目的 不配置使用原来的那几个目的
     selPurposeLen?: number; // 可选择的复印目的长度 默认 3
+    isPurposeRadio?: '1'; //目的有没有份数可以选择
 
     // 收钱方式 0 预收 1 按项目、目的
     isItemCount?: '0' | '1';

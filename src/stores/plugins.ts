@@ -2,6 +2,7 @@ import { App } from 'vue';
 import { createPinia } from 'pinia';
 import { createPersistedState } from 'pinia-plugin-persistedstate';
 import devalue from '@nuxt/devalue';
+import globalGl from '@/config/global';
 
 import {
   setLocalStorage,

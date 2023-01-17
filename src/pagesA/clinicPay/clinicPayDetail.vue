@@ -320,6 +320,7 @@
       }
 
       // #ifdef MP-ALIPAY
+      // 微信会触发组件 change 事件, 支付宝不会
       getListData();
       // #endif
     } else {

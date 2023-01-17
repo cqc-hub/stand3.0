@@ -197,7 +197,7 @@
 
             <view class="mt24">
               <g-select-flatten
-                v-if="pageConfig.isItemCount === '1'"
+                v-if="pageConfig.isPurposeRadio === '1'"
                 :selectLength="selPurposeLen"
                 :list="aimList"
                 v-model:value="aimValue"
@@ -701,7 +701,7 @@
   };
 
   const paySubmit = async () => {
-    const { sfz, requireSfz, isItemCount } = pageConfig.value;
+    const { sfz, requireSfz, isPurposeRadio } = pageConfig.value;
     let { frontIdCardUrl, endIdCardUrl, handIdCardUrl, censusRegisterUrl } =
       idCardImg.value;
     const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
@@ -769,7 +769,7 @@
       return;
     }
 
-    if (isItemCount === '1') {
+    if (isPurposeRadio === '1') {
       if (!aimValue.value.length) {
         scrollTo.value = '_aim';
         showMessage('请先选择复印目的', 3000);

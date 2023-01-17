@@ -118,7 +118,7 @@
                 </view>
               </view>
 
-              <view v-if="info.printCount" class="mt32 _row">
+              <view v-else class="mt32 _row">
                 <view class="_title">复印目的</view>
                 <view class="_content">
                   {{ getPrintCount }}
