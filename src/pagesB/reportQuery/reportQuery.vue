@@ -113,7 +113,7 @@
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
-    const { cardNumber, patientId } = gStores.userStore.patChoose;
+    const { cardNumber, patientId, idCardEncry } = gStores.userStore.patChoose;
     let params = {
       headerType: headerType,
       headerName: headerName,
@@ -121,6 +121,7 @@
       cardNumber,
       pageNumber: page,
       pageSize: size,
+      idCardEncry
       //检查传参
       // headerType: headerType,
       // headerName: headerName,
