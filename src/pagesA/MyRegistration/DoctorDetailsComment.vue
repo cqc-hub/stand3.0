@@ -1,7 +1,12 @@
 <template>
   <view class="g-page">
     <view class="g-container">
-      <Scroll-List ref="scrollListRef" :option="option" @load="loadList">
+      <Scroll-List
+        ref="scrollListRef"
+        :option="option"
+        @load="loadList"
+        @refresh="refreshList"
+      >
         <view class="list-content">
           <view class="safe-height"></view>
           <view v-for="(item, i) in list" :key="i">
@@ -42,28 +47,46 @@
     auto: true,
   });
 
-  const loadList = async (pageInfo) => {
+  const getList = async (pageInfo) => {
     const { hosDocId } = pageProps.value;
     const { page, size } = pageInfo;
 
-    return api
-      .getAllSatisfactions({
-        hosDocId,
-        pageSize: size,
-        index: page,
-      })
-      .then(({ result }) => {
-        const { satisfactionResultList, totalNum } = result;
+    const { result } = await api.getAllSatisfactions({
+      hosDocId,
+      pageSize: size,
+      index: page,
+    });
 
-        list.value = [...list.value, ...satisfactionResultList];
-        total.value = totalNum * 1;
+    const { satisfactionResultList, totalNum } = result;
 
-        const returnArg = {
-          list: list.value,
-          total: total.value,
-        };
+    list.value = [...list.value, ...satisfactionResultList];
+    total.value = totalNum * 1;
 
+    return {
+      list: list.value,
+      total: total.value,
+    };
+  };
+
+  const loadList = async (pageInfo) => {
+    getList(pageInfo)
+      .then((returnArg) => {
         scrollListRef.value.loadSuccess(returnArg);
+      })
+      .catch(() => {
+        scrollListRef.value.loadFail();
+      });
+  };
+
+  const refreshList = async (pageInfo) => {
+    list.value = [];
+    total.value = 0;
+    getList(pageInfo)
+      .then((r) => {
+        scrollListRef.value.refreshSuccess(r);
+      })
+      .catch(() => {
+        scrollListRef.value.refreshFail();
       });
   };
 
