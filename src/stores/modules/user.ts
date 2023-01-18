@@ -16,6 +16,7 @@ const userStore = defineStore('user', {
       'patList',
       'patChoose',
       'clickPat',
+      'authPhoneVerify'
     ],
   },
 

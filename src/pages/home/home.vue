@@ -180,7 +180,7 @@
     GStores,
     routerJump,
     LoginUtils,
-    outLogin
+    outLogin,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -203,7 +203,7 @@
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;
     if (len) {
-      return noticeMenu.value.map((o) => o.title).join('         ');
+      return noticeMenu.value.map((o) => o.title).join('     ');
     } else {
       return '';
     }
@@ -282,11 +282,10 @@
     if (gStores.globalStore.isLogin) {
       if (!gStores.userStore.authPhoneVerify) {
         outLogin({
-          isHideMessage: true
+          isHideMessage: true,
         });
       }
     }
-
   });
   const getNotice = async () => {
     const { result } = await api.getAnnouncementCms({});
