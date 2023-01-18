@@ -549,8 +549,10 @@
         }
       } catch (error) {
         // #ifdef MP-ALIPAY
-        gStores.messageStore.showMessage('请上传身份证正面图片', 3000);
+        gStores.messageStore.showMessage('请上传正确的身份证照片', 3000);
         //#endif
+
+        console.error(error);
       }
     } else {
       const res = await chooseImg();

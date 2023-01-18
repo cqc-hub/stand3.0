@@ -9,14 +9,14 @@
       <view class="xy-dialog__header" v-if="title.length > 0">
         {{ title }}
       </view>
-      <view class="xy-dialog__content" :style="{ 'text-align': textalign }">
+      <scroll-view class="xy-dialog__content" :style="{ 'text-align': textalign }" scroll-y>
         <template v-if="content">
           <view class="modal-content">{{ content }}</view>
         </template>
         <template v-else>
           <slot />
         </template>
-      </view>
+      </scroll-view>
       <view class="xy-dialog__footer">
         <view
           v-if="isReverseBtn"
@@ -65,7 +65,7 @@
       // 对齐方式
       textalign: {
         type: String,
-        default: 'center',
+        default: 'left',
       },
 
       // 取消文字
@@ -212,6 +212,7 @@
       font-size: 36upx;
       box-sizing: border-box;
       line-height: 1.5;
+      max-height: 600rpx;
       .modal-content {
         padding: 0 32rpx 64rpx 32rpx;
         color: #444;

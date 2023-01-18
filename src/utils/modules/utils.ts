@@ -7,7 +7,6 @@ import {
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 
-
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
 export const debounce = function (func, wait = 1000, immediate = true): any {
@@ -85,7 +84,7 @@ export const routerJump = async (url?: `/${string}`) => {
 
       const menuItem = getMenuById(routerStore._id, menus);
       if (menuItem) {
-        useCommonTo(menuItem,{type:'reLaunch'});
+        useCommonTo(menuItem, { type: 'reLaunch' });
       } else {
         // messageStore.showMessage(
         //   '未找到对应menuId 的 menu：' + routerStore._id
@@ -124,15 +123,15 @@ export const openLocation = async (
  */
 export const nameConvert = (name: string) => {
   if (!name) {
-    return ''
+    return '';
   }
   let userName = '';
   if (name.length == 1) {
     userName = '*';
-  }else if (name.length > 1 ) {
-    userName = ''
+  } else if (name.length > 1) {
+    userName = '';
     for (let i = 1; i < name.length; i++) {
-      userName += '*'
+      userName += '*';
     }
     userName += name.slice(-1);
   }
@@ -163,4 +162,3 @@ export const downFile = (url: string): Promise<string> => {
     });
   });
 };
-
