@@ -180,6 +180,7 @@
     GStores,
     routerJump,
     LoginUtils,
+    outLogin
   } from '@/utils';
 
   import global from '@/config/global';
@@ -276,6 +277,16 @@
       !uni.getStorageSync('hospital_order') &&
       authorization();
     // #endif
+
+    // 对应统一认证更新前登录的用户
+    if (gStores.globalStore.isLogin) {
+      if (!gStores.userStore.authPhoneVerify) {
+        outLogin({
+          isHideMessage: true
+        });
+      }
+    }
+
   });
   const getNotice = async () => {
     const { result } = await api.getAnnouncementCms({});

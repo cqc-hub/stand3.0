@@ -1,5 +1,12 @@
 <template>
   <view class="g-page">
+    <g-flag typeFg="5" isShowFg />
+    <g-choose-pat />
+
+    <scroll-view class="g-container" scroll-y>
+      <view v-if="isComplete"></view>
+    </scroll-view>
+
     <xy-dialog
       title="授权提示"
       content="未获取到您的位置,请允许位置授权,以便判断您是否处于医院规定取号区域内"
@@ -22,6 +29,8 @@
   import api from '@/service/api';
 
   const gStores = new GStores();
+  const isComplete = ref(false);
+  const list = ref([] as any[]);
   const isWxRequestQxDialogShow = ref(false);
   const locationInfo = ref({
     latitude: '',
@@ -32,11 +41,18 @@
     const { patientId } = gStores.userStore.patChoose;
     const { latitude, longitude } = locationInfo.value;
 
-    api.getCheckInList({
-      latitude,
-      longitude,
-      patientId,
-    });
+    isComplete.value = false;
+    list.value = [];
+
+    api
+      .getCheckInList({
+        latitude,
+        longitude,
+        patientId,
+      })
+      .finally(() => {
+        isComplete.value = true;
+      });
   };
 
   const getLocation = async (compel = false) => {

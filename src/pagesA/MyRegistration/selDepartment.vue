@@ -215,7 +215,7 @@
 
 <style lang="scss" scoped>
   .g-page {
-    background-color: #fff; 
+    background-color: #fff;
   }
 
   .reg-tip {
@@ -227,5 +227,4 @@
   .search-input {
     margin: 16rpx 32rpx;
   }
-
 </style>
