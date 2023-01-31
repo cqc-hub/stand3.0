@@ -118,6 +118,7 @@
       headerType: headerType,
       headerName: headerName,
       patientId,
+      // cardNumber: '00000646',
       cardNumber,
       pageNumber: page,
       pageSize: size,

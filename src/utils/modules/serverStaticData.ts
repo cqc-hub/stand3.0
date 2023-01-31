@@ -107,6 +107,8 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
       extraData[herenId] = gStores.globalStore.herenId;
       _d._herenId = gStores.globalStore.herenId;
     }
+
+    _d._herenId = gStores.globalStore.herenId;
   }
 
   let fullUrl = joinQuery(path, extraData);

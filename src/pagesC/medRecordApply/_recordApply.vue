@@ -140,6 +140,7 @@
       },
       addition: {
         token: 'token',
+        herenId: 'herenId'
       },
     };
 
