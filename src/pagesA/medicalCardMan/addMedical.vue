@@ -497,14 +497,17 @@
         }
         // #endif
 
-        if (key === formKey.patientPhone && globalGl.systemInfo.isSearchInHos) {
-          if (globalGl.systemInfo.isSearchInHos) {
-            o.disabled = true;
-          }
+        // if (key === formKey.patientPhone && globalGl.systemInfo.isSearchInHos) {
+        //   if (globalGl.systemInfo.isSearchInHos) {
+        //     o.disabled = true;
+        //   }
 
-          // #ifdef MP-ALIPAY
+        //   // #ifdef MP-ALIPAY
+        //   o.disabled = true;
+        //   // #endif
+        // }
+        if (key === formKey.patientPhone) {
           o.disabled = true;
-          // #endif
         }
       } else {
         // #ifdef MP-ALIPAY

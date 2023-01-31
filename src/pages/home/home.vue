@@ -286,6 +286,12 @@
         });
       }
     }
+
+    if (globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
+      outLogin({
+        isHideMessage: true,
+      });
+    }
   });
   const getNotice = async () => {
     const { result } = await api.getAnnouncementCms({});

@@ -4,7 +4,19 @@
     <g-choose-pat />
 
     <scroll-view class="g-container" scroll-y>
-      <view v-if="isComplete"></view>
+      <view v-if="isComplete || isRefresh" class="content">
+        <view v-if="list.length">
+          <Number-List
+            :list="list"
+            :loading="isRefresh"
+            @refresh-data="refreshData"
+          />
+        </view>
+
+        <view v-else class="empty-list">
+          <g-empty :current="1" noTransformY />
+        </view>
+      </view>
     </scroll-view>
 
     <xy-dialog
@@ -17,6 +29,8 @@
         <view @click="requestWxQx">去授权</view>
       </template>
     </xy-dialog>
+
+    <g-message />
   </view>
 </template>
 
@@ -25,26 +39,38 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import { GStores } from '@/utils';
+  import { type TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
 
+  import NumberList from './components/NumberList.vue';
+
   const gStores = new GStores();
   const isComplete = ref(false);
-  const list = ref([] as any[]);
+  const isRefresh = ref(false);
+  const list = ref([] as TTakeNumberListItem[]);
   const isWxRequestQxDialogShow = ref(false);
   const locationInfo = ref({
     latitude: '',
     longitude: '',
   });
 
+  const refreshData = () => {
+    isRefresh.value = true;
+
+    init();
+  };
+
   const getList = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { latitude, longitude } = locationInfo.value;
 
     isComplete.value = false;
-    list.value = [];
+    if (!isRefresh.value) {
+      list.value = [];
+    }
 
-    api
+    const { result } = await api
       .getCheckInList({
         latitude,
         longitude,
@@ -52,7 +78,14 @@
       })
       .finally(() => {
         isComplete.value = true;
+        isRefresh.value = false;
       });
+
+    list.value = result || [];
+
+    list.value.map((o) => {
+      o.signIn = false;
+    });
   };
 
   const getLocation = async (compel = false) => {
@@ -111,6 +144,10 @@
 
 <style lang="scss" scoped>
   .g-page {
-    background-color: #fff;
+    background: var(--hr-neutral-color-1);
+  }
+
+  .content {
+    padding: 0 32rpx;
   }
 </style>

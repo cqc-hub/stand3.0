@@ -37,7 +37,7 @@
   import { defineComponent, ref, nextTick, onMounted, reactive } from 'vue';
   import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
   import { onLoad } from '@dcloudio/uni-app';
-  import { ServerStaticData, wait } from '@/utils';
+  import { ServerStaticData, GStores, outLogin } from '@/utils';
   import { encryptDes, getSysCode, joinQuery, joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
 
@@ -79,6 +79,7 @@
   const props = defineProps<TPageType>();
   const messageStore = useMessageStore();
   const routeStore = useRouterStore();
+  const gStores = new GStores();
 
   const menu1List = ref([]); //我的订单
   const menu2List = ref([]); //我的服务
@@ -137,6 +138,12 @@
     } else if (props._isOutLogin) {
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
+
+    if (gStores.globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
+      outLogin({
+        isHideMessage: true,
+      });
+    }
   });
   //获取配置数据
   const getHomeConfig = async () => {
@@ -149,19 +156,17 @@
       skeletonProps.value.loading = false;
     }
   };
-  const ttt = () => { 
-
+  const ttt = () => {
     // 选择就诊人
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/order?deptName=眼科病院&clinicalType=1&hosId=13002&firstHosDeptId=A02&secondHosDeptId=A020201'
-    }); 
+      url: '/pagesA/MyRegistration/order?deptName=眼科病院&clinicalType=1&hosId=13002&firstHosDeptId=A02&secondHosDeptId=A020201',
+    });
 
     // uni.navigateTo({
     //   url: '/pages/piniaTest/piniaTest'
     //   // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
-    // }); 
+    // });
   };
-
 </script>
 
 <style lang="scss" scoped>

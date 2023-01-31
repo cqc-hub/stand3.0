@@ -74,7 +74,7 @@
                       :class="{
                         'g-split-line': docDetail.deptName,
                       }"
-                      class="color-444 f28 g-split-line mr12 pr12"
+                      class="color-444 f28 mr12 pr12"
                     >
                       {{ $global.systemInfo.name || '' }}
                     </view>

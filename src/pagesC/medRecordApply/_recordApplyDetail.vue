@@ -359,7 +359,7 @@
   const formatterTime = (time: string) => dayjs(time).format('YYYY-MM-DD');
 
   const applyAgain = () => {
-    uni.redirectTo({
+    uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
         hosId: props.hosId,
         phsOrderNo: props.phsOrderNo,
