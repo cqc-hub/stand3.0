@@ -43,7 +43,7 @@
               </text>
 
               <view class="f28 color-888">
-                {{ outinfo.diagnosis || '无诊断' }}
+                {{ outinfo.diagnosis || '' }}
               </view>
 
               <view

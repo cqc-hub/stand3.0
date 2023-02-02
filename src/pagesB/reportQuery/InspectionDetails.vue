@@ -125,61 +125,71 @@
           >
             <view class="seen">
               <view class="title">细菌培养</view>
-              <!-- 细菌培养存在 -->
-              <template v-if="checkoutReportList.antiItemResult[0].antiList">
-                <view class="content">
-                  {{ checkoutReportList.antiItemResult[0].bioName }}
-                </view>
-                <!-- 抗菌药物内容 -->
-                <view class="seen">
-                  <view class="title">抗菌药物</view>
-                  <view class="table">
-                    <view class="table-title">
-                      <view class="table-title1 table-title-first">
-                        抗菌药物
-                      </view>
-                      <view class="table-title2 table-title-common">解释</view>
-                      <view class="table-title3 table-title-common">结果</view>
-                      <view class="table-title4 table-title-common">单位</view>
-                      <view class="table-title5 table-title-common">方法</view>
-                    </view>
-                    <template
-                      v-for="(item, index) in checkoutReportList
-                        .antiItemResult[0].antiList"
-                      :key="index"
-                    >
-                      <view class="table-content">
-                        <view class="table-title1 table-content-first">
-                          {{ item.antiName }}
+              <view
+                v-for="(_item, i) in checkoutReportList.antiItemResult"
+                :key="i"
+              >
+                <!-- 细菌培养存在 -->
+                <template v-if="_item.antiList">
+                  <!-- 抗菌药物内容 -->
+                  <view class="seen">
+                    <view class="title">{{ _item.bioName }}</view>
+                    <view class="table">
+                      <view class="table-title">
+                        <view class="table-title1 table-title-first">
+                          抗菌药物
                         </view>
                         <view class="table-title2 table-title-common">
-                          {{ item.result }}
+                          解释
                         </view>
-                        <view
-                          v-if="item.antiResult"
-                          class="table-title3 table-title-common"
-                        >
-                          {{ item.antiResult }}
+                        <view class="table-title3 table-title-common">
+                          结果
                         </view>
-                        <view
-                          v-else
-                          class="table-title3 table-title-common"
-                        ></view>
                         <view class="table-title4 table-title-common">
-                          {{ item.itemUnits }}
+                          单位
                         </view>
                         <view class="table-title5 table-title-common">
-                          {{ item.testMethod }}
+                          方法
                         </view>
                       </view>
-                    </template>
+                      <template
+                        v-for="(item, index) in checkoutReportList
+                          .antiItemResult[0].antiList"
+                        :key="index"
+                      >
+                        <view class="table-content">
+                          <view class="table-title1 table-content-first">
+                            {{ item.antiName }}
+                          </view>
+                          <view class="table-title2 table-title-common">
+                            {{ item.result }}
+                          </view>
+                          <view
+                            v-if="item.antiResult"
+                            class="table-title3 table-title-common"
+                          >
+                            {{ item.antiResult }}
+                          </view>
+                          <view
+                            v-else
+                            class="table-title3 table-title-common"
+                          ></view>
+                          <view class="table-title4 table-title-common">
+                            {{ item.itemUnits }}
+                          </view>
+                          <view class="table-title5 table-title-common">
+                            {{ item.testMethod }}
+                          </view>
+                        </view>
+                      </template>
+                    </view>
                   </view>
-                </view>
-              </template>
-              <!-- 细菌培养不存在 -->
-              <template v-else>
-                <view class="content">未培养出真菌</view>
-              </template>
+                </template>
+                <!-- 细菌培养不存在 -->
+                <template v-else>
+                  <view class="content">未培养出真菌</view>
+                </template>
+              </view>
             </view>
           </template>
 
@@ -231,18 +241,18 @@
             </view>
           </template>
 
-            <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
-            <view v-if="pageProps.repType == 2" class="exegesis">
-              <view class="exegesis-content">
-                <view>注释：</view>
-                <view>S表示敏感，SDD表示剂量依赖性敏感</view>
-                <view>I表示中介</view>
-                <view>R表示耐药</view>
-                <view>MIC最低抑菌浓度</view>
-                <view>KB琼脂扩散法</view>
-                <view>Etest浓度梯度琼脂扩散实验</view>
-              </view>
+          <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
+          <view v-if="pageProps.repType == 2" class="exegesis">
+            <view class="exegesis-content">
+              <view>注释：</view>
+              <view>S表示敏感，SDD表示剂量依赖性敏感</view>
+              <view>I表示中介</view>
+              <view>R表示耐药</view>
+              <view>MIC最低抑菌浓度</view>
+              <view>KB琼脂扩散法</view>
+              <view>Etest浓度梯度琼脂扩散实验</view>
             </view>
+          </view>
         </view>
       </view>
     </view>

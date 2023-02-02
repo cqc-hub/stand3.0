@@ -289,7 +289,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     const { target, detail } = payload;
 
     if (!target.code) {
-      this.messageStore.showMessage('未获取到 code, 请重新点击', 3000);
+      this.messageStore.showMessage('用户未授权，请重新登录', 3000);
       return Promise.reject();
     }
 

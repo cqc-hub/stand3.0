@@ -19,6 +19,10 @@ const scJson: {
     isOpenButtom: '1',
     isHideHomeSearch: '1',
   },
+
+  1001033: {
+    isDrugDelivery: '1',
+  },
 };
 
 export const getSConfig = (sysCode: string) => {

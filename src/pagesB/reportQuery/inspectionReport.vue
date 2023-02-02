@@ -306,6 +306,7 @@
   import GreenToast from '@/components/greenPower/greenToast.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
+  let isScrollCheck = true
 
   const { contentTitle, greenToastContent, greenToastDuration, getPowerEnerg } =
     useReportPowerEnerg();
@@ -342,6 +343,9 @@
   const chooseBtn = ref(0);
   const toView = ref('item0');
   const choose = (index) => {
+    if (chooseBtn.value === index) {
+      return
+    }
     chooseBtn.value = index;
     toView.value = 'item' + index;
     //按钮锚点
@@ -351,16 +355,27 @@
       .selectAll('.container-block')
       .boundingClientRect((data) => {
         item.value = data[index]; //目标位置的节点：类class或者id
+        console.log({
+          data,
+          index
+        });
+
         uni
           .createSelectorQuery()
           .select('.page')
           .boundingClientRect((res) => {
             result.value = res; //最外层盒子的节点：类class或者id
+            console.log(res, 'cqc');
+
+            isScrollCheck = false
             uni.pageScrollTo({
               duration: 0,
               // scrollTop:data.top-50 - res.top,//到达距离顶部的top值 根据自己情况可调
-              scrollTop: boxTop.value[index].top, //如果置顶
+              scrollTop: boxTop.value[index].top - 50, //如果置顶
             });
+            setTimeout(() => {
+              isScrollCheck = true
+            }, 100)
           })
           .exec();
       })
@@ -368,6 +383,9 @@
   };
   const domData = ref();
   onPageScroll((e) => {
+    if (!isScrollCheck) {
+      return
+    }
     top.value = e.scrollTop;
     if (top.value > 0) {
       uni
@@ -377,8 +395,8 @@
           domData.value = data;
           for (var i = 0; i < domData.value.length; i++) {
             if (
-              boxTop.value[i].top <= top.value &&
-              top.value <= boxTop.value[i].bottom
+              boxTop.value[i].top < top.value &&
+              top.value < boxTop.value[i].bottom
             ) {
               chooseBtn.value = i;
               toView.value = 'item' + i;
@@ -397,7 +415,6 @@
         .selectAll('.container-block')
         .boundingClientRect((data) => {
           boxTop.value = data;
-          console.log(boxTop.value, 'kkkkkkkkkkkkkk');
         })
         .exec();
     });
