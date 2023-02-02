@@ -11,11 +11,7 @@
     >
       <image class="nav" :src="$global.BASE_IMG + 'yun_banner.png'" />
     </view> -->
-    <view
-      class="top"
-      :class="{ bgc: top > 0 }"
-      v-if="btnNumber && btnNumber > 1"
-    >
+    <view class="top bgc" v-if="btnNumber && btnNumber > 1">
       <scroll-view
         class="scroll-view_H"
         scroll-x="true"
@@ -48,7 +44,7 @@
         >
           <view class="container-block-top">
             <view class="container-top-click" @click="more(index)">
-              <view class="title">{{ item.repName }}</view>
+              <view class="title">{{ item.repName + '' + index }}</view>
               <view class="patient-information">
                 <view v-if="pageProps._scan !== '1'" class="subhead">
                   患者信息
@@ -298,7 +294,7 @@
     getShareTotalUrl,
     addWatermark,
   } from './utils';
-  import { GStores, nameConvert, wait } from '@/utils';
+  import { GStores, nameConvert, wait, throttle } from '@/utils';
   import { joinQuery, encryptDes, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
@@ -306,7 +302,7 @@
   import GreenToast from '@/components/greenPower/greenToast.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
-  let isScrollCheck = true
+  let isScrollCheck = true;
 
   const { contentTitle, greenToastContent, greenToastDuration, getPowerEnerg } =
     useReportPowerEnerg();
@@ -344,7 +340,7 @@
   const toView = ref('item0');
   const choose = (index) => {
     if (chooseBtn.value === index) {
-      return
+      return;
     }
     chooseBtn.value = index;
     toView.value = 'item' + index;
@@ -355,36 +351,40 @@
       .selectAll('.container-block')
       .boundingClientRect((data) => {
         item.value = data[index]; //目标位置的节点：类class或者id
-        console.log({
-          data,
-          index
-        });
 
         uni
           .createSelectorQuery()
           .select('.page')
           .boundingClientRect((res) => {
             result.value = res; //最外层盒子的节点：类class或者id
-            console.log(res, 'cqc');
+            const scrollTop = boxTop.value.reduce((p, c, idx) => {
+              if (idx < index) {
+                p += c.height;
+              }
 
-            isScrollCheck = false
+              return p;
+            }, 0);
+
+            isScrollCheck = false;
             uni.pageScrollTo({
               duration: 0,
               // scrollTop:data.top-50 - res.top,//到达距离顶部的top值 根据自己情况可调
-              scrollTop: boxTop.value[index].top - 50, //如果置顶
+              scrollTop,
             });
+            getBoxTop();
+
             setTimeout(() => {
-              isScrollCheck = true
-            }, 100)
+              isScrollCheck = true;
+            }, 100);
           })
           .exec();
       })
       .exec();
   };
   const domData = ref();
-  onPageScroll((e) => {
+  let dealScroll = (e) => {
     if (!isScrollCheck) {
-      return
+      return;
     }
     top.value = e.scrollTop;
     if (top.value > 0) {
@@ -393,19 +393,29 @@
         .selectAll('.container-block')
         .boundingClientRect((data) => {
           domData.value = data;
-          for (var i = 0; i < domData.value.length; i++) {
-            if (
-              boxTop.value[i].top < top.value &&
-              top.value < boxTop.value[i].bottom
-            ) {
-              chooseBtn.value = i;
-              toView.value = 'item' + i;
-              return;
-            }
+
+          let heightNow = 0;
+          const offTops: number[] = [];
+          for (let i = 0; i < domData.value.length; i++) {
+            const el = domData.value[i];
+            offTops.push(Math.abs(top.value - heightNow));
+            heightNow += el.height;
           }
+
+          const minValue = Math.min(...offTops);
+          const minIdx = offTops.findIndex((o) => o === minValue);
+
+          chooseBtn.value = minIdx;
+          toView.value = 'item' + minIdx;
         })
         .exec();
     }
+  };
+
+  dealScroll = throttle(dealScroll, 300);
+
+  onPageScroll((e) => {
+    dealScroll(e);
   });
   const boxTop = ref();
   const getBoxTop = () => {
@@ -435,13 +445,11 @@
   const pat = gStore.userStore.patChoose;
 
   onLoad((p) => {
-
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);
 
     console.log('获得参数-----', pageProps.value);
-
   });
 
   const getInspectionReportList = async () => {
