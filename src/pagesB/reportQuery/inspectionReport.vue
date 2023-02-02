@@ -44,7 +44,7 @@
         >
           <view class="container-block-top">
             <view class="container-top-click" @click="more(index)">
-              <view class="title">{{ item.repName + '' + index }}</view>
+              <view class="title">{{ item.repName }}</view>
               <view class="patient-information">
                 <view v-if="pageProps._scan !== '1'" class="subhead">
                   患者信息
