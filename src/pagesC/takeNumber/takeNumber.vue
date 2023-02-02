@@ -1,7 +1,23 @@
 <template>
   <view class="g-page">
     <g-flag typeFg="5" isShowFg />
-    <g-choose-pat />
+    <g-choose-pat @choose-pat="init" />
+    <view class="pat-box">
+      <view class="health-card">
+        <view @click="goRecord" class="mr14 g-flex-rc-cc">
+          <view class="iconfont icon-resize color-blue">&#xe6fc;</view>
+          <text>挂号记录</text>
+        </view>
+
+        <view v-if="isShowQueueBtn" @click="goQueueNumber" class="g-flex-rc-cc">
+          <image
+            class="queue-icon mr14"
+            :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
+          />
+          <text>排队叫号</text>
+        </view>
+      </view>
+    </view>
 
     <scroll-view class="g-container" scroll-y>
       <view v-if="isComplete || isRefresh" class="content">
@@ -10,6 +26,8 @@
             :list="list"
             :loading="isRefresh"
             @refresh-data="refreshData"
+            @take-number="takeNumber"
+            @sign-in="signIn"
           />
         </view>
 
@@ -30,30 +48,85 @@
       </template>
     </xy-dialog>
 
+    <Qr-Popup :qrValue="qrValue" v-model:show="isShowQr" />
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { watch, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
-  import { GStores } from '@/utils';
+  import { GStores, useTBanner, ServerStaticData } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
 
   import NumberList from './components/NumberList.vue';
+  import QrPopup from './components/QrPopup.vue';
 
   const gStores = new GStores();
   const isComplete = ref(false);
   const isRefresh = ref(false);
   const list = ref([] as TTakeNumberListItem[]);
   const isWxRequestQxDialogShow = ref(false);
+  const qrValue = ref('');
+  const isShowQr = ref(false);
+  const isShowQueueBtn = ref(false);
+
   const locationInfo = ref({
     latitude: '',
     longitude: '',
   });
+
+  const takeNumber = async (item: TTakeNumberListItem) => {
+    const { ampm, visitDate, visitId, hosId } = item;
+    const { source } = gStores.globalStore.browser;
+    const { patientId } = gStores.userStore.patChoose;
+
+    const args = {
+      ampm,
+      visitDate,
+      visitId,
+      source,
+      patientId,
+      hosId,
+    };
+
+    await api.getCheckIn(args);
+    getList();
+  };
+
+  const signIn = async (item: TTakeNumberListItem) => {
+    const { qrValue: q } = item;
+
+    if (q) {
+      qrValue.value = q;
+      isShowQr.value = true;
+    }
+  };
+
+  const goRecord = () => {
+    uni.navigateTo({
+      url: '/pagesA/MyRegistration/MyRegistration',
+    });
+  };
+
+  const goQueueNumber = () => {
+    useTBanner({
+      type: 'h5',
+      path: 'pagesC/queueNumber/queueNumber',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: gStores.globalStore.sysCode,
+      },
+
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+      },
+    });
+  };
 
   const refreshData = () => {
     isRefresh.value = true;
@@ -84,7 +157,7 @@
     list.value = result || [];
 
     list.value.map((o) => {
-      o.signIn = false;
+      // o.signIn = false;
     });
   };
 
@@ -137,7 +210,10 @@
     getList();
   };
 
-  onLoad(() => {
+  onLoad(async () => {
+    isShowQueueBtn.value =
+      (await ServerStaticData.getSystemConfig('order'))?.takeNumberQueueBtn ===
+      '1';
     init();
   });
 </script>
@@ -149,5 +225,56 @@
 
   .content {
     padding: 0 32rpx;
+  }
+
+  .pat-box {
+    &::after,
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 16rpx;
+    }
+  }
+
+  .add-pat-box {
+    margin: 0 32rpx;
+    padding: 38rpx 0;
+    background-color: var(--h-color-white);
+    border-radius: 16rpx;
+    color: var(--hr-brand-color-6);
+    font-weight: var(--h-weight-2);
+  }
+
+  .health-card {
+    margin: 0 32rpx;
+
+    display: flex;
+
+    > view {
+      flex: 1;
+      padding: 38rpx 0;
+      background-color: var(--h-color-white);
+      border-radius: 16rpx;
+      color: var(--hr-brand-color-6);
+      display: flex;
+      justify-content: center;
+      line-height: 40rpx;
+    }
+  }
+
+  .mr14 {
+    margin-right: 14rpx;
+  }
+
+  .icon-resize {
+    font-size: 48rpx;
+    margin-right: 10rpx;
+    font-weight: 500;
+  }
+
+  .queue-icon {
+    width: 50rpx;
+    height: 50rpx;
   }
 </style>

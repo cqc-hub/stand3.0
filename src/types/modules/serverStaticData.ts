@@ -38,6 +38,9 @@ export interface ISystemConfig {
     /** 搜索 */
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
+
+    /** 门诊取号 */
+    takeNumberQueueBtn?: '1'; // 门诊取号列表页面是否显示排队叫号入口按钮
   };
 
   // 就诊人

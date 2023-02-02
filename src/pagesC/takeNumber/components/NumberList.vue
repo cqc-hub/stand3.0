@@ -27,7 +27,7 @@
       </view>
 
       <view v-if="item.reportFlag === '0'">
-        <view class="g-flex-rc-cc">
+        <view @click="takeNumber(item)" class="g-flex-rc-cc">
           <view
             :class="{
               'take-number-disabled': !item.signIn,
@@ -53,6 +53,16 @@
           <view>点击刷新定位</view>
         </view>
       </view>
+
+      <view v-else>
+        <view
+          v-if="item.qrValue"
+          @click="signIn(item)"
+          class="btn btn-border btn-primary btn-plain p24"
+        >
+          刷码签到
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -65,10 +75,18 @@
     list: TTakeNumberListItem[];
     loading: boolean;
   }>();
-  const emits = defineEmits(['refresh-data']);
+  const emits = defineEmits(['refresh-data', 'take-number', 'sign-in']);
 
   const refrashData = () => {
     emits('refresh-data');
+  };
+
+  const takeNumber = (item) => {
+    emits('take-number', item);
+  };
+
+  const signIn = (item) => {
+    emits('sign-in', item);
   };
 </script>
 
