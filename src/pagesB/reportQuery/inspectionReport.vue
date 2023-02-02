@@ -907,10 +907,11 @@
   }
   .pop-container {
     height: 400rpx;
-    padding: 0 32rpx;
+    padding: 32rpx 0;
 
     .dialog-container {
-      padding: 32rpx 0;
+      margin: 0 32rpx;
+      width: calc(100vw - 64rpx);
     }
   }
   .onlyOneButton {
