@@ -24,6 +24,9 @@
             <view class="qr-code g-flex-rc-cc">
               <w-qrcode :options="qrCodeOpt" />
             </view>
+
+            <view class="safe-height" />
+            <view class="safe-height" />
           </view>
         </view>
 
