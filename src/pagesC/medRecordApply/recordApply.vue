@@ -54,39 +54,74 @@
         </g-empty>
       </view>
     </view>
-    <view v-if="outHosList.length" class="g-footer g-border-top">
-      <view @click="chooseAll" class="footer-check flex-normal color-444">
+    <view v-if="outHosList.length" class="g-footer flex-column g-border-top">
+      <view class="fg-agree">
         <view
           :class="{
-            'color-blue': isCheckAll,
+            'is-check': isCheck,
           }"
-          class="iconfont"
+          @click.stop="flagClick"
+          class="iconfont check-box"
         >
-          {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
+          {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
-        <view class="flex-normal" v-if="isCheckAll">
-          {{ '已选择全部' }}
-        </view>
-        <view v-else>
-          <block v-if="checkOutHosList.length">
-            <text class="mr8">已选择</text>
-            <text class="mr8 color-blue">{{ checkOutHosList.length }}</text>
-            <text>个</text>
-          </block>
 
-          <text v-else>全选</text>
+        <view>
+          <text @click.stop="flagClick">我已阅读并同意</text>
+          <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
+            《归档病历资料复印须知》
+          </text>
         </view>
       </view>
-      <button
-        :class="{
-          'btn-disabled': !checkOutHosList.length,
-        }"
-        @click="nextStep"
-        class="btn g-border btn-primary"
-      >
-        下一步
-      </button>
+
+      <view class="flex1 flex-normal">
+        <view @click="chooseAll" class="footer-check flex-normal color-444">
+          <view
+            :class="{
+              'color-blue': isCheckAll,
+            }"
+            class="iconfont"
+          >
+            {{ isCheckAll ? '&#xe6d0;' : '&#xe6ce;' }}
+          </view>
+          <view class="flex-normal" v-if="isCheckAll">
+            {{ '已选择全部' }}
+          </view>
+          <view v-else>
+            <block v-if="checkOutHosList.length">
+              <text class="mr8">已选择</text>
+              <text class="mr8 color-blue">{{ checkOutHosList.length }}</text>
+              <text>个</text>
+            </block>
+
+            <text v-else>全选</text>
+          </view>
+        </view>
+        <button
+          :class="{
+            'btn-disabled': !checkOutHosList.length || !isCheck,
+          }"
+          @click="nextStep"
+          class="btn g-border btn-primary"
+        >
+          下一步
+        </button>
+      </view>
     </view>
+
+    <Order-Reg-Confirm
+      :title="flagTitle508"
+      @confirm="isCheck = true"
+      ref="regDialogConfirm"
+    >
+      <g-flag
+        v-model:title="flagTitle508"
+        typeFg="508"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
     <g-message />
   </view>
 </template>
@@ -103,6 +138,7 @@
   import api from '@/service/api';
 
   import OutHosListCom from './components/recordApplyOutHosList.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = defineProps<{
     hosId?: string;
@@ -113,6 +149,10 @@
   const outHosList = ref<TOutHosInfo[]>([]);
   const checkOutHosList = ref<TOutHosInfo[]>([]);
 
+  const flagTitle508 = ref('');
+  const regDialogConfirm = ref<any>('');
+  const isCheck = ref(false);
+
   const itemClick = (item: TOutHosInfo) => {
     const { _id } = item;
 
@@ -122,6 +162,14 @@
       checkOutHosList.value.push(item);
     } else {
       checkOutHosList.value.splice(idx, 1);
+    }
+  };
+
+  const flagClick = () => {
+    if (isCheck.value) {
+      isCheck.value = false;
+    } else {
+      regDialogConfirm.value.show();
     }
   };
 
@@ -290,6 +338,29 @@
     }
 
     .g-footer {
+      gap: 9rpx;
+
+      .fg-agree {
+        display: flex;
+        font-size: var(--hr-font-size-xs);
+        align-items: flex-start;
+
+        .fg-agree-name {
+          color: var(--hr-brand-color-6);
+        }
+
+        .check-box {
+          color: var(--hr-neutral-color-7);
+          font-size: 40rpx;
+          margin-right: 4rpx;
+          transform: translateY(-5rpx);
+
+          &.is-check {
+            color: var(--hr-brand-color-6);
+          }
+        }
+      }
+
       .footer-check {
         font-size: var(--hr-font-size-xs);
         flex: 0.7;
