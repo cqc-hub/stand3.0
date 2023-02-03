@@ -601,6 +601,9 @@ export class PatientUtils extends LoginUtils {
     if (data._type === 'perfect') {
       await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
     } else {
+      if (this.userStore.patList.length) {
+        data.authPhoneVerify = undefined;
+      }
       await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
   }
@@ -629,9 +632,15 @@ export class PatientUtils extends LoginUtils {
       upName: string; // 儿童必填
       verifyCode: string;
       verifyType: string; // （1或空）不开启验证  2:开启验证
+      authPhoneVerify?: string;
     }>
   ) {
     const { wechatCode } = data;
+
+    if (this.userStore.patList.length) {
+      data.authPhoneVerify = undefined;
+    }
+
     const requestArg = {
       ...data,
       defaultFalg: data.defaultFalg ? '1' : '0',

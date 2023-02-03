@@ -131,28 +131,6 @@
       data.authPhoneVerify = authPhoneVerify;
     }
 
-    /**
-
-    const value = formData.value;
-      await patientUtil.addPatient({
-        ...data,
-        defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
-        herenId: patientUtil.globalStore.herenId,
-        patientName: value[formKey.patientName],
-        patientPhone: value[formKey.patientPhone],
-        source: patientUtil.globalStore.browser.source,
-        patientType: formData.value[formKey.patientType],
-        verifyCode: formData.value[formKey.verify],
-      });
-
-      await patientUtil.getPatCardList();
-      if (props._directUrl) {
-        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
-      } else {
-        routerJump('/pages/home/home');
-      }
-     */
-
     // 完善逻辑
     if (props.pageType === 'perfectReal') {
       try {
