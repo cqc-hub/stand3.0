@@ -55,7 +55,7 @@
       </view>
     </view>
     <view v-if="outHosList.length" class="g-footer flex-column g-border-top">
-      <view class="fg-agree">
+      <view class="fg-agree p32c">
         <view
           :class="{
             'is-check': isCheck,
@@ -74,7 +74,7 @@
         </view>
       </view>
 
-      <view class="flex1 flex-normal">
+      <view class="flex1 flex-normal p32c">
         <view @click="chooseAll" class="footer-check flex-normal color-444">
           <view
             :class="{
@@ -338,12 +338,15 @@
     }
 
     .g-footer {
-      gap: 9rpx;
+      padding: 24rpx 0 48rpx;
+      padding-top: 12rpx;
 
       .fg-agree {
         display: flex;
         font-size: var(--hr-font-size-xs);
         align-items: flex-start;
+        border-bottom: 2rpx solid var(--hr-neutral-color-11);
+        padding-bottom: 12rpx;
 
         .fg-agree-name {
           color: var(--hr-brand-color-6);
