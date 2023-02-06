@@ -25,7 +25,7 @@
       </view>
 
       <view class="text-ellipsis color-888 f28 aaa">
-        <text>{{ item.hosName }}</text>
+        <!-- <text>{{ item.hosName }}</text> -->
       </view>
 
       <view v-if="item._outInfo" class="outinfo-box">

@@ -3,7 +3,6 @@
     <view class="header">
       <g-flag isShowFg typeFg="505" />
 
-      <!-- class="my-display-none" -->
       <view class="g-border-bottom my-display-none">
         <g-selhos
           v-model:hosId="hosId"
@@ -99,7 +98,7 @@
         </view>
         <button
           :class="{
-            'btn-disabled': !checkOutHosList.length || !isCheck,
+            'btn-disabled': !checkOutHosList.length,
           }"
           @click="nextStep"
           class="btn g-border btn-primary"
@@ -174,6 +173,15 @@
   };
 
   const nextStep = () => {
+    if (!isCheck.value) {
+      gStores.messageStore.showMessage('请勾选协议', 3000, {
+        closeCallBack() {
+          flagClick();
+        },
+      });
+      return;
+    }
+
     setLocalStorage({
       [CACHE_KEY]: JSON.stringify(checkOutHosList.value),
     });

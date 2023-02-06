@@ -19,13 +19,23 @@ export const painaInstall = (app: App) => {
       createPersistedState({
         storage: {
           getItem(key: string): string | null {
-            return decryptDes(getLocalStorage(key));
+            if (globalGl.env === 'prod') {
+              return decryptDes(getLocalStorage(key));
+            } else {
+              return getLocalStorage(key);
+            }
           },
 
           setItem(key: string, value: string) {
-            setLocalStorage({
-              [key]: encryptDes(value),
-            });
+            if (globalGl.env === 'prod') {
+              setLocalStorage({
+                [key]: encryptDes(value),
+              });
+            } else {
+              setLocalStorage({
+                [key]: value,
+              });
+            }
           },
         },
       })

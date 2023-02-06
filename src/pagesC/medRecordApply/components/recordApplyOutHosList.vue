@@ -37,7 +37,7 @@
 
         <view v-if="item.diagnosis" class="row flex-normal">
           <view class="row-title">诊断</view>
-          <view class="row-content">{{ item.diagnosis }}</view>
+          <view class="row-content">{{ getDiagnosis(item.diagnosis) }}</view>
         </view>
 
         <view class="row flex-normal">
@@ -72,6 +72,14 @@
 
   const itemClick = (item) => {
     emits('item-click', item);
+  };
+
+  const getDiagnosis = (v) => {
+    if (typeof v === 'string') {
+      return v;
+    } else {
+      return v.join('、');
+    }
   };
 </script>
 

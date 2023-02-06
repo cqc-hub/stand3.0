@@ -28,7 +28,7 @@
                 :list="options"
               />
             </block>
-            <view class="bg-white" v-else>
+            <view v-else>
               <view
                 v-for="(item, index) in options"
                 :key="index"
@@ -369,6 +369,8 @@
   .container {
     width: 100%;
     max-height: 1119rpx;
+    min-height: 400rpx;
+    border-radius: 16rpx 16rpx 0 0;
   }
 
   .bg-white {
