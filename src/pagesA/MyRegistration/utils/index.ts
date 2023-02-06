@@ -206,8 +206,6 @@ export const useOrder = (props: IOrderProps) => {
     const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {
-      console.log('allList', allList);
-
       allList.map((docInfo) => {
         const { docPhoto } = docInfo;
         docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
@@ -397,6 +395,7 @@ export const useOrder = (props: IOrderProps) => {
   }) => {
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
+
 
     selectSchInfos.value = schDocAmPm;
     isSelectOrderSourceShow.value = true;

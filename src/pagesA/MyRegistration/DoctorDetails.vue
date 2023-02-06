@@ -287,6 +287,7 @@
       :orderSourceList="orderSourceList"
       :column="orderConfig.selOrderColumn"
       :is-blur="orderConfig.isOrderBlur"
+      :choose-days="chooseDays"
       @item-click="orderSourceChoose"
       @am-change="amChange"
     />

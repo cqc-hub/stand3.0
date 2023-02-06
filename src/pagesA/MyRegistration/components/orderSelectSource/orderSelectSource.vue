@@ -2,7 +2,7 @@
   <view class="">
     <g-popup @hide="hide" title="请选择就诊时间" ref="popup">
       <view class="content">
-        <view
+        <!-- <view
           v-if="
             selectSchInfo.amPmResults &&
             selectSchInfos &&
@@ -13,13 +13,13 @@
           <view :class="{}" class="collapse-title f32 g-bold pl32">
             <text class="mr12">{{ selectSchInfos[0].ampmName }}</text>
           </view>
-        </view>
+        </view> -->
 
-        <block v-else>
-          <view
-            v-if="selectSchInfos && selectSchInfos.length > 1"
-            class="g-border-bottom"
-          >
+        <view
+          v-if="selectSchInfos && selectSchInfos.length"
+          class="g-border-bottom"
+        >
+          <view>
             <g-tabs
               v-model:value="tabCurrent"
               :tabs="selectSchInfos"
@@ -29,7 +29,7 @@
               style="width: 100%"
             />
           </view>
-        </block>
+        </view>
         <scroll-view
           class="container"
           :class="{
@@ -106,14 +106,7 @@
 
           <block v-else>
             <view class="fix-top">
-              <view class="order-info g-border-bottom">
-                {{ selectSchInfo.ampmName }}
-              </view>
               <view class="order-info mb24">
-                <!-- <view>{{ selectSchInfo.docName }}</view>
-              <view>{{ selectSchInfo.schDate }}</view>
-              <view>{{ selectSchInfo.fee }}元</view> -->
-
                 <text class="mr24">
                   {{
                     selectSchInfo.schQukCategor ||
@@ -155,7 +148,12 @@
 
 <script lang="ts" setup>
   import { watch, ref, computed } from 'vue';
-  import { TSchInfo, IOrderSource, TSchInfoWhole } from '../../utils/index';
+  import {
+    TSchInfo,
+    IOrderSource,
+    TSchInfoWhole,
+    IChooseDays,
+  } from '../../utils/index';
   import { GStores } from '@/utils';
 
   import orderSelectSourceList from './orderSourceList.vue';
@@ -171,6 +169,7 @@
     isBlur: '0' | '1';
     selectSchInfos: TSchInfoWhole[];
     orderSourceList: IOrderSource[];
+    chooseDays: IChooseDays[];
   }>();
   const emits = defineEmits(['update:show', 'item-click', 'am-change']);
   const selectSchInfo = computed(() => {
@@ -178,6 +177,24 @@
       return props.selectSchInfos[tabCurrent.value];
     } else {
       return {} as TSchInfoWhole;
+    }
+  });
+
+  const subTitle = computed(() => {
+    if (props.selectSchInfos && props.chooseDays.length) {
+      selectSchInfo.value.schDate;
+
+      const dayItem = props.chooseDays.find(
+        (o) => o.fullDay === selectSchInfo.value.schDate
+      );
+
+      if (dayItem) {
+        return `${dayItem.weekday} ${dayItem.day}`;
+      } else {
+        return '';
+      }
+    } else {
+      return '';
     }
   });
 
@@ -266,6 +283,7 @@
       ? currentSchInfo.value
       : selectSchInfo.value;
 
+
     emits('item-click', {
       item,
       selectSchInfo: selectValue,
@@ -276,7 +294,6 @@
     emits('am-change', props.selectSchInfos[e]);
     resetData();
     refreshList.value = false;
-    console.log(props.selectSchInfos[e]);
 
     setTimeout(() => {
       refreshList.value = true;

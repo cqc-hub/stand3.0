@@ -52,6 +52,7 @@ export type IPayListItem = {
   clinicTypeName: string;
   visitNo: string;
   cardNumber?: string;
+  recipeNo?: string;
   tradeType: TTradeType;
 };
 
@@ -383,6 +384,7 @@ export const usePayPage = () => {
       diseaseTypeName,
       clinicTypeName,
       costTypeCode,
+      recipeNo
     } = item;
 
     const pageData = {
@@ -411,6 +413,7 @@ export const usePayPage = () => {
 
       params: pageProps.value.params,
       costTypeCode,
+      recipeNo
     };
 
     // if (payState === '1') {
