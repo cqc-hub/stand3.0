@@ -505,7 +505,7 @@
         token: 'token',
         herenId: 'herenId',
       },
-      isLocal: '1',
+      // isLocal: '1',
     };
 
     console.log(preConsultation.extraData);
