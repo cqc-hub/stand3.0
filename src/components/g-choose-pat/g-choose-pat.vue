@@ -11,10 +11,13 @@
 
       <view class="user-info text-ellipsis">
         {{
-          `${gStores.userStore.patChoose.patientNameEncry}  ${
+          `${gStores.userStore.patChoose.patientNameEncry}`
+        }}
+        <text> {{
+          `${
             (!isAreaProgram() && gStores.userStore.patChoose._showId) || ""
           }`
-        }}
+        }}</text>
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow`" />
@@ -117,6 +120,11 @@ onMounted(() => {
   .user-info {
     flex: 1;
     width: 1px;
+    font-size: var(--hr-font-size-base);
+    text{
+      font-size: var(--hr-font-size-xxs);
+      color:var(--hr-neutral-color-7)
+    }
   }
 
   .icon-resize {
