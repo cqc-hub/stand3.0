@@ -1,20 +1,12 @@
 <template>
   <view class="">
-    <g-popup @hide="hide" title="请选择就诊时间" ref="popup">
+    <g-popup
+      :subTitle="subTitle"
+      @hide="hide"
+      title="请选择就诊时间"
+      ref="popup"
+    >
       <view class="content">
-        <!-- <view
-          v-if="
-            selectSchInfo.amPmResults &&
-            selectSchInfos &&
-            selectSchInfos.length === 1
-          "
-          class="g-border-bottom"
-        >
-          <view :class="{}" class="collapse-title f32 g-bold pl32">
-            <text class="mr12">{{ selectSchInfos[0].ampmName }}</text>
-          </view>
-        </view> -->
-
         <view
           v-if="selectSchInfos && selectSchInfos.length"
           class="g-border-bottom"
@@ -166,6 +158,7 @@
     isComplete: boolean;
     column: number;
     value: string;
+    checkedDay: string;
     isBlur: '0' | '1';
     selectSchInfos: TSchInfoWhole[];
     orderSourceList: IOrderSource[];
@@ -181,18 +174,12 @@
   });
 
   const subTitle = computed(() => {
-    if (props.selectSchInfos && props.chooseDays.length) {
-      selectSchInfo.value.schDate;
+    const dayItem = props.chooseDays.find(
+      (o) => o.fullDay === props.checkedDay
+    );
 
-      const dayItem = props.chooseDays.find(
-        (o) => o.fullDay === selectSchInfo.value.schDate
-      );
-
-      if (dayItem) {
-        return `${dayItem.weekday} ${dayItem.day}`;
-      } else {
-        return '';
-      }
+    if (dayItem) {
+      return `${dayItem.day} ${dayItem.weekday}`;
     } else {
       return '';
     }
@@ -282,7 +269,6 @@
     const selectValue = selectSchInfo.value.amPmResults
       ? currentSchInfo.value
       : selectSchInfo.value;
-
 
     emits('item-click', {
       item,

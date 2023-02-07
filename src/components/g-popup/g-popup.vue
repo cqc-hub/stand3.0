@@ -18,11 +18,17 @@
         }"
         class="popup-container"
       >
-        <view v-if="type !== 'top' && !isHideNav" class="header flex-between">
-          <view class="popup-title text-ellipsis">
-            {{ title }}
+        <view v-if="type !== 'top' && !isHideNav" class="header">
+          <view class="flex-between f36">
+            <view class="popup-title text-ellipsis">
+              {{ title }}
+            </view>
+            <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
           </view>
-          <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
+
+          <view v-if="subTitle" class="g-flex-rc-cc color-888 f32">
+            {{ subTitle }}
+          </view>
         </view>
 
         <slot name="header" />
@@ -72,6 +78,11 @@
       },
 
       title: {
+        type: String,
+        default: '',
+      },
+
+      subTitle: {
         type: String,
         default: '',
       },
@@ -145,12 +156,9 @@
     }
 
     .header {
-      display: flex;
-      align-items: center;
       border-bottom: 1rpx solid var(--hr-neutral-color-2);
       padding: 28rpx 32rpx;
-
-      font-size: var(--hr-font-size-xl);
+      padding-bottom: 14rpx;
       font-weight: 600;
 
       .popup-title {

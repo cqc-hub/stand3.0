@@ -11,9 +11,6 @@ dayjs.extend(isoWeek);
 
 // api.getDeptSchForDoc = () => Promise.resolve()
 
-
-
-
 export interface IChooseDays {
   day: string;
   weekday: string;
@@ -159,6 +156,8 @@ export const useOrder = (props: IOrderProps) => {
   });
   const checkedDay = ref('');
   const gStores = new GStores();
+  const regDate = ref('');
+
   const dateDocListFilterByDate = computed(() => {
     if (checkedDay.value) {
       return dateDocList.value.filter((o) => o.schDate === checkedDay.value);
@@ -395,8 +394,9 @@ export const useOrder = (props: IOrderProps) => {
   }) => {
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
+    const { schDate } = schInfo;
 
-
+    regDate.value = schDate;
     selectSchInfos.value = schDocAmPm;
     isSelectOrderSourceShow.value = true;
   };
@@ -407,6 +407,9 @@ export const useOrder = (props: IOrderProps) => {
   }: {
     scheme: { scheme: TSchInfo };
   }) => {
+    const { schDate } = scheme;
+    regDate.value = schDate;
+
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
     isSelectOrderSourceShow.value = true;
@@ -564,7 +567,8 @@ export const useOrder = (props: IOrderProps) => {
     enabledDays,
     filterChooseDays,
     getDeptInfo,
-    deptInfo
+    deptInfo,
+    regDate,
   };
 };
 

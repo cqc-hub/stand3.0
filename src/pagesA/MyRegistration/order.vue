@@ -58,6 +58,7 @@
       :column="orderConfig.selOrderColumn"
       :is-blur="orderConfig.isOrderBlur"
       :choose-days="chooseDays"
+      :checked-day="regDate"
       @item-click="orderSourceChoose"
       @am-change="amChange"
       ref="selectOrderSource"
@@ -122,6 +123,7 @@
     enabledDays,
     getDeptInfo,
     deptInfo,
+    regDate
   } = useOrder(props);
 
   onReady(() => {
