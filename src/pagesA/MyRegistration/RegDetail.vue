@@ -148,30 +148,20 @@
                 ref="refForm"
               >
                 <template #showBody="{ item, value }">
-                  <view class="flex-normal" v-if="item.key === 'deptName'">
-                    <text>{{ value }}</text>
-                    <!-- <text class="ico_location2 icon-font size-icon"></text> -->
-                  </view>
-
                   <view
                     @click="goDoctorCard"
-                    v-else-if="item.key === 'docName'"
+                    v-if="
+                      item.key === 'docName' &&
+                      orderRegInfo.orderStatus !== '10'
+                    "
                     class="color-blue flex-normal doc-name"
                   >
                     <view class="doc-name-value">
                       {{ value }}
                     </view>
-                    <view style="font-weight: 400" class="iconfont color-blue">
+                    <view style="font-weight: 400" class="iconfont">
                       &#xe6c8;
                     </view>
-
-                    <!-- <view>
-                      {{
-                        orderRegInfo.schQukCategor || orderRegInfo.categorName
-                      }}
-                    </view>
-
-                    <view class="iconfont color-blue">&#xe6c8;</view> -->
                   </view>
 
                   <view
@@ -289,6 +279,14 @@
       @confirmButton="cancelOrderDialogConfirm"
     />
 
+    <xy-dialog
+      title=""
+      content="是否立即去给医生留言，方便医生提前了解您的病情？"
+      :show="isShowConsultationDialog"
+      @cancelButton="isShowConsultationDialog = false"
+      @confirmButton="goPreConsultation"
+    />
+
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -306,7 +304,6 @@
 <script lang="ts" setup>
   import { computed, ref, nextTick, onMounted, reactive } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { deQueryForUrl, joinQuery, cloneUtil } from '@/common/utils';
   import {
     GStores,
     ServerStaticData,
@@ -314,7 +311,16 @@
     openLocation,
     ISystemConfig,
     wait,
+    useTBanner,
+    TButtonConfig,
   } from '@/utils';
+  import {
+    encryptDes,
+    joinQuery,
+    joinQueryForUrl,
+    deQueryForUrl,
+    cloneUtil,
+  } from '@/common';
 
   import {
     IPageProps,
@@ -330,7 +336,7 @@
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
-  import { joinQueryForUrl } from '../../common/utils';
+  import globalGl from '@/config/global';
 
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -345,6 +351,8 @@
   });
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
+  const isFirstIn = ref(true);
+
   const isShowFooter = computed(() =>
     ['23', '45', '10', '70', '0', '20', '43'].includes(
       orderRegInfo.value.orderStatus
@@ -408,6 +416,7 @@
     );
   });
 
+  let _timeTravel: any;
   const timeTravel = ref({
     downTime: 0,
     minute: 0,
@@ -427,7 +436,7 @@
 
     timeAction();
 
-    const _timeTravel = setInterval(() => {
+    _timeTravel = setInterval(() => {
       const { downTime } = timeTravel.value;
 
       if (downTime >= 0) {
@@ -455,11 +464,62 @@
     qrCodeOpt.value.size = 0;
   };
 
+  const isShowConsultationDialog = ref(false);
+  // 预问诊
+  const showConsultationDialog = () => {
+    if (!isFirstIn.value) return;
+
+    if (
+      orderRegInfo.value.orderStatus === '0' &&
+      pageProps.value.preWz === '1' &&
+      orderConfig.value.isOpenPreConsultation === '1'
+    ) {
+      isShowConsultationDialog.value = true;
+    }
+  };
+
+  const goPreConsultation = () => {
+    isShowConsultationDialog.value = false;
+    const { patientSex, patientAge, patientName } = gStores.userStore.patChoose;
+    const { orderId } = pageProps.value;
+
+    const pageArg = {
+      patientSex,
+      patientAge,
+      patientName,
+      orderId,
+    };
+
+    const preConsultation: TButtonConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pages/inquiries/inquiries3',
+      text: '预问诊',
+      extraData: {
+        sysCode: globalGl.SYS_CODE,
+        params: encodeURIComponent(
+          encryptDes(JSON.stringify(pageArg), 'phsDesKe')
+        ),
+      },
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+      },
+      isLocal: '1',
+    };
+
+    console.log(preConsultation.extraData);
+
+    useTBanner(preConsultation);
+  };
+
   const init = async () => {
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
     qrCodeOpt.value.code = '';
     orderRegInfo.value = {} as any;
+    clearInterval(_timeTravel);
+
     const orderId = pageProps.value.orderId;
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
@@ -489,6 +549,9 @@
     orderRegInfo.value = result;
     // orderRegInfo.value.orderStatus = '75';
     qrCodeOpt.value.code = result[qrCode];
+
+    showConsultationDialog();
+    isFirstIn.value = false;
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
     nextTick(() => {
@@ -566,6 +629,7 @@
     uni.showLoading({
       mask: true,
     });
+    isFirstIn.value = true;
 
     await wait(2000);
     uni.hideLoading();
@@ -852,80 +916,73 @@
         .order-info {
           margin-top: 16rpx;
 
-          .doc-name {
-            .doc-name-value {
-              // padding-right: 12rpx;
-              // margin-right: 12rpx;
-            }
-
-            .iconfont {
-              font-size: var(--hr-font-size-xl);
-              font-size: 400;
-              margin-left: 12rpx;
-            }
-          }
-
-          .color-blue {
-            color: var(--hr-brand-color-6);
-          }
-          .size-icon {
-            width: 50rpx;
-            height: 40rpx;
-            display: inline-block;
+          .iconfont {
+            font-size: var(--hr-font-size-xl);
+            font-size: 400;
             margin-left: 12rpx;
           }
         }
-      }
 
-      .order-patient {
-        box-shadow: none;
-        margin-top: 16rpx;
-        border-radius: 8px;
-      }
-    }
-
-    .p32 {
-      padding: 32rpx;
-    }
-    .p32v {
-      padding-top: 32rpx;
-      padding-bottom: 32rpx;
-    }
-    .m32 {
-      margin: 32rpx;
-    }
-
-    .hide-icon {
-      opacity: 0;
-    }
-
-    .footer {
-      background-color: var(--h-color-white);
-      padding: 24rpx 32rpx 48rpx;
-      position: reactive;
-      z-index: 1;
-      gap: 18rpx;
-
-      display: flex;
-
-      .home {
-        font-size: var(--hr-font-size-xxxs);
-        flex-direction: column;
-        padding: 0 10rpx;
-        margin-right: 10rpx;
-
-        .home-icon {
-          font-size: var(--hr-font-size-xxl);
+        .color-blue {
+          color: var(--hr-brand-color-6);
+        }
+        .size-icon {
+          width: 50rpx;
+          height: 40rpx;
+          display: inline-block;
+          margin-left: 12rpx;
         }
       }
+    }
 
-      .btn {
-        flex: 1;
-      }
+    .order-patient {
+      box-shadow: none;
+      margin-top: 16rpx;
+      border-radius: 8px;
+    }
+  }
 
-      .pay-btn {
-        flex: 2;
+  .p32 {
+    padding: 32rpx;
+  }
+  .p32v {
+    padding-top: 32rpx;
+    padding-bottom: 32rpx;
+  }
+  .m32 {
+    margin: 32rpx;
+  }
+
+  .hide-icon {
+    opacity: 0;
+  }
+
+  .footer {
+    background-color: var(--h-color-white);
+    padding: 24rpx 32rpx 48rpx;
+    position: reactive;
+    z-index: 1;
+    gap: 18rpx;
+
+    display: flex;
+
+    .home {
+      font-size: var(--hr-font-size-xxxs);
+      flex-direction: column;
+      padding: 0 10rpx;
+      margin-right: 10rpx;
+
+      .home-icon {
+        font-size: var(--hr-font-size-xxl);
       }
+    }
+
+    .btn {
+      flex: 1;
+    }
+
+    .pay-btn {
+      flex: 2;
     }
   }
 

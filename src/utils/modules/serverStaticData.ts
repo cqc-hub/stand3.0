@@ -1,7 +1,7 @@
 import { getLocalStorage, setLocalStorage } from '@/common';
 import { ISelectOptions, hosParam } from '@/components/g-form';
 import { GStores } from './login';
-import { joinQuery } from '@/common';
+import { joinQuery, joinQueryForUrl } from '@/common';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 
@@ -79,7 +79,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
-  const localUrl = 'http://10.10.83.82:5173/#/';
+  const localUrl = 'http://localhost:8888/#/';
 
   const _d = {
     _patientId: '',
@@ -111,7 +111,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
     _d._herenId = gStores.globalStore.herenId;
   }
 
-  let fullUrl = joinQuery(path, extraData);
+  let fullUrl = joinQueryForUrl(path, extraData);
 
   const pages = getCurrentPages();
 
@@ -135,7 +135,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
 
       fullUrl = baseUrl + fullUrl;
 
-      fullUrl = joinQuery(fullUrl, {
+      fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),
       });
     }
@@ -144,7 +144,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
     // #endif
 
     // #ifndef H5
-    const url = joinQuery('/pagesA/webView/webView', {
+    const url = joinQueryForUrl('/pagesA/webView/webView', {
       https: encodeURIComponent(fullUrl),
     });
 

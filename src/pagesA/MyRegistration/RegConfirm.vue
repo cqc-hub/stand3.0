@@ -14,13 +14,13 @@
       <g-flag typeFg="4" isShowFgTip />
       <!--  #ifdef MP-ALIPAY -->
       <template v-if="alipayPid">
-      <Green-Power />
-      <Green-Toast
-        :contentTitle="contentTitle"
-        :duration="greenToastDuration"
-        v-model:content="greenToastContent"
-      />
-    </template>
+        <Green-Power />
+        <Green-Toast
+          :contentTitle="contentTitle"
+          :duration="greenToastDuration"
+          v-model:content="greenToastContent"
+        />
+      </template>
       <!--  #endif -->
     </view>
 
@@ -29,7 +29,13 @@
       @confirm="isCheck = true"
       ref="regDialogConfirm"
     >
-      <g-flag v-model:title="flagTitle9" typeFg="9" isShowFgTip isHideTitle aaa />
+      <g-flag
+        v-model:title="flagTitle9"
+        typeFg="9"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
     </Order-Reg-Confirm>
 
     <view class="footer">
@@ -71,7 +77,6 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
   import global from '@/config/global';
-
 
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
@@ -158,12 +163,12 @@
 
     let alipayAuthCode = '';
     // #ifdef MP-ALIPAY
-    if(alipayPid){
+    if (alipayPid) {
       await getMyPowerQx()
-      .then((qxRes: any) => {
-        alipayAuthCode = qxRes.authCode;
-      })
-      .catch(() => {});
+        .then((qxRes: any) => {
+          alipayAuthCode = qxRes.authCode;
+        })
+        .catch(() => {});
     }
     // #endif
 
@@ -171,9 +176,10 @@
       result: { orderId },
     } = await api.addReg(requestArg);
 
-     // #ifdef MP-ALIPAY
-     if(alipayPid){//有埋点的情况
-        if (alipayAuthCode) {
+    // #ifdef MP-ALIPAY
+    if (alipayPid) {
+      //有埋点的情况
+      if (alipayAuthCode) {
         await api
           .energySendReg({
             orderId,
@@ -202,6 +208,7 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,
+        preWz: '1',
       }),
     });
   };
@@ -217,7 +224,6 @@
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     console.log(props.value, 'props.value');
-
   });
 </script>
 

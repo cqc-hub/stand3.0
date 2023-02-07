@@ -16,6 +16,8 @@ export interface ISystemConfig {
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
+    // 挂号成功后预问诊?
+    isOpenPreConsultation?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？

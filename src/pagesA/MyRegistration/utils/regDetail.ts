@@ -2,6 +2,7 @@ import type { TInstance } from '@/components/g-form/index';
 
 export interface IPageProps {
   orderId: string;
+  preWz?: '1'; // 第一次挂号进来
 }
 
 /**
@@ -52,7 +53,6 @@ export const regInfoTempList: TInstance[] = [
     key: 'hisResult',
   },
 ];
-
 
 export const patientTempList: TInstance[] = [
   {
