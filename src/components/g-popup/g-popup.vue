@@ -20,7 +20,7 @@
       >
         <view v-if="type !== 'top' && !isHideNav" class="header">
           <view class="flex-between f36">
-            <view class="popup-title text-ellipsis">
+            <view class="popup-title text-ellipsis g-bold">
               {{ title }}
             </view>
             <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
@@ -159,7 +159,6 @@
       border-bottom: 1rpx solid var(--hr-neutral-color-2);
       padding: 28rpx 32rpx;
       padding-bottom: 14rpx;
-      font-weight: 600;
 
       .popup-title {
         width: calc(100% - 48rpx);

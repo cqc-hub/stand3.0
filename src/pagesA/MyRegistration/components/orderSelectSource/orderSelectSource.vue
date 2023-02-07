@@ -98,7 +98,14 @@
 
           <block v-else>
             <view class="fix-top">
-              <view class="order-info mb24">
+              <view
+                v-if="
+                  selectSchInfo.schQukCategor ||
+                  selectSchInfo.deptName ||
+                  selectSchInfo.categorName
+                "
+                class="order-info mb24"
+              >
                 <text class="mr24">
                   {{
                     selectSchInfo.schQukCategor ||
