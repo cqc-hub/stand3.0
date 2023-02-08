@@ -55,13 +55,6 @@
             </view>
           </view>
 
-          <!-- <view v-if="isListShowClinicType && item._clinicType" class="row flex-normal">
-            <view class="row-label color-888">门诊类型</view>
-            <view class="row-value g-break-word color-444">
-              {{ item._clinicType }}
-            </view>
-          </view> -->
-
           <view class="row flex-normal">
             <view class="row-label color-888 text-no-wrap">就诊医生</view>
             <view class="row-value g-break-word color-444 text-ellipsis">
@@ -81,13 +74,6 @@
               {{ item.diseaseTypeName }}
             </view>
           </view>
-
-          <!-- <view v-if="item.costTypeName" class="row flex-normal">
-            <view class="row-label color-888">费用类型</view>
-            <view class="row-value g-break-word color-444">
-              {{ item.costTypeName }}
-            </view>
-          </view> -->
 
           <view v-if="!isCheck && item.totalCost" class="row flex-normal">
             <view class="row-label color-888">费用金额</view>

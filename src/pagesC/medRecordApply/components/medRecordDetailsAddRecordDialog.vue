@@ -166,7 +166,7 @@
     {
       label: '住院号',
       field: 'input-text',
-      placeholder: '请输入(选填)',
+      placeholder: '可输入',
       key: 'visitNo',
     },
 

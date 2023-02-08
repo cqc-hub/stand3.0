@@ -5,6 +5,7 @@
         v-if="detailInfo.deptPhoto"
         :src="detailInfo.deptPhoto"
         @click="previewImage([detailInfo.deptPhoto])"
+        mode="widthFix"
       />
     </view>
 
@@ -243,7 +244,7 @@
 
     .header-bg {
       width: 100%;
-      height: 422rpx;
+      // height: 422rpx;
 
       image {
         width: 100%;

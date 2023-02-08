@@ -6,7 +6,7 @@
     >
       <template #footer>
         <view>
-          <order-Doc-Clinic-Time :item="item" />
+          <order-Doc-Clinic-Time :item="docInfo" />
           <view
             v-for="(_item, i) in item.schemeList"
             :key="i"
@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import { IDocListByDate } from '../../utils';
 
   import OrderDocListContainer from './orderDocListContainer.vue';
@@ -29,15 +30,17 @@
 
   const emits = defineEmits(['reg-click', 'avatar-click']);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
-  defineProps<{
+  const props = defineProps<{
     item: IItem;
   }>();
 
-  const warnSchStateMap = {
-    1: '停诊',
-    2: '约满',
-    3: '未放号',
-  };
+  const docInfo = computed(() => {
+    if (props.item.schemeList && props.item.schemeList.length) {
+      return props.item.schemeList[0];
+    } else {
+      return {};
+    }
+  });
 
   const regClick = (scheme: IItem['schemeList'][number]) => {
     emits('reg-click', {
