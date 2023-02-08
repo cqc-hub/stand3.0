@@ -1,5 +1,10 @@
 <template>
-  <view class="page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page"
+  >
     <view class="container">
       <view class="container-view">
         <view class="container-view-card">

@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <Order-Recommendation :dept-info="deptInfo" />
     <Order-Sel-Date
       v-if="allDocList.length"
@@ -123,7 +128,8 @@
     enabledDays,
     getDeptInfo,
     deptInfo,
-    regDate
+    regDate,
+    gStores
   } = useOrder(props);
 
   onReady(() => {

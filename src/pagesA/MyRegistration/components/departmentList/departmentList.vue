@@ -31,7 +31,7 @@
           'g-border-bottom': !isLv2,
         }"
         @click="itemClickLv1(item)"
-        class="item-lv1 g-flex-rc-cc"
+        class="item-lv1 g-flex-rc-cc f32"
       >
         <text>{{ item.deptName }}</text>
       </view>

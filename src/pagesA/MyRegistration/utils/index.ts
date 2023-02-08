@@ -570,6 +570,7 @@ export const useOrder = (props: IOrderProps) => {
     getDeptInfo,
     deptInfo,
     regDate,
+    gStores
   };
 };
 
