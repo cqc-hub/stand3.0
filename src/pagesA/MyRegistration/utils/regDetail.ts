@@ -83,9 +83,10 @@ const formatterTemp = (list: TInstance[]) => {
   list.map((o) => {
     o.labelWidth = '150rpx';
     o.showBodyStyle = 'text-align: left;';
-    o.labelStyle = 'padding-top: 0;';
-    o.bodyStyle = 'padding-top: 0;';
-    o.rowStyle = 'margin-top: -15rpx;';
+    o.labelStyle =
+      'padding-top: 0; color: var(--hr-neutral-color-7);font-size: var(--hr-font-size-base);';
+    o.bodyStyle = 'padding-top: 4rpx;font-size: var(--hr-font-size-base);';
+    o.rowStyle = 'margin-top: -15rpx;margin-bottom: 16rpx;';
 
     o.disabled = true;
     o.isForShow = true;

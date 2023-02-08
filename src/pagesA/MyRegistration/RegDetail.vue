@@ -86,7 +86,7 @@
         </view>
 
         <view class="container">
-          <view class="container-box g-border">
+          <view class="container-box g-border container-box1">
             <view
               v-if="isShowQr"
               class="qr-code g-flex-rc-cc g-border-bottom m32"
@@ -854,10 +854,10 @@
 
       .container-box {
         background-color: #fff;
-        box-shadow: inset 0 18rpx 5px rgba(0, 0, 0, 0.07);
         margin: 0 32rpx;
+        margin-bottom: 16rpx;
         transform: translateY(-20rpx);
-        border-radius: 0px 0px 8px 8px;
+        border-radius: 8px;
 
         .qr-code {
           flex-direction: column;
@@ -932,6 +932,11 @@
           display: inline-block;
           margin-left: 12rpx;
         }
+      }
+
+      .container-box1 {
+        border-radius: 0px 0px 8px 8px;
+        box-shadow: inset 0 18rpx 5px rgba(0, 0, 0, 0.07);
       }
     }
 

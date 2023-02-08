@@ -69,7 +69,7 @@
           />
         </view>
 
-        <view class="box info-box mt16">
+        <view class="box info-box mt16 g-border">
           <view class="flex-between g-bold f36">
             <view>费用总额</view>
             <view v-if="props.payState === '1'" class="color-error">
@@ -199,8 +199,8 @@
 
   import api from '@/service/api';
 
-  import PayDetailCostList from './components/payDetailCostList.vue';
-  import PayDetailHeadBoxDetail from './components/payDetailHeadBoxDetail.vue';
+  import PayDetailCostList from './components/PayDetailCostList.vue';
+  import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = ref({} as TPayDetailProp);
@@ -359,7 +359,7 @@
       hosId,
       visitDate,
       costTypeCode,
-      cardNumber
+      cardNumber,
     } = props.value;
 
     const args = {
@@ -393,7 +393,7 @@
       hosId,
       hosName,
       patientName: props.value.patientName || patientName,
-      cardNumber
+      cardNumber,
     });
 
     await toPayPull(res, '门诊缴费');

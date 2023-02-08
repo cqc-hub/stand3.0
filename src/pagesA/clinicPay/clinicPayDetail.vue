@@ -184,7 +184,7 @@
 
   import globalGl from '@/config/global';
 
-  import ClinicPayDetailList from './components/clinicPayDetailList.vue';
+  import ClinicPayDetailList from './components/ClinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const {
