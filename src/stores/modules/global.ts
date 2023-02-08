@@ -39,6 +39,7 @@ const globalStore = defineStore('global', {
       'nationTerms',
       'patientTypeTerms',
       'browser',
+      'modeOld',
     ],
   },
 

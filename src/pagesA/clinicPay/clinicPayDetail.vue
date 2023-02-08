@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <g-flag isShowFg typeFg="15" />
     <g-tbanner :config="pageConfig.bannerPay" />
     <g-choose-pat

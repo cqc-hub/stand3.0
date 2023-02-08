@@ -8,6 +8,9 @@
           </view>
 
           <canvas
+            :class="{
+              'my-display-none': !isShow,
+            }"
             class="shareCanvas"
             canvas-id="shareCanvas"
             id="shareCanvas"
@@ -86,10 +89,12 @@
   const inst = getCurrentInstance();
   const gStores = new GStores();
   const isWxRequestQxDialogShow = ref(false);
+  const isShow = ref(false);
 
   const qrImg = ref('');
 
   const show = () => {
+    isShow.value = true;
     popup.value.open('center');
     popupBottom.value.show();
     options.value.code = joinQuery(
@@ -104,6 +109,7 @@
   };
 
   const close = () => {
+    isShow.value = false;
     popupBottom.value.close();
     popup.value.close();
   };
