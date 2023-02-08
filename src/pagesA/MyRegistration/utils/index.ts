@@ -39,6 +39,7 @@ interface IDocRow {
 
   // 快捷号别
   schQukCategor?: string;
+  clinicTime?: string;
 }
 
 export interface IDocListAll extends IDocRow {

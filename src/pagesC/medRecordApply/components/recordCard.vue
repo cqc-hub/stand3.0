@@ -12,7 +12,8 @@
         v-if="item.outTime"
         class="container-card-header up-lv flex-normal g-border-bottom"
       >
-        <view class="iconfont container-card-header-icon mr12">&#xe6f3;</view>
+        <!-- <view class="iconfont container-card-header-icon mr12">&#xe6f3;</view> -->
+        <view class="icon-font ico_document-green mr12 title-icon" />
 
         <view>
           <text>{{ formatterTime(item.admissionTime) }}</text>
@@ -229,5 +230,10 @@
   .up-lv {
     position: relative;
     z-index: 3;
+  }
+
+  .title-icon {
+    width: 44rpx;
+    height: 44rpx;
   }
 </style>

@@ -39,6 +39,7 @@ export interface IDocDetail {
   hosDocId: string;
   hosId: string;
   intro: string;
+  clinicTime: string;
 }
 
 export interface IDocSchListItem {

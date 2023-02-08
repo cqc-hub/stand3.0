@@ -6,51 +6,55 @@
       isAllDate
     >
       <template #footer>
-        <view class="date-container g-border-top">
-          <view class="sel-date">
-            <view class="sel-label g-flex-rc-cc">可约日期</view>
-            <block v-if="getSelectData && getSelectData.length">
-              <g-login
-                v-for="date in getSelectData"
-                :key="date.schDate"
-                @handler-next="dateClick(date)"
-                patient
-              >
-                <view
-                  :class="{
-                    animate__fadeIn: !isCollapse,
-                  }"
-                  @click="dateClick(date)"
-                  class="date-item g-flex-rc-cc animate__animated"
+        <view class="g-border-top pt24">
+          <order-Doc-Clinic-Time :item="item" />
+
+          <view class="date-container">
+            <view class="sel-date">
+              <view class="sel-label g-flex-rc-cc">可约日期:</view>
+              <block v-if="getSelectData && getSelectData.length">
+                <g-login
+                  v-for="date in getSelectData"
+                  :key="date.schDate"
+                  @handler-next="dateClick(date)"
+                  patient
                 >
                   <view
                     :class="{
-                      animate__fadeIn: isCollapse,
+                      animate__fadeIn: !isCollapse,
                     }"
-                    class="animate__animated"
+                    @click="dateClick(date)"
+                    class="date-item g-flex-rc-cc animate__animated"
                   >
-                    {{ getDateFormatter(date.schDate) }}
+                    <view
+                      :class="{
+                        animate__fadeIn: isCollapse,
+                      }"
+                      class="animate__animated"
+                    >
+                      {{ getDateFormatter(date.schDate) }}
+                    </view>
                   </view>
-                </view>
-              </g-login>
-            </block>
+                </g-login>
+              </block>
 
-            <view v-else>
-              <text class="f24 color-888">无号</text>
+              <view v-else>
+                <text class="f24 color-888">无号</text>
+              </view>
             </view>
-          </view>
 
-          <view class="arrow-content">
-            <view
-              class="icon-arrow1"
-              v-if="item.schDocSubResultList.length > 3"
-              @click="toggleCollapse"
-            >
+            <view class="arrow-content">
               <view
-                :class="{ 'open-arrow': isCollapse }"
-                class="iconfont ico-arrow"
+                class="icon-arrow1"
+                v-if="item.schDocSubResultList.length > 3"
+                @click="toggleCollapse"
               >
-                &#xe6c4;
+                <view
+                  :class="{ 'open-arrow': isCollapse }"
+                  class="iconfont ico-arrow"
+                >
+                  &#xe6c4;
+                </view>
               </view>
             </view>
           </view>
@@ -66,6 +70,7 @@
   import dayjs from 'dayjs';
 
   import OrderDocListContainer from './orderDocListContainer.vue';
+  import orderDocClinicTime from './orderDocClinicTime.vue';
 
   const props = defineProps<{
     item: IDocListAll;
@@ -102,7 +107,6 @@
 
 <style lang="scss" scoped>
   .date-container {
-    padding-top: 24rpx;
     display: flex;
 
     .sel-date {

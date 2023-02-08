@@ -33,6 +33,11 @@
           </view>
         </view>
 
+        <!-- <view v-if="item.clinicTime" class="text-ellipsis ellipsis-line-clamp2">
+          <text>{{ '门诊时间: ' }}</text>
+          <text>{{ item.clinicTime }}</text>
+        </view> -->
+
         <view v-if="item.specialClinicName" class="text-ellipsis">
           <text
             v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"

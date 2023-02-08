@@ -6,6 +6,7 @@
     >
       <template #footer>
         <view>
+          <order-Doc-Clinic-Time :item="item" />
           <view
             v-for="(_item, i) in item.schemeList"
             :key="i"
@@ -24,6 +25,7 @@
 
   import OrderDocListContainer from './orderDocListContainer.vue';
   import DocShcItem from '../DoctorDetails/docShcItem.vue';
+  import orderDocClinicTime from './orderDocClinicTime.vue';
 
   const emits = defineEmits(['reg-click', 'avatar-click']);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
