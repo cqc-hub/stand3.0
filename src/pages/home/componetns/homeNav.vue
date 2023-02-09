@@ -1,7 +1,12 @@
 <template>
   <view>
     <!-- #ifdef MP-WEIXIN -->
-    <view class="nav">
+    <view
+      :class="{
+        'is-ios': isIos,
+      }"
+      class="nav"
+    >
       <view
         :class="{
           'is-ios': isIos,
@@ -33,7 +38,6 @@
       const { system } = e;
       console.log('system---', system);
 
-
       if (system.includes('iOS')) {
         isIos.value = true;
       }
@@ -42,16 +46,19 @@
 </script>
 
 <style lang="scss" scoped>
-  $nav-height: 88px;
 
   .nav {
     display: flex;
     padding: 0 10px;
     padding-left: 32rpx;
     flex-direction: column;
-    height: $nav-height;
+    height: 66px;
     font-size: var(--hr-font-size-xxxs);
     background-color: #fff;
+
+    &.is-ios {
+      height: 88px;
+    }
 
     // padding-top: 100rpx;
 

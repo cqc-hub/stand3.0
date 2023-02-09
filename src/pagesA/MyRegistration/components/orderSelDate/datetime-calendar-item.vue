@@ -242,7 +242,7 @@
 
     &-order {
       font-weight: 400;
-      font-size: var(--h-size-40);
+      font-size: var(--hr-font-size-xxxs);
       margin-top: 4rpx;
 
       &-active {
