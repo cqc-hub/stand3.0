@@ -61,7 +61,7 @@ const globalStore = defineStore('global', {
       herenId: '',
 
       sysCode: globalGl.SYS_CODE,
-      modeOld: true,
+      modeOld: false,
     };
   },
 

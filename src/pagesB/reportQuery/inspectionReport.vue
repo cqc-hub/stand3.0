@@ -1,5 +1,11 @@
 <template>
-  <view class="page" scroll-y="true">
+  <view
+    :class="{
+      'system-mode-old': gStore.globalStore.modeOld,
+    }"
+    class="page"
+    scroll-y="true"
+  >
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>

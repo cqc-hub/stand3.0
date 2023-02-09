@@ -1,5 +1,10 @@
 <template>
-  <view class="page">
+  <view
+    :class="{
+      'system-mode-old': gStore.globalStore.modeOld,
+    }"
+    class="page"
+  >
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>

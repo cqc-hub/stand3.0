@@ -1,5 +1,10 @@
 <template>
-  <view class="page g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page g-page"
+  >
     <g-flag typeFg="41" isShowFg />
     <g-choose-pat @choose-pat="choosePat" />
     <g-message />
@@ -122,7 +127,7 @@
       cardNumber,
       pageNumber: page,
       pageSize: size,
-      idCardEncry
+      idCardEncry,
       //检查传参
       // headerType: headerType,
       // headerName: headerName,
