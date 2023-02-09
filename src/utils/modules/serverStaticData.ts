@@ -87,9 +87,10 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
     _isHos: globalGl.systemInfo.isSearchInHos,
   };
 
+  const gStores = new GStores();
+
   if (addition) {
     const { token, patientId, herenId } = addition;
-    const gStores = new GStores();
 
     if (patientId) {
       extraData[patientId] = gStores.userStore.patChoose.patientId;
@@ -128,6 +129,7 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   if (type === 'h5') {
     if (config.isSelfH5) {
       let baseUrl = globalGl.h5Url;
+      const { modeOld, sysCode } = gStores.globalStore;
 
       if (config.isLocal) {
         baseUrl = localUrl;
@@ -137,6 +139,8 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
 
       fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),
+        modeOld: modeOld && '1',
+        sysCode,
       });
     }
     // #ifdef H5

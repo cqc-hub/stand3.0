@@ -132,7 +132,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(qinfenSignDocTeam);
+      useTBanner(queryNumber);
     }, 1000);
   });
 </script>
