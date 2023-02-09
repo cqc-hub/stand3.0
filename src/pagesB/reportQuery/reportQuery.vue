@@ -20,7 +20,7 @@
     </view>
 
     <swiper
-      v-if="tabs.length > 0"
+      v-if="tabs.length"
       :current="tabCurrent"
       @change="(e) => tabChange(e.detail.current, '')"
       class="container"

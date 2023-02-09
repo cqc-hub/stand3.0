@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <g-choose-pat @choose-pat="refreshListData" />
 
     <scroll-list

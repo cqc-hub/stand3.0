@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <g-flag typeFg="405" isShowFg />
 
     <view class="flex-normal header g-border-bottom">

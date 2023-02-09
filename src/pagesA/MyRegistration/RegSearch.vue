@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <view class="search-header">
       <view class="search-input">
         <uni-search-input
@@ -138,9 +143,9 @@
   const gStores = new GStores();
 
   const confirmInput = (str) => {
-    if(str.match(/^[ ]*$/)){
+    if (str.match(/^[ ]*$/)) {
       gStores.messageStore.showMessage('搜索内容不能为空', 1500);
-    }else{
+    } else {
       r.confirmSearch(str);
     }
   };

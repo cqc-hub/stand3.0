@@ -9,7 +9,7 @@
       >
         {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
       </view>
-      <view class="flex-normal content">
+      <view class="g-break-word">
         <text>我已阅读并同意</text>
         <text @click.stop="goAgreement" class="fg-agree-name">
           《用户条款和隐私政策》
@@ -66,9 +66,5 @@
         color: var(--hr-brand-color-6);
       }
     }
-  }
-
-  .content {
-    flex-wrap: wrap;
   }
 </style>

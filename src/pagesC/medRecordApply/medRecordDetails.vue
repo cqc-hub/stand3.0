@@ -1,5 +1,9 @@
 <template>
-  <view>
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+  >
     <view class="my-display-none">
       <g-selhos :hosId="_hosId" @get-list="getHosList" />
     </view>

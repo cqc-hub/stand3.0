@@ -1,5 +1,10 @@
 <template>
-  <view class="page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page"
+  >
     <view class="container" scroll-y>
       <g-form
         v-model:value="formData"

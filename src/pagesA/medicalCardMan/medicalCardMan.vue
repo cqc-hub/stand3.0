@@ -1,5 +1,9 @@
 <template>
-  <view class="">
+  <view
+    :class="{
+      'system-mode-old': gStore.globalStore.modeOld,
+    }"
+  >
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
       <view
