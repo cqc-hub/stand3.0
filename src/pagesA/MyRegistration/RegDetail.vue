@@ -145,7 +145,8 @@
                 </view>
               </view>
             </view>
-            <view class="order-info p32v">
+
+            <view class="order-info ">
               <g-form
                 :value="orderRegInfo"
                 forShowBodyAlign="left"
@@ -684,16 +685,14 @@
   const refoundOrder = async () => {
     if (orderConfig.value.isOrderPay !== '1') {
       cancelOrder();
-      return;
+    } else {
+      const args = {
+        orderId: pageProps.value.orderId,
+        source: gStores.globalStore.browser.source,
+      };
+      await api.refundOrder(args);
+      init();
     }
-
-    const args = {
-      orderId: pageProps.value.orderId,
-      source: gStores.globalStore.browser.source,
-    };
-
-    await api.refundOrder(args);
-    init();
   };
 
   const goRatePage = () => {
@@ -920,8 +919,6 @@
         }
 
         .order-info {
-          margin-top: 16rpx;
-
           .iconfont {
             font-size: var(--hr-font-size-xl);
             font-size: 400;

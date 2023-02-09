@@ -16,7 +16,7 @@
           :style="{
             color: getStatusConfig(item.orderStatus).cardColr,
           }"
-          class="text-no-wrap"
+          class="text-no-wrap f32"
         >
           {{ getStatusConfig(item.orderStatus).title }}
         </view>
@@ -180,6 +180,7 @@
       .content {
         .row {
           display: flex;
+          margin-bottom: 4rpx;
 
           .label {
             width: 100rpx;

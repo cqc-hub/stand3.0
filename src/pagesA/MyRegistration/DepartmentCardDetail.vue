@@ -9,10 +9,15 @@
       />
     </view>
 
-    <view class="container">
+    <view
+      :class="{
+        'is-transform': detailInfo.deptPhoto,
+      }"
+      class="container"
+    >
       <view class="g-bold f48">{{ pageProps.deptName }}</view>
 
-      <view class="flex-normal doc-goodat">
+      <view class="flex-normal doc-goodat mb12">
         <view class="color-444 f32 doc-goodat-content text-ellipsis">
           <image
             :src="$global.BASE_IMG + 'department-intro-text.png'"
@@ -257,7 +262,9 @@
       background: #fff;
       border-radius: 12px 12px 0px 0px;
 
-      transform: translateY(-88rpx);
+      &.is-transform {
+        transform: translateY(-88rpx);
+      }
 
       .doc-goodat {
         align-items: flex-start;
