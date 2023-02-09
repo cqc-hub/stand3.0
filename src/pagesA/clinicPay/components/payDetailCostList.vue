@@ -116,7 +116,10 @@
   const emits = defineEmits(['sel-item']);
 
   const isActive = (item: TCostList[number]) => {
-    return props.selList.findIndex((o) => o.serialNo === item.serialNo) !== -1;
+    return (
+      props.mulit &&
+      props.selList.findIndex((o) => o.serialNo === item.serialNo) !== -1
+    );
   };
 
   const selItem = (item, idx) => {
@@ -151,7 +154,7 @@
     .medical-item {
       @extend .item-content;
 
-      margin-bottom: 24rpx;
+      margin-bottom: 12rpx;
 
       .label-medical {
         width: 33%;
@@ -165,6 +168,6 @@
 
   .sel-icon {
     font-weight: normal;
-    font-size: var( --h-size-40);
+    font-size: var(--h-size-40);
   }
 </style>
