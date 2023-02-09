@@ -18,6 +18,7 @@ interface IStateGlobal {
   herenId: string;
 
   sysCode: typeof globalGl.SYS_CODE;
+  modeOld: boolean; // 敬老模式?
 }
 //页面存储token brower等
 const globalStore = defineStore('global', {
@@ -38,6 +39,7 @@ const globalStore = defineStore('global', {
       'nationTerms',
       'patientTypeTerms',
       'browser',
+      'modeOld',
     ],
   },
 
@@ -59,6 +61,7 @@ const globalStore = defineStore('global', {
       herenId: '',
 
       sysCode: globalGl.SYS_CODE,
+      modeOld: false,
     };
   },
 

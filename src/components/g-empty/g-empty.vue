@@ -12,7 +12,7 @@
       }"
       mode="heightFix"
     />
-    <view class="alt">{{ text || states[current - 1].label }}</view>
+    <view class="alt f28">{{ text || states[current - 1].label }}</view>
 
     <view class="g-flex-rc-cc empty-content">
       <slot />
@@ -97,7 +97,6 @@
     .alt {
       margin-top: 16rpx;
       color: #888;
-      font-size: 28rpx;
     }
   }
 

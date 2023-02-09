@@ -306,7 +306,7 @@
       position: relative;
 
       .eyes-icon {
-        font-size: 48rpx;
+        font-size: var(--hr-font-size-xxl);
         margin-left: 30rpx;
         position: absolute;
         transform: translateX(88rpx);

@@ -193,18 +193,18 @@
         margin-left: 8rpx;
         .user-info-name {
           font-weight: 600;
-          font-size: 40rpx;
+          font-size: var(--h-size-40);
         }
         .user-info-id {
           color: #888;
-          font-size: 32rpx;
+          font-size: var(--hr-font-size-base);
           margin-left: 8rpx;
         }
       }
     }
     .user-del {
       color: #444;
-      font-size: 28rpx;
+      font-size: var(--hr-font-size-xs);
       display: flex;
 
       &.yard {
@@ -254,7 +254,7 @@
       }
       .name {
         color: #888;
-        font-size: 32rpx;
+        font-size: var(--hr-font-size-base);
       }
       .triangle-left {
         margin: auto 0;
@@ -279,17 +279,17 @@
 
         .text {
           color: #296fff;
-          font-size: 24rpx;
+          font-size: var(--hr-font-size-xxxs);
           font-weight: 600;
           text-align: center;
         }
         .right {
-          font-size: 32rpx;
+          font-size: var(--hr-font-size-base);
           color: #296fff;
         }
       }
       .money {
-        font-size: 32rpx;
+        font-size:var(--hr-font-size-base);
         color: #111;
         font-weight: 600;
       }

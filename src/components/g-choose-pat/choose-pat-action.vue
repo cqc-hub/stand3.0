@@ -8,7 +8,7 @@
 
         <view class="add-pat-box">
           <view class="add-pat g-flex-rc-cc" @click="goAddPat">
-            <view class="iconfont icon-resize">&#xe6ab;</view>
+            <view class="iconfont icon-resize f48">&#xe6ab;</view>
             <text>添加就诊人</text>
           </view>
         </view>
@@ -97,7 +97,6 @@
       font-weight: var(--h-weight-2);
 
       .icon-resize {
-        font-size: 48rpx;
         margin-right: 10rpx;
         font-weight: 500;
         color: var(--hr-brand-color-6);

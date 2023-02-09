@@ -130,14 +130,14 @@
   }
 
   .uni-calendar-item__weeks-box-text {
-    font-size: 14px;
+    font-size: var(--hr-font-size-xs);
     // font-family: Lato-Bold, Lato;
     font-weight: bold;
     // color: #455997;
   }
 
   .uni-calendar-item__weeks-lunar-text {
-    font-size: 12px;
+    font-size: var(--hr-font-size-xxxs);
     color: #333;
   }
 
@@ -242,7 +242,7 @@
 
     &-order {
       font-weight: 400;
-      font-size: 20rpx;
+      font-size: var(--h-size-40);
       margin-top: 4rpx;
 
       &-active {

@@ -28,7 +28,7 @@
         :class="{
           arrowBottom: isShow,
         }"
-        class="iconfont right-icon color-888"
+        class="iconfont right-icon color-888 f48"
       >
         &#xe66b;
       </view>
@@ -238,7 +238,6 @@
       transition: 0.4s all;
       position: relative;
       // right: 0upx;
-      font-size: 48rpx;
 
       &.arrowBottom {
         transform: rotate(-90deg);

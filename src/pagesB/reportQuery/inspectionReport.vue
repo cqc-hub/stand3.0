@@ -1,5 +1,11 @@
 <template>
-  <view class="page" scroll-y="true">
+  <view
+    :class="{
+      'system-mode-old': gStore.globalStore.modeOld,
+    }"
+    class="page"
+    scroll-y="true"
+  >
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
@@ -664,7 +670,7 @@
         margin-left: 16rpx;
         height: 64rpx;
         width: 164rpx;
-        font-size: 28rpx;
+        font-size: var(--hr-font-size-xs);
         text-align: center;
         line-height: 64rpx;
         margin-top: 16rpx;
@@ -715,7 +721,7 @@
             // width: calc(100% - 32rpx);
             margin-left: 32rpx;
             margin-top: 16rpx;
-            font-size: 28rpx;
+            font-size: var(--hr-font-size-xs);
             .subhead {
               margin-top: 8rpx;
               color: #888888;
@@ -740,11 +746,11 @@
                 align-items: center;
                 .more {
                   height: 40rpx;
-                  font-size: 24rpx;
+                  font-size: var(--hr-font-size-xxxs);
                   color: #888888;
                 }
                 .iconfont {
-                  font-size: 32rpx;
+                  font-size: var(--hr-font-size-base);
                 }
 
                 &::after {
@@ -774,7 +780,7 @@
               border: 2rpx solid #cccccc;
               background-color: #fff;
               line-height: 80rpx;
-              font-size: 28rpx;
+              font-size: var(--hr-font-size-xs);
               font-weight: 600;
               display: flex;
               justify-content: center;
@@ -801,7 +807,7 @@
             margin-left: 32rpx;
             white-space: pre-wrap;
             .title {
-              font-size: 36rpx;
+              font-size: var(--hr-font-size-xl);
               font-weight: 600;
             }
             .content {
@@ -825,7 +831,7 @@
       // width: calc(100% - 64rpx);
       color: #888888;
       margin-top: 40rpx;
-      font-size: 28rpx;
+      font-size: var(--hr-font-size-xs);
       padding-bottom: 206rpx;
     }
     .footer {
@@ -848,7 +854,7 @@
         background-color: #fff;
         border-radius: 0rpx;
         .title {
-          font-size: 32rpx;
+          font-size: var(--hr-font-size-base);
           text-align: center;
         }
         .icon-font {
@@ -866,7 +872,7 @@
     .title {
       text-align: center;
       margin-bottom: 40rpx;
-      font-size: 32rpx;
+      font-size: var(--hr-font-size-base);
       color: #444444;
     }
     .popup-tki {
@@ -876,7 +882,7 @@
 
     .popup-href {
       margin: 24rpx 0 80rpx 0;
-      font-size: 28rpx;
+      font-size: var(--hr-font-size-xs);
       color: #888888;
       white-space: normal;
       word-break: break-all;
@@ -893,7 +899,7 @@
       justify-content: center;
       align-items: center;
       color: #296fff;
-      font-size: 36rpx;
+      font-size: var(--hr-font-size-xl);
       .popup-un-operator {
         display: flex;
         align-items: center;

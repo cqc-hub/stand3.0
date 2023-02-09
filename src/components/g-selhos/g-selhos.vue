@@ -15,7 +15,7 @@
         <view class="f32 text-ellipsis">{{ getHosName }}</view>
       </view>
 
-      <text :class="`icon-font icon-resize ico_arrow`" />
+      <text :class="`icon-font icon-resize ico_arrow f48`" />
     </view>
 
     <g-select
@@ -142,6 +142,5 @@
   .icon-resize {
     width: 48rpx;
     height: 48rpx;
-    font-size: 48rpx;
   }
 </style>

@@ -95,7 +95,7 @@
 
       .ico-checkbox {
         color: var(--hr-brand-color-6);
-        font-size: 46rpx;
+        font-size: var(--h-size-46);
       }
 
       &.pat-active {

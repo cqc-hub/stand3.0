@@ -35,7 +35,7 @@
 
       view {
         color: #999;
-        font-size: 28upx;
+        font-size: var(--hr-font-size-xs);
         line-height: 40upx;
       }
     }
@@ -49,7 +49,7 @@
         // border-bottom: 1px solid $uni-border-color;
         height: 88upx;
         color: #333;
-        font-size: 32upx;
+        font-size: var(--hr-font-size-base);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -65,14 +65,14 @@
       }
 
       .icon-resize {
-        font-size: 48rpx;
+        font-size: var(--hr-font-size-xxl);
       }
     }
     .footer {
       position: fixed;
       bottom: 50upx;
       width: 100%;
-      font-size: 28upx;
+      font-size: var(--hr-font-size-xs);
       color: #999999;
       text-align: center;
     }

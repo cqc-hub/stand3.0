@@ -49,7 +49,7 @@ dataLoad();
 }
 
 .title {
-	font-size: 36rpx;
+	font-size: var(--hr-font-size-xl);
 	color: #8f8f94;
 }
 </style>

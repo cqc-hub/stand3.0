@@ -114,7 +114,7 @@ onMounted(() => {
           width: calc(100% - 32rpx);
           margin-left: 32rpx;
           margin-top: 16rpx;
-          font-size: 24rpx;
+          font-size: var(--hr-font-size-xxxs);
           .subhead {
             margin-top: 8rpx;
             color: #888888;
@@ -139,11 +139,11 @@ onMounted(() => {
               .more {
                 height: 40rpx;
                 width: 48rpx;
-                font-size: 24rpx;
+                font-size: var(--hr-font-size-xxxs);
                 color: #888888;
               }
               .iconfont {
-                font-size: 32rpx;
+                font-size: var(--hr-font-size-base);
               }
             }
           }
@@ -162,7 +162,7 @@ onMounted(() => {
           margin-left: 32rpx;
           white-space: pre-wrap;
           .title {
-            font-size: 36rpx;
+            font-size: var(--hr-font-size-xl);
             font-weight: 600;
           }
           .content {
@@ -174,7 +174,7 @@ onMounted(() => {
               width: calc(100% - 32rpx);
               margin-bottom: 32rpx;
               .item-title {
-                font-size: 32rpx;
+                font-size: var(--hr-font-size-base);
                 font-weight: 600;
               }
               .item-content {
@@ -192,7 +192,7 @@ onMounted(() => {
     width: calc(100% - 32rpx);
     color: #888888;
     margin-top: 40rpx;
-    font-size: 28rpx;
+    font-size: var(--hr-font-size-xs);
     padding-bottom: 206rpx;
   }
   .footer {
@@ -213,7 +213,7 @@ onMounted(() => {
       background-color: #fff;
       border-radius: 0rpx;
       .title {
-        font-size: 28rpx;
+        font-size: var(--hr-font-size-xs);
         text-align: center;
       }
       .icon-font {

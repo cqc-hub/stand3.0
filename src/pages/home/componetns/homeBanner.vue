@@ -140,7 +140,7 @@ const autoplay = ref(true);
 //跳转对应地址
 const gotoPath = (item) => {
   console.log('跳转');
-  
+
   useCommonTo(item);
 };
 </script>
@@ -270,7 +270,7 @@ const gotoPath = (item) => {
   }
   .text-ellipsis {
     -webkit-line-clamp: 2;
-    font-size: 32rpx;
+    font-size: var(--hr-font-size-base);
   }
 
   .banner2 {
@@ -329,6 +329,6 @@ const gotoPath = (item) => {
   .no-border {
     background: transparent;
     border: none;
-  } 
+  }
 }
 </style>

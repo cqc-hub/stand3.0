@@ -66,7 +66,7 @@
 
     > view {
       color: #333333;
-      font-size: 28upx;
+      font-size: var(--hr-font-size-xs);
     }
 
     .green-power-circle {
@@ -117,7 +117,7 @@
       width: 100%;
       text-shadow: 1upx 1upx 2upx;
       color: #333333;
-      font-size: 36upx;
+      font-size: var(--hr-font-size-xl);
       text-align: center;
     }
 
@@ -154,7 +154,7 @@
       justify-content: center;
 
       color: #1677ff;
-      font-size: 36upx;
+      font-size: var(--hr-font-size-xl);
     }
   }
 </style>

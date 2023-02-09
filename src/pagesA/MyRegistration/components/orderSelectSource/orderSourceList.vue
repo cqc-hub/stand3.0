@@ -163,7 +163,7 @@
         right: -1rpx;
         top: -3rpx;
         color: var(--hr-neutral-color-9);
-        font-size: 48rpx;
+        font-size: var(--hr-font-size-xxl);
         z-index: 2;
       }
 

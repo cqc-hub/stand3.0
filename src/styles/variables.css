@@ -53,14 +53,22 @@ page {
   --h-weight-2: 600;
 
   /* 字体大小 */
+  /* var(--hr-font-size-xxl); */
   --hr-font-size-xxl: 48rpx;
+  /* var(--hr-font-size-xl); */
   --hr-font-size-xl: 36rpx;
+  /* var(--hr-font-size-base); */
   --hr-font-size-base: 32rpx;
+  /* var(--hr-font-size-s); */
   --hr-font-size-s: 30rpx;
+  /* var(--hr-font-size-xs); */
   --hr-font-size-xs: 28rpx;
+  /* var(--hr-font-size-xxs); */
   --hr-font-size-xxs: 26rpx;
+  /* var(--hr-font-size-xxxs); */
   --hr-font-size-xxxs: 24rpx;
 
+  /* var(--h-size-40); */
   --h-size-40: 40rpx;
   --h-size-18: 18rpx;
   --h-size-46: 46rpx;

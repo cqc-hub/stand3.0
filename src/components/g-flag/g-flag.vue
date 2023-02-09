@@ -3,6 +3,7 @@
     :class="{
       aaa: !aaa,
     }"
+    class="f28"
   >
     <slot :title="mTitle" :text="text">
       <view v-if="isShowFg && text" class="real-top">
@@ -73,13 +74,11 @@
     background: var(--hr-brand-color-1);
     text-align: left;
     color: var(--hr-brand-color-6);
-    font-size: 28rpx;
     line-height: 40rpx;
   }
 
   .tip {
     // margin-top: 32rpx;
-    font-size: 28rpx;
     line-height: 40rpx;
     color: #888;
     // padding-bottom: 50rpx;

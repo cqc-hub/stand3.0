@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <g-tbanner :config="orderConfig.bannerOrder" />
     <g-selhos
       v-model:hosId="hosId"

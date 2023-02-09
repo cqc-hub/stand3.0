@@ -43,14 +43,16 @@ export interface ISystemConfig {
 
     /** 门诊取号 */
     takeNumberQueueBtn?: '1'; // 门诊取号列表页面是否显示排队叫号入口按钮
-
   };
 
   /** 移动端伦理委员会(h5) */
   LUN_LI?: {
-    isOpenGzzn?: '1'; // 是否开放规章指南
-    isOpenWordDownload?: '1'; // 是否开放文档下载
-    isOpenBSZN?: '1';  // 是否开放办事指南
+    // 对应科室id
+    [key: string]: {
+      entranceType: string;
+      iconfont: string;
+      title: string;
+    };
   };
 
   // 就诊人

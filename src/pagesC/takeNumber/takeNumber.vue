@@ -268,7 +268,7 @@
   }
 
   .icon-resize {
-    font-size: 48rpx;
+    font-size: var(--hr-font-size-xxl);
     margin-right: 10rpx;
     font-weight: 500;
   }

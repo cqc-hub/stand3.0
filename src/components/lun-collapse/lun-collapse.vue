@@ -17,19 +17,11 @@
       <slot name="title">
         <text>{{ title }}</text>
       </slot>
-      <!-- :src="rightIcon ? rightIcon : require('./img/arrow-right.png')" -->
-      <!-- <image
-        :src="rightIcon ? rightIcon : img_url + 'ic_youjiantou@3x.png'"
-        :class="{
-          arrowBottom: isShow,
-        }"
-        class="right-icon"
-      /> -->
       <view
         :class="{
           arrowBottom: isShow,
         }"
-        class="iconfont right-icon color-888"
+        class="iconfont right-icon color-888 f48"
       >
         &#xe66b;
       </view>
@@ -182,7 +174,6 @@
       transition: 0.4s all;
       position: relative;
       right: 10upx;
-      font-size: 48rpx;
 
       &.arrowBottom {
         transform: rotate(-90deg);

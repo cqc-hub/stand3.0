@@ -1,5 +1,11 @@
 <template>
-  <view :class="titleStatus.headerClass" class="reg-detail">
+  <view
+    :class="{
+      [titleStatus.headerClass]: true,
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="reg-detail"
+  >
     <scroll-view scroll-y class="scroll-container">
       <view v-if="orderRegInfo.patientId" class="box">
         <view class="reg-header flex-between">
@@ -816,7 +822,7 @@
         }
 
         .reg-header-icon {
-          font-size: 60rpx;
+          font-size: var(--h-iconfont-60);
           margin-right: 16rpx;
         }
 

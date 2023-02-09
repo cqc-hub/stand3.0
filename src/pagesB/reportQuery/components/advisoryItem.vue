@@ -86,7 +86,7 @@ onMounted(() => {
       width: auto;
       height: 36rpx;
       border-radius: 8rpx;
-      font-size: 24rpx;
+      font-size: var(--hr-font-size-xxxs);
       line-height: 36rpx;
       text-align: center;
       padding: 0 12rpx;
@@ -96,7 +96,7 @@ onMounted(() => {
       width: calc(100% - 24rpx);
       white-space: normal;
       word-break: break-all;
-      font-size: 32rpx;
+      font-size: var(--hr-font-size-base);
       font-weight: 600;
       margin-right: 24rpx;
       padding: 28rpx 0;
@@ -131,11 +131,11 @@ onMounted(() => {
   .right {
     margin-right: 24rpx;
     .iconerror-circle {
-      font-size: 36rpx;
+      font-size: var(--hr-font-size-xl);
       color: red;
     }
     .icon-resize {
-      font-size: 36rpx;
+      font-size: var(--hr-font-size-xl);
     }
   }
 }

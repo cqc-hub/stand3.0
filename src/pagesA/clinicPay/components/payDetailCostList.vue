@@ -165,6 +165,6 @@
 
   .sel-icon {
     font-weight: normal;
-    font-size: 40rpx;
+    font-size: var( --h-size-40);
   }
 </style>

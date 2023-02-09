@@ -73,7 +73,7 @@
       width: 100%;
       text-align: center;
 
-      font-size: 24upx;
+      font-size: var(--hr-font-size-xxxs);
       font-weight: 400;
       color: #999;
     }
