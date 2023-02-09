@@ -83,7 +83,7 @@
   import advisoryItem from './components/advisoryItem.vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores, ServerStaticData, wait } from '@/utils';
-  import { joinQuery, joinQueryForUrl } from '@/common';
+  import { joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
   const tabs = ref<ITab[]>([]);
@@ -115,6 +115,7 @@
   const totalList = ref([0, 0, 0]);
   const load = async (pageInfo) => {
     await wait(600);
+    const currentTabValue = tabCurrent.value;
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
@@ -123,26 +124,10 @@
       headerType: headerType,
       headerName: headerName,
       patientId,
-      // cardNumber: '00000646',
       cardNumber,
       pageNumber: page,
       pageSize: size,
       idCardEncry,
-      //检查传参
-      // headerType: headerType,
-      // headerName: headerName,
-      // sysCode: '1001033',
-      // patientId: '10221065',
-      // cardNumber: '10763642',
-      // pageNumber: page,
-      // pageSize: 1,
-      //检验传参
-      // headerType: headerType,
-      // headerName: headerName,
-      // patientId: '52299028211',
-      // cardNumber: '00545696',
-      // pageNumber: page,
-      // pageSize: size,
     };
     let returnArg;
     loading.value = true;
@@ -205,7 +190,8 @@
         list: list,
       };
     }
-    getCurrentLoadScrollInstance()?.loadSuccess(returnArg);
+
+    slist.value[currentTabValue].loadSuccess(returnArg);
     return returnArg;
   };
   const loadScrollList = () => {
@@ -221,11 +207,12 @@
   };
 
   const refresh = async (e) => {
+    const currentTabValue = tabCurrent.value;
     const tabIdNow = tabs.value[tabCurrent.value].typeId;
     pageList.value[tabIdNow] = [];
     totalList.value = [0, 0, 0];
     const returnArg = await load(e);
-    getCurrentLoadScrollInstance()?.refreshSuccess(returnArg, 'refresh');
+    slist.value[currentTabValue].refreshSuccess(returnArg, 'refresh');
   };
   const isRefresh = ref([true, true, true]);
   const tabChange = async (e: number, type: string) => {
@@ -274,17 +261,10 @@
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', mq),
       });
-      // uni.navigateTo({
-      //   url: `/pagesB/reportQuery/InspectionDetails?mq=${JSON.stringify(mq)}`,
-      // });
     } else if (tabCurrent.value == 1) {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/inspectionReport', mq),
       });
-      // uni.navigateTo({
-      //   url: `/pagesB/reportQuery/inspectionReport?mq=${JSON.stringify(mq)}`,
-      // });
-    } else {
     }
   };
 
@@ -310,16 +290,7 @@
     reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
   };
 
-  // const getParamsMoreBySysCode = async () => {
-  //   const { result } = await api.getParamsMoreBySysCode3({
-  //     hostId: getHosId(),
-  //     paramCode: 'REPORT_QUERY_CONFIG',
-  //   });
-  //   reportConfig.value = JSON.parse(result.REPORT_QUERY_CONFIG);
-  //   console.log(reportConfig.value, 'reportConfig');
-  // };
   onLoad(async () => {
-    // await gStores.userStore.getPatList();
     await getParamsMoreBySysCode();
     init();
   });

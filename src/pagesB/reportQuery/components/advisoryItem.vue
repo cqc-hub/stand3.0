@@ -57,9 +57,6 @@ const props = defineProps({
     default: "",
   },
 });
-onMounted(() => {
-  console.log(props.type);
-});
 </script>
 <style lang="scss" scoped>
 .item {
