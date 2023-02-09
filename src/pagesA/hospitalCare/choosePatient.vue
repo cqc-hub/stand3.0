@@ -89,7 +89,7 @@ onLoad(() => {});
 .page {
   padding: 80rpx 32rpx 0;
   .title {
-    font-size: 48rpx;
+    font-size: var(--hr-font-size-xxl);
     color: #111;
     font-weight: 600;
     margin-bottom: 80rpx;
@@ -110,7 +110,7 @@ onLoad(() => {});
         width: 160rpx;
         padding-right: 32rpx;
         color: #666666;
-        font-size: 32rpx;
+        font-size: var(--hr-font-size-base);
       }
     }
     .uni-input {
@@ -125,7 +125,7 @@ onLoad(() => {});
     text-align: center;
     line-height: 96rpx;
     margin-top: 120rpx;
-    font-size: 36rpx;
+    font-size: var(--hr-font-size-xl);
   }
   .activeSubmitBtn {
     height: 96rpx;
@@ -135,7 +135,7 @@ onLoad(() => {});
     text-align: center;
     line-height: 96rpx;
     margin-top: 120rpx;
-    font-size: 36rpx;
+    font-size: var(--hr-font-size-xl);
   }
   .pat-choose {
     width: 180rpx;
@@ -144,7 +144,7 @@ onLoad(() => {});
     background-color: #e9f0ff;
     color: #296fff;
     font-weight: 600;
-    font-size: 26rpx;
+    font-size: var(--hr-font-size-xxs);
     line-height: 56rpx;
     text-align: center;
   }

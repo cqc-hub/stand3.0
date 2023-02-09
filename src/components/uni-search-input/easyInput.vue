@@ -398,7 +398,7 @@
     position: relative;
     text-align: left;
     color: #333;
-    font-size: 14px;
+    font-size: var(--hr-font-size-xs);
   }
 
   .uni-easyinput__content {
@@ -421,11 +421,11 @@
     overflow: hidden;
     flex: 1;
     line-height: 1;
-    font-size: 14px;
+    font-size: var(--hr-font-size-xs);
   }
   .uni-easyinput__placeholder-class {
     color: #999;
-    font-size: 12px;
+    font-size: var(--hr-font-size-xxxs);
     font-weight: 200;
   }
   .is-textarea {
@@ -441,7 +441,7 @@
     overflow: hidden;
     flex: 1;
     line-height: 1.5;
-    font-size: 14px;
+    font-size: var(--hr-font-size-xs);
     padding-top: 6px;
     padding-bottom: 10px;
     height: 80px;
@@ -480,9 +480,9 @@
     position: absolute;
     bottom: -17px;
     left: 0;
-    line-height: 12px;
+    line-height: var(--hr-font-size-xxxs);
     color: $uni-error;
-    font-size: 12px;
+    font-size: var(--hr-font-size-xxxs);
     text-align: left;
   }
 
@@ -525,7 +525,7 @@
     color: #d5d5d5;
     .uni-easyinput__placeholder-class {
       color: #d5d5d5;
-      font-size: 12px;
+      font-size: var(--hr-font-size-xxxs);
     }
   }
 </style>

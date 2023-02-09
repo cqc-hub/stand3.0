@@ -23,7 +23,7 @@
             <view class="popup-title text-ellipsis g-bold">
               {{ title }}
             </view>
-            <view @click="popup.hide" class="iconfont ico-close">&#xe6cd;</view>
+            <view @click="popup.hide" class="iconfont ico-close f48">&#xe6cd;</view>
           </view>
 
           <view v-if="subTitle" class="g-flex-rc-cc color-888 f32">
@@ -170,7 +170,6 @@
         color: var(--hr-neutral-color-7);
         position: absolute;
         right: 24rpx;
-        font-size: 48rpx;
         font-weight: 400;
       }
     }

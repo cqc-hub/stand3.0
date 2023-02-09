@@ -213,13 +213,13 @@ defineExpose({
       margin-top: 32rpx;
       .title {
         text-align: center;
-        font-size: 36rpx;
+        font-size: var(--hr-font-size-xl);
         font-weight: 600;
         margin-top: 40rpx;
       }
       .information {
         margin-top: 20rpx;
-        font-size: 28rpx;
+        font-size: var(--hr-font-size-xs);
         margin-left: 32rpx;
         .item {
           margin-top: 12rpx;
@@ -251,8 +251,8 @@ defineExpose({
       padding-bottom: 20rpx;
       .title {
         padding-top: 40rpx;
-        margin-left: 32rpx;
-        font-size: 32rpx;
+        margin-left: var(--hr-font-size-base);
+        font-size: var(--hr-font-size-base);
         color: #888888;
       }
       .item {
@@ -266,7 +266,7 @@ defineExpose({
           display: flex;
           justify-content: space-between;
           line-height: 96rpx;
-          font-size: 32rpx;
+          font-size: var(--hr-font-size-base);
           font-weight: 600;
           .money {
             color: #ff5040;
@@ -278,7 +278,7 @@ defineExpose({
           background-color: #f6f6f6;
           display: flex;
           justify-content: space-between;
-          font-size: 28rpx;
+          font-size: var(--hr-font-size-xs);
           padding-bottom: 16rpx;
           border-radius: 8rpx;
           &.spacing {
@@ -290,7 +290,7 @@ defineExpose({
           margin-top: 16rpx;
           .count {
             color: #888888;
-            font-size: 24rpx;
+            font-size: var(--hr-font-size-xxxs);
             display: flex;
             margin-top: 4rpx;
             .quantity {
@@ -307,7 +307,7 @@ defineExpose({
         width: 622rpx;
         height: auto;
         background-color: #f6f6f6;
-        font-size: 28rpx;
+        font-size: var(--hr-font-size-xs);
         border-radius: 8rpx;
         display: flex;
         flex-flow: row wrap;
@@ -333,7 +333,7 @@ defineExpose({
   text-align: center;
 
   color: #888;
-  font-size: 28rpx;
+  font-size: var(--hr-font-size-xs);
   .no-data-img {
     width: 200rpx;
     height: 200rpx;

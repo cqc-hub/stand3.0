@@ -191,7 +191,7 @@
       transition: 0.4s all;
       position: relative;
       right: 10upx;
-      font-size: 48rpx;
+      font-size: var(--h-iconfont-48);
 
       &.arrowBottom {
         transform: rotate(-90deg);

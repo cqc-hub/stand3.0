@@ -50,7 +50,7 @@
     padding-left: 32rpx;
     flex-direction: column;
     height: $nav-height;
-    font-size: 12px;
+    font-size: var(--hr-font-size-xxxs);
     background-color: #fff;
 
     // padding-top: 100rpx;

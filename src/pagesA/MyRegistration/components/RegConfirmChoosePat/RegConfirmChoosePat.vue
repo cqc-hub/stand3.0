@@ -91,7 +91,7 @@
         align-items: center;
       }
       .icon-resize {
-        font-size: 48rpx; 
+        font-size: var(--hr-font-size-xxl);
         margin-left: 24rpx;
         color: var(--hr-neutral-color-7);
       }

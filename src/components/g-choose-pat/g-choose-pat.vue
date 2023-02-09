@@ -20,7 +20,7 @@
         }}</text>
       </view>
 
-      <text :class="`icon-font icon-resize ico_arrow`" />
+      <text :class="`icon-font icon-resize ico_arrow f48`" />
     </view>
 
     <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
@@ -130,7 +130,6 @@ onMounted(() => {
   .icon-resize {
     width: 48rpx;
     height: 48rpx;
-    font-size: 48rpx;
   }
 }
 </style>

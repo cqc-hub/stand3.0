@@ -14,7 +14,7 @@
         @confirm="confirm"
         suffixIcon="ico_search1"
         confirmType="search"
-        placeholderStyle="font-size: 28rpx;color: #bbbbbb;"
+        placeholderStyle="font-size: var(--hr-font-size-xs);color: #bbbbbb;"
         ref="easyinput"
       >
         <template #prefix>

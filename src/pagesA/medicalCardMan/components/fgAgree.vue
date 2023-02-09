@@ -58,7 +58,7 @@
 
     .check-box {
       color: var(--hr-neutral-color-7);
-      font-size: 40rpx;
+      font-size: var(--h-size-40);
       margin-right: 4rpx;
       transform: translateY(-5rpx);
 

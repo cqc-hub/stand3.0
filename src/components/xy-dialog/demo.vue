@@ -2,8 +2,8 @@
 	<view class="demo">
 		<view class="demo-item">
 			<text>完整功能</text>
-			<button type="primary" size="mini" @click="handleShow(1)">查看</button>			
-			<xy-dialog 
+			<button type="primary" size="mini" @click="handleShow(1)">查看</button>
+			<xy-dialog
 				title="标题"
 				content="操作成功,你懂得~"
 				:show="showDialog_1"
@@ -14,29 +14,29 @@
 		<view class="demo-item">
 			<text>内容+按钮</text>
 			<button type="primary" size="mini" @click="handleShow(2)">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title=""
 				content="操作成功,你懂得~"
 				:show="showDialog_2"
 				@cancelButton="clickCancel(2)"
 				@confirmButton="clickConfirm(2)"
 			></xy-dialog>
-		</view>	
+		</view>
 		<view class="demo-item">
 			<text>标题+内容+单个按钮</text>
 			<button type="primary" size="mini" @click="handleShow(3)">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title="提示"
 				content="操作成功,你懂得~"
 				:show="showDialog_3"
 				:isShowCancel="!showDialog_3"
 				@confirmButton="clickConfirm(3)"
 			></xy-dialog>
-		</view>	
+		</view>
 		<view class="demo-item">
 			<text>改变按钮文字/颜色</text>
 			<button type="primary" size="mini" @click="handleShow(4)">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title="标题"
 				content="操作成功,你懂得~"
 				:show="showDialog_4"
@@ -51,18 +51,18 @@
 		<view class="demo-item">
 			<text>内容+单个按钮</text>
 			<button type="primary" size="mini" @click="handleShow(5)">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title=""
 				content="操作成功,你懂得~"
 				:show="showDialog_5"
 				:isShowCancel="!showDialog_5"
 				@confirmButton="clickConfirm(5)"
 			></xy-dialog>
-		</view>	
+		</view>
 		<view class="demo-item">
 			<text>自定义slot插入内容</text>
 			<button type="primary" size="mini" @click="handleShow(6)">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title="提示"
 				content=""
 				:show="showDialog_6"
@@ -76,17 +76,17 @@
 					<view>低头思故乡</view>
 				</view>
 			</xy-dialog>
-		</view>	
+		</view>
 		<view class="demo-item">
 			<text>方法调用</text>
 			<button type="primary" size="mini" @click="handleActionShow">查看</button>
-			<xy-dialog 
+			<xy-dialog
 				title="提示"
 				content="操作成功,你懂得~"
 				ref="xyDialog"
 				@confirmButton="clickConfirm"
 			></xy-dialog>
-		</view>	
+		</view>
 	</view>
 </template>
 
@@ -138,7 +138,7 @@
 			border-bottom: 1px solid #EBEEF5;
 			text {
 				flex: 1;
-				font-size: 32upx;
+				font-size: var(--hr-font-size-base);
 			}
 		}
 	}

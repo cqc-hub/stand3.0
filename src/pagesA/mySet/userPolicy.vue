@@ -293,7 +293,7 @@
     padding: 0;
     line-height: 50upx;
     text-indent: 30upx;
-    font-size: 24upx;
+    font-size: var(--hr-font-size-xxxs);
     color: rgb(71, 71, 71);
   }
 
@@ -310,7 +310,7 @@
   .title {
     line-height: 70upx;
     font-weight: bold;
-    font-size: 32upx;
+    font-size: var(--hr-font-size-base);
     text-indent: 0;
     color: #333;
   }

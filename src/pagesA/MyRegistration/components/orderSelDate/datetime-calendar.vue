@@ -843,7 +843,7 @@
     padding-left: 10px;
     height: 25px;
     line-height: 25px;
-    font-size: 12px;
+    font-size: var(--hr-font-size-xxxs);
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
     // color: #fff;
@@ -853,14 +853,14 @@
   .uni-calendar__header-text {
     text-align: center;
     width: 100px;
-    font-size: 15px;
+    font-size: var(--hr-font-size-s);
     color: #666;
   }
 
   .uni-calendar__button-text {
     text-align: center;
     width: 100px;
-    font-size: 14px;
+    font-size: var(--hr-font-size-xs);
     color: #007aff;
     /* #ifndef APP-NVUE */
     letter-spacing: 3px;
@@ -1051,7 +1051,7 @@
     line-height: 40px;
     background-color: #007aff;
     color: #fff;
-    font-size: 16px;
+    font-size: var(--hr-font-size-base);
     letter-spacing: 2px;
   }
 

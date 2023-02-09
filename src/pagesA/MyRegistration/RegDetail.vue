@@ -822,7 +822,7 @@
         }
 
         .reg-header-icon {
-          font-size: 60rpx;
+          font-size: var(--h-iconfont-60);
           margin-right: 16rpx;
         }
 

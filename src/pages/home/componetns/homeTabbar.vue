@@ -129,7 +129,7 @@
         height: 100%;
 
         .label {
-          font-size: 20rpx;
+          font-size: var(--h-size-40);
           color: var(--hr-neutral-color-8);
           margin-top: 10rpx;
         }

@@ -203,13 +203,13 @@
       line-height: 1.5;
       color: #111111;
       font-weight: bold;
-      font-size: 36upx;
+      font-size: var(--hr-font-size-xl);
       text-align: center;
     }
 
     &__content {
       position: relative;
-      font-size: 36upx;
+      font-size: var(--hr-font-size-xl);
       box-sizing: border-box;
       line-height: 1.5;
       max-height: 600rpx;
@@ -236,7 +236,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       color: #303133;
-      font-size: 36upx;
+      font-size: var(--hr-font-size-xl);
       display: flex;
       flex-direction: row;
       justify-content: space-between;

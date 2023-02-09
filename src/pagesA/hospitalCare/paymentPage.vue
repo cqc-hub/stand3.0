@@ -233,7 +233,7 @@ onLoad((opt) => {
     text-align: center;
     line-height: 96rpx;
     margin-top: 120rpx;
-    font-size: 36rpx;
+    font-size: var(--hr-font-size-xl);
   }
   .activeSubmitBtn {
     height: 96rpx;
@@ -243,11 +243,11 @@ onLoad((opt) => {
     text-align: center;
     line-height: 96rpx;
     margin-top: 120rpx;
-    font-size: 36rpx;
+    font-size: var(--hr-font-size-xl);
   }
   .uni-input {
     font-weight: 600;
-    font-size: 36rpx;
+    font-size: var(--hr-font-size-xl);
     background: #f6f6f6;
   }
 }

@@ -68,14 +68,14 @@
     .page-title {
       font-weight: 600;
       color: #111111;
-      font-size: 48rpx;
+      font-size: var(--hr-font-size-xxl);
       padding-bottom: 24rpx;
       margin-bottom: 40rpx;
     }
 
     .info-description {
       color: #888888;
-      font-size: 26rpx;
+      font-size: var(--hr-font-size-xxs);
 
       padding: 16rpx 0 40rpx 0;
       text {
@@ -89,7 +89,7 @@
     }
 
     .page-content {
-      font-size: 32rpx;
+      font-size: var(--hr-font-size-base);
       font-weight: 400;
       color: #444444;
     }

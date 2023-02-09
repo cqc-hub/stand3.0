@@ -349,7 +349,7 @@
             min-height: 44rpx;
             width: calc(100% - 32rpx);
             color: #888888;
-            font-size: 28rpx;
+            font-size: var(--hr-font-size-xs);
             line-height: 44rpx;
             margin-top: 40rpx;
             margin-left: -18rpx;
@@ -365,7 +365,7 @@
               padding-top: -5rpx;
             }
             .date-icon {
-              font-size: 32rpx;
+              font-size: var(--hr-font-size-base);
               margin-right: 20rpx;
               color: #dddddd;
               // position: relative;

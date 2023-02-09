@@ -123,7 +123,7 @@ defineExpose({
     width: 244rpx;
     height: 56rpx;
     font-weight: 600;
-    font-size: 26rpx;
+    font-size: var(--hr-font-size-xxs);
     background-color: #fff;
     border-radius: 12rpx;
     margin-left: 32rpx;
@@ -157,7 +157,7 @@ defineExpose({
         align-items: center;
       }
       .date {
-        font-size: 36rpx;
+        font-size: var(--hr-font-size-xl);
         font-weight: 600;
       }
       .details-right {
@@ -165,10 +165,10 @@ defineExpose({
         align-items: center;
       }
       .money {
-        font-size: 36rpx;
+        font-size: var(--hr-font-size-xl);
       }
       .iconfont {
-        font-size: 48rpx;
+        font-size: var(--h-iconfont-48);
         // margin: auto 0;
       }
     }
@@ -177,7 +177,7 @@ defineExpose({
     &.date {
       color: #ddd;
       position: absolute;
-      font-size: 24rpx;
+      font-size: var(--hr-font-size-xxxs);
       z-index: 999;
       top: 20rpx;
       left: 38rpx;
@@ -207,7 +207,7 @@ defineExpose({
   text-align: center;
   margin: 0 32rpx;
   color: #888;
-  font-size: 28rpx;
+  font-size: var(--hr-font-size-xs);
   .no-data-img {
     width: 200rpx;
     height: 200rpx;

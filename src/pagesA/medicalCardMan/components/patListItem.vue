@@ -130,7 +130,7 @@
       }
 
       .icon-resize {
-        font-size: 48rpx;
+        font-size: var(--hr-font-size-xxl);
         color: var(--hr-neutral-color-7);
       }
     }

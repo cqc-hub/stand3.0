@@ -5,7 +5,7 @@
       <view class="right">
         <view class="date stick">
           <text class='iconfont date '>&#xe6c6;</text>
- 
+
         {{item.date}}</view>
         <view class="detail" v-for="(i,j) in item.hospitalPay" :key="j">
           <view class="details" v-for="(m,n) in i.costListResultList" :key="n">
@@ -43,7 +43,7 @@ interface IPageProps {
   hosId: string;
 }
 
-const gStores = new GStores(); 
+const gStores = new GStores();
 const pageProps = ref(<IPageProps>{});
 const payResList = ref<hospitalPayResult>({} as hospitalPayResult);
 const init = async () => {
@@ -94,13 +94,13 @@ onLoad((opt) => {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 36rpx;
+      font-size: var(--hr-font-size-xl);
       font-weight: 600;
-      margin-bottom: 8rpx; 
+      margin-bottom: 8rpx;
     }
     .detail-date {
       color: #888;
-      font-size: 28rpx;
+      font-size: var(--hr-font-size-xs);
       display: flex;
       text {
         display: block;
@@ -140,7 +140,7 @@ onLoad((opt) => {
     &.date {
       color: #ddd;
       position: relative;
-      font-size: 32rpx;
+      font-size: var(--hr-font-size-base);
       z-index: 999;
       top: 0;
       left: -56rpx;
