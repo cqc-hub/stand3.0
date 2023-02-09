@@ -639,7 +639,7 @@
       margin-top: var(--h-margin-24);
     }
     .bg-back {
-      margin: 80rpx auto;
+      margin: 30rpx auto 20rpx;
       text-align: center;
 
       image {
