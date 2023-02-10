@@ -101,7 +101,10 @@ const getQueryPath = (options) => {
     _isDes: global.isOpenDes
   };
   let _d = encryptDesParam(desObj);
-  let query = "?_d=" + _d + "&sysCode=" + allData.sysCode + "&";
+  let modeOld = gStores.globalStore.modeOld?'1':gStores.globalStore.modeOld
+  console.log(11111,modeOld);
+  
+  let query = "?_d=" + _d + "&sysCode=" + allData.sysCode +"&modeOld="+modeOld+ "&";
   if (options.query) {
     let queryArray: A[] = JSON.parse(options.query as string);
     queryArray.map((item) => {
