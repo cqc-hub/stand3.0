@@ -82,7 +82,7 @@
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/OrderDocItemDate.vue';
-  import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
+  import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
   import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
 
   const props = defineProps<{

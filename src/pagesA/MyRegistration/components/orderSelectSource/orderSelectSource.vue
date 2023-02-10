@@ -104,7 +104,7 @@
                   selectSchInfo.deptName ||
                   selectSchInfo.categorName
                 "
-                class="order-info mb24"
+                class="order-info mb24 f32"
               >
                 <text class="mr24">
                   {{
@@ -155,7 +155,7 @@
   } from '../../utils/index';
   import { GStores } from '@/utils';
 
-  import orderSelectSourceList from './orderSourceList.vue';
+  import orderSelectSourceList from './OrderSourceList.vue';
   import api from '@/service/api';
 
   const popup = ref<any>('');

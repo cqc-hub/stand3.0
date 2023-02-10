@@ -333,7 +333,7 @@
   import DocDetails from './components/DoctorDetails/DocDetails.vue';
   import DocShare from './components/DoctorDetails/DocShare.vue';
   import DocSchItem from './components/DoctorDetails/DocShcItem.vue';
-  import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
+  import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
   import DocService from './components/DoctorDetails/DocService.vue';
   import DocBigDataTable from './components/DoctorDetails/docBigDataTable.vue';
   import DocComment from './components/DoctorDetails/DocComment.vue';
