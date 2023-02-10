@@ -17,7 +17,7 @@
       >
         <image :src="headerIcon" mode="heightFix" class="popup-header-icon" />
         <view class="popup-container">
-          <view class="popup-header popup-padding flex-between">
+          <view class="popup-header popup-padding flex-between f44">
             <view class="popup-header-title">
               {{ title }}
             </view>
@@ -160,7 +160,6 @@
       align-items: center;
       height: 140rpx;
 
-      font-size: 44rpx;
       font-weight: 600;
     }
 
@@ -189,6 +188,7 @@
 
         > button {
           width: 100%;
+          height: 96rpx;
         }
       }
     }

@@ -168,6 +168,7 @@
                     >
                       <Doc-Sch-Item
                         :item="item"
+                        :systemModeOld="gStores.globalStore.modeOld"
                         @reg-click="(scheme) => regClick({ scheme })"
                       />
                     </view>
@@ -204,7 +205,11 @@
                         }"
                         class="sch-item mb8"
                       >
-                        <Doc-Sch-Item :item="item" @reg-click="regClick" />
+                        <Doc-Sch-Item
+                          :item="item"
+                          :systemModeOld="gStores.globalStore.modeOld"
+                          @reg-click="regClick"
+                        />
                       </view>
                     </view>
                   </view>
@@ -325,11 +330,11 @@
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import DocDetails from './components/DoctorDetails/docDetails.vue';
-  import DocShare from './components/DoctorDetails/docShare.vue';
-  import DocSchItem from './components/DoctorDetails/docShcItem.vue';
+  import DocDetails from './components/DoctorDetails/DocDetails.vue';
+  import DocShare from './components/DoctorDetails/DocShare.vue';
+  import DocSchItem from './components/DoctorDetails/DocShcItem.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
-  import DocService from './components/DoctorDetails/docService.vue';
+  import DocService from './components/DoctorDetails/DocService.vue';
   import DocBigDataTable from './components/DoctorDetails/docBigDataTable.vue';
   import DocComment from './components/DoctorDetails/DocComment.vue';
 

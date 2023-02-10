@@ -1,15 +1,28 @@
 <template>
-  <view class="choose g-border">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="choose g-border"
+  >
     <view class="choose-row">
       <view class="user-info text-ellipsis" @tap="closeEyes">
         <text class="title">
-          {{ `${isClose?gStores.userStore.patChoose.patientNameEncry:gStores.userStore.patChoose.patientName}` }}
+          {{
+            `${
+              isClose
+                ? gStores.userStore.patChoose.patientNameEncry
+                : gStores.userStore.patChoose.patientName
+            }`
+          }}
         </text>
 
         <text>
           {{ ` (${gStores.userStore.patChoose._showId})` }}
         </text>
-        <text :class="`iconfont icon-resize`" > {{isClose?'&#xe6d4;':'&#xe6db;'}}</text>
+        <text :class="`iconfont icon-resize`">
+          {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+        </text>
       </view>
 
       <view class="choose-icon flex-normal" @click="chooseAction">
@@ -48,7 +61,7 @@
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
   const emits = defineEmits(['choose-pat']);
-  const isClose = ref(true)
+  const isClose = ref(true);
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
@@ -68,9 +81,9 @@
     emits('choose-pat', { item });
   };
 
-  const closeEyes = ()=>{
-    isClose.value=!isClose.value
-  }
+  const closeEyes = () => {
+    isClose.value = !isClose.value;
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -117,6 +130,14 @@
     .title {
       font-size: var(--hr-font-size-xl);
       font-weight: 600;
+    }
+  }
+
+  .system-mode-old {
+    .choose-phone {
+      .label {
+        width: 155rpx;
+      }
     }
   }
 </style>

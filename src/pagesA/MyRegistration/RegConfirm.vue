@@ -8,11 +8,14 @@
     <view class="container">
       <view class="container-view">
         <view class="container-view-card">
-          <Reg-Confirm-Card :my-props="props" />
+          <Reg-Confirm-Card
+            :my-props="props"
+            :systemModeOld="gStores.globalStore.modeOld"
+          />
         </view>
 
         <view>
-          <Reg-Confirm-ChoosePat />
+          <Reg-Confirm-ChoosePat  />
         </view>
       </view>
 
@@ -43,7 +46,7 @@
       />
     </Order-Reg-Confirm>
 
-    <view class="footer">
+    <view class="g-footer flex-column">
       <view class="fg-agree">
         <view
           :class="{
@@ -55,14 +58,17 @@
           {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
 
-        <view>
+        <view class="fg-agree-text">
           <text @click.stop="flagClick">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
             《预约挂号须知》
           </text>
         </view>
       </view>
-      <button class="btn btn-primary" @click="regConfirm">确定预约</button>
+
+      <view class="flex1">
+        <button class="btn btn-primary" @click="regConfirm">确定预约</button>
+      </view>
     </view>
 
     <g-message />
@@ -255,18 +261,10 @@
     }
   }
 
-  .footer {
-    background-color: var(--h-color-white);
-    padding: 24rpx 32rpx 48rpx;
-    position: reactive;
-    z-index: 1;
-  }
-
   .fg-agree {
     display: flex;
     font-size: var(--hr-font-size-xs);
     align-items: flex-start;
-    margin-bottom: 24rpx;
 
     .fg-agree-name {
       color: var(--hr-brand-color-6);
@@ -281,6 +279,12 @@
       &.is-check {
         color: var(--hr-brand-color-6);
       }
+    }
+  }
+
+  .system-mode-old {
+    .check-box {
+      font-size: 48rpx;
     }
   }
 </style>

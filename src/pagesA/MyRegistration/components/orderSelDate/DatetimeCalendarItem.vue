@@ -30,7 +30,9 @@
       <view
         class="uni-calendar-item__weeks-box-text uni-calendar-item__weeks-box-text-disable uni-calendar-item--checked-text g-flex-rc-cc item-content"
       >
-        <view>{{ addPlaceHolder(weeks.date, weeks) }}</view>
+        <view class="f32 text-no-wrap">
+          {{ addPlaceHolder(weeks.date, weeks) }}
+        </view>
         <view
           :class="{
             'item-content-order-active': isHasOrder,
@@ -203,10 +205,6 @@
     // border: 3px solid #fff;
   }
 
-  .uni-calendar-item--checked .uni-calendar-item--checked-text {
-    // color: #fff;
-  }
-
   .uni-calendar-item--multiple .uni-calendar-item--checked-range-text {
     color: #333;
   }
@@ -259,7 +257,7 @@
   .system-mode-old {
     .item-content {
       &-order {
-        margin-top: -6rpx;
+        margin-top: -4rpx;
       }
     }
   }

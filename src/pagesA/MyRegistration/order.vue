@@ -43,6 +43,7 @@
             >
               <Order-Doc-Item-Date
                 :item="__item"
+                :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
                 @avatar-click="avatarClick"
               />
@@ -79,8 +80,8 @@
   import { joinQuery } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
-  import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
-  import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
+  import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
+  import OrderDocItemDate from './components/orderDocList/OrderDocItemDate.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';
   import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
 

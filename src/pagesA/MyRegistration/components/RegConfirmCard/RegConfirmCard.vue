@@ -1,5 +1,10 @@
 <template>
-  <view class="card g-border">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class="card g-border"
+  >
     <view class="row-bold">
       <view>
         <text class="iconfont">&#xe6ea;</text>
@@ -72,6 +77,8 @@
         | 'fee'
         | 'categorName'
       >;
+
+      systemModeOld: boolean;
     }>(),
     {}
   );

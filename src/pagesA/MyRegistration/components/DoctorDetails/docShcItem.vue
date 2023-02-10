@@ -15,7 +15,15 @@
             {{ warnSchStateMap[item.schState] }}
           </button>
 
-          <button v-else class="btn klklk btn-primary btn-reg">挂号</button>
+          <button
+            v-else
+            :class="{
+              'btn-old': systemModeOld,
+            }"
+            class="btn klklk btn-primary btn-reg"
+          >
+            挂号
+          </button>
         </view>
       </view>
 
@@ -38,6 +46,7 @@
 
   defineProps<{
     item: TSchInfo;
+    systemModeOld?: boolean;
   }>();
 
   const emits = defineEmits(['reg-click', 'avatar-click']);
@@ -81,6 +90,10 @@
         display: flex;
         align-items: center;
         padding: 0 24rpx;
+
+        &.btn-old {
+          padding: 30rpx;
+        }
       }
     }
 

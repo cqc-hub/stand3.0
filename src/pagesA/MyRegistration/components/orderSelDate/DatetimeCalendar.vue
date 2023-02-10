@@ -46,7 +46,7 @@
 
         <view
           v-if="isRenderWeeks(nowDate.month)"
-          class="g-flex-rc-cc color-dark g-bold mb12"
+          class="g-flex-rc-cc color-dark g-bold mb12 f32"
         >
           {{
             (nowDate.year || '') + yearText + (nowDate.month || '') + monthText
@@ -86,7 +86,7 @@
         </view>
         <!-- 第二个月  -->
         <block v-if="isRenderWeeks(nextNowDate.month)">
-          <view class="g-flex-rc-cc color-dark g-bold mt24 mb12">
+          <view class="g-flex-rc-cc color-dark g-bold mt24 mb12 f32">
             {{
               (nextNowDate.year || '') +
               yearText +

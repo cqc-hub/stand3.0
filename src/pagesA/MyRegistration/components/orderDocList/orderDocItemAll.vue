@@ -69,8 +69,8 @@
   import { IDocListAll } from '../../utils';
   import dayjs from 'dayjs';
 
-  import OrderDocListContainer from './orderDocListContainer.vue';
-  import orderDocClinicTime from './orderDocClinicTime.vue';
+  import OrderDocListContainer from './OrderDocListContainer.vue';
+  import orderDocClinicTime from './OrderDocClinicTime.vue';
 
   const props = defineProps<{
     item: IDocListAll;

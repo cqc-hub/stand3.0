@@ -3,14 +3,14 @@
     :class="{
       aaa: !aaa,
     }"
-    class="f28"
+    class="f32"
   >
     <slot :title="mTitle" :text="text">
-      <view v-if="isShowFg && text" class="real-top">
+      <view v-if="isShowFg && text" class="real-top row">
         <rich-text :nodes="text" />
       </view>
 
-      <view v-if="isShowFgTip && text" class="tip">
+      <view v-if="isShowFgTip && text" class="tip row">
         <view class="title" v-if="!isHideTitle">{{ mTitle }}</view>
         <rich-text :nodes="text" />
       </view>
@@ -100,4 +100,9 @@
       padding-bottom: 50rpx;
     }
   }
+
+  .row {
+    line-height: 1.5;
+  }
+
 </style>

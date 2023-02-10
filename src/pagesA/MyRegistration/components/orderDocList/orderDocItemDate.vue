@@ -6,13 +6,17 @@
     >
       <template #footer>
         <view>
-          <order-Doc-Clinic-Time :item="docInfo" />
+          <Order-Doc-Clinic-Time :item="docInfo" />
           <view
             v-for="(_item, i) in item.schemeList"
             :key="i"
             class="sch-item mb8 animate__animated animate__fadeIn"
           >
-            <Doc-Shc-Item :item="_item" @reg-click="regClick" />
+            <Doc-Shc-Item
+              :item="_item"
+              :systemModeOld="systemModeOld"
+              @reg-click="regClick"
+            />
           </view>
         </view>
       </template>
@@ -24,14 +28,15 @@
   import { computed } from 'vue';
   import { IDocListByDate } from '../../utils';
 
-  import OrderDocListContainer from './orderDocListContainer.vue';
-  import DocShcItem from '../DoctorDetails/docShcItem.vue';
-  import orderDocClinicTime from './orderDocClinicTime.vue';
+  import OrderDocListContainer from './OrderDocListContainer.vue';
+  import DocShcItem from '../DoctorDetails/DocShcItem.vue';
+  import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
   const emits = defineEmits(['reg-click', 'avatar-click']);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;
+    systemModeOld?: boolean;
   }>();
 
   const docInfo = computed(() => {

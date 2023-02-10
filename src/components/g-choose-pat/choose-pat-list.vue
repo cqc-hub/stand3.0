@@ -1,5 +1,10 @@
 <template>
-  <view class="pat-list">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="pat-list"
+  >
     <view
       v-for="(pat, i) in gStores.userStore.patList"
       :key="pat.patientId"
@@ -89,6 +94,14 @@
       &.pat-active {
         border-color: var(--hr-brand-color-6);
         border-width: 4rpx;
+      }
+    }
+  }
+
+  .system-mode-old {
+    .pat-item {
+      .ico-checkbox {
+        font-size: 56rpx;
       }
     }
   }
