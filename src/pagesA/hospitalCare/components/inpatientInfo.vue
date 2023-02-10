@@ -82,9 +82,9 @@
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
 
-        <view class="button" @click="toPayPage">预交费用</view>
+        <view class="button f36" @click="toPayPage">预交费用</view>
       </view>
-      <g-flag typeFg="17" isShowFg />
+      <g-flag typeFg="17" isShowFgTip aaa />
     </view>
     <view class="empty-box" v-else>
       <g-empty :current="1" />

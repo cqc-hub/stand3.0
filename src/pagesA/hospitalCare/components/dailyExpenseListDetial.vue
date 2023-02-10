@@ -1,5 +1,4 @@
 <template>
-  {{}}
   <view class="page" v-if="Obj == false">
     <view class="container">
       <view class="top">
@@ -155,10 +154,11 @@ const isShowBtn = (index) => {
 };
 const init = async (opt = {}) => {
   Obj.value = undefined
-  pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(opt));
+  pageProps.value = deQueryForUrl<inHospitalCostInfoParam>(deQueryForUrl(props));
   param.value = {
     ...pageProps.value,
   };
+
   if (pageProps.value.isHosDaylist) {
     costType.value = "1";
   } else if (pageProps.value.isHosTotallist) {
@@ -210,7 +210,7 @@ defineExpose({
       border: 1rpx solid #e6e6e6;
       border-radius: 16rpx 16rpx 0px 0px;
       padding-bottom: 40rpx;
-      margin-top: 32rpx;
+      // margin-top: 32rpx;
       .title {
         text-align: center;
         font-size: var(--hr-font-size-xl);
@@ -218,11 +218,13 @@ defineExpose({
         margin-top: 40rpx;
       }
       .information {
-        margin-top: 20rpx;
+        // margin-top: 20rpx;
         font-size: var(--hr-font-size-xs);
         margin-left: 32rpx;
         .item {
-          margin-top: 12rpx;
+          &:not(:first-child) {
+            margin-top: 12rpx;
+          }
           display: flex;
           .item-title {
             width: 130rpx;
@@ -331,6 +333,7 @@ defineExpose({
   padding: 80rpx 0;
   background-color: #fff;
   text-align: center;
+  border-radius: 0px 0px 16rpx 16rpx;
 
   color: #888;
   font-size: var(--hr-font-size-xs);
