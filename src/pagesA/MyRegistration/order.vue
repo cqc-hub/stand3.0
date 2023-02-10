@@ -78,7 +78,7 @@
   import { useOrder, IChooseDays, type IDocListAll } from './utils';
   import { joinQuery } from '@/common';
 
-  import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
+  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/orderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/orderDocItemDate.vue';
   import OrderSelectSource from './components/orderSelectSource/orderSelectSource.vue';

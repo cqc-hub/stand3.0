@@ -1,5 +1,10 @@
 <template>
-  <view class="choose-day">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="choose-day"
+  >
     <view class="choose-day-container">
       <view
         v-if="isShowAllDate"
@@ -46,7 +51,7 @@
       <view
         class="choose-day-all choose-day-calendar"
         v-if="isOpenCalendar"
-        @click="calendarRef.show"
+        @click="showCalendar"
       >
         <view>展开</view>
         <view>日历</view>
@@ -63,6 +68,7 @@
       :enableDays="enableDays"
       :dateShow="dateShow"
       :clear-icon="false"
+      :systemModeOld="gStores.globalStore.modeOld"
       @change="dateTimeChange"
     >
       <view />
@@ -73,12 +79,16 @@
 <script lang="ts" setup>
   import { nextTick, ref, getCurrentInstance, watch, computed } from 'vue';
   import { IChooseDays } from '../../utils';
+  import { GStores } from '@/utils';
   import isoWeek from 'dayjs/plugin/isoWeek';
   import dayjs from 'dayjs';
 
-  import DatetimePicker from './datetime-picker.vue';
+  import DatetimePicker from './order-datetime-picker.vue';
 
   dayjs.extend(isoWeek);
+  console.log({
+    DatetimePicker,
+  });
 
   const props = withDefaults(
     defineProps<{
@@ -94,6 +104,7 @@
       isShowAllDate: false,
     }
   );
+  const gStores = new GStores();
 
   const emits = defineEmits(['change']);
   const calendarRef = ref<any>('');
@@ -105,6 +116,11 @@
   const isOpenCalendar = computed(() => {
     return props.chooseDays.length > 6;
   });
+
+  const showCalendar = () => {
+    console.log(calendarRef.value);
+    calendarRef.value.show();
+  };
 
   const change = (item: IChooseDays) => {
     emits('change', item);
@@ -271,6 +287,12 @@
         color: var(--hr-neutral-color-5);
         // pointer-events: none;
       }
+    }
+  }
+
+  .system-mode-old {
+    .choose-day-item {
+      padding: 15rpx 20rpx;
     }
   }
 </style>

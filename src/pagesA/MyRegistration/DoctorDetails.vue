@@ -323,7 +323,7 @@
     type ISystemConfig,
   } from '@/utils';
 
-  import OrderSelDate from './components/orderSelDate/orderSelDate.vue';
+  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import DocDetails from './components/DoctorDetails/docDetails.vue';
   import DocShare from './components/DoctorDetails/docShare.vue';

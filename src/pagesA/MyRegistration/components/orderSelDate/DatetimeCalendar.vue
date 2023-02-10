@@ -1,5 +1,6 @@
 <template>
   <view class="uni-calendar" @mouseleave="leaveCale">
+    {{}}
     <view
       v-if="!insert && show"
       class="uni-calendar__mask"
@@ -66,8 +67,8 @@
               v-for="(weeks, weeksIndex) in item"
               :key="weeksIndex"
             >
-              <calendar-item
-                class="uni-calendar-item--hook"
+              <Datetime-Calendar-Item
+                class="uni-Datetime-Calendar-Item--hook"
                 :weeks="weeks"
                 :calendar="calendar"
                 :selected="selected"
@@ -76,9 +77,10 @@
                 :checkHover="range"
                 :value="value"
                 :dateShow="dateShow"
+                :systemModeOld="systemModeOld"
                 @change="choiceDate"
                 @handleMouse="handleMouse"
-              ></calendar-item>
+              />
             </view>
           </view>
         </view>
@@ -102,8 +104,8 @@
               v-for="(weeks, weeksIndex) in item"
               :key="'_' + weeksIndex"
             >
-              <calendar-item
-                class="uni-calendar-item--hook"
+              <Datetime-Calendar-Item
+                class="uni-Datetime-Calendar-Item--hook"
                 :weeks="weeks"
                 :calendar="calendar"
                 :selected="selected"
@@ -111,10 +113,11 @@
                 :dateShow="dateShow"
                 :enable-days="enableDays"
                 :checkHover="range"
+                :systemModeOld="systemModeOld"
                 :value="value"
                 @change="choiceDate"
                 @handleMouse="handleMouse"
-              ></calendar-item>
+              />
             </view>
           </view>
         </block>
@@ -187,7 +190,7 @@
 
 <script>
   import Calendar from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/util.js';
-  import calendarItem from './datetime-calendar-item.vue';
+  import DatetimeCalendarItem from './DatetimeCalendarItem.vue';
   import timePicker from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue';
   import { initVueI18n } from '@dcloudio/uni-i18n';
   import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
@@ -217,10 +220,14 @@
    */
   export default {
     components: {
-      calendarItem,
+      DatetimeCalendarItem,
       timePicker,
     },
     props: {
+      systemModeOld: {
+        type: Boolean,
+        default: false,
+      },
       dateShow: {
         type: Array,
         default: () => [],
@@ -641,7 +648,10 @@
         let { year, month, date, fullDate, lunar, extraInfo } = this.calendar;
 
         if (this.enableDays[fullDate] !== '0') {
-          new GStores().messageStore.showMessage('当日未查询到医生排班信息', 3000);
+          new GStores().messageStore.showMessage(
+            '当日未查询到医生排班信息',
+            3000
+          );
           return;
         }
 

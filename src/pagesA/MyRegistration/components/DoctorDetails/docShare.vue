@@ -94,7 +94,9 @@
   const qrImg = ref('');
 
   const show = () => {
-    isShow.value = true;
+    setTimeout(() => {
+      isShow.value = true;
+    }, 350);
     popup.value.open('center');
     popupBottom.value.show();
     options.value.code = joinQuery(

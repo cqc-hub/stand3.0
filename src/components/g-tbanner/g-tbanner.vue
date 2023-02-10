@@ -1,7 +1,7 @@
 <template>
   <view class="">
     <view v-if="config">
-      <image @click="goSomeWhere" class="nav" :src="config.src" />
+      <image @click="goSomeWhere" class="nav" :src="config.src" mode="widthFix" />
     </view>
   </view>
 </template>
@@ -23,7 +23,7 @@
 <style lang="scss" scoped>
   .nav {
     width: 100%;
-    height: 128upx;
+    // height: 128upx;
     background: #fff;
   }
 </style>

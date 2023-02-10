@@ -7,6 +7,7 @@
       'uni-calendar-item--before-checked-x': weeks.beforeMultiple,
       'uni-calendar-item--multiple': weeks.multiple,
       'uni-calendar-item--after-checked-x': weeks.afterMultiple,
+      'system-mode-old': systemModeOld,
     }"
     @click="choiceDate(weeks)"
     @mouseenter="handleMousemove(weeks)"
@@ -25,7 +26,7 @@
       <text
         v-if="selected && weeks.extraInfo"
         class="uni-calendar-item__weeks-box-circle"
-      ></text>
+      />
       <view
         class="uni-calendar-item__weeks-box-text uni-calendar-item__weeks-box-text-disable uni-calendar-item--checked-text g-flex-rc-cc item-content"
       >
@@ -52,6 +53,10 @@
       enableDays: {
         type: Object,
         default: () => ({}),
+      },
+      systemModeOld: {
+        type: Boolean,
+        default: false,
       },
       weeks: {
         type: Object,
@@ -247,6 +252,14 @@
 
       &-active {
         color: var(--hr-brand-color-6);
+      }
+    }
+  }
+
+  .system-mode-old {
+    .item-content {
+      &-order {
+        margin-top: -6rpx;
       }
     }
   }

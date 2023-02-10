@@ -85,13 +85,14 @@
             />
           </time-picker>
         </view>
-        <calendar
+        <Datetime-Calendar
           ref="pcSingle"
           :showMonth="false"
           :enableDays="enableDays"
           :start-date="caleRange.startDate"
           :end-date="caleRange.endDate"
           :date="defSingleDate"
+          :systemModeOld="systemModeOld"
           @change="singleChange"
           style="padding: 0 8px"
         />
@@ -160,12 +161,13 @@
           </view>
         </view>
         <view class="popup-x-body">
-          <calendar
+          <Datetime-Calendar
             ref="left"
             :showMonth="false"
             :start-date="caleRange.startDate"
             :end-date="caleRange.endDate"
             :range="true"
+            :systemModeOld="systemModeOld"
             @change="leftChange"
             :pleStatus="endMultipleStatus"
             @firstEnterCale="updateRightCale"
@@ -173,13 +175,14 @@
             @monthSwitch="leftMonthSwitch"
             style="padding: 0 8px"
           />
-          <calendar
+          <Datetime-Calendar
             ref="right"
             :enableDays="enableDays"
             :showMonth="false"
             :start-date="caleRange.startDate"
             :end-date="caleRange.endDate"
             :range="true"
+            :systemModeOld="systemModeOld"
             @change="rightChange"
             :pleStatus="startMultipleStatus"
             @firstEnterCale="updateLeftCale"
@@ -193,7 +196,7 @@
         </view>
       </view>
     </view>
-    <calendar
+    <Datetime-Calendar
       v-show="isPhone"
       ref="mobile"
       :clearDate="false"
@@ -211,6 +214,7 @@
       :hideSecond="hideSecond"
       :value="value"
       :dateShow="dateShow"
+      :systemModeOld="systemModeOld"
       @confirm="mobileChange"
     />
   </view>
@@ -236,7 +240,7 @@
    * @event {Function} close 关闭弹出层
    * @event {Function} clear 清除上次选中的状态和值
    **/
-  import calendar from './datetime-calendar.vue';
+  import DatetimeCalendar from './DatetimeCalendar.vue';
   import timePicker from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue';
   import { initVueI18n } from '@dcloudio/uni-i18n';
 
@@ -250,7 +254,7 @@
       virtualHost: true,
     },
     components: {
-      calendar,
+      DatetimeCalendar,
       timePicker,
     },
     inject: {
@@ -314,6 +318,11 @@
       };
     },
     props: {
+      systemModeOld: {
+        type: Boolean,
+        default: false,
+      },
+
       type: {
         type: String,
         default: 'datetime',

@@ -14,7 +14,7 @@
         :src="getAvatar(pat.patientSex)"
         mode="widthFix"
       />
-      <view class="user-label text-ellipsis">
+      <view class="user-label f36 text-ellipsis">
         <text class="user-name">{{ pat.patientNameEncry }}</text>
 
         <text v-if="!isAreaProgram()">
@@ -74,11 +74,9 @@
 
       .user-label {
         color: var(--hr-neutral-color-8);
-        font-size: var(--hr-font-size-xs);
 
         .user-name {
           color: var(--hr-neutral-color-10);
-          font-size: var(--hr-font-size-xl);
           font-weight: 600;
         }
       }

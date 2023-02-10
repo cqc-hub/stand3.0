@@ -1,6 +1,11 @@
 <template>
   <view class="">
-    <view :class="{ 'bg-home': type === '2' }">
+    <view
+      :class="{
+        'bg-home': type === '2',
+        'system-mode-old': gStores.globalStore.modeOld,
+      }"
+    >
       <easy-input
         :value="value"
         :styles="{
@@ -47,6 +52,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import easyInput from './easyInput.vue';
+  import { GStores } from '@/utils';
 
   export default defineComponent({
     components: {
@@ -84,6 +90,7 @@
 
     setup(props, { emit }) {
       const easyinput = ref('');
+      const gStores = new GStores();
 
       const changeInput = (e) => {
         if (typeof e === 'string') {
@@ -111,6 +118,7 @@
         cancel,
         confirm,
         easyinput,
+        gStores,
       };
     },
 
@@ -164,5 +172,15 @@
 
   .prefix-icon {
     padding-left: 20rpx;
+  }
+
+  .system-mode-old {
+    :deep(.uni-easyinput__content) {
+      height: 88rpx;
+    }
+
+    .icon-search {
+      font-size: 40rpx;
+    }
   }
 </style>
