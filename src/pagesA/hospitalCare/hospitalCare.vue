@@ -119,7 +119,7 @@ onLoad(async (opt) => {
 
 <style scoped lang="scss">
 .tab-box {
-  padding: 0 10rpx;
+  // padding: 0 10rpx;
   :deep(.v-tabs__container-item) {
     flex: 1;
     justify-content: center;
