@@ -45,6 +45,7 @@
               :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
               :isHidePrice="isWaitPayListHidePrice"
+              :systemModeOld="gStores.globalStore.modeOld"
               isCheck
             />
           </block>
@@ -60,6 +61,7 @@
           <block v-if="isPayListRequestComplete && payedList.length">
             <Clinic-Pay-Detail-List
               :list="payedList"
+              :systemModeOld="gStores.globalStore.modeOld"
               @click-item="goPayDetail"
             />
           </block>

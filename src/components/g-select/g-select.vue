@@ -16,7 +16,7 @@
           @click="change(item)"
           class="popup-row g-border-bottom"
         >
-          <view class="popup-row-label text-ellipsis">
+          <view class="popup-row-label f32 text-ellipsis">
             {{ field ? item[field.label] : item }}
           </view>
           <view v-if="isActive(item)" class="iconfont ico-check">&#xe6cc;</view>

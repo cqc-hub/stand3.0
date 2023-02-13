@@ -7,7 +7,7 @@
   >
     <g-flag typeFg="405" isShowFg />
 
-    <view class="flex-normal header g-border-bottom">
+    <view class="flex-normal header g-border-bottom f32">
       <view
         :class="{
           'sel-active': isSelStatus,
@@ -36,6 +36,7 @@
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :showPaiDuiJiaoHaoBtn="showPaiDuiJiaoHaoBtn"
+          :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
         />
       </block>
@@ -56,7 +57,7 @@
       type="top"
     >
       <template #header>
-        <view class="flex-normal header g-border-bottom">
+        <view class="flex-normal header g-border-bottom f32">
           <view
             :class="{
               'sel-active': isSelStatus,
@@ -94,7 +95,7 @@
       type="top"
     >
       <template #header>
-        <view class="flex-normal header g-border-bottom">
+        <view class="flex-normal header g-border-bottom f32">
           <view
             :class="{
               'sel-active': isSelStatus,
@@ -138,7 +139,9 @@
   import { OrderStatus, orderStatusMap } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
   import { isAreaProgram } from '@/stores';
+
   import api from '@/service/api';
+
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
 
   const gStores = new GStores();

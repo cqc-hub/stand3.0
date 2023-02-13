@@ -1,5 +1,10 @@
 <template>
-  <view class="">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class=""
+  >
     <view
       :class="{
         f32: myprops.payState === '0',
@@ -59,7 +64,7 @@
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
           <text v-if="myprops.patientName">
-            {{ nameConvert(myprops.patientName)+ ` (${myprops.cardNumber})` }}
+            {{ nameConvert(myprops.patientName) + ` (${myprops.cardNumber})` }}
           </text>
 
           <text v-else>
@@ -159,12 +164,13 @@
     type TPayDetailInfo,
   } from '../utils/clinicPayDetail';
 
-  import { GStores, type ISystemConfig,nameConvert } from '@/utils';
+  import { GStores, type ISystemConfig, nameConvert } from '@/utils';
 
   defineProps<{
     myprops: TPayDetailProp;
     detailData: TPayDetailInfo;
     pageConfig: ISystemConfig['pay'];
+    systemModeOld?: boolean;
   }>();
 
   const gStores = new GStores();
@@ -192,6 +198,16 @@
 
         &:not(:last-child) {
           margin-bottom: 12rpx;
+        }
+      }
+    }
+  }
+
+  .system-mode-old {
+    .head-content {
+      .head-row {
+        .head-row-label {
+          width: 160rpx;
         }
       }
     }

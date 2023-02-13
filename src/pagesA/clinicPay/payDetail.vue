@@ -55,6 +55,7 @@
               :myprops="props"
               :detailData="detailData"
               :pageConfig="pageConfig"
+              :systemModeOld="gStores.globalStore.modeOld"
             />
           </view>
         </block>
@@ -71,6 +72,7 @@
             :myprops="props"
             :detailData="detailData"
             :pageConfig="pageConfig"
+            :systemModeOld="gStores.globalStore.modeOld"
           />
         </view>
 

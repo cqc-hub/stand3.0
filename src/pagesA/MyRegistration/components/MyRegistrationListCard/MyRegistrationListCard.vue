@@ -1,5 +1,10 @@
 <template>
-  <view class="card">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class="card"
+  >
     <view
       v-for="(item, idx) in list"
       :key="idx"
@@ -8,7 +13,7 @@
       }"
       class="item mb16 g-border"
     >
-      <view class="header pb18 g-border-bottom g-bold f36">
+      <view class="header pb18 g-bold f36">
         <view class="text-ellipsis">
           {{ item.deptName }}
         </view>
@@ -24,7 +29,7 @@
 
       <view @click="goDetail(item)" class="content">
         <view class="row f28">
-          <view class="label color-888">就诊人</view>
+          <view class="label text-no-wrap color-888">就诊人</view>
           <view class="body">
             {{ item.patientNameEncry }}({{ item.cardNumber }})
           </view>
@@ -106,6 +111,7 @@
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
     showFWBtn: string[];
+    systemModeOld?: boolean;
   }>();
 
   const getStatusConfig = (status: OrderStatus) => {
@@ -175,6 +181,7 @@
         grid-template-columns: 1fr 120rpx;
         gap: 40rpx;
         margin-bottom: 16rpx;
+        border-bottom: 1rpx solid var(--hr-neutral-color-2);
       }
 
       .content {
@@ -233,6 +240,18 @@
         .cancel-btn {
           background-color: #fff;
           color: var(--hr-neutral-color-10);
+        }
+      }
+    }
+  }
+
+  .system-mode-old {
+    .item {
+      .content {
+        .row {
+          .label {
+            width: 140rpx;
+          }
         }
       }
     }

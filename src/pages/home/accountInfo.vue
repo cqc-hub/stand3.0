@@ -1,5 +1,10 @@
 <template>
-  <view class="">
+  <view
+    :class="{
+      'system-mode-old': gStore.globalStore.modeOld,
+    }"
+    class=""
+  >
     <g-form v-model:value="formData" bodyBold ref="gform" />
 
     <g-message />
@@ -37,7 +42,7 @@
       field: 'input-text',
       disabled: true,
       key: 'name',
-      isForShow: true
+      isForShow: true,
     },
 
     {
@@ -45,7 +50,7 @@
       field: 'input-text',
       key: 'sex',
       disabled: true,
-      isForShow: true
+      isForShow: true,
     },
 
     {
@@ -53,7 +58,7 @@
       field: 'input-text',
       disabled: true,
       key: 'idNo',
-      isForShow: true
+      isForShow: true,
     },
 
     {
@@ -61,8 +66,8 @@
       field: 'input-text',
       disabled: true,
       key: 'cellPhoneNum',
-      isForShow: true
-    }
+      isForShow: true,
+    },
   ];
 
   const deletePat = async () => {
@@ -74,9 +79,9 @@
       closeCallBack: () => {
         loginUtils.outLogin({
           isHideMessage: true,
-          isGoLoginPage: true
+          isGoLoginPage: true,
         });
-      }
+      },
     });
   };
 
@@ -87,7 +92,7 @@
       name,
       sex,
       idNo,
-      cellPhoneNum
+      cellPhoneNum,
     };
 
     nextTick(() => {

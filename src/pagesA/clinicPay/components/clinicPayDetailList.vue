@@ -1,5 +1,10 @@
 <template>
-  <view class="clinic-pay-list">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class="clinic-pay-list"
+  >
     <view
       v-for="(item, idx) in list"
       :key="idx"
@@ -98,6 +103,7 @@
       isListShowClinicType?: boolean;
       isCheck?: boolean;
       isHidePrice?: boolean;
+      systemModeOld?: boolean;
     }>(),
     {
       selUnPayList: () => [],
@@ -207,6 +213,18 @@
         border-color: var(--hr-brand-color-6);
         .check-box-icon {
           color: var(--hr-brand-color-6);
+        }
+      }
+    }
+  }
+
+  .system-mode-old {
+    .item {
+      .content {
+        .row {
+          .row-label {
+            width: 160rpx;
+          }
         }
       }
     }

@@ -188,7 +188,7 @@
 
         > button {
           width: 100%;
-          height: 96rpx;
+          // height: 96rpx;
         }
       }
     }
