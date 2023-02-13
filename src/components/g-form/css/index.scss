@@ -15,6 +15,7 @@
     position: relative;
     display: flex;
     align-items: flex-start;
+    font-size: var(--hr-font-size-base);
 
     &.item-require {
       &::after {
@@ -42,6 +43,7 @@
 
     .verify-btn {
       color: var(--hr-brand-color-6);
+      font-size: var(--hr-font-size-base);
     }
 
     .form-item-verify-disabled {
@@ -123,6 +125,7 @@
 
   &.item-for-show {
     padding: 10rpx 32rpx;
+    font-size: var(--hr-font-size-base);
 
     .container-body {
       align-items: flex-start;

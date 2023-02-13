@@ -318,4 +318,10 @@
       }
     }
   }
+
+  .system-mode-old {
+    .f26 {
+      font-size: var(--hr-font-size-xl) !important;
+    }
+  }
 </style>

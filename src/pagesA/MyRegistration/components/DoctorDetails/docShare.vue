@@ -40,7 +40,7 @@
             </view>
           </button>
 
-          <button open-type="share" class="share-btn">
+          <button @click="clickShare" open-type="share" class="share-btn">
             <view class="g-flex-rc-cc footer-btn-content">
               <view class="iconfont share-icon">&#xe704;</view>
               <view class="color-444 f28">转发给好友</view>
@@ -92,6 +92,10 @@
   const isShow = ref(false);
 
   const qrImg = ref('');
+
+  const clickShare = () => {
+    close();
+  };
 
   const show = () => {
     setTimeout(() => {

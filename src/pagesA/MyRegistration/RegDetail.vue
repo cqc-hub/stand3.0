@@ -134,7 +134,7 @@
             <view
               v-if="hosInfo.gisLat"
               @click="openHosLocation"
-              class="hos-navigation g-flex-rc-cc m32"
+              class="hos-navigation g-flex-rc-cc m32 f32"
             >
               <view class="hos-info">
                 <view class="text-ellipsis hos-name">
@@ -146,7 +146,7 @@
               </view>
             </view>
 
-            <view class="order-info ">
+            <view class="order-info">
               <g-form
                 :value="orderRegInfo"
                 forShowBodyAlign="left"
@@ -335,6 +335,7 @@
     regInfoTempList,
     patientTempList,
     orderStatusMap,
+    formatterTemp,
   } from './utils/regDetail';
   import {
     type IGPay,
@@ -515,8 +516,6 @@
       // isLocal: '1',
     };
 
-    console.log(preConsultation.extraData);
-
     useTBanner(preConsultation);
   };
 
@@ -572,6 +571,9 @@
       }
     });
     setTimeout(() => {
+      formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
+      formatterTemp(patientTempList, gStores.globalStore.modeOld);
+
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(patientTempList);
     }, 300);
@@ -816,13 +818,18 @@
         align-items: center;
         color: #fff;
         position: relative;
+
         .reg-header-label {
           font-weight: 600;
+          position: relative;
+          top: -8rpx;
         }
 
         .reg-header-icon {
           font-size: var(--h-iconfont-60);
           margin-right: 16rpx;
+          position: relative;
+          top: -8rpx;
         }
 
         .reg-header-icon-bg {
@@ -868,6 +875,7 @@
           flex-direction: column;
           font-size: var(--hr-font-size-xs);
           margin-top: 40rpx;
+
           .qr-code-value {
             font-size: var(--hr-font-size-xs);
             color: var(--hr-neutral-color-7);
@@ -885,6 +893,7 @@
               color: var(--hr-neutral-color-9);
               font-size: var(--hr-font-size-xxl);
               display: inline-block;
+
               &.icon-reverse {
                 transform-origin: center center;
                 transform: rotate(0.5turn);
@@ -929,6 +938,7 @@
         .color-blue {
           color: var(--hr-brand-color-6);
         }
+
         .size-icon {
           width: 50rpx;
           height: 40rpx;
@@ -953,10 +963,12 @@
   .p32 {
     padding: 32rpx;
   }
+
   .p32v {
     padding-top: 32rpx;
     padding-bottom: 32rpx;
   }
+
   .m32 {
     margin: 32rpx;
   }
@@ -998,6 +1010,30 @@
     .qrcode-img {
       width: 320rpx;
       height: 320rpx;
+    }
+  }
+
+  .system-mode-old {
+    .box {
+      .reg-header-icon {
+        font-size: 74rpx;
+      }
+
+      .container-box {
+        .qr-code {
+          .qr-code-toggle {
+            .qr-toggle-icon {
+              font-size: 48rpx;
+            }
+          }
+        }
+
+        .order-info {
+          .iconfont {
+            font-size: 48rpx;
+          }
+        }
+      }
     }
   }
 </style>

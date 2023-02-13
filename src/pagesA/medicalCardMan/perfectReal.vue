@@ -26,7 +26,10 @@
     />
 
     <view class="footer">
-      <Fg-Agree v-model:isCheck="isCheck" />
+      <Fg-Agree
+        v-model:isCheck="isCheck"
+        :systemModeOld="gStores.globalStore.modeOld"
+      />
       <button
         @click="gform.submit"
         :class="{

@@ -79,9 +79,13 @@ export const patientTempList: TInstance[] = [
   },
 ];
 
-const formatterTemp = (list: TInstance[]) => {
+export const formatterTemp = (list: TInstance[], modeOld = false) => {
   list.map((o) => {
-    o.labelWidth = '150rpx';
+    if (modeOld) {
+      o.labelWidth = '180rpx';
+    } else {
+      o.labelWidth = '150rpx';
+    }
     o.showBodyStyle = 'text-align: left;';
     o.labelStyle =
       'padding-top: 0; color: var(--hr-neutral-color-7);font-size: var(--hr-font-size-base);';
@@ -92,9 +96,6 @@ const formatterTemp = (list: TInstance[]) => {
     o.isForShow = true;
   });
 };
-
-formatterTemp(regInfoTempList);
-formatterTemp(patientTempList);
 
 /**
  * 0 -》 取消 | 退号

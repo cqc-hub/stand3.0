@@ -1,5 +1,10 @@
 <template>
-  <view class="">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class=""
+  >
     <view @click="changeCheck" class="fg-agree">
       <view
         :class="{
@@ -29,6 +34,7 @@
 
   const props = defineProps<{
     isCheck: boolean;
+    systemModeOld?: boolean;
   }>();
 
   const emits = defineEmits(['update:isCheck']);
@@ -65,6 +71,12 @@
       &.is-check {
         color: var(--hr-brand-color-6);
       }
+    }
+  }
+
+  .system-mode-old {
+    .check-box {
+      font-size: 54rpx;
     }
   }
 </style>

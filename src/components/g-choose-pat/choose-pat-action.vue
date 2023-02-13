@@ -1,5 +1,10 @@
 <template>
-  <view class="choose-pat">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="choose-pat"
+  >
     <g-popup title="更换就诊人" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
@@ -9,7 +14,7 @@
         <view class="add-pat-box">
           <view class="add-pat g-flex-rc-cc" @click="goAddPat">
             <view class="iconfont icon-resize f48">&#xe6ab;</view>
-            <text>添加就诊人</text>
+            <text class="f32">添加就诊人</text>
           </view>
         </view>
       </view>
