@@ -171,10 +171,11 @@
     padding-top: 200rpx;
   }
   .card {
-    height: 244rpx;
+    // height: 244rpx;
+    position: relative;
     border: 1rpx solid #e6e6e6;
     border-radius: 16rpx;
-    padding: 40rpx 32rpx 0;
+    padding: 40rpx 32rpx;
     overflow: hidden;
     &.card-man {
       background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
@@ -224,10 +225,13 @@
       }
     }
     .iconfont {
-      font-size: 240rpx;
-      margin-top: -120rpx;
-      margin-right: -60rpx;
-      float: right;
+      font-size: 260rpx;
+      position: absolute;
+      right: -32rpx;
+      top: 64rpx;
+      // margin-top: -120rpx;
+      // margin-right: -60rpx;
+      // float: right;
       &.man {
         color: #296fff;
         opacity: 0.05;
@@ -240,7 +244,7 @@
   }
   .card-detail {
     background-color: #fff;
-    border: 1px solid #e6e6e6;
+    border: 1rpx solid #e6e6e6;
     border-radius: 16rpx;
     margin: 16rpx 0 20rpx;
     padding: 40rpx 32rpx;
