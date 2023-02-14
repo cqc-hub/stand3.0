@@ -93,10 +93,10 @@
 
   import { GStores, debounce } from '@/utils';
   import { type IWaitListItem } from './utils/medicalHelp';
-  import { setLocalStorage, getLocalStorage } from '@/common';
+  import { setLocalStorage, getLocalStorage, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
-  import HtlpList from './components/htlpList.vue';
+  import HtlpList from './components/HtlpList.vue';
   import SelWayPopup from './components/selWayPopup.vue';
 
   const gStores = new GStores();
@@ -191,7 +191,11 @@
   };
 
   const unSelItemClick = (item: IWaitListItem) => {};
-  const selItemClick = (item: IWaitListItem) => {};
+  const selItemClick = (item: IWaitListItem) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesB/medicationAssistant/medicalHelpDetail', item),
+    });
+  };
 
   const init = () => {
     getListData('0');

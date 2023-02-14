@@ -344,6 +344,12 @@
           }
         },
         {
+          "path": "medicationAssistant/medicalHelpDetail",
+          "style": {
+            "navigationBarTitleText": "药品配送"
+          }
+        },
+        {
           "path": "reportQuery/reportQuery",
           "style": {
             "navigationBarTitleText": "报告查询"
