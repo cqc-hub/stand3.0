@@ -346,7 +346,7 @@
         {
           "path": "medicationAssistant/medicalHelpDetail",
           "style": {
-            "navigationBarTitleText": "药品配送"
+            "navigationBarTitleText": "门诊处方"
           }
         },
         {

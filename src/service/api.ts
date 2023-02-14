@@ -236,6 +236,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  getDrugDeliveryDetail: (data) =>
+    service.post('/phs-query/delivery/getDrugDeliveryDetail', parm(data), {
+      hideLoading: false,
+    }),
+
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),

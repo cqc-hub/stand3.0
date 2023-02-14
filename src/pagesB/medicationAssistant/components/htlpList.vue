@@ -1,6 +1,6 @@
 <template>
   <view class="clinic-pay-list">
-  <!-- @click="itemClick(item)" -->
+    <!-- @click="itemClick(item)" -->
     <view
       v-for="(item, idx) in list"
       :key="idx"
@@ -22,12 +22,21 @@
         <view class="flex-between flex-start-r">
           <view
             @click.stop="selItem(item)"
-            class="g-bold f36 flex1 mr40 flex-normal"
+            class="g-bold f36 flex1 mr40 flex-normal item-title text-no-wrap"
           >
-            <text>{{ item.drugTypeName }}</text>
+            <text>{{ getShowDrugName(item) }}</text>
+            <text
+              v-if="item.visitType && visitTypeLabel[item.visitType]"
+              :class="{
+                [visitTypeLabel[item.visitType].class]: true,
+              }"
+              class="f24 item-title-type"
+            >
+              {{ visitTypeLabel[item.visitType].label }}
+            </text>
           </view>
 
-          <view class="g-flex-rc-cc">
+          <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow flex1">
             <!-- <view
               v-if="
                 showStatus &&
@@ -41,9 +50,9 @@
             >
               {{ statusLabel[item.takenDrugType].label }}
             </view> -->
-            <!-- <view v-if="!showStatus" class="iconfont color-888 f48">
+            <view v-if="!showStatus" class="iconfont color-888 f48">
               &#xe66b;
-            </view> -->
+            </view>
           </view>
         </view>
 
@@ -86,7 +95,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { type IWaitListItem } from '../utils/medicalHelp';
+  import { type IWaitListItem, getShowDrugName } from '../utils/medicalHelp';
 
   const props = withDefaults(
     defineProps<{
@@ -100,7 +109,17 @@
       selUnPayList: () => [],
     }
   );
-  const emits = defineEmits(['sel-item', 'click-item']);
+  const emits = defineEmits(['sel-item', 'click-item', 'arrow-item']);
+  const visitTypeLabel = {
+    1: {
+      label: '门诊处方',
+      class: 'blue',
+    },
+    2: {
+      label: '出院带药',
+      class: 'purple',
+    },
+  };
 
   const selIds = computed(() => props.selUnPayList.map((o) => o._id));
 
@@ -123,6 +142,7 @@
     },
   };
 
+
   const getIsActive = (item: IWaitListItem) => {
     return selIds.value.includes(item._id);
   };
@@ -142,6 +162,10 @@
 
   const itemClick = (item) => {
     emits('click-item', item);
+  };
+
+  const arrowClick = (item) => {
+    emits('arrow-item', item);
   };
 </script>
 
@@ -183,6 +207,27 @@
       .content {
         flex: 1;
 
+        .item-title {
+          align-items: flex-end;
+
+          .item-title-type {
+            font-weight: 400;
+            border-radius: 4px;
+            padding: 0 8rpx;
+            margin-left: 8rpx;
+
+            &.blue {
+              background-color: var(--hr-brand-color-1);
+              color: var(--hr-brand-color-6);
+            }
+
+            &.purple {
+              background-color: #f1ecff;
+              color: #7747ff;
+            }
+          }
+        }
+
         .type-block {
           font-weight: normal;
           border-radius: 4rpx;
@@ -222,5 +267,9 @@
         }
       }
     }
+  }
+
+  .arrow {
+    justify-content: flex-end;
   }
 </style>

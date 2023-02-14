@@ -27,6 +27,7 @@
             :selUnPayList="selList"
             @sel-item="selPayListItem"
             @click-item="unSelItemClick"
+            @arrow-item="selItemClick"
             isCheck
           />
 
@@ -187,13 +188,23 @@
       });
 
       listNow.value = result.drugList || [];
+
+      listNow.value.map((o) => {
+        o.drugIsDelivery = result.drugIsDelivery || '0';
+        o.takenDrug = takenDrug;
+
+        // o.visitType = '1';
+      });
     }
   };
 
   const unSelItemClick = (item: IWaitListItem) => {};
   const selItemClick = (item: IWaitListItem) => {
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesB/medicationAssistant/medicalHelpDetail', item),
+      url: joinQueryForUrl(
+        '/pagesB/medicationAssistant/medicalHelpDetail',
+        item
+      ),
     });
   };
 
