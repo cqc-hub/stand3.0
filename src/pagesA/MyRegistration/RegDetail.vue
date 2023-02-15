@@ -504,7 +504,6 @@
       path: 'pages/inquiries/inquiries3',
       text: '预问诊',
       extraData: {
-        sysCode: globalGl.SYS_CODE,
         params: encodeURIComponent(
           encryptDes(JSON.stringify(pageArg), 'phsDesKe')
         ),
