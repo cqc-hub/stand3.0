@@ -113,6 +113,8 @@
     }, 500);
   };
   const totalList = ref([0, 0, 0]);
+
+  let listLenHis = 0;
   const load = async (pageInfo) => {
     await wait(600);
     const currentTabValue = tabCurrent.value;
@@ -191,7 +193,20 @@
       };
     }
 
-    slist.value[currentTabValue].loadSuccess(returnArg);
+    if (listLenHis !== list.length) {
+      listLenHis = list.length;
+      slist.value[currentTabValue].loadSuccess(returnArg);
+    } else {
+      slist.value[currentTabValue].loadSuccess({
+        total: listLenHis,
+        list,
+      });
+
+      return {
+        total: listLenHis,
+        list,
+      };
+    }
     return returnArg;
   };
   const loadScrollList = () => {

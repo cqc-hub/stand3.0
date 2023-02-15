@@ -5,8 +5,8 @@
     <view class="pat-box">
       <view class="health-card">
         <view @click="goRecord" class="mr14 g-flex-rc-cc">
-          <view class="iconfont icon-resize color-blue">&#xe6fc;</view>
-          <text>挂号记录</text>
+          <view class="iconfont icon-resize">&#xe6fc;</view>
+          <text class="color-111">挂号记录</text>
         </view>
 
         <view v-if="isShowQueueBtn" @click="goQueueNumber" class="g-flex-rc-cc">
@@ -14,7 +14,7 @@
             class="queue-icon mr14"
             :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
           />
-          <text>排队叫号</text>
+          <text class="color-111">排队叫号</text>
         </view>
       </view>
     </view>
@@ -25,8 +25,11 @@
           <Number-List
             :list="list"
             :loading="isRefresh"
+            :isTakeNumberAfterBtnForGoQueueNumber="
+              isTakeNumberAfterBtnForGoQueueNumber
+            "
             @refresh-data="refreshData"
-            @take-number="takeNumber"
+            @take-number="showTakeNumberDialog"
             @sign-in="signIn"
           />
         </view>
@@ -48,6 +51,26 @@
       </template>
     </xy-dialog>
 
+    <xy-dialog
+      :title="fgTitle451"
+      :show="isFgShow451"
+      @confirmButton="takeNumber"
+      @cancelButton="isFgShow451 = false"
+      isMaskClick
+      confirmText="立即取号"
+      cancelText="暂不取号"
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag
+          v-model:title="fgTitle451"
+          isHideTitle
+          isShowFgTip
+          typeFg="451"
+          aaa
+        />
+      </scroll-view>
+    </xy-dialog>
+
     <Qr-Popup :qrValue="qrValue" v-model:show="isShowQr" />
     <g-message />
   </view>
@@ -57,7 +80,12 @@
   import { watch, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
-  import { GStores, useTBanner, ServerStaticData } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    type TButtonConfig,
+    useTBanner,
+  } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
@@ -73,14 +101,24 @@
   const qrValue = ref('');
   const isShowQr = ref(false);
   const isShowQueueBtn = ref(false);
+  const isTakeNumberAfterBtnForGoQueueNumber = ref(false);
 
   const locationInfo = ref({
     latitude: '',
     longitude: '',
   });
 
-  const takeNumber = async (item: TTakeNumberListItem) => {
-    const { ampm, visitDate, visitId, hosId } = item;
+  const fgTitle451 = ref('');
+  const isFgShow451 = ref(false);
+
+  let cacheItem: TTakeNumberListItem;
+  const showTakeNumberDialog = (item: TTakeNumberListItem) => {
+    cacheItem = item;
+    isFgShow451.value = true;
+  };
+
+  const takeNumber = async () => {
+    const { ampm, visitDate, visitId, hosId } = cacheItem;
     const { source } = gStores.globalStore.browser;
     const { patientId } = gStores.userStore.patChoose;
 
@@ -94,15 +132,33 @@
     };
 
     await api.getCheckIn(args);
-    getList();
+    await getList();
   };
 
   const signIn = async (item: TTakeNumberListItem) => {
-    const { qrValue: q } = item;
+    isFgShow451.value = false;
+    if (isTakeNumberAfterBtnForGoQueueNumber.value) {
+      // 排队叫号
+      const queryNumber: TButtonConfig = {
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/queueNumber/queueNumber',
+        text: '排队叫号',
+        addition: {
+          herenId: 'herenId',
+          patientId: 'aaa',
+          token: 'token',
+        },
+      };
 
-    if (q) {
-      qrValue.value = q;
-      isShowQr.value = true;
+      useTBanner(queryNumber);
+    } else {
+      const { qrValue: q } = item;
+
+      if (q) {
+        qrValue.value = q;
+        isShowQr.value = true;
+      }
     }
   };
 
@@ -131,7 +187,10 @@
   const refreshData = () => {
     isRefresh.value = true;
 
-    init();
+    // init();
+    uni.redirectTo({
+      url: '/pagesC/takeNumber/takeNumber',
+    });
   };
 
   const getList = async () => {
@@ -204,6 +263,8 @@
     init();
   };
 
+  const getConfig = async () => {};
+
   const init = async () => {
     await getLocation();
 
@@ -211,9 +272,12 @@
   };
 
   onLoad(async () => {
-    isShowQueueBtn.value =
-      (await ServerStaticData.getSystemConfig('order'))?.takeNumberQueueBtn ===
-      '1';
+    const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
+      await ServerStaticData.getSystemConfig('order');
+
+    isShowQueueBtn.value = takeNumberQueueBtn === '1';
+    isTakeNumberAfterBtnForGoQueueNumber.value =
+      takeNumberAfterBtnForGoQueueNumber === '1';
     init();
   });
 </script>
@@ -271,10 +335,17 @@
     font-size: var(--hr-font-size-xxl);
     margin-right: 10rpx;
     font-weight: 500;
+    color: var(--hr-success-color-6);
   }
 
   .queue-icon {
     width: 50rpx;
     height: 50rpx;
+  }
+
+  .reg-tip {
+    max-height: 550rpx;
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
   }
 </style>

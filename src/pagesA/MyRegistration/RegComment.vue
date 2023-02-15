@@ -245,7 +245,7 @@
       otherSuggestions: otherSuggestions.value,
     };
 
-    uni.reLaunch({
+    uni.redirectTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegCommentRes', {
         para: JSON.stringify(args),
       }),

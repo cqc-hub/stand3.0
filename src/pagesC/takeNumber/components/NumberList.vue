@@ -60,7 +60,9 @@
           @click="signIn(item)"
           class="btn btn-border btn-primary btn-plain p24"
         >
-          刷码签到
+          {{
+            isTakeNumberAfterBtnForGoQueueNumber ? '查看排队信息' : '刷码签到'
+          }}
         </view>
       </view>
     </view>
@@ -74,6 +76,7 @@
   defineProps<{
     list: TTakeNumberListItem[];
     loading: boolean;
+    isTakeNumberAfterBtnForGoQueueNumber: boolean;
   }>();
   const emits = defineEmits(['refresh-data', 'take-number', 'sign-in']);
 
@@ -81,11 +84,13 @@
     emits('refresh-data');
   };
 
-  const takeNumber = (item) => {
-    emits('take-number', item);
+  const takeNumber = (item: TTakeNumberListItem) => {
+    if (item.signIn) {
+      emits('take-number', item);
+    }
   };
 
-  const signIn = (item) => {
+  const signIn = (item: TTakeNumberListItem) => {
     emits('sign-in', item);
   };
 </script>
