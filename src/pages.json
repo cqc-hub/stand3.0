@@ -131,6 +131,14 @@
             "patient": true
           }
         },
+        {
+          "path": "MyRegistration/RegCommentRes",
+          "style": {
+            "navigationBarTitleText": "服务评价"
+          },
+          "extend": {
+          }
+        },
 
         {
           "path": "clinicPay/clinicPayDetail",

@@ -120,7 +120,6 @@
     <g-message />
 
     <view v-if="!isForShow" class="footer g-border-top">
-      <!-- btn-disabled -->
       <button @click="submitComment" class="btn g-border btn-primary">
         提交评价
       </button>
@@ -132,7 +131,7 @@
   import { watch, ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
-  import { deQueryForUrl, joinQuery } from '@/common';
+  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import { GStores } from '@/utils';
   import { type IDocDetail } from './utils/DoctorDetails';
 
@@ -233,6 +232,24 @@
       DOC_EVALUATION_CONTENT.value = EVALUATION.terms;
       DOC_SERVICE_SATISFACTION_CONTENT.value = SERVICE.terms;
     }
+  };
+
+  const goShowPage = () => {
+    const args = {
+      docGrade: docGrade.value,
+      docEvlContentList: docEvlContentList.value,
+      adviseForDoc: adviseForDoc.value,
+      serviceSatisfactionGrade: serviceSatisfactionGrade.value,
+      rateInfoList: rateInfoList.value,
+      adviseForHos: adviseForHos.value,
+      otherSuggestions: otherSuggestions.value,
+    };
+
+    uni.reLaunch({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegCommentRes', {
+        para: JSON.stringify(args),
+      }),
+    });
   };
 
   const getCommentHis = async () => {
@@ -342,15 +359,7 @@
       3000,
       {
         closeCallBack() {
-          const pages = getCurrentPages();
-
-          if (pages.length > 1) {
-            uni.navigateBack();
-          } else {
-            uni.reLaunch({
-              url: '/pages/home/home',
-            });
-          }
+          goShowPage();
         },
       }
     );

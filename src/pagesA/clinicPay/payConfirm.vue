@@ -222,7 +222,6 @@
         ...costInfo,
       };
       for (var key in costInfo) {
-        console.log(key);
         details.value.push({
           label: key,
           value: JSON.parse(result.costInfo)[key],

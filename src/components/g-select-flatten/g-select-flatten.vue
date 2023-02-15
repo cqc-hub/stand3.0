@@ -108,7 +108,7 @@
       const isActive = (v: any) => {
         if (props.multiple) {
           if (Array.isArray(props.value)) {
-            return props.value.findIndex((o) => o === v) !== -1;
+            return props.value.findIndex((o) => o == v) !== -1;
           } else {
             return false;
           }

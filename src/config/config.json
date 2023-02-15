@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "1001056",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -117,7 +117,11 @@
       "name": "中国人民解放军新疆军区总医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "37164"
+      }
     },
 
     "1001057": {
