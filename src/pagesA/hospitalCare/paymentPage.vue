@@ -57,7 +57,7 @@ type IPageProps = {
   patientName?: string; //扫码的时候传 支付用
   cardNumber?: string;
   hospitalAccount?: string;
-  type?: string; //有值1代表预交来的
+  type?: string; //有值1代表预交来的 所有预缴都不传patientid 
 };
 const gStores = new GStores();
 const resultHos = ref<hosParam>({
@@ -111,7 +111,7 @@ const int = async () => {
   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
     fee: defalutMoney.value,
     orderType: pageProps.value.hospitalAccount ? pageProps.value.hospitalAccount : "3",
-    // patientId: pageProps.value.params ? "" : gStores.userStore.patChoose.patientId,
+    patientId: pageProps.value.type == "1" ? "" : gStores.userStore.patChoose.patientId,
     patientName,
     cardNumber,
     hosId,
