@@ -14,7 +14,12 @@
             <view class="safe-height"></view>
             <view class="safe-height"></view>
 
-            <view class="g-bold f48">快递待发货</view>
+            <view
+              v-if="takenDrugTypeMap[detailData.takenDrugType]"
+              class="g-bold f48"
+            >
+              {{ takenDrugTypeMap[detailData.takenDrugType] }}
+            </view>
             <view v-if="detailData.takeLocation" class="f28">
               <text class="mr12">取药地址:</text>
               <text>{{ detailData.takeLocation }}</text>
@@ -48,6 +53,46 @@
             @go-detail="goDetailExpress"
           />
         </view>
+
+        <view
+          v-if="detailData.qrCode"
+          class="g-border box page-first-item mb16 p32"
+        >
+          <view class="my-display-none">
+            <w-qrcode :options="_qrOpt" ref="refqrcode" />
+            <w-barcode :options="_barOpt" ref="refqrbarcode" />
+          </view>
+
+          <view class="g-flex-rc-cc g-bold f32 mb32">
+            请凭二维码前往药房取药
+          </view>
+
+          <view class="qr g-flex-rc-cc">
+            <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
+            <image
+              v-if="!showQrCode"
+              :src="qrOpt._barImg"
+              class="barcode-img"
+            />
+          </view>
+
+          <view class="g-flex-rc-cc mt16 color-888 f28">{{ qrCode }}</view>
+
+          <view
+            @click="showQrCode = !showQrCode"
+            class="qr-code-toggle g-flex-rc-cc color-blue f28"
+          >
+            <text
+              :class="{
+                'icon-reverse': showQrCode,
+              }"
+              class="iconfont qr-toggle-icon color-blue"
+            >
+              &#xe6f9;
+            </text>
+            <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
+          </view>
+        </view>
         <Htlp-Head-Box :item="pageProps" :detailData="detailData" />
         <Htlp-Body-Box :item="pageProps" :detailData="detailData" />
       </view>
@@ -67,7 +112,7 @@
     type IItemDetail,
   } from './utils/medicalHelp';
   import { deQueryForUrl } from '@/common';
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, type TButtonConfig, useTBanner, wait } from '@/utils';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -79,6 +124,62 @@
   const pageProps = ref(<IWaitListItem>{});
   const gStores = new GStores();
   const detailData = ref({} as IItemDetail);
+  const takenDrugTypeMap = {
+    // 0: '窗口待取药',
+    1: '窗口待取药',
+    2: '快递待发货',
+    4: '窗口已取药',
+    20: '快递已发货',
+    50: '快递已签收',
+  };
+
+  const refqrcode = ref('' as any);
+  const refqrbarcode = ref('' as any);
+  const showQrCode = ref(true);
+
+  const qrOpt = ref({
+    // 二维码
+    size: 320,
+
+    _barImg: '',
+    _qrImg: '',
+  });
+
+  const barOpt = ref({
+    // 条形码
+    width: 600, // 宽度 单位rpx
+    height: 184, // 高度 单位rpx
+  });
+
+  const qrCode = computed(() => {
+    return detailData.value.qrCode || '';
+  });
+
+  const _qrOpt = computed(() => ({
+    ...qrOpt.value,
+    code: qrCode.value,
+  }));
+
+  const _barOpt = computed(() => ({
+    ...barOpt.value,
+    code: qrCode.value,
+  }));
+
+  const closeQrOpt = () => {
+    barOpt.value.width = 0;
+    qrOpt.value.size = 0;
+  };
+
+  const capture = async () => {
+    await wait(300);
+    const { tempFilePath: qrCodeImg } = await refqrcode.value.GetCodeImg();
+    const { tempFilePath: barcodeImg } = await refqrbarcode.value.GetCodeImg();
+
+    qrOpt.value._barImg = barcodeImg;
+    qrOpt.value._qrImg = qrCodeImg;
+
+    closeQrOpt();
+  };
 
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
@@ -114,6 +215,10 @@
     }
 
     detailData.value = result;
+
+    if (detailData.value.qrCode) {
+      capture();
+    }
   };
 
   const expressInfo = ref<{
@@ -255,5 +360,36 @@
   .box {
     background: #fff;
     border-radius: 8px;
+  }
+
+  .qr {
+    .qrcode-img {
+      width: 320rpx;
+      height: 320rpx;
+    }
+
+    .barcode-img {
+      height: 184rpx;
+      width: 600rpx;
+    }
+  }
+
+  .qr-code-toggle {
+    display: flex;
+    align-items: center;
+
+    .qr-toggle-icon {
+      transition: all 0.4s;
+      font-size: var(--hr-font-size-xl);
+      display: inline-block;
+      &.icon-reverse {
+        transform-origin: center center;
+        transform: rotate(0.5turn);
+      }
+    }
+  }
+
+  .page-first-item {
+    margin-top: 48rpx;
   }
 </style>
