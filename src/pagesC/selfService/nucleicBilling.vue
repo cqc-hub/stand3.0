@@ -12,7 +12,7 @@
         v-if="NucleResult[0].itemTime || NucleResult[0].itemAddress"
       >
         <view>
-          <label检测时间</label>
+          <label>检测时间</label>
           <label>{{ NucleResult[0].itemTime }}</label>
         </view>
         <view>
