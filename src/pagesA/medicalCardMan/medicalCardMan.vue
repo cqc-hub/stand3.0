@@ -3,6 +3,7 @@
     :class="{
       'system-mode-old': gStore.globalStore.modeOld,
     }"
+    class="f32"
   >
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">

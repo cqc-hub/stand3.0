@@ -696,6 +696,47 @@
     }
   };
 
+  const goRatePageRes = async () => {
+    const { orderId } = pageProps.value;
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
+    const { result } = await api.findSatisfactionInfo({
+      orderId,
+      source,
+    });
+
+    if (result) {
+      const {
+        adviseForDoc,
+        adviseForHos,
+        docEvlContentList,
+        docGrade,
+        otherSuggestions,
+        rateInfoList,
+        serviceSatisfactionGrade,
+      } = result;
+
+      const args = {
+        docGrade,
+        docEvlContentList,
+        adviseForDoc,
+        serviceSatisfactionGrade,
+        rateInfoList,
+        adviseForHos,
+        otherSuggestions,
+      };
+
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/RegCommentRes', {
+          para: JSON.stringify(args),
+        }),
+      });
+
+    }
+  };
+
   const goRatePage = () => {
     const orderId = pageProps.value.orderId;
     const {
@@ -708,18 +749,23 @@
       appointmentDate,
     } = orderRegInfo.value;
 
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegComment', {
-        orderId,
-        deptName,
-        docName,
-        hosDocId,
-        hosId,
-        hosDeptId,
-        rateFlag,
-        appointmentDate,
-      }),
-    });
+    // 查看评价
+    if (rateFlag == 0) {
+      goRatePageRes();
+    } else {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/RegComment', {
+          orderId,
+          deptName,
+          docName,
+          hosDocId,
+          hosId,
+          hosDeptId,
+          rateFlag,
+          appointmentDate,
+        }),
+      });
+    }
   };
 
   const againOrder = async () => {
