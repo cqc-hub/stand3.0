@@ -1,7 +1,11 @@
 <template>
   <view class="comment-item">
     <view class="flex-between">
-      <uni-rate :value="item.docGrade" :size="14" readonly />
+      <uni-rate
+        :value="item.docGrade"
+        :size="systemModeOld ? 20 : 14"
+        readonly
+      />
 
       <view class="f26 flex-normal">
         <text class="mr24">{{ item.patName }}</text>
@@ -36,6 +40,7 @@
   const props = defineProps<{
     item: ICommentItem;
     tagList: any[];
+    systemModeOld?: boolean;
   }>();
 
   // const tags = ref<IOptions[]>([

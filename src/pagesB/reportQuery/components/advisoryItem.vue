@@ -69,10 +69,11 @@ const props = defineProps({
   margin-top: 16rpx;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
+  padding: 28rpx 0;
   .left {
     display: flex;
-    align-items: center;
+    // align-items: center;
     margin-left: 24rpx;
     .icon-font {
       width: 36rpx;
@@ -87,6 +88,7 @@ const props = defineProps({
       line-height: 36rpx;
       text-align: center;
       padding: 0 12rpx;
+      margin-top: 5rpx;
     }
     .item-title {
       margin-left: 8rpx;
@@ -96,7 +98,7 @@ const props = defineProps({
       font-size: var(--hr-font-size-base);
       font-weight: 600;
       margin-right: 24rpx;
-      padding: 28rpx 0;
+
     }
     //住院
     .itemiconHospitalization {

@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page f32"
+  >
     <view class="g-container">
       <Scroll-List
         ref="scrollListRef"
@@ -11,7 +16,11 @@
           <view class="list-content">
             <view class="safe-height"></view>
             <view v-for="(item, i) in list" :key="i">
-              <Doc-Comment-Item :item="item" :tagList="tagList" />
+              <Doc-Comment-Item
+                :item="item"
+                :tagList="tagList"
+                :systemModeOld="gStores.globalStore.modeOld"
+              />
             </view>
           </view>
         </template>
@@ -23,6 +32,8 @@
         </template>
       </Scroll-List>
     </view>
+
+    <g-message />
   </view>
 </template>
 
@@ -31,6 +42,7 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import { deQueryForUrl } from '@/common';
+  import { GStores } from '@/utils';
   import { type ICommentItem } from './utils/DoctorDetails';
 
   import api from '@/service/api';
@@ -43,6 +55,7 @@
       hosDocId: string;
     }
   );
+  const gStores = new GStores();
   const scrollListRef = ref('' as any);
   const total = ref(0);
   const list = ref<ICommentItem[]>([]);

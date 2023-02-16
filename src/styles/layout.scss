@@ -64,6 +64,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  font-size: var(--hr-font-size-base);
 
   .g-container {
     flex: 1;

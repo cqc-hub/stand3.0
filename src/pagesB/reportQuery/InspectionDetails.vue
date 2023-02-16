@@ -3,7 +3,7 @@
     :class="{
       'system-mode-old': gStore.globalStore.modeOld,
     }"
-    class="page"
+    class="page f32"
   >
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
@@ -16,15 +16,15 @@
             <view v-if="pageProps._scan !== '1'" class="subhead">
               患者信息
               <view class="subhead-detail">
-                {{ nameConvert(pat.patientName) }}({{
-                  checkoutReportList.cardNumber || pat._showId
-                }})&nbsp;&nbsp;
-                <text style="color: #e6e6e6">|</text>
-                &nbsp;&nbsp;{{
-                  checkoutReportList.sex || pat.patientSex
-                }}&nbsp;&nbsp;
-                <text style="color: #e6e6e6">|</text>
-                &nbsp;&nbsp;{{ checkoutReportList.age || pat.patientAge }}岁
+                <text class="g-split-line mr12 pr12">
+                  {{ nameConvert(pat.patientName) }}({{
+                    checkoutReportList.cardNumber || pat._showId
+                  }})
+                </text>
+                <text class="g-split-line mr12 pr12">
+                  {{ checkoutReportList.sex || pat.patientSex }}
+                </text>
+                <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
               </view>
             </view>
             <view class="subhead">
@@ -209,7 +209,7 @@
               <view class="title">检验项目</view>
               <view
                 v-if="checkoutReportList.normalList.length != 0"
-                class="table"
+                class="table keep-normal"
               >
                 <view class="table-title">
                   <view class="table-title1">检验项目</view>
@@ -538,7 +538,7 @@
           z-index: 99;
           .title {
             // width: calc(100% - 32rpx);
-            font-size: 44rpx;
+            font-size: var(--hr-font-size-xxl);
             font-weight: 600;
             margin-left: 32rpx;
             padding-top: 40rpx;
@@ -759,7 +759,7 @@
         height: 96rpx;
       }
       .iconfont {
-        font-size: 46rpx;
+        font-size: var(--hr-font-size-xxl);
         margin-right: 22rpx;
       }
     }
