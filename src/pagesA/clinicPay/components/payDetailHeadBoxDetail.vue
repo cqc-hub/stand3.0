@@ -207,7 +207,7 @@
     .head-content {
       .head-row {
         .head-row-label {
-          width: 160rpx;
+          width: 177rpx;
         }
       }
     }

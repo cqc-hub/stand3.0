@@ -27,7 +27,6 @@
       <scroll-view
         class="choose-day-container-scroll"
         :scroll-into-view="scrollToId"
-        @scroll="scrollEvt"
         scroll-x
       >
         <view class="scroll-content">
@@ -106,7 +105,6 @@
   const emits = defineEmits(['change']);
   const calendarRef = ref<any>('');
   const scrollToId = ref('');
-  const scrollLeft = ref(0);
   const inst = getCurrentInstance();
   const dateShow = ref<string[]>([]);
 
@@ -122,9 +120,6 @@
     emits('change', item);
   };
 
-  const scrollEvt = (e) => {
-    scrollLeft.value = e.detail.scrollLeft;
-  };
 
   const dateTimeChange = (fullDay) => {
     const dayMap = {

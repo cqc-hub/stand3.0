@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <view class="my-display-none">
       <g-selhos :hosId="pageProps.hosId" @get-list="getHosList" />
     </view>
