@@ -869,4 +869,17 @@
     margin-top: 16rpx;
     background-color: #fff;
   }
+
+  .system-mode-old {
+    .doc-goodat {
+      .doc-major-goodat {
+        width: 70rpx;
+        position: relative;
+        top: 5rpx;
+        // #ifdef  MP-WEIXIN
+        top: 8rpx;
+        // #endif
+      }
+    }
+  }
 </style>

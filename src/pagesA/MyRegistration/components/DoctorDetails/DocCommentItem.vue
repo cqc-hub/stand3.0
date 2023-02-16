@@ -1,5 +1,5 @@
 <template>
-  <view class="comment-item">
+  <view class="comment-item f32">
     <view class="flex-between">
       <uni-rate
         :value="item.docGrade"
@@ -18,16 +18,17 @@
     </view>
 
     <view class="flex-normal tag">
-      <view
-        v-for="(tag, idx) in tags"
-        :key="tag.value"
-        :class="{
-          mb8: idx !== tags.length - 1,
-        }"
-        class="tag-item color-666 f24 mb8"
-      >
-        {{ tag.label }}
-      </view>
+      <block v-for="(tag, idx) in tags" :key="tag.value">
+        <view
+          v-if="tag.label"
+          :class="{
+            mb8: idx !== tags.length - 1,
+          }"
+          class="tag-item color-666 f24 mb8"
+        >
+          {{ tag.label }}
+        </view>
+      </block>
     </view>
   </view>
 </template>
@@ -42,29 +43,6 @@
     tagList: any[];
     systemModeOld?: boolean;
   }>();
-
-  // const tags = ref<IOptions[]>([
-  //   {
-  //     label: '医生亲切',
-  //     value: '医生亲切',
-  //   },
-  //   {
-  //     label: '认真负责',
-  //     value: '认真负责',
-  //   },
-  //   {
-  //     label: '医术高明',
-  //     value: '医术高明',
-  //   },
-  //   {
-  //     label: '有耐心',
-  //     value: '有耐心',
-  //   },
-  //   {
-  //     label: '专业',
-  //     value: '专业',
-  //   },
-  // ]);
 
   const tags = computed(() => {
     const _list = props.item.docEvlContentList;

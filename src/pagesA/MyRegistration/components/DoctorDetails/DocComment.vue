@@ -1,5 +1,10 @@
 <template>
-  <view class="g-comment">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-comment f32"
+  >
     <view class="header flex-between">
       <view class="flex-normal">
         <text class="g-bold f36">患者评价</text>
@@ -13,7 +18,11 @@
     </view>
 
     <view v-for="(item, i) in list" :key="i">
-      <Comment-Item :item="item" :tagList="tagList" />
+      <Comment-Item
+        :item="item"
+        :tagList="tagList"
+        :systemModeOld="gStores.globalStore.modeOld"
+      />
     </view>
 
     <view v-if="!list.length" class="empty-list">
@@ -26,9 +35,18 @@
   import { onMounted, ref } from 'vue';
   import { type ICommentItem } from '../../utils/DoctorDetails';
 
+  import {
+    previewImage,
+    GStores,
+    ServerStaticData,
+    type ISystemConfig,
+  } from '@/utils';
+
   import api from '@/service/api';
 
   import CommentItem from './DocCommentItem.vue';
+
+  const gStores = new GStores();
 
   const emits = defineEmits(['show-all-click']);
   const tagList = ref([] as any[]);
