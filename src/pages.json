@@ -520,7 +520,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "核酸开单"
+            "navigationBarTitleText": "自助开单"
           }
         }
       ]
