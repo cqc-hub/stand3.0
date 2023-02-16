@@ -49,9 +49,9 @@
       </scroll-view>
 
       <view
-        class="choose-day-all choose-day-calendar"
         v-if="isOpenCalendar"
         @click="showCalendar"
+        class="choose-day-all choose-day-calendar"
       >
         <view>展开</view>
         <view>日历</view>
@@ -86,9 +86,6 @@
   import DatetimePicker from './order-datetime-picker.vue';
 
   dayjs.extend(isoWeek);
-  console.log({
-    DatetimePicker,
-  });
 
   const props = withDefaults(
     defineProps<{
@@ -118,7 +115,6 @@
   });
 
   const showCalendar = () => {
-    console.log(calendarRef.value);
     calendarRef.value.show();
   };
 
@@ -149,37 +145,44 @@
     });
   };
 
+  let scrollWidth = 0;
+
   watch(
     () => props.value,
     () => {
       nextTick(async () => {
         const query = uni.createSelectorQuery().in(inst);
-        let scrollWidth = 0;
-        await new Promise((resolve) => {
-          query
-            .select('.choose-day-container-scroll')
-            .boundingClientRect((data: any) => {
-              if (data && data.width) {
-                scrollWidth = data.width;
-              }
 
-              resolve(void 0);
-            })
-            .exec();
-        });
+        if (!scrollWidth) {
+          await new Promise((resolve) => {
+            query
+              .select('.choose-day-container-scroll')
+              .boundingClientRect((data: any) => {
+                if (data && data.width) {
+                  scrollWidth = data.width;
+                }
+
+                resolve(void 0);
+              })
+              .exec();
+          });
+        }
 
         query
           .select(`#day-` + props.value)
           .boundingClientRect((data) => {
             if (data) {
-              const itemLeft = (data as any).left;
-              if (
-                !(
-                  scrollLeft.value < itemLeft &&
-                  scrollLeft.value + scrollWidth > itemLeft
-                )
-              ) {
+              const { left: itemLeft, width: itemWidth } = data as any;
+              const sLeft = itemLeft - itemWidth;
+
+              const reLocation = () => {
                 scrollToId.value = 'day-' + props.value;
+              };
+
+              if (Math.abs(sLeft) + itemWidth > scrollWidth) {
+                reLocation();
+              } else if (itemLeft < 0 && Math.abs(itemLeft) < itemWidth) {
+                reLocation();
               }
             }
           })
