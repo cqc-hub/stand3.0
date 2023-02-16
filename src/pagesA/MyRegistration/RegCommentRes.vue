@@ -96,6 +96,7 @@
       </view>
 
       <view class="safe-height" />
+      <g-message />
     </view>
   </view>
 </template>
@@ -105,6 +106,7 @@
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { deQueryForUrl } from '@/common';
+  import { GStores } from '@/utils';
 
   import api from '@/service/api';
 
@@ -119,7 +121,7 @@
     label: 'label',
     value: 'code',
   };
-
+  const gStores = new GStores();
   const DOC_EVALUATION_CONTENT = ref([] as TFalttenList);
   const DOC_SERVICE_SATISFACTION_CONTENT = ref([] as TFalttenList);
   const docEvlContentList = ref([] as string[]);
@@ -155,26 +157,65 @@
     await getConfig();
   };
 
-  onLoad((opt) => {
+  const getCommentHis = async (orderId: string) => {
     const {
-      docGrade: _docGrade,
-      docEvlContentList: _docEvlContentList,
-      adviseForDoc: _adviseForDoc,
-      serviceSatisfactionGrade: _serviceSatisfactionGrade,
-      rateInfoList: _rateInfoList,
-      adviseForHos: _adviseForHos,
-      otherSuggestions: _otherSuggestions,
-    } = JSON.parse(deQueryForUrl(deQueryForUrl(opt)).para);
+      browser: { source },
+    } = gStores.globalStore;
 
-    docGrade.value = _docGrade;
-    docEvlContentList.value = _docEvlContentList;
-    adviseForDoc.value = _adviseForDoc;
-    serviceSatisfactionGrade.value = _serviceSatisfactionGrade;
-    rateInfoList.value = _rateInfoList;
-    adviseForHos.value = _adviseForHos;
-    otherSuggestions.value = _otherSuggestions;
+    const { result } = await api.findSatisfactionInfo({
+      orderId,
+      source,
+    });
 
-    init();
+    if (result) {
+      const {
+        adviseForDoc: _adviseForDoc,
+        adviseForHos: _adviseForHos,
+        docEvlContentList: _docEvlContentList,
+        docGrade: _docGrade,
+        otherSuggestions: _otherSuggestions,
+        rateInfoList: _rateInfoList,
+        serviceSatisfactionGrade: _serviceSatisfactionGrade,
+      } = result;
+
+      adviseForDoc.value = _adviseForDoc;
+      adviseForHos.value = _adviseForDoc;
+      docEvlContentList.value = _docEvlContentList;
+      docGrade.value = _docGrade;
+      otherSuggestions.value = _otherSuggestions;
+      rateInfoList.value = _rateInfoList;
+      serviceSatisfactionGrade.value = _serviceSatisfactionGrade;
+    }
+  };
+
+  onLoad((opt) => {
+    if (opt) {
+      const { para, orderId } = opt;
+
+      if (para) {
+        const {
+          docGrade: _docGrade,
+          docEvlContentList: _docEvlContentList,
+          adviseForDoc: _adviseForDoc,
+          serviceSatisfactionGrade: _serviceSatisfactionGrade,
+          rateInfoList: _rateInfoList,
+          adviseForHos: _adviseForHos,
+          otherSuggestions: _otherSuggestions,
+        } = JSON.parse(deQueryForUrl(deQueryForUrl(opt)).para);
+
+        docGrade.value = _docGrade;
+        docEvlContentList.value = _docEvlContentList;
+        adviseForDoc.value = _adviseForDoc;
+        serviceSatisfactionGrade.value = _serviceSatisfactionGrade;
+        rateInfoList.value = _rateInfoList;
+        adviseForHos.value = _adviseForHos;
+        otherSuggestions.value = _otherSuggestions;
+      } else if (orderId) {
+        getCommentHis(orderId);
+      }
+
+      init();
+    }
   });
 </script>
 
