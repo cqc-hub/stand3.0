@@ -97,8 +97,8 @@
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
-  import HelpList from './components/helpList.vue';
-  import SelExpress from './components/selExpress.vue';
+  import HelpList from './components/HelpList.vue';
+  import SelExpress from './components/SelExpress.vue';
 
   const scrollTo = ref('');
   const remark = ref('');

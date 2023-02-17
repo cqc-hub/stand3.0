@@ -111,6 +111,8 @@ export class UseDoctorDetail extends GStores {
     };
 
     const { result } = await api.findByDocId(args);
+
+    result.hosDocId = result.hosDocId || hosDocId;
     this.docDetail = result;
 
     return this.docDetail;
