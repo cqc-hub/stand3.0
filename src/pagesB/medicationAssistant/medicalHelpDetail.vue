@@ -93,7 +93,11 @@
             <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
           </view>
         </view>
-        <Htlp-Head-Box :item="pageProps" :detailData="detailData" />
+        <Htlp-Head-Box
+          :item="pageProps"
+          :detailData="detailData"
+          :systemModeOld="gStores.globalStore.modeOld"
+        />
         <Htlp-Body-Box :item="pageProps" :detailData="detailData" />
       </view>
     </view>

@@ -1,5 +1,9 @@
 <template>
-  <view>
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+  >
     <view class="container">
       <g-form
         v-model:value="formData"
@@ -25,7 +29,7 @@
       <button
         @click="gform.submit"
         :class="{
-          'btn-disabled': btnDisabled
+          'btn-disabled': btnDisabled,
         }"
         class="btn btn-primary"
       >
@@ -70,7 +74,7 @@
       item: string;
     }>(),
     {
-      pageType: 'add'
+      pageType: 'add',
     }
   );
   const gStores = new GStores();
@@ -81,7 +85,7 @@
     address: '',
     detailedAddress: '',
     postcode: '',
-    defaultFlag: false
+    defaultFlag: false,
   });
 
   const formList = [
@@ -92,7 +96,7 @@
       field: 'input-text',
       placeholder: '请输入收货人姓名',
       key: 'senderName',
-      emptyMessage: '请填写收货人姓名'
+      emptyMessage: '请填写收货人姓名',
     },
     {
       required: true,
@@ -106,9 +110,9 @@
       rule: [
         {
           message: '请填写正确的手机号',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
-        }
-      ]
+          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        },
+      ],
     },
     {
       required: true,
@@ -117,7 +121,7 @@
       placeholder: '请选择',
       key: 'address',
       emptyMessage: '请选择所在地区',
-      field: 'address'
+      field: 'address',
     },
 
     {
@@ -130,7 +134,7 @@
       placeholder: '请输入街道、小区、门牌号等',
       key: 'detailedAddress',
       emptyMessage: '请输入街道、小区、门牌号等',
-      rowStyle: 'border-radius: 0 0 16rpx 16rpx;'
+      rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
     },
     {
       required: false,
@@ -139,15 +143,15 @@
       field: 'input-text',
       inputType: 'number',
       placeholder: '请输入邮政编码',
-      key: 'postcode'
+      key: 'postcode',
     },
     {
       field: 'switch',
       key: 'defaultFlag',
       label: '设为默认地址',
       labelWidth: '260rpx',
-      rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;'
-    }
+      rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;',
+    },
   ];
   const showDialog = ref(false);
 
@@ -167,7 +171,7 @@
       },
       fail(res) {
         console.log(3333, res);
-      }
+      },
     });
   };
   //获取拆分后的地址
@@ -175,7 +179,7 @@
   const getAddress = async (data) => {
     const { result } = await api.getAddress({
       addressName: data.name,
-      allAddress: data.address
+      allAddress: data.address,
     });
     formData.value.detailedAddress = result.detailedAddress;
     formData.value.address = result.province + result.city + result.county;
@@ -188,12 +192,12 @@
     const item = JSON.parse(props.item);
     await api.delExpressAddress({
       herenId: gStores.globalStore.herenId,
-      id: item.id
+      id: item.id,
     });
     messageStore.showMessage('删除成功', 1000, {
       closeCallBack: () => {
         uni.navigateBack({ delta: 1 });
-      }
+      },
     });
   };
 
@@ -201,7 +205,7 @@
     const params = {
       herenId: gStores.globalStore.herenId,
       ...data,
-      defaultFlag: data.defaultFlag ? 1 : 0
+      defaultFlag: data.defaultFlag ? 1 : 0,
     };
     delete params.address;
     let title = '地址保存成功';
@@ -215,7 +219,7 @@
     messageStore.showMessage(title, 1000, {
       closeCallBack: () => {
         uni.navigateBack({ delta: props.pageType === 'editPatient' ? 2 : 1 });
-      }
+      },
     });
   };
 
@@ -233,7 +237,7 @@
   onReady(() => {
     if (props.pageType === 'edit') {
       uni.setNavigationBarTitle({
-        title: '编辑收货地址'
+        title: '编辑收货地址',
       });
     }
   });
@@ -244,7 +248,7 @@
 
       formData.value = {
         ...item,
-        defaultFlag: item.defaultFlag === 0 ? false : true
+        defaultFlag: item.defaultFlag === 0 ? false : true,
       };
     }
     gform.value.setList(formList);
@@ -254,7 +258,7 @@
 <style lang="scss" scoped>
   .icon-resize {
     height: 48rpx;
-    width:48rpx;
+    width: 48rpx;
     // color: var(--hr-brand-color-6);
   }
   .footer {

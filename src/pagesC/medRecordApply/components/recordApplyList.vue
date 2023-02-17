@@ -1,5 +1,10 @@
 <template>
-  <view class="">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class=""
+  >
     <view
       v-for="item in list"
       :key="item.phsOrderNo"
@@ -110,6 +115,7 @@
 
   const props = defineProps<{
     list: CaseCopyItem[];
+    systemModeOld: boolean;
   }>();
 
   const emits = defineEmits(['item-click', 'express-click']);
@@ -229,5 +235,15 @@
 
   .m10 {
     margin: 0 10rpx;
+  }
+
+  .system-mode-old {
+    .item {
+      .row {
+        .row-title {
+          width: 190rpx;
+        }
+      }
+    }
   }
 </style>

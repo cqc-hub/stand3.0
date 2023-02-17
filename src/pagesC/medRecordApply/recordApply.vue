@@ -141,7 +141,7 @@
 
   import api from '@/service/api';
 
-  import OutHosListCom from './components/recordApplyOutHosList.vue';
+  import OutHosListCom from './components/RecordApplyOutHosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const props = defineProps<{

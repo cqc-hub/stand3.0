@@ -1,5 +1,10 @@
 <template>
-  <view class="page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page f32"
+  >
     <view class="address-top flex-between">
       <view class="item g-flex-rc-cc" @tap="gotoPatient">
         <text class="icon-font ico_people" />

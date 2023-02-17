@@ -271,6 +271,7 @@
         v-model:value="addDialogValue"
         :title="addDialogTitle"
         :isShowAddRecord="isToggleHos"
+        :systemModeOld="gStores.globalStore.modeOld"
         @submit="recordSubmit"
         @hos-change="hosChange"
         ref="refAddDialog"
@@ -332,10 +333,10 @@
 
   import api from '@/service/api';
 
-  import AddressBox from './components/medRecordDetailsAddressBox.vue';
-  import RecordCard from './components/recordCard.vue';
-  import AddRecordDialog from './components/medRecordDetailsAddRecordDialog.vue';
-  import PurposeCount from './components/purposeCount.vue';
+  import AddressBox from './components/MedRecordDetailsAddressBox.vue';
+  import RecordCard from './components/RecordCard.vue';
+  import AddRecordDialog from './components/MedRecordDetailsAddRecordDialog.vue';
+  import PurposeCount from './components/PurposeCount.vue';
 
   type TChoose = XOR<
     { success: true; path: string },

@@ -1,5 +1,9 @@
 <template>
-  <view>
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+  >
     <view
       v-if="Object.keys(info).length"
       :class="titleStatus.headerClass"
@@ -37,7 +41,9 @@
 
                   <view v-if="info.refundFee">
                     <text class="mr12 text-no-wrap">退还金额:</text>
-                    <text class="mr12 g-break-word">{{ info.refundFee }}元</text>
+                    <text class="mr12 g-break-word">
+                      {{ info.refundFee }}元
+                    </text>
                     <text
                       @click.stop="refRefConfirm.show"
                       class="iconfont refund-fee-icon"
@@ -228,8 +234,8 @@
   import globalGl from '@/config/global';
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import expressStep from './components/expressStep.vue';
-  import recordCard from './components/recordCard.vue';
+  import expressStep from './components/ExpressStep.vue';
+  import recordCard from './components/RecordCard.vue';
 
   const props = defineProps<{
     phsOrderNo: string;
@@ -547,7 +553,6 @@
         }
       }
 
-
       .container-box {
         background-color: #fff;
         // box-shadow: inset 0 18rpx 5px rgba(0, 0, 0, 0.07);
@@ -647,6 +652,14 @@
 
     .home-icon {
       font-size: var(--hr-font-size-xxl);
+    }
+  }
+
+  .system-mode-old {
+    ._row {
+      ._title {
+        width: 180rpx;
+      }
     }
   }
 </style>

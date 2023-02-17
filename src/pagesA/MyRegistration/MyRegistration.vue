@@ -195,8 +195,11 @@
   };
 
   const patientChange = async ({ item }) => {
-    console.log(item);
     await getList(item.patientId || '');
+
+    if (item._showId) {
+      gStores.userStore.updatePatChoose(item);
+    }
   };
 
   let _firstIn = true;

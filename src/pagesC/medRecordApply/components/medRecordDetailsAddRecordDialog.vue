@@ -70,6 +70,7 @@
     value: BaseObject;
     title: string;
     isShowAddRecord: boolean; // 可以切换院区?
+    systemModeOld: boolean;
   }>();
   const emits = defineEmits(['update:value', 'submit', 'hos-change']);
 
@@ -139,11 +140,6 @@
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
 
     if (listConfig && listConfig.length) {
-      console.log({
-        listConfig,
-        list,
-      });
-
       const hos = listConfig.map((o) => o.hosId + '');
       hosList.value = list.filter((o) => hos.includes(o.hosId));
     }
@@ -246,7 +242,11 @@
         }
       }
 
-      o.labelWidth = '140rpx';
+      if (props.systemModeOld) {
+        o.labelWidth = '160rpx';
+      } else {
+        o.labelWidth = '140rpx';
+      }
     });
 
     refForm.value.setList(tempList.value);

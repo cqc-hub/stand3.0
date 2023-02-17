@@ -20,6 +20,11 @@
   align-items: flex-start;
 }
 
+.flex-start {
+  align-items: flex-start;
+  @extend .flex-normal;
+}
+
 .flex1 {
   flex: 1 !important;
 }
@@ -89,6 +94,6 @@
 
 }
 
-  .g-nowrap{
+.g-nowrap {
   white-space: nowrap;
 }

@@ -1,5 +1,10 @@
 <template>
-  <view class="item g-border">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class="item g-border"
+  >
     <view class="item-title g-flex-rc-cc">
       <text class="f36 g-bold">{{ getShowDrugName(item) }}</text>
       <text
@@ -43,6 +48,7 @@
   const props = defineProps<{
     item: IWaitListItem;
     detailData: IItemDetail;
+    systemModeOld?: boolean;
   }>();
 
   const renderRow = computed(() => {
@@ -124,6 +130,16 @@
       .row {
         .label {
           width: 140rpx;
+        }
+      }
+    }
+  }
+
+  .system-mode-old {
+    .item-content {
+      .row {
+        .label {
+          width: 170rpx;
         }
       }
     }

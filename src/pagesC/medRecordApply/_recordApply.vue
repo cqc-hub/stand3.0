@@ -17,6 +17,7 @@
       <block v-if="isComplete && list.length">
         <Record-Apply-List
           :list="list"
+          :systemModeOld="gStores.globalStore.modeOld"
           @item-click="goApplyDetail"
           @express-click="expressClick"
         />
@@ -44,7 +45,7 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
 
-  import RecordApplyList from './components/recordApplyList.vue';
+  import RecordApplyList from './components/RecordApplyList.vue';
 
   const props = defineProps<{
     hosId?: string;

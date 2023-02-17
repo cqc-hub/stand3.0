@@ -96,7 +96,7 @@
   import { getSrc } from './utils';
   import api from '@/service/api';
 
-  import AddressBox from '../medRecordApply/components/medRecordDetailsAddressBox.vue';
+  import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
   import HelpList from './components/helpList.vue';
   import SelExpress from './components/selExpress.vue';
 

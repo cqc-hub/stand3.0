@@ -1,5 +1,10 @@
 <template>
-  <view class="clinic-pay-list">
+  <view
+    :class="{
+      'system-mode-old': systemModeOld,
+    }"
+    class="clinic-pay-list"
+  >
     <!-- @click="itemClick(item)" -->
     <view
       v-for="(item, idx) in list"
@@ -59,7 +64,7 @@
         <view class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">就诊时间</view>
-            <view class="row-value g-break-word color-444">
+            <view class="flex1 g-break-word color-444">
               {{ item.prescTime }}
             </view>
           </view>
@@ -68,7 +73,7 @@
         <view v-if="item.deptName" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">开单科室</view>
-            <view class="row-value g-break-word color-444 flex-normal">
+            <view class="flex1 g-break-word color-444 flex-normal">
               <view class="text-ellipsis">{{ item.deptName }}</view>
               <view v-if="item.clinicType">
                 ({{ item.clinicType == '1' ? '线下就诊' : '网络问诊' }})
@@ -80,7 +85,7 @@
         <view v-if="item.takenDrugType && !showStatus" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">取药状态</view>
-            <view class="row-value g-break-word color-444">
+            <view class="flex1 g-break-word color-444">
               {{
                 statusLabel[item.takenDrugType] &&
                 statusLabel[item.takenDrugType].label
@@ -104,6 +109,7 @@
       isListShowClinicType?: boolean;
       isCheck?: boolean;
       showStatus?: boolean;
+      systemModeOld?: boolean;
     }>(),
     {
       selUnPayList: () => [],
@@ -141,7 +147,6 @@
       color: 'var(--hr-neutral-color-7)',
     },
   };
-
 
   const getIsActive = (item: IWaitListItem) => {
     return selIds.value.includes(item._id);
@@ -254,7 +259,7 @@
             width: 130rpx;
           }
 
-          .row-value {
+          .flex1 {
             flex: 1;
           }
         }
@@ -271,5 +276,18 @@
 
   .arrow {
     justify-content: flex-end;
+  }
+
+  .system-mode-old {
+    .item {
+      .content {
+        .row {
+          .row-label {
+            width: 150rpx;
+          }
+
+        }
+      }
+    }
   }
 </style>

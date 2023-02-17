@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <g-flag isShowFg typeFg="48" />
     <g-choose-pat @choose-pat="tabChange(tabCurrent)" />
     <view class="g-border-bottom">
@@ -25,6 +30,7 @@
           <Htlp-List
             :list="waitSelList"
             :selUnPayList="selList"
+            :systemModeOld="gStores.globalStore.modeOld"
             @sel-item="selPayListItem"
             @click-item="unSelItemClick"
             @arrow-item="selItemClick"
@@ -42,7 +48,12 @@
 
       <swiper-item>
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <Htlp-List :list="seledList" @click-item="selItemClick" show-status />
+          <Htlp-List
+            :list="seledList"
+            :systemModeOld="gStores.globalStore.modeOld"
+            @click-item="selItemClick"
+            show-status
+          />
 
           <view class="empty-list" v-if="isComplete['1'] && !seledList.length">
             <g-empty :current="1" />
