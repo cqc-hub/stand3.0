@@ -63,7 +63,7 @@
                       examineReportList.sex || pat.patientSex
                     }}&nbsp;&nbsp;
                     <text style="color: #e6e6e6">|</text>
-                    &nbsp;&nbsp;{{ examineReportList.age || pat.patientAge }}岁
+                    &nbsp;&nbsp;<text class="text-no-wrap">{{ examineReportList.age || pat.patientAge }}岁</text>
                   </view>
                 </view>
                 <view class="subhead">

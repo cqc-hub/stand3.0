@@ -54,7 +54,13 @@
 
         <view class="item-box f28">
           <view class="row flex-normal">
-            <view class="row-label color-888">就诊时间</view>
+            <view class="row-label color-888">
+              {{
+                $global.SYS_CODE === '1001056' && !isCheck
+                  ? '支付时间'
+                  : '就诊时间'
+              }}
+            </view>
             <view class="row-value g-break-word color-444">
               {{ item.visitDate }}
             </view>

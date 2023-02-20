@@ -216,7 +216,6 @@ export const usePayPage = () => {
   };
 
   const getUnPayList = async () => {
-
     if (unPayList.value.length) {
       return;
     }
@@ -253,6 +252,8 @@ export const usePayPage = () => {
           cardNumber: result.cardNumber,
           patientName: result.patientName,
         };
+      } else {
+        pageProps.value.deParams = undefined;
       }
     } else {
       const { result: r } = await api
@@ -269,6 +270,7 @@ export const usePayPage = () => {
         });
 
       result = r;
+      pageProps.value.deParams = undefined;
     }
 
     const resList = (result && result.clinicalSettlementResultList) || [];
@@ -332,6 +334,8 @@ export const usePayPage = () => {
         cardNumber: result.cardNumber,
         patientName: result.patientName,
       };
+    } else {
+      pageProps.value.deParams = undefined;
     }
   };
 
@@ -383,7 +387,7 @@ export const usePayPage = () => {
       diseaseTypeName,
       clinicTypeName,
       costTypeCode,
-      recipeNo
+      recipeNo,
     } = item;
 
     const pageData = {
@@ -412,7 +416,7 @@ export const usePayPage = () => {
 
       params: pageProps.value.params,
       costTypeCode,
-      recipeNo
+      recipeNo,
     };
 
     // if (payState === '1') {
