@@ -154,6 +154,7 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId: item.orderId,
+        preWz: item.orderStatus === '10' && '1',
       }),
     });
   };

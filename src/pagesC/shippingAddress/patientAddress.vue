@@ -1,5 +1,10 @@
 <template>
-  <view class="page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page"
+  >
     <block v-if="addressList.length > 0">
       <scroll-view class="address-box-container" scroll-y>
         <view class="address-box">
@@ -74,7 +79,7 @@
   const getQueryExpressAddress = async () => {
     pageLoading.value = false;
     const { result } = await api.queryExpressAddressByPatient({
-      herenId: gStores.globalStore.herenId
+      herenId: gStores.globalStore.herenId,
     });
     addressList.value = result;
     pageLoading.value = true;
@@ -85,9 +90,9 @@
     messageStore.showMessage('添加成功', 1000, {
       closeCallBack: () => {
         uni.navigateBack({
-          delta: 1
+          delta: 1,
         });
-      }
+      },
     });
   };
   const clickSelect = (e, item) => {
@@ -115,8 +120,8 @@
     uni.navigateTo({
       url: joinQuery('/pagesC/shippingAddress/addAddress', {
         item: JSON.stringify(clickItem.value),
-        pageType: 'editPatient'
-      })
+        pageType: 'editPatient',
+      }),
     });
   };
 </script>

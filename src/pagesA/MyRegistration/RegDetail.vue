@@ -286,22 +286,14 @@
       @confirmButton="cancelOrderDialogConfirm"
     />
 
-    <xy-dialog
-      title=""
-      content="是否立即去给医生留言，方便医生提前了解您的病情？"
-      :show="isShowConsultationDialog"
-      @cancelButton="isShowConsultationDialog = false"
-      @confirmButton="goPreConsultation"
-    />
-
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
-      @pay-success="payAfter"
       @pay-click="getPayInfo"
       autoInOne
       ref="refPay"
     >
+      <!-- auto -->
       <!-- <g-flag typeFg="32" isShowFgTip /> -->
     </g-pay>
     <g-message />
@@ -474,7 +466,7 @@
 
   const isShowConsultationDialog = ref(false);
   // 预问诊
-  const showConsultationDialog = () => {
+  const showConsultationDialog = async () => {
     if (!isFirstIn.value) return;
 
     if (
@@ -482,7 +474,15 @@
       pageProps.value.preWz === '1' &&
       orderConfig.value.isOpenPreConsultation === '1'
     ) {
-      isShowConsultationDialog.value = true;
+      dialogContent.value = '是否立即去给医生留言，方便医生提前了解您的病情?';
+      isCancelOrderDialogShow.value = true;
+
+      await new Promise((confirm) => {
+        cancelOrderDialogConfirm = confirm;
+      });
+
+      isShowConsultationDialog.value = false;
+      goPreConsultation();
     }
   };
 
@@ -639,7 +639,7 @@
     });
     isFirstIn.value = true;
 
-    await wait(2000);
+    await wait(4000);
     uni.hideLoading();
 
     init();
@@ -687,6 +687,14 @@
     if (orderConfig.value.isOrderPay !== '1') {
       cancelOrder();
     } else {
+      isCancelOrderDialogShow.value = true;
+      dialogContent.value = '确认退号?';
+
+      await new Promise((confirm) => {
+        cancelOrderDialogConfirm = confirm;
+      });
+      isCancelOrderDialogShow.value = false;
+
       const args = {
         orderId: pageProps.value.orderId,
         source: gStores.globalStore.browser.source,
@@ -733,7 +741,6 @@
           para: JSON.stringify(args),
         }),
       });
-
     }
   };
 
@@ -775,9 +782,6 @@
 
   onLoad((p) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-  });
-
-  onShow(() => {
     init();
   });
 </script>

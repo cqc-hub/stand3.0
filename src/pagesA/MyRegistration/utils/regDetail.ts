@@ -129,6 +129,14 @@ export const orderStatusMap = {
     title: '已挂号',
     cardColr: 'var(--hr-brand-color-6)',
   },
+  '60': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '支付已过期',
+    cardColr: 'var(--hr-brand-color-6)',
+  },
   // 已就诊
   '70': {
     headerClass: 'header-green',

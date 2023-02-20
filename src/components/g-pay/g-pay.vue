@@ -76,7 +76,11 @@
     const { key } = item;
 
     if (key === 'online') {
-      const res = await payMoneyOnline(props.autoPayArg);
+      const requestData = {
+        ...props.autoPayArg,
+      };
+
+      const res = await payMoneyOnline(requestData);
       await toPayPull(res);
       emits('pay-success', res);
     }
