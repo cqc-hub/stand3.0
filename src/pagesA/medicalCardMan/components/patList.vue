@@ -1,7 +1,7 @@
 <template>
   <view class="list-container">
     <view v-for="pat in list" :key="pat.patientId">
-      <list-Item
+      <List-Item
         :pat="pat"
         @card-click="cardClick"
         @profile-click="profileClick"
@@ -11,7 +11,7 @@
             <slot name="footer" :pat="pat" />
           </view>
         </template>
-      </list-Item>
+      </List-Item>
     </view>
   </view>
 </template>
@@ -20,11 +20,11 @@
   import { defineComponent, PropType, ref } from 'vue';
   import { IPat } from '@/stores/type';
 
-  import listItem from './patListItem.vue';
+  import ListItem from './PatListItem.vue';
 
   export default defineComponent({
     components: {
-      listItem,
+      ListItem,
     },
 
     options: {

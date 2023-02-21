@@ -28,7 +28,7 @@
     </view>
 
     <view v-if="gStore.userStore.patList.length">
-      <pat-List
+      <Pat-List
         :list="gStore.userStore.patList"
         @profile-click="profileClick"
         @card-click="cardClick"
@@ -53,7 +53,7 @@
           </block>
           <!-- #endif -->
         </template>
-      </pat-List>
+      </Pat-List>
     </view>
 
     <view class="empty-list" v-else>
@@ -71,7 +71,7 @@ import { getHealthCardCode } from './utils/index';
 
 import globalGl from '@/config/global';
 
-import patList from './components/patList.vue';
+import PatList from './components/PatList.vue';
 
 const gStore = new GStores();
 const isShowHealthCardMode = ref(false);

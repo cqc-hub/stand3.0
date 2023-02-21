@@ -119,7 +119,7 @@
       "isStartComeTest": true,
       "isOpenOcr": false,
       "isOpenHealthCard": {
-        "healthCardText": "陕西省卫生健康委员会",
+        "healthCardText": "",
         "hospitalId": "37164"
       }
     },

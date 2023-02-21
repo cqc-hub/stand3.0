@@ -3,7 +3,7 @@
     <view class="pat-profile" @click="profileClick">
       <view class="pat-label">
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
-        <text class="pat-name bold">{{pat.patientNameEncry }}</text>
+        <text class="pat-name bold">{{ pat.patientNameEncry }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
         <g-tag v-if="pat.defaultFlag === '1'" type="yellow" text="默认" />
       </view>
@@ -18,12 +18,21 @@
     >
       <view class="health-card-container">
         <view class="health-card-title">
-          <view class="card-top-org">
+          <view
+            v-if="
+              $global.systemInfo.isOpenHealthCard &&
+              $global.systemInfo.isOpenHealthCard.healthCardText
+            "
+            class="card-top-org"
+          >
             {{ $global.systemInfo.isOpenHealthCard?.healthCardText }}
           </view>
 
           <view class="card-top-icon">
-            <image :src="$global.BASE_IMG + 'health-card-icon.png'" mode="widthFix" />
+            <image
+              :src="$global.BASE_IMG + 'health-card-icon.png'"
+              mode="widthFix"
+            />
             <text>电子健康卡</text>
           </view>
         </view>
