@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001056",
+  "sysCode": "1001054",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -65,6 +65,19 @@
       "alipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "name": "乐清市人民医院",
+      "isSearchInHos": true,
+      "isOpenOcr": false,
+      "medicalMHelp": {
+        "alipay": "1"
+      }
+    },
+
+    "1001046": {
+      "wxAppid": "wxb00075173e764492",
+      "alipayAppid": "2021003113623396",
+      "h5Appid": "wx1be541208ab16799",
+      "name": "绍兴市人民医院",
+      "isStartComeTest": true,
       "isSearchInHos": true,
       "isOpenOcr": false
     },

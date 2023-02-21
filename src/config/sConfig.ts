@@ -15,7 +15,6 @@ const scJson: {
   },
 
   1001054: {
-    // isDrugDelivery: '1',
     isOpenButtom: '1',
     isHideHomeSearch: '1',
   },
@@ -25,6 +24,8 @@ const scJson: {
   },
 };
 
-export const getSConfig = (sysCode: string) => {
+const getSConfig = (sysCode: string) => {
   return <ISConfig>(scJson[sysCode] || {});
 };
+
+export { scJson, getSConfig };

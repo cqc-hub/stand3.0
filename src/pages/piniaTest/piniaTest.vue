@@ -130,9 +130,26 @@
     isLocal: '1',
   };
 
+  // 健康档案
+  const healthRecord: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/healthRecord/healthRecord',
+    text: '健康档案',
+    extraData: {
+      sysCode: globalGl.SYS_CODE,
+    },
+    addition: {
+      herenId: 'herenId',
+      token: 'token',
+      patientId: 'a',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(queryNumber);
+      useTBanner(healthRecord);
     }, 1000);
   });
 </script>
