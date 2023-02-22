@@ -1,14 +1,18 @@
 <template>
-  <!-- 顶部样式1 其他样式2 -->
+  <!-- 顶部样式1 其他样式2  diff 里面区分老人版本3-->
   <view :class="options.type == 2 ? 'normal' : 'diff'">
     <uni-grid
       :showBorder="false"
       :square="false"
-      :column="type == 1 ? options.list.length : 4"
+      :column="type == 1 ? options.list.length : type == 3 ? 2 : 4"
     >
       <uni-grid-item v-for="(item, i) in options.list" :key="i">
-        <g-login @handler-login="updateIdFun(item)" @handler-next="gridClick(item)" :disabled="item.loginInterception === '0'" >
-          <view class="grid-item-box" @tap="gridClick(item)">
+        <g-login
+          @handler-login="updateIdFun(item)"
+          @handler-next="gridClick(item)"
+          :disabled="item.loginInterception === '0'"
+        >
+          <view class="grid-item-box" v-if="options.type != 3" @tap="gridClick(item)">
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->
             <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
@@ -35,6 +39,16 @@
               item.detail
             }}</text>
           </view>
+          <view class="grid-item-box3" v-if="options.type == 3" @tap="gridClick(item)">
+            <!-- 绿色能量角标 -->
+            <!-- v-if="item.enabled == 0 "  -->
+            <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
+            <view class="warn-label" v-if="item.gridLabel == '3'">维护中</view>
+            <view class="gree-label" v-if="item.gridLabel == '1'">绿色能量</view>
+            <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
+            <text :class="`icon-font grid-resize ${item.iconfont}`" />
+            <view class="grid-label text-ellipsis">{{ item.title }}</view>
+          </view>
         </g-login>
       </uni-grid-item>
     </uni-grid>
@@ -43,7 +57,7 @@
 
 <script lang="ts" setup>
 import { withDefaults, computed } from "vue";
-import { useRouterStore } from '@/stores';
+import { useRouterStore } from "@/stores";
 
 /**
  * g-grid 网格布局
@@ -57,7 +71,7 @@ const emit = defineEmits(["gridClick"]);
 
 interface IGridProps {
   list: IRoute[];
-  type?: 1 | 2; //首页图标样式1 默认2
+  type?: 1 | 2 | 3; //首页图标样式1 默认2
 }
 
 const props = withDefaults(defineProps<IGridProps>(), {
@@ -97,12 +111,12 @@ const gridClick = (item) => {
   emit("gridClick", item);
 };
 
-const updateIdFun = (item)=>{
+const updateIdFun = (item) => {
   const routerStore = useRouterStore();
-  console.log(3333,item);
+  console.log(3333, item);
   routerStore.update_P();
   routerStore.updateId(item.id);
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -199,6 +213,63 @@ const updateIdFun = (item)=>{
       z-index: 1;
       right: 29rpx;
       top: 4rpx;
+      background-color: var(--h-color-white);
+      box-sizing: border-box;
+    }
+  }
+  .grid-item-box3 {
+    flex: 1;
+    /* #ifndef APP-NVUE */
+    display: flex;
+    /* #endif */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f2f6ff;
+    border: 2rpx solid #dfe9ff;
+    padding: 50rpx 0 38rpx;
+    border-radius: 24px;
+    &:nth-child(odd) {
+      margin: 0 24rpx 24rpx 0;
+    }
+
+    .grid-resize {
+      width: 80upx;
+      height: 80upx;
+      position: relative;
+    }
+
+    .grid-label {
+      color: var(--hr-neutral-color-9);
+      margin-top: 18upx;
+      font-size: 48rpx;
+      font-weight: var(--h-weight-2);
+    }
+
+    .gree-label {
+      position: absolute;
+      background: #ffffff;
+      border: 1rpx solid var(--hr-success-color-6);
+      border-radius: 17rpx;
+      color: var(--hr-success-color-6);
+      padding: 2rpx 12rpx;
+      z-index: 1;
+      right: 34rpx;
+      top: 26rpx;
+      background-color: var(--h-color-white);
+      box-sizing: border-box;
+    }
+
+    .warn-label {
+      position: absolute;
+      background: #ffffff;
+      border: 1rpx solid var(--hr-error-color-6);
+      border-radius: 17rpx;
+      color: var(--hr-error-color-6);
+      padding: 2rpx 12rpx;
+      z-index: 1;
+      top: 15px;
+      right: 19px;
       background-color: var(--h-color-white);
       box-sizing: border-box;
     }

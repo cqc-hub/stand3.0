@@ -28,7 +28,7 @@
     </view>
 
     <view v-if="gStore.userStore.patList.length">
-      <Pat-List
+      <pat-List
         :list="gStore.userStore.patList"
         @profile-click="profileClick"
         @card-click="cardClick"
@@ -53,7 +53,7 @@
           </block>
           <!-- #endif -->
         </template>
-      </Pat-List>
+      </pat-List>
     </view>
 
     <view class="empty-list" v-else>

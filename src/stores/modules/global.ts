@@ -160,6 +160,9 @@ const globalStore = defineStore('global', {
     setHerenId(id: string) {
       this.herenId = id;
     },
+    setModeOld(modeOld: boolean) {
+      this.modeOld = modeOld;
+    },
   },
 });
 

@@ -9,7 +9,7 @@ import { useCommonTo } from '@/common/checkJump';
 
 interface IGridProps {
 	list: IRoute[];
-	type?: 1 | 2; //首页图标样式1 默认2
+	type?: 1 | 2 | 3 ; //首页图标样式1 默认2 老人版本3
 }
 const props = defineProps<IGridProps>();
 </script>

@@ -5,6 +5,8 @@ interface ISConfig {
   isOpenButtom?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
+  //是否开启助老版
+  isOpenHelpOld?:'1'
 }
 
 const scJson: {
@@ -22,6 +24,7 @@ const scJson: {
 
   1001033: {
     isDrugDelivery: '1',
+    isOpenHelpOld:'1'
   },
 };
 
