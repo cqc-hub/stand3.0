@@ -238,27 +238,8 @@
             </view>
           </view>
         </view>
-      </ls-skeleton>
-      <g-popup title="长辈模式" ref="refOldDialog">
-        <view class="g-page modeOld">
-          <view class="g-container">
-            <view class="old-bg">
-              <img :src="$global.BASE_IMG + 'img_old@3x.png'" alt="" />
-            </view>
-            <view class="old-title" v-if="!gStores.globalStore.modeOld">
-              <text>欢迎使用长辈模式</text>
-              <view>预约挂号、门诊缴费、报告查询 等主要功能更加简单好用</view>
-            </view>
-            <view class="old-title" v-if="gStores.globalStore.modeOld">
-              <text>长辈模式已开启</text>
-              <view>关闭后，字号放大和 功能简化效果将会解除</view>
-            </view>
-            <button @tap="switchModeOld" class="btn g-border btn-primary dialog-btn">
-              {{ gStores.globalStore.modeOld ? "关闭" : "开启" }}长辈模式
-            </button>
-          </view>
-        </view>
-      </g-popup>
+      </ls-skeleton> 
+      <homePopup ref="refOldDialog" />
     </scroll-view>
     <g-message />
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
@@ -281,7 +262,6 @@ import {
   aliLogin,
   wxLogin,
   ServerStaticData,
-  PatientUtils,
   GStores,
   routerJump,
   LoginUtils,
@@ -290,7 +270,7 @@ import {
 
 import global from '@/config/global';
 import api from '@/service/api';
-import { getLocalStorage, setLocalStorage } from '@/common';
+import { getLocalStorage } from '@/common';
 
 import homeBanner from './componetns/homeBanner.vue';
 import homeMenu from './componetns/homeMenu.vue';
@@ -298,6 +278,7 @@ import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 import homeTabbar from './componetns/homeTabbar.vue';
 import homeGrid from './componetns/homeGrid.vue';
 import homeNav from './componetns/homeNav.vue';
+import homePopup from './componetns/homePopup.vue';
 
 const props = defineProps<{
   code?: string;
@@ -543,13 +524,10 @@ const authorization = () => {
 };
 // #endif
 const openModeOld = ()=>{
-  refOldDialog.value.show();
-  // gStores.globalStore.setOpenId(openId);
-}
-const switchModeOld=()=>{
-  gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
-  refOldDialog.value.hide();
-}
+  if (refOldDialog.value) {
+    refOldDialog.value.show();
+  }
+} 
 </script>
 
 <style lang="scss" scoped>
@@ -791,41 +769,7 @@ const switchModeOld=()=>{
 .uni-noticebar {
   margin: 0;
   width: 100%;
-}
-.modeOld {
-  margin: 0 auto;
-  .old-bg {
-    text-align: center;
-    image {
-      margin-top: 80rpx;
-      width: 304rpx;
-      height: 610rpx;
-    }
-  }
-  .old-title {
-    margin-top: 56rpx;
-    text-align: center;
-    text {
-      font-size: 36rpx;
-      color: #111;
-      line-height: 50rpx;
-      font-weight: bold;
-      margin-bottom: 16rpx;
-      display: inline-block;
-    }
-    view {
-      color: #444;
-      width: 448rpx;
-      font-size: 32rpx;
-      line-height: 48rpx;
-      margin: 0 auto;
-    }
-  }
-  .btn {
-    width: 90%;
-    margin-top: 58px;
-  }
-}
+} 
 .top-menu-old {
   margin-top: 32rpx;
 }
