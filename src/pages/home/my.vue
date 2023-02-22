@@ -1,6 +1,7 @@
 <template>
-  <view class="g-page">
-    <!-- <view @click="ttt" class="iconfont icon-camera">&#xe6be;</view> -->
+  <view class="g-page" :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"> 
     <scroll-view class="g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
@@ -9,7 +10,7 @@
         <view class="top-bg" />
         <personRecord />
 
-        <view class="my-menu">
+        <view class="my-menu" v-if="!gStores.globalStore.modeOld">
           <view v-if="menu1List && menu1List.length" class="list">
             <view class="title">我的订单</view>
             <homeGrid :list="menu1List"></homeGrid>
@@ -22,6 +23,13 @@
             <view class="title">我的工具</view>
             <homeGrid :list="menu3List"></homeGrid>
           </view>
+        </view>
+        <view class="my-menu" v-if="gStores.globalStore.modeOld">
+          <!-- <view v-if="menu1List && menu1List.length" class="list">
+            <view class="title">我的订单</view> -->
+            <homeGrid :list="menu1List" :type="3" ></homeGrid>
+          <!-- </view> -->
+     
         </view>
       </ls-skeleton>
 

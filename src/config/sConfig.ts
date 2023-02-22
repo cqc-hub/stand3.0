@@ -20,6 +20,9 @@ interface ISConfig {
       };
     };
   };
+
+  //是否开启助老版
+  isOpenHelpOld?: '1';
 }
 
 const scJson: {
@@ -44,6 +47,7 @@ const scJson: {
 
   1001033: {
     isDrugDelivery: '1',
+    isOpenHelpOld: '1',
   },
 };
 
