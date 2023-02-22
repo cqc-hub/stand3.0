@@ -229,6 +229,7 @@
     isWaitPayListHidePrice,
     hosId,
     selHosRef,
+    hookInit,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -263,6 +264,8 @@
     if (!pageProps.value.params) {
       await pageHook();
     }
+
+    await hookInit();
   };
 
   setTimeout(() => {

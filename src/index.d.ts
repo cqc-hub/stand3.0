@@ -43,15 +43,6 @@ interface ISystemGlobalItem {
 
   // 中医样式
   systemStyle?: '1';
-
-  // 医保?
-  medicalMHelp?: {
-    alipay?: {
-      type: '1' | '2'; // 1.国标医保  2.医保插件
-      orgId?: string; // 医保插件必给
-    };
-    // wx: '1' | '2';
-  };
 }
 
 interface ISystemGlobalConfig {

@@ -142,6 +142,7 @@
         :typeFg="pageConfig.confirmPayFg!"
         isShowFgTip
         isHideTitle
+        aaa
       />
     </Order-Reg-Confirm>
 
@@ -205,6 +206,7 @@
   import { wait } from '@/utils';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   import PayDetailCostList from './components/PayDetailCostList.vue';
   import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
@@ -227,6 +229,8 @@
     confirmFgTitle,
     regDialogConfirm,
     getPay,
+    hookInit,
+    changeRefPayList,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -341,10 +345,74 @@
       } else {
         toPay();
       }
+    } else if (item.key === 'medicare') {
+      const {
+        sConfig: { medicalMHelp },
+      } = globalGl;
+
+      if (medicalMHelp) {
+        const { alipay } = medicalMHelp;
+
+        if (alipay?.medicalPlugin) {
+          payMoneyMedicalPlugin();
+        }
+      }
+    }
+  };
+
+  const payMoneyMedicalPlugin = () => {
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+    const { hosId, cardNumber } = props.value;
+
+    if (medicalMHelp) {
+      const { alipay } = medicalMHelp;
+
+      if (alipay?.medicalPlugin) {
+        const { medicalPlugin } = alipay;
+        // #ifdef MP-ALIPAY
+        // 支付宝 插件医保
+        const authPayPlugin = requirePlugin('auth-pay-plugin');
+        // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
+        const orgId = medicalPlugin.orgId[hosId];
+        const cardType = medicalPlugin.cardType;
+        const medOrgOrd = selList.value.map((o) => o.serialNo).join(';');
+        const cardNo = cardNumber || gStores.userStore.patChoose.cardNumber;
+
+        const params = {
+          orgId,
+          cardType,
+          cardNo,
+          medOrgOrd,
+        };
+
+        my.getAuthCode({
+          scopes: ['auth_user', 'nhsamp'],
+          success: (res) => {
+            const { authCode } = res;
+            authPayPlugin.toAuthAndPay({
+              // 授权获取的authCode
+              authCode,
+              // 请求接口所需参数
+              params,
+            });
+          },
+        });
+
+        // #endif
+      }
     }
   };
 
   const handlerPay = () => {
+    const { costTypeCode } = props.value;
+    if (costTypeCode !== '1') {
+      changeRefPayList(1);
+    } else {
+      changeRefPayList(0);
+    }
+
     if (pageConfig.value.confirmPayFg) {
       regDialogConfirm.value.show();
     } else {
@@ -441,6 +509,13 @@
     await getSysConfig();
     await getData();
     isComplete.value = true;
+    await hookInit({
+      payCancelAuth: () => {
+        uni.reLaunch({
+          url: joinQueryForUrl(`/pagesA/clinicPay/payDetail`, props.value),
+        });
+      },
+    });
   };
 
   onLoad(async (opt) => {

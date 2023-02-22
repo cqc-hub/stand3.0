@@ -1,6 +1,7 @@
 /// <reference path="./src/index.d.ts" />
 
 import globalGl from './src/config/global';
+import { getSConfig } from './src/config/sConfig';
 
 const fs = require('fs');
 
@@ -10,6 +11,7 @@ const sysInfo: ISystemGlobalConfig = JSON.parse(
 
 const sysCode = sysInfo.sysCode;
 const sysConfig = sysInfo.sysConfig[sysCode];
+const sConfig = getSConfig(sysCode);
 
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
 let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
@@ -24,8 +26,9 @@ const {
   name: sysName,
   isOpenHealthCard,
   isOpenOcr,
-  medicalMHelp,
 } = sysConfig;
+
+const { medicalMHelp } = sConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
@@ -52,13 +55,12 @@ if (medicalMHelp) {
   const { alipay } = medicalMHelp;
 
   if (alipay) {
-    const { type } = alipay;
+    const { medicalPlugin } = alipay;
 
-    if (type === '2') {
+    if (medicalPlugin) {
       // https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt
       aliPlugin['auth-pay-plugin'] = {
         version: '*',
-        // 正式环境插件ID：2021003147699046
         provider:
           globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
       };
