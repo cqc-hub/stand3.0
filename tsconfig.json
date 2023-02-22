@@ -1,46 +1,48 @@
 {
-	"compilerOptions": {
-		//文件路径在解析时 基本的url
-		"baseUrl": "./",
-		//路径解析 类似webpack的alias
-		"paths": {
-			"@/*": ["./src/*"]
-		},
-		//目标代码(ts->js(es5/6/7))
-		"target": "esnext",
-		"useDefineForClassFields": true,
-		//目标代码需要使用的模块化方案
-		"module": "esnext",
-		"moduleResolution": "node",
-		//严格模式检测
-		"strict": true,
-		//对jsx进行怎么样的处理 preserve不处理
-		"jsx": "preserve",
-		//要不要生成映射文件(ts-js)
-		"sourceMap": true,
-		"resolveJsonModule": true,
-		//es module 和 commonjs 能不能混合使用
-		"esModuleInterop": true,
-		//可以指定在项目中使用哪里库的类型
-		"lib": ["esnext", "dom"],
-		//指定具体要解析使用的类型
-		"types": ["@dcloudio/types", "node"],
-		"suppressImplicitAnyIndexErrors": true,
-		//控制当源文件中存在隐式的any的时候是否报错
-		"noImplicitAny": false,
-		//跳过一些库的类型检测
-		"skipLibCheck": true,
-		"experimentalDecorators": true,
-		"typeRoots": ["./types", "./node_modules/vue/types"]
-	},
-	//哪些代码需要解析
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.d.ts",
-		"src/**/*.tsx",
-		"src/**/*.vue",
-		"src/env.d.ts"
-	],
-	//排除
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    //文件路径在解析时 基本的url
+    "baseUrl": "./",
+    //路径解析 类似webpack的alias
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    //目标代码(ts->js(es5/6/7))
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    //目标代码需要使用的模块化方案
+    // "module": "esnext",
+    "module": "commonjs",
+
+    "moduleResolution": "node",
+    //严格模式检测
+    "strict": true,
+    //对jsx进行怎么样的处理 preserve不处理
+    "jsx": "preserve",
+    //要不要生成映射文件(ts-js)
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    //es module 和 commonjs 能不能混合使用
+    "esModuleInterop": true,
+    //可以指定在项目中使用哪里库的类型
+    "lib": ["esnext", "dom"],
+    //指定具体要解析使用的类型
+    "types": ["@dcloudio/types", "node"],
+    "suppressImplicitAnyIndexErrors": true,
+    //控制当源文件中存在隐式的any的时候是否报错
+    "noImplicitAny": false,
+    //跳过一些库的类型检测
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["./types", "./node_modules/vue/types"]
+  },
+  //哪些代码需要解析
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/env.d.ts"
+  ],
+  //排除
+  "exclude": ["node_modules"]
 }

@@ -1,5 +1,7 @@
 /// <reference path="./src/index.d.ts" />
 
+import globalGl from './src/config/global';
+
 const fs = require('fs');
 
 const sysInfo: ISystemGlobalConfig = JSON.parse(
@@ -9,21 +11,20 @@ const sysInfo: ISystemGlobalConfig = JSON.parse(
 const sysCode = sysInfo.sysCode;
 const sysConfig = sysInfo.sysConfig[sysCode];
 
-// manifest.json 路径
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
-// 读取文件数据
 let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
 // 移除注释
 manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
 
-let manifestFileDataObj = JSON.parse(manifestFileData);
-sysConfig.isOpenHealthCard;
+const manifestFileDataObj = JSON.parse(manifestFileData);
+
 const {
   wxAppid,
   alipayAppid,
   name: sysName,
   isOpenHealthCard,
   isOpenOcr,
+  medicalMHelp,
 } = sysConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
@@ -47,6 +48,24 @@ if (isOpenOcr) {
   };
 }
 
+if (medicalMHelp) {
+  const { alipay } = medicalMHelp;
+
+  if (alipay) {
+    const { type } = alipay;
+
+    if (type === '2') {
+      // https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt
+      aliPlugin['auth-pay-plugin'] = {
+        version: '*',
+        // 正式环境插件ID：2021003147699046
+        provider:
+          globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
+      };
+    }
+  }
+}
+
 wxConfig.appid = wxAppid;
 aliConfig.appid = alipayAppid;
 
@@ -56,9 +75,13 @@ manifestFileDataObj['mp-weixin'] = wxConfig;
 manifestFileDataObj['mp-alipay'] = aliConfig;
 manifestFileDataObj['name'] = sysName;
 
-fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj, null, 2), {
-  encoding: 'utf8',
-});
+fs.writeFileSync(
+  manifestFileUrl,
+  JSON.stringify(manifestFileDataObj, null, 2),
+  {
+    encoding: 'utf8',
+  }
+);
 
 // -----------------------------------------------s
 
@@ -67,6 +90,4 @@ fs.writeFileSync(manifestFileUrl, JSON.stringify(manifestFileDataObj, null, 2), 
 
 // console.log(appVueData);
 // console.log('-------------');
-
-
-module.exports = {};
+export {};

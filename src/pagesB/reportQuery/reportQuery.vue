@@ -23,56 +23,54 @@
       v-if="tabs.length"
       :current="tabCurrent"
       @change="(e) => tabChange(e.detail.current, '')"
-      class="container"
+      class="container g-container"
     >
       <swiper-item v-for="tab in tabs" :key="tab.typeId">
-        <view class="container-scroll">
-          <scroll-list
-            :option="scrollOption"
-            @refresh="refresh"
-            @load="load"
-            ref="slist"
-          >
-            <template #default>
-              <view class="list-block">
-                <template
-                  v-for="(item, index) in pageList[tab.typeId]"
-                  :key="index"
+        <scroll-list
+          :option="scrollOption"
+          @refresh="refresh"
+          @load="load"
+          ref="slist"
+          class="container-scroll"
+        >
+          <template #default>
+            <view class="list-block">
+              <template
+                v-for="(item, index) in pageList[tab.typeId]"
+                :key="index"
+              >
+                <view class="date" :class="{ dateFirst: index == 0 }">
+                  <view class="iconfont date-icon">&#xe6c6;</view>
+                  <view class="date-number">{{ item.date }}</view>
+                  <text style="color: #e6e6e6">|</text>
+                  <view class="address">
+                    {{ item.reportHosNameResults[0].hosName }}
+                  </view>
+                </view>
+                <view
+                  class="advisoryItem"
+                  :class="{ advisoryItemFirst: index == 0 }"
                 >
-                  <view class="date" :class="{ dateFirst: index == 0 }">
-                    <view class="iconfont date-icon">&#xe6c6;</view>
-                    <view class="date-number">{{ item.date }}</view>
-                    <text style="color: #e6e6e6">|</text>
-                    <view class="address">
-                      {{ item.reportHosNameResults[0].hosName }}
-                    </view>
-                  </view>
-                  <view
-                    class="advisoryItem"
-                    :class="{ advisoryItemFirst: index == 0 }"
+                  <template
+                    v-for="(data, i) in item.reportHosNameResults[0].reportList"
+                    :key="i"
                   >
-                    <template
-                      v-for="(data, i) in item.reportHosNameResults[0]
-                        .reportList"
-                      :key="i"
-                    >
-                      <view @tap="goDetail(data)">
-                        <advisoryItem :data="data" :type="tab.headerType" />
-                      </view>
-                    </template>
-                  </view>
-                </template>
-              </view>
-            </template>
+                    <view @tap="goDetail(data)">
+                      <advisoryItem :data="data" :type="tab.headerType" />
+                    </view>
+                  </template>
+                </view>
+              </template>
+            </view>
+          </template>
 
-            <template #empty>
-              <!-- v-if="!loading" -->
-              <view v-if="!loading" class="empty-box">
-                <g-empty :current="1" />
-              </view>
-            </template>
-          </scroll-list>
-        </view>
+          <template #empty>
+            <!-- v-if="!loading" -->
+            <view v-if="!loading" class="empty-box">
+              <g-empty :current="1" />
+            </view>
+          </template>
+        </scroll-list>
       </swiper-item>
     </swiper>
   </view>
@@ -98,7 +96,6 @@
       item.typeId = index;
       return item;
     });
-    console.log(tabs.value, 'tabs.value ', slist.value);
     if (tabs.value.length) {
       tabs.value.map(({ typeId }, i) => {
         pageList.value[typeId] = [];
@@ -116,6 +113,7 @@
 
   let listLenHis = 0;
   const load = async (pageInfo) => {
+    let listNowLen = 0;
     await wait(600);
     const currentTabValue = tabCurrent.value;
     const typeId = tabs.value[tabCurrent.value].typeId;
@@ -131,31 +129,29 @@
       pageSize: size,
       idCardEncry,
     };
-    let returnArg;
     loading.value = true;
-    const result = await api.getReportsReportList(params).finally(async () => {
-      loading.value = false;
-    });
+    const { result } = await api
+      .getReportsReportList(params)
+      .finally(async () => {
+        loading.value = false;
+      });
 
     const currentResult = JSON.parse(JSON.stringify(result));
-    if (result.result && result.result.length) {
+    if (result && result.length) {
       let array = JSON.parse(JSON.stringify(pageList.value[typeId]));
-      if (
-        array.length != 0 &&
-        result.result[0].date == array[array.length - 1].date
-      ) {
+      if (array.length && result[0].date == array[array.length - 1].date) {
         array[array.length - 1].reportHosNameResults[0].reportList = array[
           array.length - 1
         ].reportHosNameResults[0].reportList.concat(
-          result.result[0].reportHosNameResults[0].reportList
+          result[0].reportHosNameResults[0].reportList
         );
-        if (result.result.shift().length == 0) {
+        if (result.shift().length == 0) {
           pageList.value[typeId] = [...array];
         } else {
-          pageList.value[typeId] = [...array, ...result.result];
+          pageList.value[typeId] = [...array, ...result];
         }
       } else {
-        pageList.value[typeId] = [...pageList.value[typeId], ...result.result];
+        pageList.value[typeId] = [...pageList.value[typeId], ...result];
       }
     }
     let list: any[] = [];
@@ -167,46 +163,43 @@
         });
       });
     });
-    if (currentResult.result && currentResult.result.length > 0) {
+
+    if (currentResult && currentResult.length > 0) {
       const currentCount = ref(0);
-      currentResult.result.map((item1) => {
+      currentResult.map((item1) => {
         item1.reportHosNameResults.map((item2) => {
           currentCount.value += item2.reportList.length;
           totalList.value[typeId] += item2.reportList.length;
         });
       });
-      if (currentCount.value < size) {
-        returnArg = {
-          total: totalList.value[typeId],
-          list: list,
-        };
-      } else {
-        returnArg = {
-          total: 999999,
-          list: list,
-        };
-      }
-    } else {
-      returnArg = {
-        total: 999999,
-        list: list,
-      };
+
+      currentResult.map((o) => {
+        const { reportHosNameResults } = o;
+        if (reportHosNameResults && reportHosNameResults.length) {
+          reportHosNameResults.map((o1) => {
+            const { reportList } = o1;
+
+            if (reportList && reportList.length) {
+              reportList.map(() => {
+                listNowLen++;
+              });
+            }
+          });
+        }
+      });
     }
+
+    const returnArg = {
+      total: listNowLen < size ? 1 : listNowLen + 1,
+      list,
+    };
 
     if (listLenHis !== list.length) {
       listLenHis = list.length;
-      slist.value[currentTabValue].loadSuccess(returnArg);
-    } else {
-      slist.value[currentTabValue].loadSuccess({
-        total: listLenHis,
-        list,
-      });
-
-      return {
-        total: listLenHis,
-        list,
-      };
     }
+
+    slist.value[currentTabValue].loadSuccess(returnArg);
+
     return returnArg;
   };
   const loadScrollList = () => {
@@ -215,7 +208,6 @@
     }
   };
   const getCurrentLoadScrollInstance = () => {
-    console.log(' slist.valu', slist.value);
     if (tabs.value.length) {
       return slist.value[tabCurrent.value];
     }
@@ -325,7 +317,6 @@
     .container {
       flex: 1;
       background-color: #f6f6f6;
-      overflow: hidden;
       .container-scroll {
         height: 100%;
         .empty-box {
