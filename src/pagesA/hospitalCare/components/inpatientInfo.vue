@@ -57,13 +57,13 @@
             <view class="record" v-if="props.isQueryPreRecord == '1'">
               <view class="triangle-left"></view>
               <view class="records" @click="toPayRecord">
-                <text class="text">查看记录</text>
+                <text class="text text-no-wrap">查看记录</text>
                 <view class="iconfont right">&#xe66b;</view>
               </view>
             </view>
           </view>
 
-          <text class="money">{{ hosInfoResObj.prepaidCost }}元</text>
+          <text class="money text-no-wrap">{{ hosInfoResObj.prepaidCost }}元</text>
         </view>
         <view class="card-detail-item">
           <text class="name">已产生费用</text>
@@ -207,6 +207,7 @@
       color: #444;
       font-size: var(--hr-font-size-xs);
       display: flex;
+      flex-wrap: wrap;
 
       &.yard {
         margin-top: 24rpx;
@@ -259,6 +260,7 @@
       .name {
         color: #888;
         font-size: var(--hr-font-size-base);
+        white-space: nowrap;
       }
       .triangle-left {
         margin: auto 0;
@@ -272,14 +274,17 @@
         display: flex;
       }
       .records {
-        width: 152rpx;
-        height: 48rpx;
+        // width: 152rpx;
+        // height: 48rpx;
+        padding: 6rpx;
+        padding-right: 0;
         border-radius: 8rpx;
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: #e9f0ff;
         margin-right: 70rpx;
+
 
         .text {
           color: #296fff;

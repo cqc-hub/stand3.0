@@ -17,7 +17,7 @@
       class="health-card"
     >
       <view class="health-card-container">
-        <view class="health-card-title">
+        <view class="health-card-title keep-normal">
           <view
             v-if="
               $global.systemInfo.isOpenHealthCard &&
@@ -28,7 +28,7 @@
             {{ $global.systemInfo.isOpenHealthCard?.healthCardText }}
           </view>
 
-          <view class="card-top-icon">
+          <view class="card-top-icon ">
             <image
               :src="$global.BASE_IMG + 'health-card-icon.png'"
               mode="widthFix"
@@ -51,7 +51,7 @@
             />
           </view>
 
-          <view class="qx">中华人民共和国国家卫生健康委员会监制</view>
+          <view class="qx keep-normal">中华人民共和国国家卫生健康委员会监制</view>
         </view>
       </view>
     </view>

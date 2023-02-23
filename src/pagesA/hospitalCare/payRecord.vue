@@ -1,7 +1,10 @@
 <template>
   <!-- 日费用清单 -->
   <view
-    class="page"
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="page f32"
     v-if="
       payResList.hospitalPayResultList &&
       payResList.hospitalPayResultList.length > 0
@@ -20,7 +23,11 @@
           </view>
         </view>
         <view class="detail" v-for="(i, j) in item.hospitalPay" :key="j">
-          <view class="details g-border" v-for="(m, n) in i.costListResultList" :key="n">
+          <view
+            class="details g-border"
+            v-for="(m, n) in i.costListResultList"
+            :key="n"
+          >
             <view class="detail-item">
               <text>{{ i.hosName }}</text>
               <text class="g-nowrap">{{ m.paymentAmount }}元</text>

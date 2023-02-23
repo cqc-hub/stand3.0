@@ -227,7 +227,7 @@ defineExpose({
           }
           display: flex;
           .item-title {
-            width: 130rpx;
+            // width: 130rpx;
             height: 44rpx;
             color: #888888;
           }
