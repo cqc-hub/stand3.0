@@ -131,14 +131,6 @@
             "patient": true
           }
         },
-        {
-          "path": "MyRegistration/RegCommentRes",
-          "style": {
-            "navigationBarTitleText": "服务评价"
-          },
-          "extend": {
-          }
-        },
 
         {
           "path": "clinicPay/clinicPayDetail",
@@ -354,7 +346,7 @@
         {
           "path": "medicationAssistant/medicalHelpDetail",
           "style": {
-            "navigationBarTitleText": "门诊处方"
+            "navigationBarTitleText": "药品配送"
           }
         },
         {
@@ -431,6 +423,18 @@
           },
           "style": {
             "navigationBarTitleText": "院内账户"
+          }
+        },
+        {
+          "path": "convenienceService/convenienceService",
+          "style": {
+            "navigationBarTitleText": "便民服务"
+          }
+        },
+        {
+          "path": "convenienceService/confirmOrder",
+          "style": {
+            "navigationBarTitleText": "确认信息"
           }
         },
         {
@@ -520,7 +524,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "自助开单"
+            "navigationBarTitleText": "核酸开单"
           }
         }
       ]

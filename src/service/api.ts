@@ -251,7 +251,11 @@ const queryApi = {
       showMessage: false,
       hideLoading: false,
     }),
-
+  // 便民服务列表接口
+  getConvenientServiceList: (data) =>
+  service.post('/phs-query/billing/getConvenientServiceList', parm(data), {
+    hideLoading: false,
+  }),
   // 获取病案复印申请记录
   getCaseCopyList: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data), {
