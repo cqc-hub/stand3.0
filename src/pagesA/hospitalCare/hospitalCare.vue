@@ -1,5 +1,7 @@
 <template>
-  <view class="g-page">
+  <view class="g-page"   :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }">
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat @choosePat="choosePat" />
 
