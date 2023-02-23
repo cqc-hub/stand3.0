@@ -24,7 +24,7 @@
             <homeGrid :list="menu3List"></homeGrid>
           </view>
         </view>
-        <view class="my-menu" v-if="gStores.globalStore.modeOld">
+        <view class="my-menu old" v-if="gStores.globalStore.modeOld">
           <homeGrid :list="menu1List" :type="3"></homeGrid>
           <view class="isCloseOld flex-normal" @tap="openModeOld">
             <view class="iconfont icon-size">&#xe700;</view>
@@ -215,7 +215,10 @@ const ttt = () => {
     }
   }
 }
-
+.old{
+  background-color: #fff;
+  padding:32rpx;
+}
 .icon-camera {
   position: relative;
   font-size: 40px;
@@ -230,7 +233,7 @@ const ttt = () => {
   background: #ffffff;
   border: 2rpx solid #cccccc;
   border-radius: 50px;
-  margin: 80rpx auto;
+  margin: 40rpx auto;
   justify-content: center;
   font-size: 32rpx;
   .icon-size {

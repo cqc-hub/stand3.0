@@ -7,7 +7,10 @@
           'uni-numbox--disabled': inputValue <= min || disabled,
         }"
       >
-        &#xe6e5;
+      <text v-if="icon == 'circle'">
+        &#xe719;</text>
+        <text v-else>
+        &#xe6e5;</text>
       </text>
     </view>
     <input
@@ -24,7 +27,10 @@
         class="uni-numbox--text iconfont"
         :class="{ 'uni-numbox--disabled': inputValue >= max || disabled }"
       >
-        &#xe6e9;
+      <text v-if="icon == 'circle'">
+        &#xe718;</text>
+        <text v-else>
+          &#xe6e9;</text>
       </text>
     </view>
   </view>
@@ -39,6 +45,7 @@
  * @property {Number} max 最大值
  * @property {Number} step 每次点击改变的间隔大小
  * @property {String} background 背景色
+ * @property {String} icon 图标 可不传！默认方形，传circle为圆形
  * @property {String} color 字体颜色（前景色）
  * @property {Boolean} disabled = [true|false] 是否为禁用状态
  * @event {Function} change 输入框值改变时触发的事件，参数为输入框当前的 value
@@ -73,6 +80,9 @@ export default {
     background: {
       type: String,
       default: 'transparent',
+    },
+    icon: {
+      type: String,
     },
     color: {
       type: String,
