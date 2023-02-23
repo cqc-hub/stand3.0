@@ -221,6 +221,16 @@ export const usePayPage = () => {
 
     return Number((_subCount * 100).toFixed(2)) / 100;
   });
+  const isUnPayListSelRadio = computed(() => {
+    const fList: string[] = [];
+    unPayList.value.map(({ subIds }) => {
+      if (!fList.includes(subIds)) {
+        fList.push(subIds);
+      }
+    });
+
+    return fList.length === unPayList.value.length;
+  });
 
   const isShowSelectAll = computed(() => {
     if (unPayList.value.length > 1) {
@@ -377,17 +387,21 @@ export const usePayPage = () => {
     );
 
     if (idx === -1) {
-      const sels = [
-        ...new Set([...selUnPayList.value, item].map((o) => o.subIds)),
-      ];
-
-      if (sels.length < 2) {
-        selUnPayList.value.push(item);
+      if (isUnPayListSelRadio.value) {
+        selUnPayList.value = [item];
       } else {
-        gStores.messageStore.showMessage(
-          '您选择的门诊缴费订单不支持合并支付',
-          1500
-        );
+        const sels = [
+          ...new Set([...selUnPayList.value, item].map((o) => o.subIds)),
+        ];
+
+        if (sels.length < 2) {
+          selUnPayList.value.push(item);
+        } else {
+          gStores.messageStore.showMessage(
+            '您选择的门诊缴费订单不支持合并支付',
+            1500
+          );
+        }
       }
     } else {
       selUnPayList.value.splice(idx, 1);

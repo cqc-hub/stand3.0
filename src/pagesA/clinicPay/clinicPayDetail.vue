@@ -233,7 +233,7 @@
     hosId,
     selHosRef,
     hookInit,
-    wxPryMoneyMedicalDialog
+    wxPryMoneyMedicalDialog,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -271,23 +271,6 @@
 
     await hookInit();
   };
-
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    // const a = {
-    //   // branchHosp: '10',
-    //   // visitNo: '20221221000017',
-    //   cardNumber: '000001949',
-    //   // serialNo: '11d97a5a0dbf466d8942602e1fa848ad'
-    // };
-    // const a = {
-    //   cardNumber: '000001949',
-    //   patientName: '陈钦川',
-    // };
-    // const en = encryptForPage(a);
-    // console.log(en);
-    // console.log(decryptForPage(en));
-  }, 1000);
 
   onLoad(async (opt) => {
     const enter = uni.getEnterOptionsSync();
