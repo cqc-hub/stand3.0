@@ -1,5 +1,7 @@
 <template>
-  <view>
+  <view  :class="{
+            'system-mode-old': gStores.globalStore.modeOld,
+          }">
     <g-popup title="长辈模式" ref="refOldDialog">
       <view class="g-page modeOld">
         <view class="g-container">
@@ -42,11 +44,10 @@ export default defineComponent({
     const gStores = new GStores();
 
     const switchModeOld = () => {
-
       gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
       refOldDialog.value.hide();
 
-    //   ctx.emit("choose-pat", e);
+      //   ctx.emit("choose-pat", e);
     };
 
     const show = () => {
@@ -63,7 +64,7 @@ export default defineComponent({
     };
   },
 });
-</script> 
+</script>
 
 <style lang="scss" scoped>
 .modeOld {
@@ -97,7 +98,10 @@ export default defineComponent({
   }
   .btn {
     width: 90%;
-    margin-top: 58px;
+    margin-top: 38px;
+    // #ifdef MP-ALIPAY
+    margin: 50px auto;
+    // #endif
   }
 }
 </style>
