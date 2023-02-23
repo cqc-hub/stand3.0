@@ -34,7 +34,6 @@ const scJson: {
   [key: string]: ISConfig;
 } = {
   1001052: {
-    isOpenHelpOld: '1',
     isDrugDelivery: '1',
     medicalMHelp: {
       alipay: {

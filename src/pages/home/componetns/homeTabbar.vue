@@ -139,8 +139,8 @@
         }
 
         image {
-          width: 48rpx;
-          height: 48rpx;
+          width: var(--hr-font-size-xxl);
+          height: var(--hr-font-size-xxl);
         }
       }
     }
