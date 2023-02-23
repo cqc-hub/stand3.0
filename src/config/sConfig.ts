@@ -19,6 +19,11 @@ interface ISConfig {
         cardType: string;
       };
     };
+
+    wx?: {
+      // 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序)
+      medicalPlugin?: '1';
+    };
   };
 
   //是否开启助老版
@@ -48,6 +53,11 @@ const scJson: {
   1001033: {
     isDrugDelivery: '1',
     isOpenHelpOld: '1',
+    medicalMHelp: {
+      wx: {
+        medicalPlugin: '1',
+      },
+    },
   },
 };
 

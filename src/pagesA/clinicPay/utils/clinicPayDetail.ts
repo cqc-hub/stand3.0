@@ -83,6 +83,7 @@ export type TPayDetailProp = {
   patientName?: string;
   costTypeCode?: string;
   params?: string; //扫码的加密参数
+  traceNo?: string;
 };
 
 export type TCostList = {
@@ -133,6 +134,33 @@ export type TPayConfirmPageProp = {
   mzParams?: string;
 };
 
+// 是否医保插件模式
+export const getIsMedicalModePlugin = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  let isMedicalPay = false;
+
+  if (medicalMHelp) {
+    const { alipay, wx } = medicalMHelp;
+
+    // #ifdef MP-ALIPAY
+    if (alipay?.medicalPlugin) {
+      isMedicalPay = true;
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx?.medicalPlugin === '1') {
+      isMedicalPay = true;
+    }
+    // #endif
+  }
+
+  return isMedicalPay;
+};
+
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const regDialogConfirm = ref<any>('');
@@ -161,6 +189,7 @@ export const usePayPage = () => {
       key: 'online',
     },
   ]);
+  const wxPryMoneyMedicalDialog = ref('' as any);
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
@@ -471,29 +500,21 @@ export const usePayPage = () => {
   };
 
   const getPay = async () => {
-    const {
-      sConfig: { medicalMHelp },
-    } = globalGl;
+    const isMedicalModePlugin = getIsMedicalModePlugin();
 
-    if (medicalMHelp) {
-      const { alipay } = medicalMHelp;
+    if (isMedicalModePlugin) {
+      if (selUnPayList.value.length) {
+        const paySelfItem = selUnPayList.value.find(
+          (o) => o.costTypeCode === '1'
+        );
 
-      if (alipay?.medicalPlugin) {
-        // #ifdef MP-ALIPAY
-        // 列表页面才有(逻辑有问题没有分离, 不改了)
-        if (selUnPayList.value.length) {
-          const paySelfItem = selUnPayList.value.find(
-            (o) => o.costTypeCode === '1'
-          );
-
-          if (paySelfItem) {
-            changeRefPayList(0);
-          } else {
-            // 医保
-            changeRefPayList(1);
-          }
+        if (paySelfItem) {
+          changeRefPayList(0);
         }
-        // #endif
+        // 医保
+        else {
+          changeRefPayList(1);
+        }
       }
     }
     await wait(200);
@@ -557,65 +578,70 @@ export const usePayPage = () => {
         toPay();
       }
     } else if (item.key === 'medicare') {
-      const {
-        sConfig: { medicalMHelp },
-      } = globalGl;
+      const isMedicalModePlugin = getIsMedicalModePlugin();
 
-      if (medicalMHelp) {
-        const { alipay } = medicalMHelp;
+      if (isMedicalModePlugin) {
+        // #ifdef MP-ALIPAY
+        payMoneyMedicalPlugin();
+        // #endif
 
-        if (alipay?.medicalPlugin) {
-          payMoneyMedicalPlugin();
-        }
+        // #ifdef  MP-WEIXIN
+        wxPayMoneyMedicalPlugin();
+        // #endif
       }
     }
   };
 
+  // 支付宝 插件医保
   const payMoneyMedicalPlugin = () => {
+    const isMedicalModePlugin = getIsMedicalModePlugin();
+
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
 
-    if (medicalMHelp) {
-      const { alipay } = medicalMHelp;
+    if (isMedicalModePlugin) {
+      const { alipay } = medicalMHelp!;
 
-      if (alipay?.medicalPlugin) {
-        const { medicalPlugin } = alipay;
-        // #ifdef MP-ALIPAY
-        // 支付宝 插件医保
-        const authPayPlugin = requirePlugin('auth-pay-plugin');
-        // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
-        const hosId = selUnPayList.value[0].hosId;
-        const orgId = medicalPlugin.orgId[hosId];
-        const cardType = medicalPlugin.cardType;
-        const medOrgOrd = selUnPayList.value.map((o) => o.traceNo).join(';');
-        const cardNo =
-          pageProps.value.deParams?.cardNumber ||
-          gStores.userStore.patChoose.cardNumber;
+      const { medicalPlugin } = alipay!;
+      // #ifdef MP-ALIPAY
+      const authPayPlugin = requirePlugin('auth-pay-plugin');
+      // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
+      const hosId = selUnPayList.value[0].hosId;
+      const orgId = medicalPlugin!.orgId[hosId];
+      const cardType = medicalPlugin!.cardType;
+      const medOrgOrd = selUnPayList.value.map((o) => o.traceNo).join(';');
+      const cardNo =
+        pageProps.value.deParams?.cardNumber ||
+        gStores.userStore.patChoose.cardNumber;
 
-        const params = {
-          orgId,
-          cardType,
-          cardNo,
-          medOrgOrd,
-        };
+      const params = {
+        orgId,
+        cardType,
+        cardNo,
+        medOrgOrd,
+      };
 
-        my.getAuthCode({
-          scopes: ['auth_user', 'nhsamp'],
-          success: (res) => {
-            const { authCode } = res;
-            authPayPlugin.toAuthAndPay({
-              // 授权获取的authCode
-              authCode,
-              // 请求接口所需参数
-              params,
-            });
-          },
-        });
+      my.getAuthCode({
+        scopes: ['auth_user', 'nhsamp'],
+        success: (res) => {
+          const { authCode } = res;
+          authPayPlugin.toAuthAndPay({
+            // 授权获取的authCode
+            authCode,
+            // 请求接口所需参数
+            params,
+          });
+        },
+      });
 
-        // #endif
-      }
+      // #endif
     }
+  };
+
+  // 微信 插件医保
+  const wxPayMoneyMedicalPlugin = () => {
+    wxPryMoneyMedicalDialog.value.show();
   };
 
   const toPay = async () => {
@@ -727,51 +753,42 @@ export const usePayPage = () => {
   };
 
   const hookInit = async (initMethods = <BaseObject>{}) => {
-    const {
-      sConfig: { medicalMHelp },
-    } = globalGl;
+    const isMedicalModePlugin = getIsMedicalModePlugin();
 
-    if (medicalMHelp) {
-      const { alipay } = medicalMHelp;
+    if (isMedicalModePlugin) {
       // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { medicalPlugin } = alipay;
+      const authPayPlugin = requirePlugin('auth-pay-plugin');
 
-        if (medicalPlugin) {
-          const authPayPlugin = requirePlugin('auth-pay-plugin');
+      authPayPlugin.initMethods({
+        // 医保授权后（支付授权/建档授权），loading 页面接口报错回调函数（处理逻辑示例）
+        /**
+         * pay - 支付模块，archive - 建档模块
+         */
+        catchException: (error: string, type: 'pay' | 'archive') => {
+          console.log('error: ', error);
+          uni.reLaunch({ url: '/pagesA/clinicPay/clinicPayDetail' });
+        },
 
-          authPayPlugin.initMethods({
-            // 医保授权后（支付授权/建档授权），loading 页面接口报错回调函数（处理逻辑示例）
-            /**
-             * pay - 支付模块，archive - 建档模块
-             */
-            catchException: (error: string, type: 'pay' | 'archive') => {
-              console.log('error: ', error);
-              uni.reLaunch({ url: '/pagesA/clinicPay/clinicPayDetail' });
-            },
-
-            /**
-             * 测试插件 v0.0.6 及以上，正式插件 v0.0.12 及以上
-             * @param status 'ALIPAID'
-             * @param ampTraceId
-             * 支付宝支付成功回调, 执行时机详见流程图
-             */
-            aliPayDone: (status: string, ampTraceId: string) => {
-              // do something
-              uni.reLaunch({
-                url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-              });
-            },
-
-            // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
-            payCancelAuth: () => {
-              uni.reLaunch({ url: `/pagesA/clinicPay/clinicPayDetail` });
-            },
-
-            ...initMethods,
+        /**
+         * 测试插件 v0.0.6 及以上，正式插件 v0.0.12 及以上
+         * @param status 'ALIPAID'
+         * @param ampTraceId
+         * 支付宝支付成功回调, 执行时机详见流程图
+         */
+        aliPayDone: (status: string, ampTraceId: string) => {
+          // do something
+          uni.reLaunch({
+            url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
           });
-        }
-      }
+        },
+
+        // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
+        payCancelAuth: () => {
+          uni.reLaunch({ url: `/pagesA/clinicPay/clinicPayDetail` });
+        },
+
+        ...initMethods,
+      });
 
       // #endif
     }
@@ -816,6 +833,8 @@ export const usePayPage = () => {
     getDrugDeliveryList,
     goDrugDelivery,
     isWaitPayListHidePrice,
+    wxPryMoneyMedicalDialog,
+    wxPayMoneyMedicalPlugin,
   };
 };
 

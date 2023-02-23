@@ -146,6 +146,8 @@
       />
     </Order-Reg-Confirm>
 
+    <Wx-Pay-Money-Medical-Popup ref="wxPryMoneyMedicalDialog" />
+
     <block v-if="isComplete">
       <view v-if="props.payState === '1'" class="g-footer">
         <block>
@@ -194,6 +196,7 @@
     goConfirmPage,
     usePayPage,
     usePayDetailPage,
+    getIsMedicalModePlugin,
     type TPayDetailProp,
     type TCostList,
   } from './utils/clinicPayDetail';
@@ -211,6 +214,7 @@
   import PayDetailCostList from './components/PayDetailCostList.vue';
   import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
@@ -231,6 +235,8 @@
     getPay,
     hookInit,
     changeRefPayList,
+    wxPryMoneyMedicalDialog,
+    wxPayMoneyMedicalPlugin,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -302,8 +308,19 @@
 
   // 可以选择性支付
   const isCanSelServerFee = computed(() => {
+    let isMedicalPay = false;
+    const isMedicalModePlugin = getIsMedicalModePlugin();
+
+    if (isMedicalModePlugin) {
+      isMedicalPay = true;
+    }
+
+    isMedicalPay = isMedicalPay && props.value.costTypeCode === '2';
+
     return (
-      props.value.payState === '1' && pageConfig.value.isSubitemPay === '1'
+      props.value.payState === '1' &&
+      pageConfig.value.isSubitemPay === '1' &&
+      !isMedicalPay // 医保不支持选择
     );
   });
   const selItem = ({
@@ -346,16 +363,16 @@
         toPay();
       }
     } else if (item.key === 'medicare') {
-      const {
-        sConfig: { medicalMHelp },
-      } = globalGl;
+      const isMedicalModePlugin = getIsMedicalModePlugin();
 
-      if (medicalMHelp) {
-        const { alipay } = medicalMHelp;
+      if (isMedicalModePlugin) {
+        // #ifdef MP-ALIPAY
+        payMoneyMedicalPlugin();
+        // #endif
 
-        if (alipay?.medicalPlugin) {
-          payMoneyMedicalPlugin();
-        }
+        // #ifdef  MP-WEIXIN
+        wxPayMoneyMedicalPlugin();
+        // #endif
       }
     }
   };
@@ -377,7 +394,7 @@
         // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
         const orgId = medicalPlugin.orgId[hosId];
         const cardType = medicalPlugin.cardType;
-        const medOrgOrd = selList.value.map((o) => o.serialNo).join(';');
+        const medOrgOrd = props.value.traceNo;
         const cardNo = cardNumber || gStores.userStore.patChoose.cardNumber;
 
         const params = {
@@ -407,10 +424,17 @@
 
   const handlerPay = () => {
     const { costTypeCode } = props.value;
-    if (costTypeCode !== '1') {
+    const isMedicalModePlugin = getIsMedicalModePlugin();
+    let isMedicalPay = false;
+
+    if (isMedicalModePlugin) {
+      isMedicalPay = true;
+    }
+
+    changeRefPayList(0);
+
+    if (costTypeCode === '2' && isMedicalPay) {
       changeRefPayList(1);
-    } else {
-      changeRefPayList(0);
     }
 
     if (pageConfig.value.confirmPayFg) {

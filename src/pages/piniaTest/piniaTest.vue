@@ -140,9 +140,8 @@
       sysCode: globalGl.SYS_CODE,
     },
     addition: {
-      herenId: 'herenId',
       token: 'token',
-      patientId: 'a',
+      patientId: '_patientId',
     },
     isLocal: '1',
   };

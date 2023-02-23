@@ -166,6 +166,8 @@
       </view>
     </Order-Reg-Confirm>
 
+    <Wx-Pay-Money-Medical-Popup ref="wxPryMoneyMedicalDialog" />
+
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -193,6 +195,7 @@
 
   import ClinicPayDetailList from './components/ClinicPayDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
   const {
     pageProps,
@@ -230,6 +233,7 @@
     hosId,
     selHosRef,
     hookInit,
+    wxPryMoneyMedicalDialog
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
