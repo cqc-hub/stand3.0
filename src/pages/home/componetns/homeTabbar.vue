@@ -2,6 +2,7 @@
   <view
     :class="{
       ios: isIos,
+      'system-mode-old': systemModeOld,
     }"
     class="tabbar"
   >
@@ -24,9 +25,12 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
-  import global from '@/config/global';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
+
+  import global from '@/config/global';
+
+  defineProps<{ systemModeOld: boolean }>();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
   const current = ref('');

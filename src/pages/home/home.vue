@@ -239,13 +239,13 @@
             </view>
           </view>
         </view>
-      </ls-skeleton> 
+      </ls-skeleton>
       <homePopup ref="refOldDialog" />
     </scroll-view>
     <g-message />
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
-    <homeTabbar />
+    <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
 </template>
 
@@ -528,7 +528,7 @@ const openModeOld = ()=>{
   if (refOldDialog.value) {
     refOldDialog.value.show();
   }
-} 
+}
 </script>
 
 <style lang="scss" scoped>
@@ -770,7 +770,7 @@ const openModeOld = ()=>{
 .uni-noticebar {
   margin: 0;
   width: 100%;
-} 
+}
 .top-menu-old {
   margin-top: 32rpx;
 }

@@ -37,7 +37,7 @@
     </scroll-view>
 
     <homePopup ref="refOldDialog" />
-    <home-Tabbar />
+    <home-Tabbar :systemModeOld="gStores.globalStore.modeOld" />
     <g-message />
   </view>
 </template>
