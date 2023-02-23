@@ -160,6 +160,7 @@
         </view>
         <!-- 老年版本 -->
         <view
+          v-else
           class="homePage"
           :class="{
             'system-mode-old': gStores.globalStore.modeOld,

@@ -73,7 +73,7 @@ const props = defineProps({
   padding: 28rpx 0;
   .left {
     display: flex;
-    // align-items: center;
+    align-items: center;
     margin-left: 24rpx;
     .icon-font {
       width: 36rpx;
