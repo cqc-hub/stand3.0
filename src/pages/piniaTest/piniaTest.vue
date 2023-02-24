@@ -134,13 +134,12 @@
   const healthRecord: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    path: 'pagesC/healthRecord/healthRecord',
+    path: 'pagesC/choosePat/choosePat',
     text: '健康档案',
     extraData: {
-      sysCode: globalGl.SYS_CODE,
+      rePath: 'pagesC/healthRecord/healthRecord',
     },
     addition: {
-      token: 'token',
       patientId: '_patientId',
     },
     isLocal: '1',

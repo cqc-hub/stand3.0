@@ -39,7 +39,7 @@
                     </text>
                   </view>
 
-                  <view v-if="info.refundFee">
+                  <view v-if="info.refundFee" class="text-no-wrap">
                     <text class="mr12 text-no-wrap">退还金额:</text>
                     <text class="mr12 g-break-word">
                       {{ info.refundFee }}元
