@@ -400,6 +400,7 @@ export class ServerStaticData {
    * 首页配置的数据
    */
   static async getHomeConfig(type?): Promise<any[]> {
+    const gStores = new GStores();
     const viewConfig = getLocalStorage('viewConfig');
     //type:home 首页每次都调用一下
     if (!viewConfig || type) {
@@ -407,6 +408,10 @@ export class ServerStaticData {
         version: '',
         source: 1,
       };
+    
+      if(gStores.globalStore.modeOld){
+        arg.source = 7
+      }else{
       // #ifdef MP-ALIPAY
       arg.source = 2;
       // #endif
@@ -414,6 +419,8 @@ export class ServerStaticData {
       // #ifdef H5
       arg.source = 3;
       // #endif
+
+      }
 
       const { result } = await api.queryHospitalPattern(arg);
 
