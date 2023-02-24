@@ -6,12 +6,12 @@
     <view class="top p32 f28">
       <view class="row flex-start mb8">
         <text class="row-t mr16 color-888">执行医院</text>
-        <text>浙江省人民医院{{}}</text
+        <text>{{ hosName }}</text
       ></view>
-      <view class="row flex-start">
+      <!-- <view class="row flex-start">
         <text class="row-t mr16 color-888">就诊人</text>
         <text>张三{{}}</text
-      ></view>
+      ></view> -->
     </view>
     <view class="container ml32">
       <view class="content mt16" v-if="isComplete && lists?.length">
@@ -53,6 +53,7 @@ const props = defineProps<{
   totalNum?: string | number;
   totalMoney?: string | number;
   hosId: string;
+  hosName: string;
 }>();
 
 const lists = ref<IConfirmList[]>(JSON.parse(props.lists) || []);

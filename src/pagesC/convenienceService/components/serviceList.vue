@@ -49,6 +49,12 @@
           />
         </view>
       </view>
+      <!-- <template #footer>
+      <button class="btn g-bord btn-primary f36" @click="goWithdrawal">
+      <text class="iconfont color-fff">&#xe718;</text>
+      <text>添加项目</text></button>
+      
+      </template> -->
     </Order-Reg-Confirm>
   </view>
 </template>

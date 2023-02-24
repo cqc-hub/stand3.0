@@ -79,6 +79,7 @@ import ServiceList from "./components/serviceList.vue";
 import { type IServiceList } from './utils/index';
 interface IPageProps {
   hosId: string;
+  hosName: string;
 }
 const pageProps = ref(<IPageProps>{});
 const gStores = new GStores();
@@ -141,13 +142,14 @@ const confirm = () =>{
       })
     }
   })
-  const { hosId } = pageProps.value
+  const { hosId, hosName } = pageProps.value
   uni.navigateTo({
     url: joinQuery("/pagesC/convenienceService/confirmOrder", {
       totalNum: totalNum.value,
       totalMoney: totalMoney.value,
       lists: JSON.stringify(newChooseItemobj),
       hosId,
+      hosName
     }),
   });
 }
