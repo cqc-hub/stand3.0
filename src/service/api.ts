@@ -460,6 +460,13 @@ const regApi = {
     service.post<T>('/phs-reg/reg/getNumberSource', parm(data), {
       hideLoading: false,
     }),
+  // 支付宝-获取智能导诊链接
+    getTXGuidanceUrl: <T>(data: any) =>
+  service.post<T>('/phs-reg/guidance/getTXGuidanceUrl', parm(data), {
+    hideLoading: false,
+  }),
+
+
 };
 
 // 用户服务
