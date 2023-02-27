@@ -16,7 +16,7 @@
           >
           <view class="f-button">
             <button
-              v-if="isCash != '1'"
+              v-if="isCash == 1"
               @click="confirmForm1"
               class="f-b1 mr8 btn btn-primary"
             >
@@ -82,10 +82,10 @@ import { deQueryForUrl} from '@/common/utils';
 import { type IHospitalAccountDetail } from './utils/index';
 interface IPageProps {
   hosId: string;
-  isCash?: string;
+  isCash?: any;
 }
 const pageProps = ref(<IPageProps>{});
-const isCash = ref(pageProps.value.isCash);
+const isCash = ref('');
 const gStores = new GStores();
 const confirmFgTitle = ref('');
 const lists = ref<IHospitalAccountDetail>({} as IHospitalAccountDetail);
@@ -131,6 +131,7 @@ const init = async () => {
 
 onLoad(async (opt) => {
   pageProps.value = deQueryForUrl(opt);
+  isCash.value = pageProps.value.isCash;
 });
 
 onShow(() => {
