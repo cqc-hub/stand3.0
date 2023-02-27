@@ -15,7 +15,13 @@
             ></view
           >
           <view class="f-button">
-            <button @click="confirmForm1" class="f-b1 mr8 btn btn-primary">提现</button>
+            <button
+              v-if="isCash != '1'"
+              @click="confirmForm1"
+              class="f-b1 mr8 btn btn-primary"
+            >
+              提现
+            </button>
             <button @click="confirmForm" class="f-b2 ml8 btn btn-primary">充值</button>
           </view>
         </view>
@@ -76,8 +82,10 @@ import { deQueryForUrl} from '@/common/utils';
 import { type IHospitalAccountDetail } from './utils/index';
 interface IPageProps {
   hosId: string;
+  isCash?: string;
 }
 const pageProps = ref(<IPageProps>{});
+const isCash = ref(pageProps.value.isCash);
 const gStores = new GStores();
 const confirmFgTitle = ref('');
 const lists = ref<IHospitalAccountDetail>({} as IHospitalAccountDetail);
