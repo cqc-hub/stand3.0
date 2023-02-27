@@ -14,7 +14,7 @@
         <view class="popup-operator">
           <view v-if="isOperation" class="popup-un-operator">
             <text class="iconfont color-blue">&#xe6c7;</text>
-            复制成功 去分享
+            复制成功
           </view>
 
           <button
