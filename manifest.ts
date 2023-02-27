@@ -58,7 +58,6 @@ if (medicalMHelp) {
     const { medicalPlugin } = alipay;
 
     if (medicalPlugin) {
-      // https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt
       aliPlugin['auth-pay-plugin'] = {
         version: '*',
         provider:

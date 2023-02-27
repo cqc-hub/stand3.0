@@ -706,42 +706,17 @@
 
   const goRatePageRes = async () => {
     const { orderId } = pageProps.value;
-    const {
-      browser: { source },
-    } = gStores.globalStore;
+    console.log(
+      joinQuery('/pagesA/MyRegistration/RegCommentRes', {
+        orderId,
+      })
+    );
 
-    const { result } = await api.findSatisfactionInfo({
-      orderId,
-      source,
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/RegCommentRes', {
+        orderId,
+      }),
     });
-
-    if (result) {
-      const {
-        adviseForDoc,
-        adviseForHos,
-        docEvlContentList,
-        docGrade,
-        otherSuggestions,
-        rateInfoList,
-        serviceSatisfactionGrade,
-      } = result;
-
-      const args = {
-        docGrade,
-        docEvlContentList,
-        adviseForDoc,
-        serviceSatisfactionGrade,
-        rateInfoList,
-        adviseForHos,
-        otherSuggestions,
-      };
-
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/MyRegistration/RegCommentRes', {
-          para: JSON.stringify(args),
-        }),
-      });
-    }
   };
 
   const goRatePage = () => {

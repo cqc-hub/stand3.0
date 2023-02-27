@@ -9,7 +9,7 @@ interface ISConfig {
   // 医保? 如果是 his 结算模式直接维护后台配置即可
   medicalMHelp?: {
     alipay?: {
-      // 医保插件模式
+      // 医保插件模式  https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt
       medicalPlugin?: {
         // 机构id  各个院区都需要提供
         orgId: {

@@ -518,16 +518,15 @@ export const usePayPage = () => {
 
     if (isMedicalModePlugin) {
       if (selUnPayList.value.length) {
-        const paySelfItem = selUnPayList.value.find(
-          (o) => o.costTypeCode === '1'
+        const payMedicalItem = selUnPayList.value.find(
+          (o) => o.costTypeCode === '2'
         );
 
-        if (paySelfItem) {
-          changeRefPayList(0);
-        }
-        // 医保
-        else {
+        // 医保 类型
+        if (payMedicalItem) {
           changeRefPayList(1);
+        } else {
+          changeRefPayList(0);
         }
       }
     }

@@ -39,7 +39,7 @@
   import globalGl from '@/config/global';
 
   const copyValue = ref(
-    'alipays://platformapi/startapp?appId=2021003155652649'
+    'https://ulink.alipay.com/?scheme=alipays://platformapi/startapp?appId=2021003155652649'
   );
 
   const isDialogShow = ref('' as any);
