@@ -27,8 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { GStores } from "@/utils";
-
+import { GStores,ServerStaticData } from "@/utils";
 export default defineComponent({
   emits: ["open-old"],
 
@@ -45,6 +44,9 @@ export default defineComponent({
 
     const switchModeOld = () => {
       gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
+      uni.removeStorageSync('viewConfig');
+        //重新请求首页配置
+        ServerStaticData.getHomeConfig();
       refOldDialog.value.hide();
 
       //   ctx.emit("choose-pat", e);
