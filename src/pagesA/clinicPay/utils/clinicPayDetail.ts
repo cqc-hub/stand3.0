@@ -623,7 +623,7 @@ export const usePayPage = () => {
       const hosId = selUnPayList.value[0].hosId;
       const orgId = medicalPlugin!.orgId[hosId];
       const cardType = medicalPlugin!.cardType;
-      const medOrgOrd = selUnPayList.value.map((o) => o.traceNo).join(';');
+      const medOrgOrd = selUnPayList.value.map((o) => o.traceNo).join(',');
       const cardNo =
         pageProps.value.deParams?.cardNumber ||
         gStores.userStore.patChoose.cardNumber;
@@ -633,7 +633,10 @@ export const usePayPage = () => {
         cardType,
         cardNo,
         medOrgOrd,
+        // medOrgOrd: medOrgOrd.split(',')[0],
       };
+
+      console.log(params);
 
       my.getAuthCode({
         scopes: ['auth_user', 'nhsamp'],

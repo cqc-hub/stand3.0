@@ -50,6 +50,10 @@ const scJson: {
     isHideHomeSearch: '1',
   },
 
+  1001056: {
+
+  },
+
   1001033: {
     isDrugDelivery: '1',
     isOpenHelpOld: '1',

@@ -113,6 +113,7 @@ onMounted(() => {
 
   .user-avatar {
     width: 48rpx;
+    height: 48rpx;
     border-radius: 100px;
     margin-right: 20rpx;
   }
