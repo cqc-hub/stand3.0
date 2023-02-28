@@ -176,7 +176,15 @@
       autoInOne
       ref="refPay"
     >
-      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+      <view v-if="getIsMedicalModePlugin()" class="p32">
+        <g-flag
+          v-model:title="confirmFgTitle"
+          :typeFg="pageConfig.confirmPayFg!"
+          isShowFgTip
+          isHideTitle
+          aaa
+        />
+      </view>
     </g-pay>
   </view>
 </template>
@@ -185,7 +193,7 @@
   import { computed, ref } from 'vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
-  import { usePayPage } from './utils/clinicPayDetail';
+  import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';
   import { useTBanner, wait, debounce } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import { encryptForPage, decryptForPage } from '@/common/des';

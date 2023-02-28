@@ -114,7 +114,15 @@
       autoInOne
       ref="refPay"
     >
-      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+      <view v-if="getIsMedicalModePlugin()" class="p32">
+        <g-flag
+          v-model:title="confirmFgTitle"
+          :typeFg="pageConfig.confirmPayFg!"
+          isShowFgTip
+          isHideTitle
+          aaa
+        />
+      </view>
     </g-pay>
 
     <xy-dialog
@@ -438,7 +446,11 @@
     }
 
     if (pageConfig.value.confirmPayFg) {
-      regDialogConfirm.value.show();
+      if (isMedicalModePlugin) {
+        getPay();
+      } else {
+        regDialogConfirm.value.show();
+      }
     } else {
       getPay();
     }

@@ -507,7 +507,13 @@ export const usePayPage = () => {
     }
 
     if (pageConfig.value.confirmPayFg) {
-      regDialogConfirm.value.show();
+      const isMedicalModePlugin = getIsMedicalModePlugin();
+
+      if (isMedicalModePlugin) {
+        getPay();
+      } else {
+        regDialogConfirm.value.show();
+      }
     } else {
       getPay();
     }
