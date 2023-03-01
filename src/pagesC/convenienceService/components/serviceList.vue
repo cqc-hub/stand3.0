@@ -49,12 +49,13 @@
           />
         </view>
       </view>
-      <!-- <template #footer>
+      <template #footer>
+      <view class="addItem">
       <button class="btn g-bord btn-primary f36" @click="goWithdrawal">
-      <text class="iconfont color-fff">&#xe718;</text>
-      <text>添加项目</text></button>
+      <text class="iconfont f36 color-fff">&#xe718;</text>
+      <text>添加项目</text></button></view>
       
-      </template> -->
+      </template>
     </Order-Reg-Confirm>
   </view>
 </template>
@@ -128,5 +129,15 @@ watch(
 .amount {
   display: flex;
   justify-content: flex-end;
+}
+.addItem{
+  margin: 32rpx;
+  .btn{
+    display: flex;
+    align-items: center;
+  }
+  .iconfont{
+    margin-right: 22rpx;
+  }
 }
 </style>

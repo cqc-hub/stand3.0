@@ -6,8 +6,8 @@
     <view class="top p32 f28">
       <view class="row flex-start mb8">
         <text class="row-t mr16 color-888">执行医院</text>
-        <text>{{ hosName }}</text
-      ></view>
+        <text>{{ hosName }}</text></view
+      >
       <!-- <view class="row flex-start">
         <text class="row-t mr16 color-888">就诊人</text>
         <text>张三{{}}</text
@@ -27,7 +27,7 @@
     <!-- 底部按钮 -->
     <view class="footer">
       <view class="amount">
-        <text class="f28 color-444">合计</text>
+        <text class="f28 color-444 mr8">合计</text>
         <text class="money f36 color-error g-bold">{{ totalMoney }}元</text></view
       >
       <button class="btn g-bord btn-primary f36" @click="confirm">

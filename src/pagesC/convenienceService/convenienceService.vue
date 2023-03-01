@@ -23,7 +23,7 @@
           <view v-if="totalNum != 0" class="num">{{ totalNum }}</view></view
         >
 
-        <text class="add f28">合计</text>
+        <text class="add f28 mr8">合计</text>
 
         <text class="money f36 color-error g-bold">{{ totalMoney }}元</text></view
       >
@@ -52,7 +52,7 @@
                 <view v-if="totalNum != 0" class="num">{{ totalNum }}</view></view
               >
 
-              <text class="add f28">合计</text>
+              <text class="add f28 mr8">合计</text>
 
               <text class="money f36 color-error g-bold">{{ totalMoney }}元</text></view
             >
@@ -163,6 +163,9 @@ onLoad((p) => {
 });
 
 onShow(() => {
+  totalNum.value = 0;
+  totalMoney.value = 0;
+  chooseItem.value = [];
   init();
 });
 </script>
