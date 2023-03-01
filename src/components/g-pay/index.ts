@@ -85,7 +85,7 @@ export const payMoneyOnline = async (
 type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
 
 //微信获取小程序的openid
-const getOpenid = async () => {
+export const getOpenid = async (): Promise<any> => {
   const gStores = new GStores();
   return new Promise<void>((resolve, reject) => {
     wx.login({
@@ -116,7 +116,7 @@ const getOpenid = async () => {
 };
 
 // alipay
-const getOpenid2 = async () => {
+export const getOpenid2 = async (): Promise<any> => {
   const gStores = new GStores();
 
   return new Promise((resolve, reject) => {
@@ -175,7 +175,7 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
           resolve(void 0);
         },
 
-        fail: reject
+        fail: reject,
       });
     });
 

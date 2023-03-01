@@ -164,6 +164,12 @@ const queryApi = {
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
+  // 医保授权(微信国标)
+  authorize: <T>(data) =>
+    service.post<T>('/phs-query/medical/authorize', parm(data), {
+      hideLoading: false,
+    }),
+
   // 待缴费
   getUnpaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getUnpaidClinicList', parm(data), {
@@ -253,9 +259,9 @@ const queryApi = {
     }),
   // 便民服务列表接口
   getConvenientServiceList: (data) =>
-  service.post('/phs-query/billing/getConvenientServiceList', parm(data), {
-    hideLoading: false,
-  }),
+    service.post('/phs-query/billing/getConvenientServiceList', parm(data), {
+      hideLoading: false,
+    }),
   // 获取病案复印申请记录
   getCaseCopyList: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/getCaseCopyList', parm(data), {
@@ -461,12 +467,10 @@ const regApi = {
       hideLoading: false,
     }),
   // 支付宝-获取智能导诊链接
-    getTXGuidanceUrl: <T>(data: any) =>
-  service.post<T>('/phs-reg/guidance/getTXGuidanceUrl', parm(data), {
-    hideLoading: false,
-  }),
-
-
+  getTXGuidanceUrl: <T>(data: any) =>
+    service.post<T>('/phs-reg/guidance/getTXGuidanceUrl', parm(data), {
+      hideLoading: false,
+    }),
 };
 
 // 用户服务

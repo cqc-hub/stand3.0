@@ -30,7 +30,7 @@
       </view> -->
     </view>
 
-    <view class="pat-item my-hide" />
+    <!-- <view class="pat-item my-hide" /> -->
   </view>
 </template>
 

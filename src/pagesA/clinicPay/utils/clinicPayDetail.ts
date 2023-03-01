@@ -11,6 +11,8 @@ import {
   type IGPay,
   payMoneyOnline,
   toPayPull,
+  getOpenid,
+  getOpenid2,
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
@@ -152,13 +154,84 @@ export const getIsMedicalModePlugin = () => {
     // #endif
 
     // #ifdef  MP-WEIXIN
-    if (wx?.medicalPlugin === '1') {
-      isMedicalPay = true;
+    if (wx) {
+      const { medicalPlugin, medicalNation } = wx;
+
+      if (medicalPlugin || medicalNation) {
+        isMedicalPay = true;
+      }
     }
     // #endif
   }
 
   return isMedicalPay;
+};
+
+// 是否自动赋值医保状态
+export const getIsMedicalTradeTypeDefault = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  let setTradeTypeDefault = false;
+
+  if (medicalMHelp) {
+    const { alipay, wx } = medicalMHelp;
+
+    // #ifdef MP-ALIPAY
+    if (alipay?.medicalDefault === '1') {
+      setTradeTypeDefault = true;
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { medicalDefault } = wx;
+
+      if (medicalDefault === '1') {
+        setTradeTypeDefault = true;
+      }
+    }
+    // #endif
+  }
+
+  return setTradeTypeDefault;
+};
+
+// 获取国标授权
+export const getQxMedicalNation = async () => {
+  const gStores = new GStores();
+  let authorizeType = '1';
+  // #ifdef MP-ALIPAY
+  authorizeType = '2';
+  // #endif
+
+  const requestArg = {
+    authorizeType,
+    authorizeTypeDesc: authorizeType,
+    aliPayUserId: '',
+    callUrl: '',
+    openId: '',
+    qrCode: '',
+  };
+
+  // #ifdef  MP-WEIXIN
+  if (gStores.globalStore.openId === '') {
+    await getOpenid().then((openId) => {
+      requestArg.openId = openId;
+    });
+  } else {
+    requestArg.openId = gStores.globalStore.openId;
+  }
+
+  // #endif
+
+  // #ifdef MP-ALIPAY
+  requestArg.aliPayUserId = gStores.globalStore.openId;
+  if (!gStores.globalStore.openId) {
+    requestArg.aliPayUserId = await getOpenid2();
+  }
+  // #endif
 };
 
 export const usePayPage = () => {
@@ -661,9 +734,24 @@ export const usePayPage = () => {
     }
   };
 
-  // 微信 插件医保
-  const wxPayMoneyMedicalPlugin = () => {
-    wxPryMoneyMedicalDialog.value.show();
+  // 医保国标授权
+
+  // 微信 & 医保
+  const wxPayMoneyMedicalPlugin = async (callback = () => {}) => {
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+
+    const { wx } = medicalMHelp!;
+    const { medicalNation, medicalPlugin } = wx!;
+
+    if (medicalPlugin === '1') {
+      wxPryMoneyMedicalDialog.value.show();
+    } else if (medicalNation) {
+      console.log(233);
+
+      callback();
+    }
   };
 
   const toPay = async () => {
@@ -778,6 +866,11 @@ export const usePayPage = () => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
 
     if (isMedicalModePlugin) {
+      const params = pageProps.value;
+      let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail?tabIndex=1';
+      if (params) {
+        successCallBackUrl = `/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=${params}`;
+      }
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
 
@@ -800,13 +893,13 @@ export const usePayPage = () => {
         aliPayDone: (status: string, ampTraceId: string) => {
           // do something
           uni.reLaunch({
-            url: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+            url: successCallBackUrl,
           });
         },
 
         // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
         payCancelAuth: () => {
-          uni.reLaunch({ url: `/pagesA/clinicPay/clinicPayDetail` });
+          uni.reLaunch({ url: successCallBackUrl });
         },
 
         ...initMethods,
@@ -888,12 +981,17 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 };
 
 const dealPayList = (resList: IPayListItem[], { payState }) => {
+  const setCostTypeCodeDefault = getIsMedicalTradeTypeDefault();
+
+  console.log({
+    resList,
+  });
+
   resList.map((o) => {
-    // const { clinicType } = o;
-
-    // o.costTypeCode = '';
-
-    // o._clinicType = clinicType === '2' ? '网络医院' : '线下门诊';
     o.payState = payState;
+
+    if (setCostTypeCodeDefault) {
+      o.costTypeCode = '2';
+    }
   });
 };

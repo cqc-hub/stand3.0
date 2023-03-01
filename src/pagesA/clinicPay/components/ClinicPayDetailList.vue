@@ -29,7 +29,7 @@
             class="g-bold f36 flex1 mr40 flex-normal item-title"
           >
             <text
-              v-if="item.costTypeCode"
+              v-if="item.costTypeCode && !getIsMedicalTradeTypeDefault()"
               :class="{
                 'pay-self': isPaySelfItem(item),
                 'pay-medical': !isPaySelfItem(item),
@@ -100,7 +100,11 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { type IPayListItem, tradeType } from '../utils/clinicPayDetail';
+  import {
+    type IPayListItem,
+    tradeType,
+    getIsMedicalTradeTypeDefault,
+  } from '../utils/clinicPayDetail';
 
   const props = withDefaults(
     defineProps<{
