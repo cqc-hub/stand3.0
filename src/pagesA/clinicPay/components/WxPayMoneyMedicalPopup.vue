@@ -48,7 +48,7 @@
 
   const options = ref({
     // 二维码
-    size: 400,
+    size: 380,
     code: '',
   });
 
