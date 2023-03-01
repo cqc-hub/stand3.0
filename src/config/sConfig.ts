@@ -25,7 +25,7 @@ interface ISConfig {
     wx?: {
       // 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序)
       medicalPlugin?: '1';
-      // 医保国标模式
+      // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
       medicalNation?: {
         cityCode: string;
         channel: string; // 渠道号

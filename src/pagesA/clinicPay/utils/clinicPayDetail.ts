@@ -199,8 +199,14 @@ export const getIsMedicalTradeTypeDefault = () => {
 };
 
 // 获取国标授权
-export const getQxMedicalNation = async () => {
+export const getQxMedicalNation = async (qrCode = '') => {
   const gStores = new GStores();
+
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  const { alipay, wx: _wx } = medicalMHelp!;
   let authorizeType = '1';
   // #ifdef MP-ALIPAY
   authorizeType = '2';
@@ -212,10 +218,26 @@ export const getQxMedicalNation = async () => {
     aliPayUserId: '',
     callUrl: '',
     openId: '',
-    qrCode: '',
+    qrCode,
   };
 
   // #ifdef  MP-WEIXIN
+  if (!qrCode) {
+    const { cityCode, channel } = _wx!.medicalNation!;
+
+    wx.navigateToMiniProgram({
+      appId: 'wxe183cd55df4b4369',
+      path: joinQuery('auth/pages/bindcard/auth/index', {
+        openType: 'getAuthCode',
+        cityCode,
+        channel,
+      }),
+      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+    });
+
+    return;
+  }
+
   if (gStores.globalStore.openId === '') {
     await getOpenid().then((openId) => {
       requestArg.openId = openId;
@@ -223,7 +245,6 @@ export const getQxMedicalNation = async () => {
   } else {
     requestArg.openId = gStores.globalStore.openId;
   }
-
   // #endif
 
   // #ifdef MP-ALIPAY
@@ -232,6 +253,10 @@ export const getQxMedicalNation = async () => {
     requestArg.aliPayUserId = await getOpenid2();
   }
   // #endif
+
+  const { result } = await api.authorize(requestArg);
+
+  return result;
 };
 
 export const usePayPage = () => {
@@ -748,8 +773,7 @@ export const usePayPage = () => {
     if (medicalPlugin === '1') {
       wxPryMoneyMedicalDialog.value.show();
     } else if (medicalNation) {
-      console.log(233);
-
+      await getQxMedicalNation();
       callback();
     }
   };
@@ -866,10 +890,12 @@ export const usePayPage = () => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
 
     if (isMedicalModePlugin) {
-      const params = pageProps.value;
-      let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail?tabIndex=1';
+      const { params } = pageProps.value;
+      let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail';
       if (params) {
-        successCallBackUrl = `/pagesA/clinicPay/clinicPayDetail?tabIndex=1&params=${params}`;
+        successCallBackUrl = `/pagesA/clinicPay/clinicPayDetail?params=${encodeURIComponent(
+          params
+        )}`;
       }
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
@@ -881,7 +907,7 @@ export const usePayPage = () => {
          */
         catchException: (error: string, type: 'pay' | 'archive') => {
           console.log('error: ', error);
-          uni.reLaunch({ url: '/pagesA/clinicPay/clinicPayDetail' });
+          uni.reLaunch({ url: successCallBackUrl });
         },
 
         /**
@@ -893,7 +919,7 @@ export const usePayPage = () => {
         aliPayDone: (status: string, ampTraceId: string) => {
           // do something
           uni.reLaunch({
-            url: successCallBackUrl,
+            url: successCallBackUrl + '&tabIndex=1',
           });
         },
 

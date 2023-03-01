@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wx7acc3ecadc08f7ea",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,16 +62,21 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.1.15",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021003159674187",
+    "appid": "2021003167607056",
     "plugins": {
-      "auth-pay-plugin": {
+      "ocrPlugin": {
         "version": "*",
-        "provider": "2021003167601013"
+        "provider": "2021001130678316"
       }
     },
     "mergeVirtualHostAttributes": true
@@ -86,7 +91,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "咸阳市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

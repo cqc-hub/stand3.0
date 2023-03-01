@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001054",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -108,7 +108,7 @@
         "hospitalId": "37133"
       },
       "isStartComeTest": true,
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "alipayPid": "ze2exd3di9dbye6cc+hfia==",
       "isOpenOcr": true,
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
