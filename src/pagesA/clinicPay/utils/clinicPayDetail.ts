@@ -1009,14 +1009,10 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 const dealPayList = (resList: IPayListItem[], { payState }) => {
   const setCostTypeCodeDefault = getIsMedicalTradeTypeDefault();
 
-  console.log({
-    resList,
-  });
-
   resList.map((o) => {
     o.payState = payState;
 
-    if (setCostTypeCodeDefault) {
+    if (setCostTypeCodeDefault && !o.costTypeCode) {
       o.costTypeCode = '2';
     }
   });
