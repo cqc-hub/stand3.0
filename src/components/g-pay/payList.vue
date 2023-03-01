@@ -1,11 +1,12 @@
 <template>
   <view class="pat-list">
+    <!--  'pat-active': curr === i,-->
     <view
       v-for="(item, i) in list"
       :key="item.key"
       @click="patClick(item, i)"
       :class="{
-        'pat-active': curr === i,
+        'pat-active': false,
         mt32: !i,
       }"
       class="pat-item"

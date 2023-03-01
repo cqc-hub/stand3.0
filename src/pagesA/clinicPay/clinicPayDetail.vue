@@ -176,7 +176,10 @@
       autoInOne
       ref="refPay"
     >
-      <view v-if="getIsMedicalModePlugin()" class="p32">
+      <view
+        v-if="getIsMedicalModePlugin() && pageConfig.confirmPayFg"
+        class="p32"
+      >
         <g-flag
           v-model:title="confirmFgTitle"
           :typeFg="pageConfig.confirmPayFg!"

@@ -283,7 +283,7 @@
       :content="dialogContent"
       :show="isCancelOrderDialogShow"
       @cancelButton="isCancelOrderDialogShow = false"
-      @confirmButton="cancelOrderDialogConfirm"
+      @confirmButton="_cancelOrderDialogConfirm"
     />
 
     <g-pay
@@ -663,7 +663,12 @@
 
   const isCancelOrderDialogShow = ref(false);
   const dialogContent = ref('');
-  let cancelOrderDialogConfirm: (any) => any = async () => {};
+  const _cancelOrderDialogConfirm = () => {
+    isCancelOrderDialogShow.value = false;
+    cancelOrderDialogConfirm();
+  };
+
+  let cancelOrderDialogConfirm: (...args: any[]) => any = async () => {};
   const cancelOrder = async () => {
     const orderId = pageProps.value.orderId;
     isCancelOrderDialogShow.value = true;

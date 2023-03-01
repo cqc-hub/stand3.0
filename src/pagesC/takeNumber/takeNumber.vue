@@ -180,6 +180,7 @@
       addition: {
         token: 'token',
         herenId: 'herenId',
+        patientId: 'patientId'
       },
     });
   };
