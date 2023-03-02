@@ -229,8 +229,8 @@ const updateIdFun = (item) => {
     border: 2rpx solid #dfe9ff;
     padding: 50rpx 0 38rpx;
     border-radius: 24px;
-    &:nth-child(odd) {
-      margin: 0 24rpx 24rpx 0;
+    &:nth-child(odd) { 
+      margin: 12rpx;
     }
 
     .grid-resize {

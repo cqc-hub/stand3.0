@@ -22,10 +22,5 @@
   const gStores = new GStores();
 </script>
 
-<style lang="scss" scoped>
-  .grid-box {
-    &.system-mode-old {
-      transform: translateX(15rpx);
-    }
-  }
+<style lang="scss" scoped> 
 </style>

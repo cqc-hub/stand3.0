@@ -147,7 +147,7 @@
   .container {
     padding-top: 48upx;
     display: grid;
-    grid-template-columns: 160upx 1fr 160upx;
+    grid-template-columns: 160upx 1fr 180upx;
     gap: 10upx;
     align-items: center;
     width: 100%;
