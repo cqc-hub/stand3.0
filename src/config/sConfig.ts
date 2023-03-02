@@ -26,9 +26,10 @@ interface ISConfig {
       // 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序)
       medicalPlugin?: '1';
       // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
+      // 第三方提供的链接拼接工具(参数查看 测试环境反馈单) https://yb.qq.com/yibao-payment/doc/generateLink?nodeId=2
       medicalNation?: {
-        cityCode: string;
-        channel: string; // 渠道号
+        appId: string;
+        path: string;
       };
 
       // 默认是医保? (个别项目后端不能返回 医保标签, 前端数据手动加上但是页面不显示医保标签)
@@ -64,8 +65,8 @@ const scJson: {
     medicalMHelp: {
       wx: {
         medicalNation: {
-          cityCode: '650100',
-          channel: 'AAHXJbrzmhk_q05MEUW1ioQn',
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1G8G3JJRB0043F60C80A0000EBD85252',
         },
         medicalDefault: '1',
       },

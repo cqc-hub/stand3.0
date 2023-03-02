@@ -760,9 +760,12 @@
     goDoctorCard();
   };
 
+  onShow(() => {
+    init();
+  });
+
   onLoad((p) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-    init();
   });
 </script>
 

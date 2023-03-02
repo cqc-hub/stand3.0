@@ -223,15 +223,11 @@ export const getQxMedicalNation = async (qrCode = '') => {
 
   // #ifdef  MP-WEIXIN
   if (!qrCode) {
-    const { cityCode, channel } = _wx!.medicalNation!;
+    const { appId, path } = _wx!.medicalNation!;
 
     wx.navigateToMiniProgram({
-      appId: 'wxe183cd55df4b4369',
-      path: joinQuery('auth/pages/bindcard/auth/index', {
-        openType: 'getAuthCode',
-        cityCode,
-        channel,
-      }),
+      appId,
+      path,
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
     });
 
