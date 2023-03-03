@@ -201,7 +201,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
 
   import {
     goConfirmPage,
@@ -216,7 +216,12 @@
     payMoneyOnline,
     toPayPull,
   } from '@/components/g-pay/index';
-  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import {
+    deQueryForUrl,
+    joinQueryForUrl,
+    setLocalStorage,
+    getLocalStorage,
+  } from '@/common';
   import { wait } from '@/utils';
 
   import api from '@/service/api';
@@ -556,6 +561,25 @@
       },
     });
   };
+
+  onShow(async () => {
+    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+      await wait(300);
+      setLocalStorage({
+        'get-wx-medical-auth-code': '',
+      });
+
+      // 微信医保小程序跳回来后中断了链路 重新走下
+      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+        getPayInfo({
+          item: {
+            key: 'medicare',
+            label: '',
+          },
+        });
+      }
+    }
+  });
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
