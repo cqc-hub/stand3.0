@@ -194,11 +194,15 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
 
-  import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';
+  import {
+    usePayPage,
+    getIsMedicalModePlugin,
+    getQxMedicalNation,
+  } from './utils/clinicPayDetail';
   import { useTBanner, wait, debounce } from '@/utils';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
   import { encryptForPage, decryptForPage } from '@/common/des';
   import { beforeEach } from '@/router';
 
@@ -282,6 +286,25 @@
 
     await hookInit();
   };
+
+  onShow(async () => {
+    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+      await wait(300);
+      setLocalStorage({
+        'get-wx-medical-auth-code': '',
+      });
+
+      // 微信医保小程序跳回来后中断了链路 重新走下
+      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+        getPayInfo({
+          item: {
+            key: 'medicare',
+            label: '',
+          },
+        });
+      }
+    }
+  });
 
   onLoad(async (opt) => {
     const enter = uni.getEnterOptionsSync();

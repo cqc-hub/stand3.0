@@ -11,10 +11,13 @@
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
 
+  const globalStore = useGlobalStore();
+
   onLaunch((opt) => {
     // console.log('App Launch', opt);
-    const globalStore = useGlobalStore();
+
     globalStore.initBrowser();
+    globalStore.onAppLaunch(opt);
 
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
@@ -96,6 +99,8 @@
         }
       }
     }
+
+    globalStore.onAppShow(opt);
 
     setTimeout(() => {
       const pages = getCurrentPages();

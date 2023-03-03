@@ -16,6 +16,8 @@ interface IStateGlobal {
   openId: string;
   h5OpenId: string;
   herenId: string;
+  appShowData: BaseObject;
+  appLaunchData: BaseObject;
 
   sysCode: typeof globalGl.SYS_CODE;
   modeOld: boolean; // 敬老模式?
@@ -59,6 +61,8 @@ const globalStore = defineStore('global', {
       openId: '',
       h5OpenId: '',
       herenId: '',
+      appShowData: {},
+      appLaunchData: {},
 
       sysCode: globalGl.SYS_CODE,
       modeOld: false,
@@ -92,6 +96,18 @@ const globalStore = defineStore('global', {
       this.openId = '';
       // this.h5OpenId = '';
       this.herenId = '';
+    },
+
+    onAppShow(opt: any) {
+      if (opt) {
+        this.appShowData = opt;
+      }
+    },
+
+    onAppLaunch(opt: any) {
+      if (opt) {
+        this.appLaunchData = opt;
+      }
     },
 
     updateToken(token) {

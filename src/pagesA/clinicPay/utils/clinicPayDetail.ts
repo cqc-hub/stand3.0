@@ -6,7 +6,12 @@ import {
   ServerStaticData,
   wait,
 } from '@/utils';
-import { joinQuery, joinQueryForUrl } from '@/common';
+import {
+  joinQuery,
+  joinQueryForUrl,
+  setLocalStorage,
+  getLocalStorage,
+} from '@/common';
 import {
   type IGPay,
   payMoneyOnline,
@@ -199,8 +204,10 @@ export const getIsMedicalTradeTypeDefault = () => {
 };
 
 // 获取国标授权
-export const getQxMedicalNation = async (qrCode = '') => {
+export const getQxMedicalNation = async () => {
   const gStores = new GStores();
+  const qrCode =
+    gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
 
   const {
     sConfig: { medicalMHelp },
@@ -217,13 +224,17 @@ export const getQxMedicalNation = async (qrCode = '') => {
     authorizeTypeDesc: authorizeType,
     aliPayUserId: '',
     callUrl: '',
-    openId: '',
+    openId: gStores.globalStore.openId,
     qrCode,
   };
 
   // #ifdef  MP-WEIXIN
   if (!qrCode) {
     const { appId, path } = _wx!.medicalNation!;
+
+    setLocalStorage({
+      'get-wx-medical-auth-code': '1',
+    });
 
     wx.navigateToMiniProgram({
       appId,
@@ -250,7 +261,19 @@ export const getQxMedicalNation = async (qrCode = '') => {
   }
   // #endif
 
+  console.log({
+    requestArg,
+  });
+
+  // return
+
+  //  qrcode 只能使用一次
+  gStores.globalStore.onAppShow({});
   const { result } = await api.authorize(requestArg);
+
+  console.log({
+    result,
+  });
 
   return result;
 };
