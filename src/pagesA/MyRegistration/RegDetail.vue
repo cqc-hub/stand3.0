@@ -262,7 +262,7 @@
       </button>
 
       <button
-        v-if="['23', '43'].includes(orderRegInfo.orderStatus)"
+        v-if="['23', '43', '42'].includes(orderRegInfo.orderStatus)"
         class="btn g-border btn-primary"
         @click="againOrder"
       >
@@ -312,6 +312,7 @@
     wait,
     useTBanner,
     TButtonConfig,
+    debounce,
   } from '@/utils';
   import {
     encryptDes,
@@ -319,6 +320,8 @@
     joinQueryForUrl,
     deQueryForUrl,
     cloneUtil,
+    setLocalStorage,
+    getLocalStorage,
   } from '@/common';
 
   import {
@@ -354,7 +357,7 @@
   const isFirstIn = ref(true);
 
   const isShowFooter = computed(() =>
-    ['23', '45', '10', '70', '0', '20', '43'].includes(
+    ['23', '45', '10', '70', '0', '20', '43', '42'].includes(
       orderRegInfo.value.orderStatus
     )
   );
@@ -515,10 +518,13 @@
       // isLocal: '1',
     };
 
+    setLocalStorage({
+      'reg-detail-init': '1',
+    });
     useTBanner(preConsultation);
   };
 
-  const init = async () => {
+  let init = async () => {
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
     qrCodeOpt.value.code = '';
@@ -577,6 +583,8 @@
       refFormPatient.value.setList(patientTempList);
     }, 300);
   };
+
+  init = debounce(init, 200, false);
 
   const openHosLocation = () => {
     const { gisLat, gisLng, hosName, address } = hosInfo.value;
@@ -740,6 +748,10 @@
     if (rateFlag == 0) {
       goRatePageRes();
     } else {
+      setLocalStorage({
+        'reg-detail-init': '1',
+      });
+
       uni.navigateTo({
         url: joinQueryForUrl('/pagesA/MyRegistration/RegComment', {
           orderId,
@@ -761,11 +773,18 @@
   };
 
   onShow(() => {
-    init();
+    if (getLocalStorage('reg-detail-init') === '1') {
+      setLocalStorage({
+        'reg-detail-init': '',
+      });
+
+      init();
+    }
   });
 
   onLoad((p) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    init();
   });
 </script>
 

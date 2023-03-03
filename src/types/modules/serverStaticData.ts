@@ -195,6 +195,7 @@ export type TBannerConfigBase = {
   addition?: {
     token?: string;
     patientId?: string;
+    cardNumber?: string;
     herenId?: string;
   }; // 固定的附加参数(动态值) 键值为新的键名
 };

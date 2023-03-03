@@ -90,11 +90,16 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
   const gStores = new GStores();
 
   if (addition) {
-    const { token, patientId, herenId } = addition;
+    const { token, patientId, herenId, cardNumber } = addition;
 
     if (patientId) {
       extraData[patientId] = gStores.userStore.patChoose.patientId;
       _d._patientId = gStores.userStore.patChoose.patientId;
+      isPatient = true;
+    }
+
+    if (cardNumber) {
+      extraData[cardNumber] = gStores.userStore.patChoose.cardNumber;
       isPatient = true;
     }
 
@@ -409,18 +414,17 @@ export class ServerStaticData {
         version: '',
         source: 1,
       };
-    
-      if(gStores.globalStore.modeOld){
-        arg.source = 7
-      }else{
-      // #ifdef MP-ALIPAY
-      arg.source = 2;
-      // #endif
 
-      // #ifdef H5
-      arg.source = 3;
-      // #endif
+      if (gStores.globalStore.modeOld) {
+        arg.source = 7;
+      } else {
+        // #ifdef MP-ALIPAY
+        arg.source = 2;
+        // #endif
 
+        // #ifdef H5
+        arg.source = 3;
+        // #endif
       }
 
       const { result } = await api.queryHospitalPattern(arg);
