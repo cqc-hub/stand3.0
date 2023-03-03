@@ -143,7 +143,11 @@
       "name": "西安市红会医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "西安市红会医院"
+      }
     }
   }
 }
