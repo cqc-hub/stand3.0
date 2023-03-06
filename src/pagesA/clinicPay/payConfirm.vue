@@ -78,7 +78,10 @@
   import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
-  import { type TPayConfirmPageProp } from './utils/clinicPayDetail';
+  import {
+    type TPayConfirmPageProp,
+    executeConfigPayAfter,
+  } from './utils/clinicPayDetail';
   import { encryptForPage, decryptForPage } from '@/common/des';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { GStores, type IHosInfo, wait } from '@/utils';
@@ -143,6 +146,7 @@
         recipeNo: string;
         otherPayWay: string;
         costTypeName: string;
+        clinicType?: string;
       }
     >{}
   );
@@ -389,6 +393,12 @@
     await wait(1000);
     uni.hideLoading();
     const { mzParams, deParams } = pageProps.value;
+
+    const { cardNumber, clinicType } = info.value;
+
+    if (clinicType) {
+      await executeConfigPayAfter(clinicType, cardNumber);
+    }
 
     if (mzParams) {
       //扫码进来的

@@ -1,6 +1,8 @@
 import { type XOR } from '@/typeUtils/obj';
 
-// 未指定说明的 '0' 均为 false '1' true
+/**
+ *  未指定说明的 '0' 均为 false '1' true
+ */
 export interface ISystemConfig {
   // 预约挂号
   order: {
@@ -56,18 +58,18 @@ export interface ISystemConfig {
     };
   };
 
-  // 就诊人
+  /** 就诊人 */
   person: {
-    // 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行
+    /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '0' | '1';
-    // 开启短信验证？ 完善时候没有
+    /** 开启短信验证？ 完善时候没有 */
     isSmsVerify?: '0' | '1';
-    // 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁）
+    /** 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁） */
     ageGuardian: number;
-    // 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月）
+    /** 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月） */
     ageChildren: number;
 
-    // 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？
+    /** 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？ */
     isGuardianWithIdCard?: number;
 
     ocr?: '0' | '1';
@@ -76,25 +78,33 @@ export interface ISystemConfig {
 
   // 病案
   medRecord: {
-    // 身份证上传要求 （人像、 背面、 手持）
-    sfz: TMedRecordSfz[]; // 后端说 人像、 背面 必填 设置时候每次都加下
-    isOcrSfz?: '1'; // sfz 配置中 front 的进行 ocr认证
-    requireSfz?: string[]; // 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式
-    purpose?: string[]; // 复印目的 不配置使用原来的那几个目的
-    selPurposeLen?: number; // 可选择的复印目的长度 默认 3
-    isPurposeRadio?: '1'; //目的有没有份数可以选择
+    /**
+     * 身份证上传要求 （人像、 背面、 手持）
+     * 后端说 人像、 背面 必填 设置时候每次都加下
+     */
+    sfz: TMedRecordSfz[];
+    /** sfz 配置中 front 的进行 ocr认证 */
+    isOcrSfz?: '1';
+    /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
+    requireSfz?: string[];
+    /** 复印目的 不配置使用原来的那几个目的 */
+    purpose?: string[];
+    /** 可选择的复印目的长度 默认 3 */
+    selPurposeLen?: number;
+    /** 目的有没有份数可以选择 */
+    isPurposeRadio?: '1';
 
-    // 收钱方式 0 预收 1 按项目、目的
+    /** 收钱方式 0 预收 1 按项目、目的 */
     isItemCount?: '0' | '1';
 
-    // 收钱方式预收的金额 ｜ 单个项目金额
+    /**  收钱方式预收的金额 ｜ 单个项目金额 */
     fee: number;
     hosId: string;
 
-    // 是否支持自定义住院记录
+    /** 是否支持自定义住院记录 */
     isCustomPatRecord?: '0' | '1';
 
-    // 手动添加记录里面是否可以切换院区
+    /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '0' | '1';
   }[];
 
@@ -117,31 +127,50 @@ export interface ISystemConfig {
     /**
      * 列表页
      */
-    // 可以切换院区?
+    /** 可以切换院区? */
     isListToggleHos?: '1';
 
-    // 门诊类型  网络医院/线下门诊 (是否展示)
+    /** 门诊类型  网络医院/线下门诊 (是否展示) */
     isListShowClinicType?: '1';
-    // 待缴费点击缴费时候提示的协议编号 (不配没有)
+    /** 待缴费点击缴费时候提示的协议编号 (不配没有) */
     confirmPayFg?: string;
     // 已缴费底部的按钮
     payedFooterBtn?: TButtonConfig;
-    // 预结算
+    /** 预结算 */
     isPreSettle?: '1';
     // 申请退单
     isOpenChargeback?: '1';
     // 扫码缴费是否隐藏列表金额
     isScanListHideMoney?: '1';
 
-    // 页面顶部 banner
+    /** 页面顶部 banner */
     bannerPay?: TBannerConfig;
 
     /**
      * 详情页
      */
 
-    // 待缴费详情页面 的费用总额是否可以让用户选择缴费
+    /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
     isSubitemPay?: '1';
+
+    // 缴费完成后跳转
+    /**
+     * prop 对应缴费列表 clinicType 值
+     * 1-线下就诊
+     * 2-网络问诊
+     * 3-会诊
+     */
+    pageNextAdress?: Record<
+      '1' | '2' | '3',
+      {
+        /**
+         * @mode
+         * 1-电子导诊单
+         * 2-药品助手
+         */
+        mode: '1' | '2';
+      }
+    >;
   };
 
   //报告查询
@@ -160,7 +189,7 @@ export interface ISystemConfig {
     isGraphic?: '0' | '1';
   };
 
-  // 药品配送
+  /** 药品配送 */
   drugDelivery: {
     company?: IOptions[];
   };
@@ -189,15 +218,19 @@ export interface IHosInfo {
 
 export type TBannerConfigBase = {
   src: `http${string}`;
+  /** 会添加到path 后面的 query 里面 */
   extraData?: BaseObject;
-  path: string; // h5 跳转完整路径 其他跳转 如 home/my
-  isSelfH5?: '1'; // 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....)
+  /** h5 跳转完整路径 其他跳转 如 home/my */
+  path: string;
+  /** 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....) */
+  isSelfH5?: '1';
+  /**  固定的附加参数(动态值) 键值为新的键名 */
   addition?: {
     token?: string;
     patientId?: string;
     cardNumber?: string;
     herenId?: string;
-  }; // 固定的附加参数(动态值) 键值为新的键名
+  };
 };
 
 type TBannerConfigH5 = {

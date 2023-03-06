@@ -75,7 +75,10 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   }
 };
 
-export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
+export const useTBanner = async (
+  config: Omit<TBannerConfig, 'src'>,
+  routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo'
+) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
@@ -158,14 +161,14 @@ export const useTBanner = async (config: Omit<TBannerConfig, 'src'>) => {
       https: encodeURIComponent(fullUrl),
     });
 
-    uni.navigateTo({
+    uni[routeType]({
       url,
     });
     // #endif
   } else if (type === 'self') {
     const url = `/${fullUrl}`;
 
-    uni.navigateTo({
+    uni[routeType]({
       url,
     });
   } else {

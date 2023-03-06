@@ -5,6 +5,7 @@ import {
   type ISystemConfig,
   ServerStaticData,
   wait,
+  useTBanner,
 } from '@/utils';
 import {
   joinQuery,
@@ -41,7 +42,7 @@ export type IPayListItem = {
   docCode: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付
   subIds: string; // 可合并 id
-  clinicType?: string;
+  clinicType?: '1' | '2' | '3';
   hosOrderId?: string;
   phsOrderId?: string;
   paySeq?: string;
@@ -866,6 +867,20 @@ export const usePayPage = () => {
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
+
+    //
+    const cardNumber =
+      pageProps.value.deParams?.cardNumber ||
+      gStores.userStore.patChoose.cardNumber;
+    const { clinicType } = selUnPayList.value[0];
+
+    if (clinicType) {
+      selUnPayList.value = [];
+      payedList.value = [];
+
+      await executeConfigPayAfter(clinicType, cardNumber);
+    }
+
     selUnPayList.value = [];
     payedList.value = [];
     tabCurrent.value = 1;
@@ -1023,6 +1038,53 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
   uni.navigateTo({
     url: joinQueryForUrl('/pagesA/clinicPay/payConfirm', data),
   });
+};
+
+export const executeConfigPayAfter = async (
+  clinicType: string, // '1' | '2' | '3'
+  cardNumber = ''
+) => {
+  const { pageNextAdress } = await ServerStaticData.getSystemConfig('pay');
+
+  if (pageNextAdress) {
+    const configItem = pageNextAdress[clinicType as '1' | '2' | '3'];
+
+    if (configItem) {
+      const mode = configItem.mode;
+
+      switch (mode) {
+        // 电子导诊单
+        case '1':
+          useTBanner(
+            {
+              type: 'h5',
+              isSelfH5: '1',
+              path: 'pagesC/medicalAssistant/medicalAssistant',
+              addition: {
+                herenId: 'herenId',
+                token: 'token',
+                cardNumber: '_hosPd',
+              },
+            },
+            'reLaunch'
+          );
+
+          return Promise.reject(void 0);
+
+        case '2':
+          uni.reLaunch({
+            url: joinQueryForUrl('/pagesB/medicationAssistant/medicalHelp', {
+              _hosPd: cardNumber,
+            }),
+          });
+
+          return Promise.reject(void 0);
+
+        default:
+          break;
+      }
+    }
+  }
 };
 
 const dealPayList = (resList: IPayListItem[], { payState }) => {

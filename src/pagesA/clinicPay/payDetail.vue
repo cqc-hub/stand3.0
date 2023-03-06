@@ -169,7 +169,7 @@
           >
             申请退单
           </button>
-
+          <!-- handlerPay -->
           <button
             @click="handlerPay"
             :class="{
@@ -208,6 +208,7 @@
     usePayPage,
     usePayDetailPage,
     getIsMedicalModePlugin,
+    executeConfigPayAfter,
     type TPayDetailProp,
     type TCostList,
   } from './utils/clinicPayDetail';
@@ -525,9 +526,14 @@
   };
 
   const payAfter = async () => {
+    const { clinicType, cardNumber } = props.value;
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
+
+    if (clinicType) {
+      await executeConfigPayAfter(clinicType, cardNumber);
+    }
 
     uni.reLaunch({
       url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
