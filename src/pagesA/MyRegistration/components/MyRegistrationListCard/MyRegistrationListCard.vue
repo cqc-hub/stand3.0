@@ -103,7 +103,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
-  import { orderStatusMap, OrderStatus } from '../../utils/regDetail';
+  import { getStatusConfig } from '../../utils/regDetail';
   import { joinQueryForUrl } from '@/common';
 
   const props = defineProps<{
@@ -113,17 +113,6 @@
     showFWBtn: string[];
     systemModeOld?: boolean;
   }>();
-
-  const getStatusConfig = (status: OrderStatus) => {
-    if (orderStatusMap[status]) {
-      return orderStatusMap[status];
-    } else {
-      return {
-        title: '未知',
-        cardColr: 'var(--hr-neutral-color-7)',
-      };
-    }
-  };
 
   // 显示到院导航
   const isShowDaohan = (item: IRegistrationCardItem) => {

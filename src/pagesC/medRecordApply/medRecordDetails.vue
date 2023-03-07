@@ -843,7 +843,8 @@
 
     const division = `${province} ${city} ${county}`;
     const copyAim = aimValue.value.join('、');
-    const printCount = JSON.stringify(purposeCount.value);
+    const printCount =
+      (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
     const args = {
       address: detailedAddress,

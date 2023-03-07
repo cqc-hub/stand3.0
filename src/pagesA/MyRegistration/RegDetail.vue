@@ -331,6 +331,7 @@
     patientTempList,
     orderStatusMap,
     formatterTemp,
+    getOrderStatusTitle,
   } from './utils/regDetail';
   import {
     type IGPay,
@@ -404,11 +405,10 @@
       ...orderStatusMap[orderRegInfo.value.orderStatus],
     };
 
-    if (orderRegInfo.value.orderStatus === '0') {
-      if (orderConfig.value.isOrderPay === '1') {
-        statusInfo.title = '已挂号';
-      }
-    }
+    statusInfo.title = getOrderStatusTitle(
+      orderRegInfo.value.orderStatus,
+      orderConfig.value.isOrderPay
+    );
 
     return (
       statusInfo || {

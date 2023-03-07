@@ -136,7 +136,11 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 
-  import { OrderStatus, orderStatusMap } from './utils/regDetail';
+  import {
+    OrderStatus,
+    orderStatusMap,
+    getOrderStatusTitle,
+  } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
   import { isAreaProgram } from '@/stores';
 
@@ -185,14 +189,11 @@
       });
 
     if (result && result.length) {
-      result.map((o) => {
-        o._statusLabel = getStatusConfig(o.orderStatus).title;
-
-        if (o.orderStatus === '0') {
-          if (orderConfig.value.isOrderPay === '1') {
-            o._statusLabel = '已挂号';
-          }
-        }
+      result.map(async (o) => {
+        o._statusLabel = getOrderStatusTitle(
+          o.orderStatus,
+          orderConfig.value.isOrderPay
+        );
 
         if (o._statusLabel === '未知') {
           o.orderStatus = '--';

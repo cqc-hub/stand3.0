@@ -262,3 +262,25 @@ export interface IRegInfo {
   rateFlag?: 0 | 1;
   _source?: string;
 }
+
+export const getStatusConfig = (status: OrderStatus) => {
+  if (orderStatusMap[status]) {
+    return orderStatusMap[status];
+  } else {
+    return {
+      title: '未知',
+      cardColr: 'var(--hr-neutral-color-7)',
+    };
+  }
+};
+
+export const getOrderStatusTitle = (
+  status: OrderStatus,
+  isOrderPay
+): string => {
+  if (isOrderPay === '1' && status === '0') {
+    return '已挂号';
+  } else {
+    return getStatusConfig(status).title;
+  }
+};
