@@ -339,6 +339,8 @@ const queryApi = {
     service.post('/phs-query/examine/getExamineReportDetails', parm(data)),
   getCheckoutReportDetails: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
+  getCloudReportUrl: <T = any>(data) =>
+    service.post('/phs-query/examine/getCloudReportUrl', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
 };

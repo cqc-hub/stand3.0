@@ -7,6 +7,8 @@
   >
     <g-flag typeFg="41" isShowFg />
     <g-choose-pat @choose-pat="choosePat" />
+    <g-tbanner v-if="isShowYunBanner" :config="yunBannerConfig" />
+
     <g-message />
     <view class="tab-box">
       <g-tabs
@@ -80,7 +82,13 @@
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    wait,
+    ISystemConfig,
+    TBannerConfig,
+  } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
@@ -90,6 +98,8 @@
   const _typeId = ref('');
   const slist = ref<any>('');
   const loading = ref(true);
+  const isShowYunBanner = ref(false);
+  const yunBannerConfig = ref(<TBannerConfig>{});
   const gStores = new GStores();
   const init = async () => {
     tabs.value = reportConfig.value.reportTab.map((item, index) => {
@@ -294,8 +304,37 @@
   const reportConfig = ref(<any>{});
 
   onLoad(async () => {
-    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+    const config = await ServerStaticData.getSystemConfig('reportQuery');
+    reportConfig.value = config;
+    const { listYun } = config;
 
+    if (listYun) {
+      console.log({
+        listYun,
+      });
+
+      const { imgUrl } = listYun;
+      const pat = gStores.userStore.patChoose;
+
+      if (Object.keys(pat).length) {
+        const { cardNumber, patientId } = pat;
+
+        const { result } = await api.getCloudReportUrl({
+          cardNumber,
+          patientId,
+        });
+
+        if (result) {
+          isShowYunBanner.value = true;
+
+          yunBannerConfig.value = {
+            path: result,
+            type: 'h5',
+            src: imgUrl as any,
+          };
+        }
+      }
+    }
     init();
   });
 </script>
