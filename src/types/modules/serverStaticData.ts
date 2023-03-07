@@ -187,6 +187,11 @@ export interface ISystemConfig {
     isDownloadRepor?: '0' | '1';
     //0否 1 是 是否支持查看图文报告 有图文必有下载功能
     isGraphic?: '0' | '1';
+
+    /** 报告查询列表云影像链接 */
+    listYun?: {
+      imgUrl: string;
+    };
   };
 
   /** 药品配送 */

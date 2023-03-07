@@ -80,7 +80,7 @@
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, ServerStaticData, wait } from '@/utils';
+  import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
@@ -291,14 +291,11 @@
     });
   };
   //根据系统码查询对应医院报告参数
-  const reportConfig = ref();
-
-  const getParamsMoreBySysCode = async () => {
-    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-  };
+  const reportConfig = ref(<any>{});
 
   onLoad(async () => {
-    await getParamsMoreBySysCode();
+    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+
     init();
   });
 </script>

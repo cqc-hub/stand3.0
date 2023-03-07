@@ -35,6 +35,16 @@ export const tradeType = {
 
 type TTradeType = keyof typeof tradeType;
 
+export type TWxAuthorize = {
+  cityId: string;
+  payAuthNo: string;
+  userLongitudeLatitude: {
+    latitude: string;
+    longitude: string;
+  };
+  userName: string;
+};
+
 export type IPayListItem = {
   childOrder: string; // 唯一 !!
   deptId: string;
@@ -142,7 +152,7 @@ export type TPayConfirmPageProp = {
   mzParams?: string;
 };
 
-// 是否医保插件模式
+/** 是否医保插件模式 */
 export const getIsMedicalModePlugin = () => {
   const {
     sConfig: { medicalMHelp },
@@ -173,7 +183,7 @@ export const getIsMedicalModePlugin = () => {
   return isMedicalPay;
 };
 
-// 是否自动赋值医保状态
+/** 是否自动赋值医保状态 */
 export const getIsMedicalTradeTypeDefault = () => {
   const {
     sConfig: { medicalMHelp },
@@ -204,7 +214,7 @@ export const getIsMedicalTradeTypeDefault = () => {
   return setTradeTypeDefault;
 };
 
-// 获取国标授权
+/** 获取国标授权 */
 export const getQxMedicalNation = async () => {
   const gStores = new GStores();
   const qrCode =
@@ -243,7 +253,7 @@ export const getQxMedicalNation = async () => {
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
     });
 
-    return;
+    return Promise.reject('请求授权...');
   }
 
   if (gStores.globalStore.openId === '') {
@@ -262,21 +272,50 @@ export const getQxMedicalNation = async () => {
   }
   // #endif
 
-  console.log({
-    requestArg,
-  });
-
-  // return
+  // return;
 
   //  qrcode 只能使用一次
   gStores.globalStore.onAppShow({});
-  const { result } = await api.authorize(requestArg);
+  const { result } = await api.authorize<any>(requestArg);
+  if (result.userLongitudeLatitude) {
+    result.userLongitudeLatitude = JSON.parse(result.userLongitudeLatitude);
+  }
 
-  console.log({
-    result,
-  });
+  return <TWxAuthorize>result;
+};
 
-  return result;
+/** 国标医保费用明细上传 */
+export const medicalNationUpload = async (
+  detail: TPayDetailInfo,
+  auth: TWxAuthorize,
+  additional: BaseObject = {}
+) => {
+  let authorizeTypeDesc = '1';
+  // #ifdef MP-ALIPAY
+  authorizeTypeDesc = '2';
+  // #endif
+
+  const gStores = new GStores();
+  const {
+    userLongitudeLatitude: { longitude, latitude },
+  } = auth;
+
+  const { patientId } = gStores.userStore.patChoose;
+  const { source } = gStores.globalStore.browser;
+
+  const requestArg = {
+    ...detail,
+    ...additional,
+    patientId,
+    longitude,
+    latitude,
+    source,
+    accountUseFlag: true,
+    authorizeTypeDesc,
+  };
+
+  console.log('----');
+  console.log(requestArg);
 };
 
 export const usePayPage = () => {
@@ -723,10 +762,36 @@ export const usePayPage = () => {
         // #endif
 
         // #ifdef  MP-WEIXIN
-        wxPayMoneyMedicalPlugin();
+        wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
     }
+  };
+
+  /** 微信医保国标模式  获取到授权 */
+  const medicalNationWx = async (payload: TWxAuthorize) => {
+    // 医保必然是单选的
+    const item = selUnPayList.value[0]!;
+    const { getDetailData, detailData } = usePayDetailPage();
+
+    await getDetailData({
+      ...pageProps.value,
+      ...item,
+    });
+
+    await medicalNationUpload(
+      {
+        ...item,
+        ...detailData.value,
+      },
+      payload,
+      {
+        businessType: '1',
+        cardNumber:
+          pageProps.value.deParams?.cardNumber ||
+          gStores.userStore.patChoose.patientId,
+      }
+    );
   };
 
   // 支付宝 插件医保
@@ -760,8 +825,6 @@ export const usePayPage = () => {
         // medOrgOrd: medOrgOrd.split(',')[0],
       };
 
-      console.log(params);
-
       my.getAuthCode({
         scopes: ['auth_user', 'nhsamp'],
         success: (res) => {
@@ -782,7 +845,9 @@ export const usePayPage = () => {
   // 医保国标授权
 
   // 微信 & 医保
-  const wxPayMoneyMedicalPlugin = async (callback = () => {}) => {
+  const wxPayMoneyMedicalPlugin = async (
+    callback: (authorize: TWxAuthorize) => any = () => {}
+  ) => {
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
@@ -793,8 +858,8 @@ export const usePayPage = () => {
     if (medicalPlugin === '1') {
       wxPryMoneyMedicalDialog.value.show();
     } else if (medicalNation) {
-      await getQxMedicalNation();
-      callback();
+      const authorize = await getQxMedicalNation();
+      callback(authorize);
     }
   };
 
