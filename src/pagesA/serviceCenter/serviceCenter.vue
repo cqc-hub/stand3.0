@@ -213,7 +213,7 @@
         line-height: 50rpx;
       }
       .desc {
-        font-size: var(--h-size-40);
+        font-size: 24rpx;
         color: var(--hr-neutral-color-7);
         line-height: 30rpx;
       }
