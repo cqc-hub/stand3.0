@@ -7,7 +7,7 @@
   >
     <view
       v-for="(item, idx) in list"
-      :key="idx"
+      :key="item.orderId"
       :class="{
         mt24: !idx,
       }"
@@ -23,7 +23,7 @@
           }"
           class="text-no-wrap f32"
         >
-          {{ getStatusConfig(item.orderStatus).title }}
+          {{ item._statusLabel }}
         </view>
       </view>
 

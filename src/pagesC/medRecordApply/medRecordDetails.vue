@@ -472,13 +472,10 @@
     const _fee = pageConfig.value.fee;
     if (pageConfig.value.isItemCount === '1') {
       if (pageConfig.value.isPurposeRadio === '1') {
-        return recordRows.value.length * aimValue.value.length * _fee;
+        return aimValue.value.length * _fee;
       } else {
         return (
-          purposeCount.value.reduce((prev, curr) => {
-            prev += curr.count;
-            return prev;
-          }, 0) * _fee
+          purposeCount.value.reduce((prev, curr) => prev + curr.count, 0) * _fee
         );
       }
     } else {

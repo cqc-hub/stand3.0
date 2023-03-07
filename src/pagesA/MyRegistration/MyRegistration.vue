@@ -132,7 +132,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores, ServerStaticData } from '@/utils';
+  import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 
@@ -154,6 +154,7 @@
   const showFWBtn = ref<string[]>([]);
 
   const list = ref<IRegistrationCardItem[]>([]);
+  const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
 
   const isCancelOrderDialogShow = ref(false);
   const dialogContent = ref('');
@@ -172,6 +173,7 @@
 
   const getList = async (patientId = '') => {
     isComplete.value = false;
+    list.value = [];
     const { result } = await api
       .getRegOrderList<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
@@ -185,6 +187,13 @@
     if (result && result.length) {
       result.map((o) => {
         o._statusLabel = getStatusConfig(o.orderStatus).title;
+
+        if (o.orderStatus === '0') {
+          if (orderConfig.value.isOrderPay === '1') {
+            o._statusLabel = '已挂号';
+          }
+        }
+
         if (o._statusLabel === '未知') {
           o.orderStatus = '--';
         }
@@ -204,8 +213,10 @@
 
   let _firstIn = true;
   const getConfig = async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+
     const { isHosNavigation, isQueuing, isFWBtn, isOrderPay } =
-      await ServerStaticData.getSystemConfig('order');
+      orderConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;

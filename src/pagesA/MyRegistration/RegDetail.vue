@@ -400,7 +400,9 @@
   });
 
   const titleStatus = computed(() => {
-    let statusInfo = orderStatusMap[orderRegInfo.value.orderStatus];
+    let statusInfo = {
+      ...orderStatusMap[orderRegInfo.value.orderStatus],
+    };
 
     if (orderRegInfo.value.orderStatus === '0') {
       if (orderConfig.value.isOrderPay === '1') {
