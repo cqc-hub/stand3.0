@@ -309,10 +309,6 @@
     const { listYun } = config;
 
     if (listYun) {
-      console.log({
-        listYun,
-      });
-
       const { imgUrl } = listYun;
       const pat = gStores.userStore.patChoose;
 

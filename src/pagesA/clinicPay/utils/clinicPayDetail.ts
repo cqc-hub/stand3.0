@@ -304,6 +304,7 @@ export const medicalNationUpload = async (
   const { source } = gStores.globalStore.browser;
 
   const requestArg = {
+    ...auth,
     ...detail,
     ...additional,
     patientId,
@@ -316,6 +317,8 @@ export const medicalNationUpload = async (
 
   console.log('----');
   console.log(requestArg);
+
+  await api.medicalCostInfoUpload(requestArg);
 };
 
 export const usePayPage = () => {

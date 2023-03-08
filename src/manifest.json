@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7acc3ecadc08f7ea",
+    "appid": "wx4d8f68fdc6b6831c",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -72,13 +72,8 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021003167607056",
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "appid": "",
+    "plugins": {},
     "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
@@ -91,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "咸阳市第一人民医院",
+  "name": "中国人民解放军新疆军区总医院",
   "h5": {
     "router": {
       "base": "./"

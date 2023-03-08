@@ -170,6 +170,12 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  // 医保授权
+  medicalCostInfoUpload: <T>(data) =>
+    service.post<T>('/phs-query/medical/medicalCostInfoUpload', parm(data), {
+      hideLoading: false,
+    }),
+
   // 待缴费
   getUnpaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getUnpaidClinicList', parm(data), {
