@@ -26,6 +26,7 @@ interface ISConfig {
       // 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序)
       medicalPlugin?: '1';
       // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
+      // https://docs.qq.com/doc/DV3lxV3hSbXFudVBE
       // 第三方提供的链接拼接工具(参数查看 测试环境反馈单) https://yb.qq.com/yibao-payment/doc/generateLink?nodeId=2
       medicalNation?: {
         appId: string;

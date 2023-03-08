@@ -150,6 +150,13 @@
         },
 
         {
+          "path": "clinicPay/clinicPayMedical",
+          "style": {
+            "navigationBarTitleText": "确认支付"
+          }
+        },
+
+        {
           "path": "clinicPay/payDetail",
           "style": {
             "navigationBarTitleText": "待缴费明细"

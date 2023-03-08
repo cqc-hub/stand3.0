@@ -152,6 +152,17 @@ export type TPayConfirmPageProp = {
   mzParams?: string;
 };
 
+/** 国标医保明细上传结果 */
+export type TMedicalNationUploadRes = {
+  payOrderId: string;
+  idType: string;
+  paySign: string;
+  idCard: string;
+  orderStatus: string;
+  hisSerialNo: string;
+  platOrderId: string;
+};
+
 /** 是否医保插件模式 */
 export const getIsMedicalModePlugin = () => {
   const {
@@ -315,10 +326,9 @@ export const medicalNationUpload = async (
     authorizeTypeDesc,
   };
 
-  console.log('----');
-  console.log(requestArg);
+  const { result } = await api.medicalCostInfoUpload<any>(requestArg);
 
-  await api.medicalCostInfoUpload(requestArg);
+  return <TMedicalNationUploadRes>result;
 };
 
 export const usePayPage = () => {
@@ -782,7 +792,7 @@ export const usePayPage = () => {
       ...item,
     });
 
-    await medicalNationUpload(
+    const uploadRes = await medicalNationUpload(
       {
         ...item,
         ...detailData.value,
