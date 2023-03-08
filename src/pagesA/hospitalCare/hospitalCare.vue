@@ -1,7 +1,10 @@
 <template>
-  <view class="g-page"   :class="{
+  <view
+    class="g-page"
+    :class="{
       'system-mode-old': gStores.globalStore.modeOld,
-    }">
+    }"
+  >
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat @choosePat="choosePat" />
 
@@ -15,24 +18,24 @@
         all-blod
         @change="tabChange"
       />
-    </view>
+    </view> 
     <!-- 内容区域 -->
     <view class="g-container" v-if="pageLoading">
       <inpatientInfo
         ref="inpatientInfoRef"
-        v-if="tabCurrent == 0"
+        v-if="getValue('0')"
         :isQueryPreRecord="resultHos.isQueryPreRecord"
         :tabCurrent="tabCurrent"
       ></inpatientInfo>
       <dailyExpenseList
         ref="dailyExpenseListRef"
-        v-if="tabCurrent == 1"
+        v-if="getValue('1')"
         :isHosDaylist="resultHos.isHosDaylist"
         :tabCurrent="tabCurrent"
       ></dailyExpenseList>
       <totalList
         ref="totalListRef"
-        v-if="tabCurrent == 2"
+        v-if="getValue('2')"
         :isHosTotallist="resultHos.isHosTotallist"
         :tabCurrent="tabCurrent"
       ></totalList>
@@ -72,11 +75,26 @@ const inpatientInfoRef = ref<any>("");
 const dailyExpenseListRef = ref<any>("");
 const totalListRef = ref<any>("");
 const pageLoading = ref(false);
+const tabList = ref(false);
+const tab1List = ref(false);
+const tab2List = ref(false);
+const currentTabValue = ref(false)
+
+//获取当前的value
+const getValue = (value)=>{
+  const tab = resultHos.value?.tab
+  if( tab && tab.length){
+    const item = tab[tabCurrent.value]!;
+    return item.value === value;
+  } else {
+    return false
+  }
+}
 
 //切换就诊人
 const choosePat = ({ item }: { item: IPat; number: number }) => {
   patList.value = item;
-  pageRequest()
+  pageRequest();
 };
 
 //入口不同调用不同接口
@@ -101,10 +119,15 @@ const scrollOption = ref({
   noMoreText: "没有更多了",
 });
 const setData = async () => {
-  pageLoading.value = false
-  const result = await ServerStaticData.getSystemConfig('hospitalCare');
+  pageLoading.value = false;
+  const result = await ServerStaticData.getSystemConfig("hospitalCare");
   resultHos.value = result as any;
-  pageLoading.value = true
+
+  tabList.value = result.tab.find((o) => o.value === "0") ? true : false;
+  tab1List.value = result.tab.find((o) => o.value === "1") ? true : false;
+  tab2List.value = result.tab.find((o) => o.value === "2") ? true : false;
+
+  pageLoading.value = true;
 };
 
 onLoad(async (opt) => {
@@ -116,7 +139,6 @@ onLoad(async (opt) => {
     tabCurrent.value = pageProps.value.tabIndex;
   }
 });
-
 </script>
 
 <style scoped lang="scss">
