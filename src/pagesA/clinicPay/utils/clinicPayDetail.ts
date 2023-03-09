@@ -102,6 +102,7 @@ export type TPayDetailProp = {
   costTypeCode?: string;
   params?: string; //扫码的加密参数
   traceNo?: string;
+  recipeNo?: string;
 };
 
 export type TCostList = {
@@ -805,6 +806,22 @@ export const usePayPage = () => {
           gStores.userStore.patChoose.patientId,
       }
     );
+
+    console.log('----', uploadRes);
+
+    // if (uploadRes) {
+    //   const {
+    //     fundPay,
+    //     defrayFee, // 现金支付  自费
+    //     deposit,
+    //     insuranceFee, // 医保基金支付金额  医保报销、
+    //     ordStas, // 订单状态
+    //     platOrderId,
+    //     insurancePersonalFee, // 医保个人账户支出  医保个人账户扣款
+    //     payOrderId,
+    //     totalFee, // 费用总额
+    //   } = uploadRes;
+    // }
   };
 
   // 支付宝 插件医保
@@ -904,6 +921,7 @@ export const usePayPage = () => {
       deptName: selectList.map((o) => o.deptName).join(','),
       docCode: selectList.map((o) => o.docId).join(','),
       docName: selectList.map((o) => o.docName).join(','),
+      recipeNo: selectList.map((o) => o.recipeNo).join(','),
       hosId: selectList[0].hosId,
       // hosId: selectList.map((o) => o.hosId).join(','),
       hosName: selectList.map((o) => o.hosName).join(','),

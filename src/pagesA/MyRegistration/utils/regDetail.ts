@@ -268,7 +268,12 @@ export const getStatusConfig = (status: OrderStatus) => {
     return orderStatusMap[status];
   } else {
     return {
-      title: '未知',
+      title: '未知的状态',
+      color: 'var(--hr-error-color-6)',
+
+      headerClass: '',
+      headerBgIcon: '&#xe6de;',
+      headerIcon: '&#xe6d5;',
       cardColr: 'var(--hr-neutral-color-7)',
     };
   }

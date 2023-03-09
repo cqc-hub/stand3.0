@@ -331,7 +331,7 @@
     patientTempList,
     orderStatusMap,
     formatterTemp,
-    getOrderStatusTitle,
+    getStatusConfig,
   } from './utils/regDetail';
   import {
     type IGPay,
@@ -340,7 +340,6 @@
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
-  import globalGl from '@/config/global';
 
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
   const refForm = ref<any>('');
@@ -401,24 +400,7 @@
   });
 
   const titleStatus = computed(() => {
-    let statusInfo = {
-      ...orderStatusMap[orderRegInfo.value.orderStatus],
-    };
-
-    statusInfo.title = getOrderStatusTitle(
-      orderRegInfo.value.orderStatus,
-      orderConfig.value.isOrderPay
-    );
-
-    return (
-      statusInfo || {
-        title: '未知的状态',
-        headerClass: '',
-        color: 'var(--hr-error-color-6)',
-        headerBgIcon: '',
-        headerIcon: '&#xe6d5;',
-      }
-    );
+    return getStatusConfig(orderRegInfo.value.orderStatus);
   });
 
   let _timeTravel: any;
@@ -577,6 +559,7 @@
         o.key = qrCode;
       }
     });
+
     setTimeout(() => {
       formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
       formatterTemp(patientTempList, gStores.globalStore.modeOld);
