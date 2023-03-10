@@ -288,13 +288,13 @@
   };
 
   onShow(async () => {
+    // 微信医保小程序跳回来后中断了链路 重新走下
     if (getLocalStorage('get-wx-medical-auth-code') === '1') {
       await wait(300);
       setLocalStorage({
         'get-wx-medical-auth-code': '',
       });
 
-      // 微信医保小程序跳回来后中断了链路 重新走下
       if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
         getPayInfo({
           item: {
@@ -319,9 +319,6 @@
     if (opt.q) {
       return;
     }
-    setTimeout(() => {
-      isShowPatComponent.value = true;
-    }, 600);
 
     if (opt) {
       if (opt.q) {
@@ -342,6 +339,8 @@
     }
 
     await init();
+    await wait(600);
+    isShowPatComponent.value = true;
 
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
