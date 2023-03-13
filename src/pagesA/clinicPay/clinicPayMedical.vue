@@ -5,7 +5,7 @@
       <view class="hos-info">
         <view>
           <view class="tip">付款给</view>
-          <view class="hos-name">{{ 233 }}</view>
+          <view class="hos-name">{{ info.hosName }}</view>
         </view>
 
         <image
@@ -18,22 +18,24 @@
       <view class="container-box">
         <view class="container-row f-label1 mb88">
           <view class="f-label1">费用总额</view>
-          <view class="f-label1">{{ 233 || 0 }}元</view>
+          <view class="f-label1">{{ uploadRes.totalFee }}元</view>
         </view>
 
         <view class="container-row">
           <view class="f-label2">医保基金支付</view>
-          <view class="f-label2">{{ 233 || 0 }}元</view>
+          <view class="f-label2">{{ uploadRes.medicareTotalFee }}元</view>
         </view>
 
         <view class="container-row mb44">
           <view class="f-label2">个人账户支付</view>
-          <view class="f-label2">{{ 233 || 0 }}元</view>
+          <view class="f-label2">
+            {{ uploadRes.medicarePersonalFee || 0 }}元
+          </view>
         </view>
 
         <view class="container-row">
           <view class="f-label3">现金支付</view>
-          <view class="f-label3">{{ 233 || 0 }}元</view>
+          <view class="f-label3">{{ uploadRes.personalPayFee || 0 }}元</view>
         </view>
       </view>
 
@@ -50,20 +52,134 @@
     <view class="footer">
       <view>
         <text class="f-label4">您还需支付：</text>
-        <text class="f-label3 fs44">¥{{ 233 || 0 }}</text>
+        <text class="f-label3 fs44">¥{{ uploadRes.personalPayFee || 0 }}</text>
       </view>
 
       <view>
-        <button :loading="loading" class="btn btn-primary fs44">去支付</button>
+        <button @click="getPay" :loading="loading" class="btn btn-primary fs44">
+          去支付
+        </button>
       </view>
     </view>
+
+    <g-message />
   </view>
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
+  import { storeToRefs } from 'pinia';
+  import { TMedicalNationUploadRes } from './utils/clinicPayDetail';
+  import { getOpenId } from '@/components/g-pay/index';
 
+  import { GStores } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
+
+  import api from '@/service/api';
+
+  const gStores = new GStores();
+  const info = ref(
+    <
+      {
+        hosName: string;
+        hosId: string;
+        /** 1门诊 2住院 3挂号 */
+        businessType: '1' | '2' | '3';
+        phsOrderSource: '1' | '2' | '3';
+        cardNumber: string;
+
+        deptCode: string;
+        deptName: string;
+        docName: string;
+        serialNo: string;
+        // deptCode: string;
+        patientId: string;
+        patientName: string;
+        payAuthNo: string;
+        totalCost: string;
+        params?: string;
+      }
+    >{}
+  );
+  const uploadRes = ref(<TMedicalNationUploadRes>{});
   const loading = ref(false);
+
+  const getPay = async () => {
+    let channel = 'ALI_MINI_INSURANCE';
+    // #ifdef  MP-WEIXIN
+    channel = 'WX_MINI_INSURANCE';
+    // #endif
+
+    const {
+      businessType,
+      cardNumber,
+      serialNo: hisSerialNo,
+      hosId,
+      patientId,
+      patientName,
+      phsOrderSource,
+      totalCost,
+      params,
+    } = info.value;
+    const {
+      idCard,
+      idType,
+      medicarePersonalFee,
+      medicarePlanFee,
+      medicareTotalFee,
+      payOrderId,
+      paySign,
+      personalPayFee,
+      phsOrderNo,
+      requestContent,
+    } = uploadRes.value;
+    const { source } = gStores.globalStore.browser;
+
+    const openId = await getOpenId();
+
+    const returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+      tabIndex: '1',
+      params,
+    });
+
+    const requestArg = {
+      channel,
+      businessType,
+      cardNumber,
+      extend: requestContent,
+      hisSerialNo,
+      hosId,
+      idCard,
+      idType,
+      medicarePersonalFee,
+      medicarePlanFee,
+      medicareTotalFee,
+      openId,
+      patientId,
+      patientName,
+      payOrderId,
+      paySign,
+      personalPayFee,
+      phsOrderNo,
+      phsOrderSource,
+      requestContent,
+      source,
+      returnUrl,
+      totalFee: totalCost,
+      userId: openId,
+    };
+
+    await api.medicalPay(requestArg);
+  };
+
+  onLoad(() => {
+    // requestContent
+    const { uploadRes: _uploadRes, info: _info } =
+      gStores.globalStore.cacheData;
+    info.value = _info;
+    uploadRes.value = _uploadRes;
+  });
 </script>
 
 <style lang="scss" scoped>

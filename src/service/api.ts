@@ -657,5 +657,15 @@ const authApi = {
   ) => {
     return service.post<T>('/phs-pay/pay/addHRPay', parm(data), opt);
   },
+
+  medicalPay: <T>(
+    data,
+    opt = {
+      // showMessage: false,
+      hideLoading: false,
+    }
+  ) => {
+    return service.post<T>('/phs-pay/pay/medicalPay', parm(data), opt);
+  },
 };
 export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };

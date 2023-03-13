@@ -146,6 +146,18 @@ export const getOpenid2 = async (): Promise<any> => {
   });
 };
 
+export const getOpenId = async () => {
+  // #ifdef MP-ALIPAY
+  return await getOpenid2();
+  // #endif
+
+  // #ifdef  MP-WEIXIN
+  return await getOpenid();
+  // #endif
+
+  return '';
+};
+
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
   const gStores = new GStores();
   return new Promise(async (resolve, reject) => {

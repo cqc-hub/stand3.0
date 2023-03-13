@@ -309,13 +309,11 @@
   const getPayTotal = computed(() => {
     if (props.value.payState !== '1') {
       return 0;
-    } else if (pageConfig.value.isSubitemPay === '1') {
-      const totalFee = selList.value.reduce((prev, curr) => {
-        const fee = (curr.subCost as any) * 1;
-        prev += fee;
-
-        return prev;
-      }, 0);
+    } else if (isCanSelServerFee.value) {
+      const totalFee = selList.value.reduce(
+        (prev, curr) => (prev += (curr.subCost as any) * 1),
+        0
+      );
 
       return Number((totalFee * 100).toFixed(2)) / 100;
     } else {
@@ -327,9 +325,26 @@
   const isCanSelServerFee = computed(() => {
     let isMedicalPay = false;
     const isMedicalModePlugin = getIsMedicalModePlugin();
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
 
     if (isMedicalModePlugin) {
       isMedicalPay = true;
+
+      if (medicalMHelp) {
+        const { wx: _wx } = medicalMHelp;
+        // #ifdef  MP-WEIXIN
+        if (_wx) {
+          const { medicalNation } = _wx;
+
+          if (medicalNation) {
+            // 微信国标可以选择缴费
+            isMedicalPay = false;
+          }
+        }
+        // #endif
+      }
     }
 
     isMedicalPay = isMedicalPay && props.value.costTypeCode === '2';
@@ -467,7 +482,8 @@
 
   const toPay = async () => {
     const { patientId, patientName } = gStores.userStore.patChoose;
-    const totalCost = detailData.value.totalCost + '';
+    // const totalCost = detailData.value.totalCost + '';
+    const totalCost = getPayTotal.value;
     const source = gStores.globalStore.browser.source;
     const {
       childOrder,
@@ -480,7 +496,7 @@
       visitDate,
       costTypeCode,
       cardNumber,
-      recipeNo
+      recipeNo,
     } = props.value;
 
     const args = {

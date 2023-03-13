@@ -155,13 +155,19 @@ export type TPayConfirmPageProp = {
 
 /** 国标医保明细上传结果 */
 export type TMedicalNationUploadRes = {
-  payOrderId: string;
-  idType: string;
+  requestContent: string;
   paySign: string;
+  totalFee: string;
   idCard: string;
   orderStatus: string;
-  hisSerialNo: string;
-  platOrderId: string;
+  medicarePersonalFee: string;
+  personalPayFee: string;
+  medicarePlanFee: string;
+  medicareTotalFee: string;
+  phsOrderNo: string;
+  extend: string;
+  idType: string;
+  payOrderId: string;
 };
 
 /** 是否医保插件模式 */
@@ -787,6 +793,7 @@ export const usePayPage = () => {
     // 医保必然是单选的
     const item = selUnPayList.value[0]!;
     const { getDetailData, detailData } = usePayDetailPage();
+    const pat = gStores.userStore.patChoose;
 
     await getDetailData({
       ...pageProps.value,
@@ -801,13 +808,35 @@ export const usePayPage = () => {
       payload,
       {
         businessType: '1',
-        cardNumber:
-          pageProps.value.deParams?.cardNumber ||
-          gStores.userStore.patChoose.patientId,
+        cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
       }
     );
 
-    console.log('----', uploadRes);
+    const info = {
+      ...item,
+      // businessType: '1',
+      phsOrderSource: '1',
+      cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
+      patientId: pageProps.value.deParams?.cardNumber ? '' : pat.patientId,
+      patientName: pageProps.value.deParams?.patientName || pat.patientName,
+      payAuthNo: payload.payAuthNo,
+      totalCost: detailData.value.totalCost,
+      params: pageProps.value.params,
+    };
+
+    console.log({
+      uploadRes,
+      info,
+    });
+
+    gStores.globalStore.assignCacheData({
+      uploadRes,
+      info,
+    });
+
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayMedical',
+    });
 
     // if (uploadRes) {
     //   const {
@@ -889,6 +918,7 @@ export const usePayPage = () => {
       wxPryMoneyMedicalDialog.value.show();
     } else if (medicalNation) {
       const authorize = await getQxMedicalNation();
+
       callback(authorize);
     }
   };
