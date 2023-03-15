@@ -70,7 +70,10 @@
   import { ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { storeToRefs } from 'pinia';
-  import { TMedicalNationUploadRes } from './utils/clinicPayDetail';
+  import {
+    TMedicalNationUploadRes,
+    TWxAuthorize,
+  } from './utils/clinicPayDetail';
   import { getOpenId } from '@/components/g-pay/index';
 
   import { GStores } from '@/utils';
@@ -84,8 +87,6 @@
       {
         hosName: string;
         hosId: string;
-        /** 1门诊 2住院 3挂号 */
-        businessType: '1' | '2' | '3';
         phsOrderSource: '1' | '2' | '3';
         cardNumber: string;
 
@@ -99,6 +100,7 @@
         payAuthNo: string;
         totalCost: string;
         params?: string;
+        extend: TWxAuthorize;
       }
     >{}
   );
@@ -112,7 +114,6 @@
     // #endif
 
     const {
-      businessType,
       cardNumber,
       serialNo: hisSerialNo,
       hosId,
@@ -121,6 +122,7 @@
       phsOrderSource,
       totalCost,
       params,
+      extend,
     } = info.value;
     const {
       idCard,
@@ -145,9 +147,8 @@
 
     const requestArg = {
       channel,
-      businessType,
       cardNumber,
-      extend: requestContent,
+      extend: (extend && JSON.stringify(extend)) || '',
       hisSerialNo,
       hosId,
       idCard,

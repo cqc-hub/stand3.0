@@ -19,33 +19,6 @@
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
 
-  const gStores = new GStores();
-  const base = 'https://health.eheren.com/v3/#/';
-  // const base = 'http://10.10.83.135:3000/#/';
-  const src =
-    base +
-    // 测试h5 回调
-    // 'pagesC/myDoctor/myDoctor?sysCode=1001033';
-
-    // 'pagesA/healthAdvisory/healthAdvisory?sysCode=' + getSysCode();  // 健康咨询
-
-    // 用药管家
-    // joinQuery('pagesC/medicationManager/medicationList', {
-    //   sysCode: getSysCode(),
-    //   token: gStores.globalStore.token.accessToken,
-    //   herenId: gStores.globalStore.herenId,
-    // });
-
-    // 选择就诊人
-    joinQuery('/pagesC/choosePat/choosePat', {
-      sysCode: getSysCode(),
-      token: gStores.globalStore.token.accessToken,
-      herenId: gStores.globalStore.herenId,
-    });
-
-  // const src = 'https://health.eheren.com/testicbc.html';
-  //health.eheren.com/testicbc.html'
-
   // 电子发票
   const eletronicInvoice: TButtonConfig = {
     type: 'h5',
@@ -149,7 +122,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(healthRecord);
+      useTBanner(yonyao);
     }, 1000);
   });
 </script>

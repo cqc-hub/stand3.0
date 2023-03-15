@@ -815,13 +815,14 @@ export const usePayPage = () => {
     const info = {
       ...item,
       // businessType: '1',
-      phsOrderSource: '1',
+      phsOrderSource: '2',
       cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
       patientId: pageProps.value.deParams?.cardNumber ? '' : pat.patientId,
       patientName: pageProps.value.deParams?.patientName || pat.patientName,
       payAuthNo: payload.payAuthNo,
       totalCost: detailData.value.totalCost,
       params: pageProps.value.params,
+      extend: payload,
     };
 
     console.log({

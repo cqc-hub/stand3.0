@@ -85,7 +85,7 @@
       props.deptInfo.deptName &&
       (props.deptInfo.featuredTreatment ||
         props.deptInfo.promptMessage ||
-        props.deptInfo.featuredTreatment)
+        props.deptInfo.recommendation)
     );
   });
 
