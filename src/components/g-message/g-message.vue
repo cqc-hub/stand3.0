@@ -46,17 +46,6 @@
         });
       };
 
-      // watch(
-      // 	() => messageStore.isShow,
-      // 	() => {
-      // 		console.log('watch');
-      // 		usePopup(messageStore.isShow);
-      // 	},
-      // 	{
-      // 		immediate: true
-      // 	}
-      // );
-
       uni.$on('showMessage', function () {
         usePopup(messageStore.isShow);
       });

@@ -122,7 +122,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(yonyao);
+      useTBanner(healthRecord);
     }, 1000);
   });
 </script>

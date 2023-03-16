@@ -168,6 +168,7 @@ export type TMedicalNationUploadRes = {
   extend: string;
   idType: string;
   payOrderId: string;
+  serialNo: string;
 };
 
 /** 是否医保插件模式 */
@@ -294,6 +295,7 @@ export const getQxMedicalNation = async () => {
 
   //  qrcode 只能使用一次
   gStores.globalStore.onAppShow({});
+
   const { result } = await api.authorize<any>(requestArg);
   if (result.userLongitudeLatitude) {
     result.userLongitudeLatitude = JSON.parse(result.userLongitudeLatitude);

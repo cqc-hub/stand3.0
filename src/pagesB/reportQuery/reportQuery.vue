@@ -297,16 +297,16 @@
     totalList.value = [0, 0, 0];
     isRefresh.value = [true, true, true];
     nextTick(() => {
+      getYunBannerData();
       getCurrentLoadScrollInstance()?.refresh();
     });
   };
   //根据系统码查询对应医院报告参数
   const reportConfig = ref(<any>{});
 
-  onLoad(async () => {
-    const config = await ServerStaticData.getSystemConfig('reportQuery');
-    reportConfig.value = config;
-    const { listYun } = config;
+  const getYunBannerData = async () => {
+    const { listYun } = reportConfig.value;
+    isShowYunBanner.value = false;
 
     if (listYun) {
       const { imgUrl } = listYun;
@@ -331,6 +331,13 @@
         }
       }
     }
+  };
+
+  onLoad(async () => {
+    const config = await ServerStaticData.getSystemConfig('reportQuery');
+    reportConfig.value = config;
+    getYunBannerData();
+
     init();
   });
 </script>

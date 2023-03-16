@@ -74,7 +74,7 @@
     TMedicalNationUploadRes,
     TWxAuthorize,
   } from './utils/clinicPayDetail';
-  import { getOpenId } from '@/components/g-pay/index';
+  import { getOpenId, toPayPull } from '@/components/g-pay/index';
 
   import { GStores } from '@/utils';
   import { joinQueryForUrl } from '@/common';
@@ -93,7 +93,7 @@
         deptCode: string;
         deptName: string;
         docName: string;
-        serialNo: string;
+        // serialNo: string;
         // deptCode: string;
         patientId: string;
         patientName: string;
@@ -115,7 +115,6 @@
 
     const {
       cardNumber,
-      serialNo: hisSerialNo,
       hosId,
       patientId,
       patientName,
@@ -124,6 +123,7 @@
       params,
       extend,
     } = info.value;
+
     const {
       idCard,
       idType,
@@ -135,6 +135,7 @@
       personalPayFee,
       phsOrderNo,
       requestContent,
+      serialNo: hisSerialNo,
     } = uploadRes.value;
     const { source } = gStores.globalStore.browser;
 
@@ -171,7 +172,25 @@
       userId: openId,
     };
 
-    await api.medicalPay(requestArg);
+    Object.keys(requestArg).map((key) => {
+      requestArg[key] = requestArg[key] || '';
+    });
+
+    const { result } = await api.medicalPay<any>(requestArg);
+    console.log('-------');
+    console.log(result);
+    // await toPayPull(result);
+
+    if (result && result.invokeData) {
+      const {
+        invokeData: { payAppId, payUrl },
+      } = result;
+
+      uni.navigateToMiniProgram({
+        appId: payAppId,
+        path: payUrl,
+      });
+    }
   };
 
   onLoad(() => {
