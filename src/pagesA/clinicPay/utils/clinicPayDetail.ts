@@ -1051,50 +1051,56 @@ export const usePayPage = () => {
 
   const hookInit = async (initMethods = <BaseObject>{}) => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
 
     if (isMedicalModePlugin) {
-      const { params } = pageProps.value;
-      let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail';
-      if (params) {
-        successCallBackUrl = `/pagesA/clinicPay/clinicPayDetail?params=${encodeURIComponent(
-          params
-        )}`;
+      if (medicalMHelp!.alipay!.medicalPlugin) {
+        const { params } = pageProps.value;
+        let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail';
+        if (params) {
+          successCallBackUrl = `/pagesA/clinicPay/clinicPayDetail?params=${encodeURIComponent(
+            params
+          )}`;
+        }
+
+        // #ifdef MP-ALIPAY
+        const authPayPlugin = requirePlugin('auth-pay-plugin');
+
+        authPayPlugin.initMethods({
+          // 医保授权后（支付授权/建档授权），loading 页面接口报错回调函数（处理逻辑示例）
+          /**
+           * pay - 支付模块，archive - 建档模块
+           */
+          catchException: (error: string, type: 'pay' | 'archive') => {
+            console.log('error: ', error);
+            uni.reLaunch({ url: successCallBackUrl });
+          },
+
+          /**
+           * 测试插件 v0.0.6 及以上，正式插件 v0.0.12 及以上
+           * @param status 'ALIPAID'
+           * @param ampTraceId
+           * 支付宝支付成功回调, 执行时机详见流程图
+           */
+          aliPayDone: (status: string, ampTraceId: string) => {
+            // do something
+            uni.reLaunch({
+              url: successCallBackUrl + '&tabIndex=1',
+            });
+          },
+
+          // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
+          payCancelAuth: () => {
+            uni.reLaunch({ url: successCallBackUrl });
+          },
+
+          ...initMethods,
+        });
+
+        // #endif
       }
-      // #ifdef MP-ALIPAY
-      const authPayPlugin = requirePlugin('auth-pay-plugin');
-
-      authPayPlugin.initMethods({
-        // 医保授权后（支付授权/建档授权），loading 页面接口报错回调函数（处理逻辑示例）
-        /**
-         * pay - 支付模块，archive - 建档模块
-         */
-        catchException: (error: string, type: 'pay' | 'archive') => {
-          console.log('error: ', error);
-          uni.reLaunch({ url: successCallBackUrl });
-        },
-
-        /**
-         * 测试插件 v0.0.6 及以上，正式插件 v0.0.12 及以上
-         * @param status 'ALIPAID'
-         * @param ampTraceId
-         * 支付宝支付成功回调, 执行时机详见流程图
-         */
-        aliPayDone: (status: string, ampTraceId: string) => {
-          // do something
-          uni.reLaunch({
-            url: successCallBackUrl + '&tabIndex=1',
-          });
-        },
-
-        // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
-        payCancelAuth: () => {
-          uni.reLaunch({ url: successCallBackUrl });
-        },
-
-        ...initMethods,
-      });
-
-      // #endif
     }
   };
 

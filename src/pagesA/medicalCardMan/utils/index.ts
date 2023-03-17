@@ -477,3 +477,19 @@ export const getHealthCardCode = async (): Promise<{
   });
   // #endif
 };
+
+/** 对提交后的数据重新过滤格式化 */
+export const formatterSubPatientData = (data: BaseObject) => {
+  const cloneData = {
+    ...data,
+  };
+
+  const patientName = <string>cloneData.patientName;
+
+  if (patientName) {
+    // 新疆要求不要有英文的 '•' -> '·'
+    cloneData.patientName = patientName.replace(/•/g, '·');
+  }
+
+  return cloneData;
+};

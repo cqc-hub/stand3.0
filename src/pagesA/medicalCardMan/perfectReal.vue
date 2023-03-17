@@ -58,6 +58,7 @@
     formKey,
     TFormKeys,
     getDefaultFormData,
+    formatterSubPatientData,
   } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
@@ -116,6 +117,8 @@
 
       return;
     }
+
+    formData.value = formatterSubPatientData(formData.value);
 
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 

@@ -73,6 +73,7 @@
     TFormKeys,
     getDefaultFormData,
     getHealthCardCode,
+    formatterSubPatientData,
   } from './utils';
   import {
     GStores,
@@ -139,6 +140,7 @@
   ]);
 
   const formSubmit = async ({ data }) => {
+    formData.value = formatterSubPatientData(formData.value);
     const formKeyNow = formList.map((o) => o.key);
     const filterData = Object.fromEntries(
       Object.entries(data).map(([key, value]) => {
