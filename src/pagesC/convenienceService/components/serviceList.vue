@@ -4,7 +4,9 @@
       <view class="g-bold">
         <view class="flex-normal f32 title"
           >{{ item.itemName }}
-          <view class="iconfont" @click="iconClick(item, i)"> &#xe6d6; </view>
+          <view class="iconfont" v-if="!isNoShowMore" @click="iconClick(item, i)">
+            &#xe6d6;
+          </view>
         </view>
         <view class="fee f28 mt8">{{ item.fee }}元</view>
       </view>
@@ -20,7 +22,7 @@
     </view>
     <Order-Reg-Confirm
       :title="serviceItem.itemName"
-      @confirm="goWithdrawal"
+      @confirm="regDialogConfirm.hide"
       height="50vh"
       confirmText="添加项目"
       headerIcon=""
@@ -50,11 +52,12 @@
         </view>
       </view>
       <template #footer>
-      <view class="addItem">
-      <button class="btn g-bord btn-primary f36" @click="goWithdrawal">
-      <text class="iconfont f36 color-fff">&#xe718;</text>
-      <text>添加项目</text></button></view>
-      
+        <view class="addItem">
+          <button class="btn g-bord btn-primary f36" @click="regDialogConfirm.hide">
+            <text class="iconfont f36 color-fff">&#xe718;</text>
+            <text>添加项目</text>
+          </button></view
+        >
       </template>
     </Order-Reg-Confirm>
   </view>
@@ -68,6 +71,7 @@ const serviceItem = ref<any>("");
 const serviceIndex = ref<any>();
 const props = defineProps<{
   list: any[];
+  isNoShowMore?: boolean;
 }>();
 const listData = ref(props.list);
 const emits = defineEmits(["update:value"]);
@@ -130,13 +134,13 @@ watch(
   display: flex;
   justify-content: flex-end;
 }
-.addItem{
+.addItem {
   margin: 32rpx;
-  .btn{
+  .btn {
     display: flex;
     align-items: center;
   }
-  .iconfont{
+  .iconfont {
     margin-right: 22rpx;
   }
 }

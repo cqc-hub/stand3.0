@@ -10,7 +10,7 @@
           </view>
         </view>
         <!-- <slot name="list"/> -->
-        <Service-List :list="listData" @update:value="itemClick" />
+        <Service-List :list="listData" :isNoShowMore="true" @update:value="itemClick" />
         <view><slot name="footer" /></view>
       </view>
     </g-popup>
