@@ -9,7 +9,11 @@ interface ISConfig {
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
   medicalMHelp?: {
     alipay?: {
-      // 医保插件模式  https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt
+      /** [医保插件模式](https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt)
+       *
+       * 踩坑
+       * - 体验环境验证正常后准备发布生产务必 环境切换后重新启动项目(否则不会自动切换插件环境)
+       */
       medicalPlugin?: {
         // 机构id  各个院区都需要提供
         orgId: {
@@ -23,7 +27,7 @@ interface ISConfig {
     };
 
     wx?: {
-      // 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序)
+      /** 医保插件模式 (微信医保插件仅 弹窗二维码支付宝医保小程序) */
       medicalPlugin?: '1';
       // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
       // https://docs.qq.com/doc/DV3lxV3hSbXFudVBE
