@@ -3,46 +3,53 @@
     :class="{
       'system-mode-old': gStores.globalStore.modeOld,
     }"
-    class="box"
+    class="g-page"
   >
-    <view class="title">
-      {{ pageProps.hospitalAccount ? '充值金额' : '预交费用' }}
-    </view>
-    <view class="buttons">
-      <view
-        :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
-        v-for="(item, index) in list"
-        :key="index"
-        @click="checkMoney(item)"
-      >
-        ¥{{ item }}
+    <view class="box">
+      <view class="safe-height"></view>
+      <view class="title">
+        {{ pageProps.hospitalAccount ? '充值金额' : '预交费用' }}
       </view>
-    </view>
-    <view class="pay-input">
-      <view class="g-border-left util-content mb8">
-        <text v-if="moneyUtil" class="g-split-line mr8"></text>
-        <text v-if="moneyUtil" class="color-888">{{ moneyUtil }}</text>
+      <view class="buttons">
+        <view
+          :class="list[index] == defalutMoney ? 'activeButton' : 'button'"
+          v-for="(item, index) in list"
+          :key="index"
+          @click="checkMoney(item)"
+        >
+          ¥{{ item }}
+        </view>
       </view>
+      <view class="pay-input">
+        <view class="g-border-left util-content mb8">
+          <text v-if="moneyUtil" class="g-split-line mr8"></text>
+          <text v-if="moneyUtil" class="color-888">{{ moneyUtil }}</text>
+        </view>
 
-      <view class="flex-normal">
-        <text class="m-util">¥</text>
-        <input
-          class="uni-input"
-          maxlength="13"
-          placeholder-style="font-size:32rpx;color:#888"
-          type="number"
-          v-model="defalutMoney"
-          placeholder="输入自定义金额"
-        />
+        <view v-if="isConfigComplete" class="flex-normal">
+          <text class="m-util">¥</text>
+          <input
+            class="uni-input"
+            maxlength="13"
+            placeholder-style="font-size:32rpx;color:#888"
+            :type="getMoneyInputType"
+            v-model="defalutMoney"
+            @change="inputMoneyChange"
+            placeholder="输入自定义金额"
+          />
+        </view>
+      </view>
+      <view>
+        <button
+          :disabled="defalutMoney == '' ? true : false"
+          :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
+          @click="toPay"
+        >
+          确定
+        </button>
       </view>
     </view>
-    <button
-      :disabled="defalutMoney == '' ? true : false"
-      :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
-      @click="toPay"
-    >
-      确定
-    </button>
+
     <g-message />
   </view>
 </template>
@@ -52,7 +59,7 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import api from '@/service/api';
-  import { GStores, ServerStaticData, wait } from '@/utils';
+  import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { deQueryForUrl } from '@/common/utils';
   import { hosParam } from '@/components/g-form';
@@ -67,22 +74,29 @@
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
   };
   const gStores = new GStores();
-  const resultHos = ref<hosParam>({
-    inPatientPrePay: '',
-    isHosDaylist: '',
-    isHosTotallist: '',
-    tab: [],
-  });
+  const resultHos = ref<ISystemConfig['hospitalCare']>({} as any);
+  const isConfigComplete = ref(false);
 
   const list = ref([]);
   const defalutMoney = ref('');
 
   const payOrder = ref<payOrderResult>({} as payOrderResult);
   const pageProps = ref({} as IPageProps);
+  const getMoneyInputType = computed(() => {
+    if (
+      resultHos.value.isMode === '1' ||
+      !resultHos.value.isMode
+    ) {
+      return 'digit';
+    } else {
+      return 'number';
+    }
+  });
   const checkMoney = (item) => {
     defalutMoney.value = String(item);
   };
   const toPay = async () => {
+    await inputMoneyChange();
     await int();
     const res = await payMoneyOnline({
       phsOrderNo: payOrder.value.phsOrderNo,
@@ -112,9 +126,33 @@
     });
   };
   const setData = async () => {
-    const result = await ServerStaticData.getSystemConfig('hospitalCare');
+    isConfigComplete.value = false;
+    const result = await ServerStaticData.getSystemConfig(
+      'hospitalCare'
+    ).finally(() => {
+      isConfigComplete.value = true;
+    });
     resultHos.value = result;
-    list.value = JSON.parse(resultHos.value.inPatientPrePay);
+    console.log(result);
+    if (result.inPatientPrePay) {
+      list.value = JSON.parse(result.inPatientPrePay as any);
+    }
+  };
+
+  const inputMoneyChange = async () => {
+    const { isMode } = resultHos.value;
+
+    if (isMode === '3') {
+      if (((defalutMoney.value as any) * 1) % 100 !== 0) {
+        gStores.messageStore.showMessage('金额仅支持100倍数', 3000, {
+          closeCallBack() {
+            defalutMoney.value = '';
+          },
+        });
+
+        return Promise.reject(void 0);
+      }
+    }
   };
   const int = async () => {
     const { patientName, cardNumber, hosId, hosName } = pageProps.value;
@@ -175,11 +213,12 @@
 </script>
 
 <style scoped lang="scss">
-  .box {
+  .g-page {
     background-color: #fff;
-    // width: 100%;
-    height: 100%;
-    padding: 40rpx 32rpx 0;
+  }
+  .box {
+    padding: 0 32rpx;
+
     .title {
       color: #444;
       margin-bottom: 40rpx;

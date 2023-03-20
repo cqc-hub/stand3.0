@@ -488,7 +488,7 @@ export const formatterSubPatientData = (data: BaseObject) => {
 
   if (patientName) {
     // 新疆要求不要有英文的 '•' -> '·'
-    cloneData.patientName = patientName.replace(/•/g, '·');
+    cloneData.patientName = patientName.replace(/\•/g, '\·');
   }
 
   return cloneData;

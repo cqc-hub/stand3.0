@@ -114,6 +114,8 @@ export interface ISystemConfig {
     tab: IConfigTab[];
     //配置的预缴金额 [500,1000,2000,3000,5000,10000]
     inPatientPrePay: string[];
+    /** 共3种模式：默认 1 不限制金额，2 仅支持整数金额，3 仅支持百倍金额输入  */
+    isMode: '1' | '2' | '3';
     //列表1 详情2 住院总计清单
     isHosTotallist: '1' | '2';
     //列表1 详情2 日费用清单模式

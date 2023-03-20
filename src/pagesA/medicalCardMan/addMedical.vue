@@ -140,7 +140,7 @@
   ]);
 
   const formSubmit = async ({ data }) => {
-    formData.value = formatterSubPatientData(formData.value);
+    data = formatterSubPatientData(data);
     const formKeyNow = formList.map((o) => o.key);
     const filterData = Object.fromEntries(
       Object.entries(data).map(([key, value]) => {

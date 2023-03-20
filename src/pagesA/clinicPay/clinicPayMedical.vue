@@ -23,7 +23,7 @@
 
         <view class="container-row">
           <view class="f-label2">医保基金支付</view>
-          <view class="f-label2">{{ uploadRes.medicareTotalFee }}元</view>
+          <view class="f-label2">{{ uploadRes.medicarePlanFee }}元</view>
         </view>
 
         <view class="container-row mb44">
@@ -149,7 +149,9 @@
     const requestArg = {
       channel,
       cardNumber,
-      extend: (extend && JSON.stringify(extend)) || '',
+      extend:
+        (extend && JSON.stringify({ extend, uploadRes: uploadRes.value })) ||
+        '',
       hisSerialNo,
       hosId,
       idCard,

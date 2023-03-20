@@ -304,9 +304,17 @@ export const getQxMedicalNation = async () => {
   return <TWxAuthorize>result;
 };
 
+type OptionalType<T> = {
+  [P in keyof T]?: T[P];
+};
+
 /** 国标医保费用明细上传 */
 export const medicalNationUpload = async (
-  detail: TPayDetailInfo,
+  detail: OptionalType<
+    TPayDetailInfo & {
+      childOrder: string;
+    }
+  >,
   auth: TWxAuthorize,
   additional: BaseObject = {}
 ) => {
@@ -327,6 +335,7 @@ export const medicalNationUpload = async (
     ...auth,
     ...detail,
     ...additional,
+    mergeOrder: detail.childOrder,
     patientId,
     longitude,
     latitude,
@@ -1056,7 +1065,7 @@ export const usePayPage = () => {
     } = globalGl;
 
     if (isMedicalModePlugin) {
-      if (medicalMHelp!.alipay!.medicalPlugin) {
+      if (medicalMHelp?.alipay?.medicalPlugin) {
         const { params } = pageProps.value;
         let successCallBackUrl = '/pagesA/clinicPay/clinicPayDetail';
         if (params) {
