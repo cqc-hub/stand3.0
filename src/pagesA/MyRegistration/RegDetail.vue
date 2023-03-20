@@ -36,7 +36,14 @@
               &#xe6d5;
             </view>
 
-            <view class="reg-header-label">{{ titleStatus.title }}</view>
+            <view class="reg-header-label">
+              {{
+                getOrderStatusTitle(
+                  orderRegInfo.orderStatus,
+                  orderConfig.isOrderPay
+                )
+              }}
+            </view>
           </view>
 
           <view>
@@ -332,6 +339,7 @@
     orderStatusMap,
     formatterTemp,
     getStatusConfig,
+    getOrderStatusTitle,
   } from './utils/regDetail';
   import {
     type IGPay,
