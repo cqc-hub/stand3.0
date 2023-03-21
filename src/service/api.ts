@@ -602,6 +602,10 @@ const userApi = {
   authorization: (data) =>
     service.post<IPat[]>('/phs-user/ali/authorization', parm(data)),
 
+  // 支付宝验证本人
+  alipayVerifiSelf: (data) =>
+    service.post<any>('/phs-user/relevantPatient/alipayVerifiSelf', parm(data)),
+
   getDeptCardList: (data: any) =>
     service.post('/phs-reg/deptDoc/getDeptList', parm(data), {
       hideLoading: false,

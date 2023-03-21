@@ -349,10 +349,10 @@ export const medicalNationUpload = async (
   return <TMedicalNationUploadRes>result;
 };
 
-let _isCanUseMedical = false;
+let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
-  if (_isCanUseMedical) {
+  if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
 
@@ -360,11 +360,22 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
   await new Promise((resolve, reject) => {
     my.getAuthCode({
       scopes: 'auth_user',
-      success({ authCode }) {
-        _isCanUseMedical = true;
-        console.log(authCode);
+      success: async ({ authCode }) => {
+        const { result } = await api.alipayVerifiSelf({
+          cardNumber,
+          code: authCode,
+        });
 
-        resolve(void 0);
+        if (result) {
+          const { isSelf } = result;
+          _isCanUseMedical = isSelf;
+
+          setTimeout(() => {
+            resolve(void 0);
+          });
+        } else {
+          reject(void 0);
+        }
       },
       fail: reject,
     });
@@ -372,11 +383,7 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
 
   // #endif
 
-  if (cardNumber == '000001982') {
-    return true;
-  }
-
-  return false;
+  return !!_isCanUseMedical
 };
 
 export const usePayPage = () => {
@@ -748,6 +755,7 @@ export const usePayPage = () => {
             const flag = await isCanUseMedical(
               pageProps.value.deParams?.cardNumber || cardNumber
             );
+            // debugger;
 
             if (flag) {
               getPay();
@@ -818,6 +826,7 @@ export const usePayPage = () => {
         }
       }
     }
+
     await wait(200);
     refPay.value.show();
   };
@@ -1139,7 +1148,7 @@ export const usePayPage = () => {
   };
 
   const hookInit = async (initMethods = <BaseObject>{}) => {
-    _isCanUseMedical = false;
+    _isCanUseMedical = null;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     const {
       sConfig: { medicalMHelp },
@@ -1195,7 +1204,7 @@ export const usePayPage = () => {
   };
 
   const patChange = () => {
-    _isCanUseMedical = false;
+    _isCanUseMedical = null;
     getListData(true);
   };
 
