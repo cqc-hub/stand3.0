@@ -144,6 +144,7 @@
     const returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
       tabIndex: '1',
       params,
+      // hosp_out_trade_no:
     });
 
     const requestArg = {
@@ -180,7 +181,10 @@
 
     const { result } = await api.medicalPay<any>(requestArg);
     console.log('-------');
-    console.log(result);
+    console.log({
+      result,
+      requestArg
+    });
     // await toPayPull(result);
 
     if (result && result.invokeData) {

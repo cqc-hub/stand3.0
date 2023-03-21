@@ -349,6 +349,17 @@ export const medicalNationUpload = async (
   return <TMedicalNationUploadRes>result;
 };
 
+/** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
+export const isCanUseMedical = async (cardNumber): Promise<boolean> => {
+  console.log(cardNumber);
+
+  if (cardNumber == '000001982') {
+    return true;
+  }
+
+  return false;
+};
+
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const regDialogConfirm = ref<any>('');
@@ -698,7 +709,39 @@ export const usePayPage = () => {
       const isMedicalModePlugin = getIsMedicalModePlugin();
 
       if (isMedicalModePlugin) {
-        getPay();
+        const {
+          sConfig: { medicalMHelp },
+        } = globalGl;
+        let _isChange = false;
+        const { alipay } = medicalMHelp!;
+
+        // #ifdef MP-ALIPAY
+        if (alipay) {
+          const { medicalPlugin } = alipay;
+
+          /**
+           * 支付宝医保插件模式只能是本人
+           */
+          if (medicalPlugin) {
+            _isChange = true;
+            const { cardNumber } = gStores.userStore.patChoose;
+
+            const flag = await isCanUseMedical(
+              pageProps.value.deParams?.cardNumber || cardNumber
+            );
+
+            if (flag) {
+              getPay();
+            } else {
+              regDialogConfirm.value.show();
+            }
+          }
+        }
+        // #endif
+
+        if (!_isChange) {
+          getPay();
+        }
       } else {
         regDialogConfirm.value.show();
       }
@@ -718,7 +761,39 @@ export const usePayPage = () => {
 
         // 医保 类型
         if (payMedicalItem) {
-          changeRefPayList(1);
+          const {
+            sConfig: { medicalMHelp },
+          } = globalGl;
+          let _isChange = false;
+          const { alipay } = medicalMHelp!;
+
+          // #ifdef MP-ALIPAY
+          if (alipay) {
+            const { medicalPlugin } = alipay;
+
+            /**
+             * 支付宝医保插件模式只能是本人
+             */
+            if (medicalPlugin) {
+              _isChange = true;
+              const { cardNumber } = gStores.userStore.patChoose;
+
+              const flag = await isCanUseMedical(
+                pageProps.value.deParams?.cardNumber || cardNumber
+              );
+
+              if (flag) {
+                changeRefPayList(1);
+              } else {
+                changeRefPayList(0);
+              }
+            }
+          }
+          // #endif
+
+          if (!_isChange) {
+            changeRefPayList(1);
+          }
         } else {
           changeRefPayList(0);
         }

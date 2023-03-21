@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxda3a65909cbc3e3c",
+    "appid": "wxf582e1fd4eb0142a",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -67,8 +67,13 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021002133632822",
-    "plugins": {},
+    "appid": "2021003159674187",
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003167601013"
+      }
+    },
     "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
@@ -81,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "健康金湖",
+  "name": "乐清市人民医院",
   "h5": {
     "router": {
       "base": "./"

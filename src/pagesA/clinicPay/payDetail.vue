@@ -209,6 +209,7 @@
     usePayDetailPage,
     getIsMedicalModePlugin,
     executeConfigPayAfter,
+    isCanUseMedical,
     type TPayDetailProp,
     type TCostList,
   } from './utils/clinicPayDetail';
@@ -454,7 +455,7 @@
     }
   };
 
-  const handlerPay = () => {
+  const handlerPay = async () => {
     const { costTypeCode } = props.value;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     let isMedicalPay = false;
@@ -466,12 +467,76 @@
     changeRefPayList(0);
 
     if (costTypeCode === '2' && isMedicalPay) {
-      changeRefPayList(1);
+      const {
+        sConfig: { medicalMHelp },
+      } = globalGl;
+      let _isChange = false;
+      const { alipay } = medicalMHelp!;
+
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { medicalPlugin } = alipay;
+
+        /**
+         * 支付宝医保插件模式只能是本人
+         */
+        if (medicalPlugin) {
+          _isChange = true;
+          const { cardNumber } = gStores.userStore.patChoose;
+
+          const flag = await isCanUseMedical(
+            props.value.cardNumber || cardNumber
+          );
+
+          if (flag) {
+            changeRefPayList(1);
+          } else {
+            changeRefPayList(0);
+          }
+        }
+      }
+      // #endif
+
+      if (!_isChange) {
+        changeRefPayList(1);
+      }
     }
 
     if (pageConfig.value.confirmPayFg) {
       if (isMedicalModePlugin) {
-        getPay();
+        const {
+          sConfig: { medicalMHelp },
+        } = globalGl;
+        let _isChange = false;
+        const { alipay } = medicalMHelp!;
+
+        // #ifdef MP-ALIPAY
+        if (alipay) {
+          const { medicalPlugin } = alipay;
+
+          /**
+           * 支付宝医保插件模式只能是本人
+           */
+          if (medicalPlugin) {
+            _isChange = true;
+            const { cardNumber } = gStores.userStore.patChoose;
+
+            const flag = await isCanUseMedical(
+              props.value.cardNumber || cardNumber
+            );
+
+            if (flag) {
+              getPay();
+            } else {
+              regDialogConfirm.value.show();
+            }
+          }
+        }
+        // #endif
+
+        if (!_isChange) {
+          getPay();
+        }
       } else {
         regDialogConfirm.value.show();
       }

@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
     <scroll-view :scroll-into-view="scrollTo" class="g-container" scroll-y>
       <view class="pt24">
         <view class="comment-card">

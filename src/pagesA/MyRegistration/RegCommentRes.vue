@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page f32">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page f32"
+  >
     <view class="g-container">
       <image
         :src="$global.BASE_IMG + 'stand3-RegCommentResHeaderBg.png'"
