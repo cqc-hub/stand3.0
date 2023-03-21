@@ -349,9 +349,28 @@ export const medicalNationUpload = async (
   return <TMedicalNationUploadRes>result;
 };
 
+let _isCanUseMedical = false;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
-export const isCanUseMedical = async (cardNumber): Promise<boolean> => {
-  console.log(cardNumber);
+export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
+  if (_isCanUseMedical) {
+    return _isCanUseMedical;
+  }
+
+  // #ifdef MP-ALIPAY
+  await new Promise((resolve, reject) => {
+    my.getAuthCode({
+      scopes: 'auth_user',
+      success({ authCode }) {
+        _isCanUseMedical = true;
+        console.log(authCode);
+
+        resolve(void 0);
+      },
+      fail: reject,
+    });
+  });
+
+  // #endif
 
   if (cardNumber == '000001982') {
     return true;
@@ -1134,6 +1153,7 @@ export const usePayPage = () => {
   };
 
   const hookInit = async (initMethods = <BaseObject>{}) => {
+    _isCanUseMedical = false;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     const {
       sConfig: { medicalMHelp },
@@ -1188,7 +1208,13 @@ export const usePayPage = () => {
     }
   };
 
+  const patChange = () => {
+    _isCanUseMedical = false;
+    getListData(true);
+  };
+
   return {
+    patChange,
     changeRefPayList,
     hookInit,
     hosId,

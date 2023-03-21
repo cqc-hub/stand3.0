@@ -9,7 +9,7 @@
     <g-tbanner :config="pageConfig.bannerPay" />
     <g-choose-pat
       v-if="!pageProps.params && isShowPatComponent"
-      @choose-pat="getListData(true)"
+      @choose-pat="patChange"
     />
     <g-selhos
       v-if="pageConfig.isListToggleHos === '1'"
@@ -249,6 +249,7 @@
     selHosRef,
     hookInit,
     wxPryMoneyMedicalDialog,
+    patChange
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
