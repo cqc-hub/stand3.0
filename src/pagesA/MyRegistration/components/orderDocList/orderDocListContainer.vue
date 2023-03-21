@@ -38,7 +38,8 @@
           <text>{{ item.clinicTime }}</text>
         </view> -->
 
-        <view v-if="item.specialClinicName" class="text-ellipsis">
+        <view v-if="item.specialClinicName">
+          <text class="mr12">出诊科室</text>
           <text
             v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"
             :key="i"

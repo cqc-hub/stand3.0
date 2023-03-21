@@ -210,8 +210,10 @@
     getIsMedicalModePlugin,
     executeConfigPayAfter,
     isCanUseMedical,
+    medicalNationUpload,
     type TPayDetailProp,
     type TCostList,
+    type TWxAuthorize,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -404,10 +406,54 @@
         // #endif
 
         // #ifdef  MP-WEIXIN
-        wxPayMoneyMedicalPlugin();
+        wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
     }
+  };
+
+  /** 微信医保国标模式  获取到授权 */
+  const medicalNationWx = async (payload: TWxAuthorize) => {
+    const item = props.value;
+    const pat = gStores.userStore.patChoose;
+
+    const cardNumber = item.cardNumber || pat.cardNumber;
+    const serialNo = selList.value.map((o) => o.serialNo).join(',');
+
+    const uploadRes = await medicalNationUpload(
+      {
+        ...item,
+        ...detailData.value,
+      },
+      payload,
+      {
+        businessType: '1',
+        cardNumber: item.cardNumber || pat.cardNumber,
+        serialNo,
+      }
+    );
+
+    const info = {
+      ...item,
+      // businessType: '1',
+      phsOrderSource: '2',
+      cardNumber,
+      patientId: item.cardNumber ? '' : pat.patientId,
+      patientName: item.patientName || pat.patientName,
+      payAuthNo: payload.payAuthNo,
+      totalCost: detailData.value.totalCost,
+      params: item.params,
+      extend: payload,
+    };
+
+    gStores.globalStore.assignCacheData({
+      uploadRes,
+      info,
+    });
+
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayMedical',
+    });
   };
 
   const payMoneyMedicalPlugin = () => {

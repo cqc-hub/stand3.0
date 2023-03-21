@@ -943,20 +943,6 @@ export const usePayPage = () => {
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
-
-    // if (uploadRes) {
-    //   const {
-    //     fundPay,
-    //     defrayFee, // 现金支付  自费
-    //     deposit,
-    //     insuranceFee, // 医保基金支付金额  医保报销、
-    //     ordStas, // 订单状态
-    //     platOrderId,
-    //     insurancePersonalFee, // 医保个人账户支出  医保个人账户扣款
-    //     payOrderId,
-    //     totalFee, // 费用总额
-    //   } = uploadRes;
-    // }
   };
 
   // 支付宝 插件医保
