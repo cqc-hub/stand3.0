@@ -317,6 +317,12 @@
     const enter = uni.getEnterOptionsSync();
     const queryParams = enter?.query?.qrCode;
 
+    console.log('biubiubiu------------------');
+    console.log({
+      opt,
+      enter,
+    });
+
     if (queryParams && !opt.params) {
       return;
     }
@@ -328,10 +334,6 @@
     }
 
     if (opt) {
-      if (opt.q) {
-        return;
-      }
-
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
       if (pageProps.value.params) {
