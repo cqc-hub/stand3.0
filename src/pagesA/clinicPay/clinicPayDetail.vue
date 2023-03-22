@@ -249,7 +249,7 @@
     selHosRef,
     hookInit,
     wxPryMoneyMedicalDialog,
-    patChange
+    patChange,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);

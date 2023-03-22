@@ -39,6 +39,8 @@
   });
   onShow(async (opt) => {
     console.log('App Show', opt);
+    globalStore.onAppShow(opt);
+
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;
 
@@ -73,37 +75,39 @@
 
         //携带就诊人数据和默认就诊人不一致的情况
         /**
-         * _pd _pt(时间戳) 不分家
+         * (_pd | _hosPd) & _pt(时间戳) 不分家
          */
-        if (query._pd) {
+        change_pat: {
           const userStore = useUserStore();
-          if (
-            userStore.patList.length &&
-            userStore.patChoose.patientId != query._pd &&
-            _cacheChangePatTime !== query._pt
-          ) {
-            _cacheChangePatTime = query._pt;
-            const pat = userStore.patList.find(
-              (o) => o.patientId === query._pd
-            );
-            userStore.updatePatChoose(pat!);
-          }
-        } else if (query._hosPd) {
-          const userStore = useUserStore();
-          if (
-            userStore.patList.length &&
-            userStore.patChoose.cardNumber != query._hosPd
-          ) {
-            const pat = userStore.patList.find(
-              (o) => o.cardNumber === query._hosPd
-            );
-            userStore.updatePatChoose(pat!);
+
+          if (userStore.patList.length) {
+            const { _pt, _pd, _hosPd } = query;
+
+            if (_pt) {
+              if (_cacheChangePatTime !== _pt) {
+                _cacheChangePatTime = _pt;
+              } else {
+                break change_pat;
+              }
+            }
+
+            if (_pd) {
+              if (userStore.patChoose.patientId != _pd) {
+                const pat = userStore.patList.find((o) => o.patientId === _pd);
+                userStore.updatePatChoose(pat!);
+              }
+            } else if (_hosPd) {
+              if (userStore.patChoose.cardNumber != _hosPd) {
+                const pat = userStore.patList.find(
+                  (o) => o.cardNumber === _hosPd
+                );
+                userStore.updatePatChoose(pat!);
+              }
+            }
           }
         }
       }
     }
-
-    globalStore.onAppShow(opt);
 
     setTimeout(() => {
       const pages = getCurrentPages();
