@@ -383,7 +383,7 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
 
   // #endif
 
-  return !!_isCanUseMedical
+  return !!_isCanUseMedical;
 };
 
 export const usePayPage = () => {
@@ -1102,15 +1102,12 @@ export const usePayPage = () => {
     const { clinicType } = selUnPayList.value[0];
 
     if (clinicType) {
-      selUnPayList.value = [];
-      payedList.value = [];
-
       await executeConfigPayAfter(clinicType, cardNumber);
     }
 
     selUnPayList.value = [];
     payedList.value = [];
-    tabCurrent.value = 1;
+    tabChange(1);
 
     setTimeout(async () => {
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {

@@ -76,7 +76,7 @@
   } from './utils/clinicPayDetail';
   import { getOpenId, toPayPull } from '@/components/g-pay/index';
 
-  import { GStores } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { joinQueryForUrl } from '@/common';
 
   import api from '@/service/api';
@@ -199,13 +199,54 @@
     }
   };
 
-  onShow((showData) => {
+  const queryOrder = async () => {
+    uni.showLoading({
+      mask: true,
+      title: '查询中',
+    });
+
+    await wait(3000);
+    uni.hideLoading();
+    const { phsOrderSource, params } = info.value;
+    const { phsOrderNo } = uploadRes.value;
+
+    const { result } = await api.payResult<any>({
+      phsOrderNo,
+      phsOrderSource,
+    });
+
+    if (result) {
+      // resultCode  0存在，1不存在
+      const { resultCode } = result;
+
+      if (resultCode === '0') {
+        uni.showModal({
+          content: '支付成功',
+          showCancel: false,
+          confirmText: '返回',
+          complete() {
+            uni.reLaunch({
+              url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+                tabIndex: '1',
+                params,
+              }),
+            });
+          },
+        });
+      }
+    }
+  };
+
+  onShow(() => {
     const { appShowData } = gStores.globalStore;
 
-    console.log({
-      showData,
-      appShowData,
-    });
+    if (appShowData) {
+      const { scene } = appShowData;
+
+      if (scene === 1038) {
+        queryOrder();
+      }
+    }
   });
 
   onLoad(() => {

@@ -12,6 +12,7 @@
   // #endif
 
   const globalStore = useGlobalStore();
+  let _cacheChangePatTime = '';
 
   onLaunch((opt) => {
     // console.log('App Launch', opt);
@@ -71,21 +72,23 @@
         }
 
         //携带就诊人数据和默认就诊人不一致的情况
+        /**
+         * _pd _pt(时间戳) 不分家
+         */
         if (query._pd) {
           const userStore = useUserStore();
           if (
             userStore.patList.length &&
-            userStore.patChoose.patientId != query._pd
+            userStore.patChoose.patientId != query._pd &&
+            _cacheChangePatTime !== query._pt
           ) {
+            _cacheChangePatTime = query._pt;
             const pat = userStore.patList.find(
               (o) => o.patientId === query._pd
             );
             userStore.updatePatChoose(pat!);
           }
-        }
-
-        //携带院内就诊人数据
-        if (query._hosPd) {
+        } else if (query._hosPd) {
           const userStore = useUserStore();
           if (
             userStore.patList.length &&

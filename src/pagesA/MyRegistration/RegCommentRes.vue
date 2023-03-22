@@ -184,7 +184,7 @@
       } = result;
 
       adviseForDoc.value = _adviseForDoc;
-      adviseForHos.value = _adviseForDoc;
+      adviseForHos.value = _adviseForHos;
       docEvlContentList.value = _docEvlContentList;
       docGrade.value = _docGrade;
       otherSuggestions.value = _otherSuggestions;
