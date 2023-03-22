@@ -183,7 +183,7 @@
     console.log('-------');
     console.log({
       result,
-      requestArg
+      requestArg,
     });
     // await toPayPull(result);
 
@@ -198,6 +198,15 @@
       });
     }
   };
+
+  onShow((showData) => {
+    const { appShowData } = gStores.globalStore;
+
+    console.log({
+      showData,
+      appShowData,
+    });
+  });
 
   onLoad(() => {
     // requestContent

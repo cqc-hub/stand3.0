@@ -13,7 +13,7 @@
               class="main-text"
               :class="isMore[index] && !isShow[index] ? 'isMaxHeight' : ''"
             >
-              <view class="remark color-888 f28">{{ item.tips }} </view>
+              <view class="remark color-888 f28 g-break-word">{{ item.tips }} </view>
               <view v-if="isMore[index]" class="more flex-end" @click="isShowBtn(index)">
                 <text v-if="!isShow[index]" class="iconfont color-888">&#xe6c4;</text>
                 <text v-else class="iconfont color-888">&#xe6c5;</text></view

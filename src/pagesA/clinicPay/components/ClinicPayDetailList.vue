@@ -24,10 +24,7 @@
 
       <view class="content">
         <view class="flex-between flex-start-r">
-          <view
-            @click.stop="selItem(item)"
-            class="g-bold f36 flex1 mr40 flex-normal item-title"
-          >
+          <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
             <text
               v-if="item.costTypeCode && !getIsMedicalTradeTypeDefault()"
               :class="{
@@ -38,7 +35,9 @@
             >
               {{ tradeType[item.costTypeCode] || '未知' }}
             </text>
-            <text>{{ item.deptName }}</text>
+            <text>
+              {{ item.deptName }}
+            </text>
           </view>
 
           <view class="g-flex-rc-cc">
@@ -161,10 +160,6 @@
         margin-top: 24rpx;
       }
 
-      .item-title {
-        align-items: flex-start;
-      }
-
       .icon-content {
         height: 100%;
         padding-top: 4rpx;
@@ -194,7 +189,8 @@
           font-weight: normal;
           border-radius: 4rpx;
           padding: 4rpx 12rpx;
-
+          position: relative;
+          top: -5rpx;
           &.pay-medical {
             background: #747c94;
             color: #ffe2c1;
