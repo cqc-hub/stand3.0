@@ -58,7 +58,7 @@
 import api from "@/service/api";
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
-import { GStores, wait } from "@/utils";
+import { GStores, wait,getTimeStamp } from "@/utils";
 import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
 
 interface INucle {
@@ -85,6 +85,8 @@ const currentIndex = ref(0);
 
 onLoad(async () => {
   initConfig();
+  console.log(3333,getTimeStamp(6));
+  
   // await gStores.userStore.getPatList();
 }); 
 
@@ -114,7 +116,6 @@ const submit = async () => {
   const { patientId, patientName, cardNumber } = gStores.userStore.patChoose;
   const source = gStores.globalStore.browser.source;
   const reBillingUrl = `/pagesC/selfService/nucleicBilling?hosId=${props.hosId}&isPay=${props.isPay}`;
-  const miniUrl = `/pagesC/selfService/myOrder&_pd=${patientId}`;
   const res1 = await api.createBillingOrder({
     hosId: props.hosId,
     patientId: patientId,
@@ -146,7 +147,7 @@ const submit = async () => {
       closeCallBack: () => {
         //跳转门诊缴费页面
         uni.reLaunch({
-          url: `/pagesA/clinicPay/clinicPayDetail?_pd=${patientId}`,
+          url: `/pagesA/clinicPay/clinicPayDetail`,
         });
       },
     });
@@ -158,7 +159,7 @@ const payAfter = async (patientId) => {
   uni.hideLoading();
   //去我的开单页面
   uni.reLaunch({
-    url:`/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}`,
+    url:`/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}&_pt=${getTimeStamp(6)}`,
   });
 };
 </script>

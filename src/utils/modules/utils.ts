@@ -187,3 +187,13 @@ export const downFile = (url: string): Promise<string> => {
     });
   });
 };
+
+//获取当前时间戳方法
+export const getTimeStamp = (num?:number)=>{
+  var dateTime = JSON.stringify(new Date().getTime())
+   if(num){
+    return dateTime.substring(Number(dateTime.length)-num)
+   }else{
+    return dateTime
+   }
+}

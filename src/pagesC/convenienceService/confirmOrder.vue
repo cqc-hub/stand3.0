@@ -41,7 +41,7 @@
 import api from "@/service/api";
 import { ref } from "vue";
 import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
-import { GStores, debounce, wait } from "@/utils";
+import { GStores, debounce, wait,getTimeStamp } from "@/utils";
 import { type IConfirmList } from './utils/index';
 import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
 import ConfirmList from "./components/confirmList.vue";
@@ -100,7 +100,7 @@ const payAfter = async (patientId) => {
   uni.hideLoading();
   //去我的开单页面
   uni.reLaunch({
-    url:`/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}&convenienceService=true`,
+    url:`/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}&_pt=${getTimeStamp(6)}&convenienceService=true`,
   });
 };
 </script>
