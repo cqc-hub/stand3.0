@@ -314,14 +314,7 @@
   });
 
   onLoad(async (opt) => {
-    const enter = uni.getEnterOptionsSync();
-    const queryParams = enter?.query?.qrCode;
-
-    console.log('biubiubiu------------------');
-    console.log({
-      opt,
-      enter,
-    });
+    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
     if (queryParams && !opt.params) {
       return;
@@ -344,6 +337,8 @@
           pageProps.value.params,
           pageProps.value.deParams
         );
+
+        gStores.globalStore.onAppLaunch({});
       }
     }
 
