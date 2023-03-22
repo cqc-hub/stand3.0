@@ -126,6 +126,7 @@
     "1001056": {
       "wxAppid": "wx4d8f68fdc6b6831c",
       "alipayAppid": "",
+      "h5Appid": "wxf57d660046a04f49",
       "name": "中国人民解放军新疆军区总医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
@@ -146,7 +147,7 @@
       "isOpenOcr": false,
       "isOpenHealthCard": {
         "healthCardText": "陕西省卫生健康委员会",
-        "hospitalId": "西安市红会医院"
+        "hospitalId": "37218"
       }
     }
   }
