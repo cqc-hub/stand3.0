@@ -142,7 +142,7 @@
       "alipayAppid": "2021003173633521",
       "h5Appid": "wx69bb1d0f7210807b",
       "name": "西安市红会医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false,
       "isOpenHealthCard": {
