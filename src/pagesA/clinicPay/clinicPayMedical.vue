@@ -106,6 +106,7 @@
   );
   const uploadRes = ref(<TMedicalNationUploadRes>{});
   const loading = ref(false);
+  let insuranceNo = '';
 
   const getPay = async () => {
     let channel = 'ALI_MINI_INSURANCE';
@@ -188,6 +189,7 @@
     // await toPayPull(result);
 
     if (result && result.invokeData) {
+      insuranceNo = result.insuranceNo;
       const {
         invokeData: { payAppId, payUrl },
       } = result;
@@ -213,18 +215,20 @@
     const { result } = await api.payResult<any>({
       phsOrderNo,
       phsOrderSource,
+      insuranceNo,
     });
 
     if (result) {
-      // resultCode  0存在，1不存在
-      const { resultCode } = result;
+      // tradeStatus  TRADE_SUCCESS 代表缴费了
+      const { tradeStatus } = result;
 
-      if (resultCode === '0') {
+      if (tradeStatus === 'TRADE_SUCCESS') {
         uni.showModal({
           content: '支付成功',
           showCancel: false,
           confirmText: '返回',
-          complete() {
+          complete: async () => {
+            await wait(300);
             uni.reLaunch({
               url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
                 tabIndex: '1',

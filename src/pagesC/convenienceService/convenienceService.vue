@@ -142,24 +142,12 @@
   };
 
   const confirm = () => {
-    // const { patientId } = gStores.userStore.patChoose;
-    // const { cardNumber, patientName } = lists.value;
-    // 多个项目算n份不合并
-    let newChooseItemobj: any[] = [];
-    chooseItem.value.map((item: any) => {
-      for (let i = 0; i < item.num; i++) {
-        newChooseItemobj.push({
-          ...item,
-          num: 1,
-        });
-      }
-    });
     const { hosId, hosName } = pageProps.value;
     uni.navigateTo({
       url: joinQuery('/pagesC/convenienceService/confirmOrder', {
         totalNum: totalNum.value,
         totalMoney: totalMoney.value,
-        lists: JSON.stringify(newChooseItemobj),
+        lists: JSON.stringify(chooseItem.value),
         hosId,
         hosName,
       }),

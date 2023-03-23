@@ -46,9 +46,10 @@ interface ISConfig {
   isOpenHelpOld?: '1';
 }
 
-const scJson: {
-  [key: string]: ISConfig;
-} = {
+const scJson: Record<string, ISConfig> = {
+  /**
+   * 乐清市人民医院
+   */
   1001052: {
     isDrugDelivery: '1',
     medicalMHelp: {
@@ -61,11 +62,17 @@ const scJson: {
     },
   },
 
+  /**
+   * 咸阳市第一人民医院
+   */
   1001054: {
     isOpenButtom: '1',
     isHideHomeSearch: '1',
   },
 
+  /**
+   * 中国人民解放军新疆军区总医院
+   */
   1001056: {
     medicalMHelp: {
       wx: {
@@ -78,6 +85,9 @@ const scJson: {
     },
   },
 
+  /**
+   * 台州第一人民医院
+   */
   1001033: {
     isDrugDelivery: '1',
     isOpenHelpOld: '1',
@@ -90,7 +100,7 @@ const scJson: {
 };
 
 const getSConfig = (sysCode: string) => {
-  return <ISConfig>(scJson[sysCode] || {});
+  return scJson[sysCode];
 };
 
 export { scJson, getSConfig };
