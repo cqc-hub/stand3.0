@@ -78,19 +78,19 @@
          * (_pd | _hosPd) & _pt(时间戳) 不分家
          */
         change_pat: {
+          const { _pt, _pd, _hosPd } = query;
+
+          if (_pt) {
+            if (_cacheChangePatTime !== _pt) {
+              _cacheChangePatTime = _pt;
+            } else {
+              break change_pat;
+            }
+          }
+
           const userStore = useUserStore();
 
           if (userStore.patList.length) {
-            const { _pt, _pd, _hosPd } = query;
-
-            if (_pt) {
-              if (_cacheChangePatTime !== _pt) {
-                _cacheChangePatTime = _pt;
-              } else {
-                break change_pat;
-              }
-            }
-
             if (_pd) {
               if (userStore.patChoose.patientId != _pd) {
                 const pat = userStore.patList.find((o) => o.patientId === _pd);

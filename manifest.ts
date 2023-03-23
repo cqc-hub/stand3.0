@@ -62,6 +62,7 @@ if (medicalMHelp) {
         version: '*',
         provider:
           globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
+          // globalGl.env === 'prod' ? '2021003147699046' : '2021003147699046',
       };
     }
   }

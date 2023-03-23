@@ -212,6 +212,11 @@
           resolve(e);
         },
         fail: reject,
+        complete(e) {
+          console.log(src);
+
+          console.log('接口调用完成', e);
+        },
       });
     });
   };
@@ -354,18 +359,16 @@
     docTitleName = docTitleName || '';
 
     docTitleName = docTitleName ?? '';
+
     uni.showLoading({
       mask: true,
     });
 
     let avatar_img = '/static/image/order/order-doctor-avatar.png';
-    if (_avatar_img) {
-      avatar_img = _avatar_img;
+    if (docPhoto && docPhoto.startsWith('https')) {
+      avatar_img = await downFile(docPhoto);
     } else {
-      if (docPhoto && docPhoto.startsWith('https')) {
-        avatar_img = await downFile(docPhoto);
-        _avatar_img = avatar_img;
-      }
+      _avatar_img = avatar_img;
     }
 
     const qr_code_img = qrImg.value;
@@ -384,21 +387,25 @@
     _good_at_img = good_at_img;
 
     const { pixelRatio } = await getSysInfo();
+
     const boxWidth = canvasInfo.value.width;
     const boxHeight = canvasInfo.value.height;
 
     const ctx = uni.createCanvasContext('shareCanvas', inst);
+
     // ctx.scale(pixelRatio, pixelRatio);
     //清空画布
     ctx.clearRect(0, 0, boxWidth, boxHeight);
 
     const { painWidth: painWidthBg, painHeight: painHeightBg } =
-      await getScallSize(head_bg_img, {
+      await getScallSize(_head_bg_img, {
         width: boxWidth,
         height: boxHeight,
       });
 
-    ctx.drawImage(head_bg_img, 0, 0, painWidthBg, painHeightBg);
+    // const [painWidthBg, painHeightBg] = [352, 493.2484076433121];
+
+    ctx.drawImage(_head_bg_img, 0, 0, painWidthBg, painHeightBg);
 
     const avatarBox = {
       width: 70,
@@ -427,6 +434,12 @@
         width: avatarBox.width,
         height: avatarBox.height,
       });
+    // const [painWidthAvatar, painHeightAvatar] = [70, 70];
+
+    console.log({
+      painHeightAvatar,
+      painWidthAvatar,
+    });
 
     ctx.drawImage(
       avatar_img,
