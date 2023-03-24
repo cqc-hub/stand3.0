@@ -211,6 +211,8 @@
     executeConfigPayAfter,
     isCanUseMedical,
     medicalNationUpload,
+    isMedicalSelf,
+    isDefaultMedical,
     type TPayDetailProp,
     type TCostList,
     type TWxAuthorize,
@@ -504,85 +506,25 @@
   const handlerPay = async () => {
     const { costTypeCode } = props.value;
     const isMedicalModePlugin = getIsMedicalModePlugin();
-    let isMedicalPay = false;
+    const { cardNumber } = gStores.userStore.patChoose;
+
+    let flag = false;
 
     if (isMedicalModePlugin) {
-      isMedicalPay = true;
+      flag = await isMedicalSelf(props.value.cardNumber || cardNumber);
     }
 
     changeRefPayList(0);
 
-    if (costTypeCode === '2' && isMedicalPay) {
-      const {
-        sConfig: { medicalMHelp },
-      } = globalGl;
-      let _isChange = false;
-      const { alipay } = medicalMHelp!;
-
-      // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { medicalPlugin } = alipay;
-
-        /**
-         * 支付宝医保插件模式只能是本人
-         */
-        if (medicalPlugin) {
-          _isChange = true;
-          const { cardNumber } = gStores.userStore.patChoose;
-
-          const flag = await isCanUseMedical(
-            props.value.cardNumber || cardNumber
-          );
-
-          if (flag) {
-            changeRefPayList(1);
-          } else {
-            changeRefPayList(0);
-          }
-        }
-      }
-      // #endif
-
-      if (!_isChange) {
+    if ((costTypeCode === '2' || isDefaultMedical()) && flag) {
+      if (flag) {
         changeRefPayList(1);
       }
     }
 
     if (pageConfig.value.confirmPayFg) {
-      if (isMedicalModePlugin) {
-        const {
-          sConfig: { medicalMHelp },
-        } = globalGl;
-        let _isChange = false;
-        const { alipay } = medicalMHelp!;
-
-        // #ifdef MP-ALIPAY
-        if (alipay) {
-          const { medicalPlugin } = alipay;
-
-          /**
-           * 支付宝医保插件模式只能是本人
-           */
-          if (medicalPlugin) {
-            _isChange = true;
-            const { cardNumber } = gStores.userStore.patChoose;
-
-            const flag = await isCanUseMedical(
-              props.value.cardNumber || cardNumber
-            );
-
-            if (flag) {
-              getPay();
-            } else {
-              regDialogConfirm.value.show();
-            }
-          }
-        }
-        // #endif
-
-        if (!_isChange) {
-          getPay();
-        }
+      if (flag) {
+        getPay();
       } else {
         regDialogConfirm.value.show();
       }

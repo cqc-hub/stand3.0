@@ -397,13 +397,13 @@
     //清空画布
     ctx.clearRect(0, 0, boxWidth, boxHeight);
 
-    const { painWidth: painWidthBg, painHeight: painHeightBg } =
-      await getScallSize(_head_bg_img, {
-        width: boxWidth,
-        height: boxHeight,
-      });
+    // const { painWidth: painWidthBg, painHeight: painHeightBg } =
+    //   await getScallSize(_head_bg_img, {
+    //     width: boxWidth,
+    //     height: boxHeight,
+    //   });
 
-    // const [painWidthBg, painHeightBg] = [352, 493.2484076433121];
+    const [painWidthBg, painHeightBg] = [352, 493.2484076433121];
 
     ctx.drawImage(_head_bg_img, 0, 0, painWidthBg, painHeightBg);
 
@@ -429,17 +429,12 @@
     );
     ctx.clip();
 
-    const { painHeight: painHeightAvatar, painWidth: painWidthAvatar } =
-      await getScallSize(avatar_img, {
-        width: avatarBox.width,
-        height: avatarBox.height,
-      });
-    // const [painWidthAvatar, painHeightAvatar] = [70, 70];
-
-    console.log({
-      painHeightAvatar,
-      painWidthAvatar,
-    });
+    // const { painHeight: painHeightAvatar, painWidth: painWidthAvatar } =
+    //   await getScallSize(avatar_img, {
+    //     width: avatarBox.width,
+    //     height: avatarBox.height,
+    //   });
+    const [painWidthAvatar, painHeightAvatar] = [70, 70];
 
     ctx.drawImage(
       avatar_img,

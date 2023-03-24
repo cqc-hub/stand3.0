@@ -108,91 +108,96 @@
   const loading = ref(false);
   let insuranceNo = '';
 
+  let payRes: any = null;
   const getPay = async () => {
-    let channel = 'ALI_MINI_INSURANCE';
-    // #ifdef  MP-WEIXIN
-    channel = 'WX_MINI_INSURANCE';
-    // #endif
+    if (!payRes) {
+      let channel = 'ALI_MINI_INSURANCE';
+      // #ifdef  MP-WEIXIN
+      channel = 'WX_MINI_INSURANCE';
+      // #endif
 
-    const {
-      cardNumber,
-      hosId,
-      patientId,
-      patientName,
-      phsOrderSource,
-      totalCost,
-      params,
-      extend,
-    } = info.value;
+      const {
+        cardNumber,
+        hosId,
+        patientId,
+        patientName,
+        phsOrderSource,
+        totalCost,
+        params,
+        extend,
+      } = info.value;
 
-    const {
-      idCard,
-      idType,
-      medicarePersonalFee,
-      medicarePlanFee,
-      medicareTotalFee,
-      payOrderId,
-      paySign,
-      personalPayFee,
-      phsOrderNo,
-      requestContent,
-      serialNo: hisSerialNo,
-    } = uploadRes.value;
-    const { source } = gStores.globalStore.browser;
+      const {
+        idCard,
+        idType,
+        medicarePersonalFee,
+        medicarePlanFee,
+        medicareTotalFee,
+        payOrderId,
+        paySign,
+        personalPayFee,
+        phsOrderNo,
+        requestContent,
+        serialNo: hisSerialNo,
+      } = uploadRes.value;
+      const { source } = gStores.globalStore.browser;
 
-    const openId = await getOpenId();
+      const openId = await getOpenId();
 
-    const returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
-      tabIndex: '1',
-      params,
-      // hosp_out_trade_no:
-    });
+      const returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+        tabIndex: '1',
+        params,
+        // hosp_out_trade_no:
+      });
 
-    const requestArg = {
-      channel,
-      cardNumber,
-      extend:
-        (extend && JSON.stringify({ extend, uploadRes: uploadRes.value })) ||
-        '',
-      hisSerialNo,
-      hosId,
-      idCard,
-      idType,
-      medicarePersonalFee,
-      medicarePlanFee,
-      medicareTotalFee,
-      openId,
-      patientId,
-      patientName,
-      payOrderId,
-      paySign,
-      personalPayFee,
-      phsOrderNo,
-      phsOrderSource,
-      requestContent,
-      source,
-      returnUrl,
-      totalFee: totalCost,
-      userId: openId,
-    };
+      const requestArg = {
+        channel,
+        cardNumber,
+        extend:
+          (extend && JSON.stringify({ extend, uploadRes: uploadRes.value })) ||
+          '',
+        hisSerialNo,
+        hosId,
+        idCard,
+        idType,
+        medicarePersonalFee,
+        medicarePlanFee,
+        medicareTotalFee,
+        openId,
+        patientId,
+        patientName,
+        payOrderId,
+        paySign,
+        personalPayFee,
+        phsOrderNo,
+        phsOrderSource,
+        requestContent,
+        source,
+        returnUrl,
+        totalFee: totalCost,
+        userId: openId,
+      };
 
-    Object.keys(requestArg).map((key) => {
-      requestArg[key] = requestArg[key] || '';
-    });
+      Object.keys(requestArg).map((key) => {
+        requestArg[key] = requestArg[key] || '';
+      });
 
-    const { result } = await api.medicalPay<any>(requestArg);
-    console.log('-------');
-    console.log({
-      result,
-      requestArg,
-    });
+      const { result } = await api.medicalPay<any>(requestArg);
+      payRes = result;
+
+      console.log('-------');
+      console.log({
+        result,
+        requestArg,
+      });
+    }
     // await toPayPull(result);
 
-    if (result && result.invokeData) {
-      insuranceNo = result.insuranceNo;
+    if (payRes && payRes.invokeData) {
+      insuranceNo = payRes.insuranceNo;
       const {
         invokeData: { payAppId, payUrl },
-      } = result;
+      } = payRes;
 
       uni.navigateToMiniProgram({
         appId: payAppId,

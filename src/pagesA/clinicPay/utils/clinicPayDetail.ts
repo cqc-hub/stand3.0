@@ -386,6 +386,106 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
   return !!_isCanUseMedical;
 };
 
+/** 只考虑登录时候 校验就诊人是否能使用国标医保 */
+export const isCanUseMedicalNational = async (): Promise<boolean> => {
+  const { relationship } = new GStores().userStore.patChoose;
+
+  return relationship === '本人';
+};
+
+/** 是否需要过滤医保 仅本人使用 */
+export const _isMedicalSelf = async () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  if (medicalMHelp) {
+    const { alipay, wx } = medicalMHelp;
+
+    // #ifdef MP-ALIPAY
+    if (alipay) {
+      const { medicalPlugin } = alipay;
+
+      if (medicalPlugin) {
+        return true;
+      }
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { medicalNation } = wx;
+
+      if (medicalNation) {
+        return true;
+      }
+    }
+    //#endif
+  }
+
+  return false;
+};
+
+/** 是否默认携带医保标签 (部分项目不返回 costTypeCode 标志) */
+export const isDefaultMedical = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  if (medicalMHelp) {
+    const { alipay, wx } = medicalMHelp;
+
+    // #ifdef MP-ALIPAY
+    return alipay?.medicalDefault === '1';
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    return wx?.medicalDefault === '1';
+    //#endif
+  }
+
+  return false;
+};
+
+/**
+ *
+ * @param cardNumber
+ * @returns boolean  本人医保?
+ */
+export const isMedicalSelf = async (cardNumber: string): Promise<boolean> => {
+  if (await _isMedicalSelf()) {
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+
+    const { alipay, wx } = medicalMHelp!;
+
+    // #ifdef MP-ALIPAY
+    if (alipay) {
+      const { medicalPlugin } = alipay;
+
+      /**
+       * 支付宝医保插件模式只能是本人
+       */
+      if (medicalPlugin) {
+        return await isCanUseMedical(cardNumber);
+      }
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { medicalNation } = wx;
+
+      if (medicalNation) {
+        return await isCanUseMedicalNational();
+      }
+    }
+    // #endif
+  }
+  return false;
+};
+
 export const usePayPage = () => {
   const pageConfig = ref({} as ISystemConfig['pay']);
   const regDialogConfirm = ref<any>('');
@@ -735,39 +835,15 @@ export const usePayPage = () => {
       const isMedicalModePlugin = getIsMedicalModePlugin();
 
       if (isMedicalModePlugin) {
-        const {
-          sConfig: { medicalMHelp },
-        } = globalGl;
-        let _isChange = false;
-        const { alipay } = medicalMHelp!;
+        const { cardNumber } = gStores.userStore.patChoose;
+        const flag = await isMedicalSelf(
+          pageProps.value.deParams?.cardNumber || cardNumber
+        );
 
-        // #ifdef MP-ALIPAY
-        if (alipay) {
-          const { medicalPlugin } = alipay;
-
-          /**
-           * 支付宝医保插件模式只能是本人
-           */
-          if (medicalPlugin) {
-            _isChange = true;
-            const { cardNumber } = gStores.userStore.patChoose;
-
-            const flag = await isCanUseMedical(
-              pageProps.value.deParams?.cardNumber || cardNumber
-            );
-            // debugger;
-
-            if (flag) {
-              getPay();
-            } else {
-              regDialogConfirm.value.show();
-            }
-          }
-        }
-        // #endif
-
-        if (!_isChange) {
+        if (flag) {
           getPay();
+        } else {
+          regDialogConfirm.value.show();
         }
       } else {
         regDialogConfirm.value.show();
@@ -787,39 +863,17 @@ export const usePayPage = () => {
         );
 
         // 医保 类型
-        if (payMedicalItem) {
-          const {
-            sConfig: { medicalMHelp },
-          } = globalGl;
-          let _isChange = false;
-          const { alipay } = medicalMHelp!;
+        if (payMedicalItem || isDefaultMedical()) {
+          const { cardNumber } = gStores.userStore.patChoose;
 
-          // #ifdef MP-ALIPAY
-          if (alipay) {
-            const { medicalPlugin } = alipay;
+          const flag = await isMedicalSelf(
+            pageProps.value.deParams?.cardNumber || cardNumber
+          );
 
-            /**
-             * 支付宝医保插件模式只能是本人
-             */
-            if (medicalPlugin) {
-              _isChange = true;
-              const { cardNumber } = gStores.userStore.patChoose;
-
-              const flag = await isCanUseMedical(
-                pageProps.value.deParams?.cardNumber || cardNumber
-              );
-
-              if (flag) {
-                changeRefPayList(1);
-              } else {
-                changeRefPayList(0);
-              }
-            }
-          }
-          // #endif
-
-          if (!_isChange) {
+          if (flag) {
             changeRefPayList(1);
+          } else {
+            changeRefPayList(0);
           }
         } else {
           changeRefPayList(0);
