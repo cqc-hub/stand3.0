@@ -100,7 +100,7 @@ const scJson: Record<string, ISConfig> = {
 };
 
 const getSConfig = (sysCode: string) => {
-  return scJson[sysCode];
+  return scJson[sysCode] || {};
 };
 
 export { scJson, getSConfig };
