@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001056",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -126,7 +126,7 @@
     "1001056": {
       "wxAppid": "wx4d8f68fdc6b6831c",
       "alipayAppid": "",
-      "h5Appid": "wxf57d660046a04f49",
+      "h5Appid": "wxe8692caf9ede57e1",
       "name": "中国人民解放军新疆军区总医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
