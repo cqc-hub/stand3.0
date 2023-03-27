@@ -450,6 +450,9 @@
         },
         {
           "path": "convenienceService/confirmOrder",
+          "extend": {
+            "patient": true
+          },
           "style": {
             "navigationBarTitleText": "确认信息"
           }

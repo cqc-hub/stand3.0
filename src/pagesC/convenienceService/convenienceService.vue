@@ -158,10 +158,11 @@
 
   const ezz = (e) => {
     regDialogConfirm.value.close();
-    console.log(e);
-    const idx = lists.value.findIndex(o => o)
 
-    aaa.value.iconClick(e.item, e.i);
+    aaa.value.iconClick(
+      e.item,
+      lists.value.findIndex((o) => o.itemId === e.item.itemId)
+    );
   };
 
   const init = async () => {

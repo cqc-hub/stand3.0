@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <g-flag typeFg="1009" isShowFg />
-    <!-- <g-choose-pat @choose-pat="getListData" /> -->
+    <g-choose-pat />
 
     <view class="top p32 f28">
       <view class="row flex-start mb8">

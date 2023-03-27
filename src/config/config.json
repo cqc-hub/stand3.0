@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001056",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -132,7 +132,7 @@
       "isStartComeTest": true,
       "isOpenOcr": false,
       "isOpenHealthCard": {
-        "healthCardText": "",
+        "healthCardText": "新疆维吾尔自治区卫生健康委员会",
         "hospitalId": "37164"
       }
     },

@@ -429,12 +429,12 @@
     );
     ctx.clip();
 
-    // const { painHeight: painHeightAvatar, painWidth: painWidthAvatar } =
-    //   await getScallSize(avatar_img, {
-    //     width: avatarBox.width,
-    //     height: avatarBox.height,
-    //   });
-    const [painWidthAvatar, painHeightAvatar] = [70, 70];
+    const { painHeight: painHeightAvatar, painWidth: painWidthAvatar } =
+      await getScallSize(avatar_img, {
+        width: avatarBox.width,
+        height: avatarBox.height,
+      });
+    // const [painWidthAvatar, painHeightAvatar] = [70, 70];
 
     ctx.drawImage(
       avatar_img,

@@ -55,7 +55,7 @@
   import { ref } from 'vue';
   import { getAvatar, isAreaProgram, useUserStore, IPat } from '@/stores';
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
   import {
     getInHospitalInfoResult,
@@ -121,12 +121,19 @@
     const type = pageProps.value.type;
     if (type) {
       if (type === '1') {
+        const extraData = {
+          patientName: hosInfoParam.value.patientName,
+          patientPhone: hosInfoParam.value.patientPhone,
+        };
+
+        /** 手术查询 */
         useTBanner({
           type: 'h5',
           isSelfH5: '1',
-          path: 'pagesC/choosePat/choosePat',
+          path: 'pagesC/operationRes/operationRes',
           extraData: {
-            rePath: 'pagesC/healthRecord/healthRecord',
+            patientName: hosInfoParam.value.patientName,
+            patientPhone: hosInfoParam.value.patientPhone,
           },
           addition: {
             patientId: '_patientId',
