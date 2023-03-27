@@ -44,6 +44,11 @@ interface ISConfig {
 
   //是否开启助老版
   isOpenHelpOld?: '1';
+  //首页开启智能问答——微信
+  isOpenIntelQA?: {
+    appId: string;
+    path: string;
+  };
 }
 
 const scJson: Record<string, ISConfig> = {
@@ -97,6 +102,17 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
+
+  /**
+   * 西安红会
+   */ 
+  1001057:{
+    isOpenIntelQA:{
+      appId: "wxba22f1a66a3af7aa",
+      path:"pages/index?appid=wx7b1baac614ebed72&configure=intelligent"
+      }
+  }
+
 };
 
 const getSConfig = (sysCode: string) => {

@@ -230,7 +230,7 @@
   }
   .progress:last-child {
     .line {
-      height: 80%;
+      height: 99%;
     }
   }
   .empty-box {
