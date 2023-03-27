@@ -405,6 +405,12 @@
           // if (birthday) {
           //   lessThenSix = dayjs().diff(dayjs(birthday), 'year') <= 6;
           // }
+
+          // 非身份证不需要民族
+          const nationIdx = _patientInfo.findIndex((o) => o === formKey.nation);
+          if (nationIdx > -1) {
+            _patientInfo.splice(nationIdx, 1);
+          }
         }
 
         // 显示监护人

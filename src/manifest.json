@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7b1baac614ebed72",
+    "appid": "wxe26143481567cb97",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,17 +62,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.1.15",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021003173633521",
+    "appid": "2021003154665105",
     "plugins": {},
     "mergeVirtualHostAttributes": true
   },
@@ -86,7 +81,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "西安市红会医院",
+  "name": "台州第一人民医院",
   "h5": {
     "router": {
       "base": "./"
