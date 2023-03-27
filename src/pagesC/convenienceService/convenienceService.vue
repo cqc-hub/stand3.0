@@ -4,7 +4,7 @@
     <scroll-view class="g-container" scroll-y>
       <view class="container">
         <view class="content mt16" v-if="isComplete && lists?.length">
-          <Service-List :list="lists" @update:value="changeNum" />
+          <Service-List :list="lists" @update:value="changeNum" ref="aaa" />
         </view>
         <view class="empty-list" v-else-if="isComplete">
           <g-empty :current="1" />
@@ -44,6 +44,7 @@
         :totalNum="totalNum"
         :list="chooseItem"
         @item-click="changeNum2"
+        @ezz="ezz"
         ref="regDialogConfirm"
       >
         <template #footer>
@@ -78,13 +79,13 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
-  import ChoosePopup from './components/choosePopup.vue';
+  import ChoosePopup from './components/ChoosePopup.vue';
   import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
   import { GStores, debounce, ServerStaticData } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
-  import ServiceList from './components/serviceList.vue';
+  import ServiceList from './components/ServiceList.vue';
 
   import { type IServiceList } from './utils/index';
   interface IPageProps {
@@ -92,6 +93,7 @@
     hosName: string;
   }
   const pageProps = ref(<IPageProps>{});
+  const aaa = ref('' as any);
   const gStores = new GStores();
   const confirmFgTitle = ref('');
   const isComplete = ref(false);
@@ -152,6 +154,14 @@
         hosName,
       }),
     });
+  };
+
+  const ezz = (e) => {
+    regDialogConfirm.value.close();
+    console.log(e);
+    const idx = lists.value.findIndex(o => o)
+
+    aaa.value.iconClick(e.item, e.i);
   };
 
   const init = async () => {

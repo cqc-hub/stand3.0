@@ -11,7 +11,7 @@
         </view>
         <!-- <slot name="list"/> -->
         <!-- :isNoShowMore="true" -->
-        <Service-List :list="listData" @update:value="itemClick" />
+        <Service-List :list="listData" @update:value="itemClick" @zzz="ezz" zzz />
         <view><slot name="footer" /></view>
       </view>
     </g-popup>
@@ -20,14 +20,14 @@
 
 <script lang="ts" setup>
   import { ref, watch, nextTick } from 'vue';
-  import ServiceList from './serviceList.vue';
+  import ServiceList from './ServiceList.vue';
   const props = defineProps<{
     list: any[];
     title: string;
     totalNum: string;
   }>();
   const listData = ref(props.list);
-  const emits = defineEmits(['item-click']);
+  const emits = defineEmits(['item-click', 'ezz']);
   const refAddDialog = ref<any>('');
 
   const show = () => {
@@ -47,9 +47,13 @@
     });
     emits('item-click', listData.value);
   };
+  const ezz = (e) => {
+    emits('ezz', e)
+  }
 
   defineExpose({
     show,
+    close
   });
 
   watch(

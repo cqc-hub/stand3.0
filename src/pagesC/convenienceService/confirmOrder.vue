@@ -44,7 +44,7 @@
   import { GStores, debounce, wait, getTimeStamp } from '@/utils';
   import { type IConfirmList } from './utils/index';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
-  import ConfirmList from './components/confirmList.vue';
+  import ConfirmList from './components/ConfirmList.vue';
   const gStores = new GStores();
   const isComplete = ref(true);
 

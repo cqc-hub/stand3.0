@@ -38,7 +38,9 @@
         <view class="mb40">
           <view v-if="serviceItem.tips" class="dialog-t f32">
             <text class="dt-width color-888">项目说明</text>
-            <text class="g-bolder g-break-word">{{ serviceItem.tips }}{{ serviceItem.tips }}{{ serviceItem.tips }}</text>
+            <text class="g-bolder g-break-word">
+              {{ serviceItem.tips }}{{ serviceItem.tips }}{{ serviceItem.tips }}
+            </text>
           </view>
           <view class="dialog-t f32">
             <text class="dt-width color-888">费用金额</text>
@@ -79,20 +81,32 @@
   const props = defineProps<{
     list: any[];
     isNoShowMore?: boolean;
+    zzz?: boolean;
   }>();
   const listData = ref(props.list);
-  const emits = defineEmits(['update:value']);
+  const emits = defineEmits(['update:value', 'zzz']);
 
   const boxChange = (e, i) => {
     listData.value[i].num = e;
     emits('update:value', listData.value);
   };
   const iconClick = (item, i) => {
+    if (props.zzz) {
+      emits('zzz', {
+        item,
+        i,
+      });
+      return;
+    }
     regDialogConfirm.value.show();
     serviceItem.value = item;
     serviceIndex.value = i;
   };
   const goWithdrawal = () => {};
+
+  defineExpose({
+    iconClick
+  })
   watch(
     () => props.list,
     (v) => {

@@ -266,10 +266,21 @@ export const getQxMedicalNation = async () => {
       'get-wx-medical-auth-code': '1',
     });
 
-    wx.navigateToMiniProgram({
+    uni.navigateToMiniProgram({
       appId,
       path,
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+      fail({ errMsg }) {
+        if (errMsg.includes('fail cancel')) {
+          setLocalStorage({
+            'get-wx-medical-auth-code': '',
+          });
+
+          gStores.messageStore.showMessage(
+            '未完成电子医保凭证授权,无法维续医保结算'
+          );
+        }
+      },
     });
 
     return Promise.reject('请求授权...');

@@ -309,6 +309,10 @@
             label: '',
           },
         });
+      } else {
+        gStores.messageStore.showMessage(
+          '未完成电子医保凭证授权,无法维续医保结算'
+        );
       }
     }
   });
