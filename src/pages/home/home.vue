@@ -10,102 +10,108 @@
           :class="{
             'system-mode-old': gStores.globalStore.modeOld,
           }"
-        >
-          <view class="search flex-between" v-if="global.sConfig.isHideHomeSearch != '1'">
-            <!-- 在有搜索框的前提下 是否开启助老版本 -->
-            <template v-if="global.sConfig.isOpenHelpOld == '1'">
-              <view class="w70">
-                <uni-search-input
-                  :type="'2'"
-                  inputBorder
-                  :placeholder="searchPlaceholder"
-                  @tap="goSearch"
-                />
-              </view>
-              <view class="openOld flex-between" @tap="openModeOld">
-                <view class="iconfont icon-size">&#xe700;</view>
-                长辈模式
-              </view>
-            </template>
-            <template v-else>
-            <view class="w100">
-              <uni-search-input
-                :type="'2'"
-                inputBorder
-                :placeholder="searchPlaceholder"
-                @tap="goSearch"
-              />
-              </view>
-            </template>
-          </view>
-
-          <view class="card">
-            <!-- 登录之后 -->
-            <block v-if="globalStore.isLogin">
-              <view
-                class="top-card flex-normal-between animate__animated animate__fadeIn"
-              >
-                <!-- 有就诊人时 -->
-                <block v-if="gStores.userStore.patChoose.patientName">
-                  <view class="flex-normal">
-                    <view @tap="cardClick" class="iconfont icon-size"> &#xe6a7; </view>
-                    <view class="patient">
-                      <text>
-                        {{ gStores.userStore.patChoose.patientNameEncry }}
-                      </text>
-                      <text
-                        v-if="!isAreaProgram() && gStores.userStore.patChoose._showId"
-                      >
-                        ID
-                        {{ gStores.userStore.patChoose._showId }}
-                      </text>
-                    </view>
-                  </view>
-                  <view class="switchPatient" @tap="chooseAction"> 更换就诊人 </view>
-                </block>
-                <!-- 没有就诊人时 -->
-                <block v-else>
-                  <view class="flex-normal">
-                    <view class="patient">
-                      <text>暂无就诊人</text>
-                    </view>
-                  </view>
-                  <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
-                </block>
-              </view>
-            </block>
-            <block v-else>
-              <!-- 未登录 -->
-              <view
-                class="top-card flex-normal-between animate__animated animate__fadeIn"
-              >
-                <view class="flex-normal no-login">
-                  <text>请登录</text>
-                  <text>登录后享受更多服务</text>
+        > 
+            <view
+              class="search flex-between"
+              v-if="global.sConfig.isHideHomeSearch != '1'"
+            >
+              <!-- 在有搜索框的前提下 是否开启助老版本 -->
+              <template v-if="global.sConfig.isOpenHelpOld == '1'">
+                <view class="w70">
+                  <uni-search-input
+                    :type="'2'"
+                    inputBorder
+                    :placeholder="searchPlaceholder"
+                    @tap="goSearch"
+                  />
                 </view>
-                <!-- #ifdef MP-ALIPAY -->
-                <view class="switchPatient no-login-tip" @tap="goLogin"> 请登录 </view>
-                <!-- #endif -->
-                <!-- #ifdef MP-WEIXIN -->
-                <button
-                  open-type="getPhoneNumber"
-                  @getphonenumber="goLogin"
-                  class="login-btn"
+                <view class="openOld flex-between" @tap="openModeOld">
+                  <view class="iconfont icon-size">&#xe700;</view>
+                  长辈模式
+                </view>
+              </template>
+              <template v-else>
+                <view class="w100">
+                  <uni-search-input
+                    :type="'2'"
+                    inputBorder
+                    :placeholder="searchPlaceholder"
+                    @tap="goSearch"
+                  />
+                </view>
+              </template>
+            </view>
+   
+            <view class="card">
+              <!-- 登录之后 -->
+              <block v-if="globalStore.isLogin">
+                <view
+                  class="top-card flex-normal-between animate__animated animate__fadeIn"
                 >
-                  请登录
-                </button>
-                <!-- #endif -->
-              </view>
-            </block>
+                  <!-- 有就诊人时 -->
+                  <block v-if="gStores.userStore.patChoose.patientName">
+                    <view class="flex-normal">
+                      <view @tap="cardClick" class="iconfont icon-size"> &#xe6a7; </view>
+                      <view class="patient">
+                        <text>
+                          {{ gStores.userStore.patChoose.patientNameEncry }}
+                        </text>
+                        <text
+                          v-if="!isAreaProgram() && gStores.userStore.patChoose._showId"
+                        >
+                          ID
+                          {{ gStores.userStore.patChoose._showId }}
+                        </text>
+                      </view>
+                    </view>
+                    <view class="switchPatient" @tap="chooseAction"> 更换就诊人 </view>
+                  </block>
+                  <!-- 没有就诊人时 -->
+                  <block v-else>
+                    <view class="flex-normal">
+                      <view class="patient">
+                        <text>暂无就诊人</text>
+                      </view>
+                    </view>
+                    <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
+                  </block>
+                </view>
+              </block>
+              <block v-else>
+                <!-- 未登录 -->
+                <view
+                  class="top-card flex-normal-between animate__animated animate__fadeIn"
+                >
+                  <view class="flex-normal no-login">
+                    <text>请登录</text>
+                    <text>登录后享受更多服务</text>
+                  </view>
+                  <!-- #ifdef MP-ALIPAY -->
+                  <view class="switchPatient no-login-tip" @tap="goLogin"> 请登录 </view>
+                  <!-- #endif -->
+                  <!-- #ifdef MP-WEIXIN -->
+                  <button
+                    open-type="getPhoneNumber"
+                    @getphonenumber="goLogin"
+                    class="login-btn"
+                  >
+                    请登录
+                  </button>
+                  <!-- #endif -->
+                </view>
+              </block>
 
-            <view class="top-menu">
-              <view class="box" v-if="topMenuList.length">
-                <homeGrid :list="topMenuList" :type="1"></homeGrid>
-              </view>
-              <view class="notice flex-normal" v-if="noticeMenu && noticeMenu.length > 0">
-                <text class="icon-font img_announcement icon-size"></text>
+              <view class="top-menu">
+                <view class="box" v-if="topMenuList.length">
+                  <homeGrid :list="topMenuList" :type="1"></homeGrid>
+                </view>
+                <view
+                  class="notice flex-normal"
+                  v-if="noticeMenu && noticeMenu.length > 0"
+                >
+                  <text class="icon-font img_announcement icon-size"></text>
 
-                <!-- <swiper
+                  <!-- <swiper
                   autoplay="true"
                   display-multiple-items="1"
                   vertical="true"
@@ -124,39 +130,49 @@
                     </view>
                   </swiper-item>
                 </swiper> -->
-                <view class="bar-swiper">
-                  <uni-notice-bar
-                    v-if="noticeText"
-                    :text="noticeText"
-                    speed="80"
-                    scrollable
-                    color="--hr-neutral-color-10"
-                    style="width: 100%"
-                    background-color="transparent"
-                    @click="goToNotice1"
-                  />
+                  <view class="bar-swiper">
+                    <uni-notice-bar
+                      v-if="noticeText"
+                      :text="noticeText"
+                      speed="80"
+                      scrollable
+                      color="--hr-neutral-color-10"
+                      style="width: 100%"
+                      background-color="transparent"
+                      @click="goToNotice1"
+                    />
+                  </view>
                 </view>
               </view>
             </view>
-          </view>
-          <view class="banner-menu">
-            <homeBanner
-              :leftFunctionList="bannerLeftFunctionList"
-              :functionList="bannerFunctionList"
-            />
-          </view>
-          <!-- #ifdef MP-WEIXIN -->
-          <view>
-            <!-- <image v-if="isShow" class="official-list" :src="img_url + 'bianji@3x.png'" mode=""></image> -->
-            <official-account></official-account>
-          </view>
-          <!-- #endif -->
-          <view class="fun-list" v-if="menuList.length">
-            <homeMenu :list="menuList" />
-          </view>
-          <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-            <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
-          </view>
+   
+            <view class="banner-menu">
+              <homeBanner
+                :leftFunctionList="bannerLeftFunctionList"
+                :functionList="bannerFunctionList"
+              />
+            </view>
+            <movable-area v-if="global.sConfig.isOpenIntelQA">
+            <movable-view :x="x" :y="y" direction="all" @change="onChange">
+             <view class="auto-person" @tap="gotoIntelQA">
+              <text>智能客服</text>
+              <image  src="/static/image/auto.png"></image>
+             </view>
+            </movable-view>
+          </movable-area>
+            <!-- #ifdef MP-WEIXIN -->
+            <view>
+              <official-account></official-account>
+            </view>
+            <!-- #endif -->
+            <view class="fun-list" v-if="menuList.length">
+              <homeMenu :list="menuList" />
+            </view>
+            <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
+              <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
+            </view>
+   
+          <view> </view>
         </view>
         <!-- 老年版本 -->
         <view
@@ -192,12 +208,12 @@
                 </block>
                 <!-- 没有就诊人时 -->
                 <block v-else>
-                <view class="flex-normal">
-                  <view class="patient-old">
-                    <text>暂无就诊人</text>
+                  <view class="flex-normal">
+                    <view class="patient-old">
+                      <text>暂无就诊人</text>
+                    </view>
                   </view>
-                </view>
-                <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
+                  <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
                 </block>
               </view>
             </block>
@@ -340,6 +356,14 @@ const bannerLeftFunctionList = ref([]); //banner列表
 const bannerFunctionList = ref([]); //通知列表
 const menuList = ref([]); //业务模块
 
+const x = ref(337); //移动的位置
+const y = ref(343);
+const old = ref({
+  x:0,
+  y:0
+})
+
+
 onLoad(() => {
   //设置顶部标题
   uni.setNavigationBarTitle({
@@ -382,6 +406,23 @@ onLoad(() => {
     });
   }
 });
+
+
+const onChange = (e)=>{ 
+  old.value.x = e.detail.x
+  old.value.y = e.detail.y
+  
+}
+//跳转智能问答
+const gotoIntelQA = ()=>{
+  if(global.sConfig.isOpenIntelQA){
+    uni.navigateToMiniProgram({
+       appId: global.sConfig.isOpenIntelQA.appId,
+        path: global.sConfig.isOpenIntelQA.path,
+      });
+  }
+ 
+}
 const getNotice = async () => {
   const { result } = await api.getAnnouncementCms({});
   noticeMenu.value = result;
@@ -535,7 +576,39 @@ const openModeOld = ()=>{
 .g-page {
   background: #ffffff;
 }
-
+.auto-person {
+  position: relative;
+  z-index: 999;
+  text{
+    position: absolute;
+    bottom: 9px;
+    color: #fff;
+    font-size: 24rpx;
+    left: 23rpx;
+  }
+  image{
+  width: 140rpx;
+  height: 148rpx;
+  }
+}
+movable-area{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:48vh;
+  margin: 10vh 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+movable-view{
+  color:#F00;
+  position:relative;
+  pointer-events: auto;
+  width:auto;
+  height:auto;
+  display:inline-block;
+}
 .homePage {
   padding: 0 32rpx 188rpx 32rpx;
   .search {
@@ -544,7 +617,7 @@ const openModeOld = ()=>{
   .w70 {
     width: 70%;
   }
-   .w100 {
+  .w100 {
     width: 100%;
   }
   .openOld {
@@ -836,8 +909,8 @@ const openModeOld = ()=>{
   }
 
   .patient-old {
-    text{
-    font-size: 48rpx !important;
+    text {
+      font-size: 48rpx !important;
     }
   }
   view.switchPatient {
