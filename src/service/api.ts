@@ -166,7 +166,7 @@ const queryApi = {
 
   // 医保授权(微信国标)
   authorize: <T>(data) =>
-    service.post<T>('/phs-query/medical/authorize', parm(data), {
+    service.post<T>('/phs-base/medical/authorize', parm(data), {
       hideLoading: false,
     }),
 
