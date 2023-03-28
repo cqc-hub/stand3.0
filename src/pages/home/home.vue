@@ -165,19 +165,13 @@
               :leftFunctionList="bannerLeftFunctionList"
               :functionList="bannerFunctionList"
             />
-          </view>
-          <!-- <movable-area v-if="global.sConfig.isOpenIntelQA">
-            <movable-view :x="x" :y="y" direction="all" @change="onChange">
-              <view class="auto-person" @tap="gotoIntelQA">
-                <text>智能客服</text>
-                <image src="/static/image/auto.png"></image>
-              </view>
-            </movable-view>
-          </movable-area> -->
+          </view> 
 
+          <!-- #ifdef MP-WEIXIN -->
           <drag-button
             v-if="global.sConfig.isOpenIntelQA"
-            :edge="0"
+            :right="1"
+            :edge="100"
             :zid="33"
             @btnClick="gotoIntelQA"
             isDock
@@ -185,9 +179,11 @@
           >
             <view class="auto-person">
               <text>智能客服</text>
-              <image src="/static/image/auto.png"></image>
+              <image :src="$global.BASE_IMG + 'auto.png'"></image>
             </view>
           </drag-button>
+            <!-- #endif -->
+
           <!-- #ifdef MP-WEIXIN -->
           <view>
             <official-account></official-account>
@@ -632,24 +628,7 @@
       height: 148rpx;
     }
   }
-  movable-area {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 48vh;
-    margin: 10vh 0;
-    box-sizing: border-box;
-    pointer-events: none;
-  }
-  movable-view {
-    color: #f00;
-    position: relative;
-    pointer-events: auto;
-    width: auto;
-    height: auto;
-    display: inline-block;
-  }
+ 
   .homePage {
     padding: 0 32rpx 188rpx 32rpx;
     .search {

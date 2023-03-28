@@ -3,7 +3,7 @@
     <view
       id="_drag_button"
       class="drag"
-      :style="'left: ' + left + 'px; top:' + top + 'px;'"
+      :style="right?'right: ' + right + 'px; top:' + top + 'px;':'left: ' + left + 'px; top:' + top + 'px;'"
       @touchstart="touchstart"
       @touchmove.stop.prevent="touchmove"
       @touchend="touchend"
@@ -54,6 +54,11 @@
         type: Number,
         default: 10,
       },
+
+      right:{
+        type: Number,
+        default: 0,
+      }
     },
     data() {
       return {
@@ -93,6 +98,7 @@
           this.offsetHeight = data.height / 2;
 
           const hisLocation = getLocalStorage(DRAG_LOCATION_KEY + this.zid);
+          console.log(2222,hisLocation,this.windowWidth ,this.width);
           if (hisLocation) {
             this.left = hisLocation.left;
             this.top = hisLocation.top;
