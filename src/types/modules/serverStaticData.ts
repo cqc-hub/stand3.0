@@ -199,6 +199,12 @@ export interface ISystemConfig {
   /** 药品配送 */
   drugDelivery: {
     company?: IOptions[];
+
+    /** 中药代煎外配详情 内跳快递小程序的appid*/
+    deliveryFired?: {
+      wx?: string;
+      alipay?: string;
+    };
   };
 }
 

@@ -32,8 +32,9 @@
             :selUnPayList="selList"
             :systemModeOld="gStores.globalStore.modeOld"
             @sel-item="selPayListItem"
-            @click-item="unSelItemClick"
+            @click-item="selItemClick"
             @arrow-item="selItemClick"
+            @express-click="expressClick"
             isCheck
           />
 
@@ -43,6 +44,8 @@
           >
             <g-empty :current="1" />
           </view>
+
+          <view v-else class="safe-height" />
         </scroll-view>
       </swiper-item>
 
@@ -52,12 +55,15 @@
             :list="seledList"
             :systemModeOld="gStores.globalStore.modeOld"
             @click-item="selItemClick"
+            @express-click="expressClick"
             show-status
           />
 
           <view class="empty-list" v-if="isComplete['1'] && !seledList.length">
             <g-empty :current="1" />
           </view>
+
+          <view v-else class="safe-height" />
         </scroll-view>
       </swiper-item>
     </swiper>
@@ -77,7 +83,12 @@
     <g-message />
 
     <!-- :sel-list="drayWaySelList" -->
-    <sel-Way-Popup :sel-list="[]" @item-click="wayClick" ref="refAddDialog" />
+    <Sel-Way-Popup
+      :sel-list="[]"
+      :opt-list="selListOption"
+      @item-click="wayClick"
+      ref="refAddDialog"
+    />
     <xy-dialog
       :title="fgTitle54"
       :show="isFgShow54"
@@ -100,16 +111,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick } from 'vue';
+  import { onMounted, ref, nextTick, computed } from 'vue';
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
-  import { GStores, debounce } from '@/utils';
-  import { type IWaitListItem } from './utils/medicalHelp';
+  import { GStores, debounce, useTBanner, TButtonConfig } from '@/utils';
+  import { type IWaitListItem, isChineseMedical } from './utils/medicalHelp';
   import { setLocalStorage, getLocalStorage, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
   import HtlpList from './components/HtlpList.vue';
-  import SelWayPopup from './components/selWayPopup.vue';
+  import SelWayPopup from './components/SelWayPopup.vue';
 
   const gStores = new GStores();
   const tabCurrent = ref(0);
@@ -136,6 +147,42 @@
   const seledList = ref<IWaitListItem[]>([]);
   const drayWaySelList = ref<IOptions[]>([]);
 
+  const selListOption = computed(() => {
+    const [opt1, opt2] = [
+      {
+        label: '医院窗口取药',
+        value: '医院窗口取药',
+      },
+      {
+        label: '快递配送到家',
+        value: '快递配送到家',
+      },
+    ];
+    let f = false;
+
+    const idx = selList.value.findIndex((o) => {
+      return isChineseMedical(o) && o.deliveryType === '1';
+    });
+
+    if (idx > -1) {
+      if (selList.value.length === 1) {
+        f = true;
+      } else {
+        const idx2 = selList.value.findIndex((o) => {
+          return !isChineseMedical(o) && o.deliveryType === '1';
+        });
+
+        if (idx2 > -1) {
+          f = false;
+        } else {
+          f = true;
+        }
+      }
+    }
+
+    return f ? [opt2] : [opt1, opt2];
+  });
+
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
 
@@ -143,6 +190,25 @@
   };
 
   tabChange = debounce(tabChange, 80);
+
+  const expressClick = (item: IWaitListItem) => {
+    const { expressNo, expressCompany } = item;
+    const args: TButtonConfig = {
+      type: 'h5',
+      path: 'pagesC/myExpress/expressDetail',
+      text: '',
+      isSelfH5: '1',
+      extraData: {
+        expressNo,
+        expressCompany,
+      },
+      addition: {
+        token: 'token',
+      },
+    };
+
+    useTBanner(args);
+  };
 
   const selPayListItem = (item: IWaitListItem) => {
     const { takenDrugType } = item;
@@ -153,9 +219,16 @@
       if (idx === -1) {
         const list = [...selList.value, item];
         const hosIds = [...new Set(list.map((o) => o.hosId))];
+        const types = [
+          ...new Set(
+            list.map((o) => isChineseMedical(o) && o.drugIsDelivery === '1')
+          ),
+        ];
 
         if (hosIds.length > 1) {
           gStores.messageStore.showMessage('不支持跨院区配送');
+        } else if (types.length > 1) {
+          gStores.messageStore.showMessage('请选择相同配送方式');
         } else {
           selList.value.push(item);
         }
@@ -211,10 +284,22 @@
 
   const unSelItemClick = (item: IWaitListItem) => {};
   const selItemClick = (item: IWaitListItem) => {
+    const pageArg = {
+      ...item,
+    };
+
+    if (
+      isChineseMedical(item) &&
+      item.drugIsDelivery === '1' &&
+      item.takenDrugType !== '0'
+    ) {
+      pageArg.takenDrug = '1';
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl(
         '/pagesB/medicationAssistant/medicalHelpDetail',
-        item
+        pageArg
       ),
     });
   };

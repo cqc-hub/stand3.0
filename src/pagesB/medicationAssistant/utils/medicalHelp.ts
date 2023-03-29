@@ -1,4 +1,8 @@
 export interface IWaitListItem {
+  acceptTime: string;
+  expressNo: string;
+  expressCompany: string;
+  expressParam: string;
   hosId: string;
   hosName: string;
   drugTypeCode: string;
@@ -60,6 +64,14 @@ export interface IItemDetail {
 
 export const isChineseMedical = (item: IWaitListItem) => {
   return !!(item.drugTypeName && item.drugTypeName.includes('中药'));
+};
+
+export const isToBeFriedAndDelivery = (item: IWaitListItem) => {
+  if (isChineseMedical(item)) {
+    return item.drugIsDelivery === '1';
+  }
+
+  return false;
 };
 
 export const getShowDrugName = (item: IWaitListItem) => {

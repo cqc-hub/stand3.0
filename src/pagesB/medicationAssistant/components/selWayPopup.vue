@@ -3,7 +3,7 @@
     <g-popup :zIndex="200" :title="'选择取药方式'" ref="refAddDialog">
       <view class="pat-list">
         <view
-          v-for="(item, i) in selFiles"
+          v-for="(item, i) in optList"
           :key="i"
           :class="{
             'pat-active': selList.includes(item.value),
@@ -27,11 +27,6 @@
 <script lang="ts" setup>
   import { nextTick, ref } from 'vue';
 
-  defineProps<{
-    selList: string[];
-  }>();
-  const emits = defineEmits(['item-click']);
-  const refAddDialog = ref<any>('');
   const selFiles = [
     {
       label: '医院窗口取药',
@@ -43,8 +38,19 @@
     },
   ];
 
+  const props = defineProps<{
+    selList: string[];
+    optList: typeof selFiles;
+  }>();
+  const emits = defineEmits(['item-click']);
+  const refAddDialog = ref<any>('');
+
   const show = () => {
-    refAddDialog.value.show();
+    if (props.optList.length === 1) {
+      itemClick(props.optList[0]);
+    } else {
+      refAddDialog.value.show();
+    }
   };
 
   const close = () => {

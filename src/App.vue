@@ -111,7 +111,6 @@
 
     setTimeout(() => {
       const pages = getCurrentPages();
-
       if (pages.length) {
         const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
 

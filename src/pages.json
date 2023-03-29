@@ -98,6 +98,9 @@
           "path": "hospitalCare/choosePatient",
           "style": {
             "navigationBarTitleText": "预交金代缴"
+          },
+          "extend": {
+            "patient": true
           }
         },
         {
@@ -363,7 +366,7 @@
         {
           "path": "medicationAssistant/medicalHelpDetail",
           "style": {
-            "navigationBarTitleText": "药品配送"
+            "navigationBarTitleText": "门诊处方"
           }
         },
         {

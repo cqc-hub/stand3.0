@@ -14,8 +14,11 @@
             <view class="safe-height"></view>
             <view class="safe-height"></view>
 
+            <view v-if="isMedicalFriedAndDelivery && getExpressAppId">
+              <text @click="goExpressApp" class="a-link f48">查看快递</text>
+            </view>
             <view
-              v-if="takenDrugTypeMap[detailData.takenDrugType]"
+              v-else-if="takenDrugTypeMap[detailData.takenDrugType]"
               class="g-bold f48"
             >
               {{ takenDrugTypeMap[detailData.takenDrugType] }}
@@ -42,7 +45,11 @@
 
       <view class="content">
         <view
-          v-if="['20', '50'].includes(detailData.takenDrugType)"
+          v-if="
+            ['20', '50'].includes(detailData.takenDrugType) &&
+            // 中药 待煎外配直接小程序查看 不显示
+            !isMedicalFriedAndDelivery
+          "
           class="box g-border p32 mb32"
         >
           <Express-Step
@@ -55,7 +62,7 @@
         </view>
 
         <view
-          v-if="detailData.qrCode"
+          v-if="detailData.qrCode && detailData.takenDrugType === '1'"
           class="g-border box page-first-item mb16 p32"
         >
           <view class="my-display-none">
@@ -100,6 +107,8 @@
         />
         <Htlp-Body-Box :item="pageProps" :detailData="detailData" />
       </view>
+
+      <view class="safe-height" />
     </view>
 
     <g-message />
@@ -111,12 +120,19 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import {
-    isChineseMedical,
+    isToBeFriedAndDelivery,
     type IWaitListItem,
     type IItemDetail,
   } from './utils/medicalHelp';
   import { deQueryForUrl } from '@/common';
-  import { GStores, type TButtonConfig, useTBanner, wait } from '@/utils';
+  import {
+    GStores,
+    type TButtonConfig,
+    useTBanner,
+    wait,
+    ISystemConfig,
+    ServerStaticData,
+  } from '@/utils';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -126,6 +142,7 @@
   import ExpressStep from './components/ExpressStep.vue';
 
   const pageProps = ref(<IWaitListItem>{});
+  const pageConfig = ref<ISystemConfig['drugDelivery']>({});
   const gStores = new GStores();
   const detailData = ref({} as IItemDetail);
   const takenDrugTypeMap = {
@@ -140,6 +157,26 @@
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
   const showQrCode = ref(true);
+
+  const getExpressAppId = computed(() => {
+    // #ifdef MP-ALIPAY
+    return pageConfig.value.deliveryFired?.alipay;
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    return pageConfig.value.deliveryFired?.wx;
+    // #endif
+
+    return '';
+  });
+
+  // 选了取药方式的中药代煎外配?
+  const isMedicalFriedAndDelivery = computed(() => {
+    return (
+      isToBeFriedAndDelivery(pageProps.value) &&
+      pageProps.value.takenDrugType !== '0'
+    );
+  });
 
   const qrOpt = ref({
     // 二维码
@@ -268,6 +305,12 @@
     useTBanner(args);
   };
 
+  const goExpressApp = () => {
+    uni.navigateToMiniProgram({
+      appId: getExpressAppId.value!,
+    });
+  };
+
   const init = () => {
     getData();
   };
@@ -280,9 +323,9 @@
     }
   });
 
-  onLoad((opt) => {
+  onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value);
+    pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
 
     init();
   });
@@ -395,5 +438,19 @@
 
   .page-first-item {
     margin-top: 48rpx;
+  }
+
+  .a-link {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 4rpx;
+      background-color: #fff;
+    }
   }
 </style>

@@ -15,34 +15,44 @@
         </view>
 
         <view class="container-box g-border mb16 box-padding">
-          <block v-if="aimList.length > 1">
-            <view id="_express" class="g-bold f36">选择快递方式</view>
+          <block v-if="!isIncludeChineseMedicalFriedAndDelivery">
+            <block v-if="aimList.length > 1">
+              <view id="_express" class="g-bold f36">选择快递方式</view>
 
-            <view class="mt24 pb32 g-border-bottom">
-              <Sel-Express
-                :selectLength="3"
-                :list="aimList"
-                v-model:value="aimValue"
-                column="2"
-              />
-            </view>
-          </block>
+              <view class="mt24 pb32 g-border-bottom">
+                <Sel-Express
+                  :selectLength="3"
+                  :list="aimList"
+                  v-model:value="aimValue"
+                  column="2"
+                />
+              </view>
+            </block>
 
-          <block v-if="aimList.length === 1">
-            <view id="_express" class="g-bold f36">快递方式</view>
+            <block v-if="aimList.length === 1">
+              <view id="_express" class="g-bold f36">快递方式</view>
 
-            <view class="mt24 f28">
-              <view class="flex-between">
-                <view class="color-888">快递方式</view>
-                <!-- <view class="g-bold">{{ aimList[0].label }}</view> -->
-                <view class="g-bold">
-                  <image :src="getSrc(aimList[0].value)" class="express-icon" />
+              <view class="mt24 f28">
+                <view class="flex-between">
+                  <view class="color-888">快递方式</view>
+                  <!-- <view class="g-bold">{{ aimList[0].label }}</view> -->
+                  <view class="g-bold">
+                    <image
+                      :src="getSrc(aimList[0].value)"
+                      class="express-icon"
+                    />
+                  </view>
                 </view>
               </view>
-            </view>
+            </block>
           </block>
 
-          <view class="mt24 f28">
+          <view
+            :class="{
+              mt24: !isIncludeChineseMedicalFriedAndDelivery,
+            }"
+            class="f28"
+          >
             <view class="flex-between">
               <view class="color-888">快递费支付方式</view>
               <view class="g-bold color-error">到付</view>
@@ -70,6 +80,8 @@
         <view class="container-box g-border mb16">
           <g-flag typeFg="38" isShowFgTip />
         </view>
+
+        <view class="safe-height" />
       </view>
     </scroll-view>
     <view class="g-footer">
@@ -100,12 +112,25 @@
   import HelpList from './components/HelpList.vue';
   import SelExpress from './components/SelExpress.vue';
 
+  const isChineseMedical = (item: any) => {
+    return !!(item && item.drugTypeName && item.drugTypeName.includes('中药'));
+  };
+
+  const isToBeFriedAndDelivery = (item: any) => {
+    if (isChineseMedical(item)) {
+      return item.drugIsDelivery === '1';
+    }
+
+    return false;
+  };
+
   const scrollTo = ref('');
   const remark = ref('');
   const addressList = ref<any[]>([]);
   const gStores = new GStores();
   const listData = ref<any[]>([]);
   const pageConfig = ref<ISystemConfig['drugDelivery']>({});
+  const isIncludeChineseMedicalFriedAndDelivery = ref(false);
 
   const aimList = ref<IOptions[]>([
     // {
@@ -147,7 +172,7 @@
     const { senderName, senderPhone } = detailsAddressData;
 
     const args = {
-      deliveryType: '2',
+      deliveryType: isIncludeChineseMedicalFriedAndDelivery.value ? '3' : '2',
       detailsAddress,
       deptName,
       expressCompany,
@@ -211,6 +236,9 @@
   onLoad(async () => {
     await init();
     listData.value = getLocalStorage('medicalHelp') || [];
+    isIncludeChineseMedicalFriedAndDelivery.value = !!listData.value.find((o) =>
+      isToBeFriedAndDelivery(o)
+    );
   });
 </script>
 

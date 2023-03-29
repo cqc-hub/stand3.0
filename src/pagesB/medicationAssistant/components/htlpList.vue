@@ -12,7 +12,7 @@
       :class="{
         active: getIsActive(item),
       }"
-      @click="selItem(item)"
+      @click="itemClick(item)"
       class="item flex-normal mb16 g-border"
     >
       <view v-if="isCheck" class="icon-content">
@@ -42,7 +42,7 @@
           </view>
 
           <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow flex1">
-            <!-- <view
+            <view
               v-if="
                 showStatus &&
                 item.takenDrugType &&
@@ -54,7 +54,7 @@
               class="f32 g-bold"
             >
               {{ statusLabel[item.takenDrugType].label }}
-            </view> -->
+            </view>
             <view v-if="!showStatus" class="iconfont color-888 f48">
               &#xe66b;
             </view>
@@ -93,6 +93,24 @@
             </view>
           </view>
         </view>
+
+        <view
+          v-if="item.expressNo && item.expressCompany"
+          class="express flex-between"
+          @click.stop="goExpress(item)"
+        >
+          <view class="flex-normal express-row">
+            <text class="iconfont arrow-icon press-icon">&#xe6fd;</text>
+            <text class="g-bold m10 express-date mr8">
+              {{ getExpressTime(item.acceptTime) }}
+            </text>
+            <text class="express-color text-ellipsis">
+              {{ item.expressParam || '' }}
+            </text>
+          </view>
+
+          <text class="iconfont arrow-icon">&#xe66b;</text>
+        </view>
       </view>
     </view>
   </view>
@@ -115,7 +133,12 @@
       selUnPayList: () => [],
     }
   );
-  const emits = defineEmits(['sel-item', 'click-item', 'arrow-item']);
+  const emits = defineEmits([
+    'sel-item',
+    'click-item',
+    'arrow-item',
+    'express-click',
+  ]);
   const visitTypeLabel = {
     1: {
       label: '门诊处方',
@@ -146,10 +169,26 @@
       label: '窗口已取药',
       color: 'var(--hr-neutral-color-7)',
     },
+    '20': {
+      label: '快递已发货',
+      color: 'var(--hr-neutral-color-7)',
+    },
+  };
+
+  const getExpressTime = (time: string) => {
+    if (time) {
+      return time.slice(5, 10);
+    }
+
+    return '';
   };
 
   const getIsActive = (item: IWaitListItem) => {
     return selIds.value.includes(item._id);
+  };
+
+  const goExpress = (item: IWaitListItem) => {
+    emits('express-click', item);
   };
 
   const isPaySelfItem = (item: IWaitListItem) => {
@@ -285,9 +324,42 @@
           .row-label {
             width: 150rpx;
           }
-
         }
       }
+    }
+  }
+
+  .express {
+    margin-top: 16rpx;
+    background-color: var(--hr-neutral-color-1);
+    border-radius: 4px;
+    padding: 0 16rpx;
+    padding-right: 5rpx;
+    font-size: var(--hr-font-size-xs);
+    vertical-align: middle;
+
+    .express-date {
+      white-space: nowrap;
+    }
+
+    .express-row {
+      height: 100%;
+    }
+
+    .iconfont {
+      font-size: var(--hr-font-size-xxl);
+    }
+
+    .arrow-icon {
+      color: var(--hr-neutral-color-7);
+    }
+
+    .text-ellipsis {
+      -webkit-line-clamp: 1;
+    }
+
+    .express-color {
+      color: var(--hr-neutral-color-7);
     }
   }
 </style>
