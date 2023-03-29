@@ -297,11 +297,11 @@
           </view>
         </view>
       </ls-skeleton>
-      <homePopup ref="refOldDialog" />
     </scroll-view>
     <g-message />
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
+    <homePopup ref="refOldDialog" />
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
 </template>
@@ -652,6 +652,7 @@
       align-items: center;
       box-sizing: border-box;
       margin-right: -32rpx;
+      white-space: nowrap;
       .icon-size {
         font-size: var(--h-size-40);
         color: #fff;
