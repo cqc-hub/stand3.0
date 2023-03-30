@@ -312,8 +312,15 @@ const findSuccess = async ({
 
 const ocrForAlipay = async (imageOutput = false) => {
   const messageStore = useMessageStore();
+  const ocrPlugin = requirePlugin('ocrPlugin');
 
-  const { readIDCard, IDCardTypes } = requirePlugin('ocrPlugin');
+  if (!ocrPlugin) {
+    messageStore.showMessage('请先在支付宝后台订购 ocr 插件', 3000);
+
+    return;
+  }
+
+  const { readIDCard, IDCardTypes } = ocrPlugin;
   const bizId = 'emblem';
 
   const res = await readIDCard({
@@ -340,7 +347,7 @@ const ocrForAlipay = async (imageOutput = false) => {
       birth: birth.data,
       idCard: idCard.data,
       address: address.data,
-      image
+      image,
     });
   }
 };
@@ -356,6 +363,7 @@ export const useOcr = async (imageOutput = false): Promise<OcrFindRes> => {
   // #endif
 
   // #ifdef MP-ALIPAY
+  // @ts-expect-error
   return await ocrForAlipay(imageOutput);
   // #endif
 

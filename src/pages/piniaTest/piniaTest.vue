@@ -120,9 +120,24 @@
     isLocal: '1',
   };
 
+  // 智能导诊
+  const smartDiseaseGuide: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '智能导诊',
+    extraData: {
+      _type: 'taizhouZNDZ',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(yonyao);
+      useTBanner(smartDiseaseGuide);
     }, 1000);
   });
 </script>
