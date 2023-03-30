@@ -134,6 +134,7 @@
           extraData: {
             patientName: hosInfoParam.value.patientName,
             patientPhone: hosInfoParam.value.patientPhone,
+            openId: gStores.globalStore.openId,
           },
           addition: {
             patientId: '_patientId',
