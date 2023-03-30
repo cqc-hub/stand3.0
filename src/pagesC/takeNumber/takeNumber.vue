@@ -131,7 +131,9 @@
       hosId,
     };
 
-    await api.getCheckIn(args);
+    await api.getCheckIn(args).finally(() => {
+      isFgShow451.value = false;
+    });
     await getList();
   };
 
@@ -180,7 +182,7 @@
       addition: {
         token: 'token',
         herenId: 'herenId',
-        patientId: 'patientId'
+        patientId: 'patientId',
       },
     });
   };
