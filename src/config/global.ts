@@ -17,7 +17,7 @@ const TIMESTAMP = version + '.' + YMD + HM; //时间戳，修改时间戳会清�
 const isOpenDes = false; //测试环境是否开启加密 正式环境必加密
 let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
-if ((env as string) === 'prod') {
+if (env === 'prod') {
   authUrl = 'https://auth.eheren.com/service-authentication';
 }
 
