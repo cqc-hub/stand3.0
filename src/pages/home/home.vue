@@ -17,29 +17,28 @@
           <view
             class="search flex-between"
             v-if="global.sConfig.isHideHomeSearch != '1'"
-          >
+          > 
+
             <!-- 在有搜索框的前提下 是否开启助老版本 -->
             <template v-if="global.sConfig.isOpenHelpOld == '1'">
-              <view class="w70">
+              <view class="w70" @click.prevent="goSearch">
                 <uni-search-input
                   :type="'2'"
                   inputBorder
                   :placeholder="searchPlaceholder"
-                  @tap="goSearch"
                 />
               </view>
-              <view class="openOld flex-between" @tap="openModeOld">
+              <view class="openOld" @tap="openModeOld">
                 <view class="iconfont icon-size">&#xe700;</view>
                 长辈模式
               </view>
             </template>
             <template v-else>
-              <view class="w100">
+              <view class="w100" @click.prevent="goSearch">
                 <uni-search-input
                   :type="'2'"
                   inputBorder
                   :placeholder="searchPlaceholder"
-                  @tap="goSearch"
                 />
               </view>
             </template>
