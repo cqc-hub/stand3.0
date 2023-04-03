@@ -132,8 +132,7 @@
           isSelfH5: '1',
           path: 'pagesC/operationRes/operationRes',
           extraData: {
-            patientName: hosInfoParam.value.patientName,
-            patientPhone: hosInfoParam.value.patientPhone,
+            ...extraData,
             openId: gStores.globalStore.openId,
           },
           addition: {

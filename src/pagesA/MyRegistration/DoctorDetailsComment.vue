@@ -48,7 +48,7 @@
   import api from '@/service/api';
 
   import ScrollList from '@/components/scroll-list/scroll-list.vue';
-  import DocCommentItem from '@/pagesA/MyRegistration/components/DoctorDetails/DocCommentItem.vue';
+  import DocCommentItem from '@/pagesA/MyRegistration/components/DoctorDetails/DocCommentItem1.vue';
 
   const pageProps = ref(
     {} as {

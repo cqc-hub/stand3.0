@@ -35,7 +35,7 @@ Request.interceptors.request((request: IRequest) => {
   //   request.url = request.url + '?' + request.data
   // }
   //网关限流——除开发环境
-  if ((globalGl.env as string) === 'prod') {
+  if (globalGl.env === 'prod') {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
 

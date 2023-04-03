@@ -29,7 +29,7 @@
   import { IDocListByDate } from '../../utils';
 
   import OrderDocListContainer from './OrderDocListContainer.vue';
-  import DocShcItem from '../DoctorDetails/DocShcItem.vue';
+  import DocShcItem from '../DoctorDetails/DocShcItem1.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
   const emits = defineEmits(['reg-click', 'avatar-click']);

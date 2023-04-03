@@ -27,7 +27,6 @@
     "lib": ["esnext", "dom"],
     //指定具体要解析使用的类型
     "types": ["@dcloudio/types", "node"],
-    "suppressImplicitAnyIndexErrors": true,
     //控制当源文件中存在隐式的any的时候是否报错
     "noImplicitAny": false,
     //跳过一些库的类型检测

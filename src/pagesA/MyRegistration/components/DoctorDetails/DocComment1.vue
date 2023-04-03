@@ -44,7 +44,7 @@
 
   import api from '@/service/api';
 
-  import CommentItem from './DocCommentItem.vue';
+  import CommentItem from './DocCommentItem1.vue';
 
   const gStores = new GStores();
 

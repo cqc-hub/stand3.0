@@ -330,13 +330,13 @@
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import DocDetails from './components/DoctorDetails/DocDetails.vue';
-  import DocShare from './components/DoctorDetails/DocShare.vue';
-  import DocSchItem from './components/DoctorDetails/DocShcItem.vue';
+  import DocDetails from './components/DoctorDetails/DocDetails1.vue';
+  import DocShare from './components/DoctorDetails/DocShare1.vue';
+  import DocSchItem from './components/DoctorDetails/DocShcItem1.vue';
   import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
-  import DocService from './components/DoctorDetails/DocService.vue';
-  import DocBigDataTable from './components/DoctorDetails/docBigDataTable.vue';
-  import DocComment from './components/DoctorDetails/DocComment.vue';
+  import DocService from './components/DoctorDetails/DocService1.vue';
+  import DocBigDataTable from './components/DoctorDetails/DocBigDataTable1.vue';
+  import DocComment from './components/DoctorDetails/DocComment1.vue';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';

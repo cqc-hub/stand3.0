@@ -105,7 +105,7 @@ const scJson: Record<string, ISConfig> = {
 
   /**
    * 西安红会
-   */ 
+   */
   1001057:{
     isOpenIntelQA:{
       appId: "wxba22f1a66a3af7aa",
