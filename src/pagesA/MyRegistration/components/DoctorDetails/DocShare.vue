@@ -105,7 +105,10 @@
     popupBottom.value.show();
     options.value.code = joinQuery(
       `https://h5.eheren.com/scan/${globalGl.SYS_CODE}/DoctorDetails`,
-      props.pageProp
+      {
+        ...props.pageProp,
+        deptName: undefined,
+      }
     );
 
     setTimeout(async () => {
