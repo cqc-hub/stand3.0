@@ -204,10 +204,12 @@
       @extend .up-lv;
       font-size: var(--hr-font-size-xs);
       margin-top: 8rpx;
+      align-items: flex-start;
 
       .label {
         width: 120rpx;
         color: var(--hr-neutral-color-7);
+        white-space: nowrap;
       }
 
       .content {
@@ -235,5 +237,15 @@
   .title-icon {
     width: 44rpx;
     height: 44rpx;
+  }
+
+  .system-mode-old {
+    .container-card {
+      .container-card-row {
+        .label {
+          width: 150rpx;
+        }
+      }
+    }
   }
 </style>

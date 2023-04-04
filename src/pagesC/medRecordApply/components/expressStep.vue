@@ -46,11 +46,13 @@
 
       <view class="row-content">
         <view class="row-content flex-between">
-          <view class="text-ellipsis color-blue">
-            <text class="mr16 title color-dark">{{ pointEnd.title }}</text>
+          <view class="color-blue">
+            <view class="mr16 title color-dark text-ellipsis">
+              {{ pointEnd.title }}
+            </view>
           </view>
         </view>
-        <view class="color-light-dark text-ellipsis">{{ pointEnd.desc }}</view>
+        <view class="color-light-dark text-ellipsis aaa">{{ pointEnd.desc }}</view>
       </view>
     </view>
   </view>
@@ -191,5 +193,12 @@
     border-radius: 4px;
     margin-top: 8rpx;
     padding: 4rpx 16rpx;
+  }
+
+  .aaa {
+    background-color: #fff;
+    padding-top: 5rpx;
+    position: relative;
+    top: -5rpx;
   }
 </style>

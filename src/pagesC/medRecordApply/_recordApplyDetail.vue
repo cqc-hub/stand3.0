@@ -114,7 +114,7 @@
 
             <view class="container-box p32 g-border mb16">
               <block v-if="info._outInfo && info._outInfo.length">
-                <record-Card :list="info._outInfo" />
+                <Record-Card :list="info._outInfo" />
               </block>
 
               <view v-if="info.copyAim" class="mt32 _row">
@@ -235,7 +235,7 @@
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import expressStep from './components/ExpressStep.vue';
-  import recordCard from './components/RecordCard.vue';
+  import RecordCard from './components/RecordCard.vue';
 
   const props = defineProps<{
     phsOrderNo: string;
