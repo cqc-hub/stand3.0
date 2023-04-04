@@ -10,16 +10,21 @@
         'is-input-border': inputBorder,
         'is-input-error-border': inputBorder && msg,
         'is-textarea': type === 'textarea',
-        'is-disabled': disabled
+        'is-disabled': disabled,
       }"
       :style="{
         'border-color': inputBorder && msg ? '#dd524d' : styles.borderColor,
-        'background-color': disabled ? styles.disableColor : ''
+        'background-color': disabled ? styles.disableColor : '',
       }"
     >
       <view @click="onClickIcon('prefix')">
         <slot name="prefix">
-          <uni-icons v-if="prefixIcon" class="content-clear-icon" :type="prefixIcon" color="#c0c4cc"></uni-icons>
+          <uni-icons
+            v-if="prefixIcon"
+            class="content-clear-icon"
+            :type="prefixIcon"
+            color="#c0c4cc"
+          ></uni-icons>
         </slot>
       </view>
       <textarea
@@ -40,29 +45,33 @@
         @focus="onFocus"
         @confirm="onConfirm"
       ></textarea>
-      <input
-        v-else
-        :type="type === 'password' ? 'text' : type"
-        class="uni-easyinput__content-input"
-        :style="{
-          'padding-right': type === 'password' || clearable || prefixIcon ? '' : '10px',
-          'padding-left': prefixIcon ? '' : '10px'
-        }"
-        :name="name"
-        :value="val"
-        :password="!showPassword && type === 'password'"
-        :placeholder="placeholder"
-        :placeholderStyle="placeholderStyle"
-        placeholder-class="uni-easyinput__placeholder-class"
-        :disabled="disabled"
-        :maxlength="inputMaxlength"
-        :focus="focused"
-        :confirmType="confirmType"
-        @focus="onFocus"
-        @blur="onBlur"
-        @input="onInput"
-        @confirm="onConfirm"
-      />
+
+      <view v-else class="flex1">
+        <input
+          :type="type === 'password' ? 'text' : type"
+          class="uni-easyinput__content-input"
+          :style="{
+            'padding-right':
+              type === 'password' || clearable || prefixIcon ? '' : '10px',
+            'padding-left': prefixIcon ? '' : '10px',
+          }"
+          :name="name"
+          :value="val"
+          :password="!showPassword && type === 'password'"
+          :placeholder="placeholder"
+          :placeholderStyle="placeholderStyle"
+          placeholder-class="uni-easyinput__placeholder-class"
+          :disabled="disabled"
+          :maxlength="inputMaxlength"
+          :focus="focused"
+          :confirmType="confirmType"
+          :enableNative="false"
+          @focus="onFocus"
+          @blur="onBlur"
+          @input="onInput"
+          @confirm="onConfirm"
+        />
+      </view>
       <template v-if="type === 'password' && passwordIcon">
         <uni-icons
           v-if="val != ''"
@@ -152,10 +161,18 @@
 
   export default {
     name: 'uni-easyinput',
-    emits: ['click', 'iconClick', 'update:modelValue', 'input', 'focus', 'blur', 'confirm'],
+    emits: [
+      'click',
+      'iconClick',
+      'update:modelValue',
+      'input',
+      'focus',
+      'blur',
+      'confirm',
+    ],
     model: {
       prop: 'modelValue',
-      event: 'update:modelValue'
+      event: 'update:modelValue',
     },
     props: {
       name: String,
@@ -163,57 +180,57 @@
       modelValue: [Number, String],
       type: {
         type: String,
-        default: 'text'
+        default: 'text',
       },
       clearable: {
         type: Boolean,
-        default: true
+        default: true,
       },
       autoHeight: {
         type: Boolean,
-        default: false
+        default: false,
       },
       placeholder: String,
       placeholderStyle: String,
       focus: {
         type: Boolean,
-        default: false
+        default: false,
       },
       disabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
       maxlength: {
         type: [Number, String],
-        default: 140
+        default: 140,
       },
       confirmType: {
         type: String,
-        default: 'done'
+        default: 'done',
       },
       clearSize: {
         type: [Number, String],
-        default: 15
+        default: 15,
       },
       inputBorder: {
         type: Boolean,
-        default: true
+        default: true,
       },
       prefixIcon: {
         type: String,
-        default: ''
+        default: '',
       },
       suffixIcon: {
         type: String,
-        default: ''
+        default: '',
       },
       trim: {
         type: [Boolean, String],
-        default: true
+        default: true,
       },
       passwordIcon: {
         type: Boolean,
-        default: true
+        default: true,
       },
       styles: {
         type: Object,
@@ -221,14 +238,14 @@
           return {
             color: '#333',
             disableColor: '#F7F6F6',
-            borderColor: '#e5e5e5'
+            borderColor: '#e5e5e5',
           };
-        }
+        },
       },
       errorMessage: {
         type: [String, Boolean],
-        default: ''
-      }
+        default: '',
+      },
     },
     data() {
       return {
@@ -239,7 +256,7 @@
         border: false,
         isFirstBorder: false,
         showClearIcon: false,
-        showPassword: false
+        showPassword: false,
       };
     },
     computed: {
@@ -249,7 +266,7 @@
       // 因为uniapp的input组件的maxlength组件必须要数值，这里转为数值，用户可以传入字符串数值
       inputMaxlength() {
         return Number(this.maxlength);
-      }
+      },
     },
     watch: {
       value(newVal) {
@@ -273,7 +290,7 @@
         this.$nextTick(() => {
           this.focused = this.focus;
         });
-      }
+      },
     },
     created() {
       if (!this.value) {
@@ -382,8 +399,8 @@
           return str;
         }
         return str;
-      }
-    }
+      },
+    },
   };
 </script>
 
@@ -418,9 +435,10 @@
     width: auto;
     /* #endif */
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     flex: 1;
     line-height: 1;
+    width: 100%;
     font-size: var(--hr-font-size-xs);
   }
   .uni-easyinput__placeholder-class {

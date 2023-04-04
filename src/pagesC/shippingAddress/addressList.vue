@@ -6,20 +6,20 @@
     class="page f32"
   >
     <view class="address-top flex-between">
-      <view class="item g-flex-rc-cc" @tap="gotoPatient">
+      <view class="item g-flex-rc-cc text-no-wrap" @tap="gotoPatient">
         <text class="icon-font ico_people" />
-        <text>获取就诊人地址</text>
+        <text class="text-no-wrap">获取就诊人地址</text>
       </view>
       <!-- #ifdef MP-WEIXIN -->
-      <view class="item g-flex-rc-cc" @tap="getWX">
+      <view class="item g-flex-rc-cc text-no-wrap" @tap="getWX">
         <text class="icon-font ico_wechat" />
-        <text>获取微信地址</text>
+        <text class="text-no-wrap">获取微信地址</text>
       </view>
       <!-- #endif -->
       <!-- #ifdef MP-ALIPAY -->
-      <view class="item g-flex-rc-cc" @tap="getWX">
+      <view class="item g-flex-rc-cc text-no-wrap" @tap="getWX">
         <text class="icon-font ico_alipay" />
-        <text>获取支付宝地址</text>
+        <text class="text-no-wrap">获取支付宝地址</text>
       </view>
       <!-- #endif -->
     </view>

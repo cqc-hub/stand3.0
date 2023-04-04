@@ -230,6 +230,7 @@ defineExpose({
             // width: 130rpx;
             height: 44rpx;
             color: #888888;
+            white-space: nowrap;
           }
           .item-content {
             color: #111111;
