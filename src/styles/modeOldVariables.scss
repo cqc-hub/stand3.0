@@ -11,7 +11,7 @@
   --h-size-18: 40rpx;
   --h-size-46: 64rpx;
 
-  .keep-normal {
+  .keep-normal, &.keep-normal {
     --hr-font-size-xxl: 48rpx;
     --hr-font-size-xl: 36rpx;
     --hr-font-size-base: 32rpx;

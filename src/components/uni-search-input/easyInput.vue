@@ -46,7 +46,7 @@
         @confirm="onConfirm"
       ></textarea>
 
-      <view v-else class="flex1">
+      <view v-else class="flex1 keep-normal">
         <input
           :type="type === 'password' ? 'text' : type"
           class="uni-easyinput__content-input"
