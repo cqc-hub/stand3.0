@@ -41,11 +41,13 @@
             <text class="mr12">{{ item.appointmentDate }}</text>
             <text class="mr12">{{ item.ampmName }}</text>
             <text class="mr12">{{ item.appointmentTime }}</text>
-            <text v-if="item.appointmentNumber" class="text-no-wrap">
-              第
-              <text class="color-blue">{{ item.appointmentNumber }}</text>
-              号
-            </text>
+            <view class="flex-normal text-no-wrap">
+              <text v-if="item.appointmentNumber" class="text-no-wrap">
+                第
+                <text class="color-blue">{{ item.appointmentNumber }}</text>
+                号
+              </text>
+            </view>
           </view>
         </view>
 

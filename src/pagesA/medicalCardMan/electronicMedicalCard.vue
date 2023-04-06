@@ -40,7 +40,7 @@
             <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
           </block>
 
-          <w-qrcode :options="options" />
+          <w-qrcode :options="qrOptions" />
         </view>
 
         <view class="info-content">
@@ -109,6 +109,14 @@
       ? clickPat.value.idCardEncry
       : clickPat.value.healthQrCodeText || clickPat.value._showId,
     img: '',
+  });
+
+  const qrOptions = computed(() => {
+    return {
+      ...options.value,
+      width: undefined,
+      height: undefined,
+    };
   });
 
   const barCodeOpt = ref({ ...options.value });
