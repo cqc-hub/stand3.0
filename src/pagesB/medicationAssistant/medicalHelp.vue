@@ -226,9 +226,9 @@
         ];
 
         if (hosIds.length > 1) {
-          gStores.messageStore.showMessage('不支持跨院区配送');
+          gStores.messageStore.showMessage('不支持跨院区配送', 3000);
         } else if (types.length > 1) {
-          gStores.messageStore.showMessage('请选择相同配送方式');
+          gStores.messageStore.showMessage('请选择相同类型处方', 3000);
         } else {
           selList.value.push(item);
         }
@@ -288,13 +288,13 @@
       ...item,
     };
 
-    if (
-      isChineseMedical(item) &&
-      item.drugIsDelivery === '1' &&
-      item.takenDrugType !== '0'
-    ) {
-      pageArg.takenDrug = '1';
-    }
+    // if (
+    //   isChineseMedical(item) &&
+    //   item.drugIsDelivery === '1' &&
+    //   item.takenDrugType !== '0'
+    // ) {
+    //   pageArg.takenDrug = '1';
+    // }
 
     uni.navigateTo({
       url: joinQueryForUrl(

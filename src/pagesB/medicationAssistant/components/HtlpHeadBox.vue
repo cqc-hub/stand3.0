@@ -30,7 +30,7 @@
             <text>{{ item.deptName }}</text>
           </view>
 
-          <view v-else class="value">{{ renderRow[_item.key] }}</view>
+          <view v-else class="value">{{ renderRow[_item.key] || '' }}</view>
         </view>
       </block>
     </view>
@@ -54,7 +54,10 @@
   const renderRow = computed(() => {
     const _hosName =
       props.item.hosName +
-      `(${props.item.clinicType == '1' ? '线下就诊' : '网络问诊'})`;
+      ((props.item.clinicType &&
+        `(${props.item.clinicType == '1' ? '线下就诊' : '网络问诊'})`) ||
+        '');
+
     const data = props.detailData;
 
     return {

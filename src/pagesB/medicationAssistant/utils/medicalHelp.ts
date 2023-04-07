@@ -17,6 +17,7 @@ export interface IWaitListItem {
   visitType?: '1' | '2';
   drugIsDelivery: '0' | '1'; // 代煎方式 0代煎 1代煎外配
   takenDrug: '0' | '1'; // 0 待取药 1 已取药
+  tcmDecoctionIndicator?: '0' | '1';
   _id: string;
 }
 
@@ -68,18 +69,22 @@ export const isChineseMedical = (item: IWaitListItem) => {
 
 export const isToBeFriedAndDelivery = (item: IWaitListItem) => {
   if (isChineseMedical(item)) {
-    return item.drugIsDelivery === '1';
+    return item.drugIsDelivery === '1' && item.tcmDecoctionIndicator === '1';
   }
 
   return false;
 };
 
 export const getShowDrugName = (item: IWaitListItem) => {
-  const { drugTypeName, drugIsDelivery } = item;
+  const { drugTypeName } = item;
 
   if (isChineseMedical(item)) {
-    return drugTypeName + `(${drugIsDelivery === '1' ? '代煎外配' : '代煎'})`;
-  } else {
-    return drugTypeName;
+    if (isToBeFriedAndDelivery(item)) {
+      return drugTypeName + `(代煎外配)`;
+    } else if (item.tcmDecoctionIndicator === '0') {
+      return drugTypeName + `(代煎)`;
+    }
   }
+
+  return drugTypeName;
 };

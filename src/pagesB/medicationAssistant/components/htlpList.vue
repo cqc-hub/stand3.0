@@ -42,7 +42,7 @@
           </view>
 
           <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow flex1">
-            <view
+            <!-- <view
               v-if="
                 showStatus &&
                 item.takenDrugType &&
@@ -54,7 +54,7 @@
               class="f32 g-bold"
             >
               {{ statusLabel[item.takenDrugType].label }}
-            </view>
+            </view> -->
             <view v-if="!showStatus" class="iconfont color-888 f48">
               &#xe66b;
             </view>

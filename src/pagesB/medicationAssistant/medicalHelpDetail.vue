@@ -18,10 +18,10 @@
               <text @click="goExpressApp" class="a-link f48">查看快递</text>
             </view>
             <view
-              v-else-if="takenDrugTypeMap[detailData.takenDrugType]"
+              v-else-if="takenDrugTypeMap[pageProps.takenDrugType]"
               class="g-bold f48"
             >
-              {{ takenDrugTypeMap[detailData.takenDrugType] }}
+              {{ takenDrugTypeMap[pageProps.takenDrugType] }}
             </view>
             <view v-if="detailData.takeLocation" class="f28">
               <text class="mr12">取药地址:</text>
@@ -32,7 +32,7 @@
 
           <view class="reg-header-icon-container">
             <view
-              v-if="['0', '1', '2', '20'].includes(detailData.takenDrugType)"
+              v-if="['0', '1', '2', '20'].includes(pageProps.takenDrugType)"
               class="iconfont reg-header-icon-bg"
             >
               &#xe6c6;
@@ -46,7 +46,7 @@
       <view class="content">
         <view
           v-if="
-            ['20', '50'].includes(detailData.takenDrugType) &&
+            ['20', '50'].includes(pageProps.takenDrugType) &&
             // 中药 待煎外配直接小程序查看 不显示
             !isMedicalFriedAndDelivery
           "
@@ -62,7 +62,7 @@
         </view>
 
         <view
-          v-if="detailData.qrCode && detailData.takenDrugType === '1'"
+          v-if="detailData.qrCode && pageProps.takenDrugType === '1'"
           class="g-border box page-first-item mb16 p32"
         >
           <view class="my-display-none">
