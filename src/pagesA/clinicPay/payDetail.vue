@@ -234,7 +234,7 @@
   import globalGl from '@/config/global';
 
   import PayDetailCostList from './components/PayDetailCostList.vue';
-  import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
+  import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail1.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
