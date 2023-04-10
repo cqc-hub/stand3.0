@@ -288,13 +288,9 @@
       ...item,
     };
 
-    // if (
-    //   isChineseMedical(item) &&
-    //   item.drugIsDelivery === '1' &&
-    //   item.takenDrugType !== '0'
-    // ) {
-    //   pageArg.takenDrug = '1';
-    // }
+    if (item.takenDrugType !== '0') {
+      pageArg.takenDrug = '1';
+    }
 
     uni.navigateTo({
       url: joinQueryForUrl(

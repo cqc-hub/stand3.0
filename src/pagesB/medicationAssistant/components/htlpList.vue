@@ -95,7 +95,7 @@
         </view>
 
         <view
-          v-if="item.expressNo && item.expressCompany"
+          v-if="item.expressNo && item.expressCompany && item.expressParam"
           class="express flex-between"
           @click.stop="goExpress(item)"
         >
