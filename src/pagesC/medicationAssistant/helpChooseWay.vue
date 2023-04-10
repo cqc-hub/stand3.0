@@ -171,11 +171,15 @@
 
     const { senderName, senderPhone } = detailsAddressData;
 
+    const deliveryType = isIncludeChineseMedicalFriedAndDelivery.value
+      ? '3'
+      : '2';
+
     const args = {
-      deliveryType: isIncludeChineseMedicalFriedAndDelivery.value ? '3' : '2',
+      deliveryType,
       detailsAddress,
       deptName,
-      expressCompany,
+      expressCompany: deliveryType === '3' ? undefined : expressCompany,
       expressName: senderName,
       expressPhone: senderPhone,
       cardNumber,
