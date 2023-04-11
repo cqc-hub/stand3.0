@@ -81,7 +81,7 @@ export const getShowDrugName = (item: IWaitListItem) => {
   if (isChineseMedical(item)) {
     if (isToBeFriedAndDelivery(item)) {
       return drugTypeName + `(代煎外配)`;
-    } else if (item.tcmDecoctionIndicator === '0') {
+    } else if (item.tcmDecoctionIndicator === '0' && item.drugIsDelivery === '0') {
       return drugTypeName + `(代煎)`;
     }
   }
