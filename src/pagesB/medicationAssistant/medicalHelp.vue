@@ -115,7 +115,11 @@
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
   import { GStores, debounce, useTBanner, TButtonConfig } from '@/utils';
-  import { type IWaitListItem, isChineseMedical } from './utils/medicalHelp';
+  import {
+    type IWaitListItem,
+    isChineseMedical,
+    isToBeFriedAndDelivery,
+  } from './utils/medicalHelp';
   import { setLocalStorage, getLocalStorage, joinQueryForUrl } from '@/common';
   import api from '@/service/api';
 
@@ -161,7 +165,7 @@
     let f = false;
 
     const idx = selList.value.findIndex((o) => {
-      return isChineseMedical(o) && o.deliveryType === '1';
+      return isToBeFriedAndDelivery(o);
     });
 
     if (idx > -1) {
@@ -172,9 +176,7 @@
           return !isChineseMedical(o) && o.deliveryType === '1';
         });
 
-        if (idx2 > -1) {
-          f = false;
-        } else {
+        if (idx2 === -1) {
           f = true;
         }
       }
@@ -218,17 +220,60 @@
 
       if (idx === -1) {
         const list = [...selList.value, item];
+
+        if (list.length === 1) {
+          selList.value = list;
+          return;
+        }
+
         const hosIds = [...new Set(list.map((o) => o.hosId))];
         const types = [
           ...new Set(
             list.map((o) => isChineseMedical(o) && o.drugIsDelivery === '1')
           ),
         ];
+        const isDJ = isToBeFriedAndDelivery(item);
+        let [
+          isDifferentHosErr,
+          isDifferentTypeErr,
+          isDifferentToBeFriedAndDeliveryErr,
+        ] = [false, false, false];
+
+        if (isDJ) {
+          isDifferentToBeFriedAndDeliveryErr = !list.every((o) =>
+            isToBeFriedAndDelivery(o)
+          );
+        } else {
+          isDifferentToBeFriedAndDeliveryErr = list.some((o) =>
+            isToBeFriedAndDelivery(o)
+          );
+        }
 
         if (hosIds.length > 1) {
-          gStores.messageStore.showMessage('不支持跨院区配送', 3000);
+          isDifferentHosErr = true;
         } else if (types.length > 1) {
-          gStores.messageStore.showMessage('请选择相同类型处方', 3000);
+          isDifferentTypeErr = true;
+        } else if (!isDifferentToBeFriedAndDeliveryErr) {
+          selList.value.push(item);
+          return;
+        }
+
+        if (
+          isDifferentHosErr ||
+          isDifferentTypeErr ||
+          isDifferentToBeFriedAndDeliveryErr
+        ) {
+          if (list.length === 2) {
+            selList.value = [item];
+          } else {
+            if (isDifferentHosErr) {
+              gStores.messageStore.showMessage('不支持跨院区配送', 3000);
+            } else if (isDifferentTypeErr) {
+              gStores.messageStore.showMessage('请选择相同类型处方', 3000);
+            } else if (isDifferentToBeFriedAndDeliveryErr) {
+              gStores.messageStore.showMessage('请选择相同类型处方', 3000);
+            }
+          }
         } else {
           selList.value.push(item);
         }

@@ -43,4 +43,8 @@
       margin-right: 18rpx;
     }
   }
+
+  .row {
+    align-items: flex-start;
+  }
 </style>

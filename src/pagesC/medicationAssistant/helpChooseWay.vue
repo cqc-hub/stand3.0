@@ -116,9 +116,9 @@
     return !!(item && item.drugTypeName && item.drugTypeName.includes('中药'));
   };
 
-  const isToBeFriedAndDelivery = (item: any) => {
+  const isToBeFriedAndDelivery = (item) => {
     if (isChineseMedical(item)) {
-      return item.drugIsDelivery === '1';
+      return item.drugIsDelivery === '1' && item.tcmDecoctionIndicator === '1';
     }
 
     return false;
