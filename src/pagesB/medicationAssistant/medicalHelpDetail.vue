@@ -7,7 +7,12 @@
   >
     <view class="g-container">
       <block v-if="pageProps.takenDrug === '1'">
-        <view class="head-bg head-dark" />
+        <view
+          :class="{
+            'head-dark': ['4', '50'].includes(pageProps.takenDrugType),
+          }"
+          class="head-bg head-blue"
+        />
 
         <view class="flex-between head-body">
           <view>

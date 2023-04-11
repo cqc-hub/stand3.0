@@ -5,8 +5,7 @@ import {
   IPat,
   isAreaProgram,
 } from '@/stores';
-import { getSysCode, setLocalStorage } from '@/common';
-import { routerJump, ServerStaticData } from '@/utils';
+import { getSysCode } from '@/common';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
@@ -438,6 +437,8 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 class WebLoginHandler extends LoginUtils implements LoginHandler {
   async handler(payload?: any): Promise<void> {
     this.messageStore.showMessage('暂未支持 h5 登录');
+
+    return Promise.reject('暂未支持 h5 登录')
   }
 }
 

@@ -154,7 +154,7 @@
 
   const statusLabel = {
     '0': {
-      label: '待选择配送方式',
+      label: '未选择取药方式',
       color: 'var(--hr-brand-color-6)',
     },
     '1': {
