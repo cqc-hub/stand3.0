@@ -28,7 +28,7 @@ const {
   isOpenOcr,
 } = sysConfig;
 
-const { medicalMHelp } = sConfig;
+const { medicalMHelp,isOpenAlipayZndz } = sConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
@@ -49,6 +49,14 @@ if (isOpenOcr) {
     version: '*',
     provider: '2021001130678316',
   };
+}
+
+if(isOpenAlipayZndz){
+  //支付宝-分诊插件
+  aliPlugin.codePlugin={ 
+    "version": "*", // 目前只支持设置 * 拉取当前上架最新版本 
+    "provider": "2021003163608051"
+  }
 }
 
 if (medicalMHelp) {

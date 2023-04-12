@@ -5,7 +5,17 @@
     }"
     class="g-page"
   >
+    
+    // #ifndef MP-ALIPAY
     <g-tbanner :config="orderConfig.bannerOrder" />
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    <g-tbanner :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder" />
+    // #endif
+    
+
+    <button @tap="test">测试</button>
     <g-selhos
       v-model:hosId="hosId"
       @get-list="getHosList"
@@ -113,6 +123,14 @@
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
 
+  const test = ()=>{
+//     uni.navigateTo({
+//     url: `plugin://codePlugin/index`
+// })
+my.ap.openURL({
+  url: 'alipays://platformapi/startapp?appId=77700284&page=pages%2Fmedical%2Findex%3FchInfo%3Dquyuyibaominiapp'
+});
+  }
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');
 

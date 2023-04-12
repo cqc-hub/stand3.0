@@ -14,6 +14,8 @@ export interface ISystemConfig {
     isOrderBlur: '0' | '1';
     // 选科室上面 banner
     bannerOrder?: TBannerConfig;
+    //选科室上面 banner-支付宝
+    bannerOrderAlipay?: TBannerConfig;
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
