@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, withDefaults } from 'vue';
+  import { ref, withDefaults, watch } from 'vue';
   import api from '@/service/api';
   import HTMLParser from '@/common/html-parser';
 
@@ -43,28 +43,38 @@
 
   const emit = defineEmits(['update:value', 'update:title']);
 
-  api
-    .getSysAppMore({
-      typeFlag: props.typeFg,
-    })
-    .then(
-      ({ result }) => {
-        const { content, title } = result;
-        text.value = props.disabledFormatterParse
-          ? content
-          : HTMLParser(content);
+  const init = async () => {
+    if (!props.typeFg) {
+      return;
+    }
 
-        mTitle.value = title;
-        emit('update:value', text.value);
-        emit('update:title', title);
-      },
-      () => {
-        uni.hideLoading();
-        const t = '未获取到协议' + props.typeFg;
-        text.value = props.disabledFormatterParse ? t : HTMLParser(t);
-        emit('update:value', text.value);
-      }
-    );
+    api
+      .getSysAppMore({
+        typeFlag: props.typeFg,
+      })
+      .then(
+        ({ result }) => {
+          const { content, title } = result;
+          text.value = props.disabledFormatterParse
+            ? content
+            : HTMLParser(content);
+
+          mTitle.value = title;
+          emit('update:value', text.value);
+          emit('update:title', title);
+        },
+        () => {
+          uni.hideLoading();
+          const t = '未获取到协议' + props.typeFg;
+          text.value = props.disabledFormatterParse ? t : HTMLParser(t);
+          emit('update:value', text.value);
+        }
+      );
+  };
+
+  watch(() => props.typeFg, init, {
+    immediate: true,
+  });
 </script>
 
 <style lang="scss" scoped>

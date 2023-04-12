@@ -149,6 +149,7 @@
       footerBtnIsometric
     >
       <g-flag
+        v-if="pageConfig && pageConfig.confirmPayFg"
         v-model:title="confirmFgTitle"
         :typeFg="pageConfig.confirmPayFg!"
         isShowFgTip
@@ -570,7 +571,10 @@
       visitDate,
       cardNumber,
       recipeNo,
-      serialNo: selList.value.map((o) => o.serialNo).filter(o => o).join(','),
+      serialNo: selList.value
+        .map((o) => o.serialNo)
+        .filter((o) => o)
+        .join(','),
     };
 
     const {

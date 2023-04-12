@@ -190,9 +190,9 @@ export const getIsMedicalModePlugin = () => {
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalPlugin, medicalNation } = wx;
+      const { medicalPlugin } = wx;
 
-      if (medicalPlugin || medicalNation) {
+      if (medicalPlugin) {
         isMedicalPay = true;
       }
     }
@@ -231,6 +231,33 @@ export const getIsMedicalTradeTypeDefault = () => {
   }
 
   return setTradeTypeDefault;
+};
+
+/** 是否医保 */
+export const getIsMedicalMode = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  if (getIsMedicalModePlugin()) {
+    return true;
+  } else {
+    if (medicalMHelp) {
+      const { wx } = medicalMHelp;
+
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { medicalPlugin } = wx;
+
+        if (medicalPlugin === '1') {
+          return true;
+        }
+      }
+      // #endif
+    }
+  }
+
+  return false;
 };
 
 /** 获取国标授权 */
@@ -425,9 +452,13 @@ export const _isMedicalSelf = async () => {
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalNation } = wx;
+      const { medicalNation, medicalPlugin } = wx;
 
       if (medicalNation) {
+        return true;
+      }
+
+      if (medicalPlugin) {
         return true;
       }
     }
@@ -486,14 +517,15 @@ export const isMedicalSelf = async (cardNumber: string): Promise<boolean> => {
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalNation } = wx;
+      const { medicalNation, medicalPlugin } = wx;
 
-      if (medicalNation) {
+      if (medicalNation || medicalPlugin) {
         return await isCanUseMedicalNational();
       }
     }
     // #endif
   }
+
   return false;
 };
 
@@ -865,10 +897,11 @@ export const usePayPage = () => {
   };
 
   const getPay = async () => {
-    const isMedicalModePlugin = getIsMedicalModePlugin();
+    const isMedicalMode = getIsMedicalMode();
 
-    if (isMedicalModePlugin) {
+    if (isMedicalMode) {
       if (selUnPayList.value.length) {
+
         const payMedicalItem = selUnPayList.value.find(
           (o) => o.costTypeCode === '2'
         );
