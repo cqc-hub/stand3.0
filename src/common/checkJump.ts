@@ -3,6 +3,7 @@ import { useRouterStore } from '@/stores';
 import globalGl from '@/config/global';
 import { joinQuery } from '@/common';
 import { rejects } from 'assert';
+import { log } from 'console';
 
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -153,11 +154,21 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       });
       break;
     case 'alipay':
-      uni.navigateToMiniProgram({
-        appId: item.appId,
-        path: item.path,
-        extraData: item.query && JSON.parse(item.query),
-      });
+      //支付宝有几种跳转方法 routeType openURL
+      if(item.query && JSON.parse(item.query).routeType){
+        console.log(333,JSON.parse(item.query).routeType)
+        my.ap[JSON.parse(item.query).routeType]({
+          url: item.path
+        });
+      }else{
+        //跳转小程序
+        uni.navigateToMiniProgram({
+          appId: item.appId,
+          path: item.path,
+          extraData: item.query && JSON.parse(item.query),
+        });
+      }
+    
       break;
     case 'my-h5':
       const obj1 = {

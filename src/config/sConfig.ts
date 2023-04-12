@@ -49,6 +49,8 @@ interface ISConfig {
     appId: string;
     path: string;
   };
+  //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
+  isOpenAlipayZndz?:boolean
 }
 
 const scJson: Record<string, ISConfig> = {
@@ -79,6 +81,7 @@ const scJson: Record<string, ISConfig> = {
    * 中国人民解放军新疆军区总医院
    */
   1001056: {
+    // isOpenAlipayZndz:true,
     medicalMHelp: {
       wx: {
         medicalNation: {
