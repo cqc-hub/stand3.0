@@ -2,8 +2,6 @@ import { GStores } from '@/utils';
 import { useRouterStore } from '@/stores';
 import globalGl from '@/config/global';
 import { joinQuery } from '@/common';
-import { rejects } from 'assert';
-import { log } from 'console';
 
 // //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -155,12 +153,12 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       break;
     case 'alipay':
       //支付宝有几种跳转方法 routeType openURL
-      if(item.query && JSON.parse(item.query).routeType){
-        console.log(333,JSON.parse(item.query).routeType)
+      if (item.query && JSON.parse(item.query).routeType) {
+        console.log(333, JSON.parse(item.query).routeType);
         my.ap[JSON.parse(item.query).routeType]({
-          url: item.path
+          url: item.path,
         });
-      }else{
+      } else {
         //跳转小程序
         uni.navigateToMiniProgram({
           appId: item.appId,
@@ -168,7 +166,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
           extraData: item.query && JSON.parse(item.query),
         });
       }
-    
+
       break;
     case 'my-h5':
       const obj1 = {
@@ -183,10 +181,10 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       typeNavigate(obj1, type);
       break;
     case 'netHospital':
-      let obj2 = {}
-      if(item.query && JSON.parse(item.query)._type == '1'){
+      let obj2 = {};
+      if (item.query && JSON.parse(item.query)._type == '1') {
         //网络医院外部携带路径和参数
-         obj2 = {
+        obj2 = {
           url: item.path,
           fail: () => {
             gStores.messageStore.showMessage(
@@ -195,9 +193,12 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
             );
           },
         };
-      }else{
-         obj2 = {
-          url: joinQuery("/pagesC/cloudHospital/cloudHospital", item.query && JSON.parse(item.query)),
+      } else {
+        obj2 = {
+          url: joinQuery(
+            '/pagesC/cloudHospital/cloudHospital',
+            item.query && JSON.parse(item.query)
+          ),
           fail: () => {
             gStores.messageStore.showMessage(
               `请确认跳转地址正确性${item.path}`,
@@ -236,24 +237,22 @@ const scanCode = () => {
   return new Promise((resolve) => {
     uni.scanCode({
       success(res) {
-        console.log('扫码内容',res);
-        if(res.result.indexOf('https://')!=-1){
+        console.log('扫码内容', res);
+        if (res.result.indexOf('https://') != -1) {
           uni.navigateTo({
-            url: '/pagesC/cloudHospital/myPath?type=1&path='+res.result,
-          })
-        }else{
-          gStores.messageStore.showMessage( `扫码内容:${res.result}`);
+            url: '/pagesC/cloudHospital/myPath?type=1&path=' + res.result,
+          });
+        } else {
+          gStores.messageStore.showMessage(`扫码内容:${res.result}`);
         }
-        resolve(res.result )
+        resolve(res.result);
       },
       fail() {
-        console.log('获取失败')
-        gStores.messageStore.showMessage( '获取失败',
-          3000
-        );
-      }
-    })
-  })
+        console.log('获取失败');
+        gStores.messageStore.showMessage('获取失败', 3000);
+      },
+    });
+  });
 };
 
 //授权小程序消息推送模板
