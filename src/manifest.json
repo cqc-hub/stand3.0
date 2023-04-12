@@ -86,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州第一人民医院",
+  "name": "台州市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

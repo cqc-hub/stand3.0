@@ -1,8 +1,9 @@
 <template>
   <view class="">
+    {{ value }}
     <view
       v-for="item in _list"
-      :key="item.value"
+      :key="item.label"
       class="flex-between g-border-bottom item"
     >
       <view class="f32 g-bold flex1 text-ellipsis">{{ item.label }}</view>
@@ -116,6 +117,7 @@
     width: 25 0rpx;
     display: flex;
     justify-content: flex-end;
+    position: relative;
   }
 
   .show-more {

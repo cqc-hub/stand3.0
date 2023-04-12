@@ -184,16 +184,20 @@ export const downFile = (url: string): Promise<string> => {
       success(e) {
         resolve(e.tempFilePath);
       },
+      fail(e) {
+        console.error(`Download file error: ${url}`, 'reason:', e);
+        reject(e);
+      },
     });
   });
 };
 
 //获取当前时间戳方法
-export const getTimeStamp = (num?:number)=>{
-  var dateTime = JSON.stringify(new Date().getTime())
-   if(num){
-    return dateTime.substring(Number(dateTime.length)-num)
-   }else{
-    return dateTime
-   }
-}
+export const getTimeStamp = (num?: number) => {
+  var dateTime = JSON.stringify(new Date().getTime());
+  if (num) {
+    return dateTime.substring(Number(dateTime.length) - num);
+  } else {
+    return dateTime;
+  }
+};
