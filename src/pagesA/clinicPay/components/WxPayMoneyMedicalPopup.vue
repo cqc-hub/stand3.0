@@ -2,7 +2,10 @@
   <view class="">
     <g-popup title="医保支付" ref="isDialogShow">
       <view class="popup-content">
-        <view class="title">截图保存二维码或复制链接进行支付宝医保支付</view>
+        <view class="title">
+          截图保存图片到本地，打开支付宝APP识别
+          或复制链接在浏览器中打开进行支付宝医保支付
+        </view>
         <view class="popup-tki">
           <w-qrcode :options="options" />
         </view>

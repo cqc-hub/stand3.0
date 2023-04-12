@@ -553,7 +553,7 @@ export const usePayPage = () => {
   const payArg = ref<BaseObject>({});
   const refPayList = ref([
     {
-      label: '在线支付',
+      label: '自费支付',
       key: 'online',
     },
   ]);
@@ -901,7 +901,6 @@ export const usePayPage = () => {
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
-
         const payMedicalItem = selUnPayList.value.find(
           (o) => o.costTypeCode === '2'
         );
@@ -933,31 +932,33 @@ export const usePayPage = () => {
     if (type === 0) {
       refPayList.value = [
         {
-          label: '在线支付',
+          label: '自费支付',
           key: 'online',
         },
       ];
     } else if (type === 1) {
       refPayList.value = [
         {
-          label: '在线支付',
-          key: 'online',
-        },
-        {
           label: '医保支付',
           key: 'medicare',
+        },
+        {
+          label: '自费支付',
+          key: 'online',
         },
       ];
     } else if (type === 2) {
       refPayList.value = [
         {
-          label: '在线支付',
-          key: 'online',
-        },
-        {
           label: '医保支付',
           key: 'medicare',
         },
+
+        {
+          label: '自费支付',
+          key: 'online',
+        },
+
         {
           label: '到院支付',
           key: 'offline',
