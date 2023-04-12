@@ -4,9 +4,9 @@
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
       "alipayAppid": "2021003154665105",
-      "h5Appid": "wxac2942d44e7c2bd9",
-      "name": "台州第一人民医院",
-      "isStartComeTest": true,
+      "h5Appid": "wx8e5a08ccb011d26c",
+      "name": "台州市第一人民医院",
+      "isStartComeTest": false,
       "isSearchInHos": true,
       "isOpenOcr": true
     },
