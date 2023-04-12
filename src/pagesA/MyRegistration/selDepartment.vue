@@ -5,15 +5,16 @@
     }"
     class="g-page"
   >
-    
     <!-- #ifndef MP-ALIPAY -->
     <g-tbanner :config="orderConfig.bannerOrder" />
     <!-- #endif -->
 
     <!-- #ifdef MP-ALIPAY -->
-    <g-tbanner :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder" />
+    <g-tbanner
+      :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder"
+    />
     <!-- #endif -->
-    
+
     <g-selhos
       v-model:hosId="hosId"
       @get-list="getHosList"
