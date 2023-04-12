@@ -875,9 +875,9 @@ export const usePayPage = () => {
     }
 
     if (pageConfig.value.confirmPayFg) {
-      const isMedicalModePlugin = getIsMedicalModePlugin();
+      const isMedicalMode = getIsMedicalMode();
 
-      if (isMedicalModePlugin) {
+      if (isMedicalMode) {
         const { cardNumber } = gStores.userStore.patChoose;
         const flag = await isMedicalSelf(
           pageProps.value.deParams?.cardNumber || cardNumber
@@ -1002,7 +1002,7 @@ export const usePayPage = () => {
 
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
-    // 医保必然是单选的
+    // 医保必然是单选的(后端设置)
     const item = selUnPayList.value[0]!;
     const { getDetailData, detailData } = usePayDetailPage();
     const pat = gStores.userStore.patChoose;

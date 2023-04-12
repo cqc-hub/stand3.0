@@ -106,13 +106,12 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 西安红会
    */
-  1001057:{
-    isOpenIntelQA:{
-      appId: "wxba22f1a66a3af7aa",
-      path:"pages/index?appid=wx7b1baac614ebed72&configure=intelligent"
-      }
-  }
-
+  1001057: {
+    isOpenIntelQA: {
+      appId: 'wxba22f1a66a3af7aa',
+      path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {
