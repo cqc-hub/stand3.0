@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js';
 
+// 试试就逝世
 const defaultKey = 'qWeRt4u7';
 
 // AES 加密
