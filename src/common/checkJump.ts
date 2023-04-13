@@ -3,7 +3,7 @@ import { useRouterStore } from '@/stores';
 import globalGl from '@/config/global';
 import { joinQuery } from '@/common';
 
-// //拦截-登录
+//拦截-登录
 export const checkLogin = (item: IRoute) => {
   const gStores = new GStores();
   const routerStore = useRouterStore();
