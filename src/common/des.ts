@@ -1,7 +1,6 @@
 import CryptoJS from 'crypto-js';
 
 const defaultKey = 'qWeRt4u7';
-
 // AES 加密
 // export const encryptedAes = (val: string, key1 = defaultKey) => {
 //   const key = CryptoJS.enc.Utf8.parse(key1)
