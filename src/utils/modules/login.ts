@@ -114,8 +114,9 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
+        // #ifdef  MP-WEIXIN
         this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-
+        // #endif
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -398,6 +399,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             gender,
             mobile,
             userName,
+            authPhoneVerify,
           } = result;
 
           this.userStore.updateCacheUser({
@@ -419,6 +421,8 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             refreshToken,
           });
 
+          this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+
           await this.getUerInfo();
           resolve();
         },
@@ -438,7 +442,7 @@ class WebLoginHandler extends LoginUtils implements LoginHandler {
   async handler(payload?: any): Promise<void> {
     this.messageStore.showMessage('暂未支持 h5 登录');
 
-    return Promise.reject('暂未支持 h5 登录')
+    return Promise.reject('暂未支持 h5 登录');
   }
 }
 
