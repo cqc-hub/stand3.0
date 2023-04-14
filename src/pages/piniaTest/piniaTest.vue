@@ -141,7 +141,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(historyAnaesthesia);
+      useTBanner(yonyao);
     }, 1000);
   });
 </script>
