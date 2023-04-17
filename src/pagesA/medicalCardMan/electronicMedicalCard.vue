@@ -91,6 +91,7 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   const gStore = new GStores();
   const { clickPat } = storeToRefs(gStore.userStore);
@@ -208,7 +209,12 @@
     const orderId = result?.orderId;
 
     if (orderId) {
-      const url = `https://03-h5-health.tengmed.com/api/open/takeMsCard?order_id=${orderId}&redirect_uri=back`;
+      const baseUrl =
+        globalGl.sConfig.medicalCardDetailPackageDomain ||
+        'https://03-h5-health.tengmed.com';
+
+      const url =
+        baseUrl + `/api/open/takeMsCard?order_id=${orderId}&redirect_uri=back`;
 
       uni.navigateTo({
         url: '/pagesA/webView/webView?https=' + encodeURIComponent(url),

@@ -50,8 +50,16 @@ interface ISConfig {
     path: string;
   };
   //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
-  isOpenAlipayZndz?:boolean
+  isOpenAlipayZndz?: boolean;
   //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
+
+  /**
+   *  就诊卡详情 卡包按钮跳转对应的域名
+   *  - [document](https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail)
+   *  - defaultValue:  https://03-h5-health.tengmed.com
+   *
+   * */
+  medicalCardDetailPackageDomain?: `http${string}`;
 }
 
 const scJson: Record<string, ISConfig> = {
@@ -105,6 +113,8 @@ const scJson: Record<string, ISConfig> = {
         medicalPlugin: '1',
       },
     },
+
+    medicalCardDetailPackageDomain: 'https://03-h5-health.tengmed.com',
   },
 
   /**
