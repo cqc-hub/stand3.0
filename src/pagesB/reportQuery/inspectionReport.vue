@@ -52,13 +52,26 @@
             <view class="container-top-click" @click="more(index)">
               <view class="title">{{ item.repName }}</view>
               <view class="patient-information">
-                <view v-if="pageProps._scan !== '1'" class="subhead">
+                <view
+                  v-if="pageProps._scan !== '1'"
+                  @click.stop="isClose = !isClose"
+                  class="subhead"
+                >
                   患者信息
                   <view class="subhead-detail">
-                    <text class="g-split-line mr12 pr12">
-                      {{ nameConvert(pat.patientName) }}({{
-                        examineReportList.cardNumber || pat._showId
-                      }})
+                    <text class="mr12">
+                      {{
+                        isClose
+                          ? nameConvert(pat.patientName)
+                          : pat.patientName
+                      }}({{ examineReportList.cardNumber || pat._showId }})
+                    </text>
+
+                    <text
+                      :class="`iconfont icon-resize`"
+                      class="g-split-line mr12 pr12"
+                    >
+                      {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                     </text>
 
                     <text class="g-split-line mr12 pr12">
@@ -318,6 +331,7 @@
     useReportPowerEnerg();
   const isDialogShow = ref();
   const isOperation = ref(false);
+  const isClose = ref(true);
 
   const btnNumber = ref();
   var chnNumChar = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];

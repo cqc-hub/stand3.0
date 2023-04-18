@@ -13,14 +13,26 @@
         <view class="container-block-top" @click="more">
           <view class="title">{{ checkoutReportList.repName }}</view>
           <view class="patient-information">
-            <view v-if="pageProps._scan !== '1'" class="subhead">
+            <view
+              v-if="pageProps._scan !== '1'"
+              @click.stop="isClose = !isClose"
+              class="subhead"
+            >
               患者信息
               <view class="subhead-detail">
-                <text class="g-split-line mr12 pr12">
-                  {{ nameConvert(pat.patientName) }}({{
-                    checkoutReportList.cardNumber || pat._showId
-                  }})
+                <text class="mr12">
+                  {{
+                    isClose ? nameConvert(pat.patientName) : pat.patientName
+                  }}({{ checkoutReportList.cardNumber || pat._showId }})
                 </text>
+
+                <text
+                  :class="`iconfont icon-resize`"
+                  class="g-split-line mr12 pr12"
+                >
+                  {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+                </text>
+
                 <text class="g-split-line mr12 pr12">
                   {{ checkoutReportList.sex || pat.patientSex }}
                 </text>
@@ -371,6 +383,7 @@
 
   const { contentTitle, greenToastContent, greenToastDuration, getPowerEnerg } =
     useReportPowerEnerg();
+  const isClose = ref(true);
 
   const isShow = ref(false);
   const checkoutReportList = ref<checkoutReportDetails>({});

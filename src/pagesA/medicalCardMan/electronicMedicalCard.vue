@@ -5,6 +5,7 @@
     }"
     class="page"
   >
+    <g-flag isShowFg typeFg="113" />
     <view class="card-content">
       <view class="card-header flex-between">
         <view>{{ title }}</view>
