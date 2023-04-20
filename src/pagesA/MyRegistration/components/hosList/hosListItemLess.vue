@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { IHosInfo } from '@/utils';
 
   const props = defineProps<{
@@ -77,6 +77,8 @@
   const introClick = () => {
     emits('intro-click', props.item);
   };
+
+
 </script>
 
 <style lang="scss" scoped>

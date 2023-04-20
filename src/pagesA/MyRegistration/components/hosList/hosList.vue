@@ -1,12 +1,12 @@
 <template>
   <view class="hos-list-container">
-    <view v-for="(item, i) in list" :key="i">
+    <view v-for="item in list" :key="item.hosId">
       <g-login
         :disabled="!login || isDisabled(item)"
         @handler-next="itemClick(item)"
       >
         <view>
-          <block v-if="isShowMoreItem">
+          <view v-if="isShowMoreItem">
             <Item-Less
               :disabled="isDisabled(item)"
               :item="item"
@@ -15,9 +15,9 @@
               @item-click="itemClick"
               @intro-click="introClick"
             />
-          </block>
+          </view>
 
-          <block v-else>
+          <view v-else>
             <Item-More
               :disabled="isDisabled(item)"
               :item="item"
@@ -25,7 +25,7 @@
               @location-click="locationClick"
               @item-click="itemClick"
             />
-          </block>
+          </view>
         </view>
       </g-login>
     </view>
@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
   import { GStores, IHosInfo } from '@/utils';
   import ItemLess from './hosListItemLess.vue';
   import ItemMore from './hosListItemMore.vue';

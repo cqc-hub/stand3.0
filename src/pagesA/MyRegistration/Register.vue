@@ -139,7 +139,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, onMounted } from 'vue';
+  import { computed, ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
 
   import {
     ServerStaticData,
@@ -445,7 +446,7 @@
     getList(isAuth);
   };
 
-  init();
+  onLoad(init);
 </script>
 
 <style lang="scss" scoped>
@@ -459,7 +460,6 @@
 
     .scroll-container {
       flex: 1;
-      height: 1px;
       padding: 0 32rpx;
       padding-top: 16rpx;
       width: calc(100% - 64rpx);
