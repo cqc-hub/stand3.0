@@ -99,11 +99,15 @@
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
 
+  const SYS_TAB_KEY = 'SYS_TAB_KEY';
+
+  const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
+  systemInfo.startsWith('iOS');
+
   // https://meet-ui.com/#/
   const options = ref<any>({
     // 二维码
-    size: 350,
-
+    size: systemInfo.startsWith('iOS') ? 380 : 500,
     // 条形码
     width: 600, // 宽度 单位rpx
     height: 184, // 高度 单位rpx
@@ -176,8 +180,7 @@
       title.value = '电子健康卡';
       options.value.img = {
         src: '/static/image/person/health-card-logo.png',
-        size: 80,
-        type: 'round',
+        size: 70,
       };
 
       options.value.code = clickPat.value.healthQrCodeText!;
