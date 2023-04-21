@@ -577,14 +577,12 @@ export const useOrder = (props: IOrderProps) => {
   const goPreregistration = (item: IQueryRegNum) => {
     isOrderPreSourceShow.value = false;
 
-    nextTick(
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/MyRegistration/PreRegConfirm', {
-          ...preDocInfo.value!,
-          ...item,
-        }),
-      }) as any
-    );
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/PreRegConfirm', {
+        ...preDocInfo.value!,
+        ...item,
+      }),
+    });
   };
 
   return {
