@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001057",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -64,12 +64,10 @@
       "wxAppid": "wxf582e1fd4eb0142a",
       "alipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
+      "h5AppidDisabledInTest": true,
       "name": "乐清市人民医院",
       "isSearchInHos": true,
-      "isOpenOcr": false,
-      "medicalMHelp": {
-        "alipay": "1"
-      }
+      "isOpenOcr": false
     },
 
     "1001046": {

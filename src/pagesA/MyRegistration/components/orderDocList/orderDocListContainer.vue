@@ -11,25 +11,42 @@
       <!-- </g-login> -->
 
       <view @click="avatarClick" class="doc-info-introduce">
-        <view class="doc-info-introduce-header">
-          <view class="doc-info-introduce-name f36 text-no-wrap">
-            {{ item.docName }}
-          </view>
-          <view
-            v-if="item.docTitleName && isAllDate"
-            class="doc-info-introduce-title flex-normal"
-          >
+        <view class="flex-between flex1">
+          <view class="doc-info-introduce-header">
+            <view class="doc-info-introduce-name f36 text-no-wrap">
+              <text class="text-ellipsis">{{ item.docName }}</text>
+            </view>
             <view
-              :class="{
-                'g-split-line': item.docJobName,
-              }"
-              class="mr12 pr12 text-no-wrap"
+              v-if="item.docTitleName && isAllDate"
+              class="doc-info-introduce-title flex-normal"
             >
-              {{ item.docTitleName }}
+              <view
+                :class="{
+                  'g-split-line': item.docJobName,
+                }"
+                class="mr12 pr12 text-no-wrap"
+              >
+                {{ item.docTitleName }}
+              </view>
+              <view v-if="item.docJobName" class="text-ellipsis">
+                {{ item.docJobName }}
+              </view>
             </view>
-            <view v-if="item.docJobName" class="text-ellipsis">
-              {{ item.docJobName }}
-            </view>
+          </view>
+
+          <view
+            v-if="item.preStatus === '1'"
+            @click.stop="() => {}"
+            class="reg-btn"
+          >
+            <g-login @handler-next="preregistrationClick" patient>
+              <button
+                @click="preregistrationClick"
+                class="btn btn-primary btn-round btn-size-small"
+              >
+                预约登记
+              </button>
+            </g-login>
           </view>
         </view>
 
@@ -91,10 +108,14 @@
     isAllDate?: boolean;
   }>();
 
-  const emits = defineEmits(['avatar-click']);
+  const emits = defineEmits(['avatar-click', 'preregistration-click']);
 
   const avatarClick = () => {
     emits('avatar-click', props.item);
+  };
+
+  const preregistrationClick = () => {
+    emits('preregistration-click', props.item);
   };
 
   const splitSpecialDeptName = (name: string) => name.split(',');
@@ -164,5 +185,9 @@
         }
       }
     }
+  }
+
+  .reg-btn {
+    text-align: right;
   }
 </style>

@@ -25,6 +25,7 @@ interface ISystemGlobalItem {
   wxAppid: string;
   alipayAppid: string;
   h5Appid: string;
+  h5AppidDisabledInTest?: boolean;
   name: string;
 
   // https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wxee969de81bba9a45&token=&lang=zh_CN

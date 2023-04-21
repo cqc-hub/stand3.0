@@ -24,6 +24,7 @@
             :item="item"
             @date-click="dateClick"
             @avatar-click="avatarClick"
+            @preregistration-click="preregistrationClick"
           />
         </view>
 
@@ -46,6 +47,7 @@
                 :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
                 @avatar-click="avatarClick"
+                @preregistration-click="preregistrationClick"
               />
             </view>
           </view>
@@ -69,6 +71,12 @@
       @am-change="amChange"
       ref="selectOrderSource"
     />
+
+    <Order-Pre-Source
+      v-model:show="isOrderPreSourceShow"
+      :list="preregistrationRegNumbers"
+      @item-click="goPreregistration"
+    />
     <g-message />
   </view>
 </template>
@@ -83,6 +91,7 @@
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/OrderDocItemDate.vue';
   import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
+  import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
   import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
 
   const props = defineProps<{
@@ -130,7 +139,11 @@
     getDeptInfo,
     deptInfo,
     regDate,
-    gStores
+    gStores,
+    preregistrationClick,
+    isOrderPreSourceShow,
+    preregistrationRegNumbers,
+    goPreregistration,
   } = useOrder(props);
 
   onReady(() => {

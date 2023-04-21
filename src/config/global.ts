@@ -22,7 +22,10 @@ if (env === 'prod') {
 }
 
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
-const h5AppId = systemInfo.h5Appid;
+let h5AppId = systemInfo.h5Appid;
+if (systemInfo.h5AppidDisabledInTest) {
+  h5AppId = '';
+}
 
 const netUrl =
   env === 'prod'

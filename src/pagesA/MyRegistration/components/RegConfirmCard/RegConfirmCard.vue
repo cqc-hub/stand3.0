@@ -5,7 +5,7 @@
     }"
     class="card g-border"
   >
-    <view class="row-bold">
+    <view v-if="!isPreConfirm" class="row-bold">
       <view>
         <text class="iconfont">&#xe6ea;</text>
       </view>
@@ -19,7 +19,12 @@
       </view>
     </view>
 
-    <view class="row-bold mb32">
+    <view
+      :class="{
+        mb32: !isPreConfirm,
+      }"
+      class="row-bold"
+    >
       <view>
         <text class="iconfont">&#xe6dc;</text>
       </view>
@@ -29,12 +34,16 @@
       </view>
     </view>
 
+    <view v-if="isPreConfirm">
+      <slot name="slot1" />
+    </view>
+
     <view class="row">
       <view class="title">预约医院</view>
       <view>{{ hosLabel }}</view>
     </view>
 
-    <view class="row">
+    <view v-if="!isPreConfirm" class="row">
       <view class="title">挂号金额</view>
       <view>{{ myProps.fee }}元</view>
     </view>
@@ -79,6 +88,7 @@
       >;
 
       systemModeOld: boolean;
+      isPreConfirm?: boolean;
     }>(),
     {}
   );

@@ -14,6 +14,7 @@
 
   let baseUrl = `https://health.eheren.com`;
 
+  // 需要在微信公众号内配置回调域名权限, 一个公众号最多只能配置2个
   if (global.env === 'prod') {
     baseUrl = 'https://h5.eheren.com';
   }

@@ -58,7 +58,7 @@
                 <view class="p32c header-content">
                   <view class="flex-normal">
                     <view class="doc-name mr24 f48 g-bold text-no-wrap">
-                      {{ docDetail.docName }}
+                      <text class="text-ellipsis">{{ docDetail.docName }}</text>
                     </view>
 
                     <view
@@ -118,7 +118,21 @@
             </view>
           </view>
 
-          <view class="f36 g-bold mb16">门诊排班</view>
+          <view class="f36 g-bold mb16 flex-between">
+            <view>门诊排班</view>
+            <g-login
+              v-if="docDetail.preStatus === '1'"
+              @handler-next="preregistrationClick(docDetail as any)"
+              patient
+            >
+              <button
+                @click="preregistrationClick(docDetail as any)"
+                class="btn btn-primary btn-round btn-size-small"
+              >
+                预约登记
+              </button>
+            </g-login>
+          </view>
           <view
             :class="{
               pb40: docSchList.length && isComplete,
@@ -302,6 +316,12 @@
       @item-click="orderSourceChoose"
       @am-change="amChange"
     />
+
+    <Order-Pre-Source
+      v-model:show="isOrderPreSourceShow"
+      :list="preregistrationRegNumbers"
+      @item-click="goPreregistration"
+    />
     <g-message />
   </view>
 </template>
@@ -337,6 +357,7 @@
   import DocService from './components/DoctorDetails/DocService.vue';
   import DocBigDataTable from './components/DoctorDetails/DocBigDataTable.vue';
   import DocComment from './components/DoctorDetails/DocComment.vue';
+  import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -444,6 +465,10 @@
     enabledDays,
     filterChooseDays,
     regDate,
+    preregistrationClick,
+    isOrderPreSourceShow,
+    preregistrationRegNumbers,
+    goPreregistration,
   } = useOrder(props as any);
   const regDialogConfirm = ref<any>('');
 

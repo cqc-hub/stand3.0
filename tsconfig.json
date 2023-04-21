@@ -32,6 +32,7 @@
     //跳过一些库的类型检测
     "skipLibCheck": true,
     "experimentalDecorators": true,
+    "alwaysStrict": true,
     "typeRoots": ["./types", "./node_modules/vue/types"]
   },
   //哪些代码需要解析

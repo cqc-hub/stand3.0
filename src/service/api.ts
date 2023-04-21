@@ -620,6 +620,16 @@ const userApi = {
     service.post('/phs-reg/deptDoc/getDeptDetail', parm(data), {
       hideLoading: false,
     }),
+
+  queryRegNum: (data: any) =>
+    service.post('/phs-reg/deptDoc/queryRegNum', parm(data), {
+      hideLoading: false,
+    }),
+
+  preregistrationSave: (data: any) =>
+    service.post('/phs-reg/deptDoc/preregistrationSave', parm(data), {
+      hideLoading: false,
+    }),
 };
 //统一认证服务
 const authApi = {

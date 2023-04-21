@@ -240,6 +240,16 @@
         },
 
         {
+          "path": "MyRegistration/PreRegConfirm",
+          "style": {
+            "navigationBarTitleText": "预约登记"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "MyRegistration/RegDetail",
           "style": {
             "navigationBarTitleText": "挂号详情"

@@ -1,0 +1,47 @@
+.selpopup-container {
+  display: grid;
+  gap: 16rpx;
+
+  .item {
+    min-height: 130rpx;
+    border-radius: 16rpx;
+    font-size: var(--hr-font-size-xs);
+    position: relative;
+    margin: 2rpx;
+    width: calc(100% - 4rpx);
+    height: calc(100% - 4rpx);
+    z-index: 4;
+
+    flex-direction: column;
+
+    .icon-del {
+      position: absolute;
+      right: -1rpx;
+      top: -3rpx;
+      color: var(--hr-neutral-color-9);
+      font-size: var(--hr-font-size-xxl);
+      z-index: 2;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: var(--hr-font-size-base);
+      color: var(--hr-neutral-color-10);
+    }
+
+    .item-desc {
+      color: var(--hr-neutral-color-9);
+      font-size: var(--hr-font-size-xxxs);
+    }
+
+    &.item-active {
+      color: var(--hr-brand-color-6);
+      background-color: var(--hr-brand-color-1) !important;
+    }
+  }
+
+  .item-active-border {
+    background-color: var(--hr-brand-color-6);
+    border-radius: 16rpx;
+  }
+}

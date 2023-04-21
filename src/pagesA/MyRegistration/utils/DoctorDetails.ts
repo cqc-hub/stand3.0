@@ -40,6 +40,7 @@ export interface IDocDetail {
   hosId: string;
   intro: string;
   clinicTime: string;
+  preStatus?: '1';
 }
 
 export interface IDocSchListItem {

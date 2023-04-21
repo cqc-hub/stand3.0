@@ -3,11 +3,12 @@
     <Order-Doc-List-Container
       :item="item"
       @avatar-click="emits('avatar-click', item)"
+      @preregistration-click="emits('preregistration-click', $event)"
       isAllDate
     >
       <template #footer>
         <view class="g-border-top pt24">
-          <order-Doc-Clinic-Time :item="item" />
+          <Order-Doc-Clinic-Time :item="item" />
 
           <view class="date-container">
             <view class="sel-date">
@@ -70,13 +71,17 @@
   import dayjs from 'dayjs';
 
   import OrderDocListContainer from './OrderDocListContainer.vue';
-  import orderDocClinicTime from './OrderDocClinicTime.vue';
+  import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
   const props = defineProps<{
     item: IDocListAll;
   }>();
 
-  const emits = defineEmits(['date-click', 'avatar-click']);
+  const emits = defineEmits([
+    'date-click',
+    'avatar-click',
+    'preregistration-click',
+  ]);
 
   const isCollapse = ref(true);
 

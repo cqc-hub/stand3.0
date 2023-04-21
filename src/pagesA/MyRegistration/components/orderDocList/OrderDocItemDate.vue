@@ -3,6 +3,7 @@
     <Order-Doc-List-Container
       :item="item"
       @avatar-click="emits('avatar-click', item)"
+      @preregistration-click="emits('preregistration-click', $event)"
     >
       <template #footer>
         <view>
@@ -32,7 +33,11 @@
   import DocShcItem from '../DoctorDetails/DocShcItem.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
-  const emits = defineEmits(['reg-click', 'avatar-click']);
+  const emits = defineEmits([
+    'reg-click',
+    'avatar-click',
+    'preregistration-click',
+  ]);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;

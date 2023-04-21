@@ -20,3 +20,21 @@ export interface IPageProps {
   clinicalType: string;
   promptMessage?: string; // 就诊提示
 }
+
+export interface IPrePageProps
+  extends Pick<
+    IPageProps,
+    | 'categorName'
+    | 'fee'
+    | 'deptName'
+    | 'docName'
+    | 'docPhoto'
+    | 'docTitleName'
+    | 'hosDeptId'
+    | 'hosDocId'
+    | 'hosId'
+  > {
+  categorNamePY: string;
+  regNumber: string;
+  residueNumber: string;
+}

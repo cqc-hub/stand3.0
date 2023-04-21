@@ -10,7 +10,7 @@
         <view class="scheme-item-detail">
           <button
             v-if="item.schState in warnSchStateMap"
-            class="btn klklk btn-primary btn-reg disabled-btn"
+            class="btn btn-primary btn-reg disabled-btn"
           >
             {{ warnSchStateMap[item.schState] }}
           </button>
@@ -20,7 +20,7 @@
             :class="{
               'btn-old': systemModeOld,
             }"
-            class="btn klklk btn-primary btn-reg"
+            class="btn btn-primary btn-reg"
           >
             挂号
           </button>
@@ -109,10 +109,6 @@
   .sch-label {
     width: 230rpx;
     display: -webkit-box;
-  }
-
-  .klklk {
-    // width: 120rpx;
   }
 
   .disabled-btn {

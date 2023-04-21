@@ -2,14 +2,20 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import dayjs from 'dayjs';
 import api from '@/service/api';
 
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 import { joinQueryForUrl, joinQuery, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
-// api.getDeptSchForDoc = () => Promise.resolve()
+export interface IQueryRegNum {
+  categorName: string;
+  categorNamePY: string;
+  fee: number;
+  regNumber: number;
+  residueNumber: number;
+}
 
 export interface IChooseDays {
   day: string;
@@ -36,6 +42,7 @@ interface IDocRow {
   showNo: string;
   intro: string;
   hosDocId: string;
+  preStatus?: '1';
 
   // 快捷号别
   schQukCategor?: string;
@@ -326,6 +333,7 @@ export const useOrder = (props: IOrderProps) => {
                     hosName,
                     intro,
                     schQukCategor,
+                    preStatus,
                   } = schInfo;
 
                   Object.assign(scheme, {
@@ -341,6 +349,7 @@ export const useOrder = (props: IOrderProps) => {
                     hosName,
                     intro,
                     schQukCategor,
+                    preStatus,
                   });
                 }
               });
@@ -545,7 +554,44 @@ export const useOrder = (props: IOrderProps) => {
     }
   };
 
+  /** 预约登记 */
+  const preDocInfo = ref<IDocRow>();
+  const isOrderPreSourceShow = ref(false);
+  const preregistrationRegNumbers = ref(<IQueryRegNum[]>[]);
+  const preregistrationClick = async (item: IDocRow) => {
+    const { hosDocId } = item;
+
+    preregistrationRegNumbers.value = [];
+    const { result } = await api.queryRegNum({
+      docId: hosDocId,
+    });
+
+    if (result && result.length) {
+      preregistrationRegNumbers.value = result;
+      isOrderPreSourceShow.value = true;
+      preDocInfo.value = item;
+    } else {
+      gStores.messageStore.showMessage('暂无号源');
+    }
+  };
+  const goPreregistration = (item: IQueryRegNum) => {
+    isOrderPreSourceShow.value = false;
+
+    nextTick(
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/PreRegConfirm', {
+          ...preDocInfo.value!,
+          ...item,
+        }),
+      }) as any
+    );
+  };
+
   return {
+    goPreregistration,
+    preregistrationRegNumbers,
+    isOrderPreSourceShow,
+    preregistrationClick,
     orderConfig,
     init,
     chooseDays,
@@ -570,7 +616,7 @@ export const useOrder = (props: IOrderProps) => {
     getDeptInfo,
     deptInfo,
     regDate,
-    gStores
+    gStores,
   };
 };
 
