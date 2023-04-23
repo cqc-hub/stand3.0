@@ -1356,10 +1356,16 @@ export const usePayDetailPage = () => {
   const getDetailData = async (arg: TPayDetailProp) => {
     let { patientId } = gStores.userStore.patChoose;
 
-    const { result } = await api.getClinicalPayDetailList({
+    const requestArg = {
       ...arg,
       patientId,
-    });
+    };
+
+    if (arg.params) {
+      requestArg.patientId = undefined as unknown as any;
+    }
+
+    const { result } = await api.getClinicalPayDetailList(requestArg);
 
     detailData.value = result;
   };
