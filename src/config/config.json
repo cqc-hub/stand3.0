@@ -145,6 +145,16 @@
         "healthCardText": "陕西省卫生健康委员会",
         "hospitalId": "37218"
       }
+    },
+
+    "1001058": {
+      "wxAppid": "wx86a78f7ced7dc55f",
+      "alipayAppid": "2021003173633521",
+      "h5Appid": "wxc5f0f8f426249352",
+      "name": "濮阳市人民医院",
+      "isSearchInHos": false,
+      "isOpenOcr": false,
+      "isStartComeTest": true
     }
   }
 }
