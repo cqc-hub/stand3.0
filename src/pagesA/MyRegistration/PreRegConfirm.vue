@@ -9,6 +9,7 @@
       <view class="container-view">
         <view class="container-view-card">
           <Reg-Confirm-Card
+            v-model:hosName="hosName"
             :my-props="props"
             :systemModeOld="gStores.globalStore.modeOld"
             isPreConfirm
@@ -81,6 +82,7 @@
   const gStores = new GStores();
   const dialogShow = ref(false);
   const props = ref<IPrePageProps>({} as IPrePageProps);
+  const hosName = ref('');
   const restRegNumbers = computed(() => {
     if (props.value.regNumber) {
       // @ts-expect-error
@@ -105,6 +107,7 @@
       categorName,
       categorNamePy: categorNamePY,
       regNumber,
+      hosName: hosName.value,
     };
 
     await api.preregistrationSave(requestArg);

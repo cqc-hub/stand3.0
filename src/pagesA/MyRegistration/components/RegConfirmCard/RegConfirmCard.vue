@@ -20,6 +20,7 @@
     </view>
 
     <view
+      v-if="myProps.deptName"
       :class="{
         mb32: !isPreConfirm,
       }"
@@ -93,6 +94,8 @@
     {}
   );
 
+  const emit = defineEmits(['update:hosName']);
+
   const hosLabel = ref('');
 
   onMounted(async () => {
@@ -104,6 +107,8 @@
         list.map((o) => {
           if (o.hosId === hosId) {
             hosLabel.value = o.hosName;
+
+            emit('update:hosName', o.hosName);
           }
         });
       });

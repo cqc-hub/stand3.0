@@ -10,7 +10,7 @@
         >
           <view
             v-for="item in list"
-            @click="emits('item-click', item)"
+            @click="itemClick(item)"
             :key="item.categorNamePY"
             class="g-flex-rc-cc"
           >
@@ -50,6 +50,11 @@
 
   const show = () => {
     popup.value.show();
+  };
+
+  const itemClick = (item) => {
+    popup.value.hide();
+    emits('item-click', item);
   };
 
   watch(

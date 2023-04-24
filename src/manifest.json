@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxd9a9c329edc6e2b0",
+    "appid": "wx7b1baac614ebed72",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -72,13 +72,8 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021003164669106",
-    "plugins": {
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      }
-    },
+    "appid": "2021003173633521",
+    "plugins": {},
     "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
@@ -91,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "联勤保障部队第987医院",
+  "name": "西安市红会医院",
   "h5": {
     "router": {
       "base": "./"
