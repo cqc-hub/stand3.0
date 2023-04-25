@@ -83,6 +83,7 @@ import { type IHospitalAccountDetail } from './utils/index';
 interface IPageProps {
   hosId: string;
   isCash?: any;
+  type?: 'fromSelDepartment'
 }
 const pageProps = ref(<IPageProps>{});
 const isCash = ref('');
@@ -148,6 +149,7 @@ const confirmForm = () => {
       cardNumber,
       patientName,
       hospitalAccount: '12',
+      _type: pageProps.value.type
     }),
   });
 };

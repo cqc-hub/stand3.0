@@ -61,7 +61,7 @@
   import api from '@/service/api';
   import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
-  import { deQueryForUrl } from '@/common/utils';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { hosParam } from '@/components/g-form';
   import { payOrderResult } from './utils/inpatientInfo';
 
@@ -72,6 +72,7 @@
     cardNumber?: string;
     hospitalAccount?: string;
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
+    _type?: 'fromSelDepartment';
   };
   const gStores = new GStores();
   const resultHos = ref<ISystemConfig['hospitalCare']>({} as any);
@@ -83,10 +84,7 @@
   const payOrder = ref<payOrderResult>({} as payOrderResult);
   const pageProps = ref({} as IPageProps);
   const getMoneyInputType = computed(() => {
-    if (
-      resultHos.value.isMode === '1' ||
-      !resultHos.value.isMode
-    ) {
+    if (resultHos.value.isMode === '1' || !resultHos.value.isMode) {
       return 'digit';
     } else {
       return 'number';
@@ -121,9 +119,18 @@
     await wait(1000);
     uni.hideLoading();
 
-    uni.navigateBack({
-      delta: 1,
-    });
+    if (pageProps.value._type === 'fromSelDepartment') {
+      uni.reLaunch({
+        url: joinQueryForUrl('/pagesA/MyRegistration/selDepartment', {
+          hosId: pageProps.value.hosId,
+          noTipDialog: '1',
+        }),
+      });
+    } else {
+      uni.navigateBack({
+        delta: 1,
+      });
+    }
   };
   const setData = async () => {
     isConfigComplete.value = false;

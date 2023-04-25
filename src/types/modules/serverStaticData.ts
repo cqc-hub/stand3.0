@@ -6,16 +6,25 @@ import { type XOR } from '@/typeUtils/obj';
 export interface ISystemConfig {
   // 预约挂号
   order: {
+    /** 科室列表页面 */
+    // 选科室上面 banner
+    bannerOrder?: TBannerConfig;
+    //选科室上面 banner-支付宝
+    bannerOrderAlipay?: TBannerConfig;
+    /** 预约挂号温馨提示 */
+    deptDialogBtnCannel?: {
+      label: string;
+      // '0' 门诊充值
+      key: '0';
+    };
+
+    /** 挂号页面 */
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
     // 选择号源时候显示几列
     selOrderColumn: number;
     // 精确号源?
     isOrderBlur: '0' | '1';
-    // 选科室上面 banner
-    bannerOrder?: TBannerConfig;
-    //选科室上面 banner-支付宝
-    bannerOrderAlipay?: TBannerConfig;
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
