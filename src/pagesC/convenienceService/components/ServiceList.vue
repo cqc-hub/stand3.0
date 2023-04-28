@@ -39,7 +39,7 @@
           <view v-if="serviceItem.tips" class="dialog-t f32">
             <text class="dt-width color-888">项目说明</text>
             <text class="g-bolder g-break-word">
-              {{ serviceItem.tips }}{{ serviceItem.tips }}{{ serviceItem.tips }}
+              {{ serviceItem.tips }}
             </text>
           </view>
           <view class="dialog-t f32">
