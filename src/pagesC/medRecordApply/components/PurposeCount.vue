@@ -1,6 +1,5 @@
 <template>
   <view class="">
-    {{ value }}
     <view
       v-for="item in _list"
       :key="item.label"
