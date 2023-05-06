@@ -247,9 +247,9 @@ export const getIsMedicalMode = () => {
 
       // #ifdef  MP-WEIXIN
       if (wx) {
-        const { medicalPlugin } = wx;
+        const { medicalPlugin, medicalNation } = wx;
 
-        if (medicalPlugin === '1') {
+        if (medicalPlugin === '1' || medicalNation) {
           return true;
         }
       }
@@ -987,9 +987,9 @@ export const usePayPage = () => {
         toPay();
       }
     } else if (item.key === 'medicare') {
-      const isMedicalModePlugin = getIsMedicalModePlugin();
+      const isMedicalMode = getIsMedicalMode();
 
-      if (isMedicalModePlugin) {
+      if (isMedicalMode) {
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();
         // #endif

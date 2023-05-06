@@ -48,7 +48,7 @@ export interface ISystemConfig {
     // 排队叫号?
     isQueuing?: string[];
     // 服务评价?
-    isFWBtn?: string[];
+    isFWBtn?: string[]; // 需要服务评价的订单状态码
 
     /** 搜索 */
     // 热门搜索

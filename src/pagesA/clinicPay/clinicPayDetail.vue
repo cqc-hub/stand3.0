@@ -297,12 +297,6 @@
       });
 
       if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
-        console.log(
-          'gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode',
-          gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode
-        );
-        // return;
-
         getPayInfo({
           item: {
             key: 'medicare',
