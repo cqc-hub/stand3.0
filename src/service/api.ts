@@ -671,6 +671,19 @@ const authApi = {
     return service.post<T>('/phs-pay/pay/addHRPay', parm(data), opt);
   },
 
+  clinicRefundByMessage: <T>(
+    data,
+    opt = {
+      hideLoading: false,
+    }
+  ) => {
+    return service.post<T>(
+      '/phs-pay/pay/clinicRefundByMessage',
+      parm(data),
+      opt
+    );
+  },
+
   payResult: <T>(data) => {
     return service.post<T>('/phs-pay/pay/payResult', parm(data), {
       hideLoading: false,

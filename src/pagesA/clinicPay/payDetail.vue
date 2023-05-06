@@ -214,6 +214,7 @@
     medicalNationUpload,
     isMedicalSelf,
     isDefaultMedical,
+    getIsMedicalMode,
     type TPayDetailProp,
     type TCostList,
     type TWxAuthorize,
@@ -260,6 +261,7 @@
     changeRefPayList,
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
+
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -401,9 +403,9 @@
         toPay();
       }
     } else if (item.key === 'medicare') {
-      const isMedicalModePlugin = getIsMedicalModePlugin();
+      const isMedicalMode = getIsMedicalMode();
 
-      if (isMedicalModePlugin) {
+      if (isMedicalMode) {
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();
         // #endif
@@ -506,12 +508,12 @@
 
   const handlerPay = async () => {
     const { costTypeCode } = props.value;
-    const isMedicalModePlugin = getIsMedicalModePlugin();
+    const isMedicalMode = getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
 
     let flag = false;
 
-    if (isMedicalModePlugin) {
+    if (isMedicalMode) {
       flag = await isMedicalSelf(props.value.cardNumber || cardNumber);
     }
 

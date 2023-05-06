@@ -27,7 +27,7 @@
         <view class="box">
           <view class="flex-between mb16">
             <view class="label text-no-wrap">授权给</view>
-            <view class="value g-bold">湖州市中心医院</view>
+            <view class="value g-bold">{{ hosName }}</view>
           </view>
 
           <view class="flex-between">
@@ -38,8 +38,18 @@
       </view>
     </view>
 
+    <g-message />
+
     <view class="g-footer">
-      <button @click="submit" class="btn btn-primary flex1">立即授权</button>
+      <button
+        @click="submit"
+        :class="{
+          'btn-disabled': loading,
+        }"
+        class="btn btn-primary flex1"
+      >
+        立即授权
+      </button>
     </view>
   </view>
 </template>
@@ -48,10 +58,23 @@
   import { defineComponent, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { joinQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
+  import { GStores, wait, ServerStaticData } from '@/utils';
+
+  import api from '@/service/api';
 
   import { usePayPage, TWxAuthorize } from './utils/clinicPayDetail';
 
   const { wxPayMoneyMedicalPlugin } = usePayPage();
+  const gStores = new GStores();
+  const loading = ref(false);
+  const pageProps = ref({
+    orderId: '',
+    hosId: '',
+    patientId: '',
+  });
+  const hosName = ref('');
+  const t =
+    '借助上面的布局，下面所有分析只需要对文本B进行处理就行了。关于中间省略效果，目前还没有专门的 CSS 样式可以实现，不过可以模拟它，接着往下看';
 
   const submit = () => {
     // #ifdef  MP-WEIXIN
@@ -59,11 +82,61 @@
     // #endif
   };
 
-  const submitAction = (auth: TWxAuthorize) => {
-    console.log(auth);
+  const submitAction = async (auth: TWxAuthorize) => {
+    const { payAuthNo } = auth;
+    const { patientId, orderId } = pageProps.value;
+
+    const args = {
+      payAuthNo,
+      orderId,
+    };
+
+    await api.clinicRefundByMessage(args);
+
+    gStores.messageStore.showMessage('授权成功, 等待退费', 3000, {
+      closeCallBack() {
+        loading.value = true;
+      },
+    });
   };
 
-  onLoad(() => {});
+  const init = async () => {
+    const { hosId } = pageProps.value;
+
+    const hosList = await ServerStaticData.getHosList();
+    const hos = hosList.find((o) => o.hosId === hosId);
+    if (hos) {
+      hosName.value = hos.hosName;
+    }
+  };
+
+  onShow(async () => {
+    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+      await wait(300);
+      setLocalStorage({
+        'get-wx-medical-auth-code': '',
+      });
+
+      // 微信医保小程序跳回来后中断了链路 重新走下
+      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+        submit();
+      } else {
+        gStores.messageStore.showMessage(
+          '未完成电子医保凭证授权,无法继续异常单退费'
+        );
+      }
+    }
+  });
+
+  onLoad(() => {
+    if (gStores.globalStore.appShowData.query?.orderId) {
+      pageProps.value = {
+        ...gStores.globalStore.appShowData.query,
+      };
+
+      init();
+    }
+  });
 </script>
 
 <style lang="scss" scoped>
