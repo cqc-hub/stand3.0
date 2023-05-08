@@ -261,7 +261,6 @@
     changeRefPayList,
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
-
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -435,6 +434,7 @@
         businessType: '1',
         cardNumber: item.cardNumber || pat.cardNumber,
         serialNo,
+        totalCost: getPayTotal.value + '',
       }
     );
 
