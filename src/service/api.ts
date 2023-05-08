@@ -523,6 +523,10 @@ const userApi = {
   registerHealthCard: (data, opt = {}) =>
     service.post('/phs-user/healthCard/registerHealthCard', parm(data), opt),
 
+  // 注册电子健康卡
+  regHealthCardByPatInfo: (data, opt = {}) =>
+    service.post('/phs-user/healthCard/regHealthCardByPatInfo', parm(data), opt),
+
   // 快速关联电子健康卡
   quickLinkHealthCard: (data) =>
     service.post('/phs-user/healthCard/quickLinkHealthCard', parm(data), {

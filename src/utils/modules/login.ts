@@ -641,6 +641,7 @@ export class PatientUtils extends LoginUtils {
     }>
   ) {
     const { wechatCode } = data;
+    console.log(data);
 
     if (this.userStore.patList.length) {
       data.authPhoneVerify = undefined;
@@ -652,9 +653,19 @@ export class PatientUtils extends LoginUtils {
       source: this.globalStore.browser.source,
       herenId: this.globalStore.herenId,
       verifyType: data.verifyType || '1',
+      healthCardId: '',
+      qrCodeText: '',
     };
 
     getH5OpenidParam(requestArg);
+    if (wechatCode) {
+      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
+        data
+      );
+
+      requestArg.qrCodeText = qrCodeText;
+      requestArg.healthCardId = healthCardId;
+    }
 
     const {
       result: { patientId },
@@ -670,16 +681,16 @@ export class PatientUtils extends LoginUtils {
         this.userStore.updatePatChoose({} as any);
       }
 
-      if (wechatCode) {
-        await this.registerHealthCard(
-          {
-            patientId,
-            wechatCode,
-          },
-          false,
-          false
-        );
-      }
+      // if (wechatCode) {
+      //   await this.registerHealthCard(
+      //     {
+      //       patientId,
+      //       wechatCode,
+      //     },
+      //     false,
+      //     false
+      //   );
+      // }
     }
   }
 
@@ -708,6 +719,50 @@ export class PatientUtils extends LoginUtils {
           console.error('此处不抛出错误', err);
         }
       });
+  }
+
+  async regHealthCardByPatInfo(
+    data: Partial<{
+      _autoSetDefault: string;
+      wechatCode: string; // 微信电子健康卡时候有
+
+      addressCity: string;
+      addressCounty: string;
+      addressCountyCode: string;
+      addressProvince: string;
+      birthday: string; //非身份证类型/儿童必填
+      defaultFalg: boolean;
+      idCard: string;
+      idType: string;
+      location: string;
+      nation: string;
+      openIds: { openId: string; source: string }[];
+      patientName: string;
+      patientPhone: string;
+      patientType: string;
+      sex: string; // 非身份证类型/儿童必填
+      upIdCard: string; // 儿童必填
+      upName: string; // 儿童必填
+      verifyCode: string;
+      verifyType: string; // （1或空）不开启验证  2:开启验证
+      authPhoneVerify?: string;
+    }>
+  ): Promise<{ healthCardId: string; qrCodeText: string }> {
+    const requestArg = {
+      ...data,
+      defaultFalg: data.defaultFalg ? '1' : '0',
+      source: this.globalStore.browser.source,
+      herenId: this.globalStore.herenId,
+      verifyType: data.verifyType || '1',
+      healthCardId: '',
+      qrCodeText: '',
+    };
+
+    getH5OpenidParam(requestArg);
+
+    const { result } = await api.regHealthCardByPatInfo(requestArg);
+
+    return result;
   }
 
   async getPatCardList() {
