@@ -15,7 +15,7 @@
   let baseUrl = `https://health.eheren.com`;
 
   // 需要在微信公众号内配置回调域名权限, 一个公众号最多只能配置2个
-  if (global.env === 'prod') {
+  if (global.env === 'prod' || !isStartComeTest) {
     baseUrl = 'https://h5.eheren.com';
   }
 
@@ -42,3 +42,4 @@
 </script>
 
 <style lang="scss" scoped></style>
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx56d1a143ff27e903&redirect_uri=https%3A%2F%2Fhealth.eheren.com%2Fh5%2Findex.html&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect
