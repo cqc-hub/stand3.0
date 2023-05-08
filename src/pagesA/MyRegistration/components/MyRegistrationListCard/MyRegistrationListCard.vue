@@ -62,13 +62,19 @@
         </view>
       </view>
 
-      <view
-        v-if="isShowFooter(item) && false"
-        class="footer flex-between btn-normal"
-      >
+      <view v-if="isShowFooter(item)" class="footer flex-between btn-normal">
+        <!-- 70 82 -->
         <view class="f36 color-error g-bold">{{ item.fee }}元</view>
 
         <view class="flex-normal footer-btns">
+          <button
+            v-if="isShowReOrderBtn(item)"
+            @click="goDoctorCard(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            复诊预约
+          </button>
+
           <button
             v-if="isCancelOrder(item)"
             class="btn btn-round btn-size-small btn-border cancel-btn"
@@ -106,12 +112,13 @@
   import { computed, ref } from 'vue';
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
   import { getStatusConfig } from '../../utils/regDetail';
-  import { joinQueryForUrl } from '@/common';
+  import { joinQueryForUrl, joinQuery } from '@/common';
 
   const props = defineProps<{
     list: IRegistrationCardItem[];
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
+    showReOrderBtn: boolean;
     showFWBtn: string[];
     systemModeOld?: boolean;
   }>();
@@ -123,22 +130,49 @@
 
   // 显示排队叫号
   const isShowPaiDui = (item: IRegistrationCardItem) => {
-    return props.showPaiDuiJiaoHaoBtn.includes(item.orderStatus);
+    return false;
+
+    // return props.showPaiDuiJiaoHaoBtn.includes(item.orderStatus);
   };
 
   // 显示服务评价
   const isFW = (item: IRegistrationCardItem) => {
-    return props.showFWBtn.includes(item.orderStatus);
+    return false;
+
+    // return props.showFWBtn.includes(item.orderStatus);
   };
 
   // 显示取消订单
   const isCancelOrder = (item: IRegistrationCardItem) => {
-    return ['0'].includes(item.orderStatus);
+    return false;
+
+    // return ['0'].includes(item.orderStatus);
   };
 
   // 显示支付
   const isPayOrder = (item: IRegistrationCardItem) => {
-    return ['10'].includes(item.orderStatus);
+    // return ['10'].includes(item.orderStatus);
+    return false;
+  };
+
+  const isShowReOrderBtn = (item: IRegistrationCardItem) => {
+    return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
+  };
+
+  const goDoctorCard = (item: IRegistrationCardItem) => {
+    const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
+      item;
+
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
+        deptName,
+        docName,
+        hosDocId,
+        hosId,
+        clinicalType,
+        hosDeptId,
+      }),
+    });
   };
 
   const goDetail = (item: IRegistrationCardItem) => {
@@ -156,7 +190,8 @@
       isShowPaiDui(item) ||
       isFW(item) ||
       isCancelOrder(item) ||
-      isPayOrder(item)
+      isPayOrder(item) ||
+      isShowReOrderBtn(item)
     );
   };
 </script>

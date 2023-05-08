@@ -36,6 +36,7 @@
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :showPaiDuiJiaoHaoBtn="showPaiDuiJiaoHaoBtn"
+          :showReOrderBtn="isShowReOrderBtn"
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
         />
@@ -163,6 +164,10 @@
   const isCancelOrderDialogShow = ref(false);
   const dialogContent = ref('');
   let cancelOrderDialogConfirm: (any) => any = async () => {};
+
+  const isShowReOrderBtn = computed(
+    () => orderConfig.value.isOpenReOrder === '1'
+  );
 
   const getStatusConfig = (status: OrderStatus) => {
     if (orderStatusMap[status]) {

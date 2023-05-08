@@ -424,6 +424,12 @@
     const cardNumber = item.cardNumber || pat.cardNumber;
     const serialNo = selList.value.map((o) => o.serialNo).join(',');
 
+    const _totalCost = (getPayTotal.value + '').split('.');
+    const totalCost =
+      _totalCost[0] +
+      '.' +
+      (_totalCost[1] ? _totalCost[1].padEnd(2, '0') : '00');
+
     const uploadRes = await medicalNationUpload(
       {
         ...item,
@@ -434,7 +440,7 @@
         businessType: '1',
         cardNumber: item.cardNumber || pat.cardNumber,
         serialNo,
-        totalCost: getPayTotal.value + '',
+        totalCost,
       }
     );
 

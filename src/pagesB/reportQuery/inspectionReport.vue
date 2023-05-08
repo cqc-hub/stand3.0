@@ -62,9 +62,9 @@
                     <text class="mr12">
                       {{
                         isClose
-                          ? nameConvert(pat.patientName)
-                          : pat.patientName
-                      }}({{ examineReportList.cardNumber || pat._showId }})
+                          ? nameConvert(examineReportList.patientName)
+                          : examineReportList.patientName
+                      }}({{ examineReportList.cardNumber }})
                     </text>
 
                     <text

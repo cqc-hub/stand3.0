@@ -22,8 +22,8 @@
               <view class="subhead-detail">
                 <text class="mr12">
                   {{
-                    isClose ? nameConvert(pat.patientName) : pat.patientName
-                  }}({{ checkoutReportList.cardNumber || pat._showId }})
+                    isClose ? nameConvert(checkoutReportList.patientName) : checkoutReportList.patientName
+                  }}({{ checkoutReportList.cardNumber }})
                 </text>
 
                 <text

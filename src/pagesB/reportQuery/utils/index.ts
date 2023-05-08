@@ -70,7 +70,7 @@ export interface checkoutReportDetails {
   passDocId?: string;
   //审核医生
 
-  patientName?: string;
+  patientName: string;
   //患者姓名
 
   patientNameEncry?: string;
@@ -224,7 +224,7 @@ export interface examineReportDetails {
   passDocId?: string;
   //审核医生
 
-  patientName?: string;
+  patientName: string;
   //患者姓名
 
   patientNameEncry?: string;

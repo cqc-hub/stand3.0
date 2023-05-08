@@ -49,6 +49,8 @@ export interface ISystemConfig {
     isQueuing?: string[];
     // 服务评价?
     isFWBtn?: string[]; // 需要服务评价的订单状态码
+    // 已就诊、已结束订单状态显示“复诊预约”按钮
+    isOpenReOrder?: '1';
 
     /** 搜索 */
     // 热门搜索
