@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxd9a9c329edc6e2b0",
+    "appid": "wx4d8f68fdc6b6831c",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -72,7 +72,7 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "2021003164669106",
+    "appid": "",
     "plugins": {
       "codePlugin": {
         "version": "*",
@@ -91,7 +91,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "联勤保障部队第987医院",
+  "name": "中国人民解放军新疆军区总医院",
   "h5": {
     "router": {
       "base": "./"

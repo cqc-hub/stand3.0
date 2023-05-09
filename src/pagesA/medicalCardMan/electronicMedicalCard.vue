@@ -117,6 +117,12 @@
     img: '',
   });
 
+  uni.getSystemInfo({}).then(({ screenWidth }) => {
+    if (screenWidth > 390) {
+      options.value.size = 500;
+    }
+  });
+
   const qrOptions = computed(() => {
     return {
       ...options.value,

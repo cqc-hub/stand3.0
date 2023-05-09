@@ -328,6 +328,20 @@
     }
   });
 
+  const getTotalCostString = computed(() => {
+    if (getPayTotal.value) {
+      const _totalCost = (getPayTotal.value + '').split('.');
+
+      return (
+        _totalCost[0] +
+        '.' +
+        (_totalCost[1] ? _totalCost[1].padEnd(2, '0') : '00')
+      );
+    } else {
+      return '';
+    }
+  });
+
   // 可以选择性支付
   const isCanSelServerFee = computed(() => {
     let isMedicalPay = false;
@@ -424,12 +438,6 @@
     const cardNumber = item.cardNumber || pat.cardNumber;
     const serialNo = selList.value.map((o) => o.serialNo).join(',');
 
-    const _totalCost = (getPayTotal.value + '').split('.');
-    const totalCost =
-      _totalCost[0] +
-      '.' +
-      (_totalCost[1] ? _totalCost[1].padEnd(2, '0') : '00');
-
     const uploadRes = await medicalNationUpload(
       {
         ...item,
@@ -440,7 +448,7 @@
         businessType: '1',
         cardNumber: item.cardNumber || pat.cardNumber,
         serialNo,
-        totalCost,
+        totalCost: getTotalCostString.value,
       }
     );
 
@@ -452,7 +460,7 @@
       patientId: item.cardNumber ? '' : pat.patientId,
       patientName: item.patientName || pat.patientName,
       payAuthNo: payload.payAuthNo,
-      totalCost: detailData.value.totalCost,
+      totalCost: getTotalCostString.value,
       params: item.params,
       extend: payload,
     };
