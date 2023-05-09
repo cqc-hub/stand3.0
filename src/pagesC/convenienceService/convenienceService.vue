@@ -88,6 +88,7 @@
   import ServiceList from './components/ServiceList.vue';
 
   import { type IServiceList } from './utils/index';
+import { Console } from 'console';
   interface IPageProps {
     hosId: string;
     hosName: string;
@@ -144,16 +145,27 @@
   };
 
   const confirm = () => {
-    const { hosId, hosName } = pageProps.value;
-    uni.navigateTo({
-      url: joinQuery('/pagesC/convenienceService/confirmOrder', {
-        totalNum: totalNum.value,
-        totalMoney: totalMoney.value,
-        lists: JSON.stringify(chooseItem.value),
-        hosId,
-        hosName,
-      }),
-    });
+    //拦截一下不能合并缴费的
+    const ids= new Set()
+    chooseItem.value.map(item=>{
+      ids.add(item.subIds)
+    })
+    if(ids.size>1){
+      gStores.messageStore.showMessage("不同的项目类型不支持合并支付", 2000); 
+      return;
+    }else{
+      const { hosId, hosName } = pageProps.value;
+      uni.navigateTo({
+        url: joinQuery('/pagesC/convenienceService/confirmOrder', {
+          totalNum: totalNum.value,
+          totalMoney: totalMoney.value,
+          lists: JSON.stringify(chooseItem.value),
+          hosId,
+          hosName,
+        }),
+      });
+    }
+   
   };
 
   const ezz = (e) => {

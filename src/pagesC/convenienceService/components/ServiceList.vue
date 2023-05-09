@@ -15,12 +15,13 @@
         <view class="fee f28 mt8">{{ item.fee }}元</view>
       </view>
       <view class="text-no-wrap number-box-content">
+      {{item.num}}
         <uni-number-box
           :value="item.num"
           :min="0"
           icon="circle"
-          :max="9999"
-          @change="boxChange($event, i)"
+          :max="item.maxNum || 999"
+          @change="boxChange($event, i,item)"
         />
       </view>
     </view>
@@ -52,8 +53,8 @@
             :value="serviceItem.num"
             :min="0"
             icon="circle"
-            :max="9999"
-            @change="boxChange($event, serviceIndex)"
+            :max="serviceItem.maxNum || 999"
+            @change="boxChange($event, serviceIndex,serviceItem)"
           />
         </view>
       </view>
@@ -73,7 +74,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, watch, nextTick } from 'vue';
+  import { ref, watch, nextTick } from 'vue';
+  import { GStores } from '@/utils';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   const regDialogConfirm = ref<any>('');
   const serviceItem = ref<any>('');
@@ -84,11 +86,19 @@
     zzz?: boolean;
   }>();
   const listData = ref(props.list);
+  const gStores = new GStores();
   const emits = defineEmits(['update:value', 'zzz']);
 
-  const boxChange = (e, i) => {
+  const boxChange = (e, i,item?) => {
+    // subIds 合并缴费id 相同可合并缴费
+    // 找到已经选中的 判断subIds是否一致
+    const selectItem = listData.value.find((o)=>o.num>0)
     listData.value[i].num = e;
     emits('update:value', listData.value);
+    if(selectItem&&selectItem.subIds!=item.subIds&&e>0){
+      gStores.messageStore.showMessage("不同的项目类型不支持合并支付", 2000); 
+      return;
+    } 
   };
   const iconClick = (item, i) => {
     if (props.zzz) {
