@@ -15,7 +15,6 @@
         <view class="fee f28 mt8">{{ item.fee }}元</view>
       </view>
       <view class="text-no-wrap number-box-content">
-      {{item.num}}
         <uni-number-box
           :value="item.num"
           :min="0"
