@@ -73,8 +73,6 @@
     patientId: '',
   });
   const hosName = ref('');
-  const t =
-    '借助上面的布局，下面所有分析只需要对文本B进行处理就行了。关于中间省略效果，目前还没有专门的 CSS 样式可以实现，不过可以模拟它，接着往下看';
 
   const submit = () => {
     // #ifdef  MP-WEIXIN
@@ -128,11 +126,9 @@
     }
   });
 
-  onLoad(() => {
-    if (gStores.globalStore.appShowData.query?.orderId) {
-      pageProps.value = {
-        ...gStores.globalStore.appShowData.query,
-      };
+  onLoad((opt) => {
+    if (opt && opt.orderId) {
+      pageProps.value = opt as any;
 
       init();
     }

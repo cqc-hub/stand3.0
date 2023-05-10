@@ -177,6 +177,9 @@
           "path": "clinicPay/medicalAuth",
           "style": {
             "navigationBarTitleText": "授权确认"
+          },
+          "extend": {
+            "patient": true
           }
         },
 

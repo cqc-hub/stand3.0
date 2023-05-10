@@ -100,7 +100,7 @@
 
   const payAfter = async (patientId) => {
     uni.showLoading({});
-    await wait(1000);
+    await wait(5000);
     uni.hideLoading();
     //去我的开单页面
     uni.reLaunch({
