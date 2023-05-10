@@ -144,7 +144,11 @@ import { Console } from 'console';
     // console.log("1111",o, chooseItem.value)
   };
 
-  const confirm = () => {
+  const confirm = () => { 
+    if(chooseItem.value.length==0){
+      gStores.messageStore.showMessage("请先选择需要购买的项目", 2000); 
+      return;
+    }
     //拦截一下不能合并缴费的
     const ids= new Set()
     chooseItem.value.map(item=>{
