@@ -68,6 +68,14 @@
 
         <view class="flex-normal footer-btns">
           <button
+            v-if="isShowYWZBtn(item)"
+            @click="goYWZ(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            预问诊
+          </button>
+
+          <button
             v-if="isShowReOrderBtn(item)"
             @click="goDoctorCard(item)"
             class="btn btn-round btn-size-small btn-border cancel-btn"
@@ -119,9 +127,11 @@
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
     showReOrderBtn: boolean;
+    isShowYuWzBtn: boolean;
     showFWBtn: string[];
     systemModeOld?: boolean;
   }>();
+  const emits = defineEmits(['ywz-click']);
 
   // 显示到院导航
   const isShowDaohan = (item: IRegistrationCardItem) => {
@@ -159,6 +169,10 @@
     return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
   };
 
+  const isShowYWZBtn = (item: IRegistrationCardItem) => {
+    return ['0'].includes(item.orderStatus) && props.isShowYuWzBtn;
+  };
+
   const goDoctorCard = (item: IRegistrationCardItem) => {
     const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
       item;
@@ -173,6 +187,10 @@
         hosDeptId,
       }),
     });
+  };
+
+  const goYWZ = (item: IRegistrationCardItem) => {
+    emits('ywz-click', item);
   };
 
   const goDetail = (item: IRegistrationCardItem) => {
@@ -191,7 +209,8 @@
       isFW(item) ||
       isCancelOrder(item) ||
       isPayOrder(item) ||
-      isShowReOrderBtn(item)
+      isShowReOrderBtn(item) ||
+      isShowYWZBtn(item)
     );
   };
 </script>

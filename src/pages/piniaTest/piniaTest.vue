@@ -139,9 +139,21 @@
     isLocal: '1',
   };
 
+  // 就诊后微信推送消息，用户填写问卷
+  const questionnaireAfterVisitDoc: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/question/questionAfterVisit',
+    text: '麻醉病历申请',
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(yonyao);
+      useTBanner(questionnaireAfterVisitDoc);
     }, 1000);
   });
 </script>

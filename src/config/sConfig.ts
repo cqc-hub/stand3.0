@@ -90,7 +90,7 @@ const scJson: Record<string, ISConfig> = {
    * 中国人民解放军新疆军区总医院
    */
   1001056: {
-    isOpenAlipayZndz:true,
+    isOpenAlipayZndz: true,
     medicalMHelp: {
       wx: {
         medicalNation: {
@@ -112,6 +112,13 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalPlugin: '1',
       },
+
+      alipay: {
+        medicalPlugin: {
+          orgId: { 1279: 'H33100300340' },
+          cardType: '01',
+        },
+      },
     },
   },
 
@@ -126,11 +133,11 @@ const scJson: Record<string, ISConfig> = {
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
   },
 
-   /**
+  /**
    * 西安红会
    */
-   1001055: {
-    isOpenAlipayZndz:true,
+  1001055: {
+    isOpenAlipayZndz: true,
   },
 };
 

@@ -239,22 +239,19 @@ export const getIsMedicalMode = () => {
     sConfig: { medicalMHelp },
   } = globalGl;
 
-  if (getIsMedicalModePlugin()) {
-    return true;
-  } else {
-    if (medicalMHelp) {
-      const { wx } = medicalMHelp;
+  if (getIsMedicalModePlugin()) return true;
+  if (medicalMHelp) {
+    const { wx } = medicalMHelp;
 
-      // #ifdef  MP-WEIXIN
-      if (wx) {
-        const { medicalPlugin, medicalNation } = wx;
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { medicalPlugin, medicalNation } = wx;
 
-        if (medicalPlugin === '1' || medicalNation) {
-          return true;
-        }
+      if (medicalPlugin === '1' || medicalNation) {
+        return true;
       }
-      // #endif
     }
+    // #endif
   }
 
   return false;
@@ -390,6 +387,7 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
+  // return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
@@ -520,7 +518,11 @@ export const isMedicalSelf = async (cardNumber: string): Promise<boolean> => {
       const { medicalNation, medicalPlugin } = wx;
 
       if (medicalNation || medicalPlugin) {
-        return await isCanUseMedicalNational();
+        if (medicalPlugin) {
+          return true;
+        } else {
+          return await isCanUseMedicalNational();
+        }
       }
     }
     // #endif

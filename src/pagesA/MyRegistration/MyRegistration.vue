@@ -6,6 +6,7 @@
     class="g-page"
   >
     <g-flag typeFg="405" isShowFg />
+    <g-message />
 
     <view class="flex-normal header g-border-bottom f32">
       <view
@@ -35,10 +36,12 @@
         <My-Registration-List-Card
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
+          :isShowYuWzBtn="isShowYuWzBtn"
           :showPaiDuiJiaoHaoBtn="showPaiDuiJiaoHaoBtn"
           :showReOrderBtn="isShowReOrderBtn"
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
+          @ywz-click="ywzClick"
         />
       </block>
 
@@ -133,7 +136,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    ISystemConfig,
+    TButtonConfig,
+    useTBanner,
+  } from '@/utils';
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 
@@ -167,6 +176,10 @@
 
   const isShowReOrderBtn = computed(
     () => orderConfig.value.isOpenReOrder === '1'
+  );
+
+  const isShowYuWzBtn = computed(
+    () => orderConfig.value.isOpenPreConsultation === '1'
   );
 
   const getStatusConfig = (status: OrderStatus) => {
@@ -207,6 +220,27 @@
     }
 
     list.value = result || [];
+  };
+
+  const ywzClick = async (item: IRegistrationCardItem) => {
+    const { orderId } = item;
+
+    const preConsultation: TButtonConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/inquiries/inquiriesRes1',
+      text: '预问诊',
+      extraData: {
+        orderId,
+      },
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+      },
+      isLocal: '1',
+    };
+
+    useTBanner(preConsultation);
   };
 
   const patientChange = async ({ item }) => {

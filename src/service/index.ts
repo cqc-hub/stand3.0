@@ -75,6 +75,10 @@ Request.interceptors.response(
     }
 
     const { code, message, functionVersion, signContent } = responseData;
+    console.log({
+      responseData
+    });
+
 
     //解密
     if (isDes && signContent) {

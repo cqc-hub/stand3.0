@@ -17,6 +17,7 @@ let parm = (data: any, payload: any = {}) => {
   const body = {
     sysCode: getSysCode(),
     herenId: globalStore.herenId,
+    psnId: globalStore.herenId,
     ...data,
   };
 
@@ -357,6 +358,9 @@ const regApi = {
   subPreinquiryMessage: (data: any) =>
     service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
+  getQnRecordTemp: (data: any) =>
+    service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
+
   addCollect: (data: any) =>
     service.post('/phs-reg/collect/addCollect', parm(data), {
       hideLoading: false,
@@ -525,7 +529,11 @@ const userApi = {
 
   // 注册电子健康卡
   regHealthCardByPatInfo: (data, opt = {}) =>
-    service.post('/phs-user/healthCard/regHealthCardByPatInfo', parm(data), opt),
+    service.post(
+      '/phs-user/healthCard/regHealthCardByPatInfo',
+      parm(data),
+      opt
+    ),
 
   // 快速关联电子健康卡
   quickLinkHealthCard: (data) =>
