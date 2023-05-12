@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx4d8f68fdc6b6831c",
+    "appid": "wxe26143481567cb97",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,21 +62,20 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.1.15",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true
   },
   "mp-alipay": {
     "usingComponents": true,
-    "appid": "",
+    "appid": "2021003154665105",
     "plugins": {
-      "codePlugin": {
+      "ocrPlugin": {
         "version": "*",
-        "provider": "2021003163608051"
+        "provider": "2021001130678316"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003167601013"
       }
     },
     "mergeVirtualHostAttributes": true
@@ -91,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "中国人民解放军新疆军区总医院",
+  "name": "台州市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

@@ -208,6 +208,7 @@
 
     if (result && result.length) {
       result.map(async (o) => {
+        // o.orderStatus = '0';
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           orderConfig.value.isOrderPay
@@ -272,8 +273,6 @@
 
     if (_firstIn) {
       const o = gStores.userStore.patChoose;
-      console.log(gStores.userStore);
-
       _firstIn = false;
       selPatId.value = getPatLabel(o);
     }
