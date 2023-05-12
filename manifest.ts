@@ -53,8 +53,8 @@ if (isOpenOcr) {
 
 if(isOpenAlipayZndz){
   //支付宝-分诊插件
-  aliPlugin.codePlugin={ 
-    "version": "*", // 目前只支持设置 * 拉取当前上架最新版本 
+  aliPlugin.codePlugin={
+    "version": "*", // 目前只支持设置 * 拉取当前上架最新版本
     "provider": "2021003163608051"
   }
 }

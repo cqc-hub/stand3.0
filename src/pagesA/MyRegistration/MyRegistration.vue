@@ -224,7 +224,7 @@
   };
 
   const ywzClick = async (item: IRegistrationCardItem) => {
-    const { orderId } = item;
+    const { orderId, hosDeptId } = item;
 
     const preConsultation: TButtonConfig = {
       type: 'h5',
@@ -233,6 +233,7 @@
       text: '预问诊',
       extraData: {
         orderId,
+        hosDeptId
       },
       addition: {
         token: 'token',
