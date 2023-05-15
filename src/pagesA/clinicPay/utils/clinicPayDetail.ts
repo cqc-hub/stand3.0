@@ -387,7 +387,7 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
-  // return true;
+  return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
