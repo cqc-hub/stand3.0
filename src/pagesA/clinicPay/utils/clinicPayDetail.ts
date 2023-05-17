@@ -387,7 +387,7 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
-  return true;
+  // return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
@@ -1069,6 +1069,7 @@ export const usePayPage = () => {
       const { medicalPlugin } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
+
       // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
       const hosId = selUnPayList.value[0].hosId;
       const orgId = medicalPlugin!.orgId[hosId];
