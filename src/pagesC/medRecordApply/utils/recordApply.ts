@@ -183,6 +183,7 @@ export type CaseCopeItemDetail = Flatten<
     copyAim: string;
     detailedAddress: deParams;
     handIdCardUrl: string;
+    handIdCardFrontUrl: string;
     censusRegisterUrl: string;
     endIdCardUrl: string;
     frontIdCardUrl: string;

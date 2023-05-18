@@ -131,6 +131,15 @@ const scJson: Record<string, ISConfig> = {
       path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',
     },
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1G8FTSHFR0F63F60C80A00003310E195'
+        },
+        medicalDefault: '1',
+      },
+    },
   },
 
   /**

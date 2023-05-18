@@ -1,3 +1,4 @@
+
 import { type XOR } from '@/typeUtils/obj';
 
 /**
@@ -297,4 +298,4 @@ export interface IReportConfigTab {
   headerName: string;
 }
 
-type TMedRecordSfz = 'front' | 'end' | 'handler' | 'hkb';
+type TMedRecordSfz = 'front' | 'end' | 'handler' | 'handlerBack' | 'hkb';
