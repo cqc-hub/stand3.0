@@ -143,7 +143,7 @@ const scJson: Record<string, ISConfig> = {
   },
 
   /**
-   * 西安红会
+   * 联勤保障部队第987医院
    */
   1001055: {
     isOpenAlipayZndz: true,

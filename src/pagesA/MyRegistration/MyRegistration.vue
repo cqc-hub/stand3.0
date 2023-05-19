@@ -239,7 +239,7 @@
         token: 'token',
         herenId: 'herenId',
       },
-      isLocal: '1',
+      // isLocal: '1',
     };
 
     useTBanner(preConsultation);

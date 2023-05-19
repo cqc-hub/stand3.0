@@ -74,18 +74,19 @@
                     </view>
                   </view>
 
-                  <view class="flex-normal">
-                    <view
+                  <view>
+                    <text
                       :class="{
                         'g-split-line': docDetail.deptName,
                       }"
                       class="color-444 f28 mr12 pr12"
                     >
                       {{ $global.systemInfo.name || '' }}
-                    </view>
-                    <view class="color-444 f28">
+                    </text>
+
+                    <text class="color-444 f28">
                       {{ docDetail.deptName || '' }}
-                    </view>
+                    </text>
                   </view>
                 </view>
 

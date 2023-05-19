@@ -605,6 +605,7 @@
 
       case 'medicare':
         const isMedicalMode = getIsMedicalMode();
+
         if (isMedicalMode) {
           // #ifdef  MP-WEIXIN
           if (!getIsMedicalModePlugin()) {
