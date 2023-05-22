@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxea8552a036115576",
+    "appid": "wx7b1baac614ebed72",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,13 +62,19 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.1.15",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true
   },
   "mp-alipay": {
     "usingComponents": true,
     "plugins": {},
-    "mergeVirtualHostAttributes": true
+    "mergeVirtualHostAttributes": true,
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -80,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "濮阳市五院",
+  "name": "西安市红会医院",
   "h5": {
     "router": {
       "base": "./"
