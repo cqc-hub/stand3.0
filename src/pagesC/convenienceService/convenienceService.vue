@@ -80,7 +80,7 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import ChoosePopup from './components/ChoosePopup.vue';
-  import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { GStores, debounce, ServerStaticData } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
@@ -92,6 +92,7 @@ import { Console } from 'console';
   interface IPageProps {
     hosId: string;
     hosName: string;
+    pageTitle?:string;
   }
   const pageProps = ref(<IPageProps>{});
   const aaa = ref('' as any);
@@ -184,9 +185,12 @@ import { Console } from 'console';
   const init = async () => {
     await getListData();
   };
-
+ 
   onLoad((p) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+      uni.setNavigationBarTitle({
+        title:  pageProps.value.pageTitle || '便民服务',
+      });
   });
 
   onShow(() => {
