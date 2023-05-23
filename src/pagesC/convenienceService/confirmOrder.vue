@@ -40,19 +40,19 @@
         <view class="fg-agree-text">
           <text @click.stop="flagClick">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
-            《{{flagTitle}}》
+            《{{ flagTitle }}》
           </text>
         </view>
       </view>
-     <view class="flex-between">
-      <view class="amount">
+      <view class="flex-between">
+        <view class="amount">
           <text class="f28 color-444 mr8">合计</text>
           <text class="money f36 color-error g-bold">{{ totalMoney }}元</text>
         </view>
         <button class="btn g-bord btn-primary f36" @click="confirm">
           <text>缴费</text>
         </button>
-     </view>
+      </view>
     </view>
 
     <Order-Reg-Confirm
@@ -68,6 +68,10 @@
         aaa
       />
     </Order-Reg-Confirm>
+
+    <!-- #ifdef MP-ALIPAY-->
+    <g-flag v-model:title="flagTitle" typeFg="1008" />
+    <!-- #endif-->
   </view>
 </template>
 
@@ -97,7 +101,6 @@
   const lists = ref<IConfirmList[]>(JSON.parse(props.lists) || []);
 
   const confirm = async () => {
-
     if (!isCheck.value) {
       regDialogConfirm.value.show();
       return;
@@ -161,7 +164,6 @@
       regDialogConfirm.value.show();
     }
   };
-
 </script>
 <style lang="scss" scoped>
   .top {
@@ -194,22 +196,21 @@
       align-items: flex-start;
       padding: 24rpx 32rpx 0;
 
-    .fg-agree-name {
-      color: var(--hr-brand-color-6);
-    }
-
-    .check-box {
-      color: var(--hr-neutral-color-7);
-      font-size: var(--h-size-40);
-      margin-right: 4rpx;
-      transform: translateY(-5rpx);
-
-      &.is-check {
+      .fg-agree-name {
         color: var(--hr-brand-color-6);
       }
-    }
-  }
 
+      .check-box {
+        color: var(--hr-neutral-color-7);
+        font-size: var(--h-size-40);
+        margin-right: 4rpx;
+        transform: translateY(-5rpx);
+
+        &.is-check {
+          color: var(--hr-brand-color-6);
+        }
+      }
+    }
   }
   .icon-2 {
     color: #fff;
