@@ -2,6 +2,7 @@
   <view class="g-page">
     <home-Nav />
     <scroll-view class="scroll-page g-container" scroll-y>
+      <button @click="homeH5SharePopupRef.show">233</button>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
         :loading="skeletonProps.loading"
@@ -304,6 +305,8 @@
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
+    <homeH5SharePopup ref="homeH5SharePopupRef" />
+
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
 </template>
@@ -339,6 +342,7 @@
   import homeGrid from './componetns/homeGrid.vue';
   import homeNav from './componetns/homeNav.vue';
   import homePopup from './componetns/homePopup.vue';
+  import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
 
   const props = defineProps<{
     code?: string;
@@ -347,6 +351,7 @@
   const gStores = new GStores();
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
+  const homeH5SharePopupRef = ref('' as any);
 
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;

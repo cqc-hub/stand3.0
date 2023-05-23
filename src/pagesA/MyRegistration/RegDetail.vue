@@ -102,14 +102,14 @@
           <view class="container-box g-border container-box1">
             <view
               v-if="isShowQr"
-              class="qr-code g-flex-rc-cc g-border-bottom m32"
+              class="qr-code g-flex-rc-cc g-border-bottom m32 flex1"
             >
               <view class="my-display-none">
                 <w-qrcode :options="_qrCodeOpt" ref="refqrcode" />
                 <w-barcode :options="_barCodeOpt" ref="refqrbarcode" />
               </view>
 
-              <view class="qr g-flex-rc-cc">
+              <view class="qr g-flex-rc-cc flex1">
                 <image
                   v-if="showQrCode"
                   :src="qrCodeOpt._qrImg"
@@ -120,6 +120,7 @@
                   v-if="!showQrCode"
                   :src="qrCodeOpt._barImg"
                   mode="widthFix"
+                  class="barcode-img flex1"
                 />
               </view>
 
@@ -531,6 +532,7 @@
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
+    await wait(700);
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: gStores.globalStore.browser.source,
@@ -1131,6 +1133,9 @@
     .qrcode-img {
       width: 320rpx;
       height: 320rpx;
+    }
+    .barcode-img {
+      width: 600rpx;
     }
   }
 
