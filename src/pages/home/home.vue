@@ -2,7 +2,7 @@
   <view class="g-page">
     <home-Nav />
     <scroll-view class="scroll-page g-container" scroll-y>
-      <button @click="homeH5SharePopupRef.show">233</button>
+      <!-- <button @click="homeH5SharePopupRef.show">233</button> -->
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
         :loading="skeletonProps.loading"
