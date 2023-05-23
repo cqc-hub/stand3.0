@@ -332,8 +332,10 @@
     getIsMedicalMode,
     TWxAuthorize,
     getQxMedicalNation,
-    getIsMedicalModePlugin,
+    isMedicalSelf,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+
+  import globalGl from '@/config/global';
 
   import api from '@/service/api';
 
@@ -373,6 +375,23 @@
     _barImg: '',
     _qrImg: '',
   });
+
+  /** 医保挂号? */
+  const _getIsMedicalMode = () => {
+    if (getIsMedicalMode()) {
+      const medicalMHelp = globalGl.sConfig.medicalMHelp!;
+
+      // #ifdef  MP-WEIXIN
+      return medicalMHelp.wx?.isMedicalOrder === '1';
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      return medicalMHelp.alipay?.isMedicalOrder === '1';
+      // #endif
+    } else {
+      return false;
+    }
+  };
 
   const _qrCodeOpt = computed(() => {
     const _v = qrCodeOpt.value;
@@ -581,14 +600,15 @@
 
   const payOrder = async () => {
     // 先只做微信国标模式
-    // #ifdef  MP-WEIXIN
-    const isMedicalMode = getIsMedicalMode();
-    if (isMedicalMode && !getIsMedicalModePlugin()) {
+    const isMedicalMode = _getIsMedicalMode();
+    const { cardNumber } = gStores.userStore.patChoose;
+    const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
+
+    if (isMedicalMode && isSelf) {
       changeRefPayList(1);
     } else {
       changeRefPayList(0);
     }
-    // #endif
 
     setTimeout(() => {
       refPay.value.show();
@@ -604,14 +624,12 @@
         break;
 
       case 'medicare':
-        const isMedicalMode = getIsMedicalMode();
+        const isMedicalMode = _getIsMedicalMode();
 
         if (isMedicalMode) {
           // #ifdef  MP-WEIXIN
-          if (!getIsMedicalModePlugin()) {
-            const authorize = await getQxMedicalNation();
-            medicalNationWx(authorize);
-          }
+          const authorize = await getQxMedicalNation();
+          medicalNationWx(authorize);
           // #endif
         }
 
@@ -623,7 +641,23 @@
   };
 
   const medicalNationWx = async (payload: TWxAuthorize) => {
-    console.log(payload, 'cqc');
+    const { hosId, orderId } = orderRegInfo.value;
+    const { userLongitudeLatitude, payAuthNo } = payload;
+    const { source } = gStores.globalStore.browser;
+
+    const requestArg = {
+      ...userLongitudeLatitude,
+      accountUseFlag: true,
+      businessType: 3,
+      hosId,
+      orderId,
+      payAuthNo,
+      source,
+    };
+
+    const { result } = await api.medicalUp(requestArg);
+
+    console.log(result, 'cqc');
   };
 
   /** 自费挂号 */
@@ -787,13 +821,34 @@
     goDoctorCard();
   };
 
-  onShow(() => {
+  onShow(async () => {
     if (getLocalStorage('reg-detail-init') === '1') {
       setLocalStorage({
         'reg-detail-init': '',
       });
 
       init();
+    }
+
+    // 微信医保小程序跳回来后中断了链路 重新走下
+    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+      await wait(300);
+      setLocalStorage({
+        'get-wx-medical-auth-code': '',
+      });
+
+      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+        getPayInfo({
+          item: {
+            key: 'medicare',
+            label: '',
+          },
+        });
+      } else {
+        gStores.messageStore.showMessage(
+          '未完成电子医保凭证授权,无法继续医保结算'
+        );
+      }
     }
   });
 

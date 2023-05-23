@@ -24,6 +24,9 @@ interface ISConfig {
       };
 
       medicalDefault?: '1';
+
+      /** 挂号医保 */
+      isMedicalOrder?: '1';
     };
 
     wx?: {
@@ -39,6 +42,9 @@ interface ISConfig {
 
       /** 默认是医保? (个别项目后端不能返回 医保标签, 前端数据手动加上但是页面不显示医保标签) */
       medicalDefault?: '1';
+
+      /** 挂号医保 */
+      isMedicalOrder?: '1';
     };
   };
 
@@ -60,6 +66,19 @@ interface ISConfig {
    *
    * */
   medicalCardDetailPackageDomain?: `http${string}`;
+
+  /**
+   * 首页配置
+   */
+  home?: {
+    /** 关注公众号 */
+    h5Guide?: {
+      // 公众号名称
+      h5Name: string;
+      // 公众号二维码图片
+      h5QrCodeImg: string;
+    };
+  };
 }
 
 const scJson: Record<string, ISConfig> = {
@@ -74,6 +93,13 @@ const scJson: Record<string, ISConfig> = {
           orgId: { 13001: 'H33038200118' },
           cardType: '01',
         },
+      },
+    },
+
+    home: {
+      h5Guide: {
+        h5Name: '乐清市人民医院公众号',
+        h5QrCodeImg: '',
       },
     },
   },
@@ -135,9 +161,10 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1G8FTSHFR0F63F60C80A00003310E195'
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1G8FTSHFR0F63F60C80A00003310E195',
         },
         medicalDefault: '1',
+        isMedicalOrder: '1',
       },
     },
   },

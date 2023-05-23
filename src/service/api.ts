@@ -376,6 +376,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  medicalUp: (data: any) =>
+    service.post('/phs-reg/medical/medicalUp', parm(data), {
+      hideLoading: false,
+    }),
+
   addRegSatisfaction: (data: any) =>
     service.post('/phs-reg/regSatisfaction/addRegSatisfaction', parm(data), {
       hideLoading: false,

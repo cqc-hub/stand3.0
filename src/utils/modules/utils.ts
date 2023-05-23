@@ -7,6 +7,11 @@ import {
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 
+export const compose =
+  (...fns) =>
+  (arg) =>
+    fns.reduce((acc, fn) => fn(acc), arg);
+
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
 export const debounce = function (func, wait = 1000, immediate = true): any {
