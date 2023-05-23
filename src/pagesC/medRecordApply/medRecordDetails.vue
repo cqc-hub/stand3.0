@@ -151,7 +151,39 @@
                   class="g-flex-rc-cc flex-column f24"
                 >
                   <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>手持身份证照片</view>
+                  <view>手持身份证人像面</view>
+                </view>
+              </view>
+
+              <view
+                v-if="pageConfig.sfz.includes('handlerBack')"
+                @click="chooseIdCardBackHandler"
+                class="up-idcard g-border g-flex-rc-cc mb16"
+              >
+                <view
+                  v-if="idCardImg.handIdCardFrontUrl"
+                  @click.stop="idCardImg.handIdCardFrontUrl = ''"
+                  class="iconfont delete-icon"
+                >
+                  &#xe6fa;
+                </view>
+                <image
+                  v-if="idCardImg.handIdCardFrontUrl"
+                  :src="dealImg(idCardImg.handIdCardFrontUrl)"
+                />
+
+                <image
+                  v-else
+                  :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
+                  class="idcard-bg my-disabled"
+                />
+
+                <view
+                  v-if="!idCardImg.handIdCardFrontUrl"
+                  class="g-flex-rc-cc flex-column f24"
+                >
+                  <view class="iconfont camera-icon">&#xe6be;</view>
+                  <view>手持身份证国徽面</view>
                 </view>
               </view>
             </view>
@@ -492,6 +524,7 @@
     frontIdCardUrl: '',
     endIdCardUrl: '',
     handIdCardUrl: '',
+    handIdCardFrontUrl: '',
     censusRegisterUrl: '',
   });
 
@@ -587,6 +620,14 @@
 
     if (res.success) {
       idCardImg.value.handIdCardUrl = res.path;
+    }
+  };
+
+  const chooseIdCardBackHandler = async () => {
+    const res = await chooseImg();
+
+    if (res.success) {
+      idCardImg.value.handIdCardFrontUrl = res.path;
     }
   };
 
@@ -721,8 +762,13 @@
 
   const paySubmit = async () => {
     const { sfz, requireSfz, isPurposeRadio } = pageConfig.value;
-    let { frontIdCardUrl, endIdCardUrl, handIdCardUrl, censusRegisterUrl } =
-      idCardImg.value;
+    let {
+      frontIdCardUrl,
+      endIdCardUrl,
+      handIdCardUrl,
+      handIdCardFrontUrl,
+      censusRegisterUrl,
+    } = idCardImg.value;
     const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
 
     if (!addressList.value.length) {
@@ -742,7 +788,11 @@
       },
       handler: {
         url: handIdCardUrl,
-        message: '手持身份证',
+        message: '手持身份证人像面',
+      },
+      handlerBack: {
+        url: handIdCardFrontUrl,
+        message: '手持身份证国徽面',
       },
       hkb: {
         url: censusRegisterUrl,
@@ -827,6 +877,11 @@
         const { url } = await upImgOss(censusRegisterUrl, {});
         idCardImg.value.censusRegisterUrl = url;
       }
+
+      if (handIdCardFrontUrl && isUnImageUpLoaded(handIdCardFrontUrl)) {
+        const { url } = await upImgOss(handIdCardFrontUrl, {});
+        idCardImg.value.handIdCardFrontUrl = url;
+      }
     } catch (error) {
       console.error({
         error,
@@ -857,6 +912,7 @@
       frontIdCardUrl: idCardImg.value.frontIdCardUrl,
       endIdCardUrl: idCardImg.value.endIdCardUrl,
       handIdCardUrl: idCardImg.value.handIdCardUrl,
+      handIdCardFrontUrl: idCardImg.value.handIdCardFrontUrl,
       censusRegisterUrl: idCardImg.value.censusRegisterUrl,
       fee: getPayMoneyNum.value,
       hosId: _hosId.value,
@@ -932,6 +988,7 @@
       frontIdCardUrl,
       endIdCardUrl,
       handIdCardUrl,
+      handIdCardFrontUrl,
       censusRegisterUrl,
       outInfo,
       copyAim,
@@ -939,25 +996,19 @@
       remark: _remark,
     } = result;
 
-    if (printCount) {
-      purposeCount.value = JSON.parse(printCount as any);
-    }
+    printCount && (purposeCount.value = JSON.parse(printCount as any));
 
-    if (frontIdCardUrl) {
-      idCardImg.value.frontIdCardUrl = frontIdCardUrl;
-    }
+    frontIdCardUrl && (idCardImg.value.frontIdCardUrl = frontIdCardUrl);
 
-    if (censusRegisterUrl) {
-      idCardImg.value.censusRegisterUrl = censusRegisterUrl;
-    }
+    censusRegisterUrl &&
+      (idCardImg.value.censusRegisterUrl = censusRegisterUrl);
 
-    if (endIdCardUrl) {
-      idCardImg.value.endIdCardUrl = endIdCardUrl;
-    }
+    endIdCardUrl && (idCardImg.value.endIdCardUrl = endIdCardUrl);
 
-    if (handIdCardUrl) {
-      idCardImg.value.handIdCardUrl = handIdCardUrl;
-    }
+    handIdCardUrl && (idCardImg.value.handIdCardUrl = handIdCardUrl);
+
+    handIdCardFrontUrl &&
+      (idCardImg.value.handIdCardFrontUrl = handIdCardFrontUrl);
 
     aimValue.value = copyAim.split('、');
 

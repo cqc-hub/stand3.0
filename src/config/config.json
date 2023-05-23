@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001059",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -155,6 +155,13 @@
       "isSearchInHos": false,
       "isOpenOcr": false,
       "isStartComeTest": true
+    },
+
+    "1001059": {
+      "wxAppid": "wxea8552a036115576",
+      "name": "濮阳市第五人民医院",
+      "isSearchInHos": false,
+      "isOpenOcr": false
     }
   }
 }

@@ -63,8 +63,9 @@
       </view>
 
       <view v-if="isShowFooter(item)" class="footer flex-between btn-normal">
-        <!-- 70 82 -->
-        <view class="f36 color-error g-bold">{{ item.fee }}元</view>
+        <view class="f36 color-error g-bold">
+        <!-- {{ item.fee }}元 -->
+        </view>
 
         <view class="flex-normal footer-btns">
           <button

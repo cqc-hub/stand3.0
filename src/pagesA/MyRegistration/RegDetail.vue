@@ -261,23 +261,7 @@
       </block>
 
       <button
-        v-if="orderRegInfo.orderStatus === '45'"
-        class="btn g-border btn-primary"
-        @click="againOrder"
-      >
-        再次预约
-      </button>
-
-      <button
-        v-if="['23', '43', '42'].includes(orderRegInfo.orderStatus)"
-        class="btn g-border btn-primary"
-        @click="againOrder"
-      >
-        再次预约
-      </button>
-
-      <button
-        v-if="orderRegInfo.orderStatus === '20'"
+        v-if="['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus)"
         class="btn g-border btn-primary"
         @click="againOrder"
       >
@@ -300,8 +284,9 @@
       autoInOne
       ref="refPay"
     >
-      <!-- auto -->
-      <!-- <g-flag typeFg="32" isShowFgTip /> -->
+      <view class="p32">
+        <g-flag typeFg="49" isShowFgTip isHideTitle aaa />
+      </view>
     </g-pay>
     <g-message />
   </view>
@@ -341,11 +326,14 @@
     getStatusConfig,
     getOrderStatusTitle,
   } from './utils/regDetail';
+  import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
   import {
-    type IGPay,
-    payMoneyOnline,
-    toPayPull,
-  } from '@/components/g-pay/index';
+    usePayPage,
+    getIsMedicalMode,
+    TWxAuthorize,
+    getQxMedicalNation,
+    getIsMedicalModePlugin,
+  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import api from '@/service/api';
 
@@ -369,12 +357,9 @@
       orderRegInfo.value.orderStatus
     )
   );
-  const refPayList = ref([
-    {
-      label: '在线支付',
-      key: 'online',
-    },
-  ]);
+
+  const { refPayList, changeRefPayList, wxPayMoneyMedicalPlugin } =
+    usePayPage();
 
   const qrCodeOpt = ref({
     // 二维码
@@ -595,12 +580,59 @@
   };
 
   const payOrder = async () => {
+    // 先只做微信国标模式
+    // #ifdef  MP-WEIXIN
+    const isMedicalMode = getIsMedicalMode();
+    if (isMedicalMode && !getIsMedicalModePlugin()) {
+      changeRefPayList(1);
+    } else {
+      changeRefPayList(0);
+    }
+    // #endif
+
+    setTimeout(() => {
+      refPay.value.show();
+    });
+  };
+
+  const getPayInfo = async ({ item }: { item: IGPay }) => {
+    const { key } = item;
+
+    switch (key) {
+      case 'online':
+        toPay();
+        break;
+
+      case 'medicare':
+        const isMedicalMode = getIsMedicalMode();
+
+        if (isMedicalMode) {
+          // #ifdef  MP-WEIXIN
+          if (!getIsMedicalModePlugin()) {
+            const authorize = await getQxMedicalNation();
+            medicalNationWx(authorize);
+          }
+          // #endif
+        }
+
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const medicalNationWx = async (payload: TWxAuthorize) => {
+    console.log(payload, 'cqc');
+  };
+
+  /** 自费挂号 */
+  const toPay = async () => {
     const {
       herenId,
       browser: { source },
     } = gStores.globalStore;
     const { orderId } = pageProps.value;
-
     const arg = {
       herenId,
       source,
@@ -608,9 +640,7 @@
     };
 
     const { result } = await api.orderPayValid(arg);
-
     if (result && result.paySign) {
-      // getPayInfo
       const { hosId, fee } = orderRegInfo.value;
       payArg.value = {
         phsOrderNo: orderId,
@@ -620,18 +650,10 @@
         phsOrderSource: '1',
       };
 
-      refPay.value.show();
+      const res = await payMoneyOnline({ ...payArg.value });
+      await toPayPull(res, '挂号缴费');
+      payAfter();
     }
-  };
-
-  const getPayInfo = () => {
-    toPay();
-  };
-
-  const toPay = async () => {
-    const res = await payMoneyOnline({ ...payArg.value });
-    await toPayPull(res, '挂号缴费');
-    payAfter();
   };
 
   const payAfter = async () => {
