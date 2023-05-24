@@ -38,7 +38,8 @@ const aliPlugin: any = {};
 if (isOpenHealthCard) {
   // 电子健康卡
   wxPlugin.healthCardPlugins = {
-    version: '3.1.15',
+    // version: '3.1.15',
+    version: '3.11.0',
     provider: 'wxee969de81bba9a45',
   };
 }
