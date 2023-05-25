@@ -76,9 +76,8 @@ Request.interceptors.response(
 
     const { code, message, functionVersion, signContent } = responseData;
     console.log({
-      responseData
+      responseData,
     });
-
 
     //解密
     if (isDes && signContent) {
@@ -145,7 +144,11 @@ Request.interceptors.response(
   },
   (err) => {
     const messageStore = useMessageStore();
-    messageStore.showMessage(err.data.message, 3000);
+
+    messageStore.showMessage(
+      err.data.message || err.data.error || '服务异常',
+      3000
+    );
     uni.hideLoading();
 
     return err.data;

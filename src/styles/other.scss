@@ -1,12 +1,16 @@
-.text-ellipsis {
+@mixin text-overflow($line: 1) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: $line;
   overflow: hidden;
 }
 
+.text-ellipsis {
+  @include text-overflow(1);
+}
+
 .ellipsis-line-clamp2 {
-  -webkit-line-clamp: 2;
+  @include text-overflow(2);
 }
 
 .text-no-wrap {
@@ -21,7 +25,7 @@
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     display: inline-block;
     width: 1rpx;
     height: 24rpx;
@@ -70,7 +74,6 @@
   /* #endif */
   transform: rotate(45deg);
 }
-
 
 .icon-arrow {
   height: 20rpx;
@@ -257,8 +260,6 @@
   margin-right: 60rpx !important;
 }
 
-
-
 .m32v {
   margin-top: 32rpx !important;
   margin-bottom: 32rpx !important;
@@ -360,7 +361,6 @@
 .f44 {
   font-size: 44rpx !important;
 }
-
 
 .f48 {
   font-size: var(--hr-font-size-xxl) !important;
