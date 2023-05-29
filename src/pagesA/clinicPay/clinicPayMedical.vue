@@ -101,6 +101,7 @@
         totalCost: string;
         params?: string;
         extend: TWxAuthorize;
+        orderId?: string; // 挂号医保进来
       }
     >{}
   );
@@ -138,19 +139,21 @@
         personalPayFee,
         phsOrderNo,
         requestContent,
+        regAppTradeNo,
         serialNo: hisSerialNo,
       } = uploadRes.value;
       const { source } = gStores.globalStore.browser;
 
       const openId = await getOpenId();
 
-      const returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+      let returnUrl = joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
         tabIndex: '1',
         params,
         // hosp_out_trade_no:
       });
 
       const requestArg = {
+        regAppTradeNo,
         channel,
         cardNumber,
         extend:
@@ -214,7 +217,7 @@
 
     await wait(3000);
     uni.hideLoading();
-    const { phsOrderSource, params } = info.value;
+    const { phsOrderSource, params, orderId } = info.value;
     const { phsOrderNo } = uploadRes.value;
 
     const { result } = await api.payResult<any>({
@@ -234,11 +237,24 @@
           confirmText: '返回',
           complete: async () => {
             await wait(300);
-            uni.reLaunch({
-              url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+
+            let returnUrl = joinQueryForUrl(
+              '/pagesA/clinicPay/clinicPayDetail',
+              {
                 tabIndex: '1',
                 params,
-              }),
+              }
+            );
+
+            // 挂号医保进来
+            if (orderId) {
+              returnUrl = joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+                orderId,
+              });
+            }
+
+            uni.reLaunch({
+              url: returnUrl,
             });
           },
         });

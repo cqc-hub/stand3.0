@@ -660,6 +660,23 @@
     const { result } = await api.medicalUp(requestArg);
 
     console.log(result, 'cqc');
+
+    const info = {
+      ...hosInfo.value,
+      ...orderRegInfo.value,
+      totalCost: result.totalFee,
+      extend: payload,
+      phsOrderSource: '1',
+    };
+
+    gStores.globalStore.assignCacheData({
+      uploadRes: result,
+      info,
+    });
+
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayMedical',
+    });
   };
 
   /** 自费挂号 */

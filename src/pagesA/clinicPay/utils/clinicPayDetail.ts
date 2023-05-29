@@ -169,6 +169,7 @@ export type TMedicalNationUploadRes = {
   idType: string;
   payOrderId: string;
   serialNo: string;
+  regAppTradeNo?: string;
 };
 
 /** 是否医保插件模式 */

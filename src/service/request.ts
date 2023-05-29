@@ -74,7 +74,8 @@ class requestClass {
     options: UniApp.RequestOptions & { baseURL?: string }
   ): Promise<IResData<T>> {
     options.baseURL = options.baseURL || this[config].baseURL;
-    options.dataType = options.dataType || this[config].dataType;
+    // options.dataType = options.dataType || this[config].dataType;
+    // options.dataType = 'string';
     options.url = requestClass[isCompleteURL](options.url)
       ? options.url
       : options.baseURL + options.url;

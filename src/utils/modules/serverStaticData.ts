@@ -167,16 +167,16 @@ export const useTBanner = async (
     // #endif
   } else if (type === 'self') {
     let url;
-    if(fullUrl.indexOf('plugin')>-1){
-    // 新增判断 如果path里面包含plugin 就不用拼接了
+    if (fullUrl.indexOf('plugin') > -1) {
+      // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
-    }else{
-       url = `/${fullUrl}`;
+    } else {
+      url = `/${fullUrl}`;
     }
     uni[routeType]({
       url,
     });
-  }  else {
+  } else {
     uni.navigateToMiniProgram({
       appId: appId!,
       path,

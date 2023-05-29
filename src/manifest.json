@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx4d8f68fdc6b6831c",
+    "appid": "wx7b1baac614ebed72",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -72,14 +72,9 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "plugins": {
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -91,7 +86,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "中国人民解放军新疆军区总医院",
+  "name": "西安市红会医院",
   "h5": {
     "router": {
       "base": "./"
