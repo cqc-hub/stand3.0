@@ -522,6 +522,8 @@
   };
 
   let init = async () => {
+    uni.showLoading({});
+    await wait(800);
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
     qrCodeOpt.value.code = '';
@@ -532,7 +534,6 @@
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    await wait(700);
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: gStores.globalStore.browser.source,
@@ -574,13 +575,13 @@
       }
     });
 
-    setTimeout(() => {
-      formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
-      formatterTemp(patientTempList, gStores.globalStore.modeOld);
+    formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
+    formatterTemp(patientTempList, gStores.globalStore.modeOld);
 
+    setTimeout(() => {
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(patientTempList);
-    }, 300);
+    }, 600);
   };
 
   init = debounce(init, 200, false);
@@ -872,6 +873,7 @@
   });
 
   onLoad((p) => {
+    uni.showLoading({});
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     init();
   });

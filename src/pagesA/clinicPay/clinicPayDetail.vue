@@ -314,6 +314,8 @@
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
+    uni.showLoading({});
+
     if (queryParams && !opt.params) {
       return;
     }
