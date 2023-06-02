@@ -42,6 +42,8 @@ export interface ISystemConfig {
     isOpenBigDataNearlyYear?: '1';
     // 评论
     isOpenComment?: '1';
+    //排班页面是否隐藏号源的总量余量
+    isHideNumberSourceTotalRemain?: '1';
 
     /** 挂号记录 */
     // 显示院内导航按钮? 挂号状态 string

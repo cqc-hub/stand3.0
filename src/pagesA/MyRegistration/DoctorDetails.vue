@@ -182,6 +182,7 @@
                       class="sch-item mb8 animate__animated animate__fadeIn"
                     >
                       <Doc-Sch-Item
+                        :pageConfig="pageConfig"
                         :item="item"
                         :systemModeOld="gStores.globalStore.modeOld"
                         @reg-click="(scheme) => regClick({ scheme })"
@@ -221,6 +222,7 @@
                         class="sch-item mb8"
                       >
                         <Doc-Sch-Item
+                          :pageConfig="pageConfig"
                           :item="item"
                           :systemModeOld="gStores.globalStore.modeOld"
                           @reg-click="regClick"
@@ -321,6 +323,7 @@
     <Order-Pre-Source
       v-model:show="isOrderPreSourceShow"
       :list="preregistrationRegNumbers"
+      :pageConfig="orderConfig"
       @item-click="goPreregistration"
     />
     <g-message />

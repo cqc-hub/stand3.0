@@ -15,6 +15,7 @@
           >
             <Doc-Shc-Item
               :item="_item"
+              :pageConfig="pageConfig"
               :systemModeOld="systemModeOld"
               @reg-click="regClick"
             />
@@ -33,6 +34,10 @@
   import DocShcItem from '../DoctorDetails/DocShcItem.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
+  import { 
+    type ISystemConfig,
+  } from '@/utils';
+
   const emits = defineEmits([
     'reg-click',
     'avatar-click',
@@ -41,6 +46,7 @@
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;
+    pageConfig:ISystemConfig['order'];
     systemModeOld?: boolean;
   }>();
 

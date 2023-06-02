@@ -44,6 +44,7 @@
             >
               <Order-Doc-Item-Date
                 :item="__item"
+                :pageConfig="orderConfig"
                 :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
                 @avatar-click="avatarClick"
@@ -71,10 +72,11 @@
       @am-change="amChange"
       ref="selectOrderSource"
     />
-
+   这里{{orderConfig.isHideOutTimeOrderSource}}
     <Order-Pre-Source
       v-model:show="isOrderPreSourceShow"
       :list="preregistrationRegNumbers"
+      :pageConfig="orderConfig"
       @item-click="goPreregistration"
     />
     <g-message />
