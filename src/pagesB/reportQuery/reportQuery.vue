@@ -75,10 +75,24 @@
         </scroll-list>
       </swiper-item>
     </swiper>
+
+    <view v-if="footBtns.length" class="g-footer">
+      <button
+        v-for="(btn, bi) in footBtns"
+        :key="btn.text + tabCurrent"
+        @click="useTBanner(btn)"
+        :class="{
+          flex2: bi,
+        }"
+        class="btn btn-primary flex1"
+      >
+        {{ btn.text }}
+      </button>
+    </view>
   </view>
 </template>
 <script lang="ts" setup>
-  import { ref, nextTick } from 'vue';
+  import { ref, nextTick, computed } from 'vue';
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
   import { onLoad } from '@dcloudio/uni-app';
@@ -88,6 +102,8 @@
     wait,
     ISystemConfig,
     TBannerConfig,
+    TButtonConfig,
+    useTBanner,
   } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import api from '@/service/api';
@@ -95,7 +111,7 @@
   const tabs = ref<ITab[]>([]);
   const tabCurrent = ref(0);
   const pageList = ref<Record<string, ICms[]>>({});
-  const _typeId = ref('');
+  const _typeId = ref(0);
   const slist = ref<any>('');
   const loading = ref(true);
   const isShowYunBanner = ref(false);
@@ -248,13 +264,8 @@
     }
   };
   const goDetail = (data) => {
-    const {
-      isDoctorCard,
-      isDownloadRepor,
-      isGraphic,
-      isWatermark,
-      watermarkText,
-    } = reportConfig.value;
+    const { isDoctorCard, isDownloadRepor, isGraphic, isWatermark } =
+      reportConfig.value;
     const mq1 = {
       repId: data.repId || '',
       repType: data.repType || '',
@@ -263,7 +274,6 @@
       extend: data.extend || '',
       isDoctorCard,
       isWatermark,
-      watermarkText,
       isDownloadRepor,
       isGraphic,
     };
@@ -301,8 +311,37 @@
       getCurrentLoadScrollInstance()?.refresh();
     });
   };
+
+  const footBtns = computed<TButtonConfig[]>(() => {
+    const tabNow = tabs.value[tabCurrent.value];
+    const headerType = tabNow && tabNow.headerType;
+
+    const arrFactory = function <T>(obj: T) {
+      if (obj) {
+        if (Array.isArray(obj)) {
+          return obj;
+        } else {
+          return [obj];
+        }
+      } else {
+        return [] as any;
+      }
+    };
+
+    switch (headerType) {
+      case 'jy':
+        return arrFactory(reportConfig.value.jyListFooterBtn || []);
+
+      case 'jc':
+        return arrFactory(reportConfig.value.jcListFooterBtn || []);
+
+      default:
+        return [];
+    }
+  });
+
   //根据系统码查询对应医院报告参数
-  const reportConfig = ref(<any>{});
+  const reportConfig = ref(<ISystemConfig['reportQuery']>{});
 
   const getYunBannerData = async () => {
     const { listYun } = reportConfig.value;

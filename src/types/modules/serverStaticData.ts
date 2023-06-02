@@ -1,4 +1,3 @@
-
 import { type XOR } from '@/typeUtils/obj';
 
 /**
@@ -210,6 +209,9 @@ export interface ISystemConfig {
     listYun?: {
       imgUrl: string;
     };
+
+    jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
+    jcListFooterBtn?: TButtonConfig[] | TButtonConfig;
   };
 
   /** 药品配送 */
@@ -298,6 +300,7 @@ export interface IConfigTab {
 export interface IReportConfigTab {
   headerType: string;
   headerName: string;
+  typeId: number;
 }
 
 type TMedRecordSfz = 'front' | 'end' | 'handler' | 'handlerBack' | 'hkb';

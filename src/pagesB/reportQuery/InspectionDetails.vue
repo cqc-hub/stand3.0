@@ -386,7 +386,7 @@
   const isClose = ref(true);
 
   const isShow = ref(false);
-  const checkoutReportList = ref<checkoutReportDetails>({});
+  const checkoutReportList = ref<checkoutReportDetails>({} as any);
   const more = () => {
     isShow.value = !isShow.value;
   };

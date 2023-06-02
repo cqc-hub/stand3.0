@@ -4,7 +4,7 @@ import globalGl from '@/config/global';
 import api from '@/service/api';
 
 export interface ITab {
-  typeId: string;
+  typeId: number;
   headerType: string;
   headerName: string;
 }

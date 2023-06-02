@@ -85,7 +85,7 @@
                       <text>暂无就诊人</text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="addPatient">
+                  <view class="switchPatient " @tap="addPatient">
                     添加就诊人
                   </view>
                 </block>
