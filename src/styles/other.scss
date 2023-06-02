@@ -259,32 +259,13 @@
 }
 
 @for $i from 4 through 70 {
-  .mb#{$i} {
-    margin-bottom: #{$i}rpx !important;
-  }
-  .mr#{$i} {
-    margin-right: #{$i}rpx !important;
-  }
-  .mt#{$i} {
-    margin-top: #{$i}rpx !important;
-  }
-  .ml#{$i} {
-    margin-left: #{$i}rpx !important;
-  }
+  @each $key, $value in (r: right, l: left, t: top, b: bottom) {
+    .m#{$key}#{$i} {
+      margin-#{$value}: #{$i}rpx !important;
+    }
 
-  .pl#{$i} {
-    padding-left: #{$i}rpx !important;
-  }
-
-  .pb#{$i} {
-    padding-bottom: #{$i}rpx !important;
-  }
-
-  .pr#{$i} {
-    padding-right: #{$i}rpx !important;
-  }
-
-  .pt#{$i} {
-    padding-top: #{$i}rpx !important;
+    .p#{$key}#{$i} {
+      padding-#{$value}: #{$i}rpx !important;
+    }
   }
 }
