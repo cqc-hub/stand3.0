@@ -32,9 +32,11 @@
           {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
         </view>
 
-        <view class="color-888 text-no-wrap">
-          总{{ item.numCount }} 个 余{{ item.numRemain }}个
-        </view>
+        <block v-if="pageConfig.isHideNumberSourceTotalRemain !== '1'">
+          <view class="color-888 text-no-wrap">
+            总{{ item.numCount }} 个 余{{ item.numRemain }}个
+          </view>
+      </block>
       </view>
     </view>
   </g-login>
@@ -44,9 +46,14 @@
   import { defineComponent, ref } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
+  import { 
+    type ISystemConfig,
+  } from '@/utils';
+
   defineProps<{
     item: TSchInfo;
     systemModeOld?: boolean;
+    pageConfig:ISystemConfig['order']
   }>();
 
   const emits = defineEmits(['reg-click', 'avatar-click']);

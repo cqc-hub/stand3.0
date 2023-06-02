@@ -21,9 +21,12 @@
               class="item g-flex-rc-cc text-ellipsis"
             >
               <text class="title">{{ item.categorName }}</text>
-              <text class="item-desc">
-                总{{ item.regNumber }} 余{{ item.residueNumber }}
-              </text>
+
+              <block v-if="pageConfig.isHideNumberSourceTotalRemain !== '1'">
+                <text class="item-desc">
+                  总{{ item.regNumber }} 余{{ item.residueNumber }}
+                </text>
+              </block>
               <text class="item-desc">{{ item.fee }}元</text>
             </view>
           </view>
@@ -37,11 +40,16 @@
   import { watch, ref } from 'vue';
   import { IQueryRegNum } from '../../utils/index';
 
+  import { 
+    type ISystemConfig,
+  } from '@/utils';
+
   const emits = defineEmits(['update:show', 'item-click']);
   const popup = ref<any>('');
   const props = defineProps<{
     show: boolean;
     list: IQueryRegNum[];
+    pageConfig:ISystemConfig['order']
   }>();
 
   const hide = () => {
