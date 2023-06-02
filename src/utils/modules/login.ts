@@ -641,7 +641,6 @@ export class PatientUtils extends LoginUtils {
     }>
   ) {
     const { wechatCode } = data;
-    console.log(data);
 
     if (this.userStore.patList.length) {
       data.authPhoneVerify = undefined;
