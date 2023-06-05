@@ -107,6 +107,12 @@
   } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import api from '@/service/api';
+  import { deQueryForUrl } from '@/common/utils';
+
+  interface IPageProps {
+    tabIndex: number; 
+  }
+  const pageProps = ref(<IPageProps>{});
 
   const tabs = ref<ITab[]>([]);
   const tabCurrent = ref(0);
@@ -130,7 +136,8 @@
           tabCurrent.value = i;
         }
       });
-    }
+    } 
+    tabCurrent.value = pageProps.value.tabIndex
     setTimeout(() => {
       loadScrollList();
     }, 500);
@@ -372,9 +379,12 @@
     }
   };
 
-  onLoad(async () => {
+  onLoad(async (p) => {
     const config = await ServerStaticData.getSystemConfig('reportQuery');
     reportConfig.value = config;
+
+    pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+
     getYunBannerData();
 
     init();
