@@ -166,6 +166,7 @@
             <homeBanner
               :leftFunctionList="bannerLeftFunctionList"
               :functionList="bannerFunctionList"
+              @open-share="openShare"
             />
           </view>
 
@@ -304,12 +305,11 @@
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
-    <homeH5SharePopup ref="homeH5SharePopupRef" />
+    <homeH5SharePopup ref="homeH5SharePopupRef" :imageUrl="$global.BASE_IMG+h5QrCodeImg"  />
 
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
 </template>
-
 <script setup lang="ts">
   import { ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
@@ -351,6 +351,7 @@
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
+  const h5QrCodeImg =ref('lqCode.jpg')
 
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;
@@ -466,6 +467,12 @@
       });
     }
   };
+  //打开关注框
+  const openShare = (item)=>{ 
+    h5QrCodeImg.value = item
+    homeH5SharePopupRef.value.show()
+  } 
+
   const getNotice = async () => {
     const { result } = await api.getAnnouncementCms({});
     noticeMenu.value = result;
@@ -843,7 +850,7 @@
     }
 
     .banner-menu {
-      margin: var(--h-margin-24) 0;
+      margin: var(--h-margin-24) 0; 
     }
 
     .official-list {

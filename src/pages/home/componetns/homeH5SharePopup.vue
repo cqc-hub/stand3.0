@@ -12,15 +12,15 @@
           <view class="f48 row-box mb8">
             <text class="g-bold">欢迎关注</text>
             <text
-              @click="popup.close"
+              @click="popup.close()"
               class="iconfont close-icon color-888 f48"
             >
               &#xe6cd;
             </text>
           </view>
 
-          <view class="f44 row-box color-blue">
-            {{ $global.sConfig.home?.h5Guide?.h5Name }}
+          <view class="f44 row-box color-blue"> 
+            {{$global.systemInfo.name}}公众号
           </view>
         </view>
 
@@ -28,7 +28,8 @@
           <view class="g-flex-rc-cc p32">
             <view class="qr-code">
               <image
-                :src="$global.sConfig.home?.h5Guide?.h5QrCodeImg"
+                v-if="props.imageUrl!=''"
+                :src="props.imageUrl"
                 mode="widthFix"
                 class="qr-code-img"
                 show-menu-by-longpress
@@ -82,6 +83,16 @@
   ]);
 
   const popup = ref('' as any);
+
+  const props = withDefaults(
+    defineProps<{
+      imageUrl: string; 
+    }>(),
+    {
+      imageUrl: 'https://phsdevoss.eheren.com/pcloud/phs3.0/lqCode.jpg'
+    }
+  );
+
   const show = () => {
     popup.value.open();
   };
@@ -92,7 +103,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .container {
+  .container { 
     .header {
       position: relative;
       padding: 0 32rpx;

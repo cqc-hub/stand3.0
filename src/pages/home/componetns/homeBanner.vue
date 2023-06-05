@@ -109,8 +109,12 @@
 <script setup lang="ts">
 import { withDefaults, ref, computed } from "vue";
 import { useCommonTo } from "@/common/checkJump";
+
 // 2/3
 // const type = ref(2);
+
+const emits = defineEmits(['open-share']);
+
 
 const props = withDefaults(
   defineProps<{
@@ -138,10 +142,13 @@ const props = withDefaults(
 );
 const autoplay = ref(true);
 //跳转对应地址
-const gotoPath = (item) => {
-  console.log('跳转');
-
+const gotoPath = (item) => { 
+  if(item.path&&item.path=="showCareModel"){//关注组件拦截跳转 弹框
+    emits('open-share',item.query && JSON.parse(item.query).imageCode)
+  }else{
   useCommonTo(item);
+  }
+
 };
 </script>
 

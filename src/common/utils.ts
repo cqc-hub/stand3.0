@@ -46,7 +46,7 @@ export function cloneUtil<T>(target): T {
  * @param query 对象
  * @returns 对象数据拼接在参数上
  */
-export const joinQuery = function (url: string, query) {
+export const joinQuery = function (url: string, query={}) {
   const strQuery = Object.entries(query)
     .map(([key, value]) => `${key}=${value ?? ''}`)
     .join('&');

@@ -66,19 +66,6 @@ interface ISConfig {
    *
    * */
   medicalCardDetailPackageDomain?: `http${string}`;
-
-  /**
-   * 首页配置
-   */
-  home?: {
-    /** 关注公众号 */
-    h5Guide?: {
-      // 公众号名称
-      h5Name: string;
-      // 公众号二维码图片
-      h5QrCodeImg: string;
-    };
-  };
 }
 
 const scJson: Record<string, ISConfig> = {
@@ -94,15 +81,7 @@ const scJson: Record<string, ISConfig> = {
           cardType: '01',
         },
       },
-    },
-
-    home: {
-      h5Guide: {
-        h5Name: '乐清市人民医院公众号',
-        h5QrCodeImg:
-          'https://phsdevoss.eheren.com/pcloud/phs3.0/gong_zhong_hao_leqing.jpeg',
-      },
-    },
+    }, 
   },
 
   /**
@@ -152,14 +131,7 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 西安红会
    */
-  1001057: {
-    home: {
-      h5Guide: {
-        h5Name: '乐清市人民医院公众号',
-        h5QrCodeImg:
-          'https://phsdevoss.eheren.com/pcloud/phs3.0/gong_zhong_hao_leqing.jpeg',
-      },
-    },
+  1001057: { 
     isOpenIntelQA: {
       appId: 'wxba22f1a66a3af7aa',
       path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',
