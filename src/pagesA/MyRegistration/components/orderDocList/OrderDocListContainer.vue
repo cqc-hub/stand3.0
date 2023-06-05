@@ -5,7 +5,7 @@
       <image
         :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
         @click="avatarClick"
-        class="doc-info-avatar"
+        class="doc-info-avatar mr24"
         mode="aspectFill"
       />
       <!-- </g-login> -->
@@ -140,7 +140,7 @@
         border: 1rpx solid var(--hr-neutral-color-3);
         width: 96rpx;
         height: 96rpx;
-        margin-right: 24rpx;
+        flex-shrink: 0;
       }
 
       .doc-info-introduce {

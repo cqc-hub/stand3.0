@@ -766,6 +766,7 @@
         height: 136rpx;
         border-radius: 50%;
         overflow: hidden;
+        background-color: #fff;
       }
 
       .header-btn {

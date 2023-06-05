@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wxd9a9c329edc6e2b0",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,19 +62,24 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.11.0",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true
   },
   "mp-alipay": {
     "usingComponents": true,
     "plugins": {
-      "auth-pay-plugin": {
+      "codePlugin": {
         "version": "*",
-        "provider": "2021003167601013"
+        "provider": "2021003163608051"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003159674187"
+    "appid": "2021003164669106"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -86,7 +91,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "联勤保障部队第987医院",
   "h5": {
     "router": {
       "base": "./"
