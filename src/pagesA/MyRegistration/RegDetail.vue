@@ -660,8 +660,6 @@
 
     const { result } = await api.medicalUp(requestArg);
 
-    console.log(result, 'cqc');
-
     const info = {
       ...hosInfo.value,
       ...orderRegInfo.value,

@@ -29,15 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick } from 'vue';
+  import { ref } from 'vue';
+  import { onShow } from '@dcloudio/uni-app';
 
-  import {
-    GStores,
-    ServerStaticData,
-    IHosInfo,
-    type TButtonConfig,
-    useTBanner,
-  } from '@/utils';
+  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import { CaseCopyItem, isExpress1 } from './utils/recordApply';
   import { joinQuery } from '@/common';
 
@@ -62,7 +57,9 @@
 
   const isComplete = ref(false);
 
+  let _count = 0;
   const getListData = async () => {
+    _count++;
     try {
       const { patientId } = gStores.userStore.patChoose;
       const arg = {
@@ -156,6 +153,12 @@
   //   getListData();
   // };
   // init();
+
+  onShow(() => {
+    if (_count) {
+      refreshListData();
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

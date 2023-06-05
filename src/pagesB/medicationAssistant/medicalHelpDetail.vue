@@ -28,7 +28,10 @@
             >
               {{ takenDrugTypeMap[pageProps.takenDrugType] }}
             </view>
-            <view v-if="detailData.takeLocation" class="f28">
+            <view
+              v-if="detailData.takeLocation && pageProps.takenDrugType !== '2'"
+              class="f28"
+            >
               <text class="mr12">取药地址:</text>
               <text>{{ detailData.takeLocation }}</text>
             </view>
