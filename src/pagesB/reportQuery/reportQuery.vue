@@ -63,6 +63,9 @@
                   </template>
                 </view>
               </template>
+
+              <view class="safe-height"></view>
+              <view class="safe-height"></view>
             </view>
           </template>
 
@@ -82,9 +85,12 @@
         :key="btn.text + tabCurrent"
         @click="useTBanner(btn)"
         :class="{
-          flex2: bi,
+          flex1: bi,
+          'btn-plain ': bi % 2,
+          flex2: !bi,
+          ml12: bi
         }"
-        class="btn btn-primary flex1"
+        class="btn btn-primary btn-border"
       >
         {{ btn.text }}
       </button>
@@ -131,9 +137,11 @@
         }
       });
     }
+
+    uni.showLoading({});
     setTimeout(() => {
       loadScrollList();
-    }, 500);
+    }, 800);
   };
   const totalList = ref([0, 0, 0]);
 
@@ -448,5 +456,9 @@
   }
   :deep(.pull-up-wrap) {
     padding-bottom: 80rpx;
+  }
+
+  .g-footer {
+    transition: all linear;
   }
 </style>

@@ -60,11 +60,9 @@
                   患者信息
                   <view class="subhead-detail">
                     <text class="mr12">
-                      {{
-                        isClose
-                          ? nameConvert(examineReportList.patientName)
-                          : examineReportList.patientName
-                      }}({{ examineReportList.cardNumber }})
+                      {{ isClose ? nameConvert(patName) : patName }}({{
+                        patCardNumber
+                      }})
                     </text>
 
                     <text
@@ -465,8 +463,15 @@
   };
   const pageProps = ref(<any>{});
 
+
   const gStore = new GStores();
   const pat = gStore.userStore.patChoose;
+  const patName = computed(() => {
+    return examineReportList.value.patientName || pat.patientName
+  })
+  const patCardNumber = computed(() => {
+    return examineReportList.value.cardNumber || pat.cardNumber
+  })
 
   onLoad((p) => {
     pageProps.value = deQueryForUrl(p);
@@ -854,7 +859,7 @@
     }
     .footer {
       height: 96rpx;
-      padding-bottom: 68rpx;
+      // padding-bottom: 68rpx;
       width: 100%;
       display: flex;
       background-color: #fff;
