@@ -13,15 +13,15 @@
         <view class="my-menu" v-if="!gStores.globalStore.modeOld">
           <view v-if="menu1List && menu1List.length" class="list">
             <view class="title">我的订单</view>
-            <homeGrid :list="menu1List"></homeGrid>
+            <homeGrid :list="menu1List"  @open-share="openShare"></homeGrid>
           </view>
           <view v-if="menu2List && menu2List.length" class="list">
             <view class="title">我的服务</view>
-            <homeGrid :list="menu2List"></homeGrid>
+            <homeGrid :list="menu2List"  @open-share="openShare"></homeGrid>
           </view>
           <view v-if="menu3List && menu3List.length" class="list">
             <view class="title">我的工具</view>
-            <homeGrid :list="menu3List"></homeGrid>
+            <homeGrid :list="menu3List"  @open-share="openShare"></homeGrid>
           </view>
         </view>
         <view class="my-menu old" v-if="gStores.globalStore.modeOld">
@@ -37,6 +37,7 @@
     </scroll-view>
 
     <homePopup ref="refOldDialog" />
+    <homeH5SharePopup ref="homeH5SharePopupRef" :imageUrl="$global.BASE_IMG+h5QrCodeImg"  />
     <home-Tabbar :systemModeOld="gStores.globalStore.modeOld" />
     <g-message />
   </view>
@@ -54,6 +55,10 @@ import personRecord from "./componetns/personRecord.vue";
 import homeTabbar from "./componetns/homeTabbar.vue";
 import homeGrid from "./componetns/homeGrid.vue";
 import homePopup from "./componetns/homePopup.vue";
+import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+
+const homeH5SharePopupRef = ref('' as any);
+const h5QrCodeImg =ref('lqCode.jpg')
 
 //骨架屏配置
 const skeletonProps = ref({
@@ -172,18 +177,12 @@ const getHomeConfig = async () => {
     skeletonProps.value.loading = false;
   }
 };
-const ttt = () => {
-  // 选择就诊人
-  uni.navigateTo({
-    url:
-      "/pagesA/MyRegistration/order?deptName=眼科病院&clinicalType=1&hosId=13002&firstHosDeptId=A02&secondHosDeptId=A020201",
-  });
-
-  // uni.navigateTo({
-  //   url: '/pages/piniaTest/piniaTest'
-  //   // url: '/pagesC/cloudHospital/cloudHospital?path=https://testwechatnethos.eheren.com/static/nhs/'
-  // });
-};
+ 
+  //打开关注框
+  const openShare = (item)=>{ 
+    h5QrCodeImg.value = item
+    homeH5SharePopupRef.value.show()
+  } 
 </script>
 
 <style lang="scss" scoped>

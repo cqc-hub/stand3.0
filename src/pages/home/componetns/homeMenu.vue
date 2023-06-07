@@ -18,7 +18,7 @@
       :duration="300"
     >
       <swiper-item v-for="(item, index) in props.list" :key="index">
-        <homeGrid :list="item.functionList"></homeGrid>
+        <homeGrid :list="item.functionList" @open-share="openShare" ></homeGrid>
       </swiper-item>
     </swiper>
   </view>
@@ -27,6 +27,8 @@
 <script setup lang="ts">
 import { withDefaults, ref } from "vue";
 import homeGrid from "./homeGrid.vue";
+
+const emits = defineEmits(['open-share']);
 
 let tabIndex = ref(0);
 interface IhomeMenu {
@@ -78,6 +80,10 @@ const activeMenu = (index) => {
 const changeIndex = (e) => {
   tabIndex.value = e.detail.current;
 };
+const openShare =(item)=>{
+  console.log(1111,'我看看',item)
+  emits('open-share',item)
+}
 </script>
 
 <style scoped lang="scss">
