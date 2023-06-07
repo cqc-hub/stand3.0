@@ -140,6 +140,8 @@
           this.scrollViewTop = rect.top;
           // 判断是否自动加载
           if (this.defaultOption.auto) this.load();
+
+          this.$emit('handleInit');
         });
       },
       // 加载数据

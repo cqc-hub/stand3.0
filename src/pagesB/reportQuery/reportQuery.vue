@@ -30,6 +30,7 @@
       <swiper-item v-for="tab in tabs" :key="tab.typeId">
         <scroll-list
           :option="scrollOption"
+          @handleInit="loadScrollList"
           @refresh="refresh"
           @load="load"
           ref="slist"
@@ -139,9 +140,6 @@
     }
 
     uni.showLoading({});
-    setTimeout(() => {
-      loadScrollList();
-    }, 800);
   };
   const totalList = ref([0, 0, 0]);
 

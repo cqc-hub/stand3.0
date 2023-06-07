@@ -336,7 +336,7 @@
   const top = ref(0);
   const isShow = ref<number[]>([]);
   const windowInfo = ref();
-  const examineReportList = ref<examineReportDetails>({});
+  const examineReportList = ref<examineReportDetails>({} as any);
   const qrVal = ref();
 
   const options = ref({
