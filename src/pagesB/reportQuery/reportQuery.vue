@@ -89,7 +89,7 @@
           flex1: bi,
           'btn-plain ': bi % 2,
           flex2: !bi,
-          ml12: bi
+          ml12: bi,
         }"
         class="btn btn-primary btn-border"
       >
@@ -143,7 +143,7 @@
           tabCurrent.value = i;
         }
       });
-    tabCurrent.value = pageProps.value.tabIndex
+      tabCurrent.value = pageProps.value.tabIndex || 0;
     }
 
     uni.showLoading({});
