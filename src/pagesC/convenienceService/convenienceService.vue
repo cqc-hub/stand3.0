@@ -88,7 +88,6 @@
   import ServiceList from './components/ServiceList.vue';
 
   import { type IServiceList } from './utils/index';
-import { Console } from 'console';
   interface IPageProps {
     hosId: string;
     hosName: string;

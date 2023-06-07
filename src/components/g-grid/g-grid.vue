@@ -112,8 +112,7 @@ const gridClick = (item) => {
 };
 
 const updateIdFun = (item) => {
-  const routerStore = useRouterStore();
-  console.log(3333, item);
+  const routerStore = useRouterStore(); 
   routerStore.update_P();
   routerStore.updateId(item.id);
 };

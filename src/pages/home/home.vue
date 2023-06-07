@@ -193,7 +193,7 @@
           </view>
           <!-- #endif -->
           <view class="fun-list" v-if="menuList.length">
-            <homeMenu :list="menuList" />
+            <homeMenu :list="menuList" @open-share="openShare"  />
           </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
             <image

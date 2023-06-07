@@ -64,22 +64,23 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+
   const tzList = ref([
     {
-      icon: 'ico_sy_card',
-      title: '预约挂号通知',
-      desc: '预约挂号成功后将第一时间通知您',
-    },
-    {
-      icon: 'ico_sy_cost1',
-      title: '门诊缴费通知',
-      desc: '门诊缴费成功后将第一时间通知您',
-    },
-    {
       icon: 'ico_sy_paper1',
-      title: '报告查询通知',
-      desc: '报告内容出来后将第一时间通知您',
+      title: '医院就诊通知',
+      desc: '预约挂号、门诊缴费、报告提醒等第一时间通知',
     },
+    // {
+    //   icon: 'ico_sy_cost1',
+    //   title: '门诊缴费通知',
+    //   desc: '门诊缴费成功后将第一时间通知您',
+    // },
+    // {
+    //   icon: 'ico_sy_card',
+    //   title: '报告查询通知',
+    //   desc: '报告内容出来后将第一时间通知您',
+    // },
   ]);
 
   const popup = ref('' as any);
@@ -168,11 +169,12 @@
         display: flex;
         align-items: flex-start;
         padding-bottom: 48rpx;
+        width: 500rpx;
 
         .icon-font {
           width: 48rpx;
           height: 48rpx;
-
+          margin-top: 10rpx;
           margin-right: 20rpx;
         }
       }
