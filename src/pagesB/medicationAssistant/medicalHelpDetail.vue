@@ -29,7 +29,10 @@
               {{ takenDrugTypeMap[pageProps.takenDrugType] }}
             </view>
             <view
-              v-if="detailData.takeLocation && pageProps.takenDrugType !== '2'"
+              v-if="
+                detailData.takeLocation &&
+                !['2', '20', '50'].includes(pageProps.takenDrugType)
+              "
               class="f28"
             >
               <text class="mr12">取药地址:</text>

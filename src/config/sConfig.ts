@@ -81,7 +81,7 @@ const scJson: Record<string, ISConfig> = {
           cardType: '01',
         },
       },
-    }, 
+    },
   },
 
   /**
@@ -97,15 +97,15 @@ const scJson: Record<string, ISConfig> = {
    */
   1001056: {
     isOpenAlipayZndz: true,
-    // medicalMHelp: {
-    //   wx: {
-    //     medicalNation: {
-    //       appId: 'wxe183cd55df4b4369',
-    //       path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1G8G3JJRB0043F60C80A0000EBD85252',
-    //     },
-    //     medicalDefault: '1',
-    //   },
-    // },
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1G8G3JJRB0043F60C80A0000EBD85252',
+        },
+        medicalDefault: '1',
+      },
+    },
   },
 
   /**
@@ -131,7 +131,7 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 西安红会
    */
-  1001057: { 
+  1001057: {
     isOpenIntelQA: {
       appId: 'wxba22f1a66a3af7aa',
       path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',

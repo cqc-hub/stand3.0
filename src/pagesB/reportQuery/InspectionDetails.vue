@@ -22,8 +22,8 @@
               <view class="subhead-detail">
                 <text class="mr12">
                   {{
-                    isClose ? nameConvert(checkoutReportList.patientName) : checkoutReportList.patientName
-                  }}({{ checkoutReportList.cardNumber }})
+                    isClose ? nameConvert(patName) : patName
+                  }}({{ patCardNumber }})
                 </text>
 
                 <text
@@ -362,7 +362,7 @@
 </template>
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import dayjs from 'dayjs';
   import api from '@/service/api';
   import global from '@/config/global';
@@ -404,6 +404,12 @@
   const gStore = new GStores();
   const pat = gStore.userStore.patChoose;
   const pageProps = ref(<any>{});
+  const patName = computed(() => {
+    return checkoutReportList.value.patientName || pat.patientName
+  })
+  const patCardNumber = computed(() => {
+    return checkoutReportList.value.cardNumber || pat.cardNumber
+  })
 
   onLoad((p) => {
     console.log('获得参数-----', p);
@@ -702,7 +708,7 @@
     }
     .footer {
       height: 96rpx;
-      padding-bottom: 68rpx;
+      // padding-bottom: 68rpx;
       width: 100%;
       background-color: #fff;
       line-height: 96rpx;
