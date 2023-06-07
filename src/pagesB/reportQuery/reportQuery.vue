@@ -143,7 +143,10 @@
           tabCurrent.value = i;
         }
       });
-      tabCurrent.value = pageProps.value.tabIndex || 0;
+
+      if (pageProps.value.tabIndex) {
+        tabCurrent.value = pageProps.value.tabIndex * 1;
+      }
     }
 
     uni.showLoading({});
