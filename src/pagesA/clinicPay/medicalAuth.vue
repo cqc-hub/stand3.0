@@ -32,7 +32,9 @@
 
           <view class="flex-between">
             <view class="label text-no-wrap">项目</view>
-            <view class="value g-bold">门诊医保支付</view>
+            <view class="value g-bold">
+              {{ pageProps.type === 'order' ? '挂号医保支付' : '门诊医保支付' }}
+            </view>
           </view>
         </view>
       </view>
@@ -67,22 +69,31 @@
   const { wxPayMoneyMedicalPlugin } = usePayPage();
   const gStores = new GStores();
   const loading = ref(false);
-  const pageProps = ref({
-    orderId: '',
-    hosId: '',
-    patientId: '',
-  });
+  const pageProps = ref(
+    <
+      {
+        orderId: string;
+        hosId: string;
+        type?: 'order'; // order 挂号
+      }
+    >{}
+  );
   const hosName = ref('');
 
   const submit = () => {
     // #ifdef  MP-WEIXIN
-    wxPayMoneyMedicalPlugin(submitAction);
+    if (pageProps.value.type === 'order') {
+      wxPayMoneyMedicalPlugin(orderSubmitAction);
+    } else {
+      wxPayMoneyMedicalPlugin(submitAction);
+    }
     // #endif
   };
 
+  // 门诊退费
   const submitAction = async (auth: TWxAuthorize) => {
     const { payAuthNo } = auth;
-    const { patientId, orderId } = pageProps.value;
+    const { orderId } = pageProps.value;
 
     const args = {
       payAuthNo,
@@ -90,6 +101,26 @@
     };
 
     await api.clinicRefundByMessage(args);
+
+    gStores.messageStore.showMessage('授权成功, 等待退费', 3000, {
+      closeCallBack() {
+        loading.value = true;
+      },
+    });
+  };
+
+  const orderSubmitAction = async (auth: TWxAuthorize) => {
+    const { payAuthNo } = auth;
+    const { orderId } = pageProps.value;
+    const source = gStores.globalStore.browser.source;
+
+    const args = {
+      payAuthNo,
+      orderId,
+      source,
+    };
+
+    await api.refundMedicalException(args);
 
     gStores.messageStore.showMessage('授权成功, 等待退费', 3000, {
       closeCallBack() {

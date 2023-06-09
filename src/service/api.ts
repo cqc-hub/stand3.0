@@ -371,6 +371,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  refundMedicalException: (data: any) =>
+    service.post('/phs-reg/reg/refundMedicalException', parm(data), {
+      hideLoading: false,
+    }),
+
   getCheckInList: (data: any) =>
     service.post('/phs-reg/reg/getCheckInList', parm(data), {
       hideLoading: false,

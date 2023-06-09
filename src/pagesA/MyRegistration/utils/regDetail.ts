@@ -261,6 +261,7 @@ export interface IRegInfo {
   source?: number;
   rateFlag?: 0 | 1;
   _source?: string;
+  refundNeedAuth?: '0' | '1'; // 退费(微信国标医保)是否需要拉起授权 0需要 1不需要
 }
 
 export const getStatusConfig = (status: OrderStatus) => {
