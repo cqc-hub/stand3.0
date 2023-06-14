@@ -570,7 +570,10 @@ export class PatientUtils extends LoginUtils {
         });
       } else {
         // relevantPatient
-        await this.addRelevantPatient(payload).catch((err) => {
+        await this.addRelevantPatient({
+          ...payload,
+          _type: 'perfect',
+        }).catch((err) => {
           return Promise.reject({
             err,
             errorType: 'add',
@@ -606,15 +609,14 @@ export class PatientUtils extends LoginUtils {
     if (data._type === 'perfect') {
       await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
     } else {
-      if (this.userStore.patList.length) {
-        data.authPhoneVerify = undefined;
-      }
+      data.authPhoneVerify = undefined;
       await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
   }
 
   async addRelevantPatient(
     data: Partial<{
+      _type?: 'perfect';
       _autoSetDefault: string;
       wechatCode: string; // 微信电子健康卡时候有
 
@@ -642,7 +644,7 @@ export class PatientUtils extends LoginUtils {
   ) {
     const { wechatCode } = data;
 
-    if (this.userStore.patList.length) {
+    if (data._type !== 'perfect') {
       data.authPhoneVerify = undefined;
     }
 

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wxe26143481567cb97",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -67,9 +67,18 @@
   },
   "mp-alipay": {
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396"
+    "appid": "2021003154665105"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -81,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "台州市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

@@ -137,13 +137,13 @@
       formData.value[formKey.patientName] = data.patientName.trim();
     }
 
-    const { authPhoneVerify } = gStores.userStore;
-    if (!formData.value[formKey.verifyCode]) {
-      data.authPhoneVerify = authPhoneVerify;
-    }
-
     // 完善逻辑
     if (props.pageType === 'perfectReal') {
+      const { authPhoneVerify } = gStores.userStore;
+      if (!formData.value[formKey.verifyCode]) {
+        data.authPhoneVerify = authPhoneVerify;
+      }
+
       try {
         const { result } = await api.getPatCardInfoByHospital(data);
         if (result) {

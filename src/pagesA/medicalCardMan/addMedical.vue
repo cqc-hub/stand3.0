@@ -165,7 +165,7 @@
 
     const { authPhoneVerify } = gStores.userStore;
 
-    if (!requestData.verifyCode) {
+    if (!requestData.verifyCode && props.pageType === 'perfectReal') {
       requestData.authPhoneVerify = authPhoneVerify;
     }
 
