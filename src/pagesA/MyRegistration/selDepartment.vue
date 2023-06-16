@@ -242,7 +242,7 @@
     if (item.promptMessage && !isShowed) {
       isShowPromptMessageTip.value = true;
       showPromptMessageTip.value = HTMLParser(
-        item.promptMessage + item.promptMessage + item.promptMessage
+        item.promptMessage
       );
       cacheDeptItem.value = item;
       return;

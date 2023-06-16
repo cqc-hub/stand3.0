@@ -1115,8 +1115,6 @@ export const usePayPage = () => {
       sConfig: { medicalMHelp },
     } = globalGl;
 
-    console.log(globalGl);
-
 
     const { wx } = medicalMHelp!;
     const { medicalNation, medicalPlugin } = wx!;

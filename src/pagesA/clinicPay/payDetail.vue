@@ -690,6 +690,10 @@
     await init();
     setTimeout(() => {
       if (props.value.payState === '0') {
+        console.log({
+          _qrOpt
+        });
+
         capture();
       }
     }, 200);
