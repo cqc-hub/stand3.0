@@ -6,7 +6,7 @@
 
     <block v-else>
       <button
-        open-type="getPhoneNumber"
+        :open-type="_env === 'wx' && 'getPhoneNumber'"
         @getphonenumber="goLogin"
         @click="handlerClick"
         class="login-btn"
@@ -45,7 +45,7 @@
   // #endif
 
   const handlerClick = (e) => {
-    if (_env.value === 'h5') {
+    if (_env.value === 'h5' || _env.value === 'alipay') {
       goLogin(e);
     }
   };
