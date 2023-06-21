@@ -6,13 +6,36 @@ import {
 } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
+import { IsAny } from '@/typeUtils';
 
+type NeverTurnsAny<T> = T extends never ? any : T;
 export const compose =
   (...fns) =>
   (arg) =>
     fns.reduce((acc, fn) => fn(acc), arg);
 
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
+
+export const apiAsync: <
+  T extends {
+    (opt: { success(any): void; fail(any): any; [key: string]: any }): any;
+  }
+>(
+  api: T,
+  opt: BaseObject
+) => Promise<
+  NeverTurnsAny<
+    IsAny<T> extends true ? any : Parameters<Parameters<T>[0]['success']>[0]
+  >
+> = (api, opt) => {
+  return new Promise((success: any, fail) => {
+    api({
+      ...opt,
+      success,
+      fail,
+    });
+  });
+};
 
 export const debounce = function (func, wait = 1000, immediate = true): any {
   let timer;

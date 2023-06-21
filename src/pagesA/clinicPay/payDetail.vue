@@ -376,6 +376,7 @@
       !isMedicalPay // 医保不支持选择
     );
   });
+
   const selItem = ({
     item,
     index,

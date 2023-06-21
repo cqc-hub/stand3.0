@@ -415,7 +415,8 @@ export const getDefaultFormData = async (
   if (pageType === 'perfectReal') {
     // #ifdef MP-ALIPAY
     const { userName, mobile } = gStores.userStore.cacheUser;
-    data[formKey.patientName] = userName;
+    // data[formKey.patientName] = userName;
+    data[formKey.patientName] = '哈迪';
     data[formKey.patientPhone] = mobile;
     // #endif
 

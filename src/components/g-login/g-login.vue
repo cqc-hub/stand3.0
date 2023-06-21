@@ -6,7 +6,7 @@
 
     <block v-else>
       <button
-        :open-type="_env === 'wx' && 'getPhoneNumber'"
+        :open-type="['wx'].includes(_env) && 'getPhoneNumber'"
         @getphonenumber="goLogin"
         @click="handlerClick"
         class="login-btn"

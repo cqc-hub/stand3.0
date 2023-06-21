@@ -153,7 +153,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(questionnaireAfterVisitDoc);
+      useTBanner(historyAnaesthesia);
     }, 1000);
   });
 </script>

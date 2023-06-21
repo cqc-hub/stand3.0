@@ -6,6 +6,7 @@ import {
   isAreaProgram,
 } from '@/stores';
 import { getSysCode } from '@/common';
+import { apiAsync } from './utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
@@ -370,71 +371,76 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
 class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(): Promise<void> {
-    await new Promise<void>((resolve, reject) => {
-      uni.showLoading({
-        mask: true,
-      });
-      my.getAuthCode({
-        scopes: 'auth_user',
-        success: async ({ authCode }) => {
-          const accountType = this.globalStore.browser.accountType;
-          const { result } = await api.allinoneAuthApi(
-            packageAuthParams(
-              {
-                code: authCode,
-                codeType: 2,
-                accountType,
-              },
-              '/aliUserLogin/getTPAlipayUserInfoShare'
-            )
-          );
-
-          const {
-            userId,
-            accessToken,
-            refreshToken,
-            authHerenId,
-            certNo,
-            certType,
-            gender,
-            mobile,
-            userName,
-            authPhoneVerify,
-          } = result;
-
-          this.userStore.updateCacheUser({
-            certNo,
-            certType,
-            gender,
-            mobile,
-            userName,
-          });
-
-          if (accountType === 1) {
-            this.globalStore.setH5OpenId(userId);
-          } else {
-            this.globalStore.setOpenId(userId);
-          }
-
-          this.globalStore.setToken({
-            accessToken,
-            refreshToken,
-          });
-
-          this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-
-          await this.getUerInfo();
-          resolve();
-        },
-
-        fail: ({ errorMessage }) => {
-          this.messageStore.showMessage(errorMessage);
-          reject();
-        },
-
-        complete: uni.hideLoading,
-      });
+    uni.showLoading({
+      mask: true,
     });
+
+    try {
+      const { authCode } = await apiAsync(my.getAuthCode, {
+        scopes: 'auth_user',
+        // scopes: 'auth_base',
+      });
+
+      const accountType = this.globalStore.browser.accountType;
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            code: authCode,
+            codeType: 2,
+            accountType,
+          },
+          '/aliUserLogin/getTPAlipayUserInfoShare'
+        )
+      );
+
+      const {
+        userId,
+        accessToken,
+        refreshToken,
+        authHerenId,
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+        authPhoneVerify,
+      } = result;
+
+      this.userStore.updateCacheUser({
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+      });
+
+      if (accountType === 1) {
+        this.globalStore.setH5OpenId(userId);
+      } else {
+        this.globalStore.setOpenId(userId);
+      }
+
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+
+      await this.getUerInfo();
+    } catch (error: any) {
+      if (error) {
+        const { errorMessage } = error;
+
+        if (errorMessage) {
+          this.messageStore.showMessage(errorMessage);
+        }
+
+        throw new Error(error);
+      }
+    } finally {
+      uni.hideLoading();
+    }
   }
 }
 

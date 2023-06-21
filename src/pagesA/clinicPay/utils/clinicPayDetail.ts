@@ -684,11 +684,13 @@ export const usePayPage = () => {
       pageProps.value.deParams = undefined;
     }
 
-    const resList = (result && result.clinicalSettlementResultList) || [];
+    unPayList.value = [];
+    if (result && result.clinicalSettlementResultList) {
+      const resList = result.clinicalSettlementResultList;
+      dealPayList(resList, { payState: '1' });
 
-    dealPayList(resList, { payState: '1' });
-
-    unPayList.value = resList;
+      unPayList.value = resList;
+    }
   };
 
   const getPayedList = async () => {
@@ -827,7 +829,9 @@ export const usePayPage = () => {
       hosName,
       costTypeName,
       diseaseTypeName,
-      cardNumber: pageProps.value.deParams?.cardNumber,
+      cardNumber:
+        pageProps.value.deParams?.cardNumber ||
+        gStores.userStore.patChoose.cardNumber,
       patientName: pageProps.value.deParams?.patientName,
 
       params: pageProps.value.params,
@@ -1011,7 +1015,9 @@ export const usePayPage = () => {
     const { getDetailData, detailData } = usePayDetailPage();
     const pat = gStores.userStore.patChoose;
 
+    const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
     await getDetailData({
+      cardNumber,
       ...pageProps.value,
       ...item,
     });
@@ -1024,7 +1030,7 @@ export const usePayPage = () => {
       payload,
       {
         businessType: '1',
-        cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
+        cardNumber
       }
     );
 
@@ -1115,7 +1121,6 @@ export const usePayPage = () => {
       sConfig: { medicalMHelp },
     } = globalGl;
 
-
     const { wx } = medicalMHelp!;
     const { medicalNation, medicalPlugin } = wx!;
 
@@ -1158,9 +1163,8 @@ export const usePayPage = () => {
       docName: selectList.map((o) => o.docName).join(','),
       recipeNo: selectList.map((o) => o.recipeNo).join(','),
       hosId: selectList[0].hosId,
-      // hosId: selectList.map((o) => o.hosId).join(','),
-      hosName: selectList.map((o) => o.hosName).join(','),
-      visitDate: selectList.map((o) => o.visitDate).join(','),
+      hosName: selectList[0].hosName,
+      visitDate: selectList[0].visitDate,
       serialNo: selectList.map((o) => o.serialNo).join(';'),
     };
 
@@ -1434,7 +1438,14 @@ export const executeConfigPayAfter = async (
   }
 };
 
-const dealPayList = (resList: IPayListItem[], { payState }) => {
+const dealPayList = (
+  resList: IPayListItem[],
+  {
+    payState,
+  }: {
+    payState: '1' | '0';
+  }
+) => {
   const setCostTypeCodeDefault = getIsMedicalTradeTypeDefault();
 
   resList.map((o) => {

@@ -7,26 +7,28 @@
   >
     <g-flag isShowFg typeFg="15" />
     <g-tbanner :config="pageConfig.bannerPay" />
-    <g-choose-pat
-      v-if="!pageProps.params && isShowPatComponent"
-      @choose-pat="patChange"
-    />
-    <g-selhos
-      v-if="pageConfig.isListToggleHos === '1'"
-      v-model:hosId="hosId"
-      :autoGetData="false"
-      @change="getListData(true)"
-      ref="selHosRef"
-    />
-    <view class="g-border-bottom">
-      <g-tabs
-        v-model:value="tabCurrent"
-        :tabs="tabField"
-        :scroll="false"
-        @change="tabChange"
-        field="label"
-        style="width: 100%"
+    <view v-if="isShowPatComponent" class="animate__animated animate__fadeIn">
+      <g-choose-pat
+        v-if="!pageProps.params"
+        @choose-pat="patChange"
       />
+      <g-selhos
+        v-if="pageConfig.isListToggleHos === '1'"
+        v-model:hosId="hosId"
+        :autoGetData="false"
+        @change="getListData(true)"
+        ref="selHosRef"
+      />
+      <view class="g-border-bottom">
+        <g-tabs
+          v-model:value="tabCurrent"
+          :tabs="tabField"
+          :scroll="false"
+          @change="tabChange"
+          field="label"
+          style="width: 100%"
+        />
+      </view>
     </view>
 
     <swiper
@@ -316,13 +318,13 @@
 
     uni.showLoading({});
 
-    if (queryParams && !opt.params) {
+    if (queryParams && !opt?.params) {
       return;
     }
 
     await wait(650);
 
-    if (opt.q) {
+    if (opt?.q) {
       return;
     }
 
