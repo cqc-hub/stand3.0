@@ -45,19 +45,19 @@
                 </view>
               </view>
             </block>
-          </block>
 
-          <view
-            :class="{
-              mt24: !isIncludeChineseMedicalFriedAndDelivery,
-            }"
-            class="f28"
-          >
-            <view class="flex-between">
-              <view class="color-888">快递费支付方式</view>
-              <view class="g-bold color-error">到付</view>
+            <view
+              :class="{
+                mt24: !isIncludeChineseMedicalFriedAndDelivery,
+              }"
+              class="f28"
+            >
+              <view class="flex-between">
+                <view class="color-888">快递费支付方式</view>
+                <view class="g-bold color-error">到付</view>
+              </view>
             </view>
-          </view>
+          </block>
         </view>
 
         <view class="container-box g-border mb16 box-padding">
