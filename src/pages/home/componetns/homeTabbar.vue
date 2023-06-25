@@ -15,7 +15,7 @@
       >
         <image
           :src="currentPath === item.url ? item.iconActive : item.icon"
-          mode="widthFix"
+          mode="heightFix"
         />
         <text class="label">{{ item.label }}</text>
       </view>
@@ -76,7 +76,7 @@
   current.value = currentPath;
 
   const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
-  isIos.value = systemInfo.startsWith('iOS');
+  isIos.value = !!systemInfo;
 
   onMounted(async () => {
     if (global.sConfig.isOpenButtom) {
@@ -88,12 +88,14 @@
       });
     }
 
-    if (!isIos.value) {
-      const { system } = await uni.getSystemInfo({});
-      isIos.value = system.startsWith('iOS');
+    if (systemInfo === '') {
+      const e = await uni.getSystemInfo({});
+      // @ts-expect-error
+      const { system, osName } = e;
+      isIos.value = system.startsWith('iOS') || osName === 'ios';
 
       setLocalStorage({
-        [SYS_TAB_KEY]: system,
+        [SYS_TAB_KEY]: isIos.value,
       });
     }
   });
@@ -109,7 +111,6 @@
     border-top: 1rpx solid var(--hr-neutral-color-2);
     box-shadow: 2rpx 0 6px rgba(0, 0, 0, 0.06);
     z-index: 2;
-    padding-top: 20rpx;
     height: 120rpx;
 
     &.ios {
@@ -119,18 +120,22 @@
     .tabbar-container {
       display: flex;
       justify-content: space-around;
-      height: 100%;
       flex: 1;
+      height: 100%;
 
       .tabbar-item {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
+        padding-top: 20rpx;
 
         position: relative;
         flex: 1;
-        height: 100%;
+
+        &:active {
+          background-color: var(--hr-neutral-color-1);
+        }
 
         .label {
           font-size: var(--hr-font-size-xxxs);

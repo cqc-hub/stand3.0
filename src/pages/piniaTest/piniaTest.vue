@@ -129,6 +129,7 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
+    // path: '/',
     text: '麻醉病历申请',
     extraData: {
       _type: 'historyAnaesthesia',
