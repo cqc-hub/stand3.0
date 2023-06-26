@@ -15,7 +15,11 @@
       >
         <image
           :src="currentPath === item.url ? item.iconActive : item.icon"
+          :class="{
+            animate__rubberBand: currentPath === item.url,
+          }"
           mode="heightFix"
+          class="animate__animated animate__fast"
         />
         <text class="label">{{ item.label }}</text>
       </view>
