@@ -60,11 +60,19 @@
 
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
-  const emits = defineEmits(['choose-pat']);
+  const emits = defineEmits(['choose-pat', 'go-choose-pat']);
   const isClose = ref(true);
+  const props = defineProps<{
+    isUnSelPat?: boolean;
+  }>()
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
+    emits('go-choose-pat')
+
+    if (props.isUnSelPat) {
+      return
+    }
 
     if (!patList.length) {
       gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');

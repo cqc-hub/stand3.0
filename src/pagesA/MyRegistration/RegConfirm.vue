@@ -201,7 +201,6 @@
     const {
       result: { orderId },
     } = await api.addReg(requestArg).catch((e) => {
-      console.log(e);
       if (e) {
         const { respCode, message } = e;
 
@@ -210,6 +209,8 @@
           gStores.messageStore.closeMessage();
           preventOrderStr.value = message;
           isPreventOrder.value = true;
+        } else {
+          gStores.messageStore.showMessage(message || '挂号异常', 3000);
         }
       }
       throw new Error(e);

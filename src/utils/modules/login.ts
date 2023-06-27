@@ -372,7 +372,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 }
 
 class AliPayLoginHandler extends LoginUtils implements LoginHandler {
-  async handler1(e): Promise<void> {
+  async handler(e): Promise<void> {
     uni.showLoading({
       mask: true,
     });
@@ -386,7 +386,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       });
 
       console.log(responseStr);
-      return
+      // return
 
       const accountType = this.globalStore.browser.accountType;
       const { authCode } = await apiAsync(my.getAuthCode, {
@@ -394,25 +394,33 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         scopes: 'auth_base',
       });
 
+      console.log(JSON.stringify({
+        code: authCode,
+        encrypData: responseStr,
+        accountType,
+      }));
 
-      await api.getAlipayBaseEncryLogin({
+      return
+
+
+
+      const { result } = await api.getAlipayBaseEncryLogin({
         code: authCode,
         encrypData: responseStr,
         accountType,
       });
 
-      return;
 
-      const { result } = await api.allinoneAuthApi(
-        packageAuthParams(
-          {
-            code: authCode,
-            codeType: 2,
-            accountType,
-          },
-          '/aliUserLogin/getTPAlipayUserInfoShare'
-        )
-      );
+      // const { result } = await api.allinoneAuthApi(
+      //   packageAuthParams(
+      //     {
+      //       code: authCode,
+      //       codeType: 2,
+      //       accountType,
+      //     },
+      //     '/aliUserLogin/getTPAlipayUserInfoShare'
+      //   )
+      // );
 
       const {
         userId,
@@ -464,7 +472,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
     }
   }
 
-  async handler(): Promise<void> {
+  async handler1(): Promise<void> {
     uni.showLoading({
       mask: true,
     });

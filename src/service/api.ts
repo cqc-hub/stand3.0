@@ -420,6 +420,7 @@ const regApi = {
   addReg: (data: any) =>
     service.post('/phs-reg/reg/addReg', parm(data), {
       hideLoading: false,
+      showMessage: false,
       monitorName: '预约挂号',
       reportCmPV_YLName: '挂号缴费',
     }),

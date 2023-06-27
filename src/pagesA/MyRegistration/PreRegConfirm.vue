@@ -39,7 +39,7 @@
         </view>
 
         <view>
-          <Reg-Confirm-ChoosePat />
+          <Reg-Confirm-ChoosePat @go-choose-pat="showPatChoose" isUnSelPat />
         </view>
       </view>
 
@@ -62,6 +62,8 @@
       @confirmButton="regConfirm"
       @cancelButton="dialogShow = false"
     />
+
+    <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
   </view>
 </template>
 
@@ -78,8 +80,10 @@
 
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
+  import ChoosePat from '@/components/g-choose-pat/choose-pat-action.vue';
 
   const gStores = new GStores();
+  const actionSheet = ref<InstanceType<typeof ChoosePat>>();
   const dialogShow = ref(false);
   const props = ref<IPrePageProps>({} as IPrePageProps);
   const hosName = ref('');
@@ -91,6 +95,16 @@
       return '0';
     }
   });
+
+  const choosePatHandler = ({ item }: { item: any; number: number }) => {
+    gStores.userStore.updatePatChoose(item);
+  };
+
+  const showPatChoose = () => {
+    if (actionSheet.value) {
+      actionSheet.value.show();
+    }
+  };
 
   const regConfirm = async () => {
     dialogShow.value = false;
@@ -129,6 +143,7 @@
 
 <style lang="scss" scoped>
   .g-container {
+    z-index: 2;
     .container-view {
       padding: 0 32rpx;
 
@@ -137,6 +152,10 @@
         padding-bottom: 16rpx;
       }
     }
+  }
+
+  .g-footer {
+    z-index: 1;
   }
 
   .fg-agree {
