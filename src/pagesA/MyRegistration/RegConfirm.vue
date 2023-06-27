@@ -15,7 +15,7 @@
         </view>
 
         <view>
-          <Reg-Confirm-ChoosePat  />
+          <Reg-Confirm-ChoosePat />
         </view>
       </view>
 
@@ -45,6 +45,18 @@
         aaa
       />
     </Order-Reg-Confirm>
+
+    <xy-dialog
+      :title="'提示'"
+      :show="isPreventOrder"
+      @confirmButton="goPay"
+      @cancelButton="isPreventOrder = false"
+      confirmText="去缴费"
+    >
+      <view class="reg-tip">
+        <rich-text :nodes="HTMLParser(preventOrderStr)" />
+      </view>
+    </xy-dialog>
 
     <view class="g-footer flex-column">
       <view class="fg-agree">
@@ -88,6 +100,7 @@
   import api from '@/service/api';
   import dayjs from 'dayjs';
   import global from '@/config/global';
+  import HTMLParser from '@/common/html-parser';
 
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import RegConfirmCard from './components/RegConfirmCard/RegConfirmCard.vue';
@@ -98,6 +111,8 @@
   const gStores = new GStores();
   const props = ref<IPageProps>({} as IPageProps);
   const isCheck = ref(false);
+  const isPreventOrder = ref(false);
+  const preventOrderStr = ref('');
   const regDialogConfirm = ref<any>('');
   const flagTitle9 = ref('');
   const greenToastDuration = ref(1500);
@@ -185,7 +200,20 @@
 
     const {
       result: { orderId },
-    } = await api.addReg(requestArg);
+    } = await api.addReg(requestArg).catch((e) => {
+      console.log(e);
+      if (e) {
+        const { respCode, message } = e;
+
+        // 限制欠费用户预约挂号
+        if (respCode === 999225) {
+          gStores.messageStore.closeMessage();
+          preventOrderStr.value = message;
+          isPreventOrder.value = true;
+        }
+      }
+      throw new Error(e);
+    });
 
     // #ifdef MP-ALIPAY
     if (alipayPid) {
@@ -221,6 +249,13 @@
         orderId,
         preWz: '1',
       }),
+    });
+  };
+
+  const goPay = () => {
+    isPreventOrder.value = false;
+    uni.reLaunch({
+      url: '/pagesA/clinicPay/clinicPayDetail',
     });
   };
 
@@ -286,5 +321,11 @@
     .check-box {
       font-size: 48rpx;
     }
+  }
+
+  .reg-tip {
+    max-height: 550rpx;
+    width: calc(100% - 64rpx);
+    margin-left: 32rpx;
   }
 </style>

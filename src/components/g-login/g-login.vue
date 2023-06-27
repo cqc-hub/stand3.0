@@ -6,9 +6,12 @@
 
     <block v-else>
       <button
-        :open-type="['wx'].includes(_env) && 'getPhoneNumber'"
+        :open-type="getOpenType"
         @getphonenumber="goLogin"
+        @getAuthorize="goLogin"
         @click="handlerClick"
+        @error="handlerError"
+        scope="phoneNumber"
         class="login-btn"
       >
         <view class="my-disabled">
@@ -20,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref,  } from 'vue';
   import { handlerLogin, GStores, routerJump } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
@@ -44,8 +47,19 @@
   _env.value = 'h5';
   // #endif
 
+  const getOpenType = computed(() => {
+    switch (_env.value) {
+      case 'wx':
+        return 'getPhoneNumber';
+      case 'alipay':
+        return 'getAuthorize';
+      default:
+        return '';
+    }
+  });
+
   const handlerClick = (e) => {
-    if (_env.value === 'h5' || _env.value === 'alipay') {
+    if (_env.value === 'h5') {
       goLogin(e);
     }
   };
@@ -55,13 +69,24 @@
     const fullPathNow = (pages[pages.length - 1] as any).$page
       .fullPath as string;
 
-    routeStore.receiveQuery({
-      _url: encodeURIComponent(fullPathNow),
-    });
+    if (
+      !(
+        fullPathNow.startsWith('/pages/home/my') ||
+        fullPathNow.startsWith('/pages/home/home')
+      )
+    ) {
+      routeStore.receiveQuery({
+        _url: encodeURIComponent(fullPathNow),
+      });
+    }
 
     emits('handler-login');
     await handlerLogin(e);
     nextStep();
+  };
+
+  const handlerError = () => {
+    gStores.messageStore.showMessage('授权失败, 请重新登录', 3000);
   };
 
   const nextStep = () => {

@@ -2,11 +2,12 @@ import {
   useGlobalStore,
   useUserStore,
   useMessageStore,
+  useRouterStore,
   IPat,
   isAreaProgram,
 } from '@/stores';
 import { getSysCode } from '@/common';
-import { apiAsync } from './utils';
+import { apiAsync, routerJump } from './utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
@@ -256,6 +257,7 @@ export class LoginUtils extends GStores {
     const { isHideMessage, isGoLoginPage } = options;
     this.userStore.clearStore();
     this.globalStore.clearStore();
+    useRouterStore().clear();
 
     setTimeout(() => {
       if (!isHideMessage) {
@@ -370,6 +372,98 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 }
 
 class AliPayLoginHandler extends LoginUtils implements LoginHandler {
+  async handler1(e): Promise<void> {
+    uni.showLoading({
+      mask: true,
+    });
+
+    try {
+      const { response: responseStr } = await apiAsync(my.getPhoneNumber, {
+        // https://opendocs.alipay.com/isv/03l4j2
+        protocols: {
+          isvAppId: '2021003172684536',
+        },
+      });
+
+      console.log(responseStr);
+      return
+
+      const accountType = this.globalStore.browser.accountType;
+      const { authCode } = await apiAsync(my.getAuthCode, {
+        // scopes: 'auth_user',
+        scopes: 'auth_base',
+      });
+
+
+      await api.getAlipayBaseEncryLogin({
+        code: authCode,
+        encrypData: responseStr,
+        accountType,
+      });
+
+      return;
+
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            code: authCode,
+            codeType: 2,
+            accountType,
+          },
+          '/aliUserLogin/getTPAlipayUserInfoShare'
+        )
+      );
+
+      const {
+        userId,
+        accessToken,
+        refreshToken,
+        authHerenId,
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+        authPhoneVerify,
+      } = result;
+
+      this.userStore.updateCacheUser({
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+      });
+
+      if (accountType === 1) {
+        this.globalStore.setH5OpenId(userId);
+      } else {
+        this.globalStore.setOpenId(userId);
+      }
+
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+
+      await this.getUerInfo();
+    } catch (error: any) {
+      if (error) {
+        const { errorMessage } = error;
+
+        if (errorMessage) {
+          this.messageStore.showMessage(errorMessage);
+        }
+
+        throw new Error(error);
+      }
+    } finally {
+      uni.hideLoading();
+    }
+  }
+
   async handler(): Promise<void> {
     uni.showLoading({
       mask: true,

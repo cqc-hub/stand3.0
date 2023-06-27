@@ -347,7 +347,6 @@
 
   // 可以选择性支付
   const isCanSelServerFee = computed(() => {
-    // return true
     let isMedicalPay = false;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     const {

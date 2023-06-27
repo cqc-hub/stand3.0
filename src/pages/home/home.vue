@@ -49,73 +49,67 @@
 
           <view class="card">
             <!-- 登录之后 -->
-            <block v-if="globalStore.isLogin">
-              <view
-                class="top-card flex-normal-between animate__animated animate__fadeIn"
-              >
-                <!-- 有就诊人时 -->
-                <block v-if="gStores.userStore.patChoose.patientName">
-                  <view class="flex-normal">
-                    <view @tap="cardClick" class="iconfont icon-size">
-                      &#xe6a7;
-                    </view>
-                    <view class="patient">
-                      <text>
-                        {{ gStores.userStore.patChoose.patientNameEncry }}
-                      </text>
-                      <text
-                        v-if="
-                          !isAreaProgram() &&
-                          gStores.userStore.patChoose._showId
-                        "
-                      >
-                        ID
-                        {{ gStores.userStore.patChoose._showId }}
-                      </text>
-                    </view>
-                  </view>
-                  <view class="switchPatient" @tap="chooseAction">
-                    更换就诊人
-                  </view>
-                </block>
-                <!-- 没有就诊人时 -->
-                <block v-else>
-                  <view class="flex-normal">
-                    <view class="patient">
-                      <text>暂无就诊人</text>
-                    </view>
-                  </view>
-                  <view class="switchPatient " @tap="addPatient">
-                    添加就诊人
-                  </view>
-                </block>
-              </view>
-            </block>
-            <block v-else>
-              <!-- 未登录 -->
-              <view
-                class="top-card flex-normal-between animate__animated animate__fadeIn"
-              >
-                <view class="flex-normal no-login">
-                  <text>请登录</text>
-                  <text>登录后享受更多服务</text>
-                </view>
-                <!-- #ifdef MP-ALIPAY -->
-                <view class="switchPatient no-login-tip" @tap="goLogin">
-                  请登录
-                </view>
-                <!-- #endif -->
-                <!-- #ifdef MP-WEIXIN -->
-                <button
-                  open-type="getPhoneNumber"
-                  @getphonenumber="goLogin"
-                  class="login-btn"
+            <g-login @handler-next="routerJump">
+              <block v-if="globalStore.isLogin">
+                <view
+                  class="top-card flex-normal-between animate__animated animate__fadeIn"
                 >
-                  请登录
-                </button>
-                <!-- #endif -->
-              </view>
-            </block>
+                  <!-- 有就诊人时 -->
+                  <block v-if="gStores.userStore.patChoose.patientName">
+                    <view class="flex-normal">
+                      <view @tap="cardClick" class="iconfont icon-size">
+                        &#xe6a7;
+                      </view>
+                      <view class="patient">
+                        <text>
+                          {{ gStores.userStore.patChoose.patientNameEncry }}
+                        </text>
+                        <text
+                          v-if="
+                            !isAreaProgram() &&
+                            gStores.userStore.patChoose._showId
+                          "
+                        >
+                          ID
+                          {{ gStores.userStore.patChoose._showId }}
+                        </text>
+                      </view>
+                    </view>
+                    <view class="switchPatient" @tap="chooseAction">
+                      更换就诊人
+                    </view>
+                  </block>
+                  <!-- 没有就诊人时 -->
+                  <block v-else>
+                    <view class="flex-normal">
+                      <view class="patient">
+                        <text>暂无就诊人</text>
+                      </view>
+                    </view>
+                    <view class="switchPatient" @tap="addPatient">
+                      添加就诊人
+                    </view>
+                  </block>
+                </view>
+              </block>
+              <block v-else>
+                <!-- 未登录 -->
+                <view
+                  class="top-card flex-normal-between animate__animated animate__fadeIn"
+                >
+                  <view class="flex-normal no-login">
+                    <text>请登录</text>
+                    <text>登录后享受更多服务</text>
+                  </view>
+                  <!-- #ifdef MP-ALIPAY -->
+                  <view class="switchPatient no-login-tip">请登录</view>
+                  <!-- #endif -->
+                  <!-- #ifdef MP-WEIXIN -->
+                  <button class="login-btn">请登录</button>
+                  <!-- #endif -->
+                </view>
+              </block>
+            </g-login>
 
             <view class="top-menu">
               <view class="box" v-if="topMenuList.length">
@@ -193,7 +187,7 @@
           </view>
           <!-- #endif -->
           <view class="fun-list" v-if="menuList.length">
-            <homeMenu :list="menuList" @open-share="openShare"  />
+            <homeMenu :list="menuList" @open-share="openShare" />
           </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
             <image
@@ -305,7 +299,10 @@
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
-    <homeH5SharePopup ref="homeH5SharePopupRef" :imageUrl="$global.BASE_IMG+h5QrCodeImg"  />
+    <homeH5SharePopup
+      ref="homeH5SharePopupRef"
+      :imageUrl="$global.BASE_IMG + h5QrCodeImg"
+    />
 
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
   </view>
@@ -351,7 +348,7 @@
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
-  const h5QrCodeImg =ref('lqCode.jpg')
+  const h5QrCodeImg = ref('lqCode.jpg');
 
   const noticeText = computed(() => {
     const len = noticeMenu.value.length;
@@ -468,10 +465,10 @@
     }
   };
   //打开关注框
-  const openShare = (item)=>{ 
-    h5QrCodeImg.value = item
-    homeH5SharePopupRef.value.show()
-  } 
+  const openShare = (item) => {
+    h5QrCodeImg.value = item;
+    homeH5SharePopupRef.value.show();
+  };
 
   const getNotice = async () => {
     const { result } = await api.getAnnouncementCms({});
@@ -762,6 +759,7 @@
         box-shadow: none !important;
         margin: 0;
         height: 64rpx;
+        width: 144rpx;
         background: linear-gradient(
           180deg,
           rgba(255, 255, 255, 0.9),
@@ -850,7 +848,7 @@
     }
 
     .banner-menu {
-      margin: var(--h-margin-24) 0; 
+      margin: var(--h-margin-24) 0;
     }
 
     .official-list {
@@ -965,5 +963,4 @@
       width: 124rpx;
     }
   }
-
 </style>

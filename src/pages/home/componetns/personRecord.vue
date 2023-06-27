@@ -10,34 +10,23 @@
         />
       </g-login>
 
-      <view class="info">
-        <block v-if="gStores.globalStore.isLogin">
-          <text class="user-name animate__animated animate__fadeIn">
-            {{ gStores.userStore.name || gStores.userStore.cellPhoneNum }}
-          </text>
-        </block>
+      <g-login @handler-next="routerJump">
+        <view class="info">
+          <block v-if="gStores.globalStore.isLogin">
+            <text class="user-name animate__animated animate__fadeIn">
+              {{ gStores.userStore.name || gStores.userStore.cellPhoneNum }}
+            </text>
+          </block>
 
-        <block v-else>
-          <!-- #ifdef MP-ALIPAY -->
-          <button
-            @click="goLogin"
-            class="user-name login-btn animate__animated animate__fadeIn"
-          >
-            请登录
-          </button>
-          <!-- #endif -->
-
-          <!-- #ifdef MP-WEIXIN -->
-          <button
-            open-type="getPhoneNumber"
-            @getphonenumber="goLogin"
-            class="user-name login-btn animate__animated animate__fadeIn"
-          >
-            请登录
-          </button>
-          <!-- #endif -->
-        </block>
-      </view>
+          <block v-else>
+            <button
+              class="user-name login-btn animate__animated animate__fadeIn"
+            >
+              请登录
+            </button>
+          </block>
+        </view>
+      </g-login>
 
       <view
         v-if="gStores.globalStore.isLogin"
@@ -115,18 +104,6 @@
     if (homeConfig) {
       recordList.value = homeConfig[4].functionList;
     }
-  };
-
-  const goLogin = async (e: any) => {
-    // #ifdef MP-ALIPAY
-    await aliLogin();
-    // #endif
-
-    // #ifdef MP-WEIXIN
-    await wxLogin(e);
-    // #endif
-
-    routerJump();
   };
 
   const avatarClick = () => {

@@ -402,4 +402,8 @@
       flex: 0.8;
     }
   }
+
+  .animate__animated {
+    z-index: 10;
+  }
 </style>

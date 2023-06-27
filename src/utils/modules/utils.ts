@@ -125,7 +125,6 @@ export const routerJump = async (url?: `/${string}`) => {
   const messageStore = useMessageStore();
   const globalStore = useGlobalStore();
   const userStore = useUserStore();
-
   if (routerStore.isWork) {
     const _p = routerStore._p;
     if (!_p) {
@@ -143,6 +142,8 @@ export const routerJump = async (url?: `/${string}`) => {
         //   '未找到对应menuId 的 menu：' + routerStore._id
         // );
       }
+
+      routerStore.clear();
     }
     routerStore.clear();
   } else {
