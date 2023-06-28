@@ -697,7 +697,6 @@ export class PatientUtils extends LoginUtils {
     if (data._type === 'perfect') {
       await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
     } else {
-      data.authPhoneVerify = undefined;
       await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
   }
