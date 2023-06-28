@@ -16,7 +16,7 @@
         <image
           :src="currentPath === item.url ? item.iconActive : item.icon"
           :class="{
-            animate__rubberBand: currentPath === item.url,
+            animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
           }"
           mode="heightFix"
           class="animate__animated animate__fast"
@@ -37,6 +37,7 @@
   defineProps<{ systemModeOld: boolean }>();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
+  const clickCount = ref(0);
   const current = ref('');
   const tabBars = ref([
     {
@@ -60,6 +61,11 @@
 
   const changeTab = (item) => {
     const url = item.url;
+    clickCount.value++;
+
+    setTimeout(() => {
+      clickCount.value--;
+    }, 100);
 
     if (url !== currentPath) {
       // if (item.url == "netHospital") {
@@ -81,6 +87,10 @@
 
   const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
   isIos.value = !!systemInfo;
+
+  const animateItem = (item) => {
+    return currentPath === item.url && item.url === '/pages/home/my';
+  };
 
   onMounted(async () => {
     if (global.sConfig.isOpenButtom) {
@@ -106,6 +116,16 @@
 </script>
 
 <style lang="scss" scoped>
+  @keyframes rubberBandHref {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+
+    to {
+      transform: scale3d(1.15, 1.05, 1);
+    }
+  }
+
   .tabbar {
     position: absolute;
     bottom: 0;
@@ -150,6 +170,12 @@
         image {
           width: var(--hr-font-size-xxl);
           height: var(--hr-font-size-xxl);
+        }
+
+        &:active {
+          .animate__rubberBand {
+            animation: rubberBandHref ease 0.2s both;
+          }
         }
       }
     }

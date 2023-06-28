@@ -156,7 +156,6 @@
     routeStore.receiveQuery(props);
 
     getHomeConfig();
-    console.log(props, 'cqc');
 
     if (props.isWarningLogin) {
       messageStore.showMessage('未登录,请先登录', 1000);
@@ -164,11 +163,11 @@
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
 
-    if (gStores.globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
-      outLogin({
-        isHideMessage: true,
-      });
-    }
+    // if (gStores.globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
+    //   outLogin({
+    //     isHideMessage: true,
+    //   });
+    // }
   });
 
   const openModeOld = () => {

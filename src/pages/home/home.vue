@@ -436,19 +436,11 @@
     // #endif
 
     // 对应统一认证更新前登录的用户
-    if (gStores.globalStore.isLogin) {
-      if (!gStores.userStore.authPhoneVerify) {
-        outLogin({
-          isHideMessage: true,
-        });
-      }
-    }
-
-    if (globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
-      outLogin({
-        isHideMessage: true,
-      });
-    }
+    // if (globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
+    //   outLogin({
+    //     isHideMessage: true,
+    //   });
+    // }
   });
 
   const onChange = (e) => {

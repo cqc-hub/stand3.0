@@ -667,12 +667,6 @@ const authApi = {
     });
   },
 
-  getAlipayBaseEncryLogin: (data) => {
-    return service.post('/aliUserLogin/getAlipayBaseEncryLogin', parm(data), {
-      baseURL: global.authUrl,
-    });
-  },
-
   userInfoByToken: (data) => {
     return service.post('/modifyUserInfo/userInfoByToken', parm(data), {
       baseURL: global.authUrl,

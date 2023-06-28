@@ -59,6 +59,7 @@
     TFormKeys,
     getDefaultFormData,
     formatterSubPatientData,
+    loginAuthAlipay,
   } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
@@ -285,17 +286,7 @@
     return isDisabled;
   });
 
-  onReady(() => {
-    if (props.pageType === 'perfectReal') {
-      uni.setNavigationBarTitle({
-        title: '完善账号实名信息',
-      });
-    }
-  });
-
-  onMounted(async () => {
-    routeStore.receiveQuery(props);
-
+  const init = async () => {
     let formListKeys: TFormKeys[] = [
       'patientType',
       'patientName',
@@ -390,6 +381,24 @@
     });
 
     gform.value.setList(formList);
+  };
+
+  onReady(() => {
+    if (props.pageType === 'perfectReal') {
+      uni.setNavigationBarTitle({
+        title: '完善账号实名信息',
+      });
+    }
+  });
+
+  onMounted(async () => {
+    routeStore.receiveQuery(props);
+    init();
+
+    // #ifdef MP-ALIPAY
+    await loginAuthAlipay();
+    init();
+    // #endif
   });
 </script>
 

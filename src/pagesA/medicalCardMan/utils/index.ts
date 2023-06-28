@@ -1,6 +1,11 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
-import { idValidator, ServerStaticData, GStores } from '@/utils';
+import {
+  idValidator,
+  ServerStaticData,
+  GStores,
+  AliPayLoginHandler,
+} from '@/utils';
 import { decryptDes } from '@/common/des';
 
 /**
@@ -488,8 +493,32 @@ export const formatterSubPatientData = (data: BaseObject) => {
 
   if (patientName) {
     // 新疆要求不要有英文的 '•' -> '·'
-    cloneData.patientName = patientName.replace(/\•/g, '\·');
+    cloneData.patientName = patientName.replace(/\•/g, '·');
   }
 
   return cloneData;
+};
+
+export const loginAuthAlipay = async () => {
+  const gStores = new GStores();
+
+  const { authPhoneVerify } = gStores.userStore;
+  if (!authPhoneVerify) {
+    // #ifdef MP-ALIPAY
+    await new AliPayLoginHandler().handlerAuth().catch((e) => {
+      gStores.messageStore.showMessage(
+        '授权获取用户数据失败, 请重新进入授权',
+        3000,
+        {
+          closeCallBack() {
+            uni.reLaunch({
+              url: '/pages/home/my',
+            });
+          },
+        }
+      );
+      throw new Error(e);
+    });
+    // #endif
+  }
 };

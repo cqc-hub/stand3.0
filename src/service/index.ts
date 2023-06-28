@@ -102,7 +102,7 @@ Request.interceptors.response(
     alipayRequestTrack(response);
     // #endif
 
-    // 请根据后端规定的状态码判定
+    // 登录过期
     if (code === 4000) {
       const pages = getCurrentPages();
 

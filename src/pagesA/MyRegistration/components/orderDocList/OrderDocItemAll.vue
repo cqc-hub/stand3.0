@@ -10,7 +10,10 @@
         <view class="g-border-top pt24">
           <Order-Doc-Clinic-Time :item="item" />
 
-          <view class="date-container">
+          <view
+            v-if="item.schDocSubResultList && item.schDocSubResultList.length"
+            class="date-container"
+          >
             <view class="sel-date">
               <view class="sel-label g-flex-rc-cc text-no-wrap">可约日期:</view>
               <block v-if="getSelectData && getSelectData.length">

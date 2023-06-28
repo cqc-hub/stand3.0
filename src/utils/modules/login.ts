@@ -90,7 +90,7 @@ export class GStores {
 }
 
 export class LoginUtils extends GStores {
-  async getUerInfo(type?: 'alone') {
+  async getUerInfo(type?: 'alone', justGetInfo?: boolean) {
     try {
       const { source } = this.globalStore.browser;
       const { result } = await api.allinoneAuthApi(
@@ -136,7 +136,7 @@ export class LoginUtils extends GStores {
         }
         // #endif
 
-        if (!herenId) {
+        if (!herenId && !justGetInfo) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
           setTimeout(() => {
             uni.reLaunch({
@@ -371,22 +371,25 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
   }
 }
 
-class AliPayLoginHandler extends LoginUtils implements LoginHandler {
+let isLoading = false;
+export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
+    if (isLoading) {
+      return;
+    }
+
     uni.showLoading({
       mask: true,
     });
 
     try {
+      isLoading = true;
       const { response: responseStr } = await apiAsync(my.getPhoneNumber, {
         // https://opendocs.alipay.com/isv/03l4j2
         protocols: {
-          isvAppId: '2021003172684536',
+          isvAppId: globalGl.systemInfo.isvAlipayAppid,
         },
       });
-
-      console.log(responseStr);
-      // return
 
       const accountType = this.globalStore.browser.accountType;
       const { authCode } = await apiAsync(my.getAuthCode, {
@@ -394,54 +397,31 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         scopes: 'auth_base',
       });
 
-      console.log(JSON.stringify({
-        code: authCode,
-        encrypData: responseStr,
-        accountType,
-      }));
-
-      return
-
-
-
-      const { result } = await api.getAlipayBaseEncryLogin({
-        code: authCode,
-        encrypData: responseStr,
-        accountType,
-      });
-
-
-      // const { result } = await api.allinoneAuthApi(
-      //   packageAuthParams(
-      //     {
-      //       code: authCode,
-      //       codeType: 2,
-      //       accountType,
-      //     },
-      //     '/aliUserLogin/getTPAlipayUserInfoShare'
-      //   )
-      // );
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            code: authCode,
+            encrypData: responseStr,
+            accountType,
+          },
+          '/aliUserLogin/getAlipayBaseEncryLogin'
+        )
+      );
 
       const {
         userId,
         accessToken,
         refreshToken,
-        authHerenId,
-        certNo,
-        certType,
-        gender,
-        mobile,
-        userName,
-        authPhoneVerify,
+        // authPhoneVerify,
       } = result;
 
-      this.userStore.updateCacheUser({
-        certNo,
-        certType,
-        gender,
-        mobile,
-        userName,
-      });
+      // this.userStore.updateCacheUser({
+      //   certNo,
+      //   certType,
+      //   gender,
+      //   mobile,
+      //   userName,
+      // });
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
@@ -454,7 +434,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         refreshToken,
       });
 
-      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+      // this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
       await this.getUerInfo();
     } catch (error: any) {
@@ -468,11 +448,12 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         throw new Error(error);
       }
     } finally {
+      isLoading = false;
       uni.hideLoading();
     }
   }
 
-  async handler1(): Promise<void> {
+  async handlerAuth(): Promise<void> {
     uni.showLoading({
       mask: true,
     });
@@ -499,7 +480,6 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         userId,
         accessToken,
         refreshToken,
-        authHerenId,
         certNo,
         certType,
         gender,
@@ -529,7 +509,7 @@ class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
       this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
-      await this.getUerInfo();
+      await this.getUerInfo('alone', true);
     } catch (error: any) {
       if (error) {
         const { errorMessage } = error;

@@ -74,6 +74,7 @@
     getDefaultFormData,
     getHealthCardCode,
     formatterSubPatientData,
+    loginAuthAlipay,
   } from './utils';
   import {
     GStores,
@@ -652,16 +653,7 @@
     return isDisabled;
   });
 
-  onReady(() => {
-    if (props.pageType === 'perfectReal') {
-      uni.setNavigationBarTitle({
-        title: '完善账号实名信息',
-      });
-    }
-  });
-
-  onMounted(async () => {
-    routeStore.receiveQuery(props);
+  const init = async () => {
     formData.value = Object.fromEntries(
       Object.entries(props).map(([key, value]) => {
         if (key === formKey.defaultFalg) {
@@ -696,6 +688,24 @@
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);
     });
+  };
+
+  onReady(() => {
+    if (props.pageType === 'perfectReal') {
+      uni.setNavigationBarTitle({
+        title: '完善账号实名信息',
+      });
+    }
+  });
+
+  onMounted(async () => {
+    routeStore.receiveQuery(props);
+    init();
+
+    // #ifdef MP-ALIPAY
+    await loginAuthAlipay();
+    init();
+    // #endif
   });
 </script>
 

@@ -138,6 +138,7 @@
     "1001057": {
       "wxAppid": "wx7b1baac614ebed72",
       "alipayAppid": "2021003173633521",
+      "isvAlipayAppid": "2021003172684536",
       "name": "西安市红会医院",
       "isSearchInHos": true,
       "isOpenOcr": false,
