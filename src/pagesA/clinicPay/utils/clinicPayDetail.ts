@@ -362,6 +362,7 @@ export const medicalNationUpload = async (
   const gStores = new GStores();
   const {
     userLongitudeLatitude: { longitude, latitude },
+    userName
   } = auth;
 
   const { patientId } = gStores.userStore.patChoose;
@@ -371,6 +372,7 @@ export const medicalNationUpload = async (
     ...auth,
     ...detail,
     ...additional,
+    patientName: userName,
     mergeOrder: detail.childOrder,
     patientId,
     longitude,
@@ -493,7 +495,14 @@ export const isDefaultMedical = () => {
  * @param cardNumber
  * @returns boolean  本人医保?
  */
-export const isMedicalSelf = async (cardNumber: string): Promise<boolean> => {
+export const isMedicalSelf = async (
+  cardNumber: string,
+  params?: string
+): Promise<boolean> => {
+  if (params) {
+    return true;
+  }
+
   if (await _isMedicalSelf()) {
     const {
       sConfig: { medicalMHelp },
@@ -917,7 +926,8 @@ export const usePayPage = () => {
           const { cardNumber } = gStores.userStore.patChoose;
 
           const flag = await isMedicalSelf(
-            pageProps.value.deParams?.cardNumber || cardNumber
+            pageProps.value.deParams?.cardNumber || cardNumber,
+            pageProps.value.params
           );
 
           if (flag) {
@@ -1030,7 +1040,7 @@ export const usePayPage = () => {
       payload,
       {
         businessType: '1',
-        cardNumber
+        cardNumber,
       }
     );
 

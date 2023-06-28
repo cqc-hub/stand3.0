@@ -240,6 +240,9 @@
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
+  //- @ts-expect-error
+  // api.getClinicalPayDetailList = () => Promise.resolve({"result":{"qrCode":"100023882","costList":[{"subCostTypeCode":"1","subCost":"20.0","subCostTypeName":"西药费","serialNo": "1","costList":[{"itemSpec":"1mg*35","amount":"2","subCostTypeCode":"202305170004","subCost":"20.0","itemClass":"A","subCostTypeName":"阿兹夫定片","itemPrice":"10.00","units":"瓶"}, {"itemSpec":"1mg*35","amount":"2","subCostTypeCode":"111202305170004","subCost":"20.0","itemClass":"A","subCostTypeName":"阿兹夫定片233","itemPrice":"10.00","units":"瓶"}]},{"subCostTypeCode":"7","subCost":"55.0","subCostTypeName":"检查费","serialNo": "2","costList":[{"itemSpec":"/","amount":"1","subCostTypeCode":"210102015","subCost":"55.0","itemClass":"D","subCostTypeName":"数字化摄影（DR）","itemPrice":"55.00","units":"曝光次数"}]},{"subCostTypeCode":"chineseMedicine","subCost":"63.38","subCostTypeName":"中成药费","serialNo": "3","costList":[{"itemSpec":"50mg","amount":"2","subCostTypeCode":"202301120149","subCost":"63.38","itemClass":"M","subCostTypeName":"注射用丹参多酚酸盐","itemPrice":"31.69","units":"支"}]},{"subCostTypeCode":"6","subCost":"10.0","subCostTypeName":"治疗费","serialNo": "4","costList":[{"itemSpec":"/","amount":"1","subCostTypeCode":"120600004","subCost":"10.0","itemClass":"E","subCostTypeName":"小换药","itemPrice":"10.00","units":"次"}]},{"subCostTypeCode":"8","subCost":"3.0","subCostTypeName":"化验费","serialNo": "5","costList":[{"itemSpec":"/","amount":"1","subCostTypeCode":"250301001","subCost":"3.0","itemClass":"C","subCostTypeName":"血清总蛋白测定","itemPrice":"3.00","units":"项"}]}],"hosId":"12929","payState":"0","hosName":"西安市红会医院","totalCost":"151.38","personCost":"151.38","medicalCost":"0.00"},"timeTaken":119,"code":0,"functionVersion":"[{\"functionType\":\"1\",\"version\":\"v0.0.15\"},{\"functionType\":\"2\",\"version\":\"v0.0.15\"}]","message":"成功","respCode":999002})
+
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
@@ -344,6 +347,7 @@
 
   // 可以选择性支付
   const isCanSelServerFee = computed(() => {
+    // return true
     let isMedicalPay = false;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     const {
@@ -529,7 +533,10 @@
     let flag = false;
 
     if (isMedicalMode) {
-      flag = await isMedicalSelf(props.value.cardNumber || cardNumber);
+      flag = await isMedicalSelf(
+        props.value.cardNumber || cardNumber,
+        props.value.params
+      );
     }
 
     changeRefPayList(0);
@@ -692,7 +699,7 @@
     setTimeout(() => {
       if (props.value.payState === '0') {
         console.log({
-          _qrOpt
+          _qrOpt,
         });
 
         capture();

@@ -82,7 +82,8 @@ export const useTBanner = async (
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
-  const localUrl = 'http://localhost:8888/#/';
+  // const localUrl = 'http://localhost:8888/#/';
+  const localUrl = 'http://10.10.117.39:8888/#/';
 
   const _d = {
     _patientId: '',
