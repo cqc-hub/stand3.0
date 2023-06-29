@@ -5,9 +5,14 @@ interface ISConfig {
   isOpenButtom?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
-
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
   medicalMHelp?: {
+    /** 开启就诊人更新患者医保 */
+    isOpenPatToMedicalPat?: {
+      /** 需要获取授权? */
+      needAuth?: '1';
+    };
+
     alipay?: {
       /** [医保插件模式](https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt)
        *
@@ -139,6 +144,8 @@ const scJson: Record<string, ISConfig> = {
     },
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {
+      isOpenPatToMedicalPat: {},
+
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',

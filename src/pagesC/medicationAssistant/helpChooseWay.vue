@@ -14,8 +14,11 @@
           </view>
         </view>
 
-        <view class="container-box g-border mb16 box-padding">
-          <block v-if="!isIncludeChineseMedicalFriedAndDelivery">
+        <view
+          v-if="!isIncludeChineseMedicalFriedAndDelivery"
+          class="container-box g-border mb16 box-padding"
+        >
+          <block>
             <block v-if="aimList.length > 1">
               <view id="_express" class="g-bold f36">选择快递方式</view>
 
@@ -93,18 +96,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
 
   import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { setLocalStorage, getLocalStorage } from '@/common';
-  import {
-    GStores,
-    IHosInfo,
-    ISystemConfig,
-    ServerStaticData,
-    upImgOss,
-    wait,
-  } from '@/utils';
+  import { getLocalStorage } from '@/common';
+  import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import { getSrc } from './utils';
   import api from '@/service/api';
 
@@ -192,6 +188,7 @@
       provinces,
       remark: remark.value,
     };
+
     await api.addDrugDelivery(args);
 
     uni.reLaunch({

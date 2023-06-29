@@ -2,7 +2,7 @@
   <view>
     <view
       :class="{
-        [type]: type
+        [type]: type,
       }"
       class="tag-container"
     >
@@ -14,23 +14,23 @@
 <script lang="ts">
   import { defineComponent, PropType, ref } from 'vue';
 
-  type TText = 'yellow';
+  type TText = 'yellow' | 'blue';
   export default defineComponent({
     props: {
       text: {
         type: String,
-        default: ''
+        default: '',
       },
 
       type: {
         type: String as PropType<TText>,
-        default: 'yellow'
-      }
+        default: 'yellow',
+      },
     },
 
     setup() {
       return {};
-    }
+    },
   });
 </script>
 
@@ -47,6 +47,11 @@
     &.yellow {
       background-color: var(--hr-warning-color-1);
       color: var(--hr-warning-color-6);
+    }
+
+    &.blue {
+      background-color: var(--hr-brand-color-3-light);
+      color: var(--hr-brand-color-6);
     }
   }
 </style>

@@ -6,9 +6,9 @@ import {
   ServerStaticData,
   wait,
   useTBanner,
+  PatientUtils
 } from '@/utils';
 import {
-  joinQuery,
   joinQueryForUrl,
   setLocalStorage,
   getLocalStorage,
@@ -362,7 +362,7 @@ export const medicalNationUpload = async (
   const gStores = new GStores();
   const {
     userLongitudeLatitude: { longitude, latitude },
-    userName
+    userName,
   } = auth;
 
   const { patientId } = gStores.userStore.patChoose;
@@ -1007,6 +1007,8 @@ export const usePayPage = () => {
       const isMedicalMode = getIsMedicalMode();
 
       if (isMedicalMode) {
+        await new PatientUtils().upToMedicalPat(gStores.userStore.patChoose);
+
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();
         // #endif

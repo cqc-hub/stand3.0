@@ -116,9 +116,7 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        // #ifdef  MP-WEIXIN
         this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-        // #endif
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -373,7 +371,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
-  async handler(e): Promise<void> {
+  async handler(): Promise<void> {
     if (isLoading) {
       return;
     }
@@ -408,20 +406,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         )
       );
 
-      const {
-        userId,
-        accessToken,
-        refreshToken,
-        // authPhoneVerify,
-      } = result;
-
-      // this.userStore.updateCacheUser({
-      //   certNo,
-      //   certType,
-      //   gender,
-      //   mobile,
-      //   userName,
-      // });
+      const { userId, accessToken, refreshToken } = result;
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
@@ -433,8 +418,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accessToken,
         refreshToken,
       });
-
-      // this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
       await this.getUerInfo();
     } catch (error: any) {
@@ -485,7 +468,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         gender,
         mobile,
         userName,
-        authPhoneVerify,
       } = result;
 
       this.userStore.updateCacheUser({
@@ -506,8 +488,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accessToken,
         refreshToken,
       });
-
-      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
       await this.getUerInfo('alone', true);
     } catch (error: any) {
@@ -548,6 +528,34 @@ export class Login extends LoginUtils {
 }
 
 export class PatientUtils extends LoginUtils {
+  /** 升级医保用户 */
+  async upToMedicalPat(pat: IPat) {
+    const { patientId, healthCardUser } = pat;
+    const isOpenPatToMedicalPat =
+      globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat;
+
+    if (!isOpenPatToMedicalPat || (healthCardUser && healthCardUser === '2')) {
+      return;
+    }
+
+    const {
+      browser: { source },
+    } = this.globalStore;
+
+    await api.updateHosInfo({
+      patientId,
+      source,
+    });
+
+    await this.getPatCardList();
+    const { patChoose, patList } = this.userStore;
+
+    if (patChoose.patientId === patientId) {
+      const newPatInfo = patList.find((p) => p.patientId === patientId)!;
+      this.userStore.updatePatChoose(newPatInfo);
+    }
+  }
+
   /**
    * 完善
    */

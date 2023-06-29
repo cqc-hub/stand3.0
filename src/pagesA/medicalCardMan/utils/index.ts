@@ -499,11 +499,12 @@ export const formatterSubPatientData = (data: BaseObject) => {
   return cloneData;
 };
 
-export const loginAuthAlipay = async () => {
+export const loginAuthAlipay = async (init: Function) => {
   const gStores = new GStores();
 
-  const { authPhoneVerify } = gStores.userStore;
-  if (!authPhoneVerify) {
+  const { cacheUser, patList } = gStores.userStore;
+  const { userName } = cacheUser;
+  if (!userName && !patList.length) {
     // #ifdef MP-ALIPAY
     await new AliPayLoginHandler().handlerAuth().catch((e) => {
       gStores.messageStore.showMessage(
@@ -519,6 +520,8 @@ export const loginAuthAlipay = async () => {
       );
       throw new Error(e);
     });
+
+    init && init();
     // #endif
   }
 };

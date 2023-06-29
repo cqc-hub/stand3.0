@@ -152,9 +152,24 @@
     isLocal: '1',
   };
 
+  const questionkupperman: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    // path: 'pagesC/question/kuppermanQuestion3',
+    text: 'kupperman',
+    extraData: {
+      _type: 'kupperman',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(historyAnaesthesia);
+      useTBanner(questionkupperman);
     }, 1000);
   });
 </script>

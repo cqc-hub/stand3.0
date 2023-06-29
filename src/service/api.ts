@@ -569,6 +569,9 @@ const userApi = {
       }
     ),
 
+  updateHosInfo: (data) =>
+    service.post('/phs-user/relevantPatient/updateHosInfo', parm(data), {}),
+
   //添加已就诊就诊人
   addPatientByHasBeenTreated: (data) =>
     service.post(

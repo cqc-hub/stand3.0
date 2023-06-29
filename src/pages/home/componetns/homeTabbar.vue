@@ -61,11 +61,14 @@
 
   const changeTab = (item) => {
     const url = item.url;
-    clickCount.value++;
 
-    setTimeout(() => {
-      clickCount.value--;
-    }, 100);
+    if (url === '/pages/home/my') {
+      clickCount.value++;
+
+      setTimeout(() => {
+        clickCount.value--;
+      }, 100);
+    }
 
     if (url !== currentPath) {
       // if (item.url == "netHospital") {

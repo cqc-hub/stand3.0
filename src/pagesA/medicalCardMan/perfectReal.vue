@@ -404,8 +404,7 @@
     init();
 
     // #ifdef MP-ALIPAY
-    await loginAuthAlipay();
-    init();
+    await loginAuthAlipay(init);
     // #endif
   });
 </script>
