@@ -51,9 +51,9 @@
     routerJump,
     ServerStaticData,
     nameConvert,
+    wait,
   } from '@/utils';
   import {
-    FormKey,
     pickTempItem,
     formKey,
     TFormKeys,
@@ -93,9 +93,6 @@
   const patList = gStores.userStore.patList;
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
-    // patientName: '大钢炮22',
-    // patientPhone: '13868529891',
-    // [formKey.verify]: '2313',
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
   });
@@ -230,17 +227,28 @@
     } else {
       // 新增就诊人
       const value = formData.value;
+      const requestArg = {
+        ...data,
+        defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
+        herenId: patientUtil.globalStore.herenId,
+        patientName: value[formKey.patientName],
+        patientPhone: value[formKey.patientPhone],
+        source: patientUtil.globalStore.browser.source,
+        patientType: formData.value[formKey.patientType],
+        verifyCode: formData.value[formKey.verifyCode],
+      };
+      if (!formData.value[formKey.verifyCode]) {
+        // #ifdef MP-ALIPAY
+        const { patList, authPhoneVerify } = gStores.userStore;
+
+        if (!patList.length) {
+          requestArg.authPhoneVerify = authPhoneVerify;
+        }
+        // #endif
+      }
+
       await patientUtil
-        .addPatient({
-          ...data,
-          defaultFalg: value[formKey.defaultFalg] ? '1' : '0',
-          herenId: patientUtil.globalStore.herenId,
-          patientName: value[formKey.patientName],
-          patientPhone: value[formKey.patientPhone],
-          source: patientUtil.globalStore.browser.source,
-          patientType: formData.value[formKey.patientType],
-          verifyCode: formData.value[formKey.verifyCode],
-        })
+        .addPatient(requestArg)
         .then(async () => {
           // 切换默认就诊人
           if (value[formKey.defaultFalg]) {
@@ -375,7 +383,7 @@
         o.labelWidth = undefined;
       }
 
-      if (formData.value[key] !== undefined && key !== formKey.defaultFalg) {
+      if (formData.value[key] && key !== formKey.defaultFalg) {
         o.disabled = true;
       }
     });
@@ -396,8 +404,7 @@
     init();
 
     // #ifdef MP-ALIPAY
-    await loginAuthAlipay();
-    init();
+    await loginAuthAlipay(init);
     // #endif
   });
 </script>

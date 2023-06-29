@@ -5,7 +5,8 @@
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
         <text class="pat-name bold">{{ pat.patientNameEncry }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
-        <g-tag v-if="pat.defaultFlag === '1'" type="yellow" text="默认" />
+        <g-tag v-if="pat.defaultFlag === '1'" type="yellow" text="默认" class="mr12" />
+        <g-tag v-if="pat.healthCardUser === '2'" type="blue" text="医保" />
       </view>
 
       <view class="iconfont icon-resize">&#xe66b;</view>

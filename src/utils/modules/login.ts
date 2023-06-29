@@ -116,9 +116,7 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        // #ifdef  MP-WEIXIN
         this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-        // #endif
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -373,7 +371,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
-  async handler(e): Promise<void> {
+  async handler(): Promise<void> {
     if (isLoading) {
       return;
     }
@@ -384,44 +382,45 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
     try {
       isLoading = true;
-      const { response: responseStr } = await apiAsync(my.getPhoneNumber, {
-        // https://opendocs.alipay.com/isv/03l4j2
-        protocols: {
-          isvAppId: globalGl.systemInfo.isvAlipayAppid,
-        },
-      });
+      const getPhoneNumberOpt: BaseObject = {};
+      const isvAppId = globalGl.systemInfo.isvAlipayAppid;
+      if (isvAppId) {
+        getPhoneNumberOpt.protocols = {
+          isvAppId,
+        };
+      }
+
+      /**
+       * https://opendocs.alipay.com/isv/03l4j2
+       * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+       * 待开发后台
+       *  - 开发设置-应用网关
+       *  - 产品绑定-绑定产品-获取会员手机号
+       *
+       */
+      const { response: responseStr } = await apiAsync(
+        my.getPhoneNumber,
+        getPhoneNumberOpt
+      );
 
       const accountType = this.globalStore.browser.accountType;
       const { authCode } = await apiAsync(my.getAuthCode, {
         // scopes: 'auth_user',
         scopes: 'auth_base',
       });
+      const loginArg = {
+        code: authCode,
+        encrypData: responseStr,
+        accountType,
+      };
+
+      console.log(JSON.stringify(loginArg));
 
       const { result } = await api.allinoneAuthApi(
-        packageAuthParams(
-          {
-            code: authCode,
-            encrypData: responseStr,
-            accountType,
-          },
-          '/aliUserLogin/getAlipayBaseEncryLogin'
-        )
+        packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')
       );
 
-      const {
-        userId,
-        accessToken,
-        refreshToken,
-        // authPhoneVerify,
-      } = result;
-
-      // this.userStore.updateCacheUser({
-      //   certNo,
-      //   certType,
-      //   gender,
-      //   mobile,
-      //   userName,
-      // });
+      const { userId, accessToken, refreshToken } = result;
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
@@ -433,8 +432,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accessToken,
         refreshToken,
       });
-
-      // this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
       await this.getUerInfo();
     } catch (error: any) {
@@ -485,7 +482,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         gender,
         mobile,
         userName,
-        authPhoneVerify,
       } = result;
 
       this.userStore.updateCacheUser({
@@ -506,8 +502,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accessToken,
         refreshToken,
       });
-
-      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
 
       await this.getUerInfo('alone', true);
     } catch (error: any) {
@@ -548,6 +542,34 @@ export class Login extends LoginUtils {
 }
 
 export class PatientUtils extends LoginUtils {
+  /** 升级医保用户 */
+  async upToMedicalPat(pat: IPat) {
+    const { patientId, healthCardUser } = pat;
+    const isOpenPatToMedicalPat =
+      globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat;
+
+    if (!isOpenPatToMedicalPat || (healthCardUser && healthCardUser === '2')) {
+      return;
+    }
+
+    const {
+      browser: { source },
+    } = this.globalStore;
+
+    await api.updateHosInfo({
+      patientId,
+      source,
+    });
+
+    await this.getPatCardList();
+    const { patChoose, patList } = this.userStore;
+
+    if (patChoose.patientId === patientId) {
+      const newPatInfo = patList.find((p) => p.patientId === patientId)!;
+      this.userStore.updatePatChoose(newPatInfo);
+    }
+  }
+
   /**
    * 完善
    */
@@ -697,7 +719,6 @@ export class PatientUtils extends LoginUtils {
     if (data._type === 'perfect') {
       await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
     } else {
-      data.authPhoneVerify = undefined;
       await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
   }

@@ -62,6 +62,18 @@
             </health-card-login>
           </block>
           <!-- #endif -->
+
+          <view
+            v-if="
+              $global.sConfig.medicalMHelp &&
+              $global.sConfig.medicalMHelp.isOpenPatToMedicalPat &&
+              pat.healthCardUser === '1'
+            "
+            @click="upToMedicalPat(pat)"
+            class="jkk"
+          >
+            更新为医保用户
+          </view>
         </template>
       </pat-List>
     </view>
@@ -74,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores, PatientUtils } from '@/utils';
+  import { GStores, PatientUtils, apiAsync } from '@/utils';
   import { IPat } from '@/stores';
   import { ref } from 'vue';
   import { getHealthCardCode } from './utils/index';
@@ -124,6 +136,16 @@
       return Promise.reject(void 0);
     }
     // #endif
+  };
+
+  const upToMedicalPat = async (pat: IPat) => {
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '确定升级为医保用户?',
+    });
+
+    if (confirm) {
+      await patientUtils.upToMedicalPat(pat);
+    }
   };
 
   const addPatPage = () => {

@@ -1,9 +1,10 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
-      "alipayAppid": "2021003154665105",
+      "alipayAppid": "2021002139602458",
+      "isvAlipayAppid": "2021003154665105",
       "h5Appid": "wx8e5a08ccb011d26c",
       "name": "台州市第一人民医院",
       "isStartComeTest": false,
@@ -62,7 +63,8 @@
 
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
-      "alipayAppid": "2021003159674187",
+      "alipayAppid": "2021003173668243",
+      "isvAlipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "h5AppidDisabledInTest": true,
       "name": "乐清市人民医院",
@@ -73,6 +75,7 @@
     "1001046": {
       "wxAppid": "wxb00075173e764492",
       "alipayAppid": "2021003113623396",
+      "isvAlipayAppid": "2021003116641812",
       "h5Appid": "wx1be541208ab16799",
       "name": "绍兴市人民医院",
       "isStartComeTest": true,
@@ -83,6 +86,7 @@
     "1001055": {
       "wxAppid": "wxd9a9c329edc6e2b0",
       "alipayAppid": "2021003164669106",
+      "isvAlipayAppid": "2021003164669106",
       "h5Appid": "wx56d1a143ff27e903",
       "name": "联勤保障部队第987医院",
       "isOpenHealthCard": {
@@ -99,6 +103,7 @@
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
       "alipayAppid": "2021003167607056",
+      "isvAlipayAppid": "2021003167607056",
       "h5Appid": "wxf57d660046a04f49",
       "name": "咸阳市第一人民医院",
       "isOpenHealthCard": {
