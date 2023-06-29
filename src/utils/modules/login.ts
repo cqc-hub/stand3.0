@@ -382,28 +382,42 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
     try {
       isLoading = true;
-      const { response: responseStr } = await apiAsync(my.getPhoneNumber, {
-        // https://opendocs.alipay.com/isv/03l4j2
-        protocols: {
-          isvAppId: globalGl.systemInfo.isvAlipayAppid,
-        },
-      });
+      const getPhoneNumberOpt: BaseObject = {};
+      const isvAppId = globalGl.systemInfo.isvAlipayAppid;
+      if (isvAppId) {
+        getPhoneNumberOpt.protocols = {
+          isvAppId,
+        };
+      }
+
+      /**
+       * https://opendocs.alipay.com/isv/03l4j2
+       * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+       * 待开发后台
+       *  - 开发设置-应用网关
+       *  - 产品绑定-绑定产品-获取会员手机号
+       *
+       */
+      const { response: responseStr } = await apiAsync(
+        my.getPhoneNumber,
+        getPhoneNumberOpt
+      );
 
       const accountType = this.globalStore.browser.accountType;
       const { authCode } = await apiAsync(my.getAuthCode, {
         // scopes: 'auth_user',
         scopes: 'auth_base',
       });
+      const loginArg = {
+        code: authCode,
+        encrypData: responseStr,
+        accountType,
+      };
+
+      console.log(JSON.stringify(loginArg));
 
       const { result } = await api.allinoneAuthApi(
-        packageAuthParams(
-          {
-            code: authCode,
-            encrypData: responseStr,
-            accountType,
-          },
-          '/aliUserLogin/getAlipayBaseEncryLogin'
-        )
+        packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')
       );
 
       const { userId, accessToken, refreshToken } = result;

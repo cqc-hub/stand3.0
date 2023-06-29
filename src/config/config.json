@@ -1,9 +1,9 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
-      "alipayAppid": "2021003154665105",
+      "alipayAppid": "2021002139602458",
       "isvAlipayAppid": "2021003154665105",
       "h5Appid": "wx8e5a08ccb011d26c",
       "name": "台州市第一人民医院",
@@ -63,7 +63,7 @@
 
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
-      "alipayAppid": "2021003159674187",
+      "alipayAppid": "2021003173668243",
       "isvAlipayAppid": "2021003159674187",
       "h5Appid": "wxd57b91aafadc73a1",
       "h5AppidDisabledInTest": true,
