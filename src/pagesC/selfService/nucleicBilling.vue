@@ -84,15 +84,29 @@ const gStores = new GStores();
 const pageLoading = ref(false);
 const currentIndex = ref(0);
 
-onLoad(async () => {
+onLoad(async (opt) => {
+  console.log(2222,props)
+  const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+
+uni.showLoading({});
+
+if (queryParams && !opt?.params) {
+  return;
+}
+
+await wait(650);
+
+if (opt?.q) {
+  return;
+}
   initConfig();
-  console.log(3333,getTimeStamp(6));
   
   // await gStores.userStore.getPatList();
 }); 
 
 //初始化页面数据
 const initConfig = async () => {
+  console.log(11,'dddd')
   pageLoading.value = false;
   let billingType = props.type?props.type:(props.isPay === "1" ? 3 : 99999) // 不配type 默认 3-需要支付 99999-去门诊不需要支付
   await api
