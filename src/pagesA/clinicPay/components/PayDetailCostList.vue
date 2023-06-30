@@ -47,6 +47,7 @@
                 :class="{
                   active: isActive(item),
                 }"
+                @click="selChildren([citem])"
                 class="medical-item flex-between f28 color-444"
               >
                 <view class="text-ellipsis mr8 label-medical">
@@ -120,7 +121,7 @@
     mulit: boolean;
     mulitChildren: boolean;
   }>();
-  const emits = defineEmits(['sel-item']);
+  const emits = defineEmits(['sel-item', 'sel-children']);
 
   const isActive = (item: TCostList[number]) => {
     return (
@@ -133,7 +134,14 @@
     return 1;
   };
 
-  const selItem = (item, idx) => {
+  const selChildren = (list: TCostList[number]['costList']) => {};
+
+  const selItem = (item: TCostList[number], idx) => {
+    if (props.mulitChildren) {
+      selChildren(item.costList);
+      return;
+    }
+
     emits('sel-item', {
       item,
       index: idx,

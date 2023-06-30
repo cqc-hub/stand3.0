@@ -119,6 +119,7 @@ export type TCostList = {
     subCostTypeCode: string;
     subCostTypeName: string;
     units: string;
+    detailNo: string;
   }[];
 }[];
 

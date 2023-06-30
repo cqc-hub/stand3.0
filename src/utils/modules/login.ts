@@ -116,7 +116,9 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
+        // #ifdef MP-ALIPAY
         this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+        // #endif
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -414,7 +416,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accountType,
       };
 
-      console.log(JSON.stringify(loginArg));
 
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')
@@ -482,6 +483,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         gender,
         mobile,
         userName,
+        authPhoneVerify
       } = result;
 
       this.userStore.updateCacheUser({
@@ -491,6 +493,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         mobile,
         userName,
       });
+      this.userStore.updateAuthPhoneVerify(authPhoneVerify);
+
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
