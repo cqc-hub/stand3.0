@@ -155,8 +155,6 @@ export interface ISystemConfig {
     payedFooterBtn?: TButtonConfig;
     /** 预结算 */
     isPreSettle?: '1';
-    // 申请退单
-    isOpenChargeback?: '1';
     // 扫码缴费是否隐藏列表金额
     isScanListHideMoney?: '1';
 
@@ -169,6 +167,10 @@ export interface ISystemConfig {
 
     /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
     isSubitemPay?: '1';
+    // 申请退单
+    isOpenChargeback?: '1';
+    // 已缴费详情页面对某一条具体的费用进行退费
+    isPayedItemDetailRefund?: '1';
 
     // 缴费完成后跳转
     /**

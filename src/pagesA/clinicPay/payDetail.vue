@@ -90,6 +90,8 @@
                 :list="detailData.costList"
                 :selList="selList"
                 :mulit="isCanSelServerFee"
+                :selListChildren="selListChildren"
+                :mulitChildren="isPayedItemDetailRefundBtnShow"
                 @sel-item="selItem"
                 @sel-children="selChildren"
               />
@@ -159,6 +161,28 @@
       />
     </Order-Reg-Confirm>
 
+    <Order-Reg-Confirm
+      v-if="isPayedItemDetailRefund"
+      :title="payedItemDetailRefundDialogFgTitle"
+      @confirm="payedItemDetailRefund"
+      height="50vh"
+      confirmText="确定退费"
+      cannerText="取消"
+      headerIcon=""
+      ref="payedItemDetailRefundDialog"
+      isShowCloseIcon
+      footerBtnIsometric
+    >
+      <g-flag
+        v-if="isPayedItemDetailRefund"
+        v-model:title="payedItemDetailRefundDialogFgTitle"
+        typeFg="1107"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
+
     <Wx-Pay-Money-Medical-Popup ref="wxPryMoneyMedicalDialog" />
 
     <block v-if="isComplete">
@@ -184,16 +208,43 @@
         </block>
       </view>
 
-      <view
-        v-if="props.payState === '0' && pageConfig.isOpenChargeback === '1'"
-        class="g-footer"
-      >
-        <button
-          @click="isCannelShow = true"
-          class="btn btn-plain btn-border btn-error cancel-btn"
-        >
-          申请退单
-        </button>
+      <view v-if="isShowPayedFooter" class="g-footer">
+        <block v-if="isPayedItemDetailRefundBtnShow">
+          <button
+            @click="isPayedItemDetailRefundBtnShow = false"
+            class="btn btn-plain btn-primary btn-border cancel-btn animate__animated animate__fadeIn"
+          >
+            取消
+          </button>
+
+          <button
+            @click="showPayedItemDetailRefundDialog"
+            :class="{
+              'btn-disabled': !selListChildren.length,
+            }"
+            class="btn btn-primary confirm-btn"
+          >
+            申请退费
+          </button>
+        </block>
+
+        <block v-else>
+          <button
+            v-if="isPayedChargeBack"
+            @click="isCannelShow = true"
+            class="btn btn-plain btn-border btn-error cancel-btn"
+          >
+            申请退单
+          </button>
+
+          <button
+            v-if="isPayedItemDetailRefund"
+            @click="isPayedItemDetailRefundBtnShow = true"
+            class="btn btn-primary confirm-btn"
+          >
+            申请退费
+          </button>
+        </block>
       </view>
     </block>
 
@@ -211,11 +262,11 @@
     usePayDetailPage,
     getIsMedicalModePlugin,
     executeConfigPayAfter,
-    isCanUseMedical,
     medicalNationUpload,
     isMedicalSelf,
     isDefaultMedical,
     getIsMedicalMode,
+    compareDetailCostItem,
     type TPayDetailProp,
     type TCostList,
     type TWxAuthorize,
@@ -241,149 +292,149 @@
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
-  // api.getClinicalPayDetailList = () =>
-  //   Promise.resolve({
-  //     result: {
-  //       qrCode: '10830963',
-  //       costList: [
-  //         {
-  //           subCostTypeCode: '5',
-  //           subCost: '170.00',
-  //           subCostTypeName: '检查费',
-  //           costList: [
-  //             {
-  //               itemSpec: '/',
-  //               amount: '1',
-  //               subCostTypeCode: '8114',
-  //               subCost: '8.00',
-  //               detailNo: '20221115000000001308',
-  //               subCostTypeName: '计算机图文报告',
-  //               itemPrice: '8.00',
-  //               units: '人次',
-  //               amountRem: '1',
-  //               ''
-  //             },
-  //             {
-  //               itemSpec: '/',
-  //               amount: '1',
-  //               subCostTypeCode: '13675',
-  //               subCost: '45.00',
-  //               detailNo: '20221115000000001309',
-  //               subCostTypeName: '16层及以上多排螺旋CT扫描加收',
-  //               itemPrice: '45.00',
-  //               units: '人次',
-  //               amountRem: '1',
-  //             },
-  //             {
-  //               itemSpec: '/',
-  //               amount: '1',
-  //               subCostTypeCode: '7842',
-  //               subCost: '117.00',
-  //               detailNo: '20221115000000001310',
-  //               subCostTypeName: '(CT)螺旋平扫(一个部位)',
-  //               itemPrice: '117.00',
-  //               units: '次',
-  //               amountRem: '1',
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           subCostTypeCode: '23',
-  //           subCost: '23.00',
-  //           subCostTypeName: '化验费',
-  //           costList: [
-  //             {
-  //               itemSpec: '/',
-  //               amount: '1',
-  //               subCostTypeCode: '7242',
-  //               subCost: '15.00',
-  //               detailNo: '20221115000000001307',
-  //               subCostTypeName: '血常规（五分类）',
-  //               itemPrice: '15.00',
-  //               units: '次',
-  //               amountRem: '1',
-  //             },
-  //             {
-  //               itemSpec: '/',
-  //               amount: '1',
-  //               subCostTypeCode: '202012310002',
-  //               subCost: '8.00',
-  //               detailNo: '20221115000000001313',
-  //               subCostTypeName: '新型冠状病毒核酸检测（10人组专用）',
-  //               itemPrice: '8.00',
-  //               units: '次',
-  //               amountRem: '1',
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           subCostTypeCode: '2',
-  //           subCost: '7.41',
-  //           subCostTypeName: '西药费',
-  //           costList: [
-  //             {
-  //               itemSpec: '10mg*100',
-  //               amount: '1',
-  //               subCostTypeCode: '202011020013',
-  //               subCost: '7.41',
-  //               detailNo: '20221115000000001312',
-  //               subCostTypeName: '维生素B6片',
-  //               itemPrice: '7.41',
-  //               units: '瓶',
-  //               amountRem: '1',
-  //             },
-  //           ],
-  //         },
-  //         {
-  //           subCostTypeCode: 'chineseMedicine',
-  //           subCost: '0.08',
-  //           subCostTypeName: '中草药',
-  //           costList: [
-  //             {
-  //               itemSpec: '1g',
-  //               amount: '1',
-  //               subCostTypeCode: '202005190430',
-  //               subCost: '0.04',
-  //               detailNo: '20221115000000001306',
-  //               subCostTypeName: '艾叶',
-  //               itemPrice: '0.04',
-  //               units: 'g',
-  //               amountRem: '1',
-  //             },
-  //             {
-  //               itemSpec: '1g',
-  //               amount: '1',
-  //               subCostTypeCode: '202005190430',
-  //               subCost: '0.04',
-  //               detailNo: '20221115000000001311',
-  //               subCostTypeName: '艾叶',
-  //               itemPrice: '0.04',
-  //               units: 'g',
-  //               amountRem: '1',
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //       hosId: '1279',
-  //       payState: '1',
-  //       hosName: '台州市第一人民医院',
-  //       totalCost: '200.49',
-  //       personCost: '200.49',
-  //       medicalCost: '0.00',
-  //     },
-  //     timeTaken: 630,
-  //     code: 0,
-  //     functionVersion:
-  //       '[{"functionType":"2","version":"v0.0.79"},{"functionType":"1","version":"v0.0.37"}]',
-  //     message: '成功',
-  //     respCode: 999002,
-  //   });
+  api.getClinicalPayDetailList = () =>
+    Promise.resolve(<any>{
+      result: {
+        qrCode: '10830963',
+        costList: [
+          {
+            subCostTypeCode: '5',
+            subCost: '170.00',
+            subCostTypeName: '检查费',
+            costList: [
+              {
+                itemSpec: '/',
+                amount: '1',
+                subCostTypeCode: '8114',
+                subCost: '8.00',
+                detailNo: '20221115000000001308',
+                subCostTypeName: '计算机图文报告',
+                itemPrice: '8.00',
+                units: '人次',
+                amountRem: '0',
+              },
+              {
+                itemSpec: '/',
+                amount: '1',
+                subCostTypeCode: '13675',
+                subCost: '45.00',
+                detailNo: '20221115000000001309',
+                subCostTypeName: '16层及以上多排螺旋CT扫描加收',
+                itemPrice: '45.00',
+                units: '人次',
+                amountRem: '1',
+              },
+              {
+                itemSpec: '/',
+                amount: '1',
+                subCostTypeCode: '7842',
+                subCost: '117.00',
+                detailNo: '20221115000000001310',
+                subCostTypeName: '(CT)螺旋平扫(一个部位)',
+                itemPrice: '117.00',
+                units: '次',
+                amountRem: '1',
+              },
+            ],
+          },
+          {
+            subCostTypeCode: '23',
+            subCost: '23.00',
+            subCostTypeName: '化验费',
+            costList: [
+              {
+                itemSpec: '/',
+                amount: '1',
+                subCostTypeCode: '7242',
+                subCost: '15.00',
+                detailNo: '20221115000000001307',
+                subCostTypeName: '血常规（五分类）',
+                itemPrice: '15.00',
+                units: '次',
+                amountRem: '1',
+              },
+              {
+                itemSpec: '/',
+                amount: '1',
+                subCostTypeCode: '202012310002',
+                subCost: '8.00',
+                detailNo: '20221115000000001313',
+                subCostTypeName: '新型冠状病毒核酸检测（10人组专用）',
+                itemPrice: '8.00',
+                units: '次',
+                amountRem: '1',
+              },
+            ],
+          },
+          {
+            subCostTypeCode: '2',
+            subCost: '7.41',
+            subCostTypeName: '西药费',
+            costList: [
+              {
+                itemSpec: '10mg*100',
+                amount: '1',
+                subCostTypeCode: '202011020013',
+                subCost: '7.41',
+                detailNo: '20221115000000001312',
+                subCostTypeName: '维生素B6片',
+                itemPrice: '7.41',
+                units: '瓶',
+                amountRem: '0',
+              },
+            ],
+          },
+          {
+            subCostTypeCode: 'chineseMedicine',
+            subCost: '0.08',
+            subCostTypeName: '中草药',
+            costList: [
+              {
+                itemSpec: '1g',
+                amount: '1',
+                subCostTypeCode: '202005190430',
+                subCost: '0.04',
+                detailNo: '20221115000000001306',
+                subCostTypeName: '艾叶',
+                itemPrice: '0.04',
+                units: 'g',
+                amountRem: '0',
+              },
+              {
+                itemSpec: '1g',
+                amount: '1',
+                subCostTypeCode: '202005190430',
+                subCost: '0.04',
+                detailNo: '20221115000000001311',
+                subCostTypeName: '艾叶',
+                itemPrice: '0.04',
+                units: 'g',
+                amountRem: '0',
+              },
+            ],
+          },
+        ],
+        hosId: '1279',
+        payState: '1',
+        hosName: '台州市第一人民医院',
+        totalCost: '200.49',
+        personCost: '200.49',
+        medicalCost: '0.00',
+      },
+      timeTaken: 630,
+      code: 0,
+      functionVersion:
+        '[{"functionType":"2","version":"v0.0.79"},{"functionType":"1","version":"v0.0.37"}]',
+      message: '成功',
+      respCode: 999002,
+    });
 
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
   const isComplete = ref(false);
   const selList = ref<TCostList>([]);
+  const selListChildren = ref<TCostList[number]['costList']>([]);
 
   const { getDetailData, detailData } = usePayDetailPage();
   const {
@@ -483,7 +534,6 @@
 
   // 可以选择性支付
   const isCanSelServerFee = computed(() => {
-    // return true
     let isMedicalPay = false;
     const isMedicalModePlugin = getIsMedicalModePlugin();
     const {
@@ -517,6 +567,40 @@
     );
   });
 
+  /** 已缴费页面申请退单 */
+  const isPayedChargeBack = computed(() => {
+    return (
+      props.value.payState === '0' && pageConfig.value.isOpenChargeback === '1'
+    );
+  });
+
+  const payedItemDetailRefundDialog = ref(<any>'');
+  const payedItemDetailRefundDialogFgTitle = ref('');
+  const isPayedItemDetailRefundBtnShow = ref(false);
+  const showPayedItemDetailRefundDialog = () => {
+    payedItemDetailRefundDialog.value.show();
+  };
+  const payedItemDetailRefund = () => {
+    console.log('cqc');
+    api.clinicPartRefund
+  };
+
+  /** 已缴费页面对具体费用申请退费 */
+  const isPayedItemDetailRefund = computed(() => {
+    return (
+      props.value.payState === '0' &&
+      pageConfig.value.isPayedItemDetailRefund === '1'
+    );
+  });
+
+  const isShowPayedFooter = computed(() => {
+    if (props.value.payState === '0') {
+      return isPayedChargeBack.value || isPayedItemDetailRefund.value;
+    }
+
+    return false;
+  });
+
   const selItem = ({
     item,
     index,
@@ -524,8 +608,6 @@
     item: TCostList[number];
     index: number;
   }) => {
-    console.log(item);
-
     const { serialNo } = item;
     const idx = selList.value.findIndex((o) => o.serialNo === serialNo);
 
@@ -540,7 +622,39 @@
   };
 
   const selChildren = ({ list }: { list: TCostList[number]['costList'] }) => {
-    console.log(list);
+    const findIdx = (o: TCostList[number]['costList'][number]) => {
+      return selListChildren.value.findIndex((k) =>
+        compareDetailCostItem(k, o)
+      );
+    };
+
+    const canRefoundList = list.filter((o) => o.amountRem !== '0');
+
+    if (!canRefoundList.length) {
+      gStores.messageStore.showMessage('该笔费用不支持退费', 3000);
+      throw new Error('不支持退费');
+    }
+
+    if (list.length === 1) {
+      const item = list[0];
+      const idx = findIdx(item);
+      if (idx === -1) {
+        selListChildren.value.push(item);
+      } else {
+        selListChildren.value.splice(idx, 1);
+      }
+    } else {
+      const flag = canRefoundList.every((o) => findIdx(o) !== -1);
+
+      canRefoundList.map((o) => {
+        const idx = findIdx(o);
+        if (flag) {
+          selListChildren.value.splice(idx, 1);
+        } else {
+          idx === -1 && selListChildren.value.push(o);
+        }
+      });
+    }
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {

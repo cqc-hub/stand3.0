@@ -2,20 +2,23 @@
   <view class="">
     <view v-for="(item, idx) in list" :key="idx" class="">
       <block v-if="item.costList && item.costList.length">
-        <g-collapse :border="false">
+        <g-collapse ref="collapseRef" :border="false">
           <template #title>
             <view class="collapse-title flex-between g-bold">
               <view v-if="mulit || mulitChildren" class="flex1 f32 flex-normal">
                 <view @click.stop="selItem(item, idx)" class="flex-normal">
                   <text
                     :class="{
-                      'color-blue': isActive(item) || isActiveHref(item),
+                      'color-blue': isActive(item) || isActiveItemNums(item),
+                      'color-888': isItemDisabled(item),
                     }"
-                    class="sel-icon mr12 iconfont"
+                    class="sel-icon mr12 iconfont animate__animated animate__fadeIn"
                   >
                     {{
-                      isActiveHref(item)
-                        ? '&#xe6e6;'
+                      isActiveItemNums(item)
+                        ? isActiveItemNums(item) === item.costList.length
+                          ? '&#xe6d0;'
+                          : '&#xe6e6;'
                         : isActive(item)
                         ? '&#xe6d0;'
                         : '&#xe6ce;'
@@ -44,23 +47,39 @@
               <view
                 v-for="(citem, ci) in item.costList"
                 :key="ci"
-                :class="{
-                  active: isActive(item),
-                }"
-                @click="selChildren([citem])"
-                class="medical-item flex-between f28 color-444"
+                class="citem-content"
               >
-                <view class="text-ellipsis mr8 label-medical">
-                  {{ citem.subCostTypeName }}
+                <view v-if="mulitChildren">
+                  <text
+                    :class="{
+                      'color-blue': isChildrenActive(citem),
+                      'color-888': citem.disabled,
+                    }"
+                    class="sel-icon mr12 ml12 iconfont animate__animated animate__fadeIn"
+                  >
+                    {{ isChildrenActive(citem) ? '&#xe6d0;' : '&#xe6ce;' }}
+                  </text>
                 </view>
 
-                <view class="color-888">
-                  {{ `${citem.itemPrice}元/${citem.units}` }}
-                </view>
-                <view class="color-888">{{ `x${citem.amount}` }}</view>
+                <view
+                  :class="{
+                    active: isActive(item) || isChildrenActive(citem),
+                  }"
+                  @click="selChildren([citem])"
+                  class="medical-item flex-between f28 color-444 flex1"
+                >
+                  <view class="text-ellipsis mr8 label-medical">
+                    {{ citem.subCostTypeName }}
+                  </view>
 
-                <view class="text-no-wrap color-888">
-                  {{ `${citem.subCost}元` }}
+                  <view class="color-888">
+                    {{ `${citem.itemPrice}元/${citem.units}` }}
+                  </view>
+                  <view class="color-888">{{ `x${citem.amount}` }}</view>
+
+                  <view class="text-no-wrap color-888">
+                    {{ `${citem.subCost}元` }}
+                  </view>
                 </view>
               </view>
             </view>
@@ -72,12 +91,26 @@
                 :class="{
                   mb8: ci !== item.costList.length - 1,
                 }"
+                @click="selChildren([citem])"
+                class="citem-content flex-normal"
               >
+                <view v-if="mulitChildren">
+                  <text
+                    :class="{
+                      'color-blue': isChildrenActive(citem),
+                      'color-888': citem.disabled,
+                    }"
+                    class="sel-icon mr12 ml12 iconfont animate__animated animate__fadeIn"
+                  >
+                    {{ isChildrenActive(citem) ? '&#xe6d0;' : '&#xe6ce;' }}
+                  </text>
+                </view>
+
                 <view
                   :class="{
-                    active: isActive(item),
+                    active: isActive(item) || isChildrenActive(citem),
                   }"
-                  class="item-content f28 color-444"
+                  class="item-content f28 color-444 flex1"
                 >
                   <view class="flex-between flex-start-r mb8">
                     <view class="flex1">
@@ -112,12 +145,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { type TCostList } from '../utils/clinicPayDetail';
+  import { watch, ref } from 'vue';
+  import {
+    type TCostList,
+    compareDetailCostItem,
+  } from '../utils/clinicPayDetail';
 
   const props = defineProps<{
     list: TCostList;
     selList: TCostList;
+    selListChildren: TCostList[number]['costList'];
     mulit: boolean;
     mulitChildren: boolean;
   }>();
@@ -130,11 +167,30 @@
     );
   };
 
-  const isActiveHref = (item: TCostList[number]) => {
-    return 1;
+  const isItemDisabled = (item: TCostList[number]) => {
+    return item.costList.every((o) => o.amountRem === '0');
   };
 
-  const selChildren = (list: TCostList[number]['costList']) => {};
+  const isChildrenActive = (citem: TCostList[number]['costList'][number]) => {
+    return (
+      props.selListChildren.findIndex((o) =>
+        compareDetailCostItem(citem, o)
+      ) !== -1
+    );
+  };
+
+  const isActiveItemNums = (item: TCostList[number]) => {
+    const fList = item.costList.filter((o) => isChildrenActive(o));
+    return fList.length;
+  };
+
+  const selChildren = (list: TCostList[number]['costList']) => {
+    if (props.mulitChildren) {
+      emits('sel-children', {
+        list,
+      });
+    }
+  };
 
   const selItem = (item: TCostList[number], idx) => {
     if (props.mulitChildren) {
@@ -147,6 +203,17 @@
       index: idx,
     });
   };
+
+  const collapseRef = ref(<any>'');
+  watch(
+    () => props.mulitChildren,
+    () => {
+      collapseRef.value &&
+        collapseRef.value.map((inst) => {
+          inst.init();
+        });
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
@@ -163,6 +230,7 @@
     background: var(--hr-neutral-color-1);
     border-radius: 4px;
     padding: 16rpx 24rpx;
+    transition: all;
 
     &.active {
       background: var(--hr-brand-color-1);
@@ -179,6 +247,11 @@
         width: 33%;
       }
     }
+  }
+
+  .citem-content {
+    display: flex;
+    align-items: center;
   }
 
   .cost-item-nochild {

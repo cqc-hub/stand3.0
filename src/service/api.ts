@@ -184,6 +184,11 @@ const queryApi = {
       reportCmPV_YLName: '门诊缴费',
     }),
 
+  clinicPartRefund: <T>(data) =>
+    service.post<T>('/phs-query/clinical/clinicPartRefund', parm(data), {
+      hideLoading: false,
+    }),
+
   // 已缴费
   getPrepaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getPrepaidClinicList', parm(data), {
@@ -234,10 +239,14 @@ const queryApi = {
     }),
 
   // 缴费详情
-  getClinicalPayDetailList: (data) =>
-    service.post('/phs-query/clinical/getClinicalPayDetailList', parm(data), {
-      hideLoading: false,
-    }),
+  getClinicalPayDetailList: <T = any>(data) =>
+    service.post<T>(
+      '/phs-query/clinical/getClinicalPayDetailList',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
 
   getDrugDelivery: (data) =>
     service.post('/phs-query/delivery/getDrugDelivery', parm(data), {

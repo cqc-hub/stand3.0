@@ -6,13 +6,9 @@ import {
   ServerStaticData,
   wait,
   useTBanner,
-  PatientUtils
+  PatientUtils,
 } from '@/utils';
-import {
-  joinQueryForUrl,
-  setLocalStorage,
-  getLocalStorage,
-} from '@/common';
+import { joinQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
 import {
   type IGPay,
   payMoneyOnline,
@@ -111,7 +107,7 @@ export type TCostList = {
   subCostTypeName: string;
   serialNo: string;
   costList: {
-    amount: string;
+    amount: string; // 总数
     itemPrice: string;
     itemSpec: string;
     subCost: string;
@@ -120,6 +116,9 @@ export type TCostList = {
     subCostTypeName: string;
     units: string;
     detailNo: string;
+    amountRem: string; // 可退费数量
+
+    disabled?: boolean;
   }[];
 }[];
 
@@ -1387,8 +1386,24 @@ export const usePayDetailPage = () => {
       requestArg.patientId = undefined as unknown as any;
     }
 
-    const { result } = await api.getClinicalPayDetailList(requestArg);
+    const { result } = await api.getClinicalPayDetailList<TPayDetailInfo>(
+      requestArg
+    );
 
+    if (result) {
+      const { costList } = result;
+
+      costList &&
+        costList.map(({ costList }) => {
+          costList.map((o) => {
+            const { amountRem } = o;
+
+            if (amountRem === '0') {
+              o.disabled = true;
+            }
+          });
+        });
+    }
     detailData.value = result;
   };
 
@@ -1468,4 +1483,9 @@ const dealPayList = (
       o.costTypeCode = '2';
     }
   });
+};
+
+type TConstListItem = TCostList[number]['costList'][number];
+export const compareDetailCostItem = (o: TConstListItem, k: TConstListItem) => {
+  return k.detailNo === o.detailNo;
 };
