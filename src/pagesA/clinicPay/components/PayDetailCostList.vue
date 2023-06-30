@@ -5,15 +5,21 @@
         <g-collapse :border="false">
           <template #title>
             <view class="collapse-title flex-between g-bold">
-              <view v-if="mulit" class="flex1 f32 flex-normal">
+              <view v-if="mulit || mulitChildren" class="flex1 f32 flex-normal">
                 <view @click.stop="selItem(item, idx)" class="flex-normal">
                   <text
                     :class="{
-                      'color-blue': isActive(item),
+                      'color-blue': isActive(item) || isActiveHref(item),
                     }"
-                    class="iconfont sel-icon mr12"
+                    class="sel-icon mr12 iconfont"
                   >
-                    {{ isActive(item) ? '&#xe6d0;' : '&#xe6ce;' }}
+                    {{
+                      isActiveHref(item)
+                        ? '&#xe6e6;'
+                        : isActive(item)
+                        ? '&#xe6d0;'
+                        : '&#xe6ce;'
+                    }}
                   </text>
 
                   <text>
@@ -112,6 +118,7 @@
     list: TCostList;
     selList: TCostList;
     mulit: boolean;
+    mulitChildren: boolean;
   }>();
   const emits = defineEmits(['sel-item']);
 
@@ -120,6 +127,10 @@
       props.mulit &&
       props.selList.findIndex((o) => o.serialNo === item.serialNo) !== -1
     );
+  };
+
+  const isActiveHref = (item: TCostList[number]) => {
+    return 1;
   };
 
   const selItem = (item, idx) => {
@@ -169,5 +180,6 @@
   .sel-icon {
     font-weight: normal;
     font-size: var(--h-size-40);
+    border-radius: 100%;
   }
 </style>
