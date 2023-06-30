@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <g-flag typeFg="801" isShowFg />
-    <g-choose-pat/>
+    <g-choose-pat />
     <scroll-view
       v-if="pageLoading && NucleResult && NucleResult.length > 0"
       class="g-container box"
@@ -58,7 +58,7 @@
 import api from "@/service/api";
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
-import { GStores, wait,getTimeStamp } from "@/utils";
+import { GStores, wait, getTimeStamp } from "@/utils";
 import { payMoneyOnline, toPayPull } from "@/components/g-pay/index";
 
 interface INucle {
@@ -74,9 +74,9 @@ interface INucle {
 const props = defineProps<{
   hosName: string;
   hosId: string;
-  isPay: string; //是否需要缴费 表示支付方式 
+  isPay: string; //是否需要缴费 表示支付方式
   openId: string;
-  type:number
+  type: number;
 }>();
 
 const NucleResult = ref<INucle[]>([]);
@@ -85,33 +85,38 @@ const pageLoading = ref(false);
 const currentIndex = ref(0);
 
 onLoad(async (opt) => {
-  console.log(2222,props)
+  //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
   const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
-uni.showLoading({});
+  uni.showLoading({});
 
-if (queryParams && !opt?.params) {
-  return;
-}
+  if (queryParams && !props?.hosId) {
+    return;
+  }
+  if (opt) {
+    if (props.hosId) {
+      gStores.globalStore.onAppLaunch({});
+    }
+  }
+  await wait(650);
 
-await wait(650);
+  //针对微信扫普通二维码跳转的处理 一开始没拿到参数不掉接口
+  if (opt?.q) {
+    return;
+  }
 
-if (opt?.q) {
-  return;
-}
   initConfig();
-  
+
   // await gStores.userStore.getPatList();
-}); 
+});
 
 //初始化页面数据
 const initConfig = async () => {
-  console.log(11,'dddd')
   pageLoading.value = false;
-  let billingType = props.type?props.type:(props.isPay === "1" ? 3 : 99999) // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+  let billingType = props.type ? props.type : props.isPay === "1" ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
   await api
     .getItemList({
-      billingType: billingType, 
+      billingType: billingType,
       hosId: props.hosId,
     })
     .then(({ result }) => {
@@ -139,9 +144,9 @@ const submit = async () => {
     totalCost: NucleResult.value[currentIndex.value].fee,
     source: source,
     hosName: props.hosName,
-    reBillingUrl: reBillingUrl,//再次开单路径
+    reBillingUrl: reBillingUrl, //再次开单路径
   });
- 
+
   if (props.isPay == "1") {
     const data = {
       businessType: "",
@@ -152,7 +157,7 @@ const submit = async () => {
       phsOrderSource: 11,
       totalFee: NucleResult.value[currentIndex.value].fee,
       patientName,
-      cardNumber, 
+      cardNumber,
     };
     const res = await payMoneyOnline(data);
     await toPayPull(res);
@@ -169,22 +174,24 @@ const submit = async () => {
     });
   }
 };
-const payAfter = async (patientId) => { 
+const payAfter = async (patientId) => {
   uni.showLoading({});
   await wait(1000);
   uni.hideLoading();
   //去我的开单页面
   uni.reLaunch({
-    url:`/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}&_pt=${getTimeStamp(6)}`,
+    url: `/pagesC/cloudHospital/myPath?path=/pagesC/selfService/myOrder&_pd=${patientId}&_pt=${getTimeStamp(
+      6
+    )}`,
   });
 };
 </script>
 <style lang="scss" scoped>
 .g-page {
-
   .empty-box {
-  padding-top: 200rpx;
-}  .box {
+    padding-top: 200rpx;
+  }
+  .box {
     box-sizing: border-box;
     padding: 24rpx 32rpx 40rpx;
     width: 100%;
