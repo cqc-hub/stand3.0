@@ -499,9 +499,11 @@ export const isMedicalSelf = async (
   cardNumber: string,
   params?: string
 ): Promise<boolean> => {
+  // #ifdef  MP-WEIXIN
   if (params) {
     return true;
   }
+  // #endif
 
   if (await _isMedicalSelf()) {
     const {
