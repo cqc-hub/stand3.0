@@ -79,7 +79,7 @@
     }>(),
     {
       imgHeight: '240rpx',
-      current: 1
+      current: 1,
     }
   );
 
@@ -90,6 +90,9 @@
   .page-state {
     flex-direction: column;
     position: relative;
+    animation-name: fadeIn;
+    animation-fill-mode: both;
+    animation-duration: 1s;
 
     &.ty {
       transform: translateY(-25%);

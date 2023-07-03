@@ -211,8 +211,8 @@
       <view v-if="isShowPayedFooter" class="g-footer">
         <block v-if="isPayedItemDetailRefundBtnShow">
           <button
-            @click="isPayedItemDetailRefundBtnShow = false"
-            class="btn btn-plain btn-primary btn-border cancel-btn animate__animated animate__fadeIn"
+            @click="payedItemDetailRefundCancel"
+            class="btn btn-plain btn-primary btn-border cancel-btn"
           >
             取消
           </button>
@@ -580,9 +580,28 @@
   const showPayedItemDetailRefundDialog = () => {
     payedItemDetailRefundDialog.value.show();
   };
-  const payedItemDetailRefund = () => {
-    console.log('cqc');
-    api.clinicPartRefund
+  const payedItemDetailRefundCancel = () => {
+    isPayedItemDetailRefundBtnShow.value = false;
+    selListChildren.value = [];
+  };
+  const payedItemDetailRefund = async () => {
+    const list = selListChildren.value.map((o) => ({
+      amountReturn: o.amountRem,
+      detailNo: o.detailNo,
+    }));
+
+    const { cardNumber } = props.value;
+    const { cardNumber: _cardNumber } = gStores.userStore.patChoose;
+    const requestArg = {
+      cardNumber,
+      list,
+    };
+
+    await api.clinicPartRefund(requestArg);
+
+    gStores.messageStore.showMessage('申请成功, 等待审核通过后进行退费', 3000, {
+      closeCallBack: payedItemDetailRefundCancel,
+    });
   };
 
   /** 已缴费页面对具体费用申请退费 */
