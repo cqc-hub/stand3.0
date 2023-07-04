@@ -75,7 +75,7 @@
 import { defineComponent, ref } from 'vue';
 import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 import { onLoad, onPullDownRefresh, onShow } from "@dcloudio/uni-app";
-import { GStores, debounce, ServerStaticData } from "@/utils";
+import { GStores, debounce,wait, ServerStaticData } from "@/utils";
 import api from "@/service/api";
 import { joinQuery } from '@/common';
 import { deQueryForUrl} from '@/common/utils';
@@ -130,13 +130,33 @@ const init = async () => {
   await getListData();
 };
 
-onLoad(async (opt) => {
+onLoad(async (opt) => { 
+  //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
+  const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+  uni.showLoading({});
+  if (queryParams && !opt?.hosId) {
+    return;
+  }
+  if (opt) {
+    if (opt.hosId) {
+      gStores.globalStore.onAppLaunch({});
+    }
+  }
+  await wait(650);
+
+  //针对微信扫普通二维码跳转的处理 一开始没拿到参数不掉接口
+  if (opt?.q) {
+    return;
+  }
   pageProps.value = deQueryForUrl(opt);
   isCash.value = pageProps.value.isCash;
+  init();
 });
 
 onShow(() => {
+  if(pageProps.value.hosId){
   init();
+  }
 });
 
 const confirmForm = () => {
