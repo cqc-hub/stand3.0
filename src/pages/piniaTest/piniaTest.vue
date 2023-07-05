@@ -156,7 +156,6 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
-    // path: 'pagesC/question/kuppermanQuestion3',
     text: 'kupperman',
     extraData: {
       _type: 'kupperman',
@@ -167,9 +166,17 @@
     isLocal: '1',
   };
 
+  const ziXun: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/healthAdvisory/healthAdvisory',
+    text: '健康咨询',
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(questionkupperman);
+      useTBanner(ziXun);
     }, 1000);
   });
 </script>

@@ -475,6 +475,7 @@ export class ServerStaticData {
         const pay = JSON.parse(result.CLINIC_PAY_CONFIG || '{}');
         const reportQuery = JSON.parse(result.REPORT_QUERY_CONFIG || '{}');
         const drugDelivery = JSON.parse(result.DRUG_DELIVERY_CONFIG || '{}');
+        // @ts-expect-error
         systemConfig = {
           person,
           order,

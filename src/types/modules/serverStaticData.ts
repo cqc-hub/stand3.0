@@ -226,6 +226,20 @@ export interface ISystemConfig {
       alipay?: string;
     };
   };
+
+  /** 病历查询 */
+  CASE_HISTORY_CONFIG: {
+    //  列表页tab
+    tab: IOptions[];
+    // 门诊病历详情底部按钮
+    clinicDetailBtns: IOptions<'preview' | 'down'>[];
+  };
+
+  /** 健康咨询 */
+  HEALTH_COUNSEL: {
+    // '' 咨询  '1' 视频
+    listTopTab: IOptions<'' | '1'>[];
+  };
 }
 
 export interface IHosInfo {

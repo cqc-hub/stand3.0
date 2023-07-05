@@ -54,9 +54,9 @@ interface ISystemGlobalConfig {
   };
 }
 
-interface IOptions {
+interface IOptions<T = any> {
   label: string;
-  value: any;
+  value: T;
   [key: string]: any;
 }
 interface BaseObject {
