@@ -64,7 +64,7 @@
 
       <view v-if="isShowFooter(item)" class="footer flex-between btn-normal">
         <view class="f36 color-error g-bold">
-        <!-- {{ item.fee }}元 -->
+          <!-- {{ item.fee }}元 -->
         </view>
 
         <view class="flex-normal footer-btns">
@@ -111,6 +111,14 @@
           >
             服务评价
           </button>
+
+          <button
+            v-if="isShaoXinHosGuide()"
+            @click="shaoxinHosGuidInWx"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            院内导航
+          </button>
         </view>
       </view>
     </view>
@@ -122,6 +130,7 @@
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
   import { getStatusConfig } from '../../utils/regDetail';
   import { joinQueryForUrl, joinQuery } from '@/common';
+  import globalGl from '@/config/global';
 
   const props = defineProps<{
     list: IRegistrationCardItem[];
@@ -203,6 +212,16 @@
     });
   };
 
+  // 绍兴微信小程序院内导航
+  const isShaoXinHosGuide = () => {
+    // #ifdef MP-WEIXIN
+    if (globalGl.SYS_CODE === '1001046') {
+      return true;
+    }
+    // #endif
+    return false;
+  };
+
   const isShowFooter = (item: IRegistrationCardItem) => {
     return (
       isShowDaohan(item) ||
@@ -211,8 +230,16 @@
       isCancelOrder(item) ||
       isPayOrder(item) ||
       isShowReOrderBtn(item) ||
-      isShowYWZBtn(item)
+      isShowYWZBtn(item) ||
+      isShaoXinHosGuide()
     );
+  };
+
+  const shaoxinHosGuidInWx = () => {
+    uni.navigateToMiniProgram({
+      path: 'pages/index?id=bXgM7tKb9S',
+      appId: 'wx0fb39a1dc27c5e6d',
+    });
   };
 </script>
 
@@ -278,6 +305,7 @@
         .footer-btns {
           button {
             white-space: nowrap;
+
             &:not(:last-child) {
               margin-right: 16rpx;
             }
