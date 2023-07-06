@@ -112,13 +112,15 @@
             服务评价
           </button>
 
-          <button
-            v-if="isShaoXinHosGuide()"
-            @click="shaoxinHosGuidInWx"
-            class="btn btn-round btn-size-small btn-border cancel-btn"
-          >
-            院内导航
-          </button>
+          <block v-for="btn in getCustomBtns" :key="btn.text">
+            <button
+              v-if="isShowCustomBtn(item, btn)"
+              @click="useTBanner(btn)"
+              class="btn btn-round btn-size-small btn-border cancel-btn"
+            >
+              {{ btn.text }}
+            </button>
+          </block>
         </view>
       </view>
     </view>
@@ -130,6 +132,14 @@
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
   import { getStatusConfig } from '../../utils/regDetail';
   import { joinQueryForUrl, joinQuery } from '@/common';
+  import {
+    GStores,
+    ServerStaticData,
+    ISystemConfig,
+    TButtonConfig,
+    useTBanner,
+  } from '@/utils';
+
   import globalGl from '@/config/global';
 
   const props = defineProps<{
@@ -140,8 +150,48 @@
     isShowYuWzBtn: boolean;
     showFWBtn: string[];
     systemModeOld?: boolean;
+    config: ISystemConfig['order'];
   }>();
   const emits = defineEmits(['ywz-click']);
+
+  const getCustomBtns = computed(() => {
+    const list = props.config.regListItemCustomButtons;
+
+    if (list) {
+      return list.filter(({ env }) => {
+        if (env) {
+          let _env: (typeof env)[number] = 'wx';
+          // #ifdef MP-ALIPAY
+          _env = 'alipay';
+          // #endif
+
+          // #ifdef H5
+          _env = 'h5';
+          // #endif
+
+          return env.includes(_env);
+        } else {
+          return true;
+        }
+      });
+    }
+
+    return [];
+  });
+
+  const isShowCustomBtn = (
+    item: IRegistrationCardItem,
+    config: ISystemConfig['order']['regListItemCustomButtons'][number]
+  ) => {
+    const { orderStatus } = item;
+    const { orderStatus: _orderStatus } = config;
+
+    if (_orderStatus) {
+      return _orderStatus.includes(orderStatus);
+    }
+
+    return true;
+  };
 
   // 显示到院导航
   const isShowDaohan = (item: IRegistrationCardItem) => {
@@ -212,16 +262,6 @@
     });
   };
 
-  // 绍兴微信小程序院内导航
-  const isShaoXinHosGuide = () => {
-    // #ifdef MP-WEIXIN
-    if (globalGl.SYS_CODE === '1001046') {
-      return true;
-    }
-    // #endif
-    return false;
-  };
-
   const isShowFooter = (item: IRegistrationCardItem) => {
     return (
       isShowDaohan(item) ||
@@ -231,15 +271,8 @@
       isPayOrder(item) ||
       isShowReOrderBtn(item) ||
       isShowYWZBtn(item) ||
-      isShaoXinHosGuide()
+      getCustomBtns.value.some((o) => isShowCustomBtn(item, o))
     );
-  };
-
-  const shaoxinHosGuidInWx = () => {
-    uni.navigateToMiniProgram({
-      path: 'pages/index?id=bXgM7tKb9S',
-      appId: 'wx0fb39a1dc27c5e6d',
-    });
   };
 </script>
 

@@ -41,6 +41,7 @@
           :showReOrderBtn="isShowReOrderBtn"
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
+          :config="orderConfig"
           @ywz-click="ywzClick"
         />
       </block>

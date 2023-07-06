@@ -53,6 +53,8 @@ export interface ISystemConfig {
     isFWBtn?: string[]; // 需要服务评价的订单状态码
     // 已就诊、已结束订单状态显示“复诊预约”按钮
     isOpenReOrder?: '1';
+    // 自定义列表子项底部按钮功能
+    regListItemCustomButtons: TRegListButtonItem[];
 
     /** 搜索 */
     // 热门搜索
@@ -302,6 +304,14 @@ export type TBannerConfig = XOR<
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
 };
+
+/** 挂号记录*/
+type TRegListButtonItem = {
+  /** 哪些环境显示, 不配全显 */
+  env?: ('wx' | 'alipay' | 'h5')[];
+  /** 哪些状态时候显示, 不配全显 */
+  orderStatus?: string[];
+} & TButtonConfig;
 
 export interface IRegSearchHistoryItem {
   label: string;
