@@ -112,7 +112,7 @@
             </g-login>
 
             <view class="top-menu">
-              <view class="box" v-if="topMenuList.length">
+              <view class="box" v-if="topMenuList && topMenuList.length">
                 <homeGrid :list="topMenuList" :type="1"></homeGrid>
               </view>
               <view
