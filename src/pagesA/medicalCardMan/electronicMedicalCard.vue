@@ -101,13 +101,13 @@
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
 
-  const systemInfo = getLocalStorage(SYS_TAB_KEY) || '';
-  systemInfo.startsWith('iOS');
+  // isIos?
+  const systemInfo: boolean = getLocalStorage(SYS_TAB_KEY) || false;
 
   // https://meet-ui.com/#/
   const options = ref<any>({
     // 二维码
-    size: systemInfo.startsWith('iOS') ? 380 : 500,
+    size: systemInfo ? 380 : 500,
     // 条形码
     width: 600, // 宽度 单位rpx
     height: 184, // 高度 单位rpx
@@ -117,6 +117,7 @@
     img: '',
   });
 
+  // @ts-expect-error
   uni.getSystemInfo({}).then(({ screenWidth }) => {
     if (screenWidth > 390) {
       options.value.size = 500;
