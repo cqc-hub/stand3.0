@@ -33,7 +33,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "alwaysStrict": true,
-    "typeRoots": ["./types", "./node_modules/vue/types"]
+    "typeRoots": ["types", "node_modules/vue/types"]
   },
   //哪些代码需要解析
   "include": [

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "1001046",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -80,7 +80,7 @@
       "name": "绍兴市人民医院",
       "isStartComeTest": true,
       "isSearchInHos": false,
-      "isOpenOcr": false
+      "isOpenOcr": true
     },
 
     "1001055": {

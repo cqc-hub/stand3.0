@@ -487,9 +487,20 @@
         (o) => o.key === formKey.patientName
       );
 
-      if (patientNameItem && ocr === '1') {
-        patientNameItem.ocr = true;
+      if (patientNameItem) {
+        let isOpenOcr = false;
+        // #ifdef MP-WEIXIN
+        isOpenOcr = ocr === '1';
         // patientNameItem.showSuffixArrowIcon = true;
+        // #endif
+
+        // #ifdef MP-ALIPAY
+        isOpenOcr = !!globalGl.systemInfo.isOpenOcr;
+        // #endif
+
+        if (isOpenOcr) {
+          patientNameItem.ocr = true;
+        }
       }
     }
 

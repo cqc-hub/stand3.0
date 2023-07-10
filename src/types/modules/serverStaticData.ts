@@ -89,6 +89,7 @@ export interface ISystemConfig {
     /** 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？ */
     isGuardianWithIdCard?: number;
 
+    /** 仅微信, 支付宝 手动 config.json 配置 */
     ocr?: '0' | '1';
     isFace?: '1';
   };
