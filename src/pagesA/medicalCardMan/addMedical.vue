@@ -164,7 +164,7 @@
       ...addressChoose,
     };
 
-    const { authPhoneVerify } = gStores.userStore;
+    const { authPhoneVerify, patList } = gStores.userStore;
 
     if (!requestData.verifyCode && props.pageType === 'perfectReal') {
       requestData.authPhoneVerify = authPhoneVerify;
@@ -230,6 +230,9 @@
         }
       }
     } else {
+      if (!patList.length && !requestData.verifyCode) {
+        requestData.authPhoneVerify = authPhoneVerify;
+      }
       await patientUtils.addRelevantPatient(requestData);
       await patientUtils.getPatCardList();
       if (props._directUrl) {

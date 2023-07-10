@@ -761,9 +761,10 @@ export class PatientUtils extends LoginUtils {
   ) {
     const { wechatCode } = data;
 
-    if (data._type !== 'perfect') {
-      data.authPhoneVerify = undefined;
-    }
+
+    // if (data._type !== 'perfect') {
+    //   data.authPhoneVerify = undefined;
+    // }
 
     const requestArg = {
       ...data,
