@@ -139,7 +139,7 @@ interface IOrderProps {
 }
 
 export const useOrder = (props: IOrderProps) => {
-  const orderConfig = ref<ISystemConfig['order']>({
+  const orderConfig = ref<ISystemConfig['order']>(<any>{
     chooseDay: 0,
     selOrderColumn: 3,
     isOrderBlur: '1',
@@ -180,6 +180,7 @@ export const useOrder = (props: IOrderProps) => {
       hosId: string;
       clinicalType?: string;
       hosDeptId?: string;
+      deptId?: string;
       firstHosDeptId?: string;
       secondHosDeptId?: string;
       isExpertDeptId?: string;
@@ -188,16 +189,19 @@ export const useOrder = (props: IOrderProps) => {
     const {
       hosId,
       clinicalType,
+      deptId,
       hosDeptId,
       firstHosDeptId,
       secondHosDeptId,
       isExpertDeptId,
     } = payload;
+
+    const _hosDeptId = hosDeptId || deptId;
     const args = {
       source: gStores.globalStore.browser.source,
       hosId,
       clinicalType,
-      hosDeptId,
+      hosDeptId: _hosDeptId,
       firstHosDeptId,
       secondHosDeptId,
       isExpertDeptId,
@@ -372,19 +376,24 @@ export const useOrder = (props: IOrderProps) => {
     hosDeptId?: string;
     firstHosDeptId?: string;
     secondHosDeptId?: string;
+    deptId?: string;
     hosId: string;
   }) => {
+    console.log(data, 'cqc');
+
     if (data && Object.keys(data).length) {
       const {
         clinicalType,
         hosDeptId: _hosDeptId,
+        deptId,
         firstHosDeptId,
         secondHosDeptId,
         hosId,
       } = deQueryForUrl<typeof data>(data);
       const { source } = gStores.globalStore.browser;
 
-      const hosDeptId = _hosDeptId || secondHosDeptId || firstHosDeptId;
+      const hosDeptId =
+        deptId || _hosDeptId || secondHosDeptId || firstHosDeptId;
 
       const requestArg = {
         hosDeptId,

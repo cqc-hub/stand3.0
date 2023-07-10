@@ -163,16 +163,17 @@
       }, 500);
     }
 
+    orderConfig.value = data;
+    if (hosId.value) {
+      getDepList();
+    }
+
     // 处理 智能导诊逻辑 当path为 zndz 时 根据接口获取path
     if (data.bannerOrder?.path == 'zndz') {
       const { result } = await api.getTXGuidanceUrl({
         source: gStores.globalStore.browser.source,
       });
       data.bannerOrder.path = (result as any).url;
-    }
-    orderConfig.value = data;
-    if (hosId.value) {
-      getDepList();
     }
   };
 
@@ -182,6 +183,7 @@
     if (!hosId.value) {
       hosId.value = list[0]!.hosId;
     }
+    init();
   };
 
   const getDepList = async () => {
@@ -241,9 +243,7 @@
   ) => {
     if (item.promptMessage && !isShowed) {
       isShowPromptMessageTip.value = true;
-      showPromptMessageTip.value = HTMLParser(
-        item.promptMessage
-      );
+      showPromptMessageTip.value = HTMLParser(item.promptMessage);
       cacheDeptItem.value = item;
       return;
     }
@@ -286,7 +286,7 @@
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);
 
-    init();
+    // init();
   });
 
   const goSearch = () => {

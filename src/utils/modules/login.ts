@@ -417,7 +417,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       };
 
 
-      // console.log(JSON.stringify(loginArg));
+      console.log(JSON.stringify(loginArg));
+      // return
 
 
       const { result } = await api.allinoneAuthApi(
