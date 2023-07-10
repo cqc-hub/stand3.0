@@ -1,11 +1,12 @@
 # vue3-vite-ts-uniapp
 
-## 项目技术栈
+安装时 npm 版本对不上会产生依赖冲突报错 终止进程,
+可以使用 npm i --legacy-peer-deps 或切换npm 版本
 
-    Vue3
-    Vite
-    TypeScript
-    Pinia
+推荐使用 volta 管理 npm 版本
+    节点引擎固定
+        volta pin node@14.17
+        volta pin npm@6.14
 
 ## 安装 eslint+prettier 统一编码规范
 
