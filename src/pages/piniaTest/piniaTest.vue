@@ -174,9 +174,23 @@
     isLocal: '1',
   };
 
+  const 绍兴检查预约: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '绍兴检查预约',
+    extraData: {
+      _type: 'shaoxinInspectOrder',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(ziXun);
+      useTBanner(绍兴检查预约);
     }, 1000);
   });
 </script>

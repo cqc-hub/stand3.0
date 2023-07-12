@@ -42,6 +42,7 @@ export type TWxAuthorize = {
 };
 
 export type IPayListItem = {
+  diseaseType?: string;
   childOrder: string; // 唯一 !!
   deptId: string;
   deptName: string;
@@ -1170,16 +1171,23 @@ export const usePayPage = () => {
       patientId,
       source,
       totalCost: _totalCost,
+      hosId: selectList[0].hosId,
+      hosName: selectList[0].hosName,
+      visitDate: selectList[0].visitDate,
       mergeOrder: selectList.map((o) => o.childOrder).join(','),
       deptCode: selectList.map((o) => o.deptId).join(','),
       deptName: selectList.map((o) => o.deptName).join(','),
       docCode: selectList.map((o) => o.docId).join(','),
       docName: selectList.map((o) => o.docName).join(','),
       recipeNo: selectList.map((o) => o.recipeNo).join(','),
-      hosId: selectList[0].hosId,
-      hosName: selectList[0].hosName,
-      visitDate: selectList[0].visitDate,
       serialNo: selectList.map((o) => o.serialNo).join(';'),
+
+      diseaseTypeCode: selectList
+        .map((o) => o.diseaseTypeCode)
+        .filter((o) => o)
+        .join(','),
+      diseaseTypeName: selectList.map((o) => o.diseaseTypeName).filter((o) => o).join(','),
+      diseaseType: selectList.map((o) => o.diseaseType).filter((o) => o).join(','),
     };
 
     if (pageProps.value.deParams) {
