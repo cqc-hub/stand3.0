@@ -429,7 +429,7 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
 /** 只考虑登录时候 校验就诊人是否能使用国标医保 */
 export const isCanUseMedicalNational = async (): Promise<boolean> => {
   const { relationship } = new GStores().userStore.patChoose;
-
+  // return true
   return relationship === '本人';
 };
 

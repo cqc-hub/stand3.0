@@ -166,7 +166,7 @@
       ampm,
       categor,
       categorName,
-      clinicalType,
+      clinicalType: clinicalType === 'null' ? '1' : clinicalType || '1',
       deptName,
       disNo,
       docTitleName,
