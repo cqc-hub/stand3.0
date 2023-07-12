@@ -3,9 +3,9 @@
     :class="{
       'system-mode-old': gStores.globalStore.modeOld,
     }"
-    class="g-page"
+    class="page"
   >
-    <view class="g-container" scroll-y>
+    <view class="container" scroll-y>
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -410,6 +410,19 @@
 </script>
 
 <style lang="scss" scoped>
+  .page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    height: 1px;
+    flex: 1;
+    overflow-y: scroll;
+  }
+
 
 
   .footer {
