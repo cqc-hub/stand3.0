@@ -112,7 +112,7 @@ const gridClick = (item) => {
 };
 
 const updateIdFun = (item) => {
-  const routerStore = useRouterStore(); 
+  const routerStore = useRouterStore();
   routerStore.update_P();
   routerStore.updateId(item.id);
 };
@@ -228,7 +228,7 @@ const updateIdFun = (item) => {
     border: 2rpx solid #dfe9ff;
     padding: 50rpx 0 38rpx;
     border-radius: 24px;
-    &:nth-child(odd) { 
+    &:nth-child(odd) {
       margin: 12rpx;
     }
 

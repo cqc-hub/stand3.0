@@ -76,20 +76,12 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
 
-  import {
-    aliLogin,
-    wxLogin,
-    outLogin,
-    ServerStaticData,
-    routerJump,
-    GStores,
-  } from '@/utils';
+  import { outLogin, ServerStaticData, routerJump, GStores } from '@/utils';
   import { useCommonTo } from '@/common/checkJump';
   import { useRouterStore } from '@/stores';
   import global from '@/config/global';
 
   const gStores = new GStores();
-  const routerStore = useRouterStore();
   const recordList = ref<IRoute[]>([]); //就医凭证
   const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
   const ybIcon = global.BASE_IMG + 'v3-my-pz.png';

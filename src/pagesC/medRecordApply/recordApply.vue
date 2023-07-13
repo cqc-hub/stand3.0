@@ -195,6 +195,7 @@
       uni.navigateTo({
         url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
           hosId: hosId.value,
+          selRecords: encodeURIComponent(JSON.stringify(checkOutHosList.value)),
         }),
       });
     });

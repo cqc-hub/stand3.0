@@ -711,8 +711,6 @@
       (await ServerStaticData.getSystemConfig('medRecord')) || [];
     if (_hosId.value) {
       pageConfig.value = listConfig.find((o) => o.hosId === _hosId.value)!;
-
-      console.log('---', pageConfig.value);
     } else {
       const configDetail = listConfig[0];
       pageConfig.value = configDetail;
@@ -1038,7 +1036,7 @@
   let _firstLoaded = true;
   onShow(async () => {
     const selRecords = getLocalStorage(CACHE_KEY);
-    if (selRecords && _firstLoaded) {
+    if (selRecords && selRecords.length && _firstLoaded) {
       recordRows.value = JSON.parse(selRecords);
     }
 
@@ -1054,6 +1052,17 @@
       });
 
       addressList.value = result || [];
+    }
+  });
+
+  onLoad((opt) => {
+    if (opt && opt.selRecords) {
+      try {
+        const selRecords = JSON.parse(decodeURIComponent(opt.selRecords));
+        recordRows.value = selRecords;
+      } catch (error) {
+        console.error(error);
+      }
     }
   });
 
