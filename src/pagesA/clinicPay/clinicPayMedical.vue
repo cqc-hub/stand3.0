@@ -153,6 +153,7 @@
       });
 
       const requestArg = {
+        ...info.value,
         regAppTradeNo,
         channel,
         cardNumber,

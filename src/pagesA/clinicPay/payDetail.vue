@@ -716,6 +716,7 @@
     } = props.value;
 
     const args = {
+      ...props.value,
       personalPayFee:
         ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
       patientName: props.value.patientName,
