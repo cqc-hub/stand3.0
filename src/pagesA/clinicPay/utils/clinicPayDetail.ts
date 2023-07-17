@@ -1010,7 +1010,14 @@ export const usePayPage = () => {
       const isMedicalMode = getIsMedicalMode();
 
       if (isMedicalMode) {
-        await new PatientUtils().upToMedicalPat(gStores.userStore.patChoose);
+        const cardNumber = pageProps.value.params
+          ? pageProps.value.deParams?.cardNumber
+          : '';
+
+        await new PatientUtils().upToMedicalPat({
+          pat: gStores.userStore.patChoose,
+          cardNumber
+        });
 
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();
@@ -1132,6 +1139,16 @@ export const usePayPage = () => {
   const wxPayMoneyMedicalPlugin = async (
     callback: (authorize: TWxAuthorize) => any = () => {}
   ) => {
+    // callback({
+    //   cityId: '610100',
+    //   payAuthNo: '',
+    //   userLongitudeLatitude: {
+    //     latitude: '0',
+    //     longitude: '0',
+    //   },
+    //   userName: 'cqc',
+    // });
+    // return;
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
@@ -1186,8 +1203,14 @@ export const usePayPage = () => {
         .map((o) => o.diseaseTypeCode)
         .filter((o) => o)
         .join(','),
-      diseaseTypeName: selectList.map((o) => o.diseaseTypeName).filter((o) => o).join(','),
-      diseaseType: selectList.map((o) => o.diseaseType).filter((o) => o).join(','),
+      diseaseTypeName: selectList
+        .map((o) => o.diseaseTypeName)
+        .filter((o) => o)
+        .join(','),
+      diseaseType: selectList
+        .map((o) => o.diseaseType)
+        .filter((o) => o)
+        .join(','),
     };
 
     if (pageProps.value.deParams) {

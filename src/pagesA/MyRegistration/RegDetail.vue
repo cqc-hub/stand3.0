@@ -630,7 +630,9 @@
         const isMedicalMode = _getIsMedicalMode();
 
         if (isMedicalMode) {
-          await new PatientUtils().upToMedicalPat(gStores.userStore.patChoose);
+          await new PatientUtils().upToMedicalPat({
+            pat: gStores.userStore.patChoose,
+          });
           // #ifdef  MP-WEIXIN
           const authorize = await getQxMedicalNation();
           medicalNationWx(authorize);

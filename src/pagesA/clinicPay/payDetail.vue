@@ -282,7 +282,7 @@
     setLocalStorage,
     getLocalStorage,
   } from '@/common';
-  import { wait } from '@/utils';
+  import { wait, PatientUtils } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -562,6 +562,12 @@
       const isMedicalMode = getIsMedicalMode();
 
       if (isMedicalMode) {
+        const cardNumber = props.value.params ? props.value.cardNumber : '';
+        await new PatientUtils().upToMedicalPat({
+          pat: gStores.userStore.patChoose,
+          cardNumber,
+        });
+
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();
         // #endif

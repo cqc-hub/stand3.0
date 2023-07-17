@@ -144,7 +144,7 @@
     });
 
     if (confirm) {
-      await patientUtils.upToMedicalPat(pat);
+      await patientUtils.upToMedicalPat({ pat });
     }
   };
 

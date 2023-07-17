@@ -416,10 +416,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         accountType,
       };
 
-
       console.log(JSON.stringify(loginArg));
       // return
-
 
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')
@@ -487,7 +485,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         gender,
         mobile,
         userName,
-        authPhoneVerify
+        authPhoneVerify,
       } = result;
 
       this.userStore.updateCacheUser({
@@ -498,7 +496,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         userName,
       });
       this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
@@ -551,30 +548,41 @@ export class Login extends LoginUtils {
 
 export class PatientUtils extends LoginUtils {
   /** 升级医保用户 */
-  async upToMedicalPat(pat: IPat) {
-    const { patientId, healthCardUser } = pat;
+  async upToMedicalPat(data: { pat?: IPat; cardNumber?: string }) {
+    const { pat, cardNumber } = data;
     const isOpenPatToMedicalPat =
       globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat;
-
-    if (!isOpenPatToMedicalPat || (healthCardUser && healthCardUser === '2')) {
-      return;
-    }
-
     const {
       browser: { source },
     } = this.globalStore;
 
-    await api.updateHosInfo({
-      patientId,
-      source,
-    });
+    if (!isOpenPatToMedicalPat) {
+      return;
+    }
 
-    await this.getPatCardList();
-    const { patChoose, patList } = this.userStore;
+    if (cardNumber) {
+      await api.altHosMedicalInfo({
+        cardNumber,
+        source,
+      });
+    } else if (pat) {
+      const { patientId, healthCardUser } = pat;
+      if (healthCardUser && healthCardUser === '2') {
+        return;
+      }
 
-    if (patChoose.patientId === patientId) {
-      const newPatInfo = patList.find((p) => p.patientId === patientId)!;
-      this.userStore.updatePatChoose(newPatInfo);
+      await api.updateHosInfo({
+        patientId,
+        source,
+      });
+
+      await this.getPatCardList();
+      const { patChoose, patList } = this.userStore;
+
+      if (patChoose.patientId === patientId) {
+        const newPatInfo = patList.find((p) => p.patientId === patientId)!;
+        this.userStore.updatePatChoose(newPatInfo);
+      }
     }
   }
 
@@ -760,7 +768,6 @@ export class PatientUtils extends LoginUtils {
     }>
   ) {
     const { wechatCode } = data;
-
 
     // if (data._type !== 'perfect') {
     //   data.authPhoneVerify = undefined;

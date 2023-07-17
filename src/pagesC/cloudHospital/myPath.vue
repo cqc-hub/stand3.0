@@ -19,7 +19,7 @@ import { GStores } from "@/utils";
 import { encryptDesParam } from "@/common/des";
 import { joinQuery } from "@/common";
 import { toPayPull } from "@/components/g-pay";
-import { deQueryForUrl } from "@/common/utils"; 
+import { deQueryForUrl } from "@/common/utils";
 
 type IPageProps = {
   hosId?: string;
@@ -50,7 +50,6 @@ const pageProp = ref({} as IPageProps);
 // 页面固定携带 sysCode  加密参数（herenId patientid）
 onLoad((options) => {
   pageProp.value = deQueryForUrl<IPageProps>(deQueryForUrl(options));
-  getQueryPath(options);
   allData.hosId = pageProp.value.hosId || "";
   let query = getQueryPath(options);
   if (pageProp.value.type == "1") {
@@ -102,8 +101,7 @@ const getQueryPath = (options) => {
   };
   let _d = encryptDesParam(desObj);
   let modeOld = gStores.globalStore.modeOld?'1':gStores.globalStore.modeOld
-  console.log(11111,modeOld);
-  
+
   let query = "?_d=" + _d + "&sysCode=" + allData.sysCode +"&modeOld="+modeOld+ "&";
   if (options.query) {
     let queryArray: A[] = JSON.parse(options.query as string);
@@ -155,7 +153,7 @@ const handleMessage = (evt) => {
         // #endif
       })
       .catch((err) => {
-        let msg = err.errMsg.indexOf('cancel')!='-1'?'取消支付':"err.errMsg" 
+        let msg = err.errMsg.indexOf('cancel')!='-1'?'取消支付':"err.errMsg"
         gStores.messageStore.showMessage(msg, 2000, {
           closeCallBack: () => {
             if (V3PageData.cancelUrl) {

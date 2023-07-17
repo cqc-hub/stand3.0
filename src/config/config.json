@@ -83,6 +83,14 @@
       "isOpenOcr": true
     },
 
+    "1001060": {
+      "wxAppid": "wx799315279808c901",
+      "name": "绍兴第二医院",
+      "isStartComeTest": true,
+      "isSearchInHos": false,
+      "isOpenOcr": true
+    },
+
     "1001055": {
       "wxAppid": "wxd9a9c329edc6e2b0",
       "alipayAppid": "2021003164669106",
