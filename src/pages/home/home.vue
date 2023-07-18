@@ -49,67 +49,70 @@
 
           <view class="card">
             <!-- 登录之后 -->
-            <g-login @handler-next="routerJump">
-              <block v-if="globalStore.isLogin">
-                <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
-                >
-                  <!-- 有就诊人时 -->
-                  <block v-if="gStores.userStore.patChoose.patientName">
-                    <view class="flex-normal">
-                      <view @tap="cardClick" class="iconfont icon-size">
-                        &#xe6a7;
-                      </view>
-                      <view class="patient">
-                        <text>
-                          {{ gStores.userStore.patChoose.patientNameEncry }}
-                        </text>
-                        <text
-                          v-if="
-                            !isAreaProgram() &&
-                            gStores.userStore.patChoose._showId
-                          "
-                        >
-                          ID
-                          {{ gStores.userStore.patChoose._showId }}
-                        </text>
-                      </view>
+            <block v-if="globalStore.isLogin">
+              <view
+                class="top-card flex-normal-between animate__animated animate__fadeIn"
+              >
+                <!-- 有就诊人时 -->
+                <block v-if="gStores.userStore.patChoose.patientName">
+                  <view class="flex-normal">
+                    <view @tap="cardClick" class="iconfont icon-size">
+                      &#xe6a7;
                     </view>
-                    <view class="switchPatient" @tap="chooseAction">
-                      更换就诊人
+                    <view class="patient">
+                      <text>
+                        {{ gStores.userStore.patChoose.patientNameEncry }}
+                      </text>
+                      <text
+                        v-if="
+                          !isAreaProgram() &&
+                          gStores.userStore.patChoose._showId
+                        "
+                      >
+                        ID
+                        {{ gStores.userStore.patChoose._showId }}
+                      </text>
                     </view>
-                  </block>
-                  <!-- 没有就诊人时 -->
-                  <block v-else>
-                    <view class="flex-normal">
-                      <view class="patient">
-                        <text>暂无就诊人</text>
-                      </view>
+                  </view>
+                  <view class="switchPatient" @tap="chooseAction">
+                    更换就诊人
+                  </view>
+                </block>
+                <!-- 没有就诊人时 -->
+                <block v-else>
+                  <view class="flex-normal">
+                    <view class="patient">
+                      <text>暂无就诊人</text>
                     </view>
-                    <view class="switchPatient" @tap="addPatient">
-                      添加就诊人
-                    </view>
-                  </block>
-                </view>
-              </block>
-              <block v-else>
-                <!-- 未登录 -->
-                <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
-                >
-                  <view class="flex-normal no-login">
+                  </view>
+                  <view class="switchPatient" @tap="addPatient">
+                    添加就诊人
+                  </view>
+                </block>
+              </view>
+            </block>
+            <block v-else>
+              <!-- 未登录 -->
+              <view
+                class="top-card flex-normal-between animate__animated animate__fadeIn"
+              >
+                <view class="flex-normal no-login">
+                  <g-login @handler-next="routerJump">
                     <text>请登录</text>
                     <text>登录后享受更多服务</text>
-                  </view>
+                  </g-login>
+                </view>
+
+                <g-login @handler-next="routerJump">
                   <!-- #ifdef MP-ALIPAY -->
                   <view class="switchPatient no-login-tip">请登录</view>
                   <!-- #endif -->
                   <!-- #ifdef MP-WEIXIN -->
                   <button class="login-btn">请登录</button>
                   <!-- #endif -->
-                </view>
-              </block>
-            </g-login>
+                </g-login>
+              </view>
+            </block>
 
             <view class="top-menu">
               <view class="box" v-if="topMenuList && topMenuList.length">

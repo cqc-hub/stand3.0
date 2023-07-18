@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -87,8 +87,8 @@
       "wxAppid": "wx799315279808c901",
       "name": "绍兴第二医院",
       "isStartComeTest": true,
-      "isSearchInHos": false,
-      "isOpenOcr": true
+      "isSearchInHos": true,
+      "isOpenOcr": false
     },
 
     "1001055": {
