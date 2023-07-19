@@ -75,7 +75,9 @@
                   <view class="color-888">
                     {{ `${citem.itemPrice}元/${citem.units}` }}
                   </view>
-                  <view class="color-888">{{ `x${citem.amount}` }}</view>
+                  <view class="color-888">
+                    {{ `x${mulitChildren ? citem.amountRem : citem.amount}` }}
+                  </view>
 
                   <view class="text-no-wrap color-888">
                     {{ `${citem.subCost}元` }}
@@ -124,7 +126,9 @@
                     <text class="mr40">
                       {{ `${citem.itemPrice}元/${citem.units}` }}
                     </text>
-                    <text>{{ `x${citem.amount}` }}</text>
+                    <text>
+                      {{ `x${mulitChildren ? citem.amountRem : citem.amount}` }}
+                    </text>
                   </view>
                 </view>
               </view>
