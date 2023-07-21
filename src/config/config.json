@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001060",
+  "sysCode": "1001041",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -176,6 +176,15 @@
       "wxAppid": "wxea8552a036115576",
       "name": "濮阳市第五人民医院",
       "isSearchInHos": false,
+      "isOpenOcr": false
+    },
+
+    "1001041": {
+      "wxAppid": "wxe09a59ebf1a15c3b",
+      "h5Appid": "wxf7ff9cd57585dfd8",
+      "name": "大连二院普湾院区",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
       "isOpenOcr": false
     }
   }
