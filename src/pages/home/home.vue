@@ -461,6 +461,10 @@
   };
   //打开关注框
   const openShare = (item) => {
+    if (!item) {
+      return
+    }
+
     h5QrCodeImg.value = item;
     homeH5SharePopupRef.value.show();
   };

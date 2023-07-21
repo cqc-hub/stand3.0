@@ -63,9 +63,11 @@
     ],
     "usingComponents": true,
     "plugins": {},
-    "mergeVirtualHostAttributes": true
+    "mergeVirtualHostAttributes": true,
+    "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
+    "component2": true,
     "usingComponents": true,
     "plugins": {
       "ocrPlugin": {
@@ -74,7 +76,7 @@
       },
       "auth-pay-plugin": {
         "version": "*",
-        "provider": "2021003167601013"
+        "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,

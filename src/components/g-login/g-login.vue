@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-if="gStores.globalStore.isLogin || disabled">
-      <slot />
+      <slot  />
     </view>
 
     <block v-else>

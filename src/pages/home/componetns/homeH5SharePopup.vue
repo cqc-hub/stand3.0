@@ -19,8 +19,8 @@
             </text>
           </view>
 
-          <view class="f44 row-box color-blue"> 
-            {{$global.systemInfo.name}}公众号
+          <view class="f44 row-box color-blue">
+            {{ $global.systemInfo.name }}公众号
           </view>
         </view>
 
@@ -28,7 +28,7 @@
           <view class="g-flex-rc-cc p32">
             <view class="qr-code">
               <image
-                v-if="props.imageUrl!=''"
+                v-if="props.imageUrl != ''"
                 :src="props.imageUrl"
                 mode="widthFix"
                 class="qr-code-img"
@@ -64,6 +64,7 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+  import globalGl from '@/config/global';
 
   const tzList = ref([
     {
@@ -87,10 +88,10 @@
 
   const props = withDefaults(
     defineProps<{
-      imageUrl: string; 
+      imageUrl: string;
     }>(),
     {
-      imageUrl: 'https://phsdevoss.eheren.com/pcloud/phs3.0/lqCode.jpg'
+      imageUrl: globalGl.BASE_IMG + 'lqCode.jpg',
     }
   );
 
@@ -104,7 +105,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .container { 
+  .container {
     .header {
       position: relative;
       padding: 0 32rpx;

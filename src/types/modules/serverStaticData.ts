@@ -172,7 +172,7 @@ export interface ISystemConfig {
     isSubitemPay?: '1';
     // 申请退单
     isOpenChargeback?: '1';
-    // 已缴费详情页面对某一条具体的费用进行退费
+    // 已缴费详情页面对某一条具体的费用进行申请退费
     isPayedItemDetailRefund?: '1';
 
     // 缴费完成后跳转

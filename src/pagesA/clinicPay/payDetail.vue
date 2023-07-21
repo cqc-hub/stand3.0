@@ -513,7 +513,7 @@
     const canRefoundList = list.filter((o) => o.amountRem !== '0');
 
     if (!canRefoundList.length) {
-      gStores.messageStore.showMessage('该笔费用不支持退费', 3000);
+      gStores.messageStore.showMessage('该笔费用不支持退费或可退数量为零', 3000);
       throw new Error('不支持退费');
     }
 

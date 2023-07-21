@@ -399,6 +399,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
        *  - 开发设置-应用网关
        *  - 产品绑定-绑定产品-获取会员手机号
        *
+       * - 主体申请 会员手机号能力
+       *
        */
       const { response: responseStr } = await apiAsync(
         my.getPhoneNumber,

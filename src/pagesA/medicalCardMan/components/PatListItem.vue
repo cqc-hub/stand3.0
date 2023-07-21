@@ -211,7 +211,7 @@
     .health-card {
       height: 350rpx;
       margin-top: 16rpx;
-      background: url(https://phsdevoss.eheren.com/pcloud/phs3.0/health-card-bg.png)
+      background: url(#{$base-url}health-card-bg.png)
         100%/100% no-repeat;
       // border-radius: 16rpx;
 

@@ -3,6 +3,7 @@
     "^g-(.*)": "components/g-$1/g-$1.vue",
     "^w-(.*)": "@/uni_modules/wmf-code/components/w-$1/w-$1.vue"
   },
+
   "pages": [
     {
       "path": "pages/home/home",
