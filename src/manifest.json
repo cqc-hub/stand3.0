@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx799315279808c901",
+    "appid": "wxe09a59ebf1a15c3b",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -82,7 +82,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴第二医院",
+  "name": "大连二院普湾院区",
   "h5": {
     "router": {
       "base": "./"

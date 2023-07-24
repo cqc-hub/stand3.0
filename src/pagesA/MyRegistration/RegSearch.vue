@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, nextTick } from 'vue';
+  import { ref } from 'vue';
   import { deQueryForUrl } from '@/common';
   import { GStores } from '@/utils';
   import {

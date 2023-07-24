@@ -839,6 +839,7 @@
               white-space: pre-wrap;
               line-height: 48rpx;
               color: #444;
+              word-break: break-all;
             }
           }
         }
