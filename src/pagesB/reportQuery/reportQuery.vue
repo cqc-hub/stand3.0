@@ -37,7 +37,7 @@
           class="container-scroll"
         >
           <template #default>
-            <view class="list-block">
+            <view v-if="pageList[tab.typeId] && pageList[tab.typeId].length" class="list-block">
               <template
                 v-for="(item, index) in pageList[tab.typeId]"
                 :key="index"

@@ -395,7 +395,7 @@
     };
 
     await api.addDrugDelivery(args);
-    gStores.messageStore.showMessage('您已选择为医院窗口取药', 3000, {
+    gStores.messageStore.showMessage('选择医院窗口取药成功', 3000, {
       closeCallBack() {
         tabCurrent.value = 1;
       },

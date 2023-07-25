@@ -1139,16 +1139,6 @@ export const usePayPage = () => {
   const wxPayMoneyMedicalPlugin = async (
     callback: (authorize: TWxAuthorize) => any = () => {}
   ) => {
-    // callback({
-    //   cityId: '610100',
-    //   payAuthNo: '',
-    //   userLongitudeLatitude: {
-    //     latitude: '0',
-    //     longitude: '0',
-    //   },
-    //   userName: 'cqc',
-    // });
-    // return;
     const {
       sConfig: { medicalMHelp },
     } = globalGl;

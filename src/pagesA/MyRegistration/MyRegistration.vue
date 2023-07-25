@@ -209,7 +209,7 @@
 
     if (result && result.length) {
       result.map(async (o) => {
-        // o.orderStatus = '0';
+        // o.orderStatus = '70';
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           orderConfig.value.isOrderPay
