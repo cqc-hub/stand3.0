@@ -128,6 +128,7 @@ export const beforeEach = async (
         '/pagesA/medicalCardMan/addMedical',
       ].includes(url)
     ) {
+
       if (!globalStore.h5OpenId && globalGl.h5AppId) {
         uni.reLaunch({
           url: '/pages/home/startCome',

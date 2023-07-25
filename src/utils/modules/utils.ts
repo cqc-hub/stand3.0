@@ -122,9 +122,7 @@ const getMenuById = (_id: string, _list: any[]) => {
 
 export const routerJump = async (url?: `/${string}`) => {
   const routerStore = useRouterStore();
-  const messageStore = useMessageStore();
-  const globalStore = useGlobalStore();
-  const userStore = useUserStore();
+
   if (routerStore.isWork) {
     const _p = routerStore._p;
     if (!_p) {

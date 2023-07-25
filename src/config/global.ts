@@ -23,7 +23,7 @@ if (env === 'prod') {
 
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
 let h5AppId = systemInfo.h5Appid;
-if (systemInfo.h5AppidDisabledInTest) {
+if (systemInfo.h5AppidDisabledInTest && env !== 'prod') {
   h5AppId = '';
 }
 
