@@ -17,7 +17,7 @@
 
     <view v-if="disabled" class="hos-location f26 color-888">暂未开通</view>
     <view v-else class="hos-location">
-      <view  @click.stop="locationClick" class="g-flex-rc-cc hos-location-prefix">
+      <view v-if="item.hosLevel!=9" @click.stop="locationClick" class="g-flex-rc-cc hos-location-prefix">
         <view class="iconfont icon-location">&#xe6d7;</view>
         <view v-if="item.distanceFormat">距离{{ item.distanceFormat }}km</view>
         <view v-else>导航</view>

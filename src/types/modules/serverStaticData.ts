@@ -250,6 +250,7 @@ export interface IHosInfo {
   aliasName: string;
   hosId: string;
   hosName: string;
+  hosLevel:number;
   hosLevelName: string;
   hosPhoto: string;
   hosType: string;

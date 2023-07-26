@@ -211,8 +211,9 @@ export class ServerStaticData {
       });
 
       hosList = result;
-
-      _cacheMap.set(this.getHosList, result);
+      if (!opt.noCache) {
+        _cacheMap.set(this.getHosList, result);
+      }
 
       // setLocalStorage({
       //   hosList: result
