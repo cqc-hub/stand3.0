@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001054",
+  "sysCode": "1001060",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -85,6 +85,8 @@
 
     "1001060": {
       "wxAppid": "wx799315279808c901",
+      "alipayAppid": "2021004103625411",
+      "isvAlipayAppid": "2021004105619008",
       "name": "绍兴第二医院",
       "isStartComeTest": true,
       "isSearchInHos": true,

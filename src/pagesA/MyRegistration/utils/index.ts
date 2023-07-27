@@ -379,8 +379,6 @@ export const useOrder = (props: IOrderProps) => {
     deptId?: string;
     hosId: string;
   }) => {
-    console.log(data, 'cqc');
-
     if (data && Object.keys(data).length) {
       const {
         clinicalType,
@@ -390,6 +388,7 @@ export const useOrder = (props: IOrderProps) => {
         secondHosDeptId,
         hosId,
       } = deQueryForUrl<typeof data>(data);
+
       const { source } = gStores.globalStore.browser;
 
       const hosDeptId =

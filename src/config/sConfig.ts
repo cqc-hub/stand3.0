@@ -75,6 +75,20 @@ interface ISConfig {
 
 const scJson: Record<string, ISConfig> = {
   /**
+   * 绍兴第二医院
+   */
+  1001060: {
+    medicalMHelp: {
+      alipay: {
+        medicalPlugin: {
+          orgId: { 13060: 'H33060300001' },
+          cardType: '01',
+        },
+      },
+    },
+  },
+
+  /**
    * 乐清市人民医院
    */
   1001052: {

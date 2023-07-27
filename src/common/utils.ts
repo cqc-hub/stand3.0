@@ -76,7 +76,7 @@ export const deQueryForUrl = <T = BaseObject>(props): T => {
       const dePropList =
         (props && Object.entries(props)).map(([key, value]) => [
           key,
-          decodeURIComponent(value),
+          value && decodeURIComponent(value) || value,
         ]) || [];
 
       return <T>Object.fromEntries(dePropList);
