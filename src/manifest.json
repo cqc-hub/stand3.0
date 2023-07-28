@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wx799315279808c901",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -70,13 +70,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
+      "auth-pay-plugin": {
         "version": "*",
-        "provider": "2021001130678316"
+        "provider": "2021003167601013"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396"
+    "appid": "2021004103625411"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -88,7 +88,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "绍兴第二医院",
   "h5": {
     "router": {
       "base": "./"
