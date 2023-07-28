@@ -2,9 +2,9 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import dayjs from 'dayjs';
 import api from '@/service/api';
 
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
-import { joinQueryForUrl, joinQuery, deQueryForUrl } from '@/common/utils';
+import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
