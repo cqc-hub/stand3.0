@@ -347,7 +347,7 @@ const queryApi = {
     }),
   // 获取检验、检查、体检列表
   getReportsReportList: <T = any>(data) =>
-    service.post('/phs-query/examine/getReportsReportList', parm(data), {
+    service.post<T>('/phs-query/examine/getReportsReportList', parm(data), {
       reportCmPV_YLName: '检查检验报告查询',
       monitorName: '报告查询',
     }),
