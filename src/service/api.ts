@@ -295,6 +295,10 @@ const queryApi = {
   // 病案复印 tuifei
   copyRefund: <T>(data) =>
     service.post<T>('/phs-query/caseCopy/copyRefund', parm(data)),
+
+  copyOfCasePaySupplement: <T = any>(data) =>
+    service.post<T>('/phs-query/caseCopy/copyOfCasePaySupplement', parm(data)),
+
   // 获取住院信息
   getInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),

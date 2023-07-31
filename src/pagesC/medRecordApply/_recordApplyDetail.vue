@@ -20,7 +20,9 @@
               class="flex-normal"
             >
               <view class="reg-header-label">
-                <view class="title">{{ titleStatus.title }}</view>
+                <view class="title">
+                  {{ info.supplement === 1 ? '待补缴' : titleStatus.title }}
+                </view>
                 <view
                   :style="{
                     color: ['20', '21'].includes(info.orderStatus)
@@ -30,7 +32,9 @@
                   class="header-desc f26 flex-normal"
                 >
                   <view v-if="info.fee" class="mr24 text-no-wrap">
-                    <text class="mr12">支付金额:</text>
+                    <text class="mr12">
+                      {{ info.supplement === 1 ? '已支付金额' : '支付金额' }}:
+                    </text>
                     <text>
                       {{ info.fee }}元
                       <text v-if="info.expressFee">
@@ -39,7 +43,14 @@
                     </text>
                   </view>
 
-                  <view v-if="info.refundFee" class="text-no-wrap">
+                  <view v-if="info.supplement === 1" class="text-no-wrap">
+                    <text class="mr12 text-no-wrap">待补交金额:</text>
+                    <text class="mr12 g-break-word">
+                      {{ info.supplementFee }}元
+                    </text>
+                  </view>
+
+                  <view v-else-if="info.refundFee" class="text-no-wrap">
                     <text class="mr12 text-no-wrap">退还金额:</text>
                     <text class="mr12 g-break-word">
                       {{ info.refundFee }}元
@@ -74,7 +85,7 @@
 
           <view class="container mt24">
             <view v-if="expressInfo" class="container-box p32 mb32 g-border">
-              <express-Step
+              <Express-Step
                 :pointEnd="_expressInfo.pointEnd"
                 :pointNow="_expressInfo.pointNow"
                 :expressNo="info.expressNo"
@@ -168,6 +179,14 @@
         </view>
 
         <button
+          v-if="info.supplement === 1"
+          @click="supplementPay"
+          class="btn g-border btn-error btn-plain"
+        >
+          立即支付
+        </button>
+
+        <button
           v-if="['20', '21', '16', '17'].includes(info.orderStatus)"
           @click="applyAgain"
           class="btn g-border btn-primary btn-plain"
@@ -214,16 +233,27 @@
       @confirmButton="applyCancelDialog"
       confirmText="确定取消"
     />
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      auto
+      autoInOne
+      ref="refPay"
+    >
+      <g-flag typeFg="32" isShowFgTip />
+    </g-pay>
     <g-message />
     <g-back-home v-if="!isShowFooter" />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, reactive } from 'vue';
+  import { computed, ref, nextTick } from 'vue';
   import dayjs from 'dayjs';
 
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+
   import {
     applyOrderStatusMap,
     type CaseCopeItemDetail,
@@ -234,7 +264,7 @@
   import globalGl from '@/config/global';
 
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import expressStep from './components/ExpressStep.vue';
+  import ExpressStep from './components/ExpressStep.vue';
   import RecordCard from './components/RecordCard.vue';
 
   const props = defineProps<{
@@ -244,8 +274,9 @@
   const gStores = new GStores();
 
   const isShowFooter = computed(() => {
-    return ['20', '21', '16', '17', '11', '15'].includes(
-      info.value.orderStatus
+    return (
+      info.value.supplement === 1 ||
+      ['20', '21', '16', '17', '11', '15'].includes(info.value.orderStatus)
     );
   });
   const getPrintCount = computed(() => {
@@ -359,6 +390,7 @@
       };
     }
 
+    // result.supplement = 1
     info.value = result;
   };
 
@@ -397,6 +429,59 @@
     await api.copyRefund(args);
     init();
   };
+
+  const refPayList = ref([
+    {
+      label: '在线支付',
+      key: 'online',
+    },
+  ]);
+  const payArg = ref<BaseObject>({});
+  const refPay = ref<any>('');
+
+  const supplementPay = async () => {
+    let payType = 'ALI_MINI';
+    let [userId, openId] = ['', ''];
+    // #ifdef  MP-WEIXIN
+    payType = 'WX_MINI';
+    openId = gStores.globalStore.openId;
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    userId = gStores.globalStore.openId;
+    // #endif
+
+    const { patientId } = gStores.userStore.patChoose;
+
+    const { hosId, supplementFee, supplementId, _outInfo } = info.value;
+
+    const args = {
+      hosId,
+      payType,
+      channel: gStores.globalStore.browser.source,
+      supplementFee,
+      patientId,
+      supplementId,
+      userId,
+      openId,
+    };
+
+    const { result } = await api.copyOfCasePaySupplement(args);
+
+    payArg.value = {
+      phsOrderNo: result.phsOrderNo,
+      phsOrderSource: '4',
+      totalFee: supplementFee,
+      hosId,
+      hosName: _outInfo[0]?.hosName,
+    };
+
+    nextTick(refPay.value.show);
+  };
+
+  const payAfter = () => {
+    init();
+  }
 
   const goDetailExpress = () => {
     const { expressNo, expressCompany } = info.value;

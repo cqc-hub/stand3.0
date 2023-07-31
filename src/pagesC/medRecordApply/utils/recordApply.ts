@@ -171,6 +171,11 @@ export type CaseCopyItem = {
   expressNo: string;
   expressCompany: string;
   _outInfo: TOutInfo[];
+  /** 补交状态 1 待补交 2 已补交 */
+  supplement?: 1 | 2;
+  /** 补交金额 */
+  supplementFee?: string;
+  supplementId?: string;
 };
 
 type deParams = string;
@@ -198,6 +203,7 @@ export type CaseCopeItemDetail = Flatten<
     remark: string;
     expressNo: string;
     expressCompany: string;
+    hosId: string;
   }
 >;
 

@@ -20,12 +20,18 @@
         <view
           :style="{
             color:
-              applyOrderStatusMap[item.orderStatus].color ||
-              'var(--hr-neutral-color-10)',
+              item.supplement === 1
+                ? 'var(--hr-warning-color-6)'
+                : applyOrderStatusMap[item.orderStatus].color ||
+                  'var(--hr-neutral-color-10)',
           }"
           class="item-status g-bold"
         >
-          {{ applyOrderStatusMap[item.orderStatus].title }}
+          {{
+            item.supplement === 1
+              ? '待补缴'
+              : applyOrderStatusMap[item.orderStatus].title
+          }}
         </view>
       </view>
 
@@ -34,11 +40,7 @@
       </view>
 
       <view v-if="item._outInfo" class="outinfo-box">
-        <view
-          v-for="(outinfo, i) in item._outInfo"
-          class="outinfo-item mb16"
-          :key="i"
-        >
+        <view v-for="(outinfo, i) in item._outInfo" class="outinfo-item mb16" :key="i">
           <view class="flex-normal outinfo-item-r">
             <text class="iconfont f28 mr12">&#xe6f3;</text>
 
@@ -109,141 +111,141 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-  import { CaseCopyItem, applyOrderStatusMap } from '../utils/recordApply';
-  import dayjs from 'dayjs';
+import { defineComponent, ref } from 'vue';
+import { CaseCopyItem, applyOrderStatusMap } from '../utils/recordApply';
+import dayjs from 'dayjs';
 
-  const props = defineProps<{
-    list: CaseCopyItem[];
-    systemModeOld: boolean;
-  }>();
+const props = defineProps<{
+  list: CaseCopyItem[];
+  systemModeOld: boolean;
+}>();
 
-  const emits = defineEmits(['item-click', 'express-click']);
+const emits = defineEmits(['item-click', 'express-click']);
 
-  const itemClick = (item: CaseCopyItem) => {
-    emits('item-click', item);
-  };
+const itemClick = (item: CaseCopyItem) => {
+  emits('item-click', item);
+};
 
-  const goExpress = (item: CaseCopyItem) => {
-    emits('express-click', item);
-  };
+const goExpress = (item: CaseCopyItem) => {
+  emits('express-click', item);
+};
 </script>
 
 <style lang="scss" scoped>
-  .text-ellipsis {
-    -webkit-line-clamp: 2;
+.text-ellipsis {
+  -webkit-line-clamp: 2;
+}
+.ellipsis-1 {
+  -webkit-line-clamp: 1;
+}
+
+.item {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 40rpx 32rpx;
+  margin-bottom: 16rpx;
+  min-height: 100rpx;
+
+  &:first-child {
+    margin-top: 24rpx;
   }
-  .ellipsis-1 {
-    -webkit-line-clamp: 1;
+
+  .title {
+    align-items: flex-start;
+
+    .item-status {
+      white-space: nowrap;
+      margin-left: 66rpx;
+    }
+  }
+  .aaa {
+    margin-bottom: 24rpx;
   }
 
-  .item {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 40rpx 32rpx;
-    margin-bottom: 16rpx;
-    min-height: 100rpx;
+  .row {
+    display: flex;
+    margin-top: 16rpx;
 
-    &:first-child {
-      margin-top: 24rpx;
+    font-size: var(--hr-font-size-xs);
+    align-items: flex-start;
+
+    .row-title {
+      color: var(--hr-neutral-color-7);
+      width: 150rpx;
+      white-space: nowrap;
     }
 
-    .title {
-      align-items: flex-start;
-
-      .item-status {
-        white-space: nowrap;
-        margin-left: 66rpx;
-      }
-    }
-    .aaa {
-      margin-bottom: 24rpx;
-    }
-
-    .row {
-      display: flex;
-      margin-top: 16rpx;
-
-      font-size: var(--hr-font-size-xs);
-      align-items: flex-start;
-
-      .row-title {
-        color: var(--hr-neutral-color-7);
-        width: 150rpx;
-        white-space: nowrap;
-      }
-
-      .row-content {
-        word-break: break-all;
-        text-align: left;
-        flex: 1;
-      }
-    }
-
-    .express {
-      margin-top: 16rpx;
-      background-color: var(--hr-neutral-color-1);
-      border-radius: 4px;
-      padding: 0 16rpx;
-      padding-right: 5rpx;
-      font-size: var(--hr-font-size-xs);
-      vertical-align: middle;
-
-      .express-date {
-        white-space: nowrap;
-      }
-
-      .express-row {
-        height: 100%;
-      }
-
-      .iconfont {
-        font-size: var(--hr-font-size-xxl);
-      }
-
-      .arrow-icon {
-        color: var(--hr-neutral-color-7);
-      }
-
-      .text-ellipsis {
-        -webkit-line-clamp: 1;
-      }
-
-      .express-color {
-        color: var(--hr-neutral-color-7);
-      }
+    .row-content {
+      word-break: break-all;
+      text-align: left;
+      flex: 1;
     }
   }
 
-  .outinfo-box {
+  .express {
+    margin-top: 16rpx;
     background-color: var(--hr-neutral-color-1);
     border-radius: 4px;
-    padding: 24rpx 32rpx;
-    padding-bottom: 1rpx;
+    padding: 0 16rpx;
+    padding-right: 5rpx;
+    font-size: var(--hr-font-size-xs);
+    vertical-align: middle;
 
-    .outinfo-item {
-      .outinfo-item-r {
-        align-items: flex-start;
+    .express-date {
+      white-space: nowrap;
+    }
 
-        .iconfont {
-          transform: translateY(5rpx);
-          color: #43d5c0;
-        }
+    .express-row {
+      height: 100%;
+    }
+
+    .iconfont {
+      font-size: var(--hr-font-size-xxl);
+    }
+
+    .arrow-icon {
+      color: var(--hr-neutral-color-7);
+    }
+
+    .text-ellipsis {
+      -webkit-line-clamp: 1;
+    }
+
+    .express-color {
+      color: var(--hr-neutral-color-7);
+    }
+  }
+}
+
+.outinfo-box {
+  background-color: var(--hr-neutral-color-1);
+  border-radius: 4px;
+  padding: 24rpx 32rpx;
+  padding-bottom: 1rpx;
+
+  .outinfo-item {
+    .outinfo-item-r {
+      align-items: flex-start;
+
+      .iconfont {
+        transform: translateY(5rpx);
+        color: #43d5c0;
       }
     }
   }
+}
 
-  .m10 {
-    margin: 0 10rpx;
-  }
+.m10 {
+  margin: 0 10rpx;
+}
 
-  .system-mode-old {
-    .item {
-      .row {
-        .row-title {
-          width: 190rpx;
-        }
+.system-mode-old {
+  .item {
+    .row {
+      .row-title {
+        width: 190rpx;
       }
     }
   }
+}
 </style>
