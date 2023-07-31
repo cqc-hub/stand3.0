@@ -66,7 +66,6 @@ Request.interceptors.response(
     const messageStore = useMessageStore();
     if (responseOptions) {
       const { hideLoading: iHideLoading } = responseOptions;
-
       if (!iHideLoading) {
         hideLoading();
       }

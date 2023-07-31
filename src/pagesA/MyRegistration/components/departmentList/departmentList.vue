@@ -19,7 +19,7 @@
         }"
         class="item-lv1-pills"
       />
-      <view style="background: #fff;">
+      <view style="background: #fff">
         <view
           v-for="(item, indexLv1) in list"
           :key="item.firstHosDeptId"
@@ -209,16 +209,15 @@ watch(
 
   justify-content: flex-start;
   color: var(--hr-neutral-color-9);
-  transition: all 0.3s;
   position: relative;
   background-color: var(--hr-neutral-color-1);
 
   &.item-lv1-active-corner-bottom {
-    border-radius: 0 0 20rpx/30rpx;
+    animation: animate-corner-bottom 0.3s ease-in-out both .0s;
   }
 
   &.item-lv1-active-corner-top {
-    border-radius: 0 20rpx/30rpx;
+    animation: animate-corner-top 0.3s ease-in-out both .0s;
   }
 
   &.dept-list-lv2-alone {
@@ -260,5 +259,25 @@ watch(
   position: sticky;
   top: 0;
   z-index: 2;
+}
+
+@keyframes animate-corner-bottom {
+  0% {
+    border-radius: 0;
+  }
+
+  100% {
+    border-radius: 0 0 20rpx/30rpx;
+  }
+}
+
+@keyframes animate-corner-top {
+  0% {
+    border-radius: 0;
+  }
+
+  100% {
+    border-radius: 0 20rpx/30rpx;
+  }
 }
 </style>
