@@ -218,3 +218,7 @@ export const isExpress1 = (item: any): item is Express_1 => {
 export const isExpress2 = (item: any): item is Express_2 => {
   return item && item.mailno;
 };
+
+export const isWaitForPay = (
+  item: Pick<CaseCopyItem, 'orderStatus' | 'supplement'>
+) => !['20', '21'].includes(item.orderStatus) && item.supplement === 1;

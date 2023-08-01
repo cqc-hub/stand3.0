@@ -8,6 +8,9 @@
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
 
+  const gStores = new GStores();
+  const { source } = gStores.globalStore.browser;
+
   // 电子发票
   const eletronicInvoice: TButtonConfig = {
     type: 'h5',
@@ -202,9 +205,23 @@
     isLocal: '1',
   };
 
+  const 消息订阅管理: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/subMsgs/subMsgs',
+    text: '消息订阅管理',
+    extraData: {
+      source
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(绍兴二院采血预约);
+      useTBanner(消息订阅管理);
     }, 1000);
   });
 </script>

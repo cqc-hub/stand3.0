@@ -21,7 +21,7 @@
             >
               <view class="reg-header-label">
                 <view class="title">
-                  {{ info.supplement === 1 ? '待补缴' : titleStatus.title }}
+                  {{ isWaitForPay(info) ? '待补缴' : titleStatus.title }}
                 </view>
                 <view
                   :style="{
@@ -33,7 +33,7 @@
                 >
                   <view v-if="info.fee" class="mr24 text-no-wrap">
                     <text class="mr12">
-                      {{ info.supplement === 1 ? '已支付金额' : '支付金额' }}:
+                      {{ isWaitForPay(info) ? '已支付金额' : '支付金额' }}:
                     </text>
                     <text>
                       {{ info.fee }}元
@@ -43,7 +43,7 @@
                     </text>
                   </view>
 
-                  <view v-if="info.supplement === 1" class="text-no-wrap">
+                  <view v-if="isWaitForPay(info)" class="text-no-wrap">
                     <text class="mr12 text-no-wrap">待补交金额:</text>
                     <text class="mr12 g-break-word">
                       {{ info.supplementFee }}元
@@ -179,7 +179,7 @@
         </view>
 
         <button
-          v-if="info.supplement === 1"
+          v-if="isWaitForPay(info)"
           @click="supplementPay"
           class="btn g-border btn-error btn-plain"
         >
@@ -257,6 +257,7 @@
   import {
     applyOrderStatusMap,
     type CaseCopeItemDetail,
+    isWaitForPay
   } from './utils/recordApply';
   import { joinQuery } from '@/common';
 
@@ -275,7 +276,7 @@
 
   const isShowFooter = computed(() => {
     return (
-      info.value.supplement === 1 ||
+      isWaitForPay(info.value) ||
       ['20', '21', '16', '17', '11', '15'].includes(info.value.orderStatus)
     );
   });
