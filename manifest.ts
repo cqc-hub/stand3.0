@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference path="./src/index.d.ts" />
 
 import globalGl from './src/config/global';
