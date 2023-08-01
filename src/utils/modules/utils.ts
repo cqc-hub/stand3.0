@@ -1,9 +1,4 @@
-import {
-  useRouterStore,
-  useMessageStore,
-  useGlobalStore,
-  useUserStore,
-} from '@/stores';
+import { useRouterStore } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';

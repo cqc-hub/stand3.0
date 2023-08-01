@@ -36,7 +36,7 @@
                       {{ isWaitForPay(info) ? '已支付金额' : '支付金额' }}:
                     </text>
                     <text>
-                      {{ info.fee }}元
+                      {{ getShowFee }}元
                       <text v-if="info.expressFee">
                         (含快递费{{ info.expressFee }}元)
                       </text>
@@ -257,7 +257,7 @@
   import {
     applyOrderStatusMap,
     type CaseCopeItemDetail,
-    isWaitForPay
+    isWaitForPay,
   } from './utils/recordApply';
   import { joinQuery } from '@/common';
 
@@ -279,6 +279,20 @@
       isWaitForPay(info.value) ||
       ['20', '21', '16', '17', '11', '15'].includes(info.value.orderStatus)
     );
+  });
+  const getShowFee = computed(() => {
+    if (isWaitForPay(info.value)) {
+      return info.value.fee;
+    } else {
+      let fee = ((info.value.fee as unknown as number) || 0) * 1;
+      if (info.value.supplementFee) {
+        fee += (info.value.supplementFee as unknown as number) * 1;
+      }
+
+      fee = ~~(fee * 100) / 100;
+
+      return fee;
+    }
   });
   const getPrintCount = computed(() => {
     if (info.value.printCount) {
@@ -482,7 +496,7 @@
 
   const payAfter = () => {
     init();
-  }
+  };
 
   const goDetailExpress = () => {
     const { expressNo, expressCompany } = info.value;
