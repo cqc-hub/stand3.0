@@ -79,7 +79,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001060: {
     medicalMHelp: {
-      isOpenPatToMedicalPat: {},
+      // isOpenPatToMedicalPat: {},
       alipay: {
         medicalPlugin: {
           orgId: { 13060: 'H33060300001' },

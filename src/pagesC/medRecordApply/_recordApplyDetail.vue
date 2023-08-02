@@ -280,12 +280,13 @@
       ['20', '21', '16', '17', '11', '15'].includes(info.value.orderStatus)
     );
   });
+
   const getShowFee = computed(() => {
     if (isWaitForPay(info.value)) {
       return info.value.fee;
     } else {
       let fee = ((info.value.fee as unknown as number) || 0) * 1;
-      if (info.value.supplementFee) {
+      if (info.value.supplementFee && info.value.supplement === 2) {
         fee += (info.value.supplementFee as unknown as number) * 1;
       }
 

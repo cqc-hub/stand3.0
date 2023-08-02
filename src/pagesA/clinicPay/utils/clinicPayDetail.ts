@@ -407,7 +407,7 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
         });
 
         if (result) {
-          const { isSelf } = result;
+          let { isSelf } = result;
           _isCanUseMedical = isSelf;
 
           setTimeout(() => {
@@ -1014,10 +1014,12 @@ export const usePayPage = () => {
           ? pageProps.value.deParams?.cardNumber
           : '';
 
-        await new PatientUtils().upToMedicalPat({
-          pat: gStores.userStore.patChoose,
-          cardNumber
-        });
+        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat) {
+          await new PatientUtils().upToMedicalPat({
+            pat: gStores.userStore.patChoose,
+            cardNumber,
+          });
+        }
 
         // #ifdef MP-ALIPAY
         payMoneyMedicalPlugin();

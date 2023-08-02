@@ -80,7 +80,12 @@ export const applyOrderStatusMap = {
     color: 'var(--hr-neutral-color-7)',
   },
   '18': {
-    title: '已结算',
+    // title: '已结算',
+    // detailColor: '#fff',
+    // headerClass: 'header-blue',
+    // color: 'var(--hr-brand-color-6)',
+
+    title: '已发货',
     detailColor: '#fff',
     headerClass: 'header-blue',
     color: 'var(--hr-brand-color-6)',
