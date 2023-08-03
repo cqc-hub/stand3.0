@@ -404,6 +404,8 @@
             }
           }
         } else {
+          // 01身份证 02居民户口簿 03护照 031中国籍普通护照 032外国籍护照 04军官证 05驾驶证 06港澳居民来往内地通行证 07台湾居民来往内地通行证 99其他法定有效证件
+
           // 不是身份证类型的证件号通过选择生日来判断要不要监护人
           // const birthday = formData.value[formKey.birthday] as string;
           // if (birthday) {

@@ -456,10 +456,10 @@
   const refPay = ref<any>('');
 
   const supplementPay = async () => {
-    let payType = 'ALI_MINI';
+    let payType = '38';
     let [userId, openId] = ['', ''];
     // #ifdef  MP-WEIXIN
-    payType = 'WX_MINI';
+    payType = '37';
     openId = gStores.globalStore.openId;
     // #endif
 
