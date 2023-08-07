@@ -213,11 +213,11 @@ watch(
   background-color: var(--hr-neutral-color-1);
 
   &.item-lv1-active-corner-bottom {
-    animation: animate-corner-bottom 0.3s ease-in-out both .0s;
+    animation: animate-corner-bottom 0.1s ease-in-out both .0s;
   }
 
   &.item-lv1-active-corner-top {
-    animation: animate-corner-top 0.3s ease-in-out both .0s;
+    animation: animate-corner-top 0.1s ease-in-out both .0s;
   }
 
   &.dept-list-lv2-alone {

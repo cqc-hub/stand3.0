@@ -5,7 +5,7 @@
     }"
     class="choose-day"
   >
-    <view class="choose-day-container">
+    <view v-if="chooseDays.length" class="choose-day-container">
       <view
         v-if="isShowAllDate"
         :class="{
@@ -119,7 +119,6 @@
   const change = (item: IChooseDays) => {
     emits('change', item);
   };
-
 
   const dateTimeChange = (fullDay) => {
     const dayMap = {

@@ -1,0 +1,140 @@
+<template>
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+    class="g-page"
+  >
+    <g-flag isShowFg typeFg="79" />
+    <view class="container" scroll-y>
+      <image
+        :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
+        @click="chooseIdCard"
+        class="sfz-img p32"
+        mode="widthFix"
+      />
+
+      <g-form
+        v-model:value="formData"
+        @submit="formSubmit"
+        bodyBold
+        ref="gform"
+      />
+    </view>
+
+    <g-message />
+    <!-- #ifdef MP-ALIPAY -->
+    <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      id="canvasForBase64"
+      class="my-display-none"
+    />
+    <!-- #endif -->
+    <view class="g-footer">
+      <button @click="gform.submit" class="btn btn-primary flex1">保存</button>
+    </view>
+  </view>
+</template>
+
+<script lang="ts" setup>
+  import { onMounted, ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+  import type { TInstance } from '@/components/g-form/index';
+
+  import {
+    GStores,
+    routerJump,
+    ServerStaticData,
+    wait,
+    useOcr,
+    base64Src,
+  } from '@/utils';
+  import {
+    pickTempItem,
+    formKey,
+    TFormKeys,
+    getDefaultFormData,
+    formatterSubPatientData,
+    loginAuthAlipay,
+  } from './utils';
+
+  const gStores = new GStores();
+  const pageProps = ref({});
+  const gform = ref<any>('');
+  const idCardUrl = ref('');
+  let formList: TInstance[] = [];
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
+
+  const formData = ref<BaseObject>({
+    idType: '01',
+  });
+  const formSubmit = async () => {};
+
+  const chooseIdCard = async () => {
+    const res = await useOcr(true);
+    const { image, name, address, idCard } = res;
+
+    let iswx = false;
+    // #ifdef MP-WEIXIN
+    iswx = true;
+    // #endif
+    if (image) {
+      if (iswx) {
+        idCardUrl.value = await base64Src(image);
+      } else {
+        idCardUrl.value = image;
+      }
+
+      formData.value.idCard = idCard;
+      formData.value.patientName = name;
+    }
+  };
+
+  const init = () => {
+    formList = pickTempItem([
+      'patientName',
+      'idType',
+      'idCard',
+      'patientPhone',
+    ]);
+
+    const idTypeItem = formList.find((o) => o.key === 'idType')!;
+    // idTypeItem.disabled = true;
+    idTypeItem.showSuffixArrowIcon = false;
+
+    formList.map((o) => {
+      if (o.key !== 'patientPhone') {
+        o.disabled = true;
+        o.placeholder = '上传身份证自动填入';
+      }
+    });
+
+    gform.value.setList(formList);
+  };
+
+  onLoad(() => {
+    // console.log(333);
+  });
+
+  onMounted(() => {
+    init();
+  });
+</script>
+
+<style lang="scss" scoped>
+  .container {
+    height: 1px;
+    flex: 1;
+    overflow-y: scroll;
+  }
+
+  .sfz-img {
+    width: calc(100% - 32rpx * 2);
+    border-radius: 12rpx;
+  }
+</style>

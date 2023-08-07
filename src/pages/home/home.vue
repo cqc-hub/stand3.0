@@ -132,7 +132,7 @@
                   <uni-notice-bar
                     v-if="noticeText"
                     :text="noticeText"
-                    speed="80"
+                    :speed="80"
                     scrollable
                     color="--hr-neutral-color-10"
                     style="width: 100%"

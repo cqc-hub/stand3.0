@@ -209,11 +209,17 @@ export const useOrder = (props: IOrderProps) => {
 
     const eDaysEnabled: string[] = [];
     isComplete.value = false;
-    const { result: allList } = await api
-      .getDeptSchForDoc<IDocListAll[]>(args)
-      .finally(() => {
+
+    const asyncListFnc =
+      orderConfig.value.orderMode === '1'
+        ? api.dtSchByDoc
+        : api.getDeptSchForDoc;
+
+    const { result: allList } = await asyncListFnc<IDocListAll[]>(args).finally(
+      () => {
         isComplete.value = true;
-      });
+      }
+    );
     const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {
@@ -305,11 +311,16 @@ export const useOrder = (props: IOrderProps) => {
     };
     isComplete.value = false;
 
-    const { result } = await api
-      .getDeptSchByDate<IDocListByDate[]>(args)
-      .finally(() => {
+    const asyncListFnc =
+      orderConfig.value.orderMode === '1'
+        ? api.dtSchByDate
+        : api.getDeptSchByDate;
+
+    const { result } = await asyncListFnc<IDocListByDate[]>(args).finally(
+      () => {
         isComplete.value = true;
-      });
+      }
+    );
 
     if (result && result.length) {
       result.map((o) => {

@@ -491,9 +491,19 @@ const regApi = {
       hideLoading: false,
     }),
 
+  dtSchByDoc: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/dtSchByDoc', parm(data), {
+      hideLoading: false,
+    }),
+
   // 科室排班-按日期挂号
   getDeptSchByDate: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getDeptSchByDate', parm(data), {
+      hideLoading: false,
+    }),
+
+  dtSchByDate: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/dtSchByDate', parm(data), {
       hideLoading: false,
     }),
 

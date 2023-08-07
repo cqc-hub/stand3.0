@@ -21,6 +21,10 @@
   word-break: break-all;
 }
 
+image {
+  will-change: transform;
+}
+
 .g-split-line {
   position: relative;
 
