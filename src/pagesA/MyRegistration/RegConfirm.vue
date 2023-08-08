@@ -156,6 +156,7 @@
       clinicalType,
       promptMessage,
       docTitleName,
+      thRegisterId
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -249,6 +250,7 @@
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,
         preWz: '1',
+        thRegisterId
       }),
     });
   };

@@ -136,6 +136,7 @@ interface IOrderProps {
   promptMessage?: string;
   deptName: string;
   isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
+  thRegisterId?: string;
 }
 
 export const useOrder = (props: IOrderProps) => {
@@ -519,7 +520,7 @@ export const useOrder = (props: IOrderProps) => {
     } = selectSchInfo;
 
     const { disNo, numId, timeDesc } = item;
-    const { clinicalType, promptMessage } = props;
+    const { clinicalType, promptMessage, thRegisterId } = props;
 
     const pageArg = {
       disNo,
@@ -542,6 +543,7 @@ export const useOrder = (props: IOrderProps) => {
       clinicalType,
       promptMessage,
       docTitleName,
+      thRegisterId,
     };
     selectOrderSourceNumId.value = numId;
 

@@ -105,6 +105,7 @@
     promptMessage?: string; // 就诊提示
     deptName: string;
     isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
+    thRegisterId?: string;
   }>();
 
   const hosDeptId = ref(

@@ -31,10 +31,16 @@
                         class="btn btn-warning btn-round btn-size-small"
                       >
                         <text class="iconfont f36 mr12">
-                          {{ docDetail.collectState == '2' ? '&#xe6ff;' : '&#xe700;' }}
+                          {{
+                            docDetail.collectState == '2'
+                              ? '&#xe6ff;'
+                              : '&#xe700;'
+                          }}
                         </text>
                         <text class="text-no-wrap">
-                          {{ docDetail.collectState == '2' ? '已关注' : '关注' }}
+                          {{
+                            docDetail.collectState == '2' ? '已关注' : '关注'
+                          }}
                         </text>
                       </button>
                     </g-login>
@@ -71,14 +77,18 @@
                   <view>
                     <text
                       :class="{
-                        'g-split-line': docDetail.deptName,
+                        'g-split-line':
+                          docDetail.deptName && pageConfig.orderMode !== '1',
                       }"
                       class="color-444 f28 mr12 pr12"
                     >
                       {{ $global.systemInfo.name || '' }}
                     </text>
 
-                    <text class="color-444 f28">
+                    <text
+                      v-if="pageConfig.orderMode !== '1'"
+                      class="color-444 f28"
+                    >
                       {{ docDetail.deptName || '' }}
                     </text>
                   </view>
@@ -150,7 +160,9 @@
               <block v-if="Object.keys(schToday.schByHos).length">
                 <view v-if="isShowHosNet">
                   <text class="label-mark">
-                    <text class="color-fff f28 label-mark-content"> 到院就诊 </text>
+                    <text class="color-fff f28 label-mark-content">
+                      到院就诊
+                    </text>
                   </text>
                 </view>
 
@@ -188,7 +200,9 @@
                 <view class="animate__animated animate__fadeIn">
                   <view>
                     <text class="label-mark mb8">
-                      <text class="color-fff f28 label-mark-content"> 网络就诊 </text>
+                      <text class="color-fff f28 label-mark-content">
+                        网络就诊
+                      </text>
                     </text>
                   </view>
 
@@ -238,12 +252,17 @@
         <block v-if="isDocServiceShow">
           <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view>
           <scroll-view class="service-content" scroll-x>
-            <Doc-Service :docService="docServiceInfo" :hosDocId="docDetail.hosDocId" />
+            <Doc-Service
+              :docService="docServiceInfo"
+              :hosDocId="docDetail.hosDocId"
+            />
           </scroll-view>
         </block>
 
         <block v-if="pageConfig.isOpenBigDataNearlyYear === '1'">
-          <view class="mt32 f36 g-bold mb16 service-onlione p32c"> 近一年大数据 </view>
+          <view class="mt32 f36 g-bold mb16 service-onlione p32c">
+            近一年大数据
+          </view>
 
           <view class="table-content">
             <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData">
@@ -316,586 +335,585 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
+  import { computed, ref } from 'vue';
+  import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
-import { useOrder, IChooseDays, TSchInfo } from './utils';
+  import { useOrder, IChooseDays, TSchInfo } from './utils';
 
-import {
-  UseDoctorDetail,
-  type IProps,
-  type IDocDetail,
-  type IDocSchListItem,
-  type IDocService,
-  type ICommentItem,
-} from './utils/DoctorDetails';
-import { deQueryForUrl, joinQuery } from '@/common';
-import {
-  previewImage,
-  GStores,
-  ServerStaticData,
-  type ISystemConfig,
-} from '@/utils';
+  import {
+    UseDoctorDetail,
+    type IProps,
+    type IDocDetail,
+    type IDocSchListItem,
+    type IDocService,
+    type ICommentItem,
+  } from './utils/DoctorDetails';
+  import { deQueryForUrl, joinQuery } from '@/common';
+  import {
+    previewImage,
+    GStores,
+    ServerStaticData,
+    type ISystemConfig,
+  } from '@/utils';
 
-import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
-import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-import DocDetails from './components/DoctorDetails/DocDetails.vue';
-import DocShare from './components/DoctorDetails/DocShare.vue';
-import DocSchItem from './components/DoctorDetails/DocShcItem.vue';
-import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
-import DocService from './components/DoctorDetails/DocService.vue';
-import DocBigDataTable from './components/DoctorDetails/DocBigDataTable.vue';
-import DocComment from './components/DoctorDetails/DocComment.vue';
-import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
+  import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import DocDetails from './components/DoctorDetails/DocDetails.vue';
+  import DocShare from './components/DoctorDetails/DocShare.vue';
+  import DocSchItem from './components/DoctorDetails/DocShcItem.vue';
+  import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
+  import DocService from './components/DoctorDetails/DocService.vue';
+  import DocBigDataTable from './components/DoctorDetails/DocBigDataTable.vue';
+  import DocComment from './components/DoctorDetails/DocComment.vue';
+  import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
 
-import api from '@/service/api';
-import globalGl from '@/config/global';
+  import api from '@/service/api';
+  import globalGl from '@/config/global';
 
-/**
- * 医生名片分享:  后台新建普通链接二维码 https://h5.eheren.com/scan/${syscode}/DoctorDetails?${...props}
- */
-const props = ref({} as IProps);
-const gStores = new GStores();
-const pageConfig = ref({} as ISystemConfig['order']);
+  /**
+   * 医生名片分享:  后台新建普通链接二维码 https://h5.eheren.com/scan/${syscode}/DoctorDetails?${...props}
+   */
+  const props = ref({} as IProps);
+  const gStores = new GStores();
+  const pageConfig = ref({} as ISystemConfig['order']);
 
-const docServiceInfo = ref({} as IDocService);
-const isDocServiceShow = ref(false);
+  const docServiceInfo = ref({} as IDocService);
+  const isDocServiceShow = ref(false);
 
-const refDocShare = ref<any>('');
-const docSchList = ref<IDocSchListItem[]>([]);
-const schToday = computed(() => {
-  if (checkedDay.value) {
-    return docSchList.value.find((o) => o.schDate === checkedDay.value)!;
-  } else {
-    return {
-      schByHos: {},
-      schByNetHos: {},
-      schDate: '???',
-    };
-  }
-});
-const isShowHosNet = computed(() => {
-  return !!Object.keys(schToday.value.schByNetHos).length;
-});
-
-const tableData = computed(() => {
-  return [
-    {
-      name: docDetail.value.docName,
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '医',
-    },
-    {
-      name: docDetail.value.deptName,
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '科',
-    },
-    {
-      name: '清丰中医院',
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '院',
-    },
-    {
-      name: '清丰县',
-      time: '-',
-      fee: '-',
-      pl: '-',
-      _label: '区',
-    },
-  ];
-});
-
-const tableColumns = ref([
-  {
-    label: '分类',
-    key: 'name',
-    width: '270rpx',
-  },
-  {
-    label: '日均就诊次数(次)',
-    key: 'time',
-    width: '160rpx',
-  },
-  {
-    label: '均次费用(元)',
-    key: 'fee',
-    width: '150rpx',
-  },
-  {
-    label: '满意度',
-    key: 'pl',
-    width: '100rpx',
-    align: 'center',
-  },
-]);
-
-let useDoctorDetail = {} as UseDoctorDetail;
-
-const {
-  chooseDays,
-  checkedDay,
-  chooseDaysEnabled,
-  orderConfig,
-  init: OrderInit,
-  selectSchInfos,
-  isSelectOrderSourceShow,
-  selectOrderSourceNumId,
-  isComplete,
-  orderSourceList,
-  orderSourceChoose,
-  amChange,
-  regClick,
-  enabledDays,
-  filterChooseDays,
-  regDate,
-  preregistrationClick,
-  isOrderPreSourceShow,
-  preregistrationRegNumbers,
-  goPreregistration,
-} = useOrder(props as any);
-const regDialogConfirm = ref<any>('');
-
-const docDetail = ref(<IDocDetail>{
-  docName: props.value.docName,
-  deptName: props.value.deptName,
-});
-
-const headerBg = computed(() => {
-  return (
-    docDetail.value.docPhoto || '/static/image/order/order-doctor-avatar.png'
-  );
-});
-
-const previewImg = () => {
-  const photo = docDetail.value.docPhoto;
-  if (photo) {
-    previewImage([photo]);
-  }
-};
-
-onLoad(async (opt) => {
-  props.value = deQueryForUrl(deQueryForUrl(opt));
-
-  // 扫码进来, 不处理
-  if (props.value.q) {
-    return;
-  }
-
-  useDoctorDetail = new UseDoctorDetail(props.value);
-  init();
-
-  setTimeout(() => {
-    // regDialogConfirm.value.show();
-    // refDocShare.value.show();
-  }, 1200);
-});
-
-const dateChange = (item: IChooseDays) => {
-  checkedDay.value = item.fullDay;
-  // if (!dateDocList.value.length) {
-  //   getListByDate({
-  //     ...props,
-  //     hosDeptId: hosDeptId.value,
-  //     firstHosDeptId: firstHosDeptId.value,
-  //     secondHosDeptId: secondHosDeptId.value,
-  //   });
-  // }
-};
-
-const getSchData = async () => {
-  isComplete.value = false;
-  const schList = await useDoctorDetail.getDocSch().finally(() => {
-    isComplete.value = true;
+  const refDocShare = ref<any>('');
+  const docSchList = ref<IDocSchListItem[]>([]);
+  const schToday = computed(() => {
+    if (checkedDay.value) {
+      return docSchList.value.find((o) => o.schDate === checkedDay.value)!;
+    } else {
+      return {
+        schByHos: {},
+        schByNetHos: {},
+        schDate: '???',
+      };
+    }
   });
-  const eDaysEnabled: string[] = [];
-  const _enabledDays: Record<string, string> = {};
+  const isShowHosNet = computed(() => {
+    return !!Object.keys(schToday.value.schByNetHos).length;
+  });
 
-  if (schList.length) {
-    schList.map((o) => {
-      const { schDate } = o;
+  const tableData = computed(() => {
+    return [
+      {
+        name: docDetail.value.docName,
+        time: '-',
+        fee: '-',
+        pl: '-',
+        _label: '医',
+      },
+      {
+        name: docDetail.value.deptName,
+        time: '-',
+        fee: '-',
+        pl: '-',
+        _label: '科',
+      },
+      {
+        name: '清丰中医院',
+        time: '-',
+        fee: '-',
+        pl: '-',
+        _label: '院',
+      },
+      {
+        name: '清丰县',
+        time: '-',
+        fee: '-',
+        pl: '-',
+        _label: '区',
+      },
+    ];
+  });
 
-      o.schDateList.map((p, i) => {
-        const { schState } = p;
-        const enabledDaysValue = _enabledDays[schDate];
+  const tableColumns = ref([
+    {
+      label: '分类',
+      key: 'name',
+      width: '270rpx',
+    },
+    {
+      label: '日均就诊次数(次)',
+      key: 'time',
+      width: '160rpx',
+    },
+    {
+      label: '均次费用(元)',
+      key: 'fee',
+      width: '150rpx',
+    },
+    {
+      label: '满意度',
+      key: 'pl',
+      width: '100rpx',
+      align: 'center',
+    },
+  ]);
 
-        if (enabledDaysValue !== '0') {
-          _enabledDays[schDate] = schState;
-        }
-      });
-      if (!eDaysEnabled.includes(schDate)) {
-        eDaysEnabled.push(schDate);
-      }
-    });
+  let useDoctorDetail = {} as UseDoctorDetail;
 
-    checkedDay.value = schList[0].schDate;
-    docSchList.value = schList;
-  }
-
-  enabledDays.value = _enabledDays;
-  filterChooseDays();
-};
-
-const collectDoc = async () => {
-  await getDocDetail();
-  let { collectState, docPhoto, docTitleName } = docDetail.value;
-  const { deptName, docName, hosDocId, hosDeptId, hosId } = props.value;
   const {
-    herenId,
-    browser: { source },
-  } = gStores.globalStore;
+    chooseDays,
+    checkedDay,
+    chooseDaysEnabled,
+    orderConfig,
+    init: OrderInit,
+    selectSchInfos,
+    isSelectOrderSourceShow,
+    selectOrderSourceNumId,
+    isComplete,
+    orderSourceList,
+    orderSourceChoose,
+    amChange,
+    regClick,
+    enabledDays,
+    filterChooseDays,
+    regDate,
+    preregistrationClick,
+    isOrderPreSourceShow,
+    preregistrationRegNumbers,
+    goPreregistration,
+  } = useOrder(props as any);
+  const regDialogConfirm = ref<any>('');
 
-  const collectType = 2;
-
-  // docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar.png';
-
-  if (collectState == '1') {
-    const args = {
-      collectType,
-      deptName,
-      docName,
-      docPhoto,
-      docTitleName,
-      hosDocId,
-      herenId,
-      hosDeptId,
-      hosId,
-      source,
-    };
-
-    api
-      .addCollect(args)
-      .then(() => {
-        docDetail.value.collectState = '2';
-        gStores.messageStore.showMessage('关注成功', 3000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    const args = {
-      collectType,
-      herenId,
-      hosDocId,
-      hosId,
-    };
-
-    api
-      .delMyCollect(args)
-      .then(() => {
-        docDetail.value.collectState = '1';
-        gStores.messageStore.showMessage('已经取消关注', 3000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-};
-
-const getDocDetail = async () => {
-  await useDoctorDetail.getDoctorDetail().then((r) => {
-    docDetail.value = r;
+  const docDetail = ref(<IDocDetail>{
+    docName: props.value.docName,
+    deptName: props.value.deptName,
   });
-};
 
-// 在线服务
-const getDocService = async () => {
-  const { netHosId } = pageConfig.value;
-  const { hosDocId } = props.value;
+  const headerBg = computed(() => {
+    return (
+      docDetail.value.docPhoto || '/static/image/order/order-doctor-avatar.png'
+    );
+  });
 
-  const args = {
-    hosDocId,
-    hosId: netHosId,
-    funcode: 'service-base-platform/rest/doctor/hos-doc-id',
+  const previewImg = () => {
+    const photo = docDetail.value.docPhoto;
+    if (photo) {
+      previewImage([photo]);
+    }
   };
 
-  const { data } = await api.sendNetHos(args);
+  onLoad(async (opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
 
-  if (data) {
-    const { receptionMode, jsonParam, pictureParam, videoParam, phoneParam } =
-      data;
-
-    if (receptionMode) {
-      try {
-        data.jsonParam =
-          jsonParam && JSON.parse(jsonParam)?.registerCategorys[0];
-        data.pictureParam =
-          pictureParam && JSON.parse(pictureParam)?.registerCategorys[0];
-        data.videoParam =
-          videoParam && JSON.parse(videoParam)?.registerCategorys[0];
-        data.phoneParam =
-          videoParam && JSON.parse(phoneParam)?.registerCategorys[0];
-      } catch (error) {
-        console.error(error);
-        throw new Error('医生在线服务参数异常');
-      }
-
-      if (jsonParam || pictureParam || videoParam) {
-        isDocServiceShow.value = true;
-      }
-
-      docServiceInfo.value = data;
+    // 扫码进来, 不处理
+    if (props.value.q) {
+      return;
     }
 
-  }
-};
+    useDoctorDetail = new UseDoctorDetail(props.value);
+    init();
 
-const getPageConfig = async () => {
-  pageConfig.value = await ServerStaticData.getSystemConfig('order');
-};
-
-const commentTotal = ref('0');
-const commentList = ref<ICommentItem[]>([]);
-const getCommentList = async () => {
-  const { hosDocId } = docDetail.value;
-
-  const { result } = await api.getAllSatisfactions({
-    hosDocId,
-    pageSize: 6,
-    index: 1,
+    setTimeout(() => {
+      // regDialogConfirm.value.show();
+      // refDocShare.value.show();
+    }, 1200);
   });
 
-  if (result) {
-    const { satisfactionResultList, totalNum } = result;
-
-    commentTotal.value = totalNum;
-    commentList.value = satisfactionResultList || [];
-  }
-};
-const goAllComment = () => {
-  uni.navigateTo({
-    url: joinQuery('/pagesA/MyRegistration/DoctorDetailsComment', {
-      hosDocId: docDetail.value.hosDocId,
-    }),
-  });
-};
-
-const init = async () => {
-  await getPageConfig();
-  await OrderInit();
-  getSchData();
-  await getDocDetail();
-  if (pageConfig.value.isOpenComment === '1') {
-    getCommentList();
-  }
-
-  if (pageConfig.value.isOpenDocCardOnlineService === '1') {
-    getDocService();
-  }
-};
-
-onShareAppMessage((res) => {
-  return {
-    title: `${docDetail.value.docName}医生`,
-    path: joinQuery('/pagesA/MyRegistration/DoctorDetails', props.value),
+  const dateChange = (item: IChooseDays) => {
+    checkedDay.value = item.fullDay;
+    // if (!dateDocList.value.length) {
+    //   getListByDate({
+    //     ...props,
+    //     hosDeptId: hosDeptId.value,
+    //     firstHosDeptId: firstHosDeptId.value,
+    //     secondHosDeptId: secondHosDeptId.value,
+    //   });
+    // }
   };
-});
+
+  const getSchData = async () => {
+    isComplete.value = false;
+    const schList = await useDoctorDetail.getDocSch().finally(() => {
+      isComplete.value = true;
+    });
+    const eDaysEnabled: string[] = [];
+    const _enabledDays: Record<string, string> = {};
+
+    if (schList.length) {
+      schList.map((o) => {
+        const { schDate } = o;
+
+        o.schDateList.map((p, i) => {
+          const { schState } = p;
+          const enabledDaysValue = _enabledDays[schDate];
+
+          if (enabledDaysValue !== '0') {
+            _enabledDays[schDate] = schState;
+          }
+        });
+        if (!eDaysEnabled.includes(schDate)) {
+          eDaysEnabled.push(schDate);
+        }
+      });
+
+      checkedDay.value = schList[0].schDate;
+      docSchList.value = schList;
+    }
+
+    enabledDays.value = _enabledDays;
+    filterChooseDays();
+  };
+
+  const collectDoc = async () => {
+    await getDocDetail();
+    let { collectState, docPhoto, docTitleName } = docDetail.value;
+    const { deptName, docName, hosDocId, hosDeptId, hosId } = props.value;
+    const {
+      herenId,
+      browser: { source },
+    } = gStores.globalStore;
+
+    const collectType = 2;
+
+    // docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar.png';
+
+    if (collectState == '1') {
+      const args = {
+        collectType,
+        deptName,
+        docName,
+        docPhoto,
+        docTitleName,
+        hosDocId,
+        herenId,
+        hosDeptId,
+        hosId,
+        source,
+      };
+
+      api
+        .addCollect(args)
+        .then(() => {
+          docDetail.value.collectState = '2';
+          gStores.messageStore.showMessage('关注成功', 3000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const args = {
+        collectType,
+        herenId,
+        hosDocId,
+        hosId,
+      };
+
+      api
+        .delMyCollect(args)
+        .then(() => {
+          docDetail.value.collectState = '1';
+          gStores.messageStore.showMessage('已经取消关注', 3000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const getDocDetail = async () => {
+    await useDoctorDetail.getDoctorDetail().then((r) => {
+      docDetail.value = r;
+    });
+  };
+
+  // 在线服务
+  const getDocService = async () => {
+    const { netHosId } = pageConfig.value;
+    const { hosDocId } = props.value;
+
+    const args = {
+      hosDocId,
+      hosId: netHosId,
+      funcode: 'service-base-platform/rest/doctor/hos-doc-id',
+    };
+
+    const { data } = await api.sendNetHos(args);
+
+    if (data) {
+      const { receptionMode, jsonParam, pictureParam, videoParam, phoneParam } =
+        data;
+
+      if (receptionMode) {
+        try {
+          data.jsonParam =
+            jsonParam && JSON.parse(jsonParam)?.registerCategorys[0];
+          data.pictureParam =
+            pictureParam && JSON.parse(pictureParam)?.registerCategorys[0];
+          data.videoParam =
+            videoParam && JSON.parse(videoParam)?.registerCategorys[0];
+          data.phoneParam =
+            videoParam && JSON.parse(phoneParam)?.registerCategorys[0];
+        } catch (error) {
+          console.error(error);
+          throw new Error('医生在线服务参数异常');
+        }
+
+        if (jsonParam || pictureParam || videoParam) {
+          isDocServiceShow.value = true;
+        }
+
+        docServiceInfo.value = data;
+      }
+    }
+  };
+
+  const getPageConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
+
+  const commentTotal = ref('0');
+  const commentList = ref<ICommentItem[]>([]);
+  const getCommentList = async () => {
+    const { hosDocId } = docDetail.value;
+
+    const { result } = await api.getAllSatisfactions({
+      hosDocId,
+      pageSize: 6,
+      index: 1,
+    });
+
+    if (result) {
+      const { satisfactionResultList, totalNum } = result;
+
+      commentTotal.value = totalNum;
+      commentList.value = satisfactionResultList || [];
+    }
+  };
+  const goAllComment = () => {
+    uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DoctorDetailsComment', {
+        hosDocId: docDetail.value.hosDocId,
+      }),
+    });
+  };
+
+  const init = async () => {
+    await getPageConfig();
+    await OrderInit();
+    getSchData();
+    await getDocDetail();
+    if (pageConfig.value.isOpenComment === '1') {
+      getCommentList();
+    }
+
+    if (pageConfig.value.isOpenDocCardOnlineService === '1') {
+      getDocService();
+    }
+  };
+
+  onShareAppMessage((res) => {
+    return {
+      title: `${docDetail.value.docName}医生`,
+      path: joinQuery('/pagesA/MyRegistration/DoctorDetails', props.value),
+    };
+  });
 </script>
 
 <style lang="scss" scoped>
-.g-page {
-  background-color: var(--hr-neutral-color-1);
+  .g-page {
+    background-color: var(--hr-neutral-color-1);
 
-  .href-content {
-    background-color: #fff;
-  }
-}
-
-.header-bg {
-  width: 100%;
-  position: absolute;
-  z-index: 1;
-}
-
-.content-box {
-  // padding: 0 32rpx;
-  background-color: #fff;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 8px;
-
-  &.header-content-box {
-    height: calc(100% - 500rpx);
-  }
-
-  .content-sel-date {
-    padding: 8rpx 16rpx;
-  }
-}
-
-.content {
-  position: relative;
-  z-index: 2;
-  padding: 0 32rpx;
-}
-
-.header-box {
-  margin-bottom: 56rpx;
-  .header-transform {
-    position: relative;
-
-    transform: translateY(-50rpx);
-  }
-
-  .header {
-    padding: 0 32rpx;
-    position: relative;
-    z-index: 2;
-    align-items: flex-start;
-
-    .doc-avatar {
-      width: 136rpx;
-      height: 136rpx;
-      border-radius: 50%;
-      overflow: hidden;
+    .href-content {
       background-color: #fff;
     }
+  }
 
-    .header-btn {
-      margin-top: 20rpx;
-      button {
-        &:not(:last-child) {
-          margin-right: 16rpx;
+  .header-bg {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .content-box {
+    // padding: 0 32rpx;
+    background-color: #fff;
+    box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+
+    &.header-content-box {
+      height: calc(100% - 500rpx);
+    }
+
+    .content-sel-date {
+      padding: 8rpx 16rpx;
+    }
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    padding: 0 32rpx;
+  }
+
+  .header-box {
+    margin-bottom: 56rpx;
+    .header-transform {
+      position: relative;
+
+      transform: translateY(-50rpx);
+    }
+
+    .header {
+      padding: 0 32rpx;
+      position: relative;
+      z-index: 2;
+      align-items: flex-start;
+
+      .doc-avatar {
+        width: 136rpx;
+        height: 136rpx;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: #fff;
+      }
+
+      .header-btn {
+        margin-top: 20rpx;
+        button {
+          &:not(:last-child) {
+            margin-right: 16rpx;
+          }
+        }
+      }
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 88rpx;
+      background-color: transparent;
+    }
+
+    .doc-goodat {
+      align-items: flex-start;
+      transform: translateY(24rpx);
+      .doc-major-goodat {
+        width: 60rpx;
+        position: relative;
+        top: 5rpx;
+        // #ifdef  MP-WEIXIN
+        top: 8rpx;
+        // #endif
+      }
+
+      .doc-goodat-content {
+        -webkit-line-clamp: 2;
+        flex: 1;
+
+        .doc-show-intro {
+          position: absolute;
+          right: 32rpx;
+          bottom: 0;
+          z-index: 2;
+          display: flex;
+          padding-left: 1.5em;
+          align-items: center;
+          justify-content: flex-end;
+          background: linear-gradient(
+            270deg,
+            #fff 0,
+            #fff 80%,
+            rgba(255, 255, 255, 0.3) 100%
+          );
         }
       }
     }
   }
 
-  &::before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 88rpx;
-    background-color: transparent;
+  .share-btn {
+    background-color: var(--hr-brand-color-3-light);
+    margin-left: 12rpx;
   }
 
-  .doc-goodat {
-    align-items: flex-start;
-    transform: translateY(24rpx);
-    .doc-major-goodat {
-      width: 60rpx;
-      position: relative;
-      top: 5rpx;
-      // #ifdef  MP-WEIXIN
-      top: 8rpx;
-      // #endif
+  .label-mark {
+    position: relative;
+    left: -10rpx;
+    z-index: 2;
+
+    .label-mark-content {
+      padding: 7rpx 24rpx;
+      border-radius: 8px 40px 40px 4px;
+      background-color: #22c5ae;
     }
 
-    .doc-goodat-content {
-      -webkit-line-clamp: 2;
-      flex: 1;
+    &::after {
+      content: '';
+      display: block;
+      width: 13rpx;
+      height: 13rpx;
+      position: relative;
+      top: 5rpx;
+      z-index: 1;
+      background: linear-gradient(
+        -135deg,
+        #108f7d,
+        #108f7d 50%,
+        transparent 50%,
+        transparent 100%
+      );
+    }
+  }
 
-      .doc-show-intro {
-        position: absolute;
-        right: 32rpx;
-        bottom: 0;
-        z-index: 2;
-        display: flex;
-        padding-left: 1.5em;
-        align-items: center;
-        justify-content: flex-end;
-        background: linear-gradient(
-          270deg,
-          #fff 0,
-          #fff 80%,
-          rgba(255, 255, 255, 0.3) 100%
-        );
+  .service-onlione {
+    margin-top: 56rpx;
+  }
+
+  .service-content {
+    width: 100%;
+  }
+
+  .empty-list {
+    transform: translateY(10rpx);
+    padding: 20rpx 0;
+  }
+
+  .iconfont {
+    font-weight: normal;
+  }
+
+  .table-content {
+    background-color: #fff;
+    margin: 0 32rpx;
+
+    .category-icon {
+      border-radius: 999px;
+      background-color: #22c4ad;
+      width: 40rpx;
+      height: 40rpx;
+      color: #fff;
+      margin-right: 8rpx;
+      position: relative;
+      top: -2rpx;
+
+      &.bg-yellow {
+        background-color: var(--hr-warning-color-6);
       }
     }
   }
-}
 
-.share-btn {
-  background-color: var(--hr-brand-color-3-light);
-  margin-left: 12rpx;
-}
-
-.label-mark {
-  position: relative;
-  left: -10rpx;
-  z-index: 2;
-
-  .label-mark-content {
-    padding: 7rpx 24rpx;
-    border-radius: 8px 40px 40px 4px;
-    background-color: #22c5ae;
+  .doc-comment {
+    // border-top: var(--hr-neutral-color-1) solid 16rpx;
+    margin-top: 16rpx;
+    background-color: #fff;
   }
 
-  &::after {
-    content: '';
-    display: block;
-    width: 13rpx;
-    height: 13rpx;
-    position: relative;
-    top: 5rpx;
-    z-index: 1;
-    background: linear-gradient(
-      -135deg,
-      #108f7d,
-      #108f7d 50%,
-      transparent 50%,
-      transparent 100%
-    );
-  }
-}
-
-.service-onlione {
-  margin-top: 56rpx;
-}
-
-.service-content {
-  width: 100%;
-}
-
-.empty-list {
-  transform: translateY(10rpx);
-  padding: 20rpx 0;
-}
-
-.iconfont {
-  font-weight: normal;
-}
-
-.table-content {
-  background-color: #fff;
-  margin: 0 32rpx;
-
-  .category-icon {
-    border-radius: 999px;
-    background-color: #22c4ad;
-    width: 40rpx;
-    height: 40rpx;
-    color: #fff;
-    margin-right: 8rpx;
-    position: relative;
-    top: -2rpx;
-
-    &.bg-yellow {
-      background-color: var(--hr-warning-color-6);
+  .system-mode-old {
+    .doc-goodat {
+      .doc-major-goodat {
+        width: 70rpx;
+        position: relative;
+        top: 5rpx;
+        // #ifdef  MP-WEIXIN
+        top: 8rpx;
+        // #endif
+      }
     }
   }
-}
-
-.doc-comment {
-  // border-top: var(--hr-neutral-color-1) solid 16rpx;
-  margin-top: 16rpx;
-  background-color: #fff;
-}
-
-.system-mode-old {
-  .doc-goodat {
-    .doc-major-goodat {
-      width: 70rpx;
-      position: relative;
-      top: 5rpx;
-      // #ifdef  MP-WEIXIN
-      top: 8rpx;
-      // #endif
-    }
-  }
-}
 </style>

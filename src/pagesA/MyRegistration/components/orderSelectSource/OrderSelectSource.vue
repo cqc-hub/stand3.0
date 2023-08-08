@@ -106,7 +106,7 @@
                 "
                 class="order-info mb24 f32"
               >
-                <text class="mr24">
+                <text v-if="pageConfig.orderMode !== '1'" class="mr24">
                   {{
                     selectSchInfo.schQukCategor ||
                     `${selectSchInfo.deptName || ''}/${
@@ -153,11 +153,12 @@
     TSchInfoWhole,
     IChooseDays,
   } from '../../utils/index';
-  import { GStores } from '@/utils';
+  import { GStores, ServerStaticData, type ISystemConfig } from '@/utils';
 
   import orderSelectSourceList from './OrderSourceList.vue';
   import api from '@/service/api';
 
+  const pageConfig = ref({} as ISystemConfig['order']);
   const popup = ref<any>('');
   const gStores = new GStores();
   const props = defineProps<{
@@ -179,6 +180,9 @@
       return {} as TSchInfoWhole;
     }
   });
+  const getPageConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
 
   const subTitle = computed(() => {
     const dayItem = props.chooseDays.find(
@@ -335,6 +339,8 @@
   defineExpose({
     setTabIndex,
   });
+
+  getPageConfig();
 </script>
 
 <style lang="scss" scoped>

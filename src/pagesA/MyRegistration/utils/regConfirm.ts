@@ -19,6 +19,7 @@ export interface IPageProps {
   schQukCategor: string;
   clinicalType: string;
   promptMessage?: string; // 就诊提示
+  thRegisterId?: string;
 }
 
 export interface IPrePageProps

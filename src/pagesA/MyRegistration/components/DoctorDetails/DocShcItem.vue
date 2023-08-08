@@ -28,7 +28,10 @@
       </view>
 
       <view class="f24 color-666 flex-between">
-        <view class="text-ellipsis mr12">
+        <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
+          {{ item.categorName }}
+        </view>
+        <view v-else class="text-ellipsis mr12">
           {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
         </view>
 
@@ -36,7 +39,7 @@
           <view class="color-888 text-no-wrap">
             总{{ item.numCount }} 个 余{{ item.numRemain }}个
           </view>
-      </block>
+        </block>
       </view>
     </view>
   </g-login>
@@ -46,14 +49,12 @@
   import { defineComponent, ref } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
-  import { 
-    type ISystemConfig,
-  } from '@/utils';
+  import { type ISystemConfig } from '@/utils';
 
   defineProps<{
     item: TSchInfo;
     systemModeOld?: boolean;
-    pageConfig:ISystemConfig['order']
+    pageConfig: ISystemConfig['order'];
   }>();
 
   const emits = defineEmits(['reg-click', 'avatar-click']);

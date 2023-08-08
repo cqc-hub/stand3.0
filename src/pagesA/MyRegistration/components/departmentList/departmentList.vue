@@ -277,7 +277,7 @@ watch(
   }
 
   100% {
-    border-radius: 0 20rpx/30rpx;
+    border-top-right-radius: 20rpx 30rpx;
   }
 }
 </style>
