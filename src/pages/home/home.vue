@@ -599,6 +599,7 @@ const openModeOld = () => {
     color: #fff;
     font-size: 24rpx;
     left: 23rpx;
+    z-index: 999;
   }
   image {
     width: 140rpx;
