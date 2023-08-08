@@ -145,6 +145,7 @@ const props = defineProps<{
   costDay?: string;
   isHosDaylist?: string;
   isHosTotallist?: string;
+  hospitalId?: string;
 }>();
 
 const emit = defineEmits(["detalResult"]);
@@ -173,6 +174,7 @@ const init = async (opt = {}) => {
     costDay: props.costDay,
     costType:props.isHosDaylist?'1':'3',
     patientId: gStores.userStore.patChoose.patientId,
+    hospitalId:props.hospitalId
   };
   const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(params);
   costInfoDetal.value = result;
@@ -216,6 +218,7 @@ defineExpose({
         font-size: var(--hr-font-size-xl);
         font-weight: 600;
         margin-top: 40rpx;
+        margin-bottom: 20rpx;
       }
       .information {
         // margin-top: 20rpx;

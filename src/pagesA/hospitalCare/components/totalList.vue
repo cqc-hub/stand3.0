@@ -98,7 +98,7 @@
   };
   const gotoListExpenses = (data) => {
     uni.navigateTo({
-      url: `listExpenses?isHosTotallist='2'`,
+      url: `listExpenses?isHosTotallist=2&hospitalId=${data.inpatientNo}`,
     });
   };
   onMounted(async () => {

@@ -1,6 +1,6 @@
 <template>
     <view class="page">
-        <dailyExpenseListDetial  :isHosDaylist="props.isHosDaylist"  :isHosTotallist="props.isHosTotallist"  :costDay="props.costDay"  ref="aaa"/>
+        <dailyExpenseListDetial  :isHosDaylist="props.isHosDaylist"  :isHosTotallist="props.isHosTotallist" :hospitalId="props.hospitalId"  :costDay="props.costDay"  ref="aaa"/>
     </view>
 </template>
 <script setup lang="ts">
@@ -13,6 +13,7 @@ const props = defineProps<{
   costDay?: string;
   isHosDaylist?: string;
   isHosTotallist?: string;
+  hospitalId?: string;
 }>();
 
 const aaa = ref<any>('')
