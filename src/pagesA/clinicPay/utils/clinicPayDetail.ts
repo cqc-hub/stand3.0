@@ -1328,13 +1328,51 @@ export const usePayPage = () => {
           aliPayDone: (status: string, ampTraceId: string) => {
             // do something
             uni.reLaunch({
-              url: successCallBackUrl + '&tabIndex=1',
+              url: joinQueryForUrl(successCallBackUrl, {
+                tabIndex: 1,
+              }),
             });
           },
 
           // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
           payCancelAuth: () => {
             uni.reLaunch({ url: successCallBackUrl });
+          },
+
+          /**
+           * 第三个状态枚举值仅在测试插件 v0.0.8 及以上，正式插件 v0.0.14 及以上生效
+           * 支付完成（成功或者失败）回调函数
+           *
+           * @param status 订单详细状态
+           * @param ampTraceId id
+           * @param finalStatus 状态简化版 SUCCESS-支付成功，FAIL-支付失败，EXP-异常，PENDING-查询中
+           */
+          payComplete: (
+            status: string,
+            ampTraceId: string,
+            finalStatus: 'SUCCESS' | 'FAIL' | 'EXP' | 'PENDING'
+          ) => {
+            // do something
+            // 建议跳转到小程序结果页面
+            console.log('payComplete payload----', {
+              status,
+              ampTraceId,
+              finalStatus,
+            });
+
+            if (finalStatus === 'SUCCESS') {
+              uni.showLoading({});
+              setTimeout(() => {
+                uni.hideLoading();
+                uni.reLaunch({
+                  url: joinQueryForUrl(successCallBackUrl, {
+                    tabIndex: 1,
+                  }),
+                });
+              }, 2000);
+            } else {
+              uni.reLaunch({ url: successCallBackUrl });
+            }
           },
 
           ...initMethods,

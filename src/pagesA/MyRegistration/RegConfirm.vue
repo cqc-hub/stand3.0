@@ -156,7 +156,7 @@
       clinicalType,
       promptMessage,
       docTitleName,
-      thRegisterId
+      thRegisterId,
     } = props.value;
     const { herenId, patientId } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -210,8 +210,6 @@
           gStores.messageStore.closeMessage();
           preventOrderStr.value = message;
           isPreventOrder.value = true;
-        } else {
-          gStores.messageStore.showMessage(message || '挂号异常', 3000);
         }
       }
       throw new Error(e);
@@ -250,7 +248,7 @@
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,
         preWz: '1',
-        thRegisterId
+        thRegisterId,
       }),
     });
   };
