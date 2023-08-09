@@ -1315,8 +1315,11 @@ export const usePayPage = () => {
            * pay - 支付模块，archive - 建档模块
            */
           catchException: (error: string, type: 'pay' | 'archive') => {
-            console.log('error: ', error);
-            uni.reLaunch({ url: successCallBackUrl });
+            gStores.messageStore.showMessage(error, 3000, {
+              closeCallBack() {
+                uni.reLaunch({ url: successCallBackUrl });
+              },
+            });
           },
 
           /**
@@ -1327,11 +1330,15 @@ export const usePayPage = () => {
            */
           aliPayDone: (status: string, ampTraceId: string) => {
             // do something
-            uni.reLaunch({
-              url: joinQueryForUrl(successCallBackUrl, {
-                tabIndex: 1,
-              }),
-            });
+            uni.showLoading({});
+            setTimeout(() => {
+              uni.hideLoading();
+              uni.reLaunch({
+                url: joinQueryForUrl(successCallBackUrl, {
+                  tabIndex: 1,
+                }),
+              });
+            }, 5000);
           },
 
           // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
@@ -1369,7 +1376,7 @@ export const usePayPage = () => {
                     tabIndex: 1,
                   }),
                 });
-              }, 2000);
+              }, 5000);
             } else {
               uni.reLaunch({ url: successCallBackUrl });
             }

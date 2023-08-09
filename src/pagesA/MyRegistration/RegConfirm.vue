@@ -203,13 +203,15 @@
       result: { orderId },
     } = await api.addReg(requestArg).catch((e) => {
       if (e) {
-        const { respCode, message } = e;
+        const { respCode, message, code } = e;
 
         // 限制欠费用户预约挂号
         if (respCode === 999225) {
           gStores.messageStore.closeMessage();
           preventOrderStr.value = message;
           isPreventOrder.value = true;
+        } else if (code !== 4000) {
+          message && gStores.messageStore.showMessage(message, 3000);
         }
       }
       throw new Error(e);
