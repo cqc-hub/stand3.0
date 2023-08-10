@@ -10,7 +10,7 @@ const subPackages = PAGE_DATA.subPackages;
 if (subPackages) {
   subPackages.map(({ root, pages }) => {
     pages.map((o) => {
-      routerPages.push({
+      routerPages.push(<any>{
         ...o,
         path: root + '/' + o.path,
       });
@@ -128,7 +128,6 @@ export const beforeEach = async (
         '/pagesA/medicalCardMan/addMedical',
       ].includes(url)
     ) {
-
       if (!globalStore.h5OpenId && globalGl.h5AppId) {
         uni.reLaunch({
           url: '/pages/home/startCome',

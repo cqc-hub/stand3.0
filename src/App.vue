@@ -36,36 +36,6 @@
       });
     }
     // #endif
-
-    if (uni.canIUse('getUpdateManager')) {
-      const updateManager = uni.getUpdateManager();
-
-      updateManager.onCheckForUpdate(function (res) {
-        if (res.hasUpdate) {
-          updateManager.onUpdateReady(function (res) {
-            uni.showModal({
-              title: '更新提示',
-              content: '新版本已经准备好，请重启小程序避免影响业务',
-              showCancel: false,
-              success(res) {
-                if (res.confirm) {
-                  // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-                  updateManager.applyUpdate();
-                }
-              },
-            });
-          });
-        }
-      });
-
-      // 新的版本下载失败
-      updateManager.onUpdateFailed(function () {
-        uni.showModal({
-          title: '已有新版本~',
-          content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开~',
-        });
-      });
-    }
   });
   onShow(async (opt) => {
     console.log('App Show', opt);
@@ -149,6 +119,36 @@
         });
       }
     }, 600);
+
+    if (uni.canIUse('getUpdateManager')) {
+      const updateManager = uni.getUpdateManager();
+
+      updateManager.onCheckForUpdate(function (res) {
+        if (res.hasUpdate) {
+          updateManager.onUpdateReady(function (res) {
+            uni.showModal({
+              title: '更新提示',
+              content: '新版本已经准备好，请重启小程序避免影响业务',
+              showCancel: false,
+              success(res) {
+                if (res.confirm) {
+                  // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                  updateManager.applyUpdate();
+                }
+              },
+            });
+          });
+        }
+      });
+
+      // 新的版本下载失败
+      updateManager.onUpdateFailed(function () {
+        uni.showModal({
+          title: '已有新版本~',
+          content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开~',
+        });
+      });
+    }
   });
 </script>
 <style lang="scss">
