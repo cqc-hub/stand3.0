@@ -20,7 +20,7 @@
               <view class="flex-between">
                 <view class="date">{{ i.hosName }}</view>
                 <view class="details-right">
-                  <view class="money">{{ m.cost }}元</view>
+                  <view class="money" v-if="m.cost">{{ m.cost }}元</view>
                   <view class="iconfont right">&#xe66b;</view>
                 </view>
               </view>
