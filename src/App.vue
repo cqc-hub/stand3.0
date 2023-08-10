@@ -37,7 +37,7 @@
     }
     // #endif
 
-    if (<any>uni.getUpdateManager) {
+    if (uni.canIUse('getUpdateManager')) {
       const updateManager = uni.getUpdateManager();
 
       updateManager.onCheckForUpdate(function (res) {
@@ -56,6 +56,14 @@
             });
           });
         }
+      });
+
+      // 新的版本下载失败
+      updateManager.onUpdateFailed(function () {
+        uni.showModal({
+          title: '已有新版本~',
+          content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开~',
+        });
       });
     }
   });
