@@ -7,12 +7,14 @@
   >
     <g-flag isShowFg typeFg="79" />
     <view class="container" scroll-y>
-      <image
-        :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
-        @click="chooseIdCard"
-        class="sfz-img p32"
-        mode="widthFix"
-      />
+      <view class="sfz-container m32">
+        <image
+          :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
+          @click="chooseIdCard"
+          class="sfz-img "
+          mode="widthFix"
+        />
+      </view>
 
       <g-form
         v-model:value="formData"
@@ -133,8 +135,13 @@
     overflow-y: scroll;
   }
 
-  .sfz-img {
-    width: calc(100% - 32rpx * 2);
+  .sfz-container {
     border-radius: 12rpx;
+    overflow: hidden;
+  }
+
+  .sfz-img {
+    width: 100%;
+    height: 100%;
   }
 </style>

@@ -1396,6 +1396,7 @@ export const usePayPage = () => {
   };
 
   return {
+    payMoneyMedicalPlugin,
     patChange,
     changeRefPayList,
     hookInit,

@@ -82,8 +82,6 @@ Request.interceptors.response(
     //解密
     if (isDes && signContent) {
       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
-      console.log(JSON.parse(decryptDes(signContent, key)), 'cqc');
-
       responseData.result = JSON.parse(decryptDes(signContent, key));
       //禁止删除
       console.log(
