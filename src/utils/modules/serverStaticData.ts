@@ -15,15 +15,11 @@ const _cacheMap = new WeakMap();
 const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
 const getMedRecordConfig = async <T>(result: any): Promise<T> => {
-  // const list = _cacheMap.get(Med_Copy_Config);
+  const list = _cacheMap.get(Med_Copy_Config);
 
-  // if (list) {
-  //   return list;
-  // }
-
-  // const { result } = await api.getParamsMoreBySysCode({
-  //   paramCode: 'MEDICAL_CASE_COPY',
-  // });
+  if (list) {
+    return list;
+  }
 
   if (result && result.MEDICAL_CASE_COPY) {
     const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
