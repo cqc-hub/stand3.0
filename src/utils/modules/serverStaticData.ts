@@ -15,11 +15,11 @@ const _cacheMap = new WeakMap();
 const Med_Copy_Config = { name: 'Med_Copy_Config' };
 
 const getMedRecordConfig = async <T>(result: any): Promise<T> => {
-  const list = _cacheMap.get(Med_Copy_Config);
+  // const list = _cacheMap.get(Med_Copy_Config);
 
-  if (list) {
-    return list;
-  }
+  // if (list) {
+  //   return list;
+  // }
 
   // const { result } = await api.getParamsMoreBySysCode({
   //   paramCode: 'MEDICAL_CASE_COPY',
@@ -30,40 +30,43 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
     if (_configList.length) {
       const configList: any[] = [];
-      Object.entries(_configList[0]).map(([hosId, value]) => {
-        const {
-          tollMode,
-          price,
-          sfz,
-          isCustomPatRecord,
-          isToggleHos,
-          isHandPhoto,
-          purpose,
-          selPurposeLen,
-          isOcrSfz,
-          requireSfz,
-          isPurposeRadio,
-        } = value as any;
 
-        const isItemCount = tollMode === '1' ? '1' : '0';
+      _configList.map(o => {
+        Object.entries(o).map(([hosId, value]) => {
+          const {
+            tollMode,
+            price,
+            sfz,
+            isCustomPatRecord,
+            isToggleHos,
+            isHandPhoto,
+            purpose,
+            selPurposeLen,
+            isOcrSfz,
+            requireSfz,
+            isPurposeRadio,
+          } = value as any;
 
-        configList.push({
-          hosId,
-          isItemCount,
-          fee: price * 1,
-          sfz:
-            isHandPhoto === '1'
-              ? ['front', 'end', 'handler']
-              : sfz || ['front', 'end'],
-          isCustomPatRecord,
-          isToggleHos,
-          purpose,
-          selPurposeLen,
-          isOcrSfz,
-          requireSfz,
-          isPurposeRadio,
+          const isItemCount = tollMode === '1' ? '1' : '0';
+
+          configList.push({
+            hosId,
+            isItemCount,
+            fee: price * 1,
+            sfz:
+              isHandPhoto === '1'
+                ? ['front', 'end', 'handler']
+                : sfz || ['front', 'end'],
+            isCustomPatRecord,
+            isToggleHos,
+            purpose,
+            selPurposeLen,
+            isOcrSfz,
+            requireSfz,
+            isPurposeRadio,
+          });
         });
-      });
+      })
       // _cacheMap.set(Med_Copy_Config, configList);
 
       return <T>configList;
