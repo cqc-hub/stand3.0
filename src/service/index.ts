@@ -45,7 +45,10 @@ Request.interceptors.request((request: IRequest) => {
       getShowUrl(request.url, request.baseURL?.length || 0),
       request.data
     );
+    console.log('加密前内容', JSON.stringify(request.data));
+
     const key = 'reqv3-' + ('0' + new Date().getDate()).slice(-2);
+
     const data = JSON.parse(JSON.stringify(request.data));
     const desData = {
       args: {},

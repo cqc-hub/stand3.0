@@ -6,7 +6,7 @@
           :src="gStores.userStore.getAvatar"
           @click="avatarClick"
           mode="widthFix"
-          class="user-avatar"
+          class="user-avatar g-fade-in"
         />
       </g-login>
 
@@ -38,30 +38,30 @@
 
     <view
       :class="`record-container ${
-        recordList && recordList.length === 1
+        viewerStore.myPersonRecordList.length === 1
           ? 'record-container-row1'
           : 'record-container-row2'
       }`"
     >
       <view
-        v-for="(record, i) in recordList"
+        v-for="(record, i) in viewerStore.myPersonRecordList"
         :key="i"
         :style="{
           'background-image': `url(${backImg[i]})`,
           'background-color': recordColors[i],
         }"
         :class="{
-          'cr-center': recordList && recordList.length === 1,
-          'record-item-first': recordList.length === 2 && i === 0,
+          'cr-center': viewerStore.myPersonRecordList && viewerStore.myPersonRecordList.length === 1,
+          'record-item-first': viewerStore.myPersonRecordList.length === 2 && i === 0,
         }"
-        class="record-item"
+        class="record-item g-fade-in"
         @tap="jumpFor(record)"
       >
         <!-- <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'"> -->
         <view class="record-label">
           <text>{{ record.title }}</text>
           <view
-            v-if="recordList && recordList.length === 1"
+            v-if="viewerStore.myPersonRecordList && viewerStore.myPersonRecordList.length === 1"
             class="iconfont icon-size"
           >
             &#xe6c8;
@@ -74,29 +74,16 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
-
-  import { outLogin, ServerStaticData, routerJump, GStores } from '@/utils';
+  import { outLogin, routerJump, GStores } from '@/utils';
   import { useCommonTo } from '@/common/checkJump';
-  import { useRouterStore } from '@/stores';
+  import { useViewerStore } from '@/stores/modules/viewer';
+
   import global from '@/config/global';
 
   const gStores = new GStores();
-  const recordList = ref<IRoute[]>([]); //就医凭证
   const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
   const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
-
-  onMounted(() => {
-    getHomeConfig();
-  });
-
-  //获取配置数据
-  const getHomeConfig = async () => {
-    const homeConfig = await ServerStaticData.getHomeConfig();
-    if (homeConfig) {
-      recordList.value = homeConfig[4].functionList;
-    }
-  };
+  const viewerStore = useViewerStore();
 
   const avatarClick = () => {
     uni.navigateTo({

@@ -5,6 +5,12 @@
   overflow: hidden;
 }
 
+.g-fade-in {
+  animation-name: fadeIn;
+  animation-fill-mode: both;
+  animation-duration: .6s;
+}
+
 .text-ellipsis {
   @include text-overflow(1);
 }

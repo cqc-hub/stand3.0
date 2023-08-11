@@ -8,27 +8,27 @@
     <scroll-view class="g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
-        :loading="skeletonProps.loading"
+        :loading="viewerStore.loading"
       >
         <view class="top-bg" />
         <personRecord />
 
         <view class="my-menu" v-if="!gStores.globalStore.modeOld">
-          <view v-if="menu1List && menu1List.length" class="list">
+          <view v-if="viewerStore.myMenu1List.length" class="list g-fade-in">
             <view class="title">我的订单</view>
-            <homeGrid :list="menu1List" @open-share="openShare"></homeGrid>
+            <homeGrid :list="viewerStore.myMenu1List" @open-share="openShare"></homeGrid>
           </view>
-          <view v-if="menu2List && menu2List.length" class="list">
+          <view v-if="viewerStore.myMenu2List.length" class="list g-fade-in">
             <view class="title">我的服务</view>
-            <homeGrid :list="menu2List" @open-share="openShare"></homeGrid>
+            <homeGrid :list="viewerStore.myMenu2List" @open-share="openShare"></homeGrid>
           </view>
-          <view v-if="menu3List && menu3List.length" class="list">
+          <view v-if="viewerStore.myMenu3List.length" class="list g-fade-in">
             <view class="title">我的工具</view>
-            <homeGrid :list="menu3List" @open-share="openShare"></homeGrid>
+            <homeGrid :list="viewerStore.myMenu3List" @open-share="openShare"></homeGrid>
           </view>
         </view>
         <view class="my-menu old" v-if="gStores.globalStore.modeOld">
-          <homeGrid :list="menu1List" :type="3"></homeGrid>
+          <homeGrid :list="viewerStore.myMenu1List" :type="3"></homeGrid>
           <view class="isCloseOld flex-normal" @tap="openModeOld">
             <view class="iconfont icon-size">&#xe700;</view>
             关闭长辈模式
@@ -50,11 +50,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, nextTick, onMounted, reactive } from 'vue';
-  import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
+  import { ref, onMounted } from 'vue';
+  import { useMessageStore, useRouterStore } from '@/stores';
+  import { useViewerStore } from '@/stores/modules/viewer';
+
   import { onLoad } from '@dcloudio/uni-app';
-  import { ServerStaticData, GStores, outLogin } from '@/utils';
-  import { encryptDes, getSysCode, joinQuery, joinQueryForUrl } from '@/common';
+  import { ServerStaticData, GStores } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
 
   import personRecord from './componetns/personRecord.vue';
@@ -65,10 +67,11 @@
 
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeImg = ref('lqCode.jpg');
+  const viewerStore = useViewerStore();
+
 
   //骨架屏配置
   const skeletonProps = ref({
-    loading: true,
     skeleton: [
       'circle+line-sm*2',
       56,
@@ -103,9 +106,6 @@
   const gStores = new GStores();
   const refOldDialog = ref();
 
-  const menu1List = ref([]); //我的订单
-  const menu2List = ref([]); //我的服务
-  const menu3List = ref([]); //我的工具
 
   // 互联网医院
   const dealHosNet = async (opt: {
@@ -135,6 +135,9 @@
   };
 
   onLoad((opt) => {
+    if (!viewerStore.version) {
+      viewerStore.init();
+    }
     uni.hideLoading();
     // #ifdef MP-WEIXIN
     wx.showShareMenu({
@@ -155,35 +158,16 @@
   onMounted(() => {
     routeStore.receiveQuery(props);
 
-    getHomeConfig();
-
     if (props.isWarningLogin) {
       messageStore.showMessage('未登录,请先登录', 1000);
     } else if (props._isOutLogin) {
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
-
-    // if (gStores.globalStore.isLogin && !gStores.userStore.authPhoneVerify) {
-    //   outLogin({
-    //     isHideMessage: true,
-    //   });
-    // }
   });
 
   const openModeOld = () => {
     if (refOldDialog.value) {
       refOldDialog.value.show();
-    }
-  };
-  //获取配置数据
-  const getHomeConfig = async () => {
-    skeletonProps.value.loading = true;
-    const homeConfig = await ServerStaticData.getHomeConfig();
-    if (homeConfig) {
-      menu1List.value = homeConfig[5].functionList;
-      menu2List.value = homeConfig[6].functionList;
-      menu3List.value = homeConfig[7].functionList;
-      skeletonProps.value.loading = false;
     }
   };
 
@@ -231,12 +215,6 @@
   .old {
     background-color: #fff;
     padding: 32rpx;
-  }
-  .icon-camera {
-    position: relative;
-    font-size: 40px;
-    color: red;
-    mask: linear-gradient(to bottom, #283237, transparent);
   }
 
   .isCloseOld {

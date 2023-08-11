@@ -12,7 +12,7 @@
           :autoplay="autoplay"
           :indicator-dots="props.leftFunctionList.length > 0 ? true : false"
         >
-          <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i">
+          <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i" class="g-fade-in">
             <!-- <g-login @handler-next="gotoPath(item)" :disabled="item.loginInterception === '0'"> -->
               <image mode="scaleToFill" :src="item.iconfont" @tap="gotoPath(item)" />
             <!-- </g-login> -->
@@ -20,7 +20,7 @@
         </swiper>
       </view>
       <!-- 常规banner+三个入口 首页 三个纯入口 支持第一个是否是banner -->
-      <view class="banner2" v-if="props.functionList.length > 0">
+      <view class="banner2 g-fade-in" v-if="props.functionList.length > 0">
         <view :class="props.functionList.length > 2 ? 'parent1' : 'parent'">
           <!-- 只有一个入口 -->
           <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
@@ -142,7 +142,7 @@ const props = withDefaults(
 );
 const autoplay = ref(true);
 //跳转对应地址
-const gotoPath = (item) => { 
+const gotoPath = (item) => {
   if(item.path&&item.path=="showCareModel"){//关注组件拦截跳转 弹框
     emits('open-share',item.query && JSON.parse(item.query).imageCode)
   }else{

@@ -12,7 +12,7 @@
           @handler-next="gridClick(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="grid-item-box" v-if="options.type != 3" @tap="gridClick(item)">
+          <view class="grid-item-box g-fade-in" v-if="options.type != 3" @tap="gridClick(item)">
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->
             <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
@@ -39,7 +39,7 @@
               item.detail
             }}</text>
           </view>
-          <view class="grid-item-box3" v-if="options.type == 3" @tap="gridClick(item)">
+          <view class="grid-item-box3 g-fade-in" v-if="options.type == 3" @tap="gridClick(item)">
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->
             <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->

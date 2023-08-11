@@ -417,39 +417,30 @@ export class ServerStaticData {
    */
   static async getHomeConfig(type?): Promise<any[]> {
     const gStores = new GStores();
-    const viewConfig = getLocalStorage('viewConfig');
     //type:home 首页每次都调用一下
-    if (!viewConfig || type) {
-      const arg = {
-        version: '',
-        source: 1,
-      };
+    const arg = {
+      version: '',
+      source: 1,
+    };
 
-      if (gStores.globalStore.modeOld) {
-        arg.source = 7;
-      } else {
-        // #ifdef MP-ALIPAY
-        arg.source = 2;
-        // #endif
-
-        // #ifdef H5
-        arg.source = 3;
-        // #endif
-      }
-
-      const { result } = await api.queryHospitalPattern(arg);
-
-      if (result && result.length) {
-        setLocalStorage({
-          viewConfig: result,
-        });
-
-        return result;
-      } else {
-        return [];
-      }
+    if (gStores.globalStore.modeOld) {
+      arg.source = 7;
     } else {
-      return viewConfig;
+      // #ifdef MP-ALIPAY
+      arg.source = 2;
+      // #endif
+
+      // #ifdef H5
+      arg.source = 3;
+      // #endif
+    }
+
+    const { result } = await api.queryHospitalPattern(arg);
+
+    if (result && result.length) {
+      return result;
+    } else {
+      return [];
     }
   }
 

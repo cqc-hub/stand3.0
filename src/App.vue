@@ -16,7 +16,6 @@
 
   onLaunch((opt) => {
     // console.log('App Launch', opt);
-
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
 
