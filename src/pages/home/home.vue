@@ -162,7 +162,7 @@
             isDock
             scrollY
           >
-            <view class="auto-person">
+            <view class="auto-person g-fade-in">
               <text>智能客服</text>
               <image :src="$global.BASE_IMG + 'auto.png'"></image>
             </view>
@@ -651,7 +651,7 @@
         box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
         .box {
           padding: 40rpx 0 35rpx 0;
-          min-height: 115rpx;
+          min-height: 145rpx;
         }
 
         .bar-swiper {

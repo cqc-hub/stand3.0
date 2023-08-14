@@ -431,7 +431,7 @@
     }
 
     if (getTypeNow.value === '病案复印') {
-      const hosIds = medCopyConfigList.value.map((o) => o.hosId);
+      const hosIds = medCopyConfigList.value.map((o) => o.hosId + '');
       hosList.value.map((o) => {
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
