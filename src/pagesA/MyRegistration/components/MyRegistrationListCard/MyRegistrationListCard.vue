@@ -114,6 +114,7 @@ const props = defineProps<{
   isShowYuWzBtn: boolean;
   showFWBtn: string[];
   systemModeOld?: boolean;
+  thRegisterId?: string;
   config: ISystemConfig['order'];
 }>();
 const emits = defineEmits(['ywz-click']);
@@ -222,6 +223,7 @@ const goDetail = (item: IRegistrationCardItem) => {
     url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
       orderId: item.orderId,
       preWz: item.orderStatus === '10' && '1',
+      thRegisterId: props.thRegisterId
     }),
   });
 };

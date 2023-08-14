@@ -42,6 +42,7 @@
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
           :config="orderConfig"
+          :thRegisterId="thRegisterId"
           @ywz-click="ywzClick"
         />
       </block>
@@ -159,6 +160,9 @@
 
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
 
+  const props = defineProps<{
+    thRegisterId?: string;
+  }>();
   const gStores = new GStores();
   const isSelPatient = ref(false);
   const isSelStatus = ref(false);
@@ -234,7 +238,7 @@
       text: '预问诊',
       extraData: {
         orderId,
-        hosDeptId
+        hosDeptId,
       },
       addition: {
         token: 'token',

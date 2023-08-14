@@ -426,7 +426,7 @@
           name: searchValue.value,
           hosType: props._type == 3 ? '48' : '',
         },
-        { noCache: props._type == 3 ? true : false }
+        { noCache: true }
       );
     }
 
