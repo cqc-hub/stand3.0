@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
 
@@ -186,6 +186,7 @@
       source,
       resType,
       promptMessage,
+      thRegisterId
     };
 
     let alipayAuthCode = '';

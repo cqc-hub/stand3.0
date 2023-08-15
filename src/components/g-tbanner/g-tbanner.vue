@@ -1,7 +1,13 @@
 <template>
   <view class="">
     <view v-if="config" class="animate__animated animate__fadeIn">
-      <image v-if="config.src" @click="goSomeWhere" class="nav" :src="config.src" mode="widthFix" />
+      <image
+        v-if="config.src"
+        @click="goSomeWhere"
+        class="nav"
+        :src="config.src"
+        mode="widthFix"
+      />
     </view>
   </view>
 </template>
@@ -13,10 +19,16 @@
 
   const props = defineProps<{
     config?: TBannerConfig;
+    disabled?: boolean;
   }>();
 
+  const emits = defineEmits(['click']);
+
   const goSomeWhere = () => {
-    useTBanner(props.config!);
+    emits('click');
+    if (!props.disabled) {
+      useTBanner(props.config!);
+    }
   };
 </script>
 
