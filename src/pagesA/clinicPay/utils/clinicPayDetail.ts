@@ -8,7 +8,7 @@ import {
   useTBanner,
   PatientUtils,
 } from '@/utils';
-import { joinQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
+import { joinQueryForUrl, setLocalStorage } from '@/common';
 import {
   type IGPay,
   payMoneyOnline,

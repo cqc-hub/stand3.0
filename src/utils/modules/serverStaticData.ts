@@ -453,7 +453,7 @@ export class ServerStaticData {
       //REPORT_QUERY_CONFIG报告查询 药品配送 DRUG_DELIVERY_CONFIG
       const { result } = await api.getParamsMoreBySysCode({
         paramCode:
-          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG',
+          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG,SELF_BILLING',
       });
 
       try {
@@ -466,6 +466,8 @@ export class ServerStaticData {
         const pay = JSON.parse(result.CLINIC_PAY_CONFIG || '{}');
         const reportQuery = JSON.parse(result.REPORT_QUERY_CONFIG || '{}');
         const drugDelivery = JSON.parse(result.DRUG_DELIVERY_CONFIG || '{}');
+        const selfBilling = JSON.parse(result.SELF_BILLING || '{}');
+
         // @ts-expect-error
         systemConfig = {
           person,
@@ -475,6 +477,7 @@ export class ServerStaticData {
           pay,
           reportQuery,
           drugDelivery,
+          selfBilling
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');

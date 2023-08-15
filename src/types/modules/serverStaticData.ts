@@ -245,6 +245,11 @@ export interface ISystemConfig {
     // '' 咨询  '1' 视频
     listTopTab: IOptions<'' | '1'>[];
   };
+
+  /** 自助开单 */
+  selfBilling: {
+    footerBtn?: TButtonConfig;
+  };
 }
 
 export interface IHosInfo {
@@ -252,7 +257,7 @@ export interface IHosInfo {
   aliasName: string;
   hosId: string;
   hosName: string;
-  hosLevel:number;
+  hosLevel: number;
   hosLevelName: string;
   hosPhoto: string;
   hosType: string;

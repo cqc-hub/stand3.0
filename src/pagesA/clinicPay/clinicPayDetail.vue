@@ -195,14 +195,10 @@
   import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
-  import {
-    usePayPage,
-    getIsMedicalModePlugin,
-    getQxMedicalNation,
-  } from './utils/clinicPayDetail';
-  import { useTBanner, wait, debounce } from '@/utils';
+  import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';
+  import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
-  import { encryptForPage, decryptForPage } from '@/common/des';
+  import { decryptForPage } from '@/common/des';
   import { beforeEach } from '@/router';
 
   import globalGl from '@/config/global';
@@ -212,7 +208,6 @@
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
   const {
-    payMoneyMedicalPlugin,
     pageProps,
     tabCurrent,
     tabField,
@@ -234,7 +229,6 @@
     payArg,
     payAfter,
     getPayInfo,
-    toPay,
     selUnPayList,
     totalCost,
     isShowSelectAll,
