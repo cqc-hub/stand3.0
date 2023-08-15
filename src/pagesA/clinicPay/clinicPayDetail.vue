@@ -310,15 +310,11 @@
 
     uni.showLoading({});
 
-    if (queryParams && !opt?.params) {
+    if ((queryParams && !opt?.params) || opt?.q) {
       return;
     }
 
     await wait(650);
-
-    if (opt?.q) {
-      return;
-    }
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));

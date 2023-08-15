@@ -146,7 +146,7 @@
     useTBanner,
   } from '@/utils';
   import { computed, ref } from 'vue';
-  import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+  import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
   import {
     OrderStatus,
@@ -162,6 +162,7 @@
 
   const props = defineProps<{
     thRegisterId?: string;
+    allPData?: '1';
   }>();
   const gStores = new GStores();
   const isSelPatient = ref(false);
@@ -258,7 +259,6 @@
     }
   };
 
-  let _firstIn = true;
   const getConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
@@ -276,12 +276,6 @@
     if (isFWBtn) {
       showFWBtn.value = isFWBtn;
     }
-
-    if (_firstIn) {
-      const o = gStores.userStore.patChoose;
-      _firstIn = false;
-      selPatId.value = getPatLabel(o);
-    }
   };
 
   onPullDownRefresh(async () => {
@@ -290,7 +284,19 @@
   });
 
   onShow(() => {
-    init();
+    if (list.value.length) {
+      init();
+    }
+  });
+
+  onLoad(async () => {
+    if (props.allPData === '1') {
+      selPatId.value = '所有就诊人';
+    } else {
+      selPatId.value = getPatLabel(gStores.userStore.patChoose);
+    }
+
+    await init();
   });
 
   const getPatLabel = (o) => {
