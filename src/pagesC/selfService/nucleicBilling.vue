@@ -59,7 +59,7 @@
         :class="{
           'btn-disabled': isSubBtnDisabled,
         }"
-        class="btn btn-primary flex2"
+        class="btn btn-primary flex1"
         @click="submit"
       >
         确定开单
