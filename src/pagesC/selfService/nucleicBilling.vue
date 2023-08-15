@@ -25,7 +25,7 @@
         <label>2022-10-27</label>
         <text :class="`iconfont icon-resize`">&#xe66b;</text>
       </view> -->
-      <view class="box-list box-card">
+      <view class="box-list box-card mb20">
         <view
           v-for="(item, i) in NucleResult"
           :key="i"
@@ -42,7 +42,7 @@
           </block>
         </view>
       </view>
-      <g-flag typeFg="45" isShowFgTip />
+      <g-flag typeFg="45" isShowFgTip aaa />
     </scroll-view>
     <view
       class="g-footer"
@@ -55,7 +55,15 @@
       >
         {{ pageConfig.footerBtn.text }}
       </button>
-      <button class="btn btn-primary flex2" @click="submit">确定开单</button>
+      <button
+        :class="{
+          'btn-disabled': isSubBtnDisabled,
+        }"
+        class="btn btn-primary flex2"
+        @click="submit"
+      >
+        确定开单
+      </button>
     </view>
     <view
       v-if="pageLoading && NucleResult && NucleResult.length == 0"
@@ -105,6 +113,7 @@
   const gStores = new GStores();
   const pageLoading = ref(false);
   const currentIndex = ref(0);
+  const isSubBtnDisabled = ref(false);
 
   onLoad(async (opt) => {
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
@@ -160,41 +169,49 @@
     const { patientId, patientName, cardNumber } = gStores.userStore.patChoose;
     const source = gStores.globalStore.browser.source;
     const reBillingUrl = `/pagesC/selfService/nucleicBilling?hosId=${props.hosId}&isPay=${props.isPay}`;
-    const res1 = await api.createBillingOrder({
-      hosId: props.hosId,
-      patientId: patientId,
-      items: [NucleResult.value[currentIndex.value]],
-      totalCost: NucleResult.value[currentIndex.value].fee,
-      source: source,
-      hosName: props.hosName,
-      reBillingUrl: reBillingUrl, //再次开单路径
-    });
+    isSubBtnDisabled.value = true;
 
-    if (props.isPay == '1') {
-      const data = {
-        businessType: '',
+    try {
+      const res1 = await api.createBillingOrder({
         hosId: props.hosId,
-        hosName: props.hosName,
         patientId: patientId,
-        phsOrderNo: res1.result.phsOrderNo,
-        phsOrderSource: 11,
-        totalFee: NucleResult.value[currentIndex.value].fee,
-        patientName,
-        cardNumber,
-      };
-      const res = await payMoneyOnline(data);
-      await toPayPull(res);
-      payAfter(patientId);
-    } else {
-      console.log('跳转门诊缴费');
-      gStores.messageStore.showMessage('开单成功', 1500, {
-        closeCallBack: () => {
-          //跳转门诊缴费页面
-          uni.reLaunch({
-            url: `/pagesA/clinicPay/clinicPayDetail`,
-          });
-        },
+        items: [NucleResult.value[currentIndex.value]],
+        totalCost: NucleResult.value[currentIndex.value].fee,
+        source: source,
+        hosName: props.hosName,
+        reBillingUrl: reBillingUrl, //再次开单路径
       });
+
+      if (props.isPay == '1') {
+        const data = {
+          businessType: '',
+          hosId: props.hosId,
+          hosName: props.hosName,
+          patientId: patientId,
+          phsOrderNo: res1.result.phsOrderNo,
+          phsOrderSource: 11,
+          totalFee: NucleResult.value[currentIndex.value].fee,
+          patientName,
+          cardNumber,
+        };
+        const res = await payMoneyOnline(data);
+
+        await toPayPull(res);
+        payAfter(patientId);
+      } else {
+        console.log('跳转门诊缴费');
+        gStores.messageStore.showMessage('开单成功', 1500, {
+          closeCallBack: () => {
+            //跳转门诊缴费页面
+            uni.reLaunch({
+              url: `/pagesA/clinicPay/clinicPayDetail`,
+            });
+          },
+        });
+      }
+    } catch (error) {
+      isSubBtnDisabled.value = false;
+      throw new Error(error as string);
     }
   };
   const payAfter = async (patientId) => {
@@ -293,11 +310,6 @@
         .ico-checkbox {
           color: var(--hr-brand-color-6);
         }
-      }
-    }
-    .g-footer {
-      .btn {
-        flex: 1;
       }
     }
   }
