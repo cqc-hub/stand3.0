@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <view v-if="config" class="animate__animated animate__fadeIn">
+    <view v-if="config && config.src" class="animate__animated animate__fadeIn">
       <image
         v-if="config.src"
         @click="goSomeWhere"

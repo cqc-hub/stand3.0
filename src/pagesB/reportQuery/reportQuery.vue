@@ -8,7 +8,7 @@
     <g-flag typeFg="41" isShowFg />
     <g-choose-pat @choose-pat="choosePat" />
     <g-tbanner
-      v-if="isShowYunBanner"
+      v-if="gStores.userStore.patChoose.patientId"
       :config="yunBannerConfig"
       @click="getYunBannerData"
       disabled
@@ -135,7 +135,6 @@
   const _typeId = ref(0);
   const slist = ref<any>('');
   const loading = ref(true);
-  const isShowYunBanner = ref(false);
   const yunBannerConfig = ref(<TBannerConfig>{});
   const gStores = new GStores();
 
@@ -387,7 +386,6 @@
 
   const getYunBannerData = async () => {
     const { listYun } = reportConfig.value;
-    isShowYunBanner.value = false;
 
     if (listYun) {
       const { imgUrl } = listYun;
@@ -402,13 +400,15 @@
         });
 
         if (result) {
-          isShowYunBanner.value = true;
-
           yunBannerConfig.value = {
             path: result,
             type: 'h5',
             src: imgUrl as any,
           };
+
+          useTBanner(yunBannerConfig.value);
+        } else {
+          gStores.messageStore.showMessage('未获取到云影像数据');
         }
       }
     }
