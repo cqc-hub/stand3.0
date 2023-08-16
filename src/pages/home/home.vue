@@ -177,6 +177,7 @@
           <view class="fun-list" v-if="viewerStore.homeMenuList.length">
             <homeMenu
               :list="viewerStore.homeMenuList"
+              :tabIndex="props.tabIndex"
               @open-share="openShare"
             />
           </view>
@@ -323,6 +324,7 @@
 
   const props = defineProps<{
     code?: string;
+    tabIndex?:number
   }>();
   const gStores = new GStores();
   const viewerStore = useViewerStore();
@@ -330,6 +332,7 @@
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeImg = ref('lqCode.jpg');
+  const tabIndex = ref(0)
 
   //骨架屏配置
   const skeletonProps = ref({

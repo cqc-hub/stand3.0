@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, ref } from "vue";
+import { withDefaults, ref, onMounted } from "vue";
 import homeGrid from "./homeGrid.vue";
 
 const emits = defineEmits(['open-share']);
@@ -38,6 +38,7 @@ interface IhomeMenu {
 const props = withDefaults(
   defineProps<{
     list: IhomeMenu[];
+    tabIndex?:number
   }>(),
   {
     list: () => [
@@ -74,6 +75,12 @@ const props = withDefaults(
     ],
   }
 );
+
+onMounted(()=>{
+   console.log(22222,props)
+   tabIndex.value = props.tabIndex
+})
+
 const activeMenu = (index) => {
   tabIndex.value = index;
 };
