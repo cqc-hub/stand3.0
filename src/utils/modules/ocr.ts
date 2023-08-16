@@ -232,6 +232,7 @@ const ocrForWX = async (imageOutput = false) => {
     if (result.type === 'Front') {
       const { address, idCard, nation, patientName, patientSex } = result;
       return await findSuccess({
+        ...result,
         name: patientName,
         sex: patientSex,
         nation,
@@ -255,6 +256,8 @@ const findSuccess = async ({
   idCard,
   address,
   image,
+  idCardOcrEn,
+  patientNameOcrEn
 }: {
   name: string;
   sex: string;
@@ -263,6 +266,8 @@ const findSuccess = async ({
   idCard: string;
   address: string;
   image?: string;
+  idCardOcrEn?: string; // wx
+  patientNameOcrEn?: string; // wx
 }) => {
   if (nation) {
     if (!nation.includes('族')) {
@@ -293,6 +298,8 @@ const findSuccess = async ({
   }
 
   return {
+    idCardOcrEn,
+    patientNameOcrEn,
     image,
     name,
     sex,

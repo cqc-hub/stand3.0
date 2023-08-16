@@ -547,6 +547,20 @@ const userApi = {
       hideLoading: false,
     }),
 
+  modifyHosPhoneByIdNum: (data) =>
+    service.post(
+      '/phs-user/relevantPatient/modifyHosPhoneByIdNum',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
+
+  mdPhoneById: (data) =>
+    service.post('/phs-user/relevantPatient/mdPhoneById', parm(data), {
+      hideLoading: false,
+    }),
+
   // 获取卡包订单号
   getCardPackOrderId: (data) =>
     service.post('/phs-user/healthCard/getCardPackOrderId', parm(data), {

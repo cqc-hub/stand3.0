@@ -11,7 +11,7 @@
         <image
           :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
           @click="chooseIdCard"
-          class="sfz-img "
+          class="sfz-img"
           mode="widthFix"
         />
       </view>
@@ -44,6 +44,8 @@
   import { onMounted, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import type { TInstance } from '@/components/g-form/index';
+  import { deQueryForUrl } from '@/common/utils';
+  import api from '@/service/api';
 
   import {
     GStores,
@@ -53,6 +55,7 @@
     useOcr,
     base64Src,
   } from '@/utils';
+
   import {
     pickTempItem,
     formKey,
@@ -63,7 +66,13 @@
   } from './utils';
 
   const gStores = new GStores();
-  const pageProps = ref({});
+  const pageProps = ref(
+    <
+      {
+        patientPhone: string;
+      }
+    >{}
+  );
   const gform = ref<any>('');
   const idCardUrl = ref('');
   let formList: TInstance[] = [];
@@ -74,12 +83,37 @@
 
   const formData = ref<BaseObject>({
     idType: '01',
+    idCardOcrEn: '',
+    patientNameOcrEn: '',
   });
-  const formSubmit = async () => {};
+  const formSubmit = async () => {
+    const { source } = gStores.globalStore.browser;
+
+    const requestArg = {
+      source,
+      ...formData.value,
+    };
+
+    // #ifdef MP-ALIPAY
+    await api.mdPhoneById(requestArg);
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    await api.modifyHosPhoneByIdNum(requestArg);
+    // #endif
+
+    gStores.messageStore.showMessage('修改建党信息成功', 3000, {
+      closeCallBack() {
+        uni.navigateBack({
+          delta: 1,
+        });
+      },
+    });
+  };
 
   const chooseIdCard = async () => {
     const res = await useOcr(true);
-    const { image, name, address, idCard } = res;
+    const { image, name, idCard, idCardOcrEn, patientNameOcrEn } = res;
 
     let iswx = false;
     // #ifdef MP-WEIXIN
@@ -94,6 +128,8 @@
 
       formData.value.idCard = idCard;
       formData.value.patientName = name;
+      formData.value.idCardOcrEn = idCardOcrEn;
+      formData.value.patientNameOcrEn = patientNameOcrEn;
     }
   };
 
@@ -110,17 +146,17 @@
     idTypeItem.showSuffixArrowIcon = false;
 
     formList.map((o) => {
-      if (o.key !== 'patientPhone') {
-        o.disabled = true;
-        o.placeholder = '上传身份证自动填入';
-      }
+      o.disabled = true;
+      o.placeholder = '上传身份证自动填入';
     });
+
+    Object.assign(formData.value, pageProps.value);
 
     gform.value.setList(formList);
   };
 
-  onLoad(() => {
-    // console.log(333);
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
   onMounted(() => {

@@ -66,6 +66,10 @@
 
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
+  import { onReady } from '@dcloudio/uni-app';
+  import { useRouterStore } from '@/stores';
+  import { joinQueryForUrl } from '@/common/utils';
+
   import {
     pickTempItem,
     formKey,
@@ -84,8 +88,7 @@
     OcrFindRes,
     nameConvert,
   } from '@/utils';
-  import { onReady } from '@dcloudio/uni-app';
-  import { useRouterStore } from '@/stores';
+
 
   import dayjs from 'dayjs';
   import globalGl from '@/config/global';
@@ -243,6 +246,8 @@
         }
       }
     } else {
+      console.log(requestData, 'cqc', authPhoneVerify);
+
       if (!patList.length && !requestData.verifyCode) {
         requestData.authPhoneVerify = authPhoneVerify;
       }
@@ -254,7 +259,9 @@
           gStores.messageStore.showMessage(message, 3000, {
             closeCallBack() {
               uni.navigateTo({
-                url: '/pagesA/medicalCardMan/ocrUser',
+                url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+                  patientPhone: formData.value.patientPhone,
+                }),
               });
             },
           });
@@ -697,12 +704,6 @@
       })
     );
 
-    formData.value.patientName = '陈钦川';
-    formData.value.idCard = '330326199908286713';
-    formData.value.location = 'jjjjjjj';
-    formData.value.patientPhone = '15797812958';
-    formData.value.nation = '01';
-
     // 默认身份证
     formData.value[formKey.idType] = '01';
 
@@ -724,6 +725,12 @@
     }
     // #endif
     // }
+
+    formData.value.patientName = '陈钦川';
+    formData.value.idCard = '330326199908286713';
+    formData.value.location = 'jjjjjjj';
+    formData.value.patientPhone = '15797812958';
+    formData.value.nation = '01';
 
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);
