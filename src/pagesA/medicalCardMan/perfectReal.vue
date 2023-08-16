@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults, reactive } from 'vue';
+  import { ref, onMounted, computed, withDefaults } from 'vue';
   import {
     PatientUtils,
     GStores,

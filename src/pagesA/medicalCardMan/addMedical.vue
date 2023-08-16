@@ -67,7 +67,6 @@
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
   import {
-    FormKey,
     pickTempItem,
     formKey,
     TFormKeys,
@@ -139,6 +138,20 @@
     'verifyCode',
     'defaultFalg',
   ]);
+
+  const isOpenOcr = async () => {
+    let _isOpenOcr = false;
+    const { ocr } = await ServerStaticData.getSystemConfig('person');
+    // #ifdef MP-WEIXIN
+    _isOpenOcr = ocr === '1';
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    _isOpenOcr = !!globalGl.systemInfo.isOpenOcr;
+    // #endif
+
+    return _isOpenOcr;
+  };
 
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
@@ -233,7 +246,22 @@
       if (!patList.length && !requestData.verifyCode) {
         requestData.authPhoneVerify = authPhoneVerify;
       }
-      await patientUtils.addRelevantPatient(requestData);
+      await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
+        console.log(e);
+        const { respCode, message } = e;
+
+        if (respCode === 884801 && (await isOpenOcr())) {
+          gStores.messageStore.showMessage(message, 3000, {
+            closeCallBack() {
+              uni.navigateTo({
+                url: '/pagesA/medicalCardMan/ocrUser',
+              });
+            },
+          });
+        }
+
+        throw new Error(message);
+      });
       await patientUtils.getPatCardList();
       if (props._directUrl) {
         routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
@@ -490,17 +518,7 @@
       );
 
       if (patientNameItem) {
-        let isOpenOcr = false;
-        // #ifdef MP-WEIXIN
-        isOpenOcr = ocr === '1';
-        // patientNameItem.showSuffixArrowIcon = true;
-        // #endif
-
-        // #ifdef MP-ALIPAY
-        isOpenOcr = !!globalGl.systemInfo.isOpenOcr;
-        // #endif
-
-        if (isOpenOcr) {
+        if (await isOpenOcr()) {
           patientNameItem.ocr = true;
         }
       }
@@ -679,6 +697,12 @@
       })
     );
 
+    formData.value.patientName = '陈钦川';
+    formData.value.idCard = '330326199908286713';
+    formData.value.location = 'jjjjjjj';
+    formData.value.patientPhone = '15797812958';
+    formData.value.nation = '01';
+
     // 默认身份证
     formData.value[formKey.idType] = '01';
 
@@ -725,8 +749,7 @@
 </script>
 
 <style lang="scss" scoped>
-
- .page {
+  .page {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -738,7 +761,6 @@
     flex: 1;
     overflow-y: scroll;
   }
-
 
   .footer {
     background-color: var(--h-color-white);

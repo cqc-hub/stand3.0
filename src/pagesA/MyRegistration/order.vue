@@ -147,7 +147,7 @@
     isOrderPreSourceShow,
     preregistrationRegNumbers,
     goPreregistration,
-  } = useOrder(props);
+  } = useOrder(ref(props));
 
   onReady(() => {
     uni.setNavigationBarTitle({
@@ -171,7 +171,7 @@
   const avatarClick = (item: IDocListAll) => {
     const { deptName, docName, hosDocId, hosId, hosDeptId, docTitleName } =
       item;
-    // const { hosDeptId, firstHosDeptId, secondHosDeptId } = props;
+    const { thRegisterId } = props;
     const args = {
       deptName,
       docName,
@@ -181,6 +181,7 @@
       // firstHosDeptId,
       // secondHosDeptId,
       hosDeptId,
+      thRegisterId,
     };
 
     uni.navigateTo({

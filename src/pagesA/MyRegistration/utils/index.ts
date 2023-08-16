@@ -2,7 +2,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import dayjs from 'dayjs';
 import api from '@/service/api';
 
-import { ref, computed } from 'vue';
+import { ref, computed, Ref } from 'vue';
 import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
@@ -139,7 +139,7 @@ interface IOrderProps {
   thRegisterId?: string;
 }
 
-export const useOrder = (props: IOrderProps) => {
+export const useOrder = (props: Ref<IOrderProps>) => {
   const orderConfig = ref<ISystemConfig['order']>(<any>{
     chooseDay: 0,
     selOrderColumn: 3,
@@ -518,9 +518,9 @@ export const useOrder = (props: IOrderProps) => {
       schQukCategor,
       docTitleName,
     } = selectSchInfo;
-
     const { disNo, numId, timeDesc } = item;
-    const { clinicalType, promptMessage, thRegisterId } = props;
+    const { clinicalType, promptMessage, thRegisterId } = props.value;
+
 
     const pageArg = {
       disNo,
@@ -546,6 +546,7 @@ export const useOrder = (props: IOrderProps) => {
       thRegisterId,
     };
     selectOrderSourceNumId.value = numId;
+
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', pageArg),

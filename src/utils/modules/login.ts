@@ -7,7 +7,7 @@ import {
   isAreaProgram,
 } from '@/stores';
 import { getSysCode } from '@/common';
-import { apiAsync, routerJump } from './utils';
+import { apiAsync } from './utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 

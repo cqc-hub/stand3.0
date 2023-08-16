@@ -500,6 +500,7 @@
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log(props.value);
 
     // 扫码进来, 不处理
     if (props.value.q) {

@@ -304,7 +304,7 @@
 </template>
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
@@ -362,12 +362,15 @@
     gStores.userStore.updatePatChoose(item);
   };
 
+  onShow(() => {
+    viewerStore.init();
+  });
+
   onLoad(() => {
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,
     });
-    viewerStore.init();
     // #ifdef MP-WEIXIN
     if (props.code) {
       new LoginUtils().getNoPublicOpenId(props.code).then(() => {
@@ -476,6 +479,14 @@
     if (refOldDialog.value) {
       refOldDialog.value.show();
     }
+  };
+
+  const aaa = () => {
+    uni.navigateToMiniProgram({
+      appId: 'wx7acc3ecadc08f7ea',
+      path: 'pagesA/MyRegistration/selDepartment?type=order&hosId=13002&thRegisterId=aa942cc03b3f11ee9ba60995a3ea19f3',
+      envVersion: 'trial'
+    });
   };
 </script>
 

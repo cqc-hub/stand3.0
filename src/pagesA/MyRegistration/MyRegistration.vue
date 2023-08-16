@@ -8,6 +8,8 @@
     <g-flag typeFg="405" isShowFg />
     <g-message />
 
+    <g-choose-pat />
+
     <view class="flex-normal header g-border-bottom f32">
       <view
         :class="{

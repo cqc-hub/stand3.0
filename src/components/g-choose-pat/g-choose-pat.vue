@@ -7,7 +7,7 @@
         :src="getAvatar(gStores.userStore.patChoose.patientSex)"
         mode="widthFix"
         @load="loadImg"
-      ></image>
+      />
 
       <view class="user-info text-ellipsis">
         {{ `${gStores.userStore.patChoose.patientNameEncry}` }}
