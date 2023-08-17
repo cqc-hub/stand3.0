@@ -615,7 +615,6 @@ export class PatientUtils extends LoginUtils {
       idCardEncry,
     } = payload;
     const { accountType, source } = this.globalStore.browser;
-    const { authPhoneVerify } = this.userStore;
 
     const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
     const requestData = {
@@ -631,14 +630,8 @@ export class PatientUtils extends LoginUtils {
       birthday,
       cellPhoneNumber,
       idCardEncry,
-      authPhoneVerify: '',
       source,
     };
-
-    if (!verifyCode) {
-      requestData.authPhoneVerify = authPhoneVerify;
-      payload.authPhoneVerify = authPhoneVerify;
-    }
 
     uni.showLoading({
       title: '完善就诊人中...',
@@ -729,7 +722,6 @@ export class PatientUtils extends LoginUtils {
       upName: string;
       verifyCode: string;
       verifyType: string;
-      authPhoneVerify?: string;
       _type?: 'perfect';
     }>
   ) {
@@ -765,22 +757,17 @@ export class PatientUtils extends LoginUtils {
       upIdCard: string; // 儿童必填
       upName: string; // 儿童必填
       verifyCode: string;
-      verifyType: string; // （1或空）不开启验证  2:开启验证
-      authPhoneVerify?: string;
+      verifyType: string; // 1&bk 不开启验证  2&kq 开启验证
     }>
   ) {
     const { wechatCode } = data;
-
-    // if (data._type !== 'perfect') {
-    //   data.authPhoneVerify = undefined;
-    // }
 
     const requestArg = {
       ...data,
       defaultFalg: data.defaultFalg ? '1' : '0',
       source: this.globalStore.browser.source,
       herenId: this.globalStore.herenId,
-      verifyType: data.verifyType || '1',
+      verifyType: data.verifyType || '1&bk',
       healthCardId: '',
       qrCodeText: '',
     };
@@ -873,7 +860,6 @@ export class PatientUtils extends LoginUtils {
       upName: string; // 儿童必填
       verifyCode: string;
       verifyType: string; // （1或空）不开启验证  2:开启验证
-      authPhoneVerify?: string;
     }>
   ): Promise<{ healthCardId: string; qrCodeText: string }> {
     const requestArg = {
@@ -881,7 +867,7 @@ export class PatientUtils extends LoginUtils {
       defaultFalg: data.defaultFalg ? '1' : '0',
       source: this.globalStore.browser.source,
       herenId: this.globalStore.herenId,
-      verifyType: data.verifyType || '1',
+      verifyType: data.verifyType || '1&bk',
       healthCardId: '',
       qrCodeText: '',
     };

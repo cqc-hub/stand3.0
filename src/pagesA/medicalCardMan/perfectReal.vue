@@ -127,7 +127,7 @@
 
     const data: any = {
       ...formData.value,
-      verifyType: formData.value[formKey.verifyCode] && '2', // '2' 开启 短信验证
+      verifyType: formData.value[formKey.verifyCode] && '2&kq', // '2' 开启 短信验证
       source,
     };
 
@@ -137,11 +137,6 @@
 
     // 完善逻辑
     if (props.pageType === 'perfectReal') {
-      const { authPhoneVerify } = gStores.userStore;
-      if (!formData.value[formKey.verifyCode]) {
-        data.authPhoneVerify = authPhoneVerify;
-      }
-
       try {
         const { result } = await api.getPatCardInfoByHospital(data);
         if (result) {
@@ -167,7 +162,7 @@
                 patientPhone,
                 patientName,
                 verifyCode: formData.value[formKey.verifyCode],
-                verifyType: '',
+                verifyType: '1&bk',
                 cellPhoneNumber,
                 idCardEncry,
                 sex: (patientSex && (patientSex === '男' ? '1' : '2')) || '',
@@ -237,15 +232,6 @@
         patientType: formData.value[formKey.patientType],
         verifyCode: formData.value[formKey.verifyCode],
       };
-      if (!formData.value[formKey.verifyCode]) {
-        // #ifdef MP-ALIPAY
-        const { patList, authPhoneVerify } = gStores.userStore;
-
-        if (!patList.length) {
-          requestArg.authPhoneVerify = authPhoneVerify;
-        }
-        // #endif
-      }
 
       await patientUtil
         .addPatient(requestArg)

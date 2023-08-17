@@ -170,9 +170,8 @@
 
     const requestData = {
       wechatCode: '',
-      verifyType: '',
+      verifyType: '1&bk',
       patientName: '',
-      authPhoneVerify: '',
       source,
 
       verifyCode,
@@ -180,18 +179,15 @@
       ...addressChoose,
     };
 
-    const { authPhoneVerify, patList } = gStores.userStore;
+    const {  patList } = gStores.userStore;
 
-    if (!requestData.verifyCode && props.pageType === 'perfectReal') {
-      requestData.authPhoneVerify = authPhoneVerify;
-    }
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
       formData.value[formKey.patientName] = requestData.patientName.trim();
     }
 
-    requestData.verifyType = requestData.verifyCode ? '2' : '1';
+    requestData.verifyType = requestData.verifyCode ? '2&kq' : '1&bk';
 
     // #ifdef MP-WEIXIN
     if (globalGl.systemInfo.isOpenHealthCard) {
@@ -246,9 +242,6 @@
         }
       }
     } else {
-      if (!patList.length && !requestData.verifyCode) {
-        requestData.authPhoneVerify = authPhoneVerify;
-      }
       await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
         console.log(e);
         const { respCode, message } = e;
@@ -723,11 +716,11 @@
     // #endif
     // }
 
-    formData.value.patientName = '陈钦川';
-    formData.value.idCard = '330326199908286713';
-    formData.value.location = 'jjjjjjj';
-    formData.value.patientPhone = '15797812958';
-    formData.value.nation = '01';
+    // formData.value.patientName = '陈钦川';
+    // formData.value.idCard = '330326199908286713';
+    // formData.value.location = 'jjjjjjj';
+    // formData.value.patientPhone = '15797812958';
+    // formData.value.nation = '01';
 
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);
