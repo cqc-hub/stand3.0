@@ -726,6 +726,7 @@
   const goDoctorCard = () => {
     const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
       orderRegInfo.value;
+    const { thRegisterId } = pageProps.value;
 
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
@@ -735,6 +736,7 @@
         hosId,
         clinicalType,
         hosDeptId,
+        thRegisterId
       }),
     });
   };

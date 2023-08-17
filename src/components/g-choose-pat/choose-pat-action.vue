@@ -8,7 +8,7 @@
     <g-popup title="更换就诊人" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
-          <Pat-List @choose-pat="actionSheetItemClick" />
+          <Pat-List @choose-pat="actionSheetItemClick" :isShowAll="isShowAll" />
         </view>
 
         <view class="add-pat-box">
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { PropType, defineComponent, ref } from 'vue';
   import { GStores } from '@/utils';
   import { IPat } from '@/stores';
   import globalGl from '@/config/global';
@@ -38,6 +38,15 @@
         type: Boolean,
         default: false,
       },
+
+      isShowAll: {
+        type: Boolean,
+        default: false,
+      },
+
+      pat: {
+        type: Object as PropType<IPat>,
+      },
     },
 
     components: {
@@ -47,11 +56,10 @@
     setup(props, ctx) {
       const actionSheet = ref();
       const gStores = new GStores();
-
       const actionSheetItemClick = (e: { index: number; item: IPat }) => {
         actionSheet.value.hide();
 
-        if (props.autoStore) {
+        if (props.autoStore && e.item.patientId) {
           gStores.userStore.updatePatChoose(e.item);
         }
         ctx.emit('choose-pat', e);

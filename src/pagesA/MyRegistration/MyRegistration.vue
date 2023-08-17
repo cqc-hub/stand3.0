@@ -7,32 +7,18 @@
   >
     <g-flag typeFg="405" isShowFg />
     <g-message />
+    <!-- v-if="isShowFilterOrderStatus" -->
+    <g-choose-pat v-if="isShowFilterOrderStatus" isShowAll />
 
-    <g-choose-pat />
-
-    <view class="flex-normal header g-border-bottom f32">
-      <view
-        :class="{
-          'sel-active': isSelStatus,
-        }"
-        class="flex-normal"
-        @click="isSelStatus = !isSelStatus"
-      >
-        <view>{{ selStatusName }}</view>
-        <view class="iconfont">&#xe6e8;</view>
-      </view>
-
-      <view
-        :class="{
-          'sel-active': isSelPatient,
-        }"
-        @click="isSelPatient = !isSelPatient"
-        class="flex-normal"
-      >
-        <view>{{ selPatName }}</view>
-        <view class="iconfont">&#xe6e8;</view>
-      </view>
-    </view>
+    <My-Registration-Head
+      v-model:isSelStatus="isSelStatus"
+      v-model:isSelPatient="isSelPatient"
+      v-model:isSelOrderStatus="isSelOrderStatus"
+      :isShowFilterOrderStatus="isShowFilterOrderStatus"
+      :selStatusName="selStatusName"
+      :selPatName="selPatName"
+      :selOrderStatusName="selOrderStatusName"
+    />
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
@@ -55,6 +41,29 @@
     </view>
 
     <g-select
+      v-model:value="selOrderStatus"
+      v-model:show="isSelOrderStatus"
+      :option="orderStatusList"
+      :field="{
+        label: 'label',
+        value: 'value',
+      }"
+      type="top"
+    >
+      <template #header>
+        <My-Registration-Head
+          v-model:isSelStatus="isSelStatus"
+          v-model:isSelPatient="isSelPatient"
+          v-model:isSelOrderStatus="isSelOrderStatus"
+          :isShowFilterOrderStatus="isShowFilterOrderStatus"
+          :selStatusName="selStatusName"
+          :selPatName="selPatName"
+          :selOrderStatusName="selOrderStatusName"
+        />
+      </template>
+    </g-select>
+
+    <g-select
       v-model:value="selStatus"
       v-model:show="isSelStatus"
       :option="statusList"
@@ -65,29 +74,15 @@
       type="top"
     >
       <template #header>
-        <view class="flex-normal header g-border-bottom f32">
-          <view
-            :class="{
-              'sel-active': isSelStatus,
-            }"
-            class="flex-normal"
-            @click="isSelStatus = !isSelStatus"
-          >
-            <view>{{ selStatusName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
-          </view>
-
-          <view
-            :class="{
-              'sel-active': isSelPatient,
-            }"
-            @click="isSelPatient = !isSelPatient"
-            class="flex-normal"
-          >
-            <view>{{ selPatName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
-          </view>
-        </view>
+        <My-Registration-Head
+          v-model:isSelStatus="isSelStatus"
+          v-model:isSelPatient="isSelPatient"
+          v-model:isSelOrderStatus="isSelOrderStatus"
+          :isShowFilterOrderStatus="isShowFilterOrderStatus"
+          :selStatusName="selStatusName"
+          :selPatName="selPatName"
+          :selOrderStatusName="selOrderStatusName"
+        />
       </template>
     </g-select>
 
@@ -97,35 +92,21 @@
       :option="patList"
       :field="{
         label: '_showLabel',
-        value: '_showLabel',
+        value: 'patientId',
       }"
       @change="patientChange"
       type="top"
     >
       <template #header>
-        <view class="flex-normal header g-border-bottom f32">
-          <view
-            :class="{
-              'sel-active': isSelStatus,
-            }"
-            class="flex-normal"
-            @click="isSelStatus = !isSelStatus"
-          >
-            <view>{{ selStatusName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
-          </view>
-
-          <view
-            :class="{
-              'sel-active': isSelPatient,
-            }"
-            @click="isSelPatient = !isSelPatient"
-            class="flex-normal"
-          >
-            <view>{{ selPatName }}</view>
-            <view class="iconfont">&#xe6e8;</view>
-          </view>
-        </view>
+        <My-Registration-Head
+          v-model:isSelStatus="isSelStatus"
+          v-model:isSelPatient="isSelPatient"
+          v-model:isSelOrderStatus="isSelOrderStatus"
+          :isShowFilterOrderStatus="isShowFilterOrderStatus"
+          :selStatusName="selStatusName"
+          :selPatName="selPatName"
+          :selOrderStatusName="selOrderStatusName"
+        />
       </template>
     </g-select>
 
@@ -161,22 +142,43 @@
   import api from '@/service/api';
 
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
+  import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
 
   const props = defineProps<{
     thRegisterId?: string;
     allPData?: '1';
   }>();
   const gStores = new GStores();
-  const isSelPatient = ref(false);
-  const isSelStatus = ref(false);
   const isComplete = ref(false);
 
   const showYuanNeiDaoHanBtn = ref<string[]>([]);
   const showPaiDuiJiaoHaoBtn = ref<string[]>([]);
   const showFWBtn = ref<string[]>([]);
 
+  const isSelPatient = ref(false);
+  const isSelStatus = ref(false);
+  const isSelOrderStatus = ref(false);
+  const selPatId = ref('');
+  const selStatus = ref('');
+  const selOrderStatus = ref('');
+
   const list = ref<IRegistrationCardItem[]>([]);
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
+
+  const orderStatusList = ref([
+    {
+      label: '在线挂号',
+      value: '',
+    },
+    {
+      label: '全部挂号',
+      value: '1',
+    },
+  ]);
+
+  const isShowFilterOrderStatus = computed(() => {
+    return orderConfig.value.isCanSelOrderStatus === '1';
+  });
 
   const isCancelOrderDialogShow = ref(false);
   const dialogContent = ref('');
@@ -292,12 +294,6 @@
   });
 
   onLoad(async () => {
-    if (props.allPData === '1') {
-      selPatId.value = '所有就诊人';
-    } else {
-      selPatId.value = getPatLabel(gStores.userStore.patChoose);
-    }
-
     await init();
   });
 
@@ -312,7 +308,7 @@
     await getConfig();
     const item = patList.value.find(
       (o: any) => getPatLabel(o) === selPatId.value
-    );
+    );selPatId
 
     await getList(item?.patientId || '');
   };
@@ -350,11 +346,17 @@
   });
 
   const selPatName = computed(() => {
-    return selPatId.value;
+    return patList.value.find((o) => o.patientId === selPatId.value)
+      ?._showLabel;
   });
 
   const selStatusName = computed(() => {
     return statusList.value.find((o) => o.value === selStatus.value)?.label;
+  });
+
+  const selOrderStatusName = computed(() => {
+    return orderStatusList.value.find((o) => o.value === selOrderStatus.value)
+      ?.label;
   });
 
   const showList = computed(() => {
@@ -365,31 +367,10 @@
     return _filterStatus;
   });
 
-  const selPatId = ref('');
-  const selStatus = ref('');
-
   // init();
 </script>
 
 <style lang="scss" scoped>
-  .header {
-    background-color: #fff;
-    > view {
-      flex: 1;
-      justify-content: center;
-      padding: 24rpx 0;
-    }
-
-    .sel-active {
-      font-weight: 600;
-      color: var(--hr-brand-color-6);
-      .iconfont {
-        transform: rotate(0.5turn);
-        // color: var(--hr-neutral-color-9);
-      }
-    }
-  }
-
   .g-container {
     padding: 0 32rpx;
     width: calc(100% - 64rpx);

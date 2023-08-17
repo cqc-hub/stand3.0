@@ -57,6 +57,8 @@ export interface ISystemConfig {
     isOpenReOrder?: '1';
     // 自定义列表子项底部按钮功能
     regListItemCustomButtons: TRegListButtonItem[];
+    // 可以筛选 在线/全部 挂号?
+    isCanSelOrderStatus?: '1';
 
     /** 搜索 */
     // 热门搜索

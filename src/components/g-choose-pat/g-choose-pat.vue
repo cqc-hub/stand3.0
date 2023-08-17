@@ -4,40 +4,49 @@
       <image
         v-show="isLoad"
         class="user-avatar"
-        :src="getAvatar(gStores.userStore.patChoose.patientSex)"
+        :src="getAvatar(getShowPat.patientSex)"
         mode="widthFix"
         @load="loadImg"
       />
 
       <view class="user-info text-ellipsis">
-        {{ `${gStores.userStore.patChoose.patientNameEncry}` }}
+        {{ `${getShowPat.patientNameEncry}` }}
         <text>
-          {{
-            `${(!isAreaProgram() && gStores.userStore.patChoose._showId) || ''}`
-          }}
+          {{ `${(!isAreaProgram() && getShowPat._showId) || ''}` }}
         </text>
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow f48`" />
     </view>
 
-    <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
+    <Choose-Pat
+      @choose-pat="choosePatHandler"
+      :isShowAll="isShowAll"
+      ref="actionSheet"
+    />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { getAvatar, IPat, isAreaProgram } from '@/stores';
   import { GStores } from '@/utils';
   import { getQueryString } from '@/common/utils';
 
   import ChoosePat from './choose-pat-action.vue';
 
+  const props = defineProps<{
+    isShowAll?: boolean;
+    pat?: IPat;
+  }>();
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
   const emits = defineEmits(['choose-pat']);
-
   const isLoad = ref(false);
+
+  const getShowPat = computed(() => {
+    return props.pat || gStores.userStore.patChoose;
+  });
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
@@ -53,7 +62,10 @@
   };
 
   const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
-    gStores.userStore.updatePatChoose(item);
+    // 选所有就诊人时候不带 patientId
+    if (item.patientId) {
+      gStores.userStore.updatePatChoose(item);
+    }
     emits('choose-pat', { item });
   };
 

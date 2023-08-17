@@ -6,7 +6,7 @@
     class="pat-list"
   >
     <view
-      v-for="(pat, i) in gStores.userStore.patList"
+      v-for="(pat, i) in patList"
       :key="pat.patientId"
       @click="patClick(pat, i)"
       :class="{
@@ -38,9 +38,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { GStores } from '@/utils';
   import { IPat, getAvatar, isAreaProgram } from '@/stores';
+
+  const props = defineProps<{
+    isShowAll?: boolean;
+  }>();
 
   const gStores = new GStores();
 
@@ -51,6 +55,21 @@
       index,
     });
   };
+
+  const patList = computed(() => {
+    if (props.isShowAll) {
+      return [
+        <IPat>{
+          patientName: '所有就诊人',
+          patientNameEncry: '所有就诊人',
+          patientId: '',
+        },
+        ...gStores.userStore.patList,
+      ];
+    } else {
+      return gStores.userStore.patList;
+    }
+  });
 </script>
 
 <style lang="scss" scoped>
