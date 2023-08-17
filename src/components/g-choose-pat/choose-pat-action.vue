@@ -8,7 +8,11 @@
     <g-popup title="更换就诊人" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
-          <Pat-List @choose-pat="actionSheetItemClick" :isShowAll="isShowAll" />
+          <Pat-List
+            :showPat="pat"
+            :isShowAll="isShowAll"
+            @choose-pat="actionSheetItemClick"
+          />
         </view>
 
         <view class="add-pat-box">

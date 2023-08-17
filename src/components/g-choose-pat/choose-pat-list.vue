@@ -10,7 +10,7 @@
       :key="pat.patientId"
       @click="patClick(pat, i)"
       :class="{
-        'pat-active': gStores.userStore.patChoose.patientId === pat.patientId,
+        'pat-active': getShowPat.patientId === pat.patientId,
       }"
       class="pat-item"
     >
@@ -28,7 +28,7 @@
       </view>
 
       <view
-        v-if="gStores.userStore.patChoose.patientId === pat.patientId"
+        v-if="getShowPat.patientId === pat.patientId"
         class="iconfont ico-checkbox"
       >
         &#xe6d0;
@@ -44,6 +44,7 @@
 
   const props = defineProps<{
     isShowAll?: boolean;
+    showPat?: IPat;
   }>();
 
   const gStores = new GStores();
@@ -69,6 +70,10 @@
     } else {
       return gStores.userStore.patList;
     }
+  });
+
+  const getShowPat = computed(() => {
+    return props.showPat || gStores.userStore.patChoose;
   });
 </script>
 

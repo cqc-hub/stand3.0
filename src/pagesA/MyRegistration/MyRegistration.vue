@@ -7,8 +7,12 @@
   >
     <g-flag typeFg="405" isShowFg />
     <g-message />
-    <!-- v-if="isShowFilterOrderStatus" -->
-    <g-choose-pat v-if="isShowFilterOrderStatus" isShowAll />
+    <g-choose-pat
+      v-if="isShowFilterOrderStatus"
+      :pat="pat"
+      @choose-pat="patientChoose"
+      isShowAll
+    />
 
     <My-Registration-Head
       v-model:isSelStatus="isSelStatus"
@@ -137,19 +141,20 @@
     getOrderStatusTitle,
   } from './utils/regDetail';
   import { IRegistrationCardItem } from './utils/MyRegistration';
-  import { isAreaProgram } from '@/stores';
+  import { isAreaProgram, IPat } from '@/stores';
 
   import api from '@/service/api';
 
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
 
-  const props = defineProps<{
+  defineProps<{
     thRegisterId?: string;
     allPData?: '1';
   }>();
   const gStores = new GStores();
   const isComplete = ref(false);
+  const pat = ref<IPat>();
 
   const showYuanNeiDaoHanBtn = ref<string[]>([]);
   const showPaiDuiJiaoHaoBtn = ref<string[]>([]);
@@ -255,6 +260,10 @@
     useTBanner(preConsultation);
   };
 
+  const patientChoose = ({ item }) => {
+    pat.value = item;
+  };
+
   const patientChange = async ({ item }) => {
     await getList(item.patientId || '');
 
@@ -308,7 +317,8 @@
     await getConfig();
     const item = patList.value.find(
       (o: any) => getPatLabel(o) === selPatId.value
-    );selPatId
+    );
+    selPatId;
 
     await getList(item?.patientId || '');
   };

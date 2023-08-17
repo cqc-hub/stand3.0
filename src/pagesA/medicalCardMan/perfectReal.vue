@@ -233,12 +233,6 @@
         verifyCode: formData.value[formKey.verifyCode],
       };
 
-      console.log({
-        requestArg,
-        data
-      });
-
-
       await patientUtil
         .addPatient(requestArg)
         .then(async () => {

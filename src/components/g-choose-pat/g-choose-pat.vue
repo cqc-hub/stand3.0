@@ -22,6 +22,7 @@
     <Choose-Pat
       @choose-pat="choosePatHandler"
       :isShowAll="isShowAll"
+      :pat="pat"
       ref="actionSheet"
     />
   </view>
