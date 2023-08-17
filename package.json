@@ -5,6 +5,8 @@
     "dev:mp-weixin": "npm run rewrite:manifest && uni -p mp-weixin",
     "dev:mp-alipay": "npm run rewrite:manifest && uni -p mp-alipay",
     "dev:h5": "npm run rewrite:manifest && uni",
+    "dev:mp-weixin-w": "npm run rewrite:manifest && uni -p mp-weixin --minify",
+    "dev:mp-alipay-w": "npm run rewrite:manifest && uni -p mp-alipay --minify",
     "rewrite:manifest": "ts-node manifest.ts",
     "build:mp-weixin": "npm run rewrite:manifest && uni build -p mp-weixin",
     "build:mp-alipay": "npm run rewrite:manifest && uni build -p mp-alipay",
