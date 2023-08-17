@@ -127,7 +127,7 @@
 
     const data: any = {
       ...formData.value,
-      verifyType: formData.value[formKey.verifyCode] && '2&kq', // '2' 开启 短信验证
+      verifyType: formData.value[formKey.verifyCode] && '2&kq' || '1&bk',
       source,
     };
 
@@ -232,6 +232,12 @@
         patientType: formData.value[formKey.patientType],
         verifyCode: formData.value[formKey.verifyCode],
       };
+
+      console.log({
+        requestArg,
+        data
+      });
+
 
       await patientUtil
         .addPatient(requestArg)
