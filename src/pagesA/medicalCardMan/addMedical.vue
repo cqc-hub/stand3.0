@@ -722,11 +722,11 @@
     // #endif
     // }
 
-    formData.value.patientName = '陈钦川';
-    formData.value.idCard = '330326199908286713';
-    formData.value.location = 'jjjjjjj';
-    formData.value.patientPhone = '15797812958';
-    formData.value.nation = '01';
+    // formData.value.patientName = '陈钦川';
+    // formData.value.idCard = '330326199908286713';
+    // formData.value.location = 'jjjjjjj';
+    // formData.value.patientPhone = '15797812958';
+    // formData.value.nation = '01';
 
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);
