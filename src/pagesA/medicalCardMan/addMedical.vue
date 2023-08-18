@@ -87,8 +87,8 @@
     routerJump,
     OcrFindRes,
     nameConvert,
+    apiAsync,
   } from '@/utils';
-
 
   import dayjs from 'dayjs';
   import globalGl from '@/config/global';
@@ -179,8 +179,7 @@
       ...addressChoose,
     };
 
-    const {  patList } = gStores.userStore;
-
+    const { patList } = gStores.userStore;
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
@@ -243,19 +242,26 @@
       }
     } else {
       await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
-        console.log(e);
         const { respCode, message } = e;
 
         if (respCode === 884801 && (await isOpenOcr())) {
-          gStores.messageStore.showMessage(message, 3000, {
-            closeCallBack() {
-              uni.navigateTo({
-                url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-                  patientPhone: formData.value.patientPhone,
-                }),
-              });
-            },
+          gStores.messageStore.closeMessage();
+
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '患者存在建档记录但手机号不匹配，是否立即修改？',
           });
+
+          if (confirm) {
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+                patientPhone: formData.value.patientPhone,
+              }),
+            });
+          } else {
+            uni.reLaunch({
+              url: '/pagesA/medicalCardMan/medicalCardMan',
+            });
+          }
         }
 
         throw new Error(message);
@@ -716,11 +722,11 @@
     // #endif
     // }
 
-    // formData.value.patientName = '陈钦川';
-    // formData.value.idCard = '330326199908286713';
-    // formData.value.location = 'jjjjjjj';
-    // formData.value.patientPhone = '15797812958';
-    // formData.value.nation = '01';
+    formData.value.patientName = '陈钦川';
+    formData.value.idCard = '330326199908286713';
+    formData.value.location = 'jjjjjjj';
+    formData.value.patientPhone = '15797812958';
+    formData.value.nation = '01';
 
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);

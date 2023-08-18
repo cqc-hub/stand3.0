@@ -10,7 +10,7 @@
     <g-choose-pat
       v-if="isShowFilterOrderStatus"
       :pat="pat"
-      @choose-pat="patientChoose"
+      @choose-pat="patientChange"
       isShowAll
     />
 
@@ -260,14 +260,11 @@
     useTBanner(preConsultation);
   };
 
-  const patientChoose = ({ item }) => {
-    pat.value = item;
-  };
-
   const patientChange = async ({ item }) => {
+    pat.value = item;
     await getList(item.patientId || '');
 
-    if (item._showId) {
+    if (item.patientId) {
       gStores.userStore.updatePatChoose(item);
     }
   };
@@ -275,8 +272,7 @@
   const getConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
-    const { isHosNavigation, isQueuing, isFWBtn, isOrderPay } =
-      orderConfig.value;
+    const { isHosNavigation, isQueuing, isFWBtn } = orderConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;

@@ -102,7 +102,7 @@
     await api.modifyHosPhoneByIdNum(requestArg);
     // #endif
 
-    gStores.messageStore.showMessage('修改建党信息成功', 3000, {
+    gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
       closeCallBack() {
         uni.navigateBack({
           delta: 1,
