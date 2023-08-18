@@ -243,18 +243,21 @@
     } else {
       await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
         const { respCode, message } = e;
+        const { idCard, patientPhone, patientName, idType } = formData.value;
 
-        if (respCode === 884801 && (await isOpenOcr())) {
+        if (respCode === 884801 && idType === '01' && (await isOpenOcr())) {
           gStores.messageStore.closeMessage();
 
           const { confirm } = await apiAsync(uni.showModal, {
             content: '患者存在建档记录但手机号不匹配，是否立即修改？',
           });
-
           if (confirm) {
             uni.navigateTo({
               url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-                patientPhone: formData.value.patientPhone,
+                idCard,
+                patientPhone,
+                patientName,
+                idType,
               }),
             });
           } else {
@@ -722,6 +725,7 @@
     // #endif
     // }
 
+    formData.value.nation = '01';
     nextTick(() => {
       medicalTypeChange(formData.value[formKey.patientType]);
     });

@@ -14,7 +14,9 @@
           'form-item-error': warningKeys.includes(item.key),
           [`form-item-${item.field}`]: true,
         }"
-        :style="`--label-width: ${item.labelWidth || '190rpx'}; ${item.rowStyle || ''}`"
+        :style="`--label-width: ${item.labelWidth || '190rpx'}; ${
+          item.rowStyle || ''
+        }`"
         @tap.prevent.stop="clickContainer(item)"
         class="form-item"
       >
@@ -35,14 +37,20 @@
                 :item="item"
                 :value="
                   item.field === 'select'
-                    ? ServerStaticData.getOptionsLabel(item.options, value[item.key])
+                    ? ServerStaticData.getOptionsLabel(
+                        item.options,
+                        value[item.key]
+                      )
                     : value[item.key]
                 "
                 name="showBody"
               >
                 {{
                   item.field === 'select'
-                    ? ServerStaticData.getOptionsLabel(item.options, value[item.key])
+                    ? ServerStaticData.getOptionsLabel(
+                        item.options,
+                        value[item.key]
+                      )
                     : value[item.key]
                 }}
               </slot>
@@ -51,7 +59,9 @@
 
           <block v-else>
             <uni-easyinput
-              v-if="item.field === 'input-text' || item.field === 'input-verify'"
+              v-if="
+                item.field === 'input-text' || item.field === 'input-verify'
+              "
               :placeholder="item.placeholder"
               :inputBorder="false"
               :clearable="false"
@@ -83,7 +93,12 @@
                   :inputBorder="false"
                   :clearable="false"
                   :placeholderStyle="inputPlaceHolderStyle(item)"
-                  :value="ServerStaticData.getOptionsLabel(item.options, value[item.key])"
+                  :value="
+                    ServerStaticData.getOptionsLabel(
+                      item.options,
+                      value[item.key]
+                    )
+                  "
                   class="form-input"
                 />
               </view>
@@ -223,350 +238,363 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, withDefaults, computed } from 'vue';
+  import { ref, withDefaults, computed } from 'vue';
 
-import type {
-  TInstance,
-  ISelectOptions,
-  IRule,
-  IInputVerifyInstance,
-  ISwitchInstance,
-} from '@/components/g-form/index';
-import { useMessageStore } from '@/stores';
-import { ServerStaticData, useOcr } from '@/utils';
-import api from '@/service/api';
+  import type {
+    TInstance,
+    ISelectOptions,
+    IRule,
+    IInputVerifyInstance,
+    ISwitchInstance,
+  } from '@/components/g-form/index';
+  import { useMessageStore } from '@/stores';
+  import { ServerStaticData, useOcr } from '@/utils';
+  import api from '@/service/api';
 
-import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
+  import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
 
-/**
- * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
- */
+  /**
+   * 部分函数、正则等特殊对象在小程序无法prop传递， 请使用 setList(list)
+   */
 
-const props = withDefaults(
-  defineProps<{
-    value: BaseObject;
-    // 加粗内容
-    bodyBold?: boolean;
+  const props = withDefaults(
+    defineProps<{
+      value: BaseObject;
+      // 加粗内容
+      bodyBold?: boolean;
 
-    hideRowBorder?: boolean;
-    // 是否展示必填的 * 号
-    showRequireIcon?: boolean;
-    // 使用 uni 的选择器
-    selectInUniDataPicker?: boolean;
-    // 使用 uni 的 toast
-    warningInUni?: boolean;
-  }>(),
-  {
-    value: () => ({}),
-    bodyBold: false,
-    showRequireIcon: false,
-  }
-);
+      hideRowBorder?: boolean;
+      // 是否展示必填的 * 号
+      showRequireIcon?: boolean;
+      // 使用 uni 的选择器
+      selectInUniDataPicker?: boolean;
+      // 使用 uni 的 toast
+      warningInUni?: boolean;
+    }>(),
+    {
+      value: () => ({}),
+      bodyBold: false,
+      showRequireIcon: false,
+    }
+  );
 
-const warningKeys = ref<string[]>([]);
-const messageOptions = computed(() => {
-  return {
-    uniToast: props.warningInUni || false,
-  };
-});
+  const warningKeys = ref<string[]>([]);
+  const messageOptions = computed(() => {
+    return {
+      uniToast: props.warningInUni || false,
+    };
+  });
 
-const emits = defineEmits([
-  'update:value',
-  'submit',
-  'change',
-  'picker-change',
-  'input-blur',
-  'select-change',
-  'address-change',
-  'ocr-ident',
-  'row-click',
-  'disabled-click',
-]);
+  const emits = defineEmits([
+    'update:value',
+    'submit',
+    'change',
+    'picker-change',
+    'input-blur',
+    'select-change',
+    'address-change',
+    'ocr-ident',
+    'row-click',
+    'disabled-click',
+  ]);
 
-const maskValueItem = (item: TInstance) => {
-  const { key, inputMask } = item;
+  const maskValueItem = (item: TInstance) => {
+    const { key, inputMask } = item;
 
-  const v = props.value[key];
-  if (inputMask) {
-    return inputMask(v, item);
-  } else {
-    return v;
-  }
-};
-
-const inputPlaceHolderStyle = (item: TInstance) => {
-  const key = item.key;
-  if (warningKeys.value.includes(key)) {
-    if (props.value[item.key]) {
-      return `color: var(--hr-neutral-color-5);
-  		font-size: var(--hr-font-size-base);`;
+    const v = props.value[key];
+    if (inputMask) {
+      return inputMask(v, item);
     } else {
-      return `
+      return v;
+    }
+  };
+
+  const inputPlaceHolderStyle = (item: TInstance) => {
+    const key = item.key;
+    if (warningKeys.value.includes(key)) {
+      if (props.value[item.key]) {
+        return `color: var(--hr-neutral-color-5);
+  		font-size: var(--hr-font-size-base);`;
+      } else {
+        return `
         font-size: var(--hr-font-size-base);
         color: red;
         `;
-    }
-  } else {
-    return `color: var(--hr-neutral-color-5);
+      }
+    } else {
+      return `color: var(--hr-neutral-color-5);
   		font-size: var(--hr-font-size-base);`;
-  }
-};
-
-const _actionSheet = ref();
-const dataPicker = ref();
-const actionSheet = ref();
-const actionSheetOpt = ref<ISelectOptions[]>([]);
-const list = ref<TInstance[]>([]);
-const messageStore = useMessageStore();
-
-const verifyTip = ref<string>('');
-let cacheItem: null | TInstance = null;
-let timer: null | number = null;
-const wait = (n: number) => new Promise((r) => setTimeout(r, n));
-
-const clearTimer = () => {
-  if (timer) {
-    clearTimeout(timer);
-    timer = null;
-    verifyTip.value = '';
-  }
-};
-
-const useOcrAction = () => {
-  useOcr().then((res) => {
-    emits('ocr-ident', res);
-  });
-};
-
-const requestVerify = async (item: IInputVerifyInstance) => {
-  if (timer) {
-    clearTimer();
-  } else {
-    const { phoneKey } = item;
-
-    const phoneItem = list.value.find((o) => o.key === phoneKey);
-
-    if (phoneItem) {
-      const phone = props.value[phoneItem.key];
-      await validatorItem(phoneItem, phone);
-
-      uni.showLoading({
-        title: '请求中...',
-        mask: true,
-      });
-
-      await api.sendVerifyCode({
-        patientPhone: phone,
-      });
-
-      let waitTime = item.verifySecond;
-
-      verifyTip.value = `${waitTime--}s后重新发送`;
-      timer = (setInterval(() => {
-        verifyTip.value = `${waitTime--}s后重新发送`;
-
-        if (waitTime <= -1) {
-          clearTimer();
-        }
-      }, 1000) as unknown) as number;
-      uni.hideLoading();
-    } else {
-      messageStore.showMessage(
-        '请检查 短信对应 phone 字段是否存在',
-        3000,
-        messageOptions.value
-      );
-    }
-  }
-};
-
-const setList = async function (initList: TInstance[]) {
-  const defaultKeys = Reflect.ownKeys(props.value);
-  const cache: BaseObject = {};
-
-  const len = initList.length >>> 0;
-  let k = 0;
-
-  while (k < len) {
-    const o = initList[k++];
-    const { key, field } = o;
-    if (!defaultKeys.includes(key)) {
-      if (field === 'switch') {
-        cache[key] = false;
-      } else {
-        cache[key] = '';
-      }
-    }
-
-    if (field === 'address' && !o.options) {
-      o.options = await ServerStaticData.getAddressData();
-    }
-
-    if (field === 'select') {
-      const { autoOptions, options } = o;
-
-      if (!options.length && autoOptions) {
-        switch (autoOptions) {
-          case 'nationTerms':
-            o.options = await ServerStaticData.getNationTerms();
-            break;
-
-          case 'patientTypeTerms':
-            o.options = await ServerStaticData.getPatientTypeTerms();
-            break;
-
-          case 'idTypeTerms':
-            o.options = await ServerStaticData.getIdTypeTerms();
-            break;
-
-          default:
-            break;
-        }
-      }
-    }
-  }
-
-  setData(cache);
-  list.value = initList;
-};
-
-const clickContainer = function (item: TInstance) {
-  if (item.disabled) {
-    emits('disabled-click', item);
-    return;
-  }
-
-  emits('row-click', { item });
-  if (item.field === 'select' || item.field === 'address') {
-    const { options } = item;
-
-    if (!options) {
-      return;
-    }
-
-    actionSheetOpt.value = options;
-    cacheItem = item;
-
-    if (item.field === 'select') {
-      if (props.selectInUniDataPicker) {
-        _actionSheet.value.show();
-      } else {
-        actionSheet.value.showActionSheet();
-      }
-    }
-
-    if (item.field === 'address') {
-      dataPicker.value.show();
-    }
-  }
-};
-
-const actionItemClick = function ({ item }: { item: ISelectOptions }) {
-  if (!cacheItem) return;
-  const { value } = item;
-
-  clearItemWarning(cacheItem.key);
-
-  emits('select-change', {
-    item: { ...cacheItem },
-    value,
-  });
-
-  if (cacheItem.field === 'select') {
-    changeSelect(cacheItem, value);
-    cacheItem = null;
-  }
-};
-
-const pickerChange = function (e: { detail: { value: { text: string; value: any }[] } }) {
-  if (!cacheItem) return;
-  const { value: choose } = e.detail;
-  const { key, field } = cacheItem;
-
-  clearItemWarning(cacheItem.key);
-  if (field === 'address') {
-    addressChange(cacheItem, choose);
-  } else if (field === 'select') {
-    actionItemClick({
-      item: choose[0] as any,
-    });
-  } else {
-    emits('picker-change', {
-      item: cacheItem,
-      value: choose,
-    });
-  }
-};
-
-const addressChange = (item: TInstance, v) => {
-  const { key, field } = item;
-
-  if (field === 'address') {
-    const selLabels = v.map((o) => o.text).join('');
-    setData({
-      [key]: selLabels,
-    });
-
-    emits('address-change', {
-      item: item,
-      value: v,
-    });
-  }
-};
-
-const clearItemWarning = (key: string) => {
-  if (warningKeys.value.length) {
-    const idx = warningKeys.value.findIndex((o) => o === key);
-
-    if (idx !== -1) {
-      warningKeys.value.splice(idx, 1);
-    }
-  }
-};
-
-const clearWarning = () => {
-  warningKeys.value = [];
-};
-
-const setData = function (value: BaseObject, item?: TInstance) {
-  const oldValue = item ? props.value[item.key] : undefined;
-
-  emits('update:value', {
-    ...props.value,
-    ...value,
-  });
-
-  if (item) {
-    const key = Object.keys(value)[0];
-
-    clearItemWarning(key);
-
-    emits('change', {
-      item,
-      value: value[key],
-      oldValue,
-    });
-  }
-};
-
-const ruleMatch = (rule: IRule | IRule[], value: string, item: TInstance) => {
-  const matchValue = (r: IRule) => {
-    const _rule = r.rule;
-    const _r = value.match(_rule);
-
-    if (_r) {
-      const [_matchValue] = _r;
-      return _matchValue === value;
-    } else {
-      return false;
     }
   };
 
-  if (Array.isArray(rule)) {
-    rule.map((o) => {
-      const flag = matchValue(o);
+  const _actionSheet = ref();
+  const dataPicker = ref();
+  const actionSheet = ref();
+  const actionSheetOpt = ref<ISelectOptions[]>([]);
+  const list = ref<TInstance[]>([]);
+  const messageStore = useMessageStore();
+
+  const verifyTip = ref<string>('');
+  let cacheItem: null | TInstance = null;
+  let timer: null | number = null;
+
+  const clearTimer = () => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+      verifyTip.value = '';
+    }
+  };
+
+  const useOcrAction = () => {
+    useOcr().then((res) => {
+      emits('ocr-ident', res);
+    });
+  };
+
+  const requestVerify = async (item: IInputVerifyInstance) => {
+    if (timer) {
+      clearTimer();
+    } else {
+      const { phoneKey } = item;
+
+      const phoneItem = list.value.find((o) => o.key === phoneKey);
+
+      if (phoneItem) {
+        const phone = props.value[phoneItem.key];
+        await validatorItem(phoneItem, phone);
+
+        uni.showLoading({
+          title: '请求中...',
+          mask: true,
+        });
+
+        await api.sendVerifyCode({
+          patientPhone: phone,
+        });
+
+        let waitTime = item.verifySecond;
+
+        verifyTip.value = `${waitTime--}s后重新发送`;
+        timer = setInterval(() => {
+          verifyTip.value = `${waitTime--}s后重新发送`;
+
+          if (waitTime <= -1) {
+            clearTimer();
+          }
+        }, 1000) as unknown as number;
+        uni.hideLoading();
+      } else {
+        messageStore.showMessage(
+          '请检查 短信对应 phone 字段是否存在',
+          3000,
+          messageOptions.value
+        );
+      }
+    }
+  };
+
+  const setList = async function (initList: TInstance[]) {
+    const defaultKeys = Reflect.ownKeys(props.value);
+    const cache: BaseObject = {};
+
+    const len = initList.length >>> 0;
+    let k = 0;
+
+    while (k < len) {
+      const o = initList[k++];
+      const { key, field } = o;
+      if (!defaultKeys.includes(key)) {
+        if (field === 'switch') {
+          cache[key] = false;
+        } else {
+          cache[key] = '';
+        }
+      }
+
+      if (field === 'address' && !o.options) {
+        o.options = await ServerStaticData.getAddressData();
+      }
+
+      if (field === 'select') {
+        const { autoOptions, options } = o;
+
+        if (!options.length && autoOptions) {
+          switch (autoOptions) {
+            case 'nationTerms':
+              o.options = await ServerStaticData.getNationTerms();
+              break;
+
+            case 'patientTypeTerms':
+              o.options = await ServerStaticData.getPatientTypeTerms();
+              break;
+
+            case 'idTypeTerms':
+              o.options = await ServerStaticData.getIdTypeTerms();
+              break;
+
+            default:
+              break;
+          }
+        }
+      }
+    }
+
+    setData(cache);
+    list.value = initList;
+  };
+
+  const clickContainer = function (item: TInstance) {
+    if (item.disabled) {
+      emits('disabled-click', item);
+      return;
+    }
+
+    emits('row-click', { item });
+    if (item.field === 'select' || item.field === 'address') {
+      const { options } = item;
+
+      if (!options) {
+        return;
+      }
+
+      actionSheetOpt.value = options;
+      cacheItem = item;
+
+      if (item.field === 'select') {
+        if (props.selectInUniDataPicker) {
+          _actionSheet.value.show();
+        } else {
+          actionSheet.value.showActionSheet();
+        }
+      }
+
+      if (item.field === 'address') {
+        dataPicker.value.show();
+      }
+    }
+  };
+
+  const actionItemClick = function ({ item }: { item: ISelectOptions }) {
+    if (!cacheItem) return;
+    const { value } = item;
+
+    clearItemWarning(cacheItem.key);
+
+    emits('select-change', {
+      item: { ...cacheItem },
+      value,
+    });
+
+    if (cacheItem.field === 'select') {
+      changeSelect(cacheItem, value);
+      cacheItem = null;
+    }
+  };
+
+  const pickerChange = function (e: {
+    detail: { value: { text: string; value: any }[] };
+  }) {
+    if (!cacheItem) return;
+    const { value: choose } = e.detail;
+    const { key, field } = cacheItem;
+
+    clearItemWarning(cacheItem.key);
+    if (field === 'address') {
+      addressChange(cacheItem, choose);
+    } else if (field === 'select') {
+      actionItemClick({
+        item: choose[0] as any,
+      });
+    } else {
+      emits('picker-change', {
+        item: cacheItem,
+        value: choose,
+      });
+    }
+  };
+
+  const addressChange = (item: TInstance, v) => {
+    const { key, field } = item;
+
+    if (field === 'address') {
+      const selLabels = v.map((o) => o.text).join('');
+      setData({
+        [key]: selLabels,
+      });
+
+      emits('address-change', {
+        item: item,
+        value: v,
+      });
+    }
+  };
+
+  const clearItemWarning = (key: string) => {
+    if (warningKeys.value.length) {
+      const idx = warningKeys.value.findIndex((o) => o === key);
+
+      if (idx !== -1) {
+        warningKeys.value.splice(idx, 1);
+      }
+    }
+  };
+
+  const clearWarning = () => {
+    warningKeys.value = [];
+  };
+
+  const setData = function (value: BaseObject, item?: TInstance) {
+    const oldValue = item ? props.value[item.key] : undefined;
+
+    emits('update:value', {
+      ...props.value,
+      ...value,
+    });
+
+    if (item) {
+      const key = Object.keys(value)[0];
+
+      clearItemWarning(key);
+
+      emits('change', {
+        item,
+        value: value[key],
+        oldValue,
+      });
+    }
+  };
+
+  const ruleMatch = (rule: IRule | IRule[], value: string, item: TInstance) => {
+    const matchValue = (r: IRule) => {
+      const _rule = r.rule;
+      const _r = value.match(_rule);
+
+      if (_r) {
+        const [_matchValue] = _r;
+        return _matchValue === value;
+      } else {
+        return false;
+      }
+    };
+
+    if (Array.isArray(rule)) {
+      rule.map((o) => {
+        const flag = matchValue(o);
+        if (!flag) {
+          messageStore.showMessage(o.message, 3000, messageOptions.value);
+          const key = item.key;
+
+          if (!warningKeys.value.includes(key)) {
+            warningKeys.value.push(key);
+          }
+          throw new Error(item.label + ': 校验失败(rule)');
+        }
+      });
+    } else {
+      const flag = matchValue(rule);
       if (!flag) {
-        messageStore.showMessage(o.message, 3000, messageOptions.value);
+        messageStore.showMessage(rule.message, 3000, messageOptions.value);
         const key = item.key;
 
         if (!warningKeys.value.includes(key)) {
@@ -574,145 +602,134 @@ const ruleMatch = (rule: IRule | IRule[], value: string, item: TInstance) => {
         }
         throw new Error(item.label + ': 校验失败(rule)');
       }
-    });
-  } else {
-    const flag = matchValue(rule);
-    if (!flag) {
-      messageStore.showMessage(rule.message, 3000, messageOptions.value);
-      const key = item.key;
+    }
+  };
+
+  const validatorItem = async (item: TInstance, v: any) => {
+    const { rule, key, required, emptyMessage, validator } = item;
+    const isFillValue = !!(v || v === 0);
+
+    if (required && !isFillValue) {
+      const defaultEmptyMessage = item.label + ' 不能为空';
+      messageStore.showMessage(
+        emptyMessage || defaultEmptyMessage,
+        3000,
+        messageOptions.value
+      );
 
       if (!warningKeys.value.includes(key)) {
         warningKeys.value.push(key);
       }
-      throw new Error(item.label + ': 校验失败(rule)');
+      throw new Error(item.label + ': 校验失败(empty)');
     }
-  }
-};
 
-const validatorItem = async (item: TInstance, v: any) => {
-  const { rule, key, required, emptyMessage, validator } = item;
-  const isFillValue = !!(v || v === 0);
+    if (rule && isFillValue) {
+      ruleMatch(rule, v, item);
+    }
 
-  if (required && !isFillValue) {
-    const defaultEmptyMessage = item.label + ' 不能为空';
-    messageStore.showMessage(
-      emptyMessage || defaultEmptyMessage,
-      3000,
-      messageOptions.value
+    if (validator) {
+      const { success, message } = await validator(v, item);
+
+      if (!success) {
+        messageStore.showMessage(message, 3000, messageOptions.value);
+        if (!warningKeys.value.includes(key)) {
+          warningKeys.value.push(key);
+        }
+        throw new Error(item.label + ': 校验失败(validator)');
+      }
+    }
+  };
+
+  const submit = async function () {
+    const data = props.value;
+    const len = list.value.length >>> 0;
+    let k = 0;
+
+    while (k < len) {
+      const item = list.value[k++];
+
+      await validatorItem(item, data[item.key]);
+    }
+
+    const tramData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => {
+        let v = value;
+        if (typeof v === 'string') {
+          v = v.trim();
+        }
+        return [key, v];
+      })
     );
 
-    if (!warningKeys.value.includes(key)) {
-      warningKeys.value.push(key);
+    emits('submit', {
+      data: tramData,
+    });
+  };
+
+  const changeInput = (item: TInstance, v: string) => {
+    // 微信有bug 需要判断下
+    if (typeof v === 'string') {
+      setData(
+        {
+          [item.key]: v,
+        },
+        item
+      );
     }
-    throw new Error(item.label + ': 校验失败(empty)');
-  }
+  };
 
-  if (rule && isFillValue) {
-    ruleMatch(rule, v, item);
-  }
+  const inputBlur = (item: TInstance, e) => {
+    const {
+      detail: { value },
+    } = e;
 
-  if (validator) {
-    const { success, message } = await validator(v, item);
+    emits('input-blur', {
+      item,
+      value,
+    });
 
-    if (!success) {
-      messageStore.showMessage(message, 3000, messageOptions.value);
-      if (!warningKeys.value.includes(key)) {
-        warningKeys.value.push(key);
-      }
-      throw new Error(item.label + ': 校验失败(validator)');
-    }
-  }
-};
+    changeInput(item, value);
+  };
 
-const submit = async function () {
-  const data = props.value;
-  const len = list.value.length >>> 0;
-  let k = 0;
+  const changeSelect = function (item: TInstance, v: any) {
+    if (item.field !== 'select') return;
 
-  while (k < len) {
-    const item = list.value[k++];
-
-    await validatorItem(item, data[item.key]);
-  }
-
-  const tramData = Object.fromEntries(
-    Object.entries(data).map(([key, value]) => {
-      let v = value;
-      if (typeof v === 'string') {
-        v = v.trim();
-      }
-      return [key, v];
-    })
-  );
-
-  emits('submit', {
-    data: tramData,
-  });
-};
-
-const changeInput = (item: TInstance, v: string) => {
-  // 微信有bug 需要判断下
-  if (typeof v === 'string') {
     setData(
       {
         [item.key]: v,
       },
       item
     );
-  }
-};
+  };
 
-const inputBlur = (item: TInstance, e) => {
-  const {
-    detail: { value },
-  } = e;
+  const changeTimePicker = function (item: TInstance, v: any) {
+    const value = typeof v == 'string' ? v : v.join(' - ');
 
-  emits('input-blur', {
-    item,
-    value,
+    setData(
+      {
+        [item.key]: value,
+      },
+      item
+    );
+  };
+
+  const changeSwitch = function (item: ISwitchInstance, { detail }) {
+    setData(
+      {
+        [item.key]: detail.value,
+      },
+      item
+    );
+  };
+
+  defineExpose({
+    setList,
+    submit,
+    clearWarning,
+    clearItemWarning
   });
-
-  changeInput(item, value);
-};
-
-const changeSelect = function (item: TInstance, v: any) {
-  if (item.field !== 'select') return;
-
-  setData(
-    {
-      [item.key]: v,
-    },
-    item
-  );
-};
-
-const changeTimePicker = function (item: TInstance, v: any) {
-  const value = typeof v == 'string' ? v : v.join(' - ');
-
-  setData(
-    {
-      [item.key]: value,
-    },
-    item
-  );
-};
-
-const changeSwitch = function (item: ISwitchInstance, { detail }) {
-  setData(
-    {
-      [item.key]: detail.value,
-    },
-    item
-  );
-};
-
-defineExpose({
-  setList,
-  submit,
-  clearWarning,
-});
 </script>
 
 <style lang="scss" scoped>
-@import './css';
+  @import './css';
 </style>

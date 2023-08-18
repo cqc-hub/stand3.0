@@ -8,7 +8,6 @@
   // border-bottom: 1rpx solid var(--hr-neutral-color-2);
   color: var(--hr-neutral-color-8);
 
-
   .label {
     padding-top: 32rpx;
     height: 100%;
@@ -19,12 +18,11 @@
 
     &.item-require {
       &::after {
-        content: '*';
+        content: "*";
         color: var(--hr-error-color-6);
       }
     }
   }
-
 
   .container-body {
     display: flex;
@@ -87,9 +85,7 @@
   }
 
   &.form-item-bold {
-
     &.form-item-filled {
-
       :deep(input),
       :deep(textarea),
       .content-show {
@@ -102,15 +98,12 @@
     pointer-events: none;
   }
 
-
   &.form-item-disabled {
-
     // wx
     :deep(input),
     :deep(textarea) {
       color: var(--hr-neutral-color-8) !important;
     }
-
 
     // alipay
     &:deep(.is-disabled) {
@@ -118,7 +111,7 @@
 
       input,
       textarea {
-        color: var(--hr-neutral-color-8) !important;
+        // color: var(--hr-neutral-color-8) !important;
       }
     }
   }
@@ -134,14 +127,31 @@
     }
   }
 
-}
+  &.form-item-error {
+    :deep(input),
+    :deep(textarea),
+    input,
+    textarea {
+      color: var(--hr-error-color-6) !important;
+    }
 
-.form-item-error {
-  :deep(input),
-  :deep(textarea),
-  input,
-  textarea {
-    color: var(--hr-error-color-6) !important;
+    .form-item-disabled {
+      // wx
+      :deep(input),
+      :deep(textarea) {
+        color: var(--hr-error-color-6) !important;
+      }
+
+      // alipay
+      &:deep(.is-disabled) {
+        opacity: 1 !important;
+
+        input,
+        textarea {
+          color: var(--hr-error-color-6) !important;
+        }
+      }
+    }
   }
 }
 

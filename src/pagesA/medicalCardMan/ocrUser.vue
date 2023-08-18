@@ -41,35 +41,23 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, nextTick } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common/utils';
+  import { GStores, useOcr, base64Src } from '@/utils';
+  import { pickTempItem } from './utils';
+
   import api from '@/service/api';
-
-  import {
-    GStores,
-    routerJump,
-    ServerStaticData,
-    wait,
-    useOcr,
-    base64Src,
-  } from '@/utils';
-
-  import {
-    pickTempItem,
-    formKey,
-    TFormKeys,
-    getDefaultFormData,
-    formatterSubPatientData,
-    loginAuthAlipay,
-  } from './utils';
 
   const gStores = new GStores();
   const pageProps = ref(
     <
       {
         patientPhone: string;
+        idCard: string;
+        patientName: string;
+        idType: string;
       }
     >{}
   );
@@ -80,9 +68,10 @@
     imgWidth: 0,
     imgHeight: 0,
   });
+  const isComplete = ref(false);
 
   const formData = ref<BaseObject>({
-    idType: '01',
+    // idType: '01',
     idCardOcrEn: '',
     patientNameOcrEn: '',
   });
@@ -125,11 +114,13 @@
       } else {
         idCardUrl.value = image;
       }
-
+      isComplete.value = true;
       formData.value.idCard = idCard;
       formData.value.patientName = name;
       formData.value.idCardOcrEn = idCardOcrEn;
       formData.value.patientNameOcrEn = patientNameOcrEn;
+
+      gform.value.clearItemWarning('idCard');
     }
   };
 
@@ -146,13 +137,39 @@
     idTypeItem.showSuffixArrowIcon = false;
 
     formList.map((o) => {
+      const { key } = o;
+
       o.disabled = true;
       o.placeholder = '上传身份证自动填入';
+
+      if (key == 'idCard') {
+        o.validator = async (v) => {
+          if (!isComplete.value) {
+            return {
+              success: false,
+              message: `请先上传本人身份证再进行验证`,
+            };
+          }
+
+          if (v === pageProps.value.idCard) {
+            return {
+              success: true,
+            };
+          }
+
+          return {
+            success: false,
+            message: `请上传${pageProps.value.patientName}的本人身份证进行验证`,
+          };
+        };
+      }
     });
 
     Object.assign(formData.value, pageProps.value);
 
-    gform.value.setList(formList);
+    nextTick(() => {
+      gform.value.setList(formList);
+    });
   };
 
   onLoad((opt) => {
