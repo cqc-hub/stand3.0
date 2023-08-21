@@ -950,11 +950,11 @@ export class PatientUtils extends LoginUtils {
     if (this.userStore.patList.length) {
       // 自动切换默认就诊人 （产品拒绝加上）
       // if (pat.defaultFlag === '1') {
-      // 	const newDefaultPat = this.userStore.patList[0];
-      // 	this.changeDefault({
-      // 		patientId: newDefaultPat.patientId,
-      // 		defaultFalg: true
-      // 	});
+      //   const newDefaultPat = this.userStore.patList[0];
+      //   this.changeDefault({
+      //     patientId: newDefaultPat.patientId,
+      //     defaultFalg: true,
+      //   });
       // }
     }
   }

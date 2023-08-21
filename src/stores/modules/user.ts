@@ -16,7 +16,7 @@ const userStore = defineStore('user', {
       'patList',
       'patChoose',
       'clickPat',
-      'authPhoneVerify'
+      'authPhoneVerify',
     ],
   },
 
@@ -85,16 +85,19 @@ const userStore = defineStore('user', {
 
     updatePatList(patList: IPat[]) {
       this.patList = patList;
-
-      if (!Object.keys(this.patChoose).length) {
-        const patDefault = patList.find((o) => o.defaultFlag === '1');
-        if (patDefault) {
-          this.updatePatChoose(patDefault);
-        } else {
-          if (patList.length) {
-            this.updatePatChoose(patList[0]);
+      if (patList.length) {
+        if (!Object.keys(this.patChoose).length) {
+          const patDefault = patList.find((o) => o.defaultFlag === '1');
+          if (patDefault) {
+            this.updatePatChoose(patDefault);
+          } else {
+            if (patList.length) {
+              this.updatePatChoose(patList[0]);
+            }
           }
         }
+      } else {
+        this.updatePatChoose(<any>{});
       }
     },
 
