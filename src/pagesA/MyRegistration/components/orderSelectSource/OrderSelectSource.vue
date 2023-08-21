@@ -348,7 +348,8 @@
     background-color: var(--hr-neutral-color-1);
 
     &.container-href-day {
-      max-height: calc(var(--h-popup-max-height) - 90rpx);
+      // max-height: calc(var(--h-popup-max-height) - 90rpx);
+      max-height: calc(80vh - 90rpx);
       min-height: 400rpx;
     }
 
