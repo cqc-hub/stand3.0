@@ -46,7 +46,7 @@ export function cloneUtil<T>(target): T {
  * @param query 对象
  * @returns 对象数据拼接在参数上
  */
-export const joinQuery = function (url: string, query={}) {
+export const joinQuery = function (url: string, query = {}) {
   const strQuery = Object.entries(query)
     .map(([key, value]) => `${key}=${value ?? ''}`)
     .join('&');
@@ -60,7 +60,7 @@ export const joinQuery = function (url: string, query={}) {
 
 export const joinQueryForUrl = (url: string, pageArg) => {
   const p = Object.entries(pageArg)
-    .filter(([key, value]) => value !== undefined)
+    .filter(([key, value]) => value || value === 0)
     .map(([key, value]) => {
       return [key, encodeURIComponent(value! + '')];
     });
@@ -76,7 +76,7 @@ export const deQueryForUrl = <T = BaseObject>(props): T => {
       const dePropList =
         (props && Object.entries(props)).map(([key, value]) => [
           key,
-          value && decodeURIComponent(value) || value,
+          (value && decodeURIComponent(value)) || value,
         ]) || [];
 
       return <T>Object.fromEntries(dePropList);

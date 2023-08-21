@@ -480,14 +480,6 @@
       refOldDialog.value.show();
     }
   };
-
-  const aaa = () => {
-    uni.navigateToMiniProgram({
-      appId: 'wx7acc3ecadc08f7ea',
-      path: 'pagesA/MyRegistration/selDepartment?type=order&hosId=13002&thRegisterId=aa942cc03b3f11ee9ba60995a3ea19f3',
-      envVersion: 'trial'
-    });
-  };
 </script>
 
 <style lang="scss" scoped>
