@@ -291,10 +291,10 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     if (!payload) return;
     const { target, detail } = payload;
 
-    if (!target.code) {
-      this.messageStore.showMessage('用户未授权，请重新登录', 3000);
-      return Promise.reject();
-    }
+    // if (!target.code) {
+    //   this.messageStore.showMessage('用户未授权，请重新登录', 3000);
+    //   return Promise.reject();
+    // }
 
     if (detail.errMsg !== 'getPhoneNumber:ok') {
       this.messageStore.showMessage('用户取消授权', 3000);
@@ -320,7 +320,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
                 code,
                 accountType,
               },
-              '/wx/getAppletsOpenId',
+              '/wx/getWxOpenId',
               {
                 isOutArgs: true,
               }
@@ -328,7 +328,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
           );
 
           if (result) {
-            const { openId, sessionKey } = result;
+            const { openId, sessionKeyEn } = result;
             const {
               encryptedData: encrypData,
               iv: ivData,
@@ -340,7 +340,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
             const requestData = {
               accountType,
               openId,
-              sessionKey,
+              sessionKeyEn,
               phoneNumberCode,
               ivData,
               encrypData,
