@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx799315279808c901",
+    "appid": "wx7b1baac614ebed72",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -62,21 +62,21 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.11.0",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004103625411"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -88,7 +88,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴第二医院",
+  "name": "西安市红会医院",
   "h5": {
     "router": {
       "base": "./"

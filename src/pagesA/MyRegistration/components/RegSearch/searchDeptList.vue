@@ -7,7 +7,8 @@
         class="item color-444 f36 g-bold g-border p32"
         @click="itemClick(item)"
       >
-        {{ item.deptName }}
+        <view>{{ item.deptName }}</view>
+        <view v-if="item.hosName" class="f28 mt12 color-666">{{ item.hosName }}</view>
       </view>
     </block>
 

@@ -31,6 +31,7 @@ export interface IDeptItem {
   deptName: string;
   hosDeptId: string;
   hosId: string;
+  hosName: string;
 }
 
 const KEY_REG_SEARCH_HISTORY = 'orgsearchhistory';
@@ -115,7 +116,7 @@ export class UseRegSearch extends GStores {
       hosDocId,
       hosDeptId,
       docTitleName,
-      // hosId
+      hosId
     } = item;
 
     // const { hosId } = this.pageProp.value;
@@ -124,7 +125,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      // hosId,
+      hosId,
       docTitleName,
       hosDeptId,
     };
