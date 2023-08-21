@@ -72,7 +72,7 @@
     "plugins": {
       "auth-pay-plugin": {
         "version": "*",
-        "provider": "2021003167601013"
+        "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,

@@ -1,11 +1,7 @@
 import { nextTick, ref } from 'vue';
 import { GStores, CDebounce } from '@/utils';
 import { setLocalStorage, getLocalStorage, joinQuery } from '@/common';
-import {
-  type IRegSearchHistoryItem,
-  ServerStaticData,
-  type ISystemConfig,
-} from '@/utils';
+import { type IRegSearchHistoryItem, ServerStaticData } from '@/utils';
 
 import api from '@/service/api';
 
@@ -119,7 +115,7 @@ export class UseRegSearch extends GStores {
       hosDocId,
       hosDeptId,
       docTitleName,
-      hosId
+      // hosId
     } = item;
 
     // const { hosId } = this.pageProp.value;
@@ -128,7 +124,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      hosId,
+      // hosId,
       docTitleName,
       hosDeptId,
     };
@@ -155,7 +151,7 @@ export class UseRegSearch extends GStores {
   }
 
   async searchList(searchContent: string) {
-    const {  clinicalType } = this.pageProp.value;
+    const { clinicalType } = this.pageProp.value;
     const { source } = this.globalStore.browser;
 
     const args = {

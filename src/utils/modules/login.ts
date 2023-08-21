@@ -320,7 +320,8 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
                 code,
                 accountType,
               },
-              '/wx/getWxOpenId',
+              '/wx/getAppletsOpenId',
+              // '/wx/getWxOpenId',
               {
                 isOutArgs: true,
               }
@@ -328,7 +329,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
           );
 
           if (result) {
-            const { openId, sessionKeyEn } = result;
+            const { openId, sessionKeyEn, sessionKey } = result;
             const {
               encryptedData: encrypData,
               iv: ivData,
@@ -341,6 +342,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
               accountType,
               openId,
               sessionKeyEn,
+              sessionKey,
               phoneNumberCode,
               ivData,
               encrypData,

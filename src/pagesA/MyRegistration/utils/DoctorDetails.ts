@@ -128,7 +128,7 @@ export class UseDoctorDetail extends GStores {
       docName,
       hosDeptId,
       hosDocId,
-      // hosId,
+      hosId,
       source,
     };
 
