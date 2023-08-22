@@ -412,8 +412,6 @@
   })
 
   onLoad((p) => {
-    console.log('获得参数-----', p);
-
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);
@@ -433,7 +431,6 @@
     if (alipayPid) {
       getPowerEnerg(repId);
     }
-    console.log(checkoutReportList.value);
   };
   const goDoctor = () => {
     const path = '/pagesA/MyRegistration/DoctorDetails';
@@ -485,7 +482,6 @@
         uni.getClipboardData({
           success: function (res) {
             gStore.messageStore.showMessage('内容已复制');
-            console.log(res.data);
           },
         });
       },

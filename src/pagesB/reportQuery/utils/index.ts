@@ -283,11 +283,6 @@ export const getShareTotalUrl = (query, path) => {
 
   const outTime = 7;
   const _query = joinQueryForUrl('', data).slice(1);
-  console.log({
-    pppp: _query,
-    len: _query.length,
-    query
-  });
 
   return new Promise((resolve, reject) => {
     const envWx = globalGl.env as string === 'prod' ? 'release': 'trial'; // develop | release | trial

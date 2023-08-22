@@ -141,12 +141,11 @@
       totalMoney.value = totalMoney.value + item.num * Number(item.fee);
     });
     chooseItem.value = o.filter((item: any) => item.num != 0);
-    // console.log("1111",o, chooseItem.value)
   };
 
-  const confirm = () => { 
+  const confirm = () => {
     if(chooseItem.value.length==0){
-      gStores.messageStore.showMessage("请先选择需要购买的项目", 2000); 
+      gStores.messageStore.showMessage("请先选择需要购买的项目", 2000);
       return;
     }
     //拦截一下不能合并缴费的
@@ -155,7 +154,7 @@
       ids.add(item.subIds)
     })
     if(ids.size>1){
-      gStores.messageStore.showMessage("不同的项目类型不支持合并支付", 2000); 
+      gStores.messageStore.showMessage("不同的项目类型不支持合并支付", 2000);
       return;
     }else{
       const { hosId, hosName } = pageProps.value;
@@ -169,7 +168,7 @@
         }),
       });
     }
-   
+
   };
 
   const ezz = (e) => {
@@ -184,7 +183,7 @@
   const init = async () => {
     await getListData();
   };
- 
+
   onLoad((p) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
       uni.setNavigationBarTitle({

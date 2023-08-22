@@ -154,7 +154,6 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
     case 'alipay':
       //支付宝有几种跳转方法 routeType openURL
       if (item.query && JSON.parse(item.query).routeType) {
-        console.log(333, JSON.parse(item.query).routeType);
         my.ap[JSON.parse(item.query).routeType]({
           url: item.path,
         });
@@ -237,7 +236,7 @@ const scanCode = () => {
   return new Promise((resolve) => {
     uni.scanCode({
       success(res) {
-        console.log('扫码内容', res);
+        console.warn('扫码内容', res);
         if (res.result.indexOf('https://') != -1) {
           uni.navigateTo({
             url: '/pagesC/cloudHospital/myPath?type=1&path=' + res.result,
@@ -248,7 +247,7 @@ const scanCode = () => {
         resolve(res.result);
       },
       fail() {
-        console.log('获取失败');
+        console.warn('获取失败');
         gStores.messageStore.showMessage('获取失败', 3000);
       },
     });

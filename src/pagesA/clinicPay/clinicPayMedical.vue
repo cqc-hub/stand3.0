@@ -187,12 +187,6 @@
 
       const { result } = await api.medicalPay<any>(requestArg);
       payRes = result;
-
-      console.log('-------');
-      console.log({
-        result,
-        requestArg,
-      });
     }
     // await toPayPull(result);
 

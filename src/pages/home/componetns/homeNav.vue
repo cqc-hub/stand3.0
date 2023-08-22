@@ -29,15 +29,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
 
   const isIos = ref(false);
 
   uni.getSystemInfo({
     success(e) {
       const { system } = e;
-      console.log('system---', system);
-
       if (system.includes('iOS')) {
         isIos.value = true;
       }
@@ -46,7 +44,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   .nav {
     display: flex;
     padding: 0 10px;

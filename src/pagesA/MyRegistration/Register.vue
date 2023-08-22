@@ -495,7 +495,6 @@
       });
       getList(false);
     } else {
-      console.log(2222);
       init();
     }
   });

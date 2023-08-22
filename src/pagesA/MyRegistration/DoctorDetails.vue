@@ -593,7 +593,7 @@
           gStores.messageStore.showMessage('关注成功', 3000);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     } else {
       const args = {
@@ -610,7 +610,7 @@
           gStores.messageStore.showMessage('已经取消关注', 3000);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     }
   };

@@ -182,7 +182,7 @@
 					BarCode(parameter,(res)=>{
 						this.$emit('generate',res)
 					})
-				}catch(err){console.log(err)}
+				}catch(err){console.err(err)}
 			},
 			async GetCodeImg (){
 				try{

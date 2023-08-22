@@ -65,7 +65,6 @@
           } else {
             isMore.value[i] = false;
           }
-          // console.log('看看你们是什么',e,isMore)
         });
       })
       .exec();

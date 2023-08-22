@@ -1071,11 +1071,6 @@ export const usePayPage = () => {
       extend: payload,
     };
 
-    console.log({
-      uploadRes,
-      info,
-    });
-
     gStores.globalStore.assignCacheData({
       uploadRes,
       info,
@@ -1361,7 +1356,7 @@ export const usePayPage = () => {
           ) => {
             // do something
             // 建议跳转到小程序结果页面
-            console.log('payComplete payload----', {
+            console.warn('payComplete payload----', {
               status,
               ampTraceId,
               finalStatus,

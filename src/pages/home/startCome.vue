@@ -38,7 +38,7 @@
     )}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
   }
 
-  console.log(src.value);
+  console.warn(src.value);
 </script>
 
 <style lang="scss" scoped></style>

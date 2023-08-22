@@ -216,9 +216,7 @@
         },
         fail: reject,
         complete(e) {
-          console.log(src);
-
-          console.log('接口调用完成', e);
+          console.warn('接口调用完成', e);
         },
       });
     });

@@ -137,7 +137,6 @@
 
   onLoad((p) => {
     props.value = deQueryForUrl<IPrePageProps>(deQueryForUrl(p));
-    console.log(props.value, 'props.value');
   });
 </script>
 

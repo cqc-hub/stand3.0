@@ -100,7 +100,6 @@ export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
   return new Promise((resolve, reject) => {
     uni.chooseAddress({
       success(res) {
-        console.log('获取的地址信息', res);
         // #ifdef MP-ALIPAY
         if ((res as any).resultStatus == '9000') {
           // 针对支付宝单独处理
@@ -116,7 +115,7 @@ export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
         // #endif
       },
       fail(err) {
-        console.log(err);
+        console.error(err);
         reject(err);
       },
     });

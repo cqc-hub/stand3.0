@@ -61,8 +61,6 @@
 
   const show = () => {
     if (props.autoInOne && props.list.length === 1) {
-      console.log(props.list);
-
       const item = props.list[0];
 
       choosePay({

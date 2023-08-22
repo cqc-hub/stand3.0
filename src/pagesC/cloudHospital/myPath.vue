@@ -55,7 +55,7 @@ onLoad((options) => {
   if (pageProp.value.type == "1") {
     //第三方的h5
     src.value = `${pageProp.value.path}?sysCode=${allData.sysCode}`;
-    console.log("第三方页面路径", src.value);
+    console.warn("第三方页面路径", src.value);
   } else {
     //自研h5
     const baseUrl =
@@ -71,7 +71,6 @@ onLoad((options) => {
       //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
       let newQuery = "";
       let obj = JSON.parse(JSON.stringify(options));
-      console.log("path", obj);
 
       delete obj.path;
       delete obj.query;
@@ -82,7 +81,7 @@ onLoad((options) => {
       }
       src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
     }
-    console.log("v3页面路径", src.value);
+    console.warn("v3页面路径", src.value);
   }
 });
 const getQueryPath = (options) => {
@@ -110,7 +109,7 @@ const getQueryPath = (options) => {
         query = query + item + "=" + allData[item] + "&";
       } else {
         // messageStore.showMessage(`携带${item}参数有误`, 1000);
-        console.log(`携带${item}参数有误`);
+        console.warn(`携带${item}参数有误`);
       }
     });
     return query.slice(0, -1);
@@ -120,7 +119,7 @@ const getQueryPath = (options) => {
 };
 
 const handleMessage = (evt) => {
-  console.log("返回数据", evt);
+  console.warn("返回数据", evt);
   var data = evt.target.data;
   var V3PageData = data[0];
   //表示支付

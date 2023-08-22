@@ -140,7 +140,6 @@
       isConfigComplete.value = true;
     });
     resultHos.value = result;
-    console.log(result);
     if (result.inPatientPrePay) {
       list.value = JSON.parse(result.inPatientPrePay as any);
     }

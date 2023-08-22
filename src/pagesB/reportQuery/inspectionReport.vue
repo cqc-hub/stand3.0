@@ -477,8 +477,6 @@
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);
-
-    console.log('获得参数-----', pageProps.value);
   });
 
   const getInspectionReportList = async () => {
@@ -548,7 +546,6 @@
         uni.getClipboardData({
           success: function (res) {
             gStore.messageStore.showMessage('内容已复制');
-            console.log(res.data);
           },
         });
       },

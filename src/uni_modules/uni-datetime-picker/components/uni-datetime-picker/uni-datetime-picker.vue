@@ -203,7 +203,7 @@
       :range="isRange"
       :typeHasTime="hasTime"
       :insert="false"
-			:hideFooter="hideFooter"
+      :hideFooter="hideFooter"
       :hideSecond="hideSecond"
       @confirm="mobileChange"
     />
@@ -899,12 +899,8 @@
         return value;
       },
 
-      leftMonthSwitch(e) {
-        // console.log('leftMonthSwitch 返回:', e)
-      },
-      rightMonthSwitch(e) {
-        // console.log('rightMonthSwitch 返回:', e)
-      },
+      leftMonthSwitch(e) {},
+      rightMonthSwitch(e) {},
     },
   };
 </script>

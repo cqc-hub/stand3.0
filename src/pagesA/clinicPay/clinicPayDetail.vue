@@ -322,7 +322,7 @@
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
 
-        console.log(
+        console.warn(
           '获取到加密参数',
           pageProps.value.params,
           pageProps.value.deParams

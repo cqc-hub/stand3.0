@@ -22,7 +22,6 @@
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
-      console.log('支付宝入口埋点');
       monitor.init({
         pid: alipayPid,
         sample: 1,

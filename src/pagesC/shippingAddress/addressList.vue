@@ -168,7 +168,6 @@
 
   const getWX = async () => {
     const data = await getScopeAddress();
-    console.log(888, data);
     getAddress(data);
   };
 </script>

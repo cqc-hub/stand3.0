@@ -17,7 +17,6 @@
   const globalStore = useGlobalStore();
 
   onLoad((options) => {
-    console.log(888, options);
     getparams(options);
   });
   //封装网络医院参数
@@ -42,7 +41,6 @@
 
   //两种网络医院
   const getSrc = (para, _payload: any = {}) => {
-    console.log(para, '---------');
     const payload = {};
     for(const key in _payload) {
       if (!(key in para)) {
@@ -78,25 +76,22 @@
     src.value = fPath;
 
     isShow.value = true;
-    console.log({
-      netUrl,
-    });
 
-    console.log('跳转网络医院携带数据', para);
-    console.log('跳转网络医院的路径', src.value);
+    console.warn('跳转网络医院携带数据', para);
+    console.warn('跳转网络医院的路径', src.value);
   };
 
   const handleMessage = (evt) => {
     // #ifdef MP-WEIXIN
     var data = evt.target.data;
-    console.log('获取到返回--------------', data);
+    console.warn('获取到返回--------------', data);
     var paymentData = data[0].invokeData;
     let registerId = data[0].registerId;
     let payBackParams = encodeURIComponent(
       JSON.stringify(data[0].payBackParams)
     );
-    console.log('编码----------------');
-    console.log(payBackParams);
+    console.warn('编码----------------');
+    console.warn(payBackParams);
     if (paymentData) {
       uni.requestPayment({
         timeStamp: paymentData.timeStamp,
@@ -137,7 +132,6 @@
         icon: 'none',
       });
     }
-    console.log(evt);
     // #endif
   };
 </script>

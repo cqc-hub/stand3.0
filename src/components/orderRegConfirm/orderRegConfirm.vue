@@ -110,7 +110,6 @@
   };
 
   const closePopup = () => {
-    console.log('close');
     hide();
   };
 

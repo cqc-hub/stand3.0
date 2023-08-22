@@ -171,13 +171,13 @@ export class LoginUtils extends GStores {
             idCardNumber,
             success(e) {
               //识别成功
-              console.log('识别成功', e);
+              console.warn('识别成功', e);
               resolve(void 0);
             },
             fail(err) {
               //识别失败
               this.messageStore.showMessage('识别失败');
-              console.log('识别失败', err);
+              console.error('识别失败', err);
               reject(err);
             },
           });
@@ -186,7 +186,7 @@ export class LoginUtils extends GStores {
         fail: (err) => {
           //不支持人脸检测
           this.messageStore.showMessage('该设备不支持人脸检测');
-          console.log('该设备不支持人脸检测', err);
+          console.error('该设备不支持人脸检测', err);
 
           reject(err);
         },
@@ -419,9 +419,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         encrypData: responseStr,
         accountType,
       };
-
-      console.log(JSON.stringify(loginArg));
-      // return
 
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')

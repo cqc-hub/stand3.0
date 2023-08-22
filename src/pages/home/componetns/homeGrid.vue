@@ -23,7 +23,7 @@
   const gStores = new GStores();
 
   const gridClick = (item) => {
-    console.log(2222,item)
+    console.warn(item)
     if (item.path && item.path == 'showCareModel') {
       //关注组件拦截跳转 弹框
       emits('open-share', item.query && JSON.parse(item.query).imageCode);

@@ -86,7 +86,7 @@
         gStores.userStore.patList.length &&
         gStores.userStore.patChoose.patientId != _pd
       ) {
-        console.log('携带就诊人不一致的情况');
+        console.warn('携带就诊人不一致的情况');
         const pat = <IPat>(
           gStores.userStore.patList.find((o) => o.patientId === _pd)
         );
@@ -98,7 +98,7 @@
         gStores.userStore.patList.length &&
         gStores.userStore.patChoose.cardNumber != _hosPd
       ) {
-        console.log('携带院内就诊人不一致的情况');
+        console.warn('携带院内就诊人不一致的情况');
         const pat = <IPat>(
           gStores.userStore.patList.find((o) => o.cardNumber === _hosPd)
         );

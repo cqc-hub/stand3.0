@@ -373,8 +373,6 @@
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     init();
-
-    console.log(pageProps.value);
   });
 </script>
 

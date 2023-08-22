@@ -199,7 +199,6 @@
         await toPayPull(res);
         payAfter(patientId);
       } else {
-        console.log('跳转门诊缴费');
         gStores.messageStore.showMessage('开单成功', 1500, {
           closeCallBack: () => {
             //跳转门诊缴费页面

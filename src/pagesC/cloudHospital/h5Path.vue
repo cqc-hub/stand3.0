@@ -10,17 +10,14 @@ import { ref } from 'vue';
 const src = ref();
 const handleMessage = (evt) => {
 	// #ifdef MP-WEIXIN
-	console.log('返回数据', evt);
+	console.warn('返回数据', evt);
 	var data = evt.target.data;
 	var V3PageData = data[0];
 	uni.openLocation({
 		latitude: Number(V3PageData.gisLat),
 		longitude: Number(V3PageData.gisLng),
 		name: V3PageData.hosName,
-		address: V3PageData.address,
-		success: () => {
-			console.log('成功打开地图');
-		}
+		address: V3PageData.address
 	});
 	// #endif
 };

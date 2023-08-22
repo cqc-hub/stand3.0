@@ -55,7 +55,6 @@
 			}
 			trans('displayData')
 			trans('navigateToMiniProgram');
-			console.log(2222, opt)
 			this.hrOptions = opt
 		},
 		methods: {
@@ -67,8 +66,7 @@
 			onClick() {
 				let me = this
 				this.isJumping = true
-				let navParams = this.hrOptions && this.hrOptions.navigateToMiniProgram 
-				console.log(55551111111111, navParams)
+				let navParams = this.hrOptions && this.hrOptions.navigateToMiniProgram
 				wx.navigateBack({
 					delta: 1,
 					success() {

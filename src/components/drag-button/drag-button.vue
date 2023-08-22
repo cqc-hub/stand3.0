@@ -98,7 +98,6 @@
           this.offsetHeight = data.height / 2;
 
           const hisLocation = getLocalStorage(DRAG_LOCATION_KEY + this.zid);
-          console.log(2222,hisLocation,this.windowWidth ,this.width);
           if (hisLocation) {
             this.left = hisLocation.left;
             this.top = hisLocation.top;

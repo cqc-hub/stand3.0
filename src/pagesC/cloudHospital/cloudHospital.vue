@@ -32,10 +32,9 @@
     }, 1000);
   };
   onLoad(async (options) => {
-    console.log(333, options);
     //先登录拦截
     await wait(200);
-    if (options.loginInterception == '1') {
+    if (options?.loginInterception == '1') {
       if (!globalStore.isLogin) {
         uni.showToast({
           title: '未登录，请先登录!',

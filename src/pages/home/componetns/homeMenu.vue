@@ -87,7 +87,6 @@ const changeIndex = (e) => {
   tabIndex.value = e.detail.current;
 };
 const openShare =(item)=>{
-  console.log(1111,'我看看',item)
   emits('open-share',item)
 }
 </script>

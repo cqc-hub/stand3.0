@@ -45,11 +45,6 @@
 
       delete pageArg.returnUrl;
 
-      console.log({
-        pageArg,
-        options,
-      });
-
       gotoNext(pageArg);
     }
   });
