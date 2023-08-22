@@ -174,7 +174,6 @@ onLoad(async (opt) => {
 });
 
 onShow(async () => {
-  console.log(2222, "show", pageProps.value);
   if (pageProps.value.params) {
     //扫码进入
     uni.setNavigationBarTitle({
