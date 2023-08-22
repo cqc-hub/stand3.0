@@ -69,12 +69,11 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { storeToRefs } from 'pinia';
   import {
     TMedicalNationUploadRes,
     TWxAuthorize,
   } from './utils/clinicPayDetail';
-  import { getOpenId, toPayPull } from '@/components/g-pay/index';
+  import { getOpenId } from '@/components/g-pay/index';
 
   import { GStores, wait } from '@/utils';
   import { joinQueryForUrl } from '@/common';

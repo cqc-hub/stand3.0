@@ -171,8 +171,6 @@ const getScanInHospitalInfo = async () => {
 
 onLoad(async (opt) => {
   pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
-  console.log(22222, "onload", pageProps.value);
-  // await setData();
 });
 
 onShow(async () => {

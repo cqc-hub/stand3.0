@@ -77,8 +77,7 @@ const props = withDefaults(
 );
 
 onMounted(()=>{
-   console.log(22222,props)
-   tabIndex.value = props.tabIndex
+  props.tabIndex && (tabIndex.value = props.tabIndex)
 })
 
 const activeMenu = (index) => {
