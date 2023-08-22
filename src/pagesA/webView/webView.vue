@@ -1,11 +1,12 @@
 <template>
   <view class="">
+    <!-- @vue-skip -->
     <web-view v-if="src" :src="src" @message="getMessage"></web-view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
   import { onShareAppMessage } from '@dcloudio/uni-app';
 
   // pagesA/webView/webView

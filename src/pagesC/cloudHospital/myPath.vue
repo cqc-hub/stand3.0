@@ -50,19 +50,16 @@ const pageProp = ref({} as IPageProps);
 // 页面固定携带 sysCode  加密参数（herenId patientid）
 onLoad((options) => {
   pageProp.value = deQueryForUrl<IPageProps>(deQueryForUrl(options));
+
   allData.hosId = pageProp.value.hosId || "";
-  let query = getQueryPath(options);
+  let query = getQueryPath(pageProp.value);
   if (pageProp.value.type == "1") {
     //第三方的h5
     src.value = `${pageProp.value.path}?sysCode=${allData.sysCode}`;
     console.warn("第三方页面路径", src.value);
   } else {
     //自研h5
-    const baseUrl =
-      (global.env as any) === "prod"
-        ? "https://h5.eheren.com/v3/#"
-      //  : ' http://localhost:5173/#';
-          : "https://health.eheren.com/v3/#";
+    const baseUrl = global.h5Url.slice(0, -1);
     //公告跳转的咨询
     if (pageProp.value.type == "2") {
       let path = decodeURIComponent(pageProp.value.path as string);
