@@ -74,6 +74,8 @@ export const packageAuthParams = (
 };
 
 enum LoginType {
+  // 微信腾讯健康
+  // WeChatThReg,
   WeChat,
   AliPay,
   H5,
@@ -539,6 +541,7 @@ export class Login extends LoginUtils {
     [LoginType.WeChat]: new WeChatLoginHandler(),
     [LoginType.AliPay]: new AliPayLoginHandler(),
     [LoginType.H5]: new WebLoginHandler(),
+    // [LoginType.WeChatThReg]:
   };
 
   static async handler(type: LoginType, payload?: any) {

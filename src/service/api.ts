@@ -371,6 +371,9 @@ const regApi = {
   subPreinquiryMessage: (data: any) =>
     service.post('/phs-reg/regDoc/subPreinquiryMessage', parm(data)),
 
+  loginByThRegisterId: (data: any) =>
+    service.post('/phs-reg/tencent/loginByThRegisterId', parm(data)),
+
   getQnRecordTemp: (data: any) =>
     service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
 
