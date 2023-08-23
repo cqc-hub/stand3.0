@@ -9,3 +9,4 @@ enum LoginType {
 abstract class LoginHandler {
   abstract handler(payload?: any): Promise<void>;
 }
+
