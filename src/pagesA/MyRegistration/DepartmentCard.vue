@@ -178,9 +178,6 @@
         width: 0;
       }
 
-      .content-lv2 {
-        padding: 0 32rpx;
-      }
     }
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <view class="">
+  <view class="container">
     <view v-if="list.length" class="hhh" />
     <view
       v-for="item in list"
@@ -58,5 +58,9 @@
       right: 0;
       bottom: 0;
     }
+  }
+
+  .container {
+    padding: 0 32rpx;
   }
 </style>
