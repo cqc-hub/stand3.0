@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { joinQuery } from '@/common';
-import { LoginUtils } from '@/utils';
 import { useGlobalStore, useUserStore } from '@/stores';
 
 const spliceUrl = (prop: Required<Pick<ILoginBack, '_url' | '_query'>>) => {

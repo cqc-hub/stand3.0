@@ -125,16 +125,19 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, ref } from 'vue';
+  import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
+
   import {
     GStores,
     ServerStaticData,
     ISystemConfig,
     TButtonConfig,
     useTBanner,
+    handlerWeChatThRegLogin,
   } from '@/utils';
-  import { computed, ref } from 'vue';
-  import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
-
+  import { joinQueryForUrl } from '@/common';
+  import { beforeEach } from '@/router';
   import {
     OrderStatus,
     orderStatusMap,
@@ -148,7 +151,7 @@
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
 
-  defineProps<{
+  const props = defineProps<{
     thRegisterId?: string;
     allPData?: '1';
   }>();
@@ -299,6 +302,11 @@
   });
 
   onLoad(async () => {
+    await handlerWeChatThRegLogin(props);
+    await beforeEach({
+      url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', props),
+      _isPatient: true,
+    });
     await init();
   });
 

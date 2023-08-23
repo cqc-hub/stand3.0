@@ -8,8 +8,22 @@ import {
 } from '@/stores';
 import { getSysCode } from '@/common';
 import { apiAsync } from './utils';
+import { getOpenId } from '@/components/g-pay/index';
+
 import api from '@/service/api';
 import globalGl from '@/config/global';
+
+enum LoginType {
+  // 微信腾讯健康
+  WeChatThReg,
+  WeChat,
+  AliPay,
+  H5,
+}
+
+abstract class LoginHandler {
+  abstract handler(payload?: any): Promise<void>;
+}
 
 export const getH5OpenidParam = function (data) {
   const globalStore = useGlobalStore();
@@ -72,18 +86,6 @@ export const packageAuthParams = (
     url,
   };
 };
-
-enum LoginType {
-  // 微信腾讯健康
-  // WeChatThReg,
-  WeChat,
-  AliPay,
-  H5,
-}
-
-abstract class LoginHandler {
-  abstract handler(payload?: any): Promise<void>;
-}
 
 export class GStores {
   messageStore = useMessageStore();
@@ -536,12 +538,53 @@ class WebLoginHandler extends LoginUtils implements LoginHandler {
   }
 }
 
+/** wx腾讯健康登录 */
+class WeChatThReg extends LoginUtils implements LoginHandler {
+  async handler({ thRegisterId }): Promise<void> {
+    const openId = await getOpenId();
+    const { source } = this.globalStore.browser;
+
+    const { result: loginResult } = await api.loginByThRegisterId({
+      source,
+      openId,
+      thRegisterId,
+    });
+
+    if (loginResult) {
+      const { accessToken, refreshToken } = loginResult;
+      const pages = getCurrentPages();
+      const fullPathNow = (pages[pages.length - 1] as any).$page
+        .fullPath as string;
+
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
+        useRouterStore().receiveQuery({
+          _url: encodeURIComponent(fullPathNow),
+        });
+      }
+
+      await this.getUerInfo('alone', true);
+
+      if (!this.globalStore.herenId) {
+        useRouterStore().receiveQuery({
+          _url: encodeURIComponent(fullPathNow),
+        });
+        await this.getUerInfo('alone');
+      }
+    }
+  }
+}
+
 export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
     [LoginType.AliPay]: new AliPayLoginHandler(),
     [LoginType.H5]: new WebLoginHandler(),
-    // [LoginType.WeChatThReg]:
+    [LoginType.WeChatThReg]: new WeChatThReg(),
   };
 
   static async handler(type: LoginType, payload?: any) {
@@ -970,8 +1013,15 @@ export const wxLogin = async function (e) {
   await Login.handler(LoginType.WeChat, e);
 };
 
-export const handlerLogin = async (e) => {
+export const handlerLogin = async (e: BaseObject = {}) => {
+  const { thRegisterId } = e;
   let _env = LoginType.WeChat;
+
+  // #ifdef MP-WEIXIN
+  if (thRegisterId) {
+    _env = LoginType.WeChatThReg;
+  }
+  // #endif
 
   // #ifdef MP-ALIPAY
   _env = LoginType.AliPay;
@@ -991,4 +1041,22 @@ export const outLogin = function (
   }> = {}
 ) {
   new LoginUtils().outLogin(payload);
+};
+
+export const handlerWeChatThRegLogin = async function (e: {
+  thRegisterId?: string;
+}) {
+  const { thRegisterId } = e;
+
+  // #ifdef MP-WEIXIN
+  const gStores = new GStores();
+
+  if (thRegisterId && !gStores.globalStore.isLogin) {
+    await handlerLogin(e);
+
+    if (gStores.globalStore.herenId) {
+      await new PatientUtils().getPatCardList();
+    }
+  }
+  // #endif
 };

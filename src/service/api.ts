@@ -1,9 +1,7 @@
 import service from './index';
-import { getToken, getSysCode } from '@/common/useToken';
-import { IResponseWrapper } from './type';
+import { getSysCode } from '@/common/useToken';
 import global from '@/config/global';
-import { useGlobalStore, useUserStore, IPat } from '@/stores';
-import { hideLoading } from '../common/utils';
+import { useGlobalStore, IPat } from '@/stores';
 // ss
 //请求的额外配置
 const options = {

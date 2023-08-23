@@ -86,6 +86,7 @@
   import { ref } from 'vue';
   import { onReady } from '@dcloudio/uni-app';
   import { useOrder, IChooseDays, type IDocListAll } from './utils';
+  import { handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
@@ -122,7 +123,6 @@
     init,
     chooseDays,
     checkedDay,
-    chooseDaysEnabled,
     getListByDate,
     allDocList,
     dateDocList,
@@ -198,6 +198,8 @@
     firstHosDeptId: firstHosDeptId.value,
     secondHosDeptId: secondHosDeptId.value,
   });
+
+  handlerWeChatThRegLogin(props);
 </script>
 
 <style lang="scss" scoped>

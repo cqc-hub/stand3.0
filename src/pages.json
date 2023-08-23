@@ -115,9 +115,6 @@
           "style": {
             "navigationBarTitleText": "挂号记录",
             "enablePullDownRefresh": true
-          },
-          "extend": {
-            "patient": true
           }
         },
         {
@@ -255,9 +252,6 @@
           "path": "MyRegistration/RegDetail",
           "style": {
             "navigationBarTitleText": "挂号详情"
-          },
-          "extend": {
-            "patient": true
           }
         },
 

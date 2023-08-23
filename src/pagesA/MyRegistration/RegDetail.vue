@@ -307,7 +307,9 @@
     TButtonConfig,
     debounce,
     PatientUtils,
+    handlerWeChatThRegLogin,
   } from '@/utils';
+
   import {
     encryptDes,
     joinQuery,
@@ -317,6 +319,7 @@
     setLocalStorage,
     getLocalStorage,
   } from '@/common';
+  import { beforeEach } from '@/router';
 
   import {
     IPageProps,
@@ -736,7 +739,7 @@
         hosId,
         clinicalType,
         hosDeptId,
-        thRegisterId
+        thRegisterId,
       }),
     });
   };
@@ -903,9 +906,14 @@
     }
   });
 
-  onLoad((p) => {
+  onLoad(async (p) => {
     uni.showLoading({});
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    await handlerWeChatThRegLogin(pageProps.value);
+    await beforeEach({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),
+      _isPatient: true,
+    });
     init();
   });
 </script>
