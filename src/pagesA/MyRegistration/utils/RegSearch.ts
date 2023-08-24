@@ -125,7 +125,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      hosId,
+      // hosId,
       docTitleName,
       hosDeptId,
     };
