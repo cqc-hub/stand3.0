@@ -219,9 +219,20 @@
     isLocal: '1',
   };
 
+  const 电子导诊单: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/medicalAssistant/medicalAssistant',
+    text: '电子导诊单',
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(消息订阅管理);
+      useTBanner(电子导诊单);
     }, 1000);
   });
 </script>
