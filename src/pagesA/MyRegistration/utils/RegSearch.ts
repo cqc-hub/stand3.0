@@ -7,7 +7,7 @@ import api from '@/service/api';
 
 export { type IRegSearchHistoryItem } from '@/utils';
 interface IPageProp {
-  // hosId: string;
+  hosId: string;
   clinicalType: string;
 }
 export interface IDocResItem {
@@ -152,12 +152,12 @@ export class UseRegSearch extends GStores {
   }
 
   async searchList(searchContent: string) {
-    const { clinicalType } = this.pageProp.value;
+    const { clinicalType, hosId } = this.pageProp.value;
     const { source } = this.globalStore.browser;
 
     const args = {
       searchContent,
-      hosId: '',
+      hosId,
       clinicalType,
       source,
     };

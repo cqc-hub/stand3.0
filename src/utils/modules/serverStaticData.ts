@@ -1,7 +1,7 @@
 import { getLocalStorage, setLocalStorage } from '@/common';
-import { ISelectOptions, hosParam } from '@/components/g-form';
+import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
-import { joinQuery, joinQueryForUrl } from '@/common';
+import { joinQueryForUrl } from '@/common';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 
@@ -27,7 +27,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     if (_configList.length) {
       const configList: any[] = [];
 
-      _configList.map(o => {
+      _configList.map((o) => {
         Object.entries(o).map(([hosId, value]) => {
           const {
             tollMode,
@@ -41,6 +41,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isOcrSfz,
             requireSfz,
             isPurposeRadio,
+            company
           } = value as any;
 
           const isItemCount = tollMode === '1' ? '1' : '0';
@@ -60,9 +61,10 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isOcrSfz,
             requireSfz,
             isPurposeRadio,
+            company
           });
         });
-      })
+      });
       // _cacheMap.set(Med_Copy_Config, configList);
 
       return <T>configList;
@@ -477,7 +479,7 @@ export class ServerStaticData {
           pay,
           reportQuery,
           drugDelivery,
-          selfBilling
+          selfBilling,
         };
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');

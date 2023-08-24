@@ -128,6 +128,9 @@ export interface ISystemConfig {
 
     /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '0' | '1';
+
+    /** 快递公司 */
+    company?: IOptions[];
   }[];
 
   //住院服务
