@@ -353,7 +353,7 @@
     IHosInfo,
     ISystemConfig,
     ServerStaticData,
-    upImgOss,
+    upImgOss as _upImgOss,
     wait,
     useOcr,
     base64Src,
@@ -374,6 +374,14 @@
     { success: true; path: string },
     { success: false; evt: any }
   >;
+
+  const upImgOss = (failPath: string) => {
+    return _upImgOss(failPath, {
+      data: {
+        functionType: 'BAFY',
+      },
+    });
+  };
 
   const fg1020 = ref('');
   const fg1021 = ref('');
@@ -857,27 +865,27 @@
 
     try {
       if (frontIdCardUrl && isUnImageUpLoaded(frontIdCardUrl)) {
-        const { url } = await upImgOss(frontIdCardUrl, {});
+        const { url } = await upImgOss(frontIdCardUrl);
         idCardImg.value.frontIdCardUrl = url;
       }
 
       if (endIdCardUrl && isUnImageUpLoaded(endIdCardUrl)) {
-        const { url } = await upImgOss(endIdCardUrl, {});
+        const { url } = await upImgOss(endIdCardUrl);
         idCardImg.value.endIdCardUrl = url;
       }
 
       if (handIdCardUrl && isUnImageUpLoaded(handIdCardUrl)) {
-        const { url } = await upImgOss(handIdCardUrl, {});
+        const { url } = await upImgOss(handIdCardUrl);
         idCardImg.value.handIdCardUrl = url;
       }
 
       if (censusRegisterUrl && isUnImageUpLoaded(censusRegisterUrl)) {
-        const { url } = await upImgOss(censusRegisterUrl, {});
+        const { url } = await upImgOss(censusRegisterUrl);
         idCardImg.value.censusRegisterUrl = url;
       }
 
       if (handIdCardFrontUrl && isUnImageUpLoaded(handIdCardFrontUrl)) {
-        const { url } = await upImgOss(handIdCardFrontUrl, {});
+        const { url } = await upImgOss(handIdCardFrontUrl);
         idCardImg.value.handIdCardFrontUrl = url;
       }
     } catch (error) {

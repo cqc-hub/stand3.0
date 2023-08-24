@@ -257,7 +257,7 @@ const findSuccess = async ({
   address,
   image,
   idCardOcrEn,
-  patientNameOcrEn
+  patientNameOcrEn,
 }: {
   name: string;
   sex: string;
@@ -382,7 +382,10 @@ export const upImgOss = (
   filePath: string,
   payload: {
     header?: BaseObject;
-    data?: BaseObject;
+    data?: {
+      // 问卷WJ,病案复印BAFY
+      functionType?: 'WJ' | 'BAFY';
+    } & BaseObject;
   } = {},
   url = _env.baseApi + '/phs-base/upload/imageUpload'
 ) => {
