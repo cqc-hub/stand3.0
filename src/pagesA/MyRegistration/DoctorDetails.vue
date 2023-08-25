@@ -74,7 +74,7 @@
                     </view>
                   </view>
 
-                  <view>
+                  <view class="mt12">
                     <text
                       :class="{
                         'g-split-line':
@@ -92,7 +92,7 @@
 
                   <view
                     v-if="docDetail.multiplePracticeLocation"
-                    class="work-place flex-normal"
+                    class="work-place flex-normal mt12"
                   >
                     <view class="color-fff tag mr16">多点执业</view>
                     <text
