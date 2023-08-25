@@ -41,7 +41,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isOcrSfz,
             requireSfz,
             isPurposeRadio,
-            company
+            company,
           } = value as any;
 
           const isItemCount = tollMode === '1' ? '1' : '0';
@@ -61,7 +61,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isOcrSfz,
             requireSfz,
             isPurposeRadio,
-            company
+            company,
           });
         });
       });
@@ -448,7 +448,7 @@ export class ServerStaticData {
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
     payload: {} = {}
-  ): Promise<ISystemConfig[T]> {
+  ) {
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
     if (!systemConfig) {
       //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG
@@ -470,8 +470,7 @@ export class ServerStaticData {
         const drugDelivery = JSON.parse(result.DRUG_DELIVERY_CONFIG || '{}');
         const selfBilling = JSON.parse(result.SELF_BILLING || '{}');
 
-        // @ts-expect-error
-        systemConfig = {
+        systemConfig = <ISystemConfig>{
           person,
           order,
           medRecord,
@@ -481,6 +480,25 @@ export class ServerStaticData {
           drugDelivery,
           selfBilling,
         };
+
+        for (const key in systemConfig) {
+          const config = systemConfig[<keyof ISystemConfig>key];
+          const wxConfig = config?.inWx;
+          const alipayConfig = config?.inAlipay;
+
+          // #ifdef MP-ALIPAY
+          if (alipayConfig) {
+            Object.assign(config, alipayConfig);
+          }
+
+          // #endif
+
+          // #ifdef MP-WEIXIN
+          if (wxConfig) {
+            Object.assign(config, wxConfig);
+          }
+          // #endif
+        }
       } catch (error) {
         throw new Error('序列化错误, 请检查全局的参数');
       }

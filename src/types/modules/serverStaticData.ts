@@ -1,9 +1,10 @@
 import { type XOR } from '@/typeUtils/obj';
 
+export type TConfigEnv = 'inWx' | 'inAlipay';
 /**
  *  未指定说明的 '0' 均为 false '1' true
  */
-export interface ISystemConfig {
+export interface ISystemConfig_ {
   // 预约挂号
   order: {
     /** 科室列表页面 */
@@ -256,6 +257,12 @@ export interface ISystemConfig {
     footerBtn?: TButtonConfig;
   };
 }
+
+type TInsertEnv<T extends BaseObject, S extends keyof any> = {
+  [K in keyof T]: T[K] & { [P in S]: T[K] };
+};
+
+export type ISystemConfig = TInsertEnv<ISystemConfig_, TConfigEnv>;
 
 export interface IHosInfo {
   address: string;
