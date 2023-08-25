@@ -13,7 +13,7 @@
           class="header-bg my-disabled"
         />
         <view class="content">
-          <view class="header-box">
+          <view class="header-box f28">
             <view class="content-box header-content-box g-border">
               <view class="header-transform">
                 <view class="header mb16 flex-between">
@@ -65,11 +65,11 @@
                       :class="{
                         'g-split-line': docDetail.docJobName,
                       }"
-                      class="color-444 f28 mr12 pr12 text-no-wrap"
+                      class="color-444 mr12 pr12 text-no-wrap"
                     >
                       {{ docDetail.docJobName || '' }}
                     </view>
-                    <view class="color-444 f28 text-no-wrap">
+                    <view class="color-444 text-no-wrap">
                       {{ props.docTitleName || docDetail.docTitleName || '' }}
                     </view>
                   </view>
@@ -80,16 +80,31 @@
                         'g-split-line':
                           docDetail.deptName && pageConfig.orderMode !== '1',
                       }"
-                      class="color-444 f28 mr12 pr12"
+                      class="color-444 mr12 pr12"
                     >
                       {{ $global.systemInfo.name || '' }}
                     </text>
 
-                    <text
-                      v-if="pageConfig.orderMode !== '1'"
-                      class="color-444 f28"
-                    >
+                    <text v-if="pageConfig.orderMode !== '1'" class="color-444">
                       {{ docDetail.deptName || '' }}
+                    </text>
+                  </view>
+
+                  <view
+                    v-if="docDetail.multiplePracticeLocation"
+                    class="work-place flex-normal"
+                  >
+                    <view class="color-fff tag mr16">多点执业</view>
+                    <text
+                      v-for="(place, pi) in getDicMultiplePracticeLocation"
+                      :class="{
+                        'g-split-line':
+                          pi !== getDicMultiplePracticeLocation.length - 1,
+                      }"
+                      :key="place"
+                      class="color-444 mr12 pr12 g-break-world"
+                    >
+                      {{ place }}
                     </text>
                   </view>
                 </view>
@@ -338,7 +353,7 @@
   import { computed, ref } from 'vue';
   import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
-  import { useOrder, IChooseDays, TSchInfo } from './utils';
+  import { useOrder, IChooseDays } from './utils';
 
   import {
     UseDoctorDetail,
@@ -368,7 +383,6 @@
   import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
 
   import api from '@/service/api';
-  import globalGl from '@/config/global';
 
   /**
    * 医生名片分享:  后台新建普通链接二维码 https://h5.eheren.com/scan/${syscode}/DoctorDetails?${...props}
@@ -395,6 +409,13 @@
   });
   const isShowHosNet = computed(() => {
     return !!Object.keys(schToday.value.schByNetHos).length;
+  });
+  const getDicMultiplePracticeLocation = computed(() => {
+    if (docDetail.value.multiplePracticeLocation) {
+      return docDetail.value.multiplePracticeLocation.split(',');
+    }
+
+    return [];
   });
 
   const tableData = computed(() => {
@@ -914,5 +935,14 @@
         // #endif
       }
     }
+  }
+
+  .work-place {
+    .tag {
+      background: #dcad6c;
+      border-radius: 4rpx;
+      padding: 0 4rpx;
+    }
+    flex-wrap: wrap;
   }
 </style>

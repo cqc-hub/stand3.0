@@ -40,6 +40,7 @@ export interface IDocDetail {
   hosId: string;
   intro: string;
   clinicTime: string;
+  multiplePracticeLocation: string;
   preStatus?: '1';
 }
 
@@ -112,7 +113,6 @@ export class UseDoctorDetail extends GStores {
     };
 
     const { result } = await api.findByDocId(args);
-
     result.hosDocId = result.hosDocId || hosDocId;
     this.docDetail = result;
 
