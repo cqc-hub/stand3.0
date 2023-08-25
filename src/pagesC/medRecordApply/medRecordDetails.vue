@@ -17,6 +17,50 @@
           </view>
 
           <view
+            v-if="pageConfig.company && pageConfig.company.length"
+            class="container-box g-border mb16 box-padding"
+          >
+            <block>
+              <block v-if="pageConfig.company.length > 1">
+                <view id="_express" class="g-bold f36">选择快递方式</view>
+
+                <view class="mt24 pb32 g-border-bottom">
+                  <Sel-Express
+                    :selectLength="3"
+                    :list="pageConfig.company"
+                    v-model:value="expressCompany"
+                    column="2"
+                  />
+                </view>
+              </block>
+
+              <block v-if="pageConfig.company.length === 1">
+                <view id="_express" class="g-bold f36">快递方式</view>
+
+                <view class="mt24 f28">
+                  <view class="flex-between">
+                    <view class="color-888">快递方式</view>
+                    <!-- <view class="g-bold">{{ aimList[0].label }}</view> -->
+                    <view class="g-bold">
+                      <image
+                        :src="getSrc(expressCompany)"
+                        class="express-icon"
+                      />
+                    </view>
+                  </view>
+                </view>
+              </block>
+
+              <view class="f28 mt24">
+                <view class="flex-between">
+                  <view class="color-888">快递费支付方式</view>
+                  <view class="g-bold color-error">到付</view>
+                </view>
+              </view>
+            </block>
+          </view>
+
+          <view
             v-if="pageConfig.sfz && pageConfig.sfz.length"
             class="container-box g-border mb16 box-padding"
             id="_photo"
@@ -345,7 +389,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, getCurrentInstance, watch, nextTick } from 'vue';
+  import { computed, ref, watch, nextTick } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
   import {
@@ -358,13 +402,15 @@
     useOcr,
     base64Src,
   } from '@/utils';
+  import { getSrc } from '@/pagesC/medicationAssistant/utils';
   import { getUserShowLabel } from '@/stores';
   import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
-  import { setLocalStorage, getLocalStorage } from '@/common';
+  import { getLocalStorage } from '@/common';
   import type { NotNullable, XOR } from '@/typeUtils';
 
   import api from '@/service/api';
 
+  import SelExpress from '@/pagesC/medicationAssistant/components/SelExpress.vue';
   import AddressBox from './components/MedRecordDetailsAddressBox.vue';
   import RecordCard from './components/RecordCard.vue';
   import AddRecordDialog from './components/MedRecordDetailsAddRecordDialog.vue';
@@ -387,7 +433,7 @@
   const fg1021 = ref('');
   const selPurposeLen = ref(3);
   const purposeCount = ref<{ purpose: string; count: number }[]>([]);
-
+  const expressCompany = ref('');
   const chooseImg = (): Promise<TChoose> => {
     return new Promise((resolve) => {
       uni.chooseImage({
@@ -724,6 +770,7 @@
       pageConfig.value = configDetail;
       _hosId.value = configDetail.hosId;
     }
+    console.log(pageConfig.value);
 
     if (!pageConfig.value) {
       gStores.messageStore.showMessage(
@@ -733,8 +780,15 @@
       throw new Error('未获取到该院区的配置' + `(${_hosId.value})`);
     }
 
-    const { selPurposeLen: _selPurposeLen, purpose: _aimList } =
-      pageConfig.value;
+    const {
+      selPurposeLen: _selPurposeLen,
+      purpose: _aimList,
+      company,
+    } = pageConfig.value;
+
+    if (company && company.length) {
+      expressCompany.value = company[0].value;
+    }
 
     if (_selPurposeLen) {
       selPurposeLen.value = _selPurposeLen * 1;
@@ -908,6 +962,7 @@
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
     const args = {
+      expressCompany: expressCompany.value,
       address: detailedAddress,
       addresseeName: senderName,
       addresseePhone: senderPhone,
