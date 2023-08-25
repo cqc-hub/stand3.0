@@ -136,7 +136,7 @@
     useTBanner,
     handlerWeChatThRegLogin,
   } from '@/utils';
-  import { joinQueryForUrl } from '@/common';
+  import { joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
   import {
     OrderStatus,
@@ -308,6 +308,12 @@
       _isPatient: true,
     });
     await init();
+
+    const thRegisterId = props.thRegisterId;
+    thRegisterId &&
+      setLocalStorage({
+        thRegisterId,
+      });
   });
 
   const getPatLabel = (o) => {

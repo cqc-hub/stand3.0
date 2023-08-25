@@ -95,7 +95,7 @@
     IHosInfo,
     type ISystemConfig,
   } from '@/utils';
-  import { joinQuery, joinQueryForUrl } from '@/common';
+  import { joinQuery, joinQueryForUrl, setLocalStorage } from '@/common';
   import {
     IDeptLv1,
     IDeptLv2,
@@ -288,7 +288,11 @@
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);
-
+    const thRegisterId = props.thRegisterId;
+    thRegisterId &&
+      setLocalStorage({
+        thRegisterId,
+      });
     // init();
   });
 

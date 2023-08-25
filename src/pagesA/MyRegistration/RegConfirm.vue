@@ -96,6 +96,7 @@
   import { GStores, ServerStaticData, wait } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
+  import { getLocalStorage } from '@/common';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -186,7 +187,7 @@
       source,
       resType,
       promptMessage,
-      thRegisterId
+      thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
     };
 
     let alipayAuthCode = '';
