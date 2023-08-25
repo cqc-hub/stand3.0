@@ -259,7 +259,7 @@ export interface ISystemConfig_ {
 }
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {
-  [K in keyof T]: T[K] & { [P in S]: T[K] };
+  [K in keyof T]: T[K] & { [P in S]?: T[K] };
 };
 
 export type ISystemConfig = TInsertEnv<ISystemConfig_, TConfigEnv>;
