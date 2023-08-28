@@ -25,7 +25,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
     const { confirm } = await apiAsync(uni.showModal, {
-      content: '确认跳转小程序?',
+      content: '确认跳转第三方小程序?',
     });
 
     if (confirm) {
