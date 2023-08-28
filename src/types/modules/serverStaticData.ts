@@ -256,6 +256,16 @@ export interface ISystemConfig_ {
   selfBilling: {
     footerBtn?: TButtonConfig;
   };
+
+  /** 电子导诊单 */
+  Electronic_Consultation_Sheet: {
+    toLocationMiniProgram?: {
+      appId: string;
+      path: string;
+      // 会拼接到path中, 但需要取点击到当前行中存在的数据
+      myExtraData: BaseObject;
+    };
+  };
 }
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {

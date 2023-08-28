@@ -428,6 +428,13 @@
         },
 
         {
+          "path": "openMiniProgram/openMiniProgram",
+          "style": {
+            "navigationBarTitleText": "跳转小程序"
+          }
+        },
+
+        {
           "path": "medRecordApply/medRecordDetails",
           "extend": {
             "patient": true
