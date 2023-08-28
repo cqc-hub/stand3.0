@@ -8,6 +8,8 @@
   // border-bottom: 1rpx solid var(--hr-neutral-color-2);
   color: var(--hr-neutral-color-8);
 
+
+
   .label {
     padding-top: 32rpx;
     height: 100%;
@@ -73,6 +75,15 @@
         position: relative;
         top: 2rpx;
       }
+    }
+  }
+
+   &.form-item-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+
+    .container-body {
+      width: 100%;
     }
   }
 

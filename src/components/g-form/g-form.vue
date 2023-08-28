@@ -5,6 +5,7 @@
         v-for="item in list"
         :key="item.key"
         :class="{
+          'form-item-horizontal': item.direction === 'horizontal',
           'g-border-bottom': !hideRowBorder,
           'form-item-icon': item.field === 'select',
           'item-for-show': item.isForShow,
@@ -76,6 +77,7 @@
                 'my-disabled': item.disabled,
                 'my-disabled-color': item.disabled,
               }"
+              autoHeight
               class="form-input"
             />
 

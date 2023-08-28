@@ -418,6 +418,20 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "serviceCenter/serviceCenter",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
+        },
+
+        {
+          "path": "serviceCenter/serviceComplaint",
+          "style": {
+            "navigationBarTitleText": "客服中心"
+          }
+        },
+
+        {
           "path": "takeNumber/takeNumber",
           "extend": {
             "patient": true

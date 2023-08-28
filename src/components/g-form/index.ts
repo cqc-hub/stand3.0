@@ -50,6 +50,7 @@ interface IBaseInstance {
   isHideRowBorder?: boolean;
   labelWidth?: string;
   isForShow?: boolean;
+  direction?: 'vertical' | 'horizontal';
   validator?: (
     v: unknown,
     item: TInstance

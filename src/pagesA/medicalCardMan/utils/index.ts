@@ -1,12 +1,12 @@
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
+import { decryptDes } from '@/common/des';
 import {
   idValidator,
   ServerStaticData,
   GStores,
   AliPayLoginHandler,
 } from '@/utils';
-import { decryptDes } from '@/common/des';
 
 /**
  * 完善、 新增就诊人页面
