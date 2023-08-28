@@ -142,3 +142,9 @@ namespace UniNamespace {
     ): Promise<GetSystemInfoResult>;
   };
 }
+
+type PromiseReturnType<T> = ReturnType<T> extends Promise<infer R>
+  ? R extends Promise<infer S>
+    ? PromiseReturnType<() => R>
+    : R
+  : never;

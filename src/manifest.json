@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wx799315279808c901",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -76,7 +76,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173668243"
+    "appid": "2021004103625411"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -88,7 +88,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "绍兴第二医院",
   "h5": {
     "router": {
       "base": "./"

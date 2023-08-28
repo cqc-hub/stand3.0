@@ -266,6 +266,12 @@ export interface ISystemConfig_ {
       myExtraData: BaseObject;
     };
   };
+
+  /** 名医名科 */
+  FAMOUS_DOCTOR_DEPT: {
+    // 隐藏健康科普?
+    isHideScienceHealth?: '1';
+  }
 }
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {

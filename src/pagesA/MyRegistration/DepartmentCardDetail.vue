@@ -41,6 +41,7 @@
 
       <view class="department-pro">
         <view
+          v-if="pageConfig.isHideScienceHealth !== '1'"
           @click="goZiXun"
           class="g-flex-rc-cc g-border department-pro-item"
         >
@@ -105,7 +106,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -118,6 +119,7 @@
     useTBanner,
     GStores,
     previewImage,
+    getSystemConfig,
   } from '@/utils';
 
   import api from '@/service/api';
@@ -135,7 +137,9 @@
   const regDialogConfirm = ref<any>('');
   const detailInfo = ref({} as TDepartmentDetail);
   const gStores = new GStores();
-
+  const pageConfig = ref(
+    <PromiseReturnType<typeof getSystemConfig<'FAMOUS_DOCTOR_DEPT'>>>{}
+  );
   const getDetailData = async () => {
     const { id } = pageProps.value;
     isComplete.value = false;
@@ -225,7 +229,8 @@
     await getDetailData();
   };
 
-  onLoad((opt) => {
+  onLoad(async (opt) => {
+    pageConfig.value = await getSystemConfig('FAMOUS_DOCTOR_DEPT');
     try {
       pageProps.value = deQueryForUrl(opt);
       pageProps.value = deQueryForUrl(pageProps.value);
