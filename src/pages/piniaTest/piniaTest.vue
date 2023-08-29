@@ -230,9 +230,17 @@
     isLocal: '1',
   };
 
+  const 客服中心: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/serviceCenter/serviceChat',
+    text: '电子导诊单',
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(电子导诊单);
+      useTBanner(客服中心);
     }, 1000);
   });
 </script>

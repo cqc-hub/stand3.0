@@ -8,6 +8,8 @@
         bodyBold
         ref="gform"
       />
+
+      <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">提交</button>
     </view>
 
     <g-message />
