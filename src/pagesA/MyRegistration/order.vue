@@ -147,7 +147,7 @@
     isOrderPreSourceShow,
     preregistrationRegNumbers,
     goPreregistration,
-  } = useOrder(ref(props));
+  } = useOrder(ref({ ...props }));
 
   onReady(() => {
     uni.setNavigationBarTitle({
