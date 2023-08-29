@@ -35,6 +35,7 @@ export interface IRule {
 interface IBaseInstance {
   key: string;
   label: string;
+  subLabel?: string;
   placeholder?: string;
   required?: boolean;
   ocr?: boolean;

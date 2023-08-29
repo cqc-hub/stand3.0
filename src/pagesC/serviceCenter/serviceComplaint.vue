@@ -91,13 +91,16 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '您投诉的部门',
+      label: '意见反馈',
+      subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 200,
       key: 'dept1',
       direction: 'horizontal',
       rowStyle: 'margin-top: 16rpx;',
+      bodyStyle: 'margin-top: 12rpx;',
+      labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
     },
   ];
 

@@ -28,7 +28,10 @@
           class="label text-no-wrap"
           :style="item.labelStyle"
         >
-          {{ item.label }}
+          <view>{{ item.label }}</view>
+          <view v-if="item.subLabel" class="sub-label f24 color-888 ml16">
+            {{ item.subLabel }}
+          </view>
         </view>
 
         <view :style="item.bodyStyle" class="container-body">
@@ -59,27 +62,48 @@
           </block>
 
           <block v-else>
-            <uni-easyinput
-              v-if="
-                item.field === 'input-text' || item.field === 'input-verify'
-              "
-              :placeholder="item.placeholder"
-              :inputBorder="false"
-              :clearable="false"
-              :placeholderStyle="inputPlaceHolderStyle(item)"
-              :value="maskValueItem(item)"
-              :type="item.inputType"
-              :maxlength="item.maxlength"
-              :disabled="item.disabled"
-              @input="(e) => changeInput(item, e)"
-              @blur="inputBlur(item, $event)"
-              :class="{
-                'my-disabled': item.disabled,
-                'my-disabled-color': item.disabled,
-              }"
-              autoHeight
-              class="form-input"
-            />
+            <view class="flex1">
+              <uni-easyinput
+                v-if="
+                  item.field === 'input-text' || item.field === 'input-verify'
+                "
+                :placeholder="item.placeholder"
+                :inputBorder="false"
+                :clearable="false"
+                :placeholderStyle="inputPlaceHolderStyle(item)"
+                :value="maskValueItem(item)"
+                :type="item.inputType"
+                :maxlength="item.maxlength"
+                :disabled="item.disabled"
+                @input="(e) => changeInput(item, e)"
+                @blur="inputBlur(item, $event)"
+                :class="{
+                  'my-disabled': item.disabled,
+                  'my-disabled-color': item.disabled,
+                }"
+                autoHeight
+                class="form-input"
+              />
+
+              <!-- #ifndef MP-ALIPAY -->
+              <view
+                v-if="
+                  item.field === 'input-text' &&
+                  item.inputType === 'textarea' &&
+                  item.maxlength
+                "
+                class="warn-text-number-box"
+              >
+                <text class="warn-text-number f24">
+                  {{
+                    `${(value[item.key] && value[item.key].length) || 0}/${
+                      item.maxlength
+                    }`
+                  }}
+                </text>
+              </view>
+              <!-- #endif -->
+            </view>
 
             <view
               v-if="item.field === 'select'"
@@ -728,7 +752,7 @@
     setList,
     submit,
     clearWarning,
-    clearItemWarning
+    clearItemWarning,
   });
 </script>
 

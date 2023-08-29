@@ -8,8 +8,6 @@
   // border-bottom: 1rpx solid var(--hr-neutral-color-2);
   color: var(--hr-neutral-color-8);
 
-
-
   .label {
     padding-top: 32rpx;
     height: 100%;
@@ -24,12 +22,19 @@
         color: var(--hr-error-color-6);
       }
     }
+
+    .sub-label {
+      font-weight: normal;
+      position: relative;
+      top: 0.5em;
+    }
   }
 
   .container-body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 
     .container-body-switch {
       flex: 1;
@@ -76,9 +81,21 @@
         top: 2rpx;
       }
     }
+
+    .warn-text-number-box {
+      height: 32rpx;
+
+      .warn-text-number {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: var(--hr-neutral-color-5);
+        font-weight: normal;
+      }
+    }
   }
 
-   &.form-item-horizontal {
+  &.form-item-horizontal {
     display: flex;
     flex-wrap: wrap;
 
