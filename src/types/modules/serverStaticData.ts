@@ -259,6 +259,7 @@ export interface ISystemConfig_ {
 
   /** 电子导诊单 */
   Electronic_Consultation_Sheet: {
+    /** 点击具体行的地址跳转的第三方小程序参数 */
     toLocationMiniProgram?: {
       appId: string;
       path: string;
