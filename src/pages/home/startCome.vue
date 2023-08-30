@@ -31,5 +31,3 @@
     baseUrl + '/h5/index.html'
   )}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
 </script>
-
-<style lang="scss" scoped></style>
