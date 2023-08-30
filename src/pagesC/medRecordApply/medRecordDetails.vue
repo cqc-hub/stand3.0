@@ -1237,4 +1237,11 @@
       opacity: 1;
     }
   }
+
+  .express-icon {
+    width: 190rpx;
+    height: 52rpx;
+
+    transform: translateX(20rpx);
+  }
 </style>
