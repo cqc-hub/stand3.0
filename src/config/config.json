@@ -155,9 +155,11 @@
     "1001057": {
       "wxAppid": "wx7b1baac614ebed72",
       "alipayAppid": "2021003173633521",
+      "h5Appid": "wx69bb1d0f7210807b",
       "isvAlipayAppid": "2021003172684536",
       "name": "西安市红会医院",
       "isSearchInHos": true,
+      "isStartComeTest": true,
       "isOpenOcr": false,
       "isOpenHealthCard": {
         "healthCardText": "陕西省卫生健康委员会",
