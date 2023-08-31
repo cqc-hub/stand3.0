@@ -79,7 +79,6 @@
   import api from '@/service/api';
   import { dailyParam, dailyResult } from '../utils/inpatientInfo';
   import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
-  import { hosParam } from '@/components/g-form';
   import dailyExpenseListDetial from './dailyExpenseListDetial.vue';
   import dayjs from 'dayjs';
   const gStores = new GStores();

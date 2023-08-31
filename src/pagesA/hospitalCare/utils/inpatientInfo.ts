@@ -166,3 +166,23 @@ export interface subCostList {
   valuationAmount?: string;
   //计价金额
 }
+
+export interface IPayListObj {
+  digital: '1'; 
+  channel: string;
+  businessType: string;
+}
+
+//住院 配置参数接口 类型定义
+export interface hosParam {
+  inPatientPrePay: string;
+  isHosDaylist?: string;
+  isHosTotallist: string;
+  tab?: IOptions[];
+  isQueryPreRecord?: string;
+   /** 是否开启数字人民币支付 */
+   payList?: {
+    wx?: IPayListObj;
+    alipay?: IPayListObj;
+  };
+} 

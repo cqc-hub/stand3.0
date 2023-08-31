@@ -69,7 +69,6 @@
   import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
-  import { hosParam } from '@/components/g-form';
   import { payOrderResult } from './utils/inpatientInfo';
 
   type IPageProps = {

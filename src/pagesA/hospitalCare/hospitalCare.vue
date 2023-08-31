@@ -51,7 +51,6 @@
   import dailyExpenseList from './components/dailyExpenseList.vue';
   import totalList from './components/totalList.vue';
   import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
-  import { hosParam } from '@/components/g-form';
   import { deQueryForUrl } from '@/common';
 
   const pageProps = ref(
