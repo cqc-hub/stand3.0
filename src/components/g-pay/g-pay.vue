@@ -48,6 +48,10 @@
           label: '到院支付',
           key: 'offline',
         },
+        {
+          label: '数字人民币支付',
+          key: 'digital',
+        }
       ],
       autoPayArg: () => ({}),
     }

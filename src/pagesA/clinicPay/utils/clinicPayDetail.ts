@@ -887,6 +887,40 @@ export const usePayPage = () => {
     return pageConfig.value.isScanListHideMoney === '1';
   });
 
+  /**
+ * 是否开启数字人民币支付
+ * @returns boolean
+ */
+
+  const getIsDigitalPay = () =>{
+    const { payList } = pageConfig.value
+    if(payList){
+      const { alipay, wx } = payList!;
+
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { digital } = alipay;
+  
+        if (digital) {
+          return true;
+        }
+      }
+      // #endif
+  
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { digital } = wx;
+  
+        if (digital) {
+          return true;
+        }
+      }
+      // #endif
+    }
+   
+    return false;
+}
+
   const handlerPay = async () => {
     if (!selUnPayList.value.length) {
       gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
@@ -917,6 +951,7 @@ export const usePayPage = () => {
 
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
+    const isDigitalPay= getIsDigitalPay();
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
@@ -933,22 +968,33 @@ export const usePayPage = () => {
             pageProps.value.params
           );
 
-          if (flag) {
-            changeRefPayList(1);
-          } else {
-            changeRefPayList(0);
+          if(isDigitalPay){
+            if (flag) {
+              changeRefPayList(4);
+            } else {
+              changeRefPayList(3);
+            }
+          }else{
+            if (flag) {
+              changeRefPayList(1);
+            } else {
+              changeRefPayList(0);
+            }
           }
+         
         } else {
           changeRefPayList(0);
         }
       }
+    }else if(isDigitalPay){
+      changeRefPayList(3);
     }
 
     await wait(200);
     refPay.value.show();
   };
 
-  const changeRefPayList = (type: 0 | 1 | 2) => {
+  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => { 
     if (type === 0) {
       refPayList.value = [
         {
@@ -982,6 +1028,49 @@ export const usePayPage = () => {
         {
           label: '到院支付',
           key: 'offline',
+        },
+      ];
+    }else if (type === 3) { 
+      let labelPay = '自费支付'
+      // #ifdef MP-WEIXIN
+      labelPay = '微信支付'
+      // #endif
+      // #ifdef MP-ALIPAY
+      labelPay = '支付宝支付'
+      // #endif
+      refPayList.value = [
+        {
+          label: labelPay,
+          key: 'online',
+        },
+
+        {
+          label: '数字人民币支付',
+          key: 'digital',
+        },
+      ];
+    }else if (type === 4) {
+      let labelPay = '自费支付'
+      // #ifdef MP-WEIXIN
+      labelPay = '微信支付'
+      // #endif
+      // #ifdef MP-ALIPAY
+      labelPay = '支付宝支付'
+      // #endif
+      refPayList.value = [
+        {
+          label: '医保支付',
+          key: 'medicare',
+        },
+
+        {
+          label: labelPay,
+          key: 'online',
+        },
+
+        {
+          label: '数字人民币支付',
+          key: 'digital',
         },
       ];
     }
@@ -1029,8 +1118,115 @@ export const usePayPage = () => {
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
+    }else if(item.key === 'digital'){
+      toDigitalPay();
     }
   };
+
+  /** 数字人民币支付 */
+  const toDigitalPay = async ()=>{
+    const selectList = selUnPayList.value;
+    const { patientId, patientName } = gStores.userStore.patChoose;
+
+    const _totalCost = totalCost.value + '';
+    const source = gStores.globalStore.browser.source;
+    const personalPayFee = selectList.reduce((p, o) => {
+      const { costTypeCode } = o;
+
+      if (!costTypeCode || costTypeCode === '1') {
+        p += (o.totalCost as any) * 1;
+      }
+      return p;
+    }, 0);
+
+    const {alipay, wx } = pageConfig.value.payList!;
+    let _businessType = '';
+    let _channel = '';
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { businessType,channel } = alipay;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+  
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { businessType,channel } = wx;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+
+    const args: BaseObject = {
+      personalPayFee: personalPayFee || undefined,
+      patientName: pageProps.value.deParams?.patientName,
+      patientId,
+      source,
+      totalCost: _totalCost,
+      hosId: selectList[0].hosId,
+      hosName: selectList[0].hosName,
+      visitDate: selectList[0].visitDate,
+      mergeOrder: selectList.map((o) => o.childOrder).join(','),
+      deptCode: selectList.map((o) => o.deptId).join(','),
+      deptName: selectList.map((o) => o.deptName).join(','),
+      docCode: selectList.map((o) => o.docId).join(','),
+      docName: selectList.map((o) => o.docName).join(','),
+      recipeNo: selectList.map((o) => o.recipeNo).join(','),
+      serialNo: selectList.map((o) => o.serialNo).join(';'),
+
+      diseaseTypeCode: selectList
+        .map((o) => o.diseaseTypeCode)
+        .filter((o) => o)
+        .join(','),
+      diseaseTypeName: selectList
+        .map((o) => o.diseaseTypeName)
+        .filter((o) => o)
+        .join(','),
+      diseaseType: selectList
+        .map((o) => o.diseaseType)
+        .filter((o) => o)
+        .join(','),
+    };
+
+    if (pageProps.value.deParams) {
+      args.cardNumber = pageProps.value.deParams.cardNumber;
+    }
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const payArg: BaseObject = {
+      phsOrderNo,
+      totalFee: _totalCost,
+      phsOrderSource: '2',
+      hosId: selectList[0].hosId,
+      // hosId: '1279',
+      hosName: selectList[0].hosName,
+      channel:_channel,
+      businessType: _businessType,
+      returnUrl:
+      `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent('/pagesA/clinicPay/clinicPayDetail?tabIndex=1')}`,
+    };
+
+    if (pageProps.value.deParams) {
+      payArg.patientName = pageProps.value.deParams.patientName;
+      payArg.cardNumber = pageProps.value.deParams.cardNumber;
+    } else {
+      payArg.patientName = patientName;
+    }
+
+    const res = await payMoneyOnline(payArg);
+    const { invokeData } = res;
+    uni.navigateTo({
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(
+        invokeData.payUrl!
+      )}`,
+    });
+    // await toPayPull(res, '门诊缴费');
+    // payAfter();
+  }
 
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {

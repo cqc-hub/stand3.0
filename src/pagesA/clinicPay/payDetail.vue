@@ -576,6 +576,8 @@
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
+    }else if(item.key === 'digital'){
+      toDigitalPay();
     }
   };
 
@@ -763,6 +765,96 @@
     await toPayPull(res, '门诊缴费');
     payAfter();
   };
+
+   /** 数字人民币支付 */
+   const toDigitalPay = async ()=>{
+    const { patientId, patientName } = gStores.userStore.patChoose; 
+    const totalCost = getPayTotal.value;
+    const source = gStores.globalStore.browser.source;
+
+    const {alipay, wx } = pageConfig.value.payList!;
+    let _businessType = '';
+    let _channel = '';
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { businessType,channel } = alipay;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+  
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { businessType,channel } = wx;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+
+    const {
+      childOrder,
+      deptId,
+      docId,
+      hosName,
+      deptName,
+      docName,
+      hosId,
+      visitDate,
+      costTypeCode,
+      cardNumber,
+      recipeNo,
+    } = props.value;
+
+    const args = {
+      ...props.value,
+      personalPayFee:
+        ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
+      patientName: props.value.patientName,
+      businessType: '1',
+      patientId,
+      source,
+      totalCost,
+      mergeOrder: childOrder,
+      deptCode: deptId,
+      hosName,
+      deptName,
+      docCode: docId,
+      docName,
+      hosId,
+      visitDate,
+      cardNumber,
+      recipeNo,
+      serialNo: selList.value
+        .map((o) => o.serialNo)
+        .filter((o) => o)
+        .join(','),
+    };
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const res = await payMoneyOnline({
+      phsOrderNo,
+      totalFee: totalCost,
+      phsOrderSource: '2',
+      hosId,
+      hosName,
+      patientName: props.value.patientName || patientName,
+      cardNumber,
+      channel:_channel,
+      businessType: _businessType,
+      returnUrl:
+                `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent('/pagesA/clinicPay/clinicPayDetail?tabIndex=1')}`,
+    });
+
+    const { invokeData } = res;
+    uni.navigateTo({
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(
+        invokeData.payUrl!
+      )}`,
+    }); 
+  }
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;

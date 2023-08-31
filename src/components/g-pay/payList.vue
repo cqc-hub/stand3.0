@@ -13,7 +13,7 @@
     >
       <view
         :class="{
-          ico_pay: item.key === 'online',
+          ico_pay: item.key === 'online' || item.key === 'digital',
           ico_card: item.key === 'medicare',
           ico_hospital: item.key === 'offline',
         }"

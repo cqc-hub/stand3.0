@@ -12,6 +12,12 @@ export interface ISelectOptions {
 
   children?: ISelectOptions[];
 }
+export interface IPayListObj {
+  digital: '1'; 
+  channel: string;
+  businessType: string;
+}
+
 //住院 配置参数接口 类型定义
 export interface hosParam {
   inPatientPrePay: string;
@@ -19,6 +25,11 @@ export interface hosParam {
   isHosTotallist: string;
   tab?: nameList[];
   isQueryPreRecord?: string;
+   /** 是否开启数字人民币支付 */
+   payList?: {
+    wx?: IPayListObj;
+    alipay?: IPayListObj;
+  };
 }
 export interface nameList {
   value?: string;

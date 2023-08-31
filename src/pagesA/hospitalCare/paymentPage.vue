@@ -43,13 +43,20 @@
         <button
           :disabled="defalutMoney == '' ? true : false"
           :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
-          @click="toPay"
+          @click="getPay"
         >
           确定
         </button>
       </view>
     </view>
-
+    <g-pay
+      :list="refPayList"
+      :autoPayArg="payArg"
+      @pay-success="payAfter"
+      @pay-click="getPayInfo"
+      autoInOne
+      ref="refPay"
+    >   </g-pay>
     <g-message />
   </view>
 </template>
@@ -74,15 +81,29 @@
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment';
   };
+
+  interface IGPay {
+  label: string;
+  key: 'online' | 'digital';
+}
+
   const gStores = new GStores();
   const resultHos = ref<ISystemConfig['hospitalCare']>({} as any);
   const isConfigComplete = ref(false);
 
   const list = ref([]);
   const defalutMoney = ref('');
-
+  const refPay = ref<any>('');
   const payOrder = ref<payOrderResult>({} as payOrderResult);
   const pageProps = ref({} as IPageProps);
+
+  const refPayList = ref([
+    {
+      label: '自费支付',
+      key: 'online',
+    },
+  ]);
+  const payArg = ref<BaseObject>({});
   const getMoneyInputType = computed(() => {
     if (resultHos.value.isMode === '1' || !resultHos.value.isMode) {
       return 'digit';
@@ -93,6 +114,76 @@
   const checkMoney = (item) => {
     defalutMoney.value = String(item);
   };
+    /**
+ * 是否开启数字人民币支付
+ * @returns boolean
+ */
+
+ const getIsDigitalPay = () =>{
+    const { payList } = resultHos.value
+    if(payList){
+        const { alipay, wx } = payList!;
+
+        // #ifdef MP-ALIPAY
+        if (alipay) {
+          const { digital } = alipay;
+
+          if (digital) {
+            return true;
+          }
+        }
+        // #endif
+
+        // #ifdef  MP-WEIXIN
+        if (wx) {
+          const { digital } = wx;
+
+          if (digital) {
+            return true;
+          }
+        }
+        // #endif
+      }
+    return false;
+}
+
+  const getPayInfo = async ({ item }: { item: IGPay }) => {
+    // 自费
+    if (item.key === 'online') {
+      toPay();
+    } else if (item.key === 'digital') {
+      toDigitalPay()
+    }
+  };
+
+  const getPay = async () => {
+    const isDigitalPay= getIsDigitalPay();
+
+   if(isDigitalPay){
+    let labelPay = '自费支付'
+    // #ifdef MP-WEIXIN
+    labelPay = '微信支付'
+    // #endif
+    // #ifdef MP-ALIPAY
+    labelPay = '支付宝支付'
+    // #endif
+    refPayList.value = [
+        {
+          label: labelPay,
+          key: 'online',
+        },
+
+        {
+          label: '数字人民币支付',
+          key: 'digital',
+        },
+      ];
+    }
+
+    await wait(200);
+    refPay.value.show();
+  };
+
   const toPay = async () => {
     await inputMoneyChange();
     await int();
@@ -132,6 +223,59 @@
       });
     }
   };
+
+  /** 数字人民币支付 */
+  const toDigitalPay = async ()=>{
+
+    const {alipay, wx } = resultHos.value.payList!;
+    let _businessType = '';
+    let _channel = '';
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { businessType,channel } = alipay;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+  
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { businessType,channel } = wx;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+    await inputMoneyChange();
+    await int();
+    const res = await payMoneyOnline({
+      phsOrderNo: payOrder.value.phsOrderNo,
+      paySign: payOrder.value.paySign,
+      totalFee: defalutMoney.value,
+      phsOrderSource: pageProps.value.hospitalAccount
+        ? pageProps.value.hospitalAccount
+        : '3',
+      source: gStores.globalStore.browser.source,
+      ...pageProps.value,
+      patientId:
+        pageProps.value.type == '1'
+          ? ''
+          : gStores.userStore.patChoose.patientId,
+      businessType: _businessType,
+      channel:_channel,
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
+                "/pagesA/hospitalCare/hospitalCare"
+              )}`,
+    });
+    const { invokeData } = res;
+    uni.navigateTo({
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(
+        invokeData.payUrl!
+      )}`,
+    }); 
+    // payAfter();
+ 
+  }
+  
   const setData = async () => {
     isConfigComplete.value = false;
     const result = await ServerStaticData.getSystemConfig(

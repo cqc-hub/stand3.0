@@ -148,6 +148,11 @@ export interface ISystemConfig_ {
     isHosDaylist: '1' | '2';
     //0否 1 是 是否支持预交金记录查询
     isQueryPreRecord?: '0' | '1';
+    /** 是否开启数字人民币支付 */
+    payList?: {
+      wx?: IPayListObj;
+      alipay?: IPayListObj;
+    };
   };
 
   // 门诊缴费
@@ -166,7 +171,12 @@ export interface ISystemConfig_ {
     payedFooterBtn?: TButtonConfig;
     /** 预结算 */
     isPreSettle?: '1';
-    // 扫码缴费是否隐藏列表金额
+    /** 是否开启数字人民币支付 */
+    payList?: {
+      wx?: IPayListObj;
+      alipay?: IPayListObj;
+    };
+    /** 扫码缴费是否隐藏列表金额 */
     isScanListHideMoney?: '1';
 
     /** 页面顶部 banner */
@@ -365,6 +375,12 @@ export interface IReportConfigTab {
   headerType: string;
   headerName: string;
   typeId: number;
+}
+
+export interface IPayListObj {
+  digital: '1'; 
+  channel: string;
+  businessType: string;
 }
 
 type TMedRecordSfz = 'front' | 'end' | 'handler' | 'handlerBack' | 'hkb';

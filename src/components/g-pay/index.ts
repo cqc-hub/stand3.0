@@ -8,7 +8,7 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
 export interface IGPay {
   label: string;
-  key: 'offline' | 'online' | 'medicare';
+  key: 'offline' | 'online' | 'medicare' | 'digital';
 }
 
 export interface IPayRes {
@@ -26,6 +26,7 @@ export interface IPayRes {
     appId: string;
     signType: string;
     nonceStr: string;
+    payUrl: string;
   };
   defrayNo: string;
   buyerAccount: string;
