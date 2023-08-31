@@ -246,6 +246,11 @@
       // #endif
     await inputMoneyChange();
     await int();
+    //区分下 代缴 住院 门诊充值的回调地址
+    let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
+    if(pageProps.value.type == '1' || pageProps.value.hosId){
+      _returnUrl = '/pages/home/home'
+    } 
     const res = await payMoneyOnline({
       phsOrderNo: payOrder.value.phsOrderNo,
       paySign: payOrder.value.paySign,
@@ -262,7 +267,7 @@
       businessType: _businessType,
       channel:_channel,
       returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
-                "/pagesA/hospitalCare/hospitalCare"
+              _returnUrl
               )}`,
     });
     const { invokeData } = res;

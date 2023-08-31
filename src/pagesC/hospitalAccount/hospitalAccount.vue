@@ -16,7 +16,7 @@
           >
           <view class="f-button">
             <button
-              v-if="isCash == 1"
+              v-if="isCash == '1'"
               @click="confirmForm1"
               class="f-b1 mr8 btn btn-primary"
             >
