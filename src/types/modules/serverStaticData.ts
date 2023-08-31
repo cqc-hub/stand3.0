@@ -130,8 +130,11 @@ export interface ISystemConfig_ {
     /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '0' | '1';
 
-    /** 快递公司 */
-    company?: IOptions[];
+    /** 快递公司(新增病案时候的快递公司选择) */
+    company?: (IOptions & {
+      // 快递方式描述 (到付, 寄付..)
+      des?: string;
+    })[];
   }[];
 
   //住院服务
@@ -272,7 +275,7 @@ export interface ISystemConfig_ {
   FAMOUS_DOCTOR_DEPT: {
     // 隐藏健康科普?
     isHideScienceHealth?: '1';
-  }
+  };
 }
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {

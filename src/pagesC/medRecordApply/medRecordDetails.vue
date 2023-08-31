@@ -54,7 +54,9 @@
               <view class="f28 mt24">
                 <view class="flex-between">
                   <view class="color-888">快递费支付方式</view>
-                  <view class="g-bold color-error">到付</view>
+                  <view class="g-bold color-error">
+                    {{ getCompanyPayWayLabel }}
+                  </view>
                 </view>
               </view>
             </block>
@@ -494,6 +496,18 @@
   // 切换院区?
   const isToggleHos = computed(() => {
     return pageConfig.value.isToggleHos === '1';
+  });
+
+  const getCompanyPayWayLabel = computed(() => {
+    if (pageConfig.value.company?.length) {
+      const company = pageConfig.value.company.find(
+        (o) => o.value === expressCompany.value
+      );
+
+      return company?.des || '到付';
+    }
+
+    return '';
   });
 
   const refPay = ref<any>('');
