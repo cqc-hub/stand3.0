@@ -164,12 +164,12 @@
     GStores,
     ISystemConfig,
   } from '@/utils';
-  import { joinQuery } from '@/common';
+  import { joinQuery, deQueryForUrl } from '@/common';
 
   import hosListVue from './components/hosList/hosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
-  const props = defineProps<{
+  const _props = defineProps<{
     _url: string;
     _type: number; //区分跳转h5的页面 1：医院指南 2：核酸开单 3:药店指南（只展示药店 搜索框 不展示距离）
     _questionId: number; //问卷id
@@ -178,7 +178,9 @@
     isLogin?: '1'; // 需要登录?
   }>();
 
-  const dirUrl = ref(decodeURIComponent(props._url));
+  const props = ref(deQueryForUrl(deQueryForUrl(_props)));
+
+  const dirUrl = ref(decodeURIComponent(props.value._url));
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
 
@@ -188,14 +190,14 @@
     } else if (dirUrl.value.includes('/pagesC/medRecordApply/recordApply')) {
       return '病案复印';
     }
-    if (props._type === 2) {
+    if (props.value._type === 2) {
       return '核酸开单';
     }
 
     return '';
   });
 
-  const isNeedsLogin = computed(() => props.isLogin === '1');
+  const isNeedsLogin = computed(() => props.value.isLogin === '1');
 
   // 对应的值 '1' 禁
   const listDisableName = computed(() => {
@@ -306,30 +308,30 @@
       }
     }
 
-    if (props._type && props._type != 3) {
+    if (props.value._type && props.value._type != 3) {
       //院区跳转问卷页面
-      if (props._questionId) {
+      if (props.value._questionId) {
         //跳转问卷页面-h5
         uni.navigateTo({
           url: joinQuery(
             '/pagesC/cloudHospital/myPath?path=/pagesC/question/normalQuestion',
             {
-              category: props._questionId,
-              url: props._url,
+              category: props.value._questionId,
+              url: props.value._url,
               hosId: item.hosId,
             }
           ),
         });
       } else {
         uni.navigateTo({
-          url: joinQuery(pagesList[props._type], {
+          url: joinQuery(pagesList[props.value._type], {
             hosId: item.hosId,
-            isPay: props._isPay,
+            isPay: props.value._isPay,
           }),
         });
       }
     } else {
-      const url = decodeURIComponent(props._url);
+      const url = decodeURIComponent(props.value._url);
       uni.navigateTo({
         url: joinQuery(url, {
           hosId: item.hosId,
@@ -424,7 +426,7 @@
         {
           type,
           name: searchValue.value,
-          hosType: props._type == 3 ? '48' : '',
+          hosType: props.value._type == 3 ? '48' : '',
         },
         { noCache: true }
       );
@@ -494,7 +496,7 @@
   };
 
   onLoad(() => {
-    if (props._type == 3) {
+    if (props.value._type == 3) {
       uni.setNavigationBarTitle({
         title: '药店指南',
       });

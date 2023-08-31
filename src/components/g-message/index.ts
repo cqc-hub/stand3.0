@@ -54,10 +54,9 @@ export const useWxAuthorizationHook = () => {
   };
 
   // 处理主动触发 点击同意
-  const handlerInitiativeAgree = () => {
+  const handlerInitiativeAgree = async () => {
     if (pages.length) {
       const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
       uni.reLaunch({
         url: fullUrl,
       });
