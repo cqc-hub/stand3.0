@@ -34,7 +34,7 @@
           :style="{ color: cancelColor }"
           @click="clickCancel"
         >
-          {{ cancelText }}
+          <slot name="cancelBtn">{{ cancelText }}</slot>
         </view>
         <view
           v-if="!isReverseBtn"

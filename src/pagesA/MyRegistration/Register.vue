@@ -149,7 +149,7 @@
     >
       <view class="color-444 f32 g-break-word mb40">{{ hosIntro }}</view>
     </Order-Reg-Confirm>
-    <g-message />
+    <g-message isWxAuthInit />
   </view>
 </template>
 
@@ -467,6 +467,7 @@
         },
       })
     );
+    console.log('first');
 
     // #ifdef  MP-WEIXIN
     await new Promise((resolve, reject) => {
@@ -481,6 +482,10 @@
           } else {
             resolve(void 0);
           }
+        },
+
+        complete(e) {
+          console.log('second', e);
         },
       });
     });

@@ -16,15 +16,24 @@
         <view class="my-menu" v-if="!gStores.globalStore.modeOld">
           <view v-if="viewerStore.myMenu1List.length" class="list g-fade-in">
             <view class="title">我的订单</view>
-            <homeGrid :list="viewerStore.myMenu1List" @open-share="openShare"></homeGrid>
+            <homeGrid
+              :list="viewerStore.myMenu1List"
+              @open-share="openShare"
+            ></homeGrid>
           </view>
           <view v-if="viewerStore.myMenu2List.length" class="list g-fade-in">
             <view class="title">我的服务</view>
-            <homeGrid :list="viewerStore.myMenu2List" @open-share="openShare"></homeGrid>
+            <homeGrid
+              :list="viewerStore.myMenu2List"
+              @open-share="openShare"
+            ></homeGrid>
           </view>
           <view v-if="viewerStore.myMenu3List.length" class="list g-fade-in">
             <view class="title">我的工具</view>
-            <homeGrid :list="viewerStore.myMenu3List" @open-share="openShare"></homeGrid>
+            <homeGrid
+              :list="viewerStore.myMenu3List"
+              @open-share="openShare"
+            ></homeGrid>
           </view>
         </view>
         <view class="my-menu old" v-if="gStores.globalStore.modeOld">
@@ -69,7 +78,6 @@
   const h5QrCodeImg = ref('lqCode.jpg');
   const viewerStore = useViewerStore();
 
-
   //骨架屏配置
   const skeletonProps = ref({
     skeleton: [
@@ -105,7 +113,6 @@
   const routeStore = useRouterStore();
   const gStores = new GStores();
   const refOldDialog = ref();
-
 
   // 互联网医院
   const dealHosNet = async (opt: {
