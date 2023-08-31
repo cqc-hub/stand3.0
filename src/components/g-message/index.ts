@@ -1,13 +1,11 @@
 import { ref } from 'vue';
 import { wait } from '@/utils';
 
-let pageLen = 0;
 export const useWxAuthorizationHook = () => {
   const isShowAgreeDialog = ref(false);
   /** 是否主动触发标记 */
   let isInitiative = false;
   const pages = getCurrentPages();
-  pageLen = pages?.length || 0;
   const privacyContractName = ref('');
 
   let wxAgreeButtonCB = (payload: {
@@ -42,7 +40,7 @@ export const useWxAuthorizationHook = () => {
             privacyContractName: _privacyContractName,
           } = e;
 
-          if (needAuthorization && pageLen === pages?.length) {
+          if (needAuthorization) {
             isShowAgreeDialog.value = true;
             privacyContractName.value = _privacyContractName;
           }
