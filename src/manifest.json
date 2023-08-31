@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7acc3ecadc08f7ea",
+    "appid": "wx7b1baac614ebed72",
     "setting": {
       "urlCheck": false,
       "postcss": false,
@@ -74,14 +74,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003167607056"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -93,7 +88,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "咸阳市第一人民医院",
+  "name": "西安市红会医院",
   "h5": {
     "router": {
       "base": "./"

@@ -234,7 +234,7 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/serviceCenter/serviceChat',
-    text: '电子导诊单',
+    text: '客服中心',
     isLocal: '1',
   };
 
