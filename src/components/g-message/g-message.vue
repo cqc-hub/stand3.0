@@ -84,9 +84,9 @@
   };
 
   const goAgreement = () => {
-    uni.navigateTo({
-      url: '/pagesA/mySet/userPolicy',
-    });
+    // #ifdef  MP-WEIXIN
+    wx.openPrivacyContract();
+    // #endif
   };
 
   uni.$on('showMessage', function () {
