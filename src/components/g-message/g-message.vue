@@ -6,7 +6,7 @@
         <view class="g-break-word color-888">
           感谢您使用本小程序, 您使用本小程序前应当阅井同意,
           <text @click="goAgreement" class="fg-agree-name">
-            《用户隐私保护指引》
+            {{ privacyContractName }}
           </text>
           <view>
             当您点击同意并开始时用产品服务时，即表示你已理解并同息该条款内容，该条款将对您产生法律约束力。如您拒绝，将无法正常使用小程序。
@@ -68,6 +68,7 @@
     handlerAgree,
     handlerDisagree,
     wxOnNeedPrivacyAuthorizationInit,
+    privacyContractName,
   } = useWxAuthorizationHook();
 
   const usePopup = function (type: boolean) {

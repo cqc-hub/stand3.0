@@ -6,6 +6,7 @@ export const useWxAuthorizationHook = () => {
   /** 是否主动触发标记 */
   let isInitiative = false;
   const pages = getCurrentPages();
+  const privacyContractName = ref('');
 
   let wxAgreeButtonCB = (payload: {
     buttonId: string;
@@ -19,8 +20,7 @@ export const useWxAuthorizationHook = () => {
       wx.onNeedPrivacyAuthorization(async (resolve) => {
         wxAgreeButtonCB = resolve;
         await wait(500);
-        isShowAgreeDialog.value = true;
-        isInitiative = false;
+        wxOnNeedPrivacyAuthorizationInit(false);
       });
     // #endif
   };
@@ -29,15 +29,22 @@ export const useWxAuthorizationHook = () => {
    * 主动执行
    * 应当执行的时机: 页面进入就自动调用微信的授权街口的情况
    */
-  const wxOnNeedPrivacyAuthorizationInit = () => {
+  const wxOnNeedPrivacyAuthorizationInit = (_isInitiative = true) => {
     // #ifdef  MP-WEIXIN
-    isInitiative = true;
+    isInitiative = _isInitiative;
     wx.getPrivacySetting &&
       wx.getPrivacySetting({
         success(e) {
-          const { needAuthorization } = e;
+          console.log(e);
+
+          const {
+            needAuthorization,
+            privacyContractName: _privacyContractName,
+          } = e;
+
           if (needAuthorization) {
             isShowAgreeDialog.value = true;
+            privacyContractName.value = _privacyContractName;
           }
         },
       });
@@ -106,5 +113,6 @@ export const useWxAuthorizationHook = () => {
     handlerAgree,
     handlerDisagree,
     wxOnNeedPrivacyAuthorizationInit,
+    privacyContractName,
   };
 };
