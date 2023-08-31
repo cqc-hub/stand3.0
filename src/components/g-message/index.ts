@@ -1,11 +1,13 @@
 import { ref } from 'vue';
 import { wait } from '@/utils';
 
+let pageLen = 0;
 export const useWxAuthorizationHook = () => {
   const isShowAgreeDialog = ref(false);
   /** 是否主动触发标记 */
   let isInitiative = false;
   const pages = getCurrentPages();
+  pageLen = pages?.length || 0;
   const privacyContractName = ref('');
 
   let wxAgreeButtonCB = (payload: {
@@ -26,7 +28,7 @@ export const useWxAuthorizationHook = () => {
   };
 
   /**
-   * 主动执行
+   * 主动执行 - _isInitiative = true
    * 应当执行的时机: 页面进入就自动调用微信的授权街口的情况
    */
   const wxOnNeedPrivacyAuthorizationInit = (_isInitiative = true) => {
@@ -35,14 +37,12 @@ export const useWxAuthorizationHook = () => {
     wx.getPrivacySetting &&
       wx.getPrivacySetting({
         success(e) {
-          console.log(e);
-
           const {
             needAuthorization,
             privacyContractName: _privacyContractName,
           } = e;
 
-          if (needAuthorization) {
+          if (needAuthorization && pageLen === pages?.length) {
             isShowAgreeDialog.value = true;
             privacyContractName.value = _privacyContractName;
           }

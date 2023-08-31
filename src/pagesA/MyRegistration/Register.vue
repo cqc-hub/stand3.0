@@ -469,7 +469,6 @@
         },
       })
     );
-    console.log('first');
 
     // #ifdef  MP-WEIXIN
     await new Promise((resolve, reject) => {
@@ -484,10 +483,6 @@
           } else {
             resolve(void 0);
           }
-        },
-
-        complete(e) {
-          console.log('second', e);
         },
       });
     });
