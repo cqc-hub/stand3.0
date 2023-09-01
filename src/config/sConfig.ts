@@ -2,7 +2,7 @@ interface ISConfig {
   // 有药品配送功能?
   isDrugDelivery?: '1';
   //底部是否放开互联网医院?
-  isOpenButtom?: '1';
+  isOpenButton?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
@@ -108,7 +108,7 @@ const scJson: Record<string, ISConfig> = {
    * 咸阳市第一人民医院
    */
   1001054: {
-    isOpenButtom: '1',
+    isOpenButton: '1',
     isHideHomeSearch: '1',
   },
 
@@ -171,6 +171,7 @@ const scJson: Record<string, ISConfig> = {
         isMedicalOrder: '1',
       },
     },
+    isOpenButton: '1',
   },
 
   /**

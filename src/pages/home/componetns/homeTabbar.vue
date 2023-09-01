@@ -73,7 +73,7 @@
     if (url !== currentPath) {
       // if (item.url == "netHospital") {
       //   //目前只有咸阳对接是小程序
-      //   let obj = global.sConfig.isOpenButtom as any;
+      //   let obj = global.sConfig.isOpenButton as any;
       //   uni.navigateToMiniProgram({
       //     appId: obj.appId,
       //     path: obj.path,
@@ -96,7 +96,7 @@
   };
 
   onMounted(async () => {
-    if (global.sConfig.isOpenButtom) {
+    if (global.sConfig.isOpenButton) {
       tabBars.value.splice(1, 0, {
         label: '互联网医院',
         icon: '/static/image/wlyy.png',

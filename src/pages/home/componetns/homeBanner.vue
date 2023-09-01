@@ -10,7 +10,7 @@
           class="swiper"
           circular
           :autoplay="autoplay"
-          :indicator-dots="props.leftFunctionList.length > 0 ? true : false"
+          :indicator-dots="props.leftFunctionList.length > 1 ? true : false"
         >
           <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i" class="g-fade-in">
             <!-- <g-login @handler-next="gotoPath(item)" :disabled="item.loginInterception === '0'"> -->

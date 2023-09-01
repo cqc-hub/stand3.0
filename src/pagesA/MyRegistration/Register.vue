@@ -394,6 +394,8 @@
       medCopyConfigList.value = await ServerStaticData.getSystemConfig(
         'medRecord'
       );
+      console.log(medCopyConfigList.value);
+
     }
 
     if (isRequestApi) {
