@@ -9,7 +9,9 @@
         ref="gform"
       />
 
-      <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">提交</button>
+      <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">
+        提交
+      </button>
     </view>
 
     <g-message />
@@ -21,15 +23,22 @@
   import { GStores } from '@/utils';
   import type { TInstance } from '@/components/g-form/index';
 
+  import api from '@/service/api';
+
   const gStores = new GStores();
-  const formData = shallowRef(<BaseObject>{});
+  const formData = shallowRef(<BaseObject>{
+    // name: '炒青菜',
+    // phone: '13868529891',
+    // compDept: '消化内科',
+    // compContext: '好好好哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
+  });
   const tempList: TInstance[] = [
     {
       required: true,
       label: '投诉人',
       field: 'input-text',
       placeholder: '请输入',
-      key: 'patientName',
+      key: 'name',
       labelWidth: '220rpx',
       maxlength: 50,
       validator(value) {
@@ -70,7 +79,7 @@
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
-      key: 'patientPhone',
+      key: 'phone',
       rule: [
         {
           message: '请确认手机号是否有误',
@@ -86,7 +95,7 @@
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
-      key: 'dept',
+      key: 'compDept',
       labelWidth: '220rpx',
     },
 
@@ -98,7 +107,7 @@
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 200,
-      key: 'dept1',
+      key: 'compContext',
       direction: 'horizontal',
       rowStyle: 'margin-top: 16rpx;',
       bodyStyle: 'margin-top: 12rpx;',
@@ -106,7 +115,16 @@
     },
   ];
 
-  const formSubmit = (e) => {};
+  const formSubmit = async ({ data }) => {
+    await api.complainsAndSuggestions(data);
+    gStores.messageStore.showMessage('反馈成功,感谢您的支持', 3000, {
+      closeCallBack() {
+        uni.reLaunch({
+          url: '/pagesC/serviceCenter/serviceCenter',
+        });
+      },
+    });
+  };
   const gform = ref<any>('');
 
   onMounted(() => {

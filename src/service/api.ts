@@ -63,6 +63,12 @@ const baseApi = {
       hideLoading: true,
     }),
 
+  complainsAndSuggestions: (data) =>
+    service.post('/phs-base/complains/complainsAndSuggestions', parm(data)),
+
+  getComplainsList: (data) =>
+    service.post('/phs-base/complains/getComplainsList', parm(data)),
+
   // 资讯详情
   getCmsInfo: (data) =>
     service.post('/phs-base/cms/getCmsInfo', parm(data), {

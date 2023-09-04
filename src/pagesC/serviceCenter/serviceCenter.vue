@@ -15,13 +15,34 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { shallowRef } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+
+  import api from '@/service/api';
+
+  const isComplete = shallowRef(false);
 
   const goComplaint = () => {
     uni.navigateTo({
       url: '/pagesC/serviceCenter/serviceComplaint',
     });
   };
+
+  const getList = async () => {
+    isComplete.value = false;
+
+    await api.getComplainsList({}).finally(() => {
+      isComplete.value;
+    });
+  };
+
+  const init = async () => {
+    getList();
+  };
+
+  onLoad(() => {
+    init();
+  });
 </script>
 
 <style lang="scss" scoped>

@@ -347,6 +347,9 @@
           "path": "serviceCenter/serviceCenter",
           "style": {
             "navigationBarTitleText": "客服中心"
+          },
+          "extend": {
+            "herenId": true
           }
         },
 
@@ -354,6 +357,9 @@
           "path": "serviceCenter/serviceCenterDetail",
           "style": {
             "navigationBarTitleText": "客服中心"
+          },
+          "extend": {
+            "herenId": true
           }
         },
 
