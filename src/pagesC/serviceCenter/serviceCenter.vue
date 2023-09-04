@@ -1,6 +1,18 @@
 <template>
   <view class="g-page">
-    <view class="g-container">233</view>
+    <view class="g-container">
+      <block v-if="isComplete">
+        <Complaint-List
+          v-if="list.length"
+          :list="list"
+          @item-click="itemClick"
+        />
+
+        <view v-else class="empty-list">
+          <g-empty noTransformY />
+        </view>
+      </block>
+    </view>
 
     <view class="g-footer">
       <button
@@ -15,12 +27,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { shallowRef } from 'vue';
+  import { shallowRef, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-
+  import { TListComPlain } from './utils';
   import api from '@/service/api';
 
+  import ComplaintList from './components/ComplaintList.vue';
+
   const isComplete = shallowRef(false);
+  const list = ref<TListComPlain>([]);
 
   const goComplaint = () => {
     uni.navigateTo({
@@ -31,10 +46,14 @@
   const getList = async () => {
     isComplete.value = false;
 
-    await api.getComplainsList({}).finally(() => {
-      isComplete.value;
+    const { result } = await api.getComplainsList({}).finally(() => {
+      isComplete.value = true;
     });
+
+    list.value = result || [];
   };
+
+  const itemClick = (item) => {};
 
   const init = async () => {
     getList();
