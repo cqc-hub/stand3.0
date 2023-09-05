@@ -109,8 +109,15 @@
   const regConfirm = async () => {
     dialogShow.value = false;
     const { patientId } = gStores.userStore.patChoose;
-    const { hosId, hosDocId, docName, regNumber, categorName, categorNamePY } =
-      props.value;
+    const {
+      hosId,
+      hosDocId,
+      docName,
+      regNumber,
+      categorName,
+      categorNamePY,
+      fee,
+    } = props.value;
 
     const requestArg = {
       status: '0',
@@ -122,6 +129,7 @@
       categorNamePy: categorNamePY,
       regNumber,
       hosName: hosName.value,
+      fee,
     };
 
     await api.preregistrationSave(requestArg);

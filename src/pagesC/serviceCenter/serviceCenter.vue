@@ -30,9 +30,9 @@
 
 <script lang="ts" setup>
   import { shallowRef, ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onShow } from '@dcloudio/uni-app';
   import { TListComPlain } from './utils';
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, useTBanner } from '@/utils';
 
   import api from '@/service/api';
 
@@ -59,7 +59,6 @@
   };
 
   const itemClick = (item: TListComPlain[number]) => {
-    console.log(item);
     useTBanner({
       type: 'h5',
       isSelfH5: '1',
@@ -78,7 +77,7 @@
     getList();
   };
 
-  onLoad(() => {
+  onShow(() => {
     init();
   });
 </script>
