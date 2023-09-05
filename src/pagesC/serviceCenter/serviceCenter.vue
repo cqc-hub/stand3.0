@@ -14,6 +14,8 @@
       </block>
     </view>
 
+    <g-message />
+
     <view class="g-footer">
       <button
         @click="goComplaint"
@@ -30,10 +32,13 @@
   import { shallowRef, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { TListComPlain } from './utils';
+  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+
   import api from '@/service/api';
 
   import ComplaintList from './components/ComplaintList.vue';
 
+  const gStores = new GStores();
   const isComplete = shallowRef(false);
   const list = ref<TListComPlain>([]);
 
@@ -53,7 +58,21 @@
     list.value = result || [];
   };
 
-  const itemClick = (item) => {};
+  const itemClick = (item: TListComPlain[number]) => {
+    console.log(item);
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/serviceCenter/serviceChat',
+      isLocal: '1',
+      extraData: {
+        id: item.id,
+      },
+      addition: {
+        herenId: 'herenId',
+      },
+    });
+  };
 
   const init = async () => {
     getList();

@@ -480,7 +480,6 @@
   const {
     chooseDays,
     checkedDay,
-    chooseDaysEnabled,
     orderConfig,
     init: OrderInit,
     selectSchInfos,

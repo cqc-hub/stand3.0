@@ -90,6 +90,7 @@ export const useTBanner = async (
     _patientId: '',
     _herenId: '',
     _isHos: globalGl.systemInfo.isSearchInHos,
+    herenId: '',
   };
 
   const gStores = new GStores();
@@ -120,6 +121,7 @@ export const useTBanner = async (
     }
 
     _d._herenId = gStores.globalStore.herenId;
+    _d.herenId = gStores.globalStore.herenId;
     extraData.token = gStores.globalStore.getToken;
   }
 
@@ -469,7 +471,9 @@ export class ServerStaticData {
         const reportQuery = JSON.parse(result.REPORT_QUERY_CONFIG || '{}');
         const drugDelivery = JSON.parse(result.DRUG_DELIVERY_CONFIG || '{}');
         const selfBilling = JSON.parse(result.SELF_BILLING || '{}');
-        const FAMOUS_DOCTOR_DEPT = JSON.parse(result.FAMOUS_DOCTOR_DEPT || '{}');
+        const FAMOUS_DOCTOR_DEPT = JSON.parse(
+          result.FAMOUS_DOCTOR_DEPT || '{}'
+        );
         const Electronic_Consultation_Sheet = JSON.parse(
           result.Electronic_Consultation_Sheet || '{}'
         );
@@ -484,7 +488,7 @@ export class ServerStaticData {
           drugDelivery,
           selfBilling,
           Electronic_Consultation_Sheet,
-          FAMOUS_DOCTOR_DEPT
+          FAMOUS_DOCTOR_DEPT,
         };
 
         for (const key in systemConfig) {

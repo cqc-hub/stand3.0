@@ -84,7 +84,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onReady } from '@dcloudio/uni-app';
+  import { onReady, onShareAppMessage } from '@dcloudio/uni-app';
   import { useOrder, IChooseDays, type IDocListAll } from './utils';
   import { handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery } from '@/common';
@@ -153,6 +153,13 @@
     uni.setNavigationBarTitle({
       title: `选择${decodeURIComponent(deptName.value)}医生`,
     });
+  });
+
+  onShareAppMessage((res) => {
+    return {
+      title: `选择${decodeURIComponent(deptName.value)}医生`,
+      path: joinQuery('/pagesA/MyRegistration/order', props),
+    };
   });
 
   const dateChange = (item: IChooseDays) => {
