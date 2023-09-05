@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxe26143481567cb97",
+    "appid": "wxf582e1fd4eb0142a",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,17 +71,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
       "auth-pay-plugin": {
         "version": "*",
-        "provider": "2021003167601013"
+        "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002139602458"
+    "appid": "2021003173668243"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -93,7 +89,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州市第一人民医院",
+  "name": "乐清市人民医院",
   "h5": {
     "router": {
       "base": "./"

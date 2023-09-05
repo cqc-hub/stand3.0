@@ -64,7 +64,7 @@
       type: 'h5',
       isSelfH5: '1',
       path: 'pagesC/serviceCenter/serviceChat',
-      isLocal: '1',
+      // isLocal: '1',
       extraData: {
         id: item.id,
       },

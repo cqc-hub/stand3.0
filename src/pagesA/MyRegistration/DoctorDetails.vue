@@ -92,9 +92,9 @@
 
                   <view
                     v-if="docDetail.multiplePracticeLocation"
-                    class="work-place flex-normal mt12"
+                    class="work-place mt12"
                   >
-                    <view class="color-fff tag mr16">多点执业</view>
+                    <text class="color-fff tag mr16">多点执业</text>
                     <text
                       v-for="(place, pi) in getDicMultiplePracticeLocation"
                       :class="{
