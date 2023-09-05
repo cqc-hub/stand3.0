@@ -704,7 +704,11 @@
     }
   };
 
-  const toPay = async () => {
+  /**
+   * 创建订单 获取支付入参数据
+   */
+
+  const payBeforeCreateData = async ()=>{
     const { patientId, patientName } = gStores.userStore.patChoose;
     // const totalCost = detailData.value.totalCost + '';
     const totalCost = getPayTotal.value;
@@ -752,7 +756,8 @@
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
 
-    const res = await payMoneyOnline({
+
+    const payArg: BaseObject ={
       phsOrderNo,
       totalFee: totalCost,
       phsOrderSource: '2',
@@ -760,7 +765,14 @@
       hosName,
       patientName: props.value.patientName || patientName,
       cardNumber,
-    });
+    }
+    return payArg
+  }
+
+  const toPay = async () => {
+   
+    const payArg = await payBeforeCreateData()
+    const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '门诊缴费');
     payAfter();
@@ -768,10 +780,6 @@
 
    /** 数字人民币支付 */
    const toDigitalPay = async ()=>{
-    const { patientId, patientName } = gStores.userStore.patChoose; 
-    const totalCost = getPayTotal.value;
-    const source = gStores.globalStore.browser.source;
-
     const {alipay, wx } = pageConfig.value.payList!;
     let _businessType = '';
     let _channel = '';
@@ -790,58 +798,9 @@
         _channel = channel;
       }
       // #endif
-
-    const {
-      childOrder,
-      deptId,
-      docId,
-      hosName,
-      deptName,
-      docName,
-      hosId,
-      visitDate,
-      costTypeCode,
-      cardNumber,
-      recipeNo,
-    } = props.value;
-
-    const args = {
-      ...props.value,
-      personalPayFee:
-        ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
-      patientName: props.value.patientName,
-      businessType: '1',
-      patientId,
-      source,
-      totalCost,
-      mergeOrder: childOrder,
-      deptCode: deptId,
-      hosName,
-      deptName,
-      docCode: docId,
-      docName,
-      hosId,
-      visitDate,
-      cardNumber,
-      recipeNo,
-      serialNo: selList.value
-        .map((o) => o.serialNo)
-        .filter((o) => o)
-        .join(','),
-    };
-
-    const {
-      result: { phsOrderNo },
-    } = await api.createClinicOrder(args);
-
+    let  payArg = await payBeforeCreateData()
     const res = await payMoneyOnline({
-      phsOrderNo,
-      totalFee: totalCost,
-      phsOrderSource: '2',
-      hosId,
-      hosName,
-      patientName: props.value.patientName || patientName,
-      cardNumber,
+      ...payArg,
       channel:_channel,
       businessType: _businessType,
       returnUrl:

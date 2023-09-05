@@ -182,11 +182,14 @@
     await wait(200);
     refPay.value.show();
   };
+    /**
+   * 创建订单 获取支付入参数据
+   */
 
-  const toPay = async () => {
+  const payBeforeCreateData = async ()=>{
     await inputMoneyChange();
     await int();
-    const res = await payMoneyOnline({
+    const payArg: BaseObject ={
       phsOrderNo: payOrder.value.phsOrderNo,
       paySign: payOrder.value.paySign,
       totalFee: defalutMoney.value,
@@ -199,7 +202,13 @@
         pageProps.value.type == '1'
           ? ''
           : gStores.userStore.patChoose.patientId,
-    });
+    }
+    return payArg
+  }
+
+  const toPay = async () => {
+    const payArg = await payBeforeCreateData()
+    const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '住院缴费');
     payAfter();
@@ -244,26 +253,15 @@
         _channel = channel;
       }
       // #endif
-    await inputMoneyChange();
-    await int();
     //区分下 代缴 住院 门诊充值的回调地址
     let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
     if(pageProps.value.type == '1' || pageProps.value.hosId){
       _returnUrl = '/pages/home/home'
     } 
+
+    const payArg = await payBeforeCreateData()
     const res = await payMoneyOnline({
-      phsOrderNo: payOrder.value.phsOrderNo,
-      paySign: payOrder.value.paySign,
-      totalFee: defalutMoney.value,
-      phsOrderSource: pageProps.value.hospitalAccount
-        ? pageProps.value.hospitalAccount
-        : '3',
-      source: gStores.globalStore.browser.source,
-      ...pageProps.value,
-      patientId:
-        pageProps.value.type == '1'
-          ? ''
-          : gStores.userStore.patChoose.patientId,
+      ...payArg, 
       businessType: _businessType,
       channel:_channel,
       returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(

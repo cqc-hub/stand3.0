@@ -888,6 +888,85 @@ export const usePayPage = () => {
   });
 
   /**
+   * 创建订单 获取支付入参数据
+   */
+
+  const payBeforeCreateData = async ()=>{
+    const selectList = selUnPayList.value;
+    const { patientId, patientName } = gStores.userStore.patChoose;
+
+    const _totalCost = totalCost.value + '';
+    const source = gStores.globalStore.browser.source;
+    // const costTypeCode = selectList[0].costTypeCode;
+    const personalPayFee = selectList.reduce((p, o) => {
+      const { costTypeCode } = o;
+
+      if (!costTypeCode || costTypeCode === '1') {
+        p += (o.totalCost as any) * 1;
+      }
+      return p;
+    }, 0);
+
+    const args: BaseObject = {
+      personalPayFee: personalPayFee || undefined,
+      patientName: pageProps.value.deParams?.patientName,
+      businessType: '1',
+      patientId,
+      source,
+      totalCost: _totalCost,
+      hosId: selectList[0].hosId,
+      hosName: selectList[0].hosName,
+      visitDate: selectList[0].visitDate,
+      mergeOrder: selectList.map((o) => o.childOrder).join(','),
+      deptCode: selectList.map((o) => o.deptId).join(','),
+      deptName: selectList.map((o) => o.deptName).join(','),
+      docCode: selectList.map((o) => o.docId).join(','),
+      docName: selectList.map((o) => o.docName).join(','),
+      recipeNo: selectList.map((o) => o.recipeNo).join(','),
+      serialNo: selectList.map((o) => o.serialNo).join(';'),
+
+      diseaseTypeCode: selectList
+        .map((o) => o.diseaseTypeCode)
+        .filter((o) => o)
+        .join(','),
+      diseaseTypeName: selectList
+        .map((o) => o.diseaseTypeName)
+        .filter((o) => o)
+        .join(','),
+      diseaseType: selectList
+        .map((o) => o.diseaseType)
+        .filter((o) => o)
+        .join(','),
+    };
+
+    if (pageProps.value.deParams) {
+      args.cardNumber = pageProps.value.deParams.cardNumber;
+    }
+
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const payArg: BaseObject = {
+      phsOrderNo,
+      totalFee: _totalCost,
+      phsOrderSource: '2',
+      hosId: selectList[0].hosId,
+      // hosId: '1279',
+      hosName: selectList[0].hosName,
+    };
+
+    if (pageProps.value.deParams) {
+      payArg.patientName = pageProps.value.deParams.patientName;
+      payArg.cardNumber = pageProps.value.deParams.cardNumber;
+    } else {
+      payArg.patientName = patientName;
+    }
+    return payArg
+
+  }
+
+  /**
  * 是否开启数字人民币支付
  * @returns boolean
  */
@@ -1125,20 +1204,6 @@ export const usePayPage = () => {
 
   /** 数字人民币支付 */
   const toDigitalPay = async ()=>{
-    const selectList = selUnPayList.value;
-    const { patientId, patientName } = gStores.userStore.patChoose;
-
-    const _totalCost = totalCost.value + '';
-    const source = gStores.globalStore.browser.source;
-    const personalPayFee = selectList.reduce((p, o) => {
-      const { costTypeCode } = o;
-
-      if (!costTypeCode || costTypeCode === '1') {
-        p += (o.totalCost as any) * 1;
-      }
-      return p;
-    }, 0);
-
     const {alipay, wx } = pageConfig.value.payList!;
     let _businessType = '';
     let _channel = '';
@@ -1157,75 +1222,24 @@ export const usePayPage = () => {
         _channel = channel;
       }
       // #endif
-
-    const args: BaseObject = {
-      personalPayFee: personalPayFee || undefined,
-      patientName: pageProps.value.deParams?.patientName,
-      patientId,
-      source,
-      totalCost: _totalCost,
-      hosId: selectList[0].hosId,
-      hosName: selectList[0].hosName,
-      visitDate: selectList[0].visitDate,
-      mergeOrder: selectList.map((o) => o.childOrder).join(','),
-      deptCode: selectList.map((o) => o.deptId).join(','),
-      deptName: selectList.map((o) => o.deptName).join(','),
-      docCode: selectList.map((o) => o.docId).join(','),
-      docName: selectList.map((o) => o.docName).join(','),
-      recipeNo: selectList.map((o) => o.recipeNo).join(','),
-      serialNo: selectList.map((o) => o.serialNo).join(';'),
-
-      diseaseTypeCode: selectList
-        .map((o) => o.diseaseTypeCode)
-        .filter((o) => o)
-        .join(','),
-      diseaseTypeName: selectList
-        .map((o) => o.diseaseTypeName)
-        .filter((o) => o)
-        .join(','),
-      diseaseType: selectList
-        .map((o) => o.diseaseType)
-        .filter((o) => o)
-        .join(','),
-    };
-
-    if (pageProps.value.deParams) {
-      args.cardNumber = pageProps.value.deParams.cardNumber;
-    }
-
-    const {
-      result: { phsOrderNo },
-    } = await api.createClinicOrder(args);
-
-    const payArg: BaseObject = {
-      phsOrderNo,
-      totalFee: _totalCost,
-      phsOrderSource: '2',
-      hosId: selectList[0].hosId,
-      // hosId: '1279',
-      hosName: selectList[0].hosName,
+ 
+    let payArg = await payBeforeCreateData()
+    const payArgNew: BaseObject = {
+      ...payArg,
       channel:_channel,
       businessType: _businessType,
       returnUrl:
       `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent('/pagesA/clinicPay/clinicPayDetail?tabIndex=1')}`,
     };
 
-    if (pageProps.value.deParams) {
-      payArg.patientName = pageProps.value.deParams.patientName;
-      payArg.cardNumber = pageProps.value.deParams.cardNumber;
-    } else {
-      payArg.patientName = patientName;
-    }
-
-    const res = await payMoneyOnline(payArg);
+    const res = await payMoneyOnline(payArgNew);
     const { invokeData } = res;
     uni.navigateTo({
       url: `/pagesA/webView/webView?https=${encodeURIComponent(
         invokeData.payUrl!
       )}`,
     });
-    // await toPayPull(res, '门诊缴费');
-    // payAfter();
+
   }
 
   /** 微信医保国标模式  获取到授权 */
@@ -1349,77 +1363,8 @@ export const usePayPage = () => {
   };
 
   const toPay = async () => {
-    const selectList = selUnPayList.value;
-    const { patientId, patientName } = gStores.userStore.patChoose;
 
-    const _totalCost = totalCost.value + '';
-    const source = gStores.globalStore.browser.source;
-    // const costTypeCode = selectList[0].costTypeCode;
-    const personalPayFee = selectList.reduce((p, o) => {
-      const { costTypeCode } = o;
-
-      if (!costTypeCode || costTypeCode === '1') {
-        p += (o.totalCost as any) * 1;
-      }
-      return p;
-    }, 0);
-
-    const args: BaseObject = {
-      personalPayFee: personalPayFee || undefined,
-      patientName: pageProps.value.deParams?.patientName,
-      businessType: '1',
-      patientId,
-      source,
-      totalCost: _totalCost,
-      hosId: selectList[0].hosId,
-      hosName: selectList[0].hosName,
-      visitDate: selectList[0].visitDate,
-      mergeOrder: selectList.map((o) => o.childOrder).join(','),
-      deptCode: selectList.map((o) => o.deptId).join(','),
-      deptName: selectList.map((o) => o.deptName).join(','),
-      docCode: selectList.map((o) => o.docId).join(','),
-      docName: selectList.map((o) => o.docName).join(','),
-      recipeNo: selectList.map((o) => o.recipeNo).join(','),
-      serialNo: selectList.map((o) => o.serialNo).join(';'),
-
-      diseaseTypeCode: selectList
-        .map((o) => o.diseaseTypeCode)
-        .filter((o) => o)
-        .join(','),
-      diseaseTypeName: selectList
-        .map((o) => o.diseaseTypeName)
-        .filter((o) => o)
-        .join(','),
-      diseaseType: selectList
-        .map((o) => o.diseaseType)
-        .filter((o) => o)
-        .join(','),
-    };
-
-    if (pageProps.value.deParams) {
-      args.cardNumber = pageProps.value.deParams.cardNumber;
-    }
-
-    const {
-      result: { phsOrderNo },
-    } = await api.createClinicOrder(args);
-
-    const payArg: BaseObject = {
-      phsOrderNo,
-      totalFee: _totalCost,
-      phsOrderSource: '2',
-      hosId: selectList[0].hosId,
-      // hosId: '1279',
-      hosName: selectList[0].hosName,
-    };
-
-    if (pageProps.value.deParams) {
-      payArg.patientName = pageProps.value.deParams.patientName;
-      payArg.cardNumber = pageProps.value.deParams.cardNumber;
-    } else {
-      payArg.patientName = patientName;
-    }
-
+    const payArg = await payBeforeCreateData()
     const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '门诊缴费');
