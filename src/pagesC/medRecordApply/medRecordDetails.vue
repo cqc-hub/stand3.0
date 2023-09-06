@@ -458,7 +458,7 @@
 
         complete(e) {
           console.log(e);
-        }
+        },
       });
     });
   };
@@ -494,7 +494,8 @@
 
   // 手动添加记录?
   const isShowAddRecord = computed(() => {
-    return pageConfig.value.isCustomPatRecord === '1';
+    return props.isManual === '1';
+    // return pageConfig.value.isCustomPatRecord === '1';
   });
 
   // 切换院区?
