@@ -178,7 +178,7 @@
     isLogin?: '1'; // 需要登录?
   }>();
 
-  const props = ref(deQueryForUrl(deQueryForUrl(_props)));
+  const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
   const dirUrl = ref(decodeURIComponent(props.value._url));
   // const listDisableName = ref('ifClick');
@@ -331,9 +331,8 @@
         });
       }
     } else {
-      const url = decodeURIComponent(props.value._url);
       uni.navigateTo({
-        url: joinQuery(url, {
+        url: joinQuery(props.value._url, {
           hosId: item.hosId,
         }),
       });
@@ -395,7 +394,6 @@
         'medRecord'
       );
       console.log(medCopyConfigList.value);
-
     }
 
     if (isRequestApi) {
@@ -492,7 +490,8 @@
     getList(isAuth);
   };
 
-  onLoad(() => {
+  onLoad((opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
     if (props.value._type == 3) {
       uni.setNavigationBarTitle({
         title: '药店指南',
