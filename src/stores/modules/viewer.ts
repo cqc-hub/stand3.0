@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ServerStaticData, wait } from '@/utils';
+import { ServerStaticData } from '@/utils';
 import api from '@/service/api';
 
 const viewerStore = defineStore('viewer', {
