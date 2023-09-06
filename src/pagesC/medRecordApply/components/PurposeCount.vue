@@ -14,6 +14,7 @@
           :min="0"
           :max="99"
           @change="boxChange(item, $event)"
+          inputDisabled
         />
       </view>
     </view>

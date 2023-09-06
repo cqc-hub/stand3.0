@@ -16,7 +16,7 @@
     </view>
 
     <input
-      :disabled="disabled"
+      :disabled="disabled || inputDisabled"
       @focus="_onFocus"
       @blur="_onBlur"
       class="uni-numbox__value"
@@ -89,6 +89,10 @@
         default: 'var(--hr-neutral-color-9)',
       },
       disabled: {
+        type: Boolean,
+        default: false,
+      },
+      inputDisabled: {
         type: Boolean,
         default: false,
       },

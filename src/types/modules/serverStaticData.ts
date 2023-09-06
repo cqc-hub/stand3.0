@@ -116,6 +116,8 @@ export interface ISystemConfig_ {
     selPurposeLen?: number;
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
+    /** 住院记录中选择对应目的的份数? */
+    selPurposeInRecord?: '1';
 
     /** 收钱方式 0 预收 1 按项目、目的 */
     isItemCount?: '0' | '1';

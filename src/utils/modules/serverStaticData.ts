@@ -42,6 +42,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             requireSfz,
             isPurposeRadio,
             company,
+            selPurposeInRecord
           } = value as any;
 
           const isItemCount = tollMode === '1' ? '1' : '0';
@@ -62,6 +63,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             requireSfz,
             isPurposeRadio,
             company,
+            selPurposeInRecord
           });
         });
       });
