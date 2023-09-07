@@ -22,7 +22,7 @@
       <view style="background: #fff">
         <view
           v-for="(item, indexLv1) in list"
-          :key="item.firstHosDeptId"
+          :key="item.uuid"
           :class="{
             'dept-list-lv2': isLv2,
             'dept-list-lv2-alone': level === '2',
@@ -43,7 +43,7 @@
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
       <view
         v-for="(itemLv2, i) in deptListLv2"
-        :key="itemLv2.hosDeptId"
+        :key="itemLv2.uuid"
         :class="{}"
         class="dept-list-lv2-collapse-container animate__animated animate__fadeIn"
       >

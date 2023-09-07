@@ -41,7 +41,7 @@
         <view
           v-for="_item in item.children"
           @click="itemClickLv3(_item)"
-          :key="_item.hosDeptId"
+          :key="_item.uuid"
           :class="{
             'my-row-active': activeLv3.hosDeptId === _item.hosDeptId,
           }"
@@ -55,8 +55,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { PropType, ref, onMounted, getCurrentInstance, nextTick } from 'vue';
-  import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
+  import { ref, onMounted, getCurrentInstance, nextTick } from 'vue';
+  import { IDeptLv2, IDeptLv3 } from '@/stores';
 
   const props = withDefaults(
     defineProps<{

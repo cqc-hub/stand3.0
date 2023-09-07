@@ -94,6 +94,7 @@
     ServerStaticData,
     IHosInfo,
     type ISystemConfig,
+    generateUuid,
   } from '@/utils';
   import { joinQuery, joinQueryForUrl, setLocalStorage } from '@/common';
   import {
@@ -188,6 +189,18 @@
     init();
   };
 
+  const _loopDeptList = (list) => {
+    list.map((o) => {
+      const { children } = o;
+
+      if (children && children.length) {
+        _loopDeptList(children);
+      }
+
+      o.uuid = generateUuid();
+    });
+  };
+
   const getDepList = async () => {
     const source = gStores.globalStore.browser.source;
 
@@ -208,6 +221,7 @@
       // deptListLevel = '2'
       if (firstDeptList && firstDeptList.length) {
         loopDeptList(firstDeptList, deptListLevel);
+        _loopDeptList(firstDeptList);
         depList.value = firstDeptList;
         depLevel.value = deptListLevel;
       } else {

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-
 export interface IDeptLv1 extends IDeptLv3 {
   firstDeptName: string;
   firstHosDeptId: string;
@@ -38,6 +37,7 @@ export interface IDeptLv3 {
   standardDeptCode: string;
   standardDeptName: string;
   visitingArea: string;
+  uuid: string;
 }
 
 export const isLev1 = (item): item is IDeptLv1 => {
@@ -52,8 +52,12 @@ export const isLev3 = (item): item is IDeptLv3 => {
   return !!item.hosDeptId;
 };
 
-export const loopDeptList = (list: IDeptLv1[] | IDeptLv2[] | IDeptLv3[], deptListLevel) => {
+export const loopDeptList = (
+  list: IDeptLv1[] | IDeptLv2[] | IDeptLv3[],
+  deptListLevel
+) => {
   list.map((o) => {
+    // o.uuid = generateUuid();
     if (isLev1(o)) {
       const _list = o.secondDeptList;
 
@@ -95,14 +99,14 @@ export const loopDeptList = (list: IDeptLv1[] | IDeptLv2[] | IDeptLv3[], deptLis
 const deptStore = defineStore('_dept', {
   persist: {
     key: '_dept',
-    paths: []
+    paths: [],
   },
 
   state: () => {
     return {
       activeLv1: <IDeptLv1>{},
       activeLv2: <IDeptLv2>{},
-      activeLv3: <IDeptLv3>{}
+      activeLv3: <IDeptLv3>{},
     };
   },
 
@@ -117,8 +121,8 @@ const deptStore = defineStore('_dept', {
 
     changeActiveLv3(item: IDeptLv3) {
       this.activeLv3 = item;
-    }
-  }
+    },
+  },
 });
 
 export const useDeptStore = function () {
