@@ -153,6 +153,7 @@ type TOutInfo = {
   admissionTime: string;
   clinicOnLine?: string;
   inHosTime?: string;
+  count?: number;
 };
 
 export type CaseCopyItem = {

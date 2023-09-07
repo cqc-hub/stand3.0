@@ -99,6 +99,25 @@
       </view>
 
       <view
+        v-if="isAddCount"
+        :class="{
+          mt24: !(isEdit && item.isOneself === '0'),
+        }"
+        class="g-border-top flex-between mb24 pt24"
+      >
+        <view class="color-444 f28">选择复印份数</view>
+        <view class="content">
+          <uni-number-box
+            :value="getCountValue(item)"
+            :min="0"
+            :max="99"
+            @change="boxChange(item, $event)"
+            inputDisabled
+          />
+        </view>
+      </view>
+
+      <view
         v-if="isEdit && item.isOneself === '0'"
         class="mt24 flex-normal edit-container color-444 f28"
       >
@@ -122,12 +141,30 @@
   import dayjs from 'dayjs';
   import { NotNullable } from '@/typeUtils';
 
+  const c = ref(0);
+  type TList = NotNullable<CaseCopeItemDetail['_outInfo']>;
   defineProps<{
-    list: NotNullable<CaseCopeItemDetail['_outInfo']>;
+    list: TList;
+    isAddCount?: boolean;
     isEdit?: boolean;
   }>();
 
-  const emits = defineEmits(['click-edit', 'click-del']);
+  const emits = defineEmits(['click-edit', 'click-del', 'change-count']);
+
+  const getCountValue = (item: TList[number]) => {
+    if (item.count) {
+      return item.count;
+    } else {
+      return 0;
+    }
+  };
+
+  const boxChange = (item: TList[number], count: number) => {
+    emits('change-count', {
+      item,
+      count,
+    });
+  };
 
   const formatterTime = (time: string) => dayjs(time).format('YYYY-MM-DD');
 

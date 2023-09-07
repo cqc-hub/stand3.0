@@ -249,10 +249,20 @@
             <view class="record-container mt32">
               <Record-Card
                 :list="recordRows"
+                :isAddCount="pageConfig.selPurposeInRecord === '1'"
                 @click-edit="editRecord"
                 @click-del="delRecord"
+                @change-count="changeCount"
                 isEdit
               />
+            </view>
+
+            <view
+              v-if="pageConfig.selPurposeInRecord === '1'"
+              class="color-888 f28 mb16"
+            >
+              <rich-text :nodes="fg1021" />
+              <g-flag v-model:value="fg1021" typeFg="1021" />
             </view>
 
             <view
@@ -268,7 +278,10 @@
           <view id="_aim" class="container-box g-border mb16 box-padding">
             <view class="f36">
               <text class="mr12 g-bold">请选择复印目的</text>
-              <text class="f28 color-light-dark">
+              <text
+                v-if="pageConfig.selPurposeInRecord !== '1'"
+                class="f28 color-light-dark"
+              >
                 {{
                   selPurposeLen === 1
                     ? '可选1项'
@@ -280,9 +293,9 @@
             <view class="mt24">
               <g-select-flatten
                 v-if="pageConfig.isPurposeRadio === '1'"
+                v-model:value="aimValue"
                 :selectLength="selPurposeLen"
                 :list="aimList"
-                v-model:value="aimValue"
                 :multiple="selPurposeLen != 1"
               />
               <view v-else>
@@ -408,7 +421,7 @@
   import { getUserShowLabel } from '@/stores';
   import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
   import { getLocalStorage } from '@/common';
-  import type { NotNullable, XOR } from '@/typeUtils';
+  import { NotNullable, XOR, assignType } from '@/typeUtils';
 
   import api from '@/service/api';
 
@@ -442,7 +455,7 @@
         count: 1,
         sizeType: 'compressed',
         async success(e) {
-          const { tempFilePaths, tempFiles } = e;
+          const { tempFilePaths } = e;
           resolve({
             success: true,
             path: tempFilePaths[0],
@@ -564,13 +577,13 @@
   const hosList = ref<IHosInfo[]>([]);
   const remark = ref('');
   const recordRows = ref<TRecordRows[]>([
-    // {
-    //   deptName: '科室233',
-    //   admissionTime: '2022-09-19',
-    //   outTime: '2022-09-19',
-    //   visitNo: '233222',
-    //   isOneself: '0',
-    // },
+    {
+      deptName: '科室233',
+      admissionTime: '2022-09-19',
+      outTime: '2022-09-19',
+      visitNo: '233222',
+      isOneself: '0',
+    },
   ]);
 
   const getPayMoneyNum = computed(() => {
@@ -636,6 +649,13 @@
     hosList.value = list;
 
     init();
+  };
+
+  const changeCount = ({ item, count }) => {
+    assignType<number>(count);
+    assignType<TRecordRows>(item);
+
+    item.count = count;
   };
 
   const chooseIdCardFront = async () => {
@@ -840,7 +860,8 @@
   };
 
   const paySubmit = async () => {
-    const { sfz, requireSfz, isPurposeRadio } = pageConfig.value;
+    const { sfz, requireSfz, isPurposeRadio, selPurposeInRecord } =
+      pageConfig.value;
     let {
       frontIdCardUrl,
       endIdCardUrl,
@@ -849,6 +870,16 @@
       censusRegisterUrl,
     } = idCardImg.value;
     const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
+    const getCount = (list: any[]) =>
+      list.reduce<number>((prev, curr) => {
+        if (curr.count) {
+          prev += curr.count;
+        }
+        return prev;
+      }, 0);
+
+    const copyAimCount =
+      getCount(recordRows.value) || getCount(purposeCount.value);
 
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 3000);
@@ -931,6 +962,12 @@
       }
     }
 
+    if (selPurposeInRecord === '1' && !copyAimCount) {
+      scrollTo.value = '_record';
+      showMessage('请先在住院记录下选择复印份数', 3000);
+      return;
+    }
+
     uni.showLoading({
       mask: true,
       title: '上传证件中...',
@@ -980,7 +1017,11 @@
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
+    const copyNum = aimValue.value.length || purposeCount.value.length;
+
     const args = {
+      copyNum,
+      copyAimCount,
       expressCompany: expressCompany.value,
       address: detailedAddress,
       addresseeName: senderName,

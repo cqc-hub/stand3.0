@@ -42,10 +42,11 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             requireSfz,
             isPurposeRadio,
             company,
-            selPurposeInRecord
+            selPurposeInRecord,
+            isItemCount: _isItemCount,
           } = value as any;
 
-          const isItemCount = tollMode === '1' ? '1' : '0';
+          const isItemCount = _isItemCount || tollMode === '1' ? '1' : '0';
 
           configList.push({
             hosId,
@@ -63,7 +64,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             requireSfz,
             isPurposeRadio,
             company,
-            selPurposeInRecord
+            selPurposeInRecord,
           });
         });
       });

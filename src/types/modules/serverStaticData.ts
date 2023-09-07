@@ -116,8 +116,6 @@ export interface ISystemConfig_ {
     selPurposeLen?: number;
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
-    /** 住院记录中选择对应目的的份数? */
-    selPurposeInRecord?: '1';
 
     /** 收钱方式 0 预收 1 按项目、目的 */
     isItemCount?: '0' | '1';
@@ -128,7 +126,8 @@ export interface ISystemConfig_ {
 
     /** 是否支持自定义住院记录 */
     isCustomPatRecord?: '0' | '1';
-
+    /** 支持住院记录中选择目的的份数? */
+    selPurposeInRecord?: '1';
     /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '0' | '1';
 
