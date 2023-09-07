@@ -8,7 +8,7 @@ type NeverTurnsAny<T> = T extends never ? any : T;
 //获取随机id
 export const generateUuid = function (len = 36, binary = 16) {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    .replace(/[xy]/g, function (c) {
+    .replace(/[xy]/g, (c) => {
       const r = (Math.random() * binary) | 0;
       const v = c === 'x' ? r : (r & 0x3) | 0x8;
 

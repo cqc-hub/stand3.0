@@ -189,7 +189,7 @@
     init();
   };
 
-  const _loopDeptList = (list) => {
+  const _loopDeptList = (list: any[]) => {
     list.map((o) => {
       const { children } = o;
 
