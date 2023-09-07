@@ -4,6 +4,7 @@ import { GStores } from './login';
 import { joinQueryForUrl } from '@/common';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
+import { MEDICAL_PHOTOS } from '@/static/staticData';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';

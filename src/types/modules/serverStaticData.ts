@@ -1,6 +1,10 @@
 import { type XOR } from '@/typeUtils/obj';
+import { MEDICAL_PHOTOS } from '@/static/staticData';
 
 export type TConfigEnv = 'inWx' | 'inAlipay';
+
+type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['key'];
+
 /**
  *  未指定说明的 '0' 均为 false '1' true
  */
@@ -110,6 +114,7 @@ export interface ISystemConfig_ {
     isOcrSfz?: '1';
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
     requireSfz?: string[];
+
     /** 复印目的 不配置使用原来的那几个目的 */
     purpose?: string[];
     /** 可选择的复印目的长度 默认 3 */
@@ -117,7 +122,7 @@ export interface ISystemConfig_ {
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
 
-    /** 收钱方式 0 预收 1 按项目、目的 */
+    /** 收钱方式 0 预收 1 按项目、目的(tollMode) */
     isItemCount?: '0' | '1';
 
     /**  收钱方式预收的金额 ｜ 单个项目金额 */

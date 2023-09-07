@@ -128,6 +128,11 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
+  import { IRegistrationCardItem } from './utils/MyRegistration';
+  import { isAreaProgram, IPat } from '@/stores';
+  import { joinQueryForUrl, setLocalStorage } from '@/common';
+  import { beforeEach } from '@/router';
+
   import {
     GStores,
     ServerStaticData,
@@ -136,15 +141,11 @@
     useTBanner,
     handlerWeChatThRegLogin,
   } from '@/utils';
-  import { joinQueryForUrl, setLocalStorage } from '@/common';
-  import { beforeEach } from '@/router';
   import {
     OrderStatus,
     orderStatusMap,
     getOrderStatusTitle,
   } from './utils/regDetail';
-  import { IRegistrationCardItem } from './utils/MyRegistration';
-  import { isAreaProgram, IPat } from '@/stores';
 
   import api from '@/service/api';
 
@@ -205,8 +206,8 @@
       return orderStatusMap[status];
     } else {
       return {
-        title: '未知',
-        cardColr: 'var(--hr-neutral-color-7)',
+        title: `未知(${status})`,
+        cardColor: 'var(--hr-neutral-color-7)',
       };
     }
   };
@@ -232,7 +233,7 @@
           orderConfig.value.isOrderPay
         );
 
-        if (o._statusLabel === '未知') {
+        if (o._statusLabel.startsWith('未知')) {
           o.orderStatus = '--';
         }
       });

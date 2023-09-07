@@ -10,7 +10,7 @@
           {{ item.deptName }}
         </view>
         <view :style="{
-          color: getStatusConfig(item.orderStatus).cardColr,
+          color: getStatusConfig(item.orderStatus).cardColor,
         }" class="text-no-wrap f32">
           {{ item._statusLabel }}
         </view>
