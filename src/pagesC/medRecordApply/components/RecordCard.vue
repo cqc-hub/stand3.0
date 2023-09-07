@@ -99,6 +99,17 @@
       </view>
 
       <view
+        v-if="item.count && !isAddCount"
+        class="container-card-row flex-normal"
+      >
+        <view class="label">复印份数</view>
+
+        <view class="content">
+          {{ item.count }}
+        </view>
+      </view>
+
+      <view
         v-if="isAddCount"
         :class="{
           mt24: !(isEdit && item.isOneself === '0'),
