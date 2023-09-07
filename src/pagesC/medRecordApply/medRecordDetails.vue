@@ -577,13 +577,13 @@
   const hosList = ref<IHosInfo[]>([]);
   const remark = ref('');
   const recordRows = ref<TRecordRows[]>([
-    {
-      deptName: '科室233',
-      admissionTime: '2022-09-19',
-      outTime: '2022-09-19',
-      visitNo: '233222',
-      isOneself: '0',
-    },
+    // {
+    //   deptName: '科室233',
+    //   admissionTime: '2022-09-19',
+    //   outTime: '2022-09-19',
+    //   visitNo: '233222',
+    //   isOneself: '0',
+    // },
   ]);
 
   const getPayMoneyNum = computed(() => {
@@ -809,7 +809,6 @@
       pageConfig.value = configDetail;
       _hosId.value = configDetail.hosId;
     }
-    console.log(pageConfig.value);
 
     if (!pageConfig.value) {
       gStores.messageStore.showMessage(

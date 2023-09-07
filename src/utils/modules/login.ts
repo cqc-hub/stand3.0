@@ -324,7 +324,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
                 code,
                 accountType,
               },
-              // '/wx/getAppletsOpenId',
               '/wx/getWxOpenId',
               {
                 isOutArgs: true,
