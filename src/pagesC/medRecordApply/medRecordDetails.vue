@@ -588,7 +588,10 @@
 
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
-    if (pageConfig.value.isItemCount === '1') {
+
+    if (pageConfig.value.selPurposeInRecord === '1') {
+      return aimValue.value.length * getCount(recordRows.value) * _fee;
+    } else if (pageConfig.value.isItemCount === '1') {
       if (pageConfig.value.isPurposeRadio === '1') {
         return aimValue.value.length * _fee;
       } else {
@@ -597,6 +600,7 @@
         );
       }
     } else {
+      // 预收模式
       return _fee;
     }
   });
@@ -858,6 +862,14 @@
     return true;
   };
 
+  const getCount = (list: any[]) =>
+    list.reduce<number>((prev, curr) => {
+      if (curr.count) {
+        prev += curr.count;
+      }
+      return prev;
+    }, 0);
+
   const paySubmit = async () => {
     const { sfz, requireSfz, isPurposeRadio, selPurposeInRecord } =
       pageConfig.value;
@@ -869,13 +881,6 @@
       censusRegisterUrl,
     } = idCardImg.value;
     const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
-    const getCount = (list: any[]) =>
-      list.reduce<number>((prev, curr) => {
-        if (curr.count) {
-          prev += curr.count;
-        }
-        return prev;
-      }, 0);
 
     const copyAimCount =
       getCount(recordRows.value) || getCount(purposeCount.value);
