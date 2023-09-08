@@ -229,6 +229,20 @@
     return ['0'].includes(item.orderStatus) && props.isShowYuWzBtn;
   };
 
+  const isShowFooter = (item: IRegistrationCardItem) => {
+    return (
+      isShowDaohan(item) ||
+      isShowPaiDui(item) ||
+      isFW(item) ||
+      isCancelOrder(item) ||
+      isPayOrder(item) ||
+      isShowReOrderBtn(item) ||
+      isShowYWZBtn(item) ||
+      getCustomBtns.value.some((o) => isShowCustomBtn(item, o))
+    );
+  };
+
+  // ! 组件内部应该仅做交互, 数据展示 具体的动作行为应该事件抛出到外部处理
   const goComment = async (item: IRegistrationCardItem) => {
     const { orderId } = item;
 
@@ -268,6 +282,7 @@
     });
   };
 
+  // ! 组件内部应该仅做交互, 数据展示 具体的动作行为应该事件抛出到外部处理
   const goDoctorCard = (item: IRegistrationCardItem) => {
     const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
       item;
@@ -284,10 +299,12 @@
     });
   };
 
+  // ! 组件内部应该仅做交互, 数据展示 具体的动作行为应该事件抛出到外部处理
   const goYWZ = (item: IRegistrationCardItem) => {
     emits('ywz-click', item);
   };
 
+  // ! 组件内部应该仅做交互, 数据展示 具体的动作行为应该事件抛出到外部处理
   const goDetail = (item: IRegistrationCardItem) => {
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
@@ -296,19 +313,6 @@
         thRegisterId: props.thRegisterId,
       }),
     });
-  };
-
-  const isShowFooter = (item: IRegistrationCardItem) => {
-    return (
-      isShowDaohan(item) ||
-      isShowPaiDui(item) ||
-      isFW(item) ||
-      isCancelOrder(item) ||
-      isPayOrder(item) ||
-      isShowReOrderBtn(item) ||
-      isShowYWZBtn(item) ||
-      getCustomBtns.value.some((o) => isShowCustomBtn(item, o))
-    );
   };
 </script>
 
