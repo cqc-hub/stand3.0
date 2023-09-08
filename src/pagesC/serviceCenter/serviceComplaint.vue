@@ -105,13 +105,25 @@
       label: '意见反馈',
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
-      placeholder: '请输入',
+      placeholder: '请填写10字以上的问题描述以使我们提供更好的帮助',
       maxlength: 200,
       key: 'compContext',
       direction: 'horizontal',
       rowStyle: 'margin-top: 16rpx;',
       bodyStyle: 'margin-top: 12rpx;',
       labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
+      validator: async (v: any) => {
+        if (v && v.length > 10) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '请填写10字以上的问题描述以使我们提供更好的帮助',
+            success: false,
+          };
+        }
+      },
     },
   ];
 

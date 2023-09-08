@@ -433,7 +433,7 @@
         {
           "path": "serviceCenter/serviceComplaint",
           "style": {
-            "navigationBarTitleText": "客服中心"
+            "navigationBarTitleText": "意见反馈"
           }
         },
 
