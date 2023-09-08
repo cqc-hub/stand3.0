@@ -134,7 +134,7 @@
 
 <script lang="ts" setup>
   import { watch, ref, computed } from 'vue';
-  import { onLoad, onShow } from '@dcloudio/uni-app';
+  import { onLoad } from '@dcloudio/uni-app';
 
   import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import { GStores } from '@/utils';

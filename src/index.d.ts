@@ -122,7 +122,7 @@ interface IAddress {
 interface IHOptionItem {
   label: string;
   value: string;
-  children?: IHOptionItem;
+  children?: IHOptionItem[];
 }
 
 type IHOption = IHOptionItem[];

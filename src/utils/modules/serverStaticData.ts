@@ -4,7 +4,8 @@ import { GStores } from './login';
 import { joinQueryForUrl } from '@/common';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
-import { MEDICAL_PHOTOS } from '@/static/staticData';
+import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
+import { assignType } from '@/typeUtils';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -44,13 +45,37 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isPurposeRadio,
             company,
             selPurposeInRecord,
+            photoConfig,
             isItemCount: _isItemCount,
           } = value as any;
 
           const isItemCount = _isItemCount || tollMode === '1' ? '1' : '0';
+          assignType<ISystemConfig['medRecord'][number]['photoConfig']>(
+            photoConfig
+          );
+
+          photoConfig &&
+            photoConfig.modes.map((o) => {
+              const { photos, value, require, label, children } = o;
+
+              const defaultMode = MEDICAL_PHOTO_MODE[value];
+              o.photos = photos || defaultMode?.photos || [];
+              o.require = require || [];
+              o.children = children || [];
+              o.label = label || defaultMode?.label || '配置错误';
+              o.photos.map((key) => {
+                const photoItem = MEDICAL_PHOTOS.find((p) => p.value === key);
+
+                if (photoItem) {
+                  o.children.push(photoItem);
+                  !require && o.require.push(key);
+                }
+              });
+            });
 
           configList.push({
             hosId,
+            photoConfig,
             isItemCount,
             fee: price * 1,
             sfz:

@@ -1,9 +1,17 @@
-import { type XOR } from '@/typeUtils/obj';
-import { MEDICAL_PHOTOS } from '@/static/staticData';
+import { type XOR } from '@/typeUtils';
+import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 
 export type TConfigEnv = 'inWx' | 'inAlipay';
 
-type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['key'];
+type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['value'];
+
+interface IMedicalPhotoMode extends IHOptionItem {
+  /** 图片类型1 本人办理，2代成年人办，3代未成年人办理，4代死亡人员办理 */
+  value: string; // 配置必填
+  photos: TMedicalPhotoKey[]; // 存在默认值
+  require: (TMedicalPhotoKey | `${TMedicalPhotoKey}|${TMedicalPhotoKey}`)[]; // 存在默认值
+  children: (IHOptionItem & { url: string })[]; // 程序生成, 不需要配置
+}
 
 /**
  *  未指定说明的 '0' 均为 false '1' true
@@ -114,6 +122,10 @@ export interface ISystemConfig_ {
     isOcrSfz?: '1';
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
     requireSfz?: string[];
+
+    photoConfig?: {
+      modes: IMedicalPhotoMode[];
+    };
 
     /** 复印目的 不配置使用原来的那几个目的 */
     purpose?: string[];
