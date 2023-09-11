@@ -1,4 +1,6 @@
-import { Flatten } from '@/typeUtils';
+import { Flatten, NotNullable } from '@/typeUtils';
+import { IMedicalPhotoMode } from '@/types';
+
 export type TOutHosInfo = {
   admissionTime: string;
   deptName: string;
@@ -210,6 +212,7 @@ export type CaseCopeItemDetail = Flatten<
     expressNo: string;
     expressCompany: string;
     hosId: string;
+    imageJson?: IMedicalPhotoMode['children'];
   }
 >;
 

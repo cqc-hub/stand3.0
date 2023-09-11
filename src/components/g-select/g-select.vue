@@ -1,5 +1,9 @@
 <template>
-  <view class="">
+  <view class="pop">
+    <view @click="show">
+      <slot :label="getShowLabel" />
+    </view>
+
     <Gl-Popup ref="popup" :type="type" :title="title" @hide="hide">
       <template v-if="$slots.header" #header>
         <slot name="header" />
@@ -27,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref } from 'vue';
+  import { watch, ref, computed } from 'vue';
   import GlPopup from '@/components/g-popup/g-popup.vue';
 
   const props = withDefaults(
@@ -49,9 +53,21 @@
   );
 
   const _id = new Date().getTime();
-
   const popup = ref<InstanceType<typeof GlPopup>>();
   const emits = defineEmits(['update:show', 'update:value', 'change']);
+
+  const getShowLabel = computed(() => {
+    const field = props.field;
+
+    let label = props.value;
+    props.option.map((item) => {
+      const v = field ? item[field.value] : item;
+
+      v === label && (label = field ? item[field.label] : item);
+    });
+
+    return label;
+  });
 
   const isActive = (item) => {
     return (props.field ? item[props.field.value] : item) === props.value;
@@ -100,6 +116,11 @@
       }
     }
   );
+
+  defineExpose({
+    show,
+    close,
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -125,5 +146,10 @@
       font-size: var(--hr-font-size-xxl);
       font-weight: normal;
     }
+  }
+
+  .pop {
+    position: relative;
+    z-index: 10;
   }
 </style>

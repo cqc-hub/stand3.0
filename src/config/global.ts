@@ -2,7 +2,7 @@ import manifest from '../manifest.json';
 import systemConfig from './config.json';
 import { getSConfig } from './sConfig';
 
-export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
+export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/' as const; //oss静态资源服务器
 export const SYS_CODE = systemConfig.sysCode;
 
 type TEnv = 'dev' | 'test' | 'prod';

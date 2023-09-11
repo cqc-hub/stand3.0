@@ -360,8 +360,14 @@
 
     const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
 
-    let { outInfo, expressParam, expressStatus, acceptTime, printCount } =
-      result;
+    let {
+      outInfo,
+      expressParam,
+      expressStatus,
+      acceptTime,
+      printCount,
+      imageJson,
+    } = result;
     // result.orderStatus = '21';
     // result.refundFee = '21';
     if (outInfo) {
@@ -369,6 +375,14 @@
         result._outInfo = JSON.parse(outInfo);
       } catch (error) {
         gStores.messageStore.showMessage('outInfo 字段格式错误', 3000);
+      }
+    }
+
+    if (imageJson) {
+      try {
+        result.imageJson = JSON.parse(imageJson as unknown as string);
+      } catch (error) {
+        gStores.messageStore.showMessage('imageJson 字段格式错误', 3000);
       }
     }
 

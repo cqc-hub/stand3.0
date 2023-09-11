@@ -20,8 +20,8 @@
             v-if="pageConfig.company && pageConfig.company.length"
             class="container-box g-border mb16 box-padding"
           >
-            <block>
-              <block v-if="pageConfig.company.length > 1">
+            <view>
+              <template v-if="pageConfig.company.length > 1">
                 <view id="_express" class="g-bold f36">选择快递方式</view>
 
                 <view class="mt24 pb32 g-border-bottom">
@@ -32,9 +32,9 @@
                     column="2"
                   />
                 </view>
-              </block>
+              </template>
 
-              <block v-if="pageConfig.company.length === 1">
+              <template v-if="pageConfig.company.length === 1">
                 <view id="_express" class="g-bold f36">快递方式</view>
 
                 <view class="mt24 f28">
@@ -49,7 +49,7 @@
                     </view>
                   </view>
                 </view>
-              </block>
+              </template>
 
               <view class="f28 mt24">
                 <view class="flex-between">
@@ -59,180 +59,229 @@
                   </view>
                 </view>
               </view>
-            </block>
+            </view>
           </view>
 
           <view
-            v-if="pageConfig.sfz && pageConfig.sfz.length"
+            v-if="
+              (pageConfig.sfz && pageConfig.sfz.length) ||
+              pageConfig.photoConfig
+            "
             class="container-box g-border mb16 box-padding"
             id="_photo"
           >
             <!-- <view class="g-bold f36">请上传本人身份证</view> -->
-            <view class="g-bold f36">
-              <rich-text :nodes="fg1020" />
-              <g-flag v-model:value="fg1020" typeFg="1020" />
-            </view>
-
-            <view class="mt24 flex-between id-card-container">
+            <template v-if="pageConfig.photoConfig">
               <view
-                v-if="pageConfig.sfz.includes('front')"
-                @click="chooseIdCardFront"
-                class="up-idcard g-border g-flex-rc-cc mb16"
+                @click="photoModeSelRef.show"
+                class="g-bold f36 flex-between"
               >
-                <view
-                  v-if="idCardImg.frontIdCardUrl"
-                  @click.stop="idCardImg.frontIdCardUrl = ''"
-                  class="iconfont delete-icon"
-                >
-                  &#xe6fa;
-                </view>
-                <image
-                  v-if="idCardImg.frontIdCardUrl"
-                  :src="dealImg(idCardImg.frontIdCardUrl)"
-                />
-                <image
-                  v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-front.png'"
-                  class="idcard-bg my-disabled"
-                />
-
-                <view
-                  v-if="!idCardImg.frontIdCardUrl"
-                  class="g-flex-rc-cc flex-column f24"
-                >
-                  <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>身份证人像页</view>
-                </view>
+                <text>{{ photoModeLabel }}</text>
+                <text class="iconfont size-icon">&#xe66b;</text>
               </view>
 
-              <view
-                v-if="pageConfig.sfz.includes('end')"
-                @click="chooseIdCardBack"
-                class="up-idcard g-border g-flex-rc-cc mb16"
-              >
+              <view class="mt24 flex-between id-card-container">
                 <view
-                  v-if="idCardImg.endIdCardUrl"
-                  @click.stop="idCardImg.endIdCardUrl = ''"
-                  class="iconfont delete-icon"
+                  v-for="item in photoList"
+                  :key="item.value"
+                  @click="choosePhoto(item)"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
                 >
-                  &#xe6fa;
-                </view>
-                <image
-                  v-if="idCardImg.endIdCardUrl"
-                  :src="dealImg(idCardImg.endIdCardUrl)"
-                />
+                  <view
+                    v-if="photoSelects[item.value]"
+                    @click.stop="photoSelects[item.value] = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
 
-                <image
-                  v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
-                  class="idcard-bg my-disabled"
-                />
+                  <image
+                    v-if="photoSelects[item.value]"
+                    :src="dealImg(photoSelects[item.value])"
+                  />
 
-                <view
-                  v-if="!idCardImg.endIdCardUrl"
-                  class="g-flex-rc-cc flex-column f24"
-                >
-                  <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>身份证国徽页</view>
-                </view>
-              </view>
+                  <image v-else :src="item.url" class="idcard-bg my-disabled" />
 
-              <view
-                v-if="pageConfig.sfz.includes('hkb')"
-                @click="chooseIdCardHkb"
-                class="up-idcard g-border g-flex-rc-cc mb16"
-              >
-                <view
-                  v-if="idCardImg.censusRegisterUrl"
-                  @click.stop="idCardImg.censusRegisterUrl = ''"
-                  class="iconfont delete-icon"
-                >
-                  &#xe6fa;
-                </view>
-                <image
-                  v-if="idCardImg.censusRegisterUrl"
-                  :src="dealImg(idCardImg.censusRegisterUrl)"
-                />
-
-                <image
-                  v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-hkb.png'"
-                  class="idcard-bg my-disabled"
-                />
-
-                <view
-                  v-if="!idCardImg.censusRegisterUrl"
-                  class="g-flex-rc-cc flex-column f24"
-                >
-                  <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>户口本单页</view>
+                  <view
+                    v-if="!photoSelects[item.value]"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon color-fff">&#xe6be;</view>
+                    <view class="color-fff">{{ item.label }}</view>
+                  </view>
                 </view>
               </view>
+            </template>
 
-              <view
-                v-if="pageConfig.sfz.includes('handler')"
-                @click="chooseIdCardHandler"
-                class="up-idcard g-border g-flex-rc-cc mb16"
-              >
-                <view
-                  v-if="idCardImg.handIdCardUrl"
-                  @click.stop="idCardImg.handIdCardUrl = ''"
-                  class="iconfont delete-icon"
-                >
-                  &#xe6fa;
-                </view>
-                <image
-                  v-if="idCardImg.handIdCardUrl"
-                  :src="dealImg(idCardImg.handIdCardUrl)"
-                />
-
-                <image
-                  v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
-                  class="idcard-bg my-disabled"
-                />
-
-                <view
-                  v-if="!idCardImg.handIdCardUrl"
-                  class="g-flex-rc-cc flex-column f24"
-                >
-                  <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>手持身份证人像面</view>
-                </view>
+            <template v-else>
+              <view class="g-bold f36">
+                <template v-if="1">
+                  <rich-text :nodes="fg1020" />
+                  <g-flag v-model:value="fg1020" typeFg="1020" />
+                </template>
               </view>
 
-              <view
-                v-if="pageConfig.sfz.includes('handlerBack')"
-                @click="chooseIdCardBackHandler"
-                class="up-idcard g-border g-flex-rc-cc mb16"
-              >
+              <view class="mt24 flex-between id-card-container">
                 <view
-                  v-if="idCardImg.handIdCardFrontUrl"
-                  @click.stop="idCardImg.handIdCardFrontUrl = ''"
-                  class="iconfont delete-icon"
+                  v-if="pageConfig.sfz.includes('front')"
+                  @click="chooseIdCardFront"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
                 >
-                  &#xe6fa;
+                  <view
+                    v-if="idCardImg.frontIdCardUrl"
+                    @click.stop="idCardImg.frontIdCardUrl = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
+                  <image
+                    v-if="idCardImg.frontIdCardUrl"
+                    :src="dealImg(idCardImg.frontIdCardUrl)"
+                  />
+                  <image
+                    v-else
+                    :src="$global.BASE_IMG + 'ba_img_idcard-front.png'"
+                    class="idcard-bg my-disabled"
+                  />
+
+                  <view
+                    v-if="!idCardImg.frontIdCardUrl"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon">&#xe6be;</view>
+                    <view>身份证人像页</view>
+                  </view>
                 </view>
-                <image
-                  v-if="idCardImg.handIdCardFrontUrl"
-                  :src="dealImg(idCardImg.handIdCardFrontUrl)"
-                />
-
-                <image
-                  v-else
-                  :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
-                  class="idcard-bg my-disabled"
-                />
 
                 <view
-                  v-if="!idCardImg.handIdCardFrontUrl"
-                  class="g-flex-rc-cc flex-column f24"
+                  v-if="pageConfig.sfz.includes('end')"
+                  @click="chooseIdCardBack"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
                 >
-                  <view class="iconfont camera-icon">&#xe6be;</view>
-                  <view>手持身份证国徽面</view>
+                  <view
+                    v-if="idCardImg.endIdCardUrl"
+                    @click.stop="idCardImg.endIdCardUrl = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
+                  <image
+                    v-if="idCardImg.endIdCardUrl"
+                    :src="dealImg(idCardImg.endIdCardUrl)"
+                  />
+
+                  <image
+                    v-else
+                    :src="$global.BASE_IMG + 'ba_img_idcard-back.png'"
+                    class="idcard-bg my-disabled"
+                  />
+
+                  <view
+                    v-if="!idCardImg.endIdCardUrl"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon">&#xe6be;</view>
+                    <view>身份证国徽页</view>
+                  </view>
+                </view>
+
+                <view
+                  v-if="pageConfig.sfz.includes('hkb')"
+                  @click="chooseIdCardHkb"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
+                >
+                  <view
+                    v-if="idCardImg.censusRegisterUrl"
+                    @click.stop="idCardImg.censusRegisterUrl = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
+                  <image
+                    v-if="idCardImg.censusRegisterUrl"
+                    :src="dealImg(idCardImg.censusRegisterUrl)"
+                  />
+
+                  <image
+                    v-else
+                    :src="$global.BASE_IMG + 'ba_img_idcard-hkb.png'"
+                    class="idcard-bg my-disabled"
+                  />
+
+                  <view
+                    v-if="!idCardImg.censusRegisterUrl"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon">&#xe6be;</view>
+                    <view>户口本单页</view>
+                  </view>
+                </view>
+
+                <view
+                  v-if="pageConfig.sfz.includes('handler')"
+                  @click="chooseIdCardHandler"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
+                >
+                  <view
+                    v-if="idCardImg.handIdCardUrl"
+                    @click.stop="idCardImg.handIdCardUrl = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
+                  <image
+                    v-if="idCardImg.handIdCardUrl"
+                    :src="dealImg(idCardImg.handIdCardUrl)"
+                  />
+
+                  <image
+                    v-else
+                    :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
+                    class="idcard-bg my-disabled"
+                  />
+
+                  <view
+                    v-if="!idCardImg.handIdCardUrl"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon">&#xe6be;</view>
+                    <view>手持身份证人像面</view>
+                  </view>
+                </view>
+
+                <view
+                  v-if="pageConfig.sfz.includes('handlerBack')"
+                  @click="chooseIdCardBackHandler"
+                  class="up-idcard g-border g-flex-rc-cc mb16"
+                >
+                  <view
+                    v-if="idCardImg.handIdCardFrontUrl"
+                    @click.stop="idCardImg.handIdCardFrontUrl = ''"
+                    class="iconfont delete-icon"
+                  >
+                    &#xe6fa;
+                  </view>
+                  <image
+                    v-if="idCardImg.handIdCardFrontUrl"
+                    :src="dealImg(idCardImg.handIdCardFrontUrl)"
+                  />
+
+                  <image
+                    v-else
+                    :src="$global.BASE_IMG + 'ba_img_idcard-handheld.png'"
+                    class="idcard-bg my-disabled"
+                  />
+
+                  <view
+                    v-if="!idCardImg.handIdCardFrontUrl"
+                    class="g-flex-rc-cc flex-column f24"
+                  >
+                    <view class="iconfont camera-icon">&#xe6be;</view>
+                    <view>手持身份证国徽面</view>
+                  </view>
                 </view>
               </view>
-            </view>
+            </template>
           </view>
 
           <view id="_record" class="container-box g-border mb16 box-padding">
@@ -399,6 +448,17 @@
         <g-flag v-model:title="fgTitle32" isHideTitle isShowFgTip typeFg="32" />
       </view>
     </xy-dialog>
+
+    <g-select
+      v-model:value="photoMode"
+      :option="photoModeList"
+      :field="{
+        label: 'label',
+        value: 'value',
+      }"
+      title="选择业务类型"
+      ref="photoModeSelRef"
+    />
     <g-message />
   </view>
 </template>
@@ -468,10 +528,6 @@
             evt: e,
           });
         },
-
-        complete(e) {
-          console.log(e);
-        },
       });
     });
   };
@@ -515,6 +571,101 @@
   const isToggleHos = computed(() => {
     return pageConfig.value.isToggleHos === '1';
   });
+
+  const photoMode = ref('');
+  const photoModeSelRef = ref(<any>'');
+  const photoSelects = ref<Record<string, string>>({});
+
+  const photoModeLabel = computed(() => {
+    if (photoMode.value) {
+      return (
+        photoModeList.value.find((o) => o.value === photoMode.value)?.label ||
+        photoMode.value
+      );
+    }
+
+    return '';
+  });
+
+  const photoModeList = computed(() => {
+    return pageConfig.value.photoConfig?.modes || [];
+  });
+
+  const photoModeConfig = computed(() => {
+    return photoModeList.value.find((o) => o.value === photoMode.value);
+  });
+
+  const photoList = computed(() => {
+    return photoModeConfig.value?.children || [];
+  });
+
+  const choosePhoto = async (item: (typeof photoList.value)[number]) => {
+    const { path, success } = await chooseImg();
+
+    success && (photoSelects.value[item.value] = path);
+  };
+
+  const photoModeSubmitVerify = async () => {
+    const { require } = photoModeConfig.value || {};
+    let errMessage = '';
+    const getPhotoConfigByKey = (key: string) => {
+      const item = photoList.value.find((o) => o.value === key);
+
+      if (!item) {
+        showMessage(
+          `配置错误: 模式"${photoMode.value}" require 中不存在对应的值"${key}"`
+        );
+
+        throw new Error(
+          `配置错误: 模式"${photoMode.value}" require 中不存在对应的值"${key}"`
+        );
+      }
+
+      return item;
+    };
+
+    if (require && require.length) {
+      require.map((keys) => {
+        if (errMessage) return;
+        const rKeys = keys.split('|');
+        if (rKeys.length > 1) {
+          let isErr = true;
+
+          rKeys.map((key) => {
+            if (isErr) {
+              isErr = !!!photoSelects.value[key];
+            }
+          });
+
+          if (isErr) {
+            errMessage = rKeys.reduce((prev, key) => {
+              const item = getPhotoConfigByKey(key);
+              prev += `${item.label} 或`;
+
+              return prev;
+            }, '请先上传');
+
+            errMessage = errMessage.slice(0, -1) + '之一';
+          }
+        } else if (rKeys.length === 1) {
+          const key = rKeys[0];
+
+          if (!photoSelects.value[key]) {
+            const item = getPhotoConfigByKey(key);
+
+            errMessage = `请先上传 ${item.label}`;
+          }
+        }
+      });
+    }
+    // throw new Error('233');
+
+    if (errMessage) {
+      scrollTo.value = '_photo';
+      showMessage(errMessage, 3000);
+      throw new Error(errMessage);
+    }
+  };
 
   const getCompanyPayWayLabel = computed(() => {
     if (pageConfig.value.company?.length) {
@@ -806,6 +957,7 @@
   const getConfig = async () => {
     const listConfig =
       (await ServerStaticData.getSystemConfig('medRecord')) || [];
+
     if (_hosId.value) {
       pageConfig.value = listConfig.find((o) => o.hosId === _hosId.value)!;
     } else {
@@ -826,7 +978,12 @@
       selPurposeLen: _selPurposeLen,
       purpose: _aimList,
       company,
+      photoConfig,
     } = pageConfig.value;
+
+    if (photoConfig) {
+      photoMode.value = photoConfig.modes[0]?.value;
+    }
 
     if (company && company.length) {
       expressCompany.value = company[0].value;
@@ -847,7 +1004,7 @@
   };
 
   const isUnImageUpLoaded = (src: string) => {
-    // #ifdef  MP-WEIXIN
+    // #ifdef  MP-WEIXIN | H5
     if (src.startsWith('https')) {
       return false;
     }
@@ -871,7 +1028,7 @@
     }, 0);
 
   const paySubmit = async () => {
-    const { sfz, requireSfz, isPurposeRadio, selPurposeInRecord } =
+    const { sfz, requireSfz, isPurposeRadio, selPurposeInRecord, photoConfig } =
       pageConfig.value;
     let {
       frontIdCardUrl,
@@ -880,7 +1037,10 @@
       handIdCardFrontUrl,
       censusRegisterUrl,
     } = idCardImg.value;
-    const isRequireSfz = (requireSfz && requireSfz.length && requireSfz) || sfz;
+    const isRequireSfz =
+      (!photoConfig &&
+        ((requireSfz && requireSfz.length && requireSfz) || sfz)) ||
+      [];
 
     const copyAimCount =
       getCount(recordRows.value) || getCount(purposeCount.value);
@@ -946,6 +1106,8 @@
       }
     });
 
+    await photoModeSubmitVerify();
+
     if (!recordRows.value.length) {
       scrollTo.value = '_record';
       showMessage('请先添加住院记录', 3000);
@@ -977,7 +1139,23 @@
       title: '上传证件中...',
     });
 
+    const imageJson = <typeof photoList.value>[];
     try {
+      for (const item of photoList.value) {
+        const _item = { ...item };
+        const { value } = _item;
+        const pic = photoSelects.value[value];
+
+        if (pic && isUnImageUpLoaded(pic)) {
+          const { url } = await upImgOss(pic);
+          photoSelects.value[value] = url;
+        }
+
+        _item.url = photoSelects.value[value];
+
+        imageJson.push(_item);
+      }
+
       if (frontIdCardUrl && isUnImageUpLoaded(frontIdCardUrl)) {
         const { url } = await upImgOss(frontIdCardUrl);
         idCardImg.value.frontIdCardUrl = url;
@@ -1039,6 +1217,8 @@
       handIdCardUrl: idCardImg.value.handIdCardUrl,
       handIdCardFrontUrl: idCardImg.value.handIdCardFrontUrl,
       censusRegisterUrl: idCardImg.value.censusRegisterUrl,
+      imageJson: JSON.stringify(imageJson),
+      imageType: photoMode.value,
       fee: getPayMoneyNum.value,
       hosId: _hosId.value,
       outInfo: JSON.stringify(recordRows.value),
@@ -1118,8 +1298,21 @@
       outInfo,
       copyAim,
       printCount,
+      imageJson,
       remark: _remark,
     } = result;
+
+    if (imageJson) {
+      try {
+        result.imageJson = JSON.parse(imageJson as unknown as string);
+
+        result.imageJson?.map(({ value, url }) => {
+          photoSelects.value[value] = url;
+        });
+      } catch (error) {
+        gStores.messageStore.showMessage('imageJson 字段格式错误', 3000);
+      }
+    }
 
     printCount && (purposeCount.value = JSON.parse(printCount as any));
 
@@ -1280,6 +1473,11 @@
 
   .g-footer {
     display: flex;
+    // position: fixed;
+    // bottom: 0;
+    // right: 0;
+    // left: 0;
+    // z-index: 10;
 
     .fee-count {
       flex: 0.8;
@@ -1307,5 +1505,10 @@
     height: 52rpx;
 
     transform: translateX(20rpx);
+  }
+
+  .size-icon {
+    color: var(--hr-neutral-color-7);
+    font-size: var(--hr-font-size-xxl);
   }
 </style>
