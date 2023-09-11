@@ -6,7 +6,7 @@ export type TConfigEnv = 'inWx' | 'inAlipay';
 type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['value'];
 
 export interface IMedicalPhotoMode extends IHOptionItem {
-  /** 图片类型1 本人办理，2代成年人办，3代未成年人办理，4代死亡人员办理 */
+  /** 业务类型1 本人办理，2代成年人办，3代未成年人办理，4代死亡人员办理 */
   value: string; // 配置必填
   photos: TMedicalPhotoKey[]; // 存在默认值(可以不配置)
   require: (TMedicalPhotoKey | string)[]; // 存在默认值

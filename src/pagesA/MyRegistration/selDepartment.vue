@@ -110,7 +110,7 @@
   import api from '@/service/api';
   import HTMLParser from '@/common/html-parser';
 
-  import DepartmentList from './components/departmentList/departmentList.vue';
+  import DepartmentList from './components/departmentList/DepartmentList.vue';
 
   const props = defineProps<{
     // 不需要温馨提示
