@@ -69,11 +69,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { getCurrentInstance, ref, nextTick } from 'vue';
-  import { previewImage, downFile, wait, GStores } from '@/utils';
+  import { getCurrentInstance, ref } from 'vue';
+  import { downFile, wait, GStores } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
-  import globalGl from '@/config/global';
   import { joinQuery } from '@/common';
+  import globalGl from '@/config/global';
 
   const props = defineProps<{
     detail: IDocDetail;
@@ -114,7 +114,7 @@
     setTimeout(async () => {
       await capture();
       initCanvas();
-    }, 100);
+    }, 200);
   };
 
   const close = () => {
@@ -366,10 +366,17 @@
     });
 
     let avatar_img = '/static/image/order/order-doctor-avatar.png';
+
+    // #ifdef MP-TOUTIAO
+    avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;
+    // #endif
     if (docPhoto && docPhoto.startsWith('https')) {
       avatar_img = await downFile(docPhoto);
     } else {
       _avatar_img = avatar_img;
+      // #ifdef MP-TOUTIAO
+      _avatar_img = await downFile(avatar_img);
+      // #endif
     }
 
     const qr_code_img = qrImg.value;
@@ -561,6 +568,7 @@
   };
 
   const capture = async () => {
+    await wait(200);
     const { tempFilePath } = await qrcode.value.GetCodeImg();
     if (tempFilePath) {
       qrImg.value = tempFilePath;
