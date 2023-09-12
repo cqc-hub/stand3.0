@@ -24,6 +24,7 @@ declare var requirePlugin: any;
 interface ISystemGlobalItem {
   wxAppid: string;
   alipayAppid: string;
+  toutiaoAppid: string;
   isvAlipayAppid: string;
   h5Appid: string;
   h5AppidDisabledInTest?: boolean;

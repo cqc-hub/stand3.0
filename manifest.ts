@@ -27,12 +27,14 @@ const {
   name: sysName,
   isOpenHealthCard,
   isOpenOcr,
+  toutiaoAppid
 } = sysConfig;
 
 const { medicalMHelp,isOpenAlipayZndz } = sConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
+const toutiaoConfig = manifestFileDataObj['mp-toutiao'];
 const wxPlugin: any = {};
 const aliPlugin: any = {};
 
@@ -80,11 +82,13 @@ if (medicalMHelp) {
 
 wxConfig.appid = wxAppid;
 aliConfig.appid = alipayAppid;
+toutiaoConfig.appid = toutiaoAppid;
 
 wxConfig.plugins = wxPlugin;
 aliConfig.plugins = aliPlugin;
 manifestFileDataObj['mp-weixin'] = wxConfig;
 manifestFileDataObj['mp-alipay'] = aliConfig;
+manifestFileDataObj['mp-toutiao'] = toutiaoConfig;
 manifestFileDataObj['name'] = sysName;
 
 fs.writeFileSync(
