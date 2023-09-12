@@ -57,6 +57,12 @@ export const MEDICAL_PHOTOS = <const>[
     url: `${BASE_IMG}medRecord_photos_15@2x.png`,
     label: '死亡证明',
   },
+
+  {
+    value: '11',
+    url: `${BASE_IMG}medRecord_photos_16@2x.png`,
+    label: '其他证明材料',
+  },
 ];
 
 export const MEDICAL_PHOTO_MODE = <const>{

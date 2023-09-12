@@ -60,6 +60,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
               const defaultMode = MEDICAL_PHOTO_MODE[value];
               o.photos = photos || defaultMode?.photos || [];
+              o.photos.reverse();
               o.require = require || [];
               o.children = children || [];
               o.label = label || defaultMode?.label || '配置错误';
@@ -67,7 +68,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
                 const photoItem = MEDICAL_PHOTOS.find((p) => p.value === key);
 
                 if (photoItem) {
-                  o.children.push(photoItem);
+                  o.children = [photoItem, ...o.children];
+                  // .push(photoItem);
                   !require && o.require.push(key);
                 }
               });

@@ -372,6 +372,7 @@
 
   const getList = async (isRequestApi: boolean = true) => {
     isWxRequestQxDialogShow.value = false;
+
     // 类型-1预约挂号 2-病案复印 3-核酸开单
     let type = '3';
     switch (getTypeNow.value) {
@@ -437,6 +438,9 @@
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
     }
+
+
+    hosList
   };
 
   const regDialogConfirm = ref<any>('');
@@ -460,6 +464,8 @@
 
   const init = async () => {
     let isAuth = false;
+
+    // #ifndef H5
     await new Promise((resolve) =>
       uni.getLocation({
         complete: resolve,
@@ -468,6 +474,7 @@
         },
       })
     );
+    // #endif
 
     // #ifdef  MP-WEIXIN
     await new Promise((resolve, reject) => {

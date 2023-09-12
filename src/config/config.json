@@ -38,19 +38,6 @@
       "isOpenOcr": true
     },
 
-    "1001047": {
-      "wxAppid": "wxe0e2a3b290ad96b5",
-      "alipayAppid": "",
-      "h5Appid": "wxac2942d44e7c2bd9",
-      "name": "宝鸡市中医医院",
-      "isOpenHealthCard": {
-        "healthCardTexxt": "陕西省卫生健康委员会",
-        "hospitalId": "36076"
-      },
-      "isSearchInHos": false,
-      "isOpenOcr": false
-    },
-
     "2001013": {
       "wxAppid": "wxda3a65909cbc3e3c",
       "alipayAppid": "2021002133632822",
