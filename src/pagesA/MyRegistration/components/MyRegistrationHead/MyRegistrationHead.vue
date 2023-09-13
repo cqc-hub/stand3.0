@@ -38,8 +38,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-
   const props = defineProps<{
     isShowFilterOrderStatus: boolean;
     isSelStatus: boolean;

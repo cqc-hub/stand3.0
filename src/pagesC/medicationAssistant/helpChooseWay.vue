@@ -10,7 +10,7 @@
           <view class="g-bold f36">药品清单</view>
 
           <view>
-            <Help-List :list="listData" />
+            <Help-List :list="cacheStore.medicalHelpSelList" />
           </view>
         </view>
 
@@ -127,7 +127,6 @@
   const remark = ref('');
   const addressList = ref<any[]>([]);
   const gStores = new GStores();
-  const listData = ref<any[]>([]);
   const pageConfig = ref<ISystemConfig['drugDelivery']>({});
   const isIncludeChineseMedicalFriedAndDelivery = ref(false);
 
@@ -148,8 +147,10 @@
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
     const { herenId } = gStores.globalStore;
 
-    const deptName = listData.value.map((o) => o.deptName).join(',');
-    const hosId = listData.value[0].hosId;
+    const deptName = cacheStore.medicalHelpSelList
+      .map((o) => o.deptName)
+      .join(',');
+    const hosId = cacheStore.medicalHelpSelList[0].hosId;
     const expressCompany = aimValue.value[0];
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
@@ -186,8 +187,8 @@
       patientName,
       herenId,
       hosId,
-      prescIdList: listData.value.map((o) => o.prescId),
-      prescNoList: listData.value.map((o) => o.prescNo),
+      prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
+      prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
       provinces,
       remark: remark.value,
     };
@@ -239,12 +240,8 @@
 
   onLoad(async () => {
     await init();
-    const listData = getLocalStorage('medicalHelp');
-    listData.value =
-      (listData?.length && listData) || cacheStore.medicalHelpSelList;
-    isIncludeChineseMedicalFriedAndDelivery.value = !!listData.value.find((o) =>
-      isToBeFriedAndDelivery(o)
-    );
+    isIncludeChineseMedicalFriedAndDelivery.value =
+      !!cacheStore.medicalHelpSelList.find((o) => isToBeFriedAndDelivery(o));
   });
 </script>
 

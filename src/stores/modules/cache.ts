@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 const cacheStore = defineStore('cache', {
   persist: {
     key: 'cache',
-    paths: [],
+    paths: ['medicalHelpSelList'],
   },
 
   state: () => {
