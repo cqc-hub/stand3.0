@@ -65,7 +65,7 @@ export interface ISystemConfig_ {
     // 排队叫号?
     isQueuing?: string[];
     // 服务评价?
-    isFWBtn?: string[]; // 需要服务评价的订单状态码(暂时没做)
+    isFWBtn?: string[]; // 需要服务评价的订单状态码
     // 已就诊、已结束订单状态显示“复诊预约”按钮
     isOpenReOrder?: '1';
     // 自定义列表子项底部按钮功能

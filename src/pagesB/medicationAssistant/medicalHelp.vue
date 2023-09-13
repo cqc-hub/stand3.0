@@ -114,6 +114,7 @@
   import { onMounted, ref, nextTick, computed } from 'vue';
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
+  import { useCacheStore } from '@/stores';
   import { GStores, debounce, useTBanner, TButtonConfig } from '@/utils';
   import {
     type IWaitListItem,
@@ -127,6 +128,7 @@
   import SelWayPopup from './components/SelWayPopup.vue';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const tabCurrent = ref(0);
   const tabField = [
     {
@@ -370,11 +372,14 @@
     setLocalStorage({
       medicalHelp: selList.value,
     });
-    nextTick(() => {
+
+    cacheStore.changeMedicalHelpSelList(selList.value);
+
+    setTimeout(() => {
       uni.navigateTo({
         url: '/pagesC/medicationAssistant/helpChooseWay',
       });
-    });
+    }, 200);
   };
 
   const getMedicalInHos = async () => {

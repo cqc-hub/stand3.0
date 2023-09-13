@@ -102,11 +102,14 @@
   import { getLocalStorage } from '@/common';
   import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import { getSrc } from './utils';
+  import { useCacheStore } from '@/stores';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
   import HelpList from './components/HelpList.vue';
   import SelExpress from './components/SelExpress.vue';
+
+  const cacheStore = useCacheStore();
 
   const isChineseMedical = (item: any) => {
     return !!(item && item.drugTypeName && item.drugTypeName.includes('中药'));
@@ -236,7 +239,9 @@
 
   onLoad(async () => {
     await init();
-    listData.value = getLocalStorage('medicalHelp') || [];
+    const listData = getLocalStorage('medicalHelp');
+    listData.value =
+      (listData?.length && listData) || cacheStore.medicalHelpSelList;
     isIncludeChineseMedicalFriedAndDelivery.value = !!listData.value.find((o) =>
       isToBeFriedAndDelivery(o)
     );
