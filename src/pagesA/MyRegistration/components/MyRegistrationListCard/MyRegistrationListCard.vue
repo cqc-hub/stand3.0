@@ -205,7 +205,7 @@
   const isFW = (item: IRegistrationCardItem) => {
     // return false;
 
-    return props.showFWBtn.includes(item.orderStatus);
+    return props.showFWBtn.includes(item.orderStatus) && item.orderId;
   };
 
   // 显示取消订单
@@ -226,7 +226,9 @@
   };
 
   const isShowYWZBtn = (item: IRegistrationCardItem) => {
-    return ['0'].includes(item.orderStatus) && props.isShowYuWzBtn;
+    return (
+      ['0'].includes(item.orderStatus) && props.isShowYuWzBtn && item.orderId
+    );
   };
 
   const isShowFooter = (item: IRegistrationCardItem) => {

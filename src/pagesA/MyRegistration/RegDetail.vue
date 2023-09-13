@@ -236,7 +236,9 @@
 
         <button
           v-if="
-            orderRegInfo.rateFlag !== 1 && orderConfig.isOpenComment === '1'
+            orderRegInfo.rateFlag !== 1 &&
+            orderConfig.isOpenComment === '1' &&
+            orderRegInfo.orderId
           "
           @click="goRatePage"
           class="btn g-border btn-primary"
