@@ -1,7 +1,11 @@
+import { Ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
+import { GStores, ISystemConfig, wait } from '@/utils';
+import api from '@/service/api';
 
 export interface IPageProps {
   orderId: string;
+  hosOrderId: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
 }
@@ -291,3 +295,95 @@ export const getOrderStatusTitle = (
     return getStatusConfig(status).title;
   }
 };
+
+export class RegDetailUtil {
+  gStores = new GStores();
+  orderRegInfo = <IRegInfo>{};
+
+  private constructor(
+    public prop: Ref<IPageProps>,
+    public orderConfig: Ref<ISystemConfig['order']>
+  ) {}
+
+  getSourceInHos() {
+    return this.orderConfig.value.isCanSelOrderStatus === '1';
+  }
+
+  /** 请求内部数据库 */
+  async getDetailDataClassic(): Promise<IRegInfo> {
+    const { orderId } = this.prop.value;
+    const { result } = await api.getRegOrderInfo<IRegInfo>({
+      orderId,
+      source: this.gStores.globalStore.browser.source,
+    });
+
+    return result;
+  }
+
+  async getDataDetail(): Promise<IRegInfo> {
+    const { orderId, hosOrderId } = this.prop.value;
+
+    if (orderId) {
+      this.orderRegInfo = await this.getDetailDataClassic();
+    } else if (hosOrderId && this.getSourceInHos()) {
+      await wait(200);
+      // 院内数据库直接在列表全部返回了(数据全部拼接成url)
+      this.orderRegInfo = <any>this.prop.value;
+    } else {
+      this.gStores.messageStore.showMessage('入参错误, 调用详情失败');
+      throw new Error('入参错误, 调用详情失败');
+    }
+
+    return this.orderRegInfo;
+  }
+
+  async cancelRegClassic() {
+    return await api.cancelReg({
+      orderId: this.prop.value.orderId,
+      source: this.gStores.globalStore.browser.source,
+    });
+  }
+
+  async cancelRegHos() {
+    const { hosOrderId } = this.prop.value;
+    const { patientId } = this.gStores.userStore.patChoose;
+
+    await api.cancelHosReg({
+      hosOrderId,
+      patientId,
+      source: this.gStores.globalStore.browser.source,
+    });
+
+    uni.reLaunch({
+      url: '/pagesA/MyRegistration/MyRegistration',
+    });
+    return Promise.reject('不需要刷新数据');
+  }
+
+  async cancelReg() {
+    if (this.prop.value.orderId) {
+      return await this.cancelRegClassic();
+    } else if (this.prop.value.hosOrderId && this.getSourceInHos()) {
+      return await this.cancelRegHos();
+    }
+  }
+
+  static getInstance = (function () {
+    let inst: RegDetailUtil;
+
+    return function (payload?: {
+      prop: Ref<IPageProps>;
+      orderConfig: Ref<ISystemConfig['order']>;
+    }) {
+      if (!inst) {
+        if (payload) {
+          inst = new RegDetailUtil(payload.prop, payload.orderConfig);
+        } else {
+          throw new Error('RegDetailUtil 参数为空');
+        }
+      }
+
+      return inst;
+    };
+  })();
+}

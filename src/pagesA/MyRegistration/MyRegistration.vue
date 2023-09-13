@@ -7,12 +7,7 @@
   >
     <g-flag typeFg="405" isShowFg />
     <g-message />
-    <g-choose-pat
-      v-if="isShowFilterOrderStatus"
-      :pat="pat"
-      @choose-pat="patientChange"
-      isShowAll
-    />
+    <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
 
     <My-Registration-Head
       v-model:isSelStatus="isSelStatus"
@@ -186,7 +181,14 @@
   ]);
 
   const isShowFilterOrderStatus = computed(() => {
+    // return false;
     return orderConfig.value.isCanSelOrderStatus === '1';
+  });
+
+  const listApi = computed(() => {
+    return isShowFilterOrderStatus.value
+      ? api.hosRegOrderList
+      : api.getRegOrderList;
   });
 
   const isCancelOrderDialogShow = ref(false);
@@ -215,8 +217,8 @@
   const getList = async (patientId = '') => {
     isComplete.value = false;
     list.value = [];
-    const { result } = await api
-      .getRegOrderList<IRegistrationCardItem[]>({
+    const { result } = await listApi
+      .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
         patientId,
@@ -326,12 +328,11 @@
 
   const init = async () => {
     await getConfig();
-    const item = patList.value.find(
-      (o: any) => getPatLabel(o) === selPatId.value
+    await getList(
+      isShowFilterOrderStatus.value
+        ? gStores.userStore.patChoose?.patientId
+        : ''
     );
-    selPatId;
-
-    await getList(item?.patientId || '');
   };
 
   const patList = computed(() => {

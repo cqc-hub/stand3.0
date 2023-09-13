@@ -462,6 +462,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  cancelHosReg: (data: any) =>
+    service.post('/phs-reg/reg/cancelHosReg', parm(data), {
+      hideLoading: false,
+    }),
+
   findByDocId: (data: any) =>
     service.post('/phs-reg/regDoc/findByDocId', parm(data), {
       hideLoading: false,
@@ -481,6 +486,12 @@ const regApi = {
 
   getRegOrderList: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderList', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '挂号记录查询',
+    }),
+
+  hosRegOrderList: <T>(data: any) =>
+    service.post<T>('/phs-reg/reg/hosRegOrderList', parm(data), {
       hideLoading: false,
       reportCmPV_YLName: '挂号记录查询',
     }),

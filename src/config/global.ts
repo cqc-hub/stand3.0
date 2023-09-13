@@ -6,7 +6,7 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/' as const; 
 export const SYS_CODE = systemConfig.sysCode;
 
 type TEnv = 'dev' | 'test' | 'prod';
-let env = 'prod' as TEnv; // dev 开发； test 测试； prod 生产
+let env = 'test' as TEnv; // dev 开发； test 测试； prod 生产
 
 const wxAppid = manifest['mp-weixin'].appid;
 const YMD = '20230118'; //年月日，每次版本更新必须同步更新

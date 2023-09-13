@@ -308,7 +308,9 @@
   const goDetail = (item: IRegistrationCardItem) => {
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        ...item,
         orderId: item.orderId,
+        hosOrderId: item.hosOrderId,
         preWz: item.orderStatus === '10' && '1',
         thRegisterId: props.thRegisterId,
       }),

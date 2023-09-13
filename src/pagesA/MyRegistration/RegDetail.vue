@@ -294,7 +294,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, nextTick, onMounted, reactive } from 'vue';
+  import { computed, ref, nextTick } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
@@ -329,6 +329,7 @@
     formatterTemp,
     getStatusConfig,
     getOrderStatusTitle,
+    RegDetailUtil,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
   import {
@@ -524,8 +525,13 @@
     useTBanner(preConsultation);
   };
 
+  const getConfig = async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
+
   let init = async () => {
     uni.showLoading({});
+    await getConfig();
     await wait(800);
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
@@ -533,16 +539,15 @@
     orderRegInfo.value = {} as any;
     clearInterval(_timeTravel);
 
-    const orderId = pageProps.value.orderId;
+    const regDetailUtil = RegDetailUtil.getInstance({
+      prop: pageProps,
+      orderConfig,
+    });
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
-    orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    const { result } = await api.getRegOrderInfo<IRegInfo>({
-      orderId,
-      source: gStores.globalStore.browser.source,
-    });
-
+    const result = await regDetailUtil.getDataDetail();
     const hosList = await ServerStaticData.getHosList();
+    uni.hideLoading();
     const hos = hosList.find((o) => o.hosId === result.hosId);
     if (hos) {
       hosInfo.value = hos;
@@ -560,7 +565,6 @@
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
-    // orderRegInfo.value.orderStatus = '75';
     qrCodeOpt.value.code = result[qrCode];
 
     showConsultationDialog();
@@ -753,7 +757,6 @@
 
   let cancelOrderDialogConfirm: (...args: any[]) => any = async () => {};
   const cancelOrder = async () => {
-    const orderId = pageProps.value.orderId;
     isCancelOrderDialogShow.value = true;
     dialogContent.value = '确认取消该订单?';
 
@@ -762,11 +765,7 @@
     });
 
     isCancelOrderDialogShow.value = false;
-
-    await api.cancelReg({
-      orderId,
-      source: gStores.globalStore.browser.source,
-    });
+    await RegDetailUtil.getInstance().cancelReg();
 
     init();
   };
