@@ -363,7 +363,7 @@ export class RegDetailUtil {
   async cancelReg() {
     if (this.prop.value.orderId) {
       return await this.cancelRegClassic();
-    } else if (this.prop.value.hosOrderId && this.getSourceInHos()) {
+    } else if (this.prop.value.hosOrderId) {
       return await this.cancelRegHos();
     }
   }

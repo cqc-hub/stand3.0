@@ -47,6 +47,7 @@
         label: 'label',
         value: 'value',
       }"
+      @change="orderStatusChange"
       type="top"
     >
       <template #header>
@@ -186,7 +187,8 @@
   });
 
   const listApi = computed(() => {
-    return isShowFilterOrderStatus.value
+    // "全部" 查院内接口
+    return selOrderStatus.value === '1'
       ? api.hosRegOrderList
       : api.getRegOrderList;
   });
@@ -273,6 +275,10 @@
     if (item.patientId) {
       gStores.userStore.updatePatChoose(item);
     }
+  };
+
+  const orderStatusChange = async () => {
+    getList(gStores.userStore.patChoose.patientId || '');
   };
 
   const getConfig = async () => {
