@@ -371,11 +371,14 @@ export class RegDetailUtil {
   static getInstance = (function () {
     let inst: RegDetailUtil;
 
-    return function (payload?: {
-      prop: Ref<IPageProps>;
-      orderConfig: Ref<ISystemConfig['order']>;
-    }) {
-      if (!inst) {
+    return function (
+      payload?: {
+        prop: Ref<IPageProps>;
+        orderConfig: Ref<ISystemConfig['order']>;
+      },
+      init?: boolean
+    ) {
+      if (!inst || init) {
         if (payload) {
           inst = new RegDetailUtil(payload.prop, payload.orderConfig);
         } else {

@@ -541,10 +541,13 @@
     orderRegInfo.value = {} as any;
     clearInterval(_timeTravel);
 
-    const regDetailUtil = RegDetailUtil.getInstance({
-      prop: pageProps,
-      orderConfig,
-    });
+    const regDetailUtil = RegDetailUtil.getInstance(
+      {
+        prop: pageProps,
+        orderConfig,
+      },
+      true
+    );
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
     const result = await regDetailUtil.getDataDetail();
