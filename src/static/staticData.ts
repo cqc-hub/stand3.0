@@ -63,6 +63,18 @@ export const MEDICAL_PHOTOS = <const>[
     url: `${BASE_IMG}medRecord_photos_16@2x.png`,
     label: '其他证明材料',
   },
+
+  {
+    value: '12',
+    url: `${BASE_IMG}medRecord_photos_17@2x.png`,
+    label: '手持身份证背面',
+  },
+
+  {
+    value: '13',
+    url: `${BASE_IMG}medRecord_photos_18@2x.png`,
+    label: '手持身份证背面',
+  },
 ];
 
 export const MEDICAL_PHOTO_MODE = <const>{
