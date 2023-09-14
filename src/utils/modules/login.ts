@@ -8,7 +8,7 @@ import {
 } from '@/stores';
 import { getSysCode } from '@/common';
 import { apiAsync } from './utils';
-import { getOpenId } from '@/components/g-pay/index';
+import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -19,6 +19,7 @@ enum LoginType {
   WeChat,
   AliPay,
   H5,
+  TouTiao,
 }
 
 abstract class LoginHandler {
@@ -64,8 +65,8 @@ export const packageAuthParams = (
 
   const globalStore = useGlobalStore();
   const argsDefault = {
-    ...args,
     sysCode: getSysCode(),
+    ...args,
   };
   const { isOutArgs } = payload;
   let authParam = argsDefault;
@@ -538,7 +539,7 @@ class WebLoginHandler extends LoginUtils implements LoginHandler {
 }
 
 /** wx腾讯健康登录 */
-class WeChatThReg extends LoginUtils implements LoginHandler {
+class WeChatThRegHandler extends LoginUtils implements LoginHandler {
   async handler({ thRegisterId }): Promise<void> {
     const openId = await getOpenId();
     const { source } = this.globalStore.browser;
@@ -578,12 +579,59 @@ class WeChatThReg extends LoginUtils implements LoginHandler {
   }
 }
 
+/** 抖音登录 */
+class TouTiaoHandler extends LoginUtils implements LoginHandler {
+  async handler({ detail }): Promise<void> {
+    uni.showLoading({
+      mask: true,
+      title: '登录中..',
+    });
+    const accountType = this.globalStore.browser.accountType;
+    const { encryptedData, iv } = detail;
+    const { openId, sessionKeyEn } = await getOpenidTtResult();
+
+    // https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/open-capacity/basic-capacities/obtain-mobilenumber/
+    // https://developer.open-douyin.com/docs/resource/zh-CN/codelabs/mini-app/microapp-login/silent-login
+    const { anonymousCode, code } = await apiAsync(uni.login, {
+      complete: uni.hideLoading,
+    });
+
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(
+        {
+          code,
+          anonymousCode,
+          accountType,
+          encryptedData,
+          iv,
+          openId,
+          sessionKeyEn,
+        },
+        '/tikTok/tikTokLogin'
+      )
+    );
+
+    if (result) {
+      const { accessToken, refreshToken } = result;
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      await this.getUerInfo();
+    } else {
+      return Promise.reject('登录失败');
+    }
+  }
+}
+
 export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
     [LoginType.AliPay]: new AliPayLoginHandler(),
     [LoginType.H5]: new WebLoginHandler(),
-    [LoginType.WeChatThReg]: new WeChatThReg(),
+    [LoginType.WeChatThReg]: new WeChatThRegHandler(),
+    [LoginType.TouTiao]: new TouTiaoHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {
@@ -1028,6 +1076,10 @@ export const handlerLogin = async (e: BaseObject = {}) => {
 
   // #ifdef H5
   _env = LoginType.H5;
+  // #endif
+
+  // #ifdef MP-TOUTIAO
+  _env = LoginType.TouTiao;
   // #endif
 
   await Login.handler(_env, e);

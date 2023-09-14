@@ -107,7 +107,10 @@
                     class="g-flex-rc-cc flex-column f24"
                   >
                     <view class="iconfont camera-icon color-fff">&#xe6be;</view>
-                    <view class="color-fff">{{ item.label }}</view>
+                    <view class="color-fff">
+                      <text>{{ item.label }}</text>
+                      <text v-if="isPhotoModeItemRequire(item)">(必填)</text>
+                    </view>
                   </view>
                 </view>
               </view>
@@ -115,7 +118,7 @@
 
             <template v-else>
               <view class="g-bold f36">
-                <template v-if="1">
+                <template>
                   <rich-text :nodes="fg1020" />
                   <g-flag v-model:value="fg1020" typeFg="1020" />
                 </template>
@@ -595,9 +598,17 @@
     return photoModeList.value.find((o) => o.value === photoMode.value);
   });
 
+  const photoModeRequire = computed(() => {
+    return photoModeConfig.value?.require || [];
+  });
+
   const photoList = computed(() => {
     return photoModeConfig.value?.children || [];
   });
+
+  const isPhotoModeItemRequire = (item: (typeof photoList.value)[number]) => {
+    return photoModeRequire.value.findIndex((o) => item.value === o) > -1;
+  };
 
   const choosePhoto = async (item: (typeof photoList.value)[number]) => {
     const { path, success } = await chooseImg();
@@ -606,7 +617,6 @@
   };
 
   const photoModeSubmitVerify = async () => {
-    const { require } = photoModeConfig.value || {};
     let errMessage = '';
     const getPhotoConfigByKey = (key: string) => {
       const item = photoList.value.find((o) => o.value === key);
@@ -624,40 +634,38 @@
       return item;
     };
 
-    if (require && require.length) {
-      require.map((keys) => {
-        if (errMessage) return;
-        const rKeys = keys.split('|');
-        if (rKeys.length > 1) {
-          let isErr = true;
+    photoModeRequire.value.map((keys) => {
+      if (errMessage) return;
+      const rKeys = keys.split('|');
+      if (rKeys.length > 1) {
+        let isErr = true;
 
-          rKeys.map((key) => {
-            if (isErr) {
-              isErr = !!!photoSelects.value[key];
-            }
-          });
-
+        rKeys.map((key) => {
           if (isErr) {
-            errMessage = rKeys.reduce((prev, key) => {
-              const item = getPhotoConfigByKey(key);
-              prev += `${item.label} 或`;
-
-              return prev;
-            }, '请先上传');
-
-            errMessage = errMessage.slice(0, -1) + '之一';
+            isErr = !!!photoSelects.value[key];
           }
-        } else if (rKeys.length === 1) {
-          const key = rKeys[0];
+        });
 
-          if (!photoSelects.value[key]) {
+        if (isErr) {
+          errMessage = rKeys.reduce((prev, key) => {
             const item = getPhotoConfigByKey(key);
+            prev += `${item.label} 或`;
 
-            errMessage = `请先上传 ${item.label}`;
-          }
+            return prev;
+          }, '请先上传');
+
+          errMessage = errMessage.slice(0, -1) + '之一';
         }
-      });
-    }
+      } else if (rKeys.length === 1) {
+        const key = rKeys[0];
+
+        if (!photoSelects.value[key]) {
+          const item = getPhotoConfigByKey(key);
+
+          errMessage = `请先上传 ${item.label}`;
+        }
+      }
+    });
     // throw new Error('233');
 
     if (errMessage) {
@@ -1342,6 +1350,7 @@
 
   const init = async () => {
     await getConfig();
+    console.log(photoModeRequire.value, '233');
 
     // 再次申请
     if (props.phsOrderNo) {

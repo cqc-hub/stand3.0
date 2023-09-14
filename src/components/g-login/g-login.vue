@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-if="gStores.globalStore.isLogin || disabled">
-      <slot  />
+      <slot />
     </view>
 
     <block v-else>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref,  } from 'vue';
+  import { computed, ref } from 'vue';
   import { handlerLogin, GStores, routerJump } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
@@ -37,7 +37,7 @@
   }>();
   const emits = defineEmits(['handler-next', 'handler-login']);
 
-  const _env = ref<'wx' | 'alipay' | 'h5'>('wx');
+  const _env = ref<'wx' | 'alipay' | 'h5' | 'tt'>('wx');
 
   // #ifdef MP-ALIPAY
   _env.value = 'alipay';
@@ -47,10 +47,18 @@
   _env.value = 'h5';
   // #endif
 
+  // #ifdef MP-TOUTIAO
+  _env.value = 'tt';
+  // #endif
+
   const getOpenType = computed(() => {
     switch (_env.value) {
       case 'wx':
         return 'getPhoneNumber';
+
+      case 'tt':
+        return 'getPhoneNumber';
+
       case 'alipay':
         return 'getAuthorize';
       default:
@@ -59,7 +67,7 @@
   });
 
   const handlerClick = (e) => {
-    if (_env.value === 'h5') {
+    if (['h5'].includes(_env.value)) {
       goLogin(e);
     }
   };

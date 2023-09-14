@@ -84,10 +84,10 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onReady, onShareAppMessage } from '@dcloudio/uni-app';
+  import { onReady, onShareAppMessage, onLoad } from '@dcloudio/uni-app';
   import { useOrder, IChooseDays, type IDocListAll } from './utils';
   import { handlerWeChatThRegLogin } from '@/utils';
-  import { joinQuery } from '@/common';
+  import { joinQuery, deQueryForUrl } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
@@ -108,6 +108,7 @@
     isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
     thRegisterId?: string;
   }>();
+  const pageProps = ref(<any>{});
 
   const hosDeptId = ref(
     (props.hosDeptId && decodeURIComponent(props.hosDeptId)) || ''
@@ -157,9 +158,13 @@
 
   onShareAppMessage((res) => {
     return {
-      title: `选择${decodeURIComponent(deptName.value)}医生`,
-      path: joinQuery('/pagesA/MyRegistration/order', props),
+      title: `选择${decodeURIComponent(pageProps.value.deptName)}医生`,
+      path: joinQuery('/pagesA/MyRegistration/order', pageProps.value),
     };
+  });
+
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
   const dateChange = (item: IChooseDays) => {

@@ -1,8 +1,8 @@
-import { Login } from './../../utils/modules/login';
 import api from '@/service/api';
-import { GStores, packageAuthParams } from '@/utils';
+import { GStores, packageAuthParams, apiAsync } from '@/utils';
 import global from '@/config/global';
 import { getSysCode } from '@/common';
+
 // #ifdef MP-ALIPAY
 import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
@@ -86,9 +86,9 @@ export const payMoneyOnline = async (
 type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费';
 
 //微信获取小程序的openid
-export const getOpenid = async (): Promise<any> => {
+export const getOpenid = async (): Promise<string> => {
   const gStores = new GStores();
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     wx.login({
       success: async ({ code }) => {
         if (code) {
@@ -117,7 +117,7 @@ export const getOpenid = async (): Promise<any> => {
 };
 
 // alipay
-export const getOpenid2 = async (): Promise<any> => {
+export const getOpenid2 = async (): Promise<string> => {
   const gStores = new GStores();
 
   return new Promise((resolve, reject) => {
@@ -147,6 +147,13 @@ export const getOpenid2 = async (): Promise<any> => {
   });
 };
 
+// tt
+export const getOpenidTt = async () => {
+  const { openId } = await getOpenidTtResult();
+
+  return openId;
+};
+
 export const getOpenId = async () => {
   // #ifdef MP-ALIPAY
   return await getOpenid2();
@@ -154,6 +161,10 @@ export const getOpenId = async () => {
 
   // #ifdef  MP-WEIXIN
   return await getOpenid();
+  // #endif
+
+  // #ifdef MP-TOUTIAO
+  return await getOpenidTt();
   // #endif
 
   return '';
@@ -241,4 +252,27 @@ const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
       time: '200',
     });
   }
+};
+
+export const getOpenidTtResult = async (): Promise<{
+  openId: string;
+  sessionKeyEn: string;
+}> => {
+  const gStores = new GStores();
+  const accountType = gStores.globalStore.browser.accountType;
+
+  const { anonymousCode, code } = await apiAsync(uni.login, {});
+
+  const { result } = await api.allinoneAuthApi(
+    packageAuthParams(
+      {
+        code,
+        anonymousCode,
+        accountType,
+      },
+      '/tikTok/getTikTokOpenId'
+    )
+  );
+
+  return result;
 };

@@ -162,6 +162,13 @@ const globalStore = defineStore('global', {
         accountType: 22,
       });
       // #endif
+
+      // #ifdef MP-TOUTIAO
+      updateBrowser({
+        source: 66,
+        accountType: 66,
+      });
+      // #endif
     },
 
     setOpenId(id: string) {
