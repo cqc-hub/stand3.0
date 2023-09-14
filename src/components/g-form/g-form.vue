@@ -228,13 +228,14 @@
       </view>
     </view>
 
-    <view class="form-picker my-hide">
+    <view class="form-picker">
       <uni-data-picker
         :map="{ text: 'label', value: 'value' }"
         :localdata="actionSheetOpt"
         :clear-icon="false"
         @change="pickerChange"
         ref="dataPicker"
+        isHideSlot
       >
         <view />
       </uni-data-picker>
@@ -249,13 +250,14 @@
       title=""
     />
 
-    <view class="form-picker my-hide">
+    <view class="form-picker">
       <uni-data-picker
         :map="{ text: 'label', value: 'value' }"
         :localdata="actionSheetOpt"
         :clear-icon="false"
         @change="pickerChange"
         ref="_actionSheet"
+        isHideSlot
       >
         <view />
       </uni-data-picker>

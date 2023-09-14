@@ -205,6 +205,14 @@
 }
 
 .form-picker {
+  :deep(.uni-data-tree) {
+    opacity: 0;
+  }
+
+  .uni-data-tree {
+    opacity: 0;
+  }
+
   :deep(.uni-data-tree .uni-data-tree-input) {
     display: none !important;
   }

@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-data-tree">
-		<view class="uni-data-tree-input" @click="handleInput">
+		<view v-if="!isHideSlot" class="uni-data-tree-input" @click="handleInput">
 			<slot :options="options" :data="inputSelected" :error="errorMessage">
 				<view class="input-value" :class="{'input-value-border': border}">
 					<text v-if="errorMessage" class="selected-area error-text">{{errorMessage}}</text>
@@ -119,7 +119,11 @@
 			ellipsis: {
 				type: Boolean,
 				default: true
-			}
+			},
+			isHideSlot: {
+				type: Boolean,
+				default: true
+			},
 		},
 		data() {
 			return {
