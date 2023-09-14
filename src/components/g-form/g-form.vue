@@ -228,7 +228,7 @@
       </view>
     </view>
 
-    <view class="form-picker">
+    <view class="form-picker my-hide">
       <uni-data-picker
         :map="{ text: 'label', value: 'value' }"
         :localdata="actionSheetOpt"
@@ -249,7 +249,7 @@
       title=""
     />
 
-    <view class="form-picker">
+    <view class="form-picker my-hide">
       <uni-data-picker
         :map="{ text: 'label', value: 'value' }"
         :localdata="actionSheetOpt"

@@ -582,45 +582,57 @@ class WeChatThRegHandler extends LoginUtils implements LoginHandler {
 /** 抖音登录 */
 class TouTiaoHandler extends LoginUtils implements LoginHandler {
   async handler({ detail }): Promise<void> {
-    uni.showLoading({
-      mask: true,
-      title: '登录中..',
-    });
-    const accountType = this.globalStore.browser.accountType;
-    const { encryptedData, iv } = detail;
-    const { openId, sessionKeyEn } = await getOpenidTtResult();
+    try {
+      const { encryptedData, iv } = detail;
 
-    // https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/open-capacity/basic-capacities/obtain-mobilenumber/
-    // https://developer.open-douyin.com/docs/resource/zh-CN/codelabs/mini-app/microapp-login/silent-login
-    const { anonymousCode, code } = await apiAsync(uni.login, {
-      complete: uni.hideLoading,
-    });
+      if (!encryptedData) {
+        this.messageStore.showMessage('用户取消登录', 3000);
+        return Promise.reject('用户取消登录');
+      }
 
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(
-        {
-          code,
-          anonymousCode,
-          accountType,
-          encryptedData,
-          iv,
-          openId,
-          sessionKeyEn,
-        },
-        '/tikTok/tikTokLogin'
-      )
-    );
-
-    if (result) {
-      const { accessToken, refreshToken } = result;
-      this.globalStore.setToken({
-        accessToken,
-        refreshToken,
+      uni.showLoading({
+        mask: true,
+        title: '登录中..',
       });
 
-      await this.getUerInfo();
-    } else {
-      return Promise.reject('登录失败');
+      const accountType = this.globalStore.browser.accountType;
+      const { openId, sessionKeyEn } = await getOpenidTtResult();
+
+      // https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/open-capacity/basic-capacities/obtain-mobilenumber/
+      // https://developer.open-douyin.com/docs/resource/zh-CN/codelabs/mini-app/microapp-login/silent-login
+      const { anonymousCode, code } = await apiAsync(uni.login, {});
+
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(
+          {
+            code,
+            anonymousCode,
+            accountType,
+            encryptedData,
+            iv,
+            openId,
+            sessionKeyEn,
+          },
+          '/tikTok/tikTokLogin'
+        )
+      );
+
+      if (result) {
+        const { accessToken, refreshToken } = result;
+        this.globalStore.setToken({
+          accessToken,
+          refreshToken,
+        });
+
+        await this.getUerInfo();
+      } else {
+        return Promise.reject('登录失败');
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error('登录失败');
+    } finally {
+      uni.hideLoading();
     }
   }
 }
