@@ -276,7 +276,7 @@
     ISwitchInstance,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
-  import { ServerStaticData, useOcr } from '@/utils';
+  import { ServerStaticData, useOcr, wait } from '@/utils';
   import api from '@/service/api';
 
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
@@ -423,6 +423,10 @@
   };
 
   const setList = async function (initList: TInstance[]) {
+    // #ifdef MP-TOUTIAO
+    await wait(80);
+    // #endif
+
     const defaultKeys = Reflect.ownKeys(props.value);
     const cache: BaseObject = {};
 

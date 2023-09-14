@@ -34,7 +34,7 @@
     PatCardKeys,
     patCardDetailFormKey,
   } from './utils';
-  import { GStores, PatientUtils } from '@/utils';
+  import { GStores, PatientUtils, wait } from '@/utils';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
 
   type PagePropType = Record<PatCardKeys, any>;
@@ -73,7 +73,7 @@
     }
   };
 
-  onMounted(() => {
+  onMounted(async () => {
     const pat = gStore.userStore.clickPat;
 
     formData.value = {
@@ -84,7 +84,7 @@
     // 非新生儿无证件的 不显示监护人信息 顾说去掉
     // if (pat.patientType !== '0') {
     //判断无监护人信息
-    if (pat.upIdCard == '') {
+    if (pat.upIdCard === '') {
       formList = formList.filter(
         (o) =>
           !(
@@ -96,13 +96,14 @@
       );
     }
 
+    Object.keys(formData.value).map((key) => {
+      if (formData.value[key] === '') {
+        formData.value[key] = '无';
+      }
+    });
+
     nextTick(() => {
       gform.value.setList(formList);
-      Object.keys(formData.value).map((key) => {
-        if (formData.value[key] === '') {
-          formData.value[key] = '无';
-        }
-      });
     });
   });
 </script>

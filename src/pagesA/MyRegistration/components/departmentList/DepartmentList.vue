@@ -153,7 +153,10 @@
 
   const itemClickLv1 = async (item: IDeptLv1) => {
     emits('item-click-lv1', item);
-    await wait(20);
+    await wait(80);
+    // #ifdef MP-TOUTIAO
+    await wait(120);
+    // #endif
 
     const idx = props.list.findIndex(
       (o) => o.hosDeptId === props.activeLv1.hosDeptId
@@ -287,5 +290,4 @@
       border-top-right-radius: 20rpx 30rpx;
     }
   }
-
 </style>
