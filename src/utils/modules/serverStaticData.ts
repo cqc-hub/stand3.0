@@ -31,10 +31,12 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
       _configList.map((o) => {
         Object.entries(o).map(([hosId, value]) => {
+          assignType<ISystemConfig['medRecord'][number]>(value);
+
           const {
             tollMode,
             price,
-            sfz,
+            sfz: _sfz,
             isCustomPatRecord,
             isToggleHos,
             isHandPhoto,
@@ -47,14 +49,18 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             selPurposeInRecord,
             photoConfig,
             isItemCount: _isItemCount,
-          } = value as any;
+          } = value;
 
           const isItemCount = _isItemCount || tollMode === '1' ? '1' : '0';
-          assignType<ISystemConfig['medRecord'][number]['photoConfig']>(
-            photoConfig
-          );
+          const sfz =
+            isHandPhoto === '1'
+              ? ['front', 'end', 'handler']
+              : _sfz || ['front', 'end'];
 
-          photoConfig &&
+          if (photoConfig) {
+            sfz.length = 0;
+            requireSfz && (requireSfz.length = 0);
+
             photoConfig.modes.map((o) => {
               const { photos, value, require, label, children } = o;
 
@@ -74,18 +80,15 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
                 }
               });
             });
+          }
 
           configList.push({
-            // @ts-expect-error
             ...value,
             hosId,
             photoConfig,
             isItemCount,
-            fee: price * 1,
-            sfz:
-              isHandPhoto === '1'
-                ? ['front', 'end', 'handler']
-                : sfz || ['front', 'end'],
+            fee: (price && price * 1) || 1,
+            sfz,
             isCustomPatRecord,
             isToggleHos,
             purpose,

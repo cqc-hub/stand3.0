@@ -118,6 +118,7 @@ export interface ISystemConfig_ {
      * 后端说 人像、 背面 必填 设置时候每次都加下
      */
     sfz: TMedRecordSfz[];
+    isHandPhoto?: '1';
     /** sfz 配置中 front 的进行 ocr认证 */
     isOcrSfz?: '1';
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
@@ -137,11 +138,13 @@ export interface ISystemConfig_ {
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) */
     isItemCount?: '0' | '1';
+    tollMode?: '1'; // isItemCount(字段不统一)
     /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
     itemCountExcludeAim?: '1';
 
     /**  收钱方式预收的金额 ｜ 单个项目金额 */
     fee: number;
+    price?: number; // fee(字段不统一)
     hosId: string;
 
     /** 是否支持自定义住院记录 */
