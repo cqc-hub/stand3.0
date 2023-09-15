@@ -13,6 +13,7 @@ export interface IDeptLv1 extends IDeptLv3 {
 }
 
 export interface IDeptLv2 extends IDeptLv3 {
+  open?: boolean;
   promptMessage: string; // 就诊提示
   remark: string;
   secondDeptName: string;
@@ -77,6 +78,10 @@ export const loopDeptList = (
       }
     } else if (isLev2(o)) {
       const _list = o.thirdDeptList;
+
+      if (_list && _list.length === 1 && list.length === 1) {
+        o.open = true;
+      }
 
       o.deptName = o.secondDeptName;
       o.hosDeptId = o.secondHosDeptId;

@@ -52,6 +52,7 @@
           :myId="i"
           :active-lv2="activeLv2"
           :active-lv3="activeLv3"
+          :open="itemLv2.open"
           @show="collapseShow"
           @open-now="(e) => (openNow = e)"
           @item-click-lv2="itemClickLv2"
@@ -141,11 +142,11 @@
       .exec();
   };
 
-  const collapseShow = (id: number) => {
+  const collapseShow = (id: number, flag = false) => {
     if (collapseRef.value) {
       collapseRef.value.map((collapseInst, i) => {
         if (i !== id) {
-          collapseInst.show(false);
+          collapseInst.show(flag);
         }
       });
     }
