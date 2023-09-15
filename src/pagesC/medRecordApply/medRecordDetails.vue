@@ -753,9 +753,7 @@
 
       if (pageConfig.value.isPurposeRadio === '1') {
         return (
-          ((pageConfig.value.itemCountExcludeAim === '1' &&
-            aimValue.value.length &&
-            1) ||
+          ((pageConfig.value.itemCountExcludeAim === '1' && 1) ||
             aimValue.value.length) *
           _fee *
           count
@@ -1056,6 +1054,7 @@
       [];
 
     const copyNum = getCount(recordRows.value) || getCount(purposeCount.value);
+    const fee = getPayMoneyNum.value;
 
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 3000);
@@ -1126,19 +1125,25 @@
       return;
     }
 
-    if (isPurposeRadio === '1') {
-      if (!aimValue.value.length) {
-        scrollTo.value = '_aim';
-        showMessage('请先选择复印目的', 3000);
-        return;
-      }
-    } else {
-      if (!purposeCount.value.length) {
-        scrollTo.value = '_aim';
-        showMessage('请先选择复印目的', 3000);
-        return;
-      }
+    if (!fee) {
+      scrollTo.value = '_record';
+      showMessage('请先选择 复印份数 或 复印目的', 3000);
+      return;
     }
+
+    // if (isPurposeRadio === '1') {
+    //   if (!aimValue.value.length) {
+    //     scrollTo.value = '_aim';
+    //     showMessage('请先选择复印目的', 3000);
+    //     return;
+    //   }
+    // } else {
+    //   if (!purposeCount.value.length) {
+    //     scrollTo.value = '_aim';
+    //     showMessage('请先选择复印目的', 3000);
+    //     return;
+    //   }
+    // }
 
     if (selPurposeInRecord === '1' && !copyNum) {
       scrollTo.value = '_record';
@@ -1231,7 +1236,7 @@
       censusRegisterUrl: idCardImg.value.censusRegisterUrl,
       imageJson: JSON.stringify(imageJson),
       imageType: photoMode.value,
-      fee: getPayMoneyNum.value,
+      fee,
       hosId: _hosId.value,
       outInfo: JSON.stringify(recordRows.value),
       outTime: recordRows.value.map((o) => o.outTime).join(','),

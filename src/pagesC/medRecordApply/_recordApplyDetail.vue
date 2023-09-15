@@ -231,7 +231,7 @@
       :show="isShowApplyCancelDialog"
       @cancelButton="isShowApplyCancelDialog = false"
       @confirmButton="applyCancelDialog"
-      confirmText="确定取消"
+      confirmText="确定"
     />
     <g-pay
       :list="refPayList"
