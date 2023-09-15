@@ -751,9 +751,6 @@
     if (pageConfig.value.isItemCount === '1') {
       const count = getCount(recordRows.value) || getCount(purposeCount.value);
 
-      if (pageConfig.value.itemCountExcludeAim === '1') {
-      }
-
       if (pageConfig.value.isPurposeRadio === '1') {
         return (
           ((pageConfig.value.itemCountExcludeAim === '1' &&

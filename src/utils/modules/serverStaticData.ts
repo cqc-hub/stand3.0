@@ -76,6 +76,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             });
 
           configList.push({
+            // @ts-expect-error
+            ...value,
             hosId,
             photoConfig,
             isItemCount,

@@ -1,5 +1,5 @@
 import { type XOR } from '@/typeUtils';
-import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
+import { MEDICAL_PHOTOS } from '@/static/staticData';
 
 export type TConfigEnv = 'inWx' | 'inAlipay';
 
