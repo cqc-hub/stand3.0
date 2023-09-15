@@ -122,7 +122,15 @@ cmd: iconfont-tools
 
 ---
 
-如需重新下载 node_modules
+## warn
+
+### 如需安装新依赖
+
+需要 切换 node@15.14.0 (否则后面爆炸)
+    nom i packageName
+
+### 如需重新下载 node_modules
+
 需要 切换 node@15.14.0
     npm i
 切换 node@16.15.0
