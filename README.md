@@ -119,3 +119,11 @@ cmd: iconfont-tools
 名族地址类别的缓存：退出登录时清除
 首页配置+按照模块调用的配置: 根据后端返回版本号判断清楚对应模块缓存
 页面调用接口的配置:每次进入调用
+
+---
+
+如需重新下载 node_modules
+需要 切换 node@15.14.0
+    npm i
+切换 node@16.15.0
+    npm install terser
