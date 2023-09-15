@@ -284,7 +284,8 @@
   const getConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
-    const { isHosNavigation, isQueuing, isFWBtn } = orderConfig.value;
+    const { isHosNavigation, isQueuing, isFWBtn } =
+      orderConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;
@@ -296,6 +297,10 @@
 
     if (isFWBtn) {
       showFWBtn.value = isFWBtn;
+    }
+
+    if (isShowFilterOrderStatus.value) {
+      selOrderStatus.value = '1';
     }
   };
 

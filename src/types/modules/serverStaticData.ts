@@ -123,6 +123,7 @@ export interface ISystemConfig_ {
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
     requireSfz?: string[];
 
+    /** 按照业务类型配置需要上传的证件(设置后 sfz 参数将无效) */
     photoConfig?: {
       modes: IMedicalPhotoMode[];
     };

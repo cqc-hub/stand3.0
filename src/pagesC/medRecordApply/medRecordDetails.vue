@@ -109,7 +109,7 @@
                     <view class="iconfont camera-icon color-fff">&#xe6be;</view>
                     <view class="color-fff">
                       <text>{{ item.label }}</text>
-                      <text v-if="isPhotoModeItemRequire(item)">(必填)</text>
+                      <text v-if="isPhotoModeItemRequire(item)">(必传)</text>
                     </view>
                   </view>
                 </view>
@@ -1050,7 +1050,7 @@
         ((requireSfz && requireSfz.length && requireSfz) || sfz)) ||
       [];
 
-    const copyAimCount =
+    const copyNum =
       getCount(recordRows.value) || getCount(purposeCount.value);
 
     if (!addressList.value.length) {
@@ -1136,7 +1136,7 @@
       }
     }
 
-    if (selPurposeInRecord === '1' && !copyAimCount) {
+    if (selPurposeInRecord === '1' && !copyNum) {
       scrollTo.value = '_record';
       showMessage('请先在住院记录下选择复印份数', 3000);
       return;
@@ -1207,7 +1207,7 @@
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
-    const copyNum = aimValue.value.length || purposeCount.value.length;
+    const copyAimCount = aimValue.value.length || purposeCount.value.length;
 
     const args = {
       copyNum,

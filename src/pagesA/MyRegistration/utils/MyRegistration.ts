@@ -38,4 +38,5 @@ export type IRegistrationCardItem = {
   cardNumber: string;
   schQukCategor: string;
   _statusLabel: string;
+  regWay?: string; // 挂号途径 小程序、自助机、诊间预约等
 };
