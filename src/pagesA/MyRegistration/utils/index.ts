@@ -216,9 +216,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
         ? api.dtSchByDoc
         : api.getDeptSchForDoc;
 
+    uni.showLoading({
+      title: '获取医生排班数据..',
+    });
     const { result: allList } = await asyncListFnc<IDocListAll[]>(args).finally(
       () => {
         isComplete.value = true;
+        uni.hideLoading();
       }
     );
     const _enabledDays: Record<string, string> = {};
@@ -521,7 +525,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const { disNo, numId, timeDesc } = item;
     const { clinicalType, promptMessage, thRegisterId } = props.value;
 
-
     const pageArg = {
       disNo,
       numId,
@@ -546,7 +549,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       thRegisterId,
     };
     selectOrderSourceNumId.value = numId;
-
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', pageArg),

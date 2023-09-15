@@ -30,8 +30,9 @@
       <view @click="goDetail(item)" class="content">
         <view class="row f28">
           <view class="label text-no-wrap color-888">就诊人</view>
-          <view class="body">
-            {{ item.patientNameEncry }}({{ item.cardNumber }})
+          <view class="body flex-between">
+            <text>{{ item.patientNameEncry }}({{ item.cardNumber }})</text>
+            <text v-if="item.regWay">233</text>
           </view>
         </view>
 
