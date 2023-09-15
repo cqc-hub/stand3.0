@@ -748,15 +748,23 @@
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
 
-    if (pageConfig.value.selPurposeInRecord === '1') {
-      return aimValue.value.length * getCount(recordRows.value) * _fee;
-    } else if (pageConfig.value.isItemCount === '1') {
+    if (pageConfig.value.isItemCount === '1') {
+      const count = getCount(recordRows.value) || getCount(purposeCount.value);
+
+      if (pageConfig.value.itemCountExcludeAim === '1') {
+      }
+
       if (pageConfig.value.isPurposeRadio === '1') {
-        return aimValue.value.length * _fee;
-      } else {
         return (
-          purposeCount.value.reduce((prev, curr) => prev + curr.count, 0) * _fee
+          ((pageConfig.value.itemCountExcludeAim === '1' &&
+            aimValue.value.length &&
+            1) ||
+            aimValue.value.length) *
+          _fee *
+          count
         );
+      } else {
+        return count * _fee;
       }
     } else {
       // 预收模式
@@ -1050,8 +1058,7 @@
         ((requireSfz && requireSfz.length && requireSfz) || sfz)) ||
       [];
 
-    const copyNum =
-      getCount(recordRows.value) || getCount(purposeCount.value);
+    const copyNum = getCount(recordRows.value) || getCount(purposeCount.value);
 
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 3000);

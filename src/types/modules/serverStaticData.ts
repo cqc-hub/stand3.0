@@ -137,6 +137,8 @@ export interface ISystemConfig_ {
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) */
     isItemCount?: '0' | '1';
+    /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
+    itemCountExcludeAim?: '1';
 
     /**  收钱方式预收的金额 ｜ 单个项目金额 */
     fee: number;
