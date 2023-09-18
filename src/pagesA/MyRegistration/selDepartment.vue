@@ -87,7 +87,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onShareAppMessage, onLoad } from '@dcloudio/uni-app';
 
   import {
     GStores,
@@ -96,7 +96,12 @@
     type ISystemConfig,
     generateUuid,
   } from '@/utils';
-  import { joinQuery, joinQueryForUrl, setLocalStorage } from '@/common';
+  import {
+    joinQuery,
+    joinQueryForUrl,
+    setLocalStorage,
+    deQueryForUrl,
+  } from '@/common';
   import {
     IDeptLv1,
     IDeptLv2,
@@ -119,6 +124,7 @@
     clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
     thRegisterId?: string;
   }>();
+  const pageProps = ref(<any>{});
   const isShowRegTip = ref(false);
   const showRegTipTitle = ref('');
   const orderConfig = ref({} as ISystemConfig['order']);
@@ -298,7 +304,15 @@
     });
   };
 
-  onLoad(() => {
+  onShareAppMessage((res) => {
+    return {
+      title: `选择科室`,
+      path: joinQuery('/pagesA/MyRegistration/selDepartment', pageProps.value),
+    };
+  });
+
+  onLoad((opt = {}) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);

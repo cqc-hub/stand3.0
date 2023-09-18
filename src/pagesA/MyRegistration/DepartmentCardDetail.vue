@@ -107,9 +107,9 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady, onShareAppMessage } from '@dcloudio/uni-app';
 
-  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import {
     type TDepartmentDetail,
     type TDepartmentDocItem,
@@ -228,6 +228,16 @@
   const init = async () => {
     await getDetailData();
   };
+
+  onShareAppMessage((res) => {
+    return {
+      title: `${pageProps.value.deptName}`,
+      path: joinQuery(
+        '/pagesA/MyRegistration/DepartmentCardDetail',
+        pageProps.value
+      ),
+    };
+  });
 
   onLoad(async (opt) => {
     pageConfig.value = await getSystemConfig('FAMOUS_DOCTOR_DEPT');

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx4d8f68fdc6b6831c",
+    "appid": "wx799315279808c901",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
@@ -76,13 +71,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "codePlugin": {
+      "auth-pay-plugin": {
         "version": "*",
-        "provider": "2021003163608051"
+        "provider": "2021003167601013"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003182673498"
+    "appid": "2021004103625411"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -94,7 +89,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "中国人民解放军新疆军区总医院",
+  "name": "绍兴第二医院",
   "h5": {
     "router": {
       "base": "./"
