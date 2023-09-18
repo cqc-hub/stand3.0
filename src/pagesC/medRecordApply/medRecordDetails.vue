@@ -1127,7 +1127,7 @@
 
     if (!fee) {
       scrollTo.value = '_record';
-      showMessage('请先选择 复印份数 或 复印目的', 3000);
+      showMessage('请先选择 复印份数', 3000);
       return;
     }
 
