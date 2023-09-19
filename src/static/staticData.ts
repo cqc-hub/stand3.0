@@ -17,7 +17,7 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '3',
     url: `${BASE_IMG}medRecord_photos_9@2x.png`,
-    label: '手持身份证',
+    label: '手持身份证露脸',
   },
 
   // 代理人
@@ -34,7 +34,7 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '6',
     url: `${BASE_IMG}medRecord_photos_10@2x.png`,
-    label: '手持身份证',
+    label: '手持身份证露脸',
   },
 
   {
@@ -67,13 +67,13 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '12',
     url: `${BASE_IMG}medRecord_photos_17@2x.png`,
-    label: '手持身份证背面',
+    label: '手持身份证背面露脸',
   },
 
   {
     value: '13',
     url: `${BASE_IMG}medRecord_photos_18@2x.png`,
-    label: '手持身份证背面',
+    label: '手持身份证背面露脸',
   },
 ];
 
