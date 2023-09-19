@@ -93,7 +93,7 @@
   import { onLoad } from '@dcloudio/uni-app';
 
   import { IPageProps } from './utils/regConfirm';
-  import { GStores, ServerStaticData, wait } from '@/utils';
+  import { GStores, ServerStaticData, wait, apiAsync } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
   import { getLocalStorage } from '@/common';
@@ -202,7 +202,7 @@
     // #endif
 
     const {
-      result: { orderId },
+      result: { orderId, hasCharge, hint },
     } = await api.addReg(requestArg).catch((e) => {
       if (e) {
         const { respCode, message, code } = e;
@@ -247,6 +247,20 @@
       }
     }
     // #endif
+
+    if (hasCharge === '0') {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: hint,
+        cancelText: '稍后缴费',
+        confirmText: '立即缴费',
+      });
+
+      if (confirm) {
+        goPay();
+
+        throw new Error('去缴费');
+      }
+    }
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
