@@ -289,7 +289,6 @@
 
           <view id="_record" class="container-box g-border mb16 box-padding">
             <view class="g-bold f36">住院记录</view>
-
             <view class="flex-normal patient-info color-light-dark f28">
               <text class="patient-name">
                 {{ getUserShowLabel(gStores.userStore.patChoose) }}
@@ -301,7 +300,7 @@
             <view class="record-container mt32">
               <Record-Card
                 :list="recordRows"
-                :isAddCount="pageConfig.selPurposeInRecord === '1'"
+                :isAddCount="isSelPurposeCountInRecord"
                 @click-edit="editRecord"
                 @click-del="delRecord"
                 @change-count="changeCount"
@@ -309,10 +308,7 @@
               />
             </view>
 
-            <view
-              v-if="pageConfig.selPurposeInRecord === '1'"
-              class="color-888 f28 mb16"
-            >
+            <view v-if="isSelPurposeCountInRecord" class="color-888 f28 mb16">
               <rich-text :nodes="fg1021" />
               <g-flag v-model:value="fg1021" typeFg="1021" />
             </view>
@@ -568,6 +564,11 @@
   const isShowAddRecord = computed(() => {
     return props.isManual === '1';
     // return pageConfig.value.isCustomPatRecord === '1';
+  });
+
+  // 住院记录中选择份数?
+  const isSelPurposeCountInRecord = computed(() => {
+    return pageConfig.value.selPurposeInRecord === '1';
   });
 
   // 切换院区?
@@ -1145,10 +1146,13 @@
     //   }
     // }
 
-    if (selPurposeInRecord === '1' && !copyNum) {
+    if (isSelPurposeCountInRecord.value) {
       scrollTo.value = '_record';
-      showMessage('请先在住院记录下选择复印份数', 3000);
-      return;
+      const idx = recordRows.value.findIndex((o) => !o.count);
+      if (idx > -1) {
+        showMessage('请选择住院记录下的复印份数(不能为0)', 3000);
+        return;
+      }
     }
 
     uni.showLoading({

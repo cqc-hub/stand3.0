@@ -9,11 +9,13 @@ export const MEDICAL_PHOTOS = <const>[
     url: `${BASE_IMG}medRecord_photos_6@2x.png`,
     label: '身份证正面',
   },
+
   {
     value: '2',
     url: `${BASE_IMG}medRecord_photos_4@2x.png`,
     label: '身份证反面',
   },
+
   {
     value: '3',
     url: `${BASE_IMG}medRecord_photos_9@2x.png`,
@@ -26,11 +28,13 @@ export const MEDICAL_PHOTOS = <const>[
     url: `${BASE_IMG}medRecord_photos_8@2x.png`,
     label: '身份证正面',
   },
+
   {
     value: '5',
     url: `${BASE_IMG}medRecord_photos_7@2x.png`,
     label: '身份证反面',
   },
+
   {
     value: '6',
     url: `${BASE_IMG}medRecord_photos_10@2x.png`,
@@ -42,16 +46,19 @@ export const MEDICAL_PHOTOS = <const>[
     url: `${BASE_IMG}medRecord_photos_11@2x.png`,
     label: '户口本',
   },
+
   {
     value: '8',
     url: `${BASE_IMG}medRecord_photos_13@2x.png`,
     label: '出生医学证明',
   },
+
   {
     value: '9',
     url: `${BASE_IMG}medRecord_photos_14@2x.png`,
     label: '直系亲属关系证明',
   },
+
   {
     value: '10',
     url: `${BASE_IMG}medRecord_photos_15@2x.png`,
