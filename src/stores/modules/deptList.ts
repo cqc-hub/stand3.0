@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 export interface IDeptLv1 extends IDeptLv3 {
+  firstDefaultShowDept?: '1'; // 默认展示科室
   firstDeptName: string;
   firstHosDeptId: string;
   firstRecommendation: string; // 科室推介信息

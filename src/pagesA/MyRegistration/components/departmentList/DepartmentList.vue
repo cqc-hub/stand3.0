@@ -184,10 +184,13 @@
     () => props.list,
     async () => {
       if (props.list.length && props.level !== '1') {
-        const defaultChoose = props.list[0];
+        const defaultChoose =
+          props.list.find((o) => o.firstDefaultShowDept === '1') ||
+          props.list[0];
+
         if (defaultChoose.children && defaultChoose.children.length) {
           await wait(20);
-          itemClickLv1(props.list[0]);
+          itemClickLv1(defaultChoose);
         }
       }
     },
