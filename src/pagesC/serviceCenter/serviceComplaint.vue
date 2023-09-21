@@ -21,6 +21,7 @@
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted } from 'vue';
   import { GStores } from '@/utils';
+  import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
 
   import api from '@/service/api';
@@ -140,6 +141,20 @@
   const gform = ref<any>('');
 
   onMounted(() => {
+    // #ifdef MP-ALIPAY
+    const { userName, mobile } = gStores.userStore.cacheUser;
+    formData.value.name = userName;
+    formData.value.phone = mobile;
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    const { cellPhoneNum, phoneNum, name } = gStores.userStore;
+    const wxPhone = decryptDes(phoneNum, 'N1@ae^T:phone');
+
+    formData.value.phone = wxPhone;
+    formData.value.name = name;
+    // #endif
+
     gform.value.setList(tempList);
   });
 </script>
