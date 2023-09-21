@@ -256,8 +256,8 @@
         :localdata="actionSheetOpt"
         :clear-icon="false"
         @change="pickerChange"
-        ref="_actionSheet"
         isHideSlot
+        ref="_actionSheet"
       >
         <view />
       </uni-data-picker>
