@@ -177,7 +177,7 @@ export const useTBanner = async (
 
   if (type === 'h5') {
     if (config.isSelfH5) {
-      let baseUrl = globalGl.h5Url;
+      let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode } = gStores.globalStore;
 
       if (config.isLocal) {

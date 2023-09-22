@@ -19,10 +19,11 @@
           <view
             v-if="pageConfig.company && pageConfig.company.length"
             class="container-box g-border mb16 box-padding"
+            id="_express"
           >
             <view>
               <template v-if="pageConfig.company.length > 1">
-                <view id="_express" class="g-bold f36">选择快递方式</view>
+                <view class="g-bold f36">选择快递方式</view>
 
                 <view class="mt24 pb32 g-border-bottom">
                   <Sel-Express
@@ -997,7 +998,7 @@
       photoMode.value = photoConfig.modes[0]?.value;
     }
 
-    if (company && company.length) {
+    if (company && company.length === 1) {
       expressCompany.value = company[0].value;
     }
 
@@ -1040,8 +1041,14 @@
     }, 0);
 
   const paySubmit = async () => {
-    const { sfz, requireSfz, isPurposeRadio, selPurposeInRecord, photoConfig } =
-      pageConfig.value;
+    const {
+      sfz,
+      requireSfz,
+      company,
+      photoConfig,
+      selPurposeInRecord,
+      isPurposeRadio,
+    } = pageConfig.value;
     let {
       frontIdCardUrl,
       endIdCardUrl,
@@ -1055,11 +1062,19 @@
       [];
 
     const copyNum = getCount(recordRows.value) || getCount(purposeCount.value);
+    const copyAimCount = aimValue.value.length || purposeCount.value.length;
+
     const fee = getPayMoneyNum.value;
 
     if (!addressList.value.length) {
       showMessage('请先选择收货地址', 3000);
       scrollTo.value = '_address';
+      return;
+    }
+
+    if (company && company.length && !expressCompany.value) {
+      showMessage('请先选择快递方式', 3000);
+      scrollTo.value = '_express';
       return;
     }
 
@@ -1126,10 +1141,19 @@
       return;
     }
 
-    if (!fee) {
-      scrollTo.value = '_record';
-      showMessage('请先选择 复印份数', 3000);
-      return;
+    // 份数
+    if (selPurposeInRecord === '1' || isPurposeRadio !== '1') {
+      if (!copyNum) {
+        scrollTo.value = '_record';
+        showMessage('请先选择 复印份数', 3000);
+        return;
+      }
+    } else {
+      if (!copyAimCount) {
+        scrollTo.value = '_record';
+        showMessage('请先选择 复印目的', 3000);
+        return;
+      }
     }
 
     // if (isPurposeRadio === '1') {
@@ -1219,8 +1243,6 @@
     const copyAim = aimValue.value.join('、');
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
-
-    const copyAimCount = aimValue.value.length || purposeCount.value.length;
 
     const args = {
       copyNum,
