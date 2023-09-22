@@ -164,7 +164,7 @@
     // #endif
 
     const idx = props.list.findIndex(
-      (o) => o.hosDeptId === props.activeLv1.hosDeptId
+      (o) => o.uuid === props.activeLv1.uuid
     );
     if (idx !== -1) {
       activeLV1.value = idx;
