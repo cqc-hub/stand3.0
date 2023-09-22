@@ -49,10 +49,15 @@ const viewerStore = defineStore('viewer', {
       });
 
       if (oldVersion !== result) {
-        this.getViewConfig();
+        this.clearStore();
+        await this.getViewConfig();
       }
 
       this.version = result;
+    },
+
+    clearStore() {
+      this.$reset();
     },
   },
 
