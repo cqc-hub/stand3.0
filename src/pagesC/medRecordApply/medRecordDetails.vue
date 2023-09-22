@@ -1343,6 +1343,7 @@
       printCount,
       imageJson,
       remark: _remark,
+      expressCompany: _expressCompany,
     } = result;
 
     if (imageJson) {
@@ -1376,6 +1377,8 @@
     recordRows.value = JSON.parse(outInfo);
 
     remark.value = _remark || '';
+
+    _expressCompany && (expressCompany.value = _expressCompany + '');
   };
 
   const hosChange = () => {
