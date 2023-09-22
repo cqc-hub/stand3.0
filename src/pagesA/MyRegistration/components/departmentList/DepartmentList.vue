@@ -6,6 +6,7 @@
         'dept-list-lv2': isLv2,
         'dept-list-lv1-scrollContainer': !isLv2,
       }"
+      :scroll-into-view="scrollView"
       id="dept-list-lv1-scrollContainer"
       scroll-y
     >
@@ -32,6 +33,7 @@
             'item-lv1-border': !isLv2,
             'g-border-bottom': !isLv2,
           }"
+          :id="'lv1' + item.uuid"
           @click="itemClickLv1(item)"
           class="item-lv1 g-flex-rc-cc f32"
         >
@@ -84,6 +86,8 @@
       lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)',
     }
   );
+
+  const scrollView = ref('');
 
   const emits = defineEmits([
     'item-click-lv1',
@@ -191,12 +195,22 @@
         if (defaultChoose.children && defaultChoose.children.length) {
           await wait(20);
           itemClickLv1(defaultChoose);
+          scrollView.value = 'lv1' + defaultChoose.uuid;
         }
       }
     },
 
     {
       immediate: true,
+    }
+  );
+
+  watch(
+    () => scrollView.value,
+    () => {
+      setTimeout(() => {
+        scrollView.value = '';
+      }, 500);
     }
   );
 </script>
