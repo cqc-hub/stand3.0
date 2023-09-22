@@ -259,19 +259,14 @@
   const isShowPromptMessageTip = ref(false);
   const showPromptMessageTip = ref('');
   let promptMessageTipDialogConfirm = (v: unknown) => {};
-  const registerContinue = async (
-    item: IDeptLv3 | IDeptLv2 | IDeptLv1,
-    isShowed = false
-  ) => {
-    if (item.promptMessage && !isShowed) {
+  const registerContinue = async (item: IDeptLv3 | IDeptLv2 | IDeptLv1) => {
+    if (item.promptMessage) {
       isShowPromptMessageTip.value = true;
       showPromptMessageTip.value = HTMLParser(item.promptMessage);
-      await new Promise((r) => {
-        promptMessageTipDialogConfirm = r;
-      });
+      await new Promise((r) => (promptMessageTipDialogConfirm = r));
+      isShowPromptMessageTip.value = false;
     }
 
-    isShowPromptMessageTip.value = false;
     const queryArg = {
       hosId: hosId.value,
       clinicalType: props.clinicalType,
