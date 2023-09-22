@@ -71,7 +71,7 @@
       title="温馨提示"
       :show="isShowPromptMessageTip"
       :isShowCancel="false"
-      @confirmButton="registerContinue(cacheDeptItem, true)"
+      @confirmButton="promptMessageTipDialogConfirm"
       isMaskClick
     >
       <scroll-view scroll-y class="reg-tip">
@@ -93,8 +93,8 @@
     GStores,
     ServerStaticData,
     IHosInfo,
-    type ISystemConfig,
     generateUuid,
+    type ISystemConfig,
   } from '@/utils';
   import {
     joinQuery,
@@ -258,16 +258,17 @@
 
   const isShowPromptMessageTip = ref(false);
   const showPromptMessageTip = ref('');
-  const cacheDeptItem = ref(<IDeptLv3 | IDeptLv2 | IDeptLv1>{});
-  const registerContinue = (
+  let promptMessageTipDialogConfirm = (v: unknown) => {};
+  const registerContinue = async (
     item: IDeptLv3 | IDeptLv2 | IDeptLv1,
     isShowed = false
   ) => {
     if (item.promptMessage && !isShowed) {
       isShowPromptMessageTip.value = true;
       showPromptMessageTip.value = HTMLParser(item.promptMessage);
-      cacheDeptItem.value = item;
-      return;
+      await new Promise((r) => {
+        promptMessageTipDialogConfirm = r;
+      });
     }
 
     isShowPromptMessageTip.value = false;
