@@ -891,7 +891,7 @@ export const usePayPage = () => {
    * 创建订单 获取支付入参数据
    */
 
-  const payBeforeCreateData = async ()=>{
+  const payBeforeCreateData = async () => {
     const selectList = selUnPayList.value;
     const { patientId, patientName } = gStores.userStore.patChoose;
 
@@ -962,43 +962,42 @@ export const usePayPage = () => {
     } else {
       payArg.patientName = patientName;
     }
-    return payArg
-
-  }
+    return payArg;
+  };
 
   /**
- * 是否开启数字人民币支付
- * @returns boolean
- */
+   * 是否开启数字人民币支付
+   * @returns boolean
+   */
 
-  const getIsDigitalPay = () =>{
-    const { payList } = pageConfig.value
-    if(payList){
+  const getIsDigitalPay = () => {
+    const { payList } = pageConfig.value;
+    if (payList) {
       const { alipay, wx } = payList!;
 
       // #ifdef MP-ALIPAY
       if (alipay) {
         const { digital } = alipay;
-  
+
         if (digital) {
           return true;
         }
       }
       // #endif
-  
+
       // #ifdef  MP-WEIXIN
       if (wx) {
         const { digital } = wx;
-  
+
         if (digital) {
           return true;
         }
       }
       // #endif
     }
-   
+
     return false;
-}
+  };
 
   const handlerPay = async () => {
     if (!selUnPayList.value.length) {
@@ -1030,7 +1029,7 @@ export const usePayPage = () => {
 
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
-    const isDigitalPay= getIsDigitalPay();
+    const isDigitalPay = getIsDigitalPay();
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
@@ -1047,25 +1046,24 @@ export const usePayPage = () => {
             pageProps.value.params
           );
 
-          if(isDigitalPay){
+          if (isDigitalPay) {
             if (flag) {
               changeRefPayList(4);
             } else {
               changeRefPayList(3);
             }
-          }else{
+          } else {
             if (flag) {
               changeRefPayList(1);
             } else {
               changeRefPayList(0);
             }
           }
-         
         } else {
           changeRefPayList(0);
         }
       }
-    }else if(isDigitalPay){
+    } else if (isDigitalPay) {
       changeRefPayList(3);
     }
 
@@ -1073,7 +1071,7 @@ export const usePayPage = () => {
     refPay.value.show();
   };
 
-  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => { 
+  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
     if (type === 0) {
       refPayList.value = [
         {
@@ -1109,13 +1107,13 @@ export const usePayPage = () => {
           key: 'offline',
         },
       ];
-    }else if (type === 3) { 
-      let labelPay = '自费支付'
+    } else if (type === 3) {
+      let labelPay = '自费支付';
       // #ifdef MP-WEIXIN
-      labelPay = '微信支付'
+      labelPay = '微信支付';
       // #endif
       // #ifdef MP-ALIPAY
-      labelPay = '支付宝支付'
+      labelPay = '支付宝支付';
       // #endif
       refPayList.value = [
         {
@@ -1128,13 +1126,13 @@ export const usePayPage = () => {
           key: 'digital',
         },
       ];
-    }else if (type === 4) {
-      let labelPay = '自费支付'
+    } else if (type === 4) {
+      let labelPay = '自费支付';
       // #ifdef MP-WEIXIN
-      labelPay = '微信支付'
+      labelPay = '微信支付';
       // #endif
       // #ifdef MP-ALIPAY
-      labelPay = '支付宝支付'
+      labelPay = '支付宝支付';
       // #endif
       refPayList.value = [
         {
@@ -1197,39 +1195,40 @@ export const usePayPage = () => {
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
-    }else if(item.key === 'digital'){
+    } else if (item.key === 'digital') {
       toDigitalPay();
     }
   };
 
   /** 数字人民币支付 */
-  const toDigitalPay = async ()=>{
-    const {alipay, wx } = pageConfig.value.payList!;
+  const toDigitalPay = async () => {
+    const { alipay, wx } = pageConfig.value.payList!;
     let _businessType = '';
     let _channel = '';
-      // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { businessType,channel } = alipay;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
-  
-      // #ifdef  MP-WEIXIN
-      if (wx) {
-        const { businessType,channel } = wx;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
- 
-    let payArg = await payBeforeCreateData()
+    // #ifdef MP-ALIPAY
+    if (alipay) {
+      const { businessType, channel } = alipay;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { businessType, channel } = wx;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+
+    let payArg = await payBeforeCreateData();
     const payArgNew: BaseObject = {
       ...payArg,
-      channel:_channel,
+      channel: _channel,
       businessType: _businessType,
-      returnUrl:
-      `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent('/pagesA/clinicPay/clinicPayDetail?tabIndex=1')}`,
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
+        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1'
+      )}`,
     };
 
     const res = await payMoneyOnline(payArgNew);
@@ -1239,8 +1238,7 @@ export const usePayPage = () => {
         invokeData.payUrl!
       )}`,
     });
-
-  }
+  };
 
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
@@ -1363,8 +1361,7 @@ export const usePayPage = () => {
   };
 
   const toPay = async () => {
-
-    const payArg = await payBeforeCreateData()
+    const payArg = await payBeforeCreateData();
     const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '门诊缴费');

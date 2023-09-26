@@ -79,6 +79,7 @@
   import { joinQueryForUrl } from '@/common';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
   const info = ref(
@@ -152,6 +153,7 @@
       });
 
       const requestArg = {
+        ...uploadRes.value,
         ...info.value,
         regAppTradeNo,
         channel,
@@ -177,9 +179,13 @@
         requestContent,
         source,
         returnUrl,
-        totalFee: totalCost,
+        // totalFee: totalCost,
         userId: openId,
       };
+
+      if (globalGl.SYS_CODE === '1001056') {
+        requestArg.totalFee = totalCost;
+      }
 
       Object.keys(requestArg).map((key) => {
         requestArg[key] = requestArg[key] || '';
