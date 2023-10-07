@@ -28,9 +28,15 @@ const viewerStore = defineStore('viewer', {
 
     async getViewConfig() {
       this.loading = true;
-      this.viewConfig = await ServerStaticData.getHomeConfig().finally(() => {
-        this.loading = false;
-      });
+      this.viewConfig = await ServerStaticData.getHomeConfig()
+        .catch((e) => {
+          this.clearStore();
+          console.error(e);
+          throw new Error('获取首页配置错误');
+        })
+        .finally(() => {
+          this.loading = false;
+        });
 
       // 新增公告展示判断 showFlag为1展示
       if (this.viewConfig[1].showFlag) {
