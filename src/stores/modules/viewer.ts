@@ -19,6 +19,10 @@ const viewerStore = defineStore('viewer', {
 
   actions: {
     async init() {
+      if (!this.viewConfig.length) {
+        this.version = '';
+      }
+
       this.getVersion();
     },
 
