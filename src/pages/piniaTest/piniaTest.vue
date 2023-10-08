@@ -211,7 +211,7 @@
     path: 'pagesC/subMsgs/subMsgs',
     text: '消息订阅管理',
     extraData: {
-      source
+      source,
     },
     addition: {
       patientId: '_patientId',
@@ -236,11 +236,25 @@
     path: 'pagesC/serviceCenter/serviceChat',
     text: '客服中心',
     isLocal: '1',
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
+  const 医保结算清单: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/eletronicInvoice/settleList',
+    text: '医保结算清单',
+    isLocal: '1',
+    addition: {
+      patientId: '_patientId',
+    },
   };
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(客服中心);
+      useTBanner(医保结算清单);
     }, 1000);
   });
 </script>
