@@ -380,6 +380,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(): Promise<void> {
+    return this.handlerAuth();
     if (isLoading) {
       return;
     }
@@ -458,6 +459,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
     }
   }
 
+  // handlerAuth
   async handlerAuth(): Promise<void> {
     uni.showLoading({
       mask: true,

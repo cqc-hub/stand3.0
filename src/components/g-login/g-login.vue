@@ -59,15 +59,15 @@
       case 'tt':
         return 'getPhoneNumber';
 
-      case 'alipay':
-        return 'getAuthorize';
+      // case 'alipay':
+      // return 'getAuthorize';
       default:
         return '';
     }
   });
 
   const handlerClick = (e) => {
-    if (['h5'].includes(_env.value)) {
+    if (['h5', 'alipay'].includes(_env.value)) {
       goLogin(e);
     }
   };

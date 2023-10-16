@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref, computed, getCurrentInstance } from 'vue';
+  import { watch, ref, computed, getCurrentInstance, nextTick } from 'vue';
   import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
   import { wait } from '@/utils';
 
@@ -163,15 +163,19 @@
     await wait(120);
     // #endif
 
-    const idx = props.list.findIndex(
-      (o) => o.uuid === props.activeLv1.uuid
-    );
+    const idx = props.list.findIndex((o) => o.uuid === props.activeLv1.uuid);
     if (idx !== -1) {
       activeLV1.value = idx;
     }
     if (isLev1(item) && isLv2.value) {
-      deptListLv2.value = item.children || [];
-      getPillPosition();
+      // #ifdef H5
+      deptListLv2.value = [];
+      // #endif
+
+      nextTick(() => {
+        deptListLv2.value = item.children || [];
+        getPillPosition();
+      });
     }
   };
 

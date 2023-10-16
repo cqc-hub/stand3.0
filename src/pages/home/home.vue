@@ -109,7 +109,7 @@
                   <view class="switchPatient no-login-tip">请登录</view>
                   <!-- #endif -->
 
-                  <!-- #ifdef MP-WEIXIN -->
+                  <!-- #ifdef MP-WEIXIN | H5 -->
                   <button class="login-btn">请登录</button>
                   <!-- #endif -->
                   <!-- </g-login> -->
