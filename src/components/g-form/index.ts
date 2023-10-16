@@ -71,6 +71,7 @@ export interface ISwitchInstance extends IBaseInstance {
  * 一组最多一个验证码
  *
  * verifySecond  倒计时 s
+ * submitVerify 自定义发送短信
  */
 export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
   field: 'input-verify';
