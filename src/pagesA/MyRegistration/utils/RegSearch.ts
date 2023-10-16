@@ -77,12 +77,12 @@ export class UseRegSearch extends GStores {
       key: 0,
     },
     {
-      label: '症状',
-      key: 1,
-    },
-    {
       label: '科室',
       key: 2,
+    },
+    {
+      label: '症状',
+      key: 1,
     },
   ];
   searchHistory = ref(<IRegSearchHistoryItem[]>[]);
@@ -116,7 +116,7 @@ export class UseRegSearch extends GStores {
       hosDocId,
       hosDeptId,
       docTitleName,
-      hosId
+      hosId,
     } = item;
 
     // const { hosId } = this.pageProp.value;
@@ -175,12 +175,14 @@ export class UseRegSearch extends GStores {
     this.deptResultList.value = deptResultList;
     this.docInfoResultList.value = docInfoResultList;
     this.symptomResultList.value = symptomResultList;
+    console.log(deptResultList);
+
 
     if (docInfoResultList.length) {
       this.tabCurrent.value = 0;
-    } else if (symptomResultList.length) {
-      this.tabCurrent.value = 1;
     } else if (deptResultList.length) {
+      this.tabCurrent.value = 1;
+    } else if (symptomResultList.length) {
       this.tabCurrent.value = 2;
     }
   }

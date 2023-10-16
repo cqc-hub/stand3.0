@@ -110,6 +110,15 @@ const scJson: Record<string, ISConfig> = {
   1001054: {
     isOpenButton: '1',
     isHideHomeSearch: '1',
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610400&channel=AAFwLnLNBzDZNXVZVKdvs0v_&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtn+S/XPoOIr53u3xRWP6xq&orgCodg=H61040200092&orgAppId=1G8FTSHFR0F63F60C80A00003310E195',
+        },
+        // medicalDefault: '1',
+      },
+    },
   },
 
   /**
@@ -121,7 +130,6 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1G8G3JJRB0043F60C80A0000EBD85252',
           path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAHXJbrzmhk_q05MEUW1ioQn&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuHF+LhHk733m/BRrPGb2V8&orgCodg=H65010300478&orgAppId=1GU9PR6L900C76430B0A00006D4C0BE7',
         },
         // medicalDefault: '1',
