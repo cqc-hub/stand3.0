@@ -397,9 +397,13 @@
           mask: true,
         });
 
-        await api.sendVerifyCode({
-          patientPhone: phone,
-        });
+        if (item.submitVerify) {
+          await item.submitVerify(phone)
+        } else {
+          await api.sendVerifyCode({
+            patientPhone: phone,
+          });
+        }
 
         let waitTime = item.verifySecond;
 

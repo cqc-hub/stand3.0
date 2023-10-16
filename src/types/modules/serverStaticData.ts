@@ -338,6 +338,7 @@ export interface IHosInfo {
   gisLng?: number; // 纬度
   label: string;
   value: string;
+  hosLogo: string;
 }
 
 export type TBannerConfigBase = {

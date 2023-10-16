@@ -534,9 +534,24 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
 class WebLoginHandler extends LoginUtils implements LoginHandler {
   async handler(payload?: any): Promise<void> {
-    this.messageStore.showMessage('暂未支持 h5 登录');
+    // this.messageStore.showMessage('暂未支持 h5 登录');
+    // return Promise.reject('暂未支持 h5 登录');
 
-    return Promise.reject('暂未支持 h5 登录');
+    const pages = getCurrentPages();
+
+    if (pages.length) {
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+      const routeStore = useRouterStore();
+      routeStore.receiveQuery({
+        _url: fullUrl,
+      });
+    }
+
+    uni.navigateTo({
+      url: '/pages/login/h5',
+    });
+
+    throw Error('即将去往 h5 登录页');
   }
 }
 

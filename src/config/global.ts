@@ -51,6 +51,7 @@ const globalGl = {
   wxAppid,
   h5AppId,
   systemInfo,
+  systemConfig: systemConfig.sysConfig[SYS_CODE],
   addPersonUrl: systemInfo.isSearchInHos
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',

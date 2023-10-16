@@ -15,6 +15,12 @@
       }
     },
     {
+      "path": "pages/login/h5",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
       "path": "pages/home/my",
       "style": {
         "navigationBarTitleText": "我的"

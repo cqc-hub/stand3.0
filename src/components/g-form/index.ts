@@ -76,7 +76,7 @@ export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
   field: 'input-verify';
   verifyBtnText: string;
   verifySecond: number;
-  // submitVerify: (...args: any[]) => Promise<any>;
+  submitVerify?: (phone: string) => Promise<any>;
   phoneKey: string;
 }
 

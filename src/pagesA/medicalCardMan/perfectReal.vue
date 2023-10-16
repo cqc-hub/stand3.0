@@ -51,7 +51,6 @@
     routerJump,
     ServerStaticData,
     nameConvert,
-    wait,
   } from '@/utils';
   import {
     pickTempItem,
@@ -63,7 +62,7 @@
   } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
-  import { useUserStore, useMessageStore, useRouterStore } from '@/stores';
+  import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
 
   import api from '@/service/api';
@@ -127,7 +126,7 @@
 
     const data: any = {
       ...formData.value,
-      verifyType: formData.value[formKey.verifyCode] && '2&kq' || '1&bk',
+      verifyType: (formData.value[formKey.verifyCode] && '2&kq') || '1&bk',
       source,
     };
 
@@ -408,8 +407,6 @@
     flex: 1;
     overflow-y: scroll;
   }
-
-
 
   .footer {
     background-color: var(--h-color-white);
