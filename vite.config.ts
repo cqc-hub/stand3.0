@@ -43,6 +43,8 @@ export default defineConfig({
     host: netIp,
   },
 
+  base: '/shaoxin2/',
+
   // build: {
   //   minify: 'terser',
   //   terserOptions: {
