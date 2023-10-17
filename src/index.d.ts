@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="@dcloudio/uni-app" />
+/// <reference types="../node_modules/@dcloudio/types" />
 
 declare const wx: any;
 declare const my: any;
