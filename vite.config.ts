@@ -8,14 +8,17 @@ const interfaces = os.networkInterfaces();
 let netIp = '';
 
 for (const devName in interfaces) {
+  if (netIp) {
+    break;
+  }
   const iface = interfaces[devName];
 
-  iface.map((o) => {
-    const { family, address, internal } = o;
+  for (let i = 0; i < iface.length; i++) {
+    const { family, address, internal } = iface[i];
     if (family === 'IPv4' && address !== '127.0.0.1' && !internal) {
       netIp = address;
     }
-  });
+  }
 }
 
 // https://vitejs.dev/config/
