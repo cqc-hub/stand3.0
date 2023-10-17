@@ -1,9 +1,10 @@
 /// <reference types="vite/client" />
 /// <reference types="@dcloudio/uni-app" />
 
-declare var wx: any;
-declare var my: any;
-declare var requirePlugin: any;
+declare const wx: any;
+declare const my: any;
+declare const uni: Uni;
+declare const requirePlugin: any;
 
 /**
  * @wxAppid-微信appid
