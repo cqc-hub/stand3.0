@@ -13,6 +13,12 @@
           bodyBold
           ref="gform"
         />
+
+        <view class="p32c mt70">
+          <button @click="gform.submit" class="btn btn-primary btn-round">
+            登录
+          </button>
+        </view>
       </view>
     </view>
     <g-message />
@@ -22,7 +28,8 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { ServerStaticData, GStores } from '@/utils';
+  import { ServerStaticData, GStores, packageAuthParams } from '@/utils';
+  import { joinQuery, getSysCode } from '@/common';
 
   import api from '@/service/api';
 
@@ -34,7 +41,8 @@
   const formList = [
     {
       required: true,
-      label: '手机号',
+      label: '',
+      labelWidth: '0',
       field: 'input-text',
       placeholder: '请输入手机号',
       maxlength: 11,
@@ -50,7 +58,8 @@
     {
       required: true,
       maxlength: 6,
-      label: '验证码',
+      label: '',
+      labelWidth: '0',
       field: 'input-verify',
       placeholder: '请输入',
       key: 'verifyCode',
@@ -62,8 +71,19 @@
         rule: /\d+/,
       },
       phoneKey: 'phone',
-      async submitVerify(phone: string) {
-        console.log('hhh');
+      async submitVerify(cellPhoneNum: string) {
+        const reqArg = {
+          cellPhoneNum,
+          type: '6',
+          sysCode: getSysCode(),
+        };
+
+        api.allinoneAuthApi(
+          packageAuthParams(
+            {},
+            joinQuery('/register/sendVerificationCode', reqArg)
+          )
+        );
       },
     },
   ];
@@ -104,5 +124,9 @@
   .hos-logo {
     width: 240rpx;
     height: 240rpx;
+  }
+
+  .btn-round {
+    border-radius: 140px;
   }
 </style>

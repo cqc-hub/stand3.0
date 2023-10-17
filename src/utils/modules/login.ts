@@ -54,7 +54,7 @@ export const getH5OpenidParam = function (data) {
 
 export const packageAuthParams = (
   args: {},
-  url: `/${string}`,
+  url: string,
   payload: {
     isOutArgs?: boolean;
   } = {}

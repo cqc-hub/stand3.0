@@ -18,7 +18,9 @@ let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {
+  // #ifndef H5
   env = 'prod';
+  // #endif
 }
 
 if (env === 'prod') {

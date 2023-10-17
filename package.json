@@ -57,7 +57,9 @@
     "pinia-plugin-persistedstate": "^2.1.0",
     "polyfill-object.fromentries": "^1.0.1",
     "query-string": "^7.1.1",
+    "terser": "^5.22.0",
     "uni-vite-plugin-h5-prod-effect": "^1.0.1",
+    "vconsole": "^3.15.1",
     "vue": "^3.2.39",
     "vue-i18n": "^9.2.2"
   },
