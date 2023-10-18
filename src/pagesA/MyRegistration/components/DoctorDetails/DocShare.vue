@@ -40,12 +40,14 @@
             </view>
           </button>
 
+          <!-- #ifndef H5 -->
           <button @click="clickShare" open-type="share" class="share-btn">
             <view class="g-flex-rc-cc footer-btn-content">
               <view class="iconfont share-icon">&#xe704;</view>
               <view class="color-444 f28">转发给好友</view>
             </view>
           </button>
+          <!-- #endif -->
         </view>
 
         <button @click="close" class="share-btn g-bold">
@@ -220,9 +222,6 @@
           resolve(e);
         },
         fail: reject,
-        complete(e) {
-          console.warn('接口调用完成', e);
-        },
       });
     });
   };
