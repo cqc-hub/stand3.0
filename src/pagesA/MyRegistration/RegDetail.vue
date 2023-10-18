@@ -633,6 +633,11 @@
   const getPayInfo = async ({ item }: { item: IGPay }) => {
     const { key } = item;
 
+    // 清空退费存留状态
+    setLocalStorage({
+      'get-wx-medical-auth-code-order': '',
+    });
+
     switch (key) {
       case 'online':
         toPay();
@@ -640,10 +645,6 @@
 
       case 'medicare':
         const isMedicalMode = _getIsMedicalMode();
-        // 清空退费存留状态
-        setLocalStorage({
-          'get-wx-medical-auth-code': '',
-        });
 
         if (isMedicalMode) {
           await new PatientUtils().upToMedicalPat({
