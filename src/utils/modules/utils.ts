@@ -133,31 +133,30 @@ export const routerJump = async (url?: `/${string}`) => {
 
   if (routerStore.isWork) {
     const _p = routerStore._p;
-    if (!_p) {
-      uni.reLaunch({
-        url: routerStore.fullUrl,
-      });
-    } else {
+    if (_p) {
       const menus = await ServerStaticData.getHomeConfig();
 
       const menuItem = getMenuById(routerStore._id, menus);
-      if (menuItem) {
-        useCommonTo(menuItem, { type: 'reLaunch' });
-      } else {
-        // messageStore.showMessage(
-        //   '未找到对应menuId 的 menu：' + routerStore._id
-        // );
-      }
+      menuItem && useCommonTo(menuItem, { type: 'reLaunch' });
 
       routerStore.clear();
+    } else {
+      if (routerStore.fullUrl.startsWith('/pages/login/h5')) {
+        uni.reLaunch({
+          url: '/pages/home/home',
+        });
+      } else {
+        uni.reLaunch({
+          url: routerStore.fullUrl,
+        });
+      }
     }
     routerStore.clear();
   } else {
-    if (url) {
+    url &&
       uni.reLaunch({
         url,
       });
-    }
   }
 };
 

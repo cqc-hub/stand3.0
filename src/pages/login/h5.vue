@@ -28,16 +28,26 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { ServerStaticData, GStores, packageAuthParams } from '@/utils';
+  import {
+    ServerStaticData,
+    GStores,
+    packageAuthParams,
+    LoginUtils,
+    routerJump,
+  } from '@/utils';
   import { joinQuery, getSysCode } from '@/common';
 
   import api from '@/service/api';
 
+  // https://health.eheren.com/taizhou_pc/#/taizhou_pc/user/login
+
   const envH5 = ref<'browse' | 'wx'>('browse');
   const hosLogo = ref('');
   const gStores = new GStores();
+  const loginUtils = new LoginUtils();
   const formData = ref<BaseObject>({});
   const gform = ref<any>('');
+  let isSendedVerify = false;
   const formList = [
     {
       required: true,
@@ -47,7 +57,7 @@
       field: 'input-text',
       placeholder: '请输入手机号',
       maxlength: 11,
-      key: 'phone',
+      key: 'cellPhoneNum',
       rule: [
         {
           message: '请确认手机号是否有误',
@@ -64,7 +74,7 @@
       labelWidth: '0',
       field: 'input-verify',
       placeholder: '请输入验证码',
-      key: 'verifyCode',
+      key: 'code',
       verifyBtnText: '获取验证码',
       inputType: 'number',
       verifySecond: 60,
@@ -72,7 +82,7 @@
         message: '验证码必须是数字',
         rule: /\d+/,
       },
-      phoneKey: 'phone',
+      phoneKey: 'cellPhoneNum',
       async submitVerify(cellPhoneNum: string) {
         const reqArg = {
           cellPhoneNum,
@@ -80,17 +90,42 @@
           sysCode: getSysCode(),
         };
 
-        api.allinoneAuthApi(
-          packageAuthParams(
-            {},
-            joinQuery('/register/sendVerificationCode', reqArg)
-          )
+        await api.allinoneAuthApi(
+          packageAuthParams(reqArg, '/register/sendVerifCode')
         );
+        isSendedVerify = true;
       },
     },
   ];
 
-  const formSubmit = async () => {};
+  const formSubmit = async ({ data }) => {
+    console.log(data);
+    if (!isSendedVerify) {
+      gStores.messageStore.showMessage('请先获取验证码', 2000);
+      return;
+    }
+
+    // await
+    const reqArg = {
+      ...data,
+      sysCode: getSysCode(),
+      accountType: '5',
+    };
+
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(reqArg, '/login/registerAndLogin')
+    );
+
+    const { accessToken, refreshToken } = result;
+
+    gStores.globalStore.setToken({
+      accessToken,
+      refreshToken,
+    });
+
+    await loginUtils.getUerInfo();
+    routerJump('/pages/home/home');
+  };
 
   const getHosLogo = async () => {
     hosLogo.value = (await ServerStaticData.getHosList())[0]?.hosLogo || '';
@@ -112,25 +147,25 @@
     gform.value.setList(formList);
   });
 
-  var coinChange = function (penny, num) {
-    if (!num) return num;
-    const result = Array.from<number>({ length: num });
-    for (let i = 0; i < num; i++) {
-      const minnum = Math.min(
-        ...penny
-          .filter((item) => i + 1 >= item) // 小于计算数的硬币不用计算过滤掉
-          .map((item) => 1 + (result[i - item] || 0))
-      );
-      result[i] = minnum;
-    }
+  // var coinChange = function (penny, num) {
+  //   if (!num) return num;
+  //   const result = Array.from<number>({ length: num });
+  //   for (let i = 0; i < num; i++) {
+  //     const minnum = Math.min(
+  //       ...penny
+  //         .filter((item) => i + 1 >= item) // 小于计算数的硬币不用计算过滤掉
+  //         .map((item) => 1 + (result[i - item] || 0))
+  //     );
+  //     result[i] = minnum;
+  //   }
 
-    console.log(result);
+  //   console.log(result);
 
-    const _result = result.pop();
-    return _result === Infinity ? -1 : _result;
-  };
+  //   const _result = result.pop();
+  //   return _result === Infinity ? -1 : _result;
+  // };
 
-  console.log('res', coinChange([1, 5, 11], 14));
+  // console.log('res', coinChange([1, 5, 11], 14));
 </script>
 
 <style lang="scss" scoped>
@@ -152,4 +187,3 @@
     border-radius: 140px;
   }
 </style>
-
