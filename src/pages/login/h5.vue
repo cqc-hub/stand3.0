@@ -89,11 +89,11 @@
           type: '6',
           sysCode: getSysCode(),
         };
+        isSendedVerify = true;
 
         await api.allinoneAuthApi(
           packageAuthParams(reqArg, '/register/sendVerifCode')
         );
-        isSendedVerify = true;
       },
     },
   ];

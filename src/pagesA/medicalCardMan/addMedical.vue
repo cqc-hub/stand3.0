@@ -551,18 +551,11 @@
         }
         // #endif
 
-        // if (key === formKey.patientPhone && globalGl.systemInfo.isSearchInHos) {
-        //   if (globalGl.systemInfo.isSearchInHos) {
-        //     o.disabled = true;
-        //   }
-
-        //   // #ifdef MP-ALIPAY
-        //   o.disabled = true;
-        //   // #endif
-        // }
+        // #ifndef H5
         if (key === formKey.patientPhone) {
           o.disabled = true;
         }
+        // #endif
       } else {
         // #ifdef MP-ALIPAY
         // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
