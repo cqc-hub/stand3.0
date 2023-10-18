@@ -168,6 +168,7 @@
           font-size: var(--hr-font-size-xxxs);
           color: var(--hr-neutral-color-8);
           margin-top: 10rpx;
+          user-select: none;
         }
 
         image {

@@ -99,13 +99,11 @@
   ];
 
   const formSubmit = async ({ data }) => {
-    console.log(data);
     if (!isSendedVerify) {
       gStores.messageStore.showMessage('请先获取验证码', 2000);
       return;
     }
 
-    // await
     const reqArg = {
       ...data,
       sysCode: getSysCode(),

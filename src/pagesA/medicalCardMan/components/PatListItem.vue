@@ -66,7 +66,7 @@
       </view>
 
       <view class="card-container">
-        <image class="qr-code" src="/static/image/v-qrcode.png"></image>
+        <image class="qr-code" :src="'/static/image/v-qrcode.png'" />
       </view>
     </view>
 
