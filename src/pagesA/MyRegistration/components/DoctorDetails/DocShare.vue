@@ -103,13 +103,18 @@
     }, 350);
     popup.value.open('center');
     popupBottom.value.show();
-    options.value.code = joinQuery(
-      `https://h5.eheren.com/scan/${globalGl.SYS_CODE}/DoctorDetails`,
-      {
-        ...props.pageProp,
-        deptName: undefined,
-      }
-    );
+    let shareUrl = `https://h5.eheren.com/scan/${globalGl.SYS_CODE}/DoctorDetails`;
+    // #ifdef H5
+    shareUrl = decodeURIComponent(location.href);
+    options.value.code = shareUrl;
+    // #endif
+
+    // #ifndef H5
+    options.value.code = joinQuery(shareUrl, {
+      ...props.pageProp,
+      deptName: undefined,
+    });
+    // #endif
 
     setTimeout(async () => {
       await capture();
