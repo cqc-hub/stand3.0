@@ -70,7 +70,7 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, ref } from 'vue';
-  import { downFile, wait, GStores } from '@/utils';
+  import { downFile, wait, GStores, FileUtil } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
   import globalGl from '@/config/global';
@@ -591,6 +591,7 @@
       });
     });
     // #endif
+
     uni.showLoading({
       mask: true,
     });
@@ -612,9 +613,16 @@
                 },
               });
             });
-
             // #endif
 
+            // #ifdef H5
+            new FileUtil().downLoadFileBase64(
+              tempFilePath,
+              <any>new Date() * 1 + ''
+            );
+            // #endif
+
+            // #ifndef H5
             uni.saveImageToPhotosAlbum({
               filePath: tempFilePath,
               success() {
@@ -623,6 +631,7 @@
                 });
               },
             });
+            // #endif
           }
         },
 
