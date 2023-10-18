@@ -640,6 +640,10 @@
 
       case 'medicare':
         const isMedicalMode = _getIsMedicalMode();
+        // 清空退费存留状态
+        setLocalStorage({
+          'get-wx-medical-auth-code': '',
+        });
 
         if (isMedicalMode) {
           await new PatientUtils().upToMedicalPat({

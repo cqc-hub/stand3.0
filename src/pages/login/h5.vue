@@ -41,6 +41,7 @@
   const formList = [
     {
       required: true,
+      emptyMessage: '请输入手机号',
       label: '',
       labelWidth: '0',
       field: 'input-text',
@@ -59,9 +60,10 @@
       required: true,
       maxlength: 6,
       label: '',
+      emptyMessage: '请输入验证码',
       labelWidth: '0',
       field: 'input-verify',
-      placeholder: '请输入',
+      placeholder: '请输入验证码',
       key: 'verifyCode',
       verifyBtnText: '获取验证码',
       inputType: 'number',
@@ -106,10 +108,29 @@
     // #endif
   });
 
-
   onMounted(() => {
     gform.value.setList(formList);
   });
+
+  var coinChange = function (penny, num) {
+    if (!num) return num;
+    const result = Array.from<number>({ length: num });
+    for (let i = 0; i < num; i++) {
+      const minnum = Math.min(
+        ...penny
+          .filter((item) => i + 1 >= item) // 小于计算数的硬币不用计算过滤掉
+          .map((item) => 1 + (result[i - item] || 0))
+      );
+      result[i] = minnum;
+    }
+
+    console.log(result);
+
+    const _result = result.pop();
+    return _result === Infinity ? -1 : _result;
+  };
+
+  console.log('res', coinChange([1, 5, 11], 14));
 </script>
 
 <style lang="scss" scoped>
@@ -131,3 +152,4 @@
     border-radius: 140px;
   }
 </style>
+

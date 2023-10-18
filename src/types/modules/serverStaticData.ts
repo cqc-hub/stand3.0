@@ -257,7 +257,7 @@ export interface ISystemConfig_ {
 
     /** 报告查询列表云影像链接 */
     listYun?: {
-      imgUrl: string;
+      imgUrl: string; // https://phsdevoss.eheren.com/pcloud/phs3.0/stand3-yun-banner.png
     };
 
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;

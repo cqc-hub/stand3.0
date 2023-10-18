@@ -46,6 +46,7 @@ export default defineConfig({
     host: netIp,
   },
 
+  // 按照项目实际地址修改
   base: '/shaoxin2/',
 
   // build: {
