@@ -1,15 +1,15 @@
 export class FileUtil {
   downLoadFileBase64(base64: string, fileName: string) {
     // #ifdef H5
-    let aLink = document.createElement('a');
-    let blob = this.base64ToBlob(base64); //new Blob([content]);
+    const aLink = document.createElement('a');
+    const blob = this.base64ToBlob(base64); //new Blob([content]);
 
     aLink.download = fileName;
     aLink.href = URL.createObjectURL(blob);
 
     aLink.dispatchEvent(
       new MouseEvent('click', { bubbles: true, cancelable: true, view: window })
-    ); //兼容火狐
+    );
     // #endif
   }
 

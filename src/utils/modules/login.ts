@@ -380,7 +380,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(): Promise<void> {
-    return this.handlerAuth();
+    return await this.handlerAuth();
     if (isLoading) {
       return;
     }
@@ -515,7 +515,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         refreshToken,
       });
 
-      await this.getUerInfo('alone', true);
+      // await this.getUerInfo('alone', true);
+      await this.getUerInfo();
     } catch (error: any) {
       if (error) {
         const { errorMessage } = error;

@@ -18,7 +18,9 @@
               width: canvasInfo.width + 'px',
               height: canvasInfo.height + 'px',
             }"
-          ></canvas>
+          />
+
+          <!-- <image :src="sharePic"></image> -->
         </view>
       </view>
     </uni-popup>
@@ -72,7 +74,7 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, ref } from 'vue';
-  import { downFile, wait, GStores, FileUtil } from '@/utils';
+  import { downFile, wait, GStores, FileUtil, apiAsync } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
   import globalGl from '@/config/global';
@@ -94,6 +96,7 @@
   const isShow = ref(false);
 
   const qrImg = ref('');
+  const sharePic = ref('');
 
   const clickShare = () => {
     close();
@@ -569,6 +572,22 @@
     ctx.draw();
     uni.hideLoading();
     loadingSuccess(void 0);
+
+    transformToImg();
+  };
+
+  const transformToImg = async () => {
+    await wait(600);
+    const { tempFilePath } = await apiAsync(
+      <any>uni.canvasToTempFilePath,
+      {
+        canvasId: 'shareCanvas',
+      },
+      inst
+    );
+
+    sharePic.value = tempFilePath;
+    console.log(tempFilePath);
   };
 
   const capture = async () => {
@@ -622,6 +641,7 @@
             // #endif
 
             // #ifndef H5
+
             uni.saveImageToPhotosAlbum({
               filePath: tempFilePath,
               success() {

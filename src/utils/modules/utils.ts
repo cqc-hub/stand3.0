@@ -26,22 +26,29 @@ export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
 export const apiAsync: <
   T extends {
-    (opt: { success(any): void; fail(any): any; [key: string]: any }): any;
+    (
+      opt: { success(any): void; fail(any): any; [key: string]: any },
+      ...restOpt: any[]
+    ): any;
   }
 >(
   api: T,
-  opt: BaseObject
+  opt: BaseObject,
+  ...otherOpts: any[]
 ) => Promise<
   NeverTurnsAny<
     IsAny<T> extends true ? any : Parameters<Parameters<T>[0]['success']>[0]
   >
-> = (api, opt) => {
+> = (api, opt, ...otherOpts) => {
   return new Promise((success: any, fail) => {
-    api({
-      ...opt,
-      success,
-      fail,
-    });
+    api(
+      {
+        ...opt,
+        success,
+        fail,
+      },
+      ...otherOpts
+    );
   });
 };
 
