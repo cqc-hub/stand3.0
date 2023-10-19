@@ -19,9 +19,6 @@ export interface IProps {
   hosId: string;
   clinicalType: string;
   docTitleName?: string;
-
-  // firstHosDeptId: string;
-  // secondHosDeptId: string;
   hosDeptId: string;
   q?: string;
 }

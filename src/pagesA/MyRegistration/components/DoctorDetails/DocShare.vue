@@ -617,7 +617,7 @@
             // #ifdef H5
             new FileUtil().downLoadFileBase64(
               tempFilePath,
-              <any>new Date() * 1 + ''
+              props.detail.docName + '_' + <any>new Date() * 1
             );
             // #endif
 
@@ -794,8 +794,11 @@
 
     .cancel-btn {
       padding: 26rpx;
-      padding-bottom: 80rpx;
       margin-top: 20rpx;
+      /* #ifndef H5 */
+      padding-bottom: 80rpx;
+      /* #endif */
+      user-select: none;
     }
   }
 

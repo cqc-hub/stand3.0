@@ -242,8 +242,8 @@
   onLoad(async (opt) => {
     pageConfig.value = await getSystemConfig('FAMOUS_DOCTOR_DEPT');
     try {
-      pageProps.value = deQueryForUrl(opt);
-      pageProps.value = deQueryForUrl(pageProps.value);
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      console.log(pageProps.value);
     } catch (error) {
       console.error('prop 解析报错');
     }
