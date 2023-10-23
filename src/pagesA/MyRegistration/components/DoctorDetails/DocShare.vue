@@ -19,8 +19,6 @@
               height: canvasInfo.height + 'px',
             }"
           />
-
-          <!-- <image :src="sharePic"></image> -->
         </view>
       </view>
     </uni-popup>
@@ -94,9 +92,7 @@
   const gStores = new GStores();
   const isWxRequestQxDialogShow = ref(false);
   const isShow = ref(false);
-
   const qrImg = ref('');
-  const sharePic = ref('');
 
   const clickShare = () => {
     close();
@@ -572,22 +568,6 @@
     ctx.draw();
     uni.hideLoading();
     loadingSuccess(void 0);
-
-    transformToImg();
-  };
-
-  const transformToImg = async () => {
-    await wait(600);
-    const { tempFilePath } = await apiAsync(
-      <any>uni.canvasToTempFilePath,
-      {
-        canvasId: 'shareCanvas',
-      },
-      inst
-    );
-
-    sharePic.value = tempFilePath;
-    console.log(tempFilePath);
   };
 
   const capture = async () => {

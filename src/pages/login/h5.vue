@@ -145,25 +145,25 @@
     gform.value.setList(formList);
   });
 
-  // var coinChange = function (penny, num) {
-  //   if (!num) return num;
-  //   const result = Array.from<number>({ length: num });
-  //   for (let i = 0; i < num; i++) {
-  //     const minnum = Math.min(
-  //       ...penny
-  //         .filter((item) => i + 1 >= item) // 小于计算数的硬币不用计算过滤掉
-  //         .map((item) => 1 + (result[i - item] || 0))
-  //     );
-  //     result[i] = minnum;
-  //   }
+  var coinChange = function (penny, num) {
+    if (!num) return num;
+    const result = Array.from<number>({ length: num });
+    for (let i = 1; i <= num; i++) {
+      const minnum = Math.min(
+        ...penny
+          .filter((item) => i >= item) // 小于计算数的硬币不用计算过滤掉
+          .map((item) => 1 + (result[i - item] || 0))
+      );
+      result[i] = minnum;
+    }
 
-  //   console.log(result);
+    console.log(result);
 
-  //   const _result = result.pop();
-  //   return _result === Infinity ? -1 : _result;
-  // };
+    const _result = result.pop();
+    return _result === Infinity ? -1 : _result;
+  };
 
-  // console.log('res', coinChange([1, 5, 11], 14));
+  console.log('res', coinChange([1, 5, 11], 14));
 </script>
 
 <style lang="scss" scoped>

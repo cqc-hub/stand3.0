@@ -182,7 +182,7 @@ const scJson: Record<string, ISConfig> = {
         isMedicalOrder: '1',
       },
     },
-    isOpenButton: '1',
+    // isOpenButton: '1',
   },
 
   /**
