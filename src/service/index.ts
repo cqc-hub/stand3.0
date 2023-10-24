@@ -12,7 +12,7 @@ import {
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useUserStore, useMessageStore } from '@/stores';
-import { LoginUtils, ServerStaticData } from '@/utils';
+import { LoginUtils, ServerStaticData, outLogin } from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
 // #ifdef MP-ALIPAY
@@ -21,14 +21,32 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
 
 const Request = new requestClass();
+const globalStore = useGlobalStore();
+
+let outLoginTimer: number;
 
 //是否加密
 const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 
 const getShowUrl = (url, baseUrl) =>
   url.slice(baseUrl?.length || 0).split('=')[0];
+
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
+  // #ifdef H5
+  if (globalStore.isLogin && globalStore.envH5 === 'web') {
+    if (outLoginTimer) {
+      clearTimeout(outLoginTimer);
+    }
+    outLoginTimer = setTimeout(() => {
+      outLogin({
+        isHideMessage: false,
+        isGoLoginPage: true,
+      });
+    }, globalGl.WEB_OUT_LOGIN_TIME);
+  }
+  // #endif
+
   if (!request.hideLoading) showLoading();
   // if (request.method === 'GET') {
   //   request.data = JSON.stringify(request.data)
@@ -80,7 +98,6 @@ Request.interceptors.response(
     console.log({
       responseData,
     });
-
 
     //解密
     if (isDes && signContent) {

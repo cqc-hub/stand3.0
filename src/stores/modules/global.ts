@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import globalGl from '@/config/global';
 
+type T_ENV_H5 = 'web' | 'wx' | 'alipay';
 interface IStateGlobal {
   token: {
     accessToken: string;
@@ -19,6 +20,7 @@ interface IStateGlobal {
   appShowData: BaseObject;
   appLaunchData: BaseObject;
   cacheData: BaseObject;
+  envH5: T_ENV_H5;
 
   sysCode: typeof globalGl.SYS_CODE;
   modeOld: boolean; // 敬老模式?
@@ -43,6 +45,7 @@ const globalStore = defineStore('global', {
       'patientTypeTerms',
       'browser',
       'modeOld',
+      'envH5',
     ],
   },
 
@@ -68,6 +71,7 @@ const globalStore = defineStore('global', {
       sysCode: globalGl.SYS_CODE,
       modeOld: false,
       cacheData: {},
+      envH5: 'web',
     };
   },
 
@@ -104,6 +108,10 @@ const globalStore = defineStore('global', {
       this.cacheData = data;
     },
 
+    changeEnvH5(env: T_ENV_H5) {
+      this.envH5 = env;
+    },
+
     onAppShow(opt: any) {
       if (opt) {
         this.appShowData = opt;
@@ -131,6 +139,7 @@ const globalStore = defineStore('global', {
       if (browser) {
         // @ts-ignore
         if (browser.match(/Alipay/i) == 'alipay') {
+          this.changeEnvH5('alipay');
           updateBrowser({
             source: 4,
             accountType: 2,
@@ -140,6 +149,7 @@ const globalStore = defineStore('global', {
           // @ts-ignore
           browser.match(/MicroMessenger/i) == 'micromessenger'
         ) {
+          this.changeEnvH5('wx');
           updateBrowser({
             source: 3,
             accountType: 1,

@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import {
     ServerStaticData,
@@ -41,12 +41,12 @@
 
   // https://health.eheren.com/taizhou_pc/#/taizhou_pc/user/login
 
-  const envH5 = ref<'browse' | 'wx'>('browse');
   const hosLogo = ref('');
   const gStores = new GStores();
   const loginUtils = new LoginUtils();
   const formData = ref<BaseObject>({});
   const gform = ref<any>('');
+  const envH5 = computed(() => gStores.globalStore.envH5);
   let isSendedVerify = false;
   const formList = [
     {
@@ -131,14 +131,6 @@
 
   onLoad(() => {
     getHosLogo();
-    // #ifdef H5
-    const _ua = navigator.userAgent.toLowerCase();
-    const isWeixin = _ua.indexOf('micromessenger') !== -1;
-
-    if (isWeixin) {
-      envH5.value = 'wx';
-    }
-    // #endif
   });
 
   onMounted(() => {
