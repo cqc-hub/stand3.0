@@ -308,7 +308,15 @@
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
-  import { aliLogin, wxLogin, GStores, routerJump, LoginUtils } from '@/utils';
+  import {
+    aliLogin,
+    wxLogin,
+    GStores,
+    routerJump,
+    LoginUtils,
+    Login,
+    LoginType,
+  } from '@/utils';
 
   import global from '@/config/global';
   import api from '@/service/api';
@@ -324,7 +332,7 @@
 
   const props = defineProps<{
     code?: string;
-    tabIndex?:number
+    tabIndex?: number;
   }>();
   const gStores = new GStores();
   const viewerStore = useViewerStore();
@@ -332,7 +340,7 @@
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeImg = ref('lqCode.jpg');
-  const tabIndex = ref(0)
+  const tabIndex = ref(0);
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -391,6 +399,13 @@
       !uni.getStorageSync('hospital_order') &&
       authorization();
     // #endif
+
+    if (globalStore.envH5 === 'web' && !gStores.globalStore.isLogin) {
+      Login.handler(LoginType.PassWord, {
+        cellPhoneNum: '13868529891',
+        password: '123456',
+      });
+    }
   });
 
   //跳转智能问答

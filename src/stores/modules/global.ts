@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import globalGl from '@/config/global';
 
-type T_ENV_H5 = 'web' | 'wx' | 'alipay';
+type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
 interface IStateGlobal {
   token: {
     accessToken: string;
@@ -71,7 +71,7 @@ const globalStore = defineStore('global', {
       sysCode: globalGl.SYS_CODE,
       modeOld: false,
       cacheData: {},
-      envH5: 'web',
+      envH5: null,
     };
   },
 
@@ -155,6 +155,8 @@ const globalStore = defineStore('global', {
             accountType: 1,
             payType: 'WX_JSAPI',
           });
+        } else {
+          this.changeEnvH5('web');
         }
       }
       // #endif

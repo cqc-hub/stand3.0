@@ -6,20 +6,21 @@ import {
   IPat,
   isAreaProgram,
 } from '@/stores';
-import { getSysCode } from '@/common';
+import { getSysCode, joinQuery } from '@/common';
 import { apiAsync } from './utils';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
-enum LoginType {
+export enum LoginType {
   // 微信腾讯健康
   WeChatThReg,
   WeChat,
   AliPay,
   H5,
   TouTiao,
+  PassWord,
 }
 
 abstract class LoginHandler {
@@ -655,6 +656,30 @@ class TouTiaoHandler extends LoginUtils implements LoginHandler {
   }
 }
 
+class PassWordHandler extends LoginUtils implements LoginHandler {
+  async handler({ password, cellPhoneNum }): Promise<void> {
+    const reqArg = {
+      sysCode: getSysCode(),
+      password,
+      cellPhoneNum,
+      loginName: cellPhoneNum,
+    };
+
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(reqArg, joinQuery('/login/usePasswordLogin', reqArg))
+    );
+
+    const { accessToken, refreshToken } = result;
+
+    this.globalStore.setToken({
+      accessToken,
+      refreshToken,
+    });
+
+    await this.getUerInfo();
+  }
+}
+
 export class Login extends LoginUtils {
   public static handlerMap: Record<LoginType, LoginHandler> = {
     [LoginType.WeChat]: new WeChatLoginHandler(),
@@ -662,6 +687,7 @@ export class Login extends LoginUtils {
     [LoginType.H5]: new WebLoginHandler(),
     [LoginType.WeChatThReg]: new WeChatThRegHandler(),
     [LoginType.TouTiao]: new TouTiaoHandler(),
+    [LoginType.PassWord]: new PassWordHandler(),
   };
 
   static async handler(type: LoginType, payload?: any) {

@@ -7,7 +7,7 @@ import global from './config/global';
 // #ifdef H5
 import VConsole from 'vconsole';
 if (global.env !== 'prod') {
-  new VConsole();
+  // new VConsole();
 }
 // #endif
 

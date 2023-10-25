@@ -5,7 +5,7 @@ import { getSConfig } from './sConfig';
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/' as const; //oss静态资源服务器
 export const SYS_CODE = systemConfig.sysCode;
 
-let env = <'dev' | 'test' | 'prod'>'dev'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 30000 as const; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
