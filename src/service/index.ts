@@ -34,7 +34,11 @@ const getShowUrl = (url, baseUrl) =>
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   // #ifdef H5
-  if (globalStore.isLogin && globalStore.envH5 === 'web') {
+  if (
+    globalStore.isLogin &&
+    globalStore.envH5 === 'web' &&
+    globalGl.WEB_OUT_LOGIN_TIME
+  ) {
     if (outLoginTimer) {
       clearTimeout(outLoginTimer);
     }
