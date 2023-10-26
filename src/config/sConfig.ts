@@ -119,6 +119,7 @@ const scJson: Record<string, ISConfig> = {
           path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610400&channel=AAFwLnLNBzDZNXVZVKdvs0v_&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtn+S/XPoOIr53u3xRWP6xq&orgCodg=H61040200092&orgAppId=1G8FTSHFR0F63F60C80A00003310E195',
         },
         // medicalDefault: '1',
+        isMedicalOrder: '1',
       },
     },
   },

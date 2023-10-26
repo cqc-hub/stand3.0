@@ -168,9 +168,7 @@
       activeLV1.value = idx;
     }
     if (isLev1(item) && isLv2.value) {
-      // #ifdef H5
       deptListLv2.value = [];
-      // #endif
 
       nextTick(() => {
         deptListLv2.value = item.children || [];
