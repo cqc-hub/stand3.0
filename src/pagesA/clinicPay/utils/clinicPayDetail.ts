@@ -1045,7 +1045,6 @@ export const usePayPage = () => {
             pageProps.value.deParams?.cardNumber || cardNumber,
             pageProps.value.params
           );
-
           if (isDigitalPay) {
             if (flag) {
               changeRefPayList(4);
@@ -1060,13 +1059,25 @@ export const usePayPage = () => {
             }
           }
         } else {
-          changeRefPayList(0);
+          //不是医保 
+          if (isDigitalPay) {
+            changeRefPayList(3);
+          }else{
+            changeRefPayList(0)
+          }
+        }
+      }else{
+        if (isDigitalPay) {
+          changeRefPayList(3);
+        }else{
+          changeRefPayList(0)
         }
       }
     } else if (isDigitalPay) {
       changeRefPayList(3);
+    }else{
+      changeRefPayList(0)
     }
-
     await wait(200);
     refPay.value.show();
   };
