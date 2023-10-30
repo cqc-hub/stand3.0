@@ -1059,109 +1059,77 @@ export const usePayPage = () => {
             }
           }
         } else {
-          //不是医保 
+          //不是医保
           if (isDigitalPay) {
             changeRefPayList(3);
-          }else{
-            changeRefPayList(0)
+          } else {
+            changeRefPayList(0);
           }
         }
-      }else{
+      } else {
         if (isDigitalPay) {
           changeRefPayList(3);
-        }else{
-          changeRefPayList(0)
+        } else {
+          changeRefPayList(0);
         }
       }
     } else if (isDigitalPay) {
       changeRefPayList(3);
-    }else{
-      changeRefPayList(0)
+    } else {
+      changeRefPayList(0);
     }
     await wait(200);
     refPay.value.show();
   };
 
   const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
-    if (type === 0) {
-      refPayList.value = [
-        {
-          label: '自费支付',
-          key: 'online',
-        },
-      ];
-    } else if (type === 1) {
-      refPayList.value = [
-        {
-          label: '医保支付',
-          key: 'medicare',
-        },
-        {
-          label: '自费支付',
-          key: 'online',
-        },
-      ];
-    } else if (type === 2) {
-      refPayList.value = [
-        {
-          label: '医保支付',
-          key: 'medicare',
-        },
+    let labelPay = '自费支付';
+    // #ifdef MP-WEIXIN
+    labelPay = '微信支付';
+    // #endif
+    // #ifdef MP-ALIPAY
+    labelPay = '支付宝支付';
+    // #endif
 
-        {
-          label: '自费支付',
-          key: 'online',
-        },
+    const tList = [
+      {
+        label: '到院支付',
+        key: 'offline',
+        sort: 1,
+      },
+      {
+        label: labelPay,
+        key: 'online',
+        sort: 2,
+      },
+      {
+        label: '数字人民币支付',
+        key: 'digital',
+        sort: 3,
+      },
+      {
+        label: '医保支付',
+        key: 'medicare',
+        sort: 4,
+      },
+    ] as const;
+    const rList: (typeof tList)[number]['key'][] = ['online'];
 
-        {
-          label: '到院支付',
-          key: 'offline',
-        },
-      ];
-    } else if (type === 3) {
-      let labelPay = '自费支付';
-      // #ifdef MP-WEIXIN
-      labelPay = '微信支付';
-      // #endif
-      // #ifdef MP-ALIPAY
-      labelPay = '支付宝支付';
-      // #endif
-      refPayList.value = [
-        {
-          label: labelPay,
-          key: 'online',
-        },
-
-        {
-          label: '数字人民币支付',
-          key: 'digital',
-        },
-      ];
-    } else if (type === 4) {
-      let labelPay = '自费支付';
-      // #ifdef MP-WEIXIN
-      labelPay = '微信支付';
-      // #endif
-      // #ifdef MP-ALIPAY
-      labelPay = '支付宝支付';
-      // #endif
-      refPayList.value = [
-        {
-          label: '医保支付',
-          key: 'medicare',
-        },
-
-        {
-          label: labelPay,
-          key: 'online',
-        },
-
-        {
-          label: '数字人民币支付',
-          key: 'digital',
-        },
-      ];
+    if ([1, 2, 4].includes(type)) {
+      rList.push('medicare');
     }
+
+    if (type === 2) {
+      rList.push('offline');
+    }
+
+    if ([3, 4].includes(type)) {
+      rList.push('digital');
+    }
+
+    refPayList.value = tList
+      .filter((o) => rList.includes(o.key))
+      .sort((a, b) => b.sort - a.sort);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
