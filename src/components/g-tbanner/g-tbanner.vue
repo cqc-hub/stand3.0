@@ -13,9 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
   import { type TBannerConfig, useTBanner } from '@/utils';
-  import { joinQuery } from '@/common';
 
   const props = defineProps<{
     config?: TBannerConfig;

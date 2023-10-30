@@ -1,52 +1,5 @@
 # vue3-vite-ts-uniapp
 
-安装时 npm 版本对不上会产生依赖冲突报错 终止进程,
-可以使用 npm i --legacy-peer-deps 或切换npm 版本
-
-推荐使用 volta 管理 npm 版本
-    节点引擎固定
-        volta pin node@14.17
-        volta pin npm@6.14
-
-## 安装 eslint+prettier 统一编码规范
-
-代码保存就会自动格式化代 <https://www.cnblogs.com/sugartang/p/16464587.html>
-
-## 配置项目别名
-
-resolve: {
-alias: [
-{
-find: '@',
-replacement: resolve(__dirname, 'src'),
-},
-],
-},
-
-## 安装
-
-cnpm i
-
-## 更新最新正式版本的编译器
-
-npx @dcloudio/uvm
-
-## git 提交规范
-
-feat 增加新功能
-fix 修复问题/BUG
-style 代码风格相关无影响运行结果的
-perf 优化/性能提升
-refactor 重构
-revert 撤销修改
-test 测试相关
-docs 文档/注释
-chore 依赖更新/脚手架配置修改等
-workflow 工作流改进
-ci 持续集成
-types 类型定义文件更改
-wip 开发中
-
 ## icon font
 
 阿里云图标库下载本地
@@ -81,12 +34,6 @@ cmd: iconfont-tools
 }
 ```
 
-## 开发规范
-
-网络请求图片大小控制在 100k 以内 建议 svg 或 webP 格式
-尽量减少用同步的方式缓存
-减少重复的 JSAPI 调用
-
 ## h5 功能页汇总 默认携带 sysCode herenId patientId 下列参数作为记录 第三方跳转时
 
 | 功能         |                  页面                   | 参数                  |
@@ -114,12 +61,6 @@ cmd: iconfont-tools
 | 疾病百科 |       pagesA/diseaseCyclopedia/index        | sysCode       |
 | otc 商城 |                    暂无                     | sysCode token |
 
-## 缓存规范
-
-名族地址类别的缓存：退出登录时清除
-首页配置+按照模块调用的配置: 根据后端返回版本号判断清楚对应模块缓存
-页面调用接口的配置:每次进入调用
-
 ---
 
 ## warn
@@ -135,3 +76,19 @@ cmd: iconfont-tools
     npm i
 切换 node@16.15.0
     npm install terser
+
+## 公共页面
+
+- 跳转小程序
+
+    pagesC/openMiniProgram
+    > 无法在小程序外部的环境下控制程序直接跳转, 此时跳到此页面由小程序来调用 navigateToMiniProgram api 进行跳转
+
+- 互联网医院
+
+    pagesC/commonHosNet
+    > 需要去互联网医院的某页面使用
+
+- webview
+
+    pagesA/webView/webView

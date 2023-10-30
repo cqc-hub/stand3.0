@@ -294,6 +294,18 @@ export interface ISystemConfig_ {
     footerBtn?: TButtonConfig;
   };
 
+  /** 名医名科 */
+  FAMOUS_DOCTOR_DEPT: {
+    // 隐藏健康科普?
+    isHideScienceHealth?: '1';
+  };
+
+  // --------- h5
+  /** 用药查询 */
+  MEDICAL_SEARCH: {
+    banner?: TBannerConfig;
+  };
+
   /** 电子导诊单 */
   Electronic_Consultation_Sheet: {
     /** 点击具体行的地址跳转的第三方小程序参数 */
@@ -305,10 +317,10 @@ export interface ISystemConfig_ {
     };
   };
 
-  /** 名医名科 */
-  FAMOUS_DOCTOR_DEPT: {
-    // 隐藏健康科普?
-    isHideScienceHealth?: '1';
+  /** 手术进度查询 */
+  Operation_Search: {
+    // 开启手术订阅 ?
+    isOpenSubscribe?: '1';
   };
 }
 

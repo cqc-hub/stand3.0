@@ -252,9 +252,20 @@
     },
   };
 
+  const 用药查询: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/medicationQuery/medicationQuery',
+    text: '用药查询',
+    isLocal: '1',
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(医保结算清单);
+      useTBanner(用药查询);
     }, 1000);
   });
 </script>
