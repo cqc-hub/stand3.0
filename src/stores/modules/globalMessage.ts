@@ -44,7 +44,6 @@ const messageStore = defineStore('message', {
       }
 
       if (duration) {
-        // @ts-ignore
         timer = setTimeout(() => {
           this.closeMessage();
         }, duration);

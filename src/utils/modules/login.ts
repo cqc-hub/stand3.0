@@ -304,7 +304,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
     if (detail.errMsg !== 'getPhoneNumber:ok') {
       this.messageStore.showMessage('用户取消授权', 3000);
-      return Promise.reject();
+      return Promise.reject(payload);
     }
 
     await new Promise<void>((resolve, reject) => {
