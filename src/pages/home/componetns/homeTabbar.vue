@@ -10,10 +10,11 @@
       <view
         v-for="(item, i) in tabBars"
         :key="i"
-        @click="changeTab(item)"
         class="tabbar-item"
       >
-        <image
+         <g-login @handler-next="changeTab(item)" :disabled="item.loginInterception === '0'">
+         <view class="column" @click="changeTab(item)">
+          <image
           :src="currentPath === item.url ? item.iconActive : item.icon"
           :class="{
             animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
@@ -22,6 +23,9 @@
           class="animate__animated animate__fast"
         />
         <text class="label">{{ item.label }}</text>
+        </view>
+       </g-login>
+    
       </view>
     </view>
   </view>
@@ -45,12 +49,14 @@
       icon: '/static/image/home.png',
       iconActive: '/static/image/home_active.png',
       url: '/pages/home/home',
+      loginInterception:'0'
     },
     {
       label: '我的',
       icon: '/static/image/my.png',
       iconActive: '/static/image/my_active.png',
       url: '/pages/home/my',
+      loginInterception:'0'
     },
   ]);
 
@@ -102,16 +108,18 @@
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
         url: '/pagesC/cloudHospital/cloudHospital',
+        loginInterception:'1'
       });
     }
     
     if (global.sConfig.isOpenMessage) {
-      let messagePath = '/pagesB/historicalMess/historicalMess&query=["phone","openId"]'
+      let messagePath = '/pagesB/historicalMess/historicalMess&query=["phone","openId"]&loginInterception=1'
       tabBars.value.splice(1, 0, {
         label: '消息中心',
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
         url: '/pagesC/cloudHospital/myPath?path='+messagePath,
+        loginInterception:'1'
       });
     }
 
@@ -190,6 +198,12 @@
           .animate__rubberBand {
             animation: rubberBandHref ease 0.2s both;
           }
+        }
+
+        .column{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
       }
     }
