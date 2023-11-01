@@ -104,6 +104,16 @@
         url: '/pagesC/cloudHospital/cloudHospital',
       });
     }
+    
+    if (global.sConfig.isOpenMessage) {
+      let messagePath = '/pagesB/historicalMess/historicalMess&query=["phone","openId"]'
+      tabBars.value.splice(1, 0, {
+        label: '消息中心',
+        icon: '/static/image/wlyy.png',
+        iconActive: '/static/image/wlyy_active.png',
+        url: '/pagesC/cloudHospital/myPath?path='+messagePath,
+      });
+    }
 
     if (systemInfo === '') {
       const e = await uni.getSystemInfo({});

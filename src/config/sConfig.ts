@@ -3,6 +3,8 @@ interface ISConfig {
   isDrugDelivery?: '1';
   //底部是否放开互联网医院?
   isOpenButton?: '1';
+  //底部是否放开消息通知
+  isOpenMessage?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可

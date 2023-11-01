@@ -43,6 +43,7 @@ const allData = {
   herenId: gStores.globalStore.herenId,
   source: gStores.globalStore.browser.source,
   openId: gStores.globalStore.openId,
+  phone: gStores.userStore.phoneNum,//账号下的手机号（仅微信）
 };
 type A = keyof typeof allData;
 
