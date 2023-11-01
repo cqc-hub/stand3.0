@@ -194,6 +194,13 @@ const scJson: Record<string, ISConfig> = {
   1001055: {
     isOpenAlipayZndz: true,
   },
+
+  /**
+   * 大医二院普湾院区
+  */
+  1001041: {
+    isOpenMessage: '1',
+  },
 };
 
 const getSConfig = (sysCode: string) => {
