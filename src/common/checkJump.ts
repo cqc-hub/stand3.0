@@ -152,11 +152,17 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       });
       break;
     case 'alipay':
-      //支付宝有几种跳转方法 routeType openURL
+      //支付宝有几种跳转方法 routeType openURL 官网地址 https://opendocs.alipay.com/mini/04iy2y?pathHash=e5ca38e0
       if (item.query && JSON.parse(item.query).routeType) {
         my.ap[JSON.parse(item.query).routeType]({
           url: item.path,
-        });
+          success: (res) => {
+            console.log('openURL success', res)
+          },
+          fail: (err) => {
+            console.log('openURL success', err)
+          }
+        }); 
       } else {
         //跳转小程序
         uni.navigateToMiniProgram({

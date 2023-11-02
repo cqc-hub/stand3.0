@@ -2,9 +2,9 @@ interface ISConfig {
   // 有药品配送功能?
   isDrugDelivery?: '1';
   //底部是否放开互联网医院?
-  isOpenButton?: '1';
-  //底部是否放开消息通知
-  isOpenMessage?: '1';
+  isOpenHomeTabBarNetWorkBtn?: '1';
+  //底部是否放开消息通知 
+  isOpenHomeTabBarMessageBtn?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
@@ -110,7 +110,7 @@ const scJson: Record<string, ISConfig> = {
    * 咸阳市第一人民医院
    */
   1001054: {
-    isOpenButton: '1',
+    isOpenHomeTabBarNetWorkBtn: '1',
     isHideHomeSearch: '1',
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
@@ -184,8 +184,7 @@ const scJson: Record<string, ISConfig> = {
         medicalDefault: '1',
         isMedicalOrder: '1',
       },
-    },
-    // isOpenButton: '1',
+    }, 
   },
 
   /**
@@ -199,7 +198,7 @@ const scJson: Record<string, ISConfig> = {
    * 大医二院普湾院区
   */
   1001041: {
-    isOpenMessage: '1',
+    isOpenHomeTabBarMessageBtn: '1',
   },
 };
 

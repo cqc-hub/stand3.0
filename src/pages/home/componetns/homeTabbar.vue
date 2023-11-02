@@ -7,25 +7,24 @@
     class="tabbar"
   >
     <view class="tabbar-container">
-      <view
-        v-for="(item, i) in tabBars"
-        :key="i"
-        class="tabbar-item"
-      >
-         <g-login @handler-next="changeTab(item)" :disabled="item.loginInterception === '0'">
-         <view class="column" @click="changeTab(item)">
-          <image
-          :src="currentPath === item.url ? item.iconActive : item.icon"
-          :class="{
-            animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
-          }"
-          mode="heightFix"
-          class="animate__animated animate__fast"
-        />
-        <text class="label">{{ item.label }}</text>
-        </view>
-       </g-login>
-    
+      <view v-for="(item, i) in tabBars" :key="i" class="tabbar-item">
+        <g-login
+        class="box"
+          @handler-next="changeTab(item)"
+          :disabled="item.loginInterception === '0'"
+        >
+          <view class="column" @click="changeTab(item)">
+            <image
+              :src="currentPath === item.url ? item.iconActive : item.icon"
+              :class="{
+                animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
+              }"
+              mode="heightFix"
+              class="animate__animated animate__fast"
+            />
+            <text class="label">{{ item.label }}</text>
+          </view>
+        </g-login>
       </view>
     </view>
   </view>
@@ -49,14 +48,16 @@
       icon: '/static/image/home.png',
       iconActive: '/static/image/home_active.png',
       url: '/pages/home/home',
-      loginInterception:'0'
+      loginInterception: '0',
+      sort: 1,
     },
     {
       label: '我的',
       icon: '/static/image/my.png',
       iconActive: '/static/image/my_active.png',
       url: '/pages/home/my',
-      loginInterception:'0'
+      loginInterception: '0',
+      sort: 4,
     },
   ]);
 
@@ -79,7 +80,7 @@
     if (url !== currentPath) {
       // if (item.url == "netHospital") {
       //   //目前只有咸阳对接是小程序
-      //   let obj = global.sConfig.isOpenButton as any;
+      //   let obj = global.sConfig.isOpenHomeTabBarNetWorkBtn as any;
       //   uni.navigateToMiniProgram({
       //     appId: obj.appId,
       //     path: obj.path,
@@ -102,27 +103,7 @@
   };
 
   onMounted(async () => {
-    if (global.sConfig.isOpenButton) {
-      tabBars.value.splice(1, 0, {
-        label: '互联网医院',
-        icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
-        url: '/pagesC/cloudHospital/cloudHospital',
-        loginInterception:'1'
-      });
-    }
-    
-    if (global.sConfig.isOpenMessage) {
-      let messagePath = '/pagesB/historicalMess/historicalMess&query=["phone","openId"]&loginInterception=1'
-      tabBars.value.splice(1, 0, {
-        label: '消息中心',
-        icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
-        url: '/pagesC/cloudHospital/myPath?path='+messagePath,
-        loginInterception:'1'
-      });
-    }
-
+    getMenuBtn(); 
     if (systemInfo === '') {
       const e = await uni.getSystemInfo({});
       // @ts-expect-error
@@ -134,6 +115,57 @@
       });
     }
   });
+
+  const getMenuBtn = () => {
+    const tabBarList = [
+      {
+        label: '首页',
+        icon: '/static/image/home.png',
+        iconActive: '/static/image/home_active.png',
+        url: '/pages/home/home',
+        loginInterception: '0',
+        sort: 1,
+      },
+      {
+        label: '互联网医院',
+        icon: '/static/image/wlyy.png',
+        iconActive: '/static/image/wlyy_active.png',
+        url: '/pagesC/cloudHospital/cloudHospital',
+        loginInterception: '1',
+        sort: 2,
+      },
+      {
+        label: '消息中心',
+        icon: '/static/image/wlyy.png',
+        iconActive: '/static/image/wlyy_active.png',
+        url: '/pagesC/cloudHospital/myPath?path=/pagesB/historicalMess/historicalMess&query=["phone","openId"]&loginInterception=1',
+        loginInterception: '1',
+        sort: 3,
+      },
+      {
+        label: '我的',
+        icon: '/static/image/my.png',
+        iconActive: '/static/image/my_active.png',
+        url: '/pages/home/my',
+        loginInterception: '0',
+        sort: 4,
+      },
+    ] as const;
+
+    const tabList: (typeof tabBarList)[number]['label'][] = ['首页', '我的'];
+
+    if (global.sConfig.isOpenHomeTabBarNetWorkBtn) {
+      tabList.push('互联网医院');
+    }
+
+    if (global.sConfig.isOpenHomeTabBarMessageBtn) {
+      tabList.push('消息中心');
+    }
+
+    tabBars.value = tabBarList
+      .filter((o) => tabList.includes(o.label))
+      .sort((a, b) => b.sort - a.sort);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -167,6 +199,7 @@
       justify-content: space-around;
       flex: 1;
       height: 100%;
+    
 
       .tabbar-item {
         display: flex;
@@ -200,10 +233,14 @@
           }
         }
 
-        .column{
+        .column {
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+        .box{
+          height: 100%;
+          width: 100%;
         }
       }
     }
