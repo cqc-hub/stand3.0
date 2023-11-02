@@ -13,7 +13,7 @@
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="column w100p h100p" @click="changeTab(item)">
+          <view class="column w100p h100p pt20" @click="changeTab(item)">
             <image
               :src="currentPath === item.url ? item.iconActive : item.icon"
               :class="{
@@ -205,7 +205,7 @@
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        padding-top: 20rpx;
+        // padding-top: 20rpx;
 
         position: relative;
         flex: 1;
