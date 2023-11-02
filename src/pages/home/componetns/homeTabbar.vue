@@ -164,7 +164,7 @@
 
     tabBars.value = tabBarList
       .filter((o) => tabList.includes(o.label))
-      .sort((a, b) => b.sort - a.sort);
+      .sort((a, b) => a.sort - b.sort);
   };
 </script>
 
