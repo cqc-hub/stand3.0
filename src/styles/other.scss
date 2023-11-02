@@ -268,6 +268,14 @@ image {
   font-size: 80rpx !important;
 }
 
+.w100p {
+  width: 100%;
+}
+
+.h100p {
+  height: 100%;
+}
+
 @for $i from 4 through 70 {
   @each $key, $value in (r: right, l: left, t: top, b: bottom) {
     .m#{$key}#{$i} {

@@ -1,6 +1,6 @@
 <template>
-  <view>
-    <view v-if="gStores.globalStore.isLogin || disabled">
+  <view class="w100p h100p">
+    <view class="w100p h100p" v-if="gStores.globalStore.isLogin || disabled">
       <slot />
     </view>
 
@@ -14,7 +14,7 @@
         scope="phoneNumber"
         class="login-btn"
       >
-        <view class="my-disabled">
+        <view class="my-disabled w100p h100p">
           <slot />
         </view>
       </button>

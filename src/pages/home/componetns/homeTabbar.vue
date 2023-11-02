@@ -9,11 +9,11 @@
     <view class="tabbar-container">
       <view v-for="(item, i) in tabBars" :key="i" class="tabbar-item">
         <g-login
-        class="box"
+          class="box"
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="column" @click="changeTab(item)">
+          <view class="column w100p h100p" @click="changeTab(item)">
             <image
               :src="currentPath === item.url ? item.iconActive : item.icon"
               :class="{
@@ -103,7 +103,7 @@
   };
 
   onMounted(async () => {
-    getMenuBtn(); 
+    getMenuBtn();
     if (systemInfo === '') {
       const e = await uni.getSystemInfo({});
       // @ts-expect-error
@@ -199,7 +199,6 @@
       justify-content: space-around;
       flex: 1;
       height: 100%;
-    
 
       .tabbar-item {
         display: flex;
@@ -238,7 +237,7 @@
           flex-direction: column;
           align-items: center;
         }
-        .box{
+        .box {
           height: 100%;
           width: 100%;
         }
