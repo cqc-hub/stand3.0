@@ -96,10 +96,15 @@ const getSrc = (para, _payload: any = {}) => {
 
   // 网络医院有老版本和3.0版本
   const sysCodeList = ["1001033"];
-  const sysCode = global.SYS_CODE;
+  let sysCode = global.SYS_CODE;
   let netUrl = "";
   let params = "";
   let netPath = "";
+
+  // 演示乐清项目, 对应互联网嘉兴
+  if (sysCode === '1001052') {
+    sysCode = '1001038'
+  }
 
   if (para._url) {
     netPath = decodeURIComponent(para._url);
@@ -129,7 +134,7 @@ const getSrc = (para, _payload: any = {}) => {
 };
 
 const handleMessage = (evt) => {
-  var data = evt.target.data; 
+  var data = evt.target.data;
   console.warn("获取到返回--------------", data);
   console.warn("编码----------------");
   // #ifdef MP-WEIXIN

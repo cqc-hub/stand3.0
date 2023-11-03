@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7b1baac614ebed72",
+    "appid": "wx58ffd2c3a557bef0",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,34 +63,33 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003167601013"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173633521"
+    "appid": "2021003173668243"
   },
   "mp-baidu": {
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true,
-    "appid": "ttbcd1ca6c23ed0a5401"
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "西安市红会医院互联网医院",
+  "name": "xxx",
   "h5": {
     "router": {
       "base": "./"
