@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxe26143481567cb97",
+    "appid": "wx7b1baac614ebed72",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,41 +63,34 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.11.0",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002139602458"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
+    "usingComponents": true,
+    "appid": "ttbcd1ca6c23ed0a5401"
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州市第一人民医院",
+  "name": "西安市红会医院互联网医院",
   "h5": {
     "router": {
       "base": "./"

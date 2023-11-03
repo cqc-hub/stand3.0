@@ -92,7 +92,7 @@
 
                   <view
                     v-if="docDetail.multiplePracticeLocation"
-                    class=" work-place mt12"
+                    class="work-place mt12"
                   >
                     <text class="color-fff tag mr16 mb50">多点执业</text>
                     <text
@@ -519,9 +519,16 @@
   };
 
   onLoad(async (opt) => {
-    console.log(opt);
+    //  weixin://dl/business/?t=LgnSWxNLRHs
+    console.log(opt, 'onLoad');
 
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    // 兼容 alipays://platformapi/startapp?appId=2021003173633521&page=pagesA/MyRegistration/DoctorDetails&query=hosDocId%3D101714
+    if (!Object.keys(props.value).length) {
+      const queryParams = gStores.globalStore.appShowData.query || {};
+
+      props.value = deQueryForUrl(deQueryForUrl(queryParams));
+    }
     // 扫码进来, 不处理
     if (props.value.q) {
       return;
@@ -585,6 +592,7 @@
     await getDocDetail();
     let { collectState, docPhoto, docTitleName } = docDetail.value;
     const { deptName, docName, hosDocId, hosDeptId, hosId } = props.value;
+
     const {
       herenId,
       browser: { source },
@@ -607,7 +615,7 @@
         hosId,
         source,
       };
-
+      // weixin://dl/business/?t=XxTgl2eqtWq
       api
         .addCollect(args)
         .then(() => {
@@ -640,6 +648,7 @@
   const getDocDetail = async () => {
     await useDoctorDetail.getDoctorDetail().then((r) => {
       docDetail.value = r;
+      props.value.docName = r.docName;
     });
   };
 
