@@ -201,7 +201,7 @@
     }
     // #endif
 
-    const {
+    let {
       result: { orderId, hasCharge, hint },
     } = await api.addReg(requestArg).catch((e) => {
       if (e) {
@@ -247,7 +247,6 @@
       }
     }
     // #endif
-
     if (hasCharge === '0') {
       const { confirm } = await apiAsync(uni.showModal, {
         content: hint,
@@ -260,6 +259,12 @@
 
         throw new Error('去缴费');
       }
+    } else if (hasCharge === '2') {
+      await apiAsync(uni.showModal, {
+        content: hint,
+        confirmText: '确认',
+        showCancel: false,
+      });
     }
 
     uni.navigateTo({

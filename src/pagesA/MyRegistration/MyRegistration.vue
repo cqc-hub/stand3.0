@@ -284,8 +284,7 @@
   const getConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
-    const { isHosNavigation, isQueuing, isFWBtn } =
-      orderConfig.value;
+    const { isHosNavigation, isQueuing, isFWBtn } = orderConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;
@@ -341,7 +340,7 @@
     await getConfig();
     await getList(
       isShowFilterOrderStatus.value
-        ? gStores.userStore.patChoose?.patientId
+        ? pat.value?.patientId || gStores.userStore.patChoose?.patientId
         : ''
     );
   };
