@@ -133,7 +133,7 @@
           path: 'pagesC/operationRes/operationRes',
           extraData: {
             ...extraData,
-            openId: gStores.globalStore.openId,
+            openId: gStores.globalStore.h5OpenId,
           },
           addition: {
             patientId: '_patientId',

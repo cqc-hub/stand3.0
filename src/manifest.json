@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7acc3ecadc08f7ea",
+    "appid": "wxd9a9c329edc6e2b0",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,13 +76,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
+      "codePlugin": {
         "version": "*",
-        "provider": "2021001130678316"
+        "provider": "2021003163608051"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003167607056"
+    "appid": "2021003164669106"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -94,7 +94,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "咸阳市第一人民医院",
+  "name": "联勤保障部队第987医院",
   "h5": {
     "router": {
       "base": "./"

@@ -402,7 +402,7 @@
 
     if (globalStore.envH5 === 'web' && !gStores.globalStore.isLogin) {
       Login.handler(LoginType.PassWord, {
-        cellPhoneNum: '13868529891',
+        cellPhoneNum: '15797812958',
         password: '123456',
       });
     }
