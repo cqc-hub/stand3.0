@@ -576,9 +576,11 @@
     isFirstIn.value = false;
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
+    uni.showLoading({});
     nextTick(() => {
       setTimeout(() => {
         capture();
+        uni.hideLoading();
       }, 600);
     });
     patientTempList.map((o) => {
