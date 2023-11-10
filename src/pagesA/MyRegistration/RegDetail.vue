@@ -579,7 +579,7 @@
     nextTick(() => {
       setTimeout(() => {
         capture();
-      }, 300);
+      }, 600);
     });
     patientTempList.map((o) => {
       if (o.key === 'patientId') {
