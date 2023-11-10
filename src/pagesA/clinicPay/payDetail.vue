@@ -513,7 +513,10 @@
     const canRefoundList = list.filter((o) => o.amountRem !== '0');
 
     if (!canRefoundList.length) {
-      gStores.messageStore.showMessage('该笔费用不支持退费或可退数量为零', 3000);
+      gStores.messageStore.showMessage(
+        '该笔费用不支持退费或可退数量为零',
+        3000
+      );
       throw new Error('不支持退费');
     }
 
@@ -576,7 +579,7 @@
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
-    }else if(item.key === 'digital'){
+    } else if (item.key === 'digital') {
       toDigitalPay();
     }
   };
@@ -695,12 +698,16 @@
 
     if (pageConfig.value.confirmPayFg) {
       if (flag) {
-        getPay();
+        // getPay();
+
+        refPay.value.show();
       } else {
         regDialogConfirm.value.show();
       }
     } else {
-      getPay();
+      // getPay();
+
+      refPay.value.show();
     }
   };
 
@@ -708,7 +715,7 @@
    * 创建订单 获取支付入参数据
    */
 
-  const payBeforeCreateData = async ()=>{
+  const payBeforeCreateData = async () => {
     const { patientId, patientName } = gStores.userStore.patChoose;
     // const totalCost = detailData.value.totalCost + '';
     const totalCost = getPayTotal.value;
@@ -756,8 +763,7 @@
       result: { phsOrderNo },
     } = await api.createClinicOrder(args);
 
-
-    const payArg: BaseObject ={
+    const payArg: BaseObject = {
       phsOrderNo,
       totalFee: totalCost,
       phsOrderSource: '2',
@@ -765,46 +771,46 @@
       hosName,
       patientName: props.value.patientName || patientName,
       cardNumber,
-    }
-    return payArg
-  }
+    };
+    return payArg;
+  };
 
   const toPay = async () => {
-   
-    const payArg = await payBeforeCreateData()
+    const payArg = await payBeforeCreateData();
     const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '门诊缴费');
     payAfter();
   };
 
-   /** 数字人民币支付 */
-   const toDigitalPay = async ()=>{
-    const {alipay, wx } = pageConfig.value.payList!;
+  /** 数字人民币支付 */
+  const toDigitalPay = async () => {
+    const { alipay, wx } = pageConfig.value.payList!;
     let _businessType = '';
     let _channel = '';
-      // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { businessType,channel } = alipay;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
-  
-      // #ifdef  MP-WEIXIN
-      if (wx) {
-        const { businessType,channel } = wx;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
-    let  payArg = await payBeforeCreateData()
+    // #ifdef MP-ALIPAY
+    if (alipay) {
+      const { businessType, channel } = alipay;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { businessType, channel } = wx;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+    let payArg = await payBeforeCreateData();
     const res = await payMoneyOnline({
       ...payArg,
-      channel:_channel,
+      channel: _channel,
       businessType: _businessType,
-      returnUrl:
-                `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent('/pagesA/clinicPay/clinicPayDetail?tabIndex=1')}`,
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
+        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1'
+      )}`,
     });
 
     const { invokeData } = res;
@@ -812,8 +818,8 @@
       url: `/pagesA/webView/webView?https=${encodeURIComponent(
         invokeData.payUrl!
       )}`,
-    }); 
-  }
+    });
+  };
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;
