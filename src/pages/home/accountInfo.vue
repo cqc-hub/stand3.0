@@ -9,8 +9,10 @@
 
     <g-message />
 
-    <view @click="isShow = true" class="btn del-btn btn-primary">
-      <view class="del-btn-label">注销账号</view>
+    <view @click="handlerClick" class="btn del-btn btn-primary">
+      <view class="del-btn-label">
+        {{ pageProps.type === 'outLogin' ? '退出登录' : '注销账号' }}
+      </view>
     </view>
 
     <xy-dialog
@@ -25,12 +27,20 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, onMounted } from 'vue';
-  import { GStores, LoginUtils } from '@/utils';
-  import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
+  import { onLoad } from '@dcloudio/uni-app';
+
+  import { GStores, LoginUtils, outLogin } from '@/utils';
   import type { TInstance } from '@/components/g-form/index';
 
+  import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
+  const pageProps = ref(
+    <
+      {
+        type?: 'outLogin';
+      }
+    >{}
+  );
   const isShow = ref(false);
-
   const gStore = new GStores();
   const loginUtils = new LoginUtils();
   const gform = ref<any>('');
@@ -70,6 +80,16 @@
     },
   ];
 
+  const handlerClick = () => {
+    if (pageProps.value.type === 'outLogin') {
+      outLogin({
+        isGoLoginPage: true,
+      });
+    } else {
+      isShow.value = true;
+    }
+  };
+
   const deletePat = async () => {
     // uni.reLaunch({
     //   url: '/pagesA/medicalCardMan/medicalCardMan'
@@ -98,6 +118,10 @@
     nextTick(() => {
       gform.value.setList(formList);
     });
+  });
+
+  onLoad((opt = {}) => {
+    pageProps.value = opt;
   });
 </script>
 

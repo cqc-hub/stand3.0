@@ -1,7 +1,7 @@
 <template>
   <view class="">
     <view class="container">
-      <g-login @handler-next="avatarClick">
+      <g-login @handler-next="routerJump">
         <image
           :src="gStores.userStore.getAvatar"
           @click="avatarClick"
@@ -87,7 +87,7 @@
 
   const avatarClick = () => {
     uni.navigateTo({
-      url: '/pages/home/accountInfo',
+      url: '/pages/home/accountInfo?type=outLogin',
     });
   };
 
