@@ -3,7 +3,7 @@ interface ISConfig {
   isDrugDelivery?: '1';
   //底部是否放开互联网医院?
   isOpenHomeTabBarNetWorkBtn?: '1';
-  //底部是否放开消息通知 
+  //底部是否放开消息通知
   isOpenHomeTabBarMessageBtn?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
@@ -29,6 +29,11 @@ interface ISConfig {
         // 院内卡类型
         cardType: string;
       };
+
+      /**
+       * 国标医保
+       */
+      medicalNation?: {};
 
       medicalDefault?: '1';
 
@@ -175,6 +180,11 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 
+      alipay: {
+        medicalDefault: '1',
+        medicalNation: {},
+      },
+
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
@@ -184,7 +194,7 @@ const scJson: Record<string, ISConfig> = {
         medicalDefault: '1',
         isMedicalOrder: '1',
       },
-    }, 
+    },
   },
 
   /**
@@ -196,7 +206,7 @@ const scJson: Record<string, ISConfig> = {
 
   /**
    * 大医二院普湾院区
-  */
+   */
   1001041: {
     isOpenHomeTabBarMessageBtn: '1',
   },

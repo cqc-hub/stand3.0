@@ -355,6 +355,7 @@
       goodAt: _goodAt,
       deptName,
       docJobName,
+      hosName,
     } = props.detail;
     // docPhoto = '';
 
@@ -509,7 +510,7 @@
     ctx.save();
     ctx.setFontSize(14);
     ctx.fillText(
-      globalGl.systemInfo.name + (deptName ? `·${deptName}` : ''),
+      (hosName || '') + (deptName ? `·${deptName}` : ''),
       32,
       avatarBox.top + 24 + 24
     );

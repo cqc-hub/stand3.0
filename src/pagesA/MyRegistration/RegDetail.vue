@@ -189,7 +189,14 @@
 
                     <!-- <view class="iconfont color-blue">&#xe6c8;</view> -->
                   </view>
-                  <view v-else>{{ value }}</view>
+                  <view
+                    v-else
+                    :class="{
+                      'color-blue': item.key === 'hisResult',
+                    }"
+                  >
+                    {{ value }}
+                  </view>
                 </template>
               </g-form>
             </view>

@@ -37,6 +37,7 @@ export interface IDocDetail {
   hosId: string;
   intro: string;
   clinicTime: string;
+  hosName?: string;
   multiplePracticeLocation: string;
   preStatus?: '1';
 }

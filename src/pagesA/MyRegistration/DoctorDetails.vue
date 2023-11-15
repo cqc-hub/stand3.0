@@ -82,7 +82,8 @@
                       }"
                       class="color-444 mr12 pr12"
                     >
-                      {{ $global.systemInfo.name || '' }}
+                      <!-- {{ $global.systemInfo.name || '' }} -->
+                      {{ docDetail.hosName || '' }}
                     </text>
 
                     <text v-if="pageConfig.orderMode !== '1'" class="color-444">

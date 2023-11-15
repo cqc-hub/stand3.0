@@ -7,6 +7,7 @@ import {
   wait,
   useTBanner,
   PatientUtils,
+  apiAsync,
 } from '@/utils';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
 import {
@@ -235,6 +236,15 @@ export const getIsMedicalTradeTypeDefault = () => {
   return setTradeTypeDefault;
 };
 
+/** 支付宝国标医保? */
+export const getIsAliMedicalNation = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  return !!medicalMHelp?.alipay?.medicalNation;
+};
+
 /** 是否医保 */
 export const getIsMedicalMode = () => {
   const {
@@ -243,7 +253,7 @@ export const getIsMedicalMode = () => {
 
   if (getIsMedicalModePlugin()) return true;
   if (medicalMHelp) {
-    const { wx } = medicalMHelp;
+    const { wx, alipay } = medicalMHelp;
 
     // #ifdef  MP-WEIXIN
     if (wx) {
@@ -252,6 +262,12 @@ export const getIsMedicalMode = () => {
       if (medicalPlugin === '1' || medicalNation) {
         return true;
       }
+    }
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    if (!!alipay?.medicalNation) {
+      return true;
     }
     // #endif
   }
@@ -271,16 +287,18 @@ export const getQxMedicalNation = async () => {
 
   const { alipay, wx: _wx } = medicalMHelp!;
   let authorizeType = '1';
+  let authorizeTypeDesc = '1';
   // #ifdef MP-ALIPAY
   authorizeType = '2';
+  authorizeTypeDesc = '2';
   // #endif
 
   const requestArg = {
     authorizeType,
-    authorizeTypeDesc: authorizeType,
+    authorizeTypeDesc,
     aliPayUserId: '',
     callUrl: '',
-    openId: gStores.globalStore.openId,
+    openId: '',
     qrCode,
   };
 
@@ -312,19 +330,34 @@ export const getQxMedicalNation = async () => {
     return Promise.reject('请求授权...');
   }
 
-  if (gStores.globalStore.openId === '') {
-    await getOpenid().then((openId) => {
-      requestArg.openId = openId;
-    });
-  } else {
-    requestArg.openId = gStores.globalStore.openId;
+  requestArg.openId = gStores.globalStore.openId;
+  if (requestArg.openId === '') {
+    requestArg.openId = await getOpenid();
   }
   // #endif
 
   // #ifdef MP-ALIPAY
+  const { authCode } = await apiAsync(my.getAuthCode, {
+    // scopes: ['auth_user', 'nhsamp', 'mfrstre', 'hospital_order'],
+  });
+  // console.log(authCode);
+  // return
+
+
+  await api.authorization({
+    accountType: 21,
+    code: authCode,
+    userId: gStores.globalStore.openId,
+    scope: 'medical_ali_pay'
+  });
+
   requestArg.aliPayUserId = gStores.globalStore.openId;
+  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
   if (!gStores.globalStore.openId) {
-    requestArg.aliPayUserId = await getOpenid2();
+    requestArg.aliPayUserId = await getOpenid();
+  }
+
+  if (!qrCode) {
   }
   // #endif
 
@@ -397,28 +430,26 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
   }
 
   // #ifdef MP-ALIPAY
-  await new Promise((resolve, reject) => {
-    my.getAuthCode({
+  await new Promise(async (resolve, reject) => {
+    const { authCode } = await apiAsync(my.getAuthCode, {
       scopes: 'auth_user',
-      success: async ({ authCode }) => {
-        const { result } = await api.alipayVerifiSelf({
-          cardNumber,
-          code: authCode,
-        });
-
-        if (result) {
-          let { isSelf } = result;
-          _isCanUseMedical = isSelf;
-
-          setTimeout(() => {
-            resolve(void 0);
-          });
-        } else {
-          reject(void 0);
-        }
-      },
-      fail: reject,
     });
+
+    const { result } = await api.alipayVerifiSelf({
+      cardNumber,
+      code: authCode,
+    });
+
+    if (result) {
+      let { isSelf } = result;
+      _isCanUseMedical = isSelf;
+
+      setTimeout(() => {
+        resolve(void 0);
+      });
+    } else {
+      reject(void 0);
+    }
   });
 
   // #endif
@@ -435,39 +466,7 @@ export const isCanUseMedicalNational = async (): Promise<boolean> => {
 
 /** 是否需要过滤医保 仅本人使用 */
 export const _isMedicalSelf = async () => {
-  const {
-    sConfig: { medicalMHelp },
-  } = globalGl;
-
-  if (medicalMHelp) {
-    const { alipay, wx } = medicalMHelp;
-
-    // #ifdef MP-ALIPAY
-    if (alipay) {
-      const { medicalPlugin } = alipay;
-
-      if (medicalPlugin) {
-        return true;
-      }
-    }
-    // #endif
-
-    // #ifdef  MP-WEIXIN
-    if (wx) {
-      const { medicalNation, medicalPlugin } = wx;
-
-      if (medicalNation) {
-        return true;
-      }
-
-      if (medicalPlugin) {
-        return true;
-      }
-    }
-    //#endif
-  }
-
-  return false;
+  return getIsMedicalMode();
 };
 
 /** 是否默认携带医保标签 (部分项目不返回 costTypeCode 标志) */
@@ -500,6 +499,7 @@ export const isMedicalSelf = async (
   cardNumber: string,
   params?: string
 ): Promise<boolean> => {
+  // return true;
   // #ifdef  MP-WEIXIN
   if (params) {
     return true;
@@ -515,12 +515,12 @@ export const isMedicalSelf = async (
 
     // #ifdef MP-ALIPAY
     if (alipay) {
-      const { medicalPlugin } = alipay;
+      const { medicalPlugin, medicalNation } = alipay;
 
       /**
        * 支付宝医保插件模式只能是本人
        */
-      if (medicalPlugin) {
+      if (medicalPlugin || medicalNation) {
         return await isCanUseMedical(cardNumber);
       }
     }
@@ -1167,7 +1167,11 @@ export const usePayPage = () => {
         }
 
         // #ifdef MP-ALIPAY
-        payMoneyMedicalPlugin();
+        if (getIsAliMedicalNation()) {
+          payAliMedicalNation();
+        } else {
+          payMoneyMedicalPlugin();
+        }
         // #endif
 
         // #ifdef  MP-WEIXIN
@@ -1177,6 +1181,13 @@ export const usePayPage = () => {
     } else if (item.key === 'digital') {
       toDigitalPay();
     }
+  };
+
+  /** ali 国标医保 */
+  const payAliMedicalNation = async () => {
+    const authorize = await getQxMedicalNation();
+
+    console.log(authorize);
   };
 
   /** 数字人民币支付 */
@@ -1269,7 +1280,7 @@ export const usePayPage = () => {
   };
 
   // 支付宝 插件医保
-  const payMoneyMedicalPlugin = () => {
+  const payMoneyMedicalPlugin = async () => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
 
     const {
@@ -1300,19 +1311,16 @@ export const usePayPage = () => {
         // medOrgOrd: medOrgOrd.split(',')[0],
       };
 
-      my.getAuthCode({
+      const { authCode } = await apiAsync(my.getAuthCode, {
         scopes: ['auth_user', 'nhsamp'],
-        success: (res) => {
-          const { authCode } = res;
-          authPayPlugin.toAuthAndPay({
-            // 授权获取的authCode
-            authCode,
-            // 请求接口所需参数
-            params,
-          });
-        },
       });
 
+      authPayPlugin.toAuthAndPay({
+        // 授权获取的authCode
+        authCode,
+        // 请求接口所需参数
+        params,
+      });
       // #endif
     }
   };
