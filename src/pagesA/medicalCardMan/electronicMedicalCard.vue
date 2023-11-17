@@ -41,7 +41,14 @@
             <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
           </block>
 
-          <w-qrcode :options="qrOptions" />
+          <!-- <w-qrcode :options="qrOptions" /> -->
+          <uv-qrcode
+            :options="qrOptions2"
+            :value="qrOptions.code"
+            @change="qrComplete"
+            ref="qrcode"
+            size="250px"
+          />
         </view>
 
         <view class="info-content">
@@ -180,6 +187,18 @@
     await wait(700);
 
     uni.hideLoading();
+  };
+
+  const qrOptions2 = computed(() => {
+    return {
+      foregroundImageSrc: showHealthCode.value
+        ? globalGl.BASE_IMG + 'health-card-logo.png'
+        : '',
+    };
+  });
+
+  const qrComplete = (e) => {
+    console.log(e);
   };
 
   const setStatus = async () => {
