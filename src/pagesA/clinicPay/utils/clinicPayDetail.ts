@@ -33,13 +33,13 @@ export const tradeType = {
 type TTradeType = keyof typeof tradeType;
 
 export type TWxAuthorize = {
-  cityId: string;
+  cityId?: string; // wx
+  userName?: string; // wx
   payAuthNo: string;
   userLongitudeLatitude: {
     latitude: string;
     longitude: string;
   };
-  userName: string;
 };
 
 export type IPayListItem = {
@@ -338,17 +338,14 @@ export const getQxMedicalNation = async () => {
 
   // #ifdef MP-ALIPAY
   const { authCode } = await apiAsync(my.getAuthCode, {
-    // scopes: ['auth_user', 'nhsamp', 'mfrstre', 'hospital_order'],
+    scopes: ['nhsamp', 'auth_user'],
   });
-  // console.log(authCode);
-  // return
-
 
   await api.authorization({
     accountType: 21,
     code: authCode,
     userId: gStores.globalStore.openId,
-    scope: 'medical_ali_pay'
+    scope: 'medical_ali_pay',
   });
 
   requestArg.aliPayUserId = gStores.globalStore.openId;
@@ -370,6 +367,34 @@ export const getQxMedicalNation = async () => {
   if (result.userLongitudeLatitude) {
     result.userLongitudeLatitude = JSON.parse(result.userLongitudeLatitude);
   }
+
+  // #ifdef MP-ALIPAY
+  const { authUrl, payAuthNo, medicalCardId, medicalCardInstId } = result;
+
+  if (!payAuthNo) {
+    setLocalStorage({
+      'get-ali-medical-auth-code': '1',
+    });
+    my.ap.navigateToAlipayPage({
+      path: encodeURI(authUrl),
+    });
+
+    return Promise.reject('需要医保授权...');
+  }
+
+  const { latitude, longitude } = await apiAsync(uni.getLocation, {});
+
+  result.userLongitudeLatitude = {
+    latitude,
+    longitude,
+  };
+
+  if (!(longitude && latitude)) {
+    gStores.messageStore.showMessage('获取定位失败, 无法继续医保结算...');
+    return Promise.reject('获取定位失败, 无法继续医保结算...');
+  }
+
+  // #endif
 
   return <TWxAuthorize>result;
 };
@@ -424,7 +449,6 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
-  // return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
@@ -440,16 +464,16 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
       code: authCode,
     });
 
-    if (result) {
-      let { isSelf } = result;
-      _isCanUseMedical = isSelf;
-
-      setTimeout(() => {
-        resolve(void 0);
-      });
-    } else {
-      reject(void 0);
+    if (!result) {
+      return reject(void 0);
     }
+
+    let { isSelf } = result;
+    _isCanUseMedical = isSelf;
+
+    setTimeout(() => {
+      resolve(void 0);
+    });
   });
 
   // #endif
@@ -499,7 +523,6 @@ export const isMedicalSelf = async (
   cardNumber: string,
   params?: string
 ): Promise<boolean> => {
-  // return true;
   // #ifdef  MP-WEIXIN
   if (params) {
     return true;
@@ -1185,9 +1208,56 @@ export const usePayPage = () => {
 
   /** ali 国标医保 */
   const payAliMedicalNation = async () => {
+    uni.showLoading({
+      title: '拉取医保授权码',
+      mask: true,
+    });
+
     const authorize = await getQxMedicalNation();
 
-    console.log(authorize);
+    uni.showLoading({
+      title: '拉取缴费详情',
+      mask: true,
+    });
+
+    const item = selUnPayList.value[0]!;
+    const { getDetailData, detailData } = usePayDetailPage();
+    const pat = gStores.userStore.patChoose;
+    const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
+    await getDetailData({
+      cardNumber,
+      ...pageProps.value,
+      ...item,
+    });
+
+    uni.showLoading({
+      title: '正在预结算...',
+      mask: true,
+    });
+
+    const uploadRes = await medicalNationUpload(
+      {
+        ...item,
+        ...detailData.value,
+      },
+      authorize,
+      {
+        businessType: '1',
+        cardNumber,
+      }
+    );
+
+    const payInfoArg = {
+      ...pat,
+      ...item,
+      ...authorize,
+      ...detailData.value,
+      ...uploadRes,
+    };
+
+    console.log(payInfoArg);
+
+    uni.hideLoading();
   };
 
   /** 数字人民币支付 */

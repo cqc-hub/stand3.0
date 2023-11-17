@@ -51,6 +51,7 @@ const messageStore = defineStore('message', {
 
       this.maskClickCallBack = maskClickCallBack || (() => {});
       this.closeCallBack = closeCallBack || (() => {});
+      uni.hideLoading();
     },
 
     closeMessage() {

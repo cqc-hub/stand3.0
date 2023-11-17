@@ -266,6 +266,7 @@
     isMedicalSelf,
     isDefaultMedical,
     getIsMedicalMode,
+    getIsAliMedicalNation,
     compareDetailCostItem,
     type TPayDetailProp,
     type TCostList,
@@ -572,7 +573,13 @@
         });
 
         // #ifdef MP-ALIPAY
-        payMoneyMedicalPlugin();
+        if (getIsAliMedicalNation()) {
+          // payAliMedicalNation();
+          console.log('33333');
+
+        } else {
+          payMoneyMedicalPlugin();
+        }
         // #endif
 
         // #ifdef  MP-WEIXIN
@@ -695,6 +702,8 @@
         changeRefPayList(1);
       }
     }
+
+    await wait(20);
 
     if (pageConfig.value.confirmPayFg) {
       if (flag) {
