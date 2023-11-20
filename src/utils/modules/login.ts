@@ -875,9 +875,9 @@ export class PatientUtils extends LoginUtils {
   ) {
     getH5OpenidParam(data);
     if (data._type === 'perfect') {
-      await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
+      return await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
     } else {
-      await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+      return await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
   }
 

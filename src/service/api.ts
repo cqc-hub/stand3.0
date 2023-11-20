@@ -666,6 +666,14 @@ const userApi = {
   addPat: (data) =>
     service.post('/phs-user/relevantPatient/addPat', parm(data)),
 
+  //根据姓名手机号查询院内卡列表
+  getAllCardByName: (data) =>
+    service.post('/phs-user/relevantPatient/getAllCardByName', parm(data)),
+
+  //根据院内卡列表添加就诊人
+  addPatByAllCard: (data) =>
+    service.post('/phs-user/relevantPatient/addPatByAllCard', parm(data)),
+
   //获取就诊人列表
   getPatCardList: (data) =>
     service.post<IPat[]>(

@@ -1,4 +1,6 @@
 interface ISConfig {
+  // 添加就诊人查询院内可能存在多张卡(濮阳人民)?
+  isSearchHosForAddPatHasMoreThanOneCard?: '1';
   // 有药品配送功能?
   isDrugDelivery?: '1';
   //底部是否放开互联网医院?
@@ -81,6 +83,13 @@ interface ISConfig {
 }
 
 const scJson: Record<string, ISConfig> = {
+  /**
+   * 濮阳市人民医院
+   */
+  1001058: {
+    isSearchHosForAddPatHasMoreThanOneCard: '1',
+  },
+
   /**
    * 绍兴第二医院
    */

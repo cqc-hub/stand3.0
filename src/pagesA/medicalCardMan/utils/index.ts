@@ -30,6 +30,14 @@ export const formKey = <const>{
   nation: 'nation',
 };
 
+export type TCardPat = {
+  cardBalance: string;
+  cardNumber: string;
+  cardType: string;
+  createTime: string;
+  patientName: string;
+}
+
 export type FormKey = typeof formKey;
 
 export type TFormKeys = keyof FormKey;

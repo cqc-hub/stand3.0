@@ -24,6 +24,13 @@
       @cancelButton="dialogShow = false"
       :confirmText="pageType === 'perfectReal' ? '立即补充' : '添加'"
     />
+    <Sel-Card-Dialog
+      v-model:show="dialogSelCardShow"
+      :activeCardNumber="activeCardSelCardNumber"
+      :list="cardPatList"
+      @itemClick="selCardPat"
+      @confirm="chooseCard"
+    />
 
     <view class="footer">
       <Fg-Agree
@@ -51,6 +58,7 @@
     routerJump,
     ServerStaticData,
     nameConvert,
+    getH5OpenidParam,
   } from '@/utils';
   import {
     pickTempItem,
@@ -59,6 +67,7 @@
     getDefaultFormData,
     formatterSubPatientData,
     loginAuthAlipay,
+    TCardPat,
   } from './utils';
   import { joinQuery } from '@/common';
   import { onReady } from '@dcloudio/uni-app';
@@ -68,6 +77,8 @@
   import api from '@/service/api';
 
   import FgAgree from './components/fgAgree.vue';
+  import globalGl from '@/config/global';
+  import SelCardDialog from './components/SelCardDialog.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -100,11 +111,28 @@
 
   const isCheck = ref(false);
 
+  const dialogSelCardShow = ref(false);
   const dialogShow = ref(false);
   const dialogContent = ref('');
   let dialogConfirm = () => {};
+  const cardPatList = ref(<TCardPat[]>[]);
   const dialogConfirmRRR = () => {
     dialogShow.value = false;
+    dialogConfirm();
+  };
+
+  const activeCardSelCardNumber = ref('');
+  const selCardPat = (pat: TCardPat) => {
+    activeCardSelCardNumber.value = pat.cardNumber;
+  };
+
+  const chooseCard = (cardNumber: string) => {
+    if (!cardNumber) {
+      gStores.messageStore.showMessage('请选择就诊卡', 3000);
+      return;
+    }
+
+    dialogSelCardShow.value = false;
     dialogConfirm();
   };
 
@@ -232,36 +260,64 @@
         verifyCode: formData.value[formKey.verifyCode],
       };
 
-      await patientUtil
-        .addPatient(requestArg)
-        .then(async () => {
-          // 切换默认就诊人
-          if (value[formKey.defaultFalg]) {
-            gStores.userStore.updatePatChoose({} as any);
-          }
-          await patientUtil.getPatCardList();
-
-          if (props._directUrl) {
-            routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
-          } else {
-            routerJump('/pages/home/home');
-          }
-        })
-        .catch((err) => {
-          if (err?.respCode === 999301) {
-            messageStore.showMessage(err.message, 3000, {
-              closeCallBack() {
-                uni.navigateTo({
-                  url: joinQuery('/pagesA/medicalCardMan/addMedical', {
-                    ...data,
-                    pageType: props.pageType,
-                    _directUrl: props._directUrl,
-                  }),
-                });
-              },
-            });
-          }
+      if (globalGl.sConfig.isSearchHosForAddPatHasMoreThanOneCard === '1') {
+        getH5OpenidParam(requestArg);
+        const {
+          result: { cardList, data },
+        } = await api.getAllCardByName(requestArg).catch((err) => {
+          dealNetError(err, data);
+          throw new Error(err);
         });
+
+        if (cardList && cardList.length) {
+          await new Promise((r) => {
+            dialogSelCardShow.value = true;
+            cardPatList.value = cardList;
+            dialogConfirm = () => {
+              r(void 0);
+            };
+          });
+
+          await api.addPatByAllCard({
+            ...requestArg,
+            data,
+            cardNumber: activeCardSelCardNumber.value,
+          });
+        }
+      } else {
+        await patientUtil.addPatient(requestArg).catch((err) => {
+          dealNetError(err, data);
+          throw new Error(err);
+        });
+      }
+
+      // 切换默认就诊人
+      if (value[formKey.defaultFalg]) {
+        gStores.userStore.updatePatChoose({} as any);
+      }
+      await patientUtil.getPatCardList();
+
+      if (props._directUrl) {
+        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      } else {
+        routerJump('/pages/home/home');
+      }
+    }
+  };
+
+  const dealNetError = (err, data) => {
+    if (err?.respCode === 999301) {
+      messageStore.showMessage(err.message, 3000, {
+        closeCallBack() {
+          uni.navigateTo({
+            url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+              ...data,
+              pageType: props.pageType,
+              _directUrl: props._directUrl,
+            }),
+          });
+        },
+      });
     }
   };
 

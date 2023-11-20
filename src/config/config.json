@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001058",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -160,7 +160,7 @@
       "alipayAppid": "2021003173633521",
       "h5Appid": "wxc5f0f8f426249352",
       "name": "濮阳市人民医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isOpenOcr": false,
       "isStartComeTest": true
     },
