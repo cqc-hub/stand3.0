@@ -2,7 +2,7 @@
   <view class="choose-pat">
     <g-popup title="选择支付方式" ref="refActionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
-        <view style="width: 100%">
+        <view class="pt32" style="width: 100%">
           <pay-List :list="list" @choose-pat="choosePay" />
 
           <slot />

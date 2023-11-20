@@ -7,9 +7,8 @@
       @click="patClick(item, i)"
       :class="{
         'pat-active': false,
-        mt32: !i,
       }"
-      class="pat-item"
+      class="pat-item mb16"
     >
       <view
         :class="{
@@ -63,7 +62,7 @@
     width: calc(100% - 64rpx);
     display: flex;
     flex-direction: column;
-    gap: 16rpx;
+    // gap: 16rpx;
     padding: 0 32rpx;
 
     .pat-item {
