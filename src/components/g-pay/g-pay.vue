@@ -16,9 +16,9 @@
   import { onMounted, ref } from 'vue';
   import { GStores } from '@/utils';
   import { IPat } from '@/stores';
+  import { IGPay, payMoneyOnline, IPayRes, toPayPull } from './index';
   import globalGl from '@/config/global';
   import payList from './payList.vue';
-  import { IGPay, payMoneyOnline, IPayRes, toPayPull } from './index';
   import api from '@/service/api';
 
   const refActionSheet = ref<any>('');

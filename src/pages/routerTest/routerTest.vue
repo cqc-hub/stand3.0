@@ -20,7 +20,14 @@
 </template>
 
 <script lang="ts" setup>
-  const color = 'var(--hr-brand-color-6)';
+  const props = withDefaults(
+    defineProps<{
+      color?: string;
+    }>(),
+    {
+      color: 'var(--hr-brand-color-6)',
+    }
+  );
 </script>
 
 <style lang="scss" scoped>

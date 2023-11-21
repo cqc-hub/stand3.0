@@ -7,6 +7,10 @@ declare const my: any;
 declare const uni: Uni;
 declare const requirePlugin: any;
 
+declare const __wxConfig: {
+  envVersion: 'develop' | 'trial' | 'release';
+};
+
 /**
  * @wxAppid-微信appid
  * @alipayAppid-支付宝appid

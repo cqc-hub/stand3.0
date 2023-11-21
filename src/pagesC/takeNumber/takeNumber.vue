@@ -266,7 +266,14 @@
     init();
   };
 
-  const getConfig = async () => {};
+  const getConfig = async () => {
+    const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
+      await ServerStaticData.getSystemConfig('order');
+
+    isShowQueueBtn.value = takeNumberQueueBtn === '1';
+    isTakeNumberAfterBtnForGoQueueNumber.value =
+      takeNumberAfterBtnForGoQueueNumber === '1';
+  };
 
   const init = async () => {
     await getLocation();
@@ -275,12 +282,7 @@
   };
 
   onLoad(async () => {
-    const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
-      await ServerStaticData.getSystemConfig('order');
-
-    isShowQueueBtn.value = takeNumberQueueBtn === '1';
-    isTakeNumberAfterBtnForGoQueueNumber.value =
-      takeNumberAfterBtnForGoQueueNumber === '1';
+    await getConfig();
     init();
   });
 </script>

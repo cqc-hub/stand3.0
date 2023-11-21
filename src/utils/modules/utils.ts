@@ -242,3 +242,29 @@ export const getTimeStamp = (num?: number) => {
     return dateTime;
   }
 };
+
+export const getMiniProgramEnv = async function (): Promise<
+  '' | 'develop' | 'trial' | 'release'
+> {
+  let containerEnv = 'h5';
+
+  // #ifdef MP-WEIXIN
+  containerEnv = 'wx';
+  // #endif
+
+  // #ifdef MP-ALIPAY
+  containerEnv = 'alipay';
+  // #endif
+
+  switch (containerEnv) {
+    case 'wx':
+      return __wxConfig.envVersion;
+
+    case 'alipay':
+      const { envVersion } = await apiAsync(my.getRunScene, {});
+      return envVersion;
+
+    default:
+      return '';
+  }
+};

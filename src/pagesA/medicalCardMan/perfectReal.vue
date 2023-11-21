@@ -263,7 +263,7 @@
       if (globalGl.sConfig.isSearchHosForAddPatHasMoreThanOneCard === '1') {
         getH5OpenidParam(requestArg);
         const {
-          result: { cardList, data },
+          result: { cardList, data: resData },
         } = await api.getAllCardByName(requestArg).catch((err) => {
           dealNetError(err, data);
           throw new Error(err);
@@ -280,7 +280,7 @@
 
           await api.addPatByAllCard({
             ...requestArg,
-            data,
+            data: resData,
             cardNumber: activeCardSelCardNumber.value,
           });
         }

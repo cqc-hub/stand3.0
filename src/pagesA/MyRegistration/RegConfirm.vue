@@ -197,7 +197,7 @@
         .then((qxRes: any) => {
           alipayAuthCode = qxRes.authCode;
         })
-        .catch(() => {});
+        .catch((e) => {});
     }
     // #endif
 

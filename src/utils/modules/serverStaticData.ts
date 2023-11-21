@@ -6,6 +6,7 @@ import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType } from '@/typeUtils';
+import { getMiniProgramEnv } from '@/utils';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -26,7 +27,6 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   if (result && result.MEDICAL_CASE_COPY) {
     const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
     console.log(_configList, 233);
-
 
     if (_configList.length) {
       const configList: any[] = [];
@@ -485,6 +485,11 @@ export class ServerStaticData {
     }
   }
 
+  /**
+   * 小程序当前运行环境
+   */
+  static env: '' | 'develop' | 'trial' | 'release' = '';
+
   static async getSystemConfig<T extends keyof ISystemConfig>(
     key: T,
     payload: {} = {}
@@ -550,6 +555,14 @@ export class ServerStaticData {
       } catch (error) {
         console.error(error);
         throw new Error('序列化错误, 请检查全局的参数');
+      }
+
+      if (!this.env) {
+        this.env = await getMiniProgramEnv();
+      }
+
+      if (this.env === 'develop') {
+        // ...
       }
 
       setLocalStorage({

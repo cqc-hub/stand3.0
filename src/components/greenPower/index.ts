@@ -10,12 +10,18 @@ export const getMyPowerQx = function (scopes = 'mfrstre') {
       scopes: [scopes], // 蚂蚁能量授权：mfrstre。或者其它scope
       success: async (res) => {
         if (res.authCode) {
-          await api.authorization({
-            accountType: gStores.globalStore.browser.accountType,
-            code: res.authCode,
-            userId: gStores.globalStore.openId,
-            scope: scopes,
-          });
+          await api
+            .authorization({
+              accountType: gStores.globalStore.browser.accountType,
+              code: res.authCode,
+              userId: gStores.globalStore.openId,
+              scope: scopes,
+            })
+            .catch((e) => {
+              reject(e);
+              throw new Error(e);
+            });
+
           resolve(res);
         } else {
           reject(res);
@@ -34,7 +40,6 @@ const getReportPower = async function (repId) {
   const { authCode } = (await getMyPowerQx()) as any;
   const gStores = new GStores();
   const sysCode = gStores.globalStore.sysCode;
-
 
   if (authCode) {
     const { result } = await api.energySendReg({

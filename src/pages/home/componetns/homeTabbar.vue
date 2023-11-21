@@ -9,7 +9,6 @@
     <view class="tabbar-container">
       <view v-for="(item, i) in tabBars" :key="i" class="tabbar-item">
         <g-login
-          class="box"
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
@@ -236,10 +235,6 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-        }
-        .box {
-          height: 100%;
-          width: 100%;
         }
       }
     }
