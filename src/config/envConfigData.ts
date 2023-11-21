@@ -1,8 +1,11 @@
 /**
  * 容器为 develop 环境(开发版)下 替换 sysConfig
  */
-export default <const>{
+
+const config = <const>{
   person: {
     isSmsVerify: '0',
   },
 };
+
+export default config;

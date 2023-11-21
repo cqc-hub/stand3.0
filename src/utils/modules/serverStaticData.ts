@@ -1,12 +1,11 @@
-import { getLocalStorage, setLocalStorage } from '@/common';
+import { getLocalStorage, setLocalStorage, joinQueryForUrl } from '@/common';
 import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
-import { joinQueryForUrl } from '@/common';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType } from '@/typeUtils';
-import { getMiniProgramEnv, deepMerge } from '@/utils';
+import { getMiniProgramEnv } from '@/utils';
 import envConfigData from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -564,14 +563,14 @@ export class ServerStaticData {
 
       if (this.env === 'develop') {
         // ...
-        systemConfig = deepMerge(systemConfig, envConfigData);
+        // systemConfig = deepMerge(systemConfig, envConfigData);
       }
-
       setLocalStorage({
         systemConfig,
       });
       return systemConfig[key];
     } else {
+
       return systemConfig[key];
     }
   }

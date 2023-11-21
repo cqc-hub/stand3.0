@@ -79,7 +79,6 @@
   import FgAgree from './components/fgAgree.vue';
   import globalGl from '@/config/global';
   import SelCardDialog from './components/SelCardDialog.vue';
-
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
 
