@@ -6,7 +6,8 @@ import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType } from '@/typeUtils';
-import { getMiniProgramEnv } from '@/utils';
+import { getMiniProgramEnv, deepMerge } from '@/utils';
+import envConfigData from '@/config/envConfigData';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -563,6 +564,7 @@ export class ServerStaticData {
 
       if (this.env === 'develop') {
         // ...
+        systemConfig = deepMerge(systemConfig, envConfigData);
       }
 
       setLocalStorage({
