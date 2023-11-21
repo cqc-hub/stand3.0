@@ -3,9 +3,7 @@
  */
 
 const config = <const>{
-  person: {
-    isSmsVerify: '0',
-  },
+  'person.isSmsVerify': '0',
 };
 
 export default config;

@@ -190,10 +190,13 @@ export const getQueryUrl = function (url: string): BaseObject {
  * @param target
  * @returns target
  */
-export const insertObject = (
-  opt: { key: string; value: any },
-  target: BaseObject
-) => {
+export const insertObject = <
+  T extends { key: string; value: any },
+  K extends BaseObject
+>(
+  opt: T,
+  target: K
+): K => {
   const { key, value } = opt;
   const keySlice = key.split('.');
   const len = keySlice.length;
@@ -211,8 +214,10 @@ export const insertObject = (
         valueCache = target[keyItem];
       } else {
         if (len === 1) {
+          // @ts-expect-error
           valueCache = target[keyItem] = value;
         } else {
+          // @ts-expect-error
           valueCache = target[keyItem] = {};
         }
       }
@@ -234,6 +239,22 @@ export const insertObject = (
   return target;
 };
 
+export const insertsObject = function <
+  T extends BaseObject,
+  K extends BaseObject
+>(source: T, target: K): K {
+  for (const key in source) {
+    insertObject(
+      {
+        key,
+        value: source[key],
+      },
+      target
+    );
+  }
+  return target;
+};
+
 //获取URL 携带的对应参数
 export const getQueryString = (url: string, key: string): string => {
   const after = url.split('?')[1];
@@ -249,4 +270,3 @@ export const getQueryString = (url: string, key: string): string => {
     return '';
   }
 };
-

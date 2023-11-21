@@ -1,4 +1,9 @@
-import { getLocalStorage, setLocalStorage, joinQueryForUrl } from '@/common';
+import {
+  getLocalStorage,
+  setLocalStorage,
+  joinQueryForUrl,
+  insertsObject,
+} from '@/common';
 import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
@@ -563,14 +568,13 @@ export class ServerStaticData {
 
       if (this.env === 'develop') {
         // ...
-        // systemConfig = deepMerge(systemConfig, envConfigData);
+        insertsObject(envConfigData, systemConfig);
       }
       setLocalStorage({
         systemConfig,
       });
       return systemConfig[key];
     } else {
-
       return systemConfig[key];
     }
   }
