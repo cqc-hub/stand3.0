@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxe26143481567cb97",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,22 +70,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003167601013"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002139602458"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -97,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州市第一人民医院",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"

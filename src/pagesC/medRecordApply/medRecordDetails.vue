@@ -523,6 +523,8 @@
         },
 
         fail(e) {
+          gStores.messageStore.showMessage(e?.errMsg || '拉取照片失败', 3000);
+
           resolve({
             success: false,
             evt: e,

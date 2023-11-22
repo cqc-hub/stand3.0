@@ -9,6 +9,9 @@ export const getMyPowerQx = function (scopes = 'mfrstre') {
     my.getAuthCode({
       scopes: [scopes], // 蚂蚁能量授权：mfrstre。或者其它scope
       success: async (res) => {
+        // console.log(res.authCode);
+        // return {}
+
         if (res.authCode) {
           await api
             .authorization({
