@@ -288,6 +288,12 @@ export const getLocation = async function (isForce?: boolean): Promise<{
 
     // 授权成功
     if (res) {
+      const { latitude, longitude } = res;
+      // @ts-expect-error
+      res.longitude = longitude + '';
+      // @ts-expect-error
+      res.latitude = latitude + '';
+
       success(res as any);
     } else {
       const reAuth = async function () {

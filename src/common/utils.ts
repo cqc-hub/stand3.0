@@ -185,10 +185,14 @@ export const getQueryUrl = function (url: string): BaseObject {
 };
 
 /**
- * target.a.b.c = opt.value
- * @param opt
- * @param target
+ * target will be change
+ *
  * @returns target
+ * @example
+ *
+ * const a = { name: 'cqc', info: { fav: 'boo' } }
+ * insertObject({ 'info.fav': 'game' }, a)
+ * // { name: 'cqc', info: { fav: 'game' } }
  */
 export const insertObject = <
   T extends { key: string; value: any },

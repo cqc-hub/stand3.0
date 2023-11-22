@@ -77,9 +77,13 @@ export interface ISystemConfig_ {
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
 
-    /** 门诊取号 */
+    /** 门诊取号 takeNumber */
     takeNumberQueueBtn?: '1'; // 门诊取号列表页面是否显示排队叫号入口按钮
     takeNumberAfterBtnForGoQueueNumber?: '1'; // 取号后  按钮变成 '查看排队信息': 跳 排队叫号; 默认 '刷码签到'
+
+    /** 门诊取号 takeNumber1 */
+    takeNumber1QueueBtn?: '1'; // 门诊取号列表页面是否显示排队叫号入口按钮
+    takeNumber1ElectronicGuideBtn?: '1'; // 门诊取号列表页面是否显示排队叫号入口按钮
   };
 
   /** 移动端伦理委员会(h5) */

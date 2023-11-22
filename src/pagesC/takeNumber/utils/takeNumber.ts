@@ -12,3 +12,11 @@ export type TTakeNumberListItem = {
   hosId: string;
   qrValue?: string;
 };
+
+export type _TTakeNumberListItem = {
+  signIn: boolean; // 是否允许签到
+  status: boolean; // 已签到?
+  disabled?: boolean;
+  uuid: string;
+  label: string;
+};

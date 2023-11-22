@@ -401,6 +401,20 @@ const regApi = {
       hideLoading: false,
     }),
 
+  bloodTestSignIn: (data: any) =>
+    service.post('/phs-reg/regIntelligence/bloodTestSignIn', parm(data), {
+      hideLoading: false,
+    }),
+
+  signInPositionAnalysis: (data: any) =>
+    service.post(
+      '/phs-reg/regIntelligence/signInPositionAnalysis',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
+
   medicalUp: (data: any) =>
     service.post('/phs-reg/medical/medicalUp', parm(data), {
       hideLoading: false,

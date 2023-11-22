@@ -1,15 +1,23 @@
 <template>
   <view class="g-page">
-    <g-flag typeFg="5" isShowFg />
+    <g-flag typeFg="452" isShowFg />
     <g-choose-pat @choose-pat="init" />
     <view class="pat-box">
       <view class="health-card">
-        <view @click="goRecord" class="mr14 g-flex-rc-cc">
+        <view
+          v-if="pageConfig.takeNumber1ElectronicGuideBtn === '1'"
+          @click="goRecord"
+          class="mr14 g-flex-rc-cc"
+        >
           <view class="iconfont icon-resize">&#xe6fc;</view>
-          <text class="color-111">挂号记录</text>
+          <text class="color-111">电子导诊单</text>
         </view>
 
-        <view v-if="isShowQueueBtn" @click="goQueueNumber" class="g-flex-rc-cc">
+        <view
+          v-if="pageConfig.takeNumber1QueueBtn === '1'"
+          @click="goQueueNumber"
+          class="g-flex-rc-cc"
+        >
           <image
             class="queue-icon mr14"
             :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
@@ -22,15 +30,11 @@
     <scroll-view class="g-container" scroll-y>
       <view v-if="isComplete || isRefresh" class="content">
         <view v-if="list.length">
-          <Number-List
+          <Number-List-Copy
             :list="list"
             :loading="isRefresh"
-            :isTakeNumberAfterBtnForGoQueueNumber="
-              isTakeNumberAfterBtnForGoQueueNumber
-            "
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
-            @sign-in="signIn"
           />
         </view>
 
@@ -68,29 +72,41 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
+  import { apiAsync, generateUuid } from '@/utils';
 
   import {
     GStores,
     ServerStaticData,
     type TButtonConfig,
+    type ISystemConfig,
     useTBanner,
     getLocation,
   } from '@/utils';
-  import { type TTakeNumberListItem } from './utils/takeNumber';
+  import { type _TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
 
-  import NumberList from './components/NumberList.vue';
+  import NumberListCopy from './components/NumberListCopy.vue';
   import QrPopup from './components/QrPopup.vue';
+  import { deQueryForUrl } from '@/common';
 
+  // api.bloodTestSignIn
+  // api.signInPositionAnalysis
+
+  const pageProps = ref(
+    <
+      {
+        hosId?: string;
+      }
+    >{}
+  );
+  const pageConfig = ref(<ISystemConfig['order']>{});
   const gStores = new GStores();
   const isComplete = ref(false);
   const isRefresh = ref(false);
-  const list = ref([] as TTakeNumberListItem[]);
+  const list = ref([] as _TTakeNumberListItem[]);
   const qrValue = ref('');
   const isShowQr = ref(false);
-  const isShowQueueBtn = ref(false);
-  const isTakeNumberAfterBtnForGoQueueNumber = ref(false);
 
   const locationInfo = ref({
     latitude: '',
@@ -100,62 +116,54 @@
   const fgTitle451 = ref('');
   const isFgShow451 = ref(false);
 
-  let cacheItem: TTakeNumberListItem;
-  const showTakeNumberDialog = (item: TTakeNumberListItem) => {
+  let cacheItem: _TTakeNumberListItem;
+  const showTakeNumberDialog = async (item: _TTakeNumberListItem) => {
+    if (item.disabled) {
+      return;
+    }
+
     cacheItem = item;
-    isFgShow451.value = true;
-  };
+    // isFgShow451.value = true;
+    locationInfo.value = await getLocation(true);
 
-  const takeNumber = async () => {
-    const { ampm, visitDate, visitId, hosId } = cacheItem;
-    const { source } = gStores.globalStore.browser;
     const { patientId } = gStores.userStore.patChoose;
-
-    const args = {
-      ampm,
-      visitDate,
-      visitId,
-      source,
+    const {
+      result: { status, promptMessage },
+    } = await api.bloodTestSignIn({
+      ...pageProps.value,
+      ...locationInfo.value,
+      signType: '1',
       patientId,
-      hosId,
-    };
-
-    await api.getCheckIn(args).finally(() => {
-      isFgShow451.value = false;
     });
-    await getList();
-  };
 
-  const signIn = async (item: TTakeNumberListItem) => {
-    isFgShow451.value = false;
-    if (isTakeNumberAfterBtnForGoQueueNumber.value) {
-      // 排队叫号
-      const queryNumber: TButtonConfig = {
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/queueNumber/queueNumber',
-        text: '排队叫号',
-        addition: {
-          herenId: 'herenId',
-          patientId: 'aaa',
-          token: 'token',
-        },
-      };
-
-      useTBanner(queryNumber);
-    } else {
-      const { qrValue: q } = item;
-
-      if (q) {
-        qrValue.value = q;
-        isShowQr.value = true;
-      }
+    if (status) {
+      item.disabled = true;
+      item.status = true;
+      await apiAsync(uni.showModal, {
+        content: promptMessage || '取号成功',
+        showCancel: false,
+      });
     }
   };
 
+  const takeNumber = async () => {
+    isFgShow451.value = false;
+  };
+
   const goRecord = () => {
-    uni.navigateTo({
-      url: '/pagesA/MyRegistration/MyRegistration',
+    useTBanner({
+      type: 'h5',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: gStores.globalStore.sysCode,
+      },
+
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+        patientId: 'patientId',
+      },
     });
   };
 
@@ -177,17 +185,16 @@
   };
 
   const refreshData = () => {
-    isRefresh.value = true;
+    if (isRefresh.value) {
+      return;
+    }
 
-    // init();
-    uni.redirectTo({
-      url: '/pagesC/takeNumber/takeNumber',
-    });
+    isRefresh.value = true;
+    init();
   };
 
   const getList = async () => {
     const { patientId } = gStores.userStore.patChoose;
-    const { latitude, longitude } = locationInfo.value;
 
     isComplete.value = false;
     if (!isRefresh.value) {
@@ -195,38 +202,44 @@
     }
 
     const { result } = await api
-      .getCheckInList({
-        latitude,
-        longitude,
+      .signInPositionAnalysis({
+        ...pageProps.value,
+        ...locationInfo.value,
         patientId,
       })
       .finally(() => {
         isComplete.value = true;
-        isRefresh.value = false;
+
+        setTimeout(() => {
+          isRefresh.value = false;
+        }, 1000);
       });
 
-    list.value = result || [];
+    const { signIn } = result;
 
-    list.value.map((o) => {
-      // o.signIn = false;
-    });
+    list.value = [
+      {
+        signIn,
+        disabled: !signIn,
+        uuid: generateUuid(),
+        label: signIn ? '取号' : '不在取号范围',
+        status: false,
+      },
+    ];
   };
 
   const getConfig = async () => {
-    const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
-      await ServerStaticData.getSystemConfig('order');
-
-    isShowQueueBtn.value = takeNumberQueueBtn === '1';
-    isTakeNumberAfterBtnForGoQueueNumber.value =
-      takeNumberAfterBtnForGoQueueNumber === '1';
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
 
   const init = async () => {
+    locationInfo.value = await getLocation(true);
+
     getList();
   };
 
-  onLoad(async () => {
-    locationInfo.value = await getLocation(true);
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     await getConfig();
     init();
   });
