@@ -268,3 +268,53 @@ export const getMiniProgramEnv = async function (): Promise<
       return '';
   }
 };
+
+/**
+ *
+ * @param isForce 强制获取定位?
+ * @returns
+ */
+export const getLocation = async function (isForce?: boolean): Promise<{
+  latitude: string;
+  longitude: string;
+}> {
+  return new Promise(async (success, fail) => {
+    const res = await apiAsync(uni.getLocation, {}).catch((err) => {
+      if (!isForce) {
+        fail(err);
+        throw new Error(err);
+      }
+    });
+
+    // 授权成功
+    if (res) {
+      success(res as any);
+    } else {
+      const reAuth = async function () {
+        // #ifdef MP-WEIXIN
+        const { authSetting } = await apiAsync(uni.getSetting, {});
+
+        const qx = authSetting['scope.userLocation'];
+        if (qx) {
+          success(await getLocation(isForce));
+        } else {
+          await apiAsync(uni.showModal, {
+            content: '获取定位失败, 请重新授权',
+            showCancel: false,
+          });
+
+          await apiAsync(uni.openSetting, {});
+          reAuth();
+        }
+
+        // #endif
+
+        // #ifndef MP-WEIXIN
+        success(await getLocation(isForce));
+        // #endif
+      };
+
+      reAuth();
+    }
+  });
+};

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx86a78f7ced7dc55f",
+    "appid": "wx7acc3ecadc08f7ea",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,16 +63,26 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "healthCardPlugins": {
+        "version": "3.11.0",
+        "provider": "wxee969de81bba9a45"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173633521"
+    "appid": "2021003167607056"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -84,7 +94,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "濮阳市人民医院",
+  "name": "咸阳市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

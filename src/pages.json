@@ -456,6 +456,16 @@
         },
 
         {
+          "path": "takeNumber/takeNumber1",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "门诊取号"
+          }
+        },
+
+        {
           "path": "openMiniProgram/openMiniProgram",
           "style": {
             "navigationBarTitleText": "跳转小程序"
