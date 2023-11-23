@@ -34,7 +34,7 @@ export const apiAsync: <
   }
 >(
   api: T,
-  opt: TFirstParams<Parameters<T>>,
+  opt: Omit<TFirstParams<Parameters<T>>, 'success' | 'fail'>,
   ...otherOpts: Parameters<T> extends [infer P, ...infer K] ? K : any[]
 ) => Promise<
   NeverTurnsAny<
@@ -300,7 +300,6 @@ export const getLocation = async function (isForce?: boolean): Promise<{
       const reAuth = async function () {
         // #ifdef MP-WEIXIN
         const { authSetting } = await apiAsync(uni.getSetting, {});
-
         const qx = authSetting['scope.userLocation'];
         if (qx) {
           success(await getLocation(isForce));
