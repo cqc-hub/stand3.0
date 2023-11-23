@@ -846,7 +846,7 @@ export class PatientUtils extends LoginUtils {
           const errMsg = err?.message || '';
 
           await apiAsync(uni.showModal, {
-            content: errMsg + '系统将为您注册账号，但不进行绑定就诊人！',
+            content: errMsg + '; 系统将为您注册账号，但不进行绑定就诊人！',
             showCancel: false,
           });
 
