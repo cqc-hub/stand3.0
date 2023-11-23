@@ -24,6 +24,7 @@ export const compose =
 
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
+type TFirstParams<T> = T extends [infer K] ? K : any;
 export const apiAsync: <
   T extends {
     (
@@ -33,8 +34,8 @@ export const apiAsync: <
   }
 >(
   api: T,
-  opt: BaseObject,
-  ...otherOpts: any[]
+  opt: TFirstParams<Parameters<T>>,
+  ...otherOpts
 ) => Promise<
   NeverTurnsAny<
     IsAny<T> extends true ? any : Parameters<Parameters<T>[0]['success']>[0]
