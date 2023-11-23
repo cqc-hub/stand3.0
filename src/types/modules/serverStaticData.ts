@@ -17,6 +17,17 @@ export interface IMedicalPhotoMode extends IHOptionItem {
  *  未指定说明的 '0' 均为 false '1' true
  */
 export interface ISystemConfig_ {
+  // pagesB/menus/index  子菜单业务功能入口配置
+  BusinessMenu: {
+    menus?: {
+      [key: string]: {
+        label: string; // 标题
+        subLabel?: string; // 副标题
+        config: TBannerConfig;
+      }[];
+    };
+  };
+
   // 预约挂号
   order: {
     /** 科室列表页面 */
@@ -358,19 +369,27 @@ export interface IHosInfo {
 }
 
 export type TBannerConfigBase = {
-  src: `http${string}`;
+  src?: `http${string}`;
   /** 会添加到path 后面的 query 里面 */
   extraData?: BaseObject;
   /** h5 跳转完整路径 其他跳转 如 home/my */
   path: string;
   /** 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....) */
   isSelfH5?: '1';
-  /**  固定的附加参数(动态值) 键值为新的键名 */
+  /**  固定的附加参数(动态值) 键名为查找域中的值 键值为新的键名 */
   addition?: {
+    // 传入保证需要登录
     token?: string;
+
+    // 传入保证需要就诊人
     patientId?: string;
     cardNumber?: string;
+
+    // 传入保证需要完善
     herenId?: string;
+
+    // useTBanner 传入 additionData (配合业务手动注入 additionData)
+    [key: string]: any;
   };
 };
 

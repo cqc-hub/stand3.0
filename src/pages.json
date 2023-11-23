@@ -14,18 +14,21 @@
         // #endif
       }
     },
+
     {
       "path": "pages/login/h5",
       "style": {
         "navigationBarTitleText": "登录"
       }
     },
+
     {
       "path": "pages/home/my",
       "style": {
         "navigationBarTitleText": "我的"
       }
     },
+
     {
       "path": "pages/home/accountInfo",
       "style": {
@@ -36,6 +39,7 @@
         "herenId": true
       }
     },
+
     {
       "path": "pages/home/startCome",
       "style": {
@@ -50,6 +54,7 @@
         "backgroundColor": "#e43130"
       }
     },
+
     {
       "path": "pages/piniaTest/piniaTest",
       "style": {
@@ -68,12 +73,14 @@
             "navigationBarTitleText": "医生名片"
           }
         },
+
         {
           "path": "MyRegistration/DoctorDetailsComment",
           "style": {
             "navigationBarTitleText": "全部评论"
           }
         },
+
         {
           "path": "hospitalCare/hospitalCare",
           "style": {
@@ -84,6 +91,7 @@
             "patient": true
           }
         },
+
         {
           "path": "hospitalCare/payRecord",
           "style": {
@@ -91,12 +99,14 @@
             "enablePullDownRefresh": true
           }
         },
+
         {
           "path": "hospitalCare/paymentPage",
           "style": {
             "navigationBarTitleText": "预交费用"
           }
         },
+
         {
           "path": "hospitalCare/choosePatient",
           "style": {
@@ -106,18 +116,21 @@
             "patient": true
           }
         },
+
         {
           "path": "hospitalCare/choosePatientInfo",
           "style": {
             "navigationBarTitleText": "预交金代缴"
           }
         },
+
         {
           "path": "hospitalCare/listExpenses",
           "style": {
             "navigationBarTitleText": "住院服务"
           }
         },
+
         {
           "path": "MyRegistration/MyRegistration",
           "style": {
@@ -125,6 +138,7 @@
             "enablePullDownRefresh": true
           }
         },
+
         {
           "path": "MyRegistration/RegComment",
           "style": {
@@ -277,6 +291,7 @@
             }
           }
         },
+
         {
           "path": "medicalCardMan/easyAssociate",
           "extend": {
@@ -291,6 +306,7 @@
             }
           }
         },
+
         {
           "path": "medicalCardMan/ocrUser",
           "extend": {
@@ -384,6 +400,13 @@
       "root": "pagesB",
       "pages": [
         {
+          "path": "menus/index",
+          "style": {
+            "navigationBarTitleText": "选择功能"
+          }
+        },
+
+        {
           "path": "medicationAssistant/medicalHelp",
           "style": {
             "navigationBarTitleText": "药品配送"
@@ -392,12 +415,14 @@
             "patient": true
           }
         },
+
         {
           "path": "medicationAssistant/medicalHelpDetail",
           "style": {
             "navigationBarTitleText": "门诊处方"
           }
         },
+
         {
           "path": "reportQuery/reportQuery",
           "style": {
@@ -407,18 +432,21 @@
             "patient": true
           }
         },
+
         {
           "path": "reportQuery/inspectionReport",
           "style": {
             "navigationBarTitleText": "检查报告"
           }
         },
+
         {
           "path": "reportQuery/InspectionDetails",
           "style": {
             "navigationBarTitleText": "检验报告"
           }
         },
+
         {
           "path": "reportQuery/medicalDetails",
           "style": {
@@ -505,12 +533,14 @@
             "navigationBarTitleText": "院内账户"
           }
         },
+
         {
           "path": "convenienceService/convenienceService",
           "style": {
             "navigationBarTitleText": "便民服务"
           }
         },
+
         {
           "path": "convenienceService/confirmOrder",
           "extend": {
@@ -520,12 +550,14 @@
             "navigationBarTitleText": "确认信息"
           }
         },
+
         {
           "path": "hrvideo/index",
           "style": {
             "navigationBarTitleText": " "
           }
         },
+
         {
           "path": "medRecordApply/_recordApplyDetail",
           "extend": {
@@ -535,6 +567,7 @@
             "navigationBarTitleText": "病案复印详情"
           }
         },
+
         {
           "path": "medRecordApply/_recordApply",
           "extend": {
@@ -544,6 +577,7 @@
             "navigationBarTitleText": "申请记录"
           }
         },
+
         {
           "path": "medRecordApply/recordApply",
           "extend": {
@@ -553,6 +587,7 @@
             "navigationBarTitleText": "选择住院记录"
           }
         },
+
         {
           "path": "queueNumber/queueNumber",
           "extend": {
@@ -562,24 +597,28 @@
             "navigationBarTitleText": "排队叫号"
           }
         },
+
         {
           "path": "cloudHospital/myPath",
           "style": {
             "navigationBarTitleText": "跳转中..."
           }
         },
+
         {
           "path": "cloudHospital/cloudHospital",
           "style": {
             "navigationBarTitleText": "网络门诊"
           }
         },
+
         {
           "path": "cloudHospital/cachePage",
           "style": {
             "navigationBarTitleText": "网络门诊"
           }
         },
+
         {
           "path": "shippingAddress/addressList",
           "extend": {
@@ -589,18 +628,21 @@
             "navigationBarTitleText": "收货地址"
           }
         },
+
         {
           "path": "shippingAddress/patientAddress",
           "style": {
             "navigationBarTitleText": "就诊人地址"
           }
         },
+
         {
           "path": "shippingAddress/addAddress",
           "style": {
             "navigationBarTitleText": "新增收货地址"
           }
         },
+
         {
           "path": "selfService/nucleicBilling",
           "extend": {

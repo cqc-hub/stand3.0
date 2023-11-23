@@ -115,6 +115,7 @@
       patientId,
       hosId,
     };
+    lists.value = <any>[];
 
     const { result } = await api
       .getHospitalAccountDetail<IHospitalAccountDetail>(arg)

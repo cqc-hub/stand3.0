@@ -121,7 +121,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
 export const useTBanner = async (
   config: Omit<TBannerConfig, 'src'>,
-  routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo'
+  routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
+  additionData: BaseObject = {}
 ) => {
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
@@ -142,30 +143,41 @@ export const useTBanner = async (
     const { token, patientId, herenId, cardNumber } = addition;
 
     if (patientId) {
-      extraData[patientId] = gStores.userStore.patChoose.patientId;
-      _d._patientId = gStores.userStore.patChoose.patientId;
       isPatient = true;
     }
 
     if (cardNumber) {
-      extraData[cardNumber] = gStores.userStore.patChoose.cardNumber;
       isPatient = true;
     }
 
     if (token) {
-      extraData[token] = gStores.globalStore.getToken;
       isLogin = true;
     }
 
     if (herenId) {
       isLogin = true;
-      extraData[herenId] = gStores.globalStore.herenId;
-      _d._herenId = gStores.globalStore.herenId;
     }
 
-    _d._herenId = gStores.globalStore.herenId;
-    _d.herenId = gStores.globalStore.herenId;
-    extraData.token = gStores.globalStore.getToken;
+    if (type !== 'self') {
+      _d._herenId = gStores.globalStore.herenId;
+      _d.herenId = gStores.globalStore.herenId;
+      _d._patientId = gStores.userStore.patChoose.patientId;
+
+      patientId &&
+        (extraData[patientId] = gStores.userStore.patChoose.patientId);
+      cardNumber &&
+        (extraData[cardNumber] = gStores.userStore.patChoose.cardNumber);
+      token && (extraData[token] = gStores.globalStore.getToken);
+
+      herenId && (extraData[herenId] = gStores.globalStore.herenId);
+      extraData.token = gStores.globalStore.getToken;
+    }
+
+    for (const key in addition) {
+      if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
+        extraData[addition[key]] = additionData[key];
+      }
+    }
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
@@ -187,7 +199,7 @@ export const useTBanner = async (
       let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode } = gStores.globalStore;
 
-      if (config.isLocal) {
+      if ((await getMiniProgramEnv()) === 'develop') {
         baseUrl = localUrl;
       }
 
@@ -505,7 +517,7 @@ export class ServerStaticData {
       //REPORT_QUERY_CONFIG报告查询 药品配送 DRUG_DELIVERY_CONFIG
       const { result } = await api.getParamsMoreBySysCode({
         paramCode:
-          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG,SELF_BILLING,Electronic_Consultation_Sheet,FAMOUS_DOCTOR_DEPT',
+          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG,SELF_BILLING,Electronic_Consultation_Sheet,FAMOUS_DOCTOR_DEPT,BusinessMenu',
       });
 
       try {
@@ -525,6 +537,7 @@ export class ServerStaticData {
         const Electronic_Consultation_Sheet = JSON.parse(
           result.Electronic_Consultation_Sheet || '{}'
         );
+        const BusinessMenu = JSON.parse(result.BusinessMenu || '{}');
 
         systemConfig = <ISystemConfig>{
           person,
@@ -537,6 +550,7 @@ export class ServerStaticData {
           selfBilling,
           Electronic_Consultation_Sheet,
           FAMOUS_DOCTOR_DEPT,
+          BusinessMenu,
         };
 
         for (const key in systemConfig) {
