@@ -20,9 +20,12 @@
 
           <view class="user-info">
             <text class="user-info-name">
-              {{ hosInfoResObj.patientNameDes }}
+              {{ isNameEncry ? hosInfoResObj.patientNameDes : hosInfoResObj.patientName }}
             </text>
             <text class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
+            <text @click="eyesClick" class="iconfont eyes-icon color-888">
+              {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
+            </text>
           </view>
         </view>
         <view class="user-del yard">
@@ -111,6 +114,7 @@
   }>();
   const gStores = new GStores();
   const isLoad = ref(false);
+  const isNameEncry = ref(true);
   const loadImg = () => {
     isLoad.value = true;
   };
@@ -122,6 +126,11 @@
       url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
     });
   };
+
+  const eyesClick = () => {
+    isNameEncry.value = !isNameEncry.value;
+  };
+
   const toPayPage = () => {
     const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
     const args = {
@@ -242,6 +251,12 @@
         opacity: 0.05;
       }
     }
+
+    .eyes-icon {
+        font-size: var(--hr-font-size-xxl);
+        position: relative;
+        top: 5rpx;
+      }
   }
   .card-detail {
     background-color: #fff;
@@ -314,4 +329,5 @@
       margin-top: 28rpx;
     }
   }
+
 </style>
