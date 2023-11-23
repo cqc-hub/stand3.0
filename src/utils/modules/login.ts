@@ -7,11 +7,11 @@ import {
   isAreaProgram,
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
-import { apiAsync } from './utils';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
+import { apiAsync } from '@/utils';
 
 export enum LoginType {
   // 微信腾讯健康
@@ -842,7 +842,14 @@ export class PatientUtils extends LoginUtils {
         await this.addRelevantPatient({
           ...payload,
           _type: 'perfect',
-        }).catch((err) => {
+        }).catch(async (err) => {
+          const errMsg = err?.message || '';
+
+          await apiAsync(uni.showModal, {
+            content: errMsg + '系统将为您注册账号，但不进行绑定就诊人！',
+            showCancel: false,
+          });
+
           return Promise.reject({
             err,
             errorType: 'add',
@@ -875,7 +882,10 @@ export class PatientUtils extends LoginUtils {
   ) {
     getH5OpenidParam(data);
     if (data._type === 'perfect') {
-      return await api.addPatByHasBeenTreatedEncry({ ...data, patientType: '' });
+      return await api.addPatByHasBeenTreatedEncry({
+        ...data,
+        patientType: '',
+      });
     } else {
       return await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
     }
