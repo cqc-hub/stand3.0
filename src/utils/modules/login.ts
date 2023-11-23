@@ -843,7 +843,7 @@ export class PatientUtils extends LoginUtils {
           ...payload,
           _type: 'perfect',
         }).catch(async (err) => {
-          const errMsg = err?.message || '';
+          const errMsg = err?.message || '新增就诊人失败';
 
           await apiAsync(uni.showModal, {
             content: errMsg + '; 系统将为您注册账号，但不进行绑定就诊人！',

@@ -133,7 +133,6 @@
     } = await api.bloodTestSignIn({
       ...pageProps.value,
       ...locationInfo.value,
-      signType: '1',
       patientId,
     });
 
