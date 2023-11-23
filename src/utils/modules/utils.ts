@@ -35,7 +35,7 @@ export const apiAsync: <
 >(
   api: T,
   opt: TFirstParams<Parameters<T>>,
-  ...otherOpts
+  ...otherOpts: Parameters<T> extends [infer P, ...infer K] ? K : any[]
 ) => Promise<
   NeverTurnsAny<
     IsAny<T> extends true ? any : Parameters<Parameters<T>[0]['success']>[0]
