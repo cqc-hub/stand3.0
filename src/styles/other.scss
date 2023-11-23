@@ -11,6 +11,14 @@
   animation-duration: .6s;
 }
 
+.w100 {
+  width: 100% !important;
+}
+
+.h100 {
+  width: 100% !important;
+}
+
 .text-ellipsis {
   @include text-overflow(1);
 }

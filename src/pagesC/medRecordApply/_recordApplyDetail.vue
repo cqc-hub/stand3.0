@@ -742,10 +742,6 @@
     }
   }
 
-  .w100 {
-    width: 100% !important;
-  }
-
   ._name {
     font-size: var(--hr-font-size-xs);
   }

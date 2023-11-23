@@ -9,6 +9,7 @@
     <view class="tabbar-container">
       <view v-for="(item, i) in tabBars" :key="i" class="tabbar-item">
         <g-login
+          class="w100p h100p"
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
