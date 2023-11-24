@@ -312,10 +312,12 @@ export class RegDetailUtil {
   /** 请求内部数据库 */
   async getDetailDataClassic(): Promise<IRegInfo> {
     const { orderId } = this.prop.value;
+
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: this.gStores.globalStore.browser.source,
     });
+
 
     return result;
   }
