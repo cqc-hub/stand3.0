@@ -993,8 +993,8 @@ export const usePayPage = () => {
    * @returns boolean
    */
 
-  const getIsDigitalPay = () => {
-    const { payList } = pageConfig.value;
+  const getIsDigitalPay = (data) => {
+    const { payList } = data;
     if (payList) {
       const { alipay, wx } = payList!;
 
@@ -1052,7 +1052,7 @@ export const usePayPage = () => {
 
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
-    const isDigitalPay = getIsDigitalPay();
+    const isDigitalPay = getIsDigitalPay(pageConfig.value);
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
@@ -1202,7 +1202,8 @@ export const usePayPage = () => {
         // #endif
       }
     } else if (item.key === 'digital') {
-      toDigitalPay();
+     let payArg = await payBeforeCreateData();
+      getDigitalPay(pageConfig.value.payList!,'/pagesA/clinicPay/clinicPayDetail?tabIndex=1',payArg)
     }
   };
 
@@ -1260,9 +1261,9 @@ export const usePayPage = () => {
     uni.hideLoading();
   };
 
-  /** 数字人民币支付 */
-  const toDigitalPay = async () => {
-    const { alipay, wx } = pageConfig.value.payList!;
+  // /** 数字人民币支付 */
+  const getDigitalPay = async (configData,returnUrl,payArg) => {
+    const { alipay, wx } =configData;
     let _businessType = '';
     let _channel = '';
     // #ifdef MP-ALIPAY
@@ -1280,14 +1281,12 @@ export const usePayPage = () => {
       _channel = channel;
     }
     // #endif
-
-    let payArg = await payBeforeCreateData();
     const payArgNew: BaseObject = {
       ...payArg,
       channel: _channel,
       businessType: _businessType,
-      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
-        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1'
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/common/rmbNumber?pageUrl=${encodeURIComponent(
+        returnUrl
       )}`,
     };
 
@@ -1298,7 +1297,7 @@ export const usePayPage = () => {
         invokeData.payUrl!
       )}`,
     });
-  };
+  }; 
 
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
@@ -1628,6 +1627,8 @@ export const usePayPage = () => {
     isWaitPayListHidePrice,
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
+    getDigitalPay,
+    getIsDigitalPay
   };
 };
 

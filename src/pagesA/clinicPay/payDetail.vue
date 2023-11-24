@@ -315,6 +315,7 @@
     changeRefPayList,
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
+    getDigitalPay
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -575,7 +576,6 @@
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
           // payAliMedicalNation();
-          console.log('33333');
 
         } else {
           payMoneyMedicalPlugin();
@@ -587,7 +587,8 @@
         // #endif
       }
     } else if (item.key === 'digital') {
-      toDigitalPay();
+      let payArg = await payBeforeCreateData();
+      getDigitalPay(pageConfig.value.payList!,'/pagesA/clinicPay/clinicPayDetail?tabIndex=1',payArg)
     }
   };
 
@@ -790,45 +791,7 @@
 
     await toPayPull(res, '门诊缴费');
     payAfter();
-  };
-
-  /** 数字人民币支付 */
-  const toDigitalPay = async () => {
-    const { alipay, wx } = pageConfig.value.payList!;
-    let _businessType = '';
-    let _channel = '';
-    // #ifdef MP-ALIPAY
-    if (alipay) {
-      const { businessType, channel } = alipay;
-      _businessType = businessType;
-      _channel = channel;
-    }
-    // #endif
-
-    // #ifdef  MP-WEIXIN
-    if (wx) {
-      const { businessType, channel } = wx;
-      _businessType = businessType;
-      _channel = channel;
-    }
-    // #endif
-    let payArg = await payBeforeCreateData();
-    const res = await payMoneyOnline({
-      ...payArg,
-      channel: _channel,
-      businessType: _businessType,
-      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
-        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1'
-      )}`,
-    });
-
-    const { invokeData } = res;
-    uni.navigateTo({
-      url: `/pagesA/webView/webView?https=${encodeURIComponent(
-        invokeData.payUrl!
-      )}`,
-    });
-  };
+  }; 
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;

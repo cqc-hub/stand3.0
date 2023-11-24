@@ -65,11 +65,18 @@
   import { ref, computed } from 'vue';
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
+  import { usePayPage } from './../clinicPay/utils/clinicPayDetail';
+
   import api from '@/service/api';
   import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { payOrderResult } from './utils/inpatientInfo';
+  
+  const {
+    getIsDigitalPay,
+    getDigitalPay
+  } = usePayPage();
 
   type IPageProps = {
     hosId: string;
@@ -112,39 +119,7 @@
   });
   const checkMoney = (item) => {
     defalutMoney.value = String(item);
-  };
-    /**
- * 是否开启数字人民币支付
- * @returns boolean
- */
-
- const getIsDigitalPay = () =>{
-    const { payList } = resultHos.value
-    if(payList){
-        const { alipay, wx } = payList!;
-
-        // #ifdef MP-ALIPAY
-        if (alipay) {
-          const { digital } = alipay;
-
-          if (digital) {
-            return true;
-          }
-        }
-        // #endif
-
-        // #ifdef  MP-WEIXIN
-        if (wx) {
-          const { digital } = wx;
-
-          if (digital) {
-            return true;
-          }
-        }
-        // #endif
-      }
-    return false;
-}
+  }; 
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
     // 自费
@@ -156,7 +131,7 @@
   };
 
   const getPay = async () => {
-    const isDigitalPay= getIsDigitalPay();
+    const isDigitalPay= getIsDigitalPay(resultHos.value);
 
    if(isDigitalPay){
     let labelPay = '自费支付'
@@ -234,48 +209,14 @@
 
   /** 数字人民币支付 */
   const toDigitalPay = async ()=>{
-
-    const {alipay, wx } = resultHos.value.payList!;
-    let _businessType = '';
-    let _channel = '';
-      // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { businessType,channel } = alipay;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
-  
-      // #ifdef  MP-WEIXIN
-      if (wx) {
-        const { businessType,channel } = wx;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
+    
     //区分下 代缴 住院 门诊充值的回调地址
     let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
     if(pageProps.value.type == '1' || pageProps.value.hosId){
       _returnUrl = '/pages/home/home'
     } 
-
     const payArg = await payBeforeCreateData()
-    const res = await payMoneyOnline({
-      ...payArg, 
-      businessType: _businessType,
-      channel:_channel,
-      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
-              _returnUrl
-              )}`,
-    });
-    const { invokeData } = res;
-    uni.navigateTo({
-      url: `/pagesA/webView/webView?https=${encodeURIComponent(
-        invokeData.payUrl!
-      )}`,
-    }); 
-    // payAfter();
- 
+    getDigitalPay(resultHos.value.payList!,_returnUrl,payArg)
   }
   
   const setData = async () => {
