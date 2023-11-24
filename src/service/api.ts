@@ -176,9 +176,9 @@ const queryApi = {
     }),
 
   // 医保授权
-  medicalCostInfoUpload: <T>(data) =>
+  medicalCostInfoUpload: <T>(data, hideLoading = false) =>
     service.post<T>('/phs-query/medical/medicalCostInfoUpload', parm(data), {
-      hideLoading: false,
+      hideLoading,
     }),
 
   // 待缴费

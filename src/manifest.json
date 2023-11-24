@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,14 +70,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -89,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"
