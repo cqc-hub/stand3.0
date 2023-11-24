@@ -441,7 +441,7 @@ export const medicalNationUpload = async (
     authorizeTypeDesc,
   };
 
-  const { result } = await api.medicalCostInfoUpload<any>(requestArg);
+  const { result } = await api.medicalCostInfoUpload<any>(requestArg, true);
 
   return <TMedicalNationUploadRes>result;
 };
