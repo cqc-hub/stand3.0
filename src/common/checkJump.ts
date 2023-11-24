@@ -134,7 +134,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   switch (item.terminalType) {
     case 'h5':
       const obj = {
-        url: '/pagesC/cloudHospital/myPath?type=1&path=' + decodeURIComponent(item.path),
+        url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(item.path),
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
