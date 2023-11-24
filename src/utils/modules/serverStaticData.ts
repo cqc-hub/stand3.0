@@ -3,6 +3,7 @@ import {
   setLocalStorage,
   joinQueryForUrl,
   insertsObject,
+  joinQuery,
 } from '@/common';
 import { ISelectOptions } from '@/components/g-form';
 import { GStores } from './login';
@@ -225,20 +226,20 @@ export const useTBanner = async (
     });
     // #endif
   } else if (type === 'self') {
-    let url;
+    let url = `/${fullUrl}`;
     if (fullUrl.indexOf('plugin') > -1) {
       // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
-    } else {
-      url = `/${fullUrl}`;
     }
     uni[routeType]({
       url,
     });
   } else {
+    delete extraData.token;
+
     uni.navigateToMiniProgram({
       appId: appId!,
-      path,
+      path: joinQuery(path, extraData),
       extraData,
     });
   }

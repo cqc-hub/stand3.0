@@ -117,7 +117,7 @@
           <block v-for="btn in getCustomBtns" :key="btn.text">
             <button
               v-if="isShowCustomBtn(item, btn)"
-              @click="useTBanner(btn)"
+              @click="useTBanner(btn, 'navigateTo', item)"
               class="btn btn-round btn-size-small btn-border cancel-btn"
             >
               {{ btn.text }}
