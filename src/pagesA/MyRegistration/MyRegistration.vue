@@ -8,7 +8,6 @@
     <g-flag typeFg="405" isShowFg />
     <g-message />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
-
     <My-Registration-Head
       v-model:isSelStatus="isSelStatus"
       v-model:isSelPatient="isSelPatient"
@@ -247,7 +246,7 @@
   };
 
   const ywzClick = async (item: IRegistrationCardItem) => {
-    const { orderId, hosDeptId } = item;
+    const { orderId, hosDeptId, hosOrderId } = item;
 
     const preConsultation: TButtonConfig = {
       type: 'h5',
