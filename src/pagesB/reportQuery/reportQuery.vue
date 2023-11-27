@@ -121,8 +121,9 @@
     useTBanner,
   } from '@/utils';
   import { joinQueryForUrl } from '@/common';
-  import api from '@/service/api';
   import { deQueryForUrl } from '@/common/utils';
+
+  import api from '@/service/api';
 
   interface IPageProps {
     tabIndex: number;
@@ -194,11 +195,19 @@
     loading.value = true;
     const { result } = await api
       .getReportsReportList<ICms[]>(params)
+      .catch((e) => {
+        slist.value[currentTabValue].loadFail(returnArg);
+
+        throw new Error(e);
+      })
       .finally(async () => {
         loading.value = false;
       });
 
     const willChangeList = pageList.value[typeId];
+    if (page === 1) {
+      willChangeList.length = 0;
+    }
 
     let count = 0;
     let listTotal = [] as any[];
@@ -285,8 +294,6 @@
 
   const refresh = async (e) => {
     const currentTabValue = tabCurrent.value;
-    const tabIdNow = tabs.value[tabCurrent.value].typeId;
-    pageList.value[tabIdNow] = [];
     const returnArg = await load(e);
     slist.value[currentTabValue].refreshSuccess(returnArg, 'refresh');
   };

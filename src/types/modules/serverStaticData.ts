@@ -57,6 +57,8 @@ export interface ISystemConfig_ {
     isOrderPay: '0' | '1';
     // 挂号成功后预问诊?
     isOpenPreConsultation?: '1';
+     /** 挂号预结算 */
+     isOrderPreSettle?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
@@ -213,6 +215,7 @@ export interface ISystemConfig_ {
     payedFooterBtn?: TButtonConfig;
     /** 预结算 */
     isPreSettle?: '1';
+
     /** 是否开启数字人民币支付 */
     payList?: {
       wx?: IPayListObj;

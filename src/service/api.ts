@@ -400,6 +400,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  regPreSettlement: (data: any) =>
+    service.post('/phs-reg/reg/regPreSettlement', parm(data), {
+      hideLoading: false,
+    }),
+
   refundMedicalException: (data: any) =>
     service.post('/phs-reg/reg/refundMedicalException', parm(data), {
       hideLoading: false,

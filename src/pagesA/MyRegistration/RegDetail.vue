@@ -192,7 +192,12 @@
                   <view
                     v-else
                     :class="{
-                      'color-blue': item.key === 'hisResult',
+                      'color-blue': [
+                        'hisResult',
+                        '_fee',
+                        '_hosAccountOffsetFee',
+                        '_totalCost',
+                      ].includes(item.key),
                     }"
                   >
                     {{ value }}
@@ -341,6 +346,7 @@
     RegDetailUtil,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
+
   import {
     usePayPage,
     getIsMedicalMode,
@@ -557,6 +563,32 @@
     );
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
+    if (orderConfig.value.isOrderPreSettle === '1') {
+      console.log(_regInfoTempList, 'cqc');
+      const freeIdx = _regInfoTempList.findIndex((o) => o.key === '_fee');
+      _regInfoTempList.splice(
+        freeIdx,
+        1,
+        ...(<typeof _regInfoTempList>[
+          {
+            label: '挂号金额',
+            field: 'input-text',
+            key: '_totalCost',
+          },
+          {
+            label: '账户抵扣金额',
+            field: 'input-text',
+            key: '_hosAccountOffsetFee',
+          },
+          {
+            label: '自费金额',
+            field: 'input-text',
+            key: '_fee',
+          },
+        ])
+      );
+    }
+
     const result = await regDetailUtil.getDataDetail();
     const hosList = await ServerStaticData.getHosList();
     uni.hideLoading();
@@ -565,10 +597,18 @@
       hosInfo.value = hos;
     }
 
-    const { downTime, qrCode } = result;
+    const { downTime, qrCode, totalCost, hosAccountOffsetFee } = result;
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
+    }
+
+    if (totalCost) {
+      result._totalCost = totalCost + '元';
+    }
+
+    if (hosAccountOffsetFee) {
+      result._hosAccountOffsetFee = hosAccountOffsetFee + '元';
     }
 
     result._appointmentDate = `${result.appointmentDate} ${
@@ -649,7 +689,12 @@
 
     switch (key) {
       case 'online':
-        toPay();
+        // 预结算
+        if (orderConfig.value.isOrderPreSettle === '1') {
+          payPreSettlement();
+        } else {
+          toPay();
+        }
         break;
 
       case 'medicare':
@@ -707,8 +752,31 @@
     });
   };
 
+  /**
+   * 预结算挂号
+   */
+  const payPreSettlement = async () => {
+    const { orderId } = pageProps.value;
+    const { patientId } = gStores.userStore.patChoose;
+    const { source } = gStores.globalStore.browser;
+
+    const {
+      result: { fee, needPay },
+    } = await api.regPreSettlement({
+      orderId,
+      patientId,
+      source,
+    });
+
+    if (needPay) {
+      toPay(fee);
+    } else {
+      init();
+    }
+  };
+
   /** 自费挂号 */
-  const toPay = async () => {
+  const toPay = async (totalFee = orderRegInfo.value.fee) => {
     const {
       herenId,
       browser: { source },
@@ -722,11 +790,11 @@
 
     const { result } = await api.orderPayValid(arg);
     if (result && result.paySign) {
-      const { hosId, fee } = orderRegInfo.value;
+      const { hosId } = orderRegInfo.value;
       payArg.value = {
         phsOrderNo: orderId,
         sign: result.paySign,
-        totalFee: fee,
+        totalFee,
         hosId,
         phsOrderSource: '1',
       };

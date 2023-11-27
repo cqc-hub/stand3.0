@@ -86,10 +86,15 @@ export const patientTempList: TInstance[] = [
 
 export const formatterTemp = (list: TInstance[], modeOld = false) => {
   list.map((o) => {
+    let baseSize = 150;
+
+    if (o.label.length > 4) {
+      baseSize = 210;
+    }
     if (modeOld) {
-      o.labelWidth = '180rpx';
+      o.labelWidth = `${baseSize + 30}rpx`;
     } else {
-      o.labelWidth = '150rpx';
+      o.labelWidth = `${baseSize}rpx`;
     }
     o.showBodyStyle = 'text-align: left;';
     o.labelStyle =
@@ -267,6 +272,10 @@ export interface IRegInfo {
   rateFlag?: 0 | 1;
   _source?: string;
   refundNeedAuth?: '0' | '1'; // 退费(微信国标医保)是否需要拉起授权 0需要 1不需要
+  totalCost: string;
+  hosAccountOffsetFee: string;
+  _totalCost: string;
+  _hosAccountOffsetFee: string;
 }
 
 export const getStatusConfig = (status: OrderStatus) => {
@@ -317,7 +326,6 @@ export class RegDetailUtil {
       orderId,
       source: this.gStores.globalStore.browser.source,
     });
-
 
     return result;
   }

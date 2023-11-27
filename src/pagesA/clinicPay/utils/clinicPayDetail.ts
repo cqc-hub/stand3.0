@@ -153,6 +153,10 @@ export type TPayConfirmPageProp = {
     branchHosp: string; // 院内的院区id
   };
   mzParams?: string;
+
+  // 挂号时候
+  _type?: 'order';
+  orderId?: string;
 };
 
 /** 国标医保明细上传结果 */
@@ -1202,8 +1206,12 @@ export const usePayPage = () => {
         // #endif
       }
     } else if (item.key === 'digital') {
-     let payArg = await payBeforeCreateData();
-      getDigitalPay(pageConfig.value.payList!,'/pagesA/clinicPay/clinicPayDetail?tabIndex=1',payArg)
+      let payArg = await payBeforeCreateData();
+      getDigitalPay(
+        pageConfig.value.payList!,
+        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+        payArg
+      );
     }
   };
 
@@ -1262,8 +1270,8 @@ export const usePayPage = () => {
   };
 
   // /** 数字人民币支付 */
-  const getDigitalPay = async (configData,returnUrl,payArg) => {
-    const { alipay, wx } =configData;
+  const getDigitalPay = async (configData, returnUrl, payArg) => {
+    const { alipay, wx } = configData;
     let _businessType = '';
     let _channel = '';
     // #ifdef MP-ALIPAY
@@ -1297,7 +1305,7 @@ export const usePayPage = () => {
         invokeData.payUrl!
       )}`,
     });
-  }; 
+  };
 
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
@@ -1628,7 +1636,7 @@ export const usePayPage = () => {
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
-    getIsDigitalPay
+    getIsDigitalPay,
   };
 };
 
