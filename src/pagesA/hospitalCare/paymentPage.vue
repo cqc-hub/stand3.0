@@ -72,7 +72,7 @@
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { payOrderResult } from './utils/inpatientInfo';
-  
+
   const {
     getIsDigitalPay,
     getDigitalPay
@@ -119,7 +119,7 @@
   });
   const checkMoney = (item) => {
     defalutMoney.value = String(item);
-  }; 
+  };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
     // 自费
@@ -154,6 +154,10 @@
       ];
     }
 
+    if (defalutMoney.value == '0') {
+      gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000)
+      return
+    }
     await wait(200);
     refPay.value.show();
   };
@@ -209,16 +213,50 @@
 
   /** 数字人民币支付 */
   const toDigitalPay = async ()=>{
-    
+
+    const {alipay, wx } = resultHos.value.payList!;
+    let _businessType = '';
+    let _channel = '';
+      // #ifdef MP-ALIPAY
+      if (alipay) {
+        const { businessType,channel } = alipay;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
+
+      // #ifdef  MP-WEIXIN
+      if (wx) {
+        const { businessType,channel } = wx;
+        _businessType = businessType;
+        _channel = channel;
+      }
+      // #endif
     //区分下 代缴 住院 门诊充值的回调地址
     let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
     if(pageProps.value.type == '1' || pageProps.value.hosId){
       _returnUrl = '/pages/home/home'
-    } 
+    }
+
     const payArg = await payBeforeCreateData()
-    getDigitalPay(resultHos.value.payList!,_returnUrl,payArg)
+    const res = await payMoneyOnline({
+      ...payArg,
+      businessType: _businessType,
+      channel:_channel,
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
+              _returnUrl
+              )}`,
+    });
+    const { invokeData } = res;
+    uni.navigateTo({
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(
+        invokeData.payUrl!
+      )}`,
+    });
+    // payAfter();
+
   }
-  
+
   const setData = async () => {
     isConfigComplete.value = false;
     const result = await ServerStaticData.getSystemConfig(
