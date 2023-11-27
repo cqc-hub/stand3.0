@@ -13,16 +13,19 @@
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
-          <view class="column w100p h100p pt20" @click="changeTab(item)">
-            <image
-              :src="currentPath === item.url ? item.iconActive : item.icon"
-              :class="{
-                animate__rubberBand: animateItem(item) && clickCount % 2 === 0,
-              }"
-              mode="heightFix"
-              class="animate__animated animate__fast"
-            />
-            <text class="label">{{ item.label }}</text>
+          <view class="w100p h100p" @click="changeTab(item)">
+            <view class="pt20 column">
+              <image
+                :src="currentPath === item.url ? item.iconActive : item.icon"
+                :class="{
+                  animate__rubberBand:
+                    animateItem(item) && clickCount % 2 === 0,
+                }"
+                mode="heightFix"
+                class="animate__animated animate__fast"
+              />
+              <text class="label">{{ item.label }}</text>
+            </view>
           </view>
         </g-login>
       </view>

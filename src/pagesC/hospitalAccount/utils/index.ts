@@ -10,3 +10,5 @@ export interface IHospitalAccountDetail {
   }[];
 }
 export interface IAccountWithdrawal {}
+
+export type hospitalPayResult = any[]

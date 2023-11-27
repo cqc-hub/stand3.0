@@ -535,6 +535,16 @@
         },
 
         {
+          "path": "hospitalAccount/record",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "缴费记录"
+          }
+        },
+
+        {
           "path": "convenienceService/convenienceService",
           "style": {
             "navigationBarTitleText": "便民服务"

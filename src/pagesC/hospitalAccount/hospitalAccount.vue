@@ -5,7 +5,16 @@
     <view class="bg">
       <view class="container">
         <view class="p40">
-          <view class="f28 color-888">账户余额(元)</view>
+          <view class="flex-between">
+            <view class="f28 color-888">账户余额(元)</view>
+            <view @click="goRecord" class="record flex-normal">
+              <view class="triangle-left"></view>
+              <view class="records pl12">
+                <text class="text text-no-wrap">查看记录</text>
+                <view class="iconfont right">&#xe66b;</view>
+              </view>
+            </view>
+          </view>
           <view class="f80 g-bolder">{{ lists.accountBalance }}</view>
           <view class="f28 mt24 color-444"></view>
           <text>患者：</text>
@@ -18,7 +27,7 @@
             <text>{{ lists.accountNo }}</text>
           </text>
 
-          <view v-if="lists.cardList && lists.cardList.length">
+          <view v-if="lists.cardList && lists.cardList.length" class="w100p">
             <view v-for="item in lists.cardList" :key="item.cardNo">
               <text>
                 {{ item.cardType }}
@@ -26,7 +35,7 @@
               &nbsp;
               <text style="color: #e6e6e6">|</text>
               &nbsp;
-              {{ item.cardNo }}
+              <text class="g-break-word">{{ item.cardNo }}</text>
             </view>
           </view>
         </view>
@@ -97,6 +106,7 @@
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
   import { type IHospitalAccountDetail } from './utils/index';
+  import { joinQueryForUrl } from '../../common/utils';
   interface IPageProps {
     hosId: string;
     isCash?: any;
@@ -152,6 +162,14 @@
 
   const init = async () => {
     await getListData();
+  };
+
+  const goRecord = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesC/hospitalAccount/record', {
+        ...pageProps.value,
+      }),
+    });
   };
 
   onLoad(async (opt) => {
@@ -270,5 +288,36 @@
     .dt-red {
       color: #ff5040;
     }
+  }
+
+  .records {
+    // width: 152rpx;
+    // height: 48rpx;
+    padding: 6rpx;
+    padding-right: 0;
+    border-radius: 8rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e9f0ff;
+
+    .text {
+      color: #296fff;
+      font-size: var(--hr-font-size-xxxs);
+      font-weight: 600;
+      text-align: center;
+    }
+    .right {
+      font-size: var(--hr-font-size-base);
+      color: #296fff;
+    }
+  }
+  .triangle-left {
+    margin: auto 0;
+    width: 0;
+    height: 2rpx;
+    border-top: 10rpx solid transparent;
+    border-right: 16rpx solid #e9f0ff;
+    border-bottom: 10rpx solid transparent;
   }
 </style>

@@ -193,6 +193,15 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  getClinicPayRecord: <T = any>(data) =>
+    service.post<T>(
+      '/phs-query/hospitalAccount/getClinicPayRecord',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
+
   // 已缴费
   getPrepaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getPrepaidClinicList', parm(data), {

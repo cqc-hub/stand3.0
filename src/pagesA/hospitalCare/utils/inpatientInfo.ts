@@ -168,7 +168,7 @@ export interface subCostList {
 }
 
 export interface IPayListObj {
-  digital: '1'; 
+  digital: '1';
   channel: string;
   businessType: string;
 }
@@ -185,4 +185,6 @@ export interface hosParam {
     wx?: IPayListObj;
     alipay?: IPayListObj;
   };
-} 
+}
+
+
