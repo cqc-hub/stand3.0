@@ -8,7 +8,7 @@
           <view class="flex-between">
             <view class="f28 color-888">账户余额(元)</view>
             <view
-              v-if="pageConfig.isOpenLookRecordBtn !== '1'"
+              v-if="pageConfig.isOpenLookRecordBtn === '1'"
               @click="goRecord"
               class="record flex-normal"
             >
