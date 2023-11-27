@@ -5,16 +5,9 @@
       'system-mode-old': gStores.globalStore.modeOld,
     }"
     class="page f32"
-    v-if="
-      payResList &&
-      payResList.length > 0
-    "
+    v-if="payResList && payResList.length > 0"
   >
-    <view
-      class="progress"
-      v-for="(item, index) in payResList"
-      :key="index"
-    >
+    <view class="progress" v-for="(item, index) in payResList" :key="index">
       <view class="right">
         <view class="stick">
           <view class="time-content">
@@ -73,7 +66,6 @@
     });
 
     payResList.value = result.hospitalPayResultList;
-
   };
 
   const init = async () => {
@@ -87,7 +79,7 @@
     }, 1000);
   });
   onLoad((opt) => {
-    pageProps.value = deQueryForUrl(opt);
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     init();
   });
 </script>
