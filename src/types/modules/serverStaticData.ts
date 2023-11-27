@@ -57,8 +57,8 @@ export interface ISystemConfig_ {
     isOrderPay: '0' | '1';
     // 挂号成功后预问诊?
     isOpenPreConsultation?: '1';
-     /** 挂号预结算 */
-     isOrderPreSettle?: '1';
+    /** 挂号预结算 */
+    isOrderPreSettle?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
@@ -197,6 +197,12 @@ export interface ISystemConfig_ {
       wx?: IPayListObj;
       alipay?: IPayListObj;
     };
+
+    /**
+     * pagesC/hospitalAccount/hospitalAccount
+     * 查看充值及消费记录
+     */
+    isOpenLookRecordBtn?: '1';
   };
 
   // 门诊缴费

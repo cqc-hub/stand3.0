@@ -7,10 +7,14 @@
         <view class="p40">
           <view class="flex-between">
             <view class="f28 color-888">账户余额(元)</view>
-            <view @click="goRecord" class="record flex-normal">
+            <view
+              v-if="pageConfig.isOpenLookRecordBtn !== '1'"
+              @click="goRecord"
+              class="record flex-normal"
+            >
               <view class="triangle-left"></view>
               <view class="records pl12">
-                <text class="text text-no-wrap">查看记录</text>
+                <text class="text text-no-wrap">查看充值及消费记录</text>
                 <view class="iconfont right">&#xe66b;</view>
               </view>
             </view>
@@ -101,7 +105,13 @@
   import { defineComponent, ref } from 'vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
-  import { GStores, debounce, wait, ServerStaticData } from '@/utils';
+  import {
+    GStores,
+    debounce,
+    wait,
+    ServerStaticData,
+    ISystemConfig,
+  } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
@@ -118,6 +128,7 @@
   const confirmFgTitle = ref('');
   const lists = ref({} as IHospitalAccountDetail);
   const regDialogConfirm = ref<any>('');
+  const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
   let getListData = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { hosId } = pageProps.value;
@@ -161,6 +172,7 @@
   accountWithdrawal = debounce(accountWithdrawal, 80);
 
   const init = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
     await getListData();
   };
 
