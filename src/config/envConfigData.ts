@@ -4,7 +4,7 @@
 
 const config = <const>{
   'person.isSmsVerify': '0',
-  'order.isOrderPreSettle': '1',
+  // 'order.isOrderPreSettle': '1',
   'medRecord.0.isCustomPatRecord': '1',
 };
 

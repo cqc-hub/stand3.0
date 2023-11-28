@@ -315,7 +315,7 @@
     changeRefPayList,
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
-    getDigitalPay
+    getDigitalPay,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -492,16 +492,20 @@
     item: TCostList[number];
     index: number;
   }) => {
-    const { serialNo } = item;
+    const { serialNo, clinicId } = item;
     const idx = selList.value.findIndex((o) => o.serialNo === serialNo);
 
     if (idx === -1) {
       const allItem = detailData.value.costList!.filter(
-        (o) => o.serialNo === serialNo
+        (o) => o.serialNo === serialNo || (clinicId && o.clinicId == clinicId)
       );
       selList.value.push(...allItem);
     } else {
       selList.value = selList.value.filter((o) => o.serialNo !== serialNo);
+
+      if (clinicId) {
+        selList.value = selList.value.filter((o) => o.clinicId !== clinicId);
+      }
     }
   };
 
@@ -576,7 +580,6 @@
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
           // payAliMedicalNation();
-
         } else {
           payMoneyMedicalPlugin();
         }
@@ -588,7 +591,11 @@
       }
     } else if (item.key === 'digital') {
       let payArg = await payBeforeCreateData();
-      getDigitalPay(pageConfig.value.payList!,'/pagesA/clinicPay/clinicPayDetail?tabIndex=1',payArg)
+      getDigitalPay(
+        pageConfig.value.payList!,
+        '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+        payArg
+      );
     }
   };
 
@@ -791,7 +798,7 @@
 
     await toPayPull(res, '门诊缴费');
     payAfter();
-  }; 
+  };
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;

@@ -1,43 +1,50 @@
 <template>
-  <!-- 日费用清单 -->
-  <view
-    :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
-    }"
-    class="page f32"
-    v-if="payResList && payResList.length > 0"
-  >
-    <view class="progress" v-for="(item, index) in payResList" :key="index">
-      <view class="right">
-        <view class="stick">
-          <view class="time-content">
-            <text class="iconfont date mr24">&#xe6c6;</text>
-            <text>{{ item.date }}</text>
-          </view>
-        </view>
-        <view class="detail" v-for="(i, j) in item.hospitalPay" :key="j">
-          <view
-            class="details g-border"
-            v-for="(m, n) in i.costListResultList"
-            :key="n"
-          >
-            <view class="detail-item">
-              <text>{{ i.hosName }}</text>
-              <text class="g-nowrap">{{ m.paymentAmount }}元</text>
+  <view class="g-page">
+    <g-choose-pat @choose-pat="getList" />
+
+    <view class="g-container">
+      <view
+        :class="{
+          'system-mode-old': gStores.globalStore.modeOld,
+        }"
+        class="page f32"
+        v-if="payResList && payResList.length > 0"
+      >
+        <view class="progress" v-for="(item, index) in payResList" :key="index">
+          <view class="right">
+            <view class="stick">
+              <view class="time-content">
+                <text class="iconfont date mr24">&#xe6c6;</text>
+                <text>{{ item.date }}</text>
+              </view>
             </view>
-            <view class="detail-date">
-              <text>{{ m.payTime }}</text>
-              <text class="lines"></text>
-              <text>{{ m.moneyType }}</text>
+            <view class="detail" v-for="(i, j) in item.hospitalPay" :key="j">
+              <view
+                class="details g-border"
+                v-for="(m, n) in i.costListResultList"
+                :key="n"
+              >
+                <view class="detail-item">
+                  <text>{{ i.hosName }}</text>
+                  <text class="g-nowrap">{{ m.paymentAmount }}元</text>
+                </view>
+                <view class="detail-date">
+                  <text>{{ m.payTime }}</text>
+                  <text class="lines"></text>
+                  <text>{{ m.moneyType }}</text>
+                </view>
+              </view>
             </view>
           </view>
+          <view class="line"></view>
         </view>
       </view>
-      <view class="line"></view>
+      <view class="empty-box" v-else>
+        <g-empty :current="1" />
+      </view>
     </view>
-  </view>
-  <view class="empty-box" v-else>
-    <g-empty :current="1" />
+
+    <g-message />
   </view>
 </template>
 
@@ -60,6 +67,7 @@
   const payResList = ref<hospitalPayResult>([] as hospitalPayResult);
 
   const getList = async () => {
+    payResList.value = [];
     const { result } = await api.getClinicPayRecord({
       patientId: gStores.userStore.patChoose.patientId,
       hosId: pageProps.value.hosId,

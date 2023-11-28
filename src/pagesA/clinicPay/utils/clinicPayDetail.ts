@@ -107,6 +107,7 @@ export type TCostList = {
   subCost: string;
   subCostTypeCode: string;
   subCostTypeName: string;
+  clinicId: string;
   serialNo: string;
   costList: {
     amount: string; // 总数

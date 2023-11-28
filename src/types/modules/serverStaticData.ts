@@ -339,6 +339,9 @@ export interface ISystemConfig_ {
       // 会拼接到path中, 但需要取点击到当前行中存在的数据
       myExtraData: BaseObject;
     };
+
+    // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
+    isItemQrCodeShow?: '1';
   };
 
   /** 手术进度查询 */
