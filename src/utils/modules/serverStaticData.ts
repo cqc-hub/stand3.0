@@ -236,7 +236,6 @@ export const useTBanner = async (
     });
   } else {
     delete extraData.token;
-
     uni.navigateToMiniProgram({
       appId: appId!,
       path: joinQuery(path, extraData),

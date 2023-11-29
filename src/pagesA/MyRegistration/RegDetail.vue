@@ -563,8 +563,8 @@
     );
     let _regInfoTempList = cloneUtil<typeof regInfoTempList>(regInfoTempList);
 
+    // 预结算展示字段和原来有偏差
     if (orderConfig.value.isOrderPreSettle === '1') {
-      console.log(_regInfoTempList, 'cqc');
       const freeIdx = _regInfoTempList.findIndex((o) => o.key === '_fee');
       _regInfoTempList.splice(
         freeIdx,
@@ -576,7 +576,7 @@
             key: '_totalCost',
           },
           {
-            label: '账户抵扣金额',
+            label: '优惠及账户抵扣金额',
             field: 'input-text',
             key: '_hosAccountOffsetFee',
           },

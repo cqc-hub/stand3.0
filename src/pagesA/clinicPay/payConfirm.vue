@@ -41,7 +41,10 @@
             >
               {{ info[item.key] || 0 }}元
             </view>
-            <view v-if="item.value" class="value g-bold color-error">
+            <view
+              v-if="item.value !== undefined"
+              class="value g-bold color-error"
+            >
               {{ item.value || 0 }}元
             </view>
           </view>
@@ -230,7 +233,7 @@
         ...result,
         ...costInfo,
       };
-      for (var key in costInfo) {
+      for (const key in costInfo) {
         details.value.push({
           label: key,
           value: JSON.parse(result.costInfo)[key],
