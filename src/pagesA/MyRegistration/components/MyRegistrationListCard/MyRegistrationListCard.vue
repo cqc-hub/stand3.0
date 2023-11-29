@@ -144,6 +144,7 @@
     showPaiDuiJiaoHaoBtn: string[];
     showReOrderBtn: boolean;
     isShowYuWzBtn: boolean;
+    anotherYwzConditions: boolean;
     showFWBtn: string[];
     systemModeOld?: boolean;
     thRegisterId?: string;
@@ -226,9 +227,13 @@
     return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
   };
 
+  // 最新消息 (濮阳) 仅 "全部挂号" 开放
   const isShowYWZBtn = (item: IRegistrationCardItem) => {
     return (
-      ['0'].includes(item.orderStatus) && props.isShowYuWzBtn && item.orderId
+      ['0'].includes(item.orderStatus) &&
+      props.isShowYuWzBtn &&
+      (item.orderId || item.hosOrderId) &&
+      props.anotherYwzConditions
     );
   };
 

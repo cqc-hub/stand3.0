@@ -29,6 +29,7 @@
           :showFWBtn="showFWBtn"
           :config="orderConfig"
           :thRegisterId="thRegisterId"
+          :anotherYwzConditions="anotherYwzConditions"
           @ywz-click="ywzClick"
         />
       </block>
@@ -185,6 +186,15 @@
     return orderConfig.value.isCanSelOrderStatus === '1';
   });
 
+  const anotherYwzConditions = computed(() => {
+
+    if (isShowFilterOrderStatus.value) {
+      return selOrderStatus.value === '1';
+    } else {
+      return true;
+    }
+  });
+
   const listApi = computed(() => {
     // "全部" 查院内接口
     return selOrderStatus.value === '1'
@@ -246,8 +256,10 @@
   };
 
   const ywzClick = async (item: IRegistrationCardItem) => {
-    const { orderId, hosDeptId, hosOrderId } = item;
-
+    const { orderId, hosDeptId, hosOrderId, hosData } = item;
+    const patientId = isShowFilterOrderStatus.value
+      ? pat.value?.patientId || gStores.userStore.patChoose?.patientId
+      : '';
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',
@@ -256,6 +268,9 @@
       extraData: {
         orderId,
         hosDeptId,
+        hosOrderId,
+        hosData,
+        patientId,
       },
       addition: {
         token: 'token',

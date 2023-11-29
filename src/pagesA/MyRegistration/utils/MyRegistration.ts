@@ -2,6 +2,7 @@ import { orderStatusMap, OrderStatus } from './regDetail';
 
 export type IRegistrationCardItem = {
   sysCode: string;
+  hosData?: string;
   deptName: string;
   ampm: string;
   orderId: string;
