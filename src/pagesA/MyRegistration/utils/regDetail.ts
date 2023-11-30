@@ -87,9 +87,12 @@ export const patientTempList: TInstance[] = [
 export const formatterTemp = (list: TInstance[], modeOld = false) => {
   list.map((o) => {
     let baseSize = 150;
+    const baseBateSize = 10;
 
     if (o.label.length > 4) {
       baseSize = 210;
+
+      baseSize += baseBateSize * o.label.length;
     }
     if (modeOld) {
       o.labelWidth = `${baseSize + 30}rpx`;
