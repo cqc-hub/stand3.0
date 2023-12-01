@@ -14,6 +14,13 @@
           <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
         </view>
       </navigator>
+
+      <navigator url="/pages/home/accountInfo">
+        <view>
+          <text>注销账号</text>
+          <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
+        </view>
+      </navigator>
     </view>
     <view class="footer">浙江和仁科技股份有限公司&copy;技术支持</view>
   </view>
