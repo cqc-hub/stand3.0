@@ -36,6 +36,8 @@ export type TCardPat = {
   cardType: string;
   createTime: string;
   patientName: string;
+  idTypeName: string;
+  idCard: string;
 }
 
 export type FormKey = typeof formKey;

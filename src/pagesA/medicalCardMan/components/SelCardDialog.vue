@@ -46,6 +46,13 @@
                   <text class="color-666">{{ item.cardNumber }}</text>
                 </view>
 
+                <view v-if="item.idCard" class="color-666">
+                  <text class="label mr12">
+                    {{ item.idTypeName || '院内卡号' }}:
+                  </text>
+                  <text class="value g-break-word">{{ item.idCard }}</text>
+                </view>
+
                 <view class="color-666">
                   <text class="label mr12">卡余额:</text>
                   <text class="value">{{ item.cardBalance }}</text>
