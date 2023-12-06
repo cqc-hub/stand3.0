@@ -375,6 +375,8 @@
   });
 
   onLoad(() => {
+    console.log(h5UrlLocal);
+
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,

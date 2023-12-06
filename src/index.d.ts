@@ -6,6 +6,7 @@ declare const wx: any;
 declare const my: any;
 declare const uni: Uni;
 declare const requirePlugin: any;
+declare const h5UrlLocal: string;
 
 declare const __wxConfig: {
   envVersion: 'develop' | 'trial' | 'release';

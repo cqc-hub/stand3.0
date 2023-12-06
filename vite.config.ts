@@ -1,4 +1,7 @@
-import { defineConfig } from 'vite';
+import {
+  defineConfig,
+  loadEnv
+} from 'vite';
 import uni from '@dcloudio/vite-plugin-uni';
 import { resolve } from 'path';
 import h5ProdEffectPlugin from 'uni-vite-plugin-h5-prod-effect';
@@ -22,39 +25,48 @@ for (const devName in interfaces) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [uni(), h5ProdEffectPlugin()],
-  resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: resolve(__dirname, 'src'),
-      },
-    ],
-  },
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, process.cwd());
+  console.log(env);
 
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "@/styles/variable.scss";`,
+  return {
+    plugins: [uni(), h5ProdEffectPlugin()],
+    resolve: {
+      alias: [
+        {
+          find: '@',
+          replacement: resolve(__dirname, 'src'),
+        },
+      ],
+    },
+
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "@/styles/variable.scss";`,
+        },
       },
     },
-  },
 
-  server: {
-    open: true,
-    host: netIp,
-  },
+    server: {
+      open: true,
+      host: netIp,
+    },
 
-  // 按照项目实际地址修改
-  base: '/shaoxin2/',
+    // 按照项目实际地址修改
+    base: '/shaoxin2/',
 
-  // build: {
-  //   minify: 'terser',
-  //   terserOptions: {
-  //     compress: {
-  //       drop_console: true,
-  //     },
-  //   },
-  // },
+    define: {
+      h5UrlLocal: JSON.stringify(`http://${netIp}:8888/#/`),
+    },
+
+    // build: {
+    //   minify: 'terser',
+    //   terserOptions: {
+    //     compress: {
+    //       drop_console: true,
+    //     },
+    //   },
+    // },
+  };
 });

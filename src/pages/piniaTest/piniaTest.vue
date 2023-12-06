@@ -263,9 +263,24 @@
     },
   };
 
+  const 分数问卷: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/question/gradeQuestion',
+    text: '问卷',
+    isLocal: '1',
+    addition: {
+      patientId: '_patientId',
+    },
+    extraData: {
+      category: '22',
+      source
+    }
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(用药查询);
+      useTBanner(分数问卷);
     }, 1000);
   });
 </script>

@@ -1252,7 +1252,7 @@ export const usePayPage = () => {
       },
       authorize,
       {
-        businessType: '1',
+        // businessType: '1',
         cardNumber,
       }
     );

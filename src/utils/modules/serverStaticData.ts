@@ -128,9 +128,6 @@ export const useTBanner = async (
   const { type, extraData = {}, path, appId, addition } = config;
   let [isLogin, isPatient] = [false, false];
 
-  // const localUrl = 'http://localhost:8888/#/';
-  const localUrl = 'http://10.10.117.23:8888/#/';
-
   const _d = {
     _patientId: '',
     _herenId: '',
@@ -201,7 +198,7 @@ export const useTBanner = async (
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        baseUrl = localUrl;
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;

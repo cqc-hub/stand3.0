@@ -10,7 +10,6 @@
     "target": "esnext",
     "useDefineForClassFields": true,
     //目标代码需要使用的模块化方案
-    // "module": "esnext",
     "module": "commonjs",
 
     "moduleResolution": "node",
