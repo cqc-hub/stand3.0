@@ -136,6 +136,7 @@ const getMenuById = (_id: string, _list: any[]) => {
   return result.value;
 };
 
+// 存在回调情况下 跳某个地址(回调优先)
 export const routerJump = async (url?: `/${string}`) => {
   const routerStore = useRouterStore();
 
@@ -244,6 +245,7 @@ export const getTimeStamp = (num?: number) => {
   }
 };
 
+// 获取当前执行环境
 export const getMiniProgramEnv = async function (): Promise<
   '' | 'develop' | 'trial' | 'release'
 > {

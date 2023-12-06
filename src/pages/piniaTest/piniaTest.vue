@@ -7,6 +7,7 @@
 
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
+  import { joinQuery } from '../../common/utils';
 
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
@@ -266,16 +267,18 @@
   const 分数问卷: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    path: 'pagesC/question/gradeQuestion',
-    text: '问卷',
+    path: 'pagesC/choosePat/choosePat',
+    text: '分数问卷',
     isLocal: '1',
     addition: {
       patientId: '_patientId',
     },
     extraData: {
-      category: '22',
-      source
-    }
+      rePath: joinQuery('pagesC/question/gradeQuestion', {
+        category: '22',
+        source,
+      }),
+    },
   };
 
   onMounted(() => {
