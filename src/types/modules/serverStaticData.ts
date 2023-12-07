@@ -349,6 +349,13 @@ export interface ISystemConfig_ {
     // 开启手术订阅 ?
     isOpenSubscribe?: '1';
   };
+
+  /** 杂乱配置 */
+  RestOfConfig: {
+    // 客服中心  pagesA/serviceCenter/serviceCenter
+    // 意见反馈使用自定义的页面?
+    isCustomFeedback?: '1';
+  };
 }
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {

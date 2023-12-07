@@ -19,6 +19,7 @@
 
     <view class="footer" v-if="isShowFooter">
       <button
+        v-if="isWx"
         open-type="contact"
         bindcontact="handleContact"
         class="s-btn g-border-right"
@@ -30,7 +31,12 @@
         </view>
       </button>
 
-      <button open-type="feedback" class="s-btn">
+      <button
+        v-if="isWx || pageConfig.isCustomFeedback === '1'"
+        :open-type="getOpenTypeFeedback"
+        @click="feedbackClick"
+        class="s-btn"
+      >
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6b9;</text>
           <text class="title">意见反馈</text>
@@ -46,24 +52,33 @@
   import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
+  import { ISecondItemService } from './utils/index';
+  import {
+    GStores,
+    type ISystemConfig,
+    ServerStaticData,
+    wait,
+    useTBanner,
+    apiAsync,
+  } from '@/utils';
   import api from '@/service/api';
 
   import serviceList from './components/serviceList.vue';
-  import { ISecondItemService } from './utils/index';
 
   const props = defineProps<{
     subType?: string;
   }>();
+  const gStores = new GStores();
+  const pageConfig = ref(<ISystemConfig['RestOfConfig']>{});
   const subType = props.subType && decodeURIComponent(props.subType!);
   const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
   const isWx = ref(false);
-
   // #ifdef MP-WEIXIN
   isWx.value = true;
   // #endif
 
-  // true 二级
+  // true 二级页面
   const getLv = computed(() => !!props.subType);
   const getRowStyle = computed(() => {
     if (getLv.value) {
@@ -72,12 +87,14 @@
       return 'padding: 28rpx 32rpx 20rpx; color: var(--hr-neutral-color-10); font-size: var(--hr-font-size-xl);';
     }
   });
+
+  const getOpenTypeFeedback = computed(() => {
+    return pageConfig.value.isCustomFeedback === '1' ? '' : 'feedback';
+  });
+
+  // 此页面存在多层, 只在第一层时候展示底部按钮
   const isShowFooter = computed(() => {
-    if (!isWx.value) {
-      return false;
-    } else {
-      return !getLv.value;
-    }
+    return !getLv.value;
   });
 
   onLoad((q) => {
@@ -98,7 +115,12 @@
     list.value = result;
   };
 
+  const getConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('RestOfConfig');
+  };
+
   const init = async () => {
+    await getConfig();
     if (getLv.value) {
       await getSecondList();
     } else {
@@ -135,6 +157,14 @@
           url: '/pagesA/serviceCenter/serviceCenterDetail?id=' + id,
         });
       }
+    }
+  };
+
+  const feedbackClick = () => {
+    if (pageConfig.value.isCustomFeedback === '1') {
+      uni.navigateTo({
+        url: '/pagesC/serviceCenter/serviceComplaint',
+      });
     }
   };
 </script>
