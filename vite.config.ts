@@ -26,8 +26,7 @@ for (const devName in interfaces) {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd());
-  console.log(env);
+  // const env = loadEnv(mode, process.cwd());
 
   return {
     plugins: [uni(), h5ProdEffectPlugin()],
