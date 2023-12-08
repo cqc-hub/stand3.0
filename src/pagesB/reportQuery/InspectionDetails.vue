@@ -21,9 +21,9 @@
               患者信息
               <view class="subhead-detail">
                 <text class="mr12">
-                  {{
-                    isClose ? nameConvert(patName) : patName
-                  }}({{ patCardNumber }})
+                  {{ isClose ? nameConvert(patName) : patName }}({{
+                    patCardNumber
+                  }})
                 </text>
 
                 <text
@@ -358,6 +358,15 @@
       </view>
     </view>
   </g-popup>
+
+  <Hover-Tip
+    :config="pageConfig"
+    :addition="{
+      ...pageProps,
+      ...checkoutReportList,
+    }"
+    type="jy"
+  />
   <g-message />
 </template>
 <script lang="ts" setup>
@@ -372,12 +381,19 @@
     getShareTotalUrl,
     addWatermark,
   } from './utils';
-  import { GStores, nameConvert, wait } from '@/utils';
-  import { joinQuery, encryptDes, getSysCode } from '@/common';
+  import {
+    GStores,
+    nameConvert,
+    wait,
+    ServerStaticData,
+    ISystemConfig,
+  } from '@/utils';
+  import { joinQuery, encryptDes } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
 
   import GreenToast from '@/components/greenPower/greenToast.vue';
+  import HoverTip from './components/HoverTip.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -402,16 +418,20 @@
   };
 
   const gStore = new GStores();
+  const pageConfig = ref(<ISystemConfig['reportQuery']>{});
+
   const pat = gStore.userStore.patChoose;
   const pageProps = ref(<any>{});
   const patName = computed(() => {
-    return checkoutReportList.value.patientName || pat.patientName
-  })
+    return checkoutReportList.value.patientName || pat.patientName;
+  });
   const patCardNumber = computed(() => {
-    return checkoutReportList.value.cardNumber || pat.cardNumber
-  })
+    return checkoutReportList.value.cardNumber || pat.cardNumber;
+  });
 
-  onLoad((p) => {
+  onLoad(async (p) => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);

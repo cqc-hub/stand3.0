@@ -422,8 +422,7 @@
   };
 
   onLoad(async (p) => {
-    const config = await ServerStaticData.getSystemConfig('reportQuery');
-    reportConfig.value = config;
+    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     init();

@@ -1,18 +1,6 @@
 import { type XOR } from '@/typeUtils';
 import { MEDICAL_PHOTOS } from '@/static/staticData';
 
-export type TConfigEnv = 'inWx' | 'inAlipay';
-
-type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['value'];
-
-export interface IMedicalPhotoMode extends IHOptionItem {
-  /** 业务类型1 本人办理，2代成年人办，3代未成年人办理，4代死亡人员办理 */
-  value: string; // 配置必填
-  photos: TMedicalPhotoKey[]; // 存在默认值(可以不配置)
-  require: (TMedicalPhotoKey | string)[]; // 存在默认值
-  children: (IHOptionItem & { url: string })[]; // 程序生成, 不需要配置
-}
-
 /**
  *  未指定说明的 '0' 均为 false '1' true
  */
@@ -286,6 +274,10 @@ export interface ISystemConfig_ {
 
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
     jcListFooterBtn?: TButtonConfig[] | TButtonConfig;
+
+    // 详情里面浮窗引导提示的按钮组
+    jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
+    jcHoverTipBtns?: TButtonConfig[] | TButtonConfig;
   };
 
   /** 药品配送 */
@@ -363,6 +355,18 @@ type TInsertEnv<T extends BaseObject, S extends keyof any> = {
 };
 
 export type ISystemConfig = TInsertEnv<ISystemConfig_, TConfigEnv>;
+
+export type TConfigEnv = 'inWx' | 'inAlipay';
+
+type TMedicalPhotoKey = (typeof MEDICAL_PHOTOS)[number]['value'];
+
+export interface IMedicalPhotoMode extends IHOptionItem {
+  /** 业务类型1 本人办理，2代成年人办，3代未成年人办理，4代死亡人员办理 */
+  value: string; // 配置必填
+  photos: TMedicalPhotoKey[]; // 存在默认值(可以不配置)
+  require: (TMedicalPhotoKey | string)[]; // 存在默认值
+  children: (IHOptionItem & { url: string })[]; // 程序生成, 不需要配置
+}
 
 export interface IHosInfo {
   address: string;
