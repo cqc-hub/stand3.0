@@ -601,6 +601,7 @@ export const cacheUtil = new (class {
   wakeMap = new WeakMap();
 
   /**
+   *  获取系统参数
    *
    * @example
    * const res = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')()
