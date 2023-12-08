@@ -110,6 +110,10 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
         useToPath(item, payload);
       });
     }
+  } else { 
+      checkGrid(item).then(async () => { 
+        useToPath(item, payload);
+      });
   }
 };
 
