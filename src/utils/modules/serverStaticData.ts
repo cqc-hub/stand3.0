@@ -10,8 +10,8 @@ import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
-import { assignType } from '@/typeUtils';
-import { getMiniProgramEnv } from '@/utils';
+import { assignType, Split, Merge } from '@/typeUtils';
+import { getMiniProgramEnv, wait } from '@/utils';
 import envConfigData from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -549,7 +549,7 @@ export class ServerStaticData {
           Electronic_Consultation_Sheet,
           FAMOUS_DOCTOR_DEPT,
           BusinessMenu,
-          RestOfConfig
+          RestOfConfig,
         };
 
         for (const key in systemConfig) {
@@ -596,3 +596,57 @@ export class ServerStaticData {
 }
 
 export const getSystemConfig = ServerStaticData.getSystemConfig;
+
+export const cacheUtil = new (class {
+  wakeMap = new WeakMap();
+
+  /**
+   *
+   * @example
+   * const res = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')()
+   * const res1 = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')<{ Config_Key: any }>()
+   */
+  getSystemConfig<T extends string = string>(paramCode: T) {
+    return async <
+      R extends Partial<Record<Split<T, ','>[number], any>> = Partial<
+        Record<Split<T, ','>[number], any>
+      >
+    >(): Promise<
+      Required<Merge<Record<Split<T, ','>[number], BaseObject>, R>>
+    > => {
+      const paramCodeArr = paramCode.split(',');
+
+      const map: BaseObject = this.wakeMap.get(this.getSystemConfig) || {};
+
+      if (!this.wakeMap.has(this.getSystemConfig)) {
+        this.wakeMap.set(this.getSystemConfig, map);
+      }
+
+      const unRequestParamCode = paramCodeArr.reduce((p, v) => {
+        return map[v] === undefined ? p + v + ',' : p;
+      }, '');
+
+      if (unRequestParamCode) {
+        const { result } = await api.getParamsMoreBySysCode({
+          paramCode: unRequestParamCode.slice(0, -1),
+        });
+
+        for (const key in result) {
+          try {
+            const v = JSON.parse(result[key] || '{}');
+            map[key] = v;
+          } catch (error: any) {
+            throw new Error('序列化错误: ' + key);
+          }
+        }
+      }
+
+      return paramCodeArr
+        .filter((k) => k)
+        .reduce<any>((p, key) => {
+          p[key] = map[key];
+          return p;
+        }, {});
+    };
+  }
+})();
