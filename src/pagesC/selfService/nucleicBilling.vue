@@ -148,7 +148,7 @@
     let billingType = props.type ? props.type : props.isPay === '1' ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
     await api
       .getItemList({
-        billingType: billingType,
+        billingType,
         hosId: props.hosId,
       })
       .then(({ result }) => {
