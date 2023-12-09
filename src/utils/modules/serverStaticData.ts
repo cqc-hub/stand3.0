@@ -634,8 +634,7 @@ export const cacheUtil = new (class {
 
         for (const key in result) {
           try {
-            const v = JSON.parse(result[key] || '{}');
-            map[key] = v;
+            map[key] = JSON.parse(result[key] || '{}');
           } catch (error: any) {
             throw new Error('序列化错误: ' + key);
           }
