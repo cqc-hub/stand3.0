@@ -31,6 +31,7 @@ export const formKey = <const>{
 };
 
 export type TCardPat = {
+  inHospitalId: string;
   cardBalance: string;
   cardNumber: string;
   cardType: string;

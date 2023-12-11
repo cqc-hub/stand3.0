@@ -25,43 +25,51 @@
                 'item-active': item.cardNumber === activeCardNumber,
               }"
               @click="itemClick(item)"
-              class="item flex-normal g-border mb16 p40 pr24"
+              class="item g-border mb16 p40 pr24"
             >
-              <view class="mr30">
-                <view
-                  :class="{
-                    'is-check': item.cardNumber === activeCardNumber,
-                  }"
-                  class="iconfont check-box f48"
-                >
-                  {{
-                    (item.cardNumber === activeCardNumber && '&#xe6e6;') ||
-                    '&#xe6ce;'
-                  }}
+              <view class="flex-normal mb12">
+                <view class="mr30">
+                  <view
+                    :class="{
+                      'is-check': item.cardNumber === activeCardNumber,
+                    }"
+                    class="iconfont check-box f48"
+                  >
+                    {{
+                      (item.cardNumber === activeCardNumber && '&#xe6e6;') ||
+                      '&#xe6ce;'
+                    }}
+                  </view>
+                </view>
+
+                <view class="flex1">
+                  <view class="g-break-word g-bold">
+                    <text class="f36 mr32">{{ item.patientName }}</text>
+                    <text class="color-666">{{ item.cardNumber }}</text>
+                  </view>
                 </view>
               </view>
-              <view class="flex1">
-                <view class="g-break-word g-bold">
-                  <text class="f36 mr32">{{ item.patientName }}</text>
-                  <text class="color-666">{{ item.cardNumber }}</text>
-                </view>
 
-                <view v-if="item.idCard" class="color-666">
-                  <text class="label mr12">
-                    {{ item.idTypeName || '院内卡号' }}:
-                  </text>
-                  <text class="value g-break-word">{{ item.idCard }}</text>
-                </view>
+              <view v-if="item.idCard" class="color-666">
+                <text class="label mr12">
+                  {{ item.idTypeName || '院内卡号' }}:
+                </text>
+                <text class="value g-break-word">{{ item.idCard }}</text>
+              </view>
 
-                <view class="color-666">
-                  <text class="label mr12">卡余额:</text>
-                  <text class="value">{{ item.cardBalance }}</text>
-                </view>
+              <view v-if="item.inHospitalId" class="color-666">
+                <text class="label mr12">住院号</text>
+                <text class="value g-break-word">{{ item.inHospitalId }}</text>
+              </view>
 
-                <view class="color-666">
-                  <text class="label mr12">建卡日期:</text>
-                  <text class="value">{{ item.createTime }}</text>
-                </view>
+              <view class="color-666">
+                <text class="label mr12">卡余额:</text>
+                <text class="value">{{ item.cardBalance }}</text>
+              </view>
+
+              <view class="color-666">
+                <text class="label mr12">建卡日期:</text>
+                <text class="value">{{ item.createTime }}</text>
               </view>
             </view>
           </view>
