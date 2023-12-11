@@ -58,7 +58,7 @@
               </view>
 
               <view v-if="item.inHospitalId" class="color-666">
-                <text class="label mr12">住院号</text>
+                <text class="label mr12">住院号:</text>
                 <text class="value g-break-word">{{ item.inHospitalId }}</text>
               </view>
 
