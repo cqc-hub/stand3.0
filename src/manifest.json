@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxe26143481567cb97",
+    "appid": "wxe09a59ebf1a15c3b",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,22 +70,8 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003167601013"
-      }
-    },
-    "mergeVirtualHostAttributes": true,
-    "appid": "2021002139602458"
+    "plugins": {},
+    "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
     "usingComponents": true
@@ -97,7 +83,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州市第一人民医院",
+  "name": "大医二院普湾院区",
   "h5": {
     "router": {
       "base": "./"
