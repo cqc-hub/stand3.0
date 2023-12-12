@@ -93,7 +93,9 @@ const interceptorRoute = async function (item: any) {
   if (query) {
     try {
       query = JSON.parse(query);
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
 
     if (query?._type === 'useTBanner') {
       useTBanner(query);
@@ -104,7 +106,6 @@ const interceptorRoute = async function (item: any) {
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = async (item, payload: IPayLoad = {}) => {
-  console.log(item);
   await interceptorRoute(item);
 
   //拦截判断
