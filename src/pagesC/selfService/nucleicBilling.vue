@@ -2,6 +2,16 @@
   <view class="g-page">
     <g-flag typeFg="801" isShowFg />
     <g-choose-pat />
+    <view v-if="tabs.length" class="g-border-bottom">
+      <g-tabs
+        v-model:value="tabCurrent"
+        :tabs="tabs"
+        :scroll="false"
+        @change="initConfig"
+        field="label"
+        style="width: 100%"
+      />
+    </view>
     <scroll-view
       v-if="pageLoading && NucleResult && NucleResult.length > 0"
       class="g-container box"
@@ -77,7 +87,7 @@
 
 <script setup lang="ts">
   import api from '@/service/api';
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
@@ -108,12 +118,19 @@
     type: number;
   }>();
   const pageConfig = ref(<ISystemConfig['selfBilling']>{});
+  const tabs = computed(() => {
+    return pageConfig.value.tabs || [];
+  });
+
+  const tabCurrent = ref(0);
 
   const NucleResult = ref<INucle[]>([]);
   const gStores = new GStores();
   const pageLoading = ref(false);
   const currentIndex = ref(0);
   const isSubBtnDisabled = ref(false);
+
+  const tabChange = () => {};
 
   onLoad(async (opt) => {
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
@@ -146,6 +163,12 @@
   const initConfig = async () => {
     pageLoading.value = false;
     let billingType = props.type ? props.type : props.isPay === '1' ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+
+    if (tabs.value.length) {
+
+      billingType = tabs.value[tabCurrent.value]?.value;
+    }
+
     await api
       .getItemList({
         billingType,

@@ -110,7 +110,6 @@
     addition: {
       patientId: '_patientId',
     },
-    isLocal: '1',
   };
 
   // 智能导诊

@@ -1,7 +1,8 @@
-import { GStores } from '@/utils';
+import { assignType } from '@/typeUtils';
+import { GStores, useTBanner, TBannerConfig } from '@/utils';
 import { useRouterStore } from '@/stores';
-import globalGl from '@/config/global';
 import { joinQuery } from '@/common';
+import globalGl from '@/config/global';
 
 //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -86,8 +87,26 @@ export const checkGrid = (item: IRoute) => {
   // }
 };
 
+const interceptorRoute = async function (item: any) {
+  let query = item.query;
+
+  if (query) {
+    try {
+      query = JSON.parse(query);
+    } catch {}
+
+    if (query?._type === 'useTBanner') {
+      useTBanner(query);
+      throw new Error('使用 useTBanner函数跳转');
+    }
+  }
+};
+
 //grid的登录完善就诊人的拦截跳转方法
-export const useCommonTo = (item, payload: IPayLoad = {}) => {
+export const useCommonTo = async (item, payload: IPayLoad = {}) => {
+  console.log(item);
+  await interceptorRoute(item);
+
   //拦截判断
   if (item.path != '') {
     //判断授权消息提醒
@@ -110,10 +129,10 @@ export const useCommonTo = (item, payload: IPayLoad = {}) => {
         useToPath(item, payload);
       });
     }
-  } else { 
-      checkGrid(item).then(async () => { 
-        useToPath(item, payload);
-      });
+  } else {
+    checkGrid(item).then(async () => {
+      useToPath(item, payload);
+    });
   }
 };
 
@@ -138,7 +157,9 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   switch (item.terminalType) {
     case 'h5':
       const obj = {
-        url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(item.path),
+        url:
+          '/pagesC/cloudHospital/myPath?type=1&path=' +
+          encodeURIComponent(item.path),
         fail: () => {
           gStores.messageStore.showMessage(
             `请确认跳转地址正确性${item.path}`,
@@ -161,12 +182,12 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         my.ap[JSON.parse(item.query).routeType]({
           url: item.path,
           success: (res) => {
-            console.log('openURL success', res)
+            console.log('openURL success', res);
           },
           fail: (err) => {
-            console.log('openURL success', err)
-          }
-        }); 
+            console.log('openURL success', err);
+          },
+        });
       } else {
         //跳转小程序
         uni.navigateToMiniProgram({

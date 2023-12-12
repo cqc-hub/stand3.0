@@ -309,6 +309,7 @@ export interface ISystemConfig_ {
   /** 自助开单 */
   selfBilling: {
     footerBtn?: TButtonConfig;
+    tabs?: IOptions[];
   };
 
   /** 名医名科 */
