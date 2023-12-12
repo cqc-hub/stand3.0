@@ -157,7 +157,7 @@ export class UseRegSearch extends GStores {
 
     const args = {
       searchContent,
-      hosId,
+      // hosId,
       clinicalType,
       source,
     };
@@ -175,7 +175,6 @@ export class UseRegSearch extends GStores {
     this.deptResultList.value = deptResultList;
     this.docInfoResultList.value = docInfoResultList;
     this.symptomResultList.value = symptomResultList;
-    console.log(deptResultList);
 
 
     if (docInfoResultList.length) {

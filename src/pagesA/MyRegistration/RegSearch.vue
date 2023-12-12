@@ -134,7 +134,7 @@
 
   import { onLoad } from '@dcloudio/uni-app';
 
-  import DocList from './components/RegSearch/docList.vue';
+  import DocList from './components/RegSearch/DocList.vue';
   import SearchDeptList from './components/RegSearch/searchDeptList.vue';
   import SearchHisList from './components/RegSearch/searchHisList.vue';
 
@@ -192,7 +192,7 @@
   };
 
   onLoad((opt) => {
-    r.init(deQueryForUrl(opt));
+    r.init(deQueryForUrl(deQueryForUrl(opt)));
   });
 </script>
 

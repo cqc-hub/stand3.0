@@ -17,8 +17,12 @@
               <view class="doc-info-introduce-name f36">
                 {{ item.docName }}
               </view>
-              <view v-if="item.docTitleName" class="doc-info-introduce-title">
+              <view v-if="item.docTitleName" class="doc-info-introduce-title mr12">
                 {{ item.docTitleName }}
+              </view>
+
+              <view v-if="item.docJobName" class="doc-info-introduce-title">
+                {{ item.docJobName }}
               </view>
             </view>
 
