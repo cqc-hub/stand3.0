@@ -54,11 +54,19 @@
         </view>
       </view>
 
-      <view v-else>
+      <view v-else class="flex-normal">
+        <view
+          v-if="item.qrValue"
+          @click="goPayPage"
+          class="btn btn-border btn-primary p24 flex1 mr24"
+        >
+          门诊缴费
+        </view>
+
         <view
           v-if="item.qrValue"
           @click="signIn(item)"
-          class="btn btn-border btn-primary btn-plain p24"
+          class="btn btn-border btn-primary btn-plain p24 flex1"
         >
           {{
             isTakeNumberAfterBtnForGoQueueNumber ? '查看排队信息' : '刷码签到'
@@ -78,7 +86,12 @@
     loading: boolean;
     isTakeNumberAfterBtnForGoQueueNumber: boolean;
   }>();
-  const emits = defineEmits(['refresh-data', 'take-number', 'sign-in']);
+  const emits = defineEmits([
+    'refresh-data',
+    'take-number',
+    'sign-in',
+    'pay-page',
+  ]);
 
   const refrashData = () => {
     emits('refresh-data');
@@ -92,6 +105,13 @@
 
   const signIn = (item: TTakeNumberListItem) => {
     emits('sign-in', item);
+  };
+
+  const goPayPage = () => {
+    emits('pay-page');
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayDetail',
+    });
   };
 </script>
 

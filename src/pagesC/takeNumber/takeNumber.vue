@@ -31,6 +31,7 @@
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
             @sign-in="signIn"
+            @pay-page="goPayPage"
           />
         </view>
 
@@ -71,6 +72,45 @@
       </scroll-view>
     </xy-dialog>
 
+    <xy-dialog
+      :title="fgTitle453"
+      :show="isFgShow453"
+      :isShowCancel="false"
+      @confirmButton="goPayPage"
+      isMaskClick
+      confirmText="立即缴费"
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag
+          v-model:title="fgTitle453"
+          isHideTitle
+          isShowFgTip
+          typeFg="453"
+          aaa
+        />
+      </scroll-view>
+    </xy-dialog>
+    <!--
+    <xy-dialog
+      :title="fgTitle451"
+      :show="isFgShow451"
+      @confirmButton="takeNumber"
+      @cancelButton="isFgShow451 = false"
+      isMaskClick
+      confirmText="立即取号"
+      cancelText="暂不取号"
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag
+          v-model:title="fgTitle451"
+          isHideTitle
+          isShowFgTip
+          typeFg="451"
+          aaa
+        />
+      </scroll-view>
+    </xy-dialog> -->
+
     <Qr-Popup :qrValue="qrValue" v-model:show="isShowQr" />
     <g-message />
   </view>
@@ -85,6 +125,8 @@
     ServerStaticData,
     type TButtonConfig,
     useTBanner,
+    getLocation,
+    ISystemConfig,
   } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
@@ -94,6 +136,7 @@
   import QrPopup from './components/QrPopup.vue';
 
   const gStores = new GStores();
+  const pageConfig = ref(<ISystemConfig['order']>{});
   const isComplete = ref(false);
   const isRefresh = ref(false);
   const list = ref([] as TTakeNumberListItem[]);
@@ -111,10 +154,20 @@
   const fgTitle451 = ref('');
   const isFgShow451 = ref(false);
 
+  const fgTitle453 = ref('');
+  const isFgShow453 = ref(false);
+
   let cacheItem: TTakeNumberListItem;
   const showTakeNumberDialog = (item: TTakeNumberListItem) => {
     cacheItem = item;
     isFgShow451.value = true;
+  };
+
+  const goPayPage = () => {
+    isFgShow453.value = false;
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayDetail',
+    });
   };
 
   const takeNumber = async () => {
@@ -135,6 +188,10 @@
       isFgShow451.value = false;
     });
     await getList();
+
+    if (pageConfig.value.takeNumberConfirmAfter === '1') {
+      isFgShow453.value = true;
+    }
   };
 
   const signIn = async (item: TTakeNumberListItem) => {
@@ -223,37 +280,6 @@
     });
   };
 
-  const getLocation = async (compel = false) => {
-    let isAuth = false;
-    await new Promise((resolve) =>
-      uni.getLocation({
-        complete: resolve,
-        success(e) {
-          locationInfo.value = e as any;
-          isAuth = true;
-        },
-      })
-    );
-
-    if (!isAuth) {
-      await new Promise((resolve, reject) => {
-        uni.getSetting({
-          async success({ authSetting }) {
-            const qx = authSetting['scope.userLocation'];
-            if (!qx) {
-              setTimeout(() => {
-                isWxRequestQxDialogShow.value = true;
-              }, 500);
-              reject('未授权 Location');
-            } else {
-              resolve(void 0);
-            }
-          },
-        });
-      });
-    }
-  };
-
   const requestWxQx = async () => {
     isWxRequestQxDialogShow.value = false;
 
@@ -267,8 +293,9 @@
   };
 
   const getConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
     const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
-      await ServerStaticData.getSystemConfig('order');
+      pageConfig.value;
 
     isShowQueueBtn.value = takeNumberQueueBtn === '1';
     isTakeNumberAfterBtnForGoQueueNumber.value =
@@ -276,7 +303,7 @@
   };
 
   const init = async () => {
-    await getLocation();
+    locationInfo.value = await getLocation(true);
 
     getList();
   };
