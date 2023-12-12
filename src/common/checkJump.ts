@@ -94,7 +94,7 @@ const interceptorRoute = async function (item: any) {
     try {
       query = JSON.parse(query);
     } catch (e) {
-      console.error(e);
+      // console.log(e);
     }
 
     if (query?._type === 'useTBanner') {
