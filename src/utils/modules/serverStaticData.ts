@@ -644,7 +644,7 @@ export const cacheUtil = new (class {
       return paramCodeArr
         .filter((k) => k)
         .reduce<any>((p, key) => {
-          p[key] = map[key];
+          p[key] = map[key] || {};
           return p;
         }, {});
     };

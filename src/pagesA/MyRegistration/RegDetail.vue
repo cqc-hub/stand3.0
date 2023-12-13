@@ -189,11 +189,23 @@
 
                     <!-- <view class="iconfont color-blue">&#xe6c8;</view> -->
                   </view>
+
+                  <view
+                    v-else-if="item.key === 'hisResult'"
+                    :style="{
+                      color: titleStatus.color,
+                    }"
+                    class="flex-normal doc-name"
+                  >
+                    <view>
+                      {{ orderRegInfo.hisResult }}
+                    </view>
+                  </view>
+
                   <view
                     v-else
                     :class="{
                       'color-blue': [
-                        'hisResult',
                         '_fee',
                         '_hosAccountOffsetFee',
                         '_totalCost',
@@ -359,14 +371,14 @@
 
   import api from '@/service/api';
 
-  const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
+  const orderConfig = ref({} as ISystemConfig['order']);
   const refForm = ref<any>('');
   const refFormPatient = ref<any>('');
-  const pageProps = ref<IPageProps>({} as IPageProps);
+  const pageProps = ref({} as IPageProps);
   const gStores = new GStores();
   const showQrCode = ref(false);
-  const orderRegInfo = ref<IRegInfo>({} as IRegInfo);
-  const hosInfo = ref<IHosInfo>({} as IHosInfo);
+  const orderRegInfo = ref({} as IRegInfo);
+  const hosInfo = ref({} as IHosInfo);
   const isShowQr = computed(() => {
     return ['0', '100', '70', '75'].includes(orderRegInfo.value.orderStatus);
   });

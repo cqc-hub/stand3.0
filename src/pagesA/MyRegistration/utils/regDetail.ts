@@ -239,11 +239,12 @@ export const orderStatusMap = {
   },
 } as const;
 
-export type OrderStatus = keyof typeof orderStatusMap | '--';
+export type OrderStatus = keyof typeof orderStatusMap;
 
 export interface IRegInfo {
   orderStatus: OrderStatus;
   patientId: string;
+  hisResult: string;
   cardNumber: string;
   patientName: string;
   patientPhone: string;
