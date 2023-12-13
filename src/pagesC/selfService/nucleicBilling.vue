@@ -163,26 +163,25 @@
   const initConfig = async () => {
     pageLoading.value = false;
     let billingType = props.type ? props.type : props.isPay === '1' ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+    console.log(tabCurrent.value, 'www');
 
     if (tabs.value.length) {
-
       billingType = tabs.value[tabCurrent.value]?.value;
     }
 
-    await api
+    const { result } = await api
       .getItemList({
         billingType,
         hosId: props.hosId,
-      })
-      .then(({ result }) => {
-        if (result.length > 0) {
-          NucleResult.value = result[0].items;
-        }
       })
       .finally(() => {
         pageLoading.value = true;
         uni.stopPullDownRefresh();
       });
+
+    if (result.length > 0) {
+      NucleResult.value = result[0].items;
+    }
   };
   const clickItem = (i) => {
     currentIndex.value = i;

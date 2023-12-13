@@ -240,7 +240,9 @@
         if (this.current !== index) {
           this.current = index;
 
-          this.$emit('change', index);
+          setTimeout(() => {
+            this.$emit('change', index);
+          }, 20);
         }
       },
       // 获取左移动位置
