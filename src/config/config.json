@@ -184,6 +184,15 @@
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
+    },
+
+    "1001062": {
+      "wxAppid": "wxe09a59ebf1a15c3b",
+      "h5Appid": "",
+      "name": "大医二院普湾院区",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
     }
   }
 }
