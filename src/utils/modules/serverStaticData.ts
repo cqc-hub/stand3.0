@@ -10,8 +10,8 @@ import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
-import { assignType, Split, Merge } from '@/typeUtils';
-import { getMiniProgramEnv, wait } from '@/utils';
+import { assignType, Split, Merge, FilterOptional } from '@/typeUtils';
+import { getMiniProgramEnv, ApiParamsConfig } from '@/utils';
 import envConfigData from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -602,7 +602,7 @@ export const cacheUtil = new (class {
 
   /**
    *  获取系统参数
-   *
+   *  配合 type ApiParamsConfig 使用
    * @example
    * const res = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')()
    * const res1 = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')<{ Config_Key: any }>()
@@ -613,7 +613,19 @@ export const cacheUtil = new (class {
         Record<Split<T, ','>[number], any>
       >
     >(): Promise<
-      Required<Merge<Record<Split<T, ','>[number], BaseObject>, R>>
+      Required<
+        Merge<
+          Merge<Record<Split<T, ','>[number], BaseObject>, R>,
+          FilterOptional<
+            {
+              [K in Split<T, ','>[number]]: K extends keyof ApiParamsConfig
+                ? ApiParamsConfig[K]
+                : never;
+            },
+            'never'
+          >
+        >
+      >
     > => {
       const paramCodeArr = paramCode.split(',');
 
