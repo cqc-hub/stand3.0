@@ -622,7 +622,7 @@ export const cacheUtil = new (class {
                 ? ApiParamsConfig[K]
                 : never;
             },
-            'never'
+            never
           >
         >
       >

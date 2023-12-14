@@ -346,9 +346,4 @@
     }
   }
 
-  .reg-tip {
-    max-height: 550rpx;
-    width: calc(100% - 64rpx);
-    margin-left: 32rpx;
-  }
 </style>

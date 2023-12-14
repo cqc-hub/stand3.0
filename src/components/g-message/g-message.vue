@@ -159,11 +159,6 @@
     }
   }
 
-  .reg-tip {
-    max-height: 550rpx;
-    width: calc(100% - 64rpx);
-    margin-left: 32rpx;
-  }
 
   .fg-agree-name {
     color: var(--hr-brand-color-6);
