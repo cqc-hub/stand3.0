@@ -8,7 +8,7 @@
 }
 
 .flex-column {
-  flex-direction: column;
+  flex-direction: column !important;
 }
 
 .flex-between {
@@ -17,11 +17,11 @@
 }
 
 .flex-start-r {
-  align-items: flex-start;
+  align-items: flex-start !important;
 }
 
 .flex-start {
-  align-items: flex-start;
+  @extend .flex-start-r;
   @extend .flex-normal;
 }
 

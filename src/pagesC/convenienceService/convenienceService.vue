@@ -1,6 +1,26 @@
 <template>
   <view class="g-page page">
     <g-flag typeFg="1008" isShowFg />
+    <view class="header-btn flex-normal">
+      <!-- <view
+        v-if="isShowAddRecord"
+        @click="goAddRecord"
+        class="g-flex-rc-cc g-border"
+      >
+        <view class="iconfont color-blue">&#xe6fb;</view>
+        <view>手动添加记录</view>
+      </view> -->
+
+      <view
+        v-if="pageConfig.isOpenTopBtnOrder === '1'"
+        @click="goOrderList"
+        class="g-flex-rc-cc g-border"
+      >
+        <view class="iconfont color-green">&#xe6fc;</view>
+        <view>我的挂号</view>
+      </view>
+    </view>
+
     <scroll-view class="g-container" scroll-y>
       <view class="container">
         <view class="content mt16" v-if="isComplete && lists?.length">
@@ -81,7 +101,7 @@
   import { defineComponent, ref } from 'vue';
   import ChoosePopup from './components/ChoosePopup.vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { GStores, debounce, ServerStaticData } from '@/utils';
+  import { ApiParamsConfig, GStores, cacheUtil, debounce } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
@@ -91,18 +111,18 @@
   interface IPageProps {
     hosId: string;
     hosName: string;
-    pageTitle?:string;
+    pageTitle?: string;
   }
   const pageProps = ref(<IPageProps>{});
   const aaa = ref('' as any);
   const gStores = new GStores();
-  const confirmFgTitle = ref('');
   const isComplete = ref(false);
   const totalNum = ref(0);
   const totalMoney = ref(0);
   const lists = ref<IServiceList[]>([]);
   const regDialogConfirm = ref<any>('');
   const chooseItem = ref<any[]>([]);
+  const pageConfig = ref(<ApiParamsConfig['ConvenienceService']>{});
 
   let getListData = async () => {
     const arg = {};
@@ -144,19 +164,19 @@
   };
 
   const confirm = () => {
-    if(chooseItem.value.length==0){
-      gStores.messageStore.showMessage("请先选择需要购买的项目", 2000);
+    if (chooseItem.value.length == 0) {
+      gStores.messageStore.showMessage('请先选择需要购买的项目', 2000);
       return;
     }
     //拦截一下不能合并缴费的
-    const ids= new Set()
-    chooseItem.value.map(item=>{
-      ids.add(item.subIds)
-    })
-    if(ids.size>1){
-      gStores.messageStore.showMessage("不同的项目类型不支持合并支付", 2000);
+    const ids = new Set();
+    chooseItem.value.map((item) => {
+      ids.add(item.subIds);
+    });
+    if (ids.size > 1) {
+      gStores.messageStore.showMessage('不同的项目类型不支持合并支付', 2000);
       return;
-    }else{
+    } else {
       const { hosId, hosName } = pageProps.value;
       uni.navigateTo({
         url: joinQuery('/pagesC/convenienceService/confirmOrder', {
@@ -168,7 +188,6 @@
         }),
       });
     }
-
   };
 
   const ezz = (e) => {
@@ -180,15 +199,24 @@
     );
   };
 
+  const goOrderList = () => {
+    uni.navigateTo({
+      url: '/pagesA/MyRegistration/MyRegistration',
+    });
+  };
+
   const init = async () => {
     await getListData();
   };
 
-  onLoad((p) => {
+  onLoad(async (p) => {
+    pageConfig.value = await (
+      await cacheUtil.getSystemConfig('ConvenienceService')()
+    ).ConvenienceService;
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-      uni.setNavigationBarTitle({
-        title:  pageProps.value.pageTitle || '便民服务',
-      });
+    uni.setNavigationBarTitle({
+      title: pageProps.value.pageTitle || '便民服务',
+    });
   });
 
   onShow(() => {
@@ -319,10 +347,6 @@
         color: var(--hr-neutral-color-8);
       }
     }
-    .btn {
-      // width: 40%;
-      // margin: 24rpx 0 68rpx 32rpx;
-    }
   }
   .uni--disabled {
     color: #c0c0c0 !important;
@@ -332,5 +356,25 @@
   }
   :deep(.wyb-popup-box) {
     height: 100vh !important;
+  }
+
+  .header-btn {
+    margin: 16rpx 32rpx;
+    margin-bottom: 0;
+    gap: 14rpx;
+    transition: all 0.2s linear;
+
+    > view {
+      flex: 1;
+      font-size: var(--hr-font-size-s);
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 26rpx 0;
+
+      .iconfont {
+        font-size: var(--hr-font-size-xxl);
+        margin-right: 14rpx;
+      }
+    }
   }
 </style>
