@@ -310,6 +310,7 @@ export interface ISystemConfig_ {
   selfBilling: {
     footerBtn?: TButtonConfig;
     tabs?: IOptions[];
+    multi?: '1'; // 多选?
   };
 
   /** 名医名科 */
