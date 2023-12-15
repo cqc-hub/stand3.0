@@ -8,7 +8,7 @@ export type ApiParamsConfig = {
 
   // 便民服务  pagesC/convenienceService/convenienceService
   ConvenienceService: {
-    isOpenTopBtnOrder?: '1'; // 顶部 我的挂号 按钮
+    isOpenTopBtnOrder?: '1'; // 顶部 我的订单 按钮
   }
 };
 

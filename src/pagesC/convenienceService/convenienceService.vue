@@ -17,7 +17,7 @@
         class="g-flex-rc-cc g-border"
       >
         <view class="iconfont color-green">&#xe6fc;</view>
-        <view>我的挂号</view>
+        <view>我的订单</view>
       </view>
     </view>
 
@@ -98,16 +98,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
   import ChoosePopup from './components/ChoosePopup.vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { ApiParamsConfig, GStores, cacheUtil, debounce } from '@/utils';
-  import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
-  import ServiceList from './components/ServiceList.vue';
-
   import { type IServiceList } from './utils/index';
+
+  import {
+    ApiParamsConfig,
+    GStores,
+    cacheUtil,
+    debounce,
+    useTBanner,
+  } from '@/utils';
+
+  import api from '@/service/api';
+
+  import ServiceList from './components/ServiceList.vue';
   interface IPageProps {
     hosId: string;
     hosName: string;
@@ -200,8 +208,20 @@
   };
 
   const goOrderList = () => {
-    uni.navigateTo({
-      url: '/pagesA/MyRegistration/MyRegistration',
+    // uni.navigateTo({
+    //   url: '/pagesA/MyRegistration/MyRegistration',
+    // });
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: '/pagesC/selfService/myOrder',
+      extraData: {
+        convenienceService: 'true',
+      },
+      addition: {
+        patientId: '_patientId',
+      },
     });
   };
 
