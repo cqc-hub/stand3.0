@@ -439,8 +439,9 @@
       });
     }
 
-
-    hosList
+    if (hosList.value.length === 1) {
+      itemClick(hosList.value[0]);
+    }
   };
 
   const regDialogConfirm = ref<any>('');
