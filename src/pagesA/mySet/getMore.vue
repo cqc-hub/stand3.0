@@ -15,18 +15,22 @@
         </view>
       </navigator>
 
-      <navigator url="/pages/home/accountInfo">
-        <view>
-          <text>注销账号</text>
-          <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
-        </view>
-      </navigator>
+      <view @click="goInfoPage" class="flex-between">
+        <text>注销账号</text>
+        <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
+      </view>
     </view>
     <view class="footer">浙江和仁科技股份有限公司&copy;技术支持</view>
   </view>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  const goInfoPage = () => {
+    uni.navigateTo({
+      url: '/pages/home/accountInfo',
+    });
+  };
+</script>
 
 <style lang="scss" scoped>
   .page {
