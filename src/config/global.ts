@@ -66,3 +66,4 @@ const globalGl = {
 } as const;
 
 export default globalGl;
+

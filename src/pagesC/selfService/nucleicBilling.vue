@@ -43,17 +43,24 @@
           :class="{
             active: selList.findIndex((o) => o.itemCode === item.itemCode) > -1,
           }"
+          class="box-aaa"
         >
-          <label>{{ item.itemName }}</label>
-          <label>{{ item.fee }}元</label>
-          <block
-            v-if="selList.findIndex((o) => o.itemCode === item.itemCode) > -1"
-          >
-            <text class="iconfont ico-checkbox">&#xe6d0;</text>
-          </block>
-          <block v-else>
-            <text class="iconfont">&#xe6ce;</text>
-          </block>
+          <view class="box-item">
+            <label>{{ item.itemName }}</label>
+            <label>{{ item.fee }}元</label>
+            <block
+              v-if="selList.findIndex((o) => o.itemCode === item.itemCode) > -1"
+            >
+              <text class="iconfont ico-checkbox">&#xe6d0;</text>
+            </block>
+            <block v-else>
+              <text class="iconfont">&#xe6ce;</text>
+            </block>
+          </view>
+
+          <view v-if="item.tips" class="color-888 f26 g-break-word">
+            <rich-text :nodes="HTMLParser(item.tips)" />
+          </view>
         </view>
       </view>
       <g-flag typeFg="45" isShowFgTip aaa />
@@ -122,6 +129,7 @@
     type ISystemConfig,
     ServerStaticData,
   } from '@/utils';
+  import HTMLParser from '@/common/html-parser';
 
   interface INucle {
     billingType: string;
@@ -341,14 +349,17 @@
       }
       .box-list {
         margin-top: 16rpx;
-        view {
-          display: flex;
+        .box-aaa {
+          box-shadow: 0px -1px 0px 0px #e6e6e6 inset;
           padding: 28rpx 0;
           margin: 0 32rpx;
-          box-shadow: 0px -1px 0px 0px #e6e6e6 inset;
           &:last-child {
             box-shadow: none;
           }
+        }
+        .box-item {
+          display: flex;
+
           label {
             color: -var(-hr-neutral-color-10);
             line-height: 48rpx;
