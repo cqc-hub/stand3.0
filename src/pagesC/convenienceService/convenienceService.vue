@@ -215,7 +215,7 @@
     useTBanner({
       type: 'h5',
       isSelfH5: '1',
-      path: '/pagesC/selfService/myOrder',
+      path: 'pagesC/selfService/myOrder',
       extraData: {
         convenienceService: 'true',
       },
