@@ -192,7 +192,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, nextTick } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';
@@ -340,15 +340,15 @@
       tabCurrent.value = 1;
 
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
-        getDrugDeliveryList();
+        await getDrugDeliveryList();
       }
 
       // #ifdef MP-ALIPAY
       // 微信会触发组件 change 事件, 支付宝不会
-      getListData();
+      await getListData();
       // #endif
     } else {
-      getListData();
+      await getListData();
     }
   });
 </script>

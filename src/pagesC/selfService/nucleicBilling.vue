@@ -131,6 +131,7 @@
     apiAsync,
   } from '@/utils';
   import HTMLParser from '@/common/html-parser';
+  import { joinQuery } from '../../common/utils';
 
   interface INucle {
     billingType: string;
@@ -246,13 +247,13 @@
       `确定开单以下${selList.value.length}项吗: ` +
       selList.value
         .map((o) => {
-          return `${o.itemName}` + (o.fee ? `(${o.fee}元)`: '' );
+          return `${o.itemName}` + (o.fee ? `(${o.fee}元)` : '');
         })
         .join(',');
 
     const { confirm } = await apiAsync(uni.showModal, {
       title: '开单确认',
-      content: tips
+      content: tips,
     });
 
     if (!confirm) {
@@ -262,7 +263,7 @@
     isSubBtnDisabled.value = true;
 
     try {
-      const res1 = await api.createBillingOrder({
+      const { result } = await api.createBillingOrder({
         hosId: props.hosId,
         patientId: patientId,
         items: selList.value,
@@ -278,7 +279,7 @@
           hosId: props.hosId,
           hosName: props.hosName,
           patientId: patientId,
-          phsOrderNo: res1.result.phsOrderNo,
+          phsOrderNo: result.phsOrderNo,
           phsOrderSource: 11,
           totalFee: totalCost,
           patientName,
@@ -292,8 +293,11 @@
         gStores.messageStore.showMessage('开单成功', 1500, {
           closeCallBack: () => {
             //跳转门诊缴费页面
+
             uni.reLaunch({
-              url: `/pagesA/clinicPay/clinicPayDetail`,
+              url: joinQuery('/pagesA/clinicPay/clinicPayDetail', {
+                visitNo: result.visitNo || '',
+              }),
             });
           },
         });

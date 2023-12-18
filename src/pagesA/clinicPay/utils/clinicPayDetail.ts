@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import {
   GStores,
   debounce,
@@ -70,6 +70,7 @@ export type IPayListItem = {
   traceNo: string;
   cardNumber?: string;
   recipeNo?: string;
+  autoPay?: '1'; // when attribute autoPay in the page props, auto choose item and pay
   tradeType: TTradeType;
 };
 
@@ -613,6 +614,7 @@ export const usePayPage = () => {
   const pageProps = ref(
     {} as {
       tabIndex?: '1';
+      visitNo?: string; // 此时获取待缴费列表后应该选中并 采取缴费操作
 
       params?: string;
       deParams?: {
@@ -890,6 +892,7 @@ export const usePayPage = () => {
     });
   };
 
+  let isFirst = true;
   let getListData = async (isReset = true) => {
     if (isReset) {
       unPayList.value = [];
@@ -899,6 +902,23 @@ export const usePayPage = () => {
 
     if (tabCurrent.value === 0) {
       await getUnPayList();
+
+      if (tabCurrent.value === 0 && isFirst) {
+        isFirst = false;
+        if (pageProps.value.visitNo) {
+          unPayList.value.map((o) => {
+            if (o.visitNo === pageProps.value.visitNo) {
+              selUnPayList.value.push(o);
+            }
+          });
+
+          if (selUnPayList.value.length) {
+            nextTick(() => {
+              handlerPay();
+            });
+          }
+        }
+      }
     } else {
       await getPayedList();
     }
