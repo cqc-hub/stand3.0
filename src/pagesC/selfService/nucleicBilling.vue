@@ -128,6 +128,7 @@
     useTBanner,
     type ISystemConfig,
     ServerStaticData,
+    apiAsync,
   } from '@/utils';
   import HTMLParser from '@/common/html-parser';
 
@@ -235,12 +236,30 @@
     const { patientId, patientName, cardNumber } = gStores.userStore.patChoose;
     const source = gStores.globalStore.browser.source;
     const reBillingUrl = `/pagesC/selfService/nucleicBilling?hosId=${props.hosId}&isPay=${props.isPay}`;
-    isSubBtnDisabled.value = true;
 
     const totalCost = selList.value.reduce((p, c) => {
       p += (c.fee as unknown as number) * 1;
       return p;
     }, 0);
+
+    const tips =
+      `确定开单以下${selList.value.length}项吗: ` +
+      selList.value
+        .map((o) => {
+          return `${o.itemName}` + (o.fee ? `(${o.fee}元)`: '' );
+        })
+        .join(',');
+
+    const { confirm } = await apiAsync(uni.showModal, {
+      title: '开单确认',
+      content: tips
+    });
+
+    if (!confirm) {
+      return;
+    }
+
+    isSubBtnDisabled.value = true;
 
     try {
       const res1 = await api.createBillingOrder({

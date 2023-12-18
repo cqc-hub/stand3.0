@@ -604,7 +604,8 @@
     // docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar.png';
 
     if (collectState == '1') {
-      const args = {
+      // weixin://dl/business/?t=XxTgl2eqtWq
+      await api.addCollect({
         collectType,
         deptName,
         docName,
@@ -615,34 +616,18 @@
         hosDeptId,
         hosId,
         source,
-      };
-      // weixin://dl/business/?t=XxTgl2eqtWq
-      api
-        .addCollect(args)
-        .then(() => {
-          docDetail.value.collectState = '2';
-          gStores.messageStore.showMessage('关注成功', 3000);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      });
+      docDetail.value.collectState = '2';
+      gStores.messageStore.showMessage('关注成功', 3000);
     } else {
-      const args = {
+      await api.delMyCollect({
         collectType,
         herenId,
         hosDocId,
         hosId,
-      };
-
-      api
-        .delMyCollect(args)
-        .then(() => {
-          docDetail.value.collectState = '1';
-          gStores.messageStore.showMessage('已经取消关注', 3000);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      });
+      docDetail.value.collectState = '1';
+      gStores.messageStore.showMessage('已经取消关注', 3000);
     }
   };
 
