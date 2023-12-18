@@ -892,7 +892,7 @@ export const usePayPage = () => {
     });
   };
 
-  let isFirst = true;
+  let isGetListDataFirst = true;
   let getListData = async (isReset = true) => {
     if (isReset) {
       unPayList.value = [];
@@ -903,8 +903,8 @@ export const usePayPage = () => {
     if (tabCurrent.value === 0) {
       await getUnPayList();
 
-      if (tabCurrent.value === 0 && isFirst) {
-        isFirst = false;
+      if (tabCurrent.value === 0 && isGetListDataFirst) {
+        isGetListDataFirst = false;
         if (pageProps.value.visitNo) {
           unPayList.value.map((o) => {
             if (o.visitNo === pageProps.value.visitNo) {
