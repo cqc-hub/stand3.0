@@ -296,7 +296,7 @@
 
             uni.reLaunch({
               url: joinQuery('/pagesA/clinicPay/clinicPayDetail', {
-                visitNo: result.visitNo || '',
+                visitNo: result?.visitNo || '',
               }),
             });
           },
