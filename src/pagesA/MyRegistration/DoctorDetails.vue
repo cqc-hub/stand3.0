@@ -715,7 +715,8 @@
     getSchData();
     await getDocDetail();
     if (pageConfig.value.isOpenComment === '1') {
-      getCommentList();
+      // 患者评论列表 (23/12/19 郭要求关闭)
+      // getCommentList();
     }
 
     if (pageConfig.value.isOpenDocCardOnlineService === '1') {
