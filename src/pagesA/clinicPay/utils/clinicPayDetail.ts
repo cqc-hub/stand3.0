@@ -281,34 +281,19 @@ export const getIsMedicalMode = () => {
   return false;
 };
 
-/** 获取国标授权 */
-export const getQxMedicalNation = async () => {
-  const gStores = new GStores();
-  const qrCode =
-    gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
+export const getMedicalAuthCode = async (): Promise<string> => {
+  let fCode = '';
 
+  const gStores = new GStores();
   const {
     sConfig: { medicalMHelp },
   } = globalGl;
-
   const { alipay, wx: _wx } = medicalMHelp!;
-  let authorizeType = '1';
-  let authorizeTypeDesc = '1';
-  // #ifdef MP-ALIPAY
-  authorizeType = '2';
-  authorizeTypeDesc = '2';
-  // #endif
-
-  const requestArg = {
-    authorizeType,
-    authorizeTypeDesc,
-    aliPayUserId: '',
-    callUrl: '',
-    openId: '',
-    qrCode,
-  };
 
   // #ifdef  MP-WEIXIN
+  const qrCode =
+    gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
+
   if (!qrCode) {
     const { appId, path } = _wx!.medicalNation!;
 
@@ -334,11 +319,9 @@ export const getQxMedicalNation = async () => {
     });
 
     return Promise.reject('请求授权...');
-  }
-
-  requestArg.openId = gStores.globalStore.openId;
-  if (requestArg.openId === '') {
-    requestArg.openId = await getOpenid();
+  } else {
+    fCode = qrCode;
+    gStores.globalStore.onAppShow({});
   }
   // #endif
 
@@ -347,9 +330,49 @@ export const getQxMedicalNation = async () => {
     scopes: ['nhsamp', 'auth_user'],
   });
 
+  fCode = authCode;
+  // #endif
+
+  return fCode;
+};
+
+/** 获取国标授权 */
+export const getQxMedicalNation = async () => {
+  const gStores = new GStores();
+  const qrCode = await getMedicalAuthCode();
+
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  const { wx: _wx } = medicalMHelp!;
+  let authorizeType = '1';
+  let authorizeTypeDesc = '1';
+  // #ifdef MP-ALIPAY
+  authorizeType = '2';
+  authorizeTypeDesc = '2';
+  // #endif
+
+  const requestArg = {
+    authorizeType,
+    authorizeTypeDesc,
+    aliPayUserId: '',
+    callUrl: '',
+    openId: '',
+    qrCode,
+  };
+  // #ifdef  MP-WEIXIN
+
+  requestArg.openId = gStores.globalStore.openId;
+  if (requestArg.openId === '') {
+    requestArg.openId = await getOpenid();
+  }
+  // #endif
+
+  // #ifdef MP-ALIPAY
   await api.authorization({
     accountType: 21,
-    code: authCode,
+    code: qrCode,
     userId: gStores.globalStore.openId,
     scope: 'medical_ali_pay',
   });
@@ -360,8 +383,6 @@ export const getQxMedicalNation = async () => {
     requestArg.aliPayUserId = await getOpenid();
   }
 
-  if (!qrCode) {
-  }
   // #endif
 
   // return;
