@@ -385,11 +385,6 @@ export const getQxMedicalNation = async () => {
 
   // #endif
 
-  // return;
-
-  //  qrcode 只能使用一次
-  gStores.globalStore.onAppShow({});
-
   const { result } = await api.authorize<any>(requestArg);
   if (result.userLongitudeLatitude) {
     result.userLongitudeLatitude = JSON.parse(result.userLongitudeLatitude);
