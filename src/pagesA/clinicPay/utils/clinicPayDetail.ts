@@ -426,13 +426,9 @@ export const getQxMedicalNation = async () => {
   return <TWxAuthorize>result;
 };
 
-type OptionalType<T> = {
-  [P in keyof T]?: T[P];
-};
-
 /** 国标医保费用明细上传 */
 export const medicalNationUpload = async (
-  detail: OptionalType<
+  detail: Partial<
     TPayDetailInfo & {
       childOrder: string;
     }
