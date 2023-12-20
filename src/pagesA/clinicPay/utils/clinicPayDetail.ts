@@ -1,4 +1,6 @@
 import { ref, computed, nextTick } from 'vue';
+import { joinQueryForUrl, setLocalStorage } from '@/common';
+
 import {
   GStores,
   debounce,
@@ -9,13 +11,12 @@ import {
   PatientUtils,
   apiAsync,
 } from '@/utils';
-import { joinQueryForUrl, setLocalStorage } from '@/common';
+
 import {
   type IGPay,
   payMoneyOnline,
   toPayPull,
   getOpenid,
-  getOpenid2,
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
@@ -41,7 +42,6 @@ export type TWxAuthorize = {
     longitude: string;
   };
 };
-
 export type IPayListItem = {
   diseaseType?: string;
   childOrder: string; // 唯一 !!

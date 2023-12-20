@@ -11,6 +11,7 @@
           <Pat-List
             :showPat="pat"
             :isShowAll="isShowAll"
+            :cusTomList="cusTomList"
             @choose-pat="actionSheetItemClick"
           />
         </view>
@@ -50,6 +51,10 @@
 
       pat: {
         type: Object as PropType<IPat>,
+      },
+
+      cusTomList: {
+        type: Array as PropType<IPat[]>,
       },
     },
 

@@ -16,13 +16,17 @@
         </text>
       </view>
 
-      <text :class="`icon-font icon-resize ico_arrow f48`" />
+      <text
+        v-if="!props.disabled"
+        :class="`icon-font icon-resize ico_arrow f48`"
+      />
     </view>
 
     <Choose-Pat
       @choose-pat="choosePatHandler"
       :isShowAll="isShowAll"
       :pat="pat"
+      :cusTomList="cusTomList"
       ref="actionSheet"
     />
   </view>
@@ -38,7 +42,9 @@
 
   const props = defineProps<{
     isShowAll?: boolean;
+    disabled?: boolean;
     pat?: IPat;
+    cusTomList?: IPat[];
   }>();
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
@@ -51,6 +57,10 @@
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
+
+    if (props.disabled) {
+      return;
+    }
 
     if (!patList.length) {
       gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');

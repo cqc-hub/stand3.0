@@ -8,7 +8,12 @@
     <g-flag isShowFg typeFg="15" />
     <g-tbanner :config="pageConfig.bannerPay" />
     <view v-if="isShowPatComponent" class="animate__animated animate__fadeIn">
-      <g-choose-pat v-if="!pageProps.params" @choose-pat="patChange" />
+      <g-choose-pat
+        :cusTomList="patList"
+        :pat="selPat"
+        :disabled="pageProps.deParams"
+        @choose-pat="patChange"
+      />
       <g-selhos
         v-if="pageConfig.isListToggleHos === '1'"
         v-model:hosId="hosId"
@@ -200,6 +205,7 @@
   import { deQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
   import { decryptForPage } from '@/common/des';
   import { beforeEach } from '@/router';
+  import { IPat } from '@/stores/type/index';
 
   import globalGl from '@/config/global';
 
@@ -250,6 +256,32 @@
 
   const isListShowClinicType = computed(() => {
     return pageConfig.value.isListShowClinicType === '1';
+  });
+
+  const patList = computed(() => {
+    if (pageProps.value.deParams?.cardNumber) {
+      return [
+        <IPat>{
+          patientNameEncry:
+            pageProps.value.deParams.patientName || '未知的就诊人',
+          _showId: pageProps.value.deParams.cardNumber,
+        },
+      ];
+    } else {
+      return gStores.userStore.patList;
+    }
+  });
+
+  const selPat = computed(() => {
+    if (pageProps.value.deParams?.cardNumber) {
+      return <IPat>{
+        patientNameEncry:
+          pageProps.value.deParams.patientName || '未知的就诊人',
+        _showId: pageProps.value.deParams.cardNumber,
+      };
+    } else {
+      return gStores.userStore.patChoose;
+    }
   });
 
   const pageHook = async () => {

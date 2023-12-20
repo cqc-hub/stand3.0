@@ -45,6 +45,7 @@
   const props = defineProps<{
     isShowAll?: boolean;
     showPat?: IPat;
+    cusTomList?: IPat[];
   }>();
 
   const gStores = new GStores();
@@ -58,7 +59,9 @@
   };
 
   const patList = computed(() => {
-    if (props.isShowAll) {
+    if (props.cusTomList) {
+      return props.cusTomList;
+    } else if (props.isShowAll) {
       return [
         <IPat>{
           patientName: '所有就诊人',
