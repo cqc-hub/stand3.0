@@ -258,12 +258,12 @@
   });
 
   const patList = computed(() => {
-    if (pageProps.value.deParams?.cardNumber) {
+    if (pageProps.value.params) {
       return [
         <IPat>{
           patientNameEncry:
-            pageProps.value.deParams.patientName || '未知的就诊人',
-          _showId: pageProps.value.deParams.cardNumber,
+            pageProps.value.deParams?.patientName || '未知的就诊人',
+          _showId: pageProps.value.deParams?.cardNumber || '',
         },
       ];
     } else {
@@ -275,8 +275,8 @@
     if (pageProps.value.deParams?.cardNumber) {
       return <IPat>{
         patientNameEncry:
-          pageProps.value.deParams.patientName || '未知的就诊人',
-        _showId: pageProps.value.deParams.cardNumber,
+          pageProps.value.deParams?.patientName || '未知的就诊人',
+        _showId: pageProps.value.deParams?.cardNumber,
       };
     } else {
       return gStores.userStore.patChoose;
