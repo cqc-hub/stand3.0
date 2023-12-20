@@ -26,14 +26,13 @@
       @choose-pat="choosePatHandler"
       :isShowAll="isShowAll"
       :pat="pat"
-      :cusTomList="cusTomList"
       ref="actionSheet"
     />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed } from 'vue';
+  import { ref, onMounted, computed, provide } from 'vue';
   import { getAvatar, IPat, isAreaProgram } from '@/stores';
   import { GStores } from '@/utils';
   import { getQueryString } from '@/common/utils';
@@ -55,6 +54,9 @@
     return props.pat || gStores.userStore.patChoose;
   });
 
+  provide('activePat', () => props.pat);
+  provide('cusTomList', () => props.cusTomList);
+
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
 
@@ -73,9 +75,21 @@
   };
 
   const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
-    // 选所有就诊人时候不带 patientId
+    const { patientId, herenId } = item;
+
+    // 自定义就诊人列表时候不带 herenId
     if (item.patientId) {
-      gStores.userStore.updatePatChoose(item);
+      if (herenId) {
+        gStores.userStore.updatePatChoose(item);
+      } else {
+        const pat = gStores.userStore.patList.find(
+          (o) => o.patientId === patientId
+        );
+
+        if (pat) {
+          gStores.userStore.updatePatChoose(item);
+        }
+      }
     }
     emits('choose-pat', { item });
   };

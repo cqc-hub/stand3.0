@@ -38,17 +38,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, inject } from 'vue';
   import { GStores } from '@/utils';
   import { IPat, getAvatar, isAreaProgram } from '@/stores';
 
   const props = defineProps<{
     isShowAll?: boolean;
-    showPat?: IPat;
-    cusTomList?: IPat[];
   }>();
 
   const gStores = new GStores();
+
+  const cusTomList = inject('cusTomList', (): IPat[] | undefined => {
+    if (props.isShowAll) {
+      return [
+        <IPat>{
+          patientName: '所有就诊人',
+          patientNameEncry: '所有就诊人',
+          patientId: '',
+        },
+        ...gStores.userStore.patList,
+      ];
+    }
+  });
+  const activePat = inject('activePat', (): IPat | undefined => undefined);
 
   const emits = defineEmits(['choose-pat']);
   const patClick = (pat: IPat, index: number) => {
@@ -58,26 +70,9 @@
     });
   };
 
-  const patList = computed(() => {
-    if (props.cusTomList) {
-      return props.cusTomList;
-    } else if (props.isShowAll) {
-      return [
-        <IPat>{
-          patientName: '所有就诊人',
-          patientNameEncry: '所有就诊人',
-          patientId: '',
-        },
-        ...gStores.userStore.patList,
-      ];
-    } else {
-      return gStores.userStore.patList;
-    }
-  });
+  const patList = computed(() => cusTomList() || gStores.userStore.patList);
 
-  const getShowPat = computed(() => {
-    return props.showPat || gStores.userStore.patChoose;
-  });
+  const getShowPat = computed(() => activePat() || gStores.userStore.patChoose);
 </script>
 
 <style lang="scss" scoped>

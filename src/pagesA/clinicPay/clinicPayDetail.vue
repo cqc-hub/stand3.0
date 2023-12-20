@@ -11,7 +11,6 @@
       <g-choose-pat
         :cusTomList="patList"
         :pat="selPat"
-        :disabled="pageProps.deParams"
         @choose-pat="patChange"
       />
       <g-selhos
