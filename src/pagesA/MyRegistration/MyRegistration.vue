@@ -247,6 +247,7 @@
         );
 
         if (o._statusLabel.startsWith('未知')) {
+          // @ts-expect-error
           o.orderStatus = '--';
         }
       });

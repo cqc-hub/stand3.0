@@ -303,7 +303,13 @@
         <view class="safe-height" />
       </view>
 
-      <view v-if="pageConfig.isOpenComment === '1'" class="doc-comment">
+      <view
+        v-if="
+          pageConfig.isOpenComment === '1' &&
+          pageConfig.isHideCommentListInDocDetail !== '1'
+        "
+        class="doc-comment"
+      >
         <view class="p32c">
           <Doc-Comment
             :list="commentList"
@@ -714,9 +720,11 @@
     await OrderInit();
     getSchData();
     await getDocDetail();
-    if (pageConfig.value.isOpenComment === '1') {
-      // 患者评论列表 (23/12/19 郭要求关闭)
-      // getCommentList();
+    if (
+      pageConfig.value.isOpenComment === '1' &&
+      pageConfig.value.isHideCommentListInDocDetail !== '1'
+    ) {
+      getCommentList();
     }
 
     if (pageConfig.value.isOpenDocCardOnlineService === '1') {

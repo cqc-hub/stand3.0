@@ -1,5 +1,6 @@
 <template>
   <view
+    v-if="list && list.length"
     :class="{
       'system-mode-old': gStores.globalStore.modeOld,
     }"
@@ -35,12 +36,7 @@
   import { onMounted, ref } from 'vue';
   import { type ICommentItem } from '../../utils/DoctorDetails';
 
-  import {
-    previewImage,
-    GStores,
-    ServerStaticData,
-    type ISystemConfig,
-  } from '@/utils';
+  import { GStores } from '@/utils';
 
   import api from '@/service/api';
 

@@ -66,8 +66,7 @@
   };
 
   const btnClick = (btn: TButtonConfig) => {
-    console.log(props.addition);
-    console.log(btn);
+    useTBanner(btn, 'navigateTo', props.addition);
   };
 </script>
 

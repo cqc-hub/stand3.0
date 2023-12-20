@@ -362,6 +362,7 @@
   <Hover-Tip
     :config="pageConfig"
     :addition="{
+      ...pat,
       ...pageProps,
       ...checkoutReportList,
     }"

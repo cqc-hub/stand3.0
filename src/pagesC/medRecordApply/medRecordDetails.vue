@@ -1390,8 +1390,6 @@
 
   const init = async () => {
     await getConfig();
-    console.log(photoModeRequire.value, '233');
-
     // 再次申请
     if (props.phsOrderNo) {
       await assignPageData(props.phsOrderNo);

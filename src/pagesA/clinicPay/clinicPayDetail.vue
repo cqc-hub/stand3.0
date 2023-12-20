@@ -192,7 +192,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, nextTick } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';

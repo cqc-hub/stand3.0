@@ -163,7 +163,7 @@
   const feedbackClick = () => {
     if (pageConfig.value.isCustomFeedback === '1') {
       uni.navigateTo({
-        url: '/pagesC/serviceCenter/serviceComplaint',
+        url: '/pagesC/serviceCenter/serviceCenter',
       });
     }
   };
