@@ -11,6 +11,7 @@
       <g-choose-pat
         :cusTomList="patList"
         :pat="selPat"
+        :disabled="pageProps.params"
         @choose-pat="patChange"
       />
       <g-selhos
@@ -259,25 +260,26 @@
 
   const patList = computed(() => {
     if (pageProps.value.params) {
-      return [
-        <IPat>{
-          patientNameEncry:
-            pageProps.value.deParams?.patientName || '未知的就诊人',
-          _showId: pageProps.value.deParams?.cardNumber || '',
-        },
-      ];
+      return [selPat.value];
     } else {
       return gStores.userStore.patList;
     }
   });
 
   const selPat = computed(() => {
-    if (pageProps.value.deParams?.cardNumber) {
-      return <IPat>{
-        patientNameEncry:
-          pageProps.value.deParams?.patientName || '未知的就诊人',
-        _showId: pageProps.value.deParams?.cardNumber,
-      };
+    if (pageProps.value.params) {
+      if (
+        gStores.userStore.patChoose.cardNumber ===
+        pageProps.value.deParams?.cardNumber
+      ) {
+        return gStores.userStore.patChoose;
+      } else {
+        return <IPat>{
+          patientNameEncry:
+            pageProps.value.deParams?.patientName || '未知的就诊人',
+          _showId: pageProps.value.deParams?.cardNumber || '',
+        };
+      }
     } else {
       return gStores.userStore.patChoose;
     }
