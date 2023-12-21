@@ -277,47 +277,14 @@
       <view>{{ tips.title }}：</view>
       <view>{{ tips.content }}</view>
     </view>
-    <view class="footer">
-      <button
-        class="footer-button"
-        v-if="pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1"
-        @click="goReportPdf"
-      >
-        <view class="icon-font ico_download-blue"></view>
-        <view class="title">下载报告</view>
-      </button>
-      <!-- #ifdef MP-WEIXIN -->
-      <block v-if="pageProps._scan !== '1'">
-        <text style="color: #e6e6e6">|</text>
-        <button class="footer-button" @click="shareReport">
-          <view class="icon-font ico_share-blue"></view>
-          <view class="title">分享报告</view>
-        </button>
-      </block>
-      <!-- #endif -->
-      <text
-        v-if="
-          pageProps.isDoctorCard &&
-          checkoutReportList.applyDocId &&
-          checkoutReportList.deptId
-        "
-        style="color: #e6e6e6"
-      >
-        |
-      </text>
-      <button
-        v-if="
-          pageProps.isDoctorCard &&
-          checkoutReportList.applyDocId &&
-          checkoutReportList.deptId
-        "
-        class="footer-button"
-        @click="goDoctor"
-      >
-        <view class="icon-font ico_doctor-blue"></view>
-        <view class="title">咨询医生</view>
-      </button>
-    </view>
+    <Bottom-Nav
+      :addition="{
+        ...pat,
+        ...pageProps,
+        ...checkoutReportList,
+      }"
+      @btn-click="btnClick"
+    />
   </view>
 
   <!--  #ifdef MP-ALIPAY -->
@@ -373,9 +340,6 @@
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
   import { onMounted, ref, computed } from 'vue';
-  import dayjs from 'dayjs';
-  import api from '@/service/api';
-  import global from '@/config/global';
 
   import {
     checkoutReportDetails,
@@ -393,8 +357,13 @@
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
 
+  import dayjs from 'dayjs';
+  import api from '@/service/api';
+  import global from '@/config/global';
+
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import HoverTip from './components/HoverTip.vue';
+  import BottomNav from './components/BottomNav.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -429,6 +398,25 @@
   const patCardNumber = computed(() => {
     return checkoutReportList.value.cardNumber || pat.cardNumber;
   });
+
+  const btnClick = ({ key }) => {
+    switch (key) {
+      case 'shareReport':
+        shareReport();
+        break;
+
+      case 'downReport':
+        goReportPdf();
+        break;
+
+      case 'askDoc':
+        goDoctor();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
@@ -729,11 +717,11 @@
       width: 100%;
       background-color: #fff;
       line-height: 96rpx;
-      position: fixed;
+      // position: fixed;
       left: 0;
       bottom: 0;
       display: flex;
-      z-index: 99;
+      z-index: 1;
       .footer-button {
         height: 96rpx;
         width: 100%;

@@ -328,7 +328,11 @@
       isGraphic,
     };
 
-    const mq: any = {};
+    const mq: any = {
+      // #ifdef MP-WEIXIN
+      _local: '1',
+      // #endif
+    };
     for (const key in mq1) {
       const v = mq1[key];
       mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;

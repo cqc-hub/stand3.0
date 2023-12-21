@@ -184,47 +184,15 @@
       <view>{{ tips.title }}：</view>
       <view>{{ tips.content }}</view>
     </view>
-    <view class="footer">
-      <button
-        class="footer-button"
-        v-if="pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1"
-        @click="downloadReport"
-      >
-        <view class="icon-font ico_download-blue"></view>
-        <view class="title">下载报告</view>
-      </button>
-      <!-- #ifdef MP-WEIXIN -->
-      <block v-if="pageProps._scan !== '1'">
-        <text style="color: #e6e6e6">|</text>
-        <button class="footer-button" @click="shareReport">
-          <view class="icon-font ico_share-blue"></view>
-          <view class="title">分享报告</view>
-        </button>
-      </block>
-      <!-- #endif -->
-      <text
-        style="color: #e6e6e6"
-        v-if="
-          pageProps.isDoctorCard &&
-          examineReportList.applyDocId &&
-          examineReportList.deptId
-        "
-      >
-        |
-      </text>
-      <button
-        v-if="
-          pageProps.isDoctorCard &&
-          examineReportList.applyDocId &&
-          examineReportList.deptId
-        "
-        class="footer-button"
-        @click="goDoctor"
-      >
-        <view class="icon-font ico_doctor-blue"></view>
-        <view class="title">咨询医生</view>
-      </button>
-    </view>
+
+    <Bottom-Nav
+      :addition="{
+        ...pat,
+        ...pageProps,
+        ...examineReportList,
+      }"
+      @btn-click="btnClick"
+    />
   </view>
 
   <!--  #ifdef MP-ALIPAY -->
@@ -305,11 +273,6 @@
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import { ref, onMounted, computed, nextTick, onUpdated } from 'vue';
 
-  import global from '@/config/global';
-  import api from '@/service/api';
-  import dayjs from 'dayjs';
-  import env from '@/config/env';
-
   import {
     examineReportDetails,
     getShareTotalUrl,
@@ -319,8 +282,13 @@
   import { joinQuery, encryptDes, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
+  import global from '@/config/global';
+  import api from '@/service/api';
+  import dayjs from 'dayjs';
+  import env from '@/config/env';
 
   import GreenToast from '@/components/greenPower/greenToast.vue';
+  import BottomNav from './components/BottomNav.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
   let isScrollCheck = true;
@@ -403,6 +371,26 @@
       })
       .exec();
   };
+
+  const btnClick = ({ key }) => {
+    switch (key) {
+      case 'shareReport':
+        shareReport();
+        break;
+
+      case 'downReport':
+        downloadReport();
+        break;
+
+      case 'askDoc':
+        goDoctor();
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const domData = ref();
   let dealScroll = (e) => {
     if (!isScrollCheck) {
@@ -463,15 +451,14 @@
   };
   const pageProps = ref(<any>{});
 
-
   const gStore = new GStores();
   const pat = gStore.userStore.patChoose;
   const patName = computed(() => {
-    return examineReportList.value.patientName || pat.patientName
-  })
+    return examineReportList.value.patientName || pat.patientName;
+  });
   const patCardNumber = computed(() => {
-    return examineReportList.value.cardNumber || pat.cardNumber
-  })
+    return examineReportList.value.cardNumber || pat.cardNumber;
+  });
 
   onLoad((p) => {
     pageProps.value = deQueryForUrl(p);

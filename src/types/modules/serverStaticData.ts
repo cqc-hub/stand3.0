@@ -277,7 +277,7 @@ export interface ISystemConfig_ {
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
     jcListFooterBtn?: TButtonConfig[] | TButtonConfig;
 
-    // 详情里面浮窗引导提示的按钮组
+    // 详情里面浮窗引导提示的按钮组(报告看不懂？结果有疑问?)
     jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
     jcHoverTipBtns?: TButtonConfig[] | TButtonConfig;
   };
