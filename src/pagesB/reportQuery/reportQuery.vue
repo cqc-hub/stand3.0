@@ -314,8 +314,14 @@
     }
   };
   const goDetail = (data) => {
-    const { isDoctorCard, isDownloadRepor, isGraphic, isWatermark } =
-      reportConfig.value;
+    const {
+      isDoctorCard,
+      isDownloadRepor,
+      isGraphic,
+      isWatermark,
+      jcBottomNav,
+      jyBottomNav,
+    } = reportConfig.value;
     const mq1 = {
       repId: data.repId || '',
       repType: data.repType || '',
@@ -339,10 +345,21 @@
     }
 
     if (tabCurrent.value == 0) {
+      if (jyBottomNav) {
+        Object.keys(jyBottomNav).map((key) => {
+          mq[key] = jyBottomNav[key] === '1' ? '1' : '';
+        });
+      }
+
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', mq),
       });
     } else if (tabCurrent.value == 1) {
+      if (jcBottomNav) {
+        Object.keys(jcBottomNav).map((key) => {
+          mq[key] = jcBottomNav[key] === '1' ? '1' : '';
+        });
+      }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/inspectionReport', mq),
       });

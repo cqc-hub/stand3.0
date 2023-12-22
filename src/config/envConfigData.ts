@@ -31,6 +31,9 @@ const config = <const>{
       },
     },
   ],
+  'reportQuery.jyBottomNav': {
+    btnAskDoc: '1',
+  },
 };
 
 export default config;

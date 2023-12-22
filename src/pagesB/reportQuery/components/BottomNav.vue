@@ -79,14 +79,14 @@
       text: '咨询医生',
       ico: 'ico_doctor-blue',
       key: 'askDoc',
-      needKeys: ['isDoctorCard', 'applyDocId', 'deptId'],
+      needKeys: ['isDoctorCard', 'applyDocId', 'deptId', 'btnAskDoc'],
     },
 
     {
       text: '复诊预约',
       ico: 'ico_hospital',
       key: 'reOrder',
-      needKeys: ['deptId', 'hosId', 'deptName'],
+      needKeys: ['deptId', 'hosId', 'deptName', 'btnReOrder'],
     },
 
     {
