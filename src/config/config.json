@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001054",
+  "sysCode": "1001057",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -142,7 +142,6 @@
       "isvAlipayAppid": "2021003172684536",
       "name": "西安市红会医院互联网医院",
       "isSearchInHos": true,
-      "isStartComeTest": true,
       "isOpenOcr": false,
       "isOpenHealthCard": {
         "healthCardText": "陕西省卫生健康委员会",

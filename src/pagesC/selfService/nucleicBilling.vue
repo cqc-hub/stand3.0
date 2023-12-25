@@ -173,7 +173,6 @@
   const tabs = computed(() => {
     return pageConfig.value.tabs || [];
   });
-  const inst = getCurrentInstance();
   const tipLineHeight = 40;
 
   const tabCurrent = ref(0);
@@ -225,7 +224,7 @@
     if (tabs.value.length) {
       billingType = tabs.value[tabCurrent.value]?.value;
     }
-
+    NucleResult.value.length = 0;
     const { result } = await api
       .getItemList({
         billingType,
