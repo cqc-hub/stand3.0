@@ -10,22 +10,30 @@ const config = <const>{
   'medRecord.0.isCustomPatRecord': '1',
   'reportQuery.jyHoverTipBtns': <TButtonConfig[]>[
     {
+      text: '咨询医生',
+      type: 'self',
+      path: 'pagesA/MyRegistration/DoctorDetails',
+      addition: {
+        deptId: 'hosDeptId',
+        hosId: 'hosId',
+        docName: 'applyDoc',
+        applyDocId: 'hosDocId',
+      },
+    },
+    {
       text: '复诊预约',
       type: 'self',
       path: 'pagesA/MyRegistration/order',
       addition: {
-
-      },
-    },
-    {
-      text: '咨询医生',
-      type: 'self',
-      path: 'pagesA/MyRegistration/order',
-      addition: {
-
+        deptId: 'hosDeptId',
+        hosId: 'hosId',
+        deptName: 'deptName',
       },
     },
   ],
+  'reportQuery.jyBottomNav': {
+    btnAskDoc: '1',
+  },
 };
 
 export default config;

@@ -66,6 +66,8 @@
   };
 
   const btnClick = (btn: TButtonConfig) => {
+    console.log(props.addition);
+
     useTBanner(btn, 'navigateTo', props.addition);
   };
 </script>
@@ -74,7 +76,7 @@
   .ask-doc {
     padding: 64upx 32upx;
     position: fixed;
-    bottom: 66rpx;
+    bottom: 88rpx;
     right: 0;
     left: 0;
     color: #fff;

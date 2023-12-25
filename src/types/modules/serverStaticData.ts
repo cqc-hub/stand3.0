@@ -277,9 +277,13 @@ export interface ISystemConfig_ {
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
     jcListFooterBtn?: TButtonConfig[] | TButtonConfig;
 
-    // 详情里面浮窗引导提示的按钮组
+    // 详情里面浮窗引导提示的按钮组(报告看不懂？结果有疑问?)
     jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
     jcHoverTipBtns?: TButtonConfig[] | TButtonConfig;
+
+
+   jcBottomNav?: TReportDetailBottomConfig;
+   jyBottomNav?: TReportDetailBottomConfig;
   };
 
   /** 药品配送 */
@@ -356,6 +360,12 @@ export interface ISystemConfig_ {
 
 type TInsertEnv<T extends BaseObject, S extends keyof any> = {
   [K in keyof T]: T[K] & { [P in S]?: T[K] };
+};
+
+/** 报告查询详情底部按钮 */
+type TReportDetailBottomConfig = {
+  btnAskDoc?: '1';
+  btnReOrder?: '1';
 };
 
 export type ISystemConfig = TInsertEnv<ISystemConfig_, TConfigEnv>;
