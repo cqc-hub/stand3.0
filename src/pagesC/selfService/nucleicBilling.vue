@@ -43,7 +43,7 @@
           :class="{
             active: selList.findIndex((o) => o.itemCode === item.itemCode) > -1,
           }"
-          class="box-aaa"
+          class="box-aaa g-fade-in"
         >
           <view class="box-item">
             <label>{{ item.itemName }}</label>
@@ -58,8 +58,25 @@
             </block>
           </view>
 
-          <view v-if="item.tips" class="color-888 f26 g-break-word">
-            <rich-text :nodes="HTMLParser(item.tips)" />
+          <view
+            v-if="item.tips"
+            :id="'nucle-item-' + item.itemCode"
+            @click.stop="item.tipHide = true"
+            class="color-888 f26 g-break-word tip flex-normal"
+          >
+            <rich-text
+              :style="{
+                'line-height': `${tipLineHeight}rpx`,
+              }"
+              :class="{
+                'text-ellipsis': !item.tipHide && item.showTipHideBtn,
+              }"
+              :nodes="HTMLParser(item.tips)"
+            />
+
+            <view v-if="!item.tipHide && item.showTipHideBtn" class="show-all">
+              <text class="iconfont f36">&#xe66b;</text>
+            </view>
           </view>
         </view>
       </view>
@@ -117,7 +134,7 @@
 
 <script setup lang="ts">
   import api from '@/service/api';
-  import { ref, computed, onMounted } from 'vue';
+  import { ref, computed, onMounted, nextTick, getCurrentInstance } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
@@ -141,6 +158,8 @@
     itemName: string;
     itemTime: string;
     tips: string;
+    tipHide: boolean;
+    showTipHideBtn: boolean;
   }
 
   const props = defineProps<{
@@ -154,6 +173,8 @@
   const tabs = computed(() => {
     return pageConfig.value.tabs || [];
   });
+  const inst = getCurrentInstance();
+  const tipLineHeight = 40;
 
   const tabCurrent = ref(0);
   const isFgShow45 = ref(false);
@@ -204,7 +225,6 @@
     if (tabs.value.length) {
       billingType = tabs.value[tabCurrent.value]?.value;
     }
-    selList.value.length = 0;
 
     const { result } = await api
       .getItemList({
@@ -217,7 +237,32 @@
       });
 
     if (result.length > 0) {
+      result[0].items.map((o) => {
+        o.tipHide = false;
+        o.showTipHideBtn = false;
+      });
       NucleResult.value = result[0].items;
+
+      setTimeout(() => {
+        NucleResult.value.map((o) => {
+          if (o.tips && o.tips.length > 10) {
+            uni
+              .createSelectorQuery()
+              .select(`#nucle-item-${o.itemCode}`)
+              .boundingClientRect((rect) => {
+                const lineHeight = parseInt(
+                  // @ts-expect-error
+                  rect.height / uni.upx2px(tipLineHeight)
+                );
+
+                if (lineHeight > 1) {
+                  o.showTipHideBtn = true;
+                }
+              })
+              .exec();
+          }
+        });
+      }, 80);
     }
   };
   const clickItem = (item) => {
@@ -407,6 +452,21 @@
           color: var(--hr-brand-color-6);
         }
       }
+    }
+  }
+
+  .tip {
+    position: relative;
+
+    .show-all {
+      transform: rotate(90deg);
+
+      background: linear-gradient(
+        180deg,
+        #fff 0,
+        #fff 60%,
+        rgba(255, 255, 255, 0.3) 100%
+      );
     }
   }
 </style>
