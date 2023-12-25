@@ -61,7 +61,7 @@
           <view
             v-if="item.tips"
             :id="'nucle-item-' + item.itemCode"
-            @click.stop="item.tipHide = true"
+            @click.stop="clickTip(item)"
             class="color-888 f26 g-break-word tip flex-normal"
           >
             <rich-text
@@ -100,7 +100,7 @@
         class="btn btn-primary flex1"
         @click="submit"
       >
-        确定开单
+        确定开单{{ (selList.length && `(${selList.length})`) || '' }}
       </button>
     </view>
     <view
@@ -265,6 +265,15 @@
       }, 80);
     }
   };
+
+  const clickTip = (item: INucle) => {
+    if (item.showTipHideBtn && !item.tipHide) {
+      item.tipHide = true;
+    } else {
+      clickItem(item);
+    }
+  };
+
   const clickItem = (item) => {
     if (pageConfig.value.multi === '1') {
       const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
@@ -289,7 +298,7 @@
     }, 0);
 
     const tips =
-      `确定开单以下${selList.value.length}项吗: ` +
+      `是否确认以下${selList.value.length}项开单: ` +
       selList.value
         .map((o) => {
           return `${o.itemName}` + (o.fee ? `(${o.fee}元)` : '');
