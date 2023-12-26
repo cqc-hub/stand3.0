@@ -423,10 +423,7 @@
 <style lang="scss">
 	.uni-popup {
 		position: fixed;
-		/* #ifndef APP-NVUE */
-		z-index: 1000;
-
-		/* #endif */
+		z-index: 9999;
 		&.top,
 		&.left,
 		&.right {
