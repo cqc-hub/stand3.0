@@ -156,12 +156,12 @@
           </view>
           <view
             :class="{
-              pb40: docSchList.length && isComplete,
+              pb40: docSchList.length,
             }"
             class="content-box"
           >
             <view
-              v-if="docSchList.length && isComplete"
+              v-if="docSchList.length"
               class="content-sel-date mb16 g-border-bottom"
             >
               <Order-Sel-Date
@@ -172,7 +172,7 @@
               />
             </view>
 
-            <block v-if="docSchList.length && isComplete">
+            <block v-if="docSchList.length">
               <block v-if="Object.keys(schToday.schByHos).length">
                 <view v-if="isShowHosNet">
                   <text class="label-mark">
