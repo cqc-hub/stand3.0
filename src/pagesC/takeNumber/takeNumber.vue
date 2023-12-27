@@ -4,7 +4,11 @@
     <g-choose-pat @choose-pat="init" />
     <view class="pat-box">
       <view class="health-card">
-        <view @click="goRecord" class="mr14 g-flex-rc-cc">
+        <view
+          v-if="pageProps._type !== 'blood'"
+          @click="goRecord"
+          class="mr14 g-flex-rc-cc"
+        >
           <view class="iconfont icon-resize">&#xe6fc;</view>
           <text class="color-111">挂号记录</text>
         </view>
@@ -15,6 +19,15 @@
             :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
           />
           <text class="color-111">排队叫号</text>
+        </view>
+
+        <view
+          v-if="pageConfig.takeNumber1ElectronicGuideBtn === '1'"
+          @click="goElectronicGuide"
+          class="mr14 g-flex-rc-cc"
+        >
+          <view class="iconfont icon-resize">&#xe6fc;</view>
+          <text class="color-111">电子导诊单</text>
         </view>
       </view>
     </view>
@@ -120,6 +133,7 @@
   import { watch, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
+  import { deQueryForUrl } from '@/common';
   import {
     GStores,
     ServerStaticData,
@@ -127,6 +141,7 @@
     useTBanner,
     getLocation,
     ISystemConfig,
+    apiAsync,
   } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
@@ -145,6 +160,14 @@
   const isShowQr = ref(false);
   const isShowQueueBtn = ref(false);
   const isTakeNumberAfterBtnForGoQueueNumber = ref(false);
+  const pageProps = ref(
+    <
+      {
+        hosId?: string; // 采血取号 需要
+        _type?: 'blood'; //区分普通取号和 濮阳采血取号
+      }
+    >{}
+  );
 
   const locationInfo = ref({
     latitude: '',
@@ -183,10 +206,29 @@
       patientId,
       hosId,
     };
+    isFgShow451.value = false;
 
-    await api.getCheckIn(args).finally(() => {
-      isFgShow451.value = false;
-    });
+    if (pageProps.value._type === 'blood') {
+      locationInfo.value = await getLocation(true);
+      const {
+        result: { status, promptMessage },
+      } = await api.bloodTestSignIn({
+        signType: '1', // 没用 但是 phs 做了非空校验
+        ...pageProps.value,
+        ...locationInfo.value,
+        patientId,
+      });
+
+      if (status) {
+        await apiAsync(uni.showModal, {
+          content: promptMessage || '取号成功',
+          showCancel: false,
+        });
+      }
+    } else {
+      await api.getCheckIn(args);
+    }
+
     await getList();
 
     if (pageConfig.value.takeNumberConfirmAfter === '1') {
@@ -224,6 +266,23 @@
   const goRecord = () => {
     uni.navigateTo({
       url: '/pagesA/MyRegistration/MyRegistration',
+    });
+  };
+
+  const goElectronicGuide = () => {
+    useTBanner({
+      type: 'h5',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: gStores.globalStore.sysCode,
+      },
+
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+        patientId: 'patientId',
+      },
     });
   };
 
@@ -308,7 +367,8 @@
     getList();
   };
 
-  onLoad(async () => {
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     await getConfig();
     init();
   });
@@ -374,5 +434,4 @@
     width: 50rpx;
     height: 50rpx;
   }
-
 </style>

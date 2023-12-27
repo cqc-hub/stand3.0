@@ -85,6 +85,17 @@
                         itemBgc="#fff"
                         disabledActiveStyle
                       />
+
+                      <view
+                        v-if="
+                          !collapseOrderSourceList[
+                            getCollapseOrderSourceListKey(_item)
+                          ] && refreshList
+                        "
+                        class="empty-list g-fade-in"
+                      >
+                        <g-empty text="暂无号源" noTransformY />
+                      </view>
                     </view>
                   </template>
                 </g-collapse>
@@ -153,7 +164,7 @@
     TSchInfoWhole,
     IChooseDays,
   } from '../../utils/index';
-  import { GStores, ServerStaticData, type ISystemConfig } from '@/utils';
+  import { GStores, ServerStaticData, type ISystemConfig, wait } from '@/utils';
 
   import orderSelectSourceList from './OrderSourceList.vue';
   import api from '@/service/api';
@@ -287,15 +298,13 @@
     });
   };
 
-  const tabChange = (e) => {
+  const tabChange = async (e) => {
     emits('am-change', props.selectSchInfos[e]);
     resetData();
-    refreshList.value = false;
-
-    setTimeout(() => {
-      refreshList.value = true;
-      initAmPmResList();
-    }, 100);
+    await wait(20);
+    refreshList.value = true;
+    await wait(50);
+    initAmPmResList();
   };
 
   const initAmPmResList = async () => {

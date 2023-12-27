@@ -13,6 +13,7 @@ declare module '*.vue' {
 declare module '@vue/runtime-core' {
 	interface ComponentCustomProperties {
 		$global: typeof global;
+		$HTMLParser: (any) => any;
 	}
 }
 

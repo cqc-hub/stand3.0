@@ -248,8 +248,10 @@ export interface ISystemConfig_ {
          * @mode
          * 1-电子导诊单
          * 2-药品助手
+         * 3-门诊取号
          */
-        mode: '1' | '2';
+        mode: '1' | '2' | '3';
+        extraData?: BaseObject;
       }
     >;
   };
@@ -281,9 +283,8 @@ export interface ISystemConfig_ {
     jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
     jcHoverTipBtns?: TButtonConfig[] | TButtonConfig;
 
-
-   jcBottomNav?: TReportDetailBottomConfig;
-   jyBottomNav?: TReportDetailBottomConfig;
+    jcBottomNav?: TReportDetailBottomConfig;
+    jyBottomNav?: TReportDetailBottomConfig;
   };
 
   /** 药品配送 */

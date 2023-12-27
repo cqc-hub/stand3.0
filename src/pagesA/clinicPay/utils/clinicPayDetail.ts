@@ -1732,8 +1732,8 @@ export const executeConfigPayAfter = async (
     const configItem = pageNextAdress[clinicType as '1' | '2' | '3'];
 
     if (configItem) {
-      const mode = configItem.mode;
-
+      const { mode, extraData: _extraData } = configItem;
+      const extraData = _extraData || {};
       switch (mode) {
         // 电子导诊单
         case '1':
@@ -1747,6 +1747,7 @@ export const executeConfigPayAfter = async (
                 token: 'token',
                 cardNumber: '_hosPd',
               },
+              extraData,
             },
             'reLaunch'
           );
@@ -1754,14 +1755,32 @@ export const executeConfigPayAfter = async (
           return Promise.reject(void 0);
 
         case '2':
-          uni.reLaunch({
-            url: joinQueryForUrl('/pagesB/medicationAssistant/medicalHelp', {
-              _hosPd: cardNumber,
-            }),
-          });
+          useTBanner(
+            {
+              type: 'self',
+              path: 'pagesB/medicationAssistant/medicalHelp',
+              extraData: {
+                _hosPd: cardNumber,
+                ...extraData,
+              },
+            },
+            'reLaunch'
+          );
 
           return Promise.reject(void 0);
 
+        case '3':
+          useTBanner(
+            {
+              type: 'self',
+              path: 'pagesC/takeNumber/takeNumber',
+              extraData: {
+                ...extraData,
+              },
+            },
+            'reLaunch'
+          );
+          return Promise.reject(void 0);
         default:
           break;
       }

@@ -10,11 +10,17 @@
         <view>
           <text
             :class="{
-              'color-888': item.reportFlag === '1',
+              'color-888': ['1', '2'].includes(item.reportFlag),
             }"
             class="color-blue"
           >
-            {{ item.reportFlag === '0' ? '待取号' : '已取号' }}
+            {{
+              item.reportFlag === '2'
+                ? '无需取号'
+                : item.reportFlag === '0'
+                ? '待取号'
+                : '已取号'
+            }}
           </text>
         </view>
       </view>
@@ -23,7 +29,11 @@
         <text class="mr8">{{ item.visitDate }}</text>
         <text>{{ item.ampmName }}</text>
         <text class="mr8">{{ item.timeDesc }}</text>
-        <text>第{{ item.queueNum }}号</text>
+        <text v-if="item.queueNum">第{{ item.queueNum }}号</text>
+      </view>
+
+      <view v-if="item.visitingArea" class="tip">
+        <rich-text :nodes="$HTMLParser(item.visitingArea)" />
       </view>
 
       <view v-if="item.reportFlag === '0'">
