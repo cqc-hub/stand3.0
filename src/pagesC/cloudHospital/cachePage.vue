@@ -136,7 +136,7 @@
             })
           ),
         });
-        let authCode = getMedicalAuthCode();
+        let authCode = getMedicalAuthCode(data);
         console.warn('授权码', authCode);
         return;
       }
@@ -166,12 +166,13 @@
     //支持分享
     // 隐藏分享按钮
     if (data[0].shareData) {
-      if (data[0].shareData.closeShare) {
+      let newShareData = data[data.length - 1].shareData
+      if (newShareData.closeShare) {
         uni.hideShareMenu({
           hideShareItems: [],
         });
       } else {
-        shareData.value = data[0].shareData;
+        shareData.value = newShareData;
         console.warn('开启分享按钮');
         uni.showShareMenu({});
       }

@@ -95,7 +95,7 @@
       </button>
       <button
         :class="{
-          'btn-disabled': isSubBtnDisabled,
+          'btn-disabled': !selList.length,
         }"
         class="btn btn-primary flex1"
         @click="submit"
@@ -183,7 +183,6 @@
   const selList = ref<INucle[]>([]);
   const gStores = new GStores();
   const pageLoading = ref(false);
-  const isSubBtnDisabled = ref(false);
 
   onLoad(async (opt) => {
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
@@ -313,8 +312,6 @@
       return;
     }
 
-    isSubBtnDisabled.value = true;
-
     try {
       const { result } = await api.createBillingOrder({
         hosId: props.hosId,
@@ -356,7 +353,6 @@
         });
       }
     } catch (error) {
-      isSubBtnDisabled.value = false;
       throw new Error(error as string);
     }
   };

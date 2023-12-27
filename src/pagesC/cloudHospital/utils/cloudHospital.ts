@@ -3,7 +3,7 @@ import { GStores, apiAsync } from '@/utils';
 import globalGl from '@/config/global';
 import { setLocalStorage } from '@/common';
 
-export const getMedicalAuthCode = async (): Promise<string> => {
+export const getMedicalAuthCode = async (data): Promise<string> => {
   let fCode = '';
 
   const gStores = new GStores();
@@ -22,6 +22,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
     setLocalStorage({
       'get-wx-medical-auth-code': '1',
     });
+    let registerId = data[0].registerId;
+    let payBackParams = encodeURIComponent(JSON.stringify(data[0].payBackParams));
 
     uni.navigateToMiniProgram({
       appId,
@@ -36,6 +38,15 @@ export const getMedicalAuthCode = async (): Promise<string> => {
           gStores.messageStore.showMessage(
             '未完成电子医保凭证授权,无法继续医保结算'
           );
+          setTimeout(() => {
+            uni.navigateTo({
+              url: joinQuery('/pagesC/cloudHospital/cachePage', {
+                payment: 'back',
+                registerId: registerId,
+                payBackParams: payBackParams,
+              }),
+            });
+          }, 1000);
         }
       },
     });
