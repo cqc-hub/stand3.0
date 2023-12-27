@@ -149,6 +149,7 @@
 
   import NumberList from './components/NumberList.vue';
   import QrPopup from './components/QrPopup.vue';
+
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['order']>{});
   const isComplete = ref(false);
