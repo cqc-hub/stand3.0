@@ -4,7 +4,11 @@
     <g-choose-pat @choose-pat="init" />
     <view class="pat-box">
       <view class="health-card">
-        <view @click="goRecord" class="mr14 g-flex-rc-cc">
+        <view
+          v-if="pageProps._type !== 'blood'"
+          @click="goRecord"
+          class="mr14 g-flex-rc-cc"
+        >
           <view class="iconfont icon-resize">&#xe6fc;</view>
           <text class="color-111">挂号记录</text>
         </view>
@@ -15,6 +19,15 @@
             :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
           />
           <text class="color-111">排队叫号</text>
+        </view>
+
+        <view
+          v-if="pageConfig.takeNumber1ElectronicGuideBtn === '1'"
+          @click="goElectronicGuide"
+          class="mr14 g-flex-rc-cc"
+        >
+          <view class="iconfont icon-resize">&#xe6fc;</view>
+          <text class="color-111">电子导诊单</text>
         </view>
       </view>
     </view>
@@ -252,6 +265,23 @@
   const goRecord = () => {
     uni.navigateTo({
       url: '/pagesA/MyRegistration/MyRegistration',
+    });
+  };
+
+  const goElectronicGuide = () => {
+    useTBanner({
+      type: 'h5',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      isSelfH5: '1',
+      extraData: {
+        sysCode: gStores.globalStore.sysCode,
+      },
+
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+        patientId: 'patientId',
+      },
     });
   };
 
