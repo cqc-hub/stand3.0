@@ -120,6 +120,7 @@
   import { watch, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
+  import { deQueryForUrl } from '@/common';
   import {
     GStores,
     ServerStaticData,
@@ -127,6 +128,7 @@
     useTBanner,
     getLocation,
     ISystemConfig,
+    apiAsync,
   } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
@@ -134,7 +136,6 @@
 
   import NumberList from './components/NumberList.vue';
   import QrPopup from './components/QrPopup.vue';
-
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['order']>{});
   const isComplete = ref(false);
@@ -145,6 +146,14 @@
   const isShowQr = ref(false);
   const isShowQueueBtn = ref(false);
   const isTakeNumberAfterBtnForGoQueueNumber = ref(false);
+  const pageProps = ref(
+    <
+      {
+        hosId?: string; // 采血取号 需要
+        _type?: 'blood'; //区分普通取号和 濮阳采血取号
+      }
+    >{}
+  );
 
   const locationInfo = ref({
     latitude: '',
@@ -183,10 +192,29 @@
       patientId,
       hosId,
     };
+    isFgShow451.value = false;
 
-    await api.getCheckIn(args).finally(() => {
-      isFgShow451.value = false;
-    });
+    if (pageProps.value._type === 'blood') {
+      locationInfo.value = await getLocation(true);
+      const {
+        result: { status, promptMessage },
+      } = await api.bloodTestSignIn({
+        signType: '1', // 没用 但是 phs 做了非空校验
+        ...pageProps.value,
+        ...locationInfo.value,
+        patientId,
+      });
+
+      if (status) {
+        await apiAsync(uni.showModal, {
+          content: promptMessage || '取号成功',
+          showCancel: false,
+        });
+      }
+    } else {
+      await api.getCheckIn(args);
+    }
+
     await getList();
 
     if (pageConfig.value.takeNumberConfirmAfter === '1') {
@@ -308,7 +336,8 @@
     getList();
   };
 
-  onLoad(async () => {
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     await getConfig();
     init();
   });
@@ -374,5 +403,4 @@
     width: 50rpx;
     height: 50rpx;
   }
-
 </style>

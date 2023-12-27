@@ -525,7 +525,12 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       docTitleName,
     } = selectSchInfo;
     const { disNo, numId, timeDesc } = item;
-    const { clinicalType, promptMessage, thRegisterId } = props.value;
+    const {
+      clinicalType,
+      promptMessage,
+      thRegisterId,
+      hosId: _pHosId,
+    } = props.value;
 
     const pageArg = {
       disNo,
@@ -541,7 +546,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       fee,
       hosDeptId,
       hosDocId,
-      hosId,
+      hosId: _pHosId || hosId,
       schDate,
       schId,
       schQukCategor,

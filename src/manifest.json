@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxd9a9c329edc6e2b0",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,26 +63,16 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents"
   },
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003164669106"
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -94,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "联勤保障部队第987医院",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"

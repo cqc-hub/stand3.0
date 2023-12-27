@@ -1,7 +1,7 @@
 export type TTakeNumberListItem = {
   deptName: string;
   docName: string;
-  reportFlag: '0' | '1'; // 0-待取号 1-已取号
+  reportFlag: '0' | '1' | '2'; // 0-待取号 1-已取号 2 无需取号
   ampmName: string;
   ampm: string;
   visitDate: string;
@@ -11,6 +11,7 @@ export type TTakeNumberListItem = {
   queueNum: string;
   hosId: string;
   qrValue?: string;
+  visitingArea?: string;
 };
 
 export type _TTakeNumberListItem = {
