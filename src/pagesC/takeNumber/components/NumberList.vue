@@ -32,8 +32,8 @@
         <text v-if="item.queueNum">第{{ item.queueNum }}号</text>
       </view>
 
-      <view class="tip">
-        <view class="g-break-word">{{ item.visitingArea }}</view>
+      <view v-if="item.visitingArea" class="tip">
+        <rich-text :nodes="$HTMLParser(item.visitingArea)" />
       </view>
 
       <view v-if="item.reportFlag === '0'">

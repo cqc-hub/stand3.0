@@ -1,6 +1,7 @@
 import { createSSRApp } from 'vue';
 import { painaInstall } from '@/stores/plugins';
 import 'animate.css';
+import HTMLParser from '@/common/html-parser';
 
 import App from './App.vue';
 import global from './config/global';
@@ -17,6 +18,7 @@ export function createApp() {
   // app.use(router);
 
   app.config.globalProperties.$global = global;
+  app.config.globalProperties.$HTMLParser = HTMLParser;
 
   return {
     app,
