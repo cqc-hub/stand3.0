@@ -18,14 +18,42 @@
             <view class="dates">{{ m.inDay }}～{{ m.endDay }}</view>
             <view class="details" @click="gotoListExpenses(m)">
               <view class="flex-between">
-                <view class="date">{{ i.hosName }}</view>
+                <view class="flex-normal">
+                  <view class="date mr12">{{ i.hosName }}</view>
+                  <text
+                    v-if="isMode1"
+                    :class="{
+                      'pay-self': i.inpStatus === 'false',
+                      'pay-medical': i.inpStatus !== 'false',
+                    }"
+                    class="type-block f24 mr8 text-no-wrap"
+                  >
+                    {{ i.inpStatus === 'false' ? '在院' : '出院' }}
+                  </text>
+                </view>
+
                 <view class="details-right">
                   <view class="money" v-if="m.cost">{{ m.cost }}元</view>
                   <view class="iconfont right">&#xe66b;</view>
                 </view>
               </view>
 
-              <view v-if="m.wardName" class="color-888 f28">{{ m.wardName }}</view>
+              <view v-if="m.wardName" class="color-888 f28">
+                {{ m.wardName }}
+              </view>
+
+              <view v-if="isMode1" class="flex-normal pt24">
+                <view
+                  @click.stop="dayCostList(m)"
+                  class="btn btn-plain btn-primary btn-border pl12 pr12 pt12 pb12 mr24"
+                >
+                  日费用清单
+                </view>
+
+                <view class="flex1 btn btn-primary pl12 pr12 pt12 pb12">
+                  总计清单
+                </view>
+              </view>
             </view>
           </view>
         </view>
@@ -54,19 +82,25 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import { GStores } from '@/utils';
   import api from '@/service/api';
   import { dailyResult } from '../utils/inpatientInfo';
   import dailyExpenseListDetial from './dailyExpenseListDetial.vue';
+  import { joinQueryForUrl } from '@/common';
   const gStores = new GStores();
   const props = defineProps<{
     isHosTotallist?: string;
+    type?: 'outList';
   }>();
   const dailyInfoParam = ref({
     inHospitalId: '',
     timesHospitalization: '',
     patientId: gStores.userStore.patChoose.patientId,
+  });
+  // 出院清单
+  const isMode1 = computed(() => {
+    return props.type === 'outList';
   });
   const InHospitalCostInfo = ref(0);
   const dailyExpenseListDetialRef = ref<any>('');
@@ -101,6 +135,18 @@
       url: `listExpenses?isHosTotallist=2&hospitalId=${data.inpatientNo}`,
     });
   };
+
+  const dayCostList = (item) => {
+    const { inDay, endDay } = item;
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/hospitalCare/dayCostList', {
+        start: inDay,
+        end: endDay,
+      }),
+    });
+  };
+
   onMounted(async () => {
     await init();
     // await detalResult(InHospitalCostInfo);
@@ -194,5 +240,21 @@
   }
   .empty-box {
     padding-top: 200rpx;
+  }
+
+  .type-block {
+    font-weight: normal;
+    border-radius: 4rpx;
+    padding: 4rpx 12rpx;
+    position: relative;
+    &.pay-medical {
+      background: #747c94;
+      color: #ffe2c1;
+    }
+
+    &.pay-self {
+      background: #ffe2c1;
+      color: #51555e;
+    }
   }
 </style>

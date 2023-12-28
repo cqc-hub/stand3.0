@@ -46,6 +46,8 @@
             <uni-datetime-picker
               type="date"
               v-model="costDay"
+              :start="providePageProp().start"
+              :end="providePageProp().end"
               @change="changeTimePicker($event)"
             >
               {{ dayjs(costDay).format('YYYY-MM-DD') }}
@@ -74,8 +76,8 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref, watch, nextTick } from 'vue';
-  import { GStores, ServerStaticData } from '@/utils';
+  import { onMounted, ref, inject, nextTick } from 'vue';
+  import { GStores, wait } from '@/utils';
   import api from '@/service/api';
   import { dailyParam, dailyResult } from '../utils/inpatientInfo';
   import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
@@ -101,6 +103,10 @@
   });
 
   const dailyExpenseRef = ref<any>('');
+  const providePageProp = inject('pageProp', () => ({
+    start: '',
+    end: '',
+  }));
 
   const changeTimePicker = async (day) => {
     costDay.value = day;
@@ -111,6 +117,13 @@
   };
 
   const init = async () => {
+    await wait(20);
+    const { end, start } = providePageProp()
+    if (end || start) {
+      costDay.value = end || start;
+    }
+    console.log(props);
+
     dailyResList.value = {
       inHospitalDailyCostsResultList: [],
     };

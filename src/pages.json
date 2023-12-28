@@ -93,6 +93,16 @@
         },
 
         {
+          "path": "hospitalCare/dayCostList",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "hospitalCare/payRecord",
           "style": {
             "navigationBarTitleText": "预交记录",

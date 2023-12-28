@@ -39,6 +39,13 @@
         :isHosTotallist="resultHos.isHosTotallist"
         :tabCurrent="tabCurrent"
       ></totalList>
+      <totalList
+        ref="totalListRef3"
+        v-if="getValue('3')"
+        :isHosTotallist="resultHos.isHosTotallist"
+        :tabCurrent="tabCurrent"
+        type="outList"
+      ></totalList>
     </view>
   </view>
 </template>
@@ -67,6 +74,7 @@
   const inpatientInfoRef = ref<any>('');
   const dailyExpenseListRef = ref<any>('');
   const totalListRef = ref<any>('');
+  const totalListRef3 = ref<any>('');
   const pageLoading = ref(false);
   const tabList = ref(false);
   const tab1List = ref(false);
@@ -98,6 +106,8 @@
       dailyExpenseListRef!.value.init();
     } else if (tabCurrent.value == 2) {
       totalListRef?.value.init();
+    } else if (tabCurrent.value == 3) {
+      totalListRef3?.value.init();
     }
   };
 

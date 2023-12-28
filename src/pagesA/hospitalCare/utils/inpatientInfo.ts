@@ -63,6 +63,7 @@ export interface dailyList {
 }
 export interface dailyLists {
   hosName?: string;
+  inpStatus?: 'false' | 'true';
   costListResultList: dailySecList[];
 }
 export interface dailySecList {
@@ -143,9 +144,9 @@ export interface inHospitalCostInfo {
   inDay?: string;
   //结束时间
   endDay?: string;
-   //脱敏姓名
-   cardNumber?: string;
-   //卡号
+  //脱敏姓名
+  cardNumber?: string;
+  //卡号
 }
 export interface costList {
   category?: string;
@@ -180,11 +181,9 @@ export interface hosParam {
   isHosTotallist: string;
   tab?: IOptions[];
   isQueryPreRecord?: string;
-   /** 是否开启数字人民币支付 */
-   payList?: {
+  /** 是否开启数字人民币支付 */
+  payList?: {
     wx?: IPayListObj;
     alipay?: IPayListObj;
   };
 }
-
-
