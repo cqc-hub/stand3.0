@@ -20,16 +20,6 @@
               <view class="flex-between">
                 <view class="flex-normal">
                   <view class="date mr12">{{ i.hosName }}</view>
-                  <text
-                    v-if="isMode1"
-                    :class="{
-                      'pay-self': i.inpStatus === 'false',
-                      'pay-medical': i.inpStatus !== 'false',
-                    }"
-                    class="type-block f24 mr8 text-no-wrap"
-                  >
-                    {{ i.inpStatus === 'false' ? '在院' : '出院' }}
-                  </text>
                 </view>
 
                 <view class="details-right">
@@ -38,8 +28,20 @@
                 </view>
               </view>
 
-              <view v-if="m.wardName" class="color-888 f28">
-                {{ m.wardName }}
+              <view class="flex-normal mt12">
+                <text
+                  v-if="isMode1 && m.inpStatus === 'true'"
+                  :class="{
+                    'pay-medical': 1,
+                  }"
+                  class="type-block f24 mr8 text-no-wrap"
+                >
+                  出院
+                </text>
+
+                <view v-if="m.wardName" class="color-888 f28">
+                  {{ m.wardName }}
+                </view>
               </view>
 
               <view v-if="isMode1" class="flex-normal pt24">
@@ -134,6 +136,10 @@
     uni.navigateTo({
       url: `listExpenses?isHosTotallist=2&hospitalId=${data.inpatientNo}`,
     });
+  };
+
+  const aa = (a) => {
+    console.log(a);
   };
 
   const dayCostList = (item) => {

@@ -63,7 +63,6 @@ export interface dailyList {
 }
 export interface dailyLists {
   hosName?: string;
-  inpStatus?: 'false' | 'true';
   costListResultList: dailySecList[];
 }
 export interface dailySecList {
@@ -79,6 +78,8 @@ export interface dailySecList {
   inDay?: string;
   totalCost?: string;
   wardName?: string;
+  inpStatus?: 'false' | 'true';
+
 }
 //创建住院订单 出参
 export interface payOrderResult {
