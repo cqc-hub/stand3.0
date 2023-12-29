@@ -6,7 +6,7 @@
     }"
   >
     <g-flag typeFg="600" isShowFg />
-    <g-choose-pat @choosePat="choosePat" />
+    <g-choose-pat @choosePat="pageRequest" />
 
     <view class="tab-box" v-if="pageLoading">
       <g-tabs
@@ -67,7 +67,6 @@
   );
 
   const gStores = new GStores();
-  const patList = ref(gStores.userStore.patChoose);
   const tabCurrent = ref(0);
   const tabStatus = ref(0);
   const resultHos = ref<ISystemConfig['hospitalCare']>(<any>{});
@@ -92,22 +91,29 @@
     }
   };
 
-  //切换就诊人
-  const choosePat = ({ item }: { item: IPat; number: number }) => {
-    patList.value = item;
-    pageRequest();
-  };
-
   //入口不同调用不同接口
   const pageRequest = () => {
-    if (tabCurrent.value == 0) {
-      inpatientInfoRef?.value.init();
-    } else if (tabCurrent.value == 1) {
-      dailyExpenseListRef!.value.init();
-    } else if (tabCurrent.value == 2) {
-      totalListRef?.value.init();
-    } else if (tabCurrent.value == 3) {
-      totalListRef3?.value.init();
+    const v = resultHos.value.tab[tabCurrent.value].value;
+    switch (v) {
+      case '0':
+        inpatientInfoRef?.value.init();
+
+        break;
+      case '1':
+        dailyExpenseListRef!.value.init();
+
+        break;
+      case '2':
+        totalListRef?.value.init();
+
+        break;
+      case '3':
+        totalListRef3?.value.init();
+
+        break;
+
+      default:
+        break;
     }
   };
 
