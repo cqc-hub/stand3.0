@@ -138,10 +138,6 @@
     });
   };
 
-  const aa = (a) => {
-    console.log(a);
-  };
-
   const dayCostList = (item) => {
     const { inDay, endDay } = item;
 
