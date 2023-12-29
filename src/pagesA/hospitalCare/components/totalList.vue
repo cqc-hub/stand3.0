@@ -139,12 +139,13 @@
   };
 
   const dayCostList = (item) => {
-    const { inDay, endDay } = item;
+    const { inDay: start, endDay: end, inpatientNo: hospitalId } = item;
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/dayCostList', {
-        start: inDay,
-        end: endDay,
+        start,
+        end,
+        hospitalId,
       }),
     });
   };

@@ -190,6 +190,7 @@
   const providePageProp = inject('pageProp', () => ({
     start: '',
     end: '',
+    hospitalId: ''
   }));
 
   const emit = defineEmits(['detalResult']);
@@ -218,7 +219,7 @@
       costDay: props.costDay,
       costType: props.isHosDaylist ? '1' : '3',
       patientId: gStores.userStore.patChoose.patientId,
-      hospitalId: props.hospitalId,
+      hospitalId: props.hospitalId || providePageProp().hospitalId,
     };
     const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
       params

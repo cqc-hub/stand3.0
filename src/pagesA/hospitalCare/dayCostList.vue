@@ -18,6 +18,7 @@
       {
         start?: string; // yyyy-mm-dd
         end?: string;
+        dayCostList: string;
       }
     >{}
   );
