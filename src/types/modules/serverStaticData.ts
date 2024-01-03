@@ -286,6 +286,8 @@ export interface ISystemConfig_ {
     // 详情里面底部按钮
     jcBottomNav?: TReportDetailBottomConfig;
     jyBottomNav?: TReportDetailBottomConfig;
+    //类型是体检的 和 tab 无关
+    tjBottomNav?: TReportDetailBottomConfig;
   };
 
   /** 药品配送 */

@@ -34,13 +34,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { useTBanner } from '@/utils';
+  import { computed, ref } from 'vue';
+  import { useTBanner, ISystemConfig, ServerStaticData } from '@/utils';
 
   const props = defineProps<{
     addition: BaseObject;
   }>();
   const emits = defineEmits(['btn-click']);
+  const reportConfig = ref(<ISystemConfig['reportQuery']>{});
 
   const iconForward = computed(() => {
     if (btns.value.length > 3) {
@@ -51,7 +52,19 @@
   });
 
   const compareBtn = (prop: string[], key: string) => {
-    return prop.every((p) => !!props.addition[p]);
+    const isTjreport = props.addition?.reportType === '3'; // 这是体检报告
+    let compareData = {
+      ...(props.addition || {}),
+    };
+
+    if (isTjreport) {
+      compareData.btnAskDoc = '';
+      compareData.btnReOrder = '';
+
+      Object.assign(compareData, reportConfig.value.tjBottomNav || {});
+    }
+
+    return prop.every((p) => !!compareData[p]);
   };
 
   const itemClick = (btn: (typeof _btns)[number]) => {
@@ -108,6 +121,12 @@
     // @ts-expect-error
     _btns.filter((btn) => compareBtn(btn.needKeys || [], btn.key))
   );
+
+  const init = async () => {
+    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+  };
+
+  init();
 </script>
 
 <style lang="scss" scoped>
