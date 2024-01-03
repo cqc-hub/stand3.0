@@ -329,6 +329,7 @@
   import homeNav from './componetns/homeNav.vue';
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import { getLocalStorage, removeLocation } from '@/common/useToken';
 
   const props = defineProps<{
     code?: string;
@@ -381,9 +382,17 @@
     });
     // #ifdef MP-WEIXIN
     if (props.code) {
-      new LoginUtils().getNoPublicOpenId(props.code).then(() => {
-        routerJump();
-      });
+      const getNoPublicOpenIdOnly =
+        getLocalStorage('getNoPublicOpenIdOnly') === '1';
+
+      if (getNoPublicOpenIdOnly) {
+        removeLocation('getNoPublicOpenIdOnly');
+      }
+      new LoginUtils()
+        .getNoPublicOpenId(props.code, getNoPublicOpenIdOnly)
+        .then(() => {
+          routerJump();
+        });
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息

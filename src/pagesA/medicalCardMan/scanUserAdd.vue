@@ -174,6 +174,8 @@
             accessToken,
             refreshToken: gStores.globalStore.token.refreshToken,
           });
+
+          await new PatientUtils().getUerInfo('alone', true);
         }
         await wait(20);
         await new PatientUtils().getPatCardList();

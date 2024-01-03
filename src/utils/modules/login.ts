@@ -209,7 +209,7 @@ export class LoginUtils extends GStores {
   }
 
   // 微信获取公众号 openid
-  async getNoPublicOpenId(code: string) {
+  async getNoPublicOpenId(code: string, justGetId = false) {
     const {
       result: { openId },
     } = await api.allinoneAuthApi(
@@ -226,6 +226,8 @@ export class LoginUtils extends GStores {
     );
 
     this.globalStore.setH5OpenId(openId);
+
+    if (justGetId) return;
 
     const herenId = this.globalStore.herenId;
 

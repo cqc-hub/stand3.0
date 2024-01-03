@@ -49,7 +49,16 @@
     <g-message />
 
     <view class="g-footer">
-      <g-login @handler-next="goAddPage" class="flex1" only-login>
+      <g-login
+        @handler-login="
+          setLocalStorage({
+            getNoPublicOpenIdOnly: '1',
+          })
+        "
+        @handler-next="goAddPage"
+        class="flex1"
+        only-login
+      >
         <button @click="goAddPage" class="btn btn-primary flex1">
           立即授权
         </button>
@@ -63,14 +72,14 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores, wait } from '@/utils';
   import globalGl from '@/config/global';
+  import { setLocalStorage } from '@/common/useToken';
 
   const gStores = new GStores();
-  const goAddPage = () => {
+  const goAddPage = async () => {
     uni.reLaunch({
       url: '/pagesA/medicalCardMan/scanUserAdd',
     });
   };
-  const hosName = ref('');
 
   onMounted(async () => {
     await wait(200);

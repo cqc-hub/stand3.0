@@ -618,7 +618,7 @@ const userApi = {
     }),
 
   perfectPatByHosPatId: (data) =>
-    service.post('/phs-userrelevantPatient/perfectPatByHosPatId', parm(data), {
+    service.post('/phs-user/relevantPatient/perfectPatByHosPatId', parm(data), {
       hideLoading: false,
     }),
 
