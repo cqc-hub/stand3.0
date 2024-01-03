@@ -65,7 +65,7 @@
     {
       required: true,
       label: '患者姓名',
-      placeholder: '请选择',
+      placeholder: '请输入患者姓名',
       key: 'patientName',
       field: 'input-text',
       maxlength: 50,
@@ -105,7 +105,7 @@
       field: 'input-text',
       key: 'cardNumber',
       label: '院内id',
-      placeholder: '扫码添加',
+      placeholder: '扫码添加院内id',
       disabled: true,
       required: true,
     },
