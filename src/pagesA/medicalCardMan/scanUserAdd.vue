@@ -14,7 +14,7 @@
         </template>
       </g-form>
 
-      <g-flag typeFg="51" isShowFgTip />
+      <g-flag typeFg="592" isShowFgTip />
     </view>
 
     <g-message />
