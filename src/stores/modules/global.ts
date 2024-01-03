@@ -124,7 +124,7 @@ const globalStore = defineStore('global', {
       }
     },
 
-    updateToken(token) {
+    updateToken(token: typeof this.token) {
       this.token = token;
     },
     updateBrowser(browser) {

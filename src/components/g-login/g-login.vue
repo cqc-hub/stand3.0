@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { handlerLogin, GStores, routerJump } from '@/utils';
+  import { handlerLogin, GStores } from '@/utils';
   import { useRouterStore } from '@/stores';
   import globalGl from '@/config/global';
 
@@ -34,6 +34,7 @@
   const props = defineProps<{
     patient?: boolean;
     disabled?: boolean;
+    onlyLogin?: boolean;
   }>();
   const emits = defineEmits(['handler-next', 'handler-login']);
 
@@ -89,7 +90,10 @@
     }
 
     emits('handler-login');
-    await handlerLogin(e);
+    await handlerLogin({
+      ...(e || {}),
+      onlyLogin: props.onlyLogin,
+    });
     nextStep();
   };
 

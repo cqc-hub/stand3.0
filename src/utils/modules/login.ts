@@ -295,7 +295,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
   async handler(payload?: any): Promise<void> {
     // 微信 必然有 payload
     if (!payload) return;
-    const { target, detail } = payload;
+    const { target, detail, onlyLogin } = payload;
 
     // if (!target.code) {
     //   this.messageStore.showMessage('用户未授权，请重新登录', 3000);
@@ -311,6 +311,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       uni.showLoading({
         mask: true,
       });
+
       wx.login({
         success: async ({ code }) => {
           if (!code) {
@@ -364,7 +365,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
                 refreshToken,
               });
 
-              await this.getUerInfo();
+              await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
               resolve();
             }
           } else {
@@ -380,8 +381,8 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
-  async handler(): Promise<void> {
-    return await this.handlerAuth();
+  async handler(e): Promise<void> {
+    return await this.handlerAuth(e);
     if (isLoading) {
       return;
     }
@@ -461,7 +462,9 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   }
 
   // handlerAuth
-  async handlerAuth(): Promise<void> {
+  async handlerAuth(e: any = {}): Promise<void> {
+    const { onlyLogin } = e;
+
     uni.showLoading({
       mask: true,
     });
@@ -517,7 +520,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       });
 
       // await this.getUerInfo('alone', true);
-      await this.getUerInfo();
+      await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
     } catch (error: any) {
       if (error) {
         const { errorMessage } = error;

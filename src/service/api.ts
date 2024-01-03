@@ -602,8 +602,23 @@ const userApi = {
       }
     ),
 
+  getPatByHosPatId: (data) =>
+    service.post('/phs-user/relevantPatient/getPatByHosPatId', parm(data), {
+      hideLoading: false,
+    }),
+
   mdPhoneById: (data) =>
     service.post('/phs-user/relevantPatient/mdPhoneById', parm(data), {
+      hideLoading: false,
+    }),
+
+  addPatByHosPatId: (data) =>
+    service.post('/phs-user/relevantPatient/addPatByHosPatId', parm(data), {
+      hideLoading: false,
+    }),
+
+  perfectPatByHosPatId: (data) =>
+    service.post('/phs-userrelevantPatient/perfectPatByHosPatId', parm(data), {
       hideLoading: false,
     }),
 

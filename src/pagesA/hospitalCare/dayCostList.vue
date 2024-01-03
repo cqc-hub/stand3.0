@@ -1,5 +1,5 @@
 <template>
-  <view class="g-page">
+  <view v-if="isRen" class="g-page">
     <dailyExpenseList :isHosDaylist="pageConfig.isHosDaylist" ref="detailRef" />
     <g-message />
   </view>
@@ -9,7 +9,7 @@
   import { onMounted, ref, provide } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
-  import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
+  import { GStores, ServerStaticData, ISystemConfig, wait } from '@/utils';
 
   import dailyExpenseList from './components/dailyExpenseList.vue';
 
@@ -24,6 +24,7 @@
   );
   const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
   const detailRef = ref(<any>'');
+  const isRen = ref(false);
 
   provide('pageProp', () => pageProp.value);
 
@@ -33,8 +34,9 @@
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
-
-    detailRef.value.init();
+    await wait(60);
+    isRen.value = true;
+    // detailRef.value.init();
   });
 </script>
 

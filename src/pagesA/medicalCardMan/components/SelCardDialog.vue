@@ -62,12 +62,12 @@
                 <text class="value g-break-word">{{ item.inHospitalId }}</text>
               </view>
 
-              <view class="color-666">
+              <view v-if="item.cardBalance" class="color-666">
                 <text class="label mr12">卡余额:</text>
                 <text class="value">{{ item.cardBalance }}</text>
               </view>
 
-              <view class="color-666">
+              <view v-if="item.createTime" class="color-666">
                 <text class="label mr12">建卡日期:</text>
                 <text class="value">{{ item.createTime }}</text>
               </view>
@@ -95,9 +95,15 @@
   const width = ref(500);
   const popup = ref<any>('');
   const type = 'center';
-  const emits = defineEmits(['update:show', 'item-click', 'confirm']);
+  const emits = defineEmits([
+    'update:show',
+    'item-click',
+    'confirm',
+    'mask-close',
+  ]);
   const onActionSheetHide = () => {
     emits('update:show', false);
+    emits('mask-close');
   };
 
   const onActionSheetShow = () => {

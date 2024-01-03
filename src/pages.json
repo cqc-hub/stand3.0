@@ -328,6 +328,23 @@
         },
 
         {
+          "path": "medicalCardMan/scanUser",
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+        },
+
+        {
+          "path": "medicalCardMan/scanUserAdd",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+        },
+
+        {
           "path": "medicalCardMan/perfectReal",
           "extend": {
             "login": true

@@ -30,7 +30,7 @@
 
               <view class="flex-normal mt12">
                 <text
-                  v-if="isMode1 && m.inpStatus === 'true'"
+                  v-if="isMode1 && m.inpStatus === 'false'"
                   :class="{
                     'pay-medical': 1,
                   }"

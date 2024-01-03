@@ -118,11 +118,7 @@
 
   const init = async () => {
     await wait(20);
-    const { end, start } = providePageProp()
-    if (end || start) {
-      costDay.value = end || start;
-    }
-    console.log(props);
+
 
     dailyResList.value = {
       inHospitalDailyCostsResultList: [],
@@ -155,6 +151,11 @@
     }
   });
   onMounted(async () => {
+    const { end, start } = providePageProp()
+    if (end || start) {
+      costDay.value = end || start;
+    }
+
     await init();
   });
   defineExpose({

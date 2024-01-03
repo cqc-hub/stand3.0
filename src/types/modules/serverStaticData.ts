@@ -283,6 +283,7 @@ export interface ISystemConfig_ {
     jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
     jcHoverTipBtns?: TButtonConfig[] | TButtonConfig;
 
+    // 详情里面底部按钮
     jcBottomNav?: TReportDetailBottomConfig;
     jyBottomNav?: TReportDetailBottomConfig;
   };
