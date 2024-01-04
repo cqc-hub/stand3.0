@@ -386,6 +386,7 @@
       const getNoPublicOpenIdOnly =
         getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
+      // 免完善扫码进来
       if (getNoPublicOpenIdOnly) {
         if (gStores.globalStore.herenId) {
           await new PatientUtils().getPatCardList();
