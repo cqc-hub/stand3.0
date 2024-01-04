@@ -316,6 +316,7 @@
     LoginUtils,
     Login,
     LoginType,
+    PatientUtils,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -375,7 +376,7 @@
     viewerStore.init();
   });
 
-  onLoad(() => {
+  onLoad(async () => {
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,
@@ -386,6 +387,10 @@
         getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
       if (getNoPublicOpenIdOnly) {
+        if (gStores.globalStore.herenId) {
+          await new PatientUtils().getPatCardList();
+        }
+
         removeLocation('getNoPublicOpenIdOnly');
       }
       new LoginUtils()
