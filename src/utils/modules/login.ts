@@ -309,75 +309,69 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       return Promise.reject(payload);
     }
 
-    await new Promise<void>((resolve, reject) => {
-      uni.showLoading({
-        mask: true,
-      });
-
-      wx.login({
-        success: async ({ code }) => {
-          if (!code) {
-            reject();
-            return;
-          }
-
-          const accountType = this.globalStore.browser.accountType;
-
-          const { result } = await api.allinoneAuthApi(
-            packageAuthParams(
-              {
-                code,
-                accountType,
-              },
-              '/wx/getWxOpenId',
-              {
-                isOutArgs: true,
-              }
-            )
-          );
-
-          if (result) {
-            const { openId, sessionKeyEn, sessionKey } = result;
-            const {
-              encryptedData: encrypData,
-              iv: ivData,
-              code: phoneNumberCode,
-            } = target;
-
-            this.globalStore.setOpenId(openId);
-
-            const requestData = {
-              accountType,
-              openId,
-              sessionKeyEn,
-              sessionKey,
-              phoneNumberCode,
-              ivData,
-              encrypData,
-            };
-
-            const { result: loginResult } = await api.allinoneAuthApi(
-              packageAuthParams(requestData, '/wx/wxLoginByPhoneNumberCode')
-            );
-
-            if (loginResult) {
-              const { accessToken, refreshToken } = loginResult;
-              this.globalStore.setToken({
-                accessToken,
-                refreshToken,
-              });
-
-              await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
-              resolve();
-            }
-          } else {
-            reject();
-          }
-        },
-
-        complete: uni.hideLoading,
-      });
+    uni.showLoading({
+      mask: true,
     });
+
+    const { code } = await apiAsync(wx.login, {
+      complete: uni.hideLoading,
+    });
+
+    if (!code) {
+      throw new Error('未获取到 wx code');
+    }
+
+    const accountType = this.globalStore.browser.accountType;
+
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(
+        {
+          code,
+          accountType,
+        },
+        '/wx/getWxOpenId',
+        {
+          isOutArgs: true,
+        }
+      )
+    );
+
+    if (!result) {
+      throw new Error('未获取到 wx OpenId');
+    }
+
+    const { openId, sessionKeyEn, sessionKey } = result;
+    const {
+      encryptedData: encrypData,
+      iv: ivData,
+      code: phoneNumberCode,
+    } = target;
+
+    this.globalStore.setOpenId(openId);
+
+    const requestData = {
+      accountType,
+      openId,
+      sessionKeyEn,
+      sessionKey,
+      phoneNumberCode,
+      ivData,
+      encrypData,
+    };
+
+    const { result: loginResult } = await api.allinoneAuthApi(
+      packageAuthParams(requestData, '/wx/wxLoginByPhoneNumberCode')
+    );
+
+    if (loginResult) {
+      const { accessToken, refreshToken } = loginResult;
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
+    }
   }
 }
 

@@ -6,6 +6,7 @@ import { type TButtonConfig } from '@/utils';
 
 const config = <const>{
   'person.isSmsVerify': '0',
+  'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
   'medRecord.0.isCustomPatRecord': '1',
   'reportQuery.jyHoverTipBtns': <TButtonConfig[]>[
