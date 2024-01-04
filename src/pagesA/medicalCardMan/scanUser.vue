@@ -55,7 +55,7 @@
             getNoPublicOpenIdOnly: '1',
           })
         "
-        @handler-next="goAddPage"
+        @handler-next="handlerLoginAfter"
         class="flex1"
         only-login
       >
@@ -70,7 +70,7 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, wait } from '@/utils';
+  import { GStores, LoginUtils, PatientUtils, wait } from '@/utils';
   import globalGl from '@/config/global';
   import { setLocalStorage } from '@/common/useToken';
 
@@ -79,6 +79,14 @@
     uni.reLaunch({
       url: '/pagesA/medicalCardMan/scanUserAdd',
     });
+  };
+
+  const handlerLoginAfter = async () => {
+    if (gStores.globalStore.herenId) {
+      await new PatientUtils().getPatCardList();
+    }
+
+    goAddPage();
   };
 
   onMounted(async () => {

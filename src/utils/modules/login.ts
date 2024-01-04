@@ -8,10 +8,10 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
+import { apiAsync, ServerStaticData } from '@/utils';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
-import { apiAsync } from '@/utils';
 
 export enum LoginType {
   // 微信腾讯健康
@@ -291,18 +291,20 @@ export class LoginUtils extends GStores {
       source: this.globalStore.browser.source,
     });
   }
+
+  async getConfig() {
+    return ServerStaticData.getSystemConfig('person');
+  }
 }
 
 class WeChatLoginHandler extends LoginUtils implements LoginHandler {
   async handler(payload?: any): Promise<void> {
     // 微信 必然有 payload
-    if (!payload) return;
-    const { target, detail, onlyLogin } = payload;
+    if (!payload) {
+      throw new Error('未获取到 wx payload');
+    }
 
-    // if (!target.code) {
-    //   this.messageStore.showMessage('用户未授权，请重新登录', 3000);
-    //   return Promise.reject();
-    // }
+    const { target, detail, onlyLogin } = payload;
 
     if (detail.errMsg !== 'getPhoneNumber:ok') {
       this.messageStore.showMessage('用户取消授权', 3000);
@@ -359,8 +361,14 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       encrypData,
     };
 
+    const { isSkipPerfect } = await this.getConfig();
     const { result: loginResult } = await api.allinoneAuthApi(
-      packageAuthParams(requestData, '/wx/wxLoginByPhoneNumberCode')
+      packageAuthParams(
+        requestData,
+        isSkipPerfect === '1'
+          ? '/wx/wxLoginByPhoneCode' // 免完善接口
+          : '/wx/wxLoginByPhoneNumberCode'
+      )
     );
 
     if (loginResult) {
@@ -472,6 +480,15 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       });
 
       const accountType = this.globalStore.browser.accountType;
+      // console.log(JSON.stringify(packageAuthParams(
+      //   {
+      //     code: authCode,
+      //     codeType: 2,
+      //     accountType,
+      //   },
+      //   '/aliUserLogin/getTPAlipayUserInfoShare'
+      // )));
+      // throw new Error()
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(
           {
