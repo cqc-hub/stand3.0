@@ -480,15 +480,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       });
 
       const accountType = this.globalStore.browser.accountType;
-      // console.log(JSON.stringify(packageAuthParams(
-      //   {
-      //     code: authCode,
-      //     codeType: 2,
-      //     accountType,
-      //   },
-      //   '/aliUserLogin/getTPAlipayUserInfoShare'
-      // )));
-      // throw new Error()
+      const { isSkipPerfect } = await this.getConfig();
       const { result } = await api.allinoneAuthApi(
         packageAuthParams(
           {
@@ -496,7 +488,9 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
             codeType: 2,
             accountType,
           },
-          '/aliUserLogin/getTPAlipayUserInfoShare'
+          isSkipPerfect === '1'
+            ? '/aliUserLogin/alipayLoginByPhone'
+            : '/aliUserLogin/getTPAlipayUserInfoShare'
         )
       );
 
