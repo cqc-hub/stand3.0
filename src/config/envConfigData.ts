@@ -9,7 +9,7 @@ const config = <const>{
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
   'medRecord.0.isCustomPatRecord': '1',
-  'reportQuery.jyHoverTipBtns': <TButtonConfig[]>[
+  'reportQuery.jcHoverTipBtns': <TButtonConfig[]>[
     {
       text: '咨询医生',
       type: 'self',

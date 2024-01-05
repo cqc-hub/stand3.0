@@ -38,7 +38,6 @@
         <g-empty :current="1" />
       </view>
     </view>
-
     <g-select
       v-model:value="selOrderStatus"
       v-model:show="isSelOrderStatus"
@@ -189,7 +188,8 @@
   const anotherYwzConditions = computed(() => {
 
     if (isShowFilterOrderStatus.value) {
-      return selOrderStatus.value === '1';
+      // return selOrderStatus.value === '1'; // 全部挂号
+      return selOrderStatus.value === ''; // 在线挂号
     } else {
       return true;
     }
