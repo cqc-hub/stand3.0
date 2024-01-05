@@ -29,6 +29,15 @@
           <view class="iconfont icon-resize">&#xe6fc;</view>
           <text class="color-111">电子导诊单</text>
         </view>
+
+        <view
+          v-if="pageConfig.takeNumberGoPayBtn === '1'"
+          @click="goPay"
+          class="mr14 g-flex-rc-cc"
+        >
+          <view class="iconfont ico_pay">&#xe6fc;</view>
+          <text class="color-111">门诊缴费</text>
+        </view>
       </view>
     </view>
 
@@ -269,6 +278,12 @@
     });
   };
 
+  const goPay = () => {
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayDetail',
+    });
+  };
+
   const goElectronicGuide = () => {
     useTBanner({
       type: 'h5',
@@ -423,7 +438,8 @@
     margin-right: 14rpx;
   }
 
-  .icon-resize {
+  .icon-resize,
+  .ico_pay {
     font-size: var(--hr-font-size-xxl);
     margin-right: 10rpx;
     font-weight: 500;

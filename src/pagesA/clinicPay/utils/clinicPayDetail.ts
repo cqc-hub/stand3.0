@@ -1754,6 +1754,7 @@ export const executeConfigPayAfter = async (
 
           return Promise.reject(void 0);
 
+        // 药品助手
         case '2':
           useTBanner(
             {
@@ -1769,6 +1770,7 @@ export const executeConfigPayAfter = async (
 
           return Promise.reject(void 0);
 
+        // 门诊取号
         case '3':
           useTBanner(
             {
