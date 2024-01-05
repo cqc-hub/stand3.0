@@ -75,9 +75,9 @@
     let netPath = '';
 
     // 演示乐清项目, 对应互联网嘉兴
-    if (sysCode === '1001052') {
-      sysCode = '1001038';
-    }
+    // if (sysCode === '1001052') {
+    //   sysCode = '1001038';
+    // }
     if (para._url) {
       netPath = decodeURIComponent(para._url);
       delete para._url;
@@ -118,12 +118,12 @@
     // payBackParams:{
     //   hosPatientld:100023882
     // }
-    // }] 
+    // }]
     let insuranceParamsWx = data[0].insuranceParams;
- 
+
     if (insuranceParamsWx) {
       if (insuranceParamsWx.authCode == 1) {
-        let payBackParams = 
+        let payBackParams =
           JSON.stringify(data[0].payBackParams)
         ;
         setLocalStorage({
