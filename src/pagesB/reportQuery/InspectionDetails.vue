@@ -421,9 +421,7 @@
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
-    pageProps.value = deQueryForUrl(p);
-    pageProps.value = deQueryForUrl(pageProps.value);
-    pageProps.value = deQueryForUrl(pageProps.value);
+    pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(p)));
   });
 
   const getCheckoutReportDetails = async () => {
