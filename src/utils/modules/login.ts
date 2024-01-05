@@ -204,7 +204,8 @@ export class LoginUtils extends GStores {
   async checkNoPublicOpenId() {
     if (this.globalStore.h5OpenId) {
       const herenId = this.globalStore.herenId;
-      await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId);
+      herenId &&
+        (await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId));
     }
   }
 
@@ -222,7 +223,10 @@ export class LoginUtils extends GStores {
         {
           isOutArgs: true,
         }
-      )
+      ),
+      {
+        showMessage: false,
+      }
     );
 
     this.globalStore.setH5OpenId(openId);

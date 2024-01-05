@@ -568,7 +568,12 @@ const regApi = {
 // 用户服务
 const userApi = {
   //转发统一认证接口
-  allinoneAuthApi: (data) =>
+  allinoneAuthApi: (
+    data,
+    opt = {
+      showMessage: true,
+    }
+  ) =>
     service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
       isAuth: true,
       hideLoading: false,

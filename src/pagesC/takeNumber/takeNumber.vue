@@ -35,7 +35,7 @@
           @click="goPay"
           class="mr14 g-flex-rc-cc"
         >
-          <view class="iconfont ico_pay">&#xe6fc;</view>
+          <view class="iconfont ico_pay queue-icon" />
           <text class="color-111">门诊缴费</text>
         </view>
       </view>
@@ -438,8 +438,7 @@
     margin-right: 14rpx;
   }
 
-  .icon-resize,
-  .ico_pay {
+  .icon-resize {
     font-size: var(--hr-font-size-xxl);
     margin-right: 10rpx;
     font-weight: 500;
