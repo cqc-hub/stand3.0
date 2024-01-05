@@ -66,9 +66,9 @@
 
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
-  import { onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
-  import { joinQueryForUrl } from '@/common/utils';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
 
   import {
     pickTempItem,
@@ -116,7 +116,7 @@
     _pageInfo?: '1' | '2';
     _directUrl?: string;
   }
-  const props = defineProps<TPageType>();
+  const pageProps = ref(<TPageType>{});
   const patientUtils = new PatientUtils();
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
@@ -221,15 +221,15 @@
       }
     }
 
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       try {
         await patientUtils.registerUser(requestData, {
           addPatInterface: 'relevantPatient',
         });
 
         // await patientUtils.getPatCardList();
-        if (props._directUrl) {
-          routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+        if (pageProps.value._directUrl) {
+          routerJump(pageProps.value._directUrl as `/${string}`);
         } else {
           routerJump('/pages/home/home');
         }
@@ -270,8 +270,8 @@
         throw new Error(message);
       });
       await patientUtils.getPatCardList();
-      if (props._directUrl) {
-        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      if (pageProps.value._directUrl) {
+        routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
         routerJump('/pages/home/home');
       }
@@ -396,7 +396,7 @@
 
     if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
-      if (isSmsVerify === '1' && props.pageType !== 'perfectReal') {
+      if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;
 
         // #ifdef MP-ALIPAY
@@ -535,12 +535,12 @@
       const iValue = formData.value[key];
 
       if ([formKey.patientName, formKey.patientPhone].includes(key as any)) {
-        if (iValue && props[key]) {
+        if (iValue && pageProps.value[key]) {
           o.disabled = true;
         }
       }
 
-      if (props.pageType === 'perfectReal') {
+      if (pageProps.value.pageType === 'perfectReal') {
         // #ifdef MP-ALIPAY
         if (key === formKey.idCard) {
           o.disabled = true;
@@ -635,7 +635,7 @@
         // 完善信息只支持 有证件的(使用默认值就好)
         if (
           (iValue && isHidePatientTypeInPerfect === '0') ||
-          props.pageType === 'perfectReal'
+          pageProps.value.pageType === 'perfectReal'
         ) {
           o.disabled = true;
           o.showSuffixArrowIcon = false;
@@ -688,7 +688,7 @@
 
   const init = async () => {
     formData.value = Object.fromEntries(
-      Object.entries(props).map(([key, value]) => {
+      Object.entries(pageProps.value).map(([key, value]) => {
         if (key === formKey.defaultFalg) {
           (value as any) = (value as unknown) === 'false' ? false : true;
         }
@@ -705,14 +705,14 @@
     verifyCode = formData.value[formKey.verifyCode];
 
     const defaultValue = await getDefaultFormData(
-      props.pageType || 'addPatient'
+      pageProps.value.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
 
     //暂时注释 这个值是undifined
     // if ((props.patientType as string) === '-1') {
     // #ifdef MP-ALIPAY
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       formData.value[formKey.idCard] = gStores.userStore.cacheUser.certNo;
     }
     // #endif
@@ -725,15 +725,19 @@
   };
 
   onReady(() => {
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
         title: '完善账号实名信息',
       });
     }
   });
 
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  });
+
   onMounted(async () => {
-    routeStore.receiveQuery(props);
+    routeStore.receiveQuery(pageProps.value);
     init();
 
     // #ifdef MP-ALIPAY

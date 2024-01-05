@@ -22,7 +22,7 @@
       :content="dialogContent"
       @confirmButton="dialogConfirmRRR"
       @cancelButton="dialogShow = false"
-      :confirmText="pageType === 'perfectReal' ? '立即补充' : '添加'"
+      :confirmText="pageProps.pageType === 'perfectReal' ? '立即补充' : '添加'"
     />
     <Sel-Card-Dialog
       v-model:show="dialogSelCardShow"
@@ -69,8 +69,8 @@
     loginAuthAlipay,
     TCardPat,
   } from './utils';
-  import { joinQuery } from '@/common';
-  import { onReady } from '@dcloudio/uni-app';
+  import { deQueryForUrl, joinQuery } from '@/common';
+  import { onLoad, onReady } from '@dcloudio/uni-app';
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
 
@@ -79,6 +79,7 @@
   import FgAgree from './components/fgAgree.vue';
   import globalGl from '@/config/global';
   import SelCardDialog from './components/SelCardDialog.vue';
+
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
 
@@ -94,9 +95,10 @@
 
   const routeStore = useRouterStore();
   const messageStore = useMessageStore();
-  const props = withDefaults(defineProps<TPageType>(), {
+  const pageProps = ref(<TPageType>{
     pageType: 'addPatient',
   });
+
   const patientUtil = new PatientUtils();
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
@@ -164,7 +166,7 @@
     }
 
     // 完善逻辑
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       try {
         const { result } = await api.getPatCardInfoByHospital(data);
         if (result) {
@@ -213,8 +215,8 @@
               uni.navigateTo({
                 url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                   ...data,
-                  pageType: props.pageType,
-                  _directUrl: props._directUrl,
+                  pageType: pageProps.value.pageType,
+                  _directUrl: pageProps.value._directUrl,
                 }),
               });
             };
@@ -235,8 +237,8 @@
               uni.navigateTo({
                 url: joinQuery('/pagesA/medicalCardMan/addMedical', {
                   ...data,
-                  pageType: props.pageType,
-                  _directUrl: props._directUrl,
+                  pageType: pageProps.value.pageType,
+                  _directUrl: pageProps.value._directUrl,
                 }),
               });
             };
@@ -298,8 +300,8 @@
       }
       await patientUtil.getPatCardList();
 
-      if (props._directUrl) {
-        routerJump(decodeURIComponent(props._directUrl) as `/${string}`);
+      if (pageProps.value._directUrl) {
+        routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
         routerJump('/pages/home/home');
       }
@@ -313,8 +315,8 @@
           uni.navigateTo({
             url: joinQuery('/pagesA/medicalCardMan/addMedical', {
               ...data,
-              pageType: props.pageType,
-              _directUrl: props._directUrl,
+              pageType: pageProps.value.pageType,
+              _directUrl: pageProps.value._directUrl,
             }),
           });
         },
@@ -353,7 +355,7 @@
     // isSmsVerify = '0';
 
     let isFilterSmsVerify = false;
-    if (props.pageType !== 'perfectReal') {
+    if (pageProps.value.pageType !== 'perfectReal') {
       // #ifdef MP-ALIPAY
       // 支付宝第一个就诊人自动带入信息 不需要验证码
       if (!patList.length) {
@@ -365,7 +367,7 @@
     // 关闭手机验证码
     if (
       isSmsVerify === '0' ||
-      props.pageType === 'perfectReal' ||
+      pageProps.value.pageType === 'perfectReal' ||
       isFilterSmsVerify
     ) {
       formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
@@ -373,11 +375,11 @@
 
     formList = pickTempItem(formListKeys);
     const defaultValue = await getDefaultFormData(
-      props.pageType || 'addPatient'
+      pageProps.value.pageType || 'addPatient'
     );
     Object.assign(formData.value, defaultValue);
 
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       const medicalTypeItem = formList.find(
         (o) => o.key === formKey.patientType
       );
@@ -434,7 +436,7 @@
   };
 
   onReady(() => {
-    if (props.pageType === 'perfectReal') {
+    if (pageProps.value.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
         title: '完善账号实名信息',
       });
@@ -442,12 +444,19 @@
   });
 
   onMounted(async () => {
-    routeStore.receiveQuery(props);
+    routeStore.receiveQuery(pageProps.value);
     init();
 
     // #ifdef MP-ALIPAY
     await loginAuthAlipay(init);
     // #endif
+  });
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    if (!pageProps.value.pageType) {
+      pageProps.value.pageType = 'addPatient';
+    }
   });
 </script>
 
