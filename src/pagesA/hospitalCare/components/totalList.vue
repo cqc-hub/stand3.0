@@ -30,13 +30,13 @@
 
               <view class="flex-normal mt12">
                 <text
-                  v-if="isMode1 && m.inpStatus === 'false'"
+                  v-if="isMode1"
                   :class="{
-                    'pay-medical': 1,
+                    [m.inpStatus === 'false' ? 'pay-medical' : 'pay-self']: 1,
                   }"
                   class="type-block f24 mr8 text-no-wrap"
                 >
-                  出院
+                  {{ m.inpStatus === 'false' ? '出院' : '在院' }}
                 </text>
 
                 <view v-if="m.wardName" class="color-888 f28">
