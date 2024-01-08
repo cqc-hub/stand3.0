@@ -146,6 +146,7 @@ export type TPayConfirmPageProp = {
   visitDate: string;
   mergeOrder: string;
   cardNumber?: string;
+  clinicType?: string;
 
   params?: string; // 扫码时候
   deParams?: {
@@ -1201,6 +1202,7 @@ export const usePayPage = () => {
 
         goConfirmPage({
           hosId: selList[0].hosId,
+          clinicType: selList[0].clinicType,
           serialNo: selList.map((o) => o.serialNo).join(';'),
           visitNo: selList.map((o) => o.visitNo).join(','),
           visitDate: selList.map((o) => o.visitDate).join(','),
@@ -1476,9 +1478,7 @@ export const usePayPage = () => {
       gStores.userStore.patChoose.cardNumber;
     const { clinicType } = selUnPayList.value[0];
 
-    if (clinicType) {
-      await executeConfigPayAfter(clinicType, cardNumber);
-    }
+    await executeConfigPayAfter(clinicType, cardNumber);
 
     selUnPayList.value = [];
     payedList.value = [];
@@ -1723,8 +1723,8 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 };
 
 export const executeConfigPayAfter = async (
-  clinicType: string, // '1' | '2' | '3'
-  cardNumber = ''
+  clinicType?: string, // '1' | '2' | '3'
+  cardNumber?: string
 ) => {
   const { pageNextAdress, payNextAction } =
     await ServerStaticData.getSystemConfig('pay');
@@ -1790,6 +1790,7 @@ export const executeConfigPayAfter = async (
       }
     } else if (payNextAction) {
       useTBanner(payNextAction);
+      return Promise.reject(void 0);
     }
   }
 };

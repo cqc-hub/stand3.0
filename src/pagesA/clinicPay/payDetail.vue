@@ -553,7 +553,8 @@
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
         const list = selList.value;
-        const { hosId, childOrder, visitDate, visitNo, params } = props.value;
+        const { hosId, childOrder, visitDate, visitNo, params, clinicType } =
+          props.value;
 
         goConfirmPage({
           hosId,
@@ -563,6 +564,7 @@
           visitDate: visitDate!,
           cardNumber: props.value?.cardNumber,
           mzParams: params,
+          clinicType,
         });
       } else {
         toPay();
@@ -811,9 +813,7 @@
     await wait(1000);
     uni.hideLoading();
 
-    if (clinicType) {
-      await executeConfigPayAfter(clinicType, cardNumber);
-    }
+    await executeConfigPayAfter(clinicType, cardNumber);
 
     uni.reLaunch({
       url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
