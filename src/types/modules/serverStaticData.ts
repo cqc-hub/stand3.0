@@ -257,7 +257,7 @@ export interface ISystemConfig_ {
       }
     >;
 
-    // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType
+    // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType 且 pageNextAdress 优先
     payNextAction?: TButtonConfig;
   };
 
