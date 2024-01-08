@@ -1726,10 +1726,12 @@ export const executeConfigPayAfter = async (
   clinicType: string, // '1' | '2' | '3'
   cardNumber = ''
 ) => {
-  const { pageNextAdress } = await ServerStaticData.getSystemConfig('pay');
+  const { pageNextAdress, payNextAction } =
+    await ServerStaticData.getSystemConfig('pay');
 
-  if (pageNextAdress) {
-    const configItem = pageNextAdress[clinicType as '1' | '2' | '3'];
+  if (pageNextAdress || payNextAction) {
+    const configItem =
+      pageNextAdress && pageNextAdress[clinicType as '1' | '2' | '3'];
 
     if (configItem) {
       const { mode, extraData: _extraData } = configItem;
@@ -1786,6 +1788,8 @@ export const executeConfigPayAfter = async (
         default:
           break;
       }
+    } else if (payNextAction) {
+      useTBanner(payNextAction);
     }
   }
 };

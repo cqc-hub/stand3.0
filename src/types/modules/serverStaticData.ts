@@ -256,6 +256,9 @@ export interface ISystemConfig_ {
         extraData?: BaseObject;
       }
     >;
+
+    // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType
+    payNextAction?: TButtonConfig;
   };
 
   //报告查询
