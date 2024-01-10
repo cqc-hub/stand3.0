@@ -23,6 +23,18 @@ export enum LoginType {
   PassWord,
 }
 
+type TAliLogin = {
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
+  certNo: string;
+  certType: string;
+  gender: string;
+  mobile: string;
+  userName: string;
+  authPhoneVerify: string;
+};
+
 abstract class LoginHandler {
   abstract handler(payload?: any): Promise<void>;
 }
@@ -90,9 +102,11 @@ export const packageAuthParams = (
 };
 
 export class GStores {
-  messageStore = useMessageStore();
-  userStore = useUserStore();
-  globalStore = useGlobalStore();
+  constructor(
+    public messageStore = useMessageStore(),
+    public userStore = useUserStore(),
+    public globalStore = useGlobalStore()
+  ) {}
 }
 
 export class LoginUtils extends GStores {
@@ -299,6 +313,31 @@ export class LoginUtils extends GStores {
   async getConfig() {
     return ServerStaticData.getSystemConfig('person');
   }
+
+  async getAliOpenid() {
+    const { authCode } = await apiAsync(my.getAuthCode, {
+      scopes: 'auth_user',
+      // scopes: 'auth_base',
+    });
+
+    const accountType = this.globalStore.browser.accountType;
+    const { isSkipPerfect } = await this.getConfig();
+
+    const { result } = await api.allinoneAuthApi<TAliLogin>(
+      packageAuthParams(
+        {
+          code: authCode,
+          codeType: 2,
+          accountType,
+        },
+        isSkipPerfect === '1'
+          ? '/aliUserLogin/alipayLoginByPhone'
+          : '/aliUserLogin/getTPAlipayUserInfoShare'
+      )
+    );
+
+    return result;
+  }
 }
 
 class WeChatLoginHandler extends LoginUtils implements LoginHandler {
@@ -478,26 +517,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
     });
 
     try {
-      const { authCode } = await apiAsync(my.getAuthCode, {
-        scopes: 'auth_user',
-        // scopes: 'auth_base',
-      });
-
       const accountType = this.globalStore.browser.accountType;
-      const { isSkipPerfect } = await this.getConfig();
-      const { result } = await api.allinoneAuthApi(
-        packageAuthParams(
-          {
-            code: authCode,
-            codeType: 2,
-            accountType,
-          },
-          isSkipPerfect === '1'
-            ? '/aliUserLogin/alipayLoginByPhone'
-            : '/aliUserLogin/getTPAlipayUserInfoShare'
-        )
-      );
-
       const {
         userId,
         accessToken,
@@ -508,7 +528,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         mobile,
         userName,
         authPhoneVerify,
-      } = result;
+      } = await this.getAliOpenid();
 
       this.userStore.updateCacheUser({
         certNo,

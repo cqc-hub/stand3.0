@@ -139,99 +139,61 @@
             </view>
           </view>
 
-          <view class="f36 g-bold mb16 flex-between">
-            <view>门诊排班</view>
-            <g-login
-              v-if="docDetail.preStatus === '1'"
-              @handler-next="preregistrationClick(docDetail as any)"
-              patient
-            >
-              <button
-                @click="preregistrationClick(docDetail as any)"
-                class="btn btn-primary btn-round btn-size-small"
+          <view>
+            <view class="f36 g-bold mb16 flex-between">
+              <view>门诊排班</view>
+              <g-login
+                v-if="docDetail.preStatus === '1'"
+                @handler-next="preregistrationClick(docDetail as any)"
+                patient
               >
-                预约登记
-              </button>
-            </g-login>
-          </view>
-          <view
-            :class="{
-              pb40: docSchList.length,
-            }"
-            class="content-box"
-          >
-            <view
-              v-if="docSchList.length"
-              class="content-sel-date mb16 g-border-bottom"
-            >
-              <Order-Sel-Date
-                :value="checkedDay"
-                :choose-days="chooseDays"
-                :enable-days="enabledDays"
-                @change="dateChange"
-              />
+                <button
+                  @click="preregistrationClick(docDetail as any)"
+                  class="btn btn-primary btn-round btn-size-small"
+                >
+                  预约登记
+                </button>
+              </g-login>
             </view>
 
-            <block v-if="docSchList.length">
-              <block v-if="Object.keys(schToday.schByHos).length">
-                <view v-if="isShowHosNet">
-                  <text class="label-mark">
-                    <text class="color-fff f28 label-mark-content">
-                      到院就诊
-                    </text>
-                  </text>
-                </view>
+            <view
+              :class="{
+                pb40: docSchList.length,
+              }"
+              class="content-box"
+            >
+              <view
+                v-if="docSchList.length"
+                class="content-sel-date mb16 g-border-bottom"
+              >
+                <Order-Sel-Date
+                  :value="checkedDay"
+                  :choose-days="chooseDays"
+                  :enable-days="enabledDays"
+                  @change="dateChange"
+                />
+              </view>
 
-                <view
-                  v-for="_hosId in Object.keys(schToday.schByHos)"
-                  :key="_hosId"
-                  class="p32c mt12"
-                >
-                  <view
-                    v-for="(item, idx) in schToday.schByHos[_hosId]"
-                    :key="item.schId"
-                  >
-                    <view v-if="!idx" class="f32 g-bold mb16">
-                      {{ item.hosName }}
-                    </view>
-
-                    <view
-                      :class="{
-                        mb32: idx === schToday.schByHos[_hosId].length - 1,
-                      }"
-                      class="sch-item mb8 animate__animated animate__fadeIn"
-                    >
-                      <Doc-Sch-Item
-                        :pageConfig="pageConfig"
-                        :item="item"
-                        :systemModeOld="gStores.globalStore.modeOld"
-                        @reg-click="(scheme) => regClick({ scheme })"
-                      />
-                    </view>
-                  </view>
-                </view>
-              </block>
-
-              <block v-if="Object.keys(schToday.schByNetHos).length">
-                <view class="animate__animated animate__fadeIn">
-                  <view>
-                    <text class="label-mark mb8">
+              <block v-if="docSchList.length">
+                <block v-if="Object.keys(schToday.schByHos).length">
+                  <view v-if="isShowHosNet">
+                    <text class="label-mark">
                       <text class="color-fff f28 label-mark-content">
-                        网络就诊
+                        到院就诊
                       </text>
                     </text>
                   </view>
 
                   <view
-                    v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                    v-for="_hosId in Object.keys(schToday.schByHos)"
                     :key="_hosId"
                     class="p32c mt12"
                   >
                     <view
-                      v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                      v-for="(item, idx) in schToday.schByHos[_hosId]"
                       :key="item.schId"
                     >
-                      <view v-if="!idx" class="f36 g-bold mb16">
+                      <view v-if="!idx" class="f32 g-bold mb16">
                         {{ item.hosName }}
                       </view>
 
@@ -239,30 +201,77 @@
                         :class="{
                           mb32: idx === schToday.schByHos[_hosId].length - 1,
                         }"
-                        class="sch-item mb8"
+                        class="sch-item mb8 animate__animated animate__fadeIn"
                       >
                         <Doc-Sch-Item
                           :pageConfig="pageConfig"
                           :item="item"
                           :systemModeOld="gStores.globalStore.modeOld"
-                          @reg-click="regClick"
+                          @reg-click="(scheme) => regClick({ scheme })"
                         />
                       </view>
                     </view>
                   </view>
-                </view>
-              </block>
-            </block>
+                </block>
 
-            <view class="empty-list" v-else-if="isComplete">
-              <g-empty
-                :current="2"
-                imgHeight="180rpx"
-                text="未查询到该医生排班信息"
-                noTransformY
-              />
+                <block v-if="Object.keys(schToday.schByNetHos).length">
+                  <view class="animate__animated animate__fadeIn">
+                    <view>
+                      <text class="label-mark mb8">
+                        <text class="color-fff f28 label-mark-content">
+                          网络就诊
+                        </text>
+                      </text>
+                    </view>
+
+                    <view
+                      v-for="_hosId in Object.keys(schToday.schByNetHos)"
+                      :key="_hosId"
+                      class="p32c mt12"
+                    >
+                      <view
+                        v-for="(item, idx) in schToday.schByNetHos[_hosId]"
+                        :key="item.schId"
+                      >
+                        <view v-if="!idx" class="f36 g-bold mb16">
+                          {{ item.hosName }}
+                        </view>
+
+                        <view
+                          :class="{
+                            mb32: idx === schToday.schByHos[_hosId].length - 1,
+                          }"
+                          class="sch-item mb8"
+                        >
+                          <Doc-Sch-Item
+                            :pageConfig="pageConfig"
+                            :item="item"
+                            :systemModeOld="gStores.globalStore.modeOld"
+                            @reg-click="regClick"
+                          />
+                        </view>
+                      </view>
+                    </view>
+                  </view>
+                </block>
+              </block>
+
+              <view class="empty-list" v-else-if="isComplete">
+                <g-empty
+                  :current="2"
+                  imgHeight="180rpx"
+                  text="未查询到该医生排班信息"
+                  noTransformY
+                />
+              </view>
             </view>
           </view>
+
+          <!-- <view class="mt32">
+            <view class="f36 g-bold mb16 flex-between">
+              <view>外院排班</view>
+            </view>
+          </view> -->
         </view>
 
         <block v-if="isDocServiceShow">
@@ -595,6 +604,13 @@
     filterChooseDays();
   };
 
+  const getOutHosSchData = async () => {
+    const { result } = await api.getExtHosDocSch({
+      ...props.value,
+      source: gStores.globalStore.browser.source,
+    });
+  };
+
   const collectDoc = async () => {
     await getDocDetail();
     let { collectState, docPhoto, docTitleName } = docDetail.value;
@@ -718,17 +734,26 @@
   const init = async () => {
     await getPageConfig();
     await OrderInit();
-    getSchData();
     await getDocDetail();
-    if (
-      pageConfig.value.isOpenComment === '1' &&
-      pageConfig.value.isHideCommentListInDocDetail !== '1'
-    ) {
+    getSchData();
+
+    const {
+      isOpenComment,
+      isHideCommentListInDocDetail,
+      isOpenDocCardOnlineService,
+      isOpenOutHosSch,
+    } = pageConfig.value;
+
+    if (isOpenComment === '1' && isHideCommentListInDocDetail !== '1') {
       getCommentList();
     }
 
-    if (pageConfig.value.isOpenDocCardOnlineService === '1') {
+    if (isOpenDocCardOnlineService === '1') {
       getDocService();
+    }
+
+    if (isOpenOutHosSch === '1') {
+      getOutHosSchData();
     }
   };
 

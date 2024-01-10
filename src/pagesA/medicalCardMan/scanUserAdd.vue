@@ -4,6 +4,7 @@
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
+        @disabled-click="(row: TInstance) => row.key === 'cardNumber' && toScan()"
         bodyBold
         ref="gform"
       >

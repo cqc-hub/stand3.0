@@ -8,6 +8,7 @@ const config = <const>{
   'person.isSmsVerify': '0',
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
+  'order.isOpenOutHosSch': '1',
   'medRecord.0.isCustomPatRecord': '1',
   'reportQuery.jcHoverTipBtns': <TButtonConfig[]>[
     {

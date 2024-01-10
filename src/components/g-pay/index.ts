@@ -1,5 +1,5 @@
 import api from '@/service/api';
-import { GStores, packageAuthParams, apiAsync } from '@/utils';
+import { GStores, packageAuthParams, apiAsync, LoginUtils } from '@/utils';
 import global from '@/config/global';
 import { getSysCode } from '@/common';
 
@@ -118,33 +118,7 @@ export const getOpenid = async (): Promise<string> => {
 
 // alipay
 export const getOpenid2 = async (): Promise<string> => {
-  const gStores = new GStores();
-
-  return new Promise((resolve, reject) => {
-    my.getAuthCode({
-      scopes: ['auth_user'],
-      fail: reject,
-
-      success: async ({ authCode }) => {
-        const accountType = gStores.globalStore.browser.accountType;
-
-        const { result } = await api.allinoneAuthApi(
-          packageAuthParams(
-            {
-              code: authCode,
-              codeType: 2,
-              accountType,
-            },
-            '/aliUserLogin/getTPAlipayUserInfoShare'
-          )
-        );
-
-        const userid = result && result.userId;
-
-        userid ? resolve(userid) : reject();
-      },
-    });
-  });
+  return (await new LoginUtils().getAliOpenid()).userId;
 };
 
 // tt

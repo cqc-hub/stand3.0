@@ -78,6 +78,7 @@ const baseApi = {
   sendNetHos: (data) =>
     service.post('/phs-base/transparent/sendNetHos', parmsysCode(data), {
       hideLoading: false,
+      showMessage: false,
     }),
 
   // 蚂蚁能量
@@ -415,6 +416,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  getExtHosDocSch: (data: any) =>
+    service.post('/phs-reg/reg/getExtHosDocSch', parm(data), {
+      hideLoading: false,
+    }),
+
   bloodTestSignIn: (data: any) =>
     service.post('/phs-reg/regIntelligence/bloodTestSignIn', parm(data), {
       hideLoading: false,
@@ -568,13 +574,13 @@ const regApi = {
 // 用户服务
 const userApi = {
   //转发统一认证接口
-  allinoneAuthApi: (
+  allinoneAuthApi: <T = any>(
     data,
     opt = {
       showMessage: true,
     }
   ) =>
-    service.post('/phs-user/authUser/allinoneAuthApi', parm(data), {
+    service.post<T>('/phs-user/authUser/allinoneAuthApi', parm(data), {
       isAuth: true,
       hideLoading: false,
     }),
