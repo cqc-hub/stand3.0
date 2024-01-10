@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="g-message">
     <!-- #ifdef  MP-WEIXIN -->
     <xy-dialog title="小程序隐私保护指引" :show="isShowAgreeDialog">
       <scroll-view scroll-y class="reg-tip">
@@ -131,7 +131,8 @@
 </script>
 
 <style lang="scss" scoped>
-  .popup {
+  .popup,
+  .g-message {
     position: relative;
     z-index: 9999;
   }
@@ -158,7 +159,6 @@
       border: none;
     }
   }
-
 
   .fg-agree-name {
     color: var(--hr-brand-color-6);

@@ -87,7 +87,7 @@
    * @property {Number} lineScale = 0.5 下划线的宽度缩放比例
    * @property {String} lineRadius = '10rpx' 下划线圆角
    * @property {Boolean} pills = [true | false] 是否胶囊样式
-   * @property {String} pillsColor = '#2979ff' 胶囊背景色
+   * @property {String} pillsColor = 'var(--hr-brand-color-6)' 胶囊背景色
    * @property {String} pillsBorderRadius = '10rpx' 胶囊圆角大小
    * @property {String} field 如果是对象，显示的键名
    * @property {Boolean} fixed = [true | false] 是否固定
@@ -169,7 +169,7 @@
       },
       pillsColor: {
         type: String,
-        default: '#2979ff',
+        default: 'var(--hr-brand-color-6)',
       },
       pillsBorderRadius: {
         type: String,

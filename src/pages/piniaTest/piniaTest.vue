@@ -280,9 +280,23 @@
     },
   };
 
+  // 健康档案
+  const 咸阳智能陪诊: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '健康档案',
+    extraData: {
+      _type: 'XyZnpz',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(分数问卷);
+      useTBanner(咸阳智能陪诊);
     }, 1000);
   });
 </script>

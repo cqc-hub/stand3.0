@@ -219,12 +219,14 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     uni.showLoading({
       title: '获取医生排班数据..',
     });
+
     const { result: allList } = await asyncListFnc<IDocListAll[]>(args).finally(
       () => {
         isComplete.value = true;
         uni.hideLoading();
       }
     );
+
     const _enabledDays: Record<string, string> = {};
 
     if (allList && allList.length) {

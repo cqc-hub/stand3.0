@@ -267,11 +267,17 @@
             </view>
           </view>
 
-          <!-- <view class="mt32">
+          <view v-if="docSchOutHosList.length" class="mt32">
             <view class="f36 g-bold mb16 flex-between">
               <view>外院排班</view>
             </view>
-          </view> -->
+
+            <doc-sch-out-hos
+              v-model:hos-id="selOutHosId"
+              v-model:day="selOutHosDay"
+              :list="docSchOutHosList"
+            />
+          </view>
         </view>
 
         <block v-if="isDocServiceShow">
@@ -289,7 +295,7 @@
             近一年大数据
           </view>
 
-          <view class="table-content">
+          <view v-if="tableData.length" class="table-content">
             <Doc-Big-Data-Table :columns="tableColumns" :tableData="tableData">
               <template #td="{ row, field, rowIndex }">
                 <view v-if="field === 'name'" class="flex-normal">
@@ -315,7 +321,8 @@
       <view
         v-if="
           pageConfig.isOpenComment === '1' &&
-          pageConfig.isHideCommentListInDocDetail !== '1'
+          pageConfig.isHideCommentListInDocDetail !== '1' &&
+          commentList.length
         "
         class="doc-comment"
       >
@@ -378,6 +385,7 @@
     type IDocSchListItem,
     type IDocService,
     type ICommentItem,
+    type IDocSchOutHosItem,
   } from './utils/DoctorDetails';
   import { deQueryForUrl, joinQuery } from '@/common';
   import {
@@ -397,6 +405,7 @@
   import DocBigDataTable from './components/DoctorDetails/DocBigDataTable.vue';
   import DocComment from './components/DoctorDetails/DocComment.vue';
   import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
+  import DocSchOutHos from './components/DoctorDetails/DocSchOutHos.vue';
 
   import api from '@/service/api';
 
@@ -411,7 +420,12 @@
   const isDocServiceShow = ref(false);
 
   const refDocShare = ref<any>('');
+
   const docSchList = ref<IDocSchListItem[]>([]);
+  const docSchOutHosList = ref<IDocSchOutHosItem[]>([]);
+  const selOutHosId = ref('');
+  const selOutHosDay = ref('');
+
   const schToday = computed(() => {
     if (checkedDay.value) {
       return docSchList.value.find((o) => o.schDate === checkedDay.value)!;
@@ -534,81 +548,25 @@
     }
   };
 
-  onLoad(async (opt) => {
-    //  weixin://dl/business/?t=LgnSWxNLRHs
-    console.log(opt, 'onLoad');
-
-    props.value = deQueryForUrl(deQueryForUrl(opt));
-    // 兼容 alipays://platformapi/startapp?appId=2021003173633521&page=pagesA/MyRegistration/DoctorDetails&query=hosDocId%3D101714
-    if (!Object.keys(props.value).length) {
-      const queryParams = gStores.globalStore.appShowData.query || {};
-
-      props.value = deQueryForUrl(deQueryForUrl(queryParams));
-    }
-    // 扫码进来, 不处理
-    if (props.value.q) {
-      return;
-    }
-
-    useDoctorDetail = new UseDoctorDetail(props.value);
-    init();
-
-    setTimeout(() => {
-      // regDialogConfirm.value.show();
-      // refDocShare.value.show();
-    }, 1200);
-  });
-
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;
-    // if (!dateDocList.value.length) {
-    //   getListByDate({
-    //     ...props,
-    //     hosDeptId: hosDeptId.value,
-    //     firstHosDeptId: firstHosDeptId.value,
-    //     secondHosDeptId: secondHosDeptId.value,
-    //   });
-    // }
   };
 
   const getSchData = async () => {
     isComplete.value = false;
-    const schList = await useDoctorDetail.getDocSch().finally(() => {
-      isComplete.value = true;
-    });
-    const eDaysEnabled: string[] = [];
-    const _enabledDays: Record<string, string> = {};
-
-    if (schList.length) {
-      schList.map((o) => {
-        const { schDate } = o;
-
-        o.schDateList.map((p, i) => {
-          const { schState } = p;
-          const enabledDaysValue = _enabledDays[schDate];
-
-          if (enabledDaysValue !== '0') {
-            _enabledDays[schDate] = schState;
-          }
-        });
-        if (!eDaysEnabled.includes(schDate)) {
-          eDaysEnabled.push(schDate);
-        }
+    const { schList, enabledDays: _enabledDays } = await useDoctorDetail
+      .getDocSch()
+      .finally(() => {
+        isComplete.value = true;
       });
 
+    if (schList.length) {
       checkedDay.value = schList[0].schDate;
       docSchList.value = schList;
     }
 
     enabledDays.value = _enabledDays;
     filterChooseDays();
-  };
-
-  const getOutHosSchData = async () => {
-    const { result } = await api.getExtHosDocSch({
-      ...props.value,
-      source: gStores.globalStore.browser.source,
-    });
   };
 
   const collectDoc = async () => {
@@ -723,6 +681,7 @@
       commentList.value = satisfactionResultList || [];
     }
   };
+
   const goAllComment = () => {
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/DoctorDetailsComment', {
@@ -753,7 +712,7 @@
     }
 
     if (isOpenOutHosSch === '1') {
-      getOutHosSchData();
+      docSchOutHosList.value = await useDoctorDetail.getOutHosSchData();
     }
   };
 
@@ -762,6 +721,31 @@
       title: `${docDetail.value.docName}医生`,
       path: joinQuery('/pagesA/MyRegistration/DoctorDetails', props.value),
     };
+  });
+
+  onLoad(async (opt) => {
+    //  weixin://dl/business/?t=LgnSWxNLRHs
+    console.log(opt, 'onLoad');
+
+    props.value = deQueryForUrl(deQueryForUrl(opt));
+    // 兼容 alipays://platformapi/startapp?appId=2021003173633521&page=pagesA/MyRegistration/DoctorDetails&query=hosDocId%3D101714
+    if (!Object.keys(props.value).length) {
+      const queryParams = gStores.globalStore.appShowData.query || {};
+
+      props.value = deQueryForUrl(deQueryForUrl(queryParams));
+    }
+    // 扫码进来, 不处理
+    if (props.value.q) {
+      return;
+    }
+
+    useDoctorDetail = new UseDoctorDetail(props.value);
+    init();
+
+    setTimeout(() => {
+      // regDialogConfirm.value.show();
+      // refDocShare.value.show();
+    }, 1200);
   });
 </script>
 
