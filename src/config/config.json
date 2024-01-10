@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001041",
+  "sysCode": "1001063",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -190,6 +190,16 @@
       "wxAppid": "wxe09a59ebf1a15c3b",
       "h5Appid": "",
       "name": "大医二院普湾院区",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+
+    "1001063": {
+      "wxAppid": "",
+      "alipayAppid": "2021002199689404",
+      "h5Appid": "",
+      "name": "杭州口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
