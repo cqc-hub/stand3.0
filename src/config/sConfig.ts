@@ -1,14 +1,34 @@
 interface ISConfig {
+  // 就诊人 ----------------------------
   // 添加就诊人查询院内可能存在多张卡(濮阳人民)?
   isSearchHosForAddPatHasMoreThanOneCard?: '1';
-  // 有药品配送功能?
-  isDrugDelivery?: '1';
+  /**
+   *  就诊卡详情 卡包按钮跳转对应的域名
+   *  - [document](https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail)
+   *  - defaultValue:  https://03-h5-health.tengmed.com
+   *
+   * */
+  medicalCardDetailPackageDomain?: `http${string}`;
+
+  // 首页 ----------------------------
   //底部是否放开互联网医院?
   isOpenHomeTabBarNetWorkBtn?: '1';
   //底部是否放开消息通知
   isOpenHomeTabBarMessageBtn?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
+  //是否开启助老版
+  isOpenHelpOld?: '1';
+  //首页开启智能问答——微信
+  isOpenIntelQA?: {
+    appId: string;
+    path: string;
+  };
+  //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
+  isOpenAlipayZndz?: boolean;
+  //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
+
+  // 门诊缴费 ----------------------------
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
   medicalMHelp?: {
     /** 开启就诊人更新患者医保 */
@@ -62,24 +82,10 @@ interface ISConfig {
     };
   };
 
-  //是否开启助老版
-  isOpenHelpOld?: '1';
-  //首页开启智能问答——微信
-  isOpenIntelQA?: {
-    appId: string;
-    path: string;
-  };
-  //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
-  isOpenAlipayZndz?: boolean;
-  //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
 
-  /**
-   *  就诊卡详情 卡包按钮跳转对应的域名
-   *  - [document](https://open.tengmed.com/openAccess/ability/detail?sceneId=0&catalogId=20&serviceId=93&docContentKey=detail)
-   *  - defaultValue:  https://03-h5-health.tengmed.com
-   *
-   * */
-  medicalCardDetailPackageDomain?: `http${string}`;
+  // 其他 ----------------------------
+  // 有药品配送功能?
+  isDrugDelivery?: '1';
 }
 
 const scJson: Record<string, ISConfig> = {

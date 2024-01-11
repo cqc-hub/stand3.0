@@ -27,10 +27,10 @@ const {
   name: sysName,
   isOpenHealthCard,
   isOpenOcr,
-  toutiaoAppid
+  toutiaoAppid,
 } = sysConfig;
 
-const { medicalMHelp,isOpenAlipayZndz } = sConfig;
+const { medicalMHelp, isOpenAlipayZndz } = sConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
@@ -55,12 +55,12 @@ if (isOpenOcr) {
   };
 }
 
-if(isOpenAlipayZndz){
+if (isOpenAlipayZndz) {
   //支付宝-分诊插件
-  aliPlugin.codePlugin={
-    "version": "*", // 目前只支持设置 * 拉取当前上架最新版本
-    "provider": "2021003163608051"
-  }
+  aliPlugin.codePlugin = {
+    version: '*', // 目前只支持设置 * 拉取当前上架最新版本
+    provider: '2021003163608051',
+  };
 }
 
 if (medicalMHelp) {
@@ -74,7 +74,7 @@ if (medicalMHelp) {
         version: '*',
         provider:
           globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
-          // globalGl.env === 'prod' ? '2021003147699046' : '2021003147699046',
+        // globalGl.env === 'prod' ? '2021003147699046' : '2021003147699046',
       };
     }
   }
