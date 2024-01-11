@@ -12,7 +12,7 @@ import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType, Split, Merge, FilterOptional } from '@/typeUtils';
 import { getMiniProgramEnv, ApiParamsConfig } from '@/utils';
-import envConfigData from '@/config/envConfigData';
+import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -581,7 +581,7 @@ export class ServerStaticData {
 
       if (this.env === 'develop') {
         // ...
-        insertsObject(envConfigData, systemConfig);
+        insertsObject(sysConfigEnv, systemConfig);
       }
       setLocalStorage({
         systemConfig,
@@ -599,12 +599,13 @@ export const getSystemConfig = ServerStaticData.getSystemConfig;
 
 export const cacheUtil = new (class {
   wakeMap = new WeakMap();
+  env: '' | 'develop' | 'trial' | 'release' = '';
 
   /**
    *  获取系统参数
    *  配合 type ApiParamsConfig 使用
    * @example
-   * const res = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')()
+   * const res = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')
    * const res1 = await cacheUtil.getSystemConfig('Config_Key,Config_Key1')<{ Config_Key: any }>()
    */
   getSystemConfig<T extends string = string>(paramCode: T) {
@@ -627,6 +628,10 @@ export const cacheUtil = new (class {
         >
       >
     > => {
+      if (!this.env) {
+        this.env = await getMiniProgramEnv();
+      }
+
       const paramCodeArr = paramCode.split(',');
 
       const map: BaseObject = this.wakeMap.get(this.getSystemConfig) || {};
@@ -647,18 +652,41 @@ export const cacheUtil = new (class {
         for (const key in result) {
           try {
             map[key] = JSON.parse(result[key] || '{}');
+            const config = map[key];
+
+            const wxConfig = config?.inWx;
+            const alipayConfig = config?.inAlipay;
+
+            // #ifdef MP-ALIPAY
+            if (alipayConfig) {
+              Object.assign(config, alipayConfig);
+            }
+
+            // #endif
+
+            // #ifdef MP-WEIXIN
+            if (wxConfig) {
+              Object.assign(config, wxConfig);
+            }
+            // #endif
           } catch (error: any) {
             throw new Error('序列化错误: ' + key);
           }
         }
       }
 
-      return paramCodeArr
+      const result = paramCodeArr
         .filter((k) => k)
         .reduce<any>((p, key) => {
           p[key] = map[key] || {};
           return p;
         }, {});
+
+      if (this.env === 'develop') {
+        insertsObject(apiConfigEnv, result);
+      }
+
+      return result;
     };
   }
 })();

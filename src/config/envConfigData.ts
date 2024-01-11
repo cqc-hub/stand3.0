@@ -4,7 +4,7 @@ import { type TButtonConfig } from '@/utils';
  * 容器为 develop 环境(开发版)下 替换 sysConfig
  */
 
-const config = <const>{
+export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
@@ -35,4 +35,4 @@ const config = <const>{
   ],
 };
 
-export default config;
+export const apiConfigEnv = <const>{};

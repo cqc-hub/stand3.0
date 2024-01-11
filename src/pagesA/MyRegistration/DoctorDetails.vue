@@ -742,11 +742,6 @@
 
     useDoctorDetail = new UseDoctorDetail(props.value);
     init();
-
-    setTimeout(() => {
-      // regDialogConfirm.value.show();
-      // refDocShare.value.show();
-    }, 1200);
   });
 </script>
 

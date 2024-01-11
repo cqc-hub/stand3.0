@@ -8,7 +8,7 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, ServerStaticData } from '@/utils';
+import { apiAsync, cacheUtil } from '@/utils';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -311,17 +311,20 @@ export class LoginUtils extends GStores {
   }
 
   async getConfig() {
-    return ServerStaticData.getSystemConfig('person');
+    const config = await cacheUtil.getSystemConfig('Login,Sz')();
+
+    return config.Login;
   }
 
   async getAliOpenid() {
+    const { isSkipPerfect, isAliAuthBase, isAliIndependentDev } =
+      await this.getConfig();
+
     const { authCode } = await apiAsync(my.getAuthCode, {
-      scopes: 'auth_user',
-      // scopes: 'auth_base',
+      scopes: isAliAuthBase ? 'auth_base' : 'auth_user',
     });
 
     const accountType = this.globalStore.browser.accountType;
-    const { isSkipPerfect } = await this.getConfig();
 
     const { result } = await api.allinoneAuthApi<TAliLogin>(
       packageAuthParams(
