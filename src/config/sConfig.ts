@@ -82,7 +82,6 @@ interface ISConfig {
     };
   };
 
-
   // 其他 ----------------------------
   // 有药品配送功能?
   isDrugDelivery?: '1';
