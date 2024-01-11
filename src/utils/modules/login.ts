@@ -311,7 +311,8 @@ export class LoginUtils extends GStores {
   }
 
   async getConfig() {
-    const config = await cacheUtil.getSystemConfig('Login,Sz')();
+    const config = await cacheUtil.getSystemConfig('Login')();
+    console.log(config, '2333');
 
     return config.Login;
   }
@@ -432,6 +433,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
+    const config = await this.getConfig();
     return await this.handlerAuth(e);
     if (isLoading) {
       return;
@@ -444,7 +446,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
     try {
       isLoading = true;
       const getPhoneNumberOpt: BaseObject = {};
-      const isvAppId = globalGl.systemInfo.isvAlipayAppid;
+      const isvAppId = config.isvAlipayAppid;
       if (isvAppId) {
         getPhoneNumberOpt.protocols = {
           isvAppId,

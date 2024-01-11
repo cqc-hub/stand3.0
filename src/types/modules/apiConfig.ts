@@ -18,5 +18,8 @@ export type ApiParamsConfig = {
     isAliIndependentDev?: '1';
     // 支付宝, 仅手机号授权(无身份证)
     isAliAuthBase?: '1';
+
+    // 默认代开发且仅手机号授权时候必给
+    isvAlipayAppid?: string;
   };
 };

@@ -35,4 +35,9 @@ export const sysConfigEnv = <const>{
   ],
 };
 
-export const apiConfigEnv = <const>{};
+export const apiConfigEnv = <const>{
+  'Login.isSkipPerfect': '1',
+  // 'Login.isAliIndependentDev': '1',
+  'Login.isAliAuthBase': '1',
+  'Login.isvAlipayAppid': '2021003154665105',
+};
