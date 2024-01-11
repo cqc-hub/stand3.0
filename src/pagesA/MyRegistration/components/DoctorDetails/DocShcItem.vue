@@ -1,10 +1,12 @@
 <template>
-  <g-login @handler-next="regClick(item)" patient>
+  <g-login :disabled="disabled" @handler-next="regClick(item)" patient>
     <view @click="regClick(item)" class="scheme-item">
       <view class="flex-between">
         <view class="scheme-item-ampm-name">
           <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
-          <view class="ampm-fee f28 mr16 g-bold">{{ item.fee }}元</view>
+          <view v-if="item.fee" class="ampm-fee f28 mr16 g-bold">
+            {{ item.fee }}元
+          </view>
         </view>
 
         <view class="scheme-item-detail">
@@ -16,7 +18,7 @@
           </button>
 
           <button
-            v-else
+            v-else-if="!forShow"
             :class="{
               'btn-old': systemModeOld,
             }"
@@ -36,8 +38,11 @@
         </view>
 
         <block v-if="pageConfig.isHideNumberSourceTotalRemain !== '1'">
-          <view class="color-888 text-no-wrap">
-            总{{ item.numCount }} 个 余{{ item.numRemain }}个
+          <view class="color-888 text-no-wrap text-center">
+            <text v-if="item.numCount" class="mr4">
+              总{{ item.numCount }}个
+            </text>
+            <text v-if="item.numRemain">余{{ item.numRemain }}个</text>
           </view>
         </block>
       </view>
@@ -55,6 +60,8 @@
     item: TSchInfo;
     systemModeOld?: boolean;
     pageConfig: ISystemConfig['order'];
+    forShow?: boolean;
+    disabled?: boolean;
   }>();
 
   const emits = defineEmits(['reg-click', 'avatar-click']);

@@ -276,6 +276,7 @@
               v-model:hos-id="selOutHosId"
               v-model:day="selOutHosDay"
               :list="docSchOutHosList"
+              :pageConfig="pageConfig"
             />
           </view>
         </view>
