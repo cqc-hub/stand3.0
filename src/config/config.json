@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "1001064",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -203,6 +203,17 @@
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
+    },
+
+    "1001064": {
+      "wxAppid": "wx58ffd2c3a557bef0",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "核桃仁测试医院",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
     }
+
   }
 }
