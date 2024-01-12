@@ -20,7 +20,11 @@
 
           <view class="user-info">
             <text class="user-info-name">
-              {{ isNameEncry ? hosInfoResObj.patientNameDes : hosInfoResObj.patientName }}
+              {{
+                isNameEncry
+                  ? hosInfoResObj.patientNameDes
+                  : hosInfoResObj.patientName
+              }}
             </text>
             <text class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
             <text @click="eyesClick" class="iconfont eyes-icon color-888">
@@ -66,7 +70,9 @@
             </view>
           </view>
 
-          <text class="money text-no-wrap">{{ hosInfoResObj.prepaidCost }}元</text>
+          <text class="money text-no-wrap">
+            {{ hosInfoResObj.prepaidCost }}元
+          </text>
         </view>
         <view class="card-detail-item">
           <text class="name">已产生费用</text>
@@ -93,20 +99,37 @@
       <g-empty :current="1" />
     </view>
     <g-message />
+    <g-select
+      v-model:value="selPlace"
+      v-model:show="isSelShow"
+      :option="selPlaces"
+      :field="{
+        label: 'address',
+        value: 'appointRehabCode',
+      }"
+      @update:show="selClose"
+      @change="resolve"
+      ref="gSelect"
+      title="选择康复地点"
+    />
   </view>
 </template>
 <script setup lang="ts">
   import { onMounted, ref } from 'vue';
   import { getAvatar } from '@/stores';
-  import { GStores } from '@/utils';
+  import { GStores, apiAsync } from '@/utils';
   import { joinQuery } from '@/common';
-  import api from '@/service/api';
   import {
     getInHospitalInfoParam,
     getInHospitalInfoResult,
     hospitalPayResult,
   } from '../utils/inpatientInfo';
   import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
+
+  import GSelect from '@/components/g-select/g-select.vue';
+
+  import api from '@/service/api';
+
   const Obj = ref();
   const props = defineProps<{
     isQueryPreRecord?: string;
@@ -118,9 +141,17 @@
   const loadImg = () => {
     isLoad.value = true;
   };
-  const hosInfoResObj = ref<getInHospitalInfoResult>(
-    {} as getInHospitalInfoResult
-  );
+
+  const gSelect = ref(<any>'');
+  const selPlaces = ref(<any[]>[]);
+  const selPlace = ref('');
+  const isSelShow = ref(false);
+  const selClose = (e) => {
+    isSelShow.value = false;
+    reject();
+  };
+
+  const hosInfoResObj = ref({} as getInHospitalInfoResult);
   const toPayRecord = async () => {
     uni.navigateTo({
       url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
@@ -131,14 +162,53 @@
     isNameEncry.value = !isNameEncry.value;
   };
 
-  const toPayPage = () => {
-    const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
+  const toPayPage = async () => {
+    const {
+      hosId,
+      cardNumber,
+      patientName,
+      hosName,
+      placeList,
+      choosePlaceFlag,
+    } = hosInfoResObj.value;
+
     const args = {
       hosId,
       cardNumber,
       patientName,
       hosName,
     };
+
+    if (!choosePlaceFlag && placeList && placeList.length) {
+      selPlaces.value = placeList;
+      isSelShow.value = true;
+
+      await new Promise((r, j) => {
+        resolve = r;
+        reject = j;
+      });
+
+      const selItem = placeList.find(
+        (o) => o.appointRehabCode === selPlace.value
+      );
+
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: `确定选择 ${selItem.address} 吗?`,
+      });
+
+      if (!confirm) {
+        return;
+      }
+
+      await api.inHosChosePlace({
+        placeObject: selItem,
+        visitNo: hosInfoResObj.value.visitNo,
+      });
+    }
+
     uni.navigateTo({
       url: joinQuery('/pagesA/hospitalCare/paymentPage', args),
     });
@@ -253,10 +323,10 @@
     }
 
     .eyes-icon {
-        font-size: var(--hr-font-size-xxl);
-        position: relative;
-        top: 5rpx;
-      }
+      font-size: var(--hr-font-size-xxl);
+      position: relative;
+      top: 5rpx;
+    }
   }
   .card-detail {
     background-color: #fff;
@@ -300,7 +370,6 @@
         background-color: #e9f0ff;
         margin-right: 70rpx;
 
-
         .text {
           color: #296fff;
           font-size: var(--hr-font-size-xxxs);
@@ -313,7 +382,7 @@
         }
       }
       .money {
-        font-size:var(--hr-font-size-base);
+        font-size: var(--hr-font-size-base);
         color: #111;
         font-weight: 600;
       }
@@ -329,5 +398,4 @@
       margin-top: 28rpx;
     }
   }
-
 </style>

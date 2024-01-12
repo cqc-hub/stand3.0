@@ -304,6 +304,14 @@ export class ServerStaticData {
     }
   }
 
+  static async getAddressByLevel(upDivision = ''): Promise<ISelectOptions[]> {
+    const { result } = await api.getDivisionByLevel({
+      upDivision,
+    });
+
+    return result;
+  }
+
   static async getAddMedicalData() {
     let addMedicalData = getLocalStorage('addMedicalData');
 

@@ -37,6 +37,8 @@ export interface getInHospitalInfoResult {
   visitNo?: string;
   cardNumber?: string;
   patientNameDes?: string;
+  choosePlaceFlag?: boolean;
+  placeList?: any[];
 }
 //获取住院费用日清单列表
 export interface dailyParam {
@@ -79,7 +81,6 @@ export interface dailySecList {
   totalCost?: string;
   wardName?: string;
   inpStatus?: 'false' | 'true';
-
 }
 //创建住院订单 出参
 export interface payOrderResult {

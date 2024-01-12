@@ -20,18 +20,21 @@
           @click="change(item)"
           class="popup-row g-border-bottom"
         >
+          <slot :item="item"></slot>
           <view class="popup-row-label f32 text-ellipsis">
             {{ field ? item[field.label] : item }}
           </view>
           <view v-if="isActive(item)" class="iconfont ico-check">&#xe6cc;</view>
         </view>
+
+        <slot name="footer" />
       </view>
     </Gl-Popup>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref, computed } from 'vue';
+  import { watch, ref, computed, nextTick } from 'vue';
   import GlPopup from '@/components/g-popup/g-popup.vue';
 
   const props = withDefaults(
@@ -84,10 +87,13 @@
       return;
     }
 
-    close();
     emits('update:value', value);
     emits('change', {
       item,
+    });
+
+    nextTick(() => {
+      close();
     });
   };
 

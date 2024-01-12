@@ -93,6 +93,12 @@ const baseApi = {
       hideLoading: false,
     }),
 
+  //行政区划列表
+  getDivisionByLevel: (data) =>
+    service.post('/phs-base/division/getDivisionByLevel', parm(data), {
+      hideLoading: false,
+    }),
+
   //获取客服子标题列表
   getSubTypeList: (data) =>
     service.post('/phs-base/customerService/getSubTypeList', parm(data), {
@@ -280,6 +286,9 @@ const queryApi = {
   // 发送产科问卷
   sendQuestionnaireInfo: (data) =>
     service.post('/phs-query/hospital/sendObstetricsQuestionnaire', parm(data)),
+
+  inHosChosePlace: (data) =>
+    service.post('/phs-query/hospital/inHosChosePlace', parm(data)),
 
   // 门诊住院列表
   getOutpatientHospitalList: (data) =>
