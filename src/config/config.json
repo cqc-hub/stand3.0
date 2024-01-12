@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001064",
+  "sysCode": "1001063",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -214,6 +214,5 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     }
-
   }
 }

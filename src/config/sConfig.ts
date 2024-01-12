@@ -7,6 +7,21 @@
  */
 
 interface ISConfig {
+  // 小程序登录相关 ----------------------------
+  login?: {
+    /** 本系统不需要完善 */
+    isSkipPerfect?: '1';
+
+    /** 支付宝, 自主开发模式(默认代开发), 目前只做了 isAliAuthBase = 1 下版本 */
+    isAliIndependentDev?: '1';
+
+    /** 支付宝, 仅手机号授权(无身份证) */
+    isAliAuthBase?: '1';
+
+    /** 默认代开发且仅手机号授权时候必给 */
+    isvAlipayAppid?: string;
+  };
+
   // 就诊人 ----------------------------
   // 添加就诊人查询院内可能存在多张卡(濮阳人民)?
   isSearchHosForAddPatHasMoreThanOneCard?: '1';
@@ -96,6 +111,16 @@ interface ISConfig {
 }
 
 const scJson: Record<string, ISConfig> = {
+  /**
+   * 杭州口腔医院
+   */
+  1001063: {
+    login: {
+      isAliIndependentDev: '1',
+      isAliAuthBase: '1',
+    },
+  },
+
   /**
    * 濮阳市人民医院
    */

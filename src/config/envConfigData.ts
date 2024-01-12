@@ -8,7 +8,7 @@ export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
-  'order.isOpenOutHosSch': '1',
+  // 'order.isOpenOutHosSch': '1',
   'medRecord.0.isCustomPatRecord': '1',
   'reportQuery.jcHoverTipBtns': <TButtonConfig[]>[
     {
@@ -36,8 +36,8 @@ export const sysConfigEnv = <const>{
 };
 
 export const apiConfigEnv = <const>{
-  'Login.isSkipPerfect': '1',
+  // 'Login.isSkipPerfect': '1',
   // 'Login.isAliIndependentDev': '1',
-  'Login.isAliAuthBase': '1',
-  'Login.isvAlipayAppid': '2021003154665105',
+  // 'Login.isAliAuthBase': '1',
+  // 'Login.isvAlipayAppid': '2021003172684536',
 };

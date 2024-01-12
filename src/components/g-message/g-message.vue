@@ -119,7 +119,7 @@
     z-index: 9999;
     `;
 
-  onMounted(() => {
+  onMounted(async () => {
     // #ifdef  MP-WEIXIN
     wxOnNeedPrivacyAuthorization();
     // #endif

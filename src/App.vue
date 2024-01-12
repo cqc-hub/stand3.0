@@ -2,6 +2,7 @@
   import { onLaunch, onShow } from '@dcloudio/uni-app';
   import { useGlobalStore, useUserStore } from '@/stores';
   import { beforeEach } from '@/router';
+
   import global from '@/config/global';
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
@@ -14,11 +15,10 @@
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '';
 
-  onLaunch((opt) => {
+  onLaunch(async (opt) => {
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
-
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
@@ -35,6 +35,7 @@
     }
     // #endif
   });
+
   onShow(async (opt) => {
     console.log('App Show', opt);
     globalStore.onAppShow(opt);
@@ -149,6 +150,7 @@
         });
       }
     }
+
   });
 </script>
 <style lang="scss">

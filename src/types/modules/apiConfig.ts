@@ -14,7 +14,7 @@ export type ApiParamsConfig = {
   Login: {
     // 本系统不需要完善
     isSkipPerfect?: '1';
-    // 支付宝, 自主开发模式(默认代开发)
+    // 支付宝, 自主开发模式(默认代开发), 目前只做了 isAliAuthBase = 1 下版本
     isAliIndependentDev?: '1';
     // 支付宝, 仅手机号授权(无身份证)
     isAliAuthBase?: '1';

@@ -311,36 +311,106 @@ export class LoginUtils extends GStores {
   }
 
   async getConfig() {
-    const config = await cacheUtil.getSystemConfig('Login')();
-    console.log(config, '2333');
-
-    return config.Login;
+    return globalGl.sConfig.login || {};
   }
 
+  /**
+   *  - 代开发仅手机号授权登录
+   *  - 代开发授权身份证, 手机号登录
+   *  - 自主开发仅手机号登录
+   *
+   * @returns
+   */
   async getAliOpenid() {
-    const { isSkipPerfect, isAliAuthBase, isAliIndependentDev } =
-      await this.getConfig();
+    const {
+      isSkipPerfect,
+      isAliAuthBase,
+      isAliIndependentDev,
+      isvAlipayAppid: isvAppId,
+    } = await this.getConfig();
 
+    let res: TAliLogin;
+
+    if (isAliAuthBase === '1') {
+      return this.getAliOpenidAgentBase();
+    }
+
+    // 代开发 带授权身份证 手机号登录
     const { authCode } = await apiAsync(my.getAuthCode, {
-      scopes: isAliAuthBase ? 'auth_base' : 'auth_user',
+      scopes: 'auth_user',
+      // scopes: isAliAuthBase ? 'auth_base' : 'auth_user',
     });
 
     const accountType = this.globalStore.browser.accountType;
+    const reqArg: BaseObject = {
+      code: authCode,
+      codeType: 2, // 授权码类型 1-部分授权 2-用户信息授权
+      accountType,
+    };
+
+    let url =
+      isSkipPerfect === '1'
+        ? '/aliUserLogin/alipayLoginByPhone'
+        : '/aliUserLogin/getTPAlipayUserInfoShare';
 
     const { result } = await api.allinoneAuthApi<TAliLogin>(
+      packageAuthParams(reqArg, url)
+    );
+
+    res = result;
+
+    return res;
+  }
+
+  async getAliOpenidAgentBase() {
+    const { isvAlipayAppid: isvAppId, isAliIndependentDev } =
+      await this.getConfig();
+
+    const getPhoneNumberOpt: BaseObject = {};
+    if (isvAppId) {
+      getPhoneNumberOpt.protocols = {
+        isvAppId,
+      };
+    }
+
+    /**
+     * https://opendocs.alipay.com/isv/03l4j2
+     * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+     * 待开发后台
+     *  - 开发设置-应用网关
+     *  - 产品绑定-绑定产品-获取会员手机号
+     *
+     * - 主体申请 会员手机号能力
+     *
+     */
+    const resPhone = await apiAsync(my.getPhoneNumber, getPhoneNumberOpt);
+
+    const { response: responseStr } = resPhone;
+
+    const accountType = this.globalStore.browser.accountType;
+    const { authCode } = await apiAsync(my.getAuthCode, {
+      scopes: 'auth_base',
+    });
+    const loginArg = {
+      code: authCode,
+      encrypData: responseStr,
+      accountType,
+      codeType: 1, // 授权码类型 1-部分授权 2-用户信息授权
+    };
+
+    // console.log(JSON.stringify(loginArg));
+    // return
+
+    const { result } = await api.allinoneAuthApi(
       packageAuthParams(
-        {
-          code: authCode,
-          codeType: 2,
-          accountType,
-        },
-        isSkipPerfect === '1'
-          ? '/aliUserLogin/alipayLoginByPhone'
-          : '/aliUserLogin/getTPAlipayUserInfoShare'
+        loginArg,
+        isAliIndependentDev === '1'
+          ? '/aliUserLogin/alipayTpLoginByPhone'
+          : '/aliUserLogin/getAlipayBaseEncryLogin'
       )
     );
 
-    return result;
+    return <TAliLogin>result;
   }
 }
 
@@ -433,8 +503,12 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
-    const config = await this.getConfig();
-    return await this.handlerAuth(e);
+    const { isAliAuthBase, isAliIndependentDev } = await this.getConfig();
+
+    if (isAliAuthBase !== '1') {
+      return await this.handlerAuth(e);
+    }
+
     if (isLoading) {
       return;
     }
@@ -445,43 +519,8 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
 
     try {
       isLoading = true;
-      const getPhoneNumberOpt: BaseObject = {};
-      const isvAppId = config.isvAlipayAppid;
-      if (isvAppId) {
-        getPhoneNumberOpt.protocols = {
-          isvAppId,
-        };
-      }
-
-      /**
-       * https://opendocs.alipay.com/isv/03l4j2
-       * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
-       * 待开发后台
-       *  - 开发设置-应用网关
-       *  - 产品绑定-绑定产品-获取会员手机号
-       *
-       * - 主体申请 会员手机号能力
-       *
-       */
-      const { response: responseStr } = await apiAsync(
-        my.getPhoneNumber,
-        getPhoneNumberOpt
-      );
-
       const accountType = this.globalStore.browser.accountType;
-      const { authCode } = await apiAsync(my.getAuthCode, {
-        // scopes: 'auth_user',
-        scopes: 'auth_base',
-      });
-      const loginArg = {
-        code: authCode,
-        encrypData: responseStr,
-        accountType,
-      };
-
-      const { result } = await api.allinoneAuthApi(
-        packageAuthParams(loginArg, '/aliUserLogin/getAlipayBaseEncryLogin')
-      );
+      const result = await this.getAliOpenid();
 
       const { userId, accessToken, refreshToken } = result;
 
