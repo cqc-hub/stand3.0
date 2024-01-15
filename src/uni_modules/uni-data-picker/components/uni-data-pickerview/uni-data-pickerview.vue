@@ -141,12 +141,14 @@
           this.selected.splice(i, this.selected.length - i);
           this.selected.push({
             text,
-            value
+            value,
+            node
           });
         } else if (i === this.selected.length - 1) {
           this.selected.splice(i, 1, {
             text,
-            value
+            value,
+            node
           });
         }
 

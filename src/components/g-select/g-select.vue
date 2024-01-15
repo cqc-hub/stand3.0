@@ -40,6 +40,7 @@
   const props = withDefaults(
     defineProps<{
       show: boolean;
+      everyChoose?: boolean;
       title?: string;
       option: any[];
       value: any;
@@ -83,7 +84,7 @@
   const change = (item) => {
     const value = props.field ? item[props.field.value] : item;
 
-    if (value === props.value) {
+    if (value === props.value && !props.everyChoose) {
       return;
     }
 

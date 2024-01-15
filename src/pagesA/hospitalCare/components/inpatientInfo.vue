@@ -111,7 +111,24 @@
       @change="resolve"
       ref="gSelect"
       title="选择康复地点"
-    />
+      every-choose
+    >
+      <template #footer>
+        <view class="safe-height" />
+
+        <view class="g-flex-rc-cc">
+          <view
+            @click="skipChoose"
+            style="height: 88rpx; width: 300rpx"
+            class="btn btn-primary btn-plain btn-border"
+          >
+            跳过选择
+          </view>
+        </view>
+
+        <view class="safe-height" />
+      </template>
+    </g-select>
   </view>
 </template>
 <script setup lang="ts">
@@ -146,9 +163,14 @@
   const selPlaces = ref(<any[]>[]);
   const selPlace = ref('');
   const isSelShow = ref(false);
-  const selClose = (e) => {
+  const selClose = () => {
     isSelShow.value = false;
     reject();
+  };
+  const skipChoose = () => {
+    selPlace.value = '';
+    isSelShow.value = false;
+    resolve();
   };
 
   const hosInfoResObj = ref({} as getInHospitalInfoResult);
@@ -191,22 +213,24 @@
         reject = j;
       });
 
-      const selItem = placeList.find(
-        (o) => o.appointRehabCode === selPlace.value
-      );
+      const selItem =
+        selPlace.value &&
+        placeList.find((o) => o.appointRehabCode === selPlace.value);
 
-      const { confirm } = await apiAsync(uni.showModal, {
-        content: `确定选择 ${selItem.address} 吗?`,
-      });
+      if (selItem) {
+        const { confirm } = await apiAsync(uni.showModal, {
+          content: `确定选择 ${selItem.address} 吗?`,
+        });
 
-      if (!confirm) {
-        return;
+        if (!confirm) {
+          return;
+        }
+
+        await api.inHosChosePlace({
+          placeObject: selItem,
+          visitNo: hosInfoResObj.value.visitNo,
+        });
       }
-
-      await api.inHosChosePlace({
-        placeObject: selItem,
-        visitNo: hosInfoResObj.value.visitNo,
-      });
     }
 
     uni.navigateTo({

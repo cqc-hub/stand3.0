@@ -23,8 +23,8 @@
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
-        <text class="title">{{ item.timeDesc }}</text>
-        <text v-if="isBlur === '1'" class="item-desc">
+        <text class="title text-no-wrap">{{ item.timeDesc }}</text>
+        <text v-if="isBlur === '1'" class="item-desc text-no-wrap">
           第 {{ item.disNo }} 号
         </text>
         <text v-else class="item-desc">剩余 {{ item.disNo }} 个</text>

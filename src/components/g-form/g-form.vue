@@ -398,7 +398,7 @@
         });
 
         if (item.submitVerify) {
-          await item.submitVerify(phone)
+          await item.submitVerify(phone);
         } else {
           await api.sendVerifyCode({
             patientPhone: phone,
@@ -551,10 +551,12 @@
     }
   };
 
-  const addressChange = (item: TInstance, v) => {
+  const addressChange = async (item: TInstance, v) => {
     const { key, field } = item;
 
     if (field === 'address') {
+      console.log(v);
+
       const selLabels = v.map((o) => o.text).join('');
       setData({
         [key]: selLabels,
@@ -564,6 +566,17 @@
         item: item,
         value: v,
       });
+
+      const { node } = v;
+
+      if (node) {
+        const { id, divisionType } = node;
+        // 第三级是最后一级, 不需要继续了
+        if (divisionType !== '3') {
+          // node.children = await ServerStaticData.getAddressByLevel(id);
+        }
+      }
+      // console.log(v);
     }
   };
 

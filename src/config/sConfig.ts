@@ -132,6 +132,7 @@ const scJson: Record<string, ISConfig> = {
    * 绍兴第二医院
    */
   1001060: {
+    isOpenHelpOld: '1',
     medicalMHelp: {
       // isOpenPatToMedicalPat: {},
       alipay: {

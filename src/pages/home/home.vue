@@ -119,10 +119,7 @@
 
             <view class="top-menu">
               <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid
-                  :list="viewerStore.homeTopMenuList"
-                  :type="1"
-                ></homeGrid>
+                <homeGrid :list="viewerStore.homeTopMenuList" :type="1" />
               </view>
               <view
                 class="notice flex-normal g-fade-in"
@@ -260,7 +257,7 @@
                 <button
                   open-type="getPhoneNumber"
                   @getphonenumber="goLogin"
-                  class="login-btn"
+                  class="login-btn text-no-wrap"
                 >
                   请登录
                 </button>
@@ -270,10 +267,7 @@
 
             <view class="top-menu-old">
               <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid
-                  :list="viewerStore.homeTopMenuList"
-                  :type="3"
-                ></homeGrid>
+                <homeGrid :list="viewerStore.homeTopMenuList" :type="3" />
               </view>
             </view>
             <view class="isCloseOld flex-normal" @tap="openModeOld">
@@ -308,6 +302,8 @@
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
+  import { getLocalStorage, removeLocation } from '@/common/useToken';
+
   import {
     aliLogin,
     wxLogin,
@@ -330,7 +326,6 @@
   import homeNav from './componetns/homeNav.vue';
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
-  import { getLocalStorage, removeLocation } from '@/common/useToken';
 
   const props = defineProps<{
     code?: string;

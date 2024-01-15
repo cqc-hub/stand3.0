@@ -73,7 +73,7 @@
                   <template #default>
                     <view class="collapse-content">
                       <orderSelectSourceList
-                        :column="column"
+                        :column="getColumn"
                         :orderSourceList="
                           collapseOrderSourceList[
                             getCollapseOrderSourceListKey(_item)
@@ -194,6 +194,15 @@
   const getPageConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
+  const getColumn = computed(() => {
+    let column = props.column;
+
+    if (gStores.globalStore.modeOld && column > 1) {
+      return column - 1;
+    }
+
+    return column;
+  });
 
   const subTitle = computed(() => {
     const dayItem = props.chooseDays.find(
