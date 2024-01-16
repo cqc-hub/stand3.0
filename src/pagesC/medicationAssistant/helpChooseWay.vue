@@ -103,6 +103,7 @@
   import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
+  import { getShowDrugName } from '@/pagesB/medicationAssistant/utils/medicalHelp';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
@@ -155,6 +156,7 @@
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
     let provinces = '';
+    getShowDrugName;
 
     if (detailsAddressData) {
       const { province, city, county } = detailsAddressData;
@@ -169,7 +171,22 @@
       scrollTo.value = '_express';
     }
 
+    const findItem = cacheStore.medicalHelpSelList.find((o) =>
+      getShowDrugName(o).includes('代煎外配')
+    );
+
     const { senderName, senderPhone } = detailsAddressData;
+
+    if (findItem && pageConfig.value.deliveryFiredVerifySelf === '1') {
+      if (senderName !== gStores.userStore.patChoose.patientName) {
+        gStores.messageStore.showMessage(
+          '收件人姓名必须与处方人姓名一致，请修改！',
+          3000
+        );
+
+        return;
+      }
+    }
 
     const deliveryType = isIncludeChineseMedicalFriedAndDelivery.value
       ? '3'

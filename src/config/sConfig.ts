@@ -246,6 +246,19 @@ const scJson: Record<string, ISConfig> = {
   },
 
   /**
+   * 西安红会
+   */
+  1001045: {
+    medicalMHelp: {
+      alipay: {
+        medicalDefault: '1',
+        medicalNation: {},
+      },
+
+    },
+  },
+
+  /**
    * 联勤保障部队第987医院
    */
   1001055: {

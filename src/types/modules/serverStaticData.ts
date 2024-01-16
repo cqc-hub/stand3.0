@@ -306,6 +306,9 @@ export interface ISystemConfig_ {
       wx?: string;
       alipay?: string;
     };
+
+    // 药品配送中药代煎需要验证收货人与就诊人一致
+    deliveryFiredVerifySelf?: '1';
   };
 
   /** 病历查询 */

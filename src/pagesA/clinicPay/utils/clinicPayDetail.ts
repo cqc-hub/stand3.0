@@ -22,6 +22,8 @@ import {
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
+// api.getUnpaidClinicList = () => Promise.resolve({"result":{"clinicalSettlementResultList":[{"deptName":"呼吸与危重症医学科门诊","orderId":"9191030","payState":"1","visitDate":"2024-01-16","hosName":"郸城县人民医院","platOrderId":"824011610629121180","hosId":"12720","costTypeName":"西药","visitNo":"0HEMrCW2EBA86/CYC4xSHPZFkA3tBY94","totalCost":"1.22"}]},"timeTaken":302,"code":"0","message":"成功","respCode":"999002"})
+
 export const tradeType = {
   '1': '自费',
   '2': '医保',
