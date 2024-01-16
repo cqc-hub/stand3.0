@@ -10,34 +10,6 @@ export const sysConfigEnv = <const>{
   // 'order.isOrderPreSettle': '1',
   // 'order.isOpenOutHosSch': '1',
   'medRecord.0.isCustomPatRecord': '1',
-  'reportQuery.jcHoverTipBtns': <TButtonConfig[]>[
-    {
-      text: '咨询医生',
-      type: 'self',
-      path: 'pagesA/MyRegistration/DoctorDetails',
-      addition: {
-        deptId: 'hosDeptId',
-        hosId: 'hosId',
-        docName: 'applyDoc',
-        applyDocId: 'hosDocId',
-      },
-    },
-    {
-      text: '复诊预约',
-      type: 'self',
-      path: 'pagesA/MyRegistration/order',
-      addition: {
-        deptId: 'hosDeptId',
-        hosId: 'hosId',
-        deptName: 'deptName',
-      },
-    },
-  ],
 };
 
-export const apiConfigEnv = <const>{
-  // 'Login.isSkipPerfect': '1',
-  // 'Login.isAliIndependentDev': '1',
-  // 'Login.isAliAuthBase': '1',
-  // 'Login.isvAlipayAppid': '2021003172684536',
-};
+export const apiConfigEnv = <const>{};

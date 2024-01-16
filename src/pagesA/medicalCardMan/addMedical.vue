@@ -559,7 +559,7 @@
       } else {
         // #ifdef MP-ALIPAY
         // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
-        if (!patList.length) {
+        if (!patList.length && iValue) {
           if (key === formKey.patientName) {
             o.disabled = true;
             o.inputMask = (v, item) => {

@@ -46,7 +46,6 @@
             :options="qrOptions2"
             :value="qrOptions.code"
             @change="qrComplete"
-            ref="qrcode"
             size="500rpx"
           />
         </view>

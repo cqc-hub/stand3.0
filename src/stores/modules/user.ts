@@ -210,8 +210,9 @@ export const getUserShowLabel = (pat: IPat) => {
 export const isAreaProgram = (): boolean => {
   const sysCode = globalGl.SYS_CODE;
 
-  if (sysCode === '1001049') {
+  if (['1001049', '1001063'].includes(sysCode)) {
     return true;
   }
+
   return globalGl.SYS_CODE.startsWith('2');
 };

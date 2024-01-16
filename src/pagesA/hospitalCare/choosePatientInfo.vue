@@ -76,7 +76,6 @@ import { ref } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 
 import api from "@/service/api";
-import { isAreaProgram } from "@/stores";
 import { GStores, ServerStaticData } from "@/utils";
 import { hosParam} from "./utils/inpatientInfo";
 import { joinQuery } from "@/common";

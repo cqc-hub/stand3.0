@@ -37,7 +37,12 @@
           {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
         </view>
 
-        <block v-if="pageConfig.isHideNumberSourceTotalRemain !== '1'">
+        <block
+          v-if="
+            pageConfig.isHideNumberSourceTotalRemain !== '1' &&
+            item.schState !== '1'
+          "
+        >
           <view class="color-888 text-no-wrap text-center">
             <text v-if="item.numCount" class="mr4">
               总{{ item.numCount }}个
