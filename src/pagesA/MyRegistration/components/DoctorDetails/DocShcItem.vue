@@ -28,6 +28,18 @@
           >
             挂号
           </button>
+
+          <button
+            v-if="
+              item.schState === '2' && pageConfig.isOpenOrderWaiting === '1'
+            "
+            :class="{
+              'btn-old': systemModeOld,
+            }"
+            class="btn btn-primary btn-reg ml6"
+          >
+            候补预约
+          </button>
         </view>
       </view>
 
@@ -76,7 +88,7 @@
     disabled?: boolean;
   }>();
 
-  const emits = defineEmits(['reg-click', 'avatar-click']);
+  const emits = defineEmits(['reg-click', 'wait-reg-click', 'avatar-click']);
 
   const regClick = (scheme: TSchInfo) => {
     if (
@@ -85,6 +97,9 @@
     ) {
       // 候补预约
       console.log(scheme);
+      emits('wait-reg-click', {
+        scheme,
+      });
       return;
     } else if (scheme.schState in warnSchStateMap) {
       return;

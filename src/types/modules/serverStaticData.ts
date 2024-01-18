@@ -460,6 +460,8 @@ type TBannerConfigSelf = {
 type TBannerConfigOtherProgram = {
   type: 'otherProgram';
   appId: string;
+  // 透传给 api
+  deepProps?: BaseObject;
 } & TBannerConfigBase;
 
 export type TBannerConfig = XOR<
