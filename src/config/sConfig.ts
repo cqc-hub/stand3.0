@@ -228,10 +228,10 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 
-      alipay: {
-        medicalDefault: '1',
-        medicalNation: {},
-      },
+      // alipay: {
+      //   medicalDefault: '1',
+      //   medicalNation: {},
+      // },
 
       wx: {
         medicalNation: {

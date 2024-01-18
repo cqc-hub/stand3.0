@@ -380,7 +380,10 @@
   const orderRegInfo = ref({} as IRegInfo);
   const hosInfo = ref({} as IHosInfo);
   const isShowQr = computed(() => {
-    return ['0', '100', '70', '75'].includes(orderRegInfo.value.orderStatus);
+    return (
+      ['0', '100', '70', '75'].includes(orderRegInfo.value.orderStatus) &&
+      qrCodeOpt.value.code
+    );
   });
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
@@ -638,7 +641,7 @@
     uni.showLoading({});
     nextTick(() => {
       setTimeout(() => {
-        capture();
+        qrCodeOpt.value.code && capture();
         uni.hideLoading();
       }, 600);
     });
@@ -650,10 +653,11 @@
 
     formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
     formatterTemp(patientTempList, gStores.globalStore.modeOld);
+    const _patientTempList = patientTempList.filter((o) => orderRegInfo.value[o.key]);
 
     setTimeout(() => {
       refForm.value.setList(_regInfoTempList);
-      refFormPatient.value.setList(patientTempList);
+      refFormPatient.value.setList(_patientTempList);
     }, 600);
   };
 

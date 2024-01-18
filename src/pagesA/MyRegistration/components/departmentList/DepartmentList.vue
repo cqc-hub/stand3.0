@@ -28,10 +28,13 @@
             'dept-list-lv2': isLv2,
             'dept-list-lv2-alone': level === '2',
             'item-lv1-active': activeLV1 === indexLv1,
-            'item-lv1-active-corner-bottom': getItemCornerTopIdx === indexLv1,
-            'item-lv1-active-corner-top': getItemCornerBottomIdx === indexLv1,
+            'item-lv1-active-corner-bottom':
+              level !== '1' && getItemCornerTopIdx === indexLv1,
+            'item-lv1-active-corner-top':
+              level !== '1' && getItemCornerBottomIdx === indexLv1,
             'item-lv1-border': !isLv2,
             'g-border-bottom': !isLv2,
+            mb6: level === '1',
           }"
           :id="'lv1' + item.uuid"
           @click="itemClickLv1(item)"

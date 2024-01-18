@@ -31,7 +31,10 @@
         <view class="row f28">
           <view class="label text-no-wrap color-888">就诊人</view>
           <view class="body flex-between">
-            <text>{{ item.patientNameEncry }}({{ item.cardNumber }})</text>
+            <text>
+              {{ item.patientNameEncry }}
+              {{ item.cardNumber && `(${item.cardNumber})` }}
+            </text>
             <text v-if="item.regWay">{{ item.regWay }}</text>
           </view>
         </view>

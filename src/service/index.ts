@@ -153,6 +153,7 @@ Request.interceptors.response(
       return Promise.reject(responseData);
     } else if (code != 0) {
       let showMessage = responseOptions && responseOptions.showMessage;
+
       if (showMessage === undefined) {
         showMessage = true;
       }

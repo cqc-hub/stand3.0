@@ -517,6 +517,11 @@ export class ServerStaticData {
     payload: {} = {}
   ) {
     let systemConfig: ISystemConfig = getLocalStorage('systemConfig');
+
+    if (!this.env) {
+      this.env = await getMiniProgramEnv();
+    }
+
     if (!systemConfig) {
       //PERSON_FAMILY_CARDMAN 家庭成员 预约挂号 ORDER_REGISTER 病案复印MEDICAL_CASE_COPY 住院服务 PATIENT_SERVICE_CONFIG 门诊缴费CLINIC_PAY_CONFIG
       //REPORT_QUERY_CONFIG报告查询 药品配送 DRUG_DELIVERY_CONFIG
@@ -560,6 +565,11 @@ export class ServerStaticData {
           RestOfConfig,
         };
 
+        if (this.env === 'develop') {
+          // ...
+          insertsObject(sysConfigEnv, systemConfig);
+        }
+
         for (const key in systemConfig) {
           const config = systemConfig[<keyof ISystemConfig>key];
           const wxConfig = config?.inWx;
@@ -583,14 +593,6 @@ export class ServerStaticData {
         throw new Error('序列化错误, 请检查全局的参数');
       }
 
-      if (!this.env) {
-        this.env = await getMiniProgramEnv();
-      }
-
-      if (this.env === 'develop') {
-        // ...
-        insertsObject(sysConfigEnv, systemConfig);
-      }
       setLocalStorage({
         systemConfig,
       });

@@ -69,14 +69,15 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
+
+  import { getOpenId } from '@/components/g-pay/index';
+  import { GStores, wait, apiAsync } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
+
   import {
     TMedicalNationUploadRes,
     TWxAuthorize,
   } from './utils/clinicPayDetail';
-  import { getOpenId } from '@/components/g-pay/index';
-
-  import { GStores, wait } from '@/utils';
-  import { joinQueryForUrl } from '@/common';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -201,11 +202,32 @@
       const {
         invokeData: { payAppId, payUrl },
       } = payRes;
+      let isDeal = false;
 
-      uni.navigateToMiniProgram({
-        appId: payAppId,
-        path: payUrl,
-      });
+      // #ifdef MP-ALIPAY
+      if (globalGl.sConfig.medicalMHelp?.alipay?.medicalNation) {
+        isDeal = true;
+
+        const { resultCode } = await apiAsync(my.tradePay, {
+          orderStr: payUrl,
+        });
+
+        if (resultCode === '6001') {
+          // 取消支付
+          return;
+        }
+
+        await wait(2000);
+        queryOrder();
+      }
+      // #endif
+
+      if (!isDeal) {
+        uni.navigateToMiniProgram({
+          appId: payAppId,
+          path: payUrl,
+        });
+      }
     }
   };
 

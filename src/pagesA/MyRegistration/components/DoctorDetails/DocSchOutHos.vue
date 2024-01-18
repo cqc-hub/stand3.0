@@ -29,8 +29,9 @@
           :pageConfig="pageConfig"
           :item="item"
           :systemModeOld="gStores.globalStore.modeOld"
+          @reg-click="regClick"
           disabled
-          for-show
+          outHosSch
         />
       </view>
     </view>
@@ -40,7 +41,7 @@
 <script lang="ts" setup>
   import { ref, watch, computed } from 'vue';
   import { IDocSchOutHosItem } from '../../utils/DoctorDetails';
-  import { getChooseDays, IChooseDays } from '../../utils';
+  import { getChooseDays, IChooseDays, TSchInfo } from '../../utils';
   import { type ISystemConfig, GStores } from '@/utils';
 
   import OrderSelDate from '../orderSelDate/OrderSelDate.vue';
@@ -52,7 +53,7 @@
     day: string;
     pageConfig: ISystemConfig['order'];
   }>();
-  const emits = defineEmits(['update:hosId', 'update:day']);
+  const emits = defineEmits(['update:hosId', 'update:day', 'reg-click']);
   const gStores = new GStores();
   const tabCurrent = ref(0);
   const _chooseDays = ref<IChooseDays[]>([]);
@@ -79,6 +80,10 @@
 
   const changeDay = (day: string) => {
     emits('update:day', day);
+  };
+
+  const regClick = (item: TSchInfo) => {
+    emits('reg-click', item);
   };
 
   const tabChange = (idx: number) => {

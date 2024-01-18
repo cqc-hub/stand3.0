@@ -18,7 +18,9 @@
           </button>
 
           <button
-            v-else-if="!forShow"
+            v-else-if="
+              !outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)
+            "
             :class="{
               'btn-old': systemModeOld,
             }"
@@ -34,7 +36,11 @@
           {{ item.categorName }}
         </view>
         <view v-else class="text-ellipsis mr12">
-          {{ item.schQukCategor || `${item.deptName}/${item.categorName}` }}
+          <text v-if="item.schQukCategor">{{ item.schQukCategor }}</text>
+          <text v-else>
+            <text>{{ item.deptName }}</text>
+            <text v-if="item.categorName">/{{ item.categorName }}</text>
+          </text>
         </view>
 
         <block
@@ -44,10 +50,12 @@
           "
         >
           <view class="color-888 text-no-wrap text-center">
-            <text v-if="item.numCount" class="mr4">
+            <text v-if="item.numCount" class="mr4 text-no-wrap">
               总{{ item.numCount }}个
             </text>
-            <text v-if="item.numRemain">余{{ item.numRemain }}个</text>
+            <text v-if="item.numRemain" class="text-no-wrap">
+              余{{ item.numRemain }}个
+            </text>
           </view>
         </block>
       </view>
@@ -56,23 +64,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
   import { type ISystemConfig } from '@/utils';
 
-  defineProps<{
+  const props = defineProps<{
     item: TSchInfo;
     systemModeOld?: boolean;
     pageConfig: ISystemConfig['order'];
-    forShow?: boolean;
+    outHosSch?: boolean;
     disabled?: boolean;
   }>();
 
   const emits = defineEmits(['reg-click', 'avatar-click']);
 
   const regClick = (scheme: TSchInfo) => {
-    if (scheme.schState in warnSchStateMap) {
+    if (
+      scheme.schState === '2' &&
+      props.pageConfig.isOpenOrderWaiting === '1'
+    ) {
+      // 候补预约
+      console.log(scheme);
+      return;
+    } else if (scheme.schState in warnSchStateMap) {
       return;
     }
 

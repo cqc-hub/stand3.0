@@ -22,7 +22,37 @@ import {
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
-// api.getUnpaidClinicList = () => Promise.resolve({"result":{"clinicalSettlementResultList":[{"deptName":"呼吸与危重症医学科门诊","orderId":"9191030","payState":"1","visitDate":"2024-01-16","hosName":"郸城县人民医院","platOrderId":"824011610629121180","hosId":"12720","costTypeName":"西药","visitNo":"0HEMrCW2EBA86/CYC4xSHPZFkA3tBY94","totalCost":"1.22"}]},"timeTaken":302,"code":"0","message":"成功","respCode":"999002"})
+// api.getUnpaidClinicList = () =>
+//   Promise.resolve({
+//     result: {
+//       patientName: '支悦童',
+//       clinicalSettlementResultList: [
+//         {
+//           deptName: '神经内科',
+//           clinicId: '1747136655025532928',
+//           subIds: '1747136655025532928',
+//           deptId: 'A0102013',
+//           hosId: '12720',
+//           payState: '1',
+//           serialNo: '9191030',
+//           childOrder: '1976507',
+//           docName: '张朋',
+//           costTypeName: '智慧医保',
+//           visitDate: '2024-01-16',
+//           hosName: '郸城县人民医院',
+//           totalCost: '1.22',
+//           visitNo: '2024011610386182',
+//         },
+//       ],
+//       cardNumber: '196957103',
+//     },
+//     timeTaken: 234,
+//     code: 0,
+//     functionVersion:
+//       '[{"functionType":"2","version":"V0.0.57"},{"functionType":"1","version":"V0.0.1511111"}]',
+//     message: '成功',
+//     respCode: 999002,
+//   });
 
 export const tradeType = {
   '1': '自费',
@@ -470,6 +500,7 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
+  // return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }
@@ -565,6 +596,8 @@ export const isMedicalSelf = async (
        * 支付宝医保插件模式只能是本人
        */
       if (medicalPlugin || medicalNation) {
+        console.log(await isCanUseMedical(cardNumber), 'cqc');
+
         return await isCanUseMedical(cardNumber);
       }
     }
@@ -1108,6 +1141,7 @@ export const usePayPage = () => {
             pageProps.value.deParams?.cardNumber || cardNumber,
             pageProps.value.params
           );
+
           if (isDigitalPay) {
             if (flag) {
               changeRefPayList(4);
@@ -1115,6 +1149,8 @@ export const usePayPage = () => {
               changeRefPayList(3);
             }
           } else {
+            console.log('cqc', flag);
+
             if (flag) {
               changeRefPayList(1);
             } else {
@@ -1304,6 +1340,26 @@ export const usePayPage = () => {
     console.log(payInfoArg);
 
     uni.hideLoading();
+    const info = {
+      ...item,
+      extend: authorize,
+      // businessType: '1',
+      phsOrderSource: '2',
+      cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
+      patientId: pageProps.value.deParams?.cardNumber ? '' : pat.patientId,
+      patientName: pageProps.value.deParams?.patientName || pat.patientName,
+      totalCost: detailData.value.totalCost,
+      params: pageProps.value.params,
+    };
+
+    gStores.globalStore.assignCacheData({
+      uploadRes,
+      info,
+    });
+
+    uni.navigateTo({
+      url: '/pagesA/clinicPay/clinicPayMedical',
+    });
   };
 
   // /** 数字人民币支付 */

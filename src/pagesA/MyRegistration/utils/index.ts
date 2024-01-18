@@ -452,8 +452,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   };
 
   const amChange = async (schInfo: TSchInfoWhole) => {
-    console.log(schInfo, 'schInfoschInfoschInfoschInfo');
-
     if (!schInfo.amPmResults) {
       getOrderSource(schInfo);
     }

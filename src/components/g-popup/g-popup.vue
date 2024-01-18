@@ -23,7 +23,9 @@
             <view class="popup-title text-ellipsis g-bold">
               {{ title }}
             </view>
-            <view @click="popup.hide" class="iconfont ico-close f48">&#xe6cd;</view>
+            <view @click="popup.hide" class="iconfont ico-close f48">
+              &#xe6cd;
+            </view>
           </view>
 
           <view v-if="subTitle" class="g-flex-rc-cc color-888 f32">
@@ -32,13 +34,15 @@
         </view>
 
         <slot name="header" />
-
         <scroll-view
-          scroll-y
           :class="{
             'auto-height': type === 'top',
           }"
+          :style="{
+            'max-height': maxHeight,
+          }"
           class="popup-box"
+          scroll-y
         >
           <slot />
         </scroll-view>
@@ -57,6 +61,11 @@
     },
 
     props: {
+      maxHeight: {
+        type: String,
+        default: 'var(--h-popup-max-height);',
+      },
+
       disabled: {
         type: Boolean,
         default: false,
@@ -175,7 +184,6 @@
     }
 
     .popup-box {
-      max-height: var(--h-popup-max-height);
       min-height: min(233rpx, 30vh);
       overflow-y: scroll;
       // margin-bottom: 48rpx;

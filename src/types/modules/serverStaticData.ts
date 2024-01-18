@@ -47,6 +47,8 @@ export interface ISystemConfig_ {
     isOpenPreConsultation?: '1';
     /** 挂号预结算 */
     isOrderPreSettle?: '1';
+    /** 候补预约 */
+    isOpenOrderWaiting?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
@@ -62,6 +64,8 @@ export interface ISystemConfig_ {
     isHideNumberSourceTotalRemain?: '1';
     // 开放外院排班
     isOpenOutHosSch?: '1';
+    // 点击了外院排班
+    handlerOutHosSchClick?: TBannerConfig;
 
     /** 挂号记录 */
     // 显示院内导航按钮? 挂号状态 string

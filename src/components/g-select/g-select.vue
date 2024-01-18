@@ -4,7 +4,13 @@
       <slot :label="getShowLabel" />
     </view>
 
-    <Gl-Popup ref="popup" :type="type" :title="title" @hide="hide">
+    <Gl-Popup
+      ref="popup"
+      :maxHeight="maxHeight"
+      :type="type"
+      :title="title"
+      @hide="hide"
+    >
       <template v-if="$slots.header" #header>
         <slot name="header" />
       </template>
@@ -42,6 +48,7 @@
       show: boolean;
       everyChoose?: boolean;
       title?: string;
+      maxHeight?: string;
       option: any[];
       value: any;
       type?: 'top' | 'bottom';
@@ -53,6 +60,7 @@
     {
       title: '',
       type: 'bottom',
+      maxHeight: 'var(--h-popup-max-height);',
     }
   );
 

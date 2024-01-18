@@ -251,6 +251,7 @@
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
       patientId: gStores.userStore.patChoose.patientId,
     });
+
     hosInfoResObj.value = result;
     Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
   };

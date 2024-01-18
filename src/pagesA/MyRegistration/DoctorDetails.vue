@@ -268,15 +268,16 @@
           </view>
 
           <view v-if="docSchOutHosList.length" class="mt32">
-            <view class="f36 g-bold mb16 flex-between">
+            <!-- <view class="f36 g-bold mb16 flex-between">
               <view>外院排班</view>
-            </view>
+            </view> -->
 
             <doc-sch-out-hos
               v-model:hos-id="selOutHosId"
               v-model:day="selOutHosDay"
               :list="docSchOutHosList"
               :pageConfig="pageConfig"
+              @reg-click="outRegClick"
             />
           </view>
         </view>
@@ -377,7 +378,7 @@
   import { computed, ref } from 'vue';
   import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
-  import { useOrder, IChooseDays } from './utils';
+  import { useOrder, IChooseDays, TSchInfo } from './utils';
 
   import {
     UseDoctorDetail,
@@ -394,6 +395,7 @@
     GStores,
     ServerStaticData,
     type ISystemConfig,
+    useTBanner,
   } from '@/utils';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
@@ -617,6 +619,19 @@
       docDetail.value = r;
       props.value.docName = r.docName;
     });
+  };
+
+  const outRegClick = (e: { scheme: TSchInfo }) => {
+    const additionalData = {
+      ...props.value,
+      ...e.scheme,
+    };
+
+    const handlerConfig = pageConfig.value.handlerOutHosSchClick;
+
+    console.log(additionalData);
+
+    handlerConfig && useTBanner(handlerConfig, 'navigateTo', additionalData);
   };
 
   // 在线服务

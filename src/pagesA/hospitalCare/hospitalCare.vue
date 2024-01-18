@@ -20,7 +20,7 @@
       />
     </view>
     <!-- 内容区域 -->
-    <view class="g-container" v-if="pageLoading">
+    <view class="container" v-if="pageLoading">
       <inpatientInfo
         ref="inpatientInfoRef"
         v-if="getValue('0')"
