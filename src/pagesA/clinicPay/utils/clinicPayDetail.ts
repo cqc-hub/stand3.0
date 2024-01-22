@@ -1346,6 +1346,7 @@ export const usePayPage = () => {
       extend: authorize,
       // businessType: '1',
       phsOrderSource: '2',
+      payAuthNo: authorize.payAuthNo,
       cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
       patientId: pageProps.value.deParams?.cardNumber ? '' : pat.patientId,
       patientName: pageProps.value.deParams?.patientName || pat.patientName,
