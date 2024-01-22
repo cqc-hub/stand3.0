@@ -13,7 +13,8 @@
       <view class="row-title-bold">
         <text class="row-title-mr">{{ myProps.schDate }}</text>
         <text class="row-title-mr">
-          {{ myProps.ampmName + myProps.timeDesc }}
+          <text v-if="myProps.ampmName">{{ myProps.ampmName }}</text>
+          <text v-if="myProps.timeDesc">{{ myProps.timeDesc }}</text>
         </text>
         <!-- <text>{{ myProps.disNo }}号</text> -->
       </view>
@@ -67,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, toRaw, onMounted } from 'vue';
+  import { computed, ref, toRaw, onMounted } from 'vue';
   import { ServerStaticData, wait } from '@/utils';
   import { IPageProps } from '../../utils/regConfirm';
 

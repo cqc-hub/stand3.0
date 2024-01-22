@@ -19,7 +19,7 @@
         </view>
       </view>
 
-      <g-flag typeFg="4" isShowFgTip />
+      <g-flag v-if="isOver" :typeFg="isWaitReg ? '1101' : '4'" isShowFgTip />
       <!--  #ifdef MP-ALIPAY -->
       <template v-if="alipayPid">
         <Green-Power />
@@ -38,8 +38,9 @@
       ref="regDialogConfirm"
     >
       <g-flag
+        v-if="isOver"
         v-model:title="flagTitle9"
-        typeFg="9"
+        :typeFg="isWaitReg ? '1104' : '9'"
         isShowFgTip
         isHideTitle
         aaa
@@ -73,26 +74,42 @@
         <view class="fg-agree-text">
           <text @click.stop="flagClick">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
-            《预约挂号须知》
+            {{ isWaitReg ? '《候补预约须知》' : '《预约挂号须知》' }}
           </text>
         </view>
       </view>
 
       <view class="flex1">
-        <button class="btn btn-primary" @click="regConfirm">确定预约</button>
+        <button class="btn btn-primary" @click="regConfirm">
+          {{ isWaitReg ? '候补预约' : '确定预约' }}
+        </button>
       </view>
     </view>
 
+    <g-select
+      v-model:value="selWaitRegSch"
+      v-model:show="isShowSelWaitRegSch"
+      :option="waitRegSchSecondResultList"
+      :field="{
+        label: 'ampmName',
+        value: 'schId',
+      }"
+      @change="resolve"
+      @update:show="selClose"
+      title="确认候补就诊时段"
+      everyChoose
+    />
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
 
   import { IPageProps } from './utils/regConfirm';
+  import { TSchInfo } from './utils/index';
   import { GStores, ServerStaticData, wait, apiAsync } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -110,7 +127,7 @@
   import GreenToast from '@/components/greenPower/greenToast.vue';
 
   const gStores = new GStores();
-  const props = ref<IPageProps>({} as IPageProps);
+  const props = ref({} as IPageProps);
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
   const preventOrderStr = ref('');
@@ -120,10 +137,24 @@
   const contentTitle = ref('');
   const greenToastContent = ref(0);
   const alipayPid = global.systemInfo.alipayPid;
+  const waitRegSchSecondResultList = ref(<TSchInfo[]>[]);
+  const selWaitRegSch = ref('');
+  const isShowSelWaitRegSch = ref(false);
+  const isOver = ref(false);
+
+  // 候补挂号?
+  const isWaitReg = computed(() => {
+    return props.value.schState === '2';
+  });
 
   const regConfirm = async () => {
     if (!isCheck.value) {
       regDialogConfirm.value.show();
+      return;
+    }
+
+    if (isWaitReg.value) {
+      waitReg();
       return;
     }
 
@@ -291,8 +322,63 @@
     }
   };
 
+  const getWaitRegSch = async () => {
+    const arg = {
+      ...props.value,
+      source: gStores.globalStore.browser.source,
+    };
+
+    const { result } = await api.getAlternateSch<{
+      alternateData: string;
+      alternateLevel: string;
+      schDate: string;
+      alternateNum: number;
+      schSecondResultList: TSchInfo[];
+    }>(arg);
+
+    return result;
+  };
+
+  const selClose = () => {
+    isShowSelWaitRegSch.value = false;
+    reject();
+  };
+
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+  const waitReg = async () => {
+    const { schSecondResultList, alternateData } = await getWaitRegSch();
+
+    waitRegSchSecondResultList.value = schSecondResultList;
+
+    if (schSecondResultList && schSecondResultList.length) {
+      isShowSelWaitRegSch.value = true;
+
+      await new Promise((r, j) => {
+        resolve = r;
+        reject = j;
+      });
+
+      const selSchItem = schSecondResultList.find(
+        (o) => o.schId === selWaitRegSch.value
+      )!;
+
+      await api.addRegAlternate({
+        ...props.value,
+        ...selSchItem,
+        alternateData,
+        patientId: gStores.userStore.patChoose.patientId,
+      });
+
+      uni.reLaunch({
+        url: '/pagesA/MyRegistration/WaitRegistration',
+      });
+    }
+  };
+
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    isOver.value = true;
   });
 </script>
 
@@ -345,5 +431,4 @@
       font-size: 48rpx;
     }
   }
-
 </style>

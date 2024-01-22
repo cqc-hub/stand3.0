@@ -150,6 +150,14 @@
         },
 
         {
+          "path": "MyRegistration/WaitRegistration",
+          "style": {
+            "navigationBarTitleText": "候补预约",
+            "enablePullDownRefresh": true
+          }
+        },
+
+        {
           "path": "MyRegistration/RegComment",
           "style": {
             "navigationBarTitleText": "服务评价"

@@ -54,6 +54,7 @@ import globalGl from '@/config/global';
 //     respCode: 999002,
 //   });
 
+
 export const tradeType = {
   '1': '自费',
   '2': '医保',

@@ -18,6 +18,7 @@
               :pageConfig="pageConfig"
               :systemModeOld="systemModeOld"
               @reg-click="regClick"
+              @wait-reg-click="waitRegClick"
             />
           </view>
         </view>
@@ -34,19 +35,18 @@
   import DocShcItem from '../DoctorDetails/DocShcItem.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
-  import { 
-    type ISystemConfig,
-  } from '@/utils';
+  import { type ISystemConfig } from '@/utils';
 
   const emits = defineEmits([
     'reg-click',
+    'wait-reg-click',
     'avatar-click',
     'preregistration-click',
   ]);
   type IItem = IDocListByDate['schDateList'][number]['schemeList'][number];
   const props = defineProps<{
     item: IItem;
-    pageConfig:ISystemConfig['order'];
+    pageConfig: ISystemConfig['order'];
     systemModeOld?: boolean;
   }>();
 
@@ -60,6 +60,12 @@
 
   const regClick = (scheme: IItem['schemeList'][number]) => {
     emits('reg-click', {
+      scheme,
+    });
+  };
+
+  const waitRegClick = ({ scheme }) => {
+    emits('wait-reg-click', {
       scheme,
     });
   };

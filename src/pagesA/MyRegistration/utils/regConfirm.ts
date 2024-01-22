@@ -20,6 +20,8 @@ export interface IPageProps {
   clinicalType: string;
   promptMessage?: string; // 就诊提示
   thRegisterId?: string;
+
+  schState?: string;
 }
 
 export interface IPrePageProps

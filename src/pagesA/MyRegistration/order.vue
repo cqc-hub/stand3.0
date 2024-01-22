@@ -47,6 +47,7 @@
                 :pageConfig="orderConfig"
                 :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
+                @wait-reg-click="waitRegClick"
                 @avatar-click="avatarClick"
                 @preregistration-click="preregistrationClick"
               />
@@ -138,6 +139,7 @@
     selectOrderSourceNumId,
     amChange,
     regClick,
+    waitRegClick,
     isComplete,
     enabledDays,
     getDeptInfo,

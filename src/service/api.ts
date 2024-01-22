@@ -397,6 +397,12 @@ const regApi = {
   loginByThRegisterId: (data: any) =>
     service.post('/phs-reg/tencent/loginByThRegisterId', parm(data)),
 
+  getAlternateSch: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/getAlternateSch', parm(data)),
+
+  addRegAlternate: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data)),
+
   getQnRecordTemp: (data: any) =>
     service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
 
@@ -449,8 +455,8 @@ const regApi = {
       hideLoading: false,
     }),
 
-  addRegSatisfaction: (data: any) =>
-    service.post('/phs-reg/regSatisfaction/addRegSatisfaction', parm(data), {
+  addRegSatisfaction: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regSatisfaction/addRegSatisfaction', parm(data), {
       hideLoading: false,
     }),
 

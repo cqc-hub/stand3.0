@@ -208,6 +208,7 @@
                           :item="item"
                           :systemModeOld="gStores.globalStore.modeOld"
                           @reg-click="(scheme) => regClick({ scheme })"
+                          @wait-reg-click="waitRegClick"
                         />
                       </view>
                     </view>
@@ -248,6 +249,7 @@
                             :item="item"
                             :systemModeOld="gStores.globalStore.modeOld"
                             @reg-click="regClick"
+                            @wait-reg-click="waitRegClick"
                           />
                         </view>
                       </view>
@@ -523,6 +525,7 @@
     orderSourceChoose,
     amChange,
     regClick,
+    waitRegClick,
     enabledDays,
     filterChooseDays,
     regDate,
@@ -628,8 +631,6 @@
     };
 
     const handlerConfig = pageConfig.value.handlerOutHosSchClick;
-
-    console.log(additionalData);
 
     handlerConfig && useTBanner(handlerConfig, 'navigateTo', additionalData);
   };

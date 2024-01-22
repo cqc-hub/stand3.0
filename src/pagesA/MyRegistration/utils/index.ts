@@ -457,6 +457,15 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
   };
 
+  const waitRegClick = async ({ scheme }: { scheme: TSchInfo }) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', {
+        ...props.value,
+        ...scheme,
+      }),
+    });
+  };
+
   const getOrderSource = async (schInfo: TSchInfo) => {
     const {
       ampm,
@@ -639,6 +648,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     selectOrderSourceNumId,
     amChange,
     regClick,
+    waitRegClick,
     isComplete,
     enabledDays,
     filterChooseDays,

@@ -96,7 +96,6 @@
       props.pageConfig.isOpenOrderWaiting === '1'
     ) {
       // 候补预约
-      console.log(scheme);
       emits('wait-reg-click', {
         scheme,
       });
