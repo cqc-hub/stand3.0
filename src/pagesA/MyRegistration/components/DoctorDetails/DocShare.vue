@@ -4,9 +4,13 @@
       <view>
         <view class="g-flex-rc-cc">
           <view class="my-display-none">
-            <w-qrcode :options="options" ref="qrcode" />
+            <uv-qrcode
+              :options="options"
+              :value="options.code"
+              ref="qrcode"
+              size="500rpx"
+            />
           </view>
-
           <canvas
             :class="{
               'my-display-none': !isShow,
@@ -542,19 +546,7 @@
     const _qr_dy = avatarBox.top + 24 + 24 + 160 + 8;
     const _qr_width = 105;
 
-    const { painWidth: painWidthQrCode, painHeight: painHeightQrCode } =
-      await getScallSize(qr_code_img, {
-        width: _qr_width,
-        height: _qr_width,
-      });
-
-    ctx.drawImage(
-      qr_code_img,
-      _qr_dx,
-      _qr_dy,
-      painWidthQrCode,
-      painHeightQrCode
-    );
+    ctx.drawImage(qr_code_img, _qr_dx, _qr_dy, _qr_width, _qr_width);
     ctx.save();
 
     ctx.setFontSize(12);
@@ -573,11 +565,12 @@
 
   const capture = async () => {
     await wait(200);
-    const { tempFilePath } = await qrcode.value.GetCodeImg();
+    // const { tempFilePath } = await qrcode.value.GetCodeImg();
+
+    const { tempFilePath } = await apiAsync(qrcode.value.toTempFilePath, {});
+
     if (tempFilePath) {
       qrImg.value = tempFilePath;
-      // options.value.size = 0;
-      // previewImage([tempFilePath]);
     }
   };
 
