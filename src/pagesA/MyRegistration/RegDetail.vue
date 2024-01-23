@@ -246,7 +246,7 @@
       </view>
 
       <button
-        v-if="orderRegInfo.orderStatus === '0'"
+        v-if="['0', '3'].includes(orderRegInfo.orderStatus)"
         @click="refoundOrder"
         class="btn btn-plain btn-error g-border"
       >
@@ -390,7 +390,7 @@
   const isFirstIn = ref(true);
 
   const isShowFooter = computed(() =>
-    ['23', '45', '10', '70', '0', '20', '43', '42'].includes(
+    ['23', '45', '10', '70', '0', '20', '43', '42', '3'].includes(
       orderRegInfo.value.orderStatus
     )
   );
@@ -604,7 +604,12 @@
       );
     }
 
-    const result = await regDetailUtil.getDataDetail();
+    let result;
+    if (pageProps.value.orderStatus === '3') {
+      result = pageProps.value;
+    } else {
+      result = await regDetailUtil.getDataDetail();
+    }
     const hosList = await ServerStaticData.getHosList();
     uni.hideLoading();
     const hos = hosList.find((o) => o.hosId === result.hosId);
@@ -653,7 +658,9 @@
 
     formatterTemp(_regInfoTempList, gStores.globalStore.modeOld);
     formatterTemp(patientTempList, gStores.globalStore.modeOld);
-    const _patientTempList = patientTempList.filter((o) => orderRegInfo.value[o.key]);
+    const _patientTempList = patientTempList.filter(
+      (o) => orderRegInfo.value[o.key]
+    );
 
     setTimeout(() => {
       refForm.value.setList(_regInfoTempList);
@@ -873,7 +880,26 @@
     init();
   };
 
+  const refoundWaitOrder = async () => {
+    await api.cancelAlternate({
+      alternateId: pageProps.value.alternateId,
+      source: gStores.globalStore.browser.source,
+    });
+
+    gStores.messageStore.showMessage('取消候补预约成功', 3000, {
+      closeCallBack() {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+        });
+      },
+    });
+  };
+
   const refoundOrder = async () => {
+    if (orderRegInfo.value.orderStatus === '3') {
+      return refoundWaitOrder();
+    }
+
     if (orderConfig.value.isOrderPay !== '1') {
       cancelOrder();
     } else {

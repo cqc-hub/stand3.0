@@ -34,14 +34,14 @@ import globalGl from '@/config/global';
 //           deptId: 'A0102013',
 //           hosId: '12720',
 //           payState: '1',
-//           serialNo: '9191030',
+//           serialNo: '9239416',
 //           childOrder: '1976507',
 //           docName: '张朋',
 //           costTypeName: '智慧医保',
 //           visitDate: '2024-01-16',
 //           hosName: '郸城县人民医院',
-//           totalCost: '1.22',
-//           visitNo: '2024011610386182',
+//           totalCost: '1.73',
+//           visitNo: '2024012210456429',
 //         },
 //       ],
 //       cardNumber: '196957103',
@@ -53,7 +53,6 @@ import globalGl from '@/config/global';
 //     message: '成功',
 //     respCode: 999002,
 //   });
-
 
 export const tradeType = {
   '1': '自费',
@@ -501,7 +500,6 @@ export const medicalNationUpload = async (
 let _isCanUseMedical: boolean | null = null;
 /** 支付宝医保插件模式时候 校验就诊人是否能使用医保插件 */
 export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
-  // return true;
   if (_isCanUseMedical !== null) {
     return _isCanUseMedical;
   }

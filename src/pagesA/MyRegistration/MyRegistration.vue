@@ -9,6 +9,7 @@
     <g-message />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
     <My-Registration-Head
+      v-if="props.type !== 'waitReg'"
       v-model:isSelStatus="isSelStatus"
       v-model:isSelPatient="isSelPatient"
       v-model:isSelOrderStatus="isSelOrderStatus"
@@ -28,7 +29,7 @@
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
           :config="orderConfig"
-          :thRegisterId="thRegisterId"
+          :thRegisterId="props.thRegisterId"
           :anotherYwzConditions="anotherYwzConditions"
           @ywz-click="ywzClick"
         />
@@ -125,7 +126,7 @@
 
   import { IRegistrationCardItem } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
-  import { joinQueryForUrl, setLocalStorage } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
 
   import {
@@ -147,10 +148,15 @@
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
 
-  const props = defineProps<{
-    thRegisterId?: string;
-    allPData?: '1';
-  }>();
+  const props = ref(
+    <
+      {
+        thRegisterId?: string;
+        allPData?: '1';
+        type?: 'waitReg'; // 候补预约
+      }
+    >{}
+  );
   const gStores = new GStores();
   const isComplete = ref(false);
   const pat = ref<IPat>();
@@ -182,11 +188,13 @@
 
   const isShowFilterOrderStatus = computed(() => {
     // return false;
-    return orderConfig.value.isCanSelOrderStatus === '1';
+    return (
+      orderConfig.value.isCanSelOrderStatus === '1' ||
+      props.value.type === 'waitReg'
+    );
   });
 
   const anotherYwzConditions = computed(() => {
-
     if (isShowFilterOrderStatus.value) {
       // return selOrderStatus.value === '1'; // 全部挂号
       return selOrderStatus.value === ''; // 在线挂号
@@ -196,6 +204,9 @@
   });
 
   const listApi = computed(() => {
+    if (props.value.type === 'waitReg') {
+      return api.getAlternateList;
+    }
     // "全部" 查院内接口
     return selOrderStatus.value === '1'
       ? api.hosRegOrderList
@@ -329,15 +340,17 @@
     }
   });
 
-  onLoad(async () => {
-    await handlerWeChatThRegLogin(props);
+  onLoad(async (opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
+
+    await handlerWeChatThRegLogin(props.value);
     await beforeEach({
       url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', props),
       _isPatient: true,
     });
     await init();
 
-    const thRegisterId = props.thRegisterId;
+    const thRegisterId = props.value.thRegisterId;
     thRegisterId &&
       setLocalStorage({
         thRegisterId,

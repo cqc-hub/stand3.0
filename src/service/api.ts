@@ -400,6 +400,12 @@ const regApi = {
   getAlternateSch: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/getAlternateSch', parm(data)),
 
+  cancelAlternate: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/cancelAlternate', parm(data)),
+
+  getAlternateList: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/getAlternateList', parm(data)),
+
   addRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data)),
 

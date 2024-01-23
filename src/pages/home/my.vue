@@ -64,7 +64,7 @@
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { ServerStaticData, GStores } from '@/utils';
+  import { ServerStaticData, GStores, LoginUtils } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
 
@@ -127,6 +127,12 @@
      */
 
     let { myhosType, returnUrl, query } = opt;
+
+    if (myhosType === '0') {
+      new LoginUtils().outLogin({
+        isHideMessage: true,
+      });
+    }
 
     query = (query && JSON.parse(query)) || {};
 

@@ -371,7 +371,7 @@
       });
 
       uni.reLaunch({
-        url: '/pagesA/MyRegistration/WaitRegistration',
+        url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
       });
     }
   };

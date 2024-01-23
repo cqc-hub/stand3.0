@@ -8,6 +8,8 @@ export interface IPageProps {
   hosOrderId: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
+  orderStatus: string; // 挂号状态
+  alternateId?: string; // orderStatus === 3 候补预约时候有
 }
 
 /**
@@ -166,6 +168,15 @@ export const orderStatusMap = {
     headerIcon: '&#xe6c7;',
     color: '#fff',
     title: '待就诊',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
+  // 候补挂号
+  '3': {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '候补挂号',
     cardColor: 'var(--hr-brand-color-6)',
   },
   // 已退号
