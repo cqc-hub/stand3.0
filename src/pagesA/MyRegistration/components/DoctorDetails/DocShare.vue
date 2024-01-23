@@ -395,7 +395,6 @@
       // #endif
     }
 
-    const qr_code_img = qrImg.value;
     let [head_bg_img, good_at_img] = ['', ''];
     if (_head_bg_img && _good_at_img) {
       head_bg_img = _head_bg_img;
@@ -561,6 +560,8 @@
     ctx.save();
 
     ctx.draw();
+
+
 
     uni.hideLoading();
     loadingSuccess(void 0);
