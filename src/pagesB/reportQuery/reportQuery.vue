@@ -110,7 +110,7 @@
   import { ref, nextTick, computed } from 'vue';
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad,onShow } from '@dcloudio/uni-app';
   import {
     GStores,
     ServerStaticData,
@@ -179,6 +179,7 @@
     let listNowLen = 0;
     await wait(600);
     const currentTabValue = tabCurrent.value;
+    const { isCheckThirdParty } = reportConfig.value;
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
@@ -193,84 +194,89 @@
       idCardEncry,
     };
     loading.value = true;
-    const { result } = await api
-      .getReportsReportList<ICms[]>(params)
-      .catch((e) => {
-        slist.value[currentTabValue].loadFail(returnArg);
-
-        throw new Error(e);
-      })
-      .finally(async () => {
-        loading.value = false;
-      });
-
-    const willChangeList = pageList.value[typeId];
-    if (page === 1) {
-      willChangeList.length = 0;
-    }
-
     let count = 0;
     let listTotal = [] as any[];
-    if (result && result.length) {
-      if (willChangeList.length) {
-        result.map((o) => {
-          const { date, reportHosNameResults } = o;
-          if (reportHosNameResults && reportHosNameResults.length) {
-            reportHosNameResults.map((p) => {
-              const { hosName, reportList } = p;
 
-              if (reportList && reportList.length) {
-                reportList.map((item) => {
-                  const findItemSameDate = willChangeList.find((fItem) => {
-                    return fItem.date === date;
-                  });
+    if (currentTabValue === 1 && isCheckThirdParty) {
+      getThirdPartyReportUrl();
+    } else {
+      const { result } = await api
+        .getReportsReportList<ICms[]>(params)
+        .catch((e) => {
+          slist.value[currentTabValue].loadFail(returnArg);
 
-                  if (findItemSameDate) {
-                    if (findItemSameDate.reportHosNameResults?.length) {
-                      findItemSameDate.reportHosNameResults.map((fHItem) => {
-                        if (fHItem.hosName === hosName) {
-                          if (fHItem.reportList) {
-                            fHItem.reportList.push(item);
-                          } else {
-                            fHItem.reportList = [item];
-                          }
-                        }
-                      });
-                    }
-                  } else {
-                    willChangeList.push({
-                      date,
-                      reportHosNameResults: [
-                        {
-                          hosName,
-                          reportList,
-                        },
-                      ],
-                    });
-                  }
-                });
-              }
-            });
-          }
+          throw new Error(e);
+        })
+        .finally(async () => {
+          loading.value = false;
         });
-      } else {
-        willChangeList.push(...result);
+
+      const willChangeList = pageList.value[typeId];
+      if (page === 1) {
+        willChangeList.length = 0;
       }
 
-      result.map(({ reportHosNameResults }) => {
+      if (result && result.length) {
+        if (willChangeList.length) {
+          result.map((o) => {
+            const { date, reportHosNameResults } = o;
+            if (reportHosNameResults && reportHosNameResults.length) {
+              reportHosNameResults.map((p) => {
+                const { hosName, reportList } = p;
+
+                if (reportList && reportList.length) {
+                  reportList.map((item) => {
+                    const findItemSameDate = willChangeList.find((fItem) => {
+                      return fItem.date === date;
+                    });
+
+                    if (findItemSameDate) {
+                      if (findItemSameDate.reportHosNameResults?.length) {
+                        findItemSameDate.reportHosNameResults.map((fHItem) => {
+                          if (fHItem.hosName === hosName) {
+                            if (fHItem.reportList) {
+                              fHItem.reportList.push(item);
+                            } else {
+                              fHItem.reportList = [item];
+                            }
+                          }
+                        });
+                      }
+                    } else {
+                      willChangeList.push({
+                        date,
+                        reportHosNameResults: [
+                          {
+                            hosName,
+                            reportList,
+                          },
+                        ],
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } else {
+          willChangeList.push(...result);
+        }
+
+        result.map(({ reportHosNameResults }) => {
+          reportHosNameResults?.map(({ reportList }) => {
+            count += reportList?.length || 0;
+          });
+        });
+      }
+
+      willChangeList.map(({ reportHosNameResults }) => {
         reportHosNameResults?.map(({ reportList }) => {
-          count += reportList?.length || 0;
+          if (reportList?.length) {
+            listTotal.push(...reportList);
+          }
         });
       });
     }
-
-    willChangeList.map(({ reportHosNameResults }) => {
-      reportHosNameResults?.map(({ reportList }) => {
-        if (reportList?.length) {
-          listTotal.push(...reportList);
-        }
-      });
-    });
 
     const returnArg = {
       total: count < size ? 1 : listTotal.length + 1,
@@ -299,18 +305,23 @@
   };
   const isRefresh = ref([true, true, true]);
   const tabChange = async (e: number, type: string) => {
+    const { isCheckThirdParty } = reportConfig.value;
     tabCurrent.value = e;
     if (
       !pageList.value[tabCurrent.value].length &&
       type == 'click' &&
       isRefresh.value[tabCurrent.value]
     ) {
-      getCurrentLoadScrollInstance()?.refresh();
-      nextTick(() => {
-        if (pageList.value[tabCurrent.value].length == 0) {
-          isRefresh.value[tabCurrent.value] = false;
-        }
-      });
+      if (isCheckThirdParty && e === 1) {
+        getThirdPartyReportUrl();
+      } else {
+        getCurrentLoadScrollInstance()?.refresh();
+        nextTick(() => {
+          if (pageList.value[tabCurrent.value].length == 0) {
+            isRefresh.value[tabCurrent.value] = false;
+          }
+        });
+      }
     }
   };
   const goDetail = (data) => {
@@ -442,6 +453,30 @@
     }
   };
 
+  //查询第三方检查报告地址
+  const getThirdPartyReportUrl = async () => {
+    const pat = gStores.userStore.patChoose;
+
+    if (Object.keys(pat).length) {
+      const { patientId } = pat;
+
+      const { result } = await api.getCloudImageInfo({
+        patientId,
+      });
+      if (result.inspectUrl) {
+        uni.navigateTo({
+          url: `/pagesA/webView/webView?https=${encodeURIComponent(
+            result.inspectUrl!
+          )}`,
+        });
+      }
+    }
+  };
+
+  onShow(() => {
+    init();
+  });
+  
   onLoad(async (p) => {
     reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 

@@ -11,7 +11,7 @@
       </view>
 
       <view>
-        <view class="hos-level">{{ item.hosLevelName }}</view>
+        <view v-if="item.hosLevelName" class="hos-level">{{ item.hosLevelName }}</view>
       </view>
     </view>
 

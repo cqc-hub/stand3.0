@@ -384,6 +384,9 @@ const queryApi = {
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
   getCloudReportUrl: <T = any>(data) =>
     service.post('/phs-query/examine/getCloudReportUrl', parm(data)),
+     //获取云影像
+  getCloudImageInfo: <T = any>(data) =>
+  service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
 };
