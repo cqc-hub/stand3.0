@@ -102,6 +102,7 @@
     close();
   };
 
+  let isLoaded = false;
   const show = () => {
     setTimeout(() => {
       isShow.value = true;
@@ -121,10 +122,17 @@
     });
     // #endif
 
-    setTimeout(async () => {
-      await capture();
-      initCanvas();
-    }, 200);
+    if (!isLoaded) {
+      // #ifdef MP-WEIXIN
+      // 微信加载完一次会保存组件
+      isLoaded = true;
+      // #endif
+
+      setTimeout(async () => {
+        await capture();
+        initCanvas();
+      }, 200);
+    }
   };
 
   const close = () => {
@@ -560,8 +568,6 @@
 
   const capture = async () => {
     await wait(200);
-    // const { tempFilePath } = await qrcode.value.GetCodeImg();
-
     const { tempFilePath } = await apiAsync(qrcode.value.toTempFilePath, {});
 
     if (tempFilePath) {
