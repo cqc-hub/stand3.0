@@ -402,14 +402,11 @@
     _head_bg_img = head_bg_img;
     _good_at_img = good_at_img;
 
-    const { pixelRatio } = await getSysInfo();
-
     const boxWidth = canvasInfo.value.width;
     const boxHeight = canvasInfo.value.height;
 
     const ctx = uni.createCanvasContext('shareCanvas', inst);
 
-    // ctx.scale(pixelRatio, pixelRatio);
     //清空画布
     ctx.clearRect(0, 0, boxWidth, boxHeight);
 
@@ -418,8 +415,6 @@
         width: boxWidth,
         height: boxHeight,
       });
-
-    // const [painWidthBg, painHeightBg] = [352, 493.2484076433121];
 
     ctx.drawImage(_head_bg_img, 0, 0, painWidthBg, painHeightBg);
 
@@ -450,7 +445,6 @@
         width: avatarBox.width,
         height: avatarBox.height,
       });
-    // const [painWidthAvatar, painHeightAvatar] = [70, 70];
 
     ctx.drawImage(
       avatar_img,
@@ -520,9 +514,7 @@
     );
 
     ctx.save();
-    // ctx.setFillStyle('red');
 
-    // ctx.fillText('浙江省人民医院·口腔科', 32, avatarBox.top + 24 + 24 + 30);
     ctx.setFontSize(14);
     ctx.setFillStyle('#444444');
 
@@ -546,7 +538,7 @@
     const _qr_dy = avatarBox.top + 24 + 24 + 160 + 8;
     const _qr_width = 105;
 
-    ctx.drawImage(qr_code_img, _qr_dx, _qr_dy, _qr_width, _qr_width);
+    ctx.drawImage(qrImg.value, _qr_dx, _qr_dy, _qr_width, _qr_width);
     ctx.save();
 
     ctx.setFontSize(12);
@@ -558,7 +550,10 @@
       avatarBox.top + 24 + 24 + 260 + 20 + 20
     );
 
+    ctx.save();
+
     ctx.draw();
+
     uni.hideLoading();
     loadingSuccess(void 0);
   };
@@ -570,7 +565,27 @@
     const { tempFilePath } = await apiAsync(qrcode.value.toTempFilePath, {});
 
     if (tempFilePath) {
+      // #ifdef MP-WEIXIN
+      // 微信 拿到的 tempFilePath 是 base64 的, 然后真机 canvas 直接画会寄
+      const fsm = wx.getFileSystemManager();
+      const [, format, bodyData] =
+        /data:image\/(\w+);base64,(.*)/.exec(tempFilePath) || [];
+      if (!format) {
+        return new Error('ERROR_BASE64SRC_PARSE');
+      }
+      const filePath = `${wx.env.USER_DATA_PATH}/doc_share_base64src.${format}`;
+      const buffer = wx.base64ToArrayBuffer(bodyData);
+      await apiAsync(fsm.writeFile, {
+        filePath,
+        data: buffer,
+      });
+
+      qrImg.value = filePath;
+      // #endif
+
+      // #ifndef MP-WEIXIN
       qrImg.value = tempFilePath;
+      // #endif
     }
   };
 
