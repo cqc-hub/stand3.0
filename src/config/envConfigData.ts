@@ -9,7 +9,7 @@ export const sysConfigEnv = <const>{
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
   // 'order.isOpenOutHosSch': '1',
-  'order.isOpenOrderWaiting': '1',
+  // 'order.isOpenOrderWaiting': '1',
   // 'order.inWx.handlerOutHosSchClick': <TBannerConfig>{
   //   type: 'otherProgram',
   //   appId: 'wxb173aba2842c1438',

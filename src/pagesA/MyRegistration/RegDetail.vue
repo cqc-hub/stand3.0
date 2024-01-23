@@ -186,19 +186,19 @@
                     <view>
                       {{ orderRegInfo._category }}
                     </view>
-
-                    <!-- <view class="iconfont color-blue">&#xe6c8;</view> -->
                   </view>
 
                   <view
                     v-else-if="item.key === 'hisResult'"
-                    :style="{
-                      color: titleStatus.color,
+                    :class="{
+                      [titleStatus.cardColor]: 1,
+                      'color-blue':
+                        titleStatus.cardColor === 'var(--hr-neutral-color-7)',
                     }"
                     class="flex-normal doc-name"
                   >
                     <view>
-                      {{ orderRegInfo.hisResult }}
+                      {{ value }}
                     </view>
                   </view>
 
@@ -302,7 +302,11 @@
       :show="isCancelOrderDialogShow"
       @cancelButton="isCancelOrderDialogShow = false"
       @confirmButton="_cancelOrderDialogConfirm"
-    />
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag isHideTitle isShowFgTip typeFg="1100" aaa />
+      </scroll-view>
+    </xy-dialog>
 
     <g-pay
       :list="refPayList"
@@ -933,7 +937,8 @@
       }
 
       isCancelOrderDialogShow.value = true;
-      dialogContent.value = '确认退号?';
+      // dialogContent.value = '确认退号?';
+      dialogContent.value = '';
 
       await new Promise((confirm) => {
         cancelOrderDialogConfirm = confirm;
