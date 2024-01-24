@@ -209,7 +209,7 @@
     let count = 0;
     let listTotal = [] as any[];
 
-    if (currentTabValue === 1 && isCheckThirdParty) {
+    if (currentTabValue === 1 && isCheckThirdParty === '1') {
       getThirdPartyReportUrl();
     } else {
       const { result } = await api
@@ -324,7 +324,7 @@
       type == 'click' &&
       isRefresh.value[tabCurrent.value]
     ) {
-      if (isCheckThirdParty && e === 1) {
+      if (isCheckThirdParty === '1' && e === 1) {
         getThirdPartyReportUrl();
       } else {
         getCurrentLoadScrollInstance()?.refresh();
@@ -491,7 +491,7 @@
 
   onShow(() => {
     const { isCheckThirdParty } = reportConfig.value;
-    if (isCheckThirdParty) {
+    if (isCheckThirdParty === '1') {
       tabCurrent.value = 0;
       tabChange(0, 'click');
     }

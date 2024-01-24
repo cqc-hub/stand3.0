@@ -272,17 +272,17 @@ export interface ISystemConfig_ {
     //顶部tab
     reportTab: IReportConfigTab[];
     //0否 1 是 是否显示水印
-    isWatermark: '0' | '1';
+    isWatermark: '1';
     //水印文案 (二维码不支持中文 取消该字段, 取医院名字)
     // watermarkText?: string;
     //0否 1 是 是否开启医生名片入口
-    isDoctorCard: '0' | '1';
+    isDoctorCard: '1';
     //0否 1 是 是否开启支持下载报告 开启这个配置且有图文的前提 页面才会实现
-    isDownloadRepor?: '0' | '1';
+    isDownloadRepor?: '1';
     //0否 1 是 是否支持查看图文报告 有图文必有下载功能
-    isGraphic?: '0' | '1';
+    isGraphic?: '1';
     /** 检查报告查询第三方 点击检查跳转第三方h5 */
-    isCheckThirdParty?: '0' | '1';
+    isCheckThirdParty?: '1';
 
     /** 报告查询列表云影像链接 */
     listYun?: {
