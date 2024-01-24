@@ -476,18 +476,25 @@
         patientId,
         hosId: hosId.value,
       });
+      loading.value = false;
       if (result?.inspectUrl) {
         uni.navigateTo({
           url: `/pagesA/webView/webView?https=${encodeURIComponent(
             result.inspectUrl!
           )}`,
         });
+      } else {
+        pageList.value[tabCurrent.value] = [];
       }
     }
   };
 
   onShow(() => {
-    init();
+    const { isCheckThirdParty } = reportConfig.value;
+    if (isCheckThirdParty) {
+      tabCurrent.value = 0;
+      tabChange(0, 'click');
+    }
   });
 
   onLoad(async (p) => {
