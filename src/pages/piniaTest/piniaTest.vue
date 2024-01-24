@@ -296,7 +296,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(咸阳智能陪诊);
+      useTBanner(queryNumber);
     }, 1000);
   });
 </script>

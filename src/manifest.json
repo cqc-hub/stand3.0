@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "",
+    "appid": "wx39ce500d25aa3328",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -72,7 +72,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002199689404"
+    "appid": "2021003105653538"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -84,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "杭州口腔医院",
+  "name": "郸城县人民医院",
   "h5": {
     "router": {
       "base": "./"

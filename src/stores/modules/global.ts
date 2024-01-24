@@ -210,3 +210,8 @@ const globalStore = defineStore('global', {
 export const useGlobalStore = function () {
   return globalStore();
 };
+
+
+// type SetOptional<T, K extends keyof T> = {
+
+// }
