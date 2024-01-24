@@ -474,6 +474,7 @@
 
       const { result } = await api.getCloudImageInfo({
         patientId,
+        hosId: hosId.value,
       });
       if (result?.inspectUrl) {
         uni.navigateTo({
