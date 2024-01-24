@@ -110,9 +110,9 @@ export interface ISystemConfig_ {
     // 本系统不需要完善
     isSkipPerfect?: '1';
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
-    isHidePatientTypeInPerfect?: '0' | '1';
+    isHidePatientTypeInPerfect?: '1';
     /** 开启短信验证？ 完善时候没有 */
-    isSmsVerify?: '0' | '1';
+    isSmsVerify?: '1';
     /** 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁） */
     ageGuardian: number;
     /** 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月） */
@@ -163,11 +163,11 @@ export interface ISystemConfig_ {
     hosId: string;
 
     /** 是否支持自定义住院记录 */
-    isCustomPatRecord?: '0' | '1';
+    isCustomPatRecord?: '1';
     /** 支持住院记录中选择目的的份数? */
     selPurposeInRecord?: '1';
     /** 手动添加记录里面是否可以切换院区 */
-    isToggleHos?: '0' | '1';
+    isToggleHos?: '1';
 
     /** 快递公司(新增病案时候的快递公司选择) */
     company?: (IOptions & {
@@ -189,7 +189,7 @@ export interface ISystemConfig_ {
     //列表1 详情2 日费用清单模式
     isHosDaylist: '1' | '2';
     //0否 1 是 是否支持预交金记录查询
-    isQueryPreRecord?: '0' | '1';
+    isQueryPreRecord?: '1';
     /** 是否开启数字人民币支付 */
     payList?: {
       wx?: IPayListObj;
