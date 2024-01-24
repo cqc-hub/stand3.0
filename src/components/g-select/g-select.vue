@@ -165,6 +165,6 @@
 
   .pop {
     position: relative;
-    z-index: 10;
+    z-index: 9999;
   }
 </style>

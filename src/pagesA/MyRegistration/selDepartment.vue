@@ -16,7 +16,6 @@
     <!-- #endif -->
 
     <g-selhos
-      v-model:hosId="hosId"
       @get-list="getHosList"
       @change="getDepList"
       type="selDepartment"
@@ -109,6 +108,7 @@
     isLev1,
     isLev2,
     loopDeptList,
+    useCacheStore,
     useDeptStore,
   } from '@/stores';
 
@@ -124,7 +124,13 @@
     clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
     thRegisterId?: string;
   }>();
-  const pageProps = ref(<any>{});
+  const pageProps = ref(
+    <
+      {
+        hosId: string;
+      }
+    >{}
+  );
   const isShowRegTip = ref(false);
   const showRegTipTitle = ref('');
   const orderConfig = ref({} as ISystemConfig['order']);
@@ -133,6 +139,7 @@
   const depLevel = ref('1');
   const gStores = new GStores();
   const deptStore = useDeptStore();
+  const cacheStore = useCacheStore();
   const hosList = ref<IHosInfo[]>([]);
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
@@ -312,6 +319,8 @@
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);
+
+    pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
     const thRegisterId = props.thRegisterId;
     thRegisterId &&
       setLocalStorage({
@@ -334,7 +343,6 @@
   .g-page {
     background-color: #fff;
   }
-
 
   .search-input {
     margin: 16rpx 32rpx;

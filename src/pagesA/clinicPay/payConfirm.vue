@@ -6,7 +6,7 @@
     class="g-page"
   >
     <view class="my-display-none">
-      <g-selhos :hosId="pageProps.hosId" @get-list="getHosList" />
+      <g-selhos @get-list="getHosList" />
     </view>
 
     <view class="g-container">
@@ -95,6 +95,7 @@
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
+  import { useCacheStore } from '@/stores';
 
   interface IDetailInfo {
     label: string;
@@ -104,6 +105,7 @@
 
   const pageProps = ref(<TPayConfirmPageProp>{});
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const isComplete = ref(false);
   const hosList = ref<IHosInfo[]>([]);
   const refPay = ref<any>('');
@@ -444,6 +446,7 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
       console.warn('列表进', pageProps.value);
 
       if (pageProps.value.params) {

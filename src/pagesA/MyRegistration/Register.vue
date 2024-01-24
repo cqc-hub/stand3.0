@@ -401,7 +401,7 @@
         uni.getLocation({
           async success(e) {
             const { longitude, latitude } = e;
-            const hList = await ServerStaticData.getHosList(
+            let hList = await ServerStaticData.getHosList(
               {
                 gisLng: longitude,
                 gisLat: latitude,
@@ -409,6 +409,10 @@
               },
               { noCache: true }
             );
+
+            if (type === '1') {
+              hList = hList.filter((o) => o.ifClick !== '1');
+            }
 
             hosList.value = hList;
             isAuthLocation.value = true;

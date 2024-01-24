@@ -7,6 +7,11 @@
   >
     <g-flag typeFg="405" isShowFg />
     <g-message />
+    <g-selhos
+      v-if="cacheStore.isShowChooseHos"
+      v-model:hosId="hosId"
+      @change="getList((pat && pat.patientId) || '')"
+    />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
     <My-Registration-Head
       v-if="props.type !== 'waitReg'"
@@ -125,7 +130,7 @@
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
   import { IRegistrationCardItem } from './utils/MyRegistration';
-  import { isAreaProgram, IPat } from '@/stores';
+  import { isAreaProgram, IPat, useCacheStore } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
 
@@ -158,6 +163,7 @@
     >{}
   );
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const isComplete = ref(false);
   const pat = ref<IPat>();
 
@@ -171,6 +177,7 @@
   const selPatId = ref('');
   const selStatus = ref('');
   const selOrderStatus = ref('');
+  const hosId = ref('');
 
   const list = ref<IRegistrationCardItem[]>([]);
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
@@ -243,6 +250,7 @@
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
+        hosId: hosId.value,
         patientId,
       })
       .finally(() => {
@@ -366,6 +374,11 @@
 
   const init = async () => {
     await getConfig();
+
+    if (cacheStore.isShowChooseHos && !hosId.value) {
+      return;
+    }
+
     await getList(
       isShowFilterOrderStatus.value
         ? pat.value?.patientId || gStores.userStore.patChoose?.patientId

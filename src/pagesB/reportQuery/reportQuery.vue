@@ -6,6 +6,13 @@
     class="page g-page"
   >
     <g-flag typeFg="41" isShowFg />
+    <g-selhos
+      v-if="cacheStore.isShowChooseHos"
+      v-model:hosId="hosId"
+      :autoGetData="false"
+      @change="choosePat"
+      ref="selHosRef"
+    />
     <g-choose-pat @choose-pat="choosePat" />
     <g-tbanner
       v-if="gStores.userStore.patChoose.patientId"
@@ -110,7 +117,7 @@
   import { ref, nextTick, computed } from 'vue';
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
-  import { onLoad,onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
     ServerStaticData,
@@ -124,6 +131,7 @@
   import { deQueryForUrl } from '@/common/utils';
 
   import api from '@/service/api';
+  import { useCacheStore } from '@/stores';
 
   interface IPageProps {
     tabIndex: number;
@@ -132,12 +140,15 @@
 
   const tabs = ref<ITab[]>([]);
   const tabCurrent = ref(0);
+  const hosId = ref('');
+  const selHosRef = ref(<any>'');
   const pageList = ref<Record<string, ICms[]>>({});
   const _typeId = ref(0);
   const slist = ref<any>('');
   const loading = ref(true);
   const yunBannerConfig = ref(<TBannerConfig>{});
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const init = async () => {
     const { listYun, reportTab } = reportConfig.value;
@@ -192,6 +203,7 @@
       pageNumber: page,
       pageSize: size,
       idCardEncry,
+      hosId: hosId.value,
     };
     loading.value = true;
     let count = 0;
@@ -463,7 +475,7 @@
       const { result } = await api.getCloudImageInfo({
         patientId,
       });
-      if (result.inspectUrl) {
+      if (result?.inspectUrl) {
         uni.navigateTo({
           url: `/pagesA/webView/webView?https=${encodeURIComponent(
             result.inspectUrl!
@@ -476,11 +488,16 @@
   onShow(() => {
     init();
   });
-  
+
   onLoad(async (p) => {
     reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+
+    if (cacheStore.isShowChooseHos) {
+      await wait(300);
+      await selHosRef.value.init();
+    }
     init();
   });
 </script>

@@ -21,6 +21,7 @@ import {
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
+import { useCacheStore } from '@/stores';
 
 // api.getUnpaidClinicList = () =>
 //   Promise.resolve({
@@ -626,9 +627,10 @@ export const usePayPage = () => {
   const regDialogConfirmExpress = ref<any>('');
   const confirmFgTitle = ref('');
   const gStores = new GStores();
-  const hosId = ref<string>();
+  const cacheStore = useCacheStore();
   const selHosRef = ref('' as any);
   const tabCurrent = ref(0);
+  const hosId = ref('');
   const isPayListRequestComplete = ref(false);
   const tabField = [
     {
@@ -662,6 +664,7 @@ export const usePayPage = () => {
     {} as {
       tabIndex?: '1';
       visitNo?: string; // 此时获取待缴费列表后应该选中并 采取缴费操作
+      hosId?: string;
 
       params?: string;
       deParams?: {
@@ -1684,11 +1687,11 @@ export const usePayPage = () => {
   };
 
   return {
+    hosId,
     payMoneyMedicalPlugin,
     patChange,
     changeRefPayList,
     hookInit,
-    hosId,
     selHosRef,
     pageProps,
     pageConfig,
@@ -1728,6 +1731,7 @@ export const usePayPage = () => {
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
     getIsDigitalPay,
+    cacheStore,
   };
 };
 

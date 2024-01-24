@@ -478,7 +478,7 @@
     base64Src,
   } from '@/utils';
   import { getSrc } from '@/pagesC/medicationAssistant/utils';
-  import { getUserShowLabel } from '@/stores';
+  import { getUserShowLabel, useCacheStore } from '@/stores';
   import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
   import { getLocalStorage } from '@/common';
   import { NotNullable, XOR, assignType } from '@/typeUtils';
@@ -714,6 +714,7 @@
   );
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const showMessage = gStores.messageStore.showMessage;
 
   const refAddDialog = ref<any>('');
@@ -1423,12 +1424,18 @@
   });
 
   onLoad((opt) => {
-    if (opt && opt.selRecords) {
-      try {
-        const selRecords = JSON.parse(decodeURIComponent(opt.selRecords));
-        recordRows.value = selRecords;
-      } catch (error) {
-        console.error(error);
+    if (opt) {
+      if (opt.hosId) {
+        cacheStore.changeHosId(opt.hosId);
+      }
+
+      if (opt.selRecords) {
+        try {
+          const selRecords = JSON.parse(decodeURIComponent(opt.selRecords));
+          recordRows.value = selRecords;
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   });

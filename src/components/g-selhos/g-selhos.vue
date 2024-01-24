@@ -19,8 +19,8 @@
     </view>
 
     <g-select
-      :value="hosId"
       v-model:show="isToggleDialogShow"
+      :value="hosId || cacheStore.hosId"
       :option="hosList"
       :field="{
         label: 'hosName',
@@ -35,9 +35,11 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import { GStores, ServerStaticData, IHosInfo } from '@/utils';
+  import { GStores, ServerStaticData, IHosInfo, getLocation } from '@/utils';
+  import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const hosList = ref<IHosInfo[]>([]);
   const isToggleDialogShow = ref(false);
   const props = withDefaults(
@@ -54,11 +56,14 @@
 
   const getHosName = computed(() => {
     if (hosList.value.length) {
-      const item = hosList.value.find((o) => o.hosId == props.hosId);
+      const item = hosList.value.find(
+        (o) => o.hosId === (cacheStore.hosId || props.hosId)
+      );
       if (item) {
         return item.hosName;
       } else {
-        return props.hosId;
+        return cacheStore.hosId;
+        // return props.hosId;
       }
     } else {
       return '';
@@ -66,6 +71,10 @@
   });
 
   const change = (e) => {
+    const { item } = e;
+
+    cacheStore.changeHosId(item.hosId);
+    emits('update:hosId', item.hosId);
     emits('change', e);
   };
 
@@ -83,7 +92,14 @@
   };
 
   const getHosList = async () => {
-    let list = await ServerStaticData.getHosList();
+    const location = await getLocation().catch((err) => {
+      console.error(err);
+    });
+
+    let list = await ServerStaticData.getHosList({
+      gisLng: location?.longitude,
+      gisLat: location?.latitude,
+    });
 
     if (props.type === 'selDepartment') {
       list = list.filter((o) => o.ifClick !== '1');
@@ -93,7 +109,16 @@
 
     if (list && list.length) {
       if (!props.hosId) {
-        emits('update:hosId', list[0].hosId);
+        let hosItem =
+          (cacheStore.hosId &&
+            list.find((o) => o.hosId === cacheStore.hosId)) ||
+          list[0];
+
+        if (props.autoGetData) {
+          change({ item: hosItem });
+        } else {
+          emits('update:hosId', cacheStore.hosId || list[0].hosId);
+        }
       }
 
       emits('get-list', {

@@ -138,6 +138,7 @@
   import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
   import { joinQuery } from '@/common/utils';
   import { setLocalStorage, getLocalStorage } from '@/common';
+  import { useCacheStore } from '@/stores';
 
   import api from '@/service/api';
 
@@ -148,6 +149,7 @@
     hosId?: string;
   }>();
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const hosId = ref(props.hosId || '');
   const isComplete = ref(false);
   const outHosList = ref<TOutHosInfo[]>([]);
@@ -311,6 +313,12 @@
     }
   });
   // gStores.userStore.patChoose
+
+  onLoad((opt) => {
+    if (opt && opt.hosId) {
+      cacheStore.changeHosId(opt.hosId);
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

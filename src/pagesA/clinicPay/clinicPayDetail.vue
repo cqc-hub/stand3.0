@@ -7,6 +7,7 @@
   >
     <g-flag isShowFg typeFg="15" />
     <g-tbanner :config="pageConfig.bannerPay" />
+
     <view v-if="isShowPatComponent" class="animate__animated animate__fadeIn">
       <g-choose-pat
         :cusTomList="patList"
@@ -14,13 +15,15 @@
         :disabled="pageProps.params"
         @choose-pat="patChange"
       />
+
       <g-selhos
-        v-if="pageConfig.isListToggleHos === '1'"
+        v-if="pageConfig.isListToggleHos === '1' || cacheStore.isShowChooseHos"
         v-model:hosId="hosId"
         :autoGetData="false"
         @change="getListData(true)"
         ref="selHosRef"
       />
+
       <view class="g-border-bottom">
         <g-tabs
           v-model:value="tabCurrent"
@@ -245,11 +248,12 @@
     goDrugDelivery,
     regDialogConfirmExpress,
     isWaitPayListHidePrice,
-    hosId,
     selHosRef,
     hookInit,
     wxPryMoneyMedicalDialog,
     patChange,
+    cacheStore,
+    hosId,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -304,7 +308,10 @@
 
   const init = async () => {
     await getSysConfig();
-    if (pageConfig.value.isListToggleHos === '1') {
+    if (
+      pageConfig.value.isListToggleHos === '1' ||
+      cacheStore.isShowChooseHos
+    ) {
       await wait(300);
       await selHosRef.value.init();
     }
@@ -351,6 +358,7 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
 
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
@@ -365,9 +373,9 @@
       }
     }
 
-    await init();
-    await wait(600);
+    // await wait(600);
     isShowPatComponent.value = true;
+    await init();
 
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
