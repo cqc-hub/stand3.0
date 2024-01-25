@@ -7,6 +7,7 @@
         'dept-list-lv1-scrollContainer': !isLv2,
       }"
       :scroll-into-view="scrollView"
+      @scroll="asideListScroll"
       id="dept-list-lv1-scrollContainer"
       scroll-y
     >
@@ -36,7 +37,7 @@
               'item-lv1-border': !isLv2,
               'g-border-bottom': !isLv2,
               mb6: level === '1',
-              'lv1-alone': level === '1',
+              'lv1-alone-animate': lv1AnimateIdxs.includes(indexLv1),
             }"
             :id="'lv1' + item.uuid"
             @click="itemClickLv1(item)"
@@ -83,7 +84,7 @@
 <script lang="ts" setup>
   import { watch, ref, computed, getCurrentInstance, nextTick } from 'vue';
   import { isLev1, IDeptLv1, IDeptLv2, IDeptLv3 } from '@/stores';
-  import { wait } from '@/utils';
+  import { wait, throttle } from '@/utils';
 
   import DeptCollapse from '../dept-collapse/dept-collapse.vue';
   import DepartmentListLv1 from './DepartmentListLv1.vue';
@@ -103,6 +104,8 @@
   );
 
   const scrollView = ref('');
+  const screenHeight = uni.getSystemInfoSync().screenHeight;
+  const lv1AnimateIdxs = ref(<number[]>[]);
 
   const emits = defineEmits([
     'item-click-lv1',
@@ -201,6 +204,32 @@
     emits('item-click-lv3', item);
   };
 
+  let asideListScroll = () => {
+    if (props.level !== '1') {
+      return;
+    }
+    console.log('cqc');
+
+
+    const query = uni.createSelectorQuery().in(inst);
+    query
+      .selectAll(`.item-lv1`)
+      .boundingClientRect((data: any) => {
+        if (data) {
+          data.map((o, i) => {
+            if (o.top + 88 < screenHeight) {
+              if (!lv1AnimateIdxs.value.includes(i)) {
+                lv1AnimateIdxs.value.push(i);
+              }
+            }
+          });
+        }
+      })
+      .exec();
+  };
+
+  asideListScroll = throttle(asideListScroll, 50);
+
   watch(
     () => props.list,
     async () => {
@@ -214,6 +243,10 @@
           itemClickLv1(defaultChoose);
           scrollView.value = 'lv1' + defaultChoose.uuid;
         }
+      } else {
+        lv1AnimateIdxs.value = [];
+        await wait(60);
+        asideListScroll();
       }
     },
 
@@ -288,7 +321,7 @@
     }
   }
 
-  .lv1-alone {
+  .lv1-alone-animate {
     &:nth-child(2n) {
       animation: fadeInLeft 0.7s;
     }
