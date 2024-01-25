@@ -208,8 +208,6 @@
     if (props.level !== '1') {
       return;
     }
-    console.log('cqc');
-
 
     const query = uni.createSelectorQuery().in(inst);
     query
@@ -217,7 +215,13 @@
       .boundingClientRect((data: any) => {
         if (data) {
           data.map((o, i) => {
-            if (o.top + 88 < screenHeight) {
+            let n = 88;
+
+            if (i === data.length) {
+              n = 0;
+            }
+
+            if (o.top + n < screenHeight) {
               if (!lv1AnimateIdxs.value.includes(i)) {
                 lv1AnimateIdxs.value.push(i);
               }
