@@ -106,8 +106,8 @@
   const formData = ref<BaseObject>({
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
-    patientName: '李继民',
-    [formKey.patientPhone]: '15939324648',
+    // patientName: '李继民',
+    // [formKey.patientPhone]: '15939324648',
   });
 
   let formList: TInstance[] = [];
