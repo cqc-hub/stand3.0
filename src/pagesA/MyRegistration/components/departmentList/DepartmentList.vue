@@ -237,20 +237,22 @@
   watch(
     () => props.list,
     async () => {
-      if (props.list.length && props.level !== '1') {
-        const defaultChoose =
-          props.list.find((o) => o.firstDefaultShowDept === '1') ||
-          props.list[0];
+      if (props.list.length) {
+        if (props.level === '1') {
+          lv1AnimateIdxs.value = [];
+          await wait(60);
+          asideListScroll();
+        } else {
+          const defaultChoose =
+            props.list.find((o) => o.firstDefaultShowDept === '1') ||
+            props.list[0];
 
-        if (defaultChoose.children && defaultChoose.children.length) {
-          await wait(20);
-          itemClickLv1(defaultChoose);
-          scrollView.value = 'lv1' + defaultChoose.uuid;
+          if (defaultChoose.children && defaultChoose.children.length) {
+            await wait(20);
+            itemClickLv1(defaultChoose);
+            scrollView.value = 'lv1' + defaultChoose.uuid;
+          }
         }
-      } else {
-        lv1AnimateIdxs.value = [];
-        await wait(60);
-        asideListScroll();
       }
     },
 
