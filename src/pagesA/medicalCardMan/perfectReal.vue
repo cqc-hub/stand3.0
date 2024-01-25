@@ -106,8 +106,8 @@
   const formData = ref<BaseObject>({
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
-    // patientName: '王慧萍',
-    // [formKey.patientPhone]: '15139355060',
+    patientName: '李继民',
+    [formKey.patientPhone]: '15939324648',
   });
 
   let formList: TInstance[] = [];
@@ -366,7 +366,7 @@
 
     // 关闭手机验证码
     if (
-      isSmsVerify === '0' ||
+      isSmsVerify !== '1' ||
       pageProps.value.pageType === 'perfectReal' ||
       isFilterSmsVerify
     ) {
