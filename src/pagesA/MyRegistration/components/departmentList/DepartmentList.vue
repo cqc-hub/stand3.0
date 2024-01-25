@@ -10,7 +10,7 @@
       id="dept-list-lv1-scrollContainer"
       scroll-y
     >
-      <view v-if="!['1'].includes(level) || 1">
+      <view>
         <view
           :style="{
             background: lineColor,
@@ -41,12 +41,18 @@
             @click="itemClickLv1(item)"
             class="item-lv1 g-flex-rc-cc f32"
           >
-            <text>{{ item.deptName }}</text>
+            <text
+              :class="{
+                pl24: level === '1',
+              }"
+            >
+              {{ item.deptName }}
+            </text>
           </view>
         </view>
       </view>
 
-      <DepartmentListLv1 v-else :list="list" />
+      <!-- <DepartmentListLv1 v-else :list="list" /> -->
     </scroll-view>
 
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>

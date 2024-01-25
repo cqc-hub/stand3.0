@@ -16,6 +16,7 @@
     <!-- #endif -->
 
     <g-selhos
+      v-model:hosId="hosId"
       @get-list="getHosList"
       @change="getDepList"
       type="selDepartment"

@@ -125,7 +125,7 @@
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
   import { IRegistrationCardItem } from './utils/MyRegistration';
-  import { isAreaProgram, IPat, useCacheStore } from '@/stores';
+  import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
 
@@ -158,7 +158,6 @@
     >{}
   );
   const gStores = new GStores();
-  const cacheStore = useCacheStore();
   const isComplete = ref(false);
   const pat = ref<IPat>();
 

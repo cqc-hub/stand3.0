@@ -129,7 +129,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      // hosId,
+      hosId: this.cacheStore.isShowChooseHos ? hosId : '',
       docTitleName,
       hosDeptId,
     };
