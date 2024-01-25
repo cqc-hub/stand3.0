@@ -239,6 +239,7 @@
     async () => {
       if (props.list.length) {
         if (props.level === '1') {
+          scrollView.value = 'lv1' + props.list[0].uuid;
           lv1AnimateIdxs.value = [];
           await wait(60);
           asideListScroll();
