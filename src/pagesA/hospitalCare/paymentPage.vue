@@ -136,10 +136,10 @@
    if(isDigitalPay){
     let labelPay = '自费支付'
     // #ifdef MP-WEIXIN
-    labelPay = '微信支付'
+    labelPay = '微信自费支付'
     // #endif
     // #ifdef MP-ALIPAY
-    labelPay = '支付宝支付'
+    labelPay = '支付宝自费支付'
     // #endif
     refPayList.value = [
         {
