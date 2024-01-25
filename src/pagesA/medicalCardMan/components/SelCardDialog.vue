@@ -151,7 +151,7 @@
     border-radius: 16rpx;
 
     .scroll-container {
-      height: 800rpx;
+      height: 900rpx;
     }
 
     .item {
