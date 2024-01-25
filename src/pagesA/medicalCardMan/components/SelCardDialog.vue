@@ -43,9 +43,11 @@
                 </view>
 
                 <view class="flex1">
-                  <view class="g-break-word g-bold">
+                  <view class="g-break-word g-bold flex-normal text-ellipsis">
                     <text class="f36 mr32">{{ item.patientName }}</text>
-                    <text class="color-666">{{ item.cardNumber }}</text>
+                    <text class="color-666 text-ellipsis">
+                      {{ item.cardNumber }}
+                    </text>
                   </view>
                 </view>
               </view>
@@ -137,7 +139,7 @@
 
   const init = async () => {
     const { screenWidth } = await apiAsync(uni.getSystemInfo, {});
-    width.value = screenWidth * 2 - 160;
+    width.value = screenWidth * 2 - 80;
   };
 
   init();

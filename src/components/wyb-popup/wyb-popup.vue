@@ -112,20 +112,26 @@
         h: uni.getSystemInfoSync().screenHeight,
         isShow: false,
         winReBottom: '',
-        winReTop: '',
+        winReTop: '10%',
         sizeChange: false,
         contentOpacity: null,
         contentTransform: null,
         maskOpacity: 0,
+        myAutoHeight: 0,
       };
     },
     computed: {
       autoCenterTop() {
-        let statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
-        let windowHeight = uni.getSystemInfoSync().windowHeight;
+        const { statusBarHeight, windowHeight } = uni.getSystemInfoSync();
         let popupHeight = this.rpxToPx(this.height);
-        let navHeight = 44;
-        let result = `${(windowHeight - popupHeight) / 2 - this.negativeTop}px`;
+
+        let result = `${
+          (windowHeight -
+            (popupHeight !== popupHeight ? this.myAutoHeight : popupHeight)) /
+            2 -
+          this.negativeTop
+        }px`;
+
         return result;
       },
       autoTransform() {
@@ -349,6 +355,16 @@
               pageScroll: false,
               overflow: 'hidden',
             });
+
+            if (this.height === 'auto') {
+              const query = uni.createSelectorQuery().in(this);
+              query
+                .select('.wyb-popup-slot')
+                .boundingClientRect((res) => {
+                  this.myAutoHeight = res.height;
+                })
+                .exec();
+            }
           });
         });
         // #endif
