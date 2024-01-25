@@ -124,6 +124,8 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { useCacheStore } from '@/stores';
   import { deQueryForUrl } from '@/common';
   import { GStores } from '@/utils';
   import {
@@ -132,7 +134,6 @@
     type IRegSearchHistoryItem,
   } from './utils/RegSearch';
 
-  import { onLoad } from '@dcloudio/uni-app';
 
   import DocList from './components/RegSearch/DocList.vue';
   import SearchDeptList from './components/RegSearch/searchDeptList.vue';
@@ -141,6 +142,7 @@
   const r = new UseRegSearch();
   const isDelHisShow = ref(false);
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const confirmInput = (str) => {
     if (str.match(/^[ ]*$/)) {

@@ -2,14 +2,17 @@ import { nextTick, ref } from 'vue';
 import { GStores, CDebounce } from '@/utils';
 import { setLocalStorage, getLocalStorage, joinQuery } from '@/common';
 import { type IRegSearchHistoryItem, ServerStaticData } from '@/utils';
+import { useCacheStore } from '@/stores';
 
 import api from '@/service/api';
 
 export { type IRegSearchHistoryItem } from '@/utils';
+
 interface IPageProp {
   hosId: string;
   clinicalType: string;
 }
+
 export interface IDocResItem {
   academicAchievements: string;
   docName: string;
@@ -68,6 +71,7 @@ export const clearSearchHistory = () => {
 
 export class UseRegSearch extends GStores {
   pageProp = ref(<IPageProp>{});
+  cacheStore = useCacheStore();
   searchText = ref('');
   isComplete = ref(false);
   tabCurrent = ref(0);
@@ -157,7 +161,7 @@ export class UseRegSearch extends GStores {
 
     const args = {
       searchContent,
-      // hosId,
+      hosId: this.cacheStore.isShowChooseHos ? hosId : '',
       clinicalType,
       source,
     };
@@ -175,7 +179,6 @@ export class UseRegSearch extends GStores {
     this.deptResultList.value = deptResultList;
     this.docInfoResultList.value = docInfoResultList;
     this.symptomResultList.value = symptomResultList;
-
 
     if (docInfoResultList.length) {
       this.tabCurrent.value = 0;

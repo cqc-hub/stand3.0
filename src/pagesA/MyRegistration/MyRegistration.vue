@@ -7,11 +7,6 @@
   >
     <g-flag typeFg="405" isShowFg />
     <g-message />
-    <g-selhos
-      v-if="cacheStore.isShowChooseHos"
-      v-model:hosId="hosId"
-      @change="getList((pat && pat.patientId) || '')"
-    />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
     <My-Registration-Head
       v-if="props.type !== 'waitReg'"
@@ -177,7 +172,6 @@
   const selPatId = ref('');
   const selStatus = ref('');
   const selOrderStatus = ref('');
-  const hosId = ref('');
 
   const list = ref<IRegistrationCardItem[]>([]);
   const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
@@ -250,7 +244,6 @@
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
-        hosId: hosId.value,
         patientId,
       })
       .finally(() => {
@@ -374,10 +367,6 @@
 
   const init = async () => {
     await getConfig();
-
-    if (cacheStore.isShowChooseHos && !hosId.value) {
-      return;
-    }
 
     await getList(
       isShowFilterOrderStatus.value

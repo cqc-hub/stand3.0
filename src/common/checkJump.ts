@@ -190,12 +190,14 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
           },
         });
       } else {
-        //跳转小程序
-        uni.navigateToMiniProgram({
+        const arg = {
           appId: item.appId,
           path: item.path,
-          extraData: item.query && JSON.parse(item.query),
-        });
+          extraData: item.query && JSON.parse(item.query) || undefined,
+        }
+
+        //跳转小程序
+        uni.navigateToMiniProgram(arg);
       }
 
       break;

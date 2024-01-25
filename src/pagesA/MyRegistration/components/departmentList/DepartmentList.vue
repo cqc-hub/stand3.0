@@ -10,39 +10,43 @@
       id="dept-list-lv1-scrollContainer"
       scroll-y
     >
-      <view
-        :style="{
-          background: lineColor,
-          width: '10rpx',
-          height: pillHeight + 'px',
-          left: '0',
-          transform: `translateY(${pillOffsetTop}px)`,
-        }"
-        class="item-lv1-pills"
-      />
-      <view style="background: #fff">
+      <view v-if="!['1'].includes(level) || 1">
         <view
-          v-for="(item, indexLv1) in list"
-          :key="item.uuid"
-          :class="{
-            'dept-list-lv2': isLv2,
-            'dept-list-lv2-alone': level === '2',
-            'item-lv1-active': activeLV1 === indexLv1,
-            'item-lv1-active-corner-bottom':
-              level !== '1' && getItemCornerTopIdx === indexLv1,
-            'item-lv1-active-corner-top':
-              level !== '1' && getItemCornerBottomIdx === indexLv1,
-            'item-lv1-border': !isLv2,
-            'g-border-bottom': !isLv2,
-            mb6: level === '1',
+          :style="{
+            background: lineColor,
+            width: '10rpx',
+            height: pillHeight + 'px',
+            left: '0',
+            transform: `translateY(${pillOffsetTop}px)`,
           }"
-          :id="'lv1' + item.uuid"
-          @click="itemClickLv1(item)"
-          class="item-lv1 g-flex-rc-cc f32"
-        >
-          <text>{{ item.deptName }}</text>
+          class="item-lv1-pills"
+        />
+        <view style="background: #fff">
+          <view
+            v-for="(item, indexLv1) in list"
+            :key="item.uuid"
+            :class="{
+              'dept-list-lv2': isLv2,
+              'dept-list-lv2-alone': level === '2',
+              'item-lv1-active': activeLV1 === indexLv1,
+              'item-lv1-active-corner-bottom':
+                level !== '1' && getItemCornerTopIdx === indexLv1,
+              'item-lv1-active-corner-top':
+                level !== '1' && getItemCornerBottomIdx === indexLv1,
+              'item-lv1-border': !isLv2,
+              'g-border-bottom': !isLv2,
+              mb6: level === '1',
+            }"
+            :id="'lv1' + item.uuid"
+            @click="itemClickLv1(item)"
+            class="item-lv1 g-flex-rc-cc f32"
+          >
+            <text>{{ item.deptName }}</text>
+          </view>
         </view>
       </view>
+
+      <DepartmentListLv1 v-else :list="list" />
     </scroll-view>
 
     <scroll-view v-if="isLv2" class="dept-list-lv2-scrollContainer" scroll-y>
@@ -75,6 +79,7 @@
   import { wait } from '@/utils';
 
   import DeptCollapse from '../dept-collapse/dept-collapse.vue';
+  import DepartmentListLv1 from './DepartmentListLv1.vue';
 
   const props = withDefaults(
     defineProps<{
