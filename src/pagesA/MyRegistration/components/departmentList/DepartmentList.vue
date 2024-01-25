@@ -36,6 +36,7 @@
               'item-lv1-border': !isLv2,
               'g-border-bottom': !isLv2,
               mb6: level === '1',
+              'lv1-alone': level === '1',
             }"
             :id="'lv1' + item.uuid"
             @click="itemClickLv1(item)"
@@ -284,6 +285,16 @@
       position: absolute;
       transition: all 0.3s linear;
       z-index: 9;
+    }
+  }
+
+  .lv1-alone {
+    &:nth-child(2n) {
+      animation: fadeInLeft 0.7s;
+    }
+
+    &:nth-child(2n + 1) {
+      animation: fadeInRight 0.7s;
     }
   }
 
