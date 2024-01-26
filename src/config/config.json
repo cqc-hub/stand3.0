@@ -201,8 +201,9 @@
 
     "1001063": {
       "wxAppid": "",
-      "alipayAppid": "2021002199689404",
+      "alipayAppid": "2021004134632001",
       "h5Appid": "",
+      "isvAlipayAppid": "2021004134663007",
       "name": "杭州口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
