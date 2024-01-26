@@ -17,9 +17,6 @@ interface ISConfig {
 
     /** 支付宝, 仅手机号授权(无身份证) */
     isAliAuthBase?: '1';
-
-    /** 默认代开发且仅手机号授权时候必给 */
-    isvAlipayAppid?: string;
   };
 
   // 就诊人 ----------------------------
@@ -116,7 +113,8 @@ const scJson: Record<string, ISConfig> = {
    */
   1001063: {
     login: {
-      isAliIndependentDev: '1',
+      // isAliIndependentDev: '1',
+      isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
   },

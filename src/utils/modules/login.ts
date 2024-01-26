@@ -322,12 +322,7 @@ export class LoginUtils extends GStores {
    * @returns
    */
   async getAliOpenid() {
-    const {
-      isSkipPerfect,
-      isAliAuthBase,
-      isAliIndependentDev,
-      isvAlipayAppid: isvAppId,
-    } = await this.getConfig();
+    const { isSkipPerfect, isAliAuthBase } = await this.getConfig();
 
     let res: TAliLogin;
 
@@ -363,8 +358,8 @@ export class LoginUtils extends GStores {
   }
 
   async getAliOpenidAgentBase() {
-    const { isvAlipayAppid: isvAppId, isAliIndependentDev } =
-      await this.getConfig();
+    const { isAliIndependentDev } = await this.getConfig();
+    const isvAppId = globalGl.systemInfo.isvAlipayAppid;
 
     const getPhoneNumberOpt: BaseObject = {};
     if (isvAppId) {
@@ -503,7 +498,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
-    const { isAliAuthBase, isAliIndependentDev } = await this.getConfig();
+    const { isAliAuthBase } = await this.getConfig();
 
     if (isAliAuthBase !== '1') {
       return await this.handlerAuth(e);
