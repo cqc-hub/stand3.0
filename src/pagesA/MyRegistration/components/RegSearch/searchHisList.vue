@@ -4,7 +4,7 @@
       v-for="item in list"
       :key="item.label"
       @click="itemClick(item)"
-      class="item"
+      class="item mr16 mb16"
     >
       <image
         v-if="item.hot === '1'"
@@ -37,7 +37,6 @@
   .list-content {
     display: flex;
     flex-wrap: wrap;
-    gap: 16rpx;
   }
 
   .item {

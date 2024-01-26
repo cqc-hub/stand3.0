@@ -26,13 +26,16 @@
           @click="change(item)"
           class="popup-row g-border-bottom"
         >
-          <slot :item="item"></slot>
-          <view class="popup-row-label f32 text-ellipsis">
-            {{ field ? item[field.label] : item }}
-          </view>
-          <view v-if="isActive(item)" class="iconfont ico-check">&#xe6cc;</view>
-        </view>
+          <slot :item="item">
+            <view class="popup-row-label f32 text-ellipsis">
+              {{ field ? item[field.label] : item }}
+            </view>
 
+            <view v-if="isActive(item)" class="iconfont ico-check">
+              &#xe6cc;
+            </view>
+          </slot>
+        </view>
         <slot name="footer" />
       </view>
     </Gl-Popup>
@@ -60,7 +63,7 @@
     {
       title: '',
       type: 'bottom',
-      maxHeight: 'var(--h-popup-max-height);',
+      maxHeight: 'var(--h-popup-max-height)',
     }
   );
 

@@ -13,6 +13,7 @@
           class="hos-icon mr24"
         />
         <view class="f32 text-ellipsis">{{ getHosName }}</view>
+
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow f48`" />
