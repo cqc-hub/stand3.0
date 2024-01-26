@@ -1,14 +1,14 @@
 <template>
-  <view class="page">
+  <view class="page g-page">
     <g-flag
       v-if="dirUrl.includes('/pagesA/MyRegistration/selDepartment')"
       isShowFg
       typeFg="84"
     />
-    <view v-if="_type == 3" class="search-input">
+    <view v-if="_type == 3 || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
         v-model:value="searchValue"
-        placeholder="请输入药店名称查询"
+        :placeholder="_type == 3 ? '请输入药店名称查询' : '请输入院区名称'"
         @change="changeInput"
         @confirm="confirmInput"
         @clear="clearInput"
@@ -40,7 +40,7 @@
         <view class="iconfont">&#xe6e8;</view>
       </view>
     </view>
-    <scroll-view class="scroll-container" scroll-y>
+    <scroll-view class="scroll-container g-container" scroll-y>
       <hos-List-Vue
         :disabledKey="listDisableName"
         :isShowMoreItem="_type == 3 ? false : hosList.length <= showMoreItem"
@@ -177,6 +177,7 @@
 
     isLogin?: '1'; // 需要登录?
   }>();
+  const hosHisMaxLen = ref(0);
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
@@ -436,6 +437,10 @@
       );
     }
 
+    if (hosHisMaxLen.value < hosList.value.length) {
+      hosHisMaxLen.value = hosList.value.length;
+    }
+
     if (getTypeNow.value === '病案复印') {
       const hosIds = medCopyConfigList.value.map((o) => o.hosId + '');
       hosList.value.map((o) => {
@@ -443,9 +448,9 @@
       });
     }
 
-    if (hosList.value.length === 1) {
-      itemClick(hosList.value[0]);
-    }
+    // if (hosList.value.length === 1) {
+    //   itemClick(hosList.value[0]);
+    // }
   };
 
   const regDialogConfirm = ref<any>('');
@@ -516,11 +521,6 @@
 
 <style lang="scss" scoped>
   .page {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
     background: var(--hr-neutral-color-1);
 
     .search-input {

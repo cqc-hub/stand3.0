@@ -150,7 +150,6 @@
         });
       }
     }
-
   });
 </script>
 <style lang="scss">
