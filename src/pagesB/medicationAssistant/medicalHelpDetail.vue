@@ -63,6 +63,7 @@
           "
           class="box g-border p32 mb32"
         >
+       
           <Express-Step
             :pointEnd="_expressInfo.pointEnd"
             :pointNow="_expressInfo.pointNow"
@@ -76,14 +77,18 @@
           v-if="detailData.qrCode && pageProps.takenDrugType === '1'"
           class="g-border box page-first-item mb16 p32"
         >
+        
+
+
           <view class="my-display-none">
             <w-qrcode :options="_qrOpt" ref="refqrcode" />
             <w-barcode :options="_barOpt" ref="refqrbarcode" />
           </view>
 
           <view class="g-flex-rc-cc g-bold f32 mb32">
-            请凭二维码前往药房取药
+            <rich-text :nodes="textRef" />
           </view>
+        
 
           <view class="qr g-flex-rc-cc">
             <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
@@ -132,6 +137,7 @@
 
   import {
     isToBeFriedAndDelivery,
+    getSysAppMore,
     type IWaitListItem,
     type IItemDetail,
   } from './utils/medicalHelp';
@@ -152,6 +158,7 @@
   import HtlpBodyBox from './components/HtlpBodyBox.vue';
   import ExpressStep from './components/ExpressStep.vue';
 
+  const textRef = ref({})
   const pageProps = ref(<IWaitListItem>{});
   const pageConfig = ref<ISystemConfig['drugDelivery']>({});
   const gStores = new GStores();
@@ -337,7 +344,8 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
-
+    textRef.value = await getSysAppMore('1105') 
+  
     init();
   });
 </script>

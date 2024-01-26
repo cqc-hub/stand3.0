@@ -1,3 +1,5 @@
+import api from '@/service/api';
+import HTMLParser from '@/common/html-parser';
 export interface IWaitListItem {
   acceptTime: string;
   expressNo: string;
@@ -28,6 +30,7 @@ interface IDrugDetailListItem {
   itemSpec: string;
   units: string;
   use: string;
+  isTake:number;
 }
 
 export interface IItemDetail {
@@ -88,3 +91,17 @@ export const getShowDrugName = (item: IWaitListItem) => {
 
   return drugTypeName;
 };
+
+export const getSysAppMore = async (typeFlag: string) => {
+  let text 
+  try {
+    const { result } = await api.getSysAppMore({
+      typeFlag,
+    })
+    const { content } = result;
+    text = HTMLParser(content)
+  } catch {
+    text  = '请凭二维码前往药房取药'
+  }
+  return text
+}
