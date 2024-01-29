@@ -232,7 +232,7 @@
 
     if (result) {
       let { firstDeptList, deptListLevel } = result;
-      // deptListLevel = '2'
+      // deptListLevel = '1'
       if (firstDeptList && firstDeptList.length) {
         loopDeptList(firstDeptList, deptListLevel);
         _loopDeptList(firstDeptList);
