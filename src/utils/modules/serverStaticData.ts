@@ -32,7 +32,6 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
   if (result && result.MEDICAL_CASE_COPY) {
     const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
-    console.log(_configList, 233);
 
     if (_configList.length) {
       const configList: any[] = [];

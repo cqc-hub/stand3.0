@@ -596,7 +596,6 @@ export const isMedicalSelf = async (
        * 支付宝医保插件模式只能是本人
        */
       if (medicalPlugin || medicalNation) {
-        console.log(await isCanUseMedical(cardNumber), 'cqc');
 
         return await isCanUseMedical(cardNumber);
       }
@@ -1339,7 +1338,6 @@ export const usePayPage = () => {
       ...uploadRes,
     };
 
-    console.log(payInfoArg);
 
     uni.hideLoading();
     const info = {
