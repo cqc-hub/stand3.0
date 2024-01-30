@@ -91,7 +91,6 @@
   const popup = ref<any>('');
   const popupBottom = ref<any>('');
   const qrcode = ref<any>('');
-  const bgHeadHeight = ref('400rpx');
   const inst = getCurrentInstance();
   const gStores = new GStores();
   const isWxRequestQxDialogShow = ref(false);
@@ -514,11 +513,19 @@
 
     ctx.save();
     ctx.setFontSize(14);
-    ctx.fillText(
-      (hosName || '') + (deptName ? `·${deptName}` : ''),
+    const localName = (hosName || '') + (deptName ? `·${deptName}` : '');
+
+
+    drawTextPrevWrap(
+      ctx,
+      localName,
       32,
-      avatarBox.top + 24 + 24
+      avatarBox.top + 24 + 24,
+      20,
+      boxWidth - 66,
+      2
     );
+    // ctx.fillText(localName, 32, avatarBox.top + 24 + 24);
 
     ctx.save();
 
@@ -560,8 +567,6 @@
     ctx.save();
 
     ctx.draw();
-
-
 
     uni.hideLoading();
     loadingSuccess(void 0);
