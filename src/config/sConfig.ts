@@ -113,7 +113,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001063: {
     login: {
-      // isAliIndependentDev: '1',
+      isAliIndependentDev: '1',
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
