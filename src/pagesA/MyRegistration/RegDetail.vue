@@ -338,6 +338,7 @@
     debounce,
     PatientUtils,
     handlerWeChatThRegLogin,
+    apiAsync,
   } from '@/utils';
 
   import {
@@ -879,6 +880,7 @@
     });
 
     isCancelOrderDialogShow.value = false;
+
     await RegDetailUtil.getInstance().cancelReg();
 
     init();
@@ -900,6 +902,19 @@
   };
 
   const refoundOrder = async () => {
+    const { wxOrderSubscribeMessage } = orderConfig.value;
+
+    // #ifdef MP-WEIXIN
+    if (wxOrderSubscribeMessage?.length) {
+      // @ts-expect-error
+      await apiAsync(uni.requestSubscribeMessage, {
+        tmplIds: wxOrderSubscribeMessage,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    // #endif
+
     if (orderRegInfo.value.orderStatus === '3') {
       return refoundWaitOrder();
     }

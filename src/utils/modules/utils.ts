@@ -28,7 +28,7 @@ type TFirstParams<T> = T extends [infer K] ? K : any;
 export const apiAsync: <
   T extends {
     (
-      opt: { success(any): void; fail(any): any; [key: string]: any },
+      opt: { success(any): any; fail(any): any; [key: string]: any },
       ...restOpt: any[]
     ): any;
   }
@@ -326,3 +326,4 @@ export const getLocation = async function (isForce?: boolean): Promise<{
     }
   });
 };
+

@@ -49,6 +49,8 @@ export interface ISystemConfig_ {
     isOrderPreSettle?: '1';
     /** 候补预约 */
     isOpenOrderWaiting?: '1';
+    /** 预约挂号, 取消预约挂号时候  订阅微信消息(单词最多三个) */
+    wxOrderSubscribeMessage?: string[];
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？

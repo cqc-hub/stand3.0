@@ -477,7 +477,6 @@
 
       if (field === 'address' && !o.options) {
         // o.options = await ServerStaticData.getAddressData();
-        // o.options = await ServerStaticData.getAddressByLevel();
         getAddressList();
       }
 

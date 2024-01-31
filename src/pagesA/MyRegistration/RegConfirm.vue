@@ -110,7 +110,13 @@
 
   import { IPageProps } from './utils/regConfirm';
   import { TSchInfo } from './utils/index';
-  import { GStores, ServerStaticData, wait, apiAsync } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    wait,
+    apiAsync,
+    ISystemConfig,
+  } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
   import { getLocalStorage } from '@/common';
@@ -128,6 +134,8 @@
 
   const gStores = new GStores();
   const props = ref({} as IPageProps);
+  const pageConfig = ref({} as ISystemConfig['order']);
+
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
   const preventOrderStr = ref('');
@@ -148,6 +156,8 @@
   });
 
   const regConfirm = async () => {
+    const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
+
     if (!isCheck.value) {
       regDialogConfirm.value.show();
       return;
@@ -157,6 +167,17 @@
       waitReg();
       return;
     }
+
+    // #ifdef MP-WEIXIN
+    if (wxOrderSubscribeMessage?.length) {
+      // @ts-expect-error
+      await apiAsync(uni.requestSubscribeMessage, {
+        tmplIds: wxOrderSubscribeMessage,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    // #endif
 
     /**
      * 未填写参数
@@ -264,8 +285,7 @@
             // result.totalEnergy
             if (result && result.totalEnergy && result.totalEnergy != 0) {
               contentTitle.value =
-                (await ServerStaticData.getSystemConfig('order')).isOrderPay !==
-                '1'
+                isOrderPay !== '1'
                   ? '本次预约得绿色能量'
                   : '本次挂号得绿色能量';
               greenToastContent.value = result.totalEnergy;
@@ -376,9 +396,14 @@
     }
   };
 
+  const getPageConfig = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
+
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
+    getPageConfig();
   });
 </script>
 

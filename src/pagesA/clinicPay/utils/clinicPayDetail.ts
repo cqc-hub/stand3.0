@@ -23,38 +23,6 @@ import api from '@/service/api';
 import globalGl from '@/config/global';
 import { useCacheStore } from '@/stores';
 
-// api.getUnpaidClinicList = () =>
-//   Promise.resolve({
-//     result: {
-//       patientName: '支悦童',
-//       clinicalSettlementResultList: [
-//         {
-//           deptName: '神经内科',
-//           clinicId: '1747136655025532928',
-//           subIds: '1747136655025532928',
-//           deptId: 'A0102013',
-//           hosId: '12720',
-//           payState: '1',
-//           serialNo: '9245267',
-//           childOrder: '1976507',
-//           docName: '张朋',
-//           costTypeName: '智慧医保',
-//           visitDate: '2024-01-23',
-//           hosName: '郸城县人民医院',
-//           totalCost: '1.22',
-//           visitNo: '2024012310464944',
-//         },
-//       ],
-//       cardNumber: '00080631',
-//     },
-//     timeTaken: 234,
-//     code: 0,
-//     functionVersion:
-//       '[{"functionType":"2","version":"V0.0.57"},{"functionType":"1","version":"V0.0.1511111"}]',
-//     message: '成功',
-//     respCode: 999002,
-//   });
-
 export const tradeType = {
   '1': '自费',
   '2': '医保',

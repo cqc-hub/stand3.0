@@ -8,6 +8,9 @@ export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
+  'order.wxOrderSubscribeMessage': [
+    '1SqO2V7A19EdxKrIzZQ4wQqwR5zpjwYyKMsT-OLvwM0',
+  ],
   // 'person.isDropAddress': '1',
   // 'order.isOpenOutHosSch': '1',
   // 'order.isOpenOrderWaiting': '1',
