@@ -8,6 +8,7 @@ export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
+  // 'person.isDropAddress': '1',
   // 'order.isOpenOutHosSch': '1',
   // 'order.isOpenOrderWaiting': '1',
   // 'order.inWx.handlerOutHosSchClick': <TBannerConfig>{
