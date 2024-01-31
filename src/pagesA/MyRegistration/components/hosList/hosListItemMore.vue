@@ -1,6 +1,6 @@
 <template>
-  <view class="item-more">
-    <view class="header" @click="itemClick">
+  <view @click="itemClick" class="item-more">
+    <view class="header">
       <view
         :class="{
           'color-888': disabled,
