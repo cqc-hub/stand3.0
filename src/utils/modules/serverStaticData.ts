@@ -5,7 +5,7 @@ import {
   insertsObject,
   joinQuery,
 } from '@/common';
-import { ISelectOptions } from '@/components/g-form';
+import { ISelectOptions, TAddress } from '@/components/g-form';
 import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
@@ -304,7 +304,7 @@ export class ServerStaticData {
     }
   }
 
-  static async getAddressByLevel(upDivision = ''): Promise<ISelectOptions[]> {
+  static async getAddressByLevel(upDivision = ''): Promise<TAddress[]> {
     const { result } = await api.getDivisionByLevel({
       upDivision,
     });

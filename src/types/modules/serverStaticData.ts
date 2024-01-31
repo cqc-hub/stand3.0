@@ -110,7 +110,7 @@ export interface ISystemConfig_ {
     // 本系统不需要完善
     isSkipPerfect?: '1';
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
-    isHidePatientTypeInPerfect?: '1';
+    isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
     isSmsVerify?: '1';
     /** 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁） */

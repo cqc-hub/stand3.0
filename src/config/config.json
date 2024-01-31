@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001063",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -214,7 +214,7 @@
       "wxAppid": "wx78636dc13e06e91c",
       "alipayAppid": "",
       "h5Appid": "",
-      "name": "肿瘤医院国际保健中心",
+      "name": "浙江省肿瘤医院国际保健中心",
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false
