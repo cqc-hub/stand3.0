@@ -119,6 +119,12 @@ const scJson: Record<string, ISConfig> = {
     },
   },
 
+  1001065: {
+    login: {
+      isSkipPerfect: '1',
+    },
+  },
+
   /**
    * 濮阳市人民医院
    */
