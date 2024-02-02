@@ -6,12 +6,18 @@
     class="g-page"
   >
     <!-- #ifndef MP-ALIPAY -->
-    <g-tbanner :config="orderConfig.bannerOrder" />
+    <g-tbanner
+      :config="orderConfig.bannerOrder"
+      @click="handleDzClick(orderConfig.bannerOrder)"
+      disabled
+    />
     <!-- #endif -->
 
     <!-- #ifdef MP-ALIPAY -->
     <g-tbanner
       :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder"
+      @click="handleDzClick(orderConfig.bannerOrderAlipay || orderConfig.bannerOrder)"
+      disabled
     />
     <!-- #endif -->
 
@@ -94,6 +100,7 @@
     ServerStaticData,
     IHosInfo,
     generateUuid,
+    useTBanner,
     type ISystemConfig,
   } from '@/utils';
   import {
@@ -306,6 +313,15 @@
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
+  };
+
+  const handleDzClick = async (data) => {
+    //需要带入当前的hosID
+    const { hosId } = props;
+    if(!data.path.includes('hosId')){
+     data.path = joinQuery(data.path, { hosId });
+    }
+    useTBanner(data);
   };
 
   onShareAppMessage((res) => {
