@@ -312,9 +312,8 @@
   };
 
   const handleDzClick = async (data) => {
-    const { hosId } = pageProps.value;
     if (!data.path.includes('hosId')) {
-      data.path = joinQuery(data.path, { hosId });
+      data.path = joinQuery(data.path, { hosId:hosId.value });
     }
     useTBanner(data);
   };
