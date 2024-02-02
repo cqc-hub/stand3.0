@@ -16,7 +16,9 @@
     <!-- #ifdef MP-ALIPAY -->
     <g-tbanner
       :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder"
-      @click="handleDzClick(orderConfig.bannerOrderAlipay || orderConfig.bannerOrder)"
+      @click="
+        handleDzClick(orderConfig.bannerOrderAlipay || orderConfig.bannerOrder)
+      "
       disabled
     />
     <!-- #endif -->
@@ -316,10 +318,9 @@
   };
 
   const handleDzClick = async (data) => {
-    //需要带入当前的hosID
-    const { hosId } = props;
-    if(!data.path.includes('hosId')){
-     data.path = joinQuery(data.path, { hosId });
+    const { hosId } = pageProps.value;
+    if (!data.path.includes('hosId')) {
+      data.path = joinQuery(data.path, { hosId });
     }
     useTBanner(data);
   };
