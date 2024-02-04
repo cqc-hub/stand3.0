@@ -3,7 +3,7 @@
     <view v-for="item in list" :key="item.visitId" class="item mb16">
       <view class="flex-between f32 g-bold mb16">
         <view class="flex-normal">
-          <view class="mr12">{{ item.deptName }}</view>
+          <view class="mr12">{{ item.deptName || item.categorName }}</view>
           <view>{{ item.docName }}</view>
         </view>
 
@@ -14,13 +14,16 @@
             }"
             class="color-blue"
           >
-            {{
-              item.reportFlag === '2'
-                ? '无需取号'
-                : item.reportFlag === '0'
-                ? '待取号'
-                : '已取号'
-            }}
+            <text v-if="isOnlineSign">{{ item.reportFlag }}</text>
+            <text v-else>
+              {{
+                item.reportFlag === '2'
+                  ? '无需取号'
+                  : item.reportFlag === '0'
+                  ? '待取号'
+                  : '已取号'
+              }}
+            </text>
           </text>
         </view>
       </view>
@@ -32,11 +35,16 @@
         <text v-if="item.queueNum">第{{ item.queueNum }}号</text>
       </view>
 
-      <view v-if="item.visitingArea" class="tip">
+      <view v-if="item.visitingArea" class="tip mb32">
         <rich-text :nodes="$HTMLParser(item.visitingArea)" />
       </view>
 
-      <view v-if="item.reportFlag === '0'">
+      <view
+        v-if="
+          item.reportFlag === '0' ||
+          (isOnlineSign && item.reportFlag === '预约未到')
+        "
+      >
         <view @click="takeNumber(item)" class="g-flex-rc-cc">
           <view
             :class="{
@@ -94,6 +102,7 @@
   defineProps<{
     list: TTakeNumberListItem[];
     loading: boolean;
+    isOnlineSign: boolean;
     isTakeNumberAfterBtnForGoQueueNumber: boolean;
   }>();
   const emits = defineEmits([

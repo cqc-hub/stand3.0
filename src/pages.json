@@ -506,7 +506,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "门诊取号"
+            "navigationBarTitleText": " "
           }
         },
 

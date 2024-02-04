@@ -4,11 +4,7 @@
     <g-choose-pat @choose-pat="init" />
     <view class="pat-box">
       <view class="health-card">
-        <view
-          v-if="pageProps._type !== 'blood'"
-          @click="goRecord"
-          class="mr14 g-flex-rc-cc"
-        >
+        <view v-if="!isBloodSign" @click="goRecord" class="mr14 g-flex-rc-cc">
           <view class="iconfont icon-resize">&#xe6fc;</view>
           <text class="color-111">挂号记录</text>
         </view>
@@ -19,6 +15,18 @@
             :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
           />
           <text class="color-111">排队叫号</text>
+        </view>
+
+        <view
+          v-if="!isOnlineSign && pageConfig.takeNumberOnlineBtn === '1'"
+          @click="goTakeNumberOnline"
+          class="g-flex-rc-cc"
+        >
+          <image
+            class="queue-icon mr14"
+            :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
+          />
+          <text class="color-111">在线签到</text>
         </view>
 
         <view
@@ -50,6 +58,7 @@
             :isTakeNumberAfterBtnForGoQueueNumber="
               isTakeNumberAfterBtnForGoQueueNumber
             "
+            :isOnlineSign="isOnlineSign"
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
             @sign-in="signIn"
@@ -139,7 +148,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { deQueryForUrl } from '@/common';
@@ -174,8 +183,16 @@
       {
         hosId?: string; // 采血取号 需要
         _type?: 'blood'; //区分普通取号和 濮阳采血取号
+        type?: '0' | '1'; // 普通取号 区分为 0为门诊取号 1 为门诊签到
       }
     >{}
+  );
+
+  // 采血取号
+  const isBloodSign = computed(() => pageProps.value._type === 'blood');
+  // 在线签到
+  const isOnlineSign = computed(
+    () => !isBloodSign.value && pageProps.value.type === '1'
   );
 
   const locationInfo = ref({
@@ -206,6 +223,7 @@
     const { ampm, visitDate, visitId, hosId } = cacheItem;
     const { source } = gStores.globalStore.browser;
     const { patientId } = gStores.userStore.patChoose;
+    const { type } = pageProps.value
 
     const args = {
       ampm,
@@ -214,10 +232,11 @@
       source,
       patientId,
       hosId,
+      type
     };
     isFgShow451.value = false;
 
-    if (pageProps.value._type === 'blood') {
+    if (isBloodSign.value) {
       locationInfo.value = await getLocation(true);
       const {
         result: { status, promptMessage },
@@ -318,6 +337,12 @@
     });
   };
 
+  const goTakeNumberOnline = () => {
+    uni.navigateTo({
+      url: '/pagesC/takeNumber/takeNumber?type=1',
+    });
+  };
+
   const refreshData = () => {
     isRefresh.value = true;
 
@@ -330,6 +355,7 @@
   const getList = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { latitude, longitude } = locationInfo.value;
+    const { type } = pageProps.value;
 
     isComplete.value = false;
     if (!isRefresh.value) {
@@ -341,6 +367,7 @@
         latitude,
         longitude,
         patientId,
+        type,
       })
       .finally(() => {
         isComplete.value = true;
@@ -371,7 +398,7 @@
     const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
       pageConfig.value;
 
-    isShowQueueBtn.value = takeNumberQueueBtn === '1';
+    isShowQueueBtn.value = takeNumberQueueBtn === '1' && !isOnlineSign.value;
     isTakeNumberAfterBtnForGoQueueNumber.value =
       takeNumberAfterBtnForGoQueueNumber === '1';
   };
@@ -384,6 +411,11 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    uni.setNavigationBarTitle({
+      title: isOnlineSign.value ? '在线签到' : '门诊取号',
+    });
+
     await getConfig();
     init();
   });
