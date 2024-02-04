@@ -13,6 +13,7 @@ export type TTakeNumberListItem = {
   hosId: string;
   qrValue?: string;
   visitingArea?: string;
+  extend?: any;
 };
 
 export type _TTakeNumberListItem = {
