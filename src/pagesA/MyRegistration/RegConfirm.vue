@@ -388,6 +388,7 @@
         ...selSchItem,
         alternateData,
         patientId: gStores.userStore.patChoose.patientId,
+        source: gStores.globalStore.browser.source,
       });
 
       uni.reLaunch({
