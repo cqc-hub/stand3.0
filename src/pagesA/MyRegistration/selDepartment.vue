@@ -105,6 +105,7 @@
     useTBanner,
     type ISystemConfig,
   } from '@/utils';
+  import { deepClone } from '@/common/utils';
   import {
     joinQuery,
     joinQueryForUrl,
@@ -312,10 +313,9 @@
   };
 
   const handleDzClick = async (data) => {
-    if (!data.path.includes('hosId')) {
-      data.path = joinQuery(data.path, { hosId:hosId.value });
-    }
-    useTBanner(data);
+    const queryArg = deepClone(data);
+    queryArg.path = joinQuery(data.path, { hosId:hosId.value });
+    useTBanner(queryArg);
   };
 
   onShareAppMessage((res) => {
