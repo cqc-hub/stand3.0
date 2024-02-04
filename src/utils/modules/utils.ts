@@ -2,6 +2,7 @@ import { useRouterStore } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';
+import { useCacheStore } from '@/stores';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -327,3 +328,21 @@ export const getLocation = async function (isForce?: boolean): Promise<{
   });
 };
 
+//拼接path的方法
+export const splicPath = (path: string) => {
+  const cacheStore = useCacheStore();
+  if (
+    cacheStore.isShowChooseHos &&
+    cacheStore.hosId !== '' &&
+    !path.includes('hosId')
+  ) {
+    let connector = '';
+    if (path.includes('?')) {
+      connector = '&';
+    } else {
+      connector = '?';
+    }
+    path += `${connector}hosId=${cacheStore.hosId}`;
+  }
+  return path;
+};

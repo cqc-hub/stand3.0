@@ -15,11 +15,12 @@
   import { getToken, getSysCode } from '@/common/useToken';
   import { ref } from 'vue';
   import { useMessageStore, useCacheStore } from '@/stores';
-  import { GStores } from '@/utils';
+  import { GStores,splicPath } from '@/utils';
   import { encryptDesParam } from '@/common/des';
   import { joinQuery } from '@/common';
   import { toPayPull } from '@/components/g-pay';
   import { deQueryForUrl } from '@/common/utils';
+
 
   type IPageProps = {
     hosId?: string;
@@ -42,7 +43,7 @@
   const allData = {
     sysCode: getSysCode(),
     token: gStores.globalStore.token.accessToken,
-    hosId: cacheStore.isShowChooseHos ? cacheStore.hosId : (pageProp.value.hosId || ''),
+    hosId: '',
     herenId: gStores.globalStore.herenId,
     source: gStores.globalStore.browser.source,
     openId: gStores.globalStore.openId,
@@ -54,7 +55,7 @@
   onLoad((options) => {
     pageProp.value = deQueryForUrl<IPageProps>(deQueryForUrl(options));
 
-    // allData.hosId = pageProp.value.hosId || '';
+    allData.hosId = pageProp.value.hosId || '';
     let query = getQueryPath(pageProp.value);
     if (pageProp.value.type == '1') {
       //第三方的h5
@@ -76,16 +77,16 @@
         delete obj.query;
         delete obj._pd;
 
-        //额外处理 累死杭口 必须携带院区数据
-        if(cacheStore.isShowChooseHos && cacheStore.hosId !== ''){
-          obj.hosId = allData.hosId;
-        }
-
         // 携带参数的情况
         if (JSON.stringify(obj) != '{}') {
           newQuery += '&' + joinQuery('', obj).slice(1);
         }
-        src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
+          //额外处理 类似杭口 必须携带院区数据
+        if(cacheStore.isShowChooseHos && cacheStore.hosId !== ''){
+          src.value = splicPath(`${baseUrl}${pageProp.value.path}${query}${newQuery}`)
+        }else{
+          src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
+        }
       }
       console.warn('v3页面路径', src.value);
     }
