@@ -252,7 +252,7 @@
           @click="refoundOrder"
           class="btn btn-plain btn-error g-border"
         >
-          {{ '取消预约' }}
+          {{ '取消候补' }}
         </button>
       </template>
 
@@ -634,6 +634,8 @@
     let result;
     if (isWaitReg.value) {
       result = pageProps.value;
+      // @ts-expect-error
+      result.patientNameEncry = pageProps.value.patientName;
     } else {
       result = await regDetailUtil.getDataDetail();
     }
@@ -922,8 +924,6 @@
       source: gStores.globalStore.browser.source,
     });
 
-
-
     gStores.messageStore.showMessage('取消候补预约成功', 3000, {
       closeCallBack() {
         uni.reLaunch({
@@ -1089,6 +1089,10 @@
   onLoad(async (p) => {
     uni.showLoading({});
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+
+    uni.setNavigationBarTitle({
+      title: isWaitReg.value ? '候补详情' : '挂号详情',
+    });
     await handlerWeChatThRegLogin(pageProps.value);
     await beforeEach({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),

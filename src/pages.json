@@ -144,7 +144,7 @@
         {
           "path": "MyRegistration/MyRegistration",
           "style": {
-            "navigationBarTitleText": "挂号记录",
+            "navigationBarTitleText": " ",
             "enablePullDownRefresh": true
           }
         },
@@ -283,7 +283,7 @@
         {
           "path": "MyRegistration/RegDetail",
           "style": {
-            "navigationBarTitleText": "挂号详情"
+            "navigationBarTitleText": " "
           }
         },
 

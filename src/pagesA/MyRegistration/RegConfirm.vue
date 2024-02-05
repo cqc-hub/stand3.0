@@ -383,6 +383,8 @@
         (o) => o.schId === selWaitRegSch.value
       )!;
 
+      selWaitRegSch.value = '';
+
       await api.addRegAlternate({
         ...props.value,
         ...selSchItem,

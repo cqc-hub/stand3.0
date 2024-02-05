@@ -353,12 +353,18 @@
 
   onShow(() => {
     if (list.value.length) {
-      init();
+      patientChange({
+        item: pat.value,
+      });
     }
   });
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+
+    uni.setNavigationBarTitle({
+      title: isWaitReg.value ? '候补记录' : '我的挂号',
+    });
 
     await handlerWeChatThRegLogin(props.value);
     await beforeEach({

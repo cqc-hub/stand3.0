@@ -28,7 +28,7 @@
       </view>
 
       <view @click="goDetail(item)" class="content">
-        <view class="row f28">
+        <view v-if="item.patientNameEncry" class="row f28">
           <view class="label text-no-wrap color-888">就诊人</view>
           <view class="body flex-between">
             <text>
