@@ -336,12 +336,7 @@ export const splicPath = (path: string) => {
     cacheStore.hosId !== '' &&
     !path.includes('hosId')
   ) {
-    let connector = '';
-    if (path.includes('?')) {
-      connector = '&';
-    } else {
-      connector = '?';
-    }
+    let connector = path.includes('?') ? '&' : '?';
     path += `${connector}hosId=${cacheStore.hosId}`;
   }
   return path;
