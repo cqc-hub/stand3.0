@@ -15,7 +15,7 @@
   import { getToken, getSysCode } from '@/common/useToken';
   import { ref } from 'vue';
   import { useMessageStore, useCacheStore } from '@/stores';
-  import { GStores,splicPath } from '@/utils';
+  import { GStores,addHosIdForSelfH5 } from '@/utils';
   import { encryptDesParam } from '@/common/des';
   import { joinQuery } from '@/common';
   import { toPayPull } from '@/components/g-pay';
@@ -83,7 +83,7 @@
         }
           //额外处理 类似杭口 必须携带院区数据
         if(cacheStore.isShowChooseHos && cacheStore.hosId !== ''){
-          src.value = splicPath(`${baseUrl}${pageProp.value.path}${query}${newQuery}`)
+          src.value = addHosIdForSelfH5(`${baseUrl}${pageProp.value.path}${query}${newQuery}`)
         }else{
           src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
         }
