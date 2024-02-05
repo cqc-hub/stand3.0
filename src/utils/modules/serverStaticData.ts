@@ -11,7 +11,7 @@ import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType, Split, Merge, FilterOptional } from '@/typeUtils';
-import { getMiniProgramEnv, ApiParamsConfig, addHosIdForSelfH5 } from '@/utils';
+import { getMiniProgramEnv, ApiParamsConfig, addHosIdForSelfH5Path } from '@/utils';
 import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -201,7 +201,7 @@ export const useTBanner = async (
       }
 
       fullUrl = baseUrl + fullUrl;
-      fullUrl = addHosIdForSelfH5(fullUrl);
+      fullUrl = addHosIdForSelfH5Path(fullUrl);
 
       fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),

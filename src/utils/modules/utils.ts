@@ -329,7 +329,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
 };
 
 //拼接path的方法
-export const addHosIdForSelfH5 = (path: string) => {
+export const addHosIdForSelfH5Path = (path: string) => {
   const cacheStore = useCacheStore();
   if (
     cacheStore.isShowChooseHos &&
