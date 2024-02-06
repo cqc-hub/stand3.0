@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx93d1e2c1e646e342",
+    "appid": "wx78636dc13e06e91c",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -72,7 +72,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004134632001"
+    "appid": ""
   },
   "mp-baidu": {
     "usingComponents": true
@@ -84,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "杭州口腔医院",
+  "name": "浙江省肿瘤医院国际保健中心",
   "h5": {
     "router": {
       "base": "./"
