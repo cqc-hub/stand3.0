@@ -294,9 +294,19 @@
     },
   };
 
+  const 种植档案: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesB/toothRecord/index',
+    text: '种植档案',
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(queryNumber);
+      useTBanner(种植档案);
     }, 1000);
   });
 </script>

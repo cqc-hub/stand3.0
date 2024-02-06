@@ -39,6 +39,9 @@
   onShow(async (opt) => {
     console.log('App Show', opt);
     globalStore.onAppShow(opt);
+    // #ifdef MP-WEIXIN
+    wx.login();
+    // #endif
 
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;
