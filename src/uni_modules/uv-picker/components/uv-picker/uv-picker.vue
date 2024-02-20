@@ -107,7 +107,7 @@ export default {
 		textStyle(){
 			return (index,index1) => {
 				const style = {};
-				// #ifndef APP-NVUE 
+				// #ifndef APP-NVUE
 				style.display = 'block';
 				// #endif
 				if(this.color) {

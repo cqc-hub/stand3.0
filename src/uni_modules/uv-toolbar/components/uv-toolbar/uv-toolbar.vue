@@ -40,7 +40,7 @@
 	import props from './props.js';
 	/**
 	 * Toolbar 工具条
-	 * @description 
+	 * @description
 	 * @tutorial https://www.uvui.cn/components/toolbar.html
 	 * @property {Boolean}	show			是否展示工具条（默认 true ）
 	 * @property {Boolean}	showBorder			是否展示工具条下方边框（默认 false ）
@@ -49,8 +49,8 @@
 	 * @property {String}	cancelColor		取消按钮的颜色（默认 '#909193' ）
 	 * @property {String}	confirmColor	确认按钮的颜色（默认 '#3c9cff' ）
 	 * @property {String}	title	标题文字
-	 * @event {Function} 
-	 * @example 
+	 * @event {Function}
+	 * @example
 	 */
 	export default {
 		name: 'uv-toolbar',
@@ -84,11 +84,12 @@
 		@include flex;
 		justify-content: space-between;
 		align-items: center;
+		flex-direction: row !important;
 		&__wrapper {
 			&__cancel {
 				color: $uv-tips-color;
 				font-size: 15px;
-				padding: 0 15px;
+				padding: 15px;
 			}
 		}
 		&__title {
@@ -102,7 +103,7 @@
 			&__confirm {
 				color: $uv-primary;
 				font-size: 15px;
-				padding: 0 15px;
+				padding: 15px;
 			}
 		}
 	}

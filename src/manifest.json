@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx799315279808c901",
+    "appid": "wx39ce500d25aa3328",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,14 +70,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004103625411"
+    "appid": "2021003105653538"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -89,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴第二医院",
+  "name": "郸城县人民医院",
   "h5": {
     "router": {
       "base": "./"
