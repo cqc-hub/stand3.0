@@ -5,7 +5,7 @@
     }"
     class="g-page"
   >
-    <g-flag typeFg="405" isShowFg />
+    <g-flag v-if="isRender" :typeFg="isWaitReg ? '1113' : '405'" isShowFg />
     <g-message />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
     <My-Registration-Head
@@ -160,6 +160,7 @@
     >{}
   );
   const gStores = new GStores();
+  const isRender = ref(false);
   const isComplete = ref(false);
   const pat = ref<IPat>();
 
@@ -361,6 +362,7 @@
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    isRender.value = true;
 
     uni.setNavigationBarTitle({
       title: isWaitReg.value ? '候补记录' : '我的挂号',

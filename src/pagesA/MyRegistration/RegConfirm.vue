@@ -19,7 +19,7 @@
         </view>
       </view>
 
-      <g-flag v-if="isOver" :typeFg="isWaitReg ? '1101' : '4'" isShowFgTip />
+      <g-flag v-if="isOver" :typeFg="isWaitReg ? '1112' : '4'" isShowFgTip />
       <!--  #ifdef MP-ALIPAY -->
       <template v-if="alipayPid">
         <Green-Power />
@@ -40,7 +40,7 @@
       <g-flag
         v-if="isOver"
         v-model:title="flagTitle9"
-        :typeFg="isWaitReg ? '1104' : '9'"
+        :typeFg="isWaitReg ? '1111' : '9'"
         isShowFgTip
         isHideTitle
         aaa

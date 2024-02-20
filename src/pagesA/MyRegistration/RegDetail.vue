@@ -230,7 +230,12 @@
           </view>
 
           <view class="container-box order-patient g-border p32">
-            <g-flag typeFg="4" isShowFgTip aaa />
+            <g-flag
+              v-if="isRender"
+              :typeFg="isWaitReg ? '1114' : '4'"
+              isShowFgTip
+              aaa
+            />
           </view>
         </view>
       </view>
@@ -396,6 +401,7 @@
   const refFormPatient = ref<any>('');
   const pageProps = ref({} as IPageProps);
   const gStores = new GStores();
+  const isRender = ref(false);
   const showQrCode = ref(false);
   const orderRegInfo = ref({} as IRegInfo);
   const hosInfo = ref({} as IHosInfo);
@@ -1089,7 +1095,7 @@
   onLoad(async (p) => {
     uni.showLoading({});
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-
+    isRender.value = true;
     uni.setNavigationBarTitle({
       title: isWaitReg.value ? '候补详情' : '挂号详情',
     });

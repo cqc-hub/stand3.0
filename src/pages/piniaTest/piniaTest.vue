@@ -302,6 +302,9 @@
     addition: {
       patientId: '_patientId',
     },
+    extraData: {
+      hosId: 13078,
+    },
   };
 
   onMounted(() => {
