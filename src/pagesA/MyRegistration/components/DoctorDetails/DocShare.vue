@@ -471,7 +471,8 @@
 
     ctx.save();
 
-    const docTitle = docTitleName;
+    const docTitle = docTitleName || ' ';
+
     ctx.setFontSize(13);
 
     fillRoundRect(
@@ -514,7 +515,6 @@
     ctx.save();
     ctx.setFontSize(14);
     const localName = (hosName || '') + (deptName ? `·${deptName}` : '');
-
 
     drawTextPrevWrap(
       ctx,

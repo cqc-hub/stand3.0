@@ -181,7 +181,8 @@
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
-  const dirUrl = ref(decodeURIComponent(props.value._url));
+  const dirUrl = computed(() => props.value._url)
+
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
 

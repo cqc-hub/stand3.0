@@ -250,7 +250,7 @@ const scJson: Record<string, ISConfig> = {
   },
 
   /**
-   * 西安红会
+   * 郸城县人民医院
    */
   1001045: {
     medicalMHelp: {
