@@ -374,8 +374,6 @@
     docName = docName || '';
     docTitleName = docTitleName || '';
 
-    docTitleName = docTitleName ?? '';
-
     uni.showLoading({
       mask: true,
     });
@@ -471,31 +469,37 @@
 
     ctx.save();
 
-    const docTitle = docTitleName || ' ';
+    ctx.setFillStyle('#296fff');
+    const docTitle = docTitleName;
 
     ctx.setFontSize(13);
 
-    fillRoundRect(
-      ctx,
-      28,
-      avatarBox.top + 11,
-      ctx.measureText(docTitle).width + 9,
-      16,
-      4,
-      '#ccddff'
-    );
+    if (docTitle) {
+      fillRoundRect(
+        ctx,
+        28,
+        avatarBox.top + 11,
+        ctx.measureText(docTitle).width + 9,
+        16,
+        4,
+        '#ccddff'
+      );
 
-    ctx.setFillStyle('#296fff');
-    ctx.fillText(docTitle, 32, avatarBox.top + 24);
+      ctx.fillText(docTitle, 32, avatarBox.top + 24);
+    }
 
     if (docJobName) {
+      const pLeft = docTitle ? 32 : 21;
+      const docTitleWidth =
+        (docTitle && ctx.measureText(docTitle).width) || 0;
+
       if (docJobName.length > 10) {
         docJobName = docJobName.substring(0, 10) + '..';
       }
 
       fillRoundRect(
         ctx,
-        32 + ctx.measureText(docTitle).width + 10,
+        pLeft + docTitleWidth + 10,
         avatarBox.top + 11,
         ctx.measureText(docJobName).width + 9,
         16,
@@ -505,7 +509,7 @@
 
       ctx.fillText(
         docJobName,
-        32 + ctx.measureText(docTitle).width + 10 + 5,
+        pLeft + docTitleWidth + 10 + 5,
         avatarBox.top + 24
       );
     }

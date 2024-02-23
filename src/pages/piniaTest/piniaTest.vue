@@ -309,7 +309,17 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(eletronicInvoice);
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: '/',
+        addition: {
+          patientId: '_patientId',
+        },
+        extraData: {
+          hosId: 13078,
+        },
+      });
     }, 1000);
   });
 </script>
