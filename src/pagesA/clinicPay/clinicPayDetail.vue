@@ -359,6 +359,8 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
+      console.log(pageProps.value, 'pageProps.valuepageProps.value');
+
 
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);

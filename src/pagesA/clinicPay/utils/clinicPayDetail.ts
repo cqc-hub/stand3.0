@@ -16,7 +16,7 @@ import {
   type IGPay,
   payMoneyOnline,
   toPayPull,
-  getOpenid,
+  getOpenId
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
@@ -367,22 +367,24 @@ export const getQxMedicalNation = async () => {
 
   requestArg.openId = gStores.globalStore.openId;
   if (requestArg.openId === '') {
-    requestArg.openId = await getOpenid();
+    requestArg.openId = await getOpenId();
   }
   // #endif
 
   // #ifdef MP-ALIPAY
-  await api.authorization({
-    accountType: 21,
-    code: qrCode,
-    userId: gStores.globalStore.openId,
-    scope: 'medical_ali_pay',
-  });
+  if (gStores.globalStore.isLogin) {
+    await api.authorization({
+      accountType: 21,
+      code: qrCode,
+      userId: gStores.globalStore.openId,
+      scope: 'medical_ali_pay',
+    });
+  }
 
   requestArg.aliPayUserId = gStores.globalStore.openId;
   requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
   if (!gStores.globalStore.openId) {
-    requestArg.aliPayUserId = await getOpenid();
+    requestArg.aliPayUserId = await getOpenId();
   }
 
   // #endif
@@ -1118,8 +1120,6 @@ export const usePayPage = () => {
               changeRefPayList(3);
             }
           } else {
-            console.log('cqc', flag);
-
             if (flag) {
               changeRefPayList(1);
             } else {
