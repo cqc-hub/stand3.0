@@ -309,7 +309,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(种植档案);
+      useTBanner(eletronicInvoice);
     }, 1000);
   });
 </script>

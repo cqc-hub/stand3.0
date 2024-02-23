@@ -181,7 +181,7 @@
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
-  const dirUrl = computed(() => props.value._url)
+  const dirUrl = computed(() => props.value._url || '')
 
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
@@ -390,7 +390,6 @@
         type = '3';
         break;
     }
-
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
       medCopyConfigList.value = await ServerStaticData.getSystemConfig(
@@ -437,6 +436,7 @@
         { noCache: true }
       );
     }
+
 
     if (hosHisMaxLen.value < hosList.value.length) {
       hosHisMaxLen.value = hosList.value.length;
@@ -509,6 +509,7 @@
 
   onLoad((opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+
     if (props.value._type == 3) {
       uni.setNavigationBarTitle({
         title: '药店指南',

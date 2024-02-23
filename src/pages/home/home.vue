@@ -505,6 +505,7 @@
       refOldDialog.value.show();
     }
   };
+
 </script>
 
 <style lang="scss" scoped>
