@@ -16,7 +16,7 @@ import {
   type IGPay,
   payMoneyOnline,
   toPayPull,
-  getOpenId
+  getOpenId,
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
@@ -372,20 +372,18 @@ export const getQxMedicalNation = async () => {
   // #endif
 
   // #ifdef MP-ALIPAY
-  if (gStores.globalStore.isLogin) {
-    await api.authorization({
-      accountType: 21,
-      code: qrCode,
-      userId: gStores.globalStore.openId,
-      scope: 'medical_ali_pay',
-    });
-  }
-
   requestArg.aliPayUserId = gStores.globalStore.openId;
-  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
   if (!gStores.globalStore.openId) {
     requestArg.aliPayUserId = await getOpenId();
   }
+  await api.authorization({
+    accountType: 21,
+    code: qrCode,
+    userId: requestArg.aliPayUserId,
+    scope: 'medical_ali_pay',
+  });
+
+  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
 
   // #endif
 
@@ -566,7 +564,6 @@ export const isMedicalSelf = async (
        * 支付宝医保插件模式只能是本人
        */
       if (medicalPlugin || medicalNation) {
-
         return await isCanUseMedical(cardNumber);
       }
     }
@@ -1305,7 +1302,6 @@ export const usePayPage = () => {
       ...detailData.value,
       ...uploadRes,
     };
-
 
     uni.hideLoading();
     const info = {
