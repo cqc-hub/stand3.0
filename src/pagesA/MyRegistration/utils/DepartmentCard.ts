@@ -21,6 +21,7 @@ export type TDepartmentDocItem = {
 
 export type TDepartmentDetail = {
   deptId: string;
+  hosDeptId: string;
   deptName: string;
   deptPhoto: string;
   docList: TDepartmentDocItem[];

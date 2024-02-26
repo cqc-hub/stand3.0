@@ -312,7 +312,7 @@
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: '/',
+        path: 'pages/index/test',
         addition: {
           patientId: '_patientId',
         },
