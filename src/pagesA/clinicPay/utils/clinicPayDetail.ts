@@ -1094,6 +1094,7 @@ export const usePayPage = () => {
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
+    const isFamilyPay = getIsFamilyPayment();
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
@@ -1117,11 +1118,16 @@ export const usePayPage = () => {
               changeRefPayList(3);
             }
           } else {
+
             if (flag) {
               changeRefPayList(1);
             } else {
               changeRefPayList(0);
             }
+          }
+
+          if (isFamilyPay && flag) {
+            changeRefPayList(5);
           }
         } else {
           //不是医保
@@ -1147,7 +1153,7 @@ export const usePayPage = () => {
     refPay.value.show();
   };
 
-  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
+  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4 | 5) => {
     let labelPay = '自费支付';
     // #ifdef MP-WEIXIN
     labelPay = '微信自费支付';
@@ -1177,10 +1183,14 @@ export const usePayPage = () => {
         key: 'medicare',
         sort: 4,
       },
+      {
+        label: '医保亲情付（帮家人付款)',
+        key: 'familyPay',
+        sort: 5,
+      },
     ] as const;
     const rList: (typeof tList)[number]['key'][] = ['online'];
-
-    if ([1, 2, 4].includes(type)) {
+    if ([1, 2, 4, 5].includes(type)) {
       rList.push('medicare');
     }
 
@@ -1190,6 +1200,10 @@ export const usePayPage = () => {
 
     if ([3, 4].includes(type)) {
       rList.push('digital');
+    }
+
+    if (type === 5) {
+      rList.push('familyPay');
     }
 
     refPayList.value = tList
@@ -1251,6 +1265,34 @@ export const usePayPage = () => {
         '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
         payArg
       );
+    } else if (item.key === 'familyPay') {
+      const isMedicalMode = getIsMedicalMode();
+
+      if (isMedicalMode) {
+        const cardNumber = pageProps.value.params
+          ? pageProps.value.deParams?.cardNumber
+          : '';
+
+        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat) {
+          await new PatientUtils().upToMedicalPat({
+            pat: gStores.userStore.patChoose,
+            cardNumber,
+          });
+        }
+
+        // #ifdef MP-ALIPAY
+        if (getIsAliMedicalNation()) {
+          // payAliMedicalNation();
+        } else {
+          //亲情付暂时只开发 插件
+          payMoneyMedicalPlugin('family');
+        }
+        // #endif
+
+        // // #ifdef  MP-WEIXIN
+        // wxPayMoneyMedicalPlugin(medicalNationWx);
+        // // #endif
+      }
     }
   };
 
@@ -1365,6 +1407,40 @@ export const usePayPage = () => {
     });
   };
 
+  /**
+   * 是否开启医保亲情付（目前仅支付宝）
+   * @returns
+   */
+  const getIsFamilyPayment = () => {
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+
+    let isFamilyPay = false;
+
+    if (medicalMHelp) {
+      const { alipay } = medicalMHelp;
+
+      // #ifdef MP-ALIPAY
+      if (alipay?.isFamilyPayment) {
+        isFamilyPay = true;
+      }
+      // #endif
+    }
+
+    return isFamilyPay;
+  };
+
+  /** 插件亲情付 新增入参 */
+  const getFamilyArgs = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const { result } = await api.getAliMedicalPat({
+      hosId: selUnPayList.value[0].hosId,
+      patientId: patientId,
+    });
+    return result;
+  };
+
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
     // 医保必然是单选的(后端设置)
@@ -1415,7 +1491,7 @@ export const usePayPage = () => {
   };
 
   // 支付宝 插件医保
-  const payMoneyMedicalPlugin = async () => {
+  const payMoneyMedicalPlugin = async (type?: 'family') => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
 
     const {
@@ -1438,13 +1514,19 @@ export const usePayPage = () => {
         pageProps.value.deParams?.cardNumber ||
         gStores.userStore.patChoose.cardNumber;
 
-      const params = {
+      const params: any = {
         orgId,
         cardType,
         cardNo,
         medOrgOrd,
         // medOrgOrd: medOrgOrd.split(',')[0],
       };
+
+      if (type === 'family') {
+        const { anotherIdNo, anotherName } = await getFamilyArgs();
+        params.anotherIdNo = anotherIdNo;
+        params.anotherName = anotherName;
+      }
 
       const { authCode } = await apiAsync(my.getAuthCode, {
         scopes: ['auth_user', 'nhsamp'],
