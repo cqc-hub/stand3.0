@@ -193,8 +193,8 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         const arg = {
           appId: item.appId,
           path: item.path,
-          extraData: item.query && JSON.parse(item.query) || undefined,
-        }
+          extraData: (item.query && JSON.parse(item.query)) || undefined,
+        };
 
         //跳转小程序
         uni.navigateToMiniProgram(arg);
@@ -247,6 +247,10 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       if (item.path == 'scanCode') {
         //扫一扫
         scanCode();
+      } else if (item.path == 'makePhone') {
+        //拨打电话
+        console.log(333,item.query)
+        makePhone(item.query);
       } else {
         const obj3 = {
           url: item.path,
@@ -262,6 +266,15 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
 
       break;
   }
+};
+
+const makePhone = (query) => {
+  uni.makePhoneCall({
+    phoneNumber: JSON.parse(query).phone,
+    fail(res) {
+      console.warn('拨打电话失败原因', res);
+    },
+  });
 };
 
 //扫一扫功能

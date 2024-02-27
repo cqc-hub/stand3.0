@@ -10,7 +10,7 @@
           />
 
           <view class="f48 row-box mb8">
-            <text class="g-bold">欢迎关注</text>
+            <text class="g-bold">{{ configData.title || '欢迎关注' }}</text>
             <text
               @click="popup.close()"
               class="iconfont close-icon color-888 f48"
@@ -20,7 +20,7 @@
           </view>
 
           <view class="f44 row-box color-blue">
-            {{ $global.systemInfo.name }}公众号
+            {{ $global.systemInfo.name }}{{ configData.theme || '公众号' }}
           </view>
         </view>
 
@@ -28,8 +28,7 @@
           <view class="g-flex-rc-cc p32">
             <view class="qr-code">
               <image
-                v-if="props.imageUrl != ''"
-                :src="props.imageUrl"
+                :src="$global.BASE_IMG + configData.imageCode"
                 mode="widthFix"
                 class="qr-code-img"
                 show-menu-by-longpress
@@ -38,10 +37,13 @@
           </view>
 
           <view class="g-flex-rc-cc color-444 mb32">
-            长按识别二维码，关注公众号
+            {{ configData.subTitle || '长按识别二维码，关注公众号' }}
           </view>
 
-          <view class="g-flex-rc-cc flex-column pb40">
+          <view
+            v-if="!configData.isHideInfo"
+            class="g-flex-rc-cc flex-column pb40"
+          >
             <view v-for="item in tzList" :key="item.title" class="row">
               <view
                 :class="{
@@ -63,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
   import globalGl from '@/config/global';
 
   const tzList = ref([
@@ -88,14 +90,29 @@
 
   const props = withDefaults(
     defineProps<{
-      imageUrl: string;
+      configData: {
+        imageCode?: string;
+        theme?: string;
+        title?: string;
+        subTitle?: string;
+        isHideInfo?: Boolean;
+      };
     }>(),
     {
-      imageUrl: globalGl.BASE_IMG + 'lqCode.jpg',
+      configData: () => {
+        return {
+          imageCode: 'lqCode.jpg',
+          theme: '公众号',
+          title: '欢迎关注',
+          subTitle: '长按识别二维码，关注公众号',
+          isHideInfo: false,
+        };
+      },
     }
   );
 
   const show = () => {
+    console.log(222, props.configData);
     popup.value.open();
   };
 

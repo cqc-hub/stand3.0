@@ -290,7 +290,7 @@
     <homePopup ref="refOldDialog" />
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
-      :imageUrl="$global.BASE_IMG + h5QrCodeImg"
+      :configData="h5QrCodeData || undefined"
     />
 
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
@@ -336,7 +336,7 @@
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
-  const h5QrCodeImg = ref('lqCode.jpg');
+  const h5QrCodeData = ref();
   const tabIndex = ref(0);
 
   //骨架屏配置
@@ -429,11 +429,7 @@
   };
   //打开关注框
   const openShare = (item) => {
-    if (!item) {
-      return;
-    }
-
-    h5QrCodeImg.value = item;
+    h5QrCodeData.value = item;
     homeH5SharePopupRef.value.show();
   };
 
@@ -505,7 +501,6 @@
       refOldDialog.value.show();
     }
   };
-
 </script>
 
 <style lang="scss" scoped>
