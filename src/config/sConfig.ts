@@ -258,12 +258,12 @@ const scJson: Record<string, ISConfig> = {
    * 郸城县人民医院
    */
   1001045: {
-    medicalMHelp: {
-      alipay: {
-        medicalDefault: '1',
-        medicalNation: {},
-      },
-    },
+    // medicalMHelp: {
+    //   alipay: {
+    //     medicalDefault: '1',
+    //     medicalNation: {},
+    //   },
+    // },
   },
 
   /**

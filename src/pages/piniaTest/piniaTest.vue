@@ -313,12 +313,6 @@
         type: 'h5',
         isSelfH5: '1',
         path: 'pages/index/test',
-        addition: {
-          patientId: '_patientId',
-        },
-        extraData: {
-          hosId: 13078,
-        },
       });
     }, 1000);
   });

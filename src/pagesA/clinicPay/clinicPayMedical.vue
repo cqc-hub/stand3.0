@@ -217,7 +217,6 @@
           return;
         }
 
-        await wait(2000);
         queryOrder();
       }
       // #endif
@@ -237,7 +236,7 @@
       title: '查询中',
     });
 
-    await wait(3000);
+    await wait(5000);
     uni.hideLoading();
     const { phsOrderSource, params, orderId } = info.value;
     const { phsOrderNo } = uploadRes.value;
