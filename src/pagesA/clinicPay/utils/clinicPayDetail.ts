@@ -558,13 +558,18 @@ export const isMedicalSelf = async (
 
     // #ifdef MP-ALIPAY
     if (alipay) {
-      const { medicalPlugin, medicalNation } = alipay;
+      const { medicalPlugin, medicalNation, isFamilyPayment } = alipay;
 
       /**
        * 支付宝医保插件模式只能是本人
+       * 插件医保 亲情付 不需要本人判断
        */
       if (medicalPlugin || medicalNation) {
-        return await isCanUseMedical(cardNumber);
+        if (isFamilyPayment === '1') {
+          return true
+        } else {
+          return await isCanUseMedical(cardNumber);
+        }
       }
     }
     // #endif
@@ -1094,7 +1099,6 @@ export const usePayPage = () => {
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
-    const isFamilyPay = getIsFamilyPayment();
 
     if (isMedicalMode) {
       if (selUnPayList.value.length) {
@@ -1118,17 +1122,12 @@ export const usePayPage = () => {
               changeRefPayList(3);
             }
           } else {
-
             if (flag) {
               changeRefPayList(1);
             } else {
               changeRefPayList(0);
             }
-          }
-
-          if (isFamilyPay && flag) {
-            changeRefPayList(5);
-          }
+          } 
         } else {
           //不是医保
           if (isDigitalPay) {
@@ -1153,13 +1152,17 @@ export const usePayPage = () => {
     refPay.value.show();
   };
 
-  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4 | 5) => {
+  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
     let labelPay = '自费支付';
+    let medicalPay = '医保支付';
     // #ifdef MP-WEIXIN
     labelPay = '微信自费支付';
     // #endif
     // #ifdef MP-ALIPAY
     labelPay = '支付宝自费支付';
+    if (getIsFamilyPayment()) {
+      medicalPay = '医保支付(支持亲情付)';
+    }
     // #endif
 
     const tList = [
@@ -1179,18 +1182,13 @@ export const usePayPage = () => {
         sort: 3,
       },
       {
-        label: '医保支付',
+        label: medicalPay,
         key: 'medicare',
         sort: 4,
       },
-      {
-        label: '医保亲情付（帮家人付款)',
-        key: 'familyPay',
-        sort: 5,
-      },
     ] as const;
     const rList: (typeof tList)[number]['key'][] = ['online'];
-    if ([1, 2, 4, 5].includes(type)) {
+    if ([1, 2, 4].includes(type)) {
       rList.push('medicare');
     }
 
@@ -1200,10 +1198,6 @@ export const usePayPage = () => {
 
     if ([3, 4].includes(type)) {
       rList.push('digital');
-    }
-
-    if (type === 5) {
-      rList.push('familyPay');
     }
 
     refPayList.value = tList
@@ -1265,34 +1259,6 @@ export const usePayPage = () => {
         '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
         payArg
       );
-    } else if (item.key === 'familyPay') {
-      const isMedicalMode = getIsMedicalMode();
-
-      if (isMedicalMode) {
-        const cardNumber = pageProps.value.params
-          ? pageProps.value.deParams?.cardNumber
-          : '';
-
-        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat) {
-          await new PatientUtils().upToMedicalPat({
-            pat: gStores.userStore.patChoose,
-            cardNumber,
-          });
-        }
-
-        // #ifdef MP-ALIPAY
-        if (getIsAliMedicalNation()) {
-          // payAliMedicalNation();
-        } else {
-          //亲情付暂时只开发 插件
-          payMoneyMedicalPlugin('family');
-        }
-        // #endif
-
-        // // #ifdef  MP-WEIXIN
-        // wxPayMoneyMedicalPlugin(medicalNationWx);
-        // // #endif
-      }
     }
   };
 
@@ -1491,7 +1457,7 @@ export const usePayPage = () => {
   };
 
   // 支付宝 插件医保
-  const payMoneyMedicalPlugin = async (type?: 'family') => {
+  const payMoneyMedicalPlugin = async () => {
     const isMedicalModePlugin = getIsMedicalModePlugin();
 
     const {
@@ -1501,7 +1467,7 @@ export const usePayPage = () => {
     if (isMedicalModePlugin) {
       const { alipay } = medicalMHelp!;
 
-      const { medicalPlugin } = alipay!;
+      const { medicalPlugin,isFamilyPayment } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
 
@@ -1518,11 +1484,10 @@ export const usePayPage = () => {
         orgId,
         cardType,
         cardNo,
-        medOrgOrd,
-        // medOrgOrd: medOrgOrd.split(',')[0],
+        medOrgOrd, 
       };
 
-      if (type === 'family') {
+      if (isFamilyPayment === '1') {
         const { anotherIdNo, anotherName } = await getFamilyArgs();
         params.anotherIdNo = anotherIdNo;
         params.anotherName = anotherName;
