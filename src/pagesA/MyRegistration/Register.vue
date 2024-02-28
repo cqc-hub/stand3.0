@@ -453,7 +453,10 @@
     //   itemClick(hosList.value[0]);
     // }
 
-    hosList.value = hosList.value.sort((o) => (o.ifClick == '0' ? -1 : 1));
+    // hosList.value = hosList.value.sort((o) => (o.ifClick == '0' ? -1 : 1));
+    const usedList = hosList.value.filter((o) => o.ifClick === '0');
+    const unUsedList = hosList.value.filter((o) => o.ifClick === '1');
+    hosList.value = [...usedList, ...unUsedList];
   };
 
   const regDialogConfirm = ref<any>('');
