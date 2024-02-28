@@ -181,7 +181,7 @@
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
-  const dirUrl = computed(() => props.value._url || '')
+  const dirUrl = computed(() => props.value._url || '');
 
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
@@ -437,13 +437,13 @@
       );
     }
 
-
     if (hosHisMaxLen.value < hosList.value.length) {
       hosHisMaxLen.value = hosList.value.length;
     }
 
     if (getTypeNow.value === '病案复印') {
       const hosIds = medCopyConfigList.value.map((o) => o.hosId + '');
+
       hosList.value.map((o) => {
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
@@ -452,6 +452,8 @@
     // if (hosList.value.length === 1) {
     //   itemClick(hosList.value[0]);
     // }
+
+    hosList.value = hosList.value.sort((o) => (o.ifClick == '0' ? -1 : 1));
   };
 
   const regDialogConfirm = ref<any>('');

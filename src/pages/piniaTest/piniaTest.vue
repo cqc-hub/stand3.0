@@ -312,7 +312,10 @@
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: 'pages/index/test',
+        path: 'mDisease/index/index',
+        addition: {
+          patientId: '_patientId',
+        },
       });
     }, 1000);
   });
