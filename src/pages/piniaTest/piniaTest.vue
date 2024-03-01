@@ -312,11 +312,19 @@
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: 'mDisease/index/index',
+        path: 'mDisease/detail/blood',
         addition: {
           patientId: '_patientId',
         },
       });
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/index/index',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
     }, 1000);
   });
 </script>

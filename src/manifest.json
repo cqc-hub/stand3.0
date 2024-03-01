@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx101158c57640d854",
+    "appid": "wx93d1e2c1e646e342",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021004134632001"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -95,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "渭南电子健康卡",
+  "name": "杭州口腔医院",
   "h5": {
     "router": {
       "base": "./"

@@ -660,7 +660,7 @@ const userApi = {
     getAliMedicalPat: (data) =>
     service.post('/phs-user/relevantPatient/getAliMedicalPat', parm(data), {
       // hideLoading: false,
-    }), 
+    }),
 
   // 获取卡包订单号
   getCardPackOrderId: (data) =>

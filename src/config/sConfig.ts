@@ -84,7 +84,7 @@ interface ISConfig {
 
       /** 医保开启亲情付 */
       isFamilyPayment?: '1';
-      
+
     };
 
     wx?: {
@@ -258,12 +258,12 @@ const scJson: Record<string, ISConfig> = {
    * 郸城县人民医院
    */
   1001045: {
-    // medicalMHelp: {
-    //   alipay: {
-    //     medicalDefault: '1',
-    //     medicalNation: {},
-    //   },
-    // },
+    medicalMHelp: {
+      alipay: {
+        medicalDefault: '1',
+        medicalNation: {},
+      },
+    },
   },
 
   /**
