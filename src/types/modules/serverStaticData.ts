@@ -87,16 +87,18 @@ export interface ISystemConfig_ {
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
 
-    /** 门诊取号 takeNumber */
+    /** 门诊取号 | 在线签到 takeNumber */
     // 列表页面
     takeNumberGoPayBtn?: '1'; // 是否显示门诊缴费入口按钮
     takeNumberQueueBtn?: '1'; // 是否显示排队叫号入口按钮
     takeNumberOnlineBtn?: '1'; // 是否显示在线签到入口按钮
-    takeNumberBtn?: '1'; // 是否显示门诊取号入口按钮
     takeNumberAfterBtnForGoQueueNumber?: '1'; // 取号后  按钮变成 '查看排队信息': 跳 排队叫号; 默认 '刷码签到'
-    takeNumber1QueueBtn?: '1'; // 是否显示排队叫号入口按钮
     takeNumber1ElectronicGuideBtn?: '1'; //否显示排队叫号入口按钮
     takeNumberConfirmAfter?: '1'; // 取号成功后 按照项目配置是否进行弹窗提示(去门诊缴费页面)
+    takeNumberHeadBtns?: TButtonConfig[];
+    onlineSignHeadBtns?: TButtonConfig[];
+    takeNumberConfirmAfterBtn?: TButtonConfig;
+    onlineSignConfirmAfterBtn?: TButtonConfig;
   };
 
   /** 移动端伦理委员会(h5) */
@@ -479,6 +481,7 @@ export type TBannerConfig = XOR<
 
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
+  icon?: string;
 };
 
 /** 挂号记录*/
