@@ -134,7 +134,7 @@
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
         url: '/pagesC/cloudHospital/cloudHospital',
-        loginInterception: '1',
+        loginInterception: '0',
         sort: 2,
       },
       {
