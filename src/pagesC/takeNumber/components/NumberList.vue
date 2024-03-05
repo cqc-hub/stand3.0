@@ -52,7 +52,9 @@
             }"
             class="take-number g-flex-rc-cc f36 g-bold"
           >
-            {{ item.signIn ? '取号' : '不在取号范围' }}
+            {{
+              item.signIn ? (isOnlineSign ? '签到' : '取号') : '不在取号范围'
+            }}
           </view>
         </view>
 

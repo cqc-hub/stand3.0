@@ -312,7 +312,7 @@
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: 'mDisease/detail/blood',
+        path: 'mDisease/detail/healthGrade',
         addition: {
           patientId: '_patientId',
         },

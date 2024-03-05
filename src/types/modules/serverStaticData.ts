@@ -95,10 +95,10 @@ export interface ISystemConfig_ {
     takeNumberAfterBtnForGoQueueNumber?: '1'; // 取号后  按钮变成 '查看排队信息': 跳 排队叫号; 默认 '刷码签到'
     takeNumber1ElectronicGuideBtn?: '1'; //否显示排队叫号入口按钮
     takeNumberConfirmAfter?: '1'; // 取号成功后 按照项目配置是否进行弹窗提示(去门诊缴费页面)
-    takeNumberHeadBtns?: TButtonConfig[];
-    onlineSignHeadBtns?: TButtonConfig[];
-    takeNumberConfirmAfterBtn?: TButtonConfig;
-    onlineSignConfirmAfterBtn?: TButtonConfig;
+    takeNumberHeadBtns?: TButtonConfig[]; // 取号顶部按钮
+    onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
+    takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
+    onlineSignConfirmAfterBtn?: TButtonConfig;  //签到成功后的弹窗(按钮配置)
   };
 
   /** 移动端伦理委员会(h5) */
