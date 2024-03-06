@@ -312,11 +312,22 @@
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
-        path: 'mDisease/detail/healthGrade',
+        path: 'pages/index/test',
         addition: {
           patientId: '_patientId',
         },
       });
+
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/detail/healthGrade',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
+
+
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',

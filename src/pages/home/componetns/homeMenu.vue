@@ -8,7 +8,7 @@
       pillsColor="#fff"
       bgColor="var(--hr-neutral-color-1)"
       pillsBorderRadius="8rpx 8rpx 0 0"
-      paddingItem="0 66rpx"
+      paddingItem="0 33rpx"
       pills
       scroll
     />
