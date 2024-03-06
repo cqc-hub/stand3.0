@@ -309,14 +309,14 @@
 
   onMounted(() => {
     setTimeout(() => {
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pages/index/test',
-        addition: {
-          patientId: '_patientId',
-        },
-      });
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'pages/index/test',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
 
       // useTBanner({
       //   type: 'h5',
@@ -327,6 +327,15 @@
       //   },
       // });
 
+
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'mDisease/detail/blood',
+        addition: {
+          patientId: '_patientId',
+        },
+      });
 
       // useTBanner({
       //   type: 'h5',
