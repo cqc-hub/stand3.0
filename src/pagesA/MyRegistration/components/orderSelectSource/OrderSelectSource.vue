@@ -3,6 +3,7 @@
     <g-popup
       :subTitle="subTitle"
       @hide="hide"
+      zIndex="10"
       title="请选择就诊时间"
       ref="popup"
     >
@@ -153,6 +154,24 @@
         </scroll-view>
       </view>
     </g-popup>
+
+    <xy-dialog
+      :title="fgTitle1115"
+      :show="isFgShow1115"
+      @confirmButton="isFgShow1115 = false"
+      :isShowCancel="false"
+      isMaskClick
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag
+          v-model:title="fgTitle1115"
+          isHideTitle
+          isShowFgTip
+          typeFg="1115"
+          aaa
+        />
+      </scroll-view>
+    </xy-dialog>
   </view>
 </template>
 
@@ -191,6 +210,9 @@
       return {} as TSchInfoWhole;
     }
   });
+
+  const fgTitle1115 = ref('');
+  const isFgShow1115 = ref(false);
   const getPageConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
@@ -277,8 +299,10 @@
           sysCode,
         };
 
-        const { result } = await api.getNumberSource<any>(args);
+        const { result } = await api.getNumberSource<IOrderSource[]>(args);
+
         collapseOrderSourceList.value[listKey] = result || [];
+
         refCollapseNow.init();
       }
     }
@@ -300,6 +324,11 @@
     const selectValue = selectSchInfo.value.amPmResults
       ? currentSchInfo.value
       : selectSchInfo.value;
+
+    if (item.disabled) {
+      isFgShow1115.value = true;
+      return;
+    }
 
     emits('item-click', {
       item,

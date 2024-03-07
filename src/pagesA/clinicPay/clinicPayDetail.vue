@@ -280,7 +280,7 @@
       } else {
         return <IPat>{
           patientNameEncry:
-            pageProps.value.deParams?.patientName || '未知的就诊人',
+            pageProps.value.deParams?.patientName || '就诊人',
           _showId: pageProps.value.deParams?.cardNumber || '',
         };
       }

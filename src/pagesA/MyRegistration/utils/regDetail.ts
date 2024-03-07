@@ -253,7 +253,7 @@ export const waitOrderStatusMap = {
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
     color: '#fff',
-    title: '已登记',
+    title: '已登记，候补中',
     cardColor: 'var(--hr-brand-color-6)',
   },
 
@@ -264,7 +264,7 @@ export const waitOrderStatusMap = {
     color: '#fff',
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
-    title: '已过期',
+    title: '已过期，候补失败',
     cardColor: 'var(--hr-brand-color-6)',
   },
 

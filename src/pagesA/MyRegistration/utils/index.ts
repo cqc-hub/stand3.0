@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import api from '@/service/api';
 
 import { ref, computed, Ref } from 'vue';
-import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
+import { ServerStaticData, ISystemConfig, GStores, apiAsync } from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
@@ -27,6 +27,7 @@ export interface IOrderSource {
   disNo: string;
   numId: string;
   timeDesc: string;
+  disabled?: boolean;
 }
 
 interface IDocRow {
@@ -500,16 +501,16 @@ export const useOrder = (props: Ref<IOrderProps>) => {
         isComplete.value = true;
       });
 
-    if (result && result.length) {
-      // 过滤剩余号源数为零的(精确号源是从 1 开始的)
-      result.filter((o) => o.disNo != '0');
-    }
+    // if (result && result.length) {
+    //   // 过滤剩余号源数为零的(精确号源是从 1 开始的)
+    //   result.filter((o) => o.disNo != '0');
+    // }
 
     orderSourceList.value = result || [];
   };
 
   // 点击某个号源
-  const orderSourceChoose = ({
+  const orderSourceChoose = async ({
     item,
     selectSchInfo,
   }: {

@@ -238,11 +238,18 @@
                     <view
                       v-if="item.itemVal"
                       class="table-title2 table-title-common"
-                      :class="{ down: item.flag == 'L', up: item.flag == 'H' }"
+                      :class="{
+                        down: item.flag == 'L',
+                        up: item.flag == 'H',
+                        'color-red': !['L', 'N'].includes(item.flag!),
+                        'color-blue': item.flag === 'L'
+                       }"
                     >
-                      {{ item.itemVal }}
-                      <text class="down" v-if="item.flag == 'L'">↓</text>
-                      <text class="up" v-if="item.flag == 'H'">↑</text>
+                      {{ item.flag && item.flag.includes('阳') && item.flag || item.itemVal }}
+                      <text class="color-blue" v-if="item.flag == 'L'">↓</text>
+                      <text class="color-danger" v-if="item.flag == 'H'">
+                        ↑
+                      </text>
                     </view>
                     <view v-else class="table-title3 table-title-common"></view>
                     <view class="table-title6 table-title-common">
@@ -656,7 +663,7 @@
                 display: flex;
                 margin-top: 8rpx;
                 padding: 14rpx 16rpx;
-                align-items: center;
+                align-items: flex-start;
               }
               .table-title-common {
                 text-align: center;

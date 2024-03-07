@@ -134,6 +134,10 @@ image {
   color: transparent;
 }
 
+.color-red {
+  color: var(--hr-error-color-6) !important;
+}
+
 .color-blue {
   color: var(--hr-brand-color-6) !important;
 }
