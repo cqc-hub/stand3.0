@@ -46,7 +46,7 @@
             </view>
           </view>
 
-          <view class="g-border box">
+          <view class="g-border box mt16">
             <view class="g-bold f36 g-break-word">
               {{ props.deptName }}
             </view>
