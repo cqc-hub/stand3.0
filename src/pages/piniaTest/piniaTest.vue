@@ -328,14 +328,14 @@
       // });
 
 
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'mDisease/detail/blood',
-        addition: {
-          patientId: '_patientId',
-        },
-      });
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/detail/blood',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
 
       // useTBanner({
       //   type: 'h5',
@@ -345,6 +345,9 @@
       //     patientId: '_patientId',
       //   },
       // });
+
+      useTBanner(healthRecord)
+      // useTBanner(电子导诊单)
     }, 1000);
   });
 </script>

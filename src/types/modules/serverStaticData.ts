@@ -115,6 +115,11 @@ export interface ISystemConfig_ {
   person: {
     // 本系统不需要完善
     isSkipPerfect?: '1';
+    // pagesA/medicalCardMan/medicalCardMan
+    /** 本系统禁用就诊卡二维码 */
+    isQrCodeDisabled?: '1';
+
+    // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
@@ -123,13 +128,10 @@ export interface ISystemConfig_ {
     ageGuardian: number;
     /** 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月） */
     ageChildren: number;
-
     /** 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？ */
     isGuardianWithIdCard?: number;
-
     // 不需要地址
     isDropAddress?: '1';
-
     /** 仅微信, 支付宝 手动 config.json 配置 isOpenOcr */
     ocr?: '0' | '1';
     isFace?: '1';
