@@ -57,7 +57,11 @@
                   <!-- 有就诊人时 -->
                   <block v-if="gStores.userStore.patChoose.patientName">
                     <view class="flex-normal">
-                      <view @tap="cardClick" class="iconfont icon-size">
+                      <view
+                        v-if="personConfig.isQrCodeDisabled !== '1'"
+                        @tap="cardClick"
+                        class="iconfont icon-size"
+                      >
                         &#xe6a7;
                       </view>
                       <view class="patient">
@@ -204,7 +208,11 @@
                 <!-- 有就诊人时 -->
                 <block v-if="gStores.userStore.patChoose.patientName">
                   <view class="flex-normal">
-                    <view @tap="cardClick" class="iconfont icon-size">
+                    <view
+                      v-if="personConfig.isQrCodeDisabled !== '1'"
+                      @tap="cardClick"
+                      class="iconfont icon-size"
+                    >
                       &#xe6a7;
                     </view>
                     <view class="patient">
@@ -313,6 +321,8 @@
     Login,
     LoginType,
     PatientUtils,
+    ServerStaticData,
+    type ISystemConfig,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -337,7 +347,7 @@
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref();
-  const tabIndex = ref(0);
+  const personConfig = ref(<ISystemConfig['person']>{});
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -372,6 +382,7 @@
   });
 
   onLoad(async () => {
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,

@@ -5,7 +5,12 @@
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
         <text class="pat-name bold">{{ pat.patientNameEncry }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
-        <g-tag v-if="pat.defaultFlag === '1'" type="yellow" text="默认" class="mr12" />
+        <g-tag
+          v-if="pat.defaultFlag === '1'"
+          type="yellow"
+          text="默认"
+          class="mr12"
+        />
         <g-tag v-if="pat.healthCardUser === '2'" type="blue" text="医保" />
       </view>
 
@@ -29,7 +34,7 @@
             {{ $global.systemInfo.isOpenHealthCard?.healthCardText }}
           </view>
 
-          <view class="card-top-icon ">
+          <view class="card-top-icon">
             <image
               :src="$global.BASE_IMG + 'health-card-icon.png'"
               mode="widthFix"
@@ -52,12 +57,14 @@
             />
           </view>
 
-          <view class="qx keep-normal">中华人民共和国国家卫生健康委员会监制</view>
+          <view class="qx keep-normal">
+            中华人民共和国国家卫生健康委员会监制
+          </view>
         </view>
       </view>
     </view>
 
-    <view v-else class="pat-card" @click="cardClick">
+    <view v-else class="pat-card" @click.stop="cardClick">
       <view class="card">
         <view class="card-content">
           <view class="card-label">电子就诊卡</view>
@@ -65,7 +72,7 @@
         </view>
       </view>
 
-      <view class="card-container">
+      <view v-if="pageConfig().isQrCodeDisabled !== '1'" class="card-container">
         <image class="qr-code" :src="'/static/image/v-qrcode.png'" />
       </view>
     </view>
@@ -75,9 +82,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref } from 'vue';
+  import { defineComponent, PropType, ref, inject } from 'vue';
   import { IPat } from '@/stores/type';
-  import { nameConvert } from '@/utils';
+  import { nameConvert, type ISystemConfig } from '@/utils';
 
   export default defineComponent({
     props: {
@@ -93,13 +100,22 @@
       const { emit } = ctx;
       const isShowHealthLogin = ref(false);
       const showId = ref('');
+      const pageConfig = inject<() => ISystemConfig['person']>(
+        'pageConfig',
+        <any>{}
+      );
 
       const profileClick = () => {
         emit('profile-click', props.pat);
       };
 
       const cardClick = () => {
-        emit('card-click', props.pat);
+
+        if (pageConfig().isQrCodeDisabled === '1') {
+          profileClick();
+        } else {
+          emit('card-click', props.pat);
+        }
       };
 
       return {
@@ -108,6 +124,7 @@
         isShowHealthLogin,
         showId,
         nameConvert,
+        pageConfig,
       };
     },
   });
@@ -211,8 +228,7 @@
     .health-card {
       height: 350rpx;
       margin-top: 16rpx;
-      background: url(#{$base-url}health-card-bg.png)
-        100%/100% no-repeat;
+      background: url(#{$base-url}health-card-bg.png) 100%/100% no-repeat;
       // border-radius: 16rpx;
 
       .health-card-container {
