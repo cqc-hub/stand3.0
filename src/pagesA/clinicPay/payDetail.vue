@@ -9,7 +9,7 @@
       <view class="head-bg" />
       <view class="container">
         <block v-if="props.payState === '0'">
-          <view class="g-border box page-first-item mb16">
+          <view v-if="qrCode" class="g-border box page-first-item mb16">
             <view class="my-display-none">
               <w-qrcode :options="_qrOpt" ref="refqrcode" />
               <w-barcode :options="_barOpt" ref="refqrbarcode" />
@@ -46,7 +46,7 @@
             </view>
           </view>
 
-          <view class="g-border box">
+          <view class="g-border box mt16">
             <view class="g-bold f36 g-break-word">
               {{ props.deptName }}
             </view>
@@ -878,7 +878,7 @@
   onMounted(async () => {
     await init();
     setTimeout(() => {
-      if (props.value.payState === '0') {
+      if (props.value.payState === '0' && qrCode.value) {
         capture();
       }
     }, 200);

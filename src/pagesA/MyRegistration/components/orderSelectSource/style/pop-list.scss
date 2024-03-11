@@ -38,6 +38,14 @@
       color: var(--hr-brand-color-6);
       background-color: var(--hr-brand-color-1) !important;
     }
+
+    &.item-disabled {
+      background-color: var(--hr-neutral-color-4) !important;
+      .title,
+      .item-desc {
+        color: var(--hr-neutral-color-8);
+      }
+    }
   }
 
   .item-active-border {

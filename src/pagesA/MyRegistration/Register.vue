@@ -1,14 +1,14 @@
 <template>
-  <view class="page">
+  <view class="page g-page">
     <g-flag
       v-if="dirUrl.includes('/pagesA/MyRegistration/selDepartment')"
       isShowFg
       typeFg="84"
     />
-    <view v-if="_type == 3" class="search-input">
+    <view v-if="_type == 3 || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
         v-model:value="searchValue"
-        placeholder="请输入药店名称查询"
+        :placeholder="_type == 3 ? '请输入药店名称查询' : '请输入院区名称'"
         @change="changeInput"
         @confirm="confirmInput"
         @clear="clearInput"
@@ -40,7 +40,7 @@
         <view class="iconfont">&#xe6e8;</view>
       </view>
     </view>
-    <scroll-view class="scroll-container" scroll-y>
+    <scroll-view class="scroll-container g-container" scroll-y>
       <hos-List-Vue
         :disabledKey="listDisableName"
         :isShowMoreItem="_type == 3 ? false : hosList.length <= showMoreItem"
@@ -177,10 +177,12 @@
 
     isLogin?: '1'; // 需要登录?
   }>();
+  const hosHisMaxLen = ref(0);
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
-  const dirUrl = ref(decodeURIComponent(props.value._url));
+  const dirUrl = computed(() => props.value._url || '');
+
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
 
@@ -388,7 +390,6 @@
         type = '3';
         break;
     }
-
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
       medCopyConfigList.value = await ServerStaticData.getSystemConfig(
@@ -436,16 +437,26 @@
       );
     }
 
+    if (hosHisMaxLen.value < hosList.value.length) {
+      hosHisMaxLen.value = hosList.value.length;
+    }
+
     if (getTypeNow.value === '病案复印') {
       const hosIds = medCopyConfigList.value.map((o) => o.hosId + '');
+
       hosList.value.map((o) => {
         o.ifClick = hosIds.includes(o.hosId) ? '0' : '1';
       });
     }
 
-    if (hosList.value.length === 1) {
-      itemClick(hosList.value[0]);
-    }
+    // if (hosList.value.length === 1) {
+    //   itemClick(hosList.value[0]);
+    // }
+
+    // hosList.value = hosList.value.sort((o) => (o.ifClick == '0' ? -1 : 1));
+    const usedList = hosList.value.filter((o) => o.ifClick === '0');
+    const unUsedList = hosList.value.filter((o) => o.ifClick === '1');
+    hosList.value = [...usedList, ...unUsedList];
   };
 
   const regDialogConfirm = ref<any>('');
@@ -503,6 +514,7 @@
 
   onLoad((opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+
     if (props.value._type == 3) {
       uni.setNavigationBarTitle({
         title: '药店指南',
@@ -516,11 +528,6 @@
 
 <style lang="scss" scoped>
   .page {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
     background: var(--hr-neutral-color-1);
 
     .search-input {

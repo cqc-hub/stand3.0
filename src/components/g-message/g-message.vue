@@ -134,7 +134,7 @@
   .popup,
   .g-message {
     position: relative;
-    z-index: 9999;
+    z-index: 10076;
   }
   .text {
     font-size: var(--hr-font-size-base);

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001063",
+  "sysCode": "1001052",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -200,12 +200,23 @@
     },
 
     "1001063": {
-      "wxAppid": "",
-      "alipayAppid": "2021002199689404",
+      "wxAppid": "wx93d1e2c1e646e342",
+      "alipayAppid": "2021004134632001",
       "h5Appid": "",
+      "isvAlipayAppid": "2021004134663007",
       "name": "杭州口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+
+    "1001065": {
+      "wxAppid": "wx78636dc13e06e91c",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "浙江省肿瘤医院国际保健中心",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
       "isOpenOcr": false
     },
 

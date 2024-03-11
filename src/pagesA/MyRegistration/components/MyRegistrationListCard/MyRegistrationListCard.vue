@@ -19,7 +19,7 @@
         </view>
         <view
           :style="{
-            color: getStatusConfig(item.orderStatus).cardColor,
+            color: getStatusConfig(item.orderStatus, isWaitReg).cardColor,
           }"
           class="text-no-wrap f32"
         >
@@ -28,7 +28,7 @@
       </view>
 
       <view @click="goDetail(item)" class="content">
-        <view class="row f28">
+        <view v-if="item.patientNameEncry" class="row f28">
           <view class="label text-no-wrap color-888">就诊人</view>
           <view class="body flex-between">
             <text>
@@ -145,6 +145,7 @@
     list: IRegistrationCardItem[];
     showYuanNeiDaoHanBtn: string[];
     showPaiDuiJiaoHaoBtn: string[];
+    isWaitReg: boolean;
     showReOrderBtn: boolean;
     isShowYuWzBtn: boolean;
     anotherYwzConditions: boolean;
@@ -153,7 +154,7 @@
     thRegisterId?: string;
     config: ISystemConfig['order'];
   }>();
-  const emits = defineEmits(['ywz-click']);
+  const emits = defineEmits(['ywz-click', 'go-detail']);
 
   const getCustomBtns = computed(() => {
     const list = props.config.regListItemCustomButtons;
@@ -315,17 +316,8 @@
     emits('ywz-click', item);
   };
 
-  // ! 组件内部应该仅做交互, 数据展示 具体的动作行为应该事件抛出到外部处理
   const goDetail = (item: IRegistrationCardItem) => {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-        ...item,
-        orderId: item.orderId,
-        hosOrderId: item.hosOrderId,
-        preWz: item.orderStatus === '10' && '1',
-        thRegisterId: props.thRegisterId,
-      }),
-    });
+    emits('go-detail', item);
   };
 </script>
 

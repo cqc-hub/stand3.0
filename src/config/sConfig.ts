@@ -17,9 +17,6 @@ interface ISConfig {
 
     /** 支付宝, 仅手机号授权(无身份证) */
     isAliAuthBase?: '1';
-
-    /** 默认代开发且仅手机号授权时候必给 */
-    isvAlipayAppid?: string;
   };
 
   // 就诊人 ----------------------------
@@ -84,6 +81,10 @@ interface ISConfig {
 
       /** 挂号医保 */
       isMedicalOrder?: '1';
+
+      /** 医保开启亲情付 */
+      isFamilyPayment?: '1';
+
     };
 
     wx?: {
@@ -117,7 +118,14 @@ const scJson: Record<string, ISConfig> = {
   1001063: {
     login: {
       isAliIndependentDev: '1',
+      isSkipPerfect: '1',
       isAliAuthBase: '1',
+    },
+  },
+
+  1001065: {
+    login: {
+      isSkipPerfect: '1',
     },
   },
 
@@ -212,6 +220,7 @@ const scJson: Record<string, ISConfig> = {
           orgId: { 1279: 'H33100300340' },
           cardType: '01',
         },
+        isFamilyPayment: '1',
       },
     },
   },
@@ -228,10 +237,10 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 
-      // alipay: {
-      //   medicalDefault: '1',
-      //   medicalNation: {},
-      // },
+      alipay: {
+        // medicalDefault: '1',
+        medicalNation: {},
+      },
 
       wx: {
         medicalNation: {
@@ -246,7 +255,7 @@ const scJson: Record<string, ISConfig> = {
   },
 
   /**
-   * 西安红会
+   * 郸城县人民医院
    */
   1001045: {
     medicalMHelp: {
@@ -254,7 +263,6 @@ const scJson: Record<string, ISConfig> = {
         medicalDefault: '1',
         medicalNation: {},
       },
-
     },
   },
 

@@ -16,44 +16,12 @@ import {
   type IGPay,
   payMoneyOnline,
   toPayPull,
-  getOpenid,
+  getOpenId,
 } from '@/components/g-pay/index';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import { useCacheStore } from '@/stores';
-
-// api.getUnpaidClinicList = () =>
-//   Promise.resolve({
-//     result: {
-//       patientName: '支悦童',
-//       clinicalSettlementResultList: [
-//         {
-//           deptName: '神经内科',
-//           clinicId: '1747136655025532928',
-//           subIds: '1747136655025532928',
-//           deptId: 'A0102013',
-//           hosId: '12720',
-//           payState: '1',
-//           serialNo: '9245267',
-//           childOrder: '1976507',
-//           docName: '张朋',
-//           costTypeName: '智慧医保',
-//           visitDate: '2024-01-23',
-//           hosName: '郸城县人民医院',
-//           totalCost: '1.22',
-//           visitNo: '2024012310464944',
-//         },
-//       ],
-//       cardNumber: '00080631',
-//     },
-//     timeTaken: 234,
-//     code: 0,
-//     functionVersion:
-//       '[{"functionType":"2","version":"V0.0.57"},{"functionType":"1","version":"V0.0.1511111"}]',
-//     message: '成功',
-//     respCode: 999002,
-//   });
 
 export const tradeType = {
   '1': '自费',
@@ -399,23 +367,23 @@ export const getQxMedicalNation = async () => {
 
   requestArg.openId = gStores.globalStore.openId;
   if (requestArg.openId === '') {
-    requestArg.openId = await getOpenid();
+    requestArg.openId = await getOpenId();
   }
   // #endif
 
   // #ifdef MP-ALIPAY
+  requestArg.aliPayUserId = gStores.globalStore.openId;
+  if (!gStores.globalStore.openId) {
+    requestArg.aliPayUserId = await getOpenId();
+  }
   await api.authorization({
     accountType: 21,
     code: qrCode,
-    userId: gStores.globalStore.openId,
+    userId: requestArg.aliPayUserId,
     scope: 'medical_ali_pay',
   });
 
-  requestArg.aliPayUserId = gStores.globalStore.openId;
   requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
-  if (!gStores.globalStore.openId) {
-    requestArg.aliPayUserId = await getOpenid();
-  }
 
   // #endif
 
@@ -590,15 +558,18 @@ export const isMedicalSelf = async (
 
     // #ifdef MP-ALIPAY
     if (alipay) {
-      const { medicalPlugin, medicalNation } = alipay;
+      const { medicalPlugin, medicalNation, isFamilyPayment } = alipay;
 
       /**
        * 支付宝医保插件模式只能是本人
+       * 插件医保 亲情付 不需要本人判断
        */
       if (medicalPlugin || medicalNation) {
-        console.log(await isCanUseMedical(cardNumber), 'cqc');
-
-        return await isCanUseMedical(cardNumber);
+        if (isFamilyPayment === '1') {
+          return true
+        } else {
+          return await isCanUseMedical(cardNumber);
+        }
       }
     }
     // #endif
@@ -1151,14 +1122,12 @@ export const usePayPage = () => {
               changeRefPayList(3);
             }
           } else {
-            console.log('cqc', flag);
-
             if (flag) {
               changeRefPayList(1);
             } else {
               changeRefPayList(0);
             }
-          }
+          } 
         } else {
           //不是医保
           if (isDigitalPay) {
@@ -1185,11 +1154,15 @@ export const usePayPage = () => {
 
   const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
     let labelPay = '自费支付';
+    let medicalPay = '医保支付';
     // #ifdef MP-WEIXIN
     labelPay = '微信自费支付';
     // #endif
     // #ifdef MP-ALIPAY
     labelPay = '支付宝自费支付';
+    if (getIsFamilyPayment()) {
+      medicalPay = '医保支付(支持亲情付)';
+    }
     // #endif
 
     const tList = [
@@ -1209,13 +1182,12 @@ export const usePayPage = () => {
         sort: 3,
       },
       {
-        label: '医保支付',
+        label: medicalPay,
         key: 'medicare',
         sort: 4,
       },
     ] as const;
     const rList: (typeof tList)[number]['key'][] = ['online'];
-
     if ([1, 2, 4].includes(type)) {
       rList.push('medicare');
     }
@@ -1339,8 +1311,6 @@ export const usePayPage = () => {
       ...uploadRes,
     };
 
-    console.log(payInfoArg);
-
     uni.hideLoading();
     const info = {
       ...item,
@@ -1403,6 +1373,40 @@ export const usePayPage = () => {
     });
   };
 
+  /**
+   * 是否开启医保亲情付（目前仅支付宝）
+   * @returns
+   */
+  const getIsFamilyPayment = () => {
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+
+    let isFamilyPay = false;
+
+    if (medicalMHelp) {
+      const { alipay } = medicalMHelp;
+
+      // #ifdef MP-ALIPAY
+      if (alipay?.isFamilyPayment) {
+        isFamilyPay = true;
+      }
+      // #endif
+    }
+
+    return isFamilyPay;
+  };
+
+  /** 插件亲情付 新增入参 */
+  const getFamilyArgs = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const { result } = await api.getAliMedicalPat({
+      hosId: selUnPayList.value[0].hosId,
+      patientId: patientId,
+    });
+    return result;
+  };
+
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
     // 医保必然是单选的(后端设置)
@@ -1463,7 +1467,7 @@ export const usePayPage = () => {
     if (isMedicalModePlugin) {
       const { alipay } = medicalMHelp!;
 
-      const { medicalPlugin } = alipay!;
+      const { medicalPlugin,isFamilyPayment } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
 
@@ -1476,13 +1480,18 @@ export const usePayPage = () => {
         pageProps.value.deParams?.cardNumber ||
         gStores.userStore.patChoose.cardNumber;
 
-      const params = {
+      const params: any = {
         orgId,
         cardType,
         cardNo,
-        medOrgOrd,
-        // medOrgOrd: medOrgOrd.split(',')[0],
+        medOrgOrd, 
       };
+
+      if (isFamilyPayment === '1') {
+        const { anotherIdNo, anotherName } = await getFamilyArgs();
+        params.anotherIdNo = anotherIdNo;
+        params.anotherName = anotherName;
+      }
 
       const { authCode } = await apiAsync(my.getAuthCode, {
         scopes: ['auth_user', 'nhsamp'],

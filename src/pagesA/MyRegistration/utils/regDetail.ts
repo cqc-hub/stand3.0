@@ -10,6 +10,7 @@ export interface IPageProps {
   thRegisterId?: string;
   orderStatus: string; // 挂号状态
   alternateId?: string; // orderStatus === 3 候补预约时候有
+  _type?: 'waitReg';
 }
 
 /**
@@ -170,15 +171,7 @@ export const orderStatusMap = {
     title: '待就诊',
     cardColor: 'var(--hr-brand-color-6)',
   },
-  // 候补挂号
-  '3': {
-    headerClass: 'header-green',
-    headerBgIcon: '&#xe6d0;',
-    headerIcon: '&#xe6c7;',
-    color: '#fff',
-    title: '候补挂号',
-    cardColor: 'var(--hr-brand-color-6)',
-  },
+
   // 已退号
   '23': {
     headerClass: 'header-dark',
@@ -250,10 +243,53 @@ export const orderStatusMap = {
   },
 } as const;
 
+export const waitOrderStatusMap = {
+  // 候补挂号 0已挂号 1已登记(这个状态可以取消预约) 2待支付 3已过期 4已取消
+  // 5候补失败 6已退号 7已停诊 8已就诊
+  '0': orderStatusMap['100'],
+
+  '1': {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已登记，候补中',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
+
+  '2': orderStatusMap['10'],
+
+  '3': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已过期，候补失败',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
+
+  '4': orderStatusMap['45'],
+
+  '5': orderStatusMap['20'],
+
+  '6': orderStatusMap['42'],
+
+  '7': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已停诊',
+    cardColor: 'var(--hr-neutral-color-7)',
+  },
+
+  '8': orderStatusMap['70'],
+} as const;
+
 export type OrderStatus = keyof typeof orderStatusMap;
 
 export interface IRegInfo {
-  orderStatus: OrderStatus;
+  orderStatus: string;
   patientId: string;
   hisResult: string;
   cardNumber: string;
@@ -293,8 +329,10 @@ export interface IRegInfo {
   _hosAccountOffsetFee: string;
 }
 
-export const getStatusConfig = (status: OrderStatus) => {
-  if (orderStatusMap[status]) {
+export const getStatusConfig = (status: string, isWaitReg: boolean) => {
+  if (isWaitReg && waitOrderStatusMap[status]) {
+    return waitOrderStatusMap[status];
+  } else if (!isWaitReg && orderStatusMap[status]) {
     return orderStatusMap[status];
   } else {
     return {
@@ -309,14 +347,34 @@ export const getStatusConfig = (status: OrderStatus) => {
   }
 };
 
+const getWaitRegStatusConfig = (status: string) => {
+  if (waitOrderStatusMap[status]) {
+    return waitOrderStatusMap[status];
+  } else {
+    return {
+      title: '未知的状态',
+      color: 'var(--hr-error-color-6)',
+
+      headerClass: '',
+      headerBgIcon: '&#xe6de;',
+      headerIcon: '&#xe6d5;',
+      cardColor: 'var(--hr-neutral-color-7)',
+    };
+  }
+};
+
 export const getOrderStatusTitle = (
-  status: OrderStatus,
-  isOrderPay
+  status: string,
+  isOrderPay,
+  isWaitReg: boolean
 ): string => {
+  if (isWaitReg) {
+    return getWaitRegStatusConfig(status).title;
+  }
   if (isOrderPay === '1' && status === '0') {
     return '已挂号';
   } else {
-    return getStatusConfig(status).title;
+    return getStatusConfig(status, isWaitReg).title;
   }
 };
 

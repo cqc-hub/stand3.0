@@ -192,12 +192,15 @@
   import Calendar from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/util.js';
   import DatetimeCalendarItem from './DatetimeCalendarItem.vue';
   import timePicker from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue';
-  import { initVueI18n } from '@dcloudio/uni-i18n';
   import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
+
+  import { initVueI18n } from '@dcloudio/uni-i18n';
   import { GStores } from '@/utils';
   import { nextTick } from 'vue';
+  import dayjs from 'dayjs';
 
   const { t } = initVueI18n(messages);
+  let n = 0;
   /**
    * Calendar 日历
    * @description 日历组件可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等
@@ -726,12 +729,13 @@
       },
 
       getNextMonth() {
-        const nextDate = this.cale.getDate(
-          this.nowDate.fullDate,
-          +1,
-          'month'
-        ).fullDate;
+        // const nextDate = this.cale.getDate(
+        //   this.nowDate.fullDate,
+        //   +1,
+        //   'month'
+        // ).fullDate;
 
+        const nextDate = dayjs(this.nowDate.fullDate).add(1, 'month').format('YYYY-MM-DD')
         this.setNextMonth(nextDate);
       },
 

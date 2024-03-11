@@ -294,9 +294,60 @@
     },
   };
 
+  const 种植档案: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesB/toothRecord/index',
+    text: '种植档案',
+    addition: {
+      patientId: '_patientId',
+    },
+    extraData: {
+      hosId: 13078,
+    },
+  };
+
   onMounted(() => {
     setTimeout(() => {
-      useTBanner(queryNumber);
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'pages/index/test',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
+
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/detail/healthGrade',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
+
+
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/detail/blood',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
+
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'mDisease/index/index',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
+
+      useTBanner(healthRecord)
+      // useTBanner(电子导诊单)
     }, 1000);
   });
 </script>

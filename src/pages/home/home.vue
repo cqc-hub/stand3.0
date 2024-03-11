@@ -57,7 +57,11 @@
                   <!-- 有就诊人时 -->
                   <block v-if="gStores.userStore.patChoose.patientName">
                     <view class="flex-normal">
-                      <view @tap="cardClick" class="iconfont icon-size">
+                      <view
+                        v-if="personConfig.isQrCodeDisabled !== '1'"
+                        @tap="cardClick"
+                        class="iconfont icon-size"
+                      >
                         &#xe6a7;
                       </view>
                       <view class="patient">
@@ -204,7 +208,11 @@
                 <!-- 有就诊人时 -->
                 <block v-if="gStores.userStore.patChoose.patientName">
                   <view class="flex-normal">
-                    <view @tap="cardClick" class="iconfont icon-size">
+                    <view
+                      v-if="personConfig.isQrCodeDisabled !== '1'"
+                      @tap="cardClick"
+                      class="iconfont icon-size"
+                    >
                       &#xe6a7;
                     </view>
                     <view class="patient">
@@ -290,7 +298,7 @@
     <homePopup ref="refOldDialog" />
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
-      :imageUrl="$global.BASE_IMG + h5QrCodeImg"
+      :configData="h5QrCodeData || undefined"
     />
 
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
@@ -313,6 +321,8 @@
     Login,
     LoginType,
     PatientUtils,
+    ServerStaticData,
+    type ISystemConfig,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -336,8 +346,8 @@
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
   const homeH5SharePopupRef = ref('' as any);
-  const h5QrCodeImg = ref('lqCode.jpg');
-  const tabIndex = ref(0);
+  const h5QrCodeData = ref();
+  const personConfig = ref(<ISystemConfig['person']>{});
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -372,6 +382,7 @@
   });
 
   onLoad(async () => {
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,
@@ -429,11 +440,7 @@
   };
   //打开关注框
   const openShare = (item) => {
-    if (!item) {
-      return;
-    }
-
-    h5QrCodeImg.value = item;
+    h5QrCodeData.value = item;
     homeH5SharePopupRef.value.show();
   };
 

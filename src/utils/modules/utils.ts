@@ -2,6 +2,7 @@ import { useRouterStore } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';
+import { useCacheStore } from '@/stores';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -28,7 +29,7 @@ type TFirstParams<T> = T extends [infer K] ? K : any;
 export const apiAsync: <
   T extends {
     (
-      opt: { success(any): void; fail(any): any; [key: string]: any },
+      opt: { success(any): any; fail(any): any; [key: string]: any },
       ...restOpt: any[]
     ): any;
   }
@@ -325,4 +326,18 @@ export const getLocation = async function (isForce?: boolean): Promise<{
       reAuth();
     }
   });
+};
+
+//拼接path的方法
+export const addHosIdForSelfH5Path = (path: string) => {
+  const cacheStore = useCacheStore();
+  if (
+    cacheStore.isShowChooseHos &&
+    cacheStore.hosId !== '' &&
+    !path.includes('hosId')
+  ) {
+    let connector = path.includes('?') ? '&' : '?';
+    path += `${connector}hosId=${cacheStore.hosId}`;
+  }
+  return path;
 };

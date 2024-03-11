@@ -51,7 +51,7 @@
     <homePopup ref="refOldDialog" />
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
-      :imageUrl="$global.BASE_IMG + h5QrCodeImg"
+      :configData="h5QrCodeData || undefined"
     />
     <home-Tabbar :systemModeOld="gStores.globalStore.modeOld" />
     <g-message />
@@ -75,7 +75,7 @@
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
 
   const homeH5SharePopupRef = ref('' as any);
-  const h5QrCodeImg = ref('lqCode.jpg');
+  const h5QrCodeData = ref({});
   const viewerStore = useViewerStore();
 
   //骨架屏配置
@@ -186,7 +186,7 @@
 
   //打开关注框
   const openShare = (item) => {
-    h5QrCodeImg.value = item;
+    h5QrCodeData.value = item;
     homeH5SharePopupRef.value.show();
   };
 </script>

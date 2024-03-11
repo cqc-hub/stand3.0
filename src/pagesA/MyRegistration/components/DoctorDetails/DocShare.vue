@@ -91,7 +91,6 @@
   const popup = ref<any>('');
   const popupBottom = ref<any>('');
   const qrcode = ref<any>('');
-  const bgHeadHeight = ref('400rpx');
   const inst = getCurrentInstance();
   const gStores = new GStores();
   const isWxRequestQxDialogShow = ref(false);
@@ -375,8 +374,6 @@
     docName = docName || '';
     docTitleName = docTitleName || '';
 
-    docTitleName = docTitleName ?? '';
-
     uni.showLoading({
       mask: true,
     });
@@ -472,30 +469,37 @@
 
     ctx.save();
 
+    ctx.setFillStyle('#296fff');
     const docTitle = docTitleName;
+
     ctx.setFontSize(13);
 
-    fillRoundRect(
-      ctx,
-      28,
-      avatarBox.top + 11,
-      ctx.measureText(docTitle).width + 9,
-      16,
-      4,
-      '#ccddff'
-    );
+    if (docTitle) {
+      fillRoundRect(
+        ctx,
+        28,
+        avatarBox.top + 11,
+        ctx.measureText(docTitle).width + 9,
+        16,
+        4,
+        '#ccddff'
+      );
 
-    ctx.setFillStyle('#296fff');
-    ctx.fillText(docTitle, 32, avatarBox.top + 24);
+      ctx.fillText(docTitle, 32, avatarBox.top + 24);
+    }
 
     if (docJobName) {
+      const pLeft = docTitle ? 32 : 21;
+      const docTitleWidth =
+        (docTitle && ctx.measureText(docTitle).width) || 0;
+
       if (docJobName.length > 10) {
         docJobName = docJobName.substring(0, 10) + '..';
       }
 
       fillRoundRect(
         ctx,
-        32 + ctx.measureText(docTitle).width + 10,
+        pLeft + docTitleWidth + 10,
         avatarBox.top + 11,
         ctx.measureText(docJobName).width + 9,
         16,
@@ -505,7 +509,7 @@
 
       ctx.fillText(
         docJobName,
-        32 + ctx.measureText(docTitle).width + 10 + 5,
+        pLeft + docTitleWidth + 10 + 5,
         avatarBox.top + 24
       );
     }
@@ -514,11 +518,18 @@
 
     ctx.save();
     ctx.setFontSize(14);
-    ctx.fillText(
-      (hosName || '') + (deptName ? `·${deptName}` : ''),
+    const localName = (hosName || '') + (deptName ? `·${deptName}` : '');
+
+    drawTextPrevWrap(
+      ctx,
+      localName,
       32,
-      avatarBox.top + 24 + 24
+      avatarBox.top + 24 + 24,
+      20,
+      boxWidth - 66,
+      2
     );
+    // ctx.fillText(localName, 32, avatarBox.top + 24 + 24);
 
     ctx.save();
 
@@ -560,8 +571,6 @@
     ctx.save();
 
     ctx.draw();
-
-
 
     uni.hideLoading();
     loadingSuccess(void 0);

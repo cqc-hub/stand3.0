@@ -86,10 +86,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { GStores, PatientUtils, apiAsync } from '@/utils';
+  import { onLoad } from '@dcloudio/uni-app';
   import { IPat } from '@/stores';
-  import { ref } from 'vue';
+  import { ref, provide, readonly } from 'vue';
   import { getHealthCardCode } from './utils/index';
+  import {
+    GStores,
+    PatientUtils,
+    apiAsync,
+    ServerStaticData,
+    type ISystemConfig,
+  } from '@/utils';
 
   import globalGl from '@/config/global';
 
@@ -98,6 +105,8 @@
   const gStore = new GStores();
   const isShowHealthCardMode = ref(false);
   const patientUtils = new PatientUtils();
+  const pageConfig = ref(<ISystemConfig['person']>{});
+  provide('pageConfig', () => readonly(pageConfig.value));
 
   // #ifdef MP-WEIXIN
   if (globalGl.systemInfo.isOpenHealthCard) {
@@ -178,6 +187,10 @@
   };
 
   patientUtils.getPatCardList();
+
+  onLoad(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+  });
 </script>
 
 <style lang="scss" scoped>

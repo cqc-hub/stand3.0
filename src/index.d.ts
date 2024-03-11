@@ -31,6 +31,7 @@ declare const __wxConfig: {
 interface ISystemGlobalItem {
   wxAppid: string;
   alipayAppid: string;
+  isvAlipayAppid: string;
   toutiaoAppid: string;
   h5Appid: string;
   h5AppidDisabledInTest?: boolean;

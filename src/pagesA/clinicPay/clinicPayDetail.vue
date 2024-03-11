@@ -280,7 +280,7 @@
       } else {
         return <IPat>{
           patientNameEncry:
-            pageProps.value.deParams?.patientName || '未知的就诊人',
+            pageProps.value.deParams?.patientName || '就诊人',
           _showId: pageProps.value.deParams?.cardNumber || '',
         };
       }
@@ -359,6 +359,8 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
+      console.log(pageProps.value, 'pageProps.valuepageProps.value');
+
 
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);

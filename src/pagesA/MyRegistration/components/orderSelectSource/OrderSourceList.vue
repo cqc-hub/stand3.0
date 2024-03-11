@@ -17,6 +17,7 @@
       <view
         :class="{
           'item-active': isAllActive || isActive(item.numId),
+          'item-disabled': item.disabled,
         }"
         :style="{
           'background-color': itemBgc,

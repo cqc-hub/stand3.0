@@ -5,13 +5,13 @@ import {
   insertsObject,
   joinQuery,
 } from '@/common';
-import { ISelectOptions } from '@/components/g-form';
+import { ISelectOptions, TAddress } from '@/components/g-form';
 import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType, Split, Merge, FilterOptional } from '@/typeUtils';
-import { getMiniProgramEnv, ApiParamsConfig } from '@/utils';
+import { getMiniProgramEnv, ApiParamsConfig, addHosIdForSelfH5Path } from '@/utils';
 import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -32,7 +32,6 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
   if (result && result.MEDICAL_CASE_COPY) {
     const _configList = JSON.parse(result.MEDICAL_CASE_COPY);
-    console.log(_configList, 233);
 
     if (_configList.length) {
       const configList: any[] = [];
@@ -202,6 +201,7 @@ export const useTBanner = async (
       }
 
       fullUrl = baseUrl + fullUrl;
+      fullUrl = addHosIdForSelfH5Path(fullUrl);
 
       fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),
@@ -305,7 +305,7 @@ export class ServerStaticData {
     }
   }
 
-  static async getAddressByLevel(upDivision = ''): Promise<ISelectOptions[]> {
+  static async getAddressByLevel(upDivision = ''): Promise<TAddress[]> {
     const { result } = await api.getDivisionByLevel({
       upDivision,
     });
@@ -433,7 +433,21 @@ export class ServerStaticData {
   }
 
   /**
-   * 01身份证 02居民户口簿 03护照 031中国籍普通护照
+   *
+   *  01身份证
+   * 02居民户口簿
+   * 03护照
+   * 031中国籍普通护照
+   * 032外国籍护照
+   *  04军官证
+   * 05驾驶证
+   * 06港澳居民来往内地通行证
+   * 08 港澳居民居住证
+   * 07台湾居民来往内地通行证
+   * 11台湾居民居住证
+   * 12 外国人永久居留身份证(现版）
+   * 13 外国人永久居留身份证(新版）
+   * 99其他法定有效证件
    */
   static async getIdTypeTerms(): Promise<ISelectOptions[]> {
     const gStores = new GStores();

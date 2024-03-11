@@ -241,6 +241,16 @@
       </uni-data-picker>
     </view>
 
+    <uv-picker
+      :columns="addressList"
+      :loading="addressLoading"
+      @change="_addressChange"
+      @confirm="addressConfirm"
+      ref="refAddressPicker"
+      keyName="label"
+      showToolbar
+    />
+
     <wyb-action-sheet
       ref="actionSheet"
       :options="actionSheetOpt"
@@ -268,12 +278,13 @@
 <script lang="ts" setup>
   import { ref, withDefaults, computed } from 'vue';
 
-  import type {
+  import {
     TInstance,
     ISelectOptions,
     IRule,
     IInputVerifyInstance,
     ISwitchInstance,
+    useAddress,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
   import { ServerStaticData, useOcr, wait } from '@/utils';
@@ -380,6 +391,22 @@
     });
   };
 
+  const { addressList, addressLoading, getAddressList, refAddressPicker } =
+    useAddress();
+  const _addressChange = (e) => {
+    const { index, columnIndex } = e;
+    const addressItem = addressList.value[columnIndex][index];
+
+    getAddressList(addressItem);
+  };
+  const addressConfirm = (e) => {
+    const { value } = e;
+    value.map((o) => {
+      o.text = o.label;
+    });
+    addressChange(cacheItem!, value);
+  };
+
   const requestVerify = async (item: IInputVerifyInstance) => {
     if (timer) {
       clearTimer();
@@ -449,8 +476,8 @@
       }
 
       if (field === 'address' && !o.options) {
-        o.options = await ServerStaticData.getAddressData();
-        // o.options = await ServerStaticData.getAddressByLevel();
+        // o.options = await ServerStaticData.getAddressData();
+        getAddressList();
       }
 
       if (field === 'select') {
@@ -490,13 +517,19 @@
     emits('row-click', { item });
     if (item.field === 'select' || item.field === 'address') {
       const { options } = item;
+      cacheItem = item;
+
+      if (item.field === 'address') {
+        // dataPicker.value.show();
+        refAddressPicker.value.open();
+        return;
+      }
 
       if (!options) {
         return;
       }
 
       actionSheetOpt.value = options;
-      cacheItem = item;
 
       if (item.field === 'select') {
         if (props.selectInUniDataPicker) {
@@ -504,10 +537,6 @@
         } else {
           actionSheet.value.showActionSheet();
         }
-      }
-
-      if (item.field === 'address') {
-        dataPicker.value.show();
       }
     }
   };
@@ -555,8 +584,6 @@
     const { key, field } = item;
 
     if (field === 'address') {
-      console.log(v);
-
       const selLabels = v.map((o) => o.text).join('');
       setData({
         [key]: selLabels,
@@ -566,17 +593,6 @@
         item: item,
         value: v,
       });
-
-      const { node } = v;
-
-      if (node) {
-        const { id, divisionType } = node;
-        // 第三级是最后一级, 不需要继续了
-        if (divisionType !== '3') {
-          // node.children = await ServerStaticData.getAddressByLevel(id);
-        }
-      }
-      // console.log(v);
     }
   };
 

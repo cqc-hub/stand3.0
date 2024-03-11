@@ -13,7 +13,8 @@
   // #endif
 
   const globalStore = useGlobalStore();
-  let _cacheChangePatTime = '';
+  let _cacheChangePatTime = '',
+    showTime = 0;
 
   onLaunch(async (opt) => {
     // console.log('App Launch', opt);
@@ -39,6 +40,22 @@
   onShow(async (opt) => {
     console.log('App Show', opt);
     globalStore.onAppShow(opt);
+    // #ifdef MP-WEIXIN
+    if (!showTime) {
+      showTime = ((new Date() as unknown as number) * 1) / 1000;
+      wx.login();
+    } else {
+      setTimeout(() => {
+        const nowTime = ((new Date() as unknown as number) * 1) / 1000;
+        const difTimeHour = Math.ceil(nowTime - showTime) / 60 / 60 / 6;
+
+        if (difTimeHour >= 6) {
+          showTime = ((new Date() as unknown as number) * 1) / 1000;
+          wx.login();
+        }
+      }, 3000);
+    }
+    // #endif
 
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;
@@ -150,7 +167,6 @@
         });
       }
     }
-
   });
 </script>
 <style lang="scss">

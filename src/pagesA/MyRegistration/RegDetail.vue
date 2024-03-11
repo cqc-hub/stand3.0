@@ -40,7 +40,8 @@
               {{
                 getOrderStatusTitle(
                   orderRegInfo.orderStatus,
-                  orderConfig.isOrderPay
+                  orderConfig.isOrderPay,
+                  isWaitReg
                 )
               }}
             </view>
@@ -229,7 +230,12 @@
           </view>
 
           <view class="container-box order-patient g-border p32">
-            <g-flag typeFg="4" isShowFgTip aaa />
+            <g-flag
+              v-if="isRender"
+              :typeFg="isWaitReg ? '1114' : '4'"
+              isShowFgTip
+              aaa
+            />
           </view>
         </view>
       </view>
@@ -245,55 +251,69 @@
         <view>首页</view>
       </view>
 
-      <button
-        v-if="['0', '3'].includes(orderRegInfo.orderStatus)"
-        @click="refoundOrder"
-        class="btn btn-plain btn-error g-border"
-      >
-        {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
-      </button>
-
-      <block v-if="orderRegInfo.orderStatus === '70'">
-        <button @click="againOrder" class="btn g-border btn-normal">
-          再次预约
+      <template v-if="isWaitReg">
+        <button
+          v-if="['1'].includes(orderRegInfo.orderStatus)"
+          @click="refoundOrder"
+          class="btn btn-plain btn-error g-border"
+        >
+          {{ '取消候补' }}
         </button>
+      </template>
+
+      <template v-else>
+        <button
+          v-if="['0'].includes(orderRegInfo.orderStatus)"
+          @click="refoundOrder"
+          class="btn btn-plain btn-error g-border"
+        >
+          {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
+        </button>
+
+        <block v-if="orderRegInfo.orderStatus === '70'">
+          <button @click="againOrder" class="btn g-border btn-normal">
+            再次预约
+          </button>
+
+          <button
+            v-if="
+              orderRegInfo.rateFlag !== 1 &&
+              orderConfig.isOpenComment === '1' &&
+              orderRegInfo.orderId
+            "
+            @click="goRatePage"
+            class="btn g-border btn-primary"
+          >
+            {{ orderRegInfo.rateFlag === 0 ? '查看评价' : '服务评价' }}
+          </button>
+        </block>
+
+        <block v-if="orderRegInfo.orderStatus === '10'">
+          <button @click="cancelOrder" class="btn g-border btn-normal">
+            取消订单
+          </button>
+
+          <button
+            @click="payOrder"
+            :class="{
+              'btn-disabled': timeTravel.downTime <= 0,
+            }"
+            class="btn btn-warning pay-btn"
+          >
+            {{ orderRegInfo.fee }}元 立即支付
+          </button>
+        </block>
 
         <button
           v-if="
-            orderRegInfo.rateFlag !== 1 &&
-            orderConfig.isOpenComment === '1' &&
-            orderRegInfo.orderId
+            ['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus)
           "
-          @click="goRatePage"
           class="btn g-border btn-primary"
+          @click="againOrder"
         >
-          {{ orderRegInfo.rateFlag === 0 ? '查看评价' : '服务评价' }}
+          再次预约
         </button>
-      </block>
-
-      <block v-if="orderRegInfo.orderStatus === '10'">
-        <button @click="cancelOrder" class="btn g-border btn-normal">
-          取消订单
-        </button>
-
-        <button
-          @click="payOrder"
-          :class="{
-            'btn-disabled': timeTravel.downTime <= 0,
-          }"
-          class="btn btn-warning pay-btn"
-        >
-          {{ orderRegInfo.fee }}元 立即支付
-        </button>
-      </block>
-
-      <button
-        v-if="['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus)"
-        class="btn g-border btn-primary"
-        @click="againOrder"
-      >
-        再次预约
-      </button>
+      </template>
     </view>
 
     <xy-dialog
@@ -338,6 +358,7 @@
     debounce,
     PatientUtils,
     handlerWeChatThRegLogin,
+    apiAsync,
   } from '@/utils';
 
   import {
@@ -380,6 +401,7 @@
   const refFormPatient = ref<any>('');
   const pageProps = ref({} as IPageProps);
   const gStores = new GStores();
+  const isRender = ref(false);
   const showQrCode = ref(false);
   const orderRegInfo = ref({} as IRegInfo);
   const hosInfo = ref({} as IHosInfo);
@@ -393,11 +415,18 @@
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
 
-  const isShowFooter = computed(() =>
-    ['23', '45', '10', '70', '0', '20', '43', '42', '3'].includes(
+  const isShowFooter = computed(() => {
+    if (isWaitReg.value) {
+      return orderRegInfo.value.orderStatus === '1';
+    }
+    return ['23', '45', '10', '70', '0', '20', '43', '42'].includes(
       orderRegInfo.value.orderStatus
-    )
-  );
+    );
+  });
+
+  const isWaitReg = computed(() => {
+    return pageProps.value._type === 'waitReg';
+  });
 
   const { refPayList, changeRefPayList, wxPayMoneyMedicalPlugin } =
     usePayPage();
@@ -451,7 +480,7 @@
   });
 
   const titleStatus = computed(() => {
-    return getStatusConfig(orderRegInfo.value.orderStatus);
+    return getStatusConfig(orderRegInfo.value.orderStatus, isWaitReg.value);
   });
 
   let _timeTravel: any;
@@ -609,8 +638,10 @@
     }
 
     let result;
-    if (pageProps.value.orderStatus === '3') {
+    if (isWaitReg.value) {
       result = pageProps.value;
+      // @ts-expect-error
+      result.patientNameEncry = pageProps.value.patientName;
     } else {
       result = await regDetailUtil.getDataDetail();
     }
@@ -636,7 +667,7 @@
     }
 
     result._appointmentDate = `${result.appointmentDate} ${
-      result.ampmName + result.appointmentTime
+      result.ampmName + (result.appointmentTime || '')
     }`;
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
@@ -879,12 +910,21 @@
     });
 
     isCancelOrderDialogShow.value = false;
+
     await RegDetailUtil.getInstance().cancelReg();
 
     init();
   };
 
   const refoundWaitOrder = async () => {
+    dialogContent.value = '确定取消候补预约吗?';
+    isCancelOrderDialogShow.value = true;
+
+    await new Promise((confirm) => {
+      cancelOrderDialogConfirm = confirm;
+    });
+    isCancelOrderDialogShow.value = false;
+
     await api.cancelAlternate({
       alternateId: pageProps.value.alternateId,
       source: gStores.globalStore.browser.source,
@@ -900,7 +940,20 @@
   };
 
   const refoundOrder = async () => {
-    if (orderRegInfo.value.orderStatus === '3') {
+    const { wxOrderSubscribeMessage } = orderConfig.value;
+
+    // #ifdef MP-WEIXIN
+    if (wxOrderSubscribeMessage?.length) {
+      // @ts-expect-error
+      await apiAsync(uni.requestSubscribeMessage, {
+        tmplIds: wxOrderSubscribeMessage,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    // #endif
+
+    if (isWaitReg.value) {
       return refoundWaitOrder();
     }
 
@@ -1042,6 +1095,10 @@
   onLoad(async (p) => {
     uni.showLoading({});
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    isRender.value = true;
+    uni.setNavigationBarTitle({
+      title: isWaitReg.value ? '候补详情' : '挂号详情',
+    });
     await handlerWeChatThRegLogin(pageProps.value);
     await beforeEach({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),

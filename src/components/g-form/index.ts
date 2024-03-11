@@ -1,4 +1,6 @@
 import { XOR } from '@/typeUtils/obj';
+import { ServerStaticData, generateUuid, wait } from '@/utils';
+import { computed, ref } from 'vue';
 
 type TInputType =
   | 'text'
@@ -111,3 +113,116 @@ export type TInstance =
   | IInputVerifyInstance
   | ITimePickerInstance
   | ISwitchInstance;
+
+export type TAddress = {
+  divisionType: '1' | '2' | '3'; // 1.省、2.市、3.县
+  postalCode: string;
+  upDivision: string;
+  pyCode: string;
+  id: string;
+  uuid: string;
+} & IOptions;
+
+export const useAddress = () => {
+  const addressMap = new Map<string | undefined, TAddress[]>();
+  const provinces = ref(<TAddress[]>[]);
+  const citys = ref(<TAddress[]>[]);
+  const areas = ref(<TAddress[]>[]);
+  const addressLoading = ref(false);
+  const refAddressPicker = ref(<any>'');
+
+  const addressList = computed(() => [
+    provinces.value,
+    citys.value,
+    areas.value,
+  ]);
+
+  const cacheData = (list, uuid?: string) => {
+    if (list?.length) {
+      addressMap.set(uuid, list);
+    }
+  };
+
+  const _getList = async (payload?: TAddress) => {
+    const listHis = addressMap.get(payload?.uuid);
+    if (listHis) {
+      return listHis;
+    }
+
+    const list = await ServerStaticData.getAddressByLevel(payload?.id || '');
+
+    list.map((o) => {
+      o.uuid = generateUuid();
+    });
+
+    cacheData(list, payload?.uuid);
+
+    return list;
+  };
+
+  const getProvinces = async () => {
+    citys.value = [];
+    areas.value = [];
+    await wait(80);
+    const list = await _getList();
+
+    provinces.value = list;
+
+    if (list.length) {
+      await getCitys(list[0]);
+    }
+  };
+
+  const getCitys = async (payload: TAddress) => {
+    citys.value = [];
+    areas.value = [];
+    const list = await _getList(payload);
+    citys.value = list;
+
+    if (list.length) {
+      refAddressPicker.value?.setColumnValues(1, list);
+      await getAreas(list[0]);
+    }
+  };
+
+  const getAreas = async (payload: TAddress) => {
+    areas.value = [];
+    const list = await _getList(payload);
+    if (list.length) {
+      areas.value = list;
+      refAddressPicker.value?.setColumnValues(2, list);
+    }
+  };
+
+  const getAddressList = async (payload?: TAddress) => {
+    const { divisionType } = payload || {};
+
+    addressLoading.value = true;
+    if (!payload) {
+      await getProvinces();
+    } else {
+      if (divisionType === '1') {
+        await getCitys(payload);
+      } else if (divisionType === '2') {
+        await getAreas(payload);
+      }
+    }
+
+    addressLoading.value = false;
+  };
+
+  const init = async () => {
+    await getProvinces();
+  };
+
+  return {
+    provinces,
+    citys,
+    areas,
+    addressList,
+    addressLoading,
+    getAddressList,
+    refAddressPicker,
+    init,
+  };
+};

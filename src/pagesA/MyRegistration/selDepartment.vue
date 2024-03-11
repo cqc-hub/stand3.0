@@ -6,12 +6,20 @@
     class="g-page"
   >
     <!-- #ifndef MP-ALIPAY -->
-    <g-tbanner :config="orderConfig.bannerOrder" />
+    <g-tbanner
+      :config="orderConfig.bannerOrder"
+      @click="handleDzClick(orderConfig.bannerOrder)"
+      disabled
+    />
     <!-- #endif -->
 
     <!-- #ifdef MP-ALIPAY -->
     <g-tbanner
       :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder"
+      @click="
+        handleDzClick(orderConfig.bannerOrderAlipay || orderConfig.bannerOrder)
+      "
+      disabled
     />
     <!-- #endif -->
 
@@ -94,8 +102,10 @@
     ServerStaticData,
     IHosInfo,
     generateUuid,
+    useTBanner,
     type ISystemConfig,
   } from '@/utils';
+  import { deepClone } from '@/common/utils';
   import {
     joinQuery,
     joinQueryForUrl,
@@ -125,13 +135,7 @@
     clinicalType: string; // 1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
     thRegisterId?: string;
   }>();
-  const pageProps = ref(
-    <
-      {
-        hosId: string;
-      }
-    >{}
-  );
+  const pageProps = ref(<typeof props>{});
   const isShowRegTip = ref(false);
   const showRegTipTitle = ref('');
   const orderConfig = ref({} as ISystemConfig['order']);
@@ -232,7 +236,7 @@
 
     if (result) {
       let { firstDeptList, deptListLevel } = result;
-      // deptListLevel = '2'
+      // deptListLevel = '1'
       if (firstDeptList && firstDeptList.length) {
         loopDeptList(firstDeptList, deptListLevel);
         _loopDeptList(firstDeptList);
@@ -306,6 +310,12 @@
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
+  };
+
+  const handleDzClick = async (data) => {
+    const queryArg = deepClone(data);
+    queryArg.path = joinQuery(data.path, { hosId:hosId.value });
+    useTBanner(queryArg);
   };
 
   onShareAppMessage((res) => {

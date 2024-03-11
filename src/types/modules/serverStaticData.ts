@@ -49,6 +49,8 @@ export interface ISystemConfig_ {
     isOrderPreSettle?: '1';
     /** 候补预约 */
     isOpenOrderWaiting?: '1';
+    /** 预约挂号, 取消预约挂号时候  订阅微信消息(单词最多三个) */
+    wxOrderSubscribeMessage?: string[];
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
@@ -85,14 +87,18 @@ export interface ISystemConfig_ {
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
 
-    /** 门诊取号 takeNumber */
+    /** 门诊取号 | 在线签到 takeNumber */
     // 列表页面
     takeNumberGoPayBtn?: '1'; // 是否显示门诊缴费入口按钮
     takeNumberQueueBtn?: '1'; // 是否显示排队叫号入口按钮
+    takeNumberOnlineBtn?: '1'; // 是否显示在线签到入口按钮
     takeNumberAfterBtnForGoQueueNumber?: '1'; // 取号后  按钮变成 '查看排队信息': 跳 排队叫号; 默认 '刷码签到'
-    takeNumber1QueueBtn?: '1'; // 是否显示排队叫号入口按钮
     takeNumber1ElectronicGuideBtn?: '1'; //否显示排队叫号入口按钮
     takeNumberConfirmAfter?: '1'; // 取号成功后 按照项目配置是否进行弹窗提示(去门诊缴费页面)
+    takeNumberHeadBtns?: TButtonConfig[]; // 取号顶部按钮
+    onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
+    takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
+    onlineSignConfirmAfterBtn?: TButtonConfig;  //签到成功后的弹窗(按钮配置)
   };
 
   /** 移动端伦理委员会(h5) */
@@ -109,18 +115,23 @@ export interface ISystemConfig_ {
   person: {
     // 本系统不需要完善
     isSkipPerfect?: '1';
+    // pagesA/medicalCardMan/medicalCardMan
+    /** 本系统禁用就诊卡二维码 */
+    isQrCodeDisabled?: '1';
+
+    // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
-    isHidePatientTypeInPerfect?: '1';
+    isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
     isSmsVerify?: '1';
     /** 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁） */
     ageGuardian: number;
     /** 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月） */
     ageChildren: number;
-
     /** 新增就诊人页面有证件且证件类型 身份证时候  小于默认isGuardianWithIdCardAge(6)岁 是否监护人 ？ */
     isGuardianWithIdCard?: number;
-
+    // 不需要地址
+    isDropAddress?: '1';
     /** 仅微信, 支付宝 手动 config.json 配置 isOpenOcr */
     ocr?: '0' | '1';
     isFace?: '1';
@@ -472,6 +483,7 @@ export type TBannerConfig = XOR<
 
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
+  icon?: string;
 };
 
 /** 挂号记录*/

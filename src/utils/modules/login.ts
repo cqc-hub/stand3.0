@@ -216,11 +216,9 @@ export class LoginUtils extends GStores {
   }
 
   async checkNoPublicOpenId() {
-    if (this.globalStore.h5OpenId) {
-      const herenId = this.globalStore.herenId;
-      herenId &&
-        (await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId));
-    }
+    const herenId = this.globalStore.herenId;
+    herenId &&
+      (await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId));
   }
 
   // 微信获取公众号 openid
@@ -256,21 +254,35 @@ export class LoginUtils extends GStores {
     await this.getUerInfo();
   }
 
-  //微信绑定openid接口
+  /**
+   * 微信绑定openid接口
+   *
+   * @param herenId
+   * @param openId h5 openId
+   */
   async sysPatOpenIdAssignment(herenId, openId) {
+    const {
+      openId: miniOpenId,
+      browser: { source },
+    } = this.globalStore;
+
+    let openIds = [
+      {
+        openId: miniOpenId,
+        source,
+      },
+
+      {
+        openId,
+        source: 3, //公众号openid
+      },
+    ];
+
+    openIds = openIds.filter((o) => o.openId);
+
     await api.sysPatOpenIdAssignment({
       herenId,
-      openIds: [
-        {
-          openId: this.globalStore.openId,
-          source: 19, //微信小程序openid
-        },
-
-        {
-          openId,
-          source: 3, //公众号openid
-        },
-      ],
+      openIds,
     });
   }
 
@@ -322,12 +334,7 @@ export class LoginUtils extends GStores {
    * @returns
    */
   async getAliOpenid() {
-    const {
-      isSkipPerfect,
-      isAliAuthBase,
-      isAliIndependentDev,
-      isvAlipayAppid: isvAppId,
-    } = await this.getConfig();
+    const { isSkipPerfect, isAliAuthBase } = await this.getConfig();
 
     let res: TAliLogin;
 
@@ -363,8 +370,8 @@ export class LoginUtils extends GStores {
   }
 
   async getAliOpenidAgentBase() {
-    const { isvAlipayAppid: isvAppId, isAliIndependentDev } =
-      await this.getConfig();
+    const { isAliIndependentDev } = await this.getConfig();
+    const isvAppId = globalGl.systemInfo.isvAlipayAppid;
 
     const getPhoneNumberOpt: BaseObject = {};
     if (isvAppId) {
@@ -503,7 +510,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
-    const { isAliAuthBase, isAliIndependentDev } = await this.getConfig();
+    const { isAliAuthBase } = await this.getConfig();
 
     if (isAliAuthBase !== '1') {
       return await this.handlerAuth(e);

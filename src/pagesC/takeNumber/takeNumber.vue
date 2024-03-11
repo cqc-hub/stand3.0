@@ -1,42 +1,31 @@
 <template>
   <view class="g-page">
-    <g-flag typeFg="5" isShowFg />
+    <g-flag v-if="isRender" :typeFg="isOnlineSign ? '1116' : '5'" isShowFg />
     <g-choose-pat @choose-pat="init" />
-    <view class="pat-box">
+    <view v-if="headBtns.length" class="pat-box">
       <view class="health-card">
         <view
-          v-if="pageProps._type !== 'blood'"
-          @click="goRecord"
-          class="mr14 g-flex-rc-cc"
+          v-for="btn in headBtns"
+          :key="btn.text"
+          @click="useTBanner(btn)"
+          class="g-flex-rc-cc"
         >
-          <view class="iconfont icon-resize">&#xe6fc;</view>
-          <text class="color-111">挂号记录</text>
-        </view>
+          <view v-if="btn.icon">
+            <image
+              v-if="btn.icon.startsWith('http')"
+              class="queue-icon mr14"
+              :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
+            />
 
-        <view v-if="isShowQueueBtn" @click="goQueueNumber" class="g-flex-rc-cc">
-          <image
-            class="queue-icon mr14"
-            :src="$global.BASE_IMG + 'stand3-take-number-queue-number.png'"
-          />
-          <text class="color-111">排队叫号</text>
-        </view>
-
-        <view
-          v-if="pageConfig.takeNumber1ElectronicGuideBtn === '1'"
-          @click="goElectronicGuide"
-          class="mr14 g-flex-rc-cc"
-        >
-          <view class="iconfont icon-resize">&#xe6fc;</view>
-          <text class="color-111">电子导诊单</text>
-        </view>
-
-        <view
-          v-if="pageConfig.takeNumberGoPayBtn === '1'"
-          @click="goPay"
-          class="mr14 g-flex-rc-cc"
-        >
-          <view class="iconfont ico_pay queue-icon" />
-          <text class="color-111">门诊缴费</text>
+            <view
+              v-else
+              :class="{
+                [btn.icon]: 1,
+              }"
+              class="icon-font icon-resize"
+            />
+          </view>
+          <text class="color-111">{{ btn.text }}</text>
         </view>
       </view>
     </view>
@@ -50,6 +39,7 @@
             :isTakeNumberAfterBtnForGoQueueNumber="
               isTakeNumberAfterBtnForGoQueueNumber
             "
+            :isOnlineSign="isOnlineSign"
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
             @sign-in="signIn"
@@ -65,7 +55,7 @@
 
     <xy-dialog
       title="授权提示"
-      content="未获取到您的位置,请允许位置授权,以便判断您是否处于医院规定取号区域内"
+      content="未获取到您的位置,请允许位置授权,以便判断您是否处于医院规定区域内"
       :show="isWxRequestQxDialogShow"
       :isShowCancel="false"
     >
@@ -75,39 +65,41 @@
     </xy-dialog>
 
     <xy-dialog
+      v-if="isRender"
       :title="fgTitle451"
       :show="isFgShow451"
+      :confirmText="isOnlineSign ? '立即签到' : '立即取号'"
       @confirmButton="takeNumber"
       @cancelButton="isFgShow451 = false"
+      cancelText="取消"
       isMaskClick
-      confirmText="立即取号"
-      cancelText="暂不取号"
     >
       <scroll-view scroll-y class="reg-tip">
         <g-flag
           v-model:title="fgTitle451"
+          :typeFg="isOnlineSign ? '1117' : '451'"
           isHideTitle
           isShowFgTip
-          typeFg="451"
           aaa
         />
       </scroll-view>
     </xy-dialog>
 
     <xy-dialog
+      v-if="isRender && confirmAfterBtn"
       :title="fgTitle453"
       :show="isFgShow453"
       :isShowCancel="false"
-      @confirmButton="goPayPage"
+      @confirmButton="confirmAfter"
+      :confirmText="confirmAfterBtn.text"
       isMaskClick
-      confirmText="立即缴费"
     >
       <scroll-view scroll-y class="reg-tip">
         <g-flag
           v-model:title="fgTitle453"
           isHideTitle
           isShowFgTip
-          typeFg="453"
+          :typeFg="isOnlineSign ? '1118' : '453'"
           aaa
         />
       </scroll-view>
@@ -139,7 +131,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { deQueryForUrl } from '@/common';
@@ -158,6 +150,7 @@
 
   import NumberList from './components/NumberList.vue';
   import QrPopup from './components/QrPopup.vue';
+  import globalGl from '@/config/global';
 
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['order']>{});
@@ -169,13 +162,23 @@
   const isShowQr = ref(false);
   const isShowQueueBtn = ref(false);
   const isTakeNumberAfterBtnForGoQueueNumber = ref(false);
+  const confirmAfterBtn = ref<TButtonConfig>();
   const pageProps = ref(
     <
       {
         hosId?: string; // 采血取号 需要
         _type?: 'blood'; //区分普通取号和 濮阳采血取号
+        type?: '0' | '1'; // 普通取号 区分为 0为门诊取号 1 为门诊签到
       }
     >{}
+  );
+  const headBtns = ref(<TButtonConfig[]>[]);
+
+  // 采血取号
+  const isBloodSign = computed(() => pageProps.value._type === 'blood');
+  // 在线签到
+  const isOnlineSign = computed(
+    () => !isBloodSign.value && pageProps.value.type === '1'
   );
 
   const locationInfo = ref({
@@ -188,6 +191,7 @@
 
   const fgTitle453 = ref('');
   const isFgShow453 = ref(false);
+  const isRender = ref(false);
 
   let cacheItem: TTakeNumberListItem;
   const showTakeNumberDialog = (item: TTakeNumberListItem) => {
@@ -202,10 +206,18 @@
     });
   };
 
+  const confirmAfter = () => {
+    isFgShow453.value = false;
+    if (confirmAfterBtn.value) {
+      useTBanner(confirmAfterBtn.value);
+    }
+  };
+
   const takeNumber = async () => {
-    const { ampm, visitDate, visitId, hosId } = cacheItem;
+    const { ampm, visitDate, visitId, hosId, extend } = cacheItem;
     const { source } = gStores.globalStore.browser;
     const { patientId } = gStores.userStore.patChoose;
+    const { type } = pageProps.value;
 
     const args = {
       ampm,
@@ -214,10 +226,12 @@
       source,
       patientId,
       hosId,
+      extend,
+      type,
     };
     isFgShow451.value = false;
 
-    if (pageProps.value._type === 'blood') {
+    if (isBloodSign.value) {
       locationInfo.value = await getLocation(true);
       const {
         result: { status, promptMessage },
@@ -230,7 +244,7 @@
 
       if (status) {
         await apiAsync(uni.showModal, {
-          content: promptMessage || '取号成功',
+          content: promptMessage || '成功',
           showCancel: false,
         });
       }
@@ -240,7 +254,11 @@
 
     await getList();
 
-    if (pageConfig.value.takeNumberConfirmAfter === '1') {
+    // 普通取号
+    if (
+      pageConfig.value.takeNumberConfirmAfter === '1' &&
+      !pageProps.value._type
+    ) {
       isFgShow453.value = true;
     }
   };
@@ -318,6 +336,7 @@
     });
   };
 
+
   const refreshData = () => {
     isRefresh.value = true;
 
@@ -330,6 +349,7 @@
   const getList = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { latitude, longitude } = locationInfo.value;
+    const { type } = pageProps.value;
 
     isComplete.value = false;
     if (!isRefresh.value) {
@@ -341,6 +361,7 @@
         latitude,
         longitude,
         patientId,
+        type,
       })
       .finally(() => {
         isComplete.value = true;
@@ -368,12 +389,111 @@
 
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
-    const { takeNumberQueueBtn, takeNumberAfterBtnForGoQueueNumber } =
-      pageConfig.value;
+    const {
+      takeNumberQueueBtn,
+      takeNumber1ElectronicGuideBtn,
+      takeNumberGoPayBtn,
+      takeNumberAfterBtnForGoQueueNumber,
+      takeNumberHeadBtns,
+      onlineSignHeadBtns,
+      takeNumberOnlineBtn,
+      takeNumberConfirmAfter,
+      onlineSignConfirmAfterBtn,
+      takeNumberConfirmAfterBtn,
+    } = pageConfig.value;
+    headBtns.value = [];
 
-    isShowQueueBtn.value = takeNumberQueueBtn === '1';
+    isShowQueueBtn.value = takeNumberQueueBtn === '1' && !isOnlineSign.value;
     isTakeNumberAfterBtnForGoQueueNumber.value =
       takeNumberAfterBtnForGoQueueNumber === '1';
+
+    // headBtns.value =
+    if (isOnlineSign.value) {
+      headBtns.value = [...(onlineSignHeadBtns || [])];
+      confirmAfterBtn.value = onlineSignConfirmAfterBtn;
+    } else {
+      headBtns.value = [
+        {
+          type: 'self',
+          isSelfH5: '1',
+          path: 'pagesA/MyRegistration/MyRegistration',
+          icon: 'ico_sy_paper5',
+          text: '挂号记录',
+        },
+      ];
+      headBtns.value.push(...(takeNumberHeadBtns || []));
+      if (takeNumberQueueBtn === '1') {
+        headBtns.value.push({
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesC/queueNumber/queueNumber',
+          text: '排队叫号',
+          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
+          addition: {
+            herenId: 'herenId',
+            patientId: 'aaa',
+            token: 'token',
+          },
+        });
+      }
+
+      if (takeNumber1ElectronicGuideBtn === '1') {
+        headBtns.value.push({
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesC/medicalAssistant/medicalAssistant',
+          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
+          text: '电子导诊单',
+          addition: {
+            patientId: '_patientId',
+          },
+        });
+      }
+
+      if (takeNumberOnlineBtn === '1') {
+        headBtns.value.push({
+          type: 'self',
+          isSelfH5: '1',
+          path: 'pagesC/takeNumber/takeNumber?type=1',
+          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
+          text: '在线签到',
+        });
+      }
+
+      if (takeNumber1ElectronicGuideBtn === '1') {
+        headBtns.value.push({
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesC/medicalAssistant/medicalAssistant',
+          text: '电子导诊单',
+          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
+          addition: {
+            patientId: '_patientId',
+          },
+        });
+      }
+
+      if (takeNumberGoPayBtn === '1') {
+        headBtns.value.push({
+          type: 'self',
+          isSelfH5: '1',
+          path: 'pagesA/clinicPay/clinicPayDetail',
+          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
+          text: '门诊缴费',
+        });
+      }
+
+      confirmAfterBtn.value = takeNumberConfirmAfterBtn;
+
+      if (!takeNumberConfirmAfterBtn && takeNumberConfirmAfter === '1') {
+        confirmAfterBtn.value = {
+          type: 'self',
+          isSelfH5: '1',
+          path: 'pagesA/clinicPay/clinicPayDetail',
+          text: '立即缴费',
+        };
+      }
+    }
   };
 
   const init = async () => {
@@ -384,7 +504,12 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    uni.setNavigationBarTitle({
+      title: isOnlineSign.value ? '在线签到' : '门诊取号',
+    });
+
     await getConfig();
+    isRender.value = true;
     init();
   });
 </script>
@@ -421,16 +546,22 @@
     margin: 0 32rpx;
 
     display: flex;
+    flex-wrap: wrap;
 
     > view {
       flex: 1;
-      padding: 38rpx 0;
+      min-width: 150rpx;
+      padding: 28rpx 0;
       background-color: var(--h-color-white);
       border-radius: 16rpx;
       color: var(--hr-brand-color-6);
       display: flex;
       justify-content: center;
       line-height: 40rpx;
+
+      &:not(:last-child) {
+        margin-right: 14px;
+      }
     }
   }
 
@@ -443,6 +574,8 @@
     margin-right: 10rpx;
     font-weight: 500;
     color: var(--hr-success-color-6);
+    width: 40rpx;
+    height: 40rpx;
   }
 
   .queue-icon {

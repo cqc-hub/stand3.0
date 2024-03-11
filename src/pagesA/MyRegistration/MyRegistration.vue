@@ -5,11 +5,11 @@
     }"
     class="g-page"
   >
-    <g-flag typeFg="405" isShowFg />
+    <g-flag v-if="isRender" :typeFg="isWaitReg ? '1113' : '405'" isShowFg />
     <g-message />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
     <My-Registration-Head
-      v-if="props.type !== 'waitReg'"
+      v-if="!isWaitReg"
       v-model:isSelStatus="isSelStatus"
       v-model:isSelPatient="isSelPatient"
       v-model:isSelOrderStatus="isSelOrderStatus"
@@ -21,6 +21,7 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
+          :isWaitReg="isWaitReg"
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :isShowYuWzBtn="isShowYuWzBtn"
@@ -32,6 +33,7 @@
           :thRegisterId="props.thRegisterId"
           :anotherYwzConditions="anotherYwzConditions"
           @ywz-click="ywzClick"
+          @go-detail="goDetail"
         />
       </block>
 
@@ -158,6 +160,7 @@
     >{}
   );
   const gStores = new GStores();
+  const isRender = ref(false);
   const isComplete = ref(false);
   const pat = ref<IPat>();
 
@@ -186,12 +189,13 @@
     },
   ]);
 
+  const isWaitReg = computed(() => {
+    return props.value.type === 'waitReg';
+  });
+
   const isShowFilterOrderStatus = computed(() => {
     // return false;
-    return (
-      orderConfig.value.isCanSelOrderStatus === '1' ||
-      props.value.type === 'waitReg'
-    );
+    return orderConfig.value.isCanSelOrderStatus === '1' || isWaitReg.value;
   });
 
   const anotherYwzConditions = computed(() => {
@@ -204,7 +208,7 @@
   });
 
   const listApi = computed(() => {
-    if (props.value.type === 'waitReg') {
+    if (isWaitReg.value) {
       return api.getAlternateList;
     }
     // "全部" 查院内接口
@@ -254,7 +258,8 @@
         // o.orderStatus = '70';
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
-          orderConfig.value.isOrderPay
+          orderConfig.value.isOrderPay,
+          isWaitReg.value
         );
 
         if (o._statusLabel.startsWith('未知')) {
@@ -292,6 +297,19 @@
     };
 
     useTBanner(preConsultation);
+  };
+
+  const goDetail = (item: IRegistrationCardItem) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        ...item,
+        orderId: item.orderId,
+        hosOrderId: item.hosOrderId,
+        preWz: item.orderStatus === '10' && '1',
+        thRegisterId: props.value.thRegisterId,
+        _type: props.value.type,
+      }),
+    });
   };
 
   const patientChange = async ({ item }) => {
@@ -336,12 +354,19 @@
 
   onShow(() => {
     if (list.value.length) {
-      init();
+      patientChange({
+        item: pat.value,
+      });
     }
   });
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    isRender.value = true;
+
+    uni.setNavigationBarTitle({
+      title: isWaitReg.value ? '候补记录' : '我的挂号',
+    });
 
     await handlerWeChatThRegLogin(props.value);
     await beforeEach({

@@ -1,7 +1,8 @@
 export type TTakeNumberListItem = {
+  categorName?: string;
   deptName: string;
   docName: string;
-  reportFlag: '0' | '1' | '2'; // 0-待取号 1-已取号 2 无需取号
+  reportFlag: string; // 0-待取号 1-已取号 2 无需取号,  在线签到情况直接展示(string)
   ampmName: string;
   ampm: string;
   visitDate: string;
@@ -12,6 +13,7 @@ export type TTakeNumberListItem = {
   hosId: string;
   qrValue?: string;
   visitingArea?: string;
+  extend?: any;
 };
 
 export type _TTakeNumberListItem = {

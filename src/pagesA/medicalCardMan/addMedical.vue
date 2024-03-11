@@ -376,23 +376,27 @@
    */
   let oldFormList: any[] = [];
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
-    const listArr: TFormKeys[] = [formKey.patientType];
-    const _sexAndBirth = [formKey.sex, formKey.birthday];
-    const _parentInfo = [formKey.upName, formKey.upIdCard];
-    const _patientInfo: TFormKeys[] = [
-      formKey.nation,
-      formKey.address,
-      formKey.location,
-      formKey.patientPhone,
-      formKey.defaultFalg,
-    ];
-
     const {
       isGuardianWithIdCard,
       ocr,
       isHidePatientTypeInPerfect,
       isSmsVerify,
+      isDropAddress,
     } = await ServerStaticData.getSystemConfig('person');
+
+    const listArr: TFormKeys[] = [formKey.patientType];
+    const _sexAndBirth = [formKey.sex, formKey.birthday];
+    const _parentInfo = [formKey.upName, formKey.upIdCard];
+    const _patientInfo: TFormKeys[] = [
+      formKey.nation,
+      // 去除所在地区, 详细地址
+      ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
+      formKey.patientPhone,
+      formKey.defaultFalg,
+    ];
+
+    if (isDropAddress === '1') {
+    }
 
     if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
