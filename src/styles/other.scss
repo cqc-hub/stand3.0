@@ -8,7 +8,7 @@
 .g-fade-in {
   animation-name: fadeIn;
   animation-fill-mode: both;
-  animation-duration: .6s;
+  animation-duration: 0.6s;
 }
 
 .w100 {
@@ -33,6 +33,7 @@
 
 .text-no-wrap {
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .g-break-word {
@@ -136,6 +137,10 @@ image {
 
 .color-red {
   color: var(--hr-error-color-6) !important;
+}
+
+.color-warn {
+  color: var(--hr-warning-color-6) !important;
 }
 
 .color-blue {
