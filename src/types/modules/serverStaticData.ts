@@ -98,7 +98,7 @@ export interface ISystemConfig_ {
     takeNumberHeadBtns?: TButtonConfig[]; // 取号顶部按钮
     onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
     takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
-    onlineSignConfirmAfterBtn?: TButtonConfig;  //签到成功后的弹窗(按钮配置)
+    onlineSignConfirmAfterBtn?: TButtonConfig; //签到成功后的弹窗(按钮配置)
   };
 
   /** 移动端伦理委员会(h5) */
@@ -386,6 +386,20 @@ export interface ISystemConfig_ {
     // 客服中心  pagesA/serviceCenter/serviceCenter
     // 意见反馈使用自定义的页面?
     isCustomFeedback?: '1';
+    // 开启咨询客服弹窗
+    isOpenMyService?: {
+      imageCode: string;
+      theme: string;
+      title: string;
+      subTitle: string;
+      isHideInfo?: boolean;
+    };
+    //开启拨打电话
+    isOpenPhone?: string;
+    //开启腾讯在线客服
+    isTxService?: '1';
+    //开启腾讯意见反馈
+    isTxFeedback?: '1';
   };
 }
 
