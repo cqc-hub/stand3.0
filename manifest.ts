@@ -68,13 +68,12 @@ if (medicalMHelp) {
 
   if (alipay) {
     const { medicalPlugin } = alipay;
-
+    //  更新医保插件 一定自测下 正式域名 zhyb.ybj.zj.gov.cn 测试域名 zhybyf.ybj.zj.gov.cn
     if (medicalPlugin) {
       aliPlugin['auth-pay-plugin'] = {
         version: '*',
         provider:
           globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
-        // globalGl.env === 'prod' ? '2021003147699046' : '2021003147699046',
       };
     }
   }
