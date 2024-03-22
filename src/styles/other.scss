@@ -38,6 +38,7 @@
 
 .g-break-word {
   word-break: break-all;
+  line-break: anywhere;
 }
 
 .text-center {
@@ -185,6 +186,10 @@ image {
 
 .color-fff {
   color: #fff !important;
+}
+
+.color-bbb {
+  color: var(--hr-neutral-color-5) !important;
 }
 
 .my-disabled {
