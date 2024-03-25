@@ -55,9 +55,9 @@ image {
   &::after {
     content: "";
     display: inline-block;
-    width: 1rpx;
+    width: 2rpx;
     height: 24rpx;
-    background-color: var(--hr-neutral-color-2);
+    background-color: #999999;
     right: 0;
     position: absolute;
     top: 50%;

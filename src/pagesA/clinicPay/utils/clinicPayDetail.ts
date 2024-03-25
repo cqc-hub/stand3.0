@@ -446,12 +446,11 @@ export const medicalNationUpload = async (
 
   const { patientId } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
-
   const requestArg = {
     ...auth,
     ...detail,
     ...additional,
-    patientName: userName,
+    patientName: additional.patientName,
     mergeOrder: detail.childOrder,
     patientId,
     longitude,
@@ -1280,6 +1279,8 @@ export const usePayPage = () => {
     const { getDetailData, detailData } = usePayDetailPage();
     const pat = gStores.userStore.patChoose;
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
+    const patientName =
+      pageProps.value.deParams?.patientName || pat.patientName;
     await getDetailData({
       cardNumber,
       ...pageProps.value,
@@ -1300,6 +1301,7 @@ export const usePayPage = () => {
       {
         // businessType: '1',
         cardNumber,
+        patientName,
       }
     );
 
