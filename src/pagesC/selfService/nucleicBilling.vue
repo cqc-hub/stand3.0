@@ -4,6 +4,7 @@
     <g-choose-pat />
     <view v-if="tabs.length" class="g-border-bottom">
       <g-tabs
+        v-if="tabs.length > 1"
         v-model:value="tabCurrent"
         :tabs="tabs"
         :scroll="false"
@@ -231,6 +232,7 @@
   }
 
   const props = defineProps<{
+    billingType?: string;
     hosName: string;
     hosId: string;
     isPay: string; //是否需要缴费 表示支付方式
@@ -337,7 +339,9 @@
   //初始化页面数据
   const initConfig = async () => {
     pageLoading.value = false;
-    let billingType = props.type
+    let billingType = props.billingType
+      ? props.billingType
+      : props.type
       ? props.type
       : props.isPay === '1'
       ? '3'

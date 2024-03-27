@@ -4,7 +4,7 @@
       v-model:value="tabIndex"
       :tabs="props.list"
       @change="activeMenu"
-      itemMinWidth="170rpx"
+      itemMinWidth="120rpx"
       field="typeName"
       pillsColor="#fff"
       bgColor="var(--hr-neutral-color-1)"
