@@ -30,17 +30,7 @@
           <text class="desc">添加客服企微</text>
         </view>
       </button>
-      <button
-        v-if="pageConfig.isOpenPhone"
-        class="s-btn g-border-right"
-        @click="makePhone"
-      >
-        <view class="s-btn-container">
-          <text class="iconfont icon-kefu">&#xe66a;</text>
-          <text class="title">拨打电话</text>
-          <text class="desc">热线电话咨询</text>
-        </view>
-      </button>
+    
       <button
         v-if="pageConfig.isCustomFeedback === '1'"
         @click="feedbackClick"
@@ -74,6 +64,17 @@
           <text class="iconfont icon-kefu">&#xe6b9;</text>
           <text class="title">意见反馈</text>
           <text class="desc">在线投诉建议</text>
+        </view>
+      </button>
+      <button
+        v-if="pageConfig.isOpenPhone"
+        class="s-btn g-border-right"
+        @click="makePhone"
+      >
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe66a;</text>
+          <text class="title">拨打电话</text>
+          <text class="desc">热线电话咨询</text>
         </view>
       </button>
     </view>
