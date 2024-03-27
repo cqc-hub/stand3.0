@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001066",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -225,6 +225,16 @@
       "alipayAppid": "",
       "h5Appid": "",
       "name": "核桃仁测试医院",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
+    },
+
+    "1001066": {
+      "wxAppid": "wxbe1f8ae346536759",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "宁波口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false

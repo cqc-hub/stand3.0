@@ -39,6 +39,7 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
+  import { useTBanner } from '@/utils';
 
   defineProps<{ systemModeOld: boolean }>();
 
@@ -71,6 +72,18 @@
 
   const changeTab = (item) => {
     const url = item.url;
+
+    if (url === 'mDisease') {
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'mDisease/index/index',
+        addition: {
+          patientId: '_patientId',
+        },
+      });
+      return;
+    }
 
     if (url === '/pages/home/my') {
       clickCount.value++;
@@ -138,6 +151,14 @@
         sort: 2,
       },
       {
+        label: '健康管理',
+        icon: '/static/image/wlyy.png',
+        iconActive: '/static/image/wlyy_active.png',
+        url: 'mDisease',
+        loginInterception: '0',
+        sort: 2,
+      },
+      {
         label: '消息中心',
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
@@ -163,6 +184,10 @@
 
     if (global.sConfig.isOpenHomeTabBarMessageBtn) {
       tabList.push('消息中心');
+    }
+
+    if (global.SYS_CODE === '1001052') {
+      tabList.push('健康管理');
     }
 
     tabBars.value = tabBarList

@@ -346,7 +346,16 @@
       //   },
       // });
 
-      useTBanner(healthRecord)
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/question/normalQuestion',
+        addition: {
+          patientId: '_patientId',
+        },
+      });
+
+      // useTBanner(healthRecord)
       // useTBanner(电子导诊单)
     }, 1000);
   });

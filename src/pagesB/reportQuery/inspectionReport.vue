@@ -163,6 +163,10 @@
               <view class="title">所见</view>
               <view class="content">{{ item.description }}</view>
             </view>
+            <view class="seen" v-if="item.diacrisis || examineReportList.diacrisis">
+              <view class="title">病理诊断</view>
+              <view class="content">{{ item.diacrisis || examineReportList.diacrisis }}</view>
+            </view>
             <view
               class="seen"
               v-if="item.diagnosis || examineReportList.diagnosis"

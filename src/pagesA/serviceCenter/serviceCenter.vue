@@ -18,33 +18,71 @@
     </scroll-view>
 
     <view class="footer" v-if="isShowFooter">
+      <!-- 需求：底部按钮支持5个可配置功能 自研版（在线客服  电话咨询  意见反馈 ） （腾讯微信）咨询客服 意见反馈 -->
       <button
-        v-if="isWx"
-        open-type="contact"
-        bindcontact="handleContact"
+        v-if="pageConfig.isOpenMyService"
         class="s-btn g-border-right"
+        @click="openServicesModel"
       >
         <view class="s-btn-container">
-          <text class="iconfont icon-kefu">&#xe6e2;</text>
+          <text class="iconfont icon-kefu">&#xe6a3;</text>
           <text class="title">咨询客服</text>
-          <text class="desc">请在工作时间咨询</text>
+          <text class="desc">添加客服企微</text>
         </view>
       </button>
-
+    
       <button
-        v-if="isWx || pageConfig.isCustomFeedback === '1'"
-        :open-type="getOpenTypeFeedback"
+        v-if="pageConfig.isCustomFeedback === '1'"
         @click="feedbackClick"
         class="s-btn"
       >
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6b9;</text>
           <text class="title">意见反馈</text>
-          <text class="desc">我们会尽快给予回复</text>
+          <text class="desc">在线投诉建议</text>
+        </view>
+      </button>
+      <!-- 微信没配置默认展示 -->
+      <button
+        v-if="isWx && pageConfig.isTxService"
+        open-type="contact"
+        bindcontact="handleContact"
+        class="s-btn g-border-right"
+      >
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe6e2;</text>
+          <text class="title">在线客服</text>
+          <text class="desc">工作时间咨询</text>
+        </view>
+      </button>
+      <button
+        v-if="isWx && pageConfig.isTxFeedback"
+        open-type="feedback"
+        class="s-btn"
+      >
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe6b9;</text>
+          <text class="title">意见反馈</text>
+          <text class="desc">在线投诉建议</text>
+        </view>
+      </button>
+      <button
+        v-if="pageConfig.isOpenPhone"
+        class="s-btn g-border-right"
+        @click="makePhone"
+      >
+        <view class="s-btn-container">
+          <text class="iconfont icon-kefu">&#xe66a;</text>
+          <text class="title">拨打电话</text>
+          <text class="desc">热线电话咨询</text>
         </view>
       </button>
     </view>
     <g-message />
+    <homeH5SharePopup
+      ref="homeH5SharePopupRef"
+      :configData="pageConfig.isOpenMyService || undefined"
+    />
   </view>
 </template>
 
@@ -64,6 +102,7 @@
   import api from '@/service/api';
 
   import serviceList from './components/serviceList.vue';
+  import homeH5SharePopup from '@/pages/home/componetns/homeH5SharePopup.vue';
 
   const props = defineProps<{
     subType?: string;
@@ -74,6 +113,7 @@
   const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
   const isWx = ref(false);
+  const homeH5SharePopupRef = ref('' as any);
   // #ifdef MP-WEIXIN
   isWx.value = true;
   // #endif
@@ -86,10 +126,6 @@
     } else {
       return 'padding: 28rpx 32rpx 20rpx; color: var(--hr-neutral-color-10); font-size: var(--hr-font-size-xl);';
     }
-  });
-
-  const getOpenTypeFeedback = computed(() => {
-    return pageConfig.value.isCustomFeedback === '1' ? '' : 'feedback';
   });
 
   // 此页面存在多层, 只在第一层时候展示底部按钮
@@ -117,6 +153,12 @@
 
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('RestOfConfig');
+    if (Object.keys(pageConfig.value).length === 0) {
+      pageConfig.value = {
+        isTxService: '1',
+        isTxFeedback: '1',
+      };
+    }
   };
 
   const init = async () => {
@@ -161,11 +203,21 @@
   };
 
   const feedbackClick = () => {
-    if (pageConfig.value.isCustomFeedback === '1') {
-      uni.navigateTo({
-        url: '/pagesC/serviceCenter/serviceCenter',
-      });
-    }
+    uni.navigateTo({
+      url: '/pagesC/serviceCenter/serviceCenter',
+    });
+  };
+
+  const openServicesModel = () => {
+    homeH5SharePopupRef.value.show();
+  };
+  const makePhone = () => {
+    uni.makePhoneCall({
+      phoneNumber: pageConfig.value.isOpenPhone!,
+      fail(res) {
+        console.warn('拨打电话失败原因', res);
+      },
+    });
   };
 </script>
 

@@ -120,7 +120,8 @@
     height: 100%;
 
     &.dept-list-lv2 {
-      background-color: var(--hr-neutral-color-1);
+      // background-color: var(--hr-neutral-color-1);
+      background-color: transparent;
     }
   }
 

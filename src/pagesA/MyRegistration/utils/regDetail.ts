@@ -430,10 +430,12 @@ export class RegDetailUtil {
   async cancelRegHos() {
     const { hosOrderId } = this.prop.value;
     const { patientId } = this.gStores.userStore.patChoose;
+    const { hosId } = this.orderRegInfo;
 
     await api.cancelHosReg({
       hosOrderId,
       patientId,
+      hosId,
       source: this.gStores.globalStore.browser.source,
     });
 

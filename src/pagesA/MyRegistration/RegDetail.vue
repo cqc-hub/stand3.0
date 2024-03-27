@@ -390,6 +390,7 @@
     TWxAuthorize,
     getQxMedicalNation,
     isMedicalSelf,
+    getIsAliMedicalNation,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -645,6 +646,7 @@
     } else {
       result = await regDetailUtil.getDataDetail();
     }
+
     const hosList = await ServerStaticData.getHosList();
     uni.hideLoading();
     const hos = hosList.find((o) => o.hosId === result.hosId);
@@ -763,8 +765,14 @@
             pat: gStores.userStore.patChoose,
           });
           // #ifdef  MP-WEIXIN
-          const authorize = await getQxMedicalNation();
-          medicalNationWx(authorize);
+          medicalNationWx(await getQxMedicalNation());
+          // #endif
+
+          // #ifdef MP-ALIPAY
+          // 国标医保
+          if (getIsAliMedicalNation()) {
+            payAliMedicalNation();
+          }
           // #endif
         }
 
@@ -775,28 +783,37 @@
     }
   };
 
-  const medicalNationWx = async (payload: TWxAuthorize) => {
+  const medicalNationWx = async (
+    auth: TWxAuthorize,
+    payload: any = {
+      businessType: 3,
+    }
+  ) => {
     const { hosId, orderId } = orderRegInfo.value;
-    const { userLongitudeLatitude, payAuthNo } = payload;
+    const { userLongitudeLatitude, payAuthNo } = auth;
     const { source } = gStores.globalStore.browser;
 
     const requestArg = {
       ...userLongitudeLatitude,
       accountUseFlag: true,
-      businessType: 3,
+      businessType: payload.businessType,
       hosId,
       orderId,
       payAuthNo,
       source,
     };
 
+    uni.showLoading({
+      title: '预上传...',
+      mask: true,
+    });
     const { result } = await api.medicalUp(requestArg);
 
     const info = {
       ...hosInfo.value,
       ...orderRegInfo.value,
       totalCost: result.totalFee,
-      extend: payload,
+      extend: auth,
       phsOrderSource: '1',
     };
 
@@ -808,6 +825,10 @@
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
+  };
+
+  const payAliMedicalNation = async () => {
+    medicalNationWx(await getQxMedicalNation(), {});
   };
 
   /**

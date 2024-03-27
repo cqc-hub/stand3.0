@@ -4,13 +4,14 @@
       v-model:value="tabIndex"
       :tabs="props.list"
       @change="activeMenu"
+      itemMinWidth="120rpx"
       field="typeName"
       pillsColor="#fff"
       bgColor="var(--hr-neutral-color-1)"
       pillsBorderRadius="8rpx 8rpx 0 0"
       paddingItem="0 33rpx"
-      pills
       scroll
+      pills
     />
     <swiper
       class="swiper"

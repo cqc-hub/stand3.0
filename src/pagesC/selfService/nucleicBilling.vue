@@ -4,6 +4,7 @@
     <g-choose-pat />
     <view v-if="tabs.length" class="g-border-bottom">
       <g-tabs
+        v-if="tabs.length > 1"
         v-model:value="tabCurrent"
         :tabs="tabs"
         :scroll="false"
@@ -35,7 +36,7 @@
         <label>2022-10-27</label>
         <text :class="`iconfont icon-resize`">&#xe66b;</text>
       </view> -->
-      <view class="box-list box-card mb20">
+      <view v-if="sideList.length === 1" class="box-list box-card mb20">
         <view
           v-for="item in NucleResult"
           :key="item.itemCode"
@@ -76,6 +77,74 @@
 
             <view v-if="!item.tipHide && item.showTipHideBtn" class="show-all">
               <text class="iconfont f36">&#xe66b;</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view v-else class="mb20 mt24 flex-start box-list1">
+        <g-side-list
+          :style="{
+            width: '220rpx',
+          }"
+          :list="sideList"
+          :field="{
+            label: 'itemName',
+            value: 'itemName',
+          }"
+          :value="sideValue"
+          @item-click="sideClick"
+          defaultChoose
+        />
+
+        <view class="flex1">
+          <view
+            v-for="item in NucleResult"
+            :key="item.itemCode"
+            @tap="clickItem(item)"
+            :class="{
+              active:
+                selList.findIndex((o) => o.itemCode === item.itemCode) > -1,
+            }"
+            class="box-aaa g-fade-in"
+          >
+            <view class="box-item">
+              <label>{{ item.itemName }}</label>
+              <label>{{ item.fee }}元</label>
+              <block
+                v-if="
+                  selList.findIndex((o) => o.itemCode === item.itemCode) > -1
+                "
+              >
+                <text class="iconfont ico-checkbox">&#xe6d0;</text>
+              </block>
+              <block v-else>
+                <text class="iconfont">&#xe6ce;</text>
+              </block>
+            </view>
+
+            <view
+              v-if="item.tips"
+              :id="'nucle-item-' + item.itemCode"
+              @click.stop="clickTip(item)"
+              class="color-888 f26 g-break-word tip flex-normal"
+            >
+              <rich-text
+                :style="{
+                  'line-height': `${tipLineHeight}rpx`,
+                }"
+                :class="{
+                  'text-ellipsis': !item.tipHide && item.showTipHideBtn,
+                }"
+                :nodes="HTMLParser(item.tips)"
+              />
+
+              <view
+                v-if="!item.tipHide && item.showTipHideBtn"
+                class="show-all"
+              >
+                <text class="iconfont f36">&#xe66b;</text>
+              </view>
             </view>
           </view>
         </view>
@@ -163,11 +232,12 @@
   }
 
   const props = defineProps<{
+    billingType?: string;
     hosName: string;
     hosId: string;
     isPay: string; //是否需要缴费 表示支付方式
     openId: string;
-    type: number;
+    type: string;
   }>();
   const pageConfig = ref(<ISystemConfig['selfBilling']>{});
   const tabs = computed(() => {
@@ -211,19 +281,20 @@
     // await gStores.userStore.getPatList();
   });
 
+  const sideList = ref(<any[]>[]);
+  const sideValue = ref('');
+  const sideClick = ({ item }) => {
+    sideValue.value = item.itemName;
+    NucleResult.value = item.items;
+  };
+
   onMounted(() => {
     isFgShow45.value = true;
   });
 
-  //初始化页面数据
-  const initConfig = async () => {
-    pageLoading.value = false;
-    let billingType = props.type ? props.type : props.isPay === '1' ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
-
-    if (tabs.value.length) {
-      billingType = tabs.value[tabCurrent.value]?.value;
-    }
+  const getList = async (billingType: any) => {
     NucleResult.value.length = 0;
+    sideList.value = [];
     const { result } = await api
       .getItemList({
         billingType,
@@ -234,7 +305,8 @@
         uni.stopPullDownRefresh();
       });
 
-    if (result.length > 0) {
+    if (result.length) {
+      sideList.value = result;
       result[0].items.map((o) => {
         o.tipHide = false;
         o.showTipHideBtn = false;
@@ -262,6 +334,23 @@
         });
       }, 80);
     }
+  };
+
+  //初始化页面数据
+  const initConfig = async () => {
+    pageLoading.value = false;
+    let billingType = props.billingType
+      ? props.billingType
+      : props.type
+      ? props.type
+      : props.isPay === '1'
+      ? '3'
+      : '99999'; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+
+    if (tabs.value.length) {
+      billingType = tabs.value[tabCurrent.value]?.value;
+    }
+    getList(billingType);
   };
 
   const clickTip = (item: INucle) => {
@@ -421,40 +510,6 @@
       }
       .box-list {
         margin-top: 16rpx;
-        .box-aaa {
-          box-shadow: 0px -1px 0px 0px #e6e6e6 inset;
-          padding: 28rpx 0;
-          margin: 0 32rpx;
-          &:last-child {
-            box-shadow: none;
-          }
-        }
-        .box-item {
-          display: flex;
-
-          label {
-            color: -var(-hr-neutral-color-10);
-            line-height: 48rpx;
-            font-weight: 600;
-            font-size: var(--hr-font-size-base);
-            margin-right: 32rpx;
-
-            &:nth-child(2) {
-              flex: 1;
-              text-align: right;
-              white-space: nowrap;
-            }
-          }
-        }
-        .active {
-          label {
-            color: var(--hr-brand-color-6);
-          }
-        }
-
-        .ico-checkbox {
-          color: var(--hr-brand-color-6);
-        }
       }
     }
   }
@@ -472,5 +527,45 @@
         rgba(255, 255, 255, 0.3) 100%
       );
     }
+  }
+
+  .box-list1 {
+    background-color: #fff;
+  }
+
+  .box-aaa {
+    box-shadow: 0px -1px 0px 0px #e6e6e6 inset;
+    background-color: #fff;
+    padding: 28rpx 0;
+    margin: 0 32rpx;
+    &:last-child {
+      box-shadow: none;
+    }
+  }
+  .box-item {
+    display: flex;
+
+    label {
+      color: -var(-hr-neutral-color-10);
+      line-height: 48rpx;
+      font-weight: 600;
+      font-size: var(--hr-font-size-base);
+      margin-right: 32rpx;
+
+      &:nth-child(2) {
+        flex: 1;
+        text-align: right;
+        white-space: nowrap;
+      }
+    }
+  }
+  .active {
+    label {
+      color: var(--hr-brand-color-6);
+    }
+  }
+
+  .ico-checkbox {
+    color: var(--hr-brand-color-6);
   }
 </style>

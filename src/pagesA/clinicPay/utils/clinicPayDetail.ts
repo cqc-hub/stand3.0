@@ -446,12 +446,11 @@ export const medicalNationUpload = async (
 
   const { patientId } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
-
   const requestArg = {
     ...auth,
     ...detail,
     ...additional,
-    patientName: userName,
+    patientName: additional.patientName,
     mergeOrder: detail.childOrder,
     patientId,
     longitude,
@@ -566,7 +565,7 @@ export const isMedicalSelf = async (
        */
       if (medicalPlugin || medicalNation) {
         if (isFamilyPayment === '1') {
-          return true
+          return true;
         } else {
           return await isCanUseMedical(cardNumber);
         }
@@ -805,7 +804,7 @@ export const usePayPage = () => {
 
     payedList.value = resList;
 
-    if (result && result.patientName) {
+    if (result) {
       pageProps.value.deParams = {
         cardNumber: result.cardNumber,
         patientName: result.patientName,
@@ -1127,7 +1126,7 @@ export const usePayPage = () => {
             } else {
               changeRefPayList(0);
             }
-          } 
+          }
         } else {
           //不是医保
           if (isDigitalPay) {
@@ -1280,6 +1279,8 @@ export const usePayPage = () => {
     const { getDetailData, detailData } = usePayDetailPage();
     const pat = gStores.userStore.patChoose;
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
+    const patientName =
+      pageProps.value.deParams?.patientName || pat.patientName;
     await getDetailData({
       cardNumber,
       ...pageProps.value,
@@ -1300,6 +1301,7 @@ export const usePayPage = () => {
       {
         // businessType: '1',
         cardNumber,
+        patientName,
       }
     );
 
@@ -1467,7 +1469,7 @@ export const usePayPage = () => {
     if (isMedicalModePlugin) {
       const { alipay } = medicalMHelp!;
 
-      const { medicalPlugin,isFamilyPayment } = alipay!;
+      const { medicalPlugin, isFamilyPayment } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
 
@@ -1484,7 +1486,7 @@ export const usePayPage = () => {
         orgId,
         cardType,
         cardNo,
-        medOrgOrd, 
+        medOrgOrd,
       };
 
       if (isFamilyPayment === '1') {
