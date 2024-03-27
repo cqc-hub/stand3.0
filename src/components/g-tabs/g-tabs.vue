@@ -28,6 +28,7 @@
             justifyContent: !scroll ? 'center' : '',
             flex: scroll ? '' : 1,
             padding: paddingItem,
+            minWidth: itemMinWidth,
           }"
           @click="change(i)"
         >
@@ -97,6 +98,10 @@
    */
   export default {
     props: {
+      itemMinWidth: {
+        type: String,
+        default: 'auto',
+      },
       value: {
         type: Number,
         default: 0,
@@ -338,6 +343,7 @@
         // padding: 0 11px;
         transition: all 0.4s;
         white-space: nowrap;
+        justify-content: center;
       }
 
       &-line {

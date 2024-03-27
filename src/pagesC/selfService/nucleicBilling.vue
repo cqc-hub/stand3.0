@@ -235,7 +235,7 @@
     hosId: string;
     isPay: string; //是否需要缴费 表示支付方式
     openId: string;
-    type: number;
+    type: string;
   }>();
   const pageConfig = ref(<ISystemConfig['selfBilling']>{});
   const tabs = computed(() => {
@@ -290,14 +290,7 @@
     isFgShow45.value = true;
   });
 
-  //初始化页面数据
-  const initConfig = async () => {
-    pageLoading.value = false;
-    let billingType = props.type ? props.type : props.isPay === '1' ? 3 : 99999; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
-
-    if (tabs.value.length) {
-      billingType = tabs.value[tabCurrent.value]?.value;
-    }
+  const getList = async (billingType: any) => {
     NucleResult.value.length = 0;
     sideList.value = [];
     const { result } = await api
@@ -339,6 +332,21 @@
         });
       }, 80);
     }
+  };
+
+  //初始化页面数据
+  const initConfig = async () => {
+    pageLoading.value = false;
+    let billingType = props.type
+      ? props.type
+      : props.isPay === '1'
+      ? '3'
+      : '99999'; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+
+    if (tabs.value.length) {
+      billingType = tabs.value[tabCurrent.value]?.value;
+    }
+    getList(billingType);
   };
 
   const clickTip = (item: INucle) => {
