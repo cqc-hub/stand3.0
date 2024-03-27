@@ -401,7 +401,7 @@
 
     const { cardNumber, clinicType } = info.value;
 
-    await executeConfigPayAfter(clinicType, cardNumber);
+    await executeConfigPayAfter(clinicType, cardNumber, pageProps.value);
 
     if (mzParams) {
       //扫码进来的

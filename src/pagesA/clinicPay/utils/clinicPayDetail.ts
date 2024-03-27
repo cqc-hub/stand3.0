@@ -1550,7 +1550,7 @@ export const usePayPage = () => {
       gStores.userStore.patChoose.cardNumber;
     const { clinicType } = selUnPayList.value[0];
 
-    await executeConfigPayAfter(clinicType, cardNumber);
+    await executeConfigPayAfter(clinicType, cardNumber, pageProps.value);
 
     selUnPayList.value = [];
     payedList.value = [];
@@ -1797,7 +1797,8 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 
 export const executeConfigPayAfter = async (
   clinicType?: string, // '1' | '2' | '3'
-  cardNumber?: string
+  cardNumber?: string,
+  additionData: any = {}
 ) => {
   const { pageNextAdress, payNextAction } =
     await ServerStaticData.getSystemConfig('pay');
@@ -1862,7 +1863,7 @@ export const executeConfigPayAfter = async (
           break;
       }
     } else if (payNextAction) {
-      useTBanner(payNextAction);
+      useTBanner(payNextAction, 'redirectTo', additionData);
       return Promise.reject(void 0);
     }
   }

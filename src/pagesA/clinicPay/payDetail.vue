@@ -660,7 +660,7 @@
       info,
     });
 
-    uni.hideLoading()
+    uni.hideLoading();
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
@@ -833,7 +833,7 @@
     await wait(1000);
     uni.hideLoading();
 
-    await executeConfigPayAfter(clinicType, cardNumber);
+    await executeConfigPayAfter(clinicType, cardNumber, props.value);
 
     uni.reLaunch({
       url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {

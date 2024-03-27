@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxbe1f8ae346536759",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -73,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -85,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "宁波口腔医院",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"
