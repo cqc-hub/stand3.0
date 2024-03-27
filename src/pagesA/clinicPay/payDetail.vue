@@ -271,6 +271,7 @@
     type TPayDetailProp,
     type TCostList,
     type TWxAuthorize,
+    getQxMedicalNation,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -282,6 +283,7 @@
     joinQueryForUrl,
     setLocalStorage,
     getLocalStorage,
+    cloneUtil,
   } from '@/common';
   import { wait, PatientUtils } from '@/utils';
 
@@ -581,7 +583,7 @@
 
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
-          // payAliMedicalNation();
+          payAliMedicalNation();
         } else {
           payMoneyMedicalPlugin();
         }
@@ -601,6 +603,17 @@
     }
   };
 
+  // 支付宝国标
+  const payAliMedicalNation = async () => {
+    uni.showLoading({
+      title: '拉取医保授权码',
+      mask: true,
+    });
+
+    const authorize = await getQxMedicalNation();
+    medicalNationWx(authorize);
+  };
+
   /** 微信医保国标模式  获取到授权 */
   const medicalNationWx = async (payload: TWxAuthorize) => {
     const item = props.value;
@@ -608,15 +621,21 @@
 
     const cardNumber = item.cardNumber || pat.cardNumber;
     const serialNo = selList.value.map((o) => o.serialNo).join(',');
+    const costList = selList.value;
 
+    uni.showLoading({
+      title: '预上传...',
+      mask: true,
+    });
     const uploadRes = await medicalNationUpload(
       {
         ...item,
         ...detailData.value,
+        costList,
       },
       payload,
       {
-        businessType: '1',
+        // businessType: '1',
         cardNumber: item.cardNumber || pat.cardNumber,
         serialNo,
         totalCost: getTotalCostString.value,
@@ -641,6 +660,7 @@
       info,
     });
 
+    uni.hideLoading()
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });

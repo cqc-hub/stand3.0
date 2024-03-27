@@ -84,7 +84,6 @@ interface ISConfig {
 
       /** 医保开启亲情付 */
       isFamilyPayment?: '1';
-
     };
 
     wx?: {
@@ -240,6 +239,7 @@ const scJson: Record<string, ISConfig> = {
       alipay: {
         // medicalDefault: '1',
         medicalNation: {},
+        isMedicalOrder: '1',
       },
 
       wx: {

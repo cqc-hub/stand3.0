@@ -390,6 +390,7 @@
     TWxAuthorize,
     getQxMedicalNation,
     isMedicalSelf,
+    getIsAliMedicalNation,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -763,8 +764,14 @@
             pat: gStores.userStore.patChoose,
           });
           // #ifdef  MP-WEIXIN
-          const authorize = await getQxMedicalNation();
-          medicalNationWx(authorize);
+          medicalNationWx(await getQxMedicalNation());
+          // #endif
+
+          // #ifdef MP-ALIPAY
+          // 国标医保
+          if (getIsAliMedicalNation()) {
+            payAliMedicalNation();
+          }
           // #endif
         }
 
@@ -790,6 +797,10 @@
       source,
     };
 
+    uni.showLoading({
+      title: '预上传...',
+      mask: true,
+    });
     const { result } = await api.medicalUp(requestArg);
 
     const info = {
@@ -808,6 +819,10 @@
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
+  };
+
+  const payAliMedicalNation = async () => {
+    medicalNationWx(await getQxMedicalNation());
   };
 
   /**
