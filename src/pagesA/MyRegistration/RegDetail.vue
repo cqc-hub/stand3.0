@@ -828,7 +828,7 @@
   };
 
   const payAliMedicalNation = async () => {
-    medicalNationWx(await getQxMedicalNation(), {});
+    medicalNationWx(await getQxMedicalNation(joinQueryForUrl('/pagesA/MyRegistration/RegDetail',  pageProps.value)), {});
   };
 
   /**

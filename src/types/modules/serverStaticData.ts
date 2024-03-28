@@ -214,7 +214,7 @@ export interface ISystemConfig_ {
     isOpenLookRecordBtn?: '1';
   };
 
-  // 门诊缴费
+  // 门诊缴费  CLINIC_PAY_CONFIG ...
   pay: {
     /**
      * 列表页

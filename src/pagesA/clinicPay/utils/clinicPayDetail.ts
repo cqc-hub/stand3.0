@@ -339,7 +339,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 };
 
 /** 获取国标授权 */
-export const getQxMedicalNation = async () => {
+export const getQxMedicalNation = async (returnUrl: string = '/pagesA/clinicPay/clinicPayDetail') => {
   const gStores = new GStores();
   const qrCode = await getMedicalAuthCode();
 
@@ -383,7 +383,7 @@ export const getQxMedicalNation = async () => {
     scope: 'medical_ali_pay',
   });
 
-  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
+  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=${returnUrl}`;
 
   // #endif
 

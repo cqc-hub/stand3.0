@@ -239,9 +239,7 @@
                       v-if="item.itemVal"
                       class="table-title2 table-title-common"
                       :class="{
-                        down: item.flag == 'L',
-                        up: item.flag == 'H',
-                        'color-red': !['L', 'N'].includes(item.flag!),
+                        'color-red': item.flag == 'H',
                         'color-blue': item.flag === 'L'
                        }"
                     >

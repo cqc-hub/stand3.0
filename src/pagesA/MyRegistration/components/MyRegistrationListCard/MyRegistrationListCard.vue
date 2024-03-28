@@ -58,10 +58,16 @@
         <view class="row f28 mb10">
           <view class="label color-888">医生</view>
           <view class="body">
-            <text class="pr12 mr12 doc-name">
+            <text v-if="item.docName" class="pr12 mr12 doc-name">
               {{ item.docName }}
             </text>
-            <text>{{ item.schQukCategor || item.categorName }}</text>
+            <text
+              v-if="item.schQukCategor || item.categorName"
+              class="pr12 mr12 doc-name"
+            >
+              {{ item.schQukCategor || item.categorName }}
+            </text>
+            <text>{{ item.hosName }}</text>
           </view>
         </view>
       </view>
