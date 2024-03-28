@@ -44,6 +44,8 @@ interface ISConfig {
     appId: string;
     path: string;
   };
+  //首页是否展示支付宝的关注组件
+  isOpenAlipayFollow?: string;
   //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
   isOpenAlipayZndz?: boolean;
   //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
@@ -112,6 +114,18 @@ interface ISConfig {
 
 const scJson: Record<string, ISConfig> = {
   /**
+   * 温二附
+   */
+  1001067: {
+    login: {
+      isAliIndependentDev: '1',
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
+    },
+    isOpenAlipayFollow:'81fa167551234b1f8585325f56bd6726'
+  },
+  
+  /**
    * 杭州口腔医院
    */
   1001063: {
@@ -120,6 +134,7 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
+    isOpenAlipayFollow:'81fa167551234b1f8585325f56bd6726'
   },
 
   1001065: {
