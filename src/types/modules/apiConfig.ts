@@ -3,6 +3,13 @@ export type ApiParamsConfig = {
   HealthRecord: {
     // pagesC/healthRecord/healthRecordDetail
     tabs?: { name: string; key: string }[];
+    hotFeatures?:{
+      label: string,
+      ico: string,
+      url: string,
+      terminalType: string,
+    }[];
+     isRecordFlag?: '1'; //就诊记录页面是否展示协议
   };
 
   // 便民服务  pagesC/convenienceService/convenienceService
