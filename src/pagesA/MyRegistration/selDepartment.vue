@@ -127,6 +127,7 @@
   import HTMLParser from '@/common/html-parser';
 
   import DepartmentList from './components/departmentList/DepartmentList.vue';
+  import globalGl from '@/config/global';
 
   const props = defineProps<{
     // 不需要温馨提示
@@ -170,7 +171,11 @@
 
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');
-    const { deptDialogBtnCannel } = data;
+    let { deptDialogBtnCannel } = data;
+
+    if (globalGl.SYS_CODE === '1001052' && pageProps.value.hosId === '13118') {
+      deptDialogBtnCannel = undefined;
+    }
 
     if (props.noTipDialog !== '1') {
       setTimeout(() => {
@@ -314,7 +319,7 @@
 
   const handleDzClick = async (data) => {
     const queryArg = deepClone(data);
-    queryArg.path = joinQuery(data.path, { hosId:hosId.value });
+    queryArg.path = joinQuery(data.path, { hosId: hosId.value });
     useTBanner(queryArg);
   };
 
