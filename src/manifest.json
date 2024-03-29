@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wx1b81e5b0858757ba",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,8 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003167601013"
-      }
-    },
-    "mergeVirtualHostAttributes": true,
-    "appid": "2021003173668243"
+    "plugins": {},
+    "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +84,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "大医二院普湾院区",
   "h5": {
     "router": {
       "base": "./"

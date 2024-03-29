@@ -150,8 +150,8 @@
               </button>
               <button
                 class="button"
-                v-if="examineReportList.yunUrl"
-                @click="gotoMedical"
+                v-if="item.yunUrl || examineReportList.yunUrl"
+                @click="gotoMedical((item.yunUrl || examineReportList.yunUrl)!)"
               >
                 <view class="icon-font ico_cloud"></view>
                 云影像
@@ -618,10 +618,10 @@
     // }
   };
 
-  const gotoMedical = () => {
+  const gotoMedical = (url: string) => {
     uni.navigateTo({
       url: `/pagesA/webView/webView?https=${encodeURIComponent(
-        examineReportList.value.yunUrl!
+        url
       )}`,
     });
   };
