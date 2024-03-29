@@ -2,12 +2,12 @@ import manifest from '../manifest.json';
 import systemConfig from './config.json';
 import { getSConfig } from './sConfig';
 
-export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/' as const; //oss静态资源服务器
+export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
 export const SYS_CODE = systemConfig.sysCode;
 
-let env = <'dev' | 'test' | 'prod'>'prod'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
 
-const WEB_OUT_LOGIN_TIME = 0 as const; // web 环境下自动退出登录时间 ms
+const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
 const YMD = '20230118'; //年月日，每次版本更新必须同步更新
 const HM = '1723'; //时分，每次版本更新必须同步更新
@@ -66,4 +66,3 @@ const globalGl = {
 } as const;
 
 export default globalGl;
-
