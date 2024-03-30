@@ -125,7 +125,7 @@
       v-else-if="pageConfig.payedFooterBtn && tabCurrent === 1"
     >
       <button
-        @click="useTBanner(pageConfig.payedFooterBtn!)"
+        @click="useTBanner(pageConfig.payedFooterBtn!, 'navigateTo', pageProps)"
         class="btn btn-primary"
       >
         {{ pageConfig.payedFooterBtn.text }}
