@@ -18,19 +18,19 @@
     </scroll-view>
 
     <view class="footer" v-if="isShowFooter">
-      <!-- 需求：底部按钮支持5个可配置功能 自研版（在线客服  电话咨询  意见反馈 ） （腾讯微信）咨询客服 意见反馈 -->
+      <!-- 需求：底部按钮支持5个可配置功能 自研版（咨询客服  电话咨询  意见反馈 ） （腾讯微信）在线客服 意见反馈 -->
       <button
-        v-if="pageConfig.isOpenMyService"
+        v-if="pageConfig.isOpenMyService && isWx"
         class="s-btn g-border-right"
-        @click="openServicesModel"
+        @click="openServicesChat"
       >
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6a3;</text>
           <text class="title">咨询客服</text>
-          <text class="desc">添加客服企微</text>
+          <text class="desc">联系客服企微</text>
         </view>
       </button>
-    
+
       <button
         v-if="pageConfig.isCustomFeedback === '1'"
         @click="feedbackClick"
@@ -79,10 +79,6 @@
       </button>
     </view>
     <g-message />
-    <homeH5SharePopup
-      ref="homeH5SharePopupRef"
-      :configData="pageConfig.isOpenMyService || undefined"
-    />
   </view>
 </template>
 
@@ -102,7 +98,6 @@
   import api from '@/service/api';
 
   import serviceList from './components/serviceList.vue';
-  import homeH5SharePopup from '@/pages/home/componetns/homeH5SharePopup.vue';
 
   const props = defineProps<{
     subType?: string;
@@ -208,8 +203,14 @@
     });
   };
 
-  const openServicesModel = () => {
-    homeH5SharePopupRef.value.show();
+  const openServicesChat = () => {
+    wx.openCustomerServiceChat({
+      extInfo: { url: pageConfig.isOpenMyService.extInfo },
+      corpId: pageConfig.isOpenMyService.corpId,
+      complete(res) {
+        console.log('打开企业微信', res);
+      },
+    });
   };
   const makePhone = () => {
     uni.makePhoneCall({

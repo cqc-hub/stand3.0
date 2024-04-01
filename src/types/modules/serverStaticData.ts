@@ -388,11 +388,8 @@ export interface ISystemConfig_ {
     isCustomFeedback?: '1';
     // 开启咨询客服弹窗
     isOpenMyService?: {
-      imageCode: string;
-      theme: string;
-      title: string;
-      subTitle: string;
-      isHideInfo?: boolean;
+      extInfo:string;
+      corpId:string;
     };
     //开启拨打电话
     isOpenPhone?: string;
