@@ -152,8 +152,8 @@
       },
       {
         label: '健康管理',
-        icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
+        icon: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
+        iconActive: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
         url: 'mDisease',
         loginInterception: '0',
         sort: 2,

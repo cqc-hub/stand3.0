@@ -343,7 +343,8 @@
     }
 
     if (isShowFilterOrderStatus.value) {
-      selOrderStatus.value = '1';
+      selOrderStatus.value = '';
+      // selOrderStatus.value = '1';
     }
   };
 
