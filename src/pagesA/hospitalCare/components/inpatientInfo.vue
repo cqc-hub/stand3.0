@@ -1,7 +1,7 @@
 <template>
   <!-- 住院信息 -->
   <view>
-    <view class="box" v-if="Obj == false && hosInfoResObj">
+    <view class="box" v-if="hosInfoResObj && Object.keys(hosInfoResObj).length">
       <view
         :class="
           gStores.userStore.patChoose.patientSex == '女'
@@ -95,6 +95,9 @@
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>
+    <view v-else-if="hosCardInfoLists.length" class="p32">
+      <appointment-list :list="hosCardInfoLists" />
+    </view>
     <view class="empty-box" v-else>
       <g-empty :current="1" />
     </view>
@@ -144,13 +147,14 @@
   import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
 
   import GSelect from '@/components/g-select/g-select.vue';
-
+  import AppointmentList from '@/pagesA/hospitalCare/components/appointmentList.vue';
   import api from '@/service/api';
 
-  const Obj = ref();
   const props = defineProps<{
     isQueryPreRecord?: string;
     tabCurrent?: number;
+    // 住院中心页面, 请求住院预约接口并且开展相关 ui
+    isShowAppointment?: boolean;
   }>();
   const gStores = new GStores();
   const isLoad = ref(false);
@@ -161,6 +165,7 @@
 
   const gSelect = ref(<any>'');
   const selPlaces = ref(<any[]>[]);
+  const hosCardInfoLists = ref(<any[]>[]);
   const selPlace = ref('');
   const isSelShow = ref(false);
   const selClose = () => {
@@ -245,19 +250,35 @@
       }, 1000);
     }
   });
+
+  const getAppointmentList = async () => {
+    const {
+      result: { hosCardInfoLists: _hosCardInfoLists },
+    } = await api.queryHosCardInfo<any>({
+      patientId: gStores.userStore.patChoose.patientId,
+    });
+
+    hosCardInfoLists.value = _hosCardInfoLists;
+  };
+
   const init = async () => {
-    Obj.value = undefined;
     hosInfoResObj.value = {} as any;
+    hosCardInfoLists.value = [];
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
       patientId: gStores.userStore.patChoose.patientId,
     });
 
     hosInfoResObj.value = result;
-    Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
+
+    if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
+      getAppointmentList();
+    }
   };
+
   onMounted(() => {
     init();
   });
+
   onShow(() => {
     init();
   });

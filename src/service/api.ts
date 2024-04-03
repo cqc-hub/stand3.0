@@ -325,6 +325,10 @@ const queryApi = {
   // 获取住院信息
   getInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),
+
+  queryHosCardInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/queryHosCardInfo', parm(data)),
+
   //获取住院费用日清单列表
   getInHospitalDailyCostList: <T>(data) =>
     service.post<T>(

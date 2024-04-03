@@ -21,12 +21,14 @@
     </view>
     <!-- 内容区域 -->
     <view class="container" v-if="pageLoading">
-      <inpatientInfo
-        ref="inpatientInfoRef"
-        v-if="getValue('0')"
-        :isQueryPreRecord="resultHos.isQueryPreRecord"
-        :tabCurrent="tabCurrent"
-      ></inpatientInfo>
+      <template v-if="getValue('0')">
+        <inpatientInfo
+          ref="inpatientInfoRef"
+          :isQueryPreRecord="resultHos.isQueryPreRecord"
+          :tabCurrent="tabCurrent"
+          isShowAppointment
+        />
+      </template>
       <dailyExpenseList
         ref="dailyExpenseListRef"
         v-if="getValue('1')"
@@ -59,6 +61,7 @@
   import totalList from './components/totalList.vue';
   import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
   import { deQueryForUrl } from '@/common';
+import api from '@/service/api';
 
   const pageProps = ref(
     {} as {
@@ -75,9 +78,6 @@
   const totalListRef = ref<any>('');
   const totalListRef3 = ref<any>('');
   const pageLoading = ref(false);
-  const tabList = ref(false);
-  const tab1List = ref(false);
-  const tab2List = ref(false);
   const currentTabValue = ref(false);
 
   //获取当前的value
@@ -94,6 +94,7 @@
   //入口不同调用不同接口
   const pageRequest = () => {
     const v = resultHos.value.tab[tabCurrent.value].value;
+
     switch (v) {
       case '0':
         inpatientInfoRef?.value.init();
@@ -131,10 +132,6 @@
     pageLoading.value = false;
     const result = await ServerStaticData.getSystemConfig('hospitalCare');
     resultHos.value = result as any;
-
-    tabList.value = result.tab.find((o) => o.value === '0') ? true : false;
-    tab1List.value = result.tab.find((o) => o.value === '1') ? true : false;
-    tab2List.value = result.tab.find((o) => o.value === '2') ? true : false;
 
     pageLoading.value = true;
   };

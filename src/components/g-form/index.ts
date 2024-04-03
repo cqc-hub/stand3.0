@@ -69,6 +69,11 @@ interface IInputInstance extends IBaseInstance {
 
 export interface ISwitchInstance extends IBaseInstance {
   field: 'switch';
+  /**
+   *  对齐方式 默认 右对齐
+   */
+  align?: 'left' | 'right';
+  labelFormatter?: (v: boolean) => any;
 }
 
 /**

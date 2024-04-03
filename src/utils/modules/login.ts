@@ -192,7 +192,7 @@ export class LoginUtils extends GStores {
             success(e) {
               //识别成功
               console.warn('识别成功', e);
-              resolve(void 0);
+              resolve(e);
             },
             fail(err) {
               //识别失败

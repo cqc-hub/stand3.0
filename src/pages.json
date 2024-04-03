@@ -93,6 +93,16 @@
         },
 
         {
+          "path": "hospitalCare/changeOrder",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "hospitalCare/dayCostList",
           "style": {
             "navigationBarTitleText": "住院服务"

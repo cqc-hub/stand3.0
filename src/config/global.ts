@@ -42,7 +42,8 @@ const netUrl =
 const h5Url =
   env === 'prod'
     ? 'https://h5.eheren.com/v3/#/'
-    : 'https://health.eheren.com/v3/#/';
+    : 'https://health.eheren.com/v3dev/#/';
+    // : 'https://health.eheren.com/v3/#/';
 
 const globalGl = {
   SYS_CODE,

@@ -62,11 +62,13 @@
           </block>
 
           <block v-else>
-            <view class="flex1">
+            <view
+              v-if="
+                item.field === 'input-text' || item.field === 'input-verify'
+              "
+              class="flex1"
+            >
               <uni-easyinput
-                v-if="
-                  item.field === 'input-text' || item.field === 'input-verify'
-                "
                 :placeholder="item.placeholder"
                 :inputBorder="false"
                 :clearable="false"
@@ -181,6 +183,7 @@
               v-if="item.field === 'switch'"
               :class="{
                 'my-disabled': item.disabled,
+                'container-body-switch-align-left': item.align === 'left',
               }"
               class="container-body-switch"
             >
@@ -189,7 +192,15 @@
                 :disabled="item.disabled"
                 @change="(e: any) => changeSwitch(item, e)"
                 color="var(--hr-brand-color-6)"
-              />
+              >
+                <text class="ml12">
+                  {{
+                    (item.labelFormatter &&
+                      item.labelFormatter(value[item.key])) ||
+                    ''
+                  }}
+                </text>
+              </switch>
             </view>
 
             <view
