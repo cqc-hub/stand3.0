@@ -329,6 +329,9 @@ const queryApi = {
   queryHosCardInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/queryHosCardInfo', parm(data)),
 
+  addHosCardInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/addHosCardInfo', parm(data)),
+
   //获取住院费用日清单列表
   getInHospitalDailyCostList: <T>(data) =>
     service.post<T>(
@@ -388,9 +391,9 @@ const queryApi = {
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
   getCloudReportUrl: <T = any>(data) =>
     service.post('/phs-query/examine/getCloudReportUrl', parm(data)),
-     //获取云影像
+  //获取云影像
   getCloudImageInfo: <T = any>(data) =>
-  service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
+    service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
 };
@@ -661,7 +664,7 @@ const userApi = {
       hideLoading: false,
     }),
 
-    getAliMedicalPat: (data) =>
+  getAliMedicalPat: (data) =>
     service.post('/phs-user/relevantPatient/getAliMedicalPat', parm(data), {
       // hideLoading: false,
     }),

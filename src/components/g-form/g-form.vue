@@ -23,7 +23,8 @@
       >
         <view
           :class="{
-            'item-require': item.required && showRequireIcon,
+            'item-require':
+              item.required && (showRequireIcon || item.showRequireIcon),
           }"
           class="label text-no-wrap"
           :style="item.labelStyle"
@@ -576,7 +577,7 @@
     const { value: choose } = e.detail;
     const { key, field } = cacheItem;
 
-    clearItemWarning(cacheItem.key);
+    clearItemWarning(key);
     if (field === 'address') {
       addressChange(cacheItem, choose);
     } else if (field === 'select') {
@@ -594,6 +595,7 @@
   const addressChange = async (item: TInstance, v) => {
     const { key, field } = item;
 
+    clearItemWarning(key);
     if (field === 'address') {
       const selLabels = v.map((o) => o.text).join('');
       setData({

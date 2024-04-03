@@ -31,6 +31,7 @@ interface IBaseInstance {
   subLabel?: string;
   placeholder?: string;
   required?: boolean;
+  showRequireIcon?: boolean;
   ocr?: boolean;
   ocrDisabled?: boolean;
   emptyMessage?: string;
