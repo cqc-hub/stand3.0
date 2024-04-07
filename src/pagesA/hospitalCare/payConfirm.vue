@@ -146,7 +146,7 @@
  
   const payArg = ref<BaseObject>({});
 
-  const info = ref({});
+  const info = ref<any>({});
 
   const getData = async () => {
     await getSysConfig();
@@ -205,9 +205,9 @@
   const getOutHospitalAffirmPay = async () => {
     const { cardNumber, patientId, hosId } = pageProps.value;
     const source = gStores.globalStore.browser.source;
-    const { amount, visitNo } = info.value;
+    const { totalNeedPay, visitNo } = info.value;
     const { result } = await api.outHospitalAffirmPay<any>({
-      amount,
+      amount:totalNeedPay,
       patientId,
       hosId,
       source,
