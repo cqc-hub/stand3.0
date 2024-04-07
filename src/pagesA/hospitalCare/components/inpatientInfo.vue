@@ -283,7 +283,7 @@
   const init = async () => {
     hosInfoResObj.value = {} as any;
     hosCardInfoLists.value = [];
-    const { result } = await api.getInHospitalInfo<any>({
+    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
       patientId: gStores.userStore.patChoose.patientId,
     });
 
