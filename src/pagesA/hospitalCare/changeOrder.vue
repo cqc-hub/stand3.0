@@ -22,10 +22,10 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores } from '@/utils';
+  import { GStores, apiAsync } from '@/utils';
+
   import dayjs from 'dayjs';
   import api from '@/service/api';
-  import { apiAsync } from '../../utils/modules/utils';
 
   const pageProps = ref(
     <
@@ -275,9 +275,10 @@
   onLoad(async (opt) => {
     // opt.appointAdtStatus = '1';
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value);
+
     formData.value = {
-      ...gStores.userStore.patChoose,
+      patientId: gStores.userStore.patChoose.patientId,
+      patientName: gStores.userStore.patChoose.patientName,
       ...pageProps.value,
     };
   });

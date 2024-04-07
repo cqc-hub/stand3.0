@@ -103,6 +103,16 @@
         },
 
         {
+          "path": "hospitalCare/selfHospitalization",
+          "style": {
+            "navigationBarTitleText": "自助入院"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "hospitalCare/dayCostList",
           "style": {
             "navigationBarTitleText": "住院服务"

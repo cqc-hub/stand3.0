@@ -1235,6 +1235,7 @@ export const usePayPage = () => {
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
+    // item.key = 'medicare'
     setLocalStorage({
       selUnPayList: selUnPayList.value,
     });
