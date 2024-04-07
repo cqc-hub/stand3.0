@@ -78,7 +78,6 @@ if (medicalMHelp) {
     }
   }
 }
-console.log(globalGl.env, 'hhh');
 
 wxConfig.appid = wxAppid;
 aliConfig.appid = alipayAppid;
