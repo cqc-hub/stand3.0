@@ -341,6 +341,13 @@ const queryApi = {
         reportCmPV_YLName: '住院日清单查询',
       }
     ),
+  //出院患者确认结算
+  outHospitalAffirmPay: <T>(data) =>
+    service.post<T>('/phs-query/hospital/outHospitalAffirmPay', parm(data)),
+
+  //出院预结算
+  getOutHospitalPreparePay: <T>(data) =>
+    service.post<T>('/phs-query/hospital/getOutHospitalPreparePay', parm(data)),
   //创建住院缴费订单
   createInHospitalPayOrder: <T>(data) =>
     service.post<T>(

@@ -43,7 +43,7 @@
         <button
           :disabled="defalutMoney == '' ? true : false"
           :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
-          @click="getPay"
+          @click="getRefPay(defalutMoney)"
         >
           确定
         </button>
@@ -56,7 +56,7 @@
       @pay-click="getPayInfo"
       autoInOne
       ref="refPay"
-    >   </g-pay>
+    ></g-pay>
     <g-message />
   </view>
 </template>
@@ -66,6 +66,7 @@
   import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { usePayPage } from './../clinicPay/utils/clinicPayDetail';
+  import { useHosPayPage } from './utils/inpatientInfo';
 
   import api from '@/service/api';
   import { GStores, ServerStaticData, wait, ISystemConfig } from '@/utils';
@@ -73,10 +74,18 @@
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { payOrderResult } from './utils/inpatientInfo';
 
+  const { getIsDigitalPay, getDigitalPay } = usePayPage();
+
   const {
-    getIsDigitalPay,
-    getDigitalPay
-  } = usePayPage();
+    refPay,
+    refPayList,
+    getCreateInHospitalPayOrderData,
+    getSysConfig,
+    pageConfig,
+    isConfigComplete,
+    toDigitalPay,
+    getRefPay
+  } = useHosPayPage();
 
   type IPageProps = {
     hosId: string;
@@ -89,26 +98,19 @@
   };
 
   interface IGPay {
-  label: string;
-  key: 'online' | 'digital';
-}
+    label: string;
+    key: 'online' | 'digital';
+  }
 
   const gStores = new GStores();
   const resultHos = ref<ISystemConfig['hospitalCare']>({} as any);
-  const isConfigComplete = ref(false);
 
   const list = ref([]);
-  const defalutMoney = ref('');
-  const refPay = ref<any>('');
+  const defalutMoney = ref(''); 
   const payOrder = ref<payOrderResult>({} as payOrderResult);
   const pageProps = ref({} as IPageProps);
 
-  const refPayList = ref([
-    {
-      label: '自费支付',
-      key: 'online',
-    },
-  ]);
+
   const payArg = ref<BaseObject>({});
   const getMoneyInputType = computed(() => {
     if (resultHos.value.isMode === '1' || !resultHos.value.isMode) {
@@ -122,76 +124,81 @@
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
+    await inputMoneyChange();
     // 自费
     if (item.key === 'online') {
       toPay();
     } else if (item.key === 'digital') {
-      toDigitalPay()
+      toDigitalPay(pageProps.value, defalutMoney.value);
     }
   };
 
-  const getPay = async () => {
-    const isDigitalPay= getIsDigitalPay(resultHos.value);
+  // const getPay = async () => {
+  //   const isDigitalPay = getIsDigitalPay(resultHos.value);
 
-   if(isDigitalPay){
-    let labelPay = '自费支付'
-    // #ifdef MP-WEIXIN
-    labelPay = '微信自费支付'
-    // #endif
-    // #ifdef MP-ALIPAY
-    labelPay = '支付宝自费支付'
-    // #endif
-    refPayList.value = [
-        {
-          label: labelPay,
-          key: 'online',
-        },
+  //   if (isDigitalPay) {
+  //     let labelPay = '自费支付';
+  //     // #ifdef MP-WEIXIN
+  //     labelPay = '微信自费支付';
+  //     // #endif
+  //     // #ifdef MP-ALIPAY
+  //     labelPay = '支付宝自费支付';
+  //     // #endif
+  //     refPayList.value = [
+  //       {
+  //         label: labelPay,
+  //         key: 'online',
+  //       },
 
-        {
-          label: '数字人民币支付',
-          key: 'digital',
-        },
-      ];
-    }
+  //       {
+  //         label: '数字人民币支付',
+  //         key: 'digital',
+  //       },
+  //     ];
+  //   }
 
-    if (defalutMoney.value == '0') {
-      gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000)
-      return
-    }
-    await wait(200);
-    refPay.value.show();
-  };
-    /**
+  //   if (defalutMoney.value == '0') {
+  //     gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000);
+  //     return;
+  //   }
+  //   await wait(200);
+  //   refPay.value.show();
+  // };
+  /**
    * 创建订单 获取支付入参数据
    */
 
-  const payBeforeCreateData = async ()=>{
-    await inputMoneyChange();
-    await int();
-    const payArg: BaseObject ={
-      phsOrderNo: payOrder.value.phsOrderNo,
-      paySign: payOrder.value.paySign,
-      totalFee: defalutMoney.value,
-      phsOrderSource: pageProps.value.hospitalAccount
-        ? pageProps.value.hospitalAccount
-        : '3',
-      source: gStores.globalStore.browser.source,
-      ...pageProps.value,
-      patientId:
-        pageProps.value.type == '1'
-          ? ''
-          : gStores.userStore.patChoose.patientId,
-    }
-    return payArg
-  }
+  // const payBeforeCreateData = async ()=>{
+  //   await inputMoneyChange();
+  //   return await getCreateInHospitalPayOrderData();
+  //   // const payArg: BaseObject ={
+  //   //   phsOrderNo: payOrder.value.phsOrderNo,
+  //   //   paySign: payOrder.value.paySign,
+  //   //   totalFee: defalutMoney.value,
+  //   //   phsOrderSource: pageProps.value.hospitalAccount
+  //   //     ? pageProps.value.hospitalAccount
+  //   //     : '3',
+  //   //   source: gStores.globalStore.browser.source,
+  //   //   ...pageProps.value,
+  //   //   patientId:
+  //   //     pageProps.value.type == '1'
+  //   //       ? ''
+  //   //       : gStores.userStore.patChoose.patientId,
+  //   // }
+  //   // return payArg
+  // }
 
   const toPay = async () => {
-    const payArg = await payBeforeCreateData()
+    const payArg = await getCreateInHospitalPayOrderData(
+      pageProps.value,
+      defalutMoney.value
+    );
     const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '住院缴费');
     payAfter();
   };
+
   const payAfter = async () => {
     uni.showLoading({});
     await wait(1000);
@@ -211,62 +218,54 @@
     }
   };
 
-  /** 数字人民币支付 */
-  const toDigitalPay = async ()=>{
+  // /** 数字人民币支付 */
+  // const toDigitalPay = async ()=>{
 
-    const {alipay, wx } = resultHos.value.payList!;
-    let _businessType = '';
-    let _channel = '';
-      // #ifdef MP-ALIPAY
-      if (alipay) {
-        const { businessType,channel } = alipay;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
+  //   const {alipay, wx } = resultHos.value.payList!;
+  //   let _businessType = '';
+  //   let _channel = '';
+  //     // #ifdef MP-ALIPAY
+  //     if (alipay) {
+  //       const { businessType,channel } = alipay;
+  //       _businessType = businessType;
+  //       _channel = channel;
+  //     }
+  //     // #endif
 
-      // #ifdef  MP-WEIXIN
-      if (wx) {
-        const { businessType,channel } = wx;
-        _businessType = businessType;
-        _channel = channel;
-      }
-      // #endif
-    //区分下 代缴 住院 门诊充值的回调地址
-    let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
-    if(pageProps.value.type == '1' || pageProps.value.hosId){
-      _returnUrl = '/pages/home/home'
-    }
-
-    const payArg = await payBeforeCreateData()
-    const res = await payMoneyOnline({
-      ...payArg,
-      businessType: _businessType,
-      channel:_channel,
-      returnUrl: `https://h5.eheren.com/v3/#/pagesC/shaoxing/rmbNumber?pageUrl=${encodeURIComponent(
-              _returnUrl
-              )}`,
-    });
-    const { invokeData } = res;
-    uni.navigateTo({
-      url: `/pagesA/webView/webView?https=${encodeURIComponent(
-        invokeData.payUrl!
-      )}`,
-    });
-    // payAfter();
-
-  }
+  //     // #ifdef  MP-WEIXIN
+  //     if (wx) {
+  //       const { businessType,channel } = wx;
+  //       _businessType = businessType;
+  //       _channel = channel;
+  //     }
+  //     // #endif
+  //   //区分下 代缴 住院 门诊充值的回调地址
+  //   let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
+  //   if(pageProps.value.type == '1' || pageProps.value.hosId){
+  //     _returnUrl = '/pages/home/home'
+  //   }
+  //   const payArg = await getCreateInHospitalPayOrderData(pageProps.value,defalutMoney.value)
+  //   const res = await payMoneyOnline({
+  //     ...payArg,
+  //     businessType: _businessType,
+  //     channel:_channel,
+  //     returnUrl: `https://h5.eheren.com/v3/#/pagesC/common/rmbNumber?pageUrl=${encodeURIComponent(
+  //             _returnUrl
+  //             )}`,
+  //   });
+  //   const { invokeData } = res;
+  //   uni.navigateTo({
+  //     url: `/pagesA/webView/webView?https=${encodeURIComponent(
+  //       invokeData.payUrl!
+  //     )}`,
+  //   });
+  // }
 
   const setData = async () => {
-    isConfigComplete.value = false;
-    const result = await ServerStaticData.getSystemConfig(
-      'hospitalCare'
-    ).finally(() => {
-      isConfigComplete.value = true;
-    });
-    resultHos.value = result;
-    if (result.inPatientPrePay) {
-      list.value = JSON.parse(result.inPatientPrePay as any);
+    await getSysConfig();
+    resultHos.value = pageConfig.value;
+    if (pageConfig.value.inPatientPrePay) {
+      list.value = JSON.parse(pageConfig.value.inPatientPrePay as any);
     }
   };
 
@@ -285,24 +284,24 @@
       }
     }
   };
-  const int = async () => {
-    const { patientName, cardNumber, hosId, hosName } = pageProps.value;
-    const { result } = await api.createInHospitalPayOrder<payOrderResult>({
-      fee: defalutMoney.value,
-      orderType: pageProps.value.hospitalAccount
-        ? pageProps.value.hospitalAccount
-        : '3',
-      patientId:
-        pageProps.value.type == '1'
-          ? ''
-          : gStores.userStore.patChoose.patientId,
-      patientName,
-      cardNumber,
-      hosId,
-      hosName,
-    });
-    payOrder.value = result;
-  };
+  // const int = async () => {
+  //   const { patientName, cardNumber, hosId, hosName } = pageProps.value;
+  //   const { result } = await api.createInHospitalPayOrder<payOrderResult>({
+  //     fee: defalutMoney.value,
+  //     orderType: pageProps.value.hospitalAccount
+  //       ? pageProps.value.hospitalAccount
+  //       : '3',
+  //     patientId:
+  //       pageProps.value.type == '1'
+  //         ? ''
+  //         : gStores.userStore.patChoose.patientId,
+  //     patientName,
+  //     cardNumber,
+  //     hosId,
+  //     hosName,
+  //   });
+  //   payOrder.value = result;
+  // };
 
   const moneyUtil = computed(() => {
     return transformUnit((defalutMoney.value as unknown as number) * 1);

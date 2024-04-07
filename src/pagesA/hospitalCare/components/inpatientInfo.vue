@@ -91,7 +91,10 @@
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
 
-        <view class="button f36" @click="toPayPage">预交费用</view>
+        <view v-if="isShowPayBtn" class="button f36" @click="toPayOut">
+          已出院，立即结算
+        </view>
+        <view v-else class="button f36" @click="toPayPage">预交费用</view> 
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>
@@ -168,6 +171,7 @@
   const hosCardInfoLists = ref(<any[]>[]);
   const selPlace = ref('');
   const isSelShow = ref(false);
+  const isShowPayBtn = ref(false);
   const selClose = () => {
     isSelShow.value = false;
     reject();
@@ -242,6 +246,21 @@
       url: joinQuery('/pagesA/hospitalCare/paymentPage', args),
     });
   };
+
+  const toPayOut = async () => {
+    const { hosId, cardNumber,patientName } = hosInfoResObj.value;
+    const patientId = gStores.userStore.patChoose.patientId;
+    const args = {
+      patientId,
+      hosId,
+      cardNumber,
+      patientName
+    };
+    uni.navigateTo({
+      url: joinQuery('/pagesA/hospitalCare/payConfirm', args),
+    });
+  };
+  
   onPullDownRefresh(() => {
     if (props.tabCurrent == 0) {
       setTimeout(() => {
@@ -269,6 +288,13 @@
     });
 
     hosInfoResObj.value = result;
+    
+    //status 在院状态 1.在院 2.出院未结算
+    if (result.status === '2' && result.costTypeName === '自费') {
+      isShowPayBtn.value = false;
+    } else {
+      isShowPayBtn.value = true;
+    }
 
     if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
       getAppointmentList();

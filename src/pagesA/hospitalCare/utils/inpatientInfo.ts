@@ -189,3 +189,165 @@ export interface hosParam {
     alipay?: IPayListObj;
   };
 }
+
+export type TPayConfirmHosPageProp = {
+  hosId: string;
+  cardNumber: string;
+  patientId: string;
+  patientName?: string;
+};
+
+interface IGPay {
+  label: string;
+  key: 'online' | 'digital';
+}
+import { ref } from 'vue';
+import {
+  GStores,
+  debounce,
+  type ISystemConfig,
+  ServerStaticData,
+  wait,
+  useTBanner,
+  PatientUtils,
+  apiAsync,
+} from '@/utils';
+import api from '@/service/api';
+
+import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+import { usePayPage } from '../../clinicPay/utils/clinicPayDetail';
+const { getIsDigitalPay, getDigitalPay } = usePayPage();
+
+export const useHosPayPage = () => {
+  const gStores = new GStores();
+  const pageConfig = ref({} as ISystemConfig['hospitalCare']);
+  const isConfigComplete = ref(false);
+  const refPayList = ref([
+    {
+      label: '自费支付',
+      key: 'online',
+    },
+  ]);
+  const refPay = ref<any>('');
+
+  const getSysConfig = async () => {
+    isConfigComplete.value = false;
+    pageConfig.value = await ServerStaticData.getSystemConfig(
+      'hospitalCare'
+    ).finally(() => {
+      isConfigComplete.value = true;
+    });
+  };
+
+  const getRefPay = async (fee?) => {
+    const isDigitalPay = getIsDigitalPay(pageConfig.value);
+
+    if (isDigitalPay) {
+      let labelPay = '自费支付';
+      // #ifdef MP-WEIXIN
+      labelPay = '微信自费支付';
+      // #endif
+      // #ifdef MP-ALIPAY
+      labelPay = '支付宝自费支付';
+      // #endif
+      refPayList.value = [
+        {
+          label: labelPay,
+          key: 'online',
+        },
+
+        {
+          label: '数字人民币支付',
+          key: 'digital',
+        },
+      ];
+    }
+
+    if (fee && fee == '0') {
+      gStores.messageStore.showMessage('不支持充值0元，请输入其它金额！', 3000);
+      return;
+    }
+    await wait(200);
+    refPay.value.show();
+  };
+
+  /**
+   * 创建订单 获取支付入参数据
+   * 传参type 默认是预交金充值  outHos是出院结算
+   */
+  const getCreateInHospitalPayOrderData = async (data, fee, type?) => {
+    const { patientName, cardNumber, hosId, hosName } = data;
+    const { result } = await api.createInHospitalPayOrder<payOrderResult>({
+      fee: fee,
+      orderType: data.hospitalAccount ? data.hospitalAccount : '3',
+      patientId: data.type == '1' ? '' : gStores.userStore.patChoose.patientId,
+      patientName,
+      cardNumber,
+      hosId,
+      hosName,
+      leaveHos: type === 'outHos' ? '1' : '',
+    });
+    const payArg: BaseObject = {
+      phsOrderNo: result.phsOrderNo,
+      paySign: result.paySign,
+      totalFee: fee,
+      phsOrderSource: data.hospitalAccount ? data.hospitalAccount : '3',
+      source: gStores.globalStore.browser.source,
+      ...data,
+      patientId: data.type == '1' ? '' : gStores.userStore.patChoose.patientId,
+    };
+    return payArg;
+  };
+
+  /** 数字人民币支付 */
+  const toDigitalPay = async (data, fee) => {
+    const { alipay, wx } = pageConfig.value.payList!;
+    let _businessType = '';
+    let _channel = '';
+    // #ifdef MP-ALIPAY
+    if (alipay) {
+      const { businessType, channel } = alipay;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+
+    // #ifdef  MP-WEIXIN
+    if (wx) {
+      const { businessType, channel } = wx;
+      _businessType = businessType;
+      _channel = channel;
+    }
+    // #endif
+    //区分下 代缴 住院 门诊充值的回调地址
+    let _returnUrl = '/pagesA/hospitalCare/hospitalCare';
+    if (data.type == '1' || data.hosId) {
+      _returnUrl = '/pages/home/home';
+    }
+    const payArg = await getCreateInHospitalPayOrderData(data, fee);
+    const res = await payMoneyOnline({
+      ...payArg,
+      businessType: _businessType,
+      channel: _channel,
+      returnUrl: `https://h5.eheren.com/v3/#/pagesC/common/rmbNumber?pageUrl=${encodeURIComponent(
+        _returnUrl
+      )}`,
+    });
+    const { invokeData } = res;
+    uni.navigateTo({
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(
+        invokeData.payUrl!
+      )}`,
+    });
+  };
+  return {
+    refPay,
+    refPayList,
+    isConfigComplete,
+    pageConfig,
+    getRefPay,
+    getSysConfig,
+    toDigitalPay,
+    getCreateInHospitalPayOrderData,
+  };
+};
