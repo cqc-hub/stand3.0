@@ -26,7 +26,7 @@
           ref="inpatientInfoRef"
           :isQueryPreRecord="resultHos.isQueryPreRecord"
           :tabCurrent="tabCurrent"
-          isShowAppointment
+          :isShowAppointment="pageProps.openAppointment === '1'"
         />
       </template>
       <dailyExpenseList
@@ -61,11 +61,13 @@
   import totalList from './components/totalList.vue';
   import { GStores, ServerStaticData, ISystemConfig } from '@/utils';
   import { deQueryForUrl } from '@/common';
-import api from '@/service/api';
+  import api from '@/service/api';
 
   const pageProps = ref(
     {} as {
       tabIndex?: 1 | 2;
+      // 住院预约 ?
+      openAppointment?: '1';
     }
   );
 
@@ -122,12 +124,6 @@ import api from '@/service/api';
     tabStatus.value = e;
     tabCurrent.value = e;
   };
-  const scrollOption = ref({
-    auto: false,
-    size: 15,
-    loadFailText: '加载失败',
-    noMoreText: '没有更多了',
-  });
   const setData = async () => {
     pageLoading.value = false;
     const result = await ServerStaticData.getSystemConfig('hospitalCare');
@@ -138,7 +134,7 @@ import api from '@/service/api';
 
   onLoad(async (opt) => {
     if (opt) {
-      pageProps.value = deQueryForUrl(opt);
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
     setData();
     if (pageProps.value.tabIndex) {
