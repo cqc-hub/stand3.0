@@ -9,7 +9,7 @@
       />
     </view>
 
-    <view class="p32">
+    <view class="p32 pt70 mt70">
       <button @click="gform.submit" class="btn btn-primary">保存预约</button>
     </view>
     <g-message />

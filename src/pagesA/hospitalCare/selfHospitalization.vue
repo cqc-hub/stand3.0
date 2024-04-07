@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <view class="mb32">
-      <g-choose-pat @choose-pat="choosePat" />
+      <g-choose-pat @choose-pat="getData" />
     </view>
 
     <view class="container" scroll-y>
@@ -11,11 +11,19 @@
         bodyBold
         ref="gform"
       />
+
+      <view
+        v-if="isComplete && !Object.keys(formData).length"
+        class="empty-list"
+      >
+        <g-empty :current="1" />
+      </view>
+
+      <view v-else-if="isComplete" class="p32">
+        <button @click="gform.submit" class="btn btn-primary">保存预约</button>
+      </view>
     </view>
 
-    <view class="p32">
-      <button @click="gform.submit" class="btn btn-primary">保存预约</button>
-    </view>
     <g-message />
   </view>
 </template>
@@ -42,6 +50,7 @@
   const gform = ref<any>('');
   const gStores = new GStores();
   const formData = ref<BaseObject>({});
+  const isComplete = ref(false);
 
   const formSubmit = async ({ data }) => {
     data.isTakeAnticoagulantDrugs =
@@ -239,14 +248,15 @@
     },
   ];
 
-  const choosePat = () => {};
-
   const getData = async () => {
     formData.value = {};
+    isComplete.value = false;
     const patientId = gStores.userStore.patChoose.patientId;
-    const { result } = await api.queryInpVisit({
-      patientId,
-    });
+    const { result } = await api
+      .queryInpVisit({
+        patientId,
+      })
+      .finally(() => [(isComplete.value = true)]);
   };
 
   const init = async () => {
