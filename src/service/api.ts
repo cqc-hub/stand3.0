@@ -332,6 +332,9 @@ const queryApi = {
   addHosCardInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/addHosCardInfo', parm(data)),
 
+  queryInpVisit: <T>(data) =>
+    service.post<T>('/phs-query/hospital/queryInpVisit', parm(data)),
+
   //获取住院费用日清单列表
   getInHospitalDailyCostList: <T>(data) =>
     service.post<T>(

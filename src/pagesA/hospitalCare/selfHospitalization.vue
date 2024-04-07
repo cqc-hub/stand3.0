@@ -25,7 +25,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores, apiAsync } from '@/utils';
+  import { GStores, apiAsync, ServerStaticData, IHosInfo } from '@/utils';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -38,6 +38,7 @@
       }
     >{}
   );
+  const hosList = ref<IHosInfo[]>([]);
   const gform = ref<any>('');
   const gStores = new GStores();
   const formData = ref<BaseObject>({});
@@ -178,11 +179,83 @@
       placeholder: '请输入',
       key: 'detailedAddress',
     },
+
+    {
+      labelWidth,
+      label: '请确认您的住院信息',
+      // @ts-expect-error
+      field: ' ',
+      placeholder: '请输入',
+      key: 'sbsbsbsbsbsbs',
+      rowStyle: 'margin-top: 32rpx;',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '入院院区',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'hosName',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '主管医生',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'chiefDoctor',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '入院科室',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'deptName',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '入院病房',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'wardName',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '入院时间',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'appointAdmissionDate',
+    },
+    {
+      labelWidth,
+      disabled: true,
+      label: '院前检查',
+      field: 'input-text',
+      placeholder: ' ',
+      key: 'inAdvanceOrderFlagLabel',
+    },
   ];
 
   const choosePat = () => {};
 
-  onMounted(() => {
+  const getData = async () => {
+    formData.value = {};
+    const patientId = gStores.userStore.patChoose.patientId;
+    const { result } = await api.queryInpVisit({
+      patientId,
+    });
+  };
+
+  const init = async () => {
+    hosList.value = await ServerStaticData.getHosList();
+  };
+
+  onMounted(async () => {
+    await init();
+    await getData();
     gform.value.setList([...renderListBase]);
   });
 </script>
