@@ -94,7 +94,7 @@
         <view v-if="isShowPayBtn" class="button f36" @click="toPayOut">
           已出院，立即结算
         </view>
-        <view v-else class="button f36" @click="toPayPage">预交费用</view> 
+        <view v-else class="button f36" @click="toPayPage">预交费用</view>
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>
@@ -260,7 +260,7 @@
       url: joinQuery('/pagesA/hospitalCare/payConfirm', args),
     });
   };
-  
+
   onPullDownRefresh(() => {
     if (props.tabCurrent == 0) {
       setTimeout(() => {
@@ -283,7 +283,7 @@
   const init = async () => {
     hosInfoResObj.value = {} as any;
     hosCardInfoLists.value = [];
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    const { result } = await api.getInHospitalInfo<any>({
       patientId: gStores.userStore.patChoose.patientId,
     });
 
