@@ -39,6 +39,7 @@ export interface getInHospitalInfoResult {
   patientNameDes?: string;
   choosePlaceFlag?: boolean;
   placeList?: any[];
+  status?: string;
 }
 //获取住院费用日清单列表
 export interface dailyParam {

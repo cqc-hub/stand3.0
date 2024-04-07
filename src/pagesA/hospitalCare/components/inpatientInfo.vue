@@ -248,13 +248,13 @@
   };
 
   const toPayOut = async () => {
-    const { hosId, cardNumber,patientName } = hosInfoResObj.value;
+    const { hosId, cardNumber, patientName } = hosInfoResObj.value;
     const patientId = gStores.userStore.patChoose.patientId;
     const args = {
       patientId,
       hosId,
       cardNumber,
-      patientName
+      patientName,
     };
     uni.navigateTo({
       url: joinQuery('/pagesA/hospitalCare/payConfirm', args),
@@ -290,10 +290,12 @@
     hosInfoResObj.value = result;
 
     //status 在院状态 1.在院 2.出院未结算
-    if (result.status === '2' && result.costTypeName === '自费') {
-      isShowPayBtn.value = true;
-    } else {
-      isShowPayBtn.value = false;
+    if (result && Object.keys(result).length) {
+      if (result.status === '2' && result.costTypeName === '自费') {
+        isShowPayBtn.value = true;
+      } else {
+        isShowPayBtn.value = false;
+      }
     }
 
     if (props.isShowAppointment && (!result || !Object.keys(result).length)) {

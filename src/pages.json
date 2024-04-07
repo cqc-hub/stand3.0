@@ -137,6 +137,14 @@
           }
         },
 
+
+        {
+          "path": "hospitalCare/payConfirm",
+          "style": {
+            "navigationBarTitleText": "付款确认"
+          }
+        },
+
         {
           "path": "hospitalCare/choosePatient",
           "style": {
