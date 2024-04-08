@@ -223,6 +223,8 @@ export interface ISystemConfig_ {
      */
     /** 可以切换院区? */
     isListToggleHos?: '1';
+    /** 扫码进来(带 params 场景下待缴费无数据的跳转动作) */
+    scanPayEmptyAction?: TButtonConfig;
 
     /** 门诊类型  网络医院/线下门诊 (是否展示) */
     isListShowClinicType?: '1';
@@ -390,8 +392,8 @@ export interface ISystemConfig_ {
     isCustomFeedback?: '1';
     // 开启咨询客服弹窗
     isOpenMyService?: {
-      extInfo:string;
-      corpId:string;
+      extInfo: string;
+      corpId: string;
     };
     //开启拨打电话
     isOpenPhone?: string;

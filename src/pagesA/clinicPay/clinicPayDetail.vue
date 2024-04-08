@@ -416,6 +416,19 @@
     } else {
       await getListData();
     }
+
+    if (
+      pageProps.value.params &&
+      tabCurrent.value === 0 &&
+      !unPayList.value.length
+    ) {
+      pageConfig.value.scanPayEmptyAction &&
+        useTBanner(
+          pageConfig.value.scanPayEmptyAction,
+          'navigateTo',
+          pageProps.value
+        );
+    }
   });
 </script>
 

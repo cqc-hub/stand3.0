@@ -377,7 +377,10 @@
         selList.value.splice(idx, 1);
       } else {
         if (billingDoc !== oldBillingDoc) {
-          gStores.messageStore.showMessage('仅同一医生才支持合并开单', 3000);
+          gStores.messageStore.showMessage(
+            '您选择的项目暂不支持合并开单',
+            3000
+          );
         } else {
           selList.value.push(item);
         }

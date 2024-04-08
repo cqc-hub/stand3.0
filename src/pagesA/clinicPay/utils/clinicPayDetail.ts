@@ -933,8 +933,6 @@ export const usePayPage = () => {
 
   let isGetListDataFirst = true;
   let getListData = async (isReset = true) => {
-    console.log('hhjjj');
-
     if (isReset) {
       const isKeepSel = getLocalStorage('keepSelUnPayList') === '1';
       unPayList.value = [];
