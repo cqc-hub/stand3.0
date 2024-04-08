@@ -40,6 +40,7 @@ export interface getInHospitalInfoResult {
   choosePlaceFlag?: boolean;
   placeList?: any[];
   status?: string;
+  extend?: string;
 }
 //获取住院费用日清单列表
 export interface dailyParam {
@@ -195,7 +196,10 @@ export type TPayConfirmHosPageProp = {
   hosId: string;
   cardNumber: string;
   patientId: string;
-  patientName?: string;
+  patientName: string;
+  hospitalAccount: string; 
+  hosName: string; 
+  extend: string;
 };
 
 interface IGPay {
@@ -279,7 +283,7 @@ export const useHosPayPage = () => {
   const getCreateInHospitalPayOrderData = async (data, fee, type?) => {
     const { patientName, cardNumber, hosId, hosName } = data;
     const { result } = await api.createInHospitalPayOrder<payOrderResult>({
-      fee: fee,
+      fee,
       orderType: data.hospitalAccount ? data.hospitalAccount : '3',
       patientId: data.type == '1' ? '' : gStores.userStore.patChoose.patientId,
       patientName,
@@ -287,6 +291,7 @@ export const useHosPayPage = () => {
       hosId,
       hosName,
       leaveHos: type === 'outHos' ? '1' : '',
+      extend:data.extend
     });
     const payArg: BaseObject = {
       phsOrderNo: result.phsOrderNo,

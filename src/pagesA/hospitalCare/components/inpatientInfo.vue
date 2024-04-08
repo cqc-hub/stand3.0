@@ -248,13 +248,16 @@
   };
 
   const toPayOut = async () => {
-    const { hosId, cardNumber, patientName } = hosInfoResObj.value;
+    const { hosId, cardNumber, patientName, hosName, extend } = hosInfoResObj.value;
     const patientId = gStores.userStore.patChoose.patientId;
     const args = {
       patientId,
       hosId,
+      hosName,
       cardNumber,
       patientName,
+      hospitalAccount: '13',
+      extend
     };
     uni.navigateTo({
       url: joinQuery('/pagesA/hospitalCare/payConfirm', args),

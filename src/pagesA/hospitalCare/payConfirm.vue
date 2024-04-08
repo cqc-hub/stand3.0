@@ -18,7 +18,7 @@
 
           <view class="flex-normal f28 mt24">
             <text class="mr16 color-888">支付给</text>
-            <text class="color-444">{{ getHosName }}</text>
+            <text class="color-444">{{ pageProps.hosName }}</text>
           </view>
         </view>
 
@@ -133,15 +133,7 @@
     {
       label: '预交金额',
       key: 'inpPrepayments',
-    },
-    // {
-    //   label: '院内账户支付',
-    //   key: 'accountMoney',
-    // },
-    // {
-    //   label: '自费支付',
-    //   key: 'totalNeedSelfpay',
-    // },
+    }
   ]);
  
   const payArg = ref<BaseObject>({});
