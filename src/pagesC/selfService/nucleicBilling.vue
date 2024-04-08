@@ -367,7 +367,7 @@
     if (pageConfig.value.multi === '1' && listLen) {
       const { billingDoc } = item;
       const { billingDoc: oldBillingDoc } = selList.value[0];
-      if (listLen === 1 && billingDoc && billingDoc !== oldBillingDoc) {
+      if (listLen === 1 && billingDoc !== oldBillingDoc) {
         selList.value = [item];
         return;
       }
@@ -376,7 +376,7 @@
       if (idx > -1) {
         selList.value.splice(idx, 1);
       } else {
-        if (billingDoc && billingDoc !== oldBillingDoc) {
+        if (billingDoc !== oldBillingDoc) {
           gStores.messageStore.showMessage('仅同一医生才支持合并开单', 3000);
         } else {
           selList.value.push(item);
