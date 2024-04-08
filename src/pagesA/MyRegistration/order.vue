@@ -14,7 +14,10 @@
         @change="dateChange"
         isShowAllDate
       />
-      <view class="flex-between">
+      <view
+        v-if="orderConfig.isShowFilterOrderSourceBtn === '1'"
+        class="flex-between"
+      >
         <view></view>
         <view
           @click="isFilterDoctor = !isFilterDoctor"
@@ -47,7 +50,7 @@
       </view>
 
       <view v-if="checkedDay" class="container-contract">
-        <view v-for="(item, i) in dateDocListFilterByDate" :key="i" class="">
+        <view v-for="(item, i) in _dateDocListFilterByDate" :key="i" class="">
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
             <view class="item-scheme-date">{{ _item.categorName }}</view>
             <view
@@ -169,15 +172,39 @@
   const _allDocList = computed(() => {
     const list = cloneUtil(allDocList.value);
     if (isFilterDoctor.value) {
-      return allDocList.value.filter((o) => {
+      return list.filter((o) => {
         o.schDocSubResultList = (o.schDocSubResultList || []).filter((p) => {
-          //   过滤有号
+          // 过滤有号
           return p.schState === '0';
         });
 
         return o.schDocSubResultList.length;
       });
     }
+    return list;
+  });
+
+  const _dateDocListFilterByDate = computed(() => {
+    const list = cloneUtil(dateDocListFilterByDate.value);
+
+    if (isFilterDoctor.value) {
+      return list.filter((o) => {
+        o.schDateList = (o.schDateList || []).filter((p) => {
+          p.schemeList = (p.schemeList || []).filter((q) => {
+            q.schemeList = (q.schemeList || []).filter((r) => {
+              return r.schState === '0';
+            });
+
+            return q.schemeList.length;
+          });
+
+          return p.schemeList.length;
+        });
+
+        return o.schDateList.length;
+      });
+    }
+
     return list;
   });
 

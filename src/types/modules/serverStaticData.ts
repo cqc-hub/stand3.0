@@ -35,6 +35,8 @@ export interface ISystemConfig_ {
     orderMode?: '1';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
+    // 过滤无号医生按钮
+    isShowFilterOrderSourceBtn?: '1';
     // 选择号源时候显示几列
     selOrderColumn: number;
     // 精确号源?

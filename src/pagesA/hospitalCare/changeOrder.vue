@@ -273,7 +273,6 @@
   };
 
   onLoad(async (opt) => {
-    // opt.appointAdtStatus = '1';
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
     formData.value = {
