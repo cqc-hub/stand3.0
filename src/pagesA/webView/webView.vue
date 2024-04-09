@@ -22,7 +22,20 @@
     src.value = decodeURIComponent(props.https);
   }
 
-  const getMessage = (e) => {};
+  const getMessage = (evt) => {
+    console.warn('返回数据', evt);
+    var data = evt.target.data;
+    var V3PageData = data[0];
+    if (V3PageData.type=='hosLoaction') {
+      //打开地图
+      uni.openLocation({
+        latitude: Number(V3PageData.gisLat),
+        longitude: Number(V3PageData.gisLng),
+        name: V3PageData.hosName,
+        address: V3PageData.address,
+      });
+    }
+  };
 
   onShareAppMessage((opt) => {
     return {
