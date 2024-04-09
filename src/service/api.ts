@@ -332,8 +332,11 @@ const queryApi = {
   addHosCardInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/addHosCardInfo', parm(data)),
 
-  queryInpVisit: <T>(data) =>
+  queryInpVisit: <T = any>(data) =>
     service.post<T>('/phs-query/hospital/queryInpVisit', parm(data)),
+
+  saveInpVisit: <T = any>(data) =>
+    service.post<T>('/phs-query/hospital/saveInpVisit', parm(data)),
 
   //获取住院费用日清单列表
   getInHospitalDailyCostList: <T>(data) =>
@@ -399,6 +402,8 @@ const queryApi = {
     service.post('/phs-query/examine/getExamineReportDetails', parm(data)),
   getCheckoutReportDetails: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
+  getCheckoutReportInfo: <T = any>(data) =>
+    service.post('/phs-query/checkout/getCheckoutReportInfo', parm(data)),
   getCloudReportUrl: <T = any>(data) =>
     service.post('/phs-query/examine/getCloudReportUrl', parm(data)),
   //获取云影像

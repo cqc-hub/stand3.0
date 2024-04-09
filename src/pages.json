@@ -489,6 +489,16 @@
         },
 
         {
+          "path": "reportQuery/searchReport",
+          "style": {
+            "navigationBarTitleText": "检验单查询"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "reportQuery/inspectionReport",
           "style": {
             "navigationBarTitleText": "检查报告"

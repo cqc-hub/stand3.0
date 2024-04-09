@@ -33,7 +33,13 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores, apiAsync, ServerStaticData, IHosInfo } from '@/utils';
+  import {
+    GStores,
+    apiAsync,
+    ServerStaticData,
+    IHosInfo,
+    getLocation,
+  } from '@/utils';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -53,9 +59,10 @@
   const isComplete = ref(false);
 
   const formSubmit = async ({ data }) => {
-    data.isTakeAnticoagulantDrugs =
-      (data.isTakeAnticoagulantDrugs && '0') || '1';
-    data.maritalStatus = (data.maritalStatus && '已婚') || '未婚';
+    const { permanentAddress, detailedAddress } = data;
+    const { patientId } = gStores.userStore.patChoose;
+
+    data.presentAddress = `${permanentAddress} ${detailedAddress}`;
 
     const { confirm } = await apiAsync(uni.showModal, {
       content: '确定进行提交?',
@@ -65,8 +72,8 @@
       return;
     }
 
-    await api.addHosCardInfo({ ...data });
-    gStores.messageStore.showMessage(`住院证成功`, 3000, {
+    await api.saveInpVisit({ ...data, patientId });
+    gStores.messageStore.showMessage(`确认信息成功`, 3000, {
       closeCallBack() {
         uni.navigateBack({
           delta: 1,
@@ -80,7 +87,7 @@
       rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
     },
   ];
-  const labelWidth = '250rpx';
+  const labelWidth = '200rpx';
   const renderListBase: TInstance[] = [
     {
       labelWidth,
@@ -96,6 +103,7 @@
       labelWidth,
       required: true,
       showRequireIcon: true,
+      disabled: true,
       label: '患者性别',
       field: 'select',
       placeholder: '请选择',
@@ -130,6 +138,14 @@
       field: 'input-text',
       placeholder: '请输入',
       key: 'patientPhone',
+      inputMask: (v: string) => {
+        if (v) {
+          const reg = /^(1[3-9][0-9])\d{4}(\d{4}$)/; // 定义手机号正则表达式
+          return v.replace(reg, '$1****$2');
+        }
+
+        return v;
+      },
     },
     {
       labelWidth,
@@ -205,6 +221,8 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'hosName',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
     {
       labelWidth,
@@ -213,6 +231,8 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'chiefDoctor',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
     {
       labelWidth,
@@ -221,6 +241,8 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'deptName',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
     {
       labelWidth,
@@ -229,6 +251,8 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'wardName',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
     {
       labelWidth,
@@ -237,6 +261,8 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'appointAdmissionDate',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
     {
       labelWidth,
@@ -245,8 +271,14 @@
       field: 'input-text',
       placeholder: ' ',
       key: 'inAdvanceOrderFlagLabel',
+      isForShow: true,
+      showBodyStyle: 'text-align: left;',
     },
   ];
+  const location = ref({
+    latitude: '',
+    longitude: '',
+  });
 
   const getData = async () => {
     formData.value = {};
@@ -255,8 +287,25 @@
     const { result } = await api
       .queryInpVisit({
         patientId,
+        ...location.value,
       })
       .finally(() => [(isComplete.value = true)]);
+
+    if (result) {
+      const { inAdvanceOrderFlag, hosId, presentAddress } = result;
+      if (presentAddress) {
+        const [permanentAddress, detailedAddress] = presentAddress.split(' ');
+
+        result.permanentAddress = permanentAddress;
+        result.detailedAddress = detailedAddress;
+      }
+      result.inAdvanceOrderFlagLabel =
+        (inAdvanceOrderFlag === '0' && '否') || '是';
+      result.hosName =
+        hosList.value.find((o) => o.hosId === hosId)?.hosName || '';
+
+      formData.value = result;
+    }
   };
 
   const init = async () => {
@@ -265,6 +314,7 @@
 
   onMounted(async () => {
     await init();
+    location.value = await getLocation(true);
     await getData();
     gform.value.setList([...renderListBase]);
   });

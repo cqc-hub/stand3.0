@@ -274,6 +274,8 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    pageProps.value.isTakeAnticoagulantDrugs =
+      (pageProps.value.isTakeAnticoagulantDrugs === '0' && true) || false;
 
     formData.value = {
       patientId: gStores.userStore.patChoose.patientId,

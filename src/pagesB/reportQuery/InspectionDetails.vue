@@ -240,10 +240,13 @@
                       class="table-title2 table-title-common"
                       :class="{
                         'color-red': item.flag == 'H',
-                        'color-blue': item.flag === 'L'
-                       }"
+                        'color-blue': item.flag === 'L',
+                      }"
                     >
-                      {{ item.flag && item.flag.includes('阳') && item.flag || item.itemVal }}
+                      {{
+                        (item.flag && item.flag.includes('阳') && item.flag) ||
+                        item.itemVal
+                      }}
                       <text class="color-blue" v-if="item.flag == 'L'">↓</text>
                       <text class="color-danger" v-if="item.flag == 'H'">
                         ↑
@@ -283,6 +286,7 @@
       <view>{{ tips.content }}</view>
     </view>
     <Bottom-Nav
+      v-if="!pageProps.useCacheData"
       :addition="{
         ...pat,
         ...pageProps,
@@ -430,15 +434,23 @@
   });
 
   const getCheckoutReportDetails = async () => {
-    const { repId, repType, hosId, extend } = pageProps.value;
-    let params = {
-      hosId: hosId,
-      patientId: pat.patientId,
-      repId: repId,
-      repType: repType,
-      extend: decodeURIComponent(extend),
-    };
-    const { result } = await api.getCheckoutReportDetails(params);
+    const { repId, repType, hosId, extend, useCacheData } = pageProps.value;
+    let result: any;
+
+    if (useCacheData) {
+      result = gStore.globalStore.cacheData;
+      console.log(result, 'resultresultresult');
+    } else {
+      let params = {
+        hosId: hosId,
+        patientId: pat.patientId,
+        repId: repId,
+        repType: repType,
+        extend: decodeURIComponent(extend),
+      };
+      const { result: _result } = await api.getCheckoutReportDetails(params);
+      result = _result;
+    }
     checkoutReportList.value = result;
     if (alipayPid) {
       getPowerEnerg(repId);

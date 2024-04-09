@@ -353,7 +353,7 @@
       extend: data.extend || '',
       isDoctorCard,
       isWatermark,
-      isDownloadRepor,
+      isDownloadRepor: isDownloadRepor === '1' || '',
       isGraphic,
     };
 

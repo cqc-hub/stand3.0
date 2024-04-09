@@ -282,7 +282,7 @@ export interface ISystemConfig_ {
     payNextAction?: TButtonConfig;
   };
 
-  //报告查询
+  //报告查询 REPORT_QUERY_CONFIG
   reportQuery: {
     //顶部tab
     reportTab: IReportConfigTab[];
