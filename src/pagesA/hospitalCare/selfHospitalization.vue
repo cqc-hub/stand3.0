@@ -305,6 +305,17 @@
         hosList.value.find((o) => o.hosId === hosId)?.hosName || '';
 
       formData.value = result;
+      gform.value.setList([...renderListBase]);
+    } else {
+      gform.value.setList([]);
+
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '患者已经入院登记，是否跳转住院预缴?',
+      });
+
+      if (confirm) {
+        uni.navigateTo({ url: '/pagesA/hospitalCare/hospitalCare' });
+      }
     }
   };
 
@@ -316,7 +327,6 @@
     await init();
     location.value = await getLocation(true);
     await getData();
-    gform.value.setList([...renderListBase]);
   });
 </script>
 

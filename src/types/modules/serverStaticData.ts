@@ -367,7 +367,6 @@ export interface ISystemConfig_ {
 
   /** 电子导诊单 */
   Electronic_Consultation_Sheet: {
-    /** 点击具体行的地址跳转的第三方小程序参数 */
     toLocationMiniProgram?: {
       appId: string;
       path: string;
@@ -377,6 +376,7 @@ export interface ISystemConfig_ {
 
     // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
     isItemQrCodeShow?: '1';
+    navBtns?: TButtonConfig[];
   };
 
   /** 手术进度查询 */

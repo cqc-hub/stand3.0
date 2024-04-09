@@ -227,6 +227,9 @@
     addition: {
       patientId: '_patientId',
     },
+    extraData: {
+      isOpenDelivery: '1',
+    },
     isLocal: '1',
   };
 
@@ -327,7 +330,6 @@
       //   },
       // });
 
-
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',
@@ -346,17 +348,17 @@
       //   },
       // });
 
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/question/normalQuestion',
-        addition: {
-          patientId: '_patientId',
-        },
-      });
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'pagesC/question/normalQuestion',
+      //   addition: {
+      //     patientId: '_patientId',
+      //   },
+      // });
 
       // useTBanner(healthRecord)
-      // useTBanner(电子导诊单)
+      useTBanner(电子导诊单);
     }, 1000);
   });
 </script>
