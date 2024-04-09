@@ -11,7 +11,11 @@ import { encryptDesParam } from '@/common/des';
 import { beforeEach } from '@/router/index';
 import { MEDICAL_PHOTOS, MEDICAL_PHOTO_MODE } from '@/static/staticData';
 import { assignType, Split, Merge, FilterOptional } from '@/typeUtils';
-import { getMiniProgramEnv, ApiParamsConfig, addHosIdForSelfH5Path } from '@/utils';
+import {
+  getMiniProgramEnv,
+  ApiParamsConfig,
+  addHosIdForSelfH5Path,
+} from '@/utils';
 import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 
 import api from '@/service/api';
@@ -172,7 +176,10 @@ export const useTBanner = async (
 
     for (const key in addition) {
       if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
-        extraData[addition[key]] = additionData[key];
+        extraData[addition[key]] =
+          additionData[key] === undefined
+            ? extraData[addition[key]]
+            : additionData[key];
       }
     }
   }

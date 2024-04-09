@@ -272,6 +272,7 @@
     type TCostList,
     type TWxAuthorize,
     getQxMedicalNation,
+    _getQxMedicalNation,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -551,6 +552,12 @@
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
+    setLocalStorage({
+      selUnPayDetailList: {
+        selList: selList.value,
+        selListChildren: selListChildren.value,
+      },
+    });
     if (item.key === 'online') {
       // 预结算
       if (pageConfig.value.isPreSettle === '1') {
@@ -610,7 +617,9 @@
       mask: true,
     });
 
-    const authorize = await getQxMedicalNation();
+    const authorize = await getQxMedicalNation(
+      joinQueryForUrl('/pagesA/clinicPay/payDetail', props.value)
+    );
     medicalNationWx(authorize);
   };
 
@@ -660,7 +669,7 @@
       info,
     });
 
-    uni.hideLoading()
+    uni.hideLoading();
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
@@ -833,7 +842,7 @@
     await wait(1000);
     uni.hideLoading();
 
-    await executeConfigPayAfter(clinicType, cardNumber);
+    await executeConfigPayAfter(clinicType, cardNumber, props.value);
 
     uni.reLaunch({
       url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
@@ -850,7 +859,11 @@
   const getData = async () => {
     await getDetailData(props.value);
 
-    if (props.value.payState === '1' && detailData.value.costList) {
+    if (
+      props.value.payState === '1' &&
+      detailData.value.costList &&
+      !isMedicalBack
+    ) {
       selList.value = [...detailData.value.costList];
     }
   };
@@ -868,15 +881,34 @@
     });
   };
 
+  const medicalWx = getLocalStorage('get-wx-medical-auth-code');
+  const medicalAli = getLocalStorage('get-ali-medical-auth-code');
+  const isMedicalBack = medicalWx === '1' || medicalAli === '1';
   onShow(async () => {
-    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+    if (isMedicalBack) {
+      const oldSel = getLocalStorage('selUnPayDetailList');
+      selList.value = oldSel?.selList || selList.value;
+      selListChildren.value = oldSel?.selListChildren || selListChildren.value;
       await wait(300);
       setLocalStorage({
         'get-wx-medical-auth-code': '',
       });
 
+      setLocalStorage({
+        'get-ali-medical-auth-code': '',
+      });
+
+      let isAliAuth = false;
+      if (medicalAli === '1') {
+        const { payAuthNo } = await _getQxMedicalNation();
+        isAliAuth = !!payAuthNo;
+      }
+
       // 微信医保小程序跳回来后中断了链路 重新走下
-      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+      if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
+        isAliAuth
+      ) {
         getPayInfo({
           item: {
             key: 'medicare',

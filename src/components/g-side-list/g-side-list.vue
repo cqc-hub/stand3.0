@@ -21,6 +21,9 @@
       :class="{
         'item-lv1-active': value === item[field.value],
       }"
+      :style="{
+        '--active-bg': activeItemBg,
+      }"
       @click="itemClickLv1(item, indexLv1)"
       class="item-lv1 g-flex-rc-cc dept-list-lv2 dept-list-lv2-alone"
     >
@@ -38,6 +41,7 @@
       list: any[];
       lineColor?: string;
       defaultChoose?: boolean; // 默认选中第一个
+      activeItemBg?: string;
       value: any;
       field?: {
         label: string;
@@ -45,6 +49,7 @@
       };
     }>(),
     {
+      activeItemBg: '#fff',
       lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)',
       field: () => ({
         label: 'label',
@@ -144,7 +149,7 @@
     }
 
     &-active {
-      background-color: #fff;
+      background-color: var(--active-bg);
       color: var(--hr-brand-color-6);
       font-weight: 600;
     }

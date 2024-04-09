@@ -1,7 +1,7 @@
 <template>
   <!-- 住院信息 -->
   <view>
-    <view class="box" v-if="Obj == false && hosInfoResObj">
+    <view class="box" v-if="hosInfoResObj && Object.keys(hosInfoResObj).length">
       <view
         :class="
           gStores.userStore.patChoose.patientSex == '女'
@@ -91,9 +91,15 @@
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
 
-        <view class="button f36" @click="toPayPage">预交费用</view>
+        <view v-if="isShowPayBtn" class="button f36" @click="toPayOut">
+          已出院，立即结算
+        </view>
+        <view v-else class="button f36" @click="toPayPage">预交费用</view>
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
+    </view>
+    <view v-else-if="hosCardInfoLists.length" class="p32">
+      <appointment-list :list="hosCardInfoLists" />
     </view>
     <view class="empty-box" v-else>
       <g-empty :current="1" />
@@ -144,13 +150,14 @@
   import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
 
   import GSelect from '@/components/g-select/g-select.vue';
-
+  import AppointmentList from '@/pagesA/hospitalCare/components/appointmentList.vue';
   import api from '@/service/api';
 
-  const Obj = ref();
   const props = defineProps<{
     isQueryPreRecord?: string;
     tabCurrent?: number;
+    // 住院中心页面, 请求住院预约接口并且开展相关 ui
+    isShowAppointment?: boolean;
   }>();
   const gStores = new GStores();
   const isLoad = ref(false);
@@ -161,8 +168,10 @@
 
   const gSelect = ref(<any>'');
   const selPlaces = ref(<any[]>[]);
+  const hosCardInfoLists = ref(<any[]>[]);
   const selPlace = ref('');
   const isSelShow = ref(false);
+  const isShowPayBtn = ref(false);
   const selClose = () => {
     isSelShow.value = false;
     reject();
@@ -237,6 +246,24 @@
       url: joinQuery('/pagesA/hospitalCare/paymentPage', args),
     });
   };
+
+  const toPayOut = async () => {
+    const { hosId, cardNumber, patientName, hosName, extend } = hosInfoResObj.value;
+    const patientId = gStores.userStore.patChoose.patientId;
+    const args = {
+      patientId,
+      hosId,
+      hosName,
+      cardNumber,
+      patientName,
+      hospitalAccount: '13',
+      extend
+    };
+    uni.navigateTo({
+      url: joinQuery('/pagesA/hospitalCare/payConfirm', args),
+    });
+  };
+
   onPullDownRefresh(() => {
     if (props.tabCurrent == 0) {
       setTimeout(() => {
@@ -245,19 +272,44 @@
       }, 1000);
     }
   });
+
+  const getAppointmentList = async () => {
+    const {
+      result: { hosCardInfoLists: _hosCardInfoLists },
+    } = await api.queryHosCardInfo<any>({
+      patientId: gStores.userStore.patChoose.patientId,
+    });
+
+    hosCardInfoLists.value = _hosCardInfoLists;
+  };
+
   const init = async () => {
-    Obj.value = undefined;
     hosInfoResObj.value = {} as any;
+    hosCardInfoLists.value = [];
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
       patientId: gStores.userStore.patChoose.patientId,
     });
 
     hosInfoResObj.value = result;
-    Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
+
+    //status 在院状态 1.在院 2.出院未结算
+    if (result && Object.keys(result).length) {
+      if (result.status === '2' && result.costTypeName === '自费') {
+        isShowPayBtn.value = true;
+      } else {
+        isShowPayBtn.value = false;
+      }
+    }
+
+    if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
+      getAppointmentList();
+    }
   };
+
   onMounted(() => {
     init();
   });
+
   onShow(() => {
     init();
   });

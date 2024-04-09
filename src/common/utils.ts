@@ -18,7 +18,7 @@ export const hideLoading = () => {
   uni.hideNavigationBarLoading();
 };
 
-export function cloneUtil<T = any>(target): T {
+export function cloneUtil<T = any>(target: T): T {
   if (typeof target !== 'object') {
     return target;
   }

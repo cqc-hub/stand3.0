@@ -125,7 +125,7 @@
       v-else-if="pageConfig.payedFooterBtn && tabCurrent === 1"
     >
       <button
-        @click="useTBanner(pageConfig.payedFooterBtn!)"
+        @click="useTBanner(pageConfig.payedFooterBtn!, 'navigateTo', pageProps)"
         class="btn btn-primary"
       >
         {{ pageConfig.payedFooterBtn.text }}
@@ -203,7 +203,12 @@
   import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
-  import { usePayPage, getIsMedicalModePlugin } from './utils/clinicPayDetail';
+  import {
+    usePayPage,
+    getIsMedicalModePlugin,
+    getIsAliMedicalNation,
+    _getQxMedicalNation,
+  } from './utils/clinicPayDetail';
   import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
   import { decryptForPage } from '@/common/des';
@@ -279,8 +284,7 @@
         return gStores.userStore.patChoose;
       } else {
         return <IPat>{
-          patientNameEncry:
-            pageProps.value.deParams?.patientName || '就诊人',
+          patientNameEncry: pageProps.value.deParams?.patientName || '就诊人',
           _showId: pageProps.value.deParams?.cardNumber || '',
         };
       }
@@ -323,14 +327,35 @@
   };
 
   onShow(async () => {
+    const medicalWx = getLocalStorage('get-wx-medical-auth-code');
+    const medicalAli = getLocalStorage('get-ali-medical-auth-code');
+
     // 微信医保小程序跳回来后中断了链路 重新走下
-    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
+    if (medicalWx === '1' || medicalAli === '1') {
+      const oldSelUnPayList: any[] = getLocalStorage('selUnPayList') || [];
+
+      if (!selUnPayList.value.length) {
+        setLocalStorage({
+          keepSelUnPayList: '1',
+        });
+        selUnPayList.value = oldSelUnPayList;
+      }
       await wait(300);
       setLocalStorage({
         'get-wx-medical-auth-code': '',
+        'get-ali-medical-auth-code': '',
       });
 
-      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
+      let isAliAuth = false;
+      if (medicalAli === '1') {
+        const { payAuthNo } = await _getQxMedicalNation();
+        isAliAuth = !!payAuthNo;
+      }
+
+      if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
+        isAliAuth
+      ) {
         getPayInfo({
           item: {
             key: 'medicare',
@@ -359,8 +384,6 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
-      console.log(pageProps.value, 'pageProps.valuepageProps.value');
-
 
       if (pageProps.value.params) {
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
@@ -392,6 +415,19 @@
       // #endif
     } else {
       await getListData();
+    }
+
+    if (
+      pageProps.value.params &&
+      tabCurrent.value === 0 &&
+      !unPayList.value.length
+    ) {
+      pageConfig.value.scanPayEmptyAction &&
+        useTBanner(
+          pageConfig.value.scanPayEmptyAction,
+          'navigateTo',
+          pageProps.value
+        );
     }
   });
 </script>

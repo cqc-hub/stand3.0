@@ -23,7 +23,8 @@
       >
         <view
           :class="{
-            'item-require': item.required && showRequireIcon,
+            'item-require':
+              item.required && (showRequireIcon || item.showRequireIcon),
           }"
           class="label text-no-wrap"
           :style="item.labelStyle"
@@ -62,11 +63,13 @@
           </block>
 
           <block v-else>
-            <view class="flex1">
+            <view
+              v-if="
+                item.field === 'input-text' || item.field === 'input-verify'
+              "
+              class="flex1"
+            >
               <uni-easyinput
-                v-if="
-                  item.field === 'input-text' || item.field === 'input-verify'
-                "
                 :placeholder="item.placeholder"
                 :inputBorder="false"
                 :clearable="false"
@@ -181,6 +184,7 @@
               v-if="item.field === 'switch'"
               :class="{
                 'my-disabled': item.disabled,
+                'container-body-switch-align-left': item.align === 'left',
               }"
               class="container-body-switch"
             >
@@ -189,7 +193,15 @@
                 :disabled="item.disabled"
                 @change="(e: any) => changeSwitch(item, e)"
                 color="var(--hr-brand-color-6)"
-              />
+              >
+                <text class="ml12">
+                  {{
+                    (item.labelFormatter &&
+                      item.labelFormatter(value[item.key])) ||
+                    ''
+                  }}
+                </text>
+              </switch>
             </view>
 
             <view
@@ -565,7 +577,7 @@
     const { value: choose } = e.detail;
     const { key, field } = cacheItem;
 
-    clearItemWarning(cacheItem.key);
+    clearItemWarning(key);
     if (field === 'address') {
       addressChange(cacheItem, choose);
     } else if (field === 'select') {
@@ -583,6 +595,7 @@
   const addressChange = async (item: TInstance, v) => {
     const { key, field } = item;
 
+    clearItemWarning(key);
     if (field === 'address') {
       const selLabels = v.map((o) => o.text).join('');
       setData({

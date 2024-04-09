@@ -175,6 +175,11 @@
             <official-account></official-account>
           </view>
           <!-- #endif -->
+            <!-- #ifdef MP-ALIPAY --> 
+            <view v-if="global.sConfig.isOpenAlipayFollow">
+              <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
+          </view>
+          <!-- #endif -->
           <view class="fun-list" v-if="viewerStore.homeMenuList.length">
             <homeMenu
               :list="viewerStore.homeMenuList"

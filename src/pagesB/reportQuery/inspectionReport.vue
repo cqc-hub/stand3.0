@@ -150,8 +150,8 @@
               </button>
               <button
                 class="button"
-                v-if="examineReportList.yunUrl"
-                @click="gotoMedical"
+                v-if="item.yunUrl || examineReportList.yunUrl"
+                @click="gotoMedical((item.yunUrl || examineReportList.yunUrl)!)"
               >
                 <view class="icon-font ico_cloud"></view>
                 云影像
@@ -163,9 +163,14 @@
               <view class="title">所见</view>
               <view class="content">{{ item.description }}</view>
             </view>
-            <view class="seen" v-if="item.diacrisis || examineReportList.diacrisis">
+            <view
+              class="seen"
+              v-if="item.diacrisis || examineReportList.diacrisis"
+            >
               <view class="title">病理诊断</view>
-              <view class="content">{{ item.diacrisis || examineReportList.diacrisis }}</view>
+              <view class="content">
+                {{ item.diacrisis || examineReportList.diacrisis }}
+              </view>
             </view>
             <view
               class="seen"
@@ -190,6 +195,7 @@
     </view>
 
     <Bottom-Nav
+      v-if="!pageProps.useCacheData"
       :addition="{
         ...pat,
         ...pageProps,
@@ -471,15 +477,25 @@
   });
 
   const getInspectionReportList = async () => {
-    const { repId, examClassName, hosId, extend } = pageProps.value;
-    let params = {
-      hosId: hosId,
-      patientId: pat.patientId,
-      repId: repId,
-      examClassName: examClassName,
-      extend: decodeURIComponent(extend),
-    };
-    const { result } = await api.getExamineReportDetails(params);
+    const { repId, examClassName, hosId, extend, useCacheData } =
+      pageProps.value;
+
+    let result: any;
+
+    if (useCacheData) {
+      result = gStore.globalStore.cacheData;
+    } else {
+      let params = {
+        hosId: hosId,
+        patientId: pat.patientId,
+        repId: repId,
+        examClassName: examClassName,
+        extend: decodeURIComponent(extend),
+      };
+      const { result: _result } = await api.getExamineReportDetails(params);
+
+      result = _result;
+    }
     examineReportList.value = result;
     btnNumber.value = examineReportList.value.detailsResult?.length;
     for (var i = 0; i < btnNumber.value; i++) {
@@ -618,11 +634,9 @@
     // }
   };
 
-  const gotoMedical = () => {
+  const gotoMedical = (url: string) => {
     uni.navigateTo({
-      url: `/pagesA/webView/webView?https=${encodeURIComponent(
-        examineReportList.value.yunUrl!
-      )}`,
+      url: `/pagesA/webView/webView?https=${encodeURIComponent(url)}`,
     });
   };
 

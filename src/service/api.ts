@@ -325,6 +325,19 @@ const queryApi = {
   // 获取住院信息
   getInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),
+
+  queryHosCardInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/queryHosCardInfo', parm(data)),
+
+  addHosCardInfo: <T>(data) =>
+    service.post<T>('/phs-query/hospital/addHosCardInfo', parm(data)),
+
+  queryInpVisit: <T = any>(data) =>
+    service.post<T>('/phs-query/hospital/queryInpVisit', parm(data)),
+
+  saveInpVisit: <T = any>(data) =>
+    service.post<T>('/phs-query/hospital/saveInpVisit', parm(data)),
+
   //获取住院费用日清单列表
   getInHospitalDailyCostList: <T>(data) =>
     service.post<T>(
@@ -334,6 +347,13 @@ const queryApi = {
         reportCmPV_YLName: '住院日清单查询',
       }
     ),
+  //出院患者确认结算
+  outHospitalAffirmPay: <T>(data) =>
+    service.post<T>('/phs-query/hospital/outHospitalAffirmPay', parm(data)),
+
+  //出院预结算
+  getOutHospitalPreparePay: <T>(data) =>
+    service.post<T>('/phs-query/hospital/getOutHospitalPreparePay', parm(data)),
   //创建住院缴费订单
   createInHospitalPayOrder: <T>(data) =>
     service.post<T>(
@@ -382,11 +402,13 @@ const queryApi = {
     service.post('/phs-query/examine/getExamineReportDetails', parm(data)),
   getCheckoutReportDetails: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
+  getCheckoutReportInfo: <T = any>(data) =>
+    service.post('/phs-query/checkout/getCheckoutReportInfo', parm(data)),
   getCloudReportUrl: <T = any>(data) =>
     service.post('/phs-query/examine/getCloudReportUrl', parm(data)),
-     //获取云影像
+  //获取云影像
   getCloudImageInfo: <T = any>(data) =>
-  service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
+    service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
 };
@@ -657,7 +679,7 @@ const userApi = {
       hideLoading: false,
     }),
 
-    getAliMedicalPat: (data) =>
+  getAliMedicalPat: (data) =>
     service.post('/phs-user/relevantPatient/getAliMedicalPat', parm(data), {
       // hideLoading: false,
     }),

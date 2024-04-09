@@ -211,6 +211,7 @@
     if (_type === '病案复印') {
       return 'ifClick';
     }
+
     if (_type === '核酸开单') {
       return 'ifClick';
     }
@@ -412,7 +413,7 @@
             );
 
             if (type === '1') {
-              hList = hList.filter((o) => o.ifClick !== '1');
+              // hList = hList.filter((o) => o.ifClick !== '1');
             }
 
             hosList.value = hList;

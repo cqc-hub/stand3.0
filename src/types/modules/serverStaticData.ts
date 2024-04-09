@@ -35,6 +35,8 @@ export interface ISystemConfig_ {
     orderMode?: '1';
     // 选择科室医生页面顶部可选择的天数， chooseDay > 20 出现组件 ‘日历’
     chooseDay: number;
+    // 过滤无号医生按钮
+    isShowFilterOrderSourceBtn?: '1';
     // 选择号源时候显示几列
     selOrderColumn: number;
     // 精确号源?
@@ -214,13 +216,15 @@ export interface ISystemConfig_ {
     isOpenLookRecordBtn?: '1';
   };
 
-  // 门诊缴费
+  // 门诊缴费  CLINIC_PAY_CONFIG ...
   pay: {
     /**
      * 列表页
      */
     /** 可以切换院区? */
     isListToggleHos?: '1';
+    /** 扫码进来(带 params 场景下待缴费无数据的跳转动作) */
+    scanPayEmptyAction?: TButtonConfig;
 
     /** 门诊类型  网络医院/线下门诊 (是否展示) */
     isListShowClinicType?: '1';
@@ -278,7 +282,7 @@ export interface ISystemConfig_ {
     payNextAction?: TButtonConfig;
   };
 
-  //报告查询
+  //报告查询 REPORT_QUERY_CONFIG
   reportQuery: {
     //顶部tab
     reportTab: IReportConfigTab[];
@@ -363,7 +367,6 @@ export interface ISystemConfig_ {
 
   /** 电子导诊单 */
   Electronic_Consultation_Sheet: {
-    /** 点击具体行的地址跳转的第三方小程序参数 */
     toLocationMiniProgram?: {
       appId: string;
       path: string;
@@ -373,6 +376,7 @@ export interface ISystemConfig_ {
 
     // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
     isItemQrCodeShow?: '1';
+    navBtns?: TButtonConfig[];
   };
 
   /** 手术进度查询 */
@@ -388,11 +392,8 @@ export interface ISystemConfig_ {
     isCustomFeedback?: '1';
     // 开启咨询客服弹窗
     isOpenMyService?: {
-      imageCode: string;
-      theme: string;
-      title: string;
-      subTitle: string;
-      isHideInfo?: boolean;
+      extInfo: string;
+      corpId: string;
     };
     //开启拨打电话
     isOpenPhone?: string;

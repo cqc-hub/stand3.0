@@ -1,5 +1,10 @@
 <template>
-  <view class="choose-pat" v-if="gStores.userStore.patChoose.patientNameEncry">
+  <view
+    class="choose-pat"
+    v-if="
+      gStores.userStore.patChoose.patientNameEncry || (pat && pat._showId)
+    "
+  >
     <view class="container" @click="chooseAction">
       <image
         v-show="isLoad"

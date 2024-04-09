@@ -249,9 +249,8 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         scanCode();
       } else if (item.path == 'makePhone') {
         //拨打电话
-        console.log(333,item.query)
         makePhone(item.query);
-      } else {
+      }else {
         const obj3 = {
           url: item.path,
           fail: () => {
@@ -298,6 +297,17 @@ const scanCode = () => {
         gStores.messageStore.showMessage('获取失败', 3000);
       },
     });
+  });
+};
+
+//打开企微
+export const openServicesChat = (query) => {
+  wx.openCustomerServiceChat({
+    extInfo: { url: JSON.parse(query).extInfo },
+    corpId: JSON.parse(query).corpId,
+    complete(res) {
+      console.log('打开企业微信', res);
+    },
   });
 };
 

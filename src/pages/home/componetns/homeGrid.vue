@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useCommonTo } from '@/common/checkJump';
+  import { useCommonTo,openServicesChat } from '@/common/checkJump';
   import { GStores } from '@/utils';
 
   const emits = defineEmits(['open-share']);
@@ -27,6 +27,8 @@
     if (item.path && item.path == 'showCareModel') {
       //关注组件拦截跳转 弹框
       emits('open-share', item.query && JSON.parse(item.query));
+    }else if(item.path == 'openWxService'){
+      openServicesChat(item.query)
     } else {
       useCommonTo(item);
     }

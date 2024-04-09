@@ -152,8 +152,8 @@
       },
       {
         label: '健康管理',
-        icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
+        icon: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
+        iconActive: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
         url: 'mDisease',
         loginInterception: '0',
         sort: 2,
@@ -186,7 +186,7 @@
       tabList.push('消息中心');
     }
 
-    if (global.SYS_CODE === '1001052') {
+    if (global.SYS_CODE === '1001052' && global.env !== 'prod') {
       tabList.push('健康管理');
     }
 

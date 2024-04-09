@@ -1,5 +1,5 @@
 import { ref, computed, nextTick } from 'vue';
-import { joinQueryForUrl, setLocalStorage } from '@/common';
+import { getLocalStorage, joinQueryForUrl, setLocalStorage } from '@/common';
 
 import {
   GStores,
@@ -338,8 +338,9 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   return fCode;
 };
 
-/** 获取国标授权 */
-export const getQxMedicalNation = async () => {
+export const _getQxMedicalNation = async (
+  returnUrl: string = '/pagesA/clinicPay/clinicPayDetail'
+) => {
   const gStores = new GStores();
   const qrCode = await getMedicalAuthCode();
 
@@ -383,7 +384,7 @@ export const getQxMedicalNation = async () => {
     scope: 'medical_ali_pay',
   });
 
-  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=/pagesA/clinicPay/clinicPayDetail`;
+  requestArg.callUrl = `alipays://platformapi/startapp?appId=${globalGl.systemInfo.alipayAppid}&page=${returnUrl}`;
 
   // #endif
 
@@ -393,19 +394,6 @@ export const getQxMedicalNation = async () => {
   }
 
   // #ifdef MP-ALIPAY
-  const { authUrl, payAuthNo, medicalCardId, medicalCardInstId } = result;
-
-  if (!payAuthNo) {
-    setLocalStorage({
-      'get-ali-medical-auth-code': '1',
-    });
-    my.ap.navigateToAlipayPage({
-      path: encodeURI(authUrl),
-    });
-
-    return Promise.reject('需要医保授权...');
-  }
-
   const { latitude, longitude } = await apiAsync(uni.getLocation, {});
 
   result.userLongitudeLatitude = {
@@ -418,6 +406,37 @@ export const getQxMedicalNation = async () => {
     return Promise.reject('获取定位失败, 无法继续医保结算...');
   }
 
+  // #endif
+
+  let playMedicalCount = getLocalStorage('playMedicalCount');
+  if (!playMedicalCount) {
+    playMedicalCount = 1;
+    setLocalStorage({
+      playMedicalCount,
+    });
+  }
+
+  return <TWxAuthorize>result;
+};
+
+/** 获取国标授权 */
+export const getQxMedicalNation = async (
+  returnUrl: string = '/pagesA/clinicPay/clinicPayDetail'
+) => {
+  const result = (await _getQxMedicalNation(returnUrl)) as any;
+
+  // #ifdef MP-ALIPAY
+  const { authUrl, payAuthNo } = result;
+  if (!payAuthNo) {
+    setLocalStorage({
+      'get-ali-medical-auth-code': '1',
+    });
+    my.ap.navigateToAlipayPage({
+      path: encodeURI(authUrl),
+    });
+
+    return Promise.reject('需要医保授权...');
+  }
   // #endif
 
   return <TWxAuthorize>result;
@@ -915,9 +934,18 @@ export const usePayPage = () => {
   let isGetListDataFirst = true;
   let getListData = async (isReset = true) => {
     if (isReset) {
+      const isKeepSel = getLocalStorage('keepSelUnPayList') === '1';
       unPayList.value = [];
       payedList.value = [];
-      selUnPayList.value = [];
+
+      // 医保回来保存数据
+      if (isKeepSel) {
+        setLocalStorage({
+          keepSelUnPayList: '',
+        });
+      } else {
+        selUnPayList.value = [];
+      }
     }
 
     if (tabCurrent.value === 0) {
@@ -1205,6 +1233,11 @@ export const usePayPage = () => {
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
+    // item.key = 'medicare'
+    setLocalStorage({
+      selUnPayList: selUnPayList.value,
+    });
+
     // 自费
     if (item.key === 'online') {
       // 预结算
@@ -1304,14 +1337,6 @@ export const usePayPage = () => {
         patientName,
       }
     );
-
-    const payInfoArg = {
-      ...pat,
-      ...item,
-      ...authorize,
-      ...detailData.value,
-      ...uploadRes,
-    };
 
     uni.hideLoading();
     const info = {
@@ -1550,7 +1575,7 @@ export const usePayPage = () => {
       gStores.userStore.patChoose.cardNumber;
     const { clinicType } = selUnPayList.value[0];
 
-    await executeConfigPayAfter(clinicType, cardNumber);
+    await executeConfigPayAfter(clinicType, cardNumber, pageProps.value);
 
     selUnPayList.value = [];
     payedList.value = [];
@@ -1797,7 +1822,8 @@ export const goConfirmPage = (data: TPayConfirmPageProp) => {
 
 export const executeConfigPayAfter = async (
   clinicType?: string, // '1' | '2' | '3'
-  cardNumber?: string
+  cardNumber?: string,
+  additionData: any = {}
 ) => {
   const { pageNextAdress, payNextAction } =
     await ServerStaticData.getSystemConfig('pay');
@@ -1862,7 +1888,7 @@ export const executeConfigPayAfter = async (
           break;
       }
     } else if (payNextAction) {
-      useTBanner(payNextAction);
+      useTBanner(payNextAction, 'redirectTo', additionData);
       return Promise.reject(void 0);
     }
   }

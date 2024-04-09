@@ -391,6 +391,7 @@
     getQxMedicalNation,
     isMedicalSelf,
     getIsAliMedicalNation,
+    _getQxMedicalNation,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -703,6 +704,58 @@
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(_patientTempList);
     }, 600);
+
+    dealContinueMedicalNationAuth();
+  };
+
+  // 支付宝国标医保授权回来将刷新整个页面, 数据丢失
+  const dealContinueMedicalNationAuth = async () => {
+    let isAli = true;
+    // #ifndef MP-ALIPAY
+    isAli = false;
+    // #endif
+
+    if (!Object.keys(orderRegInfo.value).length) {
+      return;
+    }
+
+    if (
+      getLocalStorage('get-ali-medical-auth-code') === '1' ||
+      getLocalStorage('get-wx-medical-auth-code') === '1'
+    ) {
+      setLocalStorage({
+        'get-ali-medical-auth-code': '',
+        'get-wx-medical-auth-code': '',
+      });
+
+      const isAlilAuth = (await _getQxMedicalNation()).payAuthNo;
+
+      if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
+        isAlilAuth
+      ) {
+        // 退号
+        if (getLocalStorage('get-wx-medical-auth-code-order') === '1') {
+          setLocalStorage({
+            'get-wx-medical-auth-code-order': '',
+          });
+
+          refoundOrder();
+        } else {
+          // 挂号
+          getPayInfo({
+            item: {
+              key: 'medicare',
+              label: '',
+            },
+          });
+        }
+      } else {
+        gStores.messageStore.showMessage(
+          '未完成电子医保凭证授权,无法继续医保结算'
+        );
+      }
+    }
   };
 
   init = debounce(init, 200, false);
@@ -828,7 +881,12 @@
   };
 
   const payAliMedicalNation = async () => {
-    medicalNationWx(await getQxMedicalNation(), {});
+    medicalNationWx(
+      await getQxMedicalNation(
+        joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value)
+      ),
+      {}
+    );
   };
 
   /**
@@ -981,7 +1039,7 @@
     if (orderConfig.value.isOrderPay !== '1') {
       cancelOrder();
     } else {
-      const { refundNeedAuth } = orderRegInfo.value;
+      const { refundNeedAuth, source } = orderRegInfo.value;
       const args = {
         orderId: pageProps.value.orderId,
         source: gStores.globalStore.browser.source,
@@ -989,13 +1047,27 @@
       };
       if (refundNeedAuth === '0') {
         let isAlipay = false;
+        let isWx = false;
+
         // #ifdef MP-ALIPAY
         isAlipay = true;
         // #endif
 
-        if (isAlipay) {
+        // #ifdef MP-WEIXIN
+        isWx = true;
+        // #endif
+
+        if (isAlipay && source === 19) {
           gStores.messageStore.showMessage(
             '本次挂号属于微信医保挂号, 暂不支持支付宝端退费',
+            3000
+          );
+          return;
+        }
+
+        if (isWx && source === 21) {
+          gStores.messageStore.showMessage(
+            '本次挂号属于支付宝医保挂号, 暂不支持微信端退费',
             3000
           );
           return;
@@ -1005,7 +1077,9 @@
           'get-wx-medical-auth-code-order': '1',
         });
 
-        const authorize = await getQxMedicalNation();
+        const authorize = await getQxMedicalNation(
+          joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value)
+        );
 
         args.payAuthNo = authorize.payAuthNo;
       }
@@ -1082,35 +1156,7 @@
 
       init();
     }
-
-    // 微信医保小程序跳回来后中断了链路 重新走下
-    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
-      await wait(300);
-      setLocalStorage({
-        'get-wx-medical-auth-code': '',
-      });
-
-      if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
-        if (getLocalStorage('get-wx-medical-auth-code-order') === '1') {
-          setLocalStorage({
-            'get-wx-medical-auth-code-order': '',
-          });
-
-          refoundOrder();
-        } else {
-          getPayInfo({
-            item: {
-              key: 'medicare',
-              label: '',
-            },
-          });
-        }
-      } else {
-        gStores.messageStore.showMessage(
-          '未完成电子医保凭证授权,无法继续医保结算'
-        );
-      }
-    }
+    dealContinueMedicalNationAuth();
   });
 
   onLoad(async (p) => {

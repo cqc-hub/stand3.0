@@ -6,20 +6,36 @@
     class="g-page"
   >
     <Order-Recommendation :dept-info="deptInfo" />
-    <Order-Sel-Date
-      v-if="allDocList.length"
-      :value="checkedDay"
-      :choose-days="chooseDays"
-      :enable-days="enabledDays"
-      @change="dateChange"
-      isShowAllDate
-    />
+    <view v-if="allDocList.length">
+      <Order-Sel-Date
+        :value="checkedDay"
+        :choose-days="chooseDays"
+        :enable-days="enabledDays"
+        @change="dateChange"
+        isShowAllDate
+      />
+      <view
+        v-if="orderConfig.isShowFilterOrderSourceBtn === '1'"
+        class="flex-between"
+      >
+        <view></view>
+        <view
+          @click="isFilterDoctor = !isFilterDoctor"
+          class="flex-normal pt12 mr32"
+        >
+          <text class="iconfont f48">
+            {{ isFilterDoctor ? '&#xe6d0;' : '&#xe6ce;' }}
+          </text>
+          <text>只看有号</text>
+        </view>
+      </view>
+    </view>
     <scroll-view class="g-container" scroll-y>
       <view
         v-if="!checkedDay"
         class="container-contract animate__animated animate__fadeIn"
       >
-        <view v-for="(item, i) in allDocList" :key="i" class="item-content">
+        <view v-for="(item, i) in _allDocList" :key="i" class="item-content">
           <Order-Doc-Item-All
             :item="item"
             @date-click="dateClick"
@@ -28,13 +44,13 @@
           />
         </view>
 
-        <view v-if="!allDocList.length && isComplete" class="empty-list">
-          <g-empty :current="2" text="当日未查询到医生排班信息" />
+        <view v-if="!_allDocList.length && isComplete" class="empty-list">
+          <g-empty :current="2" text="未查询到医生排班信息" />
         </view>
       </view>
 
       <view v-if="checkedDay" class="container-contract">
-        <view v-for="(item, i) in dateDocListFilterByDate" :key="i" class="">
+        <view v-for="(item, i) in _dateDocListFilterByDate" :key="i" class="">
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
             <view class="item-scheme-date">{{ _item.categorName }}</view>
             <view
@@ -84,11 +100,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { onReady, onShareAppMessage, onLoad } from '@dcloudio/uni-app';
   import { useOrder, IChooseDays, type IDocListAll } from './utils';
   import { handlerWeChatThRegLogin } from '@/utils';
-  import { joinQuery, deQueryForUrl } from '@/common';
+  import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
@@ -110,6 +126,7 @@
     thRegisterId?: string;
   }>();
   const pageProps = ref(<any>{});
+  const isFilterDoctor = ref(false);
 
   const hosDeptId = ref(
     (props.hosDeptId && decodeURIComponent(props.hosDeptId)) || ''
@@ -151,6 +168,45 @@
     preregistrationRegNumbers,
     goPreregistration,
   } = useOrder(ref({ ...props }));
+
+  const _allDocList = computed(() => {
+    const list = cloneUtil(allDocList.value);
+    if (isFilterDoctor.value) {
+      return list.filter((o) => {
+        o.schDocSubResultList = (o.schDocSubResultList || []).filter((p) => {
+          // 过滤有号
+          return p.schState === '0';
+        });
+
+        return o.schDocSubResultList.length;
+      });
+    }
+    return list;
+  });
+
+  const _dateDocListFilterByDate = computed(() => {
+    const list = cloneUtil(dateDocListFilterByDate.value);
+
+    if (isFilterDoctor.value) {
+      return list.filter((o) => {
+        o.schDateList = (o.schDateList || []).filter((p) => {
+          p.schemeList = (p.schemeList || []).filter((q) => {
+            q.schemeList = (q.schemeList || []).filter((r) => {
+              return r.schState === '0';
+            });
+
+            return q.schemeList.length;
+          });
+
+          return p.schemeList.length;
+        });
+
+        return o.schDateList.length;
+      });
+    }
+
+    return list;
+  });
 
   onReady(() => {
     uni.setNavigationBarTitle({

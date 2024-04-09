@@ -97,7 +97,7 @@
           defaultChoose
         />
 
-        <view class="flex1">
+        <view class="flex1 list-content">
           <view
             v-for="item in NucleResult"
             :key="item.itemCode"
@@ -220,6 +220,7 @@
   import { joinQuery } from '../../common/utils';
 
   interface INucle {
+    billingDoc: string;
     billingType: string;
     fee: string;
     itemAddress: string;
@@ -361,13 +362,28 @@
     }
   };
 
-  const clickItem = (item) => {
-    if (pageConfig.value.multi === '1') {
+  const clickItem = (item: INucle) => {
+    const listLen = selList.value.length;
+    if (pageConfig.value.multi === '1' && listLen) {
+      const { billingDoc } = item;
+      const { billingDoc: oldBillingDoc } = selList.value[0];
+      if (listLen === 1 && billingDoc !== oldBillingDoc) {
+        selList.value = [item];
+        return;
+      }
+
       const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
       if (idx > -1) {
         selList.value.splice(idx, 1);
       } else {
-        selList.value.push(item);
+        if (billingDoc !== oldBillingDoc) {
+          gStores.messageStore.showMessage(
+            '您选择的项目暂不支持合并开单',
+            3000
+          );
+        } else {
+          selList.value.push(item);
+        }
       }
     } else {
       selList.value = [item];
@@ -530,6 +546,11 @@
   }
 
   .box-list1 {
+    // background-color: #fff;
+    background-color: #f6f6f6;
+  }
+
+  .list-content {
     background-color: #fff;
   }
 

@@ -9,6 +9,7 @@ import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
+
 export interface IQueryRegNum {
   categorName: string;
   categorNamePY: string;

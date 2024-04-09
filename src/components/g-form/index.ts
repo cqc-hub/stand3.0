@@ -31,6 +31,7 @@ interface IBaseInstance {
   subLabel?: string;
   placeholder?: string;
   required?: boolean;
+  showRequireIcon?: boolean;
   ocr?: boolean;
   ocrDisabled?: boolean;
   emptyMessage?: string;
@@ -69,6 +70,11 @@ interface IInputInstance extends IBaseInstance {
 
 export interface ISwitchInstance extends IBaseInstance {
   field: 'switch';
+  /**
+   *  对齐方式 默认 右对齐
+   */
+  align?: 'left' | 'right';
+  labelFormatter?: (v: boolean) => any;
 }
 
 /**

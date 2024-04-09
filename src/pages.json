@@ -93,6 +93,26 @@
         },
 
         {
+          "path": "hospitalCare/changeOrder",
+          "style": {
+            "navigationBarTitleText": "住院服务"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "hospitalCare/selfHospitalization",
+          "style": {
+            "navigationBarTitleText": "自助入院"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "hospitalCare/dayCostList",
           "style": {
             "navigationBarTitleText": "住院服务"
@@ -114,6 +134,14 @@
           "path": "hospitalCare/paymentPage",
           "style": {
             "navigationBarTitleText": "预交费用"
+          }
+        },
+
+
+        {
+          "path": "hospitalCare/payConfirm",
+          "style": {
+            "navigationBarTitleText": "付款确认"
           }
         },
 
@@ -454,6 +482,16 @@
           "path": "reportQuery/reportQuery",
           "style": {
             "navigationBarTitleText": "报告查询"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
+          "path": "reportQuery/searchReport",
+          "style": {
+            "navigationBarTitleText": "检验单查询"
           },
           "extend": {
             "patient": true
