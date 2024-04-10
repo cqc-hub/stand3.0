@@ -47,7 +47,7 @@
     <g-empty :current="1" />
   </view>
 
-  <g-message/>
+  <g-message />
 </template>
 
 <script setup lang="ts">
