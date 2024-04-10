@@ -8,6 +8,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShareAppMessage } from '@dcloudio/uni-app';
+  import { useCommonTo,openServicesChat } from '@/common/checkJump';
 
   // pagesA/webView/webView
   const props = defineProps<{
@@ -34,6 +35,8 @@
         name: V3PageData.hosName,
         address: V3PageData.address,
       });
+    }else if(V3PageData.type=='backAndToPath'){
+      useCommonTo(V3PageData.pageData)
     }
   };
 
