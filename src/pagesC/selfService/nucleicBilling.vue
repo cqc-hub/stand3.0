@@ -14,21 +14,21 @@
       />
     </view>
     <scroll-view
-      v-if="pageLoading && NucleResult && NucleResult.length > 0"
+      v-if="pageLoading && list && list.length > 0"
       class="g-container box"
       scroll-y
     >
       <view
         class="box-tips box-card"
-        v-if="NucleResult[0].itemTime || NucleResult[0].itemAddress"
+        v-if="list[0].itemTime || list[0].itemAddress"
       >
         <view>
           <label>检测时间</label>
-          <label>{{ NucleResult[0].itemTime }}</label>
+          <label>{{ list[0].itemTime }}</label>
         </view>
         <view>
           <label>检测地点</label>
-          <label>{{ NucleResult[0].itemAddress }}</label>
+          <label>{{ list[0].itemAddress }}</label>
         </view>
       </view>
       <!-- <view class="box-date box-card">
@@ -38,7 +38,7 @@
       </view> -->
       <view v-if="sideList.length === 1" class="box-list box-card mb20">
         <view
-          v-for="item in NucleResult"
+          v-for="item in list"
           :key="item.itemCode"
           @tap="clickItem(item)"
           :class="{
@@ -46,17 +46,26 @@
           }"
           class="box-aaa g-fade-in"
         >
-          <view class="box-item">
+          <view
+            :class="{
+              'color-bbb': item.disabled === '1',
+            }"
+            class="box-item"
+          >
             <label>{{ item.itemName }}</label>
             <label>{{ item.fee }}元</label>
-            <block
-              v-if="selList.findIndex((o) => o.itemCode === item.itemCode) > -1"
-            >
-              <text class="iconfont ico-checkbox">&#xe6d0;</text>
-            </block>
-            <block v-else>
-              <text class="iconfont">&#xe6ce;</text>
-            </block>
+            <template v-if="item.disabled !== '1'">
+              <block
+                v-if="
+                  selList.findIndex((o) => o.itemCode === item.itemCode) > -1
+                "
+              >
+                <text class="iconfont ico-checkbox">&#xe6d0;</text>
+              </block>
+              <block v-else>
+                <text class="iconfont">&#xe6ce;</text>
+              </block>
+            </template>
           </view>
 
           <view
@@ -99,7 +108,7 @@
 
         <view class="flex1 list-content">
           <view
-            v-for="item in NucleResult"
+            v-for="item in list"
             :key="item.itemCode"
             @tap="clickItem(item)"
             :class="{
@@ -108,19 +117,26 @@
             }"
             class="box-aaa g-fade-in"
           >
-            <view class="box-item">
+            <view
+              :class="{
+                'color-bbb': item.disabled === '1',
+              }"
+              class="box-item"
+            >
               <label>{{ item.itemName }}</label>
               <label>{{ item.fee }}元</label>
-              <block
-                v-if="
-                  selList.findIndex((o) => o.itemCode === item.itemCode) > -1
-                "
-              >
-                <text class="iconfont ico-checkbox">&#xe6d0;</text>
-              </block>
-              <block v-else>
-                <text class="iconfont">&#xe6ce;</text>
-              </block>
+              <template v-if="item.disabled !== '1'">
+                <block
+                  v-if="
+                    selList.findIndex((o) => o.itemCode === item.itemCode) > -1
+                  "
+                >
+                  <text class="iconfont ico-checkbox">&#xe6d0;</text>
+                </block>
+                <block v-else>
+                  <text class="iconfont">&#xe6ce;</text>
+                </block>
+              </template>
             </view>
 
             <view
@@ -151,10 +167,7 @@
       </view>
       <g-flag typeFg="45" isShowFgTip aaa />
     </scroll-view>
-    <view
-      class="g-footer"
-      v-if="pageLoading && NucleResult && NucleResult.length > 0"
-    >
+    <view class="g-footer" v-if="pageLoading && list && list.length > 0">
       <button
         v-if="pageConfig.footerBtn"
         class="btn btn-primary btn-plain btn-border flex1"
@@ -172,10 +185,7 @@
         确定开单{{ (selList.length && `(${selList.length})`) || '' }}
       </button>
     </view>
-    <view
-      v-if="pageLoading && NucleResult && NucleResult.length == 0"
-      class="empty-box"
-    >
+    <view v-if="pageLoading && list && list.length == 0" class="empty-box">
       <g-empty :current="1" />
     </view>
 
@@ -220,6 +230,7 @@
   import { joinQuery } from '../../common/utils';
 
   interface INucle {
+    disabled?: '1';
     billingDoc: string;
     billingType: string;
     fee: string;
@@ -250,7 +261,7 @@
   const isFgShow45 = ref(false);
   const fgTitle45 = ref('');
 
-  const NucleResult = ref<INucle[]>([]);
+  const list = ref<INucle[]>([]);
   const selList = ref<INucle[]>([]);
   const gStores = new GStores();
   const pageLoading = ref(false);
@@ -286,7 +297,7 @@
   const sideValue = ref('');
   const sideClick = ({ item }) => {
     sideValue.value = item.itemName;
-    NucleResult.value = item.items;
+    list.value = item.items;
   };
 
   onMounted(() => {
@@ -294,7 +305,7 @@
   });
 
   const getList = async (billingType: any) => {
-    NucleResult.value.length = 0;
+    list.value.length = 0;
     sideList.value = [];
     const { result } = await api
       .getItemList({
@@ -308,14 +319,18 @@
 
     if (result.length) {
       sideList.value = result;
-      result[0].items.map((o) => {
-        o.tipHide = false;
-        o.showTipHideBtn = false;
-      });
-      NucleResult.value = result[0].items;
+      result.map((p) =>
+        p.items.map((o) => {
+          o.tipHide = false;
+          o.showTipHideBtn = false;
+        })
+      );
+
+      list.value = result[0].items;
+      result[0].items[1].disabled = '1';
 
       setTimeout(() => {
-        NucleResult.value.map((o) => {
+        list.value.map((o) => {
           if (o.tips && o.tips.length > 10) {
             uni
               .createSelectorQuery()
@@ -363,6 +378,14 @@
   };
 
   const clickItem = (item: INucle) => {
+    const { disabled, tips } = item;
+
+    if (disabled === '1') {
+      tips && gStores.messageStore.showMessage(tips, 3000);
+
+      return;
+    }
+
     const listLen = selList.value.length;
     if (pageConfig.value.multi === '1' && listLen) {
       const { billingDoc } = item;
@@ -565,9 +588,9 @@
   }
   .box-item {
     display: flex;
+    color: -var(-hr-neutral-color-10);
 
     label {
-      color: -var(-hr-neutral-color-10);
       line-height: 48rpx;
       font-weight: 600;
       font-size: var(--hr-font-size-base);
