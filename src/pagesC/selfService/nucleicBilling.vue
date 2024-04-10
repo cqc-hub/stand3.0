@@ -327,7 +327,6 @@
       );
 
       list.value = result[0].items;
-      result[0].items[1].disabled = '1';
 
       setTimeout(() => {
         list.value.map((o) => {
