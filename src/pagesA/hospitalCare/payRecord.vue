@@ -46,6 +46,8 @@
   <view class="empty-box" v-else>
     <g-empty :current="1" />
   </view>
+
+  <g-message />
 </template>
 
 <script setup lang="ts">

@@ -97,6 +97,7 @@
       placeholder: '请选择',
       key: 'patientAppointAdmissionDate',
       start: dayjs().format('YYYY-MM-DD'),
+      showSuffixArrowIcon: true,
     },
     {
       labelWidth,
@@ -122,6 +123,7 @@
           value: '3',
         },
       ],
+      showSuffixArrowIcon: true,
     },
     {
       labelWidth,
@@ -151,6 +153,7 @@
           value: '4',
         },
       ],
+      showSuffixArrowIcon: true,
     },
     {
       labelWidth,

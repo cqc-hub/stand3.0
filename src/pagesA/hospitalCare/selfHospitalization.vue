@@ -20,10 +20,20 @@
       </view>
 
       <view v-else-if="isComplete" class="p32">
-        <button @click="gform.submit" class="btn btn-primary">保存预约</button>
+        <button @click="gform.submit" class="btn btn-primary">自助入院</button>
       </view>
     </view>
 
+    <xy-dialog
+      title=""
+      :show="isConfirmDialogShow"
+      @cancelButton="isConfirmDialogShow = false"
+      @confirmButton="resolveF"
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <g-flag isHideTitle isShowFgTip typeFg="1120" aaa />
+      </scroll-view>
+    </xy-dialog>
     <g-message />
   </view>
 </template>
@@ -39,6 +49,7 @@
     ServerStaticData,
     IHosInfo,
     getLocation,
+    wait,
   } from '@/utils';
 
   import dayjs from 'dayjs';
@@ -58,19 +69,24 @@
   const formData = ref<BaseObject>({});
   const isComplete = ref(false);
 
+  const isConfirmDialogShow = ref(false);
+  let resolveF: any = () => {};
   const formSubmit = async ({ data }) => {
+    // const { confirm } = await apiAsync(uni.showModal, {
+    //   content: '确定进行提交?',
+    // });
+
+    // if (!confirm) {
+    //   return;
+    // }
+    isConfirmDialogShow.value = true;
+    await new Promise((r) => {
+      resolveF = r;
+    });
     const { permanentAddress, detailedAddress } = data;
     const { patientId } = gStores.userStore.patChoose;
 
     data.presentAddress = `${permanentAddress} ${detailedAddress}`;
-
-    const { confirm } = await apiAsync(uni.showModal, {
-      content: '确定进行提交?',
-    });
-
-    if (!confirm) {
-      return;
-    }
 
     await api.saveInpVisit({ ...data, patientId });
     gStores.messageStore.showMessage(`确认信息成功`, 3000, {
@@ -138,14 +154,14 @@
       field: 'input-text',
       placeholder: '请输入',
       key: 'patientPhone',
-      inputMask: (v: string) => {
-        if (v) {
-          const reg = /^(1[3-9][0-9])\d{4}(\d{4}$)/; // 定义手机号正则表达式
-          return v.replace(reg, '$1****$2');
-        }
+      // inputMask: (v: string) => {
+      //   if (v) {
+      //     const reg = /^(1[3-9][0-9])\d{4}(\d{4}$)/; // 定义手机号正则表达式
+      //     return v.replace(reg, '$1****$2');
+      //   }
 
-        return v;
-      },
+      //   return v;
+      // },
     },
     {
       labelWidth,
@@ -165,6 +181,7 @@
           value: '未婚',
         },
       ],
+      showSuffixArrowIcon: true,
     },
     {
       labelWidth,
@@ -173,8 +190,8 @@
       label: '第二联系人',
       field: 'input-text',
       placeholder: '请输入手机号',
-      key: 'phoneNumber',
       rule: phoneRule,
+      key: 'nextOfKin',
     },
     {
       labelWidth,
@@ -257,7 +274,7 @@
     {
       labelWidth,
       disabled: true,
-      label: '入院时间',
+      label: '住院时间',
       field: 'input-text',
       placeholder: ' ',
       key: 'appointAdmissionDate',
@@ -294,10 +311,11 @@
     if (result) {
       const { inAdvanceOrderFlag, hosId, presentAddress } = result;
       if (presentAddress) {
-        const [permanentAddress, detailedAddress] = presentAddress.split(' ');
+        const [permanentAddress, ...detailedAddress] =
+          presentAddress.split(' ');
 
         result.permanentAddress = permanentAddress;
-        result.detailedAddress = detailedAddress;
+        result.detailedAddress = detailedAddress.join('');
       }
       result.inAdvanceOrderFlagLabel =
         (inAdvanceOrderFlag === '0' && '否') || '是';
@@ -305,6 +323,8 @@
         hosList.value.find((o) => o.hosId === hosId)?.hosName || '';
 
       formData.value = result;
+
+      await wait(10);
       gform.value.setList([...renderListBase]);
     } else {
       gform.value.setList([]);

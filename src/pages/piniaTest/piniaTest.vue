@@ -348,17 +348,17 @@
       //   },
       // });
 
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'pagesC/question/normalQuestion',
-      //   addition: {
-      //     patientId: '_patientId',
-      //   },
-      // });
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/question/questionAfterVisit',
+        addition: {
+          patientId: '_patientId',
+        },
+      });
 
       // useTBanner(healthRecord)
-      useTBanner(电子导诊单);
+      // useTBanner(电子导诊单);
     }, 1000);
   });
 </script>
