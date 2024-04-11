@@ -61,12 +61,12 @@
           <text class="color-444 f28 mr8">退还金额</text>
         </template>
         <text class="f36 g-bold color-error">
-          {{ info.totalNeedPay || '' }}元
+          {{ Math.abs(info.totalNeedPay) || '' }}元
         </text>
       </view>
 
       <button @click="payClick" class="btn g-border btn-warning pay-btn">
-        缴费
+        结算
       </button>
     </view>
 
@@ -127,7 +127,7 @@
   const hosList = ref<IHosInfo[]>([]);
   const details = ref<IDetailInfo[]>([
     {
-      label: '订单总额',
+      label: '费用总额',
       key: 'totalCharges',
     },
     {
@@ -198,7 +198,7 @@
     const { cardNumber, patientId, hosId } = pageProps.value;
     const source = gStores.globalStore.browser.source;
     const { totalNeedPay, visitNo } = info.value;
-    const { result } = await api.outHospitalAffirmPay<any>({
+    await api.outHospitalAffirmPay<any>({
       amount:totalNeedPay,
       patientId,
       hosId,
@@ -212,7 +212,7 @@
   const toPay = async () => {
     uni.showLoading({
       mask: true,
-      title: '预结算中，请勿退出否则可能出现结算异常',
+      title: '出院结算中，请勿退出否则可能出现结算异常',
     });
     try {
       const payArg = await getCreateInHospitalPayOrderData(
@@ -233,9 +233,8 @@
   };
 
   const payAfter = async () => {
-    uni.showLoading({});
-    await wait(1000);
-    uni.hideLoading();
+    gStores.messageStore.showMessage('结算成功', 15000);
+    await wait(1500);
     uni.reLaunch({
       url: '/pagesA/hospitalCare/hospitalCare',
     });

@@ -73,11 +73,11 @@
           <text class="money text-no-wrap">
             {{ hosInfoResObj.prepaidCost }}元
           </text>
-        </view>
+        </view> 
         <view class="card-detail-item">
           <text class="name">已产生费用</text>
           <text class="money">{{ hosInfoResObj.totalCost }}元</text>
-        </view>
+        </view> 
         <view class="card-detail-item" v-if="hosInfoResObj.insuranceFee">
           <text class="name">医保报销</text>
           <text class="money">{{ hosInfoResObj.insuranceFee }}元</text>
@@ -89,6 +89,10 @@
         <view class="card-detail-item last">
           <text class="name">账户余额</text>
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
+        </view>
+        <view class="card-detail-item">
+          <text class="name">费用类型</text>
+          <text class="money">{{ hosInfoResObj.costTypeName }}</text>
         </view>
 
         <view v-if="isShowPayBtn" class="button f36" @click="toPayOut">
