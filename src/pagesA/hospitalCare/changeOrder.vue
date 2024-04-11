@@ -41,7 +41,8 @@
 
   // 预约新增
   const isItemNew = computed(() => {
-    return pageProps.value.appointAdtStatus === '1';
+    return true
+    // return pageProps.value.appointAdtStatus === '1';
   });
 
   const labelWidth = '250rpx';
@@ -277,8 +278,18 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log(pageProps.value, 'pageProps.valuepageProps.value');
+
+    if (pageProps.value.presentAddressOthers) {
+      const [permanentAddress, ...detailAddress] = pageProps.value.presentAddressOthers.split(' ');
+
+      pageProps.value.permanentAddress = permanentAddress;
+      pageProps.value.detailedAddress = detailAddress.join('');
+    }
     pageProps.value.isTakeAnticoagulantDrugs =
       (pageProps.value.isTakeAnticoagulantDrugs === '0' && true) || false;
+    pageProps.value.maritalStatus =
+      (pageProps.value.maritalStatus === '已婚' && true) || false;
 
     formData.value = {
       patientId: gStores.userStore.patChoose.patientId,
