@@ -13,7 +13,6 @@
           class="hos-icon mr24"
         />
         <view class="f32 text-ellipsis">{{ getHosName }}</view>
-
       </view>
 
       <text :class="`icon-font icon-resize ico_arrow f48`" />
@@ -97,10 +96,15 @@
       console.error(err);
     });
 
-    let list = await ServerStaticData.getHosList({
-      gisLng: location?.longitude,
-      gisLat: location?.latitude,
-    });
+    let list = await ServerStaticData.getHosList(
+      {
+        gisLng: location?.longitude,
+        gisLat: location?.latitude,
+      },
+      {
+        noCache: true,
+      }
+    );
 
     if (props.type === 'selDepartment') {
       list = list.filter((o) => o.ifClick !== '1');
