@@ -43,32 +43,46 @@
           : 'record-container-row2'
       }`"
     >
-      <view
+      <g-login
         v-for="(record, i) in viewerStore.myPersonRecordList"
         :key="i"
-        :style="{
-          'background-image': `url(${backImg[i]})`,
-          'background-color': recordColors[i],
-        }"
-        :class="{
-          'cr-center': viewerStore.myPersonRecordList && viewerStore.myPersonRecordList.length === 1,
-          'record-item-first': viewerStore.myPersonRecordList.length === 2 && i === 0,
-        }"
-        class="record-item g-fade-in"
-        @tap="jumpFor(record)"
+        :disabled="record.loginInterception === '0'"
+        @handler-next="jumpFor(record)"
+        class="flex1"
       >
-        <!-- <g-login @handler-next="jumpFor(record)" :disabled="record.loginInterception === '0'"> -->
-        <view class="record-label">
-          <text>{{ record.title }}</text>
+        <view
+          :style="{
+            'background-image': `url(${backImg[i]})`,
+            'background-color': recordColors[i],
+          }"
+          :class="{
+            'cr-center':
+              viewerStore.myPersonRecordList &&
+              viewerStore.myPersonRecordList.length === 1,
+            'record-item-first':
+              viewerStore.myPersonRecordList.length === 2 && i === 0,
+          }"
+          class="record-item g-fade-in"
+          @tap="jumpFor(record)"
+        >
           <view
-            v-if="viewerStore.myPersonRecordList && viewerStore.myPersonRecordList.length === 1"
-            class="iconfont icon-size"
-          >
-            &#xe6c8;
+            :class="{
+              pt48: viewerStore.myPersonRecordList.length > 1
+            }"
+           class="record-label">
+            <text>{{ record.title }}</text>
+            <view
+              v-if="
+                viewerStore.myPersonRecordList &&
+                viewerStore.myPersonRecordList.length === 1
+              "
+              class="iconfont icon-size"
+            >
+              &#xe6c8;
+            </view>
           </view>
         </view>
-        <!-- </g-login> -->
-      </view>
+      </g-login>
     </view>
   </view>
 </template>
@@ -199,7 +213,7 @@
       font-size: var(--hr-font-size-base);
 
       .record-label {
-        margin-top: 48upx;
+        // padding-top: 48upx;
         padding-left: 24upx;
         display: flex;
         align-items: center;

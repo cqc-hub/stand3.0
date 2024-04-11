@@ -121,27 +121,22 @@
     }
 
     emits('handler-next');
-
   };
 </script>
 
 <style lang="scss" scoped>
   .login-btn {
-    padding: 0;
-    margin: 0;
-    border: none;
-    background: transparent;
-
-    display: inline-block;
-    line-height: inherit;
+    all: unset;
     height: 100%;
     width: 100%;
+    display: inline-block;
     vertical-align: middle;
     font-size: var(--hr-font-size-base);
     color: var(--hr-neutral-color-10);
 
-    &::after {
-      border: none;
+    &::after,
+    &::before {
+      all: unset;
     }
   }
 </style>
