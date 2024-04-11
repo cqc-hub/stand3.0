@@ -93,14 +93,14 @@ export const getShowDrugName = (item: IWaitListItem) => {
 };
 
 export const getSysAppMore = async (typeFlag: string) => {
-  let text 
+  let text
   try {
     const { result } = await api.getSysAppMore({
       typeFlag,
     })
     const { content } = result;
     text = HTMLParser(content)
-  } catch {
+  } catch(err) {
     text  = '请凭二维码前往药房取药'
   }
   return text
