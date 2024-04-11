@@ -135,6 +135,7 @@
 
   interface IPageProps {
     tabIndex: number;
+    hosId:string;
   }
   const pageProps = ref(<IPageProps>{});
 
@@ -501,7 +502,7 @@
     reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-
+    pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
     if (cacheStore.isShowChooseHos) {
       await wait(300);
       await selHosRef.value.init();
