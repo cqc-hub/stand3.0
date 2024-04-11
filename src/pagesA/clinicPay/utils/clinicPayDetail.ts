@@ -1237,6 +1237,8 @@ export const usePayPage = () => {
       selUnPayList: selUnPayList.value,
     });
 
+    // item.key = 'medicare'
+
     // 自费
     if (item.key === 'online') {
       // 预结算
@@ -1340,13 +1342,13 @@ export const usePayPage = () => {
     uni.hideLoading();
     const info = {
       ...item,
+      patientName,
       extend: authorize,
       // businessType: '1',
       phsOrderSource: '2',
       payAuthNo: authorize.payAuthNo,
       cardNumber: pageProps.value.deParams?.cardNumber || pat.cardNumber,
       patientId: pageProps.value.deParams?.cardNumber ? '' : pat.patientId,
-      patientName: pageProps.value.deParams?.patientName || pat.patientName,
       totalCost: detailData.value.totalCost,
       params: pageProps.value.params,
     };

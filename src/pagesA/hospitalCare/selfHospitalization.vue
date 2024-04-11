@@ -30,6 +30,7 @@
       @cancelButton="isConfirmDialogShow = false"
       @confirmButton="resolveF"
       cancelText="不同意,请至线下办理"
+      isVerticalBtn
     >
       <scroll-view scroll-y class="reg-tip">
         <g-flag isHideTitle isShowFgTip typeFg="1120" aaa />

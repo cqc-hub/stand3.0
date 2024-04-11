@@ -41,8 +41,7 @@
 
   // 预约新增
   const isItemNew = computed(() => {
-    return true
-    // return pageProps.value.appointAdtStatus === '1';
+    return pageProps.value.appointAdtStatus === '1';
   });
 
   const labelWidth = '250rpx';
@@ -253,6 +252,7 @@
     data.isTakeAnticoagulantDrugs =
       (data.isTakeAnticoagulantDrugs && '0') || '1';
     data.maritalStatus = (data.maritalStatus && '已婚') || '未婚';
+    data.presentAddressOthers = `${data.permanentAddress} ${data.detailedAddress}`;
 
     const { confirm } = await apiAsync(uni.showModal, {
       content: '确定进行提交?',
@@ -281,7 +281,8 @@
     console.log(pageProps.value, 'pageProps.valuepageProps.value');
 
     if (pageProps.value.presentAddressOthers) {
-      const [permanentAddress, ...detailAddress] = pageProps.value.presentAddressOthers.split(' ');
+      const [permanentAddress, ...detailAddress] =
+        pageProps.value.presentAddressOthers.split(' ');
 
       pageProps.value.permanentAddress = permanentAddress;
       pageProps.value.detailedAddress = detailAddress.join('');

@@ -9,7 +9,11 @@
       <view class="xy-dialog__header" v-if="title.length > 0">
         {{ title }}
       </view>
-      <scroll-view class="xy-dialog__content" :style="{ 'text-align': textalign }" scroll-y>
+      <scroll-view
+        class="xy-dialog__content"
+        :style="{ 'text-align': textalign }"
+        scroll-y
+      >
         <template v-if="content">
           <view class="modal-content">{{ content }}</view>
         </template>
@@ -17,28 +21,23 @@
           <slot />
         </template>
       </scroll-view>
-      <view class="xy-dialog__footer">
-        <view
-          v-if="isReverseBtn"
-          class="xy-dialog__btn xy-dialog__footer-confirm xy-dialog__btn-confirm-left"
-          :style="{ color: confirmColor }"
-          :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
-          @click="clickConfirm"
-        >
-          <slot name="confirmBtn">{{ confirmText }}</slot>
-        </view>
-
+      <view
+        :class="{
+          footer__reverse: isReverseBtn,
+          'footer__row f32': isVerticalBtn,
+        }"
+        class="xy-dialog__footer"
+      >
         <view
           v-if="isShowCancel"
-          class="xy-dialog__btn xy-dialog__footer-cancel g-bold"
+          class="xy-dialog__btn xy-dialog__footer-cancel g-bold w100p"
           :style="{ color: cancelColor }"
           @click="clickCancel"
         >
           <slot name="cancelBtn">{{ cancelText }}</slot>
         </view>
         <view
-          v-if="!isReverseBtn"
-          class="xy-dialog__btn xy-dialog__footer-confirm"
+          class="xy-dialog__btn xy-dialog__footer-confirm w100p"
           :style="{ color: confirmColor }"
           :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
           @click="clickConfirm"
@@ -109,9 +108,14 @@
         default: false,
       },
 
-
       // 确认按钮在前
       isReverseBtn: {
+        type: Boolean,
+        default: false,
+      },
+
+      // 按钮垂直布局
+      isVerticalBtn: {
         type: Boolean,
         default: false,
       },
@@ -241,8 +245,24 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      &.footer__reverse {
+        flex-direction: row-reverse;
+      }
+
+      &.footer__row {
+        flex-direction: column;
+
+        .xy-dialog__btn {
+          &.xy-dialog__footer-cancel {
+            border-right: none;
+            border-bottom: 2rpx solid #e6e6e6;
+          }
+        }
+      }
+
       .xy-dialog__btn {
-        width: 50%;
+        flex: 1;
         text-align: center;
         padding: 20upx 0;
         &.xy-dialog__btn-confirm-left {
