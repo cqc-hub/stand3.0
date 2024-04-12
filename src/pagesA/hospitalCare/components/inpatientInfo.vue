@@ -2,13 +2,7 @@
   <!-- 住院信息 -->
   <view>
     <view class="box" v-if="hosInfoResObj && Object.keys(hosInfoResObj).length">
-      <view
-        :class="
-          gStores.userStore.patChoose.patientSex == '女'
-            ? 'card card-lady'
-            : 'card card-man'
-        "
-      >
+      <view :class="gStores.userStore.patChoose.patientSex == '女' ? 'card card-lady' : 'card card-man'">
         <view class="user">
           <image
             v-show="isLoad"
@@ -20,15 +14,11 @@
 
           <view class="user-info">
             <text class="user-info-name">
-              {{
-                isNameEncry
-                  ? hosInfoResObj.patientNameDes
-                  : hosInfoResObj.patientName
-              }}
+              {{ isNameEncry ? hosInfoResObj.patientNameDes : hosInfoResObj.patientName }}
             </text>
             <text class="user-info-id">({{ hosInfoResObj.cardNumber }})</text>
             <text @click="eyesClick" class="iconfont eyes-icon color-888">
-              {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
+              {{ isNameEncry ? "&#xe6d4;" : " &#xe6db;" }}
             </text>
           </view>
         </view>
@@ -43,18 +33,8 @@
           <text>{{ hosInfoResObj.beHosDate }}</text>
           <text>入院</text>
         </view>
-        <view
-          v-if="gStores.userStore.patChoose.patientSex == '女'"
-          class="iconfont woman"
-        >
-          &#xe6a9;
-        </view>
-        <view
-          v-if="gStores.userStore.patChoose.patientSex == '男'"
-          class="iconfont man"
-        >
-          &#xe6aa;
-        </view>
+        <view v-if="gStores.userStore.patChoose.patientSex == '女'" class="iconfont woman"> &#xe6a9; </view>
+        <view v-if="gStores.userStore.patChoose.patientSex == '男'" class="iconfont man"> &#xe6aa; </view>
       </view>
       <view class="card-detail">
         <view class="card-detail-item">
@@ -70,14 +50,12 @@
             </view>
           </view>
 
-          <text class="money text-no-wrap">
-            {{ hosInfoResObj.prepaidCost }}元
-          </text>
-        </view> 
+          <text class="money text-no-wrap"> {{ hosInfoResObj.prepaidCost }}元 </text>
+        </view>
         <view class="card-detail-item">
           <text class="name">已产生费用</text>
           <text class="money">{{ hosInfoResObj.totalCost }}元</text>
-        </view> 
+        </view>
         <view class="card-detail-item" v-if="hosInfoResObj.insuranceFee">
           <text class="name">医保报销</text>
           <text class="money">{{ hosInfoResObj.insuranceFee }}元</text>
@@ -86,18 +64,16 @@
           <text class="name">自费金额</text>
           <text class="money">{{ hosInfoResObj.defrayFee }}元</text>
         </view>
-        <view class="card-detail-item last">
+        <view class="card-detail-item">
           <text class="name">账户余额</text>
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
-        <view class="card-detail-item">
+        <view class="card-detail-item last">
           <text class="name">费用类型</text>
           <text class="money">{{ hosInfoResObj.costTypeName }}</text>
         </view>
 
-        <view v-if="isShowPayBtn" class="button f36" @click="toPayOut">
-          已出院，立即结算
-        </view>
+        <view v-if="isShowPayBtn" class="button f36" @click="toPayOut"> 已出院，立即结算 </view>
         <view v-else class="button f36" @click="toPayPage">预交费用</view>
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
@@ -127,11 +103,7 @@
         <view class="safe-height" />
 
         <view class="g-flex-rc-cc">
-          <view
-            @click="skipChoose"
-            style="height: 88rpx; width: 300rpx"
-            class="btn btn-primary btn-plain btn-border"
-          >
+          <view @click="skipChoose" style="height: 88rpx; width: 300rpx" class="btn btn-primary btn-plain btn-border">
             跳过选择
           </view>
         </view>
@@ -142,116 +114,104 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
-  import { getAvatar } from '@/stores';
-  import { GStores, apiAsync } from '@/utils';
-  import { joinQuery } from '@/common';
-  import {
-    getInHospitalInfoParam,
-    getInHospitalInfoResult,
-    hospitalPayResult,
-  } from '../utils/inpatientInfo';
-  import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
+import { onMounted, ref } from "vue";
+import { getAvatar } from "@/stores";
+import { GStores, apiAsync } from "@/utils";
+import { joinQuery } from "@/common";
+import { getInHospitalInfoParam, getInHospitalInfoResult, hospitalPayResult } from "../utils/inpatientInfo";
+import { onShow, onPullDownRefresh } from "@dcloudio/uni-app";
 
-  import GSelect from '@/components/g-select/g-select.vue';
-  import AppointmentList from '@/pagesA/hospitalCare/components/appointmentList.vue';
-  import api from '@/service/api';
+import GSelect from "@/components/g-select/g-select.vue";
+import AppointmentList from "@/pagesA/hospitalCare/components/appointmentList.vue";
+import api from "@/service/api";
 
-  const props = defineProps<{
-    isQueryPreRecord?: string;
-    tabCurrent?: number;
-    // 住院中心页面, 请求住院预约接口并且开展相关 ui
-    isShowAppointment?: boolean;
-  }>();
-  const gStores = new GStores();
-  const isLoad = ref(false);
-  const isNameEncry = ref(true);
-  const loadImg = () => {
-    isLoad.value = true;
+const props = defineProps<{
+  isQueryPreRecord?: string;
+  tabCurrent?: number;
+  // 住院中心页面, 请求住院预约接口并且开展相关 ui
+  isShowAppointment?: boolean;
+}>();
+const gStores = new GStores();
+const isLoad = ref(false);
+const isNameEncry = ref(true);
+const loadImg = () => {
+  isLoad.value = true;
+};
+
+const gSelect = ref(<any>"");
+const selPlaces = ref(<any[]>[]);
+const hosCardInfoLists = ref(<any[]>[]);
+const selPlace = ref("");
+const isSelShow = ref(false);
+const isShowPayBtn = ref(false);
+const selClose = () => {
+  isSelShow.value = false;
+  reject();
+};
+const skipChoose = () => {
+  selPlace.value = "";
+  isSelShow.value = false;
+  resolve();
+};
+
+const hosInfoResObj = ref({} as getInHospitalInfoResult);
+const toPayRecord = async () => {
+  uni.navigateTo({
+    url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
+  });
+};
+
+const eyesClick = () => {
+  isNameEncry.value = !isNameEncry.value;
+};
+
+let resolve: (...any) => any = () => {};
+let reject: (...any) => any = () => {};
+
+const toPayPage = async () => {
+  const { hosId, cardNumber, patientName, hosName, placeList, choosePlaceFlag } = hosInfoResObj.value;
+
+  const args = {
+    hosId,
+    cardNumber,
+    patientName,
+    hosName,
   };
 
-  const gSelect = ref(<any>'');
-  const selPlaces = ref(<any[]>[]);
-  const hosCardInfoLists = ref(<any[]>[]);
-  const selPlace = ref('');
-  const isSelShow = ref(false);
-  const isShowPayBtn = ref(false);
-  const selClose = () => {
-    isSelShow.value = false;
-    reject();
-  };
-  const skipChoose = () => {
-    selPlace.value = '';
-    isSelShow.value = false;
-    resolve();
-  };
+  if (!choosePlaceFlag && placeList && placeList.length) {
+    selPlaces.value = placeList;
+    isSelShow.value = true;
 
-  const hosInfoResObj = ref({} as getInHospitalInfoResult);
-  const toPayRecord = async () => {
-    uni.navigateTo({
-      url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
+    await new Promise((r, j) => {
+      resolve = r;
+      reject = j;
     });
-  };
 
-  const eyesClick = () => {
-    isNameEncry.value = !isNameEncry.value;
-  };
+    const selItem = selPlace.value && placeList.find((o) => o.appointRehabCode === selPlace.value);
 
-  let resolve: (...any) => any = () => {};
-  let reject: (...any) => any = () => {};
-
-  const toPayPage = async () => {
-    const {
-      hosId,
-      cardNumber,
-      patientName,
-      hosName,
-      placeList,
-      choosePlaceFlag,
-    } = hosInfoResObj.value;
-
-    const args = {
-      hosId,
-      cardNumber,
-      patientName,
-      hosName,
-    };
-
-    if (!choosePlaceFlag && placeList && placeList.length) {
-      selPlaces.value = placeList;
-      isSelShow.value = true;
-
-      await new Promise((r, j) => {
-        resolve = r;
-        reject = j;
+    if (selItem) {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: `确定选择 ${selItem.address} 吗?`,
       });
 
-      const selItem =
-        selPlace.value &&
-        placeList.find((o) => o.appointRehabCode === selPlace.value);
-
-      if (selItem) {
-        const { confirm } = await apiAsync(uni.showModal, {
-          content: `确定选择 ${selItem.address} 吗?`,
-        });
-
-        if (!confirm) {
-          return;
-        }
-
-        await api.inHosChosePlace({
-          placeObject: selItem,
-          visitNo: hosInfoResObj.value.visitNo,
-        });
+      if (!confirm) {
+        return;
       }
+
+      await api.inHosChosePlace({
+        placeObject: selItem,
+        visitNo: hosInfoResObj.value.visitNo,
+      });
     }
+  }
 
-    uni.navigateTo({
-      url: joinQuery('/pagesA/hospitalCare/paymentPage', args),
-    });
-  };
+  uni.navigateTo({
+    url: joinQuery("/pagesA/hospitalCare/paymentPage", args),
+  });
+};
 
-  const toPayOut = async () => {
+const toPayOut = async () => {
+  if (hosInfoResObj.value.costTypeName === "自费") {
     const { hosId, cardNumber, patientName, hosName, extend } = hosInfoResObj.value;
     const patientId = gStores.userStore.patChoose.patientId;
     const args = {
@@ -260,223 +220,226 @@
       hosName,
       cardNumber,
       patientName,
-      hospitalAccount: '13',
-      extend
+      hospitalAccount: "13",
+      extend,
     };
     uni.navigateTo({
-      url: joinQuery('/pagesA/hospitalCare/payConfirm', args),
+      url: joinQuery("/pagesA/hospitalCare/payConfirm", args),
     });
-  };
+  } else {
+    gStores.messageStore.showMessage('医保患者暂不支持线上结算，请前往窗口结算!', 2000);
+  }
+};
 
-  onPullDownRefresh(() => {
-    if (props.tabCurrent == 0) {
-      setTimeout(() => {
-        uni.stopPullDownRefresh();
-        init();
-      }, 1000);
+onPullDownRefresh(() => {
+  if (props.tabCurrent == 0) {
+    setTimeout(() => {
+      uni.stopPullDownRefresh();
+      init();
+    }, 1000);
+  }
+});
+
+const getAppointmentList = async () => {
+  const {
+    result: { hosCardInfoLists: _hosCardInfoLists },
+  } = await api.queryHosCardInfo<any>({
+    patientId: gStores.userStore.patChoose.patientId,
+  });
+
+  hosCardInfoLists.value = _hosCardInfoLists;
+};
+
+const init = async () => {
+  hosInfoResObj.value = {} as any;
+  hosCardInfoLists.value = [];
+  const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    patientId: gStores.userStore.patChoose.patientId,
+  });
+
+  hosInfoResObj.value = result;
+
+  //status 在院状态 1.在院 2.出院未结算
+  if (result && Object.keys(result).length) {
+    if (result.status === "2") {
+      isShowPayBtn.value = true;
+    } else {
+      isShowPayBtn.value = false;
     }
-  });
+  }
 
-  const getAppointmentList = async () => {
-    const {
-      result: { hosCardInfoLists: _hosCardInfoLists },
-    } = await api.queryHosCardInfo<any>({
-      patientId: gStores.userStore.patChoose.patientId,
-    });
+  if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
+    getAppointmentList();
+  }
+};
 
-    hosCardInfoLists.value = _hosCardInfoLists;
-  };
+onMounted(() => {
+  init();
+});
 
-  const init = async () => {
-    hosInfoResObj.value = {} as any;
-    hosCardInfoLists.value = [];
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
-      patientId: gStores.userStore.patChoose.patientId,
-    });
+onShow(() => {
+  init();
+});
 
-    hosInfoResObj.value = result;
-
-    //status 在院状态 1.在院 2.出院未结算
-    if (result && Object.keys(result).length) {
-      if (result.status === '2' && result.costTypeName === '自费') {
-        isShowPayBtn.value = true;
-      } else {
-        isShowPayBtn.value = false;
-      }
-    }
-
-    if (props.isShowAppointment && (!result || !Object.keys(result).length)) {
-      getAppointmentList();
-    }
-  };
-
-  onMounted(() => {
-    init();
-  });
-
-  onShow(() => {
-    init();
-  });
-
-  defineExpose({
-    init,
-  });
+defineExpose({
+  init,
+});
 </script>
 
 <style scoped lang="scss">
-  .box {
-    padding: 32rpx 32rpx 0 32rpx;
+.box {
+  padding: 32rpx 32rpx 0 32rpx;
+}
+.empty-box {
+  padding-top: 200rpx;
+}
+.card {
+  // height: 244rpx;
+  position: relative;
+  border: 1rpx solid #e6e6e6;
+  border-radius: 16rpx;
+  padding: 40rpx 32rpx;
+  overflow: hidden;
+  &.card-man {
+    background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
   }
-  .empty-box {
-    padding-top: 200rpx;
+  &.card-lady {
+    background: linear-gradient(90deg, #ffffff, #fff0eb 99%);
   }
-  .card {
-    // height: 244rpx;
-    position: relative;
-    border: 1rpx solid #e6e6e6;
-    border-radius: 16rpx;
-    padding: 40rpx 32rpx;
-    overflow: hidden;
-    &.card-man {
-      background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
+  .user {
+    display: flex;
+    .user-avatar {
+      width: 64rpx;
+      height: 64rpx;
+      border-radius: 50%;
     }
-    &.card-lady {
-      background: linear-gradient(90deg, #ffffff, #fff0eb 99%);
-    }
-    .user {
-      display: flex;
-      .user-avatar {
-        width: 64rpx;
-        height: 64rpx;
-        border-radius: 50%;
+    .user-info {
+      margin-left: 8rpx;
+      .user-info-name {
+        font-weight: 600;
+        font-size: var(--h-size-40);
       }
-      .user-info {
-        margin-left: 8rpx;
-        .user-info-name {
-          font-weight: 600;
-          font-size: var(--h-size-40);
-        }
-        .user-info-id {
-          color: #888;
-          font-size: var(--hr-font-size-base);
-          margin-left: 8rpx;
-        }
-      }
-    }
-    .user-del {
-      color: #444;
-      font-size: var(--hr-font-size-xs);
-      display: flex;
-      flex-wrap: wrap;
-
-      &.yard {
-        margin-top: 24rpx;
-      }
-      &.date {
-        margin-top: 16rpx;
-      }
-      text {
-        display: block;
-      }
-      .line {
-        width: 2rpx;
-        height: 24rpx;
-        margin: auto 20rpx;
-        background-color: #e6e6e6;
-      }
-    }
-    .iconfont {
-      font-size: 260rpx;
-      position: absolute;
-      right: -32rpx;
-      top: 64rpx;
-      // margin-top: -120rpx;
-      // margin-right: -60rpx;
-      // float: right;
-      &.man {
-        color: #296fff;
-        opacity: 0.05;
-      }
-      &.woman {
-        color: #ff5040;
-        opacity: 0.05;
-      }
-    }
-
-    .eyes-icon {
-      font-size: var(--hr-font-size-xxl);
-      position: relative;
-      top: 5rpx;
-    }
-  }
-  .card-detail {
-    background-color: #fff;
-    border: 1rpx solid #e6e6e6;
-    border-radius: 16rpx;
-    margin: 16rpx 0 20rpx;
-    padding: 40rpx 32rpx;
-
-    .card-detail-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 32rpx;
-      &.last {
-        margin-bottom: 80rpx;
-      }
-      .name {
+      .user-info-id {
         color: #888;
         font-size: var(--hr-font-size-base);
-        white-space: nowrap;
+        margin-left: 8rpx;
       }
-      .triangle-left {
-        margin: auto 0;
-        width: 0;
-        height: 2rpx;
-        border-top: 10rpx solid transparent;
-        border-right: 16rpx solid #e9f0ff;
-        border-bottom: 10rpx solid transparent;
-      }
-      .record {
-        display: flex;
-      }
-      .records {
-        // width: 152rpx;
-        // height: 48rpx;
-        padding: 6rpx;
-        padding-right: 0;
-        border-radius: 8rpx;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #e9f0ff;
-        margin-right: 70rpx;
-
-        .text {
-          color: #296fff;
-          font-size: var(--hr-font-size-xxxs);
-          font-weight: 600;
-          text-align: center;
-        }
-        .right {
-          font-size: var(--hr-font-size-base);
-          color: #296fff;
-        }
-      }
-      .money {
-        font-size: var(--hr-font-size-base);
-        color: #111;
-        font-weight: 600;
-      }
-    }
-    .button {
-      border: 2rpx solid #296fff;
-      border-radius: 16rpx;
-      height: 96rpx;
-      color: #296fff;
-      font-weight: 600;
-      text-align: center;
-      line-height: 96rpx;
-      margin-top: 28rpx;
     }
   }
+  .user-del {
+    color: #444;
+    font-size: var(--hr-font-size-xs);
+    display: flex;
+    flex-wrap: wrap;
+
+    &.yard {
+      margin-top: 24rpx;
+    }
+    &.date {
+      margin-top: 16rpx;
+    }
+    text {
+      display: block;
+    }
+    .line {
+      width: 2rpx;
+      height: 24rpx;
+      margin: auto 20rpx;
+      background-color: #e6e6e6;
+    }
+  }
+  .iconfont {
+    font-size: 260rpx;
+    position: absolute;
+    right: -32rpx;
+    top: 64rpx;
+    // margin-top: -120rpx;
+    // margin-right: -60rpx;
+    // float: right;
+    &.man {
+      color: #296fff;
+      opacity: 0.05;
+    }
+    &.woman {
+      color: #ff5040;
+      opacity: 0.05;
+    }
+  }
+
+  .eyes-icon {
+    font-size: var(--hr-font-size-xxl);
+    position: relative;
+    top: 5rpx;
+  }
+}
+.card-detail {
+  background-color: #fff;
+  border: 1rpx solid #e6e6e6;
+  border-radius: 16rpx;
+  margin: 16rpx 0 20rpx;
+  padding: 40rpx 32rpx;
+
+  .card-detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 32rpx;
+    &.last {
+      margin-bottom: 80rpx;
+    }
+    .name {
+      color: #888;
+      font-size: var(--hr-font-size-base);
+      white-space: nowrap;
+    }
+    .triangle-left {
+      margin: auto 0;
+      width: 0;
+      height: 2rpx;
+      border-top: 10rpx solid transparent;
+      border-right: 16rpx solid #e9f0ff;
+      border-bottom: 10rpx solid transparent;
+    }
+    .record {
+      display: flex;
+    }
+    .records {
+      // width: 152rpx;
+      // height: 48rpx;
+      padding: 6rpx;
+      padding-right: 0;
+      border-radius: 8rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #e9f0ff;
+      margin-right: 70rpx;
+
+      .text {
+        color: #296fff;
+        font-size: var(--hr-font-size-xxxs);
+        font-weight: 600;
+        text-align: center;
+      }
+      .right {
+        font-size: var(--hr-font-size-base);
+        color: #296fff;
+      }
+    }
+    .money {
+      font-size: var(--hr-font-size-base);
+      color: #111;
+      font-weight: 600;
+    }
+  }
+  .button {
+    border: 2rpx solid #296fff;
+    border-radius: 16rpx;
+    height: 96rpx;
+    color: #296fff;
+    font-weight: 600;
+    text-align: center;
+    line-height: 96rpx;
+    margin-top: 28rpx;
+  }
+}
 </style>
