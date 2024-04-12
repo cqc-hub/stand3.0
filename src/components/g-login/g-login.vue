@@ -129,10 +129,9 @@
     all: unset;
     height: 100%;
     width: 100%;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: var(--hr-font-size-base);
-    color: var(--hr-neutral-color-10);
+    display: inherit;
+    font-size: inherit;
+    color: inherit;
 
     &::after,
     &::before {

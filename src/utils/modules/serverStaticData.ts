@@ -455,7 +455,7 @@ export class ServerStaticData {
    * 071 台湾居民来居住证
    * 15 外国人永久居留身份证(现版）
    * 15 外国人永久居留身份证(新版）
-   * 99其他法定有效证件
+   * 99 其他法定有效证件
    */
   static async getIdTypeTerms(): Promise<ISelectOptions[]> {
     const gStores = new GStores();
