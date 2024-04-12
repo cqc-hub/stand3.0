@@ -227,7 +227,7 @@ const toPayOut = async () => {
       url: joinQuery("/pagesA/hospitalCare/payConfirm", args),
     });
   } else {
-    gStores.messageStore.showMessage('医保患者暂不支持线上结算，请前往窗口结算!', 2000);
+    gStores.messageStore.showMessage('非自费患者暂不支持线上结算，请前往住院收费处结算！', 2000);
   }
 };
 
