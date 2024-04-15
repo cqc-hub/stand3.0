@@ -385,6 +385,7 @@
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
 
   import {
+    PayType,
     usePayPage,
     getIsMedicalMode,
     TWxAuthorize,
@@ -782,9 +783,9 @@
     const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
 
     if (isMedicalMode && isSelf) {
-      changeRefPayList([1]);
+      changeRefPayList([PayType.Medicare]);
     } else {
-      changeRefPayList([0]);
+      changeRefPayList([PayType.Online]);
     }
 
     setTimeout(() => {

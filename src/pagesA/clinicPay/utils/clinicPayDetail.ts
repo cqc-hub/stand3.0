@@ -183,13 +183,13 @@ export type TMedicalNationUploadRes = {
 };
 
 // 定义支付类型枚举
-enum PayType {
-  Offline = 0,
-  Online = 1,
-  Digital = 2,
-  Medicare = 3,
-  MedicareAndDigital = 4,
+export enum PayType {
+  Online = 0,
+  Offline = 1,
+  Medicare = 2,
+  Digital = 3,
 }
+
 type PayListItem = {
   label: string;
   key: string;
@@ -1236,6 +1236,7 @@ export const usePayPage = () => {
       switch (item) {
         case PayType.Offline:
           rList.push('offline');
+          break;
         case PayType.Medicare:
           rList.push('medicare');
           break;

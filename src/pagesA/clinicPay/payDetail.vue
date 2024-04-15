@@ -271,6 +271,7 @@
     type TPayDetailProp,
     type TCostList,
     type TWxAuthorize,
+    PayType,
     getQxMedicalNation,
     _getQxMedicalNation,
   } from './utils/clinicPayDetail';
@@ -304,7 +305,7 @@
   const selListChildren = ref<TCostList[number]['costList']>([]);
 
   const { getDetailData, detailData } = usePayDetailPage();
-  const {
+  const { 
     pageConfig,
     getSysConfig,
     gStores,
@@ -734,11 +735,11 @@
       );
     }
 
-    changeRefPayList([0]);
+    changeRefPayList([PayType.Online]);
 
     if ((costTypeCode === '2' || isDefaultMedical()) && flag) {
       if (flag) {
-        changeRefPayList([1]);
+        changeRefPayList([PayType.Medicare]);
       }
     }
 
