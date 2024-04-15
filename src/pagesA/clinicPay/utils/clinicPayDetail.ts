@@ -182,6 +182,20 @@ export type TMedicalNationUploadRes = {
   regAppTradeNo?: string;
 };
 
+// 定义支付类型枚举
+enum PayType {
+  Offline = 0,
+  Online = 1,
+  Digital = 2,
+  Medicare = 3,
+  MedicareAndDigital = 4,
+}
+type PayListItem = {
+  label: string;
+  key: string;
+  sort: number;
+};
+
 /** 是否医保插件模式 */
 export const getIsMedicalModePlugin = () => {
   const {
@@ -1123,76 +1137,73 @@ export const usePayPage = () => {
     }
   };
 
+  const determinePayType = (
+    isMedicalMode: boolean,
+    isDigitalPay: boolean,
+    hasMedicalItem: boolean,
+    isMedicalSelf: boolean
+  ) => {
+    let payTypeList = [PayType.Online];
+    if (isMedicalMode) {
+      if (hasMedicalItem || isDefaultMedical()) {
+        if (isMedicalSelf) {
+          payTypeList.push(PayType.Medicare);
+        }
+      }
+    }
+    if (isDigitalPay) {
+      payTypeList.push(PayType.Digital);
+    }
+    return payTypeList;
+  };
+
   const getPay = async () => {
     const isMedicalMode = getIsMedicalMode();
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
+    const hasMedicalItem = selUnPayList.value.some(
+      (o) => o.costTypeCode === '2'
+    );
 
-    if (isMedicalMode) {
-      if (selUnPayList.value.length) {
-        const payMedicalItem = selUnPayList.value.find(
-          (o) => o.costTypeCode === '2'
-        );
+    const payTypeList = determinePayType(
+      isMedicalMode,
+      isDigitalPay,
+      hasMedicalItem,
+      await isMedicalSelf(
+        pageProps.value.deParams?.cardNumber ||
+          gStores.userStore.patChoose.cardNumber,
+        pageProps.value.params
+      )
+    );
 
-        // 医保 类型
-        if (payMedicalItem || isDefaultMedical()) {
-          const { cardNumber } = gStores.userStore.patChoose;
-
-          const flag = await isMedicalSelf(
-            pageProps.value.deParams?.cardNumber || cardNumber,
-            pageProps.value.params
-          );
-
-          if (isDigitalPay) {
-            if (flag) {
-              changeRefPayList(4);
-            } else {
-              changeRefPayList(3);
-            }
-          } else {
-            if (flag) {
-              changeRefPayList(1);
-            } else {
-              changeRefPayList(0);
-            }
-          }
-        } else {
-          //不是医保
-          if (isDigitalPay) {
-            changeRefPayList(3);
-          } else {
-            changeRefPayList(0);
-          }
-        }
-      } else {
-        if (isDigitalPay) {
-          changeRefPayList(3);
-        } else {
-          changeRefPayList(0);
-        }
-      }
-    } else if (isDigitalPay) {
-      changeRefPayList(3);
-    } else {
-      changeRefPayList(0);
-    }
+    changeRefPayList(payTypeList);
     await wait(200);
     refPay.value.show();
   };
 
-  const changeRefPayList = (type: 0 | 1 | 2 | 3 | 4) => {
-    let labelPay = '自费支付';
-    let medicalPay = '医保支付';
+  const getPayListLabel = () => {
+    // 定义支付方式配置
+    const payMethodConfig = {
+      labelPay: '自费支付',
+      medicalPay: '医保支付',
+    };
+
     // #ifdef MP-WEIXIN
-    labelPay = '微信自费支付';
-    // #endif
-    // #ifdef MP-ALIPAY
-    labelPay = '支付宝自费支付';
-    if (getIsFamilyPayment()) {
-      medicalPay = '医保支付(支持亲情付)';
-    }
+    payMethodConfig.labelPay = '微信自费支付';
     // #endif
 
-    const tList = [
+    // #ifdef MP-ALIPAY
+    payMethodConfig.labelPay = '支付宝自费支付';
+    if (getIsFamilyPayment()) {
+      payMethodConfig.medicalPay = '医保支付(支持亲情付)';
+    }
+    // #endif
+    return payMethodConfig;
+  };
+
+  const changeRefPayList = (typeList:PayType[]) => {
+    const { labelPay, medicalPay } = getPayListLabel();
+
+    const tList: PayListItem[] = [
       {
         label: '到院支付',
         key: 'offline',
@@ -1214,22 +1225,26 @@ export const usePayPage = () => {
         sort: 4,
       },
     ] as const;
-    const rList: (typeof tList)[number]['key'][] = ['online'];
-    if ([1, 2, 4].includes(type)) {
-      rList.push('medicare');
-    }
 
-    if (type === 2) {
-      rList.push('offline');
-    }
+    const rList: string[] = ['online'];
 
-    if ([3, 4].includes(type)) {
-      rList.push('digital');
-    }
+    typeList.map((item) => {
+      switch (item) {
+        case PayType.Offline:
+          rList.push('offline');
+        case PayType.Medicare:
+          rList.push('medicare');
+          break;
+        case PayType.Digital:
+          rList.push('digital');
+          break;
+      }
+    });
 
     refPayList.value = tList
       .filter((o) => rList.includes(o.key))
       .sort((a, b) => b.sort - a.sort);
+    console.log(2222, refPayList.value);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
