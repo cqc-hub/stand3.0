@@ -782,9 +782,9 @@
     const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
 
     if (isMedicalMode && isSelf) {
-      changeRefPayList(1);
+      changeRefPayList([1]);
     } else {
-      changeRefPayList(0);
+      changeRefPayList([0]);
     }
 
     setTimeout(() => {

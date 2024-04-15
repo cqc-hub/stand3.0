@@ -734,11 +734,11 @@
       );
     }
 
-    changeRefPayList(0);
+    changeRefPayList([0]);
 
     if ((costTypeCode === '2' || isDefaultMedical()) && flag) {
       if (flag) {
-        changeRefPayList(1);
+        changeRefPayList([1]);
       }
     }
 
