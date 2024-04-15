@@ -1200,7 +1200,10 @@ export const usePayPage = () => {
     return payMethodConfig;
   };
 
-  const changeRefPayList = (typeList:PayType[]) => {
+  const changeRefPayList = (
+    typeList: PayType[],
+    additionalList: PayListItem[] = []
+  ) => {
     const { labelPay, medicalPay } = getPayListLabel();
 
     const tList: PayListItem[] = [
@@ -1241,9 +1244,8 @@ export const usePayPage = () => {
       }
     });
 
-    refPayList.value = tList
-      .filter((o) => rList.includes(o.key))
-      .sort((a, b) => b.sort - a.sort);
+    tList.filter((o) => rList.includes(o.key)).push(...additionalList);
+    refPayList.value = tList.sort((a, b) => b.sort - a.sort);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
