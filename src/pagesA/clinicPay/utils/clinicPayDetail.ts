@@ -1244,7 +1244,6 @@ export const usePayPage = () => {
     refPayList.value = tList
       .filter((o) => rList.includes(o.key))
       .sort((a, b) => b.sort - a.sort);
-    console.log(2222, refPayList.value);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
