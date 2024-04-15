@@ -305,7 +305,7 @@
   const selListChildren = ref<TCostList[number]['costList']>([]);
 
   const { getDetailData, detailData } = usePayDetailPage();
-  const { 
+  const {
     pageConfig,
     getSysConfig,
     gStores,
@@ -630,6 +630,7 @@
     const pat = gStores.userStore.patChoose;
 
     const cardNumber = item.cardNumber || pat.cardNumber;
+    const patientName = item.patientName || pat.patientName;
     const serialNo = selList.value.map((o) => o.serialNo).join(',');
     const costList = selList.value;
 
@@ -649,6 +650,7 @@
         cardNumber: item.cardNumber || pat.cardNumber,
         serialNo,
         totalCost: getTotalCostString.value,
+        patientName,
       }
     );
 

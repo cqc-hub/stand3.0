@@ -758,10 +758,6 @@ export const usePayPage = () => {
           cardNumber: result.cardNumber,
           patientName: result.patientName,
         };
-        console.log(
-          pageProps.value,
-          'pageProps.valuepageProps.valuepageProps.value'
-        );
       } else {
         pageProps.value.deParams = undefined;
       }
@@ -1337,10 +1333,6 @@ export const usePayPage = () => {
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
     const patientName =
       pageProps.value.deParams?.patientName || pat.patientName;
-    console.log(
-      pageProps.value.deParams,
-      'pageProps.value.deParamspageProps.value.deParamspageProps.value.deParams'
-    );
 
     await getDetailData({
       cardNumber,
