@@ -884,10 +884,14 @@
     });
   };
 
-  const medicalWx = getLocalStorage('get-wx-medical-auth-code');
-  const medicalAli = getLocalStorage('get-ali-medical-auth-code');
-  const isMedicalBack = medicalWx === '1' || medicalAli === '1';
+  let medicalWx = '';
+  let medicalAli = '';
+  let isMedicalBack = false;
   onShow(async () => {
+    medicalWx = getLocalStorage('get-wx-medical-auth-code');
+    medicalAli = getLocalStorage('get-ali-medical-auth-code');
+    isMedicalBack = medicalWx === '1' || medicalAli === '1';
+
     if (isMedicalBack) {
       const oldSel = getLocalStorage('selUnPayDetailList');
       selList.value = oldSel?.selList || selList.value;
