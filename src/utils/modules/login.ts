@@ -510,6 +510,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
+
     const { isAliAuthBase } = await this.getConfig();
 
     if (isAliAuthBase !== '1') {
@@ -562,6 +563,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   // handlerAuth
   async handlerAuth(e: any = {}): Promise<void> {
     const { onlyLogin } = e;
+
 
     uni.showLoading({
       mask: true,
