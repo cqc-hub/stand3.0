@@ -1174,6 +1174,7 @@ export const usePayPage = () => {
         pageProps.value.params
       )
     );
+    console.log(payTypeList, 'payTypeListpayTypeList');
 
     changeRefPayList(payTypeList);
     await wait(200);
@@ -1244,8 +1245,9 @@ export const usePayPage = () => {
       }
     });
 
-    tList.filter((o) => rList.includes(o.key)).push(...additionalList);
-    refPayList.value = tList.sort((a, b) => b.sort - a.sort);
+    const arr = tList.filter((o) => rList.includes(o.key));
+    arr.push(...additionalList);
+    refPayList.value = arr.sort((a, b) => b.sort - a.sort);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
