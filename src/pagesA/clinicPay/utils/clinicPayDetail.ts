@@ -758,6 +758,10 @@ export const usePayPage = () => {
           cardNumber: result.cardNumber,
           patientName: result.patientName,
         };
+        console.log(
+          pageProps.value,
+          'pageProps.valuepageProps.valuepageProps.value'
+        );
       } else {
         pageProps.value.deParams = undefined;
       }
@@ -1174,7 +1178,6 @@ export const usePayPage = () => {
         pageProps.value.params
       )
     );
-    console.log(payTypeList, 'payTypeListpayTypeList');
 
     changeRefPayList(payTypeList);
     await wait(200);
@@ -1334,6 +1337,11 @@ export const usePayPage = () => {
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
     const patientName =
       pageProps.value.deParams?.patientName || pat.patientName;
+    console.log(
+      pageProps.value.deParams,
+      'pageProps.value.deParamspageProps.value.deParamspageProps.value.deParams'
+    );
+
     await getDetailData({
       cardNumber,
       ...pageProps.value,
@@ -1462,12 +1470,18 @@ export const usePayPage = () => {
     const pat = gStores.userStore.patChoose;
 
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
+    const patientName =
+      pageProps.value.deParams?.patientName || pat.patientName;
     await getDetailData({
       cardNumber,
       ...pageProps.value,
       ...item,
     });
 
+    uni.showLoading({
+      title: '正在预结算...',
+      mask: true,
+    });
     const uploadRes = await medicalNationUpload(
       {
         ...item,
@@ -1477,9 +1491,10 @@ export const usePayPage = () => {
       {
         businessType: '1',
         cardNumber,
+        patientName,
       }
     );
-
+    uni.hideLoading();
     const info = {
       ...item,
       // businessType: '1',

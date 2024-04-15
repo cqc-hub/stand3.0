@@ -38,41 +38,46 @@
         @card-click="cardClick"
       >
         <template #footer="{ pat }">
-          <!-- #ifdef MP-WEIXIN -->
-          <block
-            v-if="$global.systemInfo.isOpenHealthCard && !pat.healthQrCodeText"
-          >
+          <view>
+            <view class=""></view>
+            <!-- #ifdef MP-WEIXIN -->
+            <block
+              v-if="
+                $global.systemInfo.isOpenHealthCard && !pat.healthQrCodeText
+              "
+            >
+              <view
+                v-if="!isShowHealthLogin"
+                @click="upToHealthCord(pat)"
+                class="jkk"
+              >
+                升级为电子健康卡
+              </view>
+
+              <health-card-login
+                v-else
+                :authLogin="false"
+                :hidden="!isShowHealthLogin"
+                @authSucess="upToHealthCord(pat)"
+                @authCancel="isShowHealthLogin = false"
+                wechatcode
+              >
+                <view class="jkk">再次点击授权</view>
+              </health-card-login>
+            </block>
+            <!-- #endif -->
+
             <view
-              v-if="!isShowHealthLogin"
-              @click="upToHealthCord(pat)"
+              v-if="
+                $global.sConfig.medicalMHelp &&
+                $global.sConfig.medicalMHelp.isOpenPatToMedicalPat &&
+                pat.healthCardUser === '1'
+              "
+              @click="upToMedicalPat(pat)"
               class="jkk"
             >
-              升级为电子健康卡
+              更新为医保用户
             </view>
-
-            <health-card-login
-              v-else
-              :authLogin="false"
-              :hidden="!isShowHealthLogin"
-              @authSucess="upToHealthCord(pat)"
-              @authCancel="isShowHealthLogin = false"
-              wechatcode
-            >
-              <view class="jkk">再次点击授权</view>
-            </health-card-login>
-          </block>
-          <!-- #endif -->
-
-          <view
-            v-if="
-              $global.sConfig.medicalMHelp &&
-              $global.sConfig.medicalMHelp.isOpenPatToMedicalPat &&
-              pat.healthCardUser === '1'
-            "
-            @click="upToMedicalPat(pat)"
-            class="jkk"
-          >
-            更新为医保用户
           </view>
         </template>
       </pat-List>
