@@ -694,6 +694,9 @@ const userApi = {
   ocrIdCard: <T>(data) =>
     service.post<T>('/phs-user/authUser/ocrIdCard', parm(data)),
 
+  faceResultAuth: <T = any>(data) =>
+    service.post<T>('/phs-user/authUser/faceResultAuth', parm(data)),
+
   // 注册电子健康卡
   registerHealthCard: (data, opt = {}) =>
     service.post('/phs-user/healthCard/registerHealthCard', parm(data), opt),
@@ -731,6 +734,9 @@ const userApi = {
 
   updateHosInfo: (data) =>
     service.post('/phs-user/relevantPatient/updateHosInfo', parm(data), {}),
+
+  upRealNameAuth: (data) =>
+    service.post('/phs-user/relevantPatient/upRealNameAuth', parm(data), {}),
 
   altHosMedicalInfo: (data) =>
     service.post('/phs-user/relevantPatient/altHosMedicalInfo', parm(data), {}),

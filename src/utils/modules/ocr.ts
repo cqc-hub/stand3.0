@@ -132,14 +132,17 @@ const checkFileSize = ({
   fileSize: number;
 }) => {
   const messageStore = useMessageStore();
-
   return new Promise((resolve, reject) => {
-    uni.getFileInfo({
+    uni.getFileSystemManager().getFileInfo({
       filePath,
       fail: reject,
       complete: (res) => {
-        const { size } = res;
+        // @ts-expect-error
+        const { size, errMsg } = res;
 
+        if (!size) {
+          reject(errMsg);
+        }
         if (size < fileSize) {
           resolve(res);
         } else {
@@ -258,10 +261,12 @@ const findSuccess = async ({
   image,
   idCardOcrEn,
   patientNameOcrEn,
+  pdata,
 }: {
   name: string;
   sex: string;
   nation: string;
+  pdata: string;
   birth?: string;
   idCard: string;
   address: string;
@@ -307,6 +312,7 @@ const findSuccess = async ({
     birth,
     idCard,
     address,
+    pdata,
     findResult: result as {
       city: string;
       county: string;
@@ -348,6 +354,7 @@ const ocrForAlipay = async (imageOutput = false) => {
     const { name, sex, nationality, birth, num: idCard, address } = data;
 
     return await findSuccess({
+      pdata: '',
       name: name.data,
       sex: sex.data,
       nation: nationality.data,

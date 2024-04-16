@@ -27,5 +27,7 @@ export interface IPat {
   healthQrCodeText?: string;
   /** 是否是医保用户 1自费 2医保 */
   healthCardUser: '1' | '2';
+  /** 实名认证? 0 未认证 1 已认证 */
+  realNameAuth: '0' | '1';
   _showId: string;
 }

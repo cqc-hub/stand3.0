@@ -37,9 +37,20 @@
         @profile-click="profileClick"
         @card-click="cardClick"
       >
-        <template #footer="{ pat }">
+        <template #footer="{ pat }: { pat: IPat }">
           <view>
-            <view class=""></view>
+            <view
+              v-if="getRealNameAuth.length"
+              class="pat-btns flex-normal mt16"
+            >
+              <view
+                v-if="pat.realNameAuth === '0'"
+                @click="realNameAuth(pat)"
+                class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+              >
+                去认证
+              </view>
+            </view>
             <!-- #ifdef MP-WEIXIN -->
             <block
               v-if="
@@ -92,26 +103,44 @@
 
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
-  import { IPat } from '@/stores';
-  import { ref, provide, readonly } from 'vue';
+  import { IPat, useRouterStore } from '@/stores';
+  import { ref, provide, readonly, computed } from 'vue';
   import { getHealthCardCode } from './utils/index';
+  import { deQueryForUrl } from '@/common';
   import {
     GStores,
     PatientUtils,
     apiAsync,
     ServerStaticData,
+    useOcr,
+    LoginUtils,
+    routerJump,
     type ISystemConfig,
   } from '@/utils';
 
   import globalGl from '@/config/global';
+  import api from '@/service/api';
 
   import PatList from './components/PatList.vue';
 
   const gStore = new GStores();
+  const routeStore = useRouterStore();
+  const pageProps = ref(
+    <
+      {
+        _url?: string;
+      }
+    >{}
+  );
+
   const isShowHealthCardMode = ref(false);
   const patientUtils = new PatientUtils();
   const pageConfig = ref(<ISystemConfig['person']>{});
   provide('pageConfig', () => readonly(pageConfig.value));
+
+  const getRealNameAuth = computed(() => {
+    return pageConfig.value.realNameAuth || [];
+  });
 
   // #ifdef MP-WEIXIN
   if (globalGl.systemInfo.isOpenHealthCard) {
@@ -185,6 +214,96 @@
     });
   };
 
+  const realNameAuth = async (pat: IPat) => {
+    routerJump();
+    return;
+    const tip = '选择认证方式';
+
+    let authType = getRealNameAuth.value[0];
+    if (getRealNameAuth.value.length > 1) {
+      const listMap = [
+        {
+          label: 'ocr 认证',
+          key: 'ocrVerify',
+        },
+        {
+          label: '人脸认证',
+          key: 'faceVerify',
+        },
+      ] as const;
+
+      const list = listMap.filter((o) => getRealNameAuth.value.includes(o.key));
+      const { tapIndex } = await apiAsync(
+        // @ts-expect-error
+        uni.showActionSheet,
+        {
+          title: tip,
+          alertText: tip,
+          itemList: list.map((o) => o.label),
+        }
+      );
+
+      authType = list[tapIndex].key;
+    }
+
+    if (authType === 'ocrVerify') {
+      await realNameAuthOcr(pat);
+    } else if (authType === 'faceVerify') {
+      await realNameAuthFace(pat);
+    }
+
+    await patientUtils.getPatCardList();
+    routerJump();
+  };
+
+  const realNameAuthOcr = async (pat: IPat) => {
+    const { patientId } = pat;
+    const { source } = gStore.globalStore.browser;
+    const { pdata } = await useOcr();
+
+    await api.upRealNameAuth({
+      patientId,
+      source,
+      pdata,
+    });
+  };
+
+  const realNameAuthFace = async (pat: IPat) => {
+    let isWx = true;
+    // #ifndef MP-WEIXIN
+    isWx = false;
+
+    // #endif
+    if (!isWx) {
+      gStore.messageStore.showMessage('暂时只支持微信端人脸检测', 3000);
+      throw new Error('暂时只支持微信端人脸检测');
+    }
+
+    const { patientName, patientId } = pat;
+    const { source } = gStore.globalStore.browser;
+
+    const idCard = '330326199908286713';
+
+    const { verifyResult } = await new LoginUtils().faceVerify({
+      name: patientName,
+      idCardNumber: idCard,
+    });
+
+    const {
+      result: { pdata },
+    } = await api.faceResultAuth({
+      verifyResult,
+      idCard,
+      source,
+    });
+
+    await api.upRealNameAuth({
+      patientId,
+      source,
+      pdata,
+    });
+  };
+
   const associatedHealthCard = () => {
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/easyAssociate',
@@ -193,7 +312,9 @@
 
   patientUtils.getPatCardList();
 
-  onLoad(async () => {
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    routeStore.receiveQuery(pageProps.value);
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
   });
 </script>
@@ -245,14 +366,14 @@
     transform: translateY(100%);
   }
 
-  .mr14 {
-    margin-right: 14rpx;
-  }
-
   .jkk {
     color: #00a1d6;
     text-align: center;
     font-size: var(--hr-font-size-xs);
     margin-top: 24rpx;
+  }
+
+  .pat-btns {
+    flex-direction: row-reverse;
   }
 </style>

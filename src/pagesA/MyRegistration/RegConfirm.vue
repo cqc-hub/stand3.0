@@ -157,28 +157,6 @@
 
   const regConfirm = async () => {
     const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
-
-    if (!isCheck.value) {
-      regDialogConfirm.value.show();
-      return;
-    }
-
-    if (isWaitReg.value) {
-      waitReg();
-      return;
-    }
-
-    // #ifdef MP-WEIXIN
-    if (wxOrderSubscribeMessage?.length) {
-      // @ts-expect-error
-      await apiAsync(uni.requestSubscribeMessage, {
-        tmplIds: wxOrderSubscribeMessage,
-      }).catch((e) => {
-        console.error(e);
-      });
-    }
-    // #endif
-
     /**
      * 未填写参数
      *
@@ -210,9 +188,53 @@
       promptMessage,
       docTitleName,
       thRegisterId,
+      regVerificationMode,
     } = props.value;
-    const { herenId, patientId } = gStores.userStore.patChoose;
+    const { herenId, patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
+
+    if (!isCheck.value) {
+      regDialogConfirm.value.show();
+      return;
+    }
+
+    if (regVerificationMode === '2' && realNameAuth === '0') {
+      const pages = getCurrentPages();
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+      gStores.messageStore.showMessage(
+        '需要实名认证后才能继续预约改号源',
+        3000,
+        {
+          closeCallBack() {
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+                _url: fullUrl,
+              }),
+            });
+          },
+        }
+      );
+
+      return;
+    }
+
+    if (isWaitReg.value) {
+      waitReg();
+      return;
+    }
+
+    // #ifdef MP-WEIXIN
+    if (wxOrderSubscribeMessage?.length) {
+      // @ts-expect-error
+      await apiAsync(uni.requestSubscribeMessage, {
+        tmplIds: wxOrderSubscribeMessage,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    // #endif
+
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
 

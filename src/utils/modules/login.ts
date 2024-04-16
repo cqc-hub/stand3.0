@@ -181,7 +181,7 @@ export class LoginUtils extends GStores {
   // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
   async faceVerify({ name, idCardNumber }) {
     // #ifdef MP-WEIXIN
-    return new Promise((resolve, reject) => {
+    return new Promise<{ verifyResult: string }>((resolve, reject) => {
       wx.checkIsSupportFacialRecognition({
         checkAliveType: 2,
         success() {
@@ -510,7 +510,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
-
     const { isAliAuthBase } = await this.getConfig();
 
     if (isAliAuthBase !== '1') {
@@ -563,7 +562,6 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   // handlerAuth
   async handlerAuth(e: any = {}): Promise<void> {
     const { onlyLogin } = e;
-
 
     uni.showLoading({
       mask: true,
@@ -1139,6 +1137,13 @@ export class PatientUtils extends LoginUtils {
       });
 
       this.userStore.updatePatList(result);
+      const oldPatientId = this.userStore.patChoose.patientId;
+
+      if (oldPatientId) {
+        const newPatChoose = result.find((o) => o.patientId === oldPatientId);
+
+        newPatChoose && this.userStore.updatePatChoose(newPatChoose);
+      }
     } else {
       this.userStore.updatePatList([]);
     }

@@ -14,7 +14,7 @@
 <script lang="ts">
   import { defineComponent, PropType, ref } from 'vue';
 
-  type TText = 'yellow' | 'blue';
+  type TText = 'yellow' | 'blue' | 'gray' | 'green';
   export default defineComponent({
     props: {
       text: {
@@ -52,6 +52,16 @@
     &.blue {
       background-color: var(--hr-brand-color-3-light);
       color: var(--hr-brand-color-6);
+    }
+
+    &.gray {
+      background-color: var(--hr-neutral-color-11);
+      color: var(--hr-neutral-color-7);
+    }
+
+    &.green {
+      background-color: var(--hr-success-color-1);
+      color: var(--hr-success-color-6);
     }
   }
 </style>

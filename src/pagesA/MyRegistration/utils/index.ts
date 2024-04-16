@@ -81,6 +81,8 @@ export type TSchInfo = {
   canInsurance?: '1' | '0';
   // 号别编号
   categor: string;
+  /** 医生挂号验证方式 1:验证码 2:实名认证 */
+  regVerificationMode?: '1' | '2';
   categorName: string;
   // 门诊类型：1、普通预约 2-膏方预约 3-名医在线夜门诊 4-云诊室 5-自助便民门诊（省人民凤凰HIS）6-专病门诊 7-成人 8-儿童 9-弹性门诊 10-军属门诊 11-军人门诊
   clinicalType?:
@@ -430,6 +432,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     item: IDocListAll;
     schInfo: TAllDayTScInfo;
   }) => {
+    console.log('cqc', e);
+
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
     const { schDate } = schInfo;
@@ -447,6 +451,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   }) => {
     const { schDate } = scheme;
     regDate.value = schDate;
+
 
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
@@ -518,6 +523,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     item: IOrderSource;
     selectSchInfo: TSchInfo;
   }) => {
+
     const {
       ampmName,
       ampm,
@@ -534,6 +540,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       schId,
       schQukCategor,
       docTitleName,
+      regVerificationMode
     } = selectSchInfo;
     const { disNo, numId, timeDesc } = item;
     const {
@@ -566,6 +573,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       promptMessage,
       docTitleName,
       thRegisterId,
+      regVerificationMode
     };
     selectOrderSourceNumId.value = numId;
 

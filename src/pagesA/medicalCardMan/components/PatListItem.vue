@@ -11,7 +11,16 @@
           text="默认"
           class="mr12"
         />
-        <g-tag v-if="pat.healthCardUser === '2'" type="blue" text="医保" />
+        <g-tag
+          v-if="pat.healthCardUser === '2'"
+          type="blue"
+          text="医保"
+          class="mr12"
+        />
+        <template v-if="getRealNameAuth.length">
+          <g-tag v-if="pat.realNameAuth === '0'" type="gray" text="未认证" />
+          <g-tag v-else type="green" text="已认证" />
+        </template>
       </view>
 
       <view class="iconfont icon-resize">&#xe66b;</view>
@@ -82,7 +91,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref, inject } from 'vue';
+  import { defineComponent, PropType, ref, inject, computed } from 'vue';
   import { IPat } from '@/stores/type';
   import { nameConvert, type ISystemConfig } from '@/utils';
 
@@ -105,12 +114,15 @@
         <any>{}
       );
 
+      const getRealNameAuth = computed(() => {
+        return pageConfig().realNameAuth || [];
+      });
+
       const profileClick = () => {
         emit('profile-click', props.pat);
       };
 
       const cardClick = () => {
-
         if (pageConfig().isQrCodeDisabled === '1') {
           profileClick();
         } else {
@@ -125,6 +137,7 @@
         showId,
         nameConvert,
         pageConfig,
+        getRealNameAuth,
       };
     },
   });
