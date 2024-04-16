@@ -239,7 +239,7 @@
                       v-if="item.itemVal"
                       class="table-title2 table-title-common"
                       :class="{
-                        'color-red': item.flag == 'H',
+                        'color-red': item.flag == 'H' || item.flag === '阳',
                         'color-blue': item.flag === 'L',
                       }"
                     >
