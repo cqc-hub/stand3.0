@@ -52,6 +52,7 @@
     "animate.css": "^4.1.1",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.5",
+    "miniprogram-sm-crypto": "^0.3.13",
     "node-sass": "^7.0.1",
     "pinia": "^2.0.17",
     "pinia-plugin-persistedstate": "^2.1.0",

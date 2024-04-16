@@ -39,9 +39,9 @@
   import api from '@/service/api';
 
   const gStores = new GStores();
-  const formData = ref({
-    patientName: '徐佳瑶',
-    repId: '4053211100',
+  const formData = ref(<BaseObject>{
+    // patientName: '徐佳瑶',
+    // repId: '4053211100',
   });
   const gform = ref<any>('');
   const tempList = ref<TInstance[]>([
@@ -88,7 +88,7 @@
       field: 'input-text',
       key: 'repId',
       label: '检验单号',
-      placeholder: '扫码或输入添加检验单号',
+      placeholder: '扫码或输入检验单号',
       // disabled: true,
       required: true,
     },
