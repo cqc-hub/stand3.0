@@ -175,7 +175,7 @@
             <official-account></official-account>
           </view>
           <!-- #endif -->
-            <!-- #ifdef MP-ALIPAY --> 
+            <!-- #ifdef MP-ALIPAY -->
             <view v-if="global.sConfig.isOpenAlipayFollow">
               <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
           </view>

@@ -203,7 +203,7 @@
             }"
             class="btn btn-warning confirm-btn"
           >
-            立即支付
+            {{ globalGl.SYS_CODE === '1001052' ? '去结算' : '立即支付' }}
           </button>
         </block>
       </view>

@@ -1175,7 +1175,16 @@ export const usePayPage = () => {
       )
     );
 
-    changeRefPayList(payTypeList);
+    let additionalList: any[] = [];
+    if (globalGl.SYS_CODE === '1001052') {
+      additionalList.push({
+        label: '医保账户支付',
+        key: 'online',
+        sort: 1,
+      });
+    }
+
+    changeRefPayList(payTypeList, additionalList);
     await wait(200);
     refPay.value.show();
   };
@@ -1197,6 +1206,7 @@ export const usePayPage = () => {
       payMethodConfig.medicalPay = '医保支付(支持亲情付)';
     }
     // #endif
+
     return payMethodConfig;
   };
 
@@ -1247,7 +1257,7 @@ export const usePayPage = () => {
 
     const arr = tList.filter((o) => rList.includes(o.key));
     arr.push(...additionalList);
-    refPayList.value = arr.sort((a, b) => b.sort - a.sort);
+    refPayList.value = arr.sort((a, b) => a.sort - b.sort);
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {

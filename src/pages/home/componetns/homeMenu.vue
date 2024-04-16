@@ -14,6 +14,9 @@
       pills
     />
     <swiper
+      :style="{
+        height: height + 'px',
+      }"
       class="swiper"
       :indicator-dots="false"
       :current="tabIndex"
@@ -21,23 +24,36 @@
       :duration="300"
     >
       <swiper-item v-for="(item, index) in props.list" :key="index">
-        <homeGrid :list="item.functionList" @open-share="openShare"></homeGrid>
+        <view :id="`home-menu-${index}`">
+          <homeGrid :list="item.functionList" @open-share="openShare" />
+        </view>
       </swiper-item>
     </swiper>
   </view>
 </template>
 
 <script setup lang="ts">
-  import { withDefaults, ref, onMounted } from 'vue';
+  import {
+    withDefaults,
+    ref,
+    onMounted,
+    watch,
+    getCurrentInstance,
+    nextTick,
+  } from 'vue';
   import homeGrid from './homeGrid.vue';
+  import { wait } from '@/utils';
 
   const emits = defineEmits(['open-share']);
 
   let tabIndex = ref(0);
+  const height = ref(0);
+  const inst = getCurrentInstance();
   interface IhomeMenu {
     typeName: string;
     functionList: IRoute[];
   }
+
   const props = withDefaults(
     defineProps<{
       list: IhomeMenu[];
@@ -86,12 +102,43 @@
   const activeMenu = (index) => {
     tabIndex.value = index;
   };
+
   const changeIndex = (e) => {
     tabIndex.value = e.detail.current;
+    queryHeight();
   };
+
   const openShare = (item) => {
     emits('open-share', item);
   };
+
+  const queryHeight = () => {
+    const view = uni
+      .createSelectorQuery()
+      .in(inst)
+      .select(`#home-menu-${tabIndex.value}`);
+    view
+      .boundingClientRect((data) => {
+        if (data) {
+          // @ts-expect-error
+          const { height: _height } = data;
+
+          height.value = _height < 260 ? 260 : _height;
+        }
+      })
+      .exec();
+  };
+
+  watch(
+    () => props.list,
+    async (v) => {
+      await wait(666);
+      nextTick(queryHeight);
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <style scoped lang="scss">
