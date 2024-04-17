@@ -215,8 +215,6 @@
   };
 
   const realNameAuth = async (pat: IPat) => {
-    routerJump();
-    return;
     const tip = '选择认证方式';
 
     let authType = getRealNameAuth.value[0];
@@ -279,10 +277,16 @@
       throw new Error('暂时只支持微信端人脸检测');
     }
 
-    const { patientName, patientId } = pat;
+    const { patientName, patientId, idCardEncry } = pat;
     const { source } = gStore.globalStore.browser;
 
-    const idCard = '330326199908286713';
+    const {
+      result: { idCard },
+    } = await api.rpGetPlain({
+      source,
+      idCardEncry,
+      patientId,
+    });
 
     const { verifyResult } = await new LoginUtils().faceVerify({
       name: patientName,

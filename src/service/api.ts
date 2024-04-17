@@ -650,6 +650,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  rpGetPlain: (data) =>
+    service.post('/phs-user/rePat/rpGetPlain', parm(data), {
+      hideLoading: false,
+    }),
+
   modifyHosPhoneByIdNum: (data) =>
     service.post(
       '/phs-user/relevantPatient/modifyHosPhoneByIdNum',
