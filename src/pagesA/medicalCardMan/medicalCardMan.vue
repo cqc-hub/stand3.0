@@ -97,6 +97,14 @@
     <view class="empty-list" v-else>
       <g-empty :current="1" />
     </view>
+
+    <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      style="opacity: 0; position: absolute; pointer-events: none"
+      id="canvasForBase64"
+    />
     <g-message />
   </view>
 </template>
@@ -254,10 +262,17 @@
     routerJump();
   };
 
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
   const realNameAuthOcr = async (pat: IPat) => {
     const { patientId } = pat;
     const { source } = gStore.globalStore.browser;
-    const { pdata } = await useOcr();
+    const { pdata } = await useOcr(false, {
+      aliThroughByEnd: true,
+      imgCanvas,
+    });
 
     await api.upRealNameAuth({
       patientId,

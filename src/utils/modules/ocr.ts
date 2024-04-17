@@ -78,12 +78,12 @@ const getAliPayBase64ImageByUrl = function (
   });
 
   <canvas
-    v-show="false"
-    :width="imgWidth"
-    :height="imgHeight"
-    style="opacity: 0; position: absolute;pointer-events: none;"
-    id="canvasForBase64"
-  />
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      style="opacity: 0; position: absolute; pointer-events: none"
+      id="canvasForBase64"
+    />
   */
 
   return new Promise((resolve, reject) => {
@@ -166,10 +166,21 @@ export const chooseImg = (
     imgCanvas?: any; // 支付宝必传
   } = {}
 ): Promise<TChooseImgBase64Res> => {
-  // const imgCanvas = ref({
-  //   imgWidth: 0,
-  //   imgHeight: 0,
-  // });
+  // 支付宝需要手动添加
+  /*
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
+
+  <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      style="opacity: 0; position: absolute; pointer-events: none"
+      id="canvasForBase64"
+    />
+  */
 
   const { extension, fileSize, imgCanvas } = payload;
 
@@ -216,11 +227,12 @@ export const chooseImg = (
   });
 };
 
-const ocrForWX = async (imageOutput = false) => {
+const ocrForWX = async (imgCanvas?: any) => {
   const globalStore = useGlobalStore();
   const e = await chooseImg({
     extension: ['image', 'jpeg', 'jpg'],
     fileSize: 2 * 1024 * 1024,
+    imgCanvas,
   });
 
   if (e.success) {
@@ -349,39 +361,59 @@ const ocrForAlipay = async (imageOutput = false) => {
       messageStore.showMessage(error.errorMessage, 3000);
     }
 
-    return Promise.reject(error);
-  } else {
-    const { name, sex, nationality, birth, num: idCard, address } = data;
-
-    return await findSuccess({
-      pdata: '',
-      name: name.data,
-      sex: sex.data,
-      nation: nationality.data,
-      birth: birth.data,
-      idCard: idCard.data,
-      address: address.data,
-      image,
-    });
+    throw new Error(error);
   }
+
+  const { name, sex, nationality, birth, num: idCard, address } = data;
+
+  return await findSuccess({
+    pdata: '',
+    name: name.data,
+    sex: sex.data,
+    nation: nationality.data,
+    birth: birth.data,
+    idCard: idCard.data,
+    address: address.data,
+    image,
+  });
 };
 
 type TGetPromiseType<T> = T extends Promise<infer R> ? R : any;
 export type OcrFindRes = TGetPromiseType<ReturnType<typeof findSuccess>>;
 
-export const useOcr = async (imageOutput = false): Promise<OcrFindRes> => {
+export const useOcr = async (
+  imageOutput = false,
+  opt = <
+    {
+      /** 支付宝通过后端进行 ocr 认证, 默认使用支付宝插件(区别是通过插件时候没有 pdata) */
+      aliThroughByEnd?: boolean;
+      imgCanvas?: any; // 支付宝必传(aliThroughByEnd = true 的时候)
+    }
+  >{}
+): Promise<OcrFindRes> => {
+  const { aliThroughByEnd, imgCanvas } = opt;
   // const messageStore = useMessageStore();
+  let env = '';
 
   // #ifdef MP-WEIXIN
-  return await ocrForWX(imageOutput);
+  env = 'wx';
   // #endif
 
   // #ifdef MP-ALIPAY
-  // @ts-expect-error
-  return await ocrForAlipay(imageOutput);
+  env = 'alipay';
   // #endif
 
-  return Promise.reject('未定义的 ocr');
+  if (env === 'wx') {
+    return await ocrForWX();
+  } else if (env === 'alipay') {
+    if (aliThroughByEnd) {
+      return await ocrForWX(imgCanvas);
+    } else {
+      return (await ocrForAlipay(imageOutput))!;
+    }
+  } else {
+    return Promise.reject('未定义的 ocr');
+  }
 };
 
 // 图片上传
