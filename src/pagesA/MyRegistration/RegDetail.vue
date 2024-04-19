@@ -568,6 +568,9 @@
       orderId,
     };
 
+    console.log(JSON.stringify(pageArg));
+
+
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',

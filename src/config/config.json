@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001041",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -196,7 +196,8 @@
       "name": "大医二院普湾院区",
       "isSearchInHos": false,
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "_des": "这个老版本, 不知道啥用"
     },
 
     "1001063": {
