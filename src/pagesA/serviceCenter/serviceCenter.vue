@@ -205,8 +205,8 @@
 
   const openServicesChat = () => {
     wx.openCustomerServiceChat({
-      extInfo: { url: pageConfig.isOpenMyService.extInfo },
-      corpId: pageConfig.isOpenMyService.corpId,
+      extInfo: { url: pageConfig.value.isOpenMyService?.extInfo },
+      corpId: pageConfig.value.isOpenMyService?.corpId,
       complete(res) {
         console.log('打开企业微信', res);
       },

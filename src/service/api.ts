@@ -727,6 +727,10 @@ const userApi = {
       reportCmPV_YLName: '医院介绍',
     }),
 
+
+    getHospitalGuidelines: <T>(data) =>
+    service.post<T>('/phs-base/hospital/getHospitalGuidelines', parm(data)),
+
   //添加已就诊就诊人
   addPatByHasBeenTreatedEncry: (data) =>
     service.post(

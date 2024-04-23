@@ -13,6 +13,11 @@ $uni-text-color-grey: #999; //辅助灰色，如加载更多的提示信息
 $uni-text-color-placeholder: #808080;
 $uni-text-color-disable: #c0c0c0;
 
+/* 和仁文字基础色 */
+$uni-text-hr-color:#111; //标题基础色
+$uni-text-hr-main-color:#444; //正文基础色
+$uni-text-hr-grey-color:#888; //灰色
+
 /* 背景颜色 */
 $uni-bg-color: #ffffff;
 $uni-bg-color-grey: #f8f8f8;
@@ -29,6 +34,13 @@ $uni-font-size-sm: 24rpx;
 $uni-font-size-base: 28rpx;
 $uni-font-size-lg: 32rpx;
 
+/* 和仁文字尺寸 */
+
+$uni-font-size-24:24rpx; //文案基础尺寸
+$uni-font-size-32:32rpx;
+$uni-font-size-36:36rpx;
+$uni-font-size-48:48rpx;
+
 /* 图片尺寸 */
 $uni-img-size-sm: 40rpx;
 $uni-img-size-base: 52rpx;
@@ -43,7 +55,8 @@ $uni-border-radius-circle: 50%;
 /* 水平间距 */
 $uni-spacing-row-sm: 10px;
 $uni-spacing-row-base: 20rpx;
-$uni-spacing-row-lg: 30rpx;
+$uni-spacing-row-lg: 30rpx; 
+$uni-spacing-row-32: 32rpx;
 
 /* 垂直间距 */
 $uni-spacing-col-sm: 8rpx;

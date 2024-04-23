@@ -716,7 +716,15 @@
           "style": {
             "navigationBarTitleText": "自助开单"
           }
+        },
+
+        {
+          "path": "hospitalGuide/hospitalHomepage",
+          "style": {
+            "navigationBarTitleText": "医院主页"
+          }
         }
+
       ]
     }
   ],
