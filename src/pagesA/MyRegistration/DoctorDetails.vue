@@ -50,7 +50,7 @@
                       class="btn btn-warning btn-round btn-size-small share-btn color-blue"
                     >
                       <text class="iconfont f36 mr12">&#xe6e0;</text>
-                      <text>分享</text>
+                      <text class="text-no-wrap">分享</text>
                     </button>
                   </view>
                 </view>

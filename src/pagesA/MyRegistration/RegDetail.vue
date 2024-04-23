@@ -568,6 +568,8 @@
       orderId,
     };
 
+    console.log(JSON.stringify(pageArg));
+
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',
@@ -656,7 +658,15 @@
       hosInfo.value = hos;
     }
 
-    const { downTime, qrCode, totalCost, hosAccountOffsetFee } = result;
+    const {
+      downTime,
+      qrCode,
+      totalCost,
+      hosAccountOffsetFee,
+      appointmentDate,
+      ampmName,
+      appointmentTime,
+    } = result;
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
@@ -670,9 +680,9 @@
       result._hosAccountOffsetFee = hosAccountOffsetFee + '元';
     }
 
-    result._appointmentDate = `${result.appointmentDate} ${
-      result.ampmName + (result.appointmentTime || '')
-    }`;
+    result._appointmentDate = [appointmentDate, ampmName, appointmentTime]
+      .filter((o) => o)
+      .join(' ');
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;

@@ -813,7 +813,6 @@ const userApi = {
   //首页授权接口
   authorization: (data) =>
     service.post<IPat[]>('/phs-user/ali/authorization', parm(data), {
-      showMessage: false,
     }),
 
   // 支付宝验证本人

@@ -8,6 +8,7 @@
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
   import { joinQuery } from '../../common/utils';
+  import { encryptDes } from '@/common';
 
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
@@ -310,6 +311,31 @@
     },
   };
 
+  const 预问诊: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pages/inquiries/inquiries3',
+    text: '预问诊',
+    extraData: {
+      params: encodeURIComponent(
+        encryptDes(
+          JSON.stringify({
+            patientSex: '男',
+            patientAge: '24',
+            patientName: '陈钦川',
+            orderId: '2404190502700017',
+          }),
+          'phsDesKe'
+        )
+      ),
+    },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
+    // isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({
@@ -348,17 +374,17 @@
       //   },
       // });
 
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/question/questionAfterVisit',
-        addition: {
-          patientId: '_patientId',
-        },
-      });
+      // useTBanner({
+      //   type: 'h5',
+      //   isSelfH5: '1',
+      //   path: 'pages/index/test',
+      //   addition: {
+      //     // patientId: '_patientId',
+      //   },
+      // });
 
       // useTBanner(healthRecord)
-      // useTBanner(电子导诊单);
+      useTBanner(预问诊);
     }, 1000);
   });
 </script>
