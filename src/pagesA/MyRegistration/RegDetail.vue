@@ -570,7 +570,6 @@
 
     console.log(JSON.stringify(pageArg));
 
-
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',
@@ -673,8 +672,8 @@
       result._hosAccountOffsetFee = hosAccountOffsetFee + '元';
     }
 
-    result._appointmentDate = `${result.appointmentDate} ${
-      result.ampmName + (result.appointmentTime || '')
+    result._appointmentDate = `${result.appointmentDate || ''} ${
+      (result.ampmName || '') + (result.appointmentTime || '')
     }`;
     result._fee = result.fee + '元';
     result._category = result.schQukCategor || result.categorName;
