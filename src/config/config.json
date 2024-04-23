@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001041",
+  "sysCode": "1001057",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -221,7 +221,7 @@
       "isOpenOcr": false
     },
 
-    "1001064": {
+    "1001040": {
       "wxAppid": "wx58ffd2c3a557bef0",
       "alipayAppid": "",
       "h5Appid": "",

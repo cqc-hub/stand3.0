@@ -127,9 +127,9 @@
 <style lang="scss" scoped>
   .login-btn {
     all: unset;
+    display: inherit;
     height: 100%;
     width: 100%;
-    display: inherit;
     font-size: inherit;
     color: inherit;
 
