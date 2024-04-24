@@ -252,6 +252,7 @@
       authType = list[tapIndex].key;
     }
 
+
     if (authType === 'ocrVerify') {
       await realNameAuthOcr(pat);
     } else if (authType === 'faceVerify') {

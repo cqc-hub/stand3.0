@@ -130,15 +130,11 @@ export class LoginUtils extends GStores {
           name,
           sex,
           phoneNum,
-          authPhoneVerify,
         } = result;
 
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        // #ifdef MP-ALIPAY
-        this.userStore.updateAuthPhoneVerify(authPhoneVerify);
-        // #endif
         this.userStore.updatePhone({
           phone,
           phoneNum,
@@ -334,90 +330,73 @@ export class LoginUtils extends GStores {
    * @returns
    */
   async getAliOpenid() {
-    const { isSkipPerfect, isAliAuthBase } = await this.getConfig();
+    const { isSkipPerfect, isAliAuthBase, isAliIndependentDev } =
+      await this.getConfig();
 
-    let res: TAliLogin;
+    let encrypData = '';
+    const codeType = (isAliAuthBase === '1' && 1) || 2;
 
     if (isAliAuthBase === '1') {
-      return this.getAliOpenidAgentBase();
+      const isvAppId = globalGl.systemInfo.isvAlipayAppid;
+
+      const getPhoneNumberOpt: BaseObject = {};
+      if (isvAppId) {
+        getPhoneNumberOpt.protocols = {
+          isvAppId,
+        };
+      }
+      /**
+       * https://opendocs.alipay.com/isv/03l4j2
+       * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+       * 待开发后台
+       *  - 开发设置-应用网关
+       *  - 产品绑定-绑定产品-获取会员手机号
+       *
+       * - 主体申请 会员手机号能力
+       *
+       */
+      const resPhone = await apiAsync(my.getPhoneNumber, getPhoneNumberOpt);
+      encrypData = resPhone.response;
     }
 
     // 代开发 带授权身份证 手机号登录
     const { authCode } = await apiAsync(my.getAuthCode, {
-      scopes: 'auth_user',
-      // scopes: isAliAuthBase ? 'auth_base' : 'auth_user',
+      // scopes: 'auth_user',
+      scopes: isAliAuthBase === '1' ? 'auth_base' : 'auth_user',
     });
 
     const accountType = this.globalStore.browser.accountType;
     const reqArg: BaseObject = {
       code: authCode,
-      codeType: 2, // 授权码类型 1-部分授权 2-用户信息授权
+      codeType, // 授权码类型 1-部分授权 2-用户信息授权
       accountType,
+      encrypData,
     };
 
-    let url =
-      isSkipPerfect === '1'
-        ? '/aliUserLogin/alipayLoginByPhone'
-        : '/aliUserLogin/getTPAlipayUserInfoShare';
+    // console.log(JSON.stringify(reqArg));
+    // return
+
+
+    let url = '';
+
+    if (isAliAuthBase === '1') {
+      url =
+        isAliIndependentDev === '1'
+          ? '/aliUserLogin/alipayTpLoginByPhone'
+          : '/aliUserLogin/getAlipayBaseEncryLogin';
+    } else {
+      url =
+        isSkipPerfect === '1'
+          ? '/aliUserLogin/alipayLoginByPhone'
+          : '/aliUserLogin/getTPAlipayUserInfoShare';
+    }
 
     const { result } = await api.allinoneAuthApi<TAliLogin>(
       packageAuthParams(reqArg, url)
     );
 
-    res = result;
 
-    return res;
-  }
-
-  async getAliOpenidAgentBase() {
-    const { isAliIndependentDev } = await this.getConfig();
-    const isvAppId = globalGl.systemInfo.isvAlipayAppid;
-
-    const getPhoneNumberOpt: BaseObject = {};
-    if (isvAppId) {
-      getPhoneNumberOpt.protocols = {
-        isvAppId,
-      };
-    }
-
-    /**
-     * https://opendocs.alipay.com/isv/03l4j2
-     * https://opendocs.alipay.com/isv/03kqzj#1.%20%E4%B8%BA%E6%A8%A1%E6%9D%BF%E7%94%B3%E8%AF%B7%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
-     * 待开发后台
-     *  - 开发设置-应用网关
-     *  - 产品绑定-绑定产品-获取会员手机号
-     *
-     * - 主体申请 会员手机号能力
-     *
-     */
-    const resPhone = await apiAsync(my.getPhoneNumber, getPhoneNumberOpt);
-
-    const { response: responseStr } = resPhone;
-
-    const accountType = this.globalStore.browser.accountType;
-    const { authCode } = await apiAsync(my.getAuthCode, {
-      scopes: 'auth_base',
-    });
-    const loginArg = {
-      code: authCode,
-      encrypData: responseStr,
-      accountType,
-      codeType: 1, // 授权码类型 1-部分授权 2-用户信息授权
-    };
-
-    // console.log(JSON.stringify(loginArg));
-    // return
-
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(
-        loginArg,
-        isAliIndependentDev === '1'
-          ? '/aliUserLogin/alipayTpLoginByPhone'
-          : '/aliUserLogin/getAlipayBaseEncryLogin'
-      )
-    );
-
-    return <TAliLogin>result;
+    return result;
   }
 }
 
@@ -510,11 +489,11 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
 let isLoading = false;
 export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
   async handler(e): Promise<void> {
-    const { isAliAuthBase } = await this.getConfig();
+    // const { isAliAuthBase } = await this.getConfig();
 
-    if (isAliAuthBase !== '1') {
-      return await this.handlerAuth(e);
-    }
+    // if (isAliAuthBase !== '1') {
+    //   return await this.handlerAuth(e);
+    // }
 
     if (isLoading) {
       return;
@@ -527,9 +506,17 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
     try {
       isLoading = true;
       const accountType = this.globalStore.browser.accountType;
-      const result = await this.getAliOpenid();
-
-      const { userId, accessToken, refreshToken } = result;
+      const {
+        userId,
+        accessToken,
+        refreshToken,
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+        authPhoneVerify,
+      } = await this.getAliOpenid();
 
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);

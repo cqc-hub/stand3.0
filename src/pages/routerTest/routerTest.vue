@@ -17,7 +17,7 @@
       </view>
     </view>
     <view class="g-footer">
-      <button class="btn1">233</button>
+      <button @click="testClick" class="btn1">233</button>
     </view>
   </view>
 </template>
@@ -50,6 +50,10 @@
     console.log(encryptData);
     console.log(sm4.decrypt(encryptData, key, { padding: 'none' }));
   });
+
+  const testClick = (e) => {
+    console.log(e);
+  };
 </script>
 
 <style lang="scss" scoped>

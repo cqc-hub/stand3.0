@@ -222,7 +222,7 @@ export const chooseImg = (
         }
       },
 
-      fail() {},
+      fail: reject,
     });
   });
 };
