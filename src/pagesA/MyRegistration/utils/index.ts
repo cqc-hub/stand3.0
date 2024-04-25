@@ -9,7 +9,6 @@ import { type XOR } from '@/typeUtils/obj';
 
 dayjs.extend(isoWeek);
 
-
 export interface IQueryRegNum {
   categorName: string;
   categorNamePY: string;
@@ -28,6 +27,7 @@ export interface IOrderSource {
   disNo: string;
   numId: string;
   timeDesc: string;
+  serialType: string;
   disabled?: boolean;
 }
 
@@ -452,7 +452,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const { schDate } = scheme;
     regDate.value = schDate;
 
-
     selectSchInfos.value = [scheme];
     await getOrderSource(scheme);
     isSelectOrderSourceShow.value = true;
@@ -512,6 +511,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     //   result.filter((o) => o.disNo != '0');
     // }
 
+    dealNumberSourceList(result || []);
+
     orderSourceList.value = result || [];
   };
 
@@ -523,7 +524,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     item: IOrderSource;
     selectSchInfo: TSchInfo;
   }) => {
-
     const {
       ampmName,
       ampm,
@@ -540,7 +540,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       schId,
       schQukCategor,
       docTitleName,
-      regVerificationMode
+      regVerificationMode,
     } = selectSchInfo;
     const { disNo, numId, timeDesc } = item;
     const {
@@ -573,7 +573,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       promptMessage,
       docTitleName,
       thRegisterId,
-      regVerificationMode
+      regVerificationMode,
     };
     selectOrderSourceNumId.value = numId;
 
@@ -694,4 +694,11 @@ export const getChooseDays = (days: number) => {
   }
 
   return _arr;
+};
+
+export const dealNumberSourceList = (list: IOrderSource[]) => {
+  list.map((o) => {
+    o.disabled = o.serialType === '3';
+  });
+  return list;
 };

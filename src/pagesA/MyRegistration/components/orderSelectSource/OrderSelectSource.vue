@@ -182,6 +182,7 @@
     IOrderSource,
     TSchInfoWhole,
     IChooseDays,
+    dealNumberSourceList,
   } from '../../utils/index';
   import { GStores, ServerStaticData, type ISystemConfig, wait } from '@/utils';
 
@@ -300,7 +301,7 @@
         };
 
         const { result } = await api.getNumberSource<IOrderSource[]>(args);
-
+        dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
 
         refCollapseNow.init();
