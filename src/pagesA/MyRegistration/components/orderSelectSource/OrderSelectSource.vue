@@ -159,6 +159,7 @@
       :title="fgTitle1115"
       :show="isFgShow1115"
       @confirmButton="isFgShow1115 = false"
+      @cancelButton="isFgShow1115 = false"
       :isShowCancel="false"
       isMaskClick
     >

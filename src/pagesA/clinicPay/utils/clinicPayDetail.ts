@@ -136,6 +136,7 @@ export type TPayDetailInfo = {
   personCost: string;
   hospitalCost: string;
   totalCost: string;
+  favoredReduce: string;
   invoiceNumber: string; // 发票号
   qrCode: string;
 };

@@ -125,6 +125,16 @@
         </view>
 
         <view
+          v-if="detailData.favoredReduce"
+          class="head-row flex-normal flex-start-r"
+        >
+          <view class="head-row-label text-no-wrap color-888">优待减免</view>
+          <view class="head-row-value color-444">
+            {{ detailData.favoredReduce }}元
+          </view>
+        </view>
+
+        <view
           v-if="myprops.diseaseTypeName"
           class="head-row flex-normal flex-start-r"
         >
