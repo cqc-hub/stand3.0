@@ -14,9 +14,9 @@
       >
         {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
       </view>
-      <view class="g-break-word">
+      <view class="g-break-word flex1">
         <text>我已阅读并同意</text>
-        <text @click.stop="goAgreement" class="fg-agree-name">
+        <text @click.stop="goAgreement" class="color-blue">
           《用户条款和隐私政策》
         </text>
 
@@ -58,9 +58,6 @@
     align-items: flex-start;
     margin-bottom: 24rpx;
 
-    .fg-agree-name {
-      color: var(--hr-brand-color-6);
-    }
 
     .check-box {
       color: var(--hr-neutral-color-7);

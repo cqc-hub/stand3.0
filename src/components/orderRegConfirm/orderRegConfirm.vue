@@ -184,11 +184,6 @@
         &.btn-isometric {
           grid-template-columns: 0.9fr 1fr;
         }
-
-        > button {
-          width: 100%;
-          // height: 96rpx;
-        }
       }
     }
   }

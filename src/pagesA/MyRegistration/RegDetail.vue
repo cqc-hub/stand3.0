@@ -739,7 +739,10 @@
         'get-wx-medical-auth-code': '',
       });
 
-      const isAlilAuth = (await _getQxMedicalNation()).payAuthNo;
+      let isAlilAuth = '';
+      // #ifdef MP-ALIPAY
+      isAlilAuth = (await _getQxMedicalNation()).payAuthNo;
+      // #endif
 
       if (
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
@@ -1160,6 +1163,14 @@
   };
 
   onShow(async () => {
+    console.log('微信 show');
+
+    console.log(
+      getLocalStorage('get-ali-medical-auth-code'),
+      getLocalStorage('get-wx-medical-auth-code'),
+      gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode
+    );
+
     if (getLocalStorage('reg-detail-init') === '1') {
       setLocalStorage({
         'reg-detail-init': '',

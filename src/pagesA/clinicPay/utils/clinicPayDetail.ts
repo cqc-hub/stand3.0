@@ -338,6 +338,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
     return Promise.reject('请求授权...');
   } else {
     fCode = qrCode;
+
     gStores.globalStore.onAppShow({});
   }
   // #endif
@@ -356,6 +357,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 export const _getQxMedicalNation = async (
   returnUrl: string = '/pagesA/clinicPay/clinicPayDetail'
 ) => {
+  //
+
   const gStores = new GStores();
   const qrCode = await getMedicalAuthCode();
 

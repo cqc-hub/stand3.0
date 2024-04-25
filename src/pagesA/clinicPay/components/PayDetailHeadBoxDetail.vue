@@ -125,7 +125,7 @@
         </view>
 
         <view
-          v-if="detailData.favoredReduce"
+          v-if="detailData.favoredReduce && detailData.favoredReduce !== '0'"
           class="head-row flex-normal flex-start-r"
         >
           <view class="head-row-label text-no-wrap color-888">优待减免</view>

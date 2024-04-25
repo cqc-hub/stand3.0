@@ -422,7 +422,6 @@
       padding: 24upx 50upx;
       display: flex;
       align-items: center;
-      height: 96rpx;
     }
   }
 
