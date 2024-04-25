@@ -300,6 +300,17 @@
   };
 
   const goDetail = (item: IRegistrationCardItem) => {
+    const { patList } = gStores.userStore;
+    const { patientId } = item;
+
+    if (patientId && patList.length) {
+      const pat = patList.find((o) => o.patientId === patientId);
+
+      if (pat) {
+        gStores.userStore.updatePatChoose(pat);
+      }
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
