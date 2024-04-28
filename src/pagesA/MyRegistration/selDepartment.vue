@@ -74,21 +74,6 @@
         />
       </scroll-view>
     </xy-dialog>
-
-    <xy-dialog
-      title="温馨提示"
-      :show="isShowPromptMessageTip"
-      :isShowCancel="false"
-      @confirmButton="promptMessageTipDialogConfirm"
-      isMaskClick
-    >
-      <scroll-view scroll-y class="reg-tip">
-        <view class="g-break-word color-888">
-          <rich-text :nodes="showPromptMessageTip" />
-        </view>
-      </scroll-view>
-    </xy-dialog>
-
     <g-message />
   </view>
 </template>
@@ -273,15 +258,15 @@
     registerContinue(item);
   };
 
-  const isShowPromptMessageTip = ref(false);
-  const showPromptMessageTip = ref('');
-  let promptMessageTipDialogConfirm = (v: unknown) => {};
   const registerContinue = async (item: IDeptLv3 | IDeptLv2 | IDeptLv1) => {
     if (item.promptMessage) {
-      isShowPromptMessageTip.value = true;
-      showPromptMessageTip.value = HTMLParser(item.promptMessage);
-      await new Promise((r) => (promptMessageTipDialogConfirm = r));
-      isShowPromptMessageTip.value = false;
+      await new Promise((closeCallBack: any) => {
+        gStores.messageStore.showMessage(item.promptMessage, 0, {
+          closeCallBack,
+          useDialog: true,
+          dialogTitle: '温馨提示',
+        });
+      });
     }
 
     const queryArg = {

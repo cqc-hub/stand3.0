@@ -41,7 +41,9 @@
       isMaskClick
     >
       <scroll-view scroll-y class="reg-tip">
-        <rich-text :nodes="HTMLParser(messageStore.msg)" />
+        <view class="g-break-word color-888">
+          <rich-text :nodes="HTMLParser(messageStore.msg)" />
+        </view>
       </scroll-view>
     </xy-dialog>
 
