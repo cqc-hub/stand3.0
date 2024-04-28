@@ -12,6 +12,7 @@
           placeholder="请输入医生/科室/症状"
           @confirm="confirmInput"
           @change="changeInput"
+          focus
         >
           <template #suffixRight>
             <view

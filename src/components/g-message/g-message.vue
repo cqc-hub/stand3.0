@@ -33,6 +33,18 @@
     </xy-dialog>
     <!-- #endif -->
 
+    <xy-dialog
+      :title="messageStore.dialogTitle"
+      :show="messageStore.isShow && messageStore.useDialog"
+      :isShowCancel="false"
+      @close="messageStore.closeMessage"
+      isMaskClick
+    >
+      <scroll-view scroll-y class="reg-tip">
+        <rich-text :nodes="HTMLParser(messageStore.msg)" />
+      </scroll-view>
+    </xy-dialog>
+
     <view class="popup">
       <uni-popup
         :duration="messageStore.popupDuration"
@@ -56,6 +68,7 @@
   import { useMessageStore } from '@/stores';
 
   import { useWxAuthorizationHook } from './index';
+  import HTMLParser from '@/common/html-parser';
 
   const props = defineProps<{
     isWxAuthInit?: boolean;
@@ -71,12 +84,15 @@
     privacyContractName,
   } = useWxAuthorizationHook();
 
-  const usePopup = function (type: boolean) {
+  const usePopup = function (show: boolean) {
+    if (messageStore.useDialog) {
+      return;
+    }
     nextTick(() => {
       const popupRef = popup.value;
       if (!popupRef) return;
 
-      if (type) {
+      if (show) {
         popupRef.open('center');
       } else {
         popup.value.close();

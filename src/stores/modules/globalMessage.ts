@@ -6,6 +6,10 @@ const messageStore = defineStore('message', {
     return {
       isShow: false,
       msg: '',
+
+      useDialog: false,
+      dialogTitle: '',
+
       duration: 0,
       popupDuration: 500,
       maskClickCallBack: () => {},
@@ -21,9 +25,13 @@ const messageStore = defineStore('message', {
         maskClickCallBack: () => void;
         closeCallBack: () => void;
         uniToast: boolean;
+        useDialog: boolean;
+        dialogTitle: string;
       }> = {}
     ) {
-      if (options.uniToast) {
+      const { maskClickCallBack, closeCallBack, uniToast, useDialog } = options;
+
+      if (uniToast) {
         uni.showToast({
           title: message,
           icon: 'none',
@@ -32,9 +40,10 @@ const messageStore = defineStore('message', {
 
         return;
       }
-      const { maskClickCallBack, closeCallBack } = options;
+
       this.isShow = true;
-      this.duration = duration;
+      this.useDialog = useDialog!;
+      this.duration = useDialog ? 0 : duration;
       this.msg = message;
 
       uni.$emit('showMessage');
