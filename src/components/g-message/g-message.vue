@@ -89,8 +89,6 @@
       return;
     }
     nextTick(() => {
-      console.log('hhhhh');
-
       const popupRef = popup.value;
       if (!popupRef) return;
 
