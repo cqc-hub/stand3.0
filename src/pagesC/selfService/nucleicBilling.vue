@@ -296,9 +296,14 @@
 
   const sideList = ref(<any[]>[]);
   const sideValue = ref('');
-  const sideClick = ({ item }) => {
+  const sideClick = ({ item, tips }) => {
     sideValue.value = item.itemName;
     list.value = item.items;
+
+    tips &&
+      gStores.messageStore.showMessage(tips, 0, {
+        useDialog: true,
+      });
   };
 
   onMounted(() => {
@@ -385,20 +390,6 @@
 
       return;
     }
-    const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
-    if (
-      idx === -1 &&
-      pageConfig.value.clickItemShowTipInDialog === '1' &&
-      tips
-    ) {
-      await new Promise((closeCallBack: any) => {
-        tips &&
-          gStores.messageStore.showMessage(tips, 3000, {
-            closeCallBack,
-            useDialog: true,
-          });
-      });
-    }
 
     const listLen = selList.value.length;
     if (pageConfig.value.multi === '1' && listLen) {
@@ -408,6 +399,7 @@
         selList.value = [item];
         return;
       }
+      const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
 
       if (idx > -1) {
         selList.value.splice(idx, 1);
