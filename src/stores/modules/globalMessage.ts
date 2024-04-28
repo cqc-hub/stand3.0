@@ -38,7 +38,10 @@ const messageStore = defineStore('message', {
       duration = 0,
       options: Partial<{
         maskClickCallBack: () => void;
-        closeCallBack: (args: { confirm: boolean }) => void;
+        closeCallBack: (args: {
+          /** useDialog true 时候点了确认还是取消 */
+          confirm: boolean;
+        }) => void;
         uniToast: boolean;
         useDialog: boolean;
         dialogOpt: TDialogOpt;
