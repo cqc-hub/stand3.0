@@ -69,6 +69,13 @@
           </view>
 
           <view
+            v-if="item.itemAddress"
+            class="color-888 f26 g-break-word tip flex-normal"
+          >
+            <rich-text :nodes="HTMLParser(item.itemAddress)" />
+          </view>
+
+          <view
             v-if="item.tips"
             :id="'nucle-item-' + item.itemCode"
             @click.stop="clickTip(item)"
@@ -137,6 +144,13 @@
                   <text class="iconfont">&#xe6ce;</text>
                 </block>
               </template>
+            </view>
+
+            <view
+              v-if="item.itemAddress"
+              class="color-888 f26 g-break-word tip flex-normal"
+            >
+              <rich-text :nodes="HTMLParser(item.itemAddress)" />
             </view>
 
             <view
@@ -228,20 +242,7 @@
   } from '@/utils';
   import HTMLParser from '@/common/html-parser';
   import { joinQuery } from '../../common/utils';
-
-  interface INucle {
-    disabled?: '1';
-    billingDoc: string;
-    billingType: string;
-    fee: string;
-    itemAddress: string;
-    itemCode: string;
-    itemName: string;
-    itemTime: string;
-    tips: string;
-    tipHide: boolean;
-    showTipHideBtn: boolean;
-  }
+  import { INucle } from './index';
 
   const props = defineProps<{
     billingType?: string;
@@ -376,13 +377,23 @@
     }
   };
 
-  const clickItem = (item: INucle) => {
+  const clickItem = async (item: INucle) => {
     const { disabled, tips } = item;
 
     if (disabled === '1') {
       tips && gStores.messageStore.showMessage(tips, 3000);
 
       return;
+    }
+    const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
+    if (idx === -1 && tips) {
+      await new Promise((r: any) => {
+        tips &&
+          gStores.messageStore.showMessage(tips, 3000, {
+            closeCallBack: r,
+            useDialog: true,
+          });
+      });
     }
 
     const listLen = selList.value.length;
@@ -394,7 +405,6 @@
         return;
       }
 
-      const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
       if (idx > -1) {
         selList.value.splice(idx, 1);
       } else {
