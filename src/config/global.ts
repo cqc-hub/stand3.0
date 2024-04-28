@@ -15,6 +15,7 @@ const version = '0.0.1'; //暂定
 const VERSION = version + '.' + YMD; //版本号
 const TIMESTAMP = version + '.' + YMD + HM; //时间戳，修改时间戳会清理项目缓存
 const isOpenDes = false; //测试环境是否开启加密 正式环境必加密
+const isOpenSm4 = false; //是否开启sm4加密
 let authUrl = 'https://yyldevwwz.eheren.com/allinone-auth';
 
 // @ts-ignore
@@ -60,6 +61,7 @@ const globalGl = {
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',
   isOpenDes,
+  isOpenSm4,
   netUrl,
   h5Url,
   sConfig: getSConfig(SYS_CODE),
