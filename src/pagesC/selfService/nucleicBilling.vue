@@ -386,7 +386,11 @@
       return;
     }
     const idx = selList.value.findIndex((o) => o.itemCode === item.itemCode);
-    if (idx === -1 && pageConfig.value.clickItemShowTipInDialog && tips) {
+    if (
+      idx === -1 &&
+      pageConfig.value.clickItemShowTipInDialog === '1' &&
+      tips
+    ) {
       await new Promise((closeCallBack: any) => {
         tips &&
           gStores.messageStore.showMessage(tips, 3000, {

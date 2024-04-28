@@ -353,7 +353,7 @@ export interface ISystemConfig_ {
     footerBtn?: TButtonConfig;
     tabs?: IOptions[];
     multi?: '1'; // 多选?
-    clickItemShowTipInDialog?: boolean;
+    clickItemShowTipInDialog?: '1';
   };
 
   /** 名医名科 */
