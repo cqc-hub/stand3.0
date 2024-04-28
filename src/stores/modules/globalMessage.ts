@@ -1,5 +1,15 @@
 import { defineStore } from 'pinia';
 
+type TDialogOpt = {
+  title?: string;
+  isShowCancel?: boolean; // 默认 false
+  isMaskClick?: boolean; // 默认 true
+  confirmText?: string;
+  cancelText?: string;
+  confirmColor?: string;
+  cancelColor?: string;
+};
+
 let timer: null | number = null;
 const messageStore = defineStore('message', {
   state() {
@@ -8,28 +18,39 @@ const messageStore = defineStore('message', {
       msg: '',
 
       useDialog: false,
-      dialogTitle: '',
+      isDialogConfirm: false,
+      dialogOpt: <TDialogOpt>{},
 
       duration: 0,
       popupDuration: 500,
       maskClickCallBack: () => {},
-      closeCallBack: () => {},
+      closeCallBack: (args: any) => {},
     };
   },
 
   actions: {
+    toggleDialogConfirm(confirm: boolean) {
+      this.isDialogConfirm = confirm;
+    },
+
     showMessage(
       message: string,
       duration = 0,
       options: Partial<{
         maskClickCallBack: () => void;
-        closeCallBack: () => void;
+        closeCallBack: (args: { confirm: boolean }) => void;
         uniToast: boolean;
         useDialog: boolean;
-        dialogTitle: string;
+        dialogOpt: TDialogOpt;
       }> = {}
     ) {
-      const { maskClickCallBack, closeCallBack, uniToast, useDialog } = options;
+      const {
+        maskClickCallBack,
+        closeCallBack,
+        uniToast,
+        useDialog,
+        dialogOpt,
+      } = options;
 
       if (uniToast) {
         uni.showToast({
@@ -45,6 +66,7 @@ const messageStore = defineStore('message', {
       this.useDialog = useDialog!;
       this.duration = useDialog ? 0 : duration;
       this.msg = message;
+      this.dialogOpt = dialogOpt || {};
 
       uni.$emit('showMessage');
 
@@ -69,7 +91,9 @@ const messageStore = defineStore('message', {
       }
       this.isShow = false;
       uni.$emit('closeMessage');
-      this.closeCallBack();
+      this.closeCallBack({
+        confirm: this.isDialogConfirm,
+      });
     },
   },
 });

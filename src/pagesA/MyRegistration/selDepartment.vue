@@ -264,7 +264,9 @@
         gStores.messageStore.showMessage(item.promptMessage, 0, {
           closeCallBack,
           useDialog: true,
-          dialogTitle: '温馨提示',
+          dialogOpt: {
+            title: '温馨提示',
+          },
         });
       });
     }

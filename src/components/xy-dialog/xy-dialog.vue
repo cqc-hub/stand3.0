@@ -50,6 +50,8 @@
 </template>
 
 <script>
+  import { wait } from '@/utils';
+
   export default {
     props: {
       // 标题
@@ -141,18 +143,16 @@
       },
 
       // 取消方法
-      clickCancel() {
-        setTimeout(() => {
-          this.$emit('cancelButton');
-        }, 200);
+      async clickCancel() {
+        this.$emit('cancelButton');
+        await wait(200);
         this.closeDialog();
       },
 
       // 确定方法
-      clickConfirm() {
-        setTimeout(() => {
-          this.$emit('confirmButton');
-        }, 200);
+      async clickConfirm() {
+        this.$emit('confirmButton');
+        await wait(200);
         this.closeDialog();
       },
 

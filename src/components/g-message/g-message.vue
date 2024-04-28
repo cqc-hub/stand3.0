@@ -34,11 +34,25 @@
     <!-- #endif -->
 
     <xy-dialog
-      :title="messageStore.dialogTitle"
       :show="messageStore.isShow && messageStore.useDialog"
-      :isShowCancel="false"
+      :title="messageStore.dialogOpt.title"
+      :confirmColor="messageStore.dialogOpt.confirmColor"
+      :cancelColor="messageStore.dialogOpt.cancelColor"
+      :confirmText="messageStore.dialogOpt.confirmText"
+      :cancelText="messageStore.dialogOpt.cancelText"
+      :isShowCancel="
+        messageStore.dialogOpt.isShowCancel === undefined
+          ? false
+          : messageStore.dialogOpt.isShowCancel
+      "
+      :isMaskClick="
+        messageStore.dialogOpt.isMaskClick === undefined
+          ? true
+          : messageStore.dialogOpt.isMaskClick
+      "
+      @confirmButton="messageStore.toggleDialogConfirm(true)"
+      @cancelButton="messageStore.toggleDialogConfirm(false)"
       @close="messageStore.closeMessage"
-      isMaskClick
     >
       <scroll-view scroll-y class="reg-tip">
         <view class="g-break-word color-888">
