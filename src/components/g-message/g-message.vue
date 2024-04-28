@@ -40,16 +40,8 @@
       :cancelColor="messageStore.dialogOpt.cancelColor"
       :confirmText="messageStore.dialogOpt.confirmText"
       :cancelText="messageStore.dialogOpt.cancelText"
-      :isShowCancel="
-        messageStore.dialogOpt.isShowCancel === undefined
-          ? false
-          : messageStore.dialogOpt.isShowCancel
-      "
-      :isMaskClick="
-        messageStore.dialogOpt.isMaskClick === undefined
-          ? true
-          : messageStore.dialogOpt.isMaskClick
-      "
+      :isShowCancel="messageStore.dialogOpt.isShowCancel ?? false"
+      :isMaskClick="messageStore.dialogOpt.isMaskClick ?? true"
       @confirmButton="messageStore.toggleDialogConfirm(true)"
       @cancelButton="messageStore.toggleDialogConfirm(false)"
       @close="messageStore.closeMessage"
