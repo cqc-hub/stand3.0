@@ -42,7 +42,7 @@
     >
       <scroll-view scroll-y class="reg-tip">
         <view class="g-break-word color-888">
-          <rich-text :nodes="HTMLParser(messageStore.msg)" />
+          <rich-text :nodes="getContent()" />
         </view>
       </scroll-view>
     </xy-dialog>
@@ -90,6 +90,7 @@
     if (messageStore.useDialog) {
       return;
     }
+
     nextTick(() => {
       const popupRef = popup.value;
       if (!popupRef) return;
@@ -106,6 +107,17 @@
     // #ifdef  MP-WEIXIN
     wx.openPrivacyContract();
     // #endif
+  };
+
+  const getContent = () => {
+    const msg = messageStore.msg;
+    if (Array.isArray(msg)) {
+      return msg;
+    } else if (msg) {
+      return HTMLParser(msg);
+    } else {
+      return '';
+    }
   };
 
   uni.$on('showMessage', function () {

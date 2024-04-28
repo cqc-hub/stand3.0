@@ -59,6 +59,11 @@
             ? content
             : HTMLParser(content);
 
+          console.log({
+            h: HTMLParser(content),
+            n: content,
+          });
+
           mTitle.value = title;
           emit('update:value', text.value);
           emit('update:title', title);
