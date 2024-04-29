@@ -296,9 +296,10 @@
 
   const sideList = ref(<any[]>[]);
   const sideValue = ref('');
-  const sideClick = ({ item, tips }) => {
-    sideValue.value = item.itemName;
-    list.value = item.items;
+  const sideClick = ({ item }) => {
+    const { itemName, items, tips } = item;
+    sideValue.value = itemName;
+    list.value = items;
 
     tips &&
       gStores.messageStore.showMessage(tips, 0, {

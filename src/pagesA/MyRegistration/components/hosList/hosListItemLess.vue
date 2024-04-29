@@ -4,7 +4,7 @@
       <view v-if="item.intro" @click="introClick" class="hos-intro f24">
         介绍
       </view>
-      <image @click="imgClick" :src="item.hosPhoto" />
+      <image :src="item.hosPhoto" @click="imgClick" @err="loadErr" />
     </view>
 
     <view class="content" @click="itemClick">
@@ -78,7 +78,9 @@
     emits('intro-click', props.item);
   };
 
-
+  const loadErr = (err) => {
+    console.log(err);
+  };
 </script>
 
 <style lang="scss" scoped>
