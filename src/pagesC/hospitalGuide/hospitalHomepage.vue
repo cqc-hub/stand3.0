@@ -39,13 +39,6 @@
 
       <view class="page-content">
         <view>
-          <J-skeleton
-            :loading="isLoading"
-            :imgTitle="true"
-            avatarSize="32px"
-            titleWidth="100%"
-            :row="row"
-          >
             <view class="card">
               <view class="card-top flex-between">
                 <text>{{ dataList.address }}</text>
@@ -63,7 +56,6 @@
                 <text>门诊时间:{{ dataList.clinicTime }}</text>
               </view>
             </view>
-          </J-skeleton>
         </view>
         <view v-if="!isLoading" @tap="gotoGuide">
           <view class="main-text">
@@ -81,12 +73,6 @@
           </view>
         </view>
         <view class="hosButton">
-          <J-skeleton
-            :loading="isLoading"
-            :imgTitle="true"
-            :imgHeight="70"
-            :row="row"
-          >
             <view class="hosBar">
               <view
                 class="hosBarItem"
@@ -100,7 +86,6 @@
                 </view>
               </view>
             </view>
-          </J-skeleton>
 
           <view class="GridDataList">
             <homeGrid :list="gridList" :type="2" />
@@ -112,7 +97,7 @@
 </template>
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady, onShareTimeline } from '@dcloudio/uni-app';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { wait, openLocation, GStores } from '@/utils';
@@ -362,6 +347,13 @@
     hosId?: string;
   }
   onLoad(async (p) => {
+    // #ifdef MP-WEIXIN
+    wx.showShareMenu({
+      // 要求小程序返回分享目标信息
+      withShareTicket: true,
+    });
+    // #endif
+
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     hosId.value =
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
@@ -376,7 +368,16 @@
     }
     getHospitalGuidelines(hosId.value);
   });
-
+  // #ifdef MP-WEIXIN
+  //分享到朋友圈
+  onShareTimeline(() => {
+    return {
+      title: dataList.value.aliasName,
+      query: 'hosId=' + hosId.value,
+      summary: '',
+    };
+  });
+  // #endif
   const gotoGuide = () => {
     uni.navigateTo({
       url: joinQuery(

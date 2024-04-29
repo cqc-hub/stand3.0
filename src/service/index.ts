@@ -274,11 +274,9 @@ const requestInterfaceEncrp = (request)=>{
 const responseInterfaceDecryp = (signContent)=>{
   let DecryptData = {}
     if(isOpenSm4){
-      console.log(22222,sm4_ecb_decrypt(signContent))
       DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
     }else if (isDes) {
       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
-      console.log(22222111,decryptDes(signContent, key))
       DecryptData = JSON.parse(decryptDes(signContent, key));
     }
     return  DecryptData

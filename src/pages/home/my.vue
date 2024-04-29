@@ -63,10 +63,11 @@
   import { useMessageStore, useRouterStore } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
 
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
   import { ServerStaticData, GStores, LoginUtils } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
+  import global from '@/config/global';
 
   import personRecord from './componetns/personRecord.vue';
   import homeTabbar from './componetns/homeTabbar.vue';
@@ -167,7 +168,15 @@
       }
     }
   });
-
+  // #ifdef MP-WEIXIN
+  //分享到朋友圈
+  onShareTimeline(() => {
+    return {
+      title: global.systemInfo.name,
+      query: '',
+    };
+  });
+  // #endif
   onMounted(() => {
     routeStore.receiveQuery(props);
 

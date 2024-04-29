@@ -175,9 +175,9 @@
             <official-account></official-account>
           </view>
           <!-- #endif -->
-            <!-- #ifdef MP-ALIPAY -->
-            <view v-if="global.sConfig.isOpenAlipayFollow">
-              <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
+          <!-- #ifdef MP-ALIPAY -->
+          <view v-if="global.sConfig.isOpenAlipayFollow">
+            <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
           </view>
           <!-- #endif -->
           <view class="fun-list" v-if="viewerStore.homeMenuList.length">
@@ -311,7 +311,7 @@
 </template>
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { onLoad, onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow, onShareTimeline } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
@@ -433,7 +433,15 @@
       });
     }
   });
-
+  // #ifdef MP-WEIXIN
+  //分享到朋友圈
+  onShareTimeline(() => {
+    return {
+      title: global.systemInfo.name,
+      query: '',
+    };
+  });
+ // #endif
   //跳转智能问答
   const gotoIntelQA = () => {
     if (global.sConfig.isOpenIntelQA) {
