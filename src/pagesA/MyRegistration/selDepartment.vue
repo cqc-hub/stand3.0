@@ -62,8 +62,8 @@
       :cancelText="dialogCancelText"
       :isShowCancel="isDialogShowCancel"
       cancelColor="#296FFF"
-      isMaskClick
     >
+      <!-- isMaskClick -->
       <scroll-view scroll-y class="reg-tip">
         <g-flag
           v-model:title="showRegTipTitle"

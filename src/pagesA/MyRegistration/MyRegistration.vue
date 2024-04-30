@@ -280,6 +280,7 @@
     const preConsultation: TButtonConfig = {
       type: 'h5',
       isSelfH5: '1',
+      // path: 'pages/inquiries/inquiries3',
       path: 'pagesC/inquiries/inquiriesRes1',
       text: '预问诊',
       extraData: {
@@ -293,7 +294,6 @@
         token: 'token',
         herenId: 'herenId',
       },
-      // isLocal: '1',
     };
 
     useTBanner(preConsultation);

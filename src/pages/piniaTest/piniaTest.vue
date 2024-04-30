@@ -333,7 +333,6 @@
       token: 'token',
       herenId: 'herenId',
     },
-    // isLocal: '1',
   };
 
   onMounted(() => {
