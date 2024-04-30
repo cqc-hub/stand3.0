@@ -460,18 +460,6 @@
         });
       }
 
-      if (takeNumber1ElectronicGuideBtn === '1') {
-        headBtns.value.push({
-          type: 'h5',
-          isSelfH5: '1',
-          path: 'pagesC/medicalAssistant/medicalAssistant',
-          text: '电子导诊单',
-          icon: globalGl.BASE_IMG + 'stand3-take-number-queue-number.png',
-          addition: {
-            patientId: '_patientId',
-          },
-        });
-      }
 
       if (takeNumberGoPayBtn === '1') {
         headBtns.value.push({

@@ -65,6 +65,9 @@
     } else if (_type === '1') {
       // 预问诊
 
+      // @ts-expect-error
+      delete pageProps.value._type;
+
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
@@ -73,7 +76,7 @@
           params: encodeURIComponent(
             encryptDes(
               JSON.stringify({
-                ...pageProps.value
+                ...pageProps.value,
               }),
               'phsDesKe'
             )
