@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx78636dc13e06e91c",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -73,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021003173633521"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -85,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省肿瘤医院国际保健中心",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"

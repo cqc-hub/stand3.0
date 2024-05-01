@@ -953,6 +953,7 @@ export const usePayPage = () => {
 
   let isGetListDataFirst = true;
   let getListData = async (isReset = true) => {
+
     if (isReset) {
       const isKeepSel = getLocalStorage('keepSelUnPayList') === '1';
       unPayList.value = [];
@@ -990,9 +991,11 @@ export const usePayPage = () => {
     } else {
       await getPayedList();
     }
+
+
   };
 
-  getListData = debounce(getListData, 120, false);
+  // getListData = debounce(getListData, 120, false);
 
   const getSysConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('pay');

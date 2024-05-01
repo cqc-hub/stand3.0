@@ -381,6 +381,7 @@
 
     await wait(650);
 
+
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
@@ -401,7 +402,6 @@
     // await wait(600);
     isShowPatComponent.value = true;
     await init();
-
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
 
@@ -417,11 +417,13 @@
       await getListData();
     }
 
+    await wait(10);
     if (
       pageProps.value.params &&
       tabCurrent.value === 0 &&
       !unPayList.value.length
     ) {
+
       pageConfig.value.scanPayEmptyAction &&
         useTBanner(
           pageConfig.value.scanPayEmptyAction,
