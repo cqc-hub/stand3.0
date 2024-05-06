@@ -992,10 +992,9 @@ export const usePayPage = () => {
       await getPayedList();
     }
 
-
   };
 
-  // getListData = debounce(getListData, 120, false);
+  getListData = debounce(getListData, 120, false);
 
   const getSysConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('pay');

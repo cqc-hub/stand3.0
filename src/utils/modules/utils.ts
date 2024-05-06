@@ -54,25 +54,42 @@ export const apiAsync: <
   });
 };
 
-export const debounce = function (func, wait = 1000, immediate = true): any {
-  let timer;
-  return function () {
-    // @ts-ignore
-    let context = this,
-      args = arguments;
-    if (timer) clearTimeout(timer);
-    if (immediate) {
-      let callNow = !timer;
-      timer = setTimeout(() => {
-        timer = null;
-      }, wait);
-      if (callNow) func.apply(context, args);
-    } else {
-      timer = setTimeout(() => {
-        func.apply(context, args);
-      }, wait);
-    }
+export const debounce = function <T = any>(
+  fn: T,
+  wait: number,
+  immediate = true
+): T {
+  let timer: null | number = null;
+  let isInvoke = false;
+
+  const _debounce = function (...args) {
+    return new Promise((resolve, reject) => {
+      if (timer) clearTimeout(timer);
+      if (immediate && !isInvoke) {
+        // @ts-expect-error
+        resolve(fn.apply(this, args));
+        isInvoke = true;
+      } else {
+        // 延迟执行
+        timer = setTimeout(() => {
+          // @ts-expect-error
+          resolve(fn.apply(this, args));
+          isInvoke = false;
+          timer = null;
+        }, wait);
+      }
+    });
   };
+
+  // 取消功能
+  _debounce.cancel = function () {
+    if (timer) clearTimeout(timer);
+    timer = null;
+    isInvoke = false;
+  };
+
+  // @ts-expect-error
+  return _debounce;
 };
 
 export const throttle = (func, wait = 1000, type = 1) => {
