@@ -48,13 +48,13 @@
                   :isTitleSticky="collapseOpens['' + idx + tabCurrent]"
                   :disabled="selectSchInfo.amPmResults.length === 1"
                   @change="(b) => collapseChange(idx, b, _item)"
+                  :accordionId="'order'"
                   titlePadding="0 32rpx"
                   activebg="transparent"
                   titleBackGroundColor="#fff"
-                  accordionId="order"
-                  accordion
                   ref="refCollapse"
                 >
+                  <!-- accordion -->
                   <template #title>
                     <view :class="{}" class="collapse-title f32 g-bold">
                       <text

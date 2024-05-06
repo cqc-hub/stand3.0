@@ -154,15 +154,13 @@
       };
     },
     mounted() {
-      this.init();
-
-      this.show = debounce(this.show, 80);
-
+      this.show = debounce(this.show, 80, false);
       uni.$on('_close_collapse', (e) => {
         if (this.accordionId === e) {
           this.show(false, 'no-emit');
         }
       });
+      this.init();
     },
     methods: {
       // 异步获取内容，或者动态修改了内容时，需要重新初始化
@@ -184,6 +182,10 @@
         });
       },
       show(type, status) {
+        console.log({
+
+          type, status
+        });
         if (type != undefined) {
           this.isShow = type;
         } else {

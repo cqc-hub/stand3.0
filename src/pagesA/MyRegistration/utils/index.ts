@@ -700,5 +700,6 @@ export const dealNumberSourceList = (list: IOrderSource[]) => {
   list.map((o) => {
     o.disabled = o.serialType === '3';
   });
+
   return list;
 };
