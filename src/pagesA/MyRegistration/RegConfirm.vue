@@ -347,6 +347,10 @@
       });
     }
 
+    deptStore.$patch({
+      deptClickStep: [],
+    });
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         orderId,
@@ -436,17 +440,6 @@
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
     getPageConfig();
-
-    const { hosDeptId } = props.value;
-    const findDept = deptStore.deptClickStep.find(
-      (o) => o.deptId === hosDeptId
-    );
-
-    if (!findDept) {
-      deptStore.$patch({
-        deptClickStep: [],
-      });
-    }
   });
 </script>
 

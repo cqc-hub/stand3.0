@@ -145,16 +145,6 @@
         </view>
 
         <view
-          v-if="myprops.costTypeName"
-          class="head-row flex-normal flex-start-r"
-        >
-          <view class="head-row-label text-no-wrap color-888">费用类型</view>
-          <view class="head-row-value color-444">
-            {{ myprops.costTypeName }}
-          </view>
-        </view>
-
-        <view
           v-if="detailData.invoiceNumber"
           class="head-row flex-normal flex-start-r"
         >

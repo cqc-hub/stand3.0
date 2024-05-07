@@ -137,6 +137,7 @@
   const dialogConfirmText = ref('确定');
   const dialogCancelText = ref('');
   const isDialogShowCancel = ref(false);
+  let deptStep: any[] = [];
 
   const cancelButtonClick = () => {
     isShowRegTip.value = false;
@@ -240,14 +241,7 @@
 
   const itemClickLv1 = (item: IDeptLv1) => {
     deptStore.changeActiveLv1(item);
-    deptStore.$patch({
-      deptClickStep: [
-        {
-          deptId: item.hosDeptId,
-          deptName: item.deptName,
-        },
-      ],
-    });
+    deptStep = [item];
     if (!item.children) {
       registerContinue(item);
     }
@@ -255,15 +249,7 @@
 
   const itemClickLv2 = (item: IDeptLv2) => {
     deptStore.changeActiveLv2(item);
-    deptStore.$patch({
-      deptClickStep: [
-        ...deptStore.deptClickStep.slice(0, 1),
-        {
-          deptId: item.hosDeptId,
-          deptName: item.deptName,
-        },
-      ],
-    });
+    deptStep = [...deptStep.slice(0, 1), item];
     if (!item.children) {
       registerContinue(item);
     }
@@ -271,15 +257,8 @@
 
   const itemClickLv3 = (item: IDeptLv3) => {
     deptStore.changeActiveLv3(item);
-    deptStore.$patch({
-      deptClickStep: [
-        ...deptStore.deptClickStep.slice(0, 2),
-        {
-          deptId: item.hosDeptId,
-          deptName: item.deptName,
-        },
-      ],
-    });
+    deptStep = [...deptStep.slice(0, 2), item];
+
     registerContinue(item);
   };
 
@@ -295,6 +274,13 @@
         });
       });
     }
+
+    deptStore.$patch({
+      deptClickStep: deptStep.map((o) => ({
+        deptId: o.hosDeptId,
+        deptName: o.deptName,
+      })),
+    });
 
     const queryArg = {
       hosId: hosId.value,

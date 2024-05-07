@@ -126,7 +126,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { useCacheStore } from '@/stores';
+  import { useCacheStore, useDeptStore } from '@/stores';
   import { deQueryForUrl } from '@/common';
   import { GStores } from '@/utils';
   import {
@@ -134,7 +134,6 @@
     clearSearchHistory,
     type IRegSearchHistoryItem,
   } from './utils/RegSearch';
-
 
   import DocList from './components/RegSearch/DocList.vue';
   import SearchDeptList from './components/RegSearch/searchDeptList.vue';
@@ -144,6 +143,7 @@
   const isDelHisShow = ref(false);
   const gStores = new GStores();
   const cacheStore = useCacheStore();
+  const deptStore = useDeptStore();
 
   const confirmInput = (str) => {
     if (str.match(/^[ ]*$/)) {
@@ -196,6 +196,9 @@
 
   onLoad((opt) => {
     r.init(deQueryForUrl(deQueryForUrl(opt)));
+    deptStore.$patch({
+      deptClickStep: [],
+    });
   });
 </script>
 
