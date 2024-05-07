@@ -1,29 +1,6 @@
-import { ServerStaticData, apiAsync, useTBanner } from '@/utils';
+import { GStores, ServerStaticData, apiAsync, useTBanner } from '@/utils';
 
-export const goElectronicMedicalCard = async () => {
-  const { isMedicalQrChoose } = await ServerStaticData.getSystemConfig(
-    'person'
-  );
-
-  let type = 'bySelf';
-
-  if (isMedicalQrChoose === '1') {
-    const tip = '扫码类型';
-    const { tapIndex } = await apiAsync(
-      // @ts-expect-error
-      uni.showActionSheet,
-      {
-        title: tip,
-        alertText: tip,
-        itemList: ['医保扫码', '自费扫码'],
-      }
-    );
-
-    if (tapIndex === 0) {
-      type = 'byMedical';
-    }
-  }
-
+export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
   if (type === 'byMedical') {
     // #ifdef MP-WEIXIN
     useTBanner({
@@ -43,4 +20,42 @@ export const goElectronicMedicalCard = async () => {
       url: '/pagesA/medicalCardMan/electronicMedicalCard',
     });
   }
+};
+
+export const goElectronicMedicalCard = async () => {
+  const { isMedicalQrChoose } = await ServerStaticData.getSystemConfig(
+    'person'
+  );
+
+  let type: 'bySelf' | 'byMedical' = 'bySelf';
+
+  if (isMedicalQrChoose === '1') {
+    const gStores = new GStores();
+
+    const { title, content } = await gStores.getSysAppMore('1201');
+    const { confirm, maskClose } = await new Promise<any>((closeCallBack) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          isShowCancel: true,
+          title,
+          cancelColor: '#333',
+          cancelText: '自费扫码',
+          confirmColor: '#333',
+          confirmText: '医保扫码',
+        },
+        closeCallBack,
+      });
+    });
+
+    if (maskClose) {
+      return;
+    }
+
+    if (confirm) {
+      type = 'byMedical';
+    }
+  }
+
+  _goElectronicMedicalCard(type);
 };

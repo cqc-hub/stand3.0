@@ -6,6 +6,7 @@ import { type TBannerConfig } from '@/utils';
 
 export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
+  'person.isMedicalQrChoose': '1',
   // 'person.realNameAuth': ['ocrVerify', 'faceVerify'],
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',

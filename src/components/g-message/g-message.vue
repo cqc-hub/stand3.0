@@ -1,3 +1,4 @@
+
 <template>
   <view class="g-message">
     <!-- #ifdef  MP-WEIXIN -->
@@ -44,6 +45,7 @@
       :isMaskClick="messageStore.dialogOpt.isMaskClick ?? true"
       @confirmButton="messageStore.toggleDialogConfirm(true)"
       @cancelButton="messageStore.toggleDialogConfirm(false)"
+      @maskClose="messageStore.dialogMaskClose"
       @close="messageStore.closeMessage"
     >
       <scroll-view scroll-y class="reg-tip">

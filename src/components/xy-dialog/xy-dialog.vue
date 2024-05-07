@@ -138,6 +138,7 @@
 
       maskClick() {
         if (this.isMaskClick) {
+          this.$emit('maskClose');
           this.clickCancel();
         }
       },

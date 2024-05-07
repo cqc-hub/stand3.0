@@ -20,6 +20,7 @@ const messageStore = defineStore('message', {
 
       useDialog: false,
       isDialogConfirm: false,
+      isDialogMaskClose: false,
       dialogOpt: <TDialogOpt>{},
 
       duration: 0,
@@ -32,6 +33,10 @@ const messageStore = defineStore('message', {
   actions: {
     toggleDialogConfirm(confirm: boolean) {
       this.isDialogConfirm = confirm;
+    },
+
+    dialogMaskClose() {
+      this.isDialogMaskClose = true;
     },
 
     showMessage(
@@ -68,6 +73,7 @@ const messageStore = defineStore('message', {
 
       this.isShow = true;
       this.useDialog = useDialog!;
+      this.isDialogMaskClose = false;
       this.duration = useDialog ? 0 : duration;
       this.msg = message;
       this.dialogOpt = dialogOpt || {};
@@ -96,7 +102,10 @@ const messageStore = defineStore('message', {
       this.isShow = false;
       uni.$emit('closeMessage');
       this.closeCallBack({
+        /** 点击了确认 */
         confirm: this.isDialogConfirm,
+        /** 通过 mask 关闭了, 这时候 confirm 也是 false */
+        maskClose: this.isDialogMaskClose,
       });
     },
   },

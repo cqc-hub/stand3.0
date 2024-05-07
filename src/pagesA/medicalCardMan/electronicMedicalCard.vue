@@ -11,7 +11,7 @@
         <view>{{ title }}</view>
 
         <view
-          v-if="isHasHealthCode"
+          v-if="toggleList.length > 1"
           @click="toggleQrCode"
           class="flex-normal g-border toggle-card color-blue f26"
         >
@@ -93,7 +93,7 @@
   import { onReady } from '@dcloudio/uni-app';
 
   import { isAreaProgram } from '@/stores';
-  import { GStores, wait } from '@/utils';
+  import { GStores, wait, ServerStaticData, type ISystemConfig } from '@/utils';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
 
@@ -104,6 +104,7 @@
   const { clickPat } = storeToRefs(gStore.userStore);
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
+  const pageConfig = ref(<ISystemConfig['person']>{});
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
 
@@ -152,6 +153,13 @@
   const isHasHealthCode = computed(() => {
     return !!clickPat.value.healthQrCodeText;
   });
+  const toggleList = ref([
+    {
+      label: '电子就诊卡',
+      key: '0',
+    },
+  ]);
+  const toggleListCurrent = ref(0);
 
   const changeShowName = () => {
     if (isNameEncry.value) {
@@ -268,8 +276,23 @@
     setStatus();
   });
 
-  onMounted(() => {
+  onMounted(async () => {
     changeShowName();
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+
+    if (isHasHealthCode.value) {
+      toggleList.value.push({
+        label: '电子健康卡',
+        key: '1',
+      });
+    }
+
+    if (pageConfig.value.isMedicalQrChoose === '1') {
+      toggleList.value.push({
+        label: '医保码',
+        key: '2',
+      });
+    }
   });
 </script>
 

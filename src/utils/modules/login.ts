@@ -109,7 +109,7 @@ export class GStores {
     public globalStore = useGlobalStore()
   ) {}
 
-  getSysAppMore(typeFlag: any) {
+  getSysAppMore(typeFlag: any): Promise<{ title: string; content: string; }> {
     return new Promise((r) => {
       api
         .getSysAppMore({
