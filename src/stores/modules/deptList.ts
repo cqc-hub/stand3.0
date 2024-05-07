@@ -105,7 +105,7 @@ export const loopDeptList = (
 const deptStore = defineStore('_dept', {
   persist: {
     key: '_dept',
-    paths: [],
+    paths: ['deptClickStep'],
   },
 
   state: () => {
@@ -113,6 +113,12 @@ const deptStore = defineStore('_dept', {
       activeLv1: <IDeptLv1>{},
       activeLv2: <IDeptLv2>{},
       activeLv3: <IDeptLv3>{},
+      deptClickStep: <
+        {
+          deptId: string;
+          deptName: string;
+        }[]
+      >[],
     };
   },
 

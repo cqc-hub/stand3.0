@@ -12,6 +12,7 @@ import { apiAsync, cacheUtil } from '@/utils';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
+import HTMLParser from '@/common/html-parser';
 
 export enum LoginType {
   // 微信腾讯健康
@@ -107,6 +108,29 @@ export class GStores {
     public userStore = useUserStore(),
     public globalStore = useGlobalStore()
   ) {}
+
+  getSysAppMore(typeFlag: any) {
+    return new Promise((r) => {
+      api
+        .getSysAppMore({
+          typeFlag,
+        })
+        .then(({ result }) => {
+          const { content, title } = result;
+
+          r({
+            title,
+            content: HTMLParser(content),
+          });
+        })
+        .catch((e) => {
+          r({
+            title: '',
+            content: HTMLParser('未获取到协议 ' + typeFlag),
+          });
+        });
+    });
+  }
 }
 
 export class LoginUtils extends GStores {
@@ -376,7 +400,6 @@ export class LoginUtils extends GStores {
     // console.log(JSON.stringify(reqArg));
     // return
 
-
     let url = '';
 
     if (isAliAuthBase === '1') {
@@ -394,7 +417,6 @@ export class LoginUtils extends GStores {
     const { result } = await api.allinoneAuthApi<TAliLogin>(
       packageAuthParams(reqArg, url)
     );
-
 
     return result;
   }

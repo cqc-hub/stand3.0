@@ -120,6 +120,7 @@
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
   import { getLocalStorage } from '@/common';
+  import { useDeptStore } from '@/stores';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -135,6 +136,7 @@
   const gStores = new GStores();
   const props = ref({} as IPageProps);
   const pageConfig = ref({} as ISystemConfig['order']);
+  const deptStore = useDeptStore();
 
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
@@ -237,8 +239,13 @@
 
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
+    const [firstDept, secondDept] = deptStore.deptClickStep;
 
     const requestArg = {
+      firstDeptName: firstDept?.deptName,
+      firstHosDeptId: firstDept?.deptId,
+      secondDeptName: secondDept?.deptName,
+      secondHosDeptId: secondDept?.deptId,
       ampm,
       categor,
       categorName,
@@ -429,6 +436,17 @@
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
     getPageConfig();
+
+    const { hosDeptId } = props.value;
+    const findDept = deptStore.deptClickStep.find(
+      (o) => o.deptId === hosDeptId
+    );
+
+    if (!findDept) {
+      deptStore.$patch({
+        deptClickStep: [],
+      });
+    }
   });
 </script>
 

@@ -341,6 +341,7 @@
   import homeNav from './componetns/homeNav.vue';
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import { goElectronicMedicalCard } from './utils';
 
   const props = defineProps<{
     code?: string;
@@ -388,6 +389,7 @@
 
   onLoad(async () => {
     personConfig.value = await ServerStaticData.getSystemConfig('person');
+
     //设置顶部标题
     uni.setNavigationBarTitle({
       title: global.systemInfo.name,
@@ -441,7 +443,7 @@
       query: '',
     };
   });
- // #endif
+  // #endif
   //跳转智能问答
   const gotoIntelQA = () => {
     if (global.sConfig.isOpenIntelQA) {
@@ -483,9 +485,7 @@
 
   const cardClick = (pat: IPat) => {
     gStores.userStore.updatePatClick(gStores.userStore.patChoose);
-    uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard',
-    });
+    goElectronicMedicalCard();
   };
 
   const goSearch = () => {

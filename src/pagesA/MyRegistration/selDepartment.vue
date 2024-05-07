@@ -240,6 +240,14 @@
 
   const itemClickLv1 = (item: IDeptLv1) => {
     deptStore.changeActiveLv1(item);
+    deptStore.$patch({
+      deptClickStep: [
+        {
+          deptId: item.hosDeptId,
+          deptName: item.deptName,
+        },
+      ],
+    });
     if (!item.children) {
       registerContinue(item);
     }
@@ -247,7 +255,15 @@
 
   const itemClickLv2 = (item: IDeptLv2) => {
     deptStore.changeActiveLv2(item);
-
+    deptStore.$patch({
+      deptClickStep: [
+        ...deptStore.deptClickStep.slice(0, 1),
+        {
+          deptId: item.hosDeptId,
+          deptName: item.deptName,
+        },
+      ],
+    });
     if (!item.children) {
       registerContinue(item);
     }
@@ -255,6 +271,15 @@
 
   const itemClickLv3 = (item: IDeptLv3) => {
     deptStore.changeActiveLv3(item);
+    deptStore.$patch({
+      deptClickStep: [
+        ...deptStore.deptClickStep.slice(0, 2),
+        {
+          deptId: item.hosDeptId,
+          deptName: item.deptName,
+        },
+      ],
+    });
     registerContinue(item);
   };
 

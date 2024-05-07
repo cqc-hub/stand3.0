@@ -115,6 +115,7 @@
   import { ref, provide, readonly, computed } from 'vue';
   import { getHealthCardCode } from './utils/index';
   import { deQueryForUrl } from '@/common';
+  import { goElectronicMedicalCard } from '@/pages/home/utils';
   import {
     GStores,
     PatientUtils,
@@ -217,9 +218,7 @@
 
   const cardClick = (pat: IPat) => {
     gStore.userStore.updatePatClick(pat);
-    uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard',
-    });
+    goElectronicMedicalCard();
   };
 
   const realNameAuth = async (pat: IPat) => {
@@ -251,7 +250,6 @@
 
       authType = list[tapIndex].key;
     }
-
 
     if (authType === 'ocrVerify') {
       await realNameAuthOcr(pat);
