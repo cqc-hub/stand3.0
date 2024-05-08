@@ -25,7 +25,8 @@
           </text>
 
           <view class="f26">
-            切换{{ showHealthCode ? '电子就诊卡' : '电子健康卡' }}
+            <!-- 切换{{ showHealthCode ? '电子就诊卡' : '电子健康卡' }} -->
+            {{ toggleQrLabel }}
           </view>
         </view>
       </view>
@@ -93,9 +94,16 @@
   import { onReady } from '@dcloudio/uni-app';
 
   import { isAreaProgram } from '@/stores';
-  import { GStores, wait, ServerStaticData, type ISystemConfig } from '@/utils';
+  import {
+    GStores,
+    wait,
+    ServerStaticData,
+    type ISystemConfig,
+    apiAsync,
+  } from '@/utils';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
+  import { _goElectronicMedicalCard } from '@/pages/home/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -110,6 +118,17 @@
 
   // isIos?
   const systemInfo: boolean = getLocalStorage(SYS_TAB_KEY) || false;
+  const toggleQrLabel = computed(() => {
+    if (toggleList.value.length > 2) {
+      return '切换卡类型';
+    }
+    let i = toggleListCurrent.value + 1;
+    if (i > toggleList.value.length - 1) {
+      i = 0;
+    }
+
+    return `切换${toggleList.value[i].label}`;
+  });
 
   // https://meet-ui.com/#/
   const options = ref<any>({
@@ -181,7 +200,37 @@
   };
 
   const toggleQrCode = async () => {
-    showHealthCode.value = !showHealthCode.value;
+    let oldSel = toggleListCurrent.value;
+    let { key } = toggleList.value[toggleListCurrent.value];
+    if (toggleList.value.length > 2) {
+      const tip = '切换卡类型';
+      const { tapIndex } = await apiAsync(
+        // @ts-expect-error
+        uni.showActionSheet,
+        {
+          title: tip,
+          alertText: tip,
+          itemList: toggleList.value.map((o) => o.label),
+        }
+      );
+
+      toggleListCurrent.value = tapIndex;
+    } else {
+      toggleListCurrent.value++;
+      if (toggleListCurrent.value > toggleList.value.length - 1) {
+        toggleListCurrent.value = 0;
+      }
+    }
+
+    key = toggleList.value[toggleListCurrent.value].key;
+
+    if (key === '2') {
+      _goElectronicMedicalCard('byMedical');
+      toggleListCurrent.value = oldSel;
+      return;
+    }
+
+    showHealthCode.value = key === '1';
     setLocalStorage({
       showHealthCodeHis: showHealthCode.value,
     });
