@@ -304,6 +304,10 @@
     tips &&
       gStores.messageStore.showMessage(tips, 0, {
         useDialog: true,
+        dialogOpt: {
+          title: '温馨提示',
+          zIndex: 2000,
+        },
       });
   };
 

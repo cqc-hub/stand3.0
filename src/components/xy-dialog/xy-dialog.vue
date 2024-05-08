@@ -2,6 +2,9 @@
   <view
     class="xy-dialog"
     :class="{ 'xy-dialog__show': isShow }"
+    :style="{
+      zIndex,
+    }"
     @touchmove.stop.prevent="bindTouchmove"
   >
     <view class="xy-dialog__mask" @click="maskClick"></view>
@@ -58,6 +61,11 @@
       title: {
         type: String,
         default: '',
+      },
+
+      zIndex: {
+        type: Number,
+        default: 3000,
       },
 
       // 内容
@@ -176,7 +184,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 3000;
     transition: visibility 200ms ease-in;
     &.xy-dialog__show {
       visibility: visible;
