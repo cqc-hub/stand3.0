@@ -121,7 +121,7 @@ export interface ISystemConfig_ {
     // pagesA/medicalCardMan/medicalCardMan
     /** 本系统禁用就诊卡二维码 */
     isQrCodeDisabled?: '1';
-    /** 点击就诊卡详情时候是否可以选择去 "电子医保凭证"小程序 (自费二维码|医保二维码) */
+    /** 点击就诊卡详情时候是否可以选择去 "电子医保凭证"小程序 (自费二维码|医保二维码), 二维码详情页加入医保码切换 */
     isMedicalQrChoose?: '1';
     /** 开放实名认证(去认证-就诊人列表按钮) */
     realNameAuth?: ('ocrVerify' | 'faceVerify')[];

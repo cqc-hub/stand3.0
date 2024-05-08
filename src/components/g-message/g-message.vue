@@ -1,6 +1,10 @@
-
 <template>
-  <view class="g-message">
+  <view
+    :style="{
+      zIndex: messageStore.dialogOpt.zIndex || 10076,
+    }"
+    class="g-message"
+  >
     <!-- #ifdef  MP-WEIXIN -->
     <xy-dialog title="小程序隐私保护指引" :show="isShowAgreeDialog">
       <scroll-view scroll-y class="reg-tip">
@@ -37,6 +41,7 @@
     <xy-dialog
       :show="messageStore.isShow && messageStore.useDialog"
       :title="messageStore.dialogOpt.title"
+      :zIndex="messageStore.dialogOpt.zIndex"
       :confirmColor="messageStore.dialogOpt.confirmColor"
       :cancelColor="messageStore.dialogOpt.cancelColor"
       :confirmText="messageStore.dialogOpt.confirmText"

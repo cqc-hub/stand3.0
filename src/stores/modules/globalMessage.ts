@@ -9,6 +9,7 @@ type TDialogOpt = {
   cancelText?: string;
   confirmColor?: string;
   cancelColor?: string;
+  zIndex?: number;
 };
 
 let timer: null | number = null;
