@@ -20,7 +20,7 @@
           </view>
 
           <view class="f44 row-box color-blue">
-            {{ $global.systemInfo.name }}{{ configData.theme || '公众号' }}
+            {{  configData.name || $global.systemInfo.name }}{{ configData.theme || '公众号' }}
           </view>
         </view>
 
@@ -91,11 +91,12 @@
   const props = withDefaults(
     defineProps<{
       configData: {
-        imageCode?: string;
-        theme?: string;
-        title?: string;
-        subTitle?: string;
-        isHideInfo?: Boolean;
+        imageCode?: string;//展示图片地址
+        theme?: string;//主题 公众号
+        title?: string;//主标题
+        subTitle?: string;//副标题
+        isHideInfo?: Boolean;//是否展示tzList内容
+        name?: string; //医院名称
       };
     }>(),
     {

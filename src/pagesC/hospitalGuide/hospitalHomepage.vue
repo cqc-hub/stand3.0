@@ -39,23 +39,23 @@
 
       <view class="page-content">
         <view>
-            <view class="card">
-              <view class="card-top flex-between">
-                <text>{{ dataList.address }}</text>
-                <view @tap="gotoLocation">
-                  <image :src="$global.BASE_IMG + 'ico_daohang@3x.png'" />
-                  <text class="tip">到这去</text>
-                </view>
-                <text class="label"></text>
-                <view @tap="clickPhone(dataList.tel)">
-                  <image :src="$global.BASE_IMG + 'ico_telephone@3x.png'" />
-                  <text class="tip">打电话</text>
-                </view>
+          <view class="card">
+            <view class="card-top flex-between">
+              <text>{{ dataList.address }}</text>
+              <view @tap="gotoLocation">
+                <image :src="$global.BASE_IMG + 'ico_daohang@3x.png'" />
+                <text class="tip">到这去</text>
               </view>
-              <view class="card-phone" v-if="dataList.clinicTime">
-                <text>门诊时间:{{ dataList.clinicTime }}</text>
+              <text class="label"></text>
+              <view @tap="clickPhone(dataList.tel)">
+                <image :src="$global.BASE_IMG + 'ico_telephone@3x.png'" />
+                <text class="tip">打电话</text>
               </view>
             </view>
+            <view class="card-phone" v-if="dataList.clinicTime">
+              <text>门诊时间:{{ dataList.clinicTime }}</text>
+            </view>
+          </view>
         </view>
         <view v-if="!isLoading" @tap="gotoGuide">
           <view class="main-text">
@@ -73,19 +73,19 @@
           </view>
         </view>
         <view class="hosButton">
-            <view class="hosBar">
-              <view
-                class="hosBarItem"
-                @tap="useCommonTo(item)"
-                v-for="item in gridBar"
-                :key="item.id"
-              >
-                <text :class="item.iconfont" class="icon-font" />
-                <view class="title">
-                  <text>{{ item.title }}</text>
-                </view>
+          <view class="hosBar">
+            <view
+              class="hosBarItem"
+              @tap="useCommonTo(item)"
+              v-for="item in gridBar"
+              :key="item.id"
+            >
+              <text :class="item.iconfont" class="icon-font" />
+              <view class="title">
+                <text>{{ item.title }}</text>
               </view>
             </view>
+          </view>
 
           <view class="GridDataList">
             <homeGrid :list="gridList" :type="2" />
@@ -94,6 +94,10 @@
       </view>
     </scroll-view>
   </view>
+  <homeH5SharePopup
+    ref="homeH5SharePopupRef"
+    :configData="h5QrCodeData || undefined"
+  />
 </template>
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
@@ -104,20 +108,23 @@
   import { useCacheStore } from '@/stores';
   import { useCommonTo, openServicesChat } from '@/common/checkJump';
   import homeGrid from '@/pages/home/componetns/homeGrid.vue';
+  import homeH5SharePopup from '@/pages/home/componetns/homeH5SharePopup.vue';
   import { deQueryForUrl } from '@/common/utils';
 
   const selHosRef = ref<any>();
   const toView = ref('hosIntroduce'); // 初始化跳转的视图
   const centerHeight = ref(0); //中线的高度
-
+  const homeH5SharePopupRef = ref('' as any);
+  const h5QrCodeData = ref();
   const hosId = ref<any>('');
-
   const cacheStore = useCacheStore();
   const gStores = new GStores();
   const dataList = ref<any>();
   //是否展示更多的按钮
   const isMore = ref(false);
   const isLoading = ref(true); //骨架屏
+
+  const emits = defineEmits(['open-share']);
 
   //写死内容
   const gridBar = [
@@ -388,8 +395,28 @@
       ),
     });
   };
+  //打开关注框
+  const openShare = (item) => {
+    h5QrCodeData.value = {
+      theme: '客服助手',
+      title: '欢迎添加',
+      // #ifdef MP-WEIXIN
+      subTitle: '长按识别，添加客服',
+      // #endif
+      // #ifdef MP-ALIPAY
+      subTitle: '保存扫一扫，添加客服',
+      // #endif
+      isHideInfo: true,
+      imageCode: JSON.parse(item).imageCode,
+      name: dataList.value.aliasName,
+    };
+    homeH5SharePopupRef.value.show();
+  };
   const gotoPath = (item) => {
-    if (item.path == 'openWxService') {
+    if (item.path && item.path == 'showCareModel') {
+      //关注组件拦截跳转 弹框
+      openShare(item.query);
+    } else if (item.path == 'openWxService') {
       openServicesChat(item.query);
     } else {
       useCommonTo(item);

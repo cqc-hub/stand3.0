@@ -26,9 +26,9 @@ const globalStore = useGlobalStore();
 
 let outLoginTimer: number;
 
-//是否加密
-const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
-const isOpenSm4 = globalGl.isOpenSm4
+//是否加密 正式环境默认开启sm4加密  
+const isDes = false;
+const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes
 
 const getShowUrl = (url, baseUrl) =>
   url.slice(baseUrl?.length || 0).split('=')[0];
@@ -274,10 +274,18 @@ const requestInterfaceEncrp = (request)=>{
 const responseInterfaceDecryp = (signContent)=>{
   let DecryptData = {}
     if(isOpenSm4){
-      DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
+      try{
+        DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
+      }catch{
+        DecryptData = sm4_ecb_decrypt(signContent);
+      }
     }else if (isDes) {
       const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
-      DecryptData = JSON.parse(decryptDes(signContent, key));
+      try{
+        DecryptData = JSON.parse(decryptDes(signContent, key));
+      }catch{
+        DecryptData = decryptDes(signContent, key);
+      }
     }
     return  DecryptData
 }
