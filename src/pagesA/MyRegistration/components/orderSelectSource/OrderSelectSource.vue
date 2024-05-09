@@ -156,19 +156,19 @@
     </g-popup>
 
     <xy-dialog
-      :title="fgTitle1115"
-      :show="isFgShow1115"
-      @confirmButton="isFgShow1115 = false"
-      @cancelButton="isFgShow1115 = false"
+      :title="fgTitle1202"
+      :show="isFgShow1202"
+      @confirmButton="isFgShow1202 = false"
+      @cancelButton="isFgShow1202 = false"
       :isShowCancel="false"
       isMaskClick
     >
       <scroll-view scroll-y class="reg-tip">
         <g-flag
-          v-model:title="fgTitle1115"
+          v-model:title="fgTitle1202"
           isHideTitle
           isShowFgTip
-          typeFg="1115"
+          typeFg="1202"
           aaa
         />
       </scroll-view>
@@ -213,8 +213,8 @@
     }
   });
 
-  const fgTitle1115 = ref('');
-  const isFgShow1115 = ref(false);
+  const fgTitle1202 = ref('');
+  const isFgShow1202 = ref(false);
   const getPageConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
@@ -328,7 +328,7 @@
       : selectSchInfo.value;
 
     if (item.disabled) {
-      isFgShow1115.value = true;
+      isFgShow1202.value = true;
       return;
     }
 

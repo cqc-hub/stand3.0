@@ -54,7 +54,7 @@
       @close="messageStore.closeMessage"
     >
       <scroll-view scroll-y class="reg-tip">
-        <view class="g-break-word color-888">
+        <view class="g-break-word color-888 f32">
           <rich-text :nodes="getContent()" />
         </view>
       </scroll-view>

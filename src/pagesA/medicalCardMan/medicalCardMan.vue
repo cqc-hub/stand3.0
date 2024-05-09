@@ -7,18 +7,7 @@
   >
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
-      <view
-        v-if="!isShowHealthCardMode"
-        class="add-pat-box"
-        @click="addPatPage"
-      >
-        <view class="add-pat g-flex-rc-cc">
-          <view class="iconfont icon-resize">&#xe6ab;</view>
-          <text class="text-no-wrap">添加就诊人</text>
-        </view>
-      </view>
-
-      <view v-else class="health-card">
+      <view v-if="isShowHealthCardMode" class="health-card">
         <view @click="associatedHealthCard" class="mr14">
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
@@ -27,6 +16,13 @@
         <view @click="addPatPage">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
+        </view>
+      </view>
+
+      <view v-else class="add-pat-box" @click="addPatPage">
+        <view class="add-pat g-flex-rc-cc">
+          <view class="iconfont icon-resize">&#xe6ab;</view>
+          <text class="text-no-wrap">添加就诊人</text>
         </view>
       </view>
     </view>
