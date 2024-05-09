@@ -51,29 +51,6 @@
         <g-empty :current="1" />
       </view>
     </view>
-
-    <xy-dialog
-      v-if="noTipDialog !== '1'"
-      @confirmButton="isShowRegTip = false"
-      @cancelButton="cancelButtonClick"
-      :title="showRegTipTitle"
-      :show="isShowRegTip"
-      :confirmText="dialogConfirmText"
-      :cancelText="dialogCancelText"
-      :isShowCancel="isDialogShowCancel"
-      cancelColor="#296FFF"
-    >
-      <!-- isMaskClick -->
-      <scroll-view scroll-y class="reg-tip">
-        <g-flag
-          v-model:title="showRegTipTitle"
-          isHideTitle
-          isShowFgTip
-          typeFg="8"
-          aaa
-        />
-      </scroll-view>
-    </xy-dialog>
     <g-message />
   </view>
 </template>
@@ -122,8 +99,6 @@
     thRegisterId?: string;
   }>();
   const pageProps = ref(<typeof props>{});
-  const isShowRegTip = ref(false);
-  const showRegTipTitle = ref('');
   const orderConfig = ref({} as ISystemConfig['order']);
 
   const depList = ref<IDeptLv1[]>([]);
@@ -134,26 +109,7 @@
   const hosList = ref<IHosInfo[]>([]);
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
-  const dialogConfirmText = ref('确定');
-  const dialogCancelText = ref('');
-  const isDialogShowCancel = ref(false);
   let deptStep: any[] = [];
-
-  const cancelButtonClick = () => {
-    isShowRegTip.value = false;
-    const { deptDialogBtnCannel } = orderConfig.value;
-
-    const { key } = deptDialogBtnCannel!;
-
-    if (key === '0') {
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesC/hospitalAccount/hospitalAccount', {
-          hosId: hosId.value,
-          type: 'fromSelDepartment',
-        }),
-      });
-    }
-  };
 
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');
@@ -164,14 +120,38 @@
     }
 
     if (props.noTipDialog !== '1') {
-      setTimeout(() => {
-        isDialogShowCancel.value = !!deptDialogBtnCannel;
-        if (deptDialogBtnCannel) {
-          dialogConfirmText.value = '继续预约';
-          dialogCancelText.value = deptDialogBtnCannel.label;
-        }
+      setTimeout(async () => {
+        const { title, content } = await gStores.getSysAppMore('8');
 
-        isShowRegTip.value = true;
+        const cancelText = deptDialogBtnCannel?.label;
+        const confirmText = cancelText ? '继续预约' : '确定';
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: !!deptDialogBtnCannel,
+            cancelText,
+            confirmText,
+            cancelColor: '#296FFF',
+          },
+          closeCallBack({ confirm, maskClose }) {
+            if (!confirm && !maskClose) {
+              const { key } = deptDialogBtnCannel!;
+
+              if (key === '0') {
+                uni.navigateTo({
+                  url: joinQueryForUrl(
+                    '/pagesC/hospitalAccount/hospitalAccount',
+                    {
+                      hosId: hosId.value,
+                      type: 'fromSelDepartment',
+                    }
+                  ),
+                });
+              }
+            }
+          },
+        });
       }, 500);
     }
 
