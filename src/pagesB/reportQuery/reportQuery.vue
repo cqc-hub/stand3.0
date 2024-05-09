@@ -111,12 +111,15 @@
         {{ btn.text }}
       </button>
     </view>
+    <repShare ref="repShareRef" :current-data="currentTjData" />
+
   </view>
 </template>
 <script lang="ts" setup>
   import { ref, nextTick, computed } from 'vue';
   import { ITab, ICms } from './utils';
   import advisoryItem from './components/advisoryItem.vue';
+  import repShare from './components/repShare.vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
@@ -135,7 +138,7 @@
 
   interface IPageProps {
     tabIndex: number;
-    hosId:string;
+    hosId: string;
   }
   const pageProps = ref(<IPageProps>{});
 
@@ -150,7 +153,9 @@
   const yunBannerConfig = ref(<TBannerConfig>{});
   const gStores = new GStores();
   const cacheStore = useCacheStore();
-
+  const repShareRef = ref<any>('');
+  const currentTjData = ref();
+ 
   const init = async () => {
     const { listYun, reportTab } = reportConfig.value;
 
@@ -387,6 +392,12 @@
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/inspectionReport', mq),
       });
+    } else if (tabCurrent.value == 2) {
+      //体检报告给的链接形式
+      if (data.url) {
+        repShareRef.value.show();
+        currentTjData.value = data;
+      }
     }
   };
 
