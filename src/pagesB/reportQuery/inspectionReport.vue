@@ -50,7 +50,23 @@
         >
           <view class="container-block-top">
             <view class="container-top-click" @click="more(index)">
-              <view class="title">{{ item.repName }}</view>
+              <view class="flex-between">
+                <view class="title flex1">{{ item.repName }}</view>
+
+                <view
+                  v-if="
+                    pageConfig.isOpenCollect === '1' &&
+                    gStore.globalStore.isLogin
+                  "
+                >
+                  <CollectBtn
+                    :info="{
+                      ...pageProps,
+                      ...examineReportList,
+                    }"
+                  />
+                </view>
+              </view>
               <view class="patient-information">
                 <view
                   v-if="pageProps._scan !== '1'"
@@ -288,7 +304,7 @@
     getShareTotalUrl,
     addWatermark,
   } from './utils';
-  import { GStores, nameConvert, wait, throttle } from '@/utils';
+  import { GStores, nameConvert, wait, throttle, ISystemConfig, ServerStaticData } from '@/utils';
   import { joinQuery, encryptDes, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
@@ -299,7 +315,9 @@
 
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import BottomNav from './components/BottomNav.vue';
+  import CollectBtn from './components/CollectBtn.vue';
 
+  const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
   let isScrollCheck = true;
 
@@ -470,7 +488,9 @@
     return examineReportList.value.cardNumber || pat.cardNumber;
   });
 
-  onLoad((p) => {
+  onLoad(async (p) => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+
     pageProps.value = deQueryForUrl(p);
     pageProps.value = deQueryForUrl(pageProps.value);
     pageProps.value = deQueryForUrl(pageProps.value);

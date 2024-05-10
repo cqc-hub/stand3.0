@@ -11,7 +11,22 @@
     <view class="container">
       <view class="container-block">
         <view class="container-block-top" @click="more">
-          <view class="title">{{ checkoutReportList.repName }}</view>
+          <view class="flex-between">
+            <view class="title flex1">{{ checkoutReportList.repName }}</view>
+
+            <view
+              v-if="
+                pageConfig.isOpenCollect === '1' && gStore.globalStore.isLogin
+              "
+            >
+              <CollectBtn
+                :info="{
+                  ...pageProps,
+                  ...checkoutReportList,
+                }"
+              />
+            </view>
+          </view>
           <view class="patient-information">
             <view
               v-if="pageProps._scan !== '1'"
@@ -373,6 +388,7 @@
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
+  import CollectBtn from './components/CollectBtn.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
 

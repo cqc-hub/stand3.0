@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { LoginUtils } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
 
@@ -51,8 +52,12 @@
     console.log(sm4.decrypt(encryptData, key, { padding: 'none' }));
   });
 
-  const testClick = (e) => {
-    console.log(e);
+  const testClick = async (e) => {
+    const { verifyResult } = await new LoginUtils().faceVerify({
+      name: '陈钦川',
+      idCardNumber: '330326199908286713',
+    });
+    console.log(verifyResult);
   };
 </script>
 

@@ -335,6 +335,21 @@
     },
   };
 
+  const 我的收藏: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/myDoctor/myCollect',
+    text: '我的收藏',
+    extraData: {
+      sysCode: globalGl.SYS_CODE,
+    },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
+    isLocal: '1',
+  };
+
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({
@@ -383,7 +398,7 @@
       // });
 
       // useTBanner(healthRecord)
-      useTBanner(预问诊);
+      useTBanner(我的收藏);
     }, 1000);
   });
 </script>
