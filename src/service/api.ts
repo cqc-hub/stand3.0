@@ -511,6 +511,11 @@ const regApi = {
       hideLoading: false,
     }),
 
+  queryCollect: (data: any) =>
+    service.post('/phs-reg/collect/queryCollect', parm(data), {
+      hideLoading: false,
+    }),
+
   queryDeptInfo: (data: any) =>
     service.post('/phs-reg/regIntelligence/queryDeptInfo', parm(data), {
       hideLoading: true,
@@ -732,8 +737,7 @@ const userApi = {
       reportCmPV_YLName: '医院介绍',
     }),
 
-
-    getHospitalGuidelines: <T>(data) =>
+  getHospitalGuidelines: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospitalGuidelines', parm(data)),
 
   //添加已就诊就诊人
@@ -817,8 +821,7 @@ const userApi = {
     ),
   //首页授权接口
   authorization: (data) =>
-    service.post<IPat[]>('/phs-user/ali/authorization', parm(data), {
-    }),
+    service.post<IPat[]>('/phs-user/ali/authorization', parm(data), {}),
 
   // 支付宝验证本人
   alipayVerifiSelf: (data) =>

@@ -56,7 +56,8 @@
                 <view
                   v-if="
                     pageConfig.isOpenCollect === '1' &&
-                    gStore.globalStore.isLogin
+                    gStore.globalStore.isLogin &&
+                    Object.keys(examineReportList).length
                   "
                 >
                   <CollectBtn

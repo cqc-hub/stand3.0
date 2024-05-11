@@ -21,11 +21,10 @@
   const props = defineProps<{
     info: BaseObject;
   }>();
-  const isCollected = ref(true);
+  const isCollected = ref(false);
   const gStore = new GStores();
 
   const collectClick = () => {
-    console.log(props.info);
     (isCollected.value && removeCollect()) || addCollect();
   };
 
@@ -80,6 +79,20 @@
 
     isCollected.value = false;
   };
+
+  const getStatus = async () => {
+    const { repId } = props.info;
+
+    const { result } = await api.queryCollect({
+      collectType: 4,
+      orderId: repId,
+      patientId: gStore.userStore.patChoose.patientId,
+    });
+
+    isCollected.value = result;
+  };
+
+  getStatus();
 </script>
 
 <style lang="scss" scoped></style>

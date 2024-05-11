@@ -16,7 +16,9 @@
 
             <view
               v-if="
-                pageConfig.isOpenCollect === '1' && gStore.globalStore.isLogin
+                pageConfig.isOpenCollect === '1' &&
+                gStore.globalStore.isLogin &&
+                Object.keys(checkoutReportList).length
               "
             >
               <CollectBtn
