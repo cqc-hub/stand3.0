@@ -5,7 +5,7 @@
     }"
     class="g-page"
   >
-    <view class="my-display-none">
+    <view v-if="pageReady" class="my-display-none">
       <g-selhos @get-list="getHosList" />
     </view>
 
@@ -103,6 +103,7 @@
     key?: string;
   }
 
+  const pageReady = ref(false);
   const pageProps = ref(<TPayConfirmPageProp>{});
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -453,6 +454,8 @@
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
       }
     }
+
+    pageReady.value = true;
   });
 </script>
 
