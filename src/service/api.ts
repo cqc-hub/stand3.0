@@ -650,6 +650,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  applyForSign: (data) =>
+    service.post('/phs-user/freePay/applyForSign', parm(data), {
+      hideLoading: false,
+    }),
+
   rpGetPlain: (data) =>
     service.post('/phs-user/rePat/rpGetPlain', parm(data), {
       hideLoading: false,

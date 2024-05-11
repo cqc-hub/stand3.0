@@ -23,7 +23,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { LoginUtils } from '@/utils';
+  import api from '@/service/api';
+import { LoginUtils } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
 
@@ -57,7 +58,15 @@
       name: '陈钦川',
       idCardNumber: '330326199908286713',
     });
-    console.log(verifyResult);
+    const {
+      result: { pdata },
+    } = await api.faceResultAuth({
+      verifyResult,
+      idCard: '330326199908286713',
+      source: 19,
+    });
+    console.log(pdata);
+
   };
 </script>
 

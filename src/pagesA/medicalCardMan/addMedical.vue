@@ -210,7 +210,8 @@
     }
     // #endif
 
-    const { isFace } = await ServerStaticData.getSystemConfig('person');
+    const { isFace, isPayWithoutSecretAuth } =
+      await ServerStaticData.getSystemConfig('person');
 
     if (isFace === '1') {
       if (formData.value[formKey.idType] === '01') {
@@ -226,6 +227,16 @@
         await patientUtils.registerUser(requestData, {
           addPatInterface: 'relevantPatient',
         });
+
+        if (
+          isPayWithoutSecretAuth === '1' &&
+          gStores.userStore.patList.length
+        ) {
+          uni.redirectTo({
+            url: '/pagesA/medicalCardMan/sign',
+          });
+          return;
+        }
 
         // await patientUtils.getPatCardList();
         if (pageProps.value._directUrl) {
@@ -270,6 +281,13 @@
         throw new Error(message);
       });
       await patientUtils.getPatCardList();
+      if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
+        uni.redirectTo({
+          url: '/pagesA/medicalCardMan/sign',
+        });
+        return;
+      }
+
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
