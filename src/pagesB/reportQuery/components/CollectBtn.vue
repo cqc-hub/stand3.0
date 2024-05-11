@@ -72,6 +72,8 @@
     const arg = {
       orderId: repId,
       collectType: 4,
+      patientId: gStore.userStore.patChoose.patientId,
+      patientName: gStore.userStore.patChoose.patientName,
     };
 
     await api.delMyCollect(arg);
