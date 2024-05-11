@@ -59,7 +59,9 @@
     ServerStaticData,
     nameConvert,
     getH5OpenidParam,
+    ISystemConfig,
   } from '@/utils';
+
   import {
     pickTempItem,
     formKey,
@@ -98,6 +100,7 @@
   const pageProps = ref(<TPageType>{
     pageType: 'addPatient',
   });
+  const pageConfig = ref(<ISystemConfig['person']>{});
 
   const patientUtil = new PatientUtils();
   const gStores = new GStores();
@@ -198,6 +201,16 @@
                 sex: (patientSex && (patientSex === '男' ? '1' : '2')) || '',
                 birthday,
               });
+
+              if (
+                pageConfig.value.isPayWithoutSecretAuth === '1' &&
+                gStores.userStore.patList.length
+              ) {
+                uni.redirectTo({
+                  url: '/pagesA/medicalCardMan/sign',
+                });
+                return;
+              }
 
               routerJump('/pages/home/home');
             } catch (error) {
@@ -300,6 +313,16 @@
       }
       await patientUtil.getPatCardList();
 
+      if (
+        pageConfig.value.isPayWithoutSecretAuth === '1' &&
+        gStores.userStore.patList.length
+      ) {
+        uni.redirectTo({
+          url: '/pagesA/medicalCardMan/sign',
+        });
+        return;
+      }
+
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -346,8 +369,8 @@
       'verifyCode',
       'defaultFalg',
     ];
-    let { isSmsVerify, isHidePatientTypeInPerfect } =
-      await ServerStaticData.getSystemConfig('person');
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    let { isSmsVerify, isHidePatientTypeInPerfect } = pageConfig.value;
 
     if (isHidePatientTypeInPerfect === '1') {
       formListKeys = formListKeys.filter((key) => key !== 'patientType');

@@ -11,6 +11,8 @@ export interface IRequest extends UniApp.RequestOptions {
 interface IdDtaType {
   code: number;
   message: string;
+  innerMessage: string;
+  showMessage: string;
   respCode: number;
   timeTaken: number;
   functionVersion: string;

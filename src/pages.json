@@ -363,12 +363,12 @@
         },
 
         {
-          "path": "medicalCardMan/scanUserAdd",
+          "path": "medicalCardMan/sign",
           "extend": {
-            "login": true
+            "patient": true
           },
           "style": {
-            "navigationBarTitleText": "添加就诊人"
+            "navigationBarTitleText": "选择签约"
           }
         },
 

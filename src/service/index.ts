@@ -15,7 +15,7 @@ import { useGlobalStore, useMessageStore } from '@/stores';
 import { LoginUtils, ServerStaticData, outLogin } from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
-import {sm4_ecb_encrypt,sm4_ecb_decrypt} from '@/common/sm4.js'
+import { sm4_ecb_encrypt, sm4_ecb_decrypt } from '@/common/sm4.js';
 // #ifdef MP-ALIPAY
 import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // import { reportCmPV_YL } from '@/js_sdk/alipay/cloudMonitorHelper.js';
@@ -26,9 +26,10 @@ const globalStore = useGlobalStore();
 
 let outLoginTimer: number;
 
-//是否加密 正式环境默认开启sm4加密  
+//是否加密 正式环境默认开启sm4加密
 const isDes = false;
-const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
+const isOpenSm4 =
+  (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 
 const getShowUrl = (url, baseUrl) =>
   url.slice(baseUrl?.length || 0).split('=')[0];
@@ -63,10 +64,10 @@ Request.interceptors.request((request: IRequest) => {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
 
-  if(isDes || isOpenSm4){
-    request.data = requestInterfaceEncrp(request)
+  if (isDes || isOpenSm4) {
+    request.data = requestInterfaceEncrp(request);
   }
- 
+
   return request;
 });
 
@@ -85,16 +86,23 @@ Request.interceptors.response(
       hideLoading();
     }
 
-    const { code, message, functionVersion, signContent } = responseData;
+    const {
+      code,
+      message,
+      functionVersion,
+      signContent,
+      innerMessage,
+      showMessage: _showMessage,
+    } = responseData;
 
-    if(signContent){
-      responseData.result = responseInterfaceDecryp(signContent)
+    if (signContent) {
+      responseData.result = responseInterfaceDecryp(signContent);
     }
     console.log(
       '出参----',
       getShowUrl(responseOptions?.url, responseOptions?.baseURL),
       responseData.result
-    ); 
+    );
 
     //处理清除缓存的操作
     if (functionVersion) {
@@ -133,13 +141,14 @@ Request.interceptors.response(
       return Promise.reject(responseData);
     } else if (code != 0) {
       let showMessage = responseOptions && responseOptions.showMessage;
+      let _message = _showMessage || message || innerMessage;
 
       if (showMessage === undefined) {
         showMessage = true;
       }
 
       if (showMessage) {
-        messageStore.showMessage(message, 3000);
+        messageStore.showMessage(_message, 3000);
       }
 
       return Promise.reject(responseData);
@@ -164,18 +173,24 @@ Request.interceptors.response(
 Request.setConfig((config: any) => {
   config.baseURL = env.baseApi;
   config.header = {
-    hrCode: encryptDes(getSysCode(), 'hrtest22'), 
+    hrCode: encryptDes(getSysCode(), 'hrtest22'),
   };
   //判断是否携带token校验
   if (config.token) {
     config.header['Authorization'] = getToken();
   }
-  if(isOpenSm4){
-    config.header.phsSign = encryptDes( getSysCode() + '_' + new Date().getTime(), 'SkpOe3I1')
-    config.header.phsId = '81681766'
-  }else{
-    config.header.phsSign = encryptDes( getSysCode() + '_' + new Date().getTime(), 'W7ZEgfnv')
-    config.header.phsId = '81681688'
+  if (isOpenSm4) {
+    config.header.phsSign = encryptDes(
+      getSysCode() + '_' + new Date().getTime(),
+      'SkpOe3I1'
+    );
+    config.header.phsId = '81681766';
+  } else {
+    config.header.phsSign = encryptDes(
+      getSysCode() + '_' + new Date().getTime(),
+      'W7ZEgfnv'
+    );
+    config.header.phsId = '81681688';
   }
 
   return config;
@@ -249,44 +264,45 @@ function deepEqualClean(localVersion, newVersion) {
 }
 
 //接口加密
-const requestInterfaceEncrp = (request)=>{
-    //禁止删除
-    console.log( '入参----',
-      getShowUrl(request.url, request.baseURL?.length || 0),
-      request.data
-    );
+const requestInterfaceEncrp = (request) => {
+  //禁止删除
+  console.log(
+    '入参----',
+    getShowUrl(request.url, request.baseURL?.length || 0),
+    request.data
+  );
 
-    const data = JSON.parse(JSON.stringify(request.data));
-    const desData = {
-      args: {},
-      signContent: '',
-      token: data.token,
-    };
-  if(isOpenSm4){
-    desData.signContent = sm4_ecb_encrypt(JSON.stringify(data.args))
-  }else if (isDes) {
+  const data = JSON.parse(JSON.stringify(request.data));
+  const desData = {
+    args: {},
+    signContent: '',
+    token: data.token,
+  };
+  if (isOpenSm4) {
+    desData.signContent = sm4_ecb_encrypt(JSON.stringify(data.args));
+  } else if (isDes) {
     const key = 'reqv3-' + ('0' + new Date().getDate()).slice(-2);
-    desData.signContent = encryptDes(JSON.stringify(data.args), key)
+    desData.signContent = encryptDes(JSON.stringify(data.args), key);
   }
   return desData;
-}
+};
 
-const responseInterfaceDecryp = (signContent)=>{
-  let DecryptData = {}
-    if(isOpenSm4){
-      try{
-        DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
-      }catch(e){
-        DecryptData = sm4_ecb_decrypt(signContent);
-      }
-    }else if (isDes) {
-      const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
-      try{
-        DecryptData = JSON.parse(decryptDes(signContent, key));
-      }catch(e){
-        DecryptData = decryptDes(signContent, key);
-      }
+const responseInterfaceDecryp = (signContent) => {
+  let DecryptData = {};
+  if (isOpenSm4) {
+    try {
+      DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
+    } catch (e) {
+      DecryptData = sm4_ecb_decrypt(signContent);
     }
-    return  DecryptData
-}
+  } else if (isDes) {
+    const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
+    try {
+      DecryptData = JSON.parse(decryptDes(signContent, key));
+    } catch (e) {
+      DecryptData = decryptDes(signContent, key);
+    }
+  }
+  return DecryptData;
+};
 export default Request;

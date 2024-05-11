@@ -109,7 +109,7 @@ export class GStores {
     public globalStore = useGlobalStore()
   ) {}
 
-  getSysAppMore(typeFlag: any): Promise<{ title: string; content: string; }> {
+  getSysAppMore(typeFlag: any): Promise<{ title: string; content: string }> {
     return new Promise((r) => {
       api
         .getSysAppMore({
@@ -353,16 +353,22 @@ export class LoginUtils extends GStores {
    *
    * @returns
    */
-  async getAliOpenid() {
-    const { isSkipPerfect, isAliAuthBase, isAliIndependentDev } =
-      await this.getConfig();
+  async getAliOpenid(
+    payload: {
+      // 手动开启身份证授权
+      isAuth?: boolean;
+    } = {}
+  ) {
+    const { isSkipPerfect, isAliAuthBase } = await this.getConfig();
+    const { isAuth } = payload;
+    const isvAppId = globalGl.systemInfo.isvAlipayAppid;
 
     let encrypData = '';
-    const codeType = (isAliAuthBase === '1' && 1) || 2;
 
-    if (isAliAuthBase === '1') {
-      const isvAppId = globalGl.systemInfo.isvAlipayAppid;
+    const _isAliAuthBase = isAliAuthBase === '1' && isAuth !== true;
+    const codeType = (_isAliAuthBase && 1) || 2;
 
+    if (_isAliAuthBase) {
       const getPhoneNumberOpt: BaseObject = {};
       if (isvAppId) {
         getPhoneNumberOpt.protocols = {
@@ -386,7 +392,7 @@ export class LoginUtils extends GStores {
     // 代开发 带授权身份证 手机号登录
     const { authCode } = await apiAsync(my.getAuthCode, {
       // scopes: 'auth_user',
-      scopes: isAliAuthBase === '1' ? 'auth_base' : 'auth_user',
+      scopes: _isAliAuthBase ? 'auth_base' : 'auth_user',
     });
 
     const accountType = this.globalStore.browser.accountType;
@@ -402,17 +408,32 @@ export class LoginUtils extends GStores {
 
     let url = '';
 
-    if (isAliAuthBase === '1') {
-      url =
-        isAliIndependentDev === '1'
-          ? '/aliUserLogin/alipayTpLoginByPhone'
-          : '/aliUserLogin/getAlipayBaseEncryLogin';
+    // 代开发
+    if (isvAppId) {
+      // 完善? getTPAlipayUserInfoShare
+      if (isSkipPerfect === '1') {
+        url = '/aliUserLogin/getTPAlipayUserInfoShare';
+      } else {
+        url = '/aliUserLogin/alipayTpLoginByPhone';
+      }
     } else {
-      url =
-        isSkipPerfect === '1'
-          ? '/aliUserLogin/alipayLoginByPhone'
-          : '/aliUserLogin/getTPAlipayUserInfoShare';
+      // 自研
+      // url = '/aliUserLogin/alipayLoginByPhone';
+      url = '/aliUserLogin/alipayLoginByPhone';
+      // 完善? 暂无
     }
+
+    // if (_isAliAuthBase) {
+    //   url =
+    //     isAliIndependentDev === '1'
+    //       ? '/aliUserLogin/alipayTpLoginByPhone'
+    //       : '/aliUserLogin/getAlipayBaseEncryLogin';
+    // } else {
+    //   url =
+    //     isSkipPerfect === '1'
+    //       ? '/aliUserLogin/alipayLoginByPhone'
+    //       : '/aliUserLogin/getTPAlipayUserInfoShare';
+    // }
 
     const { result } = await api.allinoneAuthApi<TAliLogin>(
       packageAuthParams(reqArg, url)
@@ -588,7 +609,9 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         mobile,
         userName,
         authPhoneVerify,
-      } = await this.getAliOpenid();
+      } = await this.getAliOpenid({
+        isAuth: true,
+      });
 
       this.userStore.updateCacheUser({
         certNo,

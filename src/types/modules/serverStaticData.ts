@@ -125,6 +125,8 @@ export interface ISystemConfig_ {
     isMedicalQrChoose?: '1';
     /** 开放实名认证(去认证-就诊人列表按钮) */
     realNameAuth?: ('ocrVerify' | 'faceVerify')[];
+    /** 新增就诊人后进行免密代扣授权 */
+    isPayWithoutSecretAuth?: '1';
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
