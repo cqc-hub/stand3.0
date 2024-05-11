@@ -295,6 +295,25 @@ const scJson: Record<string, ISConfig> = {
   1001041: {
     isOpenHomeTabBarMessageBtn: '1',
   },
+
+  /**
+   * 湖州三院
+   */
+  1001040: { 
+    isOpenHomeTabBarNetWorkBtn: '1',
+    medicalMHelp: {
+      wx: {
+        medicalPlugin: '1',
+      },
+
+      alipay: {
+        medicalPlugin: {
+          orgId: { 12694: 'H33050200031' },
+          cardType: '01',
+        },
+      },
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {

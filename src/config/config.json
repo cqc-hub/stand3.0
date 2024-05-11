@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001040",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -171,6 +171,16 @@
       "isOpenOcr": false
     },
 
+    "1001040": {
+      "wxAppid": "wxfa6c5f0835eedf08",
+      "alipayAppid": "",
+      "h5Appid": "wx32db6c8548b011c9",
+      "name": "湖州三院",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
+    },
+
     "1001041": {
       "wxAppid": "wx1b81e5b0858757ba",
       "h5Appid": "",
@@ -221,7 +231,7 @@
       "isOpenOcr": false
     },
 
-    "1001040": {
+    "1001064": {
       "wxAppid": "wx58ffd2c3a557bef0",
       "alipayAppid": "",
       "h5Appid": "",
