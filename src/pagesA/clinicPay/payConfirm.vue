@@ -159,10 +159,10 @@
 
   const getData = async () => {
     await wait(800);
-    if (!pageProps.value.visitNo) {
-      getScanData();
-    } else {
+    if (pageProps.value.visitNo) {
       getNormalData();
+    } else {
+      getScanData();
     }
   };
 

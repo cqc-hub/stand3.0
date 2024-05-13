@@ -198,41 +198,101 @@ export class LoginUtils extends GStores {
     }
   }
 
-  // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
   async faceVerify({ name, idCardNumber }) {
-    // #ifdef MP-WEIXIN
-    return new Promise<{ verifyResult: string }>((resolve, reject) => {
-      wx.checkIsSupportFacialRecognition({
-        checkAliveType: 2,
-        success() {
-          wx.startFacialRecognitionVerify({
-            checkAliveType: 2,
-            name,
-            idCardNumber,
-            success(e) {
-              //识别成功
-              console.warn('识别成功', e);
-              resolve(e);
-            },
-            fail(err) {
-              //识别失败
-              this.messageStore.showMessage('识别失败');
-              console.error('识别失败', err);
-              reject(err);
-            },
-          });
-        },
-
-        fail: (err) => {
-          //不支持人脸检测
-          this.messageStore.showMessage('该设备不支持人脸检测');
-          console.error('该设备不支持人脸检测', err);
-
-          reject(err);
-        },
-      });
-    });
+    let env = 'isWx';
+    // #ifdef MP-ALIPAY
+    env = 'isAli';
     // #endif
+
+    // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
+    if (env === 'isWx') {
+      return new Promise<{ verifyResult: string }>((resolve, reject) => {
+        wx.checkIsSupportFacialRecognition({
+          checkAliveType: 2,
+          success() {
+            wx.startFacialRecognitionVerify({
+              checkAliveType: 2,
+              name,
+              idCardNumber,
+              success(e) {
+                //识别成功
+                console.warn('识别成功', e);
+                resolve(e);
+              },
+              fail(err) {
+                //识别失败
+                this.messageStore.showMessage('识别失败');
+                console.error('识别失败', err);
+                reject(err);
+              },
+            });
+          },
+
+          fail: (err) => {
+            //不支持人脸检测
+            this.messageStore.showMessage('该设备不支持人脸检测');
+            console.error('该设备不支持人脸检测', err);
+
+            reject(err);
+          },
+        });
+      });
+    } else if (env === 'isAli') {
+      // https://opendocs.alipay.com/open/03oebe?pathHash=23ac7ae7&ref=api
+      const {
+        browser: { source },
+      } = this.globalStore;
+      const {
+        result: { url, certifyId, verifyResult },
+      } = await api.alipayFace({
+        source,
+        patientName: name,
+        idCard: idCardNumber,
+        returnUrl: '/',
+        idType: '01',
+      });
+      const { result, resultStatus } = await apiAsync(my.startAPVerify, {
+        url,
+        certifyId,
+      });
+
+      // resultStatus 6001
+      if (result?.certifyId) {
+        return {
+          certifyId,
+          verifyResult,
+        };
+      } else {
+        // 6001 手动返回
+        if (resultStatus !== '6001') {
+          this.messageStore.showMessage('识别失败', 3000);
+        }
+      }
+
+      throw new Error('识别失败');
+    }
+
+    throw new Error('未开通该服务');
+  }
+
+  async faceVerifyAndPData({ name, idCardNumber }) {
+    const {
+      browser: { source },
+    } = this.globalStore;
+
+    const { verifyResult } = await this.faceVerify({ name, idCardNumber });
+
+    const {
+      result: { pdata },
+    } = await api.faceResultAuth({
+      verifyResult,
+      idCard: idCardNumber,
+      source,
+    });
+
+    return {
+      pData: pdata,
+    };
   }
 
   async checkNoPublicOpenId() {

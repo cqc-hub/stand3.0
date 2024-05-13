@@ -16,6 +16,13 @@
             <Address-Box :addressList="addressList" />
           </view>
 
+          <view id="_family" class="container-box g-border mb16 box-padding">
+            <MedRecordFamilyChoose
+              v-model:selFamilyPat="selFamilyPat"
+              :familyList="familyList"
+            />
+          </view>
+
           <view
             v-if="pageConfig.company && pageConfig.company.length"
             class="container-box g-border mb16 box-padding"
@@ -27,10 +34,10 @@
 
                 <view class="mt24 pb32 g-border-bottom">
                   <Sel-Express
+                    v-model:value="expressCompany"
                     :selectLength="3"
                     :list="pageConfig.company"
-                    v-model:value="expressCompany"
-                    column="2"
+                    :column="2"
                   />
                 </view>
               </template>
@@ -464,7 +471,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, watch, nextTick } from 'vue';
+  import { computed, ref, watch, nextTick, provide } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
   import {
@@ -476,10 +483,16 @@
     wait,
     useOcr,
     base64Src,
+    LoginUtils,
   } from '@/utils';
   import { getSrc } from '@/pagesC/medicationAssistant/utils';
   import { getUserShowLabel, useCacheStore } from '@/stores';
-  import { type CaseCopeItemDetail, CACHE_KEY } from './utils/recordApply';
+  import {
+    type CaseCopeItemDetail,
+    CACHE_KEY,
+    TFamilyItem,
+    TFamilyList,
+  } from './utils/recordApply';
   import { getLocalStorage } from '@/common';
   import { NotNullable, XOR, assignType } from '@/typeUtils';
 
@@ -490,6 +503,7 @@
   import RecordCard from './components/RecordCard.vue';
   import AddRecordDialog from './components/MedRecordDetailsAddRecordDialog.vue';
   import PurposeCount from './components/PurposeCount.vue';
+  import MedRecordFamilyChoose from './components/MedRecordFamilyChoose.vue';
 
   type TChoose = XOR<
     { success: true; path: string },
@@ -533,6 +547,10 @@
       });
     });
   };
+  const familyList = ref(<TFamilyList>[]);
+  const selFamilyPat = ref(<TFamilyItem>{});
+  provide('familyList', () => familyList.value);
+  provide('selFamilyPat', () => selFamilyPat.value);
 
   type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
 
@@ -577,6 +595,11 @@
   // 切换院区?
   const isToggleHos = computed(() => {
     return pageConfig.value.isToggleHos === '1';
+  });
+
+  // 家属代申请?
+  const isPatProxy = computed(() => {
+    return pageConfig.value.patProxy === '1';
   });
 
   const photoMode = ref('');
@@ -741,13 +764,13 @@
   const hosList = ref<IHosInfo[]>([]);
   const remark = ref('');
   const recordRows = ref<TRecordRows[]>([
-    // {
-    //   deptName: '科室233',
-    //   admissionTime: '2022-09-19',
-    //   outTime: '2022-09-19',
-    //   visitNo: '233222',
-    //   isOneself: '0',
-    // },
+    {
+      deptName: '科室233',
+      admissionTime: '2022-09-19',
+      outTime: '2022-09-19',
+      visitNo: '233222',
+      isOneself: '0',
+    },
   ]);
 
   const getPayMoneyNum = computed(() => {
@@ -919,6 +942,7 @@
 
   const recordSubmit = (data: TRecordRows) => {
     data.isOneself = '0';
+
     if (isAddDialogEdit.value) {
       recordRows.value[_editRowIndex] = data;
     } else {
@@ -1051,6 +1075,7 @@
       photoConfig,
       selPurposeInRecord,
       isPurposeRadio,
+      patProxyFaceVerify,
     } = pageConfig.value;
     let {
       frontIdCardUrl,
@@ -1180,6 +1205,18 @@
         showMessage('请选择住院记录下的复印份数(不能为0)', 3000);
         return;
       }
+    }
+
+    if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
+      const { patientName: name, idCard: idCardNumber } = selFamilyPat.value;
+      const { pData } = await new LoginUtils().faceVerifyAndPData({
+        name,
+        idCardNumber,
+      });
+
+      console.log(pData);
+
+      // return;
     }
 
     uni.showLoading({
@@ -1389,6 +1426,34 @@
     getConfig();
   };
 
+  const getFamilyList = async () => {
+    const pat = gStores.userStore.patChoose;
+    const { patientName, patientId, idCardEncry } = pat;
+    const { source } = gStores.globalStore.browser;
+
+    let { result } = await api.relatedFamilyInfo({
+      patientId,
+    });
+
+    const {
+      result: { idCard },
+    } = await api.rpGetPlain({
+      source,
+      idCardEncry,
+      patientId,
+    });
+
+    result = result || [];
+
+    result.unshift({
+      ...pat,
+      idCard,
+    });
+
+    selFamilyPat.value = result[0];
+    familyList.value = result;
+  };
+
   const init = async () => {
     await getConfig();
     // 再次申请
@@ -1398,6 +1463,10 @@
 
     if (props.isManual) {
       addRecord();
+    }
+
+    if (isPatProxy.value) {
+      getFamilyList();
     }
   };
 

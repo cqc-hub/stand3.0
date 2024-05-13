@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
   import api from '@/service/api';
-import { LoginUtils } from '@/utils';
+  import { LoginUtils } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
 
@@ -66,7 +66,6 @@ import { LoginUtils } from '@/utils';
       source: 19,
     });
     console.log(pdata);
-
   };
 </script>
 

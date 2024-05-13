@@ -218,6 +218,13 @@ export type CaseCopeItemDetail = Flatten<
 
 export const CACHE_KEY = 'recordApply-list';
 
+export type TFamilyItem = {
+  idCard: string;
+  patientName: string;
+};
+
+export type TFamilyList = TFamilyItem[];
+
 /** 邮政 */
 export const isExpress1 = (item: any): item is Express_1 => {
   return item && item.traceNo;

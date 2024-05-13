@@ -8,14 +8,7 @@
     <g-popup :title="title" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
-          <Pat-List :isShowAll="isShowAll" @choose-pat="actionSheetItemClick" />
-        </view>
-
-        <view class="add-pat-box">
-          <view class="add-pat g-flex-rc-cc" @click="goAddPat">
-            <view class="iconfont icon-resize f48">&#xe6ab;</view>
-            <text class="f32">添加就诊人</text>
-          </view>
+          <Family-Choose-Pat-List @choose-pat="actionSheetItemClick" />
         </view>
       </view>
     </g-popup>
@@ -28,7 +21,7 @@
   import { IPat } from '@/stores';
   import globalGl from '@/config/global';
 
-  import PatList from './choose-pat-list.vue';
+  import FamilyChoosePatList from './FamilyChoosePatList1.vue';
 
   export default defineComponent({
     emits: ['choose-pat'],
@@ -39,28 +32,14 @@
         default: '更换就诊人',
       },
 
-      isShowAddPatBtn: {
-        type: Boolean,
-        default: true,
-      },
-
-      autoStore: {
-        type: Boolean,
-        default: false,
-      },
-
-      isShowAll: {
-        type: Boolean,
-        default: false,
-      },
-
       pat: {
         type: Object as PropType<IPat>,
       },
     },
 
     components: {
-      PatList,
+      // PatList,
+      FamilyChoosePatList,
     },
 
     setup(props, ctx) {
@@ -69,9 +48,6 @@
       const actionSheetItemClick = (e: { index: number; item: IPat }) => {
         actionSheet.value.hide();
 
-        if (props.autoStore && e.item.patientId) {
-          gStores.userStore.updatePatChoose(e.item);
-        }
         ctx.emit('choose-pat', e);
       };
 
@@ -81,24 +57,12 @@
         }
       };
 
-      const goAddPat = () => {
-        actionSheet.value.hide();
-        const pages = getCurrentPages();
-        const fullPathNow = (pages[pages.length - 1] as any).$page
-          .fullPath as string;
-
-        uni.navigateTo({
-          url:
-            globalGl.addPersonUrl + '?_url=' + encodeURIComponent(fullPathNow),
-        });
-      };
 
       return {
         actionSheet,
         actionSheetItemClick,
         show,
         gStores,
-        goAddPat,
       };
     },
   });

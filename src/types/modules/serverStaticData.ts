@@ -1,4 +1,3 @@
-
 import { type XOR } from '@/typeUtils';
 import { MEDICAL_PHOTOS } from '@/static/staticData';
 
@@ -158,11 +157,15 @@ export interface ISystemConfig_ {
     isOcrSfz?: '1';
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */
     requireSfz?: string[];
-
     /** 按照业务类型配置需要上传的证件(设置后 sfz 参数将无效) */
     photoConfig?: {
       modes: IMedicalPhotoMode[];
     };
+
+    // 病案代理申请(选择家属代办)
+    patProxy?: '1';
+    // patProxy 时候开启人脸
+    patProxyFaceVerify?: '1';
 
     /** 复印目的 不配置使用原来的那几个目的 */
     purpose?: string[];
