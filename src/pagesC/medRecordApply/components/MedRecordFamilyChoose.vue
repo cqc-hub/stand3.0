@@ -6,7 +6,7 @@
     class="choose"
   >
     <view class="choose-row">
-      <view class="g-bold f36">代办人</view>
+      <view class="g-bold f36">办理人</view>
 
       <view
         v-if="patList().length > 1"
@@ -33,11 +33,6 @@
         {{ `${selFamilyPat.idCard}` }}
       </text>
     </view>
-    <Choose-Pat
-      @choose-pat="choosePatHandler"
-      title="选择代办人"
-      ref="actionSheet"
-    />
   </view>
 </template>
 
@@ -47,11 +42,8 @@
   import { GStores } from '@/utils';
   import { TFamilyItem, TFamilyList } from '../utils/recordApply';
 
-  import ChoosePat from './FamilyChooseAction.vue';
-
   const gStores = new GStores();
-  const actionSheet = ref<InstanceType<typeof ChoosePat>>();
-  const emits = defineEmits(['choose-pat', 'update:selFamilyPat']);
+  const emits = defineEmits(['choose-pat', 'show-family-action']);
   const isClose = ref(true);
   const props = defineProps<{
     selFamilyPat: TFamilyItem;
@@ -59,22 +51,10 @@
   }>();
 
   const chooseAction = () => {
-    if (actionSheet.value) {
-      actionSheet.value.show();
-    }
+    emits('show-family-action');
   };
 
   const patList = inject('familyList', () => <TFamilyList>[]);
-
-  const choosePatHandler = ({
-    item,
-  }: {
-    item: TFamilyItem;
-    number: number;
-  }) => {
-    emits('update:selFamilyPat', item);
-    emits('choose-pat', { item });
-  };
 </script>
 
 <style lang="scss" scoped>

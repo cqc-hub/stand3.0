@@ -20,6 +20,7 @@
             <MedRecordFamilyChoose
               v-model:selFamilyPat="selFamilyPat"
               :familyList="familyList"
+              @show-family-action="showFamilyAction"
             />
           </view>
 
@@ -414,6 +415,12 @@
       />
       <!-- #endif -->
 
+      <Choose-Pat
+        @choose-pat="choosePatHandler"
+        title="选择办理人"
+        ref="familyActionSheet"
+      />
+
       <Add-Record-Dialog
         v-model:value="addDialogValue"
         :title="addDialogTitle"
@@ -504,6 +511,7 @@
   import AddRecordDialog from './components/MedRecordDetailsAddRecordDialog.vue';
   import PurposeCount from './components/PurposeCount.vue';
   import MedRecordFamilyChoose from './components/MedRecordFamilyChoose.vue';
+  import ChoosePat from './components/FamilyChooseAction.vue';
 
   type TChoose = XOR<
     { success: true; path: string },
@@ -549,8 +557,17 @@
   };
   const familyList = ref(<TFamilyList>[]);
   const selFamilyPat = ref(<TFamilyItem>{});
+  const familyActionSheet = ref<InstanceType<typeof ChoosePat>>();
   provide('familyList', () => familyList.value);
   provide('selFamilyPat', () => selFamilyPat.value);
+  const choosePatHandler = ({ item }) => {
+    selFamilyPat.value = item;
+  };
+  const showFamilyAction = () => {
+    if (familyActionSheet.value) {
+      familyActionSheet.value.show();
+    }
+  };
 
   type TRecordRows = NotNullable<CaseCopeItemDetail['_outInfo']>[number];
 
