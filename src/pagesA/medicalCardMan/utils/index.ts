@@ -39,7 +39,7 @@ export type TCardPat = {
   patientName: string;
   idTypeName: string;
   idCard: string;
-}
+};
 
 export type FormKey = typeof formKey;
 
@@ -514,25 +514,29 @@ export const loginAuthAlipay = async (init: Function) => {
   const gStores = new GStores();
 
   const { cacheUser, patList } = gStores.userStore;
-  const { userName } = cacheUser;
-  if (!userName && !patList.length) {
-    // #ifdef MP-ALIPAY
-    await new AliPayLoginHandler().handlerAuth().catch((e) => {
-      gStores.messageStore.showMessage(
-        '授权获取用户数据失败, 请重新进入授权',
-        3000,
-        {
-          closeCallBack() {
-            uni.reLaunch({
-              url: '/pages/home/my',
-            });
-          },
-        }
-      );
-      throw new Error(e);
-    });
+  console.log(cacheUser, 'cacheUsercacheUser');
+
+  const { userName, certNo } = cacheUser;
+  // #ifdef MP-ALIPAY
+  if (!certNo) {
+    await new AliPayLoginHandler()
+      .handlerAuth({ onlyLogin: true })
+      .catch((e) => {
+        gStores.messageStore.showMessage(
+          '授权获取用户数据失败, 请重新进入授权',
+          3000,
+          {
+            closeCallBack() {
+              uni.reLaunch({
+                url: '/pages/home/my',
+              });
+            },
+          }
+        );
+        throw new Error(e);
+      });
 
     init && init();
-    // #endif
   }
+  // #endif
 };

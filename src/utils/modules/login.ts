@@ -480,9 +480,9 @@ export class LoginUtils extends GStores {
     if (isvAppId) {
       // 完善? getTPAlipayUserInfoShare
       if (isSkipPerfect === '1') {
-        url = '/aliUserLogin/getTPAlipayUserInfoShare';
-      } else {
         url = '/aliUserLogin/alipayTpLoginByPhone';
+      } else {
+        url = '/aliUserLogin/getTPAlipayUserInfoShare';
       }
     } else {
       // 自研

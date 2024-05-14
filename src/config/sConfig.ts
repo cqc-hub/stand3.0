@@ -119,7 +119,7 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
-    isOpenAlipayFollow:'81fa167551234b1f8585325f56bd6726'
+    isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
   },
 
   /**
@@ -130,7 +130,7 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
-    isOpenAlipayFollow:'81fa167551234b1f8585325f56bd6726'
+    isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
   },
 
   1001065: {
@@ -295,7 +295,7 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 湖州三院
    */
-  1001040: { 
+  1001040: {
     isOpenHomeTabBarNetWorkBtn: '1',
     medicalMHelp: {
       wx: {
@@ -308,6 +308,15 @@ const scJson: Record<string, ISConfig> = {
           cardType: '01',
         },
       },
+    },
+  },
+
+  /**
+   * 绍兴人民
+   */
+  1001046: {
+    login: {
+      // isAliAuthBase: '1',
     },
   },
 };
