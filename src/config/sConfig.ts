@@ -151,6 +151,9 @@ const scJson: Record<string, ISConfig> = {
    */
   1001060: {
     isOpenHelpOld: '1',
+    login: {
+      isAliAuthBase: '1',
+    },
     medicalMHelp: {
       // isOpenPatToMedicalPat: {},
       alipay: {

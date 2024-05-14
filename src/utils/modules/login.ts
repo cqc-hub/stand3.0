@@ -452,11 +452,6 @@ export class LoginUtils extends GStores {
       encrypData = resPhone.response;
     }
 
-    console.log({
-      // scopes: 'auth_user',
-      scopes: _isAliAuthBase ? 'auth_base' : 'auth_user',
-    }, 233);
-
     // 代开发 带授权身份证 手机号登录
     const { authCode } = await apiAsync(my.getAuthCode, {
       // scopes: 'auth_user',
@@ -479,16 +474,18 @@ export class LoginUtils extends GStores {
     // 代开发
     if (isvAppId) {
       // 完善? getTPAlipayUserInfoShare
-      if (isSkipPerfect === '1') {
-        url = '/aliUserLogin/alipayTpLoginByPhone';
+      if (_isAliAuthBase) {
+        url = '/aliUserLogin/getAlipayBaseEncryLogin'; // 代开发完善
+      } else if (isSkipPerfect === '1') {
+        url = '/aliUserLogin/alipayTpLoginByPhone'; // 代开发非完善
       } else {
-        url = '/aliUserLogin/getTPAlipayUserInfoShare';
+        url = '/aliUserLogin/getTPAlipayUserInfoShare'; // 代开发完善
       }
     } else {
-      // 自研
-      // url = '/aliUserLogin/alipayLoginByPhone';
-      url = '/aliUserLogin/alipayLoginByPhone';
-      // 完善? 暂无
+      url = '/aliUserLogin/alipayLoginByPhone'; // 自研非完善
+
+      // 完善暂无自研
+      // Base授权登录暂无自研 - 支付宝手机号密文和Base授权登录  /aliUserLogin/getAlipayBaseEncryLogin
     }
 
     // if (_isAliAuthBase) {
