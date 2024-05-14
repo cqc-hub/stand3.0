@@ -64,6 +64,9 @@ Request.interceptors.request((request: IRequest) => {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
 
+  // @ts-expect-error
+  request._data = request.data;
+
   if (isDes || isOpenSm4) {
     request.data = requestInterfaceEncrp(request);
   }
@@ -98,11 +101,11 @@ Request.interceptors.response(
     if (signContent) {
       responseData.result = responseInterfaceDecryp(signContent);
     }
-    console.log(
-      '出参----',
-      getShowUrl(responseOptions?.url, responseOptions?.baseURL),
-      responseData.result
-    );
+    console.log('%c' + getShowUrl(responseOptions?.url, responseOptions?.baseURL), 'color: red;font-size: 16px;');
+
+    // @ts-expect-error
+    console.log('入参----', responseOptions?._data);
+    console.log('出参----', responseData.result);
 
     //处理清除缓存的操作
     if (functionVersion) {

@@ -260,10 +260,8 @@
                         'color-blue': item.flag === 'L',
                       }"
                     >
-                      {{
-                        (item.flag && item.flag.includes('阳') && item.flag) ||
-                        item.itemVal
-                      }}
+                     <text class="text-no-wrap"> {{ item.itemVal }}</text>
+                      {{ item.flag && item.flag.includes('阳') && item.flag || '' }}
                       <text class="color-blue" v-if="item.flag == 'L'">↓</text>
                       <text class="color-danger" v-if="item.flag == 'H'">
                         ↑

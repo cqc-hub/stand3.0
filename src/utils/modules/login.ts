@@ -251,14 +251,17 @@ export class LoginUtils extends GStores {
         returnUrl: '/',
         idType: '01',
       });
-      const { result, resultStatus } = await apiAsync(my.startAPVerify, {
+      const res = await apiAsync(my.startAPVerify, {
         url,
         certifyId,
       });
 
+      const { result, resultStatus } = res;
+
       // resultStatus 6001
-      if (result?.certifyId) {
+      if (resultStatus === '9000') {
         return {
+          ...result,
           certifyId,
           verifyResult,
         };

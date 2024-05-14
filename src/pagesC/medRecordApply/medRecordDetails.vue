@@ -1224,18 +1224,6 @@
       }
     }
 
-    if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
-      const { patientName: name, idCard: idCardNumber } = selFamilyPat.value;
-      const { pData } = await new LoginUtils().faceVerifyAndPData({
-        name,
-        idCardNumber,
-      });
-
-      console.log(pData);
-
-      // return;
-    }
-
     uni.showLoading({
       mask: true,
       title: '上传证件中...',
@@ -1330,6 +1318,9 @@
       payType: '',
       subopenId: '',
       visitDate: '',
+      pdata: '',
+      facialValidateIdCard: '',
+      facialValidateName: '',
     };
 
     // #ifdef  MP-WEIXIN
@@ -1341,6 +1332,18 @@
     args.userId = gStores.globalStore.openId;
     args.payType = '38';
     // #endif
+
+    if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
+      const { patientName: name, idCard: idCardNumber } = selFamilyPat.value;
+      const { pData } = await new LoginUtils().faceVerifyAndPData({
+        name,
+        idCardNumber,
+      });
+
+      args.pdata = pData;
+      args.facialValidateName = name;
+      args.facialValidateIdCard = idCardNumber;
+    }
 
     const { result } = await api.copyOfCasePay<{
       phsOrderNo: string;

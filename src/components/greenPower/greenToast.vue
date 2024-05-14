@@ -26,7 +26,7 @@
 
   const props = withDefaults(
     defineProps<{
-      content: number;
+      content: string;
       contentTitle: string;
       duration?: number;
     }>(),
