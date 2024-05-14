@@ -151,6 +151,7 @@
   const selWaitRegSch = ref('');
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
+  const isOverLimit = ref('');
 
   // 候补挂号?
   const isWaitReg = computed(() => {
@@ -269,6 +270,7 @@
       resType,
       promptMessage,
       thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
+      ageReminderCode:isOverLimit.value,
     };
 
     let alipayAuthCode = '';
@@ -284,7 +286,7 @@
 
     let {
       result: { orderId, hasCharge, hint },
-    } = await api.addReg(requestArg).catch((e) => {
+    } = await api.addReg(requestArg).catch(async (e) => {
       if (e) {
         const { respCode, message, code } = e;
 
@@ -293,6 +295,9 @@
           gStores.messageStore.closeMessage();
           preventOrderStr.value = message;
           isPreventOrder.value = true;
+        } else if (respCode === 999227) {
+          //超限就诊提示
+          OverlimiMessage(e)
         } else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
@@ -358,6 +363,20 @@
         thRegisterId,
       }),
     });
+  };
+
+  const OverlimiMessage = async (e) => {
+    const { respCode, message } = e;
+    const { cancel } = await apiAsync(uni.showModal, {
+      content: message,
+      cancelText: '继续预约',
+      confirmText: '暂不预约',
+    });
+
+    if (cancel) {
+      isOverLimit.value = respCode
+      regConfirm();
+    }
   };
 
   const goPay = () => {
