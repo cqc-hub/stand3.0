@@ -252,6 +252,8 @@
         }
       }
     } else {
+      console.log('cqcsss');
+
       await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
         const { respCode, message } = e;
         const { idCard, patientPhone, patientName, idType } = formData.value;

@@ -452,6 +452,11 @@ export class LoginUtils extends GStores {
       encrypData = resPhone.response;
     }
 
+    console.log({
+      // scopes: 'auth_user',
+      scopes: _isAliAuthBase ? 'auth_base' : 'auth_user',
+    }, 233);
+
     // 代开发 带授权身份证 手机号登录
     const { authCode } = await apiAsync(my.getAuthCode, {
       // scopes: 'auth_user',

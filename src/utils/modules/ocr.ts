@@ -95,13 +95,15 @@ const getAliPayBase64ImageByUrl = function (
         imgCanvas.value.imgWidth = width;
         imgCanvas.value.imgHeight = height;
         let canvas = my.createCanvasContext('canvasForBase64');
-        canvas.drawImage(imagePath, 0, 0, width, height); // 1. 绘制图片至canvas
+        canvas.drawImage(imagePath, 0, 0); // 1. 绘制图片至canvas
+
         // 绘制完成后执行回调
         canvas.draw(false, async () => {
           let base64 = await canvas.toDataURL({
             width,
             height,
-            quality: 1,
+            // quality: 0.5,
+            fileType: 'jpg',
           });
 
           resolve({
