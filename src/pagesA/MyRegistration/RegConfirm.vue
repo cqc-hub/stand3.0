@@ -145,7 +145,7 @@
   const flagTitle9 = ref('');
   const greenToastDuration = ref(1500);
   const contentTitle = ref('');
-  const greenToastContent = ref(0);
+  const greenToastContent = ref('');
   const alipayPid = global.systemInfo.alipayPid;
   const waitRegSchSecondResultList = ref(<TSchInfo[]>[]);
   const selWaitRegSch = ref('');
