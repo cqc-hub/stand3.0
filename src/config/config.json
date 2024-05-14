@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001058",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -156,8 +156,9 @@
 
     "1001058": {
       "wxAppid": "wx86a78f7ced7dc55f",
-      "alipayAppid": "2021003173633521",
+      "alipayAppid": "2021004144623038",
       "h5Appid": "wxc5f0f8f426249352",
+      "isvAlipayAppid": "2021004143660150",
       "name": "濮阳市人民医院",
       "isSearchInHos": true,
       "isOpenOcr": false,
@@ -173,8 +174,9 @@
 
     "1001040": {
       "wxAppid": "wxfa6c5f0835eedf08",
-      "alipayAppid": "",
+      "alipayAppid": "2021002143620963",
       "h5Appid": "wx32db6c8548b011c9",
+      "isvAlipayAppid": "2021002147662292",
       "name": "湖州三院",
       "isSearchInHos": false,
       "isStartComeTest": true,
