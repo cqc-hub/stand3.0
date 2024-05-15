@@ -140,9 +140,17 @@ export interface ISystemConfig_ {
     isGuardianWithIdCard?: number;
     // 不需要地址
     isDropAddress?: '1';
-    /** 仅微信, 支付宝 手动 config.json 配置 isOpenOcr */
+    /**
+     * 仅微信, 支付宝 手动 config.json 配置 isOpenOcr
+     * 情况有变, 支付宝 也可以直接在这儿(但目前没做), 需要开通 https://b.alipay.com/page/product-workspace/product-detail/I1080300001000043632
+     * 支付宝基本申请开了之后也会同时支持人脸
+     */
     ocr?: '0' | '1';
     isFace?: '1';
+
+    // 修改建党手机号 pagesA/medicalCardMan/ocrUser
+    isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个
+    useFaceVerifyInChangePhone?: '1'; // 使用人脸认证, 否则使用 ocr 认证
   };
 
   // 病案

@@ -101,7 +101,7 @@ Request.interceptors.response(
     if (signContent) {
       responseData.result = responseInterfaceDecryp(signContent);
     }
-    console.log('%c' + getShowUrl(responseOptions?.url, responseOptions?.baseURL), 'color: red;font-size: 16px;');
+    console.warn(getShowUrl(responseOptions?.url, responseOptions?.baseURL));
 
     // @ts-expect-error
     console.log('入参----', responseOptions?._data);

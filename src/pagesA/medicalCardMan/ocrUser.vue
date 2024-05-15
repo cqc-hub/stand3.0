@@ -7,7 +7,7 @@
   >
     <g-flag isShowFg typeFg="79" />
     <view class="container" scroll-y>
-      <view class="sfz-container m32">
+      <view v-if="!isUseFaceVerify" class="sfz-container m32">
         <image
           :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
           @click="chooseIdCard"
@@ -41,16 +41,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick } from 'vue';
+  import { onMounted, ref, nextTick, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common/utils';
-  import { GStores, useOcr, base64Src } from '@/utils';
+  import {
+    GStores,
+    useOcr,
+    base64Src,
+    ServerStaticData,
+    ISystemConfig,
+    LoginUtils,
+  } from '@/utils';
   import { pickTempItem } from './utils';
 
   import api from '@/service/api';
 
   const gStores = new GStores();
+  const pageConfig = ref(<ISystemConfig['person']>{});
   const pageProps = ref(
     <
       {
@@ -69,13 +77,65 @@
     imgHeight: 0,
   });
   const isComplete = ref(false);
+  const isUseFaceVerify = computed(
+    () => pageConfig.value.useFaceVerifyInChangePhone === '1'
+  );
 
   const formData = ref<BaseObject>({
     // idType: '01',
+    patientName: '',
+    patientPhone: '',
+    idCard: '',
     idCardOcrEn: '',
     patientNameOcrEn: '',
   });
   const formSubmit = async () => {
+    if (gStores.globalStore.sysCode === '1001054') {
+      await dealSubmitWithXY();
+    } else {
+      await dealSubmit();
+
+      return;
+    }
+
+    gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
+      closeCallBack() {
+        uni.navigateBack({
+          delta: 1,
+        });
+      },
+    });
+  };
+
+  const dealSubmit = async () => {
+    const { patientName, idCard, idType, patientPhone } = formData.value;
+    const { source } = gStores.globalStore.browser;
+
+    const args = {
+      idCard,
+      idType,
+      patientName,
+      patientPhone,
+      source,
+      pdata: '',
+    };
+
+    if (isUseFaceVerify.value) {
+      const { pData } = await new LoginUtils().faceVerifyAndPData({
+        name: patientName,
+        idCardNumber: idCard,
+      });
+
+      args.pdata = pData;
+
+      return await api.mofHosPhone(args);
+    }
+
+    throw new Error('未实现 ocr 功能');
+  };
+
+  // 咸阳老逻辑, 单独处理, 是 ocr 的
+  const dealSubmitWithXY = async () => {
     const { source } = gStores.globalStore.browser;
 
     const requestArg = {
@@ -90,14 +150,6 @@
     // #ifdef MP-WEIXIN
     await api.modifyHosPhoneByIdNum(requestArg);
     // #endif
-
-    gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
-      closeCallBack() {
-        uni.navigateBack({
-          delta: 1,
-        });
-      },
-    });
   };
 
   const chooseIdCard = async () => {
@@ -140,9 +192,9 @@
       const { key } = o;
 
       o.disabled = true;
-      o.placeholder = '上传身份证自动填入';
+      o.placeholder = ' ';
 
-      if (key == 'idCard') {
+      if (key == 'idCard' && !isUseFaceVerify.value) {
         o.validator = async (v) => {
           if (!isComplete.value) {
             return {
@@ -172,8 +224,9 @@
     });
   };
 
-  onLoad((opt) => {
+  onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
   });
 
   onMounted(() => {

@@ -210,7 +210,7 @@
     }
     // #endif
 
-    const { isFace, isPayWithoutSecretAuth } =
+    const { isFace, isPayWithoutSecretAuth, isCanChangeHosPhone } =
       await ServerStaticData.getSystemConfig('person');
 
     if (isFace === '1') {
@@ -256,7 +256,11 @@
         const { respCode, message } = e;
         const { idCard, patientPhone, patientName, idType } = formData.value;
 
-        if (respCode === 884801 && idType === '01' && (await isOpenOcr())) {
+        if (
+          respCode === 884801 &&
+          idType === '01' &&
+          isCanChangeHosPhone === '1'
+        ) {
           gStores.messageStore.closeMessage();
 
           const { confirm } = await apiAsync(uni.showModal, {
