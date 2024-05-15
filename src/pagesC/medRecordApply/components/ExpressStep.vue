@@ -76,7 +76,7 @@
       };
 
       expressNo: string;
-      expressCompany: 1 | 2; // 快递公司1-顺丰快递  2-邮政
+      expressCompany: any; // 快递公司1-顺丰快递  2-邮政
     }>(),
     {
       pointEnd: () => ({

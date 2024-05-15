@@ -84,6 +84,7 @@ export interface ISystemConfig_ {
     regListItemCustomButtons: TRegListButtonItem[];
     // 可以筛选 在线/全部 挂号?  设置后 列表, 详情 接口也会变更
     isCanSelOrderStatus?: '1';
+    selOrderStatusDefault?: '1'; //isCanSelOrderStatus 开启后 设置默认挂号状态为全部挂号
 
     /** 搜索 */
     // 热门搜索
@@ -148,7 +149,7 @@ export interface ISystemConfig_ {
     ocr?: '0' | '1';
     isFace?: '1';
 
-    // 修改建党手机号 pagesA/medicalCardMan/ocrUser
+    // 修改建档手机号 pagesA/medicalCardMan/ocrUser
     isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个
     useFaceVerifyInChangePhone?: '1'; // 使用人脸认证, 否则使用 ocr 认证
   };

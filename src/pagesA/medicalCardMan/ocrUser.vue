@@ -94,8 +94,6 @@
       await dealSubmitWithXY();
     } else {
       await dealSubmit();
-
-      return;
     }
 
     gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
@@ -153,7 +151,10 @@
   };
 
   const chooseIdCard = async () => {
-    const res = await useOcr(true);
+    const res = await useOcr(true, {
+      aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
+      imgCanvas,
+    });
     const { image, name, idCard, idCardOcrEn, patientNameOcrEn } = res;
 
     let iswx = false;
