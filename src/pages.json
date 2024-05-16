@@ -137,7 +137,6 @@
           }
         },
 
-
         {
           "path": "hospitalCare/payConfirm",
           "style": {
@@ -357,6 +356,16 @@
 
         {
           "path": "medicalCardMan/scanUser",
+          "style": {
+            "navigationBarTitleText": "添加就诊人"
+          }
+        },
+
+        {
+          "path": "medicalCardMan/scanUserAdd",
+          "extend": {
+            "login": true
+          },
           "style": {
             "navigationBarTitleText": "添加就诊人"
           }
@@ -724,7 +733,6 @@
             "navigationBarTitleText": "医院主页"
           }
         }
-
       ]
     }
   ],

@@ -398,7 +398,7 @@
       // });
 
       // useTBanner(healthRecord)
-      useTBanner(我的收藏);
+      useTBanner(historyAnaesthesia);
     }, 1000);
   });
 </script>
