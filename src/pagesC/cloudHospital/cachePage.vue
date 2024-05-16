@@ -7,7 +7,6 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
-
   import { useGlobalStore } from '@/stores';
   import {
     encryptDes,
@@ -141,9 +140,16 @@
         return;
       }
       if (insuranceParamsWx.payAppId) {
-        uni.navigateToMiniProgram({
-          appId: insuranceParamsWx.payAppId,
-          path: insuranceParamsWx.payUrl,
+          uni.showModal({
+            content: '即将打开医保支付小程序',
+            showCancel: false,
+            confirmText: '确定',
+            complete:  () => {
+              uni.navigateToMiniProgram({
+              appId: insuranceParamsWx.payAppId,
+              path: insuranceParamsWx.payUrl,
+          });
+          },
         });
       }
     }
