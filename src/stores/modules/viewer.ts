@@ -77,7 +77,7 @@ const viewerStore = defineStore('viewer', {
     },
 
     homeSearchPlaceholder(): string {
-      return this.viewConfig[0]?.showFlag == 1
+      return this.viewConfig[8]?.showFlag == 1
         ? '搜索科室、医生或疾病'
         : '搜索疾病、症状或药品';
     },
