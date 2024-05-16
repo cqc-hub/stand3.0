@@ -357,7 +357,7 @@
         {
           "path": "medicalCardMan/scanUser",
           "style": {
-            "navigationBarTitleText": "添加就诊人"
+            "navigationBarTitleText": "腕带扫码"
           }
         },
 
@@ -367,7 +367,7 @@
             "login": true
           },
           "style": {
-            "navigationBarTitleText": "添加就诊人"
+            "navigationBarTitleText": "腕带扫码"
           }
         },
 
