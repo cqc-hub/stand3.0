@@ -665,6 +665,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  mofHosPhone: (data) =>
+    service.post('/phs-user/rePat/mofHosPhone', parm(data), {
+      hideLoading: false,
+    }),
+
   modifyHosPhoneByIdNum: (data) =>
     service.post(
       '/phs-user/relevantPatient/modifyHosPhoneByIdNum',

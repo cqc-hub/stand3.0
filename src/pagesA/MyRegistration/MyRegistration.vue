@@ -339,7 +339,8 @@
   const getConfig = async () => {
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
-    const { isHosNavigation, isQueuing, isFWBtn } = orderConfig.value;
+    const { isHosNavigation, isQueuing, isFWBtn, selOrderStatusDefault } =
+      orderConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;
@@ -354,8 +355,8 @@
     }
 
     if (isShowFilterOrderStatus.value) {
-      selOrderStatus.value = '';
-      // selOrderStatus.value = '1';
+      // '1' 全部挂号 '' 在线挂号
+      selOrderStatus.value = selOrderStatusDefault === '1' ? '1' : '';
     }
   };
 
@@ -444,17 +445,23 @@
   });
 
   const selPatName = computed(() => {
-    return patList.value.find((o) => o.patientId === selPatId.value)
-      ?._showLabel;
+    return (
+      patList.value.find((o) => o.patientId === selPatId.value)?._showLabel ||
+      ''
+    );
   });
 
   const selStatusName = computed(() => {
-    return statusList.value.find((o) => o.value === selStatus.value)?.label;
+    return (
+      statusList.value.find((o) => o.value === selStatus.value)?.label || ''
+    );
   });
 
   const selOrderStatusName = computed(() => {
-    return orderStatusList.value.find((o) => o.value === selOrderStatus.value)
-      ?.label;
+    return (
+      orderStatusList.value.find((o) => o.value === selOrderStatus.value)
+        ?.label || ''
+    );
   });
 
   const showList = computed(() => {

@@ -113,7 +113,7 @@
   });
 
   onLoad(async () => {
-    gStores.getSysAppMore('1123').then(({ content: _content }) => {
+    gStores.getSysAppMore('1203').then(({ content: _content }) => {
       content.value = _content;
     });
   });

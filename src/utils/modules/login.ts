@@ -418,7 +418,9 @@ export class LoginUtils extends GStores {
    */
   async getAliOpenid(
     payload: {
-      // 手动开启身份证授权
+      /**
+       * 无视配置开启身份证授权
+       */
       isAuth?: boolean;
     } = {}
   ) {

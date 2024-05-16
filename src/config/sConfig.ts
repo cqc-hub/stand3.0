@@ -58,7 +58,7 @@ interface ISConfig {
 
     alipay?: {
       /** [医保插件模式](https://adccloud.yuque.com/adccloud/abilitywarehouse/kc7ro5?#AbvRt)
-       *
+       *  省内项目 都是医保插件模式
        * 踩坑
        * - 体验环境验证正常后准备发布生产务必 环境切换后重新启动项目(否则不会自动切换插件环境)
        */
