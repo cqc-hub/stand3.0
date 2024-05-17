@@ -29,6 +29,7 @@ export const sysConfigEnv = <const>{
   //   },
   // },
   'medRecord.0.isCustomPatRecord': '1',
+  'order.orderRegBtnLabel': '预约',
 };
 
 export const apiConfigEnv = <const>{};

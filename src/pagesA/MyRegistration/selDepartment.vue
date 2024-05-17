@@ -58,6 +58,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShareAppMessage, onLoad } from '@dcloudio/uni-app';
+  import { deepClone } from '@/common/utils';
 
   import {
     GStores,
@@ -66,8 +67,8 @@
     generateUuid,
     useTBanner,
     type ISystemConfig,
+    wait,
   } from '@/utils';
-  import { deepClone } from '@/common/utils';
   import {
     joinQuery,
     joinQueryForUrl,
@@ -119,45 +120,44 @@
       deptDialogBtnCannel = undefined;
     }
 
-    if (props.noTipDialog !== '1') {
-      setTimeout(async () => {
-        const { title, content } = await gStores.getSysAppMore('8');
-
-        const cancelText = deptDialogBtnCannel?.label;
-        const confirmText = cancelText ? '继续预约' : '确定';
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            title,
-            isShowCancel: !!deptDialogBtnCannel,
-            cancelText,
-            confirmText,
-            cancelColor: '#296FFF',
-          },
-          closeCallBack({ confirm, maskClose }) {
-            if (!confirm && !maskClose) {
-              const { key } = deptDialogBtnCannel!;
-
-              if (key === '0') {
-                uni.navigateTo({
-                  url: joinQueryForUrl(
-                    '/pagesC/hospitalAccount/hospitalAccount',
-                    {
-                      hosId: hosId.value,
-                      type: 'fromSelDepartment',
-                    }
-                  ),
-                });
-              }
-            }
-          },
-        });
-      }, 500);
-    }
-
     orderConfig.value = data;
     if (hosId.value) {
-      getDepList();
+      await getDepList();
+    }
+
+    if (props.noTipDialog !== '1') {
+      await wait(500);
+      const { title, content } = await gStores.getSysAppMore('8');
+
+      const cancelText = deptDialogBtnCannel?.label;
+      const confirmText = cancelText ? '继续预约' : '确定';
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: !!deptDialogBtnCannel,
+          cancelText,
+          confirmText,
+          cancelColor: '#296FFF',
+        },
+        closeCallBack({ confirm, maskClose }) {
+          if (!confirm && !maskClose) {
+            const { key } = deptDialogBtnCannel!;
+
+            if (key === '0') {
+              uni.navigateTo({
+                url: joinQueryForUrl(
+                  '/pagesC/hospitalAccount/hospitalAccount',
+                  {
+                    hosId: hosId.value,
+                    type: 'fromSelDepartment',
+                  }
+                ),
+              });
+            }
+          }
+        },
+      });
     }
 
     // 处理 智能导诊逻辑 当path为 zndz 时 根据接口获取path

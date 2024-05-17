@@ -26,7 +26,7 @@
             }"
             class="btn btn-primary btn-reg"
           >
-            挂号
+            {{ pageConfig.orderRegBtnLabel || '挂号' }}
           </button>
 
           <button

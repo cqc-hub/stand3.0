@@ -92,7 +92,7 @@
   const props = withDefaults(
     defineProps<{
       list: IDeptLv1[];
-      level: '1' | '2' | '3'; //  科室列表层级 1、一级科室 2、二级科室 3、三级科室
+      level: string; //  科室列表层级 1、一级科室 2、二级科室 3、三级科室
       lineColor?: string;
       activeLv1: IDeptLv1;
       activeLv2: IDeptLv2;
