@@ -4,6 +4,7 @@
       <image mode="aspectFit" class="cache-img" :src="BASE_IMG + 'img_h5bg@3x.png'" />
     </view>
     <view v-if="!$global.systemInfo.isHideHomeLogo" class="cache-fixbottom"> 浙江和仁科技股份有限公司@技术支持 </view>
+    <g-message />
   </view>
 </template>
 
@@ -27,14 +28,13 @@ const gotoNext = (options) => {
   }, 1000);
 };
 onShow(async () => {
-  console.warn("网络医院授权回来", gStores.globalStore.appShowData,getLocalStorage("get-wx-medical-auth-code"));
+  console.warn("网络医院授权回来", gStores.globalStore.appShowData);
   // 微信医保小程序跳回来后中断了链路 重新走下
-  if (getLocalStorage("get-wx-medical-auth-code") === "1") {
+  if (getLocalStorage("get-wx-medical-auth-code") === "1" && gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
     await wait(300);
     setLocalStorage({
       "get-wx-medical-auth-code": "",
     });
-
     if (gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode) {
       //获取授权码
       if (getLocalStorage("get-wx-medical-netWork-path")) {
@@ -56,15 +56,16 @@ onShow(async () => {
           gStores.messageStore.showMessage("网络医院地址参数配置错误", 2000);
           console.error("网络医院地址参数配置错误", error);
         }
-      }
+      } 
     } else {
       gStores.messageStore.showMessage("未完成电子医保凭证授权,无法继续医保结算");
     }
-  }
+  } 
 });
 
 onLoad(async (options) => {
   //先登录拦截
+  console.log('cloudHospital Options',options)
   await wait(200);
   if (options?.loginInterception == "1") {
     if (!globalStore.isLogin) {

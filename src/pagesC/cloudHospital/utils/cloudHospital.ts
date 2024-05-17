@@ -13,10 +13,7 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
   const { alipay, wx: _wx } = medicalMHelp!;
 
   // #ifdef  MP-WEIXIN
-  const qrCode =
-    gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
-
-  if (!qrCode) {
+  // 授权码只能使用一次 每次必须重新授权
     const { appId, path } = _wx!.medicalNation!;
 
     setLocalStorage({
@@ -52,10 +49,6 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
     });
 
     return Promise.reject('请求授权...');
-  } else {
-    fCode = qrCode;
-    gStores.globalStore.onAppShow({});
-  }
   // #endif
 
   // #ifdef MP-ALIPAY

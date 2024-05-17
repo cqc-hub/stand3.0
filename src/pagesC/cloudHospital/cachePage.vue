@@ -104,7 +104,7 @@
     console.warn('跳转网络医院的路径', src.value);
   };
 
-  const handleMessage = (evt) => {
+  const handleMessage = async (evt) => {
     var data = evt.target.data;
     console.warn('获取到返回--------------', data);
     console.warn('编码----------------');
@@ -135,7 +135,8 @@
             })
           ),
         });
-        let authCode = getMedicalAuthCode(data);
+        console.log('触发获取授权码')
+        let authCode = await getMedicalAuthCode(data);
         console.warn('授权码', authCode);
         return;
       }

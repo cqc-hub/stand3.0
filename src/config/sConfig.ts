@@ -143,6 +143,9 @@ const scJson: Record<string, ISConfig> = {
    * 濮阳市人民医院
    */
   1001058: {
+    login: {
+      isAliAuthBase: '1',
+    },
     isSearchHosForAddPatHasMoreThanOneCard: '1',
   },
 
