@@ -52,6 +52,10 @@ const messageStore = defineStore('message', {
           maskClose: boolean;
         }) => void;
         uniToast: boolean;
+        /**
+         * 配合 dialogOpt 参数使用 dialog 弹窗
+         * > 注意, 过程中要确认不能同时调用 showMessage 函数, 否者异常
+         */
         useDialog: boolean;
         dialogOpt: TDialogOpt;
       }> = {}
