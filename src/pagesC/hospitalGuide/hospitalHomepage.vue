@@ -391,6 +391,7 @@
         '/pagesC/cloudHospital/myPath?path=/pages/hospitalGuide/hospitalGuide',
         {
           hosId: hosId.value,
+          isFilterHosIdphone:1
         }
       ),
     });
