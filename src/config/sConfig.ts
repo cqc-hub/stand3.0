@@ -32,6 +32,8 @@ interface ISConfig {
   isOpenHomeTabBarNetWorkBtn?: '1';
   //底部是否放开消息通知
   isOpenHomeTabBarMessageBtn?: '1';
+  //首页是否支持消息授权——支付宝
+  isOpenMessageAuth?: '1';
   //首页是否隐藏搜索框?
   isHideHomeSearch?: '1';
   //是否开启助老版
@@ -119,7 +121,7 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
-    isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
+    isOpenMessageAuth: '1',
   },
 
   /**
