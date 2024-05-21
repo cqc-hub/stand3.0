@@ -767,7 +767,9 @@
     init();
 
     // #ifdef MP-ALIPAY
-    await loginAuthAlipay(init);
+    if (globalGl.sConfig.login?.isAliAuthBase !== '1') {
+      await loginAuthAlipay(init);
+    }
     // #endif
   });
 </script>
