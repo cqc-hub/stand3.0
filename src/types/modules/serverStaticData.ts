@@ -16,7 +16,7 @@ export interface ISystemConfig_ {
     };
   };
 
-  // 预约挂号
+  // 预约挂号 ORDER_REGISTER
   order: {
     /** 科室列表页面 */
     // 选科室上面 banner

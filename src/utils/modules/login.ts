@@ -476,10 +476,10 @@ export class LoginUtils extends GStores {
     // 代开发
     if (isvAppId) {
       // 完善? getTPAlipayUserInfoShare
-      if (_isAliAuthBase) {
-        url = '/aliUserLogin/getAlipayBaseEncryLogin'; // 代开发完善
-      } else if (isSkipPerfect === '1') {
+      if (isSkipPerfect === '1') {
         url = '/aliUserLogin/alipayTpLoginByPhone'; // 代开发非完善
+      } else if (_isAliAuthBase) {
+        url = '/aliUserLogin/getAlipayBaseEncryLogin'; // 代开发完善
       } else {
         url = '/aliUserLogin/getTPAlipayUserInfoShare'; // 代开发完善
       }
