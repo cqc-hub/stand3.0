@@ -417,9 +417,6 @@
       formKey.defaultFalg,
     ];
 
-    if (isDropAddress === '1') {
-    }
-
     if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
