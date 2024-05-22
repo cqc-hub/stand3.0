@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001063",
+  "sysCode": "1001066",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -160,7 +160,7 @@
       "h5Appid": "wxc5f0f8f426249352",
       "isvAlipayAppid": "2021004143660150",
       "name": "濮阳市人民医院",
-      "isSearchInHos": true,
+      "isSearchInHos": false,
       "isOpenOcr": false,
       "isStartComeTest": true
     },
@@ -245,7 +245,8 @@
 
     "1001066": {
       "wxAppid": "wxbe1f8ae346536759",
-      "alipayAppid": "",
+      "alipayAppid": "2021004146614065",
+      "isvAlipayAppid": "2021004144613751",
       "h5Appid": "",
       "name": "宁波口腔医院",
       "isSearchInHos": false,

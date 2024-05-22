@@ -45,6 +45,8 @@ interface ISConfig {
   };
   //首页是否展示支付宝的关注组件
   isOpenAlipayFollow?: string;
+  //首页是否支持展示咨询文章
+  isOpenHomeArticle?: string;
   //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
   isOpenAlipayZndz?: boolean;
   //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
@@ -150,6 +152,16 @@ const scJson: Record<string, ISConfig> = {
     },
     isSearchHosForAddPatHasMoreThanOneCard: '1',
   },
+
+    /**
+   * 濮阳市人民医院
+   */
+    1001066: {
+      login: {
+        isSkipPerfect: '1',
+        isAliAuthBase: '1',
+      },
+    },
 
   /**
    * 绍兴第二医院
@@ -272,6 +284,7 @@ const scJson: Record<string, ISConfig> = {
         isMedicalOrder: '1',
       },
     },
+    isOpenHomeArticle: '1',
   },
 
   /**

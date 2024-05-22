@@ -29,8 +29,7 @@ let outLoginTimer: number;
 //是否加密 正式环境默认开启sm4加密
 const isDes = false;
 const isOpenSm4 =
-  (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
-
+  (globalGl.env as string) === 'prod' ? true : globalGl.isOpenSm4;
 const getShowUrl = (url, baseUrl) =>
   url.slice(baseUrl?.length || 0).split('=')[0];
 
