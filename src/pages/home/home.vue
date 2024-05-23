@@ -421,7 +421,8 @@
 
     // #ifdef MP-ALIPAY
     //对接支付宝首页消息提醒
-    const alipayPid = global.systemInfo.alipayPid || global.sConfig.isOpenMessageAuth;
+    const alipayPid =
+      global.systemInfo.alipayPid || global.sConfig.isOpenMessageAuth;
     alipayPid &&
       globalStore.isLogin &&
       !uni.getStorageSync('hospital_order') &&

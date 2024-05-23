@@ -163,7 +163,7 @@ Request.interceptors.response(
     const messageStore = useMessageStore();
 
     messageStore.showMessage(
-      err.data.message || err.data.error || '服务异常',
+      err.data.message || err.data.error || '系统压力有点大，请稍后再试',
       3000
     );
     uni.hideLoading();

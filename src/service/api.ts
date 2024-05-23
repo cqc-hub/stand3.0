@@ -168,6 +168,7 @@ const baseApi = {
   searchFunctionConfig: (data) =>
     service.post('/phs-base/hospital/searchFunctionConfig', parm(data), {
       hideLoading: true,
+      showMessage: false,
     }),
 };
 // 查询服务

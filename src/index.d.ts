@@ -156,3 +156,10 @@ type PromiseReturnType<T> = ReturnType<T> extends Promise<infer R>
     ? PromiseReturnType<() => R>
     : R
   : never;
+
+declare module '*.vue' {
+  import { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+
+  export default component;
+}
