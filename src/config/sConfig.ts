@@ -153,15 +153,12 @@ const scJson: Record<string, ISConfig> = {
     isSearchHosForAddPatHasMoreThanOneCard: '1',
   },
 
-    /**
-   * 濮阳市人民医院
-   */
-    1001066: {
-      login: {
-        isSkipPerfect: '1',
-        isAliAuthBase: '1',
-      },
+  1001066: {
+    login: {
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
     },
+  },
 
   /**
    * 绍兴第二医院
