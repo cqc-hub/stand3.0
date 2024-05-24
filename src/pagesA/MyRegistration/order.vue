@@ -210,13 +210,13 @@
 
   onReady(() => {
     uni.setNavigationBarTitle({
-      title: `选择${decodeURIComponent(deptName.value)}医生`,
+      title: `${decodeURIComponent(deptName.value)}`,
     });
   });
 
   onShareAppMessage((res) => {
     return {
-      title: `选择${decodeURIComponent(pageProps.value.deptName)}医生`,
+      title: `${decodeURIComponent(pageProps.value.deptName)}`,
       path: joinQuery('/pagesA/MyRegistration/order', pageProps.value),
     };
   });
