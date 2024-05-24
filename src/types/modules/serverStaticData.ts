@@ -129,6 +129,8 @@ export interface ISystemConfig_ {
     realNameAuth?: ('ocrVerify' | 'faceVerify')[];
     /** 新增就诊人后进行免密代扣授权 */
     isPayWithoutSecretAuth?: '1';
+    /** 修改家庭成员中就诊人手机号 */
+    isEditPatPhone?: '1';
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */

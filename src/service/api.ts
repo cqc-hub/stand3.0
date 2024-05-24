@@ -666,6 +666,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  mdifPhone: (data) =>
+    service.post('/phs-user/rePat/mdifPhone', parm(data), {
+      hideLoading: false,
+    }),
+
   mofHosPhone: (data) =>
     service.post('/phs-user/rePat/mofHosPhone', parm(data), {
       hideLoading: false,

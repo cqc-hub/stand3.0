@@ -7,6 +7,7 @@
     <g-form
       v-model:value="formData"
       @change="formChange"
+      @disabled-click="rowClick"
       bodyBold
       ref="gform"
     />
@@ -34,7 +35,12 @@
     PatCardKeys,
     patCardDetailFormKey,
   } from './utils';
-  import { GStores, PatientUtils, wait } from '@/utils';
+  import {
+    GStores,
+    PatientUtils,
+    ServerStaticData,
+    type ISystemConfig,
+  } from '@/utils';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
 
   type PagePropType = Record<PatCardKeys, any>;
@@ -44,6 +50,8 @@
   const patientUtils = new PatientUtils();
   const formData = ref<PagePropType>({} as PagePropType);
   const gform = ref<any>('');
+  const pageConfig = ref(<ISystemConfig['person']>{});
+
   let formList = [...patCardDetailTempList];
 
   const changeDefault = (value: boolean) => {
@@ -73,7 +81,19 @@
     }
   };
 
+  const rowClick = (item) => {
+    const { key } = item;
+    const { isEditPatPhone } = pageConfig.value;
+
+    if (key === 'patientPhone' && isEditPatPhone === '1') {
+      uni.navigateTo({
+        url: '/pagesA/medicalCardMan/editPhone',
+      });
+    }
+  };
+
   onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
     const pat = gStore.userStore.clickPat;
 
     formData.value = {
@@ -94,6 +114,18 @@
             ] as string[]
           ).includes(o.key)
       );
+    }
+
+    const { isEditPatPhone } = pageConfig.value;
+    if (isEditPatPhone === '1') {
+      formList.map((o) => {
+        const { key } = o;
+
+        if (key === 'patientPhone') {
+          o.showSuffixArrowIcon = true;
+          // o.showBodyStyle = 'position: relative; top: 4rpx';
+        }
+      });
     }
 
     Object.keys(formData.value).map((key) => {

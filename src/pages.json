@@ -422,6 +422,16 @@
         },
 
         {
+          "path": "medicalCardMan/editPhone",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": "修改手机号"
+          }
+        },
+
+        {
           "path": "medicalCardMan/electronicMedicalCard",
           "extend": {
             "patient": true
