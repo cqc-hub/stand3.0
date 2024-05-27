@@ -186,7 +186,7 @@
       tabList.push('消息中心');
     }
 
-    if (global.SYS_CODE === '1001052' && global.env !== 'prod') {
+    if (global.SYS_CODE === '1001052') {
       tabList.push('健康管理');
     }
 
