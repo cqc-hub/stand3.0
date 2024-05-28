@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wxbe1f8ae346536759",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003167601013"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173668243"
+    "appid": "2021004146614065"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "宁波口腔医院",
   "h5": {
     "router": {
       "base": "./"

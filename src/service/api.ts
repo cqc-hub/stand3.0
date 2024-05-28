@@ -201,6 +201,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  qrCodeQuery: <T>(data) =>
+    service.post<T>('/phs-query/clinical/qrCodeQuery', parm(data), {
+      hideLoading: false,
+    }),
+
   getClinicPayRecord: <T = any>(data) =>
     service.post<T>(
       '/phs-query/hospitalAccount/getClinicPayRecord',
@@ -292,10 +297,11 @@ const queryApi = {
     service.post('/phs-query/hospital/inHosChosePlace', parm(data)),
 
   // 门诊住院列表
-  getOutpatientHospitalList: (data) =>
+  getOutpatientHospitalList: (data, config: any = {}) =>
     service.post('/phs-query/operation/getOutpatientHospitalList', parm(data), {
       showMessage: false,
       hideLoading: false,
+      ...config,
     }),
   // 便民服务列表接口
   getConvenientServiceList: (data) =>

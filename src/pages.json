@@ -551,6 +551,16 @@
         },
 
         {
+          "path": "choosePat/choosePat",
+          "style": {
+            "navigationBarTitleText": "选择就诊人"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+
+        {
           "path": "serviceCenter/serviceComplaint",
           "style": {
             "navigationBarTitleText": "意见反馈"
