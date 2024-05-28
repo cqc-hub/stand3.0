@@ -12,12 +12,12 @@
           'is-ios': isIos,
         }"
         class="nav-safe-h"
-      ></view>
+      />
       <image
         v-if="$global.systemInfo.homeNavTitleLogo"
-        class="logo"
-        :src="$global.BASE_IMG + 'xianyannavtitle.png'"
+        :src="$global.systemInfo.homeNavTitleLogo"
         mode="widthFix"
+        class="logo"
       />
 
       <view v-else class="nav-title f40 g-bold">
