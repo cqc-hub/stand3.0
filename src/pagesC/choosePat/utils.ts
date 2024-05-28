@@ -46,7 +46,7 @@ export const HK_hook = () => {
 
       if (result && typeof result === 'string') {
         await api.qrCodeQuery({
-          codeStr: result,
+          codeStr: result.replace(/\<#jn\>/g, ''),
         });
 
         const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
