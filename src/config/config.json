@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001066",
+  "sysCode": "1001068",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -263,6 +263,18 @@
       "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
+    },
+
+    "1001068": {
+      "wxAppid": "wxb03ff137dabedd6d",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "宁波耳鼻喉医院",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
     }
+
   }
 }

@@ -20,8 +20,8 @@ export const HK_hook = () => {
       await api.getOutpatientHospitalList(requestArg, {
         showMessage: true,
       });
-      const { HK_ChoosePatJump: config } = await cacheUtil.getSystemConfig(
-        'HK_ChoosePatJump'
+      const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
+        'ChoosePatJump'
       )();
 
       const { chooseThirdPath } = config;
@@ -49,8 +49,8 @@ export const HK_hook = () => {
           codeStr: result,
         });
 
-        const { HK_ChoosePatJump: config } = await cacheUtil.getSystemConfig(
-          'HK_ChoosePatJump'
+        const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
+          'ChoosePatJump'
         )();
 
         const { chooseThirdPath } = config;

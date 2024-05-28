@@ -18,5 +18,5 @@ export type ApiParamsConfig = {
   };
 
   // 杭口配置 pagesC/choosePat/choosePat
-  HK_ChoosePatJump: any;
+  ChoosePatJump: any;
 };
