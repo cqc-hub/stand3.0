@@ -486,7 +486,7 @@
     ];
   });
 
-  const tableColumns = ref([
+  const tableColumns = ref(<any>[
     {
       label: '分类',
       key: 'name',

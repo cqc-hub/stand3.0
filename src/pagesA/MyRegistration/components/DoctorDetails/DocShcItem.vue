@@ -9,24 +9,33 @@
           </view>
         </view>
 
-        <view class="scheme-item-detail">
-          <button
+        <view
+          :class="{
+            'btn-btns':
+              item.schState === '2' && pageConfig.isOpenOrderWaiting === '1',
+          }"
+          class="scheme-item-detail"
+        >
+          <!-- <button
             v-if="item.schState in warnSchStateMap"
             class="btn btn-primary btn-reg disabled-btn"
           >
             {{ warnSchStateMap[item.schState] }}
-          </button>
+          </button> -->
 
           <button
-            v-else-if="
-              !outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)
-            "
+            v-if="!outHosSch || (outHosSch && pageConfig.handlerOutHosSchClick)"
             :class="{
               'btn-old': systemModeOld,
+              'disabled-btn': item.schState in warnSchStateMap,
             }"
             class="btn btn-primary btn-reg"
           >
-            {{ pageConfig.orderRegBtnLabel || '挂号' }}
+            {{
+              warnSchStateMap[item.schState] ||
+              pageConfig.orderRegBtnLabel ||
+              '挂号'
+            }}
           </button>
 
           <button
@@ -36,9 +45,9 @@
             :class="{
               'btn-old': systemModeOld,
             }"
-            class="btn btn-primary btn-reg ml6"
+            class="btn btn-primary btn-reg"
           >
-            候补预约
+            候补
           </button>
         </view>
       </view>
@@ -141,6 +150,19 @@
 
         &.btn-old {
           padding: 30rpx;
+        }
+      }
+
+      &.btn-btns .btn-reg {
+        $r: 8rpx;
+        padding: 0 16rpx;
+
+        &:first-child {
+          border-radius: $r 0 0 $r;
+        }
+
+        &:last-child {
+          border-radius: 0 $r $r 0;
         }
       }
     }
