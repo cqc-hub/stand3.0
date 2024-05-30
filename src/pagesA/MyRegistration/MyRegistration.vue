@@ -8,6 +8,9 @@
     <g-flag v-if="isRender" :typeFg="isWaitReg ? '1113' : '405'" isShowFg />
     <g-message />
     <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
+    <view v-if="pageConfig.MyRegistrationNavBtns && !isWaitReg" class="p32c pt12 pb12">
+      <g-tbbtns :btns="pageConfig.MyRegistrationNavBtns" />
+    </view>
     <My-Registration-Head
       v-if="!isWaitReg"
       v-model:isSelStatus="isSelStatus"
@@ -29,7 +32,7 @@
           :showReOrderBtn="isShowReOrderBtn"
           :systemModeOld="gStores.globalStore.modeOld"
           :showFWBtn="showFWBtn"
-          :config="orderConfig"
+          :config="pageConfig"
           :thRegisterId="props.thRegisterId"
           :anotherYwzConditions="anotherYwzConditions"
           @ywz-click="ywzClick"
@@ -176,7 +179,7 @@
   const selOrderStatus = ref('');
 
   const list = ref<IRegistrationCardItem[]>([]);
-  const orderConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
+  const pageConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
 
   const orderStatusList = ref([
     {
@@ -195,7 +198,7 @@
 
   const isShowFilterOrderStatus = computed(() => {
     // return false;
-    return orderConfig.value.isCanSelOrderStatus === '1' || isWaitReg.value;
+    return pageConfig.value.isCanSelOrderStatus === '1' || isWaitReg.value;
   });
 
   const anotherYwzConditions = computed(() => {
@@ -222,11 +225,11 @@
   let cancelOrderDialogConfirm: (any) => any = async () => {};
 
   const isShowReOrderBtn = computed(
-    () => orderConfig.value.isOpenReOrder === '1'
+    () => pageConfig.value.isOpenReOrder === '1'
   );
 
   const isShowYuWzBtn = computed(
-    () => orderConfig.value.isOpenPreConsultation === '1'
+    () => pageConfig.value.isOpenPreConsultation === '1'
   );
 
   const getStatusConfig = (status: OrderStatus) => {
@@ -258,7 +261,7 @@
         // o.orderStatus = '70';
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
-          orderConfig.value.isOrderPay,
+          pageConfig.value.isOrderPay,
           isWaitReg.value
         );
 
@@ -337,10 +340,10 @@
   };
 
   const getConfig = async () => {
-    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
 
     const { isHosNavigation, isQueuing, isFWBtn, selOrderStatusDefault } =
-      orderConfig.value;
+      pageConfig.value;
 
     if (isHosNavigation) {
       showYuanNeiDaoHanBtn.value = isHosNavigation;

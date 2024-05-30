@@ -74,6 +74,8 @@ export interface ISystemConfig_ {
     handlerOutHosSchClick?: TBannerConfig;
 
     /** 挂号记录 */
+    //页面顶部按钮(仅我的挂号页面)
+    MyRegistrationNavBtns?: TButtonConfig[];
     // 显示院内导航按钮? 挂号状态 string
     isHosNavigation?: string[];
     // 排队叫号?
