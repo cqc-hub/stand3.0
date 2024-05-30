@@ -13,8 +13,8 @@
       }"
       class="item mb16 g-border"
     >
-      <view class="header pb18 g-bold f36">
-        <view class="text-ellipsis">
+      <view class="flex-between pb18 mb16 g-bold f36">
+        <view class="text-ellipsis mr40 flex1">
           {{ item.deptName }}
         </view>
         <view

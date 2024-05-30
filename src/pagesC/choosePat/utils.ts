@@ -10,6 +10,8 @@ export const HK_hook = () => {
     async patClick(pat: IPat, props) {
       const { patientId } = pat;
       const { hosId } = props;
+      console.log(pat);
+
 
       const requestArg = {
         patientId,
@@ -39,6 +41,7 @@ export const HK_hook = () => {
 
     async scanClick(props) {
       const { hosId } = props;
+
       const { result } = await apiAsync(uni.scanCode, {
         scanType: ['qrCode'],
         // scanType: ['barCode', 'qrCode'],
@@ -47,6 +50,7 @@ export const HK_hook = () => {
       if (result && typeof result === 'string') {
         await api.qrCodeQuery({
           codeStr: result.replace(/\<#jn\>/g, ''),
+          hosId
         });
 
         const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(

@@ -32,7 +32,14 @@
         </view>
       </view>
 
-      <P-List @choose-pat="choosePatHandler" :_firstIn="!_firstIn" />
+      <P-List
+        v-if="gStores.userStore.patList.length"
+        @choose-pat="choosePatHandler"
+        :_firstIn="!_firstIn"
+      />
+      <view class="empty-list" v-else>
+        <g-empty :current="1" />
+      </view>
     </view>
 
     <g-message />
@@ -67,8 +74,9 @@
   const _firstIn = ref(true);
 
   const { patClick: HK_PatClick, scanClick: HK_ScanClick } = HK_hook();
-  const choosePatHandler = (pat: IPat) => {
+  const choosePatHandler = ({ item: pat }: { item: IPat; number: number }) => {
     _firstIn.value = false;
+    gStores.userStore.updatePatChoose(pat);
 
     const { type } = pageProps.value;
 

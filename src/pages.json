@@ -556,7 +556,7 @@
             "navigationBarTitleText": "选择就诊人"
           },
           "extend": {
-            "patient": true
+            "herenId": true
           }
         },
 
