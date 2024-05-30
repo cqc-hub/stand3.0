@@ -253,7 +253,7 @@ export const waitOrderStatusMap = {
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
     color: '#fff',
-    title: '已登记，候补中',
+    title: '候补中',
     cardColor: 'var(--hr-brand-color-6)',
   },
 
@@ -264,13 +264,16 @@ export const waitOrderStatusMap = {
     color: '#fff',
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
-    title: '已过期，候补失败',
+    title: '已过期',
     cardColor: 'var(--hr-brand-color-6)',
   },
 
   '4': orderStatusMap['45'],
 
-  '5': orderStatusMap['20'],
+  '5': {
+    ...orderStatusMap['20'],
+    title: '候补失败',
+  },
 
   '6': orderStatusMap['42'],
 
@@ -284,6 +287,7 @@ export const waitOrderStatusMap = {
   },
 
   '8': orderStatusMap['70'],
+  '9': orderStatusMap['75'],
 } as const;
 
 export type OrderStatus = keyof typeof orderStatusMap;
