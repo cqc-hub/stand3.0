@@ -185,6 +185,7 @@ export interface hosParam {
   isHosTotallist: string;
   tab?: IOptions[];
   isQueryPreRecord?: string;
+  isHidePay?: string;
   /** 是否开启数字人民币支付 */
   payList?: {
     wx?: IPayListObj;

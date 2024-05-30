@@ -228,6 +228,8 @@ export interface ISystemConfig_ {
     isHosDaylist: '1' | '2';
     //0否 1 是 是否支持预交金记录查询
     isQueryPreRecord?: '1';
+    //是否关闭预交金充值入口
+    isHidePay?: '1';
     /** 是否开启数字人民币支付 */
     payList?: {
       wx?: IPayListObj;

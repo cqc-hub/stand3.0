@@ -25,6 +25,7 @@
         <inpatientInfo
           ref="inpatientInfoRef"
           :isQueryPreRecord="resultHos.isQueryPreRecord"
+          :isHidePay="resultHos.isHidePay"
           :tabCurrent="tabCurrent"
           :isShowAppointment="pageProps.openAppointment === '1'"
         />

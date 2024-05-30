@@ -74,7 +74,7 @@
         </view>
 
         <view v-if="isShowPayBtn" class="button f36" @click="toPayOut"> 已出院，立即结算 </view>
-        <view v-else class="button f36" @click="toPayPage">预交费用</view>
+        <view v-if="props.isHidePay == '1' && !isShowPayBtn" class="button f36" @click="toPayPage">预交费用</view>
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>
@@ -127,6 +127,7 @@ import api from "@/service/api";
 
 const props = defineProps<{
   isQueryPreRecord?: string;
+  isHidePay?: string;
   tabCurrent?: number;
   // 住院中心页面, 请求住院预约接口并且开展相关 ui
   isShowAppointment?: boolean;
