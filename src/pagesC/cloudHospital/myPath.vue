@@ -16,12 +16,10 @@
     import { getToken, getSysCode } from '@/common/useToken';
     import { ref } from 'vue';
     import { useMessageStore, useCacheStore } from '@/stores';
-    import { GStores,addHosIdForSelfH5Path } from '@/utils';
+    import { GStores,addHosIdForSelfH5Path,thirdWxPay } from '@/utils';
     import { encryptDesParam } from '@/common/des';
     import { joinQuery } from '@/common';
-    import { toPayPull } from '@/components/g-pay';
     import { deQueryForUrl } from '@/common/utils';
-
 
     type IPageProps = {
       hosId?: string;
@@ -135,56 +133,7 @@
       var data = evt.target.data;
       var V3PageData = data[0];
       if (V3PageData.appId) {
-        const {nonceStr,paySign,signType,timeStamp} = V3PageData;
-        const invokeData = {
-          nonceStr,
-          packAge: V3PageData.package,
-          paySign,
-          signType,
-          timeStamp,
-        }
-      console.warn('V3PageData', V3PageData);
-        //拉起支付
-        toPayPull({invokeData:invokeData})
-          .then((res: any) => {
-            // #ifdef MP-ALIPAY
-            if (res.payedRes.resultCode == '9000') {
-              //支付宝成功支付
-              if (V3PageData.miniUrl) {
-                uni.navigateTo({
-                  url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
-                });
-              }
-            } else {
-              gStores.messageStore.showMessage('取消支付', 1500, {
-                uniToast: true,
-              });
-            }
-            // #endif
-
-            // #ifdef MP-WEIXIN
-            //处理跳转
-            if (V3PageData.miniUrl) {
-              uni.navigateTo({
-                url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
-              });
-            }
-            // #endif
-          })
-          .catch((err) => {
-            let msg =
-              err.errMsg.indexOf('cancel') != '-1' ? '取消支付' : err.errMsg;
-            gStores.messageStore.showMessage(msg, 2000, {
-              closeCallBack: () => {
-                if (V3PageData.cancelUrl) {
-                  uni.navigateTo({
-                    url:
-                      '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.cancelUrl),
-                  });
-                }
-              },
-            });
-          });
+        thirdWxPay(V3PageData)
       } else if(V3PageData.gisLat) {
         //打开地图
         uni.openLocation({

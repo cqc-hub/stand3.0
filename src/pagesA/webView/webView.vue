@@ -8,7 +8,8 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { onShareAppMessage } from '@dcloudio/uni-app';
-  import { useCommonTo,openServicesChat } from '@/common/checkJump';
+  import { useCommonTo} from '@/common/checkJump';
+  import { thirdWxPay } from '@/utils';
 
   // pagesA/webView/webView
   const props = defineProps<{
@@ -37,7 +38,9 @@
       });
     }else if(V3PageData.type=='backAndToPath'){
       useCommonTo(V3PageData.pageData)
-    }
+    }else if (V3PageData.appId) {
+      thirdWxPay(V3PageData)
+      }
   };
 
   onShareAppMessage((opt) => {

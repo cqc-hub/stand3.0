@@ -3,6 +3,8 @@ import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';
 import { useCacheStore } from '@/stores';
+import { GStores } from '@/utils';
+import { toPayPull } from '@/components/g-pay';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -367,3 +369,59 @@ export const addHosIdForSelfH5Path = (path: string) => {
   }
   return path;
 };
+
+
+/**第三方自费支付 */
+export const thirdWxPay = (V3PageData)=>{
+  const {nonceStr,paySign,signType,timeStamp} = V3PageData;
+  const invokeData = {
+    nonceStr,
+    packAge: V3PageData.package,
+    paySign,
+    signType,
+    timeStamp,
+  }
+console.warn('V3PageData', V3PageData);
+const gStores = new GStores();
+  //拉起支付
+  toPayPull({invokeData:invokeData})
+    .then((res: any) => {
+      // #ifdef MP-ALIPAY
+      if (res.payedRes.resultCode == '9000') {
+        //支付宝成功支付
+        if (V3PageData.miniUrl) {
+          uni.navigateTo({
+            url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
+          });
+        }
+      } else {
+        gStores.messageStore.showMessage('取消支付', 1500, {
+          uniToast: true,
+        });
+      }
+      // #endif
+
+      // #ifdef MP-WEIXIN
+      //处理跳转
+      if (V3PageData.miniUrl) {
+        uni.navigateTo({
+          url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
+        });
+      }
+      // #endif
+    })
+    .catch((err) => {
+      let msg =
+        err.errMsg.indexOf('cancel') != '-1' ? '取消支付' : err.errMsg;
+      gStores.messageStore.showMessage(msg, 2000, {
+        closeCallBack: () => {
+          if (V3PageData.cancelUrl) {
+            uni.navigateTo({
+              url:
+                '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.cancelUrl),
+            });
+          }
+        },
+      });
+    });
+}
