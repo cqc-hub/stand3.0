@@ -1,7 +1,9 @@
 <template>
-  <view  :class="{
-            'system-mode-old': gStores.globalStore.modeOld,
-          }">
+  <view
+    :class="{
+      'system-mode-old': gStores.globalStore.modeOld,
+    }"
+  >
     <g-popup title="长辈模式" ref="refOldDialog">
       <view class="g-page modeOld">
         <view class="g-container">
@@ -16,9 +18,14 @@
             <text>长辈模式已开启</text>
             <view>关闭后，字号放大和 功能简化效果将会解除</view>
           </view>
-          <button @tap="switchModeOld" class="btn g-border btn-primary dialog-btn">
-            {{ gStores.globalStore.modeOld ? "关闭" : "开启" }}长辈模式
-          </button>
+          <view class="p32c">
+            <button
+              @tap="switchModeOld"
+              class="btn g-border btn-primary dialog-btn"
+            >
+              {{ gStores.globalStore.modeOld ? '关闭' : '开启' }}长辈模式
+            </button>
+          </view>
         </view>
       </view>
     </g-popup>
@@ -26,84 +33,84 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { GStores,ServerStaticData } from "@/utils";
-export default defineComponent({
-  emits: ["open-old"],
+  import { defineComponent, ref } from 'vue';
+  import { GStores, ServerStaticData } from '@/utils';
+  export default defineComponent({
+    emits: ['open-old'],
 
-  props: {
-    autoStore: {
-      type: Boolean,
-      default: false,
+    props: {
+      autoStore: {
+        type: Boolean,
+        default: false,
+      },
     },
-  },
 
-  setup(props, ctx) {
-    const refOldDialog = ref();
-    const gStores = new GStores();
+    setup(props, ctx) {
+      const refOldDialog = ref();
+      const gStores = new GStores();
 
-    const switchModeOld = () => {
-      gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
-      uni.removeStorageSync('viewConfig');
+      const switchModeOld = () => {
+        gStores.globalStore.setModeOld(!gStores.globalStore.modeOld);
+        uni.removeStorageSync('viewConfig');
         //重新请求首页配置
         ServerStaticData.getHomeConfig();
-      refOldDialog.value.hide();
+        refOldDialog.value.hide();
 
-      //   ctx.emit("choose-pat", e);
-    };
+        //   ctx.emit("choose-pat", e);
+      };
 
-    const show = () => {
-      if (refOldDialog.value) {
-        refOldDialog.value.show();
-      }
-    };
+      const show = () => {
+        if (refOldDialog.value) {
+          refOldDialog.value.show();
+        }
+      };
 
-    return {
-      refOldDialog,
-      switchModeOld,
-      gStores,
-      show,
-    };
-  },
-});
+      return {
+        refOldDialog,
+        switchModeOld,
+        gStores,
+        show,
+      };
+    },
+  });
 </script>
 
 <style lang="scss" scoped>
-.modeOld {
-  margin: 0 auto;
-  .old-bg {
-    text-align: center;
-    image {
-      margin-top: 80rpx;
-      width: 304rpx;
-      height: 610rpx;
+  .modeOld {
+    margin: 0 auto;
+    .old-bg {
+      text-align: center;
+      image {
+        margin-top: 80rpx;
+        width: 304rpx;
+        height: 610rpx;
+      }
+    }
+    .old-title {
+      margin-top: 56rpx;
+      text-align: center;
+      text {
+        font-size: 36rpx;
+        color: #111;
+        line-height: 50rpx;
+        font-weight: bold;
+        margin-bottom: 16rpx;
+        display: inline-block;
+      }
+      view {
+        color: #444;
+        width: 448rpx;
+        font-size: 32rpx;
+        line-height: 48rpx;
+        margin: 0 auto;
+      }
+    }
+    .btn {
+      // width: 90%;
+      margin-top: 38px;
+      // #ifdef MP-ALIPAY
+      // margin: 50px auto;
+      // #endif
     }
   }
-  .old-title {
-    margin-top: 56rpx;
-    text-align: center;
-    text {
-      font-size: 36rpx;
-      color: #111;
-      line-height: 50rpx;
-      font-weight: bold;
-      margin-bottom: 16rpx;
-      display: inline-block;
-    }
-    view {
-      color: #444;
-      width: 448rpx;
-      font-size: 32rpx;
-      line-height: 48rpx;
-      margin: 0 auto;
-    }
-  }
-  .btn {
-    width: 90%;
-    margin-top: 38px;
-    // #ifdef MP-ALIPAY
-    margin: 50px auto;
-    // #endif
-  }
-}
 </style>

@@ -336,6 +336,7 @@ const scJson: Record<string, ISConfig> = {
     login: {
       // isAliAuthBase: '1',
     },
+    isOpenHelpOld: '1',
   },
 };
 
