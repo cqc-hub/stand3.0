@@ -47,6 +47,7 @@
       hosId: string;
       type?: 'selDepartment';
       autoGetData?: boolean;
+      unNeedPosition?: boolean;
     }>(),
     {
       autoGetData: true,
@@ -92,9 +93,11 @@
   };
 
   const getHosList = async () => {
-    const location = await getLocation().catch((err) => {
-      console.error(err);
-    });
+    const location: any = props.unNeedPosition
+      ? {}
+      : await getLocation().catch((err) => {
+          console.error(err);
+        });
 
     let list = await ServerStaticData.getHosList(
       {

@@ -6,7 +6,7 @@
     class="g-page"
   >
     <view v-if="pageReady" class="my-display-none">
-      <g-selhos @get-list="getHosList" />
+      <g-selhos @get-list="getHosList" unNeedPosition />
     </view>
 
     <view class="g-container">
