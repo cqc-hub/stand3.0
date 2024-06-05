@@ -80,7 +80,7 @@ export const loopDeptList = (
     } else if (isLev2(o)) {
       const _list = o.thirdDeptList;
 
-      if (_list && _list.length === 1 && list.length === 1) {
+      if (_list && _list.length && list.length === 1) {
         o.open = true;
       }
 

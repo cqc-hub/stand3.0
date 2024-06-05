@@ -551,6 +551,13 @@
         },
 
         {
+          "path": "question/hkQuestion",
+          "style": {
+            "navigationBarTitleText": "满意度回访"
+          }
+        },
+
+        {
           "path": "choosePat/choosePat",
           "style": {
             "navigationBarTitleText": "选择就诊人"
