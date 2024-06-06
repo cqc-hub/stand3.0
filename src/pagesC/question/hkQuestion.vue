@@ -25,6 +25,15 @@
       },
       extraData: {
         category: '51',
+        hosName: '就诊院区',
+        deptName: '就诊科室',
+        docName: '就诊医生',
+        visitDate: '2024-06-01',
+        visitTime: '9:00-10:00',
+        hosId: 'hosId',
+        hosDeptId: 'hosDeptId',
+        hosDocId: 'hosDocId',
+        visitNo: '1123',
       },
     });
     // useTBanner({

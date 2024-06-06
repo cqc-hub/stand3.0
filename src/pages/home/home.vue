@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <home-Nav />
-    <scroll-view class="scroll-page g-container" scroll-y>
+    <scroll-view @scroll="pageScroll" class="scroll-page g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
         :loading="viewerStore.loading"
@@ -525,6 +525,10 @@
     if (refOldDialog.value) {
       refOldDialog.value.show();
     }
+  };
+
+  const pageScroll = (e) => {
+    console.log(e);
   };
 </script>
 

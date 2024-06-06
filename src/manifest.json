@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx1b81e5b0858757ba",
+    "appid": "wx93d1e2c1e646e342",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -72,7 +72,8 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
-    "mergeVirtualHostAttributes": true
+    "mergeVirtualHostAttributes": true,
+    "appid": "2021004134632001"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -84,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "大医二院普湾院区",
+  "name": "杭州口腔医院",
   "h5": {
     "router": {
       "base": "./"
