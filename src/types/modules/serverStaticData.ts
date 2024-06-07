@@ -147,6 +147,8 @@ export interface ISystemConfig_ {
     isGuardianWithIdCard?: number;
     // 不需要地址
     isDropAddress?: '1';
+    // 不需要民族
+    isDropNation?: '1';
     /**
      * 仅微信, 支付宝 手动 config.json 配置 isOpenOcr
      * 情况有变, 支付宝 也可以直接在这儿(但目前没做), 需要开通 https://b.alipay.com/page/product-workspace/product-detail/I1080300001000043632

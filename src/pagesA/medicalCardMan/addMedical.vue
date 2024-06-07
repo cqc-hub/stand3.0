@@ -404,18 +404,23 @@
       isHidePatientTypeInPerfect,
       isSmsVerify,
       isDropAddress,
+      isDropNation
     } = await ServerStaticData.getSystemConfig('person');
 
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
     const _patientInfo: TFormKeys[] = [
-      formKey.nation,
       // 去除所在地区, 详细地址
       ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
       formKey.patientPhone,
       formKey.defaultFalg,
     ];
+
+    // 判断是否需要民族
+    if (isDropNation !== '1') {
+      _patientInfo.unshift(formKey.nation)
+    }
 
     if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
