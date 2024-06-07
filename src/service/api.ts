@@ -761,7 +761,10 @@ const userApi = {
       hideLoading: false,
       reportCmPV_YLName: '医院介绍',
     }),
-
+  hosArea: <T>(data) =>
+    service.post<T>('/phs-base/hospital/hosArea', parm(data), {
+      hideLoading: false,
+    }),
   getHospitalGuidelines: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospitalGuidelines', parm(data)),
 

@@ -15,7 +15,7 @@
       />
     </view>
     <view
-      v-if="_type != 3 && hosList.length > showMoreItem"
+      v-if="_type != 3 && hosHisMaxLen > showMoreItem"
       class="flex-normal header"
     >
       <view
@@ -36,7 +36,7 @@
         @click="isShowFilterHos = !isShowFilterHos"
         class="flex-normal"
       >
-        <view>筛选</view>
+        <view>{{hosAreaNow}}</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
     </view>
@@ -72,6 +72,7 @@
       v-model:value="hosLvNow"
       v-model:show="isShowFilterHos"
       :option="hosLvs"
+      @change="hosSearchChange"
       :field="{
         label: 'label',
         value: 'value',
@@ -99,7 +100,7 @@
             @click="isShowFilterHos = !isShowFilterHos"
             class="flex-normal"
           >
-            <view>筛选</view>
+            <view>{{hosAreaNow}}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
         </view>
@@ -134,7 +135,7 @@
             @click="isShowFilterHos = !isShowFilterHos"
             class="flex-normal"
           >
-            <view>筛选</view>
+            <view>{{hosAreaNow}}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
         </view>
@@ -156,6 +157,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
+  import api from '@/service/api';
 
   import {
     ServerStaticData,
@@ -168,13 +170,13 @@
 
   import hosListVue from './components/hosList/hosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import HosListItemMore from './components/hosList/hosListItemMore.vue';
 
   const _props = defineProps<{
     _url: string;
     _type: number; //区分跳转h5的页面 1：医院指南 2：核酸开单 3:药店指南（只展示药店 搜索框 不展示距离）
     _questionId: number; //问卷id
     _isPay: number;
-
     isLogin?: '1'; // 需要登录?
   }>();
   const hosHisMaxLen = ref(0);
@@ -228,34 +230,13 @@
   const searchValue = ref('');
   const isShowFilterHos = ref(false);
   const hosList = ref<IHosInfo[]>([]);
-  const hosLvs = computed(() => {
-    const lvs = [...new Set(hosList.value.map((o) => o.hosLevelName))].map(
-      (o) => ({
-        label: o,
-        value: o,
-      })
-    );
-
-    lvs.unshift({
-      label: '全部',
-      value: '',
-    });
-    return lvs;
-  });
-
-  const _hosList = computed(() => {
-    if (!hosLvNow.value) {
-      return hosList.value;
-    } else {
-      return hosList.value.filter((o) => o.hosLevelName === hosLvNow.value);
-    }
-  });
+  const hosLvs = ref<any>([]);
 
   const __hosList = computed(() => {
     if (hosSortNow.value === '综合排序') {
-      return _hosList.value;
+      return hosList.value;
     } else {
-      return [..._hosList.value].sort((_prev, _next) => {
+      return [...hosList.value].sort((_prev, _next) => {
         if (_prev.distance) {
           return _prev.distance - _next.distance!;
         } else {
@@ -270,6 +251,8 @@
   const hosSortOpt = ref(['综合排序', '按距离排序']);
   const hosSortNow = ref('综合排序');
   const isShowHosSort = ref(false);
+
+  const hosAreaNow = ref('地区筛选');
 
   const isWxRequestQxDialogShow = ref(false);
   const showMoreItem = ref(5);
@@ -371,6 +354,16 @@
     }
   };
 
+  const hosSearchChange = async ({ item }) => {
+    hosAreaNow.value = item.label;
+    hosList.value = await ServerStaticData.getHosList(
+      {
+        areaId: item.value,
+      },
+      { noCache: true }
+    );
+  };
+
   const imgClick = (item: IHosInfo) => {};
 
   const getList = async (isRequestApi: boolean = true) => {
@@ -442,6 +435,13 @@
       hosHisMaxLen.value = hosList.value.length;
     }
 
+    if (
+      hosList.value.length > showMoreItem.value ||
+      hosList.value.length == showMoreItem.value
+    ) {
+      getAreaList();
+    }
+
     if (getTypeNow.value === '病案复印') {
       const hosIds = medCopyConfigList.value.map((o) => o.hosId + '');
 
@@ -511,6 +511,16 @@
     });
     // #endif
     getList(isAuth);
+  };
+
+  const getAreaList = async () => {
+    const { result } = await api.hosArea<any>({});
+    hosLvs.value = result.map((item) => {
+      return {
+        label: item.areaValue,
+        value: item.areaId,
+      };
+    });
   };
 
   onLoad((opt) => {

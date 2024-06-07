@@ -346,6 +346,29 @@
       patientInterception: '0',
       loginInterception: '0',
     },
+    {
+      functionIntroduce: '',
+      iconfont: 'ico_sy_medicalkit',
+      selectPatientPage: '0',
+      title: '医保电子凭证',
+      gridLabel: '0',
+        // #ifdef MP-WEIXIN
+      terminalType: 'mini',
+      path: '/pages/index/index',
+      appId: 'wx7ec43a6a6c80544d',
+      query: '',
+          // #endif
+       // #ifdef MP-ALIPAY
+      terminalType: 'alipay',
+      path: 'alipays://platformapi/startapp?appId=77700284&page=pages%2Fmedical%2Findex%3FchInfo%3Dquyuyibaominiapp',
+      appId: '',
+      query:'{\"routeType\":\"openURL\"}',
+      // #endif
+      id: 49626,
+      detail: '',
+      patientInterception: '0',
+      loginInterception: '0',
+    }
   ];
   const row: number = 3;
 
@@ -385,6 +408,12 @@
     };
   });
   // #endif
+
+  const getGridData = ()=>{
+    // let
+    // gridList
+  };
+
   const gotoGuide = () => {
     uni.navigateTo({
       url: joinQuery(
