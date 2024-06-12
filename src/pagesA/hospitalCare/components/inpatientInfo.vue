@@ -74,7 +74,7 @@
         </view>
 
         <view v-if="isShowPayBtn" class="button f36" @click="toPayOut"> 已出院，立即结算 </view>
-        <view v-if="props.isHidePay == '1' && !isShowPayBtn" class="button f36" @click="toPayPage">预交费用</view>
+        <view v-if="props.isHidePay !== '1' && !isShowPayBtn" class="button f36" @click="toPayPage">预交费用</view>
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>
