@@ -26,7 +26,6 @@
     uni.hideLoading();
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     console.log( pageProps.value, ' pageProps.value pageProps.value');
-    console.log( pageProps.value, ' pageProps.value pageProps.value');
     const { patientPhone, admissionTime } = pageProps.value;
     if (patientPhone) {
     const [visitDate, visitTime] = admissionTime.split(' ');
