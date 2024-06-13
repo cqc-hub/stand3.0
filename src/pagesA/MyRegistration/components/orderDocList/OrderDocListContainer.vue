@@ -61,7 +61,7 @@
             v-for="(o, i) in splitSpecialDeptName(item.specialClinicName)"
             :key="i"
             :class="{
-              'g-split-line':
+              'g-split-line1':
                 i !== splitSpecialDeptName(item.specialClinicName).length - 1,
             }"
             class="color-888 f28 mr12 pr12"
@@ -189,5 +189,13 @@
 
   .reg-btn {
     text-align: right;
+  }
+  .g-split-line1 {
+    &::after {
+      content: '|';
+      position: relative;
+      left: 12rpx;
+      font-size: 24rpx;
+    }
   }
 </style>
