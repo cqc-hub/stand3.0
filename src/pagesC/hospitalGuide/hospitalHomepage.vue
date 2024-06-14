@@ -354,8 +354,8 @@
       gridLabel: '0',
         // #ifdef MP-WEIXIN
       terminalType: 'mini',
-      path: '/pages/index/index',
-      appId: 'wx7ec43a6a6c80544d',
+      path: '/views/home/index',
+      appId: 'wx81ce904580cc0ff1',
       query: '',
           // #endif
        // #ifdef MP-ALIPAY

@@ -5,8 +5,8 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     // #ifdef MP-WEIXIN
     useTBanner({
       type: 'otherProgram',
-      appId: 'wx7ec43a6a6c80544d',
-      path: '/pages/nhsa-code/index/index.html?channel=AAGYCx9OVG4gOuJJPPaZmysv',
+      appId: 'wx81ce904580cc0ff1 ',
+      path: '/views/home/index',
     });
     // #endif
 
