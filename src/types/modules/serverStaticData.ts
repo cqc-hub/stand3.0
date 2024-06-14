@@ -216,7 +216,7 @@ export interface ISystemConfig_ {
     })[];
   }[];
 
-  //住院服务
+  //住院服务 PATIENT_SERVICE_CONFIG
   hospitalCare: {
     //顶部tab
     tab: IConfigTab[];
