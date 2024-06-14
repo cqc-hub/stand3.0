@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
 import { cloneUtil } from '@/common';
 import { decryptDes } from '@/common/des';
@@ -6,7 +7,12 @@ import {
   ServerStaticData,
   GStores,
   AliPayLoginHandler,
+  apiAsync,
+  wait,
+  PatientUtils,
+  routerJump,
 } from '@/utils';
+import api from '@/service/api';
 
 /**
  * 完善、 新增就诊人页面
@@ -539,4 +545,157 @@ export const loginAuthAlipay = async (init: Function) => {
     init && init();
   }
   // #endif
+};
+
+export const useProgramPaySign = () => {
+  const gStores = new GStores();
+  const regDialogConfirmSign = ref(<any>'');
+  const flagTitle1203 = ref('温馨提示');
+  const patientUtils = new PatientUtils();
+  let isAfterSign = false;
+  let _patientId = '';
+
+  const disagreeSign = () => {
+    const pages = getCurrentPages();
+    if (pages && pages.length > 1) {
+      uni.navigateBack({
+        delta: 1,
+      });
+    } else {
+      uni.reLaunch({
+        url: '/pages/home/home',
+      });
+    }
+  };
+
+  const signAfterOnPageShow = async () => {
+    if (
+      !isAfterSign ||
+      // 微信点击开通的签约授权
+      gStores.globalStore.appShowData?.referrerInfo?.extraData?.return_code !==
+        'SUCCESS'
+    ) {
+      return;
+    }
+
+    isAfterSign = false;
+    await signAfter(_patientId);
+  };
+
+  const signAfter = async (patientId?: string) => {
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
+    uni.showLoading({
+      title: '查询中...',
+      mask: true,
+    });
+    await wait(5000);
+    const {
+      result: { message, signFlag },
+    } = await api.patSign({
+      patientId,
+      source,
+    });
+
+    if (signFlag) {
+      await patientUtils.getPatCardList();
+      routerJump('/pages/home/home');
+    } else {
+      gStores.messageStore.showMessage(message, 3000);
+      throw new Error('查询免密代扣签约失败');
+    }
+    // await patientUtils.getPatCardList();
+    // const pat = gStores.userStore.patList.find(
+    //   (o) => o.patientId === patientId
+    // );
+    // if (!pat) {
+    //   return await signAfter(patientId);
+    // }
+  };
+
+  return {
+    signAfterOnPageShow,
+    disagreeSign,
+    flagTitle1203,
+    regDialogConfirmSign,
+    async initSign() {
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
+
+      if (isPayWithoutSecretAuth === '1') {
+        regDialogConfirmSign.value.show();
+      }
+    },
+
+    async goPaySign(patientId) {
+      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
+        'person'
+      );
+      if (isPayWithoutSecretAuth !== '1') {
+        return;
+      }
+      let { phoneNum, cacheUser } = gStores.userStore;
+      const {
+        browser: { source },
+        openId,
+      } = gStores.globalStore;
+      let channel = 'WX_JSAPI_SIGN';
+      let payType = 'WX_MINI';
+      // await new AliPayLoginHandler().handlerAuth()
+
+      // #ifdef MP-WEIXIN
+      channel = 'WX_MINI_SIGN';
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      channel = 'ALI_MINI_SIGN';
+      payType = 'ALI_MINI';
+
+      if (!cacheUser.certNo) {
+        await new AliPayLoginHandler().handlerAuth();
+      }
+      // #endif
+
+      const args = {
+        channel,
+        openId,
+        userId: openId,
+        patientId,
+        source,
+        payType,
+        phone: phoneNum,
+        buyerAccount: cacheUser.mobile,
+        userIdCard: cacheUser.certNo,
+        userName: cacheUser.userName,
+        showUrl: '/pagesA/medicalCardMan/sign?isBack=1',
+      };
+      console.log(args);
+      const {
+        result: { invokeData },
+      } = await api.applyForSign(args);
+      // #ifdef MP-WEIXIN
+      await apiAsync(wx.navigateToMiniProgram, {
+        appId: 'wxbd687630cd02ce1d',
+        path: 'pages/index/index',
+        extraData: invokeData,
+      });
+      // #endif
+
+      // #ifdef MP-ALIPAY
+      await apiAsync(my.paySignCenter, {
+        signStr: encodeURIComponent(invokeData.signStr),
+      });
+      // #endif
+      isAfterSign = true;
+      _patientId = patientId;
+
+      console.log('jjjjjjj');
+      // await signAfter(patientId);
+      // 微信签约成功后需要在 onShow 中继续走
+      throw new Error('签约');
+    },
+  };
 };

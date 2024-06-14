@@ -677,6 +677,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  patSign: (data) =>
+    service.post('/phs-user/freePay/patSign', parm(data), {
+      hideLoading: false,
+    }),
+
   mofHosPhone: (data) =>
     service.post('/phs-user/rePat/mofHosPhone', parm(data), {
       hideLoading: false,

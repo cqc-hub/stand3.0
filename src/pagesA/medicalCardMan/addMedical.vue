@@ -25,6 +25,24 @@
     </view>
 
     <g-message />
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :title="flagTitle1203"
+      :maskClickClose="false"
+      @cancel="disagreeSign"
+      height="90vh"
+      confirmText="同意授权,方便就诊"
+      cannerText="不授权"
+      ref="regDialogConfirmSign"
+    >
+      <g-flag
+        v-model:title="flagTitle1203"
+        typeFg="1203"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
 
     <view class="footer">
       <Fg-Agree v-if="_isPageFirst" v-model:isCheck="isCheck" />
@@ -78,6 +96,7 @@
     getHealthCardCode,
     formatterSubPatientData,
     loginAuthAlipay,
+    useProgramPaySign,
   } from './utils';
   import {
     GStores,
@@ -88,12 +107,14 @@
     OcrFindRes,
     nameConvert,
     apiAsync,
+    wait,
   } from '@/utils';
 
   import dayjs from 'dayjs';
   import globalGl from '@/config/global';
 
   import FgAgree from './components/fgAgree.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   const routeStore = useRouterStore();
   const isCheck = ref(false);
@@ -141,6 +162,14 @@
     'verifyCode',
     'defaultFalg',
   ]);
+
+  const {
+    regDialogConfirmSign,
+    flagTitle1203,
+    disagreeSign,
+    initSign,
+    goPaySign,
+  } = useProgramPaySign();
 
   const isOpenOcr = async () => {
     let _isOpenOcr = false;
@@ -228,15 +257,15 @@
           addPatInterface: 'relevantPatient',
         });
 
-        if (
-          isPayWithoutSecretAuth === '1' &&
-          gStores.userStore.patList.length
-        ) {
-          uni.redirectTo({
-            url: '/pagesA/medicalCardMan/sign',
-          });
-          return;
-        }
+        // if (
+        //   isPayWithoutSecretAuth === '1' &&
+        //   gStores.userStore.patList.length
+        // ) {
+        //   uni.redirectTo({
+        //     url: '/pagesA/medicalCardMan/sign',
+        //   });
+        //   return;
+        // }
 
         // await patientUtils.getPatCardList();
         if (pageProps.value._directUrl) {
@@ -252,45 +281,49 @@
         }
       }
     } else {
-      await patientUtils.addRelevantPatient(requestData).catch(async (e) => {
-        const { respCode, message } = e;
-        const { idCard, patientPhone, patientName, idType } = formData.value;
+      const patientId = await patientUtils
+        .addRelevantPatient(requestData)
+        .catch(async (e) => {
+          const { respCode, message } = e;
+          const { idCard, patientPhone, patientName, idType } = formData.value;
 
-        if (
-          respCode === 884801 &&
-          idType === '01' &&
-          isCanChangeHosPhone === '1'
-        ) {
-          gStores.messageStore.closeMessage();
+          if (
+            respCode === 884801 &&
+            idType === '01' &&
+            isCanChangeHosPhone === '1'
+          ) {
+            gStores.messageStore.closeMessage();
 
-          const { confirm } = await apiAsync(uni.showModal, {
-            content: '患者存在建档记录但手机号不匹配，是否立即修改？',
-          });
-          if (confirm) {
-            uni.navigateTo({
-              url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-                idCard,
-                patientPhone,
-                patientName,
-                idType,
-              }),
+            const { confirm } = await apiAsync(uni.showModal, {
+              content: '患者存在建档记录但手机号不匹配，是否立即修改？',
             });
-          } else {
-            uni.reLaunch({
-              url: '/pagesA/medicalCardMan/medicalCardMan',
-            });
+            if (confirm) {
+              uni.navigateTo({
+                url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+                  idCard,
+                  patientPhone,
+                  patientName,
+                  idType,
+                }),
+              });
+            } else {
+              uni.reLaunch({
+                url: '/pagesA/medicalCardMan/medicalCardMan',
+              });
+            }
           }
-        }
 
-        throw new Error(message);
-      });
-      await patientUtils.getPatCardList();
-      if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
-        uni.redirectTo({
-          url: '/pagesA/medicalCardMan/sign',
+          throw new Error(message);
         });
-        return;
-      }
+      await goPaySign(patientId);
+
+      await patientUtils.getPatCardList();
+      // if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
+      //   uni.redirectTo({
+      //     url: '/pagesA/medicalCardMan/sign',
+      //   });
+      //   return;
+      // }
 
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
@@ -404,7 +437,7 @@
       isHidePatientTypeInPerfect,
       isSmsVerify,
       isDropAddress,
-      isDropNation
+      isDropNation,
     } = await ServerStaticData.getSystemConfig('person');
 
     const listArr: TFormKeys[] = [formKey.patientType];
@@ -419,7 +452,7 @@
 
     // 判断是否需要民族
     if (isDropNation !== '1') {
-      _patientInfo.unshift(formKey.nation)
+      _patientInfo.unshift(formKey.nation);
     }
 
     if (!globalGl.systemInfo.isSearchInHos) {
@@ -766,13 +799,19 @@
 
   onMounted(async () => {
     routeStore.receiveQuery(pageProps.value);
-    init();
+    await init();
 
     // #ifdef MP-ALIPAY
     if (globalGl.sConfig.login?.isAliAuthBase !== '1') {
       await loginAuthAlipay(init);
     }
     // #endif
+
+    await wait(20);
+    // 无带入信息, 说明不是从 pagesA/medicalCardMan/perfectReal 这里过来的
+    if (!pageProps.value.patientName) {
+      initSign();
+    }
   });
 </script>
 

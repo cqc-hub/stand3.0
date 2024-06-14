@@ -32,6 +32,25 @@
       @confirm="chooseCard"
     />
 
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :title="flagTitle1203"
+      :maskClickClose="false"
+      @cancel="disagreeSign"
+      height="90vh"
+      confirmText="同意授权,方便就诊"
+      cannerText="不授权"
+      ref="regDialogConfirmSign"
+    >
+      <g-flag
+        v-model:title="flagTitle1203"
+        typeFg="1203"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
+
     <view class="footer">
       <Fg-Agree
         v-model:isCheck="isCheck"
@@ -60,6 +79,7 @@
     nameConvert,
     getH5OpenidParam,
     ISystemConfig,
+    wait,
   } from '@/utils';
 
   import {
@@ -70,9 +90,10 @@
     formatterSubPatientData,
     loginAuthAlipay,
     TCardPat,
+    useProgramPaySign,
   } from './utils';
   import { deQueryForUrl, joinQuery } from '@/common';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
 
@@ -81,6 +102,7 @@
   import FgAgree from './components/fgAgree.vue';
   import globalGl from '@/config/global';
   import SelCardDialog from './components/SelCardDialog.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -301,10 +323,14 @@
           });
         }
       } else {
-        await patientUtil.addPatient(requestArg).catch((err) => {
-          dealNetError(err, data);
-          throw new Error(err);
-        });
+        const patientId = await patientUtil
+          .addPatient(requestArg)
+          .catch((err) => {
+            dealNetError(err, data);
+            throw new Error(err);
+          });
+
+        await goPaySign(patientId);
       }
 
       // 切换默认就诊人
@@ -361,6 +387,15 @@
     return isDisabled;
   });
 
+  const {
+    regDialogConfirmSign,
+    flagTitle1203,
+    disagreeSign,
+    initSign,
+    goPaySign,
+    signAfterOnPageShow,
+  } = useProgramPaySign();
+
   const init = async () => {
     let formListKeys: TFormKeys[] = [
       'patientType',
@@ -370,11 +405,13 @@
       'defaultFalg',
     ];
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    let { isSmsVerify, isHidePatientTypeInPerfect } = pageConfig.value;
+    let { isSmsVerify, isHidePatientTypeInPerfect, isPayWithoutSecretAuth } =
+      pageConfig.value;
 
     if (isHidePatientTypeInPerfect === '1') {
       formListKeys = formListKeys.filter((key) => key !== 'patientType');
     }
+
     // isSmsVerify = '0';
 
     let isFilterSmsVerify = false;
@@ -475,7 +512,14 @@
       await loginAuthAlipay(init);
     }
     // #endif
+    await wait(20);
+    await initSign();
   });
+
+  onShow(() => {
+    signAfterOnPageShow();
+  });
+
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
