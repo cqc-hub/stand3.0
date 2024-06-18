@@ -45,7 +45,7 @@
                 }"
                 class="popup-footer-container popup-padding"
               >
-                <button class="btn btn-normal cannel-btn" @click="hide">
+                <button class="btn btn-normal cannel-btn" @click="cancel">
                   {{ cannerText }}
                 </button>
 
@@ -89,7 +89,7 @@
     }
   );
 
-  const emits = defineEmits(['show', 'hide', 'confirm']);
+  const emits = defineEmits(['show', 'hide', 'confirm', 'cancel']);
 
   const popup = ref<any>('');
 
@@ -106,7 +106,7 @@
   };
 
   const hide = () => {
-    popup.value.close();
+    popup.value.hide();
   };
 
   const closePopup = () => {
@@ -117,6 +117,11 @@
     emits('confirm');
     hide();
   };
+
+  const cancel = () => {
+    hide();
+    emits('cancel');
+  }
 
   defineExpose({
     show,

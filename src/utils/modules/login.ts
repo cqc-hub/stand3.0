@@ -1066,12 +1066,19 @@ export class PatientUtils extends LoginUtils {
   ) {
     getH5OpenidParam(data);
     if (data._type === 'perfect') {
-      return await api.addPatByHasBeenTreatedEncry({
+      const {
+        result: { patientId },
+      } = await api.addPatByHasBeenTreatedEncry({
         ...data,
         patientType: '',
       });
+
+      return patientId;
     } else {
-      return await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+      const {
+        result: { patientId },
+      } = await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
+      return patientId;
     }
   }
 
@@ -1137,6 +1144,8 @@ export class PatientUtils extends LoginUtils {
       if (data.defaultFalg) {
         this.userStore.updatePatChoose({} as any);
       }
+
+      return patientId;
 
       // if (wechatCode) {
       //   await this.registerHealthCard(

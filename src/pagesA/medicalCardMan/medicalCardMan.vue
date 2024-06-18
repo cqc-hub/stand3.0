@@ -346,7 +346,7 @@
 
   .add-pat-box {
     margin: 0 32rpx;
-    padding: 38rpx 0;
+    padding: 24rpx 0;
     background-color: var(--h-color-white);
     border-radius: 16rpx;
     color: var(--hr-brand-color-6);
