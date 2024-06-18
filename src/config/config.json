@@ -5,7 +5,6 @@
       "wxAppid": "wxe26143481567cb97",
       "alipayAppid": "2021002139602458",
       "isvAlipayAppid": "2021003154665105",
-      "h5Appid": "wx8e5a08ccb011d26c",
       "name": "台州市第一人民医院",
       "isStartComeTest": false,
       "isSearchInHos": true,
@@ -271,6 +270,28 @@
       "isvAlipayAppid": "",
       "h5Appid": "",
       "name": "宁波耳鼻喉医院",
+      "isSearchInHos": false,
+      "isStartComeTest": true,
+      "isOpenOcr": false
+    },
+
+    "1001069": {
+      "wxAppid": "wxf544358f2736cd20",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "毕节市第一人民医院",
+      "isStartComeTest": true,
+      "isSearchInHos": true,
+      "isOpenOcr": true
+    },
+
+    "1001070": {
+      "wxAppid": "wx0c0b335f85dee134",
+      "alipayAppid": "2021004134632001",
+      "h5Appid": "",
+      "isvAlipayAppid": "2021004134663007",
+      "name": "益阳口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false
