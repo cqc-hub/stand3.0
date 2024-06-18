@@ -9,51 +9,58 @@
   import { deQueryForUrl } from '@/common';
   import { useTBanner, wait } from '@/utils';
 
-  const pageProps = ref(<{
-    admissionTime: string;
-    category: string;
-    deptName: string;
-    docName: string;
-    hosName: string;
-    patientName: string;
-    patientPhone: string;
-    visitNo: string;
-  }>{});
+  const pageProps = ref(
+    <
+      {
+        admissionTime: string;
+        category: string;
+        deptName: string;
+        docName: string;
+        hosName: string;
+        patientName: string;
+        patientPhone: string;
+        visitNo: string;
+        hosId: string;
+        hosDeptId: string;
+        hosDocId: string;
+      }
+    >{}
+  );
 
   onLoad(async (opt) => {
     uni.showLoading({});
     await wait(500);
     uni.hideLoading();
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log( pageProps.value, ' pageProps.value pageProps.value');
+    console.log(pageProps.value, ' pageProps.value pageProps.value');
     const { patientPhone, admissionTime } = pageProps.value;
     if (patientPhone) {
-    const [visitDate, visitTime] = admissionTime.split(' ');
+      const [visitDate, visitTime] = admissionTime.split(' ');
 
       useTBanner({
-      path: 'pagesC/question/questionAfterVisit2',
-      type: 'h5',
-      isSelfH5: '1',
-      extraData: {
-        ...pageProps.value,
-        visitDate,
-        visitTime
-      },
-    });
+        path: 'pagesC/question/questionAfterVisit2',
+        type: 'h5',
+        isSelfH5: '1',
+        extraData: {
+          ...pageProps.value,
+          visitDate,
+          visitTime,
+        },
+      });
     } else {
       useTBanner({
-      path: 'pagesC/question/questionAfterVisit',
-      type: 'h5',
-      isSelfH5: '1',
-      addition: {
-        patientId: '_p',
-      },
-      extraData: {
-        type: 'hk'
-      }
-    });
+        path: 'pagesC/question/questionAfterVisit',
+        type: 'h5',
+        isSelfH5: '1',
+        addition: {
+          patientId: '_p',
+        },
+        extraData: {
+          type: 'hk',
+        },
+      });
     }
-    return
+    return;
     // useTBanner({
     //   path: 'pagesC/question/questionAfterVisit2',
     //   type: 'h5',
@@ -83,8 +90,8 @@
         patientId: '_p',
       },
       extraData: {
-        type: 'hk'
-      }
+        type: 'hk',
+      },
     });
   });
 </script>

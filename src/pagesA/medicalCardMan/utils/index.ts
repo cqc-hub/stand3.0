@@ -588,22 +588,31 @@ export const useProgramPaySign = () => {
     } = gStores.globalStore;
 
     uni.showLoading({
-      title: '查询中...',
+      title: '查询签约中...',
       mask: true,
     });
     await wait(5000);
     const {
-      result: { message, signFlag },
+      result: { message, signFlag, showFlag },
     } = await api.patSign({
       patientId,
       source,
     });
 
-    if (signFlag) {
+    if (showFlag) {
+      await signAfter(patientId);
+    } else if (signFlag) {
       await patientUtils.getPatCardList();
       routerJump('/pages/home/home');
     } else {
-      gStores.messageStore.showMessage(message, 3000);
+      gStores.messageStore.closeMessage();
+      await wait(20);
+      gStores.messageStore.showMessage(message, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title: '提示',
+        },
+      });
       throw new Error('查询免密代扣签约失败');
     }
     // await patientUtils.getPatCardList();

@@ -84,7 +84,7 @@
 
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed } from 'vue';
-  import { onLoad, onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
 
@@ -169,6 +169,7 @@
     disagreeSign,
     initSign,
     goPaySign,
+    signAfterOnPageShow,
   } = useProgramPaySign();
 
   const isOpenOcr = async () => {
@@ -791,6 +792,10 @@
         title: '完善账号实名信息',
       });
     }
+  });
+
+  onShow(() => {
+    signAfterOnPageShow();
   });
 
   onLoad((opt) => {
