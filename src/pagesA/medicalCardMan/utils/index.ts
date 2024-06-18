@@ -451,10 +451,15 @@ export const getDefaultFormData = async (
 
     if (!patList.length) {
       const { userName, mobile, certNo } = gStores.userStore.cacheUser;
-
-      data[formKey.patientName] = userName;
-      data[formKey.patientPhone] = mobile;
-      data[formKey.idCard] = certNo;
+      if (userName) {
+        data[formKey.patientName] = userName;
+      }
+      if (mobile) {
+        data[formKey.patientPhone] = mobile;
+      }
+      if (certNo) {
+        data[formKey.idCard] = certNo;
+      }
     }
     // #endif
   }
@@ -520,7 +525,6 @@ export const loginAuthAlipay = async (init: Function) => {
   const gStores = new GStores();
 
   const { cacheUser, patList } = gStores.userStore;
-  console.log(cacheUser, 'cacheUsercacheUser');
 
   const { userName, certNo } = cacheUser;
   // #ifdef MP-ALIPAY
@@ -555,6 +559,15 @@ export const useProgramPaySign = () => {
   let isAfterSign = false;
   let _patientId = '';
 
+  let containerEnv: 'wx' | 'ali';
+  // #ifdef MP-WEIXIN
+  containerEnv = <any>'wx';
+  // #endif
+
+  // #ifdef MP-ALIPAY
+  containerEnv = <any>'ali';
+  // #endif
+
   const disagreeSign = () => {
     const pages = getCurrentPages();
     if (pages && pages.length > 1) {
@@ -569,6 +582,7 @@ export const useProgramPaySign = () => {
   };
 
   const signAfterOnPageShow = async () => {
+    // 目前只有微信是异步的
     if (
       !isAfterSign ||
       // 微信点击开通的签约授权
@@ -681,30 +695,48 @@ export const useProgramPaySign = () => {
         userName: cacheUser.userName,
         showUrl: '/pagesA/medicalCardMan/sign?isBack=1',
       };
-      console.log(args);
       const {
-        result: { invokeData },
+        result: { invokeData, continueWxSign },
       } = await api.applyForSign(args);
-      // #ifdef MP-WEIXIN
-      await apiAsync(wx.navigateToMiniProgram, {
-        appId: 'wxbd687630cd02ce1d',
-        path: 'pages/index/index',
-        extraData: invokeData,
-      });
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      await apiAsync(my.paySignCenter, {
-        signStr: encodeURIComponent(invokeData.signStr),
-      });
-      // #endif
-      isAfterSign = true;
       _patientId = patientId;
 
-      console.log('jjjjjjj');
-      // await signAfter(patientId);
-      // 微信签约成功后需要在 onShow 中继续走
-      throw new Error('签约');
+      if (containerEnv === 'wx') {
+        if (!continueWxSign) {
+          await apiAsync(wx.navigateToMiniProgram, {
+            appId: 'wxbd687630cd02ce1d',
+            path: 'pages/index/index',
+            extraData: invokeData,
+          });
+          isAfterSign = true;
+          // 微信签约成功后需要在 onShow 中继续走
+          throw new Error('签约');
+        }
+      } else if (containerEnv === 'ali') {
+        const { result: _aliRes, resultStatus } = await apiAsync(
+          my.paySignCenter,
+          {
+            signStr: encodeURIComponent(invokeData.signStr),
+          }
+        );
+        if (resultStatus !== '7000') {
+          throw new Error('未签约');
+        }
+        let aliRes: any = {};
+        try {
+          aliRes = JSON.parse(_aliRes);
+        } catch (error) {
+          aliRes = {};
+        }
+
+        if (
+          aliRes &&
+          aliRes.alipay_user_agreement_page_sign_response?.code === '10000'
+        ) {
+          await signAfter(_patientId);
+        } else {
+          throw new Error('签约异常');
+        }
+      }
     },
   };
 };

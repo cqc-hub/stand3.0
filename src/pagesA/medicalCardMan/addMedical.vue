@@ -758,6 +758,7 @@
       })
     );
 
+
     // 默认身份证
     formData.value[formKey.idType] = '01';
 
@@ -766,10 +767,10 @@
       formData.value[formKey.patientType] || '-1';
     verifyCode = formData.value[formKey.verifyCode];
 
-    const defaultValue = await getDefaultFormData(
-      pageProps.value.pageType || 'addPatient'
-    );
-    Object.assign(formData.value, defaultValue);
+    // const defaultValue = await getDefaultFormData(
+    //   pageProps.value.pageType || 'addPatient'
+    // );
+    // Object.assign(formData.value, defaultValue);
 
     //暂时注释 这个值是undifined
     // if ((props.patientType as string) === '-1') {

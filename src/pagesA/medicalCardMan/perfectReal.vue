@@ -224,16 +224,6 @@
                 birthday,
               });
 
-              if (
-                pageConfig.value.isPayWithoutSecretAuth === '1' &&
-                gStores.userStore.patList.length
-              ) {
-                uni.redirectTo({
-                  url: '/pagesA/medicalCardMan/sign',
-                });
-                return;
-              }
-
               routerJump('/pages/home/home');
             } catch (error) {
               if ((error as any)?.errorType === 'add') {
@@ -339,16 +329,6 @@
       }
       await patientUtil.getPatCardList();
 
-      if (
-        pageConfig.value.isPayWithoutSecretAuth === '1' &&
-        gStores.userStore.patList.length
-      ) {
-        uni.redirectTo({
-          url: '/pagesA/medicalCardMan/sign',
-        });
-        return;
-      }
-
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -397,6 +377,8 @@
   } = useProgramPaySign();
 
   const init = async () => {
+    const { userName, mobile } = gStores.userStore.cacheUser;
+
     let formListKeys: TFormKeys[] = [
       'patientType',
       'patientName',
@@ -418,7 +400,7 @@
     if (pageProps.value.pageType !== 'perfectReal') {
       // #ifdef MP-ALIPAY
       // 支付宝第一个就诊人自动带入信息 不需要验证码
-      if (!patList.length) {
+      if (!patList.length && mobile) {
         isFilterSmsVerify = true;
       }
       // #endif
@@ -452,7 +434,7 @@
     } else {
       // #ifdef MP-ALIPAY
       // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
-      if (!patList.length) {
+      if (!patList.length && mobile) {
         formList.map((o) => {
           const { key } = o;
 
@@ -491,6 +473,7 @@
         o.disabled = true;
       }
     });
+    console.log(formData.value, 'formData.valueformData.value');
 
     gform.value.setList(formList);
   };
