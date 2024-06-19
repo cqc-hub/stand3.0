@@ -1,10 +1,11 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
       "alipayAppid": "2021002139602458",
       "isvAlipayAppid": "2021003154665105",
+
       "name": "台州市第一人民医院",
       "isStartComeTest": false,
       "isSearchInHos": true,
@@ -288,9 +289,9 @@
 
     "1001070": {
       "wxAppid": "wx0c0b335f85dee134",
-      "alipayAppid": "2021004134632001",
+      "alipayAppid": "",
       "h5Appid": "",
-      "isvAlipayAppid": "2021004134663007",
+      "isvAlipayAppid": "",
       "name": "益阳口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
