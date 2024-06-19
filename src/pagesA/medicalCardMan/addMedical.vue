@@ -30,6 +30,7 @@
       :title="flagTitle1203"
       :maskClickClose="false"
       @cancel="disagreeSign"
+      @confirm="isAgreeSign = true"
       height="90vh"
       confirmText="同意授权,方便就诊"
       cannerText="不授权"
@@ -46,6 +47,15 @@
 
     <view class="footer">
       <Fg-Agree v-if="_isPageFirst" v-model:isCheck="isCheck" />
+
+      <Fg-Agree
+        v-if="isSignExist && !pageProps.patientName"
+        v-model:isCheck="isAgreeSign"
+        :systemModeOld="gStores.globalStore.modeOld"
+        @show-agree="regDialogConfirmSign.show"
+        content="《免密代扣协议》"
+        cusShowAgree
+      />
 
       <button
         v-if="!isShowHealthLogin"
@@ -170,6 +180,8 @@
     initSign,
     goPaySign,
     signAfterOnPageShow,
+    isAgreeSign,
+    isSignExist,
   } = useProgramPaySign();
 
   const isOpenOcr = async () => {
@@ -727,6 +739,14 @@
         return true;
       }
     }
+    if (
+      isSignExist.value &&
+      !pageProps.value.patientName &&
+      !isAgreeSign.value
+    ) {
+      return true;
+    }
+
     let count = 0;
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
@@ -757,7 +777,6 @@
         return [key, value];
       })
     );
-
 
     // 默认身份证
     formData.value[formKey.idType] = '01';

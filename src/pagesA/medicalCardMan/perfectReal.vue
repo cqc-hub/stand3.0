@@ -37,6 +37,7 @@
       :title="flagTitle1203"
       :maskClickClose="false"
       @cancel="disagreeSign"
+      @confirm="isAgreeSign = true"
       height="90vh"
       confirmText="同意授权,方便就诊"
       cannerText="不授权"
@@ -52,6 +53,14 @@
     </Order-Reg-Confirm>
 
     <view class="footer">
+      <Fg-Agree
+        v-if="isSignExist"
+        v-model:isCheck="isAgreeSign"
+        :systemModeOld="gStores.globalStore.modeOld"
+        @show-agree="regDialogConfirmSign.show"
+        content="《免密代扣协议》"
+        cusShowAgree
+      />
       <Fg-Agree
         v-model:isCheck="isCheck"
         :systemModeOld="gStores.globalStore.modeOld"
@@ -165,7 +174,7 @@
   };
 
   const formSubmit = async ({}) => {
-    if (!isCheck.value) {
+    if (!isCheck.value || (isSignExist.value && !isAgreeSign.value)) {
       messageStore.showMessage('请勾选下方同意书', 3000);
 
       return;
@@ -374,6 +383,8 @@
     initSign,
     goPaySign,
     signAfterOnPageShow,
+    isAgreeSign,
+    isSignExist,
   } = useProgramPaySign();
 
   const init = async () => {

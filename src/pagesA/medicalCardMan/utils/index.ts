@@ -556,6 +556,8 @@ export const useProgramPaySign = () => {
   const regDialogConfirmSign = ref(<any>'');
   const flagTitle1203 = ref('温馨提示');
   const patientUtils = new PatientUtils();
+  // 存在签约功能?
+  const isSignExist = ref(false);
   let isAfterSign = false;
   let _patientId = '';
 
@@ -567,18 +569,19 @@ export const useProgramPaySign = () => {
   // #ifdef MP-ALIPAY
   containerEnv = <any>'ali';
   // #endif
-
+  const isAgreeSign = ref(false);
   const disagreeSign = () => {
-    const pages = getCurrentPages();
-    if (pages && pages.length > 1) {
-      uni.navigateBack({
-        delta: 1,
-      });
-    } else {
-      uni.reLaunch({
-        url: '/pages/home/home',
-      });
-    }
+    isAgreeSign.value = false;
+    // const pages = getCurrentPages();
+    // if (pages && pages.length > 1) {
+    //   uni.navigateBack({
+    //     delta: 1,
+    //   });
+    // } else {
+    //   uni.reLaunch({
+    //     url: '/pages/home/home',
+    //   });
+    // }
   };
 
   const signAfterOnPageShow = async () => {
@@ -641,15 +644,18 @@ export const useProgramPaySign = () => {
   return {
     signAfterOnPageShow,
     disagreeSign,
+    isAgreeSign,
     flagTitle1203,
     regDialogConfirmSign,
+    isSignExist,
     async initSign() {
       const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
         'person'
       );
 
       if (isPayWithoutSecretAuth === '1') {
-        regDialogConfirmSign.value.show();
+        // regDialogConfirmSign.value.show();
+        isSignExist.value = true;
       }
     },
 
@@ -663,19 +669,23 @@ export const useProgramPaySign = () => {
       let { phoneNum, cacheUser } = gStores.userStore;
       const {
         browser: { source },
-        openId,
+        openId: _openId,
       } = gStores.globalStore;
       let channel = 'WX_JSAPI_SIGN';
       let payType = 'WX_MINI';
+      let openId = '';
+      let userId = '';
       // await new AliPayLoginHandler().handlerAuth()
 
       // #ifdef MP-WEIXIN
       channel = 'WX_MINI_SIGN';
+      openId = _openId;
       // #endif
 
       // #ifdef MP-ALIPAY
       channel = 'ALI_MINI_SIGN';
       payType = 'ALI_MINI';
+      userId = _openId;
 
       if (!cacheUser.certNo) {
         await new AliPayLoginHandler().handlerAuth();
@@ -685,7 +695,7 @@ export const useProgramPaySign = () => {
       const args = {
         channel,
         openId,
-        userId: openId,
+        userId,
         patientId,
         source,
         payType,
