@@ -43,6 +43,8 @@ interface ISConfig {
     appId: string;
     path: string;
   };
+   //首页开启安诊儿云陪诊——支付宝
+   isOpenIntelAI?:boolean;
   //首页是否展示支付宝的关注组件
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
@@ -234,6 +236,7 @@ const scJson: Record<string, ISConfig> = {
    * 台州第一人民医院
    */
   1001033: {
+    isOpenIntelAI: true,
     isOpenAlipayZndz: true,
     isDrugDelivery: '1',
     isOpenHelpOld: '1',

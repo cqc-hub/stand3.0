@@ -169,6 +169,21 @@
             </view>
           </drag-button>
           <!-- #endif -->
+          <!-- #ifdef MP-ALIPAY -->
+          <drag-button
+            v-if="global.sConfig.isOpenIntelAI"
+            :right="1"
+            :edge="100"
+            :zid="33"
+            @btnClick="gotoIntelAI"
+            isDock
+            scrollY
+          >
+          <view class="auto-person g-fade-in">
+						<image :src="$global.BASE_IMG + 'aze_small.png'"></image>
+					</view>
+          </drag-button>
+          <!-- #endif -->
 
           <!-- #ifdef MP-WEIXIN -->
           <view>
@@ -327,6 +342,8 @@
     LoginType,
     PatientUtils,
     ServerStaticData,
+    useTBanner,
+    type TButtonConfig,
     type ISystemConfig,
   } from '@/utils';
 
@@ -454,6 +471,23 @@
       });
     }
   };
+  //跳转云陪诊安诊儿
+  const gotoIntelAI = () => {
+    const IntelAI : TButtonConfig  = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '云陪诊',
+    extraData: {
+      _type: 'ypzaze',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+  useTBanner(IntelAI)
+  }
   //打开关注框
   const openShare = (item) => {
     h5QrCodeData.value = item;
