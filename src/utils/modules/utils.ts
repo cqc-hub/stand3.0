@@ -6,6 +6,7 @@ import { useCacheStore } from '@/stores';
 import { GStores } from '@/utils';
 import { toPayPull } from '@/components/g-pay';
 
+
 type NeverTurnsAny<T> = T extends never ? any : T;
 
 //获取随机id
@@ -312,7 +313,14 @@ export const getLocation = async function (isForce?: boolean): Promise<{
 }> {
   return new Promise(async (success, fail) => {
     const res = await apiAsync(uni.getLocation, {}).catch((err) => {
-      if (!isForce) {
+    if(err?.errCode === 2 || err?.extError === 12 ){
+      const gStores = new GStores();
+      gStores.messageStore.showMessage('请检查设备是否开启定位', 5000, {
+        uniToast: true,
+      });
+      throw new Error(err);
+    }  
+    if (!isForce) {
         fail(err);
         throw new Error(err);
       }
@@ -327,7 +335,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
       res.latitude = latitude + '';
 
       success(res as any);
-    } else {
+    } else {   
       const reAuth = async function () {
         // #ifdef MP-WEIXIN
         const { authSetting } = await apiAsync(uni.getSetting, {});

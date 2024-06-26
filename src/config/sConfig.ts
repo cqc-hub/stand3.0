@@ -89,6 +89,9 @@ interface ISConfig {
 
       /** 医保开启亲情付 */
       isFamilyPayment?: '1';
+
+      /** 医保建档 */
+      medicalFiling?: '1'
     };
 
     wx?: {
@@ -250,6 +253,7 @@ const scJson: Record<string, ISConfig> = {
           orgId: { 1279: 'H33100300340' },
           cardType: '01',
         },
+        medicalFiling: '1',
         isFamilyPayment: '1',
       },
     },

@@ -51,7 +51,19 @@
         aaa
       />
     </Order-Reg-Confirm>
-
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      v-if="$global.sConfig.medicalMHelp && $global.sConfig.medicalMHelp.alipay && $global.sConfig.medicalMHelp.alipay.medicalFiling"
+      title="温馨提示"
+      :maskClickClose="false"
+      @confirm="medicalFiling"
+      height="30vh"
+      confirmText="确定"
+      cannerText="取消"
+      ref="regDialogMedicalFiling"
+    >
+      仅账号本人可更新为医保用户，是否更新为医保用户？
+    </Order-Reg-Confirm>
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist"
@@ -79,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults } from 'vue';
+  import { ref, onMounted, computed, withDefaults ,type Ref} from 'vue';
   import {
     PatientUtils,
     GStores,
@@ -105,6 +117,7 @@
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
+  import { isMedicalSelf, dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail'
 
   import api from '@/service/api';
 
@@ -151,6 +164,7 @@
   const dialogSelCardShow = ref(false);
   const dialogShow = ref(false);
   const dialogContent = ref('');
+  const regDialogMedicalFiling:Ref<any>=ref('')
   let dialogConfirm = () => {};
   const cardPatList = ref(<TCardPat[]>[]);
   const dialogConfirmRRR = () => {
@@ -387,6 +401,13 @@
     isSignExist,
   } = useProgramPaySign();
 
+  //医保更新用户信息
+  const medicalFiling = async (cardNumber = '10830963') => {
+  //这一步放到弹窗之前
+    const flag = await isMedicalSelf(cardNumber)
+    console.log('medicalFiling - isMedicalSelf' ,flag)
+   await dealMedicalFiling(cardNumber)
+  }
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
 
@@ -508,6 +529,8 @@
     // #endif
     await wait(20);
     await initSign();
+    console.log(8888,12345678)
+    regDialogMedicalFiling.value.show()
   });
 
   onShow(() => {
