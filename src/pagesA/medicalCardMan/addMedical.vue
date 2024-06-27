@@ -288,12 +288,12 @@
         if (pageProps.value._directUrl) {
           routerJump(pageProps.value._directUrl as `/${string}`);
         } else {
-          routerJump('/pages/home/home');
+          routerJump('/pagesA/medicalCardMan/medicalCardMan');
         }
       } catch (error) {
         if ((error as any)?.errorType === 'add') {
           uni.reLaunch({
-            url: '/pages/home/home',
+            url: '/pagesA/medicalCardMan/medicalCardMan',
           });
         }
       }
@@ -356,7 +356,7 @@
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
-        routerJump('/pages/home/home');
+        routerJump('/pagesA/medicalCardMan/medicalCardMan');
       }
     }
   };
