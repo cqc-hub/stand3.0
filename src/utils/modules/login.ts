@@ -278,6 +278,24 @@ export class LoginUtils extends GStores {
     throw new Error('未开通该服务');
   }
 
+  async faceVerifyAndPDataForPat(pat: IPat) {
+    const { patientName, patientId, idCardEncry } = pat;
+    const { source } = this.globalStore.browser;
+
+    const {
+      result: { idCard },
+    } = await api.rpGetPlain({
+      source,
+      idCardEncry,
+      patientId,
+    });
+
+    return this.faceVerifyAndPData({
+      name: patientName,
+      idCardNumber: idCard
+    })
+  }
+
   async faceVerifyAndPData({ name, idCardNumber }) {
     const {
       browser: { source },

@@ -579,7 +579,7 @@ export const useProgramPaySign = () => {
     //   });
     // } else {
     //   uni.reLaunch({
-    //     url: '/pages/home/home',
+    //     url: '/pagesA/medicalCardMan/medicalCardMan',
     //   });
     // }
   };
@@ -620,7 +620,7 @@ export const useProgramPaySign = () => {
       await signAfter(patientId);
     } else if (signFlag) {
       await patientUtils.getPatCardList();
-      routerJump('/pages/home/home');
+      routerJump('/pagesA/medicalCardMan/medicalCardMan');
     } else {
       gStores.messageStore.closeMessage();
       await wait(20);

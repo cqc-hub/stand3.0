@@ -85,11 +85,16 @@
     const { phone, verifyCode, patientId } = data;
     const { source } = gStore.globalStore.browser;
 
+    const { pData } = await patientUtils.faceVerifyAndPDataForPat(
+      gStore.userStore.clickPat
+    );
+
     await api.mdifPhone({
       patientPhone: phone,
       verifyCode,
       patientId,
       source,
+      pdata: pData
     });
 
     await patientUtils.getPatCardList();
