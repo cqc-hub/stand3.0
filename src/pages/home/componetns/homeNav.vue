@@ -20,7 +20,9 @@
         class="logo"
       />
 
-      <view v-else class="nav-title f40 g-bold">
+      <view v-else class="nav-title  g-bold" :class="
+                $global.systemInfo.name!.length>13?'f32':'f40' 
+              ">
         {{ $global.systemInfo.name }}
       </view>
     </view>

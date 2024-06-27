@@ -119,6 +119,7 @@
     apiAsync,
     wait,
   } from '@/utils';
+  import api from '@/service/api';
 
   import dayjs from 'dayjs';
   import globalGl from '@/config/global';
@@ -212,6 +213,7 @@
 
     const requestData = {
       wechatCode: '',
+      pData: '',
       verifyType: '1&bk',
       patientName: '',
       source,
@@ -257,10 +259,12 @@
 
     if (isFace === '1') {
       if (formData.value[formKey.idType] === '01') {
-        await patientUtils.faceVerify({
+        const { pData } = await patientUtils.faceVerifyAndPData({
           idCardNumber: formData.value[formKey.idCard],
           name: formData.value[formKey.patientName],
         });
+
+        requestData.pData = pData;
       }
     }
 
@@ -311,18 +315,29 @@
               content: '患者存在建档记录但手机号不匹配，是否立即修改？',
             });
             if (confirm) {
-              uni.navigateTo({
-                url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-                  idCard,
-                  patientPhone,
-                  patientName,
-                  idType,
-                }),
-              });
-            } else {
-              uni.reLaunch({
-                url: '/pagesA/medicalCardMan/medicalCardMan',
-              });
+              if (!requestData.pData) {
+                // 默认有人脸
+                const { pData } = await patientUtils.faceVerifyAndPData({
+                  idCardNumber: formData.value[formKey.idCard],
+                  name: formData.value[formKey.patientName],
+                });
+                requestData.pData = pData;
+
+                await api.mofHosPhone({
+                  ...requestData,
+                  pdata: requestData.pData,
+                  source: gStores.globalStore.browser.source
+                });
+                return await patientUtils.addRelevantPatient(requestData);
+              }
+              // uni.navigateTo({
+              //   url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+              //     idCard,
+              //     patientPhone,
+              //     patientName,
+              //     idType,
+              //   }),
+              // });
             }
           }
 

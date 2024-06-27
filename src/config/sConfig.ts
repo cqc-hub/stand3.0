@@ -158,6 +158,13 @@ const scJson: Record<string, ISConfig> = {
     isSearchHosForAddPatHasMoreThanOneCard: '1',
   },
 
+  /**
+   * 濮阳市第五人民医院
+   */
+  1001059: {
+    isSearchHosForAddPatHasMoreThanOneCard: '1',
+  },
+
   1001066: {
     login: {
       isSkipPerfect: '1',
