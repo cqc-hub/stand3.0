@@ -842,6 +842,12 @@ const userApi = {
       '/phs-user/relevantPatient/getPatCardList',
       parm(data)
     ),
+  //获取就诊人详情
+  getPatCardInfo: (data) =>
+  service.post<IPat[]>(
+    '/phs-user/relevantPatient/getPatCardInfo',
+    parm(data)
+  ),
 
   //获取就诊人信息（院内）
   getPatCardInfoByHospital: (data) =>

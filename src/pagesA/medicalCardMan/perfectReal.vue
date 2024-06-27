@@ -51,7 +51,19 @@
         aaa
       />
     </Order-Reg-Confirm>
-
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      v-if="isMedicalFiling"
+      title="是否更新为医保用户？"
+      :maskClickClose="false"
+      @confirm="medicalFiling"
+      height="35vh"
+      confirmText="确定"
+      cannerText="取消"
+      ref="regDialogMedicalFiling"
+    >
+      仅账号本人可更新为医保用户，是否更新为医保用户？
+    </Order-Reg-Confirm>
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist"
@@ -79,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults } from 'vue';
+  import { ref, onMounted, computed, withDefaults ,type Ref} from 'vue';
   import {
     PatientUtils,
     GStores,
@@ -105,6 +117,7 @@
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
+  import { isMedicalSelf, dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail'
 
   import api from '@/service/api';
 
@@ -151,13 +164,15 @@
   const dialogSelCardShow = ref(false);
   const dialogShow = ref(false);
   const dialogContent = ref('');
+  const regDialogMedicalFiling:Ref<any>=ref('')
+  const isMedicalFiling = ref(false);
   let dialogConfirm = () => {};
   const cardPatList = ref(<TCardPat[]>[]);
   const dialogConfirmRRR = () => {
     dialogShow.value = false;
     dialogConfirm();
   };
-
+  const newPat=ref()
   const activeCardSelCardNumber = ref('');
   const selCardPat = (pat: TCardPat) => {
     activeCardSelCardNumber.value = pat.cardNumber;
@@ -328,8 +343,20 @@
             dealNetError(err, data);
             throw new Error(err);
           });
-
-        await goPaySign(patientId);
+          const {result:pat} = await api.getPatCardInfo({
+            "herenId":  patientUtil.globalStore.herenId,
+            "patientId": patientId,
+            "source":  patientUtil.globalStore.browser.source,
+          })
+          newPat.value=pat
+          const flag = await isMedicalSelf(newPat.value.cardNumber)
+          if(isMedicalFiling&&flag){
+            regDialogMedicalFiling.value.show()
+            return
+            }else{
+            await goPaySign(patientId);
+          }
+        
       }
 
       // 切换默认就诊人
@@ -386,6 +413,17 @@
     isAgreeSign,
     isSignExist,
   } = useProgramPaySign();
+
+  //医保更新用户信息,医保建档
+  const medicalFiling = async ( ) => {
+    const flag = await dealMedicalFiling(newPat.value.patientId)
+    if(flag){
+      await goPaySign(newPat.value.patientId);
+      routerJump('/pages/home/home');
+    }else{
+      regDialogMedicalFiling.value.show()
+    }
+  }
 
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
@@ -487,6 +525,17 @@
     console.log(formData.value, 'formData.valueformData.value');
 
     gform.value.setList(formList);
+
+    //是否医保建档
+    const medicalMHelp = globalGl.sConfig.medicalMHelp!;
+      // #ifdef  MP-WEIXIN
+      //先实现支付宝
+      // #endif
+      // #ifdef MP-ALIPAY
+      isMedicalFiling.value= medicalMHelp.alipay?.medicalFiling === '1';
+      // #endif
+   
+    
   };
 
   onReady(() => {

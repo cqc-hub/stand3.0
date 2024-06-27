@@ -246,7 +246,7 @@ const scJson: Record<string, ISConfig> = {
    * 台州第一人民医院
    */
   1001033: {
-    isOpenIntelAI: true,
+    // isOpenIntelAI: true,
     isOpenAlipayZndz: true,
     isDrugDelivery: '1',
     isOpenHelpOld: '1',
