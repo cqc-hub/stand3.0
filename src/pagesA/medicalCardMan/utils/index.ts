@@ -134,10 +134,10 @@ export const tempList: TInstance[] = [
           //   });
           // }
 
-          if (v.length > 20) {
+          if (v.length > 50) {
             return Promise.resolve({
               success: false,
-              message: '真实姓名不能大于 20 个字符',
+              message: '真实姓名不能大于 50 个字符 ', 
             });
           }
         }
@@ -579,7 +579,7 @@ export const useProgramPaySign = () => {
     //   });
     // } else {
     //   uni.reLaunch({
-    //     url: '/pagesA/medicalCardMan/medicalCardMan',
+    //     url: '/pages/home/home',
     //   });
     // }
   };
@@ -620,7 +620,7 @@ export const useProgramPaySign = () => {
       await signAfter(patientId);
     } else if (signFlag) {
       await patientUtils.getPatCardList();
-      routerJump('/pagesA/medicalCardMan/medicalCardMan');
+      routerJump('/pages/home/home');
     } else {
       gStores.messageStore.closeMessage();
       await wait(20);

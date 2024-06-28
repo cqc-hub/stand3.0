@@ -69,10 +69,10 @@
               success: true,
             });
           } else {
-            if (v.length > 20) {
+            if (v.length > 50) {
               return Promise.resolve({
                 success: false,
-                message: '真实姓名不能大于 20 个字符',
+                message: '真实姓名不能大于 50 个字符',
               });
             }
           }

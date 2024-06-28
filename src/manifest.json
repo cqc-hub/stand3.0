@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx08440928b105c3bf",
+    "appid": "wxfa6c5f0835eedf08",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,26 +71,14 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-<<<<<<< HEAD
     "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
-=======
-    "plugins": {},
->>>>>>> acbbf7680ff5382eb93f9725bbab2b09f329b5c2
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591"
+    "appid": "2021002143620963"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -102,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温医附二院就医助手",
+  "name": "湖州三院",
   "h5": {
     "router": {
       "base": "./"
