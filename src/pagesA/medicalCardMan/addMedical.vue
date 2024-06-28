@@ -369,14 +369,20 @@
           })
           newPat.value=pat
           const flag = await isMedicalSelf(newPat.value.cardNumber)
+<<<<<<< HEAD
      
+=======
+          console.log('isMedicalFiling.value&&flag',isMedicalFiling.value)
+          console.log('isMedicalFiling.value&&flag',flag)
+          console.log('isMedicalFiling.value&&flag',isMedicalFiling.value&&flag)
+>>>>>>> d041f9d3c566650fdecae22dfa3399e677e46038
           if(isMedicalFiling.value&&flag){
             regDialogMedicalFiling.value.show()
             return
             }else{
             await goPaySign(patientId);
           }
-      
+
 
       await patientUtils.getPatCardList();
       // if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
@@ -845,10 +851,10 @@
       formData.value[formKey.patientType] || '-1';
     verifyCode = formData.value[formKey.verifyCode];
 
-    // const defaultValue = await getDefaultFormData(
-    //   pageProps.value.pageType || 'addPatient'
-    // );
-    // Object.assign(formData.value, defaultValue);
+    const defaultValue = await getDefaultFormData(
+      pageProps.value.pageType || 'addPatient'
+    );
+    Object.assign(formData.value, defaultValue);
 
     //暂时注释 这个值是undifined
     // if ((props.patientType as string) === '-1') {
