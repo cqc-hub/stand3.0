@@ -369,13 +369,9 @@
           })
           newPat.value=pat
           const flag = await isMedicalSelf(newPat.value.cardNumber)
-<<<<<<< HEAD
-     
-=======
           console.log('isMedicalFiling.value&&flag',isMedicalFiling.value)
           console.log('isMedicalFiling.value&&flag',flag)
           console.log('isMedicalFiling.value&&flag',isMedicalFiling.value&&flag)
->>>>>>> d041f9d3c566650fdecae22dfa3399e677e46038
           if(isMedicalFiling.value&&flag){
             regDialogMedicalFiling.value.show()
             return
