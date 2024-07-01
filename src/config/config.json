@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001040",
+  "sysCode": "1001070",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -292,7 +292,7 @@
       "alipayAppid": "",
       "h5Appid": "",
       "isvAlipayAppid": "",
-      "name": "益阳口腔医院",
+      "name": "益阳医专附属口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false

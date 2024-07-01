@@ -369,13 +369,7 @@
           })
           newPat.value=pat
           const flag = await isMedicalSelf(newPat.value.cardNumber)
-<<<<<<< HEAD
-     
-=======
-          console.log('isMedicalFiling.value&&flag',isMedicalFiling.value)
-          console.log('isMedicalFiling.value&&flag',flag)
-          console.log('isMedicalFiling.value&&flag',isMedicalFiling.value&&flag)
->>>>>>> d041f9d3c566650fdecae22dfa3399e677e46038
+
           if(isMedicalFiling.value&&flag){
             regDialogMedicalFiling.value.show()
             return
@@ -876,7 +870,7 @@
       //先实现支付宝
       // #endif
       // #ifdef MP-ALIPAY
-      console.log(888888,medicalMHelp.alipay?.medicalFiling)
+
       isMedicalFiling.value= medicalMHelp.alipay?.medicalFiling === '1';
       // #endif
   };

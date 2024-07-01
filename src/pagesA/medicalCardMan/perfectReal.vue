@@ -522,7 +522,7 @@
         o.disabled = true;
       }
     });
-    console.log(formData.value, 'formData.valueformData.value');
+
 
     gform.value.setList(formList);
 
