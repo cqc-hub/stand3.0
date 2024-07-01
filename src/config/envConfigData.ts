@@ -5,7 +5,7 @@ import { type TBannerConfig } from '@/utils';
  */
 
 export const sysConfigEnv = <const>{
-  // 'person.isSmsVerify': '0',
+  'person.isSmsVerify': '0',
   // 'reportQuery.isOpenCollect': '1',
   // 'person.realNameAuth': ['ocrVerify', 'faceVerify'],
   // 'person.isSkipPerfect': '1',

@@ -51,13 +51,18 @@
     base64Src,
     ServerStaticData,
     ISystemConfig,
-    LoginUtils,
+    PatientUtils,
+    routerJump,
   } from '@/utils';
   import { pickTempItem } from './utils';
 
   import api from '@/service/api';
+  import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
+  const patientUtils = new PatientUtils();
+
   const pageConfig = ref(<ISystemConfig['person']>{});
   const pageProps = ref(
     <
@@ -66,6 +71,7 @@
         idCard: string;
         patientName: string;
         idType: string;
+        from?: 'addMedical';
       }
     >{}
   );
@@ -96,6 +102,18 @@
       await dealSubmit();
     }
 
+    if (pageProps.value.from === 'addMedical') {
+      await patientUtils.addRelevantPatient({
+        ...cacheStore.cacheData,
+        ...formData.value,
+        verifyType: '1&bk',
+      })
+
+      await patientUtils.getPatCardList();
+      routerJump('/pagesA/medicalCardMan/medicalCardMan');
+      return
+    }
+
     gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
       closeCallBack() {
         uni.navigateBack({
@@ -119,7 +137,7 @@
     };
 
     if (isUseFaceVerify.value) {
-      const { pData } = await new LoginUtils().faceVerifyAndPData({
+      const { pData } = await patientUtils.faceVerifyAndPData({
         name: patientName,
         idCardNumber: idCard,
       });
@@ -127,6 +145,7 @@
       args.pdata = pData;
 
       return await api.mofHosPhone(args);
+    } else {
     }
 
     throw new Error('未实现 ocr 功能');
@@ -155,7 +174,7 @@
       aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
       imgCanvas,
     });
-    const { image, name, idCard, idCardOcrEn, patientNameOcrEn } = res;
+    const { image, name, idCard, idCardOcrEn, patientNameOcrEn, pdata } = res;
 
     let iswx = false;
     // #ifdef MP-WEIXIN
@@ -168,6 +187,7 @@
         idCardUrl.value = image;
       }
       isComplete.value = true;
+      formData.value.pdata = pdata;
       formData.value.idCard = idCard;
       formData.value.patientName = name;
       formData.value.idCardOcrEn = idCardOcrEn;
@@ -204,7 +224,7 @@
             };
           }
 
-          if (v === pageProps.value.idCard) {
+          if (v === pageProps.value.idCard && isComplete.value) {
             return {
               success: true,
             };
