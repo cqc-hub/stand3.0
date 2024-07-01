@@ -395,11 +395,10 @@
 
           throw new Error(message);
         });
-      const patientUtil = new PatientUtils();
       const { result: pat } = await api.getPatCardInfo({
-        herenId: patientUtil.globalStore.herenId,
+        herenId: patientUtils.globalStore.herenId,
         patientId: patientId,
-        source: patientUtil.globalStore.browser.source,
+        source: patientUtils.globalStore.browser.source,
       });
       newPat.value = pat;
       const flag = await isMedicalSelf(newPat.value.cardNumber);
