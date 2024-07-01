@@ -5,8 +5,8 @@ import { type TBannerConfig } from '@/utils';
  */
 
 export const sysConfigEnv = <const>{
-  'person.isSmsVerify': '0',
-  'reportQuery.isOpenCollect': '1',
+  // 'person.isSmsVerify': '0',
+  // 'reportQuery.isOpenCollect': '1',
   // 'person.realNameAuth': ['ocrVerify', 'faceVerify'],
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
@@ -28,8 +28,8 @@ export const sysConfigEnv = <const>{
   //     deptName: 'deptName',
   //   },
   // },
-  'medRecord.0.isCustomPatRecord': '1',
-  'order.orderRegBtnLabel': '预约',
+  // 'medRecord.0.isCustomPatRecord': '1',
+  // 'order.orderRegBtnLabel': '预约',
 };
 
 export const apiConfigEnv = <const>{};

@@ -101,12 +101,22 @@
         </health-card-login>
       </block>
       <!-- #endif -->
+
+      <!-- #ifdef MP-ALIPAY -->
+      <canvas
+        v-show="false"
+        :width="imgCanvas.imgWidth"
+        :height="imgCanvas.imgHeight"
+        id="canvasForBase64"
+        class="my-display-none"
+      />
+      <!-- #endif -->
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, nextTick, onMounted, computed ,type Ref} from 'vue';
+  import { ref, nextTick, onMounted, computed, type Ref } from 'vue';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useRouterStore } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
@@ -131,6 +141,7 @@
     nameConvert,
     apiAsync,
     wait,
+    useOcr,
   } from '@/utils';
   import api from '@/service/api';
 
@@ -139,7 +150,10 @@
 
   import FgAgree from './components/fgAgree.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-   import { isMedicalSelf, dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail'
+  import {
+    isMedicalSelf,
+    dealMedicalFiling,
+  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   const routeStore = useRouterStore();
   const isCheck = ref(false);
@@ -166,7 +180,11 @@
   const patientUtils = new PatientUtils();
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
-   const newPat=ref()
+  const newPat = ref();
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
 
   const isShowHealthLogin = ref(false);
   const _isPageFirst = !globalGl.systemInfo.isSearchInHos;
@@ -189,7 +207,7 @@
     'defaultFalg',
   ]);
 
-  const regDialogMedicalFiling:Ref<any>=ref('')
+  const regDialogMedicalFiling: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
 
   const {
@@ -272,8 +290,12 @@
     }
     // #endif
 
-    const { isFace, isPayWithoutSecretAuth, isCanChangeHosPhone } =
-      await ServerStaticData.getSystemConfig('person');
+    const {
+      isFace,
+      isPayWithoutSecretAuth,
+      isCanChangeHosPhone,
+      useFaceVerifyInChangePhone,
+    } = await ServerStaticData.getSystemConfig('person');
 
     if (isFace === '1') {
       if (formData.value[formKey.idType] === '01') {
@@ -332,19 +354,31 @@
             const { confirm } = await apiAsync(uni.showModal, {
               content: '患者存在建档记录但手机号不匹配，是否立即修改？',
             });
+            // 修改手机号必开启人脸|ocr之一
             if (confirm) {
               if (!requestData.pData) {
+                let pdata = '';
                 // 默认有人脸
-                const { pData } = await patientUtils.faceVerifyAndPData({
-                  idCardNumber: formData.value[formKey.idCard],
-                  name: formData.value[formKey.patientName],
-                });
-                requestData.pData = pData;
+                if (useFaceVerifyInChangePhone === '1') {
+                  const { pData } = await patientUtils.faceVerifyAndPData({
+                    idCardNumber: formData.value[formKey.idCard],
+                    name: formData.value[formKey.patientName],
+                  });
+                  pdata = pData;
+                } else {
+                  const { pdata: pData } = await useOcr(true, {
+                    aliThroughByEnd: true,
+                    imgCanvas,
+                  });
+                  pdata = pData;
+                }
+
+                requestData.pData = pdata;
 
                 await api.mofHosPhone({
                   ...requestData,
                   pdata: requestData.pData,
-                  source: gStores.globalStore.browser.source
+                  source: gStores.globalStore.browser.source,
                 });
                 return await patientUtils.addRelevantPatient(requestData);
               }
@@ -361,22 +395,28 @@
 
           throw new Error(message);
         });
-          const patientUtil = new PatientUtils();
-        const {result:pat} = await api.getPatCardInfo({
-            "herenId":  patientUtil.globalStore.herenId,
-            "patientId": patientId,
-            "source":  patientUtil.globalStore.browser.source,
-          })
-          newPat.value=pat
-          const flag = await isMedicalSelf(newPat.value.cardNumber)
+      const patientUtil = new PatientUtils();
+      const { result: pat } = await api.getPatCardInfo({
+        herenId: patientUtil.globalStore.herenId,
+        patientId: patientId,
+        source: patientUtil.globalStore.browser.source,
+      });
+      newPat.value = pat;
+      const flag = await isMedicalSelf(newPat.value.cardNumber);
 
-          if(isMedicalFiling.value&&flag){
-            regDialogMedicalFiling.value.show()
-            return
-            }else{
-            await goPaySign(patientId);
-          }
+      if (isMedicalFiling.value && flag) {
+        regDialogMedicalFiling.value.show();
+        return;
+      } else {
+        await goPaySign(patientId);
+      }
 
+      if (isMedicalFiling.value && flag) {
+        regDialogMedicalFiling.value.show();
+        return;
+      } else {
+        await goPaySign(patientId);
+      }
 
       await patientUtils.getPatCardList();
       // if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
@@ -817,15 +857,15 @@
   });
 
   //医保更新用户信息,医保建档
-  const medicalFiling = async ( ) => {
-    const flag = await dealMedicalFiling(newPat.value.patientId)
-    if(flag){
+  const medicalFiling = async () => {
+    const flag = await dealMedicalFiling(newPat.value.patientId);
+    if (flag) {
       await goPaySign(newPat.value.patientId);
       routerJump('/pages/home/home');
-    }else{
-      regDialogMedicalFiling.value.show()
+    } else {
+      regDialogMedicalFiling.value.show();
     }
-  }
+  };
 
   const init = async () => {
     formData.value = Object.fromEntries(
@@ -866,13 +906,12 @@
 
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
-      // #ifdef  MP-WEIXIN
-      //先实现支付宝
-      // #endif
-      // #ifdef MP-ALIPAY
-
-      isMedicalFiling.value= medicalMHelp.alipay?.medicalFiling === '1';
-      // #endif
+    // #ifdef  MP-WEIXIN
+    //先实现支付宝
+    // #endif
+    // #ifdef MP-ALIPAY
+    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    // #endif
   };
 
   onReady(() => {
