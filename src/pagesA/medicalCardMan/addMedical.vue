@@ -118,7 +118,7 @@
 <script lang="ts" setup>
   import { ref, nextTick, onMounted, computed, type Ref } from 'vue';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
-  import { useRouterStore } from '@/stores';
+  import { useCacheStore, useRouterStore } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
 
   import {
@@ -156,6 +156,7 @@
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   const routeStore = useRouterStore();
+  const cacheStore = useCacheStore();
   const isCheck = ref(false);
 
   interface TPageType extends ILoginBack {
@@ -250,6 +251,7 @@
     const requestData = {
       wechatCode: '',
       pData: '',
+      pdata: '',
       verifyType: '1&bk',
       patientName: '',
       source,
@@ -358,7 +360,6 @@
             if (confirm) {
               if (!requestData.pData) {
                 let pdata = '';
-                // 默认有人脸
                 if (useFaceVerifyInChangePhone === '1') {
                   const { pData } = await patientUtils.faceVerifyAndPData({
                     idCardNumber: formData.value[formKey.idCard],
@@ -366,21 +367,30 @@
                   });
                   pdata = pData;
                 } else {
-                  const { pdata: pData } = await useOcr(true, {
-                    aliThroughByEnd: true,
-                    imgCanvas,
+                  // const { pdata: pData } = await useOcr(true, {
+                  //   aliThroughByEnd: true,
+                  //   imgCanvas,
+                  // });
+                  // pdata = pData;
+                  cacheStore.changeCacheData({
+                    ...requestData,
+                    source: gStores.globalStore.browser.source,
                   });
-                  pdata = pData;
+
+                  uni.navigateTo({
+                    url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+                      idCard,
+                      patientPhone,
+                      patientName,
+                      idType,
+                      from: 'addMedical',
+                    }),
+                  });
+
+                  throw new Error('去到ocr页面');
                 }
 
                 requestData.pData = pdata;
-
-                await api.mofHosPhone({
-                  ...requestData,
-                  pdata: requestData.pData,
-                  source: gStores.globalStore.browser.source,
-                });
-                return await patientUtils.addRelevantPatient(requestData);
               }
               // uni.navigateTo({
               //   url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
@@ -390,6 +400,14 @@
               //     idType,
               //   }),
               // });
+
+              requestData.pdata = requestData.pData;
+              await api.mofHosPhone({
+                ...requestData,
+                pdata: requestData.pData,
+                source: gStores.globalStore.browser.source,
+              });
+              return await patientUtils.addRelevantPatient(requestData);
             }
           }
 
