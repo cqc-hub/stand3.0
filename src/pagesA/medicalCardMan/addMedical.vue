@@ -401,16 +401,9 @@
         source: patientUtils.globalStore.browser.source,
       });
       newPat.value = pat;
-      const flag = await isMedicalSelf(newPat.value.cardNumber);
+      // const flag = await isMedicalSelf(newPat.value.cardNumber);
 
-      if (isMedicalFiling.value && flag) {
-        regDialogMedicalFiling.value.show();
-        return;
-      } else {
-        await goPaySign(patientId);
-      }
-
-      if (isMedicalFiling.value && flag) {
+      if (isMedicalFiling.value) {
         regDialogMedicalFiling.value.show();
         return;
       } else {
