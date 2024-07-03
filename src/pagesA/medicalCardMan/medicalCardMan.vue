@@ -137,7 +137,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad ,onShow} from '@dcloudio/uni-app';
   import { IPat, useRouterStore } from '@/stores';
   import { ref, provide, readonly, computed, Ref } from 'vue';
   import { getHealthCardCode } from './utils/index';
@@ -153,7 +153,7 @@
     routerJump,
     type ISystemConfig,
   } from '@/utils';
-  import { dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+  import { dealMedicalFiling ,reDealMedicalFiling} from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
   import api from '@/service/api';
@@ -370,7 +370,9 @@
   };
 
   patientUtils.getPatCardList();
-
+  onShow(() => {
+    reDealMedicalFiling()
+  });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     routeStore.receiveQuery(pageProps.value);

@@ -433,9 +433,7 @@
       } else {
         routerJump('/pagesA/medicalCardMan/medicalCardMan');
       }
-    } else {
-      regDialogMedicalFiling.value.show();
-    }
+    } 
   };
 
   const init = async () => {

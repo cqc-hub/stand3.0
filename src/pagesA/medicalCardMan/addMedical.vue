@@ -152,7 +152,7 @@
   import FgAgree from './components/fgAgree.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import {
-    isMedicalSelf,
+    reDealMedicalFiling,
     dealMedicalFiling,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
@@ -881,9 +881,7 @@
       } else {
         routerJump('/pagesA/medicalCardMan/medicalCardMan');
       }
-    } else {
-      regDialogMedicalFiling.value.show();
-    }
+    } 
   };
 
   const init = async () => {
@@ -943,6 +941,7 @@
 
   onShow(() => {
     signAfterOnPageShow();
+    reDealMedicalFiling()
   });
 
   onLoad((opt) => {

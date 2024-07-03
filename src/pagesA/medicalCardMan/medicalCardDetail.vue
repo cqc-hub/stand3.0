@@ -72,6 +72,7 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, onMounted, Ref } from 'vue';
+    import {  onShow } from '@dcloudio/uni-app';
   import {
     patCardDetailTempList,
     PatCardKeys,
@@ -84,7 +85,10 @@
     type ISystemConfig,
   } from '@/utils';
   import globalGl from '@/config/global';
-  import { dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+  import {
+    dealMedicalFiling,
+    reDealMedicalFiling,
+  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
@@ -149,7 +153,9 @@
       patientUtils.getPatCardList();
     }
   };
-
+  onShow(() => {
+    reDealMedicalFiling();
+  });
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     const pat = gStore.userStore.clickPat;
