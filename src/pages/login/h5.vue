@@ -29,6 +29,7 @@
   import { ref, onMounted, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { joinQueryForUrl } from '@/common';
+  import { useGlobalStore, useUserStore } from '@/stores';
   import {
     ServerStaticData,
     GStores,
@@ -122,7 +123,11 @@ const props = defineProps({
   ]);
 
   const formSubmit = async ({ data }) => {
+    const userStore = useUserStore();
     let resultResponst;
+    //登录之前清除缓存
+    useGlobalStore().clearStore();
+    useUserStore().clearStore();
     if(props.isOpenPassword === '1'){
     const reqArg = {
       loginName:data.cellPhoneNum,
