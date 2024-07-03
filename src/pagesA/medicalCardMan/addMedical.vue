@@ -50,6 +50,7 @@
       title="是否更新为医保用户？"
       :maskClickClose="false"
       @confirm="medicalFiling"
+      @cancel="medicalFillCancel"
       height="35vh"
       confirmText="确定"
       cannerText="取消"
@@ -413,15 +414,9 @@
 
           throw new Error(message);
         });
-      const { result: pat } = await api.getPatCardInfo({
-        herenId: patientUtils.globalStore.herenId,
-        patientId: patientId,
-        source: patientUtils.globalStore.browser.source,
-      });
-      newPat.value = pat;
-      // const flag = await isMedicalSelf(newPat.value.cardNumber);
 
       if (isMedicalFiling.value) {
+        newPat.value = { patientId: patientId };
         regDialogMedicalFiling.value.show();
         return;
       } else {
@@ -866,12 +861,26 @@
     return isDisabled;
   });
 
+  const medicalFillCancel = async () => {
+    await goPaySign(newPat.value.patientId);
+    await patientUtils.getPatCardList();
+    if (pageProps.value._directUrl) {
+      routerJump(pageProps.value._directUrl as `/${string}`);
+    } else {
+      routerJump('/pagesA/medicalCardMan/medicalCardMan');
+    }
+  };
   //医保更新用户信息,医保建档
   const medicalFiling = async () => {
     const flag = await dealMedicalFiling(newPat.value.patientId);
     if (flag) {
       await goPaySign(newPat.value.patientId);
-      routerJump('/pages/home/home');
+      await patientUtils.getPatCardList();
+      if (pageProps.value._directUrl) {
+        routerJump(pageProps.value._directUrl as `/${string}`);
+      } else {
+        routerJump('/pagesA/medicalCardMan/medicalCardMan');
+      }
     } else {
       regDialogMedicalFiling.value.show();
     }

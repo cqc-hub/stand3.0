@@ -5,12 +5,38 @@
     }"
     class="g-page"
   >
-    <g-flag v-if="isRender" :typeFg="isWaitReg ? '1113' : '405'" isShowFg />
+    <!-- 候补入口或者挂号入口——协议begin -->
+    <!-- 已改 候补入口和候补tab显示-->
+    <g-flag
+      v-if="isRender"
+      :typeFg="isWaitReg || tabCurrent === 2 ? '1113' : '405'"
+      isShowFg
+    />
+    <!-- 候补入口或者挂号入口——协议end -->
     <g-message />
-    <g-choose-pat v-if="isShowFilterOrderStatus" @choose-pat="patientChange" />
-    <view v-if="pageConfig.MyRegistrationNavBtns && !isWaitReg" class="p32c pt12 pb12">
+    <!-- 候补入口或者在线挂号——就诊人组件begin -->
+    <!-- 已改 仅候补入口-->
+    <g-choose-pat v-if="isWaitReg" @choose-pat="patientChange" />
+    <!-- 候补或者在线挂号——就诊人组件end -->
+    <!-- 挂号非候补——按钮begin -->
+    <view
+      v-if="pageConfig.MyRegistrationNavBtns && !isWaitReg"
+      class="p32c pt12 pb12"
+    >
       <g-tbbtns :btns="pageConfig.MyRegistrationNavBtns" />
     </view>
+    <!-- 挂号非候补——按钮end -->
+    <view class="tab-box" v-show="tabs.length > 1">
+      <g-tabs
+        v-model:value="tabCurrent"
+        :tabs="tabs"
+        :line-scale="0.8"
+        field="headerName"
+        all-blod
+        @change="(e) => tabChange(e, 'click')"
+      />
+    </view>
+    <!-- 非候补——原tabber begin -->
     <My-Registration-Head
       v-if="!isWaitReg"
       v-model:isSelStatus="isSelStatus"
@@ -21,6 +47,8 @@
       :selPatName="selPatName"
       :selOrderStatusName="selOrderStatusName"
     />
+    <!-- 非候补——原tabber end -->
+    <!-- 数据列表显示 begin -->
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
@@ -44,6 +72,8 @@
         <g-empty :current="1" />
       </view>
     </view>
+    <!-- 数据列表显示 end -->
+    <!-- 弹窗 selOrderStatus'1'全部挂号 ''在线挂号 begin -->
     <g-select
       v-model:value="selOrderStatus"
       v-model:show="isSelOrderStatus"
@@ -56,6 +86,7 @@
       type="top"
     >
       <template #header>
+        <!-- 原tabber  tabber selOrderStatus'1'全部挂号 ''在线挂号  begin -->
         <My-Registration-Head
           v-model:isSelStatus="isSelStatus"
           v-model:isSelPatient="isSelPatient"
@@ -65,9 +96,11 @@
           :selPatName="selPatName"
           :selOrderStatusName="selOrderStatusName"
         />
+        <!-- 原tabber selOrderStatus'1'全部挂号 ''在线挂号 end -->
       </template>
     </g-select>
-
+    <!-- 弹窗 selOrderStatus'1'全部挂号 ''在线挂号 end -->
+    <!-- 弹窗 selStatus订单状态 begin -->
     <g-select
       v-model:value="selStatus"
       v-model:show="isSelStatus"
@@ -79,6 +112,7 @@
       type="top"
     >
       <template #header>
+        <!-- 原tabber selStatus订单状态  begin -->
         <My-Registration-Head
           v-model:isSelStatus="isSelStatus"
           v-model:isSelPatient="isSelPatient"
@@ -88,9 +122,11 @@
           :selPatName="selPatName"
           :selOrderStatusName="selOrderStatusName"
         />
+        <!-- 原tabber selStatus订单状态  begin -->
       </template>
     </g-select>
-
+    <!-- 弹窗 selStatus订单状态 end -->
+    <!-- 弹窗 就诊人选择 begin -->
     <g-select
       v-model:value="selPatId"
       v-model:show="isSelPatient"
@@ -113,6 +149,7 @@
           :selOrderStatusName="selOrderStatusName"
         />
       </template>
+      <!-- 弹窗 就诊人选择 end -->
     </g-select>
 
     <xy-dialog
@@ -180,7 +217,19 @@
 
   const list = ref<IRegistrationCardItem[]>([]);
   const pageConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
-
+  // 已改 begin
+  const tabCurrent = ref(0);
+  const tabCurrentDetail = ref({
+    typeId: 0,
+    headerName: '在线挂号',
+  });
+  const tabs = ref([
+    {
+      typeId: 0,
+      headerName: '在线挂号',
+    },
+  ]);
+  //已改 end
   const orderStatusList = ref([
     {
       label: '在线挂号',
@@ -191,14 +240,14 @@
       value: '1',
     },
   ]);
-
   const isWaitReg = computed(() => {
     return props.value.type === 'waitReg';
   });
 
   const isShowFilterOrderStatus = computed(() => {
     // return false;
-    return pageConfig.value.isCanSelOrderStatus === '1' || isWaitReg.value;
+    // return pageConfig.value.isCanSelOrderStatus === '1' || isWaitReg.value;
+    return isWaitReg.value;
   });
 
   const anotherYwzConditions = computed(() => {
@@ -215,9 +264,11 @@
       return api.getAlternateList;
     }
     // "全部" 查院内接口
-    return selOrderStatus.value === '1'
+    return tabCurrentDetail.value.typeId === 1
       ? api.hosRegOrderList
-      : api.getRegOrderList;
+      : tabCurrentDetail.value.typeId === 0
+      ? api.getRegOrderList
+      : api.getAlternateList;
   });
 
   const isCancelOrderDialogShow = ref(false);
@@ -231,6 +282,16 @@
   const isShowYuWzBtn = computed(
     () => pageConfig.value.isOpenPreConsultation === '1'
   );
+  // 已改 begin
+  const tabChange = async (e: number, type: string) => {
+    tabCurrent.value = e;
+    tabCurrentDetail.value = tabs.value[tabCurrent.value];
+    pat.value = patList.value[0];
+    await getList(
+      pat.value?.patientId || gStores.userStore.patChoose?.patientId
+    );
+  };
+  // 已改 end
 
   const getStatusConfig = (status: OrderStatus) => {
     if (orderStatusMap[status]) {
@@ -359,7 +420,7 @@
 
     if (isShowFilterOrderStatus.value) {
       // '1' 全部挂号 '' 在线挂号
-      selOrderStatus.value = selOrderStatusDefault === '1' ? '1' : '';
+      selOrderStatus.value = tabCurrent.value === 0 ? '1' : '';
     }
   };
 
@@ -396,6 +457,20 @@
       setLocalStorage({
         thRegisterId,
       });
+
+    // 已改 begin
+    pageConfig.value.isCanSelOrderStatus === '1' &&
+      tabs.value.push({
+        typeId: 1,
+        headerName: '全部挂号',
+      });
+    pageConfig.value.isTabWaitReg === '1' &&
+      tabs.value.push({
+        typeId: 2,
+        headerName: '候补挂号',
+      });
+
+    // 已改 end
   });
 
   const getPatLabel = (o) => {
@@ -407,26 +482,30 @@
 
   const init = async () => {
     await getConfig();
-
+    patList.value[0]?.patientName === '所有就诊人' &&
+      (pat.value = patList.value[0]);
     await getList(
-      isShowFilterOrderStatus.value
-        ? pat.value?.patientId || gStores.userStore.patChoose?.patientId
-        : ''
+      pat.value?.patientId || gStores.userStore.patChoose?.patientId
     );
   };
 
   const patList = computed(() => {
-    return [
-      {
-        patientId: '',
-        patientName: '所有就诊人',
-        _showLabel: '所有就诊人',
-      },
+    let list: any[] = [
       ...gStores.userStore.patList.map((o) => ({
         ...o,
         _showLabel: getPatLabel(o),
       })),
     ];
+    tabCurrent.value !== 1 &&
+      (list = [
+        {
+          patientId: '',
+          patientName: '所有就诊人',
+          _showLabel: '所有就诊人',
+        },
+        ...list,
+      ]);
+    return list;
   });
 
   const statusList = computed(() => {
@@ -450,7 +529,7 @@
   const selPatName = computed(() => {
     return (
       patList.value.find((o) => o.patientId === selPatId.value)?._showLabel ||
-      ''
+      `${gStores.userStore.patChoose.patientName}(${gStores.userStore.patChoose._showId})`
     );
   });
 
@@ -482,5 +561,12 @@
   .g-container {
     padding: 0 32rpx;
     width: calc(100% - 64rpx);
+  }
+  .tab-box {
+    padding: 0 10rpx;
+    :deep(.v-tabs__container-item) {
+      flex: 1;
+      justify-content: center;
+    }
   }
 </style>

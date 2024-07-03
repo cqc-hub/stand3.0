@@ -43,8 +43,8 @@ interface ISConfig {
     appId: string;
     path: string;
   };
-   //首页开启安诊儿云陪诊——支付宝
-   isOpenIntelAI?:boolean;
+  //首页开启安诊儿云陪诊——支付宝
+  isOpenIntelAI?: boolean;
   //首页是否展示支付宝的关注组件
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
@@ -91,7 +91,7 @@ interface ISConfig {
       isFamilyPayment?: '1';
 
       /** 医保建档 */
-      medicalFiling?: '1'
+      medicalFiling?: '1';
     };
 
     wx?: {

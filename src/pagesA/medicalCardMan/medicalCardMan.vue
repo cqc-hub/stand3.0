@@ -47,6 +47,24 @@
                 去认证
               </view>
             </view>
+            <!-- #ifdef MP-ALIPAY -->
+            <view
+              v-if="
+                $global.sConfig.medicalMHelp &&
+                $global.sConfig.medicalMHelp.alipay &&
+                $global.sConfig.medicalMHelp.alipay.medicalFiling === '1' &&
+                pat.healthCardUser !== '2'
+              "
+              class="pat-btns flex-normal mt16"
+            >
+              <view
+                @click="goMedicalFiling(pat)"
+                class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+              >
+                医保建档
+              </view>
+            </view>
+            <!-- #endif -->
             <!-- #ifdef MP-WEIXIN -->
             <block
               v-if="
@@ -103,12 +121,25 @@
     />
     <g-message />
   </view>
+  <Order-Reg-Confirm
+    :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+    v-if="isMedicalFiling"
+    title="是否更新为医保用户？"
+    :maskClickClose="false"
+    @confirm="medicalFiling"
+    height="35vh"
+    confirmText="确定"
+    cannerText="取消"
+    ref="regDialogMedicalFiling"
+  >
+    仅账号本人可更新为医保用户，是否更新为医保用户？
+  </Order-Reg-Confirm>
 </template>
 
 <script lang="ts" setup>
   import { onLoad } from '@dcloudio/uni-app';
   import { IPat, useRouterStore } from '@/stores';
-  import { ref, provide, readonly, computed } from 'vue';
+  import { ref, provide, readonly, computed, Ref } from 'vue';
   import { getHealthCardCode } from './utils/index';
   import { deQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
@@ -122,10 +153,11 @@
     routerJump,
     type ISystemConfig,
   } from '@/utils';
+  import { dealMedicalFiling } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
   import api from '@/service/api';
-
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import PatList from './components/PatList.vue';
 
   const gStore = new GStores();
@@ -142,7 +174,9 @@
   const patientUtils = new PatientUtils();
   const pageConfig = ref(<ISystemConfig['person']>{});
   provide('pageConfig', () => readonly(pageConfig.value));
-
+  const regDialogMedicalFiling: Ref<any> = ref('');
+  const medicalFilingPat: Ref<any> = ref('');
+  const isMedicalFiling = ref(false);
   const getRealNameAuth = computed(() => {
     return pageConfig.value.realNameAuth || [];
   });
@@ -323,6 +357,17 @@
       url: '/pagesA/medicalCardMan/easyAssociate',
     });
   };
+  const goMedicalFiling = (pat) => {
+    medicalFilingPat.value = pat;
+    regDialogMedicalFiling.value.show();
+  };
+  //医保更新用户信息,医保建档
+  const medicalFiling = async () => {
+    const flag = await dealMedicalFiling(medicalFilingPat.value.patientId);
+    if (flag) {
+      patientUtils.getPatCardList();
+    }
+  };
 
   patientUtils.getPatCardList();
 
@@ -330,6 +375,15 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     routeStore.receiveQuery(pageProps.value);
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
+
+    //是否医保建档
+    const medicalMHelp = globalGl.sConfig.medicalMHelp!;
+    // #ifdef  MP-WEIXIN
+    //先实现支付宝
+    // #endif
+    // #ifdef MP-ALIPAY
+    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    // #endif
   });
 </script>
 
