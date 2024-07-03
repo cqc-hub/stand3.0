@@ -9,6 +9,7 @@ import { XOR } from '../../typeUtils/obj';
 type TChooseImgBase64Res = XOR<
   {
     success: true;
+    fileType: string;
     base64: string;
   },
   {
@@ -45,6 +46,8 @@ const getWeChatBase64ImageByUrl = function (
         url = _url;
       }
     }
+    const a = url.split('.');
+    const fileType = a[a.length - 1];
 
     wx.getFileSystemManager().readFile({
       filePath: url, //选择图片返回的相对路径
@@ -53,6 +56,7 @@ const getWeChatBase64ImageByUrl = function (
         r({
           success: true,
           base64: data,
+          fileType,
           // base64: 'data:image/jpg;base64,' + data
         });
       },
@@ -94,7 +98,7 @@ const getAliPayBase64ImageByUrl = function (
 
         imgCanvas.value.imgWidth = width;
         imgCanvas.value.imgHeight = height;
-        let canvas = my.createCanvasContext('canvasForBase64');
+        const canvas = my.createCanvasContext('canvasForBase64');
         canvas.drawImage(imagePath, 0, 0); // 1. 绘制图片至canvas
 
         // 绘制完成后执行回调
@@ -106,9 +110,13 @@ const getAliPayBase64ImageByUrl = function (
             fileType: 'jpg',
           });
 
+          const a = imagePath.split('.');
+          const fileType = a[a.length - 1];
+
           resolve({
             success: true,
             base64: base64.split(',')[1],
+            fileType,
           });
 
           // base64 = base64.replace("data:image/png;base64,", "");
@@ -242,11 +250,12 @@ const ocrForWX = async (imgCanvas?: any) => {
       source: globalStore.browser.source,
       fileName: 'cssc',
       base64: e.base64,
+      expandedName: `.${e.fileType}`
     };
 
     const { result } = await api.ocrIdCard<any>(requestData);
 
-    if (result.type === 'Front') {
+    if (result.idCard) {
       const { address, idCard, nation, patientName, patientSex } = result;
       return await findSuccess({
         ...result,

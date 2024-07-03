@@ -1,12 +1,21 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStore.globalStore.modeOld,
+      'system-mode-old': gStores.globalStore.modeOld,
     }"
     class="g-page"
   >
     <view class="container" scroll-y>
       <view class="form-container">
+        <view v-if="isUseOcrVerify" class="sfz-container m32">
+          <image
+            :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
+            @click="chooseIdCard"
+            class="sfz-img"
+            mode="widthFix"
+          />
+        </view>
+
         <g-form
           v-model:value="formData"
           @submit="formSubmit"
@@ -17,6 +26,16 @@
     </view>
     <g-message />
 
+    <!-- #ifdef MP-ALIPAY -->
+    <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      id="canvasForBase64"
+      class="my-display-none"
+    />
+    <!-- #endif -->
+
     <view class="footer">
       <button @click="gform.submit" class="btn btn-primary">保存</button>
     </view>
@@ -24,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick } from 'vue';
+  import { onMounted, ref, nextTick, computed } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import {
@@ -32,15 +51,33 @@
     PatientUtils,
     ServerStaticData,
     apiAsync,
+    base64Src,
+    useOcr,
     type ISystemConfig,
   } from '@/utils';
   import { TInstance } from '@/components/g-form';
   import api from '@/service/api';
 
-  const gStore = new GStores();
+  const gStores = new GStores();
+  const pageConfig = ref(<ISystemConfig['person']>{});
   const patientUtils = new PatientUtils();
   const formData = ref<BaseObject>({});
   const gform = ref<any>('');
+  const idCardUrl = ref('');
+  const isComplete = ref(false);
+  const pData = ref('');
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
+  const isUseFaceVerify = computed(() => {
+    return pageConfig.value.useFaceVerifyInChangePhone === '1';
+  });
+
+  // 校验必有 ocr | face 之一
+  const isUseOcrVerify = computed(() => {
+    return !isUseFaceVerify.value;
+  });
 
   const formList = ref<TInstance[]>([
     {
@@ -81,27 +118,73 @@
     },
   ]);
 
+  const chooseIdCard = async () => {
+    const res = await useOcr(true, {
+      aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
+      imgCanvas,
+    }).catch(err => {
+      console.log(err)
+      gStores.messageStore.showMessage(err, 3000)
+      throw new Error(err);
+    })
+    const { image, pdata } = res;
+
+    let iswx = false;
+    // #ifdef MP-WEIXIN
+    iswx = true;
+    // #endif
+    if (image) {
+      if (iswx) {
+        idCardUrl.value = await base64Src(image);
+      } else {
+        idCardUrl.value = `data:image/jpeg;base64,${image}`;
+      }
+      isComplete.value = true;
+      pData.value = pdata;
+    }
+  };
+
   const formSubmit = async ({ data }) => {
     const { phone, verifyCode, patientId } = data;
-    const { source } = gStore.globalStore.browser;
+    const { source } = gStores.globalStore.browser;
+    let _pData = '';
 
-    const { pData } = await patientUtils.faceVerifyAndPDataForPat(
-      gStore.userStore.clickPat
-    );
+    if (isUseFaceVerify.value) {
+      const { pData } = await patientUtils.faceVerifyAndPDataForPat(
+        gStores.userStore.clickPat
+      );
+
+      _pData = pData;
+    } else {
+      _pData = pData.value;
+
+      if (!_pData) {
+        const { confirm } = await apiAsync(uni.showModal, {
+          content: '请先上传身份证正面验证身份',
+          confirmText: '去上传',
+        });
+
+        if (confirm) {
+          await chooseIdCard();
+        } else {
+          throw new Error('未验证ocr');
+        }
+      }
+    }
 
     await api.mdifPhone({
       patientPhone: phone,
       verifyCode,
       patientId,
       source,
-      pdata: pData
+      pdata: _pData,
     });
 
     await patientUtils.getPatCardList();
-    const editPat = gStore.userStore.patList.find(
+    const editPat = gStores.userStore.patList.find(
       (p) => p.patientId === patientId
     )!;
-    gStore.userStore.updatePatClick(editPat);
+    gStores.userStore.updatePatClick(editPat);
 
     await apiAsync(uni.showModal, {
       content: '修改成功',
@@ -114,7 +197,7 @@
   };
 
   onMounted(async () => {
-    const pat = gStore.userStore.clickPat;
+    const pat = gStores.userStore.clickPat;
 
     formData.value = {
       ...pat,
@@ -123,6 +206,10 @@
     nextTick(() => {
       gform.value.setList(formList.value);
     });
+  });
+
+  onLoad(async (opt) => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
   });
 </script>
 
@@ -136,5 +223,10 @@
   .footer {
     background-color: var(--h-color-white);
     padding: 32rpx 32rpx 68rpx;
+  }
+
+  .sfz-img {
+    width: 100%;
+    height: 100%;
   }
 </style>
