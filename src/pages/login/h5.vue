@@ -28,6 +28,7 @@
 <script lang="ts" setup>
   import { ref, onMounted, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
+  import { joinQueryForUrl } from '@/common';
   import {
     ServerStaticData,
     GStores,
@@ -41,6 +42,12 @@
 
   // https://health.eheren.com/taizhou_pc/#/taizhou_pc/user/login
 
+const props = defineProps({
+  isOpenPassword: {
+    type: String,
+    default: '',
+  },
+});
   const hosLogo = ref('');
   const gStores = new GStores();
   const loginUtils = new LoginUtils();
@@ -48,7 +55,7 @@
   const gform = ref<any>('');
   const envH5 = computed(() => gStores.globalStore.envH5);
   let isSendedVerify = false;
-  const formList = [
+  const formList = ref([
     {
       required: true,
       emptyMessage: '请输入手机号',
@@ -65,7 +72,6 @@
         },
       ],
     },
-
     {
       required: true,
       maxlength: 6,
@@ -96,14 +102,46 @@
         );
       },
     },
-  ];
+    {
+      required: true,
+      emptyMessage: '请输入密码',
+      label: '',
+      labelWidth: '0',
+      field: 'input-text',
+      placeholder: '请输入密码',
+      maxlength: 20,
+      inputType: 'password',
+      key: 'password',
+      rule: [
+        {
+          message: '密码必须包含大小写字母和数字组成',
+          rule: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+        },
+      ],
+    }
+  ]);
 
   const formSubmit = async ({ data }) => {
-    if (!isSendedVerify) {
+    let resultResponst;
+    if(props.isOpenPassword === '1'){
+    const reqArg = {
+      loginName:data.cellPhoneNum,
+      password:data.password,
+      sysCode: getSysCode(),
+    };
+    const payload = {
+      isOutArgs:true
+    }
+    const requestUrl = joinQueryForUrl('/login/usePasswordLogin',reqArg)
+    const { result } = await api.allinoneAuthApi(
+      packageAuthParams(reqArg,requestUrl , payload)
+    );
+    resultResponst = result
+    }else{
+      if (!isSendedVerify) {
       gStores.messageStore.showMessage('请先获取验证码', 2000);
       return;
     }
-
     const reqArg = {
       ...data,
       sysCode: getSysCode(),
@@ -113,14 +151,15 @@
     const { result } = await api.allinoneAuthApi(
       packageAuthParams(reqArg, '/login/registerAndLogin')
     );
+    resultResponst = result
+    }
 
-    const { accessToken, refreshToken } = result;
+    const { accessToken, refreshToken } = resultResponst;
 
     gStores.globalStore.setToken({
       accessToken,
       refreshToken,
     });
-
     await loginUtils.getUerInfo();
     routerJump('/pages/home/home');
   };
@@ -134,17 +173,22 @@
   });
 
   onMounted(() => {
-    gform.value.setList(formList);
+    if(props.isOpenPassword === '1'){
+      formList.value.splice(1, 1);
+    }else{
+      formList.value.pop();
+    }
+    gform.value.setList(formList.value);
   });
 
-  var coinChange = function (penny, num) {
+  var coinChange = function (penny: any[], num: number) {
     if (!num) return num;
     const result = Array.from<number>({ length: num });
     for (let i = 1; i <= num; i++) {
       const minnum = Math.min(
         ...penny
-          .filter((item) => i >= item) // 小于计算数的硬币不用计算过滤掉
-          .map((item) => 1 + (result[i - item] || 0))
+          .filter((item: number) => i >= item) // 小于计算数的硬币不用计算过滤掉
+          .map((item: number) => 1 + (result[i - item] || 0))
       );
       result[i] = minnum;
     }
