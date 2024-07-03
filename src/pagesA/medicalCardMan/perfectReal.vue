@@ -119,7 +119,7 @@
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
   import {
-    isMedicalSelf,
+    reDealMedicalFiling,
     dealMedicalFiling,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
@@ -428,8 +428,6 @@
     const flag = await dealMedicalFiling(newPat.value.patientId);
     if (flag) {
       await goPaySign(newPat.value.patientId);
-      await patientUtil.getPatCardList();
-
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -573,6 +571,7 @@
 
   onShow(() => {
     signAfterOnPageShow();
+    reDealMedicalFiling()
   });
 
   onLoad((opt) => {
@@ -581,6 +580,7 @@
     if (!pageProps.value.pageType) {
       pageProps.value.pageType = 'addPatient';
     }
+    
   });
 </script>
 

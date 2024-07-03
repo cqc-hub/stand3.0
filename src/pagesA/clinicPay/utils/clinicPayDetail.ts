@@ -953,7 +953,6 @@ export const usePayPage = () => {
 
   let isGetListDataFirst = true;
   let getListData = async (isReset = true) => {
-
     if (isReset) {
       const isKeepSel = getLocalStorage('keepSelUnPayList') === '1';
       unPayList.value = [];
@@ -991,7 +990,6 @@ export const usePayPage = () => {
     } else {
       await getPayedList();
     }
-
   };
 
   getListData = debounce(getListData, 120, false);
@@ -1963,42 +1961,89 @@ export const compareDetailCostItem = (o: TConstListItem, k: TConstListItem) => {
   return k.detailNo === o.detailNo;
 };
 //医保建档
-export const dealMedicalFiling = async (patientId) => {
-  const authCode = await getMedicalAuthCode()
-  
+export const dealMedicalFiling = async (patientId, type = 'first') => {
+  console.log('走到这1');
+  const authCode = await getMedicalAuthCode();
+
   // #ifdef MP-ALIPAY
-  const { sConfig: { medicalMHelp }, } = globalGl;
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
   const gStores = new GStores();
   const patientUtil = new PatientUtils();
   const { alipay } = medicalMHelp!;
-
-  const { medicalPlugin, isFamilyPayment } = alipay!;
+  console.log('走到这2');
+  const { medicalPlugin } = alipay!;
   const authPayPlugin = requirePlugin('auth-pay-plugin');
-  let orgId = ''
+  let orgId = '';
   Object.entries(medicalPlugin!.orgId).forEach(([k, v]) => {
-    orgId = v
-  })
+    orgId = v;
+  });
+  console.log('走到这3');
   let token = await authPayPlugin.toArchive({
     // 授权获取的authCode
     authCode,
     // 机构ID
     orgId,
   });
+  if (type === 'first') {
+    uni.setStorageSync('yibaoPatientId', patientId);
+  } else {
+    uni.removeStorageSync('yibaoPatientId');
+  }
+
   if (token) {
     const res = await api.updateHosInfo({
       insPsnToken: token,
       patientId: patientId,
       herenId: patientUtil.globalStore.herenId,
       source: gStores.globalStore.browser.source,
-    })
+    });
     if (res && res.result) {
       uni.showToast({
-        title: "您已更新为医保用户！",
-        icon: "none",
+        title: '您已更新为医保用户！',
+        icon: 'none',
       });
-      return true
+      if (type === 'first') {
+        return true;
+      } else {
+       await patientUtil.getPatCardList();
+        setTimeout(() => {
+          my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
+        }, 1600);
+      }
     }
+  } else {
+    uni.setStorageSync('yibaoPatientId', patientId);
   }
-  return false
+  return false;
   // #endif
-}
+};
+
+export const reDealMedicalFiling = async () => {
+  let yibaoPatientId = '';
+  const patientUtil = new PatientUtils();
+  if (uni.getStorageSync('yibaoPatientId')) {
+    yibaoPatientId = uni.getStorageSync('yibaoPatientId');
+    uni.removeStorageSync('yibaoPatientId');
+  } else {
+    console.warn('医保用户更新reDealMedicalFiling暂停');
+    return;
+  }
+  // #ifdef MP-ALIPAY
+  const authPayPlugin = requirePlugin('auth-pay-plugin');
+  authPayPlugin.initMethods({
+    // 获取建档返回的token
+    getArchiveToken:async (token) => {
+      console.warn('获取建档返回的token', token);
+      if (token) dealMedicalFiling(yibaoPatientId, 'second');
+      else {
+        await patientUtil.getPatCardList();
+         setTimeout(() => {
+          my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
+        }, 1600);
+      }
+    },
+  });
+  // #endif
+};
