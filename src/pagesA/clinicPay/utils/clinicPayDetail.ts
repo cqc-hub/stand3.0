@@ -1990,13 +1990,12 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
   }
 
   if (token) {
-    const res = await api
-      .updateHosInfo({
-        insPsnToken: token,
-        patientId: patientId,
-        herenId: patientUtil.globalStore.herenId,
-        source: gStores.globalStore.browser.source,
-      })
+    const res = await api.updateHosInfo({
+      insPsnToken: token,
+      patientId: patientId,
+      herenId: patientUtil.globalStore.herenId,
+      source: gStores.globalStore.browser.source,
+    });
     if (res && res.result) {
       uni.showToast({
         title: '您已更新为医保用户！',
@@ -2004,13 +2003,14 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
       });
       if (type === 'first') {
         return true;
-      } 
+      }
     }
-  } 
+  }
   await patientUtil.getPatCardList();
-    setTimeout(() => {
-      my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
-    }, 1600);
+  setTimeout(() => {
+    my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
+  }, 1600);
+  // #endif
 };
 
 export const reDealMedicalFiling = async () => {
