@@ -24,7 +24,6 @@
         />
       </view>
     </view>
-    <g-message />
 
     <!-- #ifdef MP-ALIPAY -->
     <canvas
@@ -39,6 +38,9 @@
     <view class="footer">
       <button @click="gform.submit" class="btn btn-primary">保存</button>
     </view>
+
+    <g-message />
+
   </view>
 </template>
 
