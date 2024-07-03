@@ -416,7 +416,6 @@
   const medicalFillCancel = async () => {
     await goPaySign(newPat.value.patientId);
     await patientUtil.getPatCardList();
-
     if (pageProps.value._directUrl) {
       routerJump(pageProps.value._directUrl as `/${string}`);
     } else {
@@ -427,7 +426,6 @@
   //医保更新用户信息,医保建档
   const medicalFiling = async () => {
     const flag = await dealMedicalFiling(newPat.value.patientId);
-
     if (flag) {
       await goPaySign(newPat.value.patientId);
       await patientUtil.getPatCardList();
