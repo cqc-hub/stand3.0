@@ -39,7 +39,7 @@ const viewerStore = defineStore('viewer', {
         });
 
       // 新增公告展示判断 showFlag为1展示
-      if (this.viewConfig[1].showFlag) {
+      if (this.viewConfig[1].showFlag === '1') {
         this.getHomeNotice();
       }
     },
