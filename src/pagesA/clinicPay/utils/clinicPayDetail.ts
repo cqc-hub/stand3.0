@@ -1963,13 +1963,13 @@ export const compareDetailCostItem = (o: TConstListItem, k: TConstListItem) => {
 //医保建档
 export const dealMedicalFiling = async (patientId, type = 'first') => {
   const authCode = await getMedicalAuthCode();
-
-  // #ifdef MP-ALIPAY
   const {
     sConfig: { medicalMHelp },
   } = globalGl;
   const gStores = new GStores();
   const patientUtil = new PatientUtils();
+  // #ifdef MP-ALIPAY
+
   const { alipay } = medicalMHelp!;
   const { medicalPlugin } = alipay!;
   const authPayPlugin = requirePlugin('auth-pay-plugin');
@@ -1990,12 +1990,20 @@ export const dealMedicalFiling = async (patientId, type = 'first') => {
   }
 
   if (token) {
-    const res = await api.updateHosInfo({
-      insPsnToken: token,
-      patientId: patientId,
-      herenId: patientUtil.globalStore.herenId,
-      source: gStores.globalStore.browser.source,
-    });
+    const res = await api
+      .updateHosInfo({
+        insPsnToken: token,
+        patientId: patientId,
+        herenId: patientUtil.globalStore.herenId,
+        source: gStores.globalStore.browser.source,
+      })
+      .catch(async (err) => {
+        await patientUtil.getPatCardList();
+        setTimeout(() => {
+          my.reLaunch({ url: `/pagesA/medicalCardMan/medicalCardMan` });
+        }, 1600);
+        throw new Error(err);
+      });
     if (res && res.result) {
       uni.showToast({
         title: '您已更新为医保用户！',

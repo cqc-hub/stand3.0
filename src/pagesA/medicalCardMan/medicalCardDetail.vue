@@ -30,7 +30,10 @@
                 }}
               </text>
               <text
-                v-if="gStore.userStore.clickPat.healthCardUser !== '2'"
+                v-if="
+                  gStore.userStore.clickPat.healthCardUser !== '2' &&
+                  isMedicalFiling
+                "
                 class="goMedicalFiling"
                 @click="goMedicalFiling(gStore.userStore.clickPat)"
               >
@@ -72,7 +75,7 @@
 
 <script lang="ts" setup>
   import { nextTick, ref, onMounted, Ref } from 'vue';
-    import {  onShow } from '@dcloudio/uni-app';
+  import { onShow } from '@dcloudio/uni-app';
   import {
     patCardDetailTempList,
     PatCardKeys,

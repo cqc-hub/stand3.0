@@ -349,13 +349,8 @@
           });
 
         newPat.value = { patientId: patientId };
-        // const flag = await isMedicalSelf(newPat.value.cardNumber)
-        if (isMedicalFiling.value) {
-          regDialogMedicalFiling.value.show();
-          return;
-        } else {
-          await goPaySign(patientId);
-        }
+
+        await goPaySign(patientId);
       }
 
       // 切换默认就诊人
@@ -363,7 +358,13 @@
         gStores.userStore.updatePatChoose({} as any);
       }
       await patientUtil.getPatCardList();
-
+      newPat.value = gStores.userStore.patList.find(
+        (pat) => pat.patientId === newPat.value.patientId
+      );
+      if (isMedicalFiling.value && newPat.value.healthCardUser !== "2") {
+        regDialogMedicalFiling.value.show();
+        return;
+      }
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -372,7 +373,7 @@
     }
   };
 
-  const dealNetError = (err, data) => {
+  const dealNetError = async (err, data) => {
     if (err?.respCode === 999301) {
       messageStore.showMessage(err.message, 3000, {
         closeCallBack() {
@@ -385,6 +386,8 @@
           });
         },
       });
+    } else if (err?.respCode === 999001) {
+      await patientUtil.getPatCardList();
     }
   };
 
@@ -414,8 +417,6 @@
   } = useProgramPaySign();
 
   const medicalFillCancel = async () => {
-    await goPaySign(newPat.value.patientId);
-    await patientUtil.getPatCardList();
     if (pageProps.value._directUrl) {
       routerJump(pageProps.value._directUrl as `/${string}`);
     } else {
@@ -427,13 +428,12 @@
   const medicalFiling = async () => {
     const flag = await dealMedicalFiling(newPat.value.patientId);
     if (flag) {
-      await goPaySign(newPat.value.patientId);
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
         routerJump('/pagesA/medicalCardMan/medicalCardMan');
       }
-    } 
+    }
   };
 
   const init = async () => {
@@ -569,7 +569,7 @@
 
   onShow(() => {
     signAfterOnPageShow();
-    reDealMedicalFiling()
+    reDealMedicalFiling();
   });
 
   onLoad((opt) => {
@@ -578,7 +578,6 @@
     if (!pageProps.value.pageType) {
       pageProps.value.pageType = 'addPatient';
     }
-    
   });
 </script>
 

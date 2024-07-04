@@ -414,15 +414,9 @@
 
           throw new Error(message);
         });
+      newPat.value = { patientId: patientId };
 
-      if (isMedicalFiling.value) {
-        newPat.value = { patientId: patientId };
-        regDialogMedicalFiling.value.show();
-        return;
-      } else {
-        await goPaySign(patientId);
-      }
-
+      await goPaySign(patientId);
       await patientUtils.getPatCardList();
       // if (isPayWithoutSecretAuth === '1' && gStores.userStore.patList.length) {
       //   uni.redirectTo({
@@ -430,7 +424,13 @@
       //   });
       //   return;
       // }
-
+      newPat.value = gStores.userStore.patList.find(
+        (pat) => pat.patientId === newPat.value.patientId
+      );
+      if (isMedicalFiling.value && newPat.value.healthCardUser !== '2') {
+        regDialogMedicalFiling.value.show();
+        return;
+      }
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -881,7 +881,7 @@
       } else {
         routerJump('/pagesA/medicalCardMan/medicalCardMan');
       }
-    } 
+    }
   };
 
   const init = async () => {
@@ -941,7 +941,7 @@
 
   onShow(() => {
     signAfterOnPageShow();
-    reDealMedicalFiling()
+    reDealMedicalFiling();
   });
 
   onLoad((opt) => {
