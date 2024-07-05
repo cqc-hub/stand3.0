@@ -14,7 +14,6 @@
             :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
             @click="chooseIdCard"
             class="sfz-img"
-            mode="widthFix"
           />
 
           <view v-if="!idCardUrl" class="justify-center flex pt24 color-blue font-semibold ">身份证正面图片</view>
@@ -265,7 +264,8 @@
 
   .sfz-img {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 210px;
   }
 
   .sfz-container {
