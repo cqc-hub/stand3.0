@@ -187,10 +187,9 @@
     if (isEditPatPhone === '1') {
       formList.map((o) => {
         const { key } = o;
-
-        if (key === 'patientPhone') {
+        // 仅支持身份证类型修改
+        if (key === 'patientPhone' && pat.cardType === '01') {
           o.showSuffixArrowIcon = true;
-          // o.showBodyStyle = 'position: relative; top: 4rpx';
         }
       });
     }
