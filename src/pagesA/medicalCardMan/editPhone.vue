@@ -40,7 +40,6 @@
     </view>
 
     <g-message />
-
   </view>
 </template>
 
@@ -83,6 +82,34 @@
 
   const formList = ref<TInstance[]>([
     {
+      label: '证件类型',
+      key: '_cardTypeName',
+      placeholder: '请选择',
+      field: 'input-text',
+      disabled: true,
+    },
+    {
+      label: '真实姓名',
+      key: 'patientName',
+      field: 'input-text',
+      disabled: true,
+    },
+    {
+      label: '证件号',
+      key: 'idCard',
+      field: 'input-text',
+      disabled: true,
+    },
+    {
+      label: '传入的证件号',
+      key: '_idCard',
+      field: 'input-text',
+      disabled: true,
+      placeholder: `${
+        isUseFaceVerify.value ? '人脸验证' : '上传ocr'
+      }后自动填充`,
+    },
+    {
       label: '原手机号',
       key: 'patientPhone',
       field: 'input-text',
@@ -124,12 +151,12 @@
     const res = await useOcr(true, {
       aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
       imgCanvas,
-    }).catch(err => {
-      console.log(err)
-      gStores.messageStore.showMessage(err, 3000)
+    }).catch((err) => {
+      gStores.messageStore.showMessage(err, 3000);
       throw new Error(err);
-    })
-    const { image, pdata } = res;
+    });
+    const { image, pdata, idCard } = res;
+    formData.value._idCard = idCard;
 
     let iswx = false;
     // #ifdef MP-WEIXIN
@@ -152,11 +179,12 @@
     let _pData = '';
 
     if (isUseFaceVerify.value) {
-      const { pData } = await patientUtils.faceVerifyAndPDataForPat(
+      const { pData, idCard } = await patientUtils.faceVerifyAndPDataForPat(
         gStores.userStore.clickPat
       );
 
       _pData = pData;
+      formData.value._idCard = idCard;
     } else {
       _pData = pData.value;
 
@@ -199,19 +227,17 @@
   };
 
   onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
     const pat = gStores.userStore.clickPat;
 
     formData.value = {
       ...pat,
+      _cardTypeName: '居民身份证',
     };
 
     nextTick(() => {
       gform.value.setList(formList.value);
     });
-  });
-
-  onLoad(async (opt) => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
   });
 </script>
 

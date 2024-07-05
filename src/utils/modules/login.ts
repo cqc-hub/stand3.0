@@ -292,8 +292,8 @@ export class LoginUtils extends GStores {
 
     return this.faceVerifyAndPData({
       name: patientName,
-      idCardNumber: idCard
-    })
+      idCardNumber: idCard,
+    });
   }
 
   async faceVerifyAndPData({ name, idCardNumber }) {
@@ -313,6 +313,8 @@ export class LoginUtils extends GStores {
 
     return {
       pData: pdata,
+      idCard: idCardNumber,
+      name,
     };
   }
 

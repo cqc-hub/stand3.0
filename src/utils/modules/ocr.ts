@@ -100,7 +100,6 @@ const getAliPayBase64ImageByUrl = function (
         imgCanvas.value.imgHeight = height;
         const canvas = my.createCanvasContext('canvasForBase64');
         canvas.drawImage(imagePath, 0, 0); // 1. 绘制图片至canvas
-
         // 绘制完成后执行回调
         canvas.draw(false, async () => {
           let base64 = await canvas.toDataURL({
@@ -109,9 +108,8 @@ const getAliPayBase64ImageByUrl = function (
             // quality: 0.5,
             fileType: 'jpg',
           });
-
-          const a = imagePath.split('.');
-          const fileType = a[a.length - 1];
+          const execR = /\w+\/\w+/.exec(base64);
+          const fileType = execR ? execR[0].split('/')[1] : '';
 
           resolve({
             success: true,
@@ -250,7 +248,7 @@ const ocrForWX = async (imgCanvas?: any) => {
       source: globalStore.browser.source,
       fileName: 'cssc',
       base64: e.base64,
-      expandedName: `.${e.fileType}`
+      expandedName: `.${e.fileType}`,
     };
 
     const { result } = await api.ocrIdCard<any>(requestData);
