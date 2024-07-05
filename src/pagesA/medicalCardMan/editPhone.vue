@@ -9,13 +9,14 @@
 
     <view class="container" scroll-y>
       <view class="form-container">
-        <view v-if="isUseOcrVerify" class="sfz-container m32">
+        <view v-if="isUseOcrVerify" class="sfz-container m32 p24  justify-center flex flex-col g-border">
           <image
             :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
             @click="chooseIdCard"
             class="sfz-img"
-            mode="widthFix"
           />
+
+          <view v-if="!idCardUrl" class="justify-center flex pt24 color-blue font-semibold ">身份证正面图片</view>
         </view>
 
         <g-form
@@ -129,8 +130,9 @@
       gStores.messageStore.showMessage(err, 3000);
       throw new Error(err);
     });
-    const { image, pdata, idCard } = res;
+    const { image, pdata, idCard, name } = res;
     formData.value._idCard = idCard;
+    formData.value._patientName = name;
 
     let iswx = false;
     // #ifdef MP-WEIXIN
@@ -215,9 +217,10 @@
         ...[
           {
             label: '真实姓名',
-            key: 'patientName',
+            key: '_patientName',
             field: 'input-text',
             disabled: true,
+            placeholder: '请上传身份证正面图片',
           },
           {
             label: '证件类型',
@@ -231,7 +234,7 @@
             key: '_idCard',
             field: 'input-text',
             disabled: true,
-            placeholder: '请上传身份证正面',
+            placeholder: '请上传身份证正面图片',
           },
         ]
       );
@@ -244,6 +247,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .g-page {
+    background-color: #fff;
+  }
+
   .container {
     width: 100%;
     flex: 1;
@@ -257,6 +264,11 @@
 
   .sfz-img {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 210px;
+  }
+
+  .sfz-container {
+    border-radius: 8px;
   }
 </style>
