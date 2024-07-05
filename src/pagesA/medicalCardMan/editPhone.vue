@@ -5,6 +5,8 @@
     }"
     class="g-page"
   >
+    <g-flag isShowFg typeFg="1205" />
+
     <view class="container" scroll-y>
       <view class="form-container">
         <view v-if="isUseOcrVerify" class="sfz-container m32">
@@ -81,34 +83,6 @@
   });
 
   const formList = ref<TInstance[]>([
-    {
-      label: '证件类型',
-      key: '_cardTypeName',
-      placeholder: '请选择',
-      field: 'input-text',
-      disabled: true,
-    },
-    {
-      label: '真实姓名',
-      key: 'patientName',
-      field: 'input-text',
-      disabled: true,
-    },
-    {
-      label: '证件号',
-      key: 'idCard',
-      field: 'input-text',
-      disabled: true,
-    },
-    {
-      label: '传入的证件号',
-      key: '_idCard',
-      field: 'input-text',
-      disabled: true,
-      placeholder: `${
-        isUseFaceVerify.value ? '人脸验证' : '上传ocr'
-      }后自动填充`,
-    },
     {
       label: '原手机号',
       key: 'patientPhone',
@@ -234,6 +208,34 @@
       ...pat,
       _cardTypeName: '居民身份证',
     };
+
+    if (isUseOcrVerify.value) {
+      formList.value.unshift(
+        // @ts-expect-error
+        ...[
+          {
+            label: '真实姓名',
+            key: 'patientName',
+            field: 'input-text',
+            disabled: true,
+          },
+          {
+            label: '证件类型',
+            key: '_cardTypeName',
+            placeholder: '请选择',
+            field: 'input-text',
+            disabled: true,
+          },
+          {
+            label: '证件号码',
+            key: '_idCard',
+            field: 'input-text',
+            disabled: true,
+            placeholder: '请上传身份证正面',
+          },
+        ]
+      );
+    }
 
     nextTick(() => {
       gform.value.setList(formList.value);

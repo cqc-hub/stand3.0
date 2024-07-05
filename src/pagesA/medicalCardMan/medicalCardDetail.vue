@@ -97,8 +97,9 @@
 
   type PagePropType = Record<PatCardKeys, any>;
   const isShow = ref(false);
-
   const gStore = new GStores();
+  const pat = gStore.userStore.clickPat;
+
   const patientUtils = new PatientUtils();
   const formData = ref<PagePropType>({} as PagePropType);
   const gform = ref<any>('');
@@ -139,7 +140,11 @@
     const { key } = item;
     const { isEditPatPhone } = pageConfig.value;
 
-    if (key === 'patientPhone' && isEditPatPhone === '1') {
+    if (
+      key === 'patientPhone' &&
+      isEditPatPhone === '1' &&
+      pat.idType === '01'
+    ) {
       uni.navigateTo({
         url: '/pagesA/medicalCardMan/editPhone',
       });
@@ -161,7 +166,7 @@
   });
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    const pat = gStore.userStore.clickPat;
+    console.log(pat, 'sss');
 
     formData.value = {
       ...pat,
@@ -188,7 +193,7 @@
       formList.map((o) => {
         const { key } = o;
         // 仅支持身份证类型修改
-        if (key === 'patientPhone' && pat.cardType === '01') {
+        if (key === 'patientPhone' && pat.idType === '01') {
           o.showSuffixArrowIcon = true;
         }
       });
