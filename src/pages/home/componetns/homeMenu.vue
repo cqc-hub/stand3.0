@@ -1,34 +1,39 @@
 <template>
-  <view class="menu-list">
-    <g-tabs
-      v-model:value="tabIndex"
-      :tabs="props.list"
-      @change="activeMenu"
-      itemMinWidth="120rpx"
-      field="typeName"
-      pillsColor="#fff"
-      bgColor="var(--hr-neutral-color-1)"
-      pillsBorderRadius="8rpx 8rpx 0 0"
-      paddingItem="0 33rpx"
-      scroll
-      pills
-    />
-    <swiper
-      :style="{
-        height: height + 'px',
-      }"
-      class="swiper"
-      :indicator-dots="false"
-      :current="tabIndex"
-      @change="changeIndex"
-      :duration="300"
-    >
-      <swiper-item v-for="(item, index) in props.list" :key="index">
-        <view :id="`home-menu-${index}`">
-          <homeGrid :list="item.functionList" @open-share="openShare" />
-        </view>
-      </swiper-item>
-    </swiper>
+  <view class="menu-list menu-style">
+    <view class="menu-pannel-style">
+      <homeMenuTabs
+        v-model:value="tabIndex"
+        :tabs="props.list"
+        @change="activeMenu"
+        :itemMinWidth="100 / props.list.length + '%'"
+        field="typeName"
+        pillsColor="#fff"
+        bgColor="#fff0"
+        color="#24314D"
+        activeColor="#296FFF"
+        pillsBorderRadius="42rpx 42rpx 0 0"
+        paddingItem="0"
+        height="80rpx"
+        scroll
+        pills
+      />
+      <swiper
+        :style="{
+          height: height + 'px',
+        }"
+        class="swiper menu-swiper-style"
+        :indicator-dots="false"
+        :current="tabIndex"
+        @change="changeIndex"
+        :duration="300"
+      >
+        <swiper-item v-for="(item, index) in props.list" :key="index">
+          <view :id="`home-menu-${index}`">
+            <homeGrid :list="item.functionList" @open-share="openShare" />
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
   </view>
 </template>
 
@@ -42,6 +47,7 @@
     nextTick,
   } from 'vue';
   import homeGrid from './homeGrid.vue';
+  import homeMenuTabs from './homeMenuTabs.vue';
   import { wait } from '@/utils';
 
   const emits = defineEmits(['open-share']);
@@ -143,10 +149,10 @@
 
 <style scoped lang="scss">
   .menu-list {
-    background: var(--h-color-white);
-    border: 2rpx solid #f3f3f3;
-    box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
-    border-radius: 16rpx;
+    // background: var(--h-color-white);
+    // border: 2rpx solid #f3f3f3;
+    // box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+    // border-radius: 16rpx;
     .swiper {
       height: 260px;
       swiper-item {
@@ -155,6 +161,25 @@
           display: none;
         }
       }
+    }
+  }
+  .menu-style {
+    width: 100vw;
+    right: 32rpx;
+    position: relative;
+    background: linear-gradient(
+      360deg,
+      rgba(238, 243, 255, 0) 50%,
+      #d8e5ff 99%
+    );
+    border-radius: 24rpx 0rpx 0rpx 24rpx;
+    .menu-pannel-style {
+      padding: 32rpx 32rpx 0 32rpx;
+    }
+    .menu-swiper-style {
+      background: #fff;
+       padding-top: 24rpx;
+       border-radius: 16rpx;
     }
   }
 </style>
