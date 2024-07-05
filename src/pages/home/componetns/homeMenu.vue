@@ -16,6 +16,7 @@
         height="80rpx"
         scroll
         pills
+        :allBlod="false"
       />
       <swiper
         :style="{
