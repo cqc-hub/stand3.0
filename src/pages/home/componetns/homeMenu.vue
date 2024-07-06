@@ -180,7 +180,7 @@
     .menu-swiper-style {
       background: #fff;
        padding-top: 24rpx;
-       border-radius: 16rpx;
+      //  border-radius: 16rpx;
     }
   }
 </style>

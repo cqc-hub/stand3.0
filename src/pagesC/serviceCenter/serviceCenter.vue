@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { shallowRef, ref } from 'vue';
+  import { shallowRef, ref, defineProps } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { TListComPlain } from './utils';
   import { GStores, useTBanner } from '@/utils';
@@ -37,15 +37,33 @@
   import api from '@/service/api';
 
   import ComplaintList from './components/ComplaintList.vue';
-
+  const _props = defineProps<{
+    selectRecords?: '1'; // 需要登录?
+  }>();
   const gStores = new GStores();
   const isComplete = shallowRef(false);
   const list = ref<TListComPlain>([]);
 
   const goComplaint = () => {
-    uni.navigateTo({
-      url: '/pagesC/serviceCenter/serviceComplaint',
-    });
+    console.log('_props.selectRecords', _props);
+    if (_props?.selectRecords === '1') {
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/queryCase/queryCase',
+        extraData: {
+          sysCode: gStores.globalStore.sysCode,
+          pageType: '2',
+        },
+        addition: {
+          herenId: 'herenId',
+        },
+      });
+    } else {
+      uni.navigateTo({
+        url: '/pagesC/serviceCenter/serviceComplaint',
+      });
+    }
   };
 
   const getList = async () => {

@@ -82,6 +82,23 @@
     isLocal: '1',
   };
 
+   // 意见反馈
+  const serviceCenter: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/queryCase/queryCase',
+    text: '意见反馈',
+    extraData: {
+      sysCode: globalGl.SYS_CODE,
+      pageType:2,
+    },
+    addition: {
+      herenId: 'herenId',
+      pageType:"2",
+    },
+    isLocal: '1',
+  };
+
   // 家医签约
   const qinfenSignDocTeam: TButtonConfig = {
     type: 'h5',
@@ -398,7 +415,7 @@
       // });
 
       // useTBanner(healthRecord)
-      useTBanner(historyAnaesthesia);
+      useTBanner(serviceCenter);
     }, 1000);
   });
 </script>
