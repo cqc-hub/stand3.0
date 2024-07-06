@@ -30,6 +30,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { joinQueryForUrl } from '@/common';
   import { useGlobalStore, useUserStore } from '@/stores';
+  import { getOpenId } from '@/components/g-pay/index';
   import {
     ServerStaticData,
     GStores,
@@ -141,6 +142,7 @@ const props = defineProps({
     const { result } = await api.allinoneAuthApi(
       packageAuthParams(reqArg,requestUrl , payload)
     );
+    getOpenId()
     resultResponst = result
     }else{
       if (!isSendedVerify) {

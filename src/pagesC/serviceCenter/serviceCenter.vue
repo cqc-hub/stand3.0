@@ -38,14 +38,13 @@
 
   import ComplaintList from './components/ComplaintList.vue';
   const _props = defineProps<{
-    selectRecords?: '1'; // 需要登录?
+    selectRecords?: '1'; // 需要选择就诊记录---台州?
   }>();
   const gStores = new GStores();
   const isComplete = shallowRef(false);
   const list = ref<TListComPlain>([]);
 
   const goComplaint = () => {
-    console.log('_props.selectRecords', _props);
     if (_props?.selectRecords === '1') {
       useTBanner(
         {

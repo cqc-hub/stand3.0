@@ -18,6 +18,7 @@
             <view
               hover-class="sunui-uploader-hover"
               v-for="(item, index) in uploadImgList"
+              :key="index"
               class="sunui-uploader-inputbox"
               style="width: 162rpx; height: 162rpx; margin-right: 20rpx"
             >
@@ -408,15 +409,13 @@
     // #endif
 
     // #ifdef MP-WEIXIN
-    const { cellPhoneNum, phoneNum, name } = gStores.userStore;
+    const { phoneNum, name } = gStores.userStore;
     const wxPhone = decryptDes(phoneNum, 'N1@ae^T:phone');
 
     formData.value.phone = wxPhone;
     formData.value.name = name;
     // #endif
-    if (options.value.selectRecords === '1') {
-      // formData.value.name = options.value?.name;
-      // formData.value=JSON.parse(JSON.stringify(options.value))
+    if (options.value.selectRecords === '1') { 
       formData.value.name = options.value.name;
       formData.value.compDept = options.value.deptName;
       formData.value.visitLabel = `${options.value.diagnosis}-${options.value.visitDate}`;
@@ -425,9 +424,7 @@
       gform.value.setList(tempList);
     }
   });
-  // onShow(async (opt) => {
-  //   console.log('onShow opt', opt);
-  // });
+ 
   onLoad(async (opt) => {
     if (opt?.selectRecords) {
       options.value = deQueryForUrl(deQueryForUrl(opt));
