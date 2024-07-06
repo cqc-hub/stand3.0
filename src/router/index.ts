@@ -126,6 +126,7 @@ export const beforeEach = async (
       [
         '/pagesA/medicalCardMan/perfectReal',
         '/pagesA/medicalCardMan/addMedical',
+        '/pagesC/serviceCenter/serviceCenter',
       ].includes(url)
     ) {
       if (!globalStore.h5OpenId && globalGl.h5AppId) {
