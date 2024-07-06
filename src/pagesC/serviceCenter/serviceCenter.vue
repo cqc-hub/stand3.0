@@ -47,18 +47,21 @@
   const goComplaint = () => {
     console.log('_props.selectRecords', _props);
     if (_props?.selectRecords === '1') {
-      useTBanner({
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/queryCase/queryCase',
-        extraData: {
-          sysCode: gStores.globalStore.sysCode,
-          pageType: '2',
+      useTBanner(
+        {
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesC/queryCase/queryCase',
+          extraData: {
+            sysCode: gStores.globalStore.sysCode,
+            pageType: '2',
+          },
+          addition: {
+            herenId: 'herenId',
+          },
         },
-        addition: {
-          herenId: 'herenId',
-        },
-      });
+        'navigateTo'
+      );
     } else {
       uni.navigateTo({
         url: '/pagesC/serviceCenter/serviceComplaint',

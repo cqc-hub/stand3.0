@@ -310,6 +310,16 @@
       ...options.value,
       ...data,
       photo: uploadImgList.value.toString(),
+      openIds: [
+        {
+          source: gStores.globalStore.browser.source,
+          openId: gStores.globalStore.openId,
+        },
+        {
+          source: 3,
+          openId: gStores.globalStore.h5OpenId,
+        },
+      ],
     };
 
     await api.complainsAndSuggestions(args);
@@ -317,7 +327,6 @@
       closeCallBack() {
         uni.reLaunch({
           url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${options.value.selectRecords}`,
-         
         });
       },
     });
@@ -423,7 +432,6 @@
     if (opt?.selectRecords) {
       options.value = deQueryForUrl(deQueryForUrl(opt));
     }
-  
   });
 </script>
 
