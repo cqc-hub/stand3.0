@@ -8,62 +8,12 @@
         bodyBold
         ref="gform"
       />
-      <view class="form-textarea">
-        <view class="title">
-          <label style="color: #e5493b; margin-left: 10px"></label>
-          照片附件
-        </view>
-        <view>
-          <view class="list-cell" style="display: flex">
-            <view
-              hover-class="sunui-uploader-hover"
-              v-for="(item, index) in uploadImgList"
-              :key="index"
-              class="sunui-uploader-inputbox"
-              style="width: 162rpx; height: 162rpx; margin-right: 20rpx"
-            >
-              <image
-                :src="item"
-                style="width: 162rpx; height: 162rpx; border-radius: 8rpx"
-              ></image>
-              <text
-                style="
-                  position: absolute;
-                  right: 20rpx;
-                  top: -5rpx;
-                  color: #fff;
-                "
-                @click="deleteImage(index)"
-              >
-                x
-              </text>
-            </view>
-            <view
-              v-if="uploadImgList.length < 3"
-              hover-class="sunui-uploader-hover"
-              class="sunui-uploader-inputbox"
-              style="width: 162rpx; height: 162rpx"
-              @tap="addPhoto"
-            >
-              <image
-                src="https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/image/srm_p.png"
-                style="width: 100rpx; height: 100rpx"
-              ></image>
 
-              <view
-                style="
-                  color: #666;
-                  font-size: 28rpx;
-                  position: relative;
-                  top: 0rpx;
-                "
-              >
-                上&nbsp;&nbsp;传
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
+      <ImgUpload
+        v-if="options?.selectRecords === '1'"
+        v-model:uploadImgList="uploadImgList"
+        :count="2"
+      />
 
       <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">
         提交
@@ -83,7 +33,7 @@
   import { deQueryForUrl } from '@/common';
   import api from '@/service/api';
   import env from '@/config/env';
-  import messages from '@/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js';
+  import ImgUpload from './components/ImgUpload.vue';
   const options = ref({
     selectRecords: '0',
     cardNumber: '',
@@ -98,7 +48,7 @@
     docName: '',
     diagnosis: '',
   });
-  const uploadImgList = ref(<String[]>[]);
+  const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
   const formData = shallowRef(<BaseObject>{
     // name: '炒青菜',
@@ -179,7 +129,7 @@
       label: '意见反馈',
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
-      placeholder: '请填写10字以上的问题描述以使我们提供更好的帮助',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
       maxlength: 200,
       key: 'compContext',
       direction: 'horizontal',
@@ -187,13 +137,13 @@
       bodyStyle: 'margin-top: 12rpx;',
       labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
       validator: async (v: any) => {
-        if (v && v.length > 10) {
+        if (v && v.length > 4) {
           return {
             success: true,
           };
         } else {
           return {
-            message: '请填写10字以上的问题描述以使我们提供更好的帮助',
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
             success: false,
           };
         }
@@ -269,7 +219,6 @@
 
     {
       required: true,
-      disabled: true,
       label: '您投诉的部门',
       field: 'input-text',
       placeholder: '请输入',
@@ -284,7 +233,7 @@
       label: '意见反馈',
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
-      placeholder: '请填写10字以上的问题描述以使我们提供更好的帮助',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
       maxlength: 200,
       key: 'compContext',
       direction: 'horizontal',
@@ -292,13 +241,13 @@
       bodyStyle: 'margin-top: 12rpx;',
       labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
       validator: async (v: any) => {
-        if (v && v.length > 10) {
+        if (v && v.length > 4) {
           return {
             success: true,
           };
         } else {
           return {
-            message: '请填写10字以上的问题描述以使我们提供更好的帮助',
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
             success: false,
           };
         }
@@ -308,21 +257,25 @@
 
   const formSubmit = async ({ data }) => {
     let args = {
-      ...options.value,
       ...data,
-      photo: uploadImgList.value.toString(),
-      openIds: [
-        {
-          source: gStores.globalStore.browser.source,
-          openId: gStores.globalStore.openId,
-        },
-        {
-          source: 3,
-          openId: gStores.globalStore.h5OpenId,
-        },
-      ],
     };
-
+    if (options.value.selectRecords === '1') {
+      args = {
+        ...options.value,
+        ...data,
+        photo: uploadImgList.value.toString(),
+        openIds: [
+          {
+            source: gStores.globalStore.browser.source,
+            openId: gStores.globalStore.openId,
+          },
+          {
+            source: 3,
+            openId: gStores.globalStore.h5OpenId,
+          },
+        ],
+      };
+    }
     await api.complainsAndSuggestions(args);
     gStores.messageStore.showMessage('反馈成功,感谢您的支持', 3000, {
       closeCallBack() {
@@ -333,73 +286,6 @@
     });
   };
   const gform = ref<any>('');
-  const addPhoto = async () => {
-    uni.chooseImage({
-      count: 3 - uploadImgList.value.length,
-      sizeType: ['compressed', 'original'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
-        let url =
-          env.baseApi +
-          '/phs-base/offsiteMedicalRecord/medicalRecordPhotoUpload';
-        console.log('uni.chooseImage', res);
-        for (let i = 0, len = res.tempFilePaths.length; i < len; i++) {
-          uni.uploadFile({
-            // url,
-            url: `${env.baseApi}/phs-base/upload/imageUpload`,
-            filePath: res.tempFilePaths[i],
-            name: 'file',
-            fileType: 'image',
-            formData: {
-              imageName: `feedbackAdd_photo_${new Date().getTime()}${res.tempFilePaths[
-                i
-              ].slice(res.tempFilePaths[i].lastIndexOf('.'))}`,
-              sysCode: gStores.globalStore.sysCode,
-              Authorization: gStores.globalStore.token.accessToken,
-            },
-
-            success: function (res) {
-              var data = JSON.parse(res.data) as {
-                code: number;
-                result: string;
-                message: string;
-              };
-
-              if (JSON.parse(res.data).code == '0') {
-                // TODO: JPEG格式文件未处理
-                // 增加错误提示
-                uni.showToast({
-                  title: JSON.parse(res.data).message,
-                  icon: 'none',
-                });
-              }
-              if (data.code == 0) {
-                uploadImgList.value.push(`${data.result}`);
-              } else {
-                uni.showToast({
-                  title: data.message,
-                  icon: 'none',
-                });
-              }
-            },
-          });
-        }
-
-        //   _this.upload_before_list.push(res.tempFiles[i])
-        // }
-        // _this.upload_cache = res.tempFilePaths
-        // _this.upload(_this.upload_auto)
-      },
-      fail: function (err) {
-        console.warn(err);
-      },
-    });
-  };
-  const deleteImage = async (index) => {
-    uploadImgList.value = uploadImgList.value
-      .slice(0, index)
-      .concat(uploadImgList.value.slice(index + 1));
-  };
 
   onMounted(() => {
     // #ifdef MP-ALIPAY
@@ -415,16 +301,15 @@
     formData.value.phone = wxPhone;
     formData.value.name = name;
     // #endif
-    if (options.value.selectRecords === '1') { 
+    if (options.value.selectRecords === '1') {
       formData.value.name = options.value.name;
-      formData.value.compDept = options.value.deptName;
       formData.value.visitLabel = `${options.value.diagnosis}-${options.value.visitDate}`;
       gform.value.setList(tempList2);
     } else {
       gform.value.setList(tempList);
     }
   });
- 
+
   onLoad(async (opt) => {
     if (opt?.selectRecords) {
       options.value = deQueryForUrl(deQueryForUrl(opt));
