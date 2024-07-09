@@ -126,9 +126,11 @@
     const res = await useOcr(true, {
       aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
       imgCanvas,
-    }).catch((err) => {
-      gStores.messageStore.showMessage(err, 3000);
-      throw new Error(err);
+    }).catch(({ errMsg }) => {
+      if (errMsg) {
+        gStores.messageStore.showMessage(errMsg, 3000);
+      }
+      throw new Error(errMsg);
     });
     const { image, pdata, idCard, name } = res;
     formData.value._idCard = idCard;
