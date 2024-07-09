@@ -9,14 +9,22 @@
 
     <view class="container" scroll-y>
       <view class="form-container">
-        <view v-if="isUseOcrVerify" class="sfz-container m32 p24  justify-center flex flex-col g-border">
+        <view
+          v-if="isUseOcrVerify"
+          class="sfz-container m32 p24 justify-center flex flex-col g-border"
+        >
           <image
             :src="idCardUrl || $global.BASE_IMG + 'img_sfz_zhengmian@3x.png'"
             @click="chooseIdCard"
             class="sfz-img"
           />
 
-          <view v-if="!idCardUrl" class="justify-center flex pt24 color-blue font-semibold ">身份证正面图片</view>
+          <view
+            v-if="!idCardUrl"
+            class="justify-center flex pt24 color-blue font-semibold"
+          >
+            身份证正面图片
+          </view>
         </view>
 
         <g-form
@@ -127,7 +135,7 @@
       aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
       imgCanvas,
     }).catch(({ errMsg }) => {
-      if (errMsg) {
+      if (errMsg && !errMsg.includes('用户取消操作')) {
         gStores.messageStore.showMessage(errMsg, 3000);
       }
       throw new Error(errMsg);
