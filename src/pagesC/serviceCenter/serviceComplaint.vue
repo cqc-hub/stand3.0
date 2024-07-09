@@ -12,7 +12,7 @@
       <ImgUpload
         v-if="options?.selectRecords === '1'"
         v-model:uploadImgList="uploadImgList"
-        :count="2"
+        :count="3"
       />
 
       <button @click="gform.submit" class="btn btn-primary ml32 mr32 mt32">

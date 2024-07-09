@@ -12,8 +12,8 @@
           :key="index"
           class="uploader-inputbox show-img"
         >
-          <image :src="item"></image>
-          <text @click="deleteImage(index)">x</text>
+          <image class="show-image" :src="item"></image>
+          <text class="show-text" @click="deleteImage(index)">x</text>
         </view>
         <view
           v-if="uploadImgList.length < count"
@@ -21,19 +21,18 @@
           class="uploader-inputbox camera-photo"
           @tap="addPhoto"
         >
-          <image :src="cameraPhoto"></image>
+          <image class="camera-image" :src="cameraPhoto"></image>
 
-          <view>上&nbsp;&nbsp;传</view>
+          <view class="text">上&nbsp;&nbsp;传</view>
         </view>
       </view>
     </view>
   </view>
 </template>
 <script lang="ts" setup>
-  import { ref, defineProps, withDefaults, defineEmits } from 'vue';
-  import { GStores } from '@/utils';
+  import { GStores, apiAsync } from '@/utils';
   import env from '@/config/env';
-  let $emit = defineEmits(['update:uploadImgList']);
+  const emits = defineEmits(['update:uploadImgList']);
   const props = withDefaults(
     defineProps<{
       uploadImgList: string[];
@@ -55,64 +54,52 @@
   const cameraPhoto =
     'https://phs-dev.oss-cn-hangzhou.aliyuncs.com/pcloud/image/srm_p.png';
   const addPhoto = async () => {
-    uni.chooseImage({
+    const { tempFilePaths } = await apiAsync(uni.chooseImage, {
       count: props.count - props.uploadImgList.length,
       sizeType: ['compressed', 'original'],
       sourceType: ['album', 'camera'],
-      success: function (res) {
-        for (let i = 0, len = res.tempFilePaths.length; i < len; i++) {
-          uni.uploadFile({
-            url: props.uploadUrl,
-            filePath: res.tempFilePaths[i],
-            name: 'file',
-            fileType: 'image',
-            formData: {
-              imageName: `${
-                props.imageName
-              }_${new Date().getTime()}${res.tempFilePaths[i].slice(
-                res.tempFilePaths[i].lastIndexOf('.')
-              )}`,
-              sysCode: gStores.globalStore.sysCode,
-              Authorization: gStores.globalStore.token.accessToken,
-            },
-
-            success: function (res) {
-              var data = JSON.parse(res.data) as {
-                code: number;
-                result: string;
-                message: string;
-              };
-
-              if (JSON.parse(res.data).code == '0') {
-                // TODO: JPEG格式文件未处理
-                // 增加错误提示
-                gStores.messageStore.showMessage(
-                  JSON.parse(res.data).message,
-                  2000
-                );
-              }
-              if (data.code == 0) {
-                $emit('update:uploadImgList', [
-                  ...props.uploadImgList,
-                  data.result,
-                ]);
-              } else {
-                gStores.messageStore.showMessage(data.message, 2000);
-              }
-            },
-          });
-        }
-      },
-      fail: function (err) {
-        console.warn(err);
-      },
     });
+    for (let i = 0, len = tempFilePaths?.length; i < len; i++) {
+      // @ts-expect-error
+      const { data} = await apiAsync(uni.uploadFile, {
+        url: props.uploadUrl,
+        filePath: tempFilePaths[i],
+        name: 'file',
+        fileType: 'image',
+        formData: {
+          imageName: `${props.imageName}_${new Date().getTime()}${tempFilePaths[
+            i
+          ].slice(tempFilePaths[i].lastIndexOf('.'))}`,
+          sysCode: gStores.globalStore.sysCode,
+          Authorization: gStores.globalStore.token.accessToken,
+        },
+      });
+      var jsonData = JSON.parse(data) as {
+        code: number;
+        result: string;
+        message: string;
+      };
+
+      if (JSON.parse(data).code == '0') {
+        // TODO: JPEG格式文件未处理
+        // 增加错误提示
+        gStores.messageStore.showMessage(JSON.parse(data).message, 2000);
+      }
+      if (jsonData.code == 0) {
+        emits('update:uploadImgList', [
+          ...props.uploadImgList,
+          jsonData.result,
+        ]);
+      } else {
+        gStores.messageStore.showMessage(jsonData.message, 2000);
+      }
+    }
   };
   const deleteImage = async (index) => {
     let tmpData = props.uploadImgList
       .slice(0, index)
       .concat(props.uploadImgList.slice(index + 1));
-    $emit('update:uploadImgList', tmpData);
+    emits('update:uploadImgList', tmpData);
   };
 </script>
 <style lang="scss" scoped>
@@ -152,12 +139,12 @@
         width: 162rpx;
         height: 162rpx;
         margin-right: 20rpx;
-        image {
+        .show-image {
           width: 162rpx;
           height: 162rpx;
           border-radius: 8rpx;
         }
-        text {
+        .show-text {
           position: absolute;
           right: 20rpx;
           top: -5rpx;
@@ -167,11 +154,11 @@
       .camera-photo {
         width: 162rpx;
         height: 162rpx;
-        image {
+        .camera-image {
           width: 100rpx;
           height: 100rpx;
         }
-        text {
+        .text {
           color: #666;
           font-size: 28rpx;
           position: relative;
