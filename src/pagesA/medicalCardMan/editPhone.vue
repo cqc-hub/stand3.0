@@ -176,7 +176,7 @@
 
       if (!_pData) {
         const { confirm } = await apiAsync(uni.showModal, {
-          content: '请先上传身份证正面验证身份',
+          content: '请上传身份证正面照片获取姓名',
           confirmText: '去上传',
         });
 
