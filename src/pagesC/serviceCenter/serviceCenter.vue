@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { shallowRef, ref, defineProps } from 'vue';
+  import { shallowRef, ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import { TListComPlain } from './utils';
   import { GStores, useTBanner } from '@/utils';
