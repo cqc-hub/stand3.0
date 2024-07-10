@@ -12,7 +12,7 @@
       ref="gform"
     />
 
-    <view class="container" v-if="formData && formData.patientName">
+    <view class="container" v-if="formData && formData.patientName&&gStore.userStore.clickPat.healthCardUser">
       <view
         class="grid1fr g-border-bottom item-for-show form-item-bold form-item-disabled form-item-filled form-item-input-text form-item"
       >
@@ -172,6 +172,9 @@
       ...pat,
       defaultFlag: pat.defaultFlag === '0' ? false : true,
     };
+    if(pat.idType){
+      
+    }
 
     // 非新生儿无证件的 不显示监护人信息 顾说去掉
     // if (pat.patientType !== '0') {

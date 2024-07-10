@@ -137,7 +137,7 @@ export const tempList: TInstance[] = [
           if (v.length > 50) {
             return Promise.resolve({
               success: false,
-              message: '真实姓名不能大于 50 个字符 ', 
+              message: '真实姓名不能大于 50 个字符 ',
             });
           }
         }
@@ -326,6 +326,7 @@ export const pickTempItem = function <T = TFormKeys>(
 export const patCardDetailFormKey = <const>{
   patientType: 'patientType',
   patientName: 'patientNameEncry',
+  idType: 'idType',
   idCard: 'idCard',
   patientPhone: 'patientPhone',
   nation: 'nation',
@@ -365,6 +366,15 @@ export const patCardDetailTempList: TInstance[] = [
     isForShow: true,
   },
 
+  {
+    label: '证件类型',
+    field: 'select',
+    disabled: true,
+    isForShow: true,
+    options: [],
+    key: formKey.idType,
+    autoOptions: 'idTypeTerms',
+  },
   {
     label: '证件号码',
     field: 'input-text',
