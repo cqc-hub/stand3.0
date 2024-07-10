@@ -150,8 +150,7 @@
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
-      pat.idType === '01' &&
-      pat.idCard
+      pat.idType === '01'
     ) {
       uni.navigateTo({
         url: '/pagesA/medicalCardMan/editPhone',
@@ -203,7 +202,7 @@
       formList.map((o) => {
         const { key } = o;
         // 仅支持身份证类型修改
-        if (key === 'patientPhone' && pat.idType === '01' && pat.idCard) {
+        if (key === 'patientPhone' && pat.idType === '01') {
           o.showSuffixArrowIcon = true;
         }
       });
