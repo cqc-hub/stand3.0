@@ -29,6 +29,7 @@
             flex: scroll ? '' : 1,
             padding: paddingItem,
             minWidth: itemMinWidth,
+            width: itemWidth,
           }"
           @click="change(i)"
         >
@@ -99,6 +100,10 @@
   export default {
     props: {
       itemMinWidth: {
+        type: String,
+        default: 'auto',
+      },
+      itemWidth: {
         type: String,
         default: 'auto',
       },
@@ -295,7 +300,7 @@
             this.pillsLeft = lineLeft;
             // 计算滚动的距离左侧的位置
             if (this.scroll) {
-              this.scrollLeft = this.lineLeft - this.containerWidth / 2;
+              this.scrollLeft = this.lineLeft - this.containerWidth / 2 - 40;
             }
 
             if (this.currentWidth < 15) {
@@ -356,10 +361,9 @@
         position: absolute;
         transition: all 0.4s linear;
         z-index: 9;
-            clip-path: polygon(10% 0%,90% 0%,100% 100%,0 100%);
-            transform: scaleX(1.25);
+        clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
+        transform: scaleX(1.25);
       }
     }
   }
- 
 </style>
