@@ -279,20 +279,21 @@ export class LoginUtils extends GStores {
   }
 
   async faceVerifyAndPDataForPat(pat: IPat) {
-    const { patientName, patientId, idCardEncry } = pat;
+    const { patientName, patientId, idCardEncry, upIdCardEncry, upName } = pat;
     const { source } = this.globalStore.browser;
 
     const {
-      result: { idCard },
+      result: { idCard, upIdCard },
     } = await api.rpGetPlain({
       source,
       idCardEncry,
+      upIdCardEncry,
       patientId,
     });
 
     return this.faceVerifyAndPData({
-      name: patientName,
-      idCardNumber: idCard,
+      name: upName || patientName,
+      idCardNumber: upIdCard || idCard,
     });
   }
 

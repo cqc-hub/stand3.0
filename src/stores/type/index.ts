@@ -9,6 +9,7 @@ export interface IPat {
   herenId: number;
   idCard: string;
   idCardEncry: string;
+  upIdCardEncry: string;
   idType: string;
   nation: string;
   nationCode: string;
