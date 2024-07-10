@@ -12,7 +12,14 @@
       ref="gform"
     />
 
-    <view class="container" v-if="formData && formData.patientName&&gStore.userStore.clickPat.healthCardUser">
+    <view
+      class="container"
+      v-if="
+        formData &&
+        formData.patientName &&
+        gStore.userStore.clickPat.healthCardUser
+      "
+    >
       <view
         class="grid1fr g-border-bottom item-for-show form-item-bold form-item-disabled form-item-filled form-item-input-text form-item"
       >
@@ -143,7 +150,8 @@
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
-      pat.idType === '01'
+      pat.idType === '01' &&
+      pat.idCard
     ) {
       uni.navigateTo({
         url: '/pagesA/medicalCardMan/editPhone',
