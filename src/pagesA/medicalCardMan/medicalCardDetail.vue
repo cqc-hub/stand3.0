@@ -161,9 +161,11 @@
       patientUtils.getPatCardList();
     }
   };
+
   onShow(() => {
     reDealMedicalFiling();
   });
+
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     console.log(pat, 'sss');
@@ -172,9 +174,6 @@
       ...pat,
       defaultFlag: pat.defaultFlag === '0' ? false : true,
     };
-    if(pat.idType){
-      
-    }
 
     // 非新生儿无证件的 不显示监护人信息 顾说去掉
     // if (pat.patientType !== '0') {
@@ -196,7 +195,7 @@
       formList.map((o) => {
         const { key } = o;
         // 仅支持身份证类型修改
-        if (key === 'patientPhone' && pat.idType === '01') {
+        if (key === 'patientPhone' && pat.idType === '01' && pat.idCard) {
           o.showSuffixArrowIcon = true;
         }
       });
