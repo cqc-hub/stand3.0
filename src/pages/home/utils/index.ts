@@ -5,7 +5,7 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     // #ifdef MP-WEIXIN
     useTBanner({
       type: 'otherProgram',
-      appId: 'wx81ce904580cc0ff1 ',
+      appId: 'wx81ce904580cc0ff1',
       path: '/views/home/index',
     });
     // #endif
