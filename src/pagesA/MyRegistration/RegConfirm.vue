@@ -92,7 +92,7 @@
       :option="waitRegSchSecondResultList"
       :field="{
         label: 'ampmName',
-        value: 'schId',
+        value: 'ampm',
       }"
       @change="resolve"
       @update:show="selClose"
@@ -432,7 +432,7 @@
       });
 
       const selSchItem = schSecondResultList.find(
-        (o) => o.schId === selWaitRegSch.value
+        (o) => o.ampm === selWaitRegSch.value
       )!;
 
       selWaitRegSch.value = '';
