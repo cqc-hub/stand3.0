@@ -491,6 +491,7 @@
     useOcr,
     base64Src,
     LoginUtils,
+    isTypeofIdCard,
   } from '@/utils';
   import { getSrc } from '@/pagesC/medicationAssistant/utils';
   import { getUserShowLabel, useCacheStore } from '@/stores';
@@ -1334,6 +1335,10 @@
     // #endif
 
     if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
+      if (!isTypeofIdCard(selFamilyPat.value.idCard)) {
+        gStores.messageStore.showMessage('仅支持身份证类型进行办理', 3000);
+        return;
+      }
       const { patientName: name, idCard: idCardNumber } = selFamilyPat.value;
       const { pData } = await new LoginUtils().faceVerifyAndPData({
         name,
