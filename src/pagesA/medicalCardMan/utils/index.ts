@@ -655,6 +655,13 @@ export const useProgramPaySign = () => {
     signAfterOnPageShow,
     disagreeSign,
     isAgreeSign,
+    isAgreeSignChange(v) {
+      if (v) {
+        regDialogConfirmSign.value.show();
+      } else {
+        isAgreeSign.value = v;
+      }
+    },
     flagTitle1203,
     regDialogConfirmSign,
     isSignExist,

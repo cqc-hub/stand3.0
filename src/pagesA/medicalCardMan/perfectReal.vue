@@ -68,8 +68,9 @@
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist"
-        v-model:isCheck="isAgreeSign"
+        :isCheck="isAgreeSign"
         :systemModeOld="gStores.globalStore.modeOld"
+        @update:isCheck="isAgreeSignChange"
         @show-agree="regDialogConfirmSign.show"
         content="《免密代扣协议》"
         cusShowAgree
@@ -361,7 +362,7 @@
       newPat.value = gStores.userStore.patList.find(
         (pat) => pat.patientId === newPat.value.patientId
       );
-      if (isMedicalFiling.value && newPat.value.healthCardUser !== "2") {
+      if (isMedicalFiling.value && newPat.value.healthCardUser !== '2') {
         regDialogMedicalFiling.value.show();
         return;
       }
@@ -406,6 +407,7 @@
   });
 
   const {
+    isAgreeSignChange,
     regDialogConfirmSign,
     flagTitle1203,
     disagreeSign,

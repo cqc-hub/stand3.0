@@ -64,9 +64,10 @@
 
       <Fg-Agree
         v-if="isSignExist && !pageProps.patientName"
-        v-model:isCheck="isAgreeSign"
+        :isCheck="isAgreeSign"
         :systemModeOld="gStores.globalStore.modeOld"
         @show-agree="regDialogConfirmSign.show"
+        @update:isCheck="isAgreeSignChange"
         content="《免密代扣协议》"
         cusShowAgree
       />
@@ -214,6 +215,7 @@
 
   const {
     regDialogConfirmSign,
+    isAgreeSignChange,
     flagTitle1203,
     disagreeSign,
     initSign,
