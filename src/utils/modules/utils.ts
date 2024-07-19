@@ -6,7 +6,6 @@ import { useCacheStore } from '@/stores';
 import { GStores } from '@/utils';
 import { toPayPull } from '@/components/g-pay';
 
-
 type NeverTurnsAny<T> = T extends never ? any : T;
 
 //获取随机id
@@ -236,6 +235,18 @@ export const nameConvert = (name: string) => {
   return userName;
 };
 
+export const isTypeofIdCard = (idCard: string) =>
+  /^\d{6}((((((19|20)\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|(((19|20)\d{2})(0[13578]|1[02])31)|((19|20)\d{2})02(0[1-9]|1\d|2[0-8])|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))0229))\d{3})|((((\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|((\d{2})(0[13578]|1[02])31)|((\d{2})02(0[1-9]|1\d|2[0-8]))|(([13579][26]|[2468][048]|0[048])0229))\d{2}))(\d|X|x)$/.test(
+    idCard
+  );
+
+export const idCardConvert = (idCard: string) => {
+  if (isTypeofIdCard(idCard)) {
+    return idCard.replace(/^(.{4})(?:\d+)(.{1})$/, '$1******$2');
+  }
+  return idCard;
+};
+
 export const previewImage = (
   urls: string[],
   payload: {
@@ -313,14 +324,14 @@ export const getLocation = async function (isForce?: boolean): Promise<{
 }> {
   return new Promise(async (success, fail) => {
     const res = await apiAsync(uni.getLocation, {}).catch((err) => {
-    if(err?.errCode === 2 || err?.extError === 12 ){
-      const gStores = new GStores();
-      gStores.messageStore.showMessage('请检查设备是否开启定位', 5000, {
-        uniToast: true,
-      });
-      throw new Error(err);
-    }  
-    if (!isForce) {
+      if (err?.errCode === 2 || err?.extError === 12) {
+        const gStores = new GStores();
+        gStores.messageStore.showMessage('请检查设备是否开启定位', 5000, {
+          uniToast: true,
+        });
+        throw new Error(err);
+      }
+      if (!isForce) {
         fail(err);
         throw new Error(err);
       }
@@ -335,7 +346,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
       res.latitude = latitude + '';
 
       success(res as any);
-    } else {   
+    } else {
       const reAuth = async function () {
         // #ifdef MP-WEIXIN
         const { authSetting } = await apiAsync(uni.getSetting, {});
@@ -378,28 +389,29 @@ export const addHosIdForSelfH5Path = (path: string) => {
   return path;
 };
 
-
 /**第三方自费支付 */
-export const thirdWxPay = (V3PageData)=>{
-  const {nonceStr,paySign,signType,timeStamp} = V3PageData;
+export const thirdWxPay = (V3PageData) => {
+  const { nonceStr, paySign, signType, timeStamp } = V3PageData;
   const invokeData = {
     nonceStr,
     packAge: V3PageData.package,
     paySign,
     signType,
     timeStamp,
-  }
-console.warn('V3PageData', V3PageData);
-const gStores = new GStores();
+  };
+  console.warn('V3PageData', V3PageData);
+  const gStores = new GStores();
   //拉起支付
-  toPayPull({invokeData:invokeData})
+  toPayPull({ invokeData: invokeData })
     .then((res: any) => {
       // #ifdef MP-ALIPAY
       if (res.payedRes.resultCode == '9000') {
         //支付宝成功支付
         if (V3PageData.miniUrl) {
           uni.navigateTo({
-            url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
+            url:
+              '/pagesC/cloudHospital/myPath?type=1&path=' +
+              encodeURIComponent(V3PageData.miniUrl),
           });
         }
       } else {
@@ -413,23 +425,25 @@ const gStores = new GStores();
       //处理跳转
       if (V3PageData.miniUrl) {
         uni.navigateTo({
-          url: '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.miniUrl),
+          url:
+            '/pagesC/cloudHospital/myPath?type=1&path=' +
+            encodeURIComponent(V3PageData.miniUrl),
         });
       }
       // #endif
     })
     .catch((err) => {
-      let msg =
-        err.errMsg.indexOf('cancel') != '-1' ? '取消支付' : err.errMsg;
+      let msg = err.errMsg.indexOf('cancel') != '-1' ? '取消支付' : err.errMsg;
       gStores.messageStore.showMessage(msg, 2000, {
         closeCallBack: () => {
           if (V3PageData.cancelUrl) {
             uni.navigateTo({
               url:
-                '/pagesC/cloudHospital/myPath?type=1&path=' + encodeURIComponent(V3PageData.cancelUrl),
+                '/pagesC/cloudHospital/myPath?type=1&path=' +
+                encodeURIComponent(V3PageData.cancelUrl),
             });
           }
         },
       });
     });
-}
+};

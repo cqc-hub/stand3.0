@@ -841,7 +841,7 @@
 
   const getGetHosName = computed(() => {
     return (
-      hosList.value.find((o) => o.hosId == _hosId.value)?.hosName ||
+      hosList.value.find((o) => o.hosId == _hosId.value)?.aliasName ||
       _hosId.value ||
       ''
     );

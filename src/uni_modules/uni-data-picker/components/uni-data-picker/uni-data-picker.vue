@@ -298,7 +298,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.uni-data-tree {
 		flex: 1;
 		position: relative;

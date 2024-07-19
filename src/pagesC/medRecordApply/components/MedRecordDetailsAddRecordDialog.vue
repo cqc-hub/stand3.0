@@ -30,7 +30,7 @@
       </view>
     </g-popup>
 
-    <view class="date-ref">
+    <view class="date-ref1">
       <uni-datetime-picker
         :modelValue="dateValue"
         :type="'date'"
@@ -42,13 +42,18 @@
         <view class="my-display-none">233</view>
       </uni-datetime-picker>
 
-      <view class="my-display-none">
+      <view
+        :class="{
+          '': isAlipay,
+        }"
+      >
         <uni-data-picker
-          :map="{ text: 'hosName', value: 'hosId' }"
+          :map="{ text: 'aliasName', value: 'hosId' }"
           :localdata="localdata"
           :clear-icon="false"
           @change="pickerChange"
           ref="dataPickerRef"
+          isHideSlot
         >
           <view class="my-display-none">233</view>
         </uni-data-picker>
@@ -73,6 +78,10 @@
     systemModeOld: boolean;
   }>();
   const emits = defineEmits(['update:value', 'submit', 'hos-change']);
+  const isAlipay = ref(false);
+  // #ifdef MP-ALIPAY
+  // isAlipay.value = true
+  // #endif
 
   const datePickerRef = ref<any>('');
   const dataPickerRef = ref<any>('');
@@ -109,7 +118,7 @@
     const v = value.map((o) => o.value).join(',');
 
     if (key === 'hosId') {
-      const hosName = hosList.value.find((o) => o.hosId === v)!.hosName;
+      const hosName = hosList.value.find((o) => o.hosId === v)!.aliasName;
       change({
         ...props.value,
         hosName,

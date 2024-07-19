@@ -17,7 +17,7 @@
       <!-- <image class="user-avatar" :src="getAvatar('')" mode="widthFix" /> -->
       <view class="user-label f36 text-ellipsis">
         <text class="user-name mr8">{{ pat.patientName }}</text>
-        <text class="f28">({{ pat.idCard }})</text>
+        <text class="f28">({{ idCardConvert(pat.idCard) }})</text>
       </view>
 
       <view
@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
   import { computed, inject } from 'vue';
-  import { GStores } from '@/utils';
+  import { GStores, idCardConvert } from '@/utils';
   import { TFamilyItem, TFamilyList } from '../utils/recordApply';
 
   const gStores = new GStores();

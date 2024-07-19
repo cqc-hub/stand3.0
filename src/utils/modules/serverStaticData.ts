@@ -263,9 +263,9 @@ export class ServerStaticData {
       const { result } = await api.getHospital<IHosInfo[]>(data);
 
       result.map((o) => {
-        const { distance, hosId, hosName } = o;
+        const { distance, hosId, hosName, aliasName } = o;
 
-        o.label = hosName;
+        o.label = aliasName || hosName;
         o.value = hosId;
 
         if (distance) {
