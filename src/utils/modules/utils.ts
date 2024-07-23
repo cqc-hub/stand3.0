@@ -242,7 +242,7 @@ export const isTypeofIdCard = (idCard: string) =>
 
 export const idCardConvert = (idCard: string) => {
   if (isTypeofIdCard(idCard)) {
-    return idCard.replace(/^(.{4})(?:\d+)(.{1})$/, '$1******$2');
+    return idCard.replace(/^(.{4})(?:\d+)(.{4})$/, '$1******$2');
   }
   return idCard;
 };

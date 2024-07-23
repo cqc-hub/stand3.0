@@ -257,7 +257,6 @@
         o.labelWidth = '140rpx';
       }
     });
-
     refForm.value.setList(tempList.value);
   };
 

@@ -30,7 +30,7 @@
       <text class="label">证件号码</text>
 
       <text>
-        {{ `${selFamilyPat.idCard}` }}
+        {{ `${idCardConvert(selFamilyPat.idCard)}` }}
       </text>
     </view>
   </view>
@@ -39,7 +39,7 @@
 <script lang="ts" setup>
   import { inject, ref } from 'vue';
 
-  import { GStores } from '@/utils';
+  import { GStores, idCardConvert } from '@/utils';
   import { TFamilyItem, TFamilyList } from '../utils/recordApply';
 
   const gStores = new GStores();
