@@ -1,7 +1,7 @@
 <template>
   <view
     @click.stop="collectClick"
-    class="btn btn-round btn-size-small btn-border btn-warning"
+    class="btn btn-round btn-size-small btn-border btn-primary"
   >
     <text class="iconfont f36 mr12">
       {{ isCollected ? '&#xe6ff;' : '&#xe700;' }}
@@ -34,6 +34,7 @@
       deptName,
       applyDoc,
       reportType,
+      applyTime,
       repTime,
       extend,
       repType,
@@ -51,7 +52,7 @@
       docName: applyDoc,
       orderType: reportType,
       source: gStore.globalStore.browser.source,
-      time: repTime,
+      time: applyTime || repTime,
       extend,
       repType,
       serialNo,

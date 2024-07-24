@@ -65,6 +65,15 @@ image {
   }
 }
 
+.g-split-line1 {
+  &::after {
+    content: "|";
+    position: relative;
+    left: 12rpx;
+    font-size: 24rpx;
+  }
+}
+
 .g-bold, .font-semibold {
   font-weight: 600;
 }
