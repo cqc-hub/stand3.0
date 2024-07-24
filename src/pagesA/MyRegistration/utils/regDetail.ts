@@ -444,20 +444,20 @@ export class RegDetailUtil {
     });
 
     const pages = getCurrentPages();
-    if (pages && pages.length) {
-      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+    if (pages && pages.length > 1) {
+      const fullUrl: string = (pages[pages.length - 2] as any).$page.fullPath;
       if (fullUrl.includes('pagesA/MyRegistration/MyRegistration')) {
         uni.navigateBack({
           delta: 1,
         });
-        return Promise.reject('不需要刷新数据');
+        return Promise.reject('不需要刷新数据11');
       }
     }
     uni.reLaunch({
       url: '/pagesA/MyRegistration/MyRegistration',
     });
 
-    return Promise.reject('不需要刷新数据');
+    return Promise.reject('不需要刷新数据22');
   }
 
   async cancelReg() {
