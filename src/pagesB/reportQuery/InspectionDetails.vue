@@ -9,9 +9,18 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
     <view class="container">
-      <view class="container-block">
+      <view
+        :class="{
+          [pageConfig.isOpenCollect === '1' &&
+          gStore.globalStore.isLogin &&
+          Object.keys(checkoutReportList).length
+            ? 'mt48'
+            : 'mt24']: 1,
+        }"
+        class="container-block"
+      >
         <view class="container-block-top" @click="more">
-          <view class="flex-between">
+          <view class="flex-between flex-start">
             <view class="title flex1">{{ checkoutReportList.repName }}</view>
 
             <view
@@ -20,6 +29,7 @@
                 gStore.globalStore.isLogin &&
                 Object.keys(checkoutReportList).length
               "
+              class="pr24"
             >
               <CollectBtn
                 :info="{
@@ -260,8 +270,11 @@
                         'color-blue': item.flag === 'L',
                       }"
                     >
-                     <text class="text-no-wrap"> {{ item.itemVal }}</text>
-                      {{ item.flag && item.flag.includes('阳') && item.flag || '' }}
+                      <text class="text-no-wrap">{{ item.itemVal }}</text>
+                      {{
+                        (item.flag && item.flag.includes('阳') && item.flag) ||
+                        ''
+                      }}
                       <text class="color-blue" v-if="item.flag == 'L'">↓</text>
                       <text class="color-danger" v-if="item.flag == 'H'">
                         ↑
@@ -581,7 +594,6 @@
       .container-block {
         width: 100%;
         height: 100%;
-        margin-top: 24rpx;
         .container-block-top {
           // width: calc(100% - 64rpx);
           background: linear-gradient(0deg, #ffffff, #e9f0ff);

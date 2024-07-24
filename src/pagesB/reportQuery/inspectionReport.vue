@@ -46,11 +46,18 @@
       >
         <view
           class="container-block"
-          :class="{ containerBlockFirst: index == 0 && btnNumber.length > 0 }"
+          :class="{
+            containerBlockFirst: index == 0 && btnNumber.length > 0,
+            [pageConfig.isOpenCollect === '1' &&
+            gStore.globalStore.isLogin &&
+            Object.keys(examineReportList).length
+              ? 'mt48'
+              : 'mt24']: 1,
+          }"
         >
           <view class="container-block-top">
             <view class="container-top-click" @click="more(index)">
-              <view class="flex-between">
+              <view class="flex-between flex-start">
                 <view class="title flex1">{{ item.repName }}</view>
 
                 <view
@@ -59,6 +66,7 @@
                     gStore.globalStore.isLogin &&
                     Object.keys(examineReportList).length
                   "
+                  class="pr24"
                 >
                   <CollectBtn
                     :info="{
@@ -305,7 +313,14 @@
     getShareTotalUrl,
     addWatermark,
   } from './utils';
-  import { GStores, nameConvert, wait, throttle, ISystemConfig, ServerStaticData } from '@/utils';
+  import {
+    GStores,
+    nameConvert,
+    wait,
+    throttle,
+    ISystemConfig,
+    ServerStaticData,
+  } from '@/utils';
   import { joinQuery, encryptDes, getSysCode } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
@@ -742,7 +757,6 @@
       .container-block {
         width: 100%;
         height: 100%;
-        margin-top: 24rpx;
         .container-block-top {
           // width: calc(100% - 64rpx);
           background: linear-gradient(0deg, #ffffff, #e9f0ff);
