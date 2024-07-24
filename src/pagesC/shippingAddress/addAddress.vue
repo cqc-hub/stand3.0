@@ -62,21 +62,31 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults } from 'vue';
-  import { GStores } from '@/utils';
-  import { onReady } from '@dcloudio/uni-app';
+  import { GStores, wait } from '@/utils';
+  import { onReady, onLoad } from '@dcloudio/uni-app';
   import { useMessageStore } from '@/stores';
   import api from '@/service/api';
+  import { deQueryForUrl } from '@/common';
   const messageStore = useMessageStore();
 
-  const props = withDefaults(
-    defineProps<{
+  // const props = withDefaults(
+  //   defineProps<{
+  //     pageType: 'edit' | 'add' | 'editPatient';
+  //     item: string;
+  //   }>(),
+  //   {
+  //     pageType: 'add',
+  //   }
+  // );
+
+  const props = ref(<
+    {
       pageType: 'edit' | 'add' | 'editPatient';
       item: string;
-    }>(),
-    {
-      pageType: 'add',
     }
-  );
+  >{
+    pageType: 'add',
+  });
   const gStores = new GStores();
   const gform = ref<any>('');
   const formData = ref<BaseObject>({
@@ -188,7 +198,7 @@
   };
 
   const deleteAddress = async () => {
-    const item = JSON.parse(props.item);
+    const item = JSON.parse(props.value.item);
     await api.delExpressAddress({
       herenId: gStores.globalStore.herenId,
       id: item.id,
@@ -208,7 +218,7 @@
     };
     delete params.address;
     let title = '地址保存成功';
-    if (props.pageType == 'edit') {
+    if (props.value.pageType == 'edit') {
       title = '地址修改成功';
       await api.updateExpressAddress(params);
     } else {
@@ -217,7 +227,9 @@
 
     messageStore.showMessage(title, 1000, {
       closeCallBack: () => {
-        uni.navigateBack({ delta: props.pageType === 'editPatient' ? 2 : 1 });
+        uni.navigateBack({
+          delta: props.value.pageType === 'editPatient' ? 2 : 1,
+        });
       },
     });
   };
@@ -233,23 +245,31 @@
     return isDisabled;
   });
 
+  onLoad((opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
+    if (!props.value.pageType) {
+      props.value.pageType = 'add';
+    }
+  });
+
   onReady(() => {
-    if (props.pageType === 'edit') {
+    if (props.value.pageType === 'edit') {
       uni.setNavigationBarTitle({
         title: '编辑收货地址',
       });
     }
   });
 
-  onMounted(() => {
-    if (props.pageType !== 'add') {
-      const item = JSON.parse(props.item);
+  onMounted(async () => {
+    if (props.value.pageType !== 'add') {
+      const item = JSON.parse(props.value.item);
 
       formData.value = {
         ...item,
         defaultFlag: item.defaultFlag === 0 ? false : true,
       };
     }
+    await wait(20);
     gform.value.setList(formList);
   });
 </script>
