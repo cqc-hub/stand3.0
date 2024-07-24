@@ -443,9 +443,20 @@ export class RegDetailUtil {
       source: this.gStores.globalStore.browser.source,
     });
 
+    const pages = getCurrentPages();
+    if (pages && pages.length) {
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+      if (fullUrl.includes('pagesA/MyRegistration/MyRegistration')) {
+        uni.navigateBack({
+          delta: 1,
+        });
+        return Promise.reject('不需要刷新数据');
+      }
+    }
     uni.reLaunch({
       url: '/pagesA/MyRegistration/MyRegistration',
     });
+
     return Promise.reject('不需要刷新数据');
   }
 
