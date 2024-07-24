@@ -36,11 +36,17 @@
         @click="isShowFilterHos = !isShowFilterHos"
         class="flex-normal"
       >
-        <view>{{hosAreaNow}}</view>
+        <view>{{ hosAreaNow }}</view>
         <view class="iconfont">&#xe6e8;</view>
       </view>
     </view>
     <scroll-view class="scroll-container g-container" scroll-y>
+      <g-tbanner
+        :config="orderConfig.bannerSelHosTop"
+        @click="useTBanner(orderConfig.bannerSelHosTop!)"
+        disabled
+      />
+
       <hos-List-Vue
         :disabledKey="listDisableName"
         :isShowMoreItem="_type == 3 ? false : hosList.length <= showMoreItem"
@@ -100,7 +106,7 @@
             @click="isShowFilterHos = !isShowFilterHos"
             class="flex-normal"
           >
-            <view>{{hosAreaNow}}</view>
+            <view>{{ hosAreaNow }}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
         </view>
@@ -135,7 +141,7 @@
             @click="isShowFilterHos = !isShowFilterHos"
             class="flex-normal"
           >
-            <view>{{hosAreaNow}}</view>
+            <view>{{ hosAreaNow }}</view>
             <view class="iconfont">&#xe6e8;</view>
           </view>
         </view>
@@ -165,6 +171,7 @@
     openLocation,
     GStores,
     ISystemConfig,
+    useTBanner,
   } from '@/utils';
   import { joinQuery, deQueryForUrl } from '@/common';
 
@@ -180,6 +187,7 @@
     isLogin?: '1'; // 需要登录?
   }>();
   const hosHisMaxLen = ref(0);
+  const orderConfig = ref({} as ISystemConfig['order']);
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
@@ -523,9 +531,11 @@
     });
   };
 
-  onLoad((opt) => {
+  onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
-
+    if (getTypeNow.value === '预约挂号') {
+      orderConfig.value = await ServerStaticData.getSystemConfig('order');
+    }
     if (props.value._type == 3) {
       uni.setNavigationBarTitle({
         title: '药店指南',

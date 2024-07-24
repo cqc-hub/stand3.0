@@ -41,12 +41,12 @@
     </view>
 
     <view class="row">
-      <view class="title">预约医院</view>
+      <view class="title text-no-wrap">预约医院</view>
       <view>{{ hosLabel }}</view>
     </view>
 
     <view v-if="!isPreConfirm" class="row">
-      <view class="title">挂号金额</view>
+      <view class="title text-no-wrap">挂号金额</view>
       <view>{{ myProps.fee }}元</view>
     </view>
 

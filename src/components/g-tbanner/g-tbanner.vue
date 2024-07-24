@@ -34,6 +34,6 @@
   .nav {
     width: 100%;
     // height: 128upx;
-    background: #fff;
+    background: transparent;
   }
 </style>

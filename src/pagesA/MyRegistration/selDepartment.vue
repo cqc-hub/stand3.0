@@ -195,7 +195,7 @@
 
     const requestArg = {
       source,
-      hosId: hosId.value,
+      hosId: hosId.value === '全院区' ? '' : hosId.value,
       clinicalType: props.clinicalType,
       // resType   // 预约类型：1.预约挂号，2.当日挂号
     };

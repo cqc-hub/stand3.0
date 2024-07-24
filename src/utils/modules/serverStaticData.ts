@@ -21,7 +21,7 @@ import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
-import type { TBannerConfig, ISystemConfig, IHosInfo } from '@/types';
+import type { TBannerConfig, ISystemConfig, IHosInfo, TButtonConfig } from '@/types';
 
 const _cacheMap = new WeakMap();
 
@@ -124,7 +124,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 };
 
 export const useTBanner = async (
-  config: Omit<TBannerConfig, 'src'>,
+  config: TBannerConfig | TButtonConfig,
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {

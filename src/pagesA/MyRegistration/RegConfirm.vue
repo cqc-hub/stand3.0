@@ -193,7 +193,8 @@
       thRegisterId,
       regVerificationMode,
     } = props.value;
-    const { herenId, patientId, realNameAuth } = gStores.userStore.patChoose;
+    const { herenId, patientId, realNameAuth, patientName } =
+      gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
 
     if (!isCheck.value) {
@@ -206,7 +207,7 @@
       const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
 
       gStores.messageStore.showMessage(
-        '需要实名认证后才能继续预约改号源',
+        `需要对就诊人${patientName}实名认证后才能继续预约改号源`,
         3000,
         {
           closeCallBack() {
@@ -270,7 +271,7 @@
       resType,
       promptMessage,
       thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
-      ageReminderCode:isOverLimit.value,
+      ageReminderCode: isOverLimit.value,
     };
 
     let alipayAuthCode = '';
@@ -297,7 +298,7 @@
           isPreventOrder.value = true;
         } else if (respCode === 999227) {
           //超限就诊提示
-          OverlimiMessage(e)
+          OverlimiMessage(e);
         } else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
@@ -374,7 +375,7 @@
     });
 
     if (cancel) {
-      isOverLimit.value = respCode
+      isOverLimit.value = respCode;
       regConfirm();
     }
   };

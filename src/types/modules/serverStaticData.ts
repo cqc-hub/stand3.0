@@ -18,6 +18,12 @@ export interface ISystemConfig_ {
 
   // 预约挂号 ORDER_REGISTER
   order: {
+    /**
+     * 选择医院页面
+     */
+    // 选医院上面 banner
+    bannerSelHosTop?: TBannerConfig;
+
     /** 科室列表页面 */
     // 选科室上面 banner
     bannerOrder?: TBannerConfig;
