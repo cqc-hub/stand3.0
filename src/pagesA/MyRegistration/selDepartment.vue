@@ -263,7 +263,7 @@
     });
 
     const queryArg = {
-      hosId: hosId.value,
+      hosId: item.hosId || hosId.value,
       clinicalType: props.clinicalType,
       thRegisterId: props.thRegisterId,
       deptName: encodeURIComponent(item.deptName),

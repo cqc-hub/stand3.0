@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 export interface IDeptLv1 extends IDeptLv3 {
+  hosId?: string;
   firstDefaultShowDept?: '1'; // 默认展示科室
   firstDeptName: string;
   firstHosDeptId: string;
@@ -14,6 +15,7 @@ export interface IDeptLv1 extends IDeptLv3 {
 }
 
 export interface IDeptLv2 extends IDeptLv3 {
+  hosId?: string;
   open?: boolean;
   promptMessage: string; // 就诊提示
   remark: string;
@@ -30,6 +32,7 @@ export interface IDeptLv2 extends IDeptLv3 {
 }
 
 export interface IDeptLv3 {
+  hosId?: string;
   deptName: string;
   hosDeptId: string;
   promptMessage: string;
