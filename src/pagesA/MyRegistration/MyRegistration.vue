@@ -33,7 +33,7 @@
         :line-scale="0.8"
         field="headerName"
         all-blod
-        @change="(e) => tabChange(e, 'click')"
+        @change="tabChange"
       />
     </view>
     <!-- 非候补——原tabber begin -->
@@ -178,6 +178,7 @@
     TButtonConfig,
     useTBanner,
     handlerWeChatThRegLogin,
+    wait,
   } from '@/utils';
   import {
     OrderStatus,
@@ -282,16 +283,18 @@
   const isShowYuWzBtn = computed(
     () => pageConfig.value.isOpenPreConsultation === '1'
   );
-  // 已改 begin
-  const tabChange = async (e: number, type: string) => {
+
+  const tabChange = async (e: number) => {
     tabCurrent.value = e;
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
-    pat.value = patList.value[0];
-    await getList(
-      pat.value?.patientId || gStores.userStore.patChoose?.patientId
-    );
+    // pat.value = patList.value[0];
+    if (!pat.value?.patientId && e) {
+      _patChange(gStores.userStore.patChoose);
+    }
+    const patientId =
+      pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
+    await getList(patientId);
   };
-  // 已改 end
 
   const getStatusConfig = (status: OrderStatus) => {
     if (orderStatusMap[status]) {
@@ -387,8 +390,13 @@
     });
   };
 
-  const patientChange = async ({ item }) => {
+  const _patChange = (item) => {
+    selPatId.value = item.patientId;
     pat.value = item;
+  };
+
+  const patientChange = async ({ item }) => {
+    _patChange(item);
     await getList(item.patientId || '');
 
     if (item.patientId) {
@@ -484,9 +492,10 @@
     await getConfig();
     patList.value[0]?.patientName === '所有就诊人' &&
       (pat.value = patList.value[0]);
-    await getList(
-      pat.value?.patientId || gStores.userStore.patChoose?.patientId
-    );
+    // await getList(
+    //   pat.value?.patientId || gStores.userStore.patChoose?.patientId
+    // );
+    tabChange(0);
   };
 
   const patList = computed(() => {
