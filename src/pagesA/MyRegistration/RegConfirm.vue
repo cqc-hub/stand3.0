@@ -205,22 +205,29 @@
     if (regVerificationMode === '2' && realNameAuth === '0') {
       const pages = getCurrentPages();
       const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
-      gStores.messageStore.showMessage(
-        `需要对就诊人${patientName}实名认证后才能继续预约改号源`,
-        3000,
-        {
-          closeCallBack() {
-            uni.navigateTo({
-              url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-                _url: fullUrl,
-              }),
-            });
+      const { title, content } = await gStores.getSysAppMore('1204');
+      const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: true,
+            cancelText: '暂不预约',
+            confirmText: '去实名认证',
           },
-        }
-      );
+          closeCallBack: r,
+        });
+      });
 
-      return;
+      if (confirm) {
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+            _url: fullUrl,
+          }),
+        });
+      }
+
+      return
     }
 
     if (isWaitReg.value) {

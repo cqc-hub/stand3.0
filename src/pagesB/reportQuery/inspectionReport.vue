@@ -66,7 +66,7 @@
                     gStore.globalStore.isLogin &&
                     Object.keys(examineReportList).length
                   "
-                  class="pr24"
+                  class="pr24 pt40"
                 >
                   <CollectBtn
                     :info="{

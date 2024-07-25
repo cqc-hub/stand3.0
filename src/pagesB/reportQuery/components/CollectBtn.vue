@@ -1,7 +1,7 @@
 <template>
   <view
     @click.stop="collectClick"
-    class="btn btn-round btn-size-small btn-border btn-primary c-btn"
+    class="btn btn-round btn-size-small btn-border btn-primary "
   >
     <text class="iconfont f36 mr12">
       {{ isCollected ? '&#xe6ff;' : '&#xe700;' }}
@@ -97,8 +97,4 @@
 </script>
 
 <style lang="scss" scoped>
-.c-btn {
-  position: relative;
-  transform: translateY(-50%);
-}
 </style>

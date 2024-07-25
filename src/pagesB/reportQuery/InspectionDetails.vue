@@ -10,14 +10,7 @@
     </view>
     <view class="container">
       <view
-        :class="{
-          [pageConfig.isOpenCollect === '1' &&
-          gStore.globalStore.isLogin &&
-          Object.keys(checkoutReportList).length
-            ? 'mt48'
-            : 'mt24']: 1,
-        }"
-        class="container-block"
+        class="container-block mt24"
       >
         <view class="container-block-top" @click="more">
           <view class="flex-between flex-start">
@@ -29,7 +22,7 @@
                 gStore.globalStore.isLogin &&
                 Object.keys(checkoutReportList).length
               "
-              class="pr24"
+              class="pr24 pt40"
             >
               <CollectBtn
                 :info="{
