@@ -76,7 +76,7 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, ref } from 'vue';
-  import { downFile, wait, GStores, FileUtil, apiAsync } from '@/utils';
+  import { downFile, wait, GStores, FileUtil, apiAsync, throughCharacterLineFeed } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
   import globalGl from '@/config/global';
@@ -369,8 +369,7 @@
       hosName,
     } = props.detail;
     // docPhoto = '';
-
-    _goodAt = _goodAt || '暂无';
+    _goodAt = throughCharacterLineFeed(_goodAt || '暂无', ' ');
     docName = docName || '';
     docTitleName = docTitleName || '';
 

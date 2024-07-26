@@ -10,7 +10,7 @@
         <text>门诊时间</text>
       </view>
       <view class="color-444 f32 g-break-word mb40">
-        {{ detail.clinicTime }}
+        <rich-text :nodes="HTMLParser(throughCharacterLineFeed(detail.clinicTime))" />
       </view>
     </block>
 
@@ -19,7 +19,11 @@
         <text class="icon-font ico_doctor-diamond icon-size"></text>
         <text>擅长</text>
       </view>
-      <view class="color-444 f32 g-break-word mb40">{{ detail.goodAt }}</view>
+      <view class="color-444 f32 g-break-word mb40">
+        <rich-text
+          :nodes="HTMLParser(throughCharacterLineFeed(detail.goodAt))"
+        />
+      </view>
     </block>
 
     <block v-if="detail.intro">
@@ -27,7 +31,9 @@
         <text class="icon-font ico_doctor-document icon-size"></text>
         <text>简介</text>
       </view>
-      <view class="color-444 f32 g-break-word mb40">{{ detail.intro }}</view>
+      <view class="color-444 f32 g-break-word mb40">
+        <rich-text :nodes="HTMLParser(throughCharacterLineFeed(detail.intro))" />
+      </view>
     </block>
 
     <block v-if="detail.academicAchievements">
@@ -36,15 +42,19 @@
         <text>学术成就</text>
       </view>
       <view class="color-444 f32 g-break-word mb40">
-        {{ detail.academicAchievements }}
+        <rich-text :nodes="HTMLParser(throughCharacterLineFeed(detail.academicAchievements))" />
       </view>
     </block>
+
+    <view class="safe-height" />
   </view>
 </template>
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { type IDocDetail } from '../../utils/DoctorDetails';
+  import HTMLParser from '@/common/html-parser';
+  import { throughCharacterLineFeed } from '@/utils';
 
   const props = defineProps<{
     detail: IDocDetail;

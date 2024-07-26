@@ -402,6 +402,7 @@ export const thirdWxPay = (V3PageData) => {
   console.warn('V3PageData', V3PageData);
   const gStores = new GStores();
   //拉起支付
+  // @ts-expect-error
   toPayPull({ invokeData: invokeData })
     .then((res: any) => {
       // #ifdef MP-ALIPAY
@@ -447,3 +448,15 @@ export const thirdWxPay = (V3PageData) => {
       });
     });
 };
+
+
+/**
+ * 修改 \n 成换行 -> rich-text
+ */
+export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') => {
+  if (str) {
+    str = str.replaceAll('\\n', replaceStr)
+  }
+
+  return str
+}

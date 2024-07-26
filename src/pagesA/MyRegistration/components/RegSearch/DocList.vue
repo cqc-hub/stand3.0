@@ -17,7 +17,10 @@
               <view class="doc-info-introduce-name f36">
                 {{ item.docName }}
               </view>
-              <view v-if="item.docTitleName" class="doc-info-introduce-title mr12">
+              <view
+                v-if="item.docTitleName"
+                class="doc-info-introduce-title mr12"
+              >
                 {{ item.docTitleName }}
               </view>
 
@@ -34,12 +37,15 @@
           </view>
         </view>
 
-        <view
-          @click="avatarClick(item)"
-          class="text-ellipsis ellipsis-line-clamp2"
-        >
+        <view @click="avatarClick(item)" class="flex">
           <text class="icon-font ico_major good_at_icon mr12" />
-          <text class="color-888 f28">{{ item.goodAt }}</text>
+          <view class="flex-1">
+            <rich-text
+              v-if="item.goodAt"
+              class="color-888 f28 text-ellipsis ellipsis-line-clamp2"
+              :nodes="HTMLParser(throughCharacterLineFeed(item.goodAt, '\n'))"
+            />
+          </view>
         </view>
       </view>
     </block>
@@ -53,6 +59,8 @@
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
   import { IDocResItem } from '../../utils/RegSearch';
+  import HTMLParser from '@/common/html-parser';
+  import { throughCharacterLineFeed } from '@/utils';
 
   defineProps<{
     list: IDocResItem[];
@@ -142,6 +150,7 @@
     width: 60rpx;
     height: 24rpx;
     position: relative;
-    top: 2rpx;
+    top: 4rpx;
+    flex-basis: 60rpx;
   }
 </style>

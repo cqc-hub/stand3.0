@@ -119,7 +119,15 @@
                   />
 
                   <view class="color-666 f28 doc-goodat-content text-ellipsis">
-                    <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text>
+                    <!-- <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text> -->
+                    <rich-text
+                      v-if="docDetail.goodAt"
+                      :nodes="HTMLParser(throughCharacterLineFeed(docDetail.goodAt), '\n')"
+                    />
+                    <!-- <rich-text
+                      v-if="docDetail.goodAt"
+                      :nodes="HTMLParser(docDetail.goodAt)"
+                    /> -->
 
                     <view
                       v-if="
@@ -398,7 +406,9 @@
     ServerStaticData,
     type ISystemConfig,
     useTBanner,
+    throughCharacterLineFeed,
   } from '@/utils';
+  import HTMLParser from '@/common/html-parser';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
