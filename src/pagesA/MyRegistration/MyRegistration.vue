@@ -281,7 +281,7 @@
   );
 
   const isShowYuWzBtn = computed(
-    () => pageConfig.value.isOpenPreConsultation === '1'
+    () => pageConfig.value.isOpenPreConsultation === '1'&&  tabCurrent.value === 0
   );
 
   const tabChange = async (e: number) => {
