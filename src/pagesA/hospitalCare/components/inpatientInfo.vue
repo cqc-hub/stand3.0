@@ -170,13 +170,14 @@ let resolve: (...any) => any = () => {};
 let reject: (...any) => any = () => {};
 
 const toPayPage = async () => {
-  const { hosId, cardNumber, patientName, hosName, placeList, choosePlaceFlag } = hosInfoResObj.value;
+  const { hosId, cardNumber, patientName, hosName, placeList, choosePlaceFlag, extend } = hosInfoResObj.value;
 
   const args = {
     hosId,
     cardNumber,
     patientName,
     hosName,
+    extend
   };
 
   if (!choosePlaceFlag && placeList && placeList.length) {
