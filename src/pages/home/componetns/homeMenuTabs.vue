@@ -50,11 +50,17 @@
         <view
           v-else
           class="v-tabs__container-pills"
+          :class="{
+            'v-tabs__container-pills-first': current === 0,
+            'v-tabs__container-pills-last': current === tabs.length - 1,
+            'v-tabs__container-pills-center':
+              current !== 0 && current !== tabs.length - 1,
+          }"
           :style="{
             background: pillsColor,
             borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
-            width: currentWidth + 'px',
+            width: currentWidth*1.1 + 'px',
             height,
           }"
         ></view>
@@ -346,7 +352,7 @@
         position: relative;
         z-index: 10;
         // padding: 0 11px;
-        transition: all 0.4s;
+        transition: all 0.2s;
         white-space: nowrap;
         justify-content: center;
       }
@@ -354,15 +360,29 @@
       &-line {
         position: absolute;
         bottom: 0;
-        transition: all 0.4s linear;
+        transition: all 0.2s ease-out;
+
       }
 
       &-pills {
         position: absolute;
-        transition: all 0.4s linear;
+        transition: all 0.2s ease-out;
+        // transition-delay: 0.2s;
         z-index: 9;
-        clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
-        transform: scaleX(1.25);
+        &-first {
+          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%) ;
+          border-top-right-radius: 90rpx 200rpx !important;
+        }
+        &-last {
+          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%) ;
+          border-top-left-radius: 90rpx 200rpx !important;
+        }
+        &-center {
+          clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
+          border-top-left-radius: 90rpx 200rpx !important;
+          border-top-right-radius: 90rpx 200rpx !important;
+
+        }
       }
     }
   }
