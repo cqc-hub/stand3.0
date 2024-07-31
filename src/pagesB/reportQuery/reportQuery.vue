@@ -33,6 +33,14 @@
       />
     </view>
 
+    <view
+      v-if="isOpenFilterTime"
+      class="filter-time p32 pt24 pb24 flex-between"
+    >
+      <view class="color-888 f28">近一个月</view>
+      <view class="bg-white p24 pt8 pb8 rounded f26 font-semibold">2022/09/20 ~ 2022/10/20</view>
+    </view>
+
     <swiper
       v-if="tabs.length"
       :current="tabCurrent"
@@ -112,7 +120,6 @@
       </button>
     </view>
     <repShare ref="repShareRef" :current-data="currentTjData" />
-
   </view>
 </template>
 <script lang="ts" setup>
@@ -155,9 +162,12 @@
   const cacheStore = useCacheStore();
   const repShareRef = ref<any>('');
   const currentTjData = ref();
- 
+  const isOpenFilterTime = computed(
+    () => pageConfig.value.isOpenFilterReportByTime === '1'
+  );
+
   const init = async () => {
-    const { listYun, reportTab } = reportConfig.value;
+    const { listYun, reportTab } = pageConfig.value;
 
     if (listYun) {
       const { imgUrl } = listYun;
@@ -196,7 +206,7 @@
     let listNowLen = 0;
     await wait(600);
     const currentTabValue = tabCurrent.value;
-    const { isCheckThirdParty } = reportConfig.value;
+    const { isCheckThirdParty } = pageConfig.value;
     const typeId = tabs.value[tabCurrent.value].typeId;
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
@@ -323,7 +333,7 @@
   };
   const isRefresh = ref([true, true, true]);
   const tabChange = async (e: number, type: string) => {
-    const { isCheckThirdParty } = reportConfig.value;
+    const { isCheckThirdParty } = pageConfig.value;
     tabCurrent.value = e;
     if (
       !pageList.value[tabCurrent.value].length &&
@@ -350,7 +360,7 @@
       isWatermark,
       jcBottomNav,
       jyBottomNav,
-    } = reportConfig.value;
+    } = pageConfig.value;
     const mq1 = {
       repId: data.repId || '',
       repType: data.repType || '',
@@ -434,10 +444,10 @@
 
     switch (headerType) {
       case 'jy':
-        return arrFactory(reportConfig.value.jyListFooterBtn || []);
+        return arrFactory(pageConfig.value.jyListFooterBtn || []);
 
       case 'jc':
-        return arrFactory(reportConfig.value.jcListFooterBtn || []);
+        return arrFactory(pageConfig.value.jcListFooterBtn || []);
 
       default:
         return [];
@@ -445,10 +455,10 @@
   });
 
   //根据系统码查询对应医院报告参数
-  const reportConfig = ref(<ISystemConfig['reportQuery']>{});
+  const pageConfig = ref(<ISystemConfig['reportQuery']>{});
 
   const getYunBannerData = async () => {
-    const { listYun } = reportConfig.value;
+    const { listYun } = pageConfig.value;
 
     if (listYun) {
       const { imgUrl } = listYun;
@@ -502,7 +512,7 @@
   };
 
   onShow(() => {
-    const { isCheckThirdParty } = reportConfig.value;
+    const { isCheckThirdParty } = pageConfig.value;
     if (isCheckThirdParty === '1') {
       tabCurrent.value = 0;
       tabChange(0, 'click');
@@ -510,7 +520,7 @@
   });
 
   onLoad(async (p) => {
-    reportConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+    pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
@@ -531,6 +541,10 @@
         flex: 1;
         justify-content: center;
       }
+    }
+
+    .filter-time {
+      background-color: #f6f6f6;
     }
 
     .container {

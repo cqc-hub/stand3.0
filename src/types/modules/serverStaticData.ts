@@ -320,6 +320,8 @@ export interface ISystemConfig_ {
 
   //报告查询 REPORT_QUERY_CONFIG
   reportQuery: {
+    // 列表页开放选择时间
+    isOpenFilterReportByTime?: '1';
     // 详情页开放收藏按钮
     isOpenCollect?: '1';
     //顶部tab
