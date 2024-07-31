@@ -10,7 +10,7 @@
 
       <view class="g-border-bottom my-display-none">
         <g-selhos
-          v-model:hosId="hosId"
+          v-model:hosId="pageProps.hosId"
           @change="getOutPatientHosList"
           @get-list="getHosList"
         />
@@ -136,7 +136,7 @@
 
   import { GStores, ServerStaticData, IHosInfo, ISystemConfig } from '@/utils';
   import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
-  import { joinQuery } from '@/common/utils';
+  import { deQueryForUrl, joinQuery } from '@/common/utils';
   import { setLocalStorage, getLocalStorage } from '@/common';
   import { useCacheStore } from '@/stores';
 
@@ -145,22 +145,42 @@
   import OutHosListCom from './components/RecordApplyOutHosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
 
-  const props = defineProps<{
-    hosId?: string;
-  }>();
+  const pageProps = ref(
+    {} as {
+      hosId?: string;
+      isAll?: '1';
+    }
+  );
   const gStores = new GStores();
   const cacheStore = useCacheStore();
-  const hosId = ref(props.hosId || '');
   const isComplete = ref(false);
   const outHosList = ref<TOutHosInfo[]>([]);
   const checkOutHosList = ref<TOutHosInfo[]>([]);
+  const getRealHosId = computed(() =>
+    pageProps.value.isAll === '1' ? '' : pageProps.value.hosId
+  );
 
   const flagTitle508 = ref('');
   const regDialogConfirm = ref<any>('');
   const isCheck = ref(false);
 
   const itemClick = (item: TOutHosInfo) => {
-    const { _id } = item;
+    const { _id, hosId } = item;
+    const oldItem = checkOutHosList.value[0];
+
+    if (
+      oldItem &&
+      hosId !== oldItem.hosId &&
+      checkOutHosList.value.length === 1
+    ) {
+      checkOutHosList.value = [item];
+      return;
+    }
+
+    if (oldItem && hosId !== oldItem.hosId) {
+      gStores.messageStore.showMessage('暂不支持跨院区申请病案', 3000);
+      return;
+    }
 
     const idx = checkOutHosList.value.findIndex((o) => o._id === _id);
 
@@ -196,7 +216,7 @@
     nextTick(() => {
       uni.navigateTo({
         url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
-          hosId: hosId.value,
+          hosId: getRealHosId.value || checkOutHosList.value[0].hosId,
           selRecords: encodeURIComponent(JSON.stringify(checkOutHosList.value)),
         }),
       });
@@ -207,12 +227,28 @@
     if (isCheckAll.value) {
       checkOutHosList.value = [];
     } else {
-      checkOutHosList.value = [...outHosList.value];
+      const selNos = checkOutHosList.value.map((o) => o.visitNo);
+      outHosList.value.map((item) => {
+        const _oldHosId = checkOutHosList.value[0]?.hosId;
+
+        if (!_oldHosId || (_oldHosId && item.hosId === _oldHosId)) {
+          if (!selNos.includes(item.visitNo)) {
+            checkOutHosList.value.push(item);
+          }
+        }
+      });
     }
   };
 
   const isCheckAll = computed(() => {
-    return checkOutHosList.value.length === outHosList.value.length;
+    if (checkOutHosList.value.length) {
+      const hosId = checkOutHosList.value[0].hosId;
+      return (
+        outHosList.value.filter((o) => o.hosId === hosId).length ===
+        checkOutHosList.value.length
+      );
+    }
+    return false;
   });
 
   const getHosList = ({ list }: { list: IHosInfo[] }) => {
@@ -239,8 +275,10 @@
 
   const getConfig = async () => {
     const listConfig = await ServerStaticData.getSystemConfig('medRecord');
-    if (hosId.value) {
-      pageConfig.value = listConfig.find((o) => o.hosId === hosId.value)!;
+    if (pageProps.value.hosId) {
+      pageConfig.value =
+        listConfig.find((o) => o.hosId === pageProps.value.hosId)! ||
+        ({} as any);
     } else {
       const configDetail = listConfig[0];
       pageConfig.value = configDetail;
@@ -248,10 +286,10 @@
 
     if (!pageConfig.value) {
       gStores.messageStore.showMessage(
-        '未获取到该院区的配置' + `(${hosId.value})`
+        '未获取到该院区的配置' + `(${pageProps.value.hosId})`
       );
 
-      throw new Error('未获取到该院区的配置' + `(${hosId.value})`);
+      throw new Error('未获取到该院区的配置' + `(${pageProps.value.hosId})`);
     }
   };
 
@@ -268,7 +306,7 @@
     const requestArg = {
       patientId,
       type: '11',
-      hosId: hosId.value,
+      hosId: getRealHosId.value,
     };
 
     isComplete.value = false;
@@ -289,7 +327,7 @@
   const goApplyRecord = () => {
     uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/_recordApply', {
-        hosId: hosId.value,
+        hosId: getRealHosId.value,
       }),
     });
   };
@@ -297,7 +335,7 @@
   const goAddRecord = () => {
     uni.navigateTo({
       url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
-        hosId: hosId.value,
+        hosId: pageProps.value.hosId,
         isManual: '1',
       }),
     });
@@ -315,8 +353,11 @@
   // gStores.userStore.patChoose
 
   onLoad((opt) => {
-    if (opt && opt.hosId) {
-      cacheStore.changeHosId(opt.hosId);
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    const hosId = opt?.hosId;
+    if (hosId) {
+      cacheStore.changeHosId(hosId);
     }
   });
 </script>

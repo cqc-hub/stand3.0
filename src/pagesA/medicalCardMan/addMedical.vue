@@ -264,7 +264,7 @@
       ...addressChoose,
     };
 
-    const { patList } = gStores.userStore;
+    // const { patList } = gStores.userStore;
 
     if (requestData.patientName) {
       requestData.patientName = requestData.patientName.trim();
