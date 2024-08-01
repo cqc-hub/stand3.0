@@ -142,6 +142,7 @@ export interface ISystemConfig_ {
     isEditPatPhone?: '1';
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
+    isVerifyIdCardLastFourNumber?: '1',
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */

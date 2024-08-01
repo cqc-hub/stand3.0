@@ -20,6 +20,7 @@
     >
       <view
         :class="{
+          'g-border': border && !(isAllActive || isActive(item[field.value])),
           'item-active': isAllActive || isActive(item[field.value]),
         }"
         class="item g-flex-rc-cc text-ellipsis"
@@ -44,6 +45,11 @@
   export default defineComponent({
     props: {
       disabled: {
+        type: Boolean,
+        default: false,
+      },
+
+      border: {
         type: Boolean,
         default: false,
       },
@@ -176,6 +182,7 @@
       background-color: var(--hr-neutral-color-1);
       min-height: 0rpx;
       border-radius: 16rpx;
+      border-width: 2rpx;
       font-size: var(--hr-font-size-xs);
       position: relative;
       margin: 2rpx;
@@ -187,7 +194,7 @@
       flex-direction: column;
 
       .label {
-        padding: 18rpx 0;
+        padding: 12rpx 0;
       }
 
       .icon-del {
@@ -202,6 +209,7 @@
       &.item-active {
         color: var(--hr-brand-color-6);
         background-color: var(--hr-brand-color-1);
+        border-color:  var(--hr-brand-color-6);
       }
     }
 

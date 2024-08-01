@@ -128,11 +128,13 @@
     setTimeout(() => {
       const pages = getCurrentPages();
       if (pages.length) {
-        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+        const fullUrl: string = (pages[pages.length - 1] as any).$page
+          ?.fullPath;
 
-        beforeEach({
-          url: fullUrl,
-        });
+        fullUrl &&
+          beforeEach({
+            url: fullUrl,
+          });
       }
     }, 600);
 

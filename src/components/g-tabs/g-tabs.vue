@@ -195,7 +195,7 @@
       },
       zIndex: {
         type: String,
-        default: '1996',
+        default: '2',
       },
     },
     data() {

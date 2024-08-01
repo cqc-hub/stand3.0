@@ -22,6 +22,12 @@
     />
 
     <g-message />
+    <TimeChoosePopup
+      :dateRange="dateRange"
+      :timeBtnOpt="timeBtnOpt"
+      @time-change="dateRangeChange"
+      ref="refTimeChoose"
+    />
     <view class="tab-box">
       <g-tabs
         v-model:value="tabCurrent"
@@ -35,10 +41,16 @@
 
     <view
       v-if="isOpenFilterTime"
+      @click="refTimeChoose.show"
       class="filter-time p32 pt24 pb24 flex-between"
     >
-      <view class="color-888 f28">近一个月</view>
-      <view class="bg-white p24 pt8 pb8 rounded f26 font-semibold">2022/09/20 ~ 2022/10/20</view>
+      <view class="color-888 f28">{{ showTimeLabel }}</view>
+      <view
+        class="bg-white p24 pt8 pb8 rounded f26 font-semibold flex items-center"
+      >
+        <text class="mr6">{{ dayjs(dateRange[0]).format('YYYY/MM/DD') }} ~ {{ dayjs(dateRange[1]).format('YYYY/MM/DD') }}</text>
+        <text class="icon-font ico_triangle_down" />
+      </view>
     </view>
 
     <swiper
@@ -142,6 +154,8 @@
 
   import api from '@/service/api';
   import { useCacheStore } from '@/stores';
+  import TimeChoosePopup from './components/TimeChoosePopup.vue';
+  import dayjs from 'dayjs';
 
   interface IPageProps {
     tabIndex: number;
@@ -165,6 +179,51 @@
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
+  const refTimeChoose = ref('' as any);
+  const timeBtnOpt = ref(
+    [
+      {
+        label: '近一个月',
+        _value: 'month-1',
+      },
+      {
+        label: '近三个月',
+        _value: 'month-3',
+      },
+      {
+        label: '近半年',
+        _value: 'month-6',
+      },
+      {
+        label: '近一年',
+        _value: 'month-12',
+      },
+    ].map((o) => {
+      const [util, _value] = o._value.split('-') as any;
+      const format = 'YYYY-MM-DD';
+      const [start, end] = [
+        dayjs()
+          .subtract(_value * 1, util)
+          .format(format),
+        dayjs().format(format),
+      ];
+      return {
+        ...o,
+        value: [start, end].join(','),
+      };
+    })
+  );
+  const showTimeLabel = computed(() => {
+    const timeRangeStr=  dateRange.value.join(',');
+
+    return timeBtnOpt.value.find(o => o.value === timeRangeStr)?.label || ''
+  })
+  const dateRange = ref<[string, string]>([dayjs().subtract(1, 'year').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')]);
+  const dateRangeChange = range => {
+    dateRange.value = range;
+    // tabChange(tabCurrent.value, '');
+    getCurrentLoadScrollInstance()?.refresh();
+  }
 
   const init = async () => {
     const { listYun, reportTab } = pageConfig.value;
@@ -211,6 +270,7 @@
     const { headerType, headerName } = tabs.value[tabCurrent.value];
     const { page, size } = pageInfo;
     const { cardNumber, patientId, idCardEncry } = gStores.userStore.patChoose;
+    const [startDate, endDate] = dateRange.value;
     let params = {
       headerType: headerType,
       headerName: headerName,
@@ -220,10 +280,16 @@
       pageSize: size,
       idCardEncry,
       hosId: hosId.value,
+      startDate: '',
+      endDate: '',
     };
     loading.value = true;
     let count = 0;
     let listTotal = [] as any[];
+    if (isOpenFilterTime.value) {
+      params.endDate = endDate;
+      params.startDate = startDate;
+    }
 
     if (currentTabValue === 1 && isCheckThirdParty === '1') {
       getThirdPartyReportUrl();
