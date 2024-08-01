@@ -1,4 +1,4 @@
-import { getSysCode, joinQueryForUrl } from '@/common';
+import { deQueryForUrl, getSysCode, joinQueryForUrl } from '@/common';
 import globalGl from '@/config/global';
 
 import api from '@/service/api';
@@ -272,12 +272,13 @@ export interface examineReportDetails {
 }
 export const getShareTotalUrl = (query, path) => {
   // const source = getBrowser().source;
+  query = deQueryForUrl(deQueryForUrl(query));
 
   // const data = cloneUtil(query);
   const args: any = {};
   for (const key in query) {
     const v = query[key];
-    args[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+    args[key] = v;
   }
   const data = {
     ...args,
