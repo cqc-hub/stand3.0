@@ -902,6 +902,27 @@ export class Login extends LoginUtils {
 }
 
 export class PatientUtils extends LoginUtils {
+  usePatDynamicCode = {
+    async isOpen(path: string) {
+      const { GlobalConfig } = await cacheUtil.getSystemConfig(
+        'GlobalConfig'
+      )();
+
+      return (GlobalConfig.refreshQrCode || []).includes(path);
+    },
+
+    getCode: async (pat: IPat): Promise<string> => {
+      const {
+        result: { code },
+      } = await api.patDynamicCode({
+        patientId: pat.patientId,
+        source: this.globalStore.browser.source,
+      });
+
+      return code;
+    },
+  };
+
   /** 升级医保用户 */
   async upToMedicalPat(data: { pat?: IPat; cardNumber?: string }) {
     const { pat, cardNumber } = data;

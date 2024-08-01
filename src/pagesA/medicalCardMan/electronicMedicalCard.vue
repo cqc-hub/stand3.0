@@ -100,6 +100,7 @@
     ServerStaticData,
     type ISystemConfig,
     apiAsync,
+    PatientUtils,
   } from '@/utils';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
@@ -113,6 +114,7 @@
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
   const pageConfig = ref(<ISystemConfig['person']>{});
+  const patientUtils = new PatientUtils();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
 

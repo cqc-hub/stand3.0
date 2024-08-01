@@ -19,4 +19,9 @@ export type ApiParamsConfig = {
 
   // 杭口配置 pagesC/choosePat/choosePat
   ChoosePatJump: any;
+
+  GlobalConfig: {
+    // path[]  path 内的二维码支持刷新 码值固定通过接口 (rePat/patDynamicCode 院内患者ID加密动态码)
+    refreshQrCode?: string[];
+  };
 };

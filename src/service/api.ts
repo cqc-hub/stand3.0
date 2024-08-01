@@ -677,6 +677,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  patDynamicCode: (data) =>
+    service.post('/phs-user/rePat/patDynamicCode', parm(data), {
+      hideLoading: false,
+    }),
+
   patSign: (data) =>
     service.post('/phs-user/freePay/patSign', parm(data), {
       hideLoading: false,
@@ -844,10 +849,10 @@ const userApi = {
     ),
   //获取就诊人详情
   getPatCardInfo: (data) =>
-  service.post<IPat[]>(
-    '/phs-user/relevantPatient/getPatCardInfo',
-    parm(data)
-  ),
+    service.post<IPat[]>(
+      '/phs-user/relevantPatient/getPatCardInfo',
+      parm(data)
+    ),
 
   //获取就诊人信息（院内）
   getPatCardInfoByHospital: (data) =>

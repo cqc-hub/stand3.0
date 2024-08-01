@@ -143,7 +143,6 @@
     nameConvert,
     apiAsync,
     wait,
-    useOcr,
   } from '@/utils';
   import api from '@/service/api';
 
