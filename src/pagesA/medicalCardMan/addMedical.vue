@@ -159,6 +159,10 @@
   const routeStore = useRouterStore();
   const cacheStore = useCacheStore();
   const isCheck = ref(false);
+  const fg514 = ref({
+    title: '',
+    content: '',
+  });
 
   interface TPageType extends ILoginBack {
     patientName: 'string';
@@ -446,12 +450,32 @@
     }
   };
 
-  const selectChange = (e) => {
+  const selectChange = async (e) => {
     const { item, value } = e;
 
     switch (item.key) {
       case formKey.idType:
         idCardChange();
+
+        if (['06', '07'].includes(value)) {
+          if (!fg514.value.title) {
+            const { title, content } = await gStores.getSysAppMore('514');
+            fg514.value = {
+              title,
+              content,
+            };
+          }
+
+          if (fg514.value.title) {
+            gStores.messageStore.showMessage(fg514.value.content, 0, {
+              useDialog: true,
+              dialogOpt: {
+                title: fg514.value.title,
+                isShowCancel: false,
+              },
+            });
+          }
+        }
         break;
 
       default:
