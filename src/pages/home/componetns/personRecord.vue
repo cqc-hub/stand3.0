@@ -14,7 +14,7 @@
         <view class="info">
           <block v-if="gStores.globalStore.isLogin">
             <text class="user-name animate__animated animate__fadeIn">
-              {{ gStores.userStore.name || gStores.userStore.cellPhoneNum }}
+              {{ gStores.userStore.name || gStores.userStore.cellPhoneNum || '已登录' }}
             </text>
           </block>
 

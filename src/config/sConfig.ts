@@ -11,9 +11,14 @@ interface ISConfig {
   login?: {
     /** 本系统不需要完善 */
     isSkipPerfect?: '1';
-
     /** 支付宝, 仅手机号授权(无身份证) */
     isAliAuthBase?: '1';
+
+    /**
+     * 使用 openId 授权模式登录(wx, ali)
+     *  免完善
+     */
+    isLoginByOpenId?: '1';
   };
 
   // 就诊人 ----------------------------
@@ -127,6 +132,7 @@ const scJson: Record<string, ISConfig> = {
       // isAliIndependentDev: '1',
       isSkipPerfect: '1',
       isAliAuthBase: '1',
+      isLoginByOpenId: '1'
     },
     isOpenMessageAuth: '1',
   },

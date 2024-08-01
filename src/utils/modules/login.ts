@@ -159,10 +159,12 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        this.userStore.updatePhone({
-          phone,
-          phoneNum,
-        });
+        if (/^\d+\*+\d+|\d+$/.test(phone)) {
+          this.userStore.updatePhone({
+            phone,
+            phoneNum,
+          });
+        }
 
         this.globalStore.setHerenId(herenId);
 
@@ -532,19 +534,7 @@ export class LoginUtils extends GStores {
 }
 
 class WeChatLoginHandler extends LoginUtils implements LoginHandler {
-  async handler(payload?: any): Promise<void> {
-    // 微信 必然有 payload
-    if (!payload) {
-      throw new Error('未获取到 wx payload');
-    }
-
-    const { target, detail, onlyLogin } = payload;
-
-    if (detail.errMsg !== 'getPhoneNumber:ok') {
-      this.messageStore.showMessage('用户取消授权', 3000);
-      return Promise.reject(payload);
-    }
-
+  async getWxLoginCode() {
     uni.showLoading({
       mask: true,
     });
@@ -557,6 +547,28 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       throw new Error('未获取到 wx code');
     }
 
+    return code as string;
+  }
+
+  async handler(payload?: any): Promise<void> {
+    // 微信 必然有 payload
+    if (!payload) {
+      throw new Error('未获取到 wx payload');
+    }
+
+    const { target, detail, onlyLogin } = payload;
+    const { isSkipPerfect, isLoginByOpenId } = await this.getConfig();
+
+    if (detail.errMsg !== 'getPhoneNumber:ok') {
+      this.messageStore.showMessage('用户取消授权', 3000);
+      return Promise.reject(payload);
+    }
+
+    if (isLoginByOpenId === '1') {
+      return await this.handlerByOpenid(payload);
+    }
+
+    const code = await this.getWxLoginCode();
     const accountType = this.globalStore.browser.accountType;
 
     const { result } = await api.allinoneAuthApi(
@@ -593,16 +605,48 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       phoneNumberCode,
       ivData,
       encrypData,
+      code: undefined,
     };
 
-    const { isSkipPerfect } = await this.getConfig();
+    const url =
+      isSkipPerfect === '1'
+        ? '/wx/wxLoginByPhoneCode' // 免完善接口
+        : '/wx/wxLoginByPhoneNumberCode';
+
     const { result: loginResult } = await api.allinoneAuthApi(
-      packageAuthParams(
-        requestData,
-        isSkipPerfect === '1'
-          ? '/wx/wxLoginByPhoneCode' // 免完善接口
-          : '/wx/wxLoginByPhoneNumberCode'
-      )
+      packageAuthParams(requestData, url)
+    );
+
+    if (loginResult) {
+      const { accessToken, refreshToken } = loginResult;
+      this.globalStore.setToken({
+        accessToken,
+        refreshToken,
+      });
+
+      await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
+    }
+  }
+
+  // 这个也是免完善的
+  async handlerByOpenid(payload?: any) {
+    // 微信 必然有 payload
+    if (!payload) {
+      throw new Error('未获取到 wx payload');
+    }
+    const { onlyLogin } = payload;
+
+    const code = await this.getWxLoginCode();
+    const accountType = this.globalStore.browser.accountType;
+
+    const requestData = {
+      code,
+      accountType,
+      codeType: 2,
+    };
+
+    const { result: loginResult } = await api.allinoneAuthApi(
+      packageAuthParams(requestData, '/login/authLogin')
     );
 
     if (loginResult) {
