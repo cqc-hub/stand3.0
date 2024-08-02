@@ -24,6 +24,37 @@
       @cancelButton="dialogShow = false"
       :confirmText="pageProps.pageType === 'perfectReal' ? '立即补充' : '添加'"
     />
+
+    <g-popup title="身份验证" ref="refVerifyIdCardPopup">
+      <view class="flex justify-center bg-white">
+        <view class="flex flex-col items-center">
+          <view class="mt16 mb16 color-666 f32">请输入证件号后四位</view>
+          <yi-code
+            :focus="false"
+            :maxlength="4"
+            :border="false"
+            itemBg="#F6F6F6"
+            class="mb52"
+            @onChange="verifyIdCardChange"
+          />
+          <view class="w100p pr12 pl12">
+            <view
+              :class="{
+                'btn-disabled': verifyIdCardVal.length < 4,
+              }"
+              class="btn btn-primary"
+              @click="continueVerifyIdCard"
+            >
+              确认
+            </view>
+          </view>
+
+          <view class="safe-height" />
+          <view class="safe-height" />
+        </view>
+      </view>
+    </g-popup>
+
     <Sel-Card-Dialog
       v-model:show="dialogSelCardShow"
       :activeCardNumber="activeCardSelCardNumber"
@@ -125,11 +156,12 @@
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   import FgAgree from './components/fgAgree.vue';
-  import globalGl from '@/config/global';
   import SelCardDialog from './components/SelCardDialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import yiCode from '@/uni_modules/yi-code/components/yi-code/yi-code.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -150,7 +182,6 @@
     pageType: 'addPatient',
   });
   const pageConfig = ref(<ISystemConfig['person']>{});
-
   const patientUtil = new PatientUtils();
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
@@ -161,6 +192,10 @@
     // patientName: '李继民',
     // [formKey.patientPhone]: '15939324648',
   });
+  let envContainer = '';
+  // #ifdef MP-ALIPAY
+  envContainer = 'ali';
+  // #endif
 
   let formList: TInstance[] = [];
 
@@ -193,6 +228,22 @@
     dialogConfirm();
   };
 
+  const refVerifyIdCardPopup = ref('' as any);
+  const refVerifyIdCard = ref('' as any);
+  const verifyIdCardVal = ref('');
+  const verifyIdCardChange = (e) => {
+    verifyIdCardVal.value = e;
+  };
+  let verifyIdCArdResolve: any = () => {};
+  const continueVerifyIdCard = () => {
+    if (verifyIdCardVal.value.length < 4) {
+      return;
+    }
+
+    refVerifyIdCardPopup.value.hide();
+    verifyIdCArdResolve();
+  };
+
   const formSubmit = async ({}) => {
     if (!isCheck.value || (isSignExist.value && !isAgreeSign.value)) {
       messageStore.showMessage('请勾选下方同意书', 3000);
@@ -201,6 +252,7 @@
     }
 
     formData.value = formatterSubPatientData(formData.value);
+    const { isVerifyIdCardLastFourNumber } = pageConfig.value;
 
     // const { isSmsVerify } = await ServerStaticData.getSystemConfig('person');
 
@@ -214,6 +266,30 @@
       verifyType: (formData.value[formKey.verifyCode] && '2&kq') || '1&bk',
       source,
     };
+
+    if (
+      isVerifyIdCardLastFourNumber === '1'
+
+    ) {
+      const authIdCard = gStores.userStore.cacheUser?.certNo;
+      if ((envContainer === 'ali' && !gStores.userStore.patList.length && authIdCard)) {
+        data.content = authIdCard.slice(-4);
+      } else {
+        const { result } = await api.checkPat({
+          ...data,
+        });
+
+        // 需要校验证件后四位
+        if (result) {
+          refVerifyIdCardPopup.value.show();
+          await new Promise((r) => {
+            verifyIdCArdResolve = r;
+          });
+
+          data.content = verifyIdCardVal.value;
+        }
+      }
+    }
 
     if (data.patientName) {
       formData.value[formKey.patientName] = data.patientName.trim();

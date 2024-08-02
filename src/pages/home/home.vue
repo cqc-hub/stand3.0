@@ -359,7 +359,6 @@
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import { goElectronicMedicalCard } from './utils';
-
   const props = defineProps<{
     code?: string;
     tabIndex?: number;

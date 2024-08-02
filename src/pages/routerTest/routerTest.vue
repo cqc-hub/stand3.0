@@ -27,6 +27,7 @@
   import { LoginUtils } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
+  import { ref } from 'vue';
 
   const props = withDefaults(
     defineProps<{

@@ -672,7 +672,7 @@ const userApi = {
       hideLoading: false,
     }),
 
-   wfePatSync: (data) =>
+  wfePatSync: (data) =>
     service.post('/phs-user/rePat/wfePatSync', parm(data), {
       hideLoading: false,
     }),
@@ -708,6 +708,11 @@ const userApi = {
 
   getPatByHosPatId: (data) =>
     service.post('/phs-user/relevantPatient/getPatByHosPatId', parm(data), {
+      hideLoading: false,
+    }),
+
+  checkPat: (data) =>
+    service.post('/phs-user/relevantPatient/checkPat', parm(data), {
       hideLoading: false,
     }),
 

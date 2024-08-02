@@ -715,6 +715,14 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         authPhoneVerify,
       } = await this.getAliOpenid();
 
+      this.userStore.updateCacheUser({
+        certNo,
+        certType,
+        gender,
+        mobile,
+        userName,
+      });
+
       if (accountType === 1) {
         this.globalStore.setH5OpenId(userId);
       } else {
