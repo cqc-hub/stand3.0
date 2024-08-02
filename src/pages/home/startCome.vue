@@ -23,6 +23,11 @@
     baseUrl = 'https://tzwwz.eheren.com';
   }
 
+  //判断appId以https开头 表示用的第三方的跳转页面获取openid
+  if(appId.startsWith('https://')){
+    src.value = appId
+  }else{
+
   isStartComeTest &&
     (global.env as string) !== 'prod' &&
     (appId = 'wxac2942d44e7c2bd9');
@@ -30,4 +35,5 @@
   src.value = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${encodeURIComponent(
     baseUrl + '/h5/index.html'
   )}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+  }
 </script>

@@ -363,6 +363,7 @@
   const props = defineProps<{
     code?: string;
     tabIndex?: number;
+    openId?: string;
   }>();
   const gStores = new GStores();
   const patientUtils = new PatientUtils();
@@ -431,6 +432,13 @@
         getNoPublicOpenIdOnly
       );
       routerJump();
+    }
+    if (props.openId) {
+      globalStore.setH5OpenId(props.openId);
+
+      if (globalStore.herenId) {
+        loginUtils.sysPatOpenIdAssignment(globalStore.herenId, props.openId);
+      }
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息
