@@ -34,6 +34,7 @@ type TAliLogin = {
   mobile: string;
   userName: string;
   authPhoneVerify: string;
+  loginData: string;
 };
 
 abstract class LoginHandler {
@@ -64,6 +65,8 @@ export const getH5OpenidParam = function (data) {
     },
   ];
   // #endif
+
+  return data;
 };
 
 export const packageAuthParams = (
@@ -134,6 +137,18 @@ export class GStores {
 }
 
 export class LoginUtils extends GStores {
+  // 登录后 获取就诊人列表前
+  async onAfterLoginAndBeforeGetPatList() {
+    if (this.globalStore.sysCode === '1001067') {
+      const reqData = getH5OpenidParam({
+        loginData: this.globalStore.token.loginData,
+        source: this.globalStore.browser.source,
+      });
+
+      await api.wfePatSync(reqData);
+    }
+  }
+
   async getUerInfo(type?: 'alone', justGetInfo?: boolean) {
     try {
       const { source } = this.globalStore.browser;
@@ -159,7 +174,7 @@ export class LoginUtils extends GStores {
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
-        if (/^\d+\*+\d+|\d+$/.test(phone)) {
+        if (/^[\d{1,4}\*+\d{1,4}]{11}$/.test(phone)) {
           this.userStore.updatePhone({
             phone,
             phoneNum,
@@ -188,6 +203,7 @@ export class LoginUtils extends GStores {
 
           return Promise.reject('未完善');
         } else {
+          await this.onAfterLoginAndBeforeGetPatList();
           if (type !== 'alone') {
             //获取就诊人列表
             await new PatientUtils().getPatCardList();
@@ -447,7 +463,8 @@ export class LoginUtils extends GStores {
       isAuth?: boolean;
     } = {}
   ) {
-    const { isSkipPerfect, isAliAuthBase } = await this.getConfig();
+    const { isSkipPerfect, isAliAuthBase, isLoginByOpenId } =
+      await this.getConfig();
     const { isAuth } = payload;
     const isvAppId = globalGl.systemInfo.isvAlipayAppid;
 
@@ -495,22 +512,25 @@ export class LoginUtils extends GStores {
     // return
 
     let url = '';
-
-    // 代开发
-    if (isvAppId) {
-      // 完善? getTPAlipayUserInfoShare
-      if (isSkipPerfect === '1') {
-        url = '/aliUserLogin/alipayTpLoginByPhone'; // 代开发非完善
-      } else if (_isAliAuthBase) {
-        url = '/aliUserLogin/getAlipayBaseEncryLogin'; // 代开发完善
-      } else {
-        url = '/aliUserLogin/getTPAlipayUserInfoShare'; // 代开发完善
-      }
+    if (isLoginByOpenId === '1') {
+      url = '/login/authLogin';
     } else {
-      url = '/aliUserLogin/alipayLoginByPhone'; // 自研非完善
+      // 代开发
+      if (isvAppId) {
+        // 完善? getTPAlipayUserInfoShare
+        if (isSkipPerfect === '1') {
+          url = '/aliUserLogin/alipayTpLoginByPhone'; // 代开发非完善
+        } else if (_isAliAuthBase) {
+          url = '/aliUserLogin/getAlipayBaseEncryLogin'; // 代开发完善
+        } else {
+          url = '/aliUserLogin/getTPAlipayUserInfoShare'; // 代开发完善
+        }
+      } else {
+        url = '/aliUserLogin/alipayLoginByPhone'; // 自研非完善
 
-      // 完善暂无自研
-      // Base授权登录暂无自研 - 支付宝手机号密文和Base授权登录  /aliUserLogin/getAlipayBaseEncryLogin
+        // 完善暂无自研
+        // Base授权登录暂无自研 - 支付宝手机号密文和Base授权登录  /aliUserLogin/getAlipayBaseEncryLogin
+      }
     }
 
     // if (_isAliAuthBase) {
@@ -564,10 +584,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       return Promise.reject(payload);
     }
 
-    if (isLoginByOpenId === '1') {
-      return await this.handlerByOpenid(payload);
-    }
-
     const code = await this.getWxLoginCode();
     const accountType = this.globalStore.browser.accountType;
 
@@ -589,13 +605,18 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     }
 
     const { openId, sessionKeyEn, sessionKey } = result;
+
+    this.globalStore.setOpenId(openId);
+
+    if (isLoginByOpenId === '1') {
+      return await this.handlerByOpenid(payload);
+    }
+
     const {
       encryptedData: encrypData,
       iv: ivData,
       code: phoneNumberCode,
     } = target;
-
-    this.globalStore.setOpenId(openId);
 
     const requestData = {
       accountType,
@@ -623,7 +644,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
         accessToken,
         refreshToken,
       });
-
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
     }
   }
@@ -650,12 +670,13 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     );
 
     if (loginResult) {
-      const { accessToken, refreshToken } = loginResult;
+      const { accessToken, refreshToken, loginData } = loginResult;
       this.globalStore.setToken({
         accessToken,
         refreshToken,
+        loginData,
       });
-
+      // this.globalStore.setOpenId(userId);
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
     }
   }
@@ -685,6 +706,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         userId,
         accessToken,
         refreshToken,
+        loginData,
         certNo,
         certType,
         gender,
@@ -702,6 +724,7 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
       this.globalStore.setToken({
         accessToken,
         refreshToken,
+        loginData,
       });
 
       await this.getUerInfo();

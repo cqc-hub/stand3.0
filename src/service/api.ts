@@ -672,6 +672,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+   wfePatSync: (data) =>
+    service.post('/phs-user/rePat/wfePatSync', parm(data), {
+      hideLoading: false,
+    }),
+
   mdifPhone: (data) =>
     service.post('/phs-user/rePat/mdifPhone', parm(data), {
       hideLoading: false,

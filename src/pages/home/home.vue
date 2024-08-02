@@ -179,9 +179,9 @@
             isDock
             scrollY
           >
-          <view class="auto-person g-fade-in">
-						<image :src="$global.BASE_IMG + 'aze_small.png'"></image>
-					</view>
+            <view class="auto-person g-fade-in">
+              <image :src="$global.BASE_IMG + 'aze_small.png'"></image>
+            </view>
           </drag-button>
           <!-- #endif -->
 
@@ -365,6 +365,8 @@
     tabIndex?: number;
   }>();
   const gStores = new GStores();
+  const patientUtils = new PatientUtils();
+  const loginUtils = new LoginUtils();
   const viewerStore = useViewerStore();
   const globalStore = useGlobalStore();
   const refOldDialog = ref();
@@ -419,16 +421,16 @@
       // 免完善扫码进来
       if (getNoPublicOpenIdOnly) {
         if (gStores.globalStore.herenId) {
-          await new PatientUtils().getPatCardList();
+          await patientUtils.getPatCardList();
         }
 
         removeLocation('getNoPublicOpenIdOnly');
       }
-      new LoginUtils()
-        .getNoPublicOpenId(props.code, getNoPublicOpenIdOnly)
-        .then(() => {
-          routerJump();
-        });
+      await loginUtils.getNoPublicOpenId(
+        props.code,
+        getNoPublicOpenIdOnly
+      );
+      routerJump();
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息
@@ -473,21 +475,21 @@
   };
   //跳转云陪诊安诊儿
   const gotoIntelAI = () => {
-    const IntelAI : TButtonConfig  = {
-    type: 'h5',
-    isSelfH5: '1',
-    path: 'pagesC/choosePat/choosePat',
-    text: '云陪诊',
-    extraData: {
-      _type: 'ypzaze',
-    },
-    addition: {
-      patientId: '_patientId',
-    },
-    isLocal: '1',
+    const IntelAI: TButtonConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/choosePat/choosePat',
+      text: '云陪诊',
+      extraData: {
+        _type: 'ypzaze',
+      },
+      addition: {
+        patientId: '_patientId',
+      },
+      isLocal: '1',
+    };
+    useTBanner(IntelAI);
   };
-  useTBanner(IntelAI)
-  }
   //打开关注框
   const openShare = (item) => {
     h5QrCodeData.value = item;

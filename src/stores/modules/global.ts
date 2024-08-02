@@ -6,6 +6,7 @@ interface IStateGlobal {
   token: {
     accessToken: string;
     refreshToken: string;
+    loginData: string;
   };
 
   browser: {
@@ -55,6 +56,7 @@ const globalStore = defineStore('global', {
       token: {
         accessToken: '',
         refreshToken: '',
+        loginData: '',
       },
       //来源
       browser: {
@@ -97,6 +99,7 @@ const globalStore = defineStore('global', {
       this.token = {
         accessToken: '',
         refreshToken: '',
+        loginData: ''
       };
 
       this.openId = '';
@@ -191,10 +194,11 @@ const globalStore = defineStore('global', {
       this.h5OpenId = id;
     },
 
-    setToken({ accessToken, refreshToken }) {
+    setToken({ accessToken, refreshToken, loginData = '' }) {
       this.token = {
         accessToken,
         refreshToken,
+        loginData
       };
     },
 
