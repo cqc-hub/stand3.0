@@ -320,9 +320,9 @@ const getList = async (patientId = "") => {
 };
 
 const ywzClick = async (item: IRegistrationCardItem) => {
-  if (pageConfig.value.preConsultationBtns) {
+  if (pageConfig.value.preConsultationBtn) {
     //指定的预问诊跳转
-    useTBanner(pageConfig.value.preConsultationBtns, "navigateTo", item);
+    useTBanner(pageConfig.value.preConsultationBtn, "navigateTo", item);
   } else {
     const { orderId, hosDeptId, hosOrderId, hosData } = item;
     const patientId = isShowFilterOrderStatus.value

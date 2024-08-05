@@ -558,9 +558,9 @@
 
   const goPreConsultation = () => {
     isShowConsultationDialog.value = false;
-    if (orderConfig.value.preConsultationBtns) {
+    if (orderConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
-      useTBanner(orderConfig.value.preConsultationBtns, 'navigateTo', pageProps.value);
+      useTBanner(orderConfig.value.preConsultationBtn, 'navigateTo', pageProps.value);
       return;
     }
     
