@@ -1,6 +1,10 @@
 <template>
   <view class="yi-code" :style="'width: ' + width + 'rpx;'">
-    <view class="yi-code-show" :style="'width: ' + width + 'rpx;'">
+    <view
+      @click="inputFocus"
+      class="yi-code-show"
+      :style="'width: ' + width + 'rpx;'"
+    >
       <block v-for="i in numberArr" :key="i">
         <view
           :class="{
@@ -16,7 +20,7 @@
                 : 'border-style: dashed;'
               : '')
           "
-					class="g-bold f48"
+          class="g-bold f48"
         >
           {{ showVal(codes[i]) }}
         </view>
@@ -28,19 +32,26 @@
     >
       <input
         v-model="value"
-        :style="'width: ' + width * 2 + 'rpx;'"
+        :style="{
+          width: width * 2 + 'rpx',
+          height: (isFocus ? 800 : 80) + 'rpx',
+          'pointer-events': isFocus,
+        }"
         :focus="focus"
         @focus="onFocus"
         @blur="onBlur"
         :type="inputType"
         @input="onChange"
         :maxlength="maxlength"
+        id="yi-code-input"
       />
     </view>
   </view>
 </template>
 
 <script>
+  import { getCurrentInstance } from 'vue';
+
   export default {
     props: {
       /**
@@ -51,10 +62,10 @@
         default: 600,
       },
 
-			itemSize: {
-				type: Number,
-				default: 120
-			},
+      itemSize: {
+        type: Number,
+        default: 120,
+      },
 
       /**
        * @description 是否自动聚焦
@@ -114,10 +125,16 @@
         numberArr: [], //
         codes: [],
         value: '',
+        refInput: '',
         isFocus: false,
       };
     },
     methods: {
+      inputFocus() {
+        const query = uni.createSelectorQuery().in(this);
+        query.select('#');
+      },
+
       clear() {
         this.codes = [];
         this.value = '';
@@ -179,7 +196,7 @@
         border-color: #ff5500;
         border-width: 2px;
         animation: myfirst 400ms infinite;
-				animation-direction: alternate;
+        animation-direction: alternate;
         @keyframes myfirst {
           0% {
             opacity: 0.1;

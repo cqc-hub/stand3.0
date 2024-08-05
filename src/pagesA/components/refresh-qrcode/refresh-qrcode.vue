@@ -1,9 +1,9 @@
 <template>
-  <view class="">
+  <view @click="init" class="">
     <view class="mb24">
-      <uv-qrcode :value="code" :loading="loading" size="500rpx" />
+      <uv-qrcode :value="code" :loading="loading" size="500rpx" auto start />
     </view>
-    <view @click="init" class="flex justify-center f28">
+    <view class="flex justify-center f28">
       <view class="pr12 mr12 g-split-line">
         {{ label }}
       </view>
@@ -23,6 +23,9 @@
   const loading = ref(false);
 
   const init = async () => {
+    if (loading.value) {
+      return;
+    }
     loading.value = true;
     const { result } = await api
       .patDynamicCode({
