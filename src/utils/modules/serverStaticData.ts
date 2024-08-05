@@ -240,6 +240,7 @@ export const useTBanner = async (
     });
   } else {
     delete extraData.token;
+
     uni.navigateToMiniProgram({
       ...(config.deepProps || {}),
       appId: appId!,

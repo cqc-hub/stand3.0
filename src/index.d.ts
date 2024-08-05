@@ -15,7 +15,7 @@ declare const __wxConfig: {
 /**
  * @wxAppid-微信appid
  * @alipayAppid-支付宝appid
- * @h5Appid-公众号appid 如果传https的地址表示跳转第三方页面获取openId
+ * @h5Appid-公众号appid
  * @name-小程序名字
  * @isSearchInHos-新增、完善就诊人 要跳 perfectReal 页面？
  * @isStartComeTest 欢迎页是否是测试

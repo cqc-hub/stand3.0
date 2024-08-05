@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001052",
+  "sysCode": "1001067",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -258,7 +258,7 @@
     "1001067": {
       "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
-      "h5Appid": "https://wx.wzhealth.com/FeyMobileWeb/Common/Redirect?redirectUrl=common/GetOpenIdRedirect/xcxxxts",
+      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false

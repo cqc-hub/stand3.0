@@ -359,11 +359,13 @@
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import { goElectronicMedicalCard } from './utils';
-  const props = defineProps<{
-    code?: string;
-    tabIndex?: number;
-    openId?: string;
-  }>();
+  import { deQueryForUrl} from '@/common';
+
+  const props = ref({
+    code: '',
+    tabIndex: 0,
+    openId: ''
+  });
   const gStores = new GStores();
   const patientUtils = new PatientUtils();
   const loginUtils = new LoginUtils();
@@ -406,7 +408,8 @@
     viewerStore.init();
   });
 
-  onLoad(async () => {
+  onLoad(async (opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
 
     //设置顶部标题
@@ -414,7 +417,7 @@
       title: global.systemInfo.name,
     });
     // #ifdef MP-WEIXIN
-    if (props.code) {
+    if ( props.value.code) {
       const getNoPublicOpenIdOnly =
         getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
@@ -427,16 +430,16 @@
         removeLocation('getNoPublicOpenIdOnly');
       }
       await loginUtils.getNoPublicOpenId(
-        props.code,
+         props.value.code,
         getNoPublicOpenIdOnly
       );
       routerJump();
     }
-    if (props.openId) {
-      globalStore.setH5OpenId(props.openId);
+    if ( props.value.openId) {
+      globalStore.setH5OpenId( props.value.openId);
 
       if (globalStore.herenId) {
-        loginUtils.sysPatOpenIdAssignment(globalStore.herenId, props.openId);
+        loginUtils.sysPatOpenIdAssignment(globalStore.herenId,  props.value.openId);
       }
     }
     wx.showShareMenu({

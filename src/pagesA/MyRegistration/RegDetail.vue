@@ -558,6 +558,12 @@
 
   const goPreConsultation = () => {
     isShowConsultationDialog.value = false;
+    if (orderConfig.value.preConsultationBtns) {
+      //指定的预问诊跳转
+      useTBanner(orderConfig.value.preConsultationBtns, 'navigateTo', pageProps.value);
+      return;
+    }
+    
     const { patientSex, patientAge, patientName } = gStores.userStore.patChoose;
     const { orderId } = pageProps.value;
 
