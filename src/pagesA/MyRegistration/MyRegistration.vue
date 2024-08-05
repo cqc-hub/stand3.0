@@ -322,16 +322,7 @@ const getList = async (patientId = "") => {
 const ywzClick = async (item: IRegistrationCardItem) => {
   if (pageConfig.value.preConsultationBtns) {
     //指定的预问诊跳转
-    const preConsultation: TButtonConfig = {
-	"type": 'otherProgram',
-	"appId": 'wx5dd3dc662865e663',
-	"path": '/pages/chat/index?hospital_id=2',
-	"addition": {
-		"cardNumber": "outpatient_id",
-		"orderId": "order_id"
-	}
-}
-    useTBanner(preConsultation, "navigateTo", item);
+    useTBanner(pageConfig.value.preConsultationBtns, "navigateTo", item);
   } else {
     const { orderId, hosDeptId, hosOrderId, hosData } = item;
     const patientId = isShowFilterOrderStatus.value
