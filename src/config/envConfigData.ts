@@ -33,4 +33,6 @@ export const sysConfigEnv = <const>{
   // 'order.orderRegBtnLabel': '预约',
 };
 
-export const apiConfigEnv = <const>{};
+export const apiConfigEnv = <const>{
+  // 'GlobalConfig.refreshQrCode': ['pagesA/medicalCardMan/electronicMedicalCard'],
+};

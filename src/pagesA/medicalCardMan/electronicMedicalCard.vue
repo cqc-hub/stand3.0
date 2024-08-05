@@ -1,5 +1,6 @@
 <template>
   <view
+    v-if="isPageRender"
     :class="{
       'system-mode-old': gStore.globalStore.modeOld,
     }"
@@ -43,7 +44,13 @@
           </block>
 
           <!-- <w-qrcode :options="qrOptions" /> -->
+          <refreshQrcode
+            v-if="isShowRefreshQrCode"
+            :patientId="clickPat.patientId"
+          />
+
           <uv-qrcode
+            v-else
             :options="qrOptions2"
             :value="qrOptions.code"
             @change="qrComplete"
@@ -101,6 +108,7 @@
     type ISystemConfig,
     apiAsync,
     PatientUtils,
+    cacheUtil,
   } from '@/utils';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
@@ -109,12 +117,16 @@
   import api from '@/service/api';
   import globalGl from '@/config/global';
 
+  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
+
+  const isPageRender = ref(false);
   const gStore = new GStores();
   const { clickPat } = storeToRefs(gStore.userStore);
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
   const pageConfig = ref(<ISystemConfig['person']>{});
   const patientUtils = new PatientUtils();
+  const isShowRefreshQrCode = ref(false);
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
 
@@ -330,6 +342,11 @@
   onMounted(async () => {
     changeShowName();
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
+      'pagesA/medicalCardMan/electronicMedicalCard'
+    );
+    isPageRender.value = true;
 
     if (isHasHealthCode.value) {
       toggleList.value.push({
