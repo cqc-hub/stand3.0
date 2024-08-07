@@ -340,7 +340,7 @@ export class LoginUtils extends GStores {
   async checkNoPublicOpenId() {
     const herenId = this.globalStore.herenId;
     herenId &&
-      (await this.sysPatOpenIdAssignment(herenId, this.globalStore.h5OpenId));
+      (await this.sysPatOpenIdAssignment(this.globalStore.h5OpenId));
   }
 
   // 微信获取公众号 openid
@@ -370,7 +370,7 @@ export class LoginUtils extends GStores {
     const herenId = this.globalStore.herenId;
 
     if (herenId) {
-      this.sysPatOpenIdAssignment(herenId, openId);
+      this.sysPatOpenIdAssignment(openId);
     }
 
     await this.getUerInfo();
@@ -382,7 +382,7 @@ export class LoginUtils extends GStores {
    * @param herenId
    * @param openId h5 openId
    */
-  async sysPatOpenIdAssignment(herenId, openId) {
+  async sysPatOpenIdAssignment( openId) {
     const {
       openId: miniOpenId,
       browser: { source },
@@ -403,7 +403,6 @@ export class LoginUtils extends GStores {
     openIds = openIds.filter((o) => o.openId);
 
     await api.sysPatOpenIdAssignment({
-      herenId,
       openIds,
     });
   }
