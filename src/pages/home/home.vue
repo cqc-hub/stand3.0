@@ -409,7 +409,6 @@
   });
 
   onLoad(async (opt) => {
-    console.log(opt, 'hhhhhhhhhhh')
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
 

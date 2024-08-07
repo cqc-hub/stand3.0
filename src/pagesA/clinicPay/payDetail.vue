@@ -15,6 +15,8 @@
                 :patientId="gStores.userStore.patChoose.patientId"
                 :cardData="props.params"
                 :showCode="qrCode"
+                isShowCode
+                label="缴费码"
               />
             </view>
             <view v-else class="g-border box page-first-item mb16">

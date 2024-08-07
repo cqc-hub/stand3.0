@@ -323,6 +323,7 @@
 
         // 需要校验证件后四位
         if (result) {
+          verifyIdCardVal.value = '';
           refVerifyIdCardPopup.value.show();
           await new Promise((r) => {
             verifyIdCArdResolve = r;

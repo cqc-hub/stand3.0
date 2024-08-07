@@ -21,7 +21,7 @@
 <script lang="ts" setup>
   import { getLocalStorage } from '@/common';
   import api from '@/service/api';
-  import { GStores, wait } from '@/utils';
+  import { GStores } from '@/utils';
   import { watch, ref, computed } from 'vue';
 
   const props = withDefaults(
