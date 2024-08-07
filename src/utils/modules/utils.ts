@@ -27,6 +27,10 @@ export const compose =
 
 export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
 
+export const callBackAsync = (fn: Function) => {
+  return new Promise((r) => fn(r));
+};
+
 type TFirstParams<T> = T extends [infer K] ? K : any;
 export const apiAsync: <
   T extends {

@@ -34,7 +34,7 @@
         v-model="value"
         :style="{
           width: width * 2 + 'rpx',
-          height: (isFocus ? 800 : 80) + 'rpx',
+          height: 80 + 'rpx',
           'pointer-events': isFocus,
         }"
         :focus="focus"

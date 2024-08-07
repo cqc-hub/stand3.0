@@ -105,39 +105,54 @@
               v-if="isShowQr"
               class="qr-code g-flex-rc-cc g-border-bottom m32 flex1"
             >
-              <view class="my-display-none">
-                <w-qrcode :options="_qrCodeOpt" ref="refqrcode" />
-                <w-barcode :options="_barCodeOpt" ref="refqrbarcode" />
-              </view>
+              <block v-if="isShowRefreshQrCode">
+                <view class="mb24">
+                  <refreshQrcode
+                    :patientId="gStores.userStore.patChoose.patientId"
+                    :show-code="_qrCodeOpt.code"
+                    label="就诊码"
+                    isShowCode
+                  />
+                </view>
+              </block>
 
-              <view class="qr g-flex-rc-cc flex1">
-                <image
-                  v-if="showQrCode"
-                  :src="qrCodeOpt._qrImg"
-                  class="qrcode-img"
-                />
+              <block v-else>
+                <view class="my-display-none">
+                  <w-qrcode :options="_qrCodeOpt" ref="refqrcode" />
+                  <w-barcode :options="_barCodeOpt" ref="refqrbarcode" />
+                </view>
 
-                <image
-                  v-if="!showQrCode"
-                  :src="qrCodeOpt._barImg"
-                  mode="widthFix"
-                  class="barcode-img flex1"
-                />
-              </view>
+                <view class="qr g-flex-rc-cc flex1">
+                  <image
+                    v-if="showQrCode"
+                    :src="qrCodeOpt._qrImg"
+                    class="qrcode-img"
+                  />
 
-              <view class="qr-code-value">{{ _qrCodeOpt.code }}</view>
+                  <image
+                    v-if="!showQrCode"
+                    :src="qrCodeOpt._barImg"
+                    mode="widthFix"
+                    class="barcode-img flex1"
+                  />
+                </view>
 
-              <view @click="showQrCode = !showQrCode" class="qr-code-toggle">
-                <text
-                  :class="{
-                    'icon-reverse': showQrCode,
-                  }"
-                  class="iconfont qr-toggle-icon"
-                >
-                  &#xe6f9;
-                </text>
-                <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
-              </view>
+                <view class="qr-code-value">{{ _qrCodeOpt.code }}</view>
+
+                <view @click="showQrCode = !showQrCode" class="qr-code-toggle">
+                  <text
+                    :class="{
+                      'icon-reverse': showQrCode,
+                    }"
+                    class="iconfont qr-toggle-icon"
+                  >
+                    &#xe6f9;
+                  </text>
+                  <text>
+                    点击切换{{ (showQrCode && '条形码') || '二维码' }}
+                  </text>
+                </view>
+              </block>
             </view>
 
             <view
@@ -359,6 +374,8 @@
     PatientUtils,
     handlerWeChatThRegLogin,
     apiAsync,
+    cacheUtil,
+    callBackAsync,
   } from '@/utils';
 
   import {
@@ -399,6 +416,8 @@
 
   import api from '@/service/api';
 
+  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
+
   const orderConfig = ref({} as ISystemConfig['order']);
   const refForm = ref<any>('');
   const refFormPatient = ref<any>('');
@@ -406,6 +425,7 @@
   const gStores = new GStores();
   const isRender = ref(false);
   const showQrCode = ref(false);
+  const isShowRefreshQrCode = ref(false);
   const orderRegInfo = ref({} as IRegInfo);
   const hosInfo = ref({} as IHosInfo);
   const isShowQr = computed(() => {
@@ -560,10 +580,14 @@
     isShowConsultationDialog.value = false;
     if (orderConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
-      useTBanner(orderConfig.value.preConsultationBtn, 'navigateTo', pageProps.value);
+      useTBanner(
+        orderConfig.value.preConsultationBtn,
+        'navigateTo',
+        pageProps.value
+      );
       return;
     }
-    
+
     const { patientSex, patientAge, patientName } = gStores.userStore.patChoose;
     const { orderId } = pageProps.value;
 
@@ -697,12 +721,10 @@
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
     uni.showLoading({});
-    nextTick(() => {
-      setTimeout(() => {
-        qrCodeOpt.value.code && capture();
-        uni.hideLoading();
-      }, 600);
-    });
+    await callBackAsync(nextTick);
+    await wait(600);
+    !isShowRefreshQrCode.value && qrCodeOpt.value.code && capture();
+    uni.hideLoading();
     patientTempList.map((o) => {
       if (o.key === 'patientId') {
         o.key = qrCode;
@@ -1187,6 +1209,10 @@
 
   onLoad(async (p) => {
     uni.showLoading({});
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
+      'pagesA/medicalCardMan/electronicMedicalCard'
+    );
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isRender.value = true;
     uni.setNavigationBarTitle({
