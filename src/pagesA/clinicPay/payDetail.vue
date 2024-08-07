@@ -16,7 +16,7 @@
                 :cardData="props.params"
                 :showCode="qrCode"
                 isShowCode
-                label="缴费码"
+                label="就诊码"
               />
             </view>
             <view v-else class="g-border box page-first-item mb16">

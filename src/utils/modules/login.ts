@@ -339,8 +339,7 @@ export class LoginUtils extends GStores {
 
   async checkNoPublicOpenId() {
     const herenId = this.globalStore.herenId;
-    herenId &&
-      (await this.sysPatOpenIdAssignment(this.globalStore.h5OpenId));
+    herenId && (await this.sysPatOpenIdAssignment(this.globalStore.h5OpenId));
   }
 
   // 微信获取公众号 openid
@@ -382,7 +381,7 @@ export class LoginUtils extends GStores {
    * @param herenId
    * @param openId h5 openId
    */
-  async sysPatOpenIdAssignment( openId) {
+  async sysPatOpenIdAssignment(openId) {
     const {
       openId: miniOpenId,
       browser: { source },
@@ -653,7 +652,12 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     if (!payload) {
       throw new Error('未获取到 wx payload');
     }
-    const { onlyLogin } = payload;
+    const { onlyLogin, target = {} } = payload;
+    const {
+      encryptedData: encrypData,
+      iv: ivData,
+      code: phoneNumberCode,
+    } = target;
 
     const code = await this.getWxLoginCode();
     const accountType = this.globalStore.browser.accountType;
@@ -661,6 +665,9 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     const requestData = {
       code,
       accountType,
+      encrypData,
+      ivData,
+      // phoneNumberCode,
       codeType: 2,
     };
 
