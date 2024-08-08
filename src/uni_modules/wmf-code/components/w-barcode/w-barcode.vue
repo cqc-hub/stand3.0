@@ -99,7 +99,9 @@
 		emits('error',e.detail)
 	}
 	defineExpose({
-	    GetCodeImg
+	    GetCodeImg,
+			SpecialTreatment,
+			generateCode
 	})
 
 </script>

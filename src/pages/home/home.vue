@@ -435,12 +435,14 @@
       );
       routerJump();
     }
-    if ( props.value.openId) {
+    if (props.value.openId) {
       globalStore.setH5OpenId( props.value.openId);
 
       if (globalStore.herenId) {
-        loginUtils.sysPatOpenIdAssignment(globalStore.herenId,  props.value.openId);
+        loginUtils.sysPatOpenIdAssignment(props.value.openId);
       }
+
+      loginUtils.getUerInfo();
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息

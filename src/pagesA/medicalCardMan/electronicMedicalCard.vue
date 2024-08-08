@@ -38,24 +38,24 @@
         }"
         class="card-body"
       >
-        <view class="card-qrcode">
-          <block v-if="!showHealthCode">
-            <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
+        <view class="pt32 mb12" v-if="isShowRefreshQrCode">
+          <refreshQrcode :patientId="clickPat.patientId" />
+        </view>
+
+        <view v-else class="card-qrcode">
+          <block>
+            <block v-if="!showHealthCode">
+              <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
+            </block>
+
+            <!-- <w-qrcode :options="qrOptions" /> -->
+            <uv-qrcode
+              :options="qrOptions2"
+              :value="qrOptions.code"
+              @change="qrComplete"
+              size="500rpx"
+            />
           </block>
-
-          <!-- <w-qrcode :options="qrOptions" /> -->
-          <refreshQrcode
-            v-if="isShowRefreshQrCode"
-            :patientId="clickPat.patientId"
-          />
-
-          <uv-qrcode
-            v-else
-            :options="qrOptions2"
-            :value="qrOptions.code"
-            @change="qrComplete"
-            size="500rpx"
-          />
         </view>
 
         <view class="info-content">

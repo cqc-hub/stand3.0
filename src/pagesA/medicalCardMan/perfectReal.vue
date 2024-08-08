@@ -26,31 +26,47 @@
     />
 
     <g-popup title="身份验证" ref="refVerifyIdCardPopup">
-      <view class="flex justify-center bg-white">
+      <view class="flex justify-center bg-white verify-idcard-container">
         <view class="flex flex-col items-center">
           <view class="mt16 mb16 color-666 f32">请输入证件号后四位</view>
-          <yi-code
-            :focus="false"
-            :maxlength="4"
-            :border="false"
-            itemBg="#F6F6F6"
-            class="mb52"
-            @onChange="verifyIdCardChange"
-          />
-          <view class="w100p pr12 pl12">
-            <view
-              :class="{
-                'btn-disabled': verifyIdCardVal.length < 4,
-              }"
-              class="btn btn-primary"
-              @click="continueVerifyIdCard"
-            >
-              确认
-            </view>
+
+          <view class="pb32" @click="openKeyBoard">
+            <uv-code-input
+              v-model="verifyIdCardVal"
+              :maxlength="4"
+              size="55"
+              space="20"
+              disabledKeyboard
+            />
           </view>
 
           <view class="safe-height" />
-          <view class="safe-height" />
+          <view class="bg-white"></view>
+          <uv-keyboard-number
+            :random="false"
+            :mode="'card'"
+            :dotDisabled="false"
+            @change="keyboardChange"
+            @backspace="keyboardBackspace"
+          />
+
+          <view class="w100p verify-idcard-btn">
+            <view class="pr12 pl12">
+              <view
+                :class="{
+                  'btn-disabled': verifyIdCardVal.length < 4,
+                }"
+                class="btn btn-primary"
+                @click="continueVerifyIdCard"
+              >
+                确认
+              </view>
+            </view>
+            <view class="safe-height" />
+          </view>
+
+          <!-- <view class="safe-height" />
+          <view class="safe-height" /> -->
         </view>
       </view>
     </g-popup>
@@ -96,6 +112,7 @@
     >
       仅账号本人可更新为医保用户，是否更新为医保用户？
     </Order-Reg-Confirm>
+
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist"
@@ -124,7 +141,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults, type Ref } from 'vue';
+  import { ref, onMounted, computed, type Ref } from 'vue';
   import {
     PatientUtils,
     GStores,
@@ -161,7 +178,6 @@
   import FgAgree from './components/fgAgree.vue';
   import SelCardDialog from './components/SelCardDialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import yiCode from '@/uni_modules/yi-code/components/yi-code/yi-code.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -189,13 +205,18 @@
   const formData = ref<BaseObject>({
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
-    // patientName: '李继民',
-    // [formKey.patientPhone]: '15939324648',
+    // patientName: '陈钦川',
+    // [formKey.patientPhone]: '13868529891',
   });
   let envContainer = '';
   // #ifdef MP-ALIPAY
   envContainer = 'ali';
   // #endif
+  const refKeyboard = ref('' as any);
+  const openKeyBoard = () => {
+    console.log(refKeyboard.value);
+    refKeyboard.value?.open();
+  };
 
   let formList: TInstance[] = [];
 
@@ -234,6 +255,17 @@
   const verifyIdCardChange = (e) => {
     verifyIdCardVal.value = e;
   };
+  const keyboardChange = (v) => {
+    if (verifyIdCardVal.value.length < 4) {
+      verifyIdCardVal.value += v;
+    }
+  };
+  const keyboardBackspace = () => {
+    verifyIdCardVal.value = verifyIdCardVal.value.slice(
+      0,
+      verifyIdCardVal.value.length - 1
+    );
+  };
   let verifyIdCArdResolve: any = () => {};
   const continueVerifyIdCard = () => {
     if (verifyIdCardVal.value.length < 4) {
@@ -267,12 +299,13 @@
       source,
     };
 
-    if (
-      isVerifyIdCardLastFourNumber === '1'
-
-    ) {
+    if (isVerifyIdCardLastFourNumber === '1') {
       const authIdCard = gStores.userStore.cacheUser?.certNo;
-      if ((envContainer === 'ali' && !gStores.userStore.patList.length && authIdCard)) {
+      if (
+        envContainer === 'ali' &&
+        !gStores.userStore.patList.length &&
+        authIdCard
+      ) {
         data.content = authIdCard.slice(-4);
       } else {
         const { result } = await api.checkPat({
@@ -281,6 +314,7 @@
 
         // 需要校验证件后四位
         if (result) {
+          verifyIdCardVal.value = '';
           refVerifyIdCardPopup.value.show();
           await new Promise((r) => {
             verifyIdCArdResolve = r;
@@ -678,5 +712,9 @@
     padding: 24rpx 32rpx 48rpx;
     position: reactive;
     z-index: 1;
+  }
+
+  .verify-idcard-btn {
+    background-color: #e0e4e6;
   }
 </style>

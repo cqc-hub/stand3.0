@@ -9,42 +9,57 @@
       <view class="head-bg" />
       <view class="container">
         <block v-if="props.payState === '0'">
-          <view v-if="qrCode" class="g-border box page-first-item mb16">
-            <view class="my-display-none">
-              <w-qrcode :options="_qrOpt" ref="refqrcode" />
-              <w-barcode :options="_barOpt" ref="refqrbarcode" />
-            </view>
-
-            <view class="g-flex-rc-cc g-bold f32 mb32">
-              <!-- 请凭二维码到药房窗口取药 -->
-            </view>
-
-            <view class="qr g-flex-rc-cc">
-              <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
-              <image
-                v-if="!showQrCode"
-                :src="qrOpt._barImg"
-                class="barcode-img"
+          <block v-if="qrCode">
+            <view v-if="isShowRefreshQrCode" class="box page-first-item mb16">
+              <refresh-qrcode
+                :patientId="gStores.userStore.patChoose.patientId"
+                :cardData="props.params"
+                :showCode="qrCode"
+                isShowCode
+                label="就诊码"
               />
             </view>
+            <view v-else class="g-border box page-first-item mb16">
+              <view class="my-display-none">
+                <w-qrcode :options="_qrOpt" ref="refqrcode" />
+                <w-barcode :options="_barOpt" ref="refqrbarcode" />
+              </view>
 
-            <view class="g-flex-rc-cc mt16 color-888 f24">{{ qrCode }}</view>
+              <view class="g-flex-rc-cc g-bold f32 mb32">
+                <!-- 请凭二维码到药房窗口取药 -->
+              </view>
 
-            <view
-              @click="showQrCode = !showQrCode"
-              class="qr-code-toggle g-flex-rc-cc color-blue f24"
-            >
-              <text
-                :class="{
-                  'icon-reverse': showQrCode,
-                }"
-                class="iconfont qr-toggle-icon color-blue"
+              <view class="qr g-flex-rc-cc">
+                <image
+                  v-if="showQrCode"
+                  :src="qrOpt._qrImg"
+                  class="qrcode-img"
+                />
+                <image
+                  v-if="!showQrCode"
+                  :src="qrOpt._barImg"
+                  class="barcode-img"
+                />
+              </view>
+
+              <view class="g-flex-rc-cc mt16 color-888 f24">{{ qrCode }}</view>
+
+              <view
+                @click="showQrCode = !showQrCode"
+                class="qr-code-toggle g-flex-rc-cc color-blue f24"
               >
-                &#xe6f9;
-              </text>
-              <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
+                <text
+                  :class="{
+                    'icon-reverse': showQrCode,
+                  }"
+                  class="iconfont qr-toggle-icon color-blue"
+                >
+                  &#xe6f9;
+                </text>
+                <text>点击切换{{ (showQrCode && '条形码') || '二维码' }}</text>
+              </view>
             </view>
-          </view>
+          </block>
 
           <view class="g-border box mt16">
             <view class="g-bold f36 g-break-word">
@@ -287,7 +302,7 @@
     getLocalStorage,
     cloneUtil,
   } from '@/common';
-  import { wait, PatientUtils } from '@/utils';
+  import { wait, PatientUtils, cacheUtil } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -296,11 +311,14 @@
   import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
+  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
 
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);
   const refqrbarcode = ref('' as any);
   const isComplete = ref(false);
+  const isShowRefreshQrCode = ref(false);
+
   const selList = ref<TCostList>([]);
   const selListChildren = ref<TCostList[number]['costList']>([]);
 
@@ -872,6 +890,11 @@
   };
 
   const init = async () => {
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+
+    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
+      'pagesA/clinicPay/payDetail'
+    );
     await getSysConfig();
     await getData();
     isComplete.value = true;
@@ -936,11 +959,14 @@
 
   onMounted(async () => {
     await init();
-    setTimeout(() => {
-      if (props.value.payState === '0' && qrCode.value) {
-        capture();
-      }
-    }, 200);
+    await wait(200);
+    if (
+      !isShowRefreshQrCode.value &&
+      props.value.payState === '0' &&
+      qrCode.value
+    ) {
+      capture();
+    }
   });
 
   onReady(() => {
