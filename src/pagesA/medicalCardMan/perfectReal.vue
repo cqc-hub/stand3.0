@@ -29,14 +29,6 @@
       <view class="flex justify-center bg-white verify-idcard-container">
         <view class="flex flex-col items-center">
           <view class="mt16 mb16 color-666 f32">请输入证件号后四位</view>
-          <!-- <yi-code
-            :focus="false"
-            :maxlength="4"
-            :border="false"
-            itemBg="#F6F6F6"
-            class="mb52"
-            @onChange="verifyIdCardChange"
-          /> -->
 
           <view class="pb32" @click="openKeyBoard">
             <uv-code-input
@@ -186,7 +178,6 @@
   import FgAgree from './components/fgAgree.vue';
   import SelCardDialog from './components/SelCardDialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import yiCode from '@/uni_modules/yi-code/components/yi-code/yi-code.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
