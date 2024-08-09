@@ -259,7 +259,7 @@
       await api.getCheckIn(args).catch(async (err) => {
         if (err?.respCode === 999229) {
           const { title, content } = await gStores.getSysAppMore('1207');
-          if (title || '1') {
+          if (title) {
             const { confirm } = await new Promise<any>((closeCallBack) => {
               gStores.messageStore.showMessage(content, 0, {
                 useDialog: true,
