@@ -338,6 +338,7 @@
         payAmount,
         costTypeName,
         totalCharges,
+        serialNo: serialNo1
       } = info.value;
 
       const args = {
@@ -350,7 +351,7 @@
         hosId,
         hosName: getHosName.value,
         visitDate,
-        serialNo: serialNo || pageProps.value.deParams?.serialNo,
+        serialNo: serialNo1 || serialNo || pageProps.value.deParams?.serialNo,
         visitNo,
         cardNumber,
         mergeOrder: mergeOrder || childOrder,

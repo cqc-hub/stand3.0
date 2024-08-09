@@ -701,7 +701,7 @@ export const useProgramPaySign = () => {
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
-      let { phoneNum, cacheUser } = gStores.userStore;
+      let { phoneNum, cacheUser, cellPhoneNum } = gStores.userStore;
       const {
         browser: { source },
         openId: _openId,
@@ -722,9 +722,10 @@ export const useProgramPaySign = () => {
       payType = 'ALI_MINI';
       userId = _openId;
 
-      if (!cacheUser.certNo) {
-        await new AliPayLoginHandler().handlerAuth();
-      }
+      // if (!cacheUser.certNo) {
+      //   await new AliPayLoginHandler().handlerAuth();
+      // }
+
       // #endif
 
       const args = {
@@ -735,7 +736,8 @@ export const useProgramPaySign = () => {
         source,
         payType,
         phone: phoneNum,
-        buyerAccount: cacheUser.mobile,
+        // buyerAccount: cacheUser.mobile,
+        buyerAccount: cellPhoneNum,
         userIdCard: cacheUser.certNo,
         userName: cacheUser.userName,
         showUrl: '/pagesA/medicalCardMan/sign?isBack=1',
