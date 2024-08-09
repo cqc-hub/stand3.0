@@ -452,6 +452,7 @@ const regApi = {
   getCheckIn: (data: any) =>
     service.post('/phs-reg/reg/getCheckIn', parm(data), {
       hideLoading: false,
+      showMessage: false,
     }),
 
   regPreSettlement: (data: any) =>

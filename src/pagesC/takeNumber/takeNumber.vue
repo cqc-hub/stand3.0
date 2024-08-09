@@ -125,7 +125,12 @@
       </scroll-view>
     </xy-dialog> -->
 
-    <Qr-Popup :qrValue="qrValue" v-model:show="isShowQr" />
+    <Qr-Popup
+      v-model:show="isShowQr"
+      :qrValue="qrValue"
+      :isShowRefreshQrCode="isShowRefreshQrCode"
+      :patientId="gStores.userStore.patChoose.patientId"
+    />
     <g-message />
   </view>
 </template>
@@ -134,7 +139,7 @@
   import { computed, ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery } from '@/common';
   import {
     GStores,
     ServerStaticData,
@@ -143,6 +148,7 @@
     getLocation,
     ISystemConfig,
     apiAsync,
+    cacheUtil,
   } from '@/utils';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
@@ -156,6 +162,7 @@
   const pageConfig = ref(<ISystemConfig['order']>{});
   const isComplete = ref(false);
   const isRefresh = ref(false);
+  const isShowRefreshQrCode = ref(false);
   const list = ref([] as TTakeNumberListItem[]);
   const isWxRequestQxDialogShow = ref(false);
   const qrValue = ref('');
@@ -249,7 +256,48 @@
         });
       }
     } else {
-      await api.getCheckIn(args);
+      await api.getCheckIn(args).catch(async (err) => {
+        if (err?.respCode === 999229) {
+          const { title, content } = await gStores.getSysAppMore('1207');
+          if (title || '1') {
+            const { confirm } = await new Promise<any>((closeCallBack) => {
+              gStores.messageStore.showMessage(content, 0, {
+                useDialog: true,
+                dialogOpt: {
+                  isShowCancel: true,
+                  title,
+                  cancelColor: '#333',
+                  cancelText: '窗口/自助机取号',
+                  confirmColor: '#333',
+                  confirmText: '去充值',
+                },
+                closeCallBack,
+              });
+            });
+
+            if (confirm) {
+              const { cardNumber, patientName } = gStores.userStore.patChoose;
+
+              uni.navigateTo({
+                url: joinQuery('/pagesA/hospitalCare/paymentPage', {
+                  hosId,
+                  cardNumber,
+                  patientName,
+                  hospitalAccount: '12',
+                  _url: '/pagesC/takeNumber/takeNumber',
+                }),
+              });
+            }
+          }
+        } else {
+          gStores.messageStore.showMessage(
+            err?.message || '系统繁忙,请稍后再试',
+            3000
+          );
+        }
+
+        throw new Error(err);
+      });
     }
 
     await getList();
@@ -262,6 +310,8 @@
       isFgShow453.value = true;
     }
   };
+
+  // const
 
   const signIn = async (item: TTakeNumberListItem) => {
     isFgShow451.value = false;
@@ -335,7 +385,6 @@
       },
     });
   };
-
 
   const refreshData = () => {
     isRefresh.value = true;
@@ -460,7 +509,6 @@
         });
       }
 
-
       if (takeNumberGoPayBtn === '1') {
         headBtns.value.push({
           type: 'self',
@@ -495,6 +543,11 @@
     uni.setNavigationBarTitle({
       title: isOnlineSign.value ? '在线签到' : '门诊取号',
     });
+    const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+
+    isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
+      'pagesC/takeNumber/takeNumber'
+    );
 
     await getConfig();
     isRender.value = true;

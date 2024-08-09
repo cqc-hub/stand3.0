@@ -282,33 +282,6 @@
     verifyIdCArdResolve();
   };
 
-  const injectVerifyIdCardLastFourNumber = async (data) => {
-    const authIdCard = gStores.userStore.cacheUser?.certNo;
-    if (
-      envContainer === 'ali' &&
-      !gStores.userStore.patList.length &&
-      authIdCard
-    ) {
-      data.content = authIdCard.slice(-4);
-    } else {
-      const { result } = await api.checkPat({
-        ...data,
-      });
-
-      // 需要校验证件后四位
-      if (result) {
-        verifyIdCardVal.value = '';
-        refVerifyIdCardPopup.value.show();
-        await new Promise((r) => {
-          verifyIdCArdResolve = r;
-        });
-
-        data.content = verifyIdCardVal.value;
-      }
-    }
-    return data;
-  };
-
   const formSubmit = async ({}) => {
     if (!isCheck.value || (isSignExist.value && !isAgreeSign.value)) {
       messageStore.showMessage('请勾选下方同意书', 3000);
@@ -358,7 +331,13 @@
             idCard &&
             isVerifyIdCardLastFourNumber === '1'
           ) {
-            await injectVerifyIdCardLastFourNumber(data);
+            verifyIdCardVal.value = '';
+            refVerifyIdCardPopup.value.show();
+            await new Promise((r) => {
+              verifyIdCArdResolve = r;
+            });
+
+            data.content = verifyIdCardVal.value;
           }
 
           if (jump === 0) {
@@ -429,7 +408,29 @@
       }
     } else {
       if (isVerifyIdCardLastFourNumber === '1') {
-        await injectVerifyIdCardLastFourNumber(data);
+        const authIdCard = gStores.userStore.cacheUser?.certNo;
+        if (
+          envContainer === 'ali' &&
+          !gStores.userStore.patList.length &&
+          authIdCard
+        ) {
+          data.content = authIdCard.slice(-4);
+        } else {
+          const { result } = await api.checkPat({
+            ...data,
+          });
+
+          // 需要校验证件后四位
+          if (result) {
+            verifyIdCardVal.value = '';
+            refVerifyIdCardPopup.value.show();
+            await new Promise((r) => {
+              verifyIdCArdResolve = r;
+            });
+
+            data.content = verifyIdCardVal.value;
+          }
+        }
       }
       // 新增就诊人
       const value = formData.value;

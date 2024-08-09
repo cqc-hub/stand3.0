@@ -3,7 +3,6 @@
     <web-view
       v-if="src"
       :src="src"
-      :message="getMessage"
       @message="getMessage"
     ></web-view>
   </view>

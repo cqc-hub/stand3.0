@@ -16,14 +16,25 @@
           >
             <view class="color-888 f32 g-flex-rc-cc tip">请凭就诊码签到</view>
 
-            <view class="qr-code g-flex-rc-cc flex-column">
-              <w-barcode :options="barCodeOpt" />
-              <view class="color-888 f28 mb40 mt16">{{ qrValue }}</view>
-            </view>
+            <block v-if="isShowRefreshQrCode">
+              <refreshQrcode
+                v-if="show"
+                :patientId="patientId"
+                :showCode="qrValue"
+                isShowCode
+              />
+            </block>
 
-            <view class="qr-code g-flex-rc-cc">
-              <w-qrcode :options="qrCodeOpt" />
-            </view>
+            <block v-else>
+              <view class="qr-code g-flex-rc-cc flex-column">
+                <w-barcode :options="barCodeOpt" />
+                <view class="color-888 f28 mb40 mt16">{{ qrValue }}</view>
+              </view>
+
+              <view class="qr-code g-flex-rc-cc">
+                <w-qrcode :options="qrCodeOpt" />
+              </view>
+            </block>
 
             <view class="safe-height" />
             <view class="safe-height" />
@@ -42,10 +53,13 @@
   import { computed, ref, watch } from 'vue';
 
   import MyPopup from '@/components/uni-my-popup/uni-my-popup.vue';
+  import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
 
   const props = defineProps<{
+    patientId: string;
     qrValue: string;
     show: boolean;
+    isShowRefreshQrCode: boolean;
   }>();
   const isHide = ref(true);
 

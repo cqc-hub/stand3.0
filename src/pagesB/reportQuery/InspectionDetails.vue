@@ -34,7 +34,7 @@
           </view>
           <view class="patient-information">
             <view
-              v-if="pageProps._scan !== '1'"
+              v-if="pageProps._scan !== '1' && checkoutReportList.patientName"
               @click.stop="isClose = !isClose"
               class="subhead"
             >

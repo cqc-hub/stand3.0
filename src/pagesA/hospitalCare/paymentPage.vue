@@ -84,7 +84,7 @@
     pageConfig,
     isConfigComplete,
     toDigitalPay,
-    getRefPay
+    getRefPay,
   } = useHosPayPage();
 
   type IPageProps = {
@@ -95,6 +95,7 @@
     hospitalAccount?: string;
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment';
+    _url?: string; // 充值成功后回跳
   };
 
   interface IGPay {
@@ -106,10 +107,9 @@
   const resultHos = ref<ISystemConfig['hospitalCare']>({} as any);
 
   const list = ref([]);
-  const defalutMoney = ref(''); 
+  const defalutMoney = ref('');
   const payOrder = ref<payOrderResult>({} as payOrderResult);
   const pageProps = ref({} as IPageProps);
-
 
   const payArg = ref<BaseObject>({});
   const getMoneyInputType = computed(() => {
@@ -200,9 +200,16 @@
   };
 
   const payAfter = async () => {
+    const _url = pageProps.value._url;
     uni.showLoading({});
     await wait(1000);
     uni.hideLoading();
+    if (_url) {
+      uni.reLaunch({
+        url: decodeURIComponent(_url),
+      });
+      return;
+    }
 
     if (pageProps.value._type === 'fromSelDepartment') {
       uni.reLaunch({
