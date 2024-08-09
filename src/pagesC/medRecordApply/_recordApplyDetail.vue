@@ -252,7 +252,7 @@
   import { computed, ref, nextTick } from 'vue';
   import dayjs from 'dayjs';
 
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, type TButtonConfig, useTBanner, wait } from '@/utils';
 
   import {
     applyOrderStatusMap,
@@ -509,7 +509,10 @@
     nextTick(refPay.value.show);
   };
 
-  const payAfter = () => {
+  const payAfter = async () => {
+    uni.showLoading({});
+    await wait(3000);
+    uni.hideLoading();
     init();
   };
 
