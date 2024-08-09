@@ -395,6 +395,7 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
+import { storeToRefs } from 'pinia';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -421,13 +422,13 @@
   const gStore = new GStores();
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
 
-  const pat = gStore.userStore.patChoose;
+  const { patChoose: pat } = storeToRefs(gStore.userStore);
   const pageProps = ref(<any>{});
   const patName = computed(() => {
-    return checkoutReportList.value.patientName || pat.patientName;
+    return checkoutReportList.value.patientName || pat.value.patientName;
   });
   const patCardNumber = computed(() => {
-    return checkoutReportList.value.cardNumber || pat.cardNumber;
+    return checkoutReportList.value.cardNumber || pat.value.cardNumber;
   });
 
   const btnClick = ({ key }) => {
@@ -465,7 +466,7 @@
     } else {
       let params = {
         hosId: hosId,
-        patientId: pat.patientId,
+        patientId: pat.value.patientId,
         repId: repId,
         repType: repType,
         extend: decodeURIComponent(extend),

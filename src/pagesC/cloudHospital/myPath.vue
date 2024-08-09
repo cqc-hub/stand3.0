@@ -16,7 +16,7 @@
     import { getToken, getSysCode } from '@/common/useToken';
     import { ref } from 'vue';
     import { useMessageStore, useCacheStore } from '@/stores';
-    import { GStores,addHosIdForSelfH5Path,thirdWxPay } from '@/utils';
+    import { GStores,addHosIdForSelfH5Path,handWebMessage,thirdWxPay } from '@/utils';
     import { encryptDesParam } from '@/common/des';
     import { joinQuery } from '@/common';
     import { deQueryForUrl } from '@/common/utils';
@@ -130,6 +130,7 @@
 
     const handleMessage = (evt) => {
       console.warn('返回数据', evt);
+      handWebMessage(evt);
       var data = evt.target.data;
       var V3PageData = data[0];
       if (V3PageData.appId) {

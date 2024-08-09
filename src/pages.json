@@ -483,6 +483,13 @@
       "root": "pagesC",
       "pages": [
         {
+          "path": "scan/scan",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+
+        {
           "path": "serviceCenter/serviceCenter",
           "style": {
             "navigationBarTitleText": "意见反馈"

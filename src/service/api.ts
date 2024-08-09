@@ -672,6 +672,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  analyzePatInfoInHos: (data) =>
+    service.post('/phs-user/rePat/analyzePatInfoInHos', parm(data), {
+      hideLoading: false,
+    }),
+
   wfePatSync: (data) =>
     service.post('/phs-user/rePat/wfePatSync', parm(data), {
       hideLoading: false,

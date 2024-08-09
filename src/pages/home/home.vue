@@ -442,7 +442,8 @@
         loginUtils.sysPatOpenIdAssignment(props.value.openId);
       }
 
-      loginUtils.getUerInfo();
+      await loginUtils.getUerInfo();
+      routerJump();
     }
     wx.showShareMenu({
       // 要求小程序返回分享目标信息
