@@ -418,6 +418,12 @@ const queryApi = {
     service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
+  getCmsList: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsList', parm(data)),
+  getCmsTypeList: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsTypeList', parm(data)),
+  getCmsListByWordSearch: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsListByWordSearch', parm(data)),
 };
 
 // 挂号服务

@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <home-Nav />
-    <scroll-view @scroll="pageScroll" class="scroll-page g-container" scroll-y>
+    <scroll-view @scroll="pageScroll" @scrolltolower="handePageBottom" class="scroll-page g-container" scroll-y>
       <ls-skeleton
         :skeleton="skeletonProps.skeleton"
         :loading="viewerStore.loading"
@@ -202,6 +202,9 @@
               @open-share="openShare"
             />
           </view>
+          <view class="fun-list" v-if="global.sConfig.isOpenPopularSci">
+            <homeArticle ref="HomeArticleRef" />
+          </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
             <image
               :src="$global.BASE_IMG + 'img_logo@3x.png'"
@@ -326,7 +329,12 @@
 </template>
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { onLoad, onShow, onShareTimeline } from '@dcloudio/uni-app';
+  import {
+    onLoad,
+    onShow,
+    onShareTimeline,
+    onReachBottom,
+  } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
@@ -358,13 +366,14 @@
   import homeNav from './componetns/homeNav.vue';
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import homeArticle from './componetns/homeArticle/index.vue';
   import { goElectronicMedicalCard } from './utils';
-  import { deQueryForUrl} from '@/common';
+  import { deQueryForUrl } from '@/common';
 
   const props = ref({
     code: '',
     tabIndex: 0,
-    openId: ''
+    openId: '',
   });
   const gStores = new GStores();
   const patientUtils = new PatientUtils();
@@ -375,6 +384,7 @@
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref();
   const personConfig = ref(<ISystemConfig['person']>{});
+  const HomeArticleRef = ref('' as any);
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -417,7 +427,7 @@
       title: global.systemInfo.name,
     });
     // #ifdef MP-WEIXIN
-    if ( props.value.code) {
+    if (props.value.code) {
       const getNoPublicOpenIdOnly =
         getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
@@ -430,13 +440,13 @@
         removeLocation('getNoPublicOpenIdOnly');
       }
       await loginUtils.getNoPublicOpenId(
-         props.value.code,
+        props.value.code,
         getNoPublicOpenIdOnly
       );
       routerJump();
     }
     if (props.value.openId) {
-      globalStore.setH5OpenId( props.value.openId);
+      globalStore.setH5OpenId(props.value.openId);
 
       if (globalStore.herenId) {
         loginUtils.sysPatOpenIdAssignment(props.value.openId);
@@ -468,6 +478,14 @@
       });
     }
   });
+  //当用户将页面滑倒底部
+  const handePageBottom=() => {
+    //有开启健康科普
+    if (global.sConfig.isOpenPopularSci) {
+      //查询列表
+      HomeArticleRef.value.init()
+    }
+  };
   // #ifdef MP-WEIXIN
   //分享到朋友圈
   onShareTimeline(() => {
@@ -477,6 +495,8 @@
     };
   });
   // #endif
+  //用户滑倒底部
+
   //跳转智能问答
   const gotoIntelQA = () => {
     if (global.sConfig.isOpenIntelQA) {
