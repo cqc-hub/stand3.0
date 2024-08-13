@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001038",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -11,7 +11,6 @@
       "isSearchInHos": true,
       "isOpenOcr": true
     },
-
     "2001004": {
       "wxAppid": "wx101158c57640d854",
       "alipayAppid": "",
@@ -24,7 +23,6 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
-
     "1001049": {
       "wxAppid": "wx5e97c199ecf8b8c3",
       "alipayAppid": "",
@@ -37,7 +35,6 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
-
     "2001013": {
       "wxAppid": "wxda3a65909cbc3e3c",
       "alipayAppid": "2021002133632822",
@@ -47,7 +44,6 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
-
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
       "alipayAppid": "2021003173668243",
@@ -58,7 +54,6 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
-
     "1001046": {
       "wxAppid": "wxb00075173e764492",
       "alipayAppid": "2021003113623396",
@@ -69,7 +64,6 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
-
     "1001060": {
       "wxAppid": "wx799315279808c901",
       "alipayAppid": "2021004103625411",
@@ -80,7 +74,6 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
-
     "1001055": {
       "wxAppid": "wxd9a9c329edc6e2b0",
       "alipayAppid": "2021003164669106",
@@ -96,7 +89,6 @@
       "isOpenOcr": false,
       "isHideHomeLogo": true
     },
-
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
       "alipayAppid": "2021003167607056",
@@ -113,7 +105,6 @@
       "isOpenOcr": true,
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
     },
-
     "2001012": {
       "wxAppid": "wx15abd81c31993d20",
       "alipayAppid": "",
@@ -122,7 +113,6 @@
       "isSearchInHos": false,
       "isOpenOcr": false
     },
-
     "1001056": {
       "wxAppid": "wx4d8f68fdc6b6831c",
       "alipayAppid": "2021003182673498",
@@ -137,7 +127,6 @@
         "hospitalId": "37164"
       }
     },
-
     "1001057": {
       "toutiaoAppid": "ttbcd1ca6c23ed0a5401",
       "wxAppid": "wx7b1baac614ebed72",
@@ -153,7 +142,6 @@
         "hospitalId": "37218"
       }
     },
-
     "1001058": {
       "wxAppid": "wx86a78f7ced7dc55f",
       "alipayAppid": "2021004144623038",
@@ -164,14 +152,12 @@
       "isOpenOcr": false,
       "isStartComeTest": true
     },
-
     "1001059": {
       "wxAppid": "wxea8552a036115576",
       "name": "濮阳市第五人民医院",
       "isSearchInHos": true,
       "isOpenOcr": false
     },
-
     "1001040": {
       "wxAppid": "wxfa6c5f0835eedf08",
       "alipayAppid": "2021002143620963",
@@ -182,7 +168,6 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     },
-
     "1001041": {
       "wxAppid": "wx1b81e5b0858757ba",
       "h5Appid": "",
@@ -191,7 +176,6 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-
     "1001045": {
       "wxAppid": "wx39ce500d25aa3328",
       "alipayAppid": "2021003105653538",
@@ -201,7 +185,6 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-
     "1001062": {
       "wxAppid": "wxe09a59ebf1a15c3b",
       "h5Appid": "",
@@ -211,7 +194,6 @@
       "isOpenOcr": false,
       "_des": "这个老版本, 不知道啥用"
     },
-
     "1001063": {
       "wxAppid": "wx93d1e2c1e646e342",
       "alipayAppid": "2021004134632001",
@@ -222,7 +204,6 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-
     "1001065": {
       "wxAppid": "wx78636dc13e06e91c",
       "alipayAppid": "",
@@ -232,7 +213,6 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     },
-
     "1001064": {
       "wxAppid": "wx58ffd2c3a557bef0",
       "alipayAppid": "",
@@ -242,7 +222,6 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     },
-
     "1001066": {
       "wxAppid": "wxbe1f8ae346536759",
       "alipayAppid": "2021004146614065",
@@ -253,8 +232,6 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     },
-
-
     "1001067": {
       "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
@@ -263,7 +240,6 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
-
     "1001068": {
       "wxAppid": "wxb03ff137dabedd6d",
       "alipayAppid": "",
@@ -274,7 +250,6 @@
       "isStartComeTest": true,
       "isOpenOcr": false
     },
-
     "1001069": {
       "wxAppid": "wxf544358f2736cd20",
       "alipayAppid": "",
@@ -285,7 +260,6 @@
       "isSearchInHos": true,
       "isOpenOcr": true
     },
-
     "1001070": {
       "wxAppid": "wx0c0b335f85dee134",
       "alipayAppid": "",
@@ -295,7 +269,24 @@
       "isSearchInHos": false,
       "isStartComeTest": true,
       "isOpenOcr": false
+    },
+    "1001071": {
+      "wxAppid": "wx58ffd2c3a557bef0",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "未来医院",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001038": {
+      "wxAppid": "wxf64e84cf578fe0a7",
+      "alipayAppid": "2021002182620396",
+      "h5Appid": "wx65a04aa1dc7776d8",
+      "name": "嘉兴第二互联网医院",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
     }
-
   }
 }
