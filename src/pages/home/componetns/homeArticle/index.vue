@@ -28,6 +28,10 @@
         v-model:value="tabCurrent"
         :tabs="tabs"
         :height="(isShowTopTab && '55rpx') || '88rpx'"
+        :lineColor="isShowTopTab && '#fff'"
+         :fontSize="
+            isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
+          "
         @change="tabChange"
         field="typeName"
         blod
