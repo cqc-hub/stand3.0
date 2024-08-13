@@ -263,7 +263,7 @@
     });
 
     const queryArg = {
-      hosId: item.hosId || hosId.value,
+      hosId:  item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
       clinicalType: props.clinicalType,
       thRegisterId: props.thRegisterId,
       deptName: encodeURIComponent(item.deptName),
