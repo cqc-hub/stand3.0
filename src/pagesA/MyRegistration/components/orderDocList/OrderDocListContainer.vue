@@ -50,6 +50,14 @@
           </view>
         </view>
 
+          <!-- v-if="item.hosName && isAllDate" -->
+        <view
+          v-if="item.hosName"
+          class="doc-info-introduce-title color-888 text-ellipsis"
+        >
+          {{ item.hosName }}
+        </view>
+
         <!-- <view v-if="item.clinicTime" class="text-ellipsis ellipsis-line-clamp2">
           <text>{{ '门诊时间: ' }}</text>
           <text>{{ item.clinicTime }}</text>
