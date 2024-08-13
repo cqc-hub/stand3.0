@@ -10,10 +10,8 @@
           v-model:value="tabCurrentTop"
           :tabs="compConfig.listTopTab"
           :line-scale="0.5"
-          lineColor="#fff"
           @change="tabTopChange"
           blod
-          activeColor="#296FFF"
         />
       </view>
       <view class="flex1" v-if="hasInit">
@@ -29,8 +27,6 @@
         v-if="tabs && tabs.length"
         v-model:value="tabCurrent"
         :tabs="tabs"
-        lineColor="#fff"
-        activeColor="#296FFF"
         :height="(isShowTopTab && '55rpx') || '88rpx'"
         @change="tabChange"
         field="typeName"
@@ -57,7 +53,7 @@
               @item-click="itemClick"
               class="fade-in"
             />
-            <view class="f28">
+            <view class="f28 ">
               <view
                 v-if="showMore"
                 @click="readMore(tab.typeId)"
@@ -302,8 +298,12 @@
 <style lang="scss" scoped>
   .article-container {
     width: 100%;
+    background: var(--h-color-white);
+    border: 2rpx solid #f3f3f3;
+    box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+    border-radius: 16rpx;
     .search-box {
-      padding: 16rpx 32rpx;
+      padding: 16rpx 32rpx 32rpx;
     }
     .search-tabs {
       width: fit-content;
@@ -345,5 +345,6 @@
     color: #888;
     margin: auto;
     width: fit-content;
+    padding-bottom:32rpx
   }
 </style>
