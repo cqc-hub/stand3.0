@@ -21,7 +21,12 @@ import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 
-import type { TBannerConfig, ISystemConfig, IHosInfo, TButtonConfig } from '@/types';
+import type {
+  TBannerConfig,
+  ISystemConfig,
+  IHosInfo,
+  TButtonConfig,
+} from '@/types';
 
 const _cacheMap = new WeakMap();
 
@@ -62,7 +67,8 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isItemCount: _isItemCount,
           } = value;
 
-          const isItemCount = _isItemCount || tollMode === '1' ? '1' : '0';
+          const isItemCount =
+            _isItemCount === '1' || tollMode === '1' ? '1' : '0';
           const sfz =
             isHandPhoto === '1'
               ? ['front', 'end', 'handler']
