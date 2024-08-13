@@ -225,14 +225,6 @@
       </order-Reg-Confirm>
     </view>
 
-    <xy-dialog
-      title="确定取消申请?"
-      content="若取消申请,已缴纳的金额将会在7天内原路退回"
-      :show="isShowApplyCancelDialog"
-      @cancelButton="isShowApplyCancelDialog = false"
-      @confirmButton="applyCancelDialog"
-      confirmText="确定"
-    />
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -435,19 +427,27 @@
     });
   };
 
-  const isShowApplyCancelDialog = ref(false);
-  let applyCancelResolve: (args: any) => any = () => {};
-
-  const applyCancelDialog = () => {
-    applyCancelResolve(void 0);
-    isShowApplyCancelDialog.value = false;
-  };
 
   const applyCancel = async () => {
-    isShowApplyCancelDialog.value = true;
-    await new Promise((resolve) => {
-      applyCancelResolve = resolve;
+    const {
+      title = '确定取消申请?',
+      content = '若取消申请,已缴纳的金额将会在7天内原路退回',
+    } = await gStores.getSysAppMore('1208');
+    const { confirm } = await new Promise<any>((closeCallBack) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          isShowCancel: true,
+          title,
+        },
+        closeCallBack,
+      });
     });
+
+    if (!confirm) {
+      return;
+    }
+
     const { id, phsOrderNo } = info.value;
 
     const args = {
