@@ -34,7 +34,7 @@
       isShowCode?: boolean;
     }>(),
     {
-      label: '就诊卡',
+      label: '就诊码',
     }
   );
   const gStores = new GStores();
