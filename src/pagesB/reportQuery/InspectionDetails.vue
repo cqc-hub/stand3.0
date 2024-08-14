@@ -51,10 +51,12 @@
                   {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                 </text>
 
-                <text class="g-split-line mr12 pr12">
-                  {{ checkoutReportList.sex || pat.patientSex }}
-                </text>
-                <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
+                <block v-if="!pageProps.patientName">
+                  <text class="g-split-line mr12 pr12">
+                    {{ checkoutReportList.sex || pat.patientSex }}
+                  </text>
+                  <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
+                </block>
               </view>
             </view>
             <view class="subhead">

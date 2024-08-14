@@ -97,13 +97,15 @@
                       {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                     </text>
 
-                    <text class="g-split-line mr12 pr12">
-                      {{ examineReportList.sex || pat.patientSex }}
-                    </text>
+                    <block v-if="!pageProps.patientName">
+                      <text class="g-split-line mr12 pr12">
+                        {{ examineReportList.sex || pat.patientSex }}
+                      </text>
 
-                    <text class="text-no-wrap">
-                      {{ examineReportList.age || pat.patientAge }}岁
-                    </text>
+                      <text class="text-no-wrap">
+                        {{ examineReportList.age || pat.patientAge }}岁
+                      </text>
+                    </block>
                   </view>
                 </view>
                 <view class="subhead">
