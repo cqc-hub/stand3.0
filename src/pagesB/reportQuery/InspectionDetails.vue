@@ -9,9 +9,7 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
     <view class="container">
-      <view
-        class="container-block mt24"
-      >
+      <view class="container-block mt24">
         <view class="container-block-top" @click="more">
           <view class="flex-between flex-start">
             <view class="title flex1">{{ checkoutReportList.repName }}</view>
@@ -34,7 +32,7 @@
           </view>
           <view class="patient-information">
             <view
-              v-if="pageProps._scan !== '1' && checkoutReportList.patientName"
+              v-if="pageProps._scan !== '1' && patName"
               @click.stop="isClose = !isClose"
               class="subhead"
             >
@@ -395,7 +393,7 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
-import { storeToRefs } from 'pinia';
+  import { storeToRefs } from 'pinia';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -425,10 +423,18 @@ import { storeToRefs } from 'pinia';
   const { patChoose: pat } = storeToRefs(gStore.userStore);
   const pageProps = ref(<any>{});
   const patName = computed(() => {
-    return checkoutReportList.value.patientName || pat.value.patientName;
+    return (
+      pageProps.value.patientName ||
+      checkoutReportList.value.patientName ||
+      pat.value.patientName
+    );
   });
   const patCardNumber = computed(() => {
-    return checkoutReportList.value.cardNumber || pat.value.cardNumber;
+    return (
+      pageProps.value.cardNumber ||
+      checkoutReportList.value.cardNumber ||
+      pat.value.cardNumber
+    );
   });
 
   const btnClick = ({ key }) => {

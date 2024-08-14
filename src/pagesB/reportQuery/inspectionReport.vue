@@ -498,10 +498,18 @@
   const gStore = new GStores();
   const pat = gStore.userStore.patChoose;
   const patName = computed(() => {
-    return examineReportList.value.patientName || pat.patientName;
+    return (
+      pageProps.value.patientName ||
+      examineReportList.value.patientName ||
+      pat.patientName
+    );
   });
   const patCardNumber = computed(() => {
-    return examineReportList.value.cardNumber || pat.cardNumber;
+    return (
+      pageProps.value.cardNumber ||
+      examineReportList.value.cardNumber ||
+      pat.cardNumber
+    );
   });
 
   onLoad(async (p) => {
