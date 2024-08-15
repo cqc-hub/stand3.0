@@ -64,7 +64,7 @@
                   </view>
 
                   <view v-if="info.copyFee" class="text-no-wrap">
-                    <text class="mr12 text-no-wrap">复印金额:</text>
+                    <text class="mr12 text-no-wrap">复印费:</text>
                     <text class="mr12 g-break-word">{{ info.copyFee }}元</text>
                   </view>
                 </view>
