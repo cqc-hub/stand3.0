@@ -62,6 +62,11 @@
                       &#xe6d6;
                     </text>
                   </view>
+
+                  <view v-if="info.copyFee" class="text-no-wrap">
+                    <text class="mr12 text-no-wrap">复印金额:</text>
+                    <text class="mr12 g-break-word">{{ info.copyFee }}元</text>
+                  </view>
                 </view>
               </view>
             </view>
@@ -205,22 +210,33 @@
 
       <order-Reg-Confirm
         headerIcon=""
-        title="退还金额说明"
+        :title="fgTitle1209"
         height="35vh"
         ref="refRefConfirm"
         isShowCloseIcon
       >
         <view>
-          <view class="dialog-content mb76">退还金额已原路返回，请查收。</view>
+          <!-- <view class="dialog-content mb76">退还金额已原路返回，请查收。</view> -->
+          <view class="dialog-content mb76">
+            <g-flag
+              v-model:title="fgTitle1209"
+              typeFg="1209"
+              isShowFgTip
+              isHideTitle
+              aaa
+            />
+          </view>
         </view>
 
         <template #footer>
-          <button
-            @click="refRefConfirm.hide"
-            class="btn g-border btn-primary dialog-btn"
-          >
-            我知道了
-          </button>
+          <view class="pr32 pl32">
+            <button
+              @click="refRefConfirm.hide"
+              class="btn g-border btn-primary"
+            >
+              我知道了
+            </button>
+          </view>
         </template>
       </order-Reg-Confirm>
     </view>
@@ -265,6 +281,7 @@
     hosId: string;
   }>();
   const gStores = new GStores();
+  const fgTitle1209 = ref('');
 
   const isShowFooter = computed(() => {
     return (
@@ -427,7 +444,6 @@
     });
   };
 
-
   const applyCancel = async () => {
     const {
       title = '确定取消申请?',
@@ -444,20 +460,20 @@
       });
     });
 
-    if (!confirm) {
-      return;
-    }
+    // if (!confirm) {
+    //   return;
+    // }
 
-    const { id, phsOrderNo } = info.value;
+    // const { id, phsOrderNo } = info.value;
 
-    const args = {
-      id,
-      phsOrderNo,
-      type: 3,
-    };
+    // const args = {
+    //   id,
+    //   phsOrderNo,
+    //   type: 3,
+    // };
 
-    await api.copyRefund(args);
-    init();
+    // await api.copyRefund(args);
+    // init();
   };
 
   const refPayList = ref([
@@ -747,11 +763,6 @@
 
   ._name {
     font-size: var(--hr-font-size-xs);
-  }
-
-  .dialog-btn {
-    margin: 0 32rpx;
-    width: calc(100% - 64rpx);
   }
 
   .dialog-content {

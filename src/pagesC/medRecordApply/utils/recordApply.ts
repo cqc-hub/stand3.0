@@ -213,6 +213,7 @@ export type CaseCopeItemDetail = Flatten<
     _outInfo?: TOutInfo[];
     expressFee?: string;
     refundFee?: string;
+    copyFee?: string;
     refundReason: string;
     remark: string;
     expressNo: string;
