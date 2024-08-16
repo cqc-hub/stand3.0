@@ -460,20 +460,20 @@
       });
     });
 
-    // if (!confirm) {
-    //   return;
-    // }
+    if (!confirm) {
+      return;
+    }
 
-    // const { id, phsOrderNo } = info.value;
+    const { id, phsOrderNo } = info.value;
 
-    // const args = {
-    //   id,
-    //   phsOrderNo,
-    //   type: 3,
-    // };
+    const args = {
+      id,
+      phsOrderNo,
+      type: 3,
+    };
 
-    // await api.copyRefund(args);
-    // init();
+    await api.copyRefund(args);
+    init();
   };
 
   const refPayList = ref([
