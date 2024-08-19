@@ -4,9 +4,9 @@
       '--bg-color': bgColor,
       '--main--color': lineColor,
     }"
-    class="item g-border p32 mb16"
+    class="item g-border p32 mb16 mt16"
   >
-    <view class="g-bold color-111 f32 g-break-word mb18">
+    <view class="g-bold color-111 f32 g-break-word mb26 ">
       {{ title }}
     </view>
 
@@ -80,7 +80,7 @@
             'btn-first': !i && mainColor !== '#fff',
           }"
           @click="btnAction(item, btn.key)"
-          class="mb16 btn-item f26 g-bold flex-normal"
+          class="mb16 mt26 mr48 ml48  btn-item f26 g-bold flex-normal"
         >
           {{ btn.label }}
         </button>
@@ -92,7 +92,7 @@
 <script>
 import dayjs from "dayjs";
 import { ORDER_CLASS_MAP } from "../utils";
-
+  import { joinQuery  } from '@/common';
 const buttons = [
   {
     label: "查看报告",
@@ -250,12 +250,13 @@ export default {
       const btnActionMap = {
         // 查看报告
         1: () => {
-          this.$Router.push({
-            path: "/pagesB/reportQuery/reportQuery",
-            query: {
-              tabIndex: orderClass === "2" ? 0 : 1,
-            },
-          });
+       
+          // this.$Router.push({
+          //   path: "/pagesB/reportQuery/reportQuery",
+          //   query: {
+          //     tabIndex: orderClass === "2" ? 0 : 1,
+          //   },
+          // });
         },
 
         // 院内导航

@@ -420,6 +420,13 @@ export interface ISystemConfig_ {
     // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
     isItemQrCodeShow?: '1';
     navBtns?: TButtonConfig[];
+    //智能陪诊
+    medicalAsistantConfig?: {
+      //智能陪诊日期右侧区域的按钮
+        timeLineBtn?: Array<TButtonConfig>;//extraData需要包含code，会去匹配接口中navigationCodeJson中的code，匹配上则展示
+        contentBtn?: TButtonConfig[];//依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则传{}
+        bottomBtn?: TButtonConfig[];//最多展示两个icon按钮和两个普通按钮
+    }
   };
 
   /** 手术进度查询 */

@@ -202,7 +202,7 @@
               @open-share="openShare"
             />
           </view>
-          <view class="fun-list" v-if="global.sConfig.isOpenPopularSci">
+          <view v-if="global.sConfig.isOpenPopularSci">
             <homeArticle ref="HomeArticleRef" />
           </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">

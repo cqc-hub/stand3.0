@@ -3,7 +3,51 @@
     <g-flag typeFg="1206" isShowFg />
     <g-choose-pat @choose-pat="init" />
     <view v-if="guideSheetList.length" class="pat-box">
-      <ATabList v-model:tabs-data="guideContent" :guidet-list="guideSheetList" @item-click="tabClick"  />
+      <ATabList
+        v-model:tabs-data="guideContent"
+        :guidet-list="guideSheetList"
+        @item-click="tabClick"
+      />
+      <view class="g-container">
+        <view v-if="guideSheetList.length" class="pr16 box">
+          <view
+            class="g-bold f36 color-111 a-point first-point flex-normal w100"
+          >
+            <view
+              :style="{
+                '--point-color': '#bbbbbb',
+              }"
+              class="b-point"
+            />
+            <text class="text-no-wrap mr32">
+              {{ guideContent.disposeTime }}
+            </text>
+            <scroll-view scroll-x class="aaa">
+              <!-- 按钮 -->
+              <AGuideList :list="guideContent.navigationCode" />
+            </scroll-view>
+          </view>
+          <view
+            v-for="item in guideContent.list"
+            :key="item.uuid"
+            class="g-fade-in"
+          >
+            <view class="a-point">
+              <view
+                :style="{
+                  '--point-color': getItemStyle(item).mainColor,
+                }"
+                class="b-point"
+              />
+              <AListItem
+                :mainColor="getItemStyle(item).mainColor"
+                :bgColor="getItemStyle(item).bgColor"
+                :item="item"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
     <view v-else class="empty-list">
       <g-empty :current="1" noTransformY />
@@ -12,15 +56,25 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, ref, reactive } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, wait, debounce } from '@/utils';
+  import {
+    GStores,
+    wait,
+    debounce,
+    ServerStaticData,
+    ISystemConfig,
+  } from '@/utils';
   import { HosGuideParams, HosGuideSheet, GuideContent } from './types';
+  import { getItemStyle } from './utils';
   import ATabList from './components/ATabList.vue';
+  import AGuideList from './components/AGuideList.vue';
+  import AListItem from './components/AListItem.vue';
+
   const gStores = new GStores();
   const params = new HosGuideParams(gStores.userStore.patChoose.patientId);
   const guideSheetList = ref<HosGuideSheet[] | []>([]);
-  const guideContent = ref<GuideContent>({
+  const guideContent = reactive<GuideContent>({
     list: [],
     navigationCode: {
       boilerRoom: '',
@@ -30,126 +84,223 @@
     tabValue: '',
     disposeTime: '',
   });
+  const pageConfig = ref(<ISystemConfig['Electronic_Consultation_Sheet']>{});
   onLoad(() => {
     init();
   });
-  const init = () => {
+  const init = async () => {
+    // #ifdef MP-ALIPAY
+    pageConfig.value = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    )['inAlipay'];
+    // #endif
+    // #ifdef  MP-WEIXIN
+    pageConfig.value = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    )['inWx'];
+    // #endif
+    pageConfig.value.medicalAsistantConfig = {
+      timeLineBtn: [
+        {
+          appId: 'wx8735a8a39cf58b5e',
+          path: 'pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU',
+          text: '院内导航',
+          type: 'otherProgram',
+          addition: { hosDeptId: 'poi' },
+          extraData:{code:'123456789'}
+        },
+      ],
+    };
+
+    console.log('pageConfig.value', pageConfig.value);
     getListData();
   };
   let getListData = async () => {
-    console.log('init', params);
-
     guideSheetList.value = [];
     wait(50);
     const { result } = {
       result: [
         {
-          deptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
-          disposeTime: '2024-08-03',
-          navigationCodeJson: '{}',
+          deptName: '生殖内分泌科',
+          disposeTime: '2024-08-16',
+          navigationCodeJson:
+            '{"boilerRoom":"TEA_ROOM", "wheelchair": "DES_TYPE559201", "supermarket": "CVS"}',
           hosId: '01',
           processResultList: [
             {
-              deptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
-              orderId: '2024080310024304',
+              deptName: '生殖内分泌科',
+              no: '501',
+              orderId: '2024081610145107',
+              appointIndicator: '1',
+              scheduledDateTime: '2024-08-16 13:30:00',
+              remark: '7#*自带毛巾',
+              orderClass: '3',
+              itemName:
+                '“一站式”超声[一站式男性生殖系统检查（睾丸、附睾、精索+经直肠前列腺+双肾静脉+三维脏器）]',
+              prescNo: '24081616963',
+              clinicalType: '1',
+              sortNum: '4',
+              hosName: '朝晖院区',
+              isAppoint: '1',
+              address: '五号楼二楼(超声医学科),5号楼2楼超声科',
+              billDeptName: '生殖内分泌科',
+              beforeNum: '8',
+              navigationCodeJson: '{}',
+              deptId: 'A01020290000',
+              isEmptyStomach: '0',
+              hosId: '01',
+              disposeTime: '2024-08-16 10:08:09',
+              performDeptCode: 'A01030020000',
+              disposeStatus: '1',
+              billDeptId: 'A01020290000',
+              visitNo: '20240816106061',
+            },
+            {
+              deptName: '生殖内分泌科',
+              orderId: '2024081610145112',
               orderClass: '2',
-              itemName: '甲状腺功能+TPO [血清]',
-              prescNo: '202408031000002864',
+              itemName: '血粘度测定 [全血]',
+              prescNo: '202408161000011613',
               clinicalType: '1',
               sortNum: '1',
               hosName: '朝晖院区',
               isAppoint: '0',
               address: '2号楼二楼',
-              billDeptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
+              billDeptName: '生殖内分泌科',
               navigationCodeJson: '{}',
-              deptId: 'A01020460000',
+              deptId: 'A01020290000',
               hosId: '01',
-              disposeTime: '2024-08-03 08:08:04',
+              disposeTime: '2024-08-16 10:08:11',
               performDeptCode: 'A01030030000',
               disposeStatus: '3',
-              billDeptId: 'A01020460000',
-              visitNo: '20240803100935',
-              uuid: '',
+              billDeptId: 'A01020290000',
+              visitNo: '20240816106061',
             },
             {
-              deptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
-              orderId: '2024080310023898',
-              appointIndicator: '1',
-              orderClass: '3',
-              itemName: '浅表超声[甲状腺、颈部淋巴结(浅表超声)]',
-              prescNo: '24080312606',
+              deptName: '生殖内分泌科',
+              orderId: '2024081610145111',
+              orderClass: '2',
+              itemName: '生殖激素 [血清]',
+              prescNo: '202408161000011614',
               clinicalType: '1',
-              sortNum: '2',
+              sortNum: '1',
               hosName: '朝晖院区',
               isAppoint: '0',
-              address: '检查预约中心',
-              billDeptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
+              address: '2号楼二楼',
+              billDeptName: '生殖内分泌科',
               navigationCodeJson: '{}',
-              deptId: 'A01020460000',
+              deptId: 'A01020290000',
               hosId: '01',
-              disposeTime: '2024-08-03 08:08:36',
-              performDeptCode: 'ZJSRMYYTJZX',
+              disposeTime: '2024-08-16 10:08:10',
+              performDeptCode: 'A01030030000',
               disposeStatus: '3',
-              billDeptId: 'A01020460000',
-              visitNo: '20240803100935',
+              billDeptId: 'A01020290000',
+              visitNo: '20240816106061',
+            },
+            {
+              deptName: '生殖内分泌科',
+              orderId: '2024081610145109',
+              appointIndicator: '1',
+              scheduledDateTime: '2024-08-16 11:00:00',
+              remark:
+                '1.本检查无需空腹。 2.若因病情需要加做项目，请再补交费用。 3.HIV阳性、乙肝、丙肝及其他血液系统传染性疾病的患者，请在病史中注明。 4.有出血倾向、血小板明显低下等患者慎行针极肌电图检查。 5.肛门括约肌检查前，请排空大便，清洗肛周皮肤。',
+              orderClass: '3',
+              itemName: '肌电图[阴部神经体感诱发电位]',
+              prescNo: '24081616961',
+              clinicalType: '1',
+              sortNum: '4',
+              hosName: '朝晖院区',
+              isAppoint: '1',
+              address: '三号楼二楼(神经电生理科)',
+              billDeptName: '生殖内分泌科',
+              navigationCodeJson: '{}',
+              deptId: 'A01020290000',
+              hosId: '01',
+              disposeTime: '2024-08-16 10:08:10',
+              performDeptCode: 'A01030080000',
+              disposeStatus: '3',
+              billDeptId: 'A01020290000',
+              visitNo: '20240816106061',
+            },
+            {
+              deptName: '生殖内分泌科',
+              orderId: '2024081610144365',
+              appointIndicator: '1',
+              scheduledDateTime: '2024-08-16 11:00:00',
+              remark:
+                '1.本检查无需空腹。 2.若因病情需要加做项目，请再补交费用。 3.HIV阳性、乙肝、丙肝及其他血液系统传染性疾病的患者，请在病史中注明。 4.有出血倾向、血小板明显低下等患者慎行针极肌电图检查。 5.肛门括约肌检查前，请排空大便，清洗肛周皮肤。',
+              orderClass: '3',
+              itemName: '肌电图[球海绵体肌反射]',
+              prescNo: '24081616962',
+              clinicalType: '1',
+              sortNum: '4',
+              hosName: '朝晖院区',
+              isAppoint: '1',
+              address: '三号楼二楼(神经电生理科)',
+              billDeptName: '生殖内分泌科',
+              navigationCodeJson: '{}',
+              deptId: 'A01020290000',
+              hosId: '01',
+              disposeTime: '2024-08-16 10:08:09',
+              performDeptCode: 'A01030080000',
+              disposeStatus: '3',
+              billDeptId: 'A01020290000',
+              visitNo: '20240816106061',
             },
           ],
           hosName: '朝晖院区',
-          visitNo: '20240803100935',
+          visitNo: '20240816106061',
         },
         {
-          deptName: '测试科室',
-          disposeTime: '2024-08-03',
+          deptName: '生殖内分泌科',
+          disposeTime: '2024-08-05',
           navigationCodeJson: '{}',
           hosId: '01',
           processResultList: [
             {
-              deptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
-              orderId: '2024080310024304',
+              deptName: '生殖内分泌科',
+              orderId: '2024080510028178',
               orderClass: '2',
-              itemName: '甲状腺功能+TPO [血清]',
-              prescNo: '202408031000002864',
+              itemName: '胎盘生长因子 [血清]',
+              prescNo: '202408051000002914',
               clinicalType: '1',
               sortNum: '1',
               hosName: '朝晖院区',
               isAppoint: '0',
               address: '2号楼二楼',
-              billDeptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
+              billDeptName: '生殖内分泌科',
               navigationCodeJson: '{}',
-              deptId: 'A01020460000',
+              deptId: 'A01020290000',
               hosId: '01',
-              disposeTime: '2024-08-03 08:08:04',
+              disposeTime: '2024-08-05 08:08:14',
               performDeptCode: 'A01030030000',
-              disposeStatus: '3',
-              billDeptId: 'A01020460000',
-              visitNo: '20240803100935',
-              uuid: '',
+              disposeStatus: '1',
+              billDeptId: 'A01020290000',
+              visitNo: '20240805101351',
             },
             {
-              deptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
-              orderId: '2024080310023898',
-              appointIndicator: '1',
-              orderClass: '3',
-              itemName: '浅表超声[甲状腺、颈部淋巴结(浅表超声)]',
-              prescNo: '24080312606',
+              deptName: '生殖内分泌科',
+              isDeptStorage: '0',
+              orderClass: '1',
+              itemName: '中药',
+              prescNo: '2024080510027619',
               clinicalType: '1',
-              sortNum: '2',
+              sortNum: '12',
               hosName: '朝晖院区',
-              isAppoint: '0',
-              address: '检查预约中心',
-              billDeptName: '头颈外科(头颈甲状腺外科、头颈颌面外科)',
+              address: '(门诊草药房)',
+              billDeptName: '生殖内分泌科',
               navigationCodeJson: '{}',
-              deptId: 'A01020460000',
+              deptId: 'A01020290000',
               hosId: '01',
-              disposeTime: '2024-08-03 08:08:36',
-              performDeptCode: 'ZJSRMYYTJZX',
+              disposeTime: '2024-08-05 08:08:42',
+              performDeptCode: 'A01030050400',
               disposeStatus: '3',
-              billDeptId: 'A01020460000',
-              visitNo: '20240803100935',
+              billDeptId: 'A01020290000',
+              visitNo: '20240805101351',
             },
           ],
           hosName: '朝晖院区',
-          visitNo: '202408031009352',
+          visitNo: '20240805101351',
         },
       ],
     };
@@ -169,19 +320,106 @@
   getListData = debounce(getListData, 80);
   const tabClick = ({ idx }) => {
     const item = guideSheetList.value[idx];
-    console.log(8888,item,guideSheetList)
     const { processResultList, visitNo, disposeTime, navigationCodeJson } =
       item;
-    guideContent.value = {
-      list: processResultList || [],
-      navigationCode: {},
-      disposeTime,
-      tabValue: visitNo || '',
-    };
+
+    guideContent.list = processResultList || [];
+    guideContent.navigationCode = {};
+    guideContent.disposeTime = disposeTime;
+    guideContent.tabValue = visitNo || '';
+
+    console.log('guideContent.value.list', guideContent.list);
     if (navigationCodeJson) {
-      guideContent.value.navigationCode = JSON.parse(navigationCodeJson);
+      guideContent.navigationCode = JSON.parse(navigationCodeJson);
     }
   };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+  .g-page {
+    background-color: #fff;
+  }
+  .g-container {
+    height: fit-content;
+  }
+
+  .box {
+    padding-left: 56rpx;
+  }
+
+  .b-point {
+    --point-color: #bbbbbb;
+
+    width: 16rpx;
+    height: 16rpx;
+    background-color: var(--point-color);
+    border-radius: 100%;
+    position: absolute;
+    left: -32rpx;
+    top: 32rpx;
+  }
+
+  .a-point {
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: -16rpx;
+      width: 1rpx;
+      background-color: #dddddd;
+      transform: translate(-25rpx, 0);
+    }
+
+    &.first-point {
+      $p-top: 25rpx;
+      padding: 12rpx 0;
+      .b-point {
+        top: $p-top;
+      }
+
+      &::before {
+        top: $p-top;
+      }
+    }
+  }
+
+  .a-btn-icon {
+    width: 48rpx;
+    height: 48rpx;
+    margin-bottom: 6rpx;
+  }
+
+  .footer-icon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-btn {
+    padding: 0 30rpx;
+    font-weight: 600;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    width: 208rpx;
+    overflow-x: auto;
+
+    &.footer-btn-primary {
+      color: #fff;
+      background: #296fff;
+    }
+  }
+
+  .w100 {
+    width: 100%;
+  }
+
+  .aaa {
+    overflow: hidden;
+    overflow-y: scroll;
+    width: 100%;
+  }
+</style>

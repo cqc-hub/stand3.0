@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import { GuideContent,HosGuideSheet } from '../types';
-  import { Override } from '../../../../../../mobile-health-pro-h5/mobile-health-pro-h5/src/typeUtils/obj';
+
 
   const props = defineProps<{
     tabsData: GuideContent,
