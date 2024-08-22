@@ -2,10 +2,7 @@
   <view class="g-page">
     <home-Nav />
     <scroll-view @scroll="pageScroll" @scrolltolower="handePageBottom" class="scroll-page g-container" scroll-y>
-      <ls-skeleton
-        :skeleton="skeletonProps.skeleton"
-        :loading="viewerStore.loading"
-      >
+      <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="viewerStore.loading">
         <!-- 正常版本 -->
         <view
           class="homePage"
@@ -14,19 +11,12 @@
             'system-mode-old': gStores.globalStore.modeOld,
           }"
         >
-          <view
-            class="search flex-between"
-            v-if="global.sConfig.isHideHomeSearch != '1'"
-          >
+          <view class="search flex-between" v-if="global.sConfig.isHideHomeSearch != '1'">
             <!-- 在有搜索框的前提下 是否开启助老版本 -->
             <template v-if="global.sConfig.isOpenHelpOld == '1'">
               <view class="w70" @click.prevent="goSearch">
                 <view class="my-disabled">
-                  <uni-search-input
-                    :type="'2'"
-                    inputBorder
-                    :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
+                  <uni-search-input :type="'2'" inputBorder :placeholder="viewerStore.homeSearchPlaceholder" />
                 </view>
               </view>
               <view class="openOld" @tap="openModeOld">
@@ -37,11 +27,7 @@
             <template v-else>
               <view class="w100" @click.prevent="goSearch">
                 <view class="my-disabled">
-                  <uni-search-input
-                    :type="'2'"
-                    inputBorder
-                    :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
+                  <uni-search-input :type="'2'" inputBorder :placeholder="viewerStore.homeSearchPlaceholder" />
                 </view>
               </view>
             </template>
@@ -51,37 +37,24 @@
             <g-login @handler-next="routerJump">
               <!-- 登录之后 -->
               <block v-if="globalStore.isLogin">
-                <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
-                >
+                <view class="top-card flex-normal-between animate__animated animate__fadeIn">
                   <!-- 有就诊人时 -->
                   <block v-if="gStores.userStore.patChoose.patientName">
                     <view class="flex-normal">
-                      <view
-                        v-if="personConfig.isQrCodeDisabled !== '1'"
-                        @tap="cardClick"
-                        class="iconfont icon-size"
-                      >
+                      <view v-if="personConfig.isQrCodeDisabled !== '1'" @tap="cardClick" class="iconfont icon-size">
                         &#xe6a7;
                       </view>
                       <view class="patient">
                         <text>
                           {{ gStores.userStore.patChoose.patientNameEncry }}
                         </text>
-                        <text
-                          v-if="
-                            !isAreaProgram() &&
-                            gStores.userStore.patChoose._showId
-                          "
-                        >
+                        <text v-if="!isAreaProgram() && gStores.userStore.patChoose._showId">
                           ID
                           {{ gStores.userStore.patChoose._showId }}
                         </text>
                       </view>
                     </view>
-                    <view class="switchPatient" @tap="chooseAction">
-                      更换就诊人
-                    </view>
+                    <view class="switchPatient" @tap="chooseAction"> 更换就诊人 </view>
                   </block>
                   <!-- 没有就诊人时 -->
                   <block v-else>
@@ -90,17 +63,13 @@
                         <text>暂无就诊人</text>
                       </view>
                     </view>
-                    <view class="switchPatient" @tap="addPatient">
-                      添加就诊人
-                    </view>
+                    <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
                   </block>
                 </view>
               </block>
               <block v-else>
                 <!-- 未登录 -->
-                <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
-                >
+                <view class="top-card flex-normal-between animate__animated animate__fadeIn">
                   <view class="flex-normal no-login">
                     <!-- <g-login @handler-next="routerJump"> -->
                     <text>请登录</text>
@@ -123,12 +92,9 @@
 
             <view class="top-menu">
               <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid :list="viewerStore.homeTopMenuList" :type="1" />
+                <homeGrid :list="viewerStore.homeTopMenuList" :type="1"   @open-share="openShare" />
               </view>
-              <view
-                class="notice flex-normal g-fade-in"
-                v-if="viewerStore.homeNoticeText"
-              >
+              <view class="notice flex-normal g-fade-in" v-if="viewerStore.homeNoticeText">
                 <text class="icon-font img_announcement icon-size"></text>
                 <view class="bar-swiper">
                   <uni-notice-bar
@@ -196,20 +162,13 @@
           </view>
           <!-- #endif -->
           <view class="fun-list" v-if="viewerStore.homeMenuList.length">
-            <homeMenu
-              :list="viewerStore.homeMenuList"
-              :tabIndex="props.tabIndex"
-              @open-share="openShare"
-            />
+            <homeMenu :list="viewerStore.homeMenuList" :tabIndex="props.tabIndex" @open-share="openShare" />
           </view>
           <view v-if="global.sConfig.isOpenPopularSci">
             <homeArticle ref="HomeArticleRef" />
           </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-            <image
-              :src="$global.BASE_IMG + 'img_logo@3x.png'"
-              mode="widthFix"
-            />
+            <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
           </view>
 
           <view></view>
@@ -225,37 +184,24 @@
           <view class="card">
             <!-- 登录之后 -->
             <block v-if="globalStore.isLogin">
-              <view
-                class="top-card-old flex-normal-between animate__animated animate__fadeIn"
-              >
+              <view class="top-card-old flex-normal-between animate__animated animate__fadeIn">
                 <!-- 有就诊人时 -->
                 <block v-if="gStores.userStore.patChoose.patientName">
                   <view class="flex-normal">
-                    <view
-                      v-if="personConfig.isQrCodeDisabled !== '1'"
-                      @tap="cardClick"
-                      class="iconfont icon-size"
-                    >
+                    <view v-if="personConfig.isQrCodeDisabled !== '1'" @tap="cardClick" class="iconfont icon-size">
                       &#xe6a7;
                     </view>
                     <view class="patient">
                       <text>
                         {{ gStores.userStore.patChoose.patientNameEncry }}
                       </text>
-                      <text
-                        v-if="
-                          !isAreaProgram() &&
-                          gStores.userStore.patChoose._showId
-                        "
-                      >
+                      <text v-if="!isAreaProgram() && gStores.userStore.patChoose._showId">
                         ID
                         {{ gStores.userStore.patChoose._showId }}
                       </text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="chooseAction">
-                    更换就诊人
-                  </view>
+                  <view class="switchPatient" @tap="chooseAction"> 更换就诊人 </view>
                 </block>
                 <!-- 没有就诊人时 -->
                 <block v-else>
@@ -264,32 +210,22 @@
                       <text>暂无就诊人</text>
                     </view>
                   </view>
-                  <view class="switchPatient" @tap="addPatient">
-                    添加就诊人
-                  </view>
+                  <view class="switchPatient" @tap="addPatient"> 添加就诊人 </view>
                 </block>
               </view>
             </block>
             <block v-else>
               <!-- 未登录 -->
-              <view
-                class="top-card-old flex-normal-between animate__animated animate__fadeIn"
-              >
+              <view class="top-card-old flex-normal-between animate__animated animate__fadeIn">
                 <view class="no-login">
                   <text>请登录</text>
                   <text>登录后享受更多服务</text>
                 </view>
                 <!-- #ifdef MP-ALIPAY -->
-                <view class="switchPatient no-login-tip" @tap="goLogin">
-                  请登录
-                </view>
+                <view class="switchPatient no-login-tip" @tap="goLogin"> 请登录 </view>
                 <!-- #endif -->
                 <!-- #ifdef MP-WEIXIN -->
-                <button
-                  open-type="getPhoneNumber"
-                  @getphonenumber="goLogin"
-                  class="login-btn text-no-wrap"
-                >
+                <button open-type="getPhoneNumber" @getphonenumber="goLogin" class="login-btn text-no-wrap">
                   请登录
                 </button>
                 <!-- #endif -->
@@ -306,10 +242,7 @@
               关闭长辈模式
             </view>
             <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-              <image
-                :src="$global.BASE_IMG + 'img_logo@3x.png'"
-                mode="widthFix"
-              />
+              <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
             </view>
           </view>
         </view>
@@ -322,6 +255,7 @@
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
       :configData="h5QrCodeData || undefined"
+      @close-pop-click="closePopClick"
     />
 
     <homeTabbar :systemModeOld="gStores.globalStore.modeOld" />
@@ -369,6 +303,7 @@
   import homeArticle from './componetns/homeArticle/index.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
+  import { useCommonTo } from '@/common/checkJump';
 
   const props = ref({
     code: '',
@@ -385,6 +320,7 @@
   const h5QrCodeData = ref();
   const personConfig = ref(<ISystemConfig['person']>{});
   const HomeArticleRef = ref('' as any);
+  const clickShareItem = ref<any>({});
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -451,8 +387,10 @@
       if (globalStore.herenId) {
         loginUtils.sysPatOpenIdAssignment(props.value.openId);
       }
-
-      await loginUtils.getUerInfo();
+      
+      if(globalStore.token.accessToken){
+        await loginUtils.getUerInfo();
+       }
       routerJump();
     }
     wx.showShareMenu({
@@ -523,11 +461,24 @@
     };
     useTBanner(IntelAI);
   };
-  //打开关注框
-  const openShare = (item) => {
+//打开关注框
+const openShare = (item,type?) => {
+  if(type === 'attention'){
+    h5QrCodeData.value = item.query && JSON.parse(item.query);
+    clickShareItem.value = item
+  }else{
     h5QrCodeData.value = item;
-    homeH5SharePopupRef.value.show();
-  };
+  }
+  homeH5SharePopupRef.value.show();
+};
+const closePopClick = () => {
+  const query = clickShareItem.value.query;
+   if(query&&JSON.parse(query).attention === '1'){
+    setTimeout(()=>{
+      useCommonTo(clickShareItem.value)
+    },500)
+   }
+};
 
   const goToNotice1 = () => {
     //跳咨询列表页面
@@ -602,348 +553,336 @@
 </script>
 
 <style lang="scss" scoped>
-  .g-page {
-    background: #ffffff;
-  }
-  .auto-person {
-    position: relative;
+.g-page {
+  background: #ffffff;
+}
+.auto-person {
+  position: relative;
+  z-index: 999;
+  text {
+    position: absolute;
+    bottom: 9px;
+    color: #fff;
+    font-size: 24rpx;
+    left: 23rpx;
     z-index: 999;
-    text {
-      position: absolute;
-      bottom: 9px;
+  }
+  image {
+    width: 140rpx;
+    height: 148rpx;
+  }
+}
+
+.homePage {
+  padding: 0 32rpx 188rpx 32rpx;
+  .search {
+    padding-top: 32rpx;
+  }
+  .w70 {
+    width: 70%;
+  }
+  .w100 {
+    width: 100%;
+  }
+  .openOld {
+    width: 200rpx;
+    height: 64rpx;
+    background: var(--hr-brand-color-6);
+    border-radius: 32rpx 0 0 32rpx;
+    color: #fff;
+    font-size: var(--hr-font-size-xs);
+    padding: 12rpx 24rpx;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin-right: -32rpx;
+    white-space: nowrap;
+    .icon-size {
+      font-size: var(--h-size-40);
       color: #fff;
-      font-size: 24rpx;
-      left: 23rpx;
-      z-index: 999;
-    }
-    image {
-      width: 140rpx;
-      height: 148rpx;
+      font-weight: 400;
     }
   }
 
-  .homePage {
-    padding: 0 32rpx 188rpx 32rpx;
-    .search {
-      padding-top: 32rpx;
-    }
-    .w70 {
-      width: 70%;
-    }
-    .w100 {
-      width: 100%;
-    }
-    .openOld {
-      width: 200rpx;
-      height: 64rpx;
-      background: var(--hr-brand-color-6);
-      border-radius: 32rpx 0 0 32rpx;
-      color: #fff;
-      font-size: var(--hr-font-size-xs);
-      padding: 12rpx 24rpx;
-      display: flex;
-      align-items: center;
+  .card {
+    margin-top: var(--h-margin-24);
+    .top-card {
+      padding-top: var(--h-margin-24);
+      margin: 0 26rpx;
+      position: relative;
       box-sizing: border-box;
-      margin-right: -32rpx;
-      white-space: nowrap;
-      .icon-size {
-        font-size: var(--h-size-40);
-        color: #fff;
-        font-weight: 400;
-      }
-    }
 
-    .card {
-      margin-top: var(--h-margin-24);
-      .top-card {
-        padding-top: var(--h-margin-24);
-        margin: 0 26rpx;
-        position: relative;
-        box-sizing: border-box;
+      border: 2rpx solid #dfe9ff;
+      backdrop-filter: blur(30rpx);
+      border-radius: 24rpx;
 
-        border: 2rpx solid #dfe9ff;
-        backdrop-filter: blur(30rpx);
-        border-radius: 24rpx;
+      height: 100rpx;
 
-        height: 100rpx;
-
-        .patient {
-          text {
-            display: block;
-            font-size: var(--hr-font-size-base);
-            line-height: 44rpx;
-
-            &:last-child {
-              font-size: var(--hr-font-size-xs);
-              line-height: 40rpx;
-            }
-          }
-        }
-        &::after {
-          width: 100%;
-          height: 112rpx;
-          position: absolute;
-          left: 0;
-          top: 0;
-          z-index: -1;
-          content: '';
-
-          border-radius: 24rpx 24rpx 15% 15%;
-
-          background: var(--hr-brand-color-6);
-        }
-        .no-login {
-          text {
-            font-size: var(--hr-font-size-base);
-            &:last-child {
-              font-size: var(--hr-font-size-xxxs);
-            }
-          }
-        }
-
-        .icon-size {
-          font-size: var(--h-iconfont-60);
-          margin-left: 56rpx;
-          display: inline-block;
-          color: var(--h-color-white);
-        }
-
+      .patient {
         text {
-          font-size: var(--h-size-40);
-          font-weight: var(--h-weight-2);
-          text-align: left;
-          color: var(--h-color-white);
-          margin-left: 24rpx;
-          line-height: 60rpx;
-        }
+          display: block;
+          font-size: var(--hr-font-size-base);
+          line-height: 44rpx;
 
-        view.switchPatient {
-          width: 180rpx;
-          background: linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.5)
-          );
-          border-radius: 200rpx 0 0 200rpx;
-          font-size: var(--hr-font-size-xs);
-          font-weight: 400;
-          color: var(--hr-brand-color-6);
-          line-height: 64rpx;
-          text-align: center;
+          &:last-child {
+            font-size: var(--hr-font-size-xs);
+            line-height: 40rpx;
+          }
         }
-        view.no-login-tip {
-          width: 124rpx;
+      }
+      &::after {
+        width: 100%;
+        height: 112rpx;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        content: "";
+
+        border-radius: 24rpx 24rpx 15% 15%;
+
+        background: var(--hr-brand-color-6);
+      }
+      .no-login {
+        text {
+          font-size: var(--hr-font-size-base);
+          &:last-child {
+            font-size: var(--hr-font-size-xxxs);
+          }
         }
       }
 
-      .login-btn {
-        border: none !important;
-        background-color: transparent;
-        box-shadow: none !important;
-        margin: 0;
-        height: 64rpx;
-        width: 144rpx;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.9),
-          rgba(255, 255, 255, 0.5)
-        );
+      .icon-size {
+        font-size: var(--h-iconfont-60);
+        margin-left: 56rpx;
+        display: inline-block;
+        color: var(--h-color-white);
+      }
+
+      text {
+        font-size: var(--h-size-40);
+        font-weight: var(--h-weight-2);
+        text-align: left;
+        color: var(--h-color-white);
+        margin-left: 24rpx;
+        line-height: 60rpx;
+      }
+
+      view.switchPatient {
+        width: 180rpx;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
         border-radius: 200rpx 0 0 200rpx;
         font-size: var(--hr-font-size-xs);
         font-weight: 400;
         color: var(--hr-brand-color-6);
         line-height: 64rpx;
         text-align: center;
-        & button,
-        & uni-button:after,
-        & button:after {
-          border: none !important;
-          background-color: transparent;
-          box-shadow: none !important;
-          padding: 0;
-        }
-        &:after {
-          background: none;
-          border: none;
-          padding: 0;
-        }
+      }
+      view.no-login-tip {
+        width: 124rpx;
+      }
+    }
+
+    .login-btn {
+      border: none !important;
+      background-color: transparent;
+      box-shadow: none !important;
+      margin: 0;
+      height: 64rpx;
+      width: 144rpx;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
+      border-radius: 200rpx 0 0 200rpx;
+      font-size: var(--hr-font-size-xs);
+      font-weight: 400;
+      color: var(--hr-brand-color-6);
+      line-height: 64rpx;
+      text-align: center;
+      & button,
+      & uni-button:after,
+      & button:after {
+        border: none !important;
+        background-color: transparent;
+        box-shadow: none !important;
+        padding: 0;
+      }
+      &:after {
+        background: none;
+        border: none;
+        padding: 0;
+      }
+    }
+
+    .top-menu {
+      background: #f2f6ff;
+      border: 2rpx solid #dfe9ff;
+      border-radius: 24rpx;
+      box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
+      .box {
+        padding: 40rpx 0 35rpx 0;
+        min-height: 145rpx;
       }
 
-      .top-menu {
-        background: #f2f6ff;
-        border: 2rpx solid #dfe9ff;
-        border-radius: 24rpx;
-        box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
-        .box {
-          padding: 40rpx 0 35rpx 0;
-          min-height: 145rpx;
-        }
+      .bar-swiper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        position: relative;
+        // #ifdef MP-WEIXIN
+        top: 10rpx;
+        // #endif
 
-        .bar-swiper {
-          width: 100%;
-          height: 100%;
+        .swiper-item {
           display: flex;
           align-items: center;
-          flex: 1;
-          position: relative;
-          // #ifdef MP-WEIXIN
-          top: 10rpx;
-          // #endif
-
-          .swiper-item {
-            display: flex;
-            align-items: center;
-            color: var(--hr-neutral-color-9);
-            font-size: var(--hr-font-size-xs);
-            .item-box {
-              word-break: break-all;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              overflow: hidden;
-              width: 100%;
-            }
+          color: var(--hr-neutral-color-9);
+          font-size: var(--hr-font-size-xs);
+          .item-box {
+            word-break: break-all;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 100%;
           }
         }
       }
+    }
 
-      .notice {
-        height: 78rpx;
-        background: #fefefe;
-        border-radius: 0 0 24rpx 24rpx;
-        box-shadow: 0 2rpx 0 0 #dfe9ff inset;
-        padding: 0 31rpx;
+    .notice {
+      height: 78rpx;
+      background: #fefefe;
+      border-radius: 0 0 24rpx 24rpx;
+      box-shadow: 0 2rpx 0 0 #dfe9ff inset;
+      padding: 0 31rpx;
 
-        .icon-size {
-          width: 64rpx;
-          height: 64rpx;
-          // margin-right: 16rpx;
-        }
-
-        text {
-          color: var(--hr-neutral-color-9);
-          font-size: var(--hr-font-size-xs);
-          display: inline-block;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
+      .icon-size {
+        width: 64rpx;
+        height: 64rpx;
+        // margin-right: 16rpx;
       }
-    }
 
-    .banner-menu {
-      margin: var(--h-margin-24) 0;
-    }
-
-    .official-list {
-      height: 82rpx;
-      width: 100%;
-      margin-bottom: -17rpx;
-      margin-top: 10rpx;
-    }
-
-    .fun-list {
-      margin-top: var(--h-margin-24);
-    }
-    .bg-back {
-      margin: 30rpx auto 20rpx;
-      text-align: center;
-
-      image {
-        width: 180rpx;
-        height: 80rpx;
+      text {
+        color: var(--hr-neutral-color-9);
+        font-size: var(--hr-font-size-xs);
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
   }
 
-  .uni-noticebar {
-    margin: 0;
+  .banner-menu {
+    margin: var(--h-margin-24) 0;
+  }
+
+  .official-list {
+    height: 82rpx;
     width: 100%;
+    margin-bottom: -17rpx;
+    margin-top: 10rpx;
   }
-  .top-menu-old {
-    margin-top: 32rpx;
+
+  .fun-list {
+    margin-top: var(--h-margin-24);
   }
-  .isCloseOld {
-    width: 384rpx;
-    color: #444;
-    padding: 24rpx 0 22rpx;
-    background: #ffffff;
-    border: 2rpx solid #cccccc;
-    border-radius: 50px;
-    margin: 80rpx auto;
-    justify-content: center;
-    .icon-size {
-      font-size: 42rpx;
+  .bg-back {
+    margin: 30rpx auto 20rpx;
+    text-align: center;
+
+    image {
+      width: 180rpx;
+      height: 80rpx;
     }
   }
-  .top-card-old {
-    margin: 0 26rpx;
-    box-sizing: border-box;
+}
 
-    border: 2rpx solid #dfe9ff;
-    backdrop-filter: blur(30rpx);
-    border-radius: 24rpx;
-    background: var(--hr-brand-color-6);
-    height: 184rpx;
+.uni-noticebar {
+  margin: 0;
+  width: 100%;
+}
+.top-menu-old {
+  margin-top: 32rpx;
+}
+.isCloseOld {
+  width: 384rpx;
+  color: #444;
+  padding: 24rpx 0 22rpx;
+  background: #ffffff;
+  border: 2rpx solid #cccccc;
+  border-radius: 50px;
+  margin: 80rpx auto;
+  justify-content: center;
+  .icon-size {
+    font-size: 42rpx;
+  }
+}
+.top-card-old {
+  margin: 0 26rpx;
+  box-sizing: border-box;
 
-    .patient {
-      text {
-        display: block;
-        font-size: 48rpx;
-        line-height: 66rpx;
+  border: 2rpx solid #dfe9ff;
+  backdrop-filter: blur(30rpx);
+  border-radius: 24rpx;
+  background: var(--hr-brand-color-6);
+  height: 184rpx;
 
-        &:last-child {
-          font-size: var(--hr-font-size-xs);
-          line-height: 50rpx;
-        }
-      }
-    }
-    .no-login {
-      text {
-        font-size: 48rpx;
-        display: block;
-        &:last-child {
-          font-size: 32rpx;
-        }
-      }
-    }
-
-    .icon-size {
-      font-size: 72rpx;
-      margin-left: 32rpx;
-      display: inline-block;
-      color: var(--h-color-white);
-    }
-
+  .patient {
     text {
-      font-size: var(--h-size-40);
-      font-weight: var(--h-weight-2);
-      text-align: left;
-      color: var(--h-color-white);
-      margin-left: 24rpx;
-      line-height: 60rpx;
-    }
+      display: block;
+      font-size: 48rpx;
+      line-height: 66rpx;
 
-    .patient-old {
-      text {
-        font-size: 48rpx !important;
+      &:last-child {
+        font-size: var(--hr-font-size-xs);
+        line-height: 50rpx;
       }
     }
-    view.switchPatient {
-      width: 228rpx;
-      background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.9),
-        rgba(255, 255, 255, 0.5)
-      );
-      border-radius: 200rpx 0 0 200rpx;
-      font-size: 32rpx;
-      font-weight: 400;
-      color: var(--hr-brand-color-6);
-      line-height: 72rpx;
-      text-align: center;
-    }
-    view.no-login-tip {
-      width: 124rpx;
+  }
+  .no-login {
+    text {
+      font-size: 48rpx;
+      display: block;
+      &:last-child {
+        font-size: 32rpx;
+      }
     }
   }
+
+  .icon-size {
+    font-size: 72rpx;
+    margin-left: 32rpx;
+    display: inline-block;
+    color: var(--h-color-white);
+  }
+
+  text {
+    font-size: var(--h-size-40);
+    font-weight: var(--h-weight-2);
+    text-align: left;
+    color: var(--h-color-white);
+    margin-left: 24rpx;
+    line-height: 60rpx;
+  }
+
+  .patient-old {
+    text {
+      font-size: 48rpx !important;
+    }
+  }
+  view.switchPatient {
+    width: 228rpx;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
+    border-radius: 200rpx 0 0 200rpx;
+    font-size: 32rpx;
+    font-weight: 400;
+    color: var(--hr-brand-color-6);
+    line-height: 72rpx;
+    text-align: center;
+  }
+  view.no-login-tip {
+    width: 124rpx;
+  }
+}
 </style>

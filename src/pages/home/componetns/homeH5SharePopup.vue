@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <uni-popup :safe-area="false" ref="popup" type="bottom">
+    <uni-popup :safe-area="false" :mask-click="false" ref="popup" type="bottom">
       <view class="container">
         <view class="header">
           <image
@@ -12,7 +12,7 @@
           <view class="f48 row-box mb8">
             <text class="g-bold">{{ configData.title || '欢迎关注' }}</text>
             <text
-              @click="popup.close()"
+              @click="close"
               class="iconfont close-icon color-888 f48"
             >
               &#xe6cd;
@@ -66,7 +66,8 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import globalGl from '@/config/global';
+
+  const emits = defineEmits(['close-pop-click']);
 
   const tzList = ref([
     {
@@ -113,12 +114,17 @@
   );
 
   const show = () => {
-    console.log(222, props.configData);
     popup.value.open();
+  };
+  const close = () => {
+    popup.value.close();
+    console.log(22222,'关闭')
+    emits('close-pop-click');
   };
 
   defineExpose({
     show,
+    close
   });
 </script>
 

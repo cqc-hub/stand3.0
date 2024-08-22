@@ -371,8 +371,9 @@ export class LoginUtils extends GStores {
     if (herenId) {
       this.sysPatOpenIdAssignment(openId);
     }
-
-    await this.getUerInfo();
+    if (this.globalStore.getToken) {
+      await this.getUerInfo();
+    }
   }
 
   /**

@@ -133,8 +133,8 @@
 </template>
 
 <script setup lang="ts">
-  import { withDefaults, ref, computed } from 'vue';
-  import { useCommonTo,openServicesChat } from '@/common/checkJump';
+  import { withDefaults, ref } from 'vue';
+  import { useCommonTo, openServicesChat,isSubscribeWx } from '@/common/checkJump';
 
   // 2/3
   // const type = ref(2);
@@ -167,14 +167,19 @@
   );
   const autoplay = ref(true);
   //跳转对应地址
-  const gotoPath = (item) => {
-    if (item.path && item.path == 'showCareModel') {
-      //关注组件拦截跳转 弹框
-      emits('open-share', item.query && JSON.parse(item.query));
-    } else if (item.path == 'openWxService') {
-      openServicesChat(item.query);
+  const gotoPath = async (item) => {
+    // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
+    if (item.query && JSON.parse(item.query).attention == '1' && !(await isSubscribeWx())) {
+        emits('open-share', item, 'attention');
     } else {
-      useCommonTo(item);
+      if (item.path && item.path == 'showCareModel') {
+        //关注组件拦截跳转 弹框
+        emits('open-share', item.query && JSON.parse(item.query));
+      } else if (item.path == 'openWxService') {
+        openServicesChat(item.query);
+      } else {
+        useCommonTo(item);
+      }
     }
   };
 </script>
