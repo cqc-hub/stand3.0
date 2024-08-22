@@ -881,6 +881,10 @@ const userApi = {
   alipayVerifiSelf: (data) =>
     service.post<any>('/phs-user/relevantPatient/alipayVerifiSelf', parm(data)),
 
+  // 判断是否关注公众号
+  judgeSubscribeWxAccount: (data) =>
+    service.post<any>('/phs-user/authUser/judgeSubscribeWxAccount', parm(data)),
+  
   getDeptCardList: (data: any) =>
     service.post('/phs-reg/deptDoc/getDeptList', parm(data), {
       hideLoading: false,

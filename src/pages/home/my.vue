@@ -52,6 +52,7 @@
     <homeH5SharePopup
       ref="homeH5SharePopupRef"
       :configData="h5QrCodeData || undefined"
+       @close-pop-click="closePopClick"
     />
     <home-Tabbar :systemModeOld="gStores.globalStore.modeOld" />
     <g-message />
@@ -74,10 +75,12 @@
   import homeGrid from './componetns/homeGrid.vue';
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import { useCommonTo } from '@/common/checkJump';
 
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref({});
   const viewerStore = useViewerStore();
+  const clickShareItem = ref<any>({})
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -194,10 +197,25 @@
   };
 
   //打开关注框
-  const openShare = (item) => {
+const openShare = (item,type?) => {
+  if(type === 'attention'){
+    h5QrCodeData.value = item.query && JSON.parse(item.query);
+    clickShareItem.value = item
+  }else{
     h5QrCodeData.value = item;
-    homeH5SharePopupRef.value.show();
+  }
+  homeH5SharePopupRef.value.show();
+};
+
+  const closePopClick = () => { 
+    const query = clickShareItem.value.query;
+     if(query&&JSON.parse(query).attention === '1'){
+      setTimeout(()=>{
+        useCommonTo(clickShareItem.value)
+      },500)
+     }
   };
+
 </script>
 
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ import { GStores, useTBanner, TBannerConfig } from '@/utils';
 import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
+import api from '@/service/api';
 
 //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -137,6 +138,38 @@ export const useCommonTo = async (item, payload: IPayLoad = {}) => {
   }
 };
 
+export const isSubscribeWx = async () => {
+  const gStores = new GStores();
+  if (!gStores.globalStore.h5OpenId && globalGl.h5AppId) {
+    uni.reLaunch({
+      url: '/pages/home/startCome',
+    });
+  } else {
+    const { source } = gStores.globalStore.browser;
+    try {
+      uni.showLoading({
+        title: '加载中',
+        mask: true,
+      });
+      const { result } = await api.judgeSubscribeWxAccount({
+        source,
+        openId: gStores.globalStore.h5OpenId,
+      });
+      uni.hideLoading();
+      if (result.subscribe === 0) {
+        //没关注过
+        console.log(9999)
+        return false;
+      } else {
+        return true;
+      }
+    } catch {
+      // 不影响主流程
+      return true;
+    }
+  }
+};
+
 // 回调 h5跳转的方法
 export const typeNavigate = (obj, type) => {
   if (type == 'reLaunch') {
@@ -250,7 +283,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       } else if (item.path == 'makePhone') {
         //拨打电话
         makePhone(item.query);
-      }else {
+      } else {
         const obj3 = {
           url: item.path,
           fail: () => {

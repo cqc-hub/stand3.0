@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useCommonTo,openServicesChat } from '@/common/checkJump';
+  import { useCommonTo,openServicesChat,isSubscribeWx } from '@/common/checkJump';
   import { GStores } from '@/utils';
 
   const emits = defineEmits(['open-share']);
@@ -22,9 +22,13 @@
   const props = defineProps<IGridProps>();
   const gStores = new GStores();
 
-  const gridClick = (item) => {
+  const gridClick = async (item) => {
     console.warn(item)
-    if (item.path && item.path == 'showCareModel') {
+    // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
+    if (item.query && JSON.parse(item.query).attention === '1' && !(await isSubscribeWx())) {
+      emits('open-share', item, 'attention');
+    }else{
+      if (item.path && item.path == 'showCareModel') {
       //关注组件拦截跳转 弹框
       emits('open-share', item.query && JSON.parse(item.query));
     }else if(item.path == 'openWxService'){
@@ -32,6 +36,8 @@
     } else {
       useCommonTo(item);
     }
+    }
+  
   };
 </script>
 

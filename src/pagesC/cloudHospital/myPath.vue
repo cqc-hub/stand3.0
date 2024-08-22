@@ -90,7 +90,7 @@
         console.warn('v3页面路径', src.value);
       }
     });
-    const getQueryPath = (options) => {
+    const getQueryPath = (options) => { 
       // path里面需要传参的时候['sysCode'] options.query有值得时候
       //获取当前默认就诊人的patientid 或者是携带过来的_pd
       const patientId =
@@ -127,6 +127,7 @@
         return query.slice(0, -1);
       }
     };
+
 
     const handleMessage = (evt) => {
       console.warn('返回数据', evt);

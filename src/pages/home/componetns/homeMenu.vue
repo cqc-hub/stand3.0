@@ -116,8 +116,8 @@
     queryHeight();
   };
 
-  const openShare = (item) => {
-    emits('open-share', item);
+  const openShare = (item,type?) => {
+    emits('open-share', item,type);
   };
 
   const queryHeight = () => {
