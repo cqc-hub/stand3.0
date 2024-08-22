@@ -270,6 +270,36 @@ export interface examineReportDetails {
   // 云影像
   yunUrl?: string;
 }
+
+//体检详细出参
+export interface medicalReportDetails {
+ age?: string;
+  applyDoc?: string;
+  applyDocId?: string;
+  applyTime?: string;
+  cardNumber?: string;
+  collect?: string;
+  conclusion?: string;
+  deptId?: string;
+  deptName?: string;
+  hosId?: string;
+  hosName?: string;
+  itemNo?: string;
+  passDoc?: string;
+  passDocId?: string;
+  patientName?: string;
+  regTime?: string;
+  repCode?: string;
+  repId?: string;
+  repName?: string;
+  repTime?: string;
+  reportDoc?: string;
+  reportDocId?: string;
+  serialNo?: string;
+  sex?: string;
+  suggest?: string;
+  visitNo?: string;
+}
 export const getShareTotalUrl = (query, path) => {
   // const source = getBrowser().source;
   query = deQueryForUrl(deQueryForUrl(query));

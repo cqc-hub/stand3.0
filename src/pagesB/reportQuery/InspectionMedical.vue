@@ -73,15 +73,6 @@
               <view class="subhead-detail">
                 {{ checkoutReportList.repTime }}
               </view>
-              <button
-                v-if="!isShow && !checkoutReportList.reminder"
-                class="more-button g-border"
-              >
-                <template>
-                  <view class="more">更多</view>
-                  <text class="iconfont">&#xe6c4;</text>
-                </template>
-              </button>
             </view>
             <view class="hidden-patient-information" v-show="isShow">
               <view v-if="checkoutReportList.regTime" class="subhead">
@@ -109,12 +100,7 @@
                   {{ checkoutReportList.reportDoc }}
                 </view>
               </view>
-              <view v-if="checkoutReportList.specimen" class="subhead">
-                标本类型
-                <view class="subhead-detail">
-                  {{ checkoutReportList.specimen }}
-                </view>
-              </view>
+
 
               <view class="subhead">
                 <block v-if="checkoutReportList.passDoc">
@@ -123,180 +109,24 @@
                     {{ checkoutReportList.passDoc }}
                   </view>
                 </block>
-                <button class="more-button g-border">
-                  <template v-if="isShow && !checkoutReportList.reminder">
-                    <view class="more">收起</view>
-                    <text class="iconfont">&#xe6c5;</text>
-                  </template>
-                </button>
+
               </view>
             </view>
-            <view v-if="checkoutReportList.reminder" class="subhead">
-              检验提示
-              <view
-                style="color: #296fff; width: calc(60%)"
-                class="subhead-detail"
-              >
-                {{ checkoutReportList.reminder }}
-              </view>
-              <button class="more-button g-border">
-                <template v-if="!isShow">
-                  <view class="more">更多</view>
-                  <text class="iconfont">&#xe6c4;</text>
-                </template>
-                <template v-if="isShow">
-                  <view class="more">收起</view>
-                  <text class="iconfont">&#xe6c5;</text>
-                </template>
-              </button>
-            </view>
+    
           </view>
         </view>
-        <view class="container-block-bottom">
-          <!-- 细菌培养模块 -->
-          <template
-            v-if="
-              checkoutReportList.antiItemResult &&
-              checkoutReportList.antiItemResult.length
-            "
-          >
-            <view class="seen">
-              <view class="title">细菌培养</view>
-              <view
-                v-for="(_item, i) in checkoutReportList.antiItemResult"
-                :key="i"
-              >
-                <!-- 细菌培养存在 -->
-                <template v-if="_item.antiList">
-                  <!-- 抗菌药物内容 -->
-                  <view class="seen">
-                    <view class="title">{{ _item.bioName }}</view>
-                    <view class="table">
-                      <view class="table-title">
-                        <view class="table-title1 table-title-first">
-                          抗菌药物
-                        </view>
-                        <view class="table-title2 table-title-common">
-                          解释
-                        </view>
-                        <view class="table-title3 table-title-common">
-                          结果
-                        </view>
-                        <view class="table-title4 table-title-common">
-                          单位
-                        </view>
-                        <view class="table-title5 table-title-common">
-                          方法
-                        </view>
-                      </view>
-                      <template
-                        v-for="(item, index) in checkoutReportList
-                          .antiItemResult[0].antiList"
-                        :key="index"
-                      >
-                        <view class="table-content">
-                          <view class="table-title1 table-content-first">
-                            {{ item.antiName }}
-                          </view>
-                          <view class="table-title2 table-title-common">
-                            {{ item.result }}
-                          </view>
-                          <view
-                            v-if="item.antiResult"
-                            class="table-title3 table-title-common"
-                          >
-                            {{ item.antiResult }}
-                          </view>
-                          <view
-                            v-else
-                            class="table-title3 table-title-common"
-                          ></view>
-                          <view class="table-title4 table-title-common">
-                            {{ item.itemUnits }}
-                          </view>
-                          <view class="table-title5 table-title-common">
-                            {{ item.testMethod }}
-                          </view>
-                        </view>
-                      </template>
-                    </view>
-                  </view>
-                </template>
-                <!-- 细菌培养不存在 -->
-                <template v-else>
-                  <view class="content">未培养出真菌</view>
-                </template>
-              </view>
-            </view>
-          </template>
-
-          <!-- 检验项目模块 -->
-          <template
-            v-if="
-              checkoutReportList.normalList &&
-              checkoutReportList.normalList.length
-            "
-          >
-            <view class="seen">
-              <view class="title">检验项目</view>
-              <view
-                v-if="checkoutReportList.normalList.length != 0"
-                class="table keep-normal"
-              >
-                <view class="table-title">
-                  <view class="table-title1">检验项目</view>
-                  <view class="table-title2 table-title-common">结果</view>
-                  <view class="table-title6 table-title-common">参考范围</view>
-                  <view class="table-title4 table-title-common">单位</view>
-                </view>
-                <template
-                  v-for="item in checkoutReportList.normalList"
-                  :key="item"
-                >
-                  <view class="table-content">
-                    <view class="table-title1">{{ item.itemName }}</view>
-                    <view
-                      v-if="item.itemVal"
-                      class="table-title2 table-title-common"
-                      :class="{
-                        'color-red': item.flag == 'H' || item.flag === '阳',
-                        'color-blue': item.flag === 'L',
-                      }"
-                    >
-                      <text class="text-no-wrap">{{ item.itemVal }}</text>
-                      {{
-                        (item.flag && item.flag.includes('阳') && item.flag) ||
-                        ''
-                      }}
-                      <text class="color-blue" v-if="item.flag == 'L'">↓</text>
-                      <text class="color-danger" v-if="item.flag == 'H'">
-                        ↑
-                      </text>
-                    </view>
-                    <view v-else class="table-title3 table-title-common"></view>
-                    <view class="table-title6 table-title-common">
-                      {{ item.normalVal }}
-                    </view>
-                    <view class="table-title4 table-title-common">
-                      {{ item.itemUnits }}
-                    </view>
-                  </view>
-                </template>
-              </view>
-              <view class="content" v-else></view>
-            </view>
-          </template>
-
-          <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
-          <view v-if="pageProps.repType == 2" class="exegesis">
-            <view class="exegesis-content">
-              <view>注释：</view>
-              <view>S表示敏感，SDD表示剂量依赖性敏感</view>
-              <view>I表示中介</view>
-              <view>R表示耐药</view>
-              <view>MIC最低抑菌浓度</view>
-              <view>KB琼脂扩散法</view>
-              <view>Etest浓度梯度琼脂扩散实验</view>
+         <view class="container-block-bottom">
+          <view class="seen" v-if="checkoutReportList.conclusion">
+            <view class="title">总检结论</view>
+            <view class="content">
+              <text>{{ checkoutReportList.conclusion }}</text>
+              </view
+            >
+          </view>
+          <view class="seen" v-if="checkoutReportList.collect">
+            <view class="title">检查汇总</view>
+            <view class="content">
+             <text>{{ checkoutReportList.collect }}</text>
             </view>
           </view>
         </view>
@@ -333,7 +163,7 @@
         <w-qrcode :options="options" />
       </view>
       <view class="popup-href">
-        <text>检查报告链接有效期至{{ shareEndTime || 'YYYY-MM-DD' }}。</text>
+        <text>体检报告链接有效期至{{ shareEndTime || 'YYYY-MM-DD' }}。</text>
         <text>\n链接：{{ qrVal }}</text>
       </view>
 
@@ -372,7 +202,7 @@
   import { onMounted, ref, computed } from 'vue';
 
   import {
-    checkoutReportDetails,
+    medicalReportDetails,
     getShareTotalUrl,
     addWatermark,
   } from './utils';
@@ -404,7 +234,7 @@
   const isClose = ref(true);
 
   const isShow = ref(false);
-  const checkoutReportList = ref<checkoutReportDetails>({} as any);
+  const checkoutReportList = ref<medicalReportDetails>({} as any);
   const more = () => {
     isShow.value = !isShow.value;
   };
@@ -464,7 +294,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(p)));
   });
 
-  const getCheckoutReportDetails = async () => {
+  const getmedicalReportDetails = async () => {
     const { repId, repType, hosId, extend, useCacheData } = pageProps.value;
     let result: any;
 
@@ -565,7 +395,7 @@
   onMounted(async () => {
     await wait(600);
     getTips();
-    getCheckoutReportDetails();
+    getmedicalReportDetails();
     if (pageProps.value.isWatermark === '1') {
       addWatermark(global.systemInfo.name);
     }
@@ -663,89 +493,42 @@
             // }
           }
         }
-        .container-block-bottom {
-          // width: calc(100% - 64rpx);
-          border-radius: 0rpx 0rpx 16rpx 16rpx;
-          background-color: #fff;
-          border-left: 1rpx solid #e6e6e6;
-          border-right: 1rpx solid #e6e6e6;
-          border-bottom: 1rpx solid #e6e6e6;
-          padding-bottom: 48rpx;
-          .seen {
-            padding-top: 40rpx;
-            .title {
-              font-size: var(--hr-font-size-xl);
-              font-weight: 600;
-              margin-left: 24rpx;
-              margin-bottom: 16rpx;
-            }
-            .content {
-              margin-top: 16rpx;
-              margin-left: 24rpx;
-            }
-            .table {
-              margin: 0 24rpx;
-              box-sizing: border-box;
-              .table-title {
-                height: 72rpx;
-                // width: calc(100% - 16rpx);
-                background-color: #f6f6f6;
-                font-size: var(--hr-font-size-xs);
-                color: #888888;
-                display: flex;
-                align-items: center;
-                padding: 0 16rpx;
-              }
-              .table-content {
-                // width: calc(100% - 16rpx);
-                background-color: #f5f7ff;
-                font-size: var(--hr-font-size-xs);
-                display: flex;
-                margin-top: 8rpx;
-                padding: 14rpx 16rpx;
-                align-items: flex-start;
-              }
-              .table-title-common {
-                text-align: center;
-              }
-              .table-title1 {
-                width: 33%;
-                display: block;
-                text-overflow: ellipsis;
-                word-wrap: break-word;
-              }
-              .table-title2 {
-                width: 16%;
-              }
-              .table-title3 {
-                width: 18.5%;
-              }
-              .table-title4 {
-                width: 14%;
-              }
-              .table-title5 {
-                width: 16%;
-              }
-              .table-title6 {
-                width: 31%;
-              }
-              .down {
-                color: #296fff;
-              }
-              .up {
-                color: #ff5040;
-              }
-            }
+       .container-block-bottom {
+        width: calc(100% - 32rpx);
+        border-radius: 0rpx 0rpx 16rpx 16rpx;
+        background-color: #fff;
+        border-left: 1rpx solid #e6e6e6;
+        border-right: 1rpx solid #e6e6e6;
+        border-bottom: 1rpx solid #e6e6e6;
+        padding-bottom: 16rpx;
+        .seen {
+          padding-top: 40rpx;
+          margin-left: 32rpx;
+          white-space: pre-wrap;
+          .title {
+            font-size: var(--hr-font-size-xl);
+            font-weight: 600;
           }
-          .exegesis {
-            height: auto;
-            // width: calc(100% - 64rpx);
-            margin-left: 24rpx;
-            color: #888888;
-            font-size: var(--hr-font-size-xs);
-            margin-top: 40rpx;
+          .content {
+            margin-top: 16rpx;
+            width: calc(100% - 32rpx);
+            white-space: pre-wrap;
+            .item {
+              height: auto;
+              width: calc(100% - 32rpx);
+              margin-bottom: 32rpx;
+              .item-title {
+                font-size: var(--hr-font-size-base);
+                font-weight: 600;
+              }
+              .item-content {
+                margin-top: 8rpx;
+                white-space: pre-wrap;
+              }
+            }
           }
         }
+      }
       }
     }
     .tips {

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001038",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -282,7 +282,7 @@
     "1001038": {
       "wxAppid": "wxf64e84cf578fe0a7",
       "alipayAppid": "2021002182620396",
-      "h5Appid": "wx65a04aa1dc7776d8",
+      // "h5Appid": "wx65a04aa1dc7776d8",
       "name": "嘉兴第二互联网医院",
       "isSearchInHos": false,
       "isStartComeTest": false,

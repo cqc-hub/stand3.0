@@ -11,86 +11,93 @@
 </template>
 
 <script setup lang="ts">
-    import { onLoad } from '@dcloudio/uni-app';
-    import global from '@/config/global';
-    import { getToken, getSysCode } from '@/common/useToken';
-    import { ref } from 'vue';
-    import { useMessageStore, useCacheStore } from '@/stores';
-    import { GStores,addHosIdForSelfH5Path,handWebMessage,thirdWxPay } from '@/utils';
-    import { encryptDesParam } from '@/common/des';
-    import { joinQuery } from '@/common';
-    import { deQueryForUrl } from '@/common/utils';
+  import { onLoad } from '@dcloudio/uni-app';
+  import global from '@/config/global';
+  import { getToken, getSysCode } from '@/common/useToken';
+  import { ref } from 'vue';
+  import { useMessageStore, useCacheStore } from '@/stores';
+  import {
+    GStores,
+    addHosIdForSelfH5Path,
+    handWebMessage,
+    thirdWxPay,
+  } from '@/utils';
+  import { encryptDesParam } from '@/common/des';
+  import { joinQuery } from '@/common';
+  import { deQueryForUrl } from '@/common/utils';
 
-    type IPageProps = {
-      hosId?: string;
-      type?: string; // 扫码时候带
-      path?: string;
-    };
-    // 自研h5页面统一入口
-    const messageStore = useMessageStore();
-    const gStores = new GStores();
-    const cacheStore = useCacheStore();
+  type IPageProps = {
+    hosId?: string;
+    type?: string; // 扫码时候带
+    path?: string;
+  };
+  // 自研h5页面统一入口
+  const messageStore = useMessageStore();
+  const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
-    const webviewStyles = {
-      progress: {
-        color: '#4C8FFF',
-      },
-    };
-    const src = ref();
-    const pageProp = ref({} as IPageProps);
+  const webviewStyles = {
+    progress: {
+      color: '#4C8FFF',
+    },
+  };
+  const src = ref();
+  const pageProp = ref({} as IPageProps);
 
-    const allData = {
-      sysCode: getSysCode(),
-      token: gStores.globalStore.token.accessToken,
-      hosId: '',
-      herenId: gStores.globalStore.herenId,
-      source: gStores.globalStore.browser.source,
-      openId: gStores.globalStore.openId,
-      phone: gStores.userStore.phoneNum, //账号下的手机号（仅微信）
-    };
-    type A = keyof typeof allData;
+  const allData = {
+    sysCode: getSysCode(),
+    token: gStores.globalStore.token.accessToken,
+    hosId: '',
+    herenId: gStores.globalStore.herenId,
+    source: gStores.globalStore.browser.source,
+    openId: gStores.globalStore.openId,
+    phone: gStores.userStore.phoneNum, //账号下的手机号（仅微信）
+  };
+  type A = keyof typeof allData;
 
-    // 页面固定携带 sysCode  加密参数（herenId patientid）
-    onLoad((options) => {
-      pageProp.value = deQueryForUrl<IPageProps>(deQueryForUrl(options));
+  // 页面固定携带 sysCode  加密参数（herenId patientid）
+  onLoad((options) => {
+    pageProp.value = deQueryForUrl<IPageProps>(deQueryForUrl(options));
 
-      allData.hosId = pageProp.value.hosId || '';
-      let query = getQueryPath(pageProp.value);
-      if (pageProp.value.type == '1') {
-        //第三方的h5  ?sysCode=${allData.sysCode}
-        let newQuery = getQueryPath(pageProp.value);
-        src.value = `${pageProp.value.path}${newQuery}`;
+    allData.hosId = pageProp.value.hosId || '';
+    let query = getQueryPath(pageProp.value);
+    if (pageProp.value.type == '1') {
+      //第三方的h5  ?sysCode=${allData.sysCode}
+      let newQuery = getQueryPath(pageProp.value);
+      src.value = `${pageProp.value.path}${newQuery}`;
+    } else {
+      //自研h5
+      const baseUrl = global.h5Url.slice(0, -1);
+      //公告跳转的咨询
+      if (pageProp.value.type == '2') {
+        let path = decodeURIComponent(pageProp.value.path as string);
+        src.value = `${baseUrl}${path}`;
       } else {
-        //自研h5
-        const baseUrl = global.h5Url.slice(0, -1);
-        //公告跳转的咨询
-        if (pageProp.value.type == '2') {
-          let path = decodeURIComponent(pageProp.value.path as string);
-          src.value = `${baseUrl}${path}`;
-        } else {
-          //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
-          let newQuery = '';
-          let obj = JSON.parse(JSON.stringify(options));
+        //处理配置的参数query 目前为了my-h5 健康资讯对应tab typeId
+        let newQuery = '';
+        let obj = JSON.parse(JSON.stringify(options));
 
-          delete obj.path;
-          delete obj.query;
-          delete obj._pd;
+        delete obj.path;
+        delete obj.query;
+        delete obj._pd;
 
-          // 携带参数的情况
-          if (JSON.stringify(obj) != '{}') {
-            newQuery += '&' + joinQuery('', obj).slice(1);
-          }
-            //额外处理 类似杭口 必须携带院区数据
-          if(cacheStore.isShowChooseHos && cacheStore.hosId !== ''){
-            src.value = addHosIdForSelfH5Path(`${baseUrl}${pageProp.value.path}${query}${newQuery}`)
-          }else{
-            src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
-          }
+        // 携带参数的情况
+        if (JSON.stringify(obj) != '{}') {
+          newQuery += '&' + joinQuery('', obj).slice(1);
         }
-        console.warn('v3页面路径', src.value);
+        //额外处理 类似杭口 必须携带院区数据
+        if (cacheStore.isShowChooseHos && cacheStore.hosId !== '') {
+          src.value = addHosIdForSelfH5Path(
+            `${baseUrl}${pageProp.value.path}${query}${newQuery}`
+          );
+        } else {
+          src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
+        }
       }
-    });
-    const getQueryPath = (options) => {
+      console.warn('v3页面路径', src.value);
+    }
+  });
+  const getQueryPath = (options) => {
     // path里面需要传参的时候['sysCode'] options.query有值得时候
     //获取当前默认就诊人的patientid 或者是携带过来的_pd
     const patientId =
@@ -111,47 +118,53 @@
       : gStores.globalStore.modeOld;
 
     let query = '?';
-    if (options.type == '2') {
+    if (options.type !== '1') {
       query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&`;
     }
     if (options.query) {
       let queryArray: A[];
-      if (options.type == '2') {
-        queryArray = JSON.parse(options.query as string);
-      } else {
+      if (options.type == '1') {
         queryArray = JSON.parse(options.query as string)?.query;
+      } else {
+        queryArray = JSON.parse(options.query as string);
       }
-      queryArray.map((item) => {
-        if (item in allData) {
-          query = query + item + '=' + allData[item] + '&';
-        } else {
-          // messageStore.showMessage(`携带${item}参数有误`, 1000);
-          console.warn(`携带${item}参数有误`);
-        }
-      });
+      try {
+        queryArray.map((item) => {
+          if (item in allData) {
+            query = query + item + '=' + allData[item] + '&';
+          } else {
+            // messageStore.showMessage(`携带${item}参数有误`, 1000);
+            console.warn(`携带${item}参数有误`);
+          }
+        });
+      } catch (e) {
+        console.warn(e);
+        return '';
+      }
+
       return query.slice(0, -1);
     } else {
       return query.slice(0, -1);
     }
   };
 
-    const handleMessage = (evt) => {
-      console.warn('返回数据', evt);
-      handWebMessage(evt);
-      var data = evt.target.data;
-      var V3PageData = data[0];
-      if (V3PageData.appId) {
-        thirdWxPay(V3PageData)
-      } else if(V3PageData.gisLat) {
-        //打开地图
-        uni.openLocation({
-          latitude: Number(V3PageData.gisLat),
-          longitude: Number(V3PageData.gisLng),
-          name: V3PageData.hosName,
-          address: V3PageData.address,
-        });
-      }
-    };
+  const handleMessage = (evt) => {
+    console.warn('返回数据', evt);
+    handWebMessage(evt);
+    var data = evt.target.data;
+    var V3PageData = data[0];
+    if (V3PageData.appId) {
+      thirdWxPay(V3PageData);
+    } else if (V3PageData.gisLat) {
+      //打开地图
+      uni.openLocation({
+        latitude: Number(V3PageData.gisLat),
+        longitude: Number(V3PageData.gisLng),
+        name: V3PageData.hosName,
+        address: V3PageData.address,
+      });
+    }
+  };
 </script>
 
 <style scoped></style>
