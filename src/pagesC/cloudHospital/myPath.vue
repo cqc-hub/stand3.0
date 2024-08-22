@@ -58,8 +58,8 @@
       let query = getQueryPath(pageProp.value);
       if (pageProp.value.type == '1') {
         //第三方的h5  ?sysCode=${allData.sysCode}
-        src.value = `${pageProp.value.path}`;
-        console.warn('第三方页面路径', src.value);
+        let newQuery = getQueryPath(pageProp.value);
+        src.value = `${pageProp.value.path}${newQuery}`;
       } else {
         //自研h5
         const baseUrl = global.h5Url.slice(0, -1);
@@ -90,44 +90,50 @@
         console.warn('v3页面路径', src.value);
       }
     });
-    const getQueryPath = (options) => { 
-      // path里面需要传参的时候['sysCode'] options.query有值得时候
-      //获取当前默认就诊人的patientid 或者是携带过来的_pd
-      const patientId =
-        options._pd ||
-        (gStores.userStore.patChoose && gStores.userStore.patChoose.patientId);
-      const herenId = gStores.globalStore && gStores.globalStore.herenId;
+    const getQueryPath = (options) => {
+    // path里面需要传参的时候['sysCode'] options.query有值得时候
+    //获取当前默认就诊人的patientid 或者是携带过来的_pd
+    const patientId =
+      options._pd ||
+      (gStores.userStore.patChoose && gStores.userStore.patChoose.patientId);
+    const herenId = gStores.globalStore && gStores.globalStore.herenId;
 
-      //默认加密参数
-      let desObj = {
-        _patientId: patientId,
-        _herenId: herenId,
-        _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
-        _isDes: global.isOpenDes,
-      };
-      let _d = encryptDesParam(desObj);
-      let modeOld = gStores.globalStore.modeOld
-        ? '1'
-        : gStores.globalStore.modeOld;
-
-      let query =
-        '?_d=' + _d + '&sysCode=' + allData.sysCode + '&modeOld=' + modeOld + '&';
-      if (options.query) {
-        let queryArray: A[] = JSON.parse(options.query as string);
-        queryArray.map((item) => {
-          if (item in allData) {
-            query = query + item + '=' + allData[item] + '&';
-          } else {
-            // messageStore.showMessage(`携带${item}参数有误`, 1000);
-            console.warn(`携带${item}参数有误`);
-          }
-        });
-        return query.slice(0, -1);
-      } else {
-        return query.slice(0, -1);
-      }
+    //默认加密参数
+    let desObj = {
+      _patientId: patientId,
+      _herenId: herenId,
+      _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
+      _isDes: global.isOpenDes,
     };
+    let _d = encryptDesParam(desObj);
+    let modeOld = gStores.globalStore.modeOld
+      ? '1'
+      : gStores.globalStore.modeOld;
 
+    let query = '?';
+    if (options.type == '2') {
+      query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&`;
+    }
+    if (options.query) {
+      let queryArray: A[];
+      if (options.type == '2') {
+        queryArray = JSON.parse(options.query as string);
+      } else {
+        queryArray = JSON.parse(options.query as string)?.query;
+      }
+      queryArray.map((item) => {
+        if (item in allData) {
+          query = query + item + '=' + allData[item] + '&';
+        } else {
+          // messageStore.showMessage(`携带${item}参数有误`, 1000);
+          console.warn(`携带${item}参数有误`);
+        }
+      });
+      return query.slice(0, -1);
+    } else {
+      return query.slice(0, -1);
+    }
+  };
 
     const handleMessage = (evt) => {
       console.warn('返回数据', evt);
