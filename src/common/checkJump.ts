@@ -157,9 +157,11 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   const type = payload.type;
   switch (item.terminalType) {
     case 'h5':
+      let query=''
+      item.query&(query=`&query=${item.query}`) as any
       const obj = {
         url:
-          '/pagesC/cloudHospital/myPath?type=1&path=' +
+          '/pagesC/cloudHospital/myPath?type=1'+query+'&path=' +
           encodeURIComponent(item.path),
         fail: () => {
           gStores.messageStore.showMessage(

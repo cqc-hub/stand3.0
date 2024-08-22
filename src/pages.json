@@ -472,6 +472,12 @@
           }
         },
         {
+          "path": "reportQuery/InspectionMedical",
+          "style": {
+            "navigationBarTitleText": "体检报告"
+          }
+        },
+        {
           "path": "reportQuery/medicalDetails",
           "style": {
             "navigationBarTitleText": "体检报告"

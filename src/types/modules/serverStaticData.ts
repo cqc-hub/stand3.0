@@ -111,6 +111,7 @@ export interface ISystemConfig_ {
     takeNumberAfterBtnForGoQueueNumber?: '1'; // 取号后  按钮变成 '查看排队信息': 跳 排队叫号; 默认 '刷码签到'
     takeNumber1ElectronicGuideBtn?: '1'; //否显示排队叫号入口按钮
     takeNumberConfirmAfter?: '1'; // 取号成功后 按照项目配置是否进行弹窗提示(去门诊缴费页面)
+    expireButRetrieve?: '1'; //过号后进行弹窗并允许重新取号
     takeNumberHeadBtns?: TButtonConfig[]; // 取号顶部按钮
     onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
     takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
@@ -423,7 +424,7 @@ export interface ISystemConfig_ {
     //智能陪诊
     medicalAsistantConfig?: {
       //智能陪诊日期右侧区域的按钮
-        timeLineBtn?: Array<TButtonConfig>;//extraData需要包含code，会去匹配接口中navigationCodeJson中的code，匹配上则展示
+        timeLineBtn?: Array<TButtonConfig>;//写死的按钮
         contentBtn?: TButtonConfig[];//依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则传{}
         bottomBtn?: TButtonConfig[];//最多展示两个icon按钮和两个普通按钮
     }

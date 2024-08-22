@@ -409,6 +409,8 @@ const queryApi = {
     service.post('/phs-query/examine/getExamineReportDetails', parm(data)),
   getCheckoutReportDetails: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
+  getMedicalReportDetails: <T = any>(data) =>
+    service.post('/phs-query/examine/getMedicalReportDetails', parm(data)),
   getCheckoutReportInfo: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportInfo', parm(data)),
   getCloudReportUrl: <T = any>(data) =>

@@ -107,11 +107,11 @@
         ...cacheStore.cacheData,
         ...formData.value,
         verifyType: '1&bk',
-      })
+      });
 
       await patientUtils.getPatCardList();
       routerJump('/pagesA/medicalCardMan/medicalCardMan');
-      return
+      return;
     }
 
     gStores.messageStore.showMessage('信息核验成功，已为您修改手机号！', 3000, {
@@ -146,6 +146,8 @@
 
       return await api.mofHosPhone(args);
     } else {
+      args.pdata = formData.value.pdata;
+      return await api.mofHosPhone(args);
     }
 
     throw new Error('未实现 ocr 功能');

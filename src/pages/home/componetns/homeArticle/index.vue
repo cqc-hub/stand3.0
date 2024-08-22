@@ -29,9 +29,9 @@
         :tabs="tabs"
         :height="(isShowTopTab && '55rpx') || '88rpx'"
         :lineColor="isShowTopTab && '#fff'"
-         :fontSize="
-            isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
-          "
+        :fontSize="
+          isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
+        "
         @change="tabChange"
         field="typeName"
         blod
@@ -57,7 +57,7 @@
               @item-click="itemClick"
               class="fade-in"
             />
-            <view class="f28 ">
+            <view class="f28">
               <view
                 v-if="showMore"
                 @click="readMore(tab.typeId)"
@@ -65,13 +65,19 @@
               >
                 查看更多
               </view>
-              <view v-else class="read-more">没有更多了</view>
+              <view v-else-if="pageList[tab.typeId]?.length" class="read-more">
+                没有更多了
+              </view>
             </view>
+          </view>
+
+          <view v-if="!pageList[tab.typeId]?.length" class="empty-box">
+            <g-empty :current="1" />
           </view>
         </scroll-view>
       </swiper-item>
     </swiper>
-    <view v-show="isSearch" class="container">
+    <view v-show="isSearch" class="container" >
       <view class="container-scroll fade-in" :id="`Advisory-search-Item`">
         <Advisory-Item
           v-for="(item, index) in searchList"
@@ -84,7 +90,13 @@
           <view v-if="showMore" @click="readMore('search')" class="read-more">
             点击查看更多
           </view>
-          <view v-else class="read-more">没有更多了</view>
+          <view v-else-if="searchList?.length" class="read-more">
+            没有更多了
+          </view>
+        </view>
+
+        <view v-if="!searchList?.length" class="empty-box">
+          <g-empty :current="1" />
         </view>
       </view>
     </view>
@@ -176,7 +188,7 @@
   };
 
   const fetchData = async () => {
-    const typeId = tabs.value[tabCurrent.value].typeId;
+    const typeId = tabs.value[tabCurrent.value]?.typeId;
     const requestArg = {
       pageNumber: 1,
       pageSize: 5,
@@ -211,7 +223,7 @@
         if (data) {
           // @ts-expect-error
           const { height: _height } = data;
-          swiperHeight.value = _height < 80 ? 80 : _height;
+          swiperHeight.value = _height < 120 ? 120 : _height;
         }
       })
       .exec();
@@ -349,6 +361,11 @@
     color: #888;
     margin: auto;
     width: fit-content;
-    padding-bottom:32rpx
+    padding-bottom: 32rpx;
+  }
+  .empty-box {
+    // position: relative;
+    transform: translateY(30%) !important;
+    // padding: 30rpx 0;
   }
 </style>

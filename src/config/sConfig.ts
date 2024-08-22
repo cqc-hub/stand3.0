@@ -361,6 +361,22 @@ const scJson: Record<string, ISConfig> = {
     },
     isOpenHelpOld: '1',
   },
+
+    /**
+   * 嘉兴第二互联网医院
+   */
+  1001038: {
+    isOpenHelpOld: '1',
+    medicalMHelp: {
+      // isOpenPatToMedicalPat: {},
+      alipay: {
+        medicalPlugin: {
+          orgId: { 13014: 'H33040200352' },
+          cardType: '01',
+        },
+      },
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {

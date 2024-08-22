@@ -24,7 +24,10 @@
             </text>
             <scroll-view scroll-x class="aaa">
               <!-- 按钮 -->
-              <AGuideList :list="guideContent.navigationCode" />
+              <AGuideList
+                :list="pageConfig?.medicalAsistantConfig?.timeLineBtn"
+                :data="currentTab"
+              />
             </scroll-view>
           </view>
           <view
@@ -43,8 +46,40 @@
                 :mainColor="getItemStyle(item).mainColor"
                 :bgColor="getItemStyle(item).bgColor"
                 :item="item"
+                :btns="pageConfig?.medicalAsistantConfig?.contentBtn"
               />
             </view>
+          </view>
+        </view>
+      </view>
+      <view class="footer flex-normal g-footer pb24">
+        <view
+          @click="useTBanner(btn,'navigateTo',currentTab)"
+          class="footer-icon-btn item mr12"
+          :class="{
+            'icon-flex': btn.icon,
+            mr24:
+              pageConfig?.medicalAsistantConfig?.bottomBtn?.length &&
+              pageConfig?.medicalAsistantConfig?.bottomBtn?.length < 4,
+          }"
+          v-for="(btn, idx) in pageConfig?.medicalAsistantConfig?.bottomBtn"
+        >
+          <view
+            v-if="btn.icon"
+            :class="{
+              [btn.icon]: 1,
+            }"
+            class="icon-font mb4 icon-button"
+          />
+
+          <view
+            class="f24 text-no-wrap"
+            :class="{
+              'footer-btn': !btn.icon,
+              f36: !btn.icon,
+            }"
+          >
+            {{ btn?.text }}
           </view>
         </view>
       </view>
@@ -64,6 +99,7 @@
     debounce,
     ServerStaticData,
     ISystemConfig,
+    useTBanner,
   } from '@/utils';
   import { HosGuideParams, HosGuideSheet, GuideContent } from './types';
   import { getItemStyle } from './utils';
@@ -84,35 +120,15 @@
     tabValue: '',
     disposeTime: '',
   });
+  const currentTab = ref<HosGuideSheet>();
   const pageConfig = ref(<ISystemConfig['Electronic_Consultation_Sheet']>{});
   onLoad(() => {
     init();
   });
   const init = async () => {
-    // #ifdef MP-ALIPAY
     pageConfig.value = await ServerStaticData.getSystemConfig(
       'Electronic_Consultation_Sheet'
-    )['inAlipay'];
-    // #endif
-    // #ifdef  MP-WEIXIN
-    pageConfig.value = await ServerStaticData.getSystemConfig(
-      'Electronic_Consultation_Sheet'
-    )['inWx'];
-    // #endif
-    pageConfig.value.medicalAsistantConfig = {
-      timeLineBtn: [
-        {
-          appId: 'wx8735a8a39cf58b5e',
-          path: 'pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU',
-          text: '院内导航',
-          type: 'otherProgram',
-          addition: { hosDeptId: 'poi' },
-          extraData:{code:'123456789'}
-        },
-      ],
-    };
-
-    console.log('pageConfig.value', pageConfig.value);
+    );
     getListData();
   };
   let getListData = async () => {
@@ -322,16 +338,16 @@
     const item = guideSheetList.value[idx];
     const { processResultList, visitNo, disposeTime, navigationCodeJson } =
       item;
-
+    currentTab.value = item;
     guideContent.list = processResultList || [];
     guideContent.navigationCode = {};
     guideContent.disposeTime = disposeTime;
     guideContent.tabValue = visitNo || '';
 
-    console.log('guideContent.value.list', guideContent.list);
-    if (navigationCodeJson) {
-      guideContent.navigationCode = JSON.parse(navigationCodeJson);
-    }
+    // console.log('guideContent.value.list', guideContent.list);
+    // if (navigationCodeJson) {
+    //   guideContent.navigationCode = JSON.parse(navigationCodeJson);
+    // }
   };
 </script>
 
@@ -396,21 +412,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .footer-btn {
-    padding: 0 30rpx;
-    font-weight: 600;
-    background: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 8px;
-    width: 208rpx;
-    overflow-x: auto;
-
-    &.footer-btn-primary {
-      color: #fff;
-      background: #296fff;
-    }
+    flex: 1 1 auto;
   }
 
   .w100 {
@@ -421,5 +423,38 @@
     overflow: hidden;
     overflow-y: scroll;
     width: 100%;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  .item {
+    justify-content: center;
+    min-height: 88rpx;
+
+    .icon-font {
+      height: 48rpx;
+      width: 48rpx;
+    }
+  }
+  .footer-btn {
+    padding: 20rpx 0;
+    font-weight: 600;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    width: 100% !important;
+    overflow-x: auto;
+    text-align: center;
+  }
+  .footer-icon-btn:last-of-type .footer-btn {
+    color: #fff;
+    background: #296fff;
+  }
+  .icon-flex {
+    flex: 0 0 50rpx;
   }
 </style>

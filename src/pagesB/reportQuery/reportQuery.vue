@@ -48,7 +48,10 @@
       <view
         class="bg-white p24 pt8 pb8 rounded f26 font-semibold flex items-center"
       >
-        <text class="mr6">{{ dayjs(dateRange[0]).format('YYYY/MM/DD') }} ~ {{ dayjs(dateRange[1]).format('YYYY/MM/DD') }}</text>
+        <text class="mr6">
+          {{ dayjs(dateRange[0]).format('YYYY/MM/DD') }} ~
+          {{ dayjs(dateRange[1]).format('YYYY/MM/DD') }}
+        </text>
         <text class="icon-font ico_triangle_down" />
       </view>
     </view>
@@ -214,16 +217,19 @@
     })
   );
   const showTimeLabel = computed(() => {
-    const timeRangeStr=  dateRange.value.join(',');
+    const timeRangeStr = dateRange.value.join(',');
 
-    return timeBtnOpt.value.find(o => o.value === timeRangeStr)?.label || ''
-  })
-  const dateRange = ref<[string, string]>([dayjs().subtract(1, 'year').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')]);
-  const dateRangeChange = range => {
+    return timeBtnOpt.value.find((o) => o.value === timeRangeStr)?.label || '';
+  });
+  const dateRange = ref<[string, string]>([
+    dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+    dayjs().format('YYYY-MM-DD'),
+  ]);
+  const dateRangeChange = (range) => {
     dateRange.value = range;
     // tabChange(tabCurrent.value, '');
     getCurrentLoadScrollInstance()?.refresh();
-  }
+  };
 
   const init = async () => {
     const { listYun, reportTab } = pageConfig.value;
@@ -438,7 +444,6 @@
       isDownloadRepor: isDownloadRepor === '1' || '',
       isGraphic,
     };
-
     const mq: any = {
       // #ifdef MP-WEIXIN
       _local: '1',
@@ -473,6 +478,10 @@
       if (data.url) {
         repShareRef.value.show();
         currentTjData.value = data;
+      } else {
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesB/reportQuery/InspectionMedical', mq),
+        });
       }
     }
   };

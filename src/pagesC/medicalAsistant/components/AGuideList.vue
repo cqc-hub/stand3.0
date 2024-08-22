@@ -1,62 +1,27 @@
 <template>
-  <view class="flex-normal">
+  <view class="flex-normal" v-if="list && list.length">
     <view class="flex-normal">
       <view
         v-for="(item, idx) in list"
-        :key="item.label"
-        @click="itemClick(item, idx)"
+        :key="item?.text + idx"
+        @click="useTBanner(item, 'navigateTo',data)"
         class="item g-border text-no-wrap color-444 f28 active"
       >
-        <view class="label">{{ item.label }}</view>
+        <view class="label">{{ item.text }}</view>
       </view>
     </view>
     <view class="safe-width">2</view>
   </view>
 </template>
 <script setup lang="ts">
+  import { TButtonConfig } from '@/types/modules/serverStaticData';
+  import { useTBanner } from '@/utils';
+  import { HosGuideSheet } from '../types';
   const props = defineProps<{
-    list: any;
+    list: TButtonConfig[] | undefined;
+    data: HosGuideSheet | undefined;
   }>();
-  const itemClick = (
-    { code, hosId }: { code: string; hosId: string },
-    idx: number
-  ) => {
-    
-    
-  };
-
-  //     itemClick({ code, hosId }, idx) {
-  //       const subOrgCode = "SUB_ORG9051101";
-  //       // #ifdef MP-WEIXIN
-  //       if (hosId == "03") {
-  //         //越城院区
-  //         let path =
-  //           "?buildId=0C3V01&url=" +
-  //           encodeURIComponent(`https://his.ipalmap.com/navigation/dist/index.html#/map?appsId=10259&deptId=${code}`);
-  //         uni.navigateToMiniProgram({
-  //           appId: "wx83884e3a215b20f4",
-  //           path: "pages/map/mapView" + path,
-  //         });
-  //       } else {
-  //         wx.navigateToMiniProgram({
-  //           appId: "wx0aeb52a97a73acc3",
-  //           path: `/subPackages/hospital/pages/classification/index?subOrgCode=${subOrgCode}&type=${code}`,
-  //         });
-  //       }
-  //       // #endif
-
-  //       // #ifdef MP-ALIPAY
-  //       my.navigateToMiniProgram({
-  //         appId: "2021003142699208",
-  //         path: "pages/classification/index",
-  //         query: {
-  //           subOrgCode,
-  //           type:code,
-  //         },
-  //       });
-  //       // #endif
-  //     },
-  //   },
+  console.log('props', props);
 </script>
 
 <style lang="scss" scoped>
