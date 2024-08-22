@@ -43,7 +43,7 @@
     <scroll-view class="scroll-container g-container" scroll-y>
       <g-tbanner
         :config="orderConfig.bannerSelHosTop"
-        @click="useTBanner(orderConfig.bannerSelHosTop!)"
+        @click="useTBanner(orderConfig.bannerSelHosTop!, 'navigateTo', props)"
         disabled
       />
 

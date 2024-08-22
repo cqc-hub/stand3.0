@@ -395,7 +395,8 @@ export const addHosIdForSelfH5Path = (path: string) => {
 
 /**第三方自费支付 */
 export const thirdWxPay = (V3PageData) => {
-  const { nonceStr, paySign, signType, timeStamp } = V3PageData;
+  const { nonceStr, paySign, signType, timeStamp,miniUrl ,successUrl} = V3PageData;
+  !miniUrl && successUrl && (V3PageData.miniUrl = successUrl);
   const invokeData = {
     nonceStr,
     packAge: V3PageData.package,

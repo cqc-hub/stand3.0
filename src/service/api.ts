@@ -418,6 +418,12 @@ const queryApi = {
     service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
+  getCmsList: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsList', parm(data)),
+  getCmsTypeList: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsTypeList', parm(data)),
+  getCmsListByWordSearch: <T = any>(data) =>
+    service.post('/phs-base/cms/getCmsListByWordSearch', parm(data)),
 };
 
 // 挂号服务
@@ -452,6 +458,7 @@ const regApi = {
   getCheckIn: (data: any) =>
     service.post('/phs-reg/reg/getCheckIn', parm(data), {
       hideLoading: false,
+      showMessage: false,
     }),
 
   regPreSettlement: (data: any) =>
@@ -669,6 +676,11 @@ const userApi = {
 
   rpGetPlain: (data) =>
     service.post('/phs-user/rePat/rpGetPlain', parm(data), {
+      hideLoading: false,
+    }),
+
+  analyzePatInfoInHos: (data) =>
+    service.post('/phs-user/rePat/analyzePatInfoInHos', parm(data), {
       hideLoading: false,
     }),
 

@@ -19,6 +19,7 @@
       >
         <view
           class="v-tabs__container-item f32"
+          :id="`v-tabs__container-item${contentUuid}`"
           v-for="(v, i) in tabs"
           :key="i"
           :style="{
@@ -70,7 +71,7 @@
 </template>
 
 <script>
-  import { wait } from '@/utils';
+  import { wait, generateUuid } from '@/utils';
   /**
    * v-tabs
    * @property {Number} value 选中的下标
@@ -208,6 +209,7 @@
         scrollLeft: 0, // 距离左边的位置
         containerWidth: 0, // 容器的宽度
         current: 0, // 当前选中项
+        contentUuid: '', //唯一Uuid
       };
     },
     watch: {
@@ -265,7 +267,7 @@
           .exec();
         // 获取所有的 tab-item 的宽度
         query
-          .selectAll('.v-tabs__container-item')
+          .selectAll(`#v-tabs__container-item${this.contentUuid}`)
           .boundingClientRect(async (data) => {
             if (!data) {
               return;
@@ -308,6 +310,7 @@
     },
     mounted() {
       this.elId = 'xfjpeter_' + this.randomString();
+      this.contentUuid = generateUuid();
       this.current = this.value;
       this.$nextTick(() => {
         this.getTabItemWidth();

@@ -110,6 +110,12 @@ export const applyOrderStatusMap = {
     color: 'var(--hr-neutral-color-7)',
     detailColor: 'var(--hr-error-color-6)',
   },
+  '25': {
+    detailColor: '#fff', // 结算失败
+    title: '待发货',
+    headerClass: 'header-blue',
+    color: 'var(--hr-brand-color-6)',
+  },
 } as const;
 
 type Express_1 = {
@@ -207,6 +213,7 @@ export type CaseCopeItemDetail = Flatten<
     _outInfo?: TOutInfo[];
     expressFee?: string;
     refundFee?: string;
+    copyFee?: string;
     refundReason: string;
     remark: string;
     expressNo: string;

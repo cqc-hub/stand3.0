@@ -415,7 +415,7 @@
       // });
 
       // useTBanner(healthRecord)
-      useTBanner(serviceCenter);
+      useTBanner(我的收藏);
     }, 1000);
   });
 </script>

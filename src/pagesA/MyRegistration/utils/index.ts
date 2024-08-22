@@ -401,7 +401,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     deptId?: string;
     hosId: string;
   }) => {
-    if (data && Object.keys(data).length) {
+    if (data && Object.keys(data).length && data.hosId) {
       const {
         clinicalType,
         hosDeptId: _hosDeptId,

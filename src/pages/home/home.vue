@@ -1,7 +1,7 @@
 <template>
   <view class="g-page">
     <home-Nav />
-    <scroll-view @scroll="pageScroll" class="scroll-page g-container" scroll-y>
+    <scroll-view @scroll="pageScroll" @scrolltolower="handePageBottom" class="scroll-page g-container" scroll-y>
       <ls-skeleton :skeleton="skeletonProps.skeleton" :loading="viewerStore.loading">
         <!-- 正常版本 -->
         <view
@@ -92,7 +92,7 @@
 
             <view class="top-menu">
               <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid :list="viewerStore.homeTopMenuList" :type="1" @open-share="openShare" />
+                <homeGrid :list="viewerStore.homeTopMenuList" :type="1"   @open-share="openShare" />
               </view>
               <view class="notice flex-normal g-fade-in" v-if="viewerStore.homeNoticeText">
                 <text class="icon-font img_announcement icon-size"></text>
@@ -164,6 +164,9 @@
           <view class="fun-list" v-if="viewerStore.homeMenuList.length">
             <homeMenu :list="viewerStore.homeMenuList" :tabIndex="props.tabIndex" @open-share="openShare" />
           </view>
+          <view class="fun-list" v-if="global.sConfig.isOpenPopularSci">
+            <homeArticle ref="HomeArticleRef" />
+          </view>
           <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
             <image :src="$global.BASE_IMG + 'img_logo@3x.png'" mode="widthFix" />
           </view>
@@ -231,7 +234,7 @@
 
             <view class="top-menu-old">
               <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid :list="viewerStore.homeTopMenuList" :type="3" @open-share="openShare" />
+                <homeGrid :list="viewerStore.homeTopMenuList" :type="3" />
               </view>
             </view>
             <view class="isCloseOld flex-normal" @tap="openModeOld">
@@ -259,186 +262,205 @@
   </view>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import { onLoad, onShow, onShareTimeline } from '@dcloudio/uni-app';
+  import { ref } from 'vue';
+  import {
+    onLoad,
+    onShow,
+    onShareTimeline,
+    onReachBottom,
+  } from '@dcloudio/uni-app';
 
-import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
-import { useViewerStore } from '@/stores/modules/viewer';
-import { getLocalStorage, removeLocation } from '@/common/useToken';
+  import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
+  import { useViewerStore } from '@/stores/modules/viewer';
+  import { getLocalStorage, removeLocation } from '@/common/useToken';
 
-import {
-  aliLogin,
-  wxLogin,
-  GStores,
-  routerJump,
-  LoginUtils,
-  Login,
-  LoginType,
-  PatientUtils,
-  ServerStaticData,
-  useTBanner,
-  type TButtonConfig,
-  type ISystemConfig,
-} from '@/utils';
+  import {
+    aliLogin,
+    wxLogin,
+    GStores,
+    routerJump,
+    LoginUtils,
+    Login,
+    LoginType,
+    PatientUtils,
+    ServerStaticData,
+    useTBanner,
+    type TButtonConfig,
+    type ISystemConfig,
+  } from '@/utils';
 
-import global from '@/config/global';
-import api from '@/service/api';
+  import global from '@/config/global';
+  import api from '@/service/api';
 
-import homeBanner from './componetns/homeBanner.vue';
-import homeMenu from './componetns/homeMenu.vue';
-import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
-import homeTabbar from './componetns/homeTabbar.vue';
-import homeGrid from './componetns/homeGrid.vue';
-import homeNav from './componetns/homeNav.vue';
-import homePopup from './componetns/homePopup.vue';
-import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
-import { goElectronicMedicalCard } from './utils';
-import { deQueryForUrl} from '@/common';
-import { useCommonTo } from '@/common/checkJump';
+  import homeBanner from './componetns/homeBanner.vue';
+  import homeMenu from './componetns/homeMenu.vue';
+  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
+  import homeTabbar from './componetns/homeTabbar.vue';
+  import homeGrid from './componetns/homeGrid.vue';
+  import homeNav from './componetns/homeNav.vue';
+  import homePopup from './componetns/homePopup.vue';
+  import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
+  import homeArticle from './componetns/homeArticle/index.vue';
+  import { goElectronicMedicalCard } from './utils';
+  import { deQueryForUrl } from '@/common';
+  import { useCommonTo } from '@/common/checkJump';
 
-const props = ref({
-  code: '',
-  tabIndex: 0,
-  openId: ''
-});
-const gStores = new GStores();
-const patientUtils = new PatientUtils();
-const loginUtils = new LoginUtils();
-const viewerStore = useViewerStore();
-const globalStore = useGlobalStore();
-const refOldDialog = ref();
-const homeH5SharePopupRef = ref('' as any);
-const h5QrCodeData = ref();
-const personConfig = ref(<ISystemConfig['person']>{});
-const clickShareItem = ref<any>({})
-
-//骨架屏配置
-const skeletonProps = ref({
-  skeleton: [
-    'line-lg',
-    24,
-    'line-lg',
-    'card+card+card+card',
-    24,
-    'card-lg+card-lg',
-    32,
-    'line-lg',
-    'card-sm+card-sm+card-sm+card-sm',
-    0,
-    'card-sm+card-sm+card-sm+card-sm',
-  ],
-});
-// 就诊人
-
-const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
-const chooseAction = () => {
-  if (actionSheet.value) {
-    actionSheet.value.show();
-  }
-};
-const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
-  gStores.userStore.updatePatChoose(item);
-};
-
-onShow(() => {
-  viewerStore.init();
-});
-
-onLoad(async (opt) => {
-  props.value = deQueryForUrl(deQueryForUrl(opt));
-  personConfig.value = await ServerStaticData.getSystemConfig('person');
-
-  //设置顶部标题
-  uni.setNavigationBarTitle({
-    title: global.systemInfo.name,
+  const props = ref({
+    code: '',
+    tabIndex: 0,
+    openId: '',
   });
-  // #ifdef MP-WEIXIN
-  if ( props.value.code) {
-    const getNoPublicOpenIdOnly =
-      getLocalStorage('getNoPublicOpenIdOnly') === '1';
+  const gStores = new GStores();
+  const patientUtils = new PatientUtils();
+  const loginUtils = new LoginUtils();
+  const viewerStore = useViewerStore();
+  const globalStore = useGlobalStore();
+  const refOldDialog = ref();
+  const homeH5SharePopupRef = ref('' as any);
+  const h5QrCodeData = ref();
+  const personConfig = ref(<ISystemConfig['person']>{});
+  const HomeArticleRef = ref('' as any);
+  const clickShareItem = ref<any>({});
 
-    // 免完善扫码进来
-    if (getNoPublicOpenIdOnly) {
-      if (gStores.globalStore.herenId) {
-        await patientUtils.getPatCardList();
+  //骨架屏配置
+  const skeletonProps = ref({
+    skeleton: [
+      'line-lg',
+      24,
+      'line-lg',
+      'card+card+card+card',
+      24,
+      'card-lg+card-lg',
+      32,
+      'line-lg',
+      'card-sm+card-sm+card-sm+card-sm',
+      0,
+      'card-sm+card-sm+card-sm+card-sm',
+    ],
+  });
+  // 就诊人
+
+  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+  const chooseAction = () => {
+    if (actionSheet.value) {
+      actionSheet.value.show();
+    }
+  };
+  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+    gStores.userStore.updatePatChoose(item);
+  };
+
+  onShow(() => {
+    viewerStore.init();
+  });
+
+  onLoad(async (opt) => {
+    props.value = deQueryForUrl(deQueryForUrl(opt));
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
+
+    //设置顶部标题
+    uni.setNavigationBarTitle({
+      title: global.systemInfo.name,
+    });
+    // #ifdef MP-WEIXIN
+    if (props.value.code) {
+      const getNoPublicOpenIdOnly =
+        getLocalStorage('getNoPublicOpenIdOnly') === '1';
+
+      // 免完善扫码进来
+      if (getNoPublicOpenIdOnly) {
+        if (gStores.globalStore.herenId) {
+          await patientUtils.getPatCardList();
+        }
+
+        removeLocation('getNoPublicOpenIdOnly');
       }
+      await loginUtils.getNoPublicOpenId(
+        props.value.code,
+        getNoPublicOpenIdOnly
+      );
+      routerJump();
+    }
+    if (props.value.openId) {
+      globalStore.setH5OpenId(props.value.openId);
 
-      removeLocation('getNoPublicOpenIdOnly');
+      if (globalStore.herenId) {
+        loginUtils.sysPatOpenIdAssignment(props.value.openId);
+      }
+      
+      if(globalStore.token.accessToken){
+        await loginUtils.getUerInfo();
+       }
+      routerJump();
     }
-    await loginUtils.getNoPublicOpenId(
-       props.value.code,
-      getNoPublicOpenIdOnly
-    );
-    routerJump();
-  }
-  if (props.value.openId) {
-    globalStore.setH5OpenId( props.value.openId);
+    wx.showShareMenu({
+      // 要求小程序返回分享目标信息
+      withShareTicket: true,
+    });
+    // #endif
 
-    if (globalStore.herenId) {
-      loginUtils.sysPatOpenIdAssignment(props.value.openId);
+    // #ifdef MP-ALIPAY
+    //对接支付宝首页消息提醒
+    const alipayPid =
+      global.systemInfo.alipayPid || global.sConfig.isOpenMessageAuth;
+    alipayPid &&
+      globalStore.isLogin &&
+      !uni.getStorageSync('hospital_order') &&
+      authorization();
+    // #endif
+
+    if (globalStore.envH5 === 'web' && !gStores.globalStore.isLogin) {
+      Login.handler(LoginType.PassWord, {
+        cellPhoneNum: '15797812958',
+        password: '123456',
+      });
     }
-    if(globalStore.token.accessToken){
-      loginUtils.getUerInfo();
+  });
+  //当用户将页面滑倒底部
+  const handePageBottom=() => {
+    //有开启健康科普
+    if (global.sConfig.isOpenPopularSci) {
+      //查询列表
+      HomeArticleRef.value.init()
     }
-  }
-  wx.showShareMenu({
-    // 要求小程序返回分享目标信息
-    withShareTicket: true,
+  };
+  // #ifdef MP-WEIXIN
+  //分享到朋友圈
+  onShareTimeline(() => {
+    return {
+      title: global.systemInfo.name,
+      query: '',
+    };
   });
   // #endif
+  //用户滑倒底部
 
-  // #ifdef MP-ALIPAY
-  //对接支付宝首页消息提醒
-  const alipayPid =
-    global.systemInfo.alipayPid || global.sConfig.isOpenMessageAuth;
-  alipayPid &&
-    globalStore.isLogin &&
-    !uni.getStorageSync('hospital_order') &&
-    authorization();
-  // #endif
-
-  if (globalStore.envH5 === 'web' && !gStores.globalStore.isLogin) {
-    Login.handler(LoginType.PassWord, {
-      cellPhoneNum: '15797812958',
-      password: '123456',
-    });
-  }
-});
-// #ifdef MP-WEIXIN
-//分享到朋友圈
-onShareTimeline(() => {
-  return {
-    title: global.systemInfo.name,
-    query: '',
+  //跳转智能问答
+  const gotoIntelQA = () => {
+    if (global.sConfig.isOpenIntelQA) {
+      uni.navigateToMiniProgram({
+        appId: global.sConfig.isOpenIntelQA.appId,
+        path: global.sConfig.isOpenIntelQA.path,
+      });
+    }
   };
-});
-// #endif
-//跳转智能问答
-const gotoIntelQA = () => {
-  if (global.sConfig.isOpenIntelQA) {
-    uni.navigateToMiniProgram({
-      appId: global.sConfig.isOpenIntelQA.appId,
-      path: global.sConfig.isOpenIntelQA.path,
-    });
-  }
-};
-//跳转云陪诊安诊儿
-const gotoIntelAI = () => {
-  const IntelAI: TButtonConfig = {
-    type: 'h5',
-    isSelfH5: '1',
-    path: 'pagesC/choosePat/choosePat',
-    text: '云陪诊',
-    extraData: {
-      _type: 'ypzaze',
-    },
-    addition: {
-      patientId: '_patientId',
-    },
-    isLocal: '1',
+  //跳转云陪诊安诊儿
+  const gotoIntelAI = () => {
+    const IntelAI: TButtonConfig = {
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/choosePat/choosePat',
+      text: '云陪诊',
+      extraData: {
+        _type: 'ypzaze',
+      },
+      addition: {
+        patientId: '_patientId',
+      },
+      isLocal: '1',
+    };
+    useTBanner(IntelAI);
   };
-  useTBanner(IntelAI);
-};
 //打开关注框
 const openShare = (item,type?) => {
   if(type === 'attention'){
@@ -457,76 +479,77 @@ const closePopClick = () => {
     },500)
    }
 };
-const goToNotice1 = () => {
-  //跳咨询列表页面
-  uni.navigateTo({
-    url: '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
-  });
-};
 
-const goLogin = async (e: any) => {
-  // #ifdef MP-ALIPAY
-  await aliLogin();
-  // #endif
-
-  // #ifdef MP-WEIXIN
-  await wxLogin(e);
-  // #endif
-
-  routerJump();
-};
-const addPatient = () => {
-  uni.navigateTo({
-    url: '/pagesA/medicalCardMan/medicalCardMan',
-  });
-};
-
-const cardClick = (pat: IPat) => {
-  gStores.userStore.updatePatClick(gStores.userStore.patChoose);
-  goElectronicMedicalCard();
-};
-
-const goSearch = () => {
-  let searchConfig = viewerStore.viewConfig[8]?.showFlag;
-  if (searchConfig == 1) {
+  const goToNotice1 = () => {
+    //跳咨询列表页面
     uni.navigateTo({
-      url: '/pagesA/MyRegistration/RegSearch',
+      url: '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
     });
-  } else {
-    let url =
-      (global.env as string) === 'prod'
-        ? 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
-        : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
+  };
+
+  const goLogin = async (e: any) => {
+    // #ifdef MP-ALIPAY
+    await aliLogin();
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    await wxLogin(e);
+    // #endif
+
+    routerJump();
+  };
+  const addPatient = () => {
     uni.navigateTo({
-      url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
+      url: '/pagesA/medicalCardMan/medicalCardMan',
     });
-  }
-};
-// #ifdef MP-ALIPAY
-//支付宝——首页消息推送
-const authorization = () => {
-  my.getAuthCode({
-    scopes: ['hospital_order'], // 主动授权：auth_user，静默授权：auth_base。或者其它scope
-    success: async (res) => {
-      let resp = await api.authorization({
-        accountType: globalStore.browser.accountType,
-        code: res.authCode,
-        userId: globalStore.openId,
+  };
+
+  const cardClick = (pat: IPat) => {
+    gStores.userStore.updatePatClick(gStores.userStore.patChoose);
+    goElectronicMedicalCard();
+  };
+
+  const goSearch = () => {
+    let searchConfig = viewerStore.viewConfig[8]?.showFlag;
+    if (searchConfig == 1) {
+      uni.navigateTo({
+        url: '/pagesA/MyRegistration/RegSearch',
       });
-      uni.setStorageSync('hospital_order', resp.result);
-    },
-  });
-};
-// #endif
-const openModeOld = () => {
-  if (refOldDialog.value) {
-    refOldDialog.value.show();
-  }
-};
+    } else {
+      let url =
+        (global.env as string) === 'prod'
+          ? 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
+          : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
+      uni.navigateTo({
+        url: '/pagesC/cloudHospital/myPath?type=1&path=' + url,
+      });
+    }
+  };
+  // #ifdef MP-ALIPAY
+  //支付宝——首页消息推送
+  const authorization = () => {
+    my.getAuthCode({
+      scopes: ['hospital_order'], // 主动授权：auth_user，静默授权：auth_base。或者其它scope
+      success: async (res) => {
+        let resp = await api.authorization({
+          accountType: globalStore.browser.accountType,
+          code: res.authCode,
+          userId: globalStore.openId,
+        });
+        uni.setStorageSync('hospital_order', resp.result);
+      },
+    });
+  };
+  // #endif
+  const openModeOld = () => {
+    if (refOldDialog.value) {
+      refOldDialog.value.show();
+    }
+  };
 
-const pageScroll = (e) => {
-  // console.log(e);
-};
+  const pageScroll = (e) => {
+    // console.log(e);
+  };
 </script>
 
 <style lang="scss" scoped>

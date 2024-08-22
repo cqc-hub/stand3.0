@@ -311,7 +311,7 @@
   import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
-  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
+  import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
 
   const props = ref({} as TPayDetailProp);
   const refqrcode = ref('' as any);

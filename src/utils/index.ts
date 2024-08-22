@@ -6,4 +6,5 @@ export * from './modules/ocr';
 export * from '@/types';
 export * from './modules/classUtil';
 export * from './modules/file';
+export * from './modules/webUtil';
 // export * from './modules/is';

@@ -62,6 +62,11 @@
                       &#xe6d6;
                     </text>
                   </view>
+
+                  <view v-if="info.copyFee" class="text-no-wrap">
+                    <text class="mr12 text-no-wrap">复印费:</text>
+                    <text class="mr12 g-break-word">{{ info.copyFee }}元</text>
+                  </view>
                 </view>
               </view>
             </view>
@@ -205,34 +210,37 @@
 
       <order-Reg-Confirm
         headerIcon=""
-        title="退还金额说明"
+        :title="fgTitle1209"
         height="35vh"
         ref="refRefConfirm"
         isShowCloseIcon
       >
         <view>
-          <view class="dialog-content mb76">退还金额已原路返回，请查收。</view>
+          <!-- <view class="dialog-content mb76">退还金额已原路返回，请查收。</view> -->
+          <view class="dialog-content mb76">
+            <g-flag
+              v-model:title="fgTitle1209"
+              typeFg="1209"
+              isShowFgTip
+              isHideTitle
+              aaa
+            />
+          </view>
         </view>
 
         <template #footer>
-          <button
-            @click="refRefConfirm.hide"
-            class="btn g-border btn-primary dialog-btn"
-          >
-            我知道了
-          </button>
+          <view class="pr32 pl32">
+            <button
+              @click="refRefConfirm.hide"
+              class="btn g-border btn-primary"
+            >
+              我知道了
+            </button>
+          </view>
         </template>
       </order-Reg-Confirm>
     </view>
 
-    <xy-dialog
-      title="确定取消申请?"
-      content="若取消申请,已缴纳的金额将会在7天内原路退回"
-      :show="isShowApplyCancelDialog"
-      @cancelButton="isShowApplyCancelDialog = false"
-      @confirmButton="applyCancelDialog"
-      confirmText="确定"
-    />
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -252,7 +260,7 @@
   import { computed, ref, nextTick } from 'vue';
   import dayjs from 'dayjs';
 
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, type TButtonConfig, useTBanner, wait } from '@/utils';
 
   import {
     applyOrderStatusMap,
@@ -273,6 +281,7 @@
     hosId: string;
   }>();
   const gStores = new GStores();
+  const fgTitle1209 = ref('');
 
   const isShowFooter = computed(() => {
     return (
@@ -435,19 +444,26 @@
     });
   };
 
-  const isShowApplyCancelDialog = ref(false);
-  let applyCancelResolve: (args: any) => any = () => {};
-
-  const applyCancelDialog = () => {
-    applyCancelResolve(void 0);
-    isShowApplyCancelDialog.value = false;
-  };
-
   const applyCancel = async () => {
-    isShowApplyCancelDialog.value = true;
-    await new Promise((resolve) => {
-      applyCancelResolve = resolve;
+    const {
+      title = '确定取消申请?',
+      content = '若取消申请,已缴纳的金额将会在7天内原路退回',
+    } = await gStores.getSysAppMore('1208');
+    const { confirm } = await new Promise<any>((closeCallBack) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          isShowCancel: true,
+          title,
+        },
+        closeCallBack,
+      });
     });
+
+    if (!confirm) {
+      return;
+    }
+
     const { id, phsOrderNo } = info.value;
 
     const args = {
@@ -509,7 +525,10 @@
     nextTick(refPay.value.show);
   };
 
-  const payAfter = () => {
+  const payAfter = async () => {
+    uni.showLoading({});
+    await wait(3000);
+    uni.hideLoading();
     init();
   };
 
@@ -744,11 +763,6 @@
 
   ._name {
     font-size: var(--hr-font-size-xs);
-  }
-
-  .dialog-btn {
-    margin: 0 32rpx;
-    width: calc(100% - 64rpx);
   }
 
   .dialog-content {

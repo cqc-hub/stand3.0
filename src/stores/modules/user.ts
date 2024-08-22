@@ -102,6 +102,7 @@ const userStore = defineStore('user', {
     },
 
     updatePatChoose(pat: IPat) {
+      console.log('sddddd')
       this.patChoose = pat;
     },
 

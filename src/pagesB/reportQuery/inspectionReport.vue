@@ -97,13 +97,15 @@
                       {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                     </text>
 
-                    <text class="g-split-line mr12 pr12">
-                      {{ examineReportList.sex || pat.patientSex }}
-                    </text>
+                    <block v-if="!pageProps.patientName">
+                      <text class="g-split-line mr12 pr12">
+                        {{ examineReportList.sex || pat.patientSex }}
+                      </text>
 
-                    <text class="text-no-wrap">
-                      {{ examineReportList.age || pat.patientAge }}岁
-                    </text>
+                      <text class="text-no-wrap">
+                        {{ examineReportList.age || pat.patientAge }}岁
+                      </text>
+                    </block>
                   </view>
                 </view>
                 <view class="subhead">
@@ -498,10 +500,18 @@
   const gStore = new GStores();
   const pat = gStore.userStore.patChoose;
   const patName = computed(() => {
-    return examineReportList.value.patientName || pat.patientName;
+    return (
+      pageProps.value.patientName ||
+      examineReportList.value.patientName ||
+      pat.patientName
+    );
   });
   const patCardNumber = computed(() => {
-    return examineReportList.value.cardNumber || pat.cardNumber;
+    return (
+      pageProps.value.cardNumber ||
+      examineReportList.value.cardNumber ||
+      pat.cardNumber
+    );
   });
 
   onLoad(async (p) => {

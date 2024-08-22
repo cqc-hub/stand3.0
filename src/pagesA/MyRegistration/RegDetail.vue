@@ -416,7 +416,7 @@
 
   import api from '@/service/api';
 
-  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
+  import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
 
   const orderConfig = ref({} as ISystemConfig['order']);
   const refForm = ref<any>('');

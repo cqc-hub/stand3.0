@@ -43,6 +43,8 @@ interface ISConfig {
   isHideHomeSearch?: '1';
   //是否开启助老版
   isOpenHelpOld?: '1';
+  //是否开启健康科普
+  isOpenPopularSci?: '1';
   //首页开启智能问答——微信
   isOpenIntelQA?: {
     appId: string;
@@ -280,6 +282,7 @@ const scJson: Record<string, ISConfig> = {
       appId: 'wxba22f1a66a3af7aa',
       path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',
     },
+    isOpenPopularSci:'1',
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {
       isOpenPatToMedicalPat: {},

@@ -594,6 +594,7 @@ export const useProgramPaySign = () => {
     // }
   };
 
+  let signAfterCount = 0;
   const signAfterOnPageShow = async () => {
     // 目前只有微信是异步的
     if (
@@ -606,10 +607,27 @@ export const useProgramPaySign = () => {
     }
 
     isAfterSign = false;
+    signAfterCount = 0;
     await signAfter(_patientId);
   };
 
   const signAfter = async (patientId?: string) => {
+    if (++signAfterCount > 2) {
+      uni.hideLoading();
+      gStores.messageStore.showMessage(
+        '查询免密代扣签约失败, 添加就诊人可能失败, 请稍后再试',
+        0,
+        {
+          useDialog: true,
+          dialogOpt: {
+            title: '提示',
+          },
+        }
+      );
+
+      throw new Error('查询免密代扣签约失败');
+    }
+
     const {
       browser: { source },
     } = gStores.globalStore;
@@ -683,7 +701,7 @@ export const useProgramPaySign = () => {
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
-      let { phoneNum, cacheUser } = gStores.userStore;
+      let { phoneNum, cacheUser, cellPhoneNum } = gStores.userStore;
       const {
         browser: { source },
         openId: _openId,
@@ -704,9 +722,10 @@ export const useProgramPaySign = () => {
       payType = 'ALI_MINI';
       userId = _openId;
 
-      if (!cacheUser.certNo) {
-        await new AliPayLoginHandler().handlerAuth();
-      }
+      // if (!cacheUser.certNo) {
+      //   await new AliPayLoginHandler().handlerAuth();
+      // }
+
       // #endif
 
       const args = {
@@ -717,7 +736,8 @@ export const useProgramPaySign = () => {
         source,
         payType,
         phone: phoneNum,
-        buyerAccount: cacheUser.mobile,
+        // buyerAccount: cacheUser.mobile,
+        buyerAccount: cellPhoneNum,
         userIdCard: cacheUser.certNo,
         userName: cacheUser.userName,
         showUrl: '/pagesA/medicalCardMan/sign?isBack=1',

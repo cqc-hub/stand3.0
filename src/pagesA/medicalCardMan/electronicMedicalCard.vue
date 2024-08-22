@@ -117,7 +117,7 @@
   import api from '@/service/api';
   import globalGl from '@/config/global';
 
-  import refreshQrcode from '@/pagesA/components/refresh-qrcode/refresh-qrcode.vue';
+  import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
 
   const isPageRender = ref(false);
   const gStore = new GStores();

@@ -9,9 +9,7 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
     <view class="container">
-      <view
-        class="container-block mt24"
-      >
+      <view class="container-block mt24">
         <view class="container-block-top" @click="more">
           <view class="flex-between flex-start">
             <view class="title flex1">{{ checkoutReportList.repName }}</view>
@@ -34,7 +32,7 @@
           </view>
           <view class="patient-information">
             <view
-              v-if="pageProps._scan !== '1'"
+              v-if="pageProps._scan !== '1' && patName"
               @click.stop="isClose = !isClose"
               class="subhead"
             >
@@ -53,10 +51,12 @@
                   {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                 </text>
 
-                <text class="g-split-line mr12 pr12">
-                  {{ checkoutReportList.sex || pat.patientSex }}
-                </text>
-                <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
+                <block v-if="!pageProps.patientName">
+                  <text class="g-split-line mr12 pr12">
+                    {{ checkoutReportList.sex || pat.patientSex }}
+                  </text>
+                  <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
+                </block>
               </view>
             </view>
             <view class="subhead">
@@ -395,6 +395,7 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
+  import { storeToRefs } from 'pinia';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -421,13 +422,21 @@
   const gStore = new GStores();
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
 
-  const pat = gStore.userStore.patChoose;
+  const { patChoose: pat } = storeToRefs(gStore.userStore);
   const pageProps = ref(<any>{});
   const patName = computed(() => {
-    return checkoutReportList.value.patientName || pat.patientName;
+    return (
+      pageProps.value.patientName ||
+      checkoutReportList.value.patientName ||
+      pat.value.patientName
+    );
   });
   const patCardNumber = computed(() => {
-    return checkoutReportList.value.cardNumber || pat.cardNumber;
+    return (
+      pageProps.value.cardNumber ||
+      checkoutReportList.value.cardNumber ||
+      pat.value.cardNumber
+    );
   });
 
   const btnClick = ({ key }) => {
@@ -465,7 +474,7 @@
     } else {
       let params = {
         hosId: hosId,
-        patientId: pat.patientId,
+        patientId: pat.value.patientId,
         repId: repId,
         repType: repType,
         extend: decodeURIComponent(extend),

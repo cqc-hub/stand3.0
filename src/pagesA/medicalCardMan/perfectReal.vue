@@ -182,6 +182,12 @@
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
 
+    /**
+     * 用户信息, 自动带入, patientPhone 字短将会脱敏展示
+     */
+    patientPhone?: string;
+    patientName?: string;
+
     // 微信小程序必须显示写出来， 否则接收不到
     _p?: string;
     _url?: string;
@@ -299,32 +305,6 @@
       source,
     };
 
-    if (isVerifyIdCardLastFourNumber === '1') {
-      const authIdCard = gStores.userStore.cacheUser?.certNo;
-      if (
-        envContainer === 'ali' &&
-        !gStores.userStore.patList.length &&
-        authIdCard
-      ) {
-        data.content = authIdCard.slice(-4);
-      } else {
-        const { result } = await api.checkPat({
-          ...data,
-        });
-
-        // 需要校验证件后四位
-        if (result) {
-          verifyIdCardVal.value = '';
-          refVerifyIdCardPopup.value.show();
-          await new Promise((r) => {
-            verifyIdCArdResolve = r;
-          });
-
-          data.content = verifyIdCardVal.value;
-        }
-      }
-    }
-
     if (data.patientName) {
       formData.value[formKey.patientName] = data.patientName.trim();
     }
@@ -346,6 +326,19 @@
             birthday,
           } = result;
           const { patientPhone, patientName } = data;
+          if (
+            idType === '01' &&
+            idCard &&
+            isVerifyIdCardLastFourNumber === '1'
+          ) {
+            verifyIdCardVal.value = '';
+            refVerifyIdCardPopup.value.show();
+            await new Promise((r) => {
+              verifyIdCArdResolve = r;
+            });
+
+            data.content = verifyIdCardVal.value;
+          }
 
           if (jump === 0) {
             try {
@@ -414,6 +407,31 @@
         }
       }
     } else {
+      if (isVerifyIdCardLastFourNumber === '1') {
+        const authIdCard = gStores.userStore.cacheUser?.certNo;
+        if (
+          envContainer === 'ali' &&
+          !gStores.userStore.patList.length &&
+          authIdCard
+        ) {
+          data.content = authIdCard.slice(-4);
+        } else {
+          const { result } = await api.checkPat({
+            ...data,
+          });
+
+          // 需要校验证件后四位
+          if (result) {
+            verifyIdCardVal.value = '';
+            refVerifyIdCardPopup.value.show();
+            await new Promise((r) => {
+              verifyIdCArdResolve = r;
+            });
+
+            data.content = verifyIdCardVal.value;
+          }
+        }
+      }
       // 新增就诊人
       const value = formData.value;
       const requestArg = {
@@ -548,6 +566,40 @@
     }
   };
 
+  // 脱敏信息
+  const maskInfo = (
+    formList: TInstance[],
+    opt: {
+      keys: ('patientPhone' | 'patientName')[];
+      disabled?: boolean;
+    } = {} as any
+  ) => {
+    const { keys = [], disabled } = opt;
+    formList.map((o) => {
+      const { key } = o;
+
+      if (keys.includes('patientName') && key === formKey.patientName) {
+        o.disabled = disabled;
+        o.inputMask = (v, item) => {
+          return nameConvert(v);
+        };
+      }
+
+      if (keys.includes('patientPhone') && key === formKey.patientPhone) {
+        o.disabled = disabled;
+
+        o.inputMask = (v, item) => {
+          if (v) {
+            const idReg = /(\d{3})\d*(\d{4})/;
+            return v.replace(idReg, '$1******$2');
+          } else {
+            return '';
+          }
+        };
+      }
+    });
+  };
+
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
 
@@ -604,34 +656,35 @@
         medicalTypeItem.showSuffixArrowIcon = false;
       }
     } else {
-      // #ifdef MP-ALIPAY
-      // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
-      if (!patList.length && mobile) {
-        formList.map((o) => {
-          const { key } = o;
+      const { patientPhone, patientName } = pageProps.value;
 
-          if (key === formKey.patientName) {
-            o.disabled = true;
-            o.inputMask = (v, item) => {
-              return nameConvert(v);
-            };
-          }
+      if (patientPhone || patientName) {
+        if (patientPhone) {
+          formData.value.patientPhone = patientPhone;
+          maskInfo(formList, {
+            keys: ['patientPhone'],
+            disabled: true,
+          });
+        }
 
-          if (key === formKey.patientPhone) {
-            o.disabled = true;
-
-            o.inputMask = (v, item) => {
-              if (v) {
-                const idReg = /(\d{3})\d*(\d{4})/;
-                return v.replace(idReg, '$1******$2');
-              } else {
-                return '';
-              }
-            };
-          }
-        });
+        if (patientName) {
+          formData.value.patientName = patientName;
+          maskInfo(formList, {
+            keys: ['patientName'],
+            disabled: true,
+          });
+        }
+      } else {
+        // #ifdef MP-ALIPAY
+        // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
+        if (!patList.length && mobile) {
+          maskInfo(formList, {
+            keys: ['patientName', 'patientPhone'],
+            disabled: true,
+          });
+        }
+        // #endif
       }
-      // #endif
     }
 
     formList.map((o) => {
