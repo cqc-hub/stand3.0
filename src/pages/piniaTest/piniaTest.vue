@@ -367,6 +367,16 @@
     isLocal: '1',
   };
 
+  const 会员权益: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesB/discount/discount',
+    text: '会员权益',
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({
@@ -415,7 +425,9 @@
       // });
 
       // useTBanner(healthRecord)
-      useTBanner(我的收藏);
+      // useTBanner(我的收藏);
+      useTBanner(会员权益);
+
     }, 1000);
   });
 </script>
