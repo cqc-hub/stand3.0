@@ -11,11 +11,13 @@
   @include flex-normal;
 }
 
-.flex-column, .flex-col {
+.flex-column,
+.flex-col {
   flex-direction: column !important;
 }
 
-.flex-between {
+.flex-between,
+.justify-between {
   justify-content: space-between;
   @extend .flex-normal;
 }
@@ -25,7 +27,7 @@
 }
 
 .justify-center {
-  justify-content: center
+  justify-content: center;
 }
 
 .items-center {
@@ -37,7 +39,8 @@
   @extend .flex-normal;
 }
 
-.flex1, .flex-1 {
+.flex1,
+.flex-1 {
   flex: 1 !important;
 }
 
@@ -68,8 +71,6 @@
   }
 }
 
-
-
 .flex-normal-between {
   justify-content: space-between;
   @extend .flex-normal;
@@ -94,10 +95,9 @@
     z-index: 2;
     position: relative;
     -webkit-overflow-scrolling: touch;
-    @extend .hidden-scrollbar
+    @extend .hidden-scrollbar;
   }
 }
-
 
 .g-footer {
   background-color: var(--h-color-white);
@@ -108,7 +108,6 @@
 
   display: flex;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-
 }
 
 .g-nowrap {

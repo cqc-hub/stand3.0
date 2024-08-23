@@ -77,7 +77,7 @@
       userName: cacheUser.userName,
       showUrl: '/pagesA/medicalCardMan/sign?isBack=1',
     };
-    console.log(args);
+
     const {
       result: { invokeData },
     } = await api.applyForSign(args);

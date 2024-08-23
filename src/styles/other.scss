@@ -1,3 +1,7 @@
+.z-1 {
+  z-index: 1;
+}
+
 @mixin text-overflow($line: 1) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -15,13 +19,16 @@
   border-radius: 12rpx;
 }
 
-
 .w100 {
   width: 100% !important;
 }
 
 .h100 {
   width: 100% !important;
+}
+
+.h-1 {
+  height: 1px;
 }
 
 .text-ellipsis {
@@ -79,7 +86,12 @@ image {
   }
 }
 
-.g-bold, .font-semibold {
+.relative {
+  position: relative;
+}
+
+.g-bold,
+.font-semibold {
   font-weight: 600;
 }
 
@@ -88,19 +100,19 @@ image {
 }
 
 .g-border {
-  border: 1rpx solid var(--hr-neutral-color-2);
+  border: 1px solid var(--hr-neutral-color-2);
 }
 
 .g-border-top {
-  border-top: 1rpx solid var(--hr-neutral-color-11);
+  border-top: 1px solid var(--hr-neutral-color-11);
 }
 
 .g-border-bottom {
-  border-bottom: 1rpx solid var(--hr-neutral-color-11);
+  border-bottom: 1px solid var(--hr-neutral-color-11);
 }
 
 .g-border-right {
-  border-right: 1rpx solid var(--hr-neutral-color-11);
+  border-right: 1px solid var(--hr-neutral-color-11);
 }
 
 .g-check {
