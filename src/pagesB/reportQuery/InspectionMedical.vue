@@ -494,7 +494,7 @@
           }
         }
        .container-block-bottom {
-        width: calc(100% - 32rpx);
+        // width: calc(100% - 32rpx);
         border-radius: 0rpx 0rpx 16rpx 16rpx;
         background-color: #fff;
         border-left: 1rpx solid #e6e6e6;

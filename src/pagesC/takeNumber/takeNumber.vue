@@ -289,6 +289,35 @@
               });
             }
           }
+        } else if (err?.respCode === 884801) {
+          if (pageConfig.value?.expireButRetrieve === '1') {
+            const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+              gStores.messageStore.showMessage(
+                '您已过号，是否重新预约获取新序号?               ',
+                0,
+                {
+                  useDialog: true,
+                  dialogOpt: {
+                    title: '温馨提示',
+                    isShowCancel: true,
+                    cancelText: '暂不预约',
+                    confirmText: '重新预约',
+                  },
+                  closeCallBack: r,
+                }
+              );
+            });
+
+            if (confirm) {
+              const { result } = await api.reappoint({ appointNo: visitId });
+              console.log('result',result)
+              if (result) {
+                setTimeout(() => {
+                  refreshData();
+                }, 2000);
+              }
+            }
+          }
         } else {
           gStores.messageStore.showMessage(
             err?.message || '系统繁忙,请稍后再试',

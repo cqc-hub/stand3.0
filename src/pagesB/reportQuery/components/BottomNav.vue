@@ -60,7 +60,7 @@
     if (isTjreport) {
       compareData.btnAskDoc = '';
       compareData.btnReOrder = '';
-
+        console.log('reportConfig.value.tjBottomNav',reportConfig.value.tjBottomNav)
       Object.assign(compareData, reportConfig.value.tjBottomNav || {});
     }
 

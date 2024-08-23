@@ -28,6 +28,7 @@
           :isHidePay="resultHos.isHidePay"
           :tabCurrent="tabCurrent"
           :isShowAppointment="pageProps.openAppointment === '1'"
+          :isShowCtypeBtn="pageProps.ctype === '1'"
         />
       </template>
       <dailyExpenseList
@@ -69,6 +70,7 @@
       tabIndex?: 1 | 2;
       // 住院预约 ?
       openAppointment?: '1';
+      ctype?:'1'
     }
   );
 
