@@ -328,12 +328,16 @@ image {
   width: 100%;
 }
 
-.h100p {
+.h100p, .h-full {
   height: 100%;
 }
 
 .bg-white {
   background-color: #fff;
+}
+
+.bg-red {
+  background-color: red;
 }
 
 @for $i from 4 through 70 {
