@@ -63,7 +63,7 @@
                 :pageConfig="orderConfig"
                 :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
-                @wait-reg-click="waitRegClick"
+                @wait-reg-click="showWaitRegDialog"
                 @avatar-click="avatarClick"
                 @preregistration-click="preregistrationClick"
               />
@@ -74,6 +74,20 @@
 
       <view class="safe-height" />
     </scroll-view>
+
+    <Order-Reg-Confirm
+      :title="flagTitle9"
+      @confirm="waitRegClick(waitRegClickData)"
+      ref="waitRegDialog"
+    >
+      <g-flag
+        v-model:title="flagTitle9"
+        :typeFg="'1111'"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
 
     <Order-Select-Source
       v-model:show="isSelectOrderSourceShow"
@@ -102,11 +116,12 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { onReady, onShareAppMessage, onLoad } from '@dcloudio/uni-app';
-  import { useOrder, IChooseDays, type IDocListAll } from './utils';
+  import { useOrder, IChooseDays, type IDocListAll, TSchInfo } from './utils';
   import { handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import OrderDocItemAll from './components/orderDocList/OrderDocItemAll.vue';
   import OrderDocItemDate from './components/orderDocList/OrderDocItemDate.vue';
   import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
@@ -137,6 +152,10 @@
   const secondHosDeptId = ref(
     (props.secondHosDeptId && decodeURIComponent(props.secondHosDeptId)) || ''
   );
+  const waitRegDialog = ref<any>('');
+  const flagTitle9 = ref('');
+  const waitRegClickData = ref({} as { scheme: TSchInfo });
+
   const deptName = ref(decodeURIComponent(props.deptName));
   const {
     init,
@@ -224,6 +243,11 @@
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
+
+  const showWaitRegDialog = (data) => {
+    waitRegClickData.value = data;
+    waitRegDialog.value.show();
+  };
 
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;

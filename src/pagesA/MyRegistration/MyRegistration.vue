@@ -178,6 +178,7 @@
         thRegisterId?: string;
         allPData?: '1';
         type?: 'waitReg'; // 候补预约
+        tabIndex?: '0';
       }
     >{}
   );
@@ -269,7 +270,6 @@
   const tabChange = async (e: number) => {
     tabCurrent.value = e;
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
-    // pat.value = patList.value[0];
     if (!pat.value?.patientId && e) {
       _patChange(gStores.userStore.patChoose);
     }
@@ -301,7 +301,7 @@
       .finally(() => {
         isComplete.value = true;
       });
-    console.log('getList', result, isWaitReg.value);
+
     if (result && result.length) {
       result.map(async (o) => {
         // o.orderStatus = '70';
@@ -367,14 +367,6 @@
     if (props.value.type !== 'waitReg' && tabCurrent.value === 2) {
       _type = 'waitReg';
     }
-    console.log('/pagesA/MyRegistration/RegDetail', {
-      ...item,
-      orderId: item.orderId,
-      hosOrderId: item.hosOrderId,
-      preWz: item.orderStatus === '10' && '1',
-      thRegisterId: props.value.thRegisterId,
-      _type,
-    });
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
@@ -446,6 +438,10 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     isRender.value = true;
 
+    if (props.value?.tabIndex) {
+      tabCurrent.value = parseInt(props.value?.tabIndex);
+    }
+
     uni.setNavigationBarTitle({
       title: isWaitReg.value ? '候补记录' : '我的挂号',
     });
@@ -463,7 +459,6 @@
         thRegisterId,
       });
 
-    // 已改 begin
     pageConfig.value.isCanSelOrderStatus === '1' &&
       tabs.value.push({
         typeId: 1,
@@ -472,10 +467,8 @@
     pageConfig.value.isTabWaitReg === '1' &&
       tabs.value.push({
         typeId: 2,
-        headerName: '候补挂号',
+        headerName: '预约候补',
       });
-
-    // 已改 end
   });
 
   const getPatLabel = (o) => {
@@ -492,7 +485,9 @@
     // await getList(
     //   pat.value?.patientId || gStores.userStore.patChoose?.patientId
     // );
-    tabChange(0);
+    setTimeout(() => {
+      tabChange(tabCurrent.value);
+    }, 0);
   };
 
   const patList = computed(() => {

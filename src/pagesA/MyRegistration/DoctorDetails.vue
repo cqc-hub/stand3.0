@@ -122,7 +122,12 @@
                     <!-- <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text> -->
                     <rich-text
                       v-if="docDetail.goodAt"
-                      :nodes="HTMLParser(throughCharacterLineFeed(docDetail.goodAt), '\n')"
+                      :nodes="
+                        HTMLParser(
+                          throughCharacterLineFeed(docDetail.goodAt),
+                          '\n'
+                        )
+                      "
                     />
                     <!-- <rich-text
                       v-if="docDetail.goodAt"
@@ -216,7 +221,7 @@
                           :item="item"
                           :systemModeOld="gStores.globalStore.modeOld"
                           @reg-click="(scheme) => regClick({ scheme })"
-                          @wait-reg-click="waitRegClick"
+                          @wait-reg-click="showWaitRegDialog"
                         />
                       </view>
                     </view>
@@ -257,7 +262,7 @@
                             :item="item"
                             :systemModeOld="gStores.globalStore.modeOld"
                             @reg-click="regClick"
-                            @wait-reg-click="waitRegClick"
+                            @wait-reg-click="showWaitRegDialog"
                           />
                         </view>
                       </view>
@@ -358,6 +363,20 @@
       <Doc-Details :detail="docDetail" />
     </Order-Reg-Confirm>
 
+    <Order-Reg-Confirm
+      :title="flagTitle9"
+      @confirm="waitRegClick(waitRegClickData)"
+      ref="waitRegDialog"
+    >
+      <g-flag
+        v-model:title="flagTitle9"
+        :typeFg="'1111'"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
+
     <Doc-Share :pageProp="props" :detail="docDetail" ref="refDocShare" />
 
     <Order-Select-Source
@@ -440,6 +459,14 @@
   const docSchOutHosList = ref<IDocSchOutHosItem[]>([]);
   const selOutHosId = ref('');
   const selOutHosDay = ref('');
+  const flagTitle9 = ref('');
+  const waitRegClickData = ref({} as { scheme: TSchInfo });
+  const waitRegDialog = ref<any>('');
+
+  const showWaitRegDialog = (data) => {
+    waitRegClickData.value = data;
+    waitRegDialog.value.show();
+  };
 
   const schToday = computed(() => {
     if (checkedDay.value) {
@@ -752,7 +779,6 @@
 
   onLoad(async (opt) => {
     //  weixin://dl/business/?t=LgnSWxNLRHs
-    console.log(opt, 'onLoad');
 
     props.value = deQueryForUrl(deQueryForUrl(opt));
     // 兼容 alipays://platformapi/startapp?appId=2021003173633521&page=pagesA/MyRegistration/DoctorDetails&query=hosDocId%3D101714

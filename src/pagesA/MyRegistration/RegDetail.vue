@@ -1051,9 +1051,15 @@
 
     gStores.messageStore.showMessage('取消候补预约成功', 3000, {
       closeCallBack() {
-        uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-        });
+        if (orderConfig.value?.isTabWaitReg === '1') {
+          uni.reLaunch({
+            url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+          });
+        } else {
+          uni.reLaunch({
+            url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+          });
+        }
       },
     });
   };
@@ -1189,13 +1195,7 @@
   };
 
   onShow(async () => {
-    console.log('微信 show');
 
-    console.log(
-      getLocalStorage('get-ali-medical-auth-code'),
-      getLocalStorage('get-wx-medical-auth-code'),
-      gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode
-    );
 
     if (getLocalStorage('reg-detail-init') === '1') {
       setLocalStorage({

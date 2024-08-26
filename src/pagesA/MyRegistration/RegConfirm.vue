@@ -60,7 +60,7 @@
     </xy-dialog>
 
     <view class="g-footer flex-column">
-      <view class="fg-agree">
+      <view class="fg-agree" v-if="!isWaitReg">
         <view
           :class="{
             'is-check': isCheck,
@@ -197,7 +197,7 @@
       gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
 
-    if (!isCheck.value) {
+    if (!isCheck.value && !isWaitReg.value) {
       regDialogConfirm.value.show();
       return;
     }
@@ -452,10 +452,15 @@
         patientId: gStores.userStore.patChoose.patientId,
         source: gStores.globalStore.browser.source,
       });
-
-      uni.reLaunch({
-        url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-      });
+      if (pageConfig.value?.isTabWaitReg === '1') {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+        });
+      } else {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+        });
+      }
     }
   };
 
@@ -467,6 +472,11 @@
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
     getPageConfig();
+    //设置顶部标题
+    isWaitReg &&
+      uni.setNavigationBarTitle({
+        title: '确认候补信息',
+      });
   });
 </script>
 
