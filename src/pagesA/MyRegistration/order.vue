@@ -119,6 +119,7 @@
   import { useOrder, IChooseDays, type IDocListAll, TSchInfo } from './utils';
   import { handlerWeChatThRegLogin } from '@/utils';
   import { joinQuery, deQueryForUrl, cloneUtil } from '@/common';
+  import api from '@/service/api';
 
   import OrderSelDate from './components/orderSelDate/OrderSelDate.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
@@ -244,9 +245,37 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 
-  const showWaitRegDialog = (data) => {
-    waitRegClickData.value = data;
-    waitRegDialog.value.show();
+  const showWaitRegDialog = async (data) => {
+    console.log('showWaitRegDialog', data);
+    const {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+    } = data.scheme;
+    const { result } = await api.canRegAlternate({
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+    });
+    if (result) {
+      waitRegClickData.value = data;
+      waitRegDialog.value.show();
+    } else {
+      gStores.messageStore.showMessage(
+        '当前时段候补人数已达上线，暂不支持候补!',
+        3000
+      );
+    }
   };
 
   const dateChange = (item: IChooseDays) => {

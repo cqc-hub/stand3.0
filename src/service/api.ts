@@ -448,6 +448,9 @@ const regApi = {
 
   addRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data)),
+    
+  canRegAlternate: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regAlt/canRegAlternate', parm(data)),
 
   getQnRecordTemp: (data: any) =>
     service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
@@ -899,9 +902,13 @@ const userApi = {
 
   // 判断是否关注公众号
   judgeSubscribeWxAccount: (data) =>
-    service.post<any>('/phs-user/authUser/judgeSubscribeWxAccount', parm(data), {
-      showMessage: false,
-    }),
+    service.post<any>(
+      '/phs-user/authUser/judgeSubscribeWxAccount',
+      parm(data),
+      {
+        showMessage: false,
+      }
+    ),
 
   getDeptCardList: (data: any) =>
     service.post('/phs-reg/deptDoc/getDeptList', parm(data), {

@@ -463,11 +463,6 @@
   const waitRegClickData = ref({} as { scheme: TSchInfo });
   const waitRegDialog = ref<any>('');
 
-  const showWaitRegDialog = (data) => {
-    waitRegClickData.value = data;
-    waitRegDialog.value.show();
-  };
-
   const schToday = computed(() => {
     if (checkedDay.value) {
       return docSchList.value.find((o) => o.schDate === checkedDay.value)!;
@@ -583,6 +578,38 @@
       docDetail.value.docPhoto || '/static/image/order/order-doctor-avatar.png'
     );
   });
+
+  const showWaitRegDialog = async (data) => {
+    const {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+    } = data.scheme;
+    const { result } = await api.canRegAlternate({
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+    });
+    if (result) {
+      waitRegClickData.value = data;
+      waitRegDialog.value.show();
+    } else {
+      gStores.messageStore.showMessage(
+        '当前时段候补人数已达上线，暂不支持候补!',
+        3000
+      );
+    }
+  };
 
   const previewImg = () => {
     const photo = docDetail.value.docPhoto;
