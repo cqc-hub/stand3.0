@@ -146,27 +146,22 @@ export const isSubscribeWx = async () => {
     });
   } else {
     const { source } = gStores.globalStore.browser;
-    try {
+    
       uni.showLoading({
         title: '加载中',
         mask: true,
       });
-      const { result } = await api.judgeSubscribeWxAccount({
+      const res = await api.judgeSubscribeWxAccount({
         source,
         openId: gStores.globalStore.h5OpenId,
+      }).catch(() => {
       });
       uni.hideLoading();
-      if (result.subscribe === 0) {
+      if (res?.result?.subscribe === 0) {
         //没关注过
-        console.log(9999)
         return false;
-      } else {
-        return true;
-      }
-    } catch {
-      // 不影响主流程
-      return true;
-    }
+      } 
+   return true
   }
 };
 

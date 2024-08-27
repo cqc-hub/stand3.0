@@ -25,9 +25,11 @@
   const gridClick = async (item) => {
     console.warn(item)
     // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
+    // #ifdef MP-WEIXIN
     if (item.query && JSON.parse(item.query).attention === '1' && !(await isSubscribeWx())) {
       emits('open-share', item, 'attention');
     }else{
+   // #endif
       if (item.path && item.path == 'showCareModel') {
       //关注组件拦截跳转 弹框
       emits('open-share', item.query && JSON.parse(item.query));
@@ -36,8 +38,9 @@
     } else {
       useCommonTo(item);
     }
+    // #ifdef MP-WEIXIN
     }
-  
+   // #endif
   };
 </script>
 
