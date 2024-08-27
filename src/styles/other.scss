@@ -210,7 +210,8 @@ image {
   color: var(--hr-neutral-color-7) !important;
 }
 
-.color-fff {
+.color-fff,
+.text-white {
   color: #fff !important;
 }
 
@@ -324,11 +325,13 @@ image {
   font-size: 80rpx !important;
 }
 
-.w100p {
+.w100p,
+.w-full {
   width: 100%;
 }
 
-.h100p, .h-full {
+.h100p,
+.h-full {
   height: 100%;
 }
 
