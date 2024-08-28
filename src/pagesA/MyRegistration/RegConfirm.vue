@@ -47,6 +47,26 @@
       />
     </Order-Reg-Confirm>
 
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :title="flagTitle1203"
+      :maskClickClose="false"
+      @cancel="cancelAsync"
+      @confirm="confirmAsync"
+      height="90vh"
+      confirmText="同意授权,方便就诊"
+      cannerText="不授权"
+      ref="regDialogConfirmSign"
+    >
+      <g-flag
+        v-model:title="flagTitle1203"
+        typeFg="1204"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
+
     <xy-dialog
       :title="'提示'"
       :show="isPreventOrder"
@@ -132,6 +152,7 @@
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
   import GreenPower from '@/components/greenPower/greenPower.vue';
   import GreenToast from '@/components/greenPower/greenToast.vue';
+  import { useProgramPaySign } from '@/pagesA/medicalCardMan/utils';
 
   const gStores = new GStores();
   const props = ref({} as IPageProps);
@@ -152,6 +173,18 @@
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
   const isOverLimit = ref('');
+
+  const {
+    regDialogConfirmSign,
+    isAgreeSignChange,
+    flagTitle1203,
+    disagreeSign,
+    initSign,
+    goPaySign,
+    signAfterOnPageShow,
+    isAgreeSign,
+    isSignExist,
+  } = useProgramPaySign();
 
   // 候补挂号?
   const isWaitReg = computed(() => {
@@ -227,7 +260,7 @@
         });
       }
 
-      return
+      return;
     }
 
     if (isWaitReg.value) {
@@ -245,7 +278,6 @@
       });
     }
     // #endif
-
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;
@@ -291,6 +323,26 @@
         .catch((e) => {});
     }
     // #endif
+
+    if (isSignExist.value) {
+      const {
+        result: { flag },
+      } = await api.findSign({
+        patientId,
+        source,
+      });
+
+      // if (!flag) {
+      //   regDialogConfirmSign.value.show();
+
+      //   await new Promise((r, j) => {
+      //     resolve = r;
+      //     reject = j;
+      //   });
+      //   console.log('cqc');
+      //   return;
+      // }
+    }
 
     let {
       result: { orderId, hasCharge, hint },
@@ -426,6 +478,13 @@
 
   let resolve: (...any) => any = () => {};
   let reject: (...any) => any = () => {};
+
+  const confirmAsync = () => {
+    resolve();
+  };
+  const cancelAsync = () => {
+    reject();
+  };
   const waitReg = async () => {
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
@@ -471,9 +530,10 @@
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
+    initSign();
     getPageConfig();
     //设置顶部标题
-    isWaitReg &&
+    isWaitReg.value &&
       uni.setNavigationBarTitle({
         title: '确认候补信息',
       });
