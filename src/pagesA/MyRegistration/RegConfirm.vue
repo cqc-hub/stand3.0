@@ -126,7 +126,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
 
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { IPageProps } from './utils/regConfirm';
   import { TSchInfo } from './utils/index';
@@ -283,6 +283,7 @@
     const [firstDept, secondDept] = deptStore.deptClickStep;
 
     const requestArg = {
+      freeSignData: '',
       firstDeptName: firstDept?.deptName,
       firstHosDeptId: firstDept?.deptId,
       secondDeptName: secondDept?.deptName,
@@ -324,29 +325,39 @@
     }
     // #endif
 
+    /**
+     * 免密代扣挂号
+     */
     if (isSignExist.value) {
       const {
-        result: { flag },
+        result: { flag, freeSignData },
       } = await api.findSign({
         patientId,
         source,
       });
 
-      // if (!flag) {
-      //   regDialogConfirmSign.value.show();
+      if (!flag) {
+        regDialogConfirmSign.value.show();
+        await new Promise((r, j) => {
+          resolve = r;
+          reject = j;
+        });
 
-      //   await new Promise((r, j) => {
-      //     resolve = r;
-      //     reject = j;
-      //   });
-      //   console.log('cqc');
-      //   return;
-      // }
+        await goPaySign(patientId, {
+          type: 'order',
+          cb: signAfterContinueOrder,
+        });
+      }
+
+      requestArg.freeSignData = freeSignData;
     }
+
+    // true ? 免密代扣 :  正常挂号
+    const actionApi = isSignExist.value ? api.addOrder : api.addReg;
 
     let {
       result: { orderId, hasCharge, hint },
-    } = await api.addReg(requestArg).catch(async (e) => {
+    } = await actionApi(requestArg).catch(async (e) => {
       if (e) {
         const { respCode, message, code } = e;
 
@@ -526,6 +537,19 @@
   const getPageConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
+
+  const signAfterContinueOrder = async () => {
+    // #ifdef MP-WEIXIN
+    await regConfirm();
+    // #endif
+  };
+
+  onShow(() => {
+    signAfterOnPageShow({
+      type: 'order',
+      cb: signAfterContinueOrder,
+    });
+  });
 
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));

@@ -448,7 +448,7 @@ const regApi = {
 
   addRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data)),
-    
+
   canRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/canRegAlternate', parm(data)),
 
@@ -545,6 +545,14 @@ const regApi = {
   // 挂号
   addReg: (data: any) =>
     service.post('/phs-reg/reg/addReg', parm(data), {
+      hideLoading: false,
+      showMessage: false,
+      monitorName: '预约挂号',
+      reportCmPV_YLName: '挂号缴费',
+    }),
+
+  addOrder: (data: any) =>
+    service.post('/phs-reg/regOrder/addOrder', parm(data), {
       hideLoading: false,
       showMessage: false,
       monitorName: '预约挂号',

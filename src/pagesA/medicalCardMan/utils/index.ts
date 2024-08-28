@@ -595,7 +595,12 @@ export const useProgramPaySign = () => {
   };
 
   let signAfterCount = 0;
-  const signAfterOnPageShow = async () => {
+  type TSingnPayload = {
+    type: 'addPat' | 'order';
+    cb?: any;
+  };
+  const signAfterOnPageShow = async (payload = {} as TSingnPayload) => {
+    const { type = 'addPat', cb } = payload;
     // 目前只有微信是异步的
     if (
       !isAfterSign ||
@@ -608,7 +613,11 @@ export const useProgramPaySign = () => {
 
     isAfterSign = false;
     signAfterCount = 0;
-    await signAfter(_patientId);
+    if (type === 'addPat') {
+      await signAfter(_patientId);
+    } else {
+      await orderSignAfter(_patientId, cb);
+    }
   };
 
   const signAfter = async (patientId?: string) => {
@@ -669,6 +678,57 @@ export const useProgramPaySign = () => {
     // }
   };
 
+  const orderSignAfter = async (patientId: string, cb: any = () => {}) => {
+    if (++signAfterCount > 2) {
+      uni.hideLoading();
+      gStores.messageStore.showMessage(
+        '查询免密代扣签约失败, 就诊人授权免密代扣可能失败, 请稍后再试',
+        0,
+        {
+          useDialog: true,
+          dialogOpt: {
+            title: '提示',
+          },
+        }
+      );
+
+      throw new Error('查询免密代扣签约失败');
+    }
+
+    const {
+      browser: { source },
+    } = gStores.globalStore;
+
+    uni.showLoading({
+      title: '查询签约中...',
+      mask: true,
+    });
+    await wait(5000);
+    const {
+      result: { message, signFlag, showFlag },
+    } = await api.patSign({
+      patientId,
+      source,
+    });
+
+    if (showFlag) {
+      await orderSignAfter(patientId, cb);
+    } else if (signFlag) {
+      await patientUtils.getPatCardList();
+      await cb();
+    } else {
+      gStores.messageStore.closeMessage();
+      await wait(20);
+      gStores.messageStore.showMessage(message, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title: '提示',
+        },
+      });
+      throw new Error('查询免密代扣签约失败');
+    }
+  };
+
   return {
     signAfterOnPageShow,
     disagreeSign,
@@ -694,7 +754,9 @@ export const useProgramPaySign = () => {
       }
     },
 
-    async goPaySign(patientId) {
+    async goPaySign(patientId, payload = {} as TSingnPayload) {
+      const { type = 'addPat', cb } = payload;
+
       const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
         'person'
       );
@@ -779,7 +841,11 @@ export const useProgramPaySign = () => {
           aliRes &&
           aliRes.alipay_user_agreement_page_sign_response?.code === '10000'
         ) {
-          await signAfter(_patientId);
+          if (type === 'addPat') {
+            await signAfter(_patientId);
+          } else {
+            await orderSignAfter(_patientId, cb);
+          }
         } else {
           throw new Error('签约异常');
         }
