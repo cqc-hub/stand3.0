@@ -198,8 +198,8 @@ export type TPayConfirmHosPageProp = {
   cardNumber: string;
   patientId: string;
   patientName: string;
-  hospitalAccount: string;
-  hosName: string;
+  hospitalAccount: string; 
+  hosName: string; 
   extend: string;
 };
 
@@ -221,7 +221,7 @@ import {
 import api from '@/service/api';
 
 import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
-import { usePayPage, PayType } from '../../clinicPay/utils/clinicPayDetail';
+import { usePayPage } from '../../clinicPay/utils/clinicPayDetail';
 const { getIsDigitalPay, getDigitalPay } = usePayPage();
 
 export const useHosPayPage = () => {
@@ -283,7 +283,7 @@ export const useHosPayPage = () => {
    */
   const getCreateInHospitalPayOrderData = async (data, fee, type?) => {
     const { patientName, cardNumber, hosId, hosName } = data;
-    const args = {
+    const { result } = await api.createInHospitalPayOrder<payOrderResult>({
       fee,
       orderType: data.hospitalAccount ? data.hospitalAccount : '3',
       patientId: data.type == '1' ? '' : gStores.userStore.patChoose.patientId,
@@ -292,10 +292,8 @@ export const useHosPayPage = () => {
       hosId,
       hosName,
       leaveHos: type === 'outHos' ? '1' : '',
-      extend: data.extend,
-    };
-    gStores.globalStore.sysCode === '1001038' && (args[`businessType`] = 2);
-    const { result } = await api.createInHospitalPayOrder<payOrderResult>(args);
+      extend:data.extend
+    });
     const payArg: BaseObject = {
       phsOrderNo: result.phsOrderNo,
       paySign: result.paySign,

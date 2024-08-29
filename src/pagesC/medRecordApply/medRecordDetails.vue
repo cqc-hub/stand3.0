@@ -1243,15 +1243,17 @@
         return;
       }
     }
+
     if (
       materialList.value &&
-      !materialList.value.length &&
-      !materialValue.value
+      materialList.value.length &&
+      !materialValue.value.length
     ) {
       scrollTo.value = '_materia';
       showMessage('请先选择 复印材料', 3000);
       return;
     }
+   
 
     // if (isPurposeRadio === '1') {
     //   if (!aimValue.value.length) {

@@ -147,6 +147,13 @@
                 </view>
               </view>
 
+              <view v-if="info.copyData" class="mt32 _row">
+                <view class="_title">复印材料</view>
+                <view class="_content">
+                  {{ info.copyData }}
+                </view>
+              </view>
+
               <view v-if="info.remark" class="mt16 _row">
                 <view class="_title">备注内容</view>
                 <view class="_content">{{ info.remark }}</view>
