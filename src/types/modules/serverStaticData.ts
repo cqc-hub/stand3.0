@@ -53,8 +53,8 @@ export interface ISystemConfig_ {
     isOrderPay: '0' | '1';
     // 挂号成功后预问诊?
     isOpenPreConsultation?: '1';
-     //预问诊跳转的第三方配置 不配置该参数默认跳转自研的
-     preConsultationBtn?: TBannerConfig;
+    //预问诊跳转的第三方配置 不配置该参数默认跳转自研的
+    preConsultationBtn?: TBannerConfig;
     /** 挂号预结算 */
     isOrderPreSettle?: '1';
     /** 候补预约 */
@@ -145,7 +145,7 @@ export interface ISystemConfig_ {
     isEditPatPhone?: '1';
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
-    isVerifyIdCardLastFourNumber?: '1',
+    isVerifyIdCardLastFourNumber?: '1';
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
@@ -201,6 +201,11 @@ export interface ISystemConfig_ {
     selPurposeLen?: number;
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
+
+    /** 复印材料 不配置或为空则不显示 */
+    material?: string[];
+    /** 可选择的复印材料数量 默认 3 */
+    selMaterialLen?: number;
 
     /** 收钱方式 0 预收 1 按项目、目的(tollMode) */
     isItemCount?: '0' | '1';
@@ -424,10 +429,10 @@ export interface ISystemConfig_ {
     //智能陪诊
     medicalAsistantConfig?: {
       //智能陪诊日期右侧区域的按钮
-        timeLineBtn?: Array<TButtonConfig>;//写死的按钮
-        contentBtn?: TButtonConfig[];//依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则传{}
-        bottomBtn?: TButtonConfig[];//最多展示两个icon按钮和两个普通按钮
-    }
+      timeLineBtn?: Array<TButtonConfig>; //写死的按钮
+      contentBtn?: TButtonConfig[]; //依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则传{}
+      bottomBtn?: TButtonConfig[]; //最多展示两个icon按钮和两个普通按钮
+    };
   };
 
   /** 手术进度查询 */

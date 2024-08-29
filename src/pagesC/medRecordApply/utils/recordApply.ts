@@ -200,6 +200,7 @@ export type CaseCopeItemDetail = Flatten<
     addresseeName: deParams;
     addresseePhone: deParams;
     copyAim: string;
+    copyData: string;
     detailedAddress: deParams;
     handIdCardUrl: string;
     handIdCardFrontUrl: string;

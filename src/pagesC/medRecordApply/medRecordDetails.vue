@@ -370,6 +370,32 @@
             </view>
           </view>
 
+          <view
+            id="_materia"
+            class="container-box g-border mb16 box-padding"
+            v-if="materialList && materialList.length"
+          >
+            <view class="f36">
+              <text class="mr12 g-bold">请选择复印材料</text>
+              <text class="f28 color-light-dark">
+                {{
+                  selPurposeLen === 1
+                    ? '可选1项'
+                    : `(请选择 1-${selMaterialLen} 项)`
+                }}
+              </text>
+            </view>
+
+            <view class="mt24">
+              <g-select-flatten
+                v-model:value="materialValue"
+                :selectLength="selMaterialLen"
+                :list="materialList"
+                :multiple="selMaterialLen != 1"
+              />
+            </view>
+          </view>
+
           <view class="container-box g-border mb16 box-padding">
             <view class="f36">
               <text class="mr12 g-bold">备注</text>
@@ -530,6 +556,7 @@
   const fg1020 = ref('');
   const fg1021 = ref('');
   const selPurposeLen = ref(3);
+  const selMaterialLen = ref(3);
   const purposeCount = ref<{ purpose: string; count: number }[]>([]);
   const expressCompany = ref('');
   const chooseImg = (): Promise<TChoose> => {
@@ -580,6 +607,8 @@
     '医学鉴定',
     '其他',
   ]);
+
+  const materialList = ref<any[]>([]);
 
   const props = defineProps<{
     hosId: string;
@@ -856,6 +885,7 @@
   );
 
   const aimValue = ref<string[]>([]);
+  const materialValue = ref<string[]>([]);
 
   const getHosList = async ({ list }: { list: IHosInfo[] }) => {
     hosList.value = list;
@@ -1035,6 +1065,8 @@
     const {
       selPurposeLen: _selPurposeLen,
       purpose: _aimList,
+      selMaterialLen: _selMaterialLen,
+      material: _materialList,
       company,
       photoConfig,
     } = pageConfig.value;
@@ -1051,8 +1083,18 @@
       selPurposeLen.value = _selPurposeLen * 1;
     }
 
+    if (_selMaterialLen) {
+      selMaterialLen.value = _selMaterialLen * 1;
+    }
+
     if (_aimList) {
       aimList.value = _aimList.map((o) => ({
+        label: o,
+        value: o,
+      }));
+    }
+    if (_materialList) {
+      materialList.value = _materialList.map((o) => ({
         label: o,
         value: o,
       }));
@@ -1201,6 +1243,15 @@
         return;
       }
     }
+    if (
+      materialList.value &&
+      !materialList.value.length &&
+      !materialValue.value
+    ) {
+      scrollTo.value = '_materia';
+      showMessage('请先选择 复印材料', 3000);
+      return;
+    }
 
     // if (isPurposeRadio === '1') {
     //   if (!aimValue.value.length) {
@@ -1287,6 +1338,7 @@
 
     const division = `${province} ${city} ${county}`;
     const copyAim = aimValue.value.join('、');
+    const copyData = materialValue.value.join('、');
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
@@ -1299,6 +1351,7 @@
       addresseePhone: senderPhone,
       channel: gStores.globalStore.browser.source,
       copyAim,
+      copyData,
       printCount,
       division,
       frontIdCardUrl: idCardImg.value.frontIdCardUrl,
@@ -1405,6 +1458,7 @@
       censusRegisterUrl,
       outInfo,
       copyAim,
+      copyData,
       printCount,
       imageJson,
       remark: _remark,
@@ -1438,6 +1492,7 @@
       (idCardImg.value.handIdCardFrontUrl = handIdCardFrontUrl);
 
     aimValue.value = copyAim.split('、');
+    materialValue.value = copyData.split('、');
 
     recordRows.value = JSON.parse(outInfo);
 
@@ -1481,6 +1536,8 @@
 
   const init = async () => {
     await getConfig();
+    console.log('pageConfig', pageConfig, materialList);
+
     // 再次申请
     if (props.phsOrderNo) {
       await assignPageData(props.phsOrderNo);

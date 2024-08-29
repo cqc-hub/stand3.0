@@ -109,9 +109,11 @@
         >
           预交费用
         </view>
+        <!-- #ifdef  MP-WEIXIN -->
         <view v-if="isShowCtypeBtn" class="button f36" @click="goOrder">
           住院点餐
         </view>
+        <!-- #endif -->
       </view>
       <g-flag typeFg="17" isShowFgTip aaa />
     </view>

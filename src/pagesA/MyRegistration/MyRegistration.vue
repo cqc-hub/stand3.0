@@ -165,6 +165,7 @@
     OrderStatus,
     orderStatusMap,
     getOrderStatusTitle,
+    getStatusConfig
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -270,6 +271,7 @@
   const tabChange = async (e: number) => {
     tabCurrent.value = e;
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
+    selStatus.value=''
     if (!pat.value?.patientId && e) {
       _patChange(gStores.userStore.patChoose);
     }
@@ -278,16 +280,16 @@
     await getList(patientId);
   };
 
-  const getStatusConfig = (status: OrderStatus) => {
-    if (orderStatusMap[status]) {
-      return orderStatusMap[status];
-    } else {
-      return {
-        title: `未知(${status})`,
-        cardColor: 'var(--hr-neutral-color-7)',
-      };
-    }
-  };
+  // const getStatusConfig = (status: OrderStatus) => {
+  //   if (orderStatusMap[status]) {
+  //     return orderStatusMap[status];
+  //   } else {
+  //     return {
+  //       title: `未知(${status})`,
+  //       cardColor: 'var(--hr-neutral-color-7)',
+  //     };
+  //   }
+  // };
 
   const getList = async (patientId = '') => {
     isComplete.value = false;
@@ -513,7 +515,7 @@
     // return
     const _listStatus = [...new Set(list.value.map((o) => o.orderStatus))].map(
       (status) => ({
-        label: getStatusConfig(status).title,
+        label: getStatusConfig(status,isWaitReg.value || tabCurrent.value === 2).title,
         value: status,
       })
     );

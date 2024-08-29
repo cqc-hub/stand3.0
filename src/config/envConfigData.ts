@@ -31,6 +31,8 @@ export const sysConfigEnv = <const>{
   //   },
   // },
   // 'medRecord.0.isCustomPatRecord': '1',
+  // 'medRecord.0.material': ['病案首页','入院记录','手术记录','病理报告','检查报告','出院记录'],
+  // 'patProxy':0,
   // 'order.orderRegBtnLabel': '预约',
 };
 
