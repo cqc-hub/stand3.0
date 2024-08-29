@@ -16,12 +16,12 @@
       />
       <view
         v-if="orderConfig.isShowFilterOrderSourceBtn === '1'"
-        class="flex-between"
+        class="flex-between bg-white g-border-top"
       >
         <view></view>
         <view
           @click="isFilterDoctor = !isFilterDoctor"
-          class="flex-normal pt12 mr32"
+          class="flex-normal pt6 pb6 mr32 "
         >
           <text class="iconfont f48">
             {{ isFilterDoctor ? '&#xe6d0;' : '&#xe6ce;' }}
@@ -35,7 +35,7 @@
         v-if="!checkedDay"
         class="container-contract animate__animated animate__fadeIn"
       >
-        <view v-for="(item, i) in _allDocList" :key="i" class="item-content">
+        <view v-for="(item, i) in _allDocList" :key="i" class="pb16">
           <Order-Doc-Item-All
             :item="item"
             @date-click="dateClick"
@@ -55,7 +55,7 @@
             <view class="item-scheme-date">{{ _item.categorName }}</view>
             <view
               v-for="(__item, __i) in _item.schemeList"
-              class="item-content animate__animated animate__fadeIn"
+              class="pb16 animate__animated animate__fadeIn"
               :key="__i"
             >
               <Order-Doc-Item-Date
@@ -336,9 +336,6 @@
     padding: 0 32rpx;
     padding-top: 24rpx;
 
-    .item-content {
-      padding-bottom: 16rpx;
-    }
   }
 
   .item-scheme-date {

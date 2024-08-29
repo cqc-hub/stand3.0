@@ -211,6 +211,10 @@
     args.payType = 'ALI_MINI';
     // #endif
 
+    if (gStores.globalStore.sysCode === '1001063') {
+      args.payType  = 'ICBC_JFT_H5';
+    }
+
     await api.clinicSpecialPayInform(args);
     payAfter();
   };

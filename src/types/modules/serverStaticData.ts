@@ -139,7 +139,7 @@ export interface ISystemConfig_ {
     isMedicalQrChoose?: '1';
     /** 开放实名认证(去认证-就诊人列表按钮) */
     realNameAuth?: ('ocrVerify' | 'faceVerify')[];
-    /** 新增就诊人后进行免密代扣授权 */
+    /** 新增就诊人后进行免密代扣授权(开启后预约挂号时替换挂号接口) */
     isPayWithoutSecretAuth?: '1';
     /** 修改家庭成员中就诊人手机号 */
     isEditPatPhone?: '1';

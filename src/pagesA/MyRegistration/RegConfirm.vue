@@ -47,6 +47,26 @@
       />
     </Order-Reg-Confirm>
 
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :title="flagTitle1203"
+      :maskClickClose="false"
+      @cancel="cancelAsync"
+      @confirm="confirmAsync"
+      height="90vh"
+      confirmText="同意授权,方便就诊"
+      cannerText="不授权"
+      ref="regDialogConfirmSign"
+    >
+      <g-flag
+        v-model:title="flagTitle1203"
+        typeFg="1204"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
+
     <xy-dialog
       :title="'提示'"
       :show="isPreventOrder"
@@ -106,7 +126,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
 
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { IPageProps } from './utils/regConfirm';
   import { TSchInfo } from './utils/index';
@@ -132,6 +152,7 @@
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
   import GreenPower from '@/components/greenPower/greenPower.vue';
   import GreenToast from '@/components/greenPower/greenToast.vue';
+  import { useProgramPaySign } from '@/pagesA/medicalCardMan/utils';
 
   const gStores = new GStores();
   const props = ref({} as IPageProps);
@@ -152,6 +173,18 @@
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
   const isOverLimit = ref('');
+
+  const {
+    regDialogConfirmSign,
+    isAgreeSignChange,
+    flagTitle1203,
+    disagreeSign,
+    initSign,
+    goPaySign,
+    signAfterOnPageShow,
+    isAgreeSign,
+    isSignExist,
+  } = useProgramPaySign();
 
   // 候补挂号?
   const isWaitReg = computed(() => {
@@ -227,7 +260,7 @@
         });
       }
 
-      return
+      return;
     }
 
     if (isWaitReg.value) {
@@ -245,12 +278,12 @@
       });
     }
     // #endif
-
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;
 
     const requestArg = {
+      freeSignData: '',
       firstDeptName: firstDept?.deptName,
       firstHosDeptId: firstDept?.deptId,
       secondDeptName: secondDept?.deptName,
@@ -292,9 +325,39 @@
     }
     // #endif
 
+    /**
+     * 免密代扣挂号
+     */
+    if (isSignExist.value) {
+      const {
+        result: { flag, freeSignData },
+      } = await api.findSign({
+        patientId,
+        source,
+      });
+
+      if (!flag) {
+        regDialogConfirmSign.value.show();
+        await new Promise((r, j) => {
+          resolve = r;
+          reject = j;
+        });
+
+        await goPaySign(patientId, {
+          type: 'order',
+          cb: signAfterContinueOrder,
+        });
+      }
+
+      requestArg.freeSignData = freeSignData;
+    }
+
+    // true ? 免密代扣 :  正常挂号
+    const actionApi = isSignExist.value ? api.addOrder : api.addReg;
+
     let {
       result: { orderId, hasCharge, hint },
-    } = await api.addReg(requestArg).catch(async (e) => {
+    } = await actionApi(requestArg).catch(async (e) => {
       if (e) {
         const { respCode, message, code } = e;
 
@@ -426,6 +489,13 @@
 
   let resolve: (...any) => any = () => {};
   let reject: (...any) => any = () => {};
+
+  const confirmAsync = () => {
+    resolve();
+  };
+  const cancelAsync = () => {
+    reject();
+  };
   const waitReg = async () => {
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
@@ -468,12 +538,26 @@
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
   };
 
+  const signAfterContinueOrder = async () => {
+    // #ifdef MP-WEIXIN
+    await regConfirm();
+    // #endif
+  };
+
+  onShow(() => {
+    signAfterOnPageShow({
+      type: 'order',
+      cb: signAfterContinueOrder,
+    });
+  });
+
   onLoad((p) => {
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
+    initSign();
     getPageConfig();
     //设置顶部标题
-    isWaitReg &&
+    isWaitReg.value &&
       uni.setNavigationBarTitle({
         title: '确认候补信息',
       });

@@ -62,7 +62,13 @@ export const payMoneyOnline = async (
   } else {
     requestArg.openId = gStores.globalStore.openId;
   }
-  requestArg.channel = 'WX_MINI';
+
+  if (gStores.globalStore.sysCode === '1001063') {
+    requestArg.channel = 'ICBC_JFT_H5';
+  }else{
+    requestArg.channel = 'WX_MINI';
+  }
+
   // #endif
 
   // #ifdef MP-ALIPAY
@@ -70,7 +76,13 @@ export const payMoneyOnline = async (
   if (!gStores.globalStore.openId) {
     requestArg.userId = await getOpenid2();
   }
-  requestArg.channel = 'ALI_MINI';
+
+  if (gStores.globalStore.sysCode === '1001063') {
+    requestArg.channel = 'ICBC_JFT_H5';
+  }else{
+    requestArg.channel = 'ALI_MINI';
+  }
+  
   // #endif
 
   requestArg = {
