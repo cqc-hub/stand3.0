@@ -13,6 +13,14 @@
         bodyBold
         ref="gform"
       />
+
+      <view class="p24 pt32">
+        <fgUserInfoAgree
+          v-if="pageConfig.isUserInfoShareAgree === '1'"
+          v-model:value="isUserInfoAgree"
+        />
+      </view>
+
       <g-flag typeFg="51" isShowFgTip />
     </view>
 
@@ -178,6 +186,7 @@
   import FgAgree from './components/fgAgree.vue';
   import SelCardDialog from './components/SelCardDialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import fgUserInfoAgree from './components/fgUserInfoAgree.vue';
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
@@ -227,6 +236,7 @@
   let formList: TInstance[] = [];
 
   const isCheck = ref(false);
+  const isUserInfoAgree = ref(false);
 
   const dialogSelCardShow = ref(false);
   const dialogShow = ref(false);
@@ -530,6 +540,13 @@
         isDisabled = true;
       }
     });
+
+    if (
+      pageConfig.value.isUserInfoShareAgree === '1' &&
+      !isUserInfoAgree.value
+    ) {
+      isDisabled = true;
+    }
 
     return isDisabled;
   });

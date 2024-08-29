@@ -143,6 +143,8 @@ export interface ISystemConfig_ {
     isPayWithoutSecretAuth?: '1';
     /** 修改家庭成员中就诊人手机号 */
     isEditPatPhone?: '1';
+    /** 允许该平台访问院内此用户的就诊数据 */
+    isUserInfoShareAgree?: '1';
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     isVerifyIdCardLastFourNumber?: '1';

@@ -20,7 +20,12 @@
           ref="gform"
         />
       </view>
-
+      <view class="p24 pt32">
+        <fgUserInfoAgree
+          v-if="pageConfig.isUserInfoShareAgree === '1' && _isPageFirst"
+          v-model:value="isUserInfoAgree"
+        />
+      </view>
       <g-flag typeFg="51" isShowFgTip />
     </view>
 
@@ -133,6 +138,7 @@
     loginAuthAlipay,
     useProgramPaySign,
   } from './utils';
+
   import {
     GStores,
     idValidator,
@@ -143,7 +149,14 @@
     nameConvert,
     apiAsync,
     wait,
+    ISystemConfig,
   } from '@/utils';
+
+  import {
+    reDealMedicalFiling,
+    dealMedicalFiling,
+  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+
   import api from '@/service/api';
 
   import dayjs from 'dayjs';
@@ -151,14 +164,15 @@
 
   import FgAgree from './components/fgAgree.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import {
-    reDealMedicalFiling,
-    dealMedicalFiling,
-  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+  import fgUserInfoAgree from './components/fgUserInfoAgree.vue';
 
   const routeStore = useRouterStore();
   const cacheStore = useCacheStore();
+  const pageConfig = ref(<ISystemConfig['person']>{});
+
   const isCheck = ref(false);
+  const isUserInfoAgree = ref(false);
+
   const fg514 = ref({
     title: '',
     content: '',
@@ -193,7 +207,7 @@
   });
 
   const isShowHealthLogin = ref(false);
-  const _isPageFirst = !globalGl.systemInfo.isSearchInHos;
+  const _isPageFirst = ref(!globalGl.systemInfo.isSearchInHos);
 
   const gform = ref<any>('');
   const formData = ref<Partial<Record<TFormKeys, any>>>({});
@@ -230,7 +244,7 @@
 
   const isOpenOcr = async () => {
     let _isOpenOcr = false;
-    const { ocr } = await ServerStaticData.getSystemConfig('person');
+    const { ocr } = pageConfig.value;
     // #ifdef MP-WEIXIN
     _isOpenOcr = ocr === '1';
     // #endif
@@ -303,7 +317,7 @@
       isPayWithoutSecretAuth,
       isCanChangeHosPhone,
       useFaceVerifyInChangePhone,
-    } = await ServerStaticData.getSystemConfig('person');
+    } = pageConfig.value;
 
     if (isFace === '1') {
       if (formData.value[formKey.idType] === '01') {
@@ -569,7 +583,7 @@
       isSmsVerify,
       isDropAddress,
       isDropNation,
-    } = await ServerStaticData.getSystemConfig('person');
+    } = pageConfig.value;
 
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
@@ -800,9 +814,7 @@
 
       if (value === '0' && key === formKey.birthday) {
         o.validator = async (v) => {
-          const { ageChildren } = await ServerStaticData.getSystemConfig(
-            'person'
-          );
+          const { ageChildren } = pageConfig.value;
 
           const monthAgeAgo = dayjs()
             .subtract(ageChildren, 'month')
@@ -852,11 +864,19 @@
     let isDisabled = false;
     const formKeys = formList.map((o) => o.key);
 
-    if (_isPageFirst) {
+    if (_isPageFirst.value) {
       if (!isCheck.value) {
         return true;
       }
+
+      if (
+        pageConfig.value.isUserInfoShareAgree === '1' &&
+        !isUserInfoAgree.value
+      ) {
+        return true;
+      }
     }
+
     if (
       isSignExist.value &&
       !pageProps.value.patientName &&
@@ -910,6 +930,7 @@
   };
 
   const init = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
     formData.value = Object.fromEntries(
       Object.entries(pageProps.value).map(([key, value]) => {
         if (key === formKey.defaultFalg) {
