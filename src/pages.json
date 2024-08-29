@@ -212,7 +212,7 @@
         {
           "path": "mySet/userPolicy",
           "style": {
-            "navigationBarTitleText": "隐私条款"
+            "navigationBarTitleText": " "
           }
         },
         {

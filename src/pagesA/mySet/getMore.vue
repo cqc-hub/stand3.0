@@ -8,9 +8,18 @@
       <view>当前版本 {{ $global.VERSION }}</view>
     </view>
     <view class="more-content">
-      <navigator url="/pagesA/mySet/userPolicy">
+
+      <navigator
+        v-for="item in cacheStore.flagList"
+        :key="item.flag"
+        :url="
+          joinQueryForUrl('/pagesA/mySet/userPolicy', {
+            typeFg: item.flag,
+          })
+        "
+      >
         <view>
-          <text>用户条款和隐私政策</text>
+          <text>{{ item.label }}</text>
           <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
         </view>
       </navigator>
@@ -25,6 +34,10 @@
 </template>
 
 <script lang="ts" setup>
+  import { joinQueryForUrl } from '@/common';
+  import { useCacheStore } from '@/stores';
+
+  const cacheStore = useCacheStore();
   const goInfoPage = () => {
     uni.navigateTo({
       url: '/pages/home/accountInfo',

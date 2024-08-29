@@ -16,9 +16,24 @@
       </view>
       <view class="g-break-word flex1">
         <text>我已阅读并同意</text>
-        <text @click.stop="showAgreement" class="color-blue">
+        <text
+          v-if="content"
+          @click.stop="emits('show-agree')"
+          class="color-blue"
+        >
           {{ content }}
         </text>
+
+        <template v-else>
+          <text
+            v-for="item in cacheStore.flagList"
+            :key="item.flag"
+            @click="goAgreement(item)"
+            class="color-blue"
+          >
+            《{{ item.label }}》
+          </text>
+        </template>
 
         <!-- <text>{{ fg141 }}</text> -->
         <!-- <rich-text :nodes="fg141" /> -->
@@ -31,6 +46,8 @@
 
 <script lang="ts" setup>
   import { defineComponent, ref } from 'vue';
+  import { useCacheStore } from '@/stores/modules/cache';
+  import { joinQueryForUrl } from '@/common';
 
   const props = withDefaults(
     defineProps<{
@@ -39,10 +56,9 @@
       content?: string;
       cusShowAgree?: boolean;
     }>(),
-    {
-      content: '《用户条款和隐私政策》',
-    }
+    {}
   );
+  const cacheStore = useCacheStore();
 
   const emits = defineEmits(['update:isCheck', 'show-agree']);
   const fg141 = ref('');
@@ -51,17 +67,11 @@
     emits('update:isCheck', !props.isCheck);
   };
 
-  const showAgreement = () => {
-    if (props.cusShowAgree) {
-      emits('show-agree')
-    } else {
-      goAgreement();
-    }
-  }
-
-  const goAgreement = () => {
+  const goAgreement = (item) => {
     uni.navigateTo({
-      url: '/pagesA/mySet/userPolicy',
+      url: joinQueryForUrl('/pagesA/mySet/userPolicy', {
+        typeFg: item.flag,
+      }),
     });
   };
 </script>
@@ -71,7 +81,6 @@
     display: flex;
     font-size: var(--hr-font-size-xs);
     align-items: flex-start;
-    margin-bottom: 24rpx;
 
     .check-box {
       color: var(--hr-neutral-color-7);

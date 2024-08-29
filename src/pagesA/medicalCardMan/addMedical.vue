@@ -65,8 +65,6 @@
     </Order-Reg-Confirm>
 
     <view class="footer">
-      <Fg-Agree v-if="_isPageFirst" v-model:isCheck="isCheck" />
-
       <Fg-Agree
         v-if="isSignExist && !pageProps.patientName"
         :isCheck="isAgreeSign"
@@ -76,6 +74,10 @@
         content="《免密代扣协议》"
         cusShowAgree
       />
+
+      <view v-if="_isPageFirst" class="mb24">
+        <Fg-Agree v-model:isCheck="isCheck" />
+      </view>
 
       <button
         v-if="!isShowHealthLogin"

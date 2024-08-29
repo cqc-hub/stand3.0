@@ -79,7 +79,6 @@
 
 <style lang="scss" scoped>
   .real-top {
-    // min-height: 56rpx;
     padding: 12rpx 32rpx;
     background: var(--hr-brand-color-1);
     text-align: left;
@@ -88,10 +87,8 @@
   }
 
   .tip {
-    // margin-top: 32rpx;
     line-height: 40rpx;
     color: #888;
-    // padding-bottom: 50rpx;
     word-break: break-all;
     white-space: pre-line;
     text-align: left;
@@ -100,7 +97,6 @@
       margin-bottom: 10rpx;
     }
 
-    // padding: 0 32rpx;
   }
 
   .aaa {

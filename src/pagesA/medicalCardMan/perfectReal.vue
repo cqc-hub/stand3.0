@@ -122,8 +122,8 @@
     </Order-Reg-Confirm>
 
     <view class="footer">
+      <!-- v-if="isSignExist" -->
       <Fg-Agree
-        v-if="isSignExist"
         :isCheck="isAgreeSign"
         :systemModeOld="gStores.globalStore.modeOld"
         @update:isCheck="isAgreeSignChange"
@@ -131,10 +131,12 @@
         content="《免密代扣协议》"
         cusShowAgree
       />
-      <Fg-Agree
-        v-model:isCheck="isCheck"
-        :systemModeOld="gStores.globalStore.modeOld"
-      />
+      <view class="mb24">
+        <Fg-Agree
+          v-model:isCheck="isCheck"
+          :systemModeOld="gStores.globalStore.modeOld"
+        />
+      </view>
       <button
         @click="gform.submit"
         :class="{
@@ -150,6 +152,11 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, type Ref } from 'vue';
+  import { deQueryForUrl, joinQuery } from '@/common';
+  import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
+  import { useMessageStore, useRouterStore } from '@/stores';
+  import type { TInstance } from '@/components/g-form/index';
+
   import {
     PatientUtils,
     GStores,
@@ -171,10 +178,7 @@
     TCardPat,
     useProgramPaySign,
   } from './utils';
-  import { deQueryForUrl, joinQuery } from '@/common';
-  import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
-  import { useMessageStore, useRouterStore } from '@/stores';
-  import type { TInstance } from '@/components/g-form/index';
+
   import {
     reDealMedicalFiling,
     dealMedicalFiling,
