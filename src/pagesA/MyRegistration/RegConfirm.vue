@@ -191,6 +191,18 @@
     return props.value.schState === '2';
   });
 
+  const getFreeSignData = async (patientId) => {
+    const { result } = await api.findSign({
+      patientId,
+      source: gStores.globalStore.browser.source,
+    });
+
+    return result as {
+      freeSignData: string;
+      [key: string]: any;
+    };
+  };
+
   const regConfirm = async () => {
     const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
     /**
@@ -329,14 +341,9 @@
      * 免密代扣挂号
      */
     if (isSignExist.value) {
-      let {
-        result: { flag, freeSignData },
-      } = await api.findSign({
-        patientId,
-        source,
-      });
+      let { freeSignData } = await getFreeSignData(patientId);
 
-      if (!flag) {
+      if (!freeSignData) {
         regDialogConfirmSign.value.show();
         await new Promise((r, j) => {
           resolve = r;
@@ -348,12 +355,7 @@
           cb: signAfterContinueOrder,
         });
 
-        const { result } = await api.findSign({
-          patientId,
-          source,
-        });
-
-        freeSignData = result.freeSignData;
+        freeSignData = (await getFreeSignData(patientId)).freeSignData;
       }
 
       requestArg.freeSignData = freeSignData;
