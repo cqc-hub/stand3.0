@@ -329,7 +329,7 @@
      * 免密代扣挂号
      */
     if (isSignExist.value) {
-      const {
+      let {
         result: { flag, freeSignData },
       } = await api.findSign({
         patientId,
@@ -347,6 +347,13 @@
           type: 'order',
           cb: signAfterContinueOrder,
         });
+
+        const { result } = await api.findSign({
+          patientId,
+          source,
+        });
+
+        freeSignData = result.freeSignData;
       }
 
       requestArg.freeSignData = freeSignData;
