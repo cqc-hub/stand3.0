@@ -103,6 +103,14 @@ const viewerStore = defineStore('viewer', {
       }
     },
 
+    homeBallList(): any[] {
+      return this.viewConfig[9]?.functionList || [];
+    },
+
+    myBallList(): any[] {
+      return this.viewConfig[10]?.functionList || [];
+    },
+
     myPersonRecordList(): any[] {
       return this.viewConfig[4]?.functionList || [];
     },

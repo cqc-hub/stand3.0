@@ -63,6 +63,7 @@
               pageConfig?.medicalAsistantConfig?.bottomBtn?.length < 4,
           }"
           v-for="(btn, idx) in pageConfig?.medicalAsistantConfig?.bottomBtn"
+          :key="idx"
         >
           <view
             v-if="btn.icon"
@@ -110,7 +111,7 @@
   const gStores = new GStores();
   const params = new HosGuideParams(gStores.userStore.patChoose.patientId);
   const guideSheetList = ref<HosGuideSheet[] | []>([]);
-  const guideContent = reactive<GuideContent>({
+  let guideContent = reactive<GuideContent>({
     list: [],
     navigationCode: {
       boilerRoom: '',

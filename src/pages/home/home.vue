@@ -119,37 +119,23 @@
             />
           </view>
 
-          <!-- #ifdef MP-WEIXIN -->
+          <!-- 首页悬浮球 -->
           <drag-button
-            v-if="global.sConfig.isOpenIntelQA"
+            v-if="
+            viewerStore.homeBallList &&
+            viewerStore.homeBallList.length === 1 "
             :right="1"
             :edge="100"
-            :zid="33"
-            @btnClick="gotoIntelQA"
+            zid="33"
+            @btnClick="useCommonTo(viewerStore.homeBallList[0])"
             isDock
             scrollY
           >
             <view class="auto-person g-fade-in">
-              <text>智能客服</text>
-              <image :src="$global.BASE_IMG + 'auto.png'"></image>
+              <text v-if="viewerStore.homeBallList[0].detail">{{viewerStore.homeBallList[0].detail}}</text>
+              <image :src="viewerStore.homeBallList[0].iconfont"></image>
             </view>
           </drag-button>
-          <!-- #endif -->
-          <!-- #ifdef MP-ALIPAY -->
-          <drag-button
-            v-if="global.sConfig.isOpenIntelAI"
-            :right="1"
-            :edge="100"
-            :zid="33"
-            @btnClick="gotoIntelAI"
-            isDock
-            scrollY
-          >
-            <view class="auto-person g-fade-in">
-              <image :src="$global.BASE_IMG + 'aze_small.png'"></image>
-            </view>
-          </drag-button>
-          <!-- #endif -->
 
           <!-- #ifdef MP-WEIXIN -->
           <view>
@@ -435,32 +421,6 @@
   // #endif
   //用户滑倒底部
 
-  //跳转智能问答
-  const gotoIntelQA = () => {
-    if (global.sConfig.isOpenIntelQA) {
-      uni.navigateToMiniProgram({
-        appId: global.sConfig.isOpenIntelQA.appId,
-        path: global.sConfig.isOpenIntelQA.path,
-      });
-    }
-  };
-  //跳转云陪诊安诊儿
-  const gotoIntelAI = () => {
-    const IntelAI: TButtonConfig = {
-      type: 'h5',
-      isSelfH5: '1',
-      path: 'pagesC/choosePat/choosePat',
-      text: '云陪诊',
-      extraData: {
-        _type: 'ypzaze',
-      },
-      addition: {
-        patientId: '_patientId',
-      },
-      isLocal: '1',
-    };
-    useTBanner(IntelAI);
-  };
 //打开关注框
 const openShare = (item,type?) => {
   if(type === 'attention'){

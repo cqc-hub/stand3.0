@@ -45,13 +45,6 @@ interface ISConfig {
   isOpenHelpOld?: '1';
   //是否开启健康科普
   isOpenPopularSci?: '1';
-  //首页开启智能问答——微信
-  isOpenIntelQA?: {
-    appId: string;
-    path: string;
-  };
-  //首页开启安诊儿云陪诊——支付宝
-  isOpenIntelAI?: boolean;
   //首页是否展示支付宝的关注组件
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
@@ -254,7 +247,6 @@ const scJson: Record<string, ISConfig> = {
    * 台州第一人民医院
    */
   1001033: {
-    // isOpenIntelAI: true,
     isOpenAlipayZndz: true,
     isDrugDelivery: '1',
     isOpenHelpOld: '1',
@@ -277,11 +269,7 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 西安红会
    */
-  1001057: {
-    isOpenIntelQA: {
-      appId: 'wxba22f1a66a3af7aa',
-      path: 'pages/index?appid=wx7b1baac614ebed72&configure=intelligent',
-    },
+  1001057: { 
     isOpenPopularSci:'1',
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {
