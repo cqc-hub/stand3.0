@@ -44,7 +44,7 @@
                   </view>
 
                   <view v-if="isWaitForPay(info)" class="text-no-wrap">
-                    <text class="mr12 text-no-wrap">待补交金额:</text>
+                    <text class="mr12 text-no-wrap">待补缴金额:</text>
                     <text class="mr12 g-break-word">
                       {{ info.supplementFee }}元
                     </text>
