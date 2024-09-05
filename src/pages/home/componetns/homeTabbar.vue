@@ -25,6 +25,12 @@
                 class="animate__animated animate__fast"
               />
               <text class="label">{{ item.label }}</text>
+              <view
+                class="badge"
+                v-if="item.label === '消息中心' && unreadMes "
+              >
+                
+              </view>
             </view>
           </view>
         </g-login>
@@ -34,13 +40,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, onUpdated } from 'vue';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
-  import { useTBanner } from '@/utils';
-
+  import { useTBanner, throttle, GStores } from '@/utils';
+  import api from '@/service/api';
+  
   defineProps<{ systemModeOld: boolean }>();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
@@ -69,6 +76,7 @@
   const currentPage = pages.slice(-1)[0];
   const currentPath = '/' + currentPage.route;
   const isIos = ref(false);
+  const unreadMes = ref(false);
 
   const changeTab = (item) => {
     const url = item.url;
@@ -118,6 +126,15 @@
     return currentPath === item.url && item.url === '/pages/home/my';
   };
 
+  let getNum =() => {
+    api.getStatus({}).then(({result})=>{
+      unreadMes.value = result as boolean;
+      // unreadMes.value = true;
+  })
+    
+  };
+    getNum = throttle(getNum, 1000);
+
   onMounted(async () => {
     getMenuBtn();
     if (systemInfo === '') {
@@ -129,6 +146,12 @@
       setLocalStorage({
         [SYS_TAB_KEY]: isIos.value,
       });
+    }
+    if (global.sConfig.isOpenHomeTabBarMessageBtn) {
+      const gStore = new GStores();
+      if (gStore.userStore.patChoose.patientId) {
+        getNum();
+      }
     }
   });
 
@@ -264,6 +287,22 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+        .badge {
+          width: 25rpx;
+          height: 25rpx;
+          line-height: var(--hr-font-size-xl);
+          text-align: center;
+          background-color: red;
+          color: white;
+          font-size: var(--hr-font-size-xxxs);
+          font-weight: 700;
+          border-radius: 50%;
+          position: relative;
+          bottom: calc(
+            var(--hr-font-size-xxl) + var(--hr-font-size-xxxs) + 30rpx
+          );
+          left: calc(var(--hr-font-size-xxl) / 2);
         }
       }
     }

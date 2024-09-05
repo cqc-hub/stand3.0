@@ -130,6 +130,7 @@ const scJson: Record<string, ISConfig> = {
       isLoginByOpenId: '1'
     },
     isOpenMessageAuth: '1',
+    isOpenHomeTabBarMessageBtn: '1',
   },
 
   /**
