@@ -122,8 +122,8 @@
     </Order-Reg-Confirm>
 
     <view class="footer">
-      <!-- v-if="isSignExist" -->
       <Fg-Agree
+        v-if="isSignExist"
         :isCheck="isAgreeSign"
         :systemModeOld="gStores.globalStore.modeOld"
         @update:isCheck="isAgreeSignChange"
