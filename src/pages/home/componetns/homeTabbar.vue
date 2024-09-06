@@ -78,6 +78,8 @@
   const isIos = ref(false);
   const unreadMes = ref(false);
 
+  const gStore = new GStores();
+
   const changeTab = (item) => {
     const url = item.url;
 
@@ -126,8 +128,10 @@
     return currentPath === item.url && item.url === '/pages/home/my';
   };
 
-  let getNum =() => {
-    api.getStatus({}).then(({result})=>{
+  let getNum =(pat) => {
+    api.getStatus({
+    str:`OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`
+    }).then(({result})=>{
       unreadMes.value = result as boolean;
       // unreadMes.value = true;
   })
@@ -148,7 +152,6 @@
       });
     }
     if (global.sConfig.isOpenHomeTabBarMessageBtn) {
-      const gStore = new GStores();
       if (gStore.userStore.patChoose.patientId) {
         getNum();
       }

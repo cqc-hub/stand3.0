@@ -131,16 +131,21 @@
 
   const unreadMes = ref(false);
   let getNum = () => {
-    api.getStatus({}).then(({ result }) => {
+    api.getStatus({
+      str:`OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`
+    }).then(({ result }) => {
       unreadMes.value = result as boolean;
     });
   };
 
   getNum = throttle(getNum, 1000);
 
+  const gStore = new GStores();
+
   onMounted(async () => {
-    const gStore = new GStores();
+
     if (gStore.userStore.patChoose.patientId) {
+
       const hasMes = options.value.list.find((item) =>
         item.path?.includes('/pagesB/historicalMess/historicalMess')
       );
