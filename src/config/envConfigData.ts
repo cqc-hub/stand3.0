@@ -35,28 +35,27 @@ export const sysConfigEnv = <const>{
   // 'medRecord.0.material': ['病案首页','入院记录','手术记录','病理报告','检查报告','出院记录'],
   // 'patProxy':0,
   // 'order.orderRegBtnLabel': '预约',
-  'RestOfConfig.isOpenPhone':'1',
-  'RestOfConfig.customBtn': [
-    {
-      label: '自定义按', // 标题
-      subLabel: '副标题', // 副标题
-      icon: 'ico_sy_yygh',
-      config: {
-        type: 'h5',
-        isSelfH5: '1',
-        path: 'pagesC/queryCase/queryCase',
-        text: '意见反馈',
-        extraData: {
-          pageType: 2,
-        },
-        addition: {
-          herenId: 'herenId',
-          pageType: '2',
-        },
-        isLocal: '1',
-      },
-    },
-  ],
+  // 'RestOfConfig.customBtn': [
+  //   {
+  //     label: '自定义按', // 标题
+  //     subLabel: '副标题', // 副标题
+  //     icon: 'ico_sy_yygh',
+  //     config: {
+  //       type: 'h5',
+  //       isSelfH5: '1',
+  //       path: 'pagesC/queryCase/queryCase',
+  //       text: '意见反馈',
+  //       extraData: {
+  //         pageType: 2,
+  //       },
+  //       addition: {
+  //         herenId: 'herenId',
+  //         pageType: '2',
+  //       },
+  //       isLocal: '1',
+  //     },
+  //   },
+  // ],
 };
 
 export const apiConfigEnv = <const>{
