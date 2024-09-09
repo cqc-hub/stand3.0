@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf64e84cf578fe0a7",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002182620396"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "嘉兴市第二医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "router": {
       "base": "./"
