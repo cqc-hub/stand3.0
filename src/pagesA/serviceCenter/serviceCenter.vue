@@ -77,6 +77,19 @@
           <text class="desc">热线电话咨询</text>
         </view>
       </button>
+      <button
+        v-if="pageConfig?.customBtn"
+        v-for="(item, index) in pageConfig?.customBtn"
+        :key="`customBut${index}`"
+        class="s-btn g-border-right"
+        @click="useTBanner(item.config)"
+      >
+      <view class="s-btn-container">
+          <text class="iconfont icon-font icon-kefu custom-icon" :class="item.icon??''"/>
+          <text class="title">{{item.label}}</text>
+          <text class="desc">{{item.subLabel}}</text>
+        </view>
+      </button>
     </view>
     <g-message />
   </view>
@@ -104,6 +117,7 @@
   }>();
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['RestOfConfig']>{});
+  console.log('pageConfig', pageConfig);
   const subType = props.subType && decodeURIComponent(props.subType!);
   const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
@@ -265,7 +279,11 @@
         &:after {
           border: none;
         }
-
+        .custom-icon{
+          height: 56rpx !important;
+          width: 56rpx;
+          top:34rpx;
+        }
         .icon-kefu {
           font-size: 56rpx;
           color: var(--hr-neutral-color-10);

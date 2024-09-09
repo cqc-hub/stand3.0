@@ -459,6 +459,13 @@ export interface ISystemConfig_ {
     isTxService?: '1';
     //开启腾讯意见反馈
     isTxFeedback?: '1';
+    //自定义按钮
+    customBtn?: {
+      label: string; // 标题
+      subLabel?: string; // 副标题
+      icon?: string; //icon
+      config: TBannerConfig;
+    }[];
   };
 }
 

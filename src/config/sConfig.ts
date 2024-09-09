@@ -356,6 +356,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001038: {
     isOpenHelpOld: '1',
+    isOpenHomeTabBarNetWorkBtn: '1',
     medicalMHelp: {
       // isOpenPatToMedicalPat: {},
       alipay: {

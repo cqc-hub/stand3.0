@@ -128,12 +128,12 @@
     return currentPath === item.url && item.url === '/pages/home/my';
   };
 
-  let getNum =(pat) => {
+  let getNum =() => {
     api.getStatus({
     str:`OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`
     }).then(({result})=>{
       unreadMes.value = result as boolean;
-      // unreadMes.value = true;
+      unreadMes.value = true;
   })
     
   };

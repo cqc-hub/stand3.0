@@ -2,16 +2,29 @@
   <view>
     <view class="banner-grid">
       <!-- 首页一个入口  leftFunctionList >0 且  functionList =0 -->
-      <view class="uni-margin-wrap" v-if="props.leftFunctionList.length > 0 && props.functionList.length == 0">
+      <view
+        class="uni-margin-wrap"
+        v-if="
+          props.leftFunctionList.length > 0 && props.functionList.length == 0
+        "
+      >
         <swiper
           class="swiper"
           circular
           :autoplay="autoplay"
           :indicator-dots="props.leftFunctionList.length > 1 ? true : false"
         >
-          <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i" class="g-fade-in">
+          <swiper-item
+            v-for="(item, i) in props.leftFunctionList"
+            :key="i"
+            class="g-fade-in"
+          >
             <!-- <g-login @handler-next="gotoPath(item)" :disabled="item.loginInterception === '0'"> -->
-            <image mode="scaleToFill" :src="item.iconfont" @tap="gotoPath(item)" />
+            <image
+              mode="scaleToFill"
+              :src="item.iconfont"
+              @tap="gotoPath(item)"
+            />
             <!-- </g-login> -->
           </swiper-item>
         </swiper>
@@ -23,8 +36,12 @@
           <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
 
           <view
-            :class="`banner-back2 ${props.functionList.length > 2 ? 'view1' : 'view6'} ${
-              props.leftFunctionList[0].iconfont ? 'no-border' : 'banner-common2'
+            :class="`banner-back2 ${
+              props.functionList.length > 2 ? 'view1' : 'view6'
+            } ${
+              props.leftFunctionList[0].iconfont
+                ? 'no-border'
+                : 'banner-common2'
             }`"
             :style="props.functionList.length == 1 ? '' : 'height:auto'"
             v-if="props.leftFunctionList.length == 1"
@@ -32,7 +49,10 @@
           >
             <block v-if="props.leftFunctionList[0].iconfont">
               <!-- <g-login @handler-next="gotoPath(props.leftFunctionList[0])" :disabled="props.leftFunctionList[0].loginInterception === '0'"> -->
-              <image mode="scaleToFill" :src="props.leftFunctionList[0].iconfont" />
+              <image
+                mode="scaleToFill"
+                :src="props.leftFunctionList[0].iconfont"
+              />
               <!-- </g-login> -->
             </block>
             <block v-else>
@@ -51,9 +71,19 @@
 
           <!-- 第一组是多个banner -->
           <view v-else class="view1">
-            <swiper class="swiper" circular :autoplay="autoplay" indicator-dots="true">
+            <swiper
+              class="swiper"
+              circular
+              :autoplay="autoplay"
+              indicator-dots="true"
+            >
               <swiper-item v-for="(item, i) in props.leftFunctionList" :key="i">
-                <image @tap="gotoPath(item)" class="banner-img" mode="scaleToFill" :src="item.iconfont" />
+                <image
+                  @tap="gotoPath(item)"
+                  class="banner-img"
+                  mode="scaleToFill"
+                  :src="item.iconfont"
+                />
               </swiper-item>
             </swiper>
           </view>
@@ -80,11 +110,26 @@
             <block v-for="(item, i) in props.functionList" :key="i">
               <view
                 :class="`view${i + 2} banner-back${i + 1} banner-common`"
-                :style="props.leftFunctionList.length == 1 && props.functionList.length == 2 ? 'margin-top:0' : ''"
+                :style="
+                  props.leftFunctionList.length == 1 &&
+                  props.functionList.length == 2
+                    ? 'margin-top:0'
+                    : ''
+                "
                 @tap="gotoPath(item)"
               >
                 <view class="flex-between">
-                  <text>{{ item.title }}</text>
+                  <view class="title">
+                    <text>{{ item.title }}</text>
+                    <text
+                      v-if="item.detail"
+                      class="text-no-wrap banner-detail"
+                      :class="item.detail.length < 10 ? 'f32' : 'f22'"
+                    >
+                      {{ item.detail }}
+                    </text>
+                  </view>
+
                   <view :class="`iconfont icon-size${i + 1}`">&#xe6ca;</view>
                 </view>
                 <view :class="`iconfont icon-size-back${i + 1}`">&#xe6a5;</view>
@@ -98,245 +143,262 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, ref } from "vue";
-import { useCommonTo, openServicesChat, isSubscribeWx } from "@/common/checkJump";
+  import { withDefaults, ref } from 'vue';
+  import {
+    useCommonTo,
+    openServicesChat,
+    isSubscribeWx,
+  } from '@/common/checkJump';
 
-// 2/3
-// const type = ref(2);
+  // 2/3
+  // const type = ref(2);
 
-const emits = defineEmits(["open-share"]);
+  const emits = defineEmits(['open-share']);
 
-const props = withDefaults(
-  defineProps<{
-    leftFunctionList: IRoute[];
-    functionList: IRoute[];
-  }>(),
-  {
-    //左侧轮播数组
-    leftFunctionList: () => [
-      {
-        title: "住院助手",
-        url: "/xxx",
-        iconfont: "ico_sy_calendar1",
-      },
-    ],
-    //右侧数组
-    functionList: () => [
-      {
-        title: "住院助手",
-        url: "/xxx",
-        iconfont: "ico_sy_calendar1",
-      },
-    ],
-  }
-);
-const autoplay = ref(true);
-//跳转对应地址
-const gotoPath = async (item) => {
-  // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
-  // #ifdef MP-WEIXIN
-  if (item.query && JSON.parse(item.query).attention == "1" && !(await isSubscribeWx())) {
-    emits("open-share", item, "attention");
-  } else {
-    // #endif
-    if (item.path && item.path == "showCareModel") {
-      //关注组件拦截跳转 弹框
-      emits("open-share", item.query && JSON.parse(item.query));
-    } else if (item.path == "openWxService") {
-      openServicesChat(item.query);
-    } else {
-      useCommonTo(item);
+  const props = withDefaults(
+    defineProps<{
+      leftFunctionList: IRoute[];
+      functionList: IRoute[];
+    }>(),
+    {
+      //左侧轮播数组
+      leftFunctionList: () => [
+        {
+          title: '住院助手',
+          url: '/xxx',
+          iconfont: 'ico_sy_calendar1',
+        },
+      ],
+      //右侧数组
+      functionList: () => [
+        {
+          title: '住院助手',
+          url: '/xxx',
+          iconfont: 'ico_sy_calendar1',
+        },
+      ],
     }
+  );
+  const autoplay = ref(true);
+  //跳转对应地址
+  const gotoPath = async (item) => {
+    // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
     // #ifdef MP-WEIXIN
-  }
-  // #endif
-};
+    if (
+      item.query &&
+      JSON.parse(item.query).attention == '1' &&
+      !(await isSubscribeWx())
+    ) {
+      emits('open-share', item, 'attention');
+    } else {
+      // #endif
+      if (item.path && item.path == 'showCareModel') {
+        //关注组件拦截跳转 弹框
+        emits('open-share', item.query && JSON.parse(item.query));
+      } else if (item.path == 'openWxService') {
+        openServicesChat(item.query);
+      } else {
+        useCommonTo(item);
+      }
+      // #ifdef MP-WEIXIN
+    }
+    // #endif
+  };
 </script>
 
 <style lang="scss" scoped>
-.banner-grid {
-  .uni-margin-wrap {
-    width: 100%;
-    height: 160rpx;
-  }
-
-  swiper-item {
-    display: block;
-
-    image {
+  .banner-grid {
+    .uni-margin-wrap {
       width: 100%;
-      will-change: transform;
+      height: 160rpx;
     }
-  }
 
-  // 公用样式
-  .flex-between {
-    width: 100%;
-  }
+    swiper-item {
+      display: block;
 
-  .swiper {
-    height: 100%;
-    border-radius: 16rpx;
+      image {
+        width: 100%;
+        will-change: transform;
+      }
+    }
 
-    image {
+    // 公用样式
+    .flex-between {
+      width: 100%;
+    }
+
+    .swiper {
       height: 100%;
-      will-change: transform;
-    }
-
-    .banner-img {
       border-radius: 16rpx;
+
+      image {
+        height: 100%;
+        will-change: transform;
+      }
+
+      .banner-img {
+        border-radius: 16rpx;
+      }
     }
-  }
-  //2倍高度
-  .banner-common2 {
-    height: 160rpx;
-    box-sizing: border-box;
-    border-radius: 16rpx;
-    font-size: var(--hr-font-size-s);
-    font-weight: var(--h-weight-2);
-    color: var(--hr-neutral-color-10);
-    padding: 0 16rpx 0 32rpx;
-    display: flex;
-    overflow: hidden;
-  }
-  //标准高度
-  .banner-common {
-    height: 91rpx;
-    box-sizing: border-box;
-    border-radius: 16rpx;
-    font-size: var(--hr-font-size-s);
-    font-weight: var(--h-weight-2);
-    color: var(--hr-neutral-color-10);
-    padding: 0 16rpx 0 32rpx;
-    display: flex;
-    overflow: hidden;
-  }
-  // 蓝色
-  .icon-size1 {
-    font-size: var(--h-size-46);
-    color: var(--hr-brand-color-6);
-    font-weight: 400;
-  }
-  .banner-back1 {
-    background: #eef3ff;
-    border: 2rpx solid #d9e5ff;
-  }
-  // 绿色
-  .icon-size2 {
-    font-size: var(--h-size-46);
-    color: var(--hr-success-color-6);
-    font-weight: 400;
-  }
-  .icon-size3 {
-    font-size: var(--h-size-46);
-    color: var(--hr-brand-color-6);
-    font-weight: 400;
-  }
-  .banner-back2 {
-    background: #effbfa;
-    border: 2rpx solid #cfeae6;
-  }
-  .banner-back3 {
-    background: #eef3ff;
-    border: 2rpx solid #d9e5ff;
-  }
-  // 背景样式
-  .icon-size-back1 {
-    color: var(--hr-brand-color-6);
-    font-size: 90rpx;
-    font-weight: 400;
-    opacity: 0.15;
-    position: absolute;
-    right: 0;
-    bottom: -6rpx;
-  }
-  .icon-size-back2 {
-    color: var(--hr-success-color-6);
-    font-size: 90rpx;
-    font-weight: 400;
-    opacity: 0.15;
-    position: absolute;
-    right: 0;
-    bottom: -6rpx;
-  }
-
-  .icon-size-back3 {
-    color: var(--hr-brand-color-6);
-    font-size: 90rpx;
-    font-weight: 400;
-    opacity: 0.15;
-    position: absolute;
-    right: 0;
-    bottom: -6rpx;
-  }
-
-  // 副标题
-  .details {
-    font-size: var(--hr-font-size-xxxs) !important;
-    color: var(--hr-neutral-color-7);
-    margin-top: 12rpx;
-  }
-  .text-ellipsis {
-    -webkit-line-clamp: 2;
-    font-size: var(--hr-font-size-base);
-  }
-
-  .banner2 {
-    image {
-      width: 100%;
-      height: 100%;
-      will-change: transform;
+    //2倍高度
+    .banner-common2 {
+      height: 160rpx;
+      box-sizing: border-box;
+      border-radius: 16rpx;
+      font-size: var(--hr-font-size-s);
+      font-weight: var(--h-weight-2);
+      color: var(--hr-neutral-color-10);
+      padding: 0 16rpx 0 32rpx;
+      display: flex;
+      overflow: hidden;
     }
-    .parent {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      grid-column-gap: 12rpx;
-      grid-row-gap: 0;
+    //标准高度
+    .banner-common {
+      height: 91rpx;
+      box-sizing: border-box;
+      border-radius: 16rpx;
+      font-size: var(--hr-font-size-s);
+      font-weight: var(--h-weight-2);
+      color: var(--hr-neutral-color-10);
+      padding: 0 16rpx 0 32rpx;
+      display: flex;
+      overflow: hidden;
+      .title {
+        display: grid;
+        .banner-detail {
+          font-size: var(--hr-font-size-xxxs);
+          text-align: center;
+          color: var(--hr-neutral-color-7);
+          line-height: 34rpx;
+        }
+      }
+    }
+    // 蓝色
+    .icon-size1 {
+      font-size: var(--h-size-46);
+      color: var(--hr-brand-color-6);
+      font-weight: 400;
+    }
+    .banner-back1 {
+      background: #eef3ff;
+      border: 2rpx solid #d9e5ff;
+    }
+    // 绿色
+    .icon-size2 {
+      font-size: var(--h-size-46);
+      color: var(--hr-success-color-6);
+      font-weight: 400;
+    }
+    .icon-size3 {
+      font-size: var(--h-size-46);
+      color: var(--hr-brand-color-6);
+      font-weight: 400;
+    }
+    .banner-back2 {
+      background: #effbfa;
+      border: 2rpx solid #cfeae6;
+    }
+    .banner-back3 {
+      background: #eef3ff;
+      border: 2rpx solid #d9e5ff;
+    }
+    // 背景样式
+    .icon-size-back1 {
+      color: var(--hr-brand-color-6);
+      font-size: 90rpx;
+      font-weight: 400;
+      opacity: 0.15;
+      position: absolute;
+      right: 0;
+      bottom: -6rpx;
+    }
+    .icon-size-back2 {
+      color: var(--hr-success-color-6);
+      font-size: 90rpx;
+      font-weight: 400;
+      opacity: 0.15;
+      position: absolute;
+      right: 0;
+      bottom: -6rpx;
     }
 
-    //  3个的样式
-    .parent1 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      grid-column-gap: 12rpx;
-      grid-row-gap: 0;
+    .icon-size-back3 {
+      color: var(--hr-brand-color-6);
+      font-size: 90rpx;
+      font-weight: 400;
+      opacity: 0.15;
+      position: absolute;
+      right: 0;
+      bottom: -6rpx;
     }
 
-    .view1 {
-      grid-area: 1 / 1 / 4 / 3;
-      position: relative;
-    }
-    .view2 {
-      grid-area: 1 / 3 / 2 / 5;
-      margin-bottom: 6rpx;
-      position: relative;
-    }
-    .view3 {
-      margin-top: 6rpx;
-      grid-area: 2 / 3 / 3 / 5;
-      position: relative;
-    }
-    .view4 {
+    // 副标题
+    .details {
+      font-size: var(--hr-font-size-xxxs) !important;
+      color: var(--hr-neutral-color-7);
       margin-top: 12rpx;
-      grid-area: 3 / 3 / 4 / 5;
-      position: relative;
     }
-    //右边只有一个数据的时候 2行四列
-    .view5 {
-      grid-area: 1 / 3 / 3 / 5;
-      position: relative;
+    .text-ellipsis {
+      -webkit-line-clamp: 2;
+      font-size: var(--hr-font-size-base);
     }
-    .view6 {
-      grid-area: 1 / 1 / 3 / 3;
-      margin-bottom: 6rpx;
-      position: relative;
+
+    .banner2 {
+      image {
+        width: 100%;
+        height: 100%;
+        will-change: transform;
+      }
+      .parent {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 12rpx;
+        grid-row-gap: 0;
+      }
+
+      //  3个的样式
+      .parent1 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-column-gap: 12rpx;
+        grid-row-gap: 0;
+      }
+
+      .view1 {
+        grid-area: 1 / 1 / 4 / 3;
+        position: relative;
+      }
+      .view2 {
+        grid-area: 1 / 3 / 2 / 5;
+        margin-bottom: 6rpx;
+        position: relative;
+      }
+      .view3 {
+        margin-top: 6rpx;
+        grid-area: 2 / 3 / 3 / 5;
+        position: relative;
+      }
+      .view4 {
+        margin-top: 12rpx;
+        grid-area: 3 / 3 / 4 / 5;
+        position: relative;
+      }
+      //右边只有一个数据的时候 2行四列
+      .view5 {
+        grid-area: 1 / 3 / 3 / 5;
+        position: relative;
+      }
+      .view6 {
+        grid-area: 1 / 1 / 3 / 3;
+        margin-bottom: 6rpx;
+        position: relative;
+      }
+    }
+    .no-border {
+      background: transparent;
+      border: none;
     }
   }
-  .no-border {
-    background: transparent;
-    border: none;
-  }
-}
 </style>

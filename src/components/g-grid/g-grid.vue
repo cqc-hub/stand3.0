@@ -49,7 +49,11 @@
               } ${item.iconfont}`"
             />
             <view class="grid-label text-ellipsis">{{ item.title }}</view>
-            <text v-if="type == 1" class="grid-title text-ellipsis">
+            <text
+              v-if="type == 1 && item.detail"
+              class="grid-title text-no-wrap"
+              :class="item.detail.length < 10 ? 'f32' : 'f22'"
+            >
               {{ item.detail }}
             </text>
           </view>
@@ -131,11 +135,13 @@
 
   const unreadMes = ref(false);
   let getNum = () => {
-    api.getStatus({
-      str:`OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`
-    }).then(({ result }) => {
-      unreadMes.value = result as boolean;
-    });
+    api
+      .getStatus({
+        str: `OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`,
+      })
+      .then(({ result }) => {
+        unreadMes.value = result as boolean;
+      });
   };
 
   getNum = throttle(getNum, 1000);
@@ -143,9 +149,7 @@
   const gStore = new GStores();
 
   onMounted(async () => {
-
     if (gStore.userStore.patChoose.patientId) {
-
       const hasMes = options.value.list.find((item) =>
         item.path?.includes('/pagesB/historicalMess/historicalMess')
       );

@@ -370,8 +370,7 @@
       patientId: gStores.userStore.patChoose.patientId,
     });
 
-    // hosInfoResObj.value = result;
-     hosInfoResObj.value = {"patientName":"蔡熙","timesHospitalization":"10","defrayFee":"50520.58","inpatientBed":"13","sex":"男","hosId":"13014","prepaidCost":"60000","extend":{"visitNo":"20240706849"},"sexCode":"1","inpatientWard":"EICU病区","clinicDiagnosis":"阿尔茨海默病(老年型)","costTypeName":"自费","patientNameDes":"*熙","accountBalance":"9479.42","hosName":"横街路院区","visitNo":"20240706849","totalCost":"52591.08","cardNumber":"00528269","beHosDate":"2024-07-29 15:28:00","status":"1"};
+    hosInfoResObj.value = result;
 
 
     //status 在院状态 1.在院 2.出院未结算
