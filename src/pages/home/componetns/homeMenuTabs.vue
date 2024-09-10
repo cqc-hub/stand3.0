@@ -13,7 +13,7 @@
           display: scroll ? 'inline-flex' : 'flex',
           whiteSpace: scroll ? 'nowrap' : 'normal',
           background: bgColor,
-          height,
+          height:height*1+(hasDetail?20:0)+'rpx',
           padding,
         }"
       >
@@ -30,10 +30,21 @@
             padding: paddingItem,
             minWidth: itemMinWidth,
             width: itemWidth,
+            flexDirection: v.detail ? 'column' : 'inherit',
           }"
           @click="change(i)"
         >
-          {{ field ? v[field] : v }}
+          <view>
+            <text>{{ field ? v[field] : v }}</text>
+          </view>
+          <!-- <view>{{  JSON.stringify(v)}}</view> -->
+          <view
+            v-if="v.detail"
+            class="v-tabs__subtitle text-no-wrap"
+            :class="v.detail.length < 10 ? 'f28' : 'f22'"
+          >
+            <text>{{ v.detail }}</text>
+          </view>
         </view>
         <view
           v-if="!pills"
@@ -60,8 +71,8 @@
             background: pillsColor,
             borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
-            width: currentWidth*1.1 + 'px',
-            height,
+            width: currentWidth * 1.1 + 'px',
+            height:(height*1+(hasDetail?20:0))+'rpx',
           }"
         ></view>
       </view>
@@ -69,7 +80,7 @@
     <view
       class="v-tabs__placeholder"
       :style="{
-        height: fixed ? height : '0',
+        height: fixed ? height*1+(hasDetail?20:0)+'rpx': '0',
         padding,
       }"
     ></view>
@@ -78,6 +89,7 @@
 
 <script>
   import { wait } from '@/utils';
+import { onMounted } from 'vue';
   /**
    * v-tabs
    * @property {Number} value 选中的下标
@@ -219,6 +231,7 @@
         scrollLeft: 0, // 距离左边的位置
         containerWidth: 0, // 容器的宽度
         current: 0, // 当前选中项
+        hasDetail:false //有无副标题
       };
     },
     watch: {
@@ -318,6 +331,12 @@
       },
     },
     mounted() {
+      console.log('this.list',this.tabs)
+      this.tabs.forEach((item)=>{
+        if(item?.detail&&item?.detail!==''){
+          this.hasDetail=true
+        }
+      })
       this.elId = 'xfjpeter_' + this.randomString();
       this.current = this.value;
       this.$nextTick(() => {
@@ -328,6 +347,11 @@
 </script>
 
 <style lang="scss" scoped>
+   .v-tabs__subtitle {
+      text-align: center;
+      line-height: 34rpx;
+      font-weight: normal !important;
+    }
   .v-tabs {
     width: 100%;
     box-sizing: border-box;
@@ -336,6 +360,8 @@
     ::-webkit-scrollbar {
       display: none;
     }
+
+ 
 
     &__container {
       min-width: 100%;
@@ -351,17 +377,20 @@
         height: 100%;
         position: relative;
         z-index: 10;
-        // padding: 0 11px;
+        padding: 0 11px;
         transition: all 0.2s;
         white-space: nowrap;
         justify-content: center;
+        view {
+          width: max-content;
+          padding-left:15rpx;
+        }
       }
 
       &-line {
         position: absolute;
         bottom: 0;
         transition: all 0.2s ease-out;
-
       }
 
       &-pills {
@@ -370,18 +399,17 @@
         // transition-delay: 0.2s;
         z-index: 9;
         &-first {
-          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%) ;
+          clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 0 100%);
           border-top-right-radius: 90rpx 200rpx !important;
         }
         &-last {
-          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%) ;
+          clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
         }
         &-center {
           clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0 100%);
           border-top-left-radius: 90rpx 200rpx !important;
           border-top-right-radius: 90rpx 200rpx !important;
-
         }
       }
     }

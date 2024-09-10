@@ -14,7 +14,7 @@
         activeColor="#296FFF"
         pillsBorderRadius="42rpx 42rpx 0 0"
         paddingItem="0"
-        height="80rpx"
+        height="80"
         scroll
         pills
         :allBlod="false"
