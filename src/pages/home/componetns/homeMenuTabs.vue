@@ -13,7 +13,7 @@
           display: scroll ? 'inline-flex' : 'flex',
           whiteSpace: scroll ? 'nowrap' : 'normal',
           background: bgColor,
-          height:height*1+(hasDetail?20:0)+'rpx',
+          height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           padding,
         }"
       >
@@ -41,7 +41,10 @@
           <view
             v-if="v.detail"
             class="v-tabs__subtitle text-no-wrap"
-            :class="v.detail.length < 10 ? 'f28' : 'f22'"
+            :class="v.detail.length < 10 ? 'f20' : 'f28'"
+            :style="{
+              color: current == i ? activeColor : '',
+            }"
           >
             <text>{{ v.detail }}</text>
           </view>
@@ -72,7 +75,7 @@
             borderRadius: pillsBorderRadius,
             left: pillsLeft + 'px',
             width: currentWidth * 1.1 + 'px',
-            height:(height*1+(hasDetail?20:0))+'rpx',
+            height: height * 1 + (hasDetail ? 20 : 0) + 'rpx',
           }"
         ></view>
       </view>
@@ -80,7 +83,7 @@
     <view
       class="v-tabs__placeholder"
       :style="{
-        height: fixed ? height*1+(hasDetail?20:0)+'rpx': '0',
+        height: fixed ? height * 1 + (hasDetail ? 20 : 0) + 'rpx' : '0',
         padding,
       }"
     ></view>
@@ -89,7 +92,7 @@
 
 <script>
   import { wait } from '@/utils';
-import { onMounted } from 'vue';
+  import { onMounted } from 'vue';
   /**
    * v-tabs
    * @property {Number} value 选中的下标
@@ -231,7 +234,7 @@ import { onMounted } from 'vue';
         scrollLeft: 0, // 距离左边的位置
         containerWidth: 0, // 容器的宽度
         current: 0, // 当前选中项
-        hasDetail:false //有无副标题
+        hasDetail: false, //有无副标题
       };
     },
     watch: {
@@ -331,12 +334,12 @@ import { onMounted } from 'vue';
       },
     },
     mounted() {
-      console.log('this.list',this.tabs)
-      this.tabs.forEach((item)=>{
-        if(item?.detail&&item?.detail!==''){
-          this.hasDetail=true
+      console.log('this.list', this.tabs);
+      this.tabs.forEach((item) => {
+        if (item?.detail && item?.detail !== '') {
+          this.hasDetail = true;
         }
-      })
+      });
       this.elId = 'xfjpeter_' + this.randomString();
       this.current = this.value;
       this.$nextTick(() => {
@@ -347,11 +350,12 @@ import { onMounted } from 'vue';
 </script>
 
 <style lang="scss" scoped>
-   .v-tabs__subtitle {
-      text-align: center;
-      line-height: 34rpx;
-      font-weight: normal !important;
-    }
+  .v-tabs__subtitle {
+    text-align: center;
+    line-height: 34rpx;
+    font-weight: normal !important;
+    color: var(--hr-neutral-color-7);
+  }
   .v-tabs {
     width: 100%;
     box-sizing: border-box;
@@ -360,8 +364,6 @@ import { onMounted } from 'vue';
     ::-webkit-scrollbar {
       display: none;
     }
-
- 
 
     &__container {
       min-width: 100%;
@@ -383,7 +385,7 @@ import { onMounted } from 'vue';
         justify-content: center;
         view {
           width: max-content;
-          padding-left:15rpx;
+          padding-left: 15rpx;
         }
       }
 
