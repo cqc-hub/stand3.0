@@ -16,7 +16,7 @@
             <Address-Box :addressList="addressList" />
           </view>
 
-          <view id="_family" class="container-box g-border mb16 box-padding">
+          <view v-if="isPatProxy" id="_family" class="container-box g-border mb16 box-padding">
             <MedRecordFamilyChoose
               v-model:selFamilyPat="selFamilyPat"
               :familyList="familyList"
@@ -1253,7 +1253,7 @@
       showMessage('请先选择 复印材料', 3000);
       return;
     }
-   
+
 
     // if (isPurposeRadio === '1') {
     //   if (!aimValue.value.length) {

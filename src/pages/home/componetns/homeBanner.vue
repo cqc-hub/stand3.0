@@ -123,8 +123,7 @@
                     <text>{{ item.title }}</text>
                     <text
                       v-if="item.detail"
-                      class="text-no-wrap banner-detail"
-                      :class="item.detail.length < 10 ? 'f32' : 'f22'"
+                      class="text-no-wrap banner-detail f22"
                     >
                       {{ item.detail }}
                     </text>

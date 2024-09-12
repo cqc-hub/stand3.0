@@ -40,8 +40,7 @@
           <!-- <view>{{  JSON.stringify(v)}}</view> -->
           <view
             v-if="v.detail"
-            class="v-tabs__subtitle text-no-wrap"
-            :class="v.detail.length < 10 ? 'f20' : 'f28'"
+            class="v-tabs__subtitle text-no-wrap f20"
             :style="{
               color: current == i ? activeColor : '',
             }"

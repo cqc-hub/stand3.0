@@ -180,7 +180,7 @@ const scJson: Record<string, ISConfig> = {
   1001060: {
     isOpenHelpOld: '1',
     login: {
-      isAliAuthBase: '1',
+      // isAliAuthBase: '1',
     },
     medicalMHelp: {
       // isOpenPatToMedicalPat: {},
@@ -270,7 +270,7 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 西安红会
    */
-  1001057: { 
+  1001057: {
     isOpenPopularSci:'1',
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {

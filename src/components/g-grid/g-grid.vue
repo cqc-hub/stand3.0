@@ -40,7 +40,9 @@
                 item.path?.includes('/pagesB/historicalMess/historicalMess') &&
                 unreadMes
               "
-            ></view>
+            >
+              new
+            </view>
             <text
               :class="`icon-font ${
                 options.type == 1 && options.list.length == 3
@@ -141,6 +143,7 @@
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;
+        // unreadMes.value = true;
       });
   };
 
@@ -386,13 +389,13 @@
     }
   }
   .badge {
+    padding: 0 8rpx 5rpx 8rpx;
     text-align: center;
+    line-height: 28rpx;
+    font-size: var(--h-size-18);
     background-color: red !important;
     color: white !important;
     font-weight: 700;
-    border-radius: 50%;
     right: 35rpx !important;
-    height: 25rpx !important;
-    width: 25rpx !important;
   }
 </style>

@@ -25,11 +25,8 @@
                 class="animate__animated animate__fast"
               />
               <text class="label">{{ item.label }}</text>
-              <view
-                class="badge"
-                v-if="item.label === '消息中心' && unreadMes "
-              >
-                
+              <view class="badge" v-if="item.label === '消息中心' && unreadMes">
+                new
               </view>
             </view>
           </view>
@@ -47,7 +44,7 @@
   import global from '@/config/global';
   import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
-  
+
   defineProps<{ systemModeOld: boolean }>();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
@@ -128,16 +125,17 @@
     return currentPath === item.url && item.url === '/pages/home/my';
   };
 
-  let getNum =() => {
-    api.getStatus({
-    str:`OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`
-    }).then(({result})=>{
-      unreadMes.value = result as boolean;
-      unreadMes.value = true;
-  })
-    
+  let getNum = () => {
+    api
+      .getStatus({
+        str: `OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`,
+      })
+      .then(({ result }) => {
+        unreadMes.value = result as boolean;
+        // unreadMes.value = true;
+      });
   };
-    getNum = throttle(getNum, 1000);
+  getNum = throttle(getNum, 1000);
 
   onMounted(async () => {
     getMenuBtn();
@@ -292,20 +290,23 @@
           align-items: center;
         }
         .badge {
-          width: 25rpx;
-          height: 25rpx;
-          line-height: var(--hr-font-size-xl);
+          border: 1rpx solid red;
+          border-radius: 17rpx;
+          line-height: 28rpx;
+          font-size: var(--h-size-18);
+          padding: 0 8rpx ;
+          z-index: 1;
+          background-color: var(--h-color-white);
+          box-sizing: border-box;
           text-align: center;
           background-color: red;
           color: white;
-          font-size: var(--hr-font-size-xxxs);
-          font-weight: 700;
-          border-radius: 50%;
           position: relative;
+          font-weight: 700;
           bottom: calc(
-            var(--hr-font-size-xxl) + var(--hr-font-size-xxxs) + 30rpx
+            var(--hr-font-size-xxl) + var(--hr-font-size-xxxs) + 35rpx
           );
-          left: calc(var(--hr-font-size-xxl) / 2);
+          left: calc(var(--hr-font-size-xxl) / 2 + 5rpx);
         }
       }
     }
