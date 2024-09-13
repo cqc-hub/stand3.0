@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wxf64e84cf578fe0a7",
+=======
+    "appid": "wxe26143481567cb97",
+>>>>>>> 6bcfecdc7065c2d49cfb5a312c2c52fc7e3a72e8
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -74,11 +78,26 @@
     "plugins": {
       "auth-pay-plugin": {
         "version": "*",
+<<<<<<< HEAD
+=======
+        "provider": "2021001130678316"
+      },
+      "codePlugin": {
+        "version": "*",
+        "provider": "2021003163608051"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+>>>>>>> 6bcfecdc7065c2d49cfb5a312c2c52fc7e3a72e8
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "2021002182620396"
+=======
+    "appid": "2021002139602458"
+>>>>>>> 6bcfecdc7065c2d49cfb5a312c2c52fc7e3a72e8
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +109,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "嘉兴市第二医院",
+=======
+  "name": "台州市第一人民医院",
+>>>>>>> 6bcfecdc7065c2d49cfb5a312c2c52fc7e3a72e8
   "h5": {
     "router": {
       "base": "./"
