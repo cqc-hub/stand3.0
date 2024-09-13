@@ -172,6 +172,7 @@
 
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
+import TabList from '@/pagesC/components/tabLis.vue';
 
   const props = ref(
     <
@@ -303,14 +304,13 @@
       .finally(() => {
         isComplete.value = true;
       });
-
     if (result && result.length) {
       result.map(async (o) => {
         // o.orderStatus = '70';
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           pageConfig.value.isOrderPay,
-          isWaitReg.value || tabCurrent.value === 2
+          isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2
         );
 
         if (o._statusLabel.startsWith('未知')) {
@@ -366,7 +366,7 @@
       }
     }
     let _type = props.value.type;
-    if (props.value.type !== 'waitReg' && tabCurrent.value === 2) {
+    if (props.value.type !== 'waitReg' && tabs.value[tabCurrent.value]?.typeId === 2) {
       _type = 'waitReg';
     }
     uni.navigateTo({
@@ -515,7 +515,7 @@
     // return
     const _listStatus = [...new Set(list.value.map((o) => o.orderStatus))].map(
       (status) => ({
-        label: getStatusConfig(status,isWaitReg.value || tabCurrent.value === 2).title,
+        label: getStatusConfig(status,isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2).title,
         value: status,
       })
     );

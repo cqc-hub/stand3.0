@@ -372,6 +372,7 @@ export const getOrderStatusTitle = (
   isOrderPay,
   isWaitReg: boolean
 ): string => {
+console.log('isWaitReg',isWaitReg)
   if (isWaitReg) {
     return getWaitRegStatusConfig(status).title;
   }
