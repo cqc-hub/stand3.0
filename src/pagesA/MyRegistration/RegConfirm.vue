@@ -523,22 +523,26 @@
       )!;
 
       selWaitRegSch.value = '';
-
-      await api.addRegAlternate({
-        ...props.value,
-        ...selSchItem,
-        alternateData,
-        patientId: gStores.userStore.patChoose.patientId,
-        source: gStores.globalStore.browser.source,
-      });
-      if (pageConfig.value?.isTabWaitReg === '1') {
-        uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+      try {
+        await api.addRegAlternate({
+          ...props.value,
+          ...selSchItem,
+          alternateData,
+          patientId: gStores.userStore.patChoose.patientId,
+          source: gStores.globalStore.browser.source,
         });
-      } else {
-        uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-        });
+        if (pageConfig.value?.isTabWaitReg === '1') {
+          uni.reLaunch({
+            url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+          });
+        } else {
+          uni.reLaunch({
+            url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+          });
+        }
+      } catch (e) {
+        console.error('请求候补报错', e);
+        gStores.messageStore.showMessage('暂无候补名额', 3000);
       }
     }
   };

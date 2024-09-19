@@ -149,7 +149,7 @@
         [SYS_TAB_KEY]: isIos.value,
       });
     }
-    if (global.sConfig.isOpenHomeTabBarMessageBtn) {
+    if (global.sConfig.isOpenHomeTabBarMessageBtn&&global.sConfig.isMessageBtnShowNew) {
       if (gStore.userStore.patChoose.patientId) {
         getNum();
       }

@@ -37,6 +37,8 @@ interface ISConfig {
   isOpenHomeTabBarNetWorkBtn?: '1';
   //底部是否放开消息通知
   isOpenHomeTabBarMessageBtn?: '1';
+  //消息通知是否提示新消息
+  isMessageBtnShowNew?: '1';
   //首页是否支持消息授权——支付宝
   isOpenMessageAuth?: '1';
   //首页是否隐藏搜索框?
@@ -345,6 +347,7 @@ const scJson: Record<string, ISConfig> = {
    * 绍兴人民
    */
   1001046: {
+  isMessageBtnShowNew:'1',
     login: {
       // isAliAuthBase: '1',
     },

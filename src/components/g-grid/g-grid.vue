@@ -53,8 +53,7 @@
             <view class="grid-label text-ellipsis">{{ item.title }}</view>
             <text
               v-if="type == 1 && item.detail"
-              class="grid-title text-no-wrap"
-              :class="item.detail.length < 10 ? 'f32' : 'f22'"
+              class="grid-title  f22"
             >
               {{ item.detail }}
             </text>
@@ -85,6 +84,7 @@
   import { withDefaults, computed, ref, onMounted } from 'vue';
   import { useRouterStore } from '@/stores';
   import { throttle, GStores } from '@/utils';
+  import global from '@/config/global';
   import api from '@/service/api';
 
   /**
@@ -152,7 +152,7 @@
   const gStore = new GStores();
 
   onMounted(async () => {
-    if (gStore.userStore.patChoose.patientId) {
+    if (global.sConfig.isMessageBtnShowNew&&gStore.userStore.patChoose.patientId) {
       const hasMes = options.value.list.find((item) =>
         item.path?.includes('/pagesB/historicalMess/historicalMess')
       );
@@ -204,6 +204,8 @@
         text-align: center;
         color: var(--hr-neutral-color-7);
         line-height: 34rpx;
+        // overflow-wrap: break-word;
+        word-wrap: break-word
       }
 
       .gree-label {

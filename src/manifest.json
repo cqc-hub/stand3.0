@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wxf64e84cf578fe0a7",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173668243"
+    "appid": "2021002182620396"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "嘉兴市第二医院",
   "h5": {
     "router": {
       "base": "./"

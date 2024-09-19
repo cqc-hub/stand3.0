@@ -40,12 +40,12 @@
           <!-- <view>{{  JSON.stringify(v)}}</view> -->
           <view
             v-if="v.detail"
-            class="v-tabs__subtitle text-no-wrap f20"
+            class="v-tabs__subtitle  "
             :style="{
               color: current == i ? activeColor : '',
             }"
           >
-            <text>{{ v.detail }}</text>
+            <text class="f22">{{ v.detail }}</text>
           </view>
         </view>
         <view
@@ -414,5 +414,8 @@
         }
       }
     }
+  }
+  .f22{
+    font-size: 22rpx;
   }
 </style>

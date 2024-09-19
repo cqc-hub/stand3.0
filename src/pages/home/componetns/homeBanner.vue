@@ -266,7 +266,6 @@
         display: grid;
         .banner-detail {
           font-size: var(--hr-font-size-xxxs);
-          text-align: center;
           color: var(--hr-neutral-color-7);
           line-height: 34rpx;
         }

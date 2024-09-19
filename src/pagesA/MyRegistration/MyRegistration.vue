@@ -7,7 +7,7 @@
   >
     <g-flag
       v-if="isRender"
-      :typeFg="isWaitReg || tabCurrent === 2 ? '1113' : '405'"
+      :typeFg="'1113'"
       isShowFg
     />
     <g-message />
