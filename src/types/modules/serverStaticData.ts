@@ -404,6 +404,8 @@ export interface ISystemConfig_ {
     footerBtn?: TButtonConfig;
     tabs?: IOptions[];
     multi?: '1'; // 多选?
+    /** 选择医院页面需要过滤的医院 */
+    hideHosIds?: string[];
   };
 
   /** 名医名科 */
