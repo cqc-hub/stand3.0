@@ -181,7 +181,12 @@
 
   const _props = defineProps<{
     _url: string;
-    _type: string; //区分跳转h5的页面 1：医院指南 2：核酸开单 3:药店指南（只展示药店 搜索框 不展示距离）
+    /**
+     * - 1：医院指南
+     * - 2：核酸开单
+     * - 3: 药店指南（只展示药店 搜索框 不展示距离）
+     */
+    _type: string;
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
