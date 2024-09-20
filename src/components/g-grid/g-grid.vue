@@ -51,12 +51,17 @@
               } ${item.iconfont}`"
             />
             <view class="grid-label text-ellipsis">{{ item.title }}</view>
-            <text
+            <!-- <text
               v-if="type == 1 && item.detail"
               class="grid-title  f22"
             >
               {{ item.detail }}
-            </text>
+            </text> -->
+            <rich-text
+              v-if="type == 1 && item.detail"
+              class="grid-title  f22"
+              :nodes=" $HTMLParser(item.detail.replaceAll('  ','<br/>'))"
+            ></rich-text>
           </view>
           <view
             class="grid-item-box3 g-fade-in"
@@ -152,7 +157,10 @@
   const gStore = new GStores();
 
   onMounted(async () => {
-    if (global.sConfig.isMessageBtnShowNew&&gStore.userStore.patChoose.patientId) {
+    if (
+      global.sConfig.isMessageBtnShowNew &&
+      gStore.userStore.patChoose.patientId
+    ) {
       const hasMes = options.value.list.find((item) =>
         item.path?.includes('/pagesB/historicalMess/historicalMess')
       );
@@ -204,8 +212,7 @@
         text-align: center;
         color: var(--hr-neutral-color-7);
         line-height: 34rpx;
-        // overflow-wrap: break-word;
-        word-wrap: break-word
+        white-space: normal;
       }
 
       .gree-label {

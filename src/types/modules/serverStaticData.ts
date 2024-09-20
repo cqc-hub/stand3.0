@@ -116,6 +116,8 @@ export interface ISystemConfig_ {
     onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
     takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
     onlineSignConfirmAfterBtn?: TButtonConfig; //签到成功后的弹窗(按钮配置)
+    AfterConfirmNoShowGoPayBtn?: '1';//签到成功后不展示缴费按钮
+    AfterConfirmNoShowQRcodeBtn?: '1';//签到成功后不展示刷码签到按钮
   };
 
   /** 移动端伦理委员会(h5) */

@@ -45,7 +45,10 @@
               color: current == i ? activeColor : '',
             }"
           >
-            <text class="f22">{{ v.detail }}</text>
+           <rich-text
+              class=" f22"
+              :nodes=" $HTMLParser(v.detail.replaceAll('  ','<br/>'))"
+            ></rich-text>
           </view>
         </view>
         <view

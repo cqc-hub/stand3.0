@@ -76,7 +76,7 @@
 
       <view v-else class="flex-normal">
         <view
-          v-if="item.qrValue"
+          v-if="item.qrValue && pageConfig?.AfterConfirmNoShowGoPayBtn !== '1'"
           @click="goPayPage"
           class="btn btn-border btn-primary p24 flex1 mr24"
         >
@@ -84,7 +84,7 @@
         </view>
 
         <view
-          v-if="item.qrValue"
+          v-if="item.qrValue && pageConfig?.AfterConfirmNoShowQRcodeBtn !== '1'"
           @click="signIn(item)"
           class="btn btn-border btn-primary btn-plain p24 flex1"
         >
@@ -98,15 +98,21 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, onMounted } from 'vue';
   import { type TTakeNumberListItem } from '../utils/takeNumber';
-
+  import { ServerStaticData, ISystemConfig } from '@/utils';
   defineProps<{
     list: TTakeNumberListItem[];
     loading: boolean;
     isOnlineSign: boolean;
     isTakeNumberAfterBtnForGoQueueNumber: boolean;
   }>();
+  const pageConfig = ref(<ISystemConfig['order']>{});
+
+  onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('order');
+  });
+
   const emits = defineEmits([
     'refresh-data',
     'take-number',
@@ -130,9 +136,6 @@
 
   const goPayPage = () => {
     emits('pay-page');
-    uni.navigateTo({
-      url: '/pagesA/clinicPay/clinicPayDetail',
-    });
   };
 </script>
 

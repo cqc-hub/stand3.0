@@ -273,7 +273,7 @@ const scJson: Record<string, ISConfig> = {
    * 西安红会
    */
   1001057: {
-    isOpenPopularSci:'1',
+    isOpenPopularSci: '1',
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
@@ -347,20 +347,24 @@ const scJson: Record<string, ISConfig> = {
    * 绍兴人民
    */
   1001046: {
-  isMessageBtnShowNew:'1',
+    isMessageBtnShowNew: '1',
+    isOpenHomeTabBarMessageBtn: '1',
     login: {
       // isAliAuthBase: '1',
     },
     isOpenHelpOld: '1',
   },
 
-    /**
+  /**
    * 嘉兴第二互联网医院
    */
   1001038: {
     isOpenHelpOld: '1',
     isOpenHomeTabBarNetWorkBtn: '1',
     medicalMHelp: {
+      wx: {
+        medicalPlugin: '1',
+      },
       // isOpenPatToMedicalPat: {},
       alipay: {
         medicalPlugin: {

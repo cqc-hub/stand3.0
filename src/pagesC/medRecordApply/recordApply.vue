@@ -115,7 +115,7 @@
 
     <Order-Reg-Confirm
       :title="flagTitle508"
-      @confirm="isCheck = true"
+      @confirm="handleConfirm"
       ref="regDialogConfirm"
     >
       <g-flag
@@ -190,11 +190,20 @@
       checkOutHosList.value.splice(idx, 1);
     }
   };
+  let resolve: any = () => {
+    isCheck.value = true;
+  };
+  const handleConfirm = () => {
+    resolve();
+  };
 
   const flagClick = () => {
     if (isCheck.value) {
       isCheck.value = false;
     } else {
+      resolve = () => {
+        isCheck.value = true;
+      };
       regDialogConfirm.value.show();
     }
   };
@@ -332,12 +341,17 @@
     });
   };
 
-  const goAddRecord = () => {
-    uni.navigateTo({
-      url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
-        hosId: pageProps.value.hosId,
-        isManual: '1',
-      }),
+  const goAddRecord = async () => {
+   new Promise((rl, rj) => {
+      resolve = rl;
+      regDialogConfirm.value.show();
+    }).then((res) => {
+      uni.navigateTo({
+        url: joinQuery('/pagesC/medRecordApply/medRecordDetails', {
+          hosId: pageProps.value.hosId,
+          isManual: '1',
+        }),
+      });
     });
   };
 

@@ -5,11 +5,7 @@
     }"
     class="g-page"
   >
-    <g-flag
-      v-if="isRender"
-      :typeFg="'1113'"
-      isShowFg
-    />
+    <g-flag v-if="isRender" :typeFg="'405'" isShowFg />
     <g-message />
 
     <g-choose-pat v-if="isWaitReg" @choose-pat="patientChange" />
@@ -165,14 +161,14 @@
     OrderStatus,
     orderStatusMap,
     getOrderStatusTitle,
-    getStatusConfig
+    getStatusConfig,
   } from './utils/regDetail';
 
   import api from '@/service/api';
 
   import MyRegistrationListCard from './components/MyRegistrationListCard/MyRegistrationListCard.vue';
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
-import TabList from '@/pagesC/components/tabLis.vue';
+  import TabList from '@/pagesC/components/tabLis.vue';
 
   const props = ref(
     <
@@ -180,7 +176,7 @@ import TabList from '@/pagesC/components/tabLis.vue';
         thRegisterId?: string;
         allPData?: '1';
         type?: 'waitReg'; // 候补预约
-        tabIndex?: '0';
+        tabIndex?: '0'|'1'|'2';
       }
     >{}
   );
@@ -272,7 +268,7 @@ import TabList from '@/pagesC/components/tabLis.vue';
   const tabChange = async (e: number) => {
     tabCurrent.value = e;
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
-    selStatus.value=''
+    selStatus.value = '';
     if (!pat.value?.patientId && e) {
       _patChange(gStores.userStore.patChoose);
     }
@@ -366,7 +362,10 @@ import TabList from '@/pagesC/components/tabLis.vue';
       }
     }
     let _type = props.value.type;
-    if (props.value.type !== 'waitReg' && tabs.value[tabCurrent.value]?.typeId === 2) {
+    if (
+      props.value.type !== 'waitReg' &&
+      tabs.value[tabCurrent.value]?.typeId === 2
+    ) {
       _type = 'waitReg';
     }
     uni.navigateTo({
@@ -441,7 +440,11 @@ import TabList from '@/pagesC/components/tabLis.vue';
     isRender.value = true;
 
     if (props.value?.tabIndex) {
-      tabCurrent.value = parseInt(props.value?.tabIndex);
+      if (props.value?.tabIndex && tabs.value[props.value?.tabIndex]) {
+        tabCurrent.value = parseInt(props.value?.tabIndex)
+      }else{
+        tabCurrent.value = parseInt(props.value?.tabIndex)-1
+      }
     }
 
     uni.setNavigationBarTitle({
@@ -469,7 +472,7 @@ import TabList from '@/pagesC/components/tabLis.vue';
     pageConfig.value.isTabWaitReg === '1' &&
       tabs.value.push({
         typeId: 2,
-        headerName: '预约候补',
+        headerName: '候补登记',
       });
   });
 
@@ -515,7 +518,10 @@ import TabList from '@/pagesC/components/tabLis.vue';
     // return
     const _listStatus = [...new Set(list.value.map((o) => o.orderStatus))].map(
       (status) => ({
-        label: getStatusConfig(status,isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2).title,
+        label: getStatusConfig(
+          status,
+          isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2
+        ).title,
         value: status,
       })
     );
