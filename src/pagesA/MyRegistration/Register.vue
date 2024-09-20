@@ -538,7 +538,6 @@
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
     const { _type } = props.value;
-    console.log(props.value);
 
     if (getTypeNow.value === '预约挂号') {
       orderConfig.value = await ServerStaticData.getSystemConfig('order');
