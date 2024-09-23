@@ -215,9 +215,9 @@
   };
 
   const selPayListItem = (item: IWaitListItem) => {
-    const { takenDrugType, tcmDecoctionIndicator } = item;
+    const { takenDrugType, supportEditAddr } = item;
 
-    if (takenDrugType === '0' || tcmDecoctionIndicator === '1') {
+    if (takenDrugType === '0' || supportEditAddr === '1') {
       const idx = selList.value.findIndex((o) => o._id === item._id);
 
       if (idx === -1) {

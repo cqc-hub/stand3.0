@@ -399,7 +399,7 @@ export interface ISystemConfig_ {
     listTopTab: IOptions<'' | '1'>[];
   };
 
-  /** 自助开单 */
+  /** 自助开单 SELF_BILLING */
   selfBilling: {
     footerBtn?: TButtonConfig;
     tabs?: IOptions[];
