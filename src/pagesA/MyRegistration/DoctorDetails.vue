@@ -605,7 +605,7 @@
       waitRegDialog.value.show();
     } else {
       gStores.messageStore.showMessage(
-        '当前时段候补人数已达上线，暂不支持候补!',
+        '当前时段候补人数已达上限，暂不支持候补!',
         3000
       );
     }
