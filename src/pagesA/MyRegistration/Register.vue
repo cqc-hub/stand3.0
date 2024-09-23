@@ -5,17 +5,17 @@
       isShowFg
       typeFg="84"
     />
-    <view v-if="_type == 3 || hosHisMaxLen > 5" class="search-input">
+    <view v-if="_type === '3' || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
         v-model:value="searchValue"
-        :placeholder="_type == 3 ? '请输入药店名称查询' : '请输入院区名称'"
+        :placeholder="_type === '3' ? '请输入药店名称查询' : '请输入院区名称'"
         @change="changeInput"
         @confirm="confirmInput"
         @clear="clearInput"
       />
     </view>
     <view
-      v-if="_type != 3 && hosHisMaxLen > showMoreItem"
+      v-if="_type !== '3' && hosHisMaxLen > showMoreItem"
       class="flex-normal header"
     >
       <view
@@ -49,7 +49,7 @@
 
       <hos-List-Vue
         :disabledKey="listDisableName"
-        :isShowMoreItem="_type == 3 ? false : hosList.length <= showMoreItem"
+        :isShowMoreItem="_type === '3' ? false : hosList.length <= showMoreItem"
         :list="__hosList"
         :login="isNeedsLogin"
         @img-click="imgClick"
@@ -181,13 +181,19 @@
 
   const _props = defineProps<{
     _url: string;
-    _type: number; //区分跳转h5的页面 1：医院指南 2：核酸开单 3:药店指南（只展示药店 搜索框 不展示距离）
+    /**
+     * - 1：医院指南
+     * - 2：核酸开单
+     * - 3: 药店指南（只展示药店 搜索框 不展示距离）
+     */
+    _type: string;
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
   }>();
   const hosHisMaxLen = ref(0);
   const orderConfig = ref({} as ISystemConfig['order']);
+  const selfBillingConfig = ref({} as ISystemConfig['selfBilling']);
 
   const props = ref(deQueryForUrl<typeof _props>(deQueryForUrl(_props)));
 
@@ -202,7 +208,7 @@
     } else if (dirUrl.value.includes('/pagesC/medRecordApply/recordApply')) {
       return '病案复印';
     }
-    if (props.value._type === 2) {
+    if (props.value._type === '2') {
       return '核酸开单';
     }
 
@@ -302,7 +308,7 @@
       }
     }
 
-    if (props.value._type && props.value._type != 3) {
+    if (props.value._type && props.value._type !== '3') {
       //院区跳转问卷页面
       if (props.value._questionId) {
         //跳转问卷页面-h5
@@ -433,7 +439,7 @@
         {
           type,
           name: searchValue.value,
-          hosType: props.value._type == 3 ? '48' : '',
+          hosType: props.value._type === '3' ? '48' : '',
         },
         { noCache: true }
       );
@@ -463,9 +469,12 @@
     // }
 
     // hosList.value = hosList.value.sort((o) => (o.ifClick == '0' ? -1 : 1));
+    const hideList = selfBillingConfig.value.hideHosIds || [];
     const usedList = hosList.value.filter((o) => o.ifClick === '0');
     const unUsedList = hosList.value.filter((o) => o.ifClick === '1');
-    hosList.value = [...usedList, ...unUsedList];
+    hosList.value = [...usedList, ...unUsedList].filter(
+      (o) => !hideList.includes(o.hosId)
+    );
   };
 
   const regDialogConfirm = ref<any>('');
@@ -533,10 +542,18 @@
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    const { _type } = props.value;
+
     if (getTypeNow.value === '预约挂号') {
       orderConfig.value = await ServerStaticData.getSystemConfig('order');
     }
-    if (props.value._type == 3) {
+    if (_type === '2') {
+      selfBillingConfig.value = await ServerStaticData.getSystemConfig(
+        'selfBilling'
+      );
+    }
+
+    if (_type === '3') {
       uni.setNavigationBarTitle({
         title: '药店指南',
       });
