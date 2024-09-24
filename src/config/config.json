@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001046",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -58,7 +58,7 @@
       "wxAppid": "wxb00075173e764492",
       "alipayAppid": "2021003113623396",
       "isvAlipayAppid": "2021003116641812",
-      "h5Appid": "wx1be541208ab16799",
+      "h5Appid1": "wx1be541208ab16799",
       "name": "绍兴市人民医院",
       "isStartComeTest": true,
       "isSearchInHos": false,

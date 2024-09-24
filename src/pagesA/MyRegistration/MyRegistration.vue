@@ -176,7 +176,7 @@
         thRegisterId?: string;
         allPData?: '1';
         type?: 'waitReg'; // 候补预约
-        tabIndex?: '0'|'1'|'2';
+        tabIndex?: '0' | '1' | '2';
       }
     >{}
   );
@@ -266,7 +266,12 @@
   );
 
   const tabChange = async (e: number) => {
-    tabCurrent.value = e;
+    if (tabs.value[tabCurrent.value]) {
+      tabCurrent.value = e;
+    } else {
+      tabCurrent.value = parseInt(e as any) - 1;
+    }
+
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     selStatus.value = '';
     if (!pat.value?.patientId && e) {
@@ -440,11 +445,7 @@
     isRender.value = true;
 
     if (props.value?.tabIndex) {
-      if (props.value?.tabIndex && tabs.value[props.value?.tabIndex]) {
-        tabCurrent.value = parseInt(props.value?.tabIndex)
-      }else{
-        tabCurrent.value = parseInt(props.value?.tabIndex)-1
-      }
+      tabCurrent.value = parseInt(props.value?.tabIndex);
     }
 
     uni.setNavigationBarTitle({
@@ -485,9 +486,11 @@
 
   const init = async () => {
     await getConfig();
-    patList.value[0]?.patientName === '所有就诊人' &&
-      (pat.value = patList.value[0]);
-    // await getList(
+    if (tabs.value[tabCurrent.value]?.typeId === 0) {
+      patList.value[0]?.patientName === '所有就诊人' &&
+        (pat.value = patList.value[0]);
+    }
+    // await getList(s
     //   pat.value?.patientId || gStores.userStore.patChoose?.patientId
     // );
     setTimeout(() => {

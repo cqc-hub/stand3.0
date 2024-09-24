@@ -347,8 +347,8 @@ const scJson: Record<string, ISConfig> = {
    * 绍兴人民
    */
   1001046: {
-    isMessageBtnShowNew: '1',
-    isOpenHomeTabBarMessageBtn: '1',
+    // isMessageBtnShowNew: '1',
+    // isOpenHomeTabBarMessageBtn: '1',
     login: {
       // isAliAuthBase: '1',
     },
