@@ -258,6 +258,55 @@
     return _isOpenOcr;
   };
 
+  const editPhone = async (requestData) => {
+    const { isCanChangeHosPhone, useFaceVerifyInChangePhone } =
+      pageConfig.value;
+    const { idCard, patientPhone, patientName, idType } = formData.value;
+    if (idType === '01' && isCanChangeHosPhone === '1') {
+      if (!requestData.pData) {
+        let pdata = '';
+        if (useFaceVerifyInChangePhone === '1') {
+          const { pData } = await patientUtils.faceVerifyAndPData({
+            idCardNumber: formData.value[formKey.idCard],
+            name: formData.value[formKey.patientName],
+          });
+          pdata = pData;
+        } else {
+          // const { pdata: pData } = await useOcr(true, {
+          //   aliThroughByEnd: true,
+          //   imgCanvas,
+          // });
+          // pdata = pData;
+          cacheStore.changeCacheData({
+            ...requestData,
+            source: gStores.globalStore.browser.source,
+          });
+
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
+              idCard,
+              patientPhone,
+              patientName,
+              idType,
+              from: 'addMedical',
+            }),
+          });
+
+          throw new Error('去到ocr页面');
+        }
+
+        requestData.pData = pdata;
+        await api.mofHosPhone({
+          ...requestData,
+          pdata: requestData.pData,
+          source: gStores.globalStore.browser.source,
+        });
+
+        return await patientUtils.addRelevantPatient(requestData);
+      }
+    }
+  };
+
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
     const formKeyNow = formList.map((o) => o.key);
@@ -334,9 +383,36 @@
 
     if (pageProps.value.pageType === 'perfectReal') {
       try {
-        await patientUtils.registerUser(requestData, {
-          addPatInterface: 'relevantPatient',
-        });
+        await patientUtils
+          .registerUser(requestData, {
+            addPatInterface: 'relevantPatient',
+          })
+          .catch(async (err) => {
+            if (err?.errorType === 'add') {
+              const respCode = err?.err?.respCode;
+              let isErrToast = true;
+              if (respCode === 884801) {
+                if (isCanChangeHosPhone === '1') {
+                  const { confirm } = await apiAsync(uni.showModal, {
+                    content: '患者存在建档记录但手机号不匹配，是否立即修改？',
+                  });
+
+                  if (confirm) {
+                    isErrToast = false;
+                    await editPhone(requestData);
+                  }
+                }
+              }
+
+              if (isErrToast) {
+                const errMsg = err?.err?.message || '新增就诊人失败';
+                await apiAsync(uni.showModal, {
+                  content: errMsg + ' 系统将为您注册账号，但不进行绑定就诊人！',
+                  showCancel: false,
+                });
+              }
+            }
+          });
 
         // if (
         //   isPayWithoutSecretAuth === '1' &&
@@ -380,56 +456,7 @@
             });
             // 修改手机号必开启人脸|ocr之一
             if (confirm) {
-              if (!requestData.pData) {
-                let pdata = '';
-                if (useFaceVerifyInChangePhone === '1') {
-                  const { pData } = await patientUtils.faceVerifyAndPData({
-                    idCardNumber: formData.value[formKey.idCard],
-                    name: formData.value[formKey.patientName],
-                  });
-                  pdata = pData;
-                } else {
-                  // const { pdata: pData } = await useOcr(true, {
-                  //   aliThroughByEnd: true,
-                  //   imgCanvas,
-                  // });
-                  // pdata = pData;
-                  cacheStore.changeCacheData({
-                    ...requestData,
-                    source: gStores.globalStore.browser.source,
-                  });
-
-                  uni.navigateTo({
-                    url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-                      idCard,
-                      patientPhone,
-                      patientName,
-                      idType,
-                      from: 'addMedical',
-                    }),
-                  });
-
-                  throw new Error('去到ocr页面');
-                }
-
-                requestData.pData = pdata;
-              }
-              // uni.navigateTo({
-              //   url: joinQueryForUrl('/pagesA/medicalCardMan/ocrUser', {
-              //     idCard,
-              //     patientPhone,
-              //     patientName,
-              //     idType,
-              //   }),
-              // });
-
-              requestData.pdata = requestData.pData;
-              await api.mofHosPhone({
-                ...requestData,
-                pdata: requestData.pData,
-                source: gStores.globalStore.browser.source,
-              });
-              return await patientUtils.addRelevantPatient(requestData);
+              await editPhone(requestData);
             }
           }
 

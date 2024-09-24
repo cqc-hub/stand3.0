@@ -15,11 +15,107 @@ const sysConfig = sysInfo.sysConfig[sysCode];
 const sConfig = getSConfig(sysCode);
 
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
-let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
-// 移除注释
-manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
+// let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
+// // 移除注释
+// manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
 
-const manifestFileDataObj = JSON.parse(manifestFileData);
+const manifestFileDataObj: any = {
+  appid: '__UNI__DC06FC7',
+  description: '',
+  versionName: '1.0.0',
+  versionCode: '100',
+  transformPx: false,
+  'app-plus': {
+    usingComponents: true,
+    nvueStyleCompiler: 'uni-app',
+    compilerVersion: 3,
+    splashscreen: {
+      alwaysShowBeforeRender: true,
+      waiting: true,
+      autoclose: true,
+      delay: 0,
+    },
+    modules: {},
+    distribute: {
+      android: {
+        permissions: [
+          '<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>',
+          '<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>',
+          '<uses-permission android:name="android.permission.VIBRATE"/>',
+          '<uses-permission android:name="android.permission.READ_LOGS"/>',
+          '<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>',
+          '<uses-feature android:name="android.hardware.camera.autofocus"/>',
+          '<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>',
+          '<uses-permission android:name="android.permission.CAMERA"/>',
+          '<uses-permission android:name="android.permission.GET_ACCOUNTS"/>',
+          '<uses-permission android:name="android.permission.READ_PHONE_STATE"/>',
+          '<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>',
+          '<uses-permission android:name="android.permission.WAKE_LOCK"/>',
+          '<uses-permission android:name="android.permission.FLASHLIGHT"/>',
+          '<uses-feature android:name="android.hardware.camera"/>',
+          '<uses-permission android:name="android.permission.WRITE_SETTINGS"/>',
+        ],
+      },
+      ios: {},
+      sdkConfigs: {},
+    },
+  },
+  quickapp: {},
+  'mp-weixin': {
+    appid: 'wxe26143481567cb97',
+    __usePrivacyCheck__: true,
+    setting: {
+      urlCheck: false,
+      postcss: false,
+      minified: true,
+      es6: true,
+    },
+    optimization: {
+      subPackages: true,
+    },
+    permission: {
+      'scope.userLocation': {
+        desc: '你的位置信息将用于小程序位置接口的效果展示',
+      },
+    },
+    requiredPrivateInfos: ['chooseLocation', 'getLocation', 'chooseAddress'],
+    usingComponents: true,
+    plugins: {},
+    mergeVirtualHostAttributes: true,
+    lazyCodeLoading: 'requiredComponents',
+    libVersion: 'latest',
+  },
+  'mp-alipay': {
+    component2: true,
+    usingComponents: true,
+    plugins: {},
+    mergeVirtualHostAttributes: true,
+    appid: '2021002139602458',
+  },
+  'mp-baidu': {
+    usingComponents: true,
+  },
+  'mp-toutiao': {
+    usingComponents: true,
+  },
+  uniStatistics: {
+    enable: false,
+  },
+  vueVersion: '3',
+  name: '台州市第一人民医院',
+  h5: {
+    router: {
+      base: './',
+    },
+    sdkConfigs: {
+      maps: {
+        qqmap: {
+          key: 'GH4BZ-SD6L3-2WN3U-3BAE5-7UYIH-3SFRJ',
+        },
+      },
+    },
+  },
+};
 
 const {
   wxAppid,
@@ -74,7 +170,7 @@ if (medicalMHelp) {
         version: '*',
         provider:
           // globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
-          '2021003147699046' ,
+          '2021003147699046',
       };
     }
   }
