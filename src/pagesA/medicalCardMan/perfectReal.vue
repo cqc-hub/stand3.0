@@ -14,12 +14,12 @@
         ref="gform"
       />
 
-      <view class="p24 pt32">
+      <!-- <view class="p24 pt32">
         <fgUserInfoAgree
           v-if="pageConfig.isUserInfoShareAgree === '1'"
-          v-model:value="isUserInfoAgree"
+          v-model:value="formData.isUserInfoShareAgree"
         />
-      </view>
+      </view> -->
 
       <g-flag typeFg="51" isShowFgTip />
     </view>
@@ -240,7 +240,6 @@
   let formList: TInstance[] = [];
 
   const isCheck = ref(false);
-  const isUserInfoAgree = ref(false);
 
   const dialogSelCardShow = ref(false);
   const dialogShow = ref(false);
@@ -547,7 +546,7 @@
 
     if (
       pageConfig.value.isUserInfoShareAgree === '1' &&
-      !isUserInfoAgree.value
+      !formData.value.isUserInfoShareAgree
     ) {
       isDisabled = true;
     }
@@ -629,11 +628,19 @@
       'patientName',
       'patientPhone',
       'verifyCode',
+      'isUserInfoShareAgree',
       'defaultFalg',
     ];
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    let { isSmsVerify, isHidePatientTypeInPerfect, isPayWithoutSecretAuth } =
+    let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
+
+    if (isUserInfoShareAgree !== '1') {
+      // 允许该平台访问院内此用户的就诊数据
+      formListKeys = formListKeys.filter(
+        (key) => key !== 'isUserInfoShareAgree'
+      );
+    }
 
     if (isHidePatientTypeInPerfect === '1') {
       formListKeys = formListKeys.filter((key) => key !== 'patientType');

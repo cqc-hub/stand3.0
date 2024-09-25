@@ -34,6 +34,7 @@ export const formKey = <const>{
   verifyCode: 'verifyCode',
   defaultFalg: 'defaultFalg',
   nation: 'nation',
+  isUserInfoShareAgree: 'isUserInfoShareAgree',
 };
 
 export type TCardPat = {
@@ -295,6 +296,28 @@ export const tempList: TInstance[] = [
     },
     phoneKey: formKey.patientPhone,
     labelWidth: '220rpx',
+  },
+
+  {
+    field: 'switch',
+    key: formKey.isUserInfoShareAgree,
+    label: '允许该平台访问院内此用户的就诊数据',
+    labelWidth: '100%',
+    showRequireIcon: true,
+    required: true,
+    emptyMessage: '请允许该平台访问院内此用户的就诊数据',
+    validator(v) {
+      if (!v) {
+        return Promise.resolve({
+          success: false,
+          message: '请允许该平台访问院内此用户的就诊数据',
+        });
+      }
+
+      return Promise.resolve({
+        success: true,
+      });
+    },
   },
 
   {
