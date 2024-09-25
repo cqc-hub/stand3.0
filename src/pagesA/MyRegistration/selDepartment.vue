@@ -25,6 +25,7 @@
 
     <g-selhos
       v-model:hosId="hosId"
+      :unNeedPosition="unNeedPosition"
       @get-list="getHosList"
       @change="getDepList"
       type="selDepartment"
@@ -110,6 +111,7 @@
   const hosList = ref<IHosInfo[]>([]);
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
+  const unNeedPosition = ref(true);
   let deptStep: any[] = [];
 
   const init = async () => {
@@ -263,7 +265,7 @@
     });
 
     const queryArg = {
-      hosId:  item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
+      hosId: item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
       clinicalType: props.clinicalType,
       thRegisterId: props.thRegisterId,
       deptName: encodeURIComponent(item.deptName),
@@ -320,6 +322,15 @@
       setLocalStorage({
         thRegisterId,
       });
+
+    const pages = getCurrentPages();
+    if (pages && pages.length > 1) {
+      const prevRoute = pages[pages.length - 2];
+      // 判断是否 单/多 院区， 单院区不需要调定位
+      if (prevRoute.route === 'pagesA/MyRegistration/Register') {
+        unNeedPosition.value = false;
+      }
+    }
     // init();
   });
 
