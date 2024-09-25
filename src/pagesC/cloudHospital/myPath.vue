@@ -25,6 +25,7 @@
   import { encryptDesParam } from '@/common/des';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
+  import globalGl from '@/config/global';
 
   type IPageProps = {
     hosId?: string;
@@ -51,6 +52,7 @@
     herenId: gStores.globalStore.herenId,
     source: gStores.globalStore.browser.source,
     openId: gStores.globalStore.openId,
+    h5OpenId: gStores.globalStore.h5OpenId,
     phone: gStores.userStore.phoneNum, //账号下的手机号（仅微信）
   };
   type A = keyof typeof allData;
@@ -131,6 +133,16 @@
       try {
         queryArray.map((item) => {
           if (item in allData) {
+            if (
+              item === 'h5OpenId' &&
+              !gStores.globalStore.h5OpenId &&
+              globalGl.h5AppId
+            ) {
+              uni.reLaunch({
+                url: '/pages/home/startCome',
+              });
+            }
+
             query = query + item + '=' + allData[item] + '&';
           } else {
             // messageStore.showMessage(`携带${item}参数有误`, 1000);

@@ -169,6 +169,7 @@ export class LoginUtils extends GStores {
           name,
           sex,
           mobilePhoneEn,
+          phoneNum,
         } = result;
 
         this.userStore.updateName(name);
@@ -177,7 +178,7 @@ export class LoginUtils extends GStores {
         if (/^[\d{1,4}\*+\d{1,4}]{11}$/.test(phone)) {
           this.userStore.updatePhone({
             phone,
-            phoneNum: mobilePhoneEn,
+            phoneNum: mobilePhoneEn||phoneNum,
           });
         }
 

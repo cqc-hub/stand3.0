@@ -186,7 +186,7 @@
         label: '消息中心',
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
-        url: '/pagesC/cloudHospital/myPath?path=/pagesB/historicalMess/historicalMess&query=["phone","openId"]&loginInterception=1',
+        url: '/pagesC/cloudHospital/myPath?path=/pagesB/historicalMess/historicalMess&query=["phone","h5OpenId"]&loginInterception=1',
         loginInterception: '1',
         sort: 3,
       },
