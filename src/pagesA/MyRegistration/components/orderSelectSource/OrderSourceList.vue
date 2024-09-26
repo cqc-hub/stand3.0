@@ -29,6 +29,17 @@
           第 {{ item.disNo }} 号
         </text>
         <text v-else class="item-desc">剩余 {{ item.disNo }} 个</text>
+
+        <text
+          v-if="item.consultType"
+          :class="{
+            'bg-green color-green': item.consultType === '初诊',
+            'bg-warn color-warn': item.consultType === '复诊',
+          }"
+          class="consult-type f24 pr12 pl12"
+        >
+          {{ item.consultType }}
+        </text>
       </view>
     </view>
 
@@ -142,4 +153,11 @@
 
 <style lang="scss" scoped>
   @import './style/pop-list.scss';
+
+  .consult-type {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 8rpx;
+  }
 </style>

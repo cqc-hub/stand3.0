@@ -28,6 +28,7 @@ export interface IOrderSource {
   numId: string;
   timeDesc: string;
   serialType: string;
+  consultType?: '初诊' | '复诊';
   disabled?: boolean;
 }
 
