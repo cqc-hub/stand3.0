@@ -350,7 +350,7 @@ const scJson: Record<string, ISConfig> = {
     // isMessageBtnShowNew: '1',
     isOpenHomeTabBarMessageBtn: '1',
     login: {
-      // isAliAuthBase: '1',
+      isAliAuthBase: '1',
     },
     isOpenHelpOld: '1',
   },
