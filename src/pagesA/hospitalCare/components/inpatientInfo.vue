@@ -307,8 +307,8 @@
     };
     const baseUrl = 'https://worders.eheren.com';
     const params = {
-      visitNo: base64Encode(hosInfoResObj.value.cardNumber),
-      openid: base64Encode(gStores.globalStore.openId),
+      patCode: base64Encode(hosInfoResObj.value.cardNumber),
+      openId: base64Encode(gStores.globalStore.openId),
     };
     const path = joinQuery(baseUrl, params);
     const args: TButtonConfig = {

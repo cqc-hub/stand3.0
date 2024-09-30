@@ -163,7 +163,8 @@ export class LoginUtils extends GStores {
 
       if (result) {
         const {
-          mobilePhone: phone,
+          mobilePhone,
+          cellPhoneNum,
           herenId,
           idNo,
           name,
@@ -171,7 +172,7 @@ export class LoginUtils extends GStores {
           mobilePhoneEn,
           phoneNum,
         } = result;
-
+        const phone =mobilePhone||cellPhoneNum
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
