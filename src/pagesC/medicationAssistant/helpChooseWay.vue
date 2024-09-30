@@ -26,8 +26,8 @@
                 <Sel-Express
                   :selectLength="3"
                   :list="aimList"
+                  :column="2"
                   v-model:value="aimValue"
-                  column="2"
                 />
               </view>
             </block>

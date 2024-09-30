@@ -302,7 +302,6 @@ export const tempList: TInstance[] = [
     field: 'switch',
     key: formKey.isUserInfoShareAgree,
     label: '允许该平台访问院内此用户的就诊数据',
-    labelWidth: '100%',
     showRequireIcon: true,
     required: true,
     emptyMessage: '请允许该平台访问院内此用户的就诊数据',

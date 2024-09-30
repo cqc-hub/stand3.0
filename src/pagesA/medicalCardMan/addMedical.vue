@@ -20,12 +20,12 @@
           ref="gform"
         />
       </view>
-      <view class="p24 pt32">
+      <!-- <view class="p24 pt32">
         <fgUserInfoAgree
           v-if="pageConfig.isUserInfoShareAgree === '1' && _isPageFirst"
           v-model:value="isUserInfoAgree"
         />
-      </view>
+      </view> -->
       <g-flag typeFg="51" isShowFgTip />
     </view>
 
@@ -173,7 +173,7 @@
   const pageConfig = ref(<ISystemConfig['person']>{});
 
   const isCheck = ref(false);
-  const isUserInfoAgree = ref(false);
+  // const isUserInfoAgree = ref(false);
 
   const fg514 = ref({
     title: '',
@@ -612,6 +612,7 @@
       isSmsVerify,
       isDropAddress,
       isDropNation,
+      isUserInfoShareAgree,
     } = pageConfig.value;
 
     const listArr: TFormKeys[] = [formKey.patientType];
@@ -720,6 +721,10 @@
       default:
         gStores.messageStore.showMessage('未知的就诊人类型');
         break;
+    }
+
+    if (_isPageFirst.value && isUserInfoShareAgree === '1') {
+      listArr.splice(listArr.length - 1, 0, 'isUserInfoShareAgree');
     }
 
     const completeFormList = listArr.join(',');
@@ -900,7 +905,7 @@
 
       if (
         pageConfig.value.isUserInfoShareAgree === '1' &&
-        !isUserInfoAgree.value
+        !formData.value.isUserInfoShareAgree
       ) {
         return true;
       }
@@ -1002,7 +1007,7 @@
     //先实现支付宝
     // #endif
     // #ifdef MP-ALIPAY
-    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
   };
 
@@ -1028,7 +1033,10 @@
     await init();
 
     // #ifdef MP-ALIPAY
-    if (globalGl.sConfig.login?.isAliAuthBase !== '1') {
+    if (
+      globalGl.sConfig.login?.isAliAuthBase === '1' &&
+      pageProps.value.pageType === 'perfectReal'
+    ) {
       await loginAuthAlipay(init);
     }
     // #endif

@@ -373,7 +373,7 @@
       if (globalStore.herenId) {
         loginUtils.sysPatOpenIdAssignment(props.value.openId);
       }
-      
+
       if(globalStore.token.accessToken){
         await loginUtils.getUerInfo();
        }

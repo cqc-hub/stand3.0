@@ -131,9 +131,6 @@
           "path": "hospitalCare/choosePatient",
           "style": {
             "navigationBarTitleText": "预交金代缴"
-          },
-          "extend": {
-            "patient": true
           }
         },
         {

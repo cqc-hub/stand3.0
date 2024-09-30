@@ -39,6 +39,10 @@
   @extend .flex-normal;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .flex1,
 .flex-1 {
   flex: 1 !important;

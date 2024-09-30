@@ -20,7 +20,7 @@
           >
         </view>
       </view>
-      <view class="user-del yard">
+      <view class="user-del yard flex-wrap">
         <text>{{ hosInfoResObj.hosName }}</text>
         <text class="line"></text>
         <text>{{ hosInfoResObj.inpatientWard }}</text>

@@ -29,6 +29,17 @@
           第 {{ item.disNo }} 号
         </text>
         <text v-else class="item-desc">剩余 {{ item.disNo }} 个</text>
+
+        <text
+          v-if="item.consultType"
+          :class="{
+            'bg-green color-green': ['1', '3'].includes(item.consultType),
+            'bg-warn color-warn': item.consultType === '2',
+          }"
+          class="consult-type f24 pr12 pl12"
+        >
+          {{ consultTypeMap[item.consultType] }}
+        </text>
       </view>
     </view>
 
@@ -43,7 +54,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, PropType, reactive } from 'vue';
-  import { TSchInfo, IOrderSource } from '../../utils/index';
+  import { TSchInfo, IOrderSource, consultTypeMap } from '../../utils/index';
 
   export default defineComponent({
     props: {
@@ -135,6 +146,7 @@
         isActive,
         itemClick,
         itemDelete,
+        consultTypeMap,
       };
     },
   });
@@ -142,4 +154,11 @@
 
 <style lang="scss" scoped>
   @import './style/pop-list.scss';
+
+  .consult-type {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 8rpx;
+  }
 </style>

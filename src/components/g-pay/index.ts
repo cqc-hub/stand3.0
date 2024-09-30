@@ -65,7 +65,7 @@ export const payMoneyOnline = async (
 
   if (gStores.globalStore.sysCode === '1001063') {
     requestArg.channel = 'ICBC_JFT_H5';
-  }else{
+  } else {
     requestArg.channel = 'WX_MINI';
   }
 
@@ -79,10 +79,10 @@ export const payMoneyOnline = async (
 
   if (gStores.globalStore.sysCode === '1001063') {
     requestArg.channel = 'ICBC_JFT_H5';
-  }else{
+  } else {
     requestArg.channel = 'ALI_MINI';
   }
-  
+
   // #endif
 
   requestArg = {
@@ -215,6 +215,8 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       },
 
       fail(err) {
+        console.error('支付错误---', err);
+
         // #ifdef MP-ALIPAY
         alipayTrack(false, type);
         // #endif
