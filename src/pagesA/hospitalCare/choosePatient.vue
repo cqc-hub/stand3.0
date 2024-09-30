@@ -3,7 +3,7 @@
   <g-flag v-if="!pageProps.type" typeFg="29" isShowFg />
   <g-flag v-if="pageProps.type === '1'" typeFg="53" isShowFg />
   <view class="page">
-    <view class="title">请查询就诊人</view>
+    <!-- <view class="title">请查询就诊人</view> -->
     <view class="inputs">
       <view class="input-item border">
         <text>就诊人姓名</text>
@@ -13,7 +13,9 @@
           v-model="hosInfoParam.patientName"
           placeholder="请输入"
         />
-        <view v-if="gStores.userStore.patList.length" class="pat-choose" @tap="chooseAction">选择就诊人</view>
+        <g-login @handler-next="chooseAction">
+          <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
+        </g-login>
       </view>
       <view class="input-item">
         <text>手机号码</text>
