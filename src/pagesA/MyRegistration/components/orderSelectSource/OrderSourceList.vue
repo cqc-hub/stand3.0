@@ -33,7 +33,7 @@
         <text
           v-if="item.consultType"
           :class="{
-            'bg-green color-green': item.consultType === '1',
+            'bg-green color-green': ['1', '3'].includes(item.consultType),
             'bg-warn color-warn': item.consultType === '2',
           }"
           class="consult-type f24 pr12 pl12"
@@ -146,7 +146,7 @@
         isActive,
         itemClick,
         itemDelete,
-        consultTypeMap
+        consultTypeMap,
       };
     },
   });
