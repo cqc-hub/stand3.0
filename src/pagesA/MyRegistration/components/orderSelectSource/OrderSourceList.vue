@@ -33,12 +33,12 @@
         <text
           v-if="item.consultType"
           :class="{
-            'bg-green color-green': item.consultType === '初诊',
-            'bg-warn color-warn': item.consultType === '复诊',
+            'bg-green color-green': item.consultType === '1',
+            'bg-warn color-warn': item.consultType === '2',
           }"
           class="consult-type f24 pr12 pl12"
         >
-          {{ item.consultType }}
+          {{ consultTypeMap[item.consultType] }}
         </text>
       </view>
     </view>
@@ -54,7 +54,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, PropType, reactive } from 'vue';
-  import { TSchInfo, IOrderSource } from '../../utils/index';
+  import { TSchInfo, IOrderSource, consultTypeMap } from '../../utils/index';
 
   export default defineComponent({
     props: {
@@ -146,6 +146,7 @@
         isActive,
         itemClick,
         itemDelete,
+        consultTypeMap
       };
     },
   });

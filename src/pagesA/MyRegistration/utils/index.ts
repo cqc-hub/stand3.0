@@ -23,12 +23,17 @@ export interface IChooseDays {
   fullDay: string;
 }
 
+export const consultTypeMap = {
+  '1': '初诊',
+  '2': '复诊',
+  '3': '共享',
+} as const;
 export interface IOrderSource {
   disNo: string;
   numId: string;
   timeDesc: string;
   serialType: string;
-  consultType?: '初诊' | '复诊';
+  consultType?: keyof typeof consultTypeMap;
   disabled?: boolean;
 }
 
