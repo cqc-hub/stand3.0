@@ -911,7 +911,7 @@ export const usePayPage = () => {
     const pageData = {
       ...item,
       patientId,
-      hosId,
+      hosId: hosId || pageProps.value.hosId,
       payState,
       clinicType,
       hosOrderId,

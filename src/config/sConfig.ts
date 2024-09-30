@@ -131,8 +131,8 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isLoginByOpenId: '1'
     },
-    isOpenMessageAuth: '1',
-    isOpenHomeTabBarMessageBtn: '1',
+    // isOpenMessageAuth: '1',
+    // isOpenHomeTabBarMessageBtn: '1',
   },
 
   /**
