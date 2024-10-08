@@ -456,7 +456,7 @@
             });
             // 修改手机号必开启人脸|ocr之一
             if (confirm) {
-              await editPhone(requestData);
+              return await editPhone(requestData);
             }
           }
 
