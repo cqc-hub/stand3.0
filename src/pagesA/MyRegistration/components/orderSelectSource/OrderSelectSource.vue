@@ -82,7 +82,7 @@
                         "
                         :value="value"
                         :isBlur="isBlur"
-                        @item-click="itemClick"
+                        @item-click="(v) => itemClick(v, _item)"
                         itemBgc="#fff"
                         disabledActiveStyle
                       />
@@ -144,7 +144,7 @@
                 :orderSourceList="orderSourceList"
                 :value="value"
                 :isBlur="isBlur"
-                @item-click="itemClick"
+                @item-click="(v) => itemClick(v)"
                 itemBgc="#fff"
                 disabledActiveStyle
               />
@@ -319,13 +319,15 @@
     emits('update:show', false);
   };
 
-  const itemClick = (item: IOrderSource) => {
+  const itemClick = (item: IOrderSource, _item?: TSchInfo) => {
     if (!enabledItemClick.value) {
       return;
     }
-    const selectValue = selectSchInfo.value.amPmResults
-      ? currentSchInfo.value
-      : selectSchInfo.value;
+    const selectValue =
+      _item ||
+      (selectSchInfo.value.amPmResults
+        ? currentSchInfo.value
+        : selectSchInfo.value);
 
     if (item.disabled) {
       isFgShow1202.value = true;
