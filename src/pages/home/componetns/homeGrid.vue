@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
   import { useCommonTo,openServicesChat,isSubscribeWx } from '@/common/checkJump';
+  import globalGl from '@/config/global';
   import { GStores } from '@/utils';
 
   const emits = defineEmits(['open-share']);
@@ -26,7 +27,7 @@
     console.warn(item)
     // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
     // #ifdef MP-WEIXIN
-    if (item.query && JSON.parse(item.query).attention === '1' && !(await isSubscribeWx())) {
+    if (item.query && JSON.parse(item.query).attention === '1' && globalGl.h5AppId && !(await isSubscribeWx())) {
       emits('open-share', item, 'attention');
     }else{
    // #endif
