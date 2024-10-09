@@ -346,6 +346,7 @@
   });
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(opt);
+    console.log(pageProps.value, '----')
     setData();
   });
 </script>
