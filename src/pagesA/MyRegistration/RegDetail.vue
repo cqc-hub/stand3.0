@@ -821,7 +821,7 @@
     const { cardNumber } = gStores.userStore.patChoose;
     const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
 
-    if (isMedicalMode && isSelf) {
+    if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {
       changeRefPayList([PayType.Medicare]);
     } else {
       changeRefPayList([PayType.Online]);
@@ -1195,8 +1195,6 @@
   };
 
   onShow(async () => {
-
-
     if (getLocalStorage('reg-detail-init') === '1') {
       setLocalStorage({
         'reg-detail-init': '',

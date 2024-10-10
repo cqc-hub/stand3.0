@@ -331,6 +331,7 @@ export interface IRegInfo {
   hosAccountOffsetFee: string;
   _totalCost: string;
   _hosAccountOffsetFee: string;
+  tradeType?: '1'; // 1 只能自费
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {

@@ -427,9 +427,6 @@
           "path": "medicationAssistant/medicalHelp",
           "style": {
             "navigationBarTitleText": "药品配送"
-          },
-          "extend": {
-            "patient": true
           }
         },
         {

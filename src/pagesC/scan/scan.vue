@@ -1,5 +1,7 @@
 <template>
-  <view class=""></view>
+  <view class="">
+    <g-message />
+  </view>
 </template>
 
 <script lang="ts" setup>
@@ -8,7 +10,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores } from '@/utils';
   import api from '@/service/api';
-  import { joinQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
   const pageProps = ref(
@@ -28,17 +30,25 @@
     });
 
     if (patientName && patientPhone) {
-      uni.reLaunch({
-        url: joinQueryForUrl('/pagesA/medicalCardMan/perfectReal', {
-          patientPhone,
-          patientName,
-        }),
-      });
-    } else {
-      uni.reLaunch({
-        url: `/pages/home/home`,
-      });
+      const pat = gStores.userStore.patList.find(
+        (p) => p.patientName === patientName
+      );
+
+      if (!pat) {
+        uni.reLaunch({
+          url: joinQueryForUrl('/pagesA/medicalCardMan/perfectReal', {
+            patientPhone,
+            patientName,
+          }),
+        });
+
+        return;
+      }
     }
+
+    uni.reLaunch({
+      url: `/pages/home/home`,
+    });
   };
 
   const init = async () => {
@@ -56,21 +66,23 @@
   };
 
   onLoad(async (opt) => {
-    const q = {
-      type: '1',
-      params:
-        'Yn+CgX9eWg/4k+B61aXruyitCtvf7g4TV+/8D81ihLDYvmiwH78NMGxwQjEdke0asui4LjzbaBDnKbqPraVLHP7vya4r3P7rCSSWtEnL27EQtKbq0EhclF8uPF5TzPJEaI0AZRMh2L32RZAN7QWPeA==',
-    } as any;
+    // const q = {
+    //   type: '1',
+    //   params:
+    //     'Yn+CgX9eWg/4k+B61aXruyitCtvf7g4TV+/8D81ihLDYvmiwH78NMGxwQjEdke0asui4LjzbaBDnKbqPraVLHP7vya4r3P7rCSSWtEnL27EQtKbq0EhclF8uPF5TzPJEaI0AZRMh2L32RZAN7QWPeA==',
+    // } as any;
 
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
     uni.showLoading({});
 
-    // if ((queryParams && !opt?.params) || opt?.q) {
-    //   return;
-    // }
+    if ((queryParams && !opt?.params) || opt?.q) {
+      return;
+    }
 
-    pageProps.value = q;
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
 
     init();
   });
