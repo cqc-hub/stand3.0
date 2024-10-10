@@ -8,7 +8,7 @@
   import { defineComponent, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
@@ -75,7 +75,7 @@
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
     uni.showLoading({});
-
+    await wait(600);
     if ((queryParams && !opt?.params) || opt?.q) {
       return;
     }

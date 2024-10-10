@@ -208,7 +208,7 @@
     getListData(tabField[idx].key);
   };
 
-  tabChange = debounce(tabChange, 80);
+  tabChange = debounce(tabChange, 120);
 
   const expressClick = (item: IWaitListItem) => {
     const { expressNo, expressCompany } = item;
@@ -310,6 +310,7 @@
 
   // 0-未取药 1-已取药
   const getListData = async (takenDrug: '0' | '1') => {
+    console.log('first')
     const listNow = takenDrug === '0' ? waitSelList : seledList;
     isComplete.value[takenDrug] = false;
     listNow.value = [];
