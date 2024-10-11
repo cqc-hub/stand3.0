@@ -173,8 +173,14 @@
         {
           "path": "clinicPay/clinicPayDetail",
           "style": {
-            "navigationBarTitleText": "门诊缴费"
+            "navigationBarTitleText": "门诊缴费",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "code-btn": "plugin://crossProgramPlugins/code-pop-btn"
+              // #endif
+            }
           }
+          
         },
         {
           "path": "clinicPay/clinicPayMedical",

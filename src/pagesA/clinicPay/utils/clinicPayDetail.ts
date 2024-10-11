@@ -660,6 +660,26 @@ export const usePayPage = () => {
     },
   ]);
   const wxPryMoneyMedicalDialog = ref('' as any);
+  const wxCrossProgramInfo = ref({
+    appId: '',
+    bizType: '',
+    extInfo: {},
+  });
+  // #ifdef  MP-WEIXIN
+  const {
+    sConfig: { medicalMHelp },
+    systemConfig: { alipayAppid },
+  } = globalGl;
+  const { wx } = medicalMHelp!;
+  const { crossProgramBizType } = wx!;
+  if (crossProgramBizType) {
+    wxCrossProgramInfo.value = {
+      appId: alipayAppid,
+      bizType: crossProgramBizType,
+      extInfo: {},
+    };
+  }
+  // #endif
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
@@ -1585,13 +1605,21 @@ export const usePayPage = () => {
   ) => {
     const {
       sConfig: { medicalMHelp },
+      systemConfig: { isvAlipayAppid },
     } = globalGl;
 
     const { wx } = medicalMHelp!;
-    const { medicalNation, medicalPlugin } = wx!;
+    const { medicalNation, medicalPlugin, crossProgramBizType } = wx!;
 
     if (medicalPlugin === '1') {
-      wxPryMoneyMedicalDialog.value.show();
+      if (crossProgramBizType) {
+        const curPagesList = getCurrentPages();
+        const curPages: any = curPagesList[curPagesList.length - 1];
+        const { openFunc } = curPages.selectComponent('#codePlugin');
+        openFunc();
+      } else {
+        wxPryMoneyMedicalDialog.value.show();
+      }
     } else if (medicalNation) {
       const authorize = await getQxMedicalNation();
 
@@ -1807,6 +1835,7 @@ export const usePayPage = () => {
     goDrugDelivery,
     isWaitPayListHidePrice,
     wxPryMoneyMedicalDialog,
+    wxCrossProgramInfo,
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
     getIsDigitalPay,

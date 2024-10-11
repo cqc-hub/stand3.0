@@ -6,6 +6,16 @@
     class="g-page"
   >
     <g-flag isShowFg typeFg="15" />
+    <!-- #ifdef  MP-WEIXIN -->
+    <code-btn
+      v-if="wxCrossProgramInfo.bizType"
+      :appId="wxCrossProgramInfo.appId"
+      :bizType="wxCrossProgramInfo.bizType"
+      :extInfo="wxCrossProgramInfo.extInfo"
+      id="codePlugin"
+      style="position: absolute; top: -100px"
+    ></code-btn>
+    <!-- #endif -->
     <g-tbanner :config="pageConfig.bannerPay" />
 
     <view v-if="isShowPatComponent" class="animate__animated animate__fadeIn">
@@ -259,6 +269,7 @@
     patChange,
     cacheStore,
     hosId,
+    wxCrossProgramInfo,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);

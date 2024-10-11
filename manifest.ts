@@ -160,7 +160,7 @@ if (isOpenAlipayZndz) {
 }
 
 if (medicalMHelp) {
-  const { alipay } = medicalMHelp;
+  const { alipay, wx } = medicalMHelp;
 
   if (alipay) {
     const { medicalPlugin } = alipay;
@@ -171,6 +171,15 @@ if (medicalMHelp) {
         provider:
           // globalGl.env === 'prod' ? '2021003147699046' : '2021003167601013',
           '2021003147699046',
+      };
+    }
+  }
+  if (wx) {
+    const { crossProgramBizType } = wx!;
+    if (crossProgramBizType) {
+      wxPlugin.crossProgramPlugins = {
+        version: 'latest',
+        provider: 'wx12cec70855c0cacf',
       };
     }
   }
