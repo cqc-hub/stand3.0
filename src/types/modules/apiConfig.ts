@@ -50,4 +50,9 @@ export type ApiParamsConfig = {
     // path[]  path 内的二维码支持刷新 码值固定通过接口 (rePat/patDynamicCode 院内患者ID加密动态码)
     refreshQrCode?: string[];
   };
+
+  MedicalHelp: {
+    // 目前只支持配置 value 值 0 待取药 1 已取药
+    tabs: IOptions<'0' | '1'>[];
+  };
 };

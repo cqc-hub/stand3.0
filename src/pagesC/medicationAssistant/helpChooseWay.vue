@@ -3,7 +3,22 @@
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
       <view class="content-box">
         <view id="_address" class="container-box g-border mb16">
-          <Address-Box :addressList="addressList" />
+          <Address-Box
+            :addressList="addressList"
+            @item-click="addressInputClick"
+            is-custom
+          >
+            <template v-if="pageProps.params" #suffix>
+              <g-login @handler-next="goAddressList">
+                <view
+                  @click="goAddressList"
+                  class="book-address pl24 flex items-center"
+                >
+                  <view class="color-888">地址薄</view>
+                </view>
+              </g-login>
+            </template>
+          </Address-Box>
         </view>
 
         <view class="container-box g-border mb16 box-padding">
@@ -15,7 +30,7 @@
         </view>
 
         <view
-          v-if="!isIncludeChineseMedicalFriedAndDelivery"
+          v-if="!isIncludeChineseMedicalFriedAndDelivery && aimList.length"
           class="container-box g-border mb16 box-padding"
         >
           <block>
@@ -63,7 +78,10 @@
           </block>
         </view>
 
-        <view class="container-box g-border mb16 box-padding">
+        <view
+          v-if="globalGl.SYS_CODE !== '1001067'"
+          class="container-box g-border mb16 box-padding"
+        >
           <view class="g-bold f36">备注</view>
 
           <view class="remark-content">
@@ -88,7 +106,9 @@
       </view>
     </scroll-view>
     <view class="g-footer">
-      <button @click="submit" class="btn btn-primary flex1">立即下单</button>
+      <button @click="submit" class="btn btn-primary flex1">
+        {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
+      </button>
     </view>
 
     <g-message />
@@ -99,7 +119,7 @@
   import { ref } from 'vue';
 
   import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { getLocalStorage } from '@/common';
+  import { deQueryForUrl, getLocalStorage } from '@/common';
   import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
@@ -109,8 +129,14 @@
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
   import HelpList from './components/HelpList.vue';
   import SelExpress from './components/SelExpress.vue';
+  import globalGl from '@/config/global';
 
   const cacheStore = useCacheStore();
+  const pageProps = ref(
+    {} as {
+      params?: string;
+    }
+  );
 
   const isChineseMedical = (item: any) => {
     return !!(item && item.drugTypeName && item.drugTypeName.includes('中药'));
@@ -144,6 +170,32 @@
 
   const aimValue = ref<any[]>([]);
 
+  const addressInputClick = () => {
+    uni.setStorage({
+      data: '1',
+      key: 'back-address',
+    });
+
+    if (pageProps.value.params) {
+      uni.navigateTo({
+        url: '/pagesC/shippingAddress/addressList?redir=1',
+      });
+    } else {
+      goAddressList();
+    }
+  };
+
+  const goAddressList = () => {
+    uni.setStorage({
+      data: '1',
+      key: 'back-address',
+    });
+
+    uni.navigateTo({
+      url: '/pagesC/shippingAddress/addressList?redir=1',
+    });
+  };
+
   const submit = async () => {
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
     const { herenId } = gStores.globalStore;
@@ -156,7 +208,6 @@
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
     let provinces = '';
-    getShowDrugName;
 
     if (detailsAddressData) {
       const { province, city, county } = detailsAddressData;
@@ -188,9 +239,10 @@
       }
     }
 
-    const deliveryType = isIncludeChineseMedicalFriedAndDelivery.value
-      ? '3'
-      : '2';
+    const deliveryType =
+      !aimValue.value.length || isIncludeChineseMedicalFriedAndDelivery.value
+        ? '3'
+        : '2';
 
     const args = {
       deliveryType,
@@ -217,23 +269,6 @@
     });
   };
 
-  let _firstLoaded = true;
-  onShow(async () => {
-    const _backFromAddress = getLocalStorage('back-address');
-    if (_firstLoaded || _backFromAddress) {
-      _firstLoaded = false;
-      uni.removeStorage({
-        key: 'back-address',
-      });
-
-      const { result } = await api.queryExpressAddress({
-        herenId: gStores.globalStore.herenId,
-      });
-
-      addressList.value = result || [];
-    }
-  });
-
   const getConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
 
@@ -247,7 +282,9 @@
         aimValue.value = [companyList[0].value];
       }
     } else {
-      gStores.messageStore.showMessage('未配置快递信息');
+      if (globalGl.SYS_CODE !== '1001067') {
+        gStores.messageStore.showMessage('未配置快递信息');
+      }
     }
   };
 
@@ -255,7 +292,27 @@
     await getConfig();
   };
 
-  onLoad(async () => {
+  let _firstLoaded = true;
+  onShow(async () => {
+    const _backFromAddress = getLocalStorage('back-address');
+    if ((_firstLoaded || _backFromAddress) && gStores.globalStore.isLogin) {
+      _firstLoaded = false;
+      uni.removeStorage({
+        key: 'back-address',
+      });
+
+      const { result } = await api.queryExpressAddress({
+        herenId: gStores.globalStore.herenId,
+      });
+
+      addressList.value = result || [];
+    }
+  });
+
+  onLoad(async (opt) => {
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
     await init();
     isIncludeChineseMedicalFriedAndDelivery.value =
       !!cacheStore.medicalHelpSelList.find((o) => isToBeFriedAndDelivery(o));
@@ -335,6 +392,21 @@
           margin-right: 5rpx;
         }
       }
+    }
+  }
+
+  .book-address {
+    min-height: 3rem;
+    font-weight: 500;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--hr-neutral-color-2);
+      width: 1px;
     }
   }
 

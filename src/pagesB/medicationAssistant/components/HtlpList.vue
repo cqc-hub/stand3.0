@@ -61,11 +61,20 @@
           </view>
         </view>
 
-        <view class="item-box f28">
+        <view v-if="item.prescTime" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">就诊时间</view>
             <view class="flex1 g-break-word color-444">
               {{ item.prescTime }}
+            </view>
+          </view>
+        </view>
+
+        <view v-if="item.hosName" class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">院区</view>
+            <view class="flex1 g-break-word color-444">
+              {{ item.hosName }}
             </view>
           </view>
         </view>

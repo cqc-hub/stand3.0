@@ -10,7 +10,7 @@
       v-if="!pageProps.params"
       @choose-pat="tabChange(tabCurrent)"
     />
-    <view class="g-border-bottom">
+    <view v-if="tabField.length > 1" class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
         :tabs="tabField"
@@ -28,7 +28,7 @@
       @change="({ detail: { current } }) => tabChange(current)"
       class="g-container"
     >
-      <swiper-item>
+      <swiper-item v-if="tabFieldKeys.includes('0')">
         <scroll-view scroll-y class="swiper-item uni-bg-red">
           <Htlp-List
             :list="waitSelList"
@@ -52,7 +52,7 @@
         </scroll-view>
       </swiper-item>
 
-      <swiper-item>
+      <swiper-item v-if="tabFieldKeys.includes('1')">
         <scroll-view scroll-y class="swiper-item uni-bg-red">
           <Htlp-List
             :list="seledList"
@@ -71,7 +71,7 @@
       </swiper-item>
     </swiper>
 
-    <view v-if="tabCurrent == 0" class="g-footer">
+    <view v-if="isShowSelItem" class="g-footer">
       <button
         :class="{
           'btn-disabled': !selList.length,
@@ -118,7 +118,15 @@
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
   import { useCacheStore } from '@/stores';
-  import { GStores, debounce, useTBanner, TButtonConfig, wait } from '@/utils';
+  import {
+    GStores,
+    debounce,
+    useTBanner,
+    TButtonConfig,
+    wait,
+    throttle,
+    cacheUtil,
+  } from '@/utils';
   import {
     type IWaitListItem,
     isChineseMedical,
@@ -135,6 +143,18 @@
   import HtlpList from './components/HtlpList.vue';
   import SelWayPopup from './components/SelWayPopup.vue';
   import { beforeEach } from '@/router';
+  import globalGl from '@/config/global';
+
+  const defaultField = [
+    {
+      label: '待取药',
+      key: '0',
+    },
+    {
+      label: '已取药',
+      key: '1',
+    },
+  ];
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -145,16 +165,7 @@
     }
   );
   const tabCurrent = ref(0);
-  const tabField = [
-    {
-      label: '待取药',
-      key: '0',
-    },
-    {
-      label: '已取药',
-      key: '1',
-    },
-  ] as const;
+  const tabField = ref([] as typeof defaultField);
   const refAddDialog = ref<any>('');
   const isComplete = ref({
     '0': false,
@@ -167,6 +178,17 @@
   const selList = ref<IWaitListItem[]>([]);
   const seledList = ref<IWaitListItem[]>([]);
   const drayWaySelList = ref<IOptions[]>([]);
+  const currentTabKey = computed(() => {
+    return tabField.value[tabCurrent.value].key;
+  });
+
+  const isShowSelItem = computed(() => {
+    return currentTabKey.value === '0';
+  });
+
+  const tabFieldKeys = computed(() => {
+    return tabField.value.map((o) => o.key);
+  });
 
   const selListOption = computed(() => {
     const [opt1, opt2] = [
@@ -204,11 +226,10 @@
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
-
-    getListData(tabField[idx].key);
+    getListData(tabField.value[idx].key);
   };
 
-  tabChange = debounce(tabChange, 120);
+  tabChange = throttle(tabChange, 120);
 
   const expressClick = (item: IWaitListItem) => {
     const { expressNo, expressCompany } = item;
@@ -309,8 +330,7 @@
   };
 
   // 0-未取药 1-已取药
-  const getListData = async (takenDrug: '0' | '1') => {
-    console.log('first')
+  const getListData = async (takenDrug: string) => {
     const listNow = takenDrug === '0' ? waitSelList : seledList;
     isComplete.value[takenDrug] = false;
     listNow.value = [];
@@ -351,6 +371,8 @@
 
   const unSelItemClick = (item: IWaitListItem) => {};
   const selItemClick = (item: IWaitListItem) => {
+    dealWith1001067();
+
     const pageArg = {
       ...item,
     };
@@ -367,8 +389,32 @@
     });
   };
 
-  const init = () => {
-    getListData('0');
+  const dealWith1001067 = () => {
+    // 温fu2 扫码药品配送， 不需要进列表 直接详情
+    if (globalGl.SYS_CODE === '1001067' && seledList.value.length) {
+      selList.value = [...seledList.value];
+      configToHome();
+      throw new Error('1001067');
+    }
+  };
+
+  const init = async () => {
+    const { MedicalHelp: config } = await cacheUtil.getSystemConfig(
+      'MedicalHelp'
+    )();
+    const { tabs } = config;
+
+    if (tabs) {
+      tabField.value = tabs.map((o) => ({
+        ...o,
+        key: o.value,
+      }));
+    } else {
+      tabField.value = defaultField;
+    }
+
+    await getListData(tabField.value[tabCurrent.value].key);
+    dealWith1001067();
   };
 
   const wayClick = (item: IOptions) => {
@@ -397,7 +443,9 @@
 
     setTimeout(() => {
       uni.navigateTo({
-        url: '/pagesC/medicationAssistant/helpChooseWay',
+        url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
+          ...pageProps.value,
+        }),
       });
     }, 200);
   };
@@ -429,7 +477,7 @@
 
   onShow(() => {
     if (getLocalStorage('medicalHelp')) {
-      getListData(tabField[tabCurrent.value].key);
+      getListData(tabField.value[tabCurrent.value].key);
       setLocalStorage({
         medicalHelp: '',
       });

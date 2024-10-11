@@ -673,6 +673,12 @@
           }
         },
         {
+          "path": "shippingAddress/inputAddress",
+          "style": {
+            "navigationBarTitleText": "收货地址填写"
+          }
+        },
+        {
           "path": "selfService/nucleicBilling",
           "extend": {
             "patient": true
