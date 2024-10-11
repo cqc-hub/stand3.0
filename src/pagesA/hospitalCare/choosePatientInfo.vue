@@ -127,7 +127,10 @@ const toPayPage = () => {
     hosName
   };
   uni.navigateTo({
-    url: joinQuery("/pagesA/hospitalCare/paymentPage", data),
+    url: joinQuery("/pagesA/hospitalCare/paymentPage", {
+      ...hosInfoResObj.value,
+      ...data
+    }),
   });
 };
 

@@ -82,7 +82,7 @@
     isLocal: '1',
   };
 
-   // 意见反馈
+  // 意见反馈
   const serviceCenter: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
@@ -90,11 +90,11 @@
     text: '意见反馈',
     extraData: {
       sysCode: globalGl.SYS_CODE,
-      pageType:2,
+      pageType: 2,
     },
     addition: {
       herenId: 'herenId',
-      pageType:"2",
+      pageType: '2',
     },
     isLocal: '1',
   };
@@ -377,6 +377,14 @@
     },
   };
 
+  const 满意度: TButtonConfig = {
+    path: 'pagesC/question/questionAfterVisit',
+    type: 'h5',
+    isSelfH5: '1',
+    addition: { patientId: '_p' },
+    text: '满意度',
+  };
+
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({
@@ -426,8 +434,8 @@
 
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
-      useTBanner(会员权益);
-
+      // useTBanner(会员权益);
+      useTBanner(满意度);
     }, 1000);
   });
 </script>

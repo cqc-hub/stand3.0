@@ -6,7 +6,10 @@
     class="g-page"
   >
     <g-flag isShowFg typeFg="48" />
-    <g-choose-pat @choose-pat="tabChange(tabCurrent)" />
+    <g-choose-pat
+      v-if="!pageProps.params"
+      @choose-pat="tabChange(tabCurrent)"
+    />
     <view class="g-border-bottom">
       <g-tabs
         v-model:value="tabCurrent"
@@ -115,20 +118,32 @@
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
   import { useCacheStore } from '@/stores';
-  import { GStores, debounce, useTBanner, TButtonConfig } from '@/utils';
+  import { GStores, debounce, useTBanner, TButtonConfig, wait } from '@/utils';
   import {
     type IWaitListItem,
     isChineseMedical,
     isToBeFriedAndDelivery,
   } from './utils/medicalHelp';
-  import { setLocalStorage, getLocalStorage, joinQueryForUrl } from '@/common';
+  import {
+    setLocalStorage,
+    getLocalStorage,
+    joinQueryForUrl,
+    deQueryForUrl,
+  } from '@/common';
   import api from '@/service/api';
 
   import HtlpList from './components/HtlpList.vue';
   import SelWayPopup from './components/SelWayPopup.vue';
+  import { beforeEach } from '@/router';
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
+  const pageProps = ref(
+    {} as {
+      tabIndex: number;
+      params?: string;
+    }
+  );
   const tabCurrent = ref(0);
   const tabField = [
     {
@@ -193,7 +208,7 @@
     getListData(tabField[idx].key);
   };
 
-  tabChange = debounce(tabChange, 80);
+  tabChange = debounce(tabChange, 120);
 
   const expressClick = (item: IWaitListItem) => {
     const { expressNo, expressCompany } = item;
@@ -295,19 +310,24 @@
 
   // 0-未取药 1-已取药
   const getListData = async (takenDrug: '0' | '1') => {
+    console.log('first')
     const listNow = takenDrug === '0' ? waitSelList : seledList;
     isComplete.value[takenDrug] = false;
     listNow.value = [];
     selList.value = [];
 
+    const { params: sign } = pageProps.value;
     const { patientId } = gStores.userStore.patChoose;
     const args = {
       takenDrug,
-      patientId,
+      patientId: sign ? undefined : patientId,
       clinicCate: 0,
+      sign,
     };
 
-    const { result } = await api.getDrugDelivery(args).finally(() => {
+    const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
+
+    const { result } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
 
@@ -416,19 +436,49 @@
     }
   });
 
-  onLoad((opt) => {
-    if (opt) {
-      const { tabIndex } = opt;
+  const pageHook = async () => {
+    await wait(200);
+    const patList = gStores.userStore.patList;
+    if (!patList.length) {
+      const pages = getCurrentPages();
 
-      if (tabIndex) {
-        tabCurrent.value = <any>tabIndex * 1;
+      if (pages.length) {
+        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+        await beforeEach({
+          url: fullUrl,
+          _isPatient: true,
+        });
       }
     }
-  });
+  };
 
-  onMounted(() => {
+  onLoad(async (opt) => {
+    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+    uni.showLoading({});
+    if ((queryParams && !opt?.params) || opt?.q) {
+      await wait(650);
+      return;
+    }
+
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
+
+    const { tabIndex, params } = pageProps.value;
+    if (tabIndex) {
+      tabCurrent.value = <any>tabIndex * 1;
+    }
+
+    if (!params) {
+      await pageHook();
+    }
+
     init();
   });
+
+  // onMounted(() => {
+  //   init();
+  // });
 </script>
 
 <style lang="scss" scoped>

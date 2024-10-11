@@ -279,6 +279,16 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  getScanDrugDelivery: (data) =>
+    service.post('/phs-query/delivery/getScanDrugDelivery', parm(data), {
+      hideLoading: false,
+    }),
+
+  getScanDrugDeliveryDetail: (data) =>
+    service.post('/phs-query/delivery/getScanDrugDeliveryDetail', parm(data), {
+      hideLoading: false,
+    }),
+
   addDrugDelivery: (data) =>
     service.post('/phs-query/delivery/addDrugDelivery', parm(data), {
       hideLoading: false,
@@ -1017,10 +1027,7 @@ const authApi = {
     return service.post<T>('/phs-pay/pay/medicalPay', parm(data), opt);
   },
 
-   getStatus: <T>(
-    data,
-    opt = {   hideLoading: false,}
-  ) => {
+  getStatus: <T>(data, opt = { hideLoading: false }) => {
     return service.post<T>('/phs-message/message/getStatus', parm(data), opt);
   },
 };

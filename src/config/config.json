@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001072",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -239,6 +239,7 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
+
     "1001068": {
       "wxAppid": "wxb03ff137dabedd6d",
       "alipayAppid": "",
@@ -285,6 +286,15 @@
       "h5Appid": "wx65a04aa1dc7776d8",
       "name": "嘉兴市第二医院",
       "isSearchInHos": true,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001072": {
+      "wxAppid": "wxbef5313efdabfde1",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "天水市第一人民医院",
+      "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
     }
