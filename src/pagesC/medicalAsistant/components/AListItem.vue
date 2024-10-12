@@ -82,7 +82,6 @@
       <view class="mt26">
         <button
           v-for="(btn, i) in showButtons"
-          
           :key="btn.key"
           :class="{
             'btn-first': !i && mainColor !== '#fff',
@@ -103,7 +102,7 @@
   import { joinQuery } from '@/common';
   import { useTBanner } from '@/utils';
   import { GStores } from '@/utils';
-  const buttons = [
+  let buttons = [
     {
       label: '查看报告',
       key: '1',
@@ -168,7 +167,11 @@
         const btnShows = {
           // 立即预约
           5() {
-            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}'||that.btns[4]?.path === '') {
+            if (
+              !that.btns[3] ||
+              JSON.stringify(that.btns[3]) === '{}' ||
+              that.btns[4]?.path === ''
+            ) {
               return;
             }
             // 未执行的需要预约的检查
@@ -184,7 +187,11 @@
 
           // 查看预约
           4() {
-            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}'||that.btns[3]?.path === '') {
+            if (
+              !that.btns[3] ||
+              JSON.stringify(that.btns[3]) === '{}' ||
+              that.btns[3]?.path === ''
+            ) {
               return;
             }
             if (appointIndicator === '1' && ['2', '3'].includes(orderClass)) {
@@ -196,7 +203,11 @@
 
           // 查看报告
           1() {
-            if (!that.btns[0] || JSON.stringify(that.btns[0]) === '{}'||that.btns[0]?.path === '') {
+            if (
+              !that.btns[0] ||
+              JSON.stringify(that.btns[0]) === '{}' ||
+              that.btns[0]?.path === ''
+            ) {
               return;
             }
             if (['2', '3'].includes(orderClass)) {
@@ -208,7 +219,11 @@
 
           // 用药指导
           3() {
-            if (!that.btns[2] || JSON.stringify(that.btns[2]) === '{}'||that.btns[2]?.path === '') {
+            if (
+              !that.btns[2] ||
+              JSON.stringify(that.btns[2]) === '{}' ||
+              that.btns[2]?.path === ''
+            ) {
               return;
             }
             // 西药、中药、成药
@@ -221,8 +236,11 @@
 
           // 院内导航
           2() {
-            console.log('that.btns[2]',that.btns[1])
-            if (!that.btns[1] || JSON.stringify(that.btns[1]) === '{}'||that.btns[1]?.path === '') {
+            if (
+              !that.btns[1] ||
+              JSON.stringify(that.btns[1]) === '{}' ||
+              that.btns[1]?.path === ''
+            ) {
               return;
             }
             if (performDeptCode) {
@@ -230,6 +248,50 @@
             }
           },
         };
+        if (that.btns.length > 5) {
+          buttons = [
+                {
+                  label: '查看报告',
+                  key: '1',
+                },
+                {
+                  label: '用药指导',
+                  key: '3',
+                },
+                {
+                  label: '查看预约',
+                  key: '4',
+                },
+                {
+                  label: '立即预约',
+                  key: '5',
+                },
+                {
+                  label: '院内导航',
+                  key: '2',
+                },
+              ];
+          Object.entries(this.btns).forEach(([k, v], i) => {
+            if (i >= 5) {
+              btnShows[k*1 + 1] = () => {
+                let flag = true;
+                Object.entries(v).forEach(([k2, v2]) => {
+                  console.log('buttons',item,k2,item[k2] , v2)
+                  if (item[k2] != v2) {
+                    flag = undefined;
+                  }
+                });
+                return flag;
+              };
+              
+              buttons.push({
+                key: k*1 + 1,
+                label: v.text,
+              });
+            }
+          });
+         
+        }
 
         return buttons.filter(({ key }) => {
           return btnShows[key] && btnShows[key]();
@@ -278,16 +340,17 @@
       btnAction(item, key) {
         const gStores = new GStores();
         const { performDeptCode: deptId, orderClass, hosId } = item;
-        console.log('that.item',this.item)
+        console.log('that.item', this.item);
         const that = this;
-        const {  herenId, } = gStores.globalStore;
-         // eslint-disable-next-line vue/no-mutating-props
-         that.item.herenId=herenId
+        const { herenId } = gStores.globalStore;
+        // eslint-disable-next-line vue/no-mutating-props
+        that.item.herenId = herenId;
         const btnActionMap = {
           // 查看报告
           1: () => {
             // eslint-disable-next-line vue/no-mutating-props
-            that.item.orderClassTabIndex = that.item?.orderClass === '2' ? 0 : 1;
+            that.item.orderClassTabIndex =
+              that.item?.orderClass === '2' ? 0 : 1;
             useTBanner(that.btns[0], 'navigateTo', that.item);
           },
 
@@ -307,7 +370,7 @@
           },
 
           // 立即预约
-          5() {
+          5: () => {
             useTBanner(that.btns[4], 'navigateTo', that.item);
           },
         };

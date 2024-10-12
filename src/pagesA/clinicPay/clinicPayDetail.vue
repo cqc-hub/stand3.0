@@ -13,7 +13,7 @@
       :bizType="wxCrossProgramInfo.bizType"
       :extInfo="wxCrossProgramInfo.extInfo"
       id="codePlugin"
-      style="position: absolute; top: -100px"
+      style="position: absolute; top: -100vh"
     ></code-btn>
     <!-- #endif -->
     <g-tbanner :config="pageConfig.bannerPay" />

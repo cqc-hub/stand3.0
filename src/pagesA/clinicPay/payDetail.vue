@@ -60,6 +60,16 @@
               </view>
             </view>
           </block>
+          <!-- #ifdef  MP-WEIXIN -->
+          <code-btn
+            v-if="wxCrossProgramInfo.bizType"
+            :appId="wxCrossProgramInfo.appId"
+            :bizType="wxCrossProgramInfo.bizType"
+            :extInfo="wxCrossProgramInfo.extInfo"
+            id="codePlugin"
+            style="position: absolute; top: -100vh"
+          ></code-btn>
+          <!-- #endif -->
 
           <view class="g-border box mt16">
             <view class="g-bold f36 g-break-word">
@@ -338,6 +348,7 @@
     wxPryMoneyMedicalDialog,
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
+    wxCrossProgramInfo,
   } = usePayPage();
 
   const qrCode = computed(() => {
