@@ -250,47 +250,46 @@
         };
         if (that.btns.length > 5) {
           buttons = [
-                {
-                  label: '查看报告',
-                  key: '1',
-                },
-                {
-                  label: '用药指导',
-                  key: '3',
-                },
-                {
-                  label: '查看预约',
-                  key: '4',
-                },
-                {
-                  label: '立即预约',
-                  key: '5',
-                },
-                {
-                  label: '院内导航',
-                  key: '2',
-                },
-              ];
+            {
+              label: '查看报告',
+              key: '1',
+            },
+            {
+              label: '用药指导',
+              key: '3',
+            },
+            {
+              label: '查看预约',
+              key: '4',
+            },
+            {
+              label: '立即预约',
+              key: '5',
+            },
+            {
+              label: '院内导航',
+              key: '2',
+            },
+          ];
           Object.entries(this.btns).forEach(([k, v], i) => {
             if (i >= 5) {
-              btnShows[k*1 + 1] = () => {
+              btnShows[k * 1 + 1] = () => {
                 let flag = true;
-                Object.entries(v).forEach(([k2, v2]) => {
-                  console.log('buttons',item,k2,item[k2] , v2)
+                Object.entries(v._showConditions).forEach(([k2, v2]) => {
+                  console.log('buttons', item, k2, item[k2], v2);
                   if (item[k2] != v2) {
                     flag = undefined;
                   }
                 });
                 return flag;
               };
-              
+
               buttons.push({
-                key: k*1 + 1,
+                key: k * 1 + 1,
                 label: v.text,
               });
             }
           });
-         
         }
 
         return buttons.filter(({ key }) => {
@@ -340,7 +339,6 @@
       btnAction(item, key) {
         const gStores = new GStores();
         const { performDeptCode: deptId, orderClass, hosId } = item;
-        console.log('that.item', this.item);
         const that = this;
         const { herenId } = gStores.globalStore;
         // eslint-disable-next-line vue/no-mutating-props
@@ -374,6 +372,13 @@
             useTBanner(that.btns[4], 'navigateTo', that.item);
           },
         };
+        Object.entries(that.btns).forEach(([k, v], i) => {
+          if (i >= 5) {
+            btnActionMap[k * 1 + 1] = () => {
+              useTBanner(v, 'navigateTo', that.item);
+            };
+          }
+        });
 
         if (key in btnActionMap) {
           btnActionMap[key]();
