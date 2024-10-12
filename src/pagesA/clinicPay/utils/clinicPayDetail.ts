@@ -670,14 +670,18 @@ export const usePayPage = () => {
     sConfig: { medicalMHelp },
     systemConfig: { alipayAppid },
   } = globalGl;
-  const { wx } = medicalMHelp!;
-  const { crossProgramBizType } = wx!;
-  if (crossProgramBizType) {
-    wxCrossProgramInfo.value = {
-      appId: alipayAppid,
-      bizType: crossProgramBizType,
-      extInfo: {},
-    };
+  if (medicalMHelp) {
+    const { wx } = medicalMHelp;
+    if (wx) {
+      const { crossProgramBizType } = wx;
+      if (crossProgramBizType) {
+        wxCrossProgramInfo.value = {
+          appId: alipayAppid,
+          bizType: crossProgramBizType,
+          extInfo: {},
+        };
+      }
+    }
   }
   // #endif
 

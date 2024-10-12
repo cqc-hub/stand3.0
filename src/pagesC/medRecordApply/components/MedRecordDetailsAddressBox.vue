@@ -1,6 +1,6 @@
 <template>
   <view class="flex flex-between items-center p32 address-container">
-    <view class="address-box" @click="goAddressList">
+    <view class="address-box flex-1" @click="goAddressList">
       <block v-if="addressList.length">
         <view class="header flex-normal-between">
           <view class="user-info text-ellipsis">

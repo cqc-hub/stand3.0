@@ -171,14 +171,13 @@
   const aimValue = ref<any[]>([]);
 
   const addressInputClick = () => {
-    uni.setStorage({
-      data: '1',
-      key: 'back-address',
-    });
-
     if (pageProps.value.params) {
+      uni.setStorage({
+        data: '2',
+        key: 'back-address',
+      });
       uni.navigateTo({
-        url: '/pagesC/shippingAddress/addressList?redir=1',
+        url: '/pagesC/shippingAddress/inputAddress?redir=1',
       });
     } else {
       goAddressList();
@@ -301,11 +300,23 @@
         key: 'back-address',
       });
 
-      const { result } = await api.queryExpressAddress({
-        herenId: gStores.globalStore.herenId,
-      });
+      if (_backFromAddress === '2') {
+        if (cacheStore.cacheData.address) {
+          addressList.value = [
+            {
+              ...cacheStore.cacheData,
+            },
+          ];
+        }
+      } else {
+        const { result } = await api.queryExpressAddress({
+          herenId: gStores.globalStore.herenId,
+        });
 
-      addressList.value = result || [];
+        if (result && result.length) {
+          addressList.value = result;
+        }
+      }
     }
   });
 

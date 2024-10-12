@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import api from '@/service/api';
   import { GStores } from '@/utils';
   import { ref } from 'vue';
@@ -115,6 +115,11 @@
         ...item,
         defaultFlag: 1,
       };
+
+      uni.setStorage({
+        data: '1',
+        key: 'back-address',
+      });
 
       await api.updateExpressAddress(params);
 
@@ -170,6 +175,12 @@
     const data = await getScopeAddress();
     getAddress(data);
   };
+
+  onLoad(() => {
+    uni.removeStorage({
+      key: 'back-address',
+    });
+  });
 </script>
 
 <style scoped lang="scss">

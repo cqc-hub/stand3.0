@@ -33,41 +33,20 @@
         }"
         class="btn btn-primary"
       >
-        保存
-      </button>
-      <button
-        v-if="props.pageType === 'edit'"
-        @click="
-          () => {
-            showDialog = true;
-          }
-        "
-        class="btn btn-border btn-normal"
-      >
-        删除收货地址
+        确认
       </button>
     </view>
-    <xy-dialog
-      content="您确定要删除所选地址吗？"
-      :show="showDialog"
-      @cancelButton="
-        () => {
-          showDialog = false;
-        }
-      "
-      @confirmButton="deleteAddress"
-    ></xy-dialog>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, computed, withDefaults } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { GStores, wait } from '@/utils';
-  import { onReady, onLoad } from '@dcloudio/uni-app';
-  import { useMessageStore } from '@/stores';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { useCacheStore } from '@/stores';
   import api from '@/service/api';
   import { deQueryForUrl } from '@/common';
-  const messageStore = useMessageStore();
+  const cacheStore = useCacheStore();
 
   // const props = withDefaults(
   //   defineProps<{
@@ -95,7 +74,6 @@
     address: '',
     detailedAddress: '',
     postcode: '',
-    defaultFlag: false,
   });
 
   const formList = [
@@ -155,15 +133,7 @@
       placeholder: '请输入邮政编码',
       key: 'postcode',
     },
-    {
-      field: 'switch',
-      key: 'defaultFlag',
-      label: '设为默认地址',
-      labelWidth: '260rpx',
-      rowStyle: 'margin-top: 16rpx; border-radius: 16rpx;',
-    },
   ];
-  const showDialog = ref(false);
 
   const addressChange = (e) => {
     const { value } = e;
@@ -197,40 +167,13 @@
     formData.value.county = result.county;
   };
 
-  const deleteAddress = async () => {
-    const item = JSON.parse(props.value.item);
-    await api.delExpressAddress({
-      herenId: gStores.globalStore.herenId,
-      id: item.id,
+  const formSubmit = async () => {
+    cacheStore.changeCacheData({
+      ...formData.value,
     });
-    messageStore.showMessage('删除成功', 1000, {
-      closeCallBack: () => {
-        uni.navigateBack({ delta: 1 });
-      },
-    });
-  };
 
-  const formSubmit = async ({ data }) => {
-    const params = {
-      herenId: gStores.globalStore.herenId,
-      ...data,
-      defaultFlag: data.defaultFlag ? 1 : 0,
-    };
-    delete params.address;
-    let title = '地址保存成功';
-    if (props.value.pageType == 'edit') {
-      title = '地址修改成功';
-      await api.updateExpressAddress(params);
-    } else {
-      await api.addExpressAddress(params);
-    }
-
-    messageStore.showMessage(title, 1000, {
-      closeCallBack: () => {
-        uni.navigateBack({
-          delta: props.value.pageType === 'editPatient' ? 2 : 1,
-        });
-      },
+    uni.navigateBack({
+      delta: 1,
     });
   };
 
@@ -247,28 +190,9 @@
 
   onLoad((opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
-    if (!props.value.pageType) {
-      props.value.pageType = 'add';
-    }
-  });
-
-  onReady(() => {
-    if (props.value.pageType === 'edit') {
-      uni.setNavigationBarTitle({
-        title: '编辑收货地址',
-      });
-    }
   });
 
   onMounted(async () => {
-    if (props.value.pageType !== 'add') {
-      const item = JSON.parse(props.value.item);
-
-      formData.value = {
-        ...item,
-        defaultFlag: item.defaultFlag === 0 ? false : true,
-      };
-    }
     await wait(20);
     gform.value.setList(formList);
   });

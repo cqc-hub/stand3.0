@@ -233,12 +233,14 @@
       "isOpenOcr": false
     },
     "1001067": {
-      "wxAppid": "wxdd1ed079167189fa",
+      "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
+      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false
     },
+
 
     "1001068": {
       "wxAppid": "wxb03ff137dabedd6d",
@@ -294,7 +296,7 @@
       "alipayAppid": "",
       "h5Appid": "",
       "name": "天水市第一人民医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isStartComeTest": false,
       "isOpenOcr": false
     }
