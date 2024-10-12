@@ -5,7 +5,7 @@
         <text>{{ item.drugTypeName }}</text>
       </view>
 
-      <view class="row f28 flex-normal mt24">
+      <view v-if="item.deptName" class="row f28 flex-normal mt24">
         <view class="label color-888">开单科室</view>
         <view class="row-content flex1 color-444 text-ellipsis">
           <view class="text-ellipsis">{{ item.deptName }}</view>
@@ -15,7 +15,14 @@
         </view>
       </view>
 
-      <view class="row f28 flex-normal">
+      <view v-if="item.hosName" class="row f28 flex-normal">
+        <view class="label color-888">院区</view>
+        <view class="row-content flex1 color-444 text-ellipsis">
+          {{ item.hosName }}
+        </view>
+      </view>
+
+      <view v-if="item.prescTime" class="row f28 flex-normal">
         <view class="label color-888">开单时间</view>
         <view class="row-content flex1 color-444 text-ellipsis">
           {{ item.prescTime }}

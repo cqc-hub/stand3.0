@@ -19,7 +19,7 @@ export interface IWaitListItem {
   visitType?: '1' | '2';
   supportEditAddr?: '1'; // 特殊情况支持修改取药方式或者修改地址 1需要 台一需要
   drugIsDelivery: '0' | '1'; // 代煎方式 0代煎 1代煎外配
-  takenDrug: '0' | '1'; // 0 待取药 1 已取药
+  takenDrug: string; // 0 待取药 1 已取药
   tcmDecoctionIndicator?: '0' | '1';
   _id: string;
 }

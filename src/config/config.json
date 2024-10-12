@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "sysCode": "1001052",
+=======
+  "sysCode": "1001067",
+>>>>>>> 89bd3a96d4d7c2ef2ae50c90e35057e9552034c0
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -233,12 +237,14 @@
       "isOpenOcr": false
     },
     "1001067": {
-      "wxAppid": "wxdd1ed079167189fa",
+      "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
+      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false
     },
+
 
     "1001068": {
       "wxAppid": "wxb03ff137dabedd6d",
@@ -289,12 +295,12 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-    "1001072": {
+    "1001074": {
       "wxAppid": "wxbef5313efdabfde1",
       "alipayAppid": "",
       "h5Appid": "",
       "name": "天水市第一人民医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isStartComeTest": false,
       "isOpenOcr": false
     }

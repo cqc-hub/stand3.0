@@ -473,11 +473,11 @@
       const medicalMHelp = globalGl.sConfig.medicalMHelp!;
 
       // #ifdef  MP-WEIXIN
-      return medicalMHelp.wx?.isMedicalOrder === '1';
+      return medicalMHelp?.wx?.isMedicalOrder === '1';
       // #endif
 
       // #ifdef MP-ALIPAY
-      return medicalMHelp.alipay?.isMedicalOrder === '1';
+      return medicalMHelp?.alipay?.isMedicalOrder === '1';
       // #endif
     } else {
       return false;
