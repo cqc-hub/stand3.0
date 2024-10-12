@@ -38,7 +38,7 @@
             @click-item="selItemClick"
             @arrow-item="selItemClick"
             @express-click="expressClick"
-            isCheck
+            :isCheck="isShowSelItem"
           />
 
           <view
@@ -173,6 +173,7 @@
   });
   const fgTitle54 = ref('');
   const isFgShow54 = ref(false);
+  let rPatientId = '';
 
   const waitSelList = ref<IWaitListItem[]>([]);
   const selList = ref<IWaitListItem[]>([]);
@@ -183,7 +184,7 @@
   });
 
   const isShowSelItem = computed(() => {
-    return currentTabKey.value === '0';
+    return currentTabKey.value === '0' && globalGl.SYS_CODE !== '1001067';
   });
 
   const tabFieldKeys = computed(() => {
@@ -341,17 +342,19 @@
     const args = {
       takenDrug,
       patientId: sign ? undefined : patientId,
-      clinicCate: 0,
+      clinicCate: sign ? undefined : 0,
       sign,
     };
 
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
 
-    const { result } = await actionApi(args).finally(() => {
+    const { result = {} } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
 
-    const rList = result && result.drugList;
+    const { drugList: rList, patientId: _patientId } = result;
+    rPatientId = _patientId;
+
     if (rList && rList.length) {
       const dateNow = new Date().getTime();
       rList.map((o, i) => {
@@ -372,7 +375,6 @@
   const unSelItemClick = (item: IWaitListItem) => {};
   const selItemClick = (item: IWaitListItem) => {
     dealWith1001067();
-
     const pageArg = {
       ...item,
     };
@@ -391,8 +393,8 @@
 
   const dealWith1001067 = () => {
     // 温fu2 扫码药品配送， 不需要进列表 直接详情
-    if (globalGl.SYS_CODE === '1001067' && seledList.value.length) {
-      selList.value = [...seledList.value];
+    if (globalGl.SYS_CODE === '1001067' && waitSelList.value.length) {
+      selList.value = [...waitSelList.value];
       configToHome();
       throw new Error('1001067');
     }
@@ -411,6 +413,15 @@
       }));
     } else {
       tabField.value = defaultField;
+    }
+
+    let { tabIndex } = pageProps.value;
+
+    if (tabIndex) {
+      tabIndex = tabIndex * 1;
+      if (tabIndex - 1 <= tabField.value.length) {
+        tabCurrent.value = tabIndex;
+      }
     }
 
     await getListData(tabField.value[tabCurrent.value].key);
@@ -444,6 +455,7 @@
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
+          cardNumber: rPatientId,
           ...pageProps.value,
         }),
       });
@@ -513,9 +525,6 @@
     }
 
     const { tabIndex, params } = pageProps.value;
-    if (tabIndex) {
-      tabCurrent.value = <any>tabIndex * 1;
-    }
 
     if (!params) {
       await pageHook();

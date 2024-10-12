@@ -134,6 +134,7 @@
   const cacheStore = useCacheStore();
   const pageProps = ref(
     {} as {
+      cardNumber?: string;
       params?: string;
     }
   );
@@ -194,6 +195,7 @@
   const submit = async () => {
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
     const { herenId } = gStores.globalStore;
+    const { params } = pageProps.value;
 
     const deptName = cacheStore.medicalHelpSelList
       .map((o) => o.deptName)
@@ -207,7 +209,7 @@
     if (detailsAddressData) {
       const { province, city, county } = detailsAddressData;
       detailsAddress = detailsAddressData.detailedAddress;
-      provinces = `${province} ${city} ${county} `;
+      provinces = `${province} ${city} ${county}`;
     } else {
       gStores.messageStore.showMessage('请选择快递地址', 3000);
       scrollTo.value = '_address';
@@ -246,9 +248,9 @@
       expressCompany: deliveryType === '3' ? undefined : expressCompany,
       expressName: senderName,
       expressPhone: senderPhone,
-      cardNumber,
-      patientId,
-      patientName,
+      cardNumber: pageProps.value.cardNumber || cardNumber,
+      patientId: params ? undefined : patientId,
+      patientName: params ? undefined : patientName,
       herenId,
       hosId,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
