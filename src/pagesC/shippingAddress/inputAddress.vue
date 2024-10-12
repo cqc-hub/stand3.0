@@ -172,6 +172,11 @@
       ...formData.value,
     });
 
+    uni.setStorage({
+      data: '2',
+      key: 'back-address',
+    });
+
     uni.navigateBack({
       delta: 1,
     });

@@ -172,10 +172,6 @@
 
   const addressInputClick = () => {
     if (pageProps.value.params) {
-      uni.setStorage({
-        data: '2',
-        key: 'back-address',
-      });
       uni.navigateTo({
         url: '/pagesC/shippingAddress/inputAddress?redir=1',
       });
@@ -294,7 +290,7 @@
   let _firstLoaded = true;
   onShow(async () => {
     const _backFromAddress = getLocalStorage('back-address');
-    if ((_firstLoaded || _backFromAddress) && gStores.globalStore.isLogin) {
+    if (_firstLoaded || _backFromAddress) {
       _firstLoaded = false;
       uni.removeStorage({
         key: 'back-address',
@@ -308,7 +304,7 @@
             },
           ];
         }
-      } else {
+      } else if (gStores.globalStore.isLogin) {
         const { result } = await api.queryExpressAddress({
           herenId: gStores.globalStore.herenId,
         });
