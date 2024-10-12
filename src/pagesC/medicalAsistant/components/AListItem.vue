@@ -82,6 +82,7 @@
       <view class="mt26">
         <button
           v-for="(btn, i) in showButtons"
+          
           :key="btn.key"
           :class="{
             'btn-first': !i && mainColor !== '#fff',
@@ -101,6 +102,7 @@
   import { ORDER_CLASS_MAP } from '../utils';
   import { joinQuery } from '@/common';
   import { useTBanner } from '@/utils';
+  import { GStores } from '@/utils';
   const buttons = [
     {
       label: '查看报告',
@@ -166,7 +168,7 @@
         const btnShows = {
           // 立即预约
           5() {
-            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}') {
+            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}'||that.btns[4]?.path === '') {
               return;
             }
             // 未执行的需要预约的检查
@@ -182,7 +184,7 @@
 
           // 查看预约
           4() {
-            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}') {
+            if (!that.btns[3] || JSON.stringify(that.btns[3]) === '{}'||that.btns[3]?.path === '') {
               return;
             }
             if (appointIndicator === '1' && ['2', '3'].includes(orderClass)) {
@@ -194,7 +196,7 @@
 
           // 查看报告
           1() {
-            if (!that.btns[0] || JSON.stringify(that.btns[0]) === '{}') {
+            if (!that.btns[0] || JSON.stringify(that.btns[0]) === '{}'||that.btns[0]?.path === '') {
               return;
             }
             if (['2', '3'].includes(orderClass)) {
@@ -206,7 +208,7 @@
 
           // 用药指导
           3() {
-            if (!that.btns[2] || JSON.stringify(that.btns[2]) === '{}') {
+            if (!that.btns[2] || JSON.stringify(that.btns[2]) === '{}'||that.btns[2]?.path === '') {
               return;
             }
             // 西药、中药、成药
@@ -219,7 +221,8 @@
 
           // 院内导航
           2() {
-            if (!that.btns[1] || JSON.stringify(that.btns[1]) === '{}') {
+            console.log('that.btns[2]',that.btns[1])
+            if (!that.btns[1] || JSON.stringify(that.btns[1]) === '{}'||that.btns[1]?.path === '') {
               return;
             }
             if (performDeptCode) {
@@ -273,11 +276,18 @@
        * @param { typeof buttons[number]['key']} key
        */
       btnAction(item, key) {
+        const gStores = new GStores();
         const { performDeptCode: deptId, orderClass, hosId } = item;
+        console.log('that.item',this.item)
         const that = this;
+        const {  herenId, } = gStores.globalStore;
+         // eslint-disable-next-line vue/no-mutating-props
+         that.item.herenId=herenId
         const btnActionMap = {
           // 查看报告
           1: () => {
+            // eslint-disable-next-line vue/no-mutating-props
+            that.item.orderClassTabIndex = that.item?.orderClass === '2' ? 0 : 1;
             useTBanner(that.btns[0], 'navigateTo', that.item);
           },
 

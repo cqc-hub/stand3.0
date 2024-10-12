@@ -179,7 +179,6 @@ export const useTBanner = async (
       herenId && (extraData[herenId] = gStores.globalStore.herenId);
       extraData.token = gStores.globalStore.getToken;
     }
-
     for (const key in addition) {
       if (!['token', 'patientId', 'herenId', 'cardNumber'].includes(key)) {
         extraData[addition[key]] =

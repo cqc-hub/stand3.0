@@ -436,6 +436,9 @@ const queryApi = {
     service.post('/phs-base/cms/getCmsTypeList', parm(data)),
   getCmsListByWordSearch: <T = any>(data) =>
     service.post('/phs-base/cms/getCmsListByWordSearch', parm(data)),
+  //电子导诊单
+  getHosGuideSheet: <T>(data) =>
+    service.post<T>('/phs-query/medical/getHosGuideSheet', parm(data)),
 };
 
 // 挂号服务

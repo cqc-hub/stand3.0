@@ -436,7 +436,7 @@ export interface ISystemConfig_ {
     medicalAsistantConfig?: {
       //智能陪诊日期右侧区域的按钮
       timeLineBtn?: Array<TButtonConfig>; //写死的按钮
-      contentBtn?: TButtonConfig[]; //依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则传{}
+      contentBtn?: TButtonConfig[]; //依次为：查看报告、院内导航、用药指导、查看预约、立即预约，没有则路径传空字符串{path:''}
       bottomBtn?: TButtonConfig[]; //最多展示两个icon按钮和两个普通按钮
     };
   };
