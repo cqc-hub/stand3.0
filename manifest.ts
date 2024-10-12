@@ -175,7 +175,7 @@ if (medicalMHelp) {
     }
   }
   if (wx) {
-    const { crossProgramBizType } = wx!;
+    const crossProgramBizType =wx?.crossProgramBizType;
     if (crossProgramBizType) {
       wxPlugin.crossProgramPlugins = {
         version: 'latest',

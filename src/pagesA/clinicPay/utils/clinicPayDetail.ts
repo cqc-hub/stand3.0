@@ -673,7 +673,7 @@ export const usePayPage = () => {
   if (medicalMHelp) {
     const { wx } = medicalMHelp;
     if (wx) {
-      const { crossProgramBizType } = wx;
+      const crossProgramBizType =wx?.crossProgramBizType;
       if (crossProgramBizType) {
         wxCrossProgramInfo.value = {
           appId: alipayAppid,
@@ -1613,21 +1613,25 @@ export const usePayPage = () => {
     } = globalGl;
 
     const { wx } = medicalMHelp!;
-    const { medicalNation, medicalPlugin, crossProgramBizType } = wx!;
 
-    if (medicalPlugin === '1') {
-      if (crossProgramBizType) {
-        const curPagesList = getCurrentPages();
-        const curPages: any = curPagesList[curPagesList.length - 1];
-        const { openFunc } = curPages.selectComponent('#codePlugin');
-        openFunc();
-      } else {
-        wxPryMoneyMedicalDialog.value.show();
+    if (wx) {
+      const { medicalNation, medicalPlugin} = wx!;
+      const crossProgramBizType =wx?.crossProgramBizType;
+
+      if (medicalPlugin === '1') {
+        if (crossProgramBizType) {
+          const curPagesList = getCurrentPages();
+          const curPages: any = curPagesList[curPagesList.length - 1];
+          const { openFunc } = curPages.selectComponent('#codePlugin');
+          openFunc();
+        } else {
+          wxPryMoneyMedicalDialog.value.show();
+        }
+      } else if (medicalNation) {
+        const authorize = await getQxMedicalNation();
+
+        callback(authorize);
       }
-    } else if (medicalNation) {
-      const authorize = await getQxMedicalNation();
-
-      callback(authorize);
     }
   };
 

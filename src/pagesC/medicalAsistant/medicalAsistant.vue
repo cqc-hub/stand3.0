@@ -13,7 +13,7 @@
           <view
             class="g-bold f36 color-111 a-point first-point flex-normal w100"
           >
-            <viewLQJcyy
+            <view
               :style="{
                 '--point-color': '#bbbbbb',
               }"
@@ -54,7 +54,7 @@
       </view>
       <view class="footer flex-normal g-footer pb24">
         <view
-          @click="useTBanner(btn, 'navigateTo', currentTab)"
+          @click="useTBanner(btn,'navigateTo',currentTab)"
           class="footer-icon-btn item mr12"
           :class="{
             'icon-flex': btn.icon,
