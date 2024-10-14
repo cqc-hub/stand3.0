@@ -60,16 +60,6 @@
               </view>
             </view>
           </block>
-          <!-- #ifdef  MP-WEIXIN -->
-          <code-btn
-            v-if="wxCrossProgramInfo.bizType"
-            :appId="wxCrossProgramInfo.appId"
-            :bizType="wxCrossProgramInfo.bizType"
-            :extInfo="wxCrossProgramInfo.extInfo"
-            id="codePlugin"
-            style="position: absolute; top: -100vh"
-          ></code-btn>
-          <!-- #endif -->
 
           <view class="g-border box mt16">
             <view class="g-bold f36 g-break-word">
@@ -84,7 +74,16 @@
             />
           </view>
         </block>
-
+        <!-- #ifdef  MP-WEIXIN -->
+        <code-btn
+          v-if="wxCrossProgramInfo.bizType"
+          :appId="wxCrossProgramInfo.appId"
+          :bizType="wxCrossProgramInfo.bizType"
+          :extInfo="wxCrossProgramInfo.extInfo"
+          id="codePlugin"
+          style="position: absolute; top: -100vh"
+        ></code-btn>
+        <!-- #endif -->
         <view
           v-if="props.payState === '1'"
           class="head-box g-border box page-first-item"

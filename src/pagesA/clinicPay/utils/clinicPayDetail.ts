@@ -1622,6 +1622,7 @@ export const usePayPage = () => {
         if (crossProgramBizType) {
           const curPagesList = getCurrentPages();
           const curPages: any = curPagesList[curPagesList.length - 1];
+          console.log('curPagesList',curPagesList)
           const { openFunc } = curPages.selectComponent('#codePlugin');
           openFunc();
         } else {
@@ -1870,7 +1871,7 @@ export const usePayDetailPage = () => {
     const { result } = await api.getClinicalPayDetailList<TPayDetailInfo>(
       requestArg
     );
-
+   
     if (result) {
       const { costList } = result;
 
