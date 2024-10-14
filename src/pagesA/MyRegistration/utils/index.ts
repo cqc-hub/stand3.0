@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import api from '@/service/api';
 
 import { ref, computed, Ref } from 'vue';
-import { ServerStaticData, ISystemConfig, GStores, apiAsync } from '@/utils';
+import { ServerStaticData, ISystemConfig, GStores, apiAsync, wait } from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
@@ -444,9 +444,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const schDocAmPm = schInfo.schDocAmPm;
     const { schDate } = schInfo;
 
+    selectSchInfos.value = [];
+    await wait(80);
+    isSelectOrderSourceShow.value = true;
     regDate.value = schDate;
     selectSchInfos.value = schDocAmPm;
-    isSelectOrderSourceShow.value = true;
   };
 
   // 某天点击 某个时间段(上午...)
