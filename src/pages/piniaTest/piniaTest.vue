@@ -385,6 +385,15 @@
     text: '满意度',
   };
 
+  const 多住院记录: TButtonConfig = {
+    path: 'pagesA/hospitalCare/choosePatient',
+    type: 'self',
+    extraData: {
+      type: '2',
+    },
+    text: '多住院记录',
+  };
+
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({

@@ -3,32 +3,41 @@
   <g-flag v-if="!pageProps.type" typeFg="29" isShowFg />
   <g-flag v-if="pageProps.type === '1'" typeFg="53" isShowFg />
   <view class="page">
-    <!-- <view class="title">请查询就诊人</view> -->
+    <view v-if="pageProps.type === '2'" class="title">请查询就诊人</view>
     <view class="inputs">
-      <view class="input-item border">
-        <text>就诊人姓名</text>
+      <view class="input-item border flex items-center">
+        <text class="text-no-wrap">就诊人姓名</text>
         <input
-          class="uni-input"
+          class="uni-input flex-1"
           placeholder-style="font-size:32rpx;color:#bbb"
           v-model="hosInfoParam.patientName"
+          @input="inputChange"
           placeholder="请输入"
         />
-        <g-login @handler-next="chooseAction">
-          <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
-        </g-login>
+        <view>
+          <g-login @handler-next="chooseAction">
+            <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
+          </g-login>
+        </view>
       </view>
       <view class="input-item">
         <text>手机号码</text>
         <input
-          class="uni-input"
+          class="uni-input flex-1"
           placeholder-style="font-size:32rpx;color:#bbb"
           type="number"
           v-model="hosInfoParam.patientPhone"
-          @input="checkPatientPhone(hosInfoParam.patientPhone)"
+          @input="
+            () => {
+              inputChange();
+              checkPatientPhone(hosInfoParam.patientPhone);
+            }
+          "
           placeholder="请输入"
         />
       </view>
     </view>
+
     <button
       :disabled="
         hosInfoParam.patientName != '' &&
@@ -72,9 +81,10 @@
     <
       {
         /**
-         *   - 1 手术查询
+         * - 1 手术查询
+         * - 2 多住院记录
          */
-        type?: '1';
+        type?: '1' | '2';
       }
     >{}
   );
@@ -88,10 +98,14 @@
   );
   const userSore = useUserStore();
   const gStores = new GStores();
+
+  const inputChange = () => {
+    hosInfoParam.value.patientId = '';
+  };
   const checkPatientPhone = (val) => {
     phoneStatus.value = /^1[3-9]\d{9}$/.test(val);
 
-    return /^1[3-9]\d{9}$/.test(val);
+    return phoneStatus.value;
   };
   // 就诊人
   const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
@@ -108,6 +122,7 @@
     hosInfoParam.value.patientName = item.patientName;
     phoneStatus.value = /^1[3-9]\d{9}$/.test(message);
     hosInfoParam.value.patientPhone = message;
+    hosInfoParam.value.patientId = item.patientId;
   };
   const init = async () => {
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
@@ -142,23 +157,41 @@
           },
           // isLocal: '1',
         });
+      } else if (type === '2') {
+        goSearchHospitalRecord();
       }
     } else {
       await init();
     }
   };
 
+  // 多住院记录
+  const goSearchHospitalRecord = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/hospitalCare/hospitalRecordList', {
+        ...hosInfoParam.value,
+      }),
+    });
+  };
+
   onReady(() => {
+    let navTitle = '预交金代缴';
     switch (pageProps.value.type) {
       case '1':
-        uni.setNavigationBarTitle({
-          title: '手术查询',
-        });
+        navTitle = '手术查询';
+        break;
+
+      case '2':
+        navTitle = '住院信息';
         break;
 
       default:
         break;
     }
+
+    uni.setNavigationBarTitle({
+      title: navTitle,
+    });
   });
 
   onLoad((opt) => {
@@ -178,13 +211,13 @@
       margin-bottom: 80rpx;
     }
     .inputs {
-      height: 208rpx;
+      // height: 208rpx;
       background-color: #fff;
       border-radius: 16rpx;
       .input-item {
         display: flex;
         align-items: center;
-        height: 50%;
+        height: 100rpx;
         margin: 0 32rpx;
         &.border {
           border-bottom: 2rpx solid #f3f3f3;

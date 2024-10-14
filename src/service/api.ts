@@ -343,6 +343,9 @@ const queryApi = {
   getInHospitalInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/getInHospitalInfo', parm(data)),
 
+  getInHospitalList: <T = any>(data) =>
+    service.post<T>('/phs-query/hospital/getInHospitalList', parm(data)),
+
   queryHosCardInfo: <T>(data) =>
     service.post<T>('/phs-query/hospital/queryHosCardInfo', parm(data)),
 

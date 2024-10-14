@@ -6,10 +6,11 @@
     }"
   >
     <g-flag typeFg="600" isShowFg />
-    <g-choose-pat @choosePat="pageRequest" />
+    <g-choose-pat v-if="!pageProps.visitNo" @choosePat="pageRequest" />
 
     <view class="tab-box" v-if="pageLoading">
       <g-tabs
+        v-if="!pageProps.tab"
         v-model:value="tabCurrent"
         :tabs="resultHos.tab"
         :line-scale="0.8"
@@ -29,6 +30,7 @@
           :tabCurrent="tabCurrent"
           :isShowAppointment="pageProps.openAppointment === '1'"
           :isShowCtypeBtn="pageProps.ctype === '1'"
+          :pageProps="pageProps"
         />
       </template>
       <dailyExpenseList
@@ -70,7 +72,15 @@
       tabIndex?: 1 | 2;
       // 住院预约 ?
       openAppointment?: '1';
-      ctype?:'1'
+      ctype?: '1';
+
+      //
+      tab?: string; //指定某个tab(不显示其他tab)
+      // 捆绑某条住院记录查询
+      visitNo?: string;
+      patientName?: string;
+      patientPhone?: string;
+      cardNumber?: string;
     }
   );
 
@@ -128,9 +138,18 @@
     tabCurrent.value = e;
   };
   const setData = async () => {
+    const { tab } = pageProps.value;
     pageLoading.value = false;
     const result = await ServerStaticData.getSystemConfig('hospitalCare');
     resultHos.value = result as any;
+    if (tab) {
+      resultHos.value.tab = [
+        {
+          label: '随便叫什么',
+          value: tab,
+        },
+      ];
+    }
 
     pageLoading.value = true;
   };

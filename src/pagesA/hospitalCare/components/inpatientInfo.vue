@@ -61,7 +61,7 @@
           <view class="flex-normal">
             <text class="name mr16">已预交金额</text>
 
-            <view class="record" v-if="props.isQueryPreRecord == '1'">
+            <view class="record" v-if="props.isQueryPreRecord == '1' && !pageProps.visitNo">
               <view class="triangle-left"></view>
               <view class="records" @click="toPayRecord">
                 <text class="text text-no-wrap">查看记录</text>
@@ -157,7 +157,7 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
   import { getAvatar } from '@/stores';
   import { GStores, TButtonConfig, apiAsync, useTBanner } from '@/utils';
   import { joinQuery } from '@/common';
@@ -179,6 +179,7 @@
     // 住院中心页面, 请求住院预约接口并且开展相关 ui
     isShowAppointment?: boolean;
     isShowCtypeBtn?: boolean;
+    pageProps?: any;
   }>();
   const gStores = new GStores();
   const isLoad = ref(false);
@@ -186,6 +187,7 @@
   const loadImg = () => {
     isLoad.value = true;
   };
+  const _pageProps = computed(() => props.pageProps || {});
 
   const gSelect = ref(<any>'');
   const selPlaces = ref(<any[]>[]);
@@ -366,12 +368,24 @@
   const init = async () => {
     hosInfoResObj.value = {} as any;
     hosCardInfoLists.value = [];
-    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
+    let args: any = {
       patientId: gStores.userStore.patChoose.patientId,
-    });
+    };
+    if (_pageProps.value.visitNo) {
+      const { visitNo, patientName, patientPhone, cardNumber } =
+        _pageProps.value;
+      args = {
+        visitNo,
+        patientName,
+        patientPhone,
+        cardNumber,
+      };
+    }
+    const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>(
+      args
+    );
 
     hosInfoResObj.value = result;
-
 
     //status 在院状态 1.在院 2.出院未结算
     if (result && Object.keys(result).length) {

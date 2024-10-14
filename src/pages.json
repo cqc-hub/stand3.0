@@ -72,6 +72,12 @@
           }
         },
         {
+          "path": "hospitalCare/hospitalRecordList",
+          "style": {
+            "navigationBarTitleText": "住院信息"
+          }
+        },
+        {
           "path": "hospitalCare/hospitalCare",
           "style": {
             "navigationBarTitleText": "住院服务",
@@ -130,7 +136,7 @@
         {
           "path": "hospitalCare/choosePatient",
           "style": {
-            "navigationBarTitleText": "预交金代缴"
+            "navigationBarTitleText": " "
           }
         },
         {
@@ -180,7 +186,7 @@
               // #endif
             }
           }
-          
+
         },
         {
           "path": "clinicPay/clinicPayMedical",
