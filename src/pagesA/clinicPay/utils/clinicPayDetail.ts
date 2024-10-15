@@ -1561,6 +1561,7 @@ export const usePayPage = () => {
     if (isMedicalModePlugin) {
       const { alipay } = medicalMHelp!;
 
+     
       const { medicalPlugin, isFamilyPayment } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
@@ -1849,6 +1850,7 @@ export const usePayPage = () => {
     getDigitalPay,
     getIsDigitalPay,
     cacheStore,
+    getFamilyArgs,
   };
 };
 

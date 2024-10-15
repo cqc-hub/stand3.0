@@ -5,6 +5,16 @@
     }"
     class="g-page"
   >
+    <!-- #ifdef  MP-WEIXIN -->
+    <code-btn
+      v-if="wxCrossProgramInfo.bizType"
+      :appId="wxCrossProgramInfo.appId"
+      :bizType="wxCrossProgramInfo.bizType"
+      :extInfo="wxCrossProgramInfo.extInfo"
+      id="codePlugin"
+      style="position: absolute; top: -100vh"
+    />
+    <!-- #endif -->
     <view class="g-container">
       <view class="head-bg" />
       <view class="container">
@@ -74,16 +84,7 @@
             />
           </view>
         </block>
-        <!-- #ifdef  MP-WEIXIN -->
-        <code-btn
-          v-if="wxCrossProgramInfo.bizType"
-          :appId="wxCrossProgramInfo.appId"
-          :bizType="wxCrossProgramInfo.bizType"
-          :extInfo="wxCrossProgramInfo.extInfo"
-          id="codePlugin"
-          style="position: absolute; top: -100vh"
-        ></code-btn>
-        <!-- #endif -->
+
         <view
           v-if="props.payState === '1'"
           class="head-box g-border box page-first-item"
@@ -348,6 +349,7 @@
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
     wxCrossProgramInfo,
+    getFamilyArgs,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -706,7 +708,7 @@
     });
   };
 
-  const payMoneyMedicalPlugin = () => {
+  const payMoneyMedicalPlugin = async () => {
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
@@ -721,17 +723,38 @@
         // 支付宝 插件医保
         const authPayPlugin = requirePlugin('auth-pay-plugin');
         // 合并缴费后端控制 医保不能跨院区, 不能和自费混缴
+
         const orgId = medicalPlugin.orgId[hosId];
         const cardType = medicalPlugin.cardType;
         const medOrgOrd = props.value.traceNo;
         const cardNo = cardNumber || gStores.userStore.patChoose.cardNumber;
-
         const params = {
           orgId,
           cardType,
           cardNo,
           medOrgOrd,
         };
+
+        const {
+          sConfig: { medicalMHelp },
+        } = globalGl;
+
+        if (medicalMHelp) {
+          const { alipay } = medicalMHelp!;
+          const { isFamilyPayment } = alipay!;
+
+          if (isFamilyPayment === '1') {
+            const { patientId } = gStores.userStore.patChoose;
+            const {
+              result: { anotherIdNo, anotherName },
+            } = await api.getAliMedicalPat({
+              hosId: hosId,
+              patientId: patientId,
+            });
+            params[`anotherIdNo`] = anotherIdNo;
+            params[`anotherName`] = anotherName;
+          }
+        }
 
         my.getAuthCode({
           scopes: ['auth_user', 'nhsamp'],

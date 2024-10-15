@@ -14,6 +14,7 @@
       :extInfo="wxCrossProgramInfo.extInfo"
       id="codePlugin"
       style="position: absolute; top: -100vh"
+      :zIndex="99"
     ></code-btn>
     <!-- #endif -->
     <g-tbanner :config="pageConfig.bannerPay" />
