@@ -106,7 +106,7 @@ interface ISConfig {
         appId: string;
         path: string;
       };
-    //微信跨端插件https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
+      //微信跨端插件https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: string;
 
       /** 默认是医保? (个别项目后端不能返回 医保标签, 前端数据手动加上但是页面不显示医保标签) */
@@ -131,7 +131,7 @@ const scJson: Record<string, ISConfig> = {
       // isAliIndependentDev: '1',
       isSkipPerfect: '1',
       isAliAuthBase: '1',
-      isLoginByOpenId: '1'
+      isLoginByOpenId: '1',
     },
     // isOpenMessageAuth: '1',
     // isOpenHomeTabBarMessageBtn: '1',
@@ -257,7 +257,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
-        crossProgramBizType:"iAZhaFg90P",
+        crossProgramBizType: 'iAZhaFg90P',
         medicalPlugin: '1',
       },
 

@@ -718,14 +718,29 @@
 
       if (receptionMode) {
         try {
+          // 复诊开药
           data.jsonParam =
-            jsonParam && JSON.parse(jsonParam)?.registerCategorys[0];
+            receptionMode & 8 &&
+            jsonParam &&
+            JSON.parse(jsonParam)?.registerCategorys[0];
+
+          // 图文咨询
           data.pictureParam =
-            pictureParam && JSON.parse(pictureParam)?.registerCategorys[0];
+            receptionMode & 1 &&
+            pictureParam &&
+            JSON.parse(pictureParam)?.registerCategorys[0];
+
+          // 视频门诊
           data.videoParam =
-            videoParam && JSON.parse(videoParam)?.registerCategorys[0];
+            receptionMode & 4 &&
+            videoParam &&
+            JSON.parse(videoParam)?.registerCategorys[0];
+
+          // 电话问诊
           data.phoneParam =
-            videoParam && JSON.parse(phoneParam)?.registerCategorys[0];
+            receptionMode & 2 &&
+            videoParam &&
+            JSON.parse(phoneParam)?.registerCategorys[0];
         } catch (error) {
           console.error(error);
           throw new Error('医生在线服务参数异常');
