@@ -36,7 +36,7 @@
     <g-popup title="身份验证" ref="refVerifyIdCardPopup">
       <view class="flex justify-center bg-white verify-idcard-container">
         <view class="flex flex-col items-center">
-          <view class="mt16 mb16 color-666 f32">请输入证件号后四位</view>
+          <view class="mt16 mb16 color-666 f32">请输入身份证后四位</view>
 
           <view class="pb32" @click="openKeyBoard">
             <uv-code-input
