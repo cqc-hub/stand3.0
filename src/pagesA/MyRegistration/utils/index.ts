@@ -81,6 +81,8 @@ export type TSchInfo = {
   ampm: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   // 上下午标志名称
   ampmName: string;
+  // 候补加号
+  addedNum?: string;
   // 公务员是否可报销 1都可报销 2仅公务员可报销
   canCivilServantInsurance?: '1' | '2';
   // 医保是否可报销 1可报销 0不可报销

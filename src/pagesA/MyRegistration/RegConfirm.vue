@@ -523,6 +523,19 @@
       )!;
 
       selWaitRegSch.value = '';
+      const { addedNum } = props.value;
+      if (props.value.hasOwnProperty('addedNum')) {
+        if (!(addedNum! * 1)) {
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '当前号别加号号源已满，系统将仅为您进行候补挂号!',
+          });
+
+          if (!confirm) {
+            return;
+          }
+        }
+      }
+
       try {
         await api.addRegAlternate({
           ...props.value,
@@ -531,6 +544,7 @@
           patientId: gStores.userStore.patChoose.patientId,
           source: gStores.globalStore.browser.source,
         });
+
         if (pageConfig.value?.isTabWaitReg === '1') {
           uni.reLaunch({
             url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
