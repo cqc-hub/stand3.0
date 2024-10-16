@@ -62,12 +62,18 @@
     patientSex?: string;
   };
   const gStores = new GStores();
-  const pageProps = ref({} as TPat);
+  const pageProps = ref(
+    {} as TPat & {
+      // 住院服务页面tab 多个之间 , 隔开
+      tab: string;
+    }
+  );
   const choosePat = ref({} as TPat);
   const isComplete = ref(false);
   const cardNumber = ref('');
   const isCanChangePat = computed(() => {
-    return !!pageProps.value.patientId;
+    const { patientId, patientName } = pageProps.value;
+    return !!patientId || !patientName;
   });
   const _pat = computed(() => {
     return {
@@ -143,6 +149,7 @@
   const itemClick = (item) => {
     const { visitNo } = item;
     const { patientName, patientPhone } = choosePat.value;
+    const { tab } = pageProps.value;
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/hospitalCare', {
@@ -150,18 +157,22 @@
         patientName,
         patientPhone,
         cardNumber: cardNumber.value,
-        tab: '0',
+        tab,
       }),
     });
   };
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    const { patientId } = pageProps.value;
-    if (patientId) {
-      const pat = gStores.userStore.patList.find(
-        (o) => o.patientId === patientId
-      );
+    const { patientId, patientName } = pageProps.value;
+    if (patientId || !patientName) {
+      let pat = patientId
+        ? gStores.userStore.patList.find((o) => o.patientId === patientId)
+        : gStores.userStore.patChoose;
+
+      if (!pat) {
+        pat = gStores.userStore.patChoose;
+      }
 
       if (pat) {
         gStores.userStore.updatePatChoose(pat);
@@ -171,7 +182,10 @@
       choosePat.value = { ...pageProps.value };
     }
 
-    getList();
+    await getList();
+    if (list.value.length === 1) {
+      itemClick(list.value[0]);
+    }
   });
 </script>
 

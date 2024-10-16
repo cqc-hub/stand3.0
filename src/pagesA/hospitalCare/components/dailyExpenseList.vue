@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref, inject, nextTick } from 'vue';
+  import { onMounted, ref, inject, nextTick, computed } from 'vue';
   import { GStores, wait } from '@/utils';
   import api from '@/service/api';
   import { dailyParam, dailyResult } from '../utils/inpatientInfo';
@@ -87,7 +87,10 @@
   const props = defineProps<{
     isHosDaylist?: string;
     tabCurrent?: number;
+    pageProps?: any;
   }>();
+  const _pageProps = computed(() => props.pageProps || {});
+
   const InfoList = ref();
   const InfoObject = ref();
   const timestamp = new Date().getTime();
@@ -119,16 +122,32 @@
   const init = async () => {
     await wait(20);
 
-
     dailyResList.value = {
       inHospitalDailyCostsResultList: [],
     };
     if (props.isHosDaylist == '1') {
-      //调用日费用清单列表
-      const { result } = await api.getInHospitalDailyCostList<dailyResult>({
-        patientId: gStores.userStore.patChoose.patientId,
+      let args: any = {
         costType: '1',
-      });
+        patientId: gStores.userStore.patChoose.patientId,
+        visitNo: _pageProps.value.visitNo,
+      };
+
+      // if (_pageProps.value.visitNo) {
+      //   const { visitNo, patientName, patientPhone, cardNumber } =
+      //     _pageProps.value;
+      //   args = {
+      //     visitNo,
+      //     patientName,
+      //     patientPhone,
+      //     cardNumber,
+      //     costType: '1',
+      //   };
+      // }
+
+      //调用日费用清单列表
+      const { result } = await api.getInHospitalDailyCostList<dailyResult>(
+        args
+      );
       dailyResList.value = result;
     } else if (props.isHosDaylist == '2') {
       //调用日费用清单详情
@@ -151,7 +170,7 @@
     }
   });
   onMounted(async () => {
-    const { end, start } = providePageProp()
+    const { end, start } = providePageProp();
     if (end || start) {
       costDay.value = end || start;
     }
