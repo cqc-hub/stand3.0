@@ -39,6 +39,7 @@
   import ComplaintList from './components/ComplaintList.vue';
   const _props = defineProps<{
     selectRecords?: '1'; // 需要选择就诊记录---台州?
+    tab?:string;//手动添加选择就诊记录页面的tab内容
   }>();
   const gStores = new GStores();
   const isComplete = shallowRef(false);
@@ -46,15 +47,17 @@
 
   const goComplaint = () => {
     if (_props?.selectRecords === '1') {
+      let extraData = {
+        sysCode: gStores.globalStore.sysCode,
+        pageType: '2',
+      };
+      _props?.tab&&(extraData[`tab`]=_props.tab)
       useTBanner(
         {
           type: 'h5',
           isSelfH5: '1',
           path: 'pagesC/queryCase/queryCase',
-          extraData: {
-            sysCode: gStores.globalStore.sysCode,
-            pageType: '2',
-          },
+          extraData: extraData,
           addition: {
             herenId: 'herenId',
           },
