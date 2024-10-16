@@ -47,9 +47,10 @@
 
   import { onLoad } from '@dcloudio/uni-app';
   import { decryptDes, deQueryForUrl, joinQueryForUrl } from '@/common';
-  import { GStores } from '@/utils';
-  import api from '@/service/api';
+  import { GStores, wait } from '@/utils';
   import { IPat } from '@/stores';
+  import { beforeEach } from '@/router';
+  import api from '@/service/api';
 
   type TPat = {
     patientName: string;
@@ -166,6 +167,19 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { patientId, patientName } = pageProps.value;
     if (patientId || !patientName) {
+      uni.showLoading({});
+      await wait(600);
+
+      const pages = getCurrentPages();
+      if (pages.length) {
+        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+        await beforeEach({
+          url: fullUrl,
+          _isPatient: true,
+        });
+      }
+
       let pat = patientId
         ? gStores.userStore.patList.find((o) => o.patientId === patientId)
         : gStores.userStore.patChoose;
