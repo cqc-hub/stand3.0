@@ -68,6 +68,7 @@
       <dailyExpenseListDetial
         ref="dailyExpenseListDetialRef"
         :isHosTotallist="props.isHosTotallist"
+        :pageProps="pageProps"
       />
     </view>
 
@@ -94,7 +95,9 @@
   const props = defineProps<{
     isHosTotallist?: string;
     type?: 'outList';
+    pageProps?: any;
   }>();
+  const _pageProps = computed(() => props.pageProps || {});
   const dailyInfoParam = ref({
     inHospitalId: '',
     timesHospitalization: '',
@@ -121,6 +124,7 @@
       const { result } = await api.getInHospitalDailyCostList<dailyResult>({
         patientId: gStores.userStore.patChoose.patientId,
         costType: '3',
+        visitNo: _pageProps.value.visitNo,
       });
 
       dailyResList.value = result;

@@ -7,10 +7,11 @@
   >
     <g-flag typeFg="600" isShowFg />
     <g-choose-pat v-if="!pageProps.visitNo" @choosePat="pageRequest" />
+    <g-message />
 
     <view class="tab-box" v-if="pageLoading">
       <g-tabs
-        v-if="!pageProps.tab"
+        v-if="resultHos.tab.length > 1"
         v-model:value="tabCurrent"
         :tabs="resultHos.tab"
         :line-scale="0.8"
@@ -38,18 +39,21 @@
         v-if="getValue('1')"
         :isHosDaylist="resultHos.isHosDaylist"
         :tabCurrent="tabCurrent"
+        :pageProps="pageProps"
       ></dailyExpenseList>
       <totalList
         ref="totalListRef"
         v-if="getValue('2')"
         :isHosTotallist="resultHos.isHosTotallist"
         :tabCurrent="tabCurrent"
+        :pageProps="pageProps"
       ></totalList>
       <totalList
         ref="totalListRef3"
         v-if="getValue('3')"
         :isHosTotallist="resultHos.isHosTotallist"
         :tabCurrent="tabCurrent"
+        :pageProps="pageProps"
         type="outList"
       ></totalList>
     </view>
@@ -143,12 +147,34 @@
     const result = await ServerStaticData.getSystemConfig('hospitalCare');
     resultHos.value = result as any;
     if (tab) {
-      resultHos.value.tab = [
-        {
-          label: '随便叫什么',
-          value: tab,
-        },
-      ];
+      const tabs = tab.split(',');
+
+      if (tabs.length === 1) {
+        resultHos.value.tab = [
+          {
+            label: '随便叫什么',
+            value: tab,
+          },
+        ];
+      } else {
+        const tabTemp = [
+          {
+            value: '0',
+            label: '住院信息',
+          },
+          {
+            value: '1',
+            label: '日费用清单',
+          },
+          {
+            value: '2',
+            label: '总计清单',
+          },
+        ];
+
+        resultHos.value.tab = tabTemp.filter((o) => tabs.includes(o.value));
+        console.log(resultHos.value.tab, '2334')
+      }
     }
 
     pageLoading.value = true;

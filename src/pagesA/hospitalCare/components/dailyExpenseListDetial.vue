@@ -146,7 +146,7 @@
   <g-message />
 </template>
 <script setup lang="ts">
-  import { onMounted, ref, inject } from 'vue';
+  import { onMounted, ref, inject, computed } from 'vue';
   import api from '@/service/api';
   import { getQueryUrl } from '@/common/utils';
   import {
@@ -185,12 +185,14 @@
     isHosDaylist?: string;
     isHosTotallist?: string;
     hospitalId?: string;
+    pageProps?: any;
   }>();
+  const _pageProps = computed(() => props.pageProps || {});
 
   const providePageProp = inject('pageProp', () => ({
     start: '',
     end: '',
-    hospitalId: ''
+    hospitalId: '',
   }));
 
   const emit = defineEmits(['detalResult']);
@@ -220,6 +222,7 @@
       costType: props.isHosDaylist ? '1' : '3',
       patientId: gStores.userStore.patChoose.patientId,
       hospitalId: props.hospitalId || providePageProp().hospitalId,
+      visitNo: _pageProps.value.visitNo,
     };
     const { result } = await api.getInHospitalCostInfo<inHospitalCostInfo>(
       params

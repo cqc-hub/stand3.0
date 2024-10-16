@@ -393,9 +393,17 @@ export const addHosIdForSelfH5Path = (path: string) => {
   return path;
 };
 
-/**第三方自费支付 */
+/**第三方自费支付 兼容2.0数据 */
 export const thirdWxPay = (V3PageData) => {
-  const { nonceStr, paySign, signType, timeStamp,miniUrl ,successUrl} = V3PageData;
+  if(V3PageData && V3PageData.paymentData){
+    // 2.0 支付参数
+    V3PageData = {
+      ...V3PageData.paymentData,
+      miniUrl:V3PageData.returnUrl?.successUrl || '',
+      successUrl:V3PageData.returnUrl?.errorUrl || ''
+    } 
+  }
+  const { nonceStr, paySign, signType, timeStamp,miniUrl ='' ,successUrl =''} = V3PageData;
   !miniUrl && successUrl && (V3PageData.miniUrl = successUrl);
   const invokeData = {
     nonceStr,

@@ -165,7 +165,7 @@
     handWebMessage(evt);
     var data = evt.target.data;
     var V3PageData = data[0];
-    if (V3PageData.appId) {
+      if (V3PageData && (V3PageData.appId || (V3PageData.paymentData && V3PageData.paymentData.appId))) {
       thirdWxPay(V3PageData);
     } else if (V3PageData.gisLat) {
       //打开地图

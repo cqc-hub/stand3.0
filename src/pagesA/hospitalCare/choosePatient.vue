@@ -85,6 +85,9 @@
          * - 2 多住院记录
          */
         type?: '1' | '2';
+
+        // 页面透传
+        [key: string]: any;
       }
     >{}
   );
@@ -167,9 +170,15 @@
 
   // 多住院记录
   const goSearchHospitalRecord = () => {
+    const q = {
+      ...pageProps.value,
+    };
+
+    delete q.type;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/hospitalRecordList', {
         ...hosInfoParam.value,
+        ...q,
       }),
     });
   };
