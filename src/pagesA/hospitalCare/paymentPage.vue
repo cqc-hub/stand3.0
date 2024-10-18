@@ -22,7 +22,7 @@
       </view>
       <view class="pay-input">
         <view class="g-border-left util-content mb8">
-          <text v-if="moneyUtil" class="g-split-line mr8"></text>
+          <!-- <text v-if="moneyUtil" class="g-split-line mr8"></text> -->
           <text v-if="moneyUtil" class="color-888">{{ moneyUtil }}</text>
         </view>
 
