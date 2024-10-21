@@ -60,6 +60,15 @@
       "root": "pagesA",
       "pages": [
         {
+          "path": "guide/guide",
+          "style": {
+            "navigationBarTitleText": "就诊引导"
+          },
+          "extend": {
+            "patient": true
+          }
+        },
+        {
           "path": "MyRegistration/DoctorDetails",
           "style": {
             "navigationBarTitleText": "医生名片"
@@ -186,7 +195,6 @@
               // #endif
             }
           }
-
         },
         {
           "path": "clinicPay/clinicPayMedical",

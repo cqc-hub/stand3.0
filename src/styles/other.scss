@@ -90,6 +90,10 @@ image {
   position: relative;
 }
 
+.font-normal {
+  font-weight: 400;
+}
+
 .g-bold,
 .font-semibold {
   font-weight: 600;
@@ -174,6 +178,14 @@ image {
   color: var(--hr-brand-color-6) !important;
 }
 
+.bg-blue {
+  background-color: var(--hr-brand-color-6) !important;
+}
+
+.bg-blue-light {
+  background-color: var(--hr-brand-color-3-light) !important;
+}
+
 .color-dark {
   color: var(--hr-neutral-color-10) !important;
 }
@@ -187,7 +199,7 @@ image {
 }
 
 .bg-green {
-  background-color: #E7FFF8;
+  background-color: #e7fff8;
 }
 
 .bg-warn {

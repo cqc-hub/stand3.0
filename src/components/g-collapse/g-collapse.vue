@@ -3,7 +3,12 @@
     class="collapse-box"
     :class="{ boxShadow: boxShadow, borderRadius: borderRadius }"
   >
+    <view @click.stop="disabled ? '' : show()">
+      <slot name="header" :isShow="isShow"></slot>
+    </view>
+
     <view
+      v-if="!$slots.header"
       class="title f32"
       :class="{
         border,
@@ -23,14 +28,17 @@
         <text>{{ title }}</text>
       </slot>
 
-      <view
-        v-if="!disabled"
-        :class="{
-          arrowBottom: isShow,
-        }"
-        class="iconfont right-icon color-888 f48"
-      >
-        &#xe66b;
+      <view v-if="!disabled">
+        <slot name="arrow" :isShow="isShow">
+          <view
+            :class="{
+              arrowBottom: isShow,
+            }"
+            class="iconfont right-icon color-888 f48"
+          >
+            &#xe66b;
+          </view>
+        </slot>
       </view>
     </view>
 
@@ -182,10 +190,6 @@
         });
       },
       show(type, status) {
-        console.log({
-
-          type, status
-        });
         if (type != undefined) {
           this.isShow = type;
         } else {
