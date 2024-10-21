@@ -1,5 +1,7 @@
 <template>
-  <view class=""></view>
+  <view class="">
+    <button @click="useTBanner(testbuttonConfig)">绍兴导航</button>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -394,6 +396,21 @@
     text: '多住院记录',
   };
 
+  const 绍兴导航: TButtonConfig = {
+    type: 'otherProgram',
+    path: 'pages/index/index',
+    text: '院内导航',
+    appId: 'wx0815c00f0b4bd7c3',
+    extraData: {
+      type: '8_2',
+      typeData:JSON.stringify({
+        "buildingId":208089,
+        type:1,
+        hisName:'A010215'
+      })
+    },
+  };
+  const testbuttonConfig = ref(绍兴导航)
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({
@@ -444,7 +461,7 @@
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      useTBanner(满意度);
+      // useTBanner(绍兴导航);
     }, 1000);
   });
 </script>

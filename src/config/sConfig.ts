@@ -203,6 +203,10 @@ const scJson: Record<string, ISConfig> = {
   1001052: {
     isDrugDelivery: '1',
     medicalMHelp: {
+      wx: {
+        crossProgramBizType: '6vtqCjFiWg',
+        medicalPlugin: '1',
+      },
       alipay: {
         medicalPlugin: {
           orgId: { 13001: 'H33038200118' },
@@ -355,6 +359,13 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isAliAuthBase: '1',
     },
+    medicalMHelp: {
+      wx: {
+        crossProgramBizType: 'iAZhaFg90P',
+        medicalPlugin: '1',
+      },
+    },
+    
     isOpenHelpOld: '1',
   },
 

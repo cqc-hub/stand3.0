@@ -806,6 +806,7 @@ export const usePayPage = () => {
         });
 
       result = r;
+      uni.hideLoading();
       pageProps.value.deParams = undefined;
     }
 
@@ -1228,6 +1229,7 @@ export const usePayPage = () => {
 
     // #ifdef MP-WEIXIN
     payMethodConfig.labelPay = '微信自费支付';
+    wxCrossProgramInfo.value.bizType&&(payMethodConfig.medicalPay='医保电子凭证结算')
     // #endif
 
     // #ifdef MP-ALIPAY

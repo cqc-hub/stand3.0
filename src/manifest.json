@@ -63,7 +63,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
