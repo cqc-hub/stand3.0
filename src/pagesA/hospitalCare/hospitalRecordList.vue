@@ -158,6 +158,7 @@
         patientName,
         patientPhone,
         cardNumber: cardNumber.value,
+        patientId: choosePat.value.patientId,
         tab,
       }),
     });

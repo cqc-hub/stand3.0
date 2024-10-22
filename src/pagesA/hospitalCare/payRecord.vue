@@ -62,6 +62,7 @@
 
   interface IPageProps {
     hosId: string;
+    visitNo?: string;
   }
 
   const gStores = new GStores();
@@ -71,6 +72,7 @@
     const { result } = await api.getInHospitalPayInfo<hospitalPayResult>({
       patientId: gStores.userStore.patChoose.patientId,
       hosId: pageProps.value.hosId,
+      visitNo: pageProps.value.visitNo
     });
     payResList.value = result;
   };
@@ -82,7 +84,7 @@
     }, 1000);
   });
   onLoad((opt) => {
-    pageProps.value = deQueryForUrl(opt);
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     init();
   });
 </script>

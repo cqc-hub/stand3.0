@@ -61,7 +61,13 @@
           <view class="flex-normal">
             <text class="name mr16">已预交金额</text>
 
-            <view class="record" v-if="props.isQueryPreRecord == '1' && !pageProps.visitNo">
+            <view
+              class="record"
+              v-if="
+                props.isQueryPreRecord == '1' &&
+                (pageProps.visitNo ? pageProps.patientId : false)
+              "
+            >
               <view class="triangle-left"></view>
               <view class="records" @click="toPayRecord">
                 <text class="text text-no-wrap">查看记录</text>
@@ -160,7 +166,7 @@
   import { computed, onMounted, ref } from 'vue';
   import { getAvatar } from '@/stores';
   import { GStores, TButtonConfig, apiAsync, useTBanner } from '@/utils';
-  import { joinQuery } from '@/common';
+  import { joinQuery, joinQueryForUrl } from '@/common';
   import {
     getInHospitalInfoParam,
     getInHospitalInfoResult,
@@ -207,8 +213,14 @@
 
   const hosInfoResObj = ref({} as getInHospitalInfoResult);
   const toPayRecord = async () => {
+    const { hosId } = hosInfoResObj.value || {};
+    const { visitNo } = props.pageProps || {};
     uni.navigateTo({
-      url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
+      url: joinQueryForUrl('/pagesA/hospitalCare/payRecord', {
+        hosId,
+        visitNo
+      })
+      // url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
     });
   };
 

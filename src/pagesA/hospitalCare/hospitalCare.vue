@@ -85,6 +85,8 @@
       patientName?: string;
       patientPhone?: string;
       cardNumber?: string;
+      // 有代表是登录进来的（非手输入）
+      patientId?: string;
     }
   );
 
