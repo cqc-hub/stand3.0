@@ -26,8 +26,9 @@
               <view
                 :class="{
                   'collapse-header-open': arrowBottom,
+                  'collapse-header-close': !arrowBottom,
                 }"
-                class="pl24 pr24 pt32 pb32 bg-white collapse-header"
+                class="pl24 pr24 pt32 pb32 bg-white animate__animated collapse-header"
               >
                 <view class="flex items-center">
                   <view class="f40">{{ item.title }}</view>
@@ -55,7 +56,12 @@
               </view>
             </template>
 
-            <view>
+            <view
+              :class="{
+                animate__fadeIn: arrowBottom,
+              }"
+              class="bg-white p24 pb32 animate__animated collapse-content"
+            >
               233
               <view class="safe-height"></view>
               <view class="safe-height"></view>
@@ -148,6 +154,8 @@
 </script>
 
 <style lang="scss" scoped>
+  $r: 12px;
+
   .progress {
     .progress-number {
       width: 40rpx;
@@ -168,14 +176,35 @@
   }
 
   .collapse-header {
-    $r: 12px;
     border: 0.5px solid #e6e6e6;
-    border-radius: $r;
 
     &.collapse-header-open {
       border-bottom: none;
       border-radius: $r $r 0 0;
     }
+
+    &.collapse-header-close {
+      @keyframes headerCloseAction {
+        0% {
+          border-radius: $r $r 0 0;
+          border-bottom: none;
+        }
+
+        100% {
+          border-radius: $r;
+          border: 0.5px solid #e6e6e6;
+        }
+      }
+
+      animation-name: headerCloseAction;
+      animation-delay: 0.28s;
+      animation-duration: 0.3s;
+    }
+  }
+
+  .collapse-content {
+    border: 0.5px solid #e6e6e6;
+    border-radius: 0 0 $r $r;
   }
 
   .right-icon {
