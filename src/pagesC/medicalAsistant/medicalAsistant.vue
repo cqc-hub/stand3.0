@@ -51,6 +51,7 @@
             </view>
           </view>
         </view>
+        <view class="safe-area"></view>
       </view>
       <view class="footer flex-normal g-footer pb24">
         <view
@@ -173,6 +174,10 @@
 </script>
 
 <style lang="scss" scoped>
+.safe-area{
+    height: 10vh;
+    width: 1px;
+  }
   .g-page {
     background-color: #fff;
   }

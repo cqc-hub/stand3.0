@@ -536,7 +536,7 @@
         }
       }
 
-      try {
+  
         await api.addRegAlternate({
           ...props.value,
           ...selSchItem,
@@ -554,10 +554,7 @@
             url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
           });
         }
-      } catch (e) {
-        console.error('请求候补报错', e);
-        gStores.messageStore.showMessage('暂无候补名额', 3000);
-      }
+    
     }
   };
 
