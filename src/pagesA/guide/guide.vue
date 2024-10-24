@@ -29,6 +29,8 @@
       <view class="page-bg relative pl32 pr32">
         <view class="my-hide f24">占位</view>
         <Guide-Content-List />
+        <view class="safe-height" />
+        <view class="safe-height" />
       </view>
     </view>
 

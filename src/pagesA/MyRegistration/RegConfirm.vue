@@ -203,6 +203,34 @@
     };
   };
 
+  const handlerConfirmPatReal = async () => {
+    const pages = getCurrentPages();
+    const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+    const { title, content } = await gStores.getSysAppMore('1204');
+    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: true,
+          cancelText: '暂不预约',
+          confirmText: '去实名认证',
+        },
+        closeCallBack: r,
+      });
+    });
+
+    if (confirm) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+          _url: fullUrl,
+        }),
+      });
+    }
+
+    throw new Error('实名?');
+  };
+
   const regConfirm = async () => {
     const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
     /**
@@ -248,31 +276,7 @@
     }
 
     if (regVerificationMode === '2' && realNameAuth === '0') {
-      const pages = getCurrentPages();
-      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-      const { title, content } = await gStores.getSysAppMore('1204');
-      const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            title,
-            isShowCancel: true,
-            cancelText: '暂不预约',
-            confirmText: '去实名认证',
-          },
-          closeCallBack: r,
-        });
-      });
-
-      if (confirm) {
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-            _url: fullUrl,
-          }),
-        });
-      }
-
-      return;
+      await handlerConfirmPatReal();
     }
 
     if (isWaitReg.value) {
@@ -378,6 +382,9 @@
         } else if (respCode === 999227) {
           //超限就诊提示
           OverlimiMessage(e);
+        } else if (respCode === 999231 && realNameAuth === '0') {
+          // 去实名认证
+          await handlerConfirmPatReal();
         } else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
@@ -536,25 +543,23 @@
         }
       }
 
-  
-        await api.addRegAlternate({
-          ...props.value,
-          ...selSchItem,
-          alternateData,
-          patientId: gStores.userStore.patChoose.patientId,
-          source: gStores.globalStore.browser.source,
-        });
+      await api.addRegAlternate({
+        ...props.value,
+        ...selSchItem,
+        alternateData,
+        patientId: gStores.userStore.patChoose.patientId,
+        source: gStores.globalStore.browser.source,
+      });
 
-        if (pageConfig.value?.isTabWaitReg === '1') {
-          uni.reLaunch({
-            url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
-          });
-        } else {
-          uni.reLaunch({
-            url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-          });
-        }
-    
+      if (pageConfig.value?.isTabWaitReg === '1') {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+        });
+      } else {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+        });
+      }
     }
   };
 
