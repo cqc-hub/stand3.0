@@ -106,7 +106,7 @@ interface ISConfig {
         appId: string;
         path: string;
       };
-      //微信跨端插件https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
+      //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: string;
 
       /** 默认是医保? (个别项目后端不能返回 医保标签, 前端数据手动加上但是页面不显示医保标签) */
@@ -114,6 +114,9 @@ interface ISConfig {
 
       /** 挂号医保 */
       isMedicalOrder?: '1';
+
+      /** 医保开启亲情付 */
+      isFamilyPayment?: '1';
     };
   };
 
@@ -300,6 +303,7 @@ const scJson: Record<string, ISConfig> = {
         },
         // medicalDefault: '1',
         isMedicalOrder: '1',
+        isFamilyPayment: '1',
       },
     },
     isOpenHomeArticle: '1',
@@ -365,7 +369,7 @@ const scJson: Record<string, ISConfig> = {
         medicalPlugin: '1',
       },
     },
-    
+
     isOpenHelpOld: '1',
   },
 

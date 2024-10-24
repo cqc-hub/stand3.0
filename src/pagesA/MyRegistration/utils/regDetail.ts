@@ -337,7 +337,7 @@ export interface IRegInfo {
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
   if (isWaitReg && waitOrderStatusMap[status]) {
     return waitOrderStatusMap[status];
-  } else if (!isWaitReg && orderStatusMap[status]) {
+  } else if (orderStatusMap[status]) {
     return orderStatusMap[status];
   } else {
     return {
@@ -373,6 +373,7 @@ export const getOrderStatusTitle = (
   isOrderPay,
   isWaitReg: boolean
 ): string => {
+  console.log('isWaitReg', isWaitReg);
   if (isWaitReg) {
     return getWaitRegStatusConfig(status).title === '已挂号'
       ? '已兑现'
