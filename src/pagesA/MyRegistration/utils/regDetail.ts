@@ -373,9 +373,10 @@ export const getOrderStatusTitle = (
   isOrderPay,
   isWaitReg: boolean
 ): string => {
-console.log('isWaitReg',isWaitReg)
   if (isWaitReg) {
-    return getWaitRegStatusConfig(status).title;
+    return getWaitRegStatusConfig(status).title === '已挂号'
+      ? '已兑现'
+      : getWaitRegStatusConfig(status).title;
   }
   if (isOrderPay === '1' && status === '0') {
     return '已挂号';
