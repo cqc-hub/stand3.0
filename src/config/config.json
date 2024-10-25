@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001060",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -131,8 +131,8 @@
       "toutiaoAppid": "ttbcd1ca6c23ed0a5401",
       "wxAppid": "wx7b1baac614ebed72",
       "alipayAppid": "2021003173633521",
-      "h5Appid": "wx69bb1d0f7210807b",
       "isvAlipayAppid": "2021003172684536",
+      "h5Appid": "wx69bb1d0f7210807b",
       "name": "西安市红会医院互联网医院",
       "isSearchInHos": true,
       "isStartComeTest": true,

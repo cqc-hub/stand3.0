@@ -21,6 +21,7 @@ import {
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
+import wMd5 from '@/common/md5';
 import { useCacheStore } from '@/stores';
 
 export const tradeType = {
@@ -197,66 +198,37 @@ type PayListItem = {
   sort: number;
 };
 
-/** 是否医保插件模式 */
-export const getIsMedicalModePlugin = () => {
+export const getMedicalConfigInfo = () => {
   const {
     sConfig: { medicalMHelp },
   } = globalGl;
 
-  let isMedicalPay = false;
-
   if (medicalMHelp) {
     const { alipay, wx } = medicalMHelp;
-
     // #ifdef MP-ALIPAY
-    if (alipay?.medicalPlugin) {
-      isMedicalPay = true;
+    if (alipay) {
+      return alipay;
     }
     // #endif
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalPlugin } = wx;
-
-      if (medicalPlugin) {
-        isMedicalPay = true;
-      }
+      return wx;
     }
     // #endif
   }
 
-  return isMedicalPay;
+  return null;
+};
+
+/** 是否医保插件模式 */
+export const getIsMedicalModePlugin = () => {
+  return !!getMedicalConfigInfo()?.medicalPlugin;
 };
 
 /** 是否自动赋值医保状态 */
 export const getIsMedicalTradeTypeDefault = () => {
-  const {
-    sConfig: { medicalMHelp },
-  } = globalGl;
-
-  let setTradeTypeDefault = false;
-
-  if (medicalMHelp) {
-    const { alipay, wx } = medicalMHelp;
-
-    // #ifdef MP-ALIPAY
-    if (alipay?.medicalDefault === '1') {
-      setTradeTypeDefault = true;
-    }
-    // #endif
-
-    // #ifdef  MP-WEIXIN
-    if (wx) {
-      const { medicalDefault } = wx;
-
-      if (medicalDefault === '1') {
-        setTradeTypeDefault = true;
-      }
-    }
-    // #endif
-  }
-
-  return setTradeTypeDefault;
+  return !!getMedicalConfigInfo()?.medicalDefault;
 };
 
 /** 支付宝国标医保? */
@@ -320,6 +292,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 
     uni.navigateToMiniProgram({
       appId,
+      // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
       path,
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
       fail({ errMsg }) {
@@ -673,7 +646,7 @@ export const usePayPage = () => {
   if (medicalMHelp) {
     const { wx } = medicalMHelp;
     if (wx) {
-      const crossProgramBizType =wx?.crossProgramBizType;
+      const crossProgramBizType = wx?.crossProgramBizType;
       if (crossProgramBizType) {
         wxCrossProgramInfo.value = {
           appId: alipayAppid,
@@ -1151,9 +1124,14 @@ export const usePayPage = () => {
 
       if (isMedicalMode) {
         const { cardNumber } = gStores.userStore.patChoose;
-        const flag = await isMedicalSelf(
-          pageProps.value.deParams?.cardNumber || cardNumber
-        );
+        const isOpenFamilyMedical =
+          getMedicalConfigInfo()?.isFamilyPayment === '1';
+
+        const flag =
+          isOpenFamilyMedical ||
+          (await isMedicalSelf(
+            pageProps.value.deParams?.cardNumber || cardNumber
+          ));
 
         if (flag) {
           getPay();
@@ -1194,16 +1172,18 @@ export const usePayPage = () => {
     const hasMedicalItem = selUnPayList.value.some(
       (o) => o.costTypeCode === '2'
     );
+    const isOpenFamilyMedical = getMedicalConfigInfo()?.isFamilyPayment === '1';
 
     const payTypeList = determinePayType(
       isMedicalMode,
       isDigitalPay,
       hasMedicalItem,
-      await isMedicalSelf(
-        pageProps.value.deParams?.cardNumber ||
-          gStores.userStore.patChoose.cardNumber,
-        pageProps.value.params
-      )
+      isOpenFamilyMedical ||
+        (await isMedicalSelf(
+          pageProps.value.deParams?.cardNumber ||
+            gStores.userStore.patChoose.cardNumber,
+          pageProps.value.params
+        ))
     );
 
     let additionalList: any[] = [];
@@ -1229,7 +1209,8 @@ export const usePayPage = () => {
 
     // #ifdef MP-WEIXIN
     payMethodConfig.labelPay = '微信自费支付';
-    wxCrossProgramInfo.value.bizType&&(payMethodConfig.medicalPay='医保电子凭证结算')
+    wxCrossProgramInfo.value.bizType &&
+      (payMethodConfig.medicalPay = '医保电子凭证结算');
     // #endif
 
     // #ifdef MP-ALIPAY
@@ -1563,7 +1544,6 @@ export const usePayPage = () => {
     if (isMedicalModePlugin) {
       const { alipay } = medicalMHelp!;
 
-     
       const { medicalPlugin, isFamilyPayment } = alipay!;
       // #ifdef MP-ALIPAY
       const authPayPlugin = requirePlugin('auth-pay-plugin');
@@ -1618,14 +1598,13 @@ export const usePayPage = () => {
     const { wx } = medicalMHelp!;
 
     if (wx) {
-      const { medicalNation, medicalPlugin} = wx!;
-      const crossProgramBizType =wx?.crossProgramBizType;
+      const { medicalNation, medicalPlugin } = wx!;
+      const crossProgramBizType = wx?.crossProgramBizType;
 
       if (medicalPlugin === '1') {
         if (crossProgramBizType) {
           const curPagesList = getCurrentPages();
           const curPages: any = curPagesList[curPagesList.length - 1];
-          console.log('curPagesList',curPagesList)
           const { openFunc } = curPages.selectComponent('#codePlugin');
           openFunc();
         } else {
@@ -1633,7 +1612,6 @@ export const usePayPage = () => {
         }
       } else if (medicalNation) {
         const authorize = await getQxMedicalNation();
-
         callback(authorize);
       }
     }
@@ -1875,7 +1853,7 @@ export const usePayDetailPage = () => {
     const { result } = await api.getClinicalPayDetailList<TPayDetailInfo>(
       requestArg
     );
-   
+
     if (result) {
       const { costList } = result;
 
