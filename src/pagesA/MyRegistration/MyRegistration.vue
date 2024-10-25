@@ -9,7 +9,6 @@
     <g-message />
 
     <g-choose-pat v-if="isWaitReg" @choose-pat="patientChange" />
-
     <view
       v-if="pageConfig.MyRegistrationNavBtns && !isWaitReg"
       class="p32c pt12 pb12"
@@ -40,7 +39,7 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
-          :isWaitReg="isWaitReg || tabCurrent === 2"
+          :isWaitReg="isWaitReg || tabs[tabCurrent]?.typeId === 2"
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :isShowYuWzBtn="isShowYuWzBtn"
