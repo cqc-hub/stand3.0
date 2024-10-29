@@ -45,7 +45,12 @@
       "path": "pages/routerTest/routerTest",
       "style": {
         "navigationBarTitleText": "uni-routerTest",
-        "backgroundColor": "#e43130"
+        "backgroundColor": "#e43130",
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "YES"
+        }
       }
     },
     {

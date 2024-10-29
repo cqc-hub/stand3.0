@@ -16,13 +16,7 @@
           >
             <text v-if="isOnlineSign">{{ item.reportFlag }}</text>
             <text v-else>
-              {{
-                item.reportFlag === '2'
-                  ? '无需取号'
-                  : item.reportFlag === '0'
-                  ? '待取号'
-                  : '已取号'
-              }}
+              {{ getReportFlagInfo(item.reportFlag).label }}
             </text>
           </text>
         </view>
@@ -38,10 +32,10 @@
       <view v-if="item.visitingArea" class="tip mb32">
         <rich-text :nodes="$HTMLParser(item.visitingArea)" />
       </view>
-
+      <!-- 咸阳签到取号功能新增2种reportFlag 4 过号签到，3 回诊签到。 -->
       <view
         v-if="
-          item.reportFlag === '0' ||
+          ['0', '3', '4'].includes(item.reportFlag) ||
           (isOnlineSign && item.reportFlag === '预约未到')
         "
       >
@@ -119,6 +113,33 @@
     'sign-in',
     'pay-page',
   ]);
+
+  const reportFlagMap = ref({
+    '0': {
+      label: '待取号',
+    },
+    '1': {
+      label: '已取号',
+    },
+    '2': {
+      label: '无需取号',
+    },
+    '3': {
+      label: '回诊签到',
+    },
+    '4': {
+      label: '过号签到',
+    },
+  });
+
+  const getReportFlagInfo = (flag: keyof typeof reportFlagMap.value) => {
+    const item = reportFlagMap.value[flag];
+    return (
+      item || {
+        label: '未知',
+      }
+    );
+  };
 
   const refrashData = () => {
     emits('refresh-data');
