@@ -14,8 +14,7 @@
             }"
             class="color-blue"
           >
-            <text v-if="isOnlineSign">{{ item.reportFlag }}</text>
-            <text v-else>
+            <text>
               {{ getReportFlagInfo(item.reportFlag).label }}
             </text>
           </text>
@@ -92,10 +91,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, onMounted } from 'vue';
+  import { defineComponent, ref, onMounted, computed } from 'vue';
   import { type TTakeNumberListItem } from '../utils/takeNumber';
   import { ServerStaticData, ISystemConfig } from '@/utils';
-  defineProps<{
+
+  const props = defineProps<{
     list: TTakeNumberListItem[];
     loading: boolean;
     isOnlineSign: boolean;
@@ -114,25 +114,36 @@
     'pay-page',
   ]);
 
-  const reportFlagMap = ref({
-    '0': {
-      label: '待取号',
-    },
-    '1': {
-      label: '已取号',
-    },
-    '2': {
-      label: '无需取号',
-    },
-    '3': {
-      label: '回诊签到',
-    },
-    '4': {
-      label: '过号签到',
-    },
+  const reportFlagMap = computed(() => {
+    const typeLabel = props.isOnlineSign ? '签到' : '取号';
+
+    return {
+      0: {
+        label: `待${typeLabel}`,
+      },
+      1: {
+        label: `已${typeLabel}`,
+      },
+      2: {
+        label: `无需${typeLabel}`,
+      },
+      3: {
+        label: `回诊${typeLabel}`,
+      },
+      4: {
+        label: `过号${typeLabel}`,
+      },
+    };
   });
 
   const getReportFlagInfo = (flag: keyof typeof reportFlagMap.value) => {
+    // 可能存在 flag = 过号签到 这样的情况
+    if (isNaN(flag * 1)) {
+      return {
+        label: flag,
+      };
+    }
+
     const item = reportFlagMap.value[flag];
     return (
       item || {

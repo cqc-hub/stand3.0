@@ -31,6 +31,7 @@
     </view>
 
     <scroll-view class="g-container" scroll-y>
+      <view class="safe-height" />
       <view v-if="isComplete || isRefresh" class="content">
         <view v-if="list.length">
           <Number-List
@@ -310,7 +311,7 @@
 
             if (confirm) {
               const { result } = await api.reappoint({ appointNo: visitId });
-              console.log('result',result)
+              console.log('result', result);
               if (result) {
                 setTimeout(() => {
                   refreshData();
@@ -450,6 +451,7 @@
 
     list.value.map((o) => {
       // o.signIn = false;
+      // o.reportFlag = '4';
     });
   };
 
