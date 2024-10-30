@@ -67,7 +67,7 @@
         <block
           v-if="
             pageConfig.isHideNumberSourceTotalRemain !== '1' &&
-            item.schState !== '1'
+            item.schState !== '1'&&item.schState !== '2'
           "
         >
           <view class="color-888 text-no-wrap text-center">

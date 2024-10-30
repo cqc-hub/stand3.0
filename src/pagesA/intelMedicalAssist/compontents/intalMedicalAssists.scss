@@ -1,0 +1,141 @@
+.header-area {
+    width: 100vw;
+    height: 700rpx;
+
+    .wihite-mask {
+      z-index: 3;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, #fff);
+      width: 100vw;
+      position: fixed;
+      top: 560rpx;
+      left: 0;
+      height: 155rpx;
+    }
+    .bg-img {
+      width: 100vw;
+      position: fixed;
+      height: 700rpx;
+    }
+    @keyframes progress-grow {
+      to {
+          width: 14vw;
+      }
+  }
+    .person-img {
+      width: 34vw;
+      max-width: 250rpx;
+      max-height: 550rpx;
+      position: fixed;
+      z-index: 2;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 20rpx;
+      scroll-timeline-name: --person-scroll;
+      scroll-timeline-axis: y;
+    }
+    .progress {
+      animation: auto progress-grow linear forwards;
+      /** 使用前面定义的 scroll-timeline */
+      animation-timeline: --person-scroll;
+  }
+    .header-hello {
+      position: fixed;
+      left: 50rpx;
+      top: 50rpx;
+      .en {
+        text-align: left;
+        color: #00194c;
+        line-height: 50rpx;
+      }
+      .cn {
+        color: #00194c;
+        text-align: left;
+        line-height: 28rpx;
+      }
+    }
+    .person-say {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 24rpx;
+      backdrop-filter: blur(10px);
+      font-size: 1em;
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 250rpx;
+      z-index: 3;
+      color: #000;
+      //   font-weight: 600;
+      @keyframes typing {
+        from {
+          width: 0rpx;
+        }
+      }
+      @keyframes blink-caret {
+        50% {
+          border-color: transparent;
+        }
+      }
+      .key-in {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 17em;
+        animation: typing 2s steps(17) infinite,
+          blink-caret 0.5s steps(1) infinite;
+        animation-iteration-count: 1 !important;
+      }
+    }
+    .guess {
+      border-top-right-radius: 24rpx;
+      border-top-left-radius: 24rpx;
+      backdrop-filter: blur(10px);
+      position: fixed;
+      z-index: 2;
+      height: 300rpx;
+      top: 390rpx;
+      width: 100vw;
+      .guess-title {
+      }
+      .guess-content {
+        height: 250rpx;
+        .scroll {
+          position: relative;
+          display: flex;
+          width: 100vw;
+          overflow: hidden;
+          height: 80rpx;
+          .paused {
+            animation-play-state: paused;
+          }
+          @keyframes animate {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          .row-item {
+            display: inline-block;
+            margin: 15rpx;
+            padding: 10rpx 20rpx;
+            z-index: 4;
+            border-radius: 24rpx;
+            backdrop-filter: blur(20px);
+          }
+          :active {
+              animation-play-state: paused;
+            }
+          .scroll-row {
+            width: fit-content;
+            white-space: nowrap;
+            left: 0;
+            position: absolute;
+            animation: animate 10s linear infinite;
+           
+          }
+          
+        }
+      }
+    }
+  }

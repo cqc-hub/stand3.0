@@ -69,6 +69,12 @@
           }
         },
         {
+          "path": "intelMedicalAssist/intelMedicalAssist",
+          "style": {
+            "navigationBarTitleText": "智能助医"
+          }
+        },
+        {
           "path": "MyRegistration/DoctorDetails",
           "style": {
             "navigationBarTitleText": "医生名片"
