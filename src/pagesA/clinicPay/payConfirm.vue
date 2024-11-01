@@ -268,25 +268,24 @@
     refPay.value.show();
   };
 
-  const handlerYunPayAfter = () => {
-    gStores.messageStore.showMessage(
-      '缴费成功, 请等待一段时间后查看云影像结果',
-      0,
-      {
-        useDialog: true,
-        dialogOpt: {
-          isShowCancel: false,
-          title: '缴费成功',
-          confirmText: '确认',
-        },
+  const handlerYunPayAfter = async () => {
+    uni.showLoading({});
+    await wait(1500);
+    uni.hideLoading();
+    gStores.messageStore.showMessage('缴费成功', 0, {
+      useDialog: true,
+      dialogOpt: {
+        isShowCancel: false,
+        title: '缴费成功',
+        confirmText: '确认',
+      },
 
-        closeCallBack() {
-          uni.navigateBack({
-            delta: 1,
-          });
-        },
-      }
-    );
+      closeCallBack() {
+        uni.navigateBack({
+          delta: 1,
+        });
+      },
+    });
   };
 
   const payClick = async () => {
