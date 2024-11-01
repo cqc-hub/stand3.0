@@ -7,7 +7,7 @@
   >
     <!-- #ifdef  MP-WEIXIN -->
     <xy-dialog title="小程序隐私保护指引" :show="isShowAgreeDialog">
-      <scroll-view scroll-y class="reg-tip">
+      <scroll-view scroll-y class="reg-tip" >
         <view class="g-break-word color-888">
           感谢您使用本小程序, 您使用本小程序前应当阅井同意,
           <text @click="goAgreement" class="fg-agree-name">
@@ -48,12 +48,13 @@
       :cancelText="messageStore.dialogOpt.cancelText"
       :isShowCancel="messageStore.dialogOpt.isShowCancel ?? false"
       :isMaskClick="messageStore.dialogOpt.isMaskClick ?? true"
+      :maxHeight="(messageStore.dialogOpt.maxHeight??550)+50"
       @confirmButton="messageStore.toggleDialogConfirm(true)"
       @cancelButton="messageStore.toggleDialogConfirm(false)"
       @maskClose="messageStore.dialogMaskClose"
       @close="messageStore.closeMessage"
     >
-      <scroll-view scroll-y class="reg-tip">
+      <scroll-view scroll-y class="reg-tip" :style="{'max-height':`${messageStore.dialogOpt.maxHeight??550}rpx`}">
         <view class="g-break-word color-888 f32">
           <rich-text :nodes="getContent()" />
         </view>

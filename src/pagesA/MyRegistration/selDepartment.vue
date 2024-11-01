@@ -141,6 +141,7 @@
           cancelText,
           confirmText,
           cancelColor: '#296FFF',
+          maxHeight:900
         },
         closeCallBack({ confirm, maskClose }) {
           if (!confirm && !maskClose) {

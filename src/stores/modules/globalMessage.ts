@@ -10,6 +10,7 @@ type TDialogOpt = {
   confirmColor?: string;
   cancelColor?: string;
   zIndex?: number;
+  maxHeight?: number,
 };
 
 let timer: null | number = null;
@@ -23,7 +24,6 @@ const messageStore = defineStore('message', {
       isDialogConfirm: false,
       isDialogMaskClose: false,
       dialogOpt: <TDialogOpt>{},
-
       duration: 0,
       popupDuration: 500,
       maskClickCallBack: () => {},

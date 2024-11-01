@@ -14,7 +14,7 @@
       </view>
       <scroll-view
         class="xy-dialog__content"
-        :style="{ 'text-align': textalign }"
+        :style="{ 'text-align': textalign ,'max-height':`${maxHeight}rpx`}"
         scroll-y
       >
         <template v-if="content">
@@ -129,6 +129,12 @@
         type: Boolean,
         default: false,
       },
+
+      //最大高度
+      maxHeight:{
+        type: Number,
+        default: 600,
+      }
     },
     data() {
       return {
@@ -194,7 +200,7 @@
       z-index: 1010;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -75%);
+      transform: translate(-50%, -50%);
       transition: transform 0.3s;
       width: calc(100vw - 150rpx);
       // width: 582upx;
