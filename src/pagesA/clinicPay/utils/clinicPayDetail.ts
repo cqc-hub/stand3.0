@@ -646,11 +646,11 @@ export const usePayPage = () => {
   if (medicalMHelp) {
     const { wx } = medicalMHelp;
     if (wx) {
-      const crossProgramBizType = wx?.crossProgramBizType;
-      if (crossProgramBizType) {
+      const clinicBizType = wx?.crossProgramBizType?.clinic;
+      if (clinicBizType) {
         wxCrossProgramInfo.value = {
           appId: alipayAppid,
-          bizType: crossProgramBizType,
+          bizType: clinicBizType,
           extInfo: {},
         };
       }
@@ -1173,6 +1173,9 @@ export const usePayPage = () => {
       (o) => o.costTypeCode === '2'
     );
     const isOpenFamilyMedical = getMedicalConfigInfo()?.isFamilyPayment === '1';
+    const isBizTypeMedical=getMedicalConfigInfo()?.crossProgramBizType?.clinic !== undefined
+    const a = getMedicalConfigInfo()
+    
 
     const payTypeList = determinePayType(
       isMedicalMode,
@@ -1208,15 +1211,16 @@ export const usePayPage = () => {
     };
 
     // #ifdef MP-WEIXIN
+    payMethodConfig.medicalPay = '微信医保支付'
     payMethodConfig.labelPay = '微信自费支付';
-    wxCrossProgramInfo.value.bizType &&
-      (payMethodConfig.medicalPay = '医保电子凭证结算');
+    // wxCrossProgramInfo.value.bizType &&
+    //   (payMethodConfig.medicalPay = '支付宝医保支付');
     // #endif
 
     // #ifdef MP-ALIPAY
     payMethodConfig.labelPay = '支付宝自费支付';
     if (getIsFamilyPayment()) {
-      payMethodConfig.medicalPay = '医保支付(支持亲情付)';
+      payMethodConfig.medicalPay = '支付宝医保支付(支持亲情付)';
     }
     // #endif
 
@@ -1240,15 +1244,22 @@ export const usePayPage = () => {
         key: 'online',
         sort: 2,
       },
+      // #ifdef MP-WEIXIN
+      {
+        label: '支付宝医保支付',
+        key: 'bizType',
+        sort: 3,
+      },
+        // #endif
       {
         label: '数字人民币支付',
         key: 'digital',
-        sort: 3,
+        sort: 4,
       },
       {
         label: medicalPay,
         key: 'medicare',
-        sort: 4,
+        sort: 5,
       },
     ] as const;
 
@@ -1599,10 +1610,10 @@ export const usePayPage = () => {
 
     if (wx) {
       const { medicalNation, medicalPlugin } = wx!;
-      const crossProgramBizType = wx?.crossProgramBizType;
+      const clinicBizType = wx?.crossProgramBizType?.clinic;
 
       if (medicalPlugin === '1') {
-        if (crossProgramBizType) {
+        if (clinicBizType) {
           const curPagesList = getCurrentPages();
           const curPages: any = curPagesList[curPagesList.length - 1];
           const { openFunc } = curPages.selectComponent('#codePlugin');

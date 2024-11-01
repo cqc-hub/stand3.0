@@ -44,6 +44,12 @@
           label: '医保支付',
           key: 'medicare',
         },
+        // #ifdef MP-WEIXIN
+        {
+          label: '支付宝医保支付',
+          key: 'bizType',
+        },
+        // #endif
         {
           label: '到院支付',
           key: 'offline',
