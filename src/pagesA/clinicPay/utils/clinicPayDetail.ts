@@ -160,8 +160,7 @@ export type TPayConfirmPageProp = {
   };
   mzParams?: string;
 
-  // 挂号时候
-  _type?: 'order';
+  _type?: 'order' | 'yunUrl';
   orderId?: string;
 };
 

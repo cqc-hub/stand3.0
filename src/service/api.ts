@@ -375,7 +375,7 @@ const queryApi = {
   getOutHospitalPreparePay: <T>(data) =>
     service.post<T>('/phs-query/hospital/getOutHospitalPreparePay', parm(data)),
   //创建住院缴费订单
-  createInHospitalPayOrder: <T>(data) =>
+  createInHospitalPayOrder: <T = any>(data) =>
     service.post<T>(
       '/phs-query/hospital/createInHospitalPayOrder',
       parm(data),
@@ -420,6 +420,15 @@ const queryApi = {
     }),
   getExamineReportDetails: <T = any>(data) =>
     service.post('/phs-query/examine/getExamineReportDetails', parm(data)),
+  getExamineReportDetailsNoLogin: <T = any>(data) =>
+    service.post(
+      '/phs-query/examine/getExamineReportDetailsNoLogin',
+      parm(data)
+    ),
+  queryImgStatus: <T = any>(data) =>
+    service.post('/phs-query/img/queryImgStatus', parm(data)),
+  imgHosSettle: <T = any>(data) =>
+    service.post('/phs-query/img/imgHosSettle', parm(data)),
   getCheckoutReportDetails: <T = any>(data) =>
     service.post('/phs-query/checkout/getCheckoutReportDetails', parm(data)),
   getMedicalReportDetails: <T = any>(data) =>

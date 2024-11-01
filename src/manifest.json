@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7acc3ecadc08f7ea",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003167607056"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -95,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "咸阳市第一人民医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "router": {
       "base": "./"

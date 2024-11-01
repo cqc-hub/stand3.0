@@ -261,6 +261,17 @@
 
     await api.addDrugDelivery(args);
 
+    if (pageProps.value.params) {
+      gStores.messageStore.showMessage('提交成功', 1500, {
+        closeCallBack() {
+          uni.navigateBack({
+            delta: 1,
+          });
+        },
+      });
+      return;
+    }
+
     uni.reLaunch({
       url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
     });

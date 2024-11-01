@@ -351,6 +351,8 @@ export interface ISystemConfig_ {
     isGraphic?: '1';
     /** 检查报告查询第三方 点击检查跳转第三方h5 */
     isCheckThirdParty?: '1';
+    /** 检查报告详情云云影像需要支付 */
+    isJcYunPay?: '1';
 
     /** 报告查询列表云影像链接 */
     listYun?: {
