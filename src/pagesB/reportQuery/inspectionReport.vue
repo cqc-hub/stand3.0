@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStore.globalStore.modeOld,
+      'system-mode-old': gStores.globalStore.modeOld,
     }"
     class="page"
     scroll-y="true"
@@ -10,13 +10,6 @@
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
 
-    <!-- <view
-      class="block-top"
-      @click="gotoMedical"
-      v-if="examineReportList.yunUrl"
-    >
-      <image class="nav" :src="$global.BASE_IMG + 'yun_banner.png'" />
-    </view> -->
     <view class="top bgc" v-if="btnNumber && btnNumber > 1">
       <scroll-view
         class="scroll-view_H"
@@ -49,7 +42,7 @@
           :class="{
             containerBlockFirst: index == 0 && btnNumber.length > 0,
             [pageConfig.isOpenCollect === '1' &&
-            gStore.globalStore.isLogin &&
+            gStores.globalStore.isLogin &&
             Object.keys(examineReportList).length
               ? 'mt48'
               : 'mt24']: 1,
@@ -63,8 +56,9 @@
                 <view
                   v-if="
                     pageConfig.isOpenCollect === '1' &&
-                    gStore.globalStore.isLogin &&
-                    Object.keys(examineReportList).length
+                    gStores.globalStore.isLogin &&
+                    Object.keys(examineReportList).length &&
+                    !pageProps.params
                   "
                   class="pr24 pt40"
                 >
@@ -90,14 +84,16 @@
                       }})
                     </text>
 
-                    <text
-                      :class="`iconfont icon-resize`"
-                      class="g-split-line mr12 pr12"
-                    >
+                    <text class="mr12 pr12 iconfont icon-resize">
                       {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
                     </text>
 
-                    <block v-if="!pageProps.patientName">
+                    <block
+                      v-if="
+                        !pageProps.patientName &&
+                        (examineReportList.sex || pat.patientSex)
+                      "
+                    >
                       <text class="g-split-line mr12 pr12">
                         {{ examineReportList.sex || pat.patientSex }}
                       </text>
@@ -222,7 +218,7 @@
     </view>
 
     <Bottom-Nav
-      v-if="!pageProps.useCacheData"
+      v-if="!pageProps.useCacheData && !pageProps.params"
       :addition="{
         ...pat,
         ...pageProps,
@@ -322,8 +318,9 @@
     throttle,
     ISystemConfig,
     ServerStaticData,
+    apiAsync,
   } from '@/utils';
-  import { joinQuery, encryptDes, getSysCode } from '@/common';
+  import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
   import global from '@/config/global';
@@ -334,9 +331,13 @@
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
+  import { payMoneyOnline, toPayPull } from '@/components/g-pay';
+  import { useCacheStore } from '@/stores';
 
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
+  const cacheStore = useCacheStore();
+
   let isScrollCheck = true;
 
   const { contentTitle, greenToastContent, greenToastDuration, getPowerEnerg } =
@@ -495,10 +496,17 @@
     });
     tips.value = result;
   };
-  const pageProps = ref(<any>{});
+  const pageProps = ref(
+    <
+      {
+        params?: string;
+        [key: string]: any;
+      }
+    >{}
+  );
 
-  const gStore = new GStores();
-  const pat = gStore.userStore.patChoose;
+  const gStores = new GStores();
+  const pat = gStores.userStore.patChoose;
   const patName = computed(() => {
     return (
       pageProps.value.patientName ||
@@ -514,33 +522,40 @@
     );
   });
 
-  onLoad(async (p) => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-
-    pageProps.value = deQueryForUrl(p);
-    pageProps.value = deQueryForUrl(pageProps.value);
-    pageProps.value = deQueryForUrl(pageProps.value);
-  });
-
   const getInspectionReportList = async () => {
-    const { repId, examClassName, hosId, extend, useCacheData } =
-      pageProps.value;
+    const {
+      repId,
+      examClassName,
+      hosId,
+      extend,
+      useCacheData,
+      params: _params,
+    } = pageProps.value;
 
     let result: any;
 
     if (useCacheData) {
-      result = gStore.globalStore.cacheData;
+      result = gStores.globalStore.cacheData;
     } else {
-      let params = {
-        hosId: hosId,
-        patientId: pat.patientId,
-        repId: repId,
-        examClassName: examClassName,
-        extend: decodeURIComponent(extend),
-      };
-      const { result: _result } = await api.getExamineReportDetails(params);
+      if (_params) {
+        // 扫码进入
+        const { result: _result } = await api.getExamineReportDetailsNoLogin({
+          desSecret: _params,
+        });
+        result = _result;
+      } else {
+        // 正常进入
+        let params = {
+          hosId: hosId,
+          patientId: pat.patientId,
+          repId: repId,
+          examClassName: examClassName,
+          extend: decodeURIComponent(extend),
+        };
+        const { result: _result } = await api.getExamineReportDetails(params);
 
-      result = _result;
+        result = _result;
+      }
     }
     examineReportList.value = result;
     btnNumber.value = examineReportList.value.detailsResult?.length;
@@ -588,7 +603,7 @@
   };
   const forShare = () => {
     const data = `${
-      gStore.userStore.patChoose.patientName
+      gStores.userStore.patChoose.patientName
     }的检查报告,分享链接有效期至${shareEndTime.value || 'YYYY-MM-DD'}。 ${
       qrVal.value
     }`;
@@ -598,12 +613,12 @@
         isOperation.value = true;
         uni.getClipboardData({
           success: function (res) {
-            gStore.messageStore.showMessage('内容已复制');
+            gStores.messageStore.showMessage('内容已复制');
           },
         });
       },
       fail: () => {
-        gStore.messageStore.showMessage('复制失败');
+        gStores.messageStore.showMessage('复制失败');
         isOperation.value = false;
       },
     });
@@ -651,12 +666,12 @@
       data: getPdfUrl(downloadRepId.value),
       success: function () {
         isCopySuccess.value = true;
-        gStore.messageStore.showMessage('复制链接成功!', 3000, {
+        gStores.messageStore.showMessage('复制链接成功!', 3000, {
           uniToast: true,
         });
       },
       fail() {
-        gStore.messageStore.showMessage('剪贴失败!!', 3000);
+        gStores.messageStore.showMessage('剪贴失败!!', 3000);
       },
     });
   };
@@ -680,14 +695,144 @@
     // }
   };
 
-  const gotoMedical = (url: string) => {
+  const gotoMedical = async (url: string) => {
+    const { isJcYunPay } = pageConfig.value;
+
+    if (isJcYunPay === '1') {
+      // examineReportList.value.repId = '202410011703';
+      const { cardNumber, repId, hosId, hosName, patientName } =
+        examineReportList.value;
+      let viewType = '2';
+      // #ifdef MP-ALIPAY
+      viewType = '1';
+      // #endif
+
+      const { result } = await api.queryImgStatus({
+        viewType,
+        cardNumber,
+        repId,
+        dicomId: repId,
+        hosId: pageProps.value.hosId || hosId,
+      });
+
+      // const result: any = {
+      //   needReChargeStatus: '1',
+      //   paid: '0',
+      //   price: '0.01',
+      // };
+
+      const {
+        // 根据此字短判断是否要去确认页面（存在）
+        needReChargeStatus, // 是否需要调用支付平台 1-需要 0-不需要
+        paid, // 是否已经支付 0未支付 1已支付
+        price,
+        amountPrice, // 账户抵扣
+        totalPrice, // 总金额
+      } = result;
+      const _hosId =
+        pageProps.value.hosId ||
+        result.hosId ||
+        examineReportList.value.hosId ||
+        '';
+
+      if (paid === '0') {
+        const { confirm } = await apiAsync(uni.showModal, {
+          content: `该云影像需要支付${totalPrice}元才能查看，是否继续？`,
+          cancelText: '取消',
+          confirmText: '继续',
+        });
+
+        if (!confirm) {
+          return;
+        }
+        cacheStore.changeCacheData({
+          ...examineReportList.value,
+          hosId: _hosId,
+          needReChargeStatus,
+          totalNeedSelfpay: price,
+          totalCharges: totalPrice,
+          accountMoney: amountPrice,
+          payAmount: price,
+        });
+
+        if (needReChargeStatus) {
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesA/clinicPay/payConfirm', {
+              _type: 'yunUrl',
+              hosId: _hosId,
+            }),
+          });
+        } else {
+          // 不需要去确认页面， 当前页直接支付
+          gStores.messageStore.showMessage('未开发', 1500);
+        }
+
+        return;
+
+        if (needReChargeStatus === '0') {
+          const source = gStores.globalStore.browser.source;
+
+          const {
+            result: { paySign, phsOrderNo },
+          } = await api.createInHospitalPayOrder({
+            cardNumber,
+            dicomId: repId,
+            fee: price,
+            hosId,
+            hosName,
+            orderType: '6',
+            patientName,
+            source,
+          });
+
+          const payRes = await payMoneyOnline({
+            paySign,
+            phsOrderNo,
+            totalFee: price,
+            source,
+            phsOrderSource: 6,
+            hosId,
+            patientName,
+          });
+
+          await toPayPull(payRes, '门诊缴费');
+          yunPayAfter(url);
+        }
+
+        if (needReChargeStatus === '1') {
+          api.imgHosSettle({
+            cardNumber,
+            hosId,
+            dicomId: repId,
+            viewType,
+          });
+        }
+      }
+    }
     uni.navigateTo({
-      url: `/pagesA/webView/webView?https=${encodeURIComponent(url)}`,
+      url: joinQueryForUrl('/pagesA/webView/webView', {
+        https: url,
+      }),
     });
   };
 
-  onMounted(async () => {
+  const yunPayAfter = (url) => {
+    gotoMedical(url);
+  };
+
+  onLoad(async (opt) => {
+    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+
+    uni.showLoading({});
+
+    if ((queryParams && !opt?.params) || opt?.q) {
+      return;
+    }
     await wait(600);
+
+    pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+    console.log(pageConfig.value, 'ageConfig.value ageConfig.value ');
+    pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(opt)));
 
     windowInfo.value = uni.getSystemInfoSync();
     getTips();
@@ -696,6 +841,7 @@
       addWatermark(global.systemInfo.name);
     }
   });
+
   onUpdated(() => {
     getBoxTop();
   });

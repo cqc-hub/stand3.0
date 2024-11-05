@@ -14,7 +14,9 @@
 
       <view v-if="isComplete" class="container">
         <view class="g-border box page-first-item">
-          <view class="g-bold f36 g-break-word">门诊医生支付订单</view>
+          <view class="g-bold f36 g-break-word">
+            {{ isYunPay ? '云影像支付订单' : '门诊医生支付订单' }}
+          </view>
 
           <view class="flex-normal f28 mt24">
             <text class="mr16 color-888">支付给</text>
@@ -157,8 +159,33 @@
     >{}
   );
 
+  const handlerYunPayInit = () => {
+    info.value = cacheStore.cacheData;
+    isComplete.value = true;
+    details.value = [
+      {
+        label: '订单总额',
+        key: 'totalCharges',
+      },
+      {
+        label: '院内账户支付',
+        key: 'accountMoney',
+      },
+      {
+        label: '自费支付',
+        key: 'totalNeedSelfpay',
+      },
+    ];
+  };
+
   const getData = async () => {
     await wait(800);
+    // 云影像支付确认
+    if (isYunPay.value) {
+      handlerYunPayInit();
+      return;
+    }
+
     if (pageProps.value.visitNo) {
       getNormalData();
     } else {
@@ -166,7 +193,106 @@
     }
   };
 
+  const handlerYunPay = async ({ item }: { item: IGPay }) => {
+    if (item.key !== 'online') {
+      return;
+    }
+    const source = gStores.globalStore.browser.source;
+    let viewType = '2';
+    // #ifdef MP-ALIPAY
+    viewType = '1';
+    // #endif
+    const {
+      needReChargeStatus, // 是否需要调用支付平台 1-需要 0-不需要
+      paid, // 是否已经支付 0未支付 1已支付
+      price,
+      amountPrice, // 账户抵扣
+      totalPrice, // 总金额
+      hosId,
+      cardNumber,
+      patientName,
+      repId,
+      hosName,
+      payAmount,
+    } = cacheStore.cacheData;
+
+    if (needReChargeStatus === '1') {
+      const {
+        result: { paySign, phsOrderNo },
+      } = await api.createInHospitalPayOrder({
+        cardNumber,
+        dicomId: repId,
+        fee: payAmount,
+        hosId,
+        hosName,
+        orderType: '6',
+        patientName,
+        source,
+      });
+
+      const payRes = await payMoneyOnline({
+        paySign,
+        phsOrderNo,
+        totalFee: payAmount,
+        source,
+        phsOrderSource: 6,
+        hosId,
+        patientName,
+      });
+
+      await toPayPull(payRes, '门诊缴费');
+    }
+
+    if (needReChargeStatus === '0') {
+      await api.imgHosSettle({
+        cardNumber,
+        hosId,
+        dicomId: repId,
+        viewType,
+        orderAmount: payAmount,
+        // sence:
+      });
+    }
+
+    handlerYunPayAfter();
+  };
+
+  const _handlerYunPay = () => {
+    refPayList.value = [
+      {
+        label: '在线支付',
+        key: 'online',
+      },
+    ];
+
+    refPay.value.show();
+  };
+
+  const handlerYunPayAfter = async () => {
+    uni.showLoading({});
+    await wait(1500);
+    uni.hideLoading();
+    gStores.messageStore.showMessage('缴费成功', 0, {
+      useDialog: true,
+      dialogOpt: {
+        isShowCancel: false,
+        title: '缴费成功',
+        confirmText: '确认',
+      },
+
+      closeCallBack() {
+        uni.navigateBack({
+          delta: 1,
+        });
+      },
+    });
+  };
+
   const payClick = async () => {
+    if (isYunPay.value) {
+      return _handlerYunPay();
+    }
+
     if (<any>info.value.payAmount * 1 === 0) {
       await payFeeZero();
     } else {
@@ -212,7 +338,7 @@
     // #endif
 
     if (gStores.globalStore.sysCode === '1001063') {
-      args.payType  = 'ICBC_JFT_H5';
+      args.payType = 'ICBC_JFT_H5';
     }
 
     await api.clinicSpecialPayInform(args);
@@ -300,14 +426,15 @@
   };
 
   const getHosName = computed(() => {
-    if (info.value.hosId) {
-      return (
-        hosList.value.find((o) => o.hosId == info.value.hosId)?.hosName || ''
-      );
+    const hosId = info.value.hosId || pageProps.value.hosId;
+    if (hosId) {
+      return hosList.value.find((o) => o.hosId == hosId)?.hosName || '';
     } else {
       return '';
     }
   });
+
+  const isYunPay = computed(() => pageProps.value._type === 'yunUrl');
 
   const getHosList = ({ list }) => {
     hosList.value = list;
@@ -316,6 +443,11 @@
   };
 
   const getPayInfo = async ({ item }: { item: IGPay }) => {
+    if (isYunPay.value) {
+      handlerYunPay({ item });
+      return;
+    }
+
     if (item.key === 'online') {
       toPay();
     }
@@ -342,7 +474,7 @@
         payAmount,
         costTypeName,
         totalCharges,
-        serialNo: serialNo1
+        serialNo: serialNo1,
       } = info.value;
 
       const args = {
@@ -441,6 +573,7 @@
   };
 
   onLoad(async (opt) => {
+    uni.showLoading({});
     if (!(opt && Object.keys(opt).length)) {
       return;
     }
@@ -459,7 +592,7 @@
         pageProps.value.deParams = decryptForPage(pageProps.value.params);
       }
     }
-
+    uni.hideLoading();
     pageReady.value = true;
   });
 </script>
