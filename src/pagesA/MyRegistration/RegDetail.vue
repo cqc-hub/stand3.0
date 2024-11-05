@@ -6,6 +6,18 @@
     }"
     class="reg-detail"
   >
+    <!-- #ifdef  MP-WEIXIN -->
+     <!-- {{ wxCrossProgramInfo||'' }} -->
+    <code-btn
+      v-if="wxCrossProgramInfo.bizTypeReg&&wxCrossProgramInfo.appId"
+      :appId="wxCrossProgramInfo.appId"
+      :bizType="wxCrossProgramInfo.bizTypeReg"
+      :extInfo="wxCrossProgramInfo.extInfo"
+      id="codePlugin"
+      style="position: absolute; top: -100vh"
+      :zIndex="99"
+    ></code-btn>
+    <!-- #endif -->
     <scroll-view scroll-y class="scroll-container">
       <view v-if="orderRegInfo.patientId" class="box">
         <view class="reg-header flex-between">
@@ -451,8 +463,12 @@
     return pageProps.value._type === 'waitReg';
   });
 
-  const { refPayList, changeRefPayList, wxPayMoneyMedicalPlugin } =
-    usePayPage();
+  const {
+    refPayList,
+    changeRefPayList,
+    wxPayMoneyMedicalPlugin,
+    wxCrossProgramInfo,
+  } = usePayPage();
 
   const qrCodeOpt = ref({
     // 二维码
@@ -820,12 +836,18 @@
     const isMedicalMode = _getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
     const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
+    const payList = [] as any;
 
     if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {
-      changeRefPayList([PayType.Medicare]);
+      payList.push(PayType.Medicare);
     } else {
-      changeRefPayList([PayType.Online]);
+      payList.push(PayType.Online);
     }
+
+    if (wxCrossProgramInfo.value?.bizTypeReg) {
+      payList.push(PayType.BizType);
+    }
+    changeRefPayList(payList);
 
     setTimeout(() => {
       refPay.value.show();
@@ -870,7 +892,12 @@
         }
 
         break;
-
+      case 'bizType':
+        const curPagesList = getCurrentPages();
+        const curPages: any = curPagesList[curPagesList.length - 1];
+        const { openFunc } = curPages.selectComponent('#codePlugin');
+        openFunc();
+        break;
       default:
         break;
     }

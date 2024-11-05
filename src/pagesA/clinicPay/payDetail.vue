@@ -638,6 +638,21 @@
         '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
         payArg
       );
+    } else if (item.key === 'bizType') {
+      const {
+        sConfig: { medicalMHelp },
+      } = globalGl;
+
+      const { wx } = medicalMHelp!;
+
+      const clinicBizType = wx?.crossProgramBizType?.clinic;
+      if (clinicBizType) {
+        const curPagesList = getCurrentPages();
+        const curPages: any = curPagesList[curPagesList.length - 1];
+
+        const { openFunc } = curPages.selectComponent('#codePlugin');
+        openFunc();
+      }
     }
   };
 
@@ -778,6 +793,9 @@
     const { costTypeCode } = props.value;
     const isMedicalMode = getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
 
     let flag = false;
 
@@ -791,8 +809,24 @@
     changeRefPayList([PayType.Online]);
 
     if ((costTypeCode === '2' || isDefaultMedical()) && flag) {
-      if (flag) {
-        changeRefPayList([PayType.Medicare]);
+      if (medicalMHelp) {
+        const { wx } = medicalMHelp;
+        // #ifdef  MP-WEIXIN
+        if (wx) {
+          const isBizTypeMedical =
+            wx?.crossProgramBizType?.clinic !== undefined;
+          if (flag && !isBizTypeMedical) {
+            changeRefPayList([PayType.Medicare]);
+          } else if (isBizTypeMedical) {
+            changeRefPayList([PayType.BizType]);
+          }
+        }
+        // #endif
+        // #ifdef MP-ALIPAY
+        if (flag) {
+          changeRefPayList([PayType.Medicare]);
+        }
+        // #endif
       }
     }
 
