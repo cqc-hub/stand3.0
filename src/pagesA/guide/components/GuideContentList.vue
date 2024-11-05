@@ -27,8 +27,9 @@
                 :class="{
                   'collapse-header-open': arrowBottom,
                   'collapse-header-close': !arrowBottom,
+                  'collapse-unfinished': isActive(item),
                 }"
-                class="pl24 pr24 pt32 pb32 bg-white animate__animated collapse-header"
+                class="pl24 pr24 pt32 pb32 bg-white animate__animated relative collapse-header"
               >
                 <view class="flex items-center">
                   <view class="f40">{{ item.title }}</view>
@@ -46,7 +47,7 @@
                     }"
                     class="iconfont right-icon color-888 f48"
                   >
-                    &#xe66b;
+                    &#xe6c8;
                   </view>
                 </view>
 
@@ -56,13 +57,14 @@
               </view>
             </template>
 
-            <view
-              :class="{
-                animate__fadeIn: arrowBottom,
-              }"
-              class="bg-white p24 pb32 animate__animated collapse-content"
-            >
-              233
+            <view class="bg-white p24 pb32 collapse-content">
+              <view
+                v-for="item in column"
+                :key="item.key"
+                class="flex justify-start"
+              >
+                <view></view>
+              </view>
               <view class="safe-height"></view>
               <view class="safe-height"></view>
               <view class="safe-height"></view>
@@ -86,16 +88,12 @@
       list: () => [
         {
           title: '诊区签到',
-          status: '0',
+          status: '1',
           tip: '缴费成功，请到分诊台签到取号',
         },
         {
           title: '诊区签到233',
           status: '1',
-        },
-        {
-          title: '诊区签到444',
-          status: '0',
         },
         {
           title: '诊区签到555',
@@ -122,24 +120,39 @@
           status: '0',
         },
         {
-          title: '诊区签到555',
-          status: '1',
-        },
-        {
           title: '诊区签到666',
           status: '0',
-        },
-        {
-          title: '诊区签到777',
-          status: '1',
         },
       ],
     }
   );
 
   const isActive = (item) => {
-    return item.status === '0';
+    return item.status === '1';
   };
+
+  const column = ref([
+    {
+      label: '院区',
+      key: 'hosName',
+    },
+    {
+      label: '科室号别',
+      key: 'deptName',
+    },
+    {
+      label: '预约时间',
+      key: '_orderTime',
+    },
+    {
+      label: '医生',
+      key: 'docName',
+    },
+    {
+      label: '就诊地点',
+      key: 'address',
+    },
+  ]);
 
   const collapseRef = ref(<any>'');
   watch(
@@ -177,6 +190,20 @@
 
   .collapse-header {
     border: 0.5px solid #e6e6e6;
+
+    &.collapse-unfinished {
+      background: linear-gradient(180deg, #e9f0ff, #ffffff);
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 24rpx;
+        right: 24rpx;
+        height: 2px;
+        background-color: var(--hr-brand-color-6);
+      }
+    }
 
     &.collapse-header-open {
       border-bottom: none;
