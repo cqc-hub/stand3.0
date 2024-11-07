@@ -57,13 +57,41 @@
               </view>
             </template>
 
-            <view class="bg-white p24 pb32 collapse-content">
+            <view class="bg-white p24 pb32 collapse-content f28 row">
               <view
-                v-for="item in column"
-                :key="item.key"
-                class="flex justify-start"
+                v-for="col in column"
+                :key="col.key"
+                :class="{
+                  'address-content': col.key === 'address',
+                }"
+                :style="{
+                  'background-image':
+                    (col.key === 'address' &&
+                      `url(${
+                        globalGl.BASE_IMG + 'stand3-guide-location-bg.png'
+                      })`) ||
+                    '',
+                }"
               >
-                <view></view>
+                <view v-if="item[col.key]" class="flex justify-start relative">
+                  <view class="color-888 mr16 text-no-wrap label">
+                    {{ col.label }}
+                  </view>
+                  <view
+                    class="g-break-word relative flex flex-between items-start"
+                  >
+                    <text class="">
+                      {{ item[col.key] || '' }}
+                    </text>
+
+                    <text
+                      v-if="col.key === 'address'"
+                      class="text-no-wrap color-blue mr12 location-tip"
+                    >
+                      带我去
+                    </text>
+                  </view>
+                </view>
               </view>
               <view class="safe-height"></view>
               <view class="safe-height"></view>
@@ -79,6 +107,7 @@
 <script lang="ts" setup>
   import { watch, ref } from 'vue';
   import TagStatus from './TagStatus.vue';
+  import globalGl from '@/config/global';
 
   const props = withDefaults(
     defineProps<{
@@ -90,10 +119,20 @@
           title: '诊区签到',
           status: '1',
           tip: '缴费成功，请到分诊台签到取号',
+          hosName: '朝晖院区',
+          deptName: '皮肤-脱发专科-专家号',
+          _orderTime: '2022-09-15  下午16:00  24号',
+          address:
+            '门诊三楼A区门诊三门门诊三楼A区门诊三楼A区门诊三门门诊三楼A区',
         },
         {
           title: '诊区签到233',
           status: '1',
+          hosName: '朝晖院区',
+          deptName:
+            '皮肤-脱发专科-专家号皮肤-脱发专科-专家号皮肤-脱发专科-专家号皮肤-脱发专科-专家号',
+          _orderTime:
+            '2022-09-152022-09-152022-09-152022-09-152022-09-152022-09-15  下午16:00  24号',
         },
         {
           title: '诊区签到555',
@@ -243,5 +282,28 @@
     &.arrowBottom {
       transform: rotate(-90deg);
     }
+  }
+
+  .row {
+    line-height: 72rpx;
+    .label {
+      width: 4em;
+    }
+
+    .address-content {
+      background-position: top right;
+      background-repeat: no-repeat;
+      background-size: auto 72rpx;
+    }
+  }
+
+  .location-bg {
+    height: 72rpx;
+    position: absolute;
+    right: 0;
+  }
+
+  .location-tip {
+    margin-left: 1.5em;
   }
 </style>
