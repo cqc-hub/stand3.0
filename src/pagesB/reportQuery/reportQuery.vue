@@ -80,12 +80,14 @@
                 v-for="(item, index) in pageList[tab.typeId]"
                 :key="index"
               >
+              <template v-for="(report,reportIndex) in item.reportHosNameResults" :key="`reportHosNameResults${reportIndex}`"> 
+
                 <view class="date" :class="{ dateFirst: index == 0 }">
                   <view class="iconfont date-icon">&#xe6c6;</view>
                   <view class="date-number">{{ item.date }}</view>
                   <text style="color: #e6e6e6">|</text>
                   <view class="address">
-                    {{ item.reportHosNameResults[0].hosName }}
+                    {{ report.hosName }}
                   </view>
                 </view>
                 <view
@@ -93,7 +95,7 @@
                   :class="{ advisoryItemFirst: index == 0 }"
                 >
                   <template
-                    v-for="(data, i) in item.reportHosNameResults[0].reportList"
+                    v-for="(data, i) in report.reportList"
                     :key="i"
                   >
                     <view @tap="goDetail(data)">
@@ -102,7 +104,7 @@
                   </template>
                 </view>
               </template>
-
+            </template>
               <view class="safe-height"></view>
               <view class="safe-height"></view>
             </view>
@@ -315,7 +317,7 @@
       if (page === 1) {
         willChangeList.length = 0;
       }
-
+      console.log('willChangeList', willChangeList);
       if (result && result.length) {
         if (willChangeList.length) {
           result.map((o) => {
@@ -343,6 +345,7 @@
                         });
                       }
                     } else {
+
                       willChangeList.push({
                         date,
                         reportHosNameResults: [
@@ -368,7 +371,6 @@
           });
         });
       }
-
       willChangeList.map(({ reportHosNameResults }) => {
         reportHosNameResults?.map(({ reportList }) => {
           if (reportList?.length) {
