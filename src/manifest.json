@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb03ff137dabedd6d",
+    "appid": "wxe26143481567cb97",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,7 +63,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -71,9 +76,22 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      },
+      "codePlugin": {
+        "version": "*",
+        "provider": "2021003163608051"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021002139602458"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -85,7 +103,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "宁波耳鼻喉医院",
+  "name": "台州市第一人民医院",
   "h5": {
     "router": {
       "base": "./"

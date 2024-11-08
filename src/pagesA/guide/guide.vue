@@ -23,9 +23,6 @@
         <Guide-Visit-List :list="visitList" />
       </scroll-view>
 
-      <!-- <view class="p32">
-        <Tag-Status text="已完成" />
-      </view> -->
       <view class="page-bg relative pl32 pr32">
         <view class="my-hide f24">占位</view>
         <Guide-Content-List />
