@@ -76,7 +76,12 @@
         {
           "path": "intelMedicalAssist/intelMedicalAssist",
           "style": {
-            "navigationBarTitleText": "智能助医"
+            "navigationBarTitleText": "智能助医",
+            "navigationStyle": "custom",
+              "mp-alipay": {
+                "transparentTitle": "always",
+                "titlePenetrate": "YES"
+              }
           }
         },
         {
@@ -305,8 +310,15 @@
         {
           "path": "MyRegistration/RegDetail",
           "style": {
-            "navigationBarTitleText": " "
+            "navigationBarTitleText": " ",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "code-btn": "plugin://crossProgramPlugins/code-pop-btn"
+              // #endif
+            }
+            
           }
+          
         },
         {
           "path": "medicalCardMan/addMedical",

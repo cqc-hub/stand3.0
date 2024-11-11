@@ -188,7 +188,8 @@ export enum PayType {
   Online = 0,
   Offline = 1,
   Medicare = 2,
-  Digital = 3,
+  BizType = 3,
+  Digital = 4,
 }
 
 type PayListItem = {
@@ -635,6 +636,7 @@ export const usePayPage = () => {
   const wxCrossProgramInfo = ref({
     appId: '',
     bizType: '',
+    bizTypeReg: '',
     extInfo: {},
   });
   // #ifdef  MP-WEIXIN
@@ -645,11 +647,13 @@ export const usePayPage = () => {
   if (medicalMHelp) {
     const { wx } = medicalMHelp;
     if (wx) {
-      const crossProgramBizType = wx?.crossProgramBizType;
-      if (crossProgramBizType) {
+      const clinicBizType = wx?.crossProgramBizType?.clinic || '';
+      const regBizType = wx?.crossProgramBizType?.reg || '';
+      if (clinicBizType || regBizType) {
         wxCrossProgramInfo.value = {
           appId: alipayAppid,
-          bizType: crossProgramBizType,
+          bizType: clinicBizType,
+          bizTypeReg: regBizType,
           extInfo: {},
         };
       }
@@ -1149,18 +1153,22 @@ export const usePayPage = () => {
     isMedicalMode: boolean,
     isDigitalPay: boolean,
     hasMedicalItem: boolean,
-    isMedicalSelf: boolean
+    isMedicalSelf: boolean,
+    isBizTypeMedical: boolean
   ) => {
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
-        if (isMedicalSelf) {
+        if (isMedicalSelf&&!isBizTypeMedical) {
           payTypeList.push(PayType.Medicare);
         }
       }
     }
     if (isDigitalPay) {
       payTypeList.push(PayType.Digital);
+    }
+    if (isBizTypeMedical) {
+      payTypeList.push(PayType.BizType);
     }
     return payTypeList;
   };
@@ -1171,8 +1179,10 @@ export const usePayPage = () => {
     const hasMedicalItem = selUnPayList.value.some(
       (o) => o.costTypeCode === '2'
     );
-    const isOpenFamilyMedical = getMedicalConfigInfo()?.isFamilyPayment === '1';
-
+    const medicalMHelp = getMedicalConfigInfo() as any;
+    const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
+    const isBizTypeMedical =
+      medicalMHelp?.crossProgramBizType?.clinic !== undefined;
     const payTypeList = determinePayType(
       isMedicalMode,
       isDigitalPay,
@@ -1182,7 +1192,8 @@ export const usePayPage = () => {
           pageProps.value.deParams?.cardNumber ||
             gStores.userStore.patChoose.cardNumber,
           pageProps.value.params
-        ))
+        )),
+      isBizTypeMedical
     );
 
     let additionalList: any[] = [];
@@ -1190,7 +1201,7 @@ export const usePayPage = () => {
       additionalList.push({
         label: '医保账户支付',
         key: 'online',
-        sort: 1,
+        sort: 3,
       });
     }
 
@@ -1200,6 +1211,13 @@ export const usePayPage = () => {
   };
 
   const getPayListLabel = () => {
+    const {
+      sConfig: { medicalMHelp },
+      systemConfig: { isvAlipayAppid },
+    } = globalGl;
+
+    const { wx } = medicalMHelp!;
+
     // 定义支付方式配置
     const payMethodConfig = {
       labelPay: '自费支付',
@@ -1207,15 +1225,21 @@ export const usePayPage = () => {
     };
 
     // #ifdef MP-WEIXIN
+    payMethodConfig.medicalPay = '微信医保支付';
+    if (wx) {
+      const { medicalNation, medicalPlugin } = wx!;
+
+      if (medicalPlugin === '1') {
+        payMethodConfig.medicalPay = '支付宝医保支付';
+      }
+    }
     payMethodConfig.labelPay = '微信自费支付';
-    wxCrossProgramInfo.value.bizType &&
-      (payMethodConfig.medicalPay = '医保电子凭证结算');
     // #endif
 
     // #ifdef MP-ALIPAY
     payMethodConfig.labelPay = '支付宝自费支付';
     if (getIsFamilyPayment()) {
-      payMethodConfig.medicalPay = '医保支付(支持亲情付)';
+      payMethodConfig.medicalPay = '支付宝医保支付(支持亲情付)';
     }
     // #endif
 
@@ -1239,15 +1263,22 @@ export const usePayPage = () => {
         key: 'online',
         sort: 2,
       },
+      // #ifdef MP-WEIXIN
+      {
+        label: '支付宝医保支付',
+        key: 'bizType',
+        sort: 4,
+      },
+      // #endif
       {
         label: '数字人民币支付',
         key: 'digital',
-        sort: 3,
+        sort: 5,
       },
       {
         label: medicalPay,
         key: 'medicare',
-        sort: 4,
+        sort: 3,
       },
     ] as const;
 
@@ -1261,6 +1292,11 @@ export const usePayPage = () => {
         case PayType.Medicare:
           rList.push('medicare');
           break;
+        // #ifdef MP-WEIXIN
+        case PayType.BizType:
+          rList.push('bizType');
+          break;
+        // #endif
         case PayType.Digital:
           rList.push('digital');
           break;
@@ -1332,6 +1368,22 @@ export const usePayPage = () => {
         '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
         payArg
       );
+    } else if (item.key === 'bizType') {
+      
+      const {
+        sConfig: { medicalMHelp },
+      } = globalGl;
+
+      const { wx } = medicalMHelp!;
+
+      const clinicBizType = wx?.crossProgramBizType?.clinic;
+      if (clinicBizType) {
+        const curPagesList = getCurrentPages();
+        const curPages: any = curPagesList[curPagesList.length - 1];
+
+        const { openFunc } = curPages.selectComponent('#codePlugin');
+        openFunc();
+      }
     }
   };
 
@@ -1598,17 +1650,9 @@ export const usePayPage = () => {
 
     if (wx) {
       const { medicalNation, medicalPlugin } = wx!;
-      const crossProgramBizType = wx?.crossProgramBizType;
 
       if (medicalPlugin === '1') {
-        if (crossProgramBizType) {
-          const curPagesList = getCurrentPages();
-          const curPages: any = curPagesList[curPagesList.length - 1];
-          const { openFunc } = curPages.selectComponent('#codePlugin');
-          openFunc();
-        } else {
-          wxPryMoneyMedicalDialog.value.show();
-        }
+        wxPryMoneyMedicalDialog.value.show();
       } else if (medicalNation) {
         const authorize = await getQxMedicalNation();
         callback(authorize);

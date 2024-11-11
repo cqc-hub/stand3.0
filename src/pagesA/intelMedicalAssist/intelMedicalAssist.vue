@@ -1,5 +1,5 @@
 <template>
-  <view class="topnav-container bg-white">
+  <view class="topnav-container ">
     <view class="smartChatRoom">
       <view class="smartChatRomm-content">
         <!-- hearder区域 -->
@@ -8,8 +8,12 @@
           :headerConfig="styleConfig"
         />
         <!-- content区域 -->
+        <intalMedicalContent/>
         <!-- fotter区域 -->
-        <intalMedicalFooter :guessServerList="guessServerList" :headerConfig="styleConfig" />
+        <intalMedicalFooter
+          :guessServerList="guessServerList"
+          :headerConfig="styleConfig"
+        />
       </view>
     </view>
   </view>
@@ -19,7 +23,10 @@
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
+  import intalMedicalContent from './compontents/intalMedicalContent.vue';
   import { type StyleConfigType } from './utils/types';
+  import { debounce } from '@/utils';
+
   const animationData = ref<UniNamespace.Animation>();
   const msg = ref<string>();
   const msgLoad = ref<boolean>(false);
@@ -134,13 +141,17 @@
   ]);
   const sendMsg = () => {};
   const onBlur = () => {};
-  onPageScroll((e) => {
-    styleConfig.value.transition = true;
+  let scrollChangeView = (e) => {
     if (e.scrollTop <= 100) {
       styleConfig.value.showHeader = true;
     } else {
       styleConfig.value.showHeader = false;
     }
+  };
+  scrollChangeView = debounce(scrollChangeView, 500);
+  onPageScroll((e) => {
+    styleConfig.value.transition = true;
+    scrollChangeView(e);
   });
 
   animationData.value = uni.createAnimation({});
@@ -158,9 +169,10 @@
       color: #333;
       $NavHeight: 116upx;
       width: 100%;
-      background-color: #ffffff;
+      
       .smartChatRomm-content {
-        height: 200vh;
+        background-color:#fff;
+        min-height: 100vh;
         position: relative;
         top: -12upx;
         // display: flex;
