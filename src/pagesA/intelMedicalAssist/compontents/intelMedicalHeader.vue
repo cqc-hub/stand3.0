@@ -6,6 +6,9 @@
       transition: headerConfig?.transition,
     }"
   >
+  <view class="navBar">
+    <GCustomNavbar/>
+  </view>
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
       class="w-full bg-img relative"
@@ -18,7 +21,7 @@
     />
     <view class="header-hello">
       <view class="en f32 pb24">
-        {{ `Hi,${gStores.userStore.patChoose.patientName || '用户'}` }}
+        {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }}
       </view>
       <view class="cn f26">智能医助为您服务~</view>
     </view>
@@ -62,6 +65,9 @@
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
+
+  import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue'
+  
   const gStores = new GStores();
   const props = defineProps<{
     guessAskList: any[];
@@ -84,29 +90,29 @@
 </script>
 <style lang="scss" scoped>
   .simple-header {
-    height: 430rpx !important;
+    height: 590rpx !important;
     // .wihite-mask {
     //   top: 310rpx !important;
     //   height: 130rpx !important;
     // }
     .bg-img {
-      height: 410rpx !important;
+      height: 570rpx !important;
     }
     .person-img {
-      top: 20rpx !important ;
+      top: 180rpx !important ;
       width: 140rpx !important;
       height: 300rpx !important;
       left: 100% !important;
       transform: translateX(-150%) !important;
     }
     .header-hello {
-      top: 20rpx !important;
+      top: 180rpx !important;
     }
     .person-say {
       display: none;
     }
     .guess {
-      top: 160rpx !important;
+      top: 320rpx !important;
     }
     .simple-mess {
       .guess-content {
@@ -132,10 +138,17 @@
     //   left: 0;
     //   height: 140rpx;
     // }
+    .navBar{
+      position: fixed;
+      top:0;
+      height: 160rpx;
+      width: 100vh;
+      z-index: 5;
+    }
     .bg-img {
       width: 100vw;
       position: fixed;
-      height: 640rpx;
+      height: 800rpx;
     }
     .person-img {
       width: 240rpx;
@@ -146,12 +159,12 @@
       z-index: 2;
       left: 50%;
       transform: translateX(-50%);
-      top: 20rpx;
+      top: 180rpx;
     }
     .header-hello {
       position: fixed;
       left: 50rpx;
-      top: 50rpx;
+      top: 210rpx;
       .en {
         text-align: left;
         color: #00194c;
@@ -171,7 +184,7 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      top: 250rpx;
+      top: 410rpx;
       z-index: 3;
       color: #000;
       //   font-weight: 600;
@@ -186,7 +199,7 @@
         }
       }
       .key-in {
-        height: 1.1em;
+        height: 1.2em;
         overflow: hidden;
         white-space: nowrap;
         width: 17em;
@@ -198,11 +211,13 @@
     .guess {
       border-top-right-radius: 24rpx;
       border-top-left-radius: 24rpx;
+      // border-bottom-left-radius: 24rpx;
       backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255,0.2);
       position: fixed;
       z-index: 2;
       height: 270rpx;
-      top: 390rpx;
+      top: 550rpx;
       width: 100vw;
       .guess-title {
       }

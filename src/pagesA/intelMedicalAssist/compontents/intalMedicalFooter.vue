@@ -8,6 +8,7 @@
   >
     <view
       class="guess-server"
+      :style="{'bottom':guessServerBottom}"
     >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
@@ -42,7 +43,7 @@
           <view class="border">
             <input
               v-model="msg"
-              class="dh-input"
+              class="dh-input  f28"
               type="textarea"
               @confirm="sendMsg"
               :disabled="msgLoad"
@@ -68,7 +69,7 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, getCurrentInstance,onMounted} from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
 
@@ -80,6 +81,9 @@
     guessServerList: any[];
     headerConfig: StyleConfigType;
   }>();
+  const inst = getCurrentInstance();
+  const guessServerBottom=ref('')
+
   const serverArray = computed(() => {
     if (props.headerConfig.showHeader) {
       return props.guessServerList.slice(0, 9);
@@ -89,8 +93,21 @@
   });
   const sendMsg = () => {};
   const onBlur = () => {};
-
   animationData.value = uni.createAnimation({});
+
+  onMounted(()=>{
+    const query = uni.createSelectorQuery().in(inst);
+    query
+    .selectAll(`.guess-server`)
+    .boundingClientRect((data: any) => {
+      if (data) {
+        console.log('data',data)
+         guessServerBottom.value = `calc(100vh - 800rpx - ${data[0].height}px)`;
+      }
+    })
+    .exec();
+  })
+
 </script>
 <style lang="scss" scoped>
   .transition {
@@ -102,14 +119,16 @@
   .stick-bottom {
     transition: 0.5s;
     .guess-server {
-        transition: 0.5s;
-      position: fixed !important;
-      bottom: 200rpx !important;
+      transition: 0.5s;
+      bottom: 140rpx !important;
+      z-index:3
     }
   }
   .footer-area {
     // z-index: 4;
     .guess-server {
+      position: fixed;
+      bottom:calc( 100vh - 800rpx - 360rpx);
       .guess-title {
         text-align: left;
         color: #444444;
@@ -178,6 +197,7 @@
           position: absolute;
           width: 500rpx;
           height: 65rpx;
+          margin-top: 4rpx;
         }
       }
 
@@ -227,7 +247,7 @@
     width: 500rpx;
     height: 65rpx;
     border-radius: 10rpx;
-    // padding-left: 15rpx;
+    padding-left: 15rpx;
     background-color: inherit;
   }
   .my-neirong-sm {
@@ -262,7 +282,7 @@
     position: fixed;
     bottom: 0;
     width: 100vw;
-    height: 150rpx;
+    height: 130rpx;
     background: radial-gradient(#d1fffc, #b3e2ff);
     filter: blur(20px);
   }
