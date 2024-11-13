@@ -1,5 +1,6 @@
-export type StyleConfigType={
-    transition: boolean;
-      showHeader: boolean;
-      isMessage: boolean;
-}
+export type StyleConfigType = {
+  transition: boolean;
+  showHeader: boolean;
+  isMessage: boolean;
+  simpleHeadInit?: boolean;
+};

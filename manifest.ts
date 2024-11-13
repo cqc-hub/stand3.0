@@ -126,7 +126,7 @@ const {
   toutiaoAppid,
 } = sysConfig;
 
-const { medicalMHelp, isOpenAlipayZndz } = sConfig;
+const { medicalMHelp, isOpenAlipayZndz, isOpenWechatSI } = sConfig;
 
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
@@ -159,6 +159,13 @@ if (isOpenAlipayZndz) {
   };
 }
 
+if (isOpenWechatSI) {
+  wxPlugin.SIPlugin = {
+    version: '0.3.6',
+    provider: 'wx069ba97219f66d99',
+  };
+}
+
 if (medicalMHelp) {
   const { alipay, wx } = medicalMHelp;
 
@@ -175,7 +182,7 @@ if (medicalMHelp) {
     }
   }
   if (wx) {
-    const crossProgramBizType =wx?.crossProgramBizType;
+    const crossProgramBizType = wx?.crossProgramBizType;
     if (crossProgramBizType) {
       wxPlugin.crossProgramPlugins = {
         version: 'latest',

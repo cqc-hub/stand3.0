@@ -4,14 +4,16 @@
     :class="{
       'simple-header': !headerConfig?.showHeader,
       transition: headerConfig?.transition,
+      'simple-mess': headerConfig?.isMessage
     }"
   >
-  <view class="navBar">
-    <GCustomNavbar/>
-  </view>
+    <view class="navBar">
+      <GCustomNavbar :title="'智能助医'" />
+    </view>
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
       class="w-full bg-img relative"
+      id="bg-img"
     />
     <!-- <view class="wihite-mask"></view> -->
 
@@ -30,7 +32,7 @@
         <text>您可以说出您的问题，我将为您解答哦</text>
       </view>
     </view>
-    <view class="guess" :class="{ 'simple-mess': headerConfig?.isMessage }">
+    <view class="guess" >
       <view class="guess-title pt24 pb12 pl24 f26">猜你想问的</view>
       <view class="guess-content">
         <view
@@ -40,14 +42,16 @@
         >
           <view class="scroll-row">
             <view
-              class="row-item  f28"
+              @click="handleClickGuess(item)"
+              class="row-item f28"
               v-for="(item, index) in askItem"
               :key="item.value + index + 'scroll-row'"
             >
               {{ item.label }}
             </view>
             <view
-              class="row-item  f28"
+             @click="handleClickGuess(item)"
+              class="row-item f28"
               v-for="(item, index) in askItem"
               :key="item.value + index + 'scroll-row2'"
             >
@@ -56,23 +60,26 @@
           </view>
         </view>
       </view>
+
     </view>
   </view>
 </template>
 <script setup lang="ts">
-  import { computed, } from 'vue';
+  import { computed } from 'vue';
   import { GStores } from '@/utils';
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
 
-  import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue'
-  
+  import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
+
   const gStores = new GStores();
   const props = defineProps<{
     guessAskList: any[];
     headerConfig: StyleConfigType;
   }>();
+  const emits = defineEmits(['click-guess']);
+
   const askArray = computed(() => {
     if (props.guessAskList && props.guessAskList.length) {
       return [
@@ -87,6 +94,9 @@
       return [[], []];
     }
   });
+  const handleClickGuess = (guessItem) => {
+    emits('click-guess', guessItem);
+  };
 </script>
 <style lang="scss" scoped>
   .simple-header {
@@ -114,15 +124,40 @@
     .guess {
       top: 320rpx !important;
     }
-    .simple-mess {
+    
+  }
+  .simple-mess {
+    height: 590rpx !important;
+    // .wihite-mask {
+    //   top: 310rpx !important;
+    //   height: 130rpx !important;
+    // }
+    .bg-img {
+      height: 570rpx !important;
+    }
+    .person-img {
+      top: 180rpx !important ;
+      width: 140rpx !important;
+      height: 300rpx !important;
+      left: 100% !important;
+      transform: translateX(-150%) !important;
+    }
+    .header-hello {
+      top: 180rpx !important;
+    }
+    .person-say {
+      display: none;
+    }
+    .guess {
+      top: 320rpx !important;
+    }
       .guess-content {
-        display: none;
+        display: none !important;
       }
       .guess-title {
-        display: none;
+        display: none !important;
       }
     }
-  }
   .header-area {
     top: 0;
     left: 0;
@@ -138,9 +173,9 @@
     //   left: 0;
     //   height: 140rpx;
     // }
-    .navBar{
+    .navBar {
       position: fixed;
-      top:0;
+      top: 0;
       height: 160rpx;
       width: 100vh;
       z-index: 5;
@@ -148,7 +183,7 @@
     .bg-img {
       width: 100vw;
       position: fixed;
-      height: 800rpx;
+      height: 790rpx;
     }
     .person-img {
       width: 240rpx;
@@ -213,9 +248,9 @@
       border-top-left-radius: 24rpx;
       // border-bottom-left-radius: 24rpx;
       backdrop-filter: blur(10px);
-      background-color: rgba(255, 255, 255,0.2);
+      background-color: rgba(255, 255, 255, 0.2);
       position: fixed;
-      z-index: 2;
+      z-index: 3;
       height: 270rpx;
       top: 550rpx;
       width: 100vw;
@@ -242,8 +277,8 @@
           }
 
           .row-item {
-            border: 2rpx solid rgba(255,255,255,0.50);
-            background: rgba(255,255,255,0.20);
+            border: 2rpx solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
             display: inline-block;
             margin: 15rpx;
             padding: 10rpx 20rpx;

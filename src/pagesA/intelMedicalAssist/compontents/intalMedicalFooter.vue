@@ -6,10 +6,7 @@
       'stick-bottom': !headerConfig?.showHeader,
     }"
   >
-    <view
-      class="guess-server"
-      :style="{'bottom':guessServerBottom}"
-    >
+    <view class="guess-server" :style="{ bottom: guessServerBottom }">
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
         <view class="guess-grid">
@@ -17,6 +14,7 @@
             class="grid-item"
             v-for="(item, index) in serverArray"
             :key="item.icon + index"
+            @click="handleClickServer(item)"
           >
             <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
             <view class="label f28">{{ item.label }}</view>
@@ -26,24 +24,40 @@
     </view>
     <view class="bottom-bg"></view>
     <view
+      class="bottom-bg-white"
+      :style="{ height: `${whiteAreaHeight}` }"
+    ></view>
+    <view
       class="flex-column-center footer-area-bottom bg-whit pt32"
       :animation="animationData"
     >
       <view class="bottom-dh-char flex-row-around">
-        <view class="input-send left" :disabled="msgLoad" @click="sendMsg">
+        <view
+          class="input-send left"
+          :disabled="msgLoad"
+          @click="changeVoiceType"
+        >
           <view class="circle">
             <img
+              v-if="!isVoice"
               class="bottom-icon"
               :src="globalGl.BASE_IMG + 'intelMedicalAssist_voice.png'"
               alt=""
             />
+            <!-- 未提供键盘icon -->
+            <img
+              v-else
+              class="bottom-icon"
+              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+              alt=""
+            />
           </view>
         </view>
-        <view class="bottom-dh-content">
+        <view class="bottom-dh-content" v-if="!isVoice">
           <view class="border">
             <input
               v-model="msg"
-              class="dh-input  f28"
+              class="dh-input f28"
               type="textarea"
               @confirm="sendMsg"
               :disabled="msgLoad"
@@ -53,6 +67,18 @@
               :focus="focus"
               @blur="onBlur"
             />
+          </view>
+        </view>
+        <view
+          class="bottom-dh-content"
+          v-else
+          @longpress="handleVoice"
+          @touchstart="touchStart"
+          @touchmove="touchMove"
+          @touchend="endRecord"
+        >
+          <view class="border">
+            <view class="dh-input f28 voice">按住说话</view>
           </view>
         </view>
         <view class="input-send right" :disabled="msgLoad" @click="sendMsg">
@@ -69,20 +95,51 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref, computed, getCurrentInstance,onMounted} from 'vue';
+  import {
+    ref,
+    computed,
+    getCurrentInstance,
+    onMounted,
+    watch,
+    nextTick,
+  } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
+  import { debounce } from '@/utils';
 
   const animationData = ref<UniNamespace.Animation>();
   const msg = ref<string>();
   const msgLoad = ref<boolean>(false);
   const focus = ref<boolean>(false);
+  const isVoice = ref<boolean>(false);
+  const voiceTouchData = ref<any>({
+    clientY: 0,
+    isMoveUp: false,
+  });
+
   const props = defineProps<{
     guessServerList: any[];
     headerConfig: StyleConfigType;
   }>();
+  const emits = defineEmits(['on-blur', 'send-msg', 'click-server']);
   const inst = getCurrentInstance();
-  const guessServerBottom=ref('')
+  const guessServerBottom = ref('');
+  const query = uni.createSelectorQuery().in(inst);
+  animationData.value = uni.createAnimation({});
+
+  watch(
+    () => props.headerConfig.showHeader,
+    (v) => {
+      getGuessServerBottom();
+    }
+  );
+  const whiteAreaHeight = computed(() => {
+    if (props.headerConfig.showHeader) {
+      return `calc(100vh - 800rpx)`;
+    } else {
+      return `400rpx`;
+    }
+  });
 
   const serverArray = computed(() => {
     if (props.headerConfig.showHeader) {
@@ -91,23 +148,64 @@
       return props.guessServerList.slice(0, 6);
     }
   });
-  const sendMsg = () => {};
-  const onBlur = () => {};
-  animationData.value = uni.createAnimation({});
 
-  onMounted(()=>{
-    const query = uni.createSelectorQuery().in(inst);
-    query
-    .selectAll(`.guess-server`)
-    .boundingClientRect((data: any) => {
-      if (data) {
-        console.log('data',data)
-         guessServerBottom.value = `calc(100vh - 800rpx - ${data[0].height}px)`;
-      }
-    })
-    .exec();
-  })
+  const sendMsg = (e) => {
+    emits('send-msg', e.detail.value);
+  };
+  const onBlur = (e) => {
+    emits('on-blur', e.detail.value);
+  };
+  const handleClickServer = (serverItem) => {
+    emits('click-server', serverItem);
+  };
+  const changeVoiceType = () => {
+    isVoice.value = !isVoice.value;
+  };
+  const handleVoice = (...args) => {
+    console.log('handleVoice', args);
+  };
+  const cancleVoice = () => {};
+  const touchStart = (e) => {
+    console.log('touchStart', e);
+    voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
+  };
+  let touchMove = (e) => {
+    let touchData = e.touches[0]; //滑动过程中，手指滑动的坐标信息 返回的是Objcet对象
+    let moveY = touchData.clientY - voiceTouchData.value.clientY;
+    if (moveY < -50) {
+      // 向上滑动
+      voiceTouchData.value.isMoveUp = false;
+    } else {
+      voiceTouchData.value.isMoveUp = true;
+    }
+    console.log('touchMove', voiceTouchData.value);
+  };
+  touchMove=debounce(touchMove,500,false)
+  const endRecord = (e) => {
+    if (voiceTouchData.value.isMoveUp) {
+      cancleVoice();
+      voiceTouchData.value = {
+        clientY: 0,
+        isMoveUp: false,
+      };
+    }
+    console.log('endRecord', voiceTouchData.value);
+  };
 
+  const getGuessServerBottom = () => {
+    setTimeout(() => {
+      query
+        .selectAll(`.guess-server`)
+        .boundingClientRect((data: any) => {
+          guessServerBottom.value = `calc(100vh - 800rpx - ${data[0].height}px)`;
+        })
+        .exec();
+    }, 0);
+  };
+
+  onMounted(() => {
+    getGuessServerBottom();
+  });
 </script>
 <style lang="scss" scoped>
   .transition {
@@ -115,20 +213,23 @@
     .guess-server {
       transition: 0.5s;
     }
+    .bottom-bg-white {
+      transition: 0.5s;
+    }
   }
   .stick-bottom {
-    transition: 0.5s;
     .guess-server {
-      transition: 0.5s;
-      bottom: 140rpx !important;
-      z-index:3
+      height: 270rpx !important;
+      bottom: 130rpx !important;
+      z-index: 4;
     }
   }
   .footer-area {
     // z-index: 4;
     .guess-server {
+      z-index: 4;
       position: fixed;
-      bottom:calc( 100vh - 800rpx - 360rpx);
+      bottom: calc(100vh - 800rpx - 360rpx);
       .guess-title {
         text-align: left;
         color: #444444;
@@ -250,6 +351,13 @@
     padding-left: 15rpx;
     background-color: inherit;
   }
+  .voice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    padding: 0;
+  }
   .my-neirong-sm {
     color: #616161;
   }
@@ -285,5 +393,14 @@
     height: 130rpx;
     background: radial-gradient(#d1fffc, #b3e2ff);
     filter: blur(20px);
+    z-index: 2;
+  }
+  .bottom-bg-white {
+    background-color: #fff;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 450px;
   }
 </style>

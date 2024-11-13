@@ -54,6 +54,8 @@ interface ISConfig {
   //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
   isOpenAlipayZndz?: boolean;
   //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
+  //是否开启微信同声传译插件 https://mp.weixin.qq.com/wxopen/pluginbasicprofile?action=intro&appid=wx069ba97219f66d99&token=699624033&lang=zh_CN
+  isOpenWechatSI?: boolean;
 
   // 门诊缴费 ----------------------------
   // 医保(各个平台之间最多存在一种医保模式)? 如果是 his 结算模式直接维护后台配置即可
@@ -208,6 +210,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001052: {
     isDrugDelivery: '1',
+    isOpenWechatSI:true,
     medicalMHelp: {
       wx: {
         crossProgramBizType:{
@@ -381,6 +384,12 @@ const scJson: Record<string, ISConfig> = {
           clinic:'6f8FEzfB6q',
         } ,
         medicalPlugin: '1',
+      },
+      alipay: {
+        medicalPlugin: {
+          orgId: { 12930: 'H33060200131' },
+          cardType: '01',
+        },
       },
     },
 
