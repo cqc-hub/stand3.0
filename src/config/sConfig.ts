@@ -415,6 +415,15 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
+
+  /**
+   * 天水市第一人民医院
+   */
+  1001074:{
+    login: {
+      isAliAuthBase: '1'
+    }
+  }
 };
 
 const getSConfig = (sysCode: string) => {
