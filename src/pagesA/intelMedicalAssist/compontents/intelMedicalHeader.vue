@@ -4,7 +4,7 @@
     :class="{
       'simple-header': !headerConfig?.showHeader,
       transition: headerConfig?.transition,
-      'simple-mess': headerConfig?.isMessage
+      'simple-mess': headerConfig?.isMessage,
     }"
   >
     <view class="navBar">
@@ -16,11 +16,13 @@
       id="bg-img"
     />
     <!-- <view class="wihite-mask"></view> -->
+    <view class="person-img relative">
+      <img
+        :src="globalGl.BASE_IMG + 'intelMedicalAssist_person.png'"
+        class="w-full"
+      />
+    </view>
 
-    <img
-      :src="globalGl.BASE_IMG + 'intelMedicalAssist_person.png'"
-      class="w-full person-img relative"
-    />
     <view class="header-hello">
       <view class="en f32 pb24">
         {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }}
@@ -32,7 +34,8 @@
         <text>您可以说出您的问题，我将为您解答哦</text>
       </view>
     </view>
-    <view class="guess" >
+    <view class="guess">
+      <view class="f26 sroll-title">下拉查看历史消息</view>
       <view class="guess-title pt24 pb12 pl24 f26">猜你想问的</view>
       <view class="guess-content">
         <view
@@ -50,7 +53,7 @@
               {{ item.label }}
             </view>
             <view
-             @click="handleClickGuess(item)"
+              @click="handleClickGuess(item)"
               class="row-item f28"
               v-for="(item, index) in askItem"
               :key="item.value + index + 'scroll-row2'"
@@ -60,7 +63,6 @@
           </view>
         </view>
       </view>
-
     </view>
   </view>
 </template>
@@ -113,7 +115,12 @@
       width: 140rpx !important;
       height: 300rpx !important;
       left: 100% !important;
+      overflow: hidden;
       transform: translateX(-150%) !important;
+      image {
+        width: 140rpx !important;
+        height: 300rpx !important;
+      }
     }
     .header-hello {
       top: 180rpx !important;
@@ -124,23 +131,27 @@
     .guess {
       top: 320rpx !important;
     }
-    
   }
   .simple-mess {
-    height: 590rpx !important;
+    height: 390rpx !important;
     // .wihite-mask {
     //   top: 310rpx !important;
     //   height: 130rpx !important;
     // }
     .bg-img {
-      height: 570rpx !important;
+      height: 370rpx !important;
     }
     .person-img {
       top: 180rpx !important ;
       width: 140rpx !important;
-      height: 300rpx !important;
+      height: 200rpx !important;
+      overflow: hidden;
       left: 100% !important;
       transform: translateX(-150%) !important;
+      image {
+        width: 140rpx !important;
+        height: 300rpx !important;
+      }
     }
     .header-hello {
       top: 180rpx !important;
@@ -150,14 +161,21 @@
     }
     .guess {
       top: 320rpx !important;
-    }
-      .guess-content {
-        display: none !important;
+      height: 70rpx !important;
+      .sroll-title {
+        display: flex!important;
+        font-weight: 600;
+    line-height: 50rpx;
+    justify-content: center;
       }
-      .guess-title {
-        display: none !important;
-      }
     }
+    .guess-content {
+      display: none !important;
+    }
+    .guess-title {
+      display: none !important;
+    }
+  }
   .header-area {
     top: 0;
     left: 0;
@@ -195,6 +213,10 @@
       left: 50%;
       transform: translateX(-50%);
       top: 180rpx;
+      image {
+        width: 240rpx;
+        height: 500rpx;
+      }
     }
     .header-hello {
       position: fixed;
@@ -254,6 +276,9 @@
       height: 270rpx;
       top: 550rpx;
       width: 100vw;
+      .sroll-title {
+        display: none;
+      }
       .guess-title {
       }
       .guess-content {
@@ -312,6 +337,9 @@
     }
     .person-img {
       transition: 0.5s;
+      image{
+        transition: 0.5s;
+      }
     }
     .header-hello {
       transition: 0.5s;

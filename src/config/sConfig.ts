@@ -400,6 +400,7 @@ const scJson: Record<string, ISConfig> = {
    * 嘉兴第二互联网医院
    */
   1001038: {
+    isMessageBtnShowNew: '1',
     isOpenHelpOld: '1',
     isOpenHomeTabBarNetWorkBtn: '1',
     medicalMHelp: {

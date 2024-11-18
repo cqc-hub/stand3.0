@@ -175,7 +175,6 @@
         ];
 
         resultHos.value.tab = tabTemp.filter((o) => tabs.includes(o.value));
-        console.log(resultHos.value.tab, '2334')
       }
     }
 

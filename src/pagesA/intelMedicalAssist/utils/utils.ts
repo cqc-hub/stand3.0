@@ -3,12 +3,28 @@ import { type StyleConfigType } from './types';
 const msg = ref<string>();
 const msgLoad = ref<boolean>(false);
 const focus = ref<boolean>(false);
+//普通首页
+// {
+//   transition: true,
+//   showHeader: true,
+//   isMessage: false,
+//   simpleHeadInit:false,
+// }
+//通知
+// {
+//   transition: false,
+//   showHeader: false,
+//   isMessage: true,
+//   simpleHeadInit:false,
+// }
 export const styleConfig = ref<StyleConfigType>({
-  transition: false,
-  showHeader: false,
-  isMessage: true,
-  simpleHeadInit:false,
+  transition: true,//初始过渡效果
+  showHeader: true,//展示首页
+  isMessage: false,//通知效果
+  simpleHeadInit:false,//初始服务居中
 });
+
+
 export  const guessAskList = ref([
   {
     label: '不知道挂什么号',
