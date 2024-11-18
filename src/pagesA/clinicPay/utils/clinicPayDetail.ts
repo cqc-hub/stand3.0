@@ -1159,17 +1159,18 @@ export const usePayPage = () => {
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
-        if (isMedicalSelf&&!isBizTypeMedical) {
+        if (isMedicalSelf) {
           payTypeList.push(PayType.Medicare);
+        }
+        if (isBizTypeMedical) {
+          payTypeList.push(PayType.BizType);
         }
       }
     }
     if (isDigitalPay) {
       payTypeList.push(PayType.Digital);
     }
-    if (isBizTypeMedical) {
-      payTypeList.push(PayType.BizType);
-    }
+  
     return payTypeList;
   };
 
