@@ -9,14 +9,16 @@
             is-custom
           >
             <template v-if="pageProps.params" #suffix>
-              <g-login @handler-next="goAddressList">
-                <view
-                  @click="goAddressList"
-                  class="book-address pl24 flex items-center"
-                >
-                  <view class="color-888">地址薄</view>
-                </view>
-              </g-login>
+              <div class="flex relative">
+                <g-login @handler-next="goAddressList" class="">
+                  <view
+                    @click="goAddressList"
+                    class="book-address pl24 flex items-center"
+                  >
+                    <view class="color-888">地址薄</view>
+                  </view>
+                </g-login>
+              </div>
             </template>
           </Address-Box>
         </view>
@@ -416,7 +418,6 @@
   }
 
   .book-address {
-    min-height: 3rem;
     font-weight: 500;
     position: relative;
     &::after {
@@ -464,4 +465,5 @@
 
     transform: translateX(20rpx);
   }
+
 </style>

@@ -76,7 +76,7 @@
         :class="{
           'btn-disabled': !selList.length,
         }"
-        @click="refAddDialog.show"
+        @click="showDialog"
         class="btn btn-primary flex1"
       >
         选择取药方式
@@ -86,9 +86,10 @@
     <g-message />
 
     <!-- :sel-list="drayWaySelList" -->
-    <Sel-Way-Popup
+    <sel-way-popup
       :sel-list="[]"
       :opt-list="selListOption"
+      v-model:show="isShowDialog"
       @item-click="wayClick"
       ref="refAddDialog"
     />
@@ -114,7 +115,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, nextTick, computed } from 'vue';
+  import { onMounted, ref, nextTick, computed, getCurrentInstance } from 'vue';
   import { onLoad, onShow, onHide } from '@dcloudio/uni-app';
 
   import { useCacheStore } from '@/stores';
@@ -141,7 +142,7 @@
   import api from '@/service/api';
 
   import HtlpList from './components/HtlpList.vue';
-  import SelWayPopup from './components/SelWayPopup.vue';
+  import selWayPopup from './components/SelWayPopup.vue';
   import { beforeEach } from '@/router';
   import globalGl from '@/config/global';
 
@@ -174,6 +175,7 @@
   const fgTitle54 = ref('');
   const isFgShow54 = ref(false);
   let rPatientId = '';
+  const ctx = getCurrentInstance();
 
   const waitSelList = ref<IWaitListItem[]>([]);
   const selList = ref<IWaitListItem[]>([]);
@@ -485,6 +487,11 @@
         tabCurrent.value = 1;
       },
     });
+  };
+
+  const isShowDialog = ref(false);
+  const showDialog = () => {
+    isShowDialog.value = true;
   };
 
   onShow(() => {

@@ -1,6 +1,11 @@
 <template>
   <view class="">
-    <g-popup :zIndex="200" :title="'选择取药方式'" ref="refAddDialog">
+    <g-popup
+      :zIndex="200"
+      :title="'选择取药方式'"
+      @hide="close"
+      ref="_refAddDialog"
+    >
       <view class="pat-list">
         <view
           v-for="(item, i) in optList"
@@ -25,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref } from 'vue';
+  import { nextTick, ref, watch } from 'vue';
 
   const selFiles = [
     {
@@ -41,29 +46,43 @@
   const props = defineProps<{
     selList: string[];
     optList: typeof selFiles;
+    show: boolean;
   }>();
-  const emits = defineEmits(['item-click']);
-  const refAddDialog = ref<any>('');
+  const emits = defineEmits(['item-click', 'update:show']);
+  const _refAddDialog = ref<any>('');
 
   const show = () => {
     if (props.optList.length === 1) {
       itemClick(props.optList[0]);
     } else {
-      refAddDialog.value.show();
+      _refAddDialog.value.show();
     }
   };
 
+  const hide = () => {
+    emits('update:show', false);
+  };
+
   const close = () => {
-    refAddDialog.value.close();
+    hide();
+    _refAddDialog.value.close();
   };
 
   const itemClick = (item) => {
     emits('item-click', item);
-
     nextTick(() => {
       close();
     });
   };
+
+  watch(
+    () => props.show,
+    (v) => {
+      if (v) {
+        show();
+      }
+    }
+  );
 
   defineExpose({
     show,

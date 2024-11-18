@@ -34,7 +34,9 @@
       </view>
     </view>
 
-    <slot name="suffix" />
+    <div class="relative">
+      <slot name="suffix" />
+    </div>
   </view>
 </template>
 

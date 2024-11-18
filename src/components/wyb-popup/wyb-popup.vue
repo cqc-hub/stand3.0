@@ -382,6 +382,9 @@
         // #endif
       },
       hide() {
+        if (this.isShow === false) {
+          return;
+        }
         this.contentOut();
         this.maskOut();
         this.wait(this.duration + 1).then(() => {
