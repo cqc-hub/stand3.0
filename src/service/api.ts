@@ -354,6 +354,11 @@ const queryApi = {
 
   queryInpVisit: <T = any>(data) =>
     service.post<T>('/phs-query/hospital/queryInpVisit', parm(data)),
+  
+  queryInpVisitWithNoMes: <T = any>(data) =>
+    service.post<T>('/phs-query/hospital/queryInpVisit', parm(data),{
+      showMessage: false,
+    }),
 
   saveInpVisit: <T = any>(data) =>
     service.post<T>('/phs-query/hospital/saveInpVisit', parm(data)),

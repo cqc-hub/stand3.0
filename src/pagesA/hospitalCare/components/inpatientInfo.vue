@@ -165,7 +165,15 @@
 <script setup lang="ts">
   import { computed, onMounted, ref } from 'vue';
   import { getAvatar } from '@/stores';
-  import { GStores, TButtonConfig, apiAsync, useTBanner } from '@/utils';
+  import {
+    GStores,
+    TButtonConfig,
+    apiAsync,
+    useTBanner,
+    getLocation,
+    ISystemConfig,
+    ServerStaticData
+  } from '@/utils';
   import { joinQuery, joinQueryForUrl } from '@/common';
   import {
     getInHospitalInfoParam,
@@ -198,6 +206,7 @@
   const gSelect = ref(<any>'');
   const selPlaces = ref(<any[]>[]);
   const hosCardInfoLists = ref(<any[]>[]);
+  const hosConfig = ref<ISystemConfig['hospitalCare']>(<any>{});
   const selPlace = ref('');
   const isSelShow = ref(false);
   const isShowPayBtn = ref(false);
@@ -211,6 +220,11 @@
     resolve();
   };
 
+  const location = ref({
+    latitude: '',
+    longitude: '',
+  });
+
   const hosInfoResObj = ref({} as getInHospitalInfoResult);
   const toPayRecord = async () => {
     const { hosId } = hosInfoResObj.value || {};
@@ -218,8 +232,8 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/payRecord', {
         hosId,
-        visitNo
-      })
+        visitNo,
+      }),
       // url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
     });
   };
@@ -368,10 +382,30 @@
   });
 
   const getAppointmentList = async () => {
+    const patientId = gStores.userStore.patChoose.patientId;
+    console.log(888888888,hosConfig.value)
+    hosConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
+    if (hosConfig.value?.isSelfQueryBeforeAppoint === '1') {
+      location.value = await getLocation(true);
+      try {
+        const { result } = await api.queryInpVisitWithNoMes({
+          patientId,
+          ...location.value,
+        });
+        if (result) {
+          uni.navigateTo({
+            url: joinQuery('/pagesA/hospitalCare/selfHospitalization'),
+          });
+        }
+      } catch (err) {
+        console.warn('自助入院接口', err);
+      }
+    }
+
     const {
       result: { hosCardInfoLists: _hosCardInfoLists },
     } = await api.queryHosCardInfo<any>({
-      patientId: gStores.userStore.patChoose.patientId,
+      patientId,
     });
 
     hosCardInfoLists.value = _hosCardInfoLists;
