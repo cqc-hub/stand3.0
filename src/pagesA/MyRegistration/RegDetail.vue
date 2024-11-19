@@ -7,9 +7,9 @@
     class="reg-detail"
   >
     <!-- #ifdef  MP-WEIXIN -->
-     <!-- {{ wxCrossProgramInfo||'' }} -->
+    <!-- {{ wxCrossProgramInfo||'' }} -->
     <code-btn
-      v-if="wxCrossProgramInfo.bizTypeReg&&wxCrossProgramInfo.appId"
+      v-if="wxCrossProgramInfo.bizTypeReg && wxCrossProgramInfo.appId"
       :appId="wxCrossProgramInfo.appId"
       :bizType="wxCrossProgramInfo.bizTypeReg"
       :extInfo="wxCrossProgramInfo.extInfo"
@@ -422,6 +422,8 @@
     isMedicalSelf,
     getIsAliMedicalNation,
     _getQxMedicalNation,
+    getMedicalConfigInfo,
+    getMedicalArgWithFamily,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -833,9 +835,14 @@
 
   const payOrder = async () => {
     // 先只做微信国标模式
+    const medicalMHelp = getMedicalConfigInfo() || {};
+    const { isFamilyPayment } = medicalMHelp;
+
     const isMedicalMode = _getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
-    const isSelf = isMedicalMode && (await isMedicalSelf(cardNumber));
+    const isSelf =
+      isMedicalMode &&
+      (isFamilyPayment === '1' || (await isMedicalSelf(cardNumber)));
     const payList = [] as any;
 
     if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {
@@ -880,6 +887,7 @@
             pat: gStores.userStore.patChoose,
           });
           // #ifdef  MP-WEIXIN
+          await getMedicalArgWithFamily();
           medicalNationWx(await getQxMedicalNation());
           // #endif
 

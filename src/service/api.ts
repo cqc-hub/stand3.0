@@ -759,6 +759,16 @@ const userApi = {
       hideLoading: false,
     }),
 
+  getFamilyId: (data) =>
+    service.post('/phs-user/relevantPatient/getFamilyId', parm(data), {
+      hideLoading: false,
+    }),
+
+  getIdCardAfter: (data) =>
+    service.post('/phs-user/relevantPatient/getIdCardAfter', parm(data), {
+      hideLoading: false,
+    }),
+
   modifyHosPhoneByIdNum: (data) =>
     service.post(
       '/phs-user/relevantPatient/modifyHosPhoneByIdNum',
