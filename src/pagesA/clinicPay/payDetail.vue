@@ -299,6 +299,7 @@
     PayType,
     getQxMedicalNation,
     _getQxMedicalNation,
+    getMedicalArgWithFamily,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -349,7 +350,7 @@
     wxPayMoneyMedicalPlugin,
     getDigitalPay,
     wxCrossProgramInfo,
-    getFamilyArgs,
+    selUnPayList,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -628,6 +629,8 @@
         // #endif
 
         // #ifdef  MP-WEIXIN
+        await getMedicalArgWithFamily(props.value.params);
+
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
@@ -1022,6 +1025,7 @@
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    selUnPayList.value = [props.value as any];
   });
 
   onMounted(async () => {

@@ -1,5 +1,10 @@
 import { ref, computed, nextTick } from 'vue';
-import { getLocalStorage, joinQueryForUrl, setLocalStorage } from '@/common';
+import {
+  getLocalStorage,
+  joinQuery,
+  joinQueryForUrl,
+  setLocalStorage,
+} from '@/common';
 
 import {
   GStores,
@@ -38,6 +43,7 @@ type TTradeType = keyof typeof tradeType;
 export type TWxAuthorize = {
   cityId?: string; // wx
   userName?: string; // wx
+  loginIdCard?: string; // wx
   payAuthNo: string;
   userLongitudeLatitude: {
     latitude: string;
@@ -274,6 +280,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   let fCode = '';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
+
   const {
     sConfig: { medicalMHelp },
   } = globalGl;
@@ -293,7 +301,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
     uni.navigateToMiniProgram({
       appId,
       // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
-      path,
+      path: joinQuery(path, cacheStore.medicalPathArg),
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
       fail({ errMsg }) {
         if (errMsg.includes('fail cancel')) {
@@ -380,6 +388,7 @@ export const _getQxMedicalNation = async (
   // #endif
 
   const { result } = await api.authorize<any>(requestArg);
+
   if (result.userLongitudeLatitude) {
     result.userLongitudeLatitude = JSON.parse(result.userLongitudeLatitude);
   }
@@ -398,8 +407,9 @@ export const _getQxMedicalNation = async (
     latitude,
     longitude,
   };
-
   // #endif
+  result.payAuthNo = result.payAuthNo || result.familyPayAuthNo;
+  result.loginIdCard = result.idCard;
 
   let playMedicalCount = getLocalStorage('playMedicalCount');
   if (!playMedicalCount) {
@@ -475,6 +485,37 @@ export const medicalNationUpload = async (
   const { result } = await api.medicalCostInfoUpload<any>(requestArg, true);
 
   return <TMedicalNationUploadRes>result;
+};
+
+export const getMedicalArgWithFamily = async (params?: string) => {
+  const medicalMHelp = getMedicalConfigInfo() as any;
+  const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
+  const gStores = new GStores();
+  const cacheStore = useCacheStore();
+
+  // #ifdef MP-WEIXIN
+  if (isOpenFamilyMedical) {
+    let args: any = {
+      patientId: gStores.userStore.patChoose.patientId,
+    };
+
+    let actionApi = api.getFamilyId;
+    if (params) {
+      actionApi = api.getIdCardAfter;
+      args = {
+        signParam: params,
+      };
+    }
+
+    const {
+      result: { familyIdEncode },
+    } = await actionApi(args);
+
+    cacheStore.changeMedicalPathArg({
+      familyId: familyIdEncode,
+    });
+  }
+  // #endif
 };
 
 let _isCanUseMedical: boolean | null = null;
@@ -1170,7 +1211,7 @@ export const usePayPage = () => {
     if (isDigitalPay) {
       payTypeList.push(PayType.Digital);
     }
-  
+
     return payTypeList;
   };
 
@@ -1184,6 +1225,7 @@ export const usePayPage = () => {
     const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
     const isBizTypeMedical =
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
+
     const payTypeList = determinePayType(
       isMedicalMode,
       isDigitalPay,
@@ -1359,6 +1401,7 @@ export const usePayPage = () => {
         // #endif
 
         // #ifdef  MP-WEIXIN
+        await getMedicalArgWithFamily(pageProps.value.params);
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
@@ -1370,7 +1413,6 @@ export const usePayPage = () => {
         payArg
       );
     } else if (item.key === 'bizType') {
-      
       const {
         sConfig: { medicalMHelp },
       } = globalGl;

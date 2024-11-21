@@ -1,3 +1,4 @@
+import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
 import { defineStore } from 'pinia';
 
@@ -10,6 +11,7 @@ const cacheStore = defineStore('cache', {
 
   state: () => {
     return {
+      medicalPathArg: <Record<string, string>>{},
       cacheData: <any>{},
       medicalHelpSelList: <any[]>[],
       hosId: '',
@@ -46,6 +48,10 @@ const cacheStore = defineStore('cache', {
 
     changeCacheData(data) {
       this.cacheData = data;
+    },
+
+    changeMedicalPathArg(arg: Record<string, string>) {
+      this.medicalPathArg = arg;
     },
   },
 });

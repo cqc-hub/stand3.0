@@ -20,7 +20,11 @@
         scroll-x
         class="pt16 pb16 fix-top z-1 bg-white"
       >
-        <Guide-Visit-List :list="visitList" />
+        <Guide-Visit-List
+          :list="visitList"
+          :selItem="visitItemSel"
+          @item-click="visitItemClick"
+        />
       </scroll-view>
 
       <view class="page-bg relative pl32 pr32">
@@ -51,6 +55,8 @@
   import GuideVisitList from './components/GuideVisitList.vue';
   import GuideContentList from './components/GuideContentList.vue';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
+  import api from '@/service/api';
+  import { TVisitRecord } from './guide';
 
   const gStores = new GStores();
   const tabCurrent = ref(0);
@@ -88,26 +94,62 @@
     }
   };
 
-  const visitList = ref([
-    {
-      label: '甲状腺外科门诊',
-      time: '09-25',
-    },
-    {
-      label: '甲状腺外科门诊',
-      time: '04-25',
-    },
-    {
-      label: '甲状腺外科门诊',
-      time: '03-25',
-    },
-  ]);
+  const visitList = ref(<TVisitRecord[]>[]);
+  const visitItemSel = ref(<TVisitRecord>{});
+  const visitItemClick = async (item: TVisitRecord) => {
+    const { patientId } = gStores.userStore.patChoose;
+    const { visitNo } = item;
 
-  const patChange = () => {
-    console.log(gStores.userStore.patChoose);
+    visitItemSel.value = item;
+
+    // const { result } = await api.getIntelligenceVisit({
+    //   patientId,
+    //   visitNo,
+    // });
+
+    const result = {
+      node1Info: {
+
+      }
+    }
   };
 
-  onLoad(async () => {});
+  const patChange = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    visitList.value = [];
+    let { result = [] } = await api.getTodayVisit({
+      patientId,
+    });
+
+    if (!(result && result.length)) {
+      result = [
+        {
+          deptName: '甲状腺外科门诊',
+          date: '09-25',
+          visitNo: '233456',
+        },
+        {
+          deptName: '甲状腺外科门诊',
+          date: '09-27',
+          visitNo: '233456222',
+        },
+        {
+          deptName: '甲状腺外科门诊',
+          date: '09-28',
+          visitNo: '2334561',
+        },
+      ];
+    }
+
+    if (result && result.length) {
+      visitList.value = result;
+      visitItemClick(result[0]);
+    }
+  };
+
+  onLoad(async () => {
+    patChange();
+  });
 </script>
 
 <style lang="scss" scoped>

@@ -189,6 +189,16 @@ const queryApi = {
       hideLoading,
     }),
 
+  getTodayVisit: <T = any>(data, hideLoading = false) =>
+    service.post<T>('/phs-query/medical/getTodayVisit', parm(data), {
+      hideLoading,
+    }),
+
+  getIntelligenceVisit: <T = any>(data, hideLoading = false) =>
+    service.post<T>('/phs-query/getIntelligenceVisit', parm(data), {
+      hideLoading,
+    }),
+
   // 待缴费
   getUnpaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getUnpaidClinicList', parm(data), {
@@ -354,9 +364,9 @@ const queryApi = {
 
   queryInpVisit: <T = any>(data) =>
     service.post<T>('/phs-query/hospital/queryInpVisit', parm(data)),
-  
+
   queryInpVisitWithNoMes: <T = any>(data) =>
-    service.post<T>('/phs-query/hospital/queryInpVisit', parm(data),{
+    service.post<T>('/phs-query/hospital/queryInpVisit', parm(data), {
       showMessage: false,
     }),
 
@@ -756,6 +766,16 @@ const userApi = {
 
   mofHosPhone: (data) =>
     service.post('/phs-user/rePat/mofHosPhone', parm(data), {
+      hideLoading: false,
+    }),
+
+  getFamilyId: (data) =>
+    service.post('/phs-user/relevantPatient/getFamilyId', parm(data), {
+      hideLoading: false,
+    }),
+
+  getIdCardAfter: (data) =>
+    service.post('/phs-user/relevantPatient/getIdCardAfter', parm(data), {
       hideLoading: false,
     }),
 
