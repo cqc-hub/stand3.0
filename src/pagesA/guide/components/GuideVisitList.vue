@@ -7,25 +7,35 @@
       :key="i"
       :class="{
         mr16: i !== list.length - 1,
-        [isActive(item) ? 'bg-blue-light btn-primary' : 'color-444 font-normal']: 1,
+        [isActive(item)
+          ? 'bg-blue-light btn-primary'
+          : 'color-444 font-normal']: 1,
       }"
+      @click="itemClick(item)"
       class="text-no-wrap btn btn-plain btn-border btn-round item f28"
     >
-      <text class="mr12">{{ item.time }}23</text>
-      <text>{{ item.label }}</text>
+      <text class="mr12">{{ item.date }}</text>
+      <text>{{ item.deptName }}</text>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { TVisitRecord } from '../guide';
 
-  defineProps<{
-    list: any[];
+  const props = defineProps<{
+    list: TVisitRecord[];
+    selItem: TVisitRecord;
   }>();
+  const emits = defineEmits(['item-click']);
 
-  const isActive = (item) => {
-    return item.time === '09-25';
+  const isActive = (item: TVisitRecord) => {
+    return props.selItem.visitNo === item.visitNo;
+  };
+
+  const itemClick = (item: TVisitRecord) => {
+    emits('item-click', item);
   };
 </script>
 
