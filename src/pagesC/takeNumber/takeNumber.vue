@@ -40,6 +40,7 @@
             :isTakeNumberAfterBtnForGoQueueNumber="
               isTakeNumberAfterBtnForGoQueueNumber
             "
+            :takeNumberWithPay="pageConfig?.isTakeNumerWithPay === '1'"
             :isOnlineSign="isOnlineSign"
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
@@ -203,8 +204,17 @@
 
   let cacheItem: TTakeNumberListItem;
   const showTakeNumberDialog = (item: TTakeNumberListItem) => {
-    cacheItem = item;
-    isFgShow451.value = true;
+    if (pageConfig.value?.isTakeNumerWithPay === '1') {
+      //缴费取号模式
+      console.log('去支付');
+      uni.navigateTo({
+        url: '/pagesA/MyRegistration/takeNumberDetail',
+      });
+    } else {
+      //普通模式
+      cacheItem = item;
+      isFgShow451.value = true;
+    }
   };
 
   const goPayPage = () => {
@@ -340,8 +350,6 @@
       isFgShow453.value = true;
     }
   };
-
-  // const
 
   const signIn = async (item: TTakeNumberListItem) => {
     isFgShow451.value = false;

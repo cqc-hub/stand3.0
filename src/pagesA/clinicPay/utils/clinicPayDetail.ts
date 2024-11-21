@@ -614,7 +614,7 @@ export const usePayPage = () => {
   const tabCurrent = ref(0);
   const hosId = ref('');
   const isPayListRequestComplete = ref(false);
-  const tabField = [
+  const tabField = ref([
     {
       label: '待缴费',
       key: 0,
@@ -623,7 +623,7 @@ export const usePayPage = () => {
       label: '已缴费',
       key: 1,
     },
-  ];
+  ]);
   const refPay = ref<any>('');
   const payArg = ref<BaseObject>({});
   const refPayList = ref([

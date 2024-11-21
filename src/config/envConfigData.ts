@@ -60,6 +60,7 @@ export const sysConfigEnv = <const>{
   // ],
   // 'Electronic_Consultation_Sheet.medicalAsistantConfig':
   // JSON.parse(`{"timeLineBtn":[],"contentBtn":[{"type":"self","path":"pagesB/reportQuery/reportQuery","text":"查看报告","addition":{"orderClassTabIndex":"tabIndex"}},{"type":"mini","path":"pages/index?id=QFadbKUMCl","text":"院内导航","appId":"wx0fb39a1dc27c5e6d"},{"type":"h5","isSelfH5":"1","path":"pagesC/medicationQuery/medicationQuery","text":"用药查询","addition":{"herenId":"herenId","patientId":"_patientId"}},{"type":"h5","isSelfH5":"1","path":"pagesC/choosePat/choosePat","text":"检查预约","addition":{"herenId":"herenId","patientId":"_patientId"},"extraData":{"_type":"LQJcyy","nextDo":"true"}},{"type":"h5","isSelfH5":"1","path":"pagesC/choosePat/choosePat","text":"检查预约","addition":{"herenId":"herenId","patientId":"_patientId"},"extraData":{"_type":"LQJcyy","nextDo":"true"}}],"bottomBtn":[{"type":"self","path":"pagesA/clinicPay/clinicPayDetail","text":"缴费账单","icon":"ico_pay"},{"type":"self","path":"pagesB/reportQuery/reportQuery","text":"报告查询","icon":"ico_document"},{"type":"self","path":"pagesA/hospitalCare/hospitalCare","text":"住院信息"},{"type":"self","path":"pagesA/medicalCardMan/electronicMedicalCard","text":"就诊码"}]}`)
+   'order.isTakeNumerWithPay':'1'
 };
 
 export const apiConfigEnv = <const>{

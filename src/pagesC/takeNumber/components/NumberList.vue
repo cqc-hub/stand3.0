@@ -41,18 +41,17 @@
         <view @click="takeNumber(item)" class="g-flex-rc-cc">
           <view
             :class="{
-              'take-number-disabled': !item.signIn,
+              'take-number-disabled':
+                !getTakeNumberStatus(item).enabeleTakeNumber,
             }"
             class="take-number g-flex-rc-cc f36 g-bold"
           >
-            {{
-              item.signIn ? (isOnlineSign ? '签到' : '取号') : '不在取号范围'
-            }}
+            {{ getTakeNumberStatus(item).showMess }}
           </view>
         </view>
 
         <view
-          v-if="!item.signIn"
+          v-if="getTakeNumberStatus(item).reLocation"
           @click="refrashData"
           class="g-flex-rc-cc color-blue f28 mt24"
         >
@@ -114,6 +113,8 @@
     'pay-page',
   ]);
 
+  
+
   const reportFlagMap = computed(() => {
     const typeLabel = props.isOnlineSign ? '签到' : '取号';
 
@@ -150,6 +151,22 @@
         label: '未知',
       }
     );
+  };
+
+  const getTakeNumberStatus = (item: TTakeNumberListItem) => {
+    const status = {
+      enabeleTakeNumber: false,
+      reLocation:false,
+      showMess: '',
+    };
+    status.enabeleTakeNumber = item.signIn;
+    status.reLocation = !item.signIn;
+    status.showMess = item.signIn
+      ? props.isOnlineSign
+        ? '签到'
+        : '取号'
+      : '不在取号范围';
+    return status;
   };
 
   const refrashData = () => {

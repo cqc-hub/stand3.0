@@ -322,6 +322,15 @@
           
         },
         {
+          "path": "MyRegistration/takeNumberDetail",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "取号缴费详情"
+          }
+        },
+        {
           "path": "medicalCardMan/addMedical",
           "extend": {
             "login": true

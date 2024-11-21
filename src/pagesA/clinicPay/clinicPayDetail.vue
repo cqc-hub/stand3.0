@@ -37,6 +37,7 @@
 
       <view class="g-border-bottom">
         <g-tabs
+          v-show="tabField.length && tabField.length > 1"
           v-model:value="tabCurrent"
           :tabs="tabField"
           :scroll="false"
@@ -211,7 +212,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, nextTick, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import {
@@ -324,6 +325,9 @@
 
   const init = async () => {
     await getSysConfig();
+    if (pageConfig.value.tabField) {
+      tabField.value  = pageConfig.value.tabField as any
+    }
     if (
       pageConfig.value.isListToggleHos === '1' ||
       cacheStore.isShowChooseHos
@@ -393,7 +397,6 @@
 
     await wait(650);
 
-
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
@@ -435,7 +438,6 @@
       tabCurrent.value === 0 &&
       !unPayList.value.length
     ) {
-
       pageConfig.value.scanPayEmptyAction &&
         useTBanner(
           pageConfig.value.scanPayEmptyAction,

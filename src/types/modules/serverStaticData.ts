@@ -35,6 +35,7 @@ export interface ISystemConfig_ {
       // '0' 门诊充值
       key: '0';
     };
+   
 
     /** 挂号页面 */
     /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会 */
@@ -118,6 +119,7 @@ export interface ISystemConfig_ {
     onlineSignConfirmAfterBtn?: TButtonConfig; //签到成功后的弹窗(按钮配置)
     AfterConfirmNoShowGoPayBtn?: '1';//签到成功后不展示缴费按钮
     AfterConfirmNoShowQRcodeBtn?: '1';//签到成功后不展示刷码签到按钮
+    isTakeNumerWithPay?: '1';//是否为缴费取号模式
   };
 
   /** 移动端伦理委员会(h5) */
@@ -297,6 +299,9 @@ export interface ISystemConfig_ {
 
     /** 页面顶部 banner */
     bannerPay?: TBannerConfig;
+
+     //门诊缴费自定义tabs
+     tabField?: IOptions[];
 
     /**
      * 详情页
