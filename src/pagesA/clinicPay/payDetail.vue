@@ -666,9 +666,9 @@
       mask: true,
     });
 
-    const authorize = await getQxMedicalNation(
-      joinQueryForUrl('/pagesA/clinicPay/payDetail', props.value)
-    );
+    const authorize = await getQxMedicalNation({
+      returnUrl: joinQueryForUrl('/pagesA/clinicPay/payDetail', props.value),
+    });
     medicalNationWx(authorize);
   };
 
@@ -1000,7 +1000,9 @@
 
       let isAliAuth = false;
       if (medicalAli === '1') {
-        const { payAuthNo } = await _getQxMedicalNation();
+        const { payAuthNo } = await _getQxMedicalNation({
+          params: props.value.params,
+        });
         isAliAuth = !!payAuthNo;
       }
 

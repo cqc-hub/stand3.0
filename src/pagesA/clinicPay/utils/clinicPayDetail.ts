@@ -336,12 +336,19 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 };
 
 export const _getQxMedicalNation = async (
-  returnUrl: string = '/pagesA/clinicPay/clinicPayDetail'
+  payload = {} as {
+    returnUrl?: string;
+    params?: string;
+  }
 ) => {
-  //
+  const {
+    returnUrl = '/pagesA/clinicPay/clinicPayDetail',
+    params: enHosPatientId,
+  } = payload;
 
   const gStores = new GStores();
   const qrCode = await getMedicalAuthCode();
+  const { patientId } = gStores.userStore.patChoose;
 
   const {
     sConfig: { medicalMHelp },
@@ -356,6 +363,8 @@ export const _getQxMedicalNation = async (
   // #endif
 
   const requestArg = {
+    enHosPatientId,
+    patientId: !enHosPatientId && patientId,
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',
@@ -424,9 +433,16 @@ export const _getQxMedicalNation = async (
 
 /** 获取国标授权 */
 export const getQxMedicalNation = async (
-  returnUrl: string = '/pagesA/clinicPay/clinicPayDetail'
+  payload = {} as {
+    returnUrl?: string;
+    params?: string;
+  }
 ) => {
-  const result = (await _getQxMedicalNation(returnUrl)) as any;
+  const { returnUrl = '/pagesA/clinicPay/clinicPayDetail', params } = payload;
+  const result = (await _getQxMedicalNation({
+    returnUrl,
+    params,
+  })) as any;
 
   // #ifdef MP-ALIPAY
   const { authUrl, payAuthNo } = result;
@@ -516,6 +532,17 @@ export const getMedicalArgWithFamily = async (params?: string) => {
     });
   }
   // #endif
+};
+
+export const getMedicalAuthArg = async (params?: string) => {
+  const cacheStore = useCacheStore();
+  const gStores = new GStores();
+  const { patientId } = gStores.userStore.patChoose;
+
+  cacheStore.changeMedicalAuthArg({
+    patientId: !params && patientId,
+    enHosPatientId: params,
+  });
 };
 
 let _isCanUseMedical: boolean | null = null;
@@ -1697,7 +1724,9 @@ export const usePayPage = () => {
       if (medicalPlugin === '1') {
         wxPryMoneyMedicalDialog.value.show();
       } else if (medicalNation) {
-        const authorize = await getQxMedicalNation();
+        const authorize = await getQxMedicalNation({
+          params: pageProps.value.params,
+        });
         callback(authorize);
       }
     }

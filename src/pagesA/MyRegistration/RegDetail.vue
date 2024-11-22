@@ -957,9 +957,12 @@
 
   const payAliMedicalNation = async () => {
     medicalNationWx(
-      await getQxMedicalNation(
-        joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value)
-      ),
+      await getQxMedicalNation({
+        returnUrl: joinQueryForUrl(
+          '/pagesA/MyRegistration/RegDetail',
+          pageProps.value
+        ),
+      }),
       {}
     );
   };
@@ -1158,9 +1161,12 @@
           'get-wx-medical-auth-code-order': '1',
         });
 
-        const authorize = await getQxMedicalNation(
-          joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value)
-        );
+        const authorize = await getQxMedicalNation({
+          returnUrl: joinQueryForUrl(
+            '/pagesA/MyRegistration/RegDetail',
+            pageProps.value
+          ),
+        });
 
         args.payAuthNo = authorize.payAuthNo;
       }
