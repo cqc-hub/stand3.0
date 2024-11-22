@@ -1139,6 +1139,7 @@ export const usePayPage = () => {
       hosId: selectList[0].hosId,
       // hosId: '1279',
       hosName: selectList[0].hosName,
+      patientId: pageProps.value.deParams ? undefined : patientId,
     };
 
     if (pageProps.value.deParams) {
