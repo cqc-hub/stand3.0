@@ -1096,7 +1096,7 @@ export const usePayPage = () => {
       personalPayFee: personalPayFee || undefined,
       patientName: pageProps.value.deParams?.patientName,
       businessType: '1',
-      patientId: pageProps.value.deParams ? '' : patientId,
+      patientId: pageProps.value.params ? '' : patientId,
       source,
       totalCost: _totalCost,
       hosId: selectList[0].hosId,
