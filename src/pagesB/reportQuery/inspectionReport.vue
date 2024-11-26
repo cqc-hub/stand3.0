@@ -735,7 +735,7 @@
         examineReportList.value.hosId ||
         '';
 
-      if (paid === '0' && needReChargeStatus === '1') {
+      if (paid === '0') {
         const { confirm } = await apiAsync(uni.showModal, {
           content: `该云影像需要支付${totalPrice}元才能查看，是否继续？`,
           cancelText: '取消',
@@ -763,8 +763,8 @@
             }),
           });
 
-          return;
         }
+        return;
         // else {
         //   // 不需要去确认页面， 当前页直接支付
         //   gStores.messageStore.showMessage('未开发', 1500);
@@ -801,8 +801,8 @@
           yunPayAfter(url);
         }
 
-        if (needReChargeStatus === '1') {
-          api.imgHosSettle({
+        if (needReChargeStatus === '0') {
+          await api.imgHosSettle({
             cardNumber,
             hosId,
             dicomId: repId,
