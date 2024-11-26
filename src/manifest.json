@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx4d8f68fdc6b6831c",
+    "appid": "wxdd1ed079167189fa",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "healthCardPlugins": {
-        "version": "3.11.0",
-        "provider": "wxee969de81bba9a45"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003182673498"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -95,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "中国人民解放军新疆军区总医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "router": {
       "base": "./"
