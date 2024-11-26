@@ -765,9 +765,9 @@
         } else {
           // 不需要去确认页面， 当前页直接支付
           gStores.messageStore.showMessage('未开发', 1500);
+          return;
         }
 
-        return;
 
         if (needReChargeStatus === '0') {
           const source = gStores.globalStore.browser.source;
