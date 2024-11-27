@@ -60,14 +60,17 @@
         </view>
       </view>
 
-      <view class="head-row flex-normal flex-start-r">
+      <view
+        v-if="myprops.patientName || !myprops.params"
+        class="head-row flex-normal flex-start-r"
+      >
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
           <text v-if="myprops.patientName">
             {{ nameConvert(myprops.patientName) + ` (${myprops.cardNumber})` }}
           </text>
 
-          <text v-else>
+          <text>
             {{
               nameConvert(gStores.userStore.patChoose.patientName) +
               `${

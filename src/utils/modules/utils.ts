@@ -401,7 +401,7 @@ export const thirdWxPay = (V3PageData) => {
       ...V3PageData.paymentData,
       miniUrl:V3PageData.returnUrl?.successUrl || '',
       successUrl:V3PageData.returnUrl?.errorUrl || ''
-    } 
+    }
   }
   const { nonceStr, paySign, signType, timeStamp,miniUrl ='' ,successUrl =''} = V3PageData;
   !miniUrl && successUrl && (V3PageData.miniUrl = successUrl);
@@ -468,8 +468,7 @@ export const thirdWxPay = (V3PageData) => {
  */
 export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') => {
   if (str) {
-    str = str.replace(/[\r\n]/g, replaceStr)
-    // str = str.replaceAll('\\n', replaceStr)
+    str = str.replace(/[\r\n\\n]/g, replaceStr)
   }
 
   return str

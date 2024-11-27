@@ -762,12 +762,14 @@
               hosId: _hosId,
             }),
           });
-        } else {
-          // 不需要去确认页面， 当前页直接支付
-          gStores.messageStore.showMessage('未开发', 1500);
-        }
 
+        }
         return;
+        // else {
+        //   // 不需要去确认页面， 当前页直接支付
+        //   gStores.messageStore.showMessage('未开发', 1500);
+        //   return;
+        // }
 
         if (needReChargeStatus === '0') {
           const source = gStores.globalStore.browser.source;
@@ -799,8 +801,8 @@
           yunPayAfter(url);
         }
 
-        if (needReChargeStatus === '1') {
-          api.imgHosSettle({
+        if (needReChargeStatus === '0') {
+          await api.imgHosSettle({
             cardNumber,
             hosId,
             dicomId: repId,

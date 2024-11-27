@@ -326,7 +326,7 @@
   const init = async () => {
     await getSysConfig();
     if (pageConfig.value.tabField) {
-      tabField.value  = pageConfig.value.tabField as any
+      tabField.value = pageConfig.value.tabField as any;
     }
     if (
       pageConfig.value.isListToggleHos === '1' ||
@@ -364,7 +364,9 @@
 
       let isAliAuth = false;
       if (medicalAli === '1') {
-        const { payAuthNo } = await _getQxMedicalNation();
+        const { payAuthNo } = await _getQxMedicalNation({
+          params: pageProps.value.params,
+        });
         isAliAuth = !!payAuthNo;
       }
 

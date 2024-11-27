@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "sysCode": "1001063",
+=======
+  "sysCode": "1001067",
+>>>>>>> f2ac63b6d48cfb2d4f02edc115408e90d94f43f0
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -233,9 +237,8 @@
       "isOpenOcr": false
     },
     "1001067": {
-      "wxAppid": "wx08440928b105c3bf",
+      "wxAppid": "wxdd1ed079167189fa",
       "alipayAppid": "2021002129645591",
-      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false

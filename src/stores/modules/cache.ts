@@ -12,6 +12,7 @@ const cacheStore = defineStore('cache', {
   state: () => {
     return {
       medicalPathArg: <Record<string, string>>{},
+      medicalAuthArg: <Record<string, any>>{},
       cacheData: <any>{},
       medicalHelpSelList: <any[]>[],
       hosId: '',
@@ -52,6 +53,10 @@ const cacheStore = defineStore('cache', {
 
     changeMedicalPathArg(arg: Record<string, string>) {
       this.medicalPathArg = arg;
+    },
+
+    changeMedicalAuthArg(arg: Record<string, any>) {
+      this.medicalAuthArg = arg;
     },
   },
 });
