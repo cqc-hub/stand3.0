@@ -64,19 +64,8 @@
 
       <template>
         <block>
-<<<<<<< HEAD
           <button @click="payOrder" class="btn btn-warning pay-btn">
             {{ orderTakeNunberInfo.fee }}元 立即支付
-=======
-          <button
-            @click="payOrder"
-            :class="{
-              'btn-disabled': timeTravel.downTime <= 0,
-            }"
-            class="btn btn-warning pay-btn"
-          >
-            {{ orderRegInfo.fee }}元 立即支付
->>>>>>> f2ac63b6d48cfb2d4f02edc115408e90d94f43f0
           </button>
         </block>
       </template>
@@ -226,92 +215,8 @@
     }
   };
 
-<<<<<<< HEAD
   /** 自费 */
   const toPay = async (totalFee = orderTakeNunberInfo.value.fee) => {
-=======
-  const medicalNationWx = async (
-    auth: TWxAuthorize,
-    payload: any = {
-      businessType: 3,
-    }
-  ) => {
-    const { hosId, orderId } = orderRegInfo.value;
-    const { userLongitudeLatitude, payAuthNo } = auth;
-    const { source } = gStores.globalStore.browser;
-
-    const requestArg = {
-      ...userLongitudeLatitude,
-      accountUseFlag: true,
-      businessType: payload.businessType,
-      hosId,
-      orderId,
-      payAuthNo,
-      source,
-    };
-
-    uni.showLoading({
-      title: '预上传...',
-      mask: true,
-    });
-    const { result } = await api.medicalUp(requestArg);
-
-    const info = {
-      ...hosInfo.value,
-      ...orderRegInfo.value,
-      totalCost: result.totalFee,
-      extend: auth,
-      phsOrderSource: '1',
-    };
-
-    gStores.globalStore.assignCacheData({
-      uploadRes: result,
-      info,
-    });
-
-    uni.navigateTo({
-      url: '/pagesA/clinicPay/clinicPayMedical',
-    });
-  };
-
-  const payAliMedicalNation = async () => {
-    medicalNationWx(
-      await getQxMedicalNation({
-        returnUrl: joinQueryForUrl(
-          '/pagesA/MyRegistration/RegDetail',
-          pageProps.value
-        ),
-      }),
-      {}
-    );
-  };
-
-  /**
-   * 预结算挂号
-   */
-  const payPreSettlement = async () => {
-    const { orderId } = pageProps.value;
-    const { patientId } = gStores.userStore.patChoose;
-    const { source } = gStores.globalStore.browser;
-
-    const {
-      result: { fee, needPay },
-    } = await api.regPreSettlement({
-      orderId,
-      patientId,
-      source,
-    });
-
-    if (needPay) {
-      toPay(fee);
-    } else {
-      init();
-    }
-  };
-
-  /** 自费挂号 */
-  const toPay = async (totalFee = orderRegInfo.value.fee) => {
->>>>>>> f2ac63b6d48cfb2d4f02edc115408e90d94f43f0
     const {
       herenId,
       browser: { source },
@@ -352,126 +257,7 @@
     });
     await wait(2000);
     uni.hideLoading();
-<<<<<<< HEAD
     uni.navigateBack();
-=======
-
-    init();
-  };
-
-  const goDoctorCard = () => {
-    const { deptName, docName, hosDocId, hosId, clinicalType, hosDeptId } =
-      orderRegInfo.value;
-    const { thRegisterId } = pageProps.value;
-
-    uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
-        deptName,
-        docName,
-        hosDocId,
-        hosId,
-        clinicalType,
-        hosDeptId,
-        thRegisterId,
-      }),
-    });
-  };
-
-  const isCancelOrderDialogShow = ref(false);
-  const dialogContent = ref('');
-  const _cancelOrderDialogConfirm = () => {
-    isCancelOrderDialogShow.value = false;
-  };
-
-  const cancelOrder = async () => {
-    isCancelOrderDialogShow.value = true;
-    dialogContent.value = '确认取消该订单?';
-
-    isCancelOrderDialogShow.value = false;
-
-    init();
-  };
-
-  const refoundOrder = async () => {
-    const { wxOrderSubscribeMessage } = orderConfig.value;
-
-    // #ifdef MP-WEIXIN
-    if (wxOrderSubscribeMessage?.length) {
-      // @ts-expect-error
-      await apiAsync(uni.requestSubscribeMessage, {
-        tmplIds: wxOrderSubscribeMessage,
-      }).catch((e) => {
-        console.error(e);
-      });
-    }
-    // #endif
-
-    if (orderConfig.value.isOrderPay !== '1') {
-      cancelOrder();
-    } else {
-      const { refundNeedAuth, source } = orderRegInfo.value;
-      const args = {
-        orderId: pageProps.value.orderId,
-        source: gStores.globalStore.browser.source,
-        payAuthNo: '',
-      };
-      if (refundNeedAuth === '0') {
-        let isAlipay = false;
-        let isWx = false;
-
-        // #ifdef MP-ALIPAY
-        isAlipay = true;
-        // #endif
-
-        // #ifdef MP-WEIXIN
-        isWx = true;
-        // #endif
-
-        if (isAlipay && source === 19) {
-          gStores.messageStore.showMessage(
-            '本次挂号属于微信医保挂号, 暂不支持支付宝端退费',
-            3000
-          );
-          return;
-        }
-
-        if (isWx && source === 21) {
-          gStores.messageStore.showMessage(
-            '本次挂号属于支付宝医保挂号, 暂不支持微信端退费',
-            3000
-          );
-          return;
-        }
-
-        setLocalStorage({
-          'get-wx-medical-auth-code-order': '1',
-        });
-
-        const authorize = await getQxMedicalNation({
-          returnUrl: joinQueryForUrl(
-            '/pagesA/MyRegistration/RegDetail',
-            pageProps.value
-          ),
-        });
-
-        args.payAuthNo = authorize.payAuthNo;
-      }
-
-      isCancelOrderDialogShow.value = true;
-      // dialogContent.value = '确认退号?';
-      dialogContent.value = '';
-
-      isCancelOrderDialogShow.value = false;
-
-      await api.refundOrder(args);
-      init();
-    }
-  };
-
-  const againOrder = async () => {
-    // 跳到医生名片
-    goDoctorCard();
->>>>>>> f2ac63b6d48cfb2d4f02edc115408e90d94f43f0
   };
 
   onShow(async () => {
