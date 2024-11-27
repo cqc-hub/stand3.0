@@ -4,13 +4,24 @@ import { GStores, ISystemConfig, wait } from '@/utils';
 import api from '@/service/api';
 
 export interface IPageProps {
-  orderId: string;
-  hosOrderId: string;
-  preWz?: '1'; // 第一次挂号进来
-  thRegisterId?: string;
-  orderStatus: string; // 挂号状态
-  alternateId?: string; // orderStatus === 3 候补预约时候有
-  _type?: 'waitReg';
+  extend: string;
+  ampm: string;
+  ampmName: string;
+  deptName: string;
+  distance: string;
+  docName: string;
+  fee: string;
+  hosId: string;
+  hosName: string;
+  idCard: string;
+  patientName: string;
+  patientPhone: string;
+  reportFlag: string;
+  signIn: string;
+  timeDesc: string;
+  visitDate: string;
+  visitId: string;
+  patientId: string;
 }
 
 /**
@@ -18,16 +29,16 @@ export interface IPageProps {
  *  dsds
  */
 
-export const regInfoTempList: TInstance[] = [
+export const takeNumberTempList: TInstance[] = [
+  {
+    label: '预约院区',
+    field: 'input-text',
+    key: 'hosName',
+  },
   {
     label: '预约科室',
     field: 'input-text',
     key: 'deptName',
-  },
-  {
-    label: '预约号别',
-    field: 'input-text',
-    key: '_category',
   },
   {
     label: '预约医生',
@@ -35,38 +46,34 @@ export const regInfoTempList: TInstance[] = [
     key: 'docName',
   },
   {
-    label: '挂号序号',
+    label: '就诊ID',
     field: 'input-text',
-    key: 'appointmentNumber',
+    key: 'visitId',
   },
+
   {
-    label: '就诊地址',
-    field: 'input-text',
-    key: 'visitingArea',
-  },
-  {
-    label: '就诊时间',
+    label: '预约时间',
     field: 'input-text',
     key: '_appointmentDate',
   },
   {
-    label: '挂号金额',
+    label: '支付金额',
     field: 'input-text',
     key: '_fee',
   },
-  {
-    label: '就诊提示',
-    field: 'input-text',
-    rowStyle: 'border-radius: 8px;',
-    key: 'hisResult',
-  },
+  // {
+  //   label: '就诊提示',
+  //   field: 'input-text',
+  //   rowStyle: 'border-radius: 8px;',
+  //   key: 'hisResult',
+  // },
 ];
 
 export const patientTempList: TInstance[] = [
   {
     label: '就诊人',
     field: 'input-text',
-    key: 'patientNameEncry',
+    key: 'patientName',
     rowStyle: 'border-radius: 8px;',
   },
   {
@@ -243,11 +250,9 @@ export const orderStatusMap = {
   },
 } as const;
 
-
-
 export type OrderStatus = keyof typeof orderStatusMap;
 
-export interface IRegInfo {
+export interface ItakeNumberInfo {
   orderStatus: string;
   patientId: string;
   hisResult: string;
@@ -287,10 +292,11 @@ export interface IRegInfo {
   _totalCost: string;
   _hosAccountOffsetFee: string;
   tradeType?: '1'; // 1 只能自费
+  extend: string;
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
-if (orderStatusMap[status]) {
+  if (orderStatusMap[status]) {
     return orderStatusMap[status];
   } else {
     return {
@@ -305,7 +311,6 @@ if (orderStatusMap[status]) {
   }
 };
 
-
 export const getOrderStatusTitle = (
   status: string,
   isOrderPay,
@@ -317,5 +322,3 @@ export const getOrderStatusTitle = (
     return getStatusConfig(status, isWaitReg).title;
   }
 };
-
-

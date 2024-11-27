@@ -14,6 +14,8 @@ export type TTakeNumberListItem = {
   qrValue?: string;
   visitingArea?: string;
   extend?: any;
+  tip?:string;
+  ifPay:'1'|'0'
 };
 
 export type _TTakeNumberListItem = {

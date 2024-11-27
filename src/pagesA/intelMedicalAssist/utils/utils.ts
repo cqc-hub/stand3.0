@@ -1,5 +1,6 @@
 import { computed, ref, reactive } from 'vue';
 import { type StyleConfigType } from './types';
+import { type TButtonConfig, useTBanner } from '@/utils';
 const msg = ref<string>();
 const msgLoad = ref<boolean>(false);
 const focus = ref<boolean>(false);
@@ -139,6 +140,8 @@ export const handleGuess = (item) => {
   console.log('handleGuess', item);
 };
 
-export const handleServer = (item) => {
+export const handleServer = (item:TButtonConfig) => {
   console.log('handleServer', item);
+
+  useTBanner(item)
 };

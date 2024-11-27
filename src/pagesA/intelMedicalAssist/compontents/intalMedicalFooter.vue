@@ -151,6 +151,9 @@
 
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
+    nextTick(()=>{
+      msg.value=''
+    })
   };
   const onBlur = (e) => {
     emits('on-blur', e.detail.value);

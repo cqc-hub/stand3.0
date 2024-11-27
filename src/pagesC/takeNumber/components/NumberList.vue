@@ -50,6 +50,7 @@
           </view>
         </view>
 
+        <view class="g-flex-rc-cc f28 mt24" v-if="item?.ifPay==='1'&&item?.tip">{{ item.tip }}</view>
         <view
           v-if="getTakeNumberStatus(item).reLocation"
           @click="refrashData"
@@ -166,6 +167,9 @@
         ? '签到'
         : '取号'
       : '不在取号范围';
+    if(item?.ifPay==='1'&&item?.tip){
+      status.showMess='不符合取号条件'
+    }
     return status;
   };
 
@@ -198,6 +202,7 @@
     .take-number {
       width: 280rpx;
       height: 280rpx;
+      padding:20rpx;
       background: var(--hr-brand-color-6);
       border-radius: 50%;
       color: #fff;

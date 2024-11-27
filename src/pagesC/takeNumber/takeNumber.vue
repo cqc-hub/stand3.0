@@ -40,7 +40,6 @@
             :isTakeNumberAfterBtnForGoQueueNumber="
               isTakeNumberAfterBtnForGoQueueNumber
             "
-            :takeNumberWithPay="pageConfig?.isTakeNumerWithPay === '1'"
             :isOnlineSign="isOnlineSign"
             @refresh-data="refreshData"
             @take-number="showTakeNumberDialog"
@@ -139,7 +138,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { deQueryForUrl, joinQuery } from '@/common';
   import {
@@ -152,6 +151,7 @@
     apiAsync,
     cacheUtil,
   } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
@@ -204,11 +204,11 @@
 
   let cacheItem: TTakeNumberListItem;
   const showTakeNumberDialog = (item: TTakeNumberListItem) => {
-    if (pageConfig.value?.isTakeNumerWithPay === '1') {
+    if (item.ifPay === '1') {
       //缴费取号模式
-      console.log('去支付');
+      const { patientId } = gStores.userStore.patChoose;
       uni.navigateTo({
-        url: '/pagesA/MyRegistration/takeNumberDetail',
+        url: joinQueryForUrl('/pagesA/MyRegistration/takeNumberDetail', {...item,patientId}),
       });
     } else {
       //普通模式
@@ -443,17 +443,20 @@
       list.value = [];
     }
 
-    const { result } = await api
-      .getCheckInList({
-        latitude,
-        longitude,
-        patientId,
-        type,
-      })
-      .finally(() => {
-        isComplete.value = true;
-        isRefresh.value = false;
-      });
+    const getCheckInList =
+      pageConfig.value?.isTakeNumerWithPay === '1'
+        ? api.getCheckInListNew
+        : api.getCheckInList;
+
+    const { result } = await getCheckInList({
+      latitude,
+      longitude,
+      patientId,
+      type,
+    }).finally(() => {
+      isComplete.value = true;
+      isRefresh.value = false;
+    });
 
     list.value = result || [];
 
@@ -576,6 +579,10 @@
 
     getList();
   };
+
+  onShow(() => {
+    init();
+  });
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));

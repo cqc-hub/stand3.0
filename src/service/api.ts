@@ -522,6 +522,14 @@ const regApi = {
     service.post('/phs-reg/reg/getCheckInList', parm(data), {
       hideLoading: false,
     }),
+  getCheckInListNew: (data: any) =>
+    service.post('/phs-reg/reg/getCheckInListNew', parm(data), {
+      hideLoading: false,
+    }),
+  getCheckInFeeHK: (data: any) =>
+    service.post('/phs-reg/reg/getCheckInFeeHK', parm(data), {
+      hideLoading: false,
+    }),
 
   getExtHosDocSch: (data: any) =>
     service.post('/phs-reg/reg/getExtHosDocSch', parm(data), {
