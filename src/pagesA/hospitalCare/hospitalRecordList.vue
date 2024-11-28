@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+  // 支持展示多条住院记录
   import { computed, defineComponent, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
