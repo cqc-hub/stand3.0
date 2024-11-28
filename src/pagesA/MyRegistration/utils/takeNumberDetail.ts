@@ -45,11 +45,11 @@ export const takeNumberTempList: TInstance[] = [
     field: 'input-text',
     key: 'docName',
   },
-  {
-    label: '就诊ID',
-    field: 'input-text',
-    key: 'visitId',
-  },
+  // {
+  //   label: '就诊ID',
+  //   field: 'input-text',
+  //   key: 'visitId',
+  // },
 
   {
     label: '预约时间',
@@ -76,11 +76,11 @@ export const patientTempList: TInstance[] = [
     key: 'patientName',
     rowStyle: 'border-radius: 8px;',
   },
-  {
-    label: '就诊号',
-    field: 'input-text',
-    key: 'patientId',
-  },
+  // {
+  //   label: '就诊号',
+  //   field: 'input-text',
+  //   key: 'patientId',
+  // },
   {
     label: '手机号码',
     field: 'input-text',

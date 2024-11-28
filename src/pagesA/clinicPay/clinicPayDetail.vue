@@ -325,9 +325,6 @@
 
   const init = async () => {
     await getSysConfig();
-    if (pageConfig.value.tabField) {
-      tabField.value = pageConfig.value.tabField as any;
-    }
     if (
       pageConfig.value.isListToggleHos === '1' ||
       cacheStore.isShowChooseHos
