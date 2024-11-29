@@ -182,8 +182,8 @@
         returnUrl,
         // totalFee: totalCost,
         userId: openId,
-        loginIdCard: extend?.loginIdCard,
-        userName: extend?.userName,
+        // loginIdCard: extend?.loginIdCard,
+        // userName: extend?.userName,
       };
 
       if (globalGl.SYS_CODE === '1001056') {
