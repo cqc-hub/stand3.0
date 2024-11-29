@@ -136,6 +136,7 @@
     wait,
     apiAsync,
     ISystemConfig,
+    debounce,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -231,7 +232,7 @@
     throw new Error('实名?');
   };
 
-  const regConfirm = async () => {
+  let regConfirm = async () => {
     const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
     /**
      * 未填写参数
@@ -451,6 +452,8 @@
       }),
     });
   };
+
+  regConfirm=debounce(regConfirm,1000,true)
 
   const OverlimiMessage = async (e) => {
     const { respCode, message } = e;

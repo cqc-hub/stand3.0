@@ -92,6 +92,20 @@
         </view>
       </view>
     </view>
+    <view class="voicing-area" :style="{ display: voicing ? 'flex' : 'none' }">
+      <view class="tap-area">
+        <view class="animation">
+          <view class="animation-contaner">
+            <view
+              class="line"
+              v-for="item in 15"
+              :key="item + 'animation'"
+            ></view>
+          </view>
+        </view>
+      </view>
+      <view class="title f28">松开发送</view>
+    </view>
   </view>
 </template>
 <script setup lang="ts">
@@ -112,20 +126,23 @@
   const msgLoad = ref<boolean>(false);
   const focus = ref<boolean>(false);
   const isVoice = ref<boolean>(false);
+  const voicing = ref<boolean>(false);
   const voiceTouchData = ref<any>({
     clientY: 0,
     isMoveUp: false,
   });
+  const guessServerBottom = ref<any>('');
+  const SImanager = ref<any>(null);
+  const inst = getCurrentInstance();
+  const query = uni.createSelectorQuery().in(inst);
+  animationData.value = uni.createAnimation({});
 
   const props = defineProps<{
     guessServerList: any[];
     headerConfig: StyleConfigType;
   }>();
+
   const emits = defineEmits(['on-blur', 'send-msg', 'click-server']);
-  const inst = getCurrentInstance();
-  const guessServerBottom = ref('');
-  const query = uni.createSelectorQuery().in(inst);
-  animationData.value = uni.createAnimation({});
 
   watch(
     () => props.headerConfig.showHeader,
@@ -133,6 +150,7 @@
       getGuessServerBottom();
     }
   );
+
   const whiteAreaHeight = computed(() => {
     if (props.headerConfig.showHeader) {
       return `calc(100vh - 800rpx)`;
@@ -149,29 +167,76 @@
     }
   });
 
+  const hasWechatSI = computed(() => {
+    const {
+      sConfig: { isOpenWechatSI },
+    } = globalGl;
+    return isOpenWechatSI;
+  });
+
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
-    nextTick(()=>{
-      msg.value=''
-    })
+    nextTick(() => {
+      msg.value = '';
+    });
   };
+
   const onBlur = (e) => {
     emits('on-blur', e.detail.value);
   };
+
   const handleClickServer = (serverItem) => {
     emits('click-server', serverItem);
   };
+
   const changeVoiceType = () => {
-    isVoice.value = !isVoice.value;
+    if (hasWechatSI.value) {
+      isVoice.value = !isVoice.value;
+    } else {
+      console.log('未配置语音输入插件，暂不支持切换输入方式');
+    }
   };
+
   const handleVoice = (...args) => {
     console.log('handleVoice', args);
+    SImanager.value.start({
+      duration: 60000,
+      lang: 'zh_CN',
+    });
   };
-  const cancleVoice = () => {};
+  const initRecord = () => {
+    SImanager.value.onStart = (res) => {
+      console.log('SImanager.value.onStart', res);
+    };
+    //有新的识别内容返回，则会调用此事件
+    SImanager.value.onRecognize = (res) => {
+      console.log('SImanager.value.onRecognize', res);
+      msg.value += res.result || '';
+    };
+
+    // 识别结束事件
+    SImanager.value.onStop = (res) => {
+      msg.value += res.result || '';
+      console.log('SImanager.value.onStop', res, msg.value);
+      emits('send-msg', msg.value);
+      nextTick(() => {
+        msg.value = '';
+      });
+    };
+  };
+
+  const cancleVoice = () => {
+    console.log('cancleVoice');
+    SImanager.value.stop();
+    voicing.value = false;
+  };
+
   const touchStart = (e) => {
     console.log('touchStart', e);
     voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
+    voicing.value = true;
   };
+
   let touchMove = (e) => {
     let touchData = e.touches[0]; //滑动过程中，手指滑动的坐标信息 返回的是Objcet对象
     let moveY = touchData.clientY - voiceTouchData.value.clientY;
@@ -183,15 +248,17 @@
     }
     console.log('touchMove', voiceTouchData.value);
   };
-  touchMove=debounce(touchMove,500,false)
+  touchMove = debounce(touchMove, 500, false);
+
   const endRecord = (e) => {
-    if (voiceTouchData.value.isMoveUp) {
-      cancleVoice();
-      voiceTouchData.value = {
-        clientY: 0,
-        isMoveUp: false,
-      };
-    }
+    // if (voiceTouchData.value.isMoveUp) {
+    //   cancleVoice();
+    //   voiceTouchData.value = {
+    //     clientY: 0,
+    //     isMoveUp: false,
+    //   };
+    // }
+    cancleVoice();
     console.log('endRecord', voiceTouchData.value);
   };
 
@@ -208,6 +275,11 @@
 
   onMounted(() => {
     getGuessServerBottom();
+    if (hasWechatSI.value) {
+      const plugin = requirePlugin('SIPlugin');
+      SImanager.value = plugin.getRecordRecognitionManager();
+      initRecord();
+    }
   });
 </script>
 <style lang="scss" scoped>
@@ -405,5 +477,72 @@
     bottom: 0;
     width: 100vw;
     height: 450px;
+  }
+  .voicing-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 99;
+    display: flex;
+    flex-direction: column-reverse;
+    .title {
+      text-align: center;
+      color: #ececec;
+      padding-bottom: 10rpx;
+    }
+    .animation {
+      width: 100%;
+      height: 150rpx;
+      z-index: 999;
+      background: linear-gradient(#defffd, #f5fbff);
+      // filter: blur(2px);
+      border-top: 10rpx solid  #f5fbff;
+      border-top-left-radius: 40%;
+      border-top-right-radius: 40%;
+      .animation-contaner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 50rpx;
+        .line {
+          display: inline-block;
+          width: 10rpx;
+          height: 40rpx;
+          margin: 0 5rpx;
+          background: #296fff;
+          transform-origin: center center;
+          animation: music 1s 0ms infinite ease-in-out;
+        }
+        @for $i from 1 through 15 {
+          view:nth-child(#{$i}) {
+            animation-delay: 0.05s * $i;
+          }
+        }
+        @for $i from 1 through 8 {
+          view:nth-child(#{$i}) {
+            height: 40rpx + 3rpx * $i;
+          }
+        }
+        @for $i from 8 through 15 {
+          view:nth-child(#{$i}) {
+            height: 64rpx - 3rpx * ($i - 8);
+          }
+        }
+      }
+    }
+  }
+  @keyframes music {
+    0% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(0.2);
+    }
+    100% {
+      transform: scaleY(1);
+    }
   }
 </style>
