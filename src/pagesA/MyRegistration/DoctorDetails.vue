@@ -796,6 +796,7 @@
       isOpenComment,
       isHideCommentListInDocDetail,
       isOpenDocCardOnlineService,
+      isOpenDocCardOnlineServiceAlipay,
       isOpenOutHosSch,
     } = pageConfig.value;
 
@@ -803,9 +804,16 @@
       getCommentList();
     }
 
+
     if (isOpenDocCardOnlineService === '1') {
       getDocService();
     }
+    
+    // #ifdef MP-ALIPAY
+    if (isOpenDocCardOnlineServiceAlipay === '1') {
+      getDocService();
+    }
+    // #endif
 
     if (isOpenOutHosSch === '1') {
       docSchOutHosList.value = await useDoctorDetail.getOutHosSchData();
