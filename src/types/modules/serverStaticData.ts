@@ -70,6 +70,7 @@ export interface ISystemConfig_ {
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
     // 开启在线服务?
     isOpenDocCardOnlineService?: '1';
+    isOpenDocCardOnlineServiceAlipay?: '1'; // 有的时候表示支付宝 
     // 近一年大数据
     isOpenBigDataNearlyYear?: '1';
     // 评论
