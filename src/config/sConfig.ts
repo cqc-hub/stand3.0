@@ -109,7 +109,7 @@ interface ISConfig {
         path: string;
       };
       //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
-      crossProgramBizType?:{
+      crossProgramBizType?: {
         reg?: string;
         clinic?: string;
       };
@@ -210,12 +210,12 @@ const scJson: Record<string, ISConfig> = {
    */
   1001052: {
     isDrugDelivery: '1',
-    isOpenWechatSI:true,
+    isOpenWechatSI: true,
     medicalMHelp: {
       wx: {
-        crossProgramBizType:{
-          clinic:'6vtqCjFiWg'
-        } ,
+        crossProgramBizType: {
+          clinic: '6vtqCjFiWg',
+        },
         medicalPlugin: '1',
       },
       alipay: {
@@ -272,9 +272,9 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
-        crossProgramBizType:{
-          clinic:'iAZhaFg90P',
-        } , 
+        crossProgramBizType: {
+          clinic: 'iAZhaFg90P',
+        },
         medicalPlugin: '1',
       },
 
@@ -311,11 +311,11 @@ const scJson: Record<string, ISConfig> = {
           // 生产
           path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAFCflpRouGx9rzCduR7IDwV&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxveJKftoNCw+TCAqUwy6fwh&orgCodg=H61010300557&orgAppId=1H39F4EL9015E2470B0A000095823F28',
         },
-        crossProgramBizType:{
-          clinic:'mAuUBT4u0E',
-          reg:'w4XIxwNWzW'
-        } ,
-        
+        crossProgramBizType: {
+          clinic: 'mAuUBT4u0E',
+          reg: 'w4XIxwNWzW',
+        },
+
         // medicalDefault: '1',
         isMedicalOrder: '1',
         isFamilyPayment: '1',
@@ -380,9 +380,9 @@ const scJson: Record<string, ISConfig> = {
     },
     medicalMHelp: {
       wx: {
-        crossProgramBizType:{
-          clinic:'6f8FEzfB6q',
-        } ,
+        crossProgramBizType: {
+          clinic: '6f8FEzfB6q',
+        },
         medicalPlugin: '1',
       },
       alipay: {
@@ -420,11 +420,19 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 天水市第一人民医院
    */
-  1001074:{
+  1001074: {
     login: {
-      isAliAuthBase: '1'
-    }
-  }
+      isAliAuthBase: '1',
+    },
+    medicalMHelp: {
+      isOpenPatToMedicalPat: {},
+      alipay: {
+        // medicalDefault: '1',
+        medicalNation: {},
+        isMedicalOrder: '1',
+      },
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {
