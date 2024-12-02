@@ -92,7 +92,11 @@
         </view>
       </view>
     </view>
-    <view class="voicing-area" :style="{ display: voicing ? 'flex' : 'none' }">
+    <view
+      class="voicing-area"
+      :style="{ display: voicing ? 'flex' : 'none' }"
+      @click="cancleVoice"
+    >
       <view class="tap-area">
         <view class="animation">
           <view class="animation-contaner">
@@ -114,13 +118,14 @@
     computed,
     getCurrentInstance,
     onMounted,
+    onBeforeMount,
     watch,
     nextTick,
   } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
   import { debounce } from '@/utils';
-
+  let SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
   const msg = ref<string>();
   const msgLoad = ref<boolean>(false);
@@ -132,7 +137,7 @@
     isMoveUp: false,
   });
   const guessServerBottom = ref<any>('');
-  const SImanager = ref<any>(null);
+
   const inst = getCurrentInstance();
   const query = uni.createSelectorQuery().in(inst);
   animationData.value = uni.createAnimation({});
@@ -199,35 +204,41 @@
 
   const handleVoice = (...args) => {
     console.log('handleVoice', args);
-    SImanager.value.start({
+    SImanager.start({
       duration: 60000,
       lang: 'zh_CN',
     });
+
   };
   const initRecord = () => {
-    SImanager.value.onStart = (res) => {
-      console.log('SImanager.value.onStart', res);
-    };
-    //有新的识别内容返回，则会调用此事件
-    SImanager.value.onRecognize = (res) => {
-      console.log('SImanager.value.onRecognize', res);
-      msg.value += res.result || '';
-    };
+    if (hasWechatSI.value) {
+      const plugin = requirePlugin('SIPlugin');
+      SImanager = plugin.getRecordRecognitionManager();
+      SImanager.onStop = (res) => {
+        console.log('SImanager.onStop2', res, msg.value);
+        msg.value += res.result || '';
+      };
 
-    // 识别结束事件
-    SImanager.value.onStop = (res) => {
-      msg.value += res.result || '';
-      console.log('SImanager.value.onStop', res, msg.value);
-      emits('send-msg', msg.value);
-      nextTick(() => {
-        msg.value = '';
-      });
-    };
+      SImanager.onStart = (res) => {
+        console.log('SImanager..onStart', res);
+      };0
+
+      SImanager.onError = function (res) {
+        console.error('error msg', res);
+      };
+      //有新的识别内容返回，则会调用此事件
+      SImanager.onRecognize = (res) => {
+        console.log('SImanager..onRecognize', res);
+        msg.value += res.result || '';
+      };
+      // 识别结束事件
+    }
   };
 
   const cancleVoice = () => {
-    console.log('cancleVoice');
-    SImanager.value.stop();
+    SImanager.stop();
+    console.log('cancleVoice2');
+
     voicing.value = false;
   };
 
@@ -251,13 +262,13 @@
   touchMove = debounce(touchMove, 500, false);
 
   const endRecord = (e) => {
-    // if (voiceTouchData.value.isMoveUp) {
-    //   cancleVoice();
-    //   voiceTouchData.value = {
-    //     clientY: 0,
-    //     isMoveUp: false,
-    //   };
-    // }
+    if (voiceTouchData.value.isMoveUp) {
+      cancleVoice();
+      voiceTouchData.value = {
+        clientY: 0,
+        isMoveUp: false,
+      };
+    }
     cancleVoice();
     console.log('endRecord', voiceTouchData.value);
   };
@@ -273,14 +284,13 @@
     }, 0);
   };
 
+  initRecord();
   onMounted(() => {
     getGuessServerBottom();
-    if (hasWechatSI.value) {
-      const plugin = requirePlugin('SIPlugin');
-      SImanager.value = plugin.getRecordRecognitionManager();
-      initRecord();
-    }
   });
+
+   
+
 </script>
 <style lang="scss" scoped>
   .transition {
@@ -499,7 +509,7 @@
       z-index: 999;
       background: linear-gradient(#defffd, #f5fbff);
       // filter: blur(2px);
-      border-top: 10rpx solid  #f5fbff;
+      border-top: 10rpx solid #f5fbff;
       border-top-left-radius: 40%;
       border-top-right-radius: 40%;
       .animation-contaner {
