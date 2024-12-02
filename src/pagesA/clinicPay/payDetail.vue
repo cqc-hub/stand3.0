@@ -879,7 +879,7 @@
         ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
       patientName: props.value.patientName,
       businessType: '1',
-      patientId,
+      patientId: props.value.params ? '' : patientId,
       source,
       totalCost,
       mergeOrder: childOrder,

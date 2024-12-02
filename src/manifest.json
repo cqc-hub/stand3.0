@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wx4d8f68fdc6b6831c",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -64,9 +64,9 @@
     ],
     "usingComponents": true,
     "plugins": {
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
+      "healthCardPlugins": {
+        "version": "3.11.0",
+        "provider": "wxee969de81bba9a45"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -77,17 +77,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
+      "codePlugin": {
         "version": "*",
-        "provider": "2021001130678316"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
+        "provider": "2021003163608051"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396"
+    "appid": "2021003182673498"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -99,7 +95,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "中国人民解放军新疆军区总医院",
   "h5": {
     "router": {
       "base": "./"
