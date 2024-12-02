@@ -9,6 +9,7 @@ import {
   hideLoading,
   getLocalStorage,
   setLocalStorage,
+  deepClone,
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useMessageStore } from '@/stores';
@@ -104,7 +105,7 @@ Request.interceptors.response(
 
     // @ts-expect-error
     console.log('入参----', responseOptions?._data);
-    console.log('出参----', responseData.result);
+    console.log('出参----', deepClone(responseData.result));
     console.log('总----', response);
 
     //处理清除缓存的操作

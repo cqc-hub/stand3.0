@@ -80,31 +80,30 @@
                 v-for="(item, index) in pageList[tab.typeId]"
                 :key="index"
               >
-              <template v-for="(report,reportIndex) in item.reportHosNameResults" :key="`reportHosNameResults${reportIndex}`"> 
-
-                <view class="date" :class="{ dateFirst: index == 0 }">
-                  <view class="iconfont date-icon">&#xe6c6;</view>
-                  <view class="date-number">{{ item.date }}</view>
-                  <text style="color: #e6e6e6">|</text>
-                  <view class="address">
-                    {{ report.hosName }}
-                  </view>
-                </view>
-                <view
-                  class="advisoryItem"
-                  :class="{ advisoryItemFirst: index == 0 }"
+                <template
+                  v-for="(report, reportIndex) in item.reportHosNameResults"
+                  :key="`reportHosNameResults${reportIndex}`"
                 >
-                  <template
-                    v-for="(data, i) in report.reportList"
-                    :key="i"
-                  >
-                    <view @tap="goDetail(data)">
-                      <advisoryItem :data="data" :type="tab.headerType" />
+                  <view class="date" :class="{ dateFirst: index == 0 }">
+                    <view class="iconfont date-icon">&#xe6c6;</view>
+                    <view class="date-number">{{ item.date }}</view>
+                    <text style="color: #e6e6e6">|</text>
+                    <view class="address">
+                      {{ report.hosName }}
                     </view>
-                  </template>
-                </view>
+                  </view>
+                  <view
+                    class="advisoryItem"
+                    :class="{ advisoryItemFirst: index == 0 }"
+                  >
+                    <template v-for="(data, i) in report.reportList" :key="i">
+                      <view @tap="goDetail(data)">
+                        <advisoryItem :data="data" :type="tab.headerType" />
+                      </view>
+                    </template>
+                  </view>
+                </template>
               </template>
-            </template>
               <view class="safe-height"></view>
               <view class="safe-height"></view>
             </view>
@@ -155,7 +154,7 @@
     useTBanner,
   } from '@/utils';
   import { joinQueryForUrl } from '@/common';
-  import { deQueryForUrl } from '@/common/utils';
+  import { deepClone, deQueryForUrl } from '@/common/utils';
 
   import api from '@/service/api';
   import { useCacheStore } from '@/stores';
@@ -302,7 +301,7 @@
     if (currentTabValue === 1 && isCheckThirdParty === '1') {
       getThirdPartyReportUrl();
     } else {
-      const { result } = await api
+      let { result } = await api
         .getReportsReportList<ICms[]>(params)
         .catch((e) => {
           slist.value[currentTabValue].loadFail(returnArg);
@@ -312,7 +311,7 @@
         .finally(async () => {
           loading.value = false;
         });
-
+      result = deepClone(result);
       const willChangeList = pageList.value[typeId];
       if (page === 1) {
         willChangeList.length = 0;
@@ -322,7 +321,9 @@
         if (willChangeList.length) {
           result.map((o) => {
             const { date, reportHosNameResults } = o;
+
             if (reportHosNameResults && reportHosNameResults.length) {
+
               reportHosNameResults.map((p) => {
                 const { hosName, reportList } = p;
 
@@ -335,9 +336,12 @@
                     if (findItemSameDate) {
                       if (findItemSameDate.reportHosNameResults?.length) {
                         findItemSameDate.reportHosNameResults.map((fHItem) => {
+
                           if (fHItem.hosName === hosName) {
                             if (fHItem.reportList) {
-                              fHItem.reportList.push(item);
+                              if (!fHItem.reportList.includes(item)) {
+                                fHItem.reportList.push(item);
+                              }
                             } else {
                               fHItem.reportList = [item];
                             }
@@ -345,7 +349,6 @@
                         });
                       }
                     } else {
-
                       willChangeList.push({
                         date,
                         reportHosNameResults: [

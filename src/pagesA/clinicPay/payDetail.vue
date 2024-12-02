@@ -872,6 +872,7 @@
       cardNumber,
       recipeNo,
     } = props.value;
+    const _patientId = props.value.params ? '' : patientId;
 
     const args = {
       ...props.value,
@@ -879,7 +880,7 @@
         ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
       patientName: props.value.patientName,
       businessType: '1',
-      patientId,
+      patientId: _patientId,
       source,
       totalCost,
       mergeOrder: childOrder,
@@ -910,6 +911,7 @@
       hosName,
       patientName: props.value.patientName || patientName,
       cardNumber,
+      patientId: _patientId,
     };
     return payArg;
   };
