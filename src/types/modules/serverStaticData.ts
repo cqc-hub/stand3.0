@@ -35,7 +35,7 @@ export interface ISystemConfig_ {
       // '0' 门诊充值
       key: '0';
     };
-   
+
 
     /** 挂号页面 */
     /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会 */
@@ -64,13 +64,15 @@ export interface ISystemConfig_ {
     wxOrderSubscribeMessage?: string[];
     /** 挂号按钮 的 label */
     orderRegBtnLabel?: string;
+    /** 快速预约（挂号无需绑定就诊人） */
+    isOrderWithoutPat?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
     // 开启在线服务?
     isOpenDocCardOnlineService?: '1';
-    isOpenDocCardOnlineServiceAlipay?: '1'; // 有的时候表示支付宝 
+    isOpenDocCardOnlineServiceAlipay?: '1'; // 有的时候表示支付宝
     // 近一年大数据
     isOpenBigDataNearlyYear?: '1';
     // 评论

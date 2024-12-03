@@ -74,10 +74,10 @@
       return
     }
 
-    if (!patList.length) {
-      gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
-      return;
-    }
+    // if (!patList.length) {
+    //   gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
+    //   return;
+    // }
 
     if (actionSheet.value) {
       actionSheet.value.show();

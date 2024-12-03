@@ -294,9 +294,6 @@
           "path": "MyRegistration/RegConfirm",
           "style": {
             "navigationBarTitleText": "确认挂号信息"
-          },
-          "extend": {
-            "patient": true
           }
         },
         {
@@ -317,9 +314,9 @@
               "code-btn": "plugin://crossProgramPlugins/code-pop-btn"
               // #endif
             }
-            
+
           }
-          
+
         },
         {
           "path": "MyRegistration/takeNumberDetail",

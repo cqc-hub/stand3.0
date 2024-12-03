@@ -154,6 +154,7 @@
   import GreenPower from '@/components/greenPower/greenPower.vue';
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import { useProgramPaySign } from '@/pagesA/medicalCardMan/utils';
+  import { beforeEach } from '@/router';
 
   const gStores = new GStores();
   const props = ref({} as IPageProps);
@@ -453,7 +454,7 @@
     });
   };
 
-  regConfirm=debounce(regConfirm,1000,true)
+  regConfirm = debounce(regConfirm, 1000, true);
 
   const OverlimiMessage = async (e) => {
     const { respCode, message } = e;
@@ -583,16 +584,32 @@
     });
   });
 
-  onLoad((p) => {
+  onLoad(async (p) => {
+    uni.showLoading({});
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     isOver.value = true;
-    initSign();
-    getPageConfig();
-    //设置顶部标题
     isWaitReg.value &&
       uni.setNavigationBarTitle({
         title: '确认候补信息',
       });
+    initSign();
+    await getPageConfig();
+    const pages = getCurrentPages();
+    if (pages.length) {
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+      const routeArg = {
+        url: fullUrl,
+        _isLogin: true,
+        _isPatient: true,
+      };
+
+      if (pageConfig.value.isOrderWithoutPat === '1') {
+        routeArg._isPatient = false;
+      }
+
+      await beforeEach(routeArg);
+    }
   });
 </script>
 
