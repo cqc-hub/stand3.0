@@ -65,7 +65,7 @@
               class="record"
               v-if="
                 props.isQueryPreRecord == '1' &&
-                (pageProps.visitNo ? pageProps.patientId : false)
+                (pageProps.visitNo ? pageProps.patientId : true)
               "
             >
               <view class="triangle-left"></view>
