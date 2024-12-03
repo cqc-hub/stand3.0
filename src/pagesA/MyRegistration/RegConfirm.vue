@@ -15,7 +15,37 @@
         </view>
 
         <view>
-          <Reg-Confirm-ChoosePat />
+          <Reg-Confirm-ChoosePat
+            :isOrderWithoutPat="pageConfig.isOrderWithoutPat === '1'"
+          >
+            <template #header="{ chooseAction }">
+              <view
+                v-if="pageConfig.isOrderWithoutPat === '1'"
+                class="flex mb12"
+              >
+                <view class="flex-1"></view>
+                <view>
+                  <view>
+                    <view class="flex">
+                      <view
+                        class="btn btn-primary btn-small f28 pr12 pl12 pt8 pb8 mr12"
+                        @click="chooseAction"
+                      >
+                        切换就诊人
+                      </view>
+
+                      <view
+                        class="btn btn-error btn-border btn-small f28 pr12 pl12 pt8 pb8"
+                        @click="handlerCreateCachePerson"
+                      >
+                        快速预约
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </template>
+          </Reg-Confirm-ChoosePat>
         </view>
       </view>
 
@@ -106,6 +136,10 @@
       </view>
     </view>
 
+    <RegConformQCreatePerson
+      v-if="pageConfig.isOrderWithoutPat === '1'"
+      v-model:visible="isCreateCachePersonFormShow"
+    />
     <g-select
       v-model:value="selWaitRegSch"
       v-model:show="isShowSelWaitRegSch"
@@ -153,6 +187,7 @@
   import RegConfirmChoosePat from './components/RegConfirmChoosePat/RegConfirmChoosePat.vue';
   import GreenPower from '@/components/greenPower/greenPower.vue';
   import GreenToast from '@/components/greenPower/greenToast.vue';
+  import RegConformQCreatePerson from './components/RegConformQCreatePerson/RegConformQCreatePerson.vue';
   import { useProgramPaySign } from '@/pagesA/medicalCardMan/utils';
   import { beforeEach } from '@/router';
 
@@ -575,6 +610,19 @@
     // #ifdef MP-WEIXIN
     await regConfirm();
     // #endif
+  };
+
+  let _resolve: any = () => {
+    // r
+  };
+
+  let _reject: any = () => {
+    // j RegConformQCreatePerson
+  };
+
+  const isCreateCachePersonFormShow = ref(false);
+  const handlerCreateCachePerson = async () => {
+    isCreateCachePersonFormShow.value = true;
   };
 
   onShow(() => {

@@ -5,6 +5,8 @@
     }"
     class="choose g-border"
   >
+    <slot name="header" :chooseAction="chooseAction" />
+
     <view class="choose-row">
       <view class="user-info text-ellipsis" @tap="closeEyes">
         <text class="title">
@@ -25,9 +27,15 @@
         </text>
       </view>
 
-      <view class="choose-icon flex-normal" @click="chooseAction">
-        <text>更换</text>
-        <text class="iconfont">&#xe66b;</text>
+      <view>
+        <view
+          v-if="!isOrderWithoutPat"
+          class="choose-icon flex-normal"
+          @click="chooseAction"
+        >
+          <text>更换</text>
+          <text class="iconfont">&#xe66b;</text>
+        </view>
       </view>
     </view>
 
@@ -63,15 +71,16 @@
   const emits = defineEmits(['choose-pat', 'go-choose-pat']);
   const isClose = ref(true);
   const props = defineProps<{
+    isOrderWithoutPat?: boolean;
     isUnSelPat?: boolean;
-  }>()
+  }>();
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;
-    emits('go-choose-pat')
+    emits('go-choose-pat');
 
     if (props.isUnSelPat) {
-      return
+      return;
     }
 
     // if (!patList.length) {

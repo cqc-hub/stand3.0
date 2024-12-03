@@ -17,7 +17,7 @@
               <text class="">{{ item.docName }}</text>
             </view>
             <view
-              v-if="item.docTitleName && isAllDate"
+              v-if="item.docTitleName"
               class="doc-info-introduce-title flex-normal"
             >
               <view
@@ -54,16 +54,16 @@
         <view
           v-if="item.hosName"
           :class="{
-            [(isShowHosNameWithDeptName && 'color-blue text-ellipsis') || 'color-888']: 1,
+            [(isShowHosNameWithDeptName && 'color-blue text-ellipsis') ||
+            'color-888']: 1,
           }"
-          class="doc-info-introduce-title "
+          class="doc-info-introduce-title"
         >
+          <text v-if="item.deptName && isShowHosNameWithDeptName">
+            {{ item.deptName }} -
+          </text>
           <text>
             {{ item.hosName }}
-          </text>
-
-          <text v-if="item.deptName && isShowHosNameWithDeptName">
-            - {{ item.deptName }}
           </text>
         </view>
 
@@ -87,6 +87,15 @@
           </text>
         </view>
 
+        <view
+          :class="{
+            mb12: isAllDate,
+          }"
+          class="color-444 ellipsis-line-clamp2 g-break-word"
+        >
+          我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址
+        </view>
+
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view
             v-if="!item.schQukCategor"
@@ -96,7 +105,7 @@
           </view>
 
           <!-- 按天的荣誉职称 -->
-          <block v-else>
+          <!-- <block v-else>
             <text
               :class="{
                 'doc-job-name': item.docJobName,
@@ -108,7 +117,7 @@
             <text>
               {{ item.docTitleName }}
             </text>
-          </block>
+          </block> -->
         </view>
       </view>
     </view>
