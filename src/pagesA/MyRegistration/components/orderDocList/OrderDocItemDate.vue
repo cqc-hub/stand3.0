@@ -2,6 +2,7 @@
   <view>
     <Order-Doc-List-Container
       :item="item"
+      :isShowHosNameWithDeptName="pageConfig.isShowHosNameWithDeptName === '1'"
       @avatar-click="emits('avatar-click', item)"
       @preregistration-click="emits('preregistration-click', $event)"
     >
@@ -17,6 +18,7 @@
               :item="_item"
               :pageConfig="pageConfig"
               :systemModeOld="systemModeOld"
+              :patient="patient"
               @reg-click="regClick"
               @wait-reg-click="waitRegClick"
             />
@@ -48,6 +50,7 @@
     item: IItem;
     pageConfig: ISystemConfig['order'];
     systemModeOld?: boolean;
+    patient?: boolean;
   }>();
 
   const docInfo = computed(() => {

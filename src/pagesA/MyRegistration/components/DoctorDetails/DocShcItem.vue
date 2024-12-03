@@ -1,5 +1,9 @@
 <template>
-  <g-login :disabled="disabled" @handler-next="regClick(item)" patient>
+  <g-login
+    :disabled="disabled"
+    :patient="patient"
+    @handler-next="regClick(item)"
+  >
     <view @click="regClick(item)" class="scheme-item">
       <view class="flex-between">
         <view class="scheme-item-ampm-name">
@@ -67,7 +71,8 @@
         <block
           v-if="
             pageConfig.isHideNumberSourceTotalRemain !== '1' &&
-            item.schState !== '1'&&item.schState !== '2'
+            item.schState !== '1' &&
+            item.schState !== '2'
           "
         >
           <view class="color-888 text-no-wrap text-center">
@@ -95,6 +100,7 @@
     pageConfig: ISystemConfig['order'];
     outHosSch?: boolean;
     disabled?: boolean;
+    patient?: boolean;
   }>();
 
   const emits = defineEmits(['reg-click', 'wait-reg-click', 'avatar-click']);

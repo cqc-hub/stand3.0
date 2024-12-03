@@ -21,7 +21,7 @@
         <view></view>
         <view
           @click="isFilterDoctor = !isFilterDoctor"
-          class="flex-normal pt6 pb6 mr32 "
+          class="flex-normal pt6 pb6 mr32"
         >
           <text class="iconfont f48">
             {{ isFilterDoctor ? '&#xe6d0;' : '&#xe6ce;' }}
@@ -38,6 +38,8 @@
         <view v-for="(item, i) in _allDocList" :key="i" class="pb16">
           <Order-Doc-Item-All
             :item="item"
+            :pageConfig="orderConfig"
+            :patient="orderConfig.isOrderWithoutPat !== '1'"
             @date-click="dateClick"
             @avatar-click="avatarClick"
             @preregistration-click="preregistrationClick"
@@ -59,6 +61,7 @@
               :key="__i"
             >
               <Order-Doc-Item-Date
+                :patient="orderConfig.isOrderWithoutPat !== '1'"
                 :item="__item"
                 :pageConfig="orderConfig"
                 :systemModeOld="gStores.globalStore.modeOld"
@@ -335,7 +338,6 @@
   .container-contract {
     padding: 0 32rpx;
     padding-top: 24rpx;
-
   }
 
   .item-scheme-date {

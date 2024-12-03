@@ -66,6 +66,8 @@ export interface ISystemConfig_ {
     orderRegBtnLabel?: string;
     /** 快速预约（挂号无需绑定就诊人） */
     isOrderWithoutPat?: '1';
+    /** 医生挂号展示医院名那儿多展示一下科室 */
+    isShowHosNameWithDeptName?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
