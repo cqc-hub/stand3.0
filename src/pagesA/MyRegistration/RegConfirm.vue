@@ -174,8 +174,9 @@
     wait,
     apiAsync,
     ISystemConfig,
-    debounce,
     nameConvert,
+    PatientUtils,
+    throttle,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -220,6 +221,7 @@
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
   const isOverLimit = ref('');
+  const patientUtils = new PatientUtils();
 
   const {
     regDialogConfirmSign,
@@ -282,7 +284,7 @@
     quickPat.value = {} as any;
   };
 
-  let regConfirm = async () => {
+  const regConfirm = throttle(async () => {
     const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
       pageConfig.value;
     /**
@@ -318,8 +320,7 @@
       thRegisterId,
       regVerificationMode,
     } = props.value;
-    const { herenId, patientId, realNameAuth, patientName } =
-      gStores.userStore.patChoose;
+    let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
 
     if (isOrderWithoutPat === '1') {
@@ -380,14 +381,24 @@
       schId,
       schQukCategor,
       timeDesc,
-      herenId,
       patientId,
       source,
       resType,
       promptMessage,
       thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
       ageReminderCode: isOverLimit.value,
+      quickAppoint: '',
     };
+
+    if (quickPat.value.patientName) {
+      const { patientId: _patientId } = await patientUtils.quickAppointmentAddPat(
+        quickPat.value
+      );
+      patientId = _patientId;
+
+      requestArg.patientId = patientId;
+      requestArg.quickAppoint = 'quickAppoint';
+    }
 
     let alipayAuthCode = '';
     // #ifdef MP-ALIPAY
@@ -509,9 +520,7 @@
         thRegisterId,
       }),
     });
-  };
-
-  regConfirm = debounce(regConfirm, 1000, true);
+  }, 500);
 
   const OverlimiMessage = async (e) => {
     const { respCode, message } = e;

@@ -294,9 +294,6 @@
           "path": "MyRegistration/RegConfirm",
           "style": {
             "navigationBarTitleText": "确认挂号信息"
-          },
-          "extend": {
-            "patient": true
           }
         },
         {
