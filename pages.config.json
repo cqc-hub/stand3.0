@@ -300,9 +300,6 @@
           "path": "MyRegistration/PreRegConfirm",
           "style": {
             "navigationBarTitleText": "预约登记"
-          },
-          "extend": {
-            "patient": true
           }
         },
         {

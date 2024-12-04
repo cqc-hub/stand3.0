@@ -52,11 +52,7 @@
   const formData = ref<BaseObject>({});
   const formChange = async ({ item, value, oldValue }) => {
     if (oldValue !== value) {
-      if (item.key === 'patientType') {
-        medicalTypeChange(value);
-      }
-
-      if (item.key === 'idType') {
+      if (['idType', 'patientType'].includes(item.key)) {
         formData.value['idCard'] = '';
         formData.value['sex'] = '';
         formData.value['birthday'] = '';
