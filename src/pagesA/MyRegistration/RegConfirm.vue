@@ -16,7 +16,9 @@
 
         <view>
           <Reg-Confirm-ChoosePat
+            :pat="quickPat"
             :isOrderWithoutPat="pageConfig.isOrderWithoutPat === '1'"
+            @choose-pat="patChoose"
           >
             <template #header="{ chooseAction }">
               <view
@@ -139,6 +141,8 @@
     <RegConformQCreatePerson
       v-if="pageConfig.isOrderWithoutPat === '1'"
       v-model:visible="isCreateCachePersonFormShow"
+      @submit="dialogSubmit"
+      @cancel="dialogCancel"
     />
     <g-select
       v-model:value="selWaitRegSch"
@@ -171,11 +175,12 @@
     apiAsync,
     ISystemConfig,
     debounce,
+    nameConvert,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
   import { getLocalStorage } from '@/common';
-  import { useDeptStore } from '@/stores';
+  import { IPat, useDeptStore } from '@/stores';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -195,6 +200,11 @@
   const props = ref({} as IPageProps);
   const pageConfig = ref({} as ISystemConfig['order']);
   const deptStore = useDeptStore();
+  const quickPat = ref(
+    {} as IPat & {
+      verifyCode: string;
+    }
+  );
 
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
@@ -268,8 +278,13 @@
     throw new Error('实名?');
   };
 
+  const patChoose = () => {
+    quickPat.value = {} as any;
+  };
+
   let regConfirm = async () => {
-    const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
+    const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
+      pageConfig.value;
     /**
      * 未填写参数
      *
@@ -306,6 +321,13 @@
     const { herenId, patientId, realNameAuth, patientName } =
       gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
+
+    if (isOrderWithoutPat === '1') {
+      if (!(patientId || quickPat.value.patientName)) {
+        gStores.messageStore.showMessage('请先添加就诊人信息', 1500);
+        return;
+      }
+    }
 
     if (!isCheck.value && !isWaitReg.value) {
       regDialogConfirm.value.show();
@@ -617,12 +639,29 @@
   };
 
   let _reject: any = () => {
-    // j RegConformQCreatePerson
+    // j
+  };
+
+  const dialogSubmit = (e) => {
+    _resolve(e);
+  };
+
+  const dialogCancel = () => {
+    _reject();
   };
 
   const isCreateCachePersonFormShow = ref(false);
   const handlerCreateCachePerson = async () => {
     isCreateCachePersonFormShow.value = true;
+
+    const _quickPat = await new Promise<any>((r, j) => {
+      _resolve = r;
+      _reject = j;
+    });
+
+    _quickPat.patientNameEncry = nameConvert(_quickPat.patientName);
+    quickPat.value = _quickPat;
+    isCreateCachePersonFormShow.value = false;
   };
 
   onShow(() => {
@@ -642,6 +681,8 @@
       });
     initSign();
     await getPageConfig();
+    uni.hideLoading();
+
     const pages = getCurrentPages();
     if (pages.length) {
       const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;

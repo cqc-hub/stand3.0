@@ -6,60 +6,57 @@
     class="choose g-border"
   >
     <slot name="header" :chooseAction="chooseAction" />
+    <view v-if="showPat.patientName">
+      <view class="choose-row">
+        <view class="user-info text-ellipsis" @tap="closeEyes">
+          <text class="title">
+            {{ `${isClose ? showPat.patientNameEncry : showPat.patientName}` }}
+          </text>
 
-    <view class="choose-row">
-      <view class="user-info text-ellipsis" @tap="closeEyes">
-        <text class="title">
-          {{
-            `${
-              isClose
-                ? gStores.userStore.patChoose.patientNameEncry
-                : gStores.userStore.patChoose.patientName
-            }`
-          }}
-        </text>
+          <text v-if="showPat._showId">
+            {{ ` (${showPat._showId})` }}
+          </text>
+          <text :class="`iconfont icon-resize`">
+            {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
+          </text>
+        </view>
 
-        <text>
-          {{ ` (${gStores.userStore.patChoose._showId})` }}
-        </text>
-        <text :class="`iconfont icon-resize`">
-          {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
-        </text>
-      </view>
-
-      <view>
-        <view
-          v-if="!isOrderWithoutPat"
-          class="choose-icon flex-normal"
-          @click="chooseAction"
-        >
-          <text>更换</text>
-          <text class="iconfont">&#xe66b;</text>
+        <view>
+          <view
+            v-if="!isOrderWithoutPat"
+            class="choose-icon flex-normal"
+            @click="chooseAction"
+          >
+            <text>更换</text>
+            <text class="iconfont">&#xe66b;</text>
+          </view>
         </view>
       </view>
+
+      <view class="choose-phone">
+        <text class="label">手机号</text>
+
+        <text>
+          {{ `${showPat.patientPhone}` }}
+        </text>
+      </view>
+
+      <view class="choose-phone">
+        <text class="label">证件号码</text>
+
+        <text>
+          {{ `${showPat.idCard}` }}
+        </text>
+      </view>
     </view>
 
-    <view class="choose-phone">
-      <text class="label">手机号</text>
-
-      <text>
-        {{ `${gStores.userStore.patChoose.patientPhone}` }}
-      </text>
-    </view>
-
-    <view class="choose-phone">
-      <text class="label">证件号码</text>
-
-      <text>
-        {{ `${gStores.userStore.patChoose.idCard}` }}
-      </text>
-    </view>
+    <view v-else class="font-semibold f32">请添加就诊人信息</view>
     <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
 
   import { GStores } from '@/utils';
   import { getAvatar, IPat } from '@/stores';
@@ -71,9 +68,18 @@
   const emits = defineEmits(['choose-pat', 'go-choose-pat']);
   const isClose = ref(true);
   const props = defineProps<{
+    pat?: any;
     isOrderWithoutPat?: boolean;
     isUnSelPat?: boolean;
   }>();
+
+  const showPat = computed(() => {
+    if (props.pat?.patientName) {
+      return props.pat;
+    }
+
+    return gStores.userStore.patChoose;
+  });
 
   const chooseAction = () => {
     const patList = gStores.userStore.patList;

@@ -47,7 +47,7 @@ interface IBaseInstance {
   isForShow?: boolean;
   direction?: 'vertical' | 'horizontal';
   validator?: (
-    v: unknown,
+    v: any,
     item: TInstance
   ) => Promise<
     | {

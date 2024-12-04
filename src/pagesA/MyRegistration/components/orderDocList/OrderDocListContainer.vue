@@ -87,14 +87,14 @@
           </text>
         </view>
 
-        <view
+        <!-- <view
           :class="{
             mb12: isAllDate,
           }"
           class="color-444 ellipsis-line-clamp2 g-break-word"
         >
           我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址
-        </view>
+        </view> -->
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view

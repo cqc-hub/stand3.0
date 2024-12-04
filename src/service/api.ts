@@ -737,6 +737,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  quickAppointmentAddPat: (data) =>
+    service.post('/phs-user/rePat/quickAppointmentAddPat', parm(data), {
+      hideLoading: false,
+    }),
+
   rpGetPlain: (data) =>
     service.post('/phs-user/rePat/rpGetPlain', parm(data), {
       hideLoading: false,
