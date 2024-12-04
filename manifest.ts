@@ -15,6 +15,8 @@ const sysConfig = sysInfo.sysConfig[sysCode];
 const sConfig = getSConfig(sysCode);
 
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
+let pagesExportFileUrl = `${__dirname}/src/pages.json`;
+
 // let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
 // // 移除注释
 // manifestFileData = manifestFileData.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -134,9 +136,15 @@ const toutiaoConfig = manifestFileDataObj['mp-toutiao'];
 const wxPlugin: any = {};
 const aliPlugin: any = {};
 
+const pagesPlugins: any = {
+  'pagesA-plugins': { wx: {}, ali: {} },
+  'pagesB-plugins': { wx: {}, ali: {} },
+  'pagesC-plugins': { wx: {}, ali: {} },
+};
+
 if (isOpenHealthCard) {
   // 电子健康卡
-  wxPlugin.healthCardPlugins = {
+  pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins`] = {
     // version: '3.1.15',
     version: '3.11.0',
     provider: 'wxee969de81bba9a45',
@@ -210,6 +218,36 @@ fs.writeFileSync(
     encoding: 'utf8',
   }
 );
+
+let pagesConfig = fs.readFileSync('./pages.config.json', 'utf8');
+
+Object.entries(pagesPlugins).forEach(([k, v]) => {
+  const { wx, ali } = v as any;
+  let pluginsStr = ``;
+  if (JSON.stringify(wx) !== '{}') {
+    pluginsStr += `
+    // #ifdef  MP-WEIXIN
+    ${JSON.stringify(wx)}
+    // #endif
+    `;
+  }
+  if (JSON.stringify(ali) !== '{}') {
+    pluginsStr += `
+    // #ifdef  MP-ALIPAY
+    ${JSON.stringify(ali)}
+    // #endif
+    `;
+  }
+  pagesConfig = pagesConfig.replace(
+    new RegExp(`"${k}": ""`, 'g'),
+    `"plugins":  ${pluginsStr||"{}"}`
+  );
+});
+
+fs.writeFileSync(pagesExportFileUrl, pagesConfig, {
+  encoding: 'utf8',
+});
+
 
 // -----------------------------------------------s
 

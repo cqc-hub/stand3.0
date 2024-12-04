@@ -469,11 +469,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"healthCardPlugins":{"version":"3.11.0","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
+      "pagesA-plugins": ""
     },
     {
       "root": "pagesB",
@@ -539,7 +535,7 @@
           }
         }
       ],
-      "plugins":  {}
+      "pagesB-plugins": ""
     },
     {
       "root": "pagesC",
@@ -759,7 +755,7 @@
           }
         }
       ],
-      "plugins":  {}
+      "pagesC-plugins": ""
     }
   ],
   "globalStyle": {
