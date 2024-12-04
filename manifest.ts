@@ -133,9 +133,10 @@ const { medicalMHelp, isOpenAlipayZndz, isOpenWechatSI } = sConfig;
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
 const toutiaoConfig = manifestFileDataObj['mp-toutiao'];
+//主包引入插件
 const wxPlugin: any = {};
 const aliPlugin: any = {};
-
+//分包引入插件
 const pagesPlugins: any = {
   'pagesA-plugins': { wx: {}, ali: {} },
   'pagesB-plugins': { wx: {}, ali: {} },
@@ -145,16 +146,6 @@ const pagesPlugins: any = {
 if (isOpenHealthCard) {
   // 电子健康卡
   pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins`] = {
-    // version: '3.1.15',
-    version: '3.11.0',
-    provider: 'wxee969de81bba9a45',
-  };
-  pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins1`] = {
-    // version: '3.1.15',
-    version: '3.11.0',
-    provider: 'wxee969de81bba9a45',
-  };
-  pagesPlugins['pagesA-plugins'].ali[`healthCardPlugins`] = {
     // version: '3.1.15',
     version: '3.11.0',
     provider: 'wxee969de81bba9a45',
@@ -250,14 +241,13 @@ Object.entries(pagesPlugins).forEach(([k, v]) => {
   }
   pagesConfig = pagesConfig.replace(
     new RegExp(`"${k}": ""`, 'g'),
-    `"plugins":  ${pluginsStr||"{}"}`
+    `"plugins":  ${pluginsStr || '{}'}`
   );
 });
 
 fs.writeFileSync(pagesExportFileUrl, pagesConfig, {
   encoding: 'utf8',
 });
-
 
 // -----------------------------------------------s
 

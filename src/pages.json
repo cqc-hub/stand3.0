@@ -62,7 +62,7 @@
   ],
   "subPackages": [
     {
-      "root": "pagesA",
+      "root": "pagesA",//
       "pages": [
         {
           "path": "guide/guide",
