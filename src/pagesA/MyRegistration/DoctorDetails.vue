@@ -218,6 +218,7 @@
                       >
                         <Doc-Sch-Item
                           :pageConfig="pageConfig"
+                          :patient="pageConfig.isOrderWithoutPat !== '1'"
                           :item="item"
                           :systemModeOld="gStores.globalStore.modeOld"
                           @reg-click="(scheme) => regClick({ scheme })"
@@ -259,6 +260,7 @@
                         >
                           <Doc-Sch-Item
                             :pageConfig="pageConfig"
+                            :patient="pageConfig.isOrderWithoutPat !== '1'"
                             :item="item"
                             :systemModeOld="gStores.globalStore.modeOld"
                             @reg-click="regClick"
@@ -804,11 +806,10 @@
       getCommentList();
     }
 
-
     if (isOpenDocCardOnlineService === '1') {
       getDocService();
     }
-    
+
     // #ifdef MP-ALIPAY
     if (isOpenDocCardOnlineServiceAlipay === '1') {
       getDocService();

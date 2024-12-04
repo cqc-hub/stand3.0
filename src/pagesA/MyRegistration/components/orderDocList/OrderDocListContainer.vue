@@ -13,8 +13,8 @@
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="flex-between flex1">
           <view class="doc-info-introduce-header">
-            <view class="doc-info-introduce-name f36">
-              <text class="text-ellipsis">{{ item.docName }}</text>
+            <view class="doc-info-introduce-name text-ellipsis f36">
+              <text class="">{{ item.docName }}</text>
             </view>
             <view
               v-if="item.docTitleName && isAllDate"
@@ -53,9 +53,18 @@
         <!-- v-if="item.hosName && isAllDate" -->
         <view
           v-if="item.hosName"
-          class="doc-info-introduce-title color-888 text-ellipsis"
+          :class="{
+            [(isShowHosNameWithDeptName && 'color-blue text-ellipsis') || 'color-888']: 1,
+          }"
+          class="doc-info-introduce-title "
         >
-          {{ item.hosName }}
+          <text>
+            {{ item.hosName }}
+          </text>
+
+          <text v-if="item.deptName && isShowHosNameWithDeptName">
+            - {{ item.deptName }}
+          </text>
         </view>
 
         <!-- <view v-if="item.clinicTime" class="text-ellipsis ellipsis-line-clamp2">
@@ -112,8 +121,10 @@
   import { IDocListAll } from '../../utils';
 
   const props = defineProps<{
-    item: IDocListAll;
+    // item: IDocListAll;
+    item: any;
     isAllDate?: boolean;
+    isShowHosNameWithDeptName?: boolean;
   }>();
 
   const emits = defineEmits(['avatar-click', 'preregistration-click']);
@@ -161,10 +172,6 @@
           display: flex;
           align-items: center;
           .doc-info-introduce-name {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: break-spaces;
-            width: calc( var(--hr-font-size-xl ) * 6);
             font-weight: 600;
             color: var(--hr-neutral-color-10);
             margin-right: 8rpx;

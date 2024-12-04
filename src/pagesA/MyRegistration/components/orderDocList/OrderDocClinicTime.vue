@@ -12,7 +12,8 @@
   import { IDocListAll } from '../../utils';
 
   const props = defineProps<{
-    item: IDocListAll;
+    item: any;
+    // item: IDocListAll;
     isAllDate?: boolean;
   }>();
 </script>

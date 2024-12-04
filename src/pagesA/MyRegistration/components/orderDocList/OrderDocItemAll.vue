@@ -2,6 +2,7 @@
   <view>
     <Order-Doc-List-Container
       :item="item"
+      :isShowHosNameWithDeptName="pageConfig.isShowHosNameWithDeptName === '1'"
       @avatar-click="emits('avatar-click', item)"
       @preregistration-click="emits('preregistration-click', $event)"
       isAllDate
@@ -21,7 +22,7 @@
                   v-for="date in getSelectData"
                   :key="date.schDate"
                   @handler-next="dateClick(date)"
-                  patient
+                  :patient="patient"
                 >
                   <view
                     :class="{
@@ -75,9 +76,12 @@
 
   import OrderDocListContainer from './OrderDocListContainer.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
+  import { ISystemConfig } from '@/types';
 
   const props = defineProps<{
     item: IDocListAll;
+    patient?: boolean;
+    pageConfig: ISystemConfig['order'];
   }>();
 
   const emits = defineEmits([
