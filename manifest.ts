@@ -149,6 +149,16 @@ if (isOpenHealthCard) {
     version: '3.11.0',
     provider: 'wxee969de81bba9a45',
   };
+  pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins1`] = {
+    // version: '3.1.15',
+    version: '3.11.0',
+    provider: 'wxee969de81bba9a45',
+  };
+  pagesPlugins['pagesA-plugins'].ali[`healthCardPlugins`] = {
+    // version: '3.1.15',
+    version: '3.11.0',
+    provider: 'wxee969de81bba9a45',
+  };
 }
 
 if (isOpenOcr) {
