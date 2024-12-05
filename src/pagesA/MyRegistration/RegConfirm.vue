@@ -391,9 +391,8 @@
     };
 
     if (quickPat.value.patientName) {
-      const { patientId: _patientId } = await patientUtils.quickAppointmentAddPat(
-        quickPat.value
-      );
+      const { patientId: _patientId } =
+        await patientUtils.quickAppointmentAddPat(quickPat.value);
       patientId = _patientId;
 
       requestArg.patientId = patientId;

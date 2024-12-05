@@ -2,35 +2,42 @@
   <div class="">
     <view
       :class="{
-        animate__fadeInDown: visible,
-        animate__slideOutUp: !visible && count,
+        ['animate__fadeInDown bg-mask']: visible,
+        animate__fadeOutUp: !visible && count,
         'my-hide': !count,
       }"
-      class="animate__animated wrap-form g-page bg-white"
+      @click="cancel"
+      class="animate__animated wrap-form g-page"
     >
       <view class="g-container">
-        <g-form
-          v-model:value="formData"
-          @submit="formSubmit"
-          @change="formChange"
-          bodyBold
-          ref="gform"
-        />
-
-        <view class="mt40">
-          <g-flag
-            :typeFg="formData.patientType === '-1' ? '1215' : '1216'"
-            isShowFgTip
+        <view @click.stop="() => {}" class="m32 p12 pt32 bg-white rounded">
+          <g-form
+            v-model:value="formData"
+            @submit="formSubmit"
+            @change="formChange"
+            bodyBold
+            ref="gform"
           />
+
+          <view class="mt40">
+            <g-flag
+              :typeFg="formData.patientType === '-1' ? '1215' : '1216'"
+              isShowFgTip
+            />
+          </view>
+
+          <view class="flex p32">
+            <button
+              @click="cancel"
+              class="btn btn-normal btn-border flex-1 mr24"
+            >
+              取消
+            </button>
+            <button @click="gform.submit" class="btn btn-primary flex-2">
+              确定
+            </button>
+          </view>
         </view>
-      </view>
-      <view class="g-footer">
-        <button @click="cancel" class="btn btn-normal btn-border flex-1">
-          取消
-        </button>
-        <button @click="gform.submit" class="btn btn-primary flex-1">
-          确定
-        </button>
       </view>
     </view>
   </div>
@@ -363,5 +370,9 @@
     height: 100vh;
 
     animation-duration: 0.4s; /* don't forget to set a duration! */
+  }
+
+  .bg-mask {
+    background-color: rgba(0, 0, 0, 0.5);
   }
 </style>
