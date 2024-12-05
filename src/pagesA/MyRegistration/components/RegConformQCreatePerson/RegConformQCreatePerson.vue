@@ -2,40 +2,48 @@
   <div class="">
     <view
       :class="{
-        ['animate__fadeInDown bg-mask']: visible,
-        animate__fadeOutUp: !visible && count,
         'my-hide': !count,
+        ['animate__fadeIn bg-mask']: visible,
+        ['animate__fadeOut my-disabled']: !visible && count,
       }"
-      @click="cancel"
-      class="animate__animated wrap-form g-page"
+       class="animate__animated wrap-form"
     >
-      <view class="g-container">
-        <view @click.stop="() => {}" class="m32 p12 pt32 bg-white rounded">
-          <g-form
-            v-model:value="formData"
-            @submit="formSubmit"
-            @change="formChange"
-            bodyBold
-            ref="gform"
-          />
-
-          <view class="mt40">
-            <g-flag
-              :typeFg="formData.patientType === '-1' ? '1215' : '1216'"
-              isShowFgTip
+      <view
+        :class="{
+          ['animate__fadeInDown']: visible,
+          animate__fadeOutUp: !visible && count,
+        }"
+        @click="cancel"
+        class="animate__animated g-page"
+      >
+        <view class="g-container">
+          <view @click.stop="() => {}" class="m32 p12 pt32 bg-white rounded">
+            <g-form
+              v-model:value="formData"
+              @submit="formSubmit"
+              @change="formChange"
+              bodyBold
+              ref="gform"
             />
-          </view>
 
-          <view class="flex p32">
-            <button
-              @click="cancel"
-              class="btn btn-normal btn-border flex-1 mr24"
-            >
-              取消
-            </button>
-            <button @click="gform.submit" class="btn btn-primary flex-2">
-              确定
-            </button>
+            <view class="mt40">
+              <g-flag
+                :typeFg="formData.patientType === '-1' ? '1215' : '1216'"
+                isShowFgTip
+              />
+            </view>
+
+            <view class="flex p32">
+              <button
+                @click="cancel"
+                class="btn btn-normal btn-border flex-1 mr24"
+              >
+                取消
+              </button>
+              <button @click="gform.submit" class="btn btn-primary flex-2">
+                确定
+              </button>
+            </view>
           </view>
         </view>
       </view>
