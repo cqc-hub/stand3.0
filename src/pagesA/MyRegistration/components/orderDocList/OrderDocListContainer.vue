@@ -93,7 +93,7 @@
           }"
           class="color-444 ellipsis-line-clamp2 g-break-word"
         >
-          我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址我是接诊地址
+          诊室: 门诊3楼A区302室
         </view> -->
 
         <view class="doc-info-introduce-goodat text-ellipsis">
