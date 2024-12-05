@@ -393,8 +393,8 @@
     if (quickPat.value.patientName) {
       const { patientId: _patientId } =
         await patientUtils.quickAppointmentAddPat(quickPat.value);
-      patientId = _patientId;
 
+      patientId = _patientId;
       requestArg.patientId = patientId;
       requestArg.quickAppoint = 'quickAppoint';
     }
@@ -517,6 +517,7 @@
         orderId,
         preWz: '1',
         thRegisterId,
+        patientId,
       }),
     });
   }, 500);
