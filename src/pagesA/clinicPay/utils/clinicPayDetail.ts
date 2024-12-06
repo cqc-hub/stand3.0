@@ -364,7 +364,7 @@ export const _getQxMedicalNation = async (
 
   const requestArg = {
     enHosPatientId,
-    patientId: !enHosPatientId && patientId,
+    patientId: !enHosPatientId && patientId || undefined,
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',
