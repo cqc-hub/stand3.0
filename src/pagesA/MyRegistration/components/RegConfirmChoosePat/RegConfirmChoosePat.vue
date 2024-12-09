@@ -2,8 +2,9 @@
   <view
     :class="{
       'system-mode-old': gStores.globalStore.modeOld,
+      [pb0 ? 'pb0' : 'pb40']: 1,
     }"
-    class="choose g-border"
+    class="choose g-border pt40 pr32 pl32"
   >
     <slot name="header" :chooseAction="chooseAction" />
     <view v-if="showPat.patientName">
@@ -51,6 +52,7 @@
     </view>
 
     <view v-else class="font-semibold f32">请添加就诊人信息</view>
+    <slot name="footer" :chooseAction="chooseAction" />
     <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
   </view>
 </template>
@@ -71,6 +73,7 @@
     pat?: any;
     isOrderWithoutPat?: boolean;
     isUnSelPat?: boolean;
+    pb0?: boolean;
   }>();
 
   const showPat = computed(() => {
@@ -114,7 +117,6 @@
     background-color: #fff;
     border-radius: 16rpx;
 
-    padding: 40rpx 32rpx;
     font-size: var(--hr-font-size-xs);
 
     .choose-row {

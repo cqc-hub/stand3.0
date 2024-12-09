@@ -14,36 +14,33 @@
           />
         </view>
 
-        <view>
+        <view class="bg-white">
           <Reg-Confirm-ChoosePat
             :pat="quickPat"
             :isOrderWithoutPat="pageConfig.isOrderWithoutPat === '1'"
+            :pb0="pageConfig.isOrderWithoutPat === '1'"
             @choose-pat="patChoose"
           >
-            <template #header="{ chooseAction }">
+            <template #footer="{ chooseAction }">
               <view
                 v-if="pageConfig.isOrderWithoutPat === '1'"
-                class="flex mb12"
+                class="flex items-center mb12 g-border-top mt24 pt24 color-blue"
               >
-                <view class="flex-1"></view>
-                <view>
-                  <view>
-                    <view class="flex">
-                      <view
-                        class="btn btn-primary btn-small f28 pr12 pl12 pt8 pb8 mr12"
-                        @click="chooseAction"
-                      >
-                        切换就诊人
-                      </view>
+                <view
+                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 g-border-right flex items-center"
+                  @click="chooseAction"
+                >
+                  <text class="iconfont qr-toggle-icon">&#xe6f9;</text>
+                  切换就诊人
+                </view>
 
-                      <view
-                        class="btn btn-error btn-border btn-small f28 pr12 pl12 pt8 pb8"
-                        @click="handlerCreateCachePerson"
-                      >
-                        快速预约
-                      </view>
-                    </view>
-                  </view>
+                <view
+                  class="f28 pr12 pl12 pt8 pb8 flex-1 flex items-center"
+                  @click="handlerCreateCachePerson"
+                >
+                  <text class="iconfont qr-toggle-icon">&#xe6c3;</text>
+
+                  快速创建就诊人
                 </view>
               </view>
             </template>
