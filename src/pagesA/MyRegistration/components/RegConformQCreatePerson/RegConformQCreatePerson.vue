@@ -6,7 +6,7 @@
         ['animate__fadeIn bg-mask']: visible,
         ['animate__fadeOut my-disabled']: !visible && count,
       }"
-       class="animate__animated wrap-form"
+      class="animate__animated wrap-form"
     >
       <view
         :class="{
@@ -67,8 +67,11 @@
   const formData = ref<BaseObject>({});
   const formChange = async ({ item, value, oldValue }) => {
     if (oldValue !== value) {
-      if (['idType', 'patientType'].includes(item.key)) {
+      if (['patientType'].includes(item.key)) {
         formData.value['idType'] = '';
+      }
+
+      if (['idType', 'patientType'].includes(item.key)) {
         formData.value['idCard'] = '';
         formData.value['sex'] = '';
         formData.value['birthday'] = '';
