@@ -51,8 +51,7 @@
       </view>
     </view>
 
-    <view v-else class="font-semibold f32">请添加就诊人信息</view>
-    <slot name="footer" :chooseAction="chooseAction" />
+    <slot name="footer" :chooseAction="chooseAction" :showPat="showPat" />
     <Choose-Pat @choose-pat="choosePatHandler" ref="actionSheet" />
   </view>
 </template>

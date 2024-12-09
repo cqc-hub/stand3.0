@@ -21,13 +21,20 @@
             :pb0="pageConfig.isOrderWithoutPat === '1'"
             @choose-pat="patChoose"
           >
-            <template #footer="{ chooseAction }">
+            <template #footer="{ chooseAction, showPat }">
               <view
                 v-if="pageConfig.isOrderWithoutPat === '1'"
-                class="flex items-center mb12 g-border-top mt24 pt24 color-blue"
+                :class="{
+                  ['pt0']: !showPat.patientName,
+                  'g-border-top g-border-right mt24 pt24 ': showPat.patientName,
+                }"
+                class="flex items-center mb12 color-blue pb24"
               >
                 <view
-                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 g-border-right flex items-center"
+                  :class="{
+                    ' g-border-right': showPat.patientName,
+                  }"
+                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 flex items-center"
                   @click="chooseAction"
                 >
                   <text class="iconfont qr-toggle-icon">&#xe6f9;</text>
