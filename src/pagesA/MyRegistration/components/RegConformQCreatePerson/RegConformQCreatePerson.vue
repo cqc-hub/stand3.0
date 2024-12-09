@@ -68,6 +68,7 @@
   const formChange = async ({ item, value, oldValue }) => {
     if (oldValue !== value) {
       if (['idType', 'patientType'].includes(item.key)) {
+        formData.value['idType'] = '';
         formData.value['idCard'] = '';
         formData.value['sex'] = '';
         formData.value['birthday'] = '';
