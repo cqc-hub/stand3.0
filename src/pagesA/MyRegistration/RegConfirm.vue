@@ -14,36 +14,40 @@
           />
         </view>
 
-        <view>
+        <view class="bg-white">
           <Reg-Confirm-ChoosePat
             :pat="quickPat"
             :isOrderWithoutPat="pageConfig.isOrderWithoutPat === '1'"
+            :pb0="pageConfig.isOrderWithoutPat === '1'"
             @choose-pat="patChoose"
           >
-            <template #header="{ chooseAction }">
+            <template #footer="{ chooseAction, showPat }">
               <view
                 v-if="pageConfig.isOrderWithoutPat === '1'"
-                class="flex mb12"
+                :class="{
+                  ['pt0']: !showPat.patientName,
+                  'g-border-top g-border-right mt24 pt24 ': showPat.patientName,
+                }"
+                class="flex items-center mb12 color-blue pb24"
               >
-                <view class="flex-1"></view>
-                <view>
-                  <view>
-                    <view class="flex">
-                      <view
-                        class="btn btn-primary btn-small f28 pr12 pl12 pt8 pb8 mr12"
-                        @click="chooseAction"
-                      >
-                        切换就诊人
-                      </view>
+                <view
+                  :class="{
+                    ' g-border-right': showPat.patientName,
+                  }"
+                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 flex items-center"
+                  @click="chooseAction"
+                >
+                  <text class="iconfont qr-toggle-icon">&#xe6f9;</text>
+                  切换就诊人
+                </view>
 
-                      <view
-                        class="btn btn-error btn-border btn-small f28 pr12 pl12 pt8 pb8"
-                        @click="handlerCreateCachePerson"
-                      >
-                        快速预约
-                      </view>
-                    </view>
-                  </view>
+                <view
+                  class="f28 pr12 pl12 pt8 pb8 flex-1 flex items-center"
+                  @click="handlerCreateCachePerson"
+                >
+                  <text class="iconfont qr-toggle-icon">&#xe6c3;</text>
+
+                  快速创建就诊人
                 </view>
               </view>
             </template>
@@ -174,8 +178,9 @@
     wait,
     apiAsync,
     ISystemConfig,
-    debounce,
     nameConvert,
+    PatientUtils,
+    throttle,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -220,6 +225,7 @@
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
   const isOverLimit = ref('');
+  const patientUtils = new PatientUtils();
 
   const {
     regDialogConfirmSign,
@@ -282,7 +288,7 @@
     quickPat.value = {} as any;
   };
 
-  let regConfirm = async () => {
+  const regConfirm = throttle(async () => {
     const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
       pageConfig.value;
     /**
@@ -318,8 +324,7 @@
       thRegisterId,
       regVerificationMode,
     } = props.value;
-    const { herenId, patientId, realNameAuth, patientName } =
-      gStores.userStore.patChoose;
+    let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
 
     if (isOrderWithoutPat === '1') {
@@ -380,14 +385,23 @@
       schId,
       schQukCategor,
       timeDesc,
-      herenId,
       patientId,
       source,
       resType,
       promptMessage,
       thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
       ageReminderCode: isOverLimit.value,
+      quickAppoint: '',
     };
+
+    if (quickPat.value.patientName) {
+      const { patientId: _patientId } =
+        await patientUtils.quickAppointmentAddPat(quickPat.value);
+
+      patientId = _patientId;
+      requestArg.patientId = patientId;
+      requestArg.quickAppoint = 'quickAppoint';
+    }
 
     let alipayAuthCode = '';
     // #ifdef MP-ALIPAY
@@ -507,11 +521,10 @@
         orderId,
         preWz: '1',
         thRegisterId,
+        patientId,
       }),
     });
-  };
-
-  regConfirm = debounce(regConfirm, 1000, true);
+  }, 500);
 
   const OverlimiMessage = async (e) => {
     const { respCode, message } = e;

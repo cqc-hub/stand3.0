@@ -120,7 +120,10 @@
               <block v-if="isShowRefreshQrCode">
                 <view class="mb24">
                   <refreshQrcode
-                    :patientId="gStores.userStore.patChoose.patientId"
+                    :patientId="
+                      pageProps.patientId ||
+                      gStores.userStore.patChoose.patientId
+                    "
                     :show-code="_qrCodeOpt.code"
                     label="就诊码"
                     isShowCode
@@ -645,7 +648,6 @@
 
   let init = async () => {
     uni.showLoading({});
-    await getConfig();
     await wait(800);
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
@@ -713,6 +715,7 @@
       ampmName,
       appointmentTime,
     } = result;
+    console.log(result, totalCost)
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
@@ -729,7 +732,7 @@
     result._appointmentDate = [appointmentDate, ampmName, appointmentTime]
       .filter((o) => o)
       .join(' ');
-    result._fee = result.fee + '元';
+    result._fee = (result.fee || result.totalCost) + '元';
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
     qrCodeOpt.value.code = result[qrCode];
@@ -1257,11 +1260,17 @@
     uni.setNavigationBarTitle({
       title: isWaitReg.value ? '候补详情' : '挂号详情',
     });
+    await getConfig();
     await handlerWeChatThRegLogin(pageProps.value);
-    await beforeEach({
+    const routeArg = {
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),
+      _isLogin: true,
       _isPatient: true,
-    });
+    };
+    if (orderConfig.value.isOrderWithoutPat === '1') {
+      routeArg._isPatient = false;
+    }
+    await beforeEach(routeArg);
     init();
   });
 </script>

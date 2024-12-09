@@ -172,14 +172,14 @@ export class LoginUtils extends GStores {
           mobilePhoneEn,
           phoneNum,
         } = result;
-        const phone =mobilePhone||cellPhoneNum
+        const phone = mobilePhone || cellPhoneNum;
         this.userStore.updateName(name);
         this.userStore.updateSex(sex);
         this.userStore.updateIdNo(idNo);
         if (/^[\d{1,4}\*+\d{1,4}]{11}$/.test(phone)) {
           this.userStore.updatePhone({
             phone,
-            phoneNum: mobilePhoneEn||phoneNum,
+            phoneNum: mobilePhoneEn || phoneNum,
           });
         }
 
@@ -1005,6 +1005,25 @@ export class PatientUtils extends LoginUtils {
       return code;
     },
   };
+
+  /** 快速预约添加就诊人 */
+  async quickAppointmentAddPat(patData: {
+    patientName: string;
+    patientPhone: string;
+    verifyCode: string;
+    [key: string]: any;
+  }): Promise<{
+    patientId: string;
+  }> {
+    const args = {
+      ...patData,
+      source: this.globalStore.browser.source,
+    };
+    getH5OpenidParam(args);
+    const { result } = await api.quickAppointmentAddPat(args);
+
+    return result;
+  }
 
   /** 升级医保用户 */
   async upToMedicalPat(data: { pat?: IPat; cardNumber?: string }) {

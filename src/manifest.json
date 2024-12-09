@@ -64,6 +64,7 @@
     ],
     "usingComponents": true,
     "plugins": {},
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -84,6 +85,7 @@
     "usingComponents": true
   },
   "mp-toutiao": {
+    "usingComponents": true
     "usingComponents": true
   },
   "uniStatistics": {

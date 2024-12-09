@@ -6,6 +6,7 @@ import api from '@/service/api';
 export interface IPageProps {
   orderId: string;
   hosOrderId: string;
+  patientId: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
   orderStatus: string; // 挂号状态

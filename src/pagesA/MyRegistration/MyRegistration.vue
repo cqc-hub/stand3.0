@@ -270,14 +270,22 @@
     } else {
       tabCurrent.value = parseInt(e as any) - 1;
     }
+    const patientId =
+      pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
 
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     selStatus.value = '';
+    if (e) {
+      if (!gStores.userStore.patChoose.patientId) {
+        await pageHook({
+          _isPatient: true,
+        });
+      }
+    }
     if (!pat.value?.patientId && e) {
       _patChange(gStores.userStore.patChoose);
     }
-    const patientId =
-      pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
+
     await getList(patientId);
   };
 
@@ -439,8 +447,23 @@
     }
   });
 
+  const pageHook = async ({ _isPatient = false }) => {
+    const routeArg = {
+      url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', props),
+      _isLogin: true,
+      _isPatient: true,
+    };
+
+    if (pageConfig.value.isOrderWithoutPat === '1' && !_isPatient) {
+      routeArg._isPatient = false;
+    }
+
+    await beforeEach(routeArg);
+  };
+
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    await getConfig();
     isRender.value = true;
 
     if (props.value?.tabIndex) {
@@ -452,10 +475,15 @@
     });
 
     await handlerWeChatThRegLogin(props.value);
-    await beforeEach({
-      url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', props),
-      _isPatient: true,
+    let _isPatient = true;
+    if (pageConfig.value.isOrderWithoutPat === '1') {
+      _isPatient = false;
+    }
+
+    await pageHook({
+      _isPatient,
     });
+
     await init();
 
     const thRegisterId = props.value.thRegisterId;
@@ -484,7 +512,6 @@
   };
 
   const init = async () => {
-    await getConfig();
     if (tabs.value[tabCurrent.value]?.typeId === 0) {
       patList.value[0]?.patientName === '所有就诊人' &&
         (pat.value = patList.value[0]);
