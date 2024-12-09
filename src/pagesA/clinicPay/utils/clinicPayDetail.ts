@@ -1286,7 +1286,7 @@ export const usePayPage = () => {
       sConfig: { medicalMHelp },
       systemConfig: { isvAlipayAppid },
     } = globalGl;
-    const  wx  = medicalMHelp?.wx;
+    const wx = medicalMHelp?.wx;
 
     // 定义支付方式配置
     const payMethodConfig = {

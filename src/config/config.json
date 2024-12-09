@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001057",
+  "sysCode": "1001074",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -298,7 +298,11 @@
       "name": "天水市第一人民医院",
       "isSearchInHos": true,
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isOpenHealthCard": {
+        "healthCardText": "甘肃省卫生健康委员会",
+        "hospitalId": "39894"
+      }
     }
   }
 }

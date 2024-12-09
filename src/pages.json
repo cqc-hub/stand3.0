@@ -62,7 +62,7 @@
   ],
   "subPackages": [
     {
-      "root": "pagesA",//
+      "root": "pagesA",
       "pages": [
         {
           "path": "guide/guide",
@@ -469,15 +469,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"healthCardPlugins":{"version":"3.11.0","provider":"wxee969de81bba9a45"},"healthCardPlugins1":{"version":"3.11.0","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
-    // #ifdef  MP-ALIPAY
-    {"healthCardPlugins":{"version":"3.11.0","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
+      "plugins":  {}
     },
     {
       "root": "pagesB",

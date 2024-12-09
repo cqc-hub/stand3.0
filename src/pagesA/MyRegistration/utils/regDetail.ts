@@ -267,6 +267,14 @@ export const waitOrderStatusMap = {
     title: '已过期',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '31': {
+    headerClass: 'header-green',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '候补失败，加号中',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
 
   '4': orderStatusMap['45'],
 
