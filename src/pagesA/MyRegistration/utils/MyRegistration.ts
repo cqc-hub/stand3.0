@@ -41,3 +41,51 @@ export type IRegistrationCardItem = {
   _statusLabel: string;
   regWay?: string; // 挂号途径 小程序、自助机、诊间预约等
 };
+
+//多院区院内导航（仅绍兴）
+export const HosNavData = {
+  12930: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
+  // #ifdef  MP-WEIXIN
+  13178: (item: IRegistrationCardItem) => {
+    return {
+      appId: 'wx0815c00f0b4bd7c3',
+      path: 'pages/index/index',
+      text: '院内导航',
+      type: 'otherProgram',
+      extraData: {
+        type: '8_2',
+        typeData: JSON.stringify({
+          buildingId: 208089,
+          type: 1,
+          hisName: item.hosDeptId,
+        }),
+      },
+    };
+  },
+  // #endif
+  // #ifdef  MP-ALIPAY
+  13178: (item: IRegistrationCardItem) => {
+    return {
+      appId: '2018122862716277',
+      path: 'pages/index/index',
+      text: '院内导航',
+      type: 'otherProgram',
+      extraData: {
+        hisCode:item.hosDeptId,
+        buildingId: 208089,
+        type:3
+      },
+    };
+  },
+  // #endif
+};

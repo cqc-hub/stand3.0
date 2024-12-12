@@ -52,6 +52,7 @@
           :anotherYwzConditions="anotherYwzConditions"
           @ywz-click="ywzClick"
           @go-detail="goDetail"
+          @go-hos-navigate="goHosNavigate"
         />
       </block>
 
@@ -142,7 +143,7 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { IRegistrationCardItem } from './utils/MyRegistration';
+  import { IRegistrationCardItem ,HosNavData} from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
@@ -390,6 +391,16 @@
         _type,
       }),
     });
+  };
+
+  //多院区院内导航（仅绍兴）
+  const goHosNavigate = (item: IRegistrationCardItem) => {
+    console.log('多院区院内导航（仅绍兴）',HosNavData[item.hosId](item))
+      useTBanner(
+        HosNavData[item.hosId](item),
+        'navigateTo',
+        item
+      );
   };
 
   const _patChange = (item) => {

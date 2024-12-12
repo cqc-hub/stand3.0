@@ -431,7 +431,6 @@ const scJson: Record<string, ISConfig> = {
         medicalNation: {
 
         },
-        isMedicalOrder: '1',
       },
       wx: {
         medicalNation: {
@@ -442,7 +441,6 @@ const scJson: Record<string, ISConfig> = {
           // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsP9BQzovPtfTZGwRsyhqMMZjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1GJH07S4E0IOE2470B0A00003A59E597',
         },
         // medicalPlugin: '1',
-        isMedicalOrder: '1',
       },
     },
   },

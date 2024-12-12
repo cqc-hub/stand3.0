@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { ref } from 'vue';
+  import { ref, warn } from 'vue';
   import { apiAsync, useTBanner } from '@/utils';
 
   import { deQueryForUrl, encryptDes } from '@/common';
@@ -26,6 +26,7 @@
         hosOrderId: string;
         hosData: string;
         patientId: string;
+        extraData: string;
         /** ////使用 useTBanner 函数 */
       }
     >{}
@@ -51,6 +52,14 @@
       });
 
       if (confirm) {
+        console.log('...pageProps.value', { ...pageProps.value });
+        if (pageProps.value?.extraData) {
+          try {
+            pageProps.value.extraData = JSON.parse(pageProps.value.extraData);
+          } catch (e) {
+            console.warn('存在extraData但不可序列化', e);
+          }
+        }
         uni.navigateToMiniProgram({
           ...pageProps.value,
           fail(e) {

@@ -122,6 +122,13 @@
           >
             服务评价
           </button>
+          <button
+            v-if="isNav(item)"
+            @click="goHosNavigate(item)"
+            class="btn btn-round btn-size-small btn-border cancel-btn"
+          >
+            院内导航
+          </button>
 
           <block v-for="btn in getCustomBtns" :key="btn.text">
             <button
@@ -145,6 +152,7 @@
   import { joinQueryForUrl, joinQuery } from '@/common';
   import { ISystemConfig, useTBanner } from '@/utils';
 
+  import globalGl from '@/config/global';
   import api from '@/service/api';
 
   const props = defineProps<{
@@ -160,7 +168,7 @@
     thRegisterId?: string;
     config: ISystemConfig['order'];
   }>();
-  const emits = defineEmits(['ywz-click', 'go-detail']);
+  const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
 
   const getCustomBtns = computed(() => {
     const list = props.config.regListItemCustomButtons;
@@ -235,6 +243,17 @@
 
   const isShowReOrderBtn = (item: IRegistrationCardItem) => {
     return ['70', '82'].includes(item.orderStatus) && props.showReOrderBtn;
+  };
+
+  //显示多院区院内导航(仅绍兴)
+  const isNav = (item: IRegistrationCardItem) => {
+    // #ifdef  MP-WEIXIN
+    return globalGl.SYS_CODE === '1001046';
+    // #endif
+    // #ifdef  MP-ALIPAY
+    // return globalGl.SYS_CODE === '1001046' && item.hosId === '13178';
+    // #endif
+    return false;
   };
 
   // 最新消息 (濮阳) 仅 "全部挂号" 开放
@@ -325,6 +344,10 @@
 
   const goDetail = (item: IRegistrationCardItem) => {
     emits('go-detail', item);
+  };
+
+  const goHosNavigate = (item: IRegistrationCardItem) => {
+    emits('go-hos-navigate', item);
   };
 </script>
 

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx799315279808c901",
+    "appid": "wxb00075173e764492",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,8 +63,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
-    "plugins": {},
+    "plugins": {
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -73,26 +77,29 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004103625411"
+    "appid": "2021003113623396"
   },
   "mp-baidu": {
     "usingComponents": true
   },
   "mp-toutiao": {
     "usingComponents": true
-    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴第二医院",
+  "name": "绍兴市人民医院",
   "h5": {
     "router": {
       "base": "./"
