@@ -354,6 +354,9 @@
 
           // 院内导航
           2: () => {
+            console.log(that.btns[1])
+            console.log(that.item)
+            // return
             useTBanner(that.btns[1], 'navigateTo', that.item);
           },
 

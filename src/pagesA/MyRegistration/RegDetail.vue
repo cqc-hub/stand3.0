@@ -715,7 +715,6 @@
       ampmName,
       appointmentTime,
     } = result;
-    console.log(result, totalCost)
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
