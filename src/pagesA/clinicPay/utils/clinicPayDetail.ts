@@ -303,6 +303,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
       // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
       path: joinQuery(path, cacheStore.medicalPathArg),
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+      // envVersion: 'release',
       fail({ errMsg }) {
         if (errMsg.includes('fail cancel')) {
           setLocalStorage({
