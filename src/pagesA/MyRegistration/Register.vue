@@ -174,10 +174,11 @@
     useTBanner,
   } from '@/utils';
   import { joinQuery, deQueryForUrl } from '@/common';
-
+  import { HosNavData} from './utils/MyRegistration';
   import hosListVue from './components/hosList/hosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import HosListItemMore from './components/hosList/hosListItemMore.vue';
+import globalGl from '@/config/global';
 
   const _props = defineProps<{
     _url: string;
@@ -292,6 +293,14 @@
   };
 
   const itemClick = (item: IHosInfo) => {
+    if(globalGl.SYS_CODE==='1001046'&&props.value._type==='4'){
+      useTBanner(
+        HosNavData[item.hosId](item,props.value._type),
+        'navigateTo',
+        item
+      );
+      return
+    }
     //药店不可点击
     if (item.hosLevel == 9) {
       return;
@@ -552,7 +561,11 @@
         'selfBilling'
       );
     }
-
+    if (_type === '4') {
+      uni.setNavigationBarTitle({
+        title: '院内导航',
+      });
+    }
     if (_type === '3') {
       uni.setNavigationBarTitle({
         title: '药店指南',

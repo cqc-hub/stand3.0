@@ -56,34 +56,41 @@ export const HosNavData = {
     };
   },
   // #ifdef  MP-WEIXIN
-  13178: (item: IRegistrationCardItem) => {
+  13178: (item: IRegistrationCardItem, type?: string) => {
+    let extraData: any = {
+      type: '8_2',
+      typeData: JSON.stringify({
+        buildingId: 208089,
+        type: 1,
+        hisName: item.hosDeptId,
+      }),
+    };
+    if (type === '4') {
+      extraData = {
+        type: '8',
+        buildingId: 208089,
+      };
+    }
     return {
       appId: 'wx0815c00f0b4bd7c3',
       path: 'pages/index/index',
       text: '院内导航',
       type: 'otherProgram',
-      extraData: {
-        type: '8_2',
-        typeData: JSON.stringify({
-          buildingId: 208089,
-          type: 1,
-          hisName: item.hosDeptId,
-        }),
-      },
+      extraData,
     };
   },
   // #endif
   // #ifdef  MP-ALIPAY
-  13178: (item: IRegistrationCardItem) => {
+  13178: (item: IRegistrationCardItem, type?: string) => {
     return {
       appId: '2018122862716277',
       path: 'pages/index/index',
       text: '院内导航',
       type: 'otherProgram',
       extraData: {
-        hisCode:item.hosDeptId,
+        hisCode: item.hosDeptId,
         buildingId: 208089,
-        type:3
+        type: 3,
       },
     };
   },

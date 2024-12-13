@@ -395,7 +395,6 @@
 
   //多院区院内导航（仅绍兴）
   const goHosNavigate = (item: IRegistrationCardItem) => {
-    console.log('多院区院内导航（仅绍兴）',HosNavData[item.hosId](item))
       useTBanner(
         HosNavData[item.hosId](item),
         'navigateTo',
