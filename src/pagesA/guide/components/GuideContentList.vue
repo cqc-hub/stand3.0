@@ -21,8 +21,7 @@
         </view>
 
         <view class="flex-1">
-          <!-- :open="isActive(item)" -->
-          <g-collapse ref="collapseRef" :border="false" open>
+          <g-collapse :open="isActive(item)" ref="collapseRef" :border="false">
             <template #header="{ isShow: arrowBottom }">
               <view
                 :class="{
@@ -79,42 +78,11 @@
                       </text>
                     </view>
 
-                    <view
-                      v-for="col in drugCol"
-                      :key="col.key"
-                      :style="{
-                        'background-image':
-                          (col.key === 'itemAddress' &&
-                            `url(${
-                              globalGl.BASE_IMG + 'stand3-guide-location-bg.png'
-                            })`) ||
-                          '',
-                      }"
-                      :class="{
-                        'address-content': col.key === 'itemAddress',
-                      }"
-                    >
-                      <view class="flex justify-start relative">
-                        <view class="color-888 mr16 text-no-wrap label">
-                          {{ col.label }}
-                        </view>
-
-                        <view
-                          class="g-break-word relative flex flex-between items-start flex-1 row-value"
-                        >
-                          <view class="flex-1">
-                            {{ drug[col.key] }}
-                          </view>
-
-                          <text
-                            v-if="col.key === 'itemAddress'"
-                            class="text-no-wrap color-blue mr12 location-tip"
-                          >
-                            带我去
-                          </text>
-                        </view>
-                      </view>
-                    </view>
+                    <GuideContentListCol
+                      :cols="drugCol"
+                      :lab="drug"
+                      @go-address-map="handlerAddressMap"
+                    />
 
                     <view
                       v-if="p !== item.drugs.length - 1"
@@ -156,90 +124,35 @@
                     </view>
 
                     <view class="pt24 pb24">
-                      <view class="g-border-bottom flex flex-wrap">
-                        <view
-                          v-for="(s, si) in reportStatusMap"
-                          :key="s.value"
-                          :class="{
-                            '': si !== reportStatusMap.length,
-                            [(s.value === lab.status && 'color-blue') ||
-                            'color-111']: 1,
-                          }"
-                          class="flex f32 font-semibold"
-                        >
-                          <view
-                            :class="{
-                              'active-report': s.value === lab.status,
-                            }"
-                            class="relative pb12"
-                          >
-                            {{ s.label }}
-                          </view>
-                          <view v-if="si !== reportStatusMap.length - 1">
-                            <img
-                              :src="globalGl.BASE_IMG + 'guide-arrow-right.png'"
-                              alt=""
-                              class="icon-arrow-1"
-                            />
-                          </view>
-                        </view>
-                      </view>
+                      <GuideReportProgress :lab="lab" />
                     </view>
 
-                    <view v-for="col in reportCol" :key="col.key">
-                      <view
-                        v-if="lab[col.key] ?? undefined !== undefined"
-                        :style="{
-                          'background-image':
-                            (col.key === 'itemAddress' &&
-                              `url(${
-                                globalGl.BASE_IMG +
-                                'stand3-guide-location-bg.png'
-                              })`) ||
-                            '',
-                        }"
-                        :class="{
-                          'address-content': col.key === 'itemAddress',
-                        }"
-                      >
-                        <view class="flex justify-start relative">
-                          <view class="color-888 mr16 text-no-wrap label">
-                            {{ col.label }}
-                          </view>
-
-                          <view
-                            class="g-break-word relative flex flex-between items-start flex-1 row-value"
-                          >
-                            <view class="flex-1">
-                              {{ lab[col.key] }}
-                            </view>
-
-                            <text
-                              v-if="col.key === 'itemAddress'"
-                              class="text-no-wrap color-blue mr12 location-tip"
-                            >
-                              带我去
-                            </text>
-                          </view>
-                        </view>
-                      </view>
-                    </view>
-
-                    <view
-                      :class="{
-                        'btn-disabled': lab.status !== '4',
-                      }"
-                      class="btn btn-border btn-primary btn-round f28 mt24"
-                      @click="goReport(lab)"
-                    >
-                      查看报告
-                    </view>
+                    <GuideContentListCol
+                      :cols="reportCol"
+                      :lab="lab"
+                      @go-address-map="handlerAddressMap"
+                    />
 
                     <view
                       v-if="p !== item.labs.length - 1"
                       class="drug-placeholder mb24 mt24"
                     />
                   </view>
+                </view>
+
+                <view
+                  :class="{
+                    'btn-disabled': item.completionStatus === 0,
+                  }"
+                  class="btn btn-border btn-primary btn-round f28 mt24"
+                  @click="
+                    goReport({
+                      item,
+                      tabIndex: '0',
+                    })
+                  "
+                >
+                  查看报告
                 </view>
               </view>
 
@@ -279,123 +192,114 @@
                     </view>
 
                     <view class="pt24 pb24">
-                      <view class="g-border-bottom flex flex-wrap">
-                        <view
-                          v-for="(s, si) in reportStatusMap"
-                          :key="s.value"
-                          :class="{
-                            '': si !== reportStatusMap.length,
-                            [(s.value === lab.status && 'color-blue') ||
-                            'color-111']: 1,
-                          }"
-                          class="flex f32 font-semibold"
-                        >
-                          <view
-                            :class="{
-                              'active-report': s.value === lab.status,
-                            }"
-                            class="relative pb12"
-                          >
-                            {{ s.label }}
-                          </view>
-                          <view v-if="si !== reportStatusMap.length - 1">
-                            <img
-                              :src="globalGl.BASE_IMG + 'guide-arrow-right.png'"
-                              alt=""
-                              class="icon-arrow-1"
-                            />
-                          </view>
-                        </view>
-                      </view>
+                      <GuideReportProgress :lab="lab" />
                     </view>
 
-                    <view v-for="col in reportCol" :key="col.key">
-                      <view
-                        v-if="lab[col.key] ?? undefined !== undefined"
-                        :style="{
-                          'background-image':
-                            (col.key === 'itemAddress' &&
-                              `url(${
-                                globalGl.BASE_IMG +
-                                'stand3-guide-location-bg.png'
-                              })`) ||
-                            '',
-                        }"
-                        :class="{
-                          'address-content': col.key === 'itemAddress',
-                        }"
-                      >
-                        <view class="flex justify-start relative">
-                          <view class="color-888 mr16 text-no-wrap label">
-                            {{ col.label }}
-                          </view>
-
-                          <view
-                            class="g-break-word relative flex flex-between items-start flex-1 row-value"
-                          >
-                            <view class="flex-1">
-                              {{ lab[col.key] }}
-                            </view>
-
-                            <text
-                              v-if="col.key === 'itemAddress'"
-                              class="text-no-wrap color-blue mr12 location-tip"
-                            >
-                              带我去
-                            </text>
-                          </view>
-                        </view>
-                      </view>
-                    </view>
+                    <GuideContentListCol
+                      :cols="reportCol"
+                      :lab="lab"
+                      @go-address-map="handlerAddressMap"
+                    />
 
                     <view
                       v-if="p !== item.exams.length - 1"
                       class="drug-placeholder mb24 mt24"
                     />
                   </view>
-                </view>
-              </view>
 
-              <view v-else>
-                <view
-                  v-for="col in column"
-                  :key="col.key"
-                  :class="{
-                    'address-content': col.key === 'address',
-                  }"
-                  :style="{
-                    'background-image':
-                      (col.key === 'address' &&
-                        `url(${
-                          globalGl.BASE_IMG + 'stand3-guide-location-bg.png'
-                        })`) ||
-                      '',
-                  }"
-                >
                   <view
-                    v-if="item[col.key]"
-                    class="flex justify-start relative"
+                    :class="{
+                      'btn-disabled': item.completionStatus === 0,
+                    }"
+                    class="btn btn-border btn-primary btn-round f28 mt24"
+                    @click="
+                      goReport({
+                        item,
+                        tabIndex: '1',
+                      })
+                    "
                   >
-                    <view class="color-888 mr16 text-no-wrap label">
-                      {{ col.label }}
-                    </view>
-                    <view
-                      class="g-break-word relative flex flex-between items-start"
-                    >
-                      <text class="">
-                        {{ item[col.key] || '' }}
-                      </text>
-
-                      <text
-                        v-if="col.key === 'address'"
-                        class="text-no-wrap color-blue mr12 location-tip"
-                      >
-                        带我去
-                      </text>
-                    </view>
+                    查看报告
                   </view>
                 </view>
               </view>
+
+              <view v-else-if="item.title === '其他项目'">
+                <view v-if="item.others && item.others.length">
+                  <view
+                    v-for="(lab, p) in item.others"
+                    :key="p"
+                    class="relative"
+                  >
+                    <view class="flex justify-between">
+                      <text class="f32 font-semibold">
+                        {{ lab.itemName }}
+                      </text>
+                    </view>
+
+                    <GuideContentListCol
+                      :cols="reportCol"
+                      :lab="lab"
+                      @go-address-map="handlerAddressMap"
+                    />
+
+                    <view
+                      v-if="p !== item.others.length - 1"
+                      class="drug-placeholder mb24 mt24"
+                    />
+                  </view>
+                </view>
+              </view>
+
+              <view v-else-if="item.title === '缴费'">
+                <view
+                  class="btn btn-border btn-primary btn-round f28 mt24"
+                  @click="goPayPage(item)"
+                >
+                  {{ item.completionStatus === 1 ? '门诊缴费' : '门诊缴费' }}
+                </view>
+              </view>
+
+              <view v-else-if="item.title === '门诊就诊'">
+                <GuideContentListCol :cols="mzjzCol" :lab="item" />
+
+                <view
+                  class="btn btn-border color-111 btn-default btn-round f28 mt24"
+                  @click="goTakeNumber(item)"
+                >
+                  叫号查询
+                </view>
+              </view>
+
+              <view v-else-if="item.title === '门诊取号'">
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => mzqhClickRow(item, v)"
+                />
+
+                <view class="flex gap-4">
+                  <view
+                    v-for="(btn, bi) in mzqhBtns"
+                    :key="bi"
+                    class="flex-1 btn btn-border color-111 btn-default btn-round f28 mt24"
+                    @click="
+                      btnClick({
+                        btn,
+                        item,
+                      })
+                    "
+                  >
+                    {{ btn.text }}
+                  </view>
+                </view>
+              </view>
+
+              <view v-else-if="item.title === '诊区签到'">
+                <GuideContentListCol :cols="mzqhCol" :lab="item" />
+              </view>
+
+              <view v-else>暂未实现</view>
             </view>
           </g-collapse>
         </view>
@@ -410,9 +314,15 @@
   import globalGl from '@/config/global';
   import { TVisitInfo } from '../guide';
 
+  import GuideContentListCol from './GuideContentListCol.vue';
+  import GuideReportProgress from './GuideReportProgress.vue';
+  import { TButtonConfig } from '@/types';
+  import { useTBanner } from '@/utils';
+
   const props = withDefaults(
     defineProps<{
       list: TVisitInfo[];
+      mzqhBtns: TButtonConfig[];
     }>(),
     {
       list: () => [],
@@ -422,29 +332,6 @@
   const isActive = (item) => {
     return item.completionStatus === 0;
   };
-
-  const column = ref([
-    {
-      label: '院区',
-      key: 'hosName',
-    },
-    {
-      label: '科室号别',
-      key: 'deptName',
-    },
-    {
-      label: '预约时间',
-      key: 'appointmentTime',
-    },
-    {
-      label: '医生',
-      key: 'docName',
-    },
-    {
-      label: '就诊地点',
-      key: 'address',
-    },
-  ]);
 
   const drugCol = ref([
     {
@@ -511,8 +398,91 @@
     },
   ]);
 
-  const goReport = (item) => {
-    console.log(item);
+  const mzjzCol = ref([
+    {
+      label: '我的序号',
+      key: 'no',
+    },
+    {
+      label: '当前叫号',
+      key: 'curNo',
+    },
+    {
+      label: '等待人数',
+      key: 'beforeNum',
+    },
+    {
+      label: '医生',
+      key: 'docName',
+    },
+    {
+      label: '就诊地点',
+      key: 'site',
+    },
+  ]);
+
+  const mzqhCol = ref([
+    {
+      label: '院区',
+      key: 'hosName',
+    },
+    {
+      label: '科室号别',
+      key: 'categorName',
+    },
+    {
+      label: '预约时间',
+      key: 'appointmentTime',
+    },
+    {
+      label: '医生',
+      key: 'docName',
+    },
+    {
+      label: '就诊地点',
+      key: 'areaName',
+    },
+  ]);
+
+  // const mzqdCol = ref([
+
+  // ])
+
+  const emits = defineEmits([
+    'btn-click',
+    'go-report',
+    'go-take-number',
+    'go-address-map',
+    'go-pay-page',
+    'open-hos-location',
+  ]);
+
+  const mzqhClickRow = (item, { col }) => {
+    if (col.key === 'hosName' && item.hosId) {
+      emits('open-hos-location', item);
+    }
+  };
+  const goReport = ({ item, tabIndex }) => {
+    emits('go-report', { item, tabIndex });
+  };
+
+  const goTakeNumber = (item) => {
+    emits('go-take-number', item);
+  };
+
+  const handlerAddressMap = (item) => {
+    emits('go-address-map', item);
+  };
+
+  const goPayPage = (item) => {
+    emits('go-pay-page', item);
+  };
+
+  const btnClick = ({ btn, item }) => {
+    emits('btn-click', {
+      btn,
+      item,
+    });
   };
 
   const collapseRef = ref(<any>'');
@@ -551,25 +521,6 @@
       &.bg-danger {
         background: var(--hr-error-color-6);
       }
-    }
-  }
-
-  .icon-arrow-1 {
-    width: 40rpx;
-    height: 40rpx;
-    padding: 0 6rpx;
-  }
-
-  .active-report {
-    &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 4rpx;
-      background: #296fff;
     }
   }
 
@@ -649,41 +600,6 @@
     &.arrowBottom {
       transform: rotate(-90deg);
     }
-  }
-
-  .row {
-    min-height: 72rpx;
-
-    .label {
-      width: 4em;
-      padding: 16rpx 0;
-    }
-
-    .row-value {
-      // line-height: 1em;
-      padding: 16rpx 0;
-    }
-
-    .address-content {
-      background-position: top right;
-      background-repeat: no-repeat;
-      background-size: auto 72rpx;
-      line-height: 72rpx;
-      .row-value,
-      .label {
-        padding: 0;
-      }
-    }
-  }
-
-  .location-bg {
-    height: 72rpx;
-    position: absolute;
-    right: 0;
-  }
-
-  .location-tip {
-    margin-left: 2em;
   }
 
   .tag-status {

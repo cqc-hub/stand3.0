@@ -53,4 +53,6 @@ export type TVisitInfo = {
   }[];
   /** 检查 */
   exams: TVisitInfo['labs'];
+  /** 其他 */
+  others: TVisitInfo['labs'];
 };
