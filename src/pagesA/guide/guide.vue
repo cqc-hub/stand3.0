@@ -29,7 +29,16 @@
 
       <view class="page-bg relative pl32 pr32">
         <view class="my-hide f24">占位</view>
-        <Guide-Content-List :list="visitInfoList" />
+        <Guide-Content-List
+          :list="visitInfoList"
+          :mzqhBtns="mzqhBtns"
+          @btn-click="btnClick"
+          @go-report="goReport"
+          @go-address-map="handlerAddressMap"
+          @go-pay-page="goPagePage"
+          @go-take-number="goTakeNumber"
+          @open-hos-location="openHosLocation"
+        />
         <view class="safe-height" />
         <view class="safe-height" />
       </view>
@@ -45,18 +54,25 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { debounce, GStores } from '@/utils';
+  import {
+    debounce,
+    GStores,
+    openLocation,
+    ServerStaticData,
+    TButtonConfig,
+    useTBanner,
+  } from '@/utils';
 
-  import TagStatus from './components/TagStatus.vue';
   import GuidePatChoose from './components/GuidePatChoose.vue';
   import GuideVisitList from './components/GuideVisitList.vue';
   import GuideContentList from './components/GuideContentList.vue';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import api from '@/service/api';
   import { titleMap, TVisitInfo, TVisitRecord } from './guide';
+  import { joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
   const tabCurrent = ref(0);
@@ -93,6 +109,46 @@
       actionSheet.value.show();
     }
   };
+
+  // 门诊取号下面的按钮
+  const mzqhBtns = computed<TButtonConfig[]>(() => {
+    return [
+      {
+        type: 'h5',
+        isSelfH5: '1',
+        // path: 'pages/inquiries/inquiries3',
+        path: 'pagesC/inquiries/inquiriesRes1',
+        text: '预问诊',
+        extraData: {
+          // orderId: "24121324832100498"
+        },
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+          orderId: 'orderId',
+          patientId: 'patientId',
+          hosDeptId: 'hosDeptId',
+          hosOrderId: 'hosOrderId',
+        },
+      },
+      {
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号',
+      },
+      {
+        type: 'self',
+        path: 'pagesA/MyRegistration/MyRegistration',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '取消预约',
+      },
+    ];
+  });
 
   const visitList = ref(<TVisitRecord[]>[]);
   const visitItemSel = ref(<TVisitRecord>{});
@@ -137,7 +193,7 @@
         areaId: '3C',
       },
       node3Info: {
-        completionStatus: 0,
+        completionStatus: 1,
         no: '08',
         curNo: '02',
         beforeNum: '06',
@@ -145,7 +201,7 @@
         site: 'site',
       },
       node4Info: {
-        completionStatus: 1,
+        completionStatus: 0,
       },
 
       node5Info: {
@@ -174,7 +230,7 @@
         ],
       },
       node6Info: {
-        completionStatus: 0,
+        completionStatus: 1,
         labs: [
           {
             isEmptyStomach: null,
@@ -280,10 +336,52 @@
       },
       node7Info: {
         completionStatus: 1,
-        others: [],
+        others: [
+          {
+            isEmptyStomach: null,
+            itemName: '西药',
+            itemAddress: '门诊一楼 门诊西药房',
+            isDeptStorage: '0',
+            status: null,
+            disposeStatus: '2',
+            appointIndicator: null,
+            itemTime: '2024-12-03',
+            remark: null,
+            orderId: null,
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103022',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+
+          {
+            isEmptyStomach: null,
+            itemName: '心肌酶谱 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150068',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+        ],
       },
       node8Info: {
-        completionStatus: 0,
+        completionStatus: 1,
         drugs: [
           {
             isEmptyStomach: null,
@@ -314,18 +412,21 @@
       node2Info,
       node3Info,
       node4Info,
+
       node5Info,
       node6Info,
       node7Info,
       node8Info,
     } = result;
 
+    let isBreak = false;
     // 8个node必定存在
     const rList: any[] = [
       node1Info,
       node2Info,
       node3Info,
       node4Info,
+
       node5Info,
       node6Info,
       node7Info,
@@ -333,13 +434,38 @@
     ]
       .filter((o: any, i) => {
         if (o) {
+          console.log(o, i);
+
           o.title = titleMap[i + 1];
         }
         return o;
       })
+      .filter((o, i) => {
+        // 1-4 需要过滤  5-8 固定都有
+        if (i < 4) {
+          if (isBreak) {
+            return false;
+          }
+
+          if (o.completionStatus === 0) {
+            isBreak = true;
+          }
+        }
+        return true;
+      })
       .reverse();
 
     visitInfoList.value = rList;
+    // visitInfoList.value = visitInfoList.value.filter((o) => {
+    //   const { title, others = [] } = o;
+
+    //   if (title === '其他项目' && !others.length) {
+    //     return false;
+    //   }
+
+    //   return o;
+    // });
+    console.log(visitInfoList.value);
   };
 
   const patChange = async () => {
@@ -372,6 +498,71 @@
     if (result && result.length) {
       visitList.value = result;
       visitItemClick(result[0]);
+    }
+  };
+
+  const handlerAddressMap = (item) => {
+    useTBanner(
+      {
+        type: 'otherProgram',
+        path: 'pages/index?id=QFadbKUMCl',
+        text: '院内导航',
+        appId: 'wx0fb39a1dc27c5e6d',
+      },
+      'navigateTo',
+      item
+    );
+  };
+
+  const goPagePage = (item) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
+        tabIndex: (item.completionStatus === 1 && '1') || '0',
+      }),
+    });
+  };
+
+  const goTakeNumber = () => {
+    useTBanner({
+      isSelfH5: '1',
+      type: 'h5',
+      path: 'pagesC/queueNumber/queueNumber',
+      addition: {
+        token: 'token',
+        herenId: 'herenId',
+      },
+    });
+  };
+
+  const goReport = ({ tabIndex }) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesB/reportQuery/reportQuery', { tabIndex }),
+    });
+  };
+
+  const btnClick = ({ btn, item }) => {
+    const { patChoose } = gStores.userStore;
+
+    useTBanner(btn, 'navigateTo', {
+      ...patChoose,
+      ...item,
+    });
+  };
+
+  const openHosLocation = async ({ hosId }) => {
+    const hosInfo = (await ServerStaticData.getHosList()).find(
+      (o) => o.hosId === hosId
+    );
+
+    if (hosInfo) {
+      const { gisLat, gisLng, hosName, address } = hosInfo;
+
+      openLocation([gisLat!, gisLng!], {
+        name: hosName,
+        address,
+      });
+    } else {
+      gStores.messageStore.showMessage('院区查找失败', 1500);
     }
   };
 

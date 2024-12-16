@@ -143,7 +143,7 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { IRegistrationCardItem ,HosNavData} from './utils/MyRegistration';
+  import { IRegistrationCardItem, HosNavData } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
@@ -271,7 +271,7 @@
     } else {
       tabCurrent.value = parseInt(e as any) - 1;
     }
-    const patientId =
+    let patientId =
       pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
 
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
@@ -285,8 +285,9 @@
     }
     if (!pat.value?.patientId && e) {
       _patChange(gStores.userStore.patChoose);
+      patientId =
+        pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
     }
-
     await getList(patientId);
   };
 
