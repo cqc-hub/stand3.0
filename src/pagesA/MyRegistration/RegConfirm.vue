@@ -567,6 +567,7 @@
       schDate: string;
       alternateNum: number;
       schSecondResultList: TSchInfo[];
+      addFlag?: string;
     }>(arg);
 
     return result;
@@ -587,7 +588,8 @@
     reject();
   };
   const waitReg = async () => {
-    const { schSecondResultList, alternateData } = await getWaitRegSch();
+    const { schSecondResultList, alternateData, addFlag } =
+      await getWaitRegSch();
 
     waitRegSchSecondResultList.value = schSecondResultList;
 
@@ -605,7 +607,7 @@
 
       selWaitRegSch.value = '';
       const { addedNum } = props.value;
-      if (props.value.hasOwnProperty('addedNum')) {
+      if (props.value.hasOwnProperty('addedNum') && addFlag !== '1') {
         if (!(addedNum! * 1)) {
           const { confirm } = await apiAsync(uni.showModal, {
             content: '当前号别加号号源已满，系统将仅为您进行候补挂号!',
@@ -623,6 +625,7 @@
         alternateData,
         patientId: gStores.userStore.patChoose.patientId,
         source: gStores.globalStore.browser.source,
+        addFlag,
       });
 
       if (pageConfig.value?.isTabWaitReg === '1') {

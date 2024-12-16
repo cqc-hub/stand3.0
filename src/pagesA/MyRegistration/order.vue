@@ -259,8 +259,9 @@
       hosId,
       schDate,
       schId,
+      addedNum,
     } = data.scheme;
-    const { result } = await api.canRegAlternate({
+    let query: any = {
       ampm,
       categor,
       clinicalType,
@@ -269,7 +270,10 @@
       hosId,
       schDate,
       schId,
-    });
+    };
+    orderConfig.value.isOpenAddedNum === '1' && (query.addedNum = addedNum);
+
+    const { result } = await api.canRegAlternate(query);
     if (result) {
       waitRegClickData.value = data;
       waitRegDialog.value.show();

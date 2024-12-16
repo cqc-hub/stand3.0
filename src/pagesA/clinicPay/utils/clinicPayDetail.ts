@@ -364,8 +364,11 @@ export const _getQxMedicalNation = async (
   // #endif
 
   const requestArg = {
-    enHosPatientId,
-    patientId: !enHosPatientId && patientId || undefined,
+    //天水门诊医保免登录先注释
+    // enHosPatientId,
+    // patientId: !enHosPatientId && patientId || undefined,
+    patientId:  patientId || undefined,
+    
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',

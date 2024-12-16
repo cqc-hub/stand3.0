@@ -1,5 +1,6 @@
 <template>
   <view class="g-page">
+    <g-flag typeFg="1217" isShowFg />
     <view class="container" scroll-y>
       <g-form
         v-model:value="formData"
@@ -46,12 +47,12 @@
 
   const labelWidth = '250rpx';
 
-  const phoneRule = [
-    {
-      message: '请确认手机号是否有误',
-      rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
-    },
-  ];
+  // const phoneRule = [
+  //   {
+  //     message: '请确认手机号是否有误',
+  //     rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+  //   },
+  // ];
 
   const renderListBase: TInstance[] = [
     {
@@ -99,160 +100,160 @@
       start: dayjs().format('YYYY-MM-DD'),
       showSuffixArrowIcon: true,
     },
-    {
-      labelWidth,
-      label: '住院等待地点',
-      field: 'select',
-      placeholder: '请选择',
-      key: 'waitingLocationHospital',
-      options: [
-        {
-          label: '住宾馆',
-          value: '0',
-        },
-        {
-          label: '本地亲戚家',
-          value: '1',
-        },
-        {
-          label: '本地自己家',
-          value: '2',
-        },
-        {
-          label: '回老家',
-          value: '3',
-        },
-      ],
-      showSuffixArrowIcon: true,
-    },
-    {
-      labelWidth,
-      label: '预计到院时间',
-      field: 'select',
-      placeholder: '请选择',
-      key: 'expectedArrivalTime',
-      options: [
-        {
-          label: '1小时内',
-          value: '0',
-        },
-        {
-          label: '2-3小时',
-          value: '1',
-        },
-        {
-          label: '3-5小时内',
-          value: '2',
-        },
-        {
-          label: '5小时以上',
-          value: '3',
-        },
-        {
-          label: '提前一天',
-          value: '4',
-        },
-      ],
-      showSuffixArrowIcon: true,
-    },
-    {
-      labelWidth,
-      label: '是否服用抗凝药物',
-      field: 'switch',
-      placeholder: '请选择',
-      align: 'left',
-      key: 'isTakeAnticoagulantDrugs',
-      // direction: 'horizontal',
-      labelFormatter(v) {
-        return (v && '是') || '否';
-      },
-      bodyStyle: 'margin-left: 12rpx;',
-    },
+    // {
+    //   labelWidth,
+    //   label: '住院等待地点',
+    //   field: 'select',
+    //   placeholder: '请选择',
+    //   key: 'waitingLocationHospital',
+    //   options: [
+    //     {
+    //       label: '住宾馆',
+    //       value: '0',
+    //     },
+    //     {
+    //       label: '本地亲戚家',
+    //       value: '1',
+    //     },
+    //     {
+    //       label: '本地自己家',
+    //       value: '2',
+    //     },
+    //     {
+    //       label: '回老家',
+    //       value: '3',
+    //     },
+    //   ],
+    //   showSuffixArrowIcon: true,
+    // },
+    // {
+    //   labelWidth,
+    //   label: '预计到院时间',
+    //   field: 'select',
+    //   placeholder: '请选择',
+    //   key: 'expectedArrivalTime',
+    //   options: [
+    //     {
+    //       label: '1小时内',
+    //       value: '0',
+    //     },
+    //     {
+    //       label: '2-3小时',
+    //       value: '1',
+    //     },
+    //     {
+    //       label: '3-5小时内',
+    //       value: '2',
+    //     },
+    //     {
+    //       label: '5小时以上',
+    //       value: '3',
+    //     },
+    //     {
+    //       label: '提前一天',
+    //       value: '4',
+    //     },
+    //   ],
+    //   showSuffixArrowIcon: true,
+    // },
+    // {
+    //   labelWidth,
+    //   label: '是否服用抗凝药物',
+    //   field: 'switch',
+    //   placeholder: '请选择',
+    //   align: 'left',
+    //   key: 'isTakeAnticoagulantDrugs',
+    //   // direction: 'horizontal',
+    //   labelFormatter(v) {
+    //     return (v && '是') || '否';
+    //   },
+    //   bodyStyle: 'margin-left: 12rpx;',
+    // },
   ];
 
   const renderListDetail: TInstance[] = [
-    {
-      labelWidth,
-      label: '婚姻状况',
-      field: 'switch',
-      placeholder: '请选择',
-      align: 'left',
-      key: 'maritalStatus',
-      labelFormatter(v) {
-        return (v && '已婚') || '未婚';
-      },
-      bodyStyle: 'margin-left: 12rpx;',
-      rowStyle: 'margin-top: 12rpx;',
-    },
+    // {
+    //   labelWidth,
+    //   label: '婚姻状况',
+    //   field: 'switch',
+    //   placeholder: '请选择',
+    //   align: 'left',
+    //   key: 'maritalStatus',
+    //   labelFormatter(v) {
+    //     return (v && '已婚') || '未婚';
+    //   },
+    //   bodyStyle: 'margin-left: 12rpx;',
+    //   rowStyle: 'margin-top: 12rpx;',
+    // },
 
-    {
-      labelWidth,
-      required: true,
-      showRequireIcon: true,
-      label: '职业',
-      field: 'select',
-      placeholder: '请选择',
-      key: 'occupation',
-      options: [],
-    },
+    // {
+    //   labelWidth,
+    //   required: true,
+    //   showRequireIcon: true,
+    //   label: '职业',
+    //   field: 'select',
+    //   placeholder: '请选择',
+    //   key: 'occupation',
+    //   options: [],
+    // },
 
-    {
-      labelWidth,
-      required: true,
-      showRequireIcon: true,
-      label: '工作单位',
-      field: 'input-text',
-      placeholder: '请输入工作单位',
-      key: 'serviceAgency',
-    },
+    // {
+    //   labelWidth,
+    //   required: true,
+    //   showRequireIcon: true,
+    //   label: '工作单位',
+    //   field: 'input-text',
+    //   placeholder: '请输入工作单位',
+    //   key: 'serviceAgency',
+    // },
 
-    {
-      labelWidth,
-      required: true,
-      showRequireIcon: true,
-      label: '第一联系人',
-      field: 'input-text',
-      placeholder: '请输入手机号',
-      key: 'mphoneNumber',
-      rule: phoneRule,
-    },
+    // {
+    //   labelWidth,
+    //   required: true,
+    //   showRequireIcon: true,
+    //   label: '第一联系人',
+    //   field: 'input-text',
+    //   placeholder: '请输入手机号',
+    //   key: 'mphoneNumber',
+    //   rule: phoneRule,
+    // },
 
-    {
-      labelWidth,
-      required: true,
-      showRequireIcon: true,
-      showSuffixArrowIcon: true,
-      label: '常住地址',
-      placeholder: '请选择',
-      key: 'permanentAddress',
-      field: 'address',
-    },
+    // {
+    //   labelWidth,
+    //   required: true,
+    //   showRequireIcon: true,
+    //   showSuffixArrowIcon: true,
+    //   label: '常住地址',
+    //   placeholder: '请选择',
+    //   key: 'permanentAddress',
+    //   field: 'address',
+    // },
 
-    {
-      labelWidth,
-      required: true,
-      showRequireIcon: true,
-      label: '详细地址',
-      field: 'input-text',
-      placeholder: '请输入',
-      key: 'detailedAddress',
-    },
+    // {
+    //   labelWidth,
+    //   required: true,
+    //   showRequireIcon: true,
+    //   label: '详细地址',
+    //   field: 'input-text',
+    //   placeholder: '请输入',
+    //   key: 'detailedAddress',
+    // },
 
-    {
-      labelWidth,
-      label: '第二联系人',
-      field: 'input-text',
-      placeholder: '请输入手机号',
-      key: 'phoneNumber',
-      rule: phoneRule,
-    },
+    // {
+    //   labelWidth,
+    //   label: '第二联系人',
+    //   field: 'input-text',
+    //   placeholder: '请输入手机号',
+    //   key: 'phoneNumber',
+    //   rule: phoneRule,
+    // },
   ];
 
   const formSubmit = async ({ data }) => {
     data.isTakeAnticoagulantDrugs =
       (data.isTakeAnticoagulantDrugs && '0') || '1';
-    data.maritalStatus = (data.maritalStatus && '已婚') || '未婚';
-    data.presentAddressOthers = `${data.permanentAddress} ${data.detailedAddress}`;
+    // data.maritalStatus = (data.maritalStatus && '已婚') || '未婚';
+    // data.presentAddressOthers = `${data.permanentAddress} ${data.detailedAddress}`;
 
     const { confirm } = await apiAsync(uni.showModal, {
       content: '确定进行提交?',
@@ -278,19 +279,19 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value, 'pageProps.valuepageProps.value');
+
 
     if (pageProps.value.presentAddressOthers) {
-      const [permanentAddress, ...detailAddress] =
-        pageProps.value.presentAddressOthers.split(' ');
+      // const [permanentAddress, ...detailAddress] =
+      //   pageProps.value.presentAddressOthers.split(' ');
 
-      pageProps.value.permanentAddress = permanentAddress;
-      pageProps.value.detailedAddress = detailAddress.join('');
+      // pageProps.value.permanentAddress = permanentAddress;
+      // pageProps.value.detailedAddress = detailAddress.join('');
     }
     pageProps.value.isTakeAnticoagulantDrugs =
       (pageProps.value.isTakeAnticoagulantDrugs === '0' && true) || false;
-    pageProps.value.maritalStatus =
-      (pageProps.value.maritalStatus === '已婚' && true) || false;
+    // pageProps.value.maritalStatus =
+    //   (pageProps.value.maritalStatus === '已婚' && true) || false;
 
     formData.value = {
       patientId: gStores.userStore.patChoose.patientId,
@@ -300,21 +301,21 @@
   });
 
   onMounted(async () => {
-    if (isItemNew.value) {
-      const { result } = await api.getTermsBySysAndCode({
-        domainCode: 'USER_JOB',
-      });
+    // if (isItemNew.value) {
+      // const { result } = await api.getTermsBySysAndCode({
+      //   domainCode: 'USER_JOB',
+      // });
 
-      const jobList = ((result && result[0]?.terms) || []).map((o) => ({
-        value: o.code,
-        label: o.label,
-      }));
+      // const jobList = ((result && result[0]?.terms) || []).map((o) => ({
+      //   value: o.code,
+      //   label: o.label,
+      // }));
 
-      const jobItem = renderListDetail.find((o) => o.key === 'occupation');
+      // const jobItem = renderListDetail.find((o) => o.key === 'occupation');
 
-      // @ts-expect-error
-      jobItem && (jobItem.options = jobList);
-    }
+    //  // @ts-expect-error
+      // jobItem && (jobItem.options = jobList);
+    // }
 
     gform.value.setList([
       ...renderListBase,

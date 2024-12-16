@@ -158,6 +158,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     isOrderBlur: '1',
     isHideOutTimeOrderSource: '1',
     isOrderPay: '0',
+    isOpenAddedNum: '0',
   });
 
   // ref
