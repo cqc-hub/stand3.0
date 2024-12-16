@@ -89,6 +89,8 @@
     <view v-else class="empty-list">
       <g-empty :current="1" noTransformY />
     </view>
+
+    <g-message />
   </view>
 </template>
 

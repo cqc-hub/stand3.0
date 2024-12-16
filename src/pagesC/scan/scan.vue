@@ -15,12 +15,12 @@
   const gStores = new GStores();
   const pageProps = ref(
     {} as {
-      type: '1'; // 1 温fu2
+      type: '1' | '2'; // 1 温fu2 2 温fu2
       [key: string]: any;
     }
   );
 
-  const addPatInit = async () => {
+  const initAddPat = async () => {
     const { params } = pageProps.value;
     const {
       result: { patientName, patientPhone },
@@ -51,13 +51,32 @@
     });
   };
 
+  const initQuestion = async () => {
+    const {
+      category, //  50 门诊  55 住院
+      a: pa,
+      b,
+      c,
+      d,
+      e,
+      f,
+      g,
+      h,
+    } = pageProps.value;
+  };
+
   const init = async () => {
     const { type } = pageProps.value;
 
     switch (type) {
       // 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
       case '1':
-        addPatInit();
+        initAddPat();
+        break;
+
+      // 温附二 满意度问卷
+      case '2':
+        initQuestion();
         break;
 
       default:
@@ -83,6 +102,8 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
+
+    console.log('获取到参数', pageProps.value);
 
     init();
   });
