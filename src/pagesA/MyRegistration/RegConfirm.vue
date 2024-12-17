@@ -567,7 +567,6 @@
       schDate: string;
       alternateNum: number;
       schSecondResultList: TSchInfo[];
-      addFlag?: string;
     }>(arg);
 
     return result;
@@ -588,8 +587,7 @@
     reject();
   };
   const waitReg = async () => {
-    const { schSecondResultList, alternateData, addFlag } =
-      await getWaitRegSch();
+    const { schSecondResultList, alternateData } = await getWaitRegSch();
 
     waitRegSchSecondResultList.value = schSecondResultList;
 
@@ -604,6 +602,7 @@
       const selSchItem = schSecondResultList.find(
         (o) => o.ampm === selWaitRegSch.value
       )!;
+      const { addFlag } = selSchItem;
 
       selWaitRegSch.value = '';
       const { addedNum } = props.value;

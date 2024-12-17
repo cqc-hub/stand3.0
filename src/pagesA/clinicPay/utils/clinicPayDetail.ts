@@ -365,9 +365,9 @@ export const _getQxMedicalNation = async (
 
   const requestArg = {
     //天水门诊医保免登录先注释
-    // enHosPatientId,
-    // patientId: !enHosPatientId && patientId || undefined,
-    patientId:  patientId || undefined,
+    enHosPatientId,
+    patientId: !enHosPatientId && patientId || undefined,
+    // patientId:  patientId || undefined,
     
     authorizeType,
     authorizeTypeDesc,
@@ -830,6 +830,7 @@ export const usePayPage = () => {
         });
 
       result = r;
+
 
       if (result) {
         pageProps.value.deParams = {

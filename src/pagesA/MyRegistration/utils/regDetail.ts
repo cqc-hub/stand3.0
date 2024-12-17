@@ -297,6 +297,14 @@ export const waitOrderStatusMap = {
 
   '8': orderStatusMap['70'],
   '9': orderStatusMap['75'],
+  '10':{
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    title: '已结束',
+    cardColor: 'var(--hr-neutral-color-7)',
+  }
 } as const;
 
 export type OrderStatus = keyof typeof orderStatusMap;

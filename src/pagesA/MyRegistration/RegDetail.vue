@@ -90,7 +90,7 @@
             </view>
 
             <view
-              v-if="orderRegInfo.orderStatus === '10'"
+              v-if="orderRegInfo.orderStatus === '10'&&!isWaitReg"
               class="out-time-info f28 color-error"
             >
               <block v-if="timeTravel.minute == 0 && timeTravel.second == 0">

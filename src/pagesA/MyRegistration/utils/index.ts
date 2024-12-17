@@ -125,6 +125,8 @@ export type TSchInfo = {
   schState: '0' | '1' | '2' | '3';
   // 排班状态名称
   schStateName: string;
+
+  addFlag?:string
 } & IDocRow;
 
 type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {
