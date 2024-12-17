@@ -385,9 +385,9 @@
     }
   });
 
+  // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
-
     uni.showLoading({});
 
     if ((queryParams && !opt?.params) || opt?.q) {

@@ -8,7 +8,7 @@
   import { defineComponent, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, wait } from '@/utils';
+  import { GStores, useTBanner, wait } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
@@ -54,15 +54,43 @@
   const initQuestion = async () => {
     const {
       category, //  50 门诊  55 住院
-      a: pa,
-      b,
-      c,
-      d,
-      e,
-      f,
-      g,
-      h,
+      a: patientName,
+      b: cardNumber,
+      c: patientPhone,
+      d: visitNo,
+      e: hosName,
+      f: deptName,
+      g: docName,
+      h: visitDate,
+      i: inHospitalNo,
+      j: source = gStores.globalStore.browser.source,
+      k: outTime,
+      l: hospitalWard,
+      n: hosId,
     } = pageProps.value;
+
+    useTBanner({
+      type: 'h5',
+      isLocal: '1',
+      isSelfH5: '1',
+      path: 'pagesC/question/questionAfterVisit1',
+      extraData: {
+        category,
+        patientName,
+        cardNumber,
+        hospitalWard,
+        deptName,
+        docName,
+        visitDate,
+        visitNo,
+        outTime,
+        hosId,
+        source,
+        inHospitalNo,
+        patientPhone,
+        hosName,
+      },
+    });
   };
 
   const init = async () => {
