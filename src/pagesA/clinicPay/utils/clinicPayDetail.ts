@@ -1293,7 +1293,7 @@ export const usePayPage = () => {
     const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
     const isBizTypeMedical =
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
-    const isMedicalPlugin = medicalMHelp.medicalPlugin === '1';
+    const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
     const isNavgateToZLminiProm = getIsNavToMini();
 
     const payTypeList = determinePayType(

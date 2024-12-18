@@ -2,6 +2,7 @@
   "name": "standard-mobile-pro-v3",
   "version": "0.0.0",
   "scripts": {
+    "dev:mp-weixin-dev": "npm run rewrite:manifest && uni build -p mp-weixin --watch",
     "dev:mp-weixin": "npm run rewrite:manifest && uni build -p mp-weixin --minify --watch",
     "dev:mp-alipay": "npm run rewrite:manifest && uni -p mp-alipay",
     "dev:h5": "npm run rewrite:manifest && uni",
