@@ -42,6 +42,7 @@
     </view>
     <scroll-view class="scroll-container g-container" scroll-y>
       <g-tbanner
+        v-if="props._type !== '5'"
         :config="orderConfig.bannerSelHosTop"
         @click="useTBanner(orderConfig.bannerSelHosTop!, 'navigateTo', props)"
         disabled
@@ -174,11 +175,11 @@
     useTBanner,
   } from '@/utils';
   import { joinQuery, deQueryForUrl } from '@/common';
-  import { HosNavData} from './utils/MyRegistration';
+  import { HosNavData } from './utils/MyRegistration';
   import hosListVue from './components/hosList/hosList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import HosListItemMore from './components/hosList/hosListItemMore.vue';
-import globalGl from '@/config/global';
+  import globalGl from '@/config/global';
 
   const _props = defineProps<{
     _url: string;
@@ -186,8 +187,10 @@ import globalGl from '@/config/global';
      * - 1：医院指南
      * - 2：核酸开单
      * - 3: 药店指南（只展示药店 搜索框 不展示距离）
+     * - 4: 1001046 专用 院内导航
+     * - 5: MDT (需要通过 mdtHosOpened 过滤医院列表)
      */
-    _type: string;
+    _type: '1' | '2' | '3' | '4' | '5';
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
@@ -293,13 +296,13 @@ import globalGl from '@/config/global';
   };
 
   const itemClick = (item: IHosInfo) => {
-    if(globalGl.SYS_CODE==='1001046'&&props.value._type==='4'){
+    if (globalGl.SYS_CODE === '1001046' && props.value._type === '4') {
       useTBanner(
-        HosNavData[item.hosId](item,props.value._type),
+        HosNavData[item.hosId](item, props.value._type),
         'navigateTo',
         item
       );
-      return
+      return;
     }
     //药店不可点击
     if (item.hosLevel == 9) {
@@ -317,7 +320,7 @@ import globalGl from '@/config/global';
       }
     }
 
-    if (props.value._type && props.value._type !== '3') {
+    if (props.value._type && props.value._type !== '3' && !props.value._url) {
       //院区跳转问卷页面
       if (props.value._questionId) {
         //跳转问卷页面-h5
@@ -454,6 +457,12 @@ import globalGl from '@/config/global';
       );
     }
 
+    if (props.value._type === '5' && getTypeNow.value === '预约挂号') {
+      hosList.value = hosList.value.filter((o) =>
+        (orderConfig.value.mdtHosOpened || []).includes(o.hosId)
+      );
+    }
+
     if (hosHisMaxLen.value < hosList.value.length) {
       hosHisMaxLen.value = hosList.value.length;
     }
@@ -551,6 +560,7 @@ import globalGl from '@/config/global';
 
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log('---页面参数', props.value);
     const { _type } = props.value;
 
     if (getTypeNow.value === '预约挂号') {

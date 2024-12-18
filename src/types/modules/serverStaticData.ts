@@ -23,6 +23,8 @@ export interface ISystemConfig_ {
      */
     // 选医院上面 banner
     bannerSelHosTop?: TBannerConfig;
+    /** 针对 mdt 功能, 开放的院区 */
+    mdtHosOpened?: string[];
 
     /** 科室列表页面 */
     // 选科室上面 banner
