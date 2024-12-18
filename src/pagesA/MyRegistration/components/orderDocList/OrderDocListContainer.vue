@@ -87,14 +87,15 @@
           </text>
         </view>
 
-        <!-- <view
+        <view
+          v-if="item.visitingArea"
           :class="{
             mb12: isAllDate,
           }"
           class="color-444 ellipsis-line-clamp2 g-break-word"
         >
-          诊室: 门诊3楼A区302室
-        </view> -->
+          {{ item.visitingArea }}
+        </view>
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view

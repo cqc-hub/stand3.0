@@ -59,7 +59,7 @@
     loading.value = true;
     const { result } = await api
       .patDynamicCode({
-        patientId: !props.cardData && props.patientId,
+        patientId: !props.cardData && props.patientId || undefined,
         cardData: props.cardData,
         source: gStores.globalStore.browser.source,
       })

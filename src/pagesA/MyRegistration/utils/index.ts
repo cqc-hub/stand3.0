@@ -374,6 +374,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
                   } = schInfo;
 
                   Object.assign(scheme, {
+                    ...schInfo,
                     deptName,
                     docJobName,
                     docName,
