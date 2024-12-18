@@ -583,7 +583,7 @@
   };
 
   onLoad(async () => {
-    // patChange();
+    patChange();
     visitItemClick({} as any);
   });
 </script>

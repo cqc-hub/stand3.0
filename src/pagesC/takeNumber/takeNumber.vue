@@ -177,7 +177,7 @@
       {
         hosId?: string; // 采血取号 需要
         _type?: 'blood'; //区分普通取号和 濮阳采血取号
-        type?: '0' | '1'; // 普通取号 区分为 0为门诊取号 1 为门诊签到
+        type?: '0' | '1' | '2'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
       }
     >{}
   );
@@ -208,7 +208,10 @@
       //缴费取号模式
       const { patientId } = gStores.userStore.patChoose;
       uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/MyRegistration/takeNumberDetail', {...item,patientId}),
+        url: joinQueryForUrl('/pagesA/MyRegistration/takeNumberDetail', {
+          ...item,
+          patientId,
+        }),
       });
     } else {
       //普通模式
@@ -580,8 +583,11 @@
     getList();
   };
 
+  let isFirst = true;
   onShow(() => {
-    init();
+    if (!isFirst) {
+      init();
+    }
   });
 
   onLoad(async (opt) => {
@@ -589,6 +595,10 @@
     uni.setNavigationBarTitle({
       title: isOnlineSign.value ? '在线签到' : '门诊取号',
     });
+
+    if (isBloodSign.value) {
+      pageProps.value.type = '2';
+    }
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
@@ -598,6 +608,7 @@
     await getConfig();
     isRender.value = true;
     init();
+    isFirst = false;
   });
 </script>
 
