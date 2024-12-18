@@ -14,7 +14,7 @@
         :class="{
           ico_pay: item.key === 'online' || item.key === 'digital',
           ico_card: item.key === 'medicare' || item.key === 'familyPay',
-          ico_hospital: item.key === 'offline' || item.key === 'bizType',
+          ico_hospital: item.key === 'offline' || item.key === 'bizType'||item.key === 'navToMini',
         }"
         class="icon-font pay-icon"
       />

@@ -1,22 +1,22 @@
 import { computed, ref, reactive } from 'vue';
 import { type StyleConfigType } from './types';
 import { type TButtonConfig, useTBanner } from '@/utils';
-const msg = ref<string>();
+export const msgList = ref<Array<any>>([]);
 const msgLoad = ref<boolean>(false);
 const focus = ref<boolean>(false);
 //普通首页
 // {
-//   transition: true,
-//   showHeader: true,
-//   isMessage: false,
-//   simpleHeadInit:false,
+//   transition: true,//初始过渡效果
+//   showHeader: true,//展示首页
+//   isMessage: false,//通知效果
+//   simpleHeadInit:false,//初始服务居中
 // }
 //通知
 // {
-//   transition: false,
-//   showHeader: false,
-//   isMessage: true,
-//   simpleHeadInit:false,
+//   transition: false,//初始过渡效果
+//   showHeader: false,//展示首页
+//   isMessage: true,//通知效果
+//   simpleHeadInit:false,//初始服务居中
 // }
 export const styleConfig = ref<StyleConfigType>({
   transition: true,//初始过渡效果
@@ -129,8 +129,20 @@ export const guessServerList = ref([
     addition: { orderClassTabIndex: 'tabIndex' },
   },
 ]);
-export const sendMsg = (value) => {
+export const sendMsg = async (value) => {
   console.log('sendMsg', value);
+  msgList.value.push({
+    my: true,
+    msg: value,
+  })
+  await new Promise((rl,rj)=>{
+    setTimeout(()=>{
+      msgList.value.push({
+        my: false,
+        msg: '系统回复1',
+      })
+    },1000)
+  })
 };
 export const onBlur = (value) => {
   console.log('onBlur', value);

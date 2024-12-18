@@ -1,22 +1,90 @@
 <template>
-  <view class="content-area" >
-    <p v-for="item in 200" :key="item">{{ item }}</p>
+  <view
+    class="content-area"
+    :class="{
+      transition: headerConfig?.transition,
+      'show-mess': headerConfig?.isMessage,
+    }"
+  >
+    <!-- <p v-for="item in 200" :key="item">{{ item }}</p> -->
+    <template
+      v-for="(msgItem, msgIndex) in msgList"
+      :key="`smartChatRoomItem_${msgIndex}`"
+    >
+      <view
+        v-if="msgItem.my"
+        :id="`smartChatRoomItem_${msgIndex}`"
+        class="flex-column-start smartChatRoom-item"
+      >
+        <view
+          class="flex justify-end padding-right one-show align-start padding-top"
+        >
+          <view class="flex justify-end my-width">
+            <view class="chat-my-item e margin-left padding-chat by-cyan">
+              <text class="g-break-word">{{ msgItem.msg }}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view
+        v-else
+        :id="`smartChatRoomItem_${msgIndex}`"
+        class="flex-column-start smartChatRoom-item"
+      >
+        <view
+          class="flex justify-end padding-right one-show align-start padding-top"
+        >
+          <view class="flex justify-end">
+            <view class="chat-system-item margin-left padding-chat by-cyan">
+              <text class="g-break-word">{{ msgItem.msg }}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </template>
   </view>
 </template>
 <script setup lang="ts">
-import { ref, computed, getCurrentInstance,onMounted} from 'vue';
-const viewHeight=ref(0)
-onMounted(()=>{
-
-})
-const getViewHeight=()=>{
-
-}
+  import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  import { type StyleConfigType } from '../utils/types';
+  const props = defineProps<{
+    msgList: any[];
+    headerConfig: StyleConfigType;
+  }>();
+  const viewHeight = ref(0);
+  onMounted(() => {
+    console.log('msgList', props.msgList);
+  });
+  const getViewHeight = () => {};
 </script>
 <style lang="scss" scoped>
+  @import './intalMedicalAssists.scss';
   .content-area {
     z-index: 0;
     padding-top: 40rpx;
-
+    min-height: calc(100vh - 590rpx);
+    .my-width {
+      width: 400rpx;
+    }
+    .chat-my-item {
+      border-radius: 8px 0px 8px 8px;
+      background-color: #296fff;
+      color: #fff;
+    }
+    .chat-system-item {
+      border-radius: 8px 0px 8px 8px;
+      background-color: #E8F4FF;
+      color: #111111;
+    }
+    .padding-chat {
+      padding: 17rpx 20rpx;
+    }
+  }
+  .transition {
+    transition: 0.1s;
+  }
+  .show-mess {
+    padding-top: 0rpx !important;
+    min-height: calc(100vh - 390rpx) !important;
   }
 </style>

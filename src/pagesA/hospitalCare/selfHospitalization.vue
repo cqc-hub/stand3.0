@@ -1,5 +1,6 @@
 <template>
   <view class="g-page">
+    <g-flag typeFg="1217" isShowFg />
     <view class="mb32">
       <g-choose-pat @choose-pat="getData" />
     </view>

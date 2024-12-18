@@ -96,6 +96,13 @@ interface ISConfig {
 
       /** 医保建档 */
       medicalFiling?: '1';
+
+      // /** 门诊缴费跳转浙里医保小程序 */
+      navgateToZLminiProm?: {
+        orgId: {
+          [hosId: string]: string;
+        };
+      };
     };
 
     wx?: {
@@ -386,10 +393,13 @@ const scJson: Record<string, ISConfig> = {
         medicalPlugin: '1',
       },
       alipay: {
-        medicalPlugin: {
+        navgateToZLminiProm: {
           orgId: { 12930: 'H33060200131' },
-          cardType: '01',
         },
+        // medicalPlugin: {
+        //   orgId: { 12930: 'H33060200131' },
+        //   cardType: '01',
+        // },
       },
     },
 
@@ -428,9 +438,7 @@ const scJson: Record<string, ISConfig> = {
       isOpenPatToMedicalPat: {},
       alipay: {
         // medicalDefault: '1',
-        medicalNation: {
-
-        },
+        medicalNation: {},
       },
       wx: {
         medicalNation: {

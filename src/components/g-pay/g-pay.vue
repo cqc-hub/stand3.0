@@ -57,7 +57,13 @@
         {
           label: '数字人民币支付',
           key: 'digital',
-        }
+        },
+        // #ifdef MP-ALIPAY
+        {
+          label: '浙里医保小程序结算',
+          key: 'navToMini',
+        },
+        // #endif
       ],
       autoPayArg: () => ({}),
     }

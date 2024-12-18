@@ -1,6 +1,6 @@
 <template>
   <view class="topnav-container">
-    <view class="smartChatRoom">
+    <scroll-view class="smartChatRoom">
       <view class="smartChatRomm-content">
         <!-- hearder区域 -->
         <intel-medical-header
@@ -9,7 +9,10 @@
           @click-guess="handleGuess"
         />
         <!-- content区域 -->
-        <intalMedicalContent />
+        <intalMedicalContent
+          :msgList="msgList"
+          :headerConfig="styleConfig"
+        />
         <!-- fotter区域 -->
         <intalMedicalFooter
           :guessServerList="guessServerList"
@@ -19,7 +22,7 @@
           @send-msg="sendMsg"
         />
       </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 <script setup lang="ts">
@@ -36,6 +39,7 @@
     handleGuess,
     onBlur,
     sendMsg,
+    msgList,
   } from './utils/utils';
   import { throttle } from '@/utils';
 

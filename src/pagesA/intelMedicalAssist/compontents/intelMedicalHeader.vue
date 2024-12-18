@@ -180,7 +180,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 670rpx;
+    height: 800rpx;
     // position: fixed;
     // .wihite-mask {
     //   z-index: 3;
@@ -326,6 +326,7 @@
     }
   }
   .transition {
+    transition: 0.5s;
     .simple-header {
       transition: 0.5s;
     }

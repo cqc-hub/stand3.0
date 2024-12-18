@@ -61,8 +61,8 @@ export const HosNavData = {
       type: '8_2',
       typeData: JSON.stringify({
         buildingId: 208089,
-        type: 1,
-        hisName: item.hosDeptId,
+        type: '1',
+        hisName: item.deptName,
       }),
     };
     if (type === '4') {
@@ -71,6 +71,11 @@ export const HosNavData = {
         buildingId: 208089,
       };
     }
+    // uni.navigateToMiniProgram({
+    //   appId: 'wx0815c00f0b4bd7c3',
+    //   path: 'pages/index/index',
+    //   extraData
+    // });
     return {
       appId: 'wx0815c00f0b4bd7c3',
       path: 'pages/index/index',
@@ -81,18 +86,18 @@ export const HosNavData = {
   },
   // #endif
   // #ifdef  MP-ALIPAY
-  13178: (item: IRegistrationCardItem, type?: string) => {
-    return {
-      appId: '2018122862716277',
-      path: 'pages/index/index',
-      text: '院内导航',
-      type: 'otherProgram',
-      extraData: {
-        hisCode: item.hosDeptId,
-        buildingId: 208089,
-        type: 3,
-      },
-    };
-  },
+  // 13178: (item: IRegistrationCardItem, type?: string) => {
+  //   return {
+  //     appId: '2018122862716277',
+  //     path: 'pages/index/index',
+  //     text: '院内导航',
+  //     type: 'otherProgram',
+  //     extraData: {
+  //       hisCode: item.hosDeptId,
+  //       buildingId: 208089,
+  //       type: 3,
+  //     },
+  //   };
+  // },
   // #endif
 };

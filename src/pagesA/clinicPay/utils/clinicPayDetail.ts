@@ -196,6 +196,7 @@ export enum PayType {
   Medicare = 2,
   BizType = 3,
   Digital = 4,
+  NavToMini = 5,
 }
 
 type PayListItem = {
@@ -268,6 +269,8 @@ export const getIsMedicalMode = () => {
 
     // #ifdef MP-ALIPAY
     if (!!alipay?.medicalNation) {
+      return true;
+    } else if (!!alipay?.navgateToZLminiProm) {
       return true;
     }
     // #endif
@@ -366,9 +369,9 @@ export const _getQxMedicalNation = async (
   const requestArg = {
     //天水门诊医保免登录先注释
     enHosPatientId,
-    patientId: !enHosPatientId && patientId || undefined,
+    patientId: (!enHosPatientId && patientId) || undefined,
     // patientId:  patientId || undefined,
-    
+
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',
@@ -573,7 +576,7 @@ export const isCanUseMedical = async (cardNumber: string): Promise<boolean> => {
 
     let { isSelf } = result;
     _isCanUseMedical = isSelf;
-    _isCanUseMedical = true;
+    // _isCanUseMedical = true;
     setTimeout(() => {
       resolve(void 0);
     });
@@ -831,7 +834,6 @@ export const usePayPage = () => {
 
       result = r;
 
-
       if (result) {
         pageProps.value.deParams = {
           cardNumber: result.cardNumber,
@@ -855,7 +857,7 @@ export const usePayPage = () => {
         });
 
       result = r;
-      // result={"clinicalSettlementResultList":[{"deptName":"全科医学科","clinicId":"0","subIds":"0","docId":"0000000332","clinicTypeName":"线下就诊","traceNo":"1c494a27d2dc45408223cbd6af387824","deptId":"10217000","recipeNo":"1c494a27d2dc45408223cbd6af387824","hosId":"1279","costTypeCode":"2","serialNo":"1c494a27d2dc45408223cbd6af387824","childOrder":"4032861","docName":"江凌翔","clinicType":"1","costTypeName":"医保","visitDate":"2024-10-12","hosName":"横街路院区","totalCost":"25.00","visitNo":"20241012003187"}]}
+      // result={"clinicalSettlementResultList":[{"deptName":"全科医学科","clinicId":"0","subIds":"0","docId":"0000000332","clinicTypeName":"线下就诊","traceNo":"1c494a27d2dc45408223cbd6af387824","deptId":"10217000","recipeNo":"1c494a27d2dc45408223cbd6af387824","hosId":"12930","costTypeCode":"2","serialNo":"1c494a27d2dc45408223cbd6af387824","childOrder":"4032861","docName":"江凌翔","clinicType":"1","costTypeName":"医保","visitDate":"2024-10-12","hosName":"横街路院区","totalCost":"25.00","visitNo":"20241012003187"}]}
 
       uni.hideLoading();
       pageProps.value.deParams = undefined;
@@ -1192,6 +1194,25 @@ export const usePayPage = () => {
     return false;
   };
 
+  /**
+   * 是否跳转浙里医保小程序
+   * @returns boolean
+   */
+
+  const getIsNavToMini = () => {
+    let flag = false;
+    // #ifdef MP-ALIPAY
+    const medicalMHelp = getMedicalConfigInfo() as any;
+    try {
+      const hosId = selUnPayList.value[0].hosId;
+      flag = !!medicalMHelp?.navgateToZLminiProm?.orgId[hosId];
+    } catch (e) {
+      console.warn('未获取到跳转浙里医保小程序对应医院的orgId', e);
+    }
+    // #endif
+    return flag;
+  };
+
   const handlerPay = async () => {
     if (!selUnPayList.value.length) {
       gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
@@ -1230,16 +1251,28 @@ export const usePayPage = () => {
     isDigitalPay: boolean,
     hasMedicalItem: boolean,
     isMedicalSelf: boolean,
-    isBizTypeMedical: boolean
+    isBizTypeMedical: boolean,
+    isMedicalPlugin: boolean,
+    isNavgateToZLminiProm: boolean
   ) => {
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
         if (isMedicalSelf) {
+          // #ifdef MP-ALIPAY
           payTypeList.push(PayType.Medicare);
+          // #endif
+          // #ifdef MP-WEIXIN
+          if (!isMedicalPlugin || !isBizTypeMedical) {
+            payTypeList.push(PayType.Medicare);
+          }
+          // #endif
         }
         if (isBizTypeMedical) {
           payTypeList.push(PayType.BizType);
+        }
+        if (isNavgateToZLminiProm) {
+          payTypeList.push(PayType.NavToMini);
         }
       }
     }
@@ -1260,6 +1293,8 @@ export const usePayPage = () => {
     const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
     const isBizTypeMedical =
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
+    const isMedicalPlugin = medicalMHelp.medicalPlugin === '1';
+    const isNavgateToZLminiProm = getIsNavToMini();
 
     const payTypeList = determinePayType(
       isMedicalMode,
@@ -1271,7 +1306,9 @@ export const usePayPage = () => {
             gStores.userStore.patChoose.cardNumber,
           pageProps.value.params
         )),
-      isBizTypeMedical
+      isBizTypeMedical,
+      isMedicalPlugin,
+      isNavgateToZLminiProm
     );
 
     let additionalList: any[] = [];
@@ -1357,6 +1394,13 @@ export const usePayPage = () => {
         key: 'medicare',
         sort: 3,
       },
+      // #ifdef MP-ALIPAY
+      {
+        label: '浙里医保小程序结算',
+        key: 'navToMini',
+        sort: 6,
+      },
+      // #endif
     ] as const;
 
     const rList: string[] = ['online'];
@@ -1376,6 +1420,9 @@ export const usePayPage = () => {
         // #endif
         case PayType.Digital:
           rList.push('digital');
+          break;
+        case PayType.NavToMini:
+          rList.push('navToMini');
           break;
       }
     });
@@ -1461,6 +1508,19 @@ export const usePayPage = () => {
         const { openFunc } = curPages.selectComponent('#codePlugin');
         openFunc();
       }
+    } else if (item.key === 'navToMini') {
+      const {
+        sConfig: { medicalMHelp },
+      } = globalGl;
+
+      const { alipay } = medicalMHelp!;
+      const { hosId, hosName } = selUnPayList.value[0];
+      const orgId = alipay?.navgateToZLminiProm?.orgId[hosId];
+      useTBanner({
+        type: 'otherProgram',
+        path: `pages/loading/index?orgId=${orgId}&orgName=${hosName}`,
+        appId: '2021003155652649',
+      });
     }
   };
 
