@@ -47,7 +47,7 @@
                 >
                   <text class="iconfont qr-toggle-icon">&#xe6c3;</text>
 
-                  快速创建就诊人
+                  快速预约
                 </view>
               </view>
             </template>
