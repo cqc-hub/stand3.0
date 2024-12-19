@@ -26,7 +26,7 @@
                 v-if="pageConfig.isOrderWithoutPat === '1'"
                 :class="{
                   ['pt0']: !showPat.patientName,
-                  'g-border-top g-border-right mt24 pt24 ': showPat.patientName,
+                  'g-border-top mt24 pt24 ': showPat.patientName,
                 }"
                 class="flex items-center mb12 color-blue pb24"
               >
