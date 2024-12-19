@@ -150,6 +150,7 @@ const scJson: Record<string, ISConfig> = {
     },
     // isOpenMessageAuth: '1',
     // isOpenHomeTabBarMessageBtn: '1',
+    // isOpenHomeTabBarNetWorkBtn: '1'
   },
 
   /**

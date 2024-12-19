@@ -1017,6 +1017,8 @@ export class PatientUtils extends LoginUtils {
   }> {
     const args = {
       ...patData,
+      // 徐要求无证件时候传入
+      idType: patData.idType || '100',
       source: this.globalStore.browser.source,
     };
     getH5OpenidParam(args);

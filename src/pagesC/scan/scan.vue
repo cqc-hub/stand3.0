@@ -15,7 +15,11 @@
   const gStores = new GStores();
   const pageProps = ref(
     {} as {
-      type: '1' | '2'; // 1 温fu2 2 温fu2
+      /**
+       * - 1 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
+       * - 2 温附二 满意度问卷
+       */
+      type: '1' | '2';
       [key: string]: any;
     }
   );
@@ -97,12 +101,10 @@
     const { type } = pageProps.value;
 
     switch (type) {
-      // 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
       case '1':
         initAddPat();
         break;
 
-      // 温附二 满意度问卷
       case '2':
         initQuestion();
         break;
