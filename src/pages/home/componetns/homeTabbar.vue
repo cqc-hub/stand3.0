@@ -207,7 +207,9 @@
     }
 
     if (global.sConfig.isOpenHomeTabBarMessageBtn) {
+      // #ifdef MP-WEIXIN
       tabList.push('消息中心');
+      // #endif
     }
 
     if (global.SYS_CODE === '1001052') {
