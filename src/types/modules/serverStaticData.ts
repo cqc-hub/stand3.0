@@ -107,6 +107,8 @@ export interface ISystemConfig_ {
     // 可以筛选 在线/全部 挂号?  设置后 列表, 详情 接口也会变更
     isCanSelOrderStatus?: '1';
     selOrderStatusDefault?: '1'; //isCanSelOrderStatus 开启后 设置默认挂号状态为全部挂号
+    //是否管理在线挂号tab
+    isCancelOlineReg?: '1';
     //开启后新增候补挂号tab
     isTabWaitReg?: '1';
     /** 搜索 */

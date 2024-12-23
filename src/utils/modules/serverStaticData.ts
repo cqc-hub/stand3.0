@@ -246,7 +246,7 @@ export const useTBanner = async (
     });
   } else {
     delete extraData.token;
-    console.log('跳转第三方小程序appId:',appId,';path:',joinQuery(path, extraData),extraData)
+    console.log('跳转第三方小程序appId:',appId,';path:',joinQuery(path, extraData),';extraData',extraData)
     uni.navigateToMiniProgram({
       ...(config.deepProps || {}),
       appId: appId!,

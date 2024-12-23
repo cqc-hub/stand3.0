@@ -62,7 +62,9 @@ export const HosNavData = {
       typeData: JSON.stringify({
         buildingId: 208089,
         type: '1',
-        hisName: item.deptName,
+        hisName: item.hosDeptId,
+        // type:3,
+        // hisCode:item.hosDeptId
       }),
     };
     if (type === '4') {
@@ -71,6 +73,7 @@ export const HosNavData = {
         buildingId: 208089,
       };
     }
+    // console.log('跳转第三方小程序appId:wx0815c00f0b4bd7c3;path:pages/index/index',';extraData',extraData)
     // uni.navigateToMiniProgram({
     //   appId: 'wx0815c00f0b4bd7c3',
     //   path: 'pages/index/index',

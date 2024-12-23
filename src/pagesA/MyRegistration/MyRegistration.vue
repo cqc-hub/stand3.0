@@ -39,7 +39,7 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
-          :isWaitReg="isWaitReg || tabs[tabCurrent]?.typeId === 2"
+          :isWaitReg="isWaitReg || tabCurrentDetail.typeId === 2"
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :isShowYuWzBtn="isShowYuWzBtn"
@@ -262,10 +262,12 @@
 
   const isShowYuWzBtn = computed(
     () =>
-      pageConfig.value.isOpenPreConsultation === '1' && tabCurrent.value === 0
+      pageConfig.value.isOpenPreConsultation === '1' &&
+      tabCurrentDetail.value.typeId === 0
   );
 
   const tabChange = async (e: number) => {
+    console.log('tabChange', e);
     if (tabs.value[tabCurrent.value]) {
       tabCurrent.value = e;
     } else {
@@ -283,7 +285,7 @@
         });
       }
     }
-    if (!pat.value?.patientId && e) {
+    if (!pat.value?.patientId && (e || e === 0)) {
       _patChange(gStores.userStore.patChoose);
       patientId =
         pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
@@ -320,7 +322,7 @@
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           pageConfig.value.isOrderPay,
-          isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2
+          isWaitReg.value || tabCurrentDetail.value.typeId === 2
         );
 
         if (o._statusLabel.startsWith('未知')) {
@@ -376,10 +378,7 @@
       }
     }
     let _type = props.value.type;
-    if (
-      props.value.type !== 'waitReg' &&
-      tabs.value[tabCurrent.value]?.typeId === 2
-    ) {
+    if (props.value.type !== 'waitReg' && tabCurrentDetail.value.typeId === 2) {
       _type = 'waitReg';
     }
     uni.navigateTo({
@@ -396,11 +395,7 @@
 
   //多院区院内导航（仅绍兴）
   const goHosNavigate = (item: IRegistrationCardItem) => {
-      useTBanner(
-        HosNavData[item.hosId](item),
-        'navigateTo',
-        item
-      );
+    useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
   };
 
   const _patChange = (item) => {
@@ -441,7 +436,7 @@
 
     if (isShowFilterOrderStatus.value) {
       // '1' 全部挂号 '' 在线挂号
-      selOrderStatus.value = tabCurrent.value === 0 ? '1' : '';
+      selOrderStatus.value = tabCurrentDetail.value.typeId === 1 ? '1' : '';
     }
   };
 
@@ -495,8 +490,6 @@
       _isPatient,
     });
 
-    await init();
-
     const thRegisterId = props.value.thRegisterId;
     thRegisterId &&
       setLocalStorage({
@@ -513,6 +506,12 @@
         typeId: 2,
         headerName: '候补登记',
       });
+    pageConfig.value.isCancelOlineReg === '1' &&
+      (tabs.value = tabs.value.filter((item) => {
+        return item.typeId != 0;
+      }));
+    tabCurrentDetail.value = tabs.value[tabCurrent.value];
+    await init();
   });
 
   const getPatLabel = (o) => {
@@ -523,7 +522,7 @@
   };
 
   const init = async () => {
-    if (tabs.value[tabCurrent.value]?.typeId === 0) {
+    if (tabCurrentDetail.value.typeId === 1) {
       patList.value[0]?.patientName === '所有就诊人' &&
         (pat.value = patList.value[0]);
     }
@@ -542,7 +541,8 @@
         _showLabel: getPatLabel(o),
       })),
     ];
-    tabCurrent.value !== 1 &&
+    console.log(list, 888888888888);
+    tabCurrentDetail.value.typeId !== 1 &&
       (list = [
         {
           patientId: '',

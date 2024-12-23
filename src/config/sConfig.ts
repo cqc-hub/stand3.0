@@ -148,7 +148,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isLoginByOpenId: '1',
     },
-    isOpenHelpOld:'1',
+    isOpenHelpOld: '1',
     // isOpenMessageAuth: '1',
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
@@ -427,6 +427,12 @@ const scJson: Record<string, ISConfig> = {
         },
       },
     },
+  },
+  /**
+   * 杭口未来医院
+   */
+  1001071: {
+    isOpenHomeTabBarNetWorkBtn: '1',
   },
 
   /**
