@@ -93,6 +93,8 @@ interface ISConfig {
 
       /** 医保开启亲情付 */
       isFamilyPayment?: '1';
+      /** 医保开启亲情付 */
+      isGbFamilyPayment?: '1';
 
       /** 医保建档 */
       medicalFiling?: '1';
@@ -128,7 +130,7 @@ interface ISConfig {
       isMedicalOrder?: '1';
 
       /** 医保开启亲情付 */
-      isFamilyPayment?: '1';
+      isGbFamilyPayment?: '1';
     };
   };
 
@@ -327,7 +329,7 @@ const scJson: Record<string, ISConfig> = {
 
         // medicalDefault: '1',
         isMedicalOrder: '1',
-        isFamilyPayment: '1',
+        isGbFamilyPayment: '1',
       },
     },
     isOpenHomeArticle: '1',

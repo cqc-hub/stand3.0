@@ -511,8 +511,8 @@ export const medicalNationUpload = async (
 };
 
 export const getMedicalArgWithFamily = async (params?: string) => {
-  const medicalMHelp = getMedicalConfigInfo() as any;
-  const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
+  const medicalMHelp = getMedicalConfigInfo();
+  const isOpenFamilyMedical = medicalMHelp?.isGbFamilyPayment === '1';
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
@@ -1225,7 +1225,7 @@ export const usePayPage = () => {
       if (isMedicalMode) {
         const { cardNumber } = gStores.userStore.patChoose;
         const isOpenFamilyMedical =
-          getMedicalConfigInfo()?.isFamilyPayment === '1';
+          getMedicalConfigInfo()?.isGbFamilyPayment === '1';
 
         const flag =
           isOpenFamilyMedical ||
