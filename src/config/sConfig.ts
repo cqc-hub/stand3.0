@@ -6,7 +6,7 @@
  * ? 新的系统参数直接配置到 apiConfig.ts
  */
 
-interface ISConfig {
+export interface ISConfig {
   // 小程序登录相关 ----------------------------
   login?: {
     /** 本系统不需要完善 */

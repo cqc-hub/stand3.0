@@ -28,6 +28,8 @@ import api from '@/service/api';
 import globalGl from '@/config/global';
 import wMd5 from '@/common/md5';
 import { useCacheStore } from '@/stores';
+import { ISConfig } from '@/config/sConfig';
+
 
 export const tradeType = {
   '1': '自费',
@@ -205,13 +207,16 @@ type PayListItem = {
   sort: number;
 };
 
-export const getMedicalConfigInfo = () => {
+type TMedicalConfig = Exclude<ISConfig['medicalMHelp'], undefined>;
+export const getMedicalConfigInfo = ():
+  | (TMedicalConfig['wx'] & TMedicalConfig['alipay'])
+  | null => {
   const {
     sConfig: { medicalMHelp },
   } = globalGl;
 
   if (medicalMHelp) {
-    const { alipay, wx } = medicalMHelp;
+    const { alipay, wx } = medicalMHelp as any;
     // #ifdef MP-ALIPAY
     if (alipay) {
       return alipay;
@@ -1226,7 +1231,6 @@ export const usePayPage = () => {
         const { cardNumber } = gStores.userStore.patChoose;
         const isOpenFamilyMedical =
           getMedicalConfigInfo()?.isGbFamilyPayment === '1';
-
         const flag =
           isOpenFamilyMedical ||
           (await isMedicalSelf(
