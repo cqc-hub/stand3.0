@@ -267,7 +267,6 @@
   );
 
   const tabChange = async (e: number) => {
-    console.log('tabChange', e);
     if (tabs.value[tabCurrent.value]) {
       tabCurrent.value = e;
     } else {
@@ -508,7 +507,7 @@
       });
     pageConfig.value.isCancelOlineReg === '1' &&
       (tabs.value = tabs.value.filter((item) => {
-        return item.typeId != 0;
+        return item.typeId !== 0;
       }));
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
@@ -541,7 +540,6 @@
         _showLabel: getPatLabel(o),
       })),
     ];
-    console.log(list, 888888888888);
     tabCurrentDetail.value.typeId !== 1 &&
       (list = [
         {
@@ -560,7 +558,7 @@
       (status) => ({
         label: getStatusConfig(
           status,
-          isWaitReg.value || tabs.value[tabCurrent.value]?.typeId === 2
+          isWaitReg.value || tabCurrentDetail.value.typeId === 2
         ).title,
         value: status,
       })

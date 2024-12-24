@@ -275,6 +275,7 @@
       isPayOrder(item) ||
       isShowReOrderBtn(item) ||
       isShowYWZBtn(item) ||
+      isNav(item) ||
       (!props.isWaitReg &&
         getCustomBtns.value.some((o) => isShowCustomBtn(item, o)))
     );

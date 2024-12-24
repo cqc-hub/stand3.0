@@ -366,12 +366,10 @@ export const _getQxMedicalNation = async (
   authorizeTypeDesc = '2';
   // #endif
 
-  const requestArg = {
-    //天水门诊医保免登录先注释
-    enHosPatientId,
-    patientId: (!enHosPatientId && patientId) || undefined,
-    // patientId:  patientId || undefined,
-
+  const requestArg= {
+    enHosPatientId:'',
+    // patientId: (!enHosPatientId && patientId) || undefined,
+    patientId:  patientId || undefined,
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',
@@ -379,6 +377,14 @@ export const _getQxMedicalNation = async (
     openId: '',
     qrCode,
   };
+  
+  //请亲付字段，先根据系统码判断添加，等待后端接口兼容
+  if (globalGl.SYS_CODE === '1001057') {
+    requestArg.patientId= (!enHosPatientId && patientId) || undefined
+    if (enHosPatientId) {
+      requestArg.enHosPatientId = enHosPatientId;
+    }
+  }
   // #ifdef  MP-WEIXIN
 
   requestArg.openId = gStores.globalStore.openId;
