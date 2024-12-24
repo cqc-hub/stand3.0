@@ -313,6 +313,7 @@ const scJson: Record<string, ISConfig> = {
         // medicalDefault: '1',
         medicalNation: {},
         isMedicalOrder: '1',
+        isGbFamilyPayment: '1',
       },
 
       wx: {
