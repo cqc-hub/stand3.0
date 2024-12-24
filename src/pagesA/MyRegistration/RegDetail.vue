@@ -838,13 +838,15 @@
   const payOrder = async () => {
     // 先只做微信国标模式
     const medicalMHelp = getMedicalConfigInfo() || {};
-    const { isFamilyPayment } = medicalMHelp;
+    const { isFamilyPayment, isGbFamilyPayment } = medicalMHelp;
 
     const isMedicalMode = _getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
     const isSelf =
       isMedicalMode &&
-      (isFamilyPayment === '1' || (await isMedicalSelf(cardNumber)));
+      (isFamilyPayment === '1' ||
+        isGbFamilyPayment === '1' ||
+        (await isMedicalSelf(cardNumber)));
     const payList = [] as any;
 
     if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {

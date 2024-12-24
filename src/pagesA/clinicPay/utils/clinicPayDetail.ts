@@ -1299,8 +1299,11 @@ export const usePayPage = () => {
     const hasMedicalItem = selUnPayList.value.some(
       (o) => o.costTypeCode === '2'
     );
-    const medicalMHelp = getMedicalConfigInfo() as any;
-    const isOpenFamilyMedical = medicalMHelp?.isFamilyPayment === '1';
+    const medicalMHelp = getMedicalConfigInfo() || {};
+    const { isFamilyPayment, isGbFamilyPayment } = medicalMHelp;
+
+    const isOpenFamilyMedical =
+      isGbFamilyPayment === '1' || isFamilyPayment === '1';
     const isBizTypeMedical =
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
     const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
