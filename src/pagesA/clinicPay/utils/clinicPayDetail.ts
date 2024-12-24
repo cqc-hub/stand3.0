@@ -309,8 +309,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
       appId,
       // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
       path: joinQuery(path, cacheStore.medicalPathArg),
-      // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-      envVersion: 'release',
+      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+      // envVersion: 'release',
       fail({ errMsg }) {
         if (errMsg.includes('fail cancel')) {
           setLocalStorage({
@@ -355,6 +355,7 @@ export const _getQxMedicalNation = async (
   } = payload;
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const qrCode = await getMedicalAuthCode();
   const { patientId } = gStores.userStore.patChoose;
 
@@ -370,10 +371,11 @@ export const _getQxMedicalNation = async (
   authorizeTypeDesc = '2';
   // #endif
 
-  const requestArg= {
-    enHosPatientId:'',
+  const requestArg = {
+    ...cacheStore.medicalAuthArg,
+    enHosPatientId: '',
     // patientId: (!enHosPatientId && patientId) || undefined,
-    patientId:  patientId || undefined,
+    patientId: patientId || undefined,
     authorizeType,
     authorizeTypeDesc,
     aliPayUserId: '',
@@ -381,10 +383,10 @@ export const _getQxMedicalNation = async (
     openId: '',
     qrCode,
   };
-  
+
   //请亲付字段，先根据系统码判断添加，等待后端接口兼容
   if (globalGl.SYS_CODE === '1001057') {
-    requestArg.patientId= (!enHosPatientId && patientId) || undefined
+    requestArg.patientId = (!enHosPatientId && patientId) || undefined;
     if (enHosPatientId) {
       requestArg.enHosPatientId = enHosPatientId;
     }
@@ -403,6 +405,7 @@ export const _getQxMedicalNation = async (
     requestArg.aliPayUserId = await getOpenId();
   }
   await api.authorization({
+    ...cacheStore.medicalAuthArg,
     accountType: 21,
     code: qrCode,
     userId: requestArg.aliPayUserId,
