@@ -90,7 +90,7 @@
             </view>
 
             <view
-              v-if="orderRegInfo.orderStatus === '10'&&!isWaitReg"
+              v-if="orderRegInfo.orderStatus === '10' && !isWaitReg"
               class="out-time-info f28 color-error"
             >
               <block v-if="timeTravel.minute == 0 && timeTravel.second == 0">
@@ -888,8 +888,9 @@
           await new PatientUtils().upToMedicalPat({
             pat: gStores.userStore.patChoose,
           });
-          // #ifdef  MP-WEIXIN
+
           await getMedicalArgWithFamily();
+          // #ifdef  MP-WEIXIN
           medicalNationWx(await getQxMedicalNation());
           // #endif
 

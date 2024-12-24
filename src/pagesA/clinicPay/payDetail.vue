@@ -619,6 +619,7 @@
           pat: gStores.userStore.patChoose,
           cardNumber,
         });
+        await getMedicalArgWithFamily(props.value.params);
 
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
@@ -629,8 +630,6 @@
         // #endif
 
         // #ifdef  MP-WEIXIN
-        await getMedicalArgWithFamily(props.value.params);
-
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }

@@ -30,7 +30,6 @@ import wMd5 from '@/common/md5';
 import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 
-
 export const tradeType = {
   '1': '自费',
   '2': '医保',
@@ -310,8 +309,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
       appId,
       // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
       path: joinQuery(path, cacheStore.medicalPathArg),
-      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-      // envVersion: 'release',
+      // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+      envVersion: 'release',
       fail({ errMsg }) {
         if (errMsg.includes('fail cancel')) {
           setLocalStorage({
@@ -527,7 +526,6 @@ export const getMedicalArgWithFamily = async (params?: string) => {
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
-  // #ifdef MP-WEIXIN
   if (isOpenFamilyMedical) {
     let args: any = {
       patientId: gStores.userStore.patChoose.patientId,
@@ -549,7 +547,6 @@ export const getMedicalArgWithFamily = async (params?: string) => {
       familyId: familyIdEncode,
     });
   }
-  // #endif
 };
 
 export const getMedicalAuthArg = async (params?: string) => {
@@ -1482,6 +1479,7 @@ export const usePayPage = () => {
             cardNumber,
           });
         }
+        await getMedicalArgWithFamily(pageProps.value.params);
 
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
@@ -1492,7 +1490,6 @@ export const usePayPage = () => {
         // #endif
 
         // #ifdef  MP-WEIXIN
-        await getMedicalArgWithFamily(pageProps.value.params);
         wxPayMoneyMedicalPlugin(medicalNationWx);
         // #endif
       }
