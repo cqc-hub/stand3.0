@@ -70,7 +70,7 @@
             {{ nameConvert(myprops.patientName) + ` (${myprops.cardNumber})` }}
           </text>
 
-          <text>
+          <text v-else>
             {{
               nameConvert(gStores.userStore.patChoose.patientName) +
               `${
