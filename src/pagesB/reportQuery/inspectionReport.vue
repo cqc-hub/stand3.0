@@ -70,7 +70,12 @@
                   />
                 </view>
               </view>
-              <view class="patient-information">
+              <ReportDetailPatInfo
+                :page-props="pageProps"
+                :reportInfo="examineReportList"
+              />
+
+              <!-- <view class="patient-information">
                 <view
                   v-if="pageProps._scan !== '1'"
                   @click.stop="isClose = !isClose"
@@ -117,9 +122,6 @@
                     </template>
                   </button>
                 </view>
-                <!-- <view v-if="item.diagnosis" class="subhead">检验提示<view style="color:#296FFF;width: calc(60%);" class="subhead-detail">{{item.diagnosis}}
-                </view>
-              </view> -->
                 <view
                   class="hidden-patient-information"
                   v-show="isShow[index] == 1"
@@ -157,7 +159,7 @@
                     </button>
                   </view>
                 </view>
-              </view>
+              </view> -->
             </view>
             <view class="button-list">
               <button
@@ -333,6 +335,7 @@
   import CollectBtn from './components/CollectBtn.vue';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay';
   import { useCacheStore } from '@/stores';
+import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
@@ -762,7 +765,6 @@
               hosId: _hosId,
             }),
           });
-
         }
         return;
         // else {

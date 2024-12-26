@@ -30,7 +30,9 @@
               />
             </view>
           </view>
-          <view class="patient-information">
+          <ReportDetailPatInfo :page-props="pageProps" :reportInfo="checkoutReportList"  />
+
+          <!-- <view class="patient-information">
             <view
               v-if="pageProps._scan !== '1' && patName"
               @click.stop="isClose = !isClose"
@@ -150,7 +152,7 @@
                 </template>
               </button>
             </view>
-          </view>
+          </view> -->
         </view>
         <view class="container-block-bottom">
           <!-- 细菌培养模块 -->
@@ -396,6 +398,7 @@
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
   import { storeToRefs } from 'pinia';
+import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
 
