@@ -72,8 +72,7 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
-    "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591"
+    "mergeVirtualHostAttributes": true
   },
   "mp-baidu": {
     "usingComponents": true

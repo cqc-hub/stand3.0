@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001073",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -239,6 +239,16 @@
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false
+    },
+
+    "1001073": {
+      "wxAppid": "wxdd1ed079167189fa",
+      "h5Appid": "",
+      "name": "温医附二院就医助手",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "_des": "过渡板小程序引导跳转"
     },
 
     "1001068": {
