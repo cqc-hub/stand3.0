@@ -8,7 +8,14 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
 export interface IGPay {
   label: string;
-  key: 'offline' | 'online' | 'medicare' | 'digital' | 'familyPay'|'bizType' |'navToMini';
+  key:
+    | 'offline'
+    | 'online'
+    | 'medicare'
+    | 'digital'
+    | 'familyPay'
+    | 'bizType'
+    | 'navToMini';
 }
 
 export interface IPayRes {
@@ -80,7 +87,8 @@ export const payMoneyOnline = async (
   if (gStores.globalStore.sysCode === '1001063') {
     requestArg.channel = 'ICBC_JFT_H5';
   } else {
-    requestArg.channel = 'ALI_MINI';
+    // requestArg.channel = 'ALI_MINI';
+    requestArg.channel = aliPayOldSystemPayType();
   }
 
   // #endif
@@ -263,4 +271,33 @@ export const getOpenidTtResult = async (): Promise<{
   );
 
   return result;
+};
+
+//判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
+export const aliPayOldSystemPayType = () => {
+  const gStores = new GStores();
+  const aliPldSystemList = [
+    '1001033',
+    '2001013',
+    '1001052',
+    '1001046',
+    '1001060',
+    '1001055',
+    '1001054',
+    '1001056',
+    '1001057',
+    '1001058',
+    '1001040',
+    '1001045',
+    '1001063',
+    '1001066',
+    '1001067',
+    '1001038',
+    // '1001074',
+  ];
+  //先不改
+  return 'ALI_MINI'
+  return aliPldSystemList.includes(gStores.globalStore.sysCode)
+    ? 'ALI_MINI'
+    : 'ALI_JSAPI';
 };

@@ -94,6 +94,7 @@
     type IGPay,
     payMoneyOnline,
     toPayPull,
+    aliPayOldSystemPayType 
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';
@@ -334,7 +335,8 @@
     };
 
     // #ifdef MP-ALIPAY
-    args.payType = 'ALI_MINI';
+    // args.payType = 'ALI_MINI';
+    args.payType = aliPayOldSystemPayType()
     // #endif
 
     if (gStores.globalStore.sysCode === '1001063') {

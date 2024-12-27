@@ -367,6 +367,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001040: {
     isOpenHomeTabBarNetWorkBtn: '1',
+    isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
         medicalPlugin: '1',
