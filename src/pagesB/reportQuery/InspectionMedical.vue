@@ -30,7 +30,9 @@
               />
             </view>
           </view>
-          <view class="patient-information">
+          <reportDetailPatInfo :page-props="pageProps" :reportInfo="checkoutReportList"  />
+
+          <!-- <view class="patient-information">
             <view
               v-if="pageProps._scan !== '1' && patName"
               @click.stop="isClose = !isClose"
@@ -112,8 +114,8 @@
 
               </view>
             </view>
-    
-          </view>
+
+          </view> -->
         </view>
          <view class="container-block-bottom">
           <view class="seen" v-if="checkoutReportList.conclusion">
@@ -225,6 +227,7 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
+  import reportDetailPatInfo from './components/reportDetailPatInfo.vue';
   import { storeToRefs } from 'pinia';
 
   const alipayPid = global.systemInfo.alipayPid;

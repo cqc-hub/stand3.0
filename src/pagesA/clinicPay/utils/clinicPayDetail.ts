@@ -405,7 +405,7 @@ export const _getQxMedicalNation = async (
     requestArg.aliPayUserId = await getOpenId();
   }
   await api.authorization({
-    ...cacheStore.medicalAuthArg,
+    ...cacheStore.medicalPathArg,
     accountType: 21,
     code: qrCode,
     userId: requestArg.aliPayUserId,
@@ -549,6 +549,8 @@ export const getMedicalArgWithFamily = async (params?: string) => {
     cacheStore.changeMedicalPathArg({
       familyId: familyIdEncode,
     });
+
+    await wait(0);
   }
 };
 
