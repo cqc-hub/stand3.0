@@ -99,7 +99,7 @@
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view
-            v-if="!item.schQukCategor"
+            v-if="!item.schQukCategor && item.goodAt"
             class="text-ellipsis ellipsis-line-clamp2"
           >
             <rich-text
