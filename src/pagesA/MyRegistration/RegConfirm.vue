@@ -417,7 +417,7 @@
     /**
      * 免密代扣挂号
      */
-    if (isSignExist.value) {
+    if (isSignExist.value && !quickPat.value.patientName) {
       let { freeSignData } = await getFreeSignData(patientId);
 
       if (!freeSignData) {
