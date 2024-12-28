@@ -806,6 +806,7 @@
     submit,
     clearWarning,
     clearItemWarning,
+    clearTimer,
   });
 </script>
 

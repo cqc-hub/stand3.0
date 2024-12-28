@@ -92,7 +92,7 @@
       patientType: '-1',
       idType: '01',
     };
-
+    gform.value?.clearTimer();
     medicalTypeChange('-1');
   };
 
@@ -362,10 +362,11 @@
 
   watch(
     () => props.visible,
-    (v) => {
+    async (v) => {
+      init();
       if (v) {
         if (!count.value) {
-          init();
+          // init();
           count.value++;
         }
       }
