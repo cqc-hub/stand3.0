@@ -236,7 +236,7 @@
     "1001067": {
       "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
-      // "h5Appid": "wxce22d24a140ba4d5",
+      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false
