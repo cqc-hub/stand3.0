@@ -234,11 +234,22 @@
     },
 
     "1001067": {
-      "wxAppid": "wxdd1ed079167189fa",
+      "wxAppid": "wx08440928b105c3bf",
       "alipayAppid": "2021002129645591",
+      "h5Appid": "wxce22d24a140ba4d5",
       "name": "温医附二院就医助手",
       "isSearchInHos": true,
       "isOpenOcr": false
+    },
+
+    "1001073": {
+      "wxAppid": "wxdd1ed079167189fa",
+      "h5Appid": "",
+      "name": "温医附二院就医助手",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "_des": "过渡板小程序引导跳转"
     },
 
     "1001068": {

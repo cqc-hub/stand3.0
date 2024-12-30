@@ -69,12 +69,7 @@ export const payMoneyOnline = async (
   } else {
     requestArg.openId = gStores.globalStore.openId;
   }
-
-  if (gStores.globalStore.sysCode === '1001063') {
-    requestArg.channel = 'ICBC_JFT_H5';
-  } else {
-    requestArg.channel = 'WX_MINI';
-  }
+  requestArg.channel = aliPayOldSystemPayType();
 
   // #endif
 
@@ -83,14 +78,7 @@ export const payMoneyOnline = async (
   if (!gStores.globalStore.openId) {
     requestArg.userId = await getOpenid2();
   }
-
-  if (gStores.globalStore.sysCode === '1001063') {
-    requestArg.channel = 'ICBC_JFT_H5';
-  } else {
-    // requestArg.channel = 'ALI_MINI';
-    requestArg.channel = aliPayOldSystemPayType();
-  }
-
+  requestArg.channel = aliPayOldSystemPayType();
   // #endif
 
   requestArg = {
@@ -276,7 +264,16 @@ export const getOpenidTtResult = async (): Promise<{
 //判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
 export const aliPayOldSystemPayType = () => {
   const gStores = new GStores();
-  const aliPldSystemList = [
+  let channel = '';
+  // #ifdef  MP-WEIXIN
+  channel = 'WX_MINI';
+  const wxICBCJFTSystem = ['1001063'];
+  wxICBCJFTSystem.includes(gStores.globalStore.sysCode) &&
+    (channel = 'ICBC_JFT_H5');
+  // #endif
+  // #ifdef MP-ALIPAY
+  channel = 'ALI_MINI';
+  const aliMiniSystemList = [
     '1001033',
     '2001013',
     '1001052',
@@ -289,13 +286,16 @@ export const aliPayOldSystemPayType = () => {
     '1001058',
     '1001040',
     '1001045',
-    '1001063',
     '1001066',
-    '1001067',
     '1001038',
+    // '1001067',
     // '1001074',
   ];
-  return aliPldSystemList.includes(gStores.globalStore.sysCode)
-    ? 'ALI_MINI'
-    : 'ALI_JSAPI';
+  const aliICBCJFTSystem = ['1001063'];
+  !aliMiniSystemList.includes(gStores.globalStore.sysCode) &&
+    (channel = 'ALI_JSAPI');
+  aliICBCJFTSystem.includes(gStores.globalStore.sysCode) &&
+    (channel = 'ICBC_JFT_H5');
+  // #endif
+  return channel;
 };

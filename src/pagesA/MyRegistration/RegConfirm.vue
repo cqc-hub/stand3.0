@@ -417,7 +417,8 @@
     /**
      * 免密代扣挂号
      */
-    if (isSignExist.value) {
+    const isOpenSignExist = isSignExist.value && !quickPat.value.patientName;
+    if (isOpenSignExist) {
       let { freeSignData } = await getFreeSignData(patientId);
 
       if (!freeSignData) {
@@ -439,7 +440,7 @@
     }
 
     // true ? 免密代扣 :  正常挂号
-    const actionApi = isSignExist.value ? api.addOrder : api.addReg;
+    const actionApi = isOpenSignExist ? api.addOrder : api.addReg;
 
     let {
       result: { orderId, hasCharge, hint },

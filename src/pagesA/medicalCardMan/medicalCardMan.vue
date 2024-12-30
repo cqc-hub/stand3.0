@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onLoad ,onShow} from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { IPat, useRouterStore } from '@/stores';
   import { ref, provide, readonly, computed, Ref } from 'vue';
   import { getHealthCardCode } from './utils/index';
@@ -157,7 +157,10 @@
     routerJump,
     type ISystemConfig,
   } from '@/utils';
-  import { dealMedicalFiling ,reDealMedicalFiling} from '@/pagesA/clinicPay/utils/clinicPayDetail';
+  import {
+    dealMedicalFiling,
+    reDealMedicalFiling,
+  } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
   import api from '@/service/api';
@@ -263,8 +266,8 @@
 
   const realNameAuth = async (pat: IPat) => {
     const tip = '选择认证方式';
-
     let authType = getRealNameAuth.value[0];
+
     if (getRealNameAuth.value.length > 1) {
       const listMap = [
         {
@@ -292,6 +295,17 @@
     }
 
     if (authType === 'ocrVerify') {
+      const { title, content } = await gStore.getSysAppMore('1220');
+      await new Promise<{ confirm: boolean }>((r) => {
+        gStore.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: false,
+          },
+          closeCallBack: r,
+        });
+      });
       await realNameAuthOcr(pat);
     } else if (authType === 'faceVerify') {
       await realNameAuthFace(pat);
@@ -381,7 +395,7 @@
 
   patientUtils.getPatCardList();
   onShow(() => {
-    reDealMedicalFiling()
+    reDealMedicalFiling();
   });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));

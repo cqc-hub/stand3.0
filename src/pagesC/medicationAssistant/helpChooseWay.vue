@@ -274,9 +274,13 @@
       return;
     }
 
-    uni.reLaunch({
-      url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
-    });
+    gStores.globalStore.sysCode === '1001067'
+      ? uni.reLaunch({
+          url: '/pages/home/home',
+        })
+      : uni.reLaunch({
+          url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
+        });
   };
 
   const getConfig = async () => {
@@ -465,5 +469,4 @@
 
     transform: translateX(20rpx);
   }
-
 </style>

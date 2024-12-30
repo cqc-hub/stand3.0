@@ -99,10 +99,12 @@
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view
-            v-if="!item.schQukCategor"
+            v-if="!item.schQukCategor && item.goodAt"
             class="text-ellipsis ellipsis-line-clamp2"
           >
-            {{ item.goodAt }}
+            <rich-text
+              :nodes="HTMLParser(throughCharacterLineFeed(item.goodAt))"
+            />
           </view>
 
           <!-- 按天的荣誉职称 -->
@@ -128,7 +130,9 @@
 </template>
 
 <script lang="ts" setup>
+  import { throughCharacterLineFeed } from '@/utils';
   import { IDocListAll } from '../../utils';
+  import HTMLParser from '@/common/html-parser';
 
   const props = defineProps<{
     // item: IDocListAll;
