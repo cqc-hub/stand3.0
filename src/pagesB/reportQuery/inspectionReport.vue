@@ -6,6 +6,18 @@
     class="page"
     scroll-y="true"
   >
+   <!--  #ifdef MP-WEIXIN -->
+   <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
+      <health-card-query-comp
+        :scene="queryCompData.scene"
+        :openId="queryCompData.openId"
+        :hospitalId="queryCompData.hospitalId"
+        :healthCardId="queryCompData.healthCardId"
+        pos="top"
+        channel="0402"
+      />
+    </view>
+    <!--  #endif -->
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
@@ -325,6 +337,7 @@
   import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
+  import { getOpenId } from '@/components/g-pay/index';
   import global from '@/config/global';
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -361,6 +374,20 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     // 二维码
     size: 400,
     code: '',
+  });
+
+  const queryCompData = ref(<{
+    isShowHealthCardMode: boolean;
+    hospitalId: string;
+    openId: string;
+    healthCardId?: string;
+    scene: string;
+  }>{
+    isShowHealthCardMode: false,
+    hospitalId: '',
+    openId: '',
+    healthCardId: '',
+    scene: '0101081',
   });
 
   const more = (index) => {
@@ -824,6 +851,20 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     gotoMedical(url);
   };
 
+  const getqueryCompData=async()=>{
+    // #ifdef MP-WEIXIN
+    if (global.systemInfo.isOpenHealthCard?.isCardQueryComp&&gStores.userStore.patChoose?.healthQrCodeText) {
+      queryCompData.value.openId = await getOpenId();
+      queryCompData.value.hospitalId =
+        global.systemInfo.isOpenHealthCard!.hospitalId;
+      queryCompData.value.healthCardId =
+        gStores.userStore.patChoose.healthQrCodeText;
+      queryCompData.value.isShowHealthCardMode = true;
+      console.log('queryCompData', queryCompData.value);
+    }
+    // #endif
+  }
+
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
@@ -844,6 +885,7 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     if (pageProps.value.isWatermark === '1') {
       addWatermark(global.systemInfo.name);
     }
+    getqueryCompData()
   });
 
   onUpdated(() => {
@@ -1154,5 +1196,8 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
       width: 100%;
       height: 200rpx;
     }
+  }
+  .placeholder {
+    height: 12vw;
   }
 </style>

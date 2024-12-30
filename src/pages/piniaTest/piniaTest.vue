@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <button @click="useTBanner(testbuttonConfig)">绍兴导航</button>
+    <button @click="useTBanner(testbuttonConfig)">杭口质保卡正式环境（测试用）</button>
   </view>
 </template>
 
@@ -410,7 +410,36 @@
       })
     },
   };
-  const testbuttonConfig = ref(绍兴导航)
+
+  const 湖三检查预约: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    extraData: {
+      _type: 'HS_IMCIS',
+    },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
+    text: '检查预约',
+  };
+
+  const 杭口质保卡: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/periodArchives/qualityEnsureCard',
+    extraData: {
+      hosList: '13079,13080',
+    },
+    addition: {
+      token: 'token',
+      herenId: 'herenId',
+    },
+    text: '检查预约',
+  };
+
+  const testbuttonConfig = ref(杭口质保卡)
   onMounted(() => {
     setTimeout(() => {
       // useTBanner({

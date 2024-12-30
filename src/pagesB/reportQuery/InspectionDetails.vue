@@ -5,8 +5,17 @@
     }"
     class="page f32"
   >
-     <!--  #ifdef MP-WEIXIN -->
-     <!-- <Easy-Report :scene="'0101081'" /> -->
+    <!--  #ifdef MP-WEIXIN -->
+    <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
+      <health-card-query-comp
+        :scene="queryCompData.scene"
+        :openId="queryCompData.openId"
+        :hospitalId="queryCompData.hospitalId"
+        :healthCardId="queryCompData.healthCardId"
+        pos="top"
+        channel="0402"
+      />
+    </view>
     <!--  #endif -->
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
@@ -33,7 +42,10 @@
               />
             </view>
           </view>
-          <ReportDetailPatInfo :page-props="pageProps" :reportInfo="checkoutReportList"  />
+          <ReportDetailPatInfo
+            :page-props="pageProps"
+            :reportInfo="checkoutReportList"
+          />
 
           <!-- <view class="patient-information">
             <view
@@ -391,6 +403,7 @@
   import { joinQuery, encryptDes } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
+  import { getOpenId } from '@/components/g-pay/index';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -400,9 +413,8 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
-  import EasyReport from './components/easyReport.vue';
   import { storeToRefs } from 'pinia';
-import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
+  import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -412,6 +424,21 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   const isShow = ref(false);
   const checkoutReportList = ref<checkoutReportDetails>({} as any);
+
+  const queryCompData = ref(<{
+    isShowHealthCardMode: boolean;
+    hospitalId: string;
+    openId: string;
+    healthCardId?: string;
+    scene: string;
+  }>{
+    isShowHealthCardMode: false,
+    hospitalId: '',
+    openId: '',
+    healthCardId: '',
+    scene: '0101081',
+  });
+
   const more = () => {
     isShow.value = !isShow.value;
   };
@@ -467,9 +494,24 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(p)));
+    await getqueryCompData()
+    
   });
+
+  const getqueryCompData=async()=>{
+    // #ifdef MP-WEIXIN
+    if (global.systemInfo.isOpenHealthCard?.isCardQueryComp&&gStore.userStore.patChoose?.healthQrCodeText) {
+      queryCompData.value.openId = await getOpenId();
+      queryCompData.value.hospitalId =
+        global.systemInfo.isOpenHealthCard!.hospitalId;
+      queryCompData.value.healthCardId =
+        gStore.userStore.patChoose.healthQrCodeText;
+      queryCompData.value.isShowHealthCardMode = true;
+      console.log('queryCompData', queryCompData.value);
+    }
+    // #endif
+  }
 
   const getCheckoutReportDetails = async () => {
     const { repId, repType, hosId, extend, useCacheData } = pageProps.value;
@@ -578,6 +620,8 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     }
   });
 </script>
+
+
 <style lang="scss" scoped>
   .page {
     height: auto;
@@ -844,5 +888,8 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     display: none;
     width: 0px;
     height: 0px;
+  }
+  .placeholder {
+    height: 12vw;
   }
 </style>

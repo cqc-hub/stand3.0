@@ -1,6 +1,7 @@
 <template>
-  <div v-if="isShowHealthCardMode">
+  <view>
     <health-card-query-comp
+      v-if="isShowHealthCardMode"
       :scene="props.scene"
       :openId="openId"
       :hospitalId="hospitalId"
@@ -8,7 +9,7 @@
       pos="top"
       channel="0402"
     />
-  </div>
+  </view>
 </template>
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
@@ -27,10 +28,18 @@
 
   onMounted(async () => {
     if (globalGl.systemInfo.isOpenHealthCard?.isCardQueryComp) {
-      isShowHealthCardMode.value = true;
       openId.value = await getOpenId();
       hospitalId.value = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
       healthCardId.value = gStores.userStore.patChoose.healthQrCodeText;
+      isShowHealthCardMode.value = true;
     }
+    console.log(
+      'openId:',
+      openId,
+      'hospitalId',
+      hospitalId,
+      'healthCardId',
+      healthCardId
+    );
   });
 </script>
