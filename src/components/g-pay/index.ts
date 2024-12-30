@@ -227,15 +227,15 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
 //支付宝埋点
 const alipayTrack = (isSuccess: boolean, type?: ITrackType) => {
   const alipayPid = global.systemInfo.alipayPid;
-  console.warn('缴费埋点', isSuccess, type);
-  if (alipayPid && type) {
-    monitor.api({
-      api: type,
-      success: isSuccess,
-      c1: 'taSR_YL',
-      time: '200',
-    });
-  }
+  // console.warn('缴费埋点', isSuccess, type);
+  // if (alipayPid && type) {
+  //   monitor.api({
+  //     api: type,
+  //     success: isSuccess,
+  //     c1: 'taSR_YL',
+  //     time: '200',
+  //   });
+  // }
 };
 
 export const getOpenidTtResult = async (): Promise<{
