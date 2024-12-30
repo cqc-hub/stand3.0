@@ -5,6 +5,9 @@
     }"
     class="page f32"
   >
+     <!--  #ifdef MP-WEIXIN -->
+     <!-- <Easy-Report :scene="'0101081'" /> -->
+    <!--  #endif -->
     <view class="watermarkView">
       <canvas canvas-id="watermarkCanvas"></canvas>
     </view>
@@ -397,6 +400,7 @@
   import HoverTip from './components/HoverTip.vue';
   import BottomNav from './components/BottomNav.vue';
   import CollectBtn from './components/CollectBtn.vue';
+  import EasyReport from './components/easyReport.vue';
   import { storeToRefs } from 'pinia';
 import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 

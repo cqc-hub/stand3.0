@@ -301,7 +301,8 @@
       "isOpenOcr": false,
       "isOpenHealthCard": {
         "healthCardText": "甘肃省卫生健康委员会",
-        "hospitalId": "39894"
+        "hospitalId": "39894",
+        "isCardQueryComp":true
       }
     }
   }

@@ -295,8 +295,6 @@ export const aliPayOldSystemPayType = () => {
     '1001038',
     // '1001074',
   ];
-  //先不改
-  return 'ALI_MINI'
   return aliPldSystemList.includes(gStores.globalStore.sysCode)
     ? 'ALI_MINI'
     : 'ALI_JSAPI';

@@ -41,6 +41,7 @@ interface ISystemGlobalItem {
   isOpenHealthCard?: {
     healthCardText: string;
     hospitalId: string;
+    isCardQueryComp?: boolean;//是否开启报告解读
   };
 
   isSearchInHos: boolean;

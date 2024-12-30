@@ -13,7 +13,11 @@
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
 
-        <view @click="addPatPage">
+        <!-- <view @click="addPatPage">
+          <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
+          <text class="text-no-wrap">申领健康卡</text>
+        </view> -->
+        <view @click="createCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
@@ -236,6 +240,12 @@
         globalGl.addPersonUrl +
         '?_directUrl=' +
         encodeURIComponent('/pages/home/home'),
+    });
+  };
+
+  const createCard = () => {
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/easyCardCreate',
     });
   };
 
