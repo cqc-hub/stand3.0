@@ -13,14 +13,14 @@
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
 
-        <!-- <view @click="addPatPage">
-          <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
-          <text class="text-no-wrap">申领健康卡</text>
-        </view> -->
-        <view @click="createCard">
+        <view @click="addPatPage">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
+        <!-- <view @click="createCard">
+          <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
+          <text class="text-no-wrap">申领健康卡</text>
+        </view> -->
       </view>
 
       <view v-else class="add-pat-box" @click="addPatPage">
