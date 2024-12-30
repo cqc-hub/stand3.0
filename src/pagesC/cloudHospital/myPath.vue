@@ -133,6 +133,7 @@
       try {
         queryArray.map((item) => {
           if (item in allData) {
+            // #ifdef MP-WEIXIN
             if (
               item === 'h5OpenId' &&
               !gStores.globalStore.h5OpenId &&
@@ -142,7 +143,7 @@
                 url: '/pages/home/startCome',
               });
             }
-
+            // #endif
             query = query + item + '=' + allData[item] + '&';
           } else {
             // messageStore.showMessage(`携带${item}参数有误`, 1000);

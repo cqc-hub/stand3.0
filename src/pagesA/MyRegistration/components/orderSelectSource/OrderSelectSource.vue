@@ -4,7 +4,7 @@
       :subTitle="subTitle"
       @hide="hide"
       zIndex="10"
-      title="请选择就诊时间"
+      title="请选择时间"
       ref="popup"
     >
       <view class="content">
