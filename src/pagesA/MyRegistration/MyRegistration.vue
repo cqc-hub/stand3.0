@@ -260,11 +260,14 @@
     () => pageConfig.value.isOpenReOrder === '1'
   );
 
-  const isShowYuWzBtn = computed(
-    () =>
-      pageConfig.value.isOpenPreConsultation === '1' &&
-      tabCurrentDetail.value.typeId === 0
-  );
+  const isShowYuWzBtn = computed(() => {
+    let tabShowCondition = tabCurrentDetail.value.typeId === 0;
+    if (pageConfig.value.preConsultationBtn?.isSelOrderShow) {
+      tabShowCondition =
+        tabCurrentDetail.value.typeId === 1 || tabShowCondition;
+    }
+    return pageConfig.value.isOpenPreConsultation === '1' && tabShowCondition;
+  });
 
   const tabChange = async (e: number) => {
     if (tabs.value[tabCurrent.value]) {

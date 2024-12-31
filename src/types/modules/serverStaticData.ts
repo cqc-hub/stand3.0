@@ -57,7 +57,8 @@ export interface ISystemConfig_ {
     // 挂号成功后预问诊?
     isOpenPreConsultation?: '1';
     //预问诊跳转的第三方配置 不配置该参数默认跳转自研的
-    preConsultationBtn?: TBannerConfig;
+    //isSelOrderShow为1则全部挂号展示预问诊
+    preConsultationBtn?: { isSelOrderShow?: '1' } & TBannerConfig;
     /** 挂号预结算 */
     isOrderPreSettle?: '1';
     /** 候补预约 */

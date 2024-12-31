@@ -351,6 +351,20 @@
           }
         },
         {
+          "path": "medicalCardMan/easyCardCreate",
+          "extend": {
+            "herenId": true
+          },
+          "style": {
+            "navigationBarTitleText": "创建健康卡",
+            "usingComponents": {
+              // #ifdef  MP-WEIXIN
+              "health-card-create-card": "plugin://healthCardPlugins/healthCardCreateCard"
+              // #endif
+            }
+          }
+        },
+        {
           "path": "medicalCardMan/ocrUser",
           "extend": {
             "herenId": true
@@ -406,7 +420,7 @@
             "navigationBarTitleText": "就诊人管理",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
-              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin",
               // #endif
             }
           }
@@ -507,13 +521,29 @@
         {
           "path": "reportQuery/inspectionReport",
           "style": {
-            "navigationBarTitleText": "检查报告"
+            "navigationBarTitleText": "检查报告",
+             // #ifdef  MP-WEIXIN
+             "usingComponents": {
+              "health-card-query-comp": "plugin://healthCardPlugins/healthCardQueryComp"
+            },
+            "componentPlaceholder": {
+              "health-card-query-comp": "view"
+            }
+            // #endif
           }
         },
         {
           "path": "reportQuery/InspectionDetails",
           "style": {
-            "navigationBarTitleText": "检验报告"
+            "navigationBarTitleText": "检验报告",
+            // #ifdef  MP-WEIXIN
+            "usingComponents": {
+              "health-card-query-comp": "plugin://healthCardPlugins/healthCardQueryComp"
+            },
+            "componentPlaceholder": {
+              "health-card-query-comp": "view"
+            }
+            // #endif
           }
         },
         {

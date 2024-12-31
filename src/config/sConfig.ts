@@ -450,15 +450,15 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
       alipay: {
-        // medicalNation: {},
+        medicalNation: {},
       },
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           //测试
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S3ORH0H04460C80A0000210115A3',
+          // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S3ORH0H04460C80A0000210115A3',
           // 生产
-          // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsP9BQzovPtfTZGwRsyhqMMZjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1GJH07S4E0IOE2470B0A00003A59E597',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S44OQ0028C430B0A0000A6FDEDE9',
         },
         // medicalPlugin: '1',
       },

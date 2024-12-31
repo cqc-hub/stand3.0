@@ -852,7 +852,6 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
   };
 
   const getqueryCompData=async()=>{
-    // #ifdef MP-WEIXIN
     if (global.systemInfo.isOpenHealthCard?.isCardQueryComp&&gStores.userStore.patChoose?.healthQrCodeText) {
       queryCompData.value.openId = await getOpenId();
       queryCompData.value.hospitalId =
@@ -860,9 +859,7 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
       queryCompData.value.healthCardId =
         gStores.userStore.patChoose.healthQrCodeText;
       queryCompData.value.isShowHealthCardMode = true;
-      console.log('queryCompData', queryCompData.value);
     }
-    // #endif
   }
 
   onLoad(async (opt) => {
@@ -885,7 +882,9 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     if (pageProps.value.isWatermark === '1') {
       addWatermark(global.systemInfo.name);
     }
+    // #ifdef MP-WEIXIN
     getqueryCompData()
+    // #endif
   });
 
   onUpdated(() => {

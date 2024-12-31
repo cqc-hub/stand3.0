@@ -425,13 +425,15 @@
   const isShow = ref(false);
   const checkoutReportList = ref<checkoutReportDetails>({} as any);
 
-  const queryCompData = ref(<{
-    isShowHealthCardMode: boolean;
-    hospitalId: string;
-    openId: string;
-    healthCardId?: string;
-    scene: string;
-  }>{
+  const queryCompData = ref(<
+    {
+      isShowHealthCardMode: boolean;
+      hospitalId: string;
+      openId: string;
+      healthCardId?: string;
+      scene: string;
+    }
+  >{
     isShowHealthCardMode: false,
     hospitalId: '',
     openId: '',
@@ -495,23 +497,24 @@
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(p)));
-    await getqueryCompData()
-    
+    // #ifdef MP-WEIXIN
+    await getqueryCompData();
+    // #endif
   });
 
-  const getqueryCompData=async()=>{
-    // #ifdef MP-WEIXIN
-    if (global.systemInfo.isOpenHealthCard?.isCardQueryComp&&gStore.userStore.patChoose?.healthQrCodeText) {
+  const getqueryCompData = async () => {
+    if (
+      global.systemInfo.isOpenHealthCard?.isCardQueryComp &&
+      gStore.userStore.patChoose?.healthQrCodeText
+    ) {
       queryCompData.value.openId = await getOpenId();
       queryCompData.value.hospitalId =
         global.systemInfo.isOpenHealthCard!.hospitalId;
       queryCompData.value.healthCardId =
         gStore.userStore.patChoose.healthQrCodeText;
       queryCompData.value.isShowHealthCardMode = true;
-      console.log('queryCompData', queryCompData.value);
     }
-    // #endif
-  }
+  };
 
   const getCheckoutReportDetails = async () => {
     const { repId, repType, hosId, extend, useCacheData } = pageProps.value;
@@ -620,7 +623,6 @@
     }
   });
 </script>
-
 
 <style lang="scss" scoped>
   .page {
