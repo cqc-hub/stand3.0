@@ -7,11 +7,14 @@
         mode="widthFix"
       />
 
-      <view class="content pl32 pr32 pt24 pb24 flex flex-between">
+      <view
+        @click="chooseAction"
+        class="content pl32 pr32 pt24 pb24 flex flex-between"
+      >
         <view class="flex">
           <view
             class="qr-code bg-white rounded flex justify-center items-center mr32"
-            @click="goCardDetail"
+            @click.stop="goCardDetail"
           >
             <view class="iconfont color-blue">&#xe6a7;</view>
           </view>
@@ -25,7 +28,7 @@
           </view>
         </view>
 
-        <view @click="chooseAction">
+        <view>
           <view
             class="btn btn-border btn-plain btn-round f26 pt8 pb8 pat-change-btn"
           >

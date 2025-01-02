@@ -16,7 +16,7 @@
       </view>
 
       <scroll-view
-        v-if="visitList.length"
+        v-if="visitList.length && tabCurrentKey === '0'"
         scroll-x
         class="pt16 pb16 fix-top z-1 bg-white"
       >
@@ -29,11 +29,12 @@
 
       <view class="page-bg relative pl32 pr32">
         <view class="my-hide f24">占位</view>
-        <view class="empty-list" v-if="isComplete && !visitInfoList.length">
+        <view class="empty-list" v-if="isShowEmpty">
           <g-empty :current="1" />
         </view>
 
         <Guide-Content-List
+          v-if="visitList.length && tabCurrentKey === '0'"
           :list="visitInfoList"
           :mzqhBtns="mzqhBtns"
           @btn-click="btnClick"
@@ -42,6 +43,11 @@
           @go-pay-page="goPagePage"
           @go-take-number="goTakeNumber"
           @open-hos-location="openHosLocation"
+        />
+
+        <GuideHisList
+          v-if="hisList.length && tabCurrentKey === '2'"
+          :list="hisList"
         />
         <view class="safe-height" />
         <view class="safe-height" />
@@ -63,6 +69,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import {
     debounce,
+    generateUuid,
     GStores,
     openLocation,
     ServerStaticData,
@@ -77,26 +84,31 @@
   import api from '@/service/api';
   import { titleMap, TVisitInfo, TVisitRecord } from './guide';
   import { joinQueryForUrl } from '@/common';
+  import dayjs from 'dayjs';
+  import GuideHisList from './components/GuideHisList.vue';
 
   const gStores = new GStores();
-  const tabCurrent = ref(0);
+  const tabCurrent = ref(1);
   const tabField = [
     {
       label: '今日就诊',
-      key: 0,
+      key: '0',
     },
-    {
-      label: '未来就诊',
-      key: 1,
-    },
+    // {
+    //   label: '未来就诊',
+    //   key: '1',
+    // },
     {
       label: '历史就诊',
-      key: 2,
+      key: '2',
     },
   ];
+  const tabCurrentKey = computed(() => tabField[tabCurrent.value]?.key || '');
+
   const isComplete = ref(false);
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
+    patChange();
 
     // getListData();
   };
@@ -164,258 +176,257 @@
 
     visitItemSel.value = item;
     visitInfoList.value = [];
-    isComplete.value = false;
+    // isComplete.value = false;
+    // const { result } = await api
+    //   .getIntelligenceVisit({
+    //     patientId,
+    //     visitNo,
+    //   })
+    //   .finally(() => {
+    //     isComplete.value = true;
+    //   });
 
-    const { result } = await api
-      .getIntelligenceVisit({
-        patientId,
-        visitNo,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
+    const result = {
+      node1Info: {
+        completionStatus: 1,
+        hosId: '13001',
+        hosName: '乐清市人民医院',
+        visitNo: '20241203004201',
+        date: '2024-12-03',
+        categorName: null,
+        deptName: '心血管内科',
+        appointmentTime: '2024-12-03  上午09:15-09:30  11号',
+        docName: null,
+        areaName: '3楼C区',
+        areaId: '3C',
+      },
+      node2Info: {
+        completionStatus: 1,
+        hosId: '13001',
+        hosName: '乐清市人民医院',
+        visitNo: '20241203004201',
+        date: '2024-12-03',
+        categorName: null,
+        deptName: '心血管内科',
+        appointmentTime: '2024-12-03  上午09:15-09:30  11号',
+        docName: null,
+        areaName: '3楼C区',
+        areaId: '3C',
+      },
+      node3Info: {
+        completionStatus: 1,
+        no: '08',
+        curNo: '02',
+        beforeNum: '06',
+        docName: 'docName',
+        site: 'site',
+      },
+      node4Info: {
+        completionStatus: 0,
+      },
 
-    // const result = {
-    //   node1Info: {
-    //     completionStatus: 1,
-    //     hosId: '13001',
-    //     hosName: '乐清市人民医院',
-    //     visitNo: '20241203004201',
-    //     date: '2024-12-03',
-    //     categorName: null,
-    //     deptName: '心血管内科',
-    //     appointmentTime: '2024-12-03  上午09:15-09:30  11号',
-    //     docName: null,
-    //     areaName: '3楼C区',
-    //     areaId: '3C',
-    //   },
-    //   node2Info: {
-    //     completionStatus: 1,
-    //     hosId: '13001',
-    //     hosName: '乐清市人民医院',
-    //     visitNo: '20241203004201',
-    //     date: '2024-12-03',
-    //     categorName: null,
-    //     deptName: '心血管内科',
-    //     appointmentTime: '2024-12-03  上午09:15-09:30  11号',
-    //     docName: null,
-    //     areaName: '3楼C区',
-    //     areaId: '3C',
-    //   },
-    //   node3Info: {
-    //     completionStatus: 1,
-    //     no: '08',
-    //     curNo: '02',
-    //     beforeNum: '06',
-    //     docName: 'docName',
-    //     site: 'site',
-    //   },
-    //   node4Info: {
-    //     completionStatus: 0,
-    //   },
+      node5Info: {
+        completionStatus: 1,
+        exams: [
+          {
+            isEmptyStomach: '0',
+            itemName: '常规心电图[常规心电图(心脏)]',
+            itemAddress: '心电图室',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: '0',
+            itemTime: '2024-12-03 14:09:00.0039',
+            remark: null,
+            orderId: '2024120300133878',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103006',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: '039',
+            visitNo: null,
+          },
+        ],
+      },
+      node6Info: {
+        completionStatus: 1,
+        labs: [
+          {
+            isEmptyStomach: null,
+            itemName: '门诊肾功能 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150065',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+          {
+            isEmptyStomach: null,
+            itemName: '血常规 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150064',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+          {
+            isEmptyStomach: null,
+            itemName: '甲状腺功能测定 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150067',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+          {
+            isEmptyStomach: null,
+            itemName: '电解质组合 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150066',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+          {
+            isEmptyStomach: null,
+            itemName: '心肌酶谱 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150068',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+        ],
+      },
+      node7Info: {
+        completionStatus: 1,
+        others: [
+          {
+            isEmptyStomach: null,
+            itemName: '西药',
+            itemAddress: '门诊一楼 门诊西药房',
+            isDeptStorage: '0',
+            status: null,
+            disposeStatus: '2',
+            appointIndicator: null,
+            itemTime: '2024-12-03',
+            remark: null,
+            orderId: null,
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103022',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
 
-    //   node5Info: {
-    //     completionStatus: 1,
-    //     exams: [
-    //       {
-    //         isEmptyStomach: '0',
-    //         itemName: '常规心电图[常规心电图(心脏)]',
-    //         itemAddress: '心电图室',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: '0',
-    //         itemTime: '2024-12-03 14:09:00.0039',
-    //         remark: null,
-    //         orderId: '2024120300133878',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103006',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: '039',
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node6Info: {
-    //     completionStatus: 1,
-    //     labs: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '门诊肾功能 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150065',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '血常规 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150064',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '甲状腺功能测定 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150067',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '电解质组合 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150066',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '心肌酶谱 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150068',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node7Info: {
-    //     completionStatus: 1,
-    //     others: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '西药',
-    //         itemAddress: '门诊一楼 门诊西药房',
-    //         isDeptStorage: '0',
-    //         status: null,
-    //         disposeStatus: '2',
-    //         appointIndicator: null,
-    //         itemTime: '2024-12-03',
-    //         remark: null,
-    //         orderId: null,
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103022',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '心肌酶谱 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150068',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node8Info: {
-    //     completionStatus: 1,
-    //     drugs: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '西药',
-    //         itemAddress: '门诊一楼 门诊西药房',
-    //         isDeptStorage: '0',
-    //         status: null,
-    //         disposeStatus: '2',
-    //         appointIndicator: null,
-    //         itemTime: '2024-12-03',
-    //         remark: null,
-    //         orderId: null,
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103022',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    // };
+          {
+            isEmptyStomach: null,
+            itemName: '心肌酶谱 [血液]',
+            itemAddress: '检验科',
+            isDeptStorage: null,
+            status: '3',
+            disposeStatus: null,
+            appointIndicator: null,
+            itemTime: 'nullnull',
+            remark: null,
+            orderId: '2024120300150068',
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103008',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+        ],
+      },
+      node8Info: {
+        completionStatus: 1,
+        drugs: [
+          {
+            isEmptyStomach: null,
+            itemName: '西药',
+            itemAddress: '门诊一楼 门诊西药房',
+            isDeptStorage: '0',
+            status: null,
+            disposeStatus: '2',
+            appointIndicator: null,
+            itemTime: '2024-12-03',
+            remark: null,
+            orderId: null,
+            billDeptName: '心血管内科',
+            billDocName: null,
+            performDeptCode: 'A0103022',
+            reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+            beforeNum: null,
+            curNo: null,
+            no: null,
+            visitNo: null,
+          },
+        ],
+      },
+    };
 
     const {
       node1Info,
@@ -444,8 +455,6 @@
     ]
       .filter((o: any, i) => {
         if (o) {
-          console.log(o, i);
-
           o.title = titleMap[i + 1];
         }
         return o;
@@ -475,10 +484,23 @@
 
     //   return o;
     // });
-    console.log(visitInfoList.value);
   };
 
-  const patChange = async () => {
+  const isShowEmpty = computed(() => {
+    if (isComplete.value) {
+      if (tabCurrentKey.value === '0') {
+        return !visitInfoList.value.length;
+      }
+
+      if (tabCurrentKey.value === '2') {
+        return !hisList.value.length;
+      }
+    }
+
+    return false;
+  });
+
+  const getToday = async () => {
     const { patientId } = gStores.userStore.patChoose;
     visitList.value = [];
     visitInfoList.value = [];
@@ -514,6 +536,50 @@
     if (result && result.length) {
       visitList.value = result;
       visitItemClick(result[0]);
+    }
+  };
+
+  const hisList = ref<any[]>([]);
+  const getHistory = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const toDay = dayjs().format('YYYY-MM-DD');
+
+    //
+    hisList.value = [];
+    isComplete.value = false;
+    let { result = [] } = await api
+      .getProcessState({
+        patientId,
+        type: '',
+      })
+      .finally(() => {
+        isComplete.value = true;
+      });
+
+    if (result && result.length) {
+      result = result
+        .filter((o) => o.disposeTime !== toDay)
+        .map((t) => {
+          t.uuid = generateUuid();
+
+          return t;
+        });
+    }
+    hisList.value = result;
+    console.log(result);
+  };
+
+  const patChange = async ({ item } = {} as any) => {
+    if (item) {
+      gStores.userStore.updatePatChoose(item);
+    }
+
+    if (tabCurrentKey.value === '0') {
+      getToday();
+    }
+
+    if (tabCurrentKey.value === '2') {
+      getHistory();
     }
   };
 

@@ -177,6 +177,9 @@ const queryApi = {
   getRiskCode: (data) =>
     service.post('/phs-query/escort/getRiskCode', parm(data)),
 
+  getProcessState: (data) =>
+    service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),
+
   // 医保授权(微信国标)
   authorize: <T>(data) =>
     service.post<T>('/phs-base/medical/authorize', parm(data), {

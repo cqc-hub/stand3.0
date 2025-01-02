@@ -51,9 +51,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
-
-  import { onLoad } from '@dcloudio/uni-app';
   import globalGl from '@/config/global';
   const props = withDefaults(
     defineProps<{
@@ -64,7 +61,7 @@
   );
 
   const showAddress = (col) => {
-    return ['itemAddress'].includes(col.key);
+    return col.performDeptCode && ['itemAddress'].includes(col.key);
   };
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
