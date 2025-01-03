@@ -61,7 +61,7 @@
   );
 
   const showAddress = (col) => {
-    return col.performDeptCode && ['itemAddress'].includes(col.key);
+    return props.lab.performDeptCode && ['itemAddress'].includes(col.key);
   };
 
   const emits = defineEmits(['go-report', 'go-address-map', 'click-row']);
