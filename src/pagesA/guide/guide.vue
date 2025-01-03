@@ -95,7 +95,7 @@
   import GuideHisList from './components/GuideHisList.vue';
 
   const gStores = new GStores();
-  const tabCurrent = ref(1);
+  const tabCurrent = ref(0);
   const tabField = [
     {
       label: '今日就诊',
