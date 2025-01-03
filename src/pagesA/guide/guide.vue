@@ -521,23 +521,23 @@
       });
 
     if (!(result && result.length)) {
-      result = [
-        {
-          deptName: '甲状腺外科门诊',
-          date: '09-25',
-          visitNo: '233456',
-        },
-        {
-          deptName: '甲状腺外科门诊',
-          date: '09-27',
-          visitNo: '233456222',
-        },
-        {
-          deptName: '甲状腺外科门诊',
-          date: '09-28',
-          visitNo: '2334561',
-        },
-      ];
+      // result = [
+      //   {
+      //     deptName: '甲状腺外科门诊',
+      //     date: '09-25',
+      //     visitNo: '233456',
+      //   },
+      //   {
+      //     deptName: '甲状腺外科门诊',
+      //     date: '09-27',
+      //     visitNo: '233456222',
+      //   },
+      //   {
+      //     deptName: '甲状腺外科门诊',
+      //     date: '09-28',
+      //     visitNo: '2334561',
+      //   },
+      // ];
     }
 
     if (result && result.length) {
