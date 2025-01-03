@@ -49,6 +49,7 @@
   import api from '@/service/api';
 
   import SelCardDialog from './components/SelCardDialog.vue';
+import { assignType } from '@/typeUtils';
 
   const gStores = new GStores();
   const dialogSelCardShow = ref(false);
@@ -166,8 +167,9 @@
         }
 
         const {
-          result: { patientId, accessToken },
+          result: { patientId, accessToken  },
         } = await invokeApi(reqData);
+        assignType<string>(accessToken)
 
         if (accessToken) {
           // 完善流程后 token 会过期 重新取接口返回
