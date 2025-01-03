@@ -445,7 +445,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001074: {
     login: {
-      isAliAuthBase: '1',
+      // isAliAuthBase: '1',
     },
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
