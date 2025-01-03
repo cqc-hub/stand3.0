@@ -258,6 +258,32 @@
     return _isOpenOcr;
   };
 
+  const injectHealthCode = async (requestData) => {
+    // #ifdef MP-WEIXIN
+    if (globalGl.systemInfo.isOpenHealthCard) {
+      const { success, res } = await getHealthCardCode();
+
+      if (success) {
+        isShowHealthLogin.value = false;
+        const {
+          result: { wechatCode },
+        } = res;
+
+        requestData.wechatCode = wechatCode;
+      } else {
+        gStores.messageStore.showMessage(
+          '未授权， 请再次点击按钮进行授权',
+          3000
+        );
+        isShowHealthLogin.value = true;
+        return Promise.reject(void 0);
+      }
+    }
+    // #endif
+
+    return requestData;
+  };
+
   const editPhone = async (requestData) => {
     const { isCanChangeHosPhone, useFaceVerifyInChangePhone } =
       pageConfig.value;
@@ -341,27 +367,7 @@
 
     requestData.verifyType = requestData.verifyCode ? '2&kq' : '1&bk';
 
-    // #ifdef MP-WEIXIN
-    if (globalGl.systemInfo.isOpenHealthCard) {
-      const { success, res } = await getHealthCardCode();
-
-      if (success) {
-        isShowHealthLogin.value = false;
-        const {
-          result: { wechatCode },
-        } = res;
-
-        requestData.wechatCode = wechatCode;
-      } else {
-        gStores.messageStore.showMessage(
-          '未授权， 请再次点击按钮进行授权',
-          3000
-        );
-        isShowHealthLogin.value = true;
-        return Promise.reject(void 0);
-      }
-    }
-    // #endif
+    await injectHealthCode(requestData);
 
     const {
       isFace,
@@ -456,6 +462,7 @@
             });
             // 修改手机号必开启人脸|ocr之一
             if (confirm) {
+              await injectHealthCode(requestData);
               return await editPhone(requestData);
             }
           }
