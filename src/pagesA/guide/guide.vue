@@ -48,6 +48,7 @@
         <GuideHisList
           v-if="hisList.length && tabCurrentKey === '2'"
           :list="hisList"
+          :mzqhBtns="mzqhBtns"
         />
         <view class="safe-height" />
         <view class="safe-height" />
@@ -560,7 +561,14 @@
       result = result
         .filter((o) => o.disposeTime !== toDay)
         .map((t) => {
+          const { processResultList } = t;
           t.uuid = generateUuid();
+
+          if (processResultList && processResultList.length) {
+            processResultList.map(q => {
+              // q.title =
+            })
+          }
 
           return t;
         });

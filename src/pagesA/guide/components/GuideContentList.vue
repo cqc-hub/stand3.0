@@ -19,9 +19,14 @@
         >
           {{ list.length - i }}
         </view>
-
         <view class="flex-1">
-          <g-collapse :open="isActive(item)" ref="collapseRef" :border="false">
+          <slot name="collapse-top" />
+          <g-collapse
+            :open="isActive(item)"
+            @change="(v) => emits('collapse-change', v)"
+            ref="collapseRef"
+            :border="false"
+          >
             <template #header="{ isShow: arrowBottom }">
               <view
                 :class="{
@@ -455,6 +460,7 @@
     'go-address-map',
     'go-pay-page',
     'open-hos-location',
+    'collapse-change',
   ]);
 
   const mzqhClickRow = (item, { col }) => {
