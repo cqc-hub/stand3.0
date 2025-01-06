@@ -14,7 +14,7 @@
       <view
         v-if="msgItem.my"
         :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column-start smartChatRoom-item"
+        class="flex-column smartChatRoom-item"
       >
         <view
           class="flex justify-end padding-right one-show align-start padding-top"
@@ -29,12 +29,12 @@
       <view
         v-else
         :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column-start smartChatRoom-item"
+        class="flex-column smartChatRoom-item"
       >
         <view
-          class="flex justify-end padding-right one-show align-start padding-top"
+          class="flex justify-start padding-right one-show align-start padding-top"
         >
-          <view class="flex justify-end">
+          <view class="flex justify-start">
             <view class="chat-system-item margin-left padding-chat by-cyan">
               <text class="g-break-word">{{ msgItem.msg }}</text>
             </view>
@@ -42,11 +42,27 @@
         </view>
       </view>
     </template>
+    <view
+        v-if="msgState.msgLoad"
+        :id="`smartChatRoomItem_load`"
+        class="flex-column smartChatRoom-item"
+      >
+        <view
+          class="flex justify-start padding-right one-show align-start padding-top"
+        >
+          <view class="flex justify-start">
+            <view class="chat-system-item margin-left padding-chat by-cyan">
+              <text class="g-break-word">加载中，请稍等</text>
+            </view>
+          </view>
+        </view>
+      </view>
   </view>
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
+  import {msgState} from '../utils/utils'
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;
@@ -62,7 +78,8 @@
   .content-area {
     z-index: 0;
     padding-top: 40rpx;
-    min-height: calc(100vh - 590rpx);
+    min-height: calc(100vh - 590rpx - 390rpx - 40rpx);
+    padding-bottom: 390rpx;
     .my-width {
       width: 400rpx;
     }
@@ -72,7 +89,7 @@
       color: #fff;
     }
     .chat-system-item {
-      border-radius: 8px 0px 8px 8px;
+      border-radius:8px 8px 8px 0px  ;
       background-color: #E8F4FF;
       color: #111111;
     }

@@ -1,8 +1,11 @@
-import { computed, ref, reactive } from 'vue';
+import { computed, ref, reactive, nextTick } from 'vue';
 import { type StyleConfigType } from './types';
 import { type TButtonConfig, useTBanner } from '@/utils';
 export const msgList = ref<Array<any>>([]);
-const msgLoad = ref<boolean>(false);
+export const msgState = ref<any>({
+  scrollIntoView: '',
+  msgLoad: false,
+});
 const focus = ref<boolean>(false);
 //普通首页
 // {
@@ -19,14 +22,13 @@ const focus = ref<boolean>(false);
 //   simpleHeadInit:false,//初始服务居中
 // }
 export const styleConfig = ref<StyleConfigType>({
-  transition: true,//初始过渡效果
-  showHeader: true,//展示首页
-  isMessage: false,//通知效果
-  simpleHeadInit:false,//初始服务居中
+  transition: true, //初始过渡效果
+  showHeader: true, //展示首页
+  isMessage: false, //通知效果
+  simpleHeadInit: false, //初始服务居中
 });
 
-
-export  const guessAskList = ref([
+export const guessAskList = ref([
   {
     label: '不知道挂什么号',
     value: '不知道挂什么号',
@@ -134,16 +136,49 @@ export const sendMsg = async (value) => {
   msgList.value.push({
     my: true,
     msg: value,
-  })
-  await new Promise((rl,rj)=>{
-    setTimeout(()=>{
+  });
+  msgState.value.msgLoad = true;
+  scrollToNewMsg();
+
+  await new Promise((rl, rj) => {
+    setTimeout(() => {
+      msgState.value.msgLoad = false;
+      // let i = 0;
+      // let msg =
+      //   '这是一条系统回复，这是一条系统回复，这是一条系统回复，这是一条系统回复，';
+      // msgList.value[msgList.value.length - 1].msg = '';
+      // for (; i <= msg.length; i++) {
+      //   setTimeout(() => {
+      //     msgList.value[msgList.value.length - 1].msg.push(msg[i]);
+      //   }, 50);
+      // }
+
+      // msgList.value[msgList.value.length - 1].msg = '';
       msgList.value.push({
         my: false,
         msg: '系统回复1',
-      })
-    },1000)
-  })
+      });
+      scrollToNewMsg();
+    }, 1000);
+  });
 };
+
+const scrollToNewMsg = () => {
+  nextTick(() => {
+    uni.pageScrollTo({
+      selector:
+        '#pageScroll >>> #smartChatRoomItem_' + (msgList.value.length - 1),
+      duration: 300,
+      success: () => {
+        console.log('滚动成功');
+      },
+      fail: (err) => {
+        console.log('滚动失败：', err);
+      },
+    });
+  });
+};
+
 export const onBlur = (value) => {
   console.log('onBlur', value);
 };
@@ -152,8 +187,8 @@ export const handleGuess = (item) => {
   console.log('handleGuess', item);
 };
 
-export const handleServer = (item:TButtonConfig) => {
+export const handleServer = (item: TButtonConfig) => {
   console.log('handleServer', item);
 
-  useTBanner(item)
+  useTBanner(item);
 };

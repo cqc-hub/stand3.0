@@ -220,7 +220,7 @@
       };
 
       SImanager.onStart = (res) => {
-        console.log('SImanager..onStart', res);
+        console.log('SImanager.onStart', res);
       };0
 
       SImanager.onError = function (res) {

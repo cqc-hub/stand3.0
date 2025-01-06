@@ -1,6 +1,6 @@
 <template>
   <view class="topnav-container">
-    <scroll-view class="smartChatRoom">
+    <view class="smartChatRoom" >
       <view class="smartChatRomm-content">
         <!-- hearder区域 -->
         <intel-medical-header
@@ -12,6 +12,7 @@
         <intalMedicalContent
           :msgList="msgList"
           :headerConfig="styleConfig"
+          id="pageScroll"
         />
         <!-- fotter区域 -->
         <intalMedicalFooter
@@ -22,7 +23,7 @@
           @send-msg="sendMsg"
         />
       </view>
-    </scroll-view>
+    </view>
   </view>
 </template>
 <script setup lang="ts">
@@ -44,13 +45,14 @@
   import { throttle } from '@/utils';
 
   const scrollChangeView = (e) => {
-    if (e.scrollTop <= 20 && styleConfig.value.showHeader === false) {
-      changeShowHeader();
-    } else if (e.scrollTop > 20 && styleConfig.value.showHeader === true) {
-      changeShowHeader();
+    console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
+    if (e.scrollTop <= 20 && styleConfig.value.showHeader === false&& (!msgList.value.length&&!styleConfig.value.isMessage)) {
+      changeShowHeader('2');
+    } else if (e.scrollTop > 20 && styleConfig.value.showHeader === true&& msgList.value.length&&!styleConfig.value.isMessage) {
+      changeShowHeader('1');
     }
   };
-  let changeShowHeader = () => {
+  let changeShowHeader = (flag?:'1'|'2') => {
     if (styleConfig.value.simpleHeadInit) {
       styleConfig.value.simpleHeadInit = false;
       return;
@@ -59,9 +61,12 @@
       styleConfig.value.showHeader = false;
       return
     }
+    if(flag){
+      styleConfig.value.showHeader = (flag==='1')
+    }
     styleConfig.value.showHeader = !styleConfig.value.showHeader;
   };
-  changeShowHeader = throttle(changeShowHeader, 500);
+  changeShowHeader = throttle(changeShowHeader, 1000);
 
   onMounted(() => {
     // if (styleConfig.value.isMessage && !styleConfig.value.showHeader) {
