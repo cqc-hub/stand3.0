@@ -649,7 +649,7 @@ const regApi = {
       monitorName: '挂号缴费',
     }),
 
-  getRegOrderList: <T>(data: any) =>
+  getRegOrderList: <T = any[]>(data: any) =>
     service.post<T>('/phs-reg/reg/getRegOrderList', parm(data), {
       hideLoading: false,
       reportCmPV_YLName: '挂号记录查询',
