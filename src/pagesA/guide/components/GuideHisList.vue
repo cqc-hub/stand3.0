@@ -72,10 +72,18 @@
 
   const collapseRefs = ref<any[]>();
   const handCollapseChange = async (idx) => {
-    await wait(440);
     if (collapseRefs.value) {
       const itemRef = collapseRefs.value[idx];
-      itemRef && itemRef.init();
+      if (itemRef) {
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+      }
     }
   };
 </script>

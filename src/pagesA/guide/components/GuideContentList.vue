@@ -144,10 +144,9 @@
                   </view>
                 </view>
 
+                <!-- 'btn-disabled': item.completionStatus === 0, -->
                 <view
-                  :class="{
-                    'btn-disabled': item.completionStatus === 0,
-                  }"
+                  :class="{}"
                   class="btn btn-border btn-primary btn-round f28 mt24"
                   @click="
                     goReport({
