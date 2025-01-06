@@ -20,7 +20,6 @@
           {{ list.length - i }}
         </view>
         <view class="flex-1">
-          <slot name="collapse-top" />
           <g-collapse
             :open="isActive(item)"
             @change="(v) => emits('collapse-change', v)"
@@ -128,7 +127,7 @@
                       </text>
                     </view>
 
-                    <view class="pt24 pb24">
+                    <view v-if="lab.status" class="pt24 pb24">
                       <GuideReportProgress :lab="lab" />
                     </view>
 
@@ -145,10 +144,9 @@
                   </view>
                 </view>
 
+                <!-- 'btn-disabled': item.completionStatus === 0, -->
                 <view
-                  :class="{
-                    'btn-disabled': item.completionStatus === 0,
-                  }"
+                  :class="{}"
                   class="btn btn-border btn-primary btn-round f28 mt24"
                   @click="
                     goReport({
@@ -196,7 +194,7 @@
                       </text>
                     </view>
 
-                    <view class="pt24 pb24">
+                    <view v-if="lab.status" class="pt24 pb24">
                       <GuideReportProgress :lab="lab" />
                     </view>
 

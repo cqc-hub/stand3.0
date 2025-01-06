@@ -26,17 +26,22 @@
         </template>
 
         <view
-          v-if="item.processResultList && item.processResultList.length"
+          v-if="item.itemList && item.itemList.length"
           :class="{
-            'line-play':
-              item.processResultList && item.processResultList.length > 1,
+            'line-play': item.itemList.length > 1,
           }"
           class="pt32 relative"
         >
           <GuideContentList
-            :list="item.processResultList"
+            :list="item.itemList"
             :mzqhBtns="mzqhBtns"
             @collapse-change="handCollapseChange(i)"
+            @btn-click="($event) => $emit('btn-click', $event)"
+            @go-report="($event) => $emit('go-report', $event)"
+            @go-take-number="($event) => $emit('go-take-number', $event)"
+            @go-address-map="($event) => $emit('go-address-map', $event)"
+            @go-pay-page="($event) => $emit('go-pay-page', $event)"
+            @open-hos-location="($event) => $emit('open-hos-location', $event)"
           />
         </view>
       </g-collapse>
@@ -55,13 +60,30 @@
     list: any[];
     mzqhBtns: TButtonConfig[];
   }>();
+  const emits = defineEmits([
+    'btn-click',
+    'go-report',
+    'go-take-number',
+    'go-address-map',
+    'go-pay-page',
+    'open-hos-location',
+    'collapse-change',
+  ]);
 
   const collapseRefs = ref<any[]>();
   const handCollapseChange = async (idx) => {
-    await wait(300);
     if (collapseRefs.value) {
       const itemRef = collapseRefs.value[idx];
-      itemRef && itemRef.init();
+      if (itemRef) {
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+        await wait(100);
+        itemRef.init();
+      }
     }
   };
 </script>

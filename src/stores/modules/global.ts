@@ -6,7 +6,7 @@ interface IStateGlobal {
   token: {
     accessToken: string;
     refreshToken: string;
-    loginData: string;
+    loginData?: string;
   };
 
   browser: {
