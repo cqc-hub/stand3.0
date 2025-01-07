@@ -874,6 +874,13 @@ const userApi = {
       reportCmPV_YLName: '电子健康卡',
     }),
 
+  // 电子健康卡绑卡验证授权接口
+  registerHealthCardPreAuth: (data) =>
+    service.post('/phs-user/healthCard/registerHealthCardPreAuth', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '电子健康卡',
+    }),
+
   getHospital: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospital', parm(data), {
       hideLoading: false,

@@ -39,7 +39,7 @@
     <view class="g-container">
       <block v-if="showList.length && isComplete">
         <My-Registration-List-Card
-          :isWaitReg="isWaitReg || tabCurrentDetail.typeId === 2"
+          :isWaitReg="isWaitReg || tabCurrentDetail?.typeId === 2"
           :list="showList"
           :showYuanNeiDaoHanBtn="showYuanNeiDaoHanBtn"
           :isShowYuWzBtn="isShowYuWzBtn"
@@ -245,9 +245,9 @@
       return api.getAlternateList;
     }
     // "全部" 查院内接口
-    return tabCurrentDetail.value.typeId === 1
+    return tabCurrentDetail.value?.typeId === 1
       ? api.hosRegOrderList
-      : tabCurrentDetail.value.typeId === 0
+      : tabCurrentDetail.value?.typeId === 0
       ? api.getRegOrderList
       : api.getAlternateList;
   });
@@ -261,10 +261,10 @@
   );
 
   const isShowYuWzBtn = computed(() => {
-    let tabShowCondition = tabCurrentDetail.value.typeId === 0;
+    let tabShowCondition = tabCurrentDetail.value?.typeId === 0;
     if (pageConfig.value.preConsultationBtn?.isSelOrderShow) {
       tabShowCondition =
-        tabCurrentDetail.value.typeId === 1 || tabShowCondition;
+        tabCurrentDetail.value?.typeId === 1 || tabShowCondition;
     }
     return pageConfig.value.isOpenPreConsultation === '1' && tabShowCondition;
   });
@@ -324,7 +324,7 @@
         o._statusLabel = getOrderStatusTitle(
           o.orderStatus,
           pageConfig.value.isOrderPay,
-          isWaitReg.value || tabCurrentDetail.value.typeId === 2
+          isWaitReg.value || tabCurrentDetail.value?.typeId === 2
         );
 
         if (o._statusLabel.startsWith('未知')) {
@@ -380,7 +380,7 @@
       }
     }
     let _type = props.value.type;
-    if (props.value.type !== 'waitReg' && tabCurrentDetail.value.typeId === 2) {
+    if (props.value.type !== 'waitReg' && tabCurrentDetail.value?.typeId === 2) {
       _type = 'waitReg';
     }
     uni.navigateTo({
@@ -438,7 +438,7 @@
 
     if (isShowFilterOrderStatus.value) {
       // '1' 全部挂号 '' 在线挂号
-      selOrderStatus.value = tabCurrentDetail.value.typeId === 1 ? '1' : '';
+      selOrderStatus.value = tabCurrentDetail.value?.typeId === 1 ? '1' : '';
     }
   };
 
@@ -510,7 +510,7 @@
       });
     pageConfig.value.isCancelOlineReg === '1' &&
       (tabs.value = tabs.value.filter((item) => {
-        return item.typeId !== 0;
+        return item?.typeId !== 0;
       }));
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
@@ -524,7 +524,7 @@
   };
 
   const init = async () => {
-    if (tabCurrentDetail.value.typeId === 1) {
+    if (tabCurrentDetail.value?.typeId === 1) {
       patList.value[0]?.patientName === '所有就诊人' &&
         (pat.value = patList.value[0]);
     }
@@ -543,7 +543,7 @@
         _showLabel: getPatLabel(o),
       })),
     ];
-    tabCurrentDetail.value.typeId !== 1 &&
+    tabCurrentDetail.value?.typeId !== 1 &&
       (list = [
         {
           patientId: '',
@@ -561,7 +561,7 @@
       (status) => ({
         label: getStatusConfig(
           status,
-          isWaitReg.value || tabCurrentDetail.value.typeId === 2
+          isWaitReg.value || tabCurrentDetail.value?.typeId === 2
         ).title,
         value: status,
       })

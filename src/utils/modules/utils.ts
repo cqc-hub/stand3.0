@@ -328,6 +328,8 @@ export const getLocation = async function (isForce?: boolean): Promise<{
 }> {
   return new Promise(async (success, fail) => {
     const res = await apiAsync(uni.getLocation, {}).catch((err) => {
+      console.error('getLocation',err);
+      
       if (err?.errCode === 2 || err?.extError === 12) {
         const gStores = new GStores();
         gStores.messageStore.showMessage('请检查设备是否开启定位', 5000, {

@@ -12,8 +12,8 @@
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
-
         <view @click="addPatPage">
+        <!-- <view @click="createCardH5"> -->
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
@@ -155,6 +155,7 @@
     useOcr,
     LoginUtils,
     routerJump,
+    useTBanner,
     type ISystemConfig,
   } from '@/utils';
   import {
@@ -250,6 +251,34 @@
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/easyCardCreate',
     });
+  };
+
+  const createCardH5 = async() => {
+    const { success, res } = await getHealthCardCode();
+    const {
+        result: { wechatCode },
+      } = res;
+    const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+    const requestArg = {
+      domainChannel:2,
+      faceUrl: '/pagesA/medicalCardMan/medicalCardMan?type=FaceVerify',
+      failRedirectUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${regInfoCode}',
+      herenId: gStore.globalStore.herenId,
+      hospitalId,
+      openId: gStore.globalStore.openId,
+      source:   gStore.globalStore.browser.source,
+      successRedirectUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${healthCode}',
+      sysCode:  globalGl.SYS_CODE,
+      userFormPageUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${healthCode}',
+      verifyFailRedirectUrl: 'mini:/pagesA/medicalCardMan/medicalCardMan',
+      wechatCode,
+    };
+    const {result} =await api.registerHealthCardPreAuth(requestArg);
+    // useTBanner({
+    //     type: 'h5',
+    //     isSelfH5: '1',
+    //     path: `pagesA/healthAdvisory/healthAdvisoryDetail?id=${id}`,
+    //   });
   };
 
   const profileClick = (pat: IPat) => {
