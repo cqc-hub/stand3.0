@@ -258,7 +258,7 @@ export class LoginUtils extends GStores {
         });
       });
     } else if (env === 'isAli') {
-      // https://opendocs.alipay.com/open/03oebe?pathHash=23ac7ae7&ref=api
+      // https://opendocs.alipay.com/open/03oebe?pathHash=23ac7ae7&ref=api 本身是收费项目 BD可申请免费
       const {
         browser: { source },
       } = this.globalStore;
