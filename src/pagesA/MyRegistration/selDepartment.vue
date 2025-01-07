@@ -112,6 +112,7 @@
   const hosId = ref(props.hosId);
   const isComplete = ref(false);
   const unNeedPosition = ref(true);
+  const celebratedDeptData = ref<Array<string>>([]);
   let deptStep: any[] = [];
 
   const init = async () => {
@@ -141,7 +142,7 @@
           cancelText,
           confirmText,
           cancelColor: '#296FFF',
-          maxHeight:900
+          maxHeight: 900,
         },
         closeCallBack({ confirm, maskClose }) {
           if (!confirm && !maskClose) {
@@ -161,6 +162,17 @@
           }
         },
       });
+      if (orderConfig.value?.isCelebratedDeptMode) {
+        const { result:{CELEBRATED_DEPT:jsonStr} } = await api.getParamsMoreBySysCode({
+          paramCode: 'CELEBRATED_DEPT',
+        });
+        try{
+          jsonStr && (celebratedDeptData.value = JSON.parse(jsonStr)[hosId.value]);
+        }catch(e){
+          console.error('CELEBRATED_DEPT',e);
+        }
+
+      }
     }
 
     // 处理 智能导诊逻辑 当path为 zndz 时 根据接口获取path
@@ -292,6 +304,16 @@
     }
 
     queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
+    if(celebratedDeptData.value.includes(item.hosDeptId)){
+      const query={
+        hosId: item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
+        hosDeptId:encodeURIComponent( item.hosDeptId),
+        deptName: encodeURIComponent(item.deptName),
+      }
+      uni.navigateTo({
+      url: joinQuery('/pagesA/MyRegistration/DepartmentCardDetail', query),
+    });
+    }
 
     uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
@@ -311,12 +333,11 @@
     };
   });
 
-  onLoad((opt = {}) => {
+  onLoad(async (opt = {}) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);
-
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
     const thRegisterId = props.thRegisterId;
     thRegisterId &&
@@ -332,7 +353,6 @@
         unNeedPosition.value = false;
       }
     }
-    // init();
   });
 
   const goSearch = () => {

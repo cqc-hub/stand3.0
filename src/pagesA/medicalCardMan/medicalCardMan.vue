@@ -12,8 +12,8 @@
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
-        <view @click="addPatPage">
-        <!-- <view @click="createCardH5"> -->
+        <!-- <view @click="addPatPage"> -->
+        <view @click="createCardH5">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
