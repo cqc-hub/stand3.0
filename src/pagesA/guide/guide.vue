@@ -45,6 +45,14 @@
           @open-hos-location="openHosLocation"
         />
 
+        <GuideOrderList
+          v-if="orderList.length && tabCurrentKey === '1'"
+          :list="orderList"
+          :config="orderConfig"
+          @ywz-click="ywzClick"
+          @refound-order="orderRefound"
+        />
+
         <GuideHisList
           v-if="hisList.length && tabCurrentKey === '2'"
           :list="hisList"
@@ -78,39 +86,45 @@
     debounce,
     generateUuid,
     GStores,
+    ISystemConfig,
     openLocation,
     ServerStaticData,
     TButtonConfig,
     useTBanner,
   } from '@/utils';
 
-  import GuidePatChoose from './components/GuidePatChoose.vue';
-  import GuideVisitList from './components/GuideVisitList.vue';
-  import GuideContentList from './components/GuideContentList.vue';
-  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import api from '@/service/api';
   import { titleMap, TVisitInfo, TVisitRecord } from './guide';
   import { joinQueryForUrl } from '@/common';
   import dayjs from 'dayjs';
+  import { IRegistrationCardItem } from '../MyRegistration/utils/MyRegistration';
+
+  import GuidePatChoose from './components/GuidePatChoose.vue';
+  import GuideVisitList from './components/GuideVisitList.vue';
+  import GuideContentList from './components/GuideContentList.vue';
+  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
+  import GuideOrderList from './components/GuideOrderList.vue';
   import GuideHisList from './components/GuideHisList.vue';
+  import { getOrderStatusTitle } from '../MyRegistration/utils/regDetail';
 
   const gStores = new GStores();
-  const tabCurrent = ref(0);
+  const tabCurrent = ref(1);
   const tabField = [
     {
       label: '今日就诊',
       key: '0',
     },
-    // {
-    //   label: '未来就诊',
-    //   key: '1',
-    // },
+    {
+      label: '未来就诊',
+      key: '1',
+    },
     {
       label: '历史就诊',
       key: '2',
     },
   ];
   const tabCurrentKey = computed(() => tabField[tabCurrent.value]?.key || '');
+  const orderConfig = ref({} as ISystemConfig['order']);
 
   const isComplete = ref(false);
   let tabChange = (idx: number) => {
@@ -499,6 +513,10 @@
         return !visitInfoList.value.length;
       }
 
+      if (tabCurrentKey.value === '1') {
+        return !orderList.value.length;
+      }
+
       if (tabCurrentKey.value === '2') {
         return !hisList.value.length;
       }
@@ -558,7 +576,7 @@
       .getHosGuideSheet({
         patientId,
       })
-      .finally(() => {
+      .finally(async () => {
         isComplete.value = true;
       });
 
@@ -638,6 +656,79 @@
     console.log(result);
   };
 
+  const orderList = ref<IRegistrationCardItem[]>([]);
+  const getOrderList = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+
+    isComplete.value = false;
+    orderList.value = [];
+    const { result = [] } = await api
+      .getRegOrderList<IRegistrationCardItem[]>({
+        source: gStores.globalStore.browser.source,
+        herenId: gStores.globalStore.herenId,
+        patientId,
+      })
+      .finally(() => {
+        isComplete.value = true;
+      });
+
+    orderList.value = result.filter((o) =>
+      dayjs(o.appointmentDate).isAfter(dayjs())
+    );
+
+    orderList.value.map((o) => {
+      o._statusLabel = getOrderStatusTitle(
+        o.orderStatus,
+        orderConfig.value.isOrderPay,
+        false
+      );
+
+      if (o._statusLabel.startsWith('未知')) {
+        // @ts-expect-error
+        o.orderStatus = '--';
+      }
+    });
+  };
+  const ywzClick = async (item: IRegistrationCardItem) => {
+    if (orderConfig.value.preConsultationBtn) {
+      //指定的预问诊跳转
+      useTBanner(orderConfig.value.preConsultationBtn, 'navigateTo', item);
+    } else {
+      const { orderId, hosDeptId, hosOrderId, hosData } = item;
+      const patientId = gStores.userStore.patChoose.patientId;
+      const preConsultation: TButtonConfig = {
+        type: 'h5',
+        isSelfH5: '1',
+        // path: 'pages/inquiries/inquiries3',
+        path: 'pagesC/inquiries/inquiriesRes1',
+        text: '预问诊',
+        extraData: {
+          orderId,
+          hosDeptId,
+          hosOrderId,
+          hosData,
+          patientId,
+        },
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+        },
+      };
+      useTBanner(preConsultation);
+    }
+  };
+  const orderRefound = async (item: IRegistrationCardItem) => {
+    console.log(item, '233')
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        // ...item,
+        orderId: item.orderId,
+        hosOrderId: item.hosOrderId,
+        preWz: item.orderStatus === '10' && '1',
+      }),
+    });
+  };
+
   const patChange = async ({ item } = {} as any) => {
     if (item) {
       gStores.userStore.updatePatChoose(item);
@@ -645,6 +736,10 @@
 
     if (tabCurrentKey.value === '0') {
       getToday();
+    }
+
+    if (tabCurrentKey.value === '1') {
+      getOrderList();
     }
 
     if (tabCurrentKey.value === '2') {
@@ -717,9 +812,14 @@
     }
   };
 
+  const getConfig = async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
+
   onLoad(async () => {
+    await getConfig();
     patChange();
-    visitItemClick({} as any);
+    // visitItemClick({} as any);
   });
 </script>
 

@@ -261,8 +261,8 @@
   );
 
   const isShowYuWzBtn = computed(() => {
-    let tabShowCondition = tabCurrentDetail.value?.typeId === 0;
-    if (pageConfig.value.preConsultationBtn?.isSelOrderShow) {
+    let tabShowCondition = tabCurrentDetail.value.typeId === 0;
+    if (pageConfig.value.preConsultationBtn?.isSelOrderShow === '1') {
       tabShowCondition =
         tabCurrentDetail.value?.typeId === 1 || tabShowCondition;
     }

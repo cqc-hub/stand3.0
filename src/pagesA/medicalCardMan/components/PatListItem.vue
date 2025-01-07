@@ -12,14 +12,14 @@
           class="mr12"
         />
         <g-tag
-          v-if="pat.healthCardUser === '2'"
+          v-if="globalGl.SYS_CODE !== '1001067' && pat.healthCardUser === '2'"
           type="blue"
           text="医保"
           class="mr12"
         />
         <template v-if="getRealNameAuth.length">
-          <g-tag v-if="pat.realNameAuth === '0'" type="gray" text="未认证" />
-          <g-tag v-else type="green" text="已认证" />
+          <g-tag v-if="pat.realNameAuth === '0'" type="gray" text="未实名" />
+          <g-tag v-else type="green" text="已实名" />
         </template>
       </view>
 
@@ -94,6 +94,7 @@
   import { defineComponent, PropType, ref, inject, computed } from 'vue';
   import { IPat } from '@/stores/type';
   import { nameConvert, type ISystemConfig } from '@/utils';
+  import globalGl from '@/config/global';
 
   export default defineComponent({
     props: {
@@ -138,6 +139,7 @@
         nameConvert,
         pageConfig,
         getRealNameAuth,
+        globalGl,
       };
     },
   });
