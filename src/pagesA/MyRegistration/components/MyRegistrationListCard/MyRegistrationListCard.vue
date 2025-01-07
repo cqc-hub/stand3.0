@@ -258,8 +258,10 @@
 
   // 最新消息 (濮阳) 仅 "全部挂号" 开放
   const isShowYWZBtn = (item: IRegistrationCardItem) => {
+    const showYwzByOrderStauts=props.config.showYwzByOrderStauts
+    const showStatus =showYwzByOrderStauts?showYwzByOrderStauts:['0']
     return (
-      ['0'].includes(item.orderStatus) &&
+      showStatus.includes(item.orderStatus) &&
       props.isShowYuWzBtn &&
       (item.orderId || item.hosOrderId) &&
       props.anotherYwzConditions
