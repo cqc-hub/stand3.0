@@ -873,6 +873,11 @@ const userApi = {
       hideLoading: false,
       reportCmPV_YLName: '电子健康卡',
     }),
+  // 快速关联电子健康卡,加载动画
+  quickLinkHealthCardWithLoad: (data) =>
+    service.post('/phs-user/healthCard/quickLinkHealthCard', parm(data), {
+      reportCmPV_YLName: '电子健康卡',
+    }),
 
   // 电子健康卡绑卡验证授权接口
   registerHealthCardPreAuth: (data) =>
@@ -880,6 +885,16 @@ const userApi = {
       hideLoading: false,
       reportCmPV_YLName: '电子健康卡',
     }),
+  //实人验证生成orderId接口
+  registerUniformVerifyOrder: (data) =>
+    service.post(
+      '/phs-user/healthCard/registerUniformVerifyOrder',
+      parm(data),
+      {
+        hideLoading: false,
+        reportCmPV_YLName: '电子健康卡',
+      }
+    ),
 
   getHospital: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospital', parm(data), {

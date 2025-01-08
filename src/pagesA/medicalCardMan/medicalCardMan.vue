@@ -12,8 +12,8 @@
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
-        <!-- <view @click="addPatPage"> -->
-        <view @click="createCardH5">
+        <view @click="addPatPage">
+        <!-- <view @click="createCardH5"> -->
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
@@ -144,7 +144,7 @@
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { IPat, useRouterStore } from '@/stores';
   import { ref, provide, readonly, computed, Ref } from 'vue';
-  import { getHealthCardCode } from './utils/index';
+  import { getHealthCardCode ,healthCardLink} from './utils/index';
   import { deQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
   import {
@@ -174,6 +174,10 @@
     <
       {
         _url?: string;
+
+        // 健康卡逻辑
+        _healthtype?:'FaceVerify'|'associate';
+        _healthCode?:string;
       }
     >{}
   );
@@ -261,24 +265,23 @@
     const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
     const requestArg = {
       domainChannel:2,
-      faceUrl: '/pagesA/medicalCardMan/medicalCardMan?type=FaceVerify',
-      failRedirectUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${regInfoCode}',
+      faceUrl: '/pagesA/medicalCardMan/medicalCardMan?_healthtype=FaceVerify',
+      failRedirectUrl: `mini:${globalGl.addPersonUrl}?_healthtype=failRedirect&_healthRegInfoCode=`+'${regInfoCode}',
       herenId: gStore.globalStore.herenId,
       hospitalId,
       openId: gStore.globalStore.openId,
       source:   gStore.globalStore.browser.source,
-      successRedirectUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${healthCode}',
+      successRedirectUrl: `mini:/pagesA/medicalCardMan/medicalCardMan?_healthtype=associate&_healthCode=`+'${healthCode}',
       sysCode:  globalGl.SYS_CODE,
-      userFormPageUrl: `mini:${globalGl.addPersonUrl}?healthCode=`+'${healthCode}',
+      userFormPageUrl: `mini:${globalGl.addPersonUrl}?_healthtype=addPat&_healthAuthCode=`+'${authCode=}',
       verifyFailRedirectUrl: 'mini:/pagesA/medicalCardMan/medicalCardMan',
       wechatCode,
     };
-    const {result} =await api.registerHealthCardPreAuth(requestArg);
-    // useTBanner({
-    //     type: 'h5',
-    //     isSelfH5: '1',
-    //     path: `pagesA/healthAdvisory/healthAdvisoryDetail?id=${id}`,
-    //   });
+    const {result:{bindCardUrl:h5Url}} =await api.registerHealthCardPreAuth(requestArg);
+    useTBanner({
+        type: 'h5',
+        path: h5Url,
+      });
   };
 
   const profileClick = (pat: IPat) => {
@@ -422,9 +425,21 @@
     }
   };
 
+  const HandhealthCard = async (type:'FaceVerify'|'associate') =>{
+    if(type==='associate'&&pageProps.value?._healthCode){
+      await healthCardLink(pageProps.value._healthCode,()=>{
+        console.log('pageProps.value.healthCode',pageProps.value._healthCode)
+        // uni.reLaunch()
+      })
+    }
+  }
+
   patientUtils.getPatCardList();
   onShow(() => {
     reDealMedicalFiling();
+    if(pageProps.value?._healthtype){
+      HandhealthCard(pageProps.value._healthtype)
+    }
   });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -439,6 +454,8 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
     // #endif
+    
+    
   });
 </script>
 

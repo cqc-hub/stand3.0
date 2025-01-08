@@ -313,11 +313,13 @@
       uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/DepartmentCardDetail', query),
     });
-    }
-
-    uni.navigateTo({
+    }else{
+      uni.navigateTo({
       url: joinQuery('/pagesA/MyRegistration/order', queryArg),
     });
+    }
+
+ 
   };
 
   const handleDzClick = async (data) => {

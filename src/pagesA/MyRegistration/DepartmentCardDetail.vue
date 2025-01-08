@@ -132,6 +132,7 @@
     id: '',
     deptName: '',
     hosId: '',
+    hosDeptId: '',
   });
   const isComplete = ref(false);
   const regDialogConfirm = ref<any>('');
@@ -141,12 +142,13 @@
     <PromiseReturnType<typeof getSystemConfig<'FAMOUS_DOCTOR_DEPT'>>>{}
   );
   const getDetailData = async () => {
-    const { id } = pageProps.value;
+    const { id ,hosDeptId} = pageProps.value;
     isComplete.value = false;
 
     const { result } = await api
       .getDeptCardDetail({
         id,
+        hosDeptId
       })
       .finally(() => {
         isComplete.value = true;

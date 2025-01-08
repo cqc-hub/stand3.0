@@ -439,17 +439,15 @@
     text: '检查预约',
   };
 
+
+
   const testbuttonConfig = ref(杭口质保卡)
   onMounted(() => {
     setTimeout(() => {
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'pages/index/test',
-      //   addition: {
-      //     patientId: '_patientId',
-      //   },
-      // });
+    //   useTBanner({
+    //     type: 'h5',
+    //     path: 'https://health.eheren.com/v3/#/pagesB/historicalMess/historicalMess?sysCode=1001067&appId=2021004193658562',
+    //   });
 
       // useTBanner({
       //   type: 'h5',

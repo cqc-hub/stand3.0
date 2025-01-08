@@ -11,8 +11,10 @@ import {
   wait,
   PatientUtils,
   routerJump,
+  getH5OpenidParam,
 } from '@/utils';
 import api from '@/service/api';
+import globalGl from '@/config/global';
 
 /**
  * 完善、 新增就诊人页面
@@ -874,4 +876,32 @@ export const useProgramPaySign = () => {
       }
     },
   };
+};
+
+export const healthCardLink = async(healthCode: string, cb?: Function) => {
+  const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+  const gStores = new GStores();
+  const globalStore = gStores.globalStore;
+  const requestArg = {
+    healthCode,
+    hospitalId,
+    herenId: globalStore.herenId,
+    source: globalStore.browser.source,
+  };
+
+  getH5OpenidParam(requestArg);
+  await api.quickLinkHealthCardWithLoad(requestArg);
+  gStores.messageStore.showMessage('关联成功', 1500, {
+    closeCallBack() {
+      //刷新就诊人列表
+      new PatientUtils().getPatCardList();
+      if (cb) {
+        cb.call(this);
+      } else {
+        uni.reLaunch({
+          url: '/pages/home/home',
+        });
+      }
+    },
+  });
 };

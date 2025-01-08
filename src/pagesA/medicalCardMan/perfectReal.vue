@@ -194,6 +194,7 @@
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
+    
 
     /**
      * 用户信息, 自动带入, patientPhone 字短将会脱敏展示
@@ -209,6 +210,10 @@
     _isOutLogin?: '1';
     _pageInfo?: '1' | '2';
     _directUrl?: string;
+
+    // 健康卡逻辑
+    _healthtype?:'addPat',
+    _healthAuthCode?:string
   }
 
   const routeStore = useRouterStore();
