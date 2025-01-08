@@ -33,8 +33,8 @@
           class="pt32 relative"
         >
           <GuideContentList
+            :config="config"
             :list="item.itemList"
-            :mzqhBtns="mzqhBtns"
             @collapse-change="handCollapseChange(i)"
             @btn-click="($event) => $emit('btn-click', $event)"
             @go-report="($event) => $emit('go-report', $event)"
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { TButtonConfig } from '@/types';
+  import { ApiParamsConfig, TButtonConfig } from '@/types';
   import GuideContentList from './GuideContentList.vue';
   import { ref } from 'vue';
   import dayjs from 'dayjs';
@@ -58,7 +58,7 @@
 
   const props = defineProps<{
     list: any[];
-    mzqhBtns: TButtonConfig[];
+    config: ApiParamsConfig['GuideConfig'];
   }>();
   const emits = defineEmits([
     'btn-click',
