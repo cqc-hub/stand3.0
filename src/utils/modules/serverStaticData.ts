@@ -245,7 +245,6 @@ export const useTBanner = async (
       url,
     });
   } else {
-    delete extraData.token;
     console.log('跳转第三方小程序appId:',appId,';path:',joinQuery(path, extraData),';extraData',extraData)
     uni.navigateToMiniProgram({
       ...(config.deepProps || {}),
@@ -255,7 +254,6 @@ export const useTBanner = async (
     });
   }
 };
-
 export class ServerStaticData {
   /**
    * 医院列表
