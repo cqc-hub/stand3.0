@@ -1,7 +1,9 @@
 import { Ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
-import { GStores, ISystemConfig, wait } from '@/utils';
+import { GStores, ISystemConfig, ServerStaticData, wait } from '@/utils';
 import api from '@/service/api';
+import { joinQueryForUrl, setLocalStorage } from '@/common';
+import { getQxMedicalNation } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
 export interface IPageProps {
   orderId: string;
@@ -297,14 +299,14 @@ export const waitOrderStatusMap = {
 
   '8': orderStatusMap['70'],
   '9': orderStatusMap['75'],
-  '10':{
+  '10': {
     headerClass: 'header-dark',
     color: '#fff',
     headerBgIcon: '&#xe6d0;',
     headerIcon: '&#xe6c7;',
     title: '已结束',
     cardColor: 'var(--hr-neutral-color-7)',
-  }
+  },
 } as const;
 
 export type OrderStatus = keyof typeof orderStatusMap;
@@ -488,6 +490,119 @@ export class RegDetailUtil {
     }
   }
 
+  async refoundOrder(
+    opt: {
+      returnUrl: string;
+    } = {} as any
+  ) {
+    const { returnUrl } = opt;
+    const { isOrderPay, wxOrderSubscribeMessage } = this.orderConfig.value;
+    let errMsg = '';
+
+    // if (!Object.keys(this.orderRegInfo).length) {
+    //   await this.getDataDetail();
+    // }
+
+    // #ifdef MP-WEIXIN
+    if (wxOrderSubscribeMessage?.length) {
+      // @ts-expect-error
+      await apiAsync(uni.requestSubscribeMessage, {
+        tmplIds: wxOrderSubscribeMessage,
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
+    // #endif
+
+    if (isOrderPay !== '1') {
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        this.gStores.messageStore.showMessage('', 0, {
+          useDialog: true,
+          dialogOpt: {
+            isShowCancel: true,
+            title: '确认取消该订单?',
+          },
+          closeCallBack,
+        });
+      });
+
+      if (!confirm) {
+        errMsg = '用户点击取消';
+        throw new Error(errMsg);
+      }
+      return await this.cancelReg();
+    } else {
+      const { refundNeedAuth, source } = this.orderRegInfo;
+      const { orderId } = this.prop.value;
+      const args = {
+        orderId,
+        source: this.gStores.globalStore.browser.source,
+        payAuthNo: '',
+      };
+
+      if (refundNeedAuth === '0') {
+        let isAlipay = false;
+        let isWx = false;
+
+        // #ifdef MP-ALIPAY
+        isAlipay = true;
+        // #endif
+
+        // #ifdef MP-WEIXIN
+        isWx = true;
+        // #endif
+
+        if (isAlipay && source === 19) {
+          errMsg = '本次挂号属于微信医保挂号, 暂不支持支付宝端退费';
+          this.gStores.messageStore.showMessage(errMsg, 3000);
+        }
+
+        if (isWx && source === 21) {
+          errMsg = '本次挂号属于支付宝医保挂号, 暂不支持微信端退费';
+          this.gStores.messageStore.showMessage(errMsg, 3000);
+        }
+
+        if (errMsg) {
+          throw new Error(errMsg);
+        }
+
+        setLocalStorage({
+          'get-wx-medical-auth-code-order': '1',
+        });
+
+        const authorize = await getQxMedicalNation({
+          returnUrl: joinQueryForUrl(
+            '/pagesA/MyRegistration/RegDetail',
+            this.prop.value
+          ),
+        });
+
+        args.payAuthNo = authorize.payAuthNo;
+      }
+      uni.showLoading({});
+      const { title, content } = await this.gStores.getSysAppMore('1100');
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        this.gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: true,
+          },
+          closeCallBack,
+        });
+      });
+
+      if (!confirm) {
+        errMsg = '用户点击取消';
+        throw new Error(errMsg);
+      }
+
+      await api.refundOrder(args);
+    }
+
+    throw new Error('233');
+  }
+
   static getInstance = (function () {
     let inst: RegDetailUtil;
 
@@ -510,3 +625,86 @@ export class RegDetailUtil {
     };
   })();
 }
+
+// const refoundOrder = async () => {
+//   const { wxOrderSubscribeMessage } = orderConfig.value;
+
+//   // #ifdef MP-WEIXIN
+//   if (wxOrderSubscribeMessage?.length) {
+//     // @ts-expect-error
+//     await apiAsync(uni.requestSubscribeMessage, {
+//       tmplIds: wxOrderSubscribeMessage,
+//     }).catch((e) => {
+//       console.error(e);
+//     });
+//   }
+//   // #endif
+
+//   if (isWaitReg.value) {
+//     return refoundWaitOrder();
+//   }
+
+//   if (orderConfig.value.isOrderPay !== '1') {
+//     cancelOrder();
+//   } else {
+//     const { refundNeedAuth, source } = orderRegInfo.value;
+//     const args = {
+//       orderId: pageProps.value.orderId,
+//       source: gStores.globalStore.browser.source,
+//       payAuthNo: '',
+//     };
+//     if (refundNeedAuth === '0') {
+//       let isAlipay = false;
+//       let isWx = false;
+
+//       // #ifdef MP-ALIPAY
+//       isAlipay = true;
+//       // #endif
+
+//       // #ifdef MP-WEIXIN
+//       isWx = true;
+//       // #endif
+
+//       if (isAlipay && source === 19) {
+//         gStores.messageStore.showMessage(
+//           '本次挂号属于微信医保挂号, 暂不支持支付宝端退费',
+//           3000
+//         );
+//         return;
+//       }
+
+//       if (isWx && source === 21) {
+//         gStores.messageStore.showMessage(
+//           '本次挂号属于支付宝医保挂号, 暂不支持微信端退费',
+//           3000
+//         );
+//         return;
+//       }
+
+//       setLocalStorage({
+//         'get-wx-medical-auth-code-order': '1',
+//       });
+
+//       const authorize = await getQxMedicalNation({
+//         returnUrl: joinQueryForUrl(
+//           '/pagesA/MyRegistration/RegDetail',
+//           pageProps.value
+//         ),
+//       });
+
+//       args.payAuthNo = authorize.payAuthNo;
+//     }
+
+//     isCancelOrderDialogShow.value = true;
+//     // dialogContent.value = '确认退号?';
+//     dialogContent.value = '';
+
+//     await new Promise((confirm) => {
+//       cancelOrderDialogConfirm = confirm;
+//     });
+//     isCancelOrderDialogShow.value = false;
+
+//     await api.refundOrder(args);
+//     init();
+//   }
+// };

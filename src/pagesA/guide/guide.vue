@@ -81,7 +81,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
 
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     debounce,
     generateUuid,
@@ -91,13 +91,24 @@
     ServerStaticData,
     TButtonConfig,
     useTBanner,
+    wait,
   } from '@/utils';
 
-  import api from '@/service/api';
   import { titleMap, TVisitInfo, TVisitRecord } from './guide';
-  import { joinQueryForUrl } from '@/common';
-  import dayjs from 'dayjs';
+  import {
+    deQueryForUrl,
+    getLocalStorage,
+    joinQueryForUrl,
+    setLocalStorage,
+  } from '@/common';
   import { IRegistrationCardItem } from '../MyRegistration/utils/MyRegistration';
+  import {
+    getOrderStatusTitle,
+    RegDetailUtil,
+  } from '../MyRegistration/utils/regDetail';
+
+  import api from '@/service/api';
+  import dayjs from 'dayjs';
 
   import GuidePatChoose from './components/GuidePatChoose.vue';
   import GuideVisitList from './components/GuideVisitList.vue';
@@ -105,8 +116,17 @@
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GuideOrderList from './components/GuideOrderList.vue';
   import GuideHisList from './components/GuideHisList.vue';
-  import { getOrderStatusTitle } from '../MyRegistration/utils/regDetail';
 
+  const pageProps = ref(
+    {} as {
+      tabKey: '0' | '1' | '2';
+
+      // 未来就诊用 授权返回
+      orderId?: string;
+      // refoundOrder 取消预约
+      type?: 'refoundOrder';
+    }
+  );
   const gStores = new GStores();
   const tabCurrent = ref(0);
   const tabField = [
@@ -718,15 +738,36 @@
     }
   };
   const orderRefound = async (item: IRegistrationCardItem) => {
-    console.log(item, '233')
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-        // ...item,
+    const regDetailUtil = RegDetailUtil.getInstance(
+      {
+        prop: ref({
+          orderId: item.orderId,
+          hosOrderId: item.hosOrderId,
+        } as any),
+        orderConfig,
+      },
+      true
+    );
+
+    await regDetailUtil.getDataDetail();
+    await regDetailUtil.refoundOrder({
+      returnUrl: joinQueryForUrl('pagesA/guide/guide', {
+        ...pageProps.value,
         orderId: item.orderId,
-        hosOrderId: item.hosOrderId,
-        preWz: item.orderStatus === '10' && '1',
+        type: 'refoundOrder',
       }),
     });
+
+    patChange();
+
+    // uni.navigateTo({
+    //   url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+    //     // ...item,
+    //     orderId: item.orderId,
+    //     hosOrderId: item.hosOrderId,
+    //     preWz: item.orderStatus === '10' && '1',
+    //   }),
+    // });
   };
 
   const patChange = async ({ item } = {} as any) => {
@@ -735,15 +776,15 @@
     }
 
     if (tabCurrentKey.value === '0') {
-      getToday();
+      await getToday();
     }
 
     if (tabCurrentKey.value === '1') {
-      getOrderList();
+      await getOrderList();
     }
 
     if (tabCurrentKey.value === '2') {
-      getHistory();
+      await getHistory();
     }
   };
 
@@ -816,9 +857,43 @@
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
   };
 
-  onLoad(async () => {
+  const init = async () => {
     await getConfig();
     patChange();
+  };
+
+  const checkCb = async () => {
+    if (getLocalStorage('reg-detail-init') === '1') {
+      const { type, orderId } = pageProps.value;
+      setLocalStorage({
+        'reg-detail-init': '',
+      });
+
+      await patChange();
+
+      if (type === 'refoundOrder' && orderId && orderList.value.length) {
+        const orderItem = orderList.value.find((o) => o.orderId === orderId);
+        if (orderItem) {
+          orderRefound(orderItem);
+        }
+      }
+    }
+  };
+
+  let rCount = 0;
+  onShow(async () => {
+    if (rCount) {
+      checkCb();
+    }
+    // dealContinueMedicalNationAuth();
+  });
+
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    await init();
+    await checkCb();
+    rCount++;
     // visitItemClick({} as any);
   });
 </script>
