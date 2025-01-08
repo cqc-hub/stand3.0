@@ -198,7 +198,7 @@ const queryApi = {
     }),
 
   getIntelligenceVisit: <T = any>(data, hideLoading = false) =>
-    service.post<T>('/phs-query/getIntelligenceVisit', parm(data), {
+    service.post<T>('/phs-query/medical/getIntelligenceVisit', parm(data), {
       hideLoading,
     }),
 

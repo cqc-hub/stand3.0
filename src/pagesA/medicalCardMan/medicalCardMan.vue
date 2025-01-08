@@ -372,11 +372,7 @@
     isWx = false;
 
     // #endif
-    if (!isWx) {
-      gStore.messageStore.showMessage('暂时只支持微信端人脸检测', 3000);
-      throw new Error('暂时只支持微信端人脸检测');
-    }
-
+    
     const { patientName, patientId, idCardEncry } = pat;
     const { source } = gStore.globalStore.browser;
 

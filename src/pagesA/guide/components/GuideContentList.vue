@@ -137,6 +137,32 @@
                       @go-address-map="handlerAddressMap"
                     />
 
+                    <view class="flex flex-wrap gap-4">
+                      <template v-for="(btn, bi) in jyBtns" :key="bi">
+                        <view
+                          v-if="
+                            isRenBtn({
+                              btn,
+                              lab,
+                              item,
+                            })
+                          "
+                          @click="
+                            btnClick({
+                              btn,
+                              item: {
+                                ...item,
+                                ...lab,
+                              },
+                            })
+                          "
+                          class="flex-1 f28 btn btn-border color-111 btn-default btn-round mt24"
+                        >
+                          {{ btn.text }}
+                        </view>
+                      </template>
+                    </view>
+
                     <view
                       v-if="p !== item.labs.length - 1"
                       class="drug-placeholder mb24 mt24"
@@ -311,20 +337,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { watch, ref } from 'vue';
+  import { watch, ref, computed } from 'vue';
   import TagStatus from './TagStatus.vue';
   import globalGl from '@/config/global';
   import { TVisitInfo } from '../guide';
 
   import GuideContentListCol from './GuideContentListCol.vue';
   import GuideReportProgress from './GuideReportProgress.vue';
-  import { TButtonConfig } from '@/types';
-  import { useTBanner } from '@/utils';
+  import { ApiParamsConfig, TButtonConfig } from '@/types';
 
   const props = withDefaults(
     defineProps<{
       list: TVisitInfo[];
-      mzqhBtns: TButtonConfig[];
+      config: ApiParamsConfig['GuideConfig'];
     }>(),
     {
       list: () => [],
@@ -335,11 +360,55 @@
     return item.completionStatus === 0;
   };
 
+  const jyBtns = computed(() => {
+    return props.config.jyBtns || [];
+  });
+
+  // 门诊取号下面的按钮
+  const mzqhBtns = computed<TButtonConfig[]>(() => {
+    return [
+      {
+        type: 'h5',
+        isSelfH5: '1',
+        // path: 'pages/inquiries/inquiries3',
+        path: 'pagesC/inquiries/inquiriesRes1',
+        text: '预问诊',
+        extraData: {
+          // orderId: "24121324832100498"
+        },
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+          orderId: 'orderId',
+          patientId: 'patientId',
+          hosDeptId: 'hosDeptId',
+          hosOrderId: 'hosOrderId',
+        },
+      },
+      {
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号',
+      },
+      {
+        type: 'self',
+        path: 'pagesA/MyRegistration/MyRegistration',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '取消预约',
+      },
+    ];
+  });
+
   const drugCol = ref([
-    {
-      label: '执行科室',
-      key: 'billDeptName',
-    },
+    // {
+    //   label: '执行科室',
+    //   key: 'billDeptName',
+    // },
     {
       label: '取药地点',
       key: 'itemAddress',
@@ -486,6 +555,24 @@
       btn,
       item,
     });
+  };
+
+  const isRenBtn = ({ btn, lab, item }) => {
+    const { labStatus = [], completionStatus = [] } = btn;
+
+    if (labStatus.length) {
+      if (!labStatus.includes(lab.status)) {
+        return false;
+      }
+    }
+
+    if (completionStatus.length) {
+      if (!completionStatus.includes(item.completionStatus)) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const collapseRef = ref(<any>'');
