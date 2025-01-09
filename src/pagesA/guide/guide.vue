@@ -152,7 +152,7 @@
     }
   );
   const gStores = new GStores();
-  const tabCurrent = ref(1);
+  const tabCurrent = ref(0);
   const tabField = [
     {
       label: '今日就诊',
@@ -643,9 +643,73 @@
       result = result
         .filter((o) => o.disposeTime !== toDay)
         .map((t) => {
-          const { processResultList } = t;
-          t.itemList = [];
+          const {
+            processResultList,
+            deptId,
+            deptName,
+            disposeTime,
+            hosId,
+            hosName,
+            visitNo,
+          } = t;
+
+          const info = {
+            deptId,
+            deptName,
+            disposeTime,
+            hosId,
+            hosName,
+            visitNo,
+          };
+          t.itemList = [
+            {
+              ...info,
+              title: '门诊取号',
+              sort: 1,
+              completionStatus: (processResultList?.length && 1) || 0,
+            },
+            {
+              ...info,
+              title: '诊区签到',
+              sort: 2,
+              completionStatus: (processResultList?.length && 1) || 0,
+            },
+            {
+              ...info,
+              title: '门诊就诊',
+              sort: 3,
+              completionStatus: (processResultList?.length && 1) || 0,
+            },
+            {
+              ...info,
+              title: '缴费',
+              sort: 4,
+              // completionStatus: (processResultList?.length && 1) || 0,
+            },
+          ];
           t.uuid = generateUuid();
+          const typeMap = {
+            '-1': {
+              title: '其他项目',
+              key: 'others',
+              sort: 7,
+            },
+            1: {
+              title: '门诊取药',
+              key: 'drugs',
+              sort: 8,
+            },
+            2: {
+              title: '检验项目',
+              key: 'labs',
+              sort: 5,
+            },
+            3: {
+              title: '检查项目',
+              key: 'exams',
+              sort: 6,
+            },
+          };
 
           if (processResultList && processResultList.length) {
             processResultList.map((q) => {
@@ -664,24 +728,8 @@
               // }
 
               // q.title = '';
-              const typeMap = {
-                1: {
-                  title: '门诊取药',
-                  key: 'drugs',
-                },
-                2: {
-                  title: '检验项目',
-                  key: 'labs',
-                },
-                3: {
-                  title: '检查项目',
-                  key: 'exams',
-                },
-              };
-              const { title, key } = typeMap[orderClass] || {
-                title: '其他项目',
-                key: 'others',
-              };
+
+              const { title, key, sort } = typeMap[orderClass] || typeMap['-1'];
 
               let item = t.itemList.find((o) => o.title === title);
               if (!item) {
@@ -689,6 +737,7 @@
                   title,
                   [key]: [],
                   completionStatus: -1,
+                  sort,
                 };
                 t.itemList.push(item);
               }
@@ -708,6 +757,10 @@
                 labStatus: '-1',
               });
             });
+          }
+
+          if (t.itemList.length) {
+            t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
           }
 
           return t;
