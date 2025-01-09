@@ -30,12 +30,29 @@
 
       <view class="page-bg relative pl32 pr32">
         <view class="my-hide f24">占位</view>
-        <view class="empty-list" v-if="isShowEmpty">
-          <g-empty :current="1" />
+        <view v-if="isShowEmpty" class="pt70">
+          <g-empty
+            :current="1"
+            :text="
+              tabCurrentKey === '1'
+                ? '您还未挂号，可以点击按钮进行预约挂号或点击医疗服务返回首页'
+                : '暂未查到相关信息'
+            "
+            noTransformY
+          >
+            <template>
+              <view
+                v-if="tabCurrentKey === '1'"
+                @click="goOrder"
+                class="btn btn-border color-111 btn-primary text-white f28 pt12 pb12"
+              >
+                预约挂号
+              </view>
+            </template>
+          </g-empty>
         </view>
-
         <Guide-Content-List
-          v-if="visitList.length && tabCurrentKey === '0'"
+          v-if="visitInfoList.length && tabCurrentKey === '0'"
           :list="visitInfoList"
           :mzqhBtns="mzqhBtns"
           :config="pageConfig"
@@ -132,7 +149,7 @@
     }
   );
   const gStores = new GStores();
-  const tabCurrent = ref(0);
+  const tabCurrent = ref(1);
   const tabField = [
     {
       label: '今日就诊',
@@ -269,204 +286,204 @@
 
     visitItemSel.value = item;
     visitInfoList.value = [];
-    // isComplete.value = false;
-    // const { result } = await api
-    //   .getIntelligenceVisit({
-    //     patientId,
-    //     visitNo,
-    //   })
-    //   .finally(() => {
-    //     isComplete.value = true;
-    //   });
+    isComplete.value = false;
+    const { result } = await api
+      .getIntelligenceVisit({
+        patientId,
+        visitNo,
+      })
+      .finally(() => {
+        isComplete.value = true;
+      });
 
-    const result = {
-      result: {
-        node5Info: {
-          exams: [
-            {
-              itemName: 'DR检查[头颅侧位DR(腹部, 头部)]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103001',
-              itemAddress: '科室位置科室位置 放射科',
-              orderId: '2025010800000121',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              appointIndicator: '0',
-              isEmptyStomach: '0',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: 'DR检查[左侧乳突 许、梅氏位(头部)]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103001',
-              itemAddress: '科室位置科室位置 放射科',
-              orderId: '2025010800000120',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              appointIndicator: '0',
-              isEmptyStomach: '0',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '常规彩超项目[阑尾彩超(腹部彩超)]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103002',
-              itemAddress: '超声医学科',
-              orderId: '2025010800000119',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              appointIndicator: '0',
-              isEmptyStomach: '0',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '常规彩超项目[颅腔彩超(头颈部彩超)]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103002',
-              itemAddress: '超声医学科',
-              orderId: '2025010800000118',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              appointIndicator: '0',
-              isEmptyStomach: '0',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-          ],
-          completionStatus: 0,
-        },
-        node4Info: { completionStatus: 1 },
-        node1Info: {
-          date: '2025-01-08',
-          deptName: '皮肤科',
-          areaId: '3B',
-          appointmentTime: '2025-01-08  上午10:00-10:15  20号',
-          areaName: '356皮肤科（3楼B区）',
-          hosId: '13001',
-          completionStatus: 1,
-          hosName: 'XX医院',
-          visitNo: '20250108000002',
-        },
-        node2Info: {
-          date: '2025-01-08',
-          deptName: '皮肤科',
-          areaId: '3B',
-          appointmentTime: '2025-01-08  上午10:00-10:15  20号',
-          areaName: '356皮肤科（3楼B区）',
-          hosId: '13001',
-          completionStatus: 1,
-          hosName: 'XX医院',
-          visitNo: '20250108000002',
-        },
-        node3Info: {},
-        node6Info: {
-          labs: [
-            {
-              itemName: '乙肝两对半 [血液]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000124',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '3',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '呼吸道病毒4项 [咽拭子]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000123',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '4',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '血常规 [血液]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000122',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '4',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '新冠抗体检测（收费） [血液]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000128',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '血清胃功能检测 [血液]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000125',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '鼻咽癌筛查2项 [血液]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000126',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '普通细菌培养及鉴定 [未定]',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103008',
-              itemAddress: '检验科科室位置 检验科',
-              orderId: '2025010800000127',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              status: '2',
-              itemTime: '2025-01-08',
-            },
-          ],
-          completionStatus: 0,
-        },
-        node8Info: {
-          drugs: [
-            {
-              itemName: '西药',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103022',
-              itemAddress: '门诊一楼 门诊西药房',
-              disposeStatus: '1',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              isDeptStorage: '0',
-              itemTime: '2025-01-08',
-            },
-            {
-              itemName: '西药',
-              billDeptName: '皮肤科',
-              performDeptCode: 'A0103023',
-              itemAddress: '门诊二楼 中药房',
-              disposeStatus: '1',
-              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-              isDeptStorage: '0',
-              itemTime: '2025-01-08',
-            },
-          ],
-          completionStatus: 0,
-        },
-        node7Info: { completionStatus: 1, others: [] },
-      },
-      timeTaken: 414,
-      code: 0,
-      functionVersion:
-        '[{"functionType":"1","version":"V0.0.57"},{"functionType":"2","version":"V0.0.851"}]',
-      message: '成功',
-      respCode: 999002,
-    }.result;
+    // const result = {
+    //   result: {
+    //     node5Info: {
+    //       exams: [
+    //         {
+    //           itemName: 'DR检查[头颅侧位DR(腹部, 头部)]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103001',
+    //           itemAddress: '科室位置科室位置 放射科',
+    //           orderId: '2025010800000121',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           appointIndicator: '0',
+    //           isEmptyStomach: '0',
+    //           status: '1',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: 'DR检查[左侧乳突 许、梅氏位(头部)]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103001',
+    //           itemAddress: '科室位置科室位置 放射科',
+    //           orderId: '2025010800000120',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           appointIndicator: '0',
+    //           isEmptyStomach: '0',
+    //           status: '2',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '常规彩超项目[阑尾彩超(腹部彩超)]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103002',
+    //           itemAddress: '超声医学科',
+    //           orderId: '2025010800000119',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           appointIndicator: '0',
+    //           isEmptyStomach: '0',
+    //           status: '3',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '常规彩超项目[颅腔彩超(头颈部彩超)]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103002',
+    //           itemAddress: '超声医学科',
+    //           orderId: '2025010800000118',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           appointIndicator: '0',
+    //           isEmptyStomach: '0',
+    //           status: '4',
+    //           itemTime: '2025-01-08',
+    //         },
+    //       ],
+    //       completionStatus: 0,
+    //     },
+    //     node4Info: { completionStatus: 1 },
+    //     node1Info: {
+    //       date: '2025-01-08',
+    //       deptName: '皮肤科',
+    //       areaId: '3B',
+    //       appointmentTime: '2025-01-08  上午10:00-10:15  20号',
+    //       areaName: '356皮肤科（3楼B区）',
+    //       hosId: '13001',
+    //       completionStatus: 0,
+    //       hosName: 'XX医院',
+    //       visitNo: '20250108000002',
+    //     },
+    //     node2Info: {
+    //       date: '2025-01-08',
+    //       deptName: '皮肤科',
+    //       areaId: '3B',
+    //       appointmentTime: '2025-01-08  上午10:00-10:15  20号',
+    //       areaName: '356皮肤科（3楼B区）',
+    //       hosId: '13001',
+    //       completionStatus: 1,
+    //       hosName: 'XX医院',
+    //       visitNo: '20250108000002',
+    //     },
+    //     node3Info: {},
+    //     node6Info: {
+    //       labs: [
+    //         {
+    //           itemName: '乙肝两对半 [血液]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000124',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '3',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '呼吸道病毒4项 [咽拭子]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000123',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '4',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '血常规 [血液]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000122',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '4',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '新冠抗体检测（收费） [血液]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000128',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '2',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '血清胃功能检测 [血液]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000125',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '2',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '鼻咽癌筛查2项 [血液]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000126',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '2',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '普通细菌培养及鉴定 [未定]',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103008',
+    //           itemAddress: '检验科科室位置 检验科',
+    //           orderId: '2025010800000127',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           status: '2',
+    //           itemTime: '2025-01-08',
+    //         },
+    //       ],
+    //       completionStatus: 0,
+    //     },
+    //     node8Info: {
+    //       drugs: [
+    //         {
+    //           itemName: '西药',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103022',
+    //           itemAddress: '门诊一楼 门诊西药房',
+    //           disposeStatus: '1',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           isDeptStorage: '0',
+    //           itemTime: '2025-01-08',
+    //         },
+    //         {
+    //           itemName: '西药',
+    //           billDeptName: '皮肤科',
+    //           performDeptCode: 'A0103023',
+    //           itemAddress: '门诊二楼 中药房',
+    //           disposeStatus: '1',
+    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+    //           isDeptStorage: '0',
+    //           itemTime: '2025-01-08',
+    //         },
+    //       ],
+    //       completionStatus: 0,
+    //     },
+    //     node7Info: { completionStatus: 1, others: [] },
+    //   },
+    //   timeTaken: 414,
+    //   code: 0,
+    //   functionVersion:
+    //     '[{"functionType":"1","version":"V0.0.57"},{"functionType":"2","version":"V0.0.851"}]',
+    //   message: '成功',
+    //   respCode: 999002,
+    // }.result;
 
     const {
       node1Info,
@@ -481,6 +498,7 @@
     } = result;
 
     let isBreak = false;
+    isComplete.value = true;
     // 8个node必定存在
     const rList: any[] = [
       node1Info,
@@ -512,9 +530,23 @@
         }
         return true;
       })
+      .filter((o: any) => {
+        const { title, others = [] } = o;
+
+        if (title === '其他项目' && !others.length) {
+          return false;
+        }
+
+        if (title === '检验项目') {
+          // return false;
+        }
+
+        return true;
+      })
       .reverse();
 
     visitInfoList.value = rList;
+    console.log(rList);
     // visitInfoList.value = visitInfoList.value.filter((o) => {
     //   const { title, others = [] } = o;
 
@@ -767,6 +799,14 @@
     //     preWz: item.orderStatus === '10' && '1',
     //   }),
     // });
+  };
+
+  const goOrder = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
+        _url: '/pagesA/MyRegistration/selDepartment?clinicalType=1',
+      }),
+    });
   };
 
   const patChange = async ({ item } = {} as any) => {

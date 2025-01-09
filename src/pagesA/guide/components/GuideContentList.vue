@@ -171,18 +171,6 @@
                 </view>
 
                 <!-- 'btn-disabled': item.completionStatus === 0, -->
-                <view
-                  :class="{}"
-                  class="btn btn-border btn-primary btn-round f28 mt24"
-                  @click="
-                    goReport({
-                      item,
-                      tabIndex: '0',
-                    })
-                  "
-                >
-                  查看报告
-                </view>
               </view>
 
               <view v-else-if="item.title === '检查项目'">
@@ -230,6 +218,32 @@
                       @go-address-map="handlerAddressMap"
                     />
 
+                    <view class="flex flex-wrap gap-4">
+                      <template v-for="(btn, bi) in jcBtns" :key="bi">
+                        <view
+                          v-if="
+                            isRenBtn({
+                              btn,
+                              lab,
+                              item,
+                            })
+                          "
+                          @click="
+                            btnClick({
+                              btn,
+                              item: {
+                                ...item,
+                                ...lab,
+                              },
+                            })
+                          "
+                          class="flex-1 f28 btn btn-border color-111 btn-default btn-round mt24"
+                        >
+                          {{ btn.text }}
+                        </view>
+                      </template>
+                    </view>
+
                     <view
                       v-if="p !== item.exams.length - 1"
                       class="drug-placeholder mb24 mt24"
@@ -237,18 +251,6 @@
                   </view>
 
                   <!-- 'btn-disabled': item.completionStatus === 0, -->
-                  <view
-                    :class="{}"
-                    class="btn btn-border btn-primary btn-round f28 mt24"
-                    @click="
-                      goReport({
-                        item,
-                        tabIndex: '1',
-                      })
-                    "
-                  >
-                    查看报告
-                  </view>
                 </view>
               </view>
 
@@ -306,20 +308,28 @@
                   @click-row="(v) => mzqhClickRow(item, v)"
                 />
 
-                <view class="flex gap-4">
-                  <view
-                    v-for="(btn, bi) in mzqhBtns"
-                    :key="bi"
-                    class="flex-1 btn btn-border color-111 btn-default btn-round f28 mt24"
-                    @click="
-                      btnClick({
-                        btn,
-                        item,
-                      })
-                    "
-                  >
-                    {{ btn.text }}
-                  </view>
+                <view class="flex flex-wrap gap-4">
+                  <template v-for="(btn, bi) in mzqhBtns" :key="bi">
+                    <view
+                      v-if="
+                        isRenBtn({
+                          btn,
+                          item,
+                        })
+                      "
+                      @click="
+                        btnClick({
+                          btn,
+                          item: {
+                            ...item,
+                          },
+                        })
+                      "
+                      class="flex-1 f28 btn btn-border color-111 btn-default btn-round mt24"
+                    >
+                      {{ btn.text }}
+                    </view>
+                  </template>
                 </view>
               </view>
 
@@ -344,7 +354,7 @@
 
   import GuideContentListCol from './GuideContentListCol.vue';
   import GuideReportProgress from './GuideReportProgress.vue';
-  import { ApiParamsConfig, TButtonConfig } from '@/types';
+  import { ApiParamsConfig, TButtonConfig, TGuideButtonConfig } from '@/types';
 
   const props = withDefaults(
     defineProps<{
@@ -364,44 +374,13 @@
     return props.config.jyBtns || [];
   });
 
+  const jcBtns = computed(() => {
+    return props.config.jcBtns || [];
+  });
+
   // 门诊取号下面的按钮
-  const mzqhBtns = computed<TButtonConfig[]>(() => {
-    return [
-      {
-        type: 'h5',
-        isSelfH5: '1',
-        // path: 'pages/inquiries/inquiries3',
-        path: 'pagesC/inquiries/inquiriesRes1',
-        text: '预问诊',
-        extraData: {
-          // orderId: "24121324832100498"
-        },
-        addition: {
-          token: 'token',
-          herenId: 'herenId',
-          orderId: 'orderId',
-          patientId: 'patientId',
-          hosDeptId: 'hosDeptId',
-          hosOrderId: 'hosOrderId',
-        },
-      },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
-      },
-      {
-        type: 'self',
-        path: 'pagesA/MyRegistration/MyRegistration',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '取消预约',
-      },
-    ];
+  const mzqhBtns = computed(() => {
+    return props.config.mzqhBtns || [];
   });
 
   const drugCol = ref([
@@ -534,6 +513,7 @@
       emits('open-hos-location', item);
     }
   };
+
   const goReport = ({ item, tabIndex }) => {
     emits('go-report', { item, tabIndex });
   };
@@ -557,10 +537,11 @@
     });
   };
 
-  const isRenBtn = ({ btn, lab, item }) => {
+  const isRenBtn = (opt: { lab?: any; btn: TGuideButtonConfig; item: any }) => {
+    const { btn, lab = {}, item } = opt;
     const { labStatus = [], completionStatus = [] } = btn;
 
-    if (labStatus.length) {
+    if (labStatus.length && lab) {
       if (!labStatus.includes(lab.status)) {
         return false;
       }

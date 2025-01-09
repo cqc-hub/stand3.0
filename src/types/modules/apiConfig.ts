@@ -5,6 +5,7 @@ export type ApiParamsConfig = {
   GuideConfig: {
     jyBtns: TGuideButtonConfig[];
     jcBtns: TGuideButtonConfig[];
+    mzqhBtns: TGuideButtonConfig[];
   };
 
   // 健康档案
@@ -65,7 +66,7 @@ export type ApiParamsConfig = {
   };
 };
 
-type TGuideButtonConfig = TButtonConfig & {
+export type TGuideButtonConfig = TButtonConfig & {
   labStatus?: string[];
   completionStatus?: number[];
 };
