@@ -583,6 +583,7 @@ type TBannerConfigSelf = {
 type TBannerConfigOtherProgram = {
   type: 'otherProgram';
   appId: string;
+  envVersion?: 'release' | 'develop' | 'trial';
   deepProps?: BaseObject;
 } & TBannerConfigBase;
 
