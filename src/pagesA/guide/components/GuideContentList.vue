@@ -331,7 +331,7 @@
                 <GuideContentListCol
                   :cols="mzqhCol"
                   :lab="item"
-                  @click-row="(v) => mzqhClickRow(item, v)"
+                  @click-row="(v) => colRowClick(item, v)"
                 />
 
                 <view class="flex flex-wrap gap-4">
@@ -360,7 +360,11 @@
               </view>
 
               <view v-else-if="item.title === '诊区签到'">
-                <GuideContentListCol :cols="mzqhCol" :lab="item" />
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => colRowClick(item, v)"
+                />
               </view>
 
               <view v-else>暂未实现</view>
@@ -543,7 +547,7 @@
     'collapse-change',
   ]);
 
-  const mzqhClickRow = (item, { col }) => {
+  const colRowClick = (item, { col }) => {
     if (col.key === 'hosName' && item.hosId) {
       emits('open-hos-location', item);
     }

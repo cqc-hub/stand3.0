@@ -70,6 +70,9 @@
           :config="orderConfig"
           @ywz-click="ywzClick"
           @refound-order="orderRefound"
+          @open-hos-location="openHosLocation"
+          @go-dept="goDept"
+          @go-doc="goDocDetail"
         />
 
         <GuideHisList
@@ -149,7 +152,7 @@
     }
   );
   const gStores = new GStores();
-  const tabCurrent = ref(2);
+  const tabCurrent = ref(1);
   const tabField = [
     {
       label: '今日就诊',
@@ -897,6 +900,28 @@
     } else {
       gStores.messageStore.showMessage('院区查找失败', 1500);
     }
+  };
+
+  const goDept = (item) => {
+    const { hosId, hosDeptId, deptName } = item;
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/order', {
+        hosId,
+        hosDeptId,
+        deptName,
+      }),
+    });
+  };
+
+  const goDocDetail = (item) => {
+    const { hosId, hosDocId } = item;
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+        hosId,
+        hosDocId,
+      }),
+    });
   };
 
   const getConfig = async () => {

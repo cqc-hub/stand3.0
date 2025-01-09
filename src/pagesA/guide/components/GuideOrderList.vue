@@ -15,7 +15,11 @@
       </view>
 
       <view class="p32 pt24">
-        <view v-if="item.hosName" class="row items-center f28 mb10">
+        <view
+          v-if="item.hosName"
+          @click="emits('open-hos-location', item)"
+          class="row items-center f28 mb10"
+        >
           <view class="label color-888">院区</view>
           <view class="body flex items-center">
             <text class="mr16">{{ item.hosName }}</text>
@@ -26,6 +30,7 @@
 
         <view
           v-if="item.schQukCategor || item.categorName"
+          @click="emits('go-dept', item)"
           class="row f28 mb10"
         >
           <view class="label color-888">科室号别</view>
@@ -43,7 +48,7 @@
           </view>
         </view>
 
-        <view class="row f28 mb10">
+        <view @click="emits('go-doc', item)" class="row f28 mb10">
           <view class="label color-888">医生</view>
           <view class="body color-blue">
             {{ item.docName }}
@@ -117,6 +122,9 @@
     'go-detail',
     'go-hos-navigate',
     'refound-order',
+    'open-hos-location',
+    'go-dept',
+    'go-doc',
   ]);
 
   const isShowYWZBtn = (item: IRegistrationCardItem) => {
