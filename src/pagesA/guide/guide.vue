@@ -1,5 +1,7 @@
 <template>
   <view class="g-page page-bg">
+    <g-flag isShowFg typeFg="1221" />
+
     <view class="bg-white">
       <view class="fix-top">
         <Guide-Pat-Choose @choose-pat="handlerChoosePatAction" />
@@ -52,7 +54,7 @@
           </g-empty>
         </view>
         <Guide-Content-List
-          v-if="visitInfoList.length && tabCurrentKey === '0'"
+          v-if="visitList.length && visitInfoList.length && tabCurrentKey === '0'"
           :list="visitInfoList"
           :mzqhBtns="mzqhBtns"
           :config="pageConfig"
