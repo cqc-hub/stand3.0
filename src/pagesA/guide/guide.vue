@@ -149,7 +149,7 @@
     }
   );
   const gStores = new GStores();
-  const tabCurrent = ref(1);
+  const tabCurrent = ref(2);
   const tabField = [
     {
       label: '今日就诊',
@@ -632,6 +632,11 @@
       });
 
     if (result && result.length) {
+      const _disposeStatusLabelMap = {
+        1: '未执行',
+        2: '部分执行',
+        3: '已执行',
+      };
       result = result
         .filter((o) => o.disposeTime !== toDay)
         .map((t) => {
@@ -680,7 +685,7 @@
                 item = {
                   title,
                   [key]: [],
-                  completionStatus: 1,
+                  completionStatus: -1,
                 };
                 t.itemList.push(item);
               }
@@ -696,6 +701,8 @@
               item[key].push({
                 ...q,
                 itemAddress: q.address,
+                _disposeStatusLabel: _disposeStatusLabelMap[disposeStatus],
+                labStatus: '-1',
               });
             });
           }

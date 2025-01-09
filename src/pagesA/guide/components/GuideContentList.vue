@@ -88,6 +88,32 @@
                       @go-address-map="handlerAddressMap"
                     />
 
+                    <view class="flex flex-wrap gap-4">
+                      <template v-for="(btn, bi) in takeDrugBtns" :key="bi">
+                        <view
+                          v-if="
+                            isRenBtn({
+                              btn,
+                              lab: drug,
+                              item,
+                            })
+                          "
+                          @click="
+                            btnClick({
+                              btn,
+                              item: {
+                                ...item,
+                                ...drug,
+                              },
+                            })
+                          "
+                          class="flex-1 f28 btn btn-border color-111 btn-default btn-round mt24"
+                        >
+                          {{ btn.text }}
+                        </view>
+                      </template>
+                    </view>
+
                     <view
                       v-if="p !== item.drugs.length - 1"
                       class="drug-placeholder mb24 mt24"
@@ -383,11 +409,20 @@
     return props.config.mzqhBtns || [];
   });
 
+  // 门诊取药下面按钮
+  const takeDrugBtns = computed(() => {
+    return props.config.takeDrugBtns || [];
+  });
+
   const drugCol = ref([
     // {
     //   label: '执行科室',
     //   key: 'billDeptName',
     // },
+    {
+      label: '执行状态',
+      key: '_disposeStatusLabel',
+    },
     {
       label: '取药地点',
       key: 'itemAddress',
@@ -427,8 +462,8 @@
       key: 'curNo',
     },
     {
-      label: '执行科室',
-      key: 'billDeptName',
+      label: '执行状态',
+      key: '_disposeStatusLabel',
     },
     {
       label: '预约时间',
@@ -539,10 +574,17 @@
 
   const isRenBtn = (opt: { lab?: any; btn: TGuideButtonConfig; item: any }) => {
     const { btn, lab = {}, item } = opt;
-    const { labStatus = [], completionStatus = [] } = btn;
+    const { labStatus = [], completionStatus = [], disposeStatus = [] } = btn;
 
     if (labStatus.length && lab) {
       if (!labStatus.includes(lab.status)) {
+        return false;
+      }
+    }
+
+    //  历史才有 1 未执行 2部分执行 3已执行
+    if (disposeStatus.length && lab) {
+      if (!disposeStatus.includes(lab.disposeStatus)) {
         return false;
       }
     }

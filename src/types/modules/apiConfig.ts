@@ -3,9 +3,14 @@ import { TButtonConfig } from './serverStaticData';
 export type ApiParamsConfig = {
   //pagesA/guide/guide
   GuideConfig: {
+    // 检验下面按钮
     jyBtns: TGuideButtonConfig[];
+    // 检查下面按钮
     jcBtns: TGuideButtonConfig[];
+    // 门诊取号下面按钮
     mzqhBtns: TGuideButtonConfig[];
+    // 门诊取药下面按钮
+    takeDrugBtns: TGuideButtonConfig[];
   };
 
   // 健康档案
@@ -66,7 +71,12 @@ export type ApiParamsConfig = {
   };
 };
 
+// 陪诊页面使用
 export type TGuideButtonConfig = TButtonConfig & {
+  // 最小项状态
   labStatus?: string[];
+  // 历史才有 1 未执行 2部分执行 3已执行
+  disposeStatus?: string[];
+  // 子项状态 1 已完成  历史中是 -1
   completionStatus?: number[];
 };
