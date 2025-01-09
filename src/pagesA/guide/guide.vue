@@ -23,6 +23,7 @@
         <Guide-Visit-List
           :list="visitList"
           :selItem="visitItemSel"
+          :jyBtns="jyBtns"
           @item-click="visitItemClick"
         />
       </scroll-view>
@@ -37,6 +38,7 @@
           v-if="visitList.length && tabCurrentKey === '0'"
           :list="visitInfoList"
           :mzqhBtns="mzqhBtns"
+          :config="pageConfig"
           @btn-click="btnClick"
           @go-report="goReport"
           @go-address-map="handlerAddressMap"
@@ -56,7 +58,7 @@
         <GuideHisList
           v-if="hisList.length && tabCurrentKey === '2'"
           :list="hisList"
-          :mzqhBtns="mzqhBtns"
+          :config="pageConfig"
           @btn-click="btnClick"
           @go-report="goReport"
           @go-address-map="handlerAddressMap"
@@ -83,6 +85,8 @@
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
+    ApiParamsConfig,
+    cacheUtil,
     debounce,
     generateUuid,
     GStores,
@@ -145,6 +149,7 @@
   ];
   const tabCurrentKey = computed(() => tabField[tabCurrent.value]?.key || '');
   const orderConfig = ref({} as ISystemConfig['order']);
+  const pageConfig = ref({} as ApiParamsConfig['GuideConfig']);
 
   const isComplete = ref(false);
   let tabChange = (idx: number) => {
@@ -208,6 +213,53 @@
     ];
   });
 
+  const jyBtns = computed(() => {
+    return [
+      {
+        labStatus: ['3'],
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '预约查询及改约',
+      },
+      {
+        type: 'self',
+        labStatus: ['4'],
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号在线取号在线取号在线取号',
+      },
+      {
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号',
+      },
+      {
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号',
+      },
+      {
+        type: 'self',
+        path: 'pagesC/takeNumber/takeNumber',
+        addition: {
+          patientId: 'patientId',
+        },
+        text: '在线取号',
+      },
+    ];
+  });
+
   const visitList = ref(<TVisitRecord[]>[]);
   const visitItemSel = ref(<TVisitRecord>{});
   const visitInfoList = ref(<TVisitInfo[]>[]);
@@ -217,257 +269,204 @@
 
     visitItemSel.value = item;
     visitInfoList.value = [];
-    isComplete.value = false;
-    const { result } = await api
-      .getIntelligenceVisit({
-        patientId,
-        visitNo,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
+    // isComplete.value = false;
+    // const { result } = await api
+    //   .getIntelligenceVisit({
+    //     patientId,
+    //     visitNo,
+    //   })
+    //   .finally(() => {
+    //     isComplete.value = true;
+    //   });
 
-    // const result = {
-    //   node1Info: {
-    //     completionStatus: 1,
-    //     hosId: '13001',
-    //     hosName: '乐清市人民医院',
-    //     visitNo: '20241203004201',
-    //     date: '2024-12-03',
-    //     categorName: null,
-    //     deptName: '心血管内科',
-    //     appointmentTime: '2024-12-03  上午09:15-09:30  11号',
-    //     docName: null,
-    //     areaName: '3楼C区',
-    //     areaId: '3C',
-    //   },
-    //   node2Info: {
-    //     completionStatus: 1,
-    //     hosId: '13001',
-    //     hosName: '乐清市人民医院',
-    //     visitNo: '20241203004201',
-    //     date: '2024-12-03',
-    //     categorName: null,
-    //     deptName: '心血管内科',
-    //     appointmentTime: '2024-12-03  上午09:15-09:30  11号',
-    //     docName: null,
-    //     areaName: '3楼C区',
-    //     areaId: '3C',
-    //   },
-    //   node3Info: {
-    //     completionStatus: 1,
-    //     no: '08',
-    //     curNo: '02',
-    //     beforeNum: '06',
-    //     docName: 'docName',
-    //     site: 'site',
-    //   },
-    //   node4Info: {
-    //     completionStatus: 0,
-    //   },
-
-    //   node5Info: {
-    //     completionStatus: 1,
-    //     exams: [
-    //       {
-    //         isEmptyStomach: '0',
-    //         itemName: '常规心电图[常规心电图(心脏)]',
-    //         itemAddress: '心电图室',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: '0',
-    //         itemTime: '2024-12-03 14:09:00.0039',
-    //         remark: null,
-    //         orderId: '2024120300133878',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103006',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: '039',
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node6Info: {
-    //     completionStatus: 1,
-    //     labs: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '门诊肾功能 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150065',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '血常规 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150064',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '甲状腺功能测定 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150067',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '电解质组合 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150066',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '心肌酶谱 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150068',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node7Info: {
-    //     completionStatus: 1,
-    //     others: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '西药',
-    //         itemAddress: '门诊一楼 门诊西药房',
-    //         isDeptStorage: '0',
-    //         status: null,
-    //         disposeStatus: '2',
-    //         appointIndicator: null,
-    //         itemTime: '2024-12-03',
-    //         remark: null,
-    //         orderId: null,
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103022',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '心肌酶谱 [血液]',
-    //         itemAddress: '检验科',
-    //         isDeptStorage: null,
-    //         status: '3',
-    //         disposeStatus: null,
-    //         appointIndicator: null,
-    //         itemTime: 'nullnull',
-    //         remark: null,
-    //         orderId: '2024120300150068',
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103008',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    //   node8Info: {
-    //     completionStatus: 1,
-    //     drugs: [
-    //       {
-    //         isEmptyStomach: null,
-    //         itemName: '西药',
-    //         itemAddress: '门诊一楼 门诊西药房',
-    //         isDeptStorage: '0',
-    //         status: null,
-    //         disposeStatus: '2',
-    //         appointIndicator: null,
-    //         itemTime: '2024-12-03',
-    //         remark: null,
-    //         orderId: null,
-    //         billDeptName: '心血管内科',
-    //         billDocName: null,
-    //         performDeptCode: 'A0103022',
-    //         reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //         beforeNum: null,
-    //         curNo: null,
-    //         no: null,
-    //         visitNo: null,
-    //       },
-    //     ],
-    //   },
-    // };
+    const result = {
+      result: {
+        node5Info: {
+          exams: [
+            {
+              itemName: 'DR检查[头颅侧位DR(腹部, 头部)]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103001',
+              itemAddress: '科室位置科室位置 放射科',
+              orderId: '2025010800000121',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              appointIndicator: '0',
+              isEmptyStomach: '0',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: 'DR检查[左侧乳突 许、梅氏位(头部)]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103001',
+              itemAddress: '科室位置科室位置 放射科',
+              orderId: '2025010800000120',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              appointIndicator: '0',
+              isEmptyStomach: '0',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '常规彩超项目[阑尾彩超(腹部彩超)]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103002',
+              itemAddress: '超声医学科',
+              orderId: '2025010800000119',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              appointIndicator: '0',
+              isEmptyStomach: '0',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '常规彩超项目[颅腔彩超(头颈部彩超)]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103002',
+              itemAddress: '超声医学科',
+              orderId: '2025010800000118',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              appointIndicator: '0',
+              isEmptyStomach: '0',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+          ],
+          completionStatus: 0,
+        },
+        node4Info: { completionStatus: 1 },
+        node1Info: {
+          date: '2025-01-08',
+          deptName: '皮肤科',
+          areaId: '3B',
+          appointmentTime: '2025-01-08  上午10:00-10:15  20号',
+          areaName: '356皮肤科（3楼B区）',
+          hosId: '13001',
+          completionStatus: 1,
+          hosName: 'XX医院',
+          visitNo: '20250108000002',
+        },
+        node2Info: {
+          date: '2025-01-08',
+          deptName: '皮肤科',
+          areaId: '3B',
+          appointmentTime: '2025-01-08  上午10:00-10:15  20号',
+          areaName: '356皮肤科（3楼B区）',
+          hosId: '13001',
+          completionStatus: 1,
+          hosName: 'XX医院',
+          visitNo: '20250108000002',
+        },
+        node3Info: {},
+        node6Info: {
+          labs: [
+            {
+              itemName: '乙肝两对半 [血液]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000124',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '3',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '呼吸道病毒4项 [咽拭子]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000123',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '4',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '血常规 [血液]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000122',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '4',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '新冠抗体检测（收费） [血液]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000128',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '血清胃功能检测 [血液]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000125',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '鼻咽癌筛查2项 [血液]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000126',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '普通细菌培养及鉴定 [未定]',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103008',
+              itemAddress: '检验科科室位置 检验科',
+              orderId: '2025010800000127',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              status: '2',
+              itemTime: '2025-01-08',
+            },
+          ],
+          completionStatus: 0,
+        },
+        node8Info: {
+          drugs: [
+            {
+              itemName: '西药',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103022',
+              itemAddress: '门诊一楼 门诊西药房',
+              disposeStatus: '1',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              isDeptStorage: '0',
+              itemTime: '2025-01-08',
+            },
+            {
+              itemName: '西药',
+              billDeptName: '皮肤科',
+              performDeptCode: 'A0103023',
+              itemAddress: '门诊二楼 中药房',
+              disposeStatus: '1',
+              reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
+              isDeptStorage: '0',
+              itemTime: '2025-01-08',
+            },
+          ],
+          completionStatus: 0,
+        },
+        node7Info: { completionStatus: 1, others: [] },
+      },
+      timeTaken: 414,
+      code: 0,
+      functionVersion:
+        '[{"functionType":"1","version":"V0.0.57"},{"functionType":"2","version":"V0.0.851"}]',
+      message: '成功',
+      respCode: 999002,
+    }.result;
 
     const {
       node1Info,
@@ -854,6 +853,9 @@
   };
 
   const getConfig = async () => {
+    pageConfig.value = (
+      await cacheUtil.getSystemConfig('GuideConfig')()
+    ).GuideConfig;
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
   };
 

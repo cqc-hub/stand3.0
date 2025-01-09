@@ -1,4 +1,12 @@
+import { TButtonConfig } from './serverStaticData';
+
 export type ApiParamsConfig = {
+  //pagesA/guide/guide
+  GuideConfig: {
+    jyBtns: TGuideButtonConfig[];
+    jcBtns: TGuideButtonConfig[];
+  };
+
   // 健康档案
   HealthRecord: {
     // pagesC/healthRecord/healthRecordDetail
@@ -55,4 +63,9 @@ export type ApiParamsConfig = {
     // 目前只支持配置 value 值 0 待取药 1 已取药
     tabs: IOptions<'0' | '1'>[];
   };
+};
+
+type TGuideButtonConfig = TButtonConfig & {
+  labStatus?: string[];
+  completionStatus?: number[];
 };
