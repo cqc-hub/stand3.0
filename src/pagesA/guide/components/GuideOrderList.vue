@@ -9,7 +9,12 @@
       class="bg-white g-border rounded-xl"
     >
       <view class="p32 pb24 g-border-bottom">
-        <view class="f40 font-semibold">
+        <view
+          :style="{
+            color: getStatusConfig(item.orderStatus, false).cardColor,
+          }"
+          class="f40 font-semibold"
+        >
           {{ item._statusLabel }}
         </view>
       </view>
@@ -107,6 +112,7 @@
 
 <script lang="ts" setup>
   import { IRegistrationCardItem } from '@/pagesA/MyRegistration/utils/MyRegistration';
+  import { getStatusConfig } from '@/pagesA/MyRegistration/utils/regDetail';
   import { ISystemConfig } from '@/types';
   import { GStores, useTBanner } from '@/utils';
   import { computed, defineComponent, ref } from 'vue';
