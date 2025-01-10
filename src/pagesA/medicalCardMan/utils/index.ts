@@ -12,9 +12,13 @@ import {
   PatientUtils,
   routerJump,
   getH5OpenidParam,
+  useTBanner,
 } from '@/utils';
 import api from '@/service/api';
-import globalGl from '@/config/global';
+import globalGl, { SYS_CODE } from '@/config/global';
+
+const gStores = new GStores();
+const globalStore = gStores.globalStore;
 
 /**
  * 完善、 新增就诊人页面
@@ -877,31 +881,228 @@ export const useProgramPaySign = () => {
     },
   };
 };
+const commonQuery={
+  herenId: gStores.globalStore.herenId,
+  openId: gStores.globalStore.openId,
+  source: gStores.globalStore.browser.source,
+  sysCode: globalGl.SYS_CODE,
+}
+const healthCardQuery = {
+  ...commonQuery,
+  domainChannel: 2,
+  faceUrl: '/pagesA/medicalCardMan/medicalCardMan',
+  failRedirectUrl:
+    `mini:${globalGl.addPersonUrl}?_healthType=failRedirect&regInfoCode=` +
+    '${regInfoCode}',
+  successRedirectUrl:
+    `mini:/pagesA/medicalCardMan/medicalCardMan?_healthType=associate&healthCode=` +
+    '${healthCode}',
+  verifyFailRedirectUrl:
+    'mini:/pagesA/medicalCardMan/medicalCardMan?_healthType=verifyFail',
+  userFormPageUrl:
+    `mini:/pagesA/medicalCardMan/addMedical?_healthType=addPat&authCode=` +
+    '${authCode}',
+};
+export const healthCardBind = async () => {
+  const { success, res } = await getHealthCardCode();
+  if (success) {
+    const {
+      result: { wechatCode },
+    } = res;
+    const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+    const requestArg = {
+      hospitalId,
+      wechatCode,
+      ...healthCardQuery
+    };
+    const {
+      result: { bindCardUrl: h5Url },
+    } = await api.registerHealthCardPreAuth(requestArg);
+    useTBanner({
+      type: 'h5',
+      path: h5Url,
+    });
+  }
+};
 
-export const healthCardLink = async(healthCode: string, cb?: Function) => {
-  const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
-  const gStores = new GStores();
-  const globalStore = gStores.globalStore;
-  const requestArg = {
-    healthCode,
-    hospitalId,
-    herenId: globalStore.herenId,
-    source: globalStore.browser.source,
-  };
+export const healthCardLink = async (healthCode: string, cb?: Function) => {
+  if (globalGl.systemInfo.isOpenHealthCard && healthCode) {
+    // #ifdef MP-WEIXIN
+    const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
 
-  getH5OpenidParam(requestArg);
-  await api.quickLinkHealthCardWithLoad(requestArg);
-  gStores.messageStore.showMessage('关联成功', 1500, {
-    closeCallBack() {
-      //刷新就诊人列表
-      new PatientUtils().getPatCardList();
-      if (cb) {
-        cb.call(this);
-      } else {
-        uni.reLaunch({
-          url: '/pages/home/home',
+    const requestArg = {
+      healthCode,
+      hospitalId,
+      herenId: globalStore.herenId,
+      source: globalStore.browser.source,
+    };
+
+    getH5OpenidParam(requestArg);
+    await api.quickLinkHealthCardWithLoad(requestArg).catch(async (e) => {
+      const { respCode, message } = e;
+      if (respCode === 884801) {
+        gStores.messageStore.closeMessage();
+        const { confirm } = await apiAsync(uni.showModal, {
+          content: '患者存在建档记录但手机号不匹配，是否立即修改？',
         });
+        if (confirm) {
+        }
       }
-    },
+    });
+    gStores.messageStore.showMessage('关联成功', 1500, {
+      closeCallBack() {
+        //刷新就诊人列表
+        new PatientUtils().getPatCardList();
+        if (cb) {
+          cb.call(this);
+        } else {
+          uni.reLaunch({
+            url: '/pages/home/home',
+          });
+        }
+      },
+    });
+    // #endif
+  } else {
+    console.error('addPatByHealthCode方法只支持腾讯健康卡通过healthCode建档');
+    gStores.messageStore.showMessage('绑定失败', 1500, {});
+  }
+};
+
+export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
+  const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+  const {
+    idCard: idNumber,
+    patientPhone: phone1,
+    patientName: name,
+    nation,
+  } = requestData;
+  const list = await ServerStaticData.getNationTerms();
+  const nationItem: any = list.find((o) => o.value === nation);
+  const idCardInfo = getInfoFromIdCard(idNumber);
+  const requestArg = {
+    ...requestData,
+    ...idCardInfo,
+    ...healthCardQuery,
+    nation: nationItem.label,
+    authCode,
+    phone1,
+    name,
+    idNumber,
+    hospitalId,
+  };
+  const {
+    result: { verifyUrl: h5Url },
+  } = await api.registerHealthCardPreFill(requestArg);
+  useTBanner({
+    type: 'h5',
+    path: h5Url,
   });
+};
+
+export const backWithFaceVerify = async (
+  orderId: string,
+  redirectUrl: string,
+  verifyType: string
+) => {
+  const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
+  const requestOrderArg = {
+    ...commonQuery,
+    orderId,
+    verifyType: parseInt(verifyType),
+    hospitalId,
+   
+  };
+  const {
+    result: { userData, userIdKey },
+  } = await api.getOrderInfoByOrderId(requestOrderArg);
+  const { verifyResult } = await wxFacialVerifyByKey(userIdKey);
+  const { success, res } = await getHealthCardCode();
+  let wechatCode = '';
+  if (success) wechatCode = res.result.wechatCode;
+  else {
+    gStores.messageStore.showMessage('授权失败', 3000);
+    return;
+  }
+  const requestResultArg = {
+    ...requestOrderArg,
+    userData,
+    result: verifyResult && '01',
+    wechatCode,
+  };
+  const {
+    result: { verifyBool, verifyOrderId },
+  } = await api.registerRealPersonAuthOrder(requestResultArg);
+  if (verifyBool) {
+    console.log(
+      '${decodeURIComponent(redirectUrl)}&verify_order_id=${verifyOrderId}',
+       `${redirectUrl}&verify_order_id=${verifyOrderId}`
+    );
+    useTBanner({
+      type: 'h5',
+      path: decodeURIComponent(`${redirectUrl}&verify_order_id=${verifyOrderId}`)
+      ,
+    });
+  } else {
+    useTBanner({
+      type: 'h5',
+      path: decodeURIComponent(`${redirectUrl}&verify_order_id=-1`)
+      ,
+    });
+  }
+};
+
+const wxFacialVerifyByKey = async (
+  userIdKey: string
+): Promise<{ verifyResult: string; errCode: string; errMsg: string }> => {
+  const gStores = new GStores();
+  return new Promise((rl, rj) => {
+    uni.showLoading({});
+    wx.checkIsSupportFacialRecognition({
+      checkAliveType: 2,
+      success() {
+        wx.startFacialRecognitionVerify({
+          checkAliveType: 2,
+          userIdKey,
+          success(e: { verifyResult: string; errCode: '0'; errMsg: string }) {
+            //识别成功
+            console.warn('人脸识别成功', e);
+            uni.hideLoading()
+            rl(e);
+          },
+          fail(err) {
+            //识别失败
+            uni.hideLoading()
+            gStores.messageStore.showMessage('人脸识别失败', 3000);
+            console.error('人脸识别失败', err);
+            rj(err);
+          },
+        });
+      },
+      fail(err) {
+        //识别失败
+        uni.hideLoading()
+        gStores.messageStore.showMessage('当前设备不支持人脸识别', 3000);
+        console.error('当前设备不支持人脸识别', err);
+        rj(err);
+      },
+    });
+  });
+};
+
+const getInfoFromIdCard = (idCard) => {
+  if (idCard.length !== 18) {
+    throw new Error('Invalid ID card length');
+  }
+  const gender = parseInt(idCard.charAt(16), 10) % 2 === 1 ? '男' : '女';
+  const birthday = idCard.substring(6, 14);
+  const year = parseInt(birthday.substring(0, 4), 10);
+  const month = parseInt(birthday.substring(4, 6), 10);
+  const day = parseInt(birthday.substring(6, 8), 10);
+  return {
+    gender,
+    birthday: `${year}-${month.toString().padStart(2, '0')}-${day
+      .toString()
+      .padStart(2, '0')}`,
+  };
 };

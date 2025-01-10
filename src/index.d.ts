@@ -42,6 +42,7 @@ interface ISystemGlobalItem {
     healthCardText: string;
     hospitalId: string;
     isCardQueryComp?: boolean;//是否开启报告解读
+    isNewMode?:'1'
   };
 
   isSearchInHos: boolean;

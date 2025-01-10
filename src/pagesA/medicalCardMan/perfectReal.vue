@@ -212,7 +212,7 @@
     _directUrl?: string;
 
     // 健康卡逻辑
-    _healthtype?:'addPat',
+    _healthType?:'addPat',
     _healthAuthCode?:string
   }
 

@@ -147,7 +147,7 @@ if (isOpenHealthCard) {
   // 电子健康卡
   pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins`] = {
     // version: '3.50.1',
-    version: '3.11.0',
+    version: isOpenHealthCard?.isNewMode?'3.50.1':'3.11.0',
     provider: 'wxee969de81bba9a45',
   };
 }

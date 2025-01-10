@@ -882,16 +882,34 @@ const userApi = {
   // 电子健康卡绑卡验证授权接口
   registerHealthCardPreAuth: (data) =>
     service.post('/phs-user/healthCard/registerHealthCardPreAuth', parm(data), {
-      hideLoading: false,
       reportCmPV_YLName: '电子健康卡',
     }),
+  // 电子健康卡新建就诊人填写信息页面-验证注册/绑卡接口
+  registerHealthCardPreFill: (data) =>
+    service.post('/phs-user/healthCard/registerHealthCardPreFill', parm(data), {
+      reportCmPV_YLName: '电子健康卡',
+    }),
+  // 电子健康卡实人用户信息获取接口
+  getOrderInfoByOrderId: (data) =>
+    service.post('/phs-user/healthCard/getOrderInfoByOrderId', parm(data), {
+      reportCmPV_YLName: '电子健康卡',
+    }),
+
+  // 电子健康卡实人验证结果通知接口
+  registerRealPersonAuthOrder: (data) =>
+    service.post(
+      '/phs-user/healthCard/registerRealPersonAuthOrder',
+      parm(data),
+      {
+        reportCmPV_YLName: '电子健康卡',
+      }
+    ),
   //实人验证生成orderId接口
   registerUniformVerifyOrder: (data) =>
     service.post(
       '/phs-user/healthCard/registerUniformVerifyOrder',
       parm(data),
       {
-        hideLoading: false,
         reportCmPV_YLName: '电子健康卡',
       }
     ),
@@ -1033,6 +1051,10 @@ const userApi = {
 
   preregistrationSave: (data: any) =>
     service.post('/phs-reg/deptDoc/preregistrationSave', parm(data), {
+      hideLoading: false,
+    }),
+  customerAsk: (data: any) =>
+    service.post('/phs-extend/customer/ask', parm(data), {
       hideLoading: false,
     }),
 };

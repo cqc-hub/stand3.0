@@ -20,7 +20,29 @@
           class="flex justify-end padding-right one-show align-start padding-top"
         >
           <view class="flex justify-end my-width">
-            <view class="chat-my-item e margin-left padding-chat by-cyan">
+            <view
+              v-if="msgItem.type === 4"
+              class="chat-my-item e margin-left padding-chat by-cyan"
+            >
+              <!-- <text class="g-break-word">{{ msgItem.msg }}</text> -->
+              <!-- 更多推荐 -->
+              <Second-Recommend
+                v-if="msgItem.secondCommendList"
+                :list="msgItem.secondCommendList"
+                :x="msgItem"
+              />
+
+              <!-- 首页菜单的样式 (占一行) -->
+              <Home-Menu-Item-Recommend
+                v-if="msgItem.homeMenuConfig"
+                :list="msgItem.homeMenuConfig"
+                :x="msgItem"
+              />
+            </view>
+            <view
+              v-else
+              class="chat-my-item e margin-left padding-chat by-cyan"
+            >
               <text class="g-break-word">{{ msgItem.msg }}</text>
             </view>
           </view>
@@ -35,7 +57,10 @@
           class="flex justify-start padding-right one-show align-start padding-top"
         >
           <view class="flex justify-start">
-            <view class="chat-system-item margin-left padding-chat by-cyan">
+            <view
+              v-if="msgItem.type === 1"
+              class="chat-system-item margin-left padding-chat by-cyan"
+            >
               <text class="g-break-word">{{ msgItem.msg }}</text>
             </view>
           </view>
@@ -43,26 +68,27 @@
       </view>
     </template>
     <view
-        v-if="msgState.msgLoad"
-        :id="`smartChatRoomItem_load`"
-        class="flex-column smartChatRoom-item"
+      v-if="msgState.msgLoad"
+      :id="`smartChatRoomItem_load`"
+      class="flex-column smartChatRoom-item"
+    >
+      <view
+        class="flex justify-start padding-right one-show align-start padding-top"
       >
-        <view
-          class="flex justify-start padding-right one-show align-start padding-top"
-        >
-          <view class="flex justify-start">
-            <view class="chat-system-item margin-left padding-chat by-cyan">
-              <text class="g-break-word">加载中，请稍等</text>
-            </view>
+        <view class="flex justify-start">
+          <view class="chat-system-item margin-left padding-chat by-cyan">
+            <text class="g-break-word">加载中，请稍等</text>
           </view>
         </view>
       </view>
+    </view>
   </view>
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
-  import {msgState} from '../utils/utils'
+  import SecondRecommend from './SecondRecommend.vue';
+  import { msgState } from '../utils/utils';
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;
@@ -81,7 +107,7 @@
     min-height: calc(100vh - 590rpx - 390rpx - 40rpx);
     padding-bottom: 390rpx;
     .my-width {
-      width: 400rpx;
+      width: 80vw;
     }
     .chat-my-item {
       border-radius: 8px 0px 8px 8px;
@@ -89,9 +115,10 @@
       color: #fff;
     }
     .chat-system-item {
-      border-radius:8px 8px 8px 0px  ;
-      background-color: #E8F4FF;
+      border-radius: 0px 8px 8px 8px;
+      background-color: #e8f4ff;
       color: #111111;
+      max-width: 80vw;
     }
     .padding-chat {
       padding: 17rpx 20rpx;

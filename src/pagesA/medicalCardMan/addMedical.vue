@@ -139,6 +139,7 @@
     formatterSubPatientData,
     loginAuthAlipay,
     useProgramPaySign,
+    gotoChosseVerifyPage,
   } from './utils';
 
   import {
@@ -197,6 +198,10 @@
     _isOutLogin?: '1';
     _pageInfo?: '1' | '2';
     _directUrl?: string;
+
+    //健康卡
+    _healthType?: 'addPat';
+    authCode?: string;
   }
   const pageProps = ref(<TPageType>{});
   const patientUtils = new PatientUtils();
@@ -368,6 +373,15 @@
     requestData.verifyType = requestData.verifyCode ? '2&kq' : '1&bk';
 
     await injectHealthCode(requestData);
+
+    if (
+      requestData.wechatCode &&
+      pageProps.value?._healthType == 'addPat' &&
+      pageProps.value?.authCode
+    ) {
+      gotoChosseVerifyPage(requestData, pageProps.value.authCode);
+      return;
+    }
 
     const {
       isFace,
@@ -1029,6 +1043,7 @@
   onShow(() => {
     signAfterOnPageShow();
     reDealMedicalFiling();
+    console.log('pageProps', pageProps.value);
   });
 
   onLoad((opt) => {

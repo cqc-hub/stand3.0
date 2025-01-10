@@ -430,7 +430,7 @@
     }
   }
   .dh-input {
-    width: 500rpx;
+    width: 480rpx;
     height: 65rpx;
     border-radius: 10rpx;
     padding-left: 15rpx;

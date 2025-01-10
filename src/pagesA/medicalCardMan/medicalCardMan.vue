@@ -8,14 +8,19 @@
     <g-flag typeFg="108" isShowFg />
     <view class="pat-box">
       <view v-if="isShowHealthCardMode" class="health-card">
-        <view @click="associatedHealthCard" class="mr14">
+        <view
+          v-if="!isNewHealthCard"
+          @click="associatedHealthCard"
+          class="mr14"
+        >
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
         <view @click="addPatPage">
-        <!-- <view @click="createCardH5"> -->
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
-          <text class="text-no-wrap">申领健康卡</text>
+          <text class="text-no-wrap">
+            {{ isNewHealthCard ? '申领或关联健康卡' : '申领健康卡' }}
+          </text>
         </view>
         <!-- <view @click="createCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
@@ -144,7 +149,12 @@
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { IPat, useRouterStore } from '@/stores';
   import { ref, provide, readonly, computed, Ref } from 'vue';
-  import { getHealthCardCode ,healthCardLink} from './utils/index';
+  import {
+    getHealthCardCode,
+    healthCardLink,
+    backWithFaceVerify,
+    healthCardBind,
+  } from './utils/index';
   import { deQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
   import {
@@ -176,8 +186,16 @@
         _url?: string;
 
         // 健康卡逻辑
-        _healthtype?:'FaceVerify'|'associate';
-        _healthCode?:string;
+        _healthType?:
+          | 'FaceVerify'
+          | 'associate'
+          | 'failRedirect'
+          | 'verifyFail';
+        healthCode?: string;
+        orderId?: string;
+        redirectUrl?: string;
+        verifyType?: '1';
+        regInfoCode?: string;
       }
     >{}
   );
@@ -189,6 +207,7 @@
   const regDialogMedicalFiling: Ref<any> = ref('');
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
+  const isNewHealthCard = ref(false);
   const getRealNameAuth = computed(() => {
     return pageConfig.value.realNameAuth || [];
   });
@@ -243,45 +262,22 @@
   };
 
   const addPatPage = () => {
-    uni.navigateTo({
-      url:
-        globalGl.addPersonUrl +
-        '?_directUrl=' +
-        encodeURIComponent('/pages/home/home'),
-    });
+    if (isNewHealthCard.value) {
+      healthCardBind();
+    } else {
+      uni.navigateTo({
+        url:
+          globalGl.addPersonUrl +
+          '?_directUrl=' +
+          encodeURIComponent('/pages/home/home'),
+      });
+    }
   };
 
   const createCard = () => {
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/easyCardCreate',
     });
-  };
-
-  const createCardH5 = async() => {
-    const { success, res } = await getHealthCardCode();
-    const {
-        result: { wechatCode },
-      } = res;
-    const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
-    const requestArg = {
-      domainChannel:2,
-      faceUrl: '/pagesA/medicalCardMan/medicalCardMan?_healthtype=FaceVerify',
-      failRedirectUrl: `mini:${globalGl.addPersonUrl}?_healthtype=failRedirect&_healthRegInfoCode=`+'${regInfoCode}',
-      herenId: gStore.globalStore.herenId,
-      hospitalId,
-      openId: gStore.globalStore.openId,
-      source:   gStore.globalStore.browser.source,
-      successRedirectUrl: `mini:/pagesA/medicalCardMan/medicalCardMan?_healthtype=associate&_healthCode=`+'${healthCode}',
-      sysCode:  globalGl.SYS_CODE,
-      userFormPageUrl: `mini:${globalGl.addPersonUrl}?_healthtype=addPat&_healthAuthCode=`+'${authCode=}',
-      verifyFailRedirectUrl: 'mini:/pagesA/medicalCardMan/medicalCardMan',
-      wechatCode,
-    };
-    const {result:{bindCardUrl:h5Url}} =await api.registerHealthCardPreAuth(requestArg);
-    useTBanner({
-        type: 'h5',
-        path: h5Url,
-      });
   };
 
   const profileClick = (pat: IPat) => {
@@ -372,7 +368,7 @@
     isWx = false;
 
     // #endif
-    
+
     const { patientName, patientId, idCardEncry } = pat;
     const { source } = gStore.globalStore.browser;
 
@@ -421,21 +417,47 @@
     }
   };
 
-  const HandhealthCard = async (type:'FaceVerify'|'associate') =>{
-    if(type==='associate'&&pageProps.value?._healthCode){
-      await healthCardLink(pageProps.value._healthCode,()=>{
-        console.log('pageProps.value.healthCode',pageProps.value._healthCode)
-        // uni.reLaunch()
-      })
+  const HandhealthCard = async () => {
+    const props = pageProps.value;
+    if (
+      props?._healthType === 'associate' &&
+      props?.healthCode &&
+      props?.healthCode !== '0'
+    ) {
+      await healthCardLink(props.healthCode, () => {
+        uni.reLaunch({ url: '/pagesA/medicalCardMan/medicalCardMan' });
+      });
+    } else if (
+      props?._healthType === 'associate' &&
+      props?.healthCode &&
+      props?.healthCode === '0'
+    ) {
+      //疑似健康卡关联页面新增就诊人异常，先报错
+      gStore.messageStore.showMessage(
+        '已取消关联健康卡，请重新申领或关联健康卡',
+        1500
+      );
+    } else if (props?._healthType === 'verifyFail') {
+      console.log('已取消健康卡申领');
+      gStore.messageStore.showMessage('绑定失败', 1500, {});
+    } else if (props?._healthType === 'failRedirect' && props?.regInfoCode) {
+      console.log('进入异常卡流程');
+      gStore.messageStore.showMessage(
+        '健康卡申领失败，请继续绑定就诊人流程',
+        1500
+      );
+    } else if (props?.orderId && props?.redirectUrl && props?.verifyType) {
+      await backWithFaceVerify(
+        props.orderId,
+        props.redirectUrl,
+        props.verifyType
+      );
     }
-  }
+  };
 
   patientUtils.getPatCardList();
   onShow(() => {
     reDealMedicalFiling();
-    if(pageProps.value?._healthtype){
-      HandhealthCard(pageProps.value._healthtype)
-    }
   });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -450,8 +472,15 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
     // #endif
-    
-    
+
+    //健康卡
+    // #ifdef MP-WEIXIN
+    if (globalGl.systemInfo?.isOpenHealthCard) {
+      globalGl.systemInfo.isOpenHealthCard?.isNewMode &&
+        (isNewHealthCard.value = true);
+      HandhealthCard();
+    }
+    // #endif
   });
 </script>
 
