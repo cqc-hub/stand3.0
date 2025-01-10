@@ -42,6 +42,7 @@
             @go-address-map="($event) => $emit('go-address-map', $event)"
             @go-pay-page="($event) => $emit('go-pay-page', $event)"
             @open-hos-location="($event) => $emit('open-hos-location', $event)"
+            hide-tip
           />
         </view>
       </g-collapse>

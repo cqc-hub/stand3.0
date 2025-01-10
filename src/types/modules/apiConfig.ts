@@ -11,6 +11,25 @@ export type ApiParamsConfig = {
     mzqhBtns: TGuideButtonConfig[];
     // 门诊取药下面按钮
     takeDrugBtns: TGuideButtonConfig[];
+    // 门诊缴费下面按钮
+    mzjfBtns: TGuideButtonConfig[];
+
+    // 检查tip
+    jcTip?: string;
+    // 检验tip
+    jyTip?: string;
+    // 门诊取药 tip
+    tabDrugTip?: string;
+    // 门诊取号tip
+    mzqhTip?: string;
+    // 门诊签到 tip
+    mzqdTip?: string;
+    // 门诊就诊
+    mzjzTip?: string;
+    // 门诊缴费
+    mzjfTip?: string;
+    // 其他项目
+    otherTip?: string;
   };
 
   // 健康档案
@@ -79,4 +98,7 @@ export type TGuideButtonConfig = TButtonConfig & {
   disposeStatus?: string[];
   // 子项状态 1 已完成  历史中是 -1
   completionStatus?: number[];
+
+  // 按钮样式
+  btnClass?: string;
 };

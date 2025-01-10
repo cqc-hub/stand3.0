@@ -29,68 +29,68 @@
           @item-click="visitItemClick"
         />
       </scroll-view>
+    </view>
 
-      <view class="page-bg relative pl32 pr32">
-        <view class="my-hide f24">占位</view>
-        <view v-if="isShowEmpty" class="pt70">
-          <g-empty
-            :current="1"
-            :text="
-              tabCurrentKey === '1'
-                ? '您还未挂号，可以点击按钮进行预约挂号或点击医疗服务返回首页'
-                : '暂未查到相关信息'
-            "
-            noTransformY
-          >
-            <template>
-              <view
-                v-if="tabCurrentKey === '1'"
-                @click="goOrder"
-                class="btn btn-border color-111 btn-primary text-white f28 pt12 pb12"
-              >
-                预约挂号
-              </view>
-            </template>
-          </g-empty>
-        </view>
-        <Guide-Content-List
-          v-if="visitList.length && visitInfoList.length && tabCurrentKey === '0'"
-          :list="visitInfoList"
-          :mzqhBtns="mzqhBtns"
-          :config="pageConfig"
-          @btn-click="btnClick"
-          @go-report="goReport"
-          @go-address-map="handlerAddressMap"
-          @go-pay-page="goPagePage"
-          @go-take-number="goTakeNumber"
-          @open-hos-location="openHosLocation"
-        />
-
-        <GuideOrderList
-          v-if="orderList.length && tabCurrentKey === '1'"
-          :list="orderList"
-          :config="orderConfig"
-          @ywz-click="ywzClick"
-          @refound-order="orderRefound"
-          @open-hos-location="openHosLocation"
-          @go-dept="goDept"
-          @go-doc="goDocDetail"
-        />
-
-        <GuideHisList
-          v-if="hisList.length && tabCurrentKey === '2'"
-          :list="hisList"
-          :config="pageConfig"
-          @btn-click="btnClick"
-          @go-report="goReport"
-          @go-address-map="handlerAddressMap"
-          @go-pay-page="goPagePage"
-          @go-take-number="goTakeNumber"
-          @open-hos-location="openHosLocation"
-        />
-        <view class="safe-height" />
-        <view class="safe-height" />
+    <view class="g-container page-bg relative pl32 pr32">
+      <view class="my-hide f24">占位</view>
+      <view v-if="isShowEmpty" class="pt70">
+        <g-empty
+          :current="1"
+          :text="
+            tabCurrentKey === '1'
+              ? '您还未挂号，可以点击按钮进行预约挂号或点击医疗服务返回首页'
+              : '暂未查到相关信息'
+          "
+          noTransformY
+        >
+          <template>
+            <view
+              v-if="tabCurrentKey === '1'"
+              @click="goOrder"
+              class="btn btn-border color-111 btn-primary text-white f28 pt12 pb12"
+            >
+              预约挂号
+            </view>
+          </template>
+        </g-empty>
       </view>
+      <Guide-Content-List
+        v-if="visitList.length && visitInfoList.length && tabCurrentKey === '0'"
+        :list="visitInfoList"
+        :mzqhBtns="mzqhBtns"
+        :config="pageConfig"
+        @btn-click="btnClick"
+        @go-report="goReport"
+        @go-address-map="handlerAddressMap"
+        @go-pay-page="goPagePage"
+        @go-take-number="goTakeNumber"
+        @open-hos-location="openHosLocation"
+      />
+
+      <GuideOrderList
+        v-if="orderList.length && tabCurrentKey === '1'"
+        :list="orderList"
+        :config="orderConfig"
+        @ywz-click="ywzClick"
+        @refound-order="orderRefound"
+        @open-hos-location="openHosLocation"
+        @go-dept="goDept"
+        @go-doc="goDocDetail"
+      />
+
+      <GuideHisList
+        v-if="hisList.length && tabCurrentKey === '2'"
+        :list="hisList"
+        :config="pageConfig"
+        @btn-click="btnClick"
+        @go-report="goReport"
+        @go-address-map="handlerAddressMap"
+        @go-pay-page="goPagePage"
+        @go-take-number="goTakeNumber"
+        @open-hos-location="openHosLocation"
+      />
+      <view class="safe-height" />
+      <view class="safe-height" />
     </view>
 
     <Choose-Pat-Action
@@ -684,7 +684,7 @@
             },
             {
               ...info,
-              title: '缴费',
+              title: '门诊缴费',
               sort: 4,
               // completionStatus: (processResultList?.length && 1) || 0,
             },
@@ -721,21 +721,13 @@
                 disposeStatus, // 1 未执行 2部分执行 3已执行
                 reportPlace,
               } = q;
-              // let status = '1';
-              // if (disposeStatus === '3') {
-              //   status = '4';
-              // }
-              // if (disposeStatus === '2') {
-              //   status = '4';
-              // }
-
-              // q.title = '';
 
               const { title, key, sort } = typeMap[orderClass] || typeMap['-1'];
 
               let item = t.itemList.find((o) => o.title === title);
               if (!item) {
                 item = {
+                  ...q,
                   title,
                   [key]: [],
                   completionStatus: -1,
@@ -763,13 +755,27 @@
 
           if (t.itemList.length) {
             t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
+
+            t.itemList.map((o) => {
+              const {
+                orderClass, // 1药品 2检验 3检查
+              } = o;
+
+              const { key } = typeMap[orderClass] || typeMap['-1'];
+              const itemList = o[key] || [];
+              o.completionStatus = o.completionStatus || 0;
+
+              if (itemList.length) {
+                o.completionStatus =
+                  (itemList.every((p) => p.disposeStatus === '3') && 1) || 0;
+              }
+            });
           }
 
           return t;
         });
     }
     hisList.value = result;
-    console.log(result);
   };
 
   const orderList = ref<IRegistrationCardItem[]>([]);
@@ -1033,7 +1039,7 @@
   }
 
   .fix-top {
-    position: sticky;
-    top: 0;
+    // position: sticky;
+    // top: 0;
   }
 </style>

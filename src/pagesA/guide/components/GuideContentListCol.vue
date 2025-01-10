@@ -81,7 +81,7 @@
     min-height: 72rpx;
 
     .label {
-      width: 4em;
+      width: 5em;
       padding: 16rpx 0;
     }
 
