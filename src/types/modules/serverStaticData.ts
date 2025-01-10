@@ -396,7 +396,7 @@ export interface ISystemConfig_ {
     tjBottomNav?: TReportDetailBottomConfig;
   };
 
-  /** 药品配送 */
+  /** 药品配送 DRUG_DELIVERY_CONFIG */
   drugDelivery: {
     company?: IOptions[];
 
