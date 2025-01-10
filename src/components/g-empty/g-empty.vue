@@ -12,7 +12,7 @@
       }"
       mode="heightFix"
     />
-    <view class="alt f28">{{ text || states[current - 1].label }}</view>
+    <view class="pr32 pl32 alt f28 text-center">{{ text || states[current - 1].label }}</view>
 
     <view class="g-flex-rc-cc empty-content">
       <slot />

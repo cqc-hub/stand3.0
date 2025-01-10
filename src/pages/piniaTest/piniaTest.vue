@@ -35,7 +35,6 @@
   const yonyao: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
-    // path: 'pagesA/eletronicInvoice/invoiceDetail',
     path: 'pagesC/medicationManager/medicationList',
     text: '用药管家',
     extraData: {

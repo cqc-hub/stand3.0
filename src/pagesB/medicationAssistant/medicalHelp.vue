@@ -395,9 +395,16 @@
 
   const dealWith1001067 = () => {
     // 温fu2 扫码药品配送， 不需要进列表 直接详情
-    if (globalGl.SYS_CODE === '1001067' && waitSelList.value.length) {
-      selList.value = [...waitSelList.value];
-      configToHome();
+    if (globalGl.SYS_CODE === '1001067') {
+      if (waitSelList.value.length) {
+        selList.value = [...waitSelList.value];
+        configToHome();
+      } else {
+        uni.reLaunch({
+          url: '/pages/home/home',
+        });
+      }
+
       throw new Error('1001067');
     }
   };

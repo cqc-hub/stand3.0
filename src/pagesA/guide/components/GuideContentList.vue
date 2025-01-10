@@ -1,12 +1,14 @@
 <template>
-  <view class="progress">
+  <view class="progress relative">
+    <view class="my-hide f24">占位</view>
+
     <view
       v-for="(item, i) in list"
       :key="i"
       :class="{
         pb24: i !== list.length - 1,
       }"
-      class="progress-item relative"
+      class="progress-item"
     >
       <view v-if="i !== list.length - 1" class="progress-line" />
 
@@ -38,14 +40,17 @@
                 <view class="flex items-center">
                   <view class="f40">{{ item.title }}</view>
                   <view class="flex-1"></view>
-                  <view
-                    v-if="item.completionStatus === 1"
-                    class="mr60 absolute tag-status"
-                  >
+                  <!-- v-if="item.completionStatus === 1" -->
+                  <!-- v-if="item.title !== '门诊缴费'" -->
+                  <view class="mr60 absolute tag-status">
                     <Tag-Status
-                      color="#B0F0DF"
-                      text-color="#00B39E"
-                      text="已完成"
+                      :color="
+                        item.completionStatus === 1 ? '#B0F0DF' : '#ffb5a5'
+                      "
+                      :text-color="
+                        item.completionStatus === 1 ? '#00B39E' : '#d23028'
+                      "
+                      :text="item.completionStatus === 1 ? '已完成' : '未完成'"
                     />
                   </view>
                   <view
@@ -59,10 +64,10 @@
                 </view>
 
                 <view
-                  v-if="item.reportPlace"
-                  class="g-break-word f28 color-warn"
+                  v-if="getItemTip(item)"
+                  class="g-break-word f28 color-warn mt12"
                 >
-                  {{ item.reportPlace }}
+                  {{ getItemTip(item) }}
                 </view>
               </view>
             </template>
@@ -86,6 +91,13 @@
                       :cols="drugCol"
                       :lab="drug"
                       @go-address-map="handlerAddressMap"
+                    />
+
+                    <GuideBtns
+                      :item="item"
+                      :lab="drug"
+                      :btns="takeDrugBtns"
+                      @btn-click="(v) => emits('btn-click', v)"
                     />
 
                     <view
@@ -132,36 +144,17 @@
                     </view>
 
                     <GuideContentListCol
-                      :cols="reportCol"
+                      :cols="reportJyCol"
                       :lab="lab"
                       @go-address-map="handlerAddressMap"
                     />
 
-                    <view class="flex flex-wrap gap-4">
-                      <template v-for="(btn, bi) in jyBtns" :key="bi">
-                        <view
-                          v-if="
-                            isRenBtn({
-                              btn,
-                              lab,
-                              item,
-                            })
-                          "
-                          @click="
-                            btnClick({
-                              btn,
-                              item: {
-                                ...item,
-                                ...lab,
-                              },
-                            })
-                          "
-                          class="flex-1 f28 btn btn-border color-111 btn-default btn-round mt24"
-                        >
-                          {{ btn.text }}
-                        </view>
-                      </template>
-                    </view>
+                    <GuideBtns
+                      :item="item"
+                      :lab="lab"
+                      :btns="jyBtns"
+                      @btn-click="(v) => emits('btn-click', v)"
+                    />
 
                     <view
                       v-if="p !== item.labs.length - 1"
@@ -171,18 +164,6 @@
                 </view>
 
                 <!-- 'btn-disabled': item.completionStatus === 0, -->
-                <view
-                  :class="{}"
-                  class="btn btn-border btn-primary btn-round f28 mt24"
-                  @click="
-                    goReport({
-                      item,
-                      tabIndex: '0',
-                    })
-                  "
-                >
-                  查看报告
-                </view>
               </view>
 
               <view v-else-if="item.title === '检查项目'">
@@ -225,9 +206,16 @@
                     </view>
 
                     <GuideContentListCol
-                      :cols="reportCol"
+                      :cols="reportJcCol"
                       :lab="lab"
                       @go-address-map="handlerAddressMap"
+                    />
+
+                    <GuideBtns
+                      :item="item"
+                      :lab="lab"
+                      :btns="jcBtns"
+                      @btn-click="(v) => emits('btn-click', v)"
                     />
 
                     <view
@@ -237,18 +225,6 @@
                   </view>
 
                   <!-- 'btn-disabled': item.completionStatus === 0, -->
-                  <view
-                    :class="{}"
-                    class="btn btn-border btn-primary btn-round f28 mt24"
-                    @click="
-                      goReport({
-                        item,
-                        tabIndex: '1',
-                      })
-                    "
-                  >
-                    查看报告
-                  </view>
                 </view>
               </view>
 
@@ -266,7 +242,7 @@
                     </view>
 
                     <GuideContentListCol
-                      :cols="reportCol"
+                      :cols="reportJcCol"
                       :lab="lab"
                       @go-address-map="handlerAddressMap"
                     />
@@ -279,13 +255,18 @@
                 </view>
               </view>
 
-              <view v-else-if="item.title === '缴费'">
-                <view
+              <view v-else-if="item.title === '门诊缴费'">
+                <GuideBtns
+                  :item="item"
+                  :btns="mzjfBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
+                <!-- <view
                   class="btn btn-border btn-primary btn-round f28 mt24"
                   @click="goPayPage(item)"
                 >
-                  {{ item.completionStatus === 1 ? '门诊缴费' : '门诊缴费' }}
-                </view>
+                  {{ item.completionStatus === 1 ? '缴费记录' : '门诊缴费' }}
+                </view> -->
               </view>
 
               <view v-else-if="item.title === '门诊就诊'">
@@ -303,28 +284,22 @@
                 <GuideContentListCol
                   :cols="mzqhCol"
                   :lab="item"
-                  @click-row="(v) => mzqhClickRow(item, v)"
+                  @click-row="(v) => colRowClick(item, v)"
                 />
 
-                <view class="flex gap-4">
-                  <view
-                    v-for="(btn, bi) in mzqhBtns"
-                    :key="bi"
-                    class="flex-1 btn btn-border color-111 btn-default btn-round f28 mt24"
-                    @click="
-                      btnClick({
-                        btn,
-                        item,
-                      })
-                    "
-                  >
-                    {{ btn.text }}
-                  </view>
-                </view>
+                <GuideBtns
+                  :item="item"
+                  :btns="mzqhBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
               </view>
 
               <view v-else-if="item.title === '诊区签到'">
-                <GuideContentListCol :cols="mzqhCol" :lab="item" />
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => colRowClick(item, v)"
+                />
               </view>
 
               <view v-else>暂未实现</view>
@@ -339,17 +314,18 @@
 <script lang="ts" setup>
   import { watch, ref, computed } from 'vue';
   import TagStatus from './TagStatus.vue';
-  import globalGl from '@/config/global';
   import { TVisitInfo } from '../guide';
+  import { ApiParamsConfig, TButtonConfig, TGuideButtonConfig } from '@/types';
 
   import GuideContentListCol from './GuideContentListCol.vue';
   import GuideReportProgress from './GuideReportProgress.vue';
-  import { ApiParamsConfig, TButtonConfig } from '@/types';
+  import GuideBtns from './GuideBtns.vue';
 
   const props = withDefaults(
     defineProps<{
       list: TVisitInfo[];
       config: ApiParamsConfig['GuideConfig'];
+      hideTip?: boolean;
     }>(),
     {
       list: () => [],
@@ -364,44 +340,24 @@
     return props.config.jyBtns || [];
   });
 
+  const jcBtns = computed(() => {
+    return props.config.jcBtns || [];
+  });
+
   // 门诊取号下面的按钮
-  const mzqhBtns = computed<TButtonConfig[]>(() => {
-    return [
-      {
-        type: 'h5',
-        isSelfH5: '1',
-        // path: 'pages/inquiries/inquiries3',
-        path: 'pagesC/inquiries/inquiriesRes1',
-        text: '预问诊',
-        extraData: {
-          // orderId: "24121324832100498"
-        },
-        addition: {
-          token: 'token',
-          herenId: 'herenId',
-          orderId: 'orderId',
-          patientId: 'patientId',
-          hosDeptId: 'hosDeptId',
-          hosOrderId: 'hosOrderId',
-        },
-      },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
-      },
-      {
-        type: 'self',
-        path: 'pagesA/MyRegistration/MyRegistration',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '取消预约',
-      },
-    ];
+  const mzqhBtns = computed(() => {
+    return props.config.mzqhBtns || [];
+  });
+
+  // 门诊取药下面按钮
+  const takeDrugBtns = computed(() => {
+    return props.config.takeDrugBtns || [];
+  });
+
+  // 门诊缴费下面按钮
+  const mzjfBtns = computed(() => {
+    return props.config.mzjfBtns || [];
+    // return [] as TGuideButtonConfig[];
   });
 
   const drugCol = ref([
@@ -409,6 +365,10 @@
     //   label: '执行科室',
     //   key: 'billDeptName',
     // },
+    {
+      label: '执行状态',
+      key: '_disposeStatusLabel',
+    },
     {
       label: '取药地点',
       key: 'itemAddress',
@@ -438,7 +398,7 @@
     },
   ]);
 
-  const reportCol = ref([
+  const reportJyCol = ref([
     {
       label: '等待人数',
       key: 'beforeNum',
@@ -448,24 +408,55 @@
       key: 'curNo',
     },
     {
-      label: '执行科室',
-      key: 'billDeptName',
+      label: '执行状态',
+      key: '_disposeStatusLabel',
     },
     {
       label: '预约时间',
       key: 'itemTime',
     },
     {
-      label: '报告地点',
-      key: 'reportPlace',
-    },
-    {
-      label: '地址',
+      label: '检验地址',
       key: 'itemAddress',
     },
     {
       label: '注意事项',
       key: 'remark',
+    },
+    {
+      label: '取报告地点',
+      key: 'reportPlace',
+    },
+  ]);
+
+  const reportJcCol = ref([
+    {
+      label: '等待人数',
+      key: 'beforeNum',
+    },
+    {
+      label: '当前叫号',
+      key: 'curNo',
+    },
+    {
+      label: '执行状态',
+      key: '_disposeStatusLabel',
+    },
+    {
+      label: '预约时间',
+      key: 'itemTime',
+    },
+    {
+      label: '检查地址',
+      key: 'itemAddress',
+    },
+    {
+      label: '注意事项',
+      key: 'remark',
+    },
+    {
+      label: '取报告地点',
+      key: 'reportPlace',
     },
   ]);
 
@@ -529,13 +520,10 @@
     'collapse-change',
   ]);
 
-  const mzqhClickRow = (item, { col }) => {
+  const colRowClick = (item, { col }) => {
     if (col.key === 'hosName' && item.hosId) {
       emits('open-hos-location', item);
     }
-  };
-  const goReport = ({ item, tabIndex }) => {
-    emits('go-report', { item, tabIndex });
   };
 
   const goTakeNumber = (item) => {
@@ -557,22 +545,52 @@
     });
   };
 
-  const isRenBtn = ({ btn, lab, item }) => {
-    const { labStatus = [], completionStatus = [] } = btn;
+  const getItemTip = (item: TVisitInfo) => {
+    const { config } = props;
+    let tip = '';
 
-    if (labStatus.length) {
-      if (!labStatus.includes(lab.status)) {
-        return false;
-      }
+    if (props.hideTip) {
+      return '';
     }
 
-    if (completionStatus.length) {
-      if (!completionStatus.includes(item.completionStatus)) {
-        return false;
-      }
+    switch (item.title) {
+      case '门诊取药':
+        tip = config.tabDrugTip || '';
+        break;
+
+      case '检验项目':
+        tip = config.jyTip || '';
+        break;
+
+      case '检验项目':
+        tip = config.jcTip || '';
+        break;
+
+      case '其他项目':
+        tip = config.otherTip || '';
+        break;
+
+      case '门诊缴费':
+        tip = config.mzjfTip || '';
+        break;
+
+      case '门诊就诊':
+        tip = config.mzjzTip || '';
+        break;
+
+      case '门诊取号':
+        tip = config.mzqhTip || '';
+        break;
+
+      case '诊区签到':
+        tip = config.mzqdTip || '';
+        break;
+
+      default:
+        break;
     }
 
-    return true;
+    return tip;
   };
 
   const collapseRef = ref(<any>'');
@@ -627,7 +645,7 @@
     .progress-line {
       position: absolute;
       top: 0;
-      bottom: -40rpx;
+      bottom: 0rpx;
       left: 20rpx;
       width: 1rpx;
       border-left: 1px dashed #cccccc;

@@ -134,7 +134,7 @@ export const useTBanner = async (
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {
-  const { type, extraData = {}, path, appId, addition } = config;
+  const { type, extraData = {}, path, appId, envVersion = 'release', addition } = config;
   let [isLogin, isPatient] = [false, false];
 
   const _d = {
@@ -245,11 +245,12 @@ export const useTBanner = async (
       url,
     });
   } else {
-    console.log('跳转第三方小程序appId:',appId,';path:',joinQuery(path, extraData),';extraData',extraData)
+    console.log('跳转第三方小程序appId:',appId,';path:',joinQuery(path, extraData),';extraData',extraData,envVersion)
     uni.navigateToMiniProgram({
       ...(config.deepProps || {}),
       appId: appId!,
       path: joinQuery(path, extraData),
+      envVersion,
       extraData,
     });
   }

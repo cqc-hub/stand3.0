@@ -239,9 +239,10 @@
     }
 
     const deliveryType =
-      !aimValue.value.length || isIncludeChineseMedicalFriedAndDelivery.value
+      pageConfig.value.deliveryType ||
+      (!aimValue.value.length || isIncludeChineseMedicalFriedAndDelivery.value
         ? '3'
-        : '2';
+        : '2');
 
     const args = {
       deliveryType,

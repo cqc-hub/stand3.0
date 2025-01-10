@@ -3,8 +3,33 @@ import { TButtonConfig } from './serverStaticData';
 export type ApiParamsConfig = {
   //pagesA/guide/guide
   GuideConfig: {
+    // 检验下面按钮
     jyBtns: TGuideButtonConfig[];
+    // 检查下面按钮
     jcBtns: TGuideButtonConfig[];
+    // 门诊取号下面按钮
+    mzqhBtns: TGuideButtonConfig[];
+    // 门诊取药下面按钮
+    takeDrugBtns: TGuideButtonConfig[];
+    // 门诊缴费下面按钮
+    mzjfBtns: TGuideButtonConfig[];
+
+    // 检查tip
+    jcTip?: string;
+    // 检验tip
+    jyTip?: string;
+    // 门诊取药 tip
+    tabDrugTip?: string;
+    // 门诊取号tip
+    mzqhTip?: string;
+    // 门诊签到 tip
+    mzqdTip?: string;
+    // 门诊就诊
+    mzjzTip?: string;
+    // 门诊缴费
+    mzjfTip?: string;
+    // 其他项目
+    otherTip?: string;
   };
 
   // 健康档案
@@ -65,7 +90,15 @@ export type ApiParamsConfig = {
   };
 };
 
-type TGuideButtonConfig = TButtonConfig & {
+// 陪诊页面使用
+export type TGuideButtonConfig = TButtonConfig & {
+  // 最小项状态
   labStatus?: string[];
+  // 历史才有 1 未执行 2部分执行 3已执行
+  disposeStatus?: string[];
+  // 子项状态 1 已完成  历史中是 -1
   completionStatus?: number[];
+
+  // 按钮样式
+  btnClass?: string;
 };
