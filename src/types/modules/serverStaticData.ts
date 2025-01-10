@@ -40,7 +40,6 @@ export interface ISystemConfig_ {
       key: '0';
     };
 
-
     /** 挂号页面 */
     /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会 */
     orderMode?: '1';
@@ -61,8 +60,8 @@ export interface ISystemConfig_ {
     //预问诊跳转的第三方配置 不配置该参数默认跳转自研的
     //isSelOrderShow为1则全部挂号展示预问诊
     preConsultationBtn?: { isSelOrderShow?: '1' } & TBannerConfig;
-     //预问诊显示的订单状态,['0']
-     showYwzByOrderStauts?:string[];
+    //预问诊显示的订单状态,['0']
+    showYwzByOrderStauts?: string[];
     /** 挂号预结算 */
     isOrderPreSettle?: '1';
     /** 候补预约 */
@@ -133,9 +132,9 @@ export interface ISystemConfig_ {
     onlineSignHeadBtns?: TButtonConfig[]; // 签到顶部按钮
     takeNumberConfirmAfterBtn?: TButtonConfig; // 取号成功后的弹窗(按钮配置)
     onlineSignConfirmAfterBtn?: TButtonConfig; //签到成功后的弹窗(按钮配置)
-    AfterConfirmNoShowGoPayBtn?: '1';//签到成功后不展示缴费按钮
-    AfterConfirmNoShowQRcodeBtn?: '1';//签到成功后不展示刷码签到按钮
-    isTakeNumerWithPay?: '1';//是否为缴费取号模式
+    AfterConfirmNoShowGoPayBtn?: '1'; //签到成功后不展示缴费按钮
+    AfterConfirmNoShowQRcodeBtn?: '1'; //签到成功后不展示刷码签到按钮
+    isTakeNumerWithPay?: '1'; //是否为缴费取号模式
   };
 
   /** 移动端伦理委员会(h5) */
@@ -316,8 +315,8 @@ export interface ISystemConfig_ {
     /** 页面顶部 banner */
     bannerPay?: TBannerConfig;
 
-     //门诊缴费自定义tabs
-     tabField?: IOptions[];
+    //门诊缴费自定义tabs
+    tabField?: IOptions[];
 
     /**
      * 详情页
@@ -409,6 +408,8 @@ export interface ISystemConfig_ {
 
     // 药品配送中药代煎需要验证收货人与就诊人一致
     deliveryFiredVerifySelf?: '1';
+    // 指定后端提交类型
+    deliveryType?: string;
   };
 
   /** 病历查询 */
