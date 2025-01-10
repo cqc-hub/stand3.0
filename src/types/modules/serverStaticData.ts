@@ -69,7 +69,7 @@ export interface ISystemConfig_ {
     isOpenOrderWaiting?: '1';
     /**开启后候补挂号兼容加号*/
     isOpenAddedNum?: '1';
-    /** 预约挂号, 取消预约挂号时候  订阅微信消息(单词最多三个) */
+    /** 预约挂号, 取消预约挂号时候  订阅微信消息(单次最多三个) */
     wxOrderSubscribeMessage?: string[];
     /** 挂号按钮 的 label */
     orderRegBtnLabel?: string;

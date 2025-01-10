@@ -1,12 +1,14 @@
 <template>
-  <view class="progress">
+  <view class="progress relative">
+    <view class="my-hide f24">占位</view>
+
     <view
       v-for="(item, i) in list"
       :key="i"
       :class="{
         pb24: i !== list.length - 1,
       }"
-      class="progress-item relative"
+      class="progress-item"
     >
       <view v-if="i !== list.length - 1" class="progress-line" />
 
@@ -643,7 +645,7 @@
     .progress-line {
       position: absolute;
       top: 0;
-      bottom: -40rpx;
+      bottom: 0rpx;
       left: 20rpx;
       width: 1rpx;
       border-left: 1px dashed #cccccc;

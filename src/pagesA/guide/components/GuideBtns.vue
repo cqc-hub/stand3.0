@@ -17,6 +17,8 @@
           {{ btn.text }}
         </view>
       </template>
+
+      <slot />
     </view>
   </view>
 </template>

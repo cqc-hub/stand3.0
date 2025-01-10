@@ -32,8 +32,8 @@
     </view>
 
     <view class="g-container page-bg relative pl32 pr32">
-      <view class="my-hide f24">占位</view>
-      <view v-if="isShowEmpty" class="pt70">
+      <!-- <view class="my-hide f24">占位</view> -->
+      <view v-if="isShowEmpty" class="pt40">
         <g-empty
           :current="1"
           :text="
@@ -54,6 +54,7 @@
           </template>
         </g-empty>
       </view>
+
       <Guide-Content-List
         v-if="visitList.length && visitInfoList.length && tabCurrentKey === '0'"
         :list="visitInfoList"
@@ -117,7 +118,6 @@
     ServerStaticData,
     TButtonConfig,
     useTBanner,
-    wait,
   } from '@/utils';
 
   import { titleMap, TVisitInfo, TVisitRecord } from './guide';
@@ -151,11 +151,13 @@
       orderId?: string;
       // refoundOrder 取消预约
       type?: 'refoundOrder';
+      // 今日就诊定位
+      visitNo?: string;
     }
   );
   const gStores = new GStores();
   const tabCurrent = ref(0);
-  const tabField = [
+  const tabField = ref([
     {
       label: '今日就诊',
       key: '0',
@@ -168,8 +170,10 @@
       label: '历史就诊',
       key: '2',
     },
-  ];
-  const tabCurrentKey = computed(() => tabField[tabCurrent.value]?.key || '');
+  ] as const);
+  const tabCurrentKey = computed(
+    () => tabField.value[tabCurrent.value]?.key || ''
+  );
   const orderConfig = ref({} as ISystemConfig['order']);
   const pageConfig = ref({} as ApiParamsConfig['GuideConfig']);
 
@@ -301,195 +305,6 @@
         isComplete.value = true;
       });
 
-    // const result = {
-    //   result: {
-    //     node5Info: {
-    //       exams: [
-    //         {
-    //           itemName: 'DR检查[头颅侧位DR(腹部, 头部)]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103001',
-    //           itemAddress: '科室位置科室位置 放射科',
-    //           orderId: '2025010800000121',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           appointIndicator: '0',
-    //           isEmptyStomach: '0',
-    //           status: '1',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: 'DR检查[左侧乳突 许、梅氏位(头部)]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103001',
-    //           itemAddress: '科室位置科室位置 放射科',
-    //           orderId: '2025010800000120',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           appointIndicator: '0',
-    //           isEmptyStomach: '0',
-    //           status: '2',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '常规彩超项目[阑尾彩超(腹部彩超)]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103002',
-    //           itemAddress: '超声医学科',
-    //           orderId: '2025010800000119',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           appointIndicator: '0',
-    //           isEmptyStomach: '0',
-    //           status: '3',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '常规彩超项目[颅腔彩超(头颈部彩超)]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103002',
-    //           itemAddress: '超声医学科',
-    //           orderId: '2025010800000118',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           appointIndicator: '0',
-    //           isEmptyStomach: '0',
-    //           status: '4',
-    //           itemTime: '2025-01-08',
-    //         },
-    //       ],
-    //       completionStatus: 0,
-    //     },
-    //     node4Info: { completionStatus: 1 },
-    //     node1Info: {
-    //       date: '2025-01-08',
-    //       deptName: '皮肤科',
-    //       areaId: '3B',
-    //       appointmentTime: '2025-01-08  上午10:00-10:15  20号',
-    //       areaName: '356皮肤科（3楼B区）',
-    //       hosId: '13001',
-    //       completionStatus: 0,
-    //       hosName: 'XX医院',
-    //       visitNo: '20250108000002',
-    //     },
-    //     node2Info: {
-    //       date: '2025-01-08',
-    //       deptName: '皮肤科',
-    //       areaId: '3B',
-    //       appointmentTime: '2025-01-08  上午10:00-10:15  20号',
-    //       areaName: '356皮肤科（3楼B区）',
-    //       hosId: '13001',
-    //       completionStatus: 1,
-    //       hosName: 'XX医院',
-    //       visitNo: '20250108000002',
-    //     },
-    //     node3Info: {},
-    //     node6Info: {
-    //       labs: [
-    //         {
-    //           itemName: '乙肝两对半 [血液]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000124',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '3',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '呼吸道病毒4项 [咽拭子]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000123',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '4',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '血常规 [血液]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000122',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '4',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '新冠抗体检测（收费） [血液]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000128',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '2',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '血清胃功能检测 [血液]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000125',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '2',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '鼻咽癌筛查2项 [血液]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000126',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '2',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '普通细菌培养及鉴定 [未定]',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103008',
-    //           itemAddress: '检验科科室位置 检验科',
-    //           orderId: '2025010800000127',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           status: '2',
-    //           itemTime: '2025-01-08',
-    //         },
-    //       ],
-    //       completionStatus: 0,
-    //     },
-    //     node8Info: {
-    //       drugs: [
-    //         {
-    //           itemName: '西药',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103022',
-    //           itemAddress: '门诊一楼 门诊西药房',
-    //           disposeStatus: '1',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           isDeptStorage: '0',
-    //           itemTime: '2025-01-08',
-    //         },
-    //         {
-    //           itemName: '西药',
-    //           billDeptName: '皮肤科',
-    //           performDeptCode: 'A0103023',
-    //           itemAddress: '门诊二楼 中药房',
-    //           disposeStatus: '1',
-    //           reportPlace: '您可以在线查报告,或到“自助报告打印机”进行打印',
-    //           isDeptStorage: '0',
-    //           itemTime: '2025-01-08',
-    //         },
-    //       ],
-    //       completionStatus: 0,
-    //     },
-    //     node7Info: { completionStatus: 1, others: [] },
-    //   },
-    //   timeTaken: 414,
-    //   code: 0,
-    //   functionVersion:
-    //     '[{"functionType":"1","version":"V0.0.57"},{"functionType":"2","version":"V0.0.851"}]',
-    //   message: '成功',
-    //   respCode: 999002,
-    // }.result;
-
     const {
       node1Info,
       node2Info,
@@ -536,7 +351,7 @@
         return true;
       })
       .filter((o: any) => {
-        const { title, others = [] } = o;
+        const { title, others = [], labs = [] } = o;
 
         if (title === '其他项目' && !others.length) {
           return false;
@@ -551,7 +366,6 @@
       .reverse();
 
     visitInfoList.value = rList;
-    console.log(rList);
     // visitInfoList.value = visitInfoList.value.filter((o) => {
     //   const { title, others = [] } = o;
 
@@ -593,26 +407,6 @@
       .finally(() => {
         isComplete.value = true;
       });
-
-    if (!(result && result.length)) {
-      // result = [
-      //   {
-      //     deptName: '甲状腺外科门诊',
-      //     date: '09-25',
-      //     visitNo: '233456',
-      //   },
-      //   {
-      //     deptName: '甲状腺外科门诊',
-      //     date: '09-27',
-      //     visitNo: '233456222',
-      //   },
-      //   {
-      //     deptName: '甲状腺外科门诊',
-      //     date: '09-28',
-      //     visitNo: '2334561',
-      //   },
-      // ];
-    }
 
     if (result && result.length) {
       visitList.value = result;
@@ -749,6 +543,9 @@
                 itemAddress: q.address,
                 _disposeStatusLabel: _disposeStatusLabelMap[disposeStatus],
                 labStatus: '-1',
+                // 检验、检查转字段
+                hosDocId: q.hosDocId || q.billDocId,
+                hosDeptId: q.hosDeptId || q.billDeptId,
               });
             });
           }
@@ -839,7 +636,7 @@
       useTBanner(preConsultation);
     }
   };
-  const orderRefound = async (item: IRegistrationCardItem) => {
+  const orderRefound = async (item: IRegistrationCardItem, opt = {} as {}) => {
     const regDetailUtil = RegDetailUtil.getInstance(
       {
         prop: ref({
@@ -851,25 +648,23 @@
       true
     );
 
+    const pageArg = {
+      ...pageProps.value,
+      orderId: item.orderId,
+      type: 'refoundOrder',
+      tabKey: tabCurrentKey.value,
+    };
+
+    if (tabCurrentKey.value === '0') {
+      pageArg.visitNo = visitItemSel.value.visitNo;
+    }
+
     await regDetailUtil.getDataDetail();
     await regDetailUtil.refoundOrder({
-      returnUrl: joinQueryForUrl('pagesA/guide/guide', {
-        ...pageProps.value,
-        orderId: item.orderId,
-        type: 'refoundOrder',
-      }),
+      returnUrl: joinQueryForUrl('pagesA/guide/guide', pageArg),
     });
 
     patChange();
-
-    // uni.navigateTo({
-    //   url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-    //     // ...item,
-    //     orderId: item.orderId,
-    //     hosOrderId: item.hosOrderId,
-    //     preWz: item.orderStatus === '10' && '1',
-    //   }),
-    // });
   };
 
   const goOrder = () => {
@@ -999,15 +794,34 @@
 
   const checkCb = async () => {
     if (getLocalStorage('reg-detail-init') === '1') {
-      const { type, orderId } = pageProps.value;
+      const { type, orderId, visitNo } = pageProps.value;
       setLocalStorage({
         'reg-detail-init': '',
       });
 
       await patChange();
 
-      if (type === 'refoundOrder' && orderId && orderList.value.length) {
-        const orderItem = orderList.value.find((o) => o.orderId === orderId);
+      if (type === 'refoundOrder' && orderId) {
+        let orderItem;
+
+        if (tabCurrentKey.value === '0' && visitNo && visitList.value) {
+          const visitItem = visitList.value.find((o) => o.visitNo === visitNo);
+          if (visitItem) {
+            await visitItemClick(visitItem);
+
+            const refoundItem = visitInfoList.value.find(
+              (o) => o.title === '门诊取号'
+            );
+
+            if (refoundItem) {
+            }
+          }
+        }
+
+        if (tabCurrentKey.value === '1' && orderList.value.length) {
+          orderItem = orderList.value.find((o) => o.orderId === orderId);
+        }
+
         if (orderItem) {
           orderRefound(orderItem);
         }
@@ -1018,6 +832,7 @@
   let rCount = 0;
   onShow(async () => {
     if (rCount) {
+      await patChange();
       checkCb();
     }
     // dealContinueMedicalNationAuth();
@@ -1025,7 +840,15 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    const { tabKey } = pageProps.value;
 
+    if (tabKey) {
+      const tabIdx = tabField.value.findIndex((o) => o.key === tabKey);
+
+      if (tabIdx > -1) {
+        tabCurrent.value = tabIdx;
+      }
+    }
     await init();
     await checkCb();
     rCount++;
