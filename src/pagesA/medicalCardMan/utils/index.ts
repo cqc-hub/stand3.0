@@ -17,9 +17,6 @@ import {
 import api from '@/service/api';
 import globalGl, { SYS_CODE } from '@/config/global';
 
-const gStores = new GStores();
-const globalStore = gStores.globalStore;
-
 /**
  * 完善、 新增就诊人页面
  */
@@ -881,14 +878,12 @@ export const useProgramPaySign = () => {
     },
   };
 };
-const commonQuery={
-  herenId: gStores.globalStore.herenId,
-  openId: gStores.globalStore.openId,
-  source: gStores.globalStore.browser.source,
+const commonQuery = {
   sysCode: globalGl.SYS_CODE,
-}
+};
 const healthCardQuery = {
   ...commonQuery,
+
   domainChannel: 2,
   faceUrl: '/pagesA/medicalCardMan/medicalCardMan',
   failRedirectUrl:
@@ -904,6 +899,8 @@ const healthCardQuery = {
     '${authCode}',
 };
 export const healthCardBind = async () => {
+  const gStores = new GStores();
+  const globalStore = gStores.globalStore;
   const { success, res } = await getHealthCardCode();
   if (success) {
     const {
@@ -913,7 +910,10 @@ export const healthCardBind = async () => {
     const requestArg = {
       hospitalId,
       wechatCode,
-      ...healthCardQuery
+      herenId: gStores.globalStore.herenId,
+      openId: gStores.globalStore.openId,
+      source: gStores.globalStore.browser.source,
+      ...healthCardQuery,
     };
     const {
       result: { bindCardUrl: h5Url },
@@ -926,6 +926,8 @@ export const healthCardBind = async () => {
 };
 
 export const healthCardLink = async (healthCode: string, cb?: Function) => {
+  const gStores = new GStores();
+  const globalStore = gStores.globalStore;
   if (globalGl.systemInfo.isOpenHealthCard && healthCode) {
     // #ifdef MP-WEIXIN
     const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
@@ -970,6 +972,8 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
 };
 
 export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
+  const gStores = new GStores();
+  const globalStore = gStores.globalStore;
   const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
   const {
     idCard: idNumber,
@@ -984,6 +988,9 @@ export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
     ...requestData,
     ...idCardInfo,
     ...healthCardQuery,
+    herenId: gStores.globalStore.herenId,
+    openId: gStores.globalStore.openId,
+    source: gStores.globalStore.browser.source,
     nation: nationItem.label,
     authCode,
     phone1,
@@ -1005,13 +1012,17 @@ export const backWithFaceVerify = async (
   redirectUrl: string,
   verifyType: string
 ) => {
+  const gStores = new GStores();
+  const globalStore = gStores.globalStore;
   const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
   const requestOrderArg = {
+    herenId: gStores.globalStore.herenId,
+    openId: gStores.globalStore.openId,
+    source: gStores.globalStore.browser.source,
     ...commonQuery,
     orderId,
     verifyType: parseInt(verifyType),
     hospitalId,
-   
   };
   const {
     result: { userData, userIdKey },
@@ -1036,18 +1047,18 @@ export const backWithFaceVerify = async (
   if (verifyBool) {
     console.log(
       '${decodeURIComponent(redirectUrl)}&verify_order_id=${verifyOrderId}',
-       `${redirectUrl}&verify_order_id=${verifyOrderId}`
+      `${redirectUrl}&verify_order_id=${verifyOrderId}`
     );
     useTBanner({
       type: 'h5',
-      path: decodeURIComponent(`${redirectUrl}&verify_order_id=${verifyOrderId}`)
-      ,
+      path: decodeURIComponent(
+        `${redirectUrl}&verify_order_id=${verifyOrderId}`
+      ),
     });
   } else {
     useTBanner({
       type: 'h5',
-      path: decodeURIComponent(`${redirectUrl}&verify_order_id=-1`)
-      ,
+      path: decodeURIComponent(`${redirectUrl}&verify_order_id=-1`),
     });
   }
 };
@@ -1067,12 +1078,12 @@ const wxFacialVerifyByKey = async (
           success(e: { verifyResult: string; errCode: '0'; errMsg: string }) {
             //识别成功
             console.warn('人脸识别成功', e);
-            uni.hideLoading()
+            uni.hideLoading();
             rl(e);
           },
           fail(err) {
             //识别失败
-            uni.hideLoading()
+            uni.hideLoading();
             gStores.messageStore.showMessage('人脸识别失败', 3000);
             console.error('人脸识别失败', err);
             rj(err);
@@ -1081,7 +1092,7 @@ const wxFacialVerifyByKey = async (
       },
       fail(err) {
         //识别失败
-        uni.hideLoading()
+        uni.hideLoading();
         gStores.messageStore.showMessage('当前设备不支持人脸识别', 3000);
         console.error('当前设备不支持人脸识别', err);
         rj(err);
