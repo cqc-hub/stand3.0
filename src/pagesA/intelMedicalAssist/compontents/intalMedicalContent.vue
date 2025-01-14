@@ -21,7 +21,14 @@
         >
           <view class="flex justify-end my-width">
             <view class="chat-my-item e margin-left padding-chat by-cyan">
-              <text class="g-break-word">{{ msgItem.msg }}</text>
+              <image
+                @click="previewImage(msgItem.imgUrl)"
+                v-if="msgItem.type === 5"
+                :src="msgItem.imgUrl"
+                mode="aspectFill"
+                class="chat-img"
+              ></image>
+              <text v-else class="g-break-word">{{ msgItem.msg }}</text>
             </view>
           </view>
         </view>
@@ -127,7 +134,7 @@
       >
         <view class="flex justify-start">
           <view class="chat-system-item margin-left padding-chat by-cyan">
-            <text class="g-break-word">加载中，请稍等</text>
+            <text class="g-break-word">智慧服务大模型生成中</text>
           </view>
         </view>
       </view>
@@ -142,12 +149,17 @@
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   import RecommendAddress from './RecommendAddress.vue';
   import RecommendInfo from './RecommendInfo.vue';
-  import RecommendMenu from "./RecommendMenu.vue";
+  import RecommendMenu from './RecommendMenu.vue';
   import { msgState, clearChatId } from '../utils/utils';
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;
   }>();
+  const previewImage = (url) => {
+    uni.previewImage({
+      urls: [url],
+    });
+  };
   const viewHeight = ref(0);
   onMounted(() => {
     console.log('msgList', props.msgList);
@@ -184,9 +196,13 @@
   }
   .show-mess {
     padding-top: 0rpx !important;
-    min-height: calc(100vh - 390rpx) !important;
+    // min-height: calc(100vh - 390rpx) !important;
   }
   .flex1 {
     flex: 1 !important;
+  }
+  .chat-img {
+    max-width: 240px;
+    z-index: -1;
   }
 </style>

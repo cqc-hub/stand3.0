@@ -212,26 +212,26 @@
                         :key="index"
                       >
                         <view class="table-content">
-                          <view class="table-title1 table-content-first">
+                          <view class="table-title1 table-content-first g-break-word">
                             {{ item.antiName }}
                           </view>
-                          <view class="table-title2 table-title-common">
+                          <view class="table-title2 table-title-common g-break-word">
                             {{ item.result }}
                           </view>
                           <view
                             v-if="item.antiResult"
-                            class="table-title3 table-title-common"
+                            class="table-title3 table-title-common g-break-word"
                           >
                             {{ item.antiResult }}
                           </view>
                           <view
                             v-else
-                            class="table-title3 table-title-common"
+                            class="table-title3 table-title-common g-break-word"
                           ></view>
-                          <view class="table-title4 table-title-common">
+                          <view class="table-title4 table-title-common g-break-word">
                             {{ item.itemUnits }}
                           </view>
-                          <view class="table-title5 table-title-common">
+                          <view class="table-title5 table-title-common g-break-word">
                             {{ item.testMethod }}
                           </view>
                         </view>
@@ -271,16 +271,16 @@
                   :key="item"
                 >
                   <view class="table-content">
-                    <view class="table-title1">{{ item.itemName }}</view>
+                    <view class="table-title1 g-break-word">{{ item.itemName }}</view>
                     <view
                       v-if="item.itemVal"
-                      class="table-title2 table-title-common"
+                      class="table-title2 table-title-common g-break-word"
                       :class="{
                         'color-red': item.flag == 'H' || item.flag === '阳',
                         'color-blue': item.flag === 'L',
                       }"
                     >
-                      <text class="text-no-wrap">{{ item.itemVal }}</text>
+                      <text class="g-break-word">{{ item.itemVal }}</text>
                       {{
                         (item.flag && item.flag.includes('阳') && item.flag) ||
                         ''
@@ -768,13 +768,13 @@
                 word-wrap: break-word;
               }
               .table-title2 {
-                width: 16%;
+                width: 20%;
               }
               .table-title3 {
                 width: 18.5%;
               }
               .table-title4 {
-                width: 14%;
+                width: 10%;
               }
               .table-title5 {
                 width: 16%;

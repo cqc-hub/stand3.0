@@ -13,11 +13,11 @@
           <view
             class="grid-item"
             v-for="(item, index) in serverArray"
-            :key="item.icon + index"
+            :key="'grid-item' + index"
             @click="handleClickServer(item)"
           >
             <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
-            <view class="label f28">{{ item.label }}</view>
+            <view class="label f28">{{ item.text }}</view>
           </view>
         </view>
       </view>
@@ -48,7 +48,7 @@
             <img
               v-else
               class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+              :src="globalGl.BASE_IMG + 'ntelMedicalAssist_keyboard.png'"
               alt=""
             />
           </view>
@@ -84,7 +84,7 @@
         <view
           class="input-send right"
           :disabled="msgState.msgLoad"
-          @click="sendMsg"
+          @click="sendImg"
         >
           <view class="circle">
             <img
@@ -127,7 +127,7 @@
   } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
-  import { debounce } from '@/utils';
+  import { type TButtonConfig, debounce } from '@/utils';
   import { msgState } from '../utils/utils';
   let SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
@@ -144,11 +144,16 @@
   animationData.value = uni.createAnimation({});
 
   const props = defineProps<{
-    guessServerList: any[];
+    guessServerList?: TButtonConfig[];
     headerConfig: StyleConfigType;
   }>();
 
-  const emits = defineEmits(['on-blur', 'send-msg', 'click-server']);
+  const emits = defineEmits([
+    'on-blur',
+    'send-msg',
+    'click-server',
+    'send-img',
+  ]);
 
   watch(
     () => props.headerConfig.showHeader,
@@ -167,9 +172,9 @@
 
   const serverArray = computed(() => {
     if (props.headerConfig.showHeader) {
-      return props.guessServerList.slice(0, 9);
+      return props?.guessServerList?.slice(0, 9);
     } else {
-      return props.guessServerList.slice(0, 6);
+      return props?.guessServerList?.slice(0, 6);
     }
   });
 
@@ -179,6 +184,9 @@
     } = globalGl;
     return isOpenWechatSI;
   });
+  const sendImg = () => {
+    emits('send-img');
+  };
 
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
@@ -253,9 +261,8 @@
   };
 
   const touchStart = (e) => {
-    console.log('touchStart', e);
     voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
-    voicing.value = true;
+    !msgState.value.msgLoad && (voicing.value = true);
   };
 
   let touchMove = (e) => {

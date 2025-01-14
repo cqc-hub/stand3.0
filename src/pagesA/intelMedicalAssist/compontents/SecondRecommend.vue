@@ -2,15 +2,19 @@
   <view class="">
     <scroll-view class="scroll-view w100p" scroll-x>
       <view class="flex-start mr24">
-        <view v-for="{o,i} in list" :key="'recommend'+i" class="box p24 mr24">
+        <view
+          v-for="{ o, i } in list"
+          :key="'recommend' + i"
+          class="box p24 mr24"
+        >
           <view class="g-break-word f32 mb32">
             {{ getDes(o.type) }}
           </view>
 
           <view class="box-item mb32">
             <view
-              v-for="{item,index} in o.items"
-              :key="'box-item'+index"
+              v-for="{ item, index } in o.items"
+              :key="'box-item' + index"
               @click="itemClick(item)"
               class="item f28 pt12 pb12 pr32 pl32 text-no-wrap"
             >
@@ -25,7 +29,7 @@
             />
 
             <view class="color-blue f32">
-              {{ o.type === "symptom" ? "更多部位症状" : "更多药品查询" }}
+              {{ o.type === 'symptom' ? '更多部位症状' : '更多药品查询' }}
             </view>
           </view>
         </view>
@@ -35,7 +39,8 @@
 </template>
 
 <script>
- import globalGl from '@/config/global';
+  import globalGl from '@/config/global';
+  import { useTBanner } from '@/utils';
   export default {
     props: {
       list: {
@@ -53,33 +58,26 @@
     methods: {
       itemClick(item) {
         const { type, id, content } = item;
-        console.log(item);
-
-        if (type === "drug") {
-          this.$Router.push({
-            path: "/pagesA/common/commonWebview",
-            query: {
-              url: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=0`,
-              // url: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=${globalGl.SYS_CODE}`,
-            },
+        if (type === 'drug') {
+          useTBanner({
+            type: 'h5',
+            path: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=0`,
           });
         } else {
-          this.$Router.push({
-            path: "/pagesA/common/commonWebview",
-            query: {
-              url: `${globalGl.h5Url}pagesC/IntelligentGuidance/select?sysCode=${globalGl.SYS_CODE}&symptomId=${id}`,
-            },
+          useTBanner({
+            type: 'h5',
+            path: `${globalGl.h5Url}pagesC/IntelligentGuidance/select?sysCode=${globalGl.SYS_CODE}&symptomId=${id}`,
           });
         }
       },
 
       getDes(type) {
         const desMap = {
-          symptom: "您可以详细描述症状,让我来帮您找科室找医生吧~",
-          drug: "您可以描述药品名称,让我来帮您推荐药品使用说明书~",
+          symptom: '您可以详细描述症状,让我来帮您找科室找医生吧~',
+          drug: '您可以描述药品名称,让我来帮您推荐药品使用说明书~',
         };
 
-        return desMap[type] || "我不知道推荐啥";
+        return desMap[type] || '我不知道推荐啥';
       },
 
       /**
@@ -87,24 +85,21 @@
        * @param { 'symptom' | 'drug' } type
        */
       moreClick(type) {
-        if (type === "drug") {
-          this.$Router.push({
-            path: "/pagesA/common/commonWebview",
-            query: {
-              url:
-                "https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index?tabIndex=2&sysCode=" +
-                globalGl.SYS_CODE,
-            },
+        if (type === 'drug') {
+          useTBanner({
+            type: 'h5',
+            path:
+              'https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index?tabIndex=2&sysCode=' +
+              globalGl.SYS_CODE,
           });
         } else {
-          this.$Router.push({
-            path: "/pagesA/common/commonWebview",
-            query: {
-              url:
-                globalGl.h5Url +
-                "pagesC/IntelligentGuidance/select?sysCode=" +
-                globalGl.SYS_CODE+'&mulSelect=true',
-            },
+          useTBanner({
+            type: 'h5',
+            path:
+              globalGl.h5Url +
+              'pagesC/IntelligentGuidance/select?sysCode=' +
+              globalGl.SYS_CODE +
+              '&mulSelect=true',
           });
         }
       },

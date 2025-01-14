@@ -34,20 +34,20 @@
                   :class="{
                     ' g-border-right': showPat.patientName,
                   }"
-                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 flex items-center"
-                  @click="chooseAction"
-                >
-                  <text class="iconfont qr-toggle-icon">&#xe6f9;</text>
-                  切换就诊人
-                </view>
-
-                <view
                   class="f28 pr12 pl12 pt8 pb8 flex-1 flex items-center"
                   @click="handlerCreateCachePerson"
                 >
                   <text class="iconfont qr-toggle-icon">&#xe6c3;</text>
 
                   无卡快速预约
+                </view>
+
+                <view
+                  class="f28 pr12 pl12 pt8 pb8 mr12 flex-1 flex items-center"
+                  @click="chooseAction"
+                >
+                  <text class="iconfont qr-toggle-icon">&#xe6f9;</text>
+                  切换就诊人
                 </view>
               </view>
             </template>

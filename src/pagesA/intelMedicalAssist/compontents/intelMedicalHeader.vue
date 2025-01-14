@@ -77,7 +77,7 @@
 
   const gStores = new GStores();
   const props = defineProps<{
-    guessAskList: any[];
+    guessAskList?: Array<{label:string,value:string}>;
     headerConfig: StyleConfigType;
   }>();
   const emits = defineEmits(['click-guess']);
@@ -108,6 +108,7 @@
     //   height: 130rpx !important;
     // }
     .bg-img {
+      z-index: 1;
       height: 570rpx !important;
     }
     .person-img {
@@ -123,6 +124,7 @@
       }
     }
     .header-hello {
+      z-index: 2;
       top: 180rpx !important;
     }
     .person-say {

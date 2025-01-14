@@ -1,10 +1,10 @@
 <template>
   <view class="topnav-container">
-    <view class="smartChatRoom" >
+    <view class="smartChatRoom">
       <view class="smartChatRomm-content">
         <!-- hearder区域 -->
         <intel-medical-header
-          :guessAskList="guessAskList"
+          :guessAskList="pageConfig?.intelMedicalAssistConfig?.guessAskList"
           :headerConfig="styleConfig"
           @click-guess="handleGuess"
         />
@@ -16,53 +16,70 @@
         />
         <!-- fotter区域 -->
         <intalMedicalFooter
-          :guessServerList="guessServerList"
+          :guessServerList="pageConfig?.intelMedicalAssistConfig?.guessServerList"
           :headerConfig="styleConfig"
           @click-server="handleServer"
           @on-blur="onBlur"
           @send-msg="sendMsg"
+          @send-img="sendImg"
         />
       </view>
     </view>
+    <g-message />
   </view>
 </template>
 <script setup lang="ts">
-  import { computed, ref, reactive, onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { deQueryForUrl } from '@/common';
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
   import {
     styleConfig,
-    guessAskList,
-    guessServerList,
+    pageConfig,
     handleServer,
     handleGuess,
     onBlur,
     sendMsg,
+    sendImg,
     msgList,
+    init,
   } from './utils/utils';
   import { throttle } from '@/utils';
 
+  const props = defineProps<{
+    isMess?: '1';
+  }>();
+
   const scrollChangeView = (e) => {
-    // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
-    if (e.scrollTop <= 20 && styleConfig.value.showHeader === false&& (!msgList.value.length&&!styleConfig.value.isMessage)) {
+    if (
+      e.scrollTop <= 20 &&
+      styleConfig.value.showHeader === false &&
+      !msgList.value.length &&
+      !styleConfig.value.isMessage
+    ) {
       changeShowHeader('2');
-    } else if (e.scrollTop > 20 && styleConfig.value.showHeader === true&& msgList.value.length&&!styleConfig.value.isMessage) {
+    } else if (
+      e.scrollTop > 20 &&
+      styleConfig.value.showHeader === true &&
+      msgList.value.length &&
+      !styleConfig.value.isMessage
+    ) {
       changeShowHeader('1');
     }
   };
-  let changeShowHeader = (flag?:'1'|'2') => {
+  let changeShowHeader = (flag?: '1' | '2') => {
     if (styleConfig.value.simpleHeadInit) {
       styleConfig.value.simpleHeadInit = false;
       return;
     }
-    if(styleConfig.value.isMessage){
+    if (styleConfig.value.isMessage) {
       styleConfig.value.showHeader = false;
-      return
+      return;
     }
-    if(flag){
-      styleConfig.value.showHeader = (flag==='1')
+    if (flag) {
+      styleConfig.value.showHeader = flag === '1';
     }
     styleConfig.value.showHeader = !styleConfig.value.showHeader;
   };
@@ -78,6 +95,10 @@
   onPageScroll((e) => {
     styleConfig.value.transition = true;
     scrollChangeView(e);
+  });
+
+  onLoad(() => {
+    init(props?.isMess);
   });
 </script>
 <style lang="scss" scoped>

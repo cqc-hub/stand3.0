@@ -459,6 +459,11 @@ export interface ISystemConfig_ {
     // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
     isItemQrCodeShow?: '1';
     navBtns?: TButtonConfig[];
+    //智能助医
+    intelMedicalAssistConfig?:{
+      guessAskList?:Array<{label:string,value:string}>;
+      guessServerList?:TButtonConfig[]
+    }
     //智能陪诊
     medicalAsistantConfig?: {
       //智能陪诊日期右侧区域的按钮

@@ -15,6 +15,7 @@
     width: 100vw;
     position: fixed;
     height: 700rpx;
+
   }
   @keyframes progress-grow {
     to {
@@ -39,6 +40,7 @@
     animation-timeline: --person-scroll;
   }
   .header-hello {
+    z-index: 2;
     position: fixed;
     left: 50rpx;
     top: 50rpx;

@@ -1055,11 +1055,11 @@ const userApi = {
     }),
   customerAsk: (data: any) =>
     service.post('/phs-extend/customer/ask', parm(data), {
-      hideLoading: false,
+      hideLoading: true,
     }),
   customerAIask: (data: any) =>
     service.post('/phs-extend/customer/aiAsk', parm(data), {
-      hideLoading: false,
+      hideLoading: true,
     }),
   customerEvaluate: (data: any) =>
     service.post('/phs-extend/customer/evaluate', parm(data), {

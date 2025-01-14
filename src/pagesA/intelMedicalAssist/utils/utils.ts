@@ -1,29 +1,32 @@
 import { computed, ref, reactive, nextTick } from 'vue';
-import { type StyleConfigType } from './types';
-import { type TButtonConfig, useTBanner } from '@/utils';
+import {
+  type StyleConfigType,
+  type MsgListType,
+  type MsgStatusType,
+} from './types';
+import {
+  type TButtonConfig,
+  type ISystemConfig,
+  ServerStaticData,
+  useTBanner,
+  apiAsync,
+  GStores,
+} from '@/utils';
 import { cloneUtil } from '@/common';
+
 import globalGl from '@/config/global';
 import api from '@/service/api';
-export const msgList = ref<
-  Array<{
-    msgLoad?: boolean;
-    my?: boolean;
-    msg?: string;
-    type: number;
-    boldMsg?: string;
-    requestId?: string;
-    addRessList?: any[];
-    addRessInfo?: object;
-    homeMenuConfig?: any[];
-    firstCommendList?: any[];
-  }>
->([]);
-export const msgState = ref<any>({
-  scrollIntoView: '',
+import env from '@/config/env';
+
+export const pageConfig = ref(
+  <ISystemConfig['Electronic_Consultation_Sheet']>{}
+);
+export const msgList = ref<Array<MsgListType>>([]);
+export const msgState = ref<MsgStatusType>({
   msgLoad: false,
   lastChatId: '',
-  msg:'',
-  focus:false
+  msg: '',
+  focus: false,
 });
 //普通首页
 // {
@@ -46,109 +49,23 @@ export const styleConfig = ref<StyleConfigType>({
   simpleHeadInit: false, //初始服务居中
 });
 
-export const guessAskList = ref([
-  {
-    label: '不知道挂什么号',
-    value: '不知道挂什么号',
-  },
-  {
-    label: '感冒要可以买那些',
-    value: '感冒要可以买那些',
-  },
-  {
-    label: '帮我解读预先这份报告',
-    value: '帮我解读预先这份报告',
-  },
-  {
-    label: '不知道挂什么号',
-    value: '不知道挂什么号',
-  },
-  {
-    label: '感冒要可以买那些',
-    value: '感冒要可以买那些',
-  },
-  {
-    label: '帮我解读预先这份报告',
-    value: '帮我解读预先这份报告',
-  },
-  {
-    label: '不知道挂什么号',
-    value: '不知道挂什么号',
-  },
-  {
-    label: '感冒要可以买那些',
-    value: '感冒要可以买那些',
-  },
-  {
-    label: '帮我解读预先这份报告',
-    value: '帮我解读预先这份报告',
-  },
-]);
-export const guessServerList = ref([
-  {
-    icon: 'intelMedicalAssist_zhgl.png',
-    label: '智能导诊',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_chuan card.png',
-    label: '预约挂号',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_search.png',
-    label: '报告查询',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_dbsj.png',
-    label: '门诊缴费',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_ssjj.png',
-    label: '治疗预约',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_document.png',
-    label: '病案复印',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_card.png',
-    label: '在线取号',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_hljl.png',
-    label: '满意度调查',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-  {
-    icon: 'intelMedicalAssist_rypg.png',
-    label: '门诊签到',
-    type: 'self',
-    path: 'pagesB/reportQuery/reportQuery',
-    addition: { orderClassTabIndex: 'tabIndex' },
-  },
-]);
+export const init = async (isMess) => {
+  pageConfig.value = await ServerStaticData.getSystemConfig(
+    'Electronic_Consultation_Sheet'
+  );
+  console.log('isMess',isMess)
+  isMess && initWithMess();
+};
+
+const initWithMess = async () => {
+  styleConfig.value = {
+    transition: false, //初始过渡效果
+    showHeader: false, //展示首页
+    isMessage: true, //通知效果
+    simpleHeadInit: false, //初始服务居中
+  };
+};
+
 export const recommendMenuList = [
   {
     label: '智能导诊',
@@ -182,7 +99,7 @@ export const recommendMenuList = [
   },
 ];
 
-export const sendMsg = async (value) => {
+export const sendMsg = async (value: string) => {
   msgList.value.push({
     my: true,
     msg: value,
@@ -192,14 +109,18 @@ export const sendMsg = async (value) => {
   scrollToNewMsg();
   const {
     result: { showType, list, requestId, chatId },
-  } = await api.customerAIask({
-    content: value,
-    sysCode: globalGl.SYS_CODE,
-    source: 1,
-    chatId: msgState.value.lastChatId,
-  });
+  } = await api
+    .customerAIask({
+      content: value,
+      sysCode: globalGl.SYS_CODE,
+      source: 1,
+      chatId: msgState.value.lastChatId,
+    })
+    .finally(() => {
+      msgState.value.msgLoad = false;
+    });
   msgState.value.lastChatId = chatId;
-  msgState.value.msgLoad = false;
+
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
@@ -260,32 +181,70 @@ const scrollToNewMsg = () => {
   });
 };
 
+export const sendImg = async () => {
+  if (msgState.value.msgLoad) {
+    return;
+  }
+  msgState.value.msgLoad = true;
+  const gStores = new GStores();
+  const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+    count: 1,
+    sizeType: ['compressed', 'original'],
+    sourceType: ['album', 'camera'],
+  });
+  msgList.value.push({
+    my: true,
+    imgUrl: tempFilePaths[0],
+    type: 5,
+  });
+  scrollToNewMsg();
+  msgState.value.msgLoad = false;
+  //// @ts-expect-error
+  // const { data } = await apiAsync(uni.uploadFile, {
+  //   url: `${env.baseApi}/phs-base/upload/imageUpload`,
+  //   filePath: tempFilePaths[0],
+  //   name: 'file',
+  //   fileType: 'image',
+  //   formData: {
+  //     imageName: `_${new Date().getTime()}${tempFilePaths[0].slice(
+  //       tempFilePaths[0].lastIndexOf('.')
+  //     )}`,
+  //     sysCode: globalGl.SYS_CODE,
+  //     Authorization: gStores.globalStore.token.accessToken,
+  //   },
+  // });
+  // var jsonData = JSON.parse(data) as {
+  //   code: number;
+  //   result: string;
+  //   message: string;
+  // };
+
+  //请求接口
+};
+
 export const onBlur = (value) => {
   console.log('onBlur', value);
 };
 
 export const handleGuess = (item) => {
-  console.log('handleGuess', item);
+  sendMsg(item.value);
 };
 
 export const handleServer = (item: TButtonConfig) => {
-  console.log('handleServer', item);
-
   useTBanner(item);
 };
 
 export const clearChatId = async (id: string) => {
-  let lastMyContent=''
-  let lastMsg:any={}
-  msgList.value.forEach((item,index)=>{
-    if(item?.requestId&&item.requestId===id){
-      lastMyContent=lastMsg.msg
+  let lastMyContent = '';
+  let lastMsg: any = {};
+  msgList.value.forEach((item, index) => {
+    if (item?.requestId && item.requestId === id) {
+      lastMyContent = lastMsg.msg;
     }
-    if(item.my) lastMsg=item
-  })
-  lastMyContent&&(msgState.value.msg=lastMyContent)
-  msgState.value.lastChatId=''
-
+    if (item.my) lastMsg = item;
+  });
+  lastMyContent && (msgState.value.msg = lastMyContent);
+  msgState.value.lastChatId = '';
 };
 
 const dealShowType1 = (list, requestId) => {
