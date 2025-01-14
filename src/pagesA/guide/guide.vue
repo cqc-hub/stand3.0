@@ -77,6 +77,7 @@
         @open-hos-location="openHosLocation"
         @go-dept="goDept"
         @go-doc="goDocDetail"
+        @go-detail="goRegDetail"
       />
 
       <GuideHisList
@@ -667,7 +668,16 @@
 
     patChange();
   };
-
+  const goRegDetail = (item: IRegistrationCardItem) => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+        ...item,
+        orderId: item.orderId,
+        hosOrderId: item.hosOrderId,
+        preWz: item.orderStatus === '10' && '1',
+      }),
+    });
+  };
   const goOrder = () => {
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/Register', {

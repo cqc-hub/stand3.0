@@ -8,6 +8,7 @@
       :class="{
         mb24: i !== list.length - 1,
       }"
+      @click="emits('go-detail', item)"
       class="bg-white g-border rounded-xl"
     >
       <view class="p32 pb24 g-border-bottom">
@@ -24,7 +25,7 @@
       <view class="p32 pt24">
         <view
           v-if="item.hosName"
-          @click="emits('open-hos-location', item)"
+          @click.stop="emits('open-hos-location', item)"
           class="row items-center f28 mb10"
         >
           <view class="label color-888">院区</view>
@@ -37,7 +38,7 @@
 
         <view
           v-if="item.schQukCategor || item.categorName"
-          @click="emits('go-dept', item)"
+          @click.stop="emits('go-dept', item)"
           class="row f28 mb10"
         >
           <view class="label color-888">科室号别</view>
@@ -55,7 +56,7 @@
           </view>
         </view>
 
-        <view @click="emits('go-doc', item)" class="row f28 mb10">
+        <view @click.stop="emits('go-doc', item)" class="row f28 mb10">
           <view class="label color-888">医生</view>
           <view class="body color-blue">
             {{ item.docName }}
@@ -77,7 +78,7 @@
           <view class="flex-normal footer-btns flex-wrap pt24 flex-1">
             <button
               v-if="isShowYWZBtn(item)"
-              @click="goYWZ(item)"
+              @click.stop="goYWZ(item)"
               class="btn btn-round btn-size-small btn-border cancel-btn"
             >
               预问诊留言
@@ -85,7 +86,7 @@
 
             <button
               v-if="['0'].includes(item.orderStatus)"
-              @click="refoundOrder(item)"
+              @click.stop="refoundOrder(item)"
               class="btn btn-round btn-size-small btn-border cancel-btn"
             >
               {{ config.isOrderPay === '1' ? '退号' : '取消预约' }}
@@ -94,7 +95,7 @@
             <block v-for="btn in getCustomBtns" :key="btn.text">
               <button
                 v-if="isShowCustomBtn(item, btn)"
-                @click="
+                @click.stop="
                   useTBanner(btn, 'navigateTo', {
                     ...gStores.userStore.patChoose,
                     ...item,
