@@ -12,7 +12,7 @@
       }"
       class="g-bold tip relative"
     >
-      <view class="tip-inner">{{ text }}</view>
+      <view class="tip-inner text-no-wrap">{{ text }}</view>
     </view>
   </view>
 </template>
