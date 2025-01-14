@@ -256,7 +256,6 @@
 
   const cancleVoice = () => {
     SImanager.stop();
-    console.log('cancleVoice2');
     voicing.value && (voicing.value = false);
   };
 

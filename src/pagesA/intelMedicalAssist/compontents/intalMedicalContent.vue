@@ -160,11 +160,6 @@
       urls: [url],
     });
   };
-  const viewHeight = ref(0);
-  onMounted(() => {
-    console.log('msgList', props.msgList);
-  });
-  const getViewHeight = () => {};
 </script>
 <style lang="scss" scoped>
   @import './intalMedicalAssists.scss';

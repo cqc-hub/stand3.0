@@ -53,7 +53,7 @@ export const init = async (isMess) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
-  console.log('isMess',isMess)
+  console.log('isMess', isMess);
   isMess && initWithMess();
 };
 
@@ -171,9 +171,7 @@ const scrollToNewMsg = () => {
       selector:
         '#pageScroll >>> #smartChatRoomItem_' + (msgList.value.length - 1),
       duration: 300,
-      success: () => {
-        console.log('滚动成功');
-      },
+      success: () => {},
       fail: (err) => {
         console.log('滚动失败：', err);
       },
@@ -185,13 +183,14 @@ export const sendImg = async () => {
   if (msgState.value.msgLoad) {
     return;
   }
-  msgState.value.msgLoad = true;
+
   const gStores = new GStores();
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed', 'original'],
     sourceType: ['album', 'camera'],
   });
+  msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
     imgUrl: tempFilePaths[0],

@@ -78,7 +78,6 @@
 
       goGuideMedical() {
         console.log('智能问药');
-
         useTBanner({
           type: 'h5',
           path:
