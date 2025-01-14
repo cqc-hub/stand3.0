@@ -117,6 +117,7 @@
   import {
     type TBannerConfig,
     useTBanner,
+    wait,
     GStores,
     previewImage,
     getSystemConfig,
@@ -244,6 +245,15 @@
   });
 
   onLoad(async (opt) => {
+
+    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+    uni.showLoading({});
+
+    if (queryParams || opt?.q) {
+      return;
+    }
+
+    await wait(600);
     pageConfig.value = await getSystemConfig('FAMOUS_DOCTOR_DEPT');
     try {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
