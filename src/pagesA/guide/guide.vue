@@ -582,7 +582,8 @@
     isComplete.value = false;
     orderList.value = [];
     const { result = [] } = await api
-      .getRegOrderList<IRegistrationCardItem[]>({
+      .hosRegOrderList<IRegistrationCardItem[]>({
+        // .getRegOrderList<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
         patientId,

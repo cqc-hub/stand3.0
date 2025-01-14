@@ -17,7 +17,7 @@
           :class="{
             ['bg-blue']: isActive(item),
           }"
-          class="progress-number flex items-center justify-center relative f26 color-fff mr12"
+          class="progress-number z-1 flex items-center justify-center relative f26 color-fff mr12"
         >
           {{ list.length - i }}
         </view>
