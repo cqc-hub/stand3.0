@@ -45,7 +45,7 @@
   import { throttle } from '@/utils';
 
   const scrollChangeView = (e) => {
-    console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
+    // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
     if (e.scrollTop <= 20 && styleConfig.value.showHeader === false&& (!msgList.value.length&&!styleConfig.value.isMessage)) {
       changeShowHeader('2');
     } else if (e.scrollTop > 20 && styleConfig.value.showHeader === true&& msgList.value.length&&!styleConfig.value.isMessage) {

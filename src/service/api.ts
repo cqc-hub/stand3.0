@@ -1057,6 +1057,14 @@ const userApi = {
     service.post('/phs-extend/customer/ask', parm(data), {
       hideLoading: false,
     }),
+  customerAIask: (data: any) =>
+    service.post('/phs-extend/customer/aiAsk', parm(data), {
+      hideLoading: false,
+    }),
+  customerEvaluate: (data: any) =>
+    service.post('/phs-extend/customer/evaluate', parm(data), {
+      hideLoading: false,
+    }),
 };
 //统一认证服务
 const authApi = {

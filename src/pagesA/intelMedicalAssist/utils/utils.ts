@@ -1,14 +1,30 @@
 import { computed, ref, reactive, nextTick } from 'vue';
 import { type StyleConfigType } from './types';
 import { type TButtonConfig, useTBanner } from '@/utils';
+import { cloneUtil } from '@/common';
 import globalGl from '@/config/global';
 import api from '@/service/api';
-export const msgList = ref<Array<any>>([]);
+export const msgList = ref<
+  Array<{
+    msgLoad?: boolean;
+    my?: boolean;
+    msg?: string;
+    type: number;
+    boldMsg?: string;
+    requestId?: string;
+    addRessList?: any[];
+    addRessInfo?: object;
+    homeMenuConfig?: any[];
+    firstCommendList?: any[];
+  }>
+>([]);
 export const msgState = ref<any>({
   scrollIntoView: '',
   msgLoad: false,
+  lastChatId: '',
+  msg:'',
+  focus:false
 });
-const focus = ref<boolean>(false);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -133,30 +149,68 @@ export const guessServerList = ref([
     addition: { orderClassTabIndex: 'tabIndex' },
   },
 ]);
+export const recommendMenuList = [
+  {
+    label: '智能导诊',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-1.png`,
+    key: 'guideSmart',
+  },
+  {
+    label: '智能问药',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-2.png`,
+    key: 'guideMedical',
+  },
+  {
+    label: '智能问病',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-3.png`,
+    key: 'guideDisease',
+  },
+  {
+    label: '健康自测',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-4.png`,
+    key: 'healthTestSelf',
+  },
+  {
+    label: '健康百科',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-5.png`,
+    key: 'healthCyclopaedia',
+  },
+  {
+    label: '联系医院',
+    ico: `${globalGl.BASE_IMG}srm-chat-room-recommend-6.png`,
+    key: 'serviceCenter',
+  },
+];
+
 export const sendMsg = async (value) => {
-  console.log('sendMsg', value);
   msgList.value.push({
     my: true,
     msg: value,
-    type:1
+    type: 1,
   });
-  msgList.value.msgLoad = true;
+  msgState.value.msgLoad = true;
   scrollToNewMsg();
-  const { result: { showType, list, requestId, chatId }  } = await api.customerAsk({
+  const {
+    result: { showType, list, requestId, chatId },
+  } = await api.customerAIask({
     content: value,
-    sysCode: 1001017,
-    // sysCode: globalGl.SYS_CODE,
+    sysCode: globalGl.SYS_CODE,
     source: 1,
-    chatId: msgList.value.lastChatId,
+    chatId: msgState.value.lastChatId,
   });
-  msgList.value.lastChatId=chatId
-  msgList.value.msgLoad = false;
+  msgState.value.lastChatId = chatId;
+  msgState.value.msgLoad = false;
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
       msg: '未查询到您想要了解的问题，点击客服中心获取帮助！',
+      type: 1,
+      requestId,
+      firstCommendList: cloneUtil(recommendMenuList).filter((o) =>
+        ['serviceCenter'].includes(o.key)
+      ),
     });
-  }else{
+  } else {
     switch (showType) {
       case 1:
         // 文本
@@ -180,37 +234,14 @@ export const sendMsg = async (value) => {
       default:
         msgList.value.push({
           my: false,
-          msg: "未对接的showType: " + showType,
+          msg: '未对接的showType: ' + showType,
           type: 1,
         });
         break;
-    
     }
   }
-  
+
   scrollToNewMsg();
-
-  // await new Promise((rl, rj) => {
-  //   setTimeout(() => {
-  //     msgList.value.msgLoad = false;
-  //     // let i = 0;
-  //     // let msg =
-  //     //   '这是一条系统回复，这是一条系统回复，这是一条系统回复，这是一条系统回复，';
-  //     // msgList.value[msgList.value.length - 1].msg = '';
-  //     // for (; i <= msg.length; i++) {
-  //     //   setTimeout(() => {
-  //     //     msgList.value[msgList.value.length - 1].msg.push(msg[i]);
-  //     //   }, 50);
-  //     // }
-
-  //     // msgList.value[msgList.value.length - 1].msg = '';
-  //     msgList.value.push({
-  //       my: false,
-  //       msg: '系统回复1',
-  //     });
-  //     scrollToNewMsg();
-  //   }, 1000);
-  // });
 };
 
 const scrollToNewMsg = () => {
@@ -243,30 +274,43 @@ export const handleServer = (item: TButtonConfig) => {
   useTBanner(item);
 };
 
+export const clearChatId = async (id: string) => {
+  let lastMyContent=''
+  let lastMsg:any={}
+  msgList.value.forEach((item,index)=>{
+    if(item?.requestId&&item.requestId===id){
+      lastMyContent=lastMsg.msg
+    }
+    if(item.my) lastMsg=item
+  })
+  lastMyContent&&(msgState.value.msg=lastMyContent)
+  msgState.value.lastChatId=''
 
-const dealShowType1=(list, requestId)=> {
+};
+
+const dealShowType1 = (list, requestId) => {
   const { question, answer } = list[0];
 
   msgList.value.push({
     my: false,
     msg: answer,
-    boldMsg: (question && question + "为") || "",
+    boldMsg: (question && question + '为') || '',
     type: 1,
     requestId,
   });
-}
+};
 
-const dealShowType9=(list, requestId)=> {
+const dealShowType9 = (list, requestId) => {
   msgList.value.push({
     my: false,
-    msg: "为您推荐: ",
+    msg: '为您推荐: ',
     type: 3,
     addRessList: list,
     requestId,
   });
-}
+};
 
-const dealShowType10=(list, requestId)=> {
+const dealShowType10 = (list, requestId) => {
   const {
     question: title,
     intro: subTitle,
@@ -277,7 +321,7 @@ const dealShowType10=(list, requestId)=> {
 
   msgList.value.push({
     my: false,
-    msg: "为您找到以下内容",
+    msg: '为您找到以下内容',
     type: 3,
     requestId,
     addRessInfo: {
@@ -288,14 +332,13 @@ const dealShowType10=(list, requestId)=> {
       phones,
     },
   });
-}
+};
 
-const dealShowType11=(list, requestId)=> {
+const dealShowType11 = (list, requestId) => {
   msgList.value.push({
     my: false,
     type: 4,
     homeMenuConfig: list,
     requestId,
   });
-  
-}
+};

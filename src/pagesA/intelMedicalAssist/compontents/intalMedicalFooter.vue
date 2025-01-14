@@ -34,7 +34,7 @@
       <view class="bottom-dh-char flex-row-around">
         <view
           class="input-send left"
-          :disabled="msgLoad"
+          :disabled="msgState.msgLoad"
           @click="changeVoiceType"
         >
           <view class="circle">
@@ -56,15 +56,15 @@
         <view class="bottom-dh-content" v-if="!isVoice">
           <view class="border">
             <input
-              v-model="msg"
+              v-model="msgState.msg"
               class="dh-input f28"
               type="textarea"
               @confirm="sendMsg"
-              :disabled="msgLoad"
+              :disabled="msgState.msgLoad"
               placeholder-class="my-neirong-sm f28"
               placeholder="  请输入症状/药品/疾病/地点/文章…"
               confirm-type="search"
-              :focus="focus"
+              :focus="msgState.focus"
               @blur="onBlur"
             />
           </view>
@@ -81,7 +81,11 @@
             <view class="dh-input f28 voice">按住说话</view>
           </view>
         </view>
-        <view class="input-send right" :disabled="msgLoad" @click="sendMsg">
+        <view
+          class="input-send right"
+          :disabled="msgState.msgLoad"
+          @click="sendMsg"
+        >
           <view class="circle">
             <img
               class="bottom-icon"
@@ -118,18 +122,15 @@
     computed,
     getCurrentInstance,
     onMounted,
-    onBeforeMount,
     watch,
     nextTick,
   } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
   import { debounce } from '@/utils';
+  import { msgState } from '../utils/utils';
   let SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
-  const msg = ref<string>();
-  const msgLoad = ref<boolean>(false);
-  const focus = ref<boolean>(false);
   const isVoice = ref<boolean>(false);
   const voicing = ref<boolean>(false);
   const voiceTouchData = ref<any>({
@@ -182,7 +183,7 @@
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
     nextTick(() => {
-      msg.value = '';
+      msgState.value.msg = '';
     });
   };
 
@@ -203,25 +204,35 @@
   };
 
   const handleVoice = (...args) => {
-    console.log('handleVoice', args);
     SImanager.start({
       duration: 60000,
       lang: 'zh_CN',
     });
-
+    setTimeout(() => {
+      if (voicing.value) {
+        voicing.value = false;
+      }
+    }, 60000);
   };
   const initRecord = () => {
     if (hasWechatSI.value) {
-      const plugin = requirePlugin('SIPlugin');
-      SImanager = plugin.getRecordRecognitionManager();
+      if (!SImanager) {
+        const plugin = requirePlugin('SIPlugin');
+        SImanager = plugin.getRecordRecognitionManager();
+      }
       SImanager.onStop = (res) => {
-        console.log('SImanager.onStop2', res, msg.value);
-        msg.value += res.result || '';
+        msgState.value.msg += res.result || '';
+        console.log('SImanager.onStop', msgState.value.msg);
+        emits('send-msg', msgState.value.msg);
+        nextTick(() => {
+          msgState.value.msg = '';
+        });
       };
 
       SImanager.onStart = (res) => {
         console.log('SImanager.onStart', res);
-      };0
+      };
+      0;
 
       SImanager.onError = function (res) {
         console.error('error msg', res);
@@ -229,7 +240,7 @@
       //有新的识别内容返回，则会调用此事件
       SImanager.onRecognize = (res) => {
         console.log('SImanager..onRecognize', res);
-        msg.value += res.result || '';
+        msgState.value.msg += res.result || '';
       };
       // 识别结束事件
     }
@@ -238,8 +249,7 @@
   const cancleVoice = () => {
     SImanager.stop();
     console.log('cancleVoice2');
-
-    voicing.value = false;
+    voicing.value && (voicing.value = false);
   };
 
   const touchStart = (e) => {
@@ -257,7 +267,6 @@
     } else {
       voiceTouchData.value.isMoveUp = true;
     }
-    console.log('touchMove', voiceTouchData.value);
   };
   touchMove = debounce(touchMove, 500, false);
 
@@ -287,10 +296,8 @@
   initRecord();
   onMounted(() => {
     getGuessServerBottom();
+    initRecord();
   });
-
-   
-
 </script>
 <style lang="scss" scoped>
   .transition {

@@ -2,14 +2,15 @@
   <view class="">
     <scroll-view class="scroll-view w100p" scroll-x>
       <view class="flex-start mr24">
-        <view v-for="o in list" class="box p24 mr24">
+        <view v-for="{o,i} in list" :key="'recommend'+i" class="box p24 mr24">
           <view class="g-break-word f32 mb32">
             {{ getDes(o.type) }}
           </view>
 
           <view class="box-item mb32">
             <view
-              v-for="item in o.items"
+              v-for="{item,index} in o.items"
+              :key="'box-item'+index"
               @click="itemClick(item)"
               class="item f28 pt12 pb12 pr32 pl32 text-no-wrap"
             >
@@ -34,6 +35,7 @@
 </template>
 
 <script>
+ import globalGl from '@/config/global';
   export default {
     props: {
       list: {
@@ -44,8 +46,7 @@
 
     data() {
       return {
-        imgUrl: this.$GLOBAL.BASE_IMG3,
-        sysCode: uni.getStorageSync("sysCode") || this.$GLOBAL.SYS_CODE,
+        imgUrl: this.$global.BASE_IMG,
       };
     },
 
@@ -59,14 +60,14 @@
             path: "/pagesA/common/commonWebview",
             query: {
               url: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=0`,
-              // url: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=${this.sysCode}`,
+              // url: `https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/drugsDetail?title=药品详情&label=${content}&id=${id}&sysCode=${globalGl.SYS_CODE}`,
             },
           });
         } else {
           this.$Router.push({
             path: "/pagesA/common/commonWebview",
             query: {
-              url: `${this.$GLOBAL.v3H5Url}pagesC/IntelligentGuidance/select?sysCode=${this.sysCode}&symptomId=${id}`,
+              url: `${globalGl.h5Url}pagesC/IntelligentGuidance/select?sysCode=${globalGl.SYS_CODE}&symptomId=${id}`,
             },
           });
         }
@@ -92,7 +93,7 @@
             query: {
               url:
                 "https://h5.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/index?tabIndex=2&sysCode=" +
-                this.sysCode,
+                globalGl.SYS_CODE,
             },
           });
         } else {
@@ -100,9 +101,9 @@
             path: "/pagesA/common/commonWebview",
             query: {
               url:
-                this.$GLOBAL.v3H5Url +
+                globalGl.h5Url +
                 "pagesC/IntelligentGuidance/select?sysCode=" +
-                this.sysCode+'&mulSelect=true',
+                globalGl.SYS_CODE+'&mulSelect=true',
             },
           });
         }
