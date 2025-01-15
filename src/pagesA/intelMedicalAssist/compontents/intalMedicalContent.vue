@@ -61,6 +61,9 @@
                 :x="msgItem"
               />
             </view>
+            <view v-else-if="msgItem.type === 6">
+              <Recommend-Card/>
+            </view>
             <view
               v-else
               :class="{
@@ -150,6 +153,7 @@
   import RecommendAddress from './RecommendAddress.vue';
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';
+  import RecommendCard from './RecommendCard.vue';
   import { msgState, clearChatId } from '../utils/utils';
   const props = defineProps<{
     msgList: any[];

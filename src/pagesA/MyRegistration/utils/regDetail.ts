@@ -1,6 +1,6 @@
 import { Ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
-import { GStores, ISystemConfig, ServerStaticData, wait } from '@/utils';
+import { GStores, ISystemConfig, ServerStaticData, wait ,apiAsync} from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
 import { getQxMedicalNation } from '@/pagesA/clinicPay/utils/clinicPayDetail';

@@ -6,7 +6,10 @@
       'stick-bottom': !headerConfig?.showHeader,
     }"
   >
-    <view class="guess-server" :style="{ bottom: guessServerBottom }">
+    <view
+      class="guess-server float-from-top"
+      :style="{ bottom: guessServerBottom }"
+    >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
         <view class="guess-grid">
@@ -171,6 +174,7 @@
   });
 
   const serverArray = computed(() => {
+    getGuessServerBottom();
     if (props.headerConfig.showHeader) {
       return props?.guessServerList?.slice(0, 9);
     } else {
@@ -299,10 +303,11 @@
     }, 0);
   };
 
-  initRecord();
   onMounted(() => {
     getGuessServerBottom();
+    // #ifdef  MP-WEIXIN
     initRecord();
+    // #endif
   });
 </script>
 <style lang="scss" scoped>
@@ -447,6 +452,9 @@
     height: 65rpx;
     border-radius: 10rpx;
     padding-left: 15rpx;
+    /*  #ifdef  MP-ALIPAY  */
+    padding-top: 10rpx;
+    /*  #endif  */
     background-color: inherit;
   }
   .voice {
@@ -567,5 +575,18 @@
     100% {
       transform: scaleY(1);
     }
+  }
+
+  @keyframes floatFromTop {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .float-from-top {
+    animation: floatFromTop 1s ease-out forwards;
   }
 </style>

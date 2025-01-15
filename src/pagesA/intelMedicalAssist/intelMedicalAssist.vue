@@ -53,6 +53,9 @@
   }>();
 
   const scrollChangeView = (e) => {
+    // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
+    
+    
     if (
       e.scrollTop <= 20 &&
       styleConfig.value.showHeader === false &&

@@ -64,6 +64,11 @@ const initWithMess = async () => {
     isMessage: true, //通知效果
     simpleHeadInit: false, //初始服务居中
   };
+  msgList.value.push({
+    my: false,
+    type: 6,
+  });
+
 };
 
 export const recommendMenuList = [
@@ -100,6 +105,12 @@ export const recommendMenuList = [
 ];
 
 export const sendMsg = async (value: string) => {
+  // #ifdef  MP-ALIPAY
+  // console.log('msgList.value.length',msgList.value.length)
+  if (msgList.value.length == 0) {
+    styleConfig.value.showHeader = false;
+  }
+  // #endif
   msgList.value.push({
     my: true,
     msg: value,
