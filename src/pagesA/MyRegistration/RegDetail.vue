@@ -1118,6 +1118,8 @@
         pageProps.value
       ),
     });
+
+    init();
   };
 
   const goRatePageRes = async () => {
