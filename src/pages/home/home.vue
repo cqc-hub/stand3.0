@@ -1,5 +1,5 @@
 <template>
-  <view class="g-page">
+  <view v-if="globalStore.sysCode==='1001063'?globalStore.isShowFlag:true" class="g-page">
     <home-Nav />
     <scroll-view
       @scroll="pageScroll"

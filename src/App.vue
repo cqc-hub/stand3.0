@@ -20,6 +20,14 @@
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
+    if(globalStore.sysCode === '1001063'){
+    // #ifdef MP-WEIXIN
+    globalStore.setShowFlag(false);
+    // #endif
+     // #ifdef MP-ALIPAY
+     globalStore.setShowFlag(true);
+      // #endif
+    }
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
@@ -35,11 +43,30 @@
       });
     }
     // #endif
+
   });
 
   onShow(async (opt) => {
     console.log('App Show', opt);
+    if(globalStore.sysCode==='1001063'){
+    // #ifdef MP-WEIXIN
+     globalStore.setShowFlag(false);
+        // 额外为杭口处理
+     if(opt.path === 'pages/home/home'){
+      uni.reLaunch({
+          url: "/pagesB/menus/home",
+        });
+        return
+      }
+    // #endif
+
+    // #ifdef MP-ALIPAY
+    globalStore.setShowFlag(true);
+      // #endif
+    }
+
     globalStore.onAppShow(opt);
+
     // #ifdef MP-WEIXIN
     if (!showTime) {
       showTime = ((new Date() as unknown as number) * 1) / 1000;
