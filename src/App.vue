@@ -20,6 +20,8 @@
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
+    globalStore.setShowFlag(false);
+
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
@@ -35,11 +37,21 @@
       });
     }
     // #endif
+
   });
 
   onShow(async (opt) => {
     console.log('App Show', opt);
+    globalStore.setShowFlag(false);
+        // 额外为杭口处理
+     if(opt.path === 'pages/home/home' && globalStore.sysCode==='1001063'){
+      uni.reLaunch({
+          url: "/pagesB/menus/home",
+        });
+        return
+      }
     globalStore.onAppShow(opt);
+
     // #ifdef MP-WEIXIN
     if (!showTime) {
       showTime = ((new Date() as unknown as number) * 1) / 1000;

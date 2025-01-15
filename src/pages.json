@@ -483,6 +483,12 @@
       "root": "pagesB",
       "pages": [
         {
+          "path": "menus/home",
+          "style": {
+              "navigationStyle": "custom"
+          }
+        },
+        {
           "path": "menus/index",
           "style": {
             "navigationBarTitleText": "选择功能"

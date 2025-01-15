@@ -22,6 +22,7 @@ interface IStateGlobal {
   appLaunchData: BaseObject;
   cacheData: BaseObject;
   envH5: T_ENV_H5;
+  isShowFlag: boolean; // 是否展示过启动页
 
   sysCode: typeof globalGl.SYS_CODE;
   modeOld: boolean; // 敬老模式?
@@ -47,6 +48,7 @@ const globalStore = defineStore('global', {
       'browser',
       'modeOld',
       'envH5',
+      'isShowFlag'
     ],
   },
 
@@ -74,6 +76,7 @@ const globalStore = defineStore('global', {
       modeOld: false,
       cacheData: {},
       envH5: null,
+      isShowFlag:false
     };
   },
 
@@ -207,6 +210,10 @@ const globalStore = defineStore('global', {
     },
     setModeOld(modeOld: boolean) {
       this.modeOld = modeOld;
+    },
+
+    setShowFlag(isShowFlag: boolean) {
+      this.isShowFlag = isShowFlag;
     },
   },
 });
