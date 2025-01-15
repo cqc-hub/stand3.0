@@ -600,7 +600,6 @@ export class RegDetailUtil {
       await api.refundOrder(args);
     }
 
-    throw new Error('233');
   }
 
   static getInstance = (function () {
