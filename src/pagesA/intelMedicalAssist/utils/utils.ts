@@ -9,11 +9,12 @@ import {
   type ISystemConfig,
   ServerStaticData,
   useTBanner,
+  openLocation,
   apiAsync,
   GStores,
 } from '@/utils';
 import { cloneUtil } from '@/common';
-
+import type { TInstance } from '@/components/g-form/index';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
@@ -47,6 +48,7 @@ export const styleConfig = ref<StyleConfigType>({
   showHeader: true, //展示首页
   isMessage: false, //通知效果
   simpleHeadInit: false, //初始服务居中
+  historyMess: false,
 });
 
 export const init = async (isMess) => {
@@ -63,12 +65,13 @@ const initWithMess = async () => {
     showHeader: false, //展示首页
     isMessage: true, //通知效果
     simpleHeadInit: false, //初始服务居中
+    historyMess: false,
   };
   msgList.value.push({
     my: false,
     type: 6,
+    // type: 7,
   });
-
 };
 
 export const recommendMenuList = [
@@ -176,13 +179,17 @@ export const sendMsg = async (value: string) => {
   scrollToNewMsg();
 };
 
-const scrollToNewMsg = () => {
+export const scrollToNewMsg = (selector?: string, duration?: number) => {
   nextTick(() => {
+    console.log('开始滚动', selector, duration || 300);
     uni.pageScrollTo({
       selector:
-        '#pageScroll >>> #smartChatRoomItem_' + (msgList.value.length - 1),
-      duration: 300,
-      success: () => {},
+        selector ||
+        `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+      duration: duration === 0 ? 0 : duration || 300,
+      success: () => {
+        console.log('滚动成功');
+      },
       fail: (err) => {
         console.log('滚动失败：', err);
       },
@@ -255,6 +262,53 @@ export const clearChatId = async (id: string) => {
   });
   lastMyContent && (msgState.value.msg = lastMyContent);
   msgState.value.lastChatId = '';
+};
+
+export const formatterTemp = (list: TInstance[], modeOld = false) => {
+  list.map((o) => {
+    let baseSize = 150;
+    const baseBateSize = 10;
+
+    if (o.label.length > 4) {
+      baseSize = 210;
+
+      baseSize += baseBateSize * o.label.length;
+    }
+    if (modeOld) {
+      o.labelWidth = `${baseSize + 30}rpx`;
+    } else {
+      o.labelWidth = `${baseSize}rpx`;
+    }
+    o.showBodyStyle = 'text-align: left;';
+    o.labelStyle =
+      'padding-top: 0; color: var(--hr-neutral-color-7);font-size: var(--hr-font-size-s);';
+    o.bodyStyle =
+      'padding-top: 4rpx;font-size: var(--hr-font-size-s);font-weight:600;';
+    o.rowStyle =
+      'margin-top: -15rpx;margin-bottom:4rpx; background-color: #f5f8ff;';
+
+    o.disabled = true;
+    o.isForShow = true;
+  });
+};
+
+export const goLocation = (item) => {
+  const gStores = new GStores();
+  const { gisLat, gisLng, hosName, address } = item;
+  if (gisLat) {
+    openLocation([gisLat!, gisLng!], {
+      name: hosName,
+      address,
+    });
+  } else {
+    gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 3000);
+  }
+};
+export const goDoctorCard = (item) => {
+  console.log(8888, item);
+};
+export const changeShowHistory = (isHistory: boolean = false) => {
+  styleConfig.value.historyMess = isHistory;
 };
 
 const dealShowType1 = (list, requestId) => {

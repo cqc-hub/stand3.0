@@ -1,7 +1,7 @@
 <template>
   <view class="topnav-container">
     <view class="smartChatRoom">
-      <view class="smartChatRomm-content">
+      <view class="smartChatRomm-content float-from-top">
         <!-- hearder区域 -->
         <intel-medical-header
           :guessAskList="pageConfig?.intelMedicalAssistConfig?.guessAskList"
@@ -105,6 +105,7 @@
   });
 </script>
 <style lang="scss" scoped>
+ 
   .topnav-container {
     width: 100%;
     height: 100%;
@@ -128,4 +129,16 @@
     }
   }
   //通用样式
+  @keyframes floatFromTop {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .float-from-top {
+    animation: floatFromTop 1s ease-out forwards;
+  }
 </style>

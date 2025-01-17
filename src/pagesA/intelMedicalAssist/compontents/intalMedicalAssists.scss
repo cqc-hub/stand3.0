@@ -1,3 +1,5 @@
+
+
 .header-area {
   width: 100vw;
   height: 700rpx;
@@ -15,7 +17,6 @@
     width: 100vw;
     position: fixed;
     height: 700rpx;
-
   }
   @keyframes progress-grow {
     to {
@@ -485,27 +486,42 @@
   color: #07d188;
 }
 .justify-start {
-	justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .justify-end {
-	justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .justify-center {
-	justify-content: center;
+  justify-content: center;
 }
 
 .justify-between {
-	justify-content: space-between;
+  justify-content: space-between;
 }
 
 .justify-around {
-	justify-content: space-around;
+  justify-content: space-around;
 }
-.lineH64{
+.lineH64 {
   line-height: 64rpx;
 }
-.lineH48{
+.lineH48 {
   line-height: 48rpx;
 }
+@keyframes floatFromTop {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.float-from-top {
+  animation: floatFromTop 1s ease-out forwards;
+}
+
+
+

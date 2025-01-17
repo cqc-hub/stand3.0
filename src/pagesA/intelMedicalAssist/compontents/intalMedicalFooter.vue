@@ -19,8 +19,10 @@
             :key="'grid-item' + index"
             @click="handleClickServer(item)"
           >
-            <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
-            <view class="label f28">{{ item.text }}</view>
+    
+              <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
+              <view class="label f28">{{ item.text }}</view>
+         
           </view>
         </view>
       </view>
@@ -289,7 +291,6 @@
       };
     }
     cancleVoice();
-    console.log('endRecord', voiceTouchData.value);
   };
 
   const getGuessServerBottom = () => {
@@ -589,4 +590,37 @@
   .float-from-top {
     animation: floatFromTop 1s ease-out forwards;
   }
+
+//   $duration: 0.5s; // 动画持续时间
+//   $delay-per-item: 0.1s; // 每个项之间的延迟时间
+//   @keyframes slide-up {
+//   0% {
+//     opacity: 0;
+//     transform: translateY(10px);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// }
+//   .guess-grid{
+//     .grid-item  {
+//       opacity: 0; // 初始状态不可见
+//       transition: opacity $duration; // 设置动画过渡效果
+
+//       &:nth-child(1) {
+//         animation: slide-up $duration forwards;
+//       }
+
+//       @for $i from 2 through 9 {
+//         &:nth-child(#{$i}) {
+//           animation-delay: #{$delay-per-item * ($i - 1)};
+//           animation: slide-up $duration forwards;
+//         }
+//       }
+//     }
+//   }
+
+
+
 </style>
