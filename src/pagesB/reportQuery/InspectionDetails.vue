@@ -47,7 +47,7 @@
             :reportInfo="checkoutReportList"
           />
 
-          <view v-if="checkoutReportList.pdfUrl" class="button-list">
+          <view v-if="checkoutReportList.yunUrl" class="button-list">
             <button
               class="button"
               :class="{ onlyOneButton: 1 }"
@@ -511,7 +511,7 @@
   const goPdfUrl = () => {
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/webView/webView', {
-        https: checkoutReportList.value.pdfUrl,
+        https: checkoutReportList.value.yunUrl,
       }),
     });
   };
