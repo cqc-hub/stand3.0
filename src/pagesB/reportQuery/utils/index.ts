@@ -42,6 +42,10 @@ export interface getReportList {
 
 //检验详细出参
 export interface checkoutReportDetails {
+  /**
+   * 图文
+   */
+  pdfUrl?: string;
   extend?: string;
   age?: string;
   //年龄

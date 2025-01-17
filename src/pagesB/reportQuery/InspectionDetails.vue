@@ -47,130 +47,18 @@
             :reportInfo="checkoutReportList"
           />
 
-          <!-- <view class="patient-information">
-            <view
-              v-if="pageProps._scan !== '1' && patName"
-              @click.stop="isClose = !isClose"
-              class="subhead"
+          <view v-if="checkoutReportList.pdfUrl" class="button-list">
+            <button
+              class="button"
+              :class="{ onlyOneButton: 1 }"
+              @click="goPdfUrl"
             >
-              患者信息
-              <view class="subhead-detail">
-                <text class="mr12">
-                  {{ isClose ? nameConvert(patName) : patName }}({{
-                    patCardNumber
-                  }})
-                </text>
-
-                <text
-                  :class="`iconfont icon-resize`"
-                  class="g-split-line mr12 pr12"
-                >
-                  {{ isClose ? '&#xe6d4;' : '&#xe6db;' }}
-                </text>
-
-                <block v-if="!pageProps.patientName">
-                  <text class="g-split-line mr12 pr12">
-                    {{ checkoutReportList.sex || pat.patientSex }}
-                  </text>
-                  <text>{{ checkoutReportList.age || pat.patientAge }}岁</text>
-                </block>
-              </view>
-            </view>
-            <view class="subhead">
-              报告单号
-              <view
-                class="subhead-detail"
-                style="width: calc(60%); white-space: wrap"
-              >
-                {{ checkoutReportList.repId }}
-              </view>
-            </view>
-            <view class="subhead">
-              报告时间
-              <view class="subhead-detail">
-                {{ checkoutReportList.repTime }}
-              </view>
-              <button
-                v-if="!isShow && !checkoutReportList.reminder"
-                class="more-button g-border"
-              >
-                <template>
-                  <view class="more">更多</view>
-                  <text class="iconfont">&#xe6c4;</text>
-                </template>
-              </button>
-            </view>
-            <view class="hidden-patient-information" v-show="isShow">
-              <view v-if="checkoutReportList.regTime" class="subhead">
-                采集时间
-                <view class="subhead-detail">
-                  {{ checkoutReportList.regTime }}
-                </view>
-              </view>
-
-              <view v-if="checkoutReportList.serialNo" class="subhead">
-                申请单号
-                <view class="subhead-detail">
-                  {{ checkoutReportList.serialNo }}
-                </view>
-              </view>
-              <view v-if="checkoutReportList.applyDoc" class="subhead">
-                申请医生
-                <view class="subhead-detail">
-                  {{ checkoutReportList.applyDoc }}
-                </view>
-              </view>
-              <view v-if="checkoutReportList.reportDoc" class="subhead">
-                报告医生
-                <view class="subhead-detail">
-                  {{ checkoutReportList.reportDoc }}
-                </view>
-              </view>
-              <view v-if="checkoutReportList.specimen" class="subhead">
-                标本类型
-                <view class="subhead-detail">
-                  {{ checkoutReportList.specimen }}
-                </view>
-              </view>
-
-              <view class="subhead">
-                <block v-if="checkoutReportList.passDoc">
-                  <text>审核医生</text>
-                  <view class="subhead-detail">
-                    {{ checkoutReportList.passDoc }}
-                  </view>
-                </block>
-                <button class="more-button g-border">
-                  <template v-if="isShow && !checkoutReportList.reminder">
-                    <view class="more">收起</view>
-                    <text class="iconfont">&#xe6c5;</text>
-                  </template>
-                </button>
-              </view>
-            </view>
-            <view v-if="checkoutReportList.reminder" class="subhead">
-              检验提示
-              <view
-                style="color: #296fff; width: calc(60%)"
-                class="subhead-detail"
-              >
-                {{ checkoutReportList.reminder }}
-              </view>
-              <button class="more-button g-border">
-                <template v-if="!isShow">
-                  <view class="more">更多</view>
-                  <text class="iconfont">&#xe6c4;</text>
-                </template>
-                <template v-if="isShow">
-                  <view class="more">收起</view>
-                  <text class="iconfont">&#xe6c5;</text>
-                </template>
-              </button>
-            </view>
-          </view> -->
+              <view class="icon-font ico_sy_paper1"></view>
+              图文报告
+            </button>
+          </view>
         </view>
         <view class="container-block-bottom">
-          <!-- 细菌培养模块 -->
           <template
             v-if="
               checkoutReportList.antiItemResult &&
@@ -183,9 +71,7 @@
                 v-for="(_item, i) in checkoutReportList.antiItemResult"
                 :key="i"
               >
-                <!-- 细菌培养存在 -->
                 <template v-if="_item.antiList">
-                  <!-- 抗菌药物内容 -->
                   <view class="seen">
                     <view class="title">{{ _item.bioName }}</view>
                     <view class="table">
@@ -212,10 +98,14 @@
                         :key="index"
                       >
                         <view class="table-content">
-                          <view class="table-title1 table-content-first g-break-word">
+                          <view
+                            class="table-title1 table-content-first g-break-word"
+                          >
                             {{ item.antiName }}
                           </view>
-                          <view class="table-title2 table-title-common g-break-word">
+                          <view
+                            class="table-title2 table-title-common g-break-word"
+                          >
                             {{ item.result }}
                           </view>
                           <view
@@ -228,10 +118,14 @@
                             v-else
                             class="table-title3 table-title-common g-break-word"
                           ></view>
-                          <view class="table-title4 table-title-common g-break-word">
+                          <view
+                            class="table-title4 table-title-common g-break-word"
+                          >
                             {{ item.itemUnits }}
                           </view>
-                          <view class="table-title5 table-title-common g-break-word">
+                          <view
+                            class="table-title5 table-title-common g-break-word"
+                          >
                             {{ item.testMethod }}
                           </view>
                         </view>
@@ -239,7 +133,6 @@
                     </view>
                   </view>
                 </template>
-                <!-- 细菌培养不存在 -->
                 <template v-else>
                   <view class="content">未培养出真菌</view>
                 </template>
@@ -247,7 +140,6 @@
             </view>
           </template>
 
-          <!-- 检验项目模块 -->
           <template
             v-if="
               checkoutReportList.normalList &&
@@ -271,7 +163,9 @@
                   :key="item"
                 >
                   <view class="table-content">
-                    <view class="table-title1 g-break-word">{{ item.itemName }}</view>
+                    <view class="table-title1 g-break-word">
+                      {{ item.itemName }}
+                    </view>
                     <view
                       v-if="item.itemVal"
                       class="table-title2 table-title-common g-break-word"
@@ -304,7 +198,6 @@
             </view>
           </template>
 
-          <!-- repType 1 非微生物 2微生物和药品混合展示 3微生物细菌培养 -->
           <view v-if="pageProps.repType == 2" class="exegesis">
             <view class="exegesis-content">
               <view>注释：</view>
@@ -400,7 +293,7 @@
     ServerStaticData,
     ISystemConfig,
   } from '@/utils';
-  import { joinQuery, encryptDes } from '@/common';
+  import { joinQuery, encryptDes, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
   import { useReportPowerEnerg } from '@/components/greenPower';
   import { getOpenId } from '@/components/g-pay/index';
@@ -614,6 +507,15 @@
       ),
     });
   };
+
+  const goPdfUrl = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/webView/webView', {
+        https: checkoutReportList.value.pdfUrl,
+      }),
+    });
+  };
+
   onMounted(async () => {
     await wait(600);
     getTips();
@@ -714,6 +616,32 @@
             //     opacity: 1;
             //   }
             // }
+          }
+          .button-list {
+            margin-top: 32rpx;
+            display: flex;
+            position: relative;
+            justify-content: space-evenly;
+            z-index: 99;
+            .button {
+              border-radius: 16rpx;
+              height: 80rpx;
+              width: 304rpx;
+              border: 2rpx solid #cccccc;
+              background-color: #fff;
+              line-height: 80rpx;
+              font-size: var(--hr-font-size-xs);
+              font-weight: 600;
+              display: flex;
+              justify-content: center;
+              margin: 0 !important;
+              .icon-font {
+                width: 32rpx;
+                height: 32rpx;
+                margin-top: 24rpx;
+                margin-right: 10rpx;
+              }
+            }
           }
         }
         .container-block-bottom {
