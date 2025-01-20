@@ -6,7 +6,10 @@
       'stick-bottom': !headerConfig?.showHeader,
     }"
   >
-    <view class="guess-server" :style="{ bottom: guessServerBottom }">
+    <view
+      class="guess-server float-from-top"
+      :style="{ bottom: guessServerBottom }"
+    >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
         <view class="guess-grid">
@@ -16,8 +19,10 @@
             :key="'grid-item' + index"
             @click="handleClickServer(item)"
           >
-            <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
-            <view class="label f28">{{ item.text }}</view>
+    
+              <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
+              <view class="label f28">{{ item.text }}</view>
+         
           </view>
         </view>
       </view>
@@ -171,6 +176,7 @@
   });
 
   const serverArray = computed(() => {
+    getGuessServerBottom();
     if (props.headerConfig.showHeader) {
       return props?.guessServerList?.slice(0, 9);
     } else {
@@ -285,7 +291,6 @@
       };
     }
     cancleVoice();
-    console.log('endRecord', voiceTouchData.value);
   };
 
   const getGuessServerBottom = () => {
@@ -299,10 +304,11 @@
     }, 0);
   };
 
-  initRecord();
   onMounted(() => {
     getGuessServerBottom();
+    // #ifdef  MP-WEIXIN
     initRecord();
+    // #endif
   });
 </script>
 <style lang="scss" scoped>
@@ -447,6 +453,9 @@
     height: 65rpx;
     border-radius: 10rpx;
     padding-left: 15rpx;
+    /*  #ifdef  MP-ALIPAY  */
+    padding-top: 10rpx;
+    /*  #endif  */
     background-color: inherit;
   }
   .voice {
@@ -568,4 +577,50 @@
       transform: scaleY(1);
     }
   }
+
+  @keyframes floatFromTop {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .float-from-top {
+    animation: floatFromTop 1s ease-out forwards;
+  }
+
+//   $duration: 0.5s; // 动画持续时间
+//   $delay-per-item: 0.1s; // 每个项之间的延迟时间
+//   @keyframes slide-up {
+//   0% {
+//     opacity: 0;
+//     transform: translateY(10px);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// }
+//   .guess-grid{
+//     .grid-item  {
+//       opacity: 0; // 初始状态不可见
+//       transition: opacity $duration; // 设置动画过渡效果
+
+//       &:nth-child(1) {
+//         animation: slide-up $duration forwards;
+//       }
+
+//       @for $i from 2 through 9 {
+//         &:nth-child(#{$i}) {
+//           animation-delay: #{$delay-per-item * ($i - 1)};
+//           animation: slide-up $duration forwards;
+//         }
+//       }
+//     }
+//   }
+
+
+
 </style>

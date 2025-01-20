@@ -14,7 +14,7 @@
       <view
         v-if="msgItem.my"
         :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column smartChatRoom-item"
+        class="flex-column smartChatRoom-item float-from-top"
       >
         <view
           class="flex justify-end padding-right one-show align-start padding-top"
@@ -36,7 +36,7 @@
       <view
         v-else
         :id="`smartChatRoomItem_${msgIndex}`"
-        class="flex-column smartChatRoom-item"
+        class="flex-column smartChatRoom-item float-from-top"
       >
         <view
           class="flex justify-start padding-right one-show align-start padding-top"
@@ -60,6 +60,12 @@
                 :list="msgItem.homeMenuConfig"
                 :x="msgItem"
               />
+            </view>
+            <!-- <view v-else-if="msgItem.type === 6">
+              <Recommend-Card />
+            </view> -->
+            <view v-else-if="msgItem.type === 6">
+              <Recommend-Remind />
             </view>
             <view
               v-else
@@ -144,13 +150,17 @@
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
-  import SecondRecommend from './SecondRecommend.vue';
+  import { msgState, clearChatId } from '../utils/utils';
+
   import HomeMenuItemRecommend from './HomeMenuItemRecommend.vue';
-  import EvaluateBtn1 from './EvaluateBtn1.vue';
   import RecommendAddress from './RecommendAddress.vue';
+  import RecommendRemind from './RecommendRemind.vue';
+  import SecondRecommend from './SecondRecommend.vue';
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';
-  import { msgState, clearChatId } from '../utils/utils';
+  import RecommendCard from './RecommendCard.vue';
+  import EvaluateBtn1 from './EvaluateBtn1.vue';
+
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;

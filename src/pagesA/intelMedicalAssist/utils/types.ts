@@ -3,6 +3,7 @@ export type StyleConfigType = {
   showHeader: boolean;
   isMessage: boolean;
   simpleHeadInit?: boolean;
+  historyMess?:boolean
 };
 
 export type MsgListType = {

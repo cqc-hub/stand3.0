@@ -10,7 +10,10 @@
       />
     </view>
 
-    <view class="p32 pt70 mt70">
+    <view
+      class="p32 pt70 mt70"
+      v-if="['0', '1', '2'].includes(pageProps?.appointAdtStatus)"
+    >
       <button @click="gform.submit" class="btn btn-primary">保存预约</button>
     </view>
     <g-message />
@@ -185,7 +188,6 @@
     //   bodyStyle: 'margin-left: 12rpx;',
     //   rowStyle: 'margin-top: 12rpx;',
     // },
-
     // {
     //   labelWidth,
     //   required: true,
@@ -196,7 +198,6 @@
     //   key: 'occupation',
     //   options: [],
     // },
-
     // {
     //   labelWidth,
     //   required: true,
@@ -206,7 +207,6 @@
     //   placeholder: '请输入工作单位',
     //   key: 'serviceAgency',
     // },
-
     // {
     //   labelWidth,
     //   required: true,
@@ -217,7 +217,6 @@
     //   key: 'mphoneNumber',
     //   rule: phoneRule,
     // },
-
     // {
     //   labelWidth,
     //   required: true,
@@ -228,7 +227,6 @@
     //   key: 'permanentAddress',
     //   field: 'address',
     // },
-
     // {
     //   labelWidth,
     //   required: true,
@@ -238,7 +236,6 @@
     //   placeholder: '请输入',
     //   key: 'detailedAddress',
     // },
-
     // {
     //   labelWidth,
     //   label: '第二联系人',
@@ -280,11 +277,9 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
 
-
     if (pageProps.value.presentAddressOthers) {
       // const [permanentAddress, ...detailAddress] =
       //   pageProps.value.presentAddressOthers.split(' ');
-
       // pageProps.value.permanentAddress = permanentAddress;
       // pageProps.value.detailedAddress = detailAddress.join('');
     }
@@ -302,19 +297,19 @@
 
   onMounted(async () => {
     // if (isItemNew.value) {
-      // const { result } = await api.getTermsBySysAndCode({
-      //   domainCode: 'USER_JOB',
-      // });
+    // const { result } = await api.getTermsBySysAndCode({
+    //   domainCode: 'USER_JOB',
+    // });
 
-      // const jobList = ((result && result[0]?.terms) || []).map((o) => ({
-      //   value: o.code,
-      //   label: o.label,
-      // }));
+    // const jobList = ((result && result[0]?.terms) || []).map((o) => ({
+    //   value: o.code,
+    //   label: o.label,
+    // }));
 
-      // const jobItem = renderListDetail.find((o) => o.key === 'occupation');
+    // const jobItem = renderListDetail.find((o) => o.key === 'occupation');
 
     //  // @ts-expect-error
-      // jobItem && (jobItem.options = jobList);
+    // jobItem && (jobItem.options = jobList);
     // }
 
     gform.value.setList([

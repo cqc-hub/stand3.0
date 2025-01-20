@@ -35,7 +35,12 @@
       </view>
     </view>
     <view class="guess">
-      <view class="f26 sroll-title">下拉查看历史消息</view>
+      <view
+        class="f26 sroll-title"
+        :style="{ opacity: !headerConfig?.historyMess ? 1 : 0 }"
+      >
+        下拉查看历史消息
+      </view>
       <view class="guess-title pt24 pb12 pl24 f26">猜你想问的</view>
       <view class="guess-content">
         <view
@@ -77,7 +82,7 @@
 
   const gStores = new GStores();
   const props = defineProps<{
-    guessAskList?: Array<{label:string,value:string}>;
+    guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
   }>();
   const emits = defineEmits(['click-guess']);
@@ -165,10 +170,12 @@
       top: 320rpx !important;
       height: 70rpx !important;
       .sroll-title {
-        display: flex!important;
+        transition: 0.5s;
+        display: flex !important;
         font-weight: 600;
-    line-height: 50rpx;
-    justify-content: center;
+        line-height: 50rpx;
+        justify-content: center;
+        opacity:1;
       }
     }
     .guess-content {
@@ -340,7 +347,7 @@
     }
     .person-img {
       transition: 0.5s;
-      image{
+      image {
         transition: 0.5s;
       }
     }
