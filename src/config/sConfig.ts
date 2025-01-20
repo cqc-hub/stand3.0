@@ -437,13 +437,14 @@ const scJson: Record<string, ISConfig> = {
    * 杭口未来医院
    */
   1001071: {
-    isOpenHomeTabBarNetWorkBtn: '1',
+    // isOpenHomeTabBarNetWorkBtn: '1',
   },
 
   /**
    * 天水市第一人民医院
    */
   1001074: {
+    isOpenHomeTabBarNetWorkBtn: '1',
     login: {
       // isAliAuthBase: '1',
     },
