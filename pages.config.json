@@ -571,6 +571,12 @@
       "root": "pagesC",
       "pages": [
         {
+					"path": "prevFile/prevFile",
+					"style": {
+						"navigationBarTitleText": " "
+					}
+				},
+        {
           "path": "scan/scan",
           "style": {
             "navigationBarTitleText": " "

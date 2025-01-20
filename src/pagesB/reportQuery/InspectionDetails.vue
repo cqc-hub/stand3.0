@@ -509,11 +509,20 @@
   };
 
   const goPdfUrl = () => {
+    const { repName } = checkoutReportList.value;
+
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/webView/webView', {
-        https: checkoutReportList.value.yunUrl,
+      url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+        // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
+        url: encodeURIComponent(checkoutReportList.value.yunUrl as string),
+        name: repName,
       }),
     });
+    // uni.navigateTo({
+    //   url: joinQueryForUrl('/pagesA/webView/webView', {
+    //     https: checkoutReportList.value.yunUrl,
+    //   }),
+    // });
   };
 
   onMounted(async () => {
