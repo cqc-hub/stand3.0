@@ -87,7 +87,7 @@
           </text>
         </view>
 
-        <view
+        <!-- <view
           v-if="item.visitingArea"
           :class="{
             mb12: isAllDate,
@@ -95,7 +95,7 @@
           class="color-444 ellipsis-line-clamp2 g-break-word"
         >
           {{ item.visitingArea }}
-        </view>
+        </view> -->
 
         <view class="doc-info-introduce-goodat text-ellipsis">
           <view

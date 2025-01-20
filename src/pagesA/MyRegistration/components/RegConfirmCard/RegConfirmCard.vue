@@ -50,6 +50,11 @@
       <view>{{ myProps.fee }}元</view>
     </view>
 
+    <view v-if="myProps.visitingArea" class="row">
+      <view class="title text-no-wrap">诊区诊室</view>
+      <view>{{ myProps.visitingArea  }}</view>
+    </view>
+
     <view class="doc g-border-top">
       <image
         :src="myProps.docPhoto || '/static/image/order/order-doctor-avatar.png'"
@@ -86,6 +91,7 @@
         | 'hosId'
         | 'timeDesc'
         | 'fee'
+        | 'visitingArea'
         | 'categorName'
       >;
 

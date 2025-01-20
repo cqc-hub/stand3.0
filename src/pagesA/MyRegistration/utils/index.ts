@@ -3,7 +3,13 @@ import dayjs from 'dayjs';
 import api from '@/service/api';
 
 import { ref, computed, Ref } from 'vue';
-import { ServerStaticData, ISystemConfig, GStores, apiAsync, wait } from '@/utils';
+import {
+  ServerStaticData,
+  ISystemConfig,
+  GStores,
+  apiAsync,
+  wait,
+} from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 
@@ -33,6 +39,7 @@ export interface IOrderSource {
   numId: string;
   timeDesc: string;
   serialType: string;
+  visitingArea: string;
   consultType?: keyof typeof consultTypeMap;
   disabled?: boolean;
 }
@@ -51,6 +58,7 @@ interface IDocRow {
   intro: string;
   hosDocId: string;
   preStatus?: '1';
+  visitingArea: string;
 
   // 快捷号别
   schQukCategor?: string;
@@ -120,13 +128,14 @@ export type TSchInfo = {
   // 排班日期
   schDate: string;
   schId: string;
+  visitingArea: string;
 
   // 排班状态 0有号 1停诊 2约满 3未放号
   schState: '0' | '1' | '2' | '3';
   // 排班状态名称
   schStateName: string;
 
-  addFlag?:string
+  addFlag?: string;
 } & IDocRow;
 
 type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {
@@ -246,7 +255,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
     if (allList && allList.length) {
       allList.map((docInfo) => {
-        const { docPhoto } = docInfo;
+        const { docPhoto, visitingArea } = docInfo;
         docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
           (o, i) => {
             const { schDate, schState } = o;
@@ -280,6 +289,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
                 if (orderList.amPmResults.length) {
                   orderList.amPmResults.map((amPmItem) => {
                     amPmItem.docPhoto = docPhoto;
+                    amPmItem.visitingArea = visitingArea;
                   });
                 }
               }
@@ -444,8 +454,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     item: IDocListAll;
     schInfo: TAllDayTScInfo;
   }) => {
-    console.log('cqc', e);
-
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
     const { schDate } = schInfo;
@@ -555,6 +563,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       schQukCategor,
       docTitleName,
       regVerificationMode,
+      visitingArea,
     } = selectSchInfo;
     const { disNo, numId, timeDesc } = item;
     const {
@@ -588,6 +597,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       docTitleName,
       thRegisterId,
       regVerificationMode,
+      visitingArea,
     };
     selectOrderSourceNumId.value = numId;
 

@@ -14,6 +14,7 @@ export interface IPageProps {
   hosDeptId: string;
   hosDocId: string;
   hosId: string;
+  visitingArea: string;
   schDate: string;
   schId: string;
   schQukCategor: string;
