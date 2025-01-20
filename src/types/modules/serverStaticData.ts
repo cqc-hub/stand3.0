@@ -376,6 +376,13 @@ export interface ISystemConfig_ {
     isCheckThirdParty?: '1';
     /** 检查报告详情云云影像需要支付 */
     isJcYunPay?: '1';
+    /**
+     * isJcYunPay 基础上进一步判断
+     * key 对应的值需要和列表 extend 保持一致才可以走入isJcYunPay逻辑
+     */
+    isJcYunPayWithExtendArg?: {
+      [key: string]: string;
+    };
 
     /** 报告查询列表云影像链接 */
     listYun?: {
@@ -460,10 +467,10 @@ export interface ISystemConfig_ {
     isItemQrCodeShow?: '1';
     navBtns?: TButtonConfig[];
     //智能助医
-    intelMedicalAssistConfig?:{
-      guessAskList?:Array<{label:string,value:string}>;
-      guessServerList?:TButtonConfig[]
-    }
+    intelMedicalAssistConfig?: {
+      guessAskList?: Array<{ label: string; value: string }>;
+      guessServerList?: TButtonConfig[];
+    };
     //智能陪诊
     medicalAsistantConfig?: {
       //智能陪诊日期右侧区域的按钮

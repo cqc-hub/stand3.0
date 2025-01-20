@@ -6,8 +6,8 @@
     class="page"
     scroll-y="true"
   >
-   <!--  #ifdef MP-WEIXIN -->
-   <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
+    <!--  #ifdef MP-WEIXIN -->
+    <view class="placeholder" v-if="queryCompData.isShowHealthCardMode">
       <health-card-query-comp
         :scene="queryCompData.scene"
         :openId="queryCompData.openId"
@@ -348,7 +348,7 @@
   import CollectBtn from './components/CollectBtn.vue';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay';
   import { useCacheStore } from '@/stores';
-import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
+  import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
 
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
@@ -376,13 +376,15 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     code: '',
   });
 
-  const queryCompData = ref(<{
-    isShowHealthCardMode: boolean;
-    hospitalId: string;
-    openId: string;
-    healthCardId?: string;
-    scene: string;
-  }>{
+  const queryCompData = ref(<
+    {
+      isShowHealthCardMode: boolean;
+      hospitalId: string;
+      openId: string;
+      healthCardId?: string;
+      scene: string;
+    }
+  >{
     isShowHealthCardMode: false,
     hospitalId: '',
     openId: '',
@@ -726,9 +728,22 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
   };
 
   const gotoMedical = async (url: string) => {
-    const { isJcYunPay } = pageConfig.value;
+    const { isJcYunPay, isJcYunPayWithExtendArg } = pageConfig.value;
 
-    if (isJcYunPay === '1') {
+    let isContinuePay = true;
+    if (isJcYunPayWithExtendArg) {
+      let extend = pageProps.value._extend;
+      Object.keys(isJcYunPayWithExtendArg).map((key) => {
+        const v = extend[key];
+        if (isContinuePay) {
+          if (v !== isJcYunPayWithExtendArg[key]) {
+            isContinuePay = false;
+          }
+        }
+      });
+    }
+
+    if (isJcYunPay === '1' && isContinuePay) {
       // examineReportList.value.repId = '202410011703';
       const { cardNumber, repId, hosId, hosName, patientName } =
         examineReportList.value;
@@ -851,8 +866,11 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     gotoMedical(url);
   };
 
-  const getqueryCompData=async()=>{
-    if (global.systemInfo.isOpenHealthCard?.isCardQueryComp&&gStores.userStore.patChoose?.healthQrCodeText) {
+  const getqueryCompData = async () => {
+    if (
+      global.systemInfo.isOpenHealthCard?.isCardQueryComp &&
+      gStores.userStore.patChoose?.healthQrCodeText
+    ) {
       queryCompData.value.openId = await getOpenId();
       queryCompData.value.hospitalId =
         global.systemInfo.isOpenHealthCard!.hospitalId;
@@ -860,7 +878,7 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
         gStores.userStore.patChoose.healthQrCodeText;
       queryCompData.value.isShowHealthCardMode = true;
     }
-  }
+  };
 
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
@@ -875,6 +893,12 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
     console.log(pageConfig.value, 'ageConfig.value ageConfig.value ');
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(opt)));
+    pageProps.value._extend = {};
+    if (pageProps.value.extend) {
+      try {
+        pageProps.value._extend = JSON.parse(pageProps.value.extend);
+      } catch (error) {}
+    }
 
     windowInfo.value = uni.getSystemInfoSync();
     getTips();
@@ -883,7 +907,7 @@ import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
       addWatermark(global.systemInfo.name);
     }
     // #ifdef MP-WEIXIN
-    getqueryCompData()
+    getqueryCompData();
     // #endif
   });
 
