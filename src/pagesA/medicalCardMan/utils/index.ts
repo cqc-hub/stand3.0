@@ -897,6 +897,9 @@ const healthCardQuery = {
   userFormPageUrl:
     `mini:/pagesA/medicalCardMan/addMedical?_healthType=addPat&authCode=` +
     '${authCode}',
+    // userFormPageUrl:
+    // `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
+    // '${authCode}',
 };
 export const healthCardBind = async () => {
   const gStores = new GStores();

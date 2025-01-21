@@ -3,6 +3,7 @@ import {
   type StyleConfigType,
   type MsgListType,
   type MsgStatusType,
+  type MessFormListType,
 } from './types';
 import {
   type TButtonConfig,
@@ -29,6 +30,7 @@ export const msgState = ref<MsgStatusType>({
   msg: '',
   focus: false,
 });
+export const messFormData = ref<Array<MessFormListType>>([])
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -60,6 +62,7 @@ export const init = async (isMess) => {
 };
 
 const initWithMess = async () => {
+  const gStores = new GStores();
   styleConfig.value = {
     transition: false, //初始过渡效果
     showHeader: false, //展示首页
@@ -67,6 +70,13 @@ const initWithMess = async () => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
   };
+  let { result = [] } = await api
+    .getTodayVisit({
+      patientId: gStores?.userStore?.patChoose?.patientId,
+    })
+  messFormData.value=result.map((item)=>{
+    
+  })
   msgList.value.push({
     my: false,
     type: 6,
@@ -202,7 +212,6 @@ export const sendImg = async () => {
     return;
   }
 
-  const gStores = new GStores();
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed', 'original'],

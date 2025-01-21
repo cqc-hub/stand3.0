@@ -439,7 +439,7 @@
       );
     } else if (props?._healthType === 'verifyFail') {
       console.log('已取消健康卡申领');
-      gStore.messageStore.showMessage('绑定失败', 1500, {});
+      gStore.messageStore.showMessage('已取消就诊人绑定操作', 1500, {});
     } else if (props?._healthType === 'failRedirect' && props?.regInfoCode) {
       console.log('进入异常卡流程');
       gStore.messageStore.showMessage(

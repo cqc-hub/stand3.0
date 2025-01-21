@@ -2,7 +2,7 @@
   <view class="mess-history float-from-top" v-show="styleConfig?.historyMess">
     <view v-for="(card, cardIndex) in 2" :key="`card${cardIndex}`">
       <view v-if="cardIndex == 2" id="scroll-active"></view>
-      <Recommend-Card :formData="formData[0]" :formList="formList[0]" />
+      <Recommend-Card :formData="formData[0]" :formList="formList" />
     </view>
   </view>
 
@@ -23,8 +23,8 @@
           @touchend="touchend"
         >
           <Recommend-Card
-            :formData="formData[index]"
-            :formList="formList[index]"
+            :formData="messFormData[index]"
+            :formList="formList"
           />
         </view>
       </view>
@@ -33,7 +33,7 @@
 
   <!-- 轮播指示点样式修改 -->
   <view class="dots">
-    <block v-for="(item, index) in formData.length" :key="item">
+    <block v-for="(item, index) in messFormData.length" :key="item">
       <view class="dot" :class="index == navIndex ? ' active' : ''"></view>
     </block>
   </view>
@@ -44,6 +44,7 @@
     changeShowHistory,
     styleConfig,
     scrollToNewMsg,
+    messFormData,
   } from '../utils/utils';
   import type { TInstance } from '@/components/g-form/index';
   import RecommendCard from './RecommendCard.vue';
@@ -74,78 +75,38 @@
       cs: 'cs',
     },
   ]);
-  const formList = ref<Array<TInstance[]>>([
-    [
-      {
-        label: '院区',
-        key: 'hosName',
-        field: 'input-text',
-      },
-      {
-        label: '科室名称',
-        field: 'input-text',
-        key: 'deptName',
-      },
-      {
-        label: '预约时间',
-        key: 'appointmentTime',
-        field: 'input-text',
-      },
-      {
-        label: '医生',
-        field: 'input-text',
-        key: 'docName',
-      },
-      {
-        label: '就诊人',
-        field: 'input-text',
-        key: 'patientNameEncry',
-        rowStyle: 'border-radius: 8px;',
-      },
-      {
-        label: '就诊地点',
-        key: 'areaName',
-        field: 'input-text',
-      },
-    ],
-    [
-      {
-        label: '院区',
-        key: 'hosName',
-        field: 'input-text',
-      },
-      {
-        label: '科室名称',
-        field: 'input-text',
-        key: 'deptName',
-      },
-      {
-        label: '预约时间',
-        key: 'appointmentTime',
-        field: 'input-text',
-      },
-      {
-        label: '医生',
-        field: 'input-text',
-        key: 'docName',
-      },
-      {
-        label: '就诊人',
-        field: 'input-text',
-        key: 'patientNameEncry',
-        rowStyle: 'border-radius: 8px;',
-      },
-      {
-        label: '就诊地点',
-        key: 'areaName',
-        field: 'input-text',
-      },
-      {
-        label: 'test',
-        key: 'cs',
-        field: 'input-text',
-      },
-    ],
+  const formList = ref<TInstance[]>([
+    {
+      label: '院区',
+      key: 'hosName',
+      field: 'input-text',
+    },
+    {
+      label: '科室名称',
+      field: 'input-text',
+      key: 'deptName',
+    },
+    {
+      label: '预约时间',
+      key: 'appointmentTime',
+      field: 'input-text',
+    },
+    {
+      label: '医生',
+      field: 'input-text',
+      key: 'docName',
+    },
+    {
+      label: '就诊人',
+      field: 'input-text',
+      key: 'patientNameEncry',
+      rowStyle: 'border-radius: 8px;',
+    },
+    {
+      label: '就诊地点',
+      key: 'areaName',
+      field: 'input-text',
+    },
   ]);
   const touchStart = (e) => {
     pressTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
