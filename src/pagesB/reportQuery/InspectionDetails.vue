@@ -47,7 +47,7 @@
             :reportInfo="checkoutReportList"
           />
 
-          <view v-if="checkoutReportList.yunUrl" class="button-list">
+          <view v-if="checkoutReportList.pdfUrl" class="button-list">
             <button
               class="button"
               :class="{ onlyOneButton: 1 }"
@@ -510,11 +510,10 @@
 
   const goPdfUrl = () => {
     const { repName } = checkoutReportList.value;
-
     uni.navigateTo({
       url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
         // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
-        url: encodeURIComponent(checkoutReportList.value.yunUrl as string),
+        url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
         name: repName,
       }),
     });
