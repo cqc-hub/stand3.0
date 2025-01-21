@@ -19,7 +19,7 @@
     }
   });
   onLoad(async (opt) => {
-    const { url, name } = deQueryForUrl(deQueryForUrl(opt));
+    const { url, name, type } = deQueryForUrl(deQueryForUrl(opt));
     // @ts-expect-error
     let uPath = uni.env?.USER_DATA_PATH;
     // #ifdef MP-WEIXIN
@@ -33,6 +33,55 @@
     uni.showLoading({
       title: '',
     });
+    if (type && type == 'base64') {
+      downWithBase64(url, name);
+    } else {
+      downWithStream(url, name);
+    }
+  });
+  const downWithBase64 = (url, name) => {
+    let filePath =
+      wx.env.USER_DATA_PATH +
+      '/' +
+      name +
+      '图文报告' +
+      new Date().getTime() +
+      '.pdf';
+    uni.request({
+      url,
+      success: (resp: any) => {
+        let base64buffer = uni.base64ToArrayBuffer(resp.data);
+        uni.getFileSystemManager().writeFile({
+          filePath: filePath,
+          data: base64buffer,
+          encoding: 'binary', // 指定二进制格式
+          success: (res) => {
+            console.log('writeFile成功', res);
+            // 打开文件
+            uni.hideLoading();
+            uni.openDocument({
+              filePath: filePath,
+              fileType: 'pdf', //指定为pdf文件
+              // @ts-expect-error
+              showMenu: true, //true 可以右上角转发和分享
+              fail: function (res) {
+                uni.hideLoading();
+                console.log('文件打开失败', res);
+                uni.showToast({
+                  title: '文件打开失败',
+                  icon: 'none',
+                });
+              },
+            });
+          },
+          fail: (res) => {
+            console.error('写入文件失败：', res);
+          },
+        });
+      },
+    });
+  };
+  const downWithStream = (url, name) => {
     uni.downloadFile({
       // url: 'https://xinjiang.eheren.com/image?uid=8d74fcdb5c33a273f4398750c334138a1b67f770e74dcd54fd8883c42031483e', //自定义的文件地址
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
@@ -60,7 +109,7 @@
         console.log('down fail', e);
       },
     });
-  });
+  };
 </script>
 
 <style lang="scss" scoped></style>

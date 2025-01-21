@@ -179,7 +179,9 @@
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
                 v-if="
-                  pageProps.isDownloadRepor == 1 && pageProps.isGraphic == 1
+                  (pageProps.isDownloadRepor == 1 &&
+                    pageProps.isGraphic == 1) ||
+                  item?.pdfPath
                 "
               >
                 <view class="icon-font ico_sy_paper1"></view>
@@ -599,7 +601,19 @@
     }
   };
   const goReportPdf = (item) => {
-    let { repId, repName } = item;
+    let { repId, repName, pdfPath } = item;
+    
+    if (pdfPath) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+          // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
+          url: encodeURIComponent(pdfPath as string),
+          name: repName,
+          type:'base64'
+        }),
+      });
+      return;
+    }
     const { reportType } = pageProps.value;
     repId = encodeURIComponent(encryptDes(repId + '', 'phsDesKey'));
     uni.navigateTo({
