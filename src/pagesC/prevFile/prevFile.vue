@@ -18,10 +18,11 @@
       n++;
     }
   });
+
+  // @ts-expect-error
+  let uPath = uni.env?.USER_DATA_PATH;
   onLoad(async (opt) => {
     const { url, name, type } = deQueryForUrl(deQueryForUrl(opt));
-    // @ts-expect-error
-    let uPath = uni.env?.USER_DATA_PATH;
     // #ifdef MP-WEIXIN
     uPath = wx.env.USER_DATA_PATH;
     // #endif
@@ -33,6 +34,7 @@
     uni.showLoading({
       title: '',
     });
+    console.log(url, name);
     if (type && type == 'base64') {
       downWithBase64(url, name);
     } else {
