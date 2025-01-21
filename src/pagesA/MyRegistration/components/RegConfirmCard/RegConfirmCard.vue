@@ -45,14 +45,14 @@
       <view>{{ hosLabel }}</view>
     </view>
 
-    <view v-if="!isPreConfirm" class="row">
-      <view class="title text-no-wrap">挂号金额</view>
-      <view>{{ myProps.fee }}元</view>
-    </view>
-
     <view v-if="myProps.visitingArea" class="row">
       <view class="title text-no-wrap">诊区诊室</view>
       <view>{{ myProps.visitingArea  }}</view>
+    </view>
+
+    <view v-if="!isPreConfirm" class="row">
+      <view class="title text-no-wrap">挂号金额</view>
+      <view>{{ myProps.fee }}元</view>
     </view>
 
     <view class="doc g-border-top">
