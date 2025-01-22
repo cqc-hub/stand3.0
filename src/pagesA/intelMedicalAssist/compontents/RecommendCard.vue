@@ -1,7 +1,7 @@
 <template>
   
-  <view class="card-item mb32">
-    <view class="card-content  p32v">
+  <view class="card-item mb32 mt18">
+    <view class="card-content  pt32 pb48">
       <view class="header-area">
         <view class="title g-bold f36">预约成功</view>
         <view class="warn f28">预约成功，请在就诊前完成缴费取号</view>

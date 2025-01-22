@@ -14,7 +14,7 @@
     indicator-active-color="var(--hr-brand-color-6)"
     @change="tabChange"
   >
-    <swiper-item v-for="(item, index) in 2" :key="`swiper-item${index}`">
+    <swiper-item v-for="(item, index) in messFormData.length" :key="`swiper-item${index}`">
       <view class="card-wrapper" :id="`swiper-item-${index}`">
         <view
           class="mess-now"
@@ -172,8 +172,8 @@
     position: absolute;
     left: 50%;
     // 这里一定要注意兼容不然很可能踩坑
-    transform: translate(-50%, -70rpx);
-    -webkit-transform: translate(-50%, -70rpx);
+    transform: translate(-50%, -60rpx);
+    -webkit-transform: translate(-50%, -60rpx);
     z-index: 99;
     display: flex;
     flex-direction: row;

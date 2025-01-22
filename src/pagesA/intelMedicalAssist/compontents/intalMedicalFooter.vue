@@ -44,12 +44,17 @@
         >
           <view class="circle">
             <img
-              v-if="!isVoice"
+            v-if="!hasWechatSI"
+              class="bottom-icon"
+              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+              alt=""
+            />
+            <img
+              v-else-if="!isVoice"
               class="bottom-icon"
               :src="globalGl.BASE_IMG + 'intelMedicalAssist_voice.png'"
               alt=""
             />
-            <!-- 未提供键盘icon -->
             <img
               v-else
               class="bottom-icon"
@@ -90,6 +95,7 @@
           class="input-send right"
           :disabled="msgState.msgLoad"
           @click="sendImg"
+          v-if="hasWechatSI"
         >
           <view class="circle">
             <img
@@ -99,6 +105,7 @@
             />
           </view>
         </view>
+        <view v-else @click="sendImgByButtom"  class="input-send right send-text f28"><text>发送</text></view>
       </view>
     </view>
     <view
@@ -194,6 +201,12 @@
     emits('send-img');
   };
 
+  const sendImgByButtom = () => {
+    emits('send-msg', msgState.value.msg);
+    nextTick(() => {
+      msgState.value.msg = '';
+    });
+  };
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
     nextTick(() => {
@@ -213,7 +226,7 @@
     if (hasWechatSI.value) {
       isVoice.value = !isVoice.value;
     } else {
-      console.log('未配置语音输入插件，暂不支持切换输入方式');
+      sendImg()
     }
   };
 
@@ -509,6 +522,12 @@
     bottom: 0;
     width: 100vw;
     height: 450px;
+  }
+  .send-text{
+    color: #fff!important;
+    background: #296FFF;
+    padding: 12rpx 22rpx;
+    border-radius: 16rpx;
   }
   .voicing-area {
     position: fixed;

@@ -578,8 +578,12 @@
   };
 
   const init = async () => {
+    uni.showLoading({
+      title: '获取定位中...',
+      mask: true,
+    });
     locationInfo.value = await getLocation(true);
-
+    uni.hideLoading();
     getList();
   };
 

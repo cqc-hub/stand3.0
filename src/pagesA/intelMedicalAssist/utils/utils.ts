@@ -30,7 +30,7 @@ export const msgState = ref<MsgStatusType>({
   msg: '',
   focus: false,
 });
-export const messFormData = ref<Array<MessFormListType>>([])
+export const messFormData = ref<Array<MessFormListType>>([]);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -70,17 +70,38 @@ const initWithMess = async () => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
   };
-  let { result = [] } = await api
-    .getTodayVisit({
-      patientId: gStores?.userStore?.patChoose?.patientId,
-    })
-  messFormData.value=result.map((item)=>{
-    
-  })
-  msgList.value.push({
-    my: false,
-    type: 6,
-    // type: 7,
+  const { result = [] } = await api.getTodayVisit({
+    patientId: gStores?.userStore?.patChoose?.patientId,
+  });
+  const docList: any[] = [];
+  const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
+  const allPromise = result.map(async (item) => {
+    let hosItem = Hoslist.find((hos) => {
+      // return hos.hosId === item.hosId;
+      return hos.hosId === '13001';
+    });
+    !hosItem && (hosItem = Hoslist[0]);
+    item.hosName = hosItem?.label;
+    item.patientNameEncry = gStores?.userStore?.patChoose?.patientName;
+    if (!docList[item.docId]) {
+      const { result: docInfo } = await api.findByDocId({
+        hosDocId: item.docId,
+        hosId: hosItem.hosId,
+        // hosId:item.hosId,
+      });
+      docList[item.docId] = docInfo;
+    }
+    item.docName = docList[item.docId]?.docName;
+    return item;
+  });
+  Promise.all(allPromise).then((res) => {
+    console.log('--------', res);
+    messFormData.value = res;
+    msgList.value.push({
+      my: false,
+      type: 6,
+      // type: 7,
+    });
   });
 };
 
@@ -318,7 +339,12 @@ export const goDoctorCard = (item) => {
 };
 export const changeShowHistory = (isHistory: boolean = false) => {
   styleConfig.value.historyMess = isHistory;
+  if (isHistory) {
+    getHisData();
+  }
 };
+
+const getHisData = () => {};
 
 const dealShowType1 = (list, requestId) => {
   const { question, answer } = list[0];

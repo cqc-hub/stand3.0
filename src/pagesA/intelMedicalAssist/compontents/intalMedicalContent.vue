@@ -64,7 +64,7 @@
             <!-- <view v-else-if="msgItem.type === 6">
               <Recommend-Card />
             </view> -->
-            <view v-else-if="msgItem.type === 6">
+            <view v-else-if="msgItem.type === 6 && messFormData.length">
               <Recommend-Remind />
             </view>
             <view
@@ -150,7 +150,7 @@
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
-  import { msgState, clearChatId } from '../utils/utils';
+  import { msgState, clearChatId,messFormData } from '../utils/utils';
 
   import HomeMenuItemRecommend from './HomeMenuItemRecommend.vue';
   import RecommendAddress from './RecommendAddress.vue';
