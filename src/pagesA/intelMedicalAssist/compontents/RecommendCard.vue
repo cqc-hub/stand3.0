@@ -1,10 +1,9 @@
 <template>
-  
   <view class="card-item mb32 mt18">
-    <view class="card-content  pt32 pb48">
+    <view class="card-content pt32 pb48" @click="gotoGuide(formData)">
       <view class="header-area">
-        <view class="title g-bold f36">预约成功</view>
-        <view class="warn f28">预约成功，请在就诊前完成缴费取号</view>
+        <view class="title g-bold f36">{{ formData?.statusName }}</view>
+        <view class="warn f28">{{ formData?.statusDesciption }}</view>
       </view>
       <view class="content-area pt30">
         <g-form
@@ -15,7 +14,7 @@
         >
           <template #showBody="{ item, value }">
             <view
-              @click="goDoctorCard(item)"
+              @click="goDoctorCard(formData)"
               v-if="item.key === 'docName'"
               class="color-blue flex-normal doc-name"
             >
@@ -28,7 +27,7 @@
               <view class="hos-name-value">
                 {{ value }}
               </view>
-              <view class="location flex-normal" @click="goLocation(item)">
+              <view class="location flex-normal" @click="goLocation(formData)">
                 <view class="iconfont icon-location" style="font-weight: 400">
                   &#xe6d7;
                 </view>
@@ -55,18 +54,21 @@
 </template>
 <script setup lang="ts">
   import { nextTick, ref, onMounted } from 'vue';
-  import { formatterTemp, goLocation, goDoctorCard } from '../utils/utils';
+  import { cloneUtil } from '@/common';
+  import { formatterTemp, goLocation, goDoctorCard ,gotoGuide } from '../utils/utils';
   import type { TInstance } from '@/components/g-form/index';
   const props = defineProps<{
     formData: any;
     formList: TInstance[];
   }>();
   const gform = ref<any>('');
+  const showFormList = ref<any[]>([]);
 
   onMounted(() => {
     nextTick(() => {
-      formatterTemp(props.formList, false);
-      gform.value.setList(props.formList);
+      showFormList.value = cloneUtil(props.formList);
+      formatterTemp(showFormList.value, false);
+      gform.value.setList(showFormList.value);
     });
   });
 </script>
@@ -74,7 +76,7 @@
   .card-item {
     width: 100vw;
     .card-content {
-      background-color: #f5f8ff;
+      background-color: #e8f4ff;
       margin: auto;
       transform: translateY(-20rpx);
       // border: 2rpx solid #e6e6e6;
@@ -109,5 +111,4 @@
     margin: 0 6rpx;
     position: relative;
   }
-
 </style>

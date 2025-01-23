@@ -4,6 +4,8 @@ import {
   type MsgListType,
   type MsgStatusType,
   type MessFormListType,
+  OrderStatusName,
+  OrderStatusDescript,
 } from './types';
 import {
   type TButtonConfig,
@@ -14,7 +16,7 @@ import {
   apiAsync,
   GStores,
 } from '@/utils';
-import { cloneUtil } from '@/common';
+import { cloneUtil, joinQuery } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import globalGl from '@/config/global';
 import api from '@/service/api';
@@ -31,6 +33,7 @@ export const msgState = ref<MsgStatusType>({
   focus: false,
 });
 export const messFormData = ref<Array<MessFormListType>>([]);
+export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -73,36 +76,55 @@ const initWithMess = async () => {
   const { result = [] } = await api.getTodayVisit({
     patientId: gStores?.userStore?.patChoose?.patientId,
   });
-  const docList: any[] = [];
+
   const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
-  const allPromise = result.map(async (item) => {
+  messFormData.value = result.map(async (item) => {
     let hosItem = Hoslist.find((hos) => {
       // return hos.hosId === item.hosId;
       return hos.hosId === '13001';
     });
     !hosItem && (hosItem = Hoslist[0]);
     item.hosName = hosItem?.label;
+    item.gisLat = hosItem?.gisLat;
+    item.gisLng = hosItem?.gisLng;
+    item.address = hosItem?.address;
+    item.orderStatus = item.c + item.b + item.a;
+    item.statusName = OrderStatusName[`orderStatus_${item.orderStatus}`];
+    item.statusDesciption =
+      OrderStatusDescript[`orderStatus_${item.orderStatus}`];
     item.patientNameEncry = gStores?.userStore?.patChoose?.patientName;
-    if (!docList[item.docId]) {
-      const { result: docInfo } = await api.findByDocId({
-        hosDocId: item.docId,
-        hosId: hosItem.hosId,
-        // hosId:item.hosId,
-      });
-      docList[item.docId] = docInfo;
-    }
-    item.docName = docList[item.docId]?.docName;
     return item;
   });
-  Promise.all(allPromise).then((res) => {
-    console.log('--------', res);
-    messFormData.value = res;
-    msgList.value.push({
-      my: false,
-      type: 6,
-      // type: 7,
-    });
+  msgList.value.push({
+    my: false,
+    type: 6,
+    // type: 7,
   });
+  messFormData.value.length &&
+    messFormData.value.forEach((item, index) => {
+      const hisList: Array<MessFormListType> = [];
+      if (item.a === '1')
+        hisList.push({
+          ...item,
+          statusName: OrderStatusName[`orderStatus_000`],
+          statusDesciption: OrderStatusDescript[`orderStatus_000`],
+        });
+
+      if (item.b === '1')
+        hisList.push({
+          ...item,
+          statusName: OrderStatusName[`orderStatus_001`],
+          statusDesciption: OrderStatusDescript[`orderStatus_001`],
+        });
+      if (item.c === '1')
+        hisList.push({
+          ...item,
+          statusName: OrderStatusName[`orderStatus_011`],
+          statusDesciption: OrderStatusDescript[`orderStatus_011`],
+        });
+
+      messHisFormData.value[index] = hisList;
+    });
 };
 
 export const recommendMenuList = [
@@ -315,7 +337,7 @@ export const formatterTemp = (list: TInstance[], modeOld = false) => {
     o.bodyStyle =
       'padding-top: 4rpx;font-size: var(--hr-font-size-s);font-weight:600;';
     o.rowStyle =
-      'margin-top: -15rpx;margin-bottom:4rpx; background-color: #f5f8ff;';
+      'margin-top: -15rpx;margin-bottom:4rpx; background-color: #e8f4ff;';
 
     o.disabled = true;
     o.isForShow = true;
@@ -334,8 +356,23 @@ export const goLocation = (item) => {
     gStores.messageStore.showMessage('暂不支持导航(无该医院位置信息)', 3000);
   }
 };
+
+export const gotoGuide = (item) => {
+  uni.navigateTo({
+    url: joinQuery('/pagesA/guide/guide', {}),
+  });
+};
 export const goDoctorCard = (item) => {
-  console.log(8888, item);
+  console.log('item', item);
+  const { docName, docId, hosId, deptName } = item;
+  uni.navigateTo({
+    url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
+      hosDocId: docId,
+      hosId,
+      docName,
+      deptName,
+    }),
+  });
 };
 export const changeShowHistory = (isHistory: boolean = false) => {
   styleConfig.value.historyMess = isHistory;
