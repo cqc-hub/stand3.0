@@ -78,7 +78,7 @@ const initWithMess = async () => {
   });
 
   const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
-  messFormData.value = result.map(async (item) => {
+  messFormData.value = result.map( (item) => {
     let hosItem = Hoslist.find((hos) => {
       // return hos.hosId === item.hosId;
       return hos.hosId === '13001';
