@@ -602,14 +602,14 @@
   };
   const goReportPdf = (item) => {
     let { repId, repName, pdfPath } = item;
-    
+
     if (pdfPath) {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
           url: encodeURIComponent(pdfPath as string),
           name: repName,
-          type:'base64'
+          type: 'base64',
         }),
       });
       return;
@@ -742,22 +742,11 @@
   };
 
   const gotoMedical = async (url: string) => {
-    const { isJcYunPay, isJcYunPayWithExtendArg } = pageConfig.value;
+    const { _extend = {} } = pageProps.value;
 
-    let isContinuePay = true;
-    if (isJcYunPayWithExtendArg) {
-      let extend = pageProps.value._extend;
-      Object.keys(isJcYunPayWithExtendArg).map((key) => {
-        const v = extend[key];
-        if (isContinuePay) {
-          if (v !== isJcYunPayWithExtendArg[key]) {
-            isContinuePay = false;
-          }
-        }
-      });
-    }
-
-    if (isJcYunPay === '1' && isContinuePay) {
+    // 需要缴费
+    if (_extend?.yunUrlNeedPay === '1') {
+      // if (isJcYunPay === '1' && isContinuePay) {
       // examineReportList.value.repId = '202410011703';
       const { cardNumber, repId, hosId, hosName, patientName } =
         examineReportList.value;
@@ -905,7 +894,6 @@
     await wait(600);
 
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-    console.log(pageConfig.value, 'ageConfig.value ageConfig.value ');
     pageProps.value = deQueryForUrl(deQueryForUrl(deQueryForUrl(opt)));
     pageProps.value._extend = {};
     if (pageProps.value.extend) {
@@ -913,7 +901,7 @@
         pageProps.value._extend = JSON.parse(pageProps.value.extend);
       } catch (error) {}
     }
-
+    console.log(pageProps.value, 'ageConfig.value ageConfig.value ');
     windowInfo.value = uni.getSystemInfoSync();
     getTips();
     getInspectionReportList();

@@ -41,5 +41,27 @@ export type MessFormListType = {
   hosId?: string;
   hosName?: string;
   orderId?: string;
-  visitNo: 'string';
+  visitNo?: string;
+  a?: string;
+  b?: string;
+  c?: string;
+  orderStauts?: string;
+  statusName?: string;
+  statusDesciption?: string;
+  gisLng?: string;
+  gisLat?: string;
+  address?: string;
 };
+export enum OrderStatusName {
+  orderStatus_000 = '预约成功',
+  orderStatus_001 = '取号成功',
+  orderStatus_011 = '已就诊',
+  orderStatus_111 = '缴费成功',
+}
+
+export enum OrderStatusDescript {
+  orderStatus_000 = '预约成功,请在就诊前完成缴费取号。',
+  orderStatus_001 = '取号成功,请前往诊区签到。',
+  orderStatus_011 = '已就诊,请及时缴费。',
+  orderStatus_111 = '缴费成功。',
+}

@@ -1,8 +1,8 @@
 <template>
   <view class="mess-history float-from-top" v-show="styleConfig?.historyMess">
-    <view v-for="(card, cardIndex) in 2" :key="`card${cardIndex}`">
-      <view v-if="cardIndex == 2" id="scroll-active"></view>
-      <Recommend-Card :formData="formData[0]" :formList="formList" />
+    <view v-for="(card, cardIndex) in messHisFormData[navIndex]" :key="`card${cardIndex}`">
+      <view v-if="cardIndex == messHisFormData[navIndex]?.length" id="scroll-active"></view>
+      <Recommend-Card :formData="card" :formList="formList" />
     </view>
   </view>
 
@@ -14,7 +14,7 @@
     indicator-active-color="var(--hr-brand-color-6)"
     @change="tabChange"
   >
-    <swiper-item v-for="(item, index) in messFormData.length" :key="`swiper-item${index}`">
+    <swiper-item v-for="(item, index) in messFormData" :key="`swiper-item${index}`">
       <view class="card-wrapper" :id="`swiper-item-${index}`">
         <view
           class="mess-now"
@@ -23,7 +23,7 @@
           @touchend="touchend"
         >
           <Recommend-Card
-            :formData="messFormData[index]"
+            :formData="item"
             :formList="formList"
           />
         </view>
@@ -43,7 +43,7 @@
   import {
     changeShowHistory,
     styleConfig,
-    scrollToNewMsg,
+    messHisFormData,
     messFormData,
   } from '../utils/utils';
   import type { TInstance } from '@/components/g-form/index';
