@@ -374,15 +374,6 @@ export interface ISystemConfig_ {
     isGraphic?: '1';
     /** 检查报告查询第三方 点击检查跳转第三方h5 */
     isCheckThirdParty?: '1';
-    /** 检查报告详情云云影像需要支付 */
-    isJcYunPay?: '1';
-    /**
-     * isJcYunPay 基础上进一步判断
-     * key 对应的值需要和列表 extend 保持一致才可以走入isJcYunPay逻辑
-     */
-    isJcYunPayWithExtendArg?: {
-      [key: string]: string;
-    };
 
     /** 报告查询列表云影像链接 */
     listYun?: {
