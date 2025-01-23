@@ -11,6 +11,8 @@
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
+  
+  // import '@/js_sdk/webfunny.min.js';
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
@@ -65,6 +67,8 @@
       // #endif
     }
 
+    // 温附二新增监控-只记录正式环境
+    // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))
     globalStore.onAppShow(opt);
 
     // #ifdef MP-WEIXIN
