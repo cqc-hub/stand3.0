@@ -70,7 +70,10 @@
             <view class="row-value g-break-word color-444 text-ellipsis">
               <text
                 v-if="item.clinicTypeName || item.docName"
-                class="g-split-line mr12 pr12"
+                :class="{
+                  'g-split-line': item.hosName
+                }"
+                class=" mr12 pr12"
               >
                 {{ (item.clinicTypeName && `(${item.clinicTypeName})`) || '' }}
                 {{ item.docName }}

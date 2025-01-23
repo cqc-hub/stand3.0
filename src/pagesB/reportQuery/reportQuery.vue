@@ -456,7 +456,8 @@
     };
     for (const key in mq1) {
       const v = mq1[key];
-      mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+      // mq[key] = typeof v === 'string' ? encodeURIComponent(v) : v;
+      mq[key] = v;
     }
 
     if (tabCurrent.value == 0) {
