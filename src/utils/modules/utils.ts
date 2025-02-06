@@ -470,7 +470,7 @@ export const thirdWxPay = (V3PageData) => {
  */
 export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') => {
   if (str) {
-    str = str.replace(/[\r\n\\n]/g, replaceStr)
+    str = str.replace(/[\r\n]/g, replaceStr)
   }
 
   return str

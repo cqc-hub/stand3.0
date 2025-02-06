@@ -61,7 +61,7 @@ export const init = async (isMess) => {
     'Electronic_Consultation_Sheet'
   );
   console.log('isMess', isMess);
-  isMess && initWithMess();
+  isMess&&isMess == '1' && initWithMess();
 };
 
 const initWithMess = async () => {
@@ -78,7 +78,7 @@ const initWithMess = async () => {
   });
 
   const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
-  messFormData.value = result.map( (item) => {
+  messFormData.value = result.map((item) => {
     let hosItem = Hoslist.find((hos) => {
       // return hos.hosId === item.hosId;
       return hos.hosId === '13001';

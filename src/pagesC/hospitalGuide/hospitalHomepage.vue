@@ -191,6 +191,38 @@
       patientInterception: '1',
       loginInterception: '1',
     },
+    /*门诊取号 */
+    {
+      appId: '',
+      detail: '',
+      gridLabel: '0',
+      iconfont: 'ico_sy_calendar3',
+      id: 94663,
+      loginInterception: '1',
+      path: '/pagesC/takeNumber/takeNumber?type=0',
+      patientInterception: '1',
+      query: '',
+      selectPatientPage: '0',
+      terminalType: 'my',
+      title: '门诊取号',
+    },
+
+    {
+      functionIntroduce: '基础',
+      iconfont: 'ico_sy_patient',
+      query: '',
+      selectPatientPage: '0',
+      title: '排队叫号',
+      terminalType: 'my-h5',
+      gridLabel: '0',
+      path: '/pagesC/queueNumber/queueNumber&query=["token"]',
+      showNo: 3,
+      appId: '',
+      id: 49617,
+      detail: '',
+      patientInterception: '1',
+      loginInterception: '1',
+    },
     {
       functionIntroduce: '',
       iconfont: 'ico_sy_bgcx',
@@ -208,17 +240,16 @@
       loginInterception: '1',
     },
     {
-      functionIntroduce: '基础',
-      iconfont: 'ico_sy_patient',
+      functionIntroduce: '自研原生门诊缴费',
+      iconfont: 'ico_sy_mzjf',
       query: '',
       selectPatientPage: '0',
-      title: '排队叫号',
-      terminalType: 'my-h5',
-      gridLabel: '0',
-      path: '/pagesC/queueNumber/queueNumber&query=["token"]',
-      showNo: 3,
+      title: '门诊缴费',
+      terminalType: 'my',
+      gridLabel: '3',
+      path: '/pagesA/clinicPay/clinicPayDetail',
       appId: '',
-      id: 49617,
+      id: 53464,
       detail: '',
       patientInterception: '1',
       loginInterception: '1',
@@ -238,21 +269,7 @@
       patientInterception: '1',
       loginInterception: '1',
     },
-    {
-      functionIntroduce: '自研原生门诊缴费',
-      iconfont: 'ico_sy_mzjf',
-      query: '',
-      selectPatientPage: '0',
-      title: '门诊缴费',
-      terminalType: 'my',
-      gridLabel: '3',
-      path: '/pagesA/clinicPay/clinicPayDetail',
-      appId: '',
-      id: 53464,
-      detail: '',
-      patientInterception: '1',
-      loginInterception: '1',
-    },
+
     {
       functionIntroduce: '',
       iconfont: 'ico_sy_paper7',
@@ -352,23 +369,23 @@
       selectPatientPage: '0',
       title: '医保电子凭证',
       gridLabel: '0',
-        // #ifdef MP-WEIXIN
+      // #ifdef MP-WEIXIN
       terminalType: 'mini',
       path: '/views/home/index',
       appId: 'wx81ce904580cc0ff1',
       query: '',
-          // #endif
-       // #ifdef MP-ALIPAY
+      // #endif
+      // #ifdef MP-ALIPAY
       terminalType: 'alipay',
       path: 'alipays://platformapi/startapp?appId=77700284&page=pages%2Fmedical%2Findex%3FchInfo%3Dquyuyibaominiapp',
       appId: '',
-      query:'{\"routeType\":\"openURL\"}',
+      query: '{"routeType":"openURL"}',
       // #endif
       id: 49626,
       detail: '',
       patientInterception: '0',
       loginInterception: '0',
-    }
+    },
   ];
   const row: number = 3;
 
@@ -409,7 +426,7 @@
   });
   // #endif
 
-  const getGridData = ()=>{
+  const getGridData = () => {
     // let
     // gridList
   };
@@ -420,7 +437,7 @@
         '/pagesC/cloudHospital/myPath?path=/pages/hospitalGuide/hospitalGuide',
         {
           hosId: hosId.value,
-          isFilterHosIdphone:1
+          isFilterHosIdphone: 1,
         }
       ),
     });
