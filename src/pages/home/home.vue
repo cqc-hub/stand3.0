@@ -420,7 +420,6 @@
   onShow(() => {
     viewerStore.init();
     if (global.SYS_CODE === '1001067' && globalStore.openId) {
-      console.log('我执行了');
       if (!uni.getStorageSync('wmUserInfo')) {
         uni.setStorageSync(
           'wmUserInfo',
