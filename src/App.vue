@@ -11,7 +11,7 @@
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
-  
+
   // import '@/js_sdk/webfunny.min.js';
 
   const globalStore = useGlobalStore();
@@ -22,14 +22,21 @@
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
-    if(globalStore.sysCode === '1001063'){
-    // #ifdef MP-WEIXIN
-    globalStore.setShowFlag(false);
-    // #endif
-     // #ifdef MP-ALIPAY
-     globalStore.setShowFlag(true);
+    if (globalStore.sysCode === '1001063') {
+      // #ifdef MP-WEIXIN
+      globalStore.setShowFlag(false);
+      // #endif
+      // #ifdef MP-ALIPAY
+      globalStore.setShowFlag(true);
       // #endif
     }
+    if (global.SYS_CODE === '1001067') {
+      // @ts-expect-error
+      require('./js_sdk/webfunny.min.js', (mod) => {}, (err) => {
+        console.error(err);
+      });
+    }
+
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
     if (alipayPid) {
@@ -45,25 +52,24 @@
       });
     }
     // #endif
-
   });
 
   onShow(async (opt) => {
     console.log('App Show', opt);
-    if(globalStore.sysCode==='1001063'){
-    // #ifdef MP-WEIXIN
-     globalStore.setShowFlag(false);
-        // 额外为杭口处理
-     if(opt.path === 'pages/home/home'){
-      uni.reLaunch({
-          url: "/pagesB/menus/home",
+    if (globalStore.sysCode === '1001063') {
+      // #ifdef MP-WEIXIN
+      globalStore.setShowFlag(false);
+      // 额外为杭口处理
+      if (opt.path === 'pages/home/home') {
+        uni.reLaunch({
+          url: '/pagesB/menus/home',
         });
-        return
+        return;
       }
-    // #endif
+      // #endif
 
-    // #ifdef MP-ALIPAY
-    globalStore.setShowFlag(true);
+      // #ifdef MP-ALIPAY
+      globalStore.setShowFlag(true);
       // #endif
     }
 
