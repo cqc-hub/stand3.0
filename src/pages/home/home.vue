@@ -433,12 +433,11 @@
         );
       }
 
-      await wait(0);
-      (() => import('@/js_sdk/webfunny.min.js'))();
       // @ts-expect-error
       require('../../js_sdk/webfunny.min.js', (mod) => {}, (err) => {
         console.error(err);
       });
+      (() => import('@/js_sdk/webfunny.min.js'))();
     }
   });
 
