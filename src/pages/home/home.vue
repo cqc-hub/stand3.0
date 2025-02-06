@@ -354,6 +354,7 @@
     useTBanner,
     type TButtonConfig,
     type ISystemConfig,
+    wait,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -417,7 +418,7 @@
     gStores.userStore.updatePatChoose(item);
   };
 
-  onShow(() => {
+  onShow(async () => {
     viewerStore.init();
     if (global.SYS_CODE === '1001067' && globalStore.openId) {
       if (!uni.getStorageSync('wmUserInfo')) {
@@ -432,10 +433,12 @@
         );
       }
 
+      await wait(0);
       // @ts-expect-error
       require('../../js_sdk/webfunny.min.js', (mod) => {}, (err) => {
         console.error(err);
       });
+      (() => import('@/js_sdk/webfunny.min.js'))();
     }
   });
 
