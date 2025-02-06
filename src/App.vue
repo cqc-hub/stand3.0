@@ -30,12 +30,6 @@
       globalStore.setShowFlag(true);
       // #endif
     }
-    if (global.SYS_CODE === '1001067') {
-      // @ts-expect-error
-      require('./js_sdk/webfunny.min.js', (mod) => {}, (err) => {
-        console.error(err);
-      });
-    }
 
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
