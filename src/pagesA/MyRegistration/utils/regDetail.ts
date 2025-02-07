@@ -1,6 +1,12 @@
 import { Ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
-import { GStores, ISystemConfig, ServerStaticData, wait,apiAsync } from '@/utils';
+import {
+  GStores,
+  ISystemConfig,
+  ServerStaticData,
+  wait,
+  apiAsync,
+} from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
 import { getQxMedicalNation } from '@/pagesA/clinicPay/utils/clinicPayDetail';
@@ -453,10 +459,15 @@ export class RegDetailUtil {
     });
   }
 
-  async cancelRegHos() {
+  async cancelRegHos(
+    opt: {
+      returnUrl: string;
+    } = {} as any
+  ) {
     const { hosOrderId } = this.prop.value;
     const { patientId } = this.gStores.userStore.patChoose;
     const { hosId } = this.orderRegInfo;
+    const { returnUrl = '/pagesA/MyRegistration/MyRegistration' } = opt;
 
     await api.cancelHosReg({
       hosOrderId,
@@ -476,17 +487,21 @@ export class RegDetailUtil {
       }
     }
     uni.reLaunch({
-      url: '/pagesA/MyRegistration/MyRegistration',
+      url: returnUrl,
     });
 
     return Promise.reject('不需要刷新数据22');
   }
 
-  async cancelReg() {
+  async cancelReg(
+    opt: {
+      returnUrl: string;
+    } = {} as any
+  ) {
     if (this.prop.value.orderId) {
       return await this.cancelRegClassic();
     } else if (this.prop.value.hosOrderId) {
-      return await this.cancelRegHos();
+      return await this.cancelRegHos(opt);
     }
   }
 
@@ -530,7 +545,7 @@ export class RegDetailUtil {
         errMsg = '用户点击取消';
         throw new Error(errMsg);
       }
-      return await this.cancelReg();
+      return await this.cancelReg(opt);
     } else {
       const { refundNeedAuth, source } = this.orderRegInfo;
       const { orderId } = this.prop.value;
@@ -599,7 +614,6 @@ export class RegDetailUtil {
 
       await api.refundOrder(args);
     }
-
   }
 
   static getInstance = (function () {

@@ -663,7 +663,7 @@
 
     await regDetailUtil.getDataDetail();
     await regDetailUtil.refoundOrder({
-      returnUrl: joinQueryForUrl('pagesA/guide/guide', pageArg),
+      returnUrl: joinQueryForUrl('/pagesA/guide/guide', pageArg),
     });
 
     patChange();
