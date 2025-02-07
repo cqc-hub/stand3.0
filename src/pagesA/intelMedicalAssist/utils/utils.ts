@@ -257,7 +257,7 @@ export const sendImg = async () => {
 
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
-    sizeType: ['compressed', 'original'],
+    sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
   msgState.value.msgLoad = true;

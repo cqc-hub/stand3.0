@@ -58,6 +58,7 @@
 
     <swiper
       v-if="tabs.length"
+      v-show="!(isHealthCardNewMode && isHealthCardButton)"
       :current="tabCurrent"
       @change="(e) => tabChange(e.detail.current, '')"
       class="container g-container"
@@ -118,12 +119,20 @@
         </scroll-list>
       </swiper-item>
     </swiper>
+    <view
+      v-show="isHealthCardNewMode && isHealthCardButton"
+      class="container g-container"
+    >
+      <view class="empty-box">
+        <g-empty :current="2" text="请验证身份信息" />
+      </view>
+    </view>
 
     <view v-if="footBtns.length" class="g-footer">
       <button
         v-for="(btn, bi) in footBtns"
         :key="btn.text + tabCurrent"
-        @click="useTBanner(btn)"
+        @click="handleButonClick(btn)"
         :class="{
           flex1: bi,
           'btn-plain ': bi % 2,
@@ -153,6 +162,7 @@
     TButtonConfig,
     useTBanner,
   } from '@/utils';
+  import globalGl from '@/config/global';
   import { joinQueryForUrl } from '@/common';
   import { deepClone, deQueryForUrl } from '@/common/utils';
 
@@ -217,6 +227,8 @@
       };
     })
   );
+  const isHealthCardButton = ref<boolean>(false);
+  const isHealthCardNewMode = ref<boolean>(false);
   const showTimeLabel = computed(() => {
     const timeRangeStr = dateRange.value.join(',');
 
@@ -229,6 +241,12 @@
   const dateRangeChange = (range) => {
     dateRange.value = range;
     // tabChange(tabCurrent.value, '');
+    // #ifdef MP-WEIXIN
+    if (isHealthCardNewMode.value) {
+      isHealthCardButton.value = true;
+      return;
+    }
+    // #endif
     getCurrentLoadScrollInstance()?.refresh();
   };
 
@@ -269,6 +287,11 @@
 
   let listLenHis = 0;
   const load = async (pageInfo) => {
+    // #ifdef MP-WEIXIN
+    if (isHealthCardButton.value) {
+      return;
+    }
+    // #endif
     let listNowLen = 0;
     await wait(600);
     const currentTabValue = tabCurrent.value;
@@ -323,7 +346,6 @@
             const { date, reportHosNameResults } = o;
 
             if (reportHosNameResults && reportHosNameResults.length) {
-
               reportHosNameResults.map((p) => {
                 const { hosName, reportList } = p;
 
@@ -336,7 +358,6 @@
                     if (findItemSameDate) {
                       if (findItemSameDate.reportHosNameResults?.length) {
                         findItemSameDate.reportHosNameResults.map((fHItem) => {
-
                           if (fHItem.hosName === hosName) {
                             if (fHItem.reportList) {
                               if (!fHItem.reportList.includes(item)) {
@@ -401,6 +422,76 @@
     if (tabs.value.length) {
       return slist.value[tabCurrent.value];
     }
+  };
+
+  const handleButonClick = (btn) => {
+    const pat = gStores.userStore.patChoose;
+    const { idType } = pat;
+    if (btn.type === 'button' && idType === '01') {
+      handleFacility();
+    } else {
+      useTBanner(btn);
+    }
+  };
+  const handleFacility = async () => {
+    // #ifdef MP-WEIXIN
+    uni.showLoading({});
+    //分包B引入分包A中的方法，且该方法中“使用在分包A中单独引入的插件”中的方法
+    // @ts-expect-error
+    require('../../pagesA/medicalCardMan/utils/index', async (utils) => {
+      const { success, res } = await utils.getHealthCardCode();
+      if (success) {
+        const {
+          result: { wechatCode },
+        } = res;
+        const args={
+          patientId: gStores.userStore.patChoose.patientId,
+          wechatCode,
+          herenId: gStores.globalStore.herenId,
+          openId: gStores.globalStore.openId,
+          source: gStores.globalStore.browser.source,
+          sysCode: globalGl.SYS_CODE,
+          hospitalId: globalGl.systemInfo.isOpenHealthCard!.hospitalId,
+        }
+        const { result } = await api.registerUniformVerifyOrder(args);
+        const {
+          patAndOrderId,
+          verifyType,
+          verifyOrderId,
+          verifyData,
+          protectState,
+        } = result;
+        if (verifyType !== 0) {
+          nextTick(() => {
+            pageList.value = { '0': [], '1': [], '2': [] };
+            isRefresh.value = [true, true, true];
+            getCurrentLoadScrollInstance()?.refresh();
+            isHealthCardButton.value = false;
+            uni.hideLoading();
+          });
+        } else {
+          const {
+            result: { userData, userIdKey },
+          } = await api.getOrderInfoByOrderId({ ...args, verifyType: '1' });
+          const { verifyResult } = await utils.wxFacialVerifyByKey(userIdKey);
+          console.log('verifyResult', verifyResult);
+          if(verifyResult){
+            const { result } = await api.registerUniformVerifyOrder({
+              ...args,
+              verifyType: '2',
+              verifyOrderId,
+              patAndOrderId,
+              verifyResult
+            });
+          }
+        }
+      }
+    }, ({ mod, errMsg }) => {
+      console.error('分包异步化——跨分包引入JS错误', `path: ${mod}, ${errMsg}`);
+      isHealthCardButton.value = false;
+      uni.hideLoading();
+    });
+    // #endif
   };
 
   const refresh = async (e) => {
@@ -503,6 +594,12 @@
     pageList.value = { '0': [], '1': [], '2': [] };
     isRefresh.value = [true, true, true];
     nextTick(() => {
+      // #ifdef MP-WEIXIN
+      if (isHealthCardNewMode.value) {
+        isHealthCardButton.value = true;
+        return;
+      }
+      // #endif
       getCurrentLoadScrollInstance()?.refresh();
     });
   };
@@ -512,6 +609,13 @@
     const headerType = tabNow && tabNow.headerType;
 
     const arrFactory = function <T>(obj: T) {
+      const healthCodeButton = {
+        type: 'button',
+        text: '验证身份并查询报告',
+      };
+      if (isHealthCardButton.value) {
+        return [healthCodeButton];
+      }
       if (obj) {
         if (Array.isArray(obj)) {
           return obj;
@@ -531,7 +635,7 @@
         return arrFactory(pageConfig.value.jcListFooterBtn || []);
 
       default:
-        return [];
+        return arrFactory(pageConfig.value.defaultListFooterBtn || []);
     }
   });
 
@@ -609,7 +713,18 @@
       await wait(300);
       await selHosRef.value.init();
     }
+
     init();
+    // #ifdef MP-WEIXIN
+    if (
+      globalGl.systemInfo?.isOpenHealthCard &&
+      globalGl.systemInfo.isOpenHealthCard?.isNewMode
+    ) {
+      isHealthCardNewMode.value = true;
+      isHealthCardButton.value = true;
+      uni.hideLoading();
+    }
+    // #endif
   });
 </script>
 <style lang="scss" scoped>
@@ -633,10 +748,7 @@
       background-color: #f6f6f6;
       .container-scroll {
         height: 100%;
-        .empty-box {
-          position: relative;
-          transform: translateY(100%);
-        }
+
         .list-block {
           border-left: 2rpx dashed #dddddd;
           margin: 0 32rpx;
@@ -688,5 +800,9 @@
 
   .g-footer {
     transition: all linear;
+  }
+  .empty-box {
+    position: relative;
+    transform: translateY(100%);
   }
 </style>

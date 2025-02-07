@@ -382,6 +382,7 @@ export interface ISystemConfig_ {
 
     jyListFooterBtn?: TButtonConfig[] | TButtonConfig;
     jcListFooterBtn?: TButtonConfig[] | TButtonConfig;
+    defaultListFooterBtn?: TButtonConfig[] | TButtonConfig;
 
     // 详情里面浮窗引导提示的按钮组(报告看不懂？结果有疑问?)
     jyHoverTipBtns?: TButtonConfig[] | TButtonConfig;
@@ -457,7 +458,7 @@ export interface ISystemConfig_ {
     // 开启后列表子项开放 "出示就诊码" 按钮, 隐藏底部的
     isItemQrCodeShow?: '1';
     navBtns?: TButtonConfig[];
-    //智能助医
+    //智能医助
     intelMedicalAssistConfig?: {
       guessAskList?: Array<{ label: string; value: string }>;
       guessServerList?: TButtonConfig[];

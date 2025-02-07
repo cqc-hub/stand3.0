@@ -8,7 +8,7 @@
     }"
   >
     <view class="navBar">
-      <GCustomNavbar :title="'智能助医'" />
+      <GCustomNavbar :title="'智能医助'" />
     </view>
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"

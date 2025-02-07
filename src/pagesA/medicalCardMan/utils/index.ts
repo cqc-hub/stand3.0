@@ -897,9 +897,9 @@ const healthCardQuery = {
   userFormPageUrl:
     `mini:/pagesA/medicalCardMan/addMedical?_healthType=addPat&authCode=` +
     '${authCode}',
-    // userFormPageUrl:
-    // `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
-    // '${authCode}',
+  // userFormPageUrl:
+  // `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
+  // '${authCode}',
 };
 export const healthCardBind = async () => {
   const gStores = new GStores();
@@ -1010,6 +1010,45 @@ export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
   });
 };
 
+// export const reportVerifyJudge =async (cb) => {
+//   const { success, res } = await getHealthCardCode();
+//   if (success) {
+//     const {
+//       result: { wechatCode },
+//     } = res;
+//     const gStores = new GStores(); 
+//     const args = {
+//       patientId: gStores.userStore.patChoose.patientId,
+//       wechatCode,
+//       herenId: gStores.globalStore.herenId,
+//       openId: gStores.globalStore.openId,
+//       source: gStores.globalStore.browser.source,
+//       sysCode: globalGl.SYS_CODE,
+//       hospitalId: globalGl.systemInfo.isOpenHealthCard!.hospitalId,
+//     };
+//     const { result } = await api.registerUniformVerifyOrder(args);
+//     const {
+//       patAndOrderId,
+//       verifyType,
+//       verifyOrderId,
+//       verifyData,
+//       protectState,
+//     } = result;
+//     if (verifyType !== 0) {
+//       cb.call(verifyData);
+//     } else {
+//       //去验证
+//       const {
+//         result: { userData, userIdKey },
+//       } = await api.getOrderInfoByOrderId({ ...args, verifyType: '1' });
+//       const { verifyResult } = await wxFacialVerifyByKey(userIdKey);
+//       console.log('verifyResult', verifyResult);
+//     }
+//   } else {
+//     throw new Error('获取健康卡授权失败');
+//   }
+// };
+
 export const backWithFaceVerify = async (
   orderId: string,
   redirectUrl: string,
@@ -1048,10 +1087,6 @@ export const backWithFaceVerify = async (
     result: { verifyBool, verifyOrderId },
   } = await api.registerRealPersonAuthOrder(requestResultArg);
   if (verifyBool) {
-    console.log(
-      '${decodeURIComponent(redirectUrl)}&verify_order_id=${verifyOrderId}',
-      `${redirectUrl}&verify_order_id=${verifyOrderId}`
-    );
     useTBanner({
       type: 'h5',
       path: decodeURIComponent(
@@ -1065,6 +1100,8 @@ export const backWithFaceVerify = async (
     });
   }
 };
+
+
 
 const wxFacialVerifyByKey = async (
   userIdKey: string
@@ -1120,3 +1157,6 @@ const getInfoFromIdCard = (idCard) => {
       .padStart(2, '0')}`,
   };
 };
+
+
+// module.exports = { reportVerifyJudge}

@@ -76,7 +76,7 @@
         {
           "path": "intelMedicalAssist/intelMedicalAssist",
           "style": {
-            "navigationBarTitleText": "智能助医",
+            "navigationBarTitleText": "智能医助",
             "navigationBarTextStyle": "black",
             "navigationStyle": "custom",
             "mp-alipay": {

@@ -913,6 +913,15 @@ const userApi = {
         reportCmPV_YLName: '电子健康卡',
       }
     ),
+    //实人验证结果查询接口
+  checkUniformVerifyResult: (data) =>
+    service.post(
+      '/phs-user/healthCard/checkUniformVerifyResult',
+      parm(data),
+      {
+        reportCmPV_YLName: '电子健康卡',
+      }
+    ),
 
   getHospital: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospital', parm(data), {
