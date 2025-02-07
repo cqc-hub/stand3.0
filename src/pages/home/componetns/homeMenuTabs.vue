@@ -336,7 +336,6 @@
       },
     },
     mounted() {
-      console.log('this.list', this.tabs);
       this.tabs.forEach((item) => {
         if (item?.detail && item?.detail !== '') {
           this.hasDetail = true;

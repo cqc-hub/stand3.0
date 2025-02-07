@@ -1,5 +1,8 @@
 <template>
-  <view v-if="globalStore.sysCode==='1001063'?globalStore.isShowFlag:true" class="g-page">
+  <view
+    v-if="globalStore.sysCode === '1001063' ? globalStore.isShowFlag : true"
+    class="g-page"
+  >
     <home-Nav />
     <scroll-view
       @scroll="pageScroll"
@@ -351,6 +354,7 @@
     useTBanner,
     type TButtonConfig,
     type ISystemConfig,
+    wait,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -414,8 +418,27 @@
     gStores.userStore.updatePatChoose(item);
   };
 
-  onShow(() => {
+  onShow(async () => {
     viewerStore.init();
+    if (global.SYS_CODE === '1001067' && globalStore.openId) {
+      if (!uni.getStorageSync('wmUserInfo')) {
+        uni.setStorageSync(
+          'wmUserInfo',
+          JSON.stringify({
+            userId: globalStore.openId,
+            userTag: '温附二小程序项目',
+            projectVersion: '1.0.0',
+            env: 'pro',
+          })
+        );
+      }
+
+      // @ts-expect-error
+      require('../../js_sdk/webfunny.min.js', (mod) => {}, (err) => {
+        console.error(err);
+      });
+      (() => import('@/js_sdk/webfunny.min.js'))();
+    }
   });
 
   onLoad(async (opt) => {

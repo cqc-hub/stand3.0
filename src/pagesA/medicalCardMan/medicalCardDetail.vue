@@ -10,47 +10,22 @@
       @disabled-click="rowClick"
       bodyBold
       ref="gform"
-    />
-
-    <view
-      class="container"
-      v-if="
-        formData &&
-        formData.patientName &&
-        gStore.userStore.clickPat.healthCardUser
-      "
     >
-      <view
-        class="grid1fr g-border-bottom item-for-show form-item-bold form-item-disabled form-item-filled form-item-input-text form-item"
-      >
-        <view class="label text-no-wrap">
-          <view>档案类型</view>
+      <template #suffix="{ item }">
+        <view v-if="item.key === 'healthCardUserLabel'">
+          <text
+            v-if="
+              gStore.userStore.clickPat.healthCardUser !== '2' &&
+              isMedicalFiling
+            "
+            class="goMedicalFiling text-no-wrap"
+            @click="goMedicalFiling(gStore.userStore.clickPat)"
+          >
+            医保建档
+          </text>
         </view>
-        <view class="container-body">
-          <view class="content-show">
-            <view>
-              <text>
-                {{
-                  gStore.userStore.clickPat.healthCardUser === '2'
-                    ? '医保'
-                    : '自费'
-                }}
-              </text>
-              <text
-                v-if="
-                  gStore.userStore.clickPat.healthCardUser !== '2' &&
-                  isMedicalFiling
-                "
-                class="goMedicalFiling"
-                @click="goMedicalFiling(gStore.userStore.clickPat)"
-              >
-                医保建档
-              </text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
+      </template>
+    </g-form>
 
     <g-message />
 
@@ -108,7 +83,7 @@
   const pat = gStore.userStore.clickPat;
 
   const patientUtils = new PatientUtils();
-  const formData = ref<PagePropType>({} as PagePropType);
+  const formData = ref({} as PagePropType);
   const gform = ref<any>('');
   const pageConfig = ref(<ISystemConfig['person']>{});
   const regDialogMedicalFiling: Ref<any> = ref('');
@@ -174,9 +149,18 @@
   });
 
   onMounted(async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    console.log(pat, 'sss');
+    //是否医保建档
+    const medicalMHelp = globalGl.sConfig.medicalMHelp!;
+    // #ifdef  MP-WEIXIN
+    //先实现支付宝
+    // #endif
 
+    // #ifdef MP-ALIPAY
+    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    // #endif
+    const { healthCardUser } = pat;
+
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
     formData.value = {
       ...pat,
       defaultFlag: pat.defaultFlag === '0' ? false : true,
@@ -215,16 +199,22 @@
     });
 
     nextTick(() => {
-      gform.value.setList(formList);
+      const fList = [...formList];
+      if (globalGl.SYS_CODE !== '1001067' && healthCardUser) {
+        formData.value['healthCardUserLabel'] =
+          healthCardUser === '2' ? '医保' : '自费';
+
+        fList.push({
+          label: '档案类型',
+          key: 'healthCardUserLabel',
+          field: 'input-text',
+          disabled: true,
+          isForShow: true,
+        });
+      }
+
+      gform.value.setList(fList);
     });
-    //是否医保建档
-    const medicalMHelp = globalGl.sConfig.medicalMHelp!;
-    // #ifdef  MP-WEIXIN
-    //先实现支付宝
-    // #endif
-    // #ifdef MP-ALIPAY
-    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
-    // #endif
   });
 </script>
 
@@ -241,9 +231,6 @@
     padding: 23rpx 0;
     border-bottom: 1rpx solid var(--hr-neutral-color-2);
     border-radius: 0;
-  }
-  .grid1fr {
-    grid-template-columns: 190rpx 1fr;
   }
   .goMedicalFiling {
     color: #296fff;

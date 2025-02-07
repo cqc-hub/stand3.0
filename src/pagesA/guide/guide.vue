@@ -477,12 +477,12 @@
               sort: 3,
               completionStatus: (processResultList?.length && 1) || 0,
             },
-            {
-              ...info,
-              title: '门诊缴费',
-              sort: 4,
-              // completionStatus: (processResultList?.length && 1) || 0,
-            },
+            // {
+            //   ...info,
+            //   title: '门诊缴费',
+            //   sort: 4,
+            //   // completionStatus: (processResultList?.length && 1) || 0,
+            // },
           ];
           t.uuid = generateUuid();
           const typeMap = {
@@ -663,7 +663,7 @@
 
     await regDetailUtil.getDataDetail();
     await regDetailUtil.refoundOrder({
-      returnUrl: joinQueryForUrl('pagesA/guide/guide', pageArg),
+      returnUrl: joinQueryForUrl('/pagesA/guide/guide', pageArg),
     });
 
     patChange();
