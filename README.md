@@ -66,16 +66,10 @@ cmd: iconfont-tools
 ## warn
 
 ### 如需安装新依赖
-
-需要 切换 node@15.14.0 (否则后面爆炸)
-    nom i packageName
-
-### 如需重新下载 node_modules
-
-需要 切换 node@15.14.0
-    npm i
-切换 node@16.15.0
-    npm install terser
+node版本  V16.15.0
+npm  8.5.5
+npm查看当前源 npm config get registry
+npm 源设置为 https://registry.npmmirror.com/ （npm set registry https://registry.npmmirror.com/）
 
 ## 公共页面
 
