@@ -798,6 +798,14 @@
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
+    const additionalList:any=[]
+    if (globalGl.SYS_CODE === '1001052') {
+      additionalList.push({
+        label: '医保账户支付',
+        key: 'online',
+        sort: 3,
+      });
+    }
 
     let flag = false;
 
@@ -818,9 +826,9 @@
           const isBizTypeMedical =
             wx?.crossProgramBizType?.clinic !== undefined;
           if (flag && !isBizTypeMedical) {
-            changeRefPayList([PayType.Medicare]);
-          } else if (isBizTypeMedical) {
-            changeRefPayList([PayType.BizType]);
+            changeRefPayList([PayType.Medicare],additionalList);
+          } else if (flag &&isBizTypeMedical) {
+            changeRefPayList([PayType.BizType,PayType.Medicare],additionalList);
           }
         }
         // #endif
