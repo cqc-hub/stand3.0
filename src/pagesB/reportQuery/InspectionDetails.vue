@@ -74,7 +74,7 @@
                 <template v-if="_item.antiList">
                   <view class="seen">
                     <view class="title">{{ _item.bioName }}</view>
-                    <view class="table">
+                    <view v-if="antiList.length" class="table">
                       <view class="table-title">
                         <view class="table-title1 table-title-first">
                           抗菌药物
@@ -395,6 +395,16 @@
     // #endif
   });
 
+  const antiList = computed(() => {
+    const antiItemResult = checkoutReportList.value?.antiItemResult;
+    if (antiItemResult?.length) {
+      if (antiItemResult[0].antiList?.length) {
+        return antiItemResult[0].antiList.filter((item) => item);
+      }
+    }
+    return [];
+  });
+
   const getqueryCompData = async () => {
     if (
       global.systemInfo.isOpenHealthCard?.isCardQueryComp &&
@@ -426,6 +436,12 @@
       };
       const { result: _result } = await api.getCheckoutReportDetails(params);
       result = _result;
+    }
+    if (result.antiItemResult) {
+      checkoutReportList.value = result;
+      if (alipayPid) {
+        getPowerEnerg(result.repId);
+      }
     }
     checkoutReportList.value = result;
     if (alipayPid) {
