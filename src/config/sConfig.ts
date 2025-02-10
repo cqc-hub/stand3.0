@@ -451,7 +451,7 @@ const scJson: Record<string, ISConfig> = {
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
       alipay: {
-        medicalNation: {},
+        // medicalNation: {},
       },
       wx: {
         medicalNation: {
