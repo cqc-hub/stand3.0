@@ -131,9 +131,16 @@
 <script setup lang="ts">
   import { ref, nextTick, computed, onMounted, onUpdated } from 'vue';
   import { reportPopupRef } from '../utils/utils';
-  import { ServerStaticData, ISystemConfig, wait, GStores,apiAsync } from '@/utils';
+  import {
+    ServerStaticData,
+    ISystemConfig,
+    wait,
+    GStores,
+    apiAsync,
+  } from '@/utils';
   import { deepClone, deQueryForUrl } from '@/common/utils';
   import advisoryItem from './advisoryItem.vue';
+  import { isOpenSm4 } from '@/service';
   import env from '@/config/env';
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -377,26 +384,17 @@
       sourceType: ['album', 'camera'],
     });
     for (let i = 0, len = tempFilePaths?.length; i < len; i++) {
-       // @ts-expect-error
-       const { data} = await apiAsync(uni.uploadFile, {
+      // @ts-expect-error
+      const { result } = await apiAsync(uni.uploadFile, {
         url: ImgUploadOption.value.uploadUrl,
         filePath: tempFilePaths[i],
         name: 'file',
         fileType: 'image',
-        formData: {
-          imageName: `${ImgUploadOption.value.imageName}_${new Date().getTime()}${tempFilePaths[
-            i
-          ].slice(tempFilePaths[i].lastIndexOf('.'))}`,
-          sysCode: gStores.globalStore.sysCode,
-          Authorization: gStores.globalStore.token.accessToken,
-          phsId:81681688
+        header: {
+          phsId: isOpenSm4 ? '81681766' : '81681688',
         },
       });
-      var jsonData = JSON.parse(data) as {
-        code: number;
-        result: string;
-        message: string;
-      };
+      console.log('_____________result', result);
     }
   };
   const deleteImage = async (index) => {
@@ -411,7 +409,8 @@
     ImgUploadOption.value = {
       count: 3,
       title: '选择我的报告',
-      uploadUrl: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+      // uploadUrl: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+      uploadUrl: 'http://10.10.76.236:9907/customer/picTrans?sysCode=1001052',
     };
     init();
   });

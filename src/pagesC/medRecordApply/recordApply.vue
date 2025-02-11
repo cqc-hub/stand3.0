@@ -182,6 +182,14 @@
       return;
     }
 
+    if (item?.isArchived && item.isArchived === '0') {
+      gStores.messageStore.showMessage(
+        '病历尚未归档，归档需要15个工作日，请耐心等待',
+        3000
+      );
+      return;
+    }
+
     const idx = checkOutHosList.value.findIndex((o) => o._id === _id);
 
     if (idx === -1) {
@@ -342,7 +350,7 @@
   };
 
   const goAddRecord = async () => {
-   new Promise((rl, rj) => {
+    new Promise((rl, rj) => {
       resolve = rl;
       regDialogConfirm.value.show();
     }).then((res) => {

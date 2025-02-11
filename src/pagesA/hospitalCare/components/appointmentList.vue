@@ -93,6 +93,8 @@
   };
 
   const itemClick = (item) => {
+    //待入院不可操作
+    if (item.appointAdtStatus === 3 || item.appointAdtStatus === 4) return;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/changeOrder', item),
     });

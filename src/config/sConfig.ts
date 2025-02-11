@@ -165,7 +165,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
     isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
-    isOpenHomeTabBarNetWorkBtn:'1'
+    isOpenHomeTabBarNetWorkBtn: '1',
   },
 
   1001065: {
@@ -432,6 +432,24 @@ const scJson: Record<string, ISConfig> = {
         },
       },
     },
+  },
+  /*浙江省人民医院毕节医院金海湖院区 */
+  1001069: {
+    // medicalMHelp: {
+    //   // alipay: {
+    //     // medicalNation: {},
+    //   // },
+    //   wx: {
+    //     medicalNation: {
+    //       appId: 'wxe183cd55df4b4369',
+    //       //测试
+    //       path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=551700&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxuumfluttL87+gDtSEtCYLx&orgCodg=H5205020001&orgAppId=1HN2UHLM80083F60C80A0000448F840F',
+    //       // 生产
+    //       // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=551700&channel=&orgChnlCrtfCodg=&orgCodg=H5205020001&orgAppId=1HN2UHLM80083F60C80A0000448F840F',
+    //     },
+    //     // medicalPlugin: '1',
+    //   },
+    // },
   },
   /**
    * 杭口未来医院

@@ -1,9 +1,8 @@
 import { computed, ref } from 'vue';
-import { GStores } from '@/utils';
+import { GStores, ServerStaticData } from '@/utils';
 import { TSchInfo } from './index';
 
 import api from '@/service/api';
-
 
 export interface ICommentItem {
   adviseForDoc: string;
@@ -182,10 +181,21 @@ export class UseDoctorDetail extends GStores {
   }
 
   async getDocSch() {
-    const { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
+    const { isSchNoDept, isSchNoHos } = await ServerStaticData.getSystemConfig(
+      'order'
+    );
+    let { clinicalType, docName, hosDeptId, hosDocId, hosId } = this.props;
     const { source } = this.globalStore.browser;
     let schList: IDocSchListItem[] = [],
       enabledDays: Record<string, string> = {};
+
+    if (isSchNoDept === '1') {
+      hosDeptId = undefined as any;
+    }
+
+    if (isSchNoHos === '1') {
+      hosId = undefined as any;
+    }
 
     const args = {
       clinicalType, // 4 网络
@@ -215,7 +225,6 @@ export class UseDoctorDetail extends GStores {
       source: this.globalStore.browser.source,
     });
 
-    console.warn(result);
     if (result && result.length) {
       result.map((o) => {
         const { schList, enabledDays } = this.dealSchList(o.schHosList);

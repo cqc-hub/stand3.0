@@ -94,6 +94,10 @@ export interface ISystemConfig_ {
     isOpenOutHosSch?: '1';
     // 点击了外院排班
     handlerOutHosSchClick?: TBannerConfig;
+    // 请求排班不区分科室
+    isSchNoDept?: '1';
+    // 请求排班不区分医院
+    isSchNoHos?: '1';
 
     /** 挂号记录 */
     //页面顶部按钮(仅我的挂号页面)
