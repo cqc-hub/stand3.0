@@ -31,7 +31,7 @@ let outLoginTimer: number;
 // 20250108 由于sm4容易导致系统压力大 所以统一改为des加密
 const isDes =  (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 // const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenSm4;
-const isOpenSm4 = false;
+export const isOpenSm4 = false;
 
 const getShowUrl = (url, baseUrl) =>
   url.slice(baseUrl?.length || 0).split('=')[0];

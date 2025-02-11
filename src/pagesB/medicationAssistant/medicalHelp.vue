@@ -128,6 +128,7 @@
     throttle,
     cacheUtil,
   } from '@/utils';
+  import { decryptForPage } from '@/common/des';
   import {
     type IWaitListItem,
     isChineseMedical,
@@ -138,6 +139,7 @@
     getLocalStorage,
     joinQueryForUrl,
     deQueryForUrl,
+    getSysCode,
   } from '@/common';
   import api from '@/service/api';
 
@@ -341,12 +343,19 @@
 
     const { params: sign } = pageProps.value;
     const { patientId } = gStores.userStore.patChoose;
-    const args = {
+    let args = {
       takenDrug,
       patientId: sign ? undefined : patientId,
       clinicCate: sign ? undefined : 0,
       sign,
     };
+    if (sign && getSysCode() === '1001038') {
+      const params = decryptForPage(sign);
+      args = {
+        ...args,
+        ...params,
+      };
+    }
 
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
 
