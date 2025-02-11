@@ -913,15 +913,11 @@ const userApi = {
         reportCmPV_YLName: '电子健康卡',
       }
     ),
-    //实人验证结果查询接口
+  //实人验证结果查询接口
   checkUniformVerifyResult: (data) =>
-    service.post(
-      '/phs-user/healthCard/checkUniformVerifyResult',
-      parm(data),
-      {
-        reportCmPV_YLName: '电子健康卡',
-      }
-    ),
+    service.post('/phs-user/healthCard/checkUniformVerifyResult', parm(data), {
+      reportCmPV_YLName: '电子健康卡',
+    }),
 
   getHospital: <T>(data) =>
     service.post<T>('/phs-base/hospital/getHospital', parm(data), {
@@ -1072,6 +1068,16 @@ const userApi = {
     }),
   customerEvaluate: (data: any) =>
     service.post('/phs-extend/customer/evaluate', parm(data), {
+      hideLoading: false,
+    }),
+  ///检验分析
+  inspectionAnalysis: (data: any) =>
+    service.post('/phs-extend/customer/inspectionAnalysis', parm(data), {
+      hideLoading: false,
+    }),
+  //提问
+  customerPicTrans: (data: any) =>
+    service.post('/phs-extend/customer/picTrans', parm(data), {
       hideLoading: false,
     }),
 };

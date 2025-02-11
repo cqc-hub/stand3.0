@@ -16,7 +16,9 @@
         />
         <!-- fotter区域 -->
         <intalMedicalFooter
-          :guessServerList="pageConfig?.intelMedicalAssistConfig?.guessServerList"
+          :guessServerList="
+            pageConfig?.intelMedicalAssistConfig?.guessServerList
+          "
           :headerConfig="styleConfig"
           @click-server="handleServer"
           @on-blur="onBlur"
@@ -25,6 +27,11 @@
         />
       </view>
     </view>
+    <view v-if="popipHasShow">
+      <!-- 报告解读，业务逻辑写在组件中 -->
+      <reportPopup @inspectionAnalysis="inspectionAnalysis" />
+    </view>
+
     <g-message />
   </view>
 </template>
@@ -35,6 +42,7 @@
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
+  import reportPopup from './compontents/reportPopup.vue';
   import {
     styleConfig,
     pageConfig,
@@ -45,6 +53,8 @@
     sendImg,
     msgList,
     init,
+    popipHasShow,
+    inspectionAnalysis,
   } from './utils/utils';
   import { throttle } from '@/utils';
 
@@ -54,8 +64,7 @@
 
   const scrollChangeView = (e) => {
     // console.log('e.scrollTop,styleConfig.value.showHeader',e.scrollTop,styleConfig.value.showHeader)
-    
-    
+
     if (
       e.scrollTop <= 20 &&
       styleConfig.value.showHeader === false &&
@@ -105,7 +114,6 @@
   });
 </script>
 <style lang="scss" scoped>
- 
   .topnav-container {
     width: 100%;
     height: 100%;

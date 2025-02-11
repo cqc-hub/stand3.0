@@ -76,7 +76,7 @@
   .icon-image {
     width: 40rpx;
     height: 40rpx;
-    z-index: -1;
+    // z-index: -1;
   }
   .color-blue{
 	   color: #296fff;

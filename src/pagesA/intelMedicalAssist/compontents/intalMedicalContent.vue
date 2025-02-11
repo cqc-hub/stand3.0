@@ -118,7 +118,7 @@
                   </view>
 
                   <Evaluate-Btn1
-                    v-if="msgItem.requestId"
+                    v-if="msgItem.requestId&&msgIndex>=msgList.length-2"
                     :requestId="msgItem.requestId"
                     @askAgain="clearChatId"
                   />
@@ -141,6 +141,7 @@
         <view class="flex justify-start">
           <view class="chat-system-item margin-left padding-chat by-cyan">
             <text class="g-break-word">智慧服务大模型生成中</text>
+            <icon type="waiting" size="16"/>
           </view>
         </view>
       </view>

@@ -34,6 +34,8 @@ export const msgState = ref<MsgStatusType>({
 });
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
+export const reportPopupRef = ref<any>();
+export const popipHasShow = ref<boolean>(false);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -61,7 +63,18 @@ export const init = async (isMess) => {
     'Electronic_Consultation_Sheet'
   );
   console.log('isMess', isMess);
-  isMess&&isMess == '1' && initWithMess();
+  isMess && isMess == '1' && initWithMess();
+};
+
+export const inspectionAnalysis = async (reports) => {
+  console.log('___________reports', reports);
+  const { result } = await api.inspectionAnalysis({
+    sysCode: globalGl.SYS_CODE,
+    source: 1,
+    repId: reports[0].repId,
+    repType: 1,
+    extend:reports[0].extend,
+  });
 };
 
 const initWithMess = async () => {
@@ -77,11 +90,14 @@ const initWithMess = async () => {
     patientId: gStores?.userStore?.patChoose?.patientId,
   });
 
+  if (result.length == 0) {
+    return;
+  }
   const Hoslist = await ServerStaticData.getHosList({}, { noCache: true });
   messFormData.value = result.map((item) => {
     let hosItem = Hoslist.find((hos) => {
-      // return hos.hosId === item.hosId;
-      return hos.hosId === '13001';
+      return hos.hosId === item.hosId;
+      // return hos.hosId === '13001';
     });
     !hosItem && (hosItem = Hoslist[0]);
     item.hosName = hosItem?.label;
@@ -254,6 +270,12 @@ export const sendImg = async () => {
   if (msgState.value.msgLoad) {
     return;
   }
+  !popipHasShow.value && (popipHasShow.value = true);
+  setTimeout(() => {
+    reportPopupRef.value.show();
+  }, 200);
+  //暂时只支持报告解读
+  return;
 
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
