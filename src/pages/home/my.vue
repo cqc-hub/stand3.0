@@ -123,15 +123,16 @@ const routeStore = useRouterStore();
 const gStores = new GStores();
 const refOldDialog = ref();
 
-// 互联网医院
-const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: string }) => {
+// 互联网医院和第三方微信小程序（携带登录信息）
+const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: string, myEnvir: string }) => {
   /**
    * myhosType  '0' 需要登录  '1' 需要就诊人
    * query: '{}'
    * returnUrl  'pages/v3/collect/collectList'
+   * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序
    */
 
-  let { myhosType, returnUrl, query } = opt;
+  let { myhosType, returnUrl, query, myEnvir } = opt;
 
   if (myhosType === "0") {
     new LoginUtils().outLogin({
@@ -140,11 +141,22 @@ const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: st
   }
 
   query = (query && JSON.parse(query)) || {};
+  console.log(2222,query,query.extraData)
 
-  const fullUrl = joinQueryForUrl("/pagesC/cloudHospital/cloudHospital", {
-    _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
-  });
+  let fullUrl = "";
 
+  if (myEnvir === "thirdmini") {
+
+      fullUrl = joinQueryForUrl("/pagesC/openMiniProgram/openMiniProgram", {
+        ...query,
+        _type: "2", 
+      });
+    } else if (myEnvir === "hosnet") {
+        fullUrl =joinQueryForUrl("/pagesC/cloudHospital/cloudHospital", {
+        _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
+      });
+  }
+   
   await beforeEach({
     url: fullUrl,
     _isLogin: myhosType === "0",
@@ -167,9 +179,10 @@ onLoad((opt) => {
   if (opt) {
     const { myEnvir } = opt;
 
-    if (myEnvir && myEnvir === "hosnet") {
+    if (myEnvir && myEnvir === "hosnet" || myEnvir === "thirdmini") {
       dealHosNet(<any>opt);
     }
+
   }
 });
 // #ifdef MP-WEIXIN

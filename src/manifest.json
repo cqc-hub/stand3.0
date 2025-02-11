@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wxf582e1fd4eb0142a",
+=======
+    "appid": "wx08440928b105c3bf",
+>>>>>>> 3415baf6c5819a0786f9f1c34fdb6dc2c44e4f24
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -87,7 +91,11 @@
       }
     },
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "2021003173668243"
+=======
+    "appid": "2021002129645591"
+>>>>>>> 3415baf6c5819a0786f9f1c34fdb6dc2c44e4f24
   },
   "mp-baidu": {
     "usingComponents": true
@@ -99,7 +107,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "乐清市人民医院",
+=======
+  "name": "温医附二院就医助手",
+>>>>>>> 3415baf6c5819a0786f9f1c34fdb6dc2c44e4f24
   "h5": {
     "router": {
       "base": "./"
