@@ -562,7 +562,7 @@
         tip = config.jyTip || '';
         break;
 
-      case '检验项目':
+      case '检查项目':
         tip = config.jcTip || '';
         break;
 
