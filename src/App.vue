@@ -22,14 +22,6 @@
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
-    if (globalStore.sysCode === '1001063') {
-      // #ifdef MP-WEIXIN
-      globalStore.setShowFlag(false);
-      // #endif
-      // #ifdef MP-ALIPAY
-      globalStore.setShowFlag(true);
-      // #endif
-    }
 
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
@@ -50,22 +42,6 @@
 
   onShow(async (opt) => {
     console.log('App Show', opt);
-    if (globalStore.sysCode === '1001063') {
-      // #ifdef MP-WEIXIN
-      globalStore.setShowFlag(false);
-      // 额外为杭口处理
-      if (opt.path === 'pages/home/home') {
-        uni.reLaunch({
-          url: '/pagesB/menus/home',
-        });
-        return;
-      }
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      globalStore.setShowFlag(true);
-      // #endif
-    }
 
     // 温附二新增监控-只记录正式环境
     // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))

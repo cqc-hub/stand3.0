@@ -1,6 +1,5 @@
 <template>
-  <view
-    v-if="globalStore.sysCode === '1001063' ? globalStore.isShowFlag : true"
+  <view 
     class="g-page"
   >
     <home-Nav />
