@@ -38,31 +38,21 @@
         <view :style="item.bodyStyle" class="container-body">
           <block v-if="item.isForShow">
             <view class="content-show" :style="item.showBodyStyle">
-              <slot
-                :item="item"
-                :value="
-                  item.field === 'select'
-                    ? ServerStaticData.getOptionsLabel(
-                        item.options,
-                        value[item.key]
-                      )
-                    : value[item.key]
-                "
-                name="showBody"
-              >
-                {{
-                  item.field === 'select'
-                    ? ServerStaticData.getOptionsLabel(
-                        item.options,
-                        value[item.key]
-                      )
-                    : value[item.key]
-                }}
+              <!-- #ifdef MP-ALIPAY -->
+              <text>
+                {{ getShowLabel(item) }}
+              </text>
+              <!-- #endif -->
+
+              <!-- #ifndef MP-ALIPAY -->
+              <slot :item="item" :value="getShowLabel(item)" name="show-body">
+                {{ getShowLabel(item) }}
               </slot>
+              <!-- #endif -->
             </view>
           </block>
 
-          <block v-else>
+          <block v-if="!item.isForShow">
             <view
               v-if="
                 item.field === 'input-text' || item.field === 'input-verify'
@@ -122,12 +112,7 @@
                   :inputBorder="false"
                   :clearable="false"
                   :placeholderStyle="inputPlaceHolderStyle(item)"
-                  :value="
-                    ServerStaticData.getOptionsLabel(
-                      item.options,
-                      value[item.key]
-                    )
-                  "
+                  :value="getShowLabel(item)"
                   class="form-input"
                 />
               </view>
@@ -146,7 +131,7 @@
                   :inputBorder="false"
                   :clearable="false"
                   :placeholderStyle="inputPlaceHolderStyle(item)"
-                  :value="value[item.key]"
+                  :value="getShowLabel(item)"
                   class="form-input"
                 />
               </view>
@@ -417,6 +402,16 @@
       o.text = o.label;
     });
     addressChange(cacheItem!, value);
+  };
+  const getShowLabel = (item: TInstance) => {
+    if (item.field === 'select') {
+      return ServerStaticData.getOptionsLabel(
+        item.options,
+        props.value[item.key]
+      );
+    }
+
+    return props.value[item.key];
   };
 
   const requestVerify = async (item: IInputVerifyInstance) => {
