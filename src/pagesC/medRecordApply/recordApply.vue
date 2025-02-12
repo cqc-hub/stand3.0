@@ -182,7 +182,7 @@
       return;
     }
 
-    if (item?.isArchived && item.isArchived === '0') {
+    if ( item?.isArchived === '1') {
       gStores.messageStore.showMessage(
         '病历尚未归档，归档需要15个工作日，请耐心等待',
         3000
@@ -241,6 +241,7 @@
   };
 
   const chooseAll = () => {
+    let msg =''
     if (isCheckAll.value) {
       checkOutHosList.value = [];
     } else {
@@ -250,7 +251,9 @@
 
         if (!_oldHosId || (_oldHosId && item.hosId === _oldHosId)) {
           if (!selNos.includes(item.visitNo)) {
-            checkOutHosList.value.push(item);
+            if (item?.isArchived !== '1') {
+              checkOutHosList.value.push(item);
+            }
           }
         }
       });

@@ -94,7 +94,7 @@
         <view
           class="input-send right"
           :disabled="msgState.msgLoad"
-          @click="sendImg"
+          @click="reportShow"
           v-if="hasWechatSI"
         >
           <view class="circle">
@@ -165,6 +165,7 @@
     'send-msg',
     'click-server',
     'send-img',
+    'report-show'
   ]);
 
   watch(
@@ -201,6 +202,10 @@
     emits('send-img');
   };
 
+  const reportShow = () => {
+    emits('report-show');
+  };
+
   const sendImgByButtom = () => {
     emits('send-msg', msgState.value.msg);
     nextTick(() => {
@@ -226,7 +231,7 @@
     if (hasWechatSI.value) {
       isVoice.value = !isVoice.value;
     } else {
-      sendImg()
+      reportShow()
     }
   };
 

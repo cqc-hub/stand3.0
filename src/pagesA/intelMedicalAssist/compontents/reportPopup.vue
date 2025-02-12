@@ -1,44 +1,23 @@
 <template>
-  <g-popup title="报告解读" ref="reportPopupRef">
+  <g-popup isHideNav ref="reportPopupRef">
     <view
       class="reportList-container page g-page"
       :class="{
         'system-mode-old': gStores.globalStore.modeOld,
       }"
     >
-      <view v-if="isPhoto" class="photo-container">
-        <view class="form-textarea">
-          <view class="title">
-            <label></label>
-            {{ ImgUploadOption.title }}
+      <view class="title">
+        <view class="flex-between">
+          <view class="popup-title text-ellipsis f48 pt32 pb32">
+            报告AI解读
           </view>
-          <view>
-            <view class="list-cell">
-              <view
-                hover-class="uploader-hover"
-                v-for="(item, index) in uploadImgList"
-                :key="index"
-                class="uploader-inputbox show-img"
-              >
-                <image class="show-image" :src="item"></image>
-                <text class="show-text" @click="deleteImage(index)">x</text>
-              </view>
-              <view
-                v-if="uploadImgList.length < ImgUploadOption.count"
-                hover-class="uploader-hover"
-                class="uploader-inputbox camera-photo"
-                @tap="addPhoto"
-              >
-                <image
-                  class="camera-image"
-                  :src="ImgUploadOption.cameraPhoto"
-                ></image>
-
-                <view class="text">上&nbsp;&nbsp;传</view>
-              </view>
-            </view>
+          <view @click="reportPopupRef.hide" class="iconfont ico-close f48">
+            &#xe6cd;
           </view>
         </view>
+      </view>
+      <view v-if="isPhoto" class="photo-container">
+        <view class="form-textarea">选择图片</view>
       </view>
       <!-- <view class="tab-box">
         <g-tabs
@@ -117,12 +96,12 @@
         </swiper-item>
       </swiper>
 
-      <view class="g-footer">
-        <button class="btn btn-border btn-normal" @click="isPhoto = !isPhoto">
-          {{ isPhoto ? '选择本院报告' : '选择上传报告' }}
-        </button>
+      <view class="footer f32">
         <button class="btn btn-primary btn-border" @click="inspectionAnalysis">
-          进行报告解读
+          {{ isPhoto ? '上传报告图片' : '进行报告解读' }}
+        </button>
+        <button class="btn btn-border btn-primary" @click="isPhoto = !isPhoto">
+          {{ isPhoto ? '解读本院报告' : '选择上传报告' }}
         </button>
       </view>
     </view>
@@ -140,8 +119,8 @@
   } from '@/utils';
   import { deepClone, deQueryForUrl } from '@/common/utils';
   import advisoryItem from './advisoryItem.vue';
-  import { isOpenSm4 } from '@/service';
-  import env from '@/config/env';
+  // import { isOpenSm4 } from '@/service';
+  // import env from '@/config/env';
   import api from '@/service/api';
   import dayjs from 'dayjs';
 
@@ -156,8 +135,8 @@
     },
   ]);
   const uploadImgList = ref<any[]>([]);
-  const ImgUploadOption = ref<any>({});
-  const isPhoto = ref(true);
+  // const ImgUploadOption = ref<any>({});
+  const isPhoto = ref(false);
   const isRefresh = ref([true, true, true]);
   const slist = ref<any>('');
   const loading = ref(true);
@@ -176,7 +155,7 @@
     noMoreText: '没有更多了',
   });
 
-  const emits = defineEmits(['inspection-analysis']);
+  const emits = defineEmits(['inspection-analysis', 'send-img']);
 
   const tabChange = async (e: number, type: string) => {
     const { isCheckThirdParty } = pageConfig.value;
@@ -378,24 +357,25 @@
     }
   };
   const addPhoto = async () => {
-    const { tempFilePaths } = await apiAsync(uni.chooseImage, {
-      count: ImgUploadOption.value.count - uploadImgList.value.length,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-    });
-    for (let i = 0, len = tempFilePaths?.length; i < len; i++) {
-      // @ts-expect-error
-      const { result } = await apiAsync(uni.uploadFile, {
-        url: ImgUploadOption.value.uploadUrl,
-        filePath: tempFilePaths[i],
-        name: 'file',
-        fileType: 'image',
-        header: {
-          phsId: isOpenSm4 ? '81681766' : '81681688',
-        },
-      });
-      console.log('_____________result', result);
-    }
+    emits('send-img');
+    return;
+    // const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+    //   count: ImgUploadOption.value.count - uploadImgList.value.length,
+    //   sizeType: ['compressed'],
+    //   sourceType: ['album', 'camera'],
+    // });
+    // for (let i = 0, len = tempFilePaths?.length; i < len; i++) {
+    //   // @ts-expect-error
+    //   const { result } = await apiAsync(uni.uploadFile, {
+    //     url: ImgUploadOption.value.uploadUrl,
+    //     filePath: tempFilePaths[i],
+    //     name: 'file',
+    //     fileType: 'image',
+    //     header: {
+    //       phsId: isOpenSm4 ? '81681766' : '81681688',
+    //     },
+    //   });
+    // }
   };
   const deleteImage = async (index) => {
     let tempData = { ...uploadImgList.value };
@@ -406,22 +386,24 @@
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-    ImgUploadOption.value = {
-      count: 3,
-      title: '选择我的报告',
-      // uploadUrl: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
-      uploadUrl: 'http://10.10.76.236:9907/customer/picTrans?sysCode=1001052',
-    };
+    // ImgUploadOption.value = {
+    //   count: 3,
+    //   title: '选择我的报告',
+    //   uploadUrl: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    //   // uploadUrl: 'http://10.10.76.236:9907/customer/picTrans?sysCode=1001052',
+    // };
     init();
   });
 </script>
 <style lang="scss" scoped>
   .reportList-container {
-    min-height: calc(800upx + 200rpx);
+    min-height: calc(800upx + 300rpx);
     height: calc(800upx + 200rpx);
+    background: linear-gradient(180deg, #c8eaff 1%, #e8fcff);
+    border-radius: 24rpx 24rpx 0px 0px;
   }
   .page {
-    background-color: #ffffff;
+    // background-color: #ffffff;
     touch-action: none;
     .tab-box {
       padding: 0 10rpx;
@@ -434,7 +416,11 @@
       flex: 1;
       max-height: calc(800upx + 200rpx);
       height: calc(800upx + 200rpx);
-      background-color: #f6f6f6;
+      background: linear-gradient(180deg, #f2faff 3%, #ffffff);
+      width: 90%;
+      margin: auto;
+      border-radius: 40rpx;
+      box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.06);
       .container-scroll {
         height: 100%;
 
@@ -488,78 +474,30 @@
     position: relative;
     transform: translateY(100%);
   }
-  .g-footer {
+  .footer {
+    padding: 24rpx 32rpx 48rpx;
+    position: relative;
+    z-index: 1;
     display: flex;
+    gap: 18rpx;
     button {
       flex: 1;
+      border-radius: 36rpx;
+      margin: 0 10rpx;
     }
   }
   .photo-container {
     height: 840rpx;
   }
 
-  .form-textarea {
-    padding: 20rpx 30rpx;
-
-    .title {
-      color: #666;
-      margin-bottom: 10rpx;
-      label {
-        color: #e5493b;
-        margin-left: 10px;
-      }
-    }
-    .list-cell {
-      display: flex;
-      .uploader-hover {
-      }
-      .uploader-inputbox {
-        position: relative;
-        margin-bottom: 16rpx;
-        box-sizing: border-box;
-        background-color: #ededed;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-
-        .uploader-img-wrap {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          align-items: center;
-        }
-      }
-      .show-img {
-        width: 162rpx;
-        height: 162rpx;
-        margin-right: 20rpx;
-        .show-image {
-          width: 162rpx;
-          height: 162rpx;
-          border-radius: 8rpx;
-        }
-        .show-text {
-          position: absolute;
-          right: 20rpx;
-          top: -5rpx;
-          color: #fff;
-        }
-      }
-      .camera-photo {
-        width: 162rpx;
-        height: 162rpx;
-        .camera-image {
-          width: 100rpx;
-          height: 100rpx;
-        }
-        .text {
-          color: #666;
-          font-size: 28rpx;
-          position: relative;
-          top: 0rpx;
-        }
-      }
+  ::v-deep .popup-container {
+    border-radius: 54rpx 54rpx 0px 0px !important ;
+  }
+  .title {
+    .popup-title {
+      width: calc(100% - 48rpx);
+      text-align: center;
+      transform: translateX(24rpx);
     }
   }
 </style>

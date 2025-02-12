@@ -24,12 +24,13 @@
           @on-blur="onBlur"
           @send-msg="sendMsg"
           @send-img="sendImg"
+          @report-show="reportShow"
         />
       </view>
     </view>
     <view v-if="popipHasShow">
       <!-- 报告解读，业务逻辑写在组件中 -->
-      <reportPopup @inspectionAnalysis="inspectionAnalysis" />
+      <reportPopup @inspectionAnalysis="inspectionAnalysis"  @send-img="sendImg" />
     </view>
 
     <g-message />
@@ -51,6 +52,7 @@
     onBlur,
     sendMsg,
     sendImg,
+    reportShow,
     msgList,
     init,
     popipHasShow,

@@ -68,6 +68,21 @@
               <Recommend-Remind />
             </view>
             <view
+              v-else-if="msgItem.type === 99 && msgItem.msg"
+              class="chat-system-item margin-left padding-chat by-cyan"
+            >
+              <view >
+                <view class="report-header">
+                  好的，已收到报告单，以下是详细的报告解读:
+                </view>
+                <rich-text :nodes="$HTMLParser(msgItem.msg)" />
+                <view class="report-declare">
+                  结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准,请及时与医生沟通，以便获得专业的医疗建议和治疗方案。
+                </view>
+              </view>
+            </view>
+
+            <view
               v-else
               :class="{
                 ['flex1']: msgItem.type === 3,
@@ -104,6 +119,7 @@
                       {{ msgItem.msg }}
                     </text>
                   </text>
+
                   <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
@@ -118,7 +134,7 @@
                   </view>
 
                   <Evaluate-Btn1
-                    v-if="msgItem.requestId&&msgIndex>=msgList.length-2"
+                    v-if="msgItem.requestId && msgIndex >= msgList.length - 2"
                     :requestId="msgItem.requestId"
                     @askAgain="clearChatId"
                   />
@@ -130,18 +146,15 @@
         </view>
       </view>
     </template>
-    <view
-      v-if="msgState.msgLoad"
-      :id="`smartChatRoomItem_load`"
-      class="flex-column smartChatRoom-item"
-    >
-      <view
-        class="flex justify-start padding-right one-show align-start padding-top"
-      >
-        <view class="flex justify-start">
-          <view class="chat-system-item margin-left padding-chat by-cyan">
-            <text class="g-break-word">智慧服务大模型生成中</text>
-            <icon type="waiting" size="16"/>
+    <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
+      <view v-if="msgState.msgLoad" class="flex-column smartChatRoom-item">
+        <view
+          class="flex justify-start padding-right one-show align-start padding-top"
+        >
+          <view class="flex justify-start">
+            <view class="chat-system-item margin-left padding-chat by-cyan">
+              <text class="g-break-word">正在为您解答...</text>
+            </view>
           </view>
         </view>
       </view>
@@ -151,7 +164,7 @@
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
-  import { msgState, clearChatId,messFormData } from '../utils/utils';
+  import { msgState, clearChatId, messFormData } from '../utils/utils';
 
   import HomeMenuItemRecommend from './HomeMenuItemRecommend.vue';
   import RecommendAddress from './RecommendAddress.vue';
@@ -186,12 +199,14 @@
       border-radius: 8px 0px 8px 8px;
       background-color: #296fff;
       color: #fff;
+      line-height: 60rpx;
     }
     .chat-system-item {
       border-radius: 0px 8px 8px 8px;
       background-color: #e8f4ff;
       color: #111111;
       max-width: 80vw;
+      line-height: 60rpx;
     }
     .padding-chat {
       padding: 17rpx 20rpx;
@@ -210,5 +225,11 @@
   .chat-img {
     max-width: 240px;
     z-index: -1;
+  }
+  .report-header{
+    color:#444
+  }
+  .report-declare{
+    color:#444;font-size:28rpx;line-height:48rpx
   }
 </style>

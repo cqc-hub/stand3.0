@@ -18,6 +18,7 @@ import {
 } from '@/utils';
 import { cloneUtil, joinQuery } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
+import { isOpenSm4 } from '@/service';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
@@ -64,17 +65,13 @@ export const init = async (isMess) => {
   );
   console.log('isMess', isMess);
   isMess && isMess == '1' && initWithMess();
-};
+ setTimeout(()=>{
+  !popipHasShow.value && (popipHasShow.value = true);
+  setTimeout(() => {
+    reportPopupRef.value.show();
+  }, 200);
 
-export const inspectionAnalysis = async (reports) => {
-  console.log('___________reports', reports);
-  const { result } = await api.inspectionAnalysis({
-    sysCode: globalGl.SYS_CODE,
-    source: 1,
-    repId: reports[0].repId,
-    repType: 1,
-    extend:reports[0].extend,
-  });
+ },200)
 };
 
 const initWithMess = async () => {
@@ -235,6 +232,10 @@ export const sendMsg = async (value: string) => {
         dealShowType11(list, requestId);
         break;
 
+      case 12:
+        dealShowType12(list, requestId);
+        break;
+
       default:
         msgList.value.push({
           my: false,
@@ -250,7 +251,12 @@ export const sendMsg = async (value: string) => {
 
 export const scrollToNewMsg = (selector?: string, duration?: number) => {
   nextTick(() => {
-    console.log('开始滚动', selector, duration || 300);
+    console.log(
+      '开始滚动',
+      selector ||
+        `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+      duration || 300
+    );
     uni.pageScrollTo({
       selector:
         selector ||
@@ -265,8 +271,7 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
     });
   });
 };
-
-export const sendImg = async () => {
+export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
   }
@@ -274,14 +279,49 @@ export const sendImg = async () => {
   setTimeout(() => {
     reportPopupRef.value.show();
   }, 200);
-  //暂时只支持报告解读
-  return;
+};
+export const inspectionAnalysis = async (reports) => {
+  msgState.value.msgLoad = true;
+  reportPopupRef.value.hide();
+  nextTick(() => {
+    styleConfig.value.showHeader = false;
+  });
+  const allPromise: any[] = [];
+  await reports.forEach(async (element) => {
+    let promise = new Promise(async (resolve, reject) => {
+      const { result } = await api.inspectionAnalysis({
+        sysCode: globalGl.SYS_CODE,
+        source: 1,
+        repId: element.repId,
+        repType: 1,
+        extend: element.extend,
+      });
+      const { showType, list, requestId } = result;
+      dealShowType12(list, requestId);
+      scrollToNewMsg();
+      resolve(0);
+    });
+    allPromise.push(promise);
+  });
+  Promise.all(allPromise).then(() => {
+    scrollToNewMsg();
+    msgState.value.msgLoad = false;
+  });
 
+  // msgState.value.msgLoad = false;
+};
+
+export const sendImg = async () => {
+  if (msgState.value.msgLoad) {
+    return;
+  }
+  const gStores = new GStores();
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
+
   msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
@@ -289,6 +329,18 @@ export const sendImg = async () => {
     type: 5,
   });
   scrollToNewMsg();
+  // @ts-expect-error
+  const { result } = await apiAsync(uni.uploadFile, {
+    url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    filePath: tempFilePaths[0],
+    name: 'file',
+    fileType: 'image',
+    header: {
+      phsId: isOpenSm4 ? '81681766' : '81681688',
+    },
+  });
+  const { showType, list, requestId } = result;
+  dealShowType12(list, requestId);
   msgState.value.msgLoad = false;
   //// @ts-expect-error
   // const { data } = await apiAsync(uni.uploadFile, {
@@ -458,4 +510,58 @@ const dealShowType11 = (list, requestId) => {
     homeMenuConfig: list,
     requestId,
   });
+};
+
+const dealShowType12 = (lists, requestId) => {
+  let htmlStr = ``;
+  // htmlStr +=
+  //   '<br> <div style="color:#444"> 好的，已收到报告单，以下是详细的报告解读:</div><br>';
+  let flag = false;
+  lists.forEach((list) => {
+    if (JSON.stringify(list) !== '{}') flag = true;
+
+    if (list?.judgment_criteria) {
+      htmlStr += `<strong>结果分析：</strong><br>`;
+      list.judgment_criteria.forEach((item, judgeIndex) => {
+        htmlStr += `${judgeIndex + 1}.${item?.project_name || ''}${
+          item.describe
+        }<br/>`;
+      });
+      // htmlStr += `<br>`;
+    }
+    if (list?.risk_type) {
+      htmlStr += `<strong>风险类型：</strong>${list.risk_type}<br>`;
+    }
+    if (list?.disease) {
+      htmlStr += `<strong>可能疾病：</strong>${list.disease}<br>`;
+    }
+    if (list?.symptom_manifestations) {
+      htmlStr += `<strong>症状表现：</strong>${list.symptom_manifestations}<br>`;
+    }
+    if (list?.triggering_reasons) {
+      htmlStr += `<strong>诱发原因：</strong>${list.triggering_reasons}<br>`;
+    }
+    if (list?.treatment_suggestions) {
+      htmlStr += `<strong>诊治建议：</strong>${list.treatment_suggestions}<br>`;
+    }
+    if (list?.department) {
+      htmlStr += `<strong>推荐治疗科室：</strong><text style="color:#296FFF">${list.department}</text><br>`;
+    }
+    // htmlStr += `<div style="color:#444;font-size:28rpx;line-height:36rpx">告结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准<br>请及时与医生沟通，以便获得专业的医疗建议和治疗方案。</div><br/>`;
+  });
+  if (!flag) {
+    msgList.value.push({
+      my: false,
+      msg: '报告解读失败，请稍后重试',
+      type: 1,
+      requestId,
+    });
+  } else {
+    msgList.value.push({
+      my: false,
+      msg: htmlStr,
+      type: 99,
+      requestId,
+    });
+  }
 };
