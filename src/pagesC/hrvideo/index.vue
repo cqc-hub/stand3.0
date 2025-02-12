@@ -59,7 +59,7 @@
 		},
 		methods: {
 			onClickCancel() {
-				wx.navigateBack({
+				uni.navigateBack({
 					delta: 1,
 				})
 			},
@@ -67,10 +67,10 @@
 				let me = this
 				this.isJumping = true
 				let navParams = this.hrOptions && this.hrOptions.navigateToMiniProgram
-				wx.navigateBack({
+				uni.navigateBack({
 					delta: 1,
 					success() {
-						wx.navigateToMiniProgram({
+						uni.navigateToMiniProgram({
 							...navParams,
 							fail: (err) => {
 								me.err = err.errMsg

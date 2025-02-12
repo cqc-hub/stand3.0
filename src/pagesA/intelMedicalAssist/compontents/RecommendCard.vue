@@ -12,7 +12,7 @@
           hideRowBorder
           ref="gform"
         >
-          <template #showBody="{ item, value }">
+          <template #show-body="{ item, value }">
             <view
               @click="goDoctorCard(formData)"
               v-if="item.key === 'docName'"

@@ -470,7 +470,7 @@
     //先实现支付宝
     // #endif
     // #ifdef MP-ALIPAY
-    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
 
     //健康卡

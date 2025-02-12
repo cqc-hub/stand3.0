@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref, onMounted, Ref } from 'vue';
+  import { ref, onMounted, Ref } from 'vue';
   import { onShow } from '@dcloudio/uni-app';
   import {
     patCardDetailTempList,
@@ -67,6 +67,7 @@
     GStores,
     PatientUtils,
     ServerStaticData,
+    wait,
     type ISystemConfig,
   } from '@/utils';
   import globalGl from '@/config/global';
@@ -149,6 +150,10 @@
   });
 
   onMounted(async () => {
+    formData.value = {
+      ...pat,
+      defaultFlag: pat.defaultFlag === '0' ? false : true,
+    };
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
     // #ifdef  MP-WEIXIN
@@ -156,15 +161,11 @@
     // #endif
 
     // #ifdef MP-ALIPAY
-    isMedicalFiling.value = medicalMHelp.alipay?.medicalFiling === '1';
+    isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
     const { healthCardUser } = pat;
 
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    formData.value = {
-      ...pat,
-      defaultFlag: pat.defaultFlag === '0' ? false : true,
-    };
 
     // 非新生儿无证件的 不显示监护人信息 顾说去掉
     // if (pat.patientType !== '0') {
@@ -197,24 +198,24 @@
         formData.value[key] = '无';
       }
     });
+    await wait(0);
 
-    nextTick(() => {
-      const fList = [...formList];
-      if (globalGl.SYS_CODE !== '1001067' && healthCardUser) {
-        formData.value['healthCardUserLabel'] =
-          healthCardUser === '2' ? '医保' : '自费';
+    const fList = [...formList];
+    if (globalGl.SYS_CODE !== '1001067' && healthCardUser) {
+      formData.value['healthCardUserLabel'] =
+        healthCardUser === '2' ? '医保' : '自费';
 
-        fList.push({
-          label: '档案类型',
-          key: 'healthCardUserLabel',
-          field: 'input-text',
-          disabled: true,
-          isForShow: true,
-        });
-      }
+      fList.push({
+        label: '档案类型',
+        key: 'healthCardUserLabel',
+        field: 'input-text',
+        disabled: true,
+        isForShow: true,
+      });
+    }
 
-      gform.value.setList(fList);
-    });
+    gform.value.setList(fList);
+    await wait(0);
   });
 </script>
 

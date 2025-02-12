@@ -1,7 +1,8 @@
 <template>
   <view class="cache">
     <view class="cache-img-container">
-      <image mode="aspectFit" class="cache-img" :src="BASE_IMG + 'img_h5bg@3x.png'" />
+      <image v-if="globalStore.sysCode === '1001063' " mode="aspectFit" class="cache-img" :src="BASE_IMG + 'img_h5bg_hk@3x.png'" />
+      <image v-else mode="aspectFit" class="cache-img" :src="BASE_IMG + 'img_h5bg@3x.png'" />
     </view>
     <view v-if="!$global.systemInfo.isHideHomeLogo" class="cache-fixbottom"> 浙江和仁科技股份有限公司@技术支持 </view>
     <g-message />
@@ -97,7 +98,11 @@ onLoad(async (options) => {
     display: flex;
     justify-content: center;
     position: relative;
-    top: 240upx;
+    top: 140upx;
+    .cache-img{
+      width: 95vw;
+      height: 60vh;
+    }
   }
   .cache-fixbottom {
     position: absolute;

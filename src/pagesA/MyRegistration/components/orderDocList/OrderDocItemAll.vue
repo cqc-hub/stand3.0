@@ -16,7 +16,7 @@
             class="date-container"
           >
             <view class="sel-date">
-              <view class="sel-label g-flex-rc-cc text-no-wrap">可约日期:</view>
+              <view class="sel-label g-flex-rc-cc text-no-wrap">出诊日期:</view>
               <block v-if="getSelectData && getSelectData.length">
                 <g-login
                   v-for="date in getSelectData"
@@ -51,7 +51,7 @@
             <view class="arrow-content">
               <view
                 class="icon-arrow1"
-                v-if="item.schDocSubResultList.length > 3"
+                v-if="item.schDocSubResultList.length > 4"
                 @click="toggleCollapse"
               >
                 <view
@@ -94,7 +94,7 @@
 
   const getSelectData = computed(() => {
     if (isCollapse.value) {
-      return props.item.schDocSubResultList.filter((o, i) => i < 3);
+      return props.item.schDocSubResultList.filter((o, i) => i < 4);
     } else {
       return props.item.schDocSubResultList;
     }
@@ -125,7 +125,7 @@
       flex: 1;
 
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       justify-content: center;
       align-items: center;
 

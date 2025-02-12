@@ -12,6 +12,7 @@ import {
 } from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
+import { pageConfig } from '../../intelMedicalAssist/utils/utils';
 
 dayjs.extend(isoWeek);
 
@@ -220,6 +221,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       secondHosDeptId,
       isExpertDeptId,
     } = payload;
+    const { isShowFilterOrderSourceBtn } = orderConfig.value;
 
     const _hosDeptId = hosDeptId || deptId;
     const args = {
@@ -270,7 +272,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
               _enabledDays[schDate] = schState;
             }
 
-            return schState === '0';
+            if (isShowFilterOrderSourceBtn === '1') {
+              return true;
+            } else {
+              return schState === '0';
+            }
           }
         );
 
@@ -282,9 +288,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
               const { amPmResults } = orderList;
 
               if (amPmResults && amPmResults.length) {
+                // if (isShowFilterOrderSourceBtn === '1') {
                 orderList.amPmResults = orderList.amPmResults.filter(
                   (oi) => oi.schState === '0'
                 );
+                // }
 
                 if (orderList.amPmResults.length) {
                   orderList.amPmResults.map((amPmItem) => {
@@ -423,7 +431,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     deptId?: string;
     hosId: string;
   }) => {
-    if (data && Object.keys(data).length && data.hosId) {
+    if (data && Object.keys(data).length) {
       const {
         clinicalType,
         hosDeptId: _hosDeptId,

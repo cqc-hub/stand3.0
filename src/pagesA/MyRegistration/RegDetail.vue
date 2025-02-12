@@ -193,7 +193,7 @@
                 hideRowBorder
                 ref="refForm"
               >
-                <template #showBody="{ item, value }">
+                <template #show-body="{ item, value }">
                   <view
                     @click="goDoctorCard"
                     v-if="
