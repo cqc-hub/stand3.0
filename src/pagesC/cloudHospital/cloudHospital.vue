@@ -98,7 +98,11 @@ onLoad(async (options) => {
     display: flex;
     justify-content: center;
     position: relative;
-    top: 240upx;
+    top: 140upx;
+    .cache-img{
+      width: 95vw;
+      height: 60vh;
+    }
   }
   .cache-fixbottom {
     position: absolute;
