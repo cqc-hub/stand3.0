@@ -9,7 +9,7 @@
         {{ label }}
       </view>
 
-      <view @click="init" class="color-blue">刷新二维码</view>
+      <view @click="init" class="color-blue z-1 relative">刷新二维码</view>
     </view>
 
     <view v-if="isShowCode" class="flex justify-center f28 color-888">
@@ -53,6 +53,7 @@
   });
 
   const init = async () => {
+    console.log('2333')
     if (loading.value) {
       return;
     }

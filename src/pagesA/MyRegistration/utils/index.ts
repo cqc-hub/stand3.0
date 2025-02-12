@@ -273,7 +273,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
             }
 
             if (isShowFilterOrderSourceBtn === '1') {
-              return true;
+              return ['0', '2'].includes(schState);
             } else {
               return schState === '0';
             }
