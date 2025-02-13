@@ -50,7 +50,6 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { appId, _type } = pageProps.value;
-    console.log(777,   pageProps.value.extraData,{type:1} )
 
     if (appId) {
       const { confirm } = await apiAsync(uni.showModal, {
