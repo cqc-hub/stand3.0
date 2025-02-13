@@ -464,7 +464,20 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   }) => {
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
-    const { schDate } = schInfo;
+    const { schDate, schState } = schInfo;
+
+    let warnMsg = '';
+    if (schState === '1') {
+      warnMsg = '该日期已停诊';
+    } else if (schState === '2') {
+      warnMsg = '该日期已约满';
+    } else if (schState === '3') {
+      warnMsg = '该日期未放号';
+    }
+
+    if (warnMsg) {
+      return gStores.messageStore.showMessage(warnMsg, 1500);
+    }
 
     selectSchInfos.value = [];
     await wait(80);
