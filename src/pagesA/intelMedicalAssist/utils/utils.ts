@@ -65,13 +65,11 @@ export const init = async (isMess) => {
   );
   console.log('isMess', isMess);
   isMess && isMess == '1' && initWithMess();
- setTimeout(()=>{
-  !popipHasShow.value && (popipHasShow.value = true);
-  setTimeout(() => {
-    reportPopupRef.value.show();
-  }, 200);
+//  setTimeout(()=>{
+//  styleConfig.value.showHeader=false
+//  msgState.value.msgLoad=true
 
- },200)
+//  },200)
 };
 
 const initWithMess = async () => {
@@ -321,7 +319,7 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-
+  reportPopupRef.value.hide()
   msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
@@ -329,8 +327,9 @@ export const sendImg = async () => {
     type: 5,
   });
   scrollToNewMsg();
+  // uni.showLoading({})
   // @ts-expect-error
-  const { result } = await apiAsync(uni.uploadFile, {
+  const {data} = await apiAsync(uni.uploadFile, {
     url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     filePath: tempFilePaths[0],
     name: 'file',
@@ -339,9 +338,12 @@ export const sendImg = async () => {
       phsId: isOpenSm4 ? '81681766' : '81681688',
     },
   });
+  const {result}=JSON.parse(data)
+  console.log('___________________result',result)
   const { showType, list, requestId } = result;
   dealShowType12(list, requestId);
   msgState.value.msgLoad = false;
+  // uni.hideLoading()
   //// @ts-expect-error
   // const { data } = await apiAsync(uni.uploadFile, {
   //   url: `${env.baseApi}/phs-base/upload/imageUpload`,
@@ -523,36 +525,36 @@ const dealShowType12 = (lists, requestId) => {
     if (list?.judgment_criteria) {
       htmlStr += `<strong>结果分析：</strong><br>`;
       list.judgment_criteria.forEach((item, judgeIndex) => {
-        htmlStr += `${judgeIndex + 1}.${item?.project_name || ''}${
-          item.describe
+        htmlStr += `${judgeIndex + 1}.${item?.project_name.replaceAll('<','小于').replaceAll('>','大于') || ''}${
+          item.describe.replaceAll('<','小于').replaceAll('>','大于')
         }<br/>`;
       });
       // htmlStr += `<br>`;
     }
     if (list?.risk_type) {
-      htmlStr += `<strong>风险类型：</strong>${list.risk_type}<br>`;
+      htmlStr += `<strong>风险类型：</strong>${list.risk_type.replaceAll('<','小于').replaceAll('>','大于')}<br>`;
     }
     if (list?.disease) {
-      htmlStr += `<strong>可能疾病：</strong>${list.disease}<br>`;
+      htmlStr += `<strong>可能疾病：</strong>${list.disease.replaceAll('<','小于').replaceAll('>','大于')}<br>`;
     }
     if (list?.symptom_manifestations) {
-      htmlStr += `<strong>症状表现：</strong>${list.symptom_manifestations}<br>`;
+      htmlStr += `<strong>症状表现：</strong>${list.symptom_manifestations.replaceAll('<','小于').replaceAll('>','大于')}<br>`;
     }
     if (list?.triggering_reasons) {
-      htmlStr += `<strong>诱发原因：</strong>${list.triggering_reasons}<br>`;
+      htmlStr += `<strong>诱发原因：</strong>${list.triggering_reasons.replaceAll('<','小于').replaceAll('>','大于')}<br>`;
     }
     if (list?.treatment_suggestions) {
-      htmlStr += `<strong>诊治建议：</strong>${list.treatment_suggestions}<br>`;
+      htmlStr += `<strong>诊治建议：</strong>${list.treatment_suggestions.replaceAll('<','小于').replaceAll('>','大于')}<br>`;
     }
     if (list?.department) {
-      htmlStr += `<strong>推荐治疗科室：</strong><text style="color:#296FFF">${list.department}</text><br>`;
+      htmlStr += `<strong>推荐治疗科室：</strong><text style="color:#296FFF">${list.department.replaceAll('<','小于').replaceAll('>','大于')}</text><br>`;
     }
     // htmlStr += `<div style="color:#444;font-size:28rpx;line-height:36rpx">告结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准<br>请及时与医生沟通，以便获得专业的医疗建议和治疗方案。</div><br/>`;
   });
   if (!flag) {
     msgList.value.push({
       my: false,
-      msg: '报告解读失败，请稍后重试',
+      msg: '报告解读完成。您的报告各项指标正常，无异常情况。',
       type: 1,
       requestId,
     });

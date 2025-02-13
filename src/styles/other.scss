@@ -241,6 +241,7 @@ image {
   color: var(--hr-neutral-color-7) !important;
 }
 
+
 .color-fff,
 .text-white {
   color: #fff !important;
@@ -290,6 +291,19 @@ image {
 
 .m32 {
   margin: 32rpx !important;
+}
+
+.p48 {
+  padding: 48rpx !important;
+}
+
+.p48v {
+  padding-top: 48rpx !important;
+  padding-bottom: 48rpx !important;
+}
+
+.p48c {
+  padding: 0 48rpx !important;
 }
 
 .p32 {

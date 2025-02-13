@@ -11,13 +11,35 @@
           <view class="popup-title text-ellipsis f48 pt32 pb32">
             报告AI解读
           </view>
-          <view @click="reportPopupRef.hide" class="iconfont ico-close f48">
+          <view
+            @click="reportPopupRef.hide"
+            class="iconfont ico-close f48 p24"
+          >
             &#xe6cd;
           </view>
         </view>
       </view>
       <view v-if="isPhoto" class="photo-container">
-        <view class="form-textarea">选择图片</view>
+        <view class="sub-title-line flex-normal pl24 pr24 relative">
+          <view class="sub-title f28 color-444">
+            <text>上传</text>
+            <text style="color: #296fff">检查报告、检验报告</text>
+            <text>，智能医助将为您解读报告~</text>
+          </view>
+          <view class="report-img relative">
+            <img :src="globalGl.BASE_IMG + 'znyz_jxw.png'" class="w-full" />
+          </view>
+        </view>
+        <view class="content relative">
+          <view class="upload-description pt32 p48c">
+            <text class="color-444 f28">图片上传示例</text>
+            <text class="color-888 f26">请上传图文清晰、边框完整的图片</text>
+          </view>
+          <view class="report-img flex-normal p32c pt48">
+            <img :src="globalGl.BASE_IMG + 'znyz_jc.png'" class="w-full" />
+            <img :src="globalGl.BASE_IMG + 'znyz_jy.png'" class="w-full" />
+          </view>
+        </view>
       </view>
       <!-- <view class="tab-box">
         <g-tabs
@@ -33,7 +55,7 @@
         v-else
         :current="tabCurrent"
         @change="(e) => tabChange(e.detail.current, '')"
-        class="container g-container"
+        class="container g-container pt32 "
       >
         <swiper-item v-for="tab in tabs" :key="tab.typeId">
           <scroll-list
@@ -66,7 +88,7 @@
                       </view>
                     </view>
                     <view
-                      class="advisoryItem"
+                      class="advisoryItem pb40"
                       :class="{ advisoryItemFirst: index == 0 }"
                     >
                       <template v-for="(data, i) in report.reportList" :key="i">
@@ -82,7 +104,7 @@
                   </template>
                 </template>
                 <view class="safe-height"></view>
-                <view class="safe-height"></view>
+                <!-- <view class="safe-height"></view> -->
               </view>
             </template>
 
@@ -97,10 +119,10 @@
       </swiper>
 
       <view class="footer f32">
-        <button class="btn btn-primary btn-border" @click="inspectionAnalysis">
+        <button class="btn btn-primary btn-border" @click="handleAnalysis">
           {{ isPhoto ? '上传报告图片' : '进行报告解读' }}
         </button>
-        <button class="btn btn-border btn-primary" @click="isPhoto = !isPhoto">
+        <button class="btn btn-border btn-primary" @click="changeTtype">
           {{ isPhoto ? '解读本院报告' : '选择上传报告' }}
         </button>
       </view>
@@ -117,6 +139,7 @@
     GStores,
     apiAsync,
   } from '@/utils';
+  import globalGl from '@/config/global';
   import { deepClone, deQueryForUrl } from '@/common/utils';
   import advisoryItem from './advisoryItem.vue';
   // import { isOpenSm4 } from '@/service';
@@ -136,7 +159,7 @@
   ]);
   const uploadImgList = ref<any[]>([]);
   // const ImgUploadOption = ref<any>({});
-  const isPhoto = ref(false);
+  const isPhoto = ref(true);
   const isRefresh = ref([true, true, true]);
   const slist = ref<any>('');
   const loading = ref(true);
@@ -150,12 +173,19 @@
   const scrollOption = ref({
     auto: false,
     size: 15,
-    height: 840,
+    height: 650,
     loadFailText: '加载失败',
     noMoreText: '没有更多了',
   });
 
   const emits = defineEmits(['inspection-analysis', 'send-img']);
+
+  const changeTtype = () => {
+    isPhoto.value = !isPhoto.value;
+    if (isPhoto.value) {
+      pageList.value[0] = [];
+    }
+  };
 
   const tabChange = async (e: number, type: string) => {
     const { isCheckThirdParty } = pageConfig.value;
@@ -345,43 +375,20 @@
       }
     });
   };
-
-  const inspectionAnalysis = () => {
-    emits('inspection-analysis', checkedList.value);
+  const handleAnalysis = () => {
+    if (isPhoto.value) {
+      emits('send-img');
+    } else {
+      emits('inspection-analysis', checkedList.value);
+    }
   };
+
   const init = async () => {
     if (tabs.value?.length) {
       tabs.value.map(({ typeId }, i) => {
         pageList.value[typeId] = [];
       });
     }
-  };
-  const addPhoto = async () => {
-    emits('send-img');
-    return;
-    // const { tempFilePaths } = await apiAsync(uni.chooseImage, {
-    //   count: ImgUploadOption.value.count - uploadImgList.value.length,
-    //   sizeType: ['compressed'],
-    //   sourceType: ['album', 'camera'],
-    // });
-    // for (let i = 0, len = tempFilePaths?.length; i < len; i++) {
-    //   // @ts-expect-error
-    //   const { result } = await apiAsync(uni.uploadFile, {
-    //     url: ImgUploadOption.value.uploadUrl,
-    //     filePath: tempFilePaths[i],
-    //     name: 'file',
-    //     fileType: 'image',
-    //     header: {
-    //       phsId: isOpenSm4 ? '81681766' : '81681688',
-    //     },
-    //   });
-    // }
-  };
-  const deleteImage = async (index) => {
-    let tempData = { ...uploadImgList.value };
-    uploadImgList.value = tempData
-      .slice(0, index)
-      .concat(tempData.slice(index + 1));
   };
 
   onMounted(async () => {
@@ -397,7 +404,7 @@
 </script>
 <style lang="scss" scoped>
   .reportList-container {
-    min-height: calc(800upx + 300rpx);
+    min-height: calc(800upx + 200rpx);
     height: calc(800upx + 200rpx);
     background: linear-gradient(180deg, #c8eaff 1%, #e8fcff);
     border-radius: 24rpx 24rpx 0px 0px;
@@ -414,8 +421,8 @@
     }
     .container {
       flex: 1;
-      max-height: calc(800upx + 200rpx);
-      height: calc(800upx + 200rpx);
+      // min-height: calc(800upx + 100rpx);
+      // height: calc(800upx + 100rpx);;
       background: linear-gradient(180deg, #f2faff 3%, #ffffff);
       width: 90%;
       margin: auto;
@@ -427,14 +434,14 @@
         .list-block {
           border-left: 2rpx dashed #dddddd;
           margin: 0 32rpx;
-          padding-bottom: 22rpx;
+          padding: 18rpx;
           .date {
             min-height: 44rpx;
             width: calc(100% - 32rpx);
             color: #888888;
             font-size: var(--hr-font-size-xs);
             line-height: 44rpx;
-            margin-top: 40rpx;
+            // margin-top: 40rpx;
             margin-left: -18rpx;
             display: flex;
             align-items: center;
@@ -487,7 +494,47 @@
     }
   }
   .photo-container {
-    height: 840rpx;
+    height: 700rpx;
+
+    width: 90%;
+    margin: auto;
+    .sub-title-line {
+      top: -70rpx;
+      .sub-title {
+        flex: 1 1 auto;
+      }
+      .report-img {
+        flex: 0 0 200rpx;
+        top: 40rpx;
+        image {
+          width: 200rpx;
+          height: 240rpx;
+        }
+      }
+    }
+    .content {
+      width: 100%;
+      background: linear-gradient(180deg, #f2faff 3%, #ffffff);
+      height: calc(100% - 160rpx);
+      min-height: 400rpx;
+      min-width: 350rpx;
+      z-index: 999;
+      border-radius: 40rpx;
+      box-shadow: 0px 0px 20rpx 0px rgba(0, 0, 0, 0.06);
+      top: -120rpx;
+
+      .upload-description {
+        // width: fit-content;
+        // margin: auto;
+      }
+      .report-img {
+        justify-content: space-between;
+        image {
+          width: 290rpx;
+          height: 360rpx;
+        }
+      }
+    }
   }
 
   ::v-deep .popup-container {

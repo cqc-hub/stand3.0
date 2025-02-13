@@ -71,7 +71,7 @@
               v-else-if="msgItem.type === 99 && msgItem.msg"
               class="chat-system-item margin-left padding-chat by-cyan"
             >
-              <view >
+              <view>
                 <view class="report-header">
                   好的，已收到报告单，以下是详细的报告解读:
                 </view>
@@ -147,13 +147,21 @@
       </view>
     </template>
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
-      <view v-if="msgState.msgLoad" class="flex-column smartChatRoom-item">
+      <view v-show="msgState.msgLoad" class="flex-column smartChatRoom-item">
         <view
           class="flex justify-start padding-right one-show align-start padding-top"
         >
           <view class="flex justify-start">
-            <view class="chat-system-item margin-left padding-chat by-cyan">
-              <text class="g-break-word">正在为您解答...</text>
+            <view
+              class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
+            >
+              <text class="g-break-word g-blod">正在为您解答</text>
+              <view
+                class="loading-cricle relative"
+                v-for="(item, index) in 4"
+                :key="`loading-cricle${index}`"
+                :class="`loading-cricle${index}`"
+              />
             </view>
           </view>
         </view>
@@ -226,10 +234,58 @@
     max-width: 240px;
     z-index: -1;
   }
-  .report-header{
-    color:#444
+  .report-header {
+    color: #444;
   }
-  .report-declare{
-    color:#444;font-size:28rpx;line-height:48rpx
+  .report-declare {
+    color: #444;
+    font-size: 28rpx;
+    line-height: 48rpx;
+  }
+
+  .smartChatRoomItem_load {
+    align-items: center;
+    .loading-cricle {
+      width: 16rpx;
+      height: 16rpx;
+      top: 4rpx;
+      margin: 0 0 0 8rpx;
+      border-radius: 100%;
+      background: #296fff;
+    }
+    $opacity: 1 0.8 0.5 0.3 0.1 0.3 0.5 0.8 1 0.8 0.5 0.3 0.1 0.3;
+    @for $i from 0 through 3 {
+      $remainder1: ($i + 1) % 4;
+      $remainder2: ($i + 2) % 4;
+      $remainder3: ($i + 3) % 4;
+      $remainder4: ($i + 4) % 4;
+      @keyframes change#{$i} {
+        100% {
+          opacity: nth($opacity, $i + 1);
+        }
+        85% {
+          opacity: nth($opacity, $i + 2);
+        }
+        60% {
+          opacity: nth($opacity, $i + 3);
+        }
+        45% {
+          opacity: nth($opacity, $i + 4);
+        }
+        30% {
+          opacity: nth($opacity, $i + 5);
+        }
+        15% {
+          opacity: nth($opacity, $i + 6);
+        }
+        0% {
+          opacity: nth($opacity, $i + 7);
+        }
+      }
+      .loading-cricle#{$i} {
+        // opacity: nth($opacity, $i + 1);
+        animation: change#{$i} 2s infinite;
+      }
+    }
   }
 </style>
