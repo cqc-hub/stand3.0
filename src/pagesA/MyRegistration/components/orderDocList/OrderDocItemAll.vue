@@ -27,6 +27,7 @@
                   <view
                     :class="{
                       animate__fadeIn: !isCollapse,
+                      'color-888': date.schState !== '0',
                     }"
                     @click="dateClick(date)"
                     class="date-item g-flex-rc-cc animate__animated"
@@ -70,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, reactive } from 'vue';
+  import { computed, ref, reactive, warn } from 'vue';
   import { IDocListAll } from '../../utils';
   import dayjs from 'dayjs';
 

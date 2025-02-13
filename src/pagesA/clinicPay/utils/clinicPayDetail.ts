@@ -768,6 +768,7 @@ export const usePayPage = () => {
         cardNumber?: string;
         patientName?: string;
       };
+      payNextActionParams?: string; // 携带优于配置参数TButtonConfig
     }
   );
 
@@ -2085,6 +2086,15 @@ export const executeConfigPayAfter = async (
   cardNumber?: string,
   additionData: any = {}
 ) => {
+
+  //新增定制跳转 温附二互联网缴费跳转三方
+  const { payNextActionParams } = additionData;
+
+  if(payNextActionParams){
+    useTBanner(JSON.parse(payNextActionParams), 'redirectTo');
+    return Promise.reject(void 0);
+  }
+
   const { pageNextAdress, payNextAction } =
     await ServerStaticData.getSystemConfig('pay');
 
