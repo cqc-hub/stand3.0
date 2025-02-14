@@ -198,7 +198,7 @@ export interface ISystemConfig_ {
     useFaceVerifyInChangePhone?: '1'; // 使用人脸认证, 否则使用 ocr 认证
   };
 
-  // 病案
+  // 病案 MEDICAL_CASE_COPY
   medRecord: {
     /**
      * 身份证上传要求 （人像、 背面、 手持）
