@@ -11,10 +11,7 @@
           <view class="popup-title text-ellipsis f48 pt32 pb32">
             报告AI解读
           </view>
-          <view
-            @click="reportPopupRef.hide"
-            class="iconfont ico-close f48 p24"
-          >
+          <view @click="reportPopupRef.hide" class="iconfont ico-close f48 p24">
             &#xe6cd;
           </view>
         </view>
@@ -55,7 +52,7 @@
         v-else
         :current="tabCurrent"
         @change="(e) => tabChange(e.detail.current, '')"
-        class="container g-container pt32 "
+        class="container g-container pt32"
       >
         <swiper-item v-for="tab in tabs" :key="tab.typeId">
           <scroll-list
@@ -119,11 +116,11 @@
       </swiper>
 
       <view class="footer f32">
-        <button class="btn btn-primary btn-border" @click="handleAnalysis">
-          {{ isPhoto ? '上传报告图片' : '进行报告解读' }}
+        <button class="btn btn-primary btn-border" @click="addPhoto">
+          上传报告图片
         </button>
         <button class="btn btn-border btn-primary" @click="changeTtype">
-          {{ isPhoto ? '解读本院报告' : '选择上传报告' }}
+          {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
         </button>
       </view>
     </view>
@@ -131,7 +128,7 @@
 </template>
 <script setup lang="ts">
   import { ref, nextTick, computed, onMounted, onUpdated } from 'vue';
-  import { reportPopupRef } from '../utils/utils';
+  import { reportPopupRef ,isPhoto} from '../utils/utils';
   import {
     ServerStaticData,
     ISystemConfig,
@@ -159,7 +156,7 @@
   ]);
   const uploadImgList = ref<any[]>([]);
   // const ImgUploadOption = ref<any>({});
-  const isPhoto = ref(true);
+ 
   const isRefresh = ref([true, true, true]);
   const slist = ref<any>('');
   const loading = ref(true);
@@ -181,9 +178,12 @@
   const emits = defineEmits(['inspection-analysis', 'send-img']);
 
   const changeTtype = () => {
-    isPhoto.value = !isPhoto.value;
     if (isPhoto.value) {
+    isPhoto.value = !isPhoto.value;
+    checkedList.value = [];
       pageList.value[0] = [];
+    } else {
+      handleAnalysis();
     }
   };
 
@@ -367,7 +367,6 @@
               if (item.checked) {
                 checkedList.value.push(item);
               }
-              console.log('_____________item', item);
               return item;
             });
           }
@@ -375,10 +374,11 @@
       }
     });
   };
+  const addPhoto = () => {
+    emits('send-img');
+  };
   const handleAnalysis = () => {
-    if (isPhoto.value) {
-      emits('send-img');
-    } else {
+    if (checkedList.value?.length) {
       emits('inspection-analysis', checkedList.value);
     }
   };

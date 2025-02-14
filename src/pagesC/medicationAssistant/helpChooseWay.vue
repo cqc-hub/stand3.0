@@ -202,7 +202,10 @@
     const deptName = cacheStore.medicalHelpSelList
       .map((o) => o.deptName)
       .join(',');
-    const hosId = cacheStore.medicalHelpSelList[0].hosId;
+    let hosId = cacheStore.medicalHelpSelList[0].hosId;
+    if (globalGl.SYS_CODE === '1001038') {
+      hosId = '13014';
+    }
     const expressCompany = aimValue.value[0];
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';

@@ -36,6 +36,7 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
+export  const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
 //普通首页
 // {

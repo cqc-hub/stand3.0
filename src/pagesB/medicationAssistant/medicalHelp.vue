@@ -257,8 +257,12 @@
 
   const selPayListItem = (item: IWaitListItem) => {
     const { takenDrugType, supportEditAddr } = item;
-
-    if (takenDrugType === '0' || supportEditAddr === '1') {
+    const { params: sign } = pageProps.value;
+    if (
+      takenDrugType === '0' ||
+      supportEditAddr === '1' ||
+      (sign && getSysCode() === '1001038' && !takenDrugType)
+    ) {
       const idx = selList.value.findIndex((o) => o._id === item._id);
 
       if (idx === -1) {
@@ -300,6 +304,7 @@
           selList.value.push(item);
           return;
         }
+        const { params: sign } = pageProps.value;
 
         if (
           isDifferentHosErr ||
@@ -349,6 +354,7 @@
       clinicCate: sign ? undefined : 0,
       sign,
     };
+    //嘉二特殊处理
     if (sign && getSysCode() === '1001038') {
       const params = decryptForPage(sign);
       args = {
@@ -400,6 +406,10 @@
         pageArg
       ),
     });
+  };
+
+  const dealWith1001038 = () => {
+    //嘉二，不考虑是否已经选择
   };
 
   const dealWith1001067 = () => {
