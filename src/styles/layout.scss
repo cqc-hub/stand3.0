@@ -42,6 +42,10 @@
   align-items: flex-start;
 }
 
+.items-end {
+  align-items: flex-end;
+}
+
 .flex-start {
   @extend .flex-start-r;
   @extend .flex-normal;
