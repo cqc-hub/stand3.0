@@ -61,13 +61,13 @@
       </view>
 
       <view
-        v-if="myprops.patientName || !myprops.params"
+        v-if="(myprops.patientName || !myprops.params) || detailData.patientName"
         class="head-row flex-normal flex-start-r"
       >
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
-          <text v-if="myprops.patientName">
-            {{ nameConvert(myprops.patientName) + ` (${myprops.cardNumber})` }}
+          <text v-if="myprops.patientName || detailData.patientName">
+            {{ nameConvert((detailData.patientName || myprops.patientName) as string) + ` (${detailData.cardNumber || myprops.cardNumber})` }}
           </text>
 
           <text v-else>

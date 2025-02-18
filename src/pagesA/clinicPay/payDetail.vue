@@ -84,9 +84,8 @@
             />
           </view>
         </block>
-
         <view
-          v-if="props.payState === '1'"
+          v-if="props.payState === '1' || detailData.payState === '0'"
           class="head-box g-border box page-first-item"
         >
           <view class="g-bold f40 g-break-word">
@@ -104,14 +103,14 @@
         <view class="box info-box mt16 g-border">
           <view class="flex-between g-bold f36">
             <view>费用总额</view>
-            <view v-if="props.payState === '1'" class="color-error">
+            <view v-if="payState === '1'" class="color-error">
               {{ detailData.totalCost }}元
             </view>
           </view>
 
           <block v-if="detailData.costList && detailData.costList.length">
             <view class="mt8">
-              <Pay-Detail-Cost-List
+              <pay-Detail-Cost-List
                 :list="detailData.costList"
                 :selList="selList"
                 :mulit="isCanSelServerFee"
@@ -211,7 +210,7 @@
     <Wx-Pay-Money-Medical-Popup ref="wxPryMoneyMedicalDialog" />
 
     <block v-if="isComplete">
-      <view v-if="props.payState === '1'" class="g-footer">
+      <view v-if="payState === '1'" class="g-footer">
         <block>
           <button
             v-if="pageConfig.isOpenChargeback === '1'"
@@ -313,12 +312,12 @@
     getLocalStorage,
     cloneUtil,
   } from '@/common';
-  import { wait, PatientUtils, cacheUtil } from '@/utils';
+  import { wait, PatientUtils, cacheUtil, generateUuid } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
 
-  import PayDetailCostList from './components/PayDetailCostList.vue';
+  import payDetailCostList from './components/PayDetailCostList.vue';
   import PayDetailHeadBoxDetail from './components/PayDetailHeadBoxDetail.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
@@ -383,6 +382,14 @@
   const showQrCode = ref(true);
   const isCannelShow = ref(false);
 
+  const payState = computed(() => {
+    if (props.value.payState === '1' || detailData.value.payState === '0') {
+      return '1';
+    }
+
+    return '0';
+  });
+
   const capture = async () => {
     const { tempFilePath: qrCodeImg } = await refqrcode.value.GetCodeImg();
     const { tempFilePath: barcodeImg } = await refqrbarcode.value.GetCodeImg();
@@ -394,7 +401,7 @@
   };
 
   const isCanPay = computed(() => {
-    if (props.value.payState !== '1') {
+    if (payState.value !== '1') {
       return false;
     } else if (pageConfig.value.isSubitemPay === '1') {
       return selList.value.length;
@@ -404,7 +411,7 @@
   });
 
   const getPayTotal = computed(() => {
-    if (props.value.payState !== '1') {
+    if (payState.value !== '1') {
       return 0;
     } else if (isCanSelServerFee.value) {
       const totalFee = selList.value.reduce(
@@ -461,7 +468,7 @@
     isMedicalPay = isMedicalPay && props.value.costTypeCode === '2';
 
     return (
-      props.value.payState === '1' &&
+      payState.value === '1' &&
       pageConfig.value.isSubitemPay === '1' &&
       !isMedicalPay // 医保不支持选择
     );
@@ -469,9 +476,7 @@
 
   /** 已缴费页面申请退单 */
   const isPayedChargeBack = computed(() => {
-    return (
-      props.value.payState === '0' && pageConfig.value.isOpenChargeback === '1'
-    );
+    return payState.value === '0' && pageConfig.value.isOpenChargeback === '1';
   });
 
   const payedItemDetailRefundDialog = ref(<any>'');
@@ -590,9 +595,10 @@
         selListChildren: selListChildren.value,
       },
     });
+
     if (item.key === 'online') {
-      // 预结算
-      if (pageConfig.value.isPreSettle === '1') {
+      // 预结算 (_t === '1' 为濮阳直接扫码进详情不需要预结算)
+      if (pageConfig.value.isPreSettle === '1' && props.value._t !== '1') {
         const list = selList.value;
         const { hosId, childOrder, visitDate, visitNo, params, clinicType } =
           props.value;
@@ -798,7 +804,7 @@
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
-    const additionalList:any=[]
+    const additionalList: any = [];
     if (globalGl.SYS_CODE === '1001052') {
       additionalList.push({
         label: '医保账户支付',
@@ -826,9 +832,12 @@
           const isBizTypeMedical =
             wx?.crossProgramBizType?.clinic !== undefined;
           if (flag && !isBizTypeMedical) {
-            changeRefPayList([PayType.Medicare],additionalList);
-          } else if (flag &&isBizTypeMedical) {
-            changeRefPayList([PayType.BizType,PayType.Medicare],additionalList);
+            changeRefPayList([PayType.Medicare], additionalList);
+          } else if (flag && isBizTypeMedical) {
+            changeRefPayList(
+              [PayType.BizType, PayType.Medicare],
+              additionalList
+            );
           }
         }
         // #endif
@@ -848,7 +857,12 @@
 
         refPay.value.show();
       } else {
-        regDialogConfirm.value.show();
+        // 濮阳直接扫码进详情不需要预结算
+        if (props.value._t === '1') {
+          getPay();
+        } else {
+          regDialogConfirm.value.show();
+        }
       }
     } else {
       // getPay();
@@ -866,25 +880,31 @@
     // const totalCost = detailData.value.totalCost + '';
     const totalCost = getPayTotal.value;
     const source = gStores.globalStore.browser.source;
-    const {
-      childOrder,
+    let {
+      childOrder = props.value._t === '1' && generateUuid(20),
       deptId,
       docId,
-      hosName,
+      hosName = detailData.value.hosName || '',
       deptName,
       docName,
-      hosId,
+      hosId = detailData.value.hosId || '',
       visitDate,
       costTypeCode,
       cardNumber,
       recipeNo,
     } = props.value;
     const _patientId = props.value.params ? '' : patientId;
+    let personalPayFee: any;
+    if (props.value._t === '1') {
+      personalPayFee = totalCost;
+    } else {
+      personalPayFee =
+        ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined;
+    }
 
     const args = {
       ...props.value,
-      personalPayFee:
-        ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined,
+      personalPayFee,
       patientName: props.value.patientName,
       businessType: '1',
       patientId: _patientId,
@@ -959,11 +979,7 @@
   const getData = async () => {
     await getDetailData(props.value);
 
-    if (
-      props.value.payState === '1' &&
-      detailData.value.costList &&
-      !isMedicalBack
-    ) {
+    if (payState.value === '1' && detailData.value.costList && !isMedicalBack) {
       selList.value = [...detailData.value.costList];
     }
   };

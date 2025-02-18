@@ -86,6 +86,8 @@ export type IPayListItem = {
 export type TPayedListItem = {} & IPayListItem;
 
 export type TPayDetailProp = {
+  // 直接扫码跳的详情
+  _t?: '1';
   hosId: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付;
   deptName: string;
@@ -137,6 +139,8 @@ export type TCostList = {
 
 export type TPayDetailInfo = {
   costList?: TCostList;
+  patientName: string;
+  cardNumber: string;
   hosId: string;
   hosName: string;
   medicalCost: string;
@@ -2039,18 +2043,22 @@ export const usePayDetailPage = () => {
   const getDetailData = async (arg: TPayDetailProp) => {
     let { patientId } = gStores.userStore.patChoose;
 
-    const requestArg = {
+    const requestArg: any = {
       ...arg,
       patientId,
     };
 
     if (arg.params) {
       requestArg.patientId = undefined as unknown as any;
+      requestArg.desSecret = arg.params;
     }
 
-    const { result } = await api.getClinicalPayDetailList<TPayDetailInfo>(
-      requestArg
-    );
+    const actionApi =
+      arg._t === '1'
+        ? api.getScanClinicalPayDetailList
+        : api.getClinicalPayDetailList;
+
+    const { result } = await actionApi<TPayDetailInfo>(requestArg);
 
     if (result) {
       const { costList } = result;
@@ -2086,11 +2094,10 @@ export const executeConfigPayAfter = async (
   cardNumber?: string,
   additionData: any = {}
 ) => {
-
   //新增定制跳转 温附二互联网缴费跳转三方
   const { payNextActionParams } = additionData;
 
-  if(payNextActionParams){
+  if (payNextActionParams) {
     useTBanner(JSON.parse(payNextActionParams), 'redirectTo');
     return Promise.reject(void 0);
   }
