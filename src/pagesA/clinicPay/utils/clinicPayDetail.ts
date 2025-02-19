@@ -86,7 +86,7 @@ export type IPayListItem = {
 export type TPayedListItem = {} & IPayListItem;
 
 export type TPayDetailProp = {
-  // 直接扫码跳的详情
+  // 直接扫码跳的详情, 目前只有濮阳有(体检缴费)
   _t?: '1';
   hosId: string;
   payState: '0' | '1'; // 支付状态 1待支付，0已支付;

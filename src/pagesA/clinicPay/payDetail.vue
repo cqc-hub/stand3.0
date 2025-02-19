@@ -908,8 +908,12 @@
       personalPayFee =
         ((!costTypeCode || costTypeCode === '1') && totalCost) || undefined;
     }
+    const serialNo = selList.value
+      .map((o) => o.serialNo)
+      .filter((o) => o)
+      .join(',');
 
-    const args = {
+    const args: any = {
       ...props.value,
       personalPayFee,
       patientName: _patientName || props.value.patientName,
@@ -927,11 +931,13 @@
       visitDate,
       cardNumber,
       recipeNo,
-      serialNo: selList.value
-        .map((o) => o.serialNo)
-        .filter((o) => o)
-        .join(','),
+      serialNo,
     };
+
+    // 濮阳定制处理
+    if (!args.extend && props.value._t === '1') {
+      args.extend = JSON.stringify({ payType: 'TJJF' });
+    }
 
     const {
       result: { phsOrderNo },
@@ -969,7 +975,7 @@
     await wait(1000);
     uni.hideLoading();
 
-    if (props.value._t !== '1') {
+    if (props.value._t === '1') {
       pageLoad();
       return;
     }
