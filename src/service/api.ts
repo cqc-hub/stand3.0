@@ -286,6 +286,15 @@ const queryApi = {
         hideLoading: false,
       }
     ),
+  // 扫码直接进的缴费详情
+  getScanClinicalPayDetailList: <T = any>(data) =>
+    service.post<T>(
+      '/phs-query/clinical/getScanClinicalPayDetailList',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
 
   getDrugDelivery: (data) =>
     service.post('/phs-query/delivery/getDrugDelivery', parm(data), {

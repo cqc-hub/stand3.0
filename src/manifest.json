@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxbef5313efdabfde1",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -73,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004193658562"
+    "appid": "2021004144623038"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -85,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "天水市第一人民医院",
+  "name": "濮阳市人民医院",
   "h5": {
     "router": {
       "base": "./"
