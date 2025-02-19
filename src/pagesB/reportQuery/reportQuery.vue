@@ -762,7 +762,6 @@
 
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
-    console.log('_____________onload pageConfig.value', pageConfig.value);
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);

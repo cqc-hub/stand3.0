@@ -119,6 +119,9 @@
                       {{ msgItem.msg }}
                     </text>
                   </text>
+                  <view v-if="msgItem.type === 1">
+                    <rich-text :nodes="sysAppMore"></rich-text>
+                  </view>
 
                   <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
@@ -173,6 +176,8 @@
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import { msgState, clearChatId, messFormData } from '../utils/utils';
+  import { GStores } from '@/utils';
+  import HTMLParser from '@/common/html-parser';
 
   import HomeMenuItemRecommend from './HomeMenuItemRecommend.vue';
   import RecommendAddress from './RecommendAddress.vue';
@@ -187,6 +192,15 @@
     msgList: any[];
     headerConfig: StyleConfigType;
   }>();
+
+  const sysAppMore = ref('');
+
+  onMounted(async () => {
+    const gStores = new GStores();
+    const { title, content } = await gStores.getSysAppMore('1222');
+    sysAppMore.value = content;
+  });
+
   const previewImage = (url) => {
     uni.previewImage({
       urls: [url],
