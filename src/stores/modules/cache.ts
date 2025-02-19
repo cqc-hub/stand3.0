@@ -13,6 +13,7 @@ const cacheStore = defineStore('cache', {
     return {
       medicalPathArg: <Record<string, string>>{},
       medicalAuthArg: <Record<string, any>>{},
+      healthCardCache: <any>{},
       cacheData: <any>{},
       medicalHelpSelList: <any[]>[],
       hosId: '',
@@ -42,7 +43,9 @@ const cacheStore = defineStore('cache', {
     changeMedicalHelpSelList(list) {
       this.medicalHelpSelList = list;
     },
-
+    changeHealthCardCache(healthCardData:any){
+      this.healthCardCache=healthCardData
+    },
     changeHosId(hosId: string) {
       this.hosId = hosId;
     },

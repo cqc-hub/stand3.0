@@ -86,11 +86,24 @@
         const pages = getCurrentPages();
         const fullPathNow = (pages[pages.length - 1] as any).$page
           .fullPath as string;
-
-        uni.navigateTo({
-          url:
-            globalGl.addPersonUrl + '?_url=' + encodeURIComponent(fullPathNow),
-        });
+        if (
+          globalGl.systemInfo?.isOpenHealthCard &&
+          globalGl.systemInfo.isOpenHealthCard?.isNewMode
+        ) {
+          uni.navigateTo({
+            url:
+              '/pagesA/medicalCardMan/medicalCardMan' +
+              '?_url=' +
+              encodeURIComponent(fullPathNow),
+          });
+        } else {
+          uni.navigateTo({
+            url:
+              globalGl.addPersonUrl +
+              '?_url=' +
+              encodeURIComponent(fullPathNow),
+          });
+        }
       };
 
       return {

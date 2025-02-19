@@ -854,6 +854,14 @@ const userApi = {
 
   faceResultAuth: <T = any>(data) =>
     service.post<T>('/phs-user/authUser/faceResultAuth', parm(data)),
+  
+  //快速验证注册/绑卡接口
+  quickRegisterHealthCard: (data, opt = {}) =>
+    service.post(
+      '/phs-user/healthCard/quickRegisterHealthCard',
+      parm(data),
+      opt
+    ),
 
   // 注册电子健康卡
   registerHealthCard: (data, opt = {}) =>

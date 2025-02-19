@@ -174,6 +174,12 @@
   interface IPageProps {
     tabIndex: number;
     hosId: string;
+    //电子健康卡
+    _healthType?: 'verifyFail' | 'verifySuccess';
+    verifyType?: '1';
+    orderId?: string;
+    redirectUrl?: string;
+    registerOrderId?: string;
   }
   const pageProps = ref(<IPageProps>{});
 
@@ -190,6 +196,7 @@
   const cacheStore = useCacheStore();
   const repShareRef = ref<any>('');
   const currentTjData = ref();
+  const verifyData = ref('');
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
@@ -229,6 +236,7 @@
   );
   const isHealthCardButton = ref<boolean>(false);
   const isHealthCardNewMode = ref<boolean>(false);
+  const gStore = new GStores();
   const showTimeLabel = computed(() => {
     const timeRangeStr = dateRange.value.join(',');
 
@@ -289,6 +297,11 @@
   const load = async (pageInfo) => {
     // #ifdef MP-WEIXIN
     if (isHealthCardButton.value) {
+      const pat = gStores.userStore.patChoose;
+      if (pat?.idType === '01' && pat?.healthQrCodeText) {
+        return;
+        handleFacility();
+      }
       return;
     }
     // #endif
@@ -312,6 +325,8 @@
       hosId: hosId.value,
       startDate: '',
       endDate: '',
+      verifyData: '',
+      source: gStores.globalStore.browser.source,
     };
     loading.value = true;
     let count = 0;
@@ -319,6 +334,9 @@
     if (isOpenFilterTime.value) {
       params.endDate = endDate;
       params.startDate = startDate;
+    }
+    if (isHealthCardNewMode.value) {
+      params.verifyData = verifyData.value;
     }
 
     if (currentTabValue === 1 && isCheckThirdParty === '1') {
@@ -427,15 +445,29 @@
   const handleButonClick = (btn) => {
     const pat = gStores.userStore.patChoose;
     const { idType } = pat;
-    if (btn.type === 'button' && idType === '01') {
-      handleFacility();
+    if (btn.type === 'button') {
+      if (idType === '01' && pat?.healthQrCodeText) {
+        handleFacility();
+      } else {
+        getCurrentLoadScrollInstance()?.refresh();
+        isHealthCardButton.value = false;
+      }
     } else {
       useTBanner(btn);
     }
   };
+  //电子健康卡
   const handleFacility = async () => {
     // #ifdef MP-WEIXIN
     uni.showLoading({});
+    let scene = '0101082';
+    if (tabs.value[tabCurrent.value]?.headerType === 'jy') {
+      scene = '0101082';
+    } else if (tabs.value[tabCurrent.value]?.headerType === 'jc') {
+      scene = '0101081';
+    } else {
+      scene = '0101083';
+    }
     //分包B引入分包A中的方法，且该方法中“使用在分包A中单独引入的插件”中的方法
     // @ts-expect-error
     require('../../pagesA/medicalCardMan/utils/index', async (utils) => {
@@ -444,7 +476,7 @@
         const {
           result: { wechatCode },
         } = res;
-        const args={
+        const args = {
           patientId: gStores.userStore.patChoose.patientId,
           wechatCode,
           herenId: gStores.globalStore.herenId,
@@ -452,15 +484,24 @@
           source: gStores.globalStore.browser.source,
           sysCode: globalGl.SYS_CODE,
           hospitalId: globalGl.systemInfo.isOpenHealthCard!.hospitalId,
-        }
+          scene,
+          verifySuccessRedirectUrl:
+            'mini:/pagesB/reportQuery/reportQuery?_healthType=verifySuccess&registerOrderId=${verifyOrderId}',
+          verifyFailRedirectUrl:
+            'mini:/pagesB/reportQuery/reportQuery?_healthType=verifyFail',
+          faceUrl: '/pagesB/reportQuery/reportQuery',
+          domainChannel: 2,
+        };
         const { result } = await api.registerUniformVerifyOrder(args);
         const {
           patAndOrderId,
           verifyType,
           verifyOrderId,
-          verifyData,
+          verifyData: verifyData1,
           protectState,
+          verifyUrl,
         } = result;
+        cacheStore.changeHealthCardCache(result);
         if (verifyType !== 0) {
           nextTick(() => {
             pageList.value = { '0': [], '1': [], '2': [] };
@@ -470,20 +511,13 @@
             uni.hideLoading();
           });
         } else {
-          const {
-            result: { userData, userIdKey },
-          } = await api.getOrderInfoByOrderId({ ...args, verifyType: '1' });
-          const { verifyResult } = await utils.wxFacialVerifyByKey(userIdKey);
-          console.log('verifyResult', verifyResult);
-          if(verifyResult){
-            const { result } = await api.registerUniformVerifyOrder({
-              ...args,
-              verifyType: '2',
-              verifyOrderId,
-              patAndOrderId,
-              verifyResult
-            });
-          }
+          useTBanner(
+            {
+              type: 'h5',
+              path: verifyUrl,
+            },
+            'redirectTo'
+          );
         }
       }
     }, ({ mod, errMsg }) => {
@@ -491,6 +525,28 @@
       isHealthCardButton.value = false;
       uni.hideLoading();
     });
+    // #endif
+  };
+
+  const uploudVerifyResult = async (verifyResult) => {
+    // #ifdef MP-WEIXIN
+    const args = {
+      openId: gStores.globalStore.openId,
+      source: gStores.globalStore.browser.source,
+      sysCode: globalGl.SYS_CODE,
+      hospitalId: globalGl.systemInfo.isOpenHealthCard!.hospitalId,
+      verifyResult,
+      ...cacheStore.healthCardCache,
+    };
+    const { result } = await api.checkUniformVerifyResult(args);
+    const { verifyData: verifyData2, verifyType, suc } = result;
+    if (suc) {
+      verifyData2 && (verifyData.value = verifyData2);
+      console.log('verifyData2 ', verifyData2);
+      isHealthCardButton.value = false;
+
+      getCurrentLoadScrollInstance()?.refresh();
+    }
     // #endif
   };
 
@@ -706,6 +762,7 @@
 
   onLoad(async (p) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+    console.log('_____________onload pageConfig.value', pageConfig.value);
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
@@ -723,7 +780,28 @@
       isHealthCardNewMode.value = true;
       isHealthCardButton.value = true;
       uni.hideLoading();
+      if (pageProps.value?._healthType === 'verifyFail') {
+        gStore.messageStore.showMessage('已取消验证', 1500, {});
+      } else if (pageProps.value?._healthType === 'verifySuccess') {
+        console.log('暂未处理');
+
+        uploudVerifyResult(pageProps.value?.registerOrderId);
+      } else if (
+        pageProps.value?.orderId &&
+        pageProps.value?.redirectUrl &&
+        pageProps.value?.verifyType
+      ) {
+        // @ts-expect-error
+        require('../../pagesA/medicalCardMan/utils/index', async (utils) => {
+          await utils.backWithFaceVerify(
+            pageProps.value?.orderId,
+            pageProps.value?.redirectUrl,
+            pageProps.value?.verifyType
+          );
+        });
+      }
     }
+
     // #endif
   });
 </script>

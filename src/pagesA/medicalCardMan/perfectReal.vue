@@ -177,6 +177,7 @@
     loginAuthAlipay,
     TCardPat,
     useProgramPaySign,
+    gotoChosseVerifyPage,
   } from './utils';
 
   import {
@@ -194,7 +195,6 @@
 
   interface TPageType extends ILoginBack {
     pageType: 'addPatient' | 'perfectReal';
-    
 
     /**
      * 用户信息, 自动带入, patientPhone 字短将会脱敏展示
@@ -212,8 +212,8 @@
     _directUrl?: string;
 
     // 健康卡逻辑
-    _healthType?:'addPat',
-    _healthAuthCode?:string
+    _healthType?: 'addPat';
+    authCode?: string;
   }
 
   const routeStore = useRouterStore();
@@ -425,6 +425,41 @@
         }
       }
     } else {
+      if (
+        pageProps.value?._healthType == 'addPat' &&
+        pageProps.value?.authCode
+      ) {
+        gotoChosseVerifyPage(
+          {
+            name: formData.value.patientName,
+            phone1: formData.value.patientPhone,
+            verifyCode: formData.value.verifyCode,
+            verifyType: (formData.value[formKey.verifyCode] && '2&kq') || '1&bk',
+          },
+          pageProps.value.authCode,
+          'quickRegisterHealthCard',
+          async (err) => {
+            if (err?.respCode === 999301) {
+              messageStore.showMessage(err.message, 3000, {
+                closeCallBack() {
+                  uni.navigateTo({
+                    url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                      ...data,
+                      _healthType: pageProps.value._healthType,
+                      authCode: pageProps.value.authCode,
+                      pageType: pageProps.value.pageType,
+                      _directUrl: pageProps.value._directUrl,
+                    }),
+                  });
+                },
+              });
+            } else if (err?.respCode === 999001) {
+              await patientUtil.getPatCardList();
+            }
+          }
+        );
+        return;
+      }
       if (isVerifyIdCardLastFourNumber === '1') {
         const authIdCard = gStores.userStore.cacheUser?.certNo;
         if (

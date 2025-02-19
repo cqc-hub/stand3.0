@@ -374,14 +374,7 @@
 
     await injectHealthCode(requestData);
 
-    if (
-      requestData.wechatCode &&
-      pageProps.value?._healthType == 'addPat' &&
-      pageProps.value?.authCode
-    ) {
-      gotoChosseVerifyPage(requestData, pageProps.value.authCode);
-      return;
-    }
+
 
     const {
       isFace,
@@ -458,6 +451,14 @@
         }
       }
     } else {
+      if (
+      requestData.wechatCode &&
+      pageProps.value?._healthType == 'addPat' &&
+      pageProps.value?.authCode
+    ) {
+      gotoChosseVerifyPage(requestData, pageProps.value.authCode);
+      return;
+    }
       const patientId = await patientUtils
         .addRelevantPatient(requestData)
         .catch(async (e) => {
@@ -1043,7 +1044,6 @@
   onShow(() => {
     signAfterOnPageShow();
     reDealMedicalFiling();
-    console.log('pageProps', pageProps.value);
   });
 
   onLoad((opt) => {

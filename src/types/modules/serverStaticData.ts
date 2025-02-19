@@ -465,7 +465,7 @@ export interface ISystemConfig_ {
     //智能医助
     intelMedicalAssistConfig?: {
       guessAskList?: Array<{ label: string; value: string }>;
-      guessServerList?: TButtonConfig[];
+      guessServerList?: Array<TButtonConfig&{isSelfMethod?:string}>;
     };
     //智能陪诊
     medicalAsistantConfig?: {

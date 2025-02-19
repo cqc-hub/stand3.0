@@ -895,7 +895,7 @@ const healthCardQuery = {
   verifyFailRedirectUrl:
     'mini:/pagesA/medicalCardMan/medicalCardMan?_healthType=verifyFail',
   userFormPageUrl:
-    `mini:/pagesA/medicalCardMan/addMedical?_healthType=addPat&authCode=` +
+    `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
     '${authCode}',
   // userFormPageUrl:
   // `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
@@ -921,10 +921,13 @@ export const healthCardBind = async () => {
     const {
       result: { bindCardUrl: h5Url },
     } = await api.registerHealthCardPreAuth(requestArg);
-    useTBanner({
-      type: 'h5',
-      path: h5Url,
-    });
+    useTBanner(
+      {
+        type: 'h5',
+        path: h5Url,
+      },
+      'redirectTo'
+    );
   }
 };
 
@@ -951,6 +954,10 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
           content: '患者存在建档记录但手机号不匹配，是否立即修改？',
         });
         if (confirm) {
+          await api.mofHosPhone({
+            healthCode,
+            source: gStores.globalStore.browser.source,
+          });
         }
       }
     });
@@ -974,40 +981,74 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
   }
 };
 
-export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
+export const gotoChosseVerifyPage = async (
+  requestData,
+  authCode: string,
+  type?: 'quickRegisterHealthCard' | 'registerHealthCardPreFill',
+  errCB?: Function
+) => {
   const gStores = new GStores();
   const globalStore = gStores.globalStore;
   const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
-  const {
-    idCard: idNumber,
-    patientPhone: phone1,
-    patientName: name,
-    nation,
-  } = requestData;
-  const list = await ServerStaticData.getNationTerms();
-  const nationItem: any = list.find((o) => o.value === nation);
-  const idCardInfo = getInfoFromIdCard(idNumber);
-  const requestArg = {
-    ...requestData,
-    ...idCardInfo,
-    ...healthCardQuery,
-    herenId: gStores.globalStore.herenId,
-    openId: gStores.globalStore.openId,
-    source: gStores.globalStore.browser.source,
-    nation: nationItem.label,
-    authCode,
-    phone1,
-    name,
-    idNumber,
-    hospitalId,
-  };
-  const {
-    result: { verifyUrl: h5Url },
-  } = await api.registerHealthCardPreFill(requestArg);
-  useTBanner({
-    type: 'h5',
-    path: h5Url,
-  });
+  if (type !== 'quickRegisterHealthCard') {
+    const {
+      idCard: idNumber,
+      patientPhone: phone1,
+      patientName: name,
+      nation,
+    } = requestData;
+    const list = await ServerStaticData.getNationTerms();
+    const nationItem: any = list.find((o) => o.value === nation);
+    const idCardInfo = getInfoFromIdCard(idNumber);
+    const requestArg = {
+      ...requestData,
+      ...idCardInfo,
+      ...healthCardQuery,
+      herenId: gStores.globalStore.herenId,
+      openId: gStores.globalStore.openId,
+      source: gStores.globalStore.browser.source,
+      nation: nationItem.label,
+      authCode,
+      phone1,
+      name,
+      idNumber,
+      hospitalId,
+    };
+    const {
+      result: { verifyUrl: h5Url },
+    } = await api.registerHealthCardPreFill(requestArg);
+    useTBanner(
+      {
+        type: 'h5',
+        path: h5Url,
+      },
+      'redirectTo'
+    );
+  } else {
+    const requestArg = {
+      ...requestData,
+      ...healthCardQuery,
+      herenId: gStores.globalStore.herenId,
+      openId: gStores.globalStore.openId,
+      source: gStores.globalStore.browser.source,
+      authCode,
+      hospitalId,
+    };
+    const {
+      result: { verifyUrl: h5Url },
+    } = await api.quickRegisterHealthCard(requestArg).catch((err) => {
+      errCB && errCB(err);
+      return { result: { verifyUrl: '' } };
+    });
+    h5Url &&
+      useTBanner(
+        {
+          type: 'h5',
+          path: h5Url,
+        },
+        'redirectTo'
+      );
+  }
 };
 
 // export const reportVerifyJudge =async (cb) => {
@@ -1016,7 +1057,7 @@ export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
 //     const {
 //       result: { wechatCode },
 //     } = res;
-//     const gStores = new GStores(); 
+//     const gStores = new GStores();
 //     const args = {
 //       patientId: gStores.userStore.patChoose.patientId,
 //       wechatCode,
@@ -1052,7 +1093,7 @@ export const gotoChosseVerifyPage = async (requestData, authCode: string) => {
 export const backWithFaceVerify = async (
   orderId: string,
   redirectUrl: string,
-  verifyType: string
+  verifyType: string,
 ) => {
   const gStores = new GStores();
   const globalStore = gStores.globalStore;
@@ -1087,21 +1128,25 @@ export const backWithFaceVerify = async (
     result: { verifyBool, verifyOrderId },
   } = await api.registerRealPersonAuthOrder(requestResultArg);
   if (verifyBool) {
-    useTBanner({
-      type: 'h5',
-      path: decodeURIComponent(
-        `${redirectUrl}&verify_order_id=${verifyOrderId}`
-      ),
-    });
+    useTBanner(
+      {
+        type: 'h5',
+        path: decodeURIComponent(
+          `${redirectUrl}&verify_order_id=${verifyOrderId}`
+        ),
+      },
+      'redirectTo'
+    );
   } else {
-    useTBanner({
-      type: 'h5',
-      path: decodeURIComponent(`${redirectUrl}&verify_order_id=-1`),
-    });
+    useTBanner(
+      {
+        type: 'h5',
+        path: decodeURIComponent(`${redirectUrl}&verify_order_id=-1`),
+      },
+      'redirectTo'
+    );
   }
 };
-
-
 
 const wxFacialVerifyByKey = async (
   userIdKey: string
@@ -1157,6 +1202,5 @@ const getInfoFromIdCard = (idCard) => {
       .padStart(2, '0')}`,
   };
 };
-
 
 // module.exports = { reportVerifyJudge}
