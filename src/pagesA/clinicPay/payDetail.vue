@@ -123,7 +123,7 @@
           </block>
         </view>
 
-        <view class="mt24">
+        <view v-if="props._t !== '1'" class="mt24">
           <g-flag
             :typeFg="props.payState === '0' ? '38' : '0'"
             isShowFgTip
@@ -880,17 +880,24 @@
     // const totalCost = detailData.value.totalCost + '';
     const totalCost = getPayTotal.value;
     const source = gStores.globalStore.browser.source;
+    const {
+      cardNumber: _cardNumber,
+      hosId: _hosId,
+      hosName: _hosName,
+      patientName: _patientName,
+    } = detailData.value;
+
     let {
       childOrder = props.value._t === '1' && generateUuid(20),
       deptId,
       docId,
-      hosName = detailData.value.hosName || '',
+      hosName = _hosName,
       deptName,
       docName,
-      hosId = detailData.value.hosId || '',
+      hosId = _hosId,
       visitDate,
       costTypeCode,
-      cardNumber,
+      cardNumber = _cardNumber,
       recipeNo,
     } = props.value;
     const _patientId = props.value.params ? '' : patientId;
@@ -905,7 +912,7 @@
     const args = {
       ...props.value,
       personalPayFee,
-      patientName: props.value.patientName,
+      patientName: _patientName || props.value.patientName,
       businessType: '1',
       patientId: _patientId,
       source,
@@ -962,6 +969,10 @@
     await wait(1000);
     uni.hideLoading();
 
+    if (props.value._t !== '1') {
+      pageLoad();
+      return;
+    }
     await executeConfigPayAfter(clinicType, cardNumber, props.value);
 
     uni.reLaunch({
@@ -1055,16 +1066,16 @@
     selUnPayList.value = [props.value as any];
   });
 
-  onMounted(async () => {
+  const pageLoad = async () => {
     await init();
     await wait(200);
-    if (
-      !isShowRefreshQrCode.value &&
-      props.value.payState === '0' &&
-      qrCode.value
-    ) {
+    if (!isShowRefreshQrCode.value && payState.value === '0' && qrCode.value) {
       capture();
     }
+  };
+
+  onMounted(async () => {
+    pageLoad();
   });
 
   onReady(() => {
