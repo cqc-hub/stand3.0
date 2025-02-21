@@ -1073,6 +1073,12 @@
   });
 
   const pageLoad = async () => {
+    // if (props.value) {
+
+    // }
+    if (props.value.q) {
+      return;
+    }
     await init();
     await wait(200);
     if (!isShowRefreshQrCode.value && payState.value === '0' && qrCode.value) {
