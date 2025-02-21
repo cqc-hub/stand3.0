@@ -15,7 +15,7 @@
       />
 
       <view class="user-info text-ellipsis">
-        {{ `${getShowPat.patientNameEncry}` }}
+        {{ `${gStores.userStore.choosePatName}` }}
         <text>
           {{ `${(!isAreaProgram() && getShowPat._showId) || ''}` }}
         </text>

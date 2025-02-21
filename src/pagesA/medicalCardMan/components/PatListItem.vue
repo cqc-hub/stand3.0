@@ -3,7 +3,7 @@
     <view class="pat-profile" @click="profileClick">
       <view class="pat-label">
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
-        <text class="pat-name bold">{{ pat.patientNameEncry }}</text>
+        <text class="pat-name bold">{{ gStores.userStore.getPatName(pat) }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
         <g-tag
           v-if="pat.defaultFlag === '1'"
@@ -55,7 +55,7 @@
         <view class="health-card-footer">
           <view class="health-card-info flex-normal-between">
             <view class="health-card-info-content">
-              <view>{{ nameConvert(pat.patientName) }}</view>
+              <view>{{ gStores.userStore.getPatName(pat) }}</view>
               <view>{{ pat.idCard }}</view>
             </view>
 
@@ -93,7 +93,7 @@
 <script lang="ts">
   import { defineComponent, PropType, ref, inject, computed } from 'vue';
   import { IPat } from '@/stores/type';
-  import { nameConvert, type ISystemConfig } from '@/utils';
+  import { GStores, nameConvert, type ISystemConfig } from '@/utils';
   import globalGl from '@/config/global';
 
   export default defineComponent({
@@ -114,6 +114,7 @@
         'pageConfig',
         <any>{}
       );
+      const gStores = new GStores();
 
       const getRealNameAuth = computed(() => {
         return pageConfig().realNameAuth || [];
@@ -140,6 +141,7 @@
         pageConfig,
         getRealNameAuth,
         globalGl,
+        gStores
       };
     },
   });

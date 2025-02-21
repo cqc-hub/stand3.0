@@ -471,7 +471,6 @@
   const {
     refPayList,
     changeRefPayList,
-    wxPayMoneyMedicalPlugin,
     wxCrossProgramInfo,
   } = usePayPage();
 

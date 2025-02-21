@@ -20,7 +20,7 @@
         mode="widthFix"
       />
       <view class="user-label f36 text-ellipsis">
-        <text class="user-name">{{ pat.patientNameEncry }}</text>
+        <text class="user-name">{{ gStores.userStore.getPatName(pat) }}</text>
 
         <text v-if="!isAreaProgram()">
           {{ (pat._showId && `(${pat._showId})`) || '' }}

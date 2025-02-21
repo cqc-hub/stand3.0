@@ -75,7 +75,8 @@ export const patientTempList: TInstance[] = [
   {
     label: '就诊人',
     field: 'input-text',
-    key: 'patientNameEncry',
+    // key: 'patientNameEncry',
+    key: 'patientName',
     rowStyle: 'border-radius: 8px;',
   },
   {

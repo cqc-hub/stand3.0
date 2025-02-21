@@ -32,7 +32,7 @@
           <view class="label text-no-wrap color-888">就诊人</view>
           <view class="body flex-between">
             <text>
-              {{ item.patientNameEncry }}
+              {{ item.patientName }}
               {{ item.cardNumber && `(${item.cardNumber})` }}
             </text>
             <text v-if="item.regWay">{{ item.regWay }}</text>

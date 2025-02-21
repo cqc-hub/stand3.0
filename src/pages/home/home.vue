@@ -73,7 +73,7 @@
                       </view>
                       <view class="patient">
                         <text>
-                          {{ gStores.userStore.patChoose.patientNameEncry }}
+                          {{ gStores.userStore.choosePatName }}
                         </text>
                         <text
                           v-if="

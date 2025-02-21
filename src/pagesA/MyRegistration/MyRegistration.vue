@@ -518,7 +518,7 @@
 
   const getPatLabel = (o) => {
     return (
-      o.patientNameEncry +
+      gStores.userStore.getPatName(o) +
       (isAreaProgram() ? '' : o.cardNumber ? `(${o.cardNumber})` : '')
     );
   };

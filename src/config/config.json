@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001058",
+  "sysCode": "1001067",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -316,6 +316,15 @@
         "isCardQueryComp":true,
         "isNewMode":false
       }
+    },
+    "1001048": {
+      "wxAppid": "wxf64e84cf578fe0a7",
+      "h5Appid": "wx6426f547693ab6e2",
+      "alipayAppid": "2021003144603328",
+      "name": "宜兴市人民医院",
+      "isSearchInHos": true,
+      "isStartComeTest": false,
+      "isOpenOcr": false
     }
   }
 }

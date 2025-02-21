@@ -67,7 +67,7 @@
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
   const emits = defineEmits(['choose-pat', 'go-choose-pat']);
-  const isClose = ref(true);
+  const isClose = ref(false);
   const props = defineProps<{
     pat?: any;
     isOrderWithoutPat?: boolean;

@@ -168,6 +168,11 @@ const userStore = defineStore('user', {
     clearStore() {
       this.$reset();
     },
+
+    getPatName(pat?: IPat): string {
+      pat = pat || this.patChoose;
+      return pat.patientName || '';
+    }
   },
 
   getters: {
@@ -177,6 +182,11 @@ const userStore = defineStore('user', {
 
     getAvatar(): string {
       return getAvatar(this.sex);
+    },
+
+    choosePatName(): string {
+      // @ts-expect-error
+      return this.getPatName();
     },
   },
 });
@@ -210,7 +220,9 @@ export const getUserShowLabel = (pat: IPat) => {
 export const isAreaProgram = (): boolean => {
   const sysCode = globalGl.SYS_CODE;
 
-  if (['1001049', '1001063', '1001066', '1001068', '1001070'].includes(sysCode)) {
+  if (
+    ['1001049', '1001063', '1001066', '1001068', '1001070'].includes(sysCode)
+  ) {
     return true;
   }
 
