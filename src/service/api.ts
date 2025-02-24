@@ -520,6 +520,11 @@ const regApi = {
   reappoint: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/reappoint', parm(data)),
 
+  getDeptDetail: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/reg/getDeptDetail', parm(data), {
+      showMessage: false,
+    }),
+
   regPreSettlement: (data: any) =>
     service.post('/phs-reg/reg/regPreSettlement', parm(data), {
       hideLoading: false,
@@ -863,7 +868,7 @@ const userApi = {
 
   faceResultAuth: <T = any>(data) =>
     service.post<T>('/phs-user/authUser/faceResultAuth', parm(data)),
-  
+
   //快速验证注册/绑卡接口
   quickRegisterHealthCard: (data, opt = {}) =>
     service.post(
@@ -1064,6 +1069,7 @@ const userApi = {
   getDeptCardDetail: (data: any) =>
     service.post('/phs-reg/deptDoc/getDeptDetail', parm(data), {
       hideLoading: false,
+      showMessage: false,
     }),
 
   queryRegNum: (data: any) =>

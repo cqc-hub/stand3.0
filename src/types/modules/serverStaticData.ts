@@ -76,6 +76,8 @@ export interface ISystemConfig_ {
     isOrderWithoutPat?: '1';
     /** 医生挂号展示医院名那儿多展示一下科室 */
     isShowHosNameWithDeptName?: '1';
+    /** 挂号确认页面确认挂号前是否需要展示就诊提示 */
+    isConfirmOrderWithDeptTip?: '1';
 
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？

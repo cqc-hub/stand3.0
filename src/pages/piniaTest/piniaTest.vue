@@ -1,6 +1,8 @@
 <template>
   <view class="">
-    <button @click="useTBanner(testbuttonConfig)">杭口质保卡正式环境（测试用）</button>
+    <button @click="useTBanner(testbuttonConfig)">
+      杭口质保卡正式环境（测试用）
+    </button>
   </view>
 </template>
 
@@ -402,11 +404,11 @@
     appId: 'wx0815c00f0b4bd7c3',
     extraData: {
       type: '8_2',
-      typeData:JSON.stringify({
-        "buildingId":208089,
-        type:1,
-        hisName:'A010215'
-      })
+      typeData: JSON.stringify({
+        buildingId: 208089,
+        type: 1,
+        hisName: 'A010215',
+      }),
     },
   };
 
@@ -438,16 +440,27 @@
     text: '检查预约',
   };
 
+  const 红会旧就诊卡退款: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '绍兴二院采血预约',
+    extraData: {
+      _type: 'hhjzktkdj',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
 
-
-  const testbuttonConfig = ref(杭口质保卡)
+  const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
-    //   useTBanner({
-    //     type: 'h5',
-    //     path: 'https://health.eheren.com/v3/#/pagesB/historicalMess/historicalMess?sysCode=1001067&appId=2021004193658562',
-    //   });
-
+      //   useTBanner({
+      //     type: 'h5',
+      //     path: 'https://health.eheren.com/v3/#/pagesB/historicalMess/historicalMess?sysCode=1001067&appId=2021004193658562',
+      //   });
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',
@@ -456,7 +469,6 @@
       //     patientId: '_patientId',
       //   },
       // });
-
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',
@@ -465,7 +477,6 @@
       //     patientId: '_patientId',
       //   },
       // });
-
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',
@@ -474,7 +485,6 @@
       //     patientId: '_patientId',
       //   },
       // });
-
       // useTBanner({
       //   type: 'h5',
       //   isSelfH5: '1',
@@ -483,11 +493,10 @@
       //     // patientId: '_patientId',
       //   },
       // });
-
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      // useTBanner(绍兴导航);
+      useTBanner(红会旧就诊卡退款);
     }, 1000);
   });
 </script>
