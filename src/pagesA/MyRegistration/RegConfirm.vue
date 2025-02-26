@@ -716,6 +716,7 @@
   onLoad(async (p) => {
     uni.showLoading({});
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    console.log(props.value)
     console.log(props.value);
     isOver.value = true;
     isWaitReg.value &&
