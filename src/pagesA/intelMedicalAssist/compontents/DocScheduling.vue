@@ -1,0 +1,151 @@
+<template>
+  <view class="doc-scheduling-container">
+    <view class="msg mb8 f28">
+      <text>{{ props.msg }}</text>
+    </view>
+    <view
+      class="doc-card-item mt40"
+      @click="gotoDocCard(item)"
+      v-for="(item, index) in props.list"
+      :key="index"
+    >
+      <view class="doc-header flex-normal">
+        <view class="photo">
+          <image
+            :src="'/static/image/order/order-doctor-avatar.png'"
+            class="doc-info-avatar"
+            mode="aspectFill"
+          />
+        </view>
+        <view class="flex-column f28">
+          <view class="title-line flex-normal pb10">
+            <view class="title f36 g-bold color-111">{{ item?.docName }}</view>
+            <view class="subtitle flex-normal pt8">
+              <view class="sub-main">{{ item?.docTitleName }}</view>
+              <view class="ellipsis" v-if="item?.deptName">|</view>
+              <view class="text-ellipsis">
+                {{ item?.deptName }}
+              </view>
+            </view>
+          </view>
+          <view class="hos-name text-ellipsis">{{ item?.hosName }}</view>
+          <view class="substr color-111 pt8">
+            {{ item?.intro }}
+          </view>
+        </view>
+      </view>
+      <view class="doc-footer mt8 flex-normal">
+        <view class="reg-area reg-title">预约日期:</view>
+        <view
+          class="reg-area"
+          v-for="(regItem, regIndex) in item?.date"
+          :key="regIndex"
+        >
+          <view class="reg-item">{{ regItem.slice(5) }}</view>
+        </view>
+        <view
+          class="reg-area"
+          v-for="(block, index) in 4 - (item?.date?.length % 4) - 1"
+          :key="`block+${index}`"
+        ></view>
+      </view>
+    </view>
+  </view>
+</template>
+<script setup lang="ts">
+  import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  const props = defineProps<{
+    list: any[];
+    msg: string;
+  }>();
+  onMounted(() => {
+    console.log('DoctorCard mounted', props);
+  });
+
+  import { joinQueryForUrl } from '@/common';
+  const gotoDocCard = (docInfo) => {
+    const { hosId, hosDocId ,hosDeptId} = docInfo;
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+        hosId,
+        hosDocId,
+        hosDeptId
+      }),
+    });
+  };
+</script>
+<style lang="scss" scoped>
+  .doc-scheduling-container {
+    width: 100vw;
+
+    .msg {
+      width: 95vw;
+      margin: auto;
+      color: $hr-neutral-color-9;
+    }
+    .doc-card-item {
+    //   letter-spacing: 1rpx;
+      width: 85vw;
+      margin: auto;
+      background: #e8f4ff;
+      border-radius: 0px 24rpx 24rpx 24rpx;
+      padding: 40rpx 32rpx;
+      .doc-header {
+        color: $hr-neutral-color-7;
+        align-items: flex-start;
+        .photo {
+          .doc-info-avatar {
+            border-radius: 50%;
+            border: 1rpx solid var(--hr-neutral-color-3);
+            width: 96rpx;
+            height: 96rpx;
+            margin-right: 24rpx;
+          }
+        }
+      }
+      .title-line {
+        .title {
+          min-width: fit-content;
+        }
+
+        .subtitle {
+          .sub-main {
+            min-width: fit-content;
+          }
+          overflow: hidden;
+          view {
+            padding: 0 10rpx;
+          }
+        }
+      }
+      .hos-name {
+      }
+      .substr {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+    }
+    .doc-footer {
+      justify-content: flex-start;
+      flex-wrap: wrap; /* 允许换行 */
+      .reg-area {
+        flex: 1 1 25%;
+        font-size: $hr-font-size-xs;
+        margin-top: 16rpx;
+      }
+      .reg-title {
+        color: $hr-neutral-color-8;
+      }
+      .reg-item {
+        color: $hr-brand-color-6;
+        background-color: $h-color-white;
+        border-radius: 12rpx;
+        padding: 10rpx 25rpx;
+        width: fit-content;
+      }
+    }
+  }
+</style>

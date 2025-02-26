@@ -25,6 +25,7 @@
           @send-msg="sendMsg"
           @send-img="sendImg"
           @report-show="reportShow"
+          @stop-chunk="stopChunkRequest"
         />
       </view>
     </view>
@@ -57,6 +58,7 @@
     init,
     popipHasShow,
     inspectionAnalysis,
+    stopChunkRequest,
   } from './utils/utils';
   import { throttle } from '@/utils';
 

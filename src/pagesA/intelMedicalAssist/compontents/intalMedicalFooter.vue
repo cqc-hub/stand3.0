@@ -19,10 +19,8 @@
             :key="'grid-item' + index"
             @click="handleClickServer(item)"
           >
-    
-              <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
-              <view class="label f28">{{ item.text }}</view>
-         
+            <img :src="globalGl.BASE_IMG + item.icon" alt="" class="icon" />
+            <view class="label f28">{{ item.text }}</view>
           </view>
         </view>
       </view>
@@ -37,14 +35,15 @@
       :animation="animationData"
     >
       <view class="bottom-dh-char flex-row-around">
+        <!-- #ifdef  MP-WEIXIN -->
         <view
-          class="input-send left"
+          class="input-send left mr20"
           :disabled="msgState.msgLoad"
           @click="changeVoiceType"
         >
           <view class="circle">
             <img
-            v-if="!hasWechatSI"
+              v-if="!hasWechatSI"
               class="bottom-icon"
               :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
               alt=""
@@ -63,7 +62,24 @@
             />
           </view>
         </view>
-        <view class="bottom-dh-content" v-if="!isVoice">
+        <!-- #endif -->
+        <!-- #ifndef  MP-WEIXIN -->
+        <view
+          class="input-send left mr20"
+          :disabled="msgState.msgLoad"
+          @click="reportShow"
+          v-if="isReportAnalysis"
+        >
+          <view class="circle">
+            <img
+              class="bottom-icon"
+              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+              alt=""
+            />
+          </view>
+        </view>
+        <!-- #endif -->
+        <view class="bottom-dh-content" v-if="!isVoice&&isShow">
           <view class="border">
             <input
               v-model="msgState.msg"
@@ -81,7 +97,7 @@
         </view>
         <view
           class="bottom-dh-content"
-          v-else
+          v-if="isVoice"
           @longpress="handleVoice"
           @touchstart="touchStart"
           @touchmove="touchMove"
@@ -91,11 +107,12 @@
             <view class="dh-input f28 voice">按住说话</view>
           </view>
         </view>
+        <!-- #ifdef  MP-WEIXIN -->
         <view
-          class="input-send right"
+          class="input-send right ml20"
           :disabled="msgState.msgLoad"
           @click="reportShow"
-          v-if="hasWechatSI"
+          v-if="hasWechatSI && isReportAnalysis"
         >
           <view class="circle">
             <img
@@ -105,7 +122,27 @@
             />
           </view>
         </view>
-        <view v-else @click="sendImgByButtom"  class="input-send right send-text f28"><text>发送</text></view>
+
+        <view
+          v-if="(!hasWechatSI || !isReportAnalysis) && !chunkStatus.isTyping"
+          @click="sendMsgByButtom"
+          class="input-send right send-text f28 ml20"
+        >
+          <text>发送</text>
+        </view>
+        <view
+          class="stop-button ml10"
+          v-if="chunkStatus.isTyping"
+          @click="handleStopChunk"
+        >
+          <view class="stop-circle"><view class="stop-rect"></view></view>
+        </view>
+        <!-- #endif -->
+        <!-- #ifndef  MP-WEIXIN -->
+        <view @click="sendMsgByButtom" class="input-send right send-text f28 ml20">
+          <text>发送</text>
+        </view>
+        <!-- #endif -->
       </view>
     </view>
     <view
@@ -140,11 +177,12 @@
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
   import { type TButtonConfig, debounce } from '@/utils';
-  import { msgState } from '../utils/utils';
+  import { msgState, isReportAnalysis, chunkStatus } from '../utils/utils';
   let SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
   const isVoice = ref<boolean>(false);
   const voicing = ref<boolean>(false);
+  const isShow = ref<boolean>(false);
   const voiceTouchData = ref<any>({
     clientY: 0,
     isMoveUp: false,
@@ -165,7 +203,8 @@
     'send-msg',
     'click-server',
     'send-img',
-    'report-show'
+    'report-show',
+    'stop-chunk',
   ]);
 
   watch(
@@ -198,6 +237,10 @@
     } = globalGl;
     return isOpenWechatSI;
   });
+
+  const handleStopChunk = () => {
+    emits('stop-chunk');
+  };
   const sendImg = () => {
     emits('send-img');
   };
@@ -206,7 +249,7 @@
     emits('report-show');
   };
 
-  const sendImgByButtom = () => {
+  const sendMsgByButtom = () => {
     emits('send-msg', msgState.value.msg);
     nextTick(() => {
       msgState.value.msg = '';
@@ -231,7 +274,7 @@
     if (hasWechatSI.value) {
       isVoice.value = !isVoice.value;
     } else {
-      reportShow()
+      reportShow();
     }
   };
 
@@ -324,6 +367,10 @@
 
   onMounted(() => {
     getGuessServerBottom();
+    setTimeout(()=>{
+      isShow.value = true;
+    }, 500)
+  
     // #ifdef  MP-WEIXIN
     initRecord();
     // #endif
@@ -437,6 +484,7 @@
       }
     }
     .input-send {
+      min-width: 70rpx;
       // padding: 8upx;
       color: #bbbbbb;
       //   width: 100upx;
@@ -528,11 +576,41 @@
     width: 100vw;
     height: 450px;
   }
-  .send-text{
-    color: #fff!important;
-    background: #296FFF;
+  .send-text {
+    color: #fff !important;
+    background: #296fff;
     padding: 12rpx 22rpx;
     border-radius: 16rpx;
+  }
+  .stop-button {
+    white-space: nowrap;
+    margin: 0 50rpx 0 0;
+    color: #fff;
+    background: #296fff;
+    border: none;
+    border-radius: 16px;
+    flex-direction: column;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    .stop-circle {
+      justify-content: center;
+      align-items: center;
+      min-width: 28px;
+      height: 28px;
+      display: flex;
+      .stop-rect {
+        background: currentColor;
+        border-radius: 2px;
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
+        margin: 1px;
+      }
+    }
   }
   .voicing-area {
     position: fixed;
@@ -615,36 +693,33 @@
     animation: floatFromTop 1s ease-out forwards;
   }
 
-//   $duration: 0.5s; // 动画持续时间
-//   $delay-per-item: 0.1s; // 每个项之间的延迟时间
-//   @keyframes slide-up {
-//   0% {
-//     opacity: 0;
-//     transform: translateY(10px);
-//   }
-//   100% {
-//     opacity: 1;
-//     transform: translateY(0);
-//   }
-// }
-//   .guess-grid{
-//     .grid-item  {
-//       opacity: 0; // 初始状态不可见
-//       transition: opacity $duration; // 设置动画过渡效果
+  //   $duration: 0.5s; // 动画持续时间
+  //   $delay-per-item: 0.1s; // 每个项之间的延迟时间
+  //   @keyframes slide-up {
+  //   0% {
+  //     opacity: 0;
+  //     transform: translateY(10px);
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //     transform: translateY(0);
+  //   }
+  // }
+  //   .guess-grid{
+  //     .grid-item  {
+  //       opacity: 0; // 初始状态不可见
+  //       transition: opacity $duration; // 设置动画过渡效果
 
-//       &:nth-child(1) {
-//         animation: slide-up $duration forwards;
-//       }
+  //       &:nth-child(1) {
+  //         animation: slide-up $duration forwards;
+  //       }
 
-//       @for $i from 2 through 9 {
-//         &:nth-child(#{$i}) {
-//           animation-delay: #{$delay-per-item * ($i - 1)};
-//           animation: slide-up $duration forwards;
-//         }
-//       }
-//     }
-//   }
-
-
-
+  //       @for $i from 2 through 9 {
+  //         &:nth-child(#{$i}) {
+  //           animation-delay: #{$delay-per-item * ($i - 1)};
+  //           animation: slide-up $duration forwards;
+  //         }
+  //       }
+  //     }
+  //   }
 </style>

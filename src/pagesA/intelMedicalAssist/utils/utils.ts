@@ -4,6 +4,8 @@ import {
   type MsgListType,
   type MsgStatusType,
   type MessFormListType,
+  type ChunkStatusType,
+  TaskQueue,
   OrderStatusName,
   OrderStatusDescript,
 } from './types';
@@ -36,6 +38,7 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
+export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
 //普通首页
@@ -60,15 +63,27 @@ export const styleConfig = ref<StyleConfigType>({
   historyMess: false,
 });
 
+export const chunkStatus = ref<ChunkStatusType>({
+  isWXStreamApi: false,
+  isTyping: false,
+  chunkTemp: '',
+});
+
 export const init = async (isMess) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
+  if (pageConfig.value?.intelMedicalAssistConfig?.isReportAnalysis === '1') {
+    isReportAnalysis.value = true;
+  }
+  if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
+    chunkStatus.value.isWXStreamApi = true;
+  }
   isMess && isMess == '1' && initWithMess();
+  test();
   //  setTimeout(()=>{
   //  styleConfig.value.showHeader=false
   //  msgState.value.msgLoad=true
-
   //  },200)
 };
 
@@ -178,6 +193,9 @@ export const sendMsg = async (value: string) => {
     styleConfig.value.showHeader = false;
   }
   // #endif
+
+  chunkStatus.value?.isTyping && stopChunkRequest();
+
   msgList.value.push({
     my: true,
     msg: value,
@@ -185,6 +203,12 @@ export const sendMsg = async (value: string) => {
   });
   msgState.value.msgLoad = true;
   scrollToNewMsg();
+  // #ifdef  MP-WEIXIN
+  if (chunkStatus.value?.isWXStreamApi) {
+    typeInAsk(value);
+    return;
+  }
+  // #endif
   const {
     result: { showType, list, requestId, chatId },
   } = await api
@@ -199,6 +223,16 @@ export const sendMsg = async (value: string) => {
     });
   msgState.value.lastChatId = chatId;
 
+  switchHandleResult(showType, list, requestId, chatId);
+};
+
+const switchHandleResult = (
+  showType: number,
+  list: Array<any>,
+  requestId: string,
+  chatId: string,
+  typeInIndex?: number
+) => {
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
@@ -213,25 +247,36 @@ export const sendMsg = async (value: string) => {
     switch (showType) {
       case 1:
         // 文本
-        dealShowType1(list, requestId);
+        // #ifdef  MP-WEIXIN
+        if (chunkStatus.value?.isWXStreamApi) {
+          dealShowType1withStream(list, requestId, chatId, typeInIndex);
+          return;
+        }
+        // #endif
+        dealShowType1(list, requestId, chatId);
+        break;
+
+      case 6:
+        //地址
+        dealShowType6(list, requestId, chatId);
         break;
 
       case 9:
         //地址
-        dealShowType9(list, requestId);
+        dealShowType9(list, requestId, chatId);
         break;
 
       case 10:
         // 医院|科室 信息
-        dealShowType10(list, requestId);
+        dealShowType10(list, requestId, chatId);
         break;
 
       case 11:
-        dealShowType11(list, requestId);
+        dealShowType11(list, requestId, chatId);
         break;
 
       case 12:
-        dealShowType12(list, requestId);
+        dealShowType12(list, requestId, chatId);
         break;
 
       default:
@@ -249,12 +294,12 @@ export const sendMsg = async (value: string) => {
 
 export const scrollToNewMsg = (selector?: string, duration?: number) => {
   nextTick(() => {
-    console.log(
-      '开始滚动',
-      selector ||
-        `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
-      duration || 300
-    );
+    // console.log(
+    //   '开始滚动',
+    //   selector ||
+    //     `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+    //   duration || 300
+    // );
     uni.pageScrollTo({
       selector:
         selector ||
@@ -294,8 +339,8 @@ export const inspectionAnalysis = async (reports) => {
         repType: 1,
         extend: element.extend,
       });
-      const { showType, list, requestId } = result;
-      dealShowType12(list, requestId);
+      const { showType, list, requestId, chatId } = result;
+      dealShowType12(list, requestId, chatId);
       scrollToNewMsg();
       resolve(0);
     });
@@ -340,8 +385,8 @@ export const sendImg = async () => {
   });
   const { result } = JSON.parse(data);
 
-  const { showType, list, requestId } = result;
-  dealShowType12(list, requestId);
+  const { showType, list, requestId, chatId } = result;
+  dealShowType12(list, requestId, chatId);
   msgState.value.msgLoad = false;
   // uni.hideLoading()
   //// @ts-expect-error
@@ -396,6 +441,7 @@ export const clearChatId = async (id: string) => {
   });
   lastMyContent && (msgState.value.msg = lastMyContent);
   msgState.value.lastChatId = '';
+  chunkStatus.value?.isTyping && stopChunkRequest();
 };
 
 export const formatterTemp = (list: TInstance[], modeOld = false) => {
@@ -445,7 +491,6 @@ export const gotoGuide = (item) => {
   });
 };
 export const goDoctorCard = (item) => {
-  console.log('item', item);
   const { docName, docId, hosId, deptName } = item;
   uni.navigateTo({
     url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
@@ -465,7 +510,41 @@ export const changeShowHistory = (isHistory: boolean = false) => {
 
 const getHisData = () => {};
 
-const dealShowType1 = (list, requestId) => {
+const dealShowType1withStream = async (
+  list,
+  requestId,
+  chatId,
+  typeInIndex
+) => {
+  const { question, answer } = list[0];
+  await new Promise((rl, rj) => {
+    if (msgList.value?.length === typeInIndex) {
+      msgList.value.push({
+        my: false,
+        msg: '',
+        boldMsg: (question && question + '为') || '',
+        type: 1,
+        requestId,
+        chatId,
+        isSysAppMore: judgeIsSysAppMore(chatId),
+      });
+    }
+    let index = 0; // 当前添加的字符索引
+    const interval = setInterval(() => {
+      if (index < answer?.length) {
+        // 将当前字符添加到目标变量
+        msgList.value[typeInIndex].msg += answer[index];
+        index++;
+      } else {
+        scrollToNewMsg();
+        clearInterval(interval); // 停止定时器
+        rl('');
+      }
+    }, 70);
+  });
+};
+
+const dealShowType1 = (list, requestId, chatId) => {
   const { question, answer } = list[0];
 
   msgList.value.push({
@@ -474,20 +553,37 @@ const dealShowType1 = (list, requestId) => {
     boldMsg: (question && question + '为') || '',
     type: 1,
     requestId,
+    chatId,
+    isSysAppMore: judgeIsSysAppMore(requestId),
+  });
+  let index = 0; // 当前添加的字符索引
+};
+
+const dealShowType6 = (list, requestId, chatId) => {
+  msgList.value.push({
+    my: false,
+    msg: '为您推荐以下医生和排班 ',
+    type: 61,
+    addRessList: list,
+    requestId,
+    chatId,
+    isSysAppMore: false,
   });
 };
 
-const dealShowType9 = (list, requestId) => {
+const dealShowType9 = (list, requestId, chatId) => {
   msgList.value.push({
     my: false,
     msg: '为您推荐: ',
     type: 3,
     addRessList: list,
     requestId,
+    chatId,
+    isSysAppMore: judgeIsSysAppMore(requestId),
   });
 };
 
-const dealShowType10 = (list, requestId) => {
+const dealShowType10 = (list, requestId, chatId) => {
   const {
     question: title,
     intro: subTitle,
@@ -501,6 +597,8 @@ const dealShowType10 = (list, requestId) => {
     msg: '为您找到以下内容',
     type: 3,
     requestId,
+    chatId,
+    isSysAppMore: judgeIsSysAppMore(requestId),
     addRessInfo: {
       title,
       subTitle,
@@ -511,23 +609,24 @@ const dealShowType10 = (list, requestId) => {
   });
 };
 
-const dealShowType11 = (list, requestId) => {
+const dealShowType11 = (list, requestId, chatId) => {
   msgList.value.push({
     my: false,
     type: 4,
     homeMenuConfig: list,
     requestId,
+    chatId,
+    isSysAppMore: judgeIsSysAppMore(requestId),
   });
 };
 
-const dealShowType12 = (lists, requestId) => {
+const dealShowType12 = (lists, requestId, chatId) => {
   let htmlStr = ``;
   // htmlStr +=
   //   '<br> <div style="color:#444"> 好的，已收到报告单，以下是详细的报告解读:</div><br>';
   let flag = false;
   lists.forEach((list) => {
     if (JSON.stringify(list) !== '{}') flag = true;
-
     if (list?.judgment_criteria) {
       htmlStr += `<strong>结果分析：</strong><br>`;
       list.judgment_criteria.forEach((item, judgeIndex) => {
@@ -576,6 +675,8 @@ const dealShowType12 = (lists, requestId) => {
       msg: '报告解读完成。您的报告各项指标正常，无异常情况。',
       type: 1,
       requestId,
+      chatId,
+      isSysAppMore: judgeIsSysAppMore(requestId),
     });
   } else {
     msgList.value.push({
@@ -583,6 +684,297 @@ const dealShowType12 = (lists, requestId) => {
       msg: htmlStr,
       type: 99,
       requestId,
+      chatId,
     });
   }
 };
+
+const judgeIsSysAppMore = (requestIdStr) => {
+  if (requestIdStr && msgList.value?.length) {
+    let lastQuesetIdStr = '';
+    msgList.value?.forEach((item) => {
+      item?.chatId && (lastQuesetIdStr = item.chatId);
+    });
+
+    if (lastQuesetIdStr) {
+      let lastQuesetId = lastQuesetIdStr.split('-')[1];
+      let nowQuesetId = requestIdStr.split('-')[1];
+      return lastQuesetId !== nowQuesetId;
+    } else {
+      return true;
+    }
+  } else {
+    return true;
+  }
+};
+
+let requestTask: any = null;
+let taskQueue = new TaskQueue();
+const typeInAsk = (value) => {
+  const gStores = new GStores();
+  const settings = {
+    url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
+    // url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    // url: "http://10.10.117.58:9907/customer/aiStreamAsk",
+    method: 'POST',
+    timeout: 0,
+    responseType: 'text',
+    enableChunked: true,
+    headers: {
+      'Content-Type': 'application/json',
+      phsId: isOpenSm4 ? '81681766' : '81681688',
+    },
+    data: JSON.stringify({
+      args: {
+        content: value,
+        sysCode: gStores.globalStore.sysCode,
+        // sysCode: 1001017,
+        chatId: msgState.value.lastChatId,
+      },
+    }),
+  };
+
+  const typeInIndex = msgList.value.length;
+  console.warn('手动请求', settings);
+  requestTask = wx.request({
+    ...settings,
+    success: (response) => {},
+    fail: (err) => {
+      console.log('errror', err);
+      msgState.value.msgLoad = false;
+      if (err.errMsg == 'request:fail abort') {
+        gStores.messageStore.showMessage('已暂停生成', 3000);
+      } else {
+        msgList.value.push({
+          my: false,
+          msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
+          type: -1,
+        });
+      }
+    },
+    complete: () => {
+      msgState.value.msgLoad = false;
+      requestTask?.offChunkReceived();
+      chunkStatus.value.chunkTemp = '';
+      chunkStatus.value.isTyping = false;
+    },
+  });
+  requestTask?.onHeadersReceived((res) => {});
+  requestTask?.onChunkReceived((res) => {
+    chunkStatus.value.isTyping = true;
+    const buf16 = buf2hex(res.data);
+    const resStr = hexToString(buf16);
+    chunkStatus.value.chunkTemp += resStr;
+    let tempData = chunkStatus.value.chunkTemp.split('\n\n');
+    if (tempData.length > 1) {
+      tempData.forEach((item, index) => {
+        if (index == tempData.length - 1) {
+          chunkStatus.value.chunkTemp = item;
+        } else {
+          handleOneChunk(item, typeInIndex);
+        }
+      });
+    }
+  });
+};
+
+export const stopChunkRequest = () => {
+  requestTask?.abort();
+  msgState.value.msgLoad = false;
+  chunkStatus.value.isTyping = false;
+  taskQueue.clearTask();
+};
+
+const handleOneChunk = async (chunk: string, typeInIndex: number) => {
+  if (chunk.includes('event:message')) {
+    const idMatch = chunk.match(/id:(.*)/);
+    let idStr = idMatch ? idMatch[1] : null;
+    const id = idStr?.split(',')[0];
+    const questionId=idStr?.split(',')[1];
+    // 提取data:和event:message之间的字符
+    const dataMatch = chunk.match(/data:(.*?)event:message/s);
+    const data = dataMatch ? dataMatch[1].trim() : null;
+    // console.log('解析的数据');
+    console.log('ID:', id,questionId);
+    // console.log('Data:', data);
+    // const regex = /data:([\s\S]*?)event:message/;
+    // const match = chunk.match(regex);
+    id && (msgState.value.lastChatId = id);
+    if (data) {
+      await taskQueue.addTask(
+        dealShowType1withStream,
+        [
+          {
+            answer: convertAsciiEscapeSequences(data),
+            question: '',
+          },
+        ],
+        questionId,
+        id,
+        typeInIndex
+      );
+    } else {
+      console.warn('未截取到标志文本:');
+    }
+  } else {
+    const jsonMatch = chunk.match(/data:(\{.*\})/);
+    const jsonData = JSON.parse(jsonMatch?.length ? jsonMatch[1] : '{}');
+    console.log('提取的 JSON 数据:', jsonData);
+    const { showType, list, requestId, chatId } = jsonData;
+    chatId && (msgState.value.lastChatId = chatId);
+    switchHandleResult(showType, list, requestId, chatId, typeInIndex);
+  }
+};
+
+const test = () => {
+  const data = {
+    list: [
+      {
+        date: [
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+        ],
+        deptName: '多学科门诊(杭州口腔医院)',
+        goodAt:
+          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+        ampm: '2',
+        hosDeptId: '992246295136113548',
+        fee: '15.0',
+        ampmName: '下午',
+        hosId: '13078',
+        schDate: '2025-03-03',
+        schId: '2025-03-03_2_992870638711017806',
+        docName: '李琦',
+        schState: '0',
+        intro:
+          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+        numRemain: 5,
+        hosDocId: '992870638711017806',
+        hosName: '杭州口腔医院平海院区',
+        docTitleName: '主治医师',
+      },
+      {
+        date: [
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+          '2025-03-03',
+        ],
+        deptName: '多学科门诊(杭州口腔医院)',
+        goodAt:
+          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+        ampm: '2',
+        hosDeptId: '992246295136113548',
+        fee: '15.0',
+        ampmName: '下午',
+        hosId: '13078',
+        schDate: '2025-03-03',
+        schId: '2025-03-03_2_992870638711017806',
+        docName: '李琦',
+        schState: '0',
+        intro:
+          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+        numRemain: 5,
+        hosDocId: '992870638711017806',
+        hosName: '杭州口腔医院平海院区',
+        docTitleName: '主治医师',
+      },
+      {
+        date: ['2025-03-03'],
+        deptName: '多学科门诊(杭州口腔医院)',
+        goodAt:
+          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+        ampm: '2',
+        hosDeptId: '992246295136113548',
+        fee: '15.0',
+        ampmName: '下午',
+        hosId: '13078',
+        schDate: '2025-03-03',
+        schId: '2025-03-03_2_992870638711017806',
+        docName: '李琦',
+        schState: '0',
+        intro:
+          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+        numRemain: 5,
+        hosDocId: '992870638711017806',
+        hosName: '杭州口腔医院平海院区',
+        docTitleName: '主治医师',
+      },
+    ],
+
+    showType: 6,
+  };
+  const { showType, list } = data;
+  switchHandleResult(showType, list, '', '');
+};
+
+//将2进制转为16进制
+const buf2hex = (arrayBuffer) => {
+  return Array.prototype.map
+    .call(new Uint8Array(arrayBuffer), (x) => ('00' + x.toString(16)).slice(-2))
+    .join('');
+};
+
+//将16进制转为 字符串
+const hexToString = (str) => {
+  var val = '',
+    len = str.length / 2;
+  for (var i = 0; i < len; i++) {
+    val += String.fromCharCode(parseInt(str.substr(i * 2, 2), 16));
+  }
+  return utf8to16(val);
+};
+//处理中文乱码问题
+const utf8to16 = (str) => {
+  var out, i, len, c;
+  var char2, char3;
+  out = '';
+  len = str.length;
+  i = 0;
+  while (i < len) {
+    c = str.charCodeAt(i++);
+    switch (c >> 4) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+        out += str.charAt(i - 1);
+        break;
+      case 12:
+      case 13:
+        char2 = str.charCodeAt(i++);
+        out += String.fromCharCode(((c & 0x1f) << 6) | (char2 & 0x3f));
+        break;
+      case 14:
+        char2 = str.charCodeAt(i++);
+        char3 = str.charCodeAt(i++);
+        out += String.fromCharCode(
+          ((c & 0x0f) << 12) | ((char2 & 0x3f) << 6) | ((char3 & 0x3f) << 0)
+        );
+        break;
+    }
+  }
+  return out;
+};
+
+// 将文本中的 ASCII 转义序列（如 \x0A）转换为实际字符
+function convertAsciiEscapeSequences(input) {
+  return input.replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
+    // 将十六进制字符串转换为对应的字符
+    return String.fromCharCode(parseInt(hex, 16));
+  });
+}

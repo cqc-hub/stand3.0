@@ -67,6 +67,10 @@
             <view v-else-if="msgItem.type === 6 && messFormData.length">
               <Recommend-Remind />
             </view>
+            <view v-else-if="msgItem.type === 61 ">
+
+             <Doc-Scheduling  :list="msgItem.addRessList" :msg="msgItem.msg"/>
+            </view>
             <view
               v-else-if="msgItem.type === 99 && msgItem.msg"
               class="chat-system-item margin-left padding-chat by-cyan"
@@ -106,7 +110,7 @@
                     :class="{
                       ['color-888 f28']: msgItem.type === 3,
                     }"
-                    class="f32"
+                    class="f28"
                   >
                     <text
                       v-if="msgItem.boldMsg"
@@ -115,11 +119,27 @@
                       {{ msgItem.boldMsg }}\n
                     </text>
 
-                    <text>
+                    <!-- <text>
                       {{ msgItem.msg }}
-                    </text>
+                    </text> -->
                   </text>
-                  <view v-if="msgItem.type === 1">
+                  <view
+                    :style="
+                      msgItem.type === 2
+                        ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
+                        : ''
+                    "
+                    :class="{
+                      ['color-888 f28']: msgItem.type === 3,
+                    }"
+                    class="f28"
+                  >
+                    <ua-markdown :source="msgItem.msg" />
+                  </view>
+                  <view
+                    v-if="msgItem.type === 1 && msgItem?.isSysAppMore"
+                    class="sysAppMore"
+                  >
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
@@ -150,7 +170,10 @@
       </view>
     </template>
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
-      <view v-show="msgState.msgLoad" class="flex-column smartChatRoom-item">
+      <view
+        v-show="msgState.msgLoad && !chunkStatus.isTyping"
+        class="flex-column smartChatRoom-item"
+      >
         <view
           class="flex justify-start padding-right one-show align-start padding-top"
         >
@@ -175,7 +198,12 @@
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
-  import { msgState, clearChatId, messFormData } from '../utils/utils';
+  import {
+    msgState,
+    clearChatId,
+    messFormData,
+    chunkStatus,
+  } from '../utils/utils';
   import { GStores } from '@/utils';
   import HTMLParser from '@/common/html-parser';
 
@@ -187,6 +215,8 @@
   import RecommendMenu from './RecommendMenu.vue';
   import RecommendCard from './RecommendCard.vue';
   import EvaluateBtn1 from './EvaluateBtn1.vue';
+  import uaMarkdown from './ua-markdown/ua-markdown.vue';
+  import DocScheduling from './DocScheduling.vue';
 
   const props = defineProps<{
     msgList: any[];
@@ -209,6 +239,9 @@
 </script>
 <style lang="scss" scoped>
   @import './intalMedicalAssists.scss';
+  .smartChatRoom-item{
+    font-size: 28rpx;
+  }
   .content-area {
     z-index: 0;
     padding-top: 40rpx;
@@ -229,6 +262,9 @@
       color: #111111;
       max-width: 80vw;
       line-height: 60rpx;
+      .sysAppMore {
+        line-height: 40rpx;
+      }
     }
     .padding-chat {
       padding: 17rpx 20rpx;

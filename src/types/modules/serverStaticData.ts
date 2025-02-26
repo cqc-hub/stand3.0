@@ -464,6 +464,10 @@ export interface ISystemConfig_ {
     navBtns?: TButtonConfig[];
     //智能医助
     intelMedicalAssistConfig?: {
+      //微信小程序是否启用流文本形式Api
+      isWXStreamApi?: '1';
+      //是否开启报告解读
+      isReportAnalysis?: '1';
       guessAskList?: Array<{ label: string; value: string }>;
       guessServerList?: Array<TButtonConfig&{isSelfMethod?:string}>;
     };

@@ -25,11 +25,13 @@
 
     <view class="header-hello">
       <view class="en f32 pb24">
-        {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }}
+        {{ `Hi,亲爱的用户` }}
+         <!-- {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }} -->
       </view>
       <view class="cn f26">智能医助为您服务~</view>
     </view>
     <view class="person-say pt12 pb12 pl32 pr32">
+      。
       <view class="key-in">
         <text>您可以说出您的问题，我将为您解答哦</text>
       </view>

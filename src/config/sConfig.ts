@@ -160,11 +160,13 @@ const scJson: Record<string, ISConfig> = {
    * 杭州口腔医院
    */
   1001063: {
+    
     login: {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
     isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
+    isOpenWechatSI: true,
     // isOpenHomeTabBarNetWorkBtn: '1',
   },
 
