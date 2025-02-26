@@ -444,7 +444,7 @@
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
-    text: '绍兴二院采血预约',
+    text: '红会旧就诊卡退款',
     extraData: {
       _type: 'hhjzktkdj',
     },
