@@ -246,7 +246,7 @@
       selectPatientPage: '0',
       title: '门诊缴费',
       terminalType: 'my',
-      gridLabel: '3',
+      gridLabel: '0',
       path: '/pagesA/clinicPay/clinicPayDetail',
       appId: '',
       id: 53464,

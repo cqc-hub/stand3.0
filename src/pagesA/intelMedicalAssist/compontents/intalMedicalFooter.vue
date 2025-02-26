@@ -40,7 +40,7 @@
           class="input-send left mr20"
           :disabled="msgState.msgLoad"
           @click="changeVoiceType"
-          v-if="hasWechatSI||isReportAnalysis"
+          v-if="hasWechatSI || isReportAnalysis"
         >
           <view class="circle">
             <img
@@ -80,7 +80,11 @@
           </view>
         </view>
         <!-- #endif -->
-        <view class="bottom-dh-content" :class="!(hasWechatSI||isReportAnalysis)?'long-input':''" v-if="!isVoice && isShow">
+        <view
+          class="bottom-dh-content"
+          :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ''"
+          v-if="!isVoice && isShow"
+        >
           <view class="border">
             <input
               v-model="msgState.msg"
@@ -451,9 +455,9 @@
       align-items: center;
       width: 100vw;
     }
-    .long-input{
+    .long-input {
       width: 580rpx !important;
-      .border{
+      .border {
         &::before {
           width: 580rpx !important;
         }
