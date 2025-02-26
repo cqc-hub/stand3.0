@@ -108,9 +108,9 @@
                         : ''
                     "
                     :class="{
-                      ['color-888 f28']: msgItem.type === 3,
+                      ['color-888 f32']: msgItem.type === 3,
                     }"
-                    class="f28"
+                    class="f32"
                   >
                     <text
                       v-if="msgItem.boldMsg"
@@ -130,9 +130,9 @@
                         : ''
                     "
                     :class="{
-                      ['color-888 f28']: msgItem.type === 3,
+                      ['color-888 f32']: msgItem.type === 3,
                     }"
-                    class="f28"
+                    class="f32"
                   >
                     <ua-markdown :source="msgItem.msg" />
                   </view>

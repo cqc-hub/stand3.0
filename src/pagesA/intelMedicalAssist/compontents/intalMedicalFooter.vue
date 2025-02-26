@@ -40,6 +40,7 @@
           class="input-send left mr20"
           :disabled="msgState.msgLoad"
           @click="changeVoiceType"
+          v-if="hasWechatSI||isReportAnalysis"
         >
           <view class="circle">
             <img
@@ -79,7 +80,7 @@
           </view>
         </view>
         <!-- #endif -->
-        <view class="bottom-dh-content" v-if="!isVoice&&isShow">
+        <view class="bottom-dh-content" :class="!(hasWechatSI||isReportAnalysis)?'long-input':''" v-if="!isVoice && isShow">
           <view class="border">
             <input
               v-model="msgState.msg"
@@ -88,7 +89,7 @@
               @confirm="sendMsg"
               :disabled="msgState.msgLoad"
               placeholder-class="my-neirong-sm f28"
-              placeholder="  请输入症状/药品/疾病/地点/文章…"
+              placeholder="  请输入症状/药品/疾病..."
               confirm-type="search"
               :focus="msgState.focus"
               @blur="onBlur"
@@ -139,7 +140,10 @@
         </view>
         <!-- #endif -->
         <!-- #ifndef  MP-WEIXIN -->
-        <view @click="sendMsgByButtom" class="input-send right send-text f28 ml20">
+        <view
+          @click="sendMsgByButtom"
+          class="input-send right send-text f28 ml20"
+        >
           <text>发送</text>
         </view>
         <!-- #endif -->
@@ -273,6 +277,11 @@
   const changeVoiceType = () => {
     if (hasWechatSI.value) {
       isVoice.value = !isVoice.value;
+
+      isShow.value = false;
+      setTimeout(() => {
+        isShow.value = true;
+      }, 0);
     } else {
       reportShow();
     }
@@ -367,10 +376,9 @@
 
   onMounted(() => {
     getGuessServerBottom();
-    setTimeout(()=>{
-      isShow.value = true;
-    }, 500)
-  
+
+    isShow.value = true;
+
     // #ifdef  MP-WEIXIN
     initRecord();
     // #endif
@@ -442,6 +450,14 @@
       font-size: 55rpx;
       align-items: center;
       width: 100vw;
+    }
+    .long-input{
+      width: 580rpx !important;
+      .border{
+        &::before {
+          width: 580rpx !important;
+        }
+      }
     }
     .bottom-dh-content {
       height: 65rpx;
@@ -581,6 +597,7 @@
     background: #296fff;
     padding: 12rpx 22rpx;
     border-radius: 16rpx;
+    text-align: center;
   }
   .stop-button {
     white-space: nowrap;

@@ -41,7 +41,7 @@ import parseHtml from './lib/html-parser.js'
 	copyCodeData.push(str)
 		let htmlCode = `<div class="markdown-wrap">`
 				// #ifndef MP-WEIXIN
-			htmlCode += `<div style="color: #aaa;text-align: right;font-size: 12px;padding:8px;">`
+			htmlCode += `<div style="color: #aaa;text-align: right;font-size: 32rpx;padding:8px;">`
 					htmlCode += `${lang}<a class="copy-btn" code-data-index="${copyCodeData.length - 1}" style="margin-left: 8px;">复制代码</a>`
 					htmlCode += `</div>`
 				// #endif
@@ -101,23 +101,23 @@ let {"code-data-index":codeDataIndex,"class":className} = attrs
 
 <style lang="scss" scoped>
 .ua__markdown {
-	  font-size: 14px;line-height: 1.5; word-break: break-all;
+	  font-size: $hr-font-size-base;line-height: 1.5; word-break: break-all;
 	  h1,h2,h3,h4,h5,h6 {
 	       font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;
 	    }
 	  h1,h2,h3 {margin-top: 20px;margin-bottom: 10px}
 	   h4,h5,h6 {margin-top: 10px;margin-bottom: 10px}
-	    .h1,h1 {font-size: 36px
+	    .h1,h1 {font-size: 72rpx
 	    }
-	   .h2,h2 {font-size: 30px
+	   .h2,h2 {font-size: $hr-font-size-xxl;
 	    }
-	  .h3,h3 {font-size: 24px
+	  .h3,h3 {font-size: $hr-font-size-xl;
 	    }
-	  .h4,h4 {font-size: 18px
+	  .h4,h4 {font-size: $hr-font-size-base;
 	    }
-	    .h5,h5 {font-size: 14px
+	    .h5,h5 {font-size: $hr-font-size-xs;
 	    }
-	  .h6,h6 {font-size: 12px
+	  .h6,h6 {font-size:$hr-font-size-xxs;
 	    }
 	 a {
 	     background-color: transparent;color: #2196f3;
@@ -163,10 +163,10 @@ let {"code-data-index":codeDataIndex,"class":className} = attrs
 code:empty {display: none;
 		}
 	  pre code.hljs {
-	      color: var(--vg__text-1); border-radius: 16px; background: var(--vg__bg-1);font-size: 12px;
+	      color: var(--vg__text-1); border-radius: 16px; background: var(--vg__bg-1);font-size: $hr-font-size-s;
 	    }
 .markdown-wrap {
-			font-size: 12px;margin-bottom: 10px;
+			font-size: $hr-font-size-s;margin-bottom: 10px;
 		}
 	    pre.code-block-wrapper {background: #2b2b2b;color: #f8f8f2;border-radius: 4px;overflow-x: auto;
 	        padding: 1em;
@@ -180,13 +180,13 @@ code:empty {display: none;
 	        border-radius: 0;
 	    }
 	    .code-block-header__copy {
-	        font-size: 16px;margin-left: 5px;
+	        font-size: $hr-font-size-base;margin-left: 5px;
 	    }
 	 abbr[data-original-title],abbr[title] {
 	        cursor: help;border-bottom: 1px dotted #777;
 	    }
 	    blockquote {
-	     padding: 10px 20px;margin: 0 0 20px;font-size: 17.5px;
+	     padding: 10px 20px;margin: 0 0 20px;font-size:$hr-font-size-xl;
 	        border-left: 5px solid #e5e5e5;
 	    }
 	 blockquote ol:last-child,blockquote p:last-child,blockquote ul:last-child {

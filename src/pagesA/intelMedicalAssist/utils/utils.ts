@@ -80,7 +80,7 @@ export const init = async (isMess) => {
     chunkStatus.value.isWXStreamApi = true;
   }
   isMess && isMess == '1' && initWithMess();
-  test();
+  // test();
   //  setTimeout(()=>{
   //  styleConfig.value.showHeader=false
   //  msgState.value.msgLoad=true
@@ -193,6 +193,11 @@ export const sendMsg = async (value: string) => {
     styleConfig.value.showHeader = false;
   }
   // #endif
+  const gStores = new GStores();
+  if (msgState.value.msgLoad || chunkStatus.value?.isTyping) {
+    gStores.messageStore.showMessage('正在为你解答，请稍等~', 3000);
+    return;
+  }
 
   chunkStatus.value?.isTyping && stopChunkRequest();
 
@@ -256,9 +261,9 @@ const switchHandleResult = (
         dealShowType1(list, requestId, chatId);
         break;
 
-      case 6:
-        //地址
-        dealShowType6(list, requestId, chatId);
+      case 7:
+        //医生名片
+        dealShowType7(list, requestId, chatId);
         break;
 
       case 9:
@@ -431,15 +436,15 @@ export const handleServer = (
 };
 
 export const clearChatId = async (id: string) => {
-  let lastMyContent = '';
-  let lastMsg: any = {};
-  msgList.value.forEach((item, index) => {
-    if (item?.requestId && item.requestId === id) {
-      lastMyContent = lastMsg.msg;
-    }
-    if (item.my) lastMsg = item;
-  });
-  lastMyContent && (msgState.value.msg = lastMyContent);
+  // let lastMyContent = '';
+  // let lastMsg: any = {};
+  // msgList.value.forEach((item, index) => {
+  //   if (item?.requestId && item.requestId === id) {
+  //     lastMyContent = lastMsg.msg;
+  //   }
+  //   if (item.my) lastMsg = item;
+  // });
+  // lastMyContent && (msgState.value.msg = lastMyContent);
   msgState.value.lastChatId = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
@@ -559,7 +564,7 @@ const dealShowType1 = (list, requestId, chatId) => {
   let index = 0; // 当前添加的字符索引
 };
 
-const dealShowType6 = (list, requestId, chatId) => {
+const dealShowType7 = (list, requestId, chatId) => {
   msgList.value.push({
     my: false,
     msg: '为您推荐以下医生和排班 ',
@@ -786,16 +791,17 @@ export const stopChunkRequest = () => {
 };
 
 const handleOneChunk = async (chunk: string, typeInIndex: number) => {
+  console.log('处理的数据:', chunk);
   if (chunk.includes('event:message')) {
     const idMatch = chunk.match(/id:(.*)/);
     let idStr = idMatch ? idMatch[1] : null;
     const id = idStr?.split(',')[0];
-    const questionId=idStr?.split(',')[1];
+    const questionId = idStr?.split(',')[1];
     // 提取data:和event:message之间的字符
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
     // console.log('解析的数据');
-    console.log('ID:', id,questionId);
+    console.log('ID:', id, questionId);
     // console.log('Data:', data);
     // const regex = /data:([\s\S]*?)event:message/;
     // const match = chunk.match(regex);
@@ -817,7 +823,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
       console.warn('未截取到标志文本:');
     }
   } else {
-    const jsonMatch = chunk.match(/data:(\{.*\})/);
+    const jsonMatch = chunk.replaceAll('\r\n', '').match(/data:(\{.*\})/);
     const jsonData = JSON.parse(jsonMatch?.length ? jsonMatch[1] : '{}');
     console.log('提取的 JSON 数据:', jsonData);
     const { showType, list, requestId, chatId } = jsonData;
@@ -827,6 +833,12 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
 };
 
 const test = () => {
+  const str = `id:,1894569410019172352
+data:{"chatId":"","list":[{"date":["2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"},{"date":["2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"}],"requestId":"1894569447688216576","showType":7}
+event:json
+:`;
+  handleOneChunk(str, 0);
+  return;
   const data = {
     list: [
       {
