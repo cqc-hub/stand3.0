@@ -289,8 +289,12 @@
   };
 
   const regConfirm = throttle(async () => {
-    const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
-      pageConfig.value;
+    const {
+      isOrderPay,
+      wxOrderSubscribeMessage,
+      isOrderWithoutPat,
+      isConfirmOrderWithDeptTip,
+    } = pageConfig.value;
     /**
      * 未填写参数
      *
@@ -341,6 +345,28 @@
 
     if (regVerificationMode === '2' && realNameAuth === '0') {
       await handlerConfirmPatReal();
+    }
+
+    if (isConfirmOrderWithDeptTip === '1') {
+      console.log('first');
+      const { result: { recommendation = '' } = {} } = await api
+        .getDeptDetail({
+          hosDeptId,
+        })
+        .catch(() => ({} as any));
+
+      if (recommendation) {
+        await new Promise<{ confirm: boolean }>((r) => {
+          gStores.messageStore.showMessage(recommendation, 0, {
+            useDialog: true,
+            dialogOpt: {
+              title: '预约挂号温馨提示',
+              isShowCancel: false,
+            },
+            closeCallBack: r,
+          });
+        });
+      }
     }
 
     if (isWaitReg.value) {
@@ -690,7 +716,7 @@
   onLoad(async (p) => {
     uni.showLoading({});
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
-    console.log(props.value)
+    console.log(props.value);
     isOver.value = true;
     isWaitReg.value &&
       uni.setNavigationBarTitle({
