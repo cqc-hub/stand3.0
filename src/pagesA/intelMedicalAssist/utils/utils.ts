@@ -422,6 +422,7 @@ export const onBlur = (value) => {
 };
 
 export const handleGuess = (item) => {
+  msgState.value.lastChatId = '';
   sendMsg(item.value);
 };
 
@@ -445,6 +446,9 @@ export const clearChatId = async (id: string) => {
   //   if (item.my) lastMsg = item;
   // });
   // lastMyContent && (msgState.value.msg = lastMyContent);
+  const gStores = new GStores();
+  msgState.value.lastChatId === ''&&gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
+  
   msgState.value.lastChatId = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
@@ -535,17 +539,20 @@ const dealShowType1withStream = async (
       });
     }
     let index = 0; // 当前添加的字符索引
-    const interval = setInterval(() => {
-      if (index < answer?.length) {
-        // 将当前字符添加到目标变量
-        msgList.value[typeInIndex].msg += answer[index];
-        index++;
-      } else {
-        scrollToNewMsg();
-        clearInterval(interval); // 停止定时器
-        rl('');
-      }
-    }, 70);
+    msgList.value[typeInIndex].msg += answer;
+    scrollToNewMsg();
+    rl('');
+    // const interval = setInterval(() => {
+    //   if (index < answer?.length) {
+    //     // 将当前字符添加到目标变量
+    //     msgList.value[typeInIndex].msg += answer[index];
+    //     index++;
+    //   } else {
+    //     scrollToNewMsg();
+    //     clearInterval(interval); // 停止定时器
+    //     rl('');
+    //   }
+    // }, 5);
   });
 };
 

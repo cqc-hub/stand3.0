@@ -466,12 +466,14 @@ export interface ISystemConfig_ {
     navBtns?: TButtonConfig[];
     //智能医助
     intelMedicalAssistConfig?: {
+      //是否替换首页的搜索框
+      isReplaceHomeSearch?: '1';
       //微信小程序是否启用流文本形式Api
       isWXStreamApi?: '1';
       //是否开启报告解读
       isReportAnalysis?: '1';
       guessAskList?: Array<{ label: string; value: string }>;
-      guessServerList?: Array<TButtonConfig&{isSelfMethod?:string}>;
+      guessServerList?: Array<TButtonConfig & { isSelfMethod?: string }>;
     };
     //智能陪诊
     medicalAsistantConfig?: {
@@ -595,6 +597,10 @@ type TBannerConfigSelf = {
   type: 'self';
 } & TBannerConfigBase;
 
+type TBannerConfigNet = {
+  type: 'netHospital';
+} & TBannerConfigBase;
+
 type TBannerConfigOtherProgram = {
   type: 'otherProgram';
   appId: string;
@@ -604,7 +610,7 @@ type TBannerConfigOtherProgram = {
 
 export type TBannerConfig = XOR<
   TBannerConfigOtherProgram,
-  XOR<TBannerConfigSelf, TBannerConfigH5>
+  XOR<TBannerConfigSelf, XOR<TBannerConfigNet, TBannerConfigH5>>
 >;
 
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {

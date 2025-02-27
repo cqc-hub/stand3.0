@@ -1,7 +1,5 @@
 <template>
-  <view
-    class="g-page"
-  >
+  <view class="g-page">
     <home-Nav />
     <scroll-view
       @scroll="pageScroll"
@@ -569,7 +567,16 @@
     goElectronicMedicalCard();
   };
 
-  const goSearch = () => {
+  const goSearch = async () => {
+    const pageConfig = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    );
+    if (pageConfig?.intelMedicalAssistConfig?.isReplaceHomeSearch === '1') {
+      uni.navigateTo({
+        url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
+      });
+      return
+    }
     let searchConfig = viewerStore.viewConfig[8]?.showFlag;
     if (searchConfig == 1) {
       uni.navigateTo({
