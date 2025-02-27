@@ -431,9 +431,31 @@ export const handleServer = (
 ) => {
   if (item?.isSelfMethod) {
     item.isSelfMethod == 'reportAnalysis' && reportShow();
+    item.isSelfMethod == 'openWxService' &&(openServicesChat(item.extraData))
+    item.isSelfMethod == 'makePhone' &&(makePhone(item.extraData))
   } else {
     useTBanner(item);
   }
+};
+export const openServicesChat = (query) => {
+
+  wx.openCustomerServiceChat({
+    extInfo: { url: query.extInfo },
+    corpId:query.corpId,
+    complete(res) {
+      console.log('打开企业微信', res);
+    },
+  });
+};
+
+export const makePhone = (query) => {
+  console.log('makePhone')
+  uni.makePhoneCall({
+    phoneNumber: query.phone,
+    fail(res) {
+      console.warn('拨打电话失败原因', res);
+    },
+  });
 };
 
 export const clearChatId = async (id: string) => {
@@ -447,7 +469,7 @@ export const clearChatId = async (id: string) => {
   // });
   // lastMyContent && (msgState.value.msg = lastMyContent);
   const gStores = new GStores();
-  msgState.value.lastChatId === ''&&gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
+  msgState.value.lastChatId !== ''&&gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
   
   msgState.value.lastChatId = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
@@ -725,8 +747,8 @@ let taskQueue = new TaskQueue();
 const typeInAsk = (value) => {
   const gStores = new GStores();
   const settings = {
-    url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
-    // url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
+    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
     // url: "http://10.10.117.58:9907/customer/aiStreamAsk",
     method: 'POST',
     timeout: 0,

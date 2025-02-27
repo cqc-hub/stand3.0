@@ -466,6 +466,7 @@ export interface ISystemConfig_ {
     navBtns?: TButtonConfig[];
     //智能医助
     intelMedicalAssistConfig?: {
+      isOpenWxServiceBtn?: Object;
       //是否替换首页的搜索框
       isReplaceHomeSearch?: '1';
       //微信小程序是否启用流文本形式Api
