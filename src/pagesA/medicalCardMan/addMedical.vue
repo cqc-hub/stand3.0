@@ -374,8 +374,6 @@
 
     await injectHealthCode(requestData);
 
-
-
     const {
       isFace,
       isPayWithoutSecretAuth,
@@ -452,13 +450,13 @@
       }
     } else {
       if (
-      requestData.wechatCode &&
-      pageProps.value?._healthType == 'addPat' &&
-      pageProps.value?.authCode
-    ) {
-      gotoChosseVerifyPage(requestData, pageProps.value.authCode);
-      return;
-    }
+        requestData.wechatCode &&
+        pageProps.value?._healthType == 'addPat' &&
+        pageProps.value?.authCode
+      ) {
+        gotoChosseVerifyPage(requestData, pageProps.value.authCode);
+        return;
+      }
       const patientId = await patientUtils
         .addRelevantPatient(requestData)
         .catch(async (e) => {
@@ -645,6 +643,7 @@
       ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
       formKey.patientPhone,
       formKey.defaultFalg,
+      formKey.referenceId,
     ];
 
     // 判断是否需要民族
