@@ -38,6 +38,7 @@ export const formKey = <const>{
   defaultFalg: 'defaultFalg',
   nation: 'nation',
   isUserInfoShareAgree: 'isUserInfoShareAgree',
+  referenceId: 'referenceId'
 };
 
 export type TCardPat = {
@@ -320,6 +321,15 @@ export const tempList: TInstance[] = [
         success: true,
       });
     },
+  },
+
+  {
+    label: '推荐人工号',
+    field: 'input-text',
+    placeholder: '请输入',
+    key: 'referenceId',
+    labelWidth: '220rpx',
+    maxlength: 50,
   },
 
   {
@@ -1093,7 +1103,7 @@ export const gotoChosseVerifyPage = async (
 export const backWithFaceVerify = async (
   orderId: string,
   redirectUrl: string,
-  verifyType: string,
+  verifyType: string
 ) => {
   const gStores = new GStores();
   const globalStore = gStores.globalStore;

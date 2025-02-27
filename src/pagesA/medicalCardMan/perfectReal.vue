@@ -434,7 +434,8 @@
             name: formData.value.patientName,
             phone1: formData.value.patientPhone,
             verifyCode: formData.value.verifyCode,
-            verifyType: (formData.value[formKey.verifyCode] && '2&kq') || '1&bk',
+            verifyType:
+              (formData.value[formKey.verifyCode] && '2&kq') || '1&bk',
           },
           pageProps.value.authCode,
           'quickRegisterHealthCard',
@@ -670,6 +671,7 @@
       'verifyCode',
       'isUserInfoShareAgree',
       'defaultFalg',
+      'referenceId',
     ];
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
