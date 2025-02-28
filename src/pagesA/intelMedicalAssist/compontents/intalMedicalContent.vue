@@ -268,6 +268,7 @@
       line-height: 60rpx;
       .sysAppMore {
         line-height: 40rpx;
+        color:#888;
       }
     }
     .padding-chat {
