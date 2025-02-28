@@ -579,8 +579,9 @@
   const btnDisabled = computed(() => {
     let isDisabled = false;
     const formKeys = formList.map((o) => o.key);
+    const whiteKeys = ['referenceId'];
     Object.entries(formData.value).map(([key, value]) => {
-      if (formKeys.includes(key) && value === '') {
+      if (!whiteKeys.includes(key) && formKeys.includes(key) && value === '') {
         isDisabled = true;
       }
     });

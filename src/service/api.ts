@@ -1,5 +1,6 @@
 import service from './index';
 import { getSysCode } from '@/common/useToken';
+import globalGl from '@/config/global';
 import global from '@/config/global';
 import { useGlobalStore, IPat } from '@/stores';
 // ss
@@ -1177,4 +1178,27 @@ const authApi = {
     return service.post<T>('/phs-message/message/getStatus', parm(data), opt);
   },
 };
-export default { ...baseApi, ...queryApi, ...regApi, ...userApi, ...authApi };
+
+export default {
+  ...baseApi,
+  ...queryApi,
+  ...regApi,
+  ...userApi,
+  ...authApi,
+
+  // 获取国籍
+  getCountryList: async () => {
+    const { data = [] } = await new Promise<{
+      data: {
+        name_zh: string;
+      }[];
+    }>((complete) => {
+      uni.request({
+        url: globalGl.BASE_IMG + 'country.json',
+        complete: complete as any,
+      });
+    });
+
+    return data;
+  },
+};
