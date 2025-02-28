@@ -80,12 +80,12 @@
           </view>
         </view>
         <!-- #endif -->
-   
-   <view
+
+        <view
           class="input-send right ml20"
           :disabled="msgState.msgLoad"
           @click="reportShow"
-          v-if="hasWechatSI && isReportAnalysis "
+          v-if="hasWechatSI && isReportAnalysis"
         >
           <view class="circle">
             <img
@@ -97,7 +97,13 @@
         </view>
         <view
           class="bottom-dh-content"
-          :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ((hasWechatSI || isReportAnalysis) ?'short-input':'')"
+          :class="
+            !(hasWechatSI || isReportAnalysis)
+              ? 'long-input'
+              : hasWechatSI || isReportAnalysis
+              ? 'short-input'
+              : ''
+          "
           v-if="!isVoice && isShow"
         >
           <view class="border">
@@ -117,7 +123,13 @@
         </view>
         <view
           class="bottom-dh-content"
-            :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ((hasWechatSI || isReportAnalysis) ?'short-input':'')"
+          :class="
+            !(hasWechatSI || isReportAnalysis)
+              ? 'long-input'
+              : hasWechatSI || isReportAnalysis
+              ? 'short-input'
+              : ''
+          "
           v-if="isVoice"
           @longpress="handleVoice"
           @touchstart="touchStart"
@@ -129,10 +141,9 @@
           </view>
         </view>
         <!-- #ifdef  MP-WEIXIN -->
-    
 
         <view
-          v-if=" !chunkStatus.isTyping"
+          v-if="!chunkStatus.isTyping"
           @click="sendMsgByButtom"
           class="input-send right send-text f28 ml20"
         >
@@ -288,7 +299,7 @@
       isShow.value = false;
       setTimeout(() => {
         isShow.value = true;
-      }, 0);
+      }, 100);
     } else {
       reportShow();
     }
@@ -384,7 +395,9 @@
   onMounted(() => {
     getGuessServerBottom();
 
-    isShow.value = true;
+    setTimeout(() => {
+        isShow.value = true;
+      }, 0);
 
     // #ifdef  MP-WEIXIN
     initRecord();
@@ -460,7 +473,7 @@
     }
     .long-input {
       width: 580rpx !important;
-      .dh-input{
+      .dh-input {
         width: 580rpx !important;
       }
       .border {
@@ -469,9 +482,9 @@
         }
       }
     }
-    .short-input{
+    .short-input {
       width: 400rpx !important;
-      .dh-input{
+      .dh-input {
         width: 400rpx !important;
       }
       .border {
