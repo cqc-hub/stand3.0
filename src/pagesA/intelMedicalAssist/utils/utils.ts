@@ -69,9 +69,7 @@ export const chunkStatus = ref<ChunkStatusType>({
   chunkTemp: '',
 });
 
-export const reload = async (isMess) => {
- 
-};
+export const reload = async (isMess) => {};
 
 export const init = async (isMess) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
@@ -293,6 +291,9 @@ const switchHandleResult = (
         dealShowType7(list, requestId, chatId);
         break;
 
+        case 6:
+          dealShowType6(list, requestId, chatId);
+          break;
       case 9:
         //地址
         dealShowType9(list, requestId, chatId);
@@ -415,7 +416,17 @@ export const sendImg = async () => {
       phsId: isOpenSm4 ? '81681766' : '81681688',
     },
   });
-  const { result } = JSON.parse(data);
+  const { result, code, message } = JSON.parse(data);
+  if (code == 1) {
+    msgList.value.push({
+      my: false,
+      msg: '啊哦～网络连接异常，请稍后尝试。',
+      type: -1,
+    });
+    msgState.value.msgLoad = false;
+    console.error('picTrans接口报错', JSON.parse(data));
+    return;
+  }
 
   const { showType, list, requestId, chatId } = result;
   dealShowType12(list, requestId, chatId);
@@ -619,10 +630,31 @@ const dealShowType1 = (list, requestId, chatId) => {
 };
 
 const dealShowType7 = (list, requestId, chatId) => {
+  let myList = list;
+  if (list?.length) {
+    myList = list.map((item, index) => {
+      // @ts-expect-error
+      item.date = item.date.sort((a, b) => new Date(a) - new Date(b));
+      return item;
+    });
+  }
   msgList.value.push({
     my: false,
     msg: '为您推荐以下医生和排班 ',
     type: 61,
+    addRessList: myList,
+    requestId,
+    chatId,
+    isSysAppMore: false,
+  });
+};
+
+const dealShowType6 = (list, requestId, chatId) => {
+
+  msgList.value.push({
+    my: false,
+    msg: '建议您到以下科室挂号就诊',
+    type: 62,
     addRessList: list,
     requestId,
     chatId,
@@ -880,19 +912,46 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     const jsonData = JSON.parse(jsonMatch?.length ? jsonMatch[1] : '{}');
     console.log('提取的 JSON 数据:', jsonData);
     const { showType, list, requestId, chatId } = jsonData;
+    if (JSON.stringify({}) === '[{}]') {
+      msgList.value.push({
+        my: false,
+        msg: '啊哦～网络连接异常，请稍后尝试。',
+        type: -1,
+      });
+      return;
+    }
     chatId && (msgState.value.lastChatId = chatId);
     switchHandleResult(showType, list, requestId, chatId, typeInIndex);
   }
 };
 
 const test = () => {
+  // const str = `id:,1894569410019172352
+  // data:{"chatId":"","list":[{"date":["2025-03-10","2025-03-03","2025-03-04","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"},{"date":["2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"}],"requestId":"1894569447688216576","showType":6}
+  // event:json
+  // :`;
+  //   handleOneChunk(str, 0);
+  //   return;
   const data = {
-    showType: 9,
+    showType: 6,
     list: [
       {
-        terminalType: 'mini',
-        path: '/pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU&poi=A010211',
-        appId: 'wx8735a8a39cf58b5e',
+        deptName: '多学科门诊(杭州口腔医院)',
+        hosDeptId: '992246295136113548',
+        hosId: '13078',
+        hosName: '杭州口腔医院平海院区',
+      },
+      {
+        deptName: '多学科门诊(杭州口腔医院)',
+        hosDeptId: '992246295136113548',
+        hosId: '13078',
+        hosName: '杭州口腔医院平海院区',
+      },
+      {
+        deptName: '多学科门诊(杭州口腔医院)',
+        hosDeptId: '992246295136113548',
+        hosId: '13078',
+        hosName: '杭州口腔医院平海院区',
       },
     ],
   };

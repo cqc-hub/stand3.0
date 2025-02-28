@@ -1,7 +1,12 @@
 <template>
   <view class="doc-scheduling-container">
-    <view class="msg mb8 f28">
-      <text>{{ props.msg }}</text>
+    <view class="msg-container">
+      <view class="msg mb8 f28 pl32">
+        <text>{{ props.msg }}</text>
+      </view>
+      <view class="more mb8 f28 pr32" @click="gotoDept" v-if="props?.list[0]?.hosDeptId">
+        <text>更多医生</text>
+      </view>
     </view>
     <view
       class="doc-card-item mt40"
@@ -44,7 +49,9 @@
             v-for="(regItem, regIndex) in item?.date"
             :key="regIndex"
           >
-            <view class="reg-item" @click="chooseDocDate(item,regIndex)">{{ regItem.slice(5) }}</view>
+            <view class="reg-item" @click="chooseDocDate(item, regIndex)">
+              {{ regItem.slice(5) }}
+            </view>
           </view>
           <view
             class="reg-area"
@@ -77,36 +84,59 @@
     msg: string;
   }>();
 
-
   onMounted(() => {
     console.log('DoctorCard mounted', props);
   });
 
   import { joinQueryForUrl } from '@/common';
   const gotoDocCard = (docInfo) => {
-    const { hosId, hosDocId, hosDeptId } = docInfo;
+    const { hosId, hosDocId, hosDeptId, docName } = docInfo;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         hosId,
         hosDocId,
         hosDeptId,
+        docName,
       }),
     });
   };
-  const chooseDocDate = (docInfo,date)=>{
-    console.log('docInfo,date',docInfo,date)
-    gotoDocCard(docInfo)
-  }
+  const chooseDocDate = (docInfo, date) => {
+    console.log('docInfo,date', docInfo, date);
+    gotoDocCard(docInfo);
+  };
+
+  const gotoDept = () => {
+    const docInfo = props?.list[0];
+    const { hosId, hosDeptId, deptName } = docInfo;
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/order', {
+        hosId,
+        hosDeptId,
+        deptName,
+      }),
+    });
+  };
 </script>
 <style lang="scss" scoped>
   .doc-scheduling-container {
     width: 100vw;
     transition: 0.5s;
-    .msg {
-      width: 95vw;
-      margin: auto;
-      color: $hr-neutral-color-9;
+    .msg-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100vw;
+      .msg {
+        // width: 95vw;
+
+        color: $hr-neutral-color-9;
+        width: fit-content;
+      }
+      .more {
+        color: $hr-brand-color-6;
+        width: fit-content;
+      }
     }
+
     .doc-card-item {
       //   letter-spacing: 1rpx;
       width: 85vw;
@@ -166,6 +196,9 @@
         }
         .reg-title {
           color: $hr-neutral-color-8;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .reg-item {
           color: $hr-brand-color-6;

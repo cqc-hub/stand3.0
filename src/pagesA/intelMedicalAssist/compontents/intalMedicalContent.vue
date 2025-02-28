@@ -67,9 +67,12 @@
             <view v-else-if="msgItem.type === 6 && messFormData.length">
               <Recommend-Remind />
             </view>
-            <view v-else-if="msgItem.type === 61 ">
+            <view v-else-if="msgItem.type === 61">
+              <Doc-Scheduling :list="msgItem.addRessList" :msg="msgItem.msg" />
+            </view>
 
-             <Doc-Scheduling  :list="msgItem.addRessList" :msg="msgItem.msg"/>
+            <view v-else-if="msgItem.type === 62">
+              <Recommend-Dept :list="msgItem.addRessList" :msg="msgItem.msg" />
             </view>
             <view
               v-else-if="msgItem.type === 99 && msgItem.msg"
@@ -217,6 +220,7 @@
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   import uaMarkdown from './ua-markdown/ua-markdown.vue';
   import DocScheduling from './DocScheduling.vue';
+  import RecommendDept from './RecommendDept.vue';
 
   const props = defineProps<{
     msgList: any[];
@@ -239,7 +243,7 @@
 </script>
 <style lang="scss" scoped>
   @import './intalMedicalAssists.scss';
-  .smartChatRoom-item{
+  .smartChatRoom-item {
     font-size: 28rpx;
   }
   .content-area {

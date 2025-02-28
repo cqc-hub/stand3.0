@@ -323,14 +323,14 @@ export const tempList: TInstance[] = [
     },
   },
 
-  {
-    label: '推荐人工号',
-    field: 'input-text',
-    placeholder: '请输入',
-    key: 'referenceId',
-    labelWidth: '220rpx',
-    maxlength: 50,
-  },
+  // {
+  //   label: '推荐人工号',
+  //   field: 'input-text',
+  //   placeholder: '请输入',
+  //   key: 'referenceId',
+  //   labelWidth: '220rpx',
+  //   maxlength: 50,
+  // },
 
   {
     field: 'switch',
