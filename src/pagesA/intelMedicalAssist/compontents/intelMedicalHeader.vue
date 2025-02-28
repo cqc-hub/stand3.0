@@ -73,7 +73,7 @@
               v-for="(item, index) in askItem"
               :key="item.value + index + 'scroll-row2'"
             >
-              {{ item.label }}
+              {{ item.value }}
             </view>
           </view>
         </view>

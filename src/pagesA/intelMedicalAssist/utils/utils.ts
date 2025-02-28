@@ -70,6 +70,19 @@ export const chunkStatus = ref<ChunkStatusType>({
 });
 
 export const reload = async (isMess) => {
+ 
+};
+
+export const init = async (isMess) => {
+  pageConfig.value = await ServerStaticData.getSystemConfig(
+    'Electronic_Consultation_Sheet'
+  );
+  if (pageConfig.value?.intelMedicalAssistConfig?.isReportAnalysis === '1') {
+    isReportAnalysis.value = true;
+  }
+  if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
+    chunkStatus.value.isWXStreamApi = true;
+  }
   popipHasShow.value = false;
   msgState.value = {
     msgLoad: false,
@@ -86,18 +99,6 @@ export const reload = async (isMess) => {
     historyMess: false,
   };
   isMess && isMess == '1' && initWithMess();
-};
-
-export const init = async (isMess) => {
-  pageConfig.value = await ServerStaticData.getSystemConfig(
-    'Electronic_Consultation_Sheet'
-  );
-  if (pageConfig.value?.intelMedicalAssistConfig?.isReportAnalysis === '1') {
-    isReportAnalysis.value = true;
-  }
-  if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
-    chunkStatus.value.isWXStreamApi = true;
-  }
   reload(isMess);
 
   // test();

@@ -80,9 +80,24 @@
           </view>
         </view>
         <!-- #endif -->
+   
+   <view
+          class="input-send right ml20"
+          :disabled="msgState.msgLoad"
+          @click="reportShow"
+          v-if="hasWechatSI && isReportAnalysis "
+        >
+          <view class="circle">
+            <img
+              class="bottom-icon"
+              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+              alt=""
+            />
+          </view>
+        </view>
         <view
           class="bottom-dh-content"
-          :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ''"
+          :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ((hasWechatSI || isReportAnalysis) ?'short-input':'')"
           v-if="!isVoice && isShow"
         >
           <view class="border">
@@ -102,6 +117,7 @@
         </view>
         <view
           class="bottom-dh-content"
+            :class="!(hasWechatSI || isReportAnalysis) ? 'long-input' : ((hasWechatSI || isReportAnalysis) ?'short-input':'')"
           v-if="isVoice"
           @longpress="handleVoice"
           @touchstart="touchStart"
@@ -113,23 +129,10 @@
           </view>
         </view>
         <!-- #ifdef  MP-WEIXIN -->
-        <view
-          class="input-send right ml20"
-          :disabled="msgState.msgLoad"
-          @click="reportShow"
-          v-if="hasWechatSI && isReportAnalysis  && !chunkStatus.isTyping"
-        >
-          <view class="circle">
-            <img
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
-              alt=""
-            />
-          </view>
-        </view>
+    
 
         <view
-          v-if="(!hasWechatSI || !isReportAnalysis) && !chunkStatus.isTyping"
+          v-if=" !chunkStatus.isTyping"
           @click="sendMsgByButtom"
           class="input-send right send-text f28 ml20"
         >
@@ -457,9 +460,23 @@
     }
     .long-input {
       width: 580rpx !important;
+      .dh-input{
+        width: 580rpx !important;
+      }
       .border {
         &::before {
           width: 580rpx !important;
+        }
+      }
+    }
+    .short-input{
+      width: 400rpx !important;
+      .dh-input{
+        width: 400rpx !important;
+      }
+      .border {
+        &::before {
+          width: 400rpx !important;
         }
       }
     }
