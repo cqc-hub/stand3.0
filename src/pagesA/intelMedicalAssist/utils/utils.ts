@@ -323,7 +323,7 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
         `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
       duration: duration === 0 ? 0 : duration || 300,
       success: () => {
-        console.log('滚动成功');
+        // console.log('滚动成功');
       },
       fail: (err) => {
         console.log('滚动失败：', err);
@@ -430,7 +430,7 @@ export const sendImg = async () => {
 };
 
 export const onBlur = (value) => {
-  console.log('onBlur', value);
+  // console.log('onBlur', value);
 };
 
 export const handleGuess = (item) => {
@@ -454,7 +454,6 @@ export const openServicesChat = (query) => {
     extInfo: { url: query.extInfo },
     corpId: query.corpId,
     complete(res) {
-      console.log('打开企业微信', res);
     },
   });
 };
@@ -832,7 +831,7 @@ export const stopChunkRequest = () => {
 };
 
 const handleOneChunk = async (chunk: string, typeInIndex: number) => {
-  console.log('处理的数据:', chunk);
+  // console.log('处理的数据:', chunk);
   if (chunk.includes('event:message')) {
     const idMatch = chunk.match(/id:(.*)/);
     let idStr = idMatch ? idMatch[1] : null;
@@ -842,8 +841,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
     // console.log('解析的数据');
-    console.log('ID:', id, questionId);
-    // console.log('Data:', data);
+    console.log('chatId:', id,';questionId:', questionId,";文本：" ,data);
     // const regex = /data:([\s\S]*?)event:message/;
     // const match = chunk.match(regex);
     id && (msgState.value.lastChatId = id);
