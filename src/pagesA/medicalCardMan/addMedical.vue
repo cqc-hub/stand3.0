@@ -1047,6 +1047,7 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    // api.getCountryList()
   });
 
   onMounted(async () => {
