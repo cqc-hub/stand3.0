@@ -37,7 +37,7 @@
       <view class="bottom-dh-char flex-row-around">
         <!-- #ifdef  MP-WEIXIN -->
         <view
-          class="input-send left mr20"
+          class="input-send m-left mr20"
           :disabled="msgState.msgLoad"
           @click="changeVoiceType"
           v-if="hasWechatSI || isReportAnalysis"
@@ -66,7 +66,7 @@
         <!-- #endif -->
         <!-- #ifndef  MP-WEIXIN -->
         <view
-          class="input-send left mr20"
+          class="input-send m-left mr20"
           :disabled="msgState.msgLoad"
           @click="reportShow"
           v-if="isReportAnalysis"
@@ -82,7 +82,7 @@
         <!-- #endif -->
 
         <view
-          class="input-send right ml20"
+          class="input-send m-right "
           :disabled="msgState.msgLoad"
           @click="reportShow"
           v-if="hasWechatSI && isReportAnalysis"
@@ -114,7 +114,7 @@
               @confirm="sendMsg"
               :disabled="msgState.msgLoad"
               placeholder-class="my-neirong-sm f28"
-              placeholder="  请输入症状/药品/疾病..."
+              placeholder="请输入症状/药品/疾病..."
               confirm-type="search"
               :focus="msgState.focus"
               @blur="onBlur"
@@ -136,16 +136,16 @@
           @touchmove="touchMove"
           @touchend="endRecord"
         >
-          <view class="border">
+          <!-- <view class="border"> -->
             <view class="dh-input f28 voice">按住说话</view>
-          </view>
+          <!-- </view> -->
         </view>
         <!-- #ifdef  MP-WEIXIN -->
 
         <view
           v-if="!chunkStatus.isTyping"
           @click="sendMsgByButtom"
-          class="input-send right send-text f28 ml20"
+          class="input-send m-right send-text f28 ml20"
         >
           <text>发送</text>
         </view>
@@ -160,7 +160,7 @@
         <!-- #ifndef  MP-WEIXIN -->
         <view
           @click="sendMsgByButtom"
-          class="input-send right send-text f28 ml20"
+          class="input-send m-right send-text f28 ml20"
         >
           <text>发送</text>
         </view>
@@ -472,20 +472,20 @@
       width: 100vw;
     }
     .long-input {
-      width: 580rpx !important;
+      // width: 580rpx !important;
       .dh-input {
-        width: 580rpx !important;
+        // width: 580rpx !important;
       }
       .border {
         &::before {
-          width: 580rpx !important;
+          // width: 580rpx !important;
         }
       }
     }
     .short-input {
-      width: 400rpx !important;
+      // width: 400rpx !important;
       .dh-input {
-        width: 400rpx !important;
+        // width: 400rpx !important;
       }
       .border {
         &::before {
@@ -495,29 +495,15 @@
     }
     .bottom-dh-content {
       height: 65rpx;
-      width: 500rpx;
-      //   margin: 0 16upx;
-      //   margin-right: 32upx;
-      display: flex;
-      align-items: center;
+       border-radius: 50px; 
+      flex:1;
       background-color: #fff;
-      border-radius: 50rpx;
-      .border {
+      border: 4rpx solid #ab51f5;
+      .border { 
+
         &::before {
-          display: block;
           content: '';
-          border-radius: 50rpx;
-          border: 4rpx solid transparent;
-          background: linear-gradient(270deg, #ab51f5, #296fff) border-box;
-          -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-            linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          top: 0;
-          position: absolute;
-          width: 500rpx;
-          height: 65rpx;
-          margin-top: 4rpx;
+          border: none;
         }
       }
 
@@ -534,15 +520,11 @@
       }
     }
     .input-send {
-      min-width: 70rpx;
+      width: 70rpx;
       // padding: 8upx;
       color: #bbbbbb;
-      //   width: 100upx;
-      // background-color: #fff;
-      // margin-right: 20upx;
+      white-space: nowrap; 
       font-size: 32upx;
-      position: relative;
-      //   right: 5upx;
       .circle {
         width: 70rpx;
         height: 70rpx;
@@ -557,22 +539,26 @@
         }
       }
     }
-    .right {
-      right: 15rpx;
+    .m-right {
+      margin-right: 15rpx;
     }
-    .left {
-      left: 15rpx;
+    .m-left {
+      margin-left: 15rpx;
     }
   }
   .dh-input {
-    width: 480rpx;
+    // width: 480rpx;
+    width: 100%;
     height: 65rpx;
-    border-radius: 10rpx;
-    padding-left: 15rpx;
+    // border-radius: 10rpx;
+    padding:0 25rpx;
     /*  #ifdef  MP-ALIPAY  */
     padding-top: 10rpx;
     /*  #endif  */
     background-color: inherit;
+    border-radius: 50rpx;
+    border-color: 4rpx solid #ab51f5 !important;
+    box-sizing: border-box;
   }
   .voice {
     display: flex;
@@ -600,7 +586,7 @@
     // background-color: #fff;
     height: 78rpx;
     width: 100%;
-    position: relative;
+    // position: relative;
     margin-bottom: 30rpx;
   }
   .flex-row-around {
