@@ -5,11 +5,10 @@
     </view>
     <view
       class="doc-card-item mt40"
-      @click="gotoDocCard(item)"
       v-for="(item, index) in props.list"
       :key="index"
     >
-      <view class="doc-header flex-normal">
+      <view class="doc-header flex-normal" @click="gotoDocCard(item)">
         <view class="photo">
           <image
             :src="'/static/image/order/order-doctor-avatar.png'"
@@ -35,14 +34,17 @@
         </view>
       </view>
       <view class="doc-footer flex-normal">
-        <view class="footer-conntent mt8 flex-normal">
+        <view
+          class="footer-conntent mt8 flex-normal"
+          :class="!item?.isCollapse ? 'isCollaps' : ''"
+        >
           <view class="reg-area reg-title">预约日期:</view>
           <view
             class="reg-area"
             v-for="(regItem, regIndex) in item?.date"
             :key="regIndex"
           >
-            <view class="reg-item">{{ regItem.slice(5) }}</view>
+            <view class="reg-item" @click="chooseDocDate(item,regIndex)">{{ regItem.slice(5) }}</view>
           </view>
           <view
             class="reg-area"
@@ -50,20 +52,20 @@
             :key="`block+${index}`"
           ></view>
         </view>
-        <!-- <view class="arrow-content">
+        <view class="arrow-content">
           <view
             class="icon-arrow1"
             v-if="item?.date.length > 4"
             @click="item.isCollapse = !item?.isCollapse"
           >
             <view
-              :class="{ 'open-arrow': item?.isCollapse }"
+              :class="{ 'open-arrow': !item?.isCollapse }"
               class="iconfont ico-arrow"
             >
               &#xe6c4;
             </view>
           </view>
-        </view> -->
+        </view>
       </view>
     </view>
   </view>
@@ -74,13 +76,14 @@
     list: any[];
     msg: string;
   }>();
+
+
   onMounted(() => {
     console.log('DoctorCard mounted', props);
   });
 
   import { joinQueryForUrl } from '@/common';
   const gotoDocCard = (docInfo) => {
-
     const { hosId, hosDocId, hosDeptId } = docInfo;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
@@ -90,11 +93,15 @@
       }),
     });
   };
+  const chooseDocDate = (docInfo,date)=>{
+    console.log('docInfo,date',docInfo,date)
+    gotoDocCard(docInfo)
+  }
 </script>
 <style lang="scss" scoped>
   .doc-scheduling-container {
     width: 100vw;
-
+    transition: 0.5s;
     .msg {
       width: 95vw;
       margin: auto;
@@ -155,6 +162,7 @@
           flex: 1 1 25%;
           font-size: $hr-font-size-xs;
           margin-top: 16rpx;
+          height: 60rpx;
         }
         .reg-title {
           color: $hr-neutral-color-8;
@@ -165,6 +173,8 @@
           border-radius: 12rpx;
           padding: 10rpx 25rpx;
           width: fit-content;
+          min-width: 90rpx;
+          text-align: center;
         }
       }
       .arrow-content {
@@ -173,7 +183,7 @@
         margin-top: 30rpx;
         // position: relative;
         // left: 15rpx;
-        width: 20rpx;
+        // width: 20rpx;
       }
       .ico-arrow {
         transition: all 0.1s linear;
@@ -186,5 +196,9 @@
         }
       }
     }
+  }
+  .isCollaps {
+    height: 80rpx;
+    overflow: hidden;
   }
 </style>

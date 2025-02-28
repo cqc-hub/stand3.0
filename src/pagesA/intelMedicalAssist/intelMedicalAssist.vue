@@ -40,7 +40,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { deQueryForUrl } from '@/common';
-  import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+  import { onLoad, onPageScroll,onShow } from '@dcloudio/uni-app';
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
@@ -59,6 +59,7 @@
     popipHasShow,
     inspectionAnalysis,
     stopChunkRequest,
+    reload,
   } from './utils/utils';
   import { throttle } from '@/utils';
 
@@ -112,6 +113,11 @@
     styleConfig.value.transition = true;
     scrollChangeView(e);
   });
+
+  onShow(()=>{
+    reload(props?.isMess)
+
+  })
 
   onLoad(() => {
     init(props?.isMess);

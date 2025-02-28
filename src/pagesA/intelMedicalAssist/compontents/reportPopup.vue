@@ -408,6 +408,7 @@
     height: calc(800upx + 200rpx);
     background: linear-gradient(180deg, #c8eaff 1%, #e8fcff);
     border-radius: 24rpx 24rpx 0px 0px;
+    transition: 0.5s;
   }
   .page {
     // background-color: #ffffff;

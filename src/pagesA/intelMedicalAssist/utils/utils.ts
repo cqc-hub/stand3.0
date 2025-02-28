@@ -69,6 +69,11 @@ export const chunkStatus = ref<ChunkStatusType>({
   chunkTemp: '',
 });
 
+export const reload =async(isMess)=>{
+  popipHasShow.value = false;
+  isMess && isMess == '1' && initWithMess();
+}
+
 export const init = async (isMess) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
@@ -79,7 +84,8 @@ export const init = async (isMess) => {
   if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
     chunkStatus.value.isWXStreamApi = true;
   }
-  isMess && isMess == '1' && initWithMess();
+  reload(isMess)
+  
   // test();
   //  setTimeout(()=>{
   //  styleConfig.value.showHeader=false
@@ -192,8 +198,14 @@ export const sendMsg = async (value: string) => {
   if (msgList.value.length == 0) {
     styleConfig.value.showHeader = false;
   }
+
   // #endif
   const gStores = new GStores();
+
+  if (!value) {
+    gStores.messageStore.showMessage('不能发送空白消息~', 3000);
+    return;
+  }
   if (msgState.value.msgLoad || chunkStatus.value?.isTyping) {
     gStores.messageStore.showMessage('正在为你解答，请稍等~', 3000);
     return;
@@ -431,17 +443,16 @@ export const handleServer = (
 ) => {
   if (item?.isSelfMethod) {
     item.isSelfMethod == 'reportAnalysis' && reportShow();
-    item.isSelfMethod == 'openWxService' &&(openServicesChat(item.extraData))
-    item.isSelfMethod == 'makePhone' &&(makePhone(item.extraData))
+    item.isSelfMethod == 'openWxService' && openServicesChat(item.extraData);
+    item.isSelfMethod == 'makePhone' && makePhone(item.extraData);
   } else {
     useTBanner(item);
   }
 };
 export const openServicesChat = (query) => {
-
   wx.openCustomerServiceChat({
     extInfo: { url: query.extInfo },
-    corpId:query.corpId,
+    corpId: query.corpId,
     complete(res) {
       console.log('打开企业微信', res);
     },
@@ -449,7 +460,7 @@ export const openServicesChat = (query) => {
 };
 
 export const makePhone = (query) => {
-  console.log('makePhone')
+  console.log('makePhone');
   uni.makePhoneCall({
     phoneNumber: query.phone,
     fail(res) {
@@ -469,8 +480,9 @@ export const clearChatId = async (id: string) => {
   // });
   // lastMyContent && (msgState.value.msg = lastMyContent);
   const gStores = new GStores();
-  msgState.value.lastChatId !== ''&&gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
-  
+  msgState.value.lastChatId !== '' &&
+    gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
+
   msgState.value.lastChatId = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
@@ -862,98 +874,103 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
 };
 
 const test = () => {
-  const str = `id:,1894569410019172352
-data:{"chatId":"","list":[{"date":["2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"},{"date":["2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"}],"requestId":"1894569447688216576","showType":7}
-event:json
-:`;
-  handleOneChunk(str, 0);
-  return;
-  const data = {
-    list: [
+  const data =
+    // list: [
+    //   {
+    //     date: [
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //     ],
+    //     deptName: '多学科门诊(杭州口腔医院)',
+    //     goodAt:
+    //       '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+    //     ampm: '2',
+    //     hosDeptId: '992246295136113548',
+    //     fee: '15.0',
+    //     ampmName: '下午',
+    //     hosId: '13078',
+    //     schDate: '2025-03-03',
+    //     schId: '2025-03-03_2_992870638711017806',
+    //     docName: '李琦',
+    //     schState: '0',
+    //     intro:
+    //       '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+    //     numRemain: 5,
+    //     hosDocId: '992870638711017806',
+    //     hosName: '杭州口腔医院平海院区',
+    //     docTitleName: '主治医师',
+    //   },
+    //   {
+    //     date: [
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //       '2025-03-03',
+    //     ],
+    //     deptName: '多学科门诊(杭州口腔医院)',
+    //     goodAt:
+    //       '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+    //     ampm: '2',
+    //     hosDeptId: '992246295136113548',
+    //     fee: '15.0',
+    //     ampmName: '下午',
+    //     hosId: '13078',
+    //     schDate: '2025-03-03',
+    //     schId: '2025-03-03_2_992870638711017806',
+    //     docName: '李琦',
+    //     schState: '0',
+    //     intro:
+    //       '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+    //     numRemain: 5,
+    //     hosDocId: '992870638711017806',
+    //     hosName: '杭州口腔医院平海院区',
+    //     docTitleName: '主治医师',
+    //   },
+    //   {
+    //     date: ['2025-03-03'],
+    //     deptName: '多学科门诊(杭州口腔医院)',
+    //     goodAt:
+    //       '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
+    //     ampm: '2',
+    //     hosDeptId: '992246295136113548',
+    //     fee: '15.0',
+    //     ampmName: '下午',
+    //     hosId: '13078',
+    //     schDate: '2025-03-03',
+    //     schId: '2025-03-03_2_992870638711017806',
+    //     docName: '李琦',
+    //     schState: '0',
+    //     intro:
+    //       '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
+    //     numRemain: 5,
+    //     hosDocId: '992870638711017806',
+    //     hosName: '杭州口腔医院平海院区',
+    //     docTitleName: '主治医师',
+    //   },
+    // ],
+    {
+    "showType": 9,
+    "list": [
       {
-        date: [
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-        ],
-        deptName: '多学科门诊(杭州口腔医院)',
-        goodAt:
-          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
-        ampm: '2',
-        hosDeptId: '992246295136113548',
-        fee: '15.0',
-        ampmName: '下午',
-        hosId: '13078',
-        schDate: '2025-03-03',
-        schId: '2025-03-03_2_992870638711017806',
-        docName: '李琦',
-        schState: '0',
-        intro:
-          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
-        numRemain: 5,
-        hosDocId: '992870638711017806',
-        hosName: '杭州口腔医院平海院区',
-        docTitleName: '主治医师',
-      },
-      {
-        date: [
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-          '2025-03-03',
-        ],
-        deptName: '多学科门诊(杭州口腔医院)',
-        goodAt:
-          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
-        ampm: '2',
-        hosDeptId: '992246295136113548',
-        fee: '15.0',
-        ampmName: '下午',
-        hosId: '13078',
-        schDate: '2025-03-03',
-        schId: '2025-03-03_2_992870638711017806',
-        docName: '李琦',
-        schState: '0',
-        intro:
-          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
-        numRemain: 5,
-        hosDocId: '992870638711017806',
-        hosName: '杭州口腔医院平海院区',
-        docTitleName: '主治医师',
-      },
-      {
-        date: ['2025-03-03'],
-        deptName: '多学科门诊(杭州口腔医院)',
-        goodAt:
-          '主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。',
-        ampm: '2',
-        hosDeptId: '992246295136113548',
-        fee: '15.0',
-        ampmName: '下午',
-        hosId: '13078',
-        schDate: '2025-03-03',
-        schId: '2025-03-03_2_992870638711017806',
-        docName: '李琦',
-        schState: '0',
-        intro:
-          '共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。',
-        numRemain: 5,
-        hosDocId: '992870638711017806',
-        hosName: '杭州口腔医院平海院区',
-        docTitleName: '主治医师',
-      },
-    ],
-
-    showType: 6,
+        "path": "/pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU&poi=A010202",
+        "question": "心血管内科地址",
+        "answer": "2号楼4楼",
+        "appId": "wx8735a8a39cf58b5e",
+        "showType": 9,
+        "terminalType": "mini",
+        "addition": {}
+      }
+    ]
   };
   const { showType, list } = data;
   switchHandleResult(showType, list, '', '');

@@ -24,14 +24,21 @@
     </view>
 
     <view class="header-hello">
-      <view class="en f32 pb24">
-        {{ `Hi,亲爱的用户` }}
-         <!-- {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }} -->
+      <view class="en f32 pb24 flex-normal">
+        <!-- {{ `Hi,亲爱的用户` }} -->
+        <view>
+          {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }}
+        </view>
+        <view @click="chooseAction">
+          <img
+            :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
+            class="w-full ml8"
+          />
+        </view>
       </view>
       <view class="cn f26">智能医助为您服务~</view>
     </view>
     <view class="person-say pt12 pb12 pl32 pr32">
-      
       <view class="key-in">
         <text>您可以说出您的问题，我将为您解答哦</text>
       </view>
@@ -71,18 +78,20 @@
         </view>
       </view>
     </view>
+    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
   </view>
 </template>
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { GStores } from '@/utils';
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
-
+  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
 
   const gStores = new GStores();
+  const actionSheet = ref<any>({});
   const props = defineProps<{
     guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
@@ -103,8 +112,22 @@
       return [[], []];
     }
   });
+
   const handleClickGuess = (guessItem) => {
     emits('click-guess', guessItem);
+  };
+
+  const chooseAction = () => {
+    console.log('_____________');
+    console.log('actionSheet', actionSheet.value);
+
+    if (actionSheet.value) {
+      actionSheet.value.show();
+    }
+  };
+
+  const choosePatHandler = ({ item }) => {
+    gStores.userStore.updatePatChoose(item);
   };
 </script>
 <style lang="scss" scoped>
@@ -164,6 +187,7 @@
     }
     .header-hello {
       top: 180rpx !important;
+      
     }
     .person-say {
       display: none;
@@ -177,7 +201,7 @@
         font-weight: 600;
         line-height: 50rpx;
         justify-content: center;
-        opacity:1;
+        opacity: 1;
       }
     }
     .guess-content {
@@ -242,6 +266,10 @@
         color: #00194c;
         text-align: left;
         line-height: 28rpx;
+      }
+      image{
+        width: 0.8em;
+        height:0.8em;
       }
     }
     .person-say {
