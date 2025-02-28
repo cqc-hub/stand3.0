@@ -117,7 +117,7 @@
           class="input-send right ml20"
           :disabled="msgState.msgLoad"
           @click="reportShow"
-          v-if="hasWechatSI && isReportAnalysis"
+          v-if="hasWechatSI && isReportAnalysis  && !chunkStatus.isTyping"
         >
           <view class="circle">
             <img

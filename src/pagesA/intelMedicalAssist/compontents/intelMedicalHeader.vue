@@ -27,10 +27,11 @@
       <view class="en f32 pb24 flex-normal">
         <!-- {{ `Hi,亲爱的用户` }} -->
         <view>
-          {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '用户'}` }}
+          {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '亲爱的用户'}` }}
         </view>
-        <view @click="chooseAction">
+        <view @click="chooseAction"   v-if="gStores?.userStore?.patChoose?.patientName ">
           <img
+        
             :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
             class="w-full ml8"
           />
