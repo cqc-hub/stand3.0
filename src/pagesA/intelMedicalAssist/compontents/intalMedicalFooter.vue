@@ -586,7 +586,7 @@
   }
   .stop-button {
     white-space: nowrap;
-    margin: 0 50rpx 0 0;
+    margin: 0 20rpx 0 0;
     color: #fff;
     background: #296fff;
     border: none;

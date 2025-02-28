@@ -392,7 +392,9 @@ export const inspectionAnalysis = async (reports) => {
         })
       }
       console.warn('setting',setting);
-      
+      msgState.value.msgLoad = true;
+      scrollToNewMsg();
+
       const { result } = await wx.request({
         ...setting,
         success: (response) => {
@@ -404,7 +406,11 @@ export const inspectionAnalysis = async (reports) => {
           //   gStores.messageStore.showMessage('err', response);
           // }
           const { showType, list, requestId, chatId } = response.data.result;
-          dealShowType12(list, requestId, chatId);
+          if(showType === 1){
+            dealShowType1(list, requestId, chatId);
+          }else{
+            dealShowType12(list, requestId, chatId);
+          }
         },
         fail: (err) => {
           console.log('errror', err);
@@ -421,6 +427,7 @@ export const inspectionAnalysis = async (reports) => {
         },
         complete: () => {
           scrollToNewMsg();
+          msgState.value.msgLoad = false;
           resolve(0);
         },
       });
