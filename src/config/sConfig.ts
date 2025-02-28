@@ -391,7 +391,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001046: {
     // isMessageBtnShowNew: '1',
-    isOpenWechatSI: true,
+    // isOpenWechatSI: true,
     isOpenHomeTabBarMessageBtn: '1',
     login: {
       isAliAuthBase: '1',

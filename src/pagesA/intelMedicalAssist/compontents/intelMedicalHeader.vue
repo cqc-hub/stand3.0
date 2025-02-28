@@ -88,6 +88,7 @@
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
+  import {popipHasShow,isPhoto} from '../utils/utils'
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
 
@@ -129,6 +130,8 @@
 
   const choosePatHandler = ({ item }) => {
     gStores.userStore.updatePatChoose(item);
+    popipHasShow.value=false
+    isPhoto.value=true
   };
 </script>
 <style lang="scss" scoped>

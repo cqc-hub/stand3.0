@@ -64,6 +64,7 @@
   .menu {
     background-color: #e8f4ff;
     border-radius: 0px 8px 8px 8px;
+    width: 85vw;
 
     .title {
       line-height: 32rpx;

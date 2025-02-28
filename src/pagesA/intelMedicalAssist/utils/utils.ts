@@ -1,4 +1,4 @@
-import { computed, ref, reactive, nextTick } from 'vue';
+import { computed, ref, reactive, nextTick, warn } from 'vue';
 import {
   type StyleConfigType,
   type MsgListType,
@@ -69,7 +69,10 @@ export const chunkStatus = ref<ChunkStatusType>({
   chunkTemp: '',
 });
 
-export const reload = async (isMess) => {};
+export const reload = async (isMess) => {
+  popipHasShow.value = false;
+  isPhoto.value = true;
+};
 
 export const init = async (isMess) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
@@ -81,7 +84,6 @@ export const init = async (isMess) => {
   if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
     chunkStatus.value.isWXStreamApi = true;
   }
-  popipHasShow.value = false;
   msgState.value = {
     msgLoad: false,
     lastChatId: '',
@@ -98,7 +100,7 @@ export const init = async (isMess) => {
   };
   isMess && isMess == '1' && initWithMess();
   reload(isMess);
-
+  // api.inspectionAnalysis({})
   // test();
   //  setTimeout(()=>{
   //  styleConfig.value.showHeader=false
@@ -358,24 +360,82 @@ export const reportShow = () => {
 };
 export const inspectionAnalysis = async (reports) => {
   msgState.value.msgLoad = true;
-  reportPopupRef.value.hide();
+  const gStores = new GStores();
+  try{
+    reportPopupRef.value.hide();
+
+  }catch(e){
+
+  }
   nextTick(() => {
     styleConfig.value.showHeader = false;
   });
   const allPromise: any[] = [];
   await reports.forEach(async (element) => {
     let promise = new Promise(async (resolve, reject) => {
-      const { result } = await api.inspectionAnalysis({
-        sysCode: globalGl.SYS_CODE,
-        source: 1,
-        repId: element.repId,
-        repType: 1,
-        extend: element.extend,
+      let setting={
+        url: `https://testphs.eheren.com/gateway/phs-extend/customer/inspectionAnalysis`,
+        method: 'POST',
+        responseType: 'text',
+        headers: {
+          'Content-Type': 'application/json',
+          phsId: isOpenSm4 ? '81681766' : '81681688',
+        },
+        data: JSON.stringify({
+          args: {
+            sysCode: globalGl.SYS_CODE,
+            source: 1,
+            repId: element.repId,
+            repType: 1,
+            extend: element.extend,
+          },
+        })
+      }
+      console.warn('setting',setting);
+      
+      const { result } = await wx.request({
+        ...setting,
+        success: (response) => {
+          // console.log(response, 'response________');
+          // let res: any = {};
+          // try {
+          //   res = JSON.parse(response);
+          // } catch (e) {
+          //   gStores.messageStore.showMessage('err', response);
+          // }
+          const { showType, list, requestId, chatId } = response.data.result;
+          dealShowType12(list, requestId, chatId);
+        },
+        fail: (err) => {
+          console.log('errror', err);
+          msgState.value.msgLoad = false;
+          if (err.errMsg == 'request:fail abort') {
+            gStores.messageStore.showMessage('已暂停生成', 3000);
+          } else {
+            msgList.value.push({
+              my: false,
+              msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
+              type: -1,
+            });
+          }
+        },
+        complete: () => {
+          scrollToNewMsg();
+          resolve(0);
+        },
       });
-      const { showType, list, requestId, chatId } = result;
-      dealShowType12(list, requestId, chatId);
-      scrollToNewMsg();
-      resolve(0);
+
+      // const { result } = await api.inspectionAnalysis({
+      //   sysCode: globalGl.SYS_CODE,
+      //   source: 1,
+      //   repId: element.repId,
+      //   repType: 1,
+      //   extend: element.extend,
+      // });
+      // const { showType, list, requestId, chatId } = result;
+      // dealShowType12(list, requestId, chatId);
+      // scrollToNewMsg();
+      // resolve(0);
     });
     allPromise.push(promise);
   });
@@ -397,7 +457,11 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-  reportPopupRef.value.hide();
+  try{
+    reportPopupRef.value.hide();
+  }catch(e){
+
+  }
   msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
@@ -408,7 +472,8 @@ export const sendImg = async () => {
   // uni.showLoading({})
   // @ts-expect-error
   const { data } = await apiAsync(uni.uploadFile, {
-    url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    url: `https://testphs.eheren.com/gateway/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     filePath: tempFilePaths[0],
     name: 'file',
     fileType: 'image',
@@ -634,7 +699,7 @@ const dealShowType7 = (list, requestId, chatId) => {
   if (list?.length) {
     myList = list.map((item, index) => {
       // @ts-expect-error
-      item.date = item.date.sort((a, b) => new Date(a) - new Date(b));
+      item.date = item.date.sort((a, b) => new Date(b) - new Date(a));
       return item;
     });
   }
@@ -662,11 +727,11 @@ const dealShowType6 = (list, requestId, chatId) => {
 };
 
 const dealShowType9 = (list, requestId, chatId) => {
-  if(list?.length){
-    list.forEach((item,index) => {
+  if (list?.length) {
+    list.forEach((item, index) => {
       msgList.value.push({
         my: false,
-        msg: '为您推荐: ',
+        msg: index == 0 ? '为您推荐: ' : '',
         type: 3,
         addRessList: [item],
         requestId,
@@ -674,9 +739,7 @@ const dealShowType9 = (list, requestId, chatId) => {
         isSysAppMore: judgeIsSysAppMore(requestId),
       });
     });
-    
   }
-
 };
 
 const dealShowType10 = (list, requestId, chatId) => {
@@ -809,8 +872,8 @@ let taskQueue = new TaskQueue();
 const typeInAsk = (value) => {
   const gStores = new GStores();
   const settings = {
-    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
-    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
+    // url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
     // url: "http://10.10.117.58:9907/customer/aiStreamAsk",
     method: 'POST',
     timeout: 0,
@@ -824,6 +887,7 @@ const typeInAsk = (value) => {
       args: {
         content: value,
         sysCode: gStores.globalStore.sysCode,
+        source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         // sysCode: 1001017,
         chatId: msgState.value.lastChatId,
       },
@@ -938,27 +1002,29 @@ const test = () => {
   //   handleOneChunk(str, 0);
   //   return;
   const data = {
-    showType: 9,
+    chatId: '',
     list: [
       {
-        path: '/subPackages/hospital/pages/search/index?subOrgCode=SUB_ORG9051101&anchorCode=A01020040000',
-        question: '心血管内科地址',
-        answer: '2号楼4楼',
-        appId: 'wx0aeb52a97a73acc3',
+        path: '/pages/index/index',
+        question: '镜湖院区内镜中心',
+        answer: '2楼内镜中心',
+        query:
+          '{"type":"8_2","typeData":{"buildingId":208089,"type":"1","hisName":"A020220"}}',
+        appId: 'wx0815c00f0b4bd7c3',
         showType: 9,
         terminalType: 'mini',
-        addition: {},
       },
       {
-        path: '/subPackages/hospital/pages/search/index?subOrgCode=SUB_ORG9051101&anchorCode=A01020040000',
-        question: '心血管内科地址',
-        answer: '2号楼4楼',
-        appId: 'wx0aeb52a97a73acc3',
+        path: '/pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU&poi=A010220',
+        question: '昌安院区内镜中心',
+        answer: '3楼13诊区',
+        appId: 'wx8735a8a39cf58b5e',
         showType: 9,
         terminalType: 'mini',
-        addition: {},
       },
     ],
+    requestId: '1895451830515920896',
+    showType: 9,
   };
   const { showType, list } = data;
   switchHandleResult(showType, list, '', '');

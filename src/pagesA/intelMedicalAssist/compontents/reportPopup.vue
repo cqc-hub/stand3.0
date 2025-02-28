@@ -11,7 +11,7 @@
           <view class="popup-title text-ellipsis f48 pt32 pb32">
             报告AI解读
           </view>
-          <view @click="reportPopupRef.hide" class="iconfont ico-close f48 p24">
+          <view @click="reportPopupRef?.hide" class="iconfont ico-close f48 p24">
             &#xe6cd;
           </view>
         </view>

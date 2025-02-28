@@ -64,10 +64,6 @@
     ],
     "usingComponents": true,
     "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
       "crossProgramPlugins": {
         "version": "latest",
         "provider": "wx12cec70855c0cacf"
