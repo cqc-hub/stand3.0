@@ -291,9 +291,9 @@ const switchHandleResult = (
         dealShowType7(list, requestId, chatId);
         break;
 
-        case 6:
-          dealShowType6(list, requestId, chatId);
-          break;
+      case 6:
+        dealShowType6(list, requestId, chatId);
+        break;
       case 9:
         //地址
         dealShowType9(list, requestId, chatId);
@@ -650,7 +650,6 @@ const dealShowType7 = (list, requestId, chatId) => {
 };
 
 const dealShowType6 = (list, requestId, chatId) => {
-
   msgList.value.push({
     my: false,
     msg: '建议您到以下科室挂号就诊',
@@ -663,15 +662,21 @@ const dealShowType6 = (list, requestId, chatId) => {
 };
 
 const dealShowType9 = (list, requestId, chatId) => {
-  msgList.value.push({
-    my: false,
-    msg: '为您推荐: ',
-    type: 3,
-    addRessList: list,
-    requestId,
-    chatId,
-    isSysAppMore: judgeIsSysAppMore(requestId),
-  });
+  if(list?.length){
+    list.forEach((item,index) => {
+      msgList.value.push({
+        my: false,
+        msg: '为您推荐: ',
+        type: 3,
+        addRessList: [item],
+        requestId,
+        chatId,
+        isSysAppMore: judgeIsSysAppMore(requestId),
+      });
+    });
+    
+  }
+
 };
 
 const dealShowType10 = (list, requestId, chatId) => {
@@ -933,25 +938,25 @@ const test = () => {
   //   handleOneChunk(str, 0);
   //   return;
   const data = {
-    showType: 6,
+    showType: 9,
     list: [
       {
-        deptName: '多学科门诊(杭州口腔医院)',
-        hosDeptId: '992246295136113548',
-        hosId: '13078',
-        hosName: '杭州口腔医院平海院区',
+        path: '/subPackages/hospital/pages/search/index?subOrgCode=SUB_ORG9051101&anchorCode=A01020040000',
+        question: '心血管内科地址',
+        answer: '2号楼4楼',
+        appId: 'wx0aeb52a97a73acc3',
+        showType: 9,
+        terminalType: 'mini',
+        addition: {},
       },
       {
-        deptName: '多学科门诊(杭州口腔医院)',
-        hosDeptId: '992246295136113548',
-        hosId: '13078',
-        hosName: '杭州口腔医院平海院区',
-      },
-      {
-        deptName: '多学科门诊(杭州口腔医院)',
-        hosDeptId: '992246295136113548',
-        hosId: '13078',
-        hosName: '杭州口腔医院平海院区',
+        path: '/subPackages/hospital/pages/search/index?subOrgCode=SUB_ORG9051101&anchorCode=A01020040000',
+        question: '心血管内科地址',
+        answer: '2号楼4楼',
+        appId: 'wx0aeb52a97a73acc3',
+        showType: 9,
+        terminalType: 'mini',
+        addition: {},
       },
     ],
   };

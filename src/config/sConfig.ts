@@ -308,6 +308,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001057: {
     isOpenPopularSci: '1',
+    isOpenWechatSI: true,
     medicalCardDetailPackageDomain: 'https://01-h5-health.tengmed.com',
     medicalMHelp: {
       isOpenPatToMedicalPat: {},

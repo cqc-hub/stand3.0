@@ -1,5 +1,5 @@
 <template>
-  <view class="g-border-top mt12 w100p lineH48">
+  <view class="g-border-top mt12 w100p lineH48" >
     <view
       v-for="(item,index) in showList"
       :key="`recommendAddress${index}`"

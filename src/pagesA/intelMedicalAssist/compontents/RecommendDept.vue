@@ -107,4 +107,7 @@
     border-radius: 36rpx;
     margin:24rpx 0;
   }
+  .dept-header{
+    width:100%;
+  }
 </style>
