@@ -466,6 +466,7 @@ export interface ISystemConfig_ {
     navBtns?: TButtonConfig[];
     //智能医助
     intelMedicalAssistConfig?: {
+      //企微客服按钮，例{"extInfo": "https://work.weixin.qq.com/kfid/kfc0987f35e21a6f2bd","corpId": "wwdbaea46632b03769"}
       isOpenWxServiceBtn?: Object;
       //是否替换首页的搜索框
       isReplaceHomeSearch?: '1';
@@ -474,6 +475,9 @@ export interface ISystemConfig_ {
       //是否开启报告解读
       isReportAnalysis?: '1';
       guessAskList?: Array<{ label: string; value: string }>;
+      //isSelfMethod:reportAnalysis 报告解读功能
+      //isSelfMethod:openWxService 唤起企业微信 在 "extraData"中跟isOpenWxServiceBtn的参数一致
+      //isSelfMethod:makePhone 唤起手机电话  例：在 "extraData"中{"phone":"400-060-0763"}
       guessServerList?: Array<TButtonConfig & { isSelfMethod?: string }>;
     };
     //智能陪诊
