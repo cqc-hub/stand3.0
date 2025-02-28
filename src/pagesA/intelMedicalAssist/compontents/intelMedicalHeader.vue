@@ -65,7 +65,7 @@
               v-for="(item, index) in askItem"
               :key="item.value + index + 'scroll-row'"
             >
-              {{ item.label }}
+              {{ item.value }}
             </view>
             <view
               @click="handleClickGuess(item)"
