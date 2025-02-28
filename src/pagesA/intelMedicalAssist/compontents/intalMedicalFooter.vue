@@ -82,7 +82,7 @@
         <!-- #endif -->
 
         <view
-          class="input-send m-right "
+          class="input-send"
           :disabled="msgState.msgLoad"
           @click="reportShow"
           v-if="hasWechatSI && isReportAnalysis"
@@ -97,13 +97,6 @@
         </view>
         <view
           class="bottom-dh-content"
-          :class="
-            !(hasWechatSI || isReportAnalysis)
-              ? 'long-input'
-              : hasWechatSI || isReportAnalysis
-              ? 'short-input'
-              : ''
-          "
           v-if="!isVoice && isShow"
         >
           <view class="border">
@@ -123,13 +116,6 @@
         </view>
         <view
           class="bottom-dh-content"
-          :class="
-            !(hasWechatSI || isReportAnalysis)
-              ? 'long-input'
-              : hasWechatSI || isReportAnalysis
-              ? 'short-input'
-              : ''
-          "
           v-if="isVoice"
           @longpress="handleVoice"
           @touchstart="touchStart"
@@ -471,31 +457,10 @@
       align-items: center;
       width: 100vw;
     }
-    .long-input {
-      // width: 580rpx !important;
-      .dh-input {
-        // width: 580rpx !important;
-      }
-      .border {
-        &::before {
-          // width: 580rpx !important;
-        }
-      }
-    }
-    .short-input {
-      // width: 400rpx !important;
-      .dh-input {
-        // width: 400rpx !important;
-      }
-      .border {
-        &::before {
-          width: 400rpx !important;
-        }
-      }
-    }
     .bottom-dh-content {
       height: 65rpx;
-       border-radius: 50px; 
+      border-radius: 50px; 
+      margin-left:10px;
       flex:1;
       background-color: #fff;
       border: 4rpx solid #ab51f5;
