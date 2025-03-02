@@ -40,7 +40,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { deQueryForUrl } from '@/common';
-  import { onLoad, onPageScroll,onShow } from '@dcloudio/uni-app';
+  import { onLoad, onPageScroll,onShow,onShareAppMessage } from '@dcloudio/uni-app';
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
@@ -101,7 +101,12 @@
     styleConfig.value.showHeader = !styleConfig.value.showHeader;
   };
   changeShowHeader = throttle(changeShowHeader, 1000);
-
+  onShareAppMessage((opt) => {
+    return {
+      path:
+        '/pagesA/intelMedicalAssist/intelMedicalAssist',
+    };
+  });
   onMounted(() => {
     // if (styleConfig.value.isMessage && !styleConfig.value.showHeader) {
     //   styleConfig.value.showHeader = true;

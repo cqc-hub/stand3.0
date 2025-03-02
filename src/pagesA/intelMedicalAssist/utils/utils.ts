@@ -361,88 +361,90 @@ export const reportShow = () => {
 export const inspectionAnalysis = async (reports) => {
   msgState.value.msgLoad = true;
   const gStores = new GStores();
-  try{
+  try {
     reportPopupRef.value.hide();
-
-  }catch(e){
-
-  }
+  } catch (e) {}
   nextTick(() => {
     styleConfig.value.showHeader = false;
   });
   const allPromise: any[] = [];
+  msgState.value.msgLoad = true;
   await reports.forEach(async (element) => {
     let promise = new Promise(async (resolve, reject) => {
-      let setting={
-        url: `https://testphs.eheren.com/gateway/phs-extend/customer/inspectionAnalysis`,
-        method: 'POST',
-        responseType: 'text',
-        headers: {
-          'Content-Type': 'application/json',
-          phsId: isOpenSm4 ? '81681766' : '81681688',
-        },
-        data: JSON.stringify({
-          args: {
-            sysCode: globalGl.SYS_CODE,
-            source: 1,
-            repId: element.repId,
-            repType: 1,
-            extend: element.extend,
-          },
-        })
-      }
-      console.warn('setting',setting);
-      msgState.value.msgLoad = true;
-      scrollToNewMsg();
-
-      const { result } = await wx.request({
-        ...setting,
-        success: (response) => {
-          // console.log(response, 'response________');
-          // let res: any = {};
-          // try {
-          //   res = JSON.parse(response);
-          // } catch (e) {
-          //   gStores.messageStore.showMessage('err', response);
-          // }
-          const { showType, list, requestId, chatId } = response.data.result;
-          if(showType === 1){
-            dealShowType1(list, requestId, chatId);
-          }else{
-            dealShowType12(list, requestId, chatId);
-          }
-        },
-        fail: (err) => {
-          console.log('errror', err);
-          msgState.value.msgLoad = false;
-          if (err.errMsg == 'request:fail abort') {
-            gStores.messageStore.showMessage('已暂停生成', 3000);
-          } else {
-            msgList.value.push({
-              my: false,
-              msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
-              type: -1,
-            });
-          }
-        },
-        complete: () => {
-          scrollToNewMsg();
-          msgState.value.msgLoad = false;
-          resolve(0);
-        },
-      });
-
-      // const { result } = await api.inspectionAnalysis({
-      //   sysCode: globalGl.SYS_CODE,
-      //   source: 1,
-      //   repId: element.repId,
-      //   repType: 1,
-      //   extend: element.extend,
-      // });
-      // const { showType, list, requestId, chatId } = result;
-      // dealShowType12(list, requestId, chatId);
+      // let setting={
+      //   url: `https://testphs.eheren.com/gateway/phs-extend/customer/inspectionAnalysis`,
+      //   method: 'POST',
+      //   responseType: 'text',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     phsId: isOpenSm4 ? '81681766' : '81681688',
+      //   },
+      //   data: JSON.stringify({
+      //     args: {
+      //       sysCode: globalGl.SYS_CODE,
+      //       source: 1,
+      //       repId: element.repId,
+      //       repType: 1,
+      //       extend: element.extend,
+      //     },
+      //   })
+      // }
+      // console.warn('setting',setting);
+      //
       // scrollToNewMsg();
-      // resolve(0);
+
+      // const { result } = await wx.request({
+      //   ...setting,
+      //   success: (response) => {
+      //     // console.log(response, 'response________');
+      //     // let res: any = {};
+      //     // try {
+      //     //   res = JSON.parse(response);
+      //     // } catch (e) {
+      //     //   gStores.messageStore.showMessage('err', response);
+      //     // }
+      //     const { showType, list, requestId, chatId } = response.data.result;
+      //     if(showType === 1){
+      //       dealShowType1(list, requestId, chatId);
+      //     }else{
+      //       dealShowType12(list, requestId, chatId);
+      //     }
+      //   },
+      //   fail: (err) => {
+      //     console.log('errror', err);
+      //     msgState.value.msgLoad = false;
+      //     if (err.errMsg == 'request:fail abort') {
+      //       gStores.messageStore.showMessage('已暂停生成', 3000);
+      //     } else {
+      //       msgList.value.push({
+      //         my: false,
+      //         msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
+      //         type: -1,
+      //       });
+      //     }
+      //   },
+      //   complete: () => {
+      //     scrollToNewMsg();
+      //     msgState.value.msgLoad = false;
+      //     resolve(0);
+      //   },
+      // });
+
+      const { result } = await api.inspectionAnalysis({
+        sysCode: globalGl.SYS_CODE,
+        source: 1,
+        repId: element.repId,
+        repType: 1,
+        extend: element.extend,
+      });
+      const { showType, list, requestId, chatId } = result;
+      if (showType === 1) {
+        dealShowType1(list, requestId, chatId);
+      } else {
+        dealShowType12(list, requestId, chatId);
+      }
+      scrollToNewMsg();
+      resolve(0);
     });
     allPromise.push(promise);
   });
@@ -464,11 +466,9 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-  try{
+  try {
     reportPopupRef.value.hide();
-  }catch(e){
-
-  }
+  } catch (e) {}
   msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
@@ -479,8 +479,8 @@ export const sendImg = async () => {
   // uni.showLoading({})
   // @ts-expect-error
   const { data } = await apiAsync(uni.uploadFile, {
-    url: `https://testphs.eheren.com/gateway/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
-    // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     filePath: tempFilePaths[0],
     name: 'file',
     fileType: 'image',
@@ -706,7 +706,8 @@ const dealShowType7 = (list, requestId, chatId) => {
   if (list?.length) {
     myList = list.map((item, index) => {
       // @ts-expect-error
-      item.date = item.date.sort((a, b) => new Date(b) - new Date(a));
+      item.date = item.date.sort((a, b) => new Date(a) - new Date(b));
+      console.log(88888, item.date);
       return item;
     });
   }
@@ -879,8 +880,8 @@ let taskQueue = new TaskQueue();
 const typeInAsk = (value) => {
   const gStores = new GStores();
   const settings = {
-    url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
-    // url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
+    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
     // url: "http://10.10.117.58:9907/customer/aiStreamAsk",
     method: 'POST',
     timeout: 0,
