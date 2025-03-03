@@ -247,6 +247,7 @@ const scJson: Record<string, ISConfig> = {
   1001054: {
     isOpenHomeTabBarNetWorkBtn: '1',
     isHideHomeSearch: '1',
+    isOpenWechatSI:true,
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 

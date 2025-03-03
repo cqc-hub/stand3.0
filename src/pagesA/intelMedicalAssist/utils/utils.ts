@@ -108,7 +108,7 @@ export const init = async (isMess) => {
   //  },200)
 };
 
-const initWithMess = async () => {
+export const initWithMess = async () => {
   const gStores = new GStores();
   styleConfig.value = {
     transition: false, //初始过渡效果
@@ -142,11 +142,11 @@ const initWithMess = async () => {
     item.patientNameEncry = gStores?.userStore?.patChoose?.patientName;
     return item;
   });
-  msgList.value.push({
+  msgList.value=[{
     my: false,
     type: 6,
     // type: 7,
-  });
+  }];
   messFormData.value.length &&
     messFormData.value.forEach((item, index) => {
       const hisList: Array<MessFormListType> = [];
@@ -206,8 +206,13 @@ export const recommendMenuList = [
     key: 'serviceCenter',
   },
 ];
-
-export const sendMsg = async (str: string) => {
+/**
+ * 
+ * @param str 提问内容
+ * @param answertype 回答模式：0普通；1常见问答
+ * @returns 
+ */
+export const sendMsg = async (str: string,answertype?:1|0) => {
   // #ifdef  MP-ALIPAY
   // console.log('msgList.value.length',msgList.value.length)
   if (msgList.value.length == 0) {
@@ -234,10 +239,11 @@ export const sendMsg = async (str: string) => {
     type: 1,
   });
   msgState.value.msgLoad = true;
+  console.log("_____________",msgState.value.msgLoad)
   scrollToNewMsg();
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
-    typeInAsk(value);
+    typeInAsk(value,answertype||0);
     return;
   }
   // #endif
@@ -248,6 +254,7 @@ export const sendMsg = async (str: string) => {
       content: value,
       sysCode: globalGl.SYS_CODE,
       source: 1,
+      type:answertype||0,
       chatId: msgState.value.lastChatId,
     })
     .finally(() => {
@@ -360,7 +367,7 @@ export const reportShow = () => {
 };
 export const inspectionAnalysis = async (reports) => {
   msgState.value.msgLoad = true;
-  const gStores = new GStores();
+
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
@@ -533,7 +540,7 @@ export const onBlur = (value) => {
 
 export const handleGuess = (item) => {
   msgState.value.lastChatId = '';
-  sendMsg(item.value);
+  sendMsg(item.value,1);
 };
 
 export const handleServer = (
@@ -707,7 +714,7 @@ const dealShowType7 = (list, requestId, chatId) => {
     myList = list.map((item, index) => {
       // @ts-expect-error
       item.date = item.date.sort((a, b) => new Date(a) - new Date(b));
-      console.log(88888, item.date);
+
       return item;
     });
   }
@@ -877,7 +884,7 @@ const judgeIsSysAppMore = (requestIdStr) => {
 
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
-const typeInAsk = (value) => {
+const typeInAsk = (value,answertype) => {
   const gStores = new GStores();
   const settings = {
     // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
@@ -898,6 +905,7 @@ const typeInAsk = (value) => {
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         // sysCode: 1001017,
         chatId: msgState.value.lastChatId,
+        type:answertype,
       },
     }),
   };

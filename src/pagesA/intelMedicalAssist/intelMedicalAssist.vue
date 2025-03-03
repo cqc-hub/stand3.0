@@ -6,6 +6,7 @@
         <intel-medical-header
           :guessAskList="pageConfig?.intelMedicalAssistConfig?.guessAskList"
           :headerConfig="styleConfig"
+          :isMess="props?.isMess"
           @click-guess="handleGuess"
         />
         <!-- content区域 -->
@@ -121,7 +122,6 @@
 
   onShow(()=>{
     reload(props?.isMess)
-
   })
 
   onLoad(() => {

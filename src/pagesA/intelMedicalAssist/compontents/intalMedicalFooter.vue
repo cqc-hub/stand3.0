@@ -40,11 +40,11 @@
           class="input-send m-left mr20"
           :disabled="msgState.msgLoad"
           @click="changeVoiceType"
-          v-if="hasWechatSI || isReportAnalysis"
+          v-if="(hasWechatSI && hasSIPolicy) || isReportAnalysis"
         >
           <view class="circle">
             <img
-              v-if="!hasWechatSI"
+              v-if="!(hasWechatSI && hasSIPolicy)"
               class="bottom-icon"
               :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
               alt=""
@@ -85,7 +85,7 @@
           class="input-send"
           :disabled="msgState.msgLoad"
           @click="reportShow"
-          v-if="hasWechatSI && isReportAnalysis"
+          v-if="hasWechatSI && hasSIPolicy && isReportAnalysis"
         >
           <view class="circle">
             <img
@@ -95,10 +95,7 @@
             />
           </view>
         </view>
-        <view
-          class="bottom-dh-content"
-          v-if="!isVoice && isShow"
-        >
+        <view class="bottom-dh-content" v-if="!isVoice && isShow">
           <view class="border">
             <input
               v-model="msgState.msg"
@@ -123,7 +120,7 @@
           @touchend="endRecord"
         >
           <!-- <view class="border"> -->
-            <view class="dh-input f28 voice">按住说话</view>
+          <view class="dh-input f28 voice">按住说话</view>
           <!-- </view> -->
         </view>
         <!-- #ifdef  MP-WEIXIN -->
@@ -184,8 +181,9 @@
   } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import globalGl from '@/config/global';
-  import { type TButtonConfig, debounce } from '@/utils';
+  import { type TButtonConfig, debounce, GStores } from '@/utils';
   import { msgState, isReportAnalysis, chunkStatus } from '../utils/utils';
+
   let SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
   const isVoice = ref<boolean>(false);
@@ -196,6 +194,7 @@
     isMoveUp: false,
   });
   const guessServerBottom = ref<any>('');
+  const hasSIPolicy = ref(false);
 
   const inst = getCurrentInstance();
   const query = uni.createSelectorQuery().in(inst);
@@ -279,7 +278,7 @@
   };
 
   const changeVoiceType = () => {
-    if (hasWechatSI.value) {
+    if (hasWechatSI.value&& hasSIPolicy.value) {
       isVoice.value = !isVoice.value;
 
       isShow.value = false;
@@ -310,7 +309,7 @@
       }
       SImanager.onStop = (res) => {
         msgState.value.msg += res.result || '';
-        console.log('SImanager.onStop', msgState.value.msg);
+        // console.log('SImanager.onStop', msgState.value.msg);
         emits('send-msg', msgState.value.msg);
         nextTick(() => {
           msgState.value.msg = '';
@@ -324,10 +323,38 @@
 
       SImanager.onError = function (res) {
         console.error('error msg', res);
+        const gStores = new GStores();
+        if (res.retcode === '-30004' || res.retcode === '-30008') {
+          gStores.messageStore.showMessage(
+            '诶呀，当前网络环境差，请稍后重试~~~'
+          );
+        } else if (
+          res.retcode === '-30009' ||
+          res.retcode === '-30007' ||
+          res.retcode === '-30011' ||
+          res.retcode === '-30012'
+        ) {
+          gStores.messageStore.showMessage(
+            '诶呀，语音识别启动失败，请重新尝试~~~'
+          );
+        } else if (res.retcode === '-40001') {
+          gStores.messageStore.showMessage(
+            '诶呀，接口调用频率已达限制，请稍后重试~~~'
+          );
+        } else if (res.retcode === '-30001') {
+          gStores.messageStore.showMessage(
+            '诶呀，语音识别启动失败，请检查是否开启语音权限后重试~~~'
+          );
+        } else {
+          gStores.messageStore.showMessage(
+            '诶呀，没听清楚您在说什么，请再说一遍~~~'
+          );
+        }
+        cancleVoice();
       };
       //有新的识别内容返回，则会调用此事件
       SImanager.onRecognize = (res) => {
-        console.log('SImanager..onRecognize', res);
+        // console.log('SImanager..onRecognize', res);
         msgState.value.msg += res.result || '';
       };
       // 识别结束事件
@@ -382,11 +409,39 @@
     getGuessServerBottom();
 
     setTimeout(() => {
-        isShow.value = true;
-      }, 0);
+      isShow.value = true;
+    }, 0);
 
     // #ifdef  MP-WEIXIN
-    initRecord();
+    wx.getSetting({
+      success: (res) => {
+        console.log('res_____', res);
+        if (!res.authSetting['scope.record']) {
+          wx.authorize({
+            scope: 'scope.record',
+            success: () => {
+              hasSIPolicy.value = true;
+            },
+            fail: (err) => {
+              const gStores = new GStores();
+              console.error('Failed to get microphone permission:', err);
+              if (err?.errno === 112) {
+                console.warn('隐私政策没有改声明麦克风权限');
+              } else {
+                gStores.messageStore.showMessage(
+                  '诶呀，如果您需要使用语音输入，请开启语音权限后重新进入页面~~~'
+                );
+              }
+              hasSIPolicy.value = false;
+            },
+          });
+        } else {
+          hasSIPolicy.value = true;
+        }
+      },
+    });
+
+    hasSIPolicy.value && initRecord();
     // #endif
   });
 </script>
@@ -459,13 +514,12 @@
     }
     .bottom-dh-content {
       height: 65rpx;
-      border-radius: 50px; 
-      margin-left:10px;
-      flex:1;
+      border-radius: 50px;
+      margin-left: 10px;
+      flex: 1;
       background-color: #fff;
       border: 4rpx solid #ab51f5;
-      .border { 
-
+      .border {
         &::before {
           content: '';
           border: none;
@@ -488,7 +542,7 @@
       width: 70rpx;
       // padding: 8upx;
       color: #bbbbbb;
-      white-space: nowrap; 
+      white-space: nowrap;
       font-size: 32upx;
       .circle {
         width: 70rpx;
@@ -516,7 +570,7 @@
     width: 100%;
     height: 65rpx;
     // border-radius: 10rpx;
-    padding:0 25rpx;
+    padding: 0 25rpx;
     /*  #ifdef  MP-ALIPAY  */
     padding-top: 10rpx;
     /*  #endif  */
