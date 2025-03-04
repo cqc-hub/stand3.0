@@ -19,6 +19,12 @@ export interface ISystemConfig_ {
   // 预约挂号 ORDER_REGISTER
   order: {
     /**
+     * home 页面
+     */
+    // 医生推荐banner区
+    isOpenHomeDoctorBanner?: '1';
+
+    /**
      * 选择医院页面
      */
     // 选医院上面 banner
@@ -172,7 +178,7 @@ export interface ISystemConfig_ {
     isUserInfoShareAgree?: '1';
     /**
      * 表单填写补充字段
-     * referenceId - 推荐人工号
+     * referenceId - 备注
      */
     formExtraKeys?: ['referenceId'];
 

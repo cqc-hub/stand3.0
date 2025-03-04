@@ -134,6 +134,7 @@
                   @open-share="openShare"
                 />
               </view>
+
               <view
                 class="notice flex-normal g-fade-in"
                 v-if="viewerStore.homeNoticeText"
@@ -152,6 +153,10 @@
                 </view>
               </view>
             </view>
+          </view>
+
+          <view v-if="docRecommendList.length" class="mt24 mb24">
+            <homeDocCommend :list="docRecommendList" />
           </view>
 
           <view class="banner-menu">
@@ -199,6 +204,9 @@
               @open-share="openShare"
             />
           </view>
+
+          <!-- <homeDocCommend :list="docRecommendList" /> -->
+
           <view v-if="global.sConfig.isOpenPopularSci">
             <homeArticle ref="HomeArticleRef" />
           </view>
@@ -211,6 +219,7 @@
 
           <view></view>
         </view>
+
         <!-- 老年版本 -->
         <view
           v-else
@@ -385,6 +394,7 @@
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref();
   const personConfig = ref(<ISystemConfig['person']>{});
+  const orderConfig = ref(<ISystemConfig['order']>{});
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
@@ -443,6 +453,9 @@
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+
+    const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     //设置顶部标题
     uni.setNavigationBarTitle({
@@ -502,8 +515,21 @@
       });
     }
 
-    // api.getPopularDoctors({})
+    if (isOpenHomeDoctorBanner === '1') {
+      getDocRecommendList();
+    }
   });
+
+  const getDocRecommendList = async () => {
+    const { result = [] } = await api.getPopularDoctors({});
+    docRecommendList.value = [
+      ...result,
+      ...result,
+      ...result,
+      ...result,
+    ];
+  };
+
   //当用户将页面滑倒底部
   const handePageBottom = () => {
     //有开启健康科普

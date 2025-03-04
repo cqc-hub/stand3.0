@@ -348,7 +348,6 @@
     }
 
     if (isConfirmOrderWithDeptTip === '1') {
-      console.log('first');
       const { result: { recommendation = '' } = {} } = await api
         .getDeptDetail({
           hosDeptId,
