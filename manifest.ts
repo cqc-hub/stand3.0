@@ -106,6 +106,11 @@ const manifestFileDataObj: any = {
   vueVersion: '3',
   name: '台州市第一人民医院',
   h5: {
+    optimization: {
+      treeShaking: {
+        enable: false,
+      },
+    },
     router: {
       base: './',
     },
@@ -147,7 +152,7 @@ if (isOpenHealthCard) {
   // 电子健康卡
   pagesPlugins['pagesA-plugins'].wx[`healthCardPlugins`] = {
     // version: '3.50.1',
-    version: isOpenHealthCard?.isNewMode?'3.50.1':'3.11.0',
+    version: isOpenHealthCard?.isNewMode ? '3.50.1' : '3.11.0',
     provider: 'wxee969de81bba9a45',
   };
 }
