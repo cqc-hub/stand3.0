@@ -1,9 +1,16 @@
 import manifest from '../manifest.json';
 import systemConfig from './config.json';
 import { getSConfig } from './sConfig';
-
+// #ifdef H5
+import { getSysCode } from '@/common/useToken';
+// #endif
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
-export const SYS_CODE = systemConfig.sysCode;
+
+export let SYS_CODE = systemConfig.sysCode;
+
+// #ifdef H5
+  SYS_CODE = getSysCode();
+// #endif
 
 let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
 
@@ -30,8 +37,8 @@ if (env === 'prod') {
 }
 
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
-let h5AppId = systemInfo.h5Appid;
-if (systemInfo.h5AppidDisabledInTest && env !== 'prod') {
+let h5AppId = systemInfo?.h5Appid;
+if (systemInfo?.h5AppidDisabledInTest && env !== 'prod') {
   h5AppId = '';
 }
 
@@ -57,8 +64,8 @@ const globalGl = {
   wxAppid,
   h5AppId,
   systemInfo,
-  systemConfig: systemConfig.sysConfig[SYS_CODE],
-  addPersonUrl: systemInfo.isSearchInHos
+  systemConfig: systemConfig.sysConfig[SYS_CODE] || {},
+  addPersonUrl: systemInfo?.isSearchInHos
     ? '/pagesA/medicalCardMan/perfectReal'
     : '/pagesA/medicalCardMan/addMedical',
   isOpenDes,
