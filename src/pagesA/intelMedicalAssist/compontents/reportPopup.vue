@@ -11,7 +11,10 @@
           <view class="popup-title text-ellipsis f48 pt32 pb32">
             报告AI解读
           </view>
-          <view @click="reportPopupRef?.hide" class="iconfont ico-close f48 p24">
+          <view
+            @click="reportPopupRef?.hide"
+            class="iconfont ico-close f48 p24"
+          >
             &#xe6cd;
           </view>
         </view>
@@ -128,7 +131,7 @@
 </template>
 <script setup lang="ts">
   import { ref, nextTick, computed, onMounted, onUpdated } from 'vue';
-  import { reportPopupRef ,isPhoto} from '../utils/utils';
+  import { reportPopupRef, isPhoto } from '../utils/utils';
   import {
     ServerStaticData,
     ISystemConfig,
@@ -156,7 +159,7 @@
   ]);
   const uploadImgList = ref<any[]>([]);
   // const ImgUploadOption = ref<any>({});
- 
+
   const isRefresh = ref([true, true, true]);
   const slist = ref<any>('');
   const loading = ref(true);
@@ -179,8 +182,8 @@
 
   const changeTtype = () => {
     if (isPhoto.value) {
-    isPhoto.value = !isPhoto.value;
-    checkedList.value = [];
+      isPhoto.value = !isPhoto.value;
+      checkedList.value = [];
       pageList.value[0] = [];
     } else {
       handleAnalysis();
@@ -229,6 +232,23 @@
 
   const load = async (pageInfo) => {
     let listNowLen = 0;
+    if (!gStores?.userStore?.patChoose?.patientId) {
+      gStores.messageStore.showMessage('请先绑定就诊人！', 3000, {
+        closeCallBack() {
+          const pages = getCurrentPages();
+          const fullPathNow = (pages[pages.length - 1] as any).$page
+            .fullPath as string;
+          uni.navigateTo({
+            url:
+              globalGl.addPersonUrl +
+              '?_url=' +
+              encodeURIComponent(fullPathNow),
+          });
+        },
+      });
+
+      return;
+    }
     await wait(600);
     const currentTabValue = tabCurrent.value;
     const { isCheckThirdParty } = pageConfig.value;
@@ -237,6 +257,7 @@
     const { page, size } = pageInfo;
     const { cardNumber, patientId, idCardEncry } = gStores.userStore.patChoose;
     const [startDate, endDate] = dateRange.value;
+
     let params = {
       headerType: headerType,
       headerName: headerName,

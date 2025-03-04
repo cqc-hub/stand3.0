@@ -49,7 +49,7 @@
         class="f26 sroll-title"
         :style="{ opacity: !headerConfig?.historyMess ? 1 : 0 }"
       >
-        下拉查看历史消息
+        <!-- 下拉查看历史消息 -->
       </view>
       <view class="guess-title pt24 pb12 pl24 f26">猜你想问的</view>
       <view class="guess-content">

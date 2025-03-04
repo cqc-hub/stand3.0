@@ -1,16 +1,20 @@
 <template>
-  <view class="card-item mb32 mt18">
-    <view class="card-content pt32 pb48" @click="gotoGuide(formData)">
+  <view class="card-item mb32 mt18" @click="gotoGuide(formData)">
+    <view class="card-content pt32 pb48">
       <view class="header-area">
-        <view class="title g-bold f36">{{ formData?.statusName }}</view>
+        <view class="title g-bold f36">
+          <view class="main">{{ formData?.statusName }}</view>
+          <view class="more f24">查看更多</view>
+        </view>
         <view class="warn f28">{{ formData?.statusDesciption }}</view>
       </view>
-      <view class="content-area pt30">
+      <view class="content-area pt30" >
         <g-form
           :value="formData"
           forShowBodyAlign="left"
           hideRowBorder
           ref="gform"
+          @disabled-click="gotoGuide(formData)"
         >
           <template #show-body="{ item, value }">
             <view
@@ -55,7 +59,12 @@
 <script setup lang="ts">
   import { nextTick, ref, onMounted } from 'vue';
   import { cloneUtil } from '@/common';
-  import { formatterTemp, goLocation, goDoctorCard ,gotoGuide } from '../utils/utils';
+  import {
+    formatterTemp,
+    goLocation,
+    goDoctorCard,
+    gotoGuide,
+  } from '../utils/utils';
   import type { TInstance } from '@/components/g-form/index';
   const props = defineProps<{
     formData: any;
@@ -86,6 +95,8 @@
         padding: 16rpx 32rpx 30rpx;
         border-bottom: 2rpx solid #e6e6e6;
         .title {
+          display: flex;
+          justify-content: space-between;
         }
         .warn {
           color: #ff8a00;
@@ -110,5 +121,11 @@
     color: var(--hr-brand-color-6);
     margin: 0 6rpx;
     position: relative;
+  }
+  .more {
+    color: $hr-brand-color-6;
+    width: fit-content;
+    display: flex;
+    align-items: center;
   }
 </style>

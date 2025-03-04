@@ -110,6 +110,21 @@ export const init = async (isMess) => {
 
 export const initWithMess = async () => {
   const gStores = new GStores();
+  if (!gStores?.userStore?.patChoose?.patientId) {
+    gStores.messageStore.showMessage('请先绑定就诊人！', 3000, {
+      closeCallBack() {
+        const pages = getCurrentPages();
+        const fullPathNow = (pages[pages.length - 1] as any).$page
+          .fullPath as string;
+        uni.navigateTo({
+          url:
+            globalGl.addPersonUrl + '?_url=' + encodeURIComponent(fullPathNow),
+        });
+      },
+    });
+
+    return;
+  }
   styleConfig.value = {
     transition: false, //初始过渡效果
     showHeader: false, //展示首页
@@ -117,6 +132,7 @@ export const initWithMess = async () => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
   };
+
   const { result = [] } = await api.getTodayVisit({
     patientId: gStores?.userStore?.patChoose?.patientId,
   });
@@ -142,11 +158,13 @@ export const initWithMess = async () => {
     item.patientNameEncry = gStores?.userStore?.patChoose?.patientName;
     return item;
   });
-  msgList.value=[{
-    my: false,
-    type: 6,
-    // type: 7,
-  }];
+  msgList.value = [
+    {
+      my: false,
+      type: 6,
+      // type: 7,
+    },
+  ];
   messFormData.value.length &&
     messFormData.value.forEach((item, index) => {
       const hisList: Array<MessFormListType> = [];
@@ -207,12 +225,12 @@ export const recommendMenuList = [
   },
 ];
 /**
- * 
+ *
  * @param str 提问内容
  * @param answertype 回答模式：0普通；1常见问答
- * @returns 
+ * @returns
  */
-export const sendMsg = async (str: string,answertype?:1|0) => {
+export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   // #ifdef  MP-ALIPAY
   // console.log('msgList.value.length',msgList.value.length)
   if (msgList.value.length == 0) {
@@ -239,11 +257,11 @@ export const sendMsg = async (str: string,answertype?:1|0) => {
     type: 1,
   });
   msgState.value.msgLoad = true;
-  console.log("_____________",msgState.value.msgLoad)
+  console.log('_____________', msgState.value.msgLoad);
   scrollToNewMsg();
   // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
-    typeInAsk(value,answertype||0);
+    typeInAsk(value, answertype || 0);
     return;
   }
   // #endif
@@ -254,7 +272,7 @@ export const sendMsg = async (str: string,answertype?:1|0) => {
       content: value,
       sysCode: globalGl.SYS_CODE,
       source: 1,
-      type:answertype||0,
+      type: answertype || 0,
       chatId: msgState.value.lastChatId,
     })
     .finally(() => {
@@ -540,7 +558,7 @@ export const onBlur = (value) => {
 
 export const handleGuess = (item) => {
   msgState.value.lastChatId = '';
-  sendMsg(item.value,1);
+  sendMsg(item.value, 1);
 };
 
 export const handleServer = (
@@ -884,7 +902,7 @@ const judgeIsSysAppMore = (requestIdStr) => {
 
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
-const typeInAsk = (value,answertype) => {
+const typeInAsk = (value, answertype) => {
   const gStores = new GStores();
   const settings = {
     // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
@@ -905,7 +923,7 @@ const typeInAsk = (value,answertype) => {
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         // sysCode: 1001017,
         chatId: msgState.value.lastChatId,
-        type:answertype,
+        type: answertype,
       },
     }),
   };
