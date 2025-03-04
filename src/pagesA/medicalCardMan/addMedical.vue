@@ -633,6 +633,7 @@
       isDropAddress,
       isDropNation,
       isUserInfoShareAgree,
+      formExtraKeys = []
     } = pageConfig.value;
 
     const listArr: TFormKeys[] = [formKey.patientType];
@@ -643,8 +644,11 @@
       ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
       formKey.patientPhone,
       formKey.defaultFalg,
-      formKey.referenceId,
+      // formKey.referenceId,
+      ...formExtraKeys,
     ];
+
+
 
     // 判断是否需要民族
     if (isDropNation !== '1') {

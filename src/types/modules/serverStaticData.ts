@@ -170,6 +170,11 @@ export interface ISystemConfig_ {
     isEditPatPhone?: '1';
     /** 允许该平台访问院内此用户的就诊数据 */
     isUserInfoShareAgree?: '1';
+    /**
+     * 表单填写补充字段
+     * referenceId - 推荐人工号
+     */
+    formExtraKeys?: ['referenceId'];
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     isVerifyIdCardLastFourNumber?: '1';
