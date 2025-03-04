@@ -144,6 +144,7 @@ export interface inHospitalCostInfo {
   totalCost?: string;
   //总费用
   patientNameDes?: string;
+  patientName?: string;
   //开始时间
   inDay?: string;
   //结束时间
@@ -198,8 +199,8 @@ export type TPayConfirmHosPageProp = {
   cardNumber: string;
   patientId: string;
   patientName: string;
-  hospitalAccount: string; 
-  hosName: string; 
+  hospitalAccount: string;
+  hosName: string;
   extend: string;
 };
 

@@ -61,24 +61,14 @@
       </view>
 
       <view
-        v-if="(myprops.patientName || !myprops.params) || detailData.patientName"
+        v-if="myprops.patientName || !myprops.params || detailData.patientName"
         class="head-row flex-normal flex-start-r"
       >
         <view class="head-row-label text-no-wrap color-888">就诊人</view>
         <view class="head-row-value color-444">
-          <text v-if="myprops.patientName || detailData.patientName">
-            {{ nameConvert((detailData.patientName || myprops.patientName) as string) + ` (${detailData.cardNumber || myprops.cardNumber})` }}
-          </text>
-
-          <text v-else>
-            {{
-              nameConvert(gStores.userStore.patChoose.patientName) +
-              `${
-                gStores.userStore.patChoose._showId
-                  ? ` (${gStores.userStore.patChoose._showId})`
-                  : ''
-              }`
-            }}
+          <text>
+            <!-- {{ nameConvert((detailData.patientName || myprops.patientName) as string) + ` (${detailData.cardNumber || myprops.cardNumber})` }} -->
+            {{ patientName + ` (${cardNumber})` }}
           </text>
         </view>
       </view>
@@ -162,6 +152,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import {
     type TPayDetailProp,
     type TPayDetailInfo,
@@ -169,7 +160,7 @@
 
   import { GStores, type ISystemConfig, nameConvert } from '@/utils';
 
-  defineProps<{
+  const props = defineProps<{
     myprops: TPayDetailProp;
     detailData: TPayDetailInfo;
     pageConfig: ISystemConfig['pay'];
@@ -177,6 +168,22 @@
   }>();
 
   const gStores = new GStores();
+
+  const _patientName = computed(() => {
+    return props.myprops.patientName || props.detailData.patientName || '';
+  });
+
+  const patientName = computed(() => {
+    return _patientName.value || gStores.userStore.patChoose.patientName;
+  });
+
+  const cardNumber = computed(() => {
+    if (_patientName.value) {
+      return props.myprops.cardNumber || props.detailData.cardNumber || '';
+    }
+
+    return gStores.userStore.patChoose._showId || '';
+  });
 </script>
 
 <style lang="scss" scoped>

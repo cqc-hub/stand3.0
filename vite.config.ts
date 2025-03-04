@@ -53,7 +53,8 @@ export default defineConfig(({ command, mode }) => {
     },
 
     // 按照项目实际地址修改
-    base: '/shaoxin2/',
+    // base: '/shaoxin2/',
+    base: './',
 
     define: {
       h5UrlLocal: JSON.stringify(`http://${netIp}:8888/#/`),

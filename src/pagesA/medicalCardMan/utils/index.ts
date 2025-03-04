@@ -323,14 +323,14 @@ export const tempList: TInstance[] = [
     },
   },
 
-  // {
-  //   label: '推荐人工号',
-  //   field: 'input-text',
-  //   placeholder: '请输入',
-  //   key: 'referenceId',
-  //   labelWidth: '220rpx',
-  //   maxlength: 50,
-  // },
+  {
+    label: '备注',
+    field: 'input-text',
+    placeholder: '请输入',
+    key: 'referenceId',
+    labelWidth: '220rpx',
+    maxlength: 50,
+  },
 
   {
     field: 'switch',
@@ -360,7 +360,7 @@ export const pickTempItem = function <T = TFormKeys>(
  */
 export const patCardDetailFormKey = <const>{
   patientType: 'patientType',
-  patientName: 'patientNameEncry',
+  patientName: 'patientName',
   idType: 'idType',
   idCard: 'idCard',
   patientPhone: 'patientPhone',

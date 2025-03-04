@@ -140,7 +140,12 @@
 </script>
 <style lang="scss" scoped>
   .simple-header {
-    height: 590rpx !important;
+      /* #ifndef H5 */
+      height: 590rpx !important;
+      /* #endif */
+      /* #ifdef H5 */
+      height: 430rpx !important;
+      /* #endif */
     // .wihite-mask {
     //   top: 310rpx !important;
     //   height: 130rpx !important;
@@ -173,13 +178,23 @@
     }
     .header-hello {
       z-index: 2;
-      // top: 180rpx !important;
+      /* #ifndef H5 */
+      top: 180rpx !important ;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 20rpx !important ;
+      /* #endif */
     }
     .person-say {
       display: none;
     }
     .guess {
-      top: 320rpx !important;
+       /* #ifndef H5 */
+       top: 320rpx !important;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 160rpx !important ;
+      /* #endif */     
     }
   }
   .simple-mess {

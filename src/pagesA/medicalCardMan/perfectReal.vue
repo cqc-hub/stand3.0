@@ -664,6 +664,9 @@
 
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+
+    const { formExtraKeys = [] } = pageConfig.value;
 
     let formListKeys: TFormKeys[] = [
       'patientType',
@@ -672,9 +675,8 @@
       'verifyCode',
       'isUserInfoShareAgree',
       'defaultFalg',
-      'referenceId',
+      ...formExtraKeys,
     ];
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
 
