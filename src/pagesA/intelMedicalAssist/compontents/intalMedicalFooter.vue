@@ -9,6 +9,7 @@
     <view
       class="guess-server float-from-top"
       :style="{ bottom: guessServerBottom }"
+      v-if="headerConfig?.showHeader"
     >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
@@ -27,6 +28,7 @@
     </view>
     <view class="bottom-bg"></view>
     <view
+     v-if="headerConfig?.showHeader"
       class="bottom-bg-white"
       :style="{ height: `${whiteAreaHeight}` }"
     ></view>
@@ -114,6 +116,7 @@
         <view
           class="bottom-dh-content"
           v-if="isVoice"
+          :style="{ opacity: voicing ? 0 : 1 }"
           @longpress="handleVoice"
           @touchstart="touchStart"
           @touchmove="touchMove"
@@ -195,6 +198,7 @@
   });
   const guessServerBottom = ref<any>('');
   const hasSIPolicy = ref(false);
+  const isRecording = ref(false);
 
   const inst = getCurrentInstance();
   const query = uni.createSelectorQuery().in(inst);
@@ -293,13 +297,20 @@
   };
 
   const handleVoice = (...args) => {
+    console.log('handleVoice', args);
     // SImanager.stop();
+    if (isRecording.value) {
+      voicing.value = false;
+      return;
+    }
     SImanager.start({
       duration: 60000,
       lang: 'zh_CN',
     });
     setTimeout(() => {
-      // SImanager.stop();
+      if (isRecording.value) {
+        SImanager.stop();
+      }
       if (voicing.value) {
         voicing.value = false;
       }
@@ -310,13 +321,14 @@
       if (!SImanager) {
         const plugin = requirePlugin('SIPlugin');
         SImanager = plugin.getRecordRecognitionManager();
-        console.log('initRecord',);
-        
+        console.log('initRecord');
+
         SImanager.onStop = (res) => {
           msgState.value.msg += res.result || '';
-          if(!msgState.value.msg){
-            return
+          if (!msgState.value.msg) {
+            return;
           }
+          isRecording.value && (isRecording.value = false);
           // console.log('SImanager.onStop', msgState.value.msg);
           emits('send-msg', msgState.value.msg);
           nextTick(() => {
@@ -326,19 +338,21 @@
 
         SImanager.onStart = (res) => {
           console.log('SImanager.onStart', res);
+          isRecording.value = true;
         };
         0;
 
         SImanager.onError = function (res) {
           // SImanager.stop();
           console.error('error msg', res);
-         
+          isRecording.value && (isRecording.value = false);
           voicing.value && (voicing.value = false);
 
           const gStores = new GStores();
           if (res.retcode === '-30004' || res.retcode === '-30008') {
             gStores.messageStore.showMessage(
-              '诶呀，当前网络环境差，请稍后重试~~~', 1000
+              '诶呀，当前网络环境差，请稍后重试~~~',
+              1000
             );
           } else if (
             res.retcode === '-30009' ||
@@ -347,19 +361,23 @@
             res.retcode === '-30012'
           ) {
             gStores.messageStore.showMessage(
-              '诶呀，语音识别启动失败，请重新尝试~~~', 1000
+              '诶呀，语音识别启动失败，请重新尝试~~~',
+              1000
             );
           } else if (res.retcode === '-40001') {
             gStores.messageStore.showMessage(
-              '诶呀，接口调用频率已达限制，请稍后重试~~~', 1000
+              '诶呀，接口调用频率已达限制，请稍后重试~~~',
+              1000
             );
           } else if (res.retcode === '-30001') {
             gStores.messageStore.showMessage(
-              '诶呀，语音识别启动失败，请检查是否开启语音权限后重试~~~', 1000
+              '诶呀，语音识别启动失败，请检查是否开启语音权限后重试~~~',
+              1000
             );
           } else {
             gStores.messageStore.showMessage(
-              '诶呀，没听清楚您在说什么，请再说一遍~~~', 1000
+              '诶呀，没听清楚您在说什么，请再说一遍~~~',
+              1000
             );
           }
         };
@@ -374,8 +392,10 @@
   };
 
   const cancleVoice = () => {
-    SImanager?.stop();
-    voicing.value && (voicing.value = false);
+    if (isRecording.value) {
+      SImanager?.stop();
+      voicing.value && (voicing.value = false);
+    }
   };
 
   const touchStart = (e) => {
@@ -384,6 +404,7 @@
   };
 
   let touchMove = (e) => {
+    console.log('touchMove', e);
     let touchData = e.touches[0]; //滑动过程中，手指滑动的坐标信息 返回的是Objcet对象
     let moveY = touchData.clientY - voiceTouchData.value.clientY;
     if (moveY < -50) {
@@ -396,6 +417,7 @@
   touchMove = debounce(touchMove, 500, false);
 
   const endRecord = (e) => {
+    console.log('endRecord', e);
     if (voiceTouchData.value.isMoveUp) {
       cancleVoice();
       voiceTouchData.value = {
@@ -407,6 +429,7 @@
   };
 
   const getGuessServerBottom = () => {
+    return
     setTimeout(() => {
       query
         .selectAll(`.guess-server`)
@@ -426,7 +449,7 @@
             scope: 'scope.record',
             success: () => {
               hasSIPolicy.value = true;
-              initRecord()
+              initRecord();
             },
             fail: (err) => {
               const gStores = new GStores();
@@ -435,7 +458,8 @@
                 console.warn('隐私政策没有改声明麦克风权限');
               } else {
                 gStores.messageStore.showMessage(
-                  '诶呀，如果您需要使用语音输入，请开启语音权限后重新进入页面~~~', 1000
+                  '诶呀，如果您需要使用语音输入，请开启语音权限后重新进入页面~~~',
+                  1000
                 );
               }
               hasSIPolicy.value = false;
@@ -523,7 +547,7 @@
     display: flex;
     position: fixed;
     // background-color: #fff;
-    bottom: 0px;
+    bottom: 20rpx;
     z-index: 99;
     .bottom-dh-char {
       font-size: 55rpx;
@@ -531,6 +555,7 @@
       width: 100vw;
     }
     .bottom-dh-content {
+      z-index: 9999;
       height: 65rpx;
       border-radius: 50px;
       margin-left: 10px;
@@ -703,7 +728,7 @@
     }
     .animation {
       width: 100%;
-      height: 150rpx;
+      height: 200rpx;
       z-index: 999;
       background: linear-gradient(#defffd, #f5fbff);
       // filter: blur(2px);

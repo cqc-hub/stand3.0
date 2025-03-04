@@ -15,6 +15,7 @@ import {
   ServerStaticData,
   useTBanner,
   openLocation,
+  getLocation,
   apiAsync,
   GStores
 } from '@/utils';
@@ -41,6 +42,7 @@ export const reportPopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
+export const hosData = ref<any>([]);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -73,11 +75,11 @@ export const reload = async (isMess) => {
   popipHasShow.value = false;
   isPhoto.value = true;
 };
- 
+
 export const init = async (props) => {
   // #ifdef H5
-  if(props?.sysCode){
-    uni.setStorageSync('mini_v3_sysCode',props.sysCode || '');
+  if (props?.sysCode) {
+    uni.setStorageSync('mini_v3_sysCode', props.sysCode || '');
   }
   // #endif
   pageConfig.value = await ServerStaticData.getSystemConfig(
@@ -105,12 +107,8 @@ export const init = async (props) => {
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
   reload(props?.isMess);
-  // api.inspectionAnalysis({})
   // test();
-  //  setTimeout(()=>{
-  //  styleConfig.value.showHeader=false
-  //  msgState.value.msgLoad=true
-  //  },200)
+
 };
 
 export const initWithMess = async () => {
@@ -264,7 +262,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   msgState.value.msgLoad = true;
   console.log('_____________', msgState.value.msgLoad);
   scrollToNewMsg();
-  // #ifdef  MP-WEIXIN 
+  // #ifdef  MP-WEIXIN
   if (chunkStatus.value?.isWXStreamApi) {
     typeInAsk(value, answertype || 0);
     return;
@@ -277,7 +275,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
     return;
   }
   // #endif
-  
+
   const {
     result: { showType, list, requestId, chatId },
   } = await api
@@ -296,7 +294,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   switchHandleResult(showType, list, requestId, chatId);
 };
 
-const switchHandleResult = (
+const switchHandleResult = async (
   showType: number,
   list: Array<any>,
   requestId: string,
@@ -330,9 +328,9 @@ const switchHandleResult = (
         //医生名片
         dealShowType7(list, requestId, chatId);
         break;
-
+      //科室列表
       case 6:
-        dealShowType6(list, requestId, chatId);
+        await dealShowType6(list, requestId, chatId);
         break;
       case 9:
         //地址
@@ -373,18 +371,19 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
     //     `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
     //   duration || 300
     // );
-    uni.pageScrollTo({
-      // #ifdef H5
-      selector:
-      selector ||
-      `#smartChatRoomItem_${msgList.value.length - 1}`,
-      // #endif
+    let target = '';
+    // #ifdef H5
+    target = selector || `#smartChatRoomItem_${msgList.value.length - 1}`;
+    // #endif
 
-      // #ifndef H5
-      selector:
+    // #ifndef H5
+    target =
       selector ||
-      `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
-      // #endif
+      `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`;
+    // #endif
+
+    uni.pageScrollTo({
+      selector: target,
       duration: duration === 0 ? 0 : duration || 300,
       success: () => {
         // console.log('滚动成功');
@@ -512,7 +511,7 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-  console.log(3333,tempFilePaths)
+  console.log(3333, tempFilePaths);
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
@@ -769,12 +768,31 @@ const dealShowType7 = (list, requestId, chatId) => {
   });
 };
 
-const dealShowType6 = (list, requestId, chatId) => {
+const dealShowType6 = async (list, requestId, chatId) => {
+  if (!hosData.value?.length) {
+    msgState.value.msgLoad = true;
+    const location: any = await getLocation().catch((err) => {
+      console.error(err);
+    });
+
+    hosData.value = await ServerStaticData.getHosList(
+      {
+        gisLng: location?.longitude,
+        gisLat: location?.latitude,
+      },
+      {
+        noCache: true,
+      }
+    );
+    msgState.value.msgLoad = false;
+  }
+
   msgList.value.push({
     my: false,
     msg: '建议您到以下科室挂号就诊',
     type: 62,
     addRessList: list,
+    hosData: hosData.value,
     requestId,
     chatId,
     isSysAppMore: false,
@@ -1010,7 +1028,7 @@ const typeInAskH5 = (value: string,answertype) => {
         content: value,
         sysCode: gStores.globalStore.sysCode,
         // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
-        source:1,
+        source: 1,
         chatId: msgState.value.lastChatId,
         type: answertype,
       },
@@ -1142,29 +1160,17 @@ const test = () => {
   //   handleOneChunk(str, 0);
   //   return;
   const data = {
-    chatId: '',
+    showType: 6,
     list: [
       {
-        path: '/pages/index/index',
-        question: '镜湖院区内镜中心',
-        answer: '2楼内镜中心',
-        query:
-          '{"type":"8_2","typeData":{"buildingId":208089,"type":"1","hisName":"A020220"}}',
-        appId: 'wx0815c00f0b4bd7c3',
-        showType: 9,
-        terminalType: 'mini',
-      },
-      {
-        path: '/pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU&poi=A010220',
-        question: '昌安院区内镜中心',
-        answer: '3楼13诊区',
-        appId: 'wx8735a8a39cf58b5e',
-        showType: 9,
-        terminalType: 'mini',
+        deptName: '烧伤科',
+        hosDeptId: 'A010243',
+        showType: 6,
+        hosId: '126943',
+        hosName: '昌安院区',
       },
     ],
-    requestId: '1895451830515920896',
-    showType: 9,
+    msg: '建议您到以下科室挂号就诊',
   };
   const { showType, list } = data;
   switchHandleResult(showType, list, '', '');

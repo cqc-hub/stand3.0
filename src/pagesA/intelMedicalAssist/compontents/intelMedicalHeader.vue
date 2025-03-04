@@ -152,11 +152,11 @@
     // }
     .bg-img {
       z-index: 1;
-      /* #ifndef H5 */
-      height: 570rpx !important;
-      /* #endif */
       /* #ifdef H5 */
       height: 410rpx !important;
+      /* #endif */
+      /* #ifndef H5 */
+      height: 570rpx !important;
       /* #endif */
     }
     .person-img {

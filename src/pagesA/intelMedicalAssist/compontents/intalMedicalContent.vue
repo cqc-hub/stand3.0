@@ -28,7 +28,9 @@
                 mode="aspectFill"
                 class="chat-img"
               ></image>
-              <text user-select  selectable v-else class="g-break-word">{{ msgItem.msg }}</text>
+              <text user-select selectable v-else class="g-break-word">
+                {{ msgItem.msg }}
+              </text>
             </view>
           </view>
         </view>
@@ -72,7 +74,11 @@
             </view>
 
             <view v-else-if="msgItem.type === 62">
-              <Recommend-Dept :list="msgItem.addRessList" :msg="msgItem.msg" />
+              <Recommend-Dept
+                :list="msgItem.addRessList"
+                :msg="msgItem.msg"
+                :hosData="msgItem?.hosData"
+              />
             </view>
             <view
               v-else-if="msgItem.type === 99 && msgItem.msg"
@@ -104,8 +110,10 @@
                 class="flex"
               >
                 <view class="flex1">
-                  <text user-select  selectable
-                   v-if="msgItem.boldMsg"
+                  <text
+                    user-select
+                    selectable
+                    v-if="msgItem.boldMsg"
                     :style="
                       msgItem.type === 2
                         ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
@@ -116,8 +124,9 @@
                     }"
                     class="f32"
                   >
-                    <text user-select  selectable
-                     
+                    <text
+                      user-select
+                      selectable
                       class="g-bold mr12 pb12 lineH64"
                     >
                       {{ msgItem.boldMsg }}\n
@@ -185,7 +194,9 @@
             <view
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
-              <text user-select  selectable class="g-break-word g-blod">正在为您解答</text>
+              <text user-select selectable class="g-break-word g-blod">
+                正在为您解答
+              </text>
               <view
                 class="loading-cricle relative"
                 v-for="(item, index) in 4"
@@ -250,8 +261,8 @@
   .content-area {
     z-index: 0;
     // padding-top: 40rpx;
-    min-height: calc(100vh - 590rpx - 390rpx - 40rpx);
-    padding-bottom: 390rpx;
+    min-height: calc(100vh - 590rpx - 210rpx - 40rpx);
+    padding-bottom: 200rpx;
     .my-width {
       width: 80vw;
     }
@@ -269,7 +280,7 @@
       line-height: 60rpx;
       .sysAppMore {
         line-height: 40rpx;
-        color:#888;
+        color: #888;
       }
     }
     .padding-chat {

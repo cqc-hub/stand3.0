@@ -1,5 +1,5 @@
 <template>
-  <view class="g-border-top mt12 w100p lineH48" >
+  <view class="g-border-top mt12 w100p lineH48 container" >
     <view
       v-for="(item,index) in showList"
       :key="`recommendAddress${index}`"
@@ -76,5 +76,8 @@
   }
   .lineH48{
   line-height: 48rpx;
+}
+.container{
+  min-width: 600rpx;
 }
 </style>
