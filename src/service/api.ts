@@ -126,7 +126,7 @@ const baseApi = {
 
   //查询医院样式
   queryHospitalPattern: (data) =>
-    service.post('/phs-base/firstPage/queryHospitalPattern', parm(data)),
+    service.post('/phs-base/firstPage/queryHospitalPattern', parm(data),{showMessage:false}),
 
   //添加快递地址
   addExpressAddress: (data) =>

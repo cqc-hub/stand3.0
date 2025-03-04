@@ -16,7 +16,7 @@
       <view class="doc-header flex-normal" @click="gotoDocCard(item)">
         <view class="photo">
           <image
-            :src="'/static/image/order/order-doctor-avatar.png'"
+            :src="item?.docPhoto?item?.docPhoto:'/static/image/order/order-doctor-avatar.png'"
             class="doc-info-avatar"
             mode="aspectFill"
           />
@@ -34,7 +34,7 @@
           </view>
           <view class="hos-name text-ellipsis">{{ item?.hosName }}</view>
           <view class="substr color-111 pt8">
-            {{ item?.intro }}
+            {{ item?.intro || item?.goodAt }}
           </view>
         </view>
       </view>
@@ -79,6 +79,9 @@
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  import { GStores } from '@/utils';
+  import { gotoH5DoctorDetails } from '../utils/utils';
+  const gStores = new GStores();
   const props = defineProps<{
     list: any[];
     msg: string;
@@ -90,6 +93,8 @@
 
   import { joinQueryForUrl } from '@/common';
   const gotoDocCard = (docInfo) => {
+    console.log(333,gStores.globalStore.sysCode,docInfo )
+    // #ifndef H5
     const { hosId, hosDocId, hosDeptId, docName } = docInfo;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
@@ -99,6 +104,12 @@
         docName,
       }),
     });
+    // #endif
+
+    // #ifdef H5
+    gotoH5DoctorDetails(docInfo)
+    // #endif
+ 
   };
   const chooseDocDate = (docInfo, date) => {
     console.log('docInfo,date', docInfo, date);

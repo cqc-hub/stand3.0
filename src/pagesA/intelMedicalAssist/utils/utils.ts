@@ -16,9 +16,9 @@ import {
   useTBanner,
   openLocation,
   apiAsync,
-  GStores,
+  GStores
 } from '@/utils';
-import { cloneUtil, joinQuery } from '@/common';
+import { cloneUtil, joinQuery,joinQueryForUrl } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import { isOpenSm4 } from '@/service';
 import globalGl from '@/config/global';
@@ -273,7 +273,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
 
   // #ifdef  H5
   if (chunkStatus.value?.isWXStreamApi) {
-    typeInAskH5(value);
+    typeInAskH5(value, answertype || 0);
     return;
   }
   // #endif
@@ -708,7 +708,7 @@ const dealShowType1withStream = async (
       msgList.value.push({
         my: false,
         msg: '',
-        boldMsg: (question && question + '为') || '',
+        boldMsg: (question && question ) || '',
         type: 1,
         requestId,
         chatId,
@@ -739,7 +739,7 @@ const dealShowType1 = (list, requestId, chatId) => {
   msgList.value.push({
     my: false,
     msg: answer,
-    boldMsg: (question && question + '为') || '',
+    boldMsg: (question && question ) || '',
     type: 1,
     requestId,
     chatId,
@@ -994,7 +994,7 @@ const typeInAsk = (value, answertype) => {
   });
 };
 
-const typeInAskH5 = (value: string) => {
+const typeInAskH5 = (value: string,answertype) => {
   const gStores = new GStores();
   const settings = {
     url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
@@ -1012,6 +1012,7 @@ const typeInAskH5 = (value: string) => {
         // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
         source:1,
         chatId: msgState.value.lastChatId,
+        type: answertype,
       },
     }),
   };
@@ -1028,13 +1029,11 @@ const typeInAskH5 = (value: string) => {
   let previousResponse = '';
 
   xhr.onreadystatechange = () => {
-    console.log(22222,xhr)
     if (xhr.readyState === 3) {
       // 处理分块数据
       const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
       previousResponse = newResponse;
-
       if (newChunk) {
         chunkStatus.value.isTyping = true;
         chunkStatus.value.chunkTemp += newChunk;
@@ -1230,4 +1229,28 @@ function convertAsciiEscapeSequences(input) {
     // 将十六进制字符串转换为对应的字符
     return String.fromCharCode(parseInt(hex, 16));
   });
+}
+
+//处理h5 医生跳转
+export const gotoH5DoctorDetails = (docInfo)=>{
+  const gStores = new GStores();
+  const sysCode = gStores.globalStore.sysCode;
+  const { hosId, hosDocId, hosDeptId, docName } = docInfo;
+  // location.href=
+  uni.navigateTo({
+    url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+      hosId,
+      hosDocId,
+      hosDeptId,
+      docName,
+    }),
+  });
+  switch (sysCode) {
+    case '1001035':
+      
+      break;
+
+      default:
+        break;
+  }
 }

@@ -45,7 +45,7 @@
 
     // #ifdef H5
     // h5项目重置sysCode
-    if(opt.query?.sysCode !== getSysCode()){
+    if(getSysCode() && opt.query?.sysCode !== getSysCode()){
       uni.clearStorage();
       uni.clearStorageSync()
     }

@@ -111,7 +111,7 @@
     let desObj = {
       _patientId: patientId,
       _herenId: herenId,
-      _isHos: global.systemInfo.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
+      _isHos: global.systemInfo?.isSearchInHos, // 是否区域项目 新增就诊人跳转的地址
       _isDes: global.isOpenDes,
     };
     let _d = encryptDesParam(desObj);

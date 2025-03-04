@@ -160,7 +160,7 @@ export const useTBanner = async (
   const _d = {
     _patientId: '',
     _herenId: '',
-    _isHos: globalGl.systemInfo.isSearchInHos,
+    _isHos: globalGl.systemInfo?.isSearchInHos,
     herenId: '',
   };
 

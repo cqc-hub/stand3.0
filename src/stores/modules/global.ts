@@ -69,14 +69,8 @@ const globalStore = defineStore('global', {
       h5OpenId: '',
       herenId: '',
       appShowData: {},
-      appLaunchData: {},
-      // #ifdef H5
-      sysCode:'',
-      // #endif
-
-      // #ifndef H5
+      appLaunchData: {}, 
       sysCode: globalGl.SYS_CODE,
-      // #endif
       modeOld: false,
       cacheData: {},
       envH5: null,
