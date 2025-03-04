@@ -28,7 +28,7 @@
                 mode="aspectFill"
                 class="chat-img"
               ></image>
-              <text v-else class="g-break-word">{{ msgItem.msg }}</text>
+              <text user-select  selectable v-else class="g-break-word">{{ msgItem.msg }}</text>
             </view>
           </view>
         </view>
@@ -46,7 +46,7 @@
               v-if="msgItem.type === 4"
               class="chat-system-item e margin-left by-cyan"
             >
-              <!-- <text class="g-break-word">{{ msgItem.msg }}</text> -->
+              <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
               <!-- 更多推荐 -->
               <Second-Recommend
                 v-if="msgItem.secondCommendList"
@@ -96,7 +96,7 @@
               }"
               class="chat-system-item margin-left padding-chat by-cyan"
             >
-              <!-- <text v-if="msgItem.type === 1" class="g-break-word">
+              <!-- <text user-select  selectable v-if="msgItem.type === 1" class="g-break-word">
                 {{ msgItem.msg }}
               </text> -->
               <view
@@ -104,7 +104,8 @@
                 class="flex"
               >
                 <view class="flex1">
-                  <text
+                  <text user-select  selectable
+                   v-if="msgItem.boldMsg"
                     :style="
                       msgItem.type === 2
                         ? 'color: #838383; padding: 8rpx 0;word-break: break-all'
@@ -115,14 +116,14 @@
                     }"
                     class="f32"
                   >
-                    <text
-                      v-if="msgItem.boldMsg"
+                    <text user-select  selectable
+                     
                       class="g-bold mr12 pb12 lineH64"
                     >
                       {{ msgItem.boldMsg }}\n
                     </text>
 
-                    <!-- <text>
+                    <!-- <text user-select  selectable>
                       {{ msgItem.msg }}
                     </text> -->
                   </text>
@@ -184,7 +185,7 @@
             <view
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
-              <text class="g-break-word g-blod">正在为您解答</text>
+              <text user-select  selectable class="g-break-word g-blod">正在为您解答</text>
               <view
                 class="loading-cricle relative"
                 v-for="(item, index) in 4"

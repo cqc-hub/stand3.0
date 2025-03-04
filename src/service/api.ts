@@ -508,6 +508,9 @@ const regApi = {
   getQnRecordTemp: (data: any) =>
     service.post('/phs-reg/regDoc/getQnRecordTemp', parm(data)),
 
+  getPopularDoctors: (data: any) =>
+    service.post('/phs-reg/regDoc/getPopularDoctors', parm(data)),
+
   addCollect: (data: any) =>
     service.post('/phs-reg/collect/addCollect', parm(data), {
       hideLoading: false,

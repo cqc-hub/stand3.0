@@ -52,7 +52,7 @@
         class="f26 sroll-title"
         :style="{ opacity: !headerConfig?.historyMess ? 1 : 0 }"
       >
-        下拉查看历史消息
+        <!-- 下拉查看历史消息 -->
       </view>
       <view class="guess-title pt24 pb12 pl24 f26">猜你想问的</view>
       <view class="guess-content">
@@ -91,7 +91,7 @@
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
-  import {popipHasShow,isPhoto} from '../utils/utils'
+  import {popipHasShow,isPhoto,initWithMess} from '../utils/utils'
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
 
@@ -100,6 +100,7 @@
   const props = defineProps<{
     guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
+    isMess?:string;
   }>();
   const emits = defineEmits(['click-guess']);
 
@@ -123,7 +124,6 @@
   };
 
   const chooseAction = () => {
-    console.log('_____________');
     console.log('actionSheet', actionSheet.value);
 
     if (actionSheet.value) {
@@ -135,6 +135,7 @@
     gStores.userStore.updatePatChoose(item);
     popipHasShow.value=false
     isPhoto.value=true
+    props?.isMess && props?.isMess == '1' && initWithMess()
   };
 </script>
 <style lang="scss" scoped>

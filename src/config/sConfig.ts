@@ -194,6 +194,7 @@ const scJson: Record<string, ISConfig> = {
   },
 
   1001066: {
+    isOpenWechatSI: true,
     login: {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
@@ -247,6 +248,7 @@ const scJson: Record<string, ISConfig> = {
   1001054: {
     isOpenHomeTabBarNetWorkBtn: '1',
     isHideHomeSearch: '1',
+    isOpenWechatSI:true,
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 
@@ -266,6 +268,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001056: {
     isOpenAlipayZndz: true,
+    isOpenWechatSI: true,
     medicalMHelp: {
       wx: {
         medicalNation: {
@@ -284,6 +287,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenAlipayZndz: true,
     isDrugDelivery: '1',
     isOpenHelpOld: '1',
+    isOpenWechatSI: true,
     medicalMHelp: {
       wx: {
         crossProgramBizType: {
@@ -372,6 +376,7 @@ const scJson: Record<string, ISConfig> = {
   1001040: {
     isOpenHomeTabBarNetWorkBtn: '1',
     isOpenHelpOld: '1',
+    isOpenWechatSI: true,
     medicalMHelp: {
       wx: {
         medicalPlugin: '1',
@@ -466,7 +471,8 @@ const scJson: Record<string, ISConfig> = {
    * 天水市第一人民医院
    */
   1001074: {
-    isOpenHomeTabBarNetWorkBtn: '1',
+    // isOpenHomeTabBarNetWorkBtn: '1',
+    isOpenWechatSI:true,
     login: {
       // isAliAuthBase: '1',
     },

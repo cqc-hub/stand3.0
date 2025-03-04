@@ -65,7 +65,7 @@ export enum OrderStatusDescript {
   orderStatus_000 = '预约成功,请在就诊前完成缴费取号。',
   orderStatus_001 = '取号成功,请前往诊区签到。',
   orderStatus_011 = '已就诊,请及时缴费。',
-  orderStatus_111 = '缴费成功。',
+  orderStatus_111 = '缴费成功，请前往检查取药。',
 }
 
 
