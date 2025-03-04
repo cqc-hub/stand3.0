@@ -9,6 +9,7 @@
     <view
       class="guess-server float-from-top"
       :style="{ bottom: guessServerBottom }"
+      v-if="headerConfig?.showHeader"
     >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
@@ -27,6 +28,7 @@
     </view>
     <view class="bottom-bg"></view>
     <view
+     v-if="headerConfig?.showHeader"
       class="bottom-bg-white"
       :style="{ height: `${whiteAreaHeight}` }"
     ></view>
@@ -427,6 +429,7 @@
   };
 
   const getGuessServerBottom = () => {
+    return
     setTimeout(() => {
       query
         .selectAll(`.guess-server`)
@@ -544,7 +547,7 @@
     display: flex;
     position: fixed;
     // background-color: #fff;
-    bottom: 0px;
+    bottom: 20rpx;
     z-index: 99;
     .bottom-dh-char {
       font-size: 55rpx;
@@ -725,7 +728,7 @@
     }
     .animation {
       width: 100%;
-      height: 150rpx;
+      height: 200rpx;
       z-index: 999;
       background: linear-gradient(#defffd, #f5fbff);
       // filter: blur(2px);

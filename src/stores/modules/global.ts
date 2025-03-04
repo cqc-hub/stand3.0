@@ -23,8 +23,7 @@ interface IStateGlobal {
   cacheData: BaseObject;
   envH5: T_ENV_H5;
   isShowFlag: boolean; // 是否展示过启动页
-
-  sysCode: typeof globalGl.SYS_CODE;
+  sysCode: string;
   modeOld: boolean; // 敬老模式?
 }
 //页面存储token brower等
@@ -71,8 +70,13 @@ const globalStore = defineStore('global', {
       herenId: '',
       appShowData: {},
       appLaunchData: {},
+      // #ifdef H5
+      sysCode:'',
+      // #endif
 
+      // #ifndef H5
       sysCode: globalGl.SYS_CODE,
+      // #endif
       modeOld: false,
       cacheData: {},
       envH5: null,
@@ -136,7 +140,6 @@ const globalStore = defineStore('global', {
     updateBrowser(browser) {
       this.browser = browser;
     },
-
     initBrowser() {
       const { updateBrowser } = this;
       // #ifdef H5

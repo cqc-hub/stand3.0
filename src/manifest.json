@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxfa6c5f0835eedf08",
+    "appid": "wxbe1f8ae346536759",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,14 +76,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002143620963"
+    "appid": "2021004146614065"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -95,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "湖州市第三人民医院",
+  "name": "宁波口腔医院",
   "h5": {
     "router": {
       "base": "./"

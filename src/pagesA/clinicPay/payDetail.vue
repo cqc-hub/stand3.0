@@ -18,7 +18,7 @@
     <view class="g-container">
       <view class="head-bg" />
       <view class="container">
-        <block v-if="props.payState === '0'">
+        <block v-if="payState === '0'">
           <block v-if="qrCode">
             <view v-if="isShowRefreshQrCode" class="box page-first-item mb16">
               <refresh-qrcode
@@ -85,7 +85,7 @@
           </view>
         </block>
         <view
-          v-if="props.payState === '1' || detailData.payState === '0'"
+          v-if="payState === '1'"
           class="head-box g-border box page-first-item"
         >
           <view class="g-bold f40 g-break-word">
@@ -125,7 +125,7 @@
 
         <view v-if="props._t !== '1'" class="mt24">
           <g-flag
-            :typeFg="props.payState === '0' ? '38' : '0'"
+            :typeFg="payState === '0' ? '38' : '0'"
             isShowFgTip
             aaa
           />
@@ -383,7 +383,7 @@
   const isCannelShow = ref(false);
 
   const payState = computed(() => {
-    if (props.value.payState === '1' || detailData.value.payState === '0') {
+    if (props.value.payState === '1' || detailData.value.payState === '1') {
       return '1';
     }
 
@@ -512,13 +512,13 @@
   /** 已缴费页面对具体费用申请退费 */
   const isPayedItemDetailRefund = computed(() => {
     return (
-      props.value.payState === '0' &&
+      payState.value === '0' &&
       pageConfig.value.isPayedItemDetailRefund === '1'
     );
   });
 
   const isShowPayedFooter = computed(() => {
-    if (props.value.payState === '0') {
+    if (payState.value === '0') {
       return isPayedChargeBack.value || isPayedItemDetailRefund.value;
     }
 

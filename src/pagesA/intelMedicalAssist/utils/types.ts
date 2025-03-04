@@ -1,3 +1,4 @@
+import { hosData } from './utils';
 export type StyleConfigType = {
   transition: boolean;
   showHeader: boolean;
@@ -20,6 +21,7 @@ export type MsgListType = {
   imgUrl?: string;
   isSysAppMore?: boolean;
   chatId?: string;
+  hosData?: string;
 };
 
 export type MsgStatusType = {
@@ -68,13 +70,11 @@ export enum OrderStatusDescript {
   orderStatus_111 = '缴费成功，请前往检查取药。',
 }
 
-
-export type ChunkStatusType ={
+export type ChunkStatusType = {
   isWXStreamApi: boolean;
   isTyping: boolean;
   chunkTemp: string;
-  
-}
+};
 export class TaskQueue {
   queue: any[];
   isRunning: boolean;
@@ -84,14 +84,14 @@ export class TaskQueue {
   }
 
   // 添加任务到队列
-  addTask(task,...args) {
-    this.queue.push({task,args});
+  addTask(task, ...args) {
+    this.queue.push({ task, args });
     if (!this.isRunning) {
       this.run(); // 如果当前没有任务在执行，则启动任务执行
     }
   }
-  clearTask(){
-      this.queue = []
+  clearTask() {
+    this.queue = [];
   }
 
   // 执行任务
@@ -102,7 +102,7 @@ export class TaskQueue {
       try {
         await taskItem.task(...taskItem.args); // 执行任务并等待完成
       } catch (error) {
-        console.error("添加失败:", error);
+        console.error('添加失败:', error);
       }
     }
     this.isRunning = false; // 标记为执行完成

@@ -5,19 +5,35 @@
         <text>{{ props.msg }}</text>
       </view>
     </view>
-    <view class="dept-card-item mt40 flex-normal">
-      <view class="dept-header">
-        <view
-          class="text-ellipsis flex-normal  dept-line"
-          @click="gotoDept(item)"
-          v-for="(item, index) in props.list"
-          :key="index"
-        >
-          <view class="title text-ellipsis">
-            <text class="deptName">{{ item.deptName }}</text>
-            <text class="hosName">({{ item.hosName }})</text>
+    <view
+      class="dept-card-item mt40"
+      v-for="(item, index) in hosDeptList"
+      :key="`dept-hos${item.hosId + index}`"
+    >
+      <view class="title-line g-flex-rc-cc">
+        <view class="title ml16">
+          <text>院区：</text>
+          <text>{{ item.hosName }}</text>
+        </view>
+        <view v-if="item.distanceFormat" class="hos-away">
+          距离{{ item.distanceFormat }}km
+        </view>
+      </view>
+
+      <view class="flex-normal">
+        <view class="dept-header">
+          <view
+            class="text-ellipsis flex-normal dept-line"
+            @click="gotoDept(deptItem)"
+            v-for="(deptItem, deptIndex) in item.list"
+            :key="deptIndex"
+          >
+            <view class="title text-ellipsis">
+              <text class="deptName">{{ deptItem.deptName }}</text>
+              <text class="hosName">({{ deptItem.hosName }})</text>
+            </view>
+            <view class="button">去挂号</view>
           </view>
-          <view class="button">去挂号</view>
         </view>
       </view>
     </view>
@@ -28,10 +44,39 @@
   const props = defineProps<{
     list: any[];
     msg: string;
+    hosData: any[];
   }>();
-
+  const hosDeptList = ref<any>([]);
   onMounted(() => {
     console.log('DoctorCard mounted', props);
+    const showList = {};
+    const hosList: any[] = [];
+    props.list.forEach((item) => {
+      if (showList[`${item.hosId}`]) {
+        showList[`${item.hosId}`].push(item);
+      } else {
+        showList[`${item.hosId}`] = [item];
+      }
+    });
+    Object.entries(showList).forEach(([k, v]: Array<any>, i: number) => {
+      // let distanceFormat: any = Math.floor(Math.random() * 10);
+      let distanceFormat: any = null;
+      props.hosData.forEach((item, index) => {
+        if (item.hosId == k) {
+          distanceFormat = item.distanceFormat;
+        }
+      });
+      hosList.push({
+        hosId: k,
+        list: v,
+        hosName: v[0].hosName,
+        distanceFormat,
+      });
+    });
+    hosDeptList.value = hosList.sort(
+      (a, b) =>
+        (a?.distanceFormat || 99999999) - (b?.distanceFormat || 99999999)
+    );
   });
 
   import { joinQueryForUrl } from '@/common';
@@ -101,13 +146,29 @@
     height: 80rpx;
     overflow: hidden;
   }
-  .dept-line{
+  .dept-line {
     background-color: #fff;
-    padding:16rpx 32rpx;
+    padding: 16rpx 32rpx;
     border-radius: 36rpx;
-    margin:24rpx 0;
+    margin: 24rpx 0;
   }
-  .dept-header{
-    width:100%;
+  .dept-header {
+    width: 100%;
+  }
+
+  .title-line {
+    display: flex;
+    justify-content: space-between;
+    .title {
+      flex: 1 1 auto;
+      width: fit-content;
+    }
+    .hos-away {
+      // background-color: var(--hr-neutral-color-1);
+      border-radius: 8rpx;
+      padding: 4rpx 16rpx;
+      color: var(--hr-neutral-color-8);
+      width: fit-content;
+    }
   }
 </style>

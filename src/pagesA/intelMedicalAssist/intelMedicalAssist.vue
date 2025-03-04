@@ -66,6 +66,7 @@
 
   const props = defineProps<{
     isMess?: '1';
+    sysCode?: string;
   }>();
 
   const scrollChangeView = (e) => {
@@ -125,7 +126,7 @@
   })
 
   onLoad(() => {
-    init(props?.isMess);
+    init(props);
   });
 </script>
 <style lang="scss" scoped>

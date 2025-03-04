@@ -3,6 +3,7 @@ import { SYS_CODE } from '@/config/global';
 const TokenKey = 'mini_v3_token';
 const SysKey = 'mini_v3_sysCode';
 const HosIdKey = 'mini_v3_hosId';
+const sysCodeKey = 'mini_v3_sysCode';
 
 export const setLocalStorage = (locals) => {
   if (Array.isArray(locals)) {
@@ -32,9 +33,15 @@ export const getLocalStorage = (key: string) => {
 export function getToken() {
   return getLocalStorage(TokenKey);
 }
+ 
+export function getSysCode() {
+  // #ifdef H5
+  return getLocalStorage(sysCodeKey);
+  // #endif
 
-export function getSysCode(): string {
+  // #ifndef H5
   return SYS_CODE;
+  // #endif
 }
 
 export function setToken(token) {

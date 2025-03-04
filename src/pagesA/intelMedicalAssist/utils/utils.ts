@@ -15,6 +15,7 @@ import {
   ServerStaticData,
   useTBanner,
   openLocation,
+  getLocation,
   apiAsync,
   GStores,
 } from '@/utils';
@@ -41,6 +42,7 @@ export const reportPopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
+export const hosData = ref<any>([]);
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -74,7 +76,12 @@ export const reload = async (isMess) => {
   isPhoto.value = true;
 };
 
-export const init = async (isMess) => {
+export const init = async (props) => {
+  // #ifdef H5
+  if (props?.sysCode) {
+    uni.setStorageSync('mini_v3_sysCode', props.sysCode || '');
+  }
+  // #endif
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
@@ -98,14 +105,10 @@ export const init = async (isMess) => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
   };
-  isMess && isMess == '1' && initWithMess();
-  reload(isMess);
-  // api.inspectionAnalysis({})
+  props?.isMess && props?.isMess == '1' && initWithMess();
+  reload(props?.isMess);
   // test();
-  //  setTimeout(()=>{
-  //  styleConfig.value.showHeader=false
-  //  msgState.value.msgLoad=true
-  //  },200)
+
 };
 
 export const initWithMess = async () => {
@@ -265,6 +268,14 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
     return;
   }
   // #endif
+
+  // #ifdef  H5
+  if (chunkStatus.value?.isWXStreamApi) {
+    typeInAskH5(value);
+    return;
+  }
+  // #endif
+
   const {
     result: { showType, list, requestId, chatId },
   } = await api
@@ -283,7 +294,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   switchHandleResult(showType, list, requestId, chatId);
 };
 
-const switchHandleResult = (
+const switchHandleResult = async (
   showType: number,
   list: Array<any>,
   requestId: string,
@@ -304,7 +315,7 @@ const switchHandleResult = (
     switch (showType) {
       case 1:
         // 文本
-        // #ifdef  MP-WEIXIN
+        // #ifdef  MP-WEIXIN || H5
         if (chunkStatus.value?.isWXStreamApi) {
           dealShowType1withStream(list, requestId, chatId, typeInIndex);
           return;
@@ -317,9 +328,9 @@ const switchHandleResult = (
         //医生名片
         dealShowType7(list, requestId, chatId);
         break;
-
+      //科室列表
       case 6:
-        dealShowType6(list, requestId, chatId);
+        await dealShowType6(list, requestId, chatId);
         break;
       case 9:
         //地址
@@ -360,10 +371,19 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
     //     `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
     //   duration || 300
     // );
+    let target = '';
+    // #ifdef H5
+    target = selector || `#smartChatRoomItem_${msgList.value.length - 1}`;
+    // #endif
+
+    // #ifndef H5
+    target =
+      selector ||
+      `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`;
+    // #endif
+
     uni.pageScrollTo({
-      selector:
-        selector ||
-        `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+      selector: target,
       duration: duration === 0 ? 0 : duration || 300,
       success: () => {
         // console.log('滚动成功');
@@ -491,6 +511,7 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
+  console.log(3333, tempFilePaths);
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
@@ -747,12 +768,31 @@ const dealShowType7 = (list, requestId, chatId) => {
   });
 };
 
-const dealShowType6 = (list, requestId, chatId) => {
+const dealShowType6 = async (list, requestId, chatId) => {
+  if (!hosData.value?.length) {
+    msgState.value.msgLoad = true;
+    const location: any = await getLocation().catch((err) => {
+      console.error(err);
+    });
+
+    hosData.value = await ServerStaticData.getHosList(
+      {
+        gisLng: location?.longitude,
+        gisLat: location?.latitude,
+      },
+      {
+        noCache: true,
+      }
+    );
+    msgState.value.msgLoad = false;
+  }
+
   msgList.value.push({
     my: false,
     msg: '建议您到以下科室挂号就诊',
     type: 62,
     addRessList: list,
+    hosData: hosData.value,
     requestId,
     chatId,
     isSysAppMore: false,
@@ -972,6 +1012,91 @@ const typeInAsk = (value, answertype) => {
   });
 };
 
+const typeInAskH5 = (value: string) => {
+  const gStores = new GStores();
+  const settings = {
+    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    // url:"http://10.10.76.236:9907/customer/aiStreamAsk",
+    method: 'POST',
+    timeout: 0,
+    headers: {
+      'Content-Type': 'application/json',
+      phsId: isOpenSm4 ? '81681766' : '81681688',
+    },
+    data: JSON.stringify({
+      args: {
+        content: value,
+        sysCode: gStores.globalStore.sysCode,
+        // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
+        source: 1,
+        chatId: msgState.value.lastChatId,
+      },
+    }),
+  };
+
+  const typeInIndex = msgList.value.length;
+  console.warn('手动请求', settings);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', settings.url, true);
+  xhr.setRequestHeader('Content-Type', settings.headers['Content-Type']);
+  xhr.setRequestHeader('phsId', settings.headers['phsId']);
+  xhr.responseType = 'text';
+
+  let previousResponse = '';
+
+  xhr.onreadystatechange = () => {
+    console.log(22222, xhr);
+    if (xhr.readyState === 3) {
+      // 处理分块数据
+      const newResponse = xhr.responseText;
+      const newChunk = newResponse.substring(previousResponse.length);
+      previousResponse = newResponse;
+
+      if (newChunk) {
+        chunkStatus.value.isTyping = true;
+        chunkStatus.value.chunkTemp += newChunk;
+        let tempData = chunkStatus.value.chunkTemp.split('\n\n');
+        if (tempData.length > 1) {
+          tempData.forEach((item, index) => {
+            if (index === tempData.length - 1) {
+              chunkStatus.value.chunkTemp = item;
+            } else {
+              handleOneChunk(item, typeInIndex);
+            }
+          });
+        }
+      }
+    } else if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        // 处理成功响应
+        chunkStatus.value.isTyping = false;
+        msgState.value.msgLoad = false;
+      } else {
+        // 处理错误响应
+        console.log('errror', xhr.statusText);
+        msgState.value.msgLoad = false;
+        msgList.value.push({
+          my: false,
+          msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
+          type: -1,
+        });
+      }
+    }
+  };
+
+  xhr.onerror = () => {
+    console.log('请求出错');
+    msgState.value.msgLoad = false;
+    msgList.value.push({
+      my: false,
+      msg: '啊哦～网络连接异常，请稍后尝试。',
+      type: -1,
+    });
+  };
+
+  xhr.send(settings.data);
+};
 export const stopChunkRequest = () => {
   requestTask?.abort();
   msgState.value.msgLoad = false;
@@ -1036,29 +1161,17 @@ const test = () => {
   //   handleOneChunk(str, 0);
   //   return;
   const data = {
-    chatId: '',
+    showType: 6,
     list: [
       {
-        path: '/pages/index/index',
-        question: '镜湖院区内镜中心',
-        answer: '2楼内镜中心',
-        query:
-          '{"type":"8_2","typeData":{"buildingId":208089,"type":"1","hisName":"A020220"}}',
-        appId: 'wx0815c00f0b4bd7c3',
-        showType: 9,
-        terminalType: 'mini',
-      },
-      {
-        path: '/pages/index?id=RjCFT94AaD&appKey=4l2c52f0jU&poi=A010220',
-        question: '昌安院区内镜中心',
-        answer: '3楼13诊区',
-        appId: 'wx8735a8a39cf58b5e',
-        showType: 9,
-        terminalType: 'mini',
+        deptName: '烧伤科',
+        hosDeptId: 'A010243',
+        showType: 6,
+        hosId: '126943',
+        hosName: '昌安院区',
       },
     ],
-    requestId: '1895451830515920896',
-    showType: 9,
+    msg: '建议您到以下科室挂号就诊',
   };
   const { showType, list } = data;
   switchHandleResult(showType, list, '', '');

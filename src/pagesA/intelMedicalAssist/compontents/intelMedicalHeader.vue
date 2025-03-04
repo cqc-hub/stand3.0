@@ -7,9 +7,12 @@
       'simple-mess': headerConfig?.isMessage,
     }"
   >
+  <!-- #ifdef MP-WEIXIN -->
     <view class="navBar">
       <GCustomNavbar :title="'智能医助'" />
     </view>
+  <!-- #endif -->
+    
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
       class="w-full bg-img relative"
@@ -144,10 +147,20 @@
     // }
     .bg-img {
       z-index: 1;
+      /* #ifdef H5 */
+      height: 410rpx !important;
+      /* #endif */
+      /* #ifndef H5 */
       height: 570rpx !important;
+      /* #endif */
     }
     .person-img {
+      /* #ifndef H5 */
       top: 180rpx !important ;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 20rpx !important ;
+      /* #endif */
       width: 140rpx !important;
       height: 300rpx !important;
       left: 100% !important;
@@ -160,7 +173,7 @@
     }
     .header-hello {
       z-index: 2;
-      top: 180rpx !important;
+      // top: 180rpx !important;
     }
     .person-say {
       display: none;
@@ -179,7 +192,12 @@
       height: 370rpx !important;
     }
     .person-img {
+      /* #ifndef H5 */
       top: 180rpx !important ;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 20rpx !important ;
+      /* #endif */     
       width: 140rpx !important;
       height: 200rpx !important;
       overflow: hidden;
@@ -191,14 +209,19 @@
       }
     }
     .header-hello {
-      top: 180rpx !important;
+     top: 180rpx !important;
       
     }
     .person-say {
       display: none;
     }
     .guess {
+      /* #ifdef H5 */
+      top: 160rpx !important;
+      /* #endif */
+      /* #ifndef H5 */
       top: 320rpx !important;
+      /* #endif */
       height: 70rpx !important;
       .sroll-title {
         transition: 0.5s;
@@ -241,7 +264,12 @@
     .bg-img {
       width: 100vw;
       position: fixed;
+      /* #ifndef H5 */
       height: 790rpx;
+      /* #endif */
+      /* #ifdef H5 */
+      height: 630rpx;
+      /* #endif */
     }
     .person-img {
       width: 240rpx;
@@ -252,7 +280,12 @@
       z-index: 2;
       left: 50%;
       transform: translateX(-50%);
+       /* #ifdef H5 */
+       top: 20rpx;
+      /* #endif */
+      /* #ifndef H5 */
       top: 180rpx;
+      /* #endif */
       image {
         width: 240rpx;
         height: 500rpx;
@@ -261,7 +294,12 @@
     .header-hello {
       position: fixed;
       left: 50rpx;
+      /* #ifdef H5 */
+      top: 50rpx;
+      /* #endif */
+      /* #ifndef H5 */
       top: 210rpx;
+      /* #endif */
       .en {
         text-align: left;
         color: #00194c;
@@ -285,7 +323,13 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
+       /* #ifdef H5 */
+       top: 250rpx;
+      /* #endif */
+      /* #ifndef H5 */
       top: 410rpx;
+      /* #endif */
+ 
       z-index: 3;
       color: #000;
       //   font-weight: 600;
@@ -318,7 +362,13 @@
       position: fixed;
       z-index: 3;
       height: 270rpx;
+      /* #ifdef H5 */
+      top: 390rpx;
+      /* #endif */
+      /* #ifndef H5 */
       top: 550rpx;
+      /* #endif */
+      
       width: 100vw;
       .sroll-title {
         display: none;
