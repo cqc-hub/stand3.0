@@ -28,6 +28,10 @@ import type {
   TButtonConfig,
 } from '@/types';
 
+// #ifdef H5
+import wxH5 from 'weixin-js-sdk';
+// #endif
+
 const _cacheMap = new WeakMap();
 
 const Med_Copy_Config = { name: 'Med_Copy_Config' };
@@ -128,6 +132,15 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     return <T>{};
   }
 };
+const h5LoginFun = (options)=>{
+const { url,_isLogin,_isPatient } = options;
+ console.log(999,options)
+  if(_isLogin||_isPatient){
+    wxH5.miniProgram.navigateTo({
+      url: '/pages/home/my',
+    });
+  }
+}
 
 export const useTBanner = async (
   config: TBannerConfig | TButtonConfig,
@@ -198,18 +211,27 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
-
+//  登录和就诊人拦截
+  // #ifndef H5
   const pages = getCurrentPages();
-
   if (pages.length) {
     const _fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
     await beforeEach({
       url: _fullUrl,
       _isLogin: isLogin,
       _isPatient: isPatient,
     });
   }
+  // #endif
+
+   // #ifdef H5
+  //  await h5LoginFun({
+  //   url: fullUrl,
+  //   _isLogin: isLogin,
+  //   _isPatient: isPatient,
+  // })
+// #endif
+
 
   if (type === 'h5') {
     if (config.isSelfH5) {
@@ -248,6 +270,12 @@ export const useTBanner = async (
       // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
     }
+     // #ifdef H5
+     wx.miniProgram.navigateTo({
+      url: path,
+    });
+     // #endif
+     
     uni[routeType]({
       url,
     });

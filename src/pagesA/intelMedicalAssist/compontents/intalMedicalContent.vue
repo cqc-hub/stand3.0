@@ -248,7 +248,7 @@
   }
   .content-area {
     z-index: 0;
-    padding-top: 40rpx;
+    // padding-top: 40rpx;
     min-height: calc(100vh - 590rpx - 390rpx - 40rpx);
     padding-bottom: 390rpx;
     .my-width {
@@ -287,7 +287,7 @@
   }
   .chat-img {
     max-width: 240px;
-    z-index: -1;
+    // z-index: -1;
   }
   .report-header {
     color: #444;

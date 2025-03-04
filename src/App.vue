@@ -2,7 +2,7 @@
   import { onLaunch, onShow } from '@dcloudio/uni-app';
   import { useGlobalStore, useUserStore } from '@/stores';
   import { beforeEach } from '@/router';
-
+  import { getSysCode } from '@/common/useToken';
   import global from '@/config/global';
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
@@ -41,8 +41,17 @@
   });
 
   onShow(async (opt) => {
-    console.log('App Show', opt);
+    console.log('App Show', opt.query);
 
+    // #ifdef H5
+    // h5项目重置sysCode
+    if(opt.query?.sysCode !== getSysCode()){
+      uni.clearStorage();
+      uni.clearStorageSync()
+    }
+    uni.setStorageSync('mini_v3_sysCode',opt.query?.sysCode || '');
+    // #endif
+  
     // 温附二新增监控-只记录正式环境
     // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))
     globalStore.onAppShow(opt);
@@ -137,7 +146,6 @@
       if (pages.length) {
         const fullUrl: string = (pages[pages.length - 1] as any).$page
           ?.fullPath;
-
         fullUrl &&
           beforeEach({
             url: fullUrl,

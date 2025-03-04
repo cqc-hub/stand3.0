@@ -73,8 +73,13 @@ export const reload = async (isMess) => {
   popipHasShow.value = false;
   isPhoto.value = true;
 };
-
-export const init = async (isMess) => {
+ 
+export const init = async (props) => {
+  // #ifdef H5
+  if(props?.sysCode){
+    uni.setStorageSync('mini_v3_sysCode',props.sysCode || '');
+  }
+  // #endif
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
@@ -98,8 +103,8 @@ export const init = async (isMess) => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
   };
-  isMess && isMess == '1' && initWithMess();
-  reload(isMess);
+  props?.isMess && props?.isMess == '1' && initWithMess();
+  reload(props?.isMess);
   // api.inspectionAnalysis({})
   // test();
   //  setTimeout(()=>{
@@ -235,12 +240,20 @@ export const sendMsg = async (str: string) => {
   });
   msgState.value.msgLoad = true;
   scrollToNewMsg();
-  // #ifdef  MP-WEIXIN
+  // #ifdef  MP-WEIXIN 
   if (chunkStatus.value?.isWXStreamApi) {
     typeInAsk(value);
     return;
   }
   // #endif
+
+  // #ifdef  H5
+  if (chunkStatus.value?.isWXStreamApi) {
+    typeInAskH5(value);
+    return;
+  }
+  // #endif
+  
   const {
     result: { showType, list, requestId, chatId },
   } = await api
@@ -279,7 +292,7 @@ const switchHandleResult = (
     switch (showType) {
       case 1:
         // 文本
-        // #ifdef  MP-WEIXIN
+        // #ifdef  MP-WEIXIN || H5
         if (chunkStatus.value?.isWXStreamApi) {
           dealShowType1withStream(list, requestId, chatId, typeInIndex);
           return;
@@ -336,9 +349,17 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
     //   duration || 300
     // );
     uni.pageScrollTo({
+      // #ifdef H5
       selector:
-        selector ||
-        `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+      selector ||
+      `#smartChatRoomItem_${msgList.value.length - 1}`,
+      // #endif
+
+      // #ifndef H5
+      selector:
+      selector ||
+      `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
+      // #endif
       duration: duration === 0 ? 0 : duration || 300,
       success: () => {
         // console.log('滚动成功');
@@ -466,6 +487,7 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
+  console.log(3333,tempFilePaths)
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
@@ -946,6 +968,91 @@ const typeInAsk = (value) => {
   });
 };
 
+const typeInAskH5 = (value: string) => {
+  const gStores = new GStores();
+  const settings = {
+    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    // url:"http://10.10.76.236:9907/customer/aiStreamAsk",
+    method: 'POST',
+    timeout: 0,
+    headers: {
+      'Content-Type': 'application/json',
+      phsId: isOpenSm4 ? '81681766' : '81681688',
+    },
+    data: JSON.stringify({
+      args: {
+        content: value,
+        sysCode: gStores.globalStore.sysCode,
+        // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
+        source:1,
+        chatId: msgState.value.lastChatId,
+      },
+    }),
+  };
+
+  const typeInIndex = msgList.value.length;
+  console.warn('手动请求', settings);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', settings.url, true);
+  xhr.setRequestHeader('Content-Type', settings.headers['Content-Type']);
+  xhr.setRequestHeader('phsId', settings.headers['phsId']);
+  xhr.responseType = 'text';
+
+  let previousResponse = '';
+
+  xhr.onreadystatechange = () => {
+    console.log(22222,xhr)
+    if (xhr.readyState === 3) {
+      // 处理分块数据
+      const newResponse = xhr.responseText;
+      const newChunk = newResponse.substring(previousResponse.length);
+      previousResponse = newResponse;
+
+      if (newChunk) {
+        chunkStatus.value.isTyping = true;
+        chunkStatus.value.chunkTemp += newChunk;
+        let tempData = chunkStatus.value.chunkTemp.split('\n\n');
+        if (tempData.length > 1) {
+          tempData.forEach((item, index) => {
+            if (index === tempData.length - 1) {
+              chunkStatus.value.chunkTemp = item;
+            } else {
+              handleOneChunk(item, typeInIndex);
+            }
+          });
+        }
+      }
+    } else if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        // 处理成功响应
+        chunkStatus.value.isTyping = false;
+        msgState.value.msgLoad = false;
+      } else {
+        // 处理错误响应
+        console.log('errror', xhr.statusText);
+        msgState.value.msgLoad = false;
+        msgList.value.push({
+          my: false,
+          msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
+          type: -1,
+        });
+      }
+    }
+  };
+
+  xhr.onerror = () => {
+    console.log('请求出错');
+    msgState.value.msgLoad = false;
+    msgList.value.push({
+      my: false,
+      msg: '啊哦～网络连接异常，请稍后尝试。',
+      type: -1,
+    });
+  };
+
+  xhr.send(settings.data);
+};
 export const stopChunkRequest = () => {
   requestTask?.abort();
   msgState.value.msgLoad = false;
