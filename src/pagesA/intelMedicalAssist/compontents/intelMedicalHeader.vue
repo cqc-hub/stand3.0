@@ -148,10 +148,10 @@
     .bg-img {
       z-index: 1;
       /* #ifndef H5 */
-      height: 410rpx !important;
+      height: 570rpx !important;
       /* #endif */
       /* #ifdef H5 */
-      height: 570rpx !important;
+      height: 410rpx !important;
       /* #endif */
     }
     .person-img {
@@ -179,7 +179,12 @@
       display: none;
     }
     .guess {
-      top: 320rpx !important;
+       /* #ifndef H5 */
+       top: 320rpx !important;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 190rpx !important ;
+      /* #endif */     
     }
   }
   .simple-mess {
