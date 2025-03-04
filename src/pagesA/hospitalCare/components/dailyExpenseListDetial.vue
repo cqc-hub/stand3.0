@@ -12,7 +12,7 @@
           <view class="item">
             <view class="item-title">患者姓名</view>
             <view class="item-content">
-              {{ costInfoDetal.patientNameDes
+              {{ costInfoDetal.patientName
               }}{{
                 costInfoDetal.cardNumber
                   ? '(' + costInfoDetal.cardNumber + ')'

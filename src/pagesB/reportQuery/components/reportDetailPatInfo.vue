@@ -126,7 +126,7 @@
   import { storeToRefs } from 'pinia';
   import globalGl from '@/config/global';
 
-  const isClose = ref(true);
+  const isClose = ref(false);
   const props = defineProps<{
     pageProps: any;
     reportInfo: any;
