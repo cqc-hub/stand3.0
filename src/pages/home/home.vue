@@ -366,6 +366,7 @@
   import homePopup from './componetns/homePopup.vue';
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import homeArticle from './componetns/homeArticle/index.vue';
+  import homeDocCommend from './componetns/homeDocCommend.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
   import { useCommonTo } from '@/common/checkJump';
@@ -386,6 +387,7 @@
   const personConfig = ref(<ISystemConfig['person']>{});
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
+  const docRecommendList = ref([] as any[]);
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -499,6 +501,8 @@
         password: '123456',
       });
     }
+
+    // api.getPopularDoctors({})
   });
   //当用户将页面滑倒底部
   const handePageBottom = () => {
@@ -575,7 +579,7 @@
       uni.navigateTo({
         url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
       });
-      return
+      return;
     }
     let searchConfig = viewerStore.viewConfig[8]?.showFlag;
     if (searchConfig == 1) {
