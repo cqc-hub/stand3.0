@@ -133,13 +133,17 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
   }
 };
 const h5LoginFun = (options)=>{
+  const gStores = new GStores();
 const { url,_isLogin,_isPatient } = options;
- console.log(999,options)
-  if(_isLogin||_isPatient){
+ console.log(999,options,_isLogin)
+ if(_isLogin){
+  if(!gStores.globalStore.token.accessToken){
     wxH5.miniProgram.navigateTo({
       url: '/pages/home/my',
     });
+    return Promise.reject('h5需要登录----');
   }
+ } 
 }
 
 export const useTBanner = async (
@@ -225,11 +229,11 @@ export const useTBanner = async (
   // #endif
 
    // #ifdef H5
-  //  await h5LoginFun({
-  //   url: fullUrl,
-  //   _isLogin: isLogin,
-  //   _isPatient: isPatient,
-  // })
+   await h5LoginFun({
+    url: fullUrl,
+    _isLogin: isLogin,
+    _isPatient: isPatient,
+  })
 // #endif
 
 
@@ -251,7 +255,7 @@ export const useTBanner = async (
         sysCode,
       });
     }
-    // #ifdef H5
+    // #ifdef H5 
     location.href = fullUrl;
     // #endif
 
@@ -271,14 +275,16 @@ export const useTBanner = async (
       url = fullUrl;
     }
      // #ifdef H5
-     wx.miniProgram.navigateTo({
-      url: path,
+     wxH5.miniProgram.navigateTo({
+      url: url,
     });
      // #endif
-     
-    uni[routeType]({
+     // #ifndef H5
+     uni[routeType]({
       url,
     });
+     // #endif
+
   } else if (type === 'netHospital') {
     uni[routeType]({
      url: joinQuery(

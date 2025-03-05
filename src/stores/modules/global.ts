@@ -119,13 +119,38 @@ const globalStore = defineStore('global', {
     onAppShow(opt: any) {
       if (opt) {
         this.appShowData = opt;
+       // #ifdef H5
+       this.updataH5Info(opt)
+       // #endif
       }
     },
 
     onAppLaunch(opt: any) {
       if (opt) {
         this.appLaunchData = opt;
+        // #ifdef H5
+        this.updataH5Info(opt)
+        // #endif
       }
+    },
+    updataH5Info(opt){
+      // #ifdef H5
+      const {sysCode} = opt.query;
+
+      if(sysCode){
+        if(this.sysCode !== sysCode){
+          this.clearStore();
+          uni.clearStorage();
+          uni.clearStorageSync();
+          uni.removeStorageSync('systemConfig'); 
+        }
+        this.sysCode = sysCode;
+        uni.setStorageSync('mini_v3_sysCode',sysCode)
+      }
+      // if(token){
+      //   this.token.accessToken = token
+      // }
+      // #endif
     },
 
     updateToken(token: typeof this.token) {

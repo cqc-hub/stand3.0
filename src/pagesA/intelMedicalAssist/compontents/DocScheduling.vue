@@ -79,8 +79,7 @@
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
-  import { GStores } from '@/utils';
-  import { gotoH5DoctorDetails } from '../utils/utils';
+  import { GStores,useTBanner } from '@/utils'; 
   const gStores = new GStores();
   const props = defineProps<{
     list: any[];
@@ -93,7 +92,6 @@
 
   import { joinQueryForUrl } from '@/common';
   const gotoDocCard = (docInfo) => {
-    console.log(333,gStores.globalStore.sysCode,docInfo )
     // #ifndef H5
     const { hosId, hosDocId, hosDeptId, docName } = docInfo;
     uni.navigateTo({
@@ -105,9 +103,25 @@
       }),
     });
     // #endif
+   
+    // #ifdef H5 
+    delete docInfo.goodAt;
+    delete docInfo.date
 
-    // #ifdef H5
-    gotoH5DoctorDetails(docInfo)
+    switch(gStores.globalStore.sysCode){
+      case '1001035':
+        const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order', docInfo)
+        location.href = fullUrl;
+      break;
+      default:
+          useTBanner({
+          type:'self',
+          path:joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', docInfo),
+        })
+        break;
+
+    }
+
     // #endif
  
   };
@@ -118,6 +132,7 @@
 
   const gotoDept = () => {
     const docInfo = props?.list[0];
+    // #ifndef H5
     const { hosId, hosDeptId, deptName } = docInfo;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/order', {
@@ -126,6 +141,24 @@
         deptName,
       }),
     });
+    // #endif
+
+    // #ifdef H5
+    
+    switch(gStores.globalStore.sysCode){
+      case '1001035':
+      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',{...docInfo,deptId:docInfo.hosDeptId} )
+      location.href = fullUrl;
+      break;
+      default:
+      useTBanner({
+          type:'self',
+          path:joinQueryForUrl('/pagesA/MyRegistration/order', docInfo),
+        })
+        break;
+
+    }
+    // #endif
   };
 </script>
 <style lang="scss" scoped>

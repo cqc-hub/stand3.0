@@ -30,7 +30,7 @@
           >
             <view class="title text-ellipsis">
               <text class="deptName">{{ deptItem.deptName }}</text>
-              <text class="hosName">({{ deptItem.hosName }})</text>
+              <!-- <text class="hosName">({{ deptItem.hosName }})</text> -->
             </view>
             <view class="button">去挂号</view>
           </view>
@@ -41,12 +41,15 @@
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  import { GStores,useTBanner } from '@/utils'; 
   const props = defineProps<{
     list: any[];
     msg: string;
     hosData: any[];
   }>();
   const hosDeptList = ref<any>([]);
+  const gStores = new GStores();
+
   onMounted(() => {
     console.log('DoctorCard mounted', props);
     const showList = {};
@@ -82,6 +85,7 @@
   import { joinQueryForUrl } from '@/common';
 
   const gotoDept = (item) => {
+    // #ifdef h5
     const { hosId, hosDeptId, deptName } = item;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/order', {
@@ -90,6 +94,22 @@
         deptName,
       }),
     });
+    // #endif
+    // #ifdef H5
+    switch(gStores.globalStore.sysCode){
+      case '1001035':
+      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order', {...item,deptId:item.hosDeptId})
+      location.href = fullUrl;
+      break;
+      default:
+      useTBanner({
+          type:'self',
+          path:joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', item),
+        })
+        break;
+
+    }
+    // #endif
   };
 </script>
 <style lang="scss" scoped>

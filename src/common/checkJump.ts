@@ -185,6 +185,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   const type = payload.type;
   switch (item.terminalType) {
     case 'h5':
+      // #ifndef H5
       let query=''
       item.query&(query=`&query=${item.query}`) as any
       const obj = {
@@ -199,6 +200,12 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         },
       };
       typeNavigate(obj, type);
+      // #endif
+
+      // #ifdef H5
+      location.href = item.path;
+      // #endif
+  
       break;
     case 'mini':
       uni.navigateToMiniProgram({

@@ -7,7 +7,7 @@
     }"
   >
     <!-- <p v-for="item in 200" :key="item">{{ item }}</p> -->
-    <template
+      <template
       v-for="(msgItem, msgIndex) in msgList"
       :key="`smartChatRoomItem_${msgIndex}`"
     >
@@ -182,6 +182,8 @@
         </view>
       </view>
     </template>
+
+
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
       <view
         v-show="msgState.msgLoad && !chunkStatus.isTyping"
@@ -262,7 +264,7 @@
     z-index: 0;
     // padding-top: 40rpx;
     min-height: calc(100vh - 590rpx - 210rpx - 40rpx);
-    padding-bottom: 200rpx;
+    // padding-bottom: 200rpx;
     .my-width {
       width: 80vw;
     }
