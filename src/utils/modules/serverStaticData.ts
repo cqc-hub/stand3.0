@@ -215,7 +215,7 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
-//  登录和就诊人拦截
+  //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();
   if (pages.length) {
@@ -228,14 +228,13 @@ export const useTBanner = async (
   }
   // #endif
 
-   // #ifdef H5
-   await h5LoginFun({
-    url: fullUrl,
-    _isLogin: isLogin,
-    _isPatient: isPatient,
-  })
-// #endif
-
+  // #ifdef H5
+  //  await h5LoginFun({
+  //   url: fullUrl,
+  //   _isLogin: isLogin,
+  //   _isPatient: isPatient,
+  // })
+  // #endif
 
   if (type === 'h5') {
     if (config.isSelfH5) {
@@ -287,10 +286,7 @@ export const useTBanner = async (
 
   } else if (type === 'netHospital') {
     uni[routeType]({
-     url: joinQuery(
-        '/pagesC/cloudHospital/cloudHospital',
-        extraData
-      )
+      url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
   } else {
     console.log(
@@ -549,6 +545,12 @@ export class ServerStaticData {
     } else {
       return idTypeTerms;
     }
+  }
+
+  /** 国家籍贯 */
+  static async getCountryList(): Promise<ISelectOptions[]> {
+    await api.getCountryList();
+    return [];
   }
 
   static getOptionsLabel(list: ISelectOptions[], value) {

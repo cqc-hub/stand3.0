@@ -98,7 +98,13 @@
         </view>
       </view>
 
-      <view v-else class="mb20 mt24 flex-start box-list1">
+      <view
+        v-else
+        :class="{
+          mt24: tabs.length && tabs.length > 1,
+        }"
+        class="mb20 flex-start box-list1"
+      >
         <g-side-list
           :style="{
             width: '220rpx',
@@ -179,7 +185,10 @@
           </view>
         </view>
       </view>
-      <g-flag typeFg="45" isShowFgTip aaa />
+
+      <view class="pr32 pl32">
+        <g-flag typeFg="45" isShowFgTip aaa />
+      </view>
     </scroll-view>
     <view class="g-footer" v-if="pageLoading && list && list.length > 0">
       <button
@@ -315,10 +324,53 @@
     isFgShow45.value = true;
   });
 
+  const get1001048List = async (billingType: any) => {
+    const { result = [] } = await api
+      .getConvenientServiceList({
+        billingType,
+        hosId: props.hosId,
+      })
+      .finally(() => {
+        pageLoading.value = true;
+        uni.stopPullDownRefresh();
+      });
+
+    result.map((o) => {
+      o.itemCode = o.itemId;
+    });
+    const jcList = result.filter((o) => o.billingType === '99998');
+    const jyList = result.filter((o) => o.billingType === '99999');
+
+    sideList.value = [];
+    if (jcList.length) {
+      sideList.value = [
+        {
+          itemName: '检查项目',
+          items: jcList,
+        },
+      ];
+    }
+
+    if (jyList.length) {
+      sideList.value.push({
+        itemName: '检验项目',
+        items: jyList,
+      });
+    }
+
+    if (sideList.value.length) {
+      list.value = sideList.value[0].items;
+    }
+  };
+
   const getList = async (billingType: any) => {
     list.value.length = 0;
     sideList.value = [];
-    const { result } = await api
+
+    if (gStores.globalStore.sysCode === '1001048') {
+      return await get1001048List(billingType);
+    }
+    const { result = [] } = await api
       .getItemList({
         billingType,
         hosId: props.hosId,
@@ -513,7 +565,7 @@
     }
     .box {
       box-sizing: border-box;
-      padding: 24rpx 32rpx 40rpx;
+      // padding: 24rpx 32rpx 40rpx;
       width: 100%;
       .box-card {
         background: #ffffff;

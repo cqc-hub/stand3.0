@@ -504,6 +504,10 @@
               o.options = await ServerStaticData.getIdTypeTerms();
               break;
 
+            case 'country':
+              o.options = await ServerStaticData.getCountryList();
+              break;
+
             default:
               break;
           }

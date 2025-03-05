@@ -26,6 +26,8 @@
         </view>
       </view>
     </view>
+    <view class="bottom-bg-fff"></view>
+
     <view class="bottom-bg"></view>
     <view
      v-if="headerConfig?.showHeader"
@@ -451,7 +453,7 @@
   const getAuth = () => {
     wx.getSetting({
       success: (res) => {
-        console.log('res_____', res);
+      
         if (!res.authSetting['scope.record']) {
           wx.authorize({
             scope: 'scope.record',
@@ -673,6 +675,14 @@
     background: radial-gradient(#d1fffc, #b3e2ff);
     filter: blur(20px);
     z-index: 2;
+  }
+  .bottom-bg-fff{
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 100rpx;
+    background: #fff;
+    z-index: 1;
   }
   .bottom-bg-white {
     background-color: #fff;

@@ -146,7 +146,7 @@ export const isSubscribeWx = async () => {
     });
   } else {
     const { source } = gStores.globalStore.browser;
-    
+
       uni.showLoading({
         title: '加载中',
         mask: true,
@@ -160,7 +160,7 @@ export const isSubscribeWx = async () => {
       if (res?.result?.subscribe === 0) {
         //没关注过
         return false;
-      } 
+      }
    return true
   }
 };
@@ -290,13 +290,15 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       } else {
         const obj3 = {
           url: item.path,
-          fail: () => {
+          fail: (e) => {
+            console.log('跳转失败', e);
             gStores.messageStore.showMessage(
               `请确认跳转地址正确性${item.path}`,
               3000
             );
           },
         };
+        console.log(obj3)
         typeNavigate(obj3, type);
       }
 

@@ -11,11 +11,11 @@
       :key="`dept-hos${item.hosId + index}`"
     >
       <view class="title-line g-flex-rc-cc">
-        <view class="title ml16">
+        <view class="title ml16 text-ellipsis">
           <text>院区：</text>
           <text>{{ item.hosName }}</text>
         </view>
-        <view v-if="item.distanceFormat" class="hos-away">
+        <view v-if="item.distanceFormat" class="hos-away text-ellipsis">
           距离{{ item.distanceFormat }}km
         </view>
       </view>
@@ -189,6 +189,7 @@
       padding: 4rpx 16rpx;
       color: var(--hr-neutral-color-8);
       width: fit-content;
+      min-width: 160rpx;
     }
   }
 </style>
