@@ -46,7 +46,7 @@
                   <text class="color-888 f28">{{ item.docTitleName }}</text>
                 </view>
 
-                <!-- <view>233</view> -->
+                <view class="color-444 f28">{{ item.hosName }}</view>
               </view>
             </view>
 
