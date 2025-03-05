@@ -145,7 +145,7 @@
                     :class="{
                       ['color-888 f32']: msgItem.type === 3,
                     }"
-                    class="f32"
+                    class="f32 mWidth80"
                   >
                     <ua-markdown :source="msgItem.msg" />
                   </view>
@@ -354,5 +354,8 @@
         animation: change#{$i} 2s infinite;
       }
     }
+  }
+  .mWidth80 {
+    min-width: 80vw;
   }
 </style>
