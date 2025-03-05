@@ -146,6 +146,16 @@
             {{ detailData.invoiceNumber }}
           </view>
         </view>
+
+        <view
+          v-if="detailData.medicineSpot"
+          class="head-row flex-normal flex-start-r"
+        >
+          <view class="head-row-label text-no-wrap color-888">取药地点</view>
+          <view class="head-row-value color-444">
+            {{ detailData.medicineSpot }}
+          </view>
+        </view>
       </block>
     </view>
   </view>

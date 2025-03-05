@@ -97,7 +97,7 @@ export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
 interface ISelectInstance extends IBaseInstance {
   field: 'select';
   options: ISelectOptions[];
-  autoOptions?: 'nationTerms' | 'patientTypeTerms' | 'idTypeTerms';
+  autoOptions?: 'nationTerms' | 'patientTypeTerms' | 'idTypeTerms' | 'country';
 }
 
 interface IAddressInstance extends IBaseInstance {

@@ -132,15 +132,15 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     return <T>{};
   }
 };
-const h5LoginFun = (options)=>{
-const { url,_isLogin,_isPatient } = options;
- console.log(999,options)
-  if(_isLogin||_isPatient){
+const h5LoginFun = (options) => {
+  const { url, _isLogin, _isPatient } = options;
+  console.log(999, options);
+  if (_isLogin || _isPatient) {
     wxH5.miniProgram.navigateTo({
       url: '/pages/home/my',
     });
   }
-}
+};
 
 export const useTBanner = async (
   config: TBannerConfig | TButtonConfig,
@@ -211,7 +211,7 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
-//  登录和就诊人拦截
+  //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();
   if (pages.length) {
@@ -224,14 +224,13 @@ export const useTBanner = async (
   }
   // #endif
 
-   // #ifdef H5
+  // #ifdef H5
   //  await h5LoginFun({
   //   url: fullUrl,
   //   _isLogin: isLogin,
   //   _isPatient: isPatient,
   // })
-// #endif
-
+  // #endif
 
   if (type === 'h5') {
     if (config.isSelfH5) {
@@ -270,21 +269,18 @@ export const useTBanner = async (
       // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
     }
-     // #ifdef H5
-     wx.miniProgram.navigateTo({
+    // #ifdef H5
+    wx.miniProgram.navigateTo({
       url: path,
     });
-     // #endif
-     
+    // #endif
+
     uni[routeType]({
       url,
     });
   } else if (type === 'netHospital') {
     uni[routeType]({
-     url: joinQuery(
-        '/pagesC/cloudHospital/cloudHospital',
-        extraData
-      )
+      url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
   } else {
     console.log(
@@ -543,6 +539,12 @@ export class ServerStaticData {
     } else {
       return idTypeTerms;
     }
+  }
+
+  /** 国家籍贯 */
+  static async getCountryList(): Promise<ISelectOptions[]> {
+    await api.getCountryList();
+    return [];
   }
 
   static getOptionsLabel(list: ISelectOptions[], value) {
