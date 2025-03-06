@@ -100,8 +100,9 @@
           </view>
         </view>
         <view class="bottom-dh-content" v-if="!isVoice && isShow">
-          <view class="border">
-            <input
+          <view class="border" >
+            <input 
+             v-if="!msgState.msgLoad"
               v-model="msgState.msg"
               class="dh-input f28"
               type="textarea"
@@ -113,7 +114,15 @@
               :focus="msgState.focus"
               @blur="onBlur"
             />
+            <input 
+             v-else
+              class="dh-input f28"
+              disabled="true"
+              placeholder-class="my-neirong-sm f28"
+              placeholder="请输入症状/药品/疾病..." 
+            />
           </view>
+        
         </view>
         <view
           class="bottom-dh-content"

@@ -6,7 +6,7 @@
       @click="itemClick(item)"
       class="flex-normal"
     >
-      <img :src="globalGl.BASE_IMG+item.ico" class="mr8 menu-ico" />
+      <img :src="$global.BASE_IMG+item.ico" class="mr8 menu-ico" />
       <view class="f32 color-blue">{{ item.label }}</view>
     </view>
   </view>

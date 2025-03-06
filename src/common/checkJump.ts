@@ -4,6 +4,9 @@ import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
 import api from '@/service/api';
+// #ifdef H5
+import wxH5 from 'weixin-js-sdk';
+// #endif
 
 //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -146,7 +149,7 @@ export const isSubscribeWx = async () => {
     });
   } else {
     const { source } = gStores.globalStore.browser;
-    
+
       uni.showLoading({
         title: '加载中',
         mask: true,
@@ -160,7 +163,7 @@ export const isSubscribeWx = async () => {
       if (res?.result?.subscribe === 0) {
         //没关注过
         return false;
-      } 
+      }
    return true
   }
 };
@@ -185,6 +188,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   const type = payload.type;
   switch (item.terminalType) {
     case 'h5':
+      // #ifndef H5
       let query=''
       item.query&(query=`&query=${item.query}`) as any
       const obj = {
@@ -199,6 +203,12 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         },
       };
       typeNavigate(obj, type);
+      // #endif
+
+      // #ifdef H5
+      location.href = item.path;
+      // #endif
+  
       break;
     case 'mini':
       uni.navigateToMiniProgram({
@@ -272,6 +282,14 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       }
       typeNavigate(obj2, type);
       break;
+      case 'my':
+        // 为了智能助医h5使用
+        // #ifdef H5
+        wxH5.miniProgram.navigateTo({
+          url: item.path,
+        });
+        // #endif
+        break;
     default:
       //自研或者其他直接跳转的
       if (item.path == 'scanCode') {
@@ -283,13 +301,15 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       } else {
         const obj3 = {
           url: item.path,
-          fail: () => {
+          fail: (e) => {
+            console.log('跳转失败', e);
             gStores.messageStore.showMessage(
               `请确认跳转地址正确性${item.path}`,
               3000
             );
           },
         };
+        console.log(obj3)
         typeNavigate(obj3, type);
       }
 

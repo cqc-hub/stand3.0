@@ -7,7 +7,7 @@
     }"
   >
     <!-- <p v-for="item in 200" :key="item">{{ item }}</p> -->
-    <template
+      <template
       v-for="(msgItem, msgIndex) in msgList"
       :key="`smartChatRoomItem_${msgIndex}`"
     >
@@ -156,7 +156,8 @@
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
-                  <view v-if="msgItem.firstCommendList" class="pt20">
+                 <!-- #ifndef H5 -->
+                 <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
                   </view>
@@ -174,7 +175,8 @@
                     :requestId="msgItem.requestId"
                     @askAgain="clearChatId"
                   />
-                  <!--  -->
+                 <!-- #endif -->
+            
                 </view>
               </view>
             </view>
@@ -182,6 +184,8 @@
         </view>
       </view>
     </template>
+
+
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
       <view
         v-show="msgState.msgLoad && !chunkStatus.isTyping"

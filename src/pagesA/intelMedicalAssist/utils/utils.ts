@@ -17,7 +17,8 @@ import {
   openLocation,
   getLocation,
   apiAsync,
-  GStores
+  GStores,
+  throttle
 } from '@/utils';
 import { cloneUtil, joinQuery,joinQueryForUrl } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
@@ -76,12 +77,7 @@ export const reload = async (isMess) => {
   isPhoto.value = true;
 };
 
-export const init = async (props) => {
-  // #ifdef H5
-  if (props?.sysCode) {
-    uni.setStorageSync('mini_v3_sysCode', props.sysCode || '');
-  }
-  // #endif
+export const init = async (props) => { 
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
@@ -303,7 +299,7 @@ const switchHandleResult = async (
   if (!(list && list.length)) {
     msgList.value.push({
       my: false,
-      msg: '未查询到您想要了解的问题，点击客服中心获取帮助！',
+      msg: '未查询到您想要了解的问题，请拨打客服电话获取帮助！',
       type: 1,
       requestId,
       firstCommendList: cloneUtil(recommendMenuList).filter((o) =>
@@ -364,12 +360,6 @@ const switchHandleResult = async (
 
 export const scrollToNewMsg = (selector?: string, duration?: number) => {
   nextTick(() => {
-    // console.log(
-    //   '开始滚动',
-    //   selector ||
-    //     `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`,
-    //   duration || 300
-    // );
     let target = '';
     // #ifdef H5
     target = selector || `#smartChatRoomItem_${msgList.value.length - 1}`;
@@ -393,6 +383,8 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
     });
   });
 };
+
+// export const scrollToNewMsg = throttle(scrollToNewMsgFun, 300);
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
@@ -510,7 +502,6 @@ export const sendImg = async () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-  console.log(3333, tempFilePaths);
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
@@ -944,9 +935,7 @@ let taskQueue = new TaskQueue();
 const typeInAsk = (value, answertype) => {
   const gStores = new GStores();
   const settings = {
-    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamAsk`,
     url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
-    // url: "http://10.10.117.58:9907/customer/aiStreamAsk",
     method: 'POST',
     timeout: 0,
     responseType: 'text',
@@ -960,7 +949,6 @@ const typeInAsk = (value, answertype) => {
         content: value,
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
-        // sysCode: 1001017,
         chatId: msgState.value.lastChatId,
         type: answertype,
       },
@@ -1029,7 +1017,8 @@ const typeInAskH5 = (value: string,answertype) => {
         // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
         source: 1,
         chatId: msgState.value.lastChatId,
-        type: answertype,
+        // type: answertype,
+        type: "h5",
       },
     }),
   };
@@ -1047,7 +1036,29 @@ const typeInAskH5 = (value: string,answertype) => {
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 3) {
-      // 处理分块数据
+      // 处理分块数据 -- 目前接口一次性返回
+      // const newResponse = xhr.responseText;
+      // console.log('3的时候',xhr.responseText)
+      // const newChunk = newResponse.substring(previousResponse.length);
+      // previousResponse = newResponse;
+      // if (newChunk) {
+      //   chunkStatus.value.isTyping = true;
+      //   chunkStatus.value.chunkTemp += newChunk;
+      //   let tempData = chunkStatus.value.chunkTemp.split('\n\n');
+      //   if (tempData.length > 1) {
+      //     tempData.forEach((item, index) => {
+      //       if (index === tempData.length - 1) {
+      //         chunkStatus.value.chunkTemp = item;
+      //       } else {
+      //         console.log('3的时候handleOneChunk',item,typeInIndex)
+      //         handleOneChunk(item, typeInIndex);
+      //       }
+      //     });
+      //   }
+      // }
+    } else if (xhr.readyState === 4) {
+      // 暂时处理分块数据
+      msgState.value.msgLoad = false; 
       const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
       previousResponse = newResponse;
@@ -1065,11 +1076,10 @@ const typeInAskH5 = (value: string,answertype) => {
           });
         }
       }
-    } else if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         // 处理成功响应
         chunkStatus.value.isTyping = false;
-        msgState.value.msgLoad = false;
+        msgState.value.msgLoad = false; 
       } else {
         // 处理错误响应
         console.log('errror', xhr.statusText);

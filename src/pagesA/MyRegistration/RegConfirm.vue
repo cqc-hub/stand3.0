@@ -730,7 +730,7 @@
           gStores.messageStore.showMessage(recommendation, 0, {
             useDialog: true,
             dialogOpt: {
-              title: '预约挂号温馨提示',
+              title: '科室就诊提醒',
               isShowCancel: false,
             },
             closeCallBack: r,

@@ -122,9 +122,11 @@
         <button class="btn btn-primary btn-border" @click="addPhoto">
           上传报告图片
         </button>
+        <!-- #ifndef H5 -->
         <button class="btn btn-border btn-primary" @click="changeTtype">
           {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
         </button>
+        <!-- #endif -->
       </view>
     </view>
   </g-popup>

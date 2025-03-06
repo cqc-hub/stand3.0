@@ -43,15 +43,6 @@
   onShow(async (opt) => {
     console.log('App Show', opt.query);
 
-    // #ifdef H5
-    // h5项目重置sysCode
-    if(getSysCode() && opt.query?.sysCode !== getSysCode()){
-      uni.clearStorage();
-      uni.clearStorageSync()
-    }
-    opt.query?.sysCode && uni.setStorageSync('mini_v3_sysCode',opt.query?.sysCode || '');
-    // #endif
-
     // 温附二新增监控-只记录正式环境
     // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))
     globalStore.onAppShow(opt);

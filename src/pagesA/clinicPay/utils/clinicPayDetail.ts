@@ -140,6 +140,7 @@ export type TCostList = {
 }[];
 
 export type TPayDetailInfo = {
+  medicineSpot: string;
   costList?: TCostList;
   patientName: string;
   cardNumber: string;
