@@ -1,5 +1,5 @@
 <template>
-  <view class="mess-history float-from-top" v-show="styleConfig?.historyMess">
+  <view class="mess-history float-from-top" v-show="styleConfig?.historyMess&&styleConfig?.isMessage">
     <view v-for="(card, cardIndex) in messHisFormData[navIndex]" :key="`card${cardIndex}`">
       <view v-if="cardIndex == messHisFormData[navIndex]?.length" id="scroll-active"></view>
       <Recommend-Card :formData="card" :formList="formList" />

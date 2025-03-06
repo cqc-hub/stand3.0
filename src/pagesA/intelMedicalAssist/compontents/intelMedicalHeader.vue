@@ -4,7 +4,7 @@
     :class="{
       'simple-header': !headerConfig?.showHeader,
       transition: headerConfig?.transition,
-      'simple-mess': headerConfig?.isMessage,
+      'simple-mess': headerConfig?.isMessage||headerConfig?.historyMess ,
     }"
   >
   <!-- #ifdef MP-WEIXIN -->

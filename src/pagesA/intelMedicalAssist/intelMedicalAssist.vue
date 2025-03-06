@@ -32,7 +32,10 @@
     </view>
     <view v-if="popipHasShow">
       <!-- 报告解读，业务逻辑写在组件中 -->
-      <reportPopup @inspectionAnalysis="inspectionAnalysis"  @send-img="sendImg" />
+      <reportPopup
+        @inspectionAnalysis="inspectionAnalysis"
+        @send-img="sendImg"
+      />
     </view>
 
     <g-message />
@@ -41,7 +44,12 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { deQueryForUrl } from '@/common';
-  import { onLoad, onPageScroll,onShow,onShareAppMessage } from '@dcloudio/uni-app';
+  import {
+    onLoad,
+    onPageScroll,
+    onShow,
+    onShareAppMessage,
+  } from '@dcloudio/uni-app';
   import IntelMedicalHeader from './compontents/intelMedicalHeader.vue';
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
@@ -95,18 +103,19 @@
     }
     if (styleConfig.value.isMessage) {
       styleConfig.value.showHeader = false;
+      styleConfig.value.historyMess = true;
       return;
     }
     if (flag) {
       styleConfig.value.showHeader = flag === '1';
     }
+    styleConfig.value.historyMess = !styleConfig.value.historyMess;
     styleConfig.value.showHeader = !styleConfig.value.showHeader;
   };
   changeShowHeader = throttle(changeShowHeader, 1000);
   onShareAppMessage((opt) => {
     return {
-      path:
-        '/pagesA/intelMedicalAssist/intelMedicalAssist',
+      path: '/pagesA/intelMedicalAssist/intelMedicalAssist',
     };
   });
   onMounted(() => {
@@ -121,9 +130,9 @@
     scrollChangeView(e);
   });
 
-  onShow(()=>{
-    reload(props?.isMess)
-  })
+  onShow(() => {
+    reload(props?.isMess);
+  });
 
   onLoad(() => {
     init(props);
