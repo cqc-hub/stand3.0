@@ -282,16 +282,9 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       }
       typeNavigate(obj2, type);
       break;
-      case 'my':
-        // 为了智能助医h5使用
-        // #ifdef H5
-        wxH5.miniProgram.navigateTo({
-          url: item.path,
-        });
-        // #endif
-        break;
     default:
       //自研或者其他直接跳转的
+      // #ifndef H5
       if (item.path == 'scanCode') {
         //扫一扫
         scanCode();
@@ -312,6 +305,14 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         console.log(obj3)
         typeNavigate(obj3, type);
       }
+      // #endif
+
+    // 为了智能助医h5使用
+      // #ifdef H5
+        wxH5.miniProgram.navigateTo({
+          url: item.path,
+        });
+      // #endif
 
       break;
   }
