@@ -116,7 +116,7 @@
       default:
           useTBanner({
           type:'self',
-          path:joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', docInfo),
+          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', docInfo),
         })
         break;
 
@@ -153,7 +153,7 @@
       default:
       useTBanner({
           type:'self',
-          path:joinQueryForUrl('/pagesA/MyRegistration/order', docInfo),
+          path:joinQueryForUrl('pagesA/MyRegistration/order', docInfo),
         })
         break;
 

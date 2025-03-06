@@ -385,7 +385,7 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
   });
 };
 
-// export const scrollToNewMsg = throttle(scrollToNewMsgFun, 1000);
+// export const scrollToNewMsg = throttle(scrollToNewMsgFun, 300);
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;

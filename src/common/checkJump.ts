@@ -4,6 +4,9 @@ import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
 import api from '@/service/api';
+// #ifdef H5
+import wxH5 from 'weixin-js-sdk';
+// #endif
 
 //拦截-登录
 export const checkLogin = (item: IRoute) => {
@@ -279,6 +282,14 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       }
       typeNavigate(obj2, type);
       break;
+      case 'my':
+        // 为了智能助医h5使用
+        // #ifdef H5
+        wxH5.miniProgram.navigateTo({
+          url: item.path,
+        });
+        // #endif
+        break;
     default:
       //自研或者其他直接跳转的
       if (item.path == 'scanCode') {

@@ -104,7 +104,7 @@
       default:
       useTBanner({
           type:'self',
-          path:joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', item),
+          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', item),
         })
         break;
 

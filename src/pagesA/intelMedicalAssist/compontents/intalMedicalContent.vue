@@ -156,7 +156,8 @@
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
-                  <view v-if="msgItem.firstCommendList" class="pt20">
+                 <!-- #ifndef H5 -->
+                 <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
                   </view>
@@ -174,7 +175,8 @@
                     :requestId="msgItem.requestId"
                     @askAgain="clearChatId"
                   />
-                  <!--  -->
+                 <!-- #endif -->
+            
                 </view>
               </view>
             </view>
@@ -264,7 +266,7 @@
     z-index: 0;
     // padding-top: 40rpx;
     min-height: calc(100vh - 590rpx - 210rpx - 40rpx);
-    // padding-bottom: 200rpx;
+    padding-bottom: 200rpx;
     .my-width {
       width: 80vw;
     }
