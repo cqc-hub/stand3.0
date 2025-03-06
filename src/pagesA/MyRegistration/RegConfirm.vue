@@ -719,15 +719,15 @@
 
     const { isConfirmOrderWithDeptTip } = pageConfig.value;
     if (isConfirmOrderWithDeptTip === '1') {
-      const { result: { recommendation = '' } = {} } = await api
+      const { result: { promptMessage = '' } = {} } = await api
         .getDeptDetail({
           hosDeptId: props.value.hosDeptId,
         })
         .catch(() => ({} as any));
 
-      if (recommendation) {
+      if (promptMessage) {
         await new Promise<{ confirm: boolean }>((r) => {
-          gStores.messageStore.showMessage(recommendation, 0, {
+          gStores.messageStore.showMessage(promptMessage, 0, {
             useDialog: true,
             dialogOpt: {
               title: '科室就诊提醒',
