@@ -85,7 +85,7 @@
   import { joinQueryForUrl } from '@/common';
 
   const gotoDept = (item) => {
-    // #ifndef h5
+    // #ifndef H5
     const { hosId, hosDeptId, deptName } = item;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/order', {
@@ -95,6 +95,7 @@
       }),
     });
     // #endif
+
     // #ifdef H5
     switch(gStores.globalStore.sysCode){
       case '1001035':
@@ -104,10 +105,9 @@
       default:
       useTBanner({
           type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', item),
+          path:joinQueryForUrl('pagesA/MyRegistration/order?type=order', item),
         })
         break;
-
     }
     // #endif
   };
