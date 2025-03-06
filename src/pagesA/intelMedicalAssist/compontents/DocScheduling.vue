@@ -79,6 +79,7 @@
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  import { deepClone } from '@/common/utils';
   import { GStores,useTBanner } from '@/utils'; 
   const gStores = new GStores();
   const props = defineProps<{
@@ -104,29 +105,25 @@
     });
     // #endif
    
-    // #ifdef H5 
-    delete docInfo.goodAt;
-    delete docInfo.date
-
+    // #ifdef H5  
+    const docInfoQuery = deepClone(docInfo)
+    delete docInfoQuery.goodAt;
+    delete docInfoQuery.date
     switch(gStores.globalStore.sysCode){
       case '1001035':
-        const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order', docInfo)
+        const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order', docInfoQuery)
         location.href = fullUrl;
       break;
       default:
           useTBanner({
           type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', docInfo),
+          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', docInfoQuery),
         })
         break;
-
     }
-
     // #endif
- 
   };
   const chooseDocDate = (docInfo, date) => {
-    console.log('docInfo,date', docInfo, date);
     gotoDocCard(docInfo);
   };
 

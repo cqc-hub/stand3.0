@@ -244,7 +244,7 @@
        top: 180rpx !important ;
       /* #endif */
       /* #ifdef H5 */
-      top: 20rpx !important ;
+      top: 50rpx !important ;
       /* #endif */
     }
     .person-say {
