@@ -163,15 +163,17 @@
         },
       });
       if (orderConfig.value?.isCelebratedDeptMode) {
-        const { result:{CELEBRATED_DEPT:jsonStr} } = await api.getParamsMoreBySysCode({
+        const {
+          result: { CELEBRATED_DEPT: jsonStr },
+        } = await api.getParamsMoreBySysCode({
           paramCode: 'CELEBRATED_DEPT',
         });
-        try{
-          jsonStr && (celebratedDeptData.value = JSON.parse(jsonStr)[hosId.value]);
-        }catch(e){
-          console.error('CELEBRATED_DEPT',e);
+        try {
+          jsonStr &&
+            (celebratedDeptData.value = JSON.parse(jsonStr)[hosId.value]);
+        } catch (e) {
+          console.error('CELEBRATED_DEPT', e);
         }
-
       }
     }
 
@@ -258,7 +260,8 @@
   };
 
   const registerContinue = async (item: IDeptLv3 | IDeptLv2 | IDeptLv1) => {
-    if (item.promptMessage) {
+    const { isConfirmOrderWithDeptTip } = orderConfig.value;
+    if (item.promptMessage && isConfirmOrderWithDeptTip !== '1') {
       await new Promise((closeCallBack: any) => {
         gStores.messageStore.showMessage(item.promptMessage, 0, {
           closeCallBack,
@@ -304,22 +307,20 @@
     }
 
     queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
-    if(celebratedDeptData.value.includes(item.hosDeptId)){
-      const query={
+    if (celebratedDeptData.value.includes(item.hosDeptId)) {
+      const query = {
         hosId: item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
-        hosDeptId:encodeURIComponent( item.hosDeptId),
+        hosDeptId: encodeURIComponent(item.hosDeptId),
         deptName: encodeURIComponent(item.deptName),
-      }
+      };
       uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/DepartmentCardDetail', query),
-    });
-    }else{
+        url: joinQuery('/pagesA/MyRegistration/DepartmentCardDetail', query),
+      });
+    } else {
       uni.navigateTo({
-      url: joinQuery('/pagesA/MyRegistration/order', queryArg),
-    });
+        url: joinQuery('/pagesA/MyRegistration/order', queryArg),
+      });
     }
-
- 
   };
 
   const handleDzClick = async (data) => {
