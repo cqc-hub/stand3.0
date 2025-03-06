@@ -18,9 +18,9 @@ import {
   getLocation,
   apiAsync,
   GStores,
-  throttle
+  throttle,
 } from '@/utils';
-import { cloneUtil, joinQuery,joinQueryForUrl } from '@/common';
+import { cloneUtil, joinQuery, joinQueryForUrl } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
 import { isOpenSm4 } from '@/service';
 import globalGl from '@/config/global';
@@ -77,7 +77,7 @@ export const reload = async (isMess) => {
   isPhoto.value = true;
 };
 
-export const init = async (props) => { 
+export const init = async (props) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
@@ -104,7 +104,6 @@ export const init = async (props) => {
   props?.isMess && props?.isMess == '1' && initWithMess();
   reload(props?.isMess);
   // test();
-
 };
 
 export const initWithMess = async () => {
@@ -362,13 +361,14 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
   nextTick(() => {
     let target = '';
     // #ifdef H5
-    target = selector || `#smartChatRoomItem_${msgList.value.length - 1}`;
+    target = selector || `#smartChatRoomItem_load`;
     // #endif
 
     // #ifndef H5
-    target =
-      selector ||
-      `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`;
+    // target =
+    //   selector ||
+    //   `#pageScroll >>> #smartChatRoomItem_${msgList.value.length - 1}`;
+    target = selector || `#pageScroll >>> #smartChatRoomItem_load`;
     // #endif
 
     uni.pageScrollTo({
@@ -697,7 +697,7 @@ const dealShowType1withStream = async (
       msgList.value.push({
         my: false,
         msg: '',
-        boldMsg: (question && question ) || '',
+        boldMsg: (question && question) || '',
         type: 1,
         requestId,
         chatId,
@@ -728,7 +728,7 @@ const dealShowType1 = (list, requestId, chatId) => {
   msgList.value.push({
     my: false,
     msg: answer,
-    boldMsg: (question && question ) || '',
+    boldMsg: (question && question) || '',
     type: 1,
     requestId,
     chatId,
@@ -999,7 +999,7 @@ const typeInAsk = (value, answertype) => {
   });
 };
 
-const typeInAskH5 = (value: string,answertype) => {
+const typeInAskH5 = (value: string, answertype) => {
   const gStores = new GStores();
   const settings = {
     url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
@@ -1018,7 +1018,7 @@ const typeInAskH5 = (value: string,answertype) => {
         source: 1,
         chatId: msgState.value.lastChatId,
         // type: answertype,
-        type: "h5",
+        type: 'h5',
       },
     }),
   };
@@ -1058,7 +1058,7 @@ const typeInAskH5 = (value: string,answertype) => {
       // }
     } else if (xhr.readyState === 4) {
       // 暂时处理分块数据
-      msgState.value.msgLoad = false; 
+      msgState.value.msgLoad = false;
       const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
       previousResponse = newResponse;
@@ -1079,7 +1079,7 @@ const typeInAskH5 = (value: string,answertype) => {
       if (xhr.status === 200) {
         // 处理成功响应
         chunkStatus.value.isTyping = false;
-        msgState.value.msgLoad = false; 
+        msgState.value.msgLoad = false;
       } else {
         // 处理错误响应
         console.log('errror', xhr.statusText);
@@ -1161,42 +1161,165 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
   }
 };
 
-const test = async() => {
-  // const str = `id:,1894569410019172352
-  // data:{"chatId":"","list":[{"date":["2025-03-10","2025-03-03","2025-03-04","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03","2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"},{"date":["2025-03-03"],"deptName":"多学科门诊(杭州口腔医院)","goodAt":"主诊：各类错牙合畸形的诊断、治疗，包括儿童早期矫治、儿童及成人牙列不齐、先天缺牙、埋伏牙及骨性错牙合正畸-正颌多学科联合治疗等。","ampm":"2","hosDeptId":"992246295136113548","fee":"15.0","ampmName":"下午","hosId":"13078","schDate":"2025-03-03","schId":"2025-03-03_2_992870638711017806","docName":"李琦","schState":"0","intro":"共产党员 \r\n毕业于山东大学、口腔正畸学硕士  \r\n中国口腔正畸学会（COS）会员、美国隐适美（Invisalign）矫正资格认证医师 接受系统专业的正畸学教育，熟练掌握功能矫治技术、固定矫治技术、自锁托槽矫治技术、无托槽隐形矫治技术等，诊治大量的正畸患者，具有先进的矫治理论。工作细心严谨，热情负责。多次参加国内外口腔正畸学术交流会议，对正畸领域的前沿矫治理念、技术与方法等有较全面的了解。参与《不同患者对姿势位微笑上唇线位置的审美评价》的临床研究，在口腔专业杂志发表论文多篇。","numRemain":5,"hosDocId":"992870638711017806","hosName":"杭州口腔医院平海院区","docTitleName":"主治医师"}],"requestId":"1894569447688216576","showType":6}
+const test = async () => {
+  //   const str = `id:zjsrmyy_search_doctor_office-87c9eb94fa5611efaa3f0242ac110003,1897539136071544832
+  // data:{"chatId":"zjsrmyy_search_doctor_office-87c9eb94fa5611efaa3f0242ac110003","list":[{"deptName":"神经内科门诊","hosDeptId":"3000007|A0102013","showType":6,"hosId":"13001","hosName":"乐清市人民医院"}],"requestId":"","showType":6}
   // event:json
   // :`;
-  //   handleOneChunk(str, 0);
-  //   return;
-  // const data = {
-  //   showType: 6,
-  //   list: [
-  //     {
-  //       deptName: '烧伤科',
-  //       hosDeptId: 'A010243',
-  //       showType: 6,
-  //       hosId: '126943',
-  //       hosName: '昌安院区',
-  //     },
-  //   ],
-  //   msg: '建议您到以下科室挂号就诊',
-  // };
+  // handleOneChunk(str, 0);
+  // return;
+  const data = {
+    chatId: 'zjsrmyy_search_doctor_office-e403704efa4f11efaa3f0242ac110003',
+    list: [
+      {
+        date: [
+          '2025-03-06',
+          '2025-03-07',
+          '2025-03-09',
+          '2025-03-10',
+          '2025-03-11',
+          '2025-03-13',
+          '2025-03-14',
+          '2025-03-16',
+          '2025-03-17',
+          '2025-03-18',
+          '2025-03-20',
+          '2025-03-21',
+          '2025-03-23',
+          '2025-03-24',
+          '2025-03-25',
+          '2025-03-27',
+          '2025-03-28',
+          '2025-03-30',
+          '2025-03-31',
+          '2025-04-01',
+          '2025-04-03',
+        ],
+        deptName: '烧伤科',
+        ampm: '2',
+        hosDeptId: '3000042|A0102041',
+        fee: '17.00',
+        ampmName: '下午',
+        hosId: '13001',
+        schStateName: '有号',
+        specialClinicName: '烧伤及创面修复外科门诊',
+        schDate: '2025-03-06',
+        schId: '20221129000000000634',
+        docName: '胡加林',
+        categorName: '专家（副高）',
+        numHadReg: 3,
+        schState: '0',
+        numCount: 15,
+        specialClinicDept: '3000042',
+        numRemain: 12,
+        categor: '5',
+        hosDocId: '20212048',
+        hosName: '乐清市人民医院',
+        docTitleName: '副主任医师',
+        specialDeptId: '3000042',
+        schQukCategor: '烧伤及创面修复科(副高)',
+      },
+      {
+        date: [
+          '2025-03-07',
+          '2025-03-08',
+          '2025-03-11',
+          '2025-03-14',
+          '2025-03-15',
+          '2025-03-18',
+          '2025-03-19',
+          '2025-03-21',
+          '2025-03-22',
+          '2025-03-25',
+          '2025-03-26',
+          '2025-03-28',
+          '2025-03-29',
+          '2025-04-01',
+          '2025-04-02',
+          '2025-04-03',
+        ],
+        deptName: '烧伤科',
+        ampm: '2',
+        hosDeptId: '3000042|A0102041',
+        fee: '12.00',
+        ampmName: '下午',
+        hosId: '13001',
+        schStateName: '有号',
+        specialClinicName: '烧伤及创面修复外科门诊',
+        schDate: '2025-03-07',
+        schId: '20221213000000000105',
+        docName: '崔丞硕',
+        categorName: '普通号',
+        numHadReg: 1,
+        schState: '0',
+        numCount: 10,
+        specialClinicDept: '3000042',
+        numRemain: 9,
+        categor: '2',
+        hosDocId: '20211947',
+        hosName: '乐清市人民医院',
+        docTitleName: '主治医师',
+        specialDeptId: '3000042',
+        schQukCategor: '烧伤及创面修复科',
+      },
+      {
+        date: [
+          '2025-03-12',
+          '2025-03-13',
+          '2025-03-17',
+          '2025-03-20',
+          '2025-03-23',
+          '2025-03-24',
+          '2025-04-01',
+          '2025-04-02',
+          '2025-04-03',
+        ],
+        deptName: '烧伤科',
+        ampm: '1',
+        hosDeptId: '3000042|A0102041',
+        fee: '12.00',
+        ampmName: '上午',
+        hosId: '13001',
+        schStateName: '有号',
+        specialClinicName: '烧伤及创面修复外科门诊',
+        schDate: '2025-03-12',
+        schId: '20221129000000000535',
+        docName: '林岳森',
+        categorName: '普通号',
+        numHadReg: 0,
+        schState: '0',
+        numCount: 10,
+        specialClinicDept: '3000042',
+        numRemain: 10,
+        categor: '2',
+        hosDocId: '20211848',
+        hosName: '乐清市人民医院',
+        docTitleName: '主治医师',
+        specialDeptId: '3000042',
+        schQukCategor: '烧伤及创面修复科',
+      },
+    ],
+    requestId: '',
+    showType: 7,
+  };
+  const { showType, list } = data;
+  switchHandleResult(showType, list, '', '');
   // const { showType, list } = data;
   // switchHandleResult(showType, list, '', '');
-  const { result } = await api.inspectionAnalysis({
-    sysCode: globalGl.SYS_CODE,
-    source: 1,
-    repId:"2025030400000460",
-    repType: 1,
-    extend:{"repIdDesc":"1deXdjssHbyuqyWVP4gJrHfoOdsC3MsR"}
-  });
-  const { showType, list, requestId, chatId } = result;
-  if (showType === 1) {
-    dealShowType1(list, requestId, chatId);
-  } else {
-    dealShowType12(list, requestId, chatId);
-  }
-  scrollToNewMsg();
+  // const { result } = await api.inspectionAnalysis({
+  //   sysCode: globalGl.SYS_CODE,
+  //   source: 1,
+  //   repId:"2025030400000460",
+  //   repType: 1,
+  //   extend:{"repIdDesc":"1deXdjssHbyuqyWVP4gJrHfoOdsC3MsR"}
+  // });
+  // const { showType, list, requestId, chatId } = result;
+  // if (showType === 1) {
+  //   dealShowType1(list, requestId, chatId);
+  // } else {
+  //   dealShowType12(list, requestId, chatId);
+  // }
+  // scrollToNewMsg();
 };
 
 //将2进制转为16进制
@@ -1261,7 +1384,7 @@ function convertAsciiEscapeSequences(input) {
 }
 
 //处理h5 医生跳转
-export const gotoH5DoctorDetails = (docInfo)=>{
+export const gotoH5DoctorDetails = (docInfo) => {
   const gStores = new GStores();
   const sysCode = gStores.globalStore.sysCode;
   const { hosId, hosDocId, hosDeptId, docName } = docInfo;
@@ -1276,10 +1399,9 @@ export const gotoH5DoctorDetails = (docInfo)=>{
   });
   switch (sysCode) {
     case '1001035':
-      
       break;
 
-      default:
-        break;
+    default:
+      break;
   }
-}
+};
