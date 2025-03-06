@@ -85,7 +85,7 @@
   import { joinQueryForUrl } from '@/common';
 
   const gotoDept = (item) => {
-    // #ifdef h5
+    // #ifndef h5
     const { hosId, hosDeptId, deptName } = item;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/order', {

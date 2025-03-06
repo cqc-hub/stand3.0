@@ -4,15 +4,15 @@
     :class="{
       'simple-header': !headerConfig?.showHeader,
       transition: headerConfig?.transition,
-      'simple-mess': headerConfig?.isMessage||headerConfig?.historyMess ,
+      'simple-mess': headerConfig?.isMessage || headerConfig?.historyMess,
     }"
   >
-  <!-- #ifdef MP-WEIXIN -->
+    <!-- #ifdef MP-WEIXIN -->
     <view class="navBar">
       <GCustomNavbar :title="'智能医助'" />
     </view>
-  <!-- #endif -->
-    
+    <!-- #endif -->
+
     <img
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
       class="w-full bg-img relative"
@@ -30,11 +30,15 @@
       <view class="en f32 pb24 flex-normal">
         <!-- {{ `Hi,亲爱的用户` }} -->
         <view>
-          {{ `Hi,${gStores?.userStore?.patChoose?.patientName || '亲爱的用户'}` }}
+          {{
+            `Hi,${gStores?.userStore?.patChoose?.patientName || '亲爱的用户'}`
+          }}
         </view>
-        <view @click="chooseAction"   v-if="gStores?.userStore?.patChoose?.patientName ">
+        <view
+          @click="chooseAction"
+          v-if="gStores?.userStore?.patChoose?.patientName"
+        >
           <img
-        
             :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
             class="w-full ml8"
           />
@@ -91,7 +95,7 @@
 
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
-  import {popipHasShow,isPhoto,initWithMess} from '../utils/utils'
+  import { popipHasShow, isPhoto, initWithMess } from '../utils/utils';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
 
@@ -100,7 +104,7 @@
   const props = defineProps<{
     guessAskList?: Array<{ label: string; value: string }>;
     headerConfig: StyleConfigType;
-    isMess?:string;
+    isMess?: string;
   }>();
   const emits = defineEmits(['click-guess']);
 
@@ -133,19 +137,19 @@
 
   const choosePatHandler = ({ item }) => {
     gStores.userStore.updatePatChoose(item);
-    popipHasShow.value=false
-    isPhoto.value=true
-    props?.isMess && props?.isMess == '1' && initWithMess()
+    popipHasShow.value = false;
+    isPhoto.value = true;
+    props?.isMess && props?.isMess == '1' && initWithMess();
   };
 </script>
 <style lang="scss" scoped>
   .simple-header {
-      /* #ifndef H5 */
-      height: 590rpx !important;
-      /* #endif */
-      /* #ifdef H5 */
-      height: 430rpx !important;
-      /* #endif */
+    /* #ifndef H5 */
+    height: 590rpx !important;
+    /* #endif */
+    /* #ifdef H5 */
+    height: 430rpx !important;
+    /* #endif */
     // .wihite-mask {
     //   top: 310rpx !important;
     //   height: 130rpx !important;
@@ -189,22 +193,34 @@
       display: none;
     }
     .guess {
-       /* #ifndef H5 */
-       top: 320rpx !important;
+      /* #ifndef H5 */
+      top: 320rpx !important;
       /* #endif */
       /* #ifdef H5 */
       top: 160rpx !important ;
-      /* #endif */     
+      /* #endif */
     }
   }
   .simple-mess {
+    /* #ifndef H5 */
     height: 390rpx !important;
+
+    /* #endif */
+    /* #ifdef H5 */
+    height: 240rpx !important;
+    /* #endif */
     // .wihite-mask {
     //   top: 310rpx !important;
     //   height: 130rpx !important;
     // }
     .bg-img {
+      /* #ifndef H5 */
       height: 370rpx !important;
+
+      /* #endif */
+      /* #ifdef H5 */
+      height: 220rpx !important;
+      /* #endif */
     }
     .person-img {
       /* #ifndef H5 */
@@ -212,7 +228,7 @@
       /* #endif */
       /* #ifdef H5 */
       top: 20rpx !important ;
-      /* #endif */     
+      /* #endif */
       width: 140rpx !important;
       height: 200rpx !important;
       overflow: hidden;
@@ -224,20 +240,24 @@
       }
     }
     .header-hello {
-     top: 180rpx !important;
-      
+       /* #ifndef H5 */
+       top: 180rpx !important ;
+      /* #endif */
+      /* #ifdef H5 */
+      top: 20rpx !important ;
+      /* #endif */
     }
     .person-say {
       display: none;
     }
     .guess {
       /* #ifdef H5 */
-      top: 160rpx !important;
+      top: 180rpx !important;
       /* #endif */
       /* #ifndef H5 */
-      top: 320rpx !important;
+      top: 340rpx !important;
       /* #endif */
-      height: 70rpx !important;
+      height: 50rpx !important;
       .sroll-title {
         transition: 0.5s;
         display: flex !important;
@@ -295,8 +315,8 @@
       z-index: 2;
       left: 50%;
       transform: translateX(-50%);
-       /* #ifdef H5 */
-       top: 20rpx;
+      /* #ifdef H5 */
+      top: 20rpx;
       /* #endif */
       /* #ifndef H5 */
       top: 180rpx;
@@ -325,9 +345,9 @@
         text-align: left;
         line-height: 28rpx;
       }
-      image{
+      image {
         width: 0.8em;
-        height:0.8em;
+        height: 0.8em;
       }
     }
     .person-say {
@@ -338,13 +358,13 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-       /* #ifdef H5 */
-       top: 250rpx;
+      /* #ifdef H5 */
+      top: 250rpx;
       /* #endif */
       /* #ifndef H5 */
       top: 410rpx;
       /* #endif */
- 
+
       z-index: 3;
       color: #000;
       //   font-weight: 600;
@@ -383,7 +403,7 @@
       /* #ifndef H5 */
       top: 550rpx;
       /* #endif */
-      
+
       width: 100vw;
       .sroll-title {
         display: none;
