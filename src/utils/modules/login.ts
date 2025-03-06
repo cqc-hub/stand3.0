@@ -313,7 +313,7 @@ export class LoginUtils extends GStores {
 
     return this.faceVerifyAndPData({
       name: upName || patientName,
-      idCardNumber: upIdCard || idCard,
+      idCardNumber: idCard || upIdCard,
     });
   }
 

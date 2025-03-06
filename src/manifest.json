@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7b1baac614ebed72",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,16 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -82,20 +73,19 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173633521"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true,
-    "appid": "ttbcd1ca6c23ed0a5401"
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false
   },
   "vueVersion": "3",
-  "name": "西安市红会医院互联网医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "optimization": {
       "treeShaking": {
