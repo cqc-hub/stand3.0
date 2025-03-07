@@ -33,6 +33,19 @@ export const encryptDes = (message: string, key = defaultKey) => {
   return encrypted.toString();
 };
 
+export const encryptByTripleDES = (val: string, key, iv) => {
+  let _iv = CryptoJS.enc.Utf8.parse(iv);
+  let keyHex = CryptoJS.enc.Utf8.parse(key);
+  // console.log('CryptoJS')
+  let encrypted = CryptoJS.TripleDES.encrypt(val, keyHex, {
+    iv: _iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+
+  return encrypted.toString();
+};
+
 // DES解密
 export const decryptDes = (ciphertext, key = defaultKey) => {
   const keyHex = CryptoJS.enc.Utf8.parse(key);
