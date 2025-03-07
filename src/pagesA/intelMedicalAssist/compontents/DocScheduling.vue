@@ -114,6 +114,17 @@
         const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order', docInfoQuery)
         location.href = fullUrl;
       break;
+      case '1001029':
+        useTBanner({
+              type:'self',
+              path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', {
+              query:JSON.stringify({
+            ...docInfoQuery,
+            type:'order'
+          })
+          }),
+        })
+      break;
       default:
           useTBanner({
           type:'self',
@@ -140,14 +151,24 @@
     });
     // #endif
 
-    // #ifdef H5
-    console.log(2222,gStores.globalStore.sysCode)
+    // #ifdef H5 
     
     switch(gStores.globalStore.sysCode){
       case '1001035':
       const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',{...docInfo,deptId:docInfo.hosDeptId} )
       location.href = fullUrl;
       break;
+      case '1001029':
+        useTBanner({
+              type:'self',
+              path:joinQueryForUrl('pagesA/MyRegistration/order', {
+              query:JSON.stringify({
+            ...docInfo,
+            type:'order'
+          })
+          }),
+        })
+        break;
       default:
       useTBanner({
           type:'self',
