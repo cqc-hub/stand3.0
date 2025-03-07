@@ -454,6 +454,20 @@
     isLocal: '1',
   };
 
+  const 宜兴检查预约: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '宜兴检查预约',
+    extraData: {
+      _type: 'yx_jcyy',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+    isLocal: '1',
+  };
+
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
@@ -496,7 +510,7 @@
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      useTBanner(红会旧就诊卡退款);
+      useTBanner(宜兴检查预约);
     }, 1000);
   });
 </script>

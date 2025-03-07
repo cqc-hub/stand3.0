@@ -96,11 +96,24 @@
     // #endif
 
     // #ifdef H5
+    
+    
     switch(gStores.globalStore.sysCode){
       case '1001035':
       const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order', {...item,deptId:item.hosDeptId})
       location.href = fullUrl;
       break;
+      case '1001029':
+        useTBanner({
+              type:'self',
+              path:joinQueryForUrl('pagesA/MyRegistration/order', {
+              query:JSON.stringify({
+               ...item,
+            type:'order'
+          })
+          }),
+        })
+        break;
       default:
       useTBanner({
           type:'self',

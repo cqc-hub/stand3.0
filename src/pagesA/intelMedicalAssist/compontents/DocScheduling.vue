@@ -126,7 +126,22 @@
           docInfoQuery
         );
         location.href = fullUrl;
+<<<<<<< HEAD
+      break;
+      case '1001029':
+        useTBanner({
+              type:'self',
+              path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', {
+              query:JSON.stringify({
+            ...docInfoQuery,
+            type:'order'
+          })
+          }),
+        })
+      break;
+=======
         break;
+>>>>>>> 3dd99bb50786eb001ef6255009718553f13c6122
       default:
         useTBanner({
           type: 'self',
@@ -162,6 +177,25 @@
     });
     // #endif
 
+<<<<<<< HEAD
+    // #ifdef H5 
+    
+    switch(gStores.globalStore.sysCode){
+      case '1001035':
+      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',{...docInfo,deptId:docInfo.hosDeptId} )
+      location.href = fullUrl;
+      break;
+      case '1001029':
+        useTBanner({
+              type:'self',
+              path:joinQueryForUrl('pagesA/MyRegistration/order', {
+              query:JSON.stringify({
+            ...docInfo,
+            type:'order'
+          })
+          }),
+        })
+=======
     // #ifdef H5
 
     switch (gStores.globalStore.sysCode) {
@@ -171,6 +205,7 @@
           { ...docInfo, deptId: docInfo.hosDeptId }
         );
         location.href = fullUrl;
+>>>>>>> 3dd99bb50786eb001ef6255009718553f13c6122
         break;
       default:
         useTBanner({

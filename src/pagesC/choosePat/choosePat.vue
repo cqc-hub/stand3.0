@@ -52,7 +52,7 @@
   import { GStores, useTBanner } from '@/utils';
   import { IPat } from '@/stores';
   import { deQueryForUrl } from '@/common';
-  import { HK_hook, YX_hook } from './utils';
+  import { HK_hook } from './utils';
   import globalGl from '@/config/global';
 
   import PList from './components/list.vue';
@@ -76,7 +76,6 @@
   const _firstIn = ref(true);
 
   const { patClick: HK_PatClick, scanClick: HK_ScanClick } = HK_hook();
-  const { patClick: YX_PatClick } = YX_hook();
   const choosePatHandler = ({ item: pat }: { item: IPat; number: number }) => {
     _firstIn.value = false;
     gStores.userStore.updatePatChoose(pat);
@@ -86,10 +85,6 @@
     switch (type) {
       case 'HKTCLJ':
         HK_PatClick(pat, pageProps.value);
-        break;
-
-      case 'yxjcyy':
-        YX_PatClick(pat);
         break;
 
       default:
