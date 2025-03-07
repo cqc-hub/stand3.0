@@ -143,7 +143,7 @@ const { url,_isLogin,_isPatient } = options;
     });
     return Promise.reject('h5需要登录----');
   }
- } 
+ }
 }
 
 export const useTBanner = async (
@@ -242,7 +242,7 @@ export const useTBanner = async (
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        // baseUrl = h5UrlLocal;
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;
@@ -254,7 +254,7 @@ export const useTBanner = async (
         sysCode,
       });
     }
-    // #ifdef H5 
+    // #ifdef H5
     location.href = fullUrl;
     // #endif
 

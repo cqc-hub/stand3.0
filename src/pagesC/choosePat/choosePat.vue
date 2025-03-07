@@ -63,7 +63,9 @@
         type:
           | 'xx'
           // 杭口—停车领劵
-          | 'HKTCLJ';
+          | 'HKTCLJ'
+          // 宜兴检查预约
+          | 'yxjcyy';
         [key: string]: any;
       }
     >{}

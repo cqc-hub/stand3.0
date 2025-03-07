@@ -1,7 +1,6 @@
 import api from '@/service/api';
 import { IPat } from '@/stores';
 import { apiAsync, cacheUtil, useTBanner } from '@/utils';
-import { ref, computed } from 'vue';
 
 // 杭口
 export const HK_hook = () => {
@@ -11,7 +10,6 @@ export const HK_hook = () => {
       const { patientId } = pat;
       const { hosId } = props;
       console.log(pat);
-
 
       const requestArg = {
         patientId,
@@ -50,7 +48,7 @@ export const HK_hook = () => {
       if (result && typeof result === 'string') {
         await api.qrCodeQuery({
           codeStr: result.replace(/\<#jn\>/g, ''),
-          hosId
+          hosId,
         });
 
         const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
@@ -72,3 +70,5 @@ export const HK_hook = () => {
     },
   };
 };
+
+// 宜兴

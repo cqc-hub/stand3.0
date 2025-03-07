@@ -51,7 +51,7 @@
     "@gowiny/uni-router": "^1.0.12",
     "@nuxt/devalue": "^2.0.0",
     "animate.css": "^4.1.1",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.5",
     "miniprogram-sm-crypto": "^0.3.13",
     "node-sass": "^7.0.1",

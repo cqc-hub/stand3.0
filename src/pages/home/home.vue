@@ -522,12 +522,7 @@
 
   const getDocRecommendList = async () => {
     const { result = [] } = await api.getPopularDoctors({});
-    docRecommendList.value = [
-      ...result,
-      ...result,
-      ...result,
-      ...result,
-    ];
+    docRecommendList.value = result;
   };
 
   //当用户将页面滑倒底部
