@@ -62,7 +62,6 @@
       }
     });
     Object.entries(showList).forEach(([k, v]: Array<any>, i: number) => {
-      // let distanceFormat: any = Math.floor(Math.random() * 10);
       let distanceFormat: any = null;
       props.hosData.forEach((item, index) => {
         if (item.hosId == k) {

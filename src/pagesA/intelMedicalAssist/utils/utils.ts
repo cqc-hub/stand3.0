@@ -759,6 +759,8 @@ const dealShowType7 = (list, requestId, chatId) => {
 };
 
 const dealShowType6 = async (list, requestId, chatId) => {
+  // #ifndef H5 
+  // h5暂时不支持距离
   if (!hosData.value?.length) {
     msgState.value.msgLoad = true;
     const location: any = await getLocation().catch((err) => {
@@ -776,7 +778,7 @@ const dealShowType6 = async (list, requestId, chatId) => {
     );
     msgState.value.msgLoad = false;
   }
-
+  // #endif
   msgList.value.push({
     my: false,
     msg: '建议您到以下科室挂号就诊',
