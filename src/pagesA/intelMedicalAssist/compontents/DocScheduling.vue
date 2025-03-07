@@ -4,7 +4,11 @@
       <view class="msg mb8 f28 pl32">
         <text>{{ props.msg }}</text>
       </view>
-      <view class="more mb8 f28 pr32" @click="gotoDept" v-if="props?.list[0]?.hosDeptId">
+      <view
+        class="more mb8 f28 pr32"
+        @click="gotoDept"
+        v-if="props?.list[0]?.hosDeptId"
+      >
         <text>更多医生</text>
       </view>
     </view>
@@ -16,7 +20,11 @@
       <view class="doc-header flex-normal" @click="gotoDocCard(item)">
         <view class="photo">
           <image
-            :src="item?.docPhoto?item?.docPhoto:'/static/image/order/order-doctor-avatar.png'"
+            :src="
+              item?.docPhoto
+                ? item?.docPhoto
+                : '/static/image/order/order-doctor-avatar.png'
+            "
             class="doc-info-avatar"
             mode="aspectFill"
           />
@@ -80,12 +88,14 @@
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { deepClone } from '@/common/utils';
-  import { GStores,useTBanner } from '@/utils'; 
+  import { GStores, useTBanner } from '@/utils';
+  import {handleChooseSchDate} from '../utils/utils'
   const gStores = new GStores();
   const props = defineProps<{
     list: any[];
     msg: string;
   }>();
+
 
   onMounted(() => {
     console.log('DoctorCard mounted', props);
@@ -104,27 +114,39 @@
       }),
     });
     // #endif
-   
-    // #ifdef H5  
-    const docInfoQuery = deepClone(docInfo)
+
+    // #ifdef H5
+    const docInfoQuery = deepClone(docInfo);
     delete docInfoQuery.goodAt;
-    delete docInfoQuery.date
-    switch(gStores.globalStore.sysCode){
+    delete docInfoQuery.date;
+    switch (gStores.globalStore.sysCode) {
       case '1001035':
-        const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order', docInfoQuery)
+        const fullUrl = joinQueryForUrl(
+          'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order',
+          docInfoQuery
+        );
         location.href = fullUrl;
-      break;
+        break;
       default:
-          useTBanner({
-          type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', docInfoQuery),
-        })
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl(
+            'pagesA/MyRegistration/DoctorDetails',
+            docInfoQuery
+          ),
+        });
         break;
     }
     // #endif
   };
   const chooseDocDate = (docInfo, date) => {
+    // #ifndef H5
+    // handleChooseSchDate(docInfo, date)
     gotoDocCard(docInfo);
+    // #endif
+    // #ifdef H5
+    gotoDocCard(docInfo);
+    // #endif
   };
 
   const gotoDept = () => {
@@ -141,20 +163,24 @@
     // #endif
 
     // #ifdef H5
-    console.log(2222,gStores.globalStore.sysCode)
-    
-    switch(gStores.globalStore.sysCode){
-      case '1001035':
-      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',{...docInfo,deptId:docInfo.hosDeptId} )
-      location.href = fullUrl;
-      break;
-      default:
-      useTBanner({
-          type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/order?type=order', docInfo),
-        })
-        break;
 
+    switch (gStores.globalStore.sysCode) {
+      case '1001035':
+        const fullUrl = joinQueryForUrl(
+          'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',
+          { ...docInfo, deptId: docInfo.hosDeptId }
+        );
+        location.href = fullUrl;
+        break;
+      default:
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl(
+            'pagesA/MyRegistration/order?type=order',
+            docInfo
+          ),
+        });
+        break;
     }
     // #endif
   };

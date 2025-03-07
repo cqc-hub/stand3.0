@@ -20,16 +20,25 @@ import {
   GStores,
   throttle,
 } from '@/utils';
-import { cloneUtil, joinQuery, joinQueryForUrl } from '@/common';
+import {
+  cloneUtil,
+  joinQuery,
+  joinQueryForUrl,
+  getLocalStorage,
+} from '@/common';
 import type { TInstance } from '@/components/g-form/index';
+import { IPat, useDeptStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
+import { getMyPowerQx } from '@/components/greenPower';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
+import dayjs from 'dayjs';
 
 export const pageConfig = ref(
   <ISystemConfig['Electronic_Consultation_Sheet']>{}
 );
+export const pageOrderConfig = ref({} as ISystemConfig['order']);
 export const msgList = ref<Array<MsgListType>>([]);
 export const msgState = ref<MsgStatusType>({
   msgLoad: false,
@@ -44,6 +53,10 @@ export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
 export const hosData = ref<any>([]);
+export const showOrder = ref(false);
+export const schOrderInfo = ref<any>({});
+const deptStore = useDeptStore();
+
 //普通首页
 // {
 //   transition: true,//初始过渡效果
@@ -103,7 +116,7 @@ export const init = async (props) => {
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
   reload(props?.isMess);
-  // test();
+  test();
 };
 
 export const initWithMess = async () => {
@@ -142,7 +155,6 @@ export const initWithMess = async () => {
   messFormData.value = result.map((item) => {
     let hosItem = Hoslist.find((hos) => {
       return hos.hosId === item.hosId;
-      // return hos.hosId === '13001';
     });
     !hosItem && (hosItem = Hoslist[0]);
     item.hosName = hosItem?.label;
@@ -160,7 +172,6 @@ export const initWithMess = async () => {
     {
       my: false,
       type: 6,
-      // type: 7,
     },
   ];
   messFormData.value.length &&
@@ -230,7 +241,6 @@ export const recommendMenuList = [
  */
 export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   // #ifdef  MP-ALIPAY
-  // console.log('msgList.value.length',msgList.value.length)
   if (msgList.value.length == 0) {
     styleConfig.value.showHeader = false;
   }
@@ -1164,6 +1174,275 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
   }
 };
 
+//将2进制转为16进制
+const buf2hex = (arrayBuffer) => {
+  return Array.prototype.map
+    .call(new Uint8Array(arrayBuffer), (x) => ('00' + x.toString(16)).slice(-2))
+    .join('');
+};
+
+//将16进制转为 字符串
+const hexToString = (str) => {
+  var val = '',
+    len = str.length / 2;
+  for (var i = 0; i < len; i++) {
+    val += String.fromCharCode(parseInt(str.substr(i * 2, 2), 16));
+  }
+  return utf8to16(val);
+};
+//处理中文乱码问题
+const utf8to16 = (str) => {
+  var out, i, len, c;
+  var char2, char3;
+  out = '';
+  len = str.length;
+  i = 0;
+  while (i < len) {
+    c = str.charCodeAt(i++);
+    switch (c >> 4) {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+        out += str.charAt(i - 1);
+        break;
+      case 12:
+      case 13:
+        char2 = str.charCodeAt(i++);
+        out += String.fromCharCode(((c & 0x1f) << 6) | (char2 & 0x3f));
+        break;
+      case 14:
+        char2 = str.charCodeAt(i++);
+        char3 = str.charCodeAt(i++);
+        out += String.fromCharCode(
+          ((c & 0x0f) << 12) | ((char2 & 0x3f) << 6) | ((char3 & 0x3f) << 0)
+        );
+        break;
+    }
+  }
+  return out;
+};
+
+// 将文本中的 ASCII 转义序列（如 \x0A）转换为实际字符
+function convertAsciiEscapeSequences(input) {
+  return input.replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
+    // 将十六进制字符串转换为对应的字符
+    return String.fromCharCode(parseInt(hex, 16));
+  });
+}
+
+//处理h5 医生跳转
+export const gotoH5DoctorDetails = (docInfo) => {
+  const gStores = new GStores();
+  const sysCode = gStores.globalStore.sysCode;
+  const { hosId, hosDocId, hosDeptId, docName } = docInfo;
+  // location.href=
+  uni.navigateTo({
+    url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
+      hosId,
+      hosDocId,
+      hosDeptId,
+      docName,
+    }),
+  });
+  switch (sysCode) {
+    case '1001035':
+      break;
+
+    default:
+      break;
+  }
+};
+
+export const handleChooseSchDate = (docInfo: any, date: string) => {
+  showOrder.value = true;
+  schOrderInfo.value = {
+    docInfo,
+    date,
+  };
+};
+const handlerConfirmPatReal = async () => {
+  const gStores = new GStores();
+  const pages = getCurrentPages();
+  const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+  const { title, content } = await gStores.getSysAppMore('1204');
+  const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+    gStores.messageStore.showMessage(content, 0, {
+      useDialog: true,
+      dialogOpt: {
+        title,
+        isShowCancel: true,
+        cancelText: '暂不预约',
+        confirmText: '去实名认证',
+      },
+      closeCallBack: r,
+    });
+  });
+
+  if (confirm) {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+        _url: fullUrl,
+      }),
+    });
+  }
+
+  throw new Error('实名?');
+};
+
+export const regConfirm = async (pageArg) => {
+  const gStores = new GStores();
+  const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
+    pageOrderConfig.value;
+  const {
+    ampm,
+    categor,
+    categorName,
+    deptName,
+    disNo,
+    docName,
+    fee,
+    hosDeptId,
+    hosDocId,
+    hosId,
+    numId,
+    schDate,
+    schId,
+    schQukCategor,
+    timeDesc,
+    clinicalType,
+    promptMessage,
+    docTitleName,
+    thRegisterId,
+    regVerificationMode,
+  } = pageArg;
+  let { patientId, realNameAuth } = gStores.userStore.patChoose;
+  const { source } = gStores.globalStore.browser;
+  if (regVerificationMode === '2' && realNameAuth === '0') {
+    await handlerConfirmPatReal();
+  }
+  // #ifdef MP-WEIXIN
+  if (wxOrderSubscribeMessage?.length) {
+    // @ts-expect-error
+    await apiAsync(uni.requestSubscribeMessage, {
+      tmplIds: wxOrderSubscribeMessage,
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
+  // #endif
+  // 预约类型：1.预约挂号，2.当日挂号
+  const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
+  const [firstDept, secondDept] = deptStore.deptClickStep;
+
+  const requestArg = {
+    freeSignData: '',
+    firstDeptName: firstDept?.deptName,
+    firstHosDeptId: firstDept?.deptId,
+    secondDeptName: secondDept?.deptName,
+    secondHosDeptId: secondDept?.deptId,
+    ampm,
+    categor,
+    categorName,
+    clinicalType: clinicalType === 'null' ? '1' : clinicalType || '1',
+    deptName,
+    disNo,
+    docTitleName,
+    docName,
+    fee,
+    hosDeptId,
+    hosDocId,
+    hosId,
+    numId,
+    schDate,
+    schId,
+    schQukCategor,
+    timeDesc,
+    patientId,
+    source,
+    resType,
+    promptMessage,
+    thRegisterId: thRegisterId || getLocalStorage('thRegisterId'),
+    quickAppoint: '',
+  };
+  let alipayAuthCode = '';
+  // #ifdef MP-ALIPAY
+  const alipayPid = globalGl.systemInfo.alipayPid;
+  if (alipayPid) {
+    await getMyPowerQx()
+      .then((qxRes: any) => {
+        alipayAuthCode = qxRes.authCode;
+      })
+      .catch((e) => {});
+  }
+  // #endif
+  //  正常挂号
+  const actionApi = api.addReg;
+  let {
+    result: { orderId, hasCharge, hint },
+  } = await actionApi(requestArg).catch(async (e) => {
+    if (e) {
+      const { respCode, message, code } = e;
+
+      // 限制欠费用户预约挂号
+      if (respCode === 999225) {
+        gStores.messageStore.closeMessage();
+        message && gStores.messageStore.showMessage(message, 3000);
+      } else if (respCode === 999227) {
+        //超限就诊提示
+        message && gStores.messageStore.showMessage(message, 3000);
+      } else if (respCode === 999231 && realNameAuth === '0') {
+        // 去实名认证
+        await handlerConfirmPatReal();
+      } else if (code !== 4000) {
+        message && gStores.messageStore.showMessage(message, 3000);
+      }
+    }
+    throw new Error(e);
+  });
+  if (hasCharge === '0') {
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: hint,
+      cancelText: '稍后缴费',
+      confirmText: '立即缴费',
+    });
+
+    if (confirm) {
+      goPay();
+
+      throw new Error('去缴费');
+    }
+  } else if (hasCharge === '2') {
+    await apiAsync(uni.showModal, {
+      content: hint,
+      confirmText: '确认',
+      showCancel: false,
+    });
+  }
+
+  deptStore.$patch({
+    deptClickStep: [],
+  });
+
+  uni.navigateTo({
+    url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
+      orderId,
+      preWz: '1',
+      thRegisterId,
+      patientId,
+    }),
+  });
+};
+
+export const handleSourceChoose = (pageArg) => {
+  console.log('______________', pageArg);
+  regConfirm(pageArg);
+};
+
 const test = async () => {
   //   const str = `id:zjsrmyy_search_doctor_office-87c9eb94fa5611efaa3f0242ac110003,1897539136071544832
   // data:{"chatId":"zjsrmyy_search_doctor_office-87c9eb94fa5611efaa3f0242ac110003","list":[{"deptName":"神经内科门诊","hosDeptId":"3000007|A0102013","showType":6,"hosId":"13001","hosName":"乐清市人民医院"}],"requestId":"","showType":6}
@@ -1323,88 +1602,4 @@ const test = async () => {
   //   dealShowType12(list, requestId, chatId);
   // }
   // scrollToNewMsg();
-};
-
-//将2进制转为16进制
-const buf2hex = (arrayBuffer) => {
-  return Array.prototype.map
-    .call(new Uint8Array(arrayBuffer), (x) => ('00' + x.toString(16)).slice(-2))
-    .join('');
-};
-
-//将16进制转为 字符串
-const hexToString = (str) => {
-  var val = '',
-    len = str.length / 2;
-  for (var i = 0; i < len; i++) {
-    val += String.fromCharCode(parseInt(str.substr(i * 2, 2), 16));
-  }
-  return utf8to16(val);
-};
-//处理中文乱码问题
-const utf8to16 = (str) => {
-  var out, i, len, c;
-  var char2, char3;
-  out = '';
-  len = str.length;
-  i = 0;
-  while (i < len) {
-    c = str.charCodeAt(i++);
-    switch (c >> 4) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        out += str.charAt(i - 1);
-        break;
-      case 12:
-      case 13:
-        char2 = str.charCodeAt(i++);
-        out += String.fromCharCode(((c & 0x1f) << 6) | (char2 & 0x3f));
-        break;
-      case 14:
-        char2 = str.charCodeAt(i++);
-        char3 = str.charCodeAt(i++);
-        out += String.fromCharCode(
-          ((c & 0x0f) << 12) | ((char2 & 0x3f) << 6) | ((char3 & 0x3f) << 0)
-        );
-        break;
-    }
-  }
-  return out;
-};
-
-// 将文本中的 ASCII 转义序列（如 \x0A）转换为实际字符
-function convertAsciiEscapeSequences(input) {
-  return input.replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
-    // 将十六进制字符串转换为对应的字符
-    return String.fromCharCode(parseInt(hex, 16));
-  });
-}
-
-//处理h5 医生跳转
-export const gotoH5DoctorDetails = (docInfo) => {
-  const gStores = new GStores();
-  const sysCode = gStores.globalStore.sysCode;
-  const { hosId, hosDocId, hosDeptId, docName } = docInfo;
-  // location.href=
-  uni.navigateTo({
-    url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
-      hosId,
-      hosDocId,
-      hosDeptId,
-      docName,
-    }),
-  });
-  switch (sysCode) {
-    case '1001035':
-      break;
-
-    default:
-      break;
-  }
 };
