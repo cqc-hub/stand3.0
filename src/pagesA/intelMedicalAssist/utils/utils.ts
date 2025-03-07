@@ -1384,7 +1384,7 @@ export const regConfirm = async (pageArg) => {
     });
 
     if (confirm) {
-      goPay();
+      // goPay();
 
       throw new Error('去缴费');
     }
