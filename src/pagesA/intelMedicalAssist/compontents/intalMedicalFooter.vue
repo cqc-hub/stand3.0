@@ -70,7 +70,7 @@
         <!-- #endif -->
         <!-- #ifndef  MP-WEIXIN -->
         <view
-          class="input-send m-left mr20"
+          class="input-send m-left"
           :disabled="msgState.msgLoad"
           @click="reportShow"
           v-if="isReportAnalysis"

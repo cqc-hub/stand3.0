@@ -86,3 +86,7 @@ npm 源设置为 https://registry.npmmirror.com/ （npm set registry https://reg
 - webview
 
     pagesA/webView/webView
+
+## 智能助医H5版本 
+https://h5.eheren.com/v3_mini/#/pagesA/intelMedicalAssist/intelMedicalAssist?sysCode=1001039
+pages.json 里面只保留 intelMedicalAssist/intelMedicalAssist该路径  打包把顶部医院名称置空再打包

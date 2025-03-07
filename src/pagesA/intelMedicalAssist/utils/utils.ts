@@ -525,7 +525,7 @@ export const sendImg = async () => {
   // uni.showLoading({})
   // @ts-expect-error
   const { data } = await apiAsync(uni.uploadFile, {
-    // url: `https://testphs.eheren.com/gateway/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+    // url: `http://10.10.83.108:9907/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     filePath: tempFilePaths[0],
     name: 'file',
@@ -769,6 +769,8 @@ const dealShowType7 = (list, requestId, chatId) => {
 };
 
 const dealShowType6 = async (list, requestId, chatId) => {
+  // #ifndef H5 
+  // h5暂时不支持距离
   if (!hosData.value?.length) {
     msgState.value.msgLoad = true;
     const location: any = await getLocation().catch((err) => {
@@ -786,7 +788,7 @@ const dealShowType6 = async (list, requestId, chatId) => {
     );
     msgState.value.msgLoad = false;
   }
-
+  // #endif
   msgList.value.push({
     my: false,
     msg: '建议您到以下科室挂号就诊',
@@ -939,6 +941,19 @@ const judgeIsSysAppMore = (requestIdStr) => {
     return true;
   }
 };
+// 处理分块数据
+const processChunks = (chunkTemp: string, typeInIndex: number) => {
+  let tempData = chunkTemp.split('\n\n');
+  if (tempData.length > 1) {
+    tempData.forEach((item, index) => {
+      if (index === tempData.length - 1) {
+        chunkStatus.value.chunkTemp = item;
+      } else {
+        handleOneChunk(item, typeInIndex);
+      }
+    });
+  }
+};
 
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
@@ -997,16 +1012,7 @@ const typeInAsk = (value, answertype) => {
     const buf16 = buf2hex(res.data);
     const resStr = hexToString(buf16);
     chunkStatus.value.chunkTemp += resStr;
-    let tempData = chunkStatus.value.chunkTemp.split('\n\n');
-    if (tempData.length > 1) {
-      tempData.forEach((item, index) => {
-        if (index == tempData.length - 1) {
-          chunkStatus.value.chunkTemp = item;
-        } else {
-          handleOneChunk(item, typeInIndex);
-        }
-      });
-    }
+    processChunks(chunkStatus.value.chunkTemp,typeInIndex)
   });
 };
 
@@ -1041,67 +1047,36 @@ const typeInAskH5 = (value: string, answertype) => {
   xhr.setRequestHeader('phsId', settings.headers['phsId']);
   xhr.responseType = 'text';
 
-  let previousResponse = '';
-  let processedData = ''; // 记录已经处理过的数据
-
+  let previousResponse = ''; 
+  
   xhr.onreadystatechange = () => {
-    if (xhr.readyState === 3) {
-      // 处理分块数据 -- 目前接口一次性返回
-      // const newResponse = xhr.responseText;
-      // console.log('3的时候',xhr.responseText)
-      // const newChunk = newResponse.substring(previousResponse.length);
-      // previousResponse = newResponse;
-      // if (newChunk) {
-      //   chunkStatus.value.isTyping = true;
-      //   chunkStatus.value.chunkTemp += newChunk;
-      //   let tempData = chunkStatus.value.chunkTemp.split('\n\n');
-      //   if (tempData.length > 1) {
-      //     tempData.forEach((item, index) => {
-      //       if (index === tempData.length - 1) {
-      //         chunkStatus.value.chunkTemp = item;
-      //       } else {
-      //         console.log('3的时候handleOneChunk',item,typeInIndex)
-      //         handleOneChunk(item, typeInIndex);
-      //       }
-      //     });
-      //   }
-      // }
-    } else if (xhr.readyState === 4) {
-      // 暂时处理分块数据
-      msgState.value.msgLoad = false;
+    if (xhr.readyState === 3 || xhr.readyState === 4) {
       const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
-      previousResponse = newResponse;
+      previousResponse = newResponse; 
       if (newChunk) {
         chunkStatus.value.isTyping = true;
         chunkStatus.value.chunkTemp += newChunk;
-        let tempData = chunkStatus.value.chunkTemp.split('\n\n');
-        if (tempData.length > 1) {
-          tempData.forEach((item, index) => {
-            if (index === tempData.length - 1) {
-              chunkStatus.value.chunkTemp = item;
-            } else {
-              handleOneChunk(item, typeInIndex);
-            }
-          });
-        }
+        processChunks(chunkStatus.value.chunkTemp, typeInIndex);
       }
-      if (xhr.status === 200) {
-        // 处理成功响应
-        chunkStatus.value.isTyping = false;
-        msgState.value.msgLoad = false;
-      } else {
-        // 处理错误响应
-        console.log('errror', xhr.statusText);
-        msgState.value.msgLoad = false;
-        msgList.value.push({
-          my: false,
-          msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
-          type: -1,
-        });
-        scrollToNewMsg();
-      }
+      if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            // 处理成功响应
+            chunkStatus.value.isTyping = false;
+            msgState.value.msgLoad = false; 
+          } else {
+            // 处理错误响应
+            console.log('errror', xhr.statusText);
+            msgState.value.msgLoad = false;
+            msgList.value.push({
+              my: false,
+              msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
+              type: -1,
+            });
+            scrollToNewMsg();
+          }
     }
+      } 
   };
 
   xhr.onerror = () => {
@@ -1117,6 +1092,7 @@ const typeInAskH5 = (value: string, answertype) => {
 
   xhr.send(settings.data);
 };
+ 
 export const stopChunkRequest = () => {
   requestTask?.abort();
   msgState.value.msgLoad = false;
@@ -1125,7 +1101,6 @@ export const stopChunkRequest = () => {
 };
 
 const handleOneChunk = async (chunk: string, typeInIndex: number) => {
-  // console.log('处理的数据:', chunk);
   if (chunk.includes('event:message')) {
     const idMatch = chunk.match(/id:(.*)/);
     let idStr = idMatch ? idMatch[1] : null;
@@ -1134,10 +1109,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     // 提取data:和event:message之间的字符
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
-    // console.log('解析的数据');
-    console.log('chatId:', id, ';questionId:', questionId, ';文本：', data);
-    // const regex = /data:([\s\S]*?)event:message/;
-    // const match = chunk.match(regex);
+    console.warn('文本：', data); 
     id && (msgState.value.lastChatId = id);
     if (data) {
       await taskQueue.addTask(
