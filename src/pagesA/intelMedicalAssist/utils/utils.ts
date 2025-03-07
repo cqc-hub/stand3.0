@@ -116,7 +116,7 @@ export const init = async (props) => {
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
   reload(props?.isMess);
-  test();
+  // test();
 };
 
 export const initWithMess = async () => {
