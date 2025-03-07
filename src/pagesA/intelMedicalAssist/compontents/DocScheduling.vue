@@ -141,6 +141,7 @@
     // #endif
 
     // #ifdef H5
+    console.log(2222,gStores.globalStore.sysCode)
     
     switch(gStores.globalStore.sysCode){
       case '1001035':
@@ -150,7 +151,7 @@
       default:
       useTBanner({
           type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/order', docInfo),
+          path:joinQueryForUrl('pagesA/MyRegistration/order?type=order', docInfo),
         })
         break;
 

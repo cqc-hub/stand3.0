@@ -971,6 +971,7 @@ const typeInAsk = (value, answertype) => {
           msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
           type: -1,
         });
+        scrollToNewMsg();
       }
     },
     complete: () => {
@@ -1003,7 +1004,6 @@ const typeInAskH5 = (value: string, answertype) => {
   const gStores = new GStores();
   const settings = {
     url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
-    // url:"http://10.10.76.236:9907/customer/aiStreamAsk",
     method: 'POST',
     timeout: 0,
     headers: {
@@ -1014,7 +1014,6 @@ const typeInAskH5 = (value: string, answertype) => {
       args: {
         content: value,
         sysCode: gStores.globalStore.sysCode,
-        // source: gStores.globalStore.browser.source === 19 ? 1 : 2,
         source: 1,
         chatId: msgState.value.lastChatId,
         // type: answertype,
@@ -1033,6 +1032,7 @@ const typeInAskH5 = (value: string, answertype) => {
   xhr.responseType = 'text';
 
   let previousResponse = '';
+  let processedData = ''; // 记录已经处理过的数据
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 3) {
@@ -1089,6 +1089,7 @@ const typeInAskH5 = (value: string, answertype) => {
           msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
           type: -1,
         });
+        scrollToNewMsg();
       }
     }
   };
@@ -1101,6 +1102,7 @@ const typeInAskH5 = (value: string, answertype) => {
       msg: '啊哦～网络连接异常，请稍后尝试。',
       type: -1,
     });
+    scrollToNewMsg();
   };
 
   xhr.send(settings.data);
@@ -1154,6 +1156,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
         msg: '啊哦～网络连接异常，请稍后尝试。',
         type: -1,
       });
+      scrollToNewMsg();
       return;
     }
     chatId && (msgState.value.lastChatId = chatId);
