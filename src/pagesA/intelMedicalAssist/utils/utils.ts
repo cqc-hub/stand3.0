@@ -507,14 +507,29 @@ export const sendImg = async () => {
     return;
   }
   const gStores = new GStores();
+  const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+  try {
   const { tempFilePaths } = await apiAsync(uni.chooseImage, {
     count: 1,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
   });
-  try {
-    reportPopupRef.value.hide();
-  } catch (e) {}
+  if (tempFilePaths.length === 0) {
+    return;
+  }
+
+  const tempFilePath = tempFilePaths[0];
+  const file = await uni.getFileInfo({
+    filePath: tempFilePath,
+  });
+  if (file.size > maxSize) {
+    gStores.messageStore.showMessage('图片大小超过4MB，请选择较小的图片', 2000);
+    return;
+  }else{
+    try {
+      reportPopupRef.value.hide();
+    } catch (e) {}
+  }
   msgState.value.msgLoad = true;
   msgList.value.push({
     my: true,
@@ -525,9 +540,9 @@ export const sendImg = async () => {
   // uni.showLoading({})
   // @ts-expect-error
   const { data } = await apiAsync(uni.uploadFile, {
-    // url: `http://10.10.83.108:9907/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
     filePath: tempFilePaths[0],
+    // timeout: 60000,
     name: 'file',
     fileType: 'image',
     header: {
@@ -535,6 +550,7 @@ export const sendImg = async () => {
     },
   });
   const { result, code, message } = JSON.parse(data);
+  console.log('报告的出参',JSON.parse(data))
   if (code == 1) {
     msgList.value.push({
       my: false,
@@ -545,32 +561,18 @@ export const sendImg = async () => {
     console.error('picTrans接口报错', JSON.parse(data));
     return;
   }
-
   const { showType, list, requestId, chatId } = result;
   dealShowType12(list, requestId, chatId);
+ } catch (error) {
+  console.error('上传图片失败:', error);
+  msgList.value.push({
+    my: false,
+    msg: '啊哦～上传图片失败，请稍后重试。',
+    type: -1,
+  });
+} finally {
   msgState.value.msgLoad = false;
-  // uni.hideLoading()
-  //// @ts-expect-error
-  // const { data } = await apiAsync(uni.uploadFile, {
-  //   url: `${env.baseApi}/phs-base/upload/imageUpload`,
-  //   filePath: tempFilePaths[0],
-  //   name: 'file',
-  //   fileType: 'image',
-  //   formData: {
-  //     imageName: `_${new Date().getTime()}${tempFilePaths[0].slice(
-  //       tempFilePaths[0].lastIndexOf('.')
-  //     )}`,
-  //     sysCode: globalGl.SYS_CODE,
-  //     Authorization: gStores.globalStore.token.accessToken,
-  //   },
-  // });
-  // var jsonData = JSON.parse(data) as {
-  //   code: number;
-  //   result: string;
-  //   message: string;
-  // };
-
-  //请求接口
+}
 };
 
 export const onBlur = (value) => {
@@ -602,7 +604,6 @@ export const openServicesChat = (query) => {
 };
 
 export const makePhone = (query) => {
-  console.log('makePhone');
   uni.makePhoneCall({
     phoneNumber: query.phone,
     fail(res) {
@@ -855,9 +856,7 @@ const dealShowType11 = (list, requestId, chatId) => {
 };
 
 const dealShowType12 = (lists, requestId, chatId) => {
-  let htmlStr = ``;
-  // htmlStr +=
-  //   '<br> <div style="color:#444"> 好的，已收到报告单，以下是详细的报告解读:</div><br>';
+  let htmlStr = ``; 
   let flag = false;
   lists.forEach((list) => {
     if (JSON.stringify(list) !== '{}') flag = true;
@@ -921,6 +920,7 @@ const dealShowType12 = (lists, requestId, chatId) => {
       chatId,
     });
   }
+  scrollToNewMsg();
 };
 
 const judgeIsSysAppMore = (requestIdStr) => {
@@ -981,7 +981,6 @@ const typeInAsk = (value, answertype) => {
   };
 
   const typeInIndex = msgList.value.length;
-  console.warn('手动请求', settings);
   requestTask = wx.request({
     ...settings,
     success: (response) => {},
@@ -1039,7 +1038,6 @@ const typeInAskH5 = (value: string, answertype) => {
   };
 
   const typeInIndex = msgList.value.length;
-  console.warn('手动请求', settings);
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST', settings.url, true);
@@ -1109,7 +1107,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     // 提取data:和event:message之间的字符
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
-    console.warn('文本：', data); 
+    // console.warn('文本：', data); 
     id && (msgState.value.lastChatId = id);
     if (data) {
       await taskQueue.addTask(
