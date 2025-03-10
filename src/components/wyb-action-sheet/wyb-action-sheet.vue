@@ -14,6 +14,9 @@
         class="wyb-action-sheet-content"
         :style="{ paddingBottom: bottomFit + 'rpx' }"
       >
+        <view class="w-full flex-1">
+          <slot class="w-full" name="header"></slot>
+        </view>
         <view v-if="title" class="wyb-action-sheet-options-title">
           {{ title }}
         </view>
@@ -21,7 +24,13 @@
           class="wyb-action-sheet-options"
           :class="myType !== 'choosePat' && 'wyb-action-sheet-options-arr'"
         >
-          <scroll-view class="container bg-white" scroll-y>
+          <scroll-view
+            :class="{
+              rounded: !isSlotHeader,
+            }"
+            class="container bg-white"
+            scroll-y
+          >
             <block v-if="myType === 'choosePat'">
               <pat-List
                 @pat-click="({ index, item }) => onItemsTap(index, item)"
@@ -90,6 +99,9 @@
       patList,
     },
     computed: {
+      isSlotHeader() {
+        return this.$slots.header;
+      },
       autoOptionsItemClass() {
         return `wyb-action-sheet-options-item-${this.type === 'ios' ? 'i' : 'm'}
 						wyb-action-sheet-highlight-${this.type === 'ios' ? 'i' : 'm'}`;
@@ -370,6 +382,9 @@
     width: 100%;
     max-height: 1119rpx;
     min-height: 400rpx;
+  }
+
+  .rounded {
     border-radius: 16rpx 16rpx 0 0;
   }
 

@@ -126,7 +126,9 @@ const baseApi = {
 
   //查询医院样式
   queryHospitalPattern: (data) =>
-    service.post('/phs-base/firstPage/queryHospitalPattern', parm(data),{showMessage:false}),
+    service.post('/phs-base/firstPage/queryHospitalPattern', parm(data), {
+      showMessage: false,
+    }),
 
   //添加快递地址
   addExpressAddress: (data) =>
@@ -1194,12 +1196,24 @@ export default {
     const { data = [] } = await new Promise<{
       data: {
         name_zh: string;
+        name_en: string;
+        pinyin: string;
+        short_lower: string;
+        short_upper: string;
+        tel: string;
+        label: string;
+        value: string;
       }[];
     }>((complete) => {
       uni.request({
         url: globalGl.BASE_IMG + 'country.json',
         complete: complete as any,
       });
+    });
+
+    data.map((o) => {
+      o.label = o.name_zh;
+      o.value = o.tel;
     });
 
     return data;

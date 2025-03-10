@@ -250,12 +250,26 @@
 
     <wyb-action-sheet
       ref="actionSheet"
-      :options="actionSheetOpt"
+      :options="_actionSheetOpt"
       :showCancel="false"
       :duration="100"
       @itemclick="actionItemClick"
       title=""
-    />
+    >
+      <template #header>
+        <view v-if="isShowSelectSearch" class="bg-white w-full">
+          <view class="pr12 pt12 pl12 pb12">
+            <uni-search-input
+              v-model:value="searchOpt"
+              type="2"
+              class="bg-white"
+              inputBorder
+              placeholder="搜索"
+            />
+          </view>
+        </view>
+      </template>
+    </wyb-action-sheet>
 
     <view class="form-picker">
       <uni-data-picker
@@ -282,6 +296,7 @@
     IInputVerifyInstance,
     ISwitchInstance,
     useAddress,
+    ISelectInstance,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
   import { ServerStaticData, useOcr, wait } from '@/utils';
@@ -367,6 +382,14 @@
   const dataPicker = ref();
   const actionSheet = ref();
   const actionSheetOpt = ref<ISelectOptions[]>([]);
+  const _actionSheetOpt = computed(() => {
+    const filterOptions = (clickItem.value as ISelectInstance).filterOptions;
+    if (searchOpt.value && filterOptions) {
+      return filterOptions(actionSheetOpt.value, searchOpt.value);
+    }
+    return actionSheetOpt.value;
+  });
+
   const list = ref<TInstance[]>([]);
   const messageStore = useMessageStore();
 
@@ -504,7 +527,7 @@
               o.options = await ServerStaticData.getIdTypeTerms();
               break;
 
-            case 'country':
+            case 'countries':
               o.options = await ServerStaticData.getCountryList();
               break;
 
@@ -519,6 +542,11 @@
     list.value = initList;
   };
 
+  const clickItem = ref({
+    filterOptions: '' as any,
+  } as TInstance);
+  const isShowSelectSearch = ref(false);
+  const searchOpt = ref('');
   const clickContainer = function (item: TInstance) {
     if (item.disabled) {
       emits('disabled-click', item);
@@ -526,6 +554,8 @@
     }
 
     emits('row-click', { item });
+    clickItem.value = item;
+    isShowSelectSearch.value = !!(item as any).filterOptions;
     if (item.field === 'select' || item.field === 'address') {
       const { options } = item;
       cacheItem = item;
@@ -543,6 +573,8 @@
       actionSheetOpt.value = options;
 
       if (item.field === 'select') {
+        searchOpt.value = '';
+        clickItem.value = item;
         if (props.selectInUniDataPicker) {
           _actionSheet.value.show();
         } else {

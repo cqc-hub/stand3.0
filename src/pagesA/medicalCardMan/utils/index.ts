@@ -38,7 +38,8 @@ export const formKey = <const>{
   defaultFalg: 'defaultFalg',
   nation: 'nation',
   isUserInfoShareAgree: 'isUserInfoShareAgree',
-  referenceId: 'referenceId'
+  referenceId: 'referenceId',
+  countries: 'countries',
 };
 
 export type TCardPat = {
@@ -80,6 +81,47 @@ export const tempList: TInstance[] = [
     autoOptions: 'nationTerms',
     rowStyle: 'margin-bottom: 16rpx;',
     labelWidth: '220rpx',
+    filterOptions(opt, search) {
+      if (search) {
+        return opt.filter((o) => {
+          const { label } = o;
+
+          return label.includes(search);
+        });
+      }
+      return opt;
+    },
+  },
+
+  {
+    required: true,
+    showSuffixArrowIcon: true,
+    label: '国籍',
+    placeholder: '请选择',
+    key: formKey.countries,
+    field: 'select',
+    options: [],
+    autoOptions: 'countries',
+    // rowStyle: 'margin-bottom: 16rpx;',
+    labelWidth: '220rpx',
+    filterOptions(opt, search) {
+      if (search) {
+        return opt.filter((o) => {
+          const { label, name_en, name_zh, pinyin, short_lower, short_upper } =
+            o;
+
+          return (
+            label.includes(search) ||
+            name_en.includes(search) ||
+            name_zh.includes(search) ||
+            pinyin.includes(search) ||
+            short_lower.includes(search) ||
+            short_upper.includes(search)
+          );
+        });
+      }
+      return opt;
+    },
   },
 
   {

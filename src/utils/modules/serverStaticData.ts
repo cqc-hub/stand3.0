@@ -132,19 +132,19 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
     return <T>{};
   }
 };
-const h5LoginFun = (options)=>{
+const h5LoginFun = (options) => {
   const gStores = new GStores();
-const { url,_isLogin,_isPatient } = options;
- console.log(999,options,_isLogin)
- if(_isLogin){
-  if(!gStores.globalStore.token.accessToken){
-    wxH5.miniProgram.navigateTo({
-      url: '/pages/home/my',
-    });
-    return Promise.reject('h5需要登录----');
+  const { url, _isLogin, _isPatient } = options;
+  console.log(999, options, _isLogin);
+  if (_isLogin) {
+    if (!gStores.globalStore.token.accessToken) {
+      wxH5.miniProgram.navigateTo({
+        url: '/pages/home/my',
+      });
+      return Promise.reject('h5需要登录----');
+    }
   }
- }
-}
+};
 
 export const useTBanner = async (
   config: TBannerConfig | TButtonConfig,
@@ -273,17 +273,16 @@ export const useTBanner = async (
       // 新增判断 如果path里面包含plugin 就不用拼接了
       url = fullUrl;
     }
-     // #ifdef H5
-     wxH5.miniProgram.navigateTo({
+    // #ifdef H5
+    wxH5.miniProgram.navigateTo({
       url: url,
     });
-     // #endif
-     // #ifndef H5
-     uni[routeType]({
+    // #endif
+    // #ifndef H5
+    uni[routeType]({
       url,
     });
-     // #endif
-
+    // #endif
   } else if (type === 'netHospital') {
     uni[routeType]({
       url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
@@ -549,8 +548,7 @@ export class ServerStaticData {
 
   /** 国家籍贯 */
   static async getCountryList(): Promise<ISelectOptions[]> {
-    await api.getCountryList();
-    return [];
+    return await api.getCountryList();
   }
 
   static getOptionsLabel(list: ISelectOptions[], value) {
