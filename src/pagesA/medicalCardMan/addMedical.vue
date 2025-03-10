@@ -633,7 +633,7 @@
       isDropAddress,
       isDropNation,
       isUserInfoShareAgree,
-      formExtraKeys = []
+      formExtraKeys = [],
     } = pageConfig.value;
 
     const listArr: TFormKeys[] = [formKey.patientType];
@@ -643,12 +643,11 @@
       // 去除所在地区, 详细地址
       ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
       formKey.patientPhone,
+      ...formExtraKeys,
+
       formKey.defaultFalg,
       // formKey.referenceId,
-      ...formExtraKeys,
     ];
-
-
 
     // 判断是否需要民族
     if (isDropNation !== '1') {
@@ -921,7 +920,9 @@
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
-    const formKeys = formList.map((o) => o.key);
+    const formKeys = formList
+      .map((o) => o.key)
+      .filter((o) => !['referenceId'].includes(o));
 
     if (_isPageFirst.value) {
       if (!isCheck.value) {

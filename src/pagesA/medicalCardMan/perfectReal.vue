@@ -675,7 +675,7 @@
       'verifyCode',
       'isUserInfoShareAgree',
       'defaultFalg',
-      ...formExtraKeys,
+      ...formExtraKeys.filter((key) => key !== 'countries'),
     ];
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;

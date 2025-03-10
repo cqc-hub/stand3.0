@@ -13,6 +13,7 @@ type TInputType =
 export interface ISelectOptions {
   label: string;
   value: any;
+  [key: string]: any;
 
   children?: ISelectOptions[];
 }
@@ -94,10 +95,18 @@ export interface IInputVerifyInstance extends Omit<IInputInstance, 'field'> {
 /**
  * @autoOptions 快速获取服务器上的静态列表数据
  */
-interface ISelectInstance extends IBaseInstance {
+export interface ISelectInstance extends IBaseInstance {
   field: 'select';
   options: ISelectOptions[];
-  autoOptions?: 'nationTerms' | 'patientTypeTerms' | 'idTypeTerms' | 'country';
+  autoOptions?:
+    | 'nationTerms'
+    | 'patientTypeTerms'
+    | 'idTypeTerms'
+    | 'countries';
+  filterOptions?: (
+    options: ISelectOptions[],
+    search: string
+  ) => ISelectOptions[];
 }
 
 interface IAddressInstance extends IBaseInstance {

@@ -179,8 +179,9 @@ export interface ISystemConfig_ {
     /**
      * 表单填写补充字段
      * referenceId - 备注
+     * countries - 国籍
      */
-    formExtraKeys?: ['referenceId'];
+    formExtraKeys?: ['referenceId' | 'countries'];
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     isVerifyIdCardLastFourNumber?: '1';
