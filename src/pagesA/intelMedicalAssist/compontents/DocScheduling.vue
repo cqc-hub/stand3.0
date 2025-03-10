@@ -89,13 +89,12 @@
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
   import { deepClone } from '@/common/utils';
   import { GStores, useTBanner } from '@/utils';
-  import {handleChooseSchDate} from '../utils/utils'
+  import { handleChooseSchDate } from '../utils/utils';
   const gStores = new GStores();
   const props = defineProps<{
     list: any[];
     msg: string;
   }>();
-
 
   onMounted(() => {
     console.log('DoctorCard mounted', props);
@@ -120,24 +119,48 @@
     delete docInfoQuery.goodAt;
     delete docInfoQuery.date;
     switch (gStores.globalStore.sysCode) {
+      case '1001017':
+        const {
+          docId,
+          docName,
+          docPhoto,
+          docTileName,
+          hosId,
+          // hosId = (this.$GLOBAL.SYS_CODE === "1001017" && "449") || "",
+        } = docInfoQuery;
+
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', {
+            query: JSON.stringify({
+              hosDocId: docId,
+              docName,
+              docPhoto,
+              docTileName,
+              hosId,
+              isMultiHos: 1,
+            }),
+          }),
+        });
+        break;
       case '1001035':
         const fullUrl = joinQueryForUrl(
           'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order',
           docInfoQuery
         );
         location.href = fullUrl;
-      break;
+        break;
       case '1001029':
         useTBanner({
-              type:'self',
-              path:joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', {
-              query:JSON.stringify({
-            ...docInfoQuery,
-            type:'order'
-          })
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/DoctorDetails', {
+            query: JSON.stringify({
+              ...docInfoQuery,
+              type: 'order',
+            }),
           }),
-        })
-      break;
+        });
+        break;
       default:
         useTBanner({
           type: 'self',
@@ -173,23 +196,26 @@
     });
     // #endif
 
-    // #ifdef H5 
-    
-    switch(gStores.globalStore.sysCode){
+    // #ifdef H5
+
+    switch (gStores.globalStore.sysCode) {
       case '1001035':
-      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',{...docInfo,deptId:docInfo.hosDeptId} )
-      location.href = fullUrl;
-      break;
+        const fullUrl = joinQueryForUrl(
+          'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',
+          { ...docInfo, deptId: docInfo.hosDeptId }
+        );
+        location.href = fullUrl;
+        break;
       case '1001029':
         useTBanner({
-              type:'self',
-              path:joinQueryForUrl('pagesA/MyRegistration/order', {
-              query:JSON.stringify({
-            ...docInfo,
-            type:'order'
-          })
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/order', {
+            query: JSON.stringify({
+              ...docInfo,
+              type: 'order',
+            }),
           }),
-        })
+        });
         break;
       default:
         useTBanner({

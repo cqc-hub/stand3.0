@@ -88,7 +88,7 @@
                 <view class="report-header">
                   好的，已收到报告单，以下是详细的报告解读:
                 </view>
-                <rich-text :nodes="$HTMLParser(msgItem.msg)" />
+                <ua-markdown :source="msgItem.msg" />
                 <view class="report-declare">
                   结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准,请及时与医生沟通，以便获得专业的医疗建议和治疗方案。
                 </view>

@@ -30,6 +30,7 @@ import type { TInstance } from '@/components/g-form/index';
 import { IPat, useDeptStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
+import HTMLParser from '@/common/html-parser';
 import globalGl from '@/config/global';
 import api from '@/service/api';
 import env from '@/config/env';
@@ -43,6 +44,7 @@ export const msgList = ref<Array<MsgListType>>([]);
 export const msgState = ref<MsgStatusType>({
   msgLoad: false,
   lastChatId: '',
+  requestId: '',
   msg: '',
   focus: false,
 });
@@ -103,6 +105,7 @@ export const init = async (props) => {
   msgState.value = {
     msgLoad: false,
     lastChatId: '',
+    requestId: '',
     msg: '',
     focus: false,
   };
@@ -289,11 +292,13 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
       source: 1,
       type: answertype || 0,
       chatId: msgState.value.lastChatId,
+      requestId: msgState.value.requestId,
     })
     .finally(() => {
       msgState.value.msgLoad = false;
     });
   msgState.value.lastChatId = chatId;
+  msgState.value.requestId = requestId;
 
   switchHandleResult(showType, list, requestId, chatId);
 };
@@ -509,70 +514,77 @@ export const sendImg = async () => {
   const gStores = new GStores();
   const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
   try {
-  const { tempFilePaths } = await apiAsync(uni.chooseImage, {
-    count: 1,
-    sizeType: ['compressed'],
-    sourceType: ['album', 'camera'],
-  });
-  if (tempFilePaths.length === 0) {
-    return;
-  }
+    const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+    });
+    if (tempFilePaths.length === 0) {
+      return;
+    }
 
-  const tempFilePath = tempFilePaths[0];
-  const file = await uni.getFileInfo({
-    filePath: tempFilePath,
-  });
-  if (file.size > maxSize) {
-    gStores.messageStore.showMessage('图片大小超过4MB，请选择较小的图片', 2000);
-    return;
-  }else{
-    try {
-      reportPopupRef.value.hide();
-    } catch (e) {}
-  }
-  msgState.value.msgLoad = true;
-  msgList.value.push({
-    my: true,
-    imgUrl: tempFilePaths[0],
-    type: 5,
-  });
-  scrollToNewMsg();
-  // uni.showLoading({})
-  // @ts-expect-error
-  const { data } = await apiAsync(uni.uploadFile, {
-    url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
-    filePath: tempFilePaths[0],
-    // timeout: 60000,
-    name: 'file',
-    fileType: 'image',
-    header: {
-      phsId: isOpenSm4 ? '81681766' : '81681688',
-    },
-  });
-  const { result, code, message } = JSON.parse(data);
-  console.log('报告的出参',JSON.parse(data))
-  if (code == 1) {
+    const tempFilePath = tempFilePaths[0];
+    const file = await uni.getFileInfo({
+      filePath: tempFilePath,
+    });
+    // @ts-expect-error
+    if (file.size > maxSize) {
+      gStores.messageStore.showMessage(
+        '图片大小超过4MB，请选择较小的图片',
+        2000
+      );
+      return;
+    } else {
+      try {
+        reportPopupRef.value.hide();
+      } catch (e) {}
+    }
+    msgState.value.msgLoad = true;
+    msgList.value.push({
+      my: true,
+      imgUrl: tempFilePaths[0],
+      type: 5,
+    });
+    scrollToNewMsg();
+    // uni.showLoading({})
+    // @ts-expect-error
+    const { data } = await apiAsync(uni.uploadFile, {
+      url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+      filePath: tempFilePaths[0],
+      // timeout: 60000,
+      name: 'file',
+      fileType: 'image',
+      header: {
+        phsId: isOpenSm4 ? '81681766' : '81681688',
+      },
+    });
+    const { result, code, message } = JSON.parse(data);
+    console.log('报告的出参', JSON.parse(data));
+    if (code == 1) {
+      msgList.value.push({
+        my: false,
+        msg: '啊哦～网络连接异常，请稍后尝试。',
+        type: -1,
+      });
+      msgState.value.msgLoad = false;
+      console.error('picTrans接口报错', JSON.parse(data));
+      return;
+    }
+    const list = result?.list;
+    const requestId = result?.requestId;
+    const chatId = result?.chatId;
+    // const { showType, list, requestId, chatId } = result;
+    dealShowType12(list, requestId, chatId);
+  } catch (error) {
+    console.error('上传图片失败:', error);
     msgList.value.push({
       my: false,
-      msg: '啊哦～网络连接异常，请稍后尝试。',
+      msg: '啊哦～上传图片失败，请稍后重试。',
       type: -1,
     });
+  } finally {
     msgState.value.msgLoad = false;
-    console.error('picTrans接口报错', JSON.parse(data));
-    return;
   }
-  const { showType, list, requestId, chatId } = result;
-  dealShowType12(list, requestId, chatId);
- } catch (error) {
-  console.error('上传图片失败:', error);
-  msgList.value.push({
-    my: false,
-    msg: '啊哦～上传图片失败，请稍后重试。',
-    type: -1,
-  });
-} finally {
-  msgState.value.msgLoad = false;
-}
 };
 
 export const onBlur = (value) => {
@@ -581,6 +593,7 @@ export const onBlur = (value) => {
 
 export const handleGuess = (item) => {
   msgState.value.lastChatId = '';
+  msgState.value.requestId = '';
   sendMsg(item.value, 1);
 };
 
@@ -627,6 +640,7 @@ export const clearChatId = async (id: string) => {
     gStores.messageStore.showMessage('已结束会话，请继续提问', 3000);
 
   msgState.value.lastChatId = '';
+  msgState.value.requestId = '';
   chunkStatus.value?.isTyping && stopChunkRequest();
 };
 
@@ -770,7 +784,7 @@ const dealShowType7 = (list, requestId, chatId) => {
 };
 
 const dealShowType6 = async (list, requestId, chatId) => {
-  // #ifndef H5 
+  // #ifndef H5
   // h5暂时不支持距离
   if (!hosData.value?.length) {
     msgState.value.msgLoad = true;
@@ -856,52 +870,49 @@ const dealShowType11 = (list, requestId, chatId) => {
 };
 
 const dealShowType12 = (lists, requestId, chatId) => {
-  let htmlStr = ``; 
+  let htmlStr = ``;
   let flag = false;
   lists.forEach((list) => {
     if (JSON.stringify(list) !== '{}') flag = true;
     if (list?.judgment_criteria) {
-      htmlStr += `<strong>结果分析：</strong><br>`;
+      htmlStr += `#### 结果分析：<br/>
+`;
       list.judgment_criteria.forEach((item, judgeIndex) => {
-        htmlStr += `${judgeIndex + 1}.${
-          item?.project_name.replaceAll('<', '小于').replaceAll('>', '大于') ||
-          ''
-        }${item.describe.replaceAll('<', '小于').replaceAll('>', '大于')}<br/>`;
+        htmlStr += `${judgeIndex + 1}.${item?.project_name || ''}${
+          item.describe
+        }
+<br/>`;
       });
-      // htmlStr += `<br>`;
+      // htmlStr += `<br/>`;
     }
     if (list?.risk_type) {
-      htmlStr += `<strong>风险类型：</strong>${list.risk_type
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}<br>`;
+      htmlStr += `
+**风险类型：**  ${list.risk_type}<br/>
+`;
     }
     if (list?.disease) {
-      htmlStr += `<strong>可能疾病：</strong>${list.disease
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}<br>`;
+      htmlStr += `**可能疾病：**  ${list.disease}<br/>
+`;
     }
     if (list?.symptom_manifestations) {
-      htmlStr += `<strong>症状表现：</strong>${list.symptom_manifestations
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}<br>`;
+      htmlStr += `**症状表现：**  ${list.symptom_manifestations}<br/>
+`;
     }
     if (list?.triggering_reasons) {
-      htmlStr += `<strong>诱发原因：</strong>${list.triggering_reasons
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}<br>`;
+      htmlStr += `**诱发原因：**  ${list.triggering_reasons}<br/>
+`;
     }
     if (list?.treatment_suggestions) {
-      htmlStr += `<strong>诊治建议：</strong>${list.treatment_suggestions
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}<br>`;
+      htmlStr += `**诊治建议：**  ${list.treatment_suggestions}<br/>
+`;
     }
     if (list?.department) {
-      htmlStr += `<strong>推荐治疗科室：</strong><text style="color:#296FFF">${list.department
-        .replaceAll('<', '小于')
-        .replaceAll('>', '大于')}</text><br>`;
+      htmlStr += `**推荐治疗科室：**  ${list.department}<br/>
+`;
     }
-    // htmlStr += `<div style="color:#444;font-size:28rpx;line-height:36rpx">告结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准<br>请及时与医生沟通，以便获得专业的医疗建议和治疗方案。</div><br/>`;
+    // htmlStr += `<div style="color:#444;font-size:28rpx;line-height:36rpx">告结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准<br/>请及时与医生沟通，以便获得专业的医疗建议和治疗方案。</div><br/>`;
   });
+
   if (!flag) {
     msgList.value.push({
       my: false,
@@ -919,6 +930,7 @@ const dealShowType12 = (lists, requestId, chatId) => {
       requestId,
       chatId,
     });
+    console.log('____________', htmlStr);
   }
   scrollToNewMsg();
 };
@@ -975,6 +987,7 @@ const typeInAsk = (value, answertype) => {
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
+        requestId: msgState.value.requestId,
         type: answertype,
       },
     }),
@@ -1011,7 +1024,7 @@ const typeInAsk = (value, answertype) => {
     const buf16 = buf2hex(res.data);
     const resStr = hexToString(buf16);
     chunkStatus.value.chunkTemp += resStr;
-    processChunks(chunkStatus.value.chunkTemp,typeInIndex)
+    processChunks(chunkStatus.value.chunkTemp, typeInIndex);
   });
 };
 
@@ -1031,6 +1044,7 @@ const typeInAskH5 = (value: string, answertype) => {
         sysCode: gStores.globalStore.sysCode,
         source: 1,
         chatId: msgState.value.lastChatId,
+        requestId: msgState.value.requestId,
         // type: answertype,
         type: 'h5',
       },
@@ -1045,36 +1059,36 @@ const typeInAskH5 = (value: string, answertype) => {
   xhr.setRequestHeader('phsId', settings.headers['phsId']);
   xhr.responseType = 'text';
 
-  let previousResponse = ''; 
-  
+  let previousResponse = '';
+
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 3 || xhr.readyState === 4) {
       const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
-      previousResponse = newResponse; 
+      previousResponse = newResponse;
       if (newChunk) {
         chunkStatus.value.isTyping = true;
         chunkStatus.value.chunkTemp += newChunk;
         processChunks(chunkStatus.value.chunkTemp, typeInIndex);
       }
       if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            // 处理成功响应
-            chunkStatus.value.isTyping = false;
-            msgState.value.msgLoad = false; 
-          } else {
-            // 处理错误响应
-            console.log('errror', xhr.statusText);
-            msgState.value.msgLoad = false;
-            msgList.value.push({
-              my: false,
-              msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
-              type: -1,
-            });
-            scrollToNewMsg();
-          }
+        if (xhr.status === 200) {
+          // 处理成功响应
+          chunkStatus.value.isTyping = false;
+          msgState.value.msgLoad = false;
+        } else {
+          // 处理错误响应
+          console.log('errror', xhr.statusText);
+          msgState.value.msgLoad = false;
+          msgList.value.push({
+            my: false,
+            msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
+            type: -1,
+          });
+          scrollToNewMsg();
+        }
+      }
     }
-      } 
   };
 
   xhr.onerror = () => {
@@ -1090,7 +1104,7 @@ const typeInAskH5 = (value: string, answertype) => {
 
   xhr.send(settings.data);
 };
- 
+
 export const stopChunkRequest = () => {
   requestTask?.abort();
   msgState.value.msgLoad = false;
@@ -1107,8 +1121,9 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     // 提取data:和event:message之间的字符
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
-    // console.warn('文本：', data); 
+    // console.warn('文本：', data);
     id && (msgState.value.lastChatId = id);
+    questionId && (msgState.value.requestId = id);
     if (data) {
       await taskQueue.addTask(
         dealShowType1withStream,
@@ -1140,6 +1155,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
       return;
     }
     chatId && (msgState.value.lastChatId = chatId);
+    requestId && (msgState.value.requestId = requestId);
     switchHandleResult(showType, list, requestId, chatId, typeInIndex);
   }
 };
