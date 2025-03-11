@@ -220,10 +220,10 @@
       default:
         useTBanner({
           type: 'self',
-          path: joinQueryForUrl(
-            'pagesA/MyRegistration/order?type=order',
-            docInfo
-          ),
+          path: joinQueryForUrl('pagesA/MyRegistration/order?type=order', {
+            ...docInfo,
+            deptId: docInfo.hosDeptId,
+          }),
         });
         break;
     }

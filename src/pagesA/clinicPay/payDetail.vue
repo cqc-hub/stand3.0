@@ -124,11 +124,7 @@
         </view>
 
         <view v-if="props._t !== '1'" class="mt24">
-          <g-flag
-            :typeFg="payState === '0' ? '38' : '0'"
-            isShowFgTip
-            aaa
-          />
+          <g-flag :typeFg="payState === '0' ? '38' : '0'" isShowFgTip aaa />
         </view>
       </view>
     </view>
@@ -512,8 +508,7 @@
   /** 已缴费页面对具体费用申请退费 */
   const isPayedItemDetailRefund = computed(() => {
     return (
-      payState.value === '0' &&
-      pageConfig.value.isPayedItemDetailRefund === '1'
+      payState.value === '0' && pageConfig.value.isPayedItemDetailRefund === '1'
     );
   });
 
@@ -834,10 +829,9 @@
           if (flag && !isBizTypeMedical) {
             changeRefPayList([PayType.Medicare], additionalList);
           } else if (flag && isBizTypeMedical) {
-            changeRefPayList(
-              [PayType.BizType, PayType.Medicare],
-              additionalList
-            );
+            const MedList = [PayType.BizType];
+            wx?.medicalNation?.appId && MedList.push(PayType.Medicare);
+            changeRefPayList(MedList, additionalList);
           }
         }
         // #endif
