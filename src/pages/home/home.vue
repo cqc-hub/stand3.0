@@ -435,7 +435,12 @@
           'wmUserInfo',
           JSON.stringify({
             userId: globalStore.openId,
-            userTag: '温附二小程序项目',
+            // #ifdef MP-WEIXIN
+             userTag: '温附二微信小程序项目',
+            // #endif
+             // #ifdef MP-ALIPAY
+             userTag: '温附二支付宝小程序项目',
+            // #endif
             projectVersion: '1.0.0',
             env: 'pro',
           })
