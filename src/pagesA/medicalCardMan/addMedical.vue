@@ -217,6 +217,15 @@
   const _isPageFirst = ref(!globalGl.systemInfo.isSearchInHos);
 
   const gform = ref<any>('');
+  const formList = ref(
+    pickTempItem([
+      'patientType',
+      'patientName',
+      'patientPhone',
+      'verifyCode',
+      'defaultFalg',
+    ])
+  );
   const formData = ref<Partial<Record<TFormKeys, any>>>({});
   const addressChoose = {
     addressProvince: '',
@@ -225,14 +234,6 @@
     addressCountyCode: '',
   };
   let verifyCode = '';
-
-  let formList = pickTempItem([
-    'patientType',
-    'patientName',
-    'patientPhone',
-    'verifyCode',
-    'defaultFalg',
-  ]);
 
   const regDialogMedicalFiling: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
@@ -340,7 +341,7 @@
 
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
-    const formKeyNow = formList.map((o) => o.key);
+    const formKeyNow = formList.value.map((o) => o.key);
     const filterData = Object.fromEntries(
       Object.entries(data).map(([key, value]) => {
         return [key, formKeyNow.includes(key) ? value : undefined];
@@ -758,9 +759,9 @@
       oldFormList = [...listArr];
     }
 
-    formList = pickTempItem(listArr);
+    formList.value = pickTempItem(listArr);
 
-    const idCardItem = formList.find((o) => o.key === formKey.idCard);
+    const idCardItem = formList.value.find((o) => o.key === formKey.idCard);
     if (idCardItem) {
       idCardItem.validator = (v) => {
         const value = v as string;
@@ -783,7 +784,7 @@
         }
       };
 
-      const patientNameItem = formList.find(
+      const patientNameItem = formList.value.find(
         (o) => o.key === formKey.patientName
       );
 
@@ -794,7 +795,7 @@
       }
     }
 
-    formList.map((o) => {
+    formList.value.map((o) => {
       const { key } = o;
       const iValue = formData.value[key];
 
@@ -914,15 +915,13 @@
 
     gform.value.setList([]);
     nextTick(() => {
-      gform.value.setList(formList);
+      gform.value.setList(formList.value);
     });
   };
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
-    const formKeys = formList
-      .map((o) => o.key)
-      .filter((o) => !['referenceId'].includes(o));
+    const formKeys = formList.value.filter((o) => o.required).map((o) => o.key);
 
     if (_isPageFirst.value) {
       if (!isCheck.value) {
