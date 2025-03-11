@@ -41,7 +41,7 @@
   });
 
   onShow(async (opt) => {
-    console.log('App Show', opt.query);
+    console.log('App Show', opt);
 
     // 温附二新增监控-只记录正式环境
     // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))

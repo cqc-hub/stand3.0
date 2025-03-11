@@ -379,25 +379,6 @@
     },
   ]);
 
-  const reportStatusMap = ref([
-    {
-      label: '待预约',
-      value: '1',
-    },
-    {
-      label: '待检查',
-      value: '2',
-    },
-    {
-      label: '等待报告',
-      value: '3',
-    },
-    {
-      label: '已出报告',
-      value: '4',
-    },
-  ]);
-
   const reportJyCol = ref([
     {
       label: '等待人数',

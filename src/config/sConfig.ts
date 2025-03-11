@@ -494,6 +494,17 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
+
+  /**
+   * 昆明口腔医院
+   */
+  1001076: {
+    login: {
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
+    }, 
+  },
+
 };
 
 const getSConfig = (sysCode: string) => {
