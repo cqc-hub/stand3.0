@@ -30,7 +30,7 @@
 
     <view class="bottom-bg"></view>
     <view
-     v-if="headerConfig?.showHeader"
+      v-if="headerConfig?.showHeader"
       class="bottom-bg-white"
       :style="{ height: `${whiteAreaHeight}` }"
     ></view>
@@ -100,9 +100,9 @@
           </view>
         </view>
         <view class="bottom-dh-content" v-if="!isVoice && isShow">
-          <view class="border" >
-            <input 
-             v-if="!msgState.msgLoad"
+          <view class="border">
+            <input
+              v-if="!msgState.msgLoad"
               v-model="msgState.msg"
               class="dh-input f28"
               type="textarea"
@@ -114,15 +114,14 @@
               :focus="msgState.focus"
               @blur="onBlur"
             />
-            <input 
-             v-else
+            <input
+              v-else
               class="dh-input f28"
               disabled="true"
               placeholder-class="my-neirong-sm f28"
-              placeholder="请输入症状/药品/疾病..." 
+              placeholder="请输入症状/药品/疾病..."
             />
           </view>
-        
         </view>
         <view
           class="bottom-dh-content"
@@ -440,7 +439,7 @@
   };
 
   const getGuessServerBottom = () => {
-    return
+    return;
     setTimeout(() => {
       query
         .selectAll(`.guess-server`)
@@ -454,7 +453,6 @@
   const getAuth = () => {
     wx.getSetting({
       success: (res) => {
-      
         if (!res.authSetting['scope.record']) {
           wx.authorize({
             scope: 'scope.record',
@@ -502,10 +500,10 @@
   .transition {
     transition: 0.5s;
     .guess-server {
-      transition: 0.5s;
+      // transition: 0.5s;
     }
     .bottom-bg-white {
-      transition: 0.5s;
+      // transition: 0.5s;
     }
   }
   .stick-bottom {
@@ -520,7 +518,13 @@
     .guess-server {
       z-index: 4;
       position: fixed;
+
+      /* #ifdef H5 */
+      bottom: calc(100vh - 650rpx - 360rpx);
+      /* #endif */
+      /* #ifndef H5 */
       bottom: calc(100vh - 800rpx - 360rpx);
+      /* #endif */
       .guess-title {
         text-align: left;
         color: #444444;
@@ -675,15 +679,15 @@
     height: 130rpx;
     background: radial-gradient(#d1fffc, #b3e2ff);
     filter: blur(20px);
-    z-index: 2;
+    z-index: 98;
   }
-  .bottom-bg-fff{
+  .bottom-bg-fff {
     position: fixed;
     bottom: 0;
     width: 100vw;
     height: 100rpx;
     background: #fff;
-    z-index: 1;
+    z-index: 97;
   }
   .bottom-bg-white {
     background-color: #fff;
