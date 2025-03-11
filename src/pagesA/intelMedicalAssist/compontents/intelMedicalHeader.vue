@@ -392,7 +392,7 @@
       border-top-right-radius: 24rpx;
       border-top-left-radius: 24rpx;
       // border-bottom-left-radius: 24rpx;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(5px);
       background-color: rgba(255, 255, 255, 0.2);
       position: fixed;
       z-index: 3;
