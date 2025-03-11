@@ -226,6 +226,7 @@
   const gStores = new GStores();
   const patList = gStores.userStore.patList;
   const gform = ref<any>('');
+  const _formList = ref<TInstance[]>([]);
   const formData = ref<BaseObject>({
     [formKey.patientType]: '-1',
     [formKey.defaultFalg]: true,
@@ -578,10 +579,12 @@
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
-    const formKeys = formList.map((o) => o.key);
-    const whiteKeys = ['referenceId'];
+    const formKeys = _formList.value
+      .filter((o) => o.required)
+      .map((o) => o.key);
+
     Object.entries(formData.value).map(([key, value]) => {
-      if (!whiteKeys.includes(key) && formKeys.includes(key) && value === '') {
+      if (formKeys.includes(key) && value === '') {
         isDisabled = true;
       }
     });
@@ -674,8 +677,8 @@
       'patientPhone',
       'verifyCode',
       'isUserInfoShareAgree',
+      ...formExtraKeys.filter((key) => !['countries'].includes(key)),
       'defaultFalg',
-      ...formExtraKeys.filter((key) => key !== 'countries'),
     ];
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
@@ -771,7 +774,7 @@
         o.disabled = true;
       }
     });
-
+    _formList.value = formList;
     gform.value.setList(formList);
 
     //是否医保建档
