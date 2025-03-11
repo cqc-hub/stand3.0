@@ -579,7 +579,9 @@
 
   const btnDisabled = computed(() => {
     let isDisabled = false;
-    const formKeys = _formList.value.filter((o) => o.required).map((o) => o.key);
+    const formKeys = _formList.value
+      .filter((o) => o.required)
+      .map((o) => o.key);
 
     Object.entries(formData.value).map(([key, value]) => {
       if (formKeys.includes(key) && value === '') {
@@ -675,7 +677,7 @@
       'patientPhone',
       'verifyCode',
       'isUserInfoShareAgree',
-      ...formExtraKeys.filter((key) => key !== 'countries'),
+      ...formExtraKeys.filter((key) => !['countries'].includes(key)),
       'defaultFalg',
     ];
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =

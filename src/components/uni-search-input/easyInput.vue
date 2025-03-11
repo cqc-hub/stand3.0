@@ -66,6 +66,7 @@
           :focus="focused"
           :confirmType="confirmType"
           :enableNative="false"
+          :adjust-position="false"
           @focus="onFocus"
           @blur="onBlur"
           @input="onInput"

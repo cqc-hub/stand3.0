@@ -253,6 +253,9 @@
       :options="_actionSheetOpt"
       :showCancel="false"
       :duration="100"
+      :minHeight="
+        isShowSelectSearch ? 'calc(100vh - 200rpx)' : undefined
+      "
       @itemclick="actionItemClick"
       title=""
     >

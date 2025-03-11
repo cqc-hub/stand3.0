@@ -28,6 +28,10 @@
             :class="{
               rounded: !isSlotHeader,
             }"
+            :style="{
+              maxHeight: maxHeight,
+              minHeight: minHeight,
+            }"
             class="container bg-white"
             scroll-y
           >
@@ -188,6 +192,14 @@
       bottomFit: {
         type: [String, Number],
         default: '0',
+      },
+      maxHeight: {
+        type: [String, Number],
+        default: '1119rpx',
+      },
+      minHeight: {
+        type: [String, Number],
+        default: '400rpx',
       },
     },
     methods: {
@@ -380,8 +392,6 @@
 
   .container {
     width: 100%;
-    max-height: 1119rpx;
-    min-height: 400rpx;
   }
 
   .rounded {
