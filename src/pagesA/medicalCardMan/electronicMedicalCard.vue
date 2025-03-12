@@ -38,7 +38,7 @@
         }"
         class="card-body"
       >
-        <view class="pt32 mb12" v-if="isShowRefreshQrCode">
+        <view class="pt70 mb12" v-if="isShowRefreshQrCode">
           <refreshQrcode :patientId="clickPat.patientId" />
         </view>
 
@@ -53,7 +53,7 @@
               :options="qrOptions2"
               :value="qrOptions.code"
               @change="qrComplete"
-              size="500rpx"
+              size="380rpx"
             />
           </block>
         </view>
@@ -147,7 +147,8 @@
   // https://meet-ui.com/#/
   const options = ref<any>({
     // 二维码
-    size: systemInfo ? 380 : 500,
+    // size: systemInfo ? 380 : 500,
+    size: 380,
     // 条形码
     width: 600, // 宽度 单位rpx
     height: 184, // 高度 单位rpx

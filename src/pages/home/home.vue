@@ -155,10 +155,6 @@
             </view>
           </view>
 
-          <view v-if="docRecommendList.length" class="mt24 mb24">
-            <homeDocCommend :list="docRecommendList" />
-          </view>
-
           <view class="banner-menu">
             <homeBanner
               :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
@@ -205,7 +201,9 @@
             />
           </view>
 
-          <!-- <homeDocCommend :list="docRecommendList" /> -->
+          <view v-if="docRecommendList.length" class="mt24 mb24">
+            <homeDocCommend :list="docRecommendList" />
+          </view>
 
           <view v-if="global.sConfig.isOpenPopularSci">
             <homeArticle ref="HomeArticleRef" />

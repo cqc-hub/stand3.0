@@ -153,7 +153,6 @@ export const useTBanner = async (
 ) => {
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;
-  const { sysCode } = gStores.globalStore;
   const {
     type,
     extraData = {},
