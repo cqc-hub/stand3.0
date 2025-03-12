@@ -2,7 +2,7 @@
   <view class="">
     <view class="mb24 flex flex-col items-center justify-center">
       <!-- <w-barcode ref="refBar" :options="barOpt" /> -->
-      <uv-qrcode :value="code" :loading="loading" size="500rpx" auto start />
+      <uv-qrcode :value="code" :loading="loading" size="380rpx" auto start />
     </view>
     <view class="flex justify-center f28">
       <view class="pr12 mr12 g-split-line">
@@ -53,7 +53,6 @@
   });
 
   const init = async () => {
-    console.log('2333')
     if (loading.value) {
       return;
     }

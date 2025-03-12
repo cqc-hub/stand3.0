@@ -151,6 +151,8 @@ export const useTBanner = async (
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
   additionData: BaseObject = {}
 ) => {
+  const gStores = new GStores();
+  const { source } = gStores.globalStore.browser;
   const {
     type,
     extraData = {},
@@ -161,14 +163,17 @@ export const useTBanner = async (
   } = config;
   let [isLogin, isPatient] = [false, false];
 
+  additionData = {
+    source,
+    ...additionData,
+  };
+
   const _d = {
     _patientId: '',
     _herenId: '',
     _isHos: globalGl.systemInfo?.isSearchInHos,
     herenId: '',
   };
-
-  const gStores = new GStores();
 
   if (addition) {
     const { token, patientId, herenId, cardNumber } = addition;
@@ -242,7 +247,7 @@ export const useTBanner = async (
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        baseUrl = h5UrlLocal;
+        // baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;

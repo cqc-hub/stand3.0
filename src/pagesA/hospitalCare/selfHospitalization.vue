@@ -302,6 +302,7 @@
   const getData = async () => {
     formData.value = {};
     isComplete.value = false;
+    // gform.value.setList([...renderListBase]);
     const patientId = gStores.userStore.patChoose.patientId;
     const { result } = await api
       .queryInpVisit({

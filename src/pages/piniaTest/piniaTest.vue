@@ -92,12 +92,7 @@
     path: 'pagesC/queryCase/queryCase',
     text: '意见反馈',
     extraData: {
-      sysCode: globalGl.SYS_CODE,
       pageType: 2,
-    },
-    addition: {
-      herenId: 'herenId',
-      pageType: '2',
     },
     isLocal: '1',
   };
