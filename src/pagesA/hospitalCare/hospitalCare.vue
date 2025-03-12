@@ -137,6 +137,10 @@
       default:
         break;
     }
+
+    // api.getPatCardInfo({
+    //   patientId: gStores.userStore.patChoose.patientId
+    // })
   };
 
   const tabChange = (e: number) => {
