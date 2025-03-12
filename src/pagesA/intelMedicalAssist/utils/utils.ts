@@ -411,100 +411,109 @@ export const reportShow = () => {
 };
 export const inspectionAnalysis = async (reports) => {
   msgState.value.msgLoad = true;
-
+  const gStores = new GStores();
   try {
     reportPopupRef.value.hide();
   } catch (e) {}
   nextTick(() => {
     styleConfig.value.showHeader = false;
   });
-  const allPromise: any[] = [];
+  // const allPromise: any[] = [];
   msgState.value.msgLoad = true;
+  const args: any[] = [];
   await reports.forEach(async (element) => {
-    let promise = new Promise(async (resolve, reject) => {
-      // let setting={
-      //   url: `https://testphs.eheren.com/gateway/phs-extend/customer/inspectionAnalysis`,
-      //   method: 'POST',
-      //   responseType: 'text',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     phsId: isOpenSm4 ? '81681766' : '81681688',
-      //   },
-      //   data: JSON.stringify({
-      //     args: {
-      //       sysCode: globalGl.SYS_CODE,
-      //       source: 1,
-      //       repId: element.repId,
-      //       repType: 1,
-      //       extend: element.extend,
-      //     },
-      //   })
-      // }
-      // console.warn('setting',setting);
-      //
-      // scrollToNewMsg();
-
-      // const { result } = await wx.request({
-      //   ...setting,
-      //   success: (response) => {
-      //     // console.log(response, 'response________');
-      //     // let res: any = {};
-      //     // try {
-      //     //   res = JSON.parse(response);
-      //     // } catch (e) {
-      //     //   gStores.messageStore.showMessage('err', response);
-      //     // }
-      //     const { showType, list, requestId, chatId } = response.data.result;
-      //     if(showType === 1){
-      //       dealShowType1(list, requestId, chatId);
-      //     }else{
-      //       dealShowType12(list, requestId, chatId);
-      //     }
-      //   },
-      //   fail: (err) => {
-      //     console.log('errror', err);
-      //     msgState.value.msgLoad = false;
-      //     if (err.errMsg == 'request:fail abort') {
-      //       gStores.messageStore.showMessage('已暂停生成', 3000);
-      //     } else {
-      //       msgList.value.push({
-      //         my: false,
-      //         msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
-      //         type: -1,
-      //       });
-      //     }
-      //   },
-      //   complete: () => {
-      //     scrollToNewMsg();
-      //     msgState.value.msgLoad = false;
-      //     resolve(0);
-      //   },
-      // });
-
-      const { result } = await api.inspectionAnalysis({
-        sysCode: globalGl.SYS_CODE,
-        source: 1,
-        repId: element.repId,
-        repType: 1,
-        extend: element.extend,
-      });
-      const { showType, list, requestId, chatId } = result;
-      if (showType === 1) {
-        dealShowType1(list, requestId, chatId);
-      } else {
-        dealShowType12(list, requestId, chatId);
-      }
-      scrollToNewMsg();
-      resolve(0);
+    args.push({
+      sysCode: globalGl.SYS_CODE,
+      source: 1,
+      repId: element.repId,
+      repType: 1,
+      extend: element.extend,
     });
-    allPromise.push(promise);
-  });
-  Promise.all(allPromise).then(() => {
-    scrollToNewMsg();
-    msgState.value.msgLoad = false;
-  });
+    // let promise = new Promise(async (resolve, reject) => {
+    //   const args = {
 
-  // msgState.value.msgLoad = false;
+    //   };
+
+    // let setting = {
+    //   url: `https://testphs.eheren.com/gateway/phs-extend/customer/aiStreamReportAsk`,
+    //   method: 'POST',
+    //   responseType: 'text',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     phsId: isOpenSm4 ? '81681766' : '81681688',
+    //   },
+    //   data: JSON.stringify({
+    //     args: {
+    //       sysCode: globalGl.SYS_CODE,
+    //       source: 1,
+    //       repId: element.repId,
+    //       repType: 1,
+    //       extend: element.extend,
+    //     },
+    //   }),
+    // };
+    // console.warn('setting', setting);
+
+    // scrollToNewMsg();
+
+    // const { result } = await wx.request({
+    //   ...setting,
+    //   success: (response) => {
+    //     const { showType, list, requestId, chatId } = response.data.result;
+    //     if (showType === 1) {
+    //       dealShowType1(list, requestId, chatId);
+    //     } else {
+    //       dealShowType12(list, requestId, chatId);
+    //     }
+    //   },
+    //   fail: (err) => {
+    //     console.log('errror', err);
+    //     msgState.value.msgLoad = false;
+    //     if (err.errMsg == 'request:fail abort') {
+    //       gStores.messageStore.showMessage('已暂停生成', 3000);
+    //     } else {
+    //       msgList.value.push({
+    //         my: false,
+    //         msg: err?.message || '啊哦～网络连接异常，请稍后尝试。',
+    //         type: -1,
+    //       });
+    //     }
+    //   },
+    //   complete: () => {
+    //     scrollToNewMsg();
+    //     msgState.value.msgLoad = false;
+    //     resolve(0);
+    //   },
+    // });
+
+    // const { result } = await api.inspectionAnalysis({
+    //   sysCode: globalGl.SYS_CODE,
+    //   source: 1,
+    //   repId: element.repId,
+    //   repType: 1,
+    //   extend: element.extend,
+    // });
+    // const { showType, list, requestId, chatId } = result;
+    // if (showType === 1) {
+    //   dealShowType1(list, requestId, chatId);
+    // } else {
+    //   dealShowType12(list, requestId, chatId);
+    // }
+    // scrollToNewMsg();
+    // resolve(0);
+    // });
+    // allPromise.push(promise);
+  });
+  // Promise.all(allPromise).then(() => {
+  //   scrollToNewMsg();
+  //   msgState.value.msgLoad = false;
+  // });
+  // #ifndef  H5
+  typeInAsk(args, 'report');
+  // #endif
+  // #ifdef  H5
+  typeInAskH5(args, 'report');
+  // #endif
 };
 
 export const sendImg = async () => {
@@ -546,10 +555,15 @@ export const sendImg = async () => {
       type: 5,
     });
     scrollToNewMsg();
-    // uni.showLoading({})
+    let type = 'mini';
+    // #ifdef  H5
+    type = 'h5';
+    // #endif
     // @ts-expect-error
     const { data } = await apiAsync(uni.uploadFile, {
-      url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+      // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
+
+      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}`,
       filePath: tempFilePaths[0],
       // timeout: 60000,
       name: 'file',
@@ -570,11 +584,12 @@ export const sendImg = async () => {
       console.error('picTrans接口报错', JSON.parse(data));
       return;
     }
-    const list = result?.list;
-    const requestId = result?.requestId;
-    const chatId = result?.chatId;
-    // const { showType, list, requestId, chatId } = result;
-    dealShowType12(list, requestId, chatId);
+    // #ifndef  H5
+    typeInAsk(result, 'ocr');
+    // #endif
+    // #ifdef  H5
+    typeInAskH5(result, 'ocr');
+    // #endif
   } catch (error) {
     console.error('上传图片失败:', error);
     msgList.value.push({
@@ -745,6 +760,7 @@ const dealShowType1withStream = async (
     //   }
     // }, 5);
   });
+  // console.log(' msgList.value', msgList.value);
 };
 
 const dealShowType1 = (list, requestId, chatId) => {
@@ -969,6 +985,7 @@ const processChunks = (chunkTemp: string, typeInIndex: number) => {
 
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
+
 const typeInAsk = (value, answertype) => {
   const gStores = new GStores();
   const settings = {
@@ -992,6 +1009,23 @@ const typeInAsk = (value, answertype) => {
       },
     }),
   };
+  if (answertype === 'ocr') {
+    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamOcrAsk`;
+    settings.data = JSON.stringify({
+      args: {
+        ocrId: value,
+        sysCode: gStores.globalStore.sysCode,
+        source: gStores.globalStore.browser.source == 19 ? 1 : 2,
+      },
+    });
+  }
+  if (answertype == 'report') {
+    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
+    settings.data = JSON.stringify({
+      args: value,
+    });
+  }
+  console.warn('手动调用接口', settings);
 
   const typeInIndex = msgList.value.length;
   requestTask = wx.request({
@@ -1028,7 +1062,7 @@ const typeInAsk = (value, answertype) => {
   });
 };
 
-const typeInAskH5 = (value: string, answertype) => {
+const typeInAskH5 = (value: any, answertype) => {
   const gStores = new GStores();
   const settings = {
     url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
@@ -1050,6 +1084,22 @@ const typeInAskH5 = (value: string, answertype) => {
       },
     }),
   };
+  if (answertype === 'ocr') {
+    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamOcrAsk`;
+    settings.data = JSON.stringify({
+      args: {
+        ocrId: value,
+        sysCode: gStores.globalStore.sysCode,
+        source: gStores.globalStore.browser.source == 19 ? 1 : 2,
+      },
+    });
+  }
+  if (answertype == 'report') {
+    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
+    settings.data = JSON.stringify({
+      args: value,
+    });
+  }
 
   const typeInIndex = msgList.value.length;
 

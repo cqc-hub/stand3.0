@@ -111,7 +111,7 @@
             <template #empty>
               <!-- v-if="!loading" -->
               <view v-if="!loading" class="empty-box">
-                <g-empty :current="1" />
+                <g-empty :current="1" text="未查询到您近一个月的检验报告~" />
               </view>
             </template>
           </scroll-list>
@@ -169,8 +169,8 @@
   const hosId = ref('');
   const checkedList = ref<any[]>([]);
   const dateRange = ref<[string, string]>([
-    dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
-    dayjs().format('YYYY-MM-DD'),
+    dayjs(new Date()).subtract(31, "day").format("YYYY-MM-DD"),
+    dayjs(new Date()).format('YYYY-MM-DD'),
   ]);
   const scrollOption = ref({
     auto: false,
@@ -269,8 +269,8 @@
       pageSize: size,
       idCardEncry,
       hosId: hosId.value,
-      startDate: '',
-      endDate: '',
+      startDate: startDate,
+      endDate:  endDate,
     };
     loading.value = true;
     let count = 0;
