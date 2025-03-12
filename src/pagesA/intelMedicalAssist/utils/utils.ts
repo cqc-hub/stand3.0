@@ -1173,7 +1173,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     const data = dataMatch ? dataMatch[1].trim() : null;
     // console.warn('文本：', data);
     id && (msgState.value.lastChatId = id);
-    questionId && (msgState.value.requestId = id);
+    questionId && (msgState.value.requestId = questionId);
     if (data) {
       await taskQueue.addTask(
         dealShowType1withStream,
