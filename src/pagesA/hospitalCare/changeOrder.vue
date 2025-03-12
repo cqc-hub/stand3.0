@@ -46,16 +46,17 @@
   // 预约新增
   const isItemNew = computed(() => {
     return pageProps.value.appointAdtStatus === '1';
+    // return true;
   });
 
-  const labelWidth = '250rpx';
+  const labelWidth = '240rpx';
 
-  // const phoneRule = [
-  //   {
-  //     message: '请确认手机号是否有误',
-  //     rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
-  //   },
-  // ];
+  const phoneRule = [
+    {
+      message: '请确认手机号是否有误',
+      rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+    },
+  ];
 
   const renderListBase: TInstance[] = [
     {
@@ -207,16 +208,16 @@
     //   placeholder: '请输入工作单位',
     //   key: 'serviceAgency',
     // },
-    // {
-    //   labelWidth,
-    //   required: true,
-    //   showRequireIcon: true,
-    //   label: '第一联系人',
-    //   field: 'input-text',
-    //   placeholder: '请输入手机号',
-    //   key: 'mphoneNumber',
-    //   rule: phoneRule,
-    // },
+    {
+      labelWidth,
+      required: true,
+      showRequireIcon: true,
+      label: '手机号',
+      field: 'input-text',
+      placeholder: '请输入手机号',
+      key: 'mphoneNumber',
+      rule: phoneRule,
+    },
     // {
     //   labelWidth,
     //   required: true,
@@ -276,6 +277,7 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    console.log(pageProps.value, '233');
 
     if (pageProps.value.presentAddressOthers) {
       // const [permanentAddress, ...detailAddress] =
@@ -314,8 +316,17 @@
 
     gform.value.setList([
       ...renderListBase,
-      ...(isItemNew.value ? renderListDetail : []),
-    ]);
+      // ...(isItemNew.value ? renderListDetail : []),
+      ...renderListDetail,
+      {
+        labelWidth,
+        label: '备注',
+        field: 'input-text',
+        inputType: 'textarea',
+        placeholder: '请输入房间、床位或其它信息',
+        key: 'remark',
+      },
+    ] as TInstance[]);
   });
 </script>
 
