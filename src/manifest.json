@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -67,10 +67,6 @@
       "SIPlugin": {
         "version": "0.3.6",
         "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -80,14 +76,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -99,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "optimization": {
       "treeShaking": {

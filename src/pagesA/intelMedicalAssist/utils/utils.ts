@@ -1172,7 +1172,13 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     questionId = questionId?.split('_')[1];
     // #endif
     // 提取data:和event:message之间的字符
-    const dataMatch = chunk.match(/data:(.*?)event:message/s);
+    let dataMatch 
+    // #ifndef MP-ALIPAY
+    dataMatch = chunk.match(/data:(.*?)event:message/s);
+    // #endif
+    // #ifdef MP-ALIPAY
+    dataMatch = chunk.match(/data:([\s\S]*?)event:message/);
+    // #endif
     const data = dataMatch ? dataMatch[1].trim() : null;
     // console.warn('文本：', data);
     id && (msgState.value.lastChatId = id);
