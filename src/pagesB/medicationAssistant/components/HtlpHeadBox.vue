@@ -20,7 +20,7 @@
 
     <view class="item-content f28 mt32">
       <block v-for="_item in renderList" :key="_item.key">
-        <view v-if="renderRow[_item.key]" class="row flex-normal mb12">
+        <view v-if="renderRow[_item.key]&&renderRow[_item.key]!='undefined'" class="row flex-normal mb12">
           <view class="label text-no-wrap color-888">{{ _item.label }}</view>
 
           <view v-if="_item.key === 'masterDocName'" class="value">
