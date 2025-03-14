@@ -1167,7 +1167,10 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     const idMatch = chunk.match(/id:(.*)/);
     let idStr = idMatch ? idMatch[1] : null;
     const id = idStr?.split(',')[0];
-    const questionId = idStr?.split(',')[1];
+    let questionId = idStr?.split(',')[1];
+    // #ifdef  H5
+    questionId = questionId?.split('_')[1];
+    // #endif
     // 提取data:和event:message之间的字符
     const dataMatch = chunk.match(/data:(.*?)event:message/s);
     const data = dataMatch ? dataMatch[1].trim() : null;
