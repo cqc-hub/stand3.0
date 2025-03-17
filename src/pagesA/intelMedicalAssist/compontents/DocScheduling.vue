@@ -146,7 +146,7 @@
       case '1001035':
         const fullUrl = joinQueryForUrl(
           'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order',
-          docInfoQuery
+          {...docInfoQuery,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token')}
         );
         location.href = fullUrl;
         break;
@@ -202,7 +202,7 @@
       case '1001035':
         const fullUrl = joinQueryForUrl(
           'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',
-          { ...docInfo, deptId: docInfo.hosDeptId }
+          { ...docInfo, deptId: docInfo.hosDeptId,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token') }
         );
         location.href = fullUrl;
         break;

@@ -1279,30 +1279,6 @@ function convertAsciiEscapeSequences(input) {
     return String.fromCharCode(parseInt(hex, 16));
   });
 }
-
-//处理h5 医生跳转
-export const gotoH5DoctorDetails = (docInfo) => {
-  const gStores = new GStores();
-  const sysCode = gStores.globalStore.sysCode;
-  const { hosId, hosDocId, hosDeptId, docName } = docInfo;
-  // location.href=
-  uni.navigateTo({
-    url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
-      hosId,
-      hosDocId,
-      hosDeptId,
-      docName,
-    }),
-  });
-  switch (sysCode) {
-    case '1001035':
-      break;
-
-    default:
-      break;
-  }
-};
-
 export const handleChooseSchDate = (docInfo: any, date: string) => {
   showOrder.value = true;
   schOrderInfo.value = {
