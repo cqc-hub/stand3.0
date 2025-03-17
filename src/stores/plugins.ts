@@ -12,14 +12,14 @@ import {
 } from '@/common';
 
 export const pinia = createPinia();
-
+const isOpenDes = false;
 export const painaInstall = (app: App) => {
   pinia
     .use(
       createPersistedState({
         storage: {
           getItem(key: string): string | null {
-            if (globalGl.env === 'prod') {
+            if (globalGl.env === 'prod' && isOpenDes) {
               return decryptDes(getLocalStorage(key));
             } else {
               return getLocalStorage(key);
@@ -27,7 +27,7 @@ export const painaInstall = (app: App) => {
           },
 
           setItem(key: string, value: string) {
-            if (globalGl.env === 'prod') {
+            if (globalGl.env === 'prod' && isOpenDes) {
               setLocalStorage({
                 [key]: encryptDes(value),
               });

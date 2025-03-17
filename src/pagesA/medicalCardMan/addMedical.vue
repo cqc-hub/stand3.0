@@ -423,6 +423,8 @@
                   showCancel: false,
                 });
               }
+            } else {
+              throw new Error(err);
             }
           });
 
@@ -447,6 +449,8 @@
           uni.reLaunch({
             url: '/pagesA/medicalCardMan/medicalCardMan',
           });
+        } else {
+          throw new Error(error as any);
         }
       }
     } else {
