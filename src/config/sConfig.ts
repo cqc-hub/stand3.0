@@ -167,7 +167,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
     isOpenAlipayFollow: '81fa167551234b1f8585325f56bd6726',
-    // isOpenWechatSI: true,
+    isOpenWechatSI: true,
     // isOpenHomeTabBarNetWorkBtn: '1',
   },
 
