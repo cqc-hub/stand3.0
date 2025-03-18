@@ -66,12 +66,20 @@ const routerStore = defineStore('router', {
         useUserStore().clearStore();
       }
 
-      this.backRoute = prop;
-
       if (prop._url) {
         const { _url, _query } = prop;
+        if (
+          [
+            '/pagesA/medicalCardMan/addMedical',
+            '/pagesA/medicalCardMan/perfectReal',
+            '/pages/home/home',
+            '/pages/home/my',
+          ].includes(_url)
+        ) {
+          return;
+        }
 
-        let fullUrl = decodeURIComponent(<string>_url);
+        let fullUrl = decodeURIComponent(_url);
 
         if (fullUrl) {
           if (_query) {
@@ -86,6 +94,8 @@ const routerStore = defineStore('router', {
       } else {
         this.update_P();
       }
+
+      this.backRoute = prop;
     },
 
     clear() {

@@ -100,7 +100,7 @@
     
     switch(gStores.globalStore.sysCode){
       case '1001035':
-      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order', {...item,deptId:item.hosDeptId})
+      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order', {...item,deptId:item.hosDeptId,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token')})
       location.href = fullUrl;
       break;
       case '1001029':

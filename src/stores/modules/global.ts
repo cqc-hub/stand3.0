@@ -135,7 +135,7 @@ const globalStore = defineStore('global', {
     },
     updataH5Info(opt){
       // #ifdef H5
-      const {sysCode} = opt.query;
+      const {sysCode,token,openid} = opt.query;
 
       if(sysCode){
         if(this.sysCode !== sysCode){
@@ -147,9 +147,15 @@ const globalStore = defineStore('global', {
         this.sysCode = sysCode;
         uni.setStorageSync('mini_v3_sysCode',sysCode)
       }
-      // if(token){
-      //   this.token.accessToken = token
-      // }
+
+      if(token){
+        // this.token.accessToken = token
+        uni.setStorageSync('mini_v3_sysCode_token',token)
+      }
+
+      if(openid && sysCode === '1001035'){
+        uni.setStorageSync('mini_v3_sysCode_openId',openid)
+      }
       // #endif
     },
 

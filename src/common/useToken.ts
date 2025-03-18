@@ -33,7 +33,7 @@ export const getLocalStorage = (key: string) => {
 export function getToken() {
   return getLocalStorage(TokenKey);
 }
- 
+
 export function getSysCode() {
   // #ifdef H5
   return getLocalStorage(sysCodeKey);
