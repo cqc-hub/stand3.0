@@ -92,7 +92,7 @@
             <view
               v-if="
                 orderConfig.isOrderWithoutTime !== '1' &&
-                orderRegInfo.orderStatus === '10' &&
+                isWaitForPay &&
                 !isWaitReg
               "
               class="out-time-info f28 color-error"
@@ -200,10 +200,7 @@
                 <template #show-body="{ item, value }">
                   <view
                     @click="goDoctorCard"
-                    v-if="
-                      item.key === 'docName' &&
-                      orderRegInfo.orderStatus !== '10'
-                    "
+                    v-if="item.key === 'docName' && !isWaitForPay"
                     class="color-blue flex-normal doc-name"
                   >
                     <view class="doc-name-value">
@@ -322,7 +319,7 @@
           </button>
         </block>
 
-        <block v-if="orderRegInfo.orderStatus === '10'">
+        <block v-if="isWaitForPay">
           <button @click="cancelOrder" class="btn g-border btn-normal">
             取消订单
           </button>
@@ -396,6 +393,7 @@
     cacheUtil,
     callBackAsync,
   } from '@/utils';
+  import md5s from 'js-md5';
 
   import {
     encryptDes,
@@ -463,13 +461,17 @@
     if (isWaitReg.value) {
       return orderRegInfo.value.orderStatus === '1';
     }
-    return ['23', '45', '10', '70', '0', '20', '43', '42'].includes(
+    return ['23', '45', '10', '70', '0', '20', '43', '42', '101'].includes(
       orderRegInfo.value.orderStatus
     );
   });
 
   const isWaitReg = computed(() => {
     return pageProps.value._type === 'waitReg';
+  });
+
+  const isWaitForPay = computed(() => {
+    return ['10', '101'].includes(orderRegInfo.value.orderStatus);
   });
 
   const { refPayList, changeRefPayList, wxCrossProgramInfo } = usePayPage();
@@ -580,7 +582,7 @@
     if (!isFirstIn.value) return;
 
     if (
-      orderRegInfo.value.orderStatus === '0' &&
+      isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
       orderConfig.value.isOpenPreConsultation === '1'
     ) {
@@ -605,6 +607,33 @@
         'navigateTo',
         pageProps.value
       );
+      return;
+    }
+
+    if (gStores.globalStore.sysCode === '1001048') {
+      const {
+        hosDeptId: deptcode,
+        cardNumber: hisid,
+        hosOrderId: regno,
+        createTime,
+        deptName: deptname,
+        patientName: name,
+      } = orderRegInfo.value;
+
+      const secretkey = 'V7lH3cKlj42kmZ3';
+      const callback = '/pagesA/MyRegistration/MyRegistration';
+      const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
+      const sign = md5s(needJm).toLowerCase();
+      const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
+        callback
+      )}&hisid=${hisid}&userid=${regno}&deptname=${deptname}&name=${name}&regtimestamp=${new Date(
+        createTime
+      ).getTime()}&sign=${sign}`;
+
+      useTBanner({
+        type: 'h5',
+        path: url,
+      });
       return;
     }
 
@@ -721,8 +750,8 @@
     }
 
     if (isOrderWithoutTime === '1') {
+      timeTravel.value.downTime = 100;
       clearInterval(_timeTravel);
-      timeTravel.value.minute = 10;
     }
 
     if (totalCost) {

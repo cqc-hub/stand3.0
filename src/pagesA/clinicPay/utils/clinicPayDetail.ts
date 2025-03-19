@@ -26,7 +26,6 @@ import {
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
-import wMd5 from '@/common/md5';
 import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 

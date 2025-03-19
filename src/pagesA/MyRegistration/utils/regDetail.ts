@@ -137,6 +137,14 @@ export const orderStatusMap = {
     title: '待支付',
     cardColor: 'var(--hr-warning-color-6)',
   },
+  '101': {
+    headerClass: 'header-yellow',
+    headerBgIcon: '',
+    headerIcon: '&#xe6ea;',
+    color: 'var( --hr-error-color-6)',
+    title: '待支付',
+    cardColor: 'var(--hr-warning-color-6)',
+  },
   // 成功
   '0': {
     headerClass: 'header-blue',
@@ -321,6 +329,7 @@ export type OrderStatus = keyof typeof orderStatusMap;
 export interface IRegInfo {
   orderStatus: string;
   patientId: string;
+  createTime: string;
   hisResult: string;
   cardNumber: string;
   patientName: string;
