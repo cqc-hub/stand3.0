@@ -90,7 +90,11 @@
             </view>
 
             <view
-              v-if="orderRegInfo.orderStatus === '10' && !isWaitReg"
+              v-if="
+                orderConfig.isOrderWithoutTime !== '1' &&
+                orderRegInfo.orderStatus === '10' &&
+                !isWaitReg
+              "
               class="out-time-info f28 color-error"
             >
               <block v-if="timeTravel.minute == 0 && timeTravel.second == 0">
@@ -468,11 +472,7 @@
     return pageProps.value._type === 'waitReg';
   });
 
-  const {
-    refPayList,
-    changeRefPayList,
-    wxCrossProgramInfo,
-  } = usePayPage();
+  const { refPayList, changeRefPayList, wxCrossProgramInfo } = usePayPage();
 
   const qrCodeOpt = ref({
     // 二维码
@@ -646,6 +646,7 @@
   };
 
   let init = async () => {
+    const { isOrderWithoutTime } = orderConfig.value;
     uni.showLoading({});
     await wait(800);
     qrCodeOpt.value.width = 600;
@@ -717,6 +718,11 @@
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
+    }
+
+    if (isOrderWithoutTime === '1') {
+      clearInterval(_timeTravel);
+      timeTravel.value.minute = 10;
     }
 
     if (totalCost) {
