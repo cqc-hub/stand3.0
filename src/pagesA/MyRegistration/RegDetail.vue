@@ -197,7 +197,7 @@
                 hideRowBorder
                 ref="refForm"
               >
-                <template #show-body="{ item, value }">
+                <template #showbody="{ item, value }">
                   <view
                     @click="goDoctorCard"
                     v-if="item.key === 'docName' && !isWaitForPay"
@@ -217,6 +217,22 @@
                   >
                     <view>
                       {{ orderRegInfo._category }}
+                    </view>
+                  </view>
+
+                  <view
+                    v-else-if="item.key === 'deptName'"
+                    class="flex-normal doc-name"
+                  >
+                    <view class="flex">
+                      <view class="mr12">{{ orderRegInfo.deptName }}</view>
+                      <view
+                        v-if="gStores.globalStore.sysCode === '1001048' && isWx"
+                        @click="yixinDeptGuide"
+                        class="btn btn-primary btn-border btn-plain btn-round btn-small"
+                      >
+                        导航到科室
+                      </view>
                     </view>
                   </view>
 
@@ -456,6 +472,10 @@
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
+  const isWx = ref(false);
+  // #ifdef MP-WEIXIN
+  isWx.value = true;
+  // #endif
 
   const isShowFooter = computed(() => {
     if (isWaitReg.value) {
@@ -1206,6 +1226,18 @@
     goDoctorCard();
   };
 
+  const yixinDeptGuide = () => {
+    let { hosDeptId } = orderRegInfo.value;
+    hosDeptId.indexOf('|') != -1 &&
+      (hosDeptId = hosDeptId.substr(0, hosDeptId.indexOf('|')));
+
+    wx.navigateToMiniProgram({
+      appId: 'wx8735a8a39cf58b5e',
+      // pages/index?id=医院id&appKey=向我方获取&poi=科室id A73x1x702
+      path: `pages/index?id=5B2OQCgmhE&appKey=PRUtJJeHE3&poi=${hosDeptId}`,
+    });
+  };
+
   onShow(async () => {
     if (getLocalStorage('reg-detail-init') === '1') {
       setLocalStorage({
@@ -1544,6 +1576,19 @@
           }
         }
       }
+    }
+  }
+
+  .btn-small {
+    font-size: var(--hr-font-size-xxxs);
+    padding: 8rpx 12rpx;
+    // line-height: 1em;
+    // height: 100%;
+    // width: 100%;
+    border-radius: 99px;
+
+    &::after {
+      display: none;
     }
   }
 </style>
