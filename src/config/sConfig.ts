@@ -152,7 +152,7 @@ const scJson: Record<string, ISConfig> = {
     },
     isOpenHelpOld: '1',
     isOpenMessageAuth: '1',
-     isOpenWechatSI: true,
+    isOpenWechatSI: true,
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
   },
@@ -161,7 +161,6 @@ const scJson: Record<string, ISConfig> = {
    * 杭州口腔医院
    */
   1001063: {
-    
     login: {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
@@ -249,7 +248,7 @@ const scJson: Record<string, ISConfig> = {
   1001054: {
     isOpenHomeTabBarNetWorkBtn: '1',
     isHideHomeSearch: '1',
-    isOpenWechatSI:true,
+    isOpenWechatSI: true,
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
 
@@ -473,7 +472,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001074: {
     // isOpenHomeTabBarNetWorkBtn: '1',
-    isOpenWechatSI:true,
+    isOpenWechatSI: true,
     login: {
       // isAliAuthBase: '1',
     },
@@ -502,9 +501,19 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
-    }, 
+    },
   },
 
+  1001048: {
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320200'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
+        }
+      },
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {

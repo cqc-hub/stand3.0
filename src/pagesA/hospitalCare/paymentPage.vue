@@ -194,6 +194,9 @@
       defalutMoney.value
     );
     gStores.globalStore.sysCode === '1001038' && (payArg.businessType = 2);
+    if (['1001038', '1001048'].includes(gStores.globalStore.sysCode)) {
+      payArg.businessType = 2;
+    }
     const res = await payMoneyOnline(payArg);
 
     await toPayPull(res, '住院缴费');
