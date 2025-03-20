@@ -966,8 +966,6 @@
             );
             uni.setStorageSync('resultConfig', resultConfig);
             const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${hosOrderId}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-            console.log(url)
-            return
             useTBanner({
               type: 'h5',
               path: url,

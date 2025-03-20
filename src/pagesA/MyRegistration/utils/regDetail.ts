@@ -9,7 +9,10 @@ import {
 } from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
-import { getQxMedicalNation } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+import {
+  getMedicalAuthCode,
+  getQxMedicalNation,
+} from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
 export interface IPageProps {
   orderId: string;
@@ -609,6 +612,7 @@ export class RegDetailUtil {
       }
 
       if (yixinRefund && isWx) {
+        args.payAuthNo = await getMedicalAuthCode();
       }
       uni.showLoading({});
       const { title, content } = await this.gStores.getSysAppMore('1100');

@@ -420,7 +420,7 @@
             "navigationBarTitleText": "就诊人管理",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
-              "health-card-login": "plugin://healthCardPlugins/healthCardLogin",
+              "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
               // #endif
             }
           }
@@ -477,11 +477,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"healthCardPlugins":{"version":"3.11.0","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
+      "plugins":  {}
     },
     {
       "root": "pagesB",
@@ -489,7 +485,7 @@
         {
           "path": "menus/home",
           "style": {
-              "navigationStyle": "custom"
+            "navigationStyle": "custom"
           }
         },
         {
@@ -532,8 +528,8 @@
           "path": "reportQuery/inspectionReport",
           "style": {
             "navigationBarTitleText": "检查报告",
-             // #ifdef  MP-WEIXIN
-             "usingComponents": {
+            // #ifdef  MP-WEIXIN
+            "usingComponents": {
               "health-card-query-comp": "plugin://healthCardPlugins/healthCardQueryComp"
             },
             "componentPlaceholder": {
@@ -575,11 +571,11 @@
       "root": "pagesC",
       "pages": [
         {
-					"path": "prevFile/prevFile",
-					"style": {
-						"navigationBarTitleText": " "
-					}
-				},
+          "path": "prevFile/prevFile",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
         {
           "path": "scan/scan",
           "style": {
@@ -796,6 +792,18 @@
         }
       ],
       "plugins":  {}
+    },
+    {
+      "root": "pagesD",
+      "pages": [
+        {
+          "path": "common/useJump",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        }
+      ],
+      "pagesD-plugins": ""
     }
   ],
   "globalStyle": {
