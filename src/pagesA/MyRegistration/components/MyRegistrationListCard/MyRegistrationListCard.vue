@@ -98,7 +98,7 @@
             v-if="isCancelOrder(item)"
             class="btn btn-round btn-size-small btn-border cancel-btn"
           >
-            取消订单
+            取消预约
           </button>
 
           <button
@@ -228,7 +228,7 @@
     return props.showFWBtn.includes(item.orderStatus) && item.orderId;
   };
 
-  // 显示取消订单
+  // 显示取消预约
   const isCancelOrder = (item: IRegistrationCardItem) => {
     return false;
 

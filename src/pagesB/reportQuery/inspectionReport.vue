@@ -173,13 +173,14 @@
                 </view>
               </view> -->
             </view>
-            <view class="button-list">
+            <view class="button-list mt32 flex relative flex-between pr32 pl32">
               <button
-                class="button"
+                class="button flex-1"
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
                 v-if="
-                  (pageProps.isDownloadRepor === '1' && pageProps.isGraphic == 1) ||
+                  (pageProps.isDownloadRepor === '1' &&
+                    pageProps.isGraphic == 1) ||
                   item?.pdfPath
                 "
               >
@@ -187,8 +188,8 @@
                 图文报告
               </button>
               <button
-                class="button"
                 v-if="item.yunUrl || examineReportList.yunUrl"
+                class="button flex-1"
                 @click="gotoMedical((item.yunUrl || examineReportList.yunUrl)!)"
               >
                 <view class="icon-font ico_cloud"></view>
@@ -334,6 +335,7 @@
     ISystemConfig,
     ServerStaticData,
     apiAsync,
+    useTBanner,
   } from '@/utils';
   import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -603,6 +605,13 @@
     let { repId, repName, pdfPath } = item;
 
     if (pdfPath) {
+      if (gStores.globalStore.sysCode === '1001048') {
+        useTBanner({
+          type: 'h5',
+          path: pdfPath,
+        });
+        return;
+      }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
@@ -900,7 +909,6 @@
         pageProps.value._extend = JSON.parse(pageProps.value.extend);
       } catch (error) {}
     }
-    console.log(pageProps.value, 'ageConfig.value ageConfig.value ');
     windowInfo.value = uni.getSystemInfoSync();
     getTips();
     getInspectionReportList();
@@ -1054,15 +1062,11 @@
             // }
           }
           .button-list {
-            margin-top: 32rpx;
-            display: flex;
-            position: relative;
-            justify-content: space-evenly;
             z-index: 99;
+            gap: 32rpx;
             .button {
               border-radius: 16rpx;
               height: 80rpx;
-              width: 304rpx;
               border: 2rpx solid #cccccc;
               background-color: #fff;
               line-height: 80rpx;
