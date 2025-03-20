@@ -179,8 +179,7 @@
                 :class="{ onlyOneButton: !item.dicomList }"
                 @click="goReportPdf(item)"
                 v-if="
-                  (pageProps.isDownloadRepor == 1 &&
-                    pageProps.isGraphic == 1) ||
+                  (pageProps.isDownloadRepor === '1' && pageProps.isGraphic == 1) ||
                   item?.pdfPath
                 "
               >

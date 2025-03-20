@@ -445,6 +445,7 @@
     _getQxMedicalNation,
     getMedicalConfigInfo,
     getMedicalArgWithFamily,
+    getMedicalAuthCode,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -946,16 +947,40 @@
           });
 
           await getMedicalArgWithFamily();
-          // #ifdef  MP-WEIXIN
-          medicalNationWx(await getQxMedicalNation());
-          // #endif
+          // 宜兴仅wx
+          if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
+            const authCode = await getMedicalAuthCode();
+            const { hosOrderId, orderId, hosId, hosDeptId } =
+              orderRegInfo.value;
+            const { patientId } = gStores.userStore.patChoose;
+            const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
+            const OPENID = gStores.globalStore.openId;
+            const ORGCODG = 'H32028200358';
+            const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+            const resultConfig = encodeURIComponent(
+              JSON.stringify({
+                cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
+                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}`,
+              })
+            );
+            uni.setStorageSync('resultConfig', resultConfig);
+            const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${hosOrderId}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+            useTBanner({
+              type: 'h5',
+              path: url,
+            });
+          } else {
+            // #ifdef  MP-WEIXIN
+            medicalNationWx(await getQxMedicalNation());
+            // #endif
 
-          // #ifdef MP-ALIPAY
-          // 国标医保
-          if (getIsAliMedicalNation()) {
-            payAliMedicalNation();
+            // #ifdef MP-ALIPAY
+            // 国标医保
+            if (getIsAliMedicalNation()) {
+              payAliMedicalNation();
+            }
+            // #endif
           }
-          // #endif
         }
 
         break;

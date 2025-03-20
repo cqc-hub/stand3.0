@@ -138,12 +138,12 @@ export const orderStatusMap = {
     cardColor: 'var(--hr-warning-color-6)',
   },
   '101': {
-    headerClass: 'header-yellow',
-    headerBgIcon: '',
-    headerIcon: '&#xe6ea;',
-    color: 'var( --hr-error-color-6)',
-    title: '待支付',
-    cardColor: 'var(--hr-warning-color-6)',
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已预约',
+    cardColor: 'var(--hr-brand-color-6)',
   },
   // 成功
   '0': {
