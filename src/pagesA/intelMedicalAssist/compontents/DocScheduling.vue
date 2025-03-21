@@ -94,6 +94,7 @@
   const props = defineProps<{
     list: any[];
     msg: string;
+    source?:string
   }>();
 
   onMounted(() => {
@@ -144,11 +145,26 @@
         });
         break;
       case '1001035':
-        const fullUrl = joinQueryForUrl(
-          'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order',
-          {...docInfoQuery,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token')}
-        );
-        location.href = fullUrl;
+        if (props?.source === '21') {
+          useTBanner({
+            type: 'self',
+            path: joinQueryForUrl(
+              'pagesA/MyRegistration/DoctorDetails',
+              docInfoQuery
+            ),
+          });
+        } else {
+          const fullUrl = joinQueryForUrl(
+            'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/DoctorDetails?type=order',
+            {
+              ...docInfoQuery,
+              openid: uni.getStorageSync('mini_v3_sysCode_openId'),
+              token: uni.getStorageSync('mini_v3_sysCode_token'),
+            }
+          );
+          location.href = fullUrl;
+        }
+
         break;
       case '1001029':
         useTBanner({
@@ -202,7 +218,12 @@
       case '1001035':
         const fullUrl = joinQueryForUrl(
           'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',
-          { ...docInfo, deptId: docInfo.hosDeptId,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token') }
+          {
+            ...docInfo,
+            deptId: docInfo.hosDeptId,
+            openid: uni.getStorageSync('mini_v3_sysCode_openId'),
+            token: uni.getStorageSync('mini_v3_sysCode_token'),
+          }
         );
         location.href = fullUrl;
         break;

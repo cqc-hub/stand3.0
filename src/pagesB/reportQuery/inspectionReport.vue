@@ -176,7 +176,7 @@
             <view class="button-list">
               <button
                 class="button"
-                :class="{ onlyOneButton: !item.dicomList }"
+                :class="{ onlyOneButton: !item.dicomList&&!(item.yunUrl || examineReportList.yunUrl) }"
                 @click="goReportPdf(item)"
                 v-if="
                   (pageProps.isDownloadRepor == 1 &&

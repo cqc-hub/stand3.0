@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001046",
+  "sysCode": "1001057",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -133,7 +133,7 @@
       "alipayAppid": "2021003173633521",
       "isvAlipayAppid": "2021003172684536",
       "h5Appid": "wx69bb1d0f7210807b",
-      "name": "西安市红会医院互联网医院",
+      "name": "",
       "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false,
@@ -332,6 +332,14 @@
       "h5Appid1": "wx6426f547693ab6e2",
       "alipayAppid": "2021003144603328",
       "name": "宜兴市人民医院",
+      "isSearchInHos": true,
+      "isStartComeTest": true,
+      "isOpenOcr": false
+    },
+    "1001075": {
+      "wxAppid": "wx9dcb98a8c18d44ea",
+      "h5Appid1": "wx6426f547693ab6e2",
+      "name": "陕西省中医医院",
       "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false

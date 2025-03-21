@@ -289,6 +289,9 @@ export const useTBanner = async (
     wxH5.miniProgram.navigateTo({
       url: url,
     });
+    my.navigateTo({
+      url: url,
+    });
     // #endif
     // #ifndef H5
     uni[routeType]({

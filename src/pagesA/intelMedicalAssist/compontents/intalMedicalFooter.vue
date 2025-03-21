@@ -217,6 +217,7 @@
   const props = defineProps<{
     guessServerList?: TButtonConfig[];
     headerConfig: StyleConfigType;
+       source?:string
   }>();
 
   const emits = defineEmits([
@@ -288,7 +289,7 @@
   };
 
   const handleClickServer = (serverItem) => {
-    emits('click-server', serverItem);
+    emits('click-server', serverItem,props?.source);
   };
 
   const changeVoiceType = () => {

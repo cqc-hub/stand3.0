@@ -41,11 +41,12 @@
 </template>
 <script setup lang="ts">
   import { ref, computed, getCurrentInstance, onMounted } from 'vue';
-  import { GStores,useTBanner } from '@/utils'; 
+  import { GStores, useTBanner } from '@/utils';
   const props = defineProps<{
     list: any[];
     msg: string;
     hosData: any[];
+    source?:string
   }>();
   const hosDeptList = ref<any>([]);
   const gStores = new GStores();
@@ -96,29 +97,46 @@
     // #endif
 
     // #ifdef H5
-    
-    
-    switch(gStores.globalStore.sysCode){
+
+    switch (gStores.globalStore.sysCode) {
       case '1001035':
-      const fullUrl = joinQueryForUrl('https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order', {...item,deptId:item.hosDeptId,openid:uni.getStorageSync('mini_v3_sysCode_openId'),token:uni.getStorageSync('mini_v3_sysCode_token')})
-      location.href = fullUrl;
-      break;
+        if (props?.source === '21') {
+          useTBanner({
+            type: 'self',
+            path: joinQueryForUrl(
+              'pagesA/MyRegistration/order?type=order',
+              {...item,deptId: item.hosDeptId,}
+            ),
+          });
+        } else {
+          const fullUrl = joinQueryForUrl(
+            'https://h5.eheren.com/jiangsushengzhong/#/pagesA/MyRegistration/order?type=order',
+            {
+              ...item,
+              deptId: item.hosDeptId,
+              openid: uni.getStorageSync('mini_v3_sysCode_openId'),
+              token: uni.getStorageSync('mini_v3_sysCode_token'),
+            }
+          );
+          location.href = fullUrl;
+        }
+        break;
       case '1001029':
         useTBanner({
-              type:'self',
-              path:joinQueryForUrl('pagesA/MyRegistration/order', {
-              query:JSON.stringify({
-               ...item,
-            type:'order'
-          })
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/order', {
+            query: JSON.stringify({
+              ...item,
+              type: 'order',
+            }),
           }),
-        })
+        });
         break;
       default:
-      useTBanner({
-          type:'self',
-          path:joinQueryForUrl('pagesA/MyRegistration/order?type=order', item),
-        })
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/order?type=order', item),
+        });
         break;
     }
     // #endif
