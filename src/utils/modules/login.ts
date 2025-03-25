@@ -419,8 +419,10 @@ export class LoginUtils extends GStores {
     this.globalStore.clearStore();
     useRouterStore().clear();
     if (this.globalStore.sysCode === '1001063') {
-      const gata =()=> getApp()
-      this.globalStore.updateOralMallData(gata())
+      const appInstance = getApp() 
+      if (appInstance && appInstance.globalData) {
+      this.globalStore.updateOralMallData(appInstance) 
+     }
       uni.setStorageSync('fc-user-token','')
      }
   
@@ -660,6 +662,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       }
     }
   }
+
 
   // 这个也是免完善的
   async handlerByOpenid(payload?: any) {

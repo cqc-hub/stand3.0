@@ -33,7 +33,6 @@
     }
    // #endif
    const query = item.query && JSON.parse(item.query);
-   console.log('这里', getApp()  )
    if (query.key && query.key.startsWith('myOralCell-')){
       // 明眸皓齿口腔商城跳转全局参数
       const appInstance = getApp()  

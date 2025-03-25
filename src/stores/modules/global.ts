@@ -61,7 +61,7 @@ const globalStore = defineStore('global', {
       token: {
         accessToken: '',
         refreshToken: '',
-        loginData: '',
+        loginData: ''
       },
       //来源
       browser: {
@@ -129,7 +129,7 @@ const globalStore = defineStore('global', {
        // #endif
       }
       if (this.sysCode === '1001063') {
-        this.updateOralMallData()
+        // this.updateOralMallData()
        }
    
     },
@@ -174,26 +174,14 @@ const globalStore = defineStore('global', {
      // 口腔商城
      let appData = app || getCurrentInstance()!.proxy; 
      if (appData) {
-      appData.globalData.configData = {
-        from: 1, // 小程序的渠道值，具体咨询组件方
-        appId: 'wx93d1e2c1e646e342', // 小程序的appId值
-        loginPage: '/pages/home/my?isWarningLogin=1&_p=1', // 小程序的登录页面地址
-        token:  this.token.accessToken,
-        openId: this.openId,
-        sysCode:this.sysCode,
-        mallToken:'22',
-        getMallToken:()=>{}
-        // getMallToken: function () {
-        //   return new Promise((resolve, reject) => {
-        //       api.getTcToken({}).then((res)=>{
-        //         resolve(res.result.mallToken)
-        //       }).catch(()=>{
-        //         reject('未获取到token')
-        //       })
-       
-        //   })
-        // },
-      };
+        appData.globalData.configData = {
+          from: 1, // 小程序的渠道值，具体咨询组件方
+          appId: 'wx93d1e2c1e646e342', // 小程序的appId值
+          loginPage: '/pages/home/my?isWarningLogin=1&_p=1', // 小程序的登录页面地址
+          token:  this.token.accessToken,
+          openId: this.openId,
+          sysCode:this.sysCode,
+        };  
        }
     },
 

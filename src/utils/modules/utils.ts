@@ -478,7 +478,17 @@ export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') =>
 }
 
 
-export const getTcMallToken =  async ()=>{
-  const {result} = await api.getTcToken({}); 
-    return  result.token || '';
+export const getTcMallToken = ()=>{ 
+  return new Promise((resolve, reject) => {
+    const appInstance = getApp() 
+    api.getTcToken({}).then((res)=>{
+      if (appInstance && appInstance.globalData) {
+        appInstance.globalData.configData.mallToken = res.result.token
+      }
+      resolve(res.result.token)
+    }).catch(()=>{
+      reject('未获取到token')
+    })
+
+})
   };
