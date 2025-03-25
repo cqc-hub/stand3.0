@@ -70,7 +70,7 @@
               <Recommend-Remind />
             </view>
             <view v-else-if="msgItem.type === 61">
-              <Doc-Scheduling :list="msgItem.addRessList" :msg="msgItem.msg" />
+              <Doc-Scheduling :list="msgItem.addRessList" :msg="msgItem.msg" :source="props.source" />
             </view>
 
             <view v-else-if="msgItem.type === 62">
@@ -78,6 +78,7 @@
                 :list="msgItem.addRessList"
                 :msg="msgItem.msg"
                 :hosData="msgItem?.hosData"
+                :source="props.source"
               />
             </view>
             <view
@@ -241,6 +242,7 @@
   const props = defineProps<{
     msgList: any[];
     headerConfig: StyleConfigType;
+    source?:string
   }>();
 
   const sysAppMore = ref('');

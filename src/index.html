@@ -10,5 +10,11 @@
   <body>
     <div id="app"><!--app-html--></div>
     <script type="module" src="/main.ts"></script>
+    <script type="text/javascript">
+
+			// 支付宝小程序的 JS-SDK 防止 404 需要动态加载，如果不需要兼容支付宝小程序，则无需引用此 JS 文件。
+			document.writeln('<script src="https://appx/web-view.min.js"' + '>' + '<' + '/' + 'script>');
+
+  </script>
   </body>
 </html>

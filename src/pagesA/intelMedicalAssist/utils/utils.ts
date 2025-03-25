@@ -613,13 +613,20 @@ export const handleGuess = (item) => {
 };
 
 export const handleServer = (
-  item: TButtonConfig & { isSelfMethod?: string }
+  item: TButtonConfig & { isSelfMethod?: string },
+  source?:string
 ) => {
+  const gStores = new GStores();
   if (item?.isSelfMethod) {
     item.isSelfMethod == 'reportAnalysis' && reportShow();
     item.isSelfMethod == 'openWxService' && openServicesChat(item.extraData);
     item.isSelfMethod == 'makePhone' && makePhone(item.extraData);
   } else {
+    console.log(88888888888,gStores.globalStore.sysCode==='1001035'&&source === '21',{...item,type: 'self',path:item.path.replace('https://h5.eheren.com/jiangsushengzhong/#/','')})
+    if(gStores.globalStore.sysCode==='1001035'&&source === '21'){
+
+      useTBanner({...item,type: 'self',path:item.path.replace('https://h5.eheren.com/jiangsushengzhong/#/','')});
+    }
     useTBanner(item);
   }
 };

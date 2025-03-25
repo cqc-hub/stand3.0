@@ -13,6 +13,7 @@
         <intalMedicalContent
           :msgList="msgList"
           :headerConfig="styleConfig"
+          :source="props.source"
           id="pageScroll"
         />
         <!-- fotter区域 -->
@@ -20,6 +21,7 @@
           :guessServerList="
             pageConfig?.intelMedicalAssistConfig?.guessServerList
           "
+            :source="props.source"
           :headerConfig="styleConfig"
           @click-server="handleServer"
           @on-blur="onBlur"
@@ -83,6 +85,7 @@
   const props = defineProps<{
     isMess?: '1';
     sysCode?: string;
+    source?:string
   }>();
 
   const scrollChangeView = (e) => {

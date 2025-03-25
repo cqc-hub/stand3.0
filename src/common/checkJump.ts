@@ -312,6 +312,9 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
         wxH5.miniProgram.navigateTo({
           url: item.path,
         });
+        my.navigateTo({
+          url: item.path,
+        })
       // #endif
 
       break;
