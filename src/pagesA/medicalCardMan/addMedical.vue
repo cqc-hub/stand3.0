@@ -632,7 +632,6 @@
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
     const {
       isGuardianWithIdCard,
-      ocr,
       isHidePatientTypeInPerfect,
       isSmsVerify,
       isDropAddress,
@@ -641,14 +640,31 @@
       formExtraKeys = [],
     } = pageConfig.value;
 
+    const addressArr: any[] = [];
+    const endArr: any[] = [];
+
+    if (formExtraKeys.length) {
+      if (formExtraKeys.includes('countries')) {
+        addressArr.push('countries');
+      }
+
+      if (formExtraKeys.includes('referenceId')) {
+        endArr.push('referenceId');
+      }
+    }
+
+    if (isDropAddress !== '1') {
+      addressArr.push(formKey.address, formKey.location);
+    }
+
     const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
     const _patientInfo: TFormKeys[] = [
-      // 去除所在地区, 详细地址
-      ...(isDropAddress === '1' ? [] : [formKey.address, formKey.location]),
+      ...addressArr,
       formKey.patientPhone,
-      ...formExtraKeys,
+      // ...formExtraKeys,
+      ...endArr,
 
       formKey.defaultFalg,
       // formKey.referenceId,
@@ -1055,7 +1071,6 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    // api.getCountryList()
   });
 
   onMounted(async () => {

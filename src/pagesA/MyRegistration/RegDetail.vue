@@ -90,7 +90,11 @@
             </view>
 
             <view
-              v-if="orderRegInfo.orderStatus === '10' && !isWaitReg"
+              v-if="
+                orderConfig.isOrderWithoutTime !== '1' &&
+                isWaitForPay &&
+                !isWaitReg
+              "
               class="out-time-info f28 color-error"
             >
               <block v-if="timeTravel.minute == 0 && timeTravel.second == 0">
@@ -193,13 +197,10 @@
                 hideRowBorder
                 ref="refForm"
               >
-                <template #show-body="{ item, value }">
+                <template #showbody="{ item, value }">
                   <view
                     @click="goDoctorCard"
-                    v-if="
-                      item.key === 'docName' &&
-                      orderRegInfo.orderStatus !== '10'
-                    "
+                    v-if="item.key === 'docName' && !isWaitForPay"
                     class="color-blue flex-normal doc-name"
                   >
                     <view class="doc-name-value">
@@ -216,6 +217,22 @@
                   >
                     <view>
                       {{ orderRegInfo._category }}
+                    </view>
+                  </view>
+
+                  <view
+                    v-else-if="item.key === 'deptName'"
+                    class="flex-normal doc-name"
+                  >
+                    <view class="flex">
+                      <view class="mr12">{{ orderRegInfo.deptName }}</view>
+                      <view
+                        v-if="gStores.globalStore.sysCode === '1001048' && isWx"
+                        @click="yixinDeptGuide"
+                        class="btn btn-primary btn-border btn-plain btn-round btn-small"
+                      >
+                        导航到科室
+                      </view>
                     </view>
                   </view>
 
@@ -318,9 +335,9 @@
           </button>
         </block>
 
-        <block v-if="orderRegInfo.orderStatus === '10'">
+        <block v-if="isWaitForPay">
           <button @click="cancelOrder" class="btn g-border btn-normal">
-            取消订单
+            取消预约
           </button>
 
           <button
@@ -392,6 +409,7 @@
     cacheUtil,
     callBackAsync,
   } from '@/utils';
+  import md5s from 'js-md5';
 
   import {
     encryptDes,
@@ -427,6 +445,7 @@
     _getQxMedicalNation,
     getMedicalConfigInfo,
     getMedicalArgWithFamily,
+    getMedicalAuthCode,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -454,12 +473,16 @@
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
+  const isWx = ref(false);
+  // #ifdef MP-WEIXIN
+  isWx.value = true;
+  // #endif
 
   const isShowFooter = computed(() => {
     if (isWaitReg.value) {
       return orderRegInfo.value.orderStatus === '1';
     }
-    return ['23', '45', '10', '70', '0', '20', '43', '42'].includes(
+    return ['23', '45', '10', '70', '0', '20', '43', '42', '101'].includes(
       orderRegInfo.value.orderStatus
     );
   });
@@ -468,11 +491,11 @@
     return pageProps.value._type === 'waitReg';
   });
 
-  const {
-    refPayList,
-    changeRefPayList,
-    wxCrossProgramInfo,
-  } = usePayPage();
+  const isWaitForPay = computed(() => {
+    return ['10', '101'].includes(orderRegInfo.value.orderStatus);
+  });
+
+  const { refPayList, changeRefPayList, wxCrossProgramInfo } = usePayPage();
 
   const qrCodeOpt = ref({
     // 二维码
@@ -580,7 +603,7 @@
     if (!isFirstIn.value) return;
 
     if (
-      orderRegInfo.value.orderStatus === '0' &&
+      isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
       orderConfig.value.isOpenPreConsultation === '1'
     ) {
@@ -605,6 +628,33 @@
         'navigateTo',
         pageProps.value
       );
+      return;
+    }
+
+    if (gStores.globalStore.sysCode === '1001048') {
+      const {
+        hosDeptId: deptcode,
+        cardNumber: hisid,
+        hosOrderId: regno,
+        createTime,
+        deptName: deptname,
+        patientName: name,
+      } = orderRegInfo.value;
+
+      const secretkey = 'V7lH3cKlj42kmZ3';
+      const callback = '/pagesA/MyRegistration/MyRegistration';
+      const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
+      const sign = md5s(needJm).toLowerCase();
+      const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
+        callback
+      )}&hisid=${hisid}&userid=${regno}&deptname=${deptname}&name=${name}&regtimestamp=${new Date(
+        createTime
+      ).getTime()}&sign=${sign}`;
+
+      useTBanner({
+        type: 'h5',
+        path: url,
+      });
       return;
     }
 
@@ -646,6 +696,7 @@
   };
 
   let init = async () => {
+    const { isOrderWithoutTime } = orderConfig.value;
     uni.showLoading({});
     await wait(800);
     qrCodeOpt.value.width = 600;
@@ -717,6 +768,11 @@
     if (downTime) {
       timeTravel.value.downTime = downTime;
       startTimeTravel();
+    }
+
+    if (isOrderWithoutTime === '1') {
+      timeTravel.value.downTime = 100;
+      clearInterval(_timeTravel);
     }
 
     if (totalCost) {
@@ -891,16 +947,41 @@
           });
 
           await getMedicalArgWithFamily();
-          // #ifdef  MP-WEIXIN
-          medicalNationWx(await getQxMedicalNation());
-          // #endif
+          // 宜兴仅wx
+          if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
+            const authCode = await getMedicalAuthCode();
+            // console.log(authCode, return)
+            const { hosOrderId, orderId, hosId, hosDeptId } =
+              orderRegInfo.value;
+            const { patientId } = gStores.userStore.patChoose;
+            const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
+            const OPENID = gStores.globalStore.openId;
+            const ORGCODG = 'H32028200358';
+            const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+            const resultConfig = encodeURIComponent(
+              JSON.stringify({
+                cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
+                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}`,
+              })
+            );
+            uni.setStorageSync('resultConfig', resultConfig);
+            const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${hosOrderId}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+            useTBanner({
+              type: 'h5',
+              path: url,
+            });
+          } else {
+            // #ifdef  MP-WEIXIN
+            medicalNationWx(await getQxMedicalNation());
+            // #endif
 
-          // #ifdef MP-ALIPAY
-          // 国标医保
-          if (getIsAliMedicalNation()) {
-            payAliMedicalNation();
+            // #ifdef MP-ALIPAY
+            // 国标医保
+            if (getIsAliMedicalNation()) {
+              payAliMedicalNation();
+            }
+            // #endif
           }
-          // #endif
         }
 
         break;
@@ -1169,6 +1250,18 @@
   const againOrder = async () => {
     // 跳到医生名片
     goDoctorCard();
+  };
+
+  const yixinDeptGuide = () => {
+    let { hosDeptId } = orderRegInfo.value;
+    hosDeptId.indexOf('|') != -1 &&
+      (hosDeptId = hosDeptId.substr(0, hosDeptId.indexOf('|')));
+
+    wx.navigateToMiniProgram({
+      appId: 'wx8735a8a39cf58b5e',
+      // pages/index?id=医院id&appKey=向我方获取&poi=科室id A73x1x702
+      path: `pages/index?id=5B2OQCgmhE&appKey=PRUtJJeHE3&poi=${hosDeptId}`,
+    });
   };
 
   onShow(async () => {
@@ -1509,6 +1602,19 @@
           }
         }
       }
+    }
+  }
+
+  .btn-small {
+    font-size: var(--hr-font-size-xxxs);
+    padding: 8rpx 12rpx;
+    // line-height: 1em;
+    // height: 100%;
+    // width: 100%;
+    border-radius: 99px;
+
+    &::after {
+      display: none;
     }
   }
 </style>

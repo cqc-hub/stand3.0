@@ -9,7 +9,10 @@ import {
 } from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
-import { getQxMedicalNation } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+import {
+  getMedicalAuthCode,
+  getQxMedicalNation,
+} from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
 export interface IPageProps {
   orderId: string;
@@ -136,6 +139,14 @@ export const orderStatusMap = {
     color: 'var( --hr-error-color-6)',
     title: '待支付',
     cardColor: 'var(--hr-warning-color-6)',
+  },
+  '101': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已预约',
+    cardColor: 'var(--hr-brand-color-6)',
   },
   // 成功
   '0': {
@@ -321,6 +332,7 @@ export type OrderStatus = keyof typeof orderStatusMap;
 export interface IRegInfo {
   orderStatus: string;
   patientId: string;
+  createTime: string;
   hisResult: string;
   cardNumber: string;
   patientName: string;
@@ -357,7 +369,7 @@ export interface IRegInfo {
   hosAccountOffsetFee: string;
   _totalCost: string;
   _hosAccountOffsetFee: string;
-  tradeType?: '1'; // 1 只能自费
+  tradeType?: '1' | '2'; // 1 只能自费 2 宜兴存在, 表示要医保退号
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
@@ -548,26 +560,29 @@ export class RegDetailUtil {
       }
       return await this.cancelReg(opt);
     } else {
-      const { refundNeedAuth, source } = this.orderRegInfo;
+      const { refundNeedAuth, source, tradeType } = this.orderRegInfo;
       const { orderId } = this.prop.value;
       const args = {
         orderId,
         source: this.gStores.globalStore.browser.source,
         payAuthNo: '',
       };
+      let isAlipay = false;
+      let isWx = false;
 
-      if (refundNeedAuth === '0') {
-        let isAlipay = false;
-        let isWx = false;
+      // #ifdef MP-ALIPAY
+      isAlipay = true;
+      // #endif
 
-        // #ifdef MP-ALIPAY
-        isAlipay = true;
-        // #endif
+      // #ifdef MP-WEIXIN
+      isWx = true;
+      // #endif
+      const yixinRefund =
+        this.gStores.globalStore.sysCode === '1001048' &&
+        tradeType === '2' &&
+        isWx;
 
-        // #ifdef MP-WEIXIN
-        isWx = true;
-        // #endif
-
+      if (refundNeedAuth === '0' && !yixinRefund) {
         if (isAlipay && source === 19) {
           errMsg = '本次挂号属于微信医保挂号, 暂不支持支付宝端退费';
           this.gStores.messageStore.showMessage(errMsg, 3000);
@@ -594,6 +609,10 @@ export class RegDetailUtil {
         });
 
         args.payAuthNo = authorize.payAuthNo;
+      }
+
+      if (yixinRefund && isWx) {
+        args.payAuthNo = await getMedicalAuthCode();
       }
       uni.showLoading({});
       const { title, content } = await this.gStores.getSysAppMore('1100');

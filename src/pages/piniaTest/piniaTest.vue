@@ -505,7 +505,7 @@
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      useTBanner(宜兴检查预约);
+      useTBanner(电子导诊单);
     }, 1000);
   });
 </script>

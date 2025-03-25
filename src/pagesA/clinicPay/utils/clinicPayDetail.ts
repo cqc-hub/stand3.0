@@ -26,7 +26,6 @@ import {
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
-import wMd5 from '@/common/md5';
 import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 
@@ -734,7 +733,11 @@ export const usePayPage = () => {
     bizTypeReg: '',
     extInfo: {},
   });
+
+  const isWx = ref(false);
+
   // #ifdef  MP-WEIXIN
+  isWx.value = true;
   const {
     sConfig: { medicalMHelp },
     systemConfig: { alipayAppid },
@@ -1497,13 +1500,40 @@ export const usePayPage = () => {
         }
         await getMedicalArgWithFamily(pageProps.value.params);
 
-        // #ifdef MP-ALIPAY
-        if (getIsAliMedicalNation()) {
-          payAliMedicalNation();
+        if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
+          const authCode = await getMedicalAuthCode();
+          const hosOrderId = gStores.userStore.patChoose.cardNumber;
+          const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
+          const OPENID = uni.getStorageSync('openid');
+          const MEDORGORD = selUnPayList.value
+            .map((item) => item.serialNo)
+            .join(',');
+          const ORGCODG = 'H32028200358';
+          const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+
+          const resultConfig = encodeURIComponent(
+            JSON.stringify({
+              cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
+              orderStatusRedirectUrl:
+                '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+            })
+          );
+          uni.setStorageSync('resultConfig', resultConfig);
+          const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+          useTBanner({
+            type: 'h5',
+            path: url,
+          });
+          return;
         } else {
-          payMoneyMedicalPlugin();
+          // #ifdef MP-ALIPAY
+          if (getIsAliMedicalNation()) {
+            payAliMedicalNation();
+          } else {
+            payMoneyMedicalPlugin();
+          }
+          // #endif
         }
-        // #endif
 
         // #ifdef  MP-WEIXIN
         wxPayMoneyMedicalPlugin(medicalNationWx);

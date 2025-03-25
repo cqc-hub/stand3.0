@@ -45,7 +45,7 @@
               <!-- #endif -->
 
               <!-- #ifndef MP-ALIPAY -->
-              <slot :item="item" :value="getShowLabel(item)" name="show-body">
+              <slot :item="item" :value="getShowLabel(item)" name="showbody">
                 {{ getShowLabel(item) }}
               </slot>
               <!-- #endif -->

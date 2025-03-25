@@ -242,13 +242,13 @@ export const useTBanner = async (
   // #endif
 
   if (type === 'h5') {
-    debugger
+    // debugger
     if (config.isSelfH5) {
       let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        // baseUrl = h5UrlLocal;
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;
@@ -264,7 +264,7 @@ export const useTBanner = async (
     if(uni.getStorageSync('mini_v3_sysCode') === '1001035'){
       fullUrl = joinQueryForUrl(path,{
         openid:uni.getStorageSync('mini_v3_sysCode_openId'),
-        token:uni.getStorageSync('mini_v3_sysCode_token') 
+        token:uni.getStorageSync('mini_v3_sysCode_token')
       })
     }
     location.href = fullUrl;

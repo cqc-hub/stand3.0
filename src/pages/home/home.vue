@@ -427,6 +427,7 @@
 
   onShow(async () => {
     viewerStore.init();
+    return
     if (global.SYS_CODE === '1001067' && globalStore.openId) {
       if (!uni.getStorageSync('wmUserInfo')) {
         uni.setStorageSync(

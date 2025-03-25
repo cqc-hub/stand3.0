@@ -49,9 +49,9 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, useTBanner } from '@/utils';
+  import { GStores, TButtonConfig, useTBanner } from '@/utils';
   import { IPat } from '@/stores';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery } from '@/common';
   import { HK_hook } from './utils';
   import globalGl from '@/config/global';
 
@@ -62,6 +62,7 @@
       {
         type:
           | 'xx'
+          | 'yxzndz'
           // 杭口—停车领劵
           | 'HKTCLJ'
           // 宜兴检查预约
@@ -87,6 +88,10 @@
         HK_PatClick(pat, pageProps.value);
         break;
 
+      case 'yxzndz':
+        yxZndz();
+        break;
+
       default:
         break;
     }
@@ -99,6 +104,28 @@
 
     uni.navigateTo({
       url: globalGl.addPersonUrl + '?_url=' + encodeURIComponent(fullPathNow),
+    });
+  };
+
+  // 宜兴智能导诊
+  const yxZndz = () => {
+    const {
+      cardNumber,
+      patientAge: age,
+      patientSex: sex,
+      patientName,
+    } = gStores.userStore.patChoose;
+
+
+    useTBanner({
+      type: 'h5',
+      path: joinQuery('https://zlwyl.iflyhealth.com/aiGuide2/xfjk-transfer/', {
+        channel: 'yxsrmyy262',
+        userid: cardNumber,
+        patientName,
+        age,
+        sex,
+      }),
     });
   };
 

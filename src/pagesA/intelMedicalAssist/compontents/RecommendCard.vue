@@ -16,7 +16,7 @@
           ref="gform"
           @disabled-click="gotoGuide(formData)"
         >
-          <template #show-body="{ item, value }">
+          <template #showbody="{ item, value }">
             <view
               @click="goDoctorCard(formData)"
               v-if="item.key === 'docName'"

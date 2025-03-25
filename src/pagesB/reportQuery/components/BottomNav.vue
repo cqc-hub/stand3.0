@@ -35,13 +35,19 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { useTBanner, ISystemConfig, ServerStaticData } from '@/utils';
+  import {
+    useTBanner,
+    ISystemConfig,
+    ServerStaticData,
+    GStores,
+  } from '@/utils';
 
   const props = defineProps<{
     addition: BaseObject;
   }>();
   const emits = defineEmits(['btn-click']);
   const reportConfig = ref(<ISystemConfig['reportQuery']>{});
+  const gStores = new GStores();
 
   const iconForward = computed(() => {
     if (btns.value.length > 3) {
@@ -60,8 +66,12 @@
     if (isTjreport) {
       compareData.btnAskDoc = '';
       compareData.btnReOrder = '';
-        console.log('reportConfig.value.tjBottomNav',reportConfig.value.tjBottomNav)
+
       Object.assign(compareData, reportConfig.value.tjBottomNav || {});
+    }
+
+    if (gStores.globalStore.sysCode === '1001048') {
+      compareData.isDownloadRepor = '';
     }
 
     return prop.every((p) => !!compareData[p]);

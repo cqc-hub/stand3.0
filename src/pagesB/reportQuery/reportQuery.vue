@@ -593,7 +593,7 @@
       extend: data.extend || '',
       isDoctorCard,
       isWatermark,
-      isDownloadRepor: isDownloadRepor === '1' || '',
+      isDownloadRepor: isDownloadRepor || '',
       isGraphic,
     };
     const mq: any = {

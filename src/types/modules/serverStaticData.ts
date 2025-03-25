@@ -61,6 +61,8 @@ export interface ISystemConfig_ {
     isHideOutTimeOrderSource?: '0' | '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
+    // 挂号待支付时候没有倒计时
+    isOrderWithoutTime: '1';
     // 挂号成功后预问诊?
     isOpenPreConsultation?: '1';
     //预问诊跳转的第三方配置 不配置该参数默认跳转自研的
