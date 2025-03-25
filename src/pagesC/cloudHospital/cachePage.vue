@@ -22,7 +22,7 @@
     aliPayMedicalPluginPay,
     getMedicalAuthCode,
   } from './utils/cloudHospital';
-  import { apiAsync, GStores } from '@/utils';
+  import { apiAsync, GStores, wait } from '@/utils';
 
   //第三方h5页面入口——网络医院
   const src = ref('');
@@ -192,6 +192,7 @@
 
     if (insuranceParamsWx) {
       if (globalStore.sysCode === '1001048' && insuranceParamsWx.registerType) {
+        await wait(60);
         handleMessage1001048(data[0]);
         return;
       }

@@ -92,6 +92,7 @@
 
   import DepartmentList from './components/departmentList/DepartmentList.vue';
   import globalGl from '@/config/global';
+  import { assignType } from '@/typeUtils';
 
   const props = defineProps<{
     // 不需要温馨提示
@@ -146,8 +147,7 @@
         },
         closeCallBack({ confirm, maskClose }) {
           if (!confirm && !maskClose) {
-            const { key } = deptDialogBtnCannel!;
-
+            const { key } = deptDialogBtnCannel! as any;
             if (key === '0') {
               uni.navigateTo({
                 url: joinQueryForUrl(
@@ -158,6 +158,8 @@
                   }
                 ),
               });
+            } else {
+              useTBanner(deptDialogBtnCannel as any);
             }
           }
         },

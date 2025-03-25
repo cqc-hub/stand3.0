@@ -40,11 +40,13 @@ export interface ISystemConfig_ {
     //跳转名医名科模式,若开启则会请求医院参数CELEBRATED_DEPT
     isCelebratedDeptMode?: '1';
     /** 预约挂号温馨提示 */
-    deptDialogBtnCannel?: {
-      label: string;
-      // '0' 门诊充值
-      key: '0';
-    };
+    deptDialogBtnCannel?:
+      | {
+          label: string;
+          // '0' 门诊充值
+          key: '0';
+        }
+      | (TBannerConfig & { label: string });
 
     /** 挂号页面 */
     /** 挂号模式(挂号排序,显示等医院定制) 1 西安红会 */
@@ -581,7 +583,7 @@ export interface IHosInfo {
   value: string;
   hosLogo: string;
   tcHosId?: string; // 通策的一级hosId
-  tcSubHosId?: string;// 通策的二级hosId
+  tcSubHosId?: string; // 通策的二级hosId
 }
 
 export type TBannerConfigBase = {

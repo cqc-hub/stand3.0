@@ -612,6 +612,9 @@ export class RegDetailUtil {
       }
 
       if (yixinRefund && isWx) {
+        setLocalStorage({
+          'get-wx-medical-auth-code-order': '1',
+        });
         args.payAuthNo = await getMedicalAuthCode();
       }
       uni.showLoading({});
@@ -632,6 +635,8 @@ export class RegDetailUtil {
         throw new Error(errMsg);
       }
 
+      console.log(args);
+      // return
       await api.refundOrder(args);
     }
   }
