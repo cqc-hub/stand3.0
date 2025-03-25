@@ -5,6 +5,7 @@ import { IsAny } from '@/typeUtils';
 import { useCacheStore } from '@/stores';
 import { GStores } from '@/utils';
 import { toPayPull } from '@/components/g-pay';
+import api from '@/service/api';
 
 type NeverTurnsAny<T> = T extends never ? any : T;
 
@@ -475,3 +476,9 @@ export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') =>
 
   return str
 }
+
+
+export const getTcMallToken =  async ()=>{
+  const {result} = await api.getTcToken({}); 
+    return  result.token || '';
+  };

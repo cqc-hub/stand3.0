@@ -580,6 +580,8 @@ export interface IHosInfo {
   label: string;
   value: string;
   hosLogo: string;
+  tcHosId?: string; // 通策的一级hosId
+  tcSubHosId?: string;// 通策的二级hosId
 }
 
 export type TBannerConfigBase = {

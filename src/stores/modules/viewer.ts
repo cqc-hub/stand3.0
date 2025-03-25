@@ -65,7 +65,6 @@ const viewerStore = defineStore('viewer', {
 
       this.version = result;
     },
-
     clearStore() {
       this.$reset();
     },
@@ -116,9 +115,17 @@ const viewerStore = defineStore('viewer', {
     },
 
     myMenu1List(): any[] {
-      return this.viewConfig[5]?.functionList || [];
+      return this.viewConfig[5]?.functionList
+        .filter(item => {
+          try {
+            const query = item.query && JSON.parse(item.query);
+            return !(query.key && query.key.startsWith('myOralCell-'));
+          } catch (e) {
+            console.error('Failed to parse query:', e);
+            return true; // 如果解析失败，保留该元素
+          }
+        }) || [];
     },
-
     myMenu2List(): any[] {
       return this.viewConfig[6]?.functionList || [];
     },
@@ -126,6 +133,28 @@ const viewerStore = defineStore('viewer', {
     myMenu3List(): any[] {
       return this.viewConfig[7]?.functionList || [];
     },
+    myMenuCellList(): any[] {
+      return this.viewConfig[5]?.functionList
+        .filter(item => {
+          try {
+            const query = item.query && JSON.parse(item.query);
+            return query.key && query.key.startsWith('myOralCell-');
+          } catch (e) {
+            console.error('Failed to parse query:', e);
+            return false;
+          }
+        })
+        .sort((a, b) => {
+          try {
+            const queryA = JSON.parse(a.query);
+            const queryB = JSON.parse(b.query);
+            return (queryA.sort || 0) - (queryB.sort || 0);
+          } catch (e) {
+            console.error('Failed to parse query during sorting:', e);
+            return 0;
+          }
+        }) || [];
+    }
   },
 });
 

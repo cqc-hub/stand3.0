@@ -1109,6 +1109,16 @@ const userApi = {
     service.post('/phs-extend/customer/picTrans', parm(data), {
       hideLoading: false,
     }),
+  //口腔商城首页展示消息数量
+  getOrderCnt: (data: any) =>
+    service.post('/phs-extend/tcShop/getOrderCnt', parm(data), {
+      hideLoading: false,
+    }),
+  // 口腔商城的token
+  getTcToken: (data: any) =>
+    service.post('/phs-extend/tcShop/getToken', parm(data), {
+      hideLoading: false,
+    }),
 };
 //统一认证服务
 const authApi = {

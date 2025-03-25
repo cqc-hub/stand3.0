@@ -3,8 +3,10 @@
     v-if="cacheStore.isShowChooseHos"
     v-model:hosId="hosId"
     :autoGetData="false"
+    @get-list="getHosList"
     @change="getHospitalGuidelines(hosId)"
     ref="selHosRef"
+    
   />
 
   <view class="page" v-if="dataList">
@@ -100,11 +102,11 @@
   />
 </template>
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { computed, ref,reactive, onMounted,watch } from 'vue';
   import { onLoad, onReady, onShareTimeline } from '@dcloudio/uni-app';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
-  import { wait, openLocation, GStores } from '@/utils';
+  import { wait, type IHosInfo, openLocation, GStores } from '@/utils';
   import { useCacheStore } from '@/stores';
   import { useCommonTo, openServicesChat } from '@/common/checkJump';
   import homeGrid from '@/pages/home/componetns/homeGrid.vue';
@@ -123,7 +125,7 @@
   //是否展示更多的按钮
   const isMore = ref(false);
   const isLoading = ref(true); //骨架屏
-
+  const hosList = ref<IHosInfo[]>([]);
   const emits = defineEmits(['open-share']);
 
   //写死内容
@@ -158,7 +160,23 @@
       loginInterception: '1',
     },
   ];
-  const gridList = [
+  const getHosTcId = computed(() => {
+  if (hosId.value) {
+    const hospital = hosList.value.find((o) => o.hosId == hosId.value);
+    return {
+      tcHosId: hospital?.tcHosId || '',
+      tcSubHosId: hospital?.tcSubHosId || '',
+    };
+  } else {
+    return {
+      tcHosId: '',
+      tcSubHosId: '',
+    };
+  }
+}); 
+
+
+  const gridList = reactive([
     {
       functionIntroduce: '',
       iconfont: 'ico_sy_doctor',
@@ -365,6 +383,21 @@
     },
     {
       functionIntroduce: '',
+      iconfont: 'ico_sy_file',
+      query: '{"key":"myOralCell-home"}',
+      selectPatientPage: '0',
+      title: '口腔商城',
+      terminalType: 'my',
+      gridLabel: '0',
+      path: `/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId}&subhospitalId=${getHosTcId.value.tcSubHosId}`,
+      appId: '',
+      id: 496201, // 禁止复制改id 
+      detail: '',
+      patientInterception: '0',
+      loginInterception: '0',
+    },
+    {
+      functionIntroduce: '',
       iconfont: 'ico_sy_medicalkit',
       selectPatientPage: '0',
       title: '医保电子凭证',
@@ -386,7 +419,7 @@
       patientInterception: '0',
       loginInterception: '0',
     },
-  ];
+  ]);
   const row: number = 3;
 
   const pageProps = ref<any>();
@@ -413,6 +446,7 @@
       await wait(300);
       await selHosRef.value.init();
     }
+    updateGridListPaths();
     getHospitalGuidelines(hosId.value);
   });
   // #ifdef MP-WEIXIN
@@ -426,10 +460,13 @@
   });
   // #endif
 
-  const getGridData = () => {
-    // let
-    // gridList
+  watch([hosId, hosList], () => {
+    updateGridListPaths();
+  });
+  const getHosList = ({ list }) => {
+    hosList.value = list;
   };
+
 
   const gotoGuide = () => {
     uni.navigateTo({
@@ -444,15 +481,15 @@
   };
   //打开关注框
   const openShare = (item) => {
+
+    let subTitle = '长按识别，添加客服';
+     // #ifdef MP-ALIPAY
+     subTitle = '保存扫一扫，添加客服',
+      // #endif
     h5QrCodeData.value = {
       theme: '客服助手',
       title: '欢迎添加',
-      // #ifdef MP-WEIXIN
-      subTitle: '长按识别，添加客服',
-      // #endif
-      // #ifdef MP-ALIPAY
-      subTitle: '保存扫一扫，添加客服',
-      // #endif
+      subTitle,
       isHideInfo: true,
       imageCode: JSON.parse(item).imageCode,
       name: dataList.value.aliasName,
@@ -465,8 +502,8 @@
       openShare(item.query);
     } else if (item.path == 'openWxService') {
       openServicesChat(item.query);
-    } else {
-      useCommonTo(item);
+    } else { 
+        useCommonTo(item);
     }
   };
 
@@ -528,6 +565,14 @@
       getDetailHeight();
     }, 1000);
   };
+  // 动态生成 gridList 中的 path
+  const updateGridListPaths = () => {
+  gridList.forEach((item) => {
+    if (item.id === 496201) {
+      item.path = `/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId || '72'}&subhospitalId=${getHosTcId.value.tcSubHosId || '73'}`;
+    }
+  });
+}
 </script>
 
 <style lang="scss" scoped>

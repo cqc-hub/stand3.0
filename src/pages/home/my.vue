@@ -15,6 +15,10 @@
             <view class="title">我的订单</view>
             <homeGrid :list="viewerStore.myMenu1List" @open-share="openShare"></homeGrid>
           </view>
+          <view v-if="viewerStore.myMenuCellList.length" class="list g-fade-in">
+            <view class="title">商城订单</view>
+            <homeGrid :list="viewerStore.myMenuCellList" @open-share="openShare"></homeGrid>
+          </view>
           <view v-if="viewerStore.myMenu2List.length" class="list g-fade-in">
             <view class="title">我的服务</view>
             <homeGrid :list="viewerStore.myMenu2List" @open-share="openShare"></homeGrid>
@@ -81,11 +85,13 @@ import homeGrid from "./componetns/homeGrid.vue";
 import homePopup from "./componetns/homePopup.vue";
 import homeH5SharePopup from "./componetns/homeH5SharePopup.vue";
 import { useCommonTo } from "@/common/checkJump";
+import api from '@/service/api';
 
 const homeH5SharePopupRef = ref("" as any);
 const h5QrCodeData = ref({});
 const viewerStore = useViewerStore();
 const clickShareItem = ref<any>({});
+
 
 //骨架屏配置
 const skeletonProps = ref({
@@ -141,7 +147,6 @@ const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: st
   }
 
   query = (query && JSON.parse(query)) || {};
-  console.log(2222,query,query.extraData)
 
   let fullUrl = "";
 
@@ -202,6 +207,10 @@ onMounted(() => {
   } else if (props._isOutLogin) {
     messageStore.showMessage("登录过期,请重新登录", 1000);
   }
+
+  if(gStores.globalStore.sysCode === '1001063' && gStores.globalStore.isLogin ){
+    getMyOralCellMessage()
+  }
 });
 
 const openModeOld = () => {
@@ -229,6 +238,27 @@ const closePopClick = () => {
     }, 500);
   }
 };
+
+ const getMyOralCellMessage = async ()=>{
+      const { result } = await api.getOrderCnt({
+        openId: gStores.globalStore.openId,
+        source: gStores.globalStore.browser.source, 
+      });
+      if (result) {
+        const { waitPayNum, waitWriteOff } = result;
+        if (waitPayNum > 0 || waitWriteOff > 0) {
+          viewerStore.myMenuCellList.map((item) => {
+            const query = item.query && JSON.parse(item.query)
+              if (query && query.key === 'myOralCell-waitPayNum') {
+                item.messageNum = waitPayNum;
+              }else if(query && query.key === 'myOralCell-waitWriteOff'){
+                item.messageNum = waitWriteOff;
+              } 
+              return item;
+            });
+        } 
+      }
+    };
 </script>
 
 <style lang="scss" scoped>

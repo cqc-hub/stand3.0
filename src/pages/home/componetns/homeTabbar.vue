@@ -42,8 +42,9 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
-  import { useTBanner, throttle, GStores } from '@/utils';
+  import { useTBanner, throttle, GStores,getTcMallToken } from '@/utils';
   import api from '@/service/api';
+  
 
   defineProps<{ systemModeOld: boolean }>();
 
@@ -77,7 +78,7 @@
 
   const gStore = new GStores();
 
-  const changeTab = (item) => {
+  const changeTab = async (item) => {
     const url = item.url;
 
     if (url === 'mDisease') {
@@ -109,6 +110,15 @@
       //     path: obj.path,
       //   });
       // } else {
+      if(item.label === '口腔商城'){
+       const mallToken =  await  getTcMallToken()
+       const appInstance = getApp() 
+       if (appInstance && appInstance.globalData) {
+          appInstance.globalData.configData.mallToken = mallToken;
+          appInstance.globalData.configData.getMallToken = getTcMallToken;
+        }
+      } 
+
       uni.reLaunch({
         url: item.url,
       });
@@ -183,6 +193,14 @@
         sort: 2,
       },
       {
+        label: '口腔商城',
+        icon: global.BASE_IMG + 'oral-mall-home-icon.png',
+        iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
+        url: '/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=72&subhospitalId=73',
+        loginInterception: '0',
+        sort: 2,
+      },
+      {
         label: '消息中心',
         icon: '/static/image/wlyy.png',
         iconActive: '/static/image/wlyy_active.png',
@@ -214,6 +232,10 @@
 
     if (global.SYS_CODE === '1001052') {
       tabList.push('健康管理');
+    }
+
+    if (global.SYS_CODE === '1001063') {
+      tabList.push('口腔商城');
     }
 
     tabBars.value = tabBarList

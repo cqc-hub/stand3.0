@@ -43,6 +43,13 @@
             >
               new
             </view>
+                <!-- 消息展示 -->
+                <view
+              v-if="item?.messageNum" 
+              class="warn-label badge"
+            >
+            {{item.messageNum}}
+            </view>
             <text
               :class="`icon-font ${
                 options.type == 1 && options.list.length == 3
