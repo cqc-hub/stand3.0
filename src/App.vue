@@ -10,6 +10,7 @@
 
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
+  import { joinQuery } from './common';
   // #endif
 
   // import '@/js_sdk/webfunny.min.js';
@@ -42,7 +43,7 @@
 
   onShow(async (opt) => {
     console.log('App Show', opt);
-
+    const options = opt;
     // 温附二新增监控-只记录正式环境
     // (global.env as string) === 'prod' && globalStore.sysCode === '1001067' && globalStore.openId && uni.setStorageSync('wmUserInfo', JSON.stringify({userId: globalStore.openId, userTag: "温附二小程序项目", projectVersion: "1.0.0", env: "pro"}))
     globalStore.onAppShow(opt);
@@ -143,6 +144,48 @@
           });
       }
     }, 600);
+
+    if (options.scene === 1038 && global.SYS_CODE === '1001048') {
+      if (options.path == 'pages/mms-pay-loading/mms-pay-loading') {
+        //TODO: 页面跳转
+        if (uni.getStorageSync('resultConfig')) {
+          const resultConfig = JSON.parse(
+            decodeURIComponent(uni.getStorageSync('resultConfig'))
+          );
+          uni.removeStorage({
+            key: 'resultConfig',
+          });
+          if (
+            resultConfig.orderStatusRedirectUrl ==
+            '/pagesB/cloudHospital/cloudHospital1'
+          ) {
+            const resultConfigQuery = JSON.parse(
+              decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
+            );
+            uni.removeStorage({
+              key: 'resultConfigQuery',
+            });
+            //互联网医院特殊处理
+            setTimeout(() => {
+              uni.navigateTo({
+                url: joinQuery(
+                  resultConfigQuery.path,
+                  resultConfigQuery.successQuery || {}
+                ),
+              });
+            }, 100);
+          } else {
+            setTimeout(() => {
+              uni.reLaunch({
+                url: resultConfig.orderStatusRedirectUrl,
+              });
+            }, 100);
+          }
+        }
+
+        // console.log("11111", options.path);
+      }
+    }
 
     if (uni.canIUse('getUpdateManager')) {
       const updateManager = uni.getUpdateManager && uni.getUpdateManager();

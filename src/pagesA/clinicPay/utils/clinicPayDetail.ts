@@ -1504,7 +1504,7 @@ export const usePayPage = () => {
           const authCode = await getMedicalAuthCode();
           const hosOrderId = gStores.userStore.patChoose.cardNumber;
           const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-          const OPENID = uni.getStorageSync('openid');
+          const OPENID = gStores.globalStore.openId;
           const MEDORGORD = selUnPayList.value
             .map((item) => item.serialNo)
             .join(',');

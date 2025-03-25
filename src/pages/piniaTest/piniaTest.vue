@@ -505,7 +505,7 @@
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      useTBanner(电子导诊单);
+      useTBanner(红会旧就诊卡退款);
     }, 1000);
   });
 </script>

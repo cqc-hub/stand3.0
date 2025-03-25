@@ -14,6 +14,18 @@
       }
     },
     {
+			"path": "pages/mms-pay-loading/payPage",
+			"style": {
+				"navigationBarTitleText": "去支付"
+			}
+		},
+		{
+			"path": "pages/mms-pay-loading/mms-pay-loading",
+			"style": {
+				"navigationBarTitleText": "去支付"
+			}
+		},
+    {
       "path": "pages/login/h5",
       "style": {
         "navigationBarTitleText": "登录"
