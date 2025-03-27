@@ -13,8 +13,6 @@
   import { joinQuery } from './common';
   // #endif
 
-  // import '@/js_sdk/webfunny.min.js';
-
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
     showTime = 0;
@@ -46,7 +44,7 @@
     const options = opt;
 
     globalStore.onAppShow(opt);
-
+    
     // #ifdef MP-WEIXIN
     if (!showTime) {
       showTime = ((new Date() as unknown as number) * 1) / 1000;

@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import { useCommonTo,openServicesChat,isSubscribeWx } from '@/common/checkJump';
   import globalGl from '@/config/global';
-  import { GStores, getTcMallToken } from '@/utils';
+  import { GStores } from '@/utils';
 
   const emits = defineEmits(['open-share']);
 
@@ -32,17 +32,6 @@
       return;
     }
    // #endif
-   const query = item.query && JSON.parse(item.query);
-   if (query.key && query.key.startsWith('myOralCell-')){
-      // 明眸皓齿口腔商城跳转全局参数
-      const appInstance = getApp()  
-        if( appInstance &&  appInstance.globalData){
-          appInstance.globalData.configData.mallToken = await getTcMallToken();
-          appInstance.globalData.configData.getMallToken = getTcMallToken;
-          useCommonTo(item);
-        }
-        return;
-    } 
       if (item.path && item.path == 'showCareModel') {
       //关注组件拦截跳转 弹框
       emits('open-share', item.query && JSON.parse(item.query));

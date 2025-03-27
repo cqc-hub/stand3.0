@@ -476,8 +476,6 @@ export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') =>
 
   return str
 }
-
-
 export const getTcMallToken = ()=>{ 
   return new Promise((resolve, reject) => {
     const appInstance = getApp() 

@@ -8,7 +8,7 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, cacheUtil, getTcMallToken } from '@/utils';
+import { apiAsync, cacheUtil,getTcMallToken } from '@/utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import HTMLParser from '@/common/html-parser';
@@ -419,10 +419,10 @@ export class LoginUtils extends GStores {
     this.globalStore.clearStore();
     useRouterStore().clear();
     if (this.globalStore.sysCode === '1001063') {
-      const appInstance = getApp() 
-      if (appInstance && appInstance.globalData) {
-      this.globalStore.updateOralMallData(appInstance) 
-     }
+    //   const appInstance = getApp() 
+    //   if (appInstance && appInstance.globalData) {
+    //   this.globalStore.updateOralMallData(appInstance) 
+    //  }
       uni.setStorageSync('fc-user-token','')
      }
   
@@ -652,14 +652,18 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
         refreshToken,
       });
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
+      // #ifdef MP-WEIXIN
       if (this.globalStore.sysCode === '1001063') {
         const appInstance = getApp() 
         if (appInstance && appInstance.globalData) {
-        this.globalStore.updateOralMallData(appInstance)
+        this.globalStore.updateOralMallData(appInstance,'login')
         appInstance.globalData.configData.mallToken = await getTcMallToken();
-        appInstance.globalData.configData.getMallToken = getTcMallToken;
+        // appInstance.globalData.configData.getMallToken = getTcMallToken;
        }
       }
+      
+      // #endif
+    
     }
   }
 
