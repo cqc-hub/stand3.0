@@ -598,6 +598,21 @@
   };
 
   const isShowConsultationDialog = ref(false);
+
+  const showConsultationDialog1001048 = async () => {
+    if (gStores.globalStore.sysCode !== '1001048') {
+      return;
+    }
+    dialogContent.value = '是否立即去给医生留言，方便医生提前了解您的病情?';
+    isCancelOrderDialogShow.value = true;
+    await new Promise((confirm) => {
+      cancelOrderDialogConfirm = confirm;
+    });
+
+    isShowConsultationDialog.value = false;
+    goPreConsultation();
+  };
+
   // 预问诊
   const showConsultationDialog = async () => {
     if (!isFirstIn.value) return;
@@ -605,7 +620,8 @@
     if (
       isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
-      orderConfig.value.isOpenPreConsultation === '1'
+      orderConfig.value.isOpenPreConsultation === '1' &&
+      gStores.globalStore.sysCode !== '1001048'
     ) {
       dialogContent.value = '是否立即去给医生留言，方便医生提前了解您的病情?';
       isCancelOrderDialogShow.value = true;
@@ -844,7 +860,13 @@
       // #ifdef MP-ALIPAY
       isAlilAuth = (await _getQxMedicalNation()).payAuthNo;
       // #endif
-
+      // gStores.globalStore.onAppShow({
+      //   referrerInfo: {
+      //     extraData: {
+      //       authCode: '233'
+      //     }
+      //   }
+      // })
       if (
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
         isAlilAuth
@@ -961,12 +983,12 @@
             const resultConfig = encodeURIComponent(
               JSON.stringify({
                 cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
-                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}`,
+                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&success1001048=1`,
               })
             );
             uni.setStorageSync('resultConfig', resultConfig);
             const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${hosOrderId}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-            
+
             useTBanner({
               type: 'h5',
               path: url,
@@ -1116,6 +1138,7 @@
     uni.hideLoading();
 
     init();
+    showConsultationDialog1001048();
   };
 
   const goDoctorCard = () => {
@@ -1298,7 +1321,10 @@
       routeArg._isPatient = false;
     }
     await beforeEach(routeArg);
-    init();
+    await init();
+    if (p?.success1001048) {
+      showConsultationDialog1001048();
+    }
   });
 </script>
 

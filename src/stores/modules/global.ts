@@ -52,7 +52,7 @@ const globalStore = defineStore('global', {
       'browser',
       'modeOld',
       'envH5',
-      'isShowFlag'
+      'isShowFlag',
     ],
   },
 
@@ -74,12 +74,12 @@ const globalStore = defineStore('global', {
       h5OpenId: '',
       herenId: '',
       appShowData: {},
-      appLaunchData: {}, 
+      appLaunchData: {},
       sysCode: globalGl.SYS_CODE,
       modeOld: false,
       cacheData: {},
       envH5: null,
-      isShowFlag:false
+      isShowFlag: false,
     };
   },
 
@@ -105,7 +105,7 @@ const globalStore = defineStore('global', {
       this.token = {
         accessToken: '',
         refreshToken: '',
-        loginData: ''
+        loginData: '',
       };
 
       this.openId = '';
@@ -135,37 +135,37 @@ const globalStore = defineStore('global', {
       if (opt) {
         this.appLaunchData = opt;
         // #ifdef H5
-        this.updataH5Info(opt)
+        this.updataH5Info(opt);
         // #endif
 
         // #ifdef MP-WEIXIN
         if (this.sysCode === '1001063') {
-          this.updateOralMallData()
+          this.updateOralMallData();
         }
         // #endif
       }
     },
-    updataH5Info(opt){
+    updataH5Info(opt) {
       // #ifdef H5
-      const {sysCode,token,openid} = opt.query;
+      const { sysCode, token, openid } = opt.query;
 
-      if(sysCode){
-        if(this.sysCode !== sysCode){
+      if (sysCode) {
+        if (this.sysCode !== sysCode) {
           this.clearStore();
           uni.clearStorage();
           uni.clearStorageSync();
-          uni.removeStorageSync('systemConfig'); 
+          uni.removeStorageSync('systemConfig');
         }
         this.sysCode = sysCode;
-        uni.setStorageSync('mini_v3_sysCode',sysCode)
+        uni.setStorageSync('mini_v3_sysCode', sysCode);
       }
 
-      if(token){
-        uni.setStorageSync('mini_v3_sysCode_token',token)
+      if (token) {
+        uni.setStorageSync('mini_v3_sysCode_token', token);
       }
 
-      if(openid && sysCode === '1001035'){
-        uni.setStorageSync('mini_v3_sysCode_openId',openid)
+      if (openid && sysCode === '1001035') {
+        uni.setStorageSync('mini_v3_sysCode_openId', openid);
       }
       // #endif
     },
@@ -260,7 +260,7 @@ const globalStore = defineStore('global', {
       this.token = {
         accessToken,
         refreshToken,
-        loginData
+        loginData,
       };
     },
 
