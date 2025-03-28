@@ -94,6 +94,9 @@
         patientPhone,
         hosName,
       },
+      addition: {
+        patientId: 'patientId',
+      },
     });
   };
 
