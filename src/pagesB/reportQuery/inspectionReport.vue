@@ -866,11 +866,22 @@
         }
       }
     }
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/webView/webView', {
-        https: url,
-      }),
-    });
+
+    if (gStores.globalStore.sysCode === '1001048') {
+      // uni.navigateTo({
+      //   url: `/pagesA/webView/webView?https=${url}`,
+      // });
+      useTBanner({
+        type: 'h5',
+        path: url,
+      })
+    } else {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/webView/webView', {
+          https: url,
+        }),
+      });
+    }
   };
 
   const yunPayAfter = (url) => {

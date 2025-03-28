@@ -70,7 +70,6 @@
         // uni.removeStorage({
         //   key: 'resultConfigQuery',
         // });
-
         // console.log(authCode);
       } else {
         gStores.messageStore.showMessage(
@@ -188,10 +187,14 @@
     //   hosPatientld:100023882
     // }
     // }]
-    let insuranceParamsWx = data[0].insuranceParams;
+    const {
+      insuranceParams: insuranceParamsWx,
+      payBackParams
+    } = data[0];
+    console.log(insuranceParamsWx, '233')
 
     if (insuranceParamsWx) {
-      if (globalStore.sysCode === '1001048' && insuranceParamsWx.registerType) {
+      if (globalStore.sysCode === '1001048' && (insuranceParamsWx.registerType || payBackParams.registerType)) {
         await wait(60);
         handleMessage1001048(data[0]);
         return;
@@ -267,7 +270,7 @@
     // registerType 1 医保支付 2 医保退号
     const { registerType } = insuranceParams;
 
-    if (registerType === 1) {
+    if ([1].includes(registerType)) {
       uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
       // resultConfig1001048.value = encodeURIComponent(
       //   JSON.stringify({
