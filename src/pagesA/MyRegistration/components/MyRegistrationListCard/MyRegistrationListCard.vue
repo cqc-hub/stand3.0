@@ -131,9 +131,11 @@
           </button>
 
           <block v-for="btn in getCustomBtns" :key="btn.text">
+            <!-- useTBanner(btn, 'navigateTo', item) -->
+
             <button
               v-if="isShowCustomBtn(item, btn)"
-              @click="useTBanner(btn, 'navigateTo', item)"
+              @click="customBtnClick(btn, item)"
               class="btn btn-round btn-size-small btn-border cancel-btn"
             >
               {{ btn.text }}
@@ -148,13 +150,18 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
-  import { getStatusConfig, IRegInfo } from '../../utils/regDetail';
+  import {
+    getStatusConfig,
+    IRegInfo,
+    goAskForDoc1001048,
+  } from '../../utils/regDetail';
   import { joinQueryForUrl, joinQuery } from '@/common';
-  import { ISystemConfig, useTBanner } from '@/utils';
+  import { GStores, ISystemConfig, useTBanner } from '@/utils';
 
   import globalGl from '@/config/global';
   import api from '@/service/api';
 
+  const gStores = new GStores();
   const props = defineProps<{
     list: IRegistrationCardItem[];
     showYuanNeiDaoHanBtn: string[];
@@ -171,29 +178,44 @@
   const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
 
   const getCustomBtns = computed(() => {
-    const list = props.config.regListItemCustomButtons;
-
-    if (list) {
-      return list.filter(({ env }) => {
-        if (env) {
-          let _env: (typeof env)[number] = 'wx';
-          // #ifdef MP-ALIPAY
-          _env = 'alipay';
-          // #endif
-
-          // #ifdef H5
-          _env = 'h5';
-          // #endif
-
-          return env.includes(_env);
-        } else {
-          return true;
-        }
+    const list = [...(props.config.regListItemCustomButtons || [])];
+    if (gStores.globalStore.sysCode === '1001048') {
+      list.push({
+        text: '预问诊',
+        type: 'h5',
+        path: 'ywz1001048',
+        orderStatus: ['101']
       });
     }
 
-    return [];
+    return list.filter(({ env }) => {
+      if (env) {
+        let _env: (typeof env)[number] = 'wx';
+        // #ifdef MP-ALIPAY
+        _env = 'alipay';
+        // #endif
+
+        // #ifdef H5
+        _env = 'h5';
+        // #endif
+
+        return env.includes(_env);
+      } else {
+        return true;
+      }
+    });
   });
+
+  const customBtnClick = (
+    btn: (typeof props.config.regListItemCustomButtons)[number],
+    item: IRegistrationCardItem
+  ) => {
+    if (btn.path === 'ywz1001048') {
+      goAskForDoc1001048(item);
+    } else {
+      useTBanner(btn, 'navigateTo', item);
+    }
+  };
 
   const isShowCustomBtn = (
     item: IRegistrationCardItem,
@@ -258,8 +280,8 @@
 
   // 最新消息 (濮阳) 仅 "全部挂号" 开放
   const isShowYWZBtn = (item: IRegistrationCardItem) => {
-    const showYwzByOrderStauts=props.config.showYwzByOrderStauts
-    const showStatus =showYwzByOrderStauts?showYwzByOrderStauts:['0']
+    const showYwzByOrderStauts = props.config.showYwzByOrderStauts;
+    const showStatus = showYwzByOrderStauts ? showYwzByOrderStauts : ['0'];
     return (
       showStatus.includes(item.orderStatus) &&
       props.isShowYuWzBtn &&

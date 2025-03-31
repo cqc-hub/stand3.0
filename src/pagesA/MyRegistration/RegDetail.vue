@@ -431,6 +431,7 @@
     getStatusConfig,
     getOrderStatusTitle,
     RegDetailUtil,
+    goAskForDoc1001048,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
 
@@ -648,29 +649,7 @@
     }
 
     if (gStores.globalStore.sysCode === '1001048') {
-      const {
-        hosDeptId: deptcode,
-        cardNumber: hisid,
-        hosOrderId: regno,
-        createTime,
-        deptName: deptname,
-        patientName: name,
-      } = orderRegInfo.value;
-
-      const secretkey = 'V7lH3cKlj42kmZ3';
-      const callback = '/pagesA/MyRegistration/MyRegistration';
-      const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
-      const sign = md5s(needJm).toLowerCase();
-      const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
-        callback
-      )}&hisid=${hisid}&userid=${regno}&deptname=${deptname}&name=${name}&regtimestamp=${new Date(
-        createTime
-      ).getTime()}&sign=${sign}`;
-
-      useTBanner({
-        type: 'h5',
-        path: url,
-      });
+      goAskForDoc1001048(orderRegInfo.value);
       return;
     }
 

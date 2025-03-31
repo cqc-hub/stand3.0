@@ -6,6 +6,7 @@ import {
   ServerStaticData,
   wait,
   apiAsync,
+  useTBanner,
 } from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
@@ -13,6 +14,8 @@ import {
   getMedicalAuthCode,
   getQxMedicalNation,
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+import { IRegistrationCardItem } from './MyRegistration';
+import md5s from 'js-md5';
 
 export interface IPageProps {
   orderId: string;
@@ -663,6 +666,32 @@ export class RegDetailUtil {
     };
   })();
 }
+
+export const goAskForDoc1001048 = (orderInfo) => {
+  const {
+    hosDeptId: deptcode,
+    cardNumber: hisid,
+    hosOrderId: regno,
+    createTime,
+    deptName: deptname,
+    patientName: name,
+  } = orderInfo;
+
+  const secretkey = 'V7lH3cKlj42kmZ3';
+  const callback = '/pagesA/MyRegistration/MyRegistration';
+  const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
+  const sign = md5s(needJm).toLowerCase();
+  const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
+    callback
+  )}&hisid=${hisid}&userid=${regno}&deptname=${deptname}&name=${name}&regtimestamp=${new Date(
+    createTime
+  ).getTime()}&sign=${sign}`;
+
+  useTBanner({
+    type: 'h5',
+    path: url,
+  });
+};
 
 // const refoundOrder = async () => {
 //   const { wxOrderSubscribeMessage } = orderConfig.value;
