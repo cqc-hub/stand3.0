@@ -42,7 +42,7 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
-  import { useTBanner, throttle, GStores,getTcMallToken } from '@/utils';
+  import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
   
 
