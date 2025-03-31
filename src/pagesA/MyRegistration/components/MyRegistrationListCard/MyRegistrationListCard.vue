@@ -184,7 +184,7 @@
         text: '预问诊',
         type: 'h5',
         path: 'ywz1001048',
-        orderStatus: ['101']
+        orderStatus: ['0']
       });
     }
 
@@ -283,6 +283,7 @@
     const showYwzByOrderStauts = props.config.showYwzByOrderStauts;
     const showStatus = showYwzByOrderStauts ? showYwzByOrderStauts : ['0'];
     return (
+      gStores.globalStore.sysCode !== '1001048' &&
       showStatus.includes(item.orderStatus) &&
       props.isShowYuWzBtn &&
       (item.orderId || item.hosOrderId) &&
