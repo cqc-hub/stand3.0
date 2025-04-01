@@ -282,7 +282,7 @@
         )
       );
     }
-
+    uni.setStorageSync('resultConfig', resultConfig1001048.value);
     getAuthCodeWx().catch(async (err) => {
       console.error(err);
 

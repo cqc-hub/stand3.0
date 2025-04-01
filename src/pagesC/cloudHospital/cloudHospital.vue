@@ -86,7 +86,7 @@
     let MEDORGORD = uni.getStorageSync('MEDORGORD');
     let ORGCODG = 'H32028200358';
     let APPID = '1GU9S5QVB01M76430B0A000038F064B8';
-    let resultConfig = uni.getStorageSync('resultConfigQuery');
+    let resultConfig = uni.getStorageSync('resultConfig');
     console.log(
       'MEDORGORD',
       uni.getStorageSync('MEDORGORD'),
@@ -117,7 +117,7 @@
         goYB1001048(authCode);
         return;
       }
-      //获取授权码
+      // 获取授权码
       if (getLocalStorage('get-wx-medical-netWork-path')) {
         const resultConfig = JSON.parse(
           decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
