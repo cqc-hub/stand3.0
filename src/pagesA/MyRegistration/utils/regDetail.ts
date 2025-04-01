@@ -6,6 +6,7 @@ import {
   ServerStaticData,
   wait,
   apiAsync,
+  useTBanner,
 } from '@/utils';
 import api from '@/service/api';
 import { joinQueryForUrl, setLocalStorage } from '@/common';
@@ -13,6 +14,8 @@ import {
   getMedicalAuthCode,
   getQxMedicalNation,
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
+import { IRegistrationCardItem } from './MyRegistration';
+import md5s from 'js-md5';
 
 export interface IPageProps {
   orderId: string;
@@ -523,7 +526,6 @@ export class RegDetailUtil {
       returnUrl: string;
     } = {} as any
   ) {
-    const { returnUrl } = opt;
     const { isOrderPay, wxOrderSubscribeMessage } = this.orderConfig.value;
     let errMsg = '';
 
@@ -542,24 +544,7 @@ export class RegDetailUtil {
     }
     // #endif
 
-    if (isOrderPay !== '1') {
-      const { confirm } = await new Promise<any>((closeCallBack) => {
-        this.gStores.messageStore.showMessage('', 0, {
-          useDialog: true,
-          dialogOpt: {
-            isShowCancel: true,
-            title: '确认取消该订单?',
-          },
-          closeCallBack,
-        });
-      });
-
-      if (!confirm) {
-        errMsg = '用户点击取消';
-        throw new Error(errMsg);
-      }
-      return await this.cancelReg(opt);
-    } else {
+    if (isOrderPay === '1') {
       const { refundNeedAuth, source, tradeType } = this.orderRegInfo;
       const { orderId } = this.prop.value;
       const args = {
@@ -577,12 +562,8 @@ export class RegDetailUtil {
       // #ifdef MP-WEIXIN
       isWx = true;
       // #endif
-      const yixinRefund =
-        this.gStores.globalStore.sysCode === '1001048' &&
-        tradeType === '2' &&
-        isWx;
 
-      if (refundNeedAuth === '0' && !yixinRefund) {
+      if (refundNeedAuth === '0') {
         if (isAlipay && source === 19) {
           errMsg = '本次挂号属于微信医保挂号, 暂不支持支付宝端退费';
           this.gStores.messageStore.showMessage(errMsg, 3000);
@@ -601,22 +582,21 @@ export class RegDetailUtil {
           'get-wx-medical-auth-code-order': '1',
         });
 
-        const authorize = await getQxMedicalNation({
-          returnUrl: joinQueryForUrl(
-            '/pagesA/MyRegistration/RegDetail',
-            this.prop.value
-          ),
-        });
+        if (this.gStores.globalStore.sysCode === '1001048') {
+          // 宜兴仅wx
+          args.payAuthNo = await getMedicalAuthCode();
+        } else {
+          const authorize = await getQxMedicalNation({
+            returnUrl: joinQueryForUrl(
+              '/pagesA/MyRegistration/RegDetail',
+              this.prop.value
+            ),
+          });
 
-        args.payAuthNo = authorize.payAuthNo;
+          args.payAuthNo = authorize.payAuthNo;
+        }
       }
 
-      if (yixinRefund && isWx) {
-        setLocalStorage({
-          'get-wx-medical-auth-code-order': '1',
-        });
-        args.payAuthNo = await getMedicalAuthCode();
-      }
       uni.showLoading({});
       const { title, content } = await this.gStores.getSysAppMore('1100');
       const { confirm } = await new Promise<any>((closeCallBack) => {
@@ -638,6 +618,23 @@ export class RegDetailUtil {
       console.log(args);
       // return
       await api.refundOrder(args);
+    } else {
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        this.gStores.messageStore.showMessage('', 0, {
+          useDialog: true,
+          dialogOpt: {
+            isShowCancel: true,
+            title: '确认取消该订单?',
+          },
+          closeCallBack,
+        });
+      });
+
+      if (!confirm) {
+        errMsg = '用户点击取消';
+        throw new Error(errMsg);
+      }
+      return await this.cancelReg(opt);
     }
   }
 
@@ -663,6 +660,32 @@ export class RegDetailUtil {
     };
   })();
 }
+
+export const goAskForDoc1001048 = (orderInfo) => {
+  const {
+    hosDeptId: deptcode,
+    cardNumber: hisid,
+    hosOrderId: regno,
+    createTime,
+    deptName: deptname,
+    patientName: name,
+  } = orderInfo;
+
+  const secretkey = 'V7lH3cKlj42kmZ3';
+  const callback = '/pagesA/MyRegistration/MyRegistration';
+  const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
+  const sign = md5s(needJm).toLowerCase();
+  const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
+    callback
+  )}&hisid=${hisid}&userid=${regno}&deptname=${deptname}&name=${name}&regtimestamp=${new Date(
+    createTime
+  ).getTime()}&sign=${sign}`;
+
+  useTBanner({
+    type: 'h5',
+    path: url,
+  });
+};
 
 // const refoundOrder = async () => {
 //   const { wxOrderSubscribeMessage } = orderConfig.value;

@@ -16,7 +16,7 @@
           <view class="w100p h100p" @click="changeTab(item)">
             <view class="pt20 column">
               <image
-                :src="currentPath === item.url ? item.iconActive : item.icon"
+                :src="currentPath === getPath(item.url) ? item.iconActive : item.icon"
                 :class="{
                   animate__rubberBand:
                     animateItem(item) && clickCount % 2 === 0,
@@ -42,7 +42,7 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
-  import { useTBanner, throttle, GStores,getTcMallToken } from '@/utils';
+  import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
   
 
@@ -110,14 +110,6 @@
       //     path: obj.path,
       //   });
       // } else {
-      if(item.label === '口腔商城'){
-       const mallToken =  await  getTcMallToken()
-       const appInstance = getApp() 
-       if (appInstance && appInstance.globalData) {
-          appInstance.globalData.configData.mallToken = mallToken;
-          appInstance.globalData.configData.getMallToken = getTcMallToken;
-        }
-      } 
 
       uni.reLaunch({
         url: item.url,
@@ -196,7 +188,7 @@
         label: '口腔商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
-        url: '/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=72&subhospitalId=73',
+        url: '/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=72&subhospitalId=73&isHome=true',
         loginInterception: '0',
         sort: 2,
       },
@@ -233,14 +225,21 @@
     if (global.SYS_CODE === '1001052') {
       tabList.push('健康管理');
     }
-
+    
+    // #ifdef MP-WEIXIN
     if (global.SYS_CODE === '1001063') {
       tabList.push('口腔商城');
     }
+    // #endif
 
     tabBars.value = tabBarList
       .filter((o) => tabList.includes(o.label))
       .sort((a, b) => a.sort - b.sort);
+  };
+
+  // 提取路径部分的函数
+  const getPath = (url: string) => {
+    return url.split('?')[0];
   };
 </script>
 

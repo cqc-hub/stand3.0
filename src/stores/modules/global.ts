@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import globalGl from '@/config/global';
-import { getCurrentInstance } from 'vue';
-import api from '@/service/api';
+import { getCurrentInstance} from 'vue';
+import { getTcMallToken } from '@/common/utils';
+
 
 type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
 
@@ -61,7 +62,7 @@ const globalStore = defineStore('global', {
       token: {
         accessToken: '',
         refreshToken: '',
-        loginData: '',
+        loginData: ''
       },
       //来源
       browser: {
@@ -123,14 +124,11 @@ const globalStore = defineStore('global', {
     onAppShow(opt: any) {
       if (opt) {
         this.appShowData = opt;
-
-        // #ifdef H5
-        this.updataH5Info(opt);
-        // #endif
-      }
-      if (this.sysCode === '1001063') {
-        this.updateOralMallData();
-      }
+     
+       // #ifdef H5
+       this.updataH5Info(opt)
+       // #endif
+      }  
     },
 
     onAppLaunch(opt: any) {
@@ -139,9 +137,12 @@ const globalStore = defineStore('global', {
         // #ifdef H5
         this.updataH5Info(opt);
         // #endif
+
+        // #ifdef MP-WEIXIN
         if (this.sysCode === '1001063') {
           this.updateOralMallData();
         }
+        // #endif
       }
     },
     updataH5Info(opt) {
@@ -168,32 +169,25 @@ const globalStore = defineStore('global', {
       }
       // #endif
     },
-
-    updateOralMallData(app?) {
-      // 口腔商城
-      let appData = app || getCurrentInstance()!.proxy;
-      if (appData) {
+    
+    async updateOralMallData(app?,type?){
+     // 口腔商城
+     let appData =  app || getCurrentInstance()!.proxy; 
+     if (appData) { 
+       // @ts-ignore
         appData.globalData.configData = {
           from: 1, // 小程序的渠道值，具体咨询组件方
-          appId: 'wx93d1e2c1e646e342', // 小程序的appId值
-          loginPage: '/pages/home/my?isWarningLogin=1&_p=1', // 小程序的登录页面地址
-          token: this.token.accessToken,
+          mallAppId: '1b629fcf7ac9f10c54f4f87ff14fe69a',
+          loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
+          token:  this.token.accessToken,
           openId: this.openId,
-          sysCode: this.sysCode,
-          mallToken: '22',
-          getMallToken: () => {},
-          // getMallToken: function () {
-          //   return new Promise((resolve, reject) => {
-          //       api.getTcToken({}).then((res)=>{
-          //         resolve(res.result.mallToken)
-          //       }).catch(()=>{
-          //         reject('未获取到token')
-          //       })
-
-          //   })
-          // },
-        };
-      }
+          sysCode:this.sysCode,
+          getMallToken:getTcMallToken, 
+        };  
+        if(!type){
+          await getTcMallToken(app)
+        }
+       }
     },
 
     updateToken(token: typeof this.token) {
