@@ -159,7 +159,7 @@
 
             if (
               resultConfig.orderStatusRedirectUrl ==
-              '/pagesC/cloudHospital/cloudHospital1'
+              '/pagesC/cloudHospital/cloudHospital'
             ) {
               const resultConfigQuery = JSON.parse(
                 decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
