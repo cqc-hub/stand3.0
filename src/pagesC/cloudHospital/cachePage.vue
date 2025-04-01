@@ -33,56 +33,6 @@
   const shareData = ref<any>({});
   const gStores = new GStores();
 
-  onLoad((options) => {
-    // #ifdef MP-ALIPAY
-    aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
-    // #endif
-    console.warn('跳转参数', options);
-    const para = getparams(options);
-    const path = getSrc(para, options);
-
-    console.warn('跳转网络医院携带数据', para);
-    console.warn('跳转网络医院的路径', src.value);
-    src.value = path;
-    isShow.value = true;
-
-    // setTimeout(async () => {
-    //   const r = await getAuthCodeWx();
-    //   console.log(r, 233);
-    // }, 1000);
-  });
-
-  onShow(() => {
-    const medicalWx = getLocalStorage('get-wx-medical-auth-code');
-    // 微信医保小程序跳回来后中断了链路 重新走下
-    if (medicalWx === '1') {
-      setLocalStorage({
-        'get-wx-medical-auth-code': '',
-        'get-ali-medical-auth-code': '',
-      });
-
-      const authCode =
-        gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
-      if (authCode) {
-        // const resultConfig = JSON.parse(
-        //   decodeURIComponent(uni.getStorageSync('resultConfig'))
-        // );
-        // uni.removeStorage({
-        //   key: 'resultConfigQuery',
-        // });
-        // console.log(authCode);
-      } else {
-        gStores.messageStore.showMessage(
-          '未完成电子医保凭证授权,无法继续医保结算',
-          1500,
-          {
-            uniToast: true,
-          }
-        );
-      }
-    }
-  });
-
   const getAuthCodeWx = async () => {
     return new Promise(async (r, j) => {
       const { confirm } = await apiAsync(uni.showModal, {
@@ -99,9 +49,12 @@
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
-        console.log(utils);
-
-        const authCode = await utils.getMedicalAuthCode();
+        const authCode = await utils.getMedicalAuthCode().catch((err) => {
+          console.log(err, 'err');
+          if (!(typeof err === 'string' && err === '请求授权...')) {
+            j(err);
+          }
+        });
         r(authCode);
       });
     });
@@ -175,7 +128,7 @@
     //   return;
     // }
     var data = evt.target.data;
-    console.warn('获取到返回--------------', data);
+    console.warn('获取到返回--------------', data && data[0]);
     console.warn('编码----------------');
     // #ifdef MP-WEIXIN
     // let data=[{
@@ -187,18 +140,18 @@
     //   hosPatientld:100023882
     // }
     // }]
-    const {
-      insuranceParams: insuranceParamsWx,
-      payBackParams
-    } = data[0];
-    console.log(insuranceParamsWx, '233')
+    const { insuranceParams: insuranceParamsWx, payBackParams } = data[0];
 
     if (insuranceParamsWx) {
-      if (globalStore.sysCode === '1001048' && (insuranceParamsWx.registerType || payBackParams.registerType)) {
+      if (
+        globalStore.sysCode === '1001048' &&
+        (insuranceParamsWx.registerType || payBackParams.registerType)
+      ) {
         await wait(60);
         handleMessage1001048(data[0]);
         return;
       }
+
       if (insuranceParamsWx.authCode == 1) {
         let payBackParams = JSON.stringify(data[0].payBackParams);
         setLocalStorage({
@@ -261,7 +214,7 @@
     }
   };
 
-  const resultConfig1001048 = ref({} as any);
+  const resultConfig1001048 = ref('');
   const handleMessage1001048 = async ({
     insuranceParams,
     payBackParams,
@@ -271,64 +224,81 @@
     const { registerType } = insuranceParams;
 
     if ([1].includes(registerType)) {
+      resultConfig1001048.value = encodeURIComponent(
+        JSON.stringify({
+          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
+          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
+        })
+      );
       uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
-      // resultConfig1001048.value = encodeURIComponent(
-      //   JSON.stringify({
-      //     cancelAuthRedirectUrl: '/pagesB/cloudHospital/cloudHospital1',
-      //     orderStatusRedirectUrl: '/pagesB/cloudHospital/cloudHospital1',
-      //   })
-      // );
 
       uni.setStorageSync(
         'resultConfigQuery',
         encodeURIComponent(
           JSON.stringify({
-            path: '/pagesB/cachePage/cachePage?myHosType=ybyjf',
+            path: '/pagesC/cloudHospital/cloudHospital?myHosType=ybyjf',
             successQuery: {},
           })
         )
       );
     } else if (registerType === 2) {
       uni.setStorageSync('netWorkghback', true);
-      let successQuery = {
-        payBackParams: payBackParams,
-      };
       uni.setStorageSync(
         'resultConfigQuery',
         encodeURIComponent(
           JSON.stringify({
-            path: '/pages/cloudHospital/cloudHospital',
-            successQuery: successQuery,
+            path: '/pagesC/cloudHospital/cloudHospital',
+            successQuery: {
+              payBackParams: payBackParams,
+            },
           })
         )
       );
-      uni.setStorageSync('netWorkghback', true);
     } else {
+      resultConfig1001048.value = encodeURIComponent(
+        JSON.stringify({
+          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
+          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
+        })
+      );
       uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
-      let successQuery = {
-        payment: 'next',
-        registerId: registerId,
-        payBackParams: payBackParams,
-      };
-      let failQuery = {
-        payment: 'back',
-        registerId: registerId,
-        payBackParams: payBackParams,
-      };
 
       uni.setStorageSync(
         'resultConfigQuery',
         encodeURIComponent(
           JSON.stringify({
-            path: '/pages/cloudHospital/cloudHospital',
-            successQuery: successQuery,
-            failQuery: failQuery,
+            path: '/pagesC/cloudHospital/cloudHospital',
+            successQuery: {
+              payment: 'next',
+              registerId: registerId,
+              payBackParams: payBackParams,
+            },
+            failQuery: {
+              payment: 'back',
+              registerId: registerId,
+              payBackParams: payBackParams,
+            },
           })
         )
       );
     }
 
-    getAuthCodeWx();
+    getAuthCodeWx().catch(async (err) => {
+      console.error(err);
+
+      const resultConfig = JSON.parse(
+        decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
+      );
+      //
+      uni.removeStorage({
+        key: 'resultConfig',
+      });
+
+      await wait(20);
+      uni.reLaunch({
+        url: joinQueryForUrl(resultConfig.path, resultConfig.failQuery),
+      });
+    });
   };
 
   onShareAppMessage((res) => {
@@ -342,6 +312,49 @@
       imageUrl: shareData.value.imageUrl,
       desc: shareData.value.desc,
     };
+  });
+
+  onLoad((options) => {
+    // #ifdef MP-ALIPAY
+    aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
+    // #endif
+    console.warn('跳转参数', options);
+    const para = getparams(options);
+    const path = getSrc(para, options);
+
+    src.value = path;
+    isShow.value = true;
+
+    console.warn('跳转网络医院携带数据', para);
+    console.warn('跳转网络医院的路径', src.value);
+    // setTimeout(async () => {
+    //   const r = await getAuthCodeWx();
+    //   console.log(r, 233);
+    // }, 1000);
+  });
+
+  onShow(() => {
+    const medicalWx = getLocalStorage('get-wx-medical-auth-code');
+    // 微信医保小程序跳回来后中断了链路 重新走下
+    if (medicalWx === '1') {
+      setLocalStorage({
+        'get-wx-medical-auth-code': '',
+        'get-ali-medical-auth-code': '',
+      });
+
+      const authCode =
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
+      if (authCode) {
+      } else {
+        gStores.messageStore.showMessage(
+          '未完成电子医保凭证授权,无法继续医保结算',
+          1500,
+          {
+            uniToast: true,
+          }
+        );
+      }
+    }
   });
 </script>
 
