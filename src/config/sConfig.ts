@@ -500,11 +500,20 @@ const scJson: Record<string, ISConfig> = {
   1001076: {
     login: {
       isSkipPerfect: '1',
+      // isAliAuthBase: '1',
+      // isLoginByOpenId: '1',
+    },
+  },
+
+  1001075: {
+    login: {
+      isSkipPerfect: '1',
       isAliAuthBase: '1',
     },
   },
 
   1001048: {
+    isOpenWechatSI: true,
     medicalMHelp: {
       wx: {
         medicalNation: {
