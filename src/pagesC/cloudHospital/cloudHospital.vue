@@ -47,7 +47,6 @@
   };
 
   const goYB1001048 = (authCode) => {
-    console.log(authCode);
     if (uni.getStorageSync('netWorkghback')) {
       uni.setStorageSync('netWorkghback', false);
       if (uni.getStorageSync('resultConfig')) {
@@ -80,7 +79,7 @@
 
       return;
     }
-    // 哈哈哈哈哈哈哈
+
     let H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
     let OPENID = gStores.globalStore.openId;
     let MEDORGORD = uni.getStorageSync('MEDORGORD');
@@ -94,6 +93,8 @@
       resultConfig
     );
     let url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+
+    console.log('------医保的url', url);
     useTBanner({
       type: 'h5',
       path: url,
@@ -138,48 +139,6 @@
         } catch (error) {
           gStores.messageStore.showMessage('网络医院地址参数配置错误', 2000);
           console.error('网络医院地址参数配置错误', error);
-        }
-      }
-    }
-
-    if (options) {
-      const { scene, path } = options;
-
-      if (scene === 1038 && globalStore.sysCode === '1001048') {
-        await wait(200);
-
-        if (path == 'pages/mms-pay-loading/mms-pay-loading') {
-          if (uni.getStorageSync('resultConfig')) {
-            const resultConfig = JSON.parse(
-              decodeURIComponent(uni.getStorageSync('resultConfig'))
-            );
-            uni.removeStorage({
-              key: 'resultConfig',
-            });
-
-            if (
-              resultConfig.orderStatusRedirectUrl ==
-              '/pagesC/cloudHospital/cloudHospital'
-            ) {
-              const resultConfigQuery = JSON.parse(
-                decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-              );
-              uni.removeStorage({
-                key: 'resultConfigQuery',
-              });
-
-              uni.navigateTo({
-                url: joinQueryForUrl(
-                  resultConfigQuery.path,
-                  resultConfigQuery.successQuery
-                ),
-              });
-            } else {
-              uni.reLaunch({
-                url: resultConfig.orderStatusRedirectUrl,
-              });
-            }
-          }
         }
       }
     }

@@ -10,6 +10,7 @@
   </view>
 </template>
 <script>
+  import { joinQueryForUrl, setLocalStorage } from '@/common';
   import { GStores, wait } from '@/utils';
 
   export default {
@@ -34,6 +35,9 @@
           success(res) {
             // 打开成功
             console.log('navigateToMiniProgram success:', res);
+            setLocalStorage({
+              payed1001048: '1',
+            });
           },
           fail(error) {
             console.log('navigateToMiniProgram fail:', error);
@@ -45,46 +49,51 @@
       },
     },
     async onShow() {
-      console.log(this.gStores, 'sss');
       const options = this.gStores.globalStore.appShowData;
+      const globalStore = this.gStores.globalStore;
+      console.log(options, 'sss');
       if (options) {
-        const { scene, path } = options;
+        const { scene } = options;
 
-        if (scene === 1038 && globalStore.sysCode === '1001048') {
+        if (
+          scene === 1038 &&
+          globalStore.sysCode === '1001048' &&
+          uni.getStorageSync('payed1001048') &&
+          uni.getStorageSync('resultConfig')
+        ) {
           await wait(200);
+          const resultConfig = JSON.parse(
+            decodeURIComponent(uni.getStorageSync('resultConfig'))
+          );
 
-          if (path == 'pages/mms-pay-loading/mms-pay-loading') {
-            if (uni.getStorageSync('resultConfig')) {
-              const resultConfig = JSON.parse(
-                decodeURIComponent(uni.getStorageSync('resultConfig'))
-              );
-              uni.removeStorage({
-                key: 'resultConfig',
-              });
+          uni.removeStorage({
+            key: 'resultConfig',
+          });
+          uni.removeStorage({
+            key: 'payed1001048',
+          });
 
-              if (
-                resultConfig.orderStatusRedirectUrl ==
-                '/pagesC/cloudHospital/cloudHospital'
-              ) {
-                const resultConfigQuery = JSON.parse(
-                  decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-                );
-                uni.removeStorage({
-                  key: 'resultConfigQuery',
-                });
+          if (
+            resultConfig.orderStatusRedirectUrl ==
+            '/pagesC/cloudHospital/cloudHospital'
+          ) {
+            const resultConfigQuery = JSON.parse(
+              decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
+            );
+            uni.removeStorage({
+              key: 'resultConfigQuery',
+            });
 
-                uni.navigateTo({
-                  url: joinQueryForUrl(
-                    resultConfigQuery.path,
-                    resultConfigQuery.successQuery
-                  ),
-                });
-              } else {
-                uni.reLaunch({
-                  url: resultConfig.orderStatusRedirectUrl,
-                });
-              }
-            }
+            uni.navigateTo({
+              url: joinQueryForUrl(
+                resultConfigQuery.path,
+                resultConfigQuery.successQuery
+              ),
+            });
+          } else {
+            uni.reLaunch({
+              url: resultConfig.orderStatusRedirectUrl,
+            });
           }
         }
       }
