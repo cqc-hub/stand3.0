@@ -47,20 +47,45 @@
   };
 
   const goYB1001048 = (authCode) => {
-    console.log(authCode);
+    if (uni.getStorageSync('netWorkghback')) {
+      uni.setStorageSync('netWorkghback', false);
+      if (uni.getStorageSync('resultConfig')) {
+        const resultConfig = JSON.parse(
+          decodeURIComponent(uni.getStorageSync('resultConfig'))
+        );
+        uni.removeStorage({
+          key: 'resultConfig',
+        });
+        if (
+          resultConfig.orderStatusRedirectUrl ==
+          '/pagesB/cloudHospital/cloudHospital1'
+        ) {
+          const resultConfigQuery = JSON.parse(
+            decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
+          );
+          uni.removeStorage({
+            key: 'resultConfigQuery',
+          });
+          setTimeout(() => {
+            uni.navigateTo({
+              url: joinQueryForUrl(resultConfigQuery.path, {
+                authCode,
+                ...resultConfigQuery.successQuery,
+              }),
+            });
+          }, 100);
+        }
+      }
+
+      return;
+    }
+
     let H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-    //用户OPENID
     let OPENID = gStores.globalStore.openId;
-    //院内订单号MEDORGORD
-    // let MEDORGORD = this.insuranceParams.medOrgOrd;
     let MEDORGORD = uni.getStorageSync('MEDORGORD');
-    //定点机构编码ORGCODG
     let ORGCODG = 'H32028200358';
-    // 医院渠道APPID
     let APPID = '1GU9S5QVB01M76430B0A000038F064B8';
-    let resultConfig = uni.getStorageSync('resultConfigQuery');
-    // uni.removeStorage("resultConfig1");
-    // uni.setStorageSync("resultConfig", resultConfig);
+    let resultConfig = uni.getStorageSync('resultConfig');
     console.log(
       'MEDORGORD',
       uni.getStorageSync('MEDORGORD'),
@@ -68,6 +93,8 @@
       resultConfig
     );
     let url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+
+    console.log('------医保的url', url);
     useTBanner({
       type: 'h5',
       path: url,
@@ -75,6 +102,8 @@
   };
 
   onShow(async () => {
+    const options = globalStore.appShowData;
+    console.log(options, '哈哈哈哈哈哈哈哈');
     console.warn('网络医院授权回来', gStores.globalStore.appShowData);
     const authCode =
       gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
@@ -89,7 +118,7 @@
         goYB1001048(authCode);
         return;
       }
-      //获取授权码
+      // 获取授权码
       if (getLocalStorage('get-wx-medical-netWork-path')) {
         const resultConfig = JSON.parse(
           decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
@@ -116,7 +145,6 @@
   });
 
   onLoad(async (options) => {
-    //先登录拦截
     console.log('cloudHospital Options', options);
     await wait(200);
     if (options?.loginInterception == '1') {

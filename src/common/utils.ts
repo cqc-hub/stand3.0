@@ -1,5 +1,5 @@
 import env from '@/config/env';
-import { getCurrentInstance} from 'vue';
+import { getCurrentInstance } from 'vue';
 
 //公用方法
 /**
@@ -69,6 +69,9 @@ export const joinQueryForUrl = (url: string, pageArg) => {
   const p = Object.entries(pageArg)
     .filter(([key, value]) => value || value === 0)
     .map(([key, value]) => {
+      if (typeof value === 'object') {
+        value = JSON.stringify(value);
+      }
       return [key, encodeURIComponent(value! + '')];
     });
 
@@ -301,28 +304,32 @@ export const deepClone = (obj: any) => {
   }
   return o;
 };
-export const getTcMallToken = (app?)=>{ 
+export const getTcMallToken = (app?) => {
   return new Promise((resolve, reject) => {
-    let appData =  app || getCurrentInstance()!.proxy; 
+    let appData = app || getCurrentInstance()!.proxy;
     uni.request({
-     url: `${env.baseApi}/phs-extend/tcShop/getToken`,
+      url: `${env.baseApi}/phs-extend/tcShop/getToken`,
       method: 'POST',
       header: {
         'content-type': 'application/json',
         //  phsId: '81681688',
       },
-         data: JSON.stringify({
-            args: {
-              sysCode: 1001063, 
-            },
-          }),
+      data: JSON.stringify({
+        args: {
+          sysCode: 1001063,
+        },
+      }),
       success: (res) => {
-        if (typeof res.data === 'object' && res.data !== null && 'result' in res.data) {
+        if (
+          typeof res.data === 'object' &&
+          res.data !== null &&
+          'result' in res.data
+        ) {
           const result = res.data.result;
           if (result && typeof result.token === 'string') {
-            // 更新全局变量并返回 token  
+            // 更新全局变量并返回 token
             // @ts-ignore
-           appData.globalData.configData.mallToken = result.token;
+            appData.globalData.configData.mallToken = result.token;
             // @ts-ignore
             appData.globalData.configData.mallAppId = result.appId;
             resolve(result.token);
@@ -330,9 +337,10 @@ export const getTcMallToken = (app?)=>{
           }
         }
         reject('返回数据格式错误或未获取到 token');
-      },fail: ()=>{
-        reject('未获取到token')
-      }
-    }) 
-})
-  };
+      },
+      fail: () => {
+        reject('未获取到token');
+      },
+    });
+  });
+};

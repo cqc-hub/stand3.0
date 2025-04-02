@@ -311,23 +311,27 @@ export const getMedicalAuthCode = async (): Promise<string> => {
       'get-wx-medical-auth-code': '1',
     });
 
-    uni.navigateToMiniProgram({
-      appId,
-      // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
-      path: joinQuery(path, cacheStore.medicalPathArg),
-      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-      // envVersion: 'release',
-      fail({ errMsg }) {
-        if (errMsg.includes('fail cancel')) {
-          setLocalStorage({
-            'get-wx-medical-auth-code': '',
-          });
+    await new Promise((success, j) => {
+      uni.navigateToMiniProgram({
+        appId,
+        // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
+        path: joinQuery(path, cacheStore.medicalPathArg),
+        envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+        // envVersion: 'release',
+        fail({ errMsg }) {
+          if (errMsg.includes('fail cancel')) {
+            setLocalStorage({
+              'get-wx-medical-auth-code': '',
+            });
 
-          gStores.messageStore.showMessage(
-            '未完成电子医保凭证授权,无法继续医保结算'
-          );
-        }
-      },
+            gStores.messageStore.showMessage(
+              '未完成电子医保凭证授权,无法继续医保结算'
+            );
+          }
+          j('取消请求授权...');
+        },
+        success,
+      });
     });
 
     return Promise.reject('请求授权...');

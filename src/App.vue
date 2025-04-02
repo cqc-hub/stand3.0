@@ -44,7 +44,7 @@
     const options = opt;
 
     globalStore.onAppShow(opt);
-    
+
     // #ifdef MP-WEIXIN
     if (!showTime) {
       showTime = ((new Date() as unknown as number) * 1) / 1000;
@@ -141,48 +141,6 @@
           });
       }
     }, 600);
-
-    if (options.scene === 1038 && global.SYS_CODE === '1001048') {
-      if (options.path == 'pages/mms-pay-loading/mms-pay-loading') {
-        //TODO: 页面跳转
-        if (uni.getStorageSync('resultConfig')) {
-          const resultConfig = JSON.parse(
-            decodeURIComponent(uni.getStorageSync('resultConfig'))
-          );
-          uni.removeStorage({
-            key: 'resultConfig',
-          });
-          if (
-            resultConfig.orderStatusRedirectUrl ==
-            '/pagesB/cloudHospital/cloudHospital1'
-          ) {
-            const resultConfigQuery = JSON.parse(
-              decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-            );
-            uni.removeStorage({
-              key: 'resultConfigQuery',
-            });
-            //互联网医院特殊处理
-            setTimeout(() => {
-              uni.navigateTo({
-                url: joinQuery(
-                  resultConfigQuery.path,
-                  resultConfigQuery.successQuery || {}
-                ),
-              });
-            }, 100);
-          } else {
-            setTimeout(() => {
-              uni.reLaunch({
-                url: resultConfig.orderStatusRedirectUrl,
-              });
-            }, 100);
-          }
-        }
-
-        // console.log("11111", options.path);
-      }
-    }
 
     if (uni.canIUse('getUpdateManager')) {
       const updateManager = uni.getUpdateManager && uni.getUpdateManager();
