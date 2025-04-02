@@ -39,7 +39,6 @@
       :animation="animationData"
     >
       <view class="bottom-dh-char flex-row-around">
-        <!-- #ifdef  MP-WEIXIN -->
         <view
           class="input-send m-left mr20"
           :disabled="msgState.msgLoad"
@@ -67,23 +66,6 @@
             />
           </view>
         </view>
-        <!-- #endif -->
-        <!-- #ifndef  MP-WEIXIN -->
-        <view
-          class="input-send m-left"
-          :disabled="msgState.msgLoad"
-          @click="reportShow"
-          v-if="isReportAnalysis"
-        >
-          <view class="circle">
-            <img
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
-              alt=""
-            />
-          </view>
-        </view>
-        <!-- #endif -->
 
         <view
           class="input-send"
@@ -163,6 +145,7 @@
         <!-- #endif -->
       </view>
     </view>
+   
     <view
       class="voicing-area"
       :style="{ display: voicing ? 'flex' : 'none' }"
@@ -181,6 +164,7 @@
       </view>
       <view class="title f28">松开发送</view>
     </view>
+
   </view>
 </template>
 <script setup lang="ts">
@@ -193,9 +177,17 @@
     nextTick,
   } from 'vue';
   import { type StyleConfigType } from '../utils/types';
+  // #ifdef  H5
+  import { useTranslateVoiceHook } from '../utils/hook';
+  // #endif
   import globalGl from '@/config/global';
   import { type TButtonConfig, debounce, GStores } from '@/utils';
-  import { msgState, isReportAnalysis, chunkStatus } from '../utils/utils';
+  import {
+    msgState,
+    isReportAnalysis,
+    chunkStatus,
+    pageConfig,
+  } from '../utils/utils';
 
   var SImanager: any = null;
   const animationData = ref<UniNamespace.Animation>();
@@ -207,7 +199,9 @@
     isMoveUp: false,
   });
   const guessServerBottom = ref<any>('');
-  const hasSIPolicy = ref(false);
+
+  const hasSIPolicy = ref(true);
+
   const isRecording = ref(false);
 
   const inst = getCurrentInstance();
@@ -217,9 +211,16 @@
   const props = defineProps<{
     guessServerList?: TButtonConfig[];
     headerConfig: StyleConfigType;
-       source?:string
+    source?: string;
   }>();
-
+  // #ifdef  H5
+  const {
+    isCanUse: isCanUseTranslate,
+    isListening,
+    startRecord,
+    stopRecord,
+  } = useTranslateVoiceHook();
+  // #endif
   const emits = defineEmits([
     'on-blur',
     'send-msg',
@@ -254,9 +255,18 @@
   });
 
   const hasWechatSI = computed(() => {
-    const {
-      sConfig: { isOpenWechatSI },
-    } = globalGl;
+    let isOpenWechatSI = false;
+    // #ifdef  MP-WEIXIN
+    isOpenWechatSI = globalGl.sConfig?.isOpenWechatSI || false;
+    // #endif
+    // #ifdef  H5
+    console.log('isCanUseTranslate', isCanUseTranslate);
+
+    isOpenWechatSI =
+      isCanUseTranslate &&
+      (pageConfig.value.intelMedicalAssistConfig?.isH5OpenWechatSI === '1' ||
+        false);
+    // #endif
     return isOpenWechatSI;
   });
 
@@ -289,12 +299,13 @@
   };
 
   const handleClickServer = (serverItem) => {
-    emits('click-server', serverItem,props?.source);
+    emits('click-server', serverItem, props?.source);
   };
 
   const changeVoiceType = () => {
     if (hasWechatSI.value && hasSIPolicy.value) {
       isVoice.value = !isVoice.value;
+      // #ifdef  MP-WEIXIN
       if (!SImanager) {
         initRecord();
       }
@@ -302,6 +313,7 @@
       setTimeout(() => {
         isShow.value = true;
       }, 100);
+      // #endif
     } else {
       reportShow();
     }
@@ -314,6 +326,7 @@
       voicing.value = false;
       return;
     }
+    // #ifdef  MP-WEIXIN
     SImanager.start({
       duration: 60000,
       lang: 'zh_CN',
@@ -326,6 +339,12 @@
         voicing.value = false;
       }
     }, 60000);
+    // #endif
+    // #ifdef  H5
+    isRecording.value = true;
+    startRecord();
+   
+    // #endif
   };
   const initRecord = () => {
     if (hasWechatSI.value) {
@@ -402,9 +421,26 @@
     }
   };
 
-  const cancleVoice = () => {
+  const cancleVoice = async () => {
     if (isRecording.value) {
+      // #ifdef  MP-WEIXIN
       SImanager?.stop();
+      // #endif
+      // #ifdef  H5
+      const resStr = await stopRecord();
+      if (resStr) {
+        msgState.value.msg += resStr || '';
+        if (!msgState.value.msg) {
+          return;
+        }
+        isRecording.value && (isRecording.value = false);
+        // console.log('SImanager.onStop', msgState.value.msg);
+        emits('send-msg', msgState.value.msg);
+        nextTick(() => {
+          msgState.value.msg = '';
+        });
+      }
+      // #endif
       voicing.value && (voicing.value = false);
     }
   };
@@ -428,7 +464,6 @@
   touchMove = debounce(touchMove, 500, false);
 
   const endRecord = (e) => {
-    console.log('endRecord', e);
     if (voiceTouchData.value.isMoveUp) {
       cancleVoice();
       voiceTouchData.value = {
@@ -436,6 +471,7 @@
         isMoveUp: false,
       };
     }
+    
     cancleVoice();
   };
 
@@ -452,6 +488,7 @@
   };
 
   const getAuth = () => {
+    // #ifdef  MP-WEIXIN
     wx.getSetting({
       success: (res) => {
         if (!res.authSetting['scope.record']) {
@@ -483,6 +520,10 @@
     });
 
     hasSIPolicy.value && initRecord();
+    // #endif
+    // #ifdef  H5
+    hasSIPolicy.value = true;
+    // #endif
   };
 
   onMounted(() => {
@@ -492,9 +533,7 @@
       isShow.value = true;
     }, 0);
 
-    // #ifdef  MP-WEIXIN
     getAuth();
-    // #endif
   });
 </script>
 <style lang="scss" scoped>
