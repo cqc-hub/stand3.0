@@ -58,12 +58,10 @@
   });
 
   const compareBtn = (prop: string[], key: string) => {
-
     const isTjreport = props.addition?.reportType === '3'; // 这是体检报告
     let compareData = {
       ...(props.addition || {}),
     };
-
 
     if (isTjreport) {
       compareData.btnAskDoc = '';
@@ -76,7 +74,21 @@
       compareData.isDownloadRepor = '';
     }
 
-    return prop.every((p) => !!compareData[p]);
+    return prop.every((p) => {
+      if (
+        [
+          'isDownloadRepor',
+          'isGraphic',
+          'btnReOrder',
+          'btnAskDoc',
+          'isDoctorCard',
+        ].includes(p)
+      ) {
+        return compareData[p] === '1';
+      }
+
+      return !!compareData[p];
+    });
   };
 
   const itemClick = (btn: (typeof _btns)[number]) => {
