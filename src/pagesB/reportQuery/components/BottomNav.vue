@@ -58,10 +58,12 @@
   });
 
   const compareBtn = (prop: string[], key: string) => {
+
     const isTjreport = props.addition?.reportType === '3'; // 这是体检报告
     let compareData = {
       ...(props.addition || {}),
     };
+
 
     if (isTjreport) {
       compareData.btnAskDoc = '';
@@ -74,7 +76,7 @@
       compareData.isDownloadRepor = '';
     }
 
-    return prop.every((p) => !!compareData[p]);
+    return prop.every((p) => !!compareData[p] && compareData[p] !== '0');
   };
 
   const itemClick = (btn: (typeof _btns)[number]) => {
