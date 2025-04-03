@@ -416,7 +416,7 @@ export const useOcr = async (
     return await ocrForWX();
   } else if (env === 'alipay') {
     if (aliThroughByEnd) {
-      // https://opendocs.alipay.com/open/05urve
+      // https://opendocs.alipay.com/open/05urve 纯服务端 收费
       return await ocrForWX(imgCanvas);
     } else {
       return (await ocrForAlipay(imageOutput))!;

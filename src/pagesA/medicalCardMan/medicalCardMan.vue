@@ -16,12 +16,31 @@
           <view class="iconfont icon-resize color-blue">&#xe6ef;</view>
           <text class="text-no-wrap">关联已有健康卡</text>
         </view>
-        <view @click="addPatPage">
+
+        <!-- 新健康卡 -->
+        <view v-if="isNewHealthCard" >
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
-          <text class="text-no-wrap">
-            {{ isNewHealthCard ? '申领或关联健康卡' : '申领健康卡' }}
-          </text>
+          <text v-if="!isShowHealthLogin" class="text-no-wrap" @click="addPatPage">申领或关联健康卡</text>
+          <health-card-login
+                v-else
+                :authLogin="false"
+                :hidden="!isShowHealthLogin"
+                @authSucess="addPatPage"
+                @authCancel="isShowHealthLogin = false"
+                wechatcode
+              >
+                <view class="text-no-wrap">再次点击授权</view>
+              </health-card-login>
         </view>
+
+        <view v-else @click="addPatPage">
+          <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
+          <text class="text-no-wrap">申领健康卡</text>
+        </view>
+
+
+       
+
         <!-- <view @click="createCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
@@ -219,6 +238,10 @@
   // #endif
 
   const isShowHealthLogin = ref(false);
+
+  const test = (val) => {
+    console.log('pageConfig.value', val);
+  };
   const upToHealthCord = async (pat: IPat) => {
     // #ifdef MP-WEIXIN
     const { success, res } = await getHealthCardCode();
@@ -263,7 +286,10 @@
 
   const addPatPage = () => {
     if (isNewHealthCard.value) {
-      healthCardBind();
+      healthCardBind().catch(()=>{
+        gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
+        isShowHealthLogin.value = true;
+      });
     } else {
       uni.navigateTo({
         url:

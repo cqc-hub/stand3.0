@@ -478,7 +478,7 @@
             const { confirm } = await apiAsync(uni.showModal, {
               content: '患者存在建档记录但手机号不匹配，是否立即修改？',
             });
-            // 修改手机号必开启人脸|ocr之一 ocr收费
+            // 修改手机号必开启人脸|ocr之一 ocr走后端收费改为前端ocr
             if (confirm) {
               await injectHealthCode(requestData);
               return await editPhone(requestData);
