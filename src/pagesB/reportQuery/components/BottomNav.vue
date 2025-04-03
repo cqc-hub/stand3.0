@@ -76,7 +76,7 @@
       compareData.isDownloadRepor = '';
     }
 
-    return prop.every((p) => !!compareData[p] && compareData[p] !== '0');
+    return prop.every((p) => !!compareData[p]);
   };
 
   const itemClick = (btn: (typeof _btns)[number]) => {

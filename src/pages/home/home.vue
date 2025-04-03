@@ -458,7 +458,6 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     //设置顶部标题
