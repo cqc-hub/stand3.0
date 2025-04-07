@@ -980,6 +980,8 @@ export const healthCardBind = async () => {
       },
       'redirectTo'
     );
+  }else{
+    throw new Error('未授权， 请再次点击进行授权'); 
   }
 };
 
@@ -998,8 +1000,23 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
     };
 
     getH5OpenidParam(requestArg);
-    await api.quickLinkHealthCardWithLoad(requestArg).catch(async (e) => {
+    await api.quickLinkHealthCardWithLoad(requestArg).then(()=>{
+      gStores.messageStore.showMessage('关联成功', 1500, {
+        closeCallBack() {
+          //刷新就诊人列表
+          new PatientUtils().getPatCardList();
+          if (cb) {
+            cb.call(this);
+          } else {
+            uni.reLaunch({
+              url: '/pages/home/home',
+            });
+          }
+        },
+      });
+    }).catch(async (e) => {
       const { respCode, message } = e;
+      console.log(22222,respCode,message)
       if (respCode === 884801) {
         gStores.messageStore.closeMessage();
         const { confirm } = await apiAsync(uni.showModal, {
@@ -1011,20 +1028,9 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
             source: gStores.globalStore.browser.source,
           });
         }
+      }else{
+        gStores.messageStore.showMessage(message)
       }
-    });
-    gStores.messageStore.showMessage('关联成功', 1500, {
-      closeCallBack() {
-        //刷新就诊人列表
-        new PatientUtils().getPatCardList();
-        if (cb) {
-          cb.call(this);
-        } else {
-          uni.reLaunch({
-            url: '/pages/home/home',
-          });
-        }
-      },
     });
     // #endif
   } else {

@@ -74,7 +74,21 @@
       compareData.isDownloadRepor = '';
     }
 
-    return prop.every((p) => !!compareData[p]);
+    return prop.every((p) => {
+      if (
+        [
+          'isDownloadRepor',
+          'isGraphic',
+          'btnReOrder',
+          'btnAskDoc',
+          'isDoctorCard',
+        ].includes(p)
+      ) {
+        return compareData[p] === '1';
+      }
+
+      return !!compareData[p];
+    });
   };
 
   const itemClick = (btn: (typeof _btns)[number]) => {

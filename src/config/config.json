@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001048",
+  "sysCode": "1001063",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -58,7 +58,7 @@
       "wxAppid": "wxb00075173e764492",
       "alipayAppid": "2021003113623396",
       "isvAlipayAppid": "2021003116641812",
-      "h5Appid1": "wx1be541208ab16799",
+      "h5Appid": "wx1be541208ab16799",
       "name": "绍兴市人民医院",
       "isStartComeTest": true,
       "isSearchInHos": false,
@@ -329,7 +329,7 @@
     },
     "1001048": {
       "wxAppid": "wx8358079c24acea42",
-      "h5Appid1": "wx6426f547693ab6e2",
+      "h5Appid": "wx6426f547693ab6e2",
       "alipayAppid": "2021003144603328",
       "name": "宜兴市人民医院",
       "isSearchInHos": true,
@@ -338,7 +338,7 @@
     },
     "1001075": {
       "wxAppid": "wx9dcb98a8c18d44ea",
-      "h5Appid1": "wx6426f547693ab6e2",
+      "h5Appid": "wx6426f547693ab6e2",
       "name": "陕西省中医医院",
       "isSearchInHos": true,
       "isStartComeTest": true,

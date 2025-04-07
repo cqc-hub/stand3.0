@@ -85,9 +85,12 @@
   };
 
   const docCLick = (item) => {
+    const {hosDocId,hosId,hosDeptId} = item;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
-        hosDocId: item.hosDocId,
+        hosDocId,
+        hosId,
+        hosDeptId
       }),
     });
   };
