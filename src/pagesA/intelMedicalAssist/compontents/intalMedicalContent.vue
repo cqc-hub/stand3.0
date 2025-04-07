@@ -234,6 +234,7 @@
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';
   import RecommendCard from './RecommendCard.vue';
+  
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   import uaMarkdown from './ua-markdown/ua-markdown.vue';
   import DocScheduling from './DocScheduling.vue';

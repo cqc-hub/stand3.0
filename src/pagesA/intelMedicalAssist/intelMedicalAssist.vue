@@ -165,6 +165,7 @@
 
       .smartChatRomm-content {
         background-color: #fff;
+        // background: rgba(232,252,255,0.20);
         min-height: 100vh;
         position: relative;
         top: -12upx;

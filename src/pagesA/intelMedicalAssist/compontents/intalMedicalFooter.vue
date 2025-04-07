@@ -7,9 +7,22 @@
     }"
   >
     <view
+      class="guess-server float-from-top Second-Recommend"
+      :style="{ bottom: guessServerBottom }"
+      v-if="
+        headerConfig?.showHeader &&
+        pageConfig?.intelMedicalAssistConfig?.isIntelligentGuidance === '1'
+      "
+    >
+      <Second-Recommend :serverArray="serverArray" @click-server="handleClickServer" @sendMsgSymptom="sendMsgSymptom" />
+    </view>
+    <view
       class="guess-server float-from-top"
       :style="{ bottom: guessServerBottom }"
-      v-if="headerConfig?.showHeader"
+      v-if="
+        headerConfig?.showHeader &&
+        !(pageConfig?.intelMedicalAssistConfig?.isIntelligentGuidance === '1')
+      "
     >
       <view class="guess-title pt24 pb12 pl24 f26">您可能需要以下服务</view>
       <view class="guess-content">
@@ -26,126 +39,126 @@
         </view>
       </view>
     </view>
-    <view class="bottom-bg-fff"></view>
+  </view>
+  <view class="bottom-bg-fff"></view>
 
-    <view class="bottom-bg"></view>
-    <view
-      v-if="headerConfig?.showHeader"
-      class="bottom-bg-white"
-      :style="{ height: `${whiteAreaHeight}` }"
-    ></view>
-    <view
-      class="flex-column-center footer-area-bottom bg-whit pt32"
-      :animation="animationData"
-    >
-      <view class="bottom-dh-char flex-row-around">
-        <view
-          class="input-send m-left mr20"
-          :disabled="msgState.msgLoad"
-          @click="changeVoiceType"
-          v-if="(hasWechatSI && hasSIPolicy) || isReportAnalysis"
-        >
-          <view class="circle">
-            <img
-              v-if="!(hasWechatSI && hasSIPolicy)"
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
-              alt=""
-            />
-            <img
-              v-else-if="!isVoice"
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_voice.png'"
-              alt=""
-            />
-            <img
-              v-else
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'ntelMedicalAssist_keyboard.png'"
-              alt=""
-            />
-          </view>
+  <view class="bottom-bg"></view>
+  <view
+    v-if="headerConfig?.showHeader"
+    class="bottom-bg-blue"
+    :style="{ height: `${whiteAreaHeight}` }"
+  ></view>
+  <view
+    class="flex-column-center footer-area-bottom bg-whit pt32"
+    :animation="animationData"
+  >
+    <view class="bottom-dh-char flex-row-around">
+      <view
+        class="input-send m-left mr20"
+        :disabled="msgState.msgLoad"
+        @click="changeVoiceType"
+        v-if="(hasWechatSI && hasSIPolicy) || isReportAnalysis"
+      >
+        <view class="circle">
+          <img
+            v-if="!(hasWechatSI && hasSIPolicy)"
+            class="bottom-icon"
+            :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+            alt=""
+          />
+          <img
+            v-else-if="!isVoice"
+            class="bottom-icon"
+            :src="globalGl.BASE_IMG + 'intelMedicalAssist_voice.png'"
+            alt=""
+          />
+          <img
+            v-else
+            class="bottom-icon"
+            :src="globalGl.BASE_IMG + 'ntelMedicalAssist_keyboard.png'"
+            alt=""
+          />
         </view>
-
-        <view
-          class="input-send"
-          :disabled="msgState.msgLoad"
-          @click="reportShow"
-          v-if="hasWechatSI && hasSIPolicy && isReportAnalysis"
-        >
-          <view class="circle">
-            <img
-              class="bottom-icon"
-              :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
-              alt=""
-            />
-          </view>
-        </view>
-        <view class="bottom-dh-content" v-if="!isVoice && isShow">
-          <view class="border">
-            <input
-              v-if="!msgState.msgLoad"
-              v-model="msgState.msg"
-              class="dh-input f28"
-              type="textarea"
-              @confirm="sendMsg"
-              :disabled="msgState.msgLoad"
-              placeholder-class="my-neirong-sm f28"
-              placeholder="请输入症状/药品/疾病..."
-              confirm-type="search"
-              :focus="msgState.focus"
-              @blur="onBlur"
-            />
-            <input
-              v-else
-              class="dh-input f28"
-              disabled="true"
-              placeholder-class="my-neirong-sm f28"
-              placeholder="请输入症状/药品/疾病..."
-            />
-          </view>
-        </view>
-        <view
-          class="bottom-dh-content"
-          v-if="isVoice"
-          :style="{ opacity: voicing ? 0 : 1 }"
-          @longpress="handleVoice"
-          @touchstart="touchStart"
-          @touchmove="touchMove"
-          @touchend="endRecord"
-        >
-          <!-- <view class="border"> -->
-          <view class="dh-input f28 voice">按住说话</view>
-          <!-- </view> -->
-        </view>
-        <!-- #ifdef  MP-WEIXIN -->
-
-        <view
-          v-if="!chunkStatus.isTyping"
-          @click="sendMsgByButtom"
-          class="input-send m-right send-text f28 ml20"
-        >
-          <text>发送</text>
-        </view>
-        <view
-          class="stop-button ml10"
-          v-if="chunkStatus.isTyping"
-          @click="handleStopChunk"
-        >
-          <view class="stop-circle"><view class="stop-rect"></view></view>
-        </view>
-        <!-- #endif -->
-        <!-- #ifndef  MP-WEIXIN -->
-        <view
-          @click="sendMsgByButtom"
-          class="input-send m-right send-text f28 ml20"
-        >
-          <text>发送</text>
-        </view>
-        <!-- #endif -->
       </view>
+
+      <view
+        class="input-send"
+        :disabled="msgState.msgLoad"
+        @click="reportShow"
+        v-if="hasWechatSI && hasSIPolicy && isReportAnalysis"
+      >
+        <view class="circle">
+          <img
+            class="bottom-icon"
+            :src="globalGl.BASE_IMG + 'intelMedicalAssist_image.png'"
+            alt=""
+          />
+        </view>
+      </view>
+      <view class="bottom-dh-content" v-if="!isVoice && isShow">
+        <view class="border">
+          <input
+            v-if="!msgState.msgLoad"
+            v-model="msgState.msg"
+            class="dh-input f28"
+            type="textarea"
+            @confirm="sendMsg"
+            :disabled="msgState.msgLoad"
+            placeholder-class="my-neirong-sm f28"
+            placeholder="请输入症状/药品/疾病..."
+            confirm-type="search"
+            :focus="msgState.focus"
+            @blur="onBlur"
+          />
+          <input
+            v-else
+            class="dh-input f28"
+            disabled="true"
+            placeholder-class="my-neirong-sm f28"
+            placeholder="请输入症状/药品/疾病..."
+          />
+        </view>
+      </view>
+      <view
+        class="bottom-dh-content"
+        v-if="isVoice"
+        :style="{ opacity: voicing ? 0 : 1 }"
+        @longpress="handleVoice"
+        @touchstart="touchStart"
+        @touchmove="touchMove"
+        @touchend="endRecord"
+      >
+        <!-- <view class="border"> -->
+        <view class="dh-input f28 voice">按住说话</view>
+        <!-- </view> -->
+      </view>
+      <!-- #ifdef  MP-WEIXIN -->
+
+      <view
+        v-if="!chunkStatus.isTyping"
+        @click="sendMsgByButtom"
+        class="input-send m-right send-text f28 ml20"
+      >
+        <text>发送</text>
+      </view>
+      <view
+        class="stop-button ml10"
+        v-if="chunkStatus.isTyping"
+        @click="handleStopChunk"
+      >
+        <view class="stop-circle"><view class="stop-rect"></view></view>
+      </view>
+      <!-- #endif -->
+      <!-- #ifndef  MP-WEIXIN -->
+      <view
+        @click="sendMsgByButtom"
+        class="input-send m-right send-text f28 ml20"
+      >
+        <text>发送</text>
+      </view>
+      <!-- #endif -->
     </view>
-   
+
     <view
       class="voicing-area"
       :style="{ display: voicing ? 'flex' : 'none' }"
@@ -164,7 +177,6 @@
       </view>
       <view class="title f28">松开发送</view>
     </view>
-
   </view>
 </template>
 <script setup lang="ts">
@@ -181,6 +193,7 @@
   import { useTranslateVoiceHook } from '../utils/hook';
   // #endif
   import globalGl from '@/config/global';
+  import SecondRecommend from './SecondRecommend.vue';
   import { type TButtonConfig, debounce, GStores } from '@/utils';
   import {
     msgState,
@@ -287,6 +300,14 @@
       msgState.value.msg = '';
     });
   };
+
+  const sendMsgSymptom = (value) => {
+    emits('send-msg', value);
+    nextTick(() => {
+      msgState.value.msg = '';
+    });
+  };
+
   const sendMsg = (e) => {
     emits('send-msg', e.detail.value);
     nextTick(() => {
@@ -343,7 +364,7 @@
     // #ifdef  H5
     isRecording.value = true;
     startRecord();
-   
+
     // #endif
   };
   const initRecord = () => {
@@ -471,7 +492,7 @@
         isMoveUp: false,
       };
     }
-    
+
     cancleVoice();
   };
 
@@ -542,7 +563,7 @@
     .guess-server {
       // transition: 0.5s;
     }
-    .bottom-bg-white {
+    .bottom-bg-blue {
       // transition: 0.5s;
     }
   }
@@ -555,6 +576,14 @@
   }
   .footer-area {
     // z-index: 4;
+    .Second-Recommend{
+       /* #ifdef H5 */
+       bottom: calc(100vh - 550rpx - 620rpx) !important;
+      /* #endif */
+      /* #ifndef H5 */
+      bottom: calc(100vh - 800rpx - 620rpx)  !important;
+      /* #endif */
+    }
     .guess-server {
       z-index: 4;
       position: fixed;
@@ -729,8 +758,8 @@
     background: #fff;
     z-index: 97;
   }
-  .bottom-bg-white {
-    background-color: #fff;
+  .bottom-bg-blue {
+    background: radial-gradient(rgba(232,252,255,0.20),#fff);
     z-index: 1;
     position: fixed;
     bottom: 0;

@@ -484,6 +484,8 @@ export interface ISystemConfig_ {
     intelMedicalAssistConfig?: {
       //企微客服按钮，例{"extInfo": "https://work.weixin.qq.com/kfid/kfc0987f35e21a6f2bd","corpId": "wwdbaea46632b03769"}
       isOpenWxServiceBtn?: Object;
+      //开启和仁导诊
+      isIntelligentGuidance?: '1';
       //h5版本智能客服开启语音识别
       isH5OpenWechatSI?: '1';
       //是否替换首页的搜索框

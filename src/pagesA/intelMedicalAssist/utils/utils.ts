@@ -372,7 +372,7 @@ const switchHandleResult = async (
   scrollToNewMsg();
 };
 
-export const scrollToNewMsg = (selector?: string, duration?: number) => {
+export const scrollToNewMsgFun = (selector?: string, duration?: number) => {
   nextTick(() => {
     let target = '';
     // #ifdef H5
@@ -399,7 +399,7 @@ export const scrollToNewMsg = (selector?: string, duration?: number) => {
   });
 };
 
-// export const scrollToNewMsg = throttle(scrollToNewMsgFun, 300);
+export const scrollToNewMsg = throttle(scrollToNewMsgFun, 300);
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
@@ -622,7 +622,6 @@ export const handleServer = (
     item.isSelfMethod == 'openWxService' && openServicesChat(item.extraData);
     item.isSelfMethod == 'makePhone' && makePhone(item.extraData);
   } else {
-    console.log(88888888888,gStores.globalStore.sysCode==='1001035'&&source === '21',{...item,type: 'self',path:item.path.replace('https://h5.eheren.com/jiangsushengzhong/#/','')})
     if(gStores.globalStore.sysCode==='1001035'&&source === '21'){
 
       useTBanner({...item,type: 'self',path:item.path.replace('https://h5.eheren.com/jiangsushengzhong/#/','')});

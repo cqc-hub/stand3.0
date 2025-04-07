@@ -720,6 +720,8 @@ const regApi = {
     service.post<T>('/phs-reg/guidance/getTXGuidanceUrl', parm(data), {
       hideLoading: false,
     }),
+  smartGuideDft: (data: any) =>
+    service.post('/phs-reg/regIntelligence/smartGuideDft', parm(data)),
 };
 
 // 用户服务
@@ -898,7 +900,7 @@ const userApi = {
   // 快速关联电子健康卡
   quickLinkHealthCard: (data) =>
     service.post('/phs-user/healthCard/quickLinkHealthCard', parm(data), {
-      hideLoading: false,
+      hideLoading: true,
       reportCmPV_YLName: '电子健康卡',
     }),
   // 快速关联电子健康卡,加载动画
