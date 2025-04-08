@@ -13,8 +13,8 @@
           <text @click="goAgreement" class="fg-agree-name">
             {{ privacyContractName }}&nbsp;
           </text> 
-            <text v-for="item in cacheStore.flagList" :key="item.flag" @click="goAgreement(item.flag)" class="fg-agree-name" >《{{item.label}}》</text>
           <view>
+            <text v-for="item in cacheStore.flagList" :key="item.flag" @click="goAgreementFlag(item.flag)" class="fg-agree-name" >《{{item.label}}》</text>
             当您点击同意并开始使用产品服务时，即表示你已理解并同意该条款内容，该条款将对您产生法律约束力。如您拒绝，将无法正常使用小程序。
           </view>
         </view>
@@ -124,19 +124,22 @@
     });
   };
 
-  const goAgreement = (type?) => {
+  const goAgreement = () => {
+    // #ifdef  MP-WEIXIN
+      wx.openPrivacyContract();
+    // #endif
+  };
+  const goAgreementFlag = (type) => {
     // #ifdef  MP-WEIXIN
     if(type){
       uni.navigateTo({
       url: joinQueryForUrl('/pagesA/mySet/userPolicy', {
         typeFg: type, 
       }),
-    }); 
-    }else{
-      wx.openPrivacyContract();
-    }
+    });  
     // #endif
   };
+};
 
   const getContent = () => {
     const msg = messageStore.msg;
