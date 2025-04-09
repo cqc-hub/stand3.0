@@ -399,7 +399,7 @@ export const scrollToNewMsgFun = (selector?: string, duration?: number) => {
   });
 };
 
-export const scrollToNewMsg = throttle(scrollToNewMsgFun, 300);
+export const scrollToNewMsg = throttle(scrollToNewMsgFun, 600);
 export const reportShow = () => {
   if (msgState.value.msgLoad) {
     return;
