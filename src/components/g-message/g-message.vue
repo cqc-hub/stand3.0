@@ -9,12 +9,13 @@
     <xy-dialog title="小程序隐私保护指引" :show="isShowAgreeDialog">
       <scroll-view scroll-y class="reg-tip" >
         <view class="g-break-word color-888">
-          感谢您使用本小程序, 您使用本小程序前应当阅井同意,
+          感谢您使用本小程序, 您使用本小程序前应当阅读并同意,
           <text @click="goAgreement" class="fg-agree-name">
-            {{ privacyContractName }}
-          </text>
+            {{ privacyContractName }}&nbsp;
+          </text> 
           <view>
-            当您点击同意并开始使用产品服务时，即表示你已理解并同息该条款内容，该条款将对您产生法律约束力。如您拒绝，将无法正常使用小程序。
+            <text v-for="item in cacheStore.flagList" :key="item.flag" @click="goAgreementFlag(item.flag)" class="fg-agree-name" >《{{item.label}}》</text>
+            当您点击同意并开始使用产品服务时，即表示你已理解并同意该条款内容，该条款将对您产生法律约束力。如您拒绝，将无法正常使用小程序。
           </view>
         </view>
       </scroll-view>
@@ -86,6 +87,12 @@
   import { useWxAuthorizationHook } from './index';
   import HTMLParser from '@/common/html-parser';
 
+  // #ifdef MP-WEIXIN
+  import { joinQueryForUrl } from '@/common';
+  import { useCacheStore } from '@/stores';
+  const cacheStore = useCacheStore();
+  // #endif
+
   const props = defineProps<{
     isWxAuthInit?: boolean;
   }>();
@@ -119,9 +126,20 @@
 
   const goAgreement = () => {
     // #ifdef  MP-WEIXIN
-    wx.openPrivacyContract();
+      wx.openPrivacyContract();
     // #endif
   };
+  const goAgreementFlag = (type) => {
+    // #ifdef  MP-WEIXIN
+    if(type){
+      uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/mySet/userPolicy', {
+        typeFg: type, 
+      }),
+    });  
+    // #endif
+  };
+};
 
   const getContent = () => {
     const msg = messageStore.msg;

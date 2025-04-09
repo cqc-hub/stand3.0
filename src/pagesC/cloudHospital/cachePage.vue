@@ -265,13 +265,13 @@ const handleMessage1001048 = async ({ insuranceParams, payBackParams, registerId
           path: '/pagesC/cloudHospital/cloudHospital',
           successQuery: {
             payment: 'next',
-            registerId: registerId,
-            payBackParams: payBackParams,
+            registerId,
+            payBackParams,
           },
           failQuery: {
             payment: 'back',
-            registerId: registerId,
-            payBackParams: payBackParams,
+            registerId,
+            payBackParams,
           },
         })
       )

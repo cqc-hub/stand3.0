@@ -8,7 +8,12 @@
       <view>当前版本 {{ $global.VERSION }}</view>
     </view>
     <view class="more-content">
-
+      <!-- #ifdef MP-WEIXIN -->
+      <view @click="goAgreement">
+          <text>{{  $global.systemInfo.name }}小程序隐私保护指引</text>
+          <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
+        </view>
+      <!-- #endif -->
       <navigator
         v-for="item in cacheStore.flagList"
         :key="item.flag"
@@ -34,15 +39,22 @@
 </template>
 
 <script lang="ts" setup>
+  import { onMounted } from 'vue';
   import { joinQueryForUrl } from '@/common';
   import { useCacheStore } from '@/stores';
-
+ 
   const cacheStore = useCacheStore();
+
   const goInfoPage = () => {
     uni.navigateTo({
       url: '/pages/home/accountInfo',
     });
   };
+  const goAgreement = () => {
+    // #ifdef  MP-WEIXIN
+      wx.openPrivacyContract();
+    // #endif
+  }; 
 </script>
 
 <style lang="scss" scoped>
