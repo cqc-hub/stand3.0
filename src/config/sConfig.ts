@@ -514,6 +514,7 @@ const scJson: Record<string, ISConfig> = {
 
   1001048: {
     // isOpenWechatSI: true,
+    isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
         medicalNation: {

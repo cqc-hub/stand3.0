@@ -12,11 +12,55 @@
       <g-flag typeFg="503" isShowFg />
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
         <view class="content-box">
-          <view id="_address" class="container-box g-border mb16">
+          <view
+            v-if="pickupTypeOpt.length"
+            id="_pickup-type"
+            class="container-box g-border mb16 box-padding"
+          >
+            <view class="f36">
+              <text class="mr12 g-bold">请选择取件方式</text>
+            </view>
+            <view class="mt24">
+              <g-select-flatten
+                v-model:value="pickupType"
+                :list="pickupTypeOpt"
+              />
+            </view>
+          </view>
+
+          <view
+            v-if="pickupType === '3'"
+            class="container-box g-border mb16 box-padding"
+            id="_email"
+          >
+            <view class="f36">
+              <text class="mr12 g-bold">邮箱</text>
+            </view>
+
+            <view class="remark-content">
+              <uni-easyinput
+                type="text"
+                v-model="email"
+                :inputBorder="false"
+                :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+                placeholder="请输入邮箱"
+              />
+            </view>
+          </view>
+
+          <view
+            v-if="pickupType === '1'"
+            id="_address"
+            class="container-box g-border mb16"
+          >
             <Address-Box :addressList="addressList" />
           </view>
 
-          <view v-if="isPatProxy" id="_family" class="container-box g-border mb16 box-padding">
+          <view
+            v-if="isPatProxy"
+            id="_family"
+            class="container-box g-border mb16 box-padding"
+          >
             <MedRecordFamilyChoose
               v-model:selFamilyPat="selFamilyPat"
               :familyList="familyList"
@@ -25,7 +69,11 @@
           </view>
 
           <view
-            v-if="pageConfig.company && pageConfig.company.length"
+            v-if="
+              pickupType === '1' &&
+              pageConfig.company &&
+              pageConfig.company.length
+            "
             class="container-box g-border mb16 box-padding"
             id="_express"
           >
@@ -410,8 +458,6 @@
                 :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
                 placeholder="如还需以下说明的其他病历资料请备注"
               />
-
-              <!-- auto-height -->
             </view>
           </view>
 
@@ -427,7 +473,7 @@
           <text class="color-error f36 g-bold">{{ getPayMoneyNum }}元</text>
         </view>
         <button @click="paySubmit" class="btn g-border btn-warning dialog-btn">
-          立即支付
+          {{ pickupType === '3' ? '立即申请' : '立即支付' }}
         </button>
       </view>
 
@@ -527,7 +573,7 @@
     TFamilyItem,
     TFamilyList,
   } from './utils/recordApply';
-  import { getLocalStorage } from '@/common';
+  import { deQueryForUrl, getLocalStorage } from '@/common';
   import { NotNullable, XOR, assignType } from '@/typeUtils';
 
   import api from '@/service/api';
@@ -555,6 +601,10 @@
 
   const fg1020 = ref('');
   const fg1021 = ref('');
+  const email = ref('');
+  /** 取件方式 1快递邮寄（快递邮寄可以不传该字段），2自取，3邮箱 */
+  const pickupType = ref('1');
+  const pickupTypeOpt = computed(() => pageConfig.value.pickupTypeOpt || []);
   const selPurposeLen = ref(3);
   const selMaterialLen = ref(3);
   const purposeCount = ref<{ purpose: string; count: number }[]>([]);
@@ -626,7 +676,7 @@
     fee: 10,
     isItemCount: '0',
     hosId: '2',
-  });
+  } as any);
 
   // 手动添加记录?
   const isShowAddRecord = computed(() => {
@@ -822,6 +872,9 @@
 
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
+    if (pickupType.value === '3') {
+      return 0;
+    }
 
     if (pageConfig.value.isItemCount === '1') {
       const count = getCount(recordRows.value) || getCount(purposeCount.value);
@@ -1154,16 +1207,42 @@
 
     const fee = getPayMoneyNum.value;
 
-    if (!addressList.value.length) {
-      showMessage('请先选择收货地址', 3000);
-      scrollTo.value = '_address';
-      return;
-    }
+    switch (pickupType.value) {
+      case '1':
+        if (!addressList.value.length) {
+          showMessage('请先选择收货地址', 3000);
+          scrollTo.value = '_address';
+          return;
+        }
 
-    if (company && company.length && !expressCompany.value) {
-      showMessage('请先选择快递方式', 3000);
-      scrollTo.value = '_express';
-      return;
+        if (company && company.length && !expressCompany.value) {
+          showMessage('请先选择快递方式', 3000);
+          scrollTo.value = '_express';
+          return;
+        }
+        break;
+
+      case '3':
+        if (!email.value) {
+          showMessage('请先填写邮箱', 3000);
+          scrollTo.value = '_email';
+          return;
+        } else {
+          const isEmail =
+            /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
+              email.value
+            );
+
+          if (!isEmail) {
+            showMessage('请先填写正确的邮箱', 3000);
+            scrollTo.value = '_email';
+            return;
+          }
+        }
+        break;
+
+      default:
+        break;
     }
 
     const idCardUrlInfo = {
@@ -1254,7 +1333,6 @@
       return;
     }
 
-
     // if (isPurposeRadio === '1') {
     //   if (!aimValue.value.length) {
     //     scrollTo.value = '_aim';
@@ -1334,28 +1412,27 @@
       uni.hideLoading();
     }
 
-    const { province, city, county, detailedAddress, senderName, senderPhone } =
-      getAddress.value;
     const { patientId } = gStores.userStore.patChoose;
 
-    const division = `${province} ${city} ${county}`;
     const copyAim = aimValue.value.join('、');
     const copyData = materialValue.value.join('、');
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
     const args = {
+      pickupType: pickupType.value,
+      email: '',
       copyNum,
       copyAimCount,
-      expressCompany: expressCompany.value,
-      address: detailedAddress,
-      addresseeName: senderName,
-      addresseePhone: senderPhone,
+      expressCompany: '',
+      address: '',
+      addresseeName: '',
+      addresseePhone: '',
       channel: gStores.globalStore.browser.source,
       copyAim,
       copyData,
       printCount,
-      division,
+      division: '',
       frontIdCardUrl: idCardImg.value.frontIdCardUrl,
       endIdCardUrl: idCardImg.value.endIdCardUrl,
       handIdCardUrl: idCardImg.value.handIdCardUrl,
@@ -1378,6 +1455,25 @@
       facialValidateIdCard: '',
       facialValidateName: '',
     };
+
+    if (pickupType.value === '1') {
+      const {
+        province,
+        city,
+        county,
+        detailedAddress,
+        senderName,
+        senderPhone,
+      } = getAddress.value;
+
+      args.division = `${province} ${city} ${county}`;
+      args.address = detailedAddress;
+      args.addresseeName = senderName;
+      args.addresseePhone = senderPhone;
+      args.expressCompany = expressCompany.value;
+    } else if (pickupType.value === '3') {
+      args.email = email.value;
+    }
 
     // #ifdef  MP-WEIXIN
     args.openId = gStores.globalStore.openId;
@@ -1417,7 +1513,12 @@
       hosName: getGetHosName.value,
     };
 
-    isShowFg32.value = true;
+    if (pickupType.value === '3') {
+      payAfter();
+    } else {
+      isShowFg32.value = true;
+    }
+
     // setTimeout(() => {
     //   refPay.value.show();
     // }, 200);
@@ -1538,7 +1639,7 @@
 
   const init = async () => {
     await getConfig();
-    console.log('pageConfig', pageConfig, materialList);
+    console.log('pageConfig-----------------', pageConfig.value, materialList);
 
     // 再次申请
     if (props.phsOrderNo) {
@@ -1578,6 +1679,7 @@
 
   onLoad((opt) => {
     if (opt) {
+      opt = deQueryForUrl(deQueryForUrl(opt));
       if (opt.hosId) {
         cacheStore.changeHosId(opt.hosId);
       }

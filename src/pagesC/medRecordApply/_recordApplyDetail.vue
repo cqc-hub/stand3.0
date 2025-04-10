@@ -133,6 +133,25 @@
                 <Record-Card :list="info._outInfo" />
               </block>
 
+              <view v-if="info.pickupType" class="mt32 _row">
+                <view class="_title">取件方式</view>
+                <view class="_content">
+                  {{
+                    ServerStaticData.getOptionsLabel(
+                      pickupTypeOpt,
+                      info.pickupType
+                    )
+                  }}
+                </view>
+              </view>
+
+              <view v-if="info.email" class="mt32 _row">
+                <view class="_title">邮箱</view>
+                <view class="_content">
+                  {{ info.email }}
+                </view>
+              </view>
+
               <view v-if="info.copyAim" class="mt32 _row">
                 <view class="_title">复印目的</view>
                 <view class="_content">
@@ -267,7 +286,14 @@
   import { computed, ref, nextTick } from 'vue';
   import dayjs from 'dayjs';
 
-  import { GStores, type TButtonConfig, useTBanner, wait } from '@/utils';
+  import {
+    GStores,
+    ISystemConfig,
+    ServerStaticData,
+    type TButtonConfig,
+    useTBanner,
+    wait,
+  } from '@/utils';
 
   import {
     applyOrderStatusMap,
@@ -289,6 +315,25 @@
   }>();
   const gStores = new GStores();
   const fgTitle1209 = ref('');
+  const pickupTypeOpt = computed(() => pageConfig.value.pickupTypeOpt || []);
+
+  const pageConfig = ref<ISystemConfig['medRecord'][number]>({} as any);
+  const getConfig = async () => {
+    const listConfig =
+      (await ServerStaticData.getSystemConfig('medRecord')) || [];
+
+    if (props.hosId) {
+      pageConfig.value = listConfig.find((o) => o.hosId === props.hosId)!;
+    }
+
+    if (!pageConfig.value) {
+      gStores.messageStore.showMessage(
+        '未获取到该院区的配置' + `(${props.hosId})`
+      );
+
+      throw new Error('未获取到该院区的配置' + `(${props.hosId})`);
+    }
+  };
 
   const isShowFooter = computed(() => {
     return (
@@ -566,7 +611,9 @@
     });
   };
 
-  const init = () => {
+  const init = async () => {
+    await getConfig();
+    console.log(pageConfig.value, '233');
     getData();
   };
 

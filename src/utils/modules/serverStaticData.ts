@@ -571,7 +571,7 @@ export class ServerStaticData {
     if (item) {
       return item.label;
     } else {
-      return '';
+      return value;
     }
   }
 

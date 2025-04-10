@@ -182,7 +182,7 @@
       return;
     }
 
-    if ( item?.isArchived === '1') {
+    if (item?.isArchived === '1') {
       gStores.messageStore.showMessage(
         '病历尚未归档，归档需要15个工作日，请耐心等待',
         3000
@@ -241,7 +241,7 @@
   };
 
   const chooseAll = () => {
-    let msg =''
+    let msg = '';
     if (isCheckAll.value) {
       checkOutHosList.value = [];
     } else {
@@ -286,7 +286,7 @@
     fee: 10,
     isItemCount: '0',
     hosId: '2',
-  });
+  } as any);
 
   // 手动添加记录?
   const isShowAddRecord = computed(() => {
