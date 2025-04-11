@@ -358,6 +358,7 @@
               <Record-Card
                 :list="recordRows"
                 :isAddCount="isSelPurposeCountInRecord"
+                :max="pageConfig.maxNum || 99"
                 @click-edit="editRecord"
                 @click-del="delRecord"
                 @change-count="changeCount"

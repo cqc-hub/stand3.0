@@ -121,7 +121,7 @@
           <uni-number-box
             :value="getCountValue(item)"
             :min="0"
-            :max="99"
+            :max="max"
             @change="boxChange(item, $event)"
             inputDisabled
           />
@@ -158,6 +158,7 @@
     list: TList;
     isAddCount?: boolean;
     isEdit?: boolean;
+    max: number;
   }>();
 
   const emits = defineEmits(['click-edit', 'click-del', 'change-count']);
