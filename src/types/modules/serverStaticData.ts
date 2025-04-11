@@ -250,6 +250,7 @@ export interface ISystemConfig_ {
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
 
+
     /** 复印材料 不配置或为空则不显示 */
     material?: string[];
     /** 可选择的复印材料数量 默认 3 */
@@ -270,6 +271,8 @@ export interface ISystemConfig_ {
     isCustomPatRecord?: '1';
     /** 支持住院记录中选择目的的份数? */
     selPurposeInRecord?: '1';
+     /** 复印最大份数 */
+     maxNum?: number;
     /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '1';
 
