@@ -164,7 +164,7 @@
       "h5Appid": "wx32db6c8548b011c9",
       "isvAlipayAppid": "2021002147662292",
       "name": "湖州市第三人民医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
     },

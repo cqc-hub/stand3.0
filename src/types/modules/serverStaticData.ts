@@ -219,11 +219,16 @@ export interface ISystemConfig_ {
   // 病案 MEDICAL_CASE_COPY
   medRecord: {
     /**
+     * 增取件方式 1快递邮寄，2自取，3邮箱
+     */
+    pickupTypeOpt: IOptions<'1' | '2' | '3'>[];
+
+    /**
      * 身份证上传要求 （人像、 背面、 手持）
      * 后端说 人像、 背面 必填 设置时候每次都加下
      */
     sfz: TMedRecordSfz[];
-    isHandPhoto?: '1';
+    isHandPhoto?: '1'; // 设置后 sfz设置无效 变 -> ['front', 'end', 'handler']
     /** sfz 配置中 front 的进行 ocr认证 */
     isOcrSfz?: '1';
     /** 不配置时候 sfz 中所有图片必须上传, 配置时候对应字段必须上传 可以使用 ['front|hkb'] 这样的格式 */

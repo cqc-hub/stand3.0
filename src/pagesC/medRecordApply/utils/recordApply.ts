@@ -221,6 +221,8 @@ export type CaseCopeItemDetail = Flatten<
     expressNo: string;
     expressCompany: string;
     hosId: string;
+    email: string;
+    pickupType: string;
     imageJson?: IMedicalPhotoMode['children'];
   }
 >;
