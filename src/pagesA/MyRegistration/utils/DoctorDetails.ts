@@ -56,6 +56,15 @@ export interface IDocSchListItem {
   schDateList: TSchInfo[];
 }
 
+export interface IDocHosSchListItem {
+  hosName: string;
+  hosId: string;
+  schList: IDocSchListItem[];
+  checkedDay?: string;
+  enabledDays?: Record<string, string>,
+  chooseDays?: any;
+}
+
 export interface IDocSchOutHosItem {
   enabledDays: Record<string, string>;
   hosId: string;
@@ -218,6 +227,8 @@ export class UseDoctorDetail extends GStores {
 
     return { schList, enabledDays };
   }
+
+  
 
   async getOutHosSchData() {
     const { result } = await api.getExtHosDocSch({

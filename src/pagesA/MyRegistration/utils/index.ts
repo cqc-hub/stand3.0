@@ -305,7 +305,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
           }
         });
       });
-
       allDocList.value = allList.filter((o) => {
         return true;
         // return o.schDocSubResultList && o.schDocSubResultList.length
@@ -644,6 +643,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
 
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
+
+    
 
     if (query) {
       getListAll(checkedDay.value, query);
