@@ -2,7 +2,7 @@
   <view
     class="choose-pat"
     v-if="
-      gStores.userStore.patChoose.patientNameEncry || (pat && pat._showId)
+      gStores.userStore.patChoose.patientName || (pat && pat._showId)
     "
   >
     <view class="container" @click="chooseAction">
@@ -15,7 +15,7 @@
       />
 
       <view class="user-info text-ellipsis">
-        {{ `${gStores.userStore.choosePatName}` }}
+        {{ getShowPat.patientName || `${gStores.userStore.choosePatName}` }} 
         <text>
           {{ `${(!isAreaProgram() && getShowPat._showId) || ''}` }}
         </text>

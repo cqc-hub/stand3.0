@@ -296,8 +296,8 @@
       ) {
         return gStores.userStore.patChoose;
       } else {
-        return <IPat>{
-          patientNameEncry: pageProps.value.deParams?.patientName || '就诊人',
+        return <IPat>{ 
+          patientName: pageProps.value.deParams?.patientName || '就诊人',
           _showId: pageProps.value.deParams?.cardNumber || '',
         };
       }
