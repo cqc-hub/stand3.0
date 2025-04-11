@@ -137,8 +137,9 @@
         typeFg: type, 
       }),
     });  
-    // #endif
   };
+    // #endif
+
 };
 
   const getContent = () => {
