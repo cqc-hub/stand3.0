@@ -82,15 +82,12 @@ Request.interceptors.response(
     const responseData = response.res.data;
     const responseOptions = response.options;
     const messageStore = useMessageStore();
-    if (responseOptions) {
-      const { hideLoading: iHideLoading } = responseOptions;
-      if (!iHideLoading) {
-        hideLoading();
-      }
-    } else {
+    const { hideLoading: iHideLoading } = responseOptions || {};
+
+    if (!iHideLoading) {
       hideLoading();
     }
-
+ 
     const {
       code,
       message,
