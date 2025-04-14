@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf544358f2736cd20",
+    "appid": "wx8358079c24acea42",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021003144603328"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省人民医院毕节医院金海湖院区",
+  "name": "宜兴市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

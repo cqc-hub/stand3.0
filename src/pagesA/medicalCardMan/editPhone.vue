@@ -152,7 +152,8 @@
       if (iswx) {
         idCardUrl.value = await base64Src(image);
       } else {
-        idCardUrl.value = `data:image/jpeg;base64,${image}`;
+        // idCardUrl.value = `data:image/jpeg;base64,${image}`;
+        idCardUrl.value = image;
       }
       isComplete.value = true;
       pData.value = pdata;

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001069",
+  "sysCode": "1001048",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -334,7 +334,7 @@
       "name": "宜兴市人民医院",
       "isSearchInHos": true,
       "isStartComeTest": true,
-      "isOpenOcr": false
+      "isOpenOcr": true
     },
     "1001075": {
       "wxAppid": "wx9dcb98a8c18d44ea",
