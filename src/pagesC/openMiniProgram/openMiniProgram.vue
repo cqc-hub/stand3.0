@@ -101,6 +101,11 @@
       } else {
         uni.navigateBack({
           delta: 1,
+          fail() {
+            uni.reLaunch({
+            url: '/pages/home/home',
+          })
+          },
         });
       }
     } else if (_type === '1') {

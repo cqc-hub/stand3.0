@@ -172,6 +172,7 @@ export type TPayConfirmPageProp = {
     branchHosp: string; // 院内的院区id
   };
   mzParams?: string;
+  payNextActionParams?: string; //扫码第三方缴费回调
 
   _type?: 'order' | 'yunUrl';
   orderId?: string;
@@ -1484,6 +1485,7 @@ export const usePayPage = () => {
           mergeOrder: selList.map((o) => o.childOrder).join(','),
           cardNumber: pageProps.value.deParams?.cardNumber,
           mzParams: pageProps.value.params,
+          payNextActionParams:pageProps.value.payNextActionParams
         });
       } else {
         toPay();
@@ -2132,6 +2134,7 @@ export const executeConfigPayAfter = async (
   additionData: any = {}
 ) => {
   //新增定制跳转 温附二互联网缴费跳转三方
+  console.log(9999,additionData)
   const { payNextActionParams } = additionData;
 
   if (payNextActionParams) {

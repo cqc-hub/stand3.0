@@ -82,12 +82,9 @@ Request.interceptors.response(
     const responseData = response.res.data;
     const responseOptions = response.options;
     const messageStore = useMessageStore();
-    if (responseOptions) {
-      const { hideLoading: iHideLoading } = responseOptions;
-      if (!iHideLoading) {
-        hideLoading();
-      }
-    } else {
+    const { hideLoading: iHideLoading } = responseOptions || {};
+
+    if (!iHideLoading) {
       hideLoading();
     }
 
@@ -192,6 +189,7 @@ Request.setConfig((config: any) => {
     );
     config.header.phsId = '81681766';
   } else {
+    console.log('sssssss');
     config.header.phsSign = encryptDes(
       getSysCode() + '_' + new Date().getTime(),
       'W7ZEgfnv'

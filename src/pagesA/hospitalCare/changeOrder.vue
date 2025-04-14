@@ -215,7 +215,8 @@
       label: '手机号',
       field: 'input-text',
       placeholder: '请输入手机号',
-      key: 'mphoneNumber',
+      // key: 'mphoneNumber',
+      key: 'phoneNumber',
       rule: phoneRule,
     },
     // {

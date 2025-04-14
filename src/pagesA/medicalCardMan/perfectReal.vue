@@ -152,7 +152,7 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, type Ref } from 'vue';
-  import { deQueryForUrl, joinQuery } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
   import { useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
@@ -386,10 +386,9 @@
           } else {
             dialogContent.value = jumpMsg;
             // dialogShow.value = true;
-
             dialogConfirm = () => {
               uni.navigateTo({
-                url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
                   ...data,
                   pageType: pageProps.value.pageType,
                   _directUrl: pageProps.value._directUrl,
@@ -445,7 +444,7 @@
               messageStore.showMessage(err.message, 3000, {
                 closeCallBack() {
                   uni.navigateTo({
-                    url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                    url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
                       ...data,
                       _healthType: pageProps.value._healthType,
                       authCode: pageProps.value.authCode,
@@ -456,7 +455,7 @@
                 },
               });
             } else if (err?.respCode === 999001) {
-              await patientUtil.getPatCardList();
+              // await patientUtil.getPatCardList();
             }
           }
         );
@@ -562,7 +561,7 @@
       messageStore.showMessage(err.message, 3000, {
         closeCallBack() {
           uni.navigateTo({
-            url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+            url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
               ...data,
               pageType: pageProps.value.pageType,
               _directUrl: pageProps.value._directUrl,
@@ -571,7 +570,7 @@
         },
       });
     } else if (err?.respCode === 999001) {
-      await patientUtil.getPatCardList();
+      // await patientUtil.getPatCardList();
     }
   };
 
@@ -815,7 +814,6 @@
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-
     if (!pageProps.value.pageType) {
       pageProps.value.pageType = 'addPatient';
     }

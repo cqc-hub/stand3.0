@@ -264,13 +264,12 @@ export const getOpenidTtResult = async (): Promise<{
 //判断该项目是否为2024年12月以前的项目，如是则payType使用ALI_MINI，否则使用ALI_JSAPI
 export const aliPayOldSystemPayType = () => {
   const gStores = new GStores();
-  const { sysCode } = gStores.globalStore
+  const { sysCode } = gStores.globalStore;
   let channel = '';
   // #ifdef  MP-WEIXIN
   channel = 'WX_MINI';
   const wxICBCJFTSystem = ['1001063'];
-  wxICBCJFTSystem.includes(sysCode) &&
-    (channel = 'ICBC_JFT_H5');
+  wxICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
   // #endif
   // #ifdef MP-ALIPAY
   channel = 'ALI_MINI';
@@ -293,14 +292,15 @@ export const aliPayOldSystemPayType = () => {
     // '1001074',
   ];
   const aliICBCJFTSystem = ['1001063'];
-  !aliMiniSystemList.includes(sysCode) &&
-    (channel = 'ALI_JSAPI');
-  aliICBCJFTSystem.includes(sysCode) &&
-    (channel = 'ICBC_JFT_H5');
+  !aliMiniSystemList.includes(sysCode) && (channel = 'ALI_JSAPI');
+  aliICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
   // #endif
 
   if (sysCode === '1001048') {
     channel = 'UN_MINI_WX';
+    // #ifdef MP-ALIPAY
+    channel = 'UN_MINI_ALI';
+    // #endif
   }
 
   return channel;
