@@ -87,7 +87,7 @@ Request.interceptors.response(
     if (!iHideLoading) {
       hideLoading();
     }
- 
+
     const {
       code,
       message,
@@ -189,6 +189,7 @@ Request.setConfig((config: any) => {
     );
     config.header.phsId = '81681766';
   } else {
+    console.log('sssssss');
     config.header.phsSign = encryptDes(
       getSysCode() + '_' + new Date().getTime(),
       'W7ZEgfnv'

@@ -8,7 +8,7 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, cacheUtil,getTcMallToken } from '@/utils';
+import { apiAsync, cacheUtil, getTcMallToken } from '@/utils';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import HTMLParser from '@/common/html-parser';
@@ -419,13 +419,13 @@ export class LoginUtils extends GStores {
     this.globalStore.clearStore();
     useRouterStore().clear();
     if (this.globalStore.sysCode === '1001063') {
-      const appInstance = getApp() 
+      const appInstance = getApp();
       if (appInstance && appInstance.globalData) {
-      this.globalStore.updateOralMallData(appInstance) 
-     }
-      uni.setStorageSync('fc-user-token','')
-     }
-  
+        this.globalStore.updateOralMallData(appInstance);
+      }
+      uni.setStorageSync('fc-user-token', '');
+    }
+
     setTimeout(() => {
       if (!isHideMessage) {
         this.messageStore.showMessage('退出成功', 3000);
@@ -519,7 +519,9 @@ export class LoginUtils extends GStores {
     // return
 
     let url = '';
-    if (isLoginByOpenId === '1') {
+    if (this.globalStore.sysCode === '1001048') {
+      url = '/aliUserLogin/getTPAlipayUserInfoShare';
+    } else if (isLoginByOpenId === '1') {
       url = '/login/authLogin';
     } else {
       // 代开发
@@ -654,19 +656,17 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
       // #ifdef MP-WEIXIN
       if (this.globalStore.sysCode === '1001063') {
-        const appInstance = getApp() 
+        const appInstance = getApp();
         if (appInstance && appInstance.globalData) {
-        this.globalStore.updateOralMallData(appInstance,'login')
-        appInstance.globalData.configData.mallToken = await getTcMallToken();
-        // appInstance.globalData.configData.getMallToken = getTcMallToken;
-       }
+          this.globalStore.updateOralMallData(appInstance, 'login');
+          appInstance.globalData.configData.mallToken = await getTcMallToken();
+          // appInstance.globalData.configData.getMallToken = getTcMallToken;
+        }
       }
-      
+
       // #endif
-    
     }
   }
-
 
   // 这个也是免完善的
   async handlerByOpenid(payload?: any) {
