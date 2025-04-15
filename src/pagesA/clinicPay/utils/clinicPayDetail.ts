@@ -1283,6 +1283,7 @@ export const usePayPage = () => {
     isMedicalPlugin: boolean,
     isNavgateToZLminiProm: boolean
   ) => {
+    isMedicalSelf = true;
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
