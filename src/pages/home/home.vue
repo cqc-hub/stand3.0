@@ -319,7 +319,10 @@
         </view>
       </ls-skeleton>
     </scroll-view>
-    <g-message />
+
+     <g-message v-if="gStores.globalStore.isShowFlag" :isWxAuthInit="gStores.globalStore.isShowFlag" :shouldEmitClickBtn="gStores.globalStore.isShowFlag" @click-btn="onAgree" />
+    <g-message  v-else  />  
+
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
@@ -640,6 +643,10 @@
     if (refOldDialog.value) {
       refOldDialog.value.show();
     }
+  };
+
+  const onAgree = () => {
+    gStores.globalStore.setShowFlag(false);
   };
 
   const pageScroll = (e) => {

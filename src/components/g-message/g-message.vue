@@ -25,14 +25,14 @@
           id="agree-btn"
           open-type="agreePrivacyAuthorization"
           class="login-btn btn btn-primary"
-          @agreeprivacyauthorization="handlerAgree"
+          @agreeprivacyauthorization="emitAgree"
         >
           同意
         </button>
       </template>
 
       <template #cancelBtn>
-        <button id="disagree-btn" class="login-btn" @click="handlerDisagree">
+        <button id="disagree-btn" class="login-btn" @click="emitDisagree">
           拒绝
         </button>
       </template>
@@ -93,9 +93,13 @@
   const cacheStore = useCacheStore();
   // #endif
 
+  const emits = defineEmits(['click-btn']);
+
   const props = defineProps<{
     isWxAuthInit?: boolean;
+    shouldEmitClickBtn?: boolean; // 是否抛出点击事件
   }>();
+
   const messageStore = useMessageStore();
   const popup = ref();
   const {
@@ -160,6 +164,21 @@
   uni.$on('closeMessage', function () {
     usePopup(messageStore.isShow);
   });
+  // 新增的方法，用于触发事件
+  const emitAgree = () => {
+  if (props.shouldEmitClickBtn) {
+    emits('click-btn')
+  }else{
+    handlerAgree();
+  } 
+};
+
+const emitDisagree = () => {
+  if (props.shouldEmitClickBtn) {
+    emits('click-btn')
+  }
+    handlerDisagree();
+};
 
   const maskClick = function () {
     messageStore.closeMessage();

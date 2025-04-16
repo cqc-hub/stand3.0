@@ -26,7 +26,7 @@ interface IStateGlobal {
   appLaunchData: BaseObject;
   cacheData: BaseObject;
   envH5: T_ENV_H5;
-  isShowFlag: boolean; // 是否展示过启动页
+  isShowFlag: boolean; // 宁口隐私政策
   sysCode: string;
   modeOld: boolean; // 敬老模式?
 }
@@ -141,6 +141,10 @@ const globalStore = defineStore('global', {
         // #ifdef MP-WEIXIN
         if (this.sysCode === '1001063') {
           this.updateOralMallData();
+        }
+
+        if(this.sysCode === '1001066' && !this.token.accessToken){
+          this.setShowFlag(true)
         }
         // #endif
       }
@@ -272,7 +276,7 @@ const globalStore = defineStore('global', {
     },
 
     setShowFlag(isShowFlag: boolean) {
-      this.isShowFlag = isShowFlag;
+        this.isShowFlag = isShowFlag;
     },
   },
 });
