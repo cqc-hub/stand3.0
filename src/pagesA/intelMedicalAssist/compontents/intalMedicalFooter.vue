@@ -14,7 +14,11 @@
         pageConfig?.intelMedicalAssistConfig?.isIntelligentGuidance === '1'
       "
     >
-      <Second-Recommend :serverArray="serverArray" @click-server="handleClickServer" @sendMsgSymptom="sendMsgSymptom" />
+      <Second-Recommend
+        :serverArray="serverArray"
+        @click-server="handleClickServer"
+        @sendMsgSymptom="sendMsgSymptom"
+      />
     </view>
     <view
       class="guess-server float-from-top"
@@ -52,7 +56,7 @@
     class="flex-column-center footer-area-bottom bg-whit pt32"
     :animation="animationData"
   >
-    <view class="bottom-dh-char flex-row-around">
+    <view class="bottom-dh-char flex-row-around"         :style="{ opacity: voicing ? 0 : 1 }">
       <view
         class="input-send m-left mr20"
         :disabled="msgState.msgLoad"
@@ -122,7 +126,7 @@
       <view
         class="bottom-dh-content"
         v-if="isVoice"
-        :style="{ opacity: voicing ? 0 : 1 }"
+
         @longpress="handleVoice"
         @touchstart="touchStart"
         @touchmove="touchMove"
@@ -341,13 +345,13 @@
   };
 
   const handleVoice = (...args) => {
-    console.log('handleVoice', args);
     // SImanager.stop();
+        // #ifdef  MP-WEIXIN
     if (isRecording.value) {
       voicing.value = false;
       return;
     }
-    // #ifdef  MP-WEIXIN
+
     SImanager.start({
       duration: 60000,
       lang: 'zh_CN',
@@ -361,11 +365,7 @@
       }
     }, 60000);
     // #endif
-    // #ifdef  H5
-    isRecording.value = true;
-    startRecord();
 
-    // #endif
   };
   const initRecord = () => {
     if (hasWechatSI.value) {
@@ -441,26 +441,37 @@
       }
     }
   };
-
+  const startListen = (e) => {
+    e.preventDefault();
+    startRecord();
+  };
   const cancleVoice = async () => {
     if (isRecording.value) {
       // #ifdef  MP-WEIXIN
       SImanager?.stop();
       // #endif
       // #ifdef  H5
-      const resStr = await stopRecord();
-      if (resStr) {
-        msgState.value.msg += resStr || '';
-        if (!msgState.value.msg) {
-          return;
+      try {
+        console.log('停止录音', isRecording.value);
+
+        const resStr = await stopRecord();
+        if (resStr) {
+          msgState.value.msg += resStr || '';
+          if (!msgState.value.msg) {
+            return;
+          }
+          isRecording.value && (isRecording.value = false);
+          // console.log('SImanager.onStop', msgState.value.msg);
+          emits('send-msg', msgState.value.msg);
+          nextTick(() => {
+            msgState.value.msg = '';
+          });
         }
-        isRecording.value && (isRecording.value = false);
-        // console.log('SImanager.onStop', msgState.value.msg);
-        emits('send-msg', msgState.value.msg);
-        nextTick(() => {
-          msgState.value.msg = '';
-        });
+      } catch (e) {
+        const gStores = new GStores();
+        gStores.messageStore.showMessage('诶呀，语音识别失败，请重试~~~', 1000);
       }
+
       // #endif
       voicing.value && (voicing.value = false);
     }
@@ -469,14 +480,27 @@
   const touchStart = (e) => {
     voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
     !msgState.value.msgLoad && (voicing.value = true);
+    // #ifdef  H5
+    if( !isListening.value&&!msgState.value.msgLoad){
+    console.log('handleVoice', !isListening.value ? '开始录音' : '未开始录音');
+    isRecording.value = true;
+    voicing.value = true
+    startListen(e);
+    }
+   
+    // #endif
   };
 
   let touchMove = (e) => {
     console.log('touchMove', e);
     let touchData = e.touches[0]; //滑动过程中，手指滑动的坐标信息 返回的是Objcet对象
     let moveY = touchData.clientY - voiceTouchData.value.clientY;
+    console.log('moveY滑动', moveY);
     if (moveY < -50) {
-      // 向上滑动
+      // 取消语音识别
+      // #ifdef  H5
+      cancleVoice();
+      // #endif
       voiceTouchData.value.isMoveUp = false;
     } else {
       voiceTouchData.value.isMoveUp = true;
@@ -485,6 +509,8 @@
   touchMove = debounce(touchMove, 500, false);
 
   const endRecord = (e) => {
+    e.preventDefault();
+    console.log('endRecord', e);
     if (voiceTouchData.value.isMoveUp) {
       cancleVoice();
       voiceTouchData.value = {
@@ -576,12 +602,12 @@
   }
   .footer-area {
     // z-index: 4;
-    .Second-Recommend{
-       /* #ifdef H5 */
-       bottom: calc(100vh - 550rpx - 620rpx) !important;
+    .Second-Recommend {
+      /* #ifdef H5 */
+      bottom: calc(100vh - 550rpx - 620rpx) !important;
       /* #endif */
       /* #ifndef H5 */
-      bottom: calc(100vh - 800rpx - 620rpx)  !important;
+      bottom: calc(100vh - 800rpx - 620rpx) !important;
       /* #endif */
     }
     .guess-server {
@@ -729,6 +755,7 @@
     align-items: center;
   }
   .bottom-dh-char {
+    z-index: 999;
     // background-color: #fff;
     height: 78rpx;
     width: 100%;
@@ -759,7 +786,7 @@
     z-index: 97;
   }
   .bottom-bg-blue {
-    background: radial-gradient(rgba(232,252,255,0.20),#fff);
+    background: radial-gradient(rgba(232, 252, 255, 0.2), #fff);
     z-index: 1;
     position: fixed;
     bottom: 0;

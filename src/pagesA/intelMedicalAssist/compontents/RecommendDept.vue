@@ -132,6 +132,19 @@
           }),
         });
         break;
+        case '1001017':
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl('pagesA/MyRegistration/order', {
+            query: JSON.stringify({
+              ...item,
+              type: 'order',
+              deptId: item.hosDeptId,
+              sysCode:'1001017'
+            }),
+          }),
+        });
+        break;
       default:
         useTBanner({
           type: 'self',
