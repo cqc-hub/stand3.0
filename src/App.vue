@@ -71,11 +71,12 @@
         // #ifdef MP-ALIPAY
         if (qrCode) {
           const _query = qrCode.split('?')[1];
-          setTimeout(() => {
-            uni.reLaunch({
-              url: `/${path}?${_query}`,
-            });
-          }, 600);
+          _query &&
+            setTimeout(() => {
+              uni.reLaunch({
+                url: `/${path}?${_query}`,
+              });
+            }, 600);
           return;
         }
         // #endif
