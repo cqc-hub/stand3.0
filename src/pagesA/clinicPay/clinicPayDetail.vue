@@ -296,7 +296,7 @@
       ) {
         return gStores.userStore.patChoose;
       } else {
-        return <IPat>{ 
+        return <IPat>{
           patientName: pageProps.value.deParams?.patientName || '就诊人',
           _showId: pageProps.value.deParams?.cardNumber || '',
         };
@@ -387,10 +387,16 @@
 
   // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
   onLoad(async (opt) => {
-    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+    /**
+     * 支付宝端
+     * queryParams - https://h5.eheren.com/xxxx?xxx=xxx
+     */
+    const queryParams = gStores.globalStore.appLaunchData?.query
+      ?.qrCode as string;
+    console.log(opt, 'show', queryParams);
     uni.showLoading({});
 
-    if ((queryParams && !opt?.params) || opt?.q) {
+    if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       return;
     }
 
