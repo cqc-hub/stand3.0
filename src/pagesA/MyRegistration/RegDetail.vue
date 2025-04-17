@@ -898,11 +898,12 @@
 
     const isMedicalMode = _getIsMedicalMode();
     const { cardNumber } = gStores.userStore.patChoose;
-    const isSelf =
-      isMedicalMode &&
-      (isFamilyPayment === '1' ||
-        isGbFamilyPayment === '1' ||
-        (await isMedicalSelf(cardNumber)));
+    const isSelf = true;
+    // const isSelf =
+    //   isMedicalMode &&
+    //   (isFamilyPayment === '1' ||
+    //     isGbFamilyPayment === '1' ||
+    //     (await isMedicalSelf(cardNumber)));
     const payList = [] as any;
 
     if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {
