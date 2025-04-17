@@ -387,17 +387,20 @@
 
   // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
   onLoad(async (opt) => {
+    console.log(opt, '233');
     /**
      * 支付宝端
      * queryParams - https://h5.eheren.com/xxxx?xxx=xxx
      */
     const queryParams = gStores.globalStore.appLaunchData?.query
       ?.qrCode as string;
-    console.log(opt, 'show', queryParams);
     uni.showLoading({});
 
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
-      return;
+      let url = deQueryForUrl(deQueryForUrl({ url: queryParams || opt?.q })).url;
+      if (url.split('?').length > 1) {
+        return;
+      }
     }
 
     await wait(650);

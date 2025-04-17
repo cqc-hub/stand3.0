@@ -888,6 +888,15 @@ export const useProgramPaySign = () => {
 
       if (containerEnv === 'wx') {
         if (!continueWxSign) {
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '是否拉起签约授权?',
+          });
+
+          if (!confirm) {
+            gStores.messageStore.showMessage('拉起签约失败', 1500);
+            throw new Error('用户拒绝拉起签约');
+          }
+
           await apiAsync(wx.navigateToMiniProgram, {
             appId: 'wxbd687630cd02ce1d',
             path: 'pages/index/index',
@@ -980,8 +989,8 @@ export const healthCardBind = async () => {
       },
       'redirectTo'
     );
-  }else{
-    throw new Error('未授权， 请再次点击进行授权'); 
+  } else {
+    throw new Error('未授权， 请再次点击进行授权');
   }
 };
 
@@ -1000,38 +1009,41 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
     };
 
     getH5OpenidParam(requestArg);
-    await api.quickLinkHealthCardWithLoad(requestArg).then(()=>{
-      gStores.messageStore.showMessage('关联成功', 1500, {
-        closeCallBack() {
-          //刷新就诊人列表
-          new PatientUtils().getPatCardList();
-          if (cb) {
-            cb.call(this);
-          } else {
-            uni.reLaunch({
-              url: '/pages/home/home',
+    await api
+      .quickLinkHealthCardWithLoad(requestArg)
+      .then(() => {
+        gStores.messageStore.showMessage('关联成功', 1500, {
+          closeCallBack() {
+            //刷新就诊人列表
+            new PatientUtils().getPatCardList();
+            if (cb) {
+              cb.call(this);
+            } else {
+              uni.reLaunch({
+                url: '/pages/home/home',
+              });
+            }
+          },
+        });
+      })
+      .catch(async (e) => {
+        const { respCode, message } = e;
+        console.log(22222, respCode, message);
+        if (respCode === 884801) {
+          gStores.messageStore.closeMessage();
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '患者存在建档记录但手机号不匹配，是否立即修改？',
+          });
+          if (confirm) {
+            await api.mofHosPhone({
+              healthCode,
+              source: gStores.globalStore.browser.source,
             });
           }
-        },
-      });
-    }).catch(async (e) => {
-      const { respCode, message } = e;
-      console.log(22222,respCode,message)
-      if (respCode === 884801) {
-        gStores.messageStore.closeMessage();
-        const { confirm } = await apiAsync(uni.showModal, {
-          content: '患者存在建档记录但手机号不匹配，是否立即修改？',
-        });
-        if (confirm) {
-          await api.mofHosPhone({
-            healthCode,
-            source: gStores.globalStore.browser.source,
-          });
+        } else {
+          gStores.messageStore.showMessage(message);
         }
-      }else{
-        gStores.messageStore.showMessage(message)
-      }
-    });
+      });
     // #endif
   } else {
     console.error('addPatByHealthCode方法只支持腾讯健康卡通过healthCode建档');

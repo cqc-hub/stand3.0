@@ -410,7 +410,7 @@
             // dialogShow.value = true;
             dialogConfirm = () => {
               uni.navigateTo({
-                url: joinQuery('/pagesA/medicalCardMan/addMedical', {
+                url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
                   ...data,
                   pageType: pageProps.value.pageType,
                   _directUrl: pageProps.value._directUrl,
