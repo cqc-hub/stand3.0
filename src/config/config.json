@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001048",
+  "sysCode": "1001074",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -140,7 +140,8 @@
       "isOpenHealthCard": {
         "healthCardText": "陕西省卫生健康委员会",
         "hospitalId": "37218"
-      }
+      },
+      "_des": "红会"
     },
     "1001058": {
       "wxAppid": "wx86a78f7ced7dc55f",

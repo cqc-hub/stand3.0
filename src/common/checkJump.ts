@@ -208,7 +208,7 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       // #ifdef H5
       location.href = item.path;
       // #endif
-  
+
       break;
     case 'mini':
       uni.navigateToMiniProgram({
@@ -302,7 +302,6 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
             );
           },
         };
-        console.log(obj3)
         typeNavigate(obj3, type);
       }
       // #endif
