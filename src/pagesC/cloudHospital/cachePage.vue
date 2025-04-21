@@ -299,9 +299,16 @@ const handleMessage1001048 = async ({ insuranceParams, payBackParams, registerId
 
 onShareAppMessage((res) => {
   console.warn('分享', res, shareData.value);
-  let path = `/pagesC/commonHosNet/commonHosNet?returnUrl=${encodeURIComponent(
-    shareData.value.path
-  )}`;
+  let path = '';
+  if(JSON.stringify(shareData.value) === '{}' && res.webViewUrl){
+    path =  joinQueryForUrl('/pagesA/webView/webView', {
+        https: res.webViewUrl
+      })
+  }else{
+    path = `/pagesC/commonHosNet/commonHosNet?returnUrl=${encodeURIComponent(
+       shareData.value.path
+      )}`;
+  }
   return {
     title: shareData.value.title,
     path: path,
