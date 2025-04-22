@@ -103,8 +103,6 @@
 
   onShow(async () => {
     const options = globalStore.appShowData;
-    console.log(options, '哈哈哈哈哈哈哈哈');
-    console.warn('网络医院授权回来', gStores.globalStore.appShowData);
     const authCode =
       gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
     // 微信医保小程序跳回来后中断了链路 重新走下

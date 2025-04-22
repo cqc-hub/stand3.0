@@ -114,7 +114,7 @@
     'pay-page',
   ]);
 
-  
+
 
   const reportFlagMap = computed(() => {
     const typeLabel = props.isOnlineSign ? '签到' : '取号';
