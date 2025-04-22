@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001048",
+  "sysCode": "1001077",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -336,11 +336,12 @@
       "isStartComeTest": true,
       "isOpenOcr": true
     },
-    "1001075": {
+    "1001077": {
       "wxAppid": "wx9dcb98a8c18d44ea",
-      "h5Appid": "wx6426f547693ab6e2",
+      "h5Appid1": "wx6426f547693ab6e2",
+      "alipayAppid": "2021005131642589",
+      "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",
-      "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
     }

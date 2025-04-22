@@ -97,7 +97,7 @@ export const MEDICAL_PHOTO_MODE = <const>{
   },
   // 代未成年人办理
   3: {
-    photos: ['4', '5', '6', '7', '8'],
+    photos: ['4', '5', '6', '7'],
     label: '代未成年人办理',
   },
   // 代死亡人员办理

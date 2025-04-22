@@ -1,5 +1,5 @@
 <template>
-  <view class="container flex-normal g-footer pb24">
+  <view class="container flex-normal g-footer pb24" v-if="btns.length">
     <view
       v-for="(btn, idx) in btns"
       :key="btn.key"

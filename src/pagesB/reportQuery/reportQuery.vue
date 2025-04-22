@@ -612,8 +612,11 @@
         Object.keys(jyBottomNav).map((key) => {
           mq[key] = jyBottomNav[key] === '1' ? '1' : '';
         });
+        if(mq['btnNotShare'] === '1'){
+         delete mq['_local'];
+        }
       }
-
+      console.log('______________',mq,jyBottomNav)
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', mq),
       });
@@ -622,6 +625,9 @@
         Object.keys(jcBottomNav).map((key) => {
           mq[key] = jcBottomNav[key] === '1' ? '1' : '';
         });
+        if(mq['btnNotShare'] === '1'){
+          delete mq['_local'];
+        }
       }
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/inspectionReport', mq),

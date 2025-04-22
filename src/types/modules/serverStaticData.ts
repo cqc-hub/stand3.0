@@ -557,6 +557,7 @@ type TInsertEnv<T extends BaseObject, S extends keyof any> = {
 type TReportDetailBottomConfig = {
   btnAskDoc?: '1';
   btnReOrder?: '1';
+  btnNotShare?: '1';
 };
 
 export type ISystemConfig = TInsertEnv<ISystemConfig_, TConfigEnv>;

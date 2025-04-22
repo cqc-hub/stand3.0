@@ -1255,12 +1255,12 @@ export const usePayPage = () => {
         const { cardNumber } = gStores.userStore.patChoose;
         const isOpenFamilyMedical =
           getMedicalConfigInfo()?.isGbFamilyPayment === '1';
-        const flag =
+        let flag =
           isOpenFamilyMedical ||
           (await isMedicalSelf(
             pageProps.value.deParams?.cardNumber || cardNumber
           ));
-
+          flag = true;
         if (flag) {
           getPay();
         } else {

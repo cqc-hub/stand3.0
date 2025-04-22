@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx8358079c24acea42",
+    "appid": "wx9dcb98a8c18d44ea",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003144603328"
+    "appid": "2021005131642589"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "宜兴市人民医院",
+  "name": "陕西省中医医院",
   "h5": {
     "optimization": {
       "treeShaking": {

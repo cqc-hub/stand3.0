@@ -506,10 +506,24 @@ const scJson: Record<string, ISConfig> = {
     },
   },
 
-  1001075: {
+  1001077: {
     login: {
-      isSkipPerfect: '1',
-      isAliAuthBase: '1',
+      // isAliAuthBase: '1',
+    },
+    medicalMHelp: {
+      isOpenPatToMedicalPat: {},
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          // 生产
+          // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=620500&channel=AAF-qIZucnqdnk72zjYzIJ38&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtjvE9yjYec3Tmc/8KSGSL7&orgCodg=H62050200075&orgAppId=1IC2S3ORH0H04460C80A0000210115A3',
+          //测试
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610100&channel=AAEoVvqZuWU8BNSYVtMM15px&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv2/NlHf1H5KZT+T46wCMi1&orgCodg=H61010400913&orgAppId=1IOS9I97D1CO4460C80A00004B82B3CD',
+        },
+        isMedicalOrder: '1',
+        isGbFamilyPayment: '1',
+        // medicalPlugin: '1',
+      },
     },
   },
 
