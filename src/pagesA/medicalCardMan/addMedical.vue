@@ -546,6 +546,10 @@
             });
           }
         }
+
+        await wait(0);
+        medicalTypeChange(formData.value[formKey.patientType]);
+
         break;
 
       default:
@@ -623,7 +627,6 @@
    */
   let oldFormList: any[] = [];
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
-    console.log(value, '----------');
     const {
       isGuardianWithIdCard,
       isHidePatientTypeInPerfect,
