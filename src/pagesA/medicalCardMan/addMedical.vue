@@ -512,8 +512,10 @@
     }
   };
 
-  const formChange = ({ item, value, oldValue }) => {
+  const formChange = async ({ item, value, oldValue }) => {
     if (item.key === formKey.patientType && oldValue !== value) {
+      await wait(0);
+
       medicalTypeChange(value);
     }
   };
@@ -523,7 +525,7 @@
 
     switch (item.key) {
       case formKey.idType:
-        idCardChange();
+        formData.value[formKey.idCard] = '';
 
         if (['06', '07'].includes(value)) {
           if (!fg514.value.title) {
@@ -560,17 +562,8 @@
     addressChoose.addressCountyCode = addressCounty.value;
   };
 
-  // 证件类型变化
-  const idCardChange = () => {
-    formData.value[formKey.idCard] = '';
-
-    nextTick(() => {
-      medicalTypeChange(formData.value[formKey.patientType]);
-    });
-  };
-
   const formInputBlur = (e) => {
-    const { item, value } = e;
+    const { item } = e;
 
     if (
       item.key == formKey.idCard &&
@@ -630,6 +623,7 @@
    */
   let oldFormList: any[] = [];
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
+    console.log(value, '----------');
     const {
       isGuardianWithIdCard,
       isHidePatientTypeInPerfect,
@@ -934,9 +928,8 @@
     });
 
     gform.value.setList([]);
-    nextTick(() => {
-      gform.value.setList(formList.value);
-    });
+    await wait(0);
+    gform.value.setList(formList.value);
   };
 
   const btnDisabled = computed(() => {
@@ -1042,9 +1035,8 @@
     // }
 
     formData.value.nation = '01';
-    nextTick(() => {
-      medicalTypeChange(formData.value[formKey.patientType]);
-    });
+    await wait(0);
+    medicalTypeChange(formData.value[formKey.patientType]);
 
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;

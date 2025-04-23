@@ -619,7 +619,7 @@
     if (!isFirstIn.value) return;
 
     if (
-      isWaitForPay.value &&
+      // isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
       orderConfig.value.isOpenPreConsultation === '1' &&
       gStores.globalStore.sysCode !== '1001048'
@@ -787,6 +787,7 @@
     qrCodeOpt.value.code = result[qrCode];
 
     showConsultationDialog();
+    await wait(0);
     isFirstIn.value = false;
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
