@@ -86,6 +86,7 @@
     isMess?: '1';
     sysCode?: string;
     source?:string
+    HerenId?: string; //埋点
   }>();
 
   const scrollChangeView = (e) => {

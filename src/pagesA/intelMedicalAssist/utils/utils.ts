@@ -57,6 +57,7 @@ export const popipHasShow = ref<boolean>(false);
 export const hosData = ref<any>([]);
 export const showOrder = ref(false);
 export const schOrderInfo = ref<any>({});
+const propsPbj = ref<any>({})
 const deptStore = useDeptStore();
 
 //普通首页
@@ -93,6 +94,7 @@ export const reload = async (isMess) => {
 };
 
 export const init = async (props) => {
+  propsPbj.value = props;
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
@@ -1022,6 +1024,7 @@ const typeInAsk = (value, answertype) => {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
+        herenId: gStores.globalStore.herenId,
       },
     });
   }
@@ -1082,11 +1085,12 @@ const typeInAskH5 = (value: any, answertype) => {
       args: {
         content: value,
         sysCode: gStores.globalStore.sysCode,
-        source: 1,
+        source:  propsPbj.value?.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
         // type: answertype,
         type: 'h5',
+        herenId: propsPbj.value?.herenId,
       },
     }),
   };
@@ -1096,7 +1100,7 @@ const typeInAskH5 = (value: any, answertype) => {
       args: {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
-        source: gStores.globalStore.browser.source == 19 ? 1 : 2,
+        source:  propsPbj.value?.source == 19 ? 1 : 2,
       },
     });
   }
