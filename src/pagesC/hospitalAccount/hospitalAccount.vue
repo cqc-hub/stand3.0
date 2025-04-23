@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
   import {
@@ -129,6 +129,23 @@
   const lists = ref({} as IHospitalAccountDetail);
   const regDialogConfirm = ref<any>('');
   const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
+
+  const reasonList = computed(() => {
+    const list = lists.value.reason || [
+      {
+        codeName: '233',
+      },
+      {
+        codeName: '大家看',
+      },
+    ];
+    return list.map((o) => ({
+      ...o,
+      label: o.codeName,
+      value: o.codeName,
+    }));
+  });
+
   let getListData = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { hosId } = pageProps.value;
@@ -218,10 +235,11 @@
     const { cardNumber, patientName } = lists.value;
     const { hosId } = pageProps.value;
     uni.navigateTo({
-      url: joinQuery('/pagesA/hospitalCare/paymentPage', {
+      url: joinQueryForUrl('/pagesA/hospitalCare/paymentPage', {
         hosId,
         cardNumber,
         patientName,
+        reasonList: JSON.stringify(reasonList.value),
         hospitalAccount: '12',
         _type: pageProps.value.type,
       }),

@@ -8,6 +8,9 @@ export interface IHospitalAccountDetail {
     cardNo: string;
     cardType: string;
   }[];
+  reason?: {
+    codeName: string;
+  }[]
 }
 export interface IAccountWithdrawal {}
 

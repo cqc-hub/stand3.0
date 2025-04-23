@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx9dcb98a8c18d44ea",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -77,9 +77,8 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
-    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021005131642589"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -91,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "陕西省中医医院",
+  "name": "温医附二院就医助手",
   "h5": {
     "optimization": {
       "treeShaking": {

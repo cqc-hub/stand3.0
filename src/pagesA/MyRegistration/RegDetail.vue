@@ -618,8 +618,8 @@
   const showConsultationDialog = async () => {
     if (!isFirstIn.value) return;
 
-    // isWaitForPay.value &&
     if (
+      isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
       orderConfig.value.isOpenPreConsultation === '1' &&
       gStores.globalStore.sysCode !== '1001048'

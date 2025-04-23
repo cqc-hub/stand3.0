@@ -93,6 +93,7 @@
     patientName?: string; //扫码的时候传 支付用
     cardNumber?: string;
     hospitalAccount?: string;
+    reasonList?: IOptions[];
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment';
     _url?: string; // 充值成功后回跳
@@ -349,7 +350,17 @@
   });
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value, '----')
+    if (pageProps.value.reasonList) {
+      try {
+        pageProps.value.reasonList = JSON.parse(
+          // @ts-expect-error
+          decodeURIComponent(pageProps.value.reasonList)
+        );
+      } catch (error) {
+        pageProps.value.reasonList = [];
+      }
+    }
+    console.log(pageProps.value, '----');
     setData();
   });
 </script>
