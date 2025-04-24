@@ -284,6 +284,23 @@ export const useHosPayPage = () => {
    */
   const getCreateInHospitalPayOrderData = async (data, fee, type?) => {
     const { patientName, cardNumber, hosId, hosName } = data;
+    let extend = {};
+    if (data.extend) {
+      if (typeof data.extend === 'string') {
+        try {
+          extend = JSON.parse(data.extend);
+        } catch (error) {
+          console.error('JSON parse error:', error);
+        }
+      }
+    }
+
+    if (data.reason) {
+      extend = {
+        ...extend,
+        reason: data.reason,
+      };
+    }
     const { result } = await api.createInHospitalPayOrder<payOrderResult>({
       fee,
       orderType: data.hospitalAccount ? data.hospitalAccount : '3',
@@ -293,7 +310,8 @@ export const useHosPayPage = () => {
       hosId,
       hosName,
       leaveHos: type === 'outHos' ? '1' : '',
-      extend:data.extend
+      // extend: data.extend,
+      extend: JSON.stringify(extend),
     });
     const payArg: BaseObject = {
       phsOrderNo: result.phsOrderNo,

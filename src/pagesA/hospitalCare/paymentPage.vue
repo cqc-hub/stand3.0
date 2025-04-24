@@ -58,6 +58,19 @@
       ref="refPay"
     ></g-pay>
     <g-message />
+
+    <g-select
+      v-model:value="reason"
+      v-model:show="isReasonPopupShow"
+      :option="pageProps.reasonList || []"
+      :field="{
+        label: 'label',
+        value: 'value',
+      }"
+      @change="reasonChange"
+      @update:show="reasonClose"
+      title="请选择充值理由"
+    />
   </view>
 </template>
 
@@ -188,10 +201,38 @@
   //   // }
   //   // return payArg
   // }
+  let _resolve: any = () => {
+    // r
+  };
 
+  let _reject: any = () => {
+    // j
+  };
+  const reason = ref('');
+  const isReasonPopupShow = ref(false);
+  const reasonChange = () => {
+    _resolve(reason.value);
+  };
+  const reasonClose = () => {
+    if (isReasonPopupShow.value === false) {
+      _reject();
+    }
+  };
   const toPay = async () => {
+    const { reasonList = [] } = pageProps.value;
+    const data: any = {
+      ...pageProps.value,
+    }
+    if (reasonList.length) {
+      isReasonPopupShow.value = true;
+      const reason = await new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+      });
+      data.reason = reason;
+    }
     const payArg = await getCreateInHospitalPayOrderData(
-      pageProps.value,
+      data,
       defalutMoney.value
     );
     gStores.globalStore.sysCode === '1001038' && (payArg.businessType = 2);
