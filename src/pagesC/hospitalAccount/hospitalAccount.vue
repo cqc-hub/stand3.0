@@ -132,12 +132,12 @@
 
   const reasonList = computed(() => {
     const list = lists.value.reason || [
-      {
-        codeName: '233',
-      },
-      {
-        codeName: '大家看',
-      },
+      // {
+      //   codeName: '233',
+      // },
+      // {
+      //   codeName: '大家看',
+      // },
     ];
     return list.map((o) => ({
       ...o,
