@@ -328,14 +328,14 @@
         }
 
         requestData.pData = pdata;
-        await api.mofHosPhone({
+      }
+      await api.mofHosPhone({
           ...requestData,
           pdata: requestData.pData,
           source: gStores.globalStore.browser.source,
         });
 
         return await patientUtils.addRelevantPatient(requestData);
-      }
     }
   };
 
