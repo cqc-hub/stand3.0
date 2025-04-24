@@ -58,6 +58,19 @@
       ref="refPay"
     ></g-pay>
     <g-message />
+
+    <g-select
+      v-model:value="reason"
+      v-model:show="isReasonPopupShow"
+      :option="pageProps.reasonList || []"
+      :field="{
+        label: 'label',
+        value: 'value',
+      }"
+      @change="reasonChange"
+      @update:show="reasonClose"
+      title="请选择充值理由"
+    />
   </view>
 </template>
 
@@ -93,6 +106,7 @@
     patientName?: string; //扫码的时候传 支付用
     cardNumber?: string;
     hospitalAccount?: string;
+    reasonList?: IOptions[];
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment';
     _url?: string; // 充值成功后回跳
@@ -187,10 +201,38 @@
   //   // }
   //   // return payArg
   // }
+  let _resolve: any = () => {
+    // r
+  };
 
+  let _reject: any = () => {
+    // j
+  };
+  const reason = ref('');
+  const isReasonPopupShow = ref(false);
+  const reasonChange = () => {
+    _resolve(reason.value);
+  };
+  const reasonClose = () => {
+    if (isReasonPopupShow.value === false) {
+      _reject();
+    }
+  };
   const toPay = async () => {
+    const { reasonList = [] } = pageProps.value;
+    const data: any = {
+      ...pageProps.value,
+    }
+    if (reasonList.length) {
+      isReasonPopupShow.value = true;
+      const reason = await new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+      });
+      data.reason = reason;
+    }
     const payArg = await getCreateInHospitalPayOrderData(
-      pageProps.value,
+      data,
       defalutMoney.value
     );
     gStores.globalStore.sysCode === '1001038' && (payArg.businessType = 2);
@@ -349,7 +391,17 @@
   });
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    console.log(pageProps.value, '----')
+    if (pageProps.value.reasonList) {
+      try {
+        pageProps.value.reasonList = JSON.parse(
+          // @ts-expect-error
+          decodeURIComponent(pageProps.value.reasonList)
+        );
+      } catch (error) {
+        pageProps.value.reasonList = [];
+      }
+    }
+    console.log(pageProps.value, '----');
     setData();
   });
 </script>

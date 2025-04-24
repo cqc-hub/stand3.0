@@ -23,7 +23,6 @@
               {{ guideContent.disposeTime }}
             </text>
             <scroll-view scroll-x class="aaa">
-              <!-- 按钮 -->
               <AGuideList
                 :list="pageConfig?.medicalAsistantConfig?.timeLineBtn"
                 :data="currentTab"
@@ -136,6 +135,7 @@
     );
     getListData();
   };
+
   let getListData = async () => {
     guideSheetList.value = [];
     wait(50);
