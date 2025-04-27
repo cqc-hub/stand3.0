@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001038",
+  "sysCode": "1001077",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -275,13 +275,13 @@
     },
     "1001069": {
       "wxAppid": "wxf544358f2736cd20",
-      "alipayAppid": "",
-      "isvAlipayAppid": "",
+      "alipayAppid": "2021003104674058",
+      "isvAlipayAppid": "2021003104624121",
       "h5Appid": "",
-      "name": "浙江省人民医院毕节医院金海湖院区",
+      "name": "浙江省人民医院毕节医院",
       "isStartComeTest": true,
       "isSearchInHos": true,
-      "isOpenOcr": true
+      "isOpenOcr": false
     },
     "1001070": {
       "wxAppid": "wx0c0b335f85dee134",
@@ -339,7 +339,7 @@
     },
     "1001077": {
       "wxAppid": "wx9dcb98a8c18d44ea",
-      "h5Appid1": "wx6426f547693ab6e2",
+      "h5Appid": "wx97fd54c614de79b4",
       "alipayAppid": "2021005131642589",
       "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",
