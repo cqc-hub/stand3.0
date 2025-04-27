@@ -339,6 +339,10 @@
     }
   };
 
+  const listNow = computed(() => {
+    return tabField.value[tabCurrent.value].key === '0' ? waitSelList.value : seledList.value;
+  });
+
   // 0-未取药 1-已取药
   const getListData = async (takenDrug: string) => {
     const listNow = takenDrug === '0' ? waitSelList : seledList;
@@ -415,13 +419,13 @@
   const dealWith1001067 = () => {
     // 温fu2 扫码药品配送， 不需要进列表 直接详情
     if (globalGl.SYS_CODE === '1001067') {
-      if (waitSelList.value.length) {
-        selList.value = [...waitSelList.value];
+      if (listNow.value.length) {
+        selList.value = [...listNow.value];
         configToHome();
       } else {
-        uni.reLaunch({
-          url: '/pages/home/home',
-        });
+        // uni.reLaunch({
+        //   url: '/pages/home/home',
+        // });
       }
 
       throw new Error('1001067');
