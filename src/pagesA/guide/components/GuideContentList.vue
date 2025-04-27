@@ -140,7 +140,7 @@
                     </view>
 
                     <view v-if="lab.status" class="pt24 pb24">
-                      <GuideReportProgress :lab="lab" />
+                      <GuideReportProgress :lab="lab" type="jy" />
                     </view>
 
                     <GuideContentListCol
