@@ -1256,7 +1256,7 @@ const wxFacialVerifyByKey = async (
   });
 };
 
-const getInfoFromIdCard = (idCard) => {
+export const getInfoFromIdCard = (idCard) => {
   if (idCard.length !== 18) {
     throw new Error('Invalid ID card length');
   }
@@ -1265,12 +1265,17 @@ const getInfoFromIdCard = (idCard) => {
   const year = parseInt(birthday.substring(0, 4), 10);
   const month = parseInt(birthday.substring(4, 6), 10);
   const day = parseInt(birthday.substring(6, 8), 10);
+  const btd = `${year}-${month.toString().padStart(2, '0')}-${day
+    .toString()
+    .padStart(2, '0')}`;
+  let age = new Date().getFullYear() - new Date(btd).getFullYear();
+  const monthDiff = new Date().getMonth() - new Date(btd).getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && new Date().getDate() < new Date(btd).getDate())) {
+        age--;
+    }
   return {
+    age,
     gender,
-    birthday: `${year}-${month.toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`,
+    birthday: btd,
   };
 };
-
-// module.exports = { reportVerifyJudge}

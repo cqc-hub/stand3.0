@@ -164,7 +164,7 @@
                     class="g-flex-rc-cc flex-column f24"
                   >
                     <view class="iconfont camera-icon color-fff">&#xe6be;</view>
-                    <view class="color-fff">
+                    <view class="color-fff center">
                       <text>{{ item.label }}</text>
                       <text v-if="isPhotoModeItemRequire(item)">(必传)</text>
                     </view>
@@ -1820,5 +1820,8 @@
   .size-icon {
     color: var(--hr-neutral-color-7);
     font-size: var(--hr-font-size-xxl);
+  }
+  .center {
+    padding: 0 20rpx;
   }
 </style>

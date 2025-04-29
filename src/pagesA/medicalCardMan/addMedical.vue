@@ -140,6 +140,7 @@
     loginAuthAlipay,
     useProgramPaySign,
     gotoChosseVerifyPage,
+    getInfoFromIdCard,
   } from './utils';
 
   import {
@@ -330,12 +331,12 @@
         requestData.pData = pdata;
       }
       await api.mofHosPhone({
-          ...requestData,
-          pdata: requestData.pData,
-          source: gStores.globalStore.browser.source,
-        });
+        ...requestData,
+        pdata: requestData.pData,
+        source: gStores.globalStore.browser.source,
+      });
 
-        return await patientUtils.addRelevantPatient(requestData);
+      return await patientUtils.addRelevantPatient(requestData);
     }
   };
 
@@ -383,7 +384,13 @@
     } = pageConfig.value;
 
     if (isFace === '1') {
-      if (formData.value[formKey.idType] === '01') {
+      console.log('人脸识别getInfoFromIdCard(formData.value[formKey.idCard])',getInfoFromIdCard(formData.value[formKey.idCard]));
+      
+      if (
+        formData.value[formKey.idType] === '01' &&
+        getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
+        getInfoFromIdCard(formData.value[formKey.idCard]).age < 60
+      ) {
         const { pData } = await patientUtils.faceVerifyAndPData({
           idCardNumber: formData.value[formKey.idCard],
           name: formData.value[formKey.patientName],

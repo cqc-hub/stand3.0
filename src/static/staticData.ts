@@ -7,38 +7,38 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '1',
     url: `${BASE_IMG}medRecord_photos_6@2x.png`,
-    label: '身份证正面',
+    label: '患者本人身份证正面',
   },
 
   {
     value: '2',
     url: `${BASE_IMG}medRecord_photos_4@2x.png`,
-    label: '身份证反面',
+    label: '患者本人身份证反面',
   },
 
   {
     value: '3',
     url: `${BASE_IMG}medRecord_photos_9@2x.png`,
-    label: '手持身份证露脸',
+    label: '患者本人手持身份证露脸',
   },
 
   // 代理人
   {
     value: '4',
     url: `${BASE_IMG}medRecord_photos_8@2x.png`,
-    label: '身份证正面',
+    label: '代办人身份证正面',
   },
 
   {
     value: '5',
     url: `${BASE_IMG}medRecord_photos_7@2x.png`,
-    label: '身份证反面',
+    label: '代办人身份证反面',
   },
 
   {
     value: '6',
     url: `${BASE_IMG}medRecord_photos_10@2x.png`,
-    label: '手持身份证露脸',
+    label: '代办人手持身份证露脸',
   },
 
   {
@@ -74,13 +74,19 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '12',
     url: `${BASE_IMG}medRecord_photos_17@2x.png`,
-    label: '手持身份证背面露脸',
+    label: '代办人手持身份证背面露脸',
   },
 
   {
     value: '13',
     url: `${BASE_IMG}medRecord_photos_18@2x.png`,
-    label: '手持身份证背面露脸',
+    label: '患者本人手持身份证背面露脸',
+  },
+
+  {
+    value: '14',
+    url: `${BASE_IMG}medRecord_photos_19@2x.png`,
+    label: '委托书',
   },
 ];
 
