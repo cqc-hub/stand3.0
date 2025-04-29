@@ -6,7 +6,7 @@
         :key="s.value"
         :class="{
           '': si !== reportStatusMap.length,
-          [(s.value === lab.status && 'color-blue') || 'color-111']: 1,
+          [(s.value === lab.status && 'color-blue') || 'color-888']: 1,
         }"
         class="flex f32 font-semibold"
       >
@@ -38,11 +38,12 @@
   const props = withDefaults(
     defineProps<{
       lab: any;
+      type?: string;
     }>(),
     {}
   );
-
-  const reportStatusMap = ref([
+      
+  const reportStatusjYMap = ref([
     {
       label: '待预约',
       value: '1',
@@ -60,6 +61,29 @@
       value: '4',
     },
   ]);
+
+  const reportStatusJyMap = ref([ 
+    {
+      label: '待检验',
+      value: '2',
+    },
+    {
+      label: '等待报告',
+      value: '3',
+    },
+    {
+      label: '已出报告',
+      value: '4',
+    },
+  ]);
+
+  const reportStatusMap = ref();
+  if(props.type === 'jy'){
+    reportStatusMap.value = reportStatusJyMap.value
+  }else{
+    reportStatusMap.value = reportStatusjYMap.value
+  }
+     
 </script>
 
 <style lang="scss" scoped>
