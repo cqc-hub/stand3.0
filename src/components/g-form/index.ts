@@ -1,5 +1,10 @@
 import { XOR } from '@/typeUtils/obj';
-import { ServerStaticData, generateUuid, wait } from '@/utils';
+import {
+  ServerStaticData,
+  generateUuid,
+  wait,
+  type ISystemConfig,
+} from '@/utils';
 import { computed, ref } from 'vue';
 
 type TInputType =
@@ -145,7 +150,7 @@ export const useAddress = () => {
   const areas = ref(<TAddress[]>[]);
   const addressLoading = ref(false);
   const refAddressPicker = ref(<any>'');
-
+  const personConfig = ref(<ISystemConfig['person']>{});
   const addressList = computed(() => [
     provinces.value,
     citys.value,
@@ -176,12 +181,17 @@ export const useAddress = () => {
   };
 
   const getProvinces = async () => {
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
     citys.value = [];
     areas.value = [];
     await wait(80);
     const list = await _getList();
-
     provinces.value = list;
+    personConfig.value?.defaultAddress?.provinces &&
+      (provinces.value = moveObjectToFirstByNameInPlace(
+        list,
+        personConfig.value?.defaultAddress?.provinces
+      ));
 
     if (list.length) {
       await getCitys(list[0]);
@@ -193,7 +203,11 @@ export const useAddress = () => {
     areas.value = [];
     const list = await _getList(payload);
     citys.value = list;
-
+    personConfig.value?.defaultAddress?.citys &&
+      (citys.value = moveObjectToFirstByNameInPlace(
+        list,
+        personConfig.value?.defaultAddress?.citys
+      ));
     if (list.length) {
       refAddressPicker.value?.setColumnValues(1, list);
       await getAreas(list[0]);
@@ -205,6 +219,11 @@ export const useAddress = () => {
     const list = await _getList(payload);
     if (list.length) {
       areas.value = list;
+      personConfig.value?.defaultAddress?.areas &&
+        (areas.value = moveObjectToFirstByNameInPlace(
+          list,
+          personConfig.value?.defaultAddress?.areas
+        ));
       refAddressPicker.value?.setColumnValues(2, list);
     }
   };
@@ -224,6 +243,14 @@ export const useAddress = () => {
     }
 
     addressLoading.value = false;
+  };
+  const moveObjectToFirstByNameInPlace = (arr, nameValue) => {
+    const index = arr.findIndex((obj) => obj.label === nameValue);
+    if (index !== -1) {
+      const [target] = arr.splice(index, 1);
+      arr.unshift(target);
+    }
+    return arr;
   };
 
   const init = async () => {

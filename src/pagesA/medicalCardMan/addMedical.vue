@@ -384,8 +384,11 @@
     } = pageConfig.value;
 
     if (isFace === '1') {
-      console.log('人脸识别getInfoFromIdCard(formData.value[formKey.idCard])',getInfoFromIdCard(formData.value[formKey.idCard]));
-      
+      console.log(
+        '人脸识别getInfoFromIdCard(formData.value[formKey.idCard])',
+        getInfoFromIdCard(formData.value[formKey.idCard])
+      );
+
       if (
         formData.value[formKey.idType] === '01' &&
         getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
@@ -1078,7 +1081,6 @@
   onMounted(async () => {
     routeStore.receiveQuery(pageProps.value);
     await init();
-
     // #ifdef MP-ALIPAY
     if (
       globalGl.sConfig.login?.isAliAuthBase === '1' &&

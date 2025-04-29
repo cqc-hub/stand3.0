@@ -201,6 +201,8 @@ export interface ISystemConfig_ {
     isGuardianWithIdCard?: number;
     // 不需要地址
     isDropAddress?: '1';
+    // 默认地址
+    defaultAddress?:{provinces?: string; citys?: string; areas?: string;}
     // 不需要民族
     isDropNation?: '1';
     /**
