@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001077",
+  "sysCode": "1001054",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -229,7 +229,7 @@
       "alipayAppid": "",
       "h5Appid": "",
       "name": "核桃仁测试医院",
-      "isSearchInHos": false,
+      "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
     },

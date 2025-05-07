@@ -118,6 +118,7 @@ export type TPayDetailProp = {
 
 export type TCostList = {
   subCost: string;
+  executionFlag: string; // 1 已执行
   subCostTypeCode: string;
   subCostTypeName: string;
   clinicId: string;
