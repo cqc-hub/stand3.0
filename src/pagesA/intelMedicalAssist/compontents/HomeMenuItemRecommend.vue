@@ -35,6 +35,7 @@
 
 <script>
   import { useToPath } from '@/common/checkJump';
+  import { useTBanner } from '@/utils';
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   export default {
     props: {
@@ -50,7 +51,18 @@
 
     methods: {
       itemClick(item) {
+
+        // #ifndef H5
         useToPath(item);
+          // #endif
+
+        // #ifdef H5
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl(item.path,{...item.query}),
+        });
+          // #endif
+
       },
     },
 

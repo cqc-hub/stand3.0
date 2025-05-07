@@ -13,6 +13,7 @@ import { joinQueryForUrl, setLocalStorage } from '@/common';
 import {
   getMedicalAuthCode,
   getQxMedicalNation,
+  getMedicalArgWithFamily
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 import { IRegistrationCardItem } from './MyRegistration';
 import md5s from 'js-md5';
@@ -586,6 +587,7 @@ export class RegDetailUtil {
           // 宜兴仅wx
           args.payAuthNo = await getMedicalAuthCode();
         } else {
+          await getMedicalArgWithFamily();
           const authorize = await getQxMedicalNation({
             returnUrl: joinQueryForUrl(
               '/pagesA/MyRegistration/RegDetail',

@@ -157,7 +157,7 @@
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
-                 <!-- #ifndef H5 -->
+                
                  <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
@@ -170,7 +170,7 @@
                   <view v-if="msgItem.addRessInfo">
                     <Recommend-Info :item="msgItem.addRessInfo" />
                   </view>
-
+                   <!-- #ifndef H5 -->
                   <Evaluate-Btn1
                     v-if="msgItem.requestId && msgIndex >= msgList.length - 2"
                     :requestId="msgItem.requestId"

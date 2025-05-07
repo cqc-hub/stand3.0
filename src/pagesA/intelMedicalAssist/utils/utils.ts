@@ -1470,7 +1470,6 @@ export const regConfirm = async (pageArg) => {
 };
 
 export const handleSourceChoose = (pageArg) => {
-  console.log('______________', pageArg);
   regConfirm(pageArg);
 };
 

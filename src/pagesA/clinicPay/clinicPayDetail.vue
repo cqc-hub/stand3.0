@@ -196,7 +196,7 @@
       ref="refPay"
     >
       <view
-        v-if="getIsMedicalModePlugin() && pageConfig.confirmPayFg"
+        v-if=" pageConfig.confirmPayFg"
         class="p32"
       >
         <g-flag

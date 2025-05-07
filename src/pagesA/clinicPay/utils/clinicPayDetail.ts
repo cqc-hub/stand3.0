@@ -396,12 +396,12 @@ export const _getQxMedicalNation = async (
   };
 
   //请亲付字段，先根据系统码判断添加，等待后端接口兼容
-  if (globalGl.SYS_CODE === '1001057') {
+  // if (globalGl.SYS_CODE === '1001057') {
     requestArg.patientId = (!enHosPatientId && patientId) || undefined;
     if (enHosPatientId) {
       requestArg.enHosPatientId = enHosPatientId;
     }
-  }
+  // }
   // #ifdef  MP-WEIXIN
 
   requestArg.openId = gStores.globalStore.openId;

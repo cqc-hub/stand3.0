@@ -117,9 +117,18 @@
       },
 
       goServiceCenter() {
+         // #ifndef H5
         uni.navigateTo({
           url: '/pagesA/serviceCenter/serviceCenter',
         });
+         // #endif
+
+        // #ifdef H5
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl('/pagesA/serviceCenter/serviceCenter', {}),
+        });
+        // #endif
       },
     },
 

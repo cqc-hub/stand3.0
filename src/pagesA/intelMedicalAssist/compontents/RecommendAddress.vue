@@ -1,7 +1,7 @@
 <template>
-  <view class="g-border-top mt12 w100p lineH48 container" >
+  <view class="g-border-top mt12 w100p lineH48 container">
     <view
-      v-for="(item,index) in showList"
+      v-for="(item, index) in showList"
       :key="`recommendAddress${index}`"
       @click="itemClick(item)"
       class="flex-between content pt32 pb32 g-border-bottom"
@@ -55,7 +55,16 @@
 
     methods: {
       itemClick(item) {
+        // #ifndef H5
         useToPath(item);
+        // #endif
+
+        // #ifdef H5
+        useTBanner({
+          type: 'self',
+          path: joinQueryForUrl('/pagesC/openMiniProgram/openMiniProgram',item),
+        });
+        // #endif
       },
     },
 
@@ -74,10 +83,10 @@
   .arrow-icon {
     line-height: 26rpx;
   }
-  .lineH48{
-  line-height: 48rpx;
-}
-.container{
-  min-width: 600rpx;
-}
+  .lineH48 {
+    line-height: 48rpx;
+  }
+  .container {
+    min-width: 600rpx;
+  }
 </style>
