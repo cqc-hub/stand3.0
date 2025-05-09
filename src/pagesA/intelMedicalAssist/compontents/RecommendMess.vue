@@ -5,9 +5,9 @@
     class="guess-server float-from-top Second-Recommend newMessage-card pb24"
   >
     <view class="item">
-      <view class="info-time">
+      <!-- <view class="info-time">
         {{ item.createTime }}
-      </view>
+      </view> -->
       <view class="info-box" @click="goToLink(item)" :class="'unactive'">
         <view class="title">{{ item.title }}</view>
         <view class="description">
