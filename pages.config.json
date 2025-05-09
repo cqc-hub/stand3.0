@@ -813,6 +813,12 @@
           "style": {
             "navigationBarTitleText": " "
           }
+        },
+        {
+          "path": "service/addPatByScan",
+          "style": {
+            "navigationBarTitleText": " "
+          }
         }
       ],
       "pagesD-plugins": ""

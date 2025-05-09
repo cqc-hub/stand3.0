@@ -881,6 +881,8 @@ const userApi = {
 
   faceResultAuth: <T = any>(data) =>
     service.post<T>('/phs-user/authUser/faceResultAuth', parm(data)),
+  faceResultAuthPC: <T = any>(data) =>
+    service.post<T>('/phs-user/authUser/faceResultAuthPC', parm(data)),
 
   //快速验证注册/绑卡接口
   quickRegisterHealthCard: (data, opt = {}) =>
@@ -1020,6 +1022,9 @@ const userApi = {
   //添加相关就诊人
   addPat: (data) =>
     service.post('/phs-user/relevantPatient/addPat', parm(data)),
+  //添加相关就诊人
+  cacheAddPat: (data) =>
+    service.post('/phs-user/relevantPatient/cacheAddPat', parm(data)),
 
   //根据姓名手机号查询院内卡列表
   getAllCardByName: (data) =>

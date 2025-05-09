@@ -323,9 +323,12 @@ export class LoginUtils extends GStores {
 
     const { verifyResult } = await this.faceVerify({ name, idCardNumber });
 
+    const actionApi = this.globalStore.isLogin
+      ? api.faceResultAuth
+      : api.faceResultAuthPC;
     const {
       result: { pdata },
-    } = await api.faceResultAuth({
+    } = await actionApi({
       verifyResult,
       idCard: idCardNumber,
       source,
