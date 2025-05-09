@@ -172,7 +172,7 @@
   };
 
   const isItemDisabled = (item: TCostList[number]) => {
-    return item.costList.every((o) => o.amountRem === '0');
+    return item.executionFlag === '1' || item.costList.every((o) => o.amountRem === '0');
   };
 
   const isChildrenActive = (citem: TCostList[number]['costList'][number]) => {
@@ -197,6 +197,10 @@
   };
 
   const selItem = (item: TCostList[number], idx) => {
+    if (isItemDisabled(item)) {
+      return
+    }
+
     if (props.mulitChildren) {
       selChildren(item.costList);
       return;
