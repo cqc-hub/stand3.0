@@ -5,7 +5,7 @@
     }"
     class="g-page"
   >
-    <g-flag isShowFg typeFg="15" />
+    <g-flag v-if="!isModeMedicalHelp" isShowFg typeFg="15" />
     <!-- #ifdef  MP-WEIXIN -->
     <code-btn
       v-if="wxCrossProgramInfo.bizType"
@@ -37,7 +37,7 @@
 
       <view class="g-border-bottom">
         <g-tabs
-          v-show="tabField.length && tabField.length > 1"
+          v-show="tabField.length && tabField.length > 1 && !isModeMedicalHelp"
           v-model:value="tabCurrent"
           :tabs="tabField"
           :scroll="false"
@@ -54,7 +54,7 @@
       @change="({ detail: { current } }) => tabChange(current)"
       class="g-container"
     >
-      <swiper-item>
+      <swiper-item v-if="!isModeMedicalHelp">
         <scroll-view scroll-y class="swiper-item uni-bg-red">
           <block v-if="isPayListRequestComplete && unPayList.length">
             <Clinic-Pay-Detail-List
@@ -81,7 +81,8 @@
             <Clinic-Pay-Detail-List
               :list="payedList"
               :systemModeOld="gStores.globalStore.modeOld"
-              @click-item="goPayDetail"
+              :isModeMedicalHelp="isModeMedicalHelp"
+              @click-item="itemClick"
             />
           </block>
 
@@ -195,10 +196,7 @@
       autoInOne
       ref="refPay"
     >
-      <view
-        v-if=" pageConfig.confirmPayFg"
-        class="p32"
-      >
+      <view v-if="pageConfig.confirmPayFg" class="p32">
         <g-flag
           v-model:title="confirmFgTitle"
           :typeFg="pageConfig.confirmPayFg!"
@@ -212,18 +210,22 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, nextTick, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import {
     usePayPage,
-    getIsMedicalModePlugin,
-    getIsAliMedicalNation,
     _getQxMedicalNation,
+    IPayListItem,
   } from './utils/clinicPayDetail';
   import { useTBanner, wait } from '@/utils';
-  import { deQueryForUrl, setLocalStorage, getLocalStorage } from '@/common';
-  import { decryptForPage } from '@/common/des';
+  import {
+    deQueryForUrl,
+    setLocalStorage,
+    getLocalStorage,
+    joinQueryForUrl,
+  } from '@/common';
+  import { decryptForPage, encryptDes } from '@/common/des';
   import { beforeEach } from '@/router';
   import { IPat } from '@/stores/type/index';
 
@@ -275,6 +277,27 @@
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
+  const itemClick = (item: IPayListItem) => {
+    if (isModeMedicalHelp.value) {
+      const { cardNumber } = pageProps.value.deParams;
+      const { visitNo } = item;
+      const params = encryptDes(
+        JSON.stringify({
+          cardNumber,
+          visitNo,
+        }),
+        'phsDesKey'
+      );
+
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesB/medicationAssistant/medicalHelp', {
+          params,
+        }),
+      });
+    } else {
+      goPayDetail(item);
+    }
+  };
 
   const isListShowClinicType = computed(() => {
     return pageConfig.value.isListShowClinicType === '1';
@@ -286,6 +309,10 @@
     } else {
       return gStores.userStore.patList;
     }
+  });
+
+  const isModeMedicalHelp = computed(() => {
+    return pageProps.value.mode === 'medicalHelp';
   });
 
   const selPat = computed(() => {
@@ -423,7 +450,19 @@
 
     // await wait(600);
     isShowPatComponent.value = true;
+    if (isModeMedicalHelp.value) {
+      tabCurrent.value = 1;
+      uni.setNavigationBarTitle({
+        title: '代煎登记',
+      });
+    } else {
+      uni.setNavigationBarTitle({
+        title: '门诊缴费',
+      });
+    }
+
     await init();
+
     if (pageProps.value.tabIndex === '1') {
       tabCurrent.value = 1;
 

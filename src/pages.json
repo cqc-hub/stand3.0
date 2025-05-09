@@ -217,7 +217,7 @@
         {
           "path": "clinicPay/clinicPayDetail",
           "style": {
-            "navigationBarTitleText": "门诊缴费",
+            "navigationBarTitleText": " ",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
               "code-btn": "plugin://crossProgramPlugins/code-pop-btn"

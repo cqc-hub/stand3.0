@@ -780,11 +780,15 @@ export const usePayPage = () => {
       hosId?: string;
 
       params?: string;
-      deParams?: {
+      deParams: {
         cardNumber?: string;
         patientName?: string;
       };
       payNextActionParams?: string; // 携带优于配置参数TButtonConfig
+
+      // -----------
+      // 药品配送模式, 此时不显示tab, 内容已取药 点击列表去取药页面
+      mode?: 'medicalHelp'
     }
   );
 

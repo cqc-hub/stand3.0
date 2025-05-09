@@ -26,7 +26,7 @@
         <view class="flex-between flex-start-r">
           <view @click.stop="selItem(item)" class="g-bold f36 flex1 mr40">
             <text
-              v-if="item.costTypeCode && !getIsMedicalTradeTypeDefault()"
+              v-if="!isModeMedicalHelp && item.costTypeCode && !getIsMedicalTradeTypeDefault()"
               :class="{
                 'pay-self': isPaySelfItem(item),
                 'pay-medical': !isPaySelfItem(item),
@@ -91,7 +91,7 @@
             </view>
           </view>
 
-          <view v-if="!isCheck && item.totalCost" class="row flex-normal">
+          <view v-if="!isModeMedicalHelp && !isCheck && item.totalCost" class="row flex-normal">
             <view class="row-label color-888">费用金额</view>
             <view class="row-value g-break-word color-444">
               {{ item.totalCost }}元
@@ -117,6 +117,8 @@
       selUnPayList: IPayListItem[];
       isListShowClinicType?: boolean;
       isCheck?: boolean;
+      // 药品配送
+      isModeMedicalHelp?: boolean;
       isHidePrice?: boolean;
       systemModeOld?: boolean;
     }>(),
