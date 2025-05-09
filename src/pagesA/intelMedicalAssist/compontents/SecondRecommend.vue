@@ -59,6 +59,7 @@
   import globalGl from '@/config/global';
 
   import { useTBanner } from '@/utils';
+  
   import api from '@/service/api';
   export default {
     props: {

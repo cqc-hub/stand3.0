@@ -75,6 +75,7 @@ export type ChunkStatusType = {
   isWXStreamApi: boolean;
   isTyping: boolean;
   chunkTemp: string;
+  newMessage?: any;
 };
 export class TaskQueue {
   queue: any[];

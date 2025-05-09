@@ -36,6 +36,7 @@
 <script>
   import { useToPath } from '@/common/checkJump';
   import { useTBanner } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   export default {
     props: {

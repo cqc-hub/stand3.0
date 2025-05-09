@@ -32,7 +32,8 @@
 
 <script>
   import { useToPath } from '@/common/checkJump';
-
+  import { joinQueryForUrl } from '@/common';
+  import { useTBanner } from '@/utils';
   export default {
     props: {
       list: {
@@ -62,7 +63,7 @@
         // #ifdef H5
         useTBanner({
           type: 'self',
-          path: joinQueryForUrl('/pagesC/openMiniProgram/openMiniProgram',item),
+          path: joinQueryForUrl('pagesC/openMiniProgram/openMiniProgram',item),
         });
         // #endif
       },

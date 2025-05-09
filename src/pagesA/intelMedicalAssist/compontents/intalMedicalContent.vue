@@ -48,6 +48,7 @@
               v-if="msgItem.type === 4"
               class="chat-system-item e margin-left by-cyan"
             >
+            
               <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
               <!-- 更多推荐 -->
               <Second-Recommend
@@ -67,6 +68,10 @@
               <Recommend-Card />
             </view> -->
             <view v-else-if="msgItem.type === 6 && messFormData.length">
+              <Recommend-Remind />
+            </view>
+           
+            <view v-else-if="msgItem.type === 63">
               <Recommend-Remind />
             </view>
             <view v-else-if="msgItem.type === 61">
@@ -94,6 +99,10 @@
                   结果仅供参考，具体诊断和治疗应以医生的纸质检查单为准,请及时与医生沟通，以便获得专业的医疗建议和治疗方案。
                 </view>
               </view>
+            </view>
+            <view v-else-if="msgItem.type === 64 && messFormData.length">
+ 
+              <Recommend-Mess />
             </view>
 
             <view
@@ -230,6 +239,7 @@
   import HomeMenuItemRecommend from './HomeMenuItemRecommend.vue';
   import RecommendAddress from './RecommendAddress.vue';
   import RecommendRemind from './RecommendRemind.vue';
+  import RecommendMess from './RecommendMess.vue';
   import SecondRecommend from './SecondRecommend.vue';
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';

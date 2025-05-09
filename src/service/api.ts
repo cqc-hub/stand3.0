@@ -200,6 +200,11 @@ const queryApi = {
       hideLoading,
     }),
 
+  getHistoryRecord: <T = any>(data, hideLoading = false) =>
+    service.post<T>('/phs-message/message/getHistoryRecord', parm(data), {
+      hideLoading,
+    }),
+
   getIntelligenceVisit: <T = any>(data, hideLoading = false) =>
     service.post<T>('/phs-query/medical/getIntelligenceVisit', parm(data), {
       hideLoading,

@@ -57,7 +57,7 @@ export const popipHasShow = ref<boolean>(false);
 export const hosData = ref<any>([]);
 export const showOrder = ref(false);
 export const schOrderInfo = ref<any>({});
-const propsPbj = ref<any>({})
+const propsPbj = ref<any>({});
 const deptStore = useDeptStore();
 
 //普通首页
@@ -86,6 +86,7 @@ export const chunkStatus = ref<ChunkStatusType>({
   isWXStreamApi: false,
   isTyping: false,
   chunkTemp: '',
+  newMessage: '',
 });
 
 export const reload = async (isMess) => {
@@ -120,8 +121,32 @@ export const init = async (props) => {
     historyMess: false,
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
+  props?.isMess&& props?.isMess === '2' && initWithTheMess(props?.openid);
   reload(props?.isMess);
   // test();
+};
+export const initWithTheMess = async (openid) => {
+  const gStores = new GStores();
+  let openId = openid || gStores.globalStore.openId;
+  let str = `AI_${openId}`;
+  const { result } = await api.getHistoryRecord({ str, source: 1 });
+  if (result) {
+    styleConfig.value = {
+      transition: false, //初始过渡效果
+      showHeader: false, //展示首页
+      isMessage: true, //通知效果
+      simpleHeadInit: false, //初始服务居中
+      historyMess: true,
+    };
+    messFormData.value = result;
+    msgList.value = [
+      {
+        my: false,
+        type: 64,
+      },
+    ];
+  }
+ 
 };
 
 export const initWithMess = async () => {
@@ -616,7 +641,7 @@ export const handleGuess = (item) => {
 
 export const handleServer = (
   item: TButtonConfig & { isSelfMethod?: string },
-  source?:string
+  source?: string
 ) => {
   const gStores = new GStores();
   if (item?.isSelfMethod) {
@@ -624,9 +649,15 @@ export const handleServer = (
     item.isSelfMethod == 'openWxService' && openServicesChat(item.extraData);
     item.isSelfMethod == 'makePhone' && makePhone(item.extraData);
   } else {
-    if(gStores.globalStore.sysCode==='1001035'&&source === '21'){
-
-      useTBanner({...item,type: 'self',path:item.path.replace('https://h5.eheren.com/jiangsushengzhong/#/','')});
+    if (gStores.globalStore.sysCode === '1001035' && source === '21') {
+      useTBanner({
+        ...item,
+        type: 'self',
+        path: item.path.replace(
+          'https://h5.eheren.com/jiangsushengzhong/#/',
+          ''
+        ),
+      });
     }
     useTBanner(item);
   }
@@ -1085,7 +1116,7 @@ const typeInAskH5 = (value: any, answertype) => {
       args: {
         content: value,
         sysCode: gStores.globalStore.sysCode,
-        source:  propsPbj.value?.source == 19 ? 1 : 2,
+        source: propsPbj.value?.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
         // type: answertype,
@@ -1100,7 +1131,7 @@ const typeInAskH5 = (value: any, answertype) => {
       args: {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
-        source:  propsPbj.value?.source == 19 ? 1 : 2,
+        source: propsPbj.value?.source == 19 ? 1 : 2,
       },
     });
   }
@@ -1182,7 +1213,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     questionId = questionId?.split('_')[1];
     // #endif
     // 提取data:和event:message之间的字符
-    let dataMatch 
+    let dataMatch;
     // #ifndef MP-ALIPAY
     dataMatch = chunk.match(/data:(.*?)event:message/s);
     // #endif
