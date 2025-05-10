@@ -28,6 +28,7 @@ import api from '@/service/api';
 import globalGl from '@/config/global';
 import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
+import dayjs from 'dayjs';
 
 export const tradeType = {
   '1': '自费',
@@ -398,10 +399,10 @@ export const _getQxMedicalNation = async (
 
   //请亲付字段，先根据系统码判断添加，等待后端接口兼容
   // if (globalGl.SYS_CODE === '1001057') {
-    requestArg.patientId = (!enHosPatientId && patientId) || undefined;
-    if (enHosPatientId) {
-      requestArg.enHosPatientId = enHosPatientId;
-    }
+  requestArg.patientId = (!enHosPatientId && patientId) || undefined;
+  if (enHosPatientId) {
+    requestArg.enHosPatientId = enHosPatientId;
+  }
   // }
   // #ifdef  MP-WEIXIN
 
@@ -788,7 +789,7 @@ export const usePayPage = () => {
 
       // -----------
       // 药品配送模式, 此时不显示tab, 内容已取药 点击列表去取药页面
-      mode?: 'medicalHelp'
+      mode?: 'medicalHelp';
     }
   );
 
@@ -811,6 +812,11 @@ export const usePayPage = () => {
     });
 
     return fList.length === unPayList.value.length;
+  });
+
+  // 模式-药品配送
+  const isModeMedicalHelp = computed(() => {
+    return pageProps.value.mode === 'medicalHelp';
   });
 
   const isShowSelectAll = computed(() => {
@@ -935,16 +941,26 @@ export const usePayPage = () => {
 
       result = r;
     } else {
-      const { result: r } = await api
-        .getPrepaidClinicList<{
-          clinicPayListDetailResults: TPayedListItem[];
-        }>({
-          patientId,
-          hosId: hosId.value,
+      let actionApi = api.getPrepaidClinicList
+      const arg = {
+        patientId,
+        hosId: hosId.value,
+      };
+
+      if (isModeMedicalHelp.value) {
+        actionApi = api.getPatientVisits;
+
+        Object.assign(arg, {
+          endDate: dayjs().format('YYYY-MM-DD'),
+          startDate: dayjs().subtract(30, 'day').format('YYYY-MM-DD'),
         })
-        .finally(() => {
-          isPayListRequestComplete.value = true;
-        });
+      }
+
+      const { result: r } = await actionApi<{
+        clinicPayListDetailResults: TPayedListItem[];
+      }>(arg).finally(() => {
+        isPayListRequestComplete.value = true;
+      });
 
       result = r;
     }
@@ -1265,7 +1281,7 @@ export const usePayPage = () => {
           (await isMedicalSelf(
             pageProps.value.deParams?.cardNumber || cardNumber
           ));
-          flag = true;
+        flag = true;
         if (flag) {
           getPay();
         } else {
@@ -1491,7 +1507,7 @@ export const usePayPage = () => {
           mergeOrder: selList.map((o) => o.childOrder).join(','),
           cardNumber: pageProps.value.deParams?.cardNumber,
           mzParams: pageProps.value.params,
-          payNextActionParams:pageProps.value.payNextActionParams
+          payNextActionParams: pageProps.value.payNextActionParams,
         });
       } else {
         toPay();
@@ -2078,6 +2094,7 @@ export const usePayPage = () => {
     getIsDigitalPay,
     cacheStore,
     getFamilyArgs,
+    isModeMedicalHelp,
   };
 };
 
@@ -2140,7 +2157,7 @@ export const executeConfigPayAfter = async (
   additionData: any = {}
 ) => {
   //新增定制跳转 温附二互联网缴费跳转三方
-  console.log(9999,additionData)
+  console.log(9999, additionData);
   const { payNextActionParams } = additionData;
 
   if (payNextActionParams) {

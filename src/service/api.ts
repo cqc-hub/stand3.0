@@ -243,6 +243,12 @@ const queryApi = {
       // reportCmPV_YLName: '门诊缴费',
     }),
 
+  getPatientVisits: <T>(data) =>
+    service.post<T>('/phs-query/clinical/getPatientVisits', parm(data), {
+      hideLoading: false,
+      // reportCmPV_YLName: '门诊缴费',
+    }),
+
   // 预决算
   getClinicReservePay: <T>(data) =>
     service.post<T>('/phs-query/clinical/getClinicReservePay', parm(data), {

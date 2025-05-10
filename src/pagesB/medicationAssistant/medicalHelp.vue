@@ -79,7 +79,7 @@
         @click="showDialog"
         class="btn btn-primary flex1"
       >
-        选择取药方式
+        {{ selListOption1.length > 1 ? '选择取药方式' : '快递地址' }}
       </button>
     </view>
 
@@ -195,7 +195,7 @@
     return tabField.value.map((o) => o.key);
   });
 
-  const selListOption = computed(() => {
+  const getSelOptList = (list) => {
     const [opt1, opt2] = [
       {
         label: '医院窗口取药',
@@ -208,15 +208,15 @@
     ];
     let f = false;
 
-    const idx = selList.value.findIndex((o) => {
+    const idx = list.findIndex((o) => {
       return isToBeFriedAndDelivery(o);
     });
 
     if (idx > -1) {
-      if (selList.value.length === 1) {
+      if (list.length === 1) {
         f = true;
       } else {
-        const idx2 = selList.value.findIndex((o) => {
+        const idx2 = list.findIndex((o) => {
           return !isChineseMedical(o) && o.deliveryType === '1';
         });
 
@@ -227,6 +227,45 @@
     }
 
     return f ? [opt2] : [opt1, opt2];
+  };
+
+  const selListOption = computed(() => {
+    return getSelOptList(selList.value);
+    // const [opt1, opt2] = [
+    //   {
+    //     label: '医院窗口取药',
+    //     value: '医院窗口取药',
+    //   },
+    //   {
+    //     label: '快递配送到家',
+    //     value: '快递配送到家',
+    //   },
+    // ];
+    // let f = false;
+
+    // const idx = selList.value.findIndex((o) => {
+    //   return isToBeFriedAndDelivery(o);
+    // });
+
+    // if (idx > -1) {
+    //   if (selList.value.length === 1) {
+    //     f = true;
+    //   } else {
+    //     const idx2 = selList.value.findIndex((o) => {
+    //       return !isChineseMedical(o) && o.deliveryType === '1';
+    //     });
+
+    //     if (idx2 === -1) {
+    //       f = true;
+    //     }
+    //   }
+    // }
+
+    // return f ? [opt2] : [opt1, opt2];
+  });
+
+  const selListOption1 = computed(() => {
+    return getSelOptList(listNow.value);
   });
 
   let tabChange = (idx: number) => {
@@ -340,7 +379,9 @@
   };
 
   const listNow = computed(() => {
-    return tabField.value[tabCurrent.value].key === '0' ? waitSelList.value : seledList.value;
+    return tabField.value[tabCurrent.value].key === '0'
+      ? waitSelList.value
+      : seledList.value;
   });
 
   // 0-未取药 1-已取药

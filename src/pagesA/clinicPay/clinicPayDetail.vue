@@ -274,6 +274,7 @@
     cacheStore,
     hosId,
     wxCrossProgramInfo,
+    isModeMedicalHelp
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -311,9 +312,6 @@
     }
   });
 
-  const isModeMedicalHelp = computed(() => {
-    return pageProps.value.mode === 'medicalHelp';
-  });
 
   const selPat = computed(() => {
     if (pageProps.value.params) {

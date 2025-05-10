@@ -19,7 +19,7 @@
             <view class="safe-height"></view>
             <view class="safe-height"></view>
 
-            <view v-if="isMedicalFriedAndDelivery && getExpressAppId">
+            <view v-if="isMedicalFriedAndDelivery && getExpressAppId && gStores.globalStore.sysCode !== '1001038'">
               <text @click="goExpressApp" class="a-link f48">查看快递</text>
             </view>
             <view
@@ -63,7 +63,7 @@
           "
           class="box g-border p32 mb32"
         >
-       
+
           <Express-Step
             :pointEnd="_expressInfo.pointEnd"
             :pointNow="_expressInfo.pointNow"
@@ -77,7 +77,7 @@
           v-if="detailData.qrCode && pageProps.takenDrugType === '1'"
           class="g-border box page-first-item mb16 p32"
         >
-        
+
 
 
           <view class="my-display-none">
@@ -88,7 +88,7 @@
           <view class="g-flex-rc-cc g-bold f32 mb32">
             <rich-text :nodes="textRef" />
           </view>
-        
+
 
           <view class="qr g-flex-rc-cc">
             <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
@@ -344,8 +344,8 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
-    textRef.value = await getSysAppMore('1105') 
-  
+    textRef.value = await getSysAppMore('1105')
+
     init();
   });
 </script>
