@@ -1,5 +1,7 @@
 <template>
-  <view class=""></view>
+  <view class="g-page">
+    <g-message />
+  </view>
 </template>
 
 <script lang="ts" setup>
@@ -22,7 +24,7 @@
     uni.setNavigationBarTitle({
       title: '新增就诊人',
     });
-    await wait(600)
+    await wait(600);
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { idCard: idCardNumber, name, sign } = pageProps.value;
     if (!name) {
