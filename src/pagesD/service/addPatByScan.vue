@@ -7,7 +7,7 @@
 
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
-  import { apiAsync, LoginUtils } from '@/utils';
+  import { apiAsync, LoginUtils, wait } from '@/utils';
   import api from '@/service/api';
   const pageProps = ref(
     {} as {
@@ -22,6 +22,7 @@
     uni.setNavigationBarTitle({
       title: '新增就诊人',
     });
+    await wait(600)
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { idCard: idCardNumber, name, sign } = pageProps.value;
     if (!name) {
