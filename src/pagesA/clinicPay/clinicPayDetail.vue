@@ -274,7 +274,7 @@
     cacheStore,
     hosId,
     wxCrossProgramInfo,
-    isModeMedicalHelp
+    isModeMedicalHelp,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -286,6 +286,7 @@
         JSON.stringify({
           cardNumber,
           visitNo,
+          // visitNo: '2025051000046427',
         }),
         'phsDesKey'
       );
@@ -311,7 +312,6 @@
       return gStores.userStore.patList;
     }
   });
-
 
   const selPat = computed(() => {
     if (pageProps.value.params) {

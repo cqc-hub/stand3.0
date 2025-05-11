@@ -79,7 +79,7 @@
         @click="showDialog"
         class="btn btn-primary flex1"
       >
-        {{ selListOption1.length > 1 ? '选择取药方式' : '快递地址' }}
+        {{ selListOption1.length > 1 ? '选择取药方式' : selListOption1[0].value }}
       </button>
     </view>
 
@@ -188,7 +188,7 @@
   });
 
   const isShowSelItem = computed(() => {
-    return currentTabKey.value === '0' && globalGl.SYS_CODE !== '1001067';
+    return listNow.value.length && currentTabKey.value === '0' && globalGl.SYS_CODE !== '1001067' || false;
   });
 
   const tabFieldKeys = computed(() => {
@@ -203,7 +203,7 @@
       },
       {
         label: '快递配送到家',
-        value: '快递配送到家',
+        value: '填写快递地址',
       },
     ];
     let f = false;
@@ -503,7 +503,7 @@
 
   const wayClick = (item: IOptions) => {
     drayWaySelList.value = [item.value];
-    if (item.value === '快递配送到家') {
+    if (item.value === '填写快递地址') {
       configToHome();
     } else {
       // 医院窗口取药

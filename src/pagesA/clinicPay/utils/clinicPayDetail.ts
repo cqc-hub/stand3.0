@@ -941,28 +941,42 @@ export const usePayPage = () => {
 
       result = r;
     } else {
-      let actionApi = api.getPrepaidClinicList
+      let actionApi = api.getPrepaidClinicList;
       const arg = {
         patientId,
         hosId: hosId.value,
       };
 
       if (isModeMedicalHelp.value) {
-        actionApi = api.getPatientVisits;
-
         Object.assign(arg, {
           endDate: dayjs().format('YYYY-MM-DD'),
           startDate: dayjs().subtract(30, 'day').format('YYYY-MM-DD'),
-        })
+          type: 0,
+        });
+
+        const { result: r = [] } = await api
+          .getOutpatientHospitalList(arg)
+          .finally(() => {
+            isPayListRequestComplete.value = true;
+          });
+
+        r.map((o) => {
+          o.visitDate = o.admissionTime;
+        });
+        result = {
+          clinicPayListDetailResults: r,
+          cardNumber: gStores.userStore.patChoose.cardNumber,
+          patientName: gStores.userStore.patChoose.patientName,
+        } as any;
+      } else {
+        const { result: r } = await actionApi<{
+          clinicPayListDetailResults: TPayedListItem[];
+        }>(arg).finally(() => {
+          isPayListRequestComplete.value = true;
+        });
+
+        result = r;
       }
-
-      const { result: r } = await actionApi<{
-        clinicPayListDetailResults: TPayedListItem[];
-      }>(arg).finally(() => {
-        isPayListRequestComplete.value = true;
-      });
-
-      result = r;
     }
 
     const resList = (result && result.clinicPayListDetailResults) || [];

@@ -343,8 +343,8 @@ const queryApi = {
     service.post('/phs-query/hospital/inHosChosePlace', parm(data)),
 
   // 门诊住院列表
-  getOutpatientHospitalList: (data, config: any = {}) =>
-    service.post('/phs-query/operation/getOutpatientHospitalList', parm(data), {
+  getOutpatientHospitalList: <T = any>(data, config: any = {}) =>
+    service.post<T>('/phs-query/operation/getOutpatientHospitalList', parm(data), {
       showMessage: false,
       hideLoading: false,
       ...config,
