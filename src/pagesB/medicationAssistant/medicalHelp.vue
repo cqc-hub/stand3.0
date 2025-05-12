@@ -231,37 +231,6 @@
 
   const selListOption = computed(() => {
     return getSelOptList(selList.value);
-    // const [opt1, opt2] = [
-    //   {
-    //     label: '医院窗口取药',
-    //     value: '医院窗口取药',
-    //   },
-    //   {
-    //     label: '快递配送到家',
-    //     value: '快递配送到家',
-    //   },
-    // ];
-    // let f = false;
-
-    // const idx = selList.value.findIndex((o) => {
-    //   return isToBeFriedAndDelivery(o);
-    // });
-
-    // if (idx > -1) {
-    //   if (selList.value.length === 1) {
-    //     f = true;
-    //   } else {
-    //     const idx2 = selList.value.findIndex((o) => {
-    //       return !isChineseMedical(o) && o.deliveryType === '1';
-    //     });
-
-    //     if (idx2 === -1) {
-    //       f = true;
-    //     }
-    //   }
-    // }
-
-    // return f ? [opt2] : [opt1, opt2];
   });
 
   const selListOption1 = computed(() => {
@@ -414,6 +383,7 @@
       isComplete.value[takenDrug] = true;
     });
 
+    console.log(result, '233');
     const { drugList: rList, patientId: _patientId } = result;
     rPatientId = _patientId;
 

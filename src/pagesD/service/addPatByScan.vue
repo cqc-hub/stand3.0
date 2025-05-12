@@ -11,6 +11,9 @@
   import { deQueryForUrl } from '@/common';
   import { apiAsync, LoginUtils, wait } from '@/utils';
   import api from '@/service/api';
+  import { GStores } from '@/utils/modules/login';
+
+  const gStores = new GStores();
   const pageProps = ref(
     {} as {
       name: string;
@@ -35,10 +38,26 @@
       name,
     });
 
-    await api.cacheAddPat({
-      pData,
-      sign,
-    });
+    await api
+      .cacheAddPat({
+        pData,
+        sign,
+      })
+      .catch(async (err) => {
+        const respCode = err?.err?.respCode;
+
+        if (respCode === 884801) {
+          gStores.messageStore.closeMessage();
+          await apiAsync(uni.showModal, {
+            content:
+              '患者存在建档记录但手机号不匹配，请到小程序绑定修改手机号！',
+          });
+
+          uni.reLaunch({
+            url: '/pages/home/my',
+          });
+        }
+      });
 
     await apiAsync(uni.showModal, {
       title: '提示',
