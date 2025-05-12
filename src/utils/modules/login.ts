@@ -111,8 +111,22 @@ export class GStores {
     public globalStore = useGlobalStore()
   ) {}
 
-  getSysAppMore(typeFlag: any): Promise<{ title: string; content: string }> {
-    return new Promise((r) => {
+  async getSysAppMore(
+    typeFlag: any
+  ): Promise<{ title: string; content: string }> {
+    if (!typeFlag) {
+      return {
+        title: '',
+        content: '',
+      };
+    }
+
+    const oldData = this.globalStore.flagCaches[typeFlag];
+    if (oldData) {
+      return oldData;
+    }
+
+    const { title, content } = await new Promise<any>((r) => {
       api
         .getSysAppMore({
           typeFlag,
@@ -132,6 +146,10 @@ export class GStores {
           });
         });
     });
+
+    this.globalStore.setFlagCaches(typeFlag, { title, content });
+
+    return { title, content };
   }
 }
 

@@ -320,8 +320,13 @@
       </ls-skeleton>
     </scroll-view>
 
-     <g-message v-if="gStores.globalStore.isShowFlag" :isWxAuthInit="gStores.globalStore.isShowFlag" :shouldEmitClickBtn="gStores.globalStore.isShowFlag" @click-btn="onAgree" />
-    <g-message  v-else  />  
+    <g-message
+      v-if="gStores.globalStore.isShowFlag"
+      :isWxAuthInit="gStores.globalStore.isShowFlag"
+      :shouldEmitClickBtn="gStores.globalStore.isShowFlag"
+      @click-btn="onAgree"
+    />
+    <g-message v-else />
 
     <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
 
@@ -430,31 +435,31 @@
 
   onShow(async () => {
     viewerStore.init();
-    return
-    if (global.SYS_CODE === '1001067' && globalStore.openId) {
-      if (!uni.getStorageSync('wmUserInfo')) {
-        uni.setStorageSync(
-          'wmUserInfo',
-          JSON.stringify({
-            userId: globalStore.openId,
-            // #ifdef MP-WEIXIN
-             userTag: '温附二微信小程序项目',
-            // #endif
-             // #ifdef MP-ALIPAY
-             userTag: '温附二支付宝小程序项目',
-            // #endif
-            projectVersion: '1.0.0',
-            env: 'pro',
-          })
-        );
-      }
 
-      // @ts-expect-error
-      require('../../js_sdk/webfunny.min.js', (mod) => {}, (err) => {
-        console.error(err);
-      });
-      (() => import('@/js_sdk/webfunny.min.js'))();
-    }
+    // if (global.SYS_CODE === '1001067' && globalStore.openId) {
+    //   if (!uni.getStorageSync('wmUserInfo')) {
+    //     uni.setStorageSync(
+    //       'wmUserInfo',
+    //       JSON.stringify({
+    //         userId: globalStore.openId,
+    //         // #ifdef MP-WEIXIN
+    //         userTag: '温附二微信小程序项目',
+    //         // #endif
+    //         // #ifdef MP-ALIPAY
+    //         userTag: '温附二支付宝小程序项目',
+    //         // #endif
+    //         projectVersion: '1.0.0',
+    //         env: 'pro',
+    //       })
+    //     );
+    //   }
+
+    //   // @ts-expect-error
+    //   require('../../js_sdk/webfunny.min.js', (mod) => {}, (err) => {
+    //     console.error(err);
+    //   });
+    //   (() => import('@/js_sdk/webfunny.min.js'))();
+    // }
   });
 
   onLoad(async (opt) => {

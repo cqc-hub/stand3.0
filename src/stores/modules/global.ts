@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import globalGl from '@/config/global';
-import { getCurrentInstance} from 'vue';
+import { getCurrentInstance } from 'vue';
 import { getTcMallToken } from '@/common/utils';
-
 
 type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
 
@@ -29,6 +28,13 @@ interface IStateGlobal {
   isShowFlag: boolean; // 宁口隐私政策
   sysCode: string;
   modeOld: boolean; // 敬老模式?
+
+  flagCaches: {
+    [key: string]: {
+      title: string;
+      content: string;
+    };
+  };
 }
 
 //页面存储token brower等
@@ -53,6 +59,7 @@ const globalStore = defineStore('global', {
       'modeOld',
       'envH5',
       'isShowFlag',
+      'flagCaches',
     ],
   },
 
@@ -62,7 +69,7 @@ const globalStore = defineStore('global', {
       token: {
         accessToken: '',
         refreshToken: '',
-        loginData: ''
+        loginData: '',
       },
       //来源
       browser: {
@@ -80,6 +87,7 @@ const globalStore = defineStore('global', {
       cacheData: {},
       envH5: null,
       isShowFlag: false,
+      flagCaches: {},
     };
   },
 
@@ -101,6 +109,17 @@ const globalStore = defineStore('global', {
   },
 
   actions: {
+    setFlagCaches(key, { content, title }) {
+      this.flagCaches[key] = {
+        content,
+        title,
+      };
+    },
+
+    clearFlagCaches() {
+      this.flagCaches = {};
+    },
+
     clearStore() {
       this.token = {
         accessToken: '',
@@ -124,11 +143,11 @@ const globalStore = defineStore('global', {
     onAppShow(opt: any) {
       if (opt) {
         this.appShowData = opt;
-     
-       // #ifdef H5
-       this.updataH5Info(opt)
-       // #endif
-      }  
+
+        // #ifdef H5
+        this.updataH5Info(opt);
+        // #endif
+      }
     },
 
     onAppLaunch(opt: any) {
@@ -143,8 +162,8 @@ const globalStore = defineStore('global', {
           this.updateOralMallData();
         }
 
-        if(this.sysCode === '1001066' && !this.token.accessToken){
-          this.setShowFlag(true)
+        if (this.sysCode === '1001066' && !this.token.accessToken) {
+          this.setShowFlag(true);
         }
         // #endif
       }
@@ -173,25 +192,25 @@ const globalStore = defineStore('global', {
       }
       // #endif
     },
-    
-    async updateOralMallData(app?,type?){
-     // 口腔商城
-     let appData =  app || getCurrentInstance()!.proxy; 
-     if (appData) { 
-       // @ts-ignore
+
+    async updateOralMallData(app?, type?) {
+      // 口腔商城
+      let appData = app || getCurrentInstance()!.proxy;
+      if (appData) {
+        // @ts-ignore
         appData.globalData.configData = {
           from: 1, // 小程序的渠道值，具体咨询组件方
           mallAppId: '1b629fcf7ac9f10c54f4f87ff14fe69a',
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
-          token:  this.token.accessToken,
+          token: this.token.accessToken,
           openId: this.openId,
-          sysCode:this.sysCode,
-          getMallToken:getTcMallToken, 
-        };  
-        if(!type){
-          await getTcMallToken(app)
+          sysCode: this.sysCode,
+          getMallToken: getTcMallToken,
+        };
+        if (!type) {
+          await getTcMallToken(app);
         }
-       }
+      }
     },
 
     updateToken(token: typeof this.token) {
@@ -276,7 +295,7 @@ const globalStore = defineStore('global', {
     },
 
     setShowFlag(isShowFlag: boolean) {
-        this.isShowFlag = isShowFlag;
+      this.isShowFlag = isShowFlag;
     },
   },
 });

@@ -22,6 +22,7 @@
   import { ref, withDefaults, watch } from 'vue';
   import api from '@/service/api';
   import HTMLParser from '@/common/html-parser';
+  import { GStores } from '@/utils';
 
   interface IProps {
     typeFg: string; //协议编号
@@ -37,6 +38,7 @@
     value: '',
     isShowFg: false,
   });
+  const gStores = new GStores();
 
   const text = ref<any>('');
   const mTitle = ref('');
@@ -48,28 +50,34 @@
       return;
     }
 
-    api
-      .getSysAppMore({
-        typeFlag: props.typeFg,
-      })
-      .then(
-        ({ result }) => {
-          const { content, title } = result;
-          text.value = props.disabledFormatterParse
-            ? content
-            : HTMLParser(content);
+    const { content, title } = await gStores.getSysAppMore(props.typeFg);
 
-          mTitle.value = title;
-          emit('update:value', text.value);
-          emit('update:title', title);
-        },
-        () => {
-          uni.hideLoading();
-          const t = '未获取到协议' + props.typeFg;
-          text.value = props.disabledFormatterParse ? t : HTMLParser(t);
-          emit('update:value', text.value);
-        }
-      );
+    text.value = content;
+    emit('update:value', text.value);
+    emit('update:title', title);
+
+    // api
+    //   .getSysAppMore({
+    //     typeFlag: props.typeFg,
+    //   })
+    //   .then(
+    //     ({ result }) => {
+    //       const { content, title } = result;
+    //       text.value = props.disabledFormatterParse
+    //         ? content
+    //         : HTMLParser(content);
+
+    //       mTitle.value = title;
+    //       emit('update:value', text.value);
+    //       emit('update:title', title);
+    //     },
+    //     () => {
+    //       uni.hideLoading();
+    //       const t = '未获取到协议' + props.typeFg;
+    //       text.value = props.disabledFormatterParse ? t : HTMLParser(t);
+    //       emit('update:value', text.value);
+    //     }
+    //   );
   };
 
   watch(() => props.typeFg, init, {
@@ -96,7 +104,6 @@
     .title {
       margin-bottom: 10rpx;
     }
-
   }
 
   .aaa {
