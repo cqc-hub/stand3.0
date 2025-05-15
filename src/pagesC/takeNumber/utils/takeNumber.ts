@@ -2,7 +2,7 @@ export type TTakeNumberListItem = {
   categorName?: string;
   deptName: string;
   docName: string;
-  reportFlag: string; // 0-待取号 1-已取号 2 无需取号,  在线签到情况直接展示(string)
+  reportFlag: any; // 0-待取号 1-已取号 2 无需取号,  在线签到情况直接展示(string)
   ampmName: string;
   ampm: string;
   visitDate: string;

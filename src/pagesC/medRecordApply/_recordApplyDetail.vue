@@ -130,6 +130,7 @@
 
             <view class="container-box p32 g-border mb16">
               <block v-if="info._outInfo && info._outInfo.length">
+                <!-- @vue-expect-error -->
                 <Record-Card :list="info._outInfo" />
               </block>
 
