@@ -247,6 +247,9 @@ export const useHosPayPage = () => {
   };
 
   const getRefPay = async (fee?) => {
+    if (!fee) {
+      return
+    }
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
 
     if (isDigitalPay) {

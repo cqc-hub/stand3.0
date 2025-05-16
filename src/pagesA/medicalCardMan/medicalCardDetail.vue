@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStore.globalStore.modeOld,
+      [gStore.globalStore.getPageClass]: true,
     }"
   >
     <g-form

@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <g-flag typeFg="29" isShowFg />
     <g-choose-pat @choose-pat="getListData()" />
     <view class="bg">
@@ -131,14 +136,16 @@
   const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
 
   const reasonList = computed(() => {
-    const list = lists.value.reason || [
-      // {
-      //   codeName: '233',
-      // },
-      // {
-      //   codeName: '大家看',
-      // },
-    ];
+    const list =
+      lists.value.reason ||
+      [
+        // {
+        //   codeName: '233',
+        // },
+        // {
+        //   codeName: '大家看',
+        // },
+      ];
     return list.map((o) => ({
       ...o,
       label: o.codeName,

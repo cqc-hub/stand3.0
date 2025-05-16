@@ -76,7 +76,14 @@
 
 <script lang="ts" setup>
   import { getCurrentInstance, ref } from 'vue';
-  import { downFile, wait, GStores, FileUtil, apiAsync, throughCharacterLineFeed } from '@/utils';
+  import {
+    downFile,
+    wait,
+    GStores,
+    FileUtil,
+    apiAsync,
+    throughCharacterLineFeed,
+  } from '@/utils';
   import { type IDocDetail, type IProps } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
   import globalGl from '@/config/global';
@@ -369,6 +376,8 @@
       hosName,
     } = props.detail;
     // docPhoto = '';
+    const blockBgColor = gStores.globalStore.isTcm ? '#f6ede8' : '#ccddff';
+    const blockTextColor = gStores.globalStore.isTcm ? '#aa4c1f' : '#296fff';
     _goodAt = throughCharacterLineFeed(_goodAt || '暂无', ' ');
     docName = docName || '';
     docTitleName = docTitleName || '';
@@ -468,7 +477,7 @@
 
     ctx.save();
 
-    ctx.setFillStyle('var(--hr-brand-color-6)');
+    ctx.setFillStyle(blockTextColor);
     const docTitle = docTitleName;
 
     ctx.setFontSize(13);
@@ -481,7 +490,7 @@
         ctx.measureText(docTitle).width + 9,
         16,
         4,
-        '#ccddff'
+        blockBgColor
       );
 
       ctx.fillText(docTitle, 32, avatarBox.top + 24);
@@ -489,8 +498,7 @@
 
     if (docJobName) {
       const pLeft = docTitle ? 32 : 21;
-      const docTitleWidth =
-        (docTitle && ctx.measureText(docTitle).width) || 0;
+      const docTitleWidth = (docTitle && ctx.measureText(docTitle).width) || 0;
 
       if (docJobName.length > 10) {
         docJobName = docJobName.substring(0, 10) + '..';
@@ -503,7 +511,7 @@
         ctx.measureText(docJobName).width + 9,
         16,
         4,
-        '#ccddff'
+        blockBgColor
       );
 
       ctx.fillText(

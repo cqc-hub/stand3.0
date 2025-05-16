@@ -2,7 +2,7 @@
   <view
     v-if="isPageRender"
     :class="{
-      'system-mode-old': gStore.globalStore.modeOld,
+      [gStore.globalStore.getPageClass]: true,
     }"
     class="page"
   >
@@ -377,8 +377,9 @@
     position: relative;
     z-index: 1;
     .card-header {
-      background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));
-      border: 1px solid #548cff;
+      // background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));
+      background: linear-gradient(180deg, var(--hr-brand-color-6-light-3), var(--hr-brand-color-6));
+      border: 1px solid var(--hr-brand-color-6);
       border-radius: 16rpx 16rpx 0 0;
       font-weight: 600;
       color: var(--h-color-white);
