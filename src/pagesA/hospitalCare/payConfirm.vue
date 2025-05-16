@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -135,7 +135,7 @@
       key: 'inpPrepayments',
     }
   ]);
- 
+
   const payArg = ref<BaseObject>({});
 
   const info = ref<any>({});

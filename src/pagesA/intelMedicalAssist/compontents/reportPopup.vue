@@ -3,7 +3,7 @@
     <view
       class="reportList-container page g-page"
       :class="{
-        'system-mode-old': gStores.globalStore.modeOld,
+        [gStores.globalStore.getPageClass]: true,
       }"
     >
       <view class="title">

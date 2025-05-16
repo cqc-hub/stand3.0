@@ -2,7 +2,7 @@
   <!-- 日费用清单 -->
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="page f32"
     v-if="

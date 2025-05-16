@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -843,7 +843,7 @@
             }),
           };
         });
-       
+
           docHosSchList.value = [
             {
               hosName: '全部院区',

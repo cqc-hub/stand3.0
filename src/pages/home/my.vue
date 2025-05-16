@@ -2,7 +2,7 @@
   <view
     class="g-page"
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
   >
     <scroll-view class="g-container" scroll-y>
@@ -51,7 +51,7 @@
             <image :src="viewerStore.myBallList[0].iconfont"></image>
           </view>
         </drag-button>
-        
+
       </ls-skeleton>
 
       <view class="safe-height" />
@@ -154,14 +154,14 @@ const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: st
 
       fullUrl = joinQueryForUrl("/pagesC/openMiniProgram/openMiniProgram", {
         ...query,
-        _type: "2", 
+        _type: "2",
       });
     } else if (myEnvir === "hosnet") {
         fullUrl =joinQueryForUrl("/pagesC/cloudHospital/cloudHospital", {
         _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
       });
   }
-   
+
   await beforeEach({
     url: fullUrl,
     _isLogin: myhosType === "0",
@@ -242,7 +242,7 @@ const closePopClick = () => {
  const getMyOralCellMessage = async ()=>{
       const { result } = await api.getOrderCnt({
         openId: gStores.globalStore.openId,
-        source: gStores.globalStore.browser.source, 
+        source: gStores.globalStore.browser.source,
       });
       if (result) {
         const { waitPayNum, waitWriteOff } = result;
@@ -253,10 +253,10 @@ const closePopClick = () => {
                 item.messageNum = waitPayNum;
               }else if(query && query.key === 'myOralCell-waitWriteOff'){
                 item.messageNum = waitWriteOff;
-              } 
+              }
               return item;
             });
-        } 
+        }
       }
     };
 </script>

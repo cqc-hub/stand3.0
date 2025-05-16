@@ -45,7 +45,7 @@
             </view>
                 <!-- 消息展示 -->
                 <view
-              v-if="item?.messageNum" 
+              v-if="item?.messageNum"
               class="warn-label badge"
             >
             {{item.messageNum}}
@@ -293,7 +293,7 @@
       align-items: center;
       justify-content: center;
       background: #f2f6ff;
-      border: 2rpx solid #dfe9ff;
+      border: 2rpx solid var(--hr-brand-color-3);
       padding: 50rpx 0 38rpx;
       border-radius: 24px;
       &:nth-child(odd) {

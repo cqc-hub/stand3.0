@@ -172,7 +172,7 @@
     background: linear-gradient(
       360deg,
       rgba(238, 243, 255, 0) 50%,
-      #d8e5ff 99%
+      var(--hr-brand-color-3-light) 99%
     );
     border-radius: 24rpx 0rpx 0rpx 24rpx;
     .menu-pannel-style {

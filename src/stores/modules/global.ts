@@ -106,6 +106,20 @@ const globalStore = defineStore('global', {
       }
       return false;
     },
+
+    getPageClass(): string {
+      let pageClass = '';
+
+      if (this.modeOld) {
+        pageClass += ' system-mode-old';
+      }
+
+      if (this.sysCode === '1001033') {
+        pageClass += ' system-style-medical';
+      }
+
+      return pageClass;
+    },
   },
 
   actions: {

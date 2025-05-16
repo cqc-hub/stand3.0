@@ -1,7 +1,8 @@
 <template>
+  <!-- [gStores.globalStore.getPageClass]: true, -->
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >

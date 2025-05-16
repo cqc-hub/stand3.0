@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -94,7 +94,7 @@
     type IGPay,
     payMoneyOnline,
     toPayPull,
-    aliPayOldSystemPayType 
+    aliPayOldSystemPayType
   } from '@/components/g-pay/index';
 
   import api from '@/service/api';

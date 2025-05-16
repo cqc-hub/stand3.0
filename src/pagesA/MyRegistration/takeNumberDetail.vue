@@ -2,7 +2,7 @@
   <view
     :class="{
       [titleStatus.headerClass]: true,
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="reg-detail"
   >

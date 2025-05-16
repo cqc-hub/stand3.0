@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="grid-box"
   >
@@ -37,9 +37,9 @@
       emits('open-share', item.query && JSON.parse(item.query));
       }else if(item.path == 'openWxService'){
         openServicesChat(item.query)
-      } else { 
+      } else {
         useCommonTo(item);
-      } 
+      }
   };
 </script>
 

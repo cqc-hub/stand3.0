@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
       [pb0 ? 'pb0' : 'pb40']: 1,
     }"
     class="choose g-border pt40 pr32 pl32"
