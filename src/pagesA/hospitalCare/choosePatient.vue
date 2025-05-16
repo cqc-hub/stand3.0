@@ -1,64 +1,71 @@
 <template>
-  <!-- 选择就诊人 不绑定就诊人模式 -->
-  <g-flag v-if="!pageProps.type" typeFg="29" isShowFg />
-  <g-flag v-if="pageProps.type === '1'" typeFg="53" isShowFg />
-  <view class="page">
-    <view v-if="pageProps.type === '2'" class="title">请查询就诊人</view>
-    <view class="inputs">
-      <view class="input-item border flex items-center">
-        <text class="text-no-wrap">就诊人姓名</text>
-        <input
-          class="uni-input flex-1"
-          placeholder-style="font-size:32rpx;color:#bbb"
-          v-model="hosInfoParam.patientName"
-          @input="inputChange"
-          placeholder="请输入"
-        />
-        <view>
-          <g-login @handler-next="chooseAction">
-            <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
-          </g-login>
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
+    <!-- 选择就诊人 不绑定就诊人模式 -->
+    <g-flag v-if="!pageProps.type" typeFg="29" isShowFg />
+    <g-flag v-if="pageProps.type === '1'" typeFg="53" isShowFg />
+    <view class="page">
+      <view v-if="pageProps.type === '2'" class="title">请查询就诊人</view>
+      <view class="inputs">
+        <view class="input-item border flex items-center">
+          <text class="text-no-wrap">就诊人姓名</text>
+          <input
+            class="uni-input flex-1"
+            placeholder-style="font-size:32rpx;color:#bbb"
+            v-model="hosInfoParam.patientName"
+            @input="inputChange"
+            placeholder="请输入"
+          />
+          <view>
+            <g-login @handler-next="chooseAction">
+              <view class="pat-choose" @tap="chooseAction">选择就诊人</view>
+            </g-login>
+          </view>
+        </view>
+        <view class="input-item">
+          <text>手机号码</text>
+          <input
+            class="uni-input flex-1"
+            placeholder-style="font-size:32rpx;color:#bbb"
+            type="number"
+            v-model="hosInfoParam.patientPhone"
+            @input="
+              () => {
+                inputChange();
+                checkPatientPhone(hosInfoParam.patientPhone);
+              }
+            "
+            placeholder="请输入"
+          />
         </view>
       </view>
-      <view class="input-item">
-        <text>手机号码</text>
-        <input
-          class="uni-input flex-1"
-          placeholder-style="font-size:32rpx;color:#bbb"
-          type="number"
-          v-model="hosInfoParam.patientPhone"
-          @input="
-            () => {
-              inputChange();
-              checkPatientPhone(hosInfoParam.patientPhone);
-            }
-          "
-          placeholder="请输入"
-        />
-      </view>
-    </view>
 
-    <button
-      :disabled="
-        hosInfoParam.patientName != '' &&
-        hosInfoParam.patientPhone != '' &&
-        phoneStatus == true
-          ? false
-          : true
-      "
-      :class="
-        hosInfoParam.patientName != '' &&
-        hosInfoParam.patientPhone != '' &&
-        phoneStatus == true
-          ? 'activeSubmitBtn'
-          : 'submitBtn'
-      "
-      @click="toSearch"
-    >
-      查询
-    </button>
-    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
-    <g-message />
+      <button
+        :disabled="
+          hosInfoParam.patientName != '' &&
+          hosInfoParam.patientPhone != '' &&
+          phoneStatus == true
+            ? false
+            : true
+        "
+        :class="
+          hosInfoParam.patientName != '' &&
+          hosInfoParam.patientPhone != '' &&
+          phoneStatus == true
+            ? 'activeSubmitBtn'
+            : 'submitBtn'
+        "
+        @click="toSearch"
+      >
+        查询
+      </button>
+      <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+      <g-message />
+    </view>
   </view>
 </template>
 
@@ -245,7 +252,7 @@
     .submitBtn {
       height: 96rpx;
       border-radius: 16rpx;
-      background-color: #9ebeff;
+      background-color: var(--hr-brand-color-3-light);
       color: #fff;
       text-align: center;
       line-height: 96rpx;
@@ -266,7 +273,7 @@
       width: 180rpx;
       height: 56rpx;
       border-radius: 28rpx;
-      background-color: #e9f0ff;
+      background-color: var(--hr-brand-color-3-light);
       color: var(--hr-brand-color-6);
       font-weight: 600;
       font-size: var(--hr-font-size-xxs);
