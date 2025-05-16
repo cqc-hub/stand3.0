@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <home-Nav />
     <scroll-view
       @scroll="pageScroll"
@@ -16,7 +21,7 @@
           class="homePage"
           v-if="!gStores.globalStore.modeOld"
           :class="{
-            'system-mode-old': gStores.globalStore.modeOld,
+            [gStores.globalStore.getPageClass]: true,
           }"
         >
           <view
@@ -219,13 +224,7 @@
         </view>
 
         <!-- 老年版本 -->
-        <view
-          v-else
-          class="homePage"
-          :class="{
-            'system-mode-old': gStores.globalStore.modeOld,
-          }"
-        >
+        <view v-else class="homePage">
           <view class="card">
             <!-- 登录之后 -->
             <block v-if="globalStore.isLogin">
@@ -719,7 +718,7 @@
         position: relative;
         box-sizing: border-box;
 
-        border: 2rpx solid #dfe9ff;
+        border: 2rpx solid var(--hr-brand-color-3);
         backdrop-filter: blur(30rpx);
         border-radius: 24rpx;
 
@@ -828,8 +827,9 @@
       }
 
       .top-menu {
-        background: #f2f6ff;
-        border: 2rpx solid #dfe9ff;
+        // background: #f2f6ff;
+        background: var(--hr-brand-color-3-light);
+        border: 2rpx solid var(--hr-brand-color-3);
         border-radius: 24rpx;
         box-shadow: 0px 8rpx 40rpx 0rpx rgba(0, 0, 0, 0.06);
         .box {
@@ -868,7 +868,7 @@
         height: 78rpx;
         background: #fefefe;
         border-radius: 0 0 24rpx 24rpx;
-        box-shadow: 0 2rpx 0 0 #dfe9ff inset;
+        box-shadow: 0 2rpx 0 0 var(--hr-brand-color-3) inset;
         padding: 0 31rpx;
 
         .icon-size {
@@ -937,7 +937,7 @@
     margin: 0 26rpx;
     box-sizing: border-box;
 
-    border: 2rpx solid #dfe9ff;
+    border: 2rpx solid var(--hr-brand-color-3);
     backdrop-filter: blur(30rpx);
     border-radius: 24rpx;
     background: var(--hr-brand-color-6);

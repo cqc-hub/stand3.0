@@ -735,7 +735,7 @@
                 width: 31%;
               }
               .down {
-                color: #296fff;
+                color: var(--hr-brand-color-6);
               }
               .up {
                 color: #ff5040;
@@ -825,7 +825,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #296fff;
+      color: var(--hr-brand-color-6);
       font-size: var(--hr-font-size-xl);
       .popup-un-operator {
         display: flex;

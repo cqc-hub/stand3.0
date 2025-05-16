@@ -48,7 +48,7 @@
               v-if="msgItem.type === 4"
               class="chat-system-item e margin-left by-cyan"
             >
-            
+
               <!-- <text user-select  selectable class="g-break-word">{{ msgItem.msg }}</text> -->
               <!-- 更多推荐 -->
               <Second-Recommend
@@ -70,7 +70,7 @@
             <view v-else-if="msgItem.type === 6 && messFormData.length">
               <Recommend-Remind />
             </view>
-           
+
             <view v-else-if="msgItem.type === 63">
               <Recommend-Remind />
             </view>
@@ -101,7 +101,7 @@
               </view>
             </view>
             <view v-else-if="msgItem.type === 64 && messFormData.length">
- 
+
               <Recommend-Mess />
             </view>
 
@@ -166,7 +166,7 @@
                     <rich-text :nodes="sysAppMore"></rich-text>
                   </view>
 
-                
+
                  <view v-if="msgItem.firstCommendList" class="pt20">
                     <!-- 第一个推荐 -->
                     <Recommend-Menu :list="msgItem.firstCommendList" />
@@ -186,7 +186,7 @@
                     @askAgain="clearChatId"
                   />
                  <!-- #endif -->
-            
+
                 </view>
               </view>
             </view>
@@ -244,7 +244,7 @@
   import RecommendInfo from './RecommendInfo.vue';
   import RecommendMenu from './RecommendMenu.vue';
   import RecommendCard from './RecommendCard.vue';
-  
+
   import EvaluateBtn1 from './EvaluateBtn1.vue';
   import uaMarkdown from './ua-markdown/ua-markdown.vue';
   import DocScheduling from './DocScheduling.vue';
@@ -285,7 +285,7 @@
     }
     .chat-my-item {
       border-radius: 8px 0px 8px 8px;
-      background-color: #296fff;
+      background-color: var(--hr-brand-color-6);
       color: #fff;
       line-height: 60rpx;
     }
@@ -335,7 +335,7 @@
       top: 4rpx;
       margin: 0 0 0 8rpx;
       border-radius: 100%;
-      background: #296fff;
+      background: var(--hr-brand-color-6);
     }
     $opacity: 1 0.8 0.5 0.3 0.1 0.3 0.5 0.8 1 0.8 0.5 0.3 0.1 0.3;
     @for $i from 0 through 3 {

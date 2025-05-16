@@ -22,6 +22,8 @@ page {
   /* 品牌色/主色-6  浅色-1 click状态-7 不可点击-3 */
   --hr-brand-color-6: #296fff;
   --hr-brand-color-6-light: #2970ff0a;
+  --hr-brand-color-6-light-1: #296fff00;
+  --hr-brand-color-6-light-2: #296fff33;
   --hr-brand-color-1: #e9f0ff;
   --hr-brand-color-7: #0050f5;
   --hr-brand-color-2: #ccddff;

@@ -279,7 +279,7 @@
     }
     .banner-back1 {
       background: #eef3ff;
-      border: 2rpx solid #d9e5ff;
+      border: 2rpx solid var(--hr-brand-color-3);
     }
     // 绿色
     .icon-size2 {
@@ -298,7 +298,7 @@
     }
     .banner-back3 {
       background: #eef3ff;
-      border: 2rpx solid #d9e5ff;
+      border: 2rpx solid var(--hr-brand-color-3);
     }
     // 背景样式
     .icon-size-back1 {

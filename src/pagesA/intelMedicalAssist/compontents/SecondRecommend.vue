@@ -48,7 +48,7 @@
             </template>
           </view>
 
-      
+
         </view>
       </view>
     </scroll-view>
@@ -59,7 +59,7 @@
   import globalGl from '@/config/global';
 
   import { useTBanner } from '@/utils';
-  
+
   import api from '@/service/api';
   export default {
     props: {
@@ -214,7 +214,7 @@
     }
   }
   .color-blue{
-    color:#296FFF
+    color:var(--hr-brand-color-6)
   }
   .button-item{
     width:100%

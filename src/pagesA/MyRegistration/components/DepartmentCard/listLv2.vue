@@ -46,7 +46,7 @@
     margin-bottom: 16rpx;
 
     background: #eff4ff;
-    border: 1rpx solid #296fff;
+    border: 1rpx solid var(--hr-brand-color-6);
     border-radius: 16rpx;
 
     min-height: 100rpx;

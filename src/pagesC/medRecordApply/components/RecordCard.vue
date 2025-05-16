@@ -147,12 +147,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
   import { CaseCopeItemDetail } from '../utils/recordApply';
   import dayjs from 'dayjs';
   import { NotNullable } from '@/typeUtils';
 
-  const c = ref(0);
   type TList = NotNullable<CaseCopeItemDetail['_outInfo']>;
   defineProps<{
     list: TList;

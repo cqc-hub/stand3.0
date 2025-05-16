@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -445,7 +445,7 @@
         width: 48%;
         height: 112rpx;
         border: 1px solid #e9f0ff;
-        background-color: #296fff;
+        background-color: var(--hr-brand-color-6);
         color: #fff;
         font-weight: 600;
         border-radius: 16rpx;
@@ -486,7 +486,7 @@
     .activeSubmitBtn {
       height: 96rpx;
       border-radius: 16rpx;
-      background-color: #296fff;
+      background-color: var(--hr-brand-color-6);
       color: #fff;
       text-align: center;
       line-height: 96rpx;

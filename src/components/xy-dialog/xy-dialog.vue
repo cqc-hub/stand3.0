@@ -98,7 +98,7 @@
       // 确定文字颜色
       confirmColor: {
         type: String,
-        default: '#296FFF',
+        default: 'var(--hr-brand-color-6)',
       },
 
       // 是否显示取消按钮
@@ -287,7 +287,7 @@
           border-right: 2rpx solid #e6e6e6;
         }
         &.xy-dialog__footer-confirm {
-          color: #296fff;
+          color: var(--hr-brand-color-6);
           font-weight: bold;
         }
         &.xy-dialog__btn-row {
@@ -295,7 +295,7 @@
           text-align: center;
           padding: 20upx 0;
           &.xy-dialog__footer-confirm {
-            color: #296fff;
+            color: var(--hr-brand-color-6);
           }
         }
       }

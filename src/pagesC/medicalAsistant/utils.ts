@@ -8,7 +8,7 @@ export const getItemStyle = item => {
   } = item;
 
   const s = {
-    mainColor: "#296FFF",
+    mainColor: "var(--hr-brand-color-6)",
     bgColor: "#E9F0FF",
   };
 

@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="page"
     scroll-y="true"
@@ -985,8 +985,8 @@
         border: 2rpx solid #cccccc;
         &.chooseBtn {
           background-color: #ebf1ff;
-          color: #296fff;
-          border: 2rpx solid #296fff;
+          color: var(--hr-brand-color-6);
+          border: 2rpx solid var(--hr-brand-color-6);
         }
         &.finallyBtn {
           margin-right: 32rpx;
@@ -1200,7 +1200,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #296fff;
+      color: var(--hr-brand-color-6);
       font-size: var(--hr-font-size-xl);
       .popup-un-operator {
         display: flex;

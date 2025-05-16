@@ -106,6 +106,25 @@ const globalStore = defineStore('global', {
       }
       return false;
     },
+
+    // 是否中医
+    isTcm(): boolean {
+      return this.sysCode === '1001033'
+    },
+
+    getPageClass(): string {
+      let pageClass = '';
+
+      if (this.modeOld) {
+        pageClass += ' system-mode-old';
+      }
+
+      if (this.isTcm) {
+        pageClass += ' system-style-medical';
+      }
+
+      return pageClass;
+    },
   },
 
   actions: {

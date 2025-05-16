@@ -255,7 +255,7 @@
     .activeSubmitBtn {
       height: 96rpx;
       border-radius: 16rpx;
-      background-color: #296fff;
+      background-color: var(--hr-brand-color-6);
       color: #fff;
       text-align: center;
       line-height: 96rpx;
@@ -267,7 +267,7 @@
       height: 56rpx;
       border-radius: 28rpx;
       background-color: #e9f0ff;
-      color: #296fff;
+      color: var(--hr-brand-color-6);
       font-weight: 600;
       font-size: var(--hr-font-size-xxs);
       line-height: 56rpx;

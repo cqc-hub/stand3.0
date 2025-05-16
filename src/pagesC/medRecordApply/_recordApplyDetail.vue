@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
   >
     <view
@@ -130,6 +130,7 @@
 
             <view class="container-box p32 g-border mb16">
               <block v-if="info._outInfo && info._outInfo.length">
+                <!-- @vue-expect-error -->
                 <Record-Card :list="info._outInfo" />
               </block>
 
@@ -650,8 +651,8 @@
         background: linear-gradient(
           0deg,
           rgba(41, 111, 255, 0) 1%,
-          #296fff 38%,
-          #296fff 96%
+          var(--hr-brand-color-6) 38%,
+          var(--hr-brand-color-6) 96%
         );
       }
     }
