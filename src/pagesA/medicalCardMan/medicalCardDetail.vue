@@ -234,7 +234,7 @@
     border-radius: 0;
   }
   .goMedicalFiling {
-    color: #296fff;
+    color: var(--hr-brand-color-6);
     margin-left: 20rpx;
   }
 </style>

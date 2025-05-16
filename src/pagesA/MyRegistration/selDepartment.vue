@@ -143,7 +143,7 @@
           isShowCancel: !!deptDialogBtnCannel,
           cancelText,
           confirmText,
-          cancelColor: '#296FFF',
+          cancelColor: 'var(--hr-brand-color-6)',
           maxHeight: 900,
         },
         closeCallBack({ confirm, maskClose }) {

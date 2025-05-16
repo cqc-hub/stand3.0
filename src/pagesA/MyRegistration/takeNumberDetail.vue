@@ -301,8 +301,8 @@
         background: linear-gradient(
           0deg,
           rgba(41, 111, 255, 0) 1%,
-          #296fff 38%,
-          #296fff 96%
+          var(--hr-brand-color-6) 38%,
+          var(--hr-brand-color-6) 96%
         );
       }
     }

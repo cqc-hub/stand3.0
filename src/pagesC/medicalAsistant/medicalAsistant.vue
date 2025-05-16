@@ -280,7 +280,7 @@
   }
   .footer-icon-btn:last-of-type .footer-btn {
     color: #fff;
-    background: #296fff;
+    background: var(--hr-brand-color-6);
   }
   .icon-flex {
     flex: 0 0 50rpx;

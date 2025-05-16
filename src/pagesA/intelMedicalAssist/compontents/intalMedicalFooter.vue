@@ -487,7 +487,7 @@
     voicing.value = true
     startListen(e);
     }
-   
+
     // #endif
   };
 
@@ -795,7 +795,7 @@
   }
   .send-text {
     color: #fff !important;
-    background: #296fff;
+    background: var(--hr-brand-color-6);
     padding: 12rpx 22rpx;
     border-radius: 16rpx;
     text-align: center;
@@ -804,7 +804,7 @@
     white-space: nowrap;
     margin: 0 20rpx 0 0;
     color: #fff;
-    background: #296fff;
+    background: var(--hr-brand-color-6);
     border: none;
     border-radius: 16px;
     flex-direction: column;
@@ -864,7 +864,7 @@
           width: 10rpx;
           height: 40rpx;
           margin: 0 5rpx;
-          background: #296fff;
+          background: var(--hr-brand-color-6);
           transform-origin: center center;
           animation: music 1s 0ms infinite ease-in-out;
         }

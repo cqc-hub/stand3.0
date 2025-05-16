@@ -468,7 +468,7 @@
 
     ctx.save();
 
-    ctx.setFillStyle('#296fff');
+    ctx.setFillStyle('var(--hr-brand-color-6)');
     const docTitle = docTitleName;
 
     ctx.setFontSize(13);

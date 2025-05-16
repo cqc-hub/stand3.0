@@ -1,7 +1,11 @@
 .system-style-medical {
   // --hr-font-size-xxl: 56rpx;
   --hr-brand-color-6: #aa4c1f;
-
   --hr-brand-color-3-light: #f6ede8;
   --hr-brand-color-3: #aa4b1f4a;
+  --hr-brand-color-1: var(--hr-brand-color-3-light);
+
+
+  --hr-brand-color-6-light-1: #aa4c1f00;
+  --hr-brand-color-6-light-2: #aa4c1f33;
 }

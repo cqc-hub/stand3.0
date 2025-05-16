@@ -1,5 +1,10 @@
 <template>
-  <view class="page g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="page g-page"
+  >
     <g-flag
       v-if="dirUrl.includes('/pagesA/MyRegistration/selDepartment')"
       isShowFg

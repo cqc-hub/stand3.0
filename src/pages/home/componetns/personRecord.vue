@@ -110,7 +110,7 @@
   };
 
   const backImg = [jzIcon, ybIcon];
-  const recordColors = ['#296FFF', '#00b39e'];
+  const recordColors = ['var(--hr-brand-color-6)', '#00b39e'];
 </script>
 
 <style lang="scss" scoped>

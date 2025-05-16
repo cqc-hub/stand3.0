@@ -155,7 +155,8 @@
       },
       lineColor: {
         type: String,
-        default: 'linear-gradient(270deg,#53a8ff, #296fff)',
+        default: 'linear-gradient(180deg,var(--hr-brand-color-3),var(--hr-brand-color-6) 80%)',
+        // default: 'linear-gradient(270deg,#53a8ff, var(--hr-brand-color-6))',
       },
       lineHeight: {
         type: String,

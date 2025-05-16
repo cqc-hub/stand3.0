@@ -278,7 +278,7 @@
         display: flex;
         .f-b1 {
           background: #e9f0ff;
-          color: #296fff;
+          color: var(--hr-brand-color-6);
           width: 100%;
         }
         .f-b2 {
@@ -332,14 +332,14 @@
     background-color: #e9f0ff;
 
     .text {
-      color: #296fff;
+      color: var(--hr-brand-color-6);
       font-size: var(--hr-font-size-xxxs);
       font-weight: 600;
       text-align: center;
     }
     .right {
       font-size: var(--hr-font-size-base);
-      color: #296fff;
+      color: var(--hr-brand-color-6);
     }
   }
   .triangle-left {

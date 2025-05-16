@@ -269,8 +269,11 @@ const closePopClick = () => {
   pointer-events: none;
   z-index: 1;
 
-  background: linear-gradient(160deg, #13b8ff2a, #13b8ff2a, rgba(255, 0, 0, 0) 50%),
-    linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
+  background: linear-gradient(160deg, var(--hr-brand-color-6-light), var(--hr-brand-color-6-light), rgba(255, 0, 0, 0) 50%),
+    linear-gradient(-180deg, var(--hr-brand-color-3-light), var(--hr-brand-color-3-light), rgba(0, 255, 0, 0) 50%);
+
+  // background: linear-gradient(160deg, #13b8ff2a, #13b8ff2a, rgba(255, 0, 0, 0) 50%),
+  //   linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
 }
 .my-menu {
   padding: 0 32rpx;

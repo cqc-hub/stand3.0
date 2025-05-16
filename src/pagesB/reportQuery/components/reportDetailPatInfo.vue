@@ -100,7 +100,7 @@
       </view>
       <view v-if="reportInfo.reminder" class="subhead">
         检验提示
-        <view style="color: #296fff; width: calc(60%)" class="subhead-detail">
+        <view style="color: var(--hr-brand-color-6); width: calc(60%)" class="subhead-detail">
           {{ reportInfo.reminder }}
         </view>
         <button @click="isShow = !isShow" class="more-button g-border">
