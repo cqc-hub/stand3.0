@@ -11,7 +11,7 @@
         pillsColor="#fff"
         bgColor="#fff0"
         color="#24314D"
-        activeColor="#296FFF"
+        activeColor="var(--hr-brand-color-6)"
         pillsBorderRadius="42rpx 42rpx 0 0"
         paddingItem="0"
         height="80"
