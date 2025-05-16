@@ -9,6 +9,7 @@ import {
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 import { apiAsync, cacheUtil, getTcMallToken } from '@/utils';
+import { useViewerStore } from "@/stores/modules/viewer";
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import HTMLParser from '@/common/html-parser';
@@ -439,13 +440,19 @@ export class LoginUtils extends GStores {
     this.userStore.clearStore();
     this.globalStore.clearStore();
     useRouterStore().clear();
+    
+    // #ifdef MP-WEIXIN
     if (this.globalStore.sysCode === '1001063') {
+      const viewerStore = useViewerStore();
       const appInstance = getApp();
       if (appInstance && appInstance.globalData) {
         this.globalStore.updateOralMallData(appInstance);
       }
+      // 未登录时清空 messageNum
+      viewerStore.clearMyMenuCellMessage();
       uni.setStorageSync('fc-user-token', '');
     }
+    // #endif
 
     setTimeout(() => {
       if (!isHideMessage) {
@@ -678,11 +685,12 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       // #ifdef MP-WEIXIN
       if (this.globalStore.sysCode === '1001063') {
         const appInstance = getApp();
+        const viewerStore = useViewerStore();
         if (appInstance && appInstance.globalData) {
           this.globalStore.updateOralMallData(appInstance, 'login');
           appInstance.globalData.configData.mallToken = await getTcMallToken();
-          // appInstance.globalData.configData.getMallToken = getTcMallToken;
         }
+        viewerStore.getMyOralCellMessage();
       }
 
       // #endif

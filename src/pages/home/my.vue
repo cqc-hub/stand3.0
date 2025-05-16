@@ -207,10 +207,17 @@ onMounted(() => {
   } else if (props._isOutLogin) {
     messageStore.showMessage("登录过期,请重新登录", 1000);
   }
-
-  if(gStores.globalStore.sysCode === '1001063' && gStores.globalStore.isLogin ){
-    getMyOralCellMessage()
+   // #ifdef MP-WEIXIN
+   if(gStores.globalStore.sysCode === '1001063'){
+    if (!gStores.globalStore.isLogin) {
+      viewerStore.clearMyMenuCellMessage();
+        return;
+      }else{
+       viewerStore.getMyOralCellMessage();
+      }
   }
+   // #endif
+
 });
 
 const openModeOld = () => {
@@ -238,27 +245,7 @@ const closePopClick = () => {
     }, 500);
   }
 };
-
- const getMyOralCellMessage = async ()=>{
-      const { result } = await api.getOrderCnt({
-        openId: gStores.globalStore.openId,
-        source: gStores.globalStore.browser.source, 
-      });
-      if (result) {
-        const { waitPayNum, waitWriteOff } = result;
-        if (waitPayNum > 0 || waitWriteOff > 0) {
-          viewerStore.myMenuCellList.map((item) => {
-            const query = item.query && JSON.parse(item.query)
-              if (query && query.key === 'myOralCell-waitPayNum') {
-                item.messageNum = waitPayNum;
-              }else if(query && query.key === 'myOralCell-waitWriteOff'){
-                item.messageNum = waitWriteOff;
-              } 
-              return item;
-            });
-        } 
-      }
-    };
+ 
 </script>
 
 <style lang="scss" scoped>
