@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -39,10 +39,12 @@
           />
         </view>
       </view>
-      <view>
+      <view class="mt60">
         <button
-          :disabled="defalutMoney == '' ? true : false"
-          :class="defalutMoney == '' ? 'submitBtn' : 'activeSubmitBtn'"
+          :class="{
+            'btn-disabled': !defalutMoney
+          }"
+          class="btn btn-primary mt70"
           @click="getRefPay(defalutMoney)"
         >
           确定
@@ -432,8 +434,8 @@
       .button {
         width: 48%;
         height: 112rpx;
-        border: 1px solid #e9f0ff;
-        background-color: #e9f0ff;
+        border: 1px solid var(--hr-brand-color-3-light);
+        background-color: var(--hr-brand-color-3-light);
         color: #444;
         font-weight: 600;
         border-radius: 16rpx;
@@ -444,8 +446,8 @@
       .activeButton {
         width: 48%;
         height: 112rpx;
-        border: 1px solid #e9f0ff;
-        background-color: #296fff;
+        border: 1px solid var(--hr-brand-color-3-light);
+        background-color: var(--hr-brand-color-6);
         color: #fff;
         font-weight: 600;
         border-radius: 16rpx;
@@ -476,7 +478,7 @@
     .submitBtn {
       height: 96rpx;
       border-radius: 16rpx;
-      background-color: #9ebeff;
+      background-color: var(--hr-brand-color-3-light);
       color: #fff;
       text-align: center;
       line-height: 96rpx;
@@ -486,7 +488,7 @@
     .activeSubmitBtn {
       height: 96rpx;
       border-radius: 16rpx;
-      background-color: #296fff;
+      background-color: var(--hr-brand-color-6);
       color: #fff;
       text-align: center;
       line-height: 96rpx;

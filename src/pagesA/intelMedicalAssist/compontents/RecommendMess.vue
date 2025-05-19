@@ -120,7 +120,7 @@
     }
 
     .active {
-      border: 2rpx solid #296fff;
+      border: 2rpx solid var(--hr-brand-color-6);
     }
 
     .unactive {

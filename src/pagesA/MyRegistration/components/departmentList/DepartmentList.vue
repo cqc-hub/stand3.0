@@ -99,7 +99,8 @@
       activeLv3: IDeptLv3;
     }>(),
     {
-      lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)',
+      lineColor:
+        'linear-gradient(270deg,var(--hr-brand-color-3),var(--hr-brand-color-6))',
     }
   );
 

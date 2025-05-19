@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <view class="search-input">
       <uni-search-input
         v-model:value="searchValue"
@@ -42,13 +47,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { ref } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
 
   import { type ListItem, type TDeptItem } from './utils/DepartmentCard';
   import { joinQueryForUrl } from '@/common';
-  import { debounce } from '@/utils';
-
+  import { debounce, GStores } from '@/utils';
   import api from '@/service/api';
 
   import ListLv2 from './components/DepartmentCard/listLv2.vue';
@@ -56,6 +60,7 @@
   const pageProp = ref({
     hosId: '',
   });
+  const gStores = new GStores();
   const searchValue = ref('');
   const list = ref<ListItem[]>([]);
   const listLv2 = ref<TDeptItem[]>([]);
@@ -177,7 +182,6 @@
       .w0 {
         width: 0;
       }
-
     }
   }
 

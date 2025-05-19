@@ -42,7 +42,7 @@
     }>(),
     {}
   );
-      
+
   const reportStatusjYMap = ref([
     {
       label: '待预约',
@@ -62,7 +62,7 @@
     },
   ]);
 
-  const reportStatusJyMap = ref([ 
+  const reportStatusJyMap = ref([
     {
       label: '待检验',
       value: '2',
@@ -83,7 +83,7 @@
   }else{
     reportStatusMap.value = reportStatusjYMap.value
   }
-     
+
 </script>
 
 <style lang="scss" scoped>
@@ -102,7 +102,7 @@
       left: 0;
       right: 0;
       height: 4rpx;
-      background: #296fff;
+      background: var(--hr-brand-color-6);
     }
   }
 </style>

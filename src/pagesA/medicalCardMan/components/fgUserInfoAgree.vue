@@ -5,7 +5,7 @@
         <checkbox
           :value="true"
           :checked="value"
-          color="#296fff"
+          color="var(--hr-brand-color-6)"
           style="transform: scale(0.7)"
         />
         <text class="f28 color-blue pt6">允许该平台访问院内此用户的就诊数据</text>

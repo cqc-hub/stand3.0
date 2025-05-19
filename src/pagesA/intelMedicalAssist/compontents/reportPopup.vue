@@ -3,7 +3,7 @@
     <view
       class="reportList-container page g-page"
       :class="{
-        'system-mode-old': gStores.globalStore.modeOld,
+        [gStores.globalStore.getPageClass]: true,
       }"
     >
       <view class="title">
@@ -23,7 +23,7 @@
         <view class="sub-title-line flex-normal pl24 pr24 relative">
           <view class="sub-title f28 color-444">
             <text>上传</text>
-            <text style="color: #296fff">检验报告</text>
+            <text style="color: var(--hr-brand-color-6)">检验报告</text>
             <text>，智能医助将为您解读报告~</text>
           </view>
           <view class="report-img relative">

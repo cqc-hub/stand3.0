@@ -2,7 +2,7 @@
   <view
     class="g-page"
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
   >
     <g-flag typeFg="600" isShowFg />

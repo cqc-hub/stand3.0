@@ -50,7 +50,7 @@
     }>(),
     {
       activeItemBg: '#fff',
-      lineColor: 'linear-gradient(270deg,#53a8ff, #296fff)',
+      lineColor: 'linear-gradient(270deg,#53a8ff, var(--hr-brand-color-6))',
       field: () => ({
         label: 'label',
         value: 'value',

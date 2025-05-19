@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <view class="header-bg">
       <image
         v-if="detailInfo.deptPhoto"
@@ -143,13 +148,13 @@
     <PromiseReturnType<typeof getSystemConfig<'FAMOUS_DOCTOR_DEPT'>>>{}
   );
   const getDetailData = async () => {
-    const { id ,hosDeptId} = pageProps.value;
+    const { id, hosDeptId } = pageProps.value;
     isComplete.value = false;
 
     const { result } = await api
       .getDeptCardDetail({
         id,
-        hosDeptId
+        hosDeptId,
       })
       .finally(() => {
         isComplete.value = true;
@@ -245,7 +250,6 @@
   });
 
   onLoad(async (opt) => {
-
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     uni.showLoading({});
 

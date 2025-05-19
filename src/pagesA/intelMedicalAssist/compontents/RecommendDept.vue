@@ -189,14 +189,14 @@
           color: #000;
         }
         .deptName {
-          color: #296fff;
+          color: var(--hr-brand-color-6);
         }
       }
       .button {
         flex: 0 0 auto;
         padding: 8rpx 16rpx;
         color: #fff;
-        background-color: #296fff;
+        background-color: var(--hr-brand-color-6);
         text-align: center;
         display: flex;
         align-items: center;

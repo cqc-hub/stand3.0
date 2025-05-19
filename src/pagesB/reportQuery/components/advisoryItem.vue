@@ -103,7 +103,7 @@ const props = defineProps({
     //住院
     .itemiconHospitalization {
       background-color: #e9f0ff;
-      color: #296fff;
+      color: var(--hr-brand-color-6);
     }
     //门诊
     .itemiconOutpatient {

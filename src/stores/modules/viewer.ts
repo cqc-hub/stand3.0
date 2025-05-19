@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ServerStaticData } from '@/utils';
 import api from '@/service/api';
 
+
 const viewerStore = defineStore('viewer', {
   persist: {
     key: '_viewer',
@@ -48,7 +49,36 @@ const viewerStore = defineStore('viewer', {
       const { result } = await api.getAnnouncementCms({});
       this.homeNoticeMenu = result;
     },
+    async getMyOralCellMessage() {
+      try {
+        const { result } = await api.getOrderCnt({
+          openId: JSON.parse(uni.getStorageSync('global')).openId,
+          source:'19', //微信环境
+        });
 
+        if (result) {
+          const { waitPayNum, waitWriteOff } = result;
+
+          this.myMenuCellList.map((item) => {
+            const query = item.query && JSON.parse(item.query);
+            if (query?.key === 'myOralCell-waitPayNum') {
+              item.messageNum = waitPayNum || 0;
+            } else if (query?.key === 'myOralCell-waitWriteOff') {
+              item.messageNum = waitWriteOff || 0;
+            }
+            return item;
+          });
+        }
+      } catch (error) {
+        console.error('获取订单统计失败:', error);
+        this.clearMyMenuCellMessage();
+      }
+    },
+    clearMyMenuCellMessage() {
+      this.myMenuCellList.forEach((item) => {
+        item.messageNum = 0;
+      });
+    },
     async getVersion() {
       const oldVersion = this.version;
       if (!oldVersion) {
@@ -115,8 +145,8 @@ const viewerStore = defineStore('viewer', {
     },
 
     myMenu1List(): any[] {
-      return this.viewConfig[5]?.functionList
-        .filter(item => {
+      return (
+        this.viewConfig[5]?.functionList.filter((item) => {
           try {
             const query = item.query && JSON.parse(item.query);
             return !(query.key && query.key.startsWith('myOralCell-'));
@@ -124,7 +154,8 @@ const viewerStore = defineStore('viewer', {
             console.error('Failed to parse query:', e);
             return true; // 如果解析失败，保留该元素
           }
-        }) || [];
+        }) || []
+      );
     },
     myMenu2List(): any[] {
       return this.viewConfig[6]?.functionList || [];
@@ -134,27 +165,29 @@ const viewerStore = defineStore('viewer', {
       return this.viewConfig[7]?.functionList || [];
     },
     myMenuCellList(): any[] {
-      return this.viewConfig[5]?.functionList
-        .filter(item => {
-          try {
-            const query = item.query && JSON.parse(item.query);
-            return query.key && query.key.startsWith('myOralCell-');
-          } catch (e) {
-            console.error('Failed to parse query:', e);
-            return false;
-          }
-        })
-        .sort((a, b) => {
-          try {
-            const queryA = JSON.parse(a.query);
-            const queryB = JSON.parse(b.query);
-            return (queryA.sort || 0) - (queryB.sort || 0);
-          } catch (e) {
-            console.error('Failed to parse query during sorting:', e);
-            return 0;
-          }
-        }) || [];
-    }
+      return (
+        this.viewConfig[5]?.functionList
+          .filter((item) => {
+            try {
+              const query = item.query && JSON.parse(item.query);
+              return query.key && query.key.startsWith('myOralCell-');
+            } catch (e) {
+              console.error('Failed to parse query:', e);
+              return false;
+            }
+          })
+          .sort((a, b) => {
+            try {
+              const queryA = JSON.parse(a.query);
+              const queryB = JSON.parse(b.query);
+              return (queryA.sort || 0) - (queryB.sort || 0);
+            } catch (e) {
+              console.error('Failed to parse query during sorting:', e);
+              return 0;
+            }
+          }) || []
+      );
+    },
   },
 });
 

@@ -2,7 +2,7 @@
   <view
     v-if="list && list.length"
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-comment f32"
   >

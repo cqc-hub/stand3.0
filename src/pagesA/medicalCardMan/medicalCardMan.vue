@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      'system-mode-old': gStore.globalStore.modeOld,
+      [gStore.globalStore.getPageClass]: true,
     }"
     class="f32"
   >
@@ -39,7 +39,7 @@
         </view>
 
 
-       
+
 
         <!-- <view @click="createCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>

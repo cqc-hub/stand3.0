@@ -3,7 +3,7 @@
     <view
       :class="{
         'bg-home': type === '2',
-        'system-mode-old': gStores.globalStore.modeOld,
+        [gStores.globalStore.getPageClass]: true,
       }"
     >
       <easy-input

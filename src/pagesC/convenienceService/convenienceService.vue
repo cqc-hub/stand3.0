@@ -259,7 +259,7 @@
         display: flex;
         .f-b1 {
           background: #e9f0ff;
-          color: #296fff;
+          color: var(--hr-brand-color-6);
           width: 100%;
         }
         .f-b2 {

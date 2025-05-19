@@ -5,7 +5,7 @@
     <view class="g-container">
       <view
         :class="{
-          'system-mode-old': gStores.globalStore.modeOld,
+          [gStores.globalStore.getPageClass]: true,
         }"
         class="page f32"
         v-if="payResList && payResList.length > 0"

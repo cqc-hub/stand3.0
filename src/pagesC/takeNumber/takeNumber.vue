@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <g-flag v-if="isRender" :typeFg="isOnlineSign ? '1116' : '5'" isShowFg />
     <g-choose-pat @choose-pat="init" />
     <view v-if="headBtns.length" class="pat-box">

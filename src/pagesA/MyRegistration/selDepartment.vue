@@ -1,7 +1,8 @@
 <template>
+  <!-- [gStores.globalStore.getPageClass]: true, -->
   <view
     :class="{
-      'system-mode-old': gStores.globalStore.modeOld,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="g-page"
   >
@@ -142,7 +143,7 @@
           isShowCancel: !!deptDialogBtnCannel,
           cancelText,
           confirmText,
-          cancelColor: '#296FFF',
+          cancelColor: 'var(--hr-brand-color-6)',
           maxHeight: 900,
         },
         closeCallBack({ confirm, maskClose }) {

@@ -531,7 +531,7 @@
       // margin-right: -60rpx;
       // float: right;
       &.man {
-        color: #296fff;
+        color: var(--hr-brand-color-6);
         opacity: 0.05;
       }
       &.woman {
@@ -589,14 +589,14 @@
         margin-right: 70rpx;
 
         .text {
-          color: #296fff;
+          color: var(--hr-brand-color-6);
           font-size: var(--hr-font-size-xxxs);
           font-weight: 600;
           text-align: center;
         }
         .right {
           font-size: var(--hr-font-size-base);
-          color: #296fff;
+          color: var(--hr-brand-color-6);
         }
       }
       .money {
@@ -606,10 +606,10 @@
       }
     }
     .button {
-      border: 2rpx solid #296fff;
+      border: 2rpx solid var(--hr-brand-color-6);
       border-radius: 16rpx;
       height: 96rpx;
-      color: #296fff;
+      color: var(--hr-brand-color-6);
       font-weight: 600;
       text-align: center;
       line-height: 96rpx;

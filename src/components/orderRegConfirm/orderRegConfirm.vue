@@ -147,8 +147,8 @@
       content: '';
       background: linear-gradient(
         0deg,
-        rgba(41, 111, 255, 0) 1%,
-        rgba(41, 111, 255, 0.2) 96%
+        var(--hr-brand-color-6-light-1) 1%,
+        var(--hr-brand-color-6-light-2) 96%
       );
       display: block;
       height: 200rpx;
