@@ -505,7 +505,7 @@
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
       // useTBanner(会员权益);
-      useTBanner(queryNumber);
+      useTBanner(用药查询);
     }, 1000);
   });
 </script>
