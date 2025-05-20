@@ -146,7 +146,7 @@ const viewerStore = defineStore('viewer', {
 
     myMenu1List(): any[] {
       return (
-        this.viewConfig[5]?.functionList.filter((item) => {
+        this.viewConfig[5]?.functionList?.filter((item) => {
           try {
             const query = item.query && JSON.parse(item.query);
             return !(query.key && query.key.startsWith('myOralCell-'));
@@ -166,8 +166,7 @@ const viewerStore = defineStore('viewer', {
     },
     myMenuCellList(): any[] {
       return (
-        this.viewConfig[5]?.functionList
-          .filter((item) => {
+        this.viewConfig[5]?.functionList?.filter((item) => {
             try {
               const query = item.query && JSON.parse(item.query);
               return query.key && query.key.startsWith('myOralCell-');
