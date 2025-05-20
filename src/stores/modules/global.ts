@@ -219,7 +219,7 @@ const globalStore = defineStore('global', {
         // @ts-ignore
         appData.globalData.configData = {
           from: 1, // 小程序的渠道值，具体咨询组件方
-          mallAppId: '1b629fcf7ac9f10c54f4f87ff14fe69a',
+          mallAppId: 'mallM39dpe4692n7',
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
           token: this.token.accessToken,
           openId: this.openId,
