@@ -107,9 +107,10 @@ const globalStore = defineStore('global', {
       return false;
     },
 
-    // 是否中医
-    isTcm(): boolean {
-      return this.sysCode === '1001033'
+    // 是否中医style
+    isTcmStyle(): boolean {
+      // return this.sysCode === '1001033'
+      return false
     },
 
     getPageClass(): string {
@@ -119,7 +120,7 @@ const globalStore = defineStore('global', {
         pageClass += ' system-mode-old';
       }
 
-      if (this.isTcm) {
+      if (this.isTcmStyle) {
         pageClass += ' system-style-medical';
       }
 
