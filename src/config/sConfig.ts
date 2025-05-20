@@ -543,6 +543,31 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
+
+  /**
+   * 智领医院
+   */
+    1001080: {
+      login: {
+        isSkipPerfect: '1',
+        isAliAuthBase: '1',
+        isLoginByOpenId: '1',
+      },
+      isOpenHelpOld: '1',
+      isOpenMessageAuth: '1',
+      isOpenWechatSI: true, 
+    },
+
+  /**
+   * 浙江省健康人才发展协会
+   */
+  1001081: {
+    login: {
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
+      isLoginByOpenId: '1',
+    }, 
+  },
 };
 
 const getSConfig = (sysCode: string) => {
