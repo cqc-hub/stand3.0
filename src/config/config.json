@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001074",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -316,7 +316,7 @@
       "wxAppid": "wxbef5313efdabfde1",
       "alipayAppid": "2021004193658562",
       "isvAlipayAppid": "2021004193629624",
-      "h5Appid": "",
+      "h5Appid": "wxbba52ad9743cf8fe",
       "name": "天水市第一人民医院",
       "isSearchInHos": true,
       "isStartComeTest": false,
