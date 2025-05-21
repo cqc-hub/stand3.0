@@ -90,7 +90,7 @@ export interface ISystemConfig_ {
     isConfirmOrderWithDeptTip?: '1';
 
     /** 医生名片 */
-    // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？
+    // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？(不用 固定的)
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
     // 开启在线服务?
     isOpenDocCardOnlineService?: '1';

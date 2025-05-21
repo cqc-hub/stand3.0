@@ -228,7 +228,7 @@
       "wxAppid": "wx58ffd2c3a557bef0",
       "alipayAppid": "",
       "h5Appid": "",
-      "name": "核桃仁测试医院",
+      "name": "和仁智领医院",
       "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
@@ -343,6 +343,15 @@
       "alipayAppid": "2021005131642589",
       "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001081": {
+      "wxAppid": "wx55b38fca9c378c7b",
+      "h5Appid": "",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "浙江省健康人才发展协会",
       "isStartComeTest": false,
       "isOpenOcr": false
     }

@@ -590,7 +590,7 @@ export const sendImg = async () => {
     const { data } = await apiAsync(uni.uploadFile, {
       // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
 
-      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}`,
+      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}&herenId=${gStores.globalStore.herenId || propsPbj.value?.herenId}`,
       filePath: tempFilePaths[0],
       // timeout: 60000,
       name: 'file',
@@ -1132,6 +1132,7 @@ const typeInAskH5 = (value: any, answertype) => {
         ocrId: value,
         sysCode: gStores.globalStore.sysCode,
         source: propsPbj.value?.source == 19 ? 1 : 2,
+        herenId: propsPbj.value?.herenId,
       },
     });
   }
