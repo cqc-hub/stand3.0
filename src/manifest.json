@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxe26143481567cb97",
+    "appid": "wx8358079c24acea42",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,16 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -84,18 +75,10 @@
       "ocrPlugin": {
         "version": "*",
         "provider": "2021001130678316"
-      },
-      "codePlugin": {
-        "version": "*",
-        "provider": "2021003163608051"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002139602458"
+    "appid": "2021003144603328"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -107,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "台州市第一人民医院",
+  "name": "宜兴市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
