@@ -13,7 +13,7 @@
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
         <view class="content-box">
           <view
-            v-if="pickupTypeOpt.length"
+            v-if="pickupTypeOpt.length > 1"
             id="_pickup-type"
             class="container-box g-border mb16 box-padding"
           >
