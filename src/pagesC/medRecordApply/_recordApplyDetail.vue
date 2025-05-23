@@ -134,7 +134,7 @@
                 <Record-Card :list="info._outInfo" />
               </block>
 
-              <view v-if="info.pickupType" class="mt32 _row">
+              <view v-if="info.pickupType && pickupTypeOpt.length" class="mt32 _row">
                 <view class="_title">取件方式</view>
                 <view class="_content">
                   {{
@@ -181,7 +181,7 @@
             </view>
 
             <view
-              v-if="info.addresseeAddress && !!expressInfo"
+              v-if="info.addresseeAddress && expressInfo"
               class="container-box order-patient g-border p32 mb16"
             >
               <view class="_row">

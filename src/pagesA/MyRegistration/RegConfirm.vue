@@ -17,13 +17,13 @@
         <view class="bg-white">
           <Reg-Confirm-ChoosePat
             :pat="quickPat"
-            :isOrderWithoutPat="pageConfig.isOrderWithoutPat === '1'"
-            :pb0="pageConfig.isOrderWithoutPat === '1'"
+            :isOrderWithoutPat="isOrderWithoutPat"
+            :pb0="isOrderWithoutPat"
             @choose-pat="patChoose"
           >
             <template #footer="{ chooseAction, showPat }">
               <view
-                v-if="pageConfig.isOrderWithoutPat === '1'"
+                v-if="isOrderWithoutPat"
                 :class="{
                   ['pt0']: !showPat.patientName,
                   'g-border-top mt24 pt24 ': showPat.patientName,
@@ -143,7 +143,7 @@
     </view>
 
     <RegConformQCreatePerson
-      v-if="pageConfig.isOrderWithoutPat === '1'"
+      v-if="isOrderWithoutPat"
       v-model:visible="isCreateCachePersonFormShow"
       @submit="dialogSubmit"
       @cancel="dialogCancel"
@@ -244,6 +244,11 @@
     return props.value.schState === '2';
   });
 
+  // 快速预约（挂号无需绑定就诊人）
+  const isOrderWithoutPat = computed(() => {
+    return pageConfig.value.isOrderWithoutPat === '1' && !isWaitReg.value;
+  });
+
   const getFreeSignData = async (patientId) => {
     const { result } = await api.findSign({
       patientId,
@@ -289,7 +294,7 @@
   };
 
   const regConfirm = throttle(async () => {
-    const { isOrderPay, wxOrderSubscribeMessage, isOrderWithoutPat } =
+    const { isOrderPay, wxOrderSubscribeMessage } =
       pageConfig.value;
     /**
      * 未填写参数
@@ -327,7 +332,7 @@
     let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
 
-    if (isOrderWithoutPat === '1') {
+    if (isOrderWithoutPat.value) {
       if (!(patientId || quickPat.value.patientName)) {
         gStores.messageStore.showMessage('请先添加就诊人信息', 1500);
         return;
@@ -710,7 +715,7 @@
         _isPatient: true,
       };
 
-      if (pageConfig.value.isOrderWithoutPat === '1') {
+      if (isOrderWithoutPat.value) {
         routeArg._isPatient = false;
       }
 

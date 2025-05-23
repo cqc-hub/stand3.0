@@ -1567,7 +1567,12 @@
       imageJson,
       remark: _remark,
       expressCompany: _expressCompany,
+      pickupType: _pickupType = '1',
+      email: _email = '',
     } = result;
+
+    pickupType.value = _pickupType;
+    email.value = _email;
 
     if (imageJson) {
       try {
