@@ -97,10 +97,11 @@
                   <block v-else>
                     <view class="flex-normal">
                       <view class="patient">
-                        <text>暂无就诊人</text>
+                        <text v-if="globalGl.SYS_CODE ==='1001081'">请认真填写问卷内容，保证如实填写</text>
+                      <text v-else>暂无就诊人 </text>
                       </view>
                     </view>
-                    <view class="switchPatient" @tap="addPatient">
+                    <view  v-if="globalGl.SYS_CODE !=='1001081'" class="switchPatient" @tap="addPatient">
                       添加就诊人
                     </view>
                   </block>
@@ -264,9 +265,10 @@
                 <block v-else>
                   <view class="flex-normal">
                     <view class="patient-old">
-                      <text>暂无就诊人</text>
+                      <text>暂无就诊人 </text>
                     </view>
                   </view>
+
                   <view class="switchPatient" @tap="addPatient">
                     添加就诊人
                   </view>
@@ -384,6 +386,7 @@
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
   import { useCommonTo } from '@/common/checkJump';
+  import globalGl from '@/config/global';
 
   const props = ref({
     code: '',

@@ -590,7 +590,7 @@ export const sendImg = async () => {
     const { data } = await apiAsync(uni.uploadFile, {
       // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
 
-      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}&herenId=${gStores.globalStore.herenId || propsPbj.value?.herenId}`,
+      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}&herenId=${gStores.globalStore.herenId || propsPbj.value?.herenId}&source=1`,
       filePath: tempFilePaths[0],
       // timeout: 60000,
       name: 'file',
