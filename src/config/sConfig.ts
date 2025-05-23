@@ -388,6 +388,7 @@ const scJson: Record<string, ISConfig> = {
           orgId: { 12694: 'H33050200031' },
           cardType: '01',
         },
+        medicalFiling: '1',
       },
     },
   },

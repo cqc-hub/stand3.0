@@ -13,7 +13,7 @@
       <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
         <view class="content-box">
           <view
-            v-if="pickupTypeOpt.length"
+            v-if="pickupTypeOpt.length > 1"
             id="_pickup-type"
             class="container-box g-border mb16 box-padding"
           >
@@ -1567,7 +1567,12 @@
       imageJson,
       remark: _remark,
       expressCompany: _expressCompany,
+      pickupType: _pickupType = '1',
+      email: _email = '',
     } = result;
+
+    pickupType.value = _pickupType;
+    email.value = _email;
 
     if (imageJson) {
       try {
