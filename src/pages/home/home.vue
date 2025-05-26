@@ -97,10 +97,17 @@
                   <block v-else>
                     <view class="flex-normal">
                       <view class="patient">
-                        <text>暂无就诊人</text>
+                        <text v-if="globalGl.SYS_CODE === '1001081'">
+                          请认真填写问卷内容，保证如实填写
+                        </text>
+                        <text v-else>暂无就诊人</text>
                       </view>
                     </view>
-                    <view class="switchPatient" @tap="addPatient">
+                    <view
+                      v-if="globalGl.SYS_CODE !== '1001081'"
+                      class="switchPatient"
+                      @tap="addPatient"
+                    >
                       添加就诊人
                     </view>
                   </block>
@@ -267,6 +274,7 @@
                       <text>暂无就诊人</text>
                     </view>
                   </view>
+
                   <view class="switchPatient" @tap="addPatient">
                     添加就诊人
                   </view>
@@ -384,6 +392,7 @@
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
   import { useCommonTo } from '@/common/checkJump';
+  import globalGl from '@/config/global';
 
   const props = ref({
     code: '',
@@ -661,6 +670,12 @@
 <style lang="scss" scoped>
   .g-page {
     background: #ffffff;
+
+    --h-h-main-c: var(--hr-brand-color-6);
+
+    &.system-style-medical {
+      --h-h-main-c: #a4695b;
+    }
   }
   .auto-person {
     position: relative;
@@ -693,7 +708,7 @@
     .openOld {
       width: 200rpx;
       height: 64rpx;
-      background: var(--hr-brand-color-6);
+      background: var(--h-h-main-c);
       border-radius: 32rpx 0 0 32rpx;
       color: #fff;
       font-size: var(--hr-font-size-xs);
@@ -747,7 +762,7 @@
 
           border-radius: 24rpx 24rpx 15% 15%;
 
-          background: var(--hr-brand-color-6);
+          background: var(--h-h-main-c);
         }
         .no-login {
           text {

@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { ServerStaticData } from '@/utils';
 import api from '@/service/api';
 
-
 const viewerStore = defineStore('viewer', {
   persist: {
     key: '_viewer',
@@ -53,7 +52,7 @@ const viewerStore = defineStore('viewer', {
       try {
         const { result } = await api.getOrderCnt({
           openId: JSON.parse(uni.getStorageSync('global')).openId,
-          source:'19', //微信环境
+          source: '19', //微信环境
         });
 
         if (result) {
@@ -141,6 +140,7 @@ const viewerStore = defineStore('viewer', {
     },
 
     myPersonRecordList(): any[] {
+      // return [this.viewConfig[4]?.functionList[0]];
       return this.viewConfig[4]?.functionList || [];
     },
 
@@ -166,7 +166,8 @@ const viewerStore = defineStore('viewer', {
     },
     myMenuCellList(): any[] {
       return (
-        this.viewConfig[5]?.functionList?.filter((item) => {
+        this.viewConfig[5]?.functionList
+          ?.filter((item) => {
             try {
               const query = item.query && JSON.parse(item.query);
               return query.key && query.key.startsWith('myOralCell-');

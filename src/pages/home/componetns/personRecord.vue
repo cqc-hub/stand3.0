@@ -14,7 +14,11 @@
         <view class="info">
           <block v-if="gStores.globalStore.isLogin">
             <text class="user-name animate__animated animate__fadeIn">
-              {{ gStores.userStore.name || gStores.userStore.cellPhoneNum || '已登录' }}
+              {{
+                gStores.userStore.name ||
+                gStores.userStore.cellPhoneNum ||
+                '已登录'
+              }}
             </text>
           </block>
 
@@ -52,8 +56,7 @@
       >
         <view
           :style="{
-            'background-image': `url(${backImg[i]})`,
-            'background-color': recordColors[i],
+            background: recordColors[i],
           }"
           :class="{
             'cr-center':
@@ -66,19 +69,27 @@
           @tap="jumpFor(record)"
         >
           <view
-            :class="{
-              pt48: viewerStore.myPersonRecordList.length > 1
+            :style="{
+              'background-image': `url(${backImg[i]})`,
             }"
-           class="record-label">
-            <text>{{ record.title }}</text>
+            class="record-item"
+          >
             <view
-              v-if="
-                viewerStore.myPersonRecordList &&
-                viewerStore.myPersonRecordList.length === 1
-              "
-              class="iconfont icon-size"
+              :class="{
+                pt48: viewerStore.myPersonRecordList.length > 1,
+              }"
+              class="record-label"
             >
-              &#xe6c8;
+              <text>{{ record.title }}</text>
+              <view
+                v-if="
+                  viewerStore.myPersonRecordList &&
+                  viewerStore.myPersonRecordList.length === 1
+                "
+                class="iconfont icon-size"
+              >
+                &#xe6c8;
+              </view>
             </view>
           </view>
         </view>
@@ -93,10 +104,9 @@
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import global from '@/config/global';
+  import { computed } from 'vue';
 
   const gStores = new GStores();
-  const jzIcon = global.BASE_IMG + 'v3-my-jzk.png';
-  const ybIcon = global.BASE_IMG + 'v3-my-pz.png';
   const viewerStore = useViewerStore();
 
   const avatarClick = () => {
@@ -109,8 +119,22 @@
     useCommonTo(record);
   };
 
-  const backImg = [jzIcon, ybIcon];
-  const recordColors = ['var(--hr-brand-color-6)', '#00b39e'];
+  const backImg = computed(() => {
+    let icons = ['v3-my-jzk', 'v3-my-pz'];
+    if (gStores.globalStore.isTcmStyle) {
+      icons = icons.map((o) => `${o}-tcm`);
+    }
+
+    return icons.map((icon) => global.BASE_IMG + icon + '.png');
+  });
+  const recordColors = computed(() => {
+    return gStores.globalStore.isTcmStyle
+      ? [
+          'linear-gradient(0deg,#8e493b, #b68272 100%)',
+          'linear-gradient(0deg,#d26900, #ffa52e)',
+        ]
+      : ['var(--hr-brand-color-6)', '#00b39e'];
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -181,7 +205,7 @@
       justify-content: flex-end;
 
       .out-btn {
-        background-color: var(--hr-brand-color-2);
+        background-color: var(--h-m-main-c);
         border-radius: 32upx 0px 0px 32upx;
         text-align: center;
         padding: 12rpx 24rpx;
@@ -199,18 +223,19 @@
     margin-bottom: 24rpx;
 
     display: flex;
-    // gap: 16upx;
+    gap: 16upx;
     height: 160upx;
 
     .record-item {
-      flex: 1;
+      flex: 1 0 400rpx;
       height: 100%;
       color: var(--h-color-white);
       border-radius: 16upx;
+
+      font-size: var(--hr-font-size-base);
       background-size: 200upx;
       background-repeat: no-repeat;
       background-position: right 0 bottom 0;
-      font-size: var(--hr-font-size-base);
 
       .record-label {
         // padding-top: 48upx;
@@ -232,6 +257,8 @@
     height: 120upx;
 
     .record-item {
+      flex: 1 0 400rpx;
+
       display: flex;
       align-items: center;
       .record-label {
@@ -243,7 +270,7 @@
 
   .record-container-row2 {
     .record-item-first {
-      margin-right: 16rpx;
+      // margin-right: 16rpx;
     }
   }
 </style>
