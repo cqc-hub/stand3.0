@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      [gStore.globalStore.getPageClass]: true,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="page f32"
   >
@@ -17,7 +17,7 @@
             <view
               v-if="
                 pageConfig.isOpenCollect === '1' &&
-                gStore.globalStore.isLogin &&
+                gStores.globalStore.isLogin &&
                 Object.keys(checkoutReportList).length
               "
               class="pr24 pt40"
@@ -252,10 +252,10 @@
     tips.value = result;
   };
 
-  const gStore = new GStores();
+  const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
 
-  const { patChoose: pat } = storeToRefs(gStore.userStore);
+  const { patChoose: pat } = storeToRefs(gStores.userStore);
   const pageProps = ref(<any>{});
   const patName = computed(() => {
     return (
@@ -302,7 +302,7 @@
     let result: any;
 
     if (useCacheData) {
-      result = gStore.globalStore.cacheData;
+      result = gStores.globalStore.cacheData;
       console.log(result, 'resultresultresult');
     } else {
       let params = {
@@ -359,7 +359,7 @@
   };
   const forShare = () => {
     const data = `${
-      gStore.userStore.patChoose.patientName
+      gStores.userStore.patChoose.patientName
     }的检验报告,分享链接有效期至${shareEndTime.value || 'YYYY-MM-DD'}。 ${
       qrVal.value
     }`;
@@ -369,12 +369,12 @@
         isOperation.value = true;
         uni.getClipboardData({
           success: function (res) {
-            gStore.messageStore.showMessage('内容已复制');
+            gStores.messageStore.showMessage('内容已复制');
           },
         });
       },
       fail: () => {
-        gStore.messageStore.showMessage('复制失败');
+        gStores.messageStore.showMessage('复制失败');
         isOperation.value = false;
       },
     });

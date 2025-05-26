@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      [gStore.globalStore.getPageClass]: true,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class=""
   >
@@ -41,7 +41,7 @@
     >{}
   );
   const isShow = ref(false);
-  const gStore = new GStores();
+  const gStores = new GStores();
   const loginUtils = new LoginUtils();
   const gform = ref<any>('');
   const formData = ref({});
@@ -95,7 +95,7 @@
     //   url: '/pagesA/medicalCardMan/medicalCardMan'
     // });
     await loginUtils.logoutUser();
-    gStore.messageStore.showMessage('注销账号成功', 1000, {
+    gStores.messageStore.showMessage('注销账号成功', 1000, {
       closeCallBack: () => {
         loginUtils.outLogin({
           isHideMessage: true,
@@ -106,7 +106,7 @@
   };
 
   onMounted(() => {
-    const { name, sex, idNo, cellPhoneNum } = gStore.userStore;
+    const { name, sex, idNo, cellPhoneNum } = gStores.userStore;
 
     formData.value = {
       name,

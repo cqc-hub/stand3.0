@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      [gStore.globalStore.getPageClass]: true,
+      [gStores.globalStore.getPageClass]: true,
     }"
   >
     <g-form
@@ -15,11 +15,11 @@
         <view v-if="item.key === 'healthCardUserLabel'">
           <text
             v-if="
-              gStore.userStore.clickPat.healthCardUser !== '2' &&
+              gStores.userStore.clickPat.healthCardUser !== '2' &&
               isMedicalFiling
             "
             class="goMedicalFiling text-no-wrap"
-            @click="goMedicalFiling(gStore.userStore.clickPat)"
+            @click="goMedicalFiling(gStores.userStore.clickPat)"
           >
             医保建档
           </text>
@@ -80,8 +80,8 @@
 
   type PagePropType = Record<PatCardKeys, any>;
   const isShow = ref(false);
-  const gStore = new GStores();
-  const pat = gStore.userStore.clickPat;
+  const gStores = new GStores();
+  const pat = gStores.userStore.clickPat;
 
   const patientUtils = new PatientUtils();
   const formData = ref({} as PagePropType);
@@ -93,7 +93,7 @@
   let formList = [...patCardDetailTempList];
 
   const changeDefault = (value: boolean) => {
-    const pat = gStore.userStore.clickPat;
+    const pat = gStores.userStore.clickPat;
 
     patientUtils.changeDefault({
       defaultFalg: value,
@@ -104,7 +104,7 @@
   const deletePat = async () => {
     isShow.value = false;
     await patientUtils.deletePat({
-      patientId: gStore.userStore.clickPat.patientId,
+      patientId: gStores.userStore.clickPat.patientId,
     });
 
     uni.reLaunch({

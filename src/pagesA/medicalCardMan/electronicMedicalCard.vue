@@ -2,7 +2,7 @@
   <view
     v-if="isPageRender"
     :class="{
-      [gStore.globalStore.getPageClass]: true,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="page"
   >
@@ -120,8 +120,8 @@
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
 
   const isPageRender = ref(false);
-  const gStore = new GStores();
-  const { clickPat } = storeToRefs(gStore.userStore);
+  const gStores = new GStores();
+  const { clickPat } = storeToRefs(gStores.userStore);
   const title = ref('电子就诊卡');
   const showHealthCode = ref(false);
   const pageConfig = ref(<ISystemConfig['person']>{});
@@ -298,7 +298,7 @@
     const { patientId } = clickPat.value;
     const {
       browser: { source },
-    } = gStore.globalStore;
+    } = gStores.globalStore;
 
     const arg = {
       patientId,
@@ -321,7 +321,7 @@
         url: '/pagesA/webView/webView?https=' + encodeURIComponent(url),
       });
     } else {
-      gStore.messageStore.showMessage('获取订单失败', 3000);
+      gStores.messageStore.showMessage('获取订单失败', 3000);
     }
   };
 

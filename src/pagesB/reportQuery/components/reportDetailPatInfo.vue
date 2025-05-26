@@ -131,9 +131,9 @@
     pageProps: any;
     reportInfo: any;
   }>();
-  const gStore = new GStores();
+  const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
-  const { patChoose: pat } = storeToRefs(gStore.userStore);
+  const { patChoose: pat } = storeToRefs(gStores.userStore);
   const isShow = ref(false);
 
   const patName = computed(() => {

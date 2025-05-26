@@ -1,7 +1,7 @@
 <template>
   <view
     :class="{
-      [gStore.globalStore.getPageClass]: true,
+      [gStores.globalStore.getPageClass]: true,
     }"
     class="f32"
   >
@@ -55,9 +55,9 @@
       </view>
     </view>
 
-    <view v-if="gStore.userStore.patList.length">
+    <view v-if="gStores.userStore.patList.length">
       <pat-List
-        :list="gStore.userStore.patList"
+        :list="gStores.userStore.patList"
         @profile-click="profileClick"
         @card-click="cardClick"
       >
@@ -197,7 +197,7 @@
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import PatList from './components/PatList.vue';
 
-  const gStore = new GStores();
+  const gStores = new GStores();
   const routeStore = useRouterStore();
   const pageProps = ref(
     <
@@ -267,7 +267,7 @@
       await patientUtils.getPatCardList();
       uni.hideLoading();
     } else {
-      gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
+      gStores.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
       isShowHealthLogin.value = true;
       return Promise.reject(void 0);
     }
@@ -287,7 +287,7 @@
   const addPatPage = () => {
     if (isNewHealthCard.value) {
       healthCardBind().catch(()=>{
-        gStore.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
+        gStores.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
         isShowHealthLogin.value = true;
       });
     } else {
@@ -307,14 +307,14 @@
   };
 
   const profileClick = (pat: IPat) => {
-    gStore.userStore.updatePatClick(pat);
+    gStores.userStore.updatePatClick(pat);
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/medicalCardDetail',
     });
   };
 
   const cardClick = (pat: IPat) => {
-    gStore.userStore.updatePatClick(pat);
+    gStores.userStore.updatePatClick(pat);
     goElectronicMedicalCard();
   };
 
@@ -349,9 +349,9 @@
     }
 
     if (authType === 'ocrVerify') {
-      const { title, content } = await gStore.getSysAppMore('1220');
+      const { title, content } = await gStores.getSysAppMore('1220');
       await new Promise<{ confirm: boolean }>((r) => {
-        gStore.messageStore.showMessage(content, 0, {
+        gStores.messageStore.showMessage(content, 0, {
           useDialog: true,
           dialogOpt: {
             title,
@@ -375,7 +375,7 @@
   });
   const realNameAuthOcr = async (pat: IPat) => {
     const { patientId } = pat;
-    const { source } = gStore.globalStore.browser;
+    const { source } = gStores.globalStore.browser;
     const { pdata } = await useOcr(false, {
       aliThroughByEnd: true,
       imgCanvas,
@@ -396,7 +396,7 @@
     // #endif
 
     const { patientName, patientId, idCardEncry } = pat;
-    const { source } = gStore.globalStore.browser;
+    const { source } = gStores.globalStore.browser;
 
     const {
       result: { idCard },
@@ -459,16 +459,16 @@
       props?.healthCode === '0'
     ) {
       //疑似健康卡关联页面新增就诊人异常，先报错
-      gStore.messageStore.showMessage(
+      gStores.messageStore.showMessage(
         '已取消关联健康卡，请重新申领或关联健康卡',
         1500
       );
     } else if (props?._healthType === 'verifyFail') {
       console.log('已取消健康卡申领');
-      gStore.messageStore.showMessage('已取消就诊人绑定操作', 1500, {});
+      gStores.messageStore.showMessage('已取消就诊人绑定操作', 1500, {});
     } else if (props?._healthType === 'failRedirect' && props?.regInfoCode) {
       console.log('进入异常卡流程');
-      gStore.messageStore.showMessage(
+      gStores.messageStore.showMessage(
         '健康卡申领失败，请继续绑定就诊人流程',
         1500
       );

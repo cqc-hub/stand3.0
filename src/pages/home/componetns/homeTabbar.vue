@@ -44,7 +44,7 @@
   import global from '@/config/global';
   import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
-  
+
 
   defineProps<{ systemModeOld: boolean }>();
 
@@ -76,7 +76,7 @@
   const isIos = ref(false);
   const unreadMes = ref(false);
 
-  const gStore = new GStores();
+  const gStores = new GStores();
 
   const changeTab = async (item) => {
     const url = item.url;
@@ -130,7 +130,7 @@
   let getNum = () => {
     api
       .getStatus({
-        str: `OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`,
+        str: `OPENID_${gStores.globalStore.openId}/${gStores.userStore.phoneNum}`,
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;
@@ -152,7 +152,7 @@
       });
     }
     if (global.sConfig.isOpenHomeTabBarMessageBtn&&global.sConfig.isMessageBtnShowNew) {
-      if (gStore.userStore.patChoose.patientId) {
+      if (gStores.userStore.patChoose.patientId) {
         getNum();
       }
     }
@@ -226,7 +226,7 @@
     if (global.SYS_CODE === '1001052') {
       tabList.push('健康管理');
     }
-    
+
     // #ifdef MP-WEIXIN
     if (global.SYS_CODE === '1001063') {
       tabList.push('口腔商城');
