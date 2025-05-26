@@ -171,6 +171,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     isHideOutTimeOrderSource: '1',
     isOrderPay: '0',
     isOpenAddedNum: '0',
+    isAddedNumSelf: '0',
   });
 
   // ref
@@ -643,8 +644,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     }
 
     chooseDays.value = getChooseDays(orderConfig.value.chooseDay);
-
-    
 
     if (query) {
       getListAll(checkedDay.value, query);

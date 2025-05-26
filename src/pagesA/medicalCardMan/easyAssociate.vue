@@ -34,17 +34,32 @@
 
     getH5OpenidParam(requestArg);
 
-    await api.quickLinkHealthCard(requestArg);
-
-    gStores.messageStore.showMessage('关联成功', 1500, {
-      closeCallBack() {
-        //刷新就诊人列表
-        new PatientUtils().getPatCardList();
-        uni.reLaunch({
-          url: '/pages/home/home',
+    await api
+      .quickLinkHealthCard(requestArg)
+      .then(() => {
+        gStores.messageStore.showMessage('关联成功', 1500, {
+          closeCallBack() {
+            //刷新就诊人列表
+            new PatientUtils().getPatCardList();
+            uni.reLaunch({
+              url: '/pages/home/home',
+            });
+          },
         });
-      },
-    });
+      })
+      .catch(async (e) => {
+        const { respCode, message } = e;
+        console.error('quickLinkHealthCardWithLoad error', respCode, message);
+        gStores.messageStore.showMessage('关联失败'+message, 1500, {
+          closeCallBack() {
+            //刷新就诊人列表
+            new PatientUtils().getPatCardList();
+            uni.reLaunch({
+              url: '/pages/home/home',
+            });
+          },
+        });
+      });
   };
 
   const addCard = () => {

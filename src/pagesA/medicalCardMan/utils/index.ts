@@ -1028,7 +1028,7 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
       })
       .catch(async (e) => {
         const { respCode, message } = e;
-        console.log(22222, respCode, message);
+        console.error('quickLinkHealthCardWithLoad error', respCode, message);
         if (respCode === 884801) {
           gStores.messageStore.closeMessage();
           const { confirm } = await apiAsync(uni.showModal, {

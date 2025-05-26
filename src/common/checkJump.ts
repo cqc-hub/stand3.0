@@ -51,9 +51,18 @@ export const checkPatient = (item: IRoute) => {
       if (!patList.length) {
         gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人', 3000, {
           closeCallBack: () => {
-            uni.reLaunch({
-              url: globalGl.addPersonUrl + '?_p=1',
-            });
+            if (
+              globalGl.systemInfo?.isOpenHealthCard &&
+              globalGl.systemInfo.isOpenHealthCard?.isNewMode
+            ) {
+              uni.reLaunch({
+                url: '/pagesA/medicalCardMan/medicalCardMan' + '?_p=1',
+              });
+            } else {
+              uni.reLaunch({
+                url: globalGl.addPersonUrl + '?_p=1',
+              });
+            }
           },
         });
         reject('暂无就诊人， 请先添加就诊人');
@@ -150,21 +159,22 @@ export const isSubscribeWx = async () => {
   } else {
     const { source } = gStores.globalStore.browser;
 
-      uni.showLoading({
-        title: '加载中',
-        mask: true,
-      });
-      const res = await api.judgeSubscribeWxAccount({
+    uni.showLoading({
+      title: '加载中',
+      mask: true,
+    });
+    const res = await api
+      .judgeSubscribeWxAccount({
         source,
         openId: gStores.globalStore.h5OpenId,
-      }).catch(() => {
-      });
-      uni.hideLoading();
-      if (res?.result?.subscribe === 0) {
-        //没关注过
-        return false;
-      }
-   return true
+      })
+      .catch(() => {});
+    uni.hideLoading();
+    if (res?.result?.subscribe === 0) {
+      //没关注过
+      return false;
+    }
+    return true;
   }
 };
 
@@ -189,11 +199,13 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
   switch (item.terminalType) {
     case 'h5':
       // #ifndef H5
-      let query=''
-      item.query&(query=`&query=${item.query}`) as any
+      let query = '';
+      item.query & ((query = `&query=${item.query}`) as any);
       const obj = {
         url:
-          '/pagesC/cloudHospital/myPath?type=1'+query+'&path=' +
+          '/pagesC/cloudHospital/myPath?type=1' +
+          query +
+          '&path=' +
           encodeURIComponent(item.path),
         fail: () => {
           gStores.messageStore.showMessage(
@@ -306,14 +318,14 @@ export const useToPath = async (item, payload: IPayLoad = {}) => {
       }
       // #endif
 
-    // 为了智能助医h5使用
+      // 为了智能助医h5使用
       // #ifdef H5
-        wxH5.miniProgram.navigateTo({
-          url: item.path,
-        });
-        my.navigateTo({
-          url: item.path,
-        })
+      wxH5.miniProgram.navigateTo({
+        url: item.path,
+      });
+      my.navigateTo({
+        url: item.path,
+      });
       // #endif
 
       break;
