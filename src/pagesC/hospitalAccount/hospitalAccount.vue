@@ -7,7 +7,14 @@
   >
     <g-flag typeFg="29" isShowFg />
     <g-choose-pat @choose-pat="getListData()" />
-    <view class="bg">
+    <view
+      :style="{
+        background: `url(${globalGl.BASE_IMG}v3-hosAccount-bj${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png) 100%/100% no-repeat`,
+      }"
+      class="bg"
+    >
       <view class="container">
         <view class="p40">
           <view class="flex-between">
@@ -122,6 +129,7 @@
   import { deQueryForUrl } from '@/common/utils';
   import { type IHospitalAccountDetail } from './utils/index';
   import { joinQueryForUrl } from '../../common/utils';
+  import globalGl from '@/config/global';
   interface IPageProps {
     hosId: string;
     isCash?: any;
@@ -270,7 +278,7 @@
 
 <style lang="scss" scoped>
   .bg {
-    background: url($base-url + 'v3-hosAccount-bj.png') 100%/100% no-repeat;
+    // background: url($base-url + 'v3-hosAccount-bj.png') 100%/100% no-repeat;
     height: 1256rpx;
     .container {
       width: calc(100% - 64rpx);
