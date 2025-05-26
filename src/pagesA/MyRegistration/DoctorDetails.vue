@@ -8,7 +8,12 @@
     <scroll-view class="g-container" scroll-y>
       <view class="href-content">
         <image
-          :src="$global.BASE_IMG + 'v3_doctor_card_top.png'"
+          :src="
+            $global.BASE_IMG +
+            `v3_doctor_card_top${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png`
+          "
           mode="widthFix"
           class="header-bg my-disabled"
         />
@@ -113,7 +118,12 @@
                 <view class="flex-normal p32c doc-goodat">
                   <image
                     v-if="docDetail.goodAt"
-                    :src="$global.BASE_IMG + 'v3_doctor_card_major.png'"
+                    :src="
+                      $global.BASE_IMG +
+                      `v3_doctor_card_major${
+                        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                      }.png`
+                    "
                     class="doc-major-goodat mr12"
                     mode="widthFix"
                   />
@@ -288,7 +298,7 @@
                 <view
                   class="tabs pl16 pr16 mb16"
                   v-if="docHosSchList.length"
-                  style="width:100%"
+                  style="width: 100%"
                 >
                   <g-tabs
                     v-model:value="tabCurrent"
@@ -535,7 +545,12 @@
     </scroll-view>
 
     <Order-Reg-Confirm
-      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :headerIcon="
+        $global.BASE_IMG +
+        `v3-order-reg-confirm-add${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`
+      "
       title="医生简介"
       isHideFooter
       ref="regDialogConfirm"
@@ -844,19 +859,19 @@
           };
         });
 
-          docHosSchList.value = [
-            {
-              hosName: '全部院区',
-              hosId: '',
-              schList: schList,
-              checkedDay: schList[0].schDate,
-              enabledDays: _enabledDays,
-              chooseDays: myChooseDays.filter((o) => {
-                return _enabledDays[o.fullDay];
-              }),
-            },
-          ];
-          docHosSchList.value.push(...schListByhosId);
+        docHosSchList.value = [
+          {
+            hosName: '全部院区',
+            hosId: '',
+            schList: schList,
+            checkedDay: schList[0].schDate,
+            enabledDays: _enabledDays,
+            chooseDays: myChooseDays.filter((o) => {
+              return _enabledDays[o.fullDay];
+            }),
+          },
+        ];
+        docHosSchList.value.push(...schListByhosId);
         getdocHosSchHeight();
       }
     }
@@ -942,8 +957,6 @@
     } = gStores.globalStore;
 
     const collectType = 2;
-
-    // docPhoto ||= globalGl.BASE_IMG + 'order-doctor-avatar.png';
 
     if (collectState == '1') {
       // weixin://dl/business/?t=XxTgl2eqtWq

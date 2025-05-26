@@ -376,8 +376,10 @@
       hosName,
     } = props.detail;
     // docPhoto = '';
-    const blockBgColor = gStores.globalStore.isTcm ? '#f6ede8' : '#ccddff';
-    const blockTextColor = gStores.globalStore.isTcm ? '#aa4c1f' : '#296fff';
+    const blockBgColor = gStores.globalStore.isTcmStyle ? '#f6ede8' : '#ccddff';
+    const blockTextColor = gStores.globalStore.isTcmStyle
+      ? '#aa4c1f'
+      : '#296fff';
     _goodAt = throughCharacterLineFeed(_goodAt || '暂无', ' ');
     docName = docName || '';
     docTitleName = docTitleName || '';
@@ -407,7 +409,12 @@
     } else {
       [head_bg_img, good_at_img] = await Promise.all([
         downFile(globalGl.BASE_IMG + 'v3_doctor_bg_share_1.png'),
-        downFile(globalGl.BASE_IMG + 'v3_doctor_card_major.png'),
+        downFile(
+          globalGl.BASE_IMG +
+            `v3_doctor_card_major${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png`
+        ),
       ]);
     }
 

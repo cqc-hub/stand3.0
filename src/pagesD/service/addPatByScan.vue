@@ -44,7 +44,7 @@
         sign,
       })
       .catch(async (err) => {
-        const respCode = err?.err?.respCode;
+        const respCode = err?.respCode || err?.err?.respCode;
 
         if (respCode === 884801) {
           gStores.messageStore.closeMessage();
@@ -57,6 +57,8 @@
             url: '/pages/home/my',
           });
         }
+
+        throw new Error(err?.message || '添加就诊人失败');
       });
 
     await apiAsync(uni.showModal, {

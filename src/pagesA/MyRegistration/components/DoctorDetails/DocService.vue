@@ -32,6 +32,7 @@
     type TDocServiceItem,
   } from '../../utils/DoctorDetails';
   import { joinQuery } from '@/common';
+  import { GStores } from '@/utils';
 
   const burl = globalGl.BASE_IMG;
   const systemStyle = ref('normal');
@@ -39,6 +40,7 @@
     docService: IDocService;
     hosDocId: string;
   }>();
+  const gStores = new GStores();
 
   /**
    * 已上传图片(都有对应中医风格 名字后面加上_zy 即可)
@@ -56,7 +58,8 @@
    */
   const serList = ref([
     {
-      img: 'card_doctor_twzx_n',
+      img:
+        'card_doctor_twzx_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
       title: '图文咨询',
       fee: 0,
       util: '次',
@@ -64,7 +67,8 @@
       receptionMode: '1',
     },
     {
-      img: 'card_doctor_dhwz_n',
+      img:
+        'card_doctor_dhwz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
       title: '电话问诊',
       fee: 0,
       util: '次',
@@ -72,7 +76,8 @@
       receptionMode: '2',
     },
     {
-      img: 'card_doctor_spwz_n',
+      img:
+        'card_doctor_spwz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
       title: '视频门诊',
       fee: 0,
       util: '次',
@@ -115,7 +120,7 @@
     isComplete.value = true;
   };
 
-  const goNetService = (item: typeof serList.value[number]) => {
+  const goNetService = (item: (typeof serList.value)[number]) => {
     const { receptionMode } = item;
 
     const arg = {
