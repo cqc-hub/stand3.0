@@ -408,7 +408,12 @@
       good_at_img = _good_at_img;
     } else {
       [head_bg_img, good_at_img] = await Promise.all([
-        downFile(globalGl.BASE_IMG + 'v3_doctor_bg_share_1.png'),
+        downFile(
+          globalGl.BASE_IMG +
+            `v3_doctor_bg_share_1${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png`
+        ),
         downFile(
           globalGl.BASE_IMG +
             `v3_doctor_card_major${
