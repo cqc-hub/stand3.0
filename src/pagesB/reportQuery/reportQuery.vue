@@ -236,7 +236,6 @@
   );
   const isHealthCardButton = ref<boolean>(false);
   const isHealthCardNewMode = ref<boolean>(false);
-  const gStores = new GStores();
   const showTimeLabel = computed(() => {
     const timeRangeStr = dateRange.value.join(',');
 
