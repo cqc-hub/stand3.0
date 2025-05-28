@@ -557,6 +557,7 @@ const scJson: Record<string, ISConfig> = {
       isOpenHelpOld: '1',
       isOpenMessageAuth: '1',
       isOpenWechatSI: true, 
+      isOpenHomeTabBarNetWorkBtn: '1'
     },
 
   /**

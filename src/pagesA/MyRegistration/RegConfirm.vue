@@ -104,6 +104,26 @@
     </Order-Reg-Confirm>
 
     <xy-dialog
+      :title="'请选择候补方式'"
+      :show="waitChooseDialog"
+      @confirmButton="reject"
+      @cancelButton="resolve"
+      :cancelColor="'var(--hr-brand-color-6)'"
+      confirmText="候补加号"
+      cancelText="候补登记"
+    >
+      <view class="reg-tip">
+        <g-flag
+          v-model:title="flagTitle1203"
+          typeFg="1226"
+          isShowFgTip
+          isHideTitle
+          aaa
+        />
+      </view>
+    </xy-dialog>
+
+    <xy-dialog
       :title="'提示'"
       :show="isPreventOrder"
       @confirmButton="goPay"
@@ -177,10 +197,12 @@
     ServerStaticData,
     wait,
     apiAsync,
+    getLocation,
     ISystemConfig,
     nameConvert,
     PatientUtils,
     throttle,
+    useTBanner,
   } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { getMyPowerQx } from '@/components/greenPower';
@@ -211,6 +233,7 @@
     }
   );
 
+  const priorityReg = ref(true);
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
   const preventOrderStr = ref('');
@@ -222,6 +245,7 @@
   const alipayPid = global.systemInfo.alipayPid;
   const waitRegSchSecondResultList = ref(<TSchInfo[]>[]);
   const selWaitRegSch = ref('');
+  const waitChooseDialog = ref<boolean>(false);
   const isShowSelWaitRegSch = ref(false);
   const isOver = ref(false);
   const isOverLimit = ref('');
@@ -239,7 +263,7 @@
     isSignExist,
   } = useProgramPaySign();
 
-  // 候补挂号?
+  // 候补登记?
   const isWaitReg = computed(() => {
     return props.value.schState === '2';
   });
@@ -247,6 +271,10 @@
   // 快速预约（挂号无需绑定就诊人）
   const isOrderWithoutPat = computed(() => {
     return pageConfig.value.isOrderWithoutPat === '1' && !isWaitReg.value;
+  });
+
+  const isAddedNumSelf = computed(() => {
+    return pageConfig.value.isAddedNumSelf === '1' && isWaitReg.value;
   });
 
   const getFreeSignData = async (patientId) => {
@@ -294,8 +322,7 @@
   };
 
   const regConfirm = throttle(async () => {
-    const { isOrderPay, wxOrderSubscribeMessage } =
-      pageConfig.value;
+    const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
     /**
      * 未填写参数
      *
@@ -592,6 +619,94 @@
   const cancelAsync = () => {
     reject();
   };
+  const waitRegShow = async (args) => {
+    await new Promise((r, j) => {
+      waitChooseDialog.value = true;
+      resolve = async () => {
+        await api.addRegAlternate(args);
+        waitChooseDialog.value = false;
+        if (priorityReg.value) {
+          gStores.messageStore.showMessage(
+            '您符合优先预约条件，可进行优先预约。',
+            0,
+            {
+              useDialog: true,
+              dialogOpt: {
+                title: '优先预约温馨提示',
+              },
+              closeCallBack: async () => {
+                const {
+                  patientId,
+                  hosDocId,
+                  hosId,
+                  docName,
+                  categorName,
+                  fee,
+                  hosName,
+                } = args;
+                const requestArg = {
+                  status: '0',
+                  patientId,
+                  docId: hosDocId,
+                  hosId,
+                  docName,
+                  categorName,
+                  // categorNamePy: categorNamePY,
+                  regNumber: 9,
+                  hosName,
+                  fee,
+                };
+
+                await api.preregistrationSave(requestArg);
+                if (pageConfig.value?.isTabWaitReg === '1') {
+                  uni.reLaunch({
+                    url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+                  });
+                } else {
+                  uni.reLaunch({
+                    url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+                  });
+                }
+              },
+            }
+          );
+        } else {
+          if (pageConfig.value?.isTabWaitReg === '1') {
+            uni.reLaunch({
+              url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+            });
+          } else {
+            uni.reLaunch({
+              url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
+            });
+          }
+        }
+
+        r('sueess');
+      };
+      reject = () => {
+        console.log('预问诊');
+        waitChooseDialog.value = false;
+        useTBanner({
+          type: 'h5',
+          isSelfH5: '1',
+          path: 'pagesC/question/alternatePreQues',
+          extraData: {
+            data: JSON.stringify({
+              ...args,
+              priorityReg: priorityReg.value,
+            }),
+          },
+          addition: {
+            patientId: '_patientId',
+            token: 'token',
+            herenId: 'herenId',
+          },
+        });
+        r('sueess');
+      };
+    });
+  };
   const waitReg = async () => {
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
@@ -615,15 +730,24 @@
       if (props.value.hasOwnProperty('addedNum') && addFlag !== '1') {
         if (!(addedNum! * 1)) {
           const { confirm } = await apiAsync(uni.showModal, {
-            content: '当前号别加号号源已满，系统将仅为您进行候补挂号!',
+            content: '当前号别加号号源已满，系统将仅为您进行候补登记!',
           });
 
           if (!confirm) {
             return;
           }
+        } else if (isAddedNumSelf.value) {
+          waitRegShow({
+            ...props.value,
+            ...selSchItem,
+            alternateData,
+            patientId: gStores.userStore.patChoose.patientId,
+            source: gStores.globalStore.browser.source,
+            addFlag,
+          });
+          return;
         }
       }
-
       await api.addRegAlternate({
         ...props.value,
         ...selSchItem,
@@ -742,6 +866,9 @@
           });
         });
       }
+    }
+    if (isAddedNumSelf.value) {
+      const locationInfo = await getLocation(true);
     }
   });
 </script>
