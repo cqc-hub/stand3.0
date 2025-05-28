@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001048",
+  "sysCode": "1001078",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -343,6 +343,16 @@
       "alipayAppid": "2021005131642589",
       "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001078": {
+      "wxAppid": "wx5a88bc0cf40aa66f",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "isvAlipayAppid": "",
+      "name": "南京金陵口腔医院",
+      "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
     },
