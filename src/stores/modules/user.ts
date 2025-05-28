@@ -204,7 +204,9 @@ export const getAvatar = function (sex) {
       globalStore.isTcmStyle ? '-tcm' : ''
     }.png`;
   } else {
-    path = '/static/image/img_tx_nor.png';
+    path = `/static/image/img_tx_nor${
+      globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
   }
 
   return path;
