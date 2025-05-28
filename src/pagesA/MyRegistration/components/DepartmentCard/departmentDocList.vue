@@ -8,7 +8,12 @@
     >
       <view class="doc-info-container">
         <image
-          :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+          :src="
+            item.docPhoto ||
+            `/static/image/order/order-doctor-avatar${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png`
+          "
           class="doc-info-avatar"
           mode="aspectFill"
         />
@@ -53,13 +58,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { GStores } from '@/utils';
   import { type TDepartmentDocItem } from '../../utils/DepartmentCard';
 
   defineProps<{
     list: TDepartmentDocItem[];
   }>();
   const emits = defineEmits(['item-click']);
+  const gStores = new GStores();
 
   const itemClick = (item) => {
     emits('item-click', item);

@@ -35,7 +35,10 @@
             <view class="flex items-start mb24 pb24 doc-info">
               <image
                 :src="
-                  item.docPhoto || '/static/image/order/order-doctor-avatar.png'
+                  item.docPhoto ||
+                  `/static/image/order/order-doctor-avatar${
+                    gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                  }.png`
                 "
                 class="doc-info-avatar mr24"
                 mode="aspectFill"
@@ -73,24 +76,27 @@
 
   import globalGl from '@/config/global';
   import { joinQueryForUrl } from '@/common';
+  import { GStores } from '@/utils';
+
   defineProps<{
     list: any[];
   }>();
 
   const current = ref(0);
   const swiperDotIndex = ref(0);
+  const gStores = new GStores();
 
   const change = (e) => {
     current.value = e;
   };
 
   const docCLick = (item) => {
-    const {hosDocId,hosId,hosDeptId} = item;
+    const { hosDocId, hosId, hosDeptId } = item;
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         hosDocId,
         hosId,
-        hosDeptId
+        hosDeptId,
       }),
     });
   };

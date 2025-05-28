@@ -98,7 +98,7 @@ onMounted(() => {
       padding-top: 24rpx;
       .container-block-top {
         width: calc(100% - 32rpx);
-        background: linear-gradient(0deg, #ffffff, #e9f0ff);
+        background: linear-gradient(0deg, #ffffff, var(--hr-brand-color-1));
         border-radius: 16rpx 16rpx 0rpx 0rpx;
         box-shadow: 0rpx 1rpx 0rpx 0rpx #e6e6;
         border: 1rpx solid #e6e6e6;

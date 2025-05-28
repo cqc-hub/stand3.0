@@ -22,7 +22,7 @@
     info: BaseObject;
   }>();
   const isCollected = ref(false);
-  const gStore = new GStores();
+  const gStores = new GStores();
 
   const collectClick = () => {
     (isCollected.value && removeCollect()) || addCollect();
@@ -51,14 +51,14 @@
       deptId,
       docName: applyDoc,
       orderType: reportType,
-      source: gStore.globalStore.browser.source,
+      source: gStores.globalStore.browser.source,
       time: applyTime || repTime,
       extend,
       repType,
       serialNo,
       orderId: repId,
-      patientId: gStore.userStore.patChoose.patientId,
-      patientName: gStore.userStore.patChoose.patientName,
+      patientId: gStores.userStore.patChoose.patientId,
+      patientName: gStores.userStore.patChoose.patientName,
       hosId
     };
 
@@ -72,8 +72,8 @@
     const arg = {
       orderId: repId,
       collectType: 4,
-      patientId: gStore.userStore.patChoose.patientId,
-      patientName: gStore.userStore.patChoose.patientName,
+      patientId: gStores.userStore.patChoose.patientId,
+      patientName: gStores.userStore.patChoose.patientName,
     };
 
     await api.delMyCollect(arg);
@@ -87,7 +87,7 @@
     const { result } = await api.queryCollect({
       collectType: 4,
       orderId: repId,
-      patientId: gStore.userStore.patChoose.patientId,
+      patientId: gStores.userStore.patChoose.patientId,
     });
 
     isCollected.value = result;

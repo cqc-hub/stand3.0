@@ -42,7 +42,7 @@
       <view class="mt60">
         <button
           :class="{
-            'btn-disabled': !defalutMoney
+            'btn-disabled': !defalutMoney,
           }"
           class="btn btn-primary mt70"
           @click="getRefPay(defalutMoney)"
@@ -224,8 +224,27 @@
     const { reasonList = [] } = pageProps.value;
     const data: any = {
       ...pageProps.value,
-    }
+    };
     if (reasonList.length) {
+      // await gStores
+
+      const { title, content } = await gStores.getSysAppMore('6701');
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: true,
+            cancelText: '取消预存操作',
+            confirmText: '同意继续办理',
+            maxHeight: 900,
+          },
+          closeCallBack,
+        });
+      });
+      if (!confirm) {
+        return;
+      }
       isReasonPopupShow.value = true;
       const reason = await new Promise((resolve, reject) => {
         _resolve = resolve;

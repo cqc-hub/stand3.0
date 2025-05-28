@@ -16,7 +16,11 @@
           <view class="w100p h100p" @click="changeTab(item)">
             <view class="pt20 column">
               <image
-                :src="currentPath === getPath(item.url) ? item.iconActive : item.icon"
+                :src="
+                  currentPath === getPath(item.url)
+                    ? item.iconActive
+                    : item.icon
+                "
                 :class="{
                   animate__rubberBand:
                     animateItem(item) && clickCount % 2 === 0,
@@ -44,9 +48,9 @@
   import global from '@/config/global';
   import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
-  
 
   defineProps<{ systemModeOld: boolean }>();
+  const gStores = new GStores();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
   const clickCount = ref(0);
@@ -55,7 +59,9 @@
     {
       label: '首页',
       icon: '/static/image/home.png',
-      iconActive: '/static/image/home_active.png',
+      iconActive: `/static/image/home_active${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`,
       url: '/pages/home/home',
       loginInterception: '0',
       sort: 1,
@@ -63,7 +69,9 @@
     {
       label: '我的',
       icon: '/static/image/my.png',
-      iconActive: '/static/image/my_active.png',
+      iconActive: `/static/image/my_active${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`,
       url: '/pages/home/my',
       loginInterception: '0',
       sort: 4,
@@ -75,8 +83,6 @@
   const currentPath = '/' + currentPage.route;
   const isIos = ref(false);
   const unreadMes = ref(false);
-
-  const gStore = new GStores();
 
   const changeTab = async (item) => {
     const url = item.url;
@@ -130,7 +136,7 @@
   let getNum = () => {
     api
       .getStatus({
-        str: `OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`,
+        str: `OPENID_${gStores.globalStore.openId}/${gStores.userStore.phoneNum}`,
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;
@@ -151,8 +157,11 @@
         [SYS_TAB_KEY]: isIos.value,
       });
     }
-    if (global.sConfig.isOpenHomeTabBarMessageBtn&&global.sConfig.isMessageBtnShowNew) {
-      if (gStore.userStore.patChoose.patientId) {
+    if (
+      global.sConfig.isOpenHomeTabBarMessageBtn &&
+      global.sConfig.isMessageBtnShowNew
+    ) {
+      if (gStores.userStore.patChoose.patientId) {
         getNum();
       }
     }
@@ -163,7 +172,9 @@
       {
         label: '首页',
         icon: '/static/image/home.png',
-        iconActive: '/static/image/home_active.png',
+        iconActive: `/static/image/home_active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
         url: '/pages/home/home',
         loginInterception: '0',
         sort: 1,
@@ -171,7 +182,9 @@
       {
         label: '互联网医院',
         icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
+        iconActive: `/static/image/wlyy_active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
         url: '/pagesC/cloudHospital/cloudHospital',
         loginInterception: '0',
         sort: 2,
@@ -196,7 +209,9 @@
       {
         label: '消息中心',
         icon: '/static/image/wlyy.png',
-        iconActive: '/static/image/wlyy_active.png',
+        iconActive: `/static/image/wlyy_active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
         url: '/pagesC/cloudHospital/myPath?path=/pagesB/historicalMess/historicalMess&query=["phone","h5OpenId"]&loginInterception=1',
         loginInterception: '1',
         sort: 3,
@@ -204,7 +219,9 @@
       {
         label: '我的',
         icon: '/static/image/my.png',
-        iconActive: '/static/image/my_active.png',
+        iconActive: `/static/image/my_active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
         url: '/pages/home/my',
         loginInterception: '0',
         sort: 4,
@@ -226,7 +243,7 @@
     if (global.SYS_CODE === '1001052') {
       tabList.push('健康管理');
     }
-    
+
     // #ifdef MP-WEIXIN
     if (global.SYS_CODE === '1001063') {
       tabList.push('口腔商城');
@@ -318,7 +335,7 @@
           border-radius: 17rpx;
           line-height: 28rpx;
           font-size: var(--h-size-18);
-          padding: 0 8rpx ;
+          padding: 0 8rpx;
           z-index: 1;
           background-color: var(--h-color-white);
           box-sizing: border-box;

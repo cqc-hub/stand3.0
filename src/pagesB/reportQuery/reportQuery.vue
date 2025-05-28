@@ -236,7 +236,6 @@
   );
   const isHealthCardButton = ref<boolean>(false);
   const isHealthCardNewMode = ref<boolean>(false);
-  const gStore = new GStores();
   const showTimeLabel = computed(() => {
     const timeRangeStr = dateRange.value.join(',');
 
@@ -786,7 +785,7 @@
       isHealthCardButton.value = true;
       uni.hideLoading();
       if (pageProps.value?._healthType === 'verifyFail') {
-        gStore.messageStore.showMessage('已取消验证', 1500, {});
+        gStores.messageStore.showMessage('已取消验证', 1500, {});
       } else if (pageProps.value?._healthType === 'verifySuccess') {
         console.log('暂未处理');
 

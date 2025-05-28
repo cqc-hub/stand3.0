@@ -207,6 +207,7 @@ export const useTBanner = async (
 
       herenId && (extraData[herenId] = gStores.globalStore.herenId);
       extraData.token = gStores.globalStore.getToken;
+      extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
 
     for (const key in addition) {
@@ -261,11 +262,11 @@ export const useTBanner = async (
       });
     }
     // #ifdef H5
-    if(uni.getStorageSync('mini_v3_sysCode') === '1001035'){
-      fullUrl = joinQueryForUrl(path,{
-        openid:uni.getStorageSync('mini_v3_sysCode_openId'),
-        token:uni.getStorageSync('mini_v3_sysCode_token')
-      })
+    if (uni.getStorageSync('mini_v3_sysCode') === '1001035') {
+      fullUrl = joinQueryForUrl(path, {
+        openid: uni.getStorageSync('mini_v3_sysCode_openId'),
+        token: uni.getStorageSync('mini_v3_sysCode_token'),
+      });
     }
     location.href = fullUrl;
     // #endif

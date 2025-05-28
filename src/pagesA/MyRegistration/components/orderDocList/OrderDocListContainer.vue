@@ -3,7 +3,12 @@
     <view class="doc-info-container">
       <!-- <g-login @handler-next="avatarClick"> -->
       <image
-        :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+        :src="
+          item.docPhoto ||
+          `/static/image/order/order-doctor-avatar${
+            gStores.globalStore.isTcmStyle ? '-tcm' : ''
+          }.png`
+        "
         @click="avatarClick"
         class="doc-info-avatar mr24"
         mode="aspectFill"
@@ -130,7 +135,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { throughCharacterLineFeed } from '@/utils';
+  import { GStores, throughCharacterLineFeed } from '@/utils';
   import { IDocListAll } from '../../utils';
   import HTMLParser from '@/common/html-parser';
 
@@ -140,6 +145,7 @@
     isAllDate?: boolean;
     isShowHosNameWithDeptName?: boolean;
   }>();
+  const gStores = new GStores();
 
   const emits = defineEmits(['avatar-click', 'preregistration-click']);
 

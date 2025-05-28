@@ -638,7 +638,7 @@
     border: 0.5px solid #e6e6e6;
 
     &.collapse-unfinished {
-      background: linear-gradient(180deg, #e9f0ff, #ffffff);
+      background: linear-gradient(180deg, var(--hr-brand-color-1), #ffffff);
       &::before {
         content: '';
         display: block;

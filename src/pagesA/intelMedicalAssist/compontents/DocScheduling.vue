@@ -23,7 +23,9 @@
             :src="
               item?.docPhoto
                 ? item?.docPhoto
-                : '/static/image/order/order-doctor-avatar.png'
+                : `/static/image/order/order-doctor-avatar${
+                    gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                  }.png`
             "
             class="doc-info-avatar"
             mode="aspectFill"
@@ -94,7 +96,7 @@
   const props = defineProps<{
     list: any[];
     msg: string;
-    source?:string
+    source?: string;
   }>();
 
   onMounted(() => {

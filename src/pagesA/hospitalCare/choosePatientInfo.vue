@@ -221,7 +221,7 @@
     padding: 40rpx 32rpx 0;
     overflow: hidden;
     &.card-man {
-      background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
+      background: linear-gradient(90deg, #ffffff, var(--hr-brand-color-1) 99%);
     }
     &.card-lady {
       background: linear-gradient(90deg, #ffffff, #fff0eb 99%);
@@ -318,7 +318,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #e9f0ff;
+        background-color: var(--hr-brand-color-1);
         margin-right: 70rpx;
 
         .text {

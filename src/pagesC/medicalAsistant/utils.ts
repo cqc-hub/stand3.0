@@ -9,7 +9,7 @@ export const getItemStyle = item => {
 
   const s = {
     mainColor: "var(--hr-brand-color-6)",
-    bgColor: "#E9F0FF",
+    bgColor: "var(--hr-brand-color-1)",
   };
 
   // if (["2", "3"].includes(orderClass)) {

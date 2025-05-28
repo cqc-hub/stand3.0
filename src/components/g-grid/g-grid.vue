@@ -151,7 +151,7 @@
   let getNum = () => {
     api
       .getStatus({
-        str: `OPENID_${gStore.globalStore.openId}/${gStore.userStore.phoneNum}`,
+        str: `OPENID_${gStores.globalStore.openId}/${gStores.userStore.phoneNum}`,
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;
@@ -161,12 +161,12 @@
 
   getNum = throttle(getNum, 1000);
 
-  const gStore = new GStores();
+  const gStores = new GStores();
 
   onMounted(async () => {
     if (
       global.sConfig.isMessageBtnShowNew &&
-      gStore.userStore.patChoose.patientId
+      gStores.userStore.patChoose.patientId
     ) {
       const hasMes = options.value.list.find((item) =>
         item.path?.includes('/pagesB/historicalMess/historicalMess')

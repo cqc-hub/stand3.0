@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { IPat } from '@/stores/type';
 import globalGl from '@/config/global';
+import { useGlobalStore } from '@/stores';
 
 const userStore = defineStore('user', {
   persist: {
@@ -172,7 +173,7 @@ const userStore = defineStore('user', {
     getPatName(pat?: IPat): string {
       pat = pat || this.patChoose;
       return pat.patientName || '';
-    }
+    },
   },
 
   getters: {
@@ -192,13 +193,20 @@ const userStore = defineStore('user', {
 });
 
 export const getAvatar = function (sex) {
+  const globalStore = useGlobalStore();
   let path = '';
   if (sex === '男') {
-    path = '/static/image/img_tx_patient_male.png';
+    path = `/static/image/img_tx_patient_male${
+      globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
   } else if (sex === '女') {
-    path = '/static/image/img_tx_patient_female.png';
+    path = `/static/image/img_tx_patient_female${
+      globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
   } else {
-    path = '/static/image/img_tx_nor.png';
+    path = `/static/image/img_tx_nor${
+      globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
   }
 
   return path;
@@ -221,7 +229,9 @@ export const isAreaProgram = (): boolean => {
   const sysCode = globalGl.SYS_CODE;
 
   if (
-    ['1001049', '1001063', '1001066', '1001068', '1001070','1001076'].includes(sysCode)
+    ['1001049', '1001063', '1001066', '1001068', '1001070', '1001076'].includes(
+      sysCode
+    )
   ) {
     return true;
   }
