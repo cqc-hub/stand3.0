@@ -2,7 +2,12 @@
   <view class="doc-info">
     <view class="doc-info-container">
       <image
-        :src="item.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+        :src="
+          item.docPhoto ||
+          `/static/image/order/order-doctor-avatar${
+            gStores.globalStore.isTcmStyle ? '-tcm' : ''
+          }.png`
+        "
         @click="avatarClick"
         class="doc-info-avatar"
         mode="aspectFill"
@@ -41,12 +46,14 @@
 </template>
 
 <script lang="ts" setup>
+  import { GStores } from '@/utils';
   import { IDocListAll } from '../../utils';
 
   const props = defineProps<{
     item: IDocListAll;
     appointmentDate?: string;
   }>();
+  const gStores = new GStores();
 
   const emits = defineEmits(['avatar-click']);
 

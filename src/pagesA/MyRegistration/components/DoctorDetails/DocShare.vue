@@ -388,7 +388,9 @@
       mask: true,
     });
 
-    let avatar_img = '/static/image/order/order-doctor-avatar.png';
+    let avatar_img = `/static/image/order/order-doctor-avatar${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
 
     // #ifdef MP-TOUTIAO
     avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;

@@ -776,7 +776,10 @@
 
   const headerBg = computed(() => {
     return (
-      docDetail.value.docPhoto || '/static/image/order/order-doctor-avatar.png'
+      docDetail.value.docPhoto ||
+      `/static/image/order/order-doctor-avatar${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`
     );
   });
 

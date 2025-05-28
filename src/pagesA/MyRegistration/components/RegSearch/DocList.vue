@@ -5,7 +5,10 @@
         <view class="doc-info-container">
           <image
             :src="
-              item.docPhoto || '/static/image/order/order-doctor-avatar.png'
+              item.docPhoto ||
+              `/static/image/order/order-doctor-avatar${
+                gStores.globalStore.isTcmStyle ? '-tcm' : ''
+              }.png`
             "
             @click="avatarClick(item)"
             class="doc-info-avatar"
@@ -60,13 +63,14 @@
   import { defineComponent, ref } from 'vue';
   import { IDocResItem } from '../../utils/RegSearch';
   import HTMLParser from '@/common/html-parser';
-  import { throughCharacterLineFeed } from '@/utils';
+  import { GStores, throughCharacterLineFeed } from '@/utils';
 
   defineProps<{
     list: IDocResItem[];
   }>();
 
   const emits = defineEmits(['item-click']);
+  const gStores = new GStores();
 
   const avatarClick = (item: IDocResItem) => {
     emits('item-click', item);

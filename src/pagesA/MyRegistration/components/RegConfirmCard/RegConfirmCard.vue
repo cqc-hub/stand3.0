@@ -47,18 +47,23 @@
 
     <view v-if="myProps.visitingArea" class="row">
       <view class="title text-no-wrap">诊区诊室</view>
-      <view>{{ myProps.visitingArea  }}</view>
+      <view>{{ myProps.visitingArea }}</view>
     </view>
 
     <view v-if="!isPreConfirm" class="row">
       <view class="title text-no-wrap">挂号金额</view>
       <view class="mr12">{{ myProps.fee }}元</view>
-      <view v-if="myProps.categorName">{{ myProps.categorName  }}</view>
+      <view v-if="myProps.categorName">{{ myProps.categorName }}</view>
     </view>
 
     <view class="doc g-border-top">
       <image
-        :src="myProps.docPhoto || '/static/image/order/order-doctor-avatar.png'"
+        :src="
+          myProps.docPhoto ||
+          `/static/image/order/order-doctor-avatar${
+            gStores.globalStore.isTcmStyle ? '-tcm' : ''
+          }.png`
+        "
         class="doc-avatar g-border"
         mode="aspectFill"
       />
@@ -75,7 +80,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, toRaw, onMounted } from 'vue';
-  import { ServerStaticData, wait } from '@/utils';
+  import { GStores, ServerStaticData, wait } from '@/utils';
   import { IPageProps } from '../../utils/regConfirm';
 
   const props = withDefaults(
@@ -103,6 +108,7 @@
   );
 
   const emit = defineEmits(['update:hosName']);
+  const gStores = new GStores();
 
   const hosLabel = ref('');
 
