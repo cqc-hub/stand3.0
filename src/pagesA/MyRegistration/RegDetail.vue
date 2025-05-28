@@ -1082,31 +1082,36 @@
   /** 自费挂号 */
   const toPay = async (totalFee = orderRegInfo.value.fee) => {
     const {
-      herenId,
       browser: { source },
     } = gStores.globalStore;
     const { orderId } = pageProps.value;
     const arg = {
-      herenId,
       source,
       orderId,
     };
+    // return
 
-    const { result } = await api.orderPayValid(arg);
-    if (result && result.paySign) {
-      const { hosId } = orderRegInfo.value;
-      payArg.value = {
-        phsOrderNo: orderId,
-        sign: result.paySign,
-        totalFee,
-        hosId,
-        phsOrderSource: '1',
-      };
+    // 0元号
+    if (totalFee === 0) {
+      await api.freeRegPay(arg);
+    } else {
+      const { result } = await api.orderPayValid(arg);
+      if (result && result.paySign) {
+        const { hosId } = orderRegInfo.value;
+        payArg.value = {
+          phsOrderNo: orderId,
+          sign: result.paySign,
+          totalFee,
+          hosId,
+          phsOrderSource: '1',
+        };
 
-      const res = await payMoneyOnline({ ...payArg.value });
-      await toPayPull(res, '挂号缴费');
-      payAfter();
+        const res = await payMoneyOnline({ ...payArg.value });
+        await toPayPull(res, '挂号缴费');
+      }
     }
+
+    payAfter();
   };
 
   const payAfter = async () => {
