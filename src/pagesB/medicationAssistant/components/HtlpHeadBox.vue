@@ -105,7 +105,7 @@
 <style lang="scss" scoped>
   .item {
     padding: 40rpx 32rpx;
-    background: linear-gradient(180deg, #ffffff 0%, #e9f0ff 100%);
+    background: linear-gradient(180deg, #ffffff 0%, var(--hr-brand-color-1) 100%);
     border-radius: 8px 8px 0px 0px;
 
     .item-title {

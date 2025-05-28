@@ -133,7 +133,7 @@
       }
       //住院
       .itemiconHospitalization {
-        background-color: #e9f0ff;
+        background-color: var(--hr-brand-color-1);
         color: var(--hr-brand-color-6);
       }
       //门诊

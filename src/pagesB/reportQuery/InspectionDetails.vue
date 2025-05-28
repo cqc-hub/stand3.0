@@ -577,7 +577,7 @@
         height: 100%;
         .container-block-top {
           // width: calc(100% - 64rpx);
-          background: linear-gradient(0deg, #ffffff, #e9f0ff);
+          background: linear-gradient(0deg, #ffffff, var(--hr-brand-color-1));
           border-radius: 16rpx 16rpx 0rpx 0rpx;
           box-shadow: 0rpx 1rpx 0rpx 0rpx #e6e6;
           border: 1rpx solid #e6e6e6;
@@ -703,7 +703,7 @@
               }
               .table-content {
                 // width: calc(100% - 16rpx);
-                background-color: #f5f7ff;
+                background-color: var(--hr-brand-color-3-light);
                 font-size: var(--hr-font-size-xs);
                 display: flex;
                 margin-top: 8rpx;

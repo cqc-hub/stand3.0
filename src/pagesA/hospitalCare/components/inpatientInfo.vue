@@ -475,7 +475,7 @@
     padding: 40rpx 32rpx;
     overflow: hidden;
     &.card-man {
-      background: linear-gradient(90deg, #ffffff, #e9f0ff 99%);
+      background: linear-gradient(90deg, #ffffff, var(--hr-brand-color-1) 99%);
     }
     &.card-lady {
       background: linear-gradient(90deg, #ffffff, #fff0eb 99%);
@@ -570,7 +570,7 @@
         width: 0;
         height: 2rpx;
         border-top: 10rpx solid transparent;
-        border-right: 16rpx solid #e9f0ff;
+        border-right: 16rpx solid var(--hr-brand-color-1);
         border-bottom: 10rpx solid transparent;
       }
       .record {
@@ -585,7 +585,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #e9f0ff;
+        background-color: var(--hr-brand-color-1);
         margin-right: 70rpx;
 
         .text {

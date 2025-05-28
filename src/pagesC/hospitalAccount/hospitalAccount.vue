@@ -292,7 +292,7 @@
         margin-top: 104rpx;
         display: flex;
         .f-b1 {
-          background: #e9f0ff;
+          background: var(--hr-brand-color-1);
           color: var(--hr-brand-color-6);
           width: 100%;
         }
@@ -344,7 +344,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #e9f0ff;
+    background-color: var(--hr-brand-color-1);
 
     .text {
       color: var(--hr-brand-color-6);
@@ -362,7 +362,7 @@
     width: 0;
     height: 2rpx;
     border-top: 10rpx solid transparent;
-    border-right: 16rpx solid #e9f0ff;
+    border-right: 16rpx solid var(--hr-brand-color-1);
     border-bottom: 10rpx solid transparent;
   }
 </style>

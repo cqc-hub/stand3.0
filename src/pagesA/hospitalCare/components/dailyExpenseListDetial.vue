@@ -1,5 +1,11 @@
 <template>
-  <view class="page" v-if="Obj == false">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="page"
+    v-if="Obj == false"
+  >
     <view class="container">
       <view class="top">
         <view class="title" v-if="costType == '1'">
@@ -258,7 +264,11 @@
       .top {
         height: auto;
         width: 686rpx;
-        background: linear-gradient(180deg, #ffffff 0%, #e9f0ff 100%);
+        background: linear-gradient(
+          180deg,
+          #ffffff 0%,
+          var(--hr-brand-color-1) 100%
+        );
         border: 1rpx solid #e6e6e6;
         border-radius: 16rpx 16rpx 0px 0px;
         padding-bottom: 40rpx;

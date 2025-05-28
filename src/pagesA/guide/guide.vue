@@ -869,7 +869,7 @@
 
 <style lang="scss" scoped>
   .page-bg {
-    background: #e9f0ff;
+    background: var(--hr-brand-color-1);
   }
 
   .fix-top {

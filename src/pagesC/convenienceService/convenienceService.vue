@@ -258,7 +258,7 @@
         margin-top: 104rpx;
         display: flex;
         .f-b1 {
-          background: #e9f0ff;
+          background: var(--hr-brand-color-1);
           color: var(--hr-brand-color-6);
           width: 100%;
         }
