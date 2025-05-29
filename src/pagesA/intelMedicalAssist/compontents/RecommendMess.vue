@@ -48,9 +48,13 @@
   const showAll = ref(true);
   const goToLink = (item) => {
     if (item.appId && item.self) {
+    let url=item.redirectUrl
+     if (!redirectUrl.startsWith('/')) {
+        return '/' + url; // 添加前导斜杠
+    }
       useTBanner({
         type: 'self',
-        path: item.redirectUrl,
+        path: url,
       });
     } else if (item.appId) {
       // #ifndef H5
@@ -66,7 +70,7 @@
         type: 'self',
         path: joinQueryForUrl('pagesC/openMiniProgram/openMiniProgram', {
           appId: item.appId,
-          path: item.redirectUrl,
+          path: item.redirectUrl.replace(/^\//, ''),
         }),
       });
       // #endif

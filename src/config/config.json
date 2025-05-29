@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001080",
+  "sysCode": "1001074",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -325,7 +325,7 @@
         "healthCardText": "甘肃省卫生健康委员会",
         "hospitalId": "39894",
         "isCardQueryComp": true,
-        "isNewMode": false
+        "isNewMode": true
       }
     },
     "1001048": {
