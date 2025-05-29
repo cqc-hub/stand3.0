@@ -344,11 +344,15 @@ const queryApi = {
 
   // 门诊住院列表
   getOutpatientHospitalList: <T = any>(data, config: any = {}) =>
-    service.post<T>('/phs-query/operation/getOutpatientHospitalList', parm(data), {
-      showMessage: false,
-      hideLoading: false,
-      ...config,
-    }),
+    service.post<T>(
+      '/phs-query/operation/getOutpatientHospitalList',
+      parm(data),
+      {
+        showMessage: false,
+        hideLoading: false,
+        ...config,
+      }
+    ),
   // 便民服务列表接口
   getConvenientServiceList: (data) =>
     service.post('/phs-query/billing/getConvenientServiceList', parm(data), {
@@ -533,6 +537,10 @@ const regApi = {
     service.post('/phs-reg/reg/getCheckIn', parm(data), {
       hideLoading: false,
       showMessage: false,
+    }),
+  freeRegPay: (data: any) =>
+    service.post('/phs-reg/reg/freeRegPay', parm(data), {
+      hideLoading: false,
     }),
   reappoint: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/reappoint', parm(data)),

@@ -359,7 +359,7 @@ export interface IRegInfo {
   appointmentDate: string;
   appointmentTime: string;
   ampmName: string;
-  fee: string;
+  fee: number;
   _fee: string;
   clinicalType: string;
   deptName: string;
