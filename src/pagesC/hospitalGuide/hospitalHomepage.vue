@@ -389,7 +389,7 @@
       title: '口腔商城',
       terminalType: 'my',
       gridLabel: '0',
-      path: `/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId}&subhospitalId=${getHosTcId.value.tcSubHosId}`,
+      path: `/pagesE/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId}&subhospitalId=${getHosTcId.value.tcSubHosId}`,
       appId: '',
       id: 496201, // 禁止复制改id 
       detail: '',
@@ -569,7 +569,7 @@
   const updateGridListPaths = () => {
   gridList.forEach((item) => {
     if (item.id === 496201) {
-      item.path = `/pagesC/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId || '72'}&subhospitalId=${getHosTcId.value.tcSubHosId || '73'}`;
+      item.path = `/pagesE/miniprogram_dist/pages/oralMall/oralMall?hospitalId=${getHosTcId.value.tcHosId || '202505190001'}&subhospitalId=${getHosTcId.value.tcSubHosId || '202505191001'}`;
     }
   });
 }

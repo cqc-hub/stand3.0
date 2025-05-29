@@ -822,6 +822,18 @@
         }
       ],
       "pagesD-plugins": ""
+    },
+     {
+      "root": "pagesE",
+      "pages": [
+         {
+          "path": "common/useJump",
+          "style": {
+            "navigationBarTitleText": "该分包仅给明眸皓齿使用,其他页面不放这里"
+          }
+        }
+      ],
+      "pagesE-plugins": ""
     }
   ],
   "globalStyle": {
