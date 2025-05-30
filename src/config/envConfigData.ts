@@ -66,7 +66,7 @@ export const sysConfigEnv = <const>{
 
   //  'order.isTakeNumerWithPay':'1',
   //  'order.isCancelOlineReg':'1',
-  'order.isAddedNumSelf': '1',
+  // 'order.isAddedNumSelf': '1',
 };
 
 export const apiConfigEnv = <const>{
