@@ -18,8 +18,9 @@
       /**
        * - 1 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
        * - 2 温附二 满意度问卷
+       * - 3 温附二 化验排队
        */
-      type: '1' | '2';
+      type: '1' | '2' | '3';
       [key: string]: any;
     }
   );
@@ -100,6 +101,28 @@
     });
   };
 
+  // 化验排队 https://h5.eheren.com/scan/1001067/scan?type=3&windowId=233
+  const initTakeNumber = async () => {
+    const { windowId } = pageProps.value;
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/queueNumber/queueNumber',
+      text: '化验排队',
+      extraData: {
+        windowId,
+        type: '3',
+      },
+      addition: {
+        herenId: 'herenId',
+        patientId: 'aaa',
+        token: 'token',
+      },
+      isLocal: '1',
+    });
+  };
+
   const init = async () => {
     const { type } = pageProps.value;
 
@@ -110,6 +133,10 @@
 
       case '2':
         initQuestion();
+        break;
+
+      case '3':
+        initTakeNumber();
         break;
 
       default:
