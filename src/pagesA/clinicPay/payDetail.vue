@@ -295,6 +295,7 @@
     getQxMedicalNation,
     _getQxMedicalNation,
     getMedicalArgWithFamily,
+    getMedicalAuthCode,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -308,7 +309,13 @@
     getLocalStorage,
     cloneUtil,
   } from '@/common';
-  import { wait, PatientUtils, cacheUtil, generateUuid } from '@/utils';
+  import {
+    wait,
+    PatientUtils,
+    cacheUtil,
+    generateUuid,
+    useTBanner,
+  } from '@/utils';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';
@@ -327,6 +334,10 @@
 
   const selList = ref<TCostList>([]);
   const selListChildren = ref<TCostList[number]['costList']>([]);
+  const isWx = ref(false);
+  // #ifdef  MP-WEIXIN
+  isWx.value = true;
+  // #endif
 
   const { getDetailData, detailData } = usePayDetailPage();
   const {
@@ -621,6 +632,33 @@
           cardNumber,
         });
         await getMedicalArgWithFamily(props.value.params);
+
+        if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
+          const authCode = await getMedicalAuthCode();
+          const hosOrderId = gStores.userStore.patChoose.cardNumber;
+          const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
+          const OPENID = gStores.globalStore.openId;
+          const MEDORGORD = selList.value
+            .map((item) => item.serialNo)
+            .join(',');
+          const ORGCODG = 'H32028200358';
+          const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+
+          const resultConfig = encodeURIComponent(
+            JSON.stringify({
+              cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
+              orderStatusRedirectUrl:
+                '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+            })
+          );
+          uni.setStorageSync('resultConfig', resultConfig);
+          const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
+          useTBanner({
+            type: 'h5',
+            path: url,
+          });
+          return;
+        }
 
         // #ifdef MP-ALIPAY
         if (getIsAliMedicalNation()) {
