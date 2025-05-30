@@ -18,22 +18,29 @@
             v-for="(infoItem, InfoI) in Object.entries(item.data)"
             :key="`${InfoI}`"
           >
-            <view class="info-item"  >
-                <view class="info-item-left">{{ infoItem[0] }}</view>
-                <view class="info-item-right" :class="{'notAll':infoItem[0] !== '推送备注' || showAll}">{{ infoItem[1] }}</view>
-                <view
-                      v-if=" infoItem[0] === '推送备注' && showAll"
-                      @click.stop="showAll=!showAll"
-                      class="doc-show-intro f26 "
-                    >
-                      <text class="iconfont">&#xe66b;</text>
-                    </view>
+            <view class="info-item">
+              <view class="info-item-left">{{ infoItem[0] }}</view>
+              <view
+                class="info-item-right"
+                :class="{ notAll: infoItem[0] !== '推送备注' || showAll }"
+              >
+                {{ infoItem[1] }}
               </view>
+              <view
+                v-if="infoItem[0] === '推送备注' && showAll"
+                @click.stop="showAll = !showAll"
+                class="doc-show-intro f26"
+              >
+                <text class="iconfont">&#xe66b;</text>
+              </view>
+            </view>
           </template>
         </view>
         <view class="goto-detail" v-if="item.redirectUrl">
           <view class="goto-detail-text">查看详情</view>
-          <view class="goto-detail-avatr">  <text class="iconfont">&#xe66b;</text></view>
+          <view class="goto-detail-avatr">
+            <text class="iconfont">&#xe66b;</text>
+          </view>
         </view>
       </view>
     </view>
@@ -47,14 +54,25 @@
   import { useTBanner } from '@/utils';
   const showAll = ref(true);
   const goToLink = (item) => {
+    // #ifdef H5
     if (item.appId && item.self) {
-    let url=item.redirectUrl
-     if (!redirectUrl.startsWith('/')) {
-        return '/' + url; // 添加前导斜杠
+      item.redirectUrl = item.redirectUrl.replace(/^\//, '');
+    } else {
+      if (!item.redirectUrl.startsWith('/')) {
+        item.redirectUrl = '/' + item.redirectUrl; // 添加前导斜杠
+      }
     }
+    // #endif
+
+    // #ifndef H5
+    if (!item.redirectUrl.startsWith('/')) {
+      item.redirectUrl = '/' + item.redirectUrl; // 添加前导斜杠
+    }
+    // #endif
+    if (item.appId && item.self) {
       useTBanner({
         type: 'self',
-        path: url,
+        path: item.redirectUrl.replace(/^\//, ''),
       });
     } else if (item.appId) {
       // #ifndef H5
@@ -70,7 +88,7 @@
         type: 'self',
         path: joinQueryForUrl('pagesC/openMiniProgram/openMiniProgram', {
           appId: item.appId,
-          path: item.redirectUrl.replace(/^\//, ''),
+          path: item.redirectUrl,
         }),
       });
       // #endif
@@ -182,7 +200,7 @@
         overflow: hidden;
         // text-overflow: ellipsis;
       }
-      .notAll{
+      .notAll {
         -webkit-line-clamp: 1 !important; /* 显示3行 */
       }
     }
@@ -204,13 +222,18 @@
     }
   }
   .doc-show-intro {
-          right: 32rpx;
-          bottom: 0;
-          z-index: 2;
-          display: flex;
-          padding-left: 1.5em;
-          align-items: center;
-          justify-content: flex-end;
-          background: linear-gradient(270deg, #fbfdff 40%, #fbfeff 0, rgba(255, 255, 255, 0.3) 100%);
-        }
+    right: 32rpx;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    padding-left: 1.5em;
+    align-items: center;
+    justify-content: flex-end;
+    background: linear-gradient(
+      270deg,
+      #fbfdff 40%,
+      #fbfeff 0,
+      rgba(255, 255, 255, 0.3) 100%
+    );
+  }
 </style>
