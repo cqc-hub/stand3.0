@@ -229,7 +229,7 @@ export const isAreaProgram = (): boolean => {
   const sysCode = globalGl.SYS_CODE;
 
   if (
-    ['1001049', '1001063', '1001066', '1001068', '1001070', '1001076'].includes(
+    ['1001049', '1001063', '1001066', '1001068', '1001070', '1001076','1001078'].includes(
       sysCode
     )
   ) {

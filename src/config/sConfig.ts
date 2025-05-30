@@ -503,8 +503,6 @@ const scJson: Record<string, ISConfig> = {
   1001076: {
     login: {
       isSkipPerfect: '1',
-      // isAliAuthBase: '1',
-      // isLoginByOpenId: '1',
     },
   },
 
@@ -529,7 +527,7 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
-
+  
   1001048: {
     // isOpenWechatSI: true,
     isOpenHelpOld: '1',
@@ -570,6 +568,16 @@ const scJson: Record<string, ISConfig> = {
       isLoginByOpenId: '1',
     }, 
   },
+
+   /**
+   * 南京金陵口腔医院
+   */
+  1001078: {
+    login: {
+      isSkipPerfect: '1',
+    },
+  },
+
 };
 
 const getSConfig = (sysCode: string) => {
