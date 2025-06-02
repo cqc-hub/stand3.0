@@ -219,6 +219,7 @@
     if (isReasonPopupShow.value === false) {
       _reject();
     }
+    isReasonPopupShow.value = false;
   };
   const toPay = async () => {
     const { reasonList = [] } = pageProps.value;
