@@ -384,6 +384,7 @@
     } = pageConfig.value;
 
     if (isFace === '1') {
+      debugger;
       if (
         formData.value[formKey.idType] === '01' &&
         getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
@@ -527,8 +528,16 @@
 
   const selectChange = async (e) => {
     const { item, value } = e;
+    console.log(e);
 
     switch (item.key) {
+      case formKey.patientType:
+        if (value === '0') {
+          formData.value[formKey.idType] = '';
+        } else if (value === '-1') {
+          formData.value[formKey.idType] = '01';
+        }
+        break;
       case formKey.idType:
         formData.value[formKey.idCard] = '';
 
