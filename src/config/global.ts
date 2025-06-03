@@ -9,10 +9,10 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静�
 export let SYS_CODE = systemConfig.sysCode;
 
 // #ifdef H5
-  SYS_CODE = getSysCode();
+SYS_CODE = getSysCode();
 // #endif
 
-let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'prod'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
@@ -49,10 +49,10 @@ const netUrl =
 
 const h5Url =
   env === 'prod'
-    // ? 'https://h5.eheren.com/v4/#/'
-    ? 'https://h5.eheren.com/v3/#/'
-    // : 'https://health.eheren.com/v3dev/#/';
-    : 'https://health.eheren.com/v3/#/';
+    ? // ? 'https://h5.eheren.com/v4/#/'
+      'https://h5.eheren.com/v3/#/'
+    : // : 'https://health.eheren.com/v3dev/#/';
+      'https://health.eheren.com/v3/#/';
 
 const globalGl = {
   SYS_CODE,

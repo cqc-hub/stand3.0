@@ -384,7 +384,6 @@
     } = pageConfig.value;
 
     if (isFace === '1') {
-      debugger;
       if (
         formData.value[formKey.idType] === '01' &&
         getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
