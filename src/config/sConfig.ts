@@ -155,6 +155,19 @@ const scJson: Record<string, ISConfig> = {
     isOpenWechatSI: true,
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
+    medicalMHelp: {
+      alipay: {
+        medicalPlugin: {
+          orgId: {
+            13012: 'H33030200034',
+            13013: 'H33030200034',
+            13009: 'H33030200034',
+            13011: 'H33030200034',
+          },
+          cardType: '01',
+        },
+      },
+    },
   },
 
   /**
@@ -180,7 +193,7 @@ const scJson: Record<string, ISConfig> = {
    * 濮阳市人民医院
    */
   1001058: {
-     isOpenWechatSI: true,
+    isOpenWechatSI: true,
     login: {
       isAliAuthBase: '1',
     },
@@ -527,7 +540,7 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
-  
+
   1001048: {
     // isOpenWechatSI: true,
     isOpenHelpOld: '1',
@@ -546,17 +559,17 @@ const scJson: Record<string, ISConfig> = {
   /**
    * 智领医院
    */
-    1001080: {
-      login: {
-        isSkipPerfect: '1',
-        isAliAuthBase: '1',
-        isLoginByOpenId: '1',
-      },
-      isOpenHelpOld: '1',
-      isOpenMessageAuth: '1',
-      isOpenWechatSI: true, 
-      isOpenHomeTabBarNetWorkBtn: '1'
+  1001080: {
+    login: {
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
+      isLoginByOpenId: '1',
     },
+    isOpenHelpOld: '1',
+    isOpenMessageAuth: '1',
+    isOpenWechatSI: true,
+    isOpenHomeTabBarNetWorkBtn: '1',
+  },
 
   /**
    * 浙江省健康人才发展协会
@@ -566,10 +579,10 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
       isAliAuthBase: '1',
       isLoginByOpenId: '1',
-    }, 
+    },
   },
 
-   /**
+  /**
    * 南京金陵口腔医院
    */
   1001078: {
@@ -577,7 +590,6 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
     },
   },
-
 };
 
 const getSConfig = (sysCode: string) => {

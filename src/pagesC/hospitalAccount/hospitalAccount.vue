@@ -63,7 +63,11 @@
           >
             提现
           </button>
-          <button @click="confirmForm" class="f-b2 ml8 btn btn-primary">
+          <button
+            v-if="pageConfig.isHideAccountRefillBtn !== '1'"
+            @click="confirmForm"
+            class="f-b2 ml8 btn btn-primary"
+          >
             充值
           </button>
         </view>

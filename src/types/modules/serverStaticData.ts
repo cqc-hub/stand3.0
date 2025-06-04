@@ -314,6 +314,8 @@ export interface ISystemConfig_ {
      * 查看充值及消费记录
      */
     isOpenLookRecordBtn?: '1';
+    /** 隐藏充值按钮 */
+    isHideAccountRefillBtn?: '1';
 
     /** 住院预约前查询当前就诊人是否有自助入院，有则跳转至自助入院页面 */
     isSelfQueryBeforeAppoint?: '1';
