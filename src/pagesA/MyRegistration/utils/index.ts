@@ -511,6 +511,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', {
         ...props.value,
         ...scheme,
+        // "addedNum": "10",
       }),
     });
   };

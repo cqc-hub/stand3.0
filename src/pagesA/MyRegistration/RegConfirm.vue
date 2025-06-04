@@ -96,7 +96,7 @@
     >
       <g-flag
         v-model:title="flagTitle1203"
-        typeFg="1203"
+        typeFg="1226"
         isShowFgTip
         isHideTitle
         aaa
@@ -233,7 +233,7 @@
     }
   );
 
-  const priorityReg = ref(true);
+  const priorityReg = ref(false);
   const isCheck = ref(false);
   const isPreventOrder = ref(false);
   const preventOrderStr = ref('');
@@ -694,7 +694,7 @@
           extraData: {
             data: JSON.stringify({
               ...args,
-              priorityReg: priorityReg.value,
+              priorityReg: true,
             }),
           },
           addition: {
