@@ -151,11 +151,12 @@
     //     'Yn+CgX9eWg/4k+B61aXruyitCtvf7g4TV+/8D81ihLDYvmiwH78NMGxwQjEdke0asui4LjzbaBDnKbqPraVLHP7vya4r3P7rCSSWtEnL27EQtKbq0EhclF8uPF5TzPJEaI0AZRMh2L32RZAN7QWPeA==',
     // } as any;
 
-    const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+    const queryParams = gStores.globalStore.appShowData?.query?.qrCode;
 
     uni.showLoading({});
     await wait(600);
-    if ((queryParams && !opt?.params) || opt?.q) {
+    if ((queryParams && !Object.keys(opt).length) || opt?.q) {
+      console.log('截止-----', queryParams);
       return;
     }
 
