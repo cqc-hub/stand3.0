@@ -96,7 +96,7 @@
     >
       <g-flag
         v-model:title="flagTitle1203"
-        typeFg="1226"
+        typeFg="1203"
         isShowFgTip
         isHideTitle
         aaa
