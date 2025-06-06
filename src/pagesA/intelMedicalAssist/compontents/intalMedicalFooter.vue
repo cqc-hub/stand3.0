@@ -234,6 +234,7 @@
   const {
     isCanUse: isCanUseTranslate,
     isListening,
+    getAuthority,
     startRecord,
     stopRecord,
   } = useTranslateVoiceHook();
@@ -277,7 +278,6 @@
     isOpenWechatSI = globalGl.sConfig?.isOpenWechatSI || false;
     // #endif
     // #ifdef  H5
-    console.log('isCanUseTranslate', isCanUseTranslate);
 
     isOpenWechatSI =
       isCanUseTranslate &&
@@ -330,6 +330,11 @@
   const changeVoiceType = () => {
     if (hasWechatSI.value && hasSIPolicy.value) {
       isVoice.value = !isVoice.value;
+      // #ifdef  H5
+      console.log('getAuthority');
+      
+      getAuthority()
+       // #endif
       // #ifdef  MP-WEIXIN
       if (!SImanager) {
         initRecord();
