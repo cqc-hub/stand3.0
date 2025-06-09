@@ -52,18 +52,19 @@
 
     methods: {
       itemClick(item) {
-
         // #ifndef H5
         useToPath(item);
-          // #endif
+        // #endif
 
         // #ifdef H5
+        if (item.path.startsWith('/')) {
+          item.path = item.path.replace(/^\//, '');
+        }
         useTBanner({
           type: 'self',
-          path: joinQueryForUrl(item.path,{...item.query}),
+          path: joinQueryForUrl(item.path, { ...item.query }),
         });
-          // #endif
-
+        // #endif
       },
     },
 
