@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001046",
+  "sysCode": "1001058",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -362,6 +362,15 @@
       "alipayAppid": "",
       "isvAlipayAppid": "",
       "name": "浙江省健康人才发展协会",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001082": {
+      "wxAppid": "wx38f42e8057350a57",
+      "h5Appid": "",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "健康温州",
       "isStartComeTest": false,
       "isOpenOcr": false
     }

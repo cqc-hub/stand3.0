@@ -156,7 +156,6 @@ const scJson: Record<string, ISConfig> = {
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
 
-
     // medicalMHelp: {
     //   alipay: {
     //     medicalPlugin: {
@@ -200,6 +199,19 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
     isSearchHosForAddPatHasMoreThanOneCard: '1',
+
+    medicalMHelp: {
+      isOpenPatToMedicalPat: {},
+
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsP9BQzovPtfTZGwRsyhqMMZJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM942P0163F60C80A00008C628E5F'
+        },
+        // medicalDefault: '1',
+        isMedicalOrder: '1',
+      },
+    },
   },
 
   /**
