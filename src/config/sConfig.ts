@@ -201,7 +201,7 @@ const scJson: Record<string, ISConfig> = {
     isSearchHosForAddPatHasMoreThanOneCard: '1',
 
     medicalMHelp: {
-      isOpenPatToMedicalPat: {},
+      // isOpenPatToMedicalPat: {},
 
       wx: {
         medicalNation: {
