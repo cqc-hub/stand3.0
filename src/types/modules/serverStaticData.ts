@@ -316,6 +316,8 @@ export interface ISystemConfig_ {
     isOpenLookRecordBtn?: '1';
     /** 隐藏充值按钮 */
     isHideAccountRefillBtn?: '1';
+    // 支持退款
+    isAccountCanRefund?: '1';
 
     /** 住院预约前查询当前就诊人是否有自助入院，有则跳转至自助入院页面 */
     isSelfQueryBeforeAppoint?: '1';
@@ -325,6 +327,7 @@ export interface ISystemConfig_ {
      */
     // 展示 "备注" 字段
     isChangeOrderRemarkShow?: '1';
+
   };
 
   // 门诊缴费  CLINIC_PAY_CONFIG ...

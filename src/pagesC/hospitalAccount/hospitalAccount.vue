@@ -84,7 +84,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      :confirmText="reFoundWorld"
+      :confirmText="isCanRefound ? '提现' : '申请实名打款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
@@ -93,15 +93,23 @@
     >
       <view>
         <view class="mb40">
-          <view class="dialog-t f32 mb32">
-            <text class="dt-width color-888">当前可{{ reFoundWorld }}</text>
-            <text class="dt-red g-bolder">
-              {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
-            </text>
+          <view v-if="isCanRefound">
+            <view class="dialog-t f32 mb32">
+              <text class="dt-width color-888">当前可{{ reFoundWorld }}</text>
+              <text class="dt-red g-bolder">
+                {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
+              </text>
+            </view>
           </view>
-          <view class="dialog-t f32">
+
+          <view v-if="isCanRefound" class="dialog-t f32">
             <text class="dt-width color-888">到账账户</text>
             <text class="g-bolder">原路返回</text>
+          </view>
+
+          <view v-if="!isCanRefound">
+            不可原路退回金额
+            <text class="dt-red g-bolder">{{ lists.accountBalance }}元</text>
           </view>
         </view>
         <g-flag
@@ -140,6 +148,7 @@
     wait,
     ServerStaticData,
     ISystemConfig,
+    useTBanner,
   } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
@@ -179,7 +188,7 @@
   });
 
   const isRefoundExist = computed(
-    () => gStores.globalStore.sysCode === '1001067'
+    () => pageConfig.value.isAccountCanRefund === '1'
   );
 
   const reFoundWorld = computed(() => {
@@ -339,12 +348,29 @@
       }),
     });
   };
+
+  const isAllowOnLineCash = computed(
+    () => ((lists.value.allowOnLineCash || 0) as unknown as number) * 1
+  );
+
+  // 提现
+  const isCanRefound = computed(
+    () =>
+      (isRefoundExist.value && isAllowOnLineCash.value) || !isRefoundExist.value
+  );
+
   const confirmForm1 = () => {
-    const allowOnLineCash = ((lists.value.allowOnLineCash || 0) as unknown as number) * 1;
-    if (isRefoundExist.value && !allowOnLineCash) {
-      // 退款
-      return
+    if (!isCanRefound.value) {
+      const c = ((lists.value.accountBalance || 0) as unknown as number) * 1;
+      if (!c) {
+        gStores.messageStore.showMessage('当前没有可退款金额', 1500);
+        return;
+      }
     }
+    // if (isRefoundExist.value && !allowOnLineCash) {
+    //   // 退款
+    //   return
+    // }
     // if(lists.value.accountNo && lists.value.allowOnLineCash != '0'){
     regDialogConfirm.value.show();
     // }else{
@@ -356,7 +382,23 @@
   };
 
   const goWithdrawal = () => {
-    accountWithdrawal();
+    if (isCanRefound.value) {
+      accountWithdrawal();
+    } else {
+      // 申请实名打款
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/hospitalAccount/hospitalAccountRefund',
+        text: '申请实名打款',
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+          patientId: '_patientId',
+        },
+        isLocal: '1',
+      });
+    }
   };
 </script>
 
@@ -414,9 +456,9 @@
       display: inline-block;
       width: 176rpx;
     }
-    .dt-red {
-      color: #ff5040;
-    }
+  }
+  .dt-red {
+    color: #ff5040;
   }
 
   .records {
