@@ -26,7 +26,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores, apiAsync } from '@/utils';
+  import { GStores, ISystemConfig, ServerStaticData, apiAsync } from '@/utils';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -297,8 +297,11 @@
       ...pageProps.value,
     };
   });
+  const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
 
   onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
+
     // if (isItemNew.value) {
     // const { result } = await api.getTermsBySysAndCode({
     //   domainCode: 'USER_JOB',
@@ -315,19 +318,23 @@
     // jobItem && (jobItem.options = jobList);
     // }
 
-    gform.value.setList([
+    const rList = [
       ...renderListBase,
       // ...(isItemNew.value ? renderListDetail : []),
       ...renderListDetail,
-      {
+    ] as TInstance[];
+    if (pageConfig.value.isChangeOrderRemarkShow === '1') {
+      rList.push({
         labelWidth,
         label: '备注',
         field: 'input-text',
         inputType: 'textarea',
         placeholder: '请输入房间、床位或其它信息',
         key: 'remark',
-      },
-    ] as TInstance[]);
+      });
+    }
+
+    gform.value.setList(rList);
   });
 </script>
 

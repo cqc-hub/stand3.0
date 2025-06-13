@@ -61,18 +61,6 @@
     ></g-pay>
     <g-message />
 
-    <g-select
-      v-model:value="reason"
-      v-model:show="isReasonPopupShow"
-      :option="pageProps.reasonList || []"
-      :field="{
-        label: 'label',
-        value: 'value',
-      }"
-      @change="reasonChange"
-      @update:show="reasonClose"
-      title="请选择充值理由"
-    />
   </view>
 </template>
 
@@ -108,7 +96,7 @@
     patientName?: string; //扫码的时候传 支付用
     cardNumber?: string;
     hospitalAccount?: string;
-    reasonList?: IOptions[];
+    reason?: string;
     type?: string; //有值1代表预交来的 所有预缴都不传patientid
     _type?: 'fromSelDepartment';
     _url?: string; // 充值成功后回跳
@@ -222,37 +210,9 @@
     isReasonPopupShow.value = false;
   };
   const toPay = async () => {
-    const { reasonList = [] } = pageProps.value;
     const data: any = {
       ...pageProps.value,
     };
-    if (reasonList.length) {
-      // await gStores
-
-      const { title, content } = await gStores.getSysAppMore('6701');
-      const { confirm } = await new Promise<any>((closeCallBack) => {
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            title,
-            isShowCancel: true,
-            cancelText: '取消预存操作',
-            confirmText: '同意继续办理',
-            maxHeight: 900,
-          },
-          closeCallBack,
-        });
-      });
-      if (!confirm) {
-        return;
-      }
-      isReasonPopupShow.value = true;
-      const reason = await new Promise((resolve, reject) => {
-        _resolve = resolve;
-        _reject = reject;
-      });
-      data.reason = reason;
-    }
     const payArg = await getCreateInHospitalPayOrderData(
       data,
       defalutMoney.value
@@ -413,16 +373,6 @@
   });
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (pageProps.value.reasonList) {
-      try {
-        pageProps.value.reasonList = JSON.parse(
-          // @ts-expect-error
-          decodeURIComponent(pageProps.value.reasonList)
-        );
-      } catch (error) {
-        pageProps.value.reasonList = [];
-      }
-    }
     console.log(pageProps.value, '----');
     setData();
   });
