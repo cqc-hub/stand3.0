@@ -14,7 +14,6 @@ if (global.env !== 'prod') {
 
 export function createApp() {
   const app = createSSRApp(App).use(painaInstall);
-
   // app.use(router);
 
   app.config.globalProperties.$global = global;

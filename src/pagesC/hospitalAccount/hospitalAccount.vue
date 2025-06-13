@@ -385,12 +385,21 @@
     if (isCanRefound.value) {
       accountWithdrawal();
     } else {
+      // 退款不存在可提现金额
+      const { accountBalance: refundFee, accountNo } = lists.value;
+      const { hosId } = pageProps.value;
+
       // 申请实名打款
       useTBanner({
         type: 'h5',
         isSelfH5: '1',
         path: 'pagesC/hospitalAccount/hospitalAccountRefund',
         text: '申请实名打款',
+        extraData: {
+          refundFee,
+          accountNo,
+          hosId,
+        },
         addition: {
           token: 'token',
           herenId: 'herenId',
