@@ -604,6 +604,15 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
     },
   },
+
+    /**
+   * 健康温州
+   */
+  1001082: {
+    login: {
+      isAliAuthBase: '1',
+    }, 
+  },
 };
 
 const getSConfig = (sysCode: string) => {
