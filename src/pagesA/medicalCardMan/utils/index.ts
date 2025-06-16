@@ -810,6 +810,17 @@ export const useProgramPaySign = () => {
     signAfterOnPageShow,
     disagreeSign,
     isAgreeSign,
+    async getFreeSignData(patientId) {
+      const { result } = await api.findSign({
+        patientId,
+        source: gStores.globalStore.browser.source,
+      });
+
+      return result as {
+        freeSignData: string;
+        [key: string]: any;
+      };
+    },
     isAgreeSignChange(v) {
       if (v) {
         regDialogConfirmSign.value.show();
@@ -1270,9 +1281,12 @@ export const getInfoFromIdCard = (idCard) => {
     .padStart(2, '0')}`;
   let age = new Date().getFullYear() - new Date(btd).getFullYear();
   const monthDiff = new Date().getMonth() - new Date(btd).getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && new Date().getDate() < new Date(btd).getDate())) {
-        age--;
-    }
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && new Date().getDate() < new Date(btd).getDate())
+  ) {
+    age--;
+  }
   return {
     age,
     gender,
