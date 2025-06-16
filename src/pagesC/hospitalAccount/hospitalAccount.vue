@@ -95,7 +95,7 @@
         <view class="mb40">
           <view v-if="isCanRefound">
             <view class="dialog-t f32 mb32">
-              <text class="dt-width color-888">当前可{{ reFoundWorld }}</text>
+              <text class="dt-width color-888">当前可提现</text>
               <text class="dt-red g-bolder">
                 {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
               </text>
@@ -245,7 +245,6 @@
   accountWithdrawal = debounce(accountWithdrawal, 80);
 
   const init = async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
     await getListData();
   };
 
@@ -258,6 +257,9 @@
   };
 
   onLoad(async (opt) => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
+    console.log('cqcccc');
+
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     uni.showLoading({});
@@ -387,7 +389,7 @@
     } else {
       // 退款不存在可提现金额
       const { accountBalance: refundFee, accountNo } = lists.value;
-      const { hosId } = pageProps.value;
+      const { hosId, isCash } = pageProps.value;
 
       // 申请实名打款
       useTBanner({
@@ -399,6 +401,7 @@
           refundFee,
           accountNo,
           hosId,
+          isCash,
         },
         addition: {
           token: 'token',
