@@ -57,11 +57,11 @@
         </view>
         <view class="f-button p24">
           <button
-            v-if="isCash == '1'"
+            v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
             class="f-b1 mr8 btn btn-primary"
           >
-            提现
+            {{ reFoundWorld }}
           </button>
           <button
             v-if="pageConfig.isHideAccountRefillBtn !== '1'"
@@ -84,7 +84,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      confirmText="提现"
+      :confirmText="isCanRefound ? '提现' : '申请退款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
@@ -93,15 +93,23 @@
     >
       <view>
         <view class="mb40">
-          <view class="dialog-t f32 mb32">
-            <text class="dt-width color-888">当前可提现</text>
-            <text class="dt-red g-bolder">
-              {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
-            </text>
+          <view v-if="isCanRefound">
+            <view class="dialog-t f32 mb32">
+              <text class="dt-width color-888">当前可提现</text>
+              <text class="dt-red g-bolder">
+                {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
+              </text>
+            </view>
           </view>
-          <view class="dialog-t f32">
+
+          <view v-if="isCanRefound" class="dialog-t f32">
             <text class="dt-width color-888">到账账户</text>
             <text class="g-bolder">原路返回</text>
+          </view>
+
+          <view v-if="!isCanRefound">
+            不可原路退回金额
+            <text class="dt-red g-bolder">{{ lists.accountBalance }}元</text>
           </view>
         </view>
         <g-flag
@@ -113,6 +121,19 @@
         />
       </view>
     </Order-Reg-Confirm>
+
+    <g-select
+      v-model:value="reason"
+      v-model:show="isReasonPopupShow"
+      :option="reasonList"
+      :field="{
+        label: 'label',
+        value: 'value',
+      }"
+      @change="reasonChange"
+      @update:show="reasonClose"
+      title="请选择充值理由"
+    />
     <g-message />
   </view>
 </template>
@@ -127,6 +148,7 @@
     wait,
     ServerStaticData,
     ISystemConfig,
+    useTBanner,
   } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
@@ -165,6 +187,20 @@
     }));
   });
 
+  const isRefoundExist = computed(
+    () => pageConfig.value.isAccountCanRefund === '1'
+  );
+
+  const reFoundWorld = computed(() => {
+    let w = '提现';
+
+    if (isRefoundExist.value) {
+      w = '退款';
+    }
+
+    return w;
+  });
+
   let getListData = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { hosId } = pageProps.value;
@@ -196,7 +232,8 @@
         if (res.code == '0') {
           init();
           gStores.messageStore.showMessage(
-            '提现申请已提交，提现金额将原路返回，请耐心等待',
+            reFoundWorld.value +
+              `申请已提交，${reFoundWorld.value}金额将原路返回，请耐心等待`,
             3000
           );
         }
@@ -208,7 +245,6 @@
   accountWithdrawal = debounce(accountWithdrawal, 80);
 
   const init = async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
     await getListData();
   };
 
@@ -221,6 +257,9 @@
   };
 
   onLoad(async (opt) => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
+    console.log('cqcccc');
+
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     uni.showLoading({});
@@ -249,22 +288,91 @@
     }
   });
 
-  const confirmForm = () => {
+  let _resolve: any = () => {
+    // r
+  };
+
+  let _reject: any = () => {
+    // j
+  };
+  const reason = ref('');
+  const isReasonPopupShow = ref(false);
+  const reasonChange = () => {
+    _resolve(reason.value);
+  };
+  const reasonClose = () => {
+    if (isReasonPopupShow.value === false) {
+      _reject();
+    }
+    isReasonPopupShow.value = false;
+  };
+
+  const confirmForm = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const { cardNumber, patientName } = lists.value;
     const { hosId } = pageProps.value;
+    let reason = '';
+    if (reasonList.value.length) {
+      // await gStores
+
+      const { title, content } = await gStores.getSysAppMore('6701');
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: true,
+            cancelText: '取消预存操作',
+            confirmText: '同意继续办理',
+            maxHeight: 900,
+          },
+          closeCallBack,
+        });
+      });
+      if (!confirm) {
+        return;
+      }
+      isReasonPopupShow.value = true;
+      reason = await new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+      });
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/hospitalCare/paymentPage', {
         hosId,
         cardNumber,
         patientName,
-        reasonList: JSON.stringify(reasonList.value),
+        reason,
         hospitalAccount: '12',
         _type: pageProps.value.type,
       }),
     });
   };
+
+  const isAllowOnLineCash = computed(
+    () => ((lists.value.allowOnLineCash || 0) as unknown as number) * 1
+  );
+
+  // 提现
+  const isCanRefound = computed(
+    () =>
+      (isRefoundExist.value && isAllowOnLineCash.value) || !isRefoundExist.value
+  );
+
   const confirmForm1 = () => {
+    if (!isCanRefound.value) {
+      const c = ((lists.value.accountBalance || 0) as unknown as number) * 1;
+      if (!c) {
+        gStores.messageStore.showMessage('当前没有可退款金额', 1500);
+        return;
+      }
+    }
+    // if (isRefoundExist.value && !allowOnLineCash) {
+    //   // 退款
+    //   return
+    // }
     // if(lists.value.accountNo && lists.value.allowOnLineCash != '0'){
     regDialogConfirm.value.show();
     // }else{
@@ -276,7 +384,33 @@
   };
 
   const goWithdrawal = () => {
-    accountWithdrawal();
+    if (isCanRefound.value) {
+      accountWithdrawal();
+    } else {
+      // 退款不存在可提现金额
+      const { accountBalance: refundFee, accountNo } = lists.value;
+      const { hosId, isCash } = pageProps.value;
+
+      // 申请实名打款
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: 'pagesC/hospitalAccount/hospitalAccountRefund',
+        text: '申请实名打款',
+        extraData: {
+          refundFee,
+          accountNo,
+          hosId,
+          isCash,
+        },
+        addition: {
+          token: 'token',
+          herenId: 'herenId',
+          patientId: '_patientId',
+        },
+        isLocal: '1',
+      });
+    }
   };
 </script>
 
@@ -334,9 +468,9 @@
       display: inline-block;
       width: 176rpx;
     }
-    .dt-red {
-      color: #ff5040;
-    }
+  }
+  .dt-red {
+    color: #ff5040;
   }
 
   .records {

@@ -261,6 +261,7 @@
     signAfterOnPageShow,
     isAgreeSign,
     isSignExist,
+    getFreeSignData,
   } = useProgramPaySign();
 
   // 候补登记?
@@ -276,18 +277,6 @@
   const isAddedNumSelf = computed(() => {
     return pageConfig.value.isAddedNumSelf === '1' && isWaitReg.value;
   });
-
-  const getFreeSignData = async (patientId) => {
-    const { result } = await api.findSign({
-      patientId,
-      source: gStores.globalStore.browser.source,
-    });
-
-    return result as {
-      freeSignData: string;
-      [key: string]: any;
-    };
-  };
 
   const handlerConfirmPatReal = async () => {
     const pages = getCurrentPages();

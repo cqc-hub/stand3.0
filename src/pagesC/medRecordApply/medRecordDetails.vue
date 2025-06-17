@@ -469,12 +469,16 @@
       </scroll-view>
 
       <view class="g-footer g-border-top">
-        <view class="fee-count flex-normal">
+        <view v-if="!isPayWithoutSecretAuth" class="fee-count flex-normal">
           <text class="color-666 f28 mr12">合计</text>
           <text class="color-error f36 g-bold">{{ getPayMoneyNum }}元</text>
         </view>
         <button @click="paySubmit" class="btn g-border btn-warning dialog-btn">
-          {{ pickupType === '3' ? '立即申请' : '立即支付' }}
+          {{
+            pickupType === '3' || isPayWithoutSecretAuth
+              ? '立即申请'
+              : '立即支付'
+          }}
         </button>
       </view>
 
@@ -546,6 +550,26 @@
       title="选择业务类型"
       ref="photoModeSelRef"
     />
+
+    <Order-Reg-Confirm
+      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :title="flagTitle1203"
+      :maskClickClose="false"
+      @cancel="cancelAsync"
+      @confirm="confirmAsync"
+      height="90vh"
+      confirmText="同意授权,方便就诊"
+      cannerText="不授权"
+      ref="regDialogConfirmSign"
+    >
+      <g-flag
+        v-model:title="flagTitle1203"
+        typeFg="1203"
+        isShowFgTip
+        isHideTitle
+        aaa
+      />
+    </Order-Reg-Confirm>
     <g-message />
   </view>
 </template>
@@ -579,6 +603,7 @@
 
   import api from '@/service/api';
 
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import SelExpress from '@/pagesC/medicationAssistant/components/SelExpress.vue';
   import AddressBox from './components/MedRecordDetailsAddressBox.vue';
   import RecordCard from './components/RecordCard.vue';
@@ -678,6 +703,7 @@
     isItemCount: '0',
     hosId: '2',
   } as any);
+  const personConfig = ref({} as ISystemConfig['person']);
 
   // 手动添加记录?
   const isShowAddRecord = computed(() => {
@@ -699,6 +725,11 @@
   const isPatProxy = computed(() => {
     return pageConfig.value.patProxy === '1';
   });
+
+  // 免密
+  const isPayWithoutSecretAuth = computed(
+    () => personConfig.value.isPayWithoutSecretAuth === '1'
+  );
 
   const photoMode = ref('');
   const photoModeSelRef = ref(<any>'');
@@ -873,11 +904,12 @@
 
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
-    if (pickupType.value === '3') {
+    const isItemCount = pageConfig.value.isItemCount;
+    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
       return 0;
     }
 
-    if (pageConfig.value.isItemCount === '1') {
+    if (isItemCount === '1') {
       const count = getCount(recordRows.value) || getCount(purposeCount.value);
 
       if (pageConfig.value.isPurposeRadio === '1') {
@@ -1099,6 +1131,8 @@
   const getConfig = async () => {
     const listConfig =
       (await ServerStaticData.getSystemConfig('medRecord')) || [];
+    await wait(0);
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
 
     if (_hosId.value) {
       pageConfig.value = listConfig.find((o) => o.hosId === _hosId.value)!;
@@ -1181,6 +1215,22 @@
       return prev;
     }, 0);
 
+  const flagTitle1203 = ref('');
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
+  const confirmAsync = () => {
+    resolve();
+  };
+  const cancelAsync = () => {
+    reject();
+  };
+  const regDialogConfirmSign = ref('' as any);
+  const signAfterContinueOrder = async () => {
+    // #ifdef MP-WEIXIN
+    await paySubmit();
+    // #endif
+  };
   const paySubmit = async () => {
     const {
       sfz,
@@ -1203,10 +1253,42 @@
         ((requireSfz && requireSfz.length && requireSfz) || sfz)) ||
       [];
 
+    const _arg: any = {};
+
     const copyNum = getCount(recordRows.value) || getCount(purposeCount.value);
     const copyAimCount = aimValue.value.length || purposeCount.value.length;
+    const { patientId } = gStores.userStore.patChoose;
 
     const fee = getPayMoneyNum.value;
+
+    if (isPayWithoutSecretAuth.value) {
+      uni.showLoading({});
+      const u: any = await new Promise((r) => {
+        // @ts-expect-error
+        require('../../pagesA/medicalCardMan/utils/index', r);
+      });
+
+      const { getFreeSignData, goPaySign } = u.useProgramPaySign();
+      uni.hideLoading();
+
+      let { freeSignData } = await getFreeSignData(patientId);
+
+      if (!freeSignData) {
+        regDialogConfirmSign.value.show();
+        await new Promise((r, j) => {
+          resolve = r;
+          reject = j;
+        });
+
+        await goPaySign(patientId, {
+          type: 'order',
+          cb: signAfterContinueOrder,
+        });
+
+        freeSignData = (await getFreeSignData(patientId)).freeSignData;
+      }
+      _arg.freeSignData = freeSignData;
+    }
 
     switch (pickupType.value) {
       case '1':
@@ -1413,14 +1495,13 @@
       uni.hideLoading();
     }
 
-    const { patientId } = gStores.userStore.patChoose;
-
     const copyAim = aimValue.value.join('、');
     const copyData = materialValue.value.join('、');
     const printCount =
       (purposeCount.value.length && JSON.stringify(purposeCount.value)) || '';
 
     const args = {
+      ..._arg,
       pickupType: pickupType.value,
       email: '',
       copyNum,
@@ -1514,7 +1595,7 @@
       hosName: getGetHosName.value,
     };
 
-    if (pickupType.value === '3') {
+    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
       payAfter();
     } else {
       isShowFg32.value = true;

@@ -810,6 +810,17 @@ export const useProgramPaySign = () => {
     signAfterOnPageShow,
     disagreeSign,
     isAgreeSign,
+    async getFreeSignData(patientId) {
+      const { result } = await api.findSign({
+        patientId,
+        source: gStores.globalStore.browser.source,
+      });
+
+      return result as {
+        freeSignData: string;
+        [key: string]: any;
+      };
+    },
     isAgreeSignChange(v) {
       if (v) {
         regDialogConfirmSign.value.show();

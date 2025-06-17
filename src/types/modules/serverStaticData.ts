@@ -176,7 +176,7 @@ export interface ISystemConfig_ {
     isMedicalQrChoose?: '1';
     /** 开放实名认证(去认证-就诊人列表按钮) */
     realNameAuth?: ('ocrVerify' | 'faceVerify')[];
-    /** 新增就诊人后进行免密代扣授权(开启后预约挂号时替换挂号接口) */
+    /** 新增就诊人后进行免密代扣授权(开启后预约挂号时替换挂号接口, 病案) */
     isPayWithoutSecretAuth?: '1';
     /** 修改家庭成员中就诊人手机号 */
     isEditPatPhone?: '1';
@@ -204,7 +204,7 @@ export interface ISystemConfig_ {
     // 不需要地址
     isDropAddress?: '1';
     // 默认地址
-    defaultAddress?:{provinces?: string; citys?: string; areas?: string;}
+    defaultAddress?: { provinces?: string; citys?: string; areas?: string };
     // 不需要民族
     isDropNation?: '1';
     /**
@@ -254,13 +254,12 @@ export interface ISystemConfig_ {
     /** 目的有没有份数可以选择 */
     isPurposeRadio?: '1';
 
-
     /** 复印材料 不配置或为空则不显示 */
     material?: string[];
     /** 可选择的复印材料数量 默认 3 */
     selMaterialLen?: number;
 
-    /** 收钱方式 0 预收 1 按项目、目的(tollMode) */
+    /** 收钱方式 0 预收 1 按项目、目的(tollMode)  */
     isItemCount?: '0' | '1';
     tollMode?: '1'; // isItemCount(字段不统一)
     /** isItemCount | tollMode 为 1 时, 计算的金额不受选了多个目的影响 */
@@ -275,8 +274,8 @@ export interface ISystemConfig_ {
     isCustomPatRecord?: '1';
     /** 支持住院记录中选择目的的份数? */
     selPurposeInRecord?: '1';
-     /** 复印最大份数 */
-     maxNum?: number;
+    /** 复印最大份数 */
+    maxNum?: number;
     /** 手动添加记录里面是否可以切换院区 */
     isToggleHos?: '1';
 
@@ -316,9 +315,17 @@ export interface ISystemConfig_ {
     isOpenLookRecordBtn?: '1';
     /** 隐藏充值按钮 */
     isHideAccountRefillBtn?: '1';
+    // 支持退款
+    isAccountCanRefund?: '1';
 
     /** 住院预约前查询当前就诊人是否有自助入院，有则跳转至自助入院页面 */
     isSelfQueryBeforeAppoint?: '1';
+
+    /**
+     * hospitalCare/changeOrder
+     */
+    // 展示 "备注" 字段
+    isChangeOrderRemarkShow?: '1';
   };
 
   // 门诊缴费  CLINIC_PAY_CONFIG ...
