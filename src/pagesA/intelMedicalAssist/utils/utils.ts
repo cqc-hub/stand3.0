@@ -608,7 +608,7 @@ export const sendImg = async () => {
         type: -1,
       });
       msgState.value.msgLoad = false;
-      console.error('picTrans接口报错', JSON.parse(data));
+      console.error('picOcr接口报错', JSON.parse(data));
       return;
     }
     // #ifndef  H5

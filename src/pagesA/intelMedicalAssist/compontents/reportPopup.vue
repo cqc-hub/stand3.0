@@ -23,6 +23,10 @@
         <view class="sub-title-line flex-normal pl24 pr24 relative">
           <view class="sub-title f28 color-444">
             <text>上传</text>
+            <!-- <text style="color: var(--hr-brand-color-6)">检验报告</text><text>、</text>
+            <text style="color: var(--hr-brand-color-6)">检查报告</text><text>、</text>
+            <text style="color: var(--hr-brand-color-6)">病历</text><text>、</text>
+            <text style="color: var(--hr-brand-color-6)">药盒</text><text>、</text> -->
             <text style="color: var(--hr-brand-color-6)">检验报告</text>
             <text>，智能医助将为您解读报告~</text>
           </view>
@@ -169,7 +173,7 @@
   const hosId = ref('');
   const checkedList = ref<any[]>([]);
   const dateRange = ref<[string, string]>([
-    dayjs(new Date()).subtract(31, "day").format("YYYY-MM-DD"),
+    dayjs(new Date()).subtract(31, 'day').format('YYYY-MM-DD'),
     dayjs(new Date()).format('YYYY-MM-DD'),
   ]);
   const scrollOption = ref({
@@ -270,7 +274,7 @@
       idCardEncry,
       hosId: hosId.value,
       startDate: startDate,
-      endDate:  endDate,
+      endDate: endDate,
     };
     loading.value = true;
     let count = 0;

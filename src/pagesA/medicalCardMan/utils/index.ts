@@ -942,10 +942,10 @@ export const useProgramPaySign = () => {
 const commonQuery = {
   sysCode: globalGl.SYS_CODE,
 };
-const healthCardQuery = {
+export const healthCardQuery = {
   ...commonQuery,
 
-  domainChannel: 2,
+  domainChannel: 3,
   faceUrl: '/pagesA/medicalCardMan/medicalCardMan',
   failRedirectUrl:
     `mini:${globalGl.addPersonUrl}?_healthType=failRedirect&regInfoCode=` +
@@ -958,6 +958,7 @@ const healthCardQuery = {
   userFormPageUrl:
     `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
     '${authCode}',
+  verifyUrl: '',
   // userFormPageUrl:
   // `mini:${globalGl.addPersonUrl}?_healthType=addPat&authCode=` +
   // '${authCode}',
@@ -995,6 +996,10 @@ export const healthCardBind = async () => {
 };
 
 export const healthCardLink = async (healthCode: string, cb?: Function) => {
+  uni.showLoading({
+    title: '关联电子健康卡中...',
+    mask: true,
+  });
   const gStores = new GStores();
   const globalStore = gStores.globalStore;
   if (globalGl.systemInfo.isOpenHealthCard && healthCode) {
@@ -1012,8 +1017,10 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
     await api
       .quickLinkHealthCardWithLoad(requestArg)
       .then(() => {
+        uni.hideLoading();
         gStores.messageStore.showMessage('关联成功', 1500, {
           closeCallBack() {
+            uni.hideLoading();
             //刷新就诊人列表
             new PatientUtils().getPatCardList();
             if (cb) {
@@ -1027,6 +1034,7 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
         });
       })
       .catch(async (e) => {
+        uni.hideLoading();
         const { respCode, message } = e;
         console.error('quickLinkHealthCardWithLoad error', respCode, message);
         if (respCode === 884801) {
@@ -1041,12 +1049,11 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
             });
           }
         } else {
-          gStores.messageStore.showMessage(message);
+          gStores.messageStore.showMessage(message,3000);
         }
       });
     // #endif
   } else {
-    console.error('addPatByHealthCode方法只支持腾讯健康卡通过healthCode建档');
     gStores.messageStore.showMessage('绑定失败', 1500, {});
   }
 };
@@ -1087,6 +1094,7 @@ export const gotoChosseVerifyPage = async (
     const {
       result: { verifyUrl: h5Url },
     } = await api.registerHealthCardPreFill(requestArg);
+    healthCardQuery.verifyUrl = h5Url;
     useTBanner(
       {
         type: 'h5',
@@ -1110,6 +1118,7 @@ export const gotoChosseVerifyPage = async (
       errCB && errCB(err);
       return { result: { verifyUrl: '' } };
     });
+    healthCardQuery.verifyUrl = h5Url;
     h5Url &&
       useTBanner(
         {
@@ -1121,50 +1130,15 @@ export const gotoChosseVerifyPage = async (
   }
 };
 
-// export const reportVerifyJudge =async (cb) => {
-//   const { success, res } = await getHealthCardCode();
-//   if (success) {
-//     const {
-//       result: { wechatCode },
-//     } = res;
-//     const gStores = new GStores();
-//     const args = {
-//       patientId: gStores.userStore.patChoose.patientId,
-//       wechatCode,
-//       herenId: gStores.globalStore.herenId,
-//       openId: gStores.globalStore.openId,
-//       source: gStores.globalStore.browser.source,
-//       sysCode: globalGl.SYS_CODE,
-//       hospitalId: globalGl.systemInfo.isOpenHealthCard!.hospitalId,
-//     };
-//     const { result } = await api.registerUniformVerifyOrder(args);
-//     const {
-//       patAndOrderId,
-//       verifyType,
-//       verifyOrderId,
-//       verifyData,
-//       protectState,
-//     } = result;
-//     if (verifyType !== 0) {
-//       cb.call(verifyData);
-//     } else {
-//       //去验证
-//       const {
-//         result: { userData, userIdKey },
-//       } = await api.getOrderInfoByOrderId({ ...args, verifyType: '1' });
-//       const { verifyResult } = await wxFacialVerifyByKey(userIdKey);
-//       console.log('verifyResult', verifyResult);
-//     }
-//   } else {
-//     throw new Error('获取健康卡授权失败');
-//   }
-// };
-
 export const backWithFaceVerify = async (
   orderId: string,
   redirectUrl: string,
   verifyType: string
 ) => {
+  uni.showLoading({
+    title: '验证中...',
+    mask: true,
+  });
   const gStores = new GStores();
   const globalStore = gStores.globalStore;
   const hospitalId = globalGl.systemInfo.isOpenHealthCard!.hospitalId;
@@ -1185,6 +1159,7 @@ export const backWithFaceVerify = async (
   let wechatCode = '';
   if (success) wechatCode = res.result.wechatCode;
   else {
+    uni.hideLoading();
     gStores.messageStore.showMessage('授权失败', 3000);
     return;
   }
@@ -1216,6 +1191,7 @@ export const backWithFaceVerify = async (
       'redirectTo'
     );
   }
+  uni.hideLoading();
 };
 
 const wxFacialVerifyByKey = async (
@@ -1236,11 +1212,24 @@ const wxFacialVerifyByKey = async (
             uni.hideLoading();
             rl(e);
           },
-          fail(err) {
+          async fail(err) {
             //识别失败
             uni.hideLoading();
-            gStores.messageStore.showMessage('人脸识别失败', 3000);
-            console.error('人脸识别失败', err);
+            gStores.messageStore.showMessage(
+              '人脸识别失败,请重新选择验证方式',
+              2000
+            );
+            console.log('看看是不是走到这', healthCardQuery);
+            await wait(2000);
+            if (healthCardQuery?.verifyUrl) {
+              useTBanner(
+                {
+                  type: 'h5',
+                  path: healthCardQuery.verifyUrl,
+                },
+                'redirectTo'
+              );
+            }
             rj(err);
           },
         });
@@ -1270,9 +1259,12 @@ export const getInfoFromIdCard = (idCard) => {
     .padStart(2, '0')}`;
   let age = new Date().getFullYear() - new Date(btd).getFullYear();
   const monthDiff = new Date().getMonth() - new Date(btd).getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && new Date().getDate() < new Date(btd).getDate())) {
-        age--;
-    }
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && new Date().getDate() < new Date(btd).getDate())
+  ) {
+    age--;
+  }
   return {
     age,
     gender,

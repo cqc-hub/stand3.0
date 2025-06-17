@@ -489,7 +489,7 @@
           verifyFailRedirectUrl:
             'mini:/pagesB/reportQuery/reportQuery?_healthType=verifyFail',
           faceUrl: '/pagesB/reportQuery/reportQuery',
-          domainChannel: 2,
+          domainChannel: 3,
         };
         const { result } = await api.registerUniformVerifyOrder(args);
         const {
