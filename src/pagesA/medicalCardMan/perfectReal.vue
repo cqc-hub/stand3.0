@@ -502,11 +502,12 @@
       if (globalGl.sConfig.isSearchHosForAddPatHasMoreThanOneCard === '1') {
         getH5OpenidParam(requestArg);
         const {
-          result: { cardList, data: resData },
+          result: { cardList, data: resData, patientId },
         } = await api.getAllCardByName(requestArg).catch((err) => {
           dealNetError(err, data);
           throw new Error(err);
         });
+         newPat.value = { patientId };
 
         if (cardList && cardList.length) {
           await new Promise((r) => {
@@ -531,7 +532,7 @@
             throw new Error(err);
           });
 
-        newPat.value = { patientId: patientId };
+        newPat.value = { patientId };
 
         await goPaySign(patientId);
       }

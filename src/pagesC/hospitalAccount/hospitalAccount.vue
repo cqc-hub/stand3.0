@@ -84,7 +84,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      :confirmText="isCanRefound ? '提现' : '申请实名打款'"
+      :confirmText="isCanRefound ? '提现' : '申请退款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
