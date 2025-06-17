@@ -72,6 +72,11 @@
 
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['person']>{});
+  const pageProps = ref(
+    {} as {
+      verifyType?: 'ocr' | 'face';
+    }
+  );
   const patientUtils = new PatientUtils();
   const formData = ref<BaseObject>({});
   const gform = ref<any>('');
@@ -88,6 +93,12 @@
 
   // 校验必有 ocr | face 之一
   const isUseOcrVerify = computed(() => {
+    const { verifyType } = pageProps.value;
+
+    if (verifyType) {
+      return verifyType === 'ocr';
+    }
+
     return !isUseFaceVerify.value;
   });
 
@@ -212,6 +223,12 @@
       url: '/pagesA/medicalCardMan/medicalCardDetail',
     });
   };
+
+  onLoad((opt) => {
+    if (opt) {
+      pageProps.value = opt
+    }
+  });
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('person');

@@ -503,7 +503,7 @@
       //   },
       // });
       // useTBanner(healthRecord)
-      useTBanner(我的收藏);
+      // useTBanner(我的收藏);
       // useTBanner(会员权益);
       // useTBanner(queryCase);
     }, 1000);

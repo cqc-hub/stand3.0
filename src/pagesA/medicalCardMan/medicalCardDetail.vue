@@ -64,6 +64,7 @@
     patCardDetailFormKey,
   } from './utils';
   import {
+    apiAsync,
     GStores,
     PatientUtils,
     ServerStaticData,
@@ -77,6 +78,7 @@
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import { joinQueryForUrl } from '@/common';
 
   type PagePropType = Record<PatCardKeys, any>;
   const isShow = ref(false);
@@ -119,17 +121,44 @@
     }
   };
 
-  const rowClick = (item) => {
+  const rowClick = async (item) => {
     const { key } = item;
-    const { isEditPatPhone } = pageConfig.value;
+    const { isEditPatPhone, isChangeHosPhoneWay } = pageConfig.value;
 
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
       pat.idType === '01'
     ) {
+      let q: any = {};
+
+      if (isChangeHosPhoneWay) {
+        const chooseList = [
+          {
+            label: '使用人脸验证',
+            value: 'face',
+          },
+          {
+            label: '使用ocr验证',
+            value: 'ocr',
+          },
+          // @ts-expect-error
+        ].filter((o) => isChangeHosPhoneWay.includes(o.value));
+
+        const { tapIndex } = await apiAsync(
+          // @ts-expect-error
+          uni.showActionSheet,
+          {
+            title: '选择验证方式',
+            alertText: '选择验证方式',
+            itemList: chooseList.map((o) => o.label),
+          }
+        );
+
+        q.verifyType = chooseList[tapIndex].value;
+      }
       uni.navigateTo({
-        url: '/pagesA/medicalCardMan/editPhone',
+        url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
       });
     }
   };

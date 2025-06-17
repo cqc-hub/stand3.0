@@ -83,9 +83,9 @@
     imgHeight: 0,
   });
   const isComplete = ref(false);
-  const isUseFaceVerify = computed(
-    () => pageConfig.value.useFaceVerifyInChangePhone === '1'
-  );
+  const isUseFaceVerify = computed(() => {
+    return pageConfig.value.useFaceVerifyInChangePhone === '1';
+  });
 
   const formData = ref<BaseObject>({
     // idType: '01',
