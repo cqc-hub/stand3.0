@@ -905,7 +905,7 @@
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
     const isItemCount = pageConfig.value.isItemCount;
-    if (pickupType.value === '3') {
+    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
       return 0;
     }
 
