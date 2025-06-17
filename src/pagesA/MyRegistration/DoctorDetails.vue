@@ -164,7 +164,7 @@
 
           <view>
             <view class="f36 g-bold mb16 flex-between">
-              <view class="text-no-wrap mr32">门诊排班</view>
+              <view class="text-no-wrap mr32">出诊时间</view>
               <g-login
                 v-if="docDetail.preStatus === '1'"
                 @handler-next="preregistrationClick(docDetail as any)"

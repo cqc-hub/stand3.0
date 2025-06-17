@@ -76,7 +76,10 @@
           "
         >
           <view class="color-888 text-no-wrap text-center">
-            <text v-if="item.numCount" class="mr4 text-no-wrap">
+            <text
+              v-if="item.numCount && pageConfig.isHideNumCount !== '1'"
+              class="mr4 text-no-wrap"
+            >
               总{{ item.numCount }}个
             </text>
             <text v-if="item.numRemain" class="text-no-wrap">

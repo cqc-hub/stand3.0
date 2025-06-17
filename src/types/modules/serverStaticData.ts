@@ -61,6 +61,8 @@ export interface ISystemConfig_ {
     isOrderBlur: '0' | '1';
     // 展示号源数不为空的，超过当前时间的号源是否展示
     isHideOutTimeOrderSource?: '0' | '1';
+    // 隐藏号源总数
+    isHideNumCount?: '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
     // 挂号待支付时候没有倒计时
