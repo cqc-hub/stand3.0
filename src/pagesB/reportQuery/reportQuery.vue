@@ -501,15 +501,7 @@
           verifyUrl,
         } = result;
         cacheStore.changeHealthCardCache(result);
-        if (verifyType !== 0) {
-          nextTick(() => {
-            pageList.value = { '0': [], '1': [], '2': [] };
-            isRefresh.value = [true, true, true];
-            getCurrentLoadScrollInstance()?.refresh();
-            isHealthCardButton.value = false;
-            uni.hideLoading();
-          });
-        } else {
+        if(verifyUrl){
           useTBanner(
             {
               type: 'h5',
@@ -517,7 +509,15 @@
             },
             'redirectTo'
           );
-        }
+        }else {
+          nextTick(() => {
+            pageList.value = { '0': [], '1': [], '2': [] };
+            isRefresh.value = [true, true, true];
+            getCurrentLoadScrollInstance()?.refresh();
+            isHealthCardButton.value = false;
+            uni.hideLoading();
+          });
+        } 
       }
     }, ({ mod, errMsg }) => {
       console.error('分包异步化——跨分包引入JS错误', `path: ${mod}, ${errMsg}`);
@@ -787,8 +787,6 @@
       if (pageProps.value?._healthType === 'verifyFail') {
         gStores.messageStore.showMessage('已取消验证', 1500, {});
       } else if (pageProps.value?._healthType === 'verifySuccess') {
-        console.log('暂未处理');
-
         uploudVerifyResult(pageProps.value?.registerOrderId);
       } else if (
         pageProps.value?.orderId &&
