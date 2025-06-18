@@ -19,12 +19,18 @@
       id="bg-img"
     />
     <!-- <view class="wihite-mask"></view> -->
-    <view class="person-img relative">
+    <view class="person-img  relative">
       <img
+        v-if="gStores.globalStore.sysCode === '1001017'" 
+        :src="globalGl.BASE_IMG + 'intelMedicalAssist_person_1001017.png'"
+        class="img-1001017"
+      />
+       <img
+       v-else
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person.png'"
         class="w-full"
       />
-    </view>
+    </view> 
 
     <view class="header-hello">
       <view class="en f32 pb24 flex-normal">
@@ -179,7 +185,15 @@
         width: 140rpx !important;
         height: 300rpx !important;
       }
+      .img-1001017{ 
+        width: 140rpx !important;
+        height: 160rpx !important;
+        position: absolute;
+        left: 4px !important; 
+        bottom: 16px !important;
+      }
     }
+ 
     .header-hello {
       z-index: 2;
       /* #ifndef H5 */
@@ -238,6 +252,10 @@
         width: 140rpx !important;
         height: 300rpx !important;
       }
+      // .img-1001017{ 
+      //   width: 140rpx !important;
+      //   height: 140rpx !important; 
+      // }
     }
     .header-hello {
        /* #ifndef H5 */
@@ -324,6 +342,13 @@
       image {
         width: 240rpx;
         height: 500rpx;
+      }
+      .img-1001017{ 
+        width: 330rpx  ;
+        height: 400rpx ; 
+        position: absolute;
+        left: -30rpx; 
+        bottom: 40px;
       }
     }
     .header-hello {
