@@ -505,6 +505,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenWechatSI: true,
     login: {
       // isAliAuthBase: '1',
+      // isLoginByOpenId:"1",
     },
     medicalMHelp: {
       isOpenPatToMedicalPat: {},

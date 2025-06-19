@@ -44,7 +44,7 @@ export const MEDICAL_PHOTOS = <const>[
   {
     value: '7',
     url: `${BASE_IMG}medRecord_photos_11@2x.png`,
-    label: '户口本',
+    label: '患者户口本',
   },
 
   {

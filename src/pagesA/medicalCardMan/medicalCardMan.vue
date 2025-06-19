@@ -100,7 +100,7 @@
               "
             >
               <view
-                v-if="!isShowHealthLogin"
+                v-if="!isShowHealthLogin&&!isNewHealthCard"
                 @click="upToHealthCord(pat)"
                 class="jkk"
               >
@@ -108,14 +108,14 @@
               </view>
 
               <health-card-login
-                v-else
+                v-else-if="!isNewHealthCard"
                 :authLogin="false"
                 :hidden="!isShowHealthLogin"
                 @authSucess="upToHealthCord(pat)"
                 @authCancel="isShowHealthLogin = false"
                 wechatcode
               >
-                <view class="jkk">再次点击授权</view>
+                <view class="jkk" >再次点击授权</view>
               </health-card-login>
             </block>
             <!-- #endif -->

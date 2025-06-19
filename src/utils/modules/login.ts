@@ -1307,15 +1307,15 @@ export class PatientUtils extends LoginUtils {
       healthCardId: '',
       qrCodeText: '',
     };
-
+    const isNewMode=globalGl.systemInfo.isOpenHealthCard?.isNewMode
     getH5OpenidParam(requestArg);
-    if (wechatCode) {
+    if (wechatCode&&!isNewMode) {
       const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
         data
       );
 
       requestArg.qrCodeText = qrCodeText;
-      requestArg.healthCardId = healthCardId;
+      requestArg.healthCardId = healthCardId; 
     }
 
     const {

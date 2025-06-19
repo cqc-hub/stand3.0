@@ -1061,6 +1061,14 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
           }
         } else {
           gStores.messageStore.showMessage(message,3000);
+          const { confirm } = await apiAsync(uni.showModal, {
+            content: '电子健康卡关联失败，是否直接绑定就诊人？',
+          });
+          if (confirm) {
+           uni.navigateTo({
+                url: `${globalGl.addPersonUrl}`,
+              });
+          }
         }
       });
     // #endif
