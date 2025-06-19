@@ -88,17 +88,17 @@
     imgHeight: 0,
   });
   const isUseFaceVerify = computed(() => {
+    const { verifyType } = pageProps.value;
+
+    if (verifyType) {
+      return verifyType === 'face';
+    }
+
     return pageConfig.value.useFaceVerifyInChangePhone === '1';
   });
 
   // 校验必有 ocr | face 之一
   const isUseOcrVerify = computed(() => {
-    const { verifyType } = pageProps.value;
-
-    if (verifyType) {
-      return verifyType === 'ocr';
-    }
-
     return !isUseFaceVerify.value;
   });
 
@@ -226,7 +226,7 @@
 
   onLoad((opt) => {
     if (opt) {
-      pageProps.value = opt
+      pageProps.value = opt;
     }
   });
 
