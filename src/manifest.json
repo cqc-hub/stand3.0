@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7c53b0e82e20494e",
+    "appid": "wxbef5313efdabfde1",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021004193658562"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "健康温州",
+  "name": "天水市第一人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

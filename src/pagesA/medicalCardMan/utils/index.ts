@@ -1060,14 +1060,14 @@ export const healthCardLink = async (healthCode: string, cb?: Function) => {
             });
           }
         } else {
-          gStores.messageStore.showMessage(message,3000);
+          gStores.messageStore.showMessage(message, 3000);
           const { confirm } = await apiAsync(uni.showModal, {
             content: '电子健康卡关联失败，是否直接绑定就诊人？',
           });
           if (confirm) {
-           uni.navigateTo({
-                url: `${globalGl.addPersonUrl}`,
-              });
+            uni.navigateTo({
+              url: `${globalGl.addPersonUrl}`,
+            });
           }
         }
       });
@@ -1173,7 +1173,7 @@ export const backWithFaceVerify = async (
   const {
     result: { userData, userIdKey },
   } = await api.getOrderInfoByOrderId(requestOrderArg);
-  const { verifyResult } = await wxFacialVerifyByKey(userIdKey);
+  const { verifyResult } = await wxFacialVerifyByKey(userIdKey, redirectUrl);
   const { success, res } = await getHealthCardCode();
   let wechatCode = '';
   if (success) wechatCode = res.result.wechatCode;
@@ -1214,7 +1214,8 @@ export const backWithFaceVerify = async (
 };
 
 const wxFacialVerifyByKey = async (
-  userIdKey: string
+  userIdKey: string,
+  redirectUrl: string,
 ): Promise<{ verifyResult: string; errCode: string; errMsg: string }> => {
   const gStores = new GStores();
   return new Promise((rl, rj) => {
@@ -1240,7 +1241,17 @@ const wxFacialVerifyByKey = async (
             );
             console.log('看看是不是走到这', healthCardQuery);
             await wait(2000);
-            if (healthCardQuery?.verifyUrl) {
+            if (redirectUrl) {
+              useTBanner(
+                {
+                  type: 'h5',
+                  path: decodeURIComponent(
+                    `${redirectUrl}&verify_order_id=-1`
+                  ),
+                },
+                'redirectTo'
+              );
+            } else if (healthCardQuery?.verifyUrl) {
               useTBanner(
                 {
                   type: 'h5',
