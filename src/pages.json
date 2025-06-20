@@ -273,6 +273,12 @@
           }
         },
         {
+          "path": "MyRegistration/registrationType",
+          "style": {
+            "navigationBarTitleText": "预约类型"
+          }
+        },
+        {
           "path": "MyRegistration/selDepartment",
           "style": {
             "navigationBarTitleText": "选择科室"
@@ -489,11 +495,7 @@
           }
         }
       ],
-      "plugins":  
-    // #ifdef  MP-WEIXIN
-    {"healthCardPlugins":{"version":"3.50.1","provider":"wxee969de81bba9a45"}}
-    // #endif
-    
+      "plugins":  {}
     },
     {
       "root": "pagesB",

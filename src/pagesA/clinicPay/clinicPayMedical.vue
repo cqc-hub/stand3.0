@@ -244,6 +244,7 @@
     const { phsOrderNo } = uploadRes.value;
 
     const { result } = await api.payResult<any>({
+      ...uploadRes.value,
       phsOrderNo,
       phsOrderSource,
       insuranceNo,
