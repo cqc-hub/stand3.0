@@ -6,6 +6,19 @@ import { type TBannerConfig } from '@/utils';
 
 export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
+  // 'order.regDeptButton': {
+  //   text: '导航到科室',
+  //   type: 'otherProgram',
+  //   appId: 'wx8735a8a39cf58b5e',
+  //   path: 'pages/index',
+  //   extraData: {
+  //     id: 'qMb5Ulu53x',
+  //     appKey: 'ECUUsgGgSG',
+  //   },
+  //   addition: {
+  //     _hosDeptId: 'poi',
+  //   },
+  // },
   // 'person.formExtraKeys': ['countries', 'referenceId'],
   // 'person.isUserInfoShareAgree': '1',
   // 'person.isVerifyIdCardLastFourNumber': '1',

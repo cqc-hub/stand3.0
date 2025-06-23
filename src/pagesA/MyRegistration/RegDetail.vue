@@ -226,12 +226,16 @@
                   >
                     <view class="flex">
                       <view class="mr12">{{ orderRegInfo.deptName }}</view>
+                      <!-- v-if="gStores.globalStore.sysCode === '1001048' && isWx" -->
                       <view
-                        v-if="gStores.globalStore.sysCode === '1001048' && isWx"
-                        @click="yixinDeptGuide"
+                        v-if="
+                          orderConfig.regDeptButton &&
+                          orderConfig.regDeptButton[orderRegInfo.hosId]
+                        "
+                        @click="useDeptTBanner"
                         class="btn btn-primary btn-border btn-plain btn-round btn-small"
                       >
-                        导航到科室
+                        {{ orderConfig.regDeptButton[orderRegInfo.hosId].text }}
                       </view>
                     </view>
                   </view>
@@ -1262,16 +1266,27 @@
     goDoctorCard();
   };
 
-  const yixinDeptGuide = () => {
-    let { hosDeptId } = orderRegInfo.value;
-    hosDeptId.indexOf('|') != -1 &&
-      (hosDeptId = hosDeptId.substr(0, hosDeptId.indexOf('|')));
+  const useDeptTBanner = () => {
+    let { hosDeptId, hosId } = orderRegInfo.value;
+    const regDeptButton = orderConfig.value.regDeptButton![hosId];
 
-    wx.navigateToMiniProgram({
-      appId: 'wx8735a8a39cf58b5e',
-      // pages/index?id=医院id&appKey=向我方获取&poi=科室id A73x1x702
-      path: `pages/index?id=5B2OQCgmhE&appKey=PRUtJJeHE3&poi=${hosDeptId}`,
+    if (gStores.globalStore.sysCode === '1001048') {
+      hosDeptId.indexOf('|') != -1 &&
+        (hosDeptId = hosDeptId.substr(0, hosDeptId.indexOf('|')));
+    }
+
+    useTBanner(regDeptButton, 'navigateTo', {
+      ...pageProps.value,
+      ...gStores.userStore.patChoose,
+      ...orderRegInfo.value,
+      _hosDeptId: hosDeptId,
     });
+
+    // wx.navigateToMiniProgram({
+    //   appId: 'wx8735a8a39cf58b5e',
+    //   // pages/index?id=医院id&appKey=向我方获取&poi=科室id A73x1x702
+    //   path: `pages/index?id=5B2OQCgmhE&appKey=PRUtJJeHE3&poi=${hosDeptId}`,
+    // });
   };
 
   onShow(async () => {
