@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001058",
+  "sysCode": "1001084",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -371,6 +371,15 @@
       "alipayAppid": "",
       "isvAlipayAppid": "",
       "name": "健康温州",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001084": {
+      "wxAppid": "wxa50129d260033b82",
+      "h5Appid": "",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "溧阳市人民医院",
       "isStartComeTest": false,
       "isOpenOcr": false
     },
