@@ -109,14 +109,37 @@
               <view class="safe-height"></view>
             </view>
           </template>
-
           <template #empty>
-            <!-- v-if="!loading" -->
             <view v-if="!loading" class="empty-box">
               <g-empty :current="1" />
             </view>
           </template>
         </scroll-list>
+
+        <view
+          v-if="
+            pageList[tab.typeId] &&
+            pageList[tab.typeId].length &&
+            pageConfig.reportAnalysis === '1'
+          "
+          @click="reportAnalysis"
+          class="report-aly"
+        >
+        <view class="relative flex items-center">
+
+          <image
+            :src="globalGl.BASE_IMG + 'stand3-report-aly.png'"
+            class="w-full"
+            mode="widthFix"
+          />
+          <image
+            :src="globalGl.BASE_IMG + 'stand3-report-aly-btn.png'"
+            style="width: 70px"
+            mode="widthFix"
+            class="stand3-report-aly-btn absolute right-0 z-1"
+          />
+        </view>
+        </view>
       </swiper-item>
     </swiper>
     <view
@@ -163,8 +186,8 @@
     useTBanner,
   } from '@/utils';
   import globalGl from '@/config/global';
-  import { joinQueryForUrl } from '@/common';
-  import { deepClone, deQueryForUrl } from '@/common/utils';
+  import { joinQueryForUrl, encryptedAes } from '@/common';
+  import { deepClone, deQueryForUrl, joinQuery } from '@/common/utils';
 
   import api from '@/service/api';
   import { useCacheStore } from '@/stores';
@@ -255,6 +278,22 @@
     }
     // #endif
     getCurrentLoadScrollInstance()?.refresh();
+  };
+
+  const reportAnalysis = () => {
+    if (gStores.globalStore.sysCode === '1001038') {
+      let params = encodeURIComponent(
+        encryptedAes(gStores.userStore.patChoose.cardNumber, '2e9e#0!76@b88e32')
+      );
+      const path = joinQuery('https://runda.jxey.com/middle/#/ma', {
+        patient_id: params,
+      });
+
+      useTBanner({
+        type: 'h5',
+        path,
+      });
+    }
   };
 
   const init = async () => {
@@ -501,7 +540,7 @@
           verifyUrl,
         } = result;
         cacheStore.changeHealthCardCache(result);
-        if(verifyUrl){
+        if (verifyUrl) {
           useTBanner(
             {
               type: 'h5',
@@ -509,7 +548,7 @@
             },
             'redirectTo'
           );
-        }else {
+        } else {
           nextTick(() => {
             pageList.value = { '0': [], '1': [], '2': [] };
             isRefresh.value = [true, true, true];
@@ -517,7 +556,7 @@
             isHealthCardButton.value = false;
             uni.hideLoading();
           });
-        } 
+        }
       }
     }, ({ mod, errMsg }) => {
       console.error('分包异步化——跨分包引入JS错误', `path: ${mod}, ${errMsg}`);
@@ -611,11 +650,11 @@
         Object.keys(jyBottomNav).map((key) => {
           mq[key] = jyBottomNav[key] === '1' ? '1' : '';
         });
-        if(mq['btnNotShare'] === '1'){
-         delete mq['_local'];
+        if (mq['btnNotShare'] === '1') {
+          delete mq['_local'];
         }
       }
-      console.log('______________',mq,jyBottomNav)
+      console.log('______________', mq, jyBottomNav);
       uni.navigateTo({
         url: joinQueryForUrl('/pagesB/reportQuery/InspectionDetails', mq),
       });
@@ -624,7 +663,7 @@
         Object.keys(jcBottomNav).map((key) => {
           mq[key] = jcBottomNav[key] === '1' ? '1' : '';
         });
-        if(mq['btnNotShare'] === '1'){
+        if (mq['btnNotShare'] === '1') {
           delete mq['_local'];
         }
       }
@@ -884,5 +923,16 @@
   .empty-box {
     position: relative;
     transform: translateY(100%);
+  }
+
+  .report-aly {
+    position: fixed;
+    bottom: 0rpx;
+    right: 0;
+    left: 0;
+
+    .stand3-report-aly-btn {
+      right: 56rpx;
+    }
   }
 </style>

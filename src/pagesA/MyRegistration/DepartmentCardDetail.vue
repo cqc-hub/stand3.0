@@ -166,7 +166,7 @@
   const docItemClick = (item: TDepartmentDocItem) => {
     const { docName, hosDocId } = item;
     const { deptName, hosId } = pageProps.value;
-    // const { hosDeptId } = detailInfo.value;
+    const { hosDeptId } = detailInfo.value;
 
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
@@ -174,7 +174,7 @@
         deptName,
         hosId,
         hosDocId,
-        // hosDeptId,
+        hosDeptId,
       }),
     });
   };

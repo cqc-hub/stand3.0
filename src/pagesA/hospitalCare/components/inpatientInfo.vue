@@ -92,8 +92,12 @@
           <text class="name">自费金额</text>
           <text class="money">{{ hosInfoResObj.defrayFee }}元</text>
         </view>
+        <view v-if="hosInfoResObj.singleSelfPay" class="card-detail-item">
+          <text class="name">独立结算</text>
+          <text class="money">{{ hosInfoResObj.singleSelfPay }}元</text>
+        </view>
         <view class="card-detail-item">
-          <text class="name">账户余额</text>
+          <text class="name"></text>
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
         <view class="card-detail-item last">

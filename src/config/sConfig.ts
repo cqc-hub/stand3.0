@@ -406,6 +406,8 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     isOpenWechatSI: true,
     medicalMHelp: {
+      isOpenPatToMedicalPat: {},
+
       wx: {
         medicalPlugin: '1',
       },
@@ -606,13 +608,15 @@ const scJson: Record<string, ISConfig> = {
     },
   },
 
-    /**
+  /**
    * 健康温州
    */
   1001082: {
+    isOpenPopularSci: '1',
+    isOpenHomeTabBarMessageBtn: '1',
     login: {
       isAliAuthBase: '1',
-    }, 
+    },
   },
 };
 

@@ -136,6 +136,14 @@ export interface ISystemConfig_ {
     isCancelOlineReg?: '1';
     //开启后新增候补挂号tab
     isTabWaitReg?: '1';
+    /**
+     * 挂号详情页
+     */
+    // 预约科室字段后的按钮(导航)
+    regDeptButton?: {
+      [hosId: string]: TButtonConfig;
+    };
+
     /** 搜索 */
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];
@@ -403,6 +411,8 @@ export interface ISystemConfig_ {
 
   //报告查询 REPORT_QUERY_CONFIG
   reportQuery: {
+    // 开启报告解读
+    reportAnalysis: '1';
     // 列表页开放选择时间
     isOpenFilterReportByTime?: '1';
     // 详情页开放收藏按钮

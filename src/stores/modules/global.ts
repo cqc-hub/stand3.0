@@ -109,8 +109,8 @@ const globalStore = defineStore('global', {
 
     // 是否中医style
     isTcmStyle(): boolean {
-      // return this.sysCode === '1001048';
-      return false
+      return this.sysCode === '1001035';
+      // return false
     },
 
     getPageClass(): string {

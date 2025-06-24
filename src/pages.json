@@ -273,6 +273,12 @@
           }
         },
         {
+          "path": "MyRegistration/registrationType",
+          "style": {
+            "navigationBarTitleText": "预约类型"
+          }
+        },
+        {
           "path": "MyRegistration/selDepartment",
           "style": {
             "navigationBarTitleText": "选择科室"

@@ -383,7 +383,7 @@ export const getStatusConfig = (status: string, isWaitReg: boolean) => {
     return orderStatusMap[status];
   } else {
     return {
-      title: '未知的状态',
+      title: `未知的状态 ${status}`,
       color: 'var(--hr-error-color-6)',
 
       headerClass: '',
