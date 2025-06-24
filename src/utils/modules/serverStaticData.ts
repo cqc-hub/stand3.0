@@ -668,11 +668,6 @@ export class ServerStaticData {
           RestOfConfig,
         };
 
-        if (this.env === 'develop') {
-          // ...
-          insertsObject(sysConfigEnv, systemConfig);
-        }
-
         for (const key in systemConfig) {
           const config = systemConfig[<keyof ISystemConfig>key];
           const wxConfig = config?.inWx;
@@ -690,6 +685,11 @@ export class ServerStaticData {
             Object.assign(config, wxConfig);
           }
           // #endif
+        }
+
+        if (this.env === 'develop') {
+          // ...
+          insertsObject(sysConfigEnv, systemConfig);
         }
       } catch (error) {
         console.error(error);

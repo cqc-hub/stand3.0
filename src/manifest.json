@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx86a78f7ced7dc55f",
+    "appid": "wxfa3674d9f42ae57e",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -78,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004144623038"
+    "appid": ""
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "濮阳市人民医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

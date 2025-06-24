@@ -43,14 +43,23 @@
             >
               new
             </view>
-                <!-- 消息展示 -->
-                <view
-              v-if="item?.messageNum"
-              class="warn-label badge"
-            >
-            {{item.messageNum}}
+            <!-- 消息展示 -->
+            <view v-if="item?.messageNum" class="warn-label badge">
+              {{ item.messageNum }}
             </view>
+
+            <img
+              v-if="isImg(item.iconfont)"
+              :class="`${
+                options.type == 1 && options.list.length == 3
+                  ? 'grid-resize1'
+                  : 'grid-resize'
+              }  `"
+              :src="item.iconfont"
+              mode="widthFix"
+            />
             <text
+              v-else
               :class="`icon-font ${
                 options.type == 1 && options.list.length == 3
                   ? 'grid-resize1'
@@ -66,8 +75,8 @@
             </text> -->
             <rich-text
               v-if="type == 1 && item.detail"
-              class="grid-title  f22"
-              :nodes=" $HTMLParser(item.detail.replaceAll('  ','<br/>'))"
+              class="grid-title f22"
+              :nodes="$HTMLParser(item.detail.replaceAll('  ', '<br/>'))"
             ></rich-text>
           </view>
           <view
@@ -113,6 +122,13 @@
     list: IRoute[];
     type?: 1 | 2 | 3; //首页图标样式1 默认2
   }
+
+  const isImg = (src?: string) => {
+    if (src) {
+      return src.startsWith('http');
+    }
+    return false;
+  };
 
   const props = withDefaults(defineProps<IGridProps>(), {
     list: () => [

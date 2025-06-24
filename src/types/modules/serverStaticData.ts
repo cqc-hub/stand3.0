@@ -135,6 +135,14 @@ export interface ISystemConfig_ {
     isCancelOlineReg?: '1';
     //开启后新增候补挂号tab
     isTabWaitReg?: '1';
+    /**
+     * 挂号详情页
+     */
+    // 预约科室字段后的按钮(导航)
+    regDeptButton?: {
+      [hosId: string]: TButtonConfig;
+    };
+
     /** 搜索 */
     // 热门搜索
     hosRegHistory?: IRegSearchHistoryItem[];

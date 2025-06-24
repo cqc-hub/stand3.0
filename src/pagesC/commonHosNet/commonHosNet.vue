@@ -17,8 +17,6 @@
   import { BASE_IMG } from '@/config/global';
   import { joinQuery } from '@/common';
   import { useGlobalStore } from '@/stores';
-  import { wait } from '@/utils';
-  import { beforeEach } from '@/router/index';
 
   const globalStore = useGlobalStore();
   const gotoNext = (options) => {
