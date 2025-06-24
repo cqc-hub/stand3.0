@@ -11,6 +11,15 @@ const defaultKey = 'qWeRt4u7';
 //   return encryptedStr
 // }
 
+export const encryptedAes = (val: string, key1 = defaultKey) => {
+  const key = CryptoJS.enc.Utf8.parse(key1);
+  let encryptedStr = CryptoJS.AES.encrypt(val, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  }).toString();
+  return encryptedStr;
+};
+
 // // aes 解密
 // export function decrypt(val: string, key = defaultKey) {
 //   const key1 = CryptoJS.enc.Utf8.parse(key);

@@ -12,7 +12,9 @@
       }"
       mode="heightFix"
     />
-    <view class="pr32 pl32 alt f28 text-center">{{ text || states[current - 1].label }}</view>
+    <view class="pr32 pl32 alt f28 text-center">
+      {{ text || states[current - 1].label }}
+    </view>
 
     <view class="g-flex-rc-cc empty-content">
       <slot />
@@ -21,11 +23,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { GStores } from '@/utils';
+  import { computed, defineComponent, ref } from 'vue';
 
-  const states = [
+  const states = computed(() => [
     {
-      icon: 'img_404_no content@3x.png',
+      icon: `img_404_no content@3x${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`,
       label: '暂未查到相关信息',
     },
     {
@@ -68,7 +73,9 @@
       icon: 'img_404_message2@3x.png',
       label: '页面维护中...',
     },
-  ] as const;
+  ]);
+
+  const gStores = new GStores();
 
   withDefaults(
     defineProps<{
