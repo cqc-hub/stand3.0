@@ -118,7 +118,7 @@ export class UseRegSearch extends GStores {
       // deptName,
       docName,
       hosDocId,
-      // hosDeptId,
+      hosDeptId,
       docTitleName,
       hosId,
     } = item;
@@ -131,7 +131,7 @@ export class UseRegSearch extends GStores {
       hosDocId,
       hosId: this.cacheStore.isShowChooseHos ? hosId : '',
       docTitleName,
-      // hosDeptId,
+      hosDeptId,
     };
 
     uni.navigateTo({

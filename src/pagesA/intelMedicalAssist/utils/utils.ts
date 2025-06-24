@@ -745,13 +745,14 @@ export const gotoGuide = (item) => {
   });
 };
 export const goDoctorCard = (item) => {
-  const { docName, docId, hosId, deptName } = item;
+  const { docName, docId, hosId, deptName,hosDeptId } = item;
   uni.navigateTo({
     url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
       hosDocId: docId,
       hosId,
       docName,
       deptName,
+      hosDeptId
     }),
   });
 };
