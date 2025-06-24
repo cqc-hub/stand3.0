@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxc3ee6623e27269a7",
+    "appid": "wxf64e84cf578fe0a7",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,9 +71,14 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021002182620396"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -85,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温州人民医院",
+  "name": "嘉兴市第二医院",
   "h5": {
     "optimization": {
       "treeShaking": {

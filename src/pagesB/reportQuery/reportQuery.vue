@@ -122,14 +122,23 @@
             pageList[tab.typeId].length &&
             pageConfig.reportAnalysis === '1'
           "
+          @click="reportAnalysis"
           class="report-aly"
         >
+        <view class="relative flex items-center">
+
           <image
             :src="globalGl.BASE_IMG + 'stand3-report-aly.png'"
             class="w-full"
             mode="widthFix"
-            @click="reportAnalysis"
           />
+          <image
+            :src="globalGl.BASE_IMG + 'stand3-report-aly-btn.png'"
+            style="width: 70px"
+            mode="widthFix"
+            class="stand3-report-aly-btn absolute right-0 z-1"
+          />
+        </view>
         </view>
       </swiper-item>
     </swiper>
@@ -272,7 +281,7 @@
   };
 
   const reportAnalysis = () => {
-    if (gStores.globalStore.sysCode === '10001038') {
+    if (gStores.globalStore.sysCode === '1001038') {
       let params = encodeURIComponent(
         encryptedAes(gStores.userStore.patChoose.cardNumber, '2e9e#0!76@b88e32')
       );
@@ -921,5 +930,9 @@
     bottom: 0rpx;
     right: 0;
     left: 0;
+
+    .stand3-report-aly-btn {
+      right: 56rpx;
+    }
   }
 </style>
