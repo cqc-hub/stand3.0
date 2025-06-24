@@ -198,7 +198,7 @@
   // #endif
   import globalGl from '@/config/global';
   import SecondRecommend from './SecondRecommend.vue';
-  import { type TButtonConfig, debounce, GStores } from '@/utils';
+  import { type TButtonConfig, debounce, GStores,throttle } from '@/utils';
   import {
     msgState,
     isReportAnalysis,
@@ -450,7 +450,7 @@
     e.preventDefault();
     startRecord();
   };
-  const cancleVoice = async () => {
+  let cancleVoice = async () => {
     if (isRecording.value) {
       // #ifdef  MP-WEIXIN
       SImanager?.stop();
@@ -482,7 +482,9 @@
     }
   };
 
-  const touchStart = (e) => {
+  cancleVoice = throttle(cancleVoice, 3000);
+
+  let  touchStart = (e) => {
     voiceTouchData.value.clientY = e.changedTouches[0].clientY; //手指按下时的Y坐标
     !msgState.value.msgLoad && (voicing.value = true);
     // #ifdef  H5
@@ -492,9 +494,9 @@
     voicing.value = true
     startListen(e);
     }
-
     // #endif
   };
+  touchStart = throttle(touchStart, 2000);
 
   let touchMove = (e) => {
     console.log('touchMove', e);

@@ -81,7 +81,8 @@ export interface ISystemConfig_ {
     /**开启后候补加号（候补兼容加号模式）*/
     isOpenAddedNum?: '1';
     /**开启后候补挂号与加号分离（目前只供演示用）*/
-    isAddedNumSelf?: '1';
+    /**1:仅演示。2、模拟定位江苏、非江苏户籍。3、模拟定位非江苏、江苏户籍。4、模拟定位江苏、江苏户籍*/
+    isAddedNumSelf?: '1' | '2' | '3' | '4';
     /** 预约挂号, 取消预约挂号时候  订阅微信消息(单次最多三个) */
     wxOrderSubscribeMessage?: string[];
     /** 挂号按钮 的 label */

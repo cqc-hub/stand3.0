@@ -21,7 +21,7 @@
           :guessServerList="
             pageConfig?.intelMedicalAssistConfig?.guessServerList
           "
-            :source="props.source"
+          :source="props.source"
           :headerConfig="styleConfig"
           @click-server="handleServer"
           @on-blur="onBlur"
@@ -39,11 +39,9 @@
         @send-img="sendImg"
       />
     </view>
-    <view  v-if="showOrder">
-    <Doc-Sch-Order :orderInfo="schOrderInfo"></Doc-Sch-Order>
+    <view v-if="showOrder">
+      <Doc-Sch-Order :orderInfo="schOrderInfo"></Doc-Sch-Order>
     </view>
-  
-
 
     <g-message />
   </view>
@@ -78,15 +76,17 @@
     stopChunkRequest,
     reload,
     showOrder,
-    schOrderInfo
+    schOrderInfo,
   } from './utils/utils';
   import { throttle } from '@/utils';
 
   const props = defineProps<{
-    isMess?: '1';
+    isMess?: string;
     sysCode?: string;
-    source?:string
+    source?: string;
     herenId?: string; //埋点
+    type?: 'report';
+    reportId?: string; //报告id
   }>();
 
   const scrollChangeView = (e) => {

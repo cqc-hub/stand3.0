@@ -109,6 +109,7 @@
       @confirmButton="reject"
       @cancelButton="resolve"
       :cancelColor="'var(--hr-brand-color-6)'"
+      :confirmColor="'var(--hr-brand-color-6)'"
       confirmText="候补加号"
       cancelText="候补登记"
     >
@@ -275,7 +276,7 @@
   });
 
   const isAddedNumSelf = computed(() => {
-    return pageConfig.value.isAddedNumSelf === '1' && isWaitReg.value;
+    return pageConfig.value.isAddedNumSelf && isWaitReg.value;
   });
 
   const handlerConfirmPatReal = async () => {
@@ -715,7 +716,8 @@
       const { addFlag } = selSchItem;
 
       selWaitRegSch.value = '';
-      const { addedNum } = props.value;
+      let { addedNum } = props.value;
+      // addedNum = 1;
       if (props.value.hasOwnProperty('addedNum') && addFlag !== '1') {
         if (!(addedNum! * 1)) {
           const { confirm } = await apiAsync(uni.showModal, {
@@ -858,6 +860,7 @@
     }
     if (isAddedNumSelf.value) {
       const locationInfo = await getLocation(true);
+      priorityReg.value = pageConfig.value.isAddedNumSelf !== '1';
     }
   });
 </script>

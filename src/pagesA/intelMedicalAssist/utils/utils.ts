@@ -123,7 +123,6 @@ export const init = async (props) => {
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess&& props?.isMess === '2' && initWithTheMess(props?.openid);
   reload(props?.isMess);
-  // test();
 };
 export const initWithTheMess = async (openid) => {
   const gStores = new GStores();
