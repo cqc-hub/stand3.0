@@ -416,19 +416,25 @@
       useFaceVerifyInChangePhone,
     } = pageConfig.value;
 
-    if (isFace === '1') {
-      if (
-        formData.value[formKey.idType] === '01' &&
-        getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
-        getInfoFromIdCard(formData.value[formKey.idCard]).age < 60
-      ) {
-        const { pData } = await patientUtils.faceVerifyAndPData({
-          idCardNumber: formData.value[formKey.idCard],
-          name: formData.value[formKey.patientName],
-        });
 
+    if (isFace === '1') {
+      const isIDCard = formData.value[formKey.idType] === '01'; 
+      if (isIDCard) {
+        const { sysCode } = gStores.globalStore;
+        // 新增判断 健康温州去除年龄判断
+          const shouldProceed =
+            sysCode === '1001082' ||
+            (getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
+            getInfoFromIdCard(formData.value[formKey.idCard]).age < 60);
+
+          if (shouldProceed) {
+            const { pData } = await patientUtils.faceVerifyAndPData({
+              idCardNumber: formData.value[formKey.idCard],
+              name: formData.value[formKey.patientName],
+        });
         requestData.pData = pData;
-      }
+          }
+        } 
     }
 
     if (pageProps.value.pageType === 'perfectReal') {
