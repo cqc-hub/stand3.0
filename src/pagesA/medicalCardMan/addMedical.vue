@@ -292,13 +292,46 @@
   };
 
   const editPhone = async (requestData) => {
-    const { isCanChangeHosPhone, useFaceVerifyInChangePhone } =
-      pageConfig.value;
+    const {
+      isCanChangeHosPhone,
+      useFaceVerifyInChangePhone,
+      isChangeHosPhoneWay,
+    } = pageConfig.value;
     const { idCard, patientPhone, patientName, idType } = formData.value;
     if (idType === '01' && isCanChangeHosPhone === '1') {
       if (!requestData.pData) {
+        let selWay = '';
+        if (isChangeHosPhoneWay) {
+          const chooseList = [
+            {
+              label: '使用人脸验证',
+              value: 'face',
+            },
+            {
+              label: '上传证件认证',
+              value: 'ocr',
+            },
+            // @ts-expect-error
+          ].filter((o) => isChangeHosPhoneWay.includes(o.value));
+
+          const { tapIndex } = await apiAsync(
+            // @ts-expect-error
+            uni.showActionSheet,
+            {
+              title: '选择验证方式',
+              alertText: '选择验证方式',
+              itemList: chooseList.map((o) => o.label),
+            }
+          );
+
+          selWay = chooseList[tapIndex].value;
+        }
+
         let pdata = '';
-        if (useFaceVerifyInChangePhone === '1') {
+        if (
+          (!selWay && useFaceVerifyInChangePhone === '1') ||
+          selWay === 'face'
+        ) {
           const { pData } = await patientUtils.faceVerifyAndPData({
             idCardNumber: formData.value[formKey.idCard],
             name: formData.value[formKey.patientName],
