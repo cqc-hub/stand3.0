@@ -139,7 +139,7 @@
             value: 'face',
           },
           {
-            label: '上传证件认证',
+            label: '上传证件验证',
             value: 'ocr',
           },
           // @ts-expect-error

@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001038",
+  "sysCode": "1001084",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -228,7 +228,7 @@
       "wxAppid": "wx58ffd2c3a557bef0",
       "alipayAppid": "",
       "h5Appid": "",
-      "name": "",
+      "name": "和仁智领医院",
       "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
