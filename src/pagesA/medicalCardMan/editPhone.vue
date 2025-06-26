@@ -186,7 +186,7 @@
     } else {
       _pData = pData.value;
 
-      if (!_pData) {
+      if (!isComplete.value) {
         const { confirm } = await apiAsync(uni.showModal, {
           content: '请上传身份证正面照片获取姓名',
           confirmText: '去上传',

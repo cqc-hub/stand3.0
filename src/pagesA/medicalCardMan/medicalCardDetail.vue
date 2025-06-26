@@ -84,6 +84,10 @@
   const isShow = ref(false);
   const gStores = new GStores();
   const pat = gStores.userStore.clickPat;
+  const isWx = ref(false);
+  // #ifdef  MP-WEIXIN
+  isWx.value = true;
+  // #endif
 
   const patientUtils = new PatientUtils();
   const formData = ref({} as PagePropType);
@@ -128,7 +132,8 @@
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
-      pat.idType === '01'
+      pat.idType === '01' &&
+      isWx.value
     ) {
       let q: any = {};
 
@@ -212,7 +217,7 @@
     }
 
     const { isEditPatPhone } = pageConfig.value;
-    if (isEditPatPhone === '1') {
+    if (isEditPatPhone === '1' && isWx.value) {
       formList.map((o) => {
         const { key } = o;
         // 仅支持身份证类型修改

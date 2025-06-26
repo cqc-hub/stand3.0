@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001084",
+  "sysCode": "1001038",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -294,10 +294,10 @@
       "isOpenOcr": false
     },
     "1001071": {
-      "wxAppid": "wx58ffd2c3a557bef0",
+      "wxAppid": "wxf98b0710887ab252",
       "alipayAppid": "",
       "h5Appid": "",
-      "name": "延安市人民医院",
+      "name": "杭州口腔医院集团滨江门诊部",
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
@@ -310,7 +310,7 @@
       "name": "嘉兴市第二医院",
       "isSearchInHos": true,
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": true
     },
     "1001074": {
       "wxAppid": "wxbef5313efdabfde1",

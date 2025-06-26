@@ -3,6 +3,7 @@
     <button @click="useTBanner(testbuttonConfig)">
       杭口质保卡正式环境（测试用）
     </button>
+
   </view>
 </template>
 

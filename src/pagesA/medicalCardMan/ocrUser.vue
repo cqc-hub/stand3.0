@@ -71,6 +71,7 @@
         idCard: string;
         patientName: string;
         idType: string;
+        isUseFace?: '1';
         from?: 'addMedical';
       }
     >{}
@@ -84,6 +85,10 @@
   });
   const isComplete = ref(false);
   const isUseFaceVerify = computed(() => {
+    if (pageProps.value.isUseFace) {
+      return pageProps.value.isUseFace === '1';
+    }
+
     return pageConfig.value.useFaceVerifyInChangePhone === '1';
   });
 
@@ -96,11 +101,20 @@
     patientNameOcrEn: '',
   });
   const formSubmit = async () => {
-    if (gStores.globalStore.sysCode === '1001054') {
-      await dealSubmitWithXY();
-    } else {
-      await dealSubmit();
-    }
+    // if (gStores.globalStore.sysCode === '1001054') {
+    //   await dealSubmitWithXY();
+    // } else {
+    //   await dealSubmit();
+    // }
+
+    // #ifdef MP-ALIPAY
+    // 支付宝都没有 pdata
+    await dealSubmitWithXY();
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    await dealSubmit();
+    // #endif
 
     if (pageProps.value.from === 'addMedical') {
       await patientUtils.addRelevantPatient({
@@ -173,7 +187,8 @@
 
   const chooseIdCard = async () => {
     const res = await useOcr(true, {
-      aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
+      // aliThroughByEnd: gStores.globalStore.sysCode !== '1001054',
+      aliThroughByEnd: true,
       imgCanvas,
     });
     const { image, name, idCard, idCardOcrEn, patientNameOcrEn, pdata } = res;
