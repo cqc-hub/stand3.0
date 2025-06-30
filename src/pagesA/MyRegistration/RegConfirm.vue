@@ -110,8 +110,9 @@
       @cancelButton="resolve"
       :cancelColor="'var(--hr-brand-color-6)'"
       :confirmColor="'var(--hr-brand-color-6)'"
-      confirmText="候补加号"
-      cancelText="候补登记"
+      :cancelFontWeight ="'bold'"
+      confirmText="去填写病情"
+      cancelText="仅候补登记"
     >
       <view class="reg-tip">
         <g-flag
@@ -617,7 +618,7 @@
         waitChooseDialog.value = false;
         if (priorityReg.value) {
           gStores.messageStore.showMessage(
-            '您符合优先预约条件，可进行优先预约。',
+            '您符合地处省外用户患者优先预约条件，将为您进行优先预约!',
             0,
             {
               useDialog: true,

@@ -34,14 +34,14 @@
         <view
           v-if="isShowCancel"
           class="xy-dialog__btn xy-dialog__footer-cancel g-bold w100p"
-          :style="{ color: cancelColor }"
+          :style="{ color: cancelColor ,fontWeight: cancelFontWeight }"
           @click="clickCancel"
         >
           <slot name="cancelBtn">{{ cancelText }}</slot>
         </view>
         <view
           class="xy-dialog__btn xy-dialog__footer-confirm w100p"
-          :style="{ color: confirmColor }"
+          :style="{ color: confirmColor , fontWeight: confirmFontWeight }"
           :class="[isShowCancel ? '' : 'xy-dialog__btn-row']"
           @click="clickConfirm"
         >
@@ -83,6 +83,11 @@
         default: '取消',
       },
 
+      cancelFontWeight: {
+        type: String,
+        default: 'normal',
+      },
+
       // 取消颜色
       cancelColor: {
         type: String,
@@ -93,6 +98,11 @@
       confirmText: {
         type: String,
         default: '确定',
+      },
+
+      confirmFontWeight: {
+        type: String,
+        default: 'bold',
       },
 
       // 确定文字颜色
@@ -288,7 +298,7 @@
         }
         &.xy-dialog__footer-confirm {
           color: var(--hr-brand-color-6);
-          font-weight: bold;
+          
         }
         &.xy-dialog__btn-row {
           width: 100%;

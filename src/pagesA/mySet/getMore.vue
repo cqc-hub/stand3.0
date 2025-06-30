@@ -5,14 +5,15 @@
         :src="$global.BASE_IMG + 'getmore-img_heren@3x.png'"
         mode="widthFix"
       ></image>
-      <view>当前版本 {{ $global.VERSION }}</view>
+      <view>当前首页版本 {{ getLocalStorage('systemConfigVersion')[0].version }}</view>
+      <view>当前系统版本 {{ getLocalStorage('systemConfigVersion')[1].version }}</view>
     </view>
     <view class="more-content">
       <!-- #ifdef MP-WEIXIN -->
       <view @click="goAgreement">
-          <text>{{  $global.systemInfo.name }}小程序隐私保护指引</text>
-          <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
-        </view>
+        <text>{{ $global.systemInfo.name }}小程序隐私保护指引</text>
+        <view class="iconfont icon-resize icon_arrow">&#xe66b;</view>
+      </view>
       <!-- #endif -->
       <navigator
         v-for="item in cacheStore.flagList"
@@ -40,9 +41,9 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue';
-  import { joinQueryForUrl } from '@/common';
+  import { joinQueryForUrl, getLocalStorage } from '@/common';
   import { useCacheStore } from '@/stores';
- 
+
   const cacheStore = useCacheStore();
 
   const goInfoPage = () => {
@@ -52,9 +53,9 @@
   };
   const goAgreement = () => {
     // #ifdef  MP-WEIXIN
-      wx.openPrivacyContract();
+    wx.openPrivacyContract();
     // #endif
-  }; 
+  };
 </script>
 
 <style lang="scss" scoped>
