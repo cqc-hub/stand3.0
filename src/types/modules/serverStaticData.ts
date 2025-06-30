@@ -228,7 +228,7 @@ export interface ISystemConfig_ {
 
     // 修改建档手机号 pagesA/medicalCardMan/ocrUser
     isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个
-    isChangeHosPhoneWay?: ('ocr' | 'face')[]; // 和 useFaceVerifyInChangePhone 具体重复性
+    isChangeHosPhoneWay?: ('ocr' | 'face')[]; // 和 useFaceVerifyInChangePhone 具备重复性
     useFaceVerifyInChangePhone?: '1'; // 使用人脸认证, 否则使用 ocr 认证
   };
 
