@@ -1567,20 +1567,25 @@
     args.payType = '38';
     // #endif
 
-    if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
-      if (!isTypeofIdCard(selFamilyPat.value.idCard)) {
-        gStores.messageStore.showMessage('仅支持身份证类型进行办理', 3000);
-        return;
-      }
+    if (isPatProxy.value) {
       const { patientName: name, idCard: idCardNumber } = selFamilyPat.value;
-      const { pData } = await new LoginUtils().faceVerifyAndPData({
-        name,
-        idCardNumber,
-      });
 
-      args.pdata = pData;
       args.facialValidateName = name;
       args.facialValidateIdCard = idCardNumber;
+
+      // if (patProxyFaceVerify === '1' && selFamilyPat.value.idCard) {
+      if (patProxyFaceVerify === '1') {
+        if (!isTypeofIdCard(selFamilyPat.value.idCard)) {
+          gStores.messageStore.showMessage('仅支持身份证类型进行办理', 3000);
+          return;
+        }
+        const { pData } = await new LoginUtils().faceVerifyAndPData({
+          name,
+          idCardNumber,
+        });
+
+        args.pdata = pData;
+      }
     }
 
     const { result } = await api.copyOfCasePay<{
@@ -1698,7 +1703,7 @@
 
   const getFamilyList = async () => {
     const pat = gStores.userStore.patChoose;
-    const { patientName, patientId, idCardEncry } = pat;
+    const { patientId, idCardEncry } = pat;
     const { source } = gStores.globalStore.browser;
 
     let { result } = await api.relatedFamilyInfo({
