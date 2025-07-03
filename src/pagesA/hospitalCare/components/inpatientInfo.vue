@@ -114,10 +114,17 @@
         </view>
         <view
           v-if="props.isHidePay !== '1' && !isShowPayBtn && !isShowCtypeBtn"
-          class="button f36"
-          @click="toPayPage"
+          @click="checkCount"
         >
-          预交费用
+          <view
+            :class="{
+              'btn-disabled': isDisabledPay,
+            }"
+            class="btn btn-primary btn-plain btn-border f36"
+            @click="toPayPage"
+          >
+            预交费用
+          </view>
         </view>
         <!-- #ifdef  MP-WEIXIN -->
         <view v-if="isShowCtypeBtn" class="button f36" @click="goOrder">
@@ -176,7 +183,7 @@
     useTBanner,
     getLocation,
     ISystemConfig,
-    ServerStaticData
+    ServerStaticData,
   } from '@/utils';
   import { joinQuery, joinQueryForUrl } from '@/common';
   import {
@@ -190,6 +197,7 @@
   import AppointmentList from '@/pagesA/hospitalCare/components/appointmentList.vue';
   import api from '@/service/api';
 
+  const pageConfig = ref({} as ISystemConfig['hospitalCare']);
   const props = defineProps<{
     isQueryPreRecord?: string;
     isHidePay?: string;
@@ -240,6 +248,22 @@
       }),
       // url: `payRecord?hosId=${hosInfoResObj.value.hosId}`,
     });
+  };
+
+  const isDisabledPay = computed(() => {
+    const maxPayNumCount = pageConfig.value.maxPayNumCount || 0;
+    const c = hosInfoResObj.value.prepaymentPayCount;
+
+    if (c && maxPayNumCount) {
+      return c > maxPayNumCount;
+    }
+
+    return false;
+  });
+  const checkCount = () => {
+    if (isDisabledPay.value) {
+      gStores.messageStore.showMessage('充值次数已达上限', 1500);
+    }
   };
 
   const eyesClick = () => {
@@ -387,7 +411,7 @@
 
   const getAppointmentList = async () => {
     const patientId = gStores.userStore.patChoose.patientId;
-    console.log(888888888,hosConfig.value)
+    console.log(888888888, hosConfig.value);
     hosConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
     if (hosConfig.value?.isSelfQueryBeforeAppoint === '1') {
       location.value = await getLocation(true);
@@ -451,7 +475,9 @@
     }
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
+
     init();
   });
 
