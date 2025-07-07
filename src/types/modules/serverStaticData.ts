@@ -25,6 +25,12 @@ export interface ISystemConfig_ {
     isOpenHomeDoctorBanner?: '1';
 
     /**
+     * pagesA/MyRegistration/RegSearch
+     */
+    // 搜索列表时候传入 hosId
+    regSearchWithHosId?: '1';
+
+    /**
      * 选择医院页面
      */
     // 选医院上面 banner
