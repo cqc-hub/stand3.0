@@ -25,6 +25,12 @@ export interface ISystemConfig_ {
     isOpenHomeDoctorBanner?: '1';
 
     /**
+     * pagesA/MyRegistration/RegSearch
+     */
+    // 搜索列表时候传入 hosId
+    regSearchWithHosId?: '1';
+
+    /**
      * 选择医院页面
      */
     // 选医院上面 banner
@@ -314,6 +320,8 @@ export interface ISystemConfig_ {
     isQueryPreRecord?: '1';
     //是否关闭预交金充值入口
     isHidePay?: '1';
+    // phs接口：getInHospitalInfo 新增字段 prepaymentPayCount, 不能超出此限制
+    maxPayNumCount?: number;
     /** 是否开启数字人民币支付 */
     payList?: {
       wx?: IPayListObj;
@@ -338,6 +346,10 @@ export interface ISystemConfig_ {
      */
     // 展示 "备注" 字段
     isChangeOrderRemarkShow?: '1';
+
+    /**
+     * pagesA/hospitalCare/choosePatientInfo
+     */
   };
 
   // 门诊缴费  CLINIC_PAY_CONFIG ...

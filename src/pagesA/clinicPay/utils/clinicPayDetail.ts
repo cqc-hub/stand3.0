@@ -897,7 +897,6 @@ export const usePayPage = () => {
         });
 
       result = r;
-      // result={"clinicalSettlementResultList":[{"deptName":"全科医学科","clinicId":"0","subIds":"0","docId":"0000000332","clinicTypeName":"线下就诊","traceNo":"1c494a27d2dc45408223cbd6af387824","deptId":"10217000","recipeNo":"1c494a27d2dc45408223cbd6af387824","hosId":"12930","costTypeCode":"2","serialNo":"1c494a27d2dc45408223cbd6af387824","childOrder":"4032861","docName":"江凌翔","clinicType":"1","costTypeName":"医保","visitDate":"2024-10-12","hosName":"横街路院区","totalCost":"25.00","visitNo":"20241012003187"}]}
 
       uni.hideLoading();
       pageProps.value.deParams = {};

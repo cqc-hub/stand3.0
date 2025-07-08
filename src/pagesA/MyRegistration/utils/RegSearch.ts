@@ -1,5 +1,5 @@
 import { nextTick, ref } from 'vue';
-import { GStores, CDebounce } from '@/utils';
+import { GStores, CDebounce, ISystemConfig } from '@/utils';
 import { setLocalStorage, getLocalStorage, joinQuery } from '@/common';
 import { type IRegSearchHistoryItem, ServerStaticData } from '@/utils';
 import { useCacheStore } from '@/stores';
@@ -71,6 +71,7 @@ export const clearSearchHistory = () => {
 
 export class UseRegSearch extends GStores {
   pageProp = ref(<IPageProp>{});
+  pageConfig = {} as ISystemConfig['order'];
   cacheStore = useCacheStore();
   searchText = ref('');
   isComplete = ref(false);
@@ -159,10 +160,14 @@ export class UseRegSearch extends GStores {
   async searchList(searchContent: string) {
     const { clinicalType, hosId } = this.pageProp.value;
     const { source } = this.globalStore.browser;
+    let _hosId: any;
+    if (this.cacheStore.isShowChooseHos || this.pageConfig.regSearchWithHosId === '1') {
+      _hosId = hosId;
+    }
 
     const args = {
+      hosId: _hosId,
       searchContent,
-      hosId: this.cacheStore.isShowChooseHos ? hosId : '',
       clinicalType,
       source,
     };
@@ -204,7 +209,8 @@ export class UseRegSearch extends GStores {
   }
 
   async getConfig() {
-    const { hosRegHistory } = await ServerStaticData.getSystemConfig('order');
+    this.pageConfig = await ServerStaticData.getSystemConfig('order');
+    const { hosRegHistory } = this.pageConfig;
 
     if (hosRegHistory && hosRegHistory.length) {
       this.hotSearchList.value = hosRegHistory;
