@@ -613,7 +613,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001082: {
     isOpenPopularSci: '1',
-    isOpenHomeTabBarMessageBtn: '1',
+    // isOpenHomeTabBarMessageBtn: '1',
     login: {
       isAliAuthBase: '1',
     },
