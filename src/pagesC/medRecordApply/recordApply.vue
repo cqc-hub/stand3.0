@@ -134,7 +134,7 @@
   import { computed, ref, nextTick } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { GStores, ServerStaticData, IHosInfo, ISystemConfig } from '@/utils';
+  import { GStores, ServerStaticData, IHosInfo, ISystemConfig, PatientUtils } from '@/utils';
   import { type TOutHosInfo, CACHE_KEY } from './utils/recordApply';
   import { deQueryForUrl, joinQuery } from '@/common/utils';
   import { setLocalStorage, getLocalStorage } from '@/common';
@@ -376,6 +376,7 @@
     }
   });
   // gStores.userStore.patChoose
+  const patientUtils = new PatientUtils();
 
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -384,6 +385,7 @@
     if (hosId) {
       cacheStore.changeHosId(hosId);
     }
+    patientUtils.getPatCardList();
   });
 </script>
 
