@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx08440928b105c3bf",
+    "appid": "wxbef5313efdabfde1",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591"
+    "appid": "2021004193658562"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温医附二院就医助手",
+  "name": "天水市第一人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
