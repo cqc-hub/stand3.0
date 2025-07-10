@@ -181,7 +181,8 @@
 
     .pat-card {
       border-radius: 16rpx;
-      background-color: #f6f8ff;
+      // background-color: #f6f8ff;
+      background-color: var(--hr-banner-color-1);
       margin-top: 24rpx;
       height: 136rpx;
 
