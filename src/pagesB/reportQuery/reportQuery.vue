@@ -125,20 +125,19 @@
           @click="reportAnalysis"
           class="report-aly"
         >
-        <view class="relative flex items-center">
-
-          <image
-            :src="globalGl.BASE_IMG + 'stand3-report-aly.png'"
-            class="w-full"
-            mode="widthFix"
-          />
-          <image
-            :src="globalGl.BASE_IMG + 'stand3-report-aly-btn.png'"
-            style="width: 70px"
-            mode="widthFix"
-            class="stand3-report-aly-btn absolute right-0 z-1"
-          />
-        </view>
+          <view class="relative flex items-center">
+            <image
+              :src="globalGl.BASE_IMG + 'stand3-report-aly.png'"
+              class="w-full"
+              mode="widthFix"
+            />
+            <image
+              :src="globalGl.BASE_IMG + 'stand3-report-aly-btn.png'"
+              style="width: 70px"
+              mode="widthFix"
+              class="stand3-report-aly-btn absolute right-0 z-1"
+            />
+          </view>
         </view>
       </swiper-item>
     </swiper>
@@ -168,6 +167,51 @@
       </button>
     </view>
     <repShare ref="repShareRef" :current-data="currentTjData" />
+    <g-popup title="身份验证" ref="refVerifyIdCardPopup">
+      <view class="flex justify-center bg-white verify-idcard-container">
+        <view class="flex flex-col items-center">
+          <view class="mt16 mb16 color-666 f32">请输入身份证后四位</view>
+
+          <view class="pb32" @click="openKeyBoard">
+            <uv-code-input
+              v-model="verifyIdCardVal"
+              :maxlength="4"
+              size="55"
+              space="20"
+              disabledKeyboard
+            />
+          </view>
+
+          <view class="safe-height" />
+          <view class="bg-white"></view>
+          <uv-keyboard-number
+            :random="false"
+            :mode="'card'"
+            :dotDisabled="false"
+            @change="keyboardChange"
+            @backspace="keyboardBackspace"
+          />
+
+          <view class="w100p verify-idcard-btn">
+            <view class="pr12 pl12">
+              <view
+                :class="{
+                  'btn-disabled': verifyIdCardVal.length < 4,
+                }"
+                class="btn btn-primary"
+                @click="continueVerifyIdCard"
+              >
+                确认
+              </view>
+            </view>
+            <view class="safe-height" />
+          </view>
+
+          <!-- <view class="safe-height" />
+          <view class="safe-height" /> -->
+        </view>
+      </view>
+    </g-popup>
   </view>
 </template>
 <script lang="ts" setup>
@@ -220,6 +264,8 @@
   const repShareRef = ref<any>('');
   const currentTjData = ref();
   const verifyData = ref('');
+  const verifyIdCardVal = ref('');
+  const refVerifyIdCardPopup = ref('' as any);
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
@@ -588,6 +634,37 @@
     // #endif
   };
 
+  //验证身份证后四位
+  const refKeyboard = ref('' as any);
+  const openKeyBoard = () => {
+    console.log(refKeyboard.value);
+    refKeyboard.value?.open();
+  };
+  const keyboardChange = (v) => {
+    if (verifyIdCardVal.value.length < 4) {
+      verifyIdCardVal.value += v;
+    }
+  };
+  const keyboardBackspace = () => {
+    verifyIdCardVal.value = verifyIdCardVal.value.slice(
+      0,
+      verifyIdCardVal.value.length - 1
+    );
+  };
+  const continueVerifyIdCard = async () => {
+    if (verifyIdCardVal.value.length < 4) {
+      return;
+    }
+
+    refVerifyIdCardPopup.value.hide();
+    await api.getFourCheck({
+      patientId: gStores.userStore.patChoose.patientId,
+      content: verifyIdCardVal.value,
+    });
+    isHealthCardButton.value = false;
+    getCurrentLoadScrollInstance()?.refresh();
+  };
+
   const refresh = async (e) => {
     const currentTabValue = tabCurrent.value;
     const returnArg = await load(e);
@@ -824,7 +901,22 @@
       isHealthCardButton.value = true;
       uni.hideLoading();
       if (pageProps.value?._healthType === 'verifyFail') {
-        gStores.messageStore.showMessage('已取消验证', 1500, {});
+        gStores.messageStore.showMessage(
+          '是否输入当前患者身份证后四位进行验证',
+          0,
+          {
+            useDialog: true,
+            dialogOpt: {
+              title: '人脸识别失败',
+              isShowCancel: true,
+              cancelText: '暂不验证',
+              confirmText: '前往验证',
+            },
+            closeCallBack: () => {
+              refVerifyIdCardPopup.value.show();
+            },
+          }
+        );
       } else if (pageProps.value?._healthType === 'verifySuccess') {
         uploudVerifyResult(pageProps.value?.registerOrderId);
       } else if (

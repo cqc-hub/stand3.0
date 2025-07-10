@@ -855,6 +855,12 @@ const userApi = {
       hideLoading: false,
     }),
 
+  // 验证患者身份证后四位
+  getFourCheck: (data) =>
+    service.post('/phs-user/relevantPatient/getFourCheck', parm(data), {
+      hideLoading: false,
+    }),
+
   relatedFamilyInfo: (data) =>
     service.post('/phs-user/relevantPatient/relatedFamilyInfo', parm(data), {
       hideLoading: false,

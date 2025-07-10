@@ -397,6 +397,7 @@
       verifyType: '1&bk',
       patientName: '',
       source,
+      idType:'',
 
       verifyCode,
       ...filterData,
@@ -505,8 +506,10 @@
       if (
         requestData.wechatCode &&
         pageProps.value?._healthType == 'addPat' &&
-        pageProps.value?.authCode
+        pageProps.value?.authCode&&
+        requestData?.idType=='01'
       ) {
+    
         gotoChosseVerifyPage(requestData, pageProps.value.authCode);
         return;
       }
