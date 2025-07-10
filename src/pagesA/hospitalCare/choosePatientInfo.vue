@@ -224,8 +224,8 @@
   // };
 
   onLoad(async (opt) => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
   });
 
   onShow(async () => {

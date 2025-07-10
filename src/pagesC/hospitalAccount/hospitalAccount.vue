@@ -58,15 +58,24 @@
         <view class="f-button p24">
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
-            @click="confirmForm1"
-            class="f-b1 mr8 btn btn-primary"
+            @click="confirmForm1('refound')"
+            class="mr8 btn btn-primary btn-border btn-plain f-base"
           >
-            {{ reFoundWorld }}
+            {{ '退款' }}
           </button>
+
+          <button
+            v-if="isCash == '1' && lists.accountBalance !== '0'"
+            @click="confirmForm1"
+            class="f-b1 mr8 btn btn-primary f-base"
+          >
+            {{ '提现' }}
+          </button>
+
           <button
             v-if="pageConfig.isHideAccountRefillBtn !== '1'"
             @click="confirmForm"
-            class="f-b2 ml8 btn btn-primary"
+            class="f-b2 ml8 btn btn-primary f-base"
           >
             充值
           </button>
@@ -84,7 +93,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      :confirmText="isCanRefound ? '提现' : '申请退款'"
+      :confirmText="!isRefound ? '提现' : '申请退款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
@@ -93,24 +102,26 @@
     >
       <view>
         <view class="mb40">
-          <view v-if="isCanRefound">
+          <view>
             <view class="dialog-t f32 mb32">
-              <text class="dt-width color-888">当前可提现</text>
+              <text class="dt-width color-888">
+                当前可{{ isRefound ? '退款' : '提现' }}
+              </text>
               <text class="dt-red g-bolder">
                 {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
               </text>
             </view>
           </view>
 
-          <view v-if="isCanRefound" class="dialog-t f32">
+          <view v-if="!isRefound" class="dialog-t f32">
             <text class="dt-width color-888">到账账户</text>
             <text class="g-bolder">原路返回</text>
           </view>
 
-          <view v-if="!isCanRefound">
+          <!-- <view v-if="isRefound">
             不可原路退回金额
             <text class="dt-red g-bolder">{{ lists.accountBalance }}元</text>
-          </view>
+          </view> -->
         </view>
         <g-flag
           v-model:title="confirmFgTitle"
@@ -134,12 +145,18 @@
       @update:show="reasonClose"
       title="请选择充值理由"
     />
+
+    <Choose-Pat
+      @choose-pat="choosePatHandler"
+      title="选择收款人"
+      ref="familyActionSheet"
+    />
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, ref, provide } from 'vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
   import {
@@ -149,13 +166,72 @@
     ServerStaticData,
     ISystemConfig,
     useTBanner,
+    idValidator,
   } from '@/utils';
   import api from '@/service/api';
   import { joinQuery } from '@/common';
   import { deQueryForUrl } from '@/common/utils';
   import { type IHospitalAccountDetail } from './utils/index';
   import { joinQueryForUrl } from '../../common/utils';
+  import {
+    TFamilyItem,
+    TFamilyList,
+  } from '@/pagesC/medRecordApply/utils/recordApply';
   import globalGl from '@/config/global';
+
+  import ChoosePat from '@/pagesC/medRecordApply/components/FamilyChooseAction.vue';
+
+  // api.getHospitalAccountDetail = () =>
+  //   Promise.resolve({
+  //     result: {
+  //       patientName: '王佳蓓',
+  //       allowOnLineCash: '8705.94',
+  //       reason: [
+  //         {
+  //           codeTypeId: '202504011537290001',
+  //           codeTypeName: 'PRESTORE_REASON',
+  //           codeName: '急诊（含留观）',
+  //         },
+  //         {
+  //           codeTypeId: '202504011537290001',
+  //           codeTypeName: 'PRESTORE_REASON',
+  //           codeName:
+  //             '口腔正畸、血液透析、康复理疗等需按照疗程进行多次检查或治疗',
+  //         },
+  //         {
+  //           codeTypeId: '202504011537290001',
+  //           codeTypeName: 'PRESTORE_REASON',
+  //           codeName: '日间手术、门诊手术、急诊手术',
+  //         },
+  //         {
+  //           codeTypeId: '202504011537290001',
+  //           codeTypeName: 'PRESTORE_REASON',
+  //           codeName: '门诊特殊疾病',
+  //         },
+  //         {
+  //           codeTypeId: '202504011537290001',
+  //           codeTypeName: 'PRESTORE_REASON',
+  //           codeName: '单位或团体为个人体检预交的资金',
+  //         },
+  //       ],
+  //       accountNo: '20250123000000005013',
+  //       accountBalance: '8705.94',
+  //       cardNumber: '30039971',
+  //     },
+  //   });
+
+  // api.relatedFamilyInfo = () =>
+  //   Promise.resolve({
+  //     result: [
+  //       {
+  //         patientId: '20250123000000005013',
+  //         patientName: '王佳蓓',
+  //         idCardEncry: '330326199908286713',
+  //         idCard: '330326199908286713',
+  //       },
+  //     ],
+  //   });
+
   interface IPageProps {
     hosId: string;
     isCash?: any;
@@ -168,7 +244,7 @@
   const lists = ref({} as IHospitalAccountDetail);
   const regDialogConfirm = ref<any>('');
   const pageConfig = ref(<ISystemConfig['hospitalCare']>{});
-
+  const isRefound = ref(false);
   const reasonList = computed(() => {
     const list =
       lists.value.reason ||
@@ -186,6 +262,45 @@
       value: o.codeName,
     }));
   });
+
+  const familyActionSheet = ref<InstanceType<typeof ChoosePat>>();
+  const familyList = ref(<TFamilyList>[]);
+  const selFamilyPat = ref(<TFamilyItem>{});
+  provide('familyList', () => familyList.value);
+  provide('selFamilyPat', () => selFamilyPat.value);
+  const choosePatHandler = ({ item }) => {
+    selFamilyPat.value = item;
+    _resolve();
+  };
+  const getFamilyList = async () => {
+    const pat = gStores.userStore.patChoose;
+    const { patientId, idCardEncry } = pat;
+    const { source } = gStores.globalStore.browser;
+
+    let { result } = await api.relatedFamilyInfo({
+      patientId,
+      type: '0',
+    });
+
+    const {
+      result: { idCard },
+    } = await api.rpGetPlain({
+      source,
+      idCardEncry,
+      patientId,
+    });
+    // const idCard = '330326199908286712';
+
+    result = result || [];
+
+    result.unshift({
+      ...pat,
+      idCard,
+    });
+
+    selFamilyPat.value = result[0];
+    familyList.value = result;
+  };
 
   const isRefoundExist = computed(
     () => pageConfig.value.isAccountCanRefund === '1'
@@ -214,6 +329,7 @@
       .getHospitalAccountDetail<IHospitalAccountDetail>(arg)
       .finally(() => {});
     lists.value = result || [];
+    console.log(result);
   };
 
   getListData = debounce(getListData, 80);
@@ -258,11 +374,10 @@
 
   onLoad(async (opt) => {
     pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
-    console.log('cqcccc');
 
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
-    uni.showLoading({});
+    // uni.showLoading({});
     if (queryParams && !opt?.hosId) {
       return;
     }
@@ -357,11 +472,12 @@
 
   // 提现
   const isCanRefound = computed(
-    () =>
-      (isRefoundExist.value && isAllowOnLineCash.value) || !isRefoundExist.value
+    () => isAllowOnLineCash.value
+    // (isRefoundExist.value && isAllowOnLineCash.value) || !isRefoundExist.value
   );
 
-  const confirmForm1 = () => {
+  const confirmForm1 = (type = '') => {
+    isRefound.value = type === 'refound';
     if (!isCanRefound.value) {
       const c = ((lists.value.accountBalance || 0) as unknown as number) * 1;
       if (!c) {
@@ -383,13 +499,33 @@
     // }
   };
 
-  const goWithdrawal = () => {
-    if (isCanRefound.value) {
+  const goWithdrawal = async () => {
+    if (!isRefound.value) {
       accountWithdrawal();
     } else {
       // 退款不存在可提现金额
       const { accountBalance: refundFee, accountNo } = lists.value;
       const { hosId, isCash } = pageProps.value;
+      const { patientPhone: patPhone, patientName, idCard: patIdCard } = gStores.userStore.patChoose;
+
+      if (!familyList.value.length) {
+        await getFamilyList();
+      }
+      familyActionSheet.value!.show();
+
+      await new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+      });
+
+      const { patientName: openAccountName, idCard: openAccountIdCard } =
+        selFamilyPat.value;
+
+      if (!openAccountIdCard) {
+        gStores.messageStore.showMessage('未查询到收款人身份证信息', 1500);
+        return;
+      }
+
 
       // 申请实名打款
       useTBanner({
@@ -402,6 +538,11 @@
           accountNo,
           hosId,
           isCash,
+          patPhone,
+          patientName,
+          openAccountName,
+          openAccountIdCard,
+          patIdCard
         },
         addition: {
           token: 'token',
@@ -415,6 +556,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .f-base {
+    flex: 1 1 100px;
+  }
   .bg {
     // background: url($base-url + 'v3-hosAccount-bj.png') 100%/100% no-repeat;
     height: 1256rpx;
@@ -429,10 +573,12 @@
       .f-button {
         margin-top: 104rpx;
         display: flex;
+        flex-wrap: wrap;
+        gap: 24rpx;
         .f-b1 {
+          // flex: 1 1 50%;
           background: var(--hr-brand-color-1);
           color: var(--hr-brand-color-6);
-          width: 100%;
         }
         .f-b2 {
           width: 100%;
