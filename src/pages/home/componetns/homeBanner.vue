@@ -34,7 +34,6 @@
         <view :class="props.functionList.length > 2 ? 'parent1' : 'parent'">
           <!-- 只有一个入口 -->
           <!-- 左边是一个的时候根据是否有图片来判断展示入口还是banner -->
-
           <view
             :class="`banner-back2 ${
               props.functionList.length > 2 ? 'view1' : 'view6'
@@ -153,7 +152,6 @@
   // const type = ref(2);
 
   const emits = defineEmits(['open-share']);
-
   const props = withDefaults(
     defineProps<{
       leftFunctionList: IRoute[];
@@ -278,9 +276,9 @@
       font-weight: 400;
     }
     .banner-back1 {
-      background: #eef3ff;
+      background: var(--hr-banner-color-1);
       border: 2rpx solid var(--hr-brand-color-3);
-    }
+    } 
     // 绿色
     .icon-size2 {
       font-size: var(--h-size-46);
@@ -293,13 +291,13 @@
       font-weight: 400;
     }
     .banner-back2 {
-      background: #effbfa;
-      border: 2rpx solid #cfeae6;
-    }
+      background: var(--hr-banner-color-2);
+      border: 2rpx solid var(--h-color-border-1);
+    } 
     .banner-back3 {
-      background: #eef3ff;
+      background: var(--hr-banner-color-1);
       border: 2rpx solid var(--hr-brand-color-3);
-    }
+    } 
     // 背景样式
     .icon-size-back1 {
       color: var(--hr-brand-color-6);
