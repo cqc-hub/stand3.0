@@ -108,7 +108,10 @@
                 当前可{{ isRefound ? '退款' : '提现' }}
               </text>
               <text class="dt-red g-bolder">
+              <text v-if="isRefound">{{ lists.accountBalance }}元</text>
+              <text v-else>
                 {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
+              </text>
               </text>
             </view>
           </view>
@@ -220,17 +223,6 @@
   //     },
   //   });
 
-  // api.relatedFamilyInfo = () =>
-  //   Promise.resolve({
-  //     result: [
-  //       {
-  //         patientId: '20250123000000005013',
-  //         patientName: '王佳蓓',
-  //         idCardEncry: '330326199908286713',
-  //         idCard: '330326199908286713',
-  //       },
-  //     ],
-  //   });
 
   interface IPageProps {
     hosId: string;
@@ -508,23 +500,23 @@
       const { hosId, isCash } = pageProps.value;
       const { patientPhone: patPhone, patientName, idCard: patIdCard } = gStores.userStore.patChoose;
 
-      if (!familyList.value.length) {
-        await getFamilyList();
-      }
-      familyActionSheet.value!.show();
+      // if (!familyList.value.length) {
+      //   await getFamilyList();
+      // }
+      // familyActionSheet.value!.show();
 
-      await new Promise((resolve, reject) => {
-        _resolve = resolve;
-        _reject = reject;
-      });
+      // await new Promise((resolve, reject) => {
+      //   _resolve = resolve;
+      //   _reject = reject;
+      // });
 
-      const { patientName: openAccountName, idCard: openAccountIdCard } =
-        selFamilyPat.value;
+      // const { patientName: openAccountName, idCard: openAccountIdCard } =
+      //   selFamilyPat.value;
 
-      if (!openAccountIdCard) {
-        gStores.messageStore.showMessage('未查询到收款人身份证信息', 1500);
-        return;
-      }
+      // if (!openAccountIdCard) {
+      //   gStores.messageStore.showMessage('未查询到收款人身份证信息', 1500);
+      //   return;
+      // }
 
 
       // 申请实名打款
@@ -540,8 +532,8 @@
           isCash,
           patPhone,
           patientName,
-          openAccountName,
-          openAccountIdCard,
+          // openAccountName,
+          // openAccountIdCard,
           patIdCard
         },
         addition: {
