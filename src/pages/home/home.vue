@@ -151,7 +151,15 @@
                 class="notice flex-normal g-fade-in"
                 v-if="viewerStore.homeNoticeText"
               >
-                <text class="icon-font img_announcement icon-size"></text>
+                <text  v-if="!gStores.globalStore.isTcmStyle" class="icon-font img_announcement icon-size"></text>
+                <image v-if="gStores.globalStore.isTcmStyle"
+                  :src="
+                    $global.BASE_IMG +
+                    `img_announcement-tcm@3x.png`
+                  "
+                  mode="widthFix"
+                  class="icon-font icon-size "
+                />
                 <view class="bar-swiper">
                   <uni-notice-bar
                     :text="viewerStore.homeNoticeText"
