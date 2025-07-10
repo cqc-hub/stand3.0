@@ -156,19 +156,19 @@ const scJson: Record<string, ISConfig> = {
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
 
-    // medicalMHelp: {
-    //   alipay: {
-    //     medicalPlugin: {
-    //       orgId: {
-    //         13012: 'H33030200034',
-    //         13013: 'H33030200034',
-    //         13009: 'H33030200034',
-    //         13011: 'H33030200034',
-    //       },
-    //       cardType: '01',
-    //     },
-    //   },
-    // },
+    medicalMHelp: {
+      alipay: {
+        medicalPlugin: {
+          orgId: {
+            13012: 'H33030200034',
+            13013: 'H33030200034',
+            13009: 'H33030200034',
+            13011: 'H33030200034',
+          },
+          cardType: '01',
+        },
+      },
+    },
   },
 
   /**
@@ -613,7 +613,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001082: {
     isOpenPopularSci: '1',
-    isOpenHomeTabBarMessageBtn: '1',
+    // isOpenHomeTabBarMessageBtn: '1',
     login: {
       isAliAuthBase: '1',
     },

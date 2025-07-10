@@ -440,7 +440,7 @@ export class LoginUtils extends GStores {
     this.userStore.clearStore();
     this.globalStore.clearStore();
     useRouterStore().clear();
-    
+
     // #ifdef MP-WEIXIN
     if (this.globalStore.sysCode === '1001063') {
       const viewerStore = useViewerStore();
@@ -1315,7 +1315,7 @@ export class PatientUtils extends LoginUtils {
       );
 
       requestArg.qrCodeText = qrCodeText;
-      requestArg.healthCardId = healthCardId; 
+      requestArg.healthCardId = healthCardId;
     }
 
     const {

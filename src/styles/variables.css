@@ -16,6 +16,8 @@ page {
   --h-color-white: #ffffff;
   /* 边框颜色 */
   --h-color-border: #f1f1f1;
+  --h-color-border-1: #cfeae6;
+  
 
   /* 主要颜色 */
 
@@ -32,6 +34,10 @@ page {
   --hr-brand-color-3: #9ebeff;
   /* tab页面选中背景色 */
   --hr-brand-color-3-light: #ebf1ff;
+
+  /* banner背景色 */
+  --hr-banner-color-1: #eef3ff;
+  --hr-banner-color-2: #effbfa;
 
   /* 警示 warning  主色-6  浅色-1 click状态-7 不可点击-3 */
   --hr-warning-color-6: #ff8a00;

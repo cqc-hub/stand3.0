@@ -12,6 +12,7 @@ export interface getInHospitalInfoParam {
 //获取住院信息 出参类型
 export interface getInHospitalInfoResult {
   singleSelfPay?: string;
+  prepaymentPayCount?: number;
   accountBalance?: string;
   beHosDate?: string;
   clinicDiagnosis?: string;

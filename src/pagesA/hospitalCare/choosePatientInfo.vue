@@ -83,7 +83,17 @@
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
 
-        <view class="button" @click="toPayPage">预交费用</view>
+        <view @click="checkCount">
+          <view
+            :class="{
+              'btn-disabled': isDisabledPay,
+            }"
+            class="btn btn-primary"
+            @click="toPayPage"
+          >
+            预交费用
+          </view>
+        </view>
       </view>
     </view>
     <view class="empty-box" v-else>
@@ -93,11 +103,11 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import api from '@/service/api';
-  import { GStores, ServerStaticData } from '@/utils';
+  import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
   import { hosParam } from './utils/inpatientInfo';
   import { joinQuery } from '@/common';
 
@@ -114,6 +124,7 @@
     params?: string; // 扫码时候带的加密参数
   };
   const pageProps = ref<IPageProps>({} as IPageProps);
+  const pageConfig = ref({} as ISystemConfig['hospitalCare']);
 
   const resultHos = ref<hosParam>({
     inPatientPrePay: '',
@@ -138,6 +149,22 @@
 
   const loadImg = () => {
     isLoad.value = true;
+  };
+
+  const isDisabledPay = computed(() => {
+    const maxPayNumCount = pageConfig.value.maxPayNumCount || 0;
+    const c = hosInfoResObj.value.prepaymentPayCount;
+
+    if (c && maxPayNumCount) {
+      return c > maxPayNumCount;
+    }
+
+    return false;
+  });
+  const checkCount = () => {
+    if (isDisabledPay.value) {
+      gStores.messageStore.showMessage('充值次数已达上限', 1500);
+    }
   };
 
   const toPayPage = () => {
@@ -198,6 +225,7 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
+    pageConfig.value = await ServerStaticData.getSystemConfig('hospitalCare');
   });
 
   onShow(async () => {
@@ -341,16 +369,6 @@
         color: #111;
         font-weight: 600;
       }
-    }
-    .button {
-      border: 2rpx solid var(--hr-brand-color-6);
-      border-radius: 16rpx;
-      height: 96rpx;
-      color: var(--hr-brand-color-6);
-      font-weight: 600;
-      text-align: center;
-      line-height: 96rpx;
-      margin-top: 28rpx;
     }
   }
   .empty-box {

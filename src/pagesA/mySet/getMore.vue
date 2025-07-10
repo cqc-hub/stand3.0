@@ -5,8 +5,8 @@
         :src="$global.BASE_IMG + 'getmore-img_heren@3x.png'"
         mode="widthFix"
       ></image>
-      <view>当前首页版本 {{ getLocalStorage('systemConfigVersion')[0].version }}</view>
-      <view>当前系统版本 {{ getLocalStorage('systemConfigVersion')[1].version }}</view>
+      <view>当前首页版本 {{ getLocalStorage('systemConfigVersion')[0]?.version }}</view>
+      <view>当前系统版本 {{ getLocalStorage('systemConfigVersion')[1]?.version }}</view>
     </view>
     <view class="more-content">
       <!-- #ifdef MP-WEIXIN -->
