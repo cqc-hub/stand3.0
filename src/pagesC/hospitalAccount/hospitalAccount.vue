@@ -57,11 +57,11 @@
         </view>
         <view class="f-button p24">
           <button
-            v-if="isCash == '1' && lists.accountBalance !== '0'"
+            v-if="isCash == '1' && lists.accountBalance !== '0' && isRefoundExist"
             @click="confirmForm1('refound')"
             class="mr8 btn btn-primary btn-border btn-plain f-base"
           >
-            {{ '退款' }}
+            {{ '申请实名退款' }}
           </button>
 
           <button
