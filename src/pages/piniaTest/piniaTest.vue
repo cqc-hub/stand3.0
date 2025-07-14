@@ -3,7 +3,6 @@
     <button @click="useTBanner(testbuttonConfig)">
       杭口质保卡正式环境（测试用）
     </button>
-
   </view>
 </template>
 
@@ -464,6 +463,23 @@
     isLocal: '1',
   };
 
+  const 乐清产科问卷 = {
+    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/question/question1001063',
+    text: '自助问卷',
+    extraData: {
+      submitType: '2',
+      category: '5201',
+      disabled: 1,
+    },
+    addition: {
+      herenId: 'herenId',
+    },
+    isLocal: '1',
+  } as TButtonConfig;
+
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
@@ -505,7 +521,7 @@
       // });
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
-      // useTBanner(会员权益);
+      useTBanner(乐清产科问卷);
       // useTBanner(queryCase);
     }, 1000);
   });
