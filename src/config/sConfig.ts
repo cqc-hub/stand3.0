@@ -206,7 +206,7 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F'
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
         },
         // medicalDefault: '1',
         isMedicalOrder: '1',
@@ -570,6 +570,7 @@ const scJson: Record<string, ISConfig> = {
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
         // medicalDefault: '1'
+        // isGbFamilyPayment: '1',
       },
     },
   },

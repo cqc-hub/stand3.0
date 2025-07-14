@@ -30,6 +30,46 @@ import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 import dayjs from 'dayjs';
 
+// api.getClinicalPayDetailList = () =>
+//   Promise.resolve({
+//     result: {
+//       qrCode: '1001647268',
+//       costList: [
+//         {
+//           clinicId: '13',
+//           subCostTypeCode: '13',
+//           subCost: '8.0',
+//           subCostTypeName: '诊查费',
+//           costList: [
+//             {
+//               itemSpec: '/',
+//               amount: '1',
+//               subCostTypeCode: '110200001',
+//               subCost: '8.0',
+//               itemClass: 'N',
+//               subCostTypeName: '普通门诊诊查费',
+//               itemPrice: '8.00',
+//               units: '次',
+//             },
+//           ],
+//           serialNo: '',
+//         },
+//       ],
+//       hosId: '12929',
+//       payState: '0',
+//       hosName: '北院区（经开）',
+//       totalCost: '8.0',
+//       personCost: '8.00',
+//       medicalCost: '0.00',
+//     },
+//     timeTaken: 95,
+//     code: 0,
+//     functionVersion:
+//       '[{"functionType":"1","version":"V1.3.16"},{"functionType":"2","version":"V1.0.45"}]',
+//     message: '成功',
+//     respCode: 999002,
+//   });
+
 export const tradeType = {
   '1': '自费',
   '2': '医保',
@@ -148,6 +188,7 @@ export type TPayDetailInfo = {
   hosId: string;
   hosName: string;
   medicalCost: string;
+  invoiceInfo: string;
   payState: string;
   personCost: string;
   hospitalCost: string;
