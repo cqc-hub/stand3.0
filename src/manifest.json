@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wxe26143481567cb97",
+=======
+    "appid": "wxf582e1fd4eb0142a",
+>>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -81,6 +85,7 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
+<<<<<<< HEAD
       "ocrPlugin": {
         "version": "*",
         "provider": "2021001130678316"
@@ -89,13 +94,19 @@
         "version": "*",
         "provider": "2021003163608051"
       },
+=======
+>>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "2021002139602458"
+=======
+    "appid": "2021003173668243"
+>>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
   },
   "mp-baidu": {
     "usingComponents": true
@@ -107,7 +118,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "台州市第一人民医院",
+=======
+  "name": "乐清市人民医院",
+>>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
   "h5": {
     "optimization": {
       "treeShaking": {

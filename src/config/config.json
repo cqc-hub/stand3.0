@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "sysCode": "1001033",
+=======
+  "sysCode": "1001052",
+>>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
