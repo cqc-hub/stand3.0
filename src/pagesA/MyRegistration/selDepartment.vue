@@ -211,6 +211,7 @@
   };
 
   const getDepList = async () => {
+    depList.value=[]
     const source = gStores.globalStore.browser.source;
 
     const requestArg = {
