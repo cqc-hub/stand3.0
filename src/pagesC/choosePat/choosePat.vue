@@ -62,11 +62,14 @@
       {
         type:
           | 'xx'
+          // 乐清产科预约
+          | 'lqckyy'
           | 'yxzndz'
           // 杭口—停车领劵
           | 'HKTCLJ'
           // 宜兴检查预约
           | 'yxjcyy';
+
         [key: string]: any;
       }
     >{}
@@ -90,6 +93,10 @@
 
       case 'yxzndz':
         yxZndz();
+        break;
+
+      case 'lqckyy':
+        lqCkyy();
         break;
 
       default:
@@ -116,7 +123,6 @@
       patientName,
     } = gStores.userStore.patChoose;
 
-
     useTBanner({
       type: 'h5',
       path: joinQuery('https://zlwyl.iflyhealth.com/aiGuide2/xfjk-transfer/', {
@@ -126,6 +132,27 @@
         age,
         sex,
       }),
+    });
+  };
+
+  const lqCkyy = () => {
+    const { patientName } = gStores.userStore.patChoose;
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/question/question1001063',
+      text: '自助问卷',
+      extraData: {
+        submitType: '0',
+        category: '5201',
+        disabled: 1,
+        patientName,
+      },
+      addition: {
+        herenId: 'herenId',
+        patientId: 'patientId',
+      },
+      isLocal: '1',
     });
   };
 

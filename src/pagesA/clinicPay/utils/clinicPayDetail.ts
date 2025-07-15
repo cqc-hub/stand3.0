@@ -61,6 +61,11 @@ import dayjs from 'dayjs';
 //       totalCost: '8.0',
 //       personCost: '8.00',
 //       medicalCost: '0.00',
+//       invoiceInfo: {
+//         appId: 'wx8e0b79a7f627ca18',
+//         path: 'pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=https%3A%2F%2Fwww.chinaebill.cn%2Fd%3Ft%3D501%26a%3D4ktvEHYCQ%26d%3D61060125_0116185047_1f5f64_20250711%26s%3D0672A4B102',
+//       },
+//       // 'https://www.chinaebill.cn/d?t=501&a=4ktvEHYCQ&d=61060125_0116185047_1f5f64_20250711&s=0672A4B102',
 //     },
 //     timeTaken: 95,
 //     code: 0,
@@ -188,7 +193,6 @@ export type TPayDetailInfo = {
   hosId: string;
   hosName: string;
   medicalCost: string;
-  invoiceInfo: string;
   payState: string;
   personCost: string;
   hospitalCost: string;
@@ -196,6 +200,11 @@ export type TPayDetailInfo = {
   favoredReduce: string;
   invoiceNumber: string; // 发票号
   qrCode: string;
+  invoiceInfo?: {
+    appId: string;
+    path: string;
+    type: 'h5' | 'wx' | 'alipay';
+  };
 };
 
 export type TPayConfirmPageProp = {
@@ -2162,6 +2171,7 @@ export const usePayDetailPage = () => {
     const requestArg: any = {
       ...arg,
       patientId,
+      source: gStores.globalStore.browser.source,
     };
 
     if (arg.params) {
