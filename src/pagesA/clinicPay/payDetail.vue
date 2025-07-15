@@ -16,7 +16,7 @@
     />
     <!-- #endif -->
     <view class="g-container">
-    <!-- {{ detailData.einvoiceUrl }} -->
+      <!-- {{ detailData.einvoiceUrl }} -->
       <view class="head-bg" />
       <view class="container">
         <block v-if="payState === '0'">
@@ -133,13 +133,16 @@
     <block v-if="isComplete">
       <view v-if="payState === '1'" class="g-footer">
         <block>
-          <button
+          <view
             v-if="detailData.invoiceInfo"
-            @click="isCannelShow = true"
-            class="btn btn-normal btn-border cancel-btn"
+            @click="showInvoice"
+            class="cancel-btn"
           >
-            申请退单
-          </button>
+            <view class="flex flex-col items-center">
+              <view class="icon-font ico_pay invoice-icon"></view>
+              <view class="f24">查看发票</view>
+            </view>
+          </view>
 
           <button
             v-if="pageConfig.isOpenChargeback === '1'"
@@ -1043,6 +1046,26 @@
     }
   };
 
+  const showInvoice = () => {
+    const { invoiceInfo } = detailData.value;
+
+    // const invoiceInfo = {
+    //   appId: 'wx8e0b79a7f627ca18',
+    //   path: 'pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=https%3A%2F%2Fwww.chinaebill.cn%2Fd%3Ft%3D501%26a%3D4ktvEHYCQ%26d%3D61060125_0116185047_1f5f64_20250711%26s%3D0672A4B102',
+    // };
+    if (!invoiceInfo) {
+      return;
+    }
+
+    const { path, appId } = invoiceInfo;
+
+    useTBanner({
+      type: 'otherProgram',
+      appId,
+      path,
+    });
+  };
+
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
@@ -1165,6 +1188,11 @@
         var(--hr-brand-color-6) 96%
       );
     }
+  }
+
+  .invoice-icon {
+    width: 64rpx;
+    height: 64rpx;
   }
 
   .container {
