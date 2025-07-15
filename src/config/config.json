@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "sysCode": "1001033",
-=======
-  "sysCode": "1001052",
->>>>>>> 7f000dadf763dc1b5c928fa010e5751ca50e6f8c
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -15,16 +11,78 @@
       "isSearchInHos": true,
       "isOpenOcr": true
     },
-    "2001004": {
-      "wxAppid": "wx101158c57640d854",
-      "alipayAppid": "",
+    "1001035": {
+      "wxAppid": "wxfa3674d9f42ae57e",
       "h5Appid": "",
-      "name": "渭南电子健康卡",
-      "isOpenHealthCard": {
-        "healthCardText": "陕西省卫生健康委员会",
-        "hospitalId": "36658"
-      },
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "江苏省中医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001036": {
+      "wxAppid": "",
+      "h5Appid": "",
+      "alipayAppid": "2021003120612222",
+      "isvAlipayAppid": "2021003120637143",
+      "name": "中国人民解放军东部战区总医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001038": {
+      "wxAppid": "wxf64e84cf578fe0a7",
+      "alipayAppid": "2021002182620396",
+      "isvAlipayAppid": "2021002133632822",
+      "h5Appid": "wx65a04aa1dc7776d8",
+      "name": "嘉兴市第二医院",
+      "isSearchInHos": true,
+      "isStartComeTest": false,
+      "isOpenOcr": true
+    },
+    "1001040": {
+      "wxAppid": "wxfa6c5f0835eedf08",
+      "alipayAppid": "2021002143620963",
+      "h5Appid": "wx32db6c8548b011c9",
+      "isvAlipayAppid": "2021002147662292",
+      "name": "湖州市第三人民医院",
+      "isSearchInHos": true,
+      "isStartComeTest": true,
+      "isOpenOcr": false
+    },
+    "1001041": {
+      "wxAppid": "wx1b81e5b0858757ba",
+      "h5Appid": "",
+      "name": "大医二院普湾院区",
       "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001045": {
+      "wxAppid": "wx39ce500d25aa3328",
+      "alipayAppid": "2021003105653538",
+      "h5Appid": "wxed31a7829838f998",
+      "name": "郸城县人民医院",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001046": {
+      "wxAppid": "wxb00075173e764492",
+      "alipayAppid": "2021003113623396",
+      "isvAlipayAppid": "2021003116641812",
+      "h5Appid": "wx1be541208ab16799",
+      "name": "绍兴市人民医院",
+      "isStartComeTest": true,
+      "isSearchInHos": false,
+      "isOpenOcr": true
+    },
+    "1001048": {
+      "wxAppid": "wx8358079c24acea42",
+      "h5Appid": "wx6426f547693ab6e2",
+      "alipayAppid": "2021003144603328",
+      "name": "宜兴市人民医院",
+      "isSearchInHos": true,
+      "isStartComeTest": true,
       "isOpenOcr": true
     },
     "1001049": {
@@ -39,15 +97,6 @@
       "isSearchInHos": false,
       "isOpenOcr": true
     },
-    "2001013": {
-      "wxAppid": "wxda3a65909cbc3e3c",
-      "alipayAppid": "2021002133632822",
-      "h5Appid": "wx12f8b744255a6f5d",
-      "name": "健康金湖",
-      "isStartComeTest": true,
-      "isSearchInHos": false,
-      "isOpenOcr": false
-    },
     "1001052": {
       "wxAppid": "wxf582e1fd4eb0142a",
       "alipayAppid": "2021003173668243",
@@ -57,41 +106,6 @@
       "name": "乐清市人民医院",
       "isSearchInHos": true,
       "isOpenOcr": false
-    },
-    "1001046": {
-      "wxAppid": "wxb00075173e764492",
-      "alipayAppid": "2021003113623396",
-      "isvAlipayAppid": "2021003116641812",
-      "h5Appid": "wx1be541208ab16799",
-      "name": "绍兴市人民医院",
-      "isStartComeTest": true,
-      "isSearchInHos": false,
-      "isOpenOcr": true
-    },
-    "1001060": {
-      "wxAppid": "wx799315279808c901",
-      "alipayAppid": "2021004103625411",
-      "isvAlipayAppid": "2021004105619008",
-      "name": "绍兴第二医院",
-      "h5Appid": "wx13e186671d763023",
-      "isStartComeTest": false,
-      "isSearchInHos": true,
-      "isOpenOcr": false
-    },
-    "1001055": {
-      "wxAppid": "wxd9a9c329edc6e2b0",
-      "alipayAppid": "2021003164669106",
-      "isvAlipayAppid": "2021003164669106",
-      "name": "联勤保障部队第987医院",
-      "isOpenHealthCard": {
-        "healthCardText": "陕西省卫生健康委员会",
-        "hospitalId": "37139"
-      },
-      "isStartComeTest": false,
-      "isSearchInHos": false,
-      "alipayPid": "dl5dt/lx8x6q93cionolzw==",
-      "isOpenOcr": false,
-      "isHideHomeLogo": true
     },
     "1001054": {
       "wxAppid": "wx7acc3ecadc08f7ea",
@@ -109,13 +123,20 @@
       "isOpenOcr": true,
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xianyannavtitle.png"
     },
-    "2001012": {
-      "wxAppid": "wx15abd81c31993d20",
-      "alipayAppid": "",
-      "h5Appid": "wx941119f41e867811",
-      "name": "健康清丰",
+    "1001055": {
+      "wxAppid": "wxd9a9c329edc6e2b0",
+      "alipayAppid": "2021003164669106",
+      "isvAlipayAppid": "2021003164669106",
+      "name": "联勤保障部队第987医院",
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "37139"
+      },
+      "isStartComeTest": false,
       "isSearchInHos": false,
-      "isOpenOcr": false
+      "alipayPid": "dl5dt/lx8x6q93cionolzw==",
+      "isOpenOcr": false,
+      "isHideHomeLogo": true
     },
     "1001056": {
       "wxAppid": "wx4d8f68fdc6b6831c",
@@ -163,31 +184,14 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
-    "1001040": {
-      "wxAppid": "wxfa6c5f0835eedf08",
-      "alipayAppid": "2021002143620963",
-      "h5Appid": "wx32db6c8548b011c9",
-      "isvAlipayAppid": "2021002147662292",
-      "name": "湖州市第三人民医院",
+    "1001060": {
+      "wxAppid": "wx799315279808c901",
+      "alipayAppid": "2021004103625411",
+      "isvAlipayAppid": "2021004105619008",
+      "name": "绍兴第二医院",
+      "h5Appid": "wx13e186671d763023",
+      "isStartComeTest": false,
       "isSearchInHos": true,
-      "isStartComeTest": true,
-      "isOpenOcr": false
-    },
-    "1001041": {
-      "wxAppid": "wx1b81e5b0858757ba",
-      "h5Appid": "",
-      "name": "大医二院普湾院区",
-      "isSearchInHos": false,
-      "isStartComeTest": false,
-      "isOpenOcr": false
-    },
-    "1001045": {
-      "wxAppid": "wx39ce500d25aa3328",
-      "alipayAppid": "2021003105653538",
-      "h5Appid": "wxed31a7829838f998",
-      "name": "郸城县人民医院",
-      "isSearchInHos": false,
-      "isStartComeTest": false,
       "isOpenOcr": false
     },
     "1001062": {
@@ -209,31 +213,12 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-    "1001076": {
-      "wxAppid": "wxe1c48c70681bfc56",
-      "alipayAppid": "2021004134632001",
-      "h5Appid": "",
-      "isvAlipayAppid": "2021004134663007",
-      "name": "昆明口腔医院",
-      "isSearchInHos": false,
-      "isStartComeTest": false,
-      "isOpenOcr": false
-    },
     "1001065": {
       "wxAppid": "wx78636dc13e06e91c",
       "alipayAppid": "",
       "h5Appid": "",
       "name": "浙江省肿瘤医院国际保健中心",
       "isSearchInHos": false,
-      "isStartComeTest": true,
-      "isOpenOcr": false
-    },
-    "1001080": {
-      "wxAppid": "wx58ffd2c3a557bef0",
-      "alipayAppid": "",
-      "h5Appid": "",
-      "name": "和仁智领医院",
-      "isSearchInHos": true,
       "isStartComeTest": true,
       "isOpenOcr": false
     },
@@ -256,17 +241,6 @@
       "isSearchInHos": true,
       "isOpenOcr": false
     },
-
-    "1001073": {
-      "wxAppid": "wxdd1ed079167189fa",
-      "h5Appid": "",
-      "name": "温医附二院就医助手",
-      "isSearchInHos": false,
-      "isStartComeTest": false,
-      "isOpenOcr": false,
-      "_des": "过渡板小程序引导跳转"
-    },
-
     "1001068": {
       "wxAppid": "wxb03ff137dabedd6d",
       "alipayAppid": "",
@@ -306,16 +280,16 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-    "1001038": {
-      "wxAppid": "wxf64e84cf578fe0a7",
-      "alipayAppid": "2021002182620396",
-      "isvAlipayAppid": "2021002133632822",
-      "h5Appid": "wx65a04aa1dc7776d8",
-      "name": "嘉兴市第二医院",
-      "isSearchInHos": true,
+    "1001073": {
+      "wxAppid": "wxdd1ed079167189fa",
+      "h5Appid": "",
+      "name": "温医附二院就医助手",
+      "isSearchInHos": false,
       "isStartComeTest": false,
-      "isOpenOcr": true
+      "isOpenOcr": false,
+      "_des": "过渡板小程序引导跳转"
     },
+
     "1001074": {
       "wxAppid": "wxbef5313efdabfde1",
       "alipayAppid": "2021004193658562",
@@ -329,17 +303,18 @@
         "healthCardText": "甘肃省卫生健康委员会",
         "hospitalId": "39894",
         "isCardQueryComp": true,
-        "isNewMode": false
+        "isNewMode": true
       }
     },
-    "1001048": {
-      "wxAppid": "wx8358079c24acea42",
-      "h5Appid": "wx6426f547693ab6e2",
-      "alipayAppid": "2021003144603328",
-      "name": "宜兴市人民医院",
-      "isSearchInHos": true,
-      "isStartComeTest": true,
-      "isOpenOcr": true
+    "1001076": {
+      "wxAppid": "wxe1c48c70681bfc56",
+      "alipayAppid": "2021004134632001",
+      "h5Appid": "",
+      "isvAlipayAppid": "2021004134663007",
+      "name": "昆明口腔医院",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
     },
     "1001077": {
       "wxAppid": "wx9dcb98a8c18d44ea",
@@ -359,6 +334,15 @@
       "name": "南京金陵口腔医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001080": {
+      "wxAppid": "wx58ffd2c3a557bef0",
+      "alipayAppid": "",
+      "h5Appid": "",
+      "name": "和仁智领医院",
+      "isSearchInHos": true,
+      "isStartComeTest": true,
       "isOpenOcr": false
     },
     "1001081": {
@@ -406,13 +390,33 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-    "1001035": {
-      "wxAppid": "wxfa3674d9f42ae57e",
-      "h5Appid": "",
+    "2001004": {
+      "wxAppid": "wx101158c57640d854",
       "alipayAppid": "",
-      "isvAlipayAppid": "",
-      "name": "江苏省中医院",
-      "isStartComeTest": false,
+      "h5Appid": "",
+      "name": "渭南电子健康卡",
+      "isOpenHealthCard": {
+        "healthCardText": "陕西省卫生健康委员会",
+        "hospitalId": "36658"
+      },
+      "isSearchInHos": false,
+      "isOpenOcr": true
+    },
+    "2001012": {
+      "wxAppid": "wx15abd81c31993d20",
+      "alipayAppid": "",
+      "h5Appid": "wx941119f41e867811",
+      "name": "健康清丰",
+      "isSearchInHos": false,
+      "isOpenOcr": false
+    },
+    "2001013": {
+      "wxAppid": "wxda3a65909cbc3e3c",
+      "alipayAppid": "2021002133632822",
+      "h5Appid": "wx12f8b744255a6f5d",
+      "name": "健康金湖",
+      "isStartComeTest": true,
+      "isSearchInHos": false,
       "isOpenOcr": false
     }
   }
