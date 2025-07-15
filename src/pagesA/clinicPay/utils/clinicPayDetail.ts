@@ -30,6 +30,7 @@ import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 import dayjs from 'dayjs';
 
+
 export const tradeType = {
   '1': '自费',
   '2': '医保',
@@ -155,6 +156,11 @@ export type TPayDetailInfo = {
   favoredReduce: string;
   invoiceNumber: string; // 发票号
   qrCode: string;
+  invoiceInfo?: {
+    appId: string;
+    path: string;
+    type: 'h5' | 'wx' | 'alipay';
+  };
 };
 
 export type TPayConfirmPageProp = {
@@ -2121,6 +2127,7 @@ export const usePayDetailPage = () => {
     const requestArg: any = {
       ...arg,
       patientId,
+      source: gStores.globalStore.browser.source,
     };
 
     if (arg.params) {

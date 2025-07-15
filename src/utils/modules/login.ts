@@ -9,7 +9,7 @@ import {
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
 import { apiAsync, cacheUtil, getTcMallToken } from '@/utils';
-import { useViewerStore } from "@/stores/modules/viewer";
+import { useViewerStore } from '@/stores/modules/viewer';
 import api from '@/service/api';
 import globalGl from '@/config/global';
 import HTMLParser from '@/common/html-parser';
@@ -1054,6 +1054,36 @@ export class PatientUtils extends LoginUtils {
     },
   };
 
+  // 获取当前就诊人隐私数据
+  async getPatientPersonalInfo(
+    opt: { phone?: boolean; idCard?: boolean } = {}
+  ) {
+    const { phone, idCard } = opt;
+    const { patientId, cellPhoneNumber, idCardEncry } =
+      this.userStore.patChoose;
+
+    const arg: any = {
+      source: this.globalStore.browser.source,
+      patientId,
+    };
+
+    if (idCard) {
+      arg.idCardEncry = idCardEncry;
+    }
+
+    if (phone) {
+      arg.cellPhoneNumber = cellPhoneNumber;
+    }
+    const {
+      result: { patientPhone: _patientPhone, idCard: _idCard },
+    } = await api.rpGetPlain(arg);
+
+    return {
+      phone: _patientPhone,
+      idCard: _idCard,
+    };
+  }
+
   /** 快速预约添加就诊人 */
   async quickAppointmentAddPat(patData: {
     patientName: string;
@@ -1307,9 +1337,9 @@ export class PatientUtils extends LoginUtils {
       healthCardId: '',
       qrCodeText: '',
     };
-    const isNewMode=globalGl.systemInfo.isOpenHealthCard?.isNewMode
+    const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
-    if (wechatCode&&!isNewMode) {
+    if (wechatCode && !isNewMode) {
       const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
         data
       );

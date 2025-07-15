@@ -49,30 +49,35 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, PatientUtils, TButtonConfig, useTBanner } from '@/utils';
   import { IPat } from '@/stores';
   import { deQueryForUrl, joinQuery } from '@/common';
   import { HK_hook } from './utils';
   import globalGl from '@/config/global';
 
   import PList from './components/list.vue';
+  import api from '@/service/api';
 
   const pageProps = ref(
     <
       {
         type:
           | 'xx'
+          // 乐清产科预约
+          | 'lqckyy'
           | 'yxzndz'
           // 杭口—停车领劵
           | 'HKTCLJ'
           // 宜兴检查预约
           | 'yxjcyy';
+
         [key: string]: any;
       }
     >{}
   );
 
   const gStores = new GStores();
+  const patientUtils = new PatientUtils();
   const type = computed(() => pageProps.value.type);
   const _firstIn = ref(true);
 
@@ -90,6 +95,10 @@
 
       case 'yxzndz':
         yxZndz();
+        break;
+
+      case 'lqckyy':
+        lqCkyy();
         break;
 
       default:
@@ -116,7 +125,6 @@
       patientName,
     } = gStores.userStore.patChoose;
 
-
     useTBanner({
       type: 'h5',
       path: joinQuery('https://zlwyl.iflyhealth.com/aiGuide2/xfjk-transfer/', {
@@ -126,6 +134,33 @@
         age,
         sex,
       }),
+    });
+  };
+
+  const lqCkyy = async () => {
+    const { patientName } = gStores.userStore.patChoose;
+
+    const { phone } = await patientUtils.getPatientPersonalInfo({
+      phone: true,
+    });
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/question/question1001063',
+      text: '自助问卷',
+      extraData: {
+        submitType: '0',
+        category: '5201',
+        disabled: 1,
+        patientName,
+        'd-1': patientName,
+        'd-3': phone,
+      },
+      addition: {
+        herenId: 'herenId',
+        patientId: 'patientId',
+      },
+      isLocal: '1',
     });
   };
 

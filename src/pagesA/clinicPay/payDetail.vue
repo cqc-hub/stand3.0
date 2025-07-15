@@ -16,6 +16,7 @@
     />
     <!-- #endif -->
     <view class="g-container">
+      <!-- {{ detailData.einvoiceUrl }} -->
       <view class="head-bg" />
       <view class="container">
         <block v-if="payState === '0'">
@@ -129,6 +130,81 @@
       </view>
     </view>
 
+    <block v-if="isComplete">
+      <view v-if="payState === '1'" class="g-footer">
+        <block>
+          <view
+            v-if="detailData.invoiceInfo"
+            @click="showInvoice"
+            class="cancel-btn"
+          >
+            <view class="flex flex-col items-center">
+              <view class="icon-font ico_pay invoice-icon"></view>
+              <view class="f24">查看发票</view>
+            </view>
+          </view>
+
+          <button
+            v-if="pageConfig.isOpenChargeback === '1'"
+            @click="isCannelShow = true"
+            class="btn btn-normal btn-border cancel-btn"
+          >
+            申请退单
+          </button>
+
+          <!-- handlerPay -->
+          <button
+            @click="handlerPay"
+            :class="{
+              'btn-disabled': !isCanPay,
+            }"
+            class="btn btn-warning confirm-btn"
+          >
+            {{ globalGl.SYS_CODE === '1001052' ? '去结算' : '立即支付' }}
+          </button>
+        </block>
+      </view>
+
+      <view v-if="isShowPayedFooter" class="g-footer">
+        <block v-if="isPayedItemDetailRefundBtnShow">
+          <button
+            @click="payedItemDetailRefundCancel"
+            class="btn btn-plain btn-primary btn-border cancel-btn"
+          >
+            取消
+          </button>
+
+          <button
+            @click="showPayedItemDetailRefundDialog"
+            :class="{
+              'btn-disabled': !selListChildren.length,
+            }"
+            class="btn btn-primary confirm-btn"
+          >
+            申请退费
+          </button>
+        </block>
+
+        <block v-else>
+          <button
+            v-if="isPayedChargeBack"
+            @click="isCannelShow = true"
+            class="btn btn-plain btn-border btn-error cancel-btn"
+          >
+            申请退单
+          </button>
+
+          <button
+            v-if="isPayedItemDetailRefund"
+            @click="isPayedItemDetailRefundBtnShow = true"
+            class="btn btn-primary confirm-btn"
+          >
+            申请退费
+          </button>
+        </block>
+      </view>
+    </block>
+
     <g-pay
       :list="refPayList"
       :autoPayArg="payArg"
@@ -204,69 +280,6 @@
     </Order-Reg-Confirm>
 
     <Wx-Pay-Money-Medical-Popup ref="wxPryMoneyMedicalDialog" />
-
-    <block v-if="isComplete">
-      <view v-if="payState === '1'" class="g-footer">
-        <block>
-          <button
-            v-if="pageConfig.isOpenChargeback === '1'"
-            @click="isCannelShow = true"
-            class="btn btn-normal btn-border cancel-btn"
-          >
-            申请退单
-          </button>
-          <!-- handlerPay -->
-          <button
-            @click="handlerPay"
-            :class="{
-              'btn-disabled': !isCanPay,
-            }"
-            class="btn btn-warning confirm-btn"
-          >
-            {{ globalGl.SYS_CODE === '1001052' ? '去结算' : '立即支付' }}
-          </button>
-        </block>
-      </view>
-
-      <view v-if="isShowPayedFooter" class="g-footer">
-        <block v-if="isPayedItemDetailRefundBtnShow">
-          <button
-            @click="payedItemDetailRefundCancel"
-            class="btn btn-plain btn-primary btn-border cancel-btn"
-          >
-            取消
-          </button>
-
-          <button
-            @click="showPayedItemDetailRefundDialog"
-            :class="{
-              'btn-disabled': !selListChildren.length,
-            }"
-            class="btn btn-primary confirm-btn"
-          >
-            申请退费
-          </button>
-        </block>
-
-        <block v-else>
-          <button
-            v-if="isPayedChargeBack"
-            @click="isCannelShow = true"
-            class="btn btn-plain btn-border btn-error cancel-btn"
-          >
-            申请退单
-          </button>
-
-          <button
-            v-if="isPayedItemDetailRefund"
-            @click="isPayedItemDetailRefundBtnShow = true"
-            class="btn btn-primary confirm-btn"
-          >
-            申请退费
-          </button>
-        </block>
-      </view>
-    </block>
 
     <g-message />
   </view>
@@ -1033,6 +1046,26 @@
     }
   };
 
+  const showInvoice = () => {
+    const { invoiceInfo } = detailData.value;
+
+    // const invoiceInfo = {
+    //   appId: 'wx8e0b79a7f627ca18',
+    //   path: 'pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=https%3A%2F%2Fwww.chinaebill.cn%2Fd%3Ft%3D501%26a%3D4ktvEHYCQ%26d%3D61060125_0116185047_1f5f64_20250711%26s%3D0672A4B102',
+    // };
+    if (!invoiceInfo) {
+      return;
+    }
+
+    const { path, appId } = invoiceInfo;
+
+    useTBanner({
+      type: 'otherProgram',
+      appId,
+      path,
+    });
+  };
+
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
@@ -1155,6 +1188,11 @@
         var(--hr-brand-color-6) 96%
       );
     }
+  }
+
+  .invoice-icon {
+    width: 64rpx;
+    height: 64rpx;
   }
 
   .container {

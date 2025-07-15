@@ -470,7 +470,7 @@
     path: 'pagesC/question/question1001063',
     text: '自助问卷',
     extraData: {
-      submitType: '2',
+      submitType: '0',
       category: '5201',
       disabled: 1,
     },
