@@ -49,13 +49,14 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, PatientUtils, TButtonConfig, useTBanner } from '@/utils';
   import { IPat } from '@/stores';
   import { deQueryForUrl, joinQuery } from '@/common';
   import { HK_hook } from './utils';
   import globalGl from '@/config/global';
 
   import PList from './components/list.vue';
+  import api from '@/service/api';
 
   const pageProps = ref(
     <
@@ -76,6 +77,7 @@
   );
 
   const gStores = new GStores();
+  const patientUtils = new PatientUtils();
   const type = computed(() => pageProps.value.type);
   const _firstIn = ref(true);
 
@@ -135,8 +137,12 @@
     });
   };
 
-  const lqCkyy = () => {
+  const lqCkyy = async () => {
     const { patientName } = gStores.userStore.patChoose;
+
+    const { phone } = await patientUtils.getPatientPersonalInfo({
+      phone: true,
+    });
     useTBanner({
       type: 'h5',
       isSelfH5: '1',
@@ -147,6 +153,8 @@
         category: '5201',
         disabled: 1,
         patientName,
+        'd-1': patientName,
+        'd-3': phone,
       },
       addition: {
         herenId: 'herenId',
