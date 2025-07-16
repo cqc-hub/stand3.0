@@ -440,10 +440,10 @@
 
     let {
       isFace,
-      isPayWithoutSecretAuth,
       isCanChangeHosPhone,
-      useFaceVerifyInChangePhone,
       isFaceRemote,
+      // isPayWithoutSecretAuth,
+      // useFaceVerifyInChangePhone,
     } = pageConfig.value;
     const isIDCard = formData.value[formKey.idType] === '01';
 

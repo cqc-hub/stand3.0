@@ -9,99 +9,132 @@
       <view
         v-for="item in list"
         :key="item.value"
+        :class="{
+          'order-yun': isYunOrder,
+        }"
         @click="itemClick(item)"
-        class="item mb24"
+        class="mb24 relative"
       >
-        <image :src="item.img" class="item-image" mode="widthFix"></image>
-        <text class="item-text">{{ item.tip }}</text>
+        <image :src="item.img" class="w-full" mode="widthFix"></image>
+        <view class="box absolute z-0">
+          <view v-if="!isYunOrder" class="safe-height"></view>
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
+          <view class="safe-height"></view>
+          <text class="color-666 pl42">{{ item.tip }}</text>
+        </view>
       </view>
     </view>
     <g-message />
 
     <view class="pr32 pl32">
-      <g-flag typeFg="4" isShowFgTip aaa />
+      <g-flag :typeFg="isYunOrder ? 112 : 4" isShowFgTip aaa />
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores } from '@/utils';
-  import { BASE_IMG } from '@/config/global';
-  import { joinQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
-  const list = ref([
-    {
-      tip: '到院现场就诊',
-      img: `https://phsdevoss.eheren.com/pcloud/image/yylx_mzyy@2x.png`,
-      value: '1',
-    },
-    {
-      tip: '到院现场就诊',
-      img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
-      value: '2',
-    },
-    // {
-    //   tip: '网络线上就诊',
-    //   img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
-    //   value: '',
-    //   path: '233',
-    // },
-    {
-      tip: ' ',
-      img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
-      value: '7',
-    },
-  ]);
+  const pageProps = ref(
+    {} as {
+      // 1 云门诊
+      type: '1';
+    }
+  );
+
+  const isYunOrder = computed(() => pageProps.value.type === '1');
+  const list = computed(() => {
+    if (isYunOrder.value) {
+      return [
+        {
+          tip: '网络线上就诊,快递发药',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_rjymz@2x.png`,
+          value: '4',
+          path: '/pagesA/MyRegistration/selDepartment?clinicalType=4&hosId=12675&hideSelHos=1',
+        },
+        {
+          tip: '夜间网络线上就诊,快递发药',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_yjymz@2x.png`,
+          value: '3',
+          path: '/pagesA/MyRegistration/selDepartment?clinicalType=3&hosId=12675&hideSelHos=1',
+        },
+        {
+          tip: '中医重点专科网络线上就诊,快递发药',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zyzdzkymz.png`,
+          value: '6',
+          path: '/pagesA/MyRegistration/selDepartment?clinicalType=6&hosId=12675&hideSelHos=1',
+        },
+        {
+          tip: '网络线上图文问诊医生,快递发药',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_twwz@2x.png`,
+          value: '7',
+          path: '/pagesC/cloudHospital/cloudHospital',
+        },
+        // {
+        //   tip: ' ',
+        //   img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
+        //   value: '10',
+        // },
+      ];
+    } else {
+      return [
+        {
+          tip: '到院现场就诊',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_mzyy@2x.png`,
+          value: '1',
+        },
+        {
+          tip: '到院现场就诊',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
+          value: '2',
+        },
+        {
+          tip: '网络线上就诊',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
+          value: '',
+          path: '/pagesA/MyRegistration/registrationType?type=1',
+        },
+        // {
+        //   tip: ' ',
+        //   img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
+        //   value: '7',
+        // },
+      ];
+    }
+  });
 
   const itemClick = (item) => {
     const { value: clinicalType, path } = item;
-    let url = path;
 
-    if (clinicalType) {
-      url = joinQueryForUrl('/pagesA/MyRegistration/Register', {
-        _url: `/pagesA/MyRegistration/selDepartment?clinicalType=${clinicalType}`,
-      });
-    }
+    let url = joinQueryForUrl('/pagesA/MyRegistration/Register', {
+      _url: `/pagesA/MyRegistration/selDepartment?clinicalType=${clinicalType}`,
+    });
+
     if (path) {
-      uni.navigateTo({
-        url: path,
-      });
-    } else {
+      url = path;
     }
 
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
-        _url: `/pagesA/MyRegistration/selDepartment?clinicalType=${clinicalType}`,
-      }),
+      url,
     });
   };
 
-  onLoad(async () => {});
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  });
 </script>
 
 <style lang="scss" scoped>
-  .item {
-    display: flex;
-    justify-content: flex-start;
-    position: relative;
-    height: 264upx;
-
-    .item-image {
-      position: absolute;
-      display: block;
-      z-index: 0;
-      width: 100%;
-    }
-
-    .item-text {
-      width: auto;
-      z-index: 1;
-      padding: 140upx 0 0 42upx;
-      color: #666666;
-    }
+  .box {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 </style>

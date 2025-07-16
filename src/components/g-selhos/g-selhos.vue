@@ -2,7 +2,7 @@
   <view class="">
     <view
       :class="{
-        'my-display-none': hosList.length < 2,
+        'my-display-none': (hosList.length < 2) || isHide,
       }"
       class="bread-crumbs flex-between"
       @click="toggleHos"
@@ -48,9 +48,11 @@
       type?: 'selDepartment';
       autoGetData?: boolean;
       unNeedPosition?: boolean;
+      isHide?: boolean;
     }>(),
     {
       autoGetData: true,
+      isHide: false,
     }
   );
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);

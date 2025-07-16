@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001057",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -14,8 +14,8 @@
     "1001035": {
       "wxAppid": "wxacb96ee66c3dee84",
       "h5Appid": "",
-      "alipayAppid": "",
-      "isvAlipayAppid": "",
+      "alipayAppid": "2021003104670597",
+      "isvAlipayAppid": "2021003104670597",
       "name": "江苏省中医院",
       "isStartComeTest": false,
       "isOpenOcr": false,

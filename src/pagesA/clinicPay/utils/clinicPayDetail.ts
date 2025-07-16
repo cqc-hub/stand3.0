@@ -30,7 +30,6 @@ import { useCacheStore } from '@/stores';
 import { ISConfig } from '@/config/sConfig';
 import dayjs from 'dayjs';
 
-
 export const tradeType = {
   '1': '自费',
   '2': '医保',

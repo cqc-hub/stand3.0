@@ -166,6 +166,17 @@
       </view>
 
       <view v-if="isShowPayedFooter" class="g-footer">
+        <view
+          v-if="detailData.invoiceInfo"
+          @click="showInvoice"
+          class="cancel-btn"
+        >
+          <view class="btn btn-primary btn-border btn-plain">
+            <view class="icon-font ico_pay invoice-icon-1"></view>
+            <view class="">查看发票</view>
+          </view>
+        </view>
+
         <block v-if="isPayedItemDetailRefundBtnShow">
           <button
             @click="payedItemDetailRefundCancel"
@@ -536,9 +547,19 @@
     );
   });
 
+  const isShow = computed(() => {
+    return (
+      payState.value === '0' && pageConfig.value.isPayedItemDetailRefund === '1'
+    );
+  });
+
   const isShowPayedFooter = computed(() => {
     if (payState.value === '0') {
-      return isPayedChargeBack.value || isPayedItemDetailRefund.value;
+      return (
+        isPayedChargeBack.value ||
+        isPayedItemDetailRefund.value ||
+        detailData.value.invoiceInfo
+      );
     }
 
     return false;
@@ -1193,6 +1214,11 @@
   .invoice-icon {
     width: 64rpx;
     height: 64rpx;
+  }
+
+  .invoice-icon-1 {
+    width: 48rpx;
+    height: 48rpx;
   }
 
   .container {
