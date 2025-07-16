@@ -18,28 +18,31 @@
         </view>
 
         <!-- 新健康卡 -->
-        <view v-if="isNewHealthCard" >
+        <view v-if="isNewHealthCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
-          <text v-if="!isShowHealthLogin" class="text-no-wrap" @click="addPatPage">申领或关联健康卡</text>
+          <text
+            v-if="!isShowHealthLogin"
+            class="text-no-wrap"
+            @click="addPatPage"
+          >
+            申领或关联健康卡
+          </text>
           <health-card-login
-                v-else
-                :authLogin="false"
-                :hidden="!isShowHealthLogin"
-                @authSucess="addPatPage"
-                @authCancel="isShowHealthLogin = false"
-                wechatcode
-              >
-                <view class="text-no-wrap">再次点击授权</view>
-              </health-card-login>
+            v-else
+            :authLogin="false"
+            :hidden="!isShowHealthLogin"
+            @authSucess="addPatPage"
+            @authCancel="isShowHealthLogin = false"
+            wechatcode
+          >
+            <view class="text-no-wrap">再次点击授权</view>
+          </health-card-login>
         </view>
 
         <view v-else @click="addPatPage">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
           <text class="text-no-wrap">申领健康卡</text>
         </view>
-
-
-
 
         <!-- <view @click="createCard">
           <view class="iconfont icon-resize color-purple">&#xe6f8;</view>
@@ -100,7 +103,7 @@
               "
             >
               <view
-                v-if="!isShowHealthLogin&&!isNewHealthCard"
+                v-if="!isShowHealthLogin && !isNewHealthCard"
                 @click="upToHealthCord(pat)"
                 class="jkk"
               >
@@ -115,7 +118,7 @@
                 @authCancel="isShowHealthLogin = false"
                 wechatcode
               >
-                <view class="jkk" >再次点击授权</view>
+                <view class="jkk">再次点击授权</view>
               </health-card-login>
             </block>
             <!-- #endif -->
@@ -286,7 +289,7 @@
 
   const addPatPage = () => {
     if (isNewHealthCard.value) {
-      healthCardBind().catch(()=>{
+      healthCardBind().catch(() => {
         gStores.messageStore.showMessage('未授权， 请再次点击进行授权', 3000);
         isShowHealthLogin.value = true;
       });
@@ -481,7 +484,6 @@
     }
   };
 
-
   onShow(() => {
     reDealMedicalFiling();
   });
@@ -498,13 +500,13 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
-     await patientUtils.getPatCardList();
+    await patientUtils.getPatCardList();
     //健康卡
     // #ifdef MP-WEIXIN
     if (globalGl.systemInfo?.isOpenHealthCard) {
       globalGl.systemInfo.isOpenHealthCard?.isNewMode &&
         (isNewHealthCard.value = true);
-     await HandhealthCard();
+      await HandhealthCard();
     }
     // #endif
   });

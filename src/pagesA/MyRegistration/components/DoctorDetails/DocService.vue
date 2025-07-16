@@ -86,7 +86,7 @@
     },
     {
       img: 'card_doctor_mbfz_n',
-      title: '复诊开药',
+      title: '在线问诊',
       fee: 0,
       util: '次',
       key: 'jsonParam',

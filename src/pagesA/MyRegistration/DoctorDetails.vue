@@ -1026,7 +1026,7 @@
 
       if (receptionMode) {
         try {
-          // 复诊开药
+          // 在线问诊
           data.jsonParam =
             receptionMode & 8 &&
             jsonParam &&

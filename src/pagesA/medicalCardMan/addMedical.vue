@@ -174,6 +174,13 @@
   const cacheStore = useCacheStore();
   const pageConfig = ref(<ISystemConfig['person']>{});
 
+  let _resolve: any = () => {
+    // r
+  };
+  let _reject: any = () => {
+    // j
+  };
+
   const isCheck = ref(false);
   // const isUserInfoAgree = ref(false);
 
@@ -397,7 +404,7 @@
       verifyType: '1&bk',
       patientName: '',
       source,
-      idType:'',
+      idType: '',
 
       verifyCode,
       ...filterData,
@@ -415,15 +422,54 @@
 
     await injectHealthCode(requestData);
 
-    const {
+    let {
       isFace,
       isPayWithoutSecretAuth,
       isCanChangeHosPhone,
       useFaceVerifyInChangePhone,
+      isFaceRemote,
     } = pageConfig.value;
+    const isIDCard = formData.value[formKey.idType] === '01';
+
+    if (
+      isIDCard &&
+      isFaceRemote === '1' &&
+      isFace === '1' &&
+      pageProps.value.pageType !== 'perfectReal'
+    ) {
+      const tip = '选择认证方式';
+
+      const list = [
+        {
+          label: '人脸认证',
+          key: 'isFace',
+        },
+        {
+          label: '远程人脸认证',
+          key: 'isFaceRemote',
+        },
+      ] as const;
+
+      const { tapIndex } = await apiAsync(
+        // @ts-expect-error
+        uni.showActionSheet,
+        {
+          title: tip,
+          alertText: tip,
+          itemList: list.map((o) => o.label),
+        }
+      );
+
+      const v = list[tapIndex].key;
+
+      if (v === 'isFaceRemote') {
+        isFace = undefined;
+      } else {
+        isFaceRemote = undefined;
+      }
+    }
 
     if (isFace === '1') {
-      const isIDCard = formData.value[formKey.idType] === '01';
       if (isIDCard) {
         const { sysCode } = gStores.globalStore;
         // 新增判断 健康温州去除年龄判断
@@ -506,13 +552,28 @@
       if (
         requestData.wechatCode &&
         pageProps.value?._healthType == 'addPat' &&
-        pageProps.value?.authCode&&
-        requestData?.idType=='01'
+        pageProps.value?.authCode &&
+        requestData?.idType == '01'
       ) {
-    
         gotoChosseVerifyPage(requestData, pageProps.value.authCode);
         return;
       }
+
+      if (isFaceRemote === '1' && isIDCard) {
+        const sign = await patientUtils.addCachePatient(requestData);
+        const { patientName, idCard } = formData.value;
+
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesD/service/addPatByScan', {
+            sign,
+            name: patientName,
+            idCard,
+            isSelf: '1',
+          }),
+        });
+        return;
+      }
+
       const patientId = await patientUtils
         .addRelevantPatient(requestData)
         .catch(async (e) => {

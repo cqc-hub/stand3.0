@@ -231,6 +231,8 @@ export interface ISystemConfig_ {
      */
     ocr?: '0' | '1';
     isFace?: '1';
+    // 远程人脸
+    isFaceRemote?: '1';
 
     // 修改建档手机号 pagesA/medicalCardMan/ocrUser
     isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个

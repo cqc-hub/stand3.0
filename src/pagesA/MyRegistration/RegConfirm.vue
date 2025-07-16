@@ -69,6 +69,9 @@
     </view>
 
     <Order-Reg-Confirm
+      :headerIcon="`${global.BASE_IMG}v3-order-reg-confirm${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`"
       :title="flagTitle9"
       @confirm="isCheck = true"
       ref="regDialogConfirm"
@@ -84,7 +87,9 @@
     </Order-Reg-Confirm>
 
     <Order-Reg-Confirm
-      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :headerIcon="`${global.BASE_IMG}v3-order-reg-confirm${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`"
       :title="flagTitle1203"
       :maskClickClose="false"
       @cancel="cancelAsync"
@@ -110,7 +115,7 @@
       @cancelButton="resolve"
       :cancelColor="'var(--hr-brand-color-6)'"
       :confirmColor="'var(--hr-brand-color-6)'"
-      :cancelFontWeight ="'bold'"
+      :cancelFontWeight="'bold'"
       confirmText="去填写病情"
       cancelText="仅候补登记"
     >

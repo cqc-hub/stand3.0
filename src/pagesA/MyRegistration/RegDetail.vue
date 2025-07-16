@@ -177,6 +177,11 @@
             <view
               v-if="hosInfo.gisLat"
               @click="openHosLocation"
+              :style="{
+                background: `url(${globalGl.BASE_IMG}reg-detail-position-bg${
+                  gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                }.png) 100%/100% no-repeat`,
+              }"
               class="hos-navigation g-flex-rc-cc m32 f32"
             >
               <view class="hos-info">
@@ -1495,8 +1500,8 @@
         }
 
         .hos-navigation {
-          background: url($base-url + 'reg-detail-position-bg.png') 100%/100%
-            no-repeat;
+          // background: url($base-url + 'reg-detail-position-bg.png') 100%/100%
+          //   no-repeat;
           height: 144rpx;
           justify-content: flex-start;
           padding-left: 32rpx;
