@@ -64,6 +64,17 @@
       仅账号本人可更新为医保用户，是否更新为医保用户？
     </Order-Reg-Confirm>
 
+    <g-pay
+      :list="refPayList"
+      @pay-click="selVerifyWay"
+      ref="refPay"
+      title="选择认证方式"
+    >
+      <view class="p32">
+        <g-flag :typeFg="'xxxxx'" isShowFgTip isHideTitle aaa />
+      </view>
+    </g-pay>
+
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist && !pageProps.patientName"
@@ -173,6 +184,11 @@
   const routeStore = useRouterStore();
   const cacheStore = useCacheStore();
   const pageConfig = ref(<ISystemConfig['person']>{});
+  const refPay = ref<any>('');
+  const refPayList = ref<any[]>([]);
+  const selVerifyWay = ({ item }) => {
+    _resolve(item.key);
+  };
 
   let _resolve: any = () => {
     // r
@@ -437,8 +453,6 @@
       isFace === '1' &&
       pageProps.value.pageType !== 'perfectReal'
     ) {
-      const tip = '选择认证方式';
-
       const list = [
         {
           label: '人脸认证',
@@ -448,19 +462,24 @@
           label: '远程人脸认证',
           key: 'isFaceRemote',
         },
-      ] as const;
+      ];
 
-      const { tapIndex } = await apiAsync(
-        // @ts-expect-error
-        uni.showActionSheet,
-        {
-          title: tip,
-          alertText: tip,
-          itemList: list.map((o) => o.label),
-        }
-      );
+      // const { tapIndex } = await apiAsync(
+      //   // @ts-expect-error
+      //   uni.showActionSheet,
+      //   {
+      //     title: '选择认证方式',
+      //     alertText: '选择认证方式',
+      //     itemList: list.map((o) => o.label),
+      //   }
+      // );
 
-      const v = list[tapIndex].key;
+      // const v = list[tapIndex].key;
+      refPayList.value = list;
+      const v = await new Promise((r) => {
+        _resolve = r;
+        refPay.value.show();
+      });
 
       if (v === 'isFaceRemote') {
         isFace = undefined;

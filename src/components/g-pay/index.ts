@@ -9,6 +9,7 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 export interface IGPay {
   label: string;
   key:
+    | string
     | 'offline'
     | 'online'
     | 'medicare'

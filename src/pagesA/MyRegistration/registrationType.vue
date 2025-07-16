@@ -44,6 +44,12 @@
       img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
       value: '2',
     },
+    // {
+    //   tip: '网络线上就诊',
+    //   img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
+    //   value: '',
+    //   path: '233',
+    // },
     {
       tip: ' ',
       img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
@@ -51,7 +57,22 @@
     },
   ]);
 
-  const itemClick = ({ value: clinicalType }) => {
+  const itemClick = (item) => {
+    const { value: clinicalType, path } = item;
+    let url = path;
+
+    if (clinicalType) {
+      url = joinQueryForUrl('/pagesA/MyRegistration/Register', {
+        _url: `/pagesA/MyRegistration/selDepartment?clinicalType=${clinicalType}`,
+      });
+    }
+    if (path) {
+      uni.navigateTo({
+        url: path,
+      });
+    } else {
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
         _url: `/pagesA/MyRegistration/selDepartment?clinicalType=${clinicalType}`,

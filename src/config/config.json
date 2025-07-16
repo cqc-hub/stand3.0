@@ -12,13 +12,14 @@
       "isOpenOcr": true
     },
     "1001035": {
-      "wxAppid": "wxfa3674d9f42ae57e",
+      "wxAppid": "wxacb96ee66c3dee84",
       "h5Appid": "",
       "alipayAppid": "",
       "isvAlipayAppid": "",
       "name": "江苏省中医院",
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "1001036": {
       "wxAppid": "",
