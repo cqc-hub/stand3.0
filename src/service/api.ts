@@ -510,6 +510,9 @@ const regApi = {
   getAlternateSch: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/getAlternateSch', parm(data)),
 
+  addDiseaseInformation: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/reg/addDiseaseInformation', parm(data)),
+
   cancelAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/cancelAlternate', parm(data)),
 

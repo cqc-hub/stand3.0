@@ -18,6 +18,8 @@
       <g-flag typeFg="65" isShowFgTip />
     </view>
 
+    <g-message />
+
     <!-- #ifdef MP-ALIPAY -->
     <canvas
       v-show="false"
@@ -40,8 +42,9 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores } from '@/utils';
   import { IPageProps } from './utils/regConfirm';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
+  import api from '@/service/api';
 
   const gStores = new GStores();
   const pageProps = ref({} as IPageProps);
@@ -53,10 +56,25 @@
   const gform = ref<any>('');
   const gformList = ref([] as TInstance[]);
   const formData = ref({} as any);
-  const formSubmit = async ({ data }) => {};
+  const formSubmit = async ({ data }) => {
+    const {
+      result: { diseaseId },
+    } = await api.addDiseaseInformation({
+      ...data,
+      illPic: (data.ceshiData || []).map((o) => o.url),
+    });
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', {
+        ...pageProps.value,
+        diseaseId,
+      }),
+    });
+  };
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
+    console.log(pageProps.value, '2222');
   });
 
   onMounted(() => {
@@ -68,6 +86,7 @@
         key: 'illName',
         placeholder: '如未确诊请填写尚未确诊',
         showRequireIcon: true,
+        emptyMessage: '请填写所患疾病',
       },
       {
         label: '病情描述',
@@ -78,6 +97,7 @@
         placeholder: '填写病情描述,如疾病名称、症状、治疗经历及想要获得的帮助',
         direction: 'horizontal',
         showRequireIcon: true,
+        emptyMessage: '请填写病情描述',
       },
       {
         label: '添加病历照片',
@@ -85,7 +105,7 @@
         key: 'ceshiData',
         imgLimit: 6,
         direction: 'horizontal',
-
+        placeholder: '添加有关疾病的病历或检验检查图片，方便医生确诊',
       },
     ];
     gform.value.setList(gformList.value);

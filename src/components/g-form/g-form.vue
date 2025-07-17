@@ -194,6 +194,7 @@
               :class="{
                 'my-disabled': item.disabled,
               }"
+              class="w-full"
             >
               <uni-file-picker
                 :title="' '"
@@ -217,8 +218,14 @@
                 @delete="imgDelete($event, item)"
                 mode="grid"
               >
-                <view class="iconfont">&#xe6c3;</view>
+                <template #default>
+                  <view class="iconfont relative z-0">&#xe6c3;</view>
+                </template>
               </uni-file-picker>
+
+              <view v-if="item.placeholder" class="color-bbb mt24">
+                {{ item.placeholder || '' }}
+              </view>
             </view>
 
             <view

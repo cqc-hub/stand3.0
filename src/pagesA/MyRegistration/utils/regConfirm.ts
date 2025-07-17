@@ -25,6 +25,9 @@ export interface IPageProps {
   /** 医生挂号验证方式 1:验证码 2:实名认证 */
   regVerificationMode?: '1' | '2';
   schState?: string;
+
+  // 省中疾病描述提交后的id
+  diseaseId?: string;
 }
 
 export interface IPrePageProps

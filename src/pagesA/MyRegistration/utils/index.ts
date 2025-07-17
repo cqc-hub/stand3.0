@@ -623,6 +623,17 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     };
     selectOrderSourceNumId.value = numId;
 
+    // 云门诊
+    if (['4', '3', '6'].includes(clinicalType)) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/addDescribe', {
+          ...pageArg,
+        }),
+      });
+
+      return;
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegConfirm', pageArg),
     });
