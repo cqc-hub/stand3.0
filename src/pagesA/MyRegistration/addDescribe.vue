@@ -13,7 +13,6 @@
           bodyBold
           ref="gform"
         />
-        {{ formData }}
       </view>
 
       <g-flag typeFg="65" isShowFgTip />
