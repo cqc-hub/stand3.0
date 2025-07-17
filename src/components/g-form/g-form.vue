@@ -194,6 +194,7 @@
               :class="{
                 'my-disabled': item.disabled,
               }"
+              class="w-full"
             >
               <uni-file-picker
                 :title="' '"
@@ -213,11 +214,18 @@
                     radius: '8px',
                   },
                 }"
-                fileMediatype="image"
+                @select="imgSelect($event, item)"
+                @delete="imgDelete($event, item)"
                 mode="grid"
               >
-                <view class="iconfont">&#xe6c3;</view>
+                <template #default>
+                  <view class="iconfont relative z-0">&#xe6c3;</view>
+                </template>
               </uni-file-picker>
+
+              <view v-if="item.placeholder" class="color-bbb mt24">
+                {{ item.placeholder || '' }}
+              </view>
             </view>
 
             <view
@@ -330,9 +338,10 @@
     ISwitchInstance,
     useAddress,
     ISelectInstance,
+    IImgInstance,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
-  import { ServerStaticData, useOcr, wait } from '@/utils';
+  import { ServerStaticData, upImgOss, useOcr, wait } from '@/utils';
   import api from '@/service/api';
 
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
@@ -632,6 +641,53 @@
       changeSelect(cacheItem, value);
       cacheItem = null;
     }
+  };
+
+  const imgSelect = async (e, item: IImgInstance) => {
+    const { tempFiles } = e;
+    const { key } = item;
+    const waitList: any[] = [];
+
+    tempFiles.map((o) => {
+      waitList.push(
+        upImgOss(o.path, {
+          data: {
+            functionType: 'WJ',
+          },
+        })
+      );
+    });
+
+    uni.showLoading({
+      title: '上传图片中',
+      mask: true,
+    });
+
+    const fRes = await Promise.all(waitList).finally(() => {
+      uni.hideLoading();
+    });
+
+    tempFiles.map((fileItem, i) => {
+      // 一次只一张
+      fileItem.url = fRes[i].url;
+      fileItem.progress = 100;
+      fileItem._isUpLoad = true;
+    });
+
+    setData({
+      [key]: [...(props.value[key] || []), ...tempFiles],
+    });
+  };
+
+  const imgDelete = (e, item: IImgInstance) => {
+    const { key } = item;
+    const { tempFile } = e;
+    const oldValue = props.value[key] || [];
+    const newValue = oldValue.filter((o) => o.uuid !== tempFile.uuid);
+
+    setData({
+      [key]: newValue,
+    });
   };
 
   const pickerChange = function (e: {

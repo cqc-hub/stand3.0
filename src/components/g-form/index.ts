@@ -126,7 +126,7 @@ interface ITimePickerInstance extends IBaseInstance {
   end?: string | number;
 }
 
-interface IImgInstance extends IBaseInstance {
+export interface IImgInstance extends IBaseInstance {
   field: 'file-image';
   imgLimit?: number;
 }

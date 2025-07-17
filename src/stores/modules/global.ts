@@ -109,7 +109,7 @@ const globalStore = defineStore('global', {
 
     // 是否中医style
     isTcmStyle(): boolean {
-      return ['1001035', '1001077'].includes(this.sysCode);
+      return ['1001035', '1001077', '1001086'].includes(this.sysCode);
       // return false
     },
 
@@ -219,7 +219,7 @@ const globalStore = defineStore('global', {
       if (appData) {
         // @ts-ignore
         appData.globalData.configData = {
-          env:1,//不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
+          env: 1, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
           from: 1, // 小程序的渠道值，具体咨询组件方
           mallAppId: 'mallM39dpe4692n7',
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址

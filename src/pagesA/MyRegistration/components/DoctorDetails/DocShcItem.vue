@@ -15,8 +15,7 @@
 
         <view
           :class="{
-            'btn-btns':
-              item.schState === '2' && pageConfig.isOpenOrderWaiting === '1',
+            'btn-btns': isExistOrderWait,
           }"
           class="scheme-item-detail"
         >
@@ -43,9 +42,7 @@
           </button>
 
           <button
-            v-if="
-              item.schState === '2' && pageConfig.isOpenOrderWaiting === '1'
-            "
+            v-if="isExistOrderWait"
             :class="{
               'btn-old': systemModeOld,
             }"
@@ -96,6 +93,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
   import { type ISystemConfig } from '@/utils';
@@ -110,12 +108,17 @@
   }>();
 
   const emits = defineEmits(['reg-click', 'wait-reg-click', 'avatar-click']);
+  const isExistOrderWait = computed(() => {
+    const { pageConfig, item } = props;
+    return (
+      !['3', '4', '6'].includes(item.clinicalType!) &&
+      item.schState === '2' &&
+      pageConfig.isOpenOrderWaiting === '1'
+    );
+  });
 
   const regClick = (scheme: TSchInfo) => {
-    if (
-      scheme.schState === '2' &&
-      props.pageConfig.isOpenOrderWaiting === '1'
-    ) {
+    if (isExistOrderWait.value) {
       // 候补预约
       emits('wait-reg-click', {
         scheme,

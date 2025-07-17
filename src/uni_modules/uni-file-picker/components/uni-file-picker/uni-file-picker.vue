@@ -18,11 +18,11 @@
       @choose="choose"
       @delFile="delFile"
     >
-      <slot>
-        <view class="is-add">
+      <slot name="default">
+        <!-- <view class="is-add">
           <view class="icon-add"></view>
           <view class="icon-add rotate"></view>
-        </view>
+        </view> -->
       </slot>
     </upload-image>
     <upload-file
@@ -393,11 +393,20 @@
           })
           .catch((err) => {
             console.log('选择失败', err);
-            uni.showToast({
-              title: '图片格式不正确',
-              icon: 'none',
-              duration: 2000,
-            });
+            const errStr = err?.errMsg || '';
+            let isShowErr = true;
+            if (
+              errStr.includes('fail cancel') ||
+              errStr.includes('用户取消操作')
+            ) {
+              isShowErr = false;
+            }
+            isShowErr &&
+              uni.showToast({
+                title: '图片格式不正确',
+                icon: 'none',
+                duration: 2000,
+              });
           });
       },
 

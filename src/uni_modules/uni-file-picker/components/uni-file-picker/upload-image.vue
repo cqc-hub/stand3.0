@@ -59,10 +59,12 @@
         :style="borderStyle"
         @click="choose"
       >
-        <slot>
-          <view class="icon-add"></view>
-          <view class="icon-add rotate"></view>
-        </slot>
+        <template #default>
+          <slot name="default">
+            <!-- <view class="icon-add"></view>
+            <view class="icon-add rotate"></view> -->
+          </slot>
+        </template>
       </view>
     </view>
   </view>
