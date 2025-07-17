@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001033",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -12,13 +12,14 @@
       "isOpenOcr": true
     },
     "1001035": {
-      "wxAppid": "wxfa3674d9f42ae57e",
+      "wxAppid": "wxacb96ee66c3dee84",
       "h5Appid": "",
-      "alipayAppid": "",
-      "isvAlipayAppid": "",
+      "alipayAppid": "2021003104670597",
+      "isvAlipayAppid": "2021003104670597",
       "name": "江苏省中医院",
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "1001036": {
       "wxAppid": "",

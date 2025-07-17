@@ -339,7 +339,6 @@ export class LoginUtils extends GStores {
     const {
       browser: { source },
     } = this.globalStore;
-
     const { verifyResult } = await this.faceVerify({ name, idCardNumber });
 
     const actionApi = this.globalStore.isLogin
@@ -1297,6 +1296,60 @@ export class PatientUtils extends LoginUtils {
       } = await api.addPatientByHasBeenTreated({ ...data, patientType: '' });
       return patientId;
     }
+  }
+
+  async addCachePatient(
+    data: Partial<{
+      _type?: 'perfect';
+      _autoSetDefault: string;
+      wechatCode: string; // 微信电子健康卡时候有
+
+      addressCity: string;
+      addressCounty: string;
+      addressCountyCode: string;
+      addressProvince: string;
+      birthday: string; //非身份证类型/儿童必填
+      defaultFalg: boolean;
+      idCard: string;
+      idType: string;
+      location: string;
+      nation: string;
+      openIds: { openId: string; source: string }[];
+      patientName: string;
+      patientPhone: string;
+      patientType: string;
+      sex: string; // 非身份证类型/儿童必填
+      upIdCard: string; // 儿童必填
+      upName: string; // 儿童必填
+      verifyCode: string;
+      verifyType: string; // 1&bk 不开启验证  2&kq 开启验证
+    }>
+  ) {
+    const { wechatCode } = data;
+
+    const requestArg = {
+      ...data,
+      defaultFalg: data.defaultFalg ? '1' : '0',
+      source: this.globalStore.browser.source,
+      herenId: this.globalStore.herenId,
+      verifyType: data.verifyType || '1&bk',
+      healthCardId: '',
+      qrCodeText: '',
+    };
+    const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
+    getH5OpenidParam(requestArg);
+    if (wechatCode && !isNewMode) {
+      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
+        data
+      );
+
+      requestArg.qrCodeText = qrCodeText;
+      requestArg.healthCardId = healthCardId;
+    }
+
+    const { result } = await api.cachePat(requestArg);
+
+    return result as string;
   }
 
   async addRelevantPatient(

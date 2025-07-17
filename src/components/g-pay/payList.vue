@@ -12,9 +12,14 @@
     >
       <view
         :class="{
+          'ico_share-blue': item.key === 'isFaceRemote',
+          'ico_camera': item.key === 'isFace',
           ico_pay: item.key === 'online' || item.key === 'digital',
           ico_card: item.key === 'medicare' || item.key === 'familyPay',
-          ico_hospital: item.key === 'offline' || item.key === 'bizType'||item.key === 'navToMini',
+          ico_hospital:
+            item.key === 'offline' ||
+            item.key === 'bizType' ||
+            item.key === 'navToMini',
         }"
         class="icon-font pay-icon"
       />

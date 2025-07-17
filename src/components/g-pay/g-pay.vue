@@ -1,6 +1,6 @@
 <template>
   <view class="choose-pat">
-    <g-popup title="选择支付方式" ref="refActionSheet">
+    <g-popup :title="title" ref="refActionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view class="pt32" style="width: 100%">
           <pay-List :list="list" @choose-pat="choosePay" />
@@ -28,6 +28,7 @@
     defineProps<{
       list?: IGPay[];
       auto?: boolean;
+      title?: string;
 
       // auto true 时候接口参数 (openId channel patientName patientId cardNumber source) 不用给
       autoPayArg?: BaseObject;
@@ -35,6 +36,7 @@
       autoInOne?: boolean;
     }>(),
     {
+      title: '选择支付方式',
       list: () => [
         {
           label: '在线支付',

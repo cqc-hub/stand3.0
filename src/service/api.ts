@@ -836,6 +836,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  cachePat: (data) =>
+    service.post('/phs-user/relevantPatient/cachePat', parm(data), {
+      hideLoading: false,
+    }),
+
   modifyHosPhoneByIdNum: (data) =>
     service.post(
       '/phs-user/relevantPatient/modifyHosPhoneByIdNum',

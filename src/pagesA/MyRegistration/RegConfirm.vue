@@ -69,6 +69,9 @@
     </view>
 
     <Order-Reg-Confirm
+      :headerIcon="`${global.BASE_IMG}v3-order-reg-confirm${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`"
       :title="flagTitle9"
       @confirm="isCheck = true"
       ref="regDialogConfirm"
@@ -84,7 +87,9 @@
     </Order-Reg-Confirm>
 
     <Order-Reg-Confirm
-      :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
+      :headerIcon="`${global.BASE_IMG}v3-order-reg-confirm${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`"
       :title="flagTitle1203"
       :maskClickClose="false"
       @cancel="cancelAsync"
@@ -110,7 +115,7 @@
       @cancelButton="resolve"
       :cancelColor="'var(--hr-brand-color-6)'"
       :confirmColor="'var(--hr-brand-color-6)'"
-      :cancelFontWeight ="'bold'"
+      :cancelFontWeight="'bold'"
       confirmText="去填写病情"
       cancelText="仅候补登记"
     >
@@ -381,6 +386,18 @@
       });
     }
     // #endif
+
+    // 云门诊
+    if (['4', '3', '6'].includes(clinicalType)) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/addDescribe', {
+          ...props.value,
+        }),
+      });
+
+      return;
+    }
+
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;

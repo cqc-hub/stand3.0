@@ -190,6 +190,37 @@
             </view>
 
             <view
+              v-if="item.field === 'file-image'"
+              :class="{
+                'my-disabled': item.disabled,
+              }"
+            >
+              <uni-file-picker
+                :title="' '"
+                :disabled="item.disabled"
+                :del-icon="!item.disabled"
+                :limit="item.imgLimit || 1"
+                :auto-upload="false"
+                :modelValue="value[item.key]"
+                :sourceType="'album'"
+                :sizeType="['compressed']"
+                :image-styles="{
+                  width: 80,
+                  height: 80,
+                  border: {
+                    style: 'dashed',
+                    color: '#CCCCCC',
+                    radius: '8px',
+                  },
+                }"
+                fileMediatype="image"
+                mode="grid"
+              >
+                <view class="iconfont">&#xe6c3;</view>
+              </uni-file-picker>
+            </view>
+
+            <view
               v-if="item.field === 'input-verify'"
               @tap="requestVerify(item)"
               :class="{
@@ -253,12 +284,11 @@
       :options="_actionSheetOpt"
       :showCancel="false"
       :duration="100"
-      :minHeight="
-        isShowSelectSearch ? 'calc(100vh - 200rpx)' : undefined
-      "
+      :minHeight="isShowSelectSearch ? 'calc(100vh - 200rpx)' : undefined"
       @itemclick="actionItemClick"
       title=""
     >
+      <!-- @vue-expect-error -->
       <template #header>
         <view v-if="isShowSelectSearch" class="bg-white w-full">
           <view class="pr12 pt12 pl12 pb12">

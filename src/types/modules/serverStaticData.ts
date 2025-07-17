@@ -231,6 +231,8 @@ export interface ISystemConfig_ {
      */
     ocr?: '0' | '1';
     isFace?: '1';
+    // 远程人脸
+    isFaceRemote?: '1';
 
     // 修改建档手机号 pagesA/medicalCardMan/ocrUser
     isCanChangeHosPhone?: '1'; // 前提需要开通 ocr | 人脸 至少一个
@@ -646,8 +648,6 @@ export type TBannerConfigBase = {
   extraData?: BaseObject;
   /** h5 跳转完整路径 其他跳转 如 home/my */
   path: string;
-  /** 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....) */
-  isSelfH5?: '1';
   /**  固定的附加参数(动态值) 键名为查找域中的值 键值为新的键名 */
   addition?: {
     // 传入保证需要登录
@@ -667,6 +667,8 @@ export type TBannerConfigBase = {
 
 type TBannerConfigH5 = {
   type: 'h5';
+  /** 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....) */
+  isSelfH5?: '1';
   isLocal?: '1'; // 当他不存在
 } & TBannerConfigBase;
 

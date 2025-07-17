@@ -64,6 +64,17 @@
       仅账号本人可更新为医保用户，是否更新为医保用户？
     </Order-Reg-Confirm>
 
+    <g-pay
+      :list="refPayList"
+      @pay-click="selVerifyWay"
+      ref="refPay"
+      title="选择认证方式"
+    >
+      <view class="p32">
+        <g-flag :typeFg="'xxxxx'" isShowFgTip isHideTitle aaa />
+      </view>
+    </g-pay>
+
     <view class="footer">
       <Fg-Agree
         v-if="isSignExist && !pageProps.patientName"
@@ -173,6 +184,18 @@
   const routeStore = useRouterStore();
   const cacheStore = useCacheStore();
   const pageConfig = ref(<ISystemConfig['person']>{});
+  const refPay = ref<any>('');
+  const refPayList = ref<any[]>([]);
+  const selVerifyWay = ({ item }) => {
+    _resolve(item.key);
+  };
+
+  let _resolve: any = () => {
+    // r
+  };
+  let _reject: any = () => {
+    // j
+  };
 
   const isCheck = ref(false);
   // const isUserInfoAgree = ref(false);
@@ -397,7 +420,7 @@
       verifyType: '1&bk',
       patientName: '',
       source,
-      idType:'',
+      idType: '',
 
       verifyCode,
       ...filterData,
@@ -415,15 +438,57 @@
 
     await injectHealthCode(requestData);
 
-    const {
+    let {
       isFace,
-      isPayWithoutSecretAuth,
       isCanChangeHosPhone,
-      useFaceVerifyInChangePhone,
+      isFaceRemote,
+      // isPayWithoutSecretAuth,
+      // useFaceVerifyInChangePhone,
     } = pageConfig.value;
+    const isIDCard = formData.value[formKey.idType] === '01';
+
+    if (
+      isIDCard &&
+      isFaceRemote === '1' &&
+      isFace === '1' &&
+      pageProps.value.pageType !== 'perfectReal'
+    ) {
+      const list = [
+        {
+          label: '人脸认证',
+          key: 'isFace',
+        },
+        {
+          label: '远程人脸认证',
+          key: 'isFaceRemote',
+        },
+      ];
+
+      // const { tapIndex } = await apiAsync(
+      //   // @ts-expect-error
+      //   uni.showActionSheet,
+      //   {
+      //     title: '选择认证方式',
+      //     alertText: '选择认证方式',
+      //     itemList: list.map((o) => o.label),
+      //   }
+      // );
+
+      // const v = list[tapIndex].key;
+      refPayList.value = list;
+      const v = await new Promise((r) => {
+        _resolve = r;
+        refPay.value.show();
+      });
+
+      if (v === 'isFaceRemote') {
+        isFace = undefined;
+      } else {
+        isFaceRemote = undefined;
+      }
+    }
 
     if (isFace === '1') {
-      const isIDCard = formData.value[formKey.idType] === '01';
       if (isIDCard) {
         const { sysCode } = gStores.globalStore;
         // 新增判断 健康温州去除年龄判断
@@ -506,13 +571,28 @@
       if (
         requestData.wechatCode &&
         pageProps.value?._healthType == 'addPat' &&
-        pageProps.value?.authCode&&
-        requestData?.idType=='01'
+        pageProps.value?.authCode &&
+        requestData?.idType == '01'
       ) {
-    
         gotoChosseVerifyPage(requestData, pageProps.value.authCode);
         return;
       }
+
+      if (isFaceRemote === '1' && isIDCard) {
+        const sign = await patientUtils.addCachePatient(requestData);
+        const { patientName, idCard } = formData.value;
+
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesD/service/addPatByScan', {
+            sign,
+            name: patientName,
+            idCard,
+            isSelf: '1',
+          }),
+        });
+        return;
+      }
+
       const patientId = await patientUtils
         .addRelevantPatient(requestData)
         .catch(async (e) => {

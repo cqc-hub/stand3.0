@@ -1,17 +1,46 @@
 <template>
   <view class="g-page">
+    <view v-if="isSelf" class="mb24 flex flex-col items-center justify-center">
+      <view class="pt70 safe-height"></view>
+      <uv-qrcode :value="qrCode" :loading="false" size="380rpx" auto start />
+      <!-- #ifndef H5 -->
+      <button open-type="share" class="btn btn-primary mt70">
+        <view class="g-flex-rc-cc footer-btn-content flex items-center">
+          <view class="iconfont f48 mr24">&#xe704;</view>
+          <view class="">转发给好友</view>
+        </view>
+      </button>
+
+      <button
+        @click="refreshPatList"
+        class="btn btn-primary btn-plain btn-border mt24"
+      >
+        <view class="g-flex-rc-cc footer-btn-content flex items-center">
+          <view class="iconfont f48 mr24">&#xe6ab;</view>
+          <view class="">刷新就诊人</view>
+        </view>
+      </button>
+      <!-- #endif -->
+    </view>
+
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { computed, ref } from 'vue';
 
-  import { onLoad } from '@dcloudio/uni-app';
-  import { deQueryForUrl } from '@/common';
-  import { apiAsync, LoginUtils, wait } from '@/utils';
+  import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import {
+    apiAsync,
+    LoginUtils,
+    wait,
+    GStores,
+    PatientUtils,
+    routerJump,
+  } from '@/utils';
   import api from '@/service/api';
-  import { GStores } from '@/utils/modules/login';
 
   const gStores = new GStores();
   const pageProps = ref(
@@ -19,20 +48,16 @@
       name: string;
       idCard: string;
       sign: string;
+      isSelf?: '1'; // 远程人脸认证
     }
   );
+  const patientUtils = new PatientUtils();
 
-  onLoad(async (opt) => {
-    uni.showLoading({});
-    uni.setNavigationBarTitle({
-      title: '新增就诊人',
-    });
-    await wait(600);
-    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  const isSelf = computed(() => pageProps.value.isSelf === '1');
+  const qrCode = ref('');
+
+  const handlerVerify = async () => {
     const { idCard: idCardNumber, name, sign } = pageProps.value;
-    if (!name) {
-      return;
-    }
     const { pData } = await new LoginUtils().faceVerifyAndPData({
       idCardNumber,
       name,
@@ -70,6 +95,67 @@
     uni.reLaunch({
       url: '/pages/home/home',
     });
+  };
+
+  const generateShareCode = () => {
+    const { name, idCard, sign } = pageProps.value;
+    qrCode.value = joinQueryForUrl(
+      `https://h5.eheren.com/scan/${gStores.globalStore.sysCode}/addPatByScan`,
+      {
+        name,
+        idCard,
+        sign,
+      }
+    );
+  };
+
+  const refreshPatList = async () => {
+    await patientUtils.getPatCardList();
+
+    const pat = gStores.userStore.patList.find(
+      (o) => o.patientName === pageProps.value.name
+    );
+    if (pat) {
+      gStores.messageStore.showMessage('就诊人添加成功', 1500, {
+        closeCallBack() {
+          routerJump('/pages/home/home');
+        },
+      });
+    } else {
+      gStores.messageStore.showMessage(
+        '就诊人添加失败, 请确认人脸验证时候成功',
+        1500
+      );
+    }
+  };
+
+  onShareAppMessage((res) => {
+    return {
+      title: `${pageProps.value.name}的实名认证`,
+      path: joinQueryForUrl('/pagesD/service/addPatByScan', {
+        ...pageProps.value,
+        isSelf: undefined,
+      }),
+    };
+  });
+
+  onLoad(async (opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    uni.showLoading({});
+    uni.setNavigationBarTitle({
+      title: '新增就诊人',
+    });
+    await wait(600);
+
+    const { name } = pageProps.value;
+    if (name && !isSelf.value) {
+      await handlerVerify();
+    }
+
+    uni.hideLoading();
+    if (isSelf.value) {
+      generateShareCode();
+    }
   });
 </script>
 

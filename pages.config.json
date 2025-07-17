@@ -14,17 +14,17 @@
       }
     },
     {
-			"path": "pages/mms-pay-loading/payPage",
-			"style": {
-				"navigationBarTitleText": "去支付"
-			}
-		},
-		{
-			"path": "pages/mms-pay-loading/mms-pay-loading",
-			"style": {
-				"navigationBarTitleText": "去支付"
-			}
-		},
+      "path": "pages/mms-pay-loading/payPage",
+      "style": {
+        "navigationBarTitleText": "去支付"
+      }
+    },
+    {
+      "path": "pages/mms-pay-loading/mms-pay-loading",
+      "style": {
+        "navigationBarTitleText": "去支付"
+      }
+    },
     {
       "path": "pages/login/h5",
       "style": {
@@ -97,6 +97,17 @@
             }
           }
         },
+
+        {
+          "path": "MyRegistration/addDescribe",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "病情描述"
+          }
+        },
+
         {
           "path": "MyRegistration/DoctorDetails",
           "style": {
@@ -829,10 +840,10 @@
       ],
       "pagesD-plugins": ""
     },
-     {
+    {
       "root": "pagesE",
       "pages": [
-         {
+        {
           "path": "common/useJump",
           "style": {
             "navigationBarTitleText": "该分包仅给明眸皓齿使用,其他页面不放这里"
