@@ -76,7 +76,6 @@
         }
         if (_type === '2') {
           const { extraData } = pageProps.value;
-          console.log(777, extraData);
           useTBanner({
             ...pageProps.value,
             type: 'mini',

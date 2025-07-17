@@ -158,7 +158,7 @@
      * myhosType  '0' 需要登录  '1' 需要就诊人
      * query: '{}'
      * returnUrl  'pages/v3/collect/collectList'
-     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序
+     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序 commonH5 通用第三方
      */
 
     let { myhosType, returnUrl, query, myEnvir } = opt;
@@ -181,6 +181,11 @@
     } else if (myEnvir === 'hosnet') {
       fullUrl = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
         _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
+      });
+    } else if (myEnvir === 'commonH5') {
+        fullUrl = joinQueryForUrl('/pagesA/webView/webView', {
+        _type: '3',
+        query,
       });
     }
 
@@ -206,7 +211,7 @@
     if (opt) {
       const { myEnvir } = opt;
 
-      if ((myEnvir && myEnvir === 'hosnet') || myEnvir === 'thirdmini') {
+      if ((myEnvir && myEnvir === 'hosnet') || myEnvir === 'thirdmini' || myEnvir === 'commonH5') {
         dealHosNet(<any>opt);
       }
     }

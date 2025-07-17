@@ -196,7 +196,7 @@ export const useTBanner = async (
       isLogin = true;
     }
 
-    if (type !== 'self') {
+    if (config.isSelfH5 === '1') {
       _d._herenId = gStores.globalStore.herenId;
       _d.herenId = gStores.globalStore.herenId;
       _d._patientId = gStores.userStore.patChoose.patientId;
@@ -226,8 +226,9 @@ export const useTBanner = async (
   //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();
-  if (pages.length) {
-    const _fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+  if (pages.length > 0) {
+    const currentPage = pages[pages.length - 1];
+    const _fullUrl: string = (currentPage as any).route || (currentPage as any).$page?.fullPath;
     await beforeEach({
       url: _fullUrl,
       _isLogin: isLogin,

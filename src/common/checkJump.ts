@@ -1,5 +1,5 @@
 import { assignType } from '@/typeUtils';
-import { GStores, useTBanner, TBannerConfig } from '@/utils';
+import { GStores, useTBanner, TBannerConfig, packageAuthParams, LoginUtils } from '@/utils';
 import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
@@ -99,8 +99,30 @@ export const checkGrid = (item: IRoute) => {
   //   //跳转my-h5选择就诊人页面
   // }
 };
-
+// 判断登录是否过期
+const checkLoginExpired = async (): Promise<boolean> => {
+  try {
+    const result  = await api.allinoneAuthApi(
+      packageAuthParams(
+        {},
+        '/modifyUserInfo/userInfoByToken',
+        {
+          isOutArgs: true,
+        }
+      )
+    );
+    if (result && result.code == '1') { 
+      return false;// 没有过期
+    }else{
+      return true; 
+    }
+  } catch (error) {
+    console.error('检查登录状态失败:', error);
+    return true; // 网络错误也视为过期
+  }
+};
 const interceptorRoute = async function (item: any) {
+   const gStores = new GStores();
   let query = item.query;
 
   if (query) {
@@ -111,11 +133,31 @@ const interceptorRoute = async function (item: any) {
     }
 
     if (query?._type === 'useTBanner') {
-      useTBanner(query);
-      throw new Error('使用 useTBanner函数跳转');
+      if(query?.isExpired){ // 新增第三方过期拦截判断
+        const isExpired = await checkLoginExpired();
+          if (isExpired) {
+            // 登录过期，引导重新登录
+            uni.reLaunch({
+              url: '/pages/home/my?_isOutLogin=1',  
+            });
+            new LoginUtils().outLogin({
+              isHideMessage: true,
+              isGoLoginPage: false,
+            });
+            throw new Error('登录已过期，请重新登录');
+          } 
+        } 
+         useTBanner(query, 'navigateTo', {
+          PATIENTID: gStores.userStore.patChoose.patientId,
+          HERENID: gStores.globalStore.herenId,
+          TOKEN: gStores.globalStore.token.accessToken,
+          OPENID: gStores.globalStore.openId,
+        });
+        throw new Error('使用 useTBanner函数跳转');
     }
   }
 };
+
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = async (item, payload: IPayLoad = {}) => {

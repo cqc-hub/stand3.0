@@ -196,7 +196,7 @@
         url: 'mDisease',
         loginInterception: '0',
         sort: 2,
-      },
+      }, 
       {
         label: '口腔商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
