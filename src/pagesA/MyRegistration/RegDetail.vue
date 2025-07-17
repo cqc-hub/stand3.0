@@ -670,6 +670,7 @@
       patientAge,
       patientName,
       orderId,
+      hosDeptId: orderRegInfo.value.hosDeptId,
     };
 
     const preConsultation: TButtonConfig = {
