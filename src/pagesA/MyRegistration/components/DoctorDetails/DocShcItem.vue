@@ -56,6 +56,9 @@
         </view>
       </view>
 
+      <view>
+        <!-- <view class="flex">233</view> -->
+      </view>
       <view class="f24 color-666 flex-between">
         <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
           {{ item.categorName }}

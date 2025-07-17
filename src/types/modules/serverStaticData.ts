@@ -646,7 +646,6 @@ export type TBannerConfigBase = {
   extraData?: BaseObject;
   /** h5 跳转完整路径 其他跳转 如 home/my */
   path: string;
-
   /**  固定的附加参数(动态值) 键名为查找域中的值 键值为新的键名 */
   addition?: {
     // 传入保证需要登录
@@ -668,7 +667,6 @@ type TBannerConfigH5 = {
   type: 'h5';
   /** 我们的 h5 (v3) 跳自己h5 必设置(参数加密.....) */
   isSelfH5?: '1';
-  beLikeSelfH5?: '1';
   isLocal?: '1'; // 当他不存在
 } & TBannerConfigBase;
 

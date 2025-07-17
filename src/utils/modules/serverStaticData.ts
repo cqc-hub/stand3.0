@@ -196,14 +196,19 @@ export const useTBanner = async (
       isLogin = true;
     }
 
-    if (config.isSelfH5 === '1' || config.beLikeSelfH5 === '1') {
+    if (type !== 'self') {
       _d._herenId = gStores.globalStore.herenId;
       _d.herenId = gStores.globalStore.herenId;
       _d._patientId = gStores.userStore.patChoose.patientId;
 
+      patientId &&
+        (extraData[patientId] = gStores.userStore.patChoose.patientId);
+      cardNumber &&
+        (extraData[cardNumber] = gStores.userStore.patChoose.cardNumber);
+      token && (extraData[token] = gStores.globalStore.getToken);
+
+      herenId && (extraData[herenId] = gStores.globalStore.herenId);
       extraData.token = gStores.globalStore.getToken;
-      extraData.herenId = gStores.globalStore.herenId;
-      extraData.patientId = gStores.userStore.patChoose.patientId;
       extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
 
@@ -241,7 +246,7 @@ export const useTBanner = async (
 
   if (type === 'h5') {
     // debugger
-    if (config.isSelfH5 === '1') {
+    if (config.isSelfH5) {
       let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode } = gStores.globalStore;
 

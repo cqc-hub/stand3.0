@@ -386,6 +386,18 @@
       });
     }
     // #endif
+
+    // 云门诊
+    if (['4', '3', '6'].includes(clinicalType)) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/MyRegistration/addDescribe', {
+          ...props.value,
+        }),
+      });
+
+      return;
+    }
+
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;
