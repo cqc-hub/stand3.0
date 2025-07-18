@@ -120,9 +120,17 @@
       : gStores.globalStore.modeOld;
 
     let query = '?';
+    let isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     if (options.type !== '1') {
-      query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&`;
+      query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}`;
+      // 中医风格
+      console.log(888,isTcmStyle)
+      if(isTcmStyle !== '0'){
+         console.log(999,isTcmStyle)
+        query+=`&isTcmStyle=${isTcmStyle}`
+      }
     }
+
     if (options.query) {
       let queryArray: A[];
       if (options.type == '1') {
