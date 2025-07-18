@@ -134,7 +134,7 @@
       <view v-if="payState === '1'" class="g-footer">
         <block>
           <view
-            v-if="detailData.invoiceInfo"
+            v-if="detailData.invoiceInfo && detailData.invoiceInfo.path"
             @click="showInvoice"
             class="cancel-btn"
           >
