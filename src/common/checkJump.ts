@@ -111,7 +111,7 @@ const checkLoginExpired = async (): Promise<boolean> => {
         }
       )
     );
-    if (result && result.code == '1') { 
+    if (result && result.code == '0') { 
       return false;// 没有过期
     }else{
       return true; 
