@@ -334,6 +334,10 @@ const queryApi = {
     service.post('/phs-query/delivery/addDrugDelivery', parm(data), {
       hideLoading: false,
     }),
+  expressPay: (data) =>
+    service.post('/phs-query/delivery/expressPay', parm(data), {
+      hideLoading: false,
+    }),
 
   getDrugDeliveryDetail: (data) =>
     service.post('/phs-query/delivery/getDrugDeliveryDetail', parm(data), {

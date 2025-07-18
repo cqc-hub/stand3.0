@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    class="g-page"
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+  >
     <scroll-view :scroll-into-view="scrollTo" scroll-y class="g-container">
       <view class="content-box">
         <view id="_address" class="container-box g-border mb16">
@@ -79,27 +84,31 @@
                 </view>
               </view>
             </view>
+            <view
+              :class="{
+                mt24: !isIncludeChineseMedicalFriedAndDelivery,
+              }"
+              v-if="
+                pageConfig.isPayOnline === '1' &&
+                pageConfig.isSelectIceBag == '1' &&
+                feeDetail.totalFee
+              "
+              class="f28"
+            >
+              <view class="flex-between">
+                <view class="color-888">冰袋数量</view>
+                <view class="g-bold color-error">
+                  <uni-number-box
+                    :value="iceBagNum"
+                    :min="0"
+                    :max="2"
+                    @change="boxChange"
+                    inputDisabled
+                  />
+                </view>
+              </view>
+            </view>
           </block>
-        </view>
-
-          <view
-          v-if="pageConfig.isPayOnline === '1'&&pageConfig.isSelectIceBag=='1'&&feeDetail.totalFee"
-          class="container-box g-border mb16 box-padding"
-        >
-          <view class="g-bold f36">请选择冰袋数量</view>
-
-          <view class="remark-content">
-            <uni-easyinput
-              type="textarea"
-              v-model="remark"
-              autoHeight
-              :inputBorder="false"
-              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
-              placeholder="请输入备注内容"
-            />
-
-            <!-- auto-height -->
-          </view>
         </view>
 
         <view
@@ -151,10 +160,16 @@
 
   import { onShow, onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl, getLocalStorage } from '@/common';
-  import { GStores, ISystemConfig, ServerStaticData } from '@/utils';
+  import {
+    GStores,
+    ISystemConfig,
+    ServerStaticData,
+    useTBanner,
+  } from '@/utils';
   import { getSrc } from './utils';
   import { useCacheStore } from '@/stores';
   import { getShowDrugName } from '@/pagesB/medicationAssistant/utils/medicalHelp';
+  import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import api from '@/service/api';
 
   import AddressBox from '../medRecordApply/components/MedRecordDetailsAddressBox.vue';
@@ -201,13 +216,19 @@
   ]);
 
   const aimValue = ref<any[]>([]);
-  // const totalFee = ref(0);
+  const iceBagNum = ref(0);
   // const iceBagCharges =ref(0)
   // const iceBagRules = ref<any>({});
   const feeDetail = ref<any>({
     totalFee: 0,
     iceBagCharges: 0,
+    hosOrderId: '',
   });
+
+  const boxChange = async (count: number) => {
+    iceBagNum.value = count;
+    await getExpressFee();
+  };
 
   const addressInputClick = () => {
     if (pageProps.value.params) {
@@ -230,7 +251,12 @@
     });
   };
 
-  const getExpressFee = async (iceBagNum?: 0) => {
+  const getExpressFee = async () => {
+    feeDetail.value = {
+      totalFee: 0,
+      iceBagCharges: 0,
+      hosOrderId: '',
+    };
     const addressData = addressList.value[0];
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
@@ -244,16 +270,17 @@
       expressPhone: senderPhone,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
-      iceBagNum,
-      // "remark": me.remark,
+      iceBagNum: iceBagNum.value,
+      remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
       hosPatientId: gStores.userStore.patChoose.cardNumber,
     };
     const { result } = await api.drugDeliveryCost(params);
-    const { totalFee, iceBagCharges } = result;
+    const { totalFee, iceBagCharges, hosOrderId } = result;
     feeDetail.value = {
       totalFee,
       iceBagCharges,
+      hosOrderId,
     };
   };
 
@@ -342,6 +369,10 @@
       provinces,
       remark: remark.value,
     };
+    if (pageConfig.value.isPayOnline === '1') {
+      gotoExpressPay(args);
+      return;
+    }
 
     await api.addDrugDelivery(args);
 
@@ -363,6 +394,65 @@
       : uni.reLaunch({
           url: '/pagesB/medicationAssistant/medicalHelp?tabIndex=1',
         });
+  };
+
+  const gotoExpressPay = async (args) => {
+    const { title, content } = await gStores.getSysAppMore('504');
+    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title: '江苏省中医院',
+          isShowCancel: true,
+          cancelText: '取消',
+          confirmText: '确认',
+        },
+        closeCallBack: r,
+      });
+    });
+
+    if (confirm) {
+      const { source } = gStores.globalStore.browser;
+      const { patientName } = gStores.userStore.patChoose;
+      const params = {
+        ...args,
+        ...feeDetail.value,
+        hosPatientId: args.cardNumber,
+        openId: gStores.globalStore.openId,
+        payType: 'WX_MINI',
+        source,
+      };
+
+      const {
+        result: { paySign, phsOrderNo },
+      } = await api.expressPay(params);
+      const { hosId, totalFee } = args;
+      const payRes = await payMoneyOnline({
+        paySign,
+        phsOrderNo,
+        totalFee,
+        source,
+        phsOrderSource: 6,
+        hosId,
+        patientName,
+      });
+      await toPayPull(payRes, '药品配送下单');
+      await handlePayAfter();
+    }
+  };
+
+  const handlePayAfter = () => {
+    gStores.messageStore.showMessage('快递下单成功', 2000, {
+      closeCallBack: () => {
+        useTBanner({
+          type: 'self',
+          path: 'pagesB/medicationAssistant/medicalHelp',
+          extraData:{
+            tabIndex:'1'
+          }
+        });
+      },
+    });
   };
 
   const getConfig = async () => {
@@ -428,11 +518,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .g-page {
-    &.system-style-medical {
-      --h-h-main-c: #a4695b;
-    }
-  }
   .g-container {
     .content-box {
       padding: 0 32rpx;
