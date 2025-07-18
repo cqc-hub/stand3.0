@@ -124,7 +124,7 @@ export class UseRegSearch extends GStores {
       hosId,
     } = item;
 
-    // const { hosId } = this.pageProp.value;
+    const { clinicalType } = this.pageProp.value;
 
     const args = {
       // deptName,
@@ -133,6 +133,7 @@ export class UseRegSearch extends GStores {
       hosId: this.cacheStore.isShowChooseHos ? hosId : '',
       docTitleName,
       hosDeptId,
+      clinicalType
     };
 
     uni.navigateTo({
