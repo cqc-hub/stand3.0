@@ -53,9 +53,27 @@
         </view>
       </view>
 
-      <view>
-        <!-- <view class="flex">233</view> -->
+      <view
+        v-if="pageConfig.isShowClinicalType === '1'"
+        class="flex flex-wrap f24 mb4"
+      >
+        <view class="tag tag-dark mr12">
+          {{
+            ['3', '4', '6'].includes(item.clinicalType!)
+              ? '网络就诊'
+              : '到院就诊'
+          }}
+        </view>
+
+        <view
+          v-if="['2', '6'].includes(item.clinicalType!)"
+          class="tag tag-brown mr12"
+        >
+          <text v-if="item.clinicalType === '2'">膏方</text>
+          <text v-if="item.clinicalType === '6'">专病</text>
+        </view>
       </view>
+
       <view class="f24 color-666 flex-between">
         <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
           {{ item.categorName }}
@@ -111,7 +129,7 @@
   const isExistOrderWait = computed(() => {
     const { pageConfig, item } = props;
     return (
-      !['3', '4', '6'].includes(item.clinicalType!) &&
+      (!item.clinicalType || item.clinicalType === '1') &&
       item.schState === '2' &&
       pageConfig.isOpenOrderWaiting === '1'
     );
@@ -198,5 +216,21 @@
 
   .disabled-btn {
     background-color: var(--hr-neutral-color-4);
+  }
+
+  .tag {
+    border-radius: 2px;
+    text-align: center;
+    padding: 0 8rpx;
+
+    &.tag-dark {
+      background-color: #51555e;
+      color: #ffe2c1;
+    }
+
+    &.tag-brown {
+      background: linear-gradient(270deg, #d26900, #ac4b1c);
+      color: #fff;
+    }
   }
 </style>

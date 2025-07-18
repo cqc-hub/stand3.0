@@ -71,6 +71,8 @@ export interface ISystemConfig_ {
     isHideNumCount?: '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
+    // 医生排班里展示挂号类型
+    isShowClinicalType?: '1';
     // 挂号待支付时候没有倒计时
     isOrderWithoutTime: '1';
     // 挂号成功后预问诊?
