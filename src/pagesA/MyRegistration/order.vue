@@ -301,13 +301,14 @@
   const avatarClick = (item: IDocListAll) => {
     const { deptName, docName, hosDocId, hosId, hosDeptId, docTitleName } =
       item;
-    const { thRegisterId } = props;
+    const { thRegisterId, clinicalType } = props;
     const args = {
+      clinicalType,
       deptName,
       docName,
+      docTitleName,
       hosDocId,
       hosId,
-      docTitleName,
       // firstHosDeptId,
       // secondHosDeptId,
       hosDeptId,
