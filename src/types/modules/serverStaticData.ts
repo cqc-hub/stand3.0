@@ -387,6 +387,8 @@ export interface ISystemConfig_ {
     //门诊缴费自定义tabs
     tabField?: IOptions[];
 
+    
+
     /**
      * 详情页
      */
@@ -397,6 +399,8 @@ export interface ISystemConfig_ {
     isOpenChargeback?: '1';
     // 已缴费详情页面对某一条具体的费用进行申请退费
     isPayedItemDetailRefund?: '1';
+    // 已缴费页面 展示药品助手按钮
+    isOpenDrug?: '1';
 
     // 缴费完成后跳转
     /**
@@ -480,6 +484,11 @@ export interface ISystemConfig_ {
     deliveryFiredVerifySelf?: '1';
     // 指定后端提交类型
     deliveryType?: string;
+
+    //支持选择冰袋
+    isSelectIceBag?: '1';
+    //支持快递下单支付
+    isPayOnline?: '1';
   };
 
   /** 病历查询 */

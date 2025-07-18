@@ -129,7 +129,6 @@
         </view>
       </view>
     </view>
-
     <block v-if="isComplete">
       <view v-if="payState === '1'" class="g-footer">
         <block>
@@ -175,6 +174,13 @@
             <view class="icon-font ico_pay invoice-icon-1"></view>
             <view class="">查看发票</view>
           </view>
+        </view>
+        <view
+          v-if="pageConfig.isOpenDrug === '1'"
+          @click="gotoDrug"
+          class="btn btn-primary confirm-btn"
+        >
+          药品助手
         </view>
 
         <block v-if="isPayedItemDetailRefundBtnShow">
@@ -540,6 +546,11 @@
     });
   };
 
+  /** 已缴费页面  显示药品助手页面*/
+  const isPayedItemShowDrug = computed(() => {
+    return payState.value === '0' && pageConfig.value.isOpenDrug === '1';
+  });
+
   /** 已缴费页面对具体费用申请退费 */
   const isPayedItemDetailRefund = computed(() => {
     return (
@@ -558,7 +569,8 @@
       return (
         isPayedChargeBack.value ||
         isPayedItemDetailRefund.value ||
-        detailData.value.invoiceInfo
+        detailData.value.invoiceInfo ||
+        isPayedItemShowDrug
       );
     }
 
@@ -1084,6 +1096,13 @@
       type: 'otherProgram',
       appId,
       path,
+    });
+  };
+
+  const gotoDrug = () => {
+    useTBanner({
+      type: 'self',
+      path: 'pagesB/medicationAssistant/medicalHelp',
     });
   };
 

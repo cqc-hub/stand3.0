@@ -315,6 +315,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  drugDeliveryCost: (data) =>
+    service.post('/phs-query/delivery/drugDeliveryCost', parm(data), {
+      hideLoading: false,
+    }),
+
   getScanDrugDelivery: (data) =>
     service.post('/phs-query/delivery/getScanDrugDelivery', parm(data), {
       hideLoading: false,

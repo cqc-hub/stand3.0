@@ -74,10 +74,32 @@
             >
               <view class="flex-between">
                 <view class="color-888">快递费支付方式</view>
-                <view class="g-bold color-error">到付</view>
+                <view class="g-bold color-error">
+                  {{ pageConfig.isPayOnline == '1' ? '在线支付' : '到付' }}
+                </view>
               </view>
             </view>
           </block>
+        </view>
+
+          <view
+          v-if="pageConfig.isPayOnline === '1'&&pageConfig.isSelectIceBag=='1'&&feeDetail.totalFee"
+          class="container-box g-border mb16 box-padding"
+        >
+          <view class="g-bold f36">请选择冰袋数量</view>
+
+          <view class="remark-content">
+            <uni-easyinput
+              type="textarea"
+              v-model="remark"
+              autoHeight
+              :inputBorder="false"
+              :placeholderStyle="'color: var(--hr-neutral-color-5);font-size: var(--hr-font-size-base);'"
+              placeholder="请输入备注内容"
+            />
+
+            <!-- auto-height -->
+          </view>
         </view>
 
         <view
@@ -108,6 +130,13 @@
       </view>
     </scroll-view>
     <view class="g-footer">
+      <view
+        v-if="pageConfig.isPayOnline === '1'"
+        class="flex1 flex-normal count-money"
+      >
+        <text class="color-444 f28 mr8">合计</text>
+        <text class="f36 g-bold color-error">{{ feeDetail.totalFee }}元</text>
+      </view>
       <button @click="submit" class="btn btn-primary flex1">
         {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
       </button>
@@ -118,7 +147,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
 
   import { onShow, onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl, getLocalStorage } from '@/common';
@@ -172,6 +201,13 @@
   ]);
 
   const aimValue = ref<any[]>([]);
+  // const totalFee = ref(0);
+  // const iceBagCharges =ref(0)
+  // const iceBagRules = ref<any>({});
+  const feeDetail = ref<any>({
+    totalFee: 0,
+    iceBagCharges: 0,
+  });
 
   const addressInputClick = () => {
     if (pageProps.value.params) {
@@ -194,6 +230,45 @@
     });
   };
 
+  const getExpressFee = async (iceBagNum?: 0) => {
+    const addressData = addressList.value[0];
+    const { city, county, province, senderName, senderPhone, detailedAddress } =
+      addressData as any;
+    const params = {
+      city,
+      county,
+      province,
+      address: detailedAddress,
+      expressCompany: aimValue.value[0], //1-顺丰快递 2-邮政
+      expressName: senderName,
+      expressPhone: senderPhone,
+      prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
+      prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
+      iceBagNum,
+      // "remark": me.remark,
+      patientId: gStores.userStore.patChoose.patientId,
+      hosPatientId: gStores.userStore.patChoose.cardNumber,
+    };
+    const { result } = await api.drugDeliveryCost(params);
+    const { totalFee, iceBagCharges } = result;
+    feeDetail.value = {
+      totalFee,
+      iceBagCharges,
+    };
+  };
+
+  watch(
+    () => {
+      return [aimValue.value, addressList.value];
+    },
+    ([aim, address]) => {
+      console.log('wathch', aim, address[0]);
+      if (aim?.length && address?.length) {
+        getExpressFee();
+      }
+    }
+  );
+
   const submit = async () => {
     const { cardNumber, patientId, patientName } = gStores.userStore.patChoose;
     const { herenId } = gStores.globalStore;
@@ -207,6 +282,7 @@
       hosId = '13014';
     }
     const expressCompany = aimValue.value[0];
+
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';
     let provinces = '';
@@ -218,10 +294,12 @@
     } else {
       gStores.messageStore.showMessage('请选择快递地址', 3000);
       scrollTo.value = '_address';
+      return;
     }
     if (!expressCompany) {
       gStores.messageStore.showMessage('请选择快递方式', 3000);
       scrollTo.value = '_express';
+      return;
     }
 
     const findItem = cacheStore.medicalHelpSelList.find((o) =>
@@ -350,6 +428,11 @@
 </script>
 
 <style lang="scss" scoped>
+  .g-page {
+    &.system-style-medical {
+      --h-h-main-c: #a4695b;
+    }
+  }
   .g-container {
     .content-box {
       padding: 0 32rpx;

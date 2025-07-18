@@ -33,6 +33,7 @@ export const sysConfigEnv = <const>{
   //     deptName: 'deptName',
   //   },
   // },
+  // 'pay.isOpenDrug': '1',
   // 'order.AfterConfirmNoShowGoPayBtn': '1',
   // 'order.AfterConfirmNoShowQRcodeBtn': '1',
   // 'medRecord.0.isCustomPatRecord': '1',
