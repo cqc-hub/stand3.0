@@ -500,7 +500,7 @@
 
         let shouldProceed = false;
 
-        if (!shouldProceed && minAge && age > minAge) {
+        if (!shouldProceed && minAge && age >= minAge) {
           shouldProceed = true;
         }
 
@@ -509,7 +509,7 @@
         }
 
         if (minAge && maxAge) {
-          shouldProceed = age > minAge && age < maxAge;
+          shouldProceed = age >= minAge && age <= maxAge;
         }
 
         // 新增判断 健康温州去除年龄判断
