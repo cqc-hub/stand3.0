@@ -374,7 +374,7 @@
 
   const goDetail = (item: IRegistrationCardItem) => {
     const { patList } = gStores.userStore;
-    const { patientId } = item;
+    const { patientId, orderId } = item;
 
     if (patientId && patList.length) {
       const pat = patList.find((o) => o.patientId === patientId);
@@ -386,14 +386,15 @@
     let _type = props.value.type;
     if (
       props.value.type !== 'waitReg' &&
-      tabCurrentDetail.value?.typeId === 2
+      tabCurrentDetail.value?.typeId === 2 &&
+      !orderId
     ) {
       _type = 'waitReg';
     }
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
-        orderId: item.orderId,
+        orderId,
         hosOrderId: item.hosOrderId,
         preWz: item.orderStatus === '10' && '1',
         thRegisterId: props.value.thRegisterId,
