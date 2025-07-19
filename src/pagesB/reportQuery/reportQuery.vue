@@ -822,6 +822,12 @@
   const getYunBannerData = async () => {
     const { listYun } = pageConfig.value;
 
+   // 优先处理 sysCode 为 '1001035' 的情况
+   if(gStores.globalStore.sysCode === '1001035'){
+       getJSSZYunUrl();
+       return;
+    }
+
     if (listYun) {
       const { imgUrl } = listYun;
       const pat = gStores.userStore.patChoose;
@@ -847,8 +853,29 @@
         }
       }
     }
-  };
 
+
+  };
+  //查询省中云影像地址
+  const getJSSZYunUrl = async () => {
+    const pat = gStores.userStore.patChoose;
+
+    if (Object.keys(pat).length) {
+      const { patientId } = pat;
+
+      const { result } = await api.getJSYunURL({
+        patientId,
+      });
+      loading.value = false;
+      if (result?.respCode) {
+        uni.navigateTo({
+          url: `/pagesA/webView/webView?https=${encodeURIComponent(
+            result.respCode!
+          )}`,
+        });
+      }  
+    }
+  };
   //查询第三方检查报告地址
   const getThirdPartyReportUrl = async () => {
     const pat = gStores.userStore.patChoose;
