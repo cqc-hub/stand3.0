@@ -8,7 +8,7 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, cacheUtil, getTcMallToken } from '@/utils';
+import { apiAsync, cacheUtil, getTcMallToken, nameConvert } from '@/utils';
 import { useViewerStore } from '@/stores/modules/viewer';
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -1512,6 +1512,9 @@ export class PatientUtils extends LoginUtils {
       const isArea = isAreaProgram();
       result.map((o) => {
         o._showId = (isArea && o.idCard) || o.cardNumber || '';
+        if (!o.patientNameEncry) {
+          o.patientNameEncry = nameConvert(o.patientName);
+        }
       });
 
       this.userStore.updatePatList(result);

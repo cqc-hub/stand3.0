@@ -673,7 +673,6 @@
 
   const selectChange = async (e) => {
     const { item, value } = e;
-    console.log(e);
 
     switch (item.key) {
       case formKey.patientType:
