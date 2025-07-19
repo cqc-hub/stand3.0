@@ -5,7 +5,7 @@
     }"
     class="g-page"
   >
-    <g-flag v-if="!isModeMedicalHelp" isShowFg typeFg="15" />
+    <g-flag v-if="!isModeMedicalHelp && gStores.globalStore.sysCode !== '1001035'" isShowFg typeFg="15" />
     <!-- #ifdef  MP-WEIXIN -->
     <code-btn
       v-if="wxCrossProgramInfo.bizType"
@@ -56,10 +56,11 @@
     >
       <swiper-item v-if="!isModeMedicalHelp">
         <scroll-view scroll-y class="swiper-item uni-bg-red">
+          <g-flag v-if="gStores.globalStore.sysCode === '1001035'" isShowFg typeFg="15" />
           <block v-if="isPayListRequestComplete && unPayList.length">
             <Clinic-Pay-Detail-List
               :list="unPayList"
-              @click-item="goPayDetail"
+              @click-item="itemClick"
               @sel-item="selPayListItem"
               :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
@@ -275,6 +276,7 @@
     hosId,
     wxCrossProgramInfo,
     isModeMedicalHelp,
+    getChineseMedicineList
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -286,7 +288,6 @@
         JSON.stringify({
           cardNumber,
           visitNo,
-          // visitNo: '2025051000046427',
         }),
         'phsDesKey'
       );
@@ -297,6 +298,10 @@
         }),
       });
     } else {
+      // 江苏省中定制化 门诊待缴费不让点击
+      if(gStores.globalStore.sysCode === '1001035' && item.payState === '1'){
+        return;
+      }
       goPayDetail(item);
     }
   };

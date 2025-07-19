@@ -187,7 +187,6 @@
     useOcr,
     LoginUtils,
     routerJump,
-    useTBanner,
     type ISystemConfig,
   } from '@/utils';
   import {
@@ -484,8 +483,9 @@
     }
   };
 
-  onShow(() => {
+  onShow(async () => {
     reDealMedicalFiling();
+    await patientUtils.getPatCardList();
   });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -500,7 +500,6 @@
     // #ifdef MP-ALIPAY
     isMedicalFiling.value = medicalMHelp?.alipay?.medicalFiling === '1';
     // #endif
-    await patientUtils.getPatCardList();
     //健康卡
     // #ifdef MP-WEIXIN
     if (globalGl.systemInfo?.isOpenHealthCard) {

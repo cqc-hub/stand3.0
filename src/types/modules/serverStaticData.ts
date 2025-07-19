@@ -71,6 +71,8 @@ export interface ISystemConfig_ {
     isHideNumCount?: '1';
     // 预约挂号时候付钱?
     isOrderPay: '0' | '1';
+    // 医生排班里展示挂号类型
+    isShowClinicalType?: '1';
     // 挂号待支付时候没有倒计时
     isOrderWithoutTime: '1';
     // 挂号成功后预问诊?
@@ -231,6 +233,8 @@ export interface ISystemConfig_ {
      */
     ocr?: '0' | '1';
     isFace?: '1';
+    /** 适用人脸范围 默认 [17, 60] */
+    faceAgeRange?: [number, number];
     // 远程人脸
     isFaceRemote?: '1';
 
@@ -387,6 +391,8 @@ export interface ISystemConfig_ {
     //门诊缴费自定义tabs
     tabField?: IOptions[];
 
+    //支付后已缴费列表是否查询草药代煎列表
+    isQueryChineseMedicine?: '1';
     
 
     /**
@@ -398,9 +404,9 @@ export interface ISystemConfig_ {
     // 申请退单
     isOpenChargeback?: '1';
     // 已缴费详情页面对某一条具体的费用进行申请退费
-    isPayedItemDetailRefund?: '1';
-    // 已缴费页面 展示药品助手按钮
-    isOpenDrug?: '1';
+    isPayedItemDetailRefund?: '1'; 
+    // 已缴费详情底部的按钮
+    payedDetailFooterBtns?: TButtonConfig[];
 
     // 缴费完成后跳转
     /**
@@ -590,7 +596,7 @@ export interface ISystemConfig_ {
     //开启腾讯意见反馈
     isTxFeedback?: '1';
     //失物招领电话
-    lostAndFoundPhone?:string;
+    lostAndFoundPhone?: string;
     //自定义按钮
     customBtn?: {
       label: string; // 标题

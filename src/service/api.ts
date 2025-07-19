@@ -516,10 +516,14 @@ const queryApi = {
       '/phs-query/medicine/getChineseMedicineListNl',
       parm(data)
     ),
+    //草药代煎创建订单
   chineseMedicinePay: (data) =>
     service.post<any>('/phs-query/medicine/chineseMedicinePay', parm(data)),
   chineseMedicinePayNl: (data) =>
     service.post<any>('/phs-query/medicine/chineseMedicinePayNl', parm(data)),
+  // 江苏省中获取云影像
+  getJSYunURL: (data) =>
+    service.post<any[]>('/phs-query/getJSYunURL', parm(data)),
 };
 
 // 挂号服务

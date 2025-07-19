@@ -47,7 +47,7 @@
             >
               {{ item.totalCost }}元
             </view>
-            <view class="iconfont color-888 f48">&#xe66b;</view>
+            <view  v-if="gStores.globalStore.sysCode !== '1001035'" class="iconfont color-888 f48">&#xe66b;</view>
           </view>
         </view>
 
@@ -105,11 +105,14 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
+  import { GStores } from '@/utils';
   import {
     type IPayListItem,
     tradeType,
     getIsMedicalTradeTypeDefault,
   } from '../utils/clinicPayDetail';
+  
+  const gStores = new GStores();
 
   const props = withDefaults(
     defineProps<{
