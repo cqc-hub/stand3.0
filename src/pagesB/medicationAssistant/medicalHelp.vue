@@ -149,7 +149,6 @@
   import selWayPopup from './components/SelWayPopup.vue';
   import { beforeEach } from '@/router';
   import globalGl from '@/config/global';
-import Sign from '@/pagesA/medicalCardMan/sign.vue';
 
   let defaultField = [
     {
@@ -391,7 +390,6 @@ import Sign from '@/pagesA/medicalCardMan/sign.vue';
       isComplete.value[takenDrug] = true;
     });
 
-    console.log(result, '233');
     const { drugList: rList, patientId: _patientId } = result;
     rPatientId = _patientId;
 
@@ -508,7 +506,7 @@ import Sign from '@/pagesA/medicalCardMan/sign.vue';
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: rPatientId,
           ...pageProps.value,
-          scan:Sign?1:0
+          scan:pageProps.value?.params?1:0
         }),
       });
     }, 200);
