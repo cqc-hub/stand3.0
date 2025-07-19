@@ -149,9 +149,9 @@
         </text>
       </view>
       <button
-      :class="{
-            'btn-disabled': !feeDetail.totalFee,
-          }"
+        :class="{
+          'btn-disabled': !feeDetail.totalFee,
+        }"
         @click="submit"
         class="btn btn-primary flex1"
       >
@@ -190,6 +190,7 @@
     {} as {
       cardNumber?: string;
       params?: string;
+      scan?: 1 | 0;
     }
   );
 
@@ -261,6 +262,7 @@
 
   const getExpressFee = async () => {
     feeDetail.value.hosOrderId = '';
+    const {cardNumber} =pageProps.value
     const addressData = addressList.value[0];
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
@@ -277,10 +279,14 @@
       iceBagNum: iceBagNum.value,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
-      hosPatientId: gStores.userStore.patChoose.cardNumber,
+      hosPatientId: gStores.userStore.patChoose.cardNumber||cardNumber,
+      cardNumber:gStores.userStore.patChoose.cardNumber||cardNumber
     };
     try {
-      const { result } = await api.drugDeliveryCost(params);
+      const actionApi = pageProps.value.scan
+        ? api.getScanExpressDrugCost
+        : api.drugDeliveryCost;
+      const { result } = await actionApi(params);
       const { totalFee, iceBagCharges, hosOrderId } = result;
       feeDetail.value = {
         totalFee,
@@ -409,8 +415,8 @@
   };
 
   const gotoExpressPay = async (args) => {
-    if(!feeDetail.value.totalFee){
-      return
+    if (!feeDetail.value.totalFee) {
+      return;
     }
     const { title, content } = await gStores.getSysAppMore('504');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {

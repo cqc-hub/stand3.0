@@ -87,7 +87,7 @@
   import { onShow, onLoad } from '@dcloudio/uni-app';
   import { useTBanner } from '@/utils';
   import { deQueryForUrl } from '@/common';
-    import { decryptForPage, encryptDes } from '@/common/des';
+  import { decryptForPage, encryptDes } from '@/common/des';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { usePayPage, IPayListItem } from './utils/clinicPayDetail';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
@@ -118,15 +118,15 @@
   );
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-     if (pageProps.value.params) {
-        pageProps.value.deParams = decryptForPage(pageProps.value.params);
-        console.warn(
-          '获取到加密参数',
-          pageProps.value.params,
-          pageProps.value.deParams
-        );
-        gStores.globalStore.onAppLaunch({});
-      }
+    if (pageProps.value.params) {
+      pageProps.value.deParams = decryptForPage(pageProps.value.params);
+      console.warn(
+        '获取到加密参数',
+        pageProps.value.params,
+        pageProps.value.deParams
+      );
+      gStores.globalStore.onAppLaunch({});
+    }
   });
 
   onShow(async (opt) => {
@@ -137,11 +137,11 @@
   const init = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const actionApi = pageProps.value.deParams
-        ? api.getChineseMedicineListNl
-        : api.getChineseMedicineList;
+      ? api.getChineseMedicineListNl
+      : api.getChineseMedicineList;
     const { result } = await actionApi({
-      cardNumber:cardNumber||pageProps.value.deParams.cardNumber,
-      patientId:patientId||pageProps.value.deParams.patientId,
+      cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
+      patientId: patientId || pageProps.value.deParams.patientId,
     });
     unPayList.value = (result?.results || []).map((item) => {
       return {
@@ -151,6 +151,18 @@
         childOrder: item.prescId,
       };
     });
+    if (unPayList.value?.length == 0) {
+      useTBanner(
+        {
+          type: 'self',
+          path: 'pagesB/medicationAssistant/medicalHelp',
+          extraData: {
+            params: pageProps.value.params || '',
+          },
+        },
+        'reLaunch'
+      );
+    }
   };
 
   const selPayListItem = (item: IPayListItem) => {
@@ -182,6 +194,9 @@
           {
             type: 'self',
             path: 'pagesB/medicationAssistant/medicalHelp',
+            extraData: {
+              params: pageProps.value.params || '',
+            },
           },
           'reLaunch'
         );
@@ -221,7 +236,8 @@
     });
 
     if (confirm) {
-      const { cardNumber, patientName } = gStores.userStore.patChoose;
+      const { cardNumber, patientName, patientId } =
+        gStores.userStore.patChoose;
       const { source } = gStores.globalStore.browser;
       let payType = 'WX_MINI';
       // #ifdef MP-ALIPAY
@@ -229,7 +245,8 @@
       // #endif
       console.log('selUnPayList', selUnPayList.value);
       const params = {
-        cardNumber,
+        cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
+        patientId: patientId || pageProps.value.deParams.patientId,
         payType,
         source,
         patientName,
@@ -241,10 +258,13 @@
         prescId: selUnPayList.value.map((o) => o.prescId).join(','),
         subIds: selUnPayList.value.map((o) => o.phsOrderId).join(','),
       };
-      
+      const actionApi = pageProps.value.deParams
+        ? api.chineseMedicinePayNl
+        : api.chineseMedicinePay;
+
       const {
         result: { paySign, phsOrderNo },
-      } = await api.chineseMedicinePay(params);
+      } = await actionApi(params);
       const payRes = await payMoneyOnline({
         paySign,
         phsOrderNo,
@@ -253,6 +273,7 @@
         phsOrderSource: 5,
         hosId: params.hosId,
         patientName,
+        cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
       handlePayAfter();

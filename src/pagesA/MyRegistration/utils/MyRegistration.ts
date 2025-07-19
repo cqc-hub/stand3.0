@@ -104,3 +104,28 @@ export const HosNavData = {
   // },
   // #endif
 };
+
+export const HosNavData1001035 = {
+  12675: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=fjFuiy2y0W&appKey=ECUUsgGgSG',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
+  12713: () => {
+    return {
+      appId: 'wx8735a8a39cf58b5e',
+      path: 'pages/index?id=qMb5Ulu53x&appKey=ECUUsgGgSG',
+      text: '院内导航',
+      type: 'otherProgram',
+      addition: {
+        hosDeptId: 'poi',
+      },
+    };
+  },
+};
