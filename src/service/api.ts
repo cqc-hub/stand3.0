@@ -506,7 +506,9 @@ const queryApi = {
     service.post<any[]>('/phs-query/medicine/getChineseMedicineList', parm(data)),
   getChineseMedicineListNl: (data) =>
     service.post<any[]>('/phs-query/medicine/getChineseMedicineListNl', parm(data)),
-  
+  // 江苏省中获取云影像
+  getJSYunURL: (data) =>
+    service.post<any[]>('/phs-query/getJSYunURL', parm(data)), 
 };
 
 // 挂号服务

@@ -387,6 +387,8 @@ export interface ISystemConfig_ {
     //门诊缴费自定义tabs
     tabField?: IOptions[];
 
+    //已缴费列表是否查询草药代煎列表
+    isQueryChineseMedicine?: '1';
     
 
     /**
@@ -398,9 +400,9 @@ export interface ISystemConfig_ {
     // 申请退单
     isOpenChargeback?: '1';
     // 已缴费详情页面对某一条具体的费用进行申请退费
-    isPayedItemDetailRefund?: '1';
-    // 已缴费页面 展示药品助手按钮
-    isOpenDrug?: '1';
+    isPayedItemDetailRefund?: '1'; 
+    // 已缴费详情底部的按钮
+    payedDetailFooterBtns?: TButtonConfig[];
 
     // 缴费完成后跳转
     /**

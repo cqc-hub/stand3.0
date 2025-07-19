@@ -166,6 +166,14 @@
 
       <view v-if="isShowPayedFooter" class="g-footer">
         <view
+          v-for="(btn, i) in pageConfig.payedDetailFooterBtns"
+          :key="i"
+          @click="clickBtn(btn)"
+          class="btn btn-primary btn-border"  :class="i === 0 ? 'btn-plain' : 'confirm-btn'"
+        >
+          <text>{{ btn.text }}</text>
+      </view>
+        <view
           v-if="detailData.invoiceInfo"
           @click="showInvoice"
           class="cancel-btn"
@@ -174,13 +182,6 @@
             <view class="icon-font ico_pay invoice-icon-1"></view>
             <view class="">查看发票</view>
           </view>
-        </view>
-        <view
-          v-if="pageConfig.isOpenDrug === '1'"
-          @click="gotoDrug"
-          class="btn btn-primary confirm-btn"
-        >
-          药品助手
         </view>
 
         <block v-if="isPayedItemDetailRefundBtnShow">
@@ -387,6 +388,7 @@
     getDigitalPay,
     wxCrossProgramInfo,
     selUnPayList,
+    getChineseMedicineList
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -546,9 +548,9 @@
     });
   };
 
-  /** 已缴费页面  显示药品助手页面*/
+  /** 已缴费详情页面  显示对应底部按钮*/
   const isPayedItemShowDrug = computed(() => {
-    return payState.value === '0' && pageConfig.value.isOpenDrug === '1';
+    return payState.value === '0' && pageConfig.value.payedDetailFooterBtns.length;
   });
 
   /** 已缴费页面对具体费用申请退费 */
@@ -1041,6 +1043,15 @@
     await toPayPull(res, '门诊缴费');
     payAfter();
   };
+
+  const clickBtn = async (btn) => {
+    //查询是否中药代煎
+    if(btn.isOpenDrug === '1'){
+        await getChineseMedicineList();
+    }else{
+       useTBanner(btn)
+    }
+  }
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;

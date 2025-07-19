@@ -1927,6 +1927,9 @@ export const usePayPage = () => {
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
       }
+      if(!pageProps.value.params && pageConfig.value.isQueryChineseMedicine === '1'){
+        getChineseMedicineList()  
+    }
     }, 500);
   };
 
@@ -2064,6 +2067,44 @@ export const usePayPage = () => {
     getListData(true);
   };
 
+    /** 查询草药代煎数据 */
+  const getChineseMedicineList = async () => {
+    const { patientId } = gStores.userStore.patChoose;
+    const cardNumber =
+      pageProps.value.deParams?.cardNumber || gStores.userStore.patChoose.cardNumber;
+
+    try {
+      const {result} = await api.getChineseMedicineList({
+        cardNumber,
+        patientId,
+      });
+      if (result?.results && result.results.length ) {
+        const { confirm, cancel } = await apiAsync(uni.showModal, {
+          content: '本次缴费项目中含有中草药处方，是否需要代煎？',
+          cancelText: '我要自煎',
+          confirmText: '选药代煎',
+        });
+
+        if (confirm) {
+          uni.navigateTo({
+            url: joinQuery('/pagesA/clinicPay/medicineDecoce', {
+              patientId,
+              cardNumber,
+            }),
+          });
+        }
+        if(cancel){
+          uni.navigateTo({
+            url: '/pagesB/medicationAssistant/medicalHelp',
+          });
+        }
+      }
+    } catch (error) {
+      console.error('获取中药代煎数据失败:', error);
+    }
+  };
+
+
   return {
     hosId,
     payMoneyMedicalPlugin,
@@ -2113,6 +2154,7 @@ export const usePayPage = () => {
     cacheStore,
     getFamilyArgs,
     isModeMedicalHelp,
+    getChineseMedicineList
   };
 };
 
