@@ -13,7 +13,7 @@ import { joinQueryForUrl, setLocalStorage } from '@/common';
 import {
   getMedicalAuthCode,
   getQxMedicalNation,
-  getMedicalArgWithFamily
+  getMedicalArgWithFamily,
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 import { IRegistrationCardItem } from './MyRegistration';
 import md5s from 'js-md5';
@@ -271,7 +271,14 @@ export const orderStatusMap = {
 export const waitOrderStatusMap = {
   // 候补挂号 0已挂号 1已登记(这个状态可以取消预约) 2待支付 3已过期 4已取消
   // 5候补失败 6已退号 7已停诊 8已就诊
-  '0': orderStatusMap['100'],
+  '0': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已兑现',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
 
   '1': {
     headerClass: 'header-green',
@@ -337,7 +344,7 @@ export const waitOrderStatusMap = {
     title: '候补完成',
     cardColor: 'var(--hr-neutral-color-7)',
   },
-} as const;
+};
 
 export type OrderStatus = keyof typeof orderStatusMap;
 
@@ -404,6 +411,15 @@ export const getStatusConfig = (status: string, isWaitReg: boolean) => {
 
 const getWaitRegStatusConfig = (status: string) => {
   if (waitOrderStatusMap[status]) {
+    const gStores = new GStores();
+    if (gStores.globalStore.sysCode === '1001035') {
+      if (status === '0') {
+        return {
+          ...waitOrderStatusMap[status],
+          title: '待付款',
+        };
+      }
+    }
     return waitOrderStatusMap[status];
   } else {
     return {
@@ -424,9 +440,7 @@ export const getOrderStatusTitle = (
   isWaitReg: boolean
 ): string => {
   if (isWaitReg) {
-    return getWaitRegStatusConfig(status).title === '已挂号'
-      ? '已兑现'
-      : getWaitRegStatusConfig(status).title;
+    return getWaitRegStatusConfig(status).title;
   }
   if (isOrderPay === '1' && status === '0') {
     return '已挂号';
