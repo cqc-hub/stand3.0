@@ -112,6 +112,7 @@
           <block v-if="detailData.costList && detailData.costList.length">
             <view class="mt8">
               <pay-Detail-Cost-List
+                :disabled="isDisabledCostList"
                 :list="detailData.costList"
                 :selList="selList"
                 :mulit="isCanSelServerFee"
@@ -169,10 +170,11 @@
           v-for="(btn, i) in pageConfig.payedDetailFooterBtns"
           :key="i"
           @click="clickBtn(btn)"
-          class="btn btn-primary btn-border"  :class="i === 0 ? 'btn-plain' : 'confirm-btn'"
+          class="btn btn-primary btn-border"
+          :class="i === 0 ? 'btn-plain' : 'confirm-btn'"
         >
           <text>{{ btn.text }}</text>
-      </view>
+        </view>
         <view
           v-if="detailData.invoiceInfo"
           @click="showInvoice"
@@ -388,7 +390,7 @@
     getDigitalPay,
     wxCrossProgramInfo,
     selUnPayList,
-    getChineseMedicineList
+    getChineseMedicineList,
   } = usePayPage();
 
   const qrCode = computed(() => {
@@ -427,6 +429,14 @@
     }
 
     return '0';
+  });
+
+  const isDisabledCostList = computed(() => {
+    if (payState.value === '1') {
+      return pageConfig.value.isDisabledShowCostList === '1';
+    }
+
+    return false;
   });
 
   const capture = async () => {
@@ -550,7 +560,9 @@
 
   /** 已缴费详情页面  显示对应底部按钮*/
   const isPayedItemShowDrug = computed(() => {
-    return payState.value === '0' && pageConfig.value.payedDetailFooterBtns.length;
+    return (
+      payState.value === '0' && pageConfig.value.payedDetailFooterBtns?.length
+    );
   });
 
   /** 已缴费页面对具体费用申请退费 */
@@ -1046,12 +1058,12 @@
 
   const clickBtn = async (btn) => {
     //查询是否中药代煎
-    if(btn.isOpenDrug === '1'){
-        await getChineseMedicineList();
-    }else{
-       useTBanner(btn)
+    if (btn.isOpenDrug === '1') {
+      await getChineseMedicineList();
+    } else {
+      useTBanner(btn);
     }
-  }
+  };
 
   const closeQrOpt = () => {
     barOpt.value.width = 0;

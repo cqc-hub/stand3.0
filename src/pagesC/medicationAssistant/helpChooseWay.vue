@@ -145,10 +145,10 @@
       >
         <text class="color-444 f28 mr8">合计</text>
         <text class="f36 g-bold color-error">
-          {{ feeDetail.totalFee ? `${feeDetail.totalFee}元` : '' }}元
+          {{ feeDetail.totalFee ? `${feeDetail.totalFee}元` : '0元' }}
         </text>
       </view>
-      <button @click="submit" class="btn btn-primary flex1">
+      <button :disabled="!feeDetail.totalFee" @click="submit" class="btn btn-primary flex1">
         {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
       </button>
     </view>
@@ -254,11 +254,7 @@
   };
 
   const getExpressFee = async () => {
-    feeDetail.value = {
-      // totalFee: 0,
-      // iceBagCharges: 0,
-      hosOrderId: '',
-    };
+    feeDetail.value.hosOrderId = '';
     const addressData = addressList.value[0];
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
@@ -277,13 +273,21 @@
       patientId: gStores.userStore.patChoose.patientId,
       hosPatientId: gStores.userStore.patChoose.cardNumber,
     };
-    const { result } = await api.drugDeliveryCost(params);
-    const { totalFee, iceBagCharges, hosOrderId } = result;
-    feeDetail.value = {
-      totalFee,
-      iceBagCharges,
-      hosOrderId,
-    };
+    try {
+      const { result } = await api.drugDeliveryCost(params);
+      const { totalFee, iceBagCharges, hosOrderId } = result;
+      feeDetail.value = {
+        totalFee,
+        iceBagCharges,
+        hosOrderId,
+      };
+    } catch (e) {
+      feeDetail.value = {
+        totalFee: 0,
+        iceBagCharges: 0,
+        hosOrderId: '',
+      };
+    }
   };
 
   watch(
@@ -423,6 +427,7 @@
       const params = {
         ...args,
         ...feeDetail.value,
+        fee:feeDetail.value.totalFee,
         hosPatientId: args.cardNumber,
         prescId: args.prescIdList,
         prescNo: args.prescNoList,
@@ -434,7 +439,7 @@
       const {
         result: { paySign, phsOrderNo },
       } = await api.expressPay(params);
-      const { hosId, totalFee } = args;
+      const { hosId, totalFee } = params;
       const payRes = await payMoneyOnline({
         paySign,
         phsOrderNo,

@@ -393,7 +393,7 @@ export interface ISystemConfig_ {
 
     //支付后已缴费列表是否查询草药代煎列表
     isQueryChineseMedicine?: '1';
-    
+
 
     /**
      * 详情页
@@ -401,10 +401,12 @@ export interface ISystemConfig_ {
 
     /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
     isSubitemPay?: '1';
+    /** 待缴费详情页禁用查看费用明细 */
+    isDisabledShowCostList?: '1';
     // 申请退单
     isOpenChargeback?: '1';
     // 已缴费详情页面对某一条具体的费用进行申请退费
-    isPayedItemDetailRefund?: '1'; 
+    isPayedItemDetailRefund?: '1';
     // 已缴费详情底部的按钮
     payedDetailFooterBtns?: TButtonConfig[];
 

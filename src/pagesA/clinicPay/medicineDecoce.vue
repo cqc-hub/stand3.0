@@ -86,12 +86,12 @@
   import { onMounted, ref, computed } from 'vue';
   import { onLoad } from '@dcloudio/uni-app';
   import { useTBanner } from '@/utils';
-  import global from '@/config/global';
-  import medicineDecoceList from './components/medicineDecoceList.vue';
-  import { usePayPage, IPayListItem } from './utils/clinicPayDetail';
-  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
+  import { usePayPage, IPayListItem } from './utils/clinicPayDetail';
+  import global from '@/config/global';
   import api from '@/service/api';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
+  import medicineDecoceList from './components/medicineDecoceList.vue';
 
   const { gStores } = usePayPage();
   const regDialogConfirm = ref<any>('');
@@ -99,25 +99,32 @@
   const selUnPayList = ref<any[]>([]);
   const unPayList = ref<any[]>([]);
   const flagTitle9 = ref('');
+
   const totalCost = computed(() => {
     const _subCount = selUnPayList.value.reduce((prev, curr) => {
       return prev + (curr.totalCost as unknown as number) * 1;
     }, 0);
-
     return Number((_subCount * 100).toFixed(2)) / 100;
   });
+
+  const isSelectAll = computed(
+    () =>
+      selUnPayList.value.length &&
+      selUnPayList.value.length === unPayList.value.length
+  );
+
   onLoad(async (opt) => {
     // pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     init();
   });
+
   const init = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const { result } = await api.getChineseMedicineList({
       cardNumber,
       patientId,
     });
-    //@ts-expect-error
-    unPayList.value = (result?.results||[]).map((item) => {
+    unPayList.value = (result?.results || []).map((item) => {
       return {
         ...item,
         totalCost: item.drugCost,
@@ -140,12 +147,6 @@
       selUnPayList.value.splice(idx, 1);
     }
   };
-
-  const isSelectAll = computed(
-    () =>
-      selUnPayList.value.length &&
-      selUnPayList.value.length === unPayList.value.length
-  );
 
   const chooseAll = () => {
     if (isSelectAll.value) {
@@ -182,8 +183,7 @@
       gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
       return;
     }
-    
-    if (!isCheck.value ) {
+    if (!isCheck.value) {
       regDialogConfirm.value.show();
       return;
     }
@@ -213,13 +213,14 @@
         cardNumber,
         payType,
         source,
+        patientName,
         fee: totalCost.value,
+        openId: gStores.globalStore.openId,
         hosId: selUnPayList.value[0].hosId,
         hosName: selUnPayList.value[0].hosName,
         prescNo: selUnPayList.value.map((o) => o.prescNo).join(','),
         prescId: selUnPayList.value.map((o) => o.prescId).join(','),
         subIds: selUnPayList.value.map((o) => o.phsOrderId).join(','),
-        openId: gStores.globalStore.openId,
       };
 
       const {
@@ -247,7 +248,6 @@
     width: calc(100% - 64rpx);
   }
   .g-footer {
-
     .footer-check {
       font-size: var(--hr-font-size-xs);
       flex: 0.5;
@@ -295,8 +295,7 @@
       }
     }
   }
-  .bottom{
-
+  .bottom {
     display: flex;
   }
 </style>

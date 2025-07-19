@@ -79,6 +79,15 @@
           </view>
         </view>
 
+         <view v-if="item.tcmDecoctionIndicator " class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">是否代煎</view>
+            <view class="flex1 g-break-word color-444">
+              {{ item.tcmDecoctionIndicator=='1'?'代煎':'自煎' }}
+            </view>
+          </view>
+        </view>
+
         <view v-if="item.deptName" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">开单科室</view>
