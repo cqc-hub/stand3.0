@@ -144,7 +144,9 @@
         class="flex1 flex-normal count-money"
       >
         <text class="color-444 f28 mr8">合计</text>
-        <text class="f36 g-bold color-error">{{ feeDetail.totalFee }}元</text>
+        <text class="f36 g-bold color-error">
+          {{ feeDetail.totalFee ? `${feeDetail.totalFee}元` : '' }}元
+        </text>
       </view>
       <button @click="submit" class="btn btn-primary flex1">
         {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
@@ -253,8 +255,8 @@
 
   const getExpressFee = async () => {
     feeDetail.value = {
-      totalFee: 0,
-      iceBagCharges: 0,
+      // totalFee: 0,
+      // iceBagCharges: 0,
       hosOrderId: '',
     };
     const addressData = addressList.value[0];
@@ -414,12 +416,18 @@
     if (confirm) {
       const { source } = gStores.globalStore.browser;
       const { patientName } = gStores.userStore.patChoose;
+      let payType = 'WX_MINI';
+      // #ifdef MP-ALIPAY
+      payType = 'ALI_MINI';
+      // #endif
       const params = {
         ...args,
         ...feeDetail.value,
         hosPatientId: args.cardNumber,
+        prescId: args.prescIdList,
+        prescNo: args.prescNoList,
         openId: gStores.globalStore.openId,
-        payType: 'WX_MINI',
+        payType,
         source,
       };
 
@@ -447,9 +455,9 @@
         useTBanner({
           type: 'self',
           path: 'pagesB/medicationAssistant/medicalHelp',
-          extraData:{
-            tabIndex:'1'
-          }
+          extraData: {
+            tabIndex: '1',
+          },
         });
       },
     });

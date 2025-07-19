@@ -505,12 +505,21 @@ const queryApi = {
   //电子导诊单
   getHosGuideSheet: (data) =>
     service.post<any[]>('/phs-query/medical/getHosGuideSheet', parm(data)),
-    //草药代煎
+  //草药代煎
   getChineseMedicineList: (data) =>
-    service.post<any[]>('/phs-query/medicine/getChineseMedicineList', parm(data)),
+    service.post<any[]>(
+      '/phs-query/medicine/getChineseMedicineList',
+      parm(data)
+    ),
   getChineseMedicineListNl: (data) =>
-    service.post<any[]>('/phs-query/medicine/getChineseMedicineListNl', parm(data)),
-  
+    service.post<any[]>(
+      '/phs-query/medicine/getChineseMedicineListNl',
+      parm(data)
+    ),
+  chineseMedicinePay: (data) =>
+    service.post<any>('/phs-query/medicine/chineseMedicinePay', parm(data)),
+  chineseMedicinePayNl: (data) =>
+    service.post<any>('/phs-query/medicine/chineseMedicinePayNl', parm(data)),
 };
 
 // 挂号服务

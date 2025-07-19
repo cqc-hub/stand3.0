@@ -265,6 +265,12 @@
             "navigationBarTitleText": "授权确认"
           }
         },
+           {
+          "path": "clinicPay/medicineDecoce",
+          "style": {
+            "navigationBarTitleText": "草药代煎登记"
+          }
+        },
         {
           "path": "mySet/getMore",
           "style": {
