@@ -266,13 +266,6 @@
           }
         },
            {
-          "path": "clinicPay/herbalDecoctionRegister",
-          "style": {
-            "navigationBarTitleText": "草药代煎登记"
-          }
-        },
-        {
-           {
           "path": "clinicPay/medicineDecoce",
           "style": {
             "navigationBarTitleText": "草药代煎登记"

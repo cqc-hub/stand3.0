@@ -507,16 +507,13 @@ const queryApi = {
     service.post<any[]>('/phs-query/medical/getHosGuideSheet', parm(data)),
   //草药代煎
   getChineseMedicineList: (data) =>
-    service.post<any[]>(
-      '/phs-query/medicine/getChineseMedicineList',
-      parm(data)
-    ),
+    service.post<any>('/phs-query/medicine/getChineseMedicineList', parm(data)),
   getChineseMedicineListNl: (data) =>
-    service.post<any[]>(
+    service.post<any>(
       '/phs-query/medicine/getChineseMedicineListNl',
       parm(data)
     ),
-    //草药代煎创建订单
+  //草药代煎创建订单
   chineseMedicinePay: (data) =>
     service.post<any>('/phs-query/medicine/chineseMedicinePay', parm(data)),
   chineseMedicinePayNl: (data) =>
