@@ -507,12 +507,12 @@ const queryApi = {
     service.post<any[]>('/phs-query/medical/getHosGuideSheet', parm(data)),
   //草药代煎
   getChineseMedicineList: (data) =>
-    service.post<any[]>(
+    service.post<any>(
       '/phs-query/medicine/getChineseMedicineList',
       parm(data)
     ),
   getChineseMedicineListNl: (data) =>
-    service.post<any[]>(
+    service.post<any>(
       '/phs-query/medicine/getChineseMedicineListNl',
       parm(data)
     ),
@@ -523,7 +523,7 @@ const queryApi = {
     service.post<any>('/phs-query/medicine/chineseMedicinePayNl', parm(data)),
   // 江苏省中获取云影像
   getJSYunURL: (data) =>
-    service.post<any[]>('/phs-query/getJSYunURL', parm(data)),
+    service.post<any>('/phs-query/getJSYunURL', parm(data)),
 };
 
 // 挂号服务
