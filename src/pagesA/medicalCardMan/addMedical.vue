@@ -421,6 +421,7 @@
       patientName: '',
       source,
       idType: '',
+      realNameAuth: '',
 
       verifyCode,
       ...filterData,
@@ -523,6 +524,7 @@
             name: formData.value[formKey.patientName],
           });
           requestData.pData = pData;
+          requestData.realNameAuth = '1';
         }
       }
     }
