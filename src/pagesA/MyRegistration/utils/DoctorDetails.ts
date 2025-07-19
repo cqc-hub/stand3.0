@@ -19,7 +19,7 @@ export interface IProps {
   docName: string;
   hosDocId: string;
   hosId: string;
-  clinicalType: string;
+  clinicalType?: string;
   docTitleName?: string;
   hosDeptId: string;
   q?: string;
