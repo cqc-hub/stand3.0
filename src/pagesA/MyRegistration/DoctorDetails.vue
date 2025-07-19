@@ -1136,8 +1136,8 @@
 
   onLoad(async (opt) => {
     //  weixin://dl/business/?t=LgnSWxNLRHs
-
     props.value = deQueryForUrl(deQueryForUrl(opt));
+
     // 兼容 alipays://platformapi/startapp?appId=2021003173633521&page=pagesA/MyRegistration/DoctorDetails&query=hosDocId%3D101714
     if (!Object.keys(props.value).length) {
       const queryParams = gStores.globalStore.appShowData.query || {};
@@ -1147,6 +1147,10 @@
     // 扫码进来, 不处理
     if (props.value.q) {
       return;
+    }
+
+    if (gStores.globalStore.sysCode === '1001035') {
+      props.value.clinicalType = undefined;
     }
 
     useDoctorDetail = new UseDoctorDetail(props.value);

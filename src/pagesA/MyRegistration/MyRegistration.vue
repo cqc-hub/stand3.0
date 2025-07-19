@@ -143,7 +143,11 @@
   import { computed, ref } from 'vue';
   import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
 
-  import { IRegistrationCardItem, HosNavData } from './utils/MyRegistration';
+  import {
+    IRegistrationCardItem,
+    HosNavData,
+    HosNavData1001035,
+  } from './utils/MyRegistration';
   import { isAreaProgram, IPat } from '@/stores';
   import { deQueryForUrl, joinQueryForUrl, setLocalStorage } from '@/common';
   import { beforeEach } from '@/router';
@@ -380,7 +384,10 @@
       }
     }
     let _type = props.value.type;
-    if (props.value.type !== 'waitReg' && tabCurrentDetail.value?.typeId === 2) {
+    if (
+      props.value.type !== 'waitReg' &&
+      tabCurrentDetail.value?.typeId === 2
+    ) {
       _type = 'waitReg';
     }
     uni.navigateTo({
@@ -395,9 +402,14 @@
     });
   };
 
-  //多院区院内导航（仅绍兴）
+  //多院区院内导航
   const goHosNavigate = (item: IRegistrationCardItem) => {
-    useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+    if (gStores.globalStore.sysCode === '1001035') {
+      useTBanner(HosNavData1001035[item.hosId](item), 'navigateTo', item);
+    }
+    if (gStores.globalStore.sysCode === '1001046') {
+      useTBanner(HosNavData[item.hosId](item), 'navigateTo', item);
+    }
   };
 
   const _patChange = (item) => {
