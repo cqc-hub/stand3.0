@@ -67,7 +67,7 @@
           <text v-if="item.deptName && isShowHosNameWithDeptName">
             {{ item.deptName }} -
           </text>
-          <text>
+          <text v-if="gStores.globalStore.sysCode === '1001067'">
             {{ item.hosName }}
           </text>
         </view>
