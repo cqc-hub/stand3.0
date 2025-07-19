@@ -319,6 +319,11 @@ const queryApi = {
     service.post('/phs-query/delivery/drugDeliveryCost', parm(data), {
       hideLoading: false,
     }),
+     getScanExpressDrugCost: (data) =>
+    service.post('/phs-query/delivery/getScanExpressDrugCost', parm(data), {
+      hideLoading: false,
+    }),
+
 
   getScanDrugDelivery: (data) =>
     service.post('/phs-query/delivery/getScanDrugDelivery', parm(data), {
@@ -509,7 +514,6 @@ const queryApi = {
   getChineseMedicineList: (data) =>
     service.post<any>('/phs-query/medicine/getChineseMedicineList', parm(data)),
   getChineseMedicineListNl: (data) =>
-    service.post<any>(
     service.post<any>(
       '/phs-query/medicine/getChineseMedicineListNl',
       parm(data)

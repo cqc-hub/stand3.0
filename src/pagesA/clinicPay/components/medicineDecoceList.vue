@@ -41,26 +41,25 @@
               >
                 {{ item.totalCost }}元
               </view>
-              <view class="iconfont color-888 f48">&#xe66b;</view>
+              <!-- <view class="iconfont color-888 f48">&#xe66b;</view> -->
             </view>
           </view>
 
           <view class="item-box f28">
             <view class="row flex-normal">
-              <view class="row-label color-888">下单时间</view>
+              <view class="row-label color-888"> 开单时间</view>
               <view class="row-value g-break-word color-444">
                 {{ item.drugDate }}
               </view>
             </view>
 
             <view class="row flex-normal">
+               <view class="row-label color-888"> 药品名称</view>
               <view class="row-value g-break-word color-444">
-                <text
-                  v-for="(items, index) in item.chineseDrugNames"
-                  :key="`drug${index}`"
-                >
-                  {{ items }}
+                <text>
+                  {{ item?.chineseDrugNames.length&&item?.chineseDrugNames.toString().replaceAll(',','、')}}
                 </text>
+               
                 <text class="ml12">
                   (共{{ item.chineseDrugNames.length }}种草药)
                 </text>
@@ -80,6 +79,7 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
+import { Split } from '../../../typeUtils/string';
   import {
     type IPayListItem,
     tradeType,

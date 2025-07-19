@@ -79,7 +79,9 @@
         @click="showDialog"
         class="btn btn-primary flex1"
       >
-        {{ selListOption1.length > 1 ? '选择取药方式' : selListOption1[0].value }}
+        {{
+          selListOption1.length > 1 ? '选择取药方式' : selListOption1[0].value
+        }}
       </button>
     </view>
 
@@ -147,8 +149,9 @@
   import selWayPopup from './components/SelWayPopup.vue';
   import { beforeEach } from '@/router';
   import globalGl from '@/config/global';
+import Sign from '@/pagesA/medicalCardMan/sign.vue';
 
-  const defaultField = [
+  let defaultField = [
     {
       label: '待取药',
       key: '0',
@@ -188,7 +191,12 @@
   });
 
   const isShowSelItem = computed(() => {
-    return listNow.value.length && currentTabKey.value === '0' && globalGl.SYS_CODE !== '1001067' || false;
+    return (
+      (listNow.value.length &&
+        currentTabKey.value === '0' &&
+        globalGl.SYS_CODE !== '1001067') ||
+      false
+    );
   });
 
   const tabFieldKeys = computed(() => {
@@ -500,6 +508,7 @@
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: rPatientId,
           ...pageProps.value,
+          scan:Sign?1:0
         }),
       });
     }, 200);
@@ -562,6 +571,21 @@
 
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+    if (getSysCode() === '1001035') {
+      uni.setNavigationBarTitle({
+        title: '药品代煎快递办理',
+      });
+      defaultField = [
+        {
+          label: '未选择',
+          key: '0',
+        },
+        {
+          label: '已选择',
+          key: '1',
+        },
+      ];
+    }
     uni.showLoading({});
     if ((queryParams && !opt?.params) || opt?.q) {
       await wait(650);

@@ -148,7 +148,13 @@
           {{ feeDetail.totalFee ? `${feeDetail.totalFee}元` : '0元' }}
         </text>
       </view>
-      <button :disabled="!feeDetail.totalFee" @click="submit" class="btn btn-primary flex1">
+      <button
+      :class="{
+            'btn-disabled': !feeDetail.totalFee,
+          }"
+        @click="submit"
+        class="btn btn-primary flex1"
+      >
         {{ globalGl.SYS_CODE === '1001067' ? '提交' : '立即下单' }}
       </button>
     </view>
@@ -161,7 +167,7 @@
   import { ref, watch } from 'vue';
 
   import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { deQueryForUrl, getLocalStorage } from '@/common';
+  import { deQueryForUrl, getLocalStorage, getSysCode } from '@/common';
   import {
     GStores,
     ISystemConfig,
@@ -403,6 +409,9 @@
   };
 
   const gotoExpressPay = async (args) => {
+    if(!feeDetail.value.totalFee){
+      return
+    }
     const { title, content } = await gStores.getSysAppMore('504');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
       gStores.messageStore.showMessage(content, 0, {
@@ -427,7 +436,7 @@
       const params = {
         ...args,
         ...feeDetail.value,
-        fee:feeDetail.value.totalFee,
+        fee: feeDetail.value.totalFee,
         hosPatientId: args.cardNumber,
         prescId: args.prescIdList,
         prescNo: args.prescNoList,
@@ -445,7 +454,7 @@
         phsOrderNo,
         totalFee,
         source,
-        phsOrderSource: 6,
+        phsOrderSource: 7,
         hosId,
         patientName,
       });
@@ -521,6 +530,11 @@
   });
 
   onLoad(async (opt) => {
+    if (getSysCode() === '1001035') {
+      uni.setNavigationBarTitle({
+        title: '药品代煎快递办理',
+      });
+    }
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
