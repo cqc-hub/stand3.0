@@ -772,8 +772,7 @@
       appointmentTime,
     } = result;
     if (downTime) {
-      // timeTravel.value.downTime = downTime;
-      timeTravel.value.downTime = 120;
+      timeTravel.value.downTime = downTime;
       startTimeTravel();
     }
 
