@@ -34,7 +34,9 @@
       label: '暂未查到相关信息',
     },
     {
-      icon: 'img_404_no record@3x.png',
+      icon: `img_404_no record@3x${
+        gStores.globalStore.isTcmStyle ? '-tcm' : ''
+      }.png`,
       label: '暂未查到相关信息',
     },
     {

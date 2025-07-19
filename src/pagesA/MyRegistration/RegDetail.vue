@@ -630,6 +630,7 @@
     if (
       // isWaitForPay.value &&
       pageProps.value.preWz === '1' &&
+      ['0', '101', '100'].includes(orderRegInfo.value.orderStatus) &&
       orderConfig.value.isOpenPreConsultation === '1' &&
       gStores.globalStore.sysCode !== '1001048'
     ) {

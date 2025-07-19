@@ -6,10 +6,32 @@
   >
     <view @click="regClick(item)" class="scheme-item">
       <view class="flex-between">
-        <view class="scheme-item-ampm-name">
-          <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
-          <view v-if="item.fee" class="ampm-fee f28 mr16 g-bold">
-            {{ item.fee }}元
+        <view class="flex">
+          <view
+            v-if="pageConfig.isShowClinicalType === '1'"
+            class="flex flex-wrap f24 mb4"
+          >
+            <view
+              v-if="['3', '4', '6'].includes(item.clinicalType!)"
+              class="tag tag-dark mr12"
+            >
+              网络就诊
+            </view>
+            <view v-else class="tag tag-light mr12">到院就诊</view>
+
+            <view
+              v-if="['2', '6'].includes(item.clinicalType!)"
+              class="tag tag-brown mr12"
+            >
+              <text v-if="item.clinicalType === '2'">膏方</text>
+              <text v-if="item.clinicalType === '6'">专病</text>
+            </view>
+          </view>
+          <view class="scheme-item-ampm-name">
+            <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
+            <view v-if="item.fee" class="ampm-fee f28 mr16 g-bold">
+              {{ item.fee }}元
+            </view>
           </view>
         </view>
 
@@ -53,37 +75,19 @@
         </view>
       </view>
 
-      <view
-        v-if="pageConfig.isShowClinicalType === '1'"
-        class="flex flex-wrap f24 mb4"
-      >
-        <view class="tag tag-dark mr12">
-          {{
-            ['3', '4', '6'].includes(item.clinicalType!)
-              ? '网络就诊'
-              : '到院就诊'
-          }}
-        </view>
-
-        <view
-          v-if="['2', '6'].includes(item.clinicalType!)"
-          class="tag tag-brown mr12"
-        >
-          <text v-if="item.clinicalType === '2'">膏方</text>
-          <text v-if="item.clinicalType === '6'">专病</text>
-        </view>
-      </view>
-
       <view class="f24 color-666 flex-between">
-        <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
-          {{ item.categorName }}
-        </view>
-        <view v-else class="text-ellipsis mr12">
-          <text v-if="item.schQukCategor">{{ item.schQukCategor }}</text>
-          <text v-else>
-            <text>{{ item.deptName }}</text>
-            <text v-if="item.categorName">/{{ item.categorName }}</text>
-          </text>
+        <view class="flex">
+          <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
+            {{ item.categorName }}
+          </view>
+
+          <view v-else class="text-ellipsis mr12">
+            <text v-if="item.schQukCategor">{{ item.schQukCategor }}</text>
+            <text v-else>
+              <text>{{ item.deptName }}</text>
+              <text v-if="item.categorName">/{{ item.categorName }}</text>
+            </text>
+          </view>
         </view>
 
         <block
@@ -115,6 +119,7 @@
   import { TSchInfo } from '../../utils/index';
 
   import { type ISystemConfig } from '@/utils';
+  import dayjs from 'dayjs';
 
   const props = defineProps<{
     item: TSchInfo;
@@ -128,6 +133,14 @@
   const emits = defineEmits(['reg-click', 'wait-reg-click', 'avatar-click']);
   const isExistOrderWait = computed(() => {
     const { pageConfig, item } = props;
+
+    if (
+      dayjs(props.item.schDate).format('YYYY-MM-DD') ===
+      dayjs().format('YYYY-MM-DD')
+    ) {
+      return false;
+    }
+
     return (
       (!item.clinicalType || item.clinicalType === '1') &&
       item.schState === '2' &&
@@ -224,13 +237,18 @@
     padding: 0 8rpx;
 
     &.tag-dark {
-      background-color: #51555e;
+      background-color: #5f494a;
       color: #ffe2c1;
     }
 
     &.tag-brown {
       background: linear-gradient(270deg, #d26900, #ac4b1c);
       color: #fff;
+    }
+
+    &.tag-light {
+      background-color: #ffe2c1;
+      color: #5f494a;
     }
   }
 </style>

@@ -61,7 +61,7 @@ export interface IDocHosSchListItem {
   hosId: string;
   schList: IDocSchListItem[];
   checkedDay?: string;
-  enabledDays?: Record<string, string>,
+  enabledDays?: Record<string, string>;
   chooseDays?: any;
 }
 
@@ -147,7 +147,10 @@ export class UseDoctorDetail extends GStores {
         if (schDateList.length) {
           schDateList.map((o) => {
             const { hosId, clinicalType } = o;
-            const cache = clinicalType === '4' ? _netHos : _cache;
+            const cache =
+              clinicalType === '4' && this.globalStore.sysCode !== '1001035'
+                ? _netHos
+                : _cache;
             const schByHosId = cache[hosId];
 
             if (schByHosId) {
@@ -227,8 +230,6 @@ export class UseDoctorDetail extends GStores {
 
     return { schList, enabledDays };
   }
-
-  
 
   async getOutHosSchData() {
     const { result } = await api.getExtHosDocSch({
