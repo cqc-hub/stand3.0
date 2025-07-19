@@ -272,6 +272,9 @@
 
   //显示多院区院内导航(仅绍兴)
   const isNav = (item: IRegistrationCardItem) => {
+    if (props.isWaitReg) {
+      return false;
+    }
     if (isWx.value) {
       if (gStores.globalStore.sysCode === '1001046') {
         return true;
