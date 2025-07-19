@@ -281,13 +281,14 @@
       iceBagNum: iceBagNum.value,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
-      hosPatientId: gStores.userStore.patChoose.cardNumber || cardNumber,
-      cardNumber: gStores.userStore.patChoose.cardNumber || cardNumber,
+      hosPatientId: cardNumber || gStores.userStore.patChoose.cardNumber,
+      cardNumber: cardNumber || gStores.userStore.patChoose.cardNumber,
     };
     try {
-      const actionApi = pageProps.value.scan
-        ? api.getScanExpressDrugCost
-        : api.drugDeliveryCost;
+      const actionApi =
+        pageProps.value.scan == 1
+          ? api.getScanExpressDrugCost
+          : api.drugDeliveryCost;
       const { result } = await actionApi(params);
       const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
       feeDetail.value = {
@@ -418,7 +419,8 @@
   };
 
   const gotoExpressPay = async (args) => {
-    if (!feeDetail.value.totalFee||feeDetail.value.totalFee==='0') {
+    if (!feeDetail.value.totalFee || feeDetail.value.totalFee === '0') {
+      gStores.messageStore.showMessage('请重新获取费用信息', 3000);
       return;
     }
     const { title, content } = await gStores.getSysAppMore('504');
@@ -447,8 +449,8 @@
         ...feeDetail.value,
         fee: feeDetail.value.totalFee,
         hosPatientId: args.cardNumber,
-        prescId: args.prescIdList,
-        prescNo: args.prescNoList,
+        prescId: cacheStore.medicalHelpSelList.map((o) => o.prescId),
+        prescNo: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
         openId: gStores.globalStore.openId,
         payType,
         source,
@@ -481,7 +483,7 @@
           extraData: {
             tabIndex: '1',
           },
-        });
+        },'reLaunch');
       },
     });
   };
@@ -544,8 +546,8 @@
         title: '药品代煎快递办理',
       });
     }
-    console.log('药品代煎快递办理',opt);
-    
+    console.log('药品代煎快递办理', opt);
+
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }

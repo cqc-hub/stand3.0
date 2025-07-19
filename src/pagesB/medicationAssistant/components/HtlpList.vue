@@ -100,6 +100,15 @@
           </view>
         </view>
 
+        <view v-if="item.deliveryType" class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">配送状态</view>
+            <view class="flex1 g-break-word color-444 flex-normal">
+              <view class="text-ellipsis">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
+            </view>
+          </view>
+        </view>
+
         <view v-if="item.takenDrugType && !showStatus" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">取药状态</view>

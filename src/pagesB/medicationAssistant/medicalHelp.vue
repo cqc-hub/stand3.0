@@ -232,6 +232,26 @@
         }
       }
     }
+    // if (getSysCode() === '1001035'&&list?.length) {
+    //   let oldPrescVisitType = list[0].prescVisitType;
+    //   if (list.every((item) => item.prescVisitType === oldPrescVisitType)) {
+    //     let firstDev = list[0].deliveryType;
+    //     if (list.every((item) => item.deliveryType === firstDev)) {
+    //       //判断是否同种类
+    //       if (firstDev == 5) {
+    //         //只可快递
+    //         return[opt2]
+    //       }
+    //     } else {
+    //       gStores.messageStore.showMessage('不同配送类型不可同时勾选！', 3000);
+    //       return;
+    //     }
+    //   } else {
+    //     gStores.messageStore.showMessage('不同就诊类型不可同时勾选！', 3000);
+
+    //     return;
+    //   }
+    // }
 
     return f ? [opt2] : [opt1, opt2];
   };
@@ -506,7 +526,7 @@
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: rPatientId,
           ...pageProps.value,
-          scan:pageProps.value?.params?1:0
+          scan: pageProps.value?.params ? 1 : 0,
         }),
       });
     }, 200);
@@ -568,7 +588,7 @@
   };
 
   onLoad(async (opt) => {
-      console.log('show pageProps.value',opt)
+    console.log('show pageProps.value', opt);
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     if (getSysCode() === '1001035') {
       uni.setNavigationBarTitle({
@@ -593,7 +613,7 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-      console.log('show pageProps.value',pageProps.value)
+      console.log('show pageProps.value', pageProps.value);
     }
 
     const { tabIndex, params } = pageProps.value;

@@ -140,8 +140,8 @@
       ? api.getChineseMedicineListNl
       : api.getChineseMedicineList;
     const { result } = await actionApi({
-      cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
-      patientId: patientId || pageProps.value.deParams.patientId,
+      cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
+      patientId: pageProps.value?.deParams?.patientId || patientId,
     });
     unPayList.value = (result?.results || []).map((item) => {
       return {
@@ -244,8 +244,8 @@
       payType = 'ALI_MINI';
       // #endif
       const params = {
-        cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
-        patientId: patientId || pageProps.value.deParams.patientId,
+        cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
+      patientId: pageProps.value?.deParams?.patientId || patientId,
         payType,
         source,
         patientName,
