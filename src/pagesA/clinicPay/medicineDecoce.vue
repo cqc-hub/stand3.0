@@ -243,7 +243,6 @@
       // #ifdef MP-ALIPAY
       payType = 'ALI_MINI';
       // #endif
-      console.log('selUnPayList', selUnPayList.value);
       const params = {
         cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
         patientId: patientId || pageProps.value.deParams.patientId,

@@ -232,6 +232,7 @@
     totalFee: 0,
     iceBagCharges: 0,
     hosOrderId: '',
+    costs: '',
   });
 
   const boxChange = async (count: number) => {
@@ -262,7 +263,8 @@
 
   const getExpressFee = async () => {
     feeDetail.value.hosOrderId = '';
-    const {cardNumber} =pageProps.value
+    feeDetail.value.costs = '';
+    const { cardNumber } = pageProps.value;
     const addressData = addressList.value[0];
     const { city, county, province, senderName, senderPhone, detailedAddress } =
       addressData as any;
@@ -279,25 +281,27 @@
       iceBagNum: iceBagNum.value,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
-      hosPatientId: gStores.userStore.patChoose.cardNumber||cardNumber,
-      cardNumber:gStores.userStore.patChoose.cardNumber||cardNumber
+      hosPatientId: gStores.userStore.patChoose.cardNumber || cardNumber,
+      cardNumber: gStores.userStore.patChoose.cardNumber || cardNumber,
     };
     try {
       const actionApi = pageProps.value.scan
         ? api.getScanExpressDrugCost
         : api.drugDeliveryCost;
       const { result } = await actionApi(params);
-      const { totalFee, iceBagCharges, hosOrderId } = result;
+      const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
       feeDetail.value = {
         totalFee,
         iceBagCharges,
         hosOrderId,
+        costs: expressList,
       };
     } catch (e) {
       feeDetail.value = {
-        totalFee: 0,
+        totalFee: '0',
         iceBagCharges: 0,
         hosOrderId: '',
+        costs: '',
       };
     }
   };
@@ -307,7 +311,6 @@
       return [aimValue.value, addressList.value];
     },
     ([aim, address]) => {
-      console.log('wathch', aim, address[0]);
       if (aim?.length && address?.length) {
         getExpressFee();
       }
@@ -415,7 +418,7 @@
   };
 
   const gotoExpressPay = async (args) => {
-    if (!feeDetail.value.totalFee) {
+    if (!feeDetail.value.totalFee||feeDetail.value.totalFee==='0') {
       return;
     }
     const { title, content } = await gStores.getSysAppMore('504');
@@ -541,6 +544,8 @@
         title: '药品代煎快递办理',
       });
     }
+    console.log('药品代煎快递办理',opt);
+    
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }

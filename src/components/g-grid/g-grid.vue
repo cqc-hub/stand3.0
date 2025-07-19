@@ -47,7 +47,6 @@
             <view v-if="item?.messageNum" class="warn-label badge">
               {{ item.messageNum }}
             </view>
-
             <img
               v-if="isImg(item.iconfont)"
               :class="`${
@@ -92,7 +91,13 @@
               绿色能量
             </view>
             <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
-            <text :class="`icon-font grid-resize ${item.iconfont}`" />
+            <img
+              v-if="isImg(item.iconfont)"
+              :class="`icon-font grid-resize`"
+              :src="item.iconfont"
+              mode="widthFix"
+            />
+            <text v-else :class="`icon-font grid-resize ${item.iconfont}`" />
             <view class="grid-label text-ellipsis">{{ item.title }}</view>
           </view>
         </g-login>
