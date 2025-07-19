@@ -97,7 +97,7 @@
           <text class="money">{{ hosInfoResObj.singleSelfPay }}元</text>
         </view>
         <view class="card-detail-item">
-          <text class="name"></text>
+          <text class="name">账户余额</text>
           <text class="money">{{ hosInfoResObj.accountBalance }}元</text>
         </view>
         <view class="card-detail-item last">

@@ -141,6 +141,7 @@ export type TCostList = {
 }[];
 
 export type TPayDetailInfo = {
+  visitingMode?: string;
   medicineSpot: string;
   costList?: TCostList;
   patientName: string;

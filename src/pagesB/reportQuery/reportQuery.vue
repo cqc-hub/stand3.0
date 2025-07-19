@@ -823,10 +823,10 @@
     const { listYun } = pageConfig.value;
 
    // 优先处理 sysCode 为 '1001035' 的情况
-   if(gStores.globalStore.sysCode === '1001035'){
-       getJSSZYunUrl();
-       return;
-    }
+  //  if(gStores.globalStore.sysCode === '1001035'){
+  //      getJSSZYunUrl();
+  //      return;
+  //   }
 
     if (listYun) {
       const { imgUrl } = listYun;

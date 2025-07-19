@@ -152,7 +152,10 @@
           class="head-row flex-normal flex-start-r"
         >
           <view class="head-row-label text-no-wrap color-888">取药地点</view>
-          <view class="head-row-value color-444">
+          <view v-if="gStores.globalStore.sysCode === '1001035' && detailData.visitingMode === '1'"  class="head-row-value color-444">
+           云诊室不支持到院取药，请选择快递取药！
+          </view>
+          <view v-else class="head-row-value color-444">
             {{ detailData.medicineSpot }}
           </view>
         </view>

@@ -47,7 +47,7 @@
             >
               {{ item.totalCost }}元
             </view>
-            <view  v-if="gStores.globalStore.sysCode !== '1001035'" class="iconfont color-888 f48">&#xe66b;</view>
+            <view class="iconfont color-888 f48">&#xe66b;</view>
           </view>
         </view>
 
