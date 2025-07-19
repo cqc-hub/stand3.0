@@ -442,6 +442,7 @@
       isFace,
       isCanChangeHosPhone,
       isFaceRemote,
+      faceAgeRange = [17, 60],
       // isPayWithoutSecretAuth,
       // useFaceVerifyInChangePhone,
     } = pageConfig.value;
@@ -489,13 +490,32 @@
     }
 
     if (isFace === '1') {
+      const [minAge, maxAge] = faceAgeRange || [];
       if (isIDCard) {
         const { sysCode } = gStores.globalStore;
+
+        const { age } = idValidator.getIdCardInfo(
+          formData.value[formKey.idCard]
+        );
+
+        let shouldProceed = false;
+
+        if (!shouldProceed && minAge && age >= minAge) {
+          shouldProceed = true;
+        }
+
+        if (!shouldProceed && maxAge && age < maxAge) {
+          shouldProceed = true;
+        }
+
+        if (minAge && maxAge) {
+          shouldProceed = age >= minAge && age <= maxAge;
+        }
+
         // 新增判断 健康温州去除年龄判断
-        const shouldProceed =
-          sysCode === '1001082' ||
-          (getInfoFromIdCard(formData.value[formKey.idCard]).age > 17 &&
-            getInfoFromIdCard(formData.value[formKey.idCard]).age < 60);
+        if (sysCode === '1001082') {
+          shouldProceed = true;
+        }
 
         if (shouldProceed) {
           const { pData } = await patientUtils.faceVerifyAndPData({

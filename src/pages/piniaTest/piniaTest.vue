@@ -480,6 +480,17 @@
     isLocal: '1',
   } as TButtonConfig;
 
+  const 省中云诊室 = {
+    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesA/MyRegistration/registrationTypeYun',
+    text: '省中云诊室',
+    extraData: {},
+    addition: {},
+    isLocal: '1',
+  } as TButtonConfig;
+
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
@@ -521,7 +532,7 @@
       // });
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
-      useTBanner(乐清产科问卷);
+      useTBanner(省中云诊室);
       // useTBanner(queryCase);
     }, 1000);
   });
