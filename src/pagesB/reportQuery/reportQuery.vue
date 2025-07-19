@@ -867,10 +867,11 @@
         patientId,
       });
       loading.value = false;
-      if (result?.respCode) {
+      console.log(2222,result)
+      if (result) {
         uni.navigateTo({
           url: `/pagesA/webView/webView?https=${encodeURIComponent(
-            result.respCode!
+            result
           )}`,
         });
       }  
