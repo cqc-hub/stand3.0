@@ -298,10 +298,6 @@
         }),
       });
     } else {
-      // 江苏省中定制化 门诊待缴费不让点击
-      if(gStores.globalStore.sysCode === '1001035' && item.payState === '1'){
-        return;
-      }
       goPayDetail(item);
     }
   };
@@ -497,7 +493,7 @@
     setTimeout(()=>{
        console.log(77777777777777,unPayList.value)
     },3000)
-   
+
 
   });
 </script>
