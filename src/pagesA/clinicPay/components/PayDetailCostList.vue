@@ -2,7 +2,7 @@
   <view class="">
     <view v-for="(item, idx) in list" :key="idx" class="">
       <block v-if="item.costList && item.costList.length">
-        <g-collapse ref="collapseRef" :border="false">
+        <g-collapse ref="collapseRef" :border="false" :disabled="disabled">
           <template #title>
             <view class="collapse-title flex-between g-bold">
               <view v-if="mulit || mulitChildren" class="flex1 f32 flex-normal">
@@ -161,6 +161,7 @@
     selListChildren: TCostList[number]['costList'];
     mulit: boolean;
     mulitChildren: boolean;
+    disabled: boolean;
   }>();
   const emits = defineEmits(['sel-item', 'sel-children']);
 
