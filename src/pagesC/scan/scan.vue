@@ -8,7 +8,7 @@
   import { defineComponent, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, useTBanner, wait } from '@/utils';
+  import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
@@ -22,6 +22,8 @@
        */
       type: '1' | '2' | '3';
       [key: string]: any;
+      // TBannerConfig
+      btn?: string;
     }
   );
 
@@ -124,7 +126,13 @@
   };
 
   const init = async () => {
-    const { type } = pageProps.value;
+    const { type, btn } = pageProps.value;
+
+    if (btn) {
+      const btnParse = JSON.parse(btn) as TBannerConfig;
+      useTBanner(btnParse);
+      return;
+    }
 
     switch (type) {
       case '1':
