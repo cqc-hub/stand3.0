@@ -148,7 +148,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { IRegistrationCardItem } from '../../utils/MyRegistration';
   import {
     getStatusConfig,
@@ -176,7 +176,10 @@
     config: ISystemConfig['order'];
   }>();
   const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
-
+  const isWx = ref(false);
+  // #ifdef  MP-WEIXIN
+  isWx.value = true;
+  // #endif
   const getCustomBtns = computed(() => {
     const list = [...(props.config.regListItemCustomButtons || [])];
     if (gStores.globalStore.sysCode === '1001048') {
@@ -184,7 +187,7 @@
         text: '预问诊',
         type: 'h5',
         path: 'ywz1001048',
-        orderStatus: ['0']
+        orderStatus: ['0'],
       });
     }
 
@@ -269,12 +272,19 @@
 
   //显示多院区院内导航(仅绍兴)
   const isNav = (item: IRegistrationCardItem) => {
-    // #ifdef  MP-WEIXIN
-    return globalGl.SYS_CODE === '1001046';
-    // #endif
-    // #ifdef  MP-ALIPAY
-    // return globalGl.SYS_CODE === '1001046' && item.hosId === '13178';
-    // #endif
+    if (isWx.value) {
+      if (gStores.globalStore.sysCode === '1001046') {
+        return true;
+      }
+      if (gStores.globalStore.sysCode === '1001035') {
+        const { hosId } = item;
+
+        if (['12675', '12713'].includes(hosId)) {
+          return true;
+        }
+      }
+    }
+
     return false;
   };
 
