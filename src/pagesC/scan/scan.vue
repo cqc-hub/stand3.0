@@ -1,6 +1,13 @@
 <template>
-  <view class="">
-    <g-message />
+  <view class="cache">
+    <view class="cache-img-container">
+      <image
+        mode="aspectFit"
+        class="cache-img"
+        :src="BASE_IMG + 'img_h5bg@3x.png'"
+      />
+    </view>
+    <view class="cache-fixbottom">浙江和仁科技股份有限公司@技术支持</view>
   </view>
 </template>
 
@@ -11,6 +18,7 @@
   import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
+    import { BASE_IMG } from '@/config/global';
 
   const gStores = new GStores();
   const pageProps = ref(
@@ -130,7 +138,7 @@
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
-      useTBanner(btnParse);
+      useTBanner(btnParse,'navigateTo', gStores.globalStore.h5MenuExtraData);
       return;
     }
 
@@ -161,8 +169,8 @@
 
     const queryParams = gStores.globalStore.appShowData?.query?.qrCode;
 
-    uni.showLoading({});
-    await wait(600);
+    // uni.showLoading({});
+    // await wait(600);
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       console.log('截止-----', queryParams);
       return;
@@ -178,4 +186,29 @@
   });
 </script>
 
-<style lang="scss" scoped></style>
+
+<style scoped lang="scss">
+  .cache {
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+
+    .cache-img-container {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      top: 240upx;
+    }
+    .cache-fixbottom {
+      position: absolute;
+      bottom: 144upx;
+      width: 100%;
+      text-align: center;
+
+      font-size: var(--hr-font-size-xxxs);
+      font-weight: 400;
+      color: #999;
+    }
+  }
+</style>
+

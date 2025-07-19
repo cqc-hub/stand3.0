@@ -147,12 +147,7 @@ const interceptorRoute = async function (item: any) {
             throw new Error('登录已过期，请重新登录');
           } 
         } 
-         useTBanner(query, 'navigateTo', {
-          PATIENTID: gStores.userStore.patChoose.patientId,
-          HERENID: gStores.globalStore.herenId,
-          TOKEN: gStores.globalStore.token.accessToken,
-          OPENID: gStores.globalStore.openId,
-        });
+         useTBanner(query, 'navigateTo', gStores.globalStore.h5MenuExtraData);
         throw new Error('使用 useTBanner函数跳转');
     }
   }

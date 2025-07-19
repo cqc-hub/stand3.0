@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import globalGl from '@/config/global';
 import { getCurrentInstance } from 'vue';
 import { getTcMallToken } from '@/common/utils';
+import { useUserStore } from '@/stores';
 
 type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
 
@@ -125,6 +126,16 @@ const globalStore = defineStore('global', {
       }
 
       return pageClass;
+    },
+
+    h5MenuExtraData() {
+      const userStore = useUserStore();
+      return {
+          PATIENTID: userStore.patChoose.patientId,
+          HERENID: this.herenId,
+          TOKEN: this.token.accessToken,
+          OPENID: this.openId,
+      };
     },
   },
 
