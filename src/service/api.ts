@@ -510,7 +510,6 @@ const queryApi = {
     service.post<any>('/phs-query/medicine/getChineseMedicineList', parm(data)),
   getChineseMedicineListNl: (data) =>
     service.post<any>(
-    service.post<any>(
       '/phs-query/medicine/getChineseMedicineListNl',
       parm(data)
     ),
