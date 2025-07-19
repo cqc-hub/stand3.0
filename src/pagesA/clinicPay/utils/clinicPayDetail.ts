@@ -2098,6 +2098,10 @@ export const usePayPage = () => {
             url: '/pagesB/medicationAssistant/medicalHelp',
           });
         }
+      }else{
+          uni.navigateTo({
+            url: '/pagesB/medicationAssistant/medicalHelp',
+          });
       }
     } catch (error) {
       console.error('获取中药代煎数据失败:', error);

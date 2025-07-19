@@ -223,6 +223,7 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
+  console.log(8888888888,fullUrl)
   //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();

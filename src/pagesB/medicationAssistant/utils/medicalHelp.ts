@@ -22,6 +22,7 @@ export interface IWaitListItem {
   takenDrug: string; // 0 待取药 1 已取药
   tcmDecoctionIndicator?: '0' | '1';
   _id: string;
+  scan?:string;
 }
 
 interface IDrugDetailListItem {

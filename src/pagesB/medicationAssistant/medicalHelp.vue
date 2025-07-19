@@ -570,6 +570,7 @@ import Sign from '@/pagesA/medicalCardMan/sign.vue';
   };
 
   onLoad(async (opt) => {
+      console.log('show pageProps.value',opt)
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     if (getSysCode() === '1001035') {
       uni.setNavigationBarTitle({
@@ -594,6 +595,7 @@ import Sign from '@/pagesA/medicalCardMan/sign.vue';
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      console.log('show pageProps.value',pageProps.value)
     }
 
     const { tabIndex, params } = pageProps.value;
