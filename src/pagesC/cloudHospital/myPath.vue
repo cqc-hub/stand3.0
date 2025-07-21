@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
   import global from '@/config/global';
   import { getToken, getSysCode } from '@/common/useToken';
   import { ref } from 'vue';
@@ -124,8 +124,8 @@
     if (options.type !== '1') {
       query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}`;
       // 中医风格
-      if(isTcmStyle !== '0'){
-        query+=`&isTcmStyle=${isTcmStyle}&`
+      if (isTcmStyle !== '0') {
+        query += `&isTcmStyle=${isTcmStyle}&`;
       }
     }
 
@@ -172,7 +172,11 @@
     handWebMessage(evt);
     var data = evt.target.data;
     var V3PageData = data[0];
-      if (V3PageData && (V3PageData.appId || (V3PageData.paymentData && V3PageData.paymentData.appId))) {
+    if (
+      V3PageData &&
+      (V3PageData.appId ||
+        (V3PageData.paymentData && V3PageData.paymentData.appId))
+    ) {
       thirdWxPay(V3PageData);
     } else if (V3PageData.gisLat) {
       //打开地图
@@ -184,6 +188,10 @@
       });
     }
   };
+
+  onShareTimeline(() => {
+    return {};
+  });
 </script>
 
 <style scoped></style>
