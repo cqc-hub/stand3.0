@@ -256,9 +256,13 @@
 
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
+    
     const { hosId, prescId } = pageProps.value;
-
-    const { result } = await api.getDrugDeliveryDetail({
+ const actionApi =
+        pageProps.value.scan == 1
+          ? api.getScanDrugDeliveryDetail
+          : api.getDrugDeliveryDetail;
+    const { result } = await actionApi({
       cardNumber,
       patientId,
       hosId,
@@ -312,7 +316,7 @@
     return {
       pointNow: expressInfo.value?.pointNow,
       pointEnd: {
-        title: detailData.value.addresseeAddress,
+        title: detailData.value.deliveryAddress||detailData.value.addresseeAddress,
         desc: `${detailData.value.addresseeName} ${detailData.value.addresseePhone}`,
       },
     };

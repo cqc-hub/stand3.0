@@ -47,7 +47,7 @@
       <view class="row-content">
         <view class="row-content flex-between">
           <view class="text-ellipsis color-blue">
-            <text class="mr16 title color-dark">{{ pointEnd.title }}</text>
+            <text class="mr16 title color-dark ellipsis-line-clamp2">{{ pointEnd.title }}</text>
           </view>
         </view>
         <view class="color-light-dark text-ellipsis">{{ pointEnd.desc }}</view>

@@ -59,7 +59,6 @@
             :systemModeOld="gStores.globalStore.modeOld"
             @click-item="selItemClick"
             @express-click="expressClick"
-            show-status
           />
 
           <view class="empty-list" v-if="isComplete['1'] && !seledList.length">
@@ -232,27 +231,6 @@
         }
       }
     }
-    // if (getSysCode() === '1001035'&&list?.length) {
-    //   let oldPrescVisitType = list[0].prescVisitType;
-    //   if (list.every((item) => item.prescVisitType === oldPrescVisitType)) {
-    //     let firstDev = list[0].deliveryType;
-    //     if (list.every((item) => item.deliveryType === firstDev)) {
-    //       //判断是否同种类
-    //       if (firstDev == 5) {
-    //         //只可快递
-    //         return[opt2]
-    //       }
-    //     } else {
-    //       gStores.messageStore.showMessage('不同配送类型不可同时勾选！', 3000);
-    //       return;
-    //     }
-    //   } else {
-    //     gStores.messageStore.showMessage('不同就诊类型不可同时勾选！', 3000);
-
-    //     return;
-    //   }
-    // }
-
     return f ? [opt2] : [opt1, opt2];
   };
 
@@ -314,6 +292,7 @@
             list.map((o) => isChineseMedical(o) && o.drugIsDelivery === '1')
           ),
         ];
+        console.log('types',types)
         const isDJ = isToBeFriedAndDelivery(item);
         let [
           isDifferentHosErr,
@@ -435,6 +414,7 @@
     dealWith1001067();
     const pageArg = {
       ...item,
+      scan: pageProps.value?.params ? 1 : 0,
     };
 
     if (item.takenDrugType !== '0') {

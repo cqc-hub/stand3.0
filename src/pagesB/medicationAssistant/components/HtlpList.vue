@@ -96,20 +96,22 @@
 
         <view v-if="item.deliveryType" class="item-box f28">
           <view class="row flex-normal">
-            <view class="row-label color-888">药品类型</view>
+            <view class="row-label color-888">药品分类</view>
             <view class="flex1 g-break-word color-444 flex-normal">
               <view class="text-ellipsis">
                 {{
-                  item.tcmDecoctionIndicator &&
-                  item.tcmDecoctionIndicator == '1'
-                    ? '代煎'
-                    : '自煎'
-                }}{{
                   item?.takenDrugType == '0'
                     ? item.deliveryType == '2'
-                      ? '(含有特殊药品，请前往医院窗口自提)'
-                      : '(可配送)'
-                    : `(${deliveryTypeList[item.deliveryType]})`
+                      ? '窗口取药'
+                      : '可配送'
+                    : `${deliveryTypeList[item.deliveryType]}`
+                }}
+                {{
+                  item.drugTypeName === '中药' ?
+                  (item.tcmDecoctionIndicator &&
+                  item.tcmDecoctionIndicator == '1'
+                    ? '(代煎)'
+                    : '(自煎)'):''
                 }}
               </view>
             </view>
@@ -117,7 +119,7 @@
         </view>
 
         <view
-          v-if="item.takenDrugType && !showStatus && !item.deliveryType"
+          v-if="item.takenDrugType && !showStatus "
           class="item-box f28"
         >
           <view class="row flex-normal">

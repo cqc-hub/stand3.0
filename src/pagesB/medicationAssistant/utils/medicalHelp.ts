@@ -24,7 +24,7 @@ export interface IWaitListItem {
   tcmDecoctionIndicator?: '0' | '1';
   prescVisitType?: string;
   _id: string;
-  scan?: string;
+  scan?: number;
 }
 
 interface IDrugDetailListItem {
