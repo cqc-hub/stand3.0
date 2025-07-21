@@ -190,9 +190,7 @@
   });
 
   const getExpressAppId = computed(() => {
-    if (gStores.globalStore.sysCode === '1001035') {
-      return true;
-    }
+  
     // #ifdef MP-ALIPAY
     return pageConfig.value.deliveryFired?.alipay;
     // #endif
