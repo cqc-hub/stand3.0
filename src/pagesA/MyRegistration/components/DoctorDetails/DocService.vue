@@ -85,7 +85,7 @@
       receptionMode: '4',
     },
     {
-      img: 'card_doctor_mbfz_n',
+      img: 'card_doctor_mbfz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
       title: '在线问诊',
       fee: 0,
       util: '次',
