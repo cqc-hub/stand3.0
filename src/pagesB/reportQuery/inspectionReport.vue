@@ -228,9 +228,10 @@
         </view>
       </template>
     </view>
+    
     <view class="tips">
       <view>{{ tips.title }}：</view>
-      <view>{{ tips.content }}</view>
+       <rich-text :nodes="tips.content" />
     </view>
 
     <Bottom-Nav
@@ -525,9 +526,9 @@
     title: '',
     content: '',
   });
-  const getTips = async () => {
+  const getTips = async (typeFlag) => {
     const { result } = await api.getSysAppMore({
-      typeFlag: 6,
+      typeFlag,
     });
     tips.value = result;
   };
@@ -593,6 +594,12 @@
       }
     }
     examineReportList.value = result;
+    if(gStores.globalStore.sysCode === '1001035' && result.examClass === '病理'){
+      getTips(661);
+    }else{
+      getTips(6);
+    }
+
     btnNumber.value = examineReportList.value.detailsResult?.length;
     for (var i = 0; i < btnNumber.value; i++) {
       isShow.value.push(0);
@@ -921,7 +928,6 @@
       } catch (error) {}
     }
     windowInfo.value = uni.getSystemInfoSync();
-    getTips();
     getInspectionReportList();
     if (pageProps.value.isWatermark === '1') {
       addWatermark(global.systemInfo.name);

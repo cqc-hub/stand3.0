@@ -128,6 +128,20 @@
     },
   };
 
+  const tiyy1001035 = {
+    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '体检预约与报告',
+    extraData: {
+      _type: 'tjyy1001035',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   // 智能导诊
   const smartDiseaseGuide: TButtonConfig = {
     type: 'h5',
@@ -494,45 +508,9 @@
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
-      //   useTBanner({
-      //     type: 'h5',
-      //     path: 'https://health.eheren.com/v3/#/pagesB/historicalMess/historicalMess?sysCode=1001067&appId=2021004193658562',
-      //   });
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'mDisease/detail/healthGrade',
-      //   addition: {
-      //     patientId: '_patientId',
-      //   },
-      // });
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'mDisease/detail/blood',
-      //   addition: {
-      //     patientId: '_patientId',
-      //   },
-      // });
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'mDisease/index/index',
-      //   addition: {
-      //     patientId: '_patientId',
-      //   },
-      // });
-      // useTBanner({
-      //   type: 'h5',
-      //   isSelfH5: '1',
-      //   path: 'pages/index/test',
-      //   addition: {
-      //     // patientId: '_patientId',
-      //   },
-      // });
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
-      useTBanner(eletronicInvoice);
+      useTBanner(省中云诊室);
       // useTBanner(queryCase);
     }, 1000);
   });

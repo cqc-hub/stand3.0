@@ -10,3 +10,10 @@ export type FilterOptional<T extends BaseObject, F> = Pick<
 >;
 
 export function assignType<T>(val): asserts val is T {}
+
+
+export type CanWrite<T> = {
+  -readonly [K in keyof T]: T[K] extends Record<any, any>
+    ? CanWrite<T[K]>
+    : T[K];
+};

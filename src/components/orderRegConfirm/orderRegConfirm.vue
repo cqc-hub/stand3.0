@@ -15,7 +15,7 @@
         }"
         class="container"
       >
-        <image :src="headerIcon" mode="heightFix" class="popup-header-icon" />
+        <image :src="_headerIcon" mode="heightFix" class="popup-header-icon" />
         <view class="popup-container">
           <view class="popup-header popup-padding flex-between f44">
             <view class="popup-header-title">
@@ -62,11 +62,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref, reactive } from 'vue';
+  import { computed, ref } from 'vue';
   import wybPopup from '@/components/wyb-popup/wyb-popup.vue';
   import global from '@/config/global';
+  import { GStores } from '@/utils';
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       maskClickClose?: boolean;
       isShowCloseIcon?: boolean;
@@ -82,16 +83,25 @@
     {
       title: '须知',
       maskClickClose: true,
-      headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png',
+      // headerIcon: global.BASE_IMG + 'v3-order-reg-confirm.png',
       height: '90vh',
       cannerText: '取消',
       confirmText: '同意须知',
     }
   );
-
+  const gStores = new GStores();
   const emits = defineEmits(['show', 'hide', 'confirm', 'cancel']);
-
   const popup = ref<any>('');
+
+  const _headerIcon = computed(() => {
+    if (props.headerIcon) {
+      return props.headerIcon;
+    }
+
+    return `${global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`;
+  });
 
   const onActionSheetShow = () => {
     emits('show');
@@ -121,7 +131,7 @@
   const cancel = () => {
     hide();
     emits('cancel');
-  }
+  };
 
   defineExpose({
     show,

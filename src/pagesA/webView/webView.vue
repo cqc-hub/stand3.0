@@ -1,57 +1,27 @@
 <template>
   <view class="">
+    <!-- @vue-expect-error -->
     <web-view v-if="src" :src="src" @message="getMessage"></web-view>
   </view>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { onShareAppMessage } from '@dcloudio/uni-app';
+  import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
   import { useCommonTo } from '@/common/checkJump';
   import { handWebMessage, thirdWxPay, GStores, useTBanner } from '@/utils';
+  import { deQueryForUrl } from '@/common';
+  import { CanWrite } from '@/typeUtils';
 
   const gStores = new GStores();
 
   // pagesA/webView/webView
   const props = defineProps<{
     https: string;
-    _type?: string; // 1 表示h5携带登录相关信息跳转过去
     query?: any;
   }>();
+  const pageProps = ref({} as CanWrite<typeof props>);
   const src = ref('');
-
-  if (props.https) {
-    console.warn(decodeURIComponent(props.https));
-
-    src.value = decodeURIComponent(props.https);
-  }
-  if (props._type === '3') {
-    let query = (props.query && JSON.parse(props.query)) || {};
-    useTBanner(
-      {
-        type: 'h5',
-        path: query?.path,
-        addition: {
-          TOKEN: 'token',
-          PATIENTID: 'patientId',
-          HERENID: 'herenId',
-        },
-        extraData: {
-          source: gStores.globalStore.browser.source,
-          sysCode: gStores.globalStore.sysCode,
-          reqForward: true,
-          openId: gStores.globalStore.openId,
-          ...(query?.extraData || {}),
-        },
-      },
-      'navigateTo',
-      {
-        PATIENTID: gStores.userStore.patChoose.patientId,
-        HERENID: gStores.globalStore.herenId,
-        TOKEN: gStores.globalStore.token.accessToken,
-      }
-    );
-  }
 
   const getMessage = (evt) => {
     console.warn('返回数据', evt);
@@ -73,11 +43,23 @@
     }
   };
 
+  const init = () => {
+    if (pageProps.value.https) {
+      console.warn(decodeURIComponent(pageProps.value.https));
+      src.value = decodeURIComponent(pageProps.value.https);
+    }
+  };
+
+  onLoad((opt) => {
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
+
+    init();
+  });
+
   onShareAppMessage((opt) => {
-    return {
-      path:
-        '/pagesA/webView/webView?https=' + encodeURIComponent(opt.webViewUrl!),
-    };
+    return {};
   });
 </script>
 

@@ -61,6 +61,8 @@ export interface ISystemConfig_ {
     chooseDay: number;
     // 过滤无号医生按钮
     isShowFilterOrderSourceBtn?: '1';
+    /** 按日期, 分组名 categorName 隐藏 */
+    isHideOrderCategorName?: '1';
     // 选择号源时候显示几列
     selOrderColumn: number;
     // 精确号源?
