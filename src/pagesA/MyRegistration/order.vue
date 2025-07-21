@@ -15,7 +15,7 @@
         isShowAllDate
       />
       <view
-        v-if="orderConfig.isShowFilterOrderSourceBtn === '1'"
+        v-if="pageConfig.isShowFilterOrderSourceBtn === '1'"
         class="flex-between bg-white g-border-top"
       >
         <view></view>
@@ -38,8 +38,8 @@
         <view v-for="(item, i) in _allDocList" :key="i" class="pb16">
           <Order-Doc-Item-All
             :item="item"
-            :pageConfig="orderConfig"
-            :patient="orderConfig.isOrderWithoutPat !== '1'"
+            :pageConfig="pageConfig"
+            :patient="pageConfig.isOrderWithoutPat !== '1'"
             @date-click="dateClick"
             @avatar-click="avatarClick"
             @preregistration-click="preregistrationClick"
@@ -54,16 +54,16 @@
       <view v-if="checkedDay" class="container-contract">
         <view v-for="(item, i) in _dateDocListFilterByDate" :key="i" class="">
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
-            <view class="item-scheme-date">{{ _item.categorName }}</view>
+            <view v-if="pageConfig.isHideOrderCategorName !== '1'" class="item-scheme-date">{{ _item.categorName }}</view>
             <view
               v-for="(__item, __i) in _item.schemeList"
               class="pb16 animate__animated animate__fadeIn"
               :key="__i"
             >
               <Order-Doc-Item-Date
-                :patient="orderConfig.isOrderWithoutPat !== '1'"
+                :patient="pageConfig.isOrderWithoutPat !== '1'"
                 :item="__item"
-                :pageConfig="orderConfig"
+                :pageConfig="pageConfig"
                 :systemModeOld="gStores.globalStore.modeOld"
                 @reg-click="regClick"
                 @wait-reg-click="showWaitRegDialog"
@@ -98,8 +98,8 @@
       v-model:value="selectOrderSourceNumId"
       :isComplete="isComplete"
       :orderSourceList="orderSourceList"
-      :column="orderConfig.selOrderColumn"
-      :is-blur="orderConfig.isOrderBlur"
+      :column="pageConfig.selOrderColumn"
+      :is-blur="pageConfig.isOrderBlur"
       :choose-days="chooseDays"
       :checked-day="regDate"
       @item-click="orderSourceChoose"
@@ -109,7 +109,7 @@
     <Order-Pre-Source
       v-model:show="isOrderPreSourceShow"
       :list="preregistrationRegNumbers"
-      :pageConfig="orderConfig"
+      :pageConfig="pageConfig"
       @item-click="goPreregistration"
     />
     <g-message />
@@ -174,7 +174,7 @@
     selectOrderSource,
     selectSchInfos,
     orderSourceList,
-    orderConfig,
+    orderConfig: pageConfig,
     orderSourceChoose,
     selectOrderSourceNumId,
     amChange,
@@ -271,7 +271,7 @@
       schDate,
       schId,
     };
-    orderConfig.value.isOpenAddedNum === '1' && (query.addedNum = addedNum);
+    pageConfig.value.isOpenAddedNum === '1' && (query.addedNum = addedNum);
 
     const { result } = await api.canRegAlternate(query);
     if (result) {
