@@ -79,9 +79,9 @@
   onLoad((opt) => {
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-
-      init();
     }
+
+    init();
   });
 
   onShareAppMessage((opt) => {
