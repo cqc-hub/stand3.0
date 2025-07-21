@@ -33,7 +33,7 @@
         }"
         class="btn btn-primary"
       >
-        保1存
+        保存
       </button>
       <button
         v-if="props.pageType === 'edit'"

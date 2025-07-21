@@ -39,6 +39,9 @@
             >
               {{ visitTypeLabel[item.visitType].label }}
             </text>
+            <text v-if="item.prescVisitType" class="f24 item-title-type base">
+              {{ prescVisitTypeList[item.prescVisitType] }}
+            </text>
           </view>
 
           <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow flex1">
@@ -79,15 +82,6 @@
           </view>
         </view>
 
-         <view v-if="item.tcmDecoctionIndicator " class="item-box f28">
-          <view class="row flex-normal">
-            <view class="row-label color-888">是否代煎</view>
-            <view class="flex1 g-break-word color-444">
-              {{ item.tcmDecoctionIndicator=='1'?'代煎':'自煎' }}
-            </view>
-          </view>
-        </view>
-
         <view v-if="item.deptName" class="item-box f28">
           <view class="row flex-normal">
             <view class="row-label color-888">开单科室</view>
@@ -102,14 +96,30 @@
 
         <view v-if="item.deliveryType" class="item-box f28">
           <view class="row flex-normal">
-            <view class="row-label color-888">配送状态</view>
+            <view class="row-label color-888">药品类型</view>
             <view class="flex1 g-break-word color-444 flex-normal">
-              <view class="text-ellipsis">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
+              <view class="text-ellipsis">
+                {{
+                  item.tcmDecoctionIndicator &&
+                  item.tcmDecoctionIndicator == '1'
+                    ? '代煎'
+                    : '自煎'
+                }}{{
+                  item?.takenDrugType == '0'
+                    ? item.deliveryType == '2'
+                      ? '(含有特殊药品，请前往医院窗口自提)'
+                      : '(可配送)'
+                    : `(${deliveryTypeList[item.deliveryType]})`
+                }}
+              </view>
             </view>
           </view>
         </view>
 
-        <view v-if="item.takenDrugType && !showStatus" class="item-box f28">
+        <view
+          v-if="item.takenDrugType && !showStatus && !item.deliveryType"
+          class="item-box f28"
+        >
           <view class="row flex-normal">
             <view class="row-label color-888">取药状态</view>
             <view class="flex1 g-break-word color-444">
@@ -176,8 +186,18 @@
       class: 'purple',
     },
   };
+  const prescVisitTypeList = ['线下门诊', '云诊室', '出院带药'];
 
   const selIds = computed(() => props.selUnPayList.map((o) => o._id));
+
+  const deliveryTypeList = [
+    '无',
+    '可配送或窗口取药',
+    '线下处置',
+    '冷链配送',
+    '中药代煎',
+    '快递配送',
+  ];
 
   const statusLabel = {
     '0': {
@@ -286,6 +306,10 @@
             border-radius: 4px;
             padding: 0 8rpx;
             margin-left: 8rpx;
+
+            &.base {
+              color: var(--hr-warning-color-7);
+            }
 
             &.blue {
               background-color: var(--hr-brand-color-1);

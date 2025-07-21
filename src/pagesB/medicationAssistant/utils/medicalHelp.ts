@@ -1,5 +1,6 @@
 import api from '@/service/api';
 import HTMLParser from '@/common/html-parser';
+import { GStores, ServerStaticData } from '@/utils';
 export interface IWaitListItem {
   acceptTime: string;
   expressNo: string;
@@ -21,8 +22,9 @@ export interface IWaitListItem {
   drugIsDelivery: '0' | '1'; // 代煎方式 0代煎 1代煎外配
   takenDrug: string; // 0 待取药 1 已取药
   tcmDecoctionIndicator?: '0' | '1';
+  prescVisitType?: string;
   _id: string;
-  scan?:string;
+  scan?: string;
 }
 
 interface IDrugDetailListItem {
@@ -32,7 +34,7 @@ interface IDrugDetailListItem {
   itemSpec: string;
   units: string;
   use: string;
-  isTake:number;
+  isTake: number;
 }
 
 export interface IItemDetail {
@@ -81,12 +83,16 @@ export const isToBeFriedAndDelivery = (item: IWaitListItem) => {
 };
 
 export const getShowDrugName = (item: IWaitListItem) => {
+  const gStores = new GStores();
   const { drugTypeName } = item;
 
-  if (isChineseMedical(item)) {
+  if (isChineseMedical(item) && gStores.globalStore.sysCode !== '1001035') {
     if (isToBeFriedAndDelivery(item)) {
       return drugTypeName + `(代煎外配)`;
-    } else if (item.tcmDecoctionIndicator === '0' && item.drugIsDelivery === '0') {
+    } else if (
+      item.tcmDecoctionIndicator === '0' &&
+      item.drugIsDelivery === '0'
+    ) {
       return drugTypeName + `(代煎)`;
     }
   }
@@ -95,15 +101,15 @@ export const getShowDrugName = (item: IWaitListItem) => {
 };
 
 export const getSysAppMore = async (typeFlag: string) => {
-  let text
+  let text;
   try {
     const { result } = await api.getSysAppMore({
       typeFlag,
-    })
+    });
     const { content } = result;
-    text = HTMLParser(content)
-  } catch(err) {
-    text  = '请凭二维码前往药房取药'
+    text = HTMLParser(content);
+  } catch (err) {
+    text = '请凭二维码前往药房取药';
   }
-  return text
-}
+  return text;
+};

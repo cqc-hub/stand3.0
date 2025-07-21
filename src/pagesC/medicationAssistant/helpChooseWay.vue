@@ -102,6 +102,7 @@
                     :value="iceBagNum"
                     :min="0"
                     :max="2"
+                    :step="iceBagStep"
                     @change="boxChange"
                     inputDisabled
                   />
@@ -145,12 +146,12 @@
       >
         <text class="color-444 f28 mr8">合计</text>
         <text class="f36 g-bold color-error">
-          {{ feeDetail.totalFee ? `${feeDetail.totalFee}元` : '0元' }}
+          {{ feeDetail.totalCost ? `${feeDetail.totalCost}元` : '0元' }}
         </text>
       </view>
       <button
         :class="{
-          'btn-disabled': !feeDetail.totalFee,
+          'btn-disabled': !feeDetail.totalCost,
         }"
         @click="submit"
         class="btn btn-primary flex1"
@@ -225,6 +226,7 @@
   ]);
 
   const aimValue = ref<any[]>([]);
+  const iceBagStep = ref<number>(1);
   const iceBagNum = ref(0);
   // const iceBagCharges =ref(0)
   // const iceBagRules = ref<any>({});
@@ -233,11 +235,18 @@
     iceBagCharges: 0,
     hosOrderId: '',
     costs: '',
+    totalCost: 0,
   });
 
   const boxChange = async (count: number) => {
     iceBagNum.value = count;
-    await getExpressFee();
+    if (gStores.globalStore.sysCode==='1001035') {
+      const aim = aimList.value.find(
+        (item) => item.value === aimValue.value[0]
+      );
+      aim?.value == '2' && (iceBagStep.value = 1);
+    }
+    getIceFee();
   };
 
   const addressInputClick = () => {
@@ -261,6 +270,15 @@
     });
   };
 
+  const getIceFee = () => {
+    const aim = aimList.value.find((item) => item.value === aimValue.value[0]);
+    let iceFee = (aim?.iceBagfee * 1 || 0) * iceBagNum.value;
+    if(gStores.globalStore.sysCode==='1001035'&&addressList.value[0]?.city!=='南京市'&&aim?.value=='1'){
+      iceFee=0
+    }
+    feeDetail.value.iceBagCharges = iceFee;
+    feeDetail.value.totalCost = feeDetail.value.totalFee * 1 + iceFee;
+  };
   const getExpressFee = async () => {
     feeDetail.value.hosOrderId = '';
     feeDetail.value.costs = '';
@@ -278,7 +296,7 @@
       expressPhone: senderPhone,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
-      iceBagNum: iceBagNum.value,
+      iceBagNum: 0,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
       hosPatientId: cardNumber || gStores.userStore.patChoose.cardNumber,
@@ -296,13 +314,26 @@
         iceBagCharges,
         hosOrderId,
         costs: expressList,
+        totalCost: totalFee,
       };
+      getIceFee();
+
+      if (gStores.globalStore.sysCode==='1001035') {
+        const aim = aimList.value.find(
+          (item) => item.value === aimValue.value[0]
+        );
+        iceBagNum.value == 0
+        aim?.value == '2' && iceBagNum.value !== 0
+          ? (iceBagStep.value = 1)
+          : (iceBagStep.value = 2);
+      }
     } catch (e) {
       feeDetail.value = {
-        totalFee: '0',
+        totalFee: 0,
         iceBagCharges: 0,
         hosOrderId: '',
         costs: '',
+        totalCost: '0',
       };
     }
   };
@@ -419,7 +450,7 @@
   };
 
   const gotoExpressPay = async (args) => {
-    if (!feeDetail.value.totalFee || feeDetail.value.totalFee === '0') {
+    if (!feeDetail.value.totalCost || feeDetail.value.totalCost === '0') {
       gStores.messageStore.showMessage('请重新获取费用信息', 3000);
       return;
     }
@@ -447,7 +478,7 @@
       const params = {
         ...args,
         ...feeDetail.value,
-        fee: feeDetail.value.totalFee,
+        fee: feeDetail.value.totalCost,
         hosPatientId: args.cardNumber,
         prescId: cacheStore.medicalHelpSelList.map((o) => o.prescId),
         prescNo: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
@@ -459,11 +490,11 @@
       const {
         result: { paySign, phsOrderNo },
       } = await api.expressPay(params);
-      const { hosId, totalFee } = params;
+      const { hosId, totalCost } = params;
       const payRes = await payMoneyOnline({
         paySign,
         phsOrderNo,
-        totalFee,
+        totalFee: totalCost,
         source,
         phsOrderSource: 7,
         hosId,
@@ -477,13 +508,16 @@
   const handlePayAfter = () => {
     gStores.messageStore.showMessage('快递下单成功', 2000, {
       closeCallBack: () => {
-        useTBanner({
-          type: 'self',
-          path: 'pagesB/medicationAssistant/medicalHelp',
-          extraData: {
-            tabIndex: '1',
+        useTBanner(
+          {
+            type: 'self',
+            path: 'pagesB/medicationAssistant/medicalHelp',
+            extraData: {
+              tabIndex: '1',
+            },
           },
-        },'reLaunch');
+          'reLaunch'
+        );
       },
     });
   };
@@ -541,7 +575,7 @@
   });
 
   onLoad(async (opt) => {
-    if (getSysCode() === '1001035') {
+    if (gStores.globalStore.sysCode==='1001035') {
       uni.setNavigationBarTitle({
         title: '药品代煎快递办理',
       });

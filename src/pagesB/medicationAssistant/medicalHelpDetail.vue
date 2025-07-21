@@ -19,7 +19,13 @@
             <view class="safe-height"></view>
             <view class="safe-height"></view>
 
-            <view v-if="isMedicalFriedAndDelivery && getExpressAppId && gStores.globalStore.sysCode !== '1001038'">
+            <view
+              v-if="
+                isMedicalFriedAndDelivery &&
+                getExpressAppId &&
+                gStores.globalStore.sysCode !== '1001038'
+              "
+            >
               <text @click="goExpressApp" class="a-link f48">查看快递</text>
             </view>
             <view
@@ -57,13 +63,13 @@
       <view class="content">
         <view
           v-if="
-            ['20', '50'].includes(pageProps.takenDrugType) &&
-            // 中药 待煎外配直接小程序查看 不显示
-            !isMedicalFriedAndDelivery
+            (['20', '50'].includes(pageProps.takenDrugType) &&
+              // 中药 待煎外配直接小程序查看 不显示
+              !isMedicalFriedAndDelivery) ||
+            isSZShowExprss
           "
           class="box g-border p32 mb32"
         >
-
           <Express-Step
             :pointEnd="_expressInfo.pointEnd"
             :pointNow="_expressInfo.pointNow"
@@ -77,9 +83,6 @@
           v-if="detailData.qrCode && pageProps.takenDrugType === '1'"
           class="g-border box page-first-item mb16 p32"
         >
-
-
-
           <view class="my-display-none">
             <w-qrcode :options="_qrOpt" ref="refqrcode" />
             <w-barcode :options="_barOpt" ref="refqrbarcode" />
@@ -88,7 +91,6 @@
           <view class="g-flex-rc-cc g-bold f32 mb32">
             <rich-text :nodes="textRef" />
           </view>
-
 
           <view class="qr g-flex-rc-cc">
             <image v-if="showQrCode" :src="qrOpt._qrImg" class="qrcode-img" />
@@ -141,7 +143,7 @@
     type IWaitListItem,
     type IItemDetail,
   } from './utils/medicalHelp';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, getSysCode } from '@/common';
   import {
     GStores,
     type TButtonConfig,
@@ -158,7 +160,7 @@
   import HtlpBodyBox from './components/HtlpBodyBox.vue';
   import ExpressStep from './components/ExpressStep.vue';
 
-  const textRef = ref({})
+  const textRef = ref({});
   const pageProps = ref(<IWaitListItem>{});
   const pageConfig = ref<ISystemConfig['drugDelivery']>({});
   const gStores = new GStores();
@@ -176,7 +178,21 @@
   const refqrbarcode = ref('' as any);
   const showQrCode = ref(true);
 
+  const isSZShowExprss = computed(() => {
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      ['20', '50'].includes(detailData.value.takenDrugType) &&
+      detailData.value.expressNo
+    ) {
+      return true;
+    }
+    return false;
+  });
+
   const getExpressAppId = computed(() => {
+    if (gStores.globalStore.sysCode === '1001035') {
+      return true;
+    }
     // #ifdef MP-ALIPAY
     return pageConfig.value.deliveryFired?.alipay;
     // #endif
@@ -190,6 +206,10 @@
 
   // 选了取药方式的中药代煎外配?
   const isMedicalFriedAndDelivery = computed(() => {
+    console.log(
+      'isToBeFriedAndDelivery(pageProps.value)',
+      isToBeFriedAndDelivery(pageProps.value)
+    );
     return (
       isToBeFriedAndDelivery(pageProps.value) &&
       pageProps.value.takenDrugType !== '0'
@@ -273,7 +293,8 @@
       };
     }
 
-    detailData.value = result;
+    detailData.value = { ...result, qrCode: result.prescNo };
+    console.log('detailData.value');
 
     if (detailData.value.qrCode) {
       capture();
@@ -344,7 +365,7 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     pageConfig.value = await ServerStaticData.getSystemConfig('drugDelivery');
-    textRef.value = await getSysAppMore('1105')
+    textRef.value = await getSysAppMore('1105');
 
     init();
   });

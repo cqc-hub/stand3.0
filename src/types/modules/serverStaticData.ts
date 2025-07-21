@@ -394,7 +394,6 @@ export interface ISystemConfig_ {
     //支付后已缴费列表是否查询草药代煎列表
     isQueryChineseMedicine?: '1';
 
-
     /**
      * 详情页
      */
@@ -480,7 +479,7 @@ export interface ISystemConfig_ {
 
   /** 药品配送 DRUG_DELIVERY_CONFIG */
   drugDelivery: {
-    company?: IOptions[];
+    company?: Array<{ label: string; value: string; iceBagfee?: string }>;
 
     /** 中药代煎外配详情 内跳快递小程序的appid*/
     deliveryFired?: {
