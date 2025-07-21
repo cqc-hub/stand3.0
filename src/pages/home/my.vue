@@ -164,7 +164,9 @@ const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: st
         _type: "useTBanner",
         type: "h5",
         path: query?.path,
-        addition: { TOKEN: "token", PATIENTID: "patientId", HERENID: "herenId", OPENID: "openId" },
+        addition: { TOKEN: "token", PATIENTID: "patientId", HERENID: "herenId", OPENID: "openId",
+           ...(query?.addition || {}),
+         },
         extraData: { 
           sysCode: gStores.globalStore.sysCode, 
           reqForward: "true", 
