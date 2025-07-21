@@ -18,7 +18,6 @@
   // pagesA/webView/webView
   const props = defineProps<{
     https: string;
-    _type?: string; // 1 表示h5携带登录相关信息跳转过去
     query?: any;
   }>();
   const pageProps = ref({} as CanWrite<typeof props>);
@@ -47,32 +46,7 @@
   const init = () => {
     if (pageProps.value.https) {
       console.warn(decodeURIComponent(pageProps.value.https));
-
       src.value = decodeURIComponent(pageProps.value.https);
-    }
-    if (pageProps.value._type === '3') {
-      let query =
-        (pageProps.value.query && JSON.parse(pageProps.value.query)) || {};
-      useTBanner(
-        {
-          type: 'h5',
-          path: query?.path,
-          addition: {
-            TOKEN: 'token',
-            PATIENTID: 'patientId',
-            HERENID: 'herenId',
-          },
-          extraData: {
-            source: gStores.globalStore.browser.source,
-            sysCode: gStores.globalStore.sysCode,
-            reqForward: true,
-            openId: gStores.globalStore.openId,
-            ...(query?.extraData || {}),
-          },
-        },
-        'navigateTo',
-        gStores.globalStore.h5MenuExtraData
-      );
     }
   };
 
