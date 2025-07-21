@@ -29,15 +29,15 @@
               <text @click="goExpressApp" class="a-link f48">查看快递</text>
             </view>
             <view
-              v-else-if="takenDrugTypeMap[pageProps.takenDrugType]"
+              v-else-if="takenDrugTypeMap[detailData.takenDrugType||pageProps.takenDrugType]"
               class="g-bold f48"
             >
-              {{ takenDrugTypeMap[pageProps.takenDrugType] }}
+              {{ takenDrugTypeMap[detailData.takenDrugType||pageProps.takenDrugType] }}
             </view>
             <view
               v-if="
                 detailData.takeLocation &&
-                !['2', '20', '50'].includes(pageProps.takenDrugType)
+                !['2', '20', '50'].includes(detailData.takenDrugType||pageProps.takenDrugType)
               "
               class="f28"
             >
@@ -49,7 +49,7 @@
 
           <view class="reg-header-icon-container">
             <view
-              v-if="['0', '1', '2', '20'].includes(pageProps.takenDrugType)"
+              v-if="['0', '1', '2', '20'].includes(detailData.takenDrugType||pageProps.takenDrugType)"
               class="iconfont reg-header-icon-bg"
             >
               &#xe6c6;
@@ -63,10 +63,10 @@
       <view class="content">
         <view
           v-if="
-            (['20', '50'].includes(pageProps.takenDrugType) &&
+            (['20', '50'].includes(detailData.takenDrugType||pageProps.takenDrugType) &&
               // 中药 待煎外配直接小程序查看 不显示
               !isMedicalFriedAndDelivery) ||
-            isSZShowExprss
+            isSZShowExpress
           "
           class="box g-border p32 mb32"
         >
@@ -80,7 +80,7 @@
         </view>
 
         <view
-          v-if="detailData.qrCode && pageProps.takenDrugType === '1'"
+          v-if="detailData.qrCode && (pageProps.takenDrugType === '1'||isSZShowExpress)"
           class="g-border box page-first-item mb16 p32"
         >
           <view class="my-display-none">
@@ -88,7 +88,7 @@
             <w-barcode :options="_barOpt" ref="refqrbarcode" />
           </view>
 
-          <view class="g-flex-rc-cc g-bold f32 mb32">
+          <view class="g-flex-rc-cc g-bold f32 mb32" v-if="!isSZShowExpress">
             <rich-text :nodes="textRef" />
           </view>
 
@@ -178,7 +178,7 @@
   const refqrbarcode = ref('' as any);
   const showQrCode = ref(true);
 
-  const isSZShowExprss = computed(() => {
+  const isSZShowExpress = computed(() => {
     if (
       gStores.globalStore.sysCode === '1001035' &&
       ['20', '50'].includes(detailData.value.takenDrugType) &&
@@ -204,10 +204,6 @@
 
   // 选了取药方式的中药代煎外配?
   const isMedicalFriedAndDelivery = computed(() => {
-    console.log(
-      'isToBeFriedAndDelivery(pageProps.value)',
-      isToBeFriedAndDelivery(pageProps.value)
-    );
     return (
       isToBeFriedAndDelivery(pageProps.value) &&
       pageProps.value.takenDrugType !== '0'
