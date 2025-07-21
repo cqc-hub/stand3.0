@@ -128,13 +128,14 @@
     },
   };
 
-  const tiyy1001035: TButtonConfig = {
+  const tiyy1001035 = {
+    _type: 'useTBanner',
     type: 'h5',
     isSelfH5: '1',
     path: 'pagesC/choosePat/choosePat',
     text: '体检预约与报告',
     extraData: {
-      _type: 'tjyy1001035'
+      _type: 'tjyy1001035',
     },
     addition: {
       patientId: '_patientId',

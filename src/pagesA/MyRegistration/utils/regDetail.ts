@@ -27,6 +27,7 @@ export interface IPageProps {
   orderStatus: string; // 挂号状态
   alternateId?: string; // orderStatus === 3 候补预约时候有
   _type?: 'waitReg';
+  searchType?: '1'; // 省中区别app挂号  不传为查询3.0接口  传1  查询2.0接口
 }
 
 /**
@@ -465,11 +466,12 @@ export class RegDetailUtil {
 
   /** 请求内部数据库 */
   async getDetailDataClassic(): Promise<IRegInfo> {
-    const { orderId } = this.prop.value;
+    const { orderId, searchType } = this.prop.value;
 
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: this.gStores.globalStore.browser.source,
+      searchType
     });
 
     return result;
@@ -570,9 +572,10 @@ export class RegDetailUtil {
 
     if (isOrderPay === '1') {
       const { refundNeedAuth, source, tradeType } = this.orderRegInfo;
-      const { orderId } = this.prop.value;
+      const { orderId, searchType } = this.prop.value;
       const args = {
         orderId,
+        searchType,
         source: this.gStores.globalStore.browser.source,
         payAuthNo: '',
       };

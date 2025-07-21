@@ -19,7 +19,10 @@
     ></code-btn>
     <!-- #endif -->
     <scroll-view scroll-y class="scroll-container">
-      <view v-if="orderRegInfo.patientId" class="box">
+      <view
+        v-if="orderRegInfo.patientId || pageProps.searchType === '1'"
+        class="box"
+      >
         <view class="reg-header flex-between">
           <view
             :style="{
@@ -250,7 +253,7 @@
                     :class="{
                       [titleStatus.cardColor]: 1,
                       'color-blue':
-                        titleStatus.cardColor === 'var(--hr-neutral-color-7)' ,
+                        titleStatus.cardColor === 'var(--hr-neutral-color-7)',
                     }"
                     class="flex-normal doc-name"
                   >
@@ -266,7 +269,7 @@
                         '_fee',
                         '_hosAccountOffsetFee',
                         '_totalCost',
-                        'visitingArea'
+                        'visitingArea',
                       ].includes(item.key),
                     }"
                   >
@@ -807,7 +810,6 @@
     await callBackAsync(nextTick);
     await wait(600);
     !isShowRefreshQrCode.value && qrCodeOpt.value.code && capture();
-    uni.hideLoading();
     patientTempList.map((o) => {
       if (o.key === 'patientId') {
         o.key = qrCode;
@@ -823,6 +825,7 @@
     setTimeout(() => {
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(_patientTempList);
+      uni.hideLoading();
     }, 600);
 
     dealContinueMedicalNationAuth();

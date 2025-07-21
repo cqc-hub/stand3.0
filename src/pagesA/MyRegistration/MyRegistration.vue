@@ -412,6 +412,7 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
+        searchType: tabCurrentDetail.value.searchType,
         orderId,
         hosOrderId: item.hosOrderId,
         preWz: item.orderStatus === '10' && '1',
