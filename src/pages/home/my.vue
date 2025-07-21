@@ -170,7 +170,7 @@ const dealHosNet = async (opt: { myhosType: "0" | "1"; query: any; returnUrl: st
         extraData: { 
           sysCode: gStores.globalStore.sysCode, 
           reqForward: "true", 
-          source: "19",
+          source: gStores.globalStore.openId,
           ...(query?.extraData || {}),
         },
       },
