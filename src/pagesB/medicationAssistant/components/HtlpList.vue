@@ -39,8 +39,8 @@
             >
               {{ visitTypeLabel[item.visitType].label }}
             </text>
-            <text v-if="item.prescVisitType" class="f24 item-title-type base">
-              {{ prescVisitTypeList[item.prescVisitType] }}
+            <text v-if="item.prescVisitType" class="f24 item-title-type base f30">
+              ({{ prescVisitTypeList[item.prescVisitType] }})
             </text>
           </view>
 
@@ -310,7 +310,7 @@
             margin-left: 8rpx;
 
             &.base {
-              color: var(--hr-warning-color-7);
+              color: var(--hr-brand-color-6)
             }
 
             &.blue {

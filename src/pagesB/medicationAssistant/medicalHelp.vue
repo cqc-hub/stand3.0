@@ -235,10 +235,12 @@
   };
 
   const selListOption = computed(() => {
+    console.log('selList.value',selList.value)
     return getSelOptList(selList.value);
   });
 
   const selListOption1 = computed(() => {
+       console.log('listNow.value',listNow.value)
     return getSelOptList(listNow.value);
   });
 

@@ -75,7 +75,9 @@ export const isChineseMedical = (item: IWaitListItem) => {
 };
 
 export const isToBeFriedAndDelivery = (item: IWaitListItem) => {
-  if (isChineseMedical(item)) {
+   const gStores = new GStores();
+  
+  if (isChineseMedical(item)&&gStores.globalStore.sysCode !== '1001035') {
     return item.drugIsDelivery === '1' && item.tcmDecoctionIndicator === '1';
   }
 
