@@ -1,24 +1,28 @@
 <template>
-  <view class="cache">
-    <view class="cache-img-container">
+  <view class="g-page bg-white">
+    <g-message />
+
+    <view class="g-container flex justify-center pt70">
       <image
         mode="aspectFit"
-        class="cache-img"
+        class="cache-img pt70"
         :src="BASE_IMG + 'img_h5bg@3x.png'"
       />
     </view>
-    <view class="cache-fixbottom">浙江和仁科技股份有限公司@技术支持</view>
+    <view class="color-888 f24 text-center pb70">
+      浙江和仁科技股份有限公司@技术支持
+    </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
-    import { BASE_IMG } from '@/config/global';
+  import { BASE_IMG } from '@/config/global';
 
   const gStores = new GStores();
   const pageProps = ref(
@@ -43,6 +47,7 @@
       patData: params,
       source: gStores.globalStore.browser.source,
     });
+    await wait(400);
 
     if (patientName && patientPhone) {
       const pat = gStores.userStore.patList.find(
@@ -138,7 +143,7 @@
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
-      useTBanner(btnParse,'navigateTo', gStores.globalStore.h5MenuExtraData);
+      useTBanner(btnParse, 'navigateTo', gStores.globalStore.h5MenuExtraData);
       return;
     }
 
@@ -160,55 +165,29 @@
     }
   };
 
+  let isContinue = true;
   onLoad(async (opt) => {
-    // const q = {
-    //   type: '1',
-    //   params:
-    //     'Yn+CgX9eWg/4k+B61aXruyitCtvf7g4TV+/8D81ihLDYvmiwH78NMGxwQjEdke0asui4LjzbaBDnKbqPraVLHP7vya4r3P7rCSSWtEnL27EQtKbq0EhclF8uPF5TzPJEaI0AZRMh2L32RZAN7QWPeA==',
-    // } as any;
-
     const queryParams = gStores.globalStore.appShowData?.query?.qrCode;
-
-    // uni.showLoading({});
-    // await wait(600);
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       console.log('截止-----', queryParams);
+      isContinue = false;
       return;
     }
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
-
     console.log('获取到参数', pageProps.value);
+  });
 
+  onMounted(async () => {
+    uni.showLoading({});
+
+    if (!isContinue) {
+      return;
+    }
+    await wait(200);
+    uni.hideLoading();
     init();
   });
 </script>
-
-
-<style scoped lang="scss">
-  .cache {
-    width: 100%;
-    height: 100vh;
-    background-color: #fff;
-
-    .cache-img-container {
-      display: flex;
-      justify-content: center;
-      position: relative;
-      top: 240upx;
-    }
-    .cache-fixbottom {
-      position: absolute;
-      bottom: 144upx;
-      width: 100%;
-      text-align: center;
-
-      font-size: var(--hr-font-size-xxxs);
-      font-weight: 400;
-      color: #999;
-    }
-  }
-</style>
-
