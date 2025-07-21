@@ -250,7 +250,7 @@
                     :class="{
                       [titleStatus.cardColor]: 1,
                       'color-blue':
-                        titleStatus.cardColor === 'var(--hr-neutral-color-7)',
+                        titleStatus.cardColor === 'var(--hr-neutral-color-7)' ,
                     }"
                     class="flex-normal doc-name"
                   >
@@ -266,6 +266,7 @@
                         '_fee',
                         '_hosAccountOffsetFee',
                         '_totalCost',
+                        'visitingArea'
                       ].includes(item.key),
                     }"
                   >

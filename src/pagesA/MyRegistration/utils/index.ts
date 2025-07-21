@@ -588,12 +588,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       visitingArea,
     } = selectSchInfo;
     const { disNo, numId, timeDesc } = item;
-    const {
-      clinicalType,
-      promptMessage,
-      thRegisterId,
-      hosId: _pHosId,
-    } = props.value;
+    const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;
+    const clinicalType = props.value.clinicalType || selectSchInfo.clinicalType;
 
     const pageArg = {
       disNo,
@@ -624,7 +620,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     selectOrderSourceNumId.value = numId;
 
     // 云门诊
-    if (['4', '3', '6'].includes(clinicalType)) {
+    if (clinicalType && ['4', '3', '6'].includes(clinicalType)) {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesA/MyRegistration/addDescribe', {
           ...pageArg,

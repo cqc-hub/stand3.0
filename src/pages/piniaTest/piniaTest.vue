@@ -128,6 +128,19 @@
     },
   };
 
+  const tiyy1001035: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '体检预约与报告',
+    extraData: {
+      _type: 'tjyy1001035'
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   // 智能导诊
   const smartDiseaseGuide: TButtonConfig = {
     type: 'h5',
@@ -532,7 +545,7 @@
       // });
       // useTBanner(healthRecord)
       // useTBanner(我的收藏);
-      useTBanner(eletronicInvoice);
+      useTBanner(tiyy1001035);
       // useTBanner(queryCase);
     }, 1000);
   });

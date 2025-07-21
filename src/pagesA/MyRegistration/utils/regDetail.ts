@@ -55,11 +55,7 @@ export const regInfoTempList: TInstance[] = [
     field: 'input-text',
     key: 'appointmentNumber',
   },
-  {
-    label: '就诊地址',
-    field: 'input-text',
-    key: 'visitingArea',
-  },
+
   {
     label: '就诊时间',
     field: 'input-text',
@@ -69,6 +65,11 @@ export const regInfoTempList: TInstance[] = [
     label: '挂号金额',
     field: 'input-text',
     key: '_fee',
+  },
+  {
+    label: '就诊地址',
+    field: 'input-text',
+    key: 'visitingArea',
   },
   {
     label: '就诊提示',

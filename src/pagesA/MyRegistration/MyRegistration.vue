@@ -174,6 +174,12 @@
   import MyRegistrationHead from './components/MyRegistrationHead/MyRegistrationHead.vue';
   import TabList from '@/pagesC/components/tabLis.vue';
 
+  type TTabItem = {
+    typeId: number;
+    headerName: string;
+    searchType?: string;
+  };
+
   const props = ref(
     <
       {
@@ -207,12 +213,12 @@
   const tabCurrentDetail = ref({
     typeId: 0,
     headerName: '在线挂号',
-  });
+  } as TTabItem);
   const tabs = ref([
     {
       typeId: 0,
       headerName: '在线挂号',
-    },
+    } as TTabItem,
   ]);
   //已改 end
   const orderStatusList = ref([
@@ -249,11 +255,21 @@
       return api.getAlternateList;
     }
     // "全部" 查院内接口
-    return tabCurrentDetail.value?.typeId === 1
-      ? api.hosRegOrderList
-      : tabCurrentDetail.value?.typeId === 0
-      ? api.getRegOrderList
-      : api.getAlternateList;
+    // return tabCurrentDetail.value?.typeId === 1
+    //   ? api.hosRegOrderList
+    //   : tabCurrentDetail.value?.typeId === 0
+    //   ? api.getRegOrderList
+    //   : api.getAlternateList;
+
+    if (tabCurrentDetail.value?.typeId === 1) {
+      return api.hosRegOrderList;
+    }
+
+    if ([0, 3].includes(tabCurrentDetail.value?.typeId)) {
+      return api.getRegOrderList;
+    }
+
+    return api.getAlternateList;
   });
 
   const isCancelOrderDialogShow = ref(false);
@@ -274,6 +290,7 @@
   });
 
   const tabChange = async (e: number) => {
+    console.log(e);
     if (tabs.value[tabCurrent.value]) {
       tabCurrent.value = e;
     } else {
@@ -317,6 +334,7 @@
       .value<IRegistrationCardItem[]>({
         source: gStores.globalStore.browser.source,
         herenId: gStores.globalStore.herenId,
+        searchType: tabCurrentDetail.value.searchType,
         patientId,
       })
       .finally(() => {
@@ -521,10 +539,19 @@
         typeId: 2,
         headerName: '候补登记',
       });
+
     pageConfig.value.isCancelOlineReg === '1' &&
       (tabs.value = tabs.value.filter((item) => {
         return item?.typeId !== 0;
       }));
+
+    if (gStores.globalStore.sysCode === '1001035') {
+      tabs.value.push({
+        typeId: 3,
+        headerName: 'App挂号',
+        searchType: '1',
+      });
+    }
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
   });
