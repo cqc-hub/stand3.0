@@ -119,7 +119,7 @@
         </view>
 
         <view
-          v-if="item.takenDrugType&&item.takenDrugType!='0' && !showStatus "
+          v-if="item.takenDrugType && !showStatus &&!item.deliveryType "
           class="item-box f28"
         >
           <view class="row flex-normal">

@@ -620,14 +620,14 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
   },
-
-  /**
+   /**
    * 江苏省中医院
    */
   1001035: {
     // isDrugDelivery: '1',
     isOpenHelpOld:'1'
   },
+ 
 };
 
 const getSConfig = (sysCode: string) => {

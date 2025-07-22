@@ -35,7 +35,7 @@
             <Help-List :list="cacheStore.medicalHelpSelList" />
           </view>
         </view>
-
+   
         <view
           v-if="!isIncludeChineseMedicalFriedAndDelivery && aimList.length"
           class="container-box g-border mb16 box-padding"
@@ -591,8 +591,13 @@
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
     await init();
-    isIncludeChineseMedicalFriedAndDelivery.value =
+    if(gStores.globalStore.sysCode=='1001035'){
+      isIncludeChineseMedicalFriedAndDelivery.value =false
+    }else{
+       isIncludeChineseMedicalFriedAndDelivery.value =
       !!cacheStore.medicalHelpSelList.find((o) => isToBeFriedAndDelivery(o));
+    }
+   
   });
 </script>
 

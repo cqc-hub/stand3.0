@@ -29,15 +29,27 @@
               <text @click="goExpressApp" class="a-link f48">查看快递</text>
             </view>
             <view
-              v-else-if="takenDrugTypeMap[detailData.takenDrugType||pageProps.takenDrugType]"
+              v-else-if="
+                takenDrugTypeMap[
+                  isSZShowExpress
+                    ? detailData.takenDrugType
+                    : detailData.takenDrugType || pageProps.takenDrugType
+                ]
+              "
               class="g-bold f48"
             >
-              {{ takenDrugTypeMap[detailData.takenDrugType||pageProps.takenDrugType] }}
+              {{
+                takenDrugTypeMap[
+                  detailData.takenDrugType || pageProps.takenDrugType
+                ]
+              }}
             </view>
             <view
               v-if="
                 detailData.takeLocation &&
-                !['2', '20', '50'].includes(detailData.takenDrugType||pageProps.takenDrugType)
+                !['2', '20', '50'].includes(
+                  detailData.takenDrugType || pageProps.takenDrugType
+                )
               "
               class="f28"
             >
@@ -49,7 +61,11 @@
 
           <view class="reg-header-icon-container">
             <view
-              v-if="['0', '1', '2', '20'].includes(detailData.takenDrugType||pageProps.takenDrugType)"
+              v-if="
+                ['0', '1', '2', '20'].includes(
+                  detailData.takenDrugType || pageProps.takenDrugType
+                )
+              "
               class="iconfont reg-header-icon-bg"
             >
               &#xe6c6;
@@ -63,7 +79,9 @@
       <view class="content">
         <view
           v-if="
-            (['20', '50'].includes(detailData.takenDrugType||pageProps.takenDrugType) &&
+            (['20', '50'].includes(
+              detailData.takenDrugType || pageProps.takenDrugType
+            ) &&
               // 中药 待煎外配直接小程序查看 不显示
               !isMedicalFriedAndDelivery) ||
             isSZShowExpress
@@ -80,7 +98,10 @@
         </view>
 
         <view
-          v-if="detailData.qrCode && (pageProps.takenDrugType === '1'||isSZShowExpress)"
+          v-if="
+            detailData.qrCode &&
+            (pageProps.takenDrugType === '1' || isSZShowExpress)
+          "
           class="g-border box page-first-item mb16 p32"
         >
           <view class="my-display-none">
@@ -190,7 +211,6 @@
   });
 
   const getExpressAppId = computed(() => {
-  
     // #ifdef MP-ALIPAY
     return pageConfig.value.deliveryFired?.alipay;
     // #endif
@@ -256,12 +276,12 @@
 
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
-    
+
     const { hosId, prescId } = pageProps.value;
- const actionApi =
-        pageProps.value.scan == 1
-          ? api.getScanDrugDeliveryDetail
-          : api.getDrugDeliveryDetail;
+    const actionApi =
+      pageProps.value.scan == 1
+        ? api.getScanDrugDeliveryDetail
+        : api.getDrugDeliveryDetail;
     const { result } = await actionApi({
       cardNumber,
       patientId,
@@ -316,7 +336,8 @@
     return {
       pointNow: expressInfo.value?.pointNow,
       pointEnd: {
-        title: detailData.value.deliveryAddress||detailData.value.addresseeAddress,
+        title:
+          detailData.value.deliveryAddress || detailData.value.addresseeAddress,
         desc: `${detailData.value.addresseeName} ${detailData.value.addresseePhone}`,
       },
     };

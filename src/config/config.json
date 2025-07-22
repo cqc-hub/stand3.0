@@ -21,14 +21,7 @@
       "isOpenOcr": false,
       "isSearchInHos": true
     },
-    "1001086": {
-      "wxAppid": "wxa4a2728d9d7598f1",
-      "h5Appid": "",
-      "name": "新疆维吾尔自治区中医医院",
-      "isStartComeTest": false,
-      "isOpenOcr": false,
-      "isSearchInHos": true
-    },
+  
     "1001036": {
       "wxAppid": "",
       "h5Appid": "",
@@ -398,6 +391,14 @@
       "name": "温州市中西医结合医院",
       "isStartComeTest": false,
       "isOpenOcr": false
+    },
+      "1001086": {
+      "wxAppid": "wxa4a2728d9d7598f1",
+      "h5Appid": "",
+      "name": "新疆维吾尔自治区中医医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "2001004": {
       "wxAppid": "wx101158c57640d854",
