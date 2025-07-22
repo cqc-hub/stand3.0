@@ -299,6 +299,15 @@
         10: '待取件',
         30: '运输中',
       };
+      if(gStores.globalStore.sysCode==='1001035'){
+         const _keyMap = {
+        40: '派送中',
+        20: '已下单',
+        50: '已签收',
+        10: '待取件',
+        30: '运输中',
+      };
+      }
 
       const date = dayjs(acceptTime).format('MM-DD');
 
@@ -312,7 +321,6 @@
     }
 
     detailData.value = { ...result, qrCode: result.prescNo };
-    console.log('detailData.value');
 
     if (detailData.value.qrCode) {
       capture();
