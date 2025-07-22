@@ -69,7 +69,7 @@ Request.interceptors.request((request: IRequest) => {
   // ========== 动态修改内网部署 baseURL 的逻辑放在这里 ==========
   const skipBaseURLChangeApis = ['/phs-user/authUser/allinoneAuthApi'];
   if (
-    getSysCode() === '1001082' &&
+    getSysCode() !== '1001082' &&
     !request.url.includes(skipBaseURLChangeApis[0])
   ) {
      const gatewayMatch = request.url.match(/\/gateway(\/[^?#]*)?/);
