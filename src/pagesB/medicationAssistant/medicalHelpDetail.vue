@@ -299,14 +299,14 @@
         10: '待取件',
         30: '运输中',
       };
-      if(gStores.globalStore.sysCode==='1001035'){
-         const _keyMap = {
-        40: '派送中',
-        20: '已下单',
-        50: '已签收',
-        10: '待取件',
-        30: '运输中',
-      };
+      if (gStores.globalStore.sysCode === '1001035') {
+        const _keyMap = {
+          40: '派送中',
+          20: '已下单',
+          50: '已签收',
+          10: '待取件',
+          30: '运输中',
+        };
       }
 
       const date = dayjs(acceptTime).format('MM-DD');
@@ -378,7 +378,11 @@
   };
 
   const init = () => {
+    if (gStores.globalStore.sysCode === '1001035') {
+      showQrCode.value = false;
+    }
     getData();
+    
   };
 
   onReady(() => {
