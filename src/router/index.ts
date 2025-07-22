@@ -40,101 +40,104 @@ export const beforeEach = async (
 ) => {
   const fullUrl = options.url;
   const url = fullUrl.split('?')[0];
-  const currentRoute = getCurrentRoute(url);
-  if (currentRoute) {
-    const globalStore = useGlobalStore();
-    const userStore = useUserStore();
+  const currentRoute = getCurrentRoute(url) || {};
+  const globalStore = useGlobalStore();
+  const userStore = useUserStore();
 
-    const { extend } = currentRoute;
-    let [login, patient, herenId] = [false, false, false];
+  const { extend } = currentRoute;
+  let [login, patient, herenId] = [false, false, false];
 
-    if (extend) {
-      let { login: _login, patient: _patient, herenId: _herenId } = extend;
+  if (extend) {
+    let { login: _login, patient: _patient, herenId: _herenId } = extend;
 
-      login = _login;
-      patient = _patient;
-      herenId = _herenId;
+    login = _login;
+    patient = _patient;
+    herenId = _herenId;
+  }
+
+  if (options._isLogin) {
+    login = true;
+  }
+
+  if (options._isHerenId) {
+    herenId = true;
+  }
+
+  if (options._isPatient) {
+    patient = true;
+  }
+
+  if (patient) {
+    herenId = true;
+    login = true;
+  } else if (herenId) {
+    login = true;
+  }
+
+  if (patient) {
+    herenId = true;
+    login = true;
+  } else if (herenId) {
+    login = true;
+  }
+
+  console.log({
+    login,
+    patient,
+  });
+
+  if (login) {
+    if (!globalStore.isLogin) {
+      uni.reLaunch({
+        url: joinQuery('/pages/home/my', {
+          isWarningLogin: '1',
+          _url: encodeURIComponent(<string>fullUrl),
+        }),
+      });
+
+      return Promise.reject('需要登录----');
     }
 
-    if (options._isLogin) {
-      login = true;
-    }
-
-    if (options._isHerenId) {
-      herenId = true;
-    }
-
-    if (options._isPatient) {
-      patient = true;
-    }
-
-    if (patient) {
-      herenId = true;
-      login = true;
-    } else if (herenId) {
-      login = true;
-    }
-
-    if (patient) {
-      herenId = true;
-      login = true;
-    } else if (herenId) {
-      login = true;
-    }
-
-    if (login) {
-      if (!globalStore.isLogin) {
+    if (herenId) {
+      if (!globalStore.herenId) {
         uni.reLaunch({
-          url: joinQuery('/pages/home/my', {
-            isWarningLogin: '1',
+          url: joinQuery(globalGl.addPersonUrl + '', {
+            pageType: 'perfectReal',
             _url: encodeURIComponent(<string>fullUrl),
           }),
         });
 
-        return Promise.reject('需要登录----');
-      }
-
-      if (herenId) {
-        if (!globalStore.herenId) {
-          uni.reLaunch({
-            url: joinQuery(globalGl.addPersonUrl + '', {
-              pageType: 'perfectReal',
-              _url: encodeURIComponent(<string>fullUrl),
-            }),
-          });
-
-          return Promise.reject('需要完善----');
-        }
-      }
-
-      if (patient) {
-        if (!userStore.patList.length) {
-          uni.reLaunch({
-            url: joinQuery(globalGl.addPersonUrl + '', {
-              _url: encodeURIComponent(<string>fullUrl),
-            }),
-          });
-
-          return Promise.reject('需要就诊人----');
-        }
+        return Promise.reject('需要完善----');
       }
     }
 
-    // #ifdef MP-WEIXIN
-    if (
-      [
-        '/pagesA/medicalCardMan/perfectReal',
-        '/pagesA/medicalCardMan/addMedical',
-        '/pagesC/serviceCenter/serviceCenter',
-      ].includes(url)
-    ) {
-      if (!globalStore.h5OpenId && globalGl.h5AppId) {
+    if (patient) {
+      if (!userStore.patList.length) {
         uni.reLaunch({
-          url: '/pages/home/startCome',
+          url: joinQuery(globalGl.addPersonUrl + '', {
+            _url: encodeURIComponent(<string>fullUrl),
+          }),
         });
-        return Promise.reject('需要 h5openid');
+
+        return Promise.reject('需要就诊人----');
       }
     }
-    // #endif
   }
+
+  // #ifdef MP-WEIXIN
+  if (
+    [
+      '/pagesA/medicalCardMan/perfectReal',
+      '/pagesA/medicalCardMan/addMedical',
+      '/pagesC/serviceCenter/serviceCenter',
+    ].includes(url)
+  ) {
+    if (!globalStore.h5OpenId && globalGl.h5AppId) {
+      uni.reLaunch({
+        url: '/pages/home/startCome',
+      });
+      return Promise.reject('需要 h5openid');
+    }
+  }
+  // #endif
 };

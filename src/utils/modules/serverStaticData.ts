@@ -223,13 +223,17 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
-  console.log(8888888888,fullUrl)
   //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();
   if (pages.length > 0) {
     const currentPage = pages[pages.length - 1];
     const _fullUrl: string = (currentPage as any).route || (currentPage as any).$page?.fullPath;
+    console.log('object233', {
+      url: _fullUrl,
+      _isLogin: isLogin,
+      _isPatient: isPatient,
+    });
     await beforeEach({
       url: _fullUrl,
       _isLogin: isLogin,
