@@ -240,7 +240,7 @@
 
   const boxChange = async (count: number) => {
     iceBagNum.value = count;
-    if (gStores.globalStore.sysCode==='1001035') {
+    if (gStores.globalStore.sysCode === '1001035') {
       const aim = aimList.value.find(
         (item) => item.value === aimValue.value[0]
       );
@@ -273,8 +273,12 @@
   const getIceFee = () => {
     const aim = aimList.value.find((item) => item.value === aimValue.value[0]);
     let iceFee = (aim?.iceBagfee * 1 || 0) * iceBagNum.value;
-    if(gStores.globalStore.sysCode==='1001035'&&addressList.value[0]?.city!=='南京市'&&aim?.value=='1'){
-      iceFee=0
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      addressList.value[0]?.city !== '南京市' &&
+      aim?.value == '1'
+    ) {
+      iceFee = 0;
     }
     feeDetail.value.iceBagCharges = iceFee;
     feeDetail.value.totalCost = feeDetail.value.totalFee * 1 + iceFee;
@@ -318,11 +322,11 @@
       };
       getIceFee();
 
-      if (gStores.globalStore.sysCode==='1001035') {
+      if (gStores.globalStore.sysCode === '1001035') {
         const aim = aimList.value.find(
           (item) => item.value === aimValue.value[0]
         );
-        iceBagNum.value == 0
+        iceBagNum.value == 0;
         aim?.value == '2' && iceBagNum.value !== 0
           ? (iceBagStep.value = 1)
           : (iceBagStep.value = 2);
@@ -499,6 +503,7 @@
         phsOrderSource: 7,
         hosId,
         patientName,
+        businessType: args.expressCompany == '1' ? 8 : 9,//8顺丰，9邮政
       });
       await toPayPull(payRes, '药品配送下单');
       await handlePayAfter();
@@ -575,7 +580,7 @@
   });
 
   onLoad(async (opt) => {
-    if (gStores.globalStore.sysCode==='1001035') {
+    if (gStores.globalStore.sysCode === '1001035') {
       uni.setNavigationBarTitle({
         title: '药品代煎快递办理',
       });

@@ -212,6 +212,11 @@
         value: '填写快递地址',
       },
     ];
+    if (gStores.globalStore.sysCode === '1001035') {
+      return list.every((item) => item.deliveryType === '5')
+        ? [opt2]
+        : [opt1, opt2];
+    }
     let f = false;
 
     const idx = list.findIndex((o) => {
@@ -235,12 +240,10 @@
   };
 
   const selListOption = computed(() => {
-    console.log('selList.value',selList.value)
     return getSelOptList(selList.value);
   });
 
   const selListOption1 = computed(() => {
-       console.log('listNow.value',listNow.value)
     return getSelOptList(listNow.value);
   });
 
@@ -273,14 +276,19 @@
   const selPayListItem = (item: IWaitListItem) => {
     const { takenDrugType, supportEditAddr } = item;
     const { params: sign } = pageProps.value;
+
     if (
       takenDrugType === '0' ||
       supportEditAddr === '1' ||
-      (sign && getSysCode() === '1001038' && !takenDrugType)
+      (sign && gStores.globalStore.sysCode === '1001038' && !takenDrugType)
     ) {
       const idx = selList.value.findIndex((o) => o._id === item._id);
 
       if (idx === -1) {
+        if (gStores.globalStore.sysCode === '1001035') {
+          selSZPayListItem(item);
+          return;
+        }
         const list = [...selList.value, item];
 
         if (list.length === 1) {
@@ -294,7 +302,6 @@
             list.map((o) => isChineseMedical(o) && o.drugIsDelivery === '1')
           ),
         ];
-        console.log('types',types)
         const isDJ = isToBeFriedAndDelivery(item);
         let [
           isDifferentHosErr,
@@ -353,6 +360,32 @@
 
       gStores.messageStore.showMessage(errWord, 3000);
     }
+  };
+
+  const selSZPayListItem = (item: IWaitListItem) => {
+    const list = [...selList.value, item];
+
+    if (list.length === 1) {
+      selList.value = list;
+      return;
+    }
+
+    if ([...new Set(list.map((o) => o.hosId))].length > 1) {
+      //判断是否同院区
+      gStores.messageStore.showMessage('不支持跨院区配送', 3000);
+    } else if (
+      !list.every((o) => o?.prescVisitType === list[0]?.prescVisitType)
+    ) {
+      //判断是否同种类
+      gStores.messageStore.showMessage('请选择相同就诊类型处方', 3000);
+    } else if (!list.every((o) => o?.deliveryType === list[0]?.deliveryType)) {
+      //判断是否同种配送类型
+      gStores.messageStore.showMessage('请选择相同配送类型处方', 3000);
+    } else {
+      selList.value = list;
+      return;
+    }
+    selList.value = [item];
   };
 
   const listNow = computed(() => {

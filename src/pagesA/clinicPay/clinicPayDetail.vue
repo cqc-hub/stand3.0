@@ -5,7 +5,11 @@
     }"
     class="g-page"
   >
-    <g-flag v-if="!isModeMedicalHelp && gStores.globalStore.sysCode !== '1001035'" isShowFg typeFg="15" />
+    <g-flag
+      v-if="!isModeMedicalHelp && gStores.globalStore.sysCode !== '1001035'"
+      isShowFg
+      typeFg="15"
+    />
     <!-- #ifdef  MP-WEIXIN -->
     <code-btn
       v-if="wxCrossProgramInfo.bizType"
@@ -56,7 +60,11 @@
     >
       <swiper-item v-if="!isModeMedicalHelp">
         <scroll-view scroll-y class="swiper-item uni-bg-red">
-          <g-flag v-if="gStores.globalStore.sysCode === '1001035'" isShowFg typeFg="15" />
+          <g-flag
+            v-if="gStores.globalStore.sysCode === '1001035'"
+            isShowFg
+            typeFg="15"
+          />
           <block v-if="isPayListRequestComplete && unPayList.length">
             <Clinic-Pay-Detail-List
               :list="unPayList"
@@ -138,7 +146,24 @@
       class="g-footer"
       v-else-if="pageConfig.payedFooterBtn && tabCurrent === 1"
     >
+      <block
+        v-if="
+          Array.isArray(pageConfig.payedFooterBtn) &&
+          pageConfig.payedFooterBtn.length
+        "
+      >
+        <button
+          v-for="(btn, index) in pageConfig.payedFooterBtn"
+          :key="`payedFooterBtn${index}`"
+          @click="clickBtn(btn)"
+          class="btn btn-primary btn-border"
+          :class="index === 0 ? 'btn-plain' : 'confirm-btn'"
+        >
+          {{ btn.text }}
+        </button>
+      </block>
       <button
+        v-if="!Array.isArray(pageConfig.payedFooterBtn)"
         @click="useTBanner(pageConfig.payedFooterBtn!, 'navigateTo', pageProps)"
         class="btn btn-primary"
       >
@@ -276,7 +301,7 @@
     hosId,
     wxCrossProgramInfo,
     isModeMedicalHelp,
-    getChineseMedicineList
+    getChineseMedicineList,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -411,6 +436,14 @@
     }
   });
 
+  const clickBtn=async(btn)=>{
+    if (btn.isOpenDrug === '1') {
+      await getChineseMedicineList();
+    } else {
+      useTBanner(btn!, 'navigateTo', pageProps.value)
+    }
+  }
+
   // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
   onLoad(async (opt) => {
     /**
@@ -490,9 +523,6 @@
           pageProps.value
         );
     }
-
-
-
   });
 </script>
 

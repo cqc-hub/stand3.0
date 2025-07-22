@@ -375,7 +375,7 @@ export interface ISystemConfig_ {
     /** 待缴费点击缴费时候提示的协议编号 (不配没有) */
     confirmPayFg?: string;
     // 已缴费底部的按钮
-    payedFooterBtn?: TButtonConfig;
+    payedFooterBtn?: TButtonConfig|TButtonConfig[];
     /** 预结算 */
     isPreSettle?: '1';
 
