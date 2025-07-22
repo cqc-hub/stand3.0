@@ -192,7 +192,7 @@ Request.interceptors.response(
 
 // 设置默认配置
 Request.setConfig((config: any) => {
-  config.baseURL = env.baseApi; 
+  config.baseURL = env.baseApi;
   config.header = {
     hrCode: encryptDes(getSysCode(), 'hrtest22'),
   };

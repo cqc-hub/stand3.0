@@ -81,11 +81,6 @@ export const beforeEach = async (
     login = true;
   }
 
-  console.log({
-    login,
-    patient,
-  });
-
   if (login) {
     if (!globalStore.isLogin) {
       uni.reLaunch({
