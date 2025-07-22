@@ -45,14 +45,15 @@
               </view>
             </template>
             <template v-else>
-              <view class="w100" @click.prevent="goSearch">
-                <view class="my-disabled">
+              <view class="w100 flex">
+                <view class="my-disabled flex1" @click.prevent="goSearch">
                   <uni-search-input
                     :type="'2'"
                     inputBorder
                     :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
+                  />  
                 </view>
+                <view v-if="gStores.globalStore.sysCode === '1001063'" @click="goClinicPay" class="ico_my_scon icon-size">&#xe6e4;</view>
               </view>
             </template>
           </view>
@@ -644,6 +645,18 @@
       });
     }
   };
+
+  const goClinicPay = () => {
+    uni.scanCode({
+      complete(res) {
+        console.warn('扫码完成',res); 
+          uni.navigateTo({
+            url: '/pagesA/clinicPay/clinicPayDetail',
+          }); 
+      },
+    });
+ 
+  };
   // #ifdef MP-ALIPAY
   //支付宝——首页消息推送
   const authorization = () => {
@@ -712,6 +725,12 @@
     }
     .w100 {
       width: 100%;
+    }
+    .icon-size{
+      width: 88rpx;
+      margin-left: 20rpx;
+      display: inline-block;
+      color: var(--h-color-white); 
     }
     .openOld {
       width: 200rpx;
