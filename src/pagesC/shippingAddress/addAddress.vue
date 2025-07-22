@@ -179,8 +179,9 @@
       success(res) {
         getAddress(res);
       },
-      // fail(res) {
-      // },
+      fail(res) {
+        console.error(res)
+      },
     });
   };
   //获取拆分后的地址

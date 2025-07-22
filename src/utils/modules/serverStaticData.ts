@@ -223,7 +223,6 @@ export const useTBanner = async (
   }
 
   let fullUrl = joinQueryForUrl(path, extraData);
-  console.log(8888888888,fullUrl)
   //  登录和就诊人拦截
   // #ifndef H5
   const pages = getCurrentPages();
@@ -253,7 +252,7 @@ export const useTBanner = async (
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        baseUrl = h5UrlLocal;
+        // baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;

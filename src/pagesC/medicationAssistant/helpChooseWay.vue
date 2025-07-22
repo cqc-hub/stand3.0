@@ -35,7 +35,7 @@
             <Help-List :list="cacheStore.medicalHelpSelList" />
           </view>
         </view>
-   
+
         <view
           v-if="!isIncludeChineseMedicalFriedAndDelivery && aimList.length"
           class="container-box g-border mb16 box-padding"
@@ -326,10 +326,8 @@
         const aim = aimList.value.find(
           (item) => item.value === aimValue.value[0]
         );
-        iceBagNum.value == 0;
-        aim?.value == '2' && iceBagNum.value !== 0
-          ? (iceBagStep.value = 1)
-          : (iceBagStep.value = 2);
+        iceBagNum.value = 0;
+        aim?.value == '2' ? (iceBagStep.value = 1) : (iceBagStep.value = 2);
       }
     } catch (e) {
       feeDetail.value = {
@@ -503,7 +501,7 @@
         phsOrderSource: 7,
         hosId,
         patientName,
-        businessType: args.expressCompany == '1' ? 8 : 9,//8顺丰，9邮政
+        businessType: args.expressCompany == '1' ? 8 : 9, //8顺丰，9邮政
       });
       await toPayPull(payRes, '药品配送下单');
       await handlePayAfter();
@@ -580,24 +578,19 @@
   });
 
   onLoad(async (opt) => {
-    if (gStores.globalStore.sysCode === '1001035') {
-      uni.setNavigationBarTitle({
-        title: '药品代煎快递办理',
-      });
-    }
-    console.log('药品代煎快递办理', opt);
-
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
     await init();
-    if(gStores.globalStore.sysCode=='1001035'){
-      isIncludeChineseMedicalFriedAndDelivery.value =false
-    }else{
-       isIncludeChineseMedicalFriedAndDelivery.value =
-      !!cacheStore.medicalHelpSelList.find((o) => isToBeFriedAndDelivery(o));
+    if (gStores.globalStore.sysCode == '1001035') {
+       uni.setNavigationBarTitle({
+        title: '药品代煎快递办理',
+      });
+      isIncludeChineseMedicalFriedAndDelivery.value = false;
+    } else {
+      isIncludeChineseMedicalFriedAndDelivery.value =
+        !!cacheStore.medicalHelpSelList.find((o) => isToBeFriedAndDelivery(o));
     }
-   
   });
 </script>
 
