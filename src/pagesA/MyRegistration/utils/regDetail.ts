@@ -418,7 +418,7 @@ const getWaitRegStatusConfig = (status: string) => {
       if (status === '0') {
         return {
           ...waitOrderStatusMap[status],
-          title: '待付款',
+          title: '候补成功',
         };
       }
     }
