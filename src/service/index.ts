@@ -69,18 +69,10 @@ Request.interceptors.request((request: IRequest) => {
   // ========== 动态修改内网部署 baseURL 的逻辑放在这里 ==========
   const skipBaseURLChangeApis = ['/phs-user/authUser/allinoneAuthApi'];
   if (
-    getSysCode() === '1001082' &&
+    globalStore.sysCode === '1001082' &&
     !request.url.includes(skipBaseURLChangeApis[0])
   ) {
-     const gatewayMatch = request.url.match(/\/gateway(\/[^?#]*)?/);
-
-    if (gatewayMatch) {
-      const gatewayPath = gatewayMatch[0];
-      request.url = 'https://eservice.wzswsj.gov.cn' + gatewayPath;
-    }
     request.baseURL = 'https://eservice.wzswsj.gov.cn/gateway';
-  } else {
-    request.baseURL = env.baseApi;
   }
   // ========== END ==========
 
@@ -192,7 +184,7 @@ Request.interceptors.response(
 
 // 设置默认配置
 Request.setConfig((config: any) => {
-  config.baseURL = env.baseApi; 
+  config.baseURL = env.baseApi;
   config.header = {
     hrCode: encryptDes(getSysCode(), 'hrtest22'),
   };

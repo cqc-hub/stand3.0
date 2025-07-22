@@ -87,7 +87,7 @@
     {
       img: 'card_doctor_mbfz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
       // title: '在线问诊',
-      title: '复诊开药',
+      title: '线上问诊',
       fee: 0,
       util: '次',
       key: 'jsonParam',

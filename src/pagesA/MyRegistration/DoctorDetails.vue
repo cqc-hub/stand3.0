@@ -488,8 +488,7 @@
         </view>
 
         <block v-if="isDocServiceShow">
-          <!-- <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view> -->
-          <view class="f36 g-bold mb16 service-onlione p32c">在线问诊</view>
+          <view class="f36 g-bold mb16 service-onlione p32c">在线服务</view>
           <scroll-view class="service-content" scroll-x>
             <Doc-Service
               :docService="docServiceInfo"
