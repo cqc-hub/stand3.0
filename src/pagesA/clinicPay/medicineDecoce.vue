@@ -84,19 +84,20 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, computed } from 'vue';
-  import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { useTBanner } from '@/utils';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl } from '@/common';
-  import { decryptForPage, encryptDes } from '@/common/des';
+  import { decryptForPage } from '@/common/des';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
-  import { usePayPage, IPayListItem } from './utils/clinicPayDetail';
+  import { GStores } from '@/utils';
+  import { IPayListItem } from './utils/clinicPayDetail';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import medicineDecoceList from './components/medicineDecoceList.vue';
   import global from '@/config/global';
 
   import api from '@/service/api';
 
-  const { gStores } = usePayPage();
+  const gStores = new GStores();
   const pageProps = ref<any>({});
   const regDialogConfirm = ref<any>('');
   const isCheck = ref(false);
@@ -117,6 +118,17 @@
       selUnPayList.value.length === unPayList.value.length
   );
   onLoad(async (opt) => {
+    const queryParams = gStores.globalStore.appLaunchData?.query
+      ?.qrCode as string;
+    uni.showLoading({});
+
+    if ((queryParams && !Object.keys(opt).length) || opt?.q) {
+      let url = deQueryForUrl(deQueryForUrl({ q: queryParams || opt?.q })).q;
+      if (url.split('?').length > 1) {
+        return;
+      }
+    }
+    await wait(650);
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     if (pageProps.value.params) {
       pageProps.value.deParams = decryptForPage(pageProps.value.params);
@@ -125,16 +137,28 @@
         pageProps.value.params,
         pageProps.value.deParams
       );
-      gStores.globalStore.onAppLaunch({});
     }
-  });
-
-  onShow(async (opt) => {
-    // pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     init();
+    console.log('pageProps.value.deParams1', pageProps.value.deParams);
   });
 
   const init = async () => {
+    await fetchList();
+    if (unPayList.value?.length == 0) {
+      useTBanner(
+        {
+          type: 'self',
+          path: 'pagesB/medicationAssistant/medicalHelp',
+          extraData: {
+            params: pageProps.value.params || '',
+          },
+        },
+        'reLaunch'
+      );
+    }
+  };
+  const fetchList = async () => {
+    console.log('pageProps.value.deParams', pageProps.value.deParams);
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const actionApi = pageProps.value.deParams
       ? api.getChineseMedicineListNl
@@ -151,18 +175,6 @@
         childOrder: item.prescId,
       };
     });
-    if (unPayList.value?.length == 0) {
-      useTBanner(
-        {
-          type: 'self',
-          path: 'pagesB/medicationAssistant/medicalHelp',
-          extraData: {
-            params: pageProps.value.params || '',
-          },
-        },
-        'reLaunch'
-      );
-    }
   };
 
   const selPayListItem = (item: IPayListItem) => {
@@ -188,6 +200,7 @@
   };
 
   const handlePayAfter = () => {
+    fetchList();
     gStores.messageStore.showMessage('药品代煎缴费成功', 3000, {
       closeCallBack: () => {
         useTBanner(
@@ -245,7 +258,7 @@
       // #endif
       const params = {
         cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
-      patientId: pageProps.value?.deParams?.patientId || patientId,
+        patientId: pageProps.value?.deParams?.patientId || patientId,
         payType,
         source,
         patientName,

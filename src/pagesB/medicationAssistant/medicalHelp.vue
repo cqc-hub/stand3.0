@@ -603,7 +603,6 @@
   };
 
   onLoad(async (opt) => {
-    console.log('show pageProps.value', opt);
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
     if (getSysCode() === '1001035') {
       uni.setNavigationBarTitle({
@@ -628,7 +627,6 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-      console.log('show pageProps.value', pageProps.value);
     }
 
     const { tabIndex, params } = pageProps.value;
