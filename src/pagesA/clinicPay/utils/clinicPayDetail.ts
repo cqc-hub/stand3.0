@@ -1533,6 +1533,16 @@ export const usePayPage = () => {
       }
     } else if (item.key === 'medicare') {
       const isMedicalMode = getIsMedicalMode();
+      if (
+        gStores.globalStore.sysCode === '1001033' &&
+        selUnPayList.value.length > 1
+      ) {
+        gStores.messageStore.showMessage(
+          '医保支付不能勾选多个单据，请逐一结算',
+          1500
+        );
+        return;
+      }
 
       if (isMedicalMode) {
         const cardNumber = pageProps.value.params
@@ -1928,9 +1938,12 @@ export const usePayPage = () => {
       if (!pageProps.value.params && globalGl.sConfig.isDrugDelivery === '1') {
         getDrugDeliveryList();
       }
-      if(!pageProps.value.params && pageConfig.value.isQueryChineseMedicine === '1'){
-        getChineseMedicineList()  
-    }
+      if (
+        !pageProps.value.params &&
+        pageConfig.value.isQueryChineseMedicine === '1'
+      ) {
+        getChineseMedicineList();
+      }
     }, 500);
   };
 
@@ -2068,18 +2081,19 @@ export const usePayPage = () => {
     getListData(true);
   };
 
-    /** 查询草药代煎数据 */
+  /** 查询草药代煎数据 */
   const getChineseMedicineList = async () => {
     const { patientId } = gStores.userStore.patChoose;
     const cardNumber =
-      pageProps.value.deParams?.cardNumber || gStores.userStore.patChoose.cardNumber;
+      pageProps.value.deParams?.cardNumber ||
+      gStores.userStore.patChoose.cardNumber;
 
     try {
-      const {result} = await api.getChineseMedicineList({
+      const { result } = await api.getChineseMedicineList({
         cardNumber,
         patientId,
       });
-      if (result?.results && result.results.length ) {
+      if (result?.results && result.results.length) {
         const { confirm, cancel } = await apiAsync(uni.showModal, {
           content: '本次缴费项目中含有中草药处方，是否需要代煎？',
           cancelText: '我要自煎',
@@ -2094,21 +2108,20 @@ export const usePayPage = () => {
             }),
           });
         }
-        if(cancel){
+        if (cancel) {
           uni.navigateTo({
             url: '/pagesB/medicationAssistant/medicalHelp',
           });
         }
-      }else{
-          uni.navigateTo({
-            url: '/pagesB/medicationAssistant/medicalHelp',
-          });
+      } else {
+        uni.navigateTo({
+          url: '/pagesB/medicationAssistant/medicalHelp',
+        });
       }
     } catch (error) {
       console.error('获取中药代煎数据失败:', error);
     }
   };
-
 
   return {
     hosId,
@@ -2159,7 +2172,7 @@ export const usePayPage = () => {
     cacheStore,
     getFamilyArgs,
     isModeMedicalHelp,
-    getChineseMedicineList
+    getChineseMedicineList,
   };
 };
 

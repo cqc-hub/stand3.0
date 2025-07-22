@@ -122,11 +122,7 @@
     let query = '?';
     let isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     if (options.type !== '1') {
-      query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}`;
-      // 中医风格
-      if (isTcmStyle !== '0') {
-        query += `&isTcmStyle=${isTcmStyle}&`;
-      }
+      query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&isTcmStyle=${isTcmStyle}&`;
     }
 
     if (options.query) {
