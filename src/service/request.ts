@@ -76,9 +76,9 @@ class requestClass {
     options.baseURL = options.baseURL || this[config].baseURL;
     // options.dataType = options.dataType || this[config].dataType;
     // options.dataType = 'string';
-    options.url = requestClass[isCompleteURL](options.url)
-      ? options.url
-      : options.baseURL + options.url;
+    // options.url = requestClass[isCompleteURL](options.url)
+    //   ? options.url
+    //   : options.baseURL + options.url;
     options.data = options.data;
     options.header = { ...options.header, ...this[config].header };
     options.method = options.method || this[config].method;
@@ -102,7 +102,10 @@ class requestClass {
 
         reject(err);
       };
-      uni.request(options);
+      uni.request({
+        ...options,
+        url: `${options.baseURL}${options.url}`
+      });
     });
   }
 
