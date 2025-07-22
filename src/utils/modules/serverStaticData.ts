@@ -196,7 +196,7 @@ export const useTBanner = async (
       isLogin = true;
     }
 
-    if (config.isSelfH5 === '1') {
+    if (config.isSelfH5 === '1' || config.type === 'h5') {
       _d._herenId = gStores.globalStore.herenId;
       _d.herenId = gStores.globalStore.herenId;
       _d._patientId = gStores.userStore.patChoose.patientId;
