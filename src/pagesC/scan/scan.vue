@@ -139,9 +139,10 @@
     });
   };
 
-  // 用药详情1001035 https://h5.eheren.com/note/?myType=drug35&linkRecordId=tHWQeC057CvyF
+  // 用药详情1001035 1.eheren.com/s/35/13/tHWQeC057CvyF  ->(运维转) https://h5.eheren.com/note/?s=35&p=13&q=tHWQeC057CvyF
+  // https://iheren.feishu.cn/docx/doxcnlxOHeTwHeYEpkswCvkba8f
   const initDrugDetail35 = async () => {
-    const { linkRecordId } = pageProps.value;
+    const { queryDes } = pageProps.value;
 
     useTBanner({
       type: 'h5',
@@ -149,7 +150,7 @@
       path: 'pagesC/medicationQuery/medicineDetail',
       text: '用药详情',
       extraData: {
-        linkRecordId,
+        linkRecordId: queryDes,
       },
       isLocal: '1',
     });

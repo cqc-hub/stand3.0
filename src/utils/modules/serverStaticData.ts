@@ -252,7 +252,7 @@ export const useTBanner = async (
       const { modeOld, sysCode } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
-        // baseUrl = h5UrlLocal;
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;
