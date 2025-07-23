@@ -54,7 +54,7 @@
               class="f28"
             >
               <text class="mr12">取药地址:</text>
-              <text>{{ detailData.takeLocation }}</text>
+              <text @click="gotoLocation">{{ detailData.takeLocation }}</text>
             </view>
             <view style="height: 12rpx"></view>
           </view>
@@ -377,12 +377,25 @@
     });
   };
 
+  const gotoLocation = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      text: '查看电子导诊单',
+      addition: {
+        herenId: 'herenId',
+        cardNumber: '_hosPd',
+        token: 'token',
+      },
+    });
+  };
+
   const init = () => {
     if (gStores.globalStore.sysCode === '1001035') {
       showQrCode.value = false;
     }
     getData();
-    
   };
 
   onReady(() => {

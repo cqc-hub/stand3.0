@@ -320,7 +320,7 @@
         costs: expressList,
         totalCost: totalFee,
       };
-      getIceFee();
+      
 
       if (gStores.globalStore.sysCode === '1001035') {
         const aim = aimList.value.find(
@@ -329,6 +329,7 @@
         iceBagNum.value = 0;
         aim?.value == '2' ? (iceBagStep.value = 1) : (iceBagStep.value = 2);
       }
+      getIceFee();
     } catch (e) {
       feeDetail.value = {
         totalFee: 0,
