@@ -122,6 +122,7 @@
     patientName?: string;
     patientPhone?: string; // 代缴的时候带
     params?: string; // 扫码时候带的加密参数
+    _m?: string; // 默认充值金额
   };
   const pageProps = ref<IPageProps>({} as IPageProps);
   const pageConfig = ref({} as ISystemConfig['hospitalCare']);
@@ -168,6 +169,7 @@
   };
 
   const toPayPage = () => {
+    const { _m } = pageProps.value;
     const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
     const data = {
       hosId,
@@ -178,6 +180,7 @@
     };
     uni.navigateTo({
       url: joinQuery('/pagesA/hospitalCare/paymentPage', {
+        defaultMoney: _m,
         ...hosInfoResObj.value,
         ...data,
       }),
