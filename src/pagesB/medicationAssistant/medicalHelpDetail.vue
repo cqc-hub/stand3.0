@@ -54,7 +54,9 @@
               class="f28"
             >
               <text class="mr12">取药地址:</text>
-              <text @click="gotoLocation">{{ detailData.takeLocation }}</text>
+              <text class="hljs-link" @click="gotoLocation">
+                {{ detailData.takeLocation }}
+              </text>
             </view>
             <view style="height: 12rpx"></view>
           </view>
@@ -536,5 +538,8 @@
       height: 4rpx;
       background-color: #fff;
     }
+  }
+  .hljs-link {
+    text-decoration: underline;
   }
 </style>
