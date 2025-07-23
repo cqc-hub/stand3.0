@@ -51,7 +51,7 @@
                     :type="'2'"
                     inputBorder
                     :placeholder="viewerStore.homeSearchPlaceholder"
-                  />  
+                  />
                 </view>
                 <view v-if="gStores.globalStore.sysCode === '1001063'" @click="goClinicPay" class="ico_my_scon icon-size">&#xe6e4;</view>
               </view>
@@ -191,6 +191,7 @@
             "
             :right="1"
             :edge="100"
+            :offsetHeight="0"
             zid="33"
             @btnClick="useCommonTo(viewerStore.homeBallList[0])"
             isDock
@@ -200,7 +201,7 @@
               <text v-if="viewerStore.homeBallList[0].detail">
                 {{ viewerStore.homeBallList[0].detail }}
               </text>
-              <image :src="viewerStore.homeBallList[0].iconfont"></image>
+              <image :src="viewerStore.homeBallList[0].iconfont" mode="heightFix"></image>
             </view>
           </drag-button>
 
@@ -649,13 +650,13 @@
   const goClinicPay = () => {
     uni.scanCode({
       complete(res) {
-        console.warn('扫码完成',res); 
+        console.warn('扫码完成',res);
           uni.navigateTo({
             url: '/pagesA/clinicPay/clinicPayDetail',
-          }); 
+          });
       },
     });
- 
+
   };
   // #ifdef MP-ALIPAY
   //支付宝——首页消息推送
@@ -710,7 +711,7 @@
       z-index: 999;
     }
     image {
-      width: 140rpx;
+      // width: 100rpx;
       height: 148rpx;
     }
   }
@@ -730,7 +731,7 @@
       width: 88rpx;
       margin-left: 20rpx;
       display: inline-block;
-      color: var(--h-color-white); 
+      color: var(--h-color-white);
     }
     .openOld {
       width: 200rpx;
