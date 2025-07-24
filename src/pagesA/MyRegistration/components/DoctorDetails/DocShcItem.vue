@@ -75,18 +75,22 @@
         </view>
       </view>
 
-      <view class="f24 color-666 flex-between">
+      <view class="f24 color-666 flex-between items-start">
         <view class="flex">
-          <view v-if="pageConfig.orderMode === '1'" class="text-ellipsis mr12">
-            {{ item.categorName }}
-          </view>
-
-          <view v-else class="text-ellipsis mr12">
-            <text v-if="item.schQukCategor">{{ item.schQukCategor }}</text>
-            <text v-else>
+          <!-- text-ellipsis -->
+          <view class="mr12">
+            <text v-if="pageConfig.orderMode === '1'" class="mr12">
+              {{ item.categorName }}
+            </text>
+            <text v-else-if="item.schQukCategor" class="mr12">
+              {{ item.schQukCategor }}
+            </text>
+            <text v-else class="mr12">
               <text>{{ item.deptName }}</text>
               <text v-if="item.categorName">/{{ item.categorName }}</text>
             </text>
+
+            <text v-if="item.visitingArea">{{ item.visitingArea }}</text>
           </view>
         </view>
 
@@ -104,7 +108,13 @@
             >
               总{{ item.numCount }}个
             </text>
-            <text v-if="item.numRemain" class="text-no-wrap">
+            <text
+              v-if="item.numRemain"
+              :class="{
+                mr12: !(item.numCount && pageConfig.isHideNumCount !== '1'),
+              }"
+              class="text-no-wrap"
+            >
               余{{ item.numRemain }}个
             </text>
           </view>

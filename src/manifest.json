@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wx08440928b105c3bf",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -83,7 +83,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597"
+    "appid": "2021002129645591"
   },
   "mp-baidu": {
     "usingComponents": true
