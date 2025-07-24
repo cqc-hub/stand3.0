@@ -94,7 +94,7 @@ const changeTab = async (item) => {
           type: "h5",
           path: "https://jksc.eheren.com/mobile/pages/login/index",
           addition: { TOKEN: "token", PATIENTID: "patientId", HERENID: "herenId", OPENID: "openId" },
-          extraData: { sysCode: gStores.globalStore.sysCode, reqForward: "true", source: gStores.globalStore.openId },
+          extraData: { sysCode: gStores.globalStore.sysCode, reqForward: "true", source: gStores.globalStore.browser.source },
         },
       },
     });
