@@ -294,7 +294,7 @@
     const { expressParam, expressStatus, acceptTime } = result;
 
     if (expressParam) {
-      const _keyMap = {
+      let _keyMap = {
         40: '派送中',
         20: '已发货',
         50: '已签收',
@@ -302,7 +302,7 @@
         30: '运输中',
       };
       if (gStores.globalStore.sysCode === '1001035') {
-        const _keyMap = {
+       _keyMap = {
           40: '派送中',
           20: '已下单',
           50: '已签收',
