@@ -15,6 +15,7 @@
             class="sch-item mb8 animate__animated animate__fadeIn"
           >
             <Doc-Shc-Item
+              :gStores="gStores"
               :item="_item"
               :pageConfig="pageConfig"
               :systemModeOld="systemModeOld"
@@ -37,7 +38,9 @@
   import DocShcItem from '../DoctorDetails/DocShcItem.vue';
   import OrderDocClinicTime from './OrderDocClinicTime.vue';
 
-  import { type ISystemConfig } from '@/utils';
+  import { GStores, type ISystemConfig } from '@/utils';
+
+  const gStores = new GStores();
 
   const emits = defineEmits([
     'reg-click',

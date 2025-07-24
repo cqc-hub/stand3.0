@@ -32,6 +32,9 @@
             <view v-if="item.fee" class="ampm-fee f28 mr16 g-bold">
               {{ item.fee }}元
             </view>
+            <view v-if="item.categorName && gStores.globalStore.sysCode === '1001067'" class="mr16">
+              {{ item.categorName }}
+            </view>
           </view>
         </view>
 
@@ -128,13 +131,14 @@
   import { computed } from 'vue';
   import { TSchInfo } from '../../utils/index';
 
-  import { type ISystemConfig } from '@/utils';
+  import { type ISystemConfig, GStores } from '@/utils';
   import dayjs from 'dayjs';
 
   const props = defineProps<{
     item: TSchInfo;
     systemModeOld?: boolean;
     pageConfig: ISystemConfig['order'];
+    gStores: GStores;
     outHosSch?: boolean;
     disabled?: boolean;
     patient?: boolean;

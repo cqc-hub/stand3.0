@@ -27,6 +27,7 @@
       >
         <doc-sch-item
           :pageConfig="pageConfig"
+          :gStores="gStores"
           :item="item"
           :systemModeOld="gStores.globalStore.modeOld"
           @reg-click="regClick"

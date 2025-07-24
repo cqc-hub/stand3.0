@@ -228,6 +228,7 @@
                           class="sch-item mb8 animate__animated animate__fadeIn"
                         >
                           <Doc-Sch-Item
+                            :gStores="gStores"
                             :pageConfig="pageConfig"
                             :patient="pageConfig.isOrderWithoutPat !== '1'"
                             :item="item"
@@ -271,6 +272,7 @@
                             class="sch-item mb8"
                           >
                             <Doc-Sch-Item
+                              :gStores="gStores"
                               :pageConfig="pageConfig"
                               :patient="pageConfig.isOrderWithoutPat !== '1'"
                               :item="item"
@@ -375,6 +377,7 @@
                                 class="sch-item mb8 animate__animated animate__fadeIn"
                               >
                                 <Doc-Sch-Item
+                                  :gStores="gStores"
                                   :pageConfig="pageConfig"
                                   :patient="
                                     pageConfig.isOrderWithoutPat !== '1'
@@ -433,6 +436,7 @@
                                   class="sch-item mb8"
                                 >
                                   <Doc-Sch-Item
+                                    :gStores="gStores"
                                     :pageConfig="pageConfig"
                                     :patient="
                                       pageConfig.isOrderWithoutPat !== '1'
