@@ -127,13 +127,9 @@
           </view>
         </template>
       </view>
-      <view class="no-data" v-else>
-        <img
-          class="no-data-img"
-          :src="$global.BASE_IMG + 'img_404_no record@3x.png'"
-          alt=""
-        />
-        <view>未查询到住院清单信息</view>
+
+      <view v-else class="empty-box bg-white">
+        <g-empty :current="2" text="未查询到住院清单信息" />
       </view>
     </view>
   </view>
@@ -392,18 +388,5 @@
   }
   .empty-box {
     padding-top: 200rpx;
-  }
-  .no-data {
-    padding: 80rpx 0;
-    background-color: #fff;
-    text-align: center;
-    border-radius: 0px 0px 16rpx 16rpx;
-
-    color: #888;
-    font-size: var(--hr-font-size-xs);
-    .no-data-img {
-      width: 200rpx;
-      height: 200rpx;
-    }
   }
 </style>

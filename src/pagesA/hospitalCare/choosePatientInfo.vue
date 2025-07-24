@@ -16,11 +16,7 @@
         <view class="user">
           <image
             class="user-avatar"
-            :src="
-              hosInfoResObj.sexCode == '1'
-                ? '../../static/image/img_tx_patient_male.png'
-                : '/static/image/img_tx_patient_female.png'
-            "
+            :src="getAvatar(hosInfoResObj.sexCode == '1' ? '男' : '女')"
             mode="widthFix"
           ></image>
           <view class="user-info">
@@ -117,11 +113,13 @@
     hospitalPayResult,
   } from './utils/inpatientInfo';
   import { deQueryForUrl } from '@/common/utils';
+  import { getAvatar } from '@/stores';
 
   type IPageProps = {
     patientName?: string;
     patientPhone?: string; // 代缴的时候带
     params?: string; // 扫码时候带的加密参数
+    _m?: string; // 默认充值金额
   };
   const pageProps = ref<IPageProps>({} as IPageProps);
   const pageConfig = ref({} as ISystemConfig['hospitalCare']);
@@ -168,6 +166,7 @@
   };
 
   const toPayPage = () => {
+    const { _m } = pageProps.value;
     const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
     const data = {
       hosId,
@@ -178,6 +177,7 @@
     };
     uni.navigateTo({
       url: joinQuery('/pagesA/hospitalCare/paymentPage', {
+        defaultMoney: _m,
         ...hosInfoResObj.value,
         ...data,
       }),

@@ -377,10 +377,10 @@
       !list.every((o) => o?.prescVisitType === list[0]?.prescVisitType)
     ) {
       //判断是否同种类
-      gStores.messageStore.showMessage('请选择相同就诊类型处方', 3000);
+      gStores.messageStore.showMessage('不同就诊类型处方不能同时操作！', 3000);
     } else if (!list.every((o) => o?.deliveryType === list[0]?.deliveryType)) {
       //判断是否同种配送类型
-      gStores.messageStore.showMessage('请选择相同配送类型处方', 3000);
+      gStores.messageStore.showMessage('不同配送类型处方不能同时操作！', 3000);
     } else {
       selList.value = list;
       return;

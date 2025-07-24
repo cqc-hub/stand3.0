@@ -60,7 +60,6 @@
       ref="refPay"
     ></g-pay>
     <g-message />
-
   </view>
 </template>
 
@@ -91,6 +90,7 @@
   } = useHosPayPage();
 
   type IPageProps = {
+    defaultMoney?: string; // 默认充值金额
     hosId: string;
     hosName: string;
     patientName?: string; //扫码的时候传 支付用
@@ -374,6 +374,9 @@
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     console.log(pageProps.value, '----');
+    if (pageProps.value.defaultMoney) {
+      defalutMoney.value = pageProps.value.defaultMoney;
+    }
     setData();
   });
 </script>

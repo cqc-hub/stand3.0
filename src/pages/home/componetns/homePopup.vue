@@ -8,7 +8,14 @@
       <view class="g-page modeOld">
         <view class="g-container">
           <view class="old-bg">
-            <img :src="$global.BASE_IMG + 'img_old@3x.png'" alt="" />
+            <img
+              :src="` ${$global.BASE_IMG}${
+                gStores.globalStore.getPageClass === ' system-style-medical'
+                  ? 'img_old@3x-tcm.png'
+                  : 'img_old@3x.png'
+              }`"
+              alt=""
+            />
           </view>
           <view class="old-title" v-if="!gStores.globalStore.modeOld">
             <text>欢迎使用长辈模式</text>

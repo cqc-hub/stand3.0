@@ -54,7 +54,9 @@
               class="f28"
             >
               <text class="mr12">取药地址:</text>
-              <text>{{ detailData.takeLocation }}</text>
+              <text class="hljs-link" @click="gotoLocation">
+                {{ detailData.takeLocation }}
+              </text>
             </view>
             <view style="height: 12rpx"></view>
           </view>
@@ -299,14 +301,14 @@
         10: '待取件',
         30: '运输中',
       };
-      if(gStores.globalStore.sysCode==='1001035'){
-         const _keyMap = {
-        40: '派送中',
-        20: '已下单',
-        50: '已签收',
-        10: '待取件',
-        30: '运输中',
-      };
+      if (gStores.globalStore.sysCode === '1001035') {
+        const _keyMap = {
+          40: '派送中',
+          20: '已下单',
+          50: '已签收',
+          10: '待取件',
+          30: '运输中',
+        };
       }
 
       const date = dayjs(acceptTime).format('MM-DD');
@@ -377,7 +379,24 @@
     });
   };
 
+  const gotoLocation = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      text: '查看电子导诊单',
+      addition: {
+        herenId: 'herenId',
+        cardNumber: '_hosPd',
+        token: 'token',
+      },
+    });
+  };
+
   const init = () => {
+    if (gStores.globalStore.sysCode === '1001035') {
+      showQrCode.value = false;
+    }
     getData();
   };
 
@@ -519,5 +538,8 @@
       height: 4rpx;
       background-color: #fff;
     }
+  }
+  .hljs-link {
+    text-decoration: underline;
   }
 </style>

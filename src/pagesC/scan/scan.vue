@@ -31,8 +31,9 @@
        * - 1 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
        * - 2 温附二 满意度问卷
        * - 3 温附二 化验排队
+       * - 4 江苏省中 用药详情
        */
-      type: '1' | '2' | '3';
+      type: '1' | '2' | '3' | '4';
       [key: string]: any;
       // TBannerConfig
       btn?: string;
@@ -138,6 +139,23 @@
     });
   };
 
+  // 用药详情1001035 1.eheren.com/s/35/13/tHWQeC057CvyF  ->(运维转) https://h5.eheren.com/note/?s=35&p=13&q=tHWQeC057CvyF
+  // https://iheren.feishu.cn/docx/doxcnlxOHeTwHeYEpkswCvkba8f
+  const initDrugDetail35 = async () => {
+    const { queryDes } = pageProps.value;
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/medicationQuery/medicineDetail',
+      text: '用药详情',
+      extraData: {
+        linkRecordId: queryDes,
+      },
+      isLocal: '1',
+    });
+  };
+
   const init = async () => {
     const { type, btn } = pageProps.value;
 
@@ -158,6 +176,10 @@
 
       case '3':
         initTakeNumber();
+        break;
+
+      case '4':
+        initDrugDetail35();
         break;
 
       default:
