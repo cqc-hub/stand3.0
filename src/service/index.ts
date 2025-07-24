@@ -29,12 +29,10 @@ let outLoginTimer: number;
 
 //是否加密 正式环境默认开启sm4加密
 // 20250108 由于sm4容易导致系统压力大 所以统一改为des加密
-const isDes =  (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
+const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 // const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenSm4;
 export const isOpenSm4 = false;
 
-const getShowUrl = (url, baseUrl) =>
-  url.slice(baseUrl?.length || 0).split('=')[0];
 
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
@@ -110,7 +108,7 @@ Request.interceptors.response(
     if (signContent) {
       responseData.result = responseInterfaceDecryp(signContent);
     }
-    console.warn(getShowUrl(responseOptions?.url, responseOptions?.baseURL));
+    console.warn(responseOptions?.url);
 
     // @ts-expect-error
     console.log('入参----', responseOptions?._data);
@@ -263,7 +261,7 @@ function deepEqualClean(localVersion, newVersion) {
     if (val1.version != val2.version) {
       if (val1.functionType == 1) {
         uni.removeStorageSync('systemConfig');
-        globalStore.clearFlagCaches()
+        globalStore.clearFlagCaches();
       }
       if (val1.functionType == 2) {
         uni.removeStorageSync('viewConfig');
@@ -282,7 +280,7 @@ const requestInterfaceEncrp = (request) => {
   //禁止删除
   console.log(
     '入参----',
-    getShowUrl(request.url, request.baseURL?.length || 0),
+    request.url,
     request.data
   );
 
