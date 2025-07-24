@@ -22,6 +22,7 @@ export interface IPageProps {
   orderId: string;
   hosOrderId: string;
   patientId: string;
+  hisResult?: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
   orderStatus: string; // 挂号状态
@@ -498,6 +499,8 @@ export class RegDetailUtil {
     return await api.cancelReg({
       orderId: this.prop.value.orderId,
       source: this.gStores.globalStore.browser.source,
+      hisResult:this.prop.value.hisResult,
+      hosOrderId: this.prop.value.hosOrderId,
     });
   }
 

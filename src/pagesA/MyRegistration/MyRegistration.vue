@@ -187,6 +187,7 @@
         allPData?: '1';
         type?: 'waitReg'; // 候补预约
         tabIndex?: '0' | '1' | '2';
+        typeId?: number;
       }
     >{}
   );
@@ -208,19 +209,10 @@
 
   const list = ref<IRegistrationCardItem[]>([]);
   const pageConfig = ref<ISystemConfig['order']>({} as ISystemConfig['order']);
-  // 已改 begin
   const tabCurrent = ref(0);
-  const tabCurrentDetail = ref({
-    typeId: 0,
-    headerName: '在线挂号',
-  } as TTabItem);
-  const tabs = ref([
-    {
-      typeId: 0,
-      headerName: '在线挂号',
-    } as TTabItem,
-  ]);
-  //已改 end
+
+  const tabs = ref<TTabItem[]>([]);
+  const tabCurrentDetail = ref({} as TTabItem);
   const orderStatusList = ref([
     {
       label: '在线挂号',
@@ -290,7 +282,6 @@
   });
 
   const tabChange = async (e: number) => {
-    console.log(e);
     if (tabs.value[tabCurrent.value]) {
       tabCurrent.value = e;
     } else {
@@ -502,12 +493,58 @@
   };
 
   onLoad(async (opt) => {
+    tabs.value = [
+      {
+        typeId: 0,
+        headerName:
+          gStores.globalStore.sysCode === '1001035' ? '小程序挂号' : '在线挂号',
+      },
+    ];
     props.value = deQueryForUrl(deQueryForUrl(opt));
     await getConfig();
     isRender.value = true;
+    const thRegisterId = props.value.thRegisterId;
+    thRegisterId &&
+      setLocalStorage({
+        thRegisterId,
+      });
+
+    pageConfig.value.isCanSelOrderStatus === '1' &&
+      tabs.value.push({
+        typeId: 1,
+        headerName: '全部挂号',
+      });
+
+    if (gStores.globalStore.sysCode === '1001035') {
+      tabs.value.push({
+        typeId: 3,
+        headerName: 'APP挂号',
+        searchType: '1',
+      });
+    }
+
+    pageConfig.value.isTabWaitReg === '1' &&
+      tabs.value.push({
+        typeId: 2,
+        headerName: '候补登记',
+      });
+
+    pageConfig.value.isCancelOlineReg === '1' &&
+      (tabs.value = tabs.value.filter((item) => {
+        return item?.typeId !== 0;
+      }));
 
     if (props.value?.tabIndex) {
       tabCurrent.value = parseInt(props.value?.tabIndex);
+    }
+
+    if (props.value.typeId) {
+      // tabCurrent.value = parseInt(props.value?.typeId);
+      const idx = tabs.value.findIndex(
+        (o) => o.typeId === (props.value.typeId as unknown as number) * 1
+      );
+
+      idx > -1 && (tabCurrent.value = idx);
     }
 
     uni.setNavigationBarTitle({
@@ -524,35 +561,6 @@
       _isPatient,
     });
 
-    const thRegisterId = props.value.thRegisterId;
-    thRegisterId &&
-      setLocalStorage({
-        thRegisterId,
-      });
-
-    pageConfig.value.isCanSelOrderStatus === '1' &&
-      tabs.value.push({
-        typeId: 1,
-        headerName: '全部挂号',
-      });
-    pageConfig.value.isTabWaitReg === '1' &&
-      tabs.value.push({
-        typeId: 2,
-        headerName: '候补登记',
-      });
-
-    pageConfig.value.isCancelOlineReg === '1' &&
-      (tabs.value = tabs.value.filter((item) => {
-        return item?.typeId !== 0;
-      }));
-
-    if (gStores.globalStore.sysCode === '1001035') {
-      tabs.value.push({
-        typeId: 3,
-        headerName: 'App挂号',
-        searchType: '1',
-      });
-    }
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
   });

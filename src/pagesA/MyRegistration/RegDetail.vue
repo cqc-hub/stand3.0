@@ -19,10 +19,7 @@
     ></code-btn>
     <!-- #endif -->
     <scroll-view scroll-y class="scroll-container">
-      <view
-        v-if="orderRegInfo.patientId || pageProps.searchType === '1'"
-        class="box"
-      >
+      <view v-if="orderRegInfo.patientId" class="box">
         <view class="reg-header flex-between">
           <view
             :style="{
@@ -1201,7 +1198,7 @@
       closeCallBack() {
         if (orderConfig.value?.isTabWaitReg === '1') {
           uni.reLaunch({
-            url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+            url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
           });
         } else {
           uni.reLaunch({
