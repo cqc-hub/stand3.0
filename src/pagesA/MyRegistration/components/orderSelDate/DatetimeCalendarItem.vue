@@ -39,7 +39,7 @@
           }"
           class="item-content-order"
         >
-          {{ isHasOrder ? '有号' : '无号' }}
+          {{ getOrderSchStateLabel }}
         </view>
       </view>
     </view>
@@ -97,9 +97,23 @@
     },
 
     computed: {
+      getOrderSchState() {
+        return this.enableDays[this.weeks.fullDate];
+      },
+
       isHasOrder() {
-        // return this.enableDays.includes(this.weeks.fullDate);
-        return this.enableDays[this.weeks.fullDate] === '0';
+        return this.getOrderSchState === '0';
+      },
+
+      getOrderSchStateLabel() {
+        const stateMap = {
+          0: '有号',
+          1: '停诊',
+          2: '约满',
+          3: '无号',
+        };
+
+        return stateMap[this.getOrderSchState] || '未知';
       },
     },
 
