@@ -185,21 +185,56 @@
               }"
               class="content-box"
             >
-              <template v-if="!isMultHosDoc">
+              <template>
+                <view
+                  class="tabs pl16 pr16 mb16"
+                  v-if="docHosSchList.length && isMultHosDoc"
+                  style="width: 100%"
+                >
+                  <g-tabs
+                    v-model:value="tabCurrent"
+                    :tabs="docHosSchList"
+                    :scroll="true"
+                    field="hosName"
+                    @change="tabChange"
+                  />
+                </view>
                 <view
                   v-if="docSchList.length"
                   class="content-sel-date mb16 g-border-bottom"
                 >
                   <Order-Sel-Date
-                    :value="checkedDay"
-                    :choose-days="chooseDays"
-                    :enable-days="enabledDays"
+                    :value="
+                      isMultHosDoc
+                        ? docHosSchList[tabCurrent].checkedDay
+                        : checkedDay
+                    "
+                    :choose-days="
+                      isMultHosDoc
+                        ? docHosSchList[tabCurrent].chooseDays
+                        : chooseDays
+                    "
+                    :enable-days="
+                      isMultHosDoc
+                        ? docHosSchList[tabCurrent].enabledDays
+                        : enabledDays
+                    "
                     @change="dateChange"
                   />
                 </view>
 
-                <block v-if="docSchList.length">
-                  <block v-if="Object.keys(schToday.schByHos).length">
+                <block
+                  v-if="isMultHosDoc ? docHosSchList.length : docSchList.length"
+                >
+                  <block
+                    v-if="
+                      Object.keys(
+                        isMultHosDoc
+                          ? schHosToday(docHosSchList[tabCurrent]).schByHos
+                          : schToday.schByHos
+                      ).length
+                    "
+                  >
                     <view v-if="isShowHosNet">
                       <text class="label-mark">
                         <text class="color-fff f28 label-mark-content">
@@ -209,12 +244,20 @@
                     </view>
 
                     <view
-                      v-for="_hosId in Object.keys(schToday.schByHos)"
+                      v-for="_hosId in Object.keys(
+                        (isMultHosDoc
+                          ? schHosToday(docHosSchList[tabCurrent])
+                          : schToday
+                        ).schByHos
+                      )"
                       :key="_hosId"
                       class="p32c mt12"
                     >
                       <view
-                        v-for="(item, idx) in schToday.schByHos[_hosId]"
+                        v-for="(item, idx) in (isMultHosDoc
+                          ? schHosToday(docHosSchList[tabCurrent])
+                          : schToday
+                        ).schByHos[_hosId]"
                         :key="item.schId"
                       >
                         <view v-if="!idx" class="f32 g-bold mb16">
@@ -223,7 +266,13 @@
 
                         <view
                           :class="{
-                            mb32: idx === schToday.schByHos[_hosId].length - 1,
+                            mb32:
+                              idx ===
+                              (isMultHosDoc
+                                ? schHosToday(docHosSchList[tabCurrent])
+                                : schToday
+                              ).schByHos[_hosId].length -
+                                1,
                           }"
                           class="sch-item mb8 animate__animated animate__fadeIn"
                         >
@@ -288,183 +337,6 @@
                 </block>
 
                 <view class="empty-list" v-else-if="isComplete">
-                  <g-empty
-                    :current="2"
-                    imgHeight="180rpx"
-                    text="未查询到该医生排班信息"
-                    noTransformY
-                  />
-                </view>
-              </template>
-              <template v-else>
-                <view
-                  class="tabs pl16 pr16 mb16"
-                  v-if="docHosSchList.length"
-                  style="width: 100%"
-                >
-                  <g-tabs
-                    v-model:value="tabCurrent"
-                    :tabs="docHosSchList"
-                    :scroll="true"
-                    field="hosName"
-                    @change="tabChange"
-                  />
-                </view>
-                <swiper
-                  v-if="docHosSchList.length"
-                  :current="tabCurrent"
-                  :duration="300"
-                  @change="({ detail: { current } }) => tabChange(current)"
-                  :style="{ height: `${docHosSchHeight}px` }"
-                >
-                  <swiper-item
-                    v-for="(hosItem, hosIndex) in docHosSchList"
-                    :key="`docHosSchList${hosIndex}`"
-                  >
-                    <view
-                      class="doc-hos-sch-list"
-                      :id="`doc-hos-sch-list${hosIndex}`"
-                    >
-                      <view
-                        v-if="hosItem.schList.length"
-                        class="content-sel-date mb16 g-border-bottom"
-                      >
-                        <Order-Sel-Date
-                          :value="hosItem.checkedDay"
-                          :choose-days="hosItem.chooseDays"
-                          :enable-days="hosItem.enabledDays"
-                          @change="dateChange"
-                        />
-                      </view>
-                      <block v-if="docHosSchList.length">
-                        <block
-                          v-if="
-                            Object.keys(schHosToday(hosItem).schByHos).length
-                          "
-                        >
-                          <view v-if="isShowHosNet">
-                            <text class="label-mark">
-                              <text class="color-fff f28 label-mark-content">
-                                到院就诊
-                              </text>
-                            </text>
-                          </view>
-
-                          <view
-                            v-for="_hosId in Object.keys(
-                              schHosToday(hosItem).schByHos
-                            )"
-                            :key="_hosId"
-                            class="p32c mt12"
-                          >
-                            <view
-                              v-for="(item, idx) in schHosToday(hosItem)
-                                .schByHos[_hosId]"
-                              :key="item.schId"
-                            >
-                              <view v-if="!idx" class="f32 g-bold mb16">
-                                {{ item.hosName }}
-                              </view>
-
-                              <view
-                                :class="{
-                                  mb32:
-                                    idx ===
-                                    schHosToday(hosItem).schByHos[_hosId]
-                                      .length -
-                                      1,
-                                }"
-                                class="sch-item mb8 animate__animated animate__fadeIn"
-                              >
-                                <Doc-Sch-Item
-                                  :gStores="gStores"
-                                  :pageConfig="pageConfig"
-                                  :patient="
-                                    pageConfig.isOrderWithoutPat !== '1'
-                                  "
-                                  :item="item"
-                                  :systemModeOld="gStores.globalStore.modeOld"
-                                  @reg-click="
-                                    (scheme) => {
-                                      chooseDays = hosItem.chooseDays;
-                                      regClick({ scheme });
-                                    }
-                                  "
-                                  @wait-reg-click="showWaitRegDialog"
-                                />
-                              </view>
-                            </view>
-                          </view>
-                        </block>
-
-                        <block
-                          v-if="
-                            Object.keys(schHosToday(hosItem).schByNetHos).length
-                          "
-                        >
-                          <view class="animate__animated animate__fadeIn">
-                            <view>
-                              <text class="label-mark mb8">
-                                <text class="color-fff f28 label-mark-content">
-                                  网络就诊
-                                </text>
-                              </text>
-                            </view>
-
-                            <view
-                              v-for="_hosId in Object.keys(
-                                schHosToday(hosItem).schByNetHos
-                              )"
-                              :key="_hosId"
-                              class="p32c mt12"
-                            >
-                              <view
-                                v-for="(item, idx) in schHosToday(hosItem)
-                                  .schByNetHos[_hosId]"
-                                :key="item.schId"
-                              >
-                                <view v-if="!idx" class="f36 g-bold mb16">
-                                  {{ item.hosName }}
-                                </view>
-
-                                <view
-                                  :class="{
-                                    mb32:
-                                      idx ===
-                                      schToday.schByHos[_hosId].length - 1,
-                                  }"
-                                  class="sch-item mb8"
-                                >
-                                  <Doc-Sch-Item
-                                    :gStores="gStores"
-                                    :pageConfig="pageConfig"
-                                    :patient="
-                                      pageConfig.isOrderWithoutPat !== '1'
-                                    "
-                                    :item="item"
-                                    :systemModeOld="gStores.globalStore.modeOld"
-                                    @reg-click="
-                                      (data) => {
-                                        chooseDays = hosItem.chooseDays;
-                                        chooseDays;
-                                        regClick(data);
-                                      }
-                                    "
-                                    @wait-reg-click="showWaitRegDialog"
-                                  />
-                                </view>
-                              </view>
-                            </view>
-                          </view>
-                        </block>
-                      </block>
-                    </view>
-                  </swiper-item>
-                </swiper>
-                <view
-                  class="empty-list"
-                  v-else-if="isComplete && !docHosSchList.length"
-                >
                   <g-empty
                     :current="2"
                     imgHeight="180rpx"
