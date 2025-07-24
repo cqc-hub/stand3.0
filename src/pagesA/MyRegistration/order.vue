@@ -54,7 +54,12 @@
       <view v-if="checkedDay" class="container-contract">
         <view v-for="(item, i) in _dateDocListFilterByDate" :key="i" class="">
           <view v-for="(_item, _i) in item.schDateList" :key="_i">
-            <view v-if="pageConfig.isHideOrderCategorName !== '1'" class="item-scheme-date">{{ _item.categorName }}</view>
+            <view
+              v-if="pageConfig.isHideOrderCategorName !== '1'"
+              class="item-scheme-date"
+            >
+              {{ _item.categorName }}
+            </view>
             <view
               v-for="(__item, __i) in _item.schemeList"
               class="pb16 animate__animated animate__fadeIn"
@@ -131,6 +136,7 @@
   import OrderSelectSource from './components/orderSelectSource/OrderSelectSource.vue';
   import OrderPreSource from './components/orderSelectSource/OrderPreSource.vue';
   import OrderRecommendation from './components/orderRecommendation/orderRecommendation.vue';
+  import { CanWrite } from '@/typeUtils';
 
   const props = defineProps<{
     hosId: string;
@@ -144,7 +150,7 @@
     isExpertDeptId?: string; // 是否是专家科室（0否 1是） 是：按一级科室ID查询排班 否：按二级科室ID查询排班
     thRegisterId?: string;
   }>();
-  const pageProps = ref(<any>{});
+  const pageProps = ref(<CanWrite<typeof props>>{});
   const isFilterDoctor = ref(false);
 
   const hosDeptId = ref(
@@ -249,7 +255,6 @@
   });
 
   const showWaitRegDialog = async (data) => {
-    console.log('showWaitRegDialog', data);
     const {
       ampm,
       categor,
