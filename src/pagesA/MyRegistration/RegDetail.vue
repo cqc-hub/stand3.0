@@ -1201,7 +1201,7 @@
       closeCallBack() {
         if (orderConfig.value?.isTabWaitReg === '1') {
           uni.reLaunch({
-            url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+            url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
           });
         } else {
           uni.reLaunch({

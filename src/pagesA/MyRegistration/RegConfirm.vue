@@ -662,7 +662,7 @@
                 await api.preregistrationSave(requestArg);
                 if (pageConfig.value?.isTabWaitReg === '1') {
                   uni.reLaunch({
-                    url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+                    url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
                   });
                 } else {
                   uni.reLaunch({
@@ -675,7 +675,7 @@
         } else {
           if (pageConfig.value?.isTabWaitReg === '1') {
             uni.reLaunch({
-              url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+              url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
             });
           } else {
             uni.reLaunch({
@@ -762,7 +762,7 @@
 
       if (pageConfig.value?.isTabWaitReg === '1') {
         uni.reLaunch({
-          url: '/pagesA/MyRegistration/MyRegistration?tabIndex=2',
+          url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
         });
       } else {
         uni.reLaunch({
