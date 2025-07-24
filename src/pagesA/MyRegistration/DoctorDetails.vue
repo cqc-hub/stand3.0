@@ -704,7 +704,6 @@
   const dateChange = (item: IChooseDays) => {
     if (isMultHosDoc.value) {
       docHosSchList.value[tabCurrent.value].checkedDay = item.fullDay;
-      getdocHosSchHeight();
     }
     checkedDay.value = item.fullDay;
   };
@@ -751,27 +750,11 @@
           },
         ];
         docHosSchList.value.push(...schListByhosId);
-        getdocHosSchHeight();
       }
     }
 
     enabledDays.value = _enabledDays;
     filterChooseDays();
-  };
-  const inst = getCurrentInstance();
-  const getdocHosSchHeight = () => {
-    nextTick(() => {
-      const query = uni.createSelectorQuery().in(inst);
-      query
-        .selectAll(`#doc-hos-sch-list${tabCurrent.value}`)
-        .boundingClientRect((data: any) => {
-          if (data) {
-            console.log(data, 'docHosSchHeight');
-            docHosSchHeight.value = data[0].height;
-          }
-        })
-        .exec();
-    });
   };
 
   const schHosToday = (item) => {
@@ -788,7 +771,6 @@
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
-    getdocHosSchHeight();
   };
   const groupedByHosId = (originalArray) => {
     return originalArray.reduce((acc, current) => {
