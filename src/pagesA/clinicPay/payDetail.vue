@@ -698,9 +698,9 @@
           const hosOrderId = gStores.userStore.patChoose.cardNumber;
           const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
           const OPENID = gStores.globalStore.openId;
-          const MEDORGORD = selList.value
-            .map((item) => item.serialNo)
-            .join(',');
+          const MEDORGORD =
+            selList.value.map((item) => item.serialNo).join(',') ||
+            selUnPayList.value.map((item) => item.serialNo).join(',');
           const ORGCODG = 'H32028200358';
           const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
 
@@ -909,10 +909,12 @@
     let flag = false;
 
     if (isMedicalMode) {
-      flag = await isMedicalSelf(
-        props.value.cardNumber || cardNumber,
-        props.value.params
-      );
+      //现在不判断是否本人医保,交给微信医保去判断
+      // flag = await isMedicalSelf(
+      //   props.value.cardNumber || cardNumber,
+      //   props.value.params
+      // );
+      flag = true;
     }
 
     changeRefPayList([PayType.Online]);
