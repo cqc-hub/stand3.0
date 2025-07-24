@@ -36,7 +36,7 @@
               'item-active': item.fullDay === value,
               'item-disabled': enableDays[item.fullDay] !== '0',
             }"
-            :key="item.day"
+            :key="`${item.day}${generateUuid()}`"
             :id="'day-' + item.fullDay"
             @click="change(item)"
             class="choose-day-item g-flex-rc-cc item"
@@ -78,7 +78,7 @@
 <script lang="ts" setup>
   import { nextTick, ref, getCurrentInstance, watch, computed } from 'vue';
   import { IChooseDays } from '../../utils';
-  import { GStores } from '@/utils';
+  import { GStores, generateUuid } from '@/utils';
   import isoWeek from 'dayjs/plugin/isoWeek';
   import dayjs from 'dayjs';
 
