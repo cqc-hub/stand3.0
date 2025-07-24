@@ -16,7 +16,7 @@
         <view class="head-row-label text-no-wrap color-888">就诊医院</view>
         <view class="head-row-value color-444">
           {{
-            `${detailData.hosName || ''}${
+            `${detailData.hosName || myprops.hosName||''}${
               pageConfig.isListShowClinicType === '1'
                 ? (myprops.clinicTypeName && `(${myprops.clinicTypeName})`) ||
                   ''
