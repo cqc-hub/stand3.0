@@ -148,7 +148,7 @@
   const gStores = new GStores();
   const refOldDialog = ref();
 
-  // 互联网医院和第三方微信小程序（携带登录信息）
+  // 互联网医院和第三方微信小程序（携带登录信息）h5直接跳转scan页面
   const dealHosNet = async (opt: {
     myhosType: '0' | '1';
     query: any;
@@ -159,7 +159,7 @@
      * myhosType  '0' 需要登录  '1' 需要就诊人
      * query: '{}'
      * returnUrl  'pages/v3/collect/collectList'
-     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序 commonH5 通用第三方
+     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序 
      */
 
     let { myhosType, returnUrl, query, myEnvir } = opt;
@@ -182,24 +182,7 @@
       fullUrl = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
         _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
       });
-    } else if (myEnvir === 'commonH5') {
-      fullUrl = joinQueryForUrl('/pagesC/scan/scan', {
-        btn: {
-          _type: 'useTBanner',
-          type: 'h5',
-          path: query?.path,
-          addition: {
-            ...gStores.globalStore.h5MenuExtraData,
-            ...(query?.addition || {}),
-          },
-          extraData: {
-            sysCode: gStores.globalStore.sysCode,
-            reqForward: 'true',
-            ...(query?.extraData || {}),
-          },
-        },
-      });
-    }
+    }  
 
     await beforeEach({
       url: fullUrl,

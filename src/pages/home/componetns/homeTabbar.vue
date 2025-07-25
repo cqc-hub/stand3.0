@@ -88,14 +88,11 @@ const changeTab = async (item) => {
       type: "self",
       path: "pagesC/scan/scan",
       extraData: {
-        btn: {
-          isExpired: "1",
           _type: "useTBanner",
           type: "h5",
           path: "https://jksc.eheren.com/mobile/pages/login/index",
           addition: { TOKEN: "token", PATIENTID: "patientId", HERENID: "herenId", OPENID: "openId" },
           extraData: { sysCode: gStores.globalStore.sysCode, reqForward: "true", source: gStores.globalStore.browser.source },
-        },
       },
     });
     return;
