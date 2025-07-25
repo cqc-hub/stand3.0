@@ -201,7 +201,6 @@
       });
     }
 
-    console.log(fullUrl, 'full');
     await beforeEach({
       url: fullUrl,
       _isLogin: myhosType === '0',

@@ -275,6 +275,7 @@ export const useTBanner = async (
     // #endif
 
     // #ifndef H5
+    console.log('跳转路径-----', fullUrl);
     const url = joinQueryForUrl('/pagesA/webView/webView', {
       https: encodeURIComponent(fullUrl),
     });

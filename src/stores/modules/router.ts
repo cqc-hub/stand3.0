@@ -79,7 +79,6 @@ const routerStore = defineStore('router', {
           return;
         }
 
-        console.log(_url, '233');
         let fullUrl = decodeURIComponent(_url);
 
         if (fullUrl) {
