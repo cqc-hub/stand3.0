@@ -549,6 +549,8 @@
         regDialogMedicalFiling.value.show();
         return;
       }
+
+      console.log('哈哈哈哈哈哈', JSON.stringify(newPat.value));
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
