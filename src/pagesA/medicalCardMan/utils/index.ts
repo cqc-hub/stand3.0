@@ -1307,7 +1307,10 @@ export const getInfoFromIdCard = (idCard) => {
 export const useAuthPerson = () => {
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['person']>{});
-
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
   const getRealNameAuth = computed(() => {
     return pageConfig.value.realNameAuth || [];
   });
@@ -1315,10 +1318,6 @@ export const useAuthPerson = () => {
   const realNameAuthOcr = async (pat: IPat) => {
     const { patientId } = pat;
     const { source } = gStores.globalStore.browser;
-    const imgCanvas = ref({
-      imgWidth: 0,
-      imgHeight: 0,
-    });
     const { pdata } = await useOcr(false, {
       aliThroughByEnd: true,
       imgCanvas,
@@ -1418,5 +1417,16 @@ export const useAuthPerson = () => {
 
     // await patientUtils.getPatCardList();
     // routerJump();
+  };
+
+  const init = async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+  };
+
+  return {
+    realNameAuth,
+    init,
+    imgCanvas,
+    getRealNameAuth
   };
 };

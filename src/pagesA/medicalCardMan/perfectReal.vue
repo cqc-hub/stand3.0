@@ -23,7 +23,13 @@
 
       <g-flag typeFg="51" isShowFgTip />
     </view>
-
+    <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      style="opacity: 0; position: absolute; pointer-events: none"
+      id="canvasForBase64"
+    />
     <g-message />
     <xy-dialog
       :show="dialogShow"
@@ -154,7 +160,7 @@
   import { ref, onMounted, computed, type Ref } from 'vue';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { onLoad, onReady, onShow } from '@dcloudio/uni-app';
-  import { useMessageStore, useRouterStore } from '@/stores';
+  import { IPat, useMessageStore, useRouterStore } from '@/stores';
   import type { TInstance } from '@/components/g-form/index';
 
   import {
@@ -178,6 +184,7 @@
     TCardPat,
     useProgramPaySign,
     gotoChosseVerifyPage,
+    useAuthPerson,
   } from './utils';
 
   import {
@@ -262,6 +269,39 @@
   const activeCardSelCardNumber = ref('');
   const selCardPat = (pat: TCardPat) => {
     activeCardSelCardNumber.value = pat.cardNumber;
+  };
+
+  const {
+    getRealNameAuth,
+    realNameAuth: _realNameAuth,
+    init: useAuthPersonInit,
+    imgCanvas,
+  } = useAuthPerson();
+  const realNameAuth = async (pat: IPat) => {
+    const { title, content } = await gStores.getSysAppMore('xxx');
+
+    const isConfirm = await new Promise((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: true,
+          cancelText: '取消',
+          confirmText: '去认证',
+          cancelColor: 'var(--hr-brand-color-6)',
+          maxHeight: 900,
+          isMaskClick: false,
+        },
+        closeCallBack({ confirm, maskClose }) {
+          r(confirm);
+        },
+      });
+    });
+
+    if (isConfirm) {
+      await _realNameAuth(pat);
+      await patientUtil.getPatCardList();
+    }
   };
 
   const chooseCard = (cardNumber: string) => {
@@ -507,7 +547,7 @@
           dealNetError(err, data);
           throw new Error(err);
         });
-         newPat.value = { patientId };
+        newPat.value = { patientId };
 
         if (cardList && cardList.length) {
           await new Promise((r) => {
@@ -550,7 +590,14 @@
         return;
       }
 
-      console.log('哈哈哈哈哈哈', JSON.stringify(newPat.value));
+      if (
+        newPat.value.realNameAuth === '0' &&
+        getRealNameAuth.value.length &&
+        pageConfig.value.isRealNameAuthAfterAdd === '1'
+      ) {
+        await realNameAuth(newPat.value);
+      }
+
       if (pageProps.value._directUrl) {
         routerJump(pageProps.value._directUrl as `/${string}`);
       } else {
@@ -669,8 +716,6 @@
 
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
-
     const { formExtraKeys = [] } = pageConfig.value;
 
     let formListKeys: TFormKeys[] = [
@@ -799,6 +844,8 @@
 
   onMounted(async () => {
     routeStore.receiveQuery(pageProps.value);
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    await useAuthPersonInit();
     init();
 
     // #ifdef MP-ALIPAY

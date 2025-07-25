@@ -176,6 +176,7 @@
     healthCardLink,
     backWithFaceVerify,
     healthCardBind,
+    useAuthPerson,
   } from './utils/index';
   import { deQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
@@ -229,9 +230,18 @@
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
   const isNewHealthCard = ref(false);
-  const getRealNameAuth = computed(() => {
-    return pageConfig.value.realNameAuth || [];
-  });
+
+  const {
+    getRealNameAuth,
+    realNameAuth: _realNameAuth,
+    init: useAuthPersonInit,
+    imgCanvas,
+  } = useAuthPerson();
+  const realNameAuth = async (pat: IPat) => {
+    await _realNameAuth(pat);
+    await patientUtils.getPatCardList();
+    routerJump();
+  };
 
   // #ifdef MP-WEIXIN
   if (globalGl.systemInfo.isOpenHealthCard) {
@@ -241,9 +251,6 @@
 
   const isShowHealthLogin = ref(false);
 
-  const test = (val) => {
-    console.log('pageConfig.value', val);
-  };
   const upToHealthCord = async (pat: IPat) => {
     // #ifdef MP-WEIXIN
     const { success, res } = await getHealthCardCode();
@@ -320,114 +327,6 @@
     goElectronicMedicalCard();
   };
 
-  const realNameAuth = async (pat: IPat) => {
-    const tip = '选择认证方式';
-    let authType = getRealNameAuth.value[0];
-
-    if (getRealNameAuth.value.length > 1) {
-      const listMap = [
-        {
-          label: 'ocr 认证',
-          key: 'ocrVerify',
-        },
-        {
-          label: '人脸认证',
-          key: 'faceVerify',
-        },
-      ] as const;
-
-      const list = listMap.filter((o) => getRealNameAuth.value.includes(o.key));
-      const { tapIndex } = await apiAsync(
-        // @ts-expect-error
-        uni.showActionSheet,
-        {
-          title: tip,
-          alertText: tip,
-          itemList: list.map((o) => o.label),
-        }
-      );
-
-      authType = list[tapIndex].key;
-    }
-
-    if (authType === 'ocrVerify') {
-      const { title, content } = await gStores.getSysAppMore('1220');
-      await new Promise<{ confirm: boolean }>((r) => {
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            title,
-            isShowCancel: false,
-          },
-          closeCallBack: r,
-        });
-      });
-      await realNameAuthOcr(pat);
-    } else if (authType === 'faceVerify') {
-      await realNameAuthFace(pat);
-    }
-
-    await patientUtils.getPatCardList();
-    routerJump();
-  };
-
-  const imgCanvas = ref({
-    imgWidth: 0,
-    imgHeight: 0,
-  });
-  const realNameAuthOcr = async (pat: IPat) => {
-    const { patientId } = pat;
-    const { source } = gStores.globalStore.browser;
-    const { pdata } = await useOcr(false, {
-      aliThroughByEnd: true,
-      imgCanvas,
-    });
-
-    await api.upRealNameAuth({
-      patientId,
-      source,
-      pdata,
-    });
-  };
-
-  const realNameAuthFace = async (pat: IPat) => {
-    let isWx = true;
-    // #ifndef MP-WEIXIN
-    isWx = false;
-
-    // #endif
-
-    const { patientName, patientId, idCardEncry } = pat;
-    const { source } = gStores.globalStore.browser;
-
-    const {
-      result: { idCard },
-    } = await api.rpGetPlain({
-      source,
-      idCardEncry,
-      patientId,
-    });
-
-    const { verifyResult } = await new LoginUtils().faceVerify({
-      name: patientName,
-      idCardNumber: idCard,
-    });
-
-    const {
-      result: { pdata },
-    } = await api.faceResultAuth({
-      verifyResult,
-      idCard,
-      source,
-    });
-
-    await api.upRealNameAuth({
-      patientId,
-      source,
-      pdata,
-    });
-  };
-
   const associatedHealthCard = () => {
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/easyAssociate',
@@ -491,6 +390,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     routeStore.receiveQuery(pageProps.value);
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    useAuthPersonInit();
 
     //是否医保建档
     const medicalMHelp = globalGl.sConfig.medicalMHelp!;
