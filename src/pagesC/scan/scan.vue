@@ -33,7 +33,8 @@
        * - 3 温附二 化验排队
        * - 4 江苏省中 用药详情
        */
-      type: '1' | '2' | '3' | '4';
+      type: '1' | '2' | '3' | '4' | 'btn';
+      _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
       btn?: string;
@@ -48,7 +49,6 @@
       patData: params,
       source: gStores.globalStore.browser.source,
     });
-    await wait(400);
 
     if (patientName && patientPhone) {
       const pat = gStores.userStore.patList.find(
@@ -157,11 +157,27 @@
   };
 
   const init = async () => {
-    const { type, btn } = pageProps.value;
+    const { type, btn, _type } = pageProps.value;
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
       useTBanner(btnParse, 'navigateTo', gStores.globalStore.h5MenuExtraData);
+      return;
+    }
+
+    if (_type === 'useTBanner') {
+      console.log(pageProps.value, '---------');
+      if (pageProps.value.addition) {
+        pageProps.value.addition = JSON.parse(pageProps.value.addition);
+      }
+      if (pageProps.value.extraData) {
+        pageProps.value.extraData = JSON.parse(pageProps.value.extraData);
+      }
+      useTBanner(
+        pageProps.value as unknown as TBannerConfig,
+        'navigateTo',
+        gStores.globalStore.h5MenuExtraData
+      );
       return;
     }
 
@@ -199,6 +215,7 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
+
     console.log('获取到参数', pageProps.value);
   });
 
@@ -208,7 +225,7 @@
     if (!isContinue) {
       return;
     }
-    await wait(200);
+    await wait(600);
     uni.hideLoading();
     init();
   });
