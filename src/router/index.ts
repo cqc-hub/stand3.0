@@ -38,7 +38,7 @@ export const beforeEach = async (
     UniApp.RedirectToOptions &
     TRoute
 ) => {
-  const fullUrl = options.url;
+  const fullUrl = options.url[0] === '/' ? options.url : '/' + options.url;
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url) || {};
   const globalStore = useGlobalStore();

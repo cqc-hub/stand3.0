@@ -227,8 +227,8 @@
 
       if (
         (myEnvir && myEnvir === 'hosnet') ||
-        myEnvir === 'thirdmini' ||
-        myEnvir === 'commonH5'
+        myEnvir === 'thirdmini'
+        // myEnvir === 'commonH5'
       ) {
         dealHosNet(<any>opt);
       }

@@ -34,6 +34,7 @@
        * - 4 江苏省中 用药详情
        */
       type: '1' | '2' | '3' | '4' | 'btn';
+      _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
       btn?: string;
@@ -156,7 +157,7 @@
   };
 
   const init = async () => {
-    const { type, btn } = pageProps.value;
+    const { type, btn, _type } = pageProps.value;
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
@@ -164,15 +165,23 @@
       return;
     }
 
-    switch (type) {
-      case 'btn':
-        useTBanner(
-          pageProps.value as unknown as TBannerConfig,
-          'navigateTo',
-          gStores.globalStore.h5MenuExtraData
-        );
-        break;
+    if (_type === 'useTBanner') {
+      console.log(pageProps.value, '---------');
+      if (pageProps.value.addition) {
+        pageProps.value.addition = JSON.parse(pageProps.value.addition);
+      }
+      if (pageProps.value.extraData) {
+        pageProps.value.extraData = JSON.parse(pageProps.value.extraData);
+      }
+      useTBanner(
+        pageProps.value as unknown as TBannerConfig,
+        'navigateTo',
+        gStores.globalStore.h5MenuExtraData
+      );
+      return;
+    }
 
+    switch (type) {
       case '1':
         initAddPat();
         break;
