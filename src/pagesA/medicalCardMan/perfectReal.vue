@@ -278,7 +278,7 @@
     imgCanvas,
   } = useAuthPerson();
   const realNameAuth = async (pat: IPat) => {
-    const { title, content } = await gStores.getSysAppMore('xxx');
+    const { title, content } = await gStores.getSysAppMore('95');
 
     const isConfirm = await new Promise((r) => {
       gStores.messageStore.showMessage(content, 0, {
@@ -855,6 +855,8 @@
     // #endif
     await wait(20);
     await initSign();
+    // await wait(2000);
+    // realNameAuth(gStores.userStore.patChoose)
   });
 
   onShow(() => {
