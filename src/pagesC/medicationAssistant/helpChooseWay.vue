@@ -423,6 +423,7 @@
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
       provinces,
+      iceBagNum: iceBagNum.value||0,
       remark: remark.value,
     };
     if (pageConfig.value.isPayOnline === '1') {
