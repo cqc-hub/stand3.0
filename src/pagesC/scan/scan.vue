@@ -33,7 +33,7 @@
        * - 3 温附二 化验排队
        * - 4 江苏省中 用药详情
        */
-      type: '1' | '2' | '3' | '4';
+      type: '1' | '2' | '3' | '4' | 'btn';
       [key: string]: any;
       // TBannerConfig
       btn?: string;
@@ -48,7 +48,6 @@
       patData: params,
       source: gStores.globalStore.browser.source,
     });
-    await wait(400);
 
     if (patientName && patientPhone) {
       const pat = gStores.userStore.patList.find(
@@ -166,6 +165,14 @@
     }
 
     switch (type) {
+      case 'btn':
+        useTBanner(
+          pageProps.value as unknown as TBannerConfig,
+          'navigateTo',
+          gStores.globalStore.h5MenuExtraData
+        );
+        break;
+
       case '1':
         initAddPat();
         break;
@@ -199,6 +206,7 @@
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     }
+
     console.log('获取到参数', pageProps.value);
   });
 
@@ -208,7 +216,7 @@
     if (!isContinue) {
       return;
     }
-    await wait(200);
+    await wait(600);
     uni.hideLoading();
     init();
   });
