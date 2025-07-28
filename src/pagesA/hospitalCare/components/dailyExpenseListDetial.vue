@@ -98,13 +98,13 @@
                   <view class="left">
                     <view class="name">{{ sub.costName }}</view>
                     <view class="count">
-                      <view v-if="sub.orderedDate || 1" class=" mr24">
-                        {{ '2025-07-26' }}
-                      </view>
                       <view class="unit mr24">
                         {{ sub.unitPrice }}元/{{ sub.unit }}
                       </view>
-                      <view class="quantity">x{{ sub.quantity }}</view>
+                      <view class="quantity mr24">x{{ sub.quantity }}</view>
+                      <view v-if="sub.orderedDate" class="mr24">
+                        {{ sub.orderedDate }}
+                      </view>
                     </view>
                   </view>
                   <view class="right text-no-wrap">
