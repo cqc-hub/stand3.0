@@ -587,6 +587,8 @@ export interface ISystemConfig_ {
     // 客服中心  pagesA/serviceCenter/serviceCenter
     // 意见反馈使用自定义的页面?
     isCustomFeedback?: '1';
+    //匿名意见反馈
+    anonymousFeedback?: '1';
     // 开启咨询客服弹窗
     isOpenMyService?: {
       extInfo: string;

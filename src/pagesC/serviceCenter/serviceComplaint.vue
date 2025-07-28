@@ -10,7 +10,7 @@
       />
 
       <ImgUpload
-        v-if="options?.selectRecords === '1'"
+        v-if="options?.selectRecords === '1' || options?.isAnonymous === '1'"
         v-model:uploadImgList="uploadImgList"
         :count="3"
       />
@@ -47,6 +47,7 @@
     deptName: '',
     docName: '',
     diagnosis: '',
+    isAnonymous: '',
   });
   const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
@@ -254,6 +255,44 @@
       },
     },
   ];
+  const tempList3: TInstance[] = [
+    {
+      required: true,
+      label: '您投诉的部门',
+      field: 'input-text',
+      placeholder: '请输入',
+      maxlength: 11,
+      key: 'compDept',
+      labelWidth: '220rpx',
+    },
+
+    {
+      required: true,
+      inputType: 'textarea',
+      label: '意见反馈',
+      subLabel: '您的意见将帮助我们改进产品和服务',
+      field: 'input-text',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+      maxlength: 200,
+      key: 'compContext',
+      direction: 'horizontal',
+      rowStyle: 'margin-top: 16rpx;',
+      bodyStyle: 'margin-top: 12rpx;',
+      labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
+      validator: async (v: any) => {
+        if (v && v.length > 4) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+            success: false,
+          };
+        }
+      },
+    },
+  ];
 
   const formSubmit = async ({ data }) => {
     let args = {
@@ -288,6 +327,10 @@
   const gform = ref<any>('');
 
   onMounted(() => {
+    if (options.value.isAnonymous === '1') {
+      gform.value.setList(tempList3);
+      return;
+    }
     // #ifdef MP-ALIPAY
     const { userName, mobile } = gStores.userStore.cacheUser;
     formData.value.name = userName;
@@ -311,8 +354,11 @@
   });
 
   onLoad(async (opt) => {
+    console.log('complaint onLoad', opt);
     if (opt?.selectRecords) {
       options.value = deQueryForUrl(deQueryForUrl(opt));
+    } else if (opt?.isAnonymous) {
+      options.value.isAnonymous = opt.isAnonymous;
     }
   });
 </script>

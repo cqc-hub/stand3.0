@@ -77,19 +77,23 @@
           <text class="desc">热线电话咨询</text>
         </view>
       </button>
-      <button
-        v-if="pageConfig?.customBtn"
-        v-for="(item, index) in pageConfig?.customBtn"
-        :key="`customBut${index}`"
-        class="s-btn g-border-right"
-        @click="useTBanner(item.config)"
-      >
-      <view class="s-btn-container">
-          <text class="iconfont icon-font icon-kefu custom-icon" :class="item.icon??''"/>
-          <text class="title">{{item.label}}</text>
-          <text class="desc">{{item.subLabel}}</text>
-        </view>
-      </button>
+      <template v-if="pageConfig?.customBtn">
+        <button
+          v-for="(item, index) in pageConfig?.customBtn"
+          :key="`customBut${index}`"
+          class="s-btn g-border-right"
+          @click="useTBanner(item.config)"
+        >
+          <view class="s-btn-container">
+            <text
+              class="iconfont icon-font icon-kefu custom-icon"
+              :class="item.icon ?? ''"
+            />
+            <text class="title">{{ item.label }}</text>
+            <text class="desc">{{ item.subLabel }}</text>
+          </view>
+        </button>
+      </template>
     </view>
     <g-message />
   </view>
@@ -279,10 +283,10 @@
         &:after {
           border: none;
         }
-        .custom-icon{
+        .custom-icon {
           height: 56rpx !important;
           width: 56rpx;
-          top:34rpx;
+          top: 34rpx;
         }
         .icon-kefu {
           font-size: 56rpx;

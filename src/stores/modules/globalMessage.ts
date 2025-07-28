@@ -11,6 +11,7 @@ type TDialogOpt = {
   cancelColor?: string;
   zIndex?: number;
   maxHeight?: number,
+  cancelFontWeight?: string;
 };
 
 let timer: null | number = null;

@@ -47,6 +47,7 @@
       :cancelColor="messageStore.dialogOpt.cancelColor"
       :confirmText="messageStore.dialogOpt.confirmText"
       :cancelText="messageStore.dialogOpt.cancelText"
+      :cancelFontWeight="messageStore.dialogOpt.cancelFontWeight"
       :isShowCancel="messageStore.dialogOpt.isShowCancel ?? false"
       :isMaskClick="messageStore.dialogOpt.isMaskClick ?? true"
       :maxHeight="(messageStore.dialogOpt.maxHeight??550)+50"

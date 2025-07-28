@@ -30,28 +30,58 @@
 
 <script lang="ts" setup>
   import { shallowRef, ref } from 'vue';
-  import { onShow } from '@dcloudio/uni-app';
+  import { onShow, onLoad } from '@dcloudio/uni-app';
   import { TListComPlain } from './utils';
-  import { GStores, useTBanner } from '@/utils';
-
+  import { deQueryForUrl } from '@/common';
+  import {
+    GStores,
+    useTBanner,
+    type ISystemConfig,
+    ServerStaticData,
+  } from '@/utils';
   import api from '@/service/api';
-
   import ComplaintList from './components/ComplaintList.vue';
-  const _props = defineProps<{
+
+  const _props = ref<{
     selectRecords?: '1'; // 需要选择就诊记录---台州?
-    tab?:string;//手动添加选择就诊记录页面的tab内容
+    tab?: string; //手动添加选择就诊记录页面的tab内容
   }>();
   const gStores = new GStores();
   const isComplete = shallowRef(false);
   const list = ref<TListComPlain>([]);
+  const pageConfig = ref(<ISystemConfig['RestOfConfig']>{});
 
-  const goComplaint = () => {
-    if (_props?.selectRecords === '1') {
+  const goComplaint = async () => {
+    if (pageConfig.value.anonymousFeedback === '1') {
+      const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+        gStores.messageStore.showMessage('', 0, {
+          useDialog: true,
+          dialogOpt: {
+            title: '请选择反馈方式',
+            isMaskClick: false,
+            cancelColor: 'var(--hr-brand-color-6)',
+            confirmColor: 'var(--hr-brand-color-6)',
+            isShowCancel: true,
+            cancelFontWeight: 'bold',
+            cancelText: '实名反馈',
+            confirmText: '匿名反馈',
+          },
+          closeCallBack: r,
+        });
+      });
+      if (confirm) {
+        uni.navigateTo({
+          url: '/pagesC/serviceCenter/serviceComplaint?isAnonymous=1',
+        });
+        return;
+      }
+    }
+    if (_props.value?.selectRecords === '1') {
       let extraData = {
         sysCode: gStores.globalStore.sysCode,
         pageType: '2',
       };
-      _props?.tab&&(extraData[`tab`]=_props.tab)
+      _props.value?.tab && (extraData[`tab`] = _props.value.tab);
       useTBanner(
         {
           type: 'h5',
@@ -60,6 +90,7 @@
           extraData: extraData,
           addition: {
             herenId: 'herenId',
+            patientId: 'patientId',
           },
         },
         'navigateTo'
@@ -102,6 +133,10 @@
 
   onShow(() => {
     init();
+  });
+  onLoad(async (op) => {
+    _props.value = deQueryForUrl(deQueryForUrl(op));
+    pageConfig.value = await ServerStaticData.getSystemConfig('RestOfConfig');
   });
 </script>
 
