@@ -71,7 +71,9 @@
         <template v-for="(item, index) in costInfoDetal.costList" :key="index">
           <view class="item">
             <view @click="isShowBtn(index)" class="item-top">
-              <view class="type">{{ item.category }}</view>
+              <view class="flex">
+                <view class="type mr12 g-bold">{{ item.category }}</view>
+              </view>
               <view class="money text-no-wrap">
                 {{ item.categoryCost }}元
                 <text
@@ -96,7 +98,10 @@
                   <view class="left">
                     <view class="name">{{ sub.costName }}</view>
                     <view class="count">
-                      <view class="unit">
+                      <view v-if="sub.orderedDate || 1" class=" mr24">
+                        {{ '2025-07-26' }}
+                      </view>
+                      <view class="unit mr24">
                         {{ sub.unitPrice }}元/{{ sub.unit }}
                       </view>
                       <view class="quantity">x{{ sub.quantity }}</view>
@@ -329,7 +334,6 @@
             justify-content: space-between;
             line-height: 96rpx;
             font-size: var(--hr-font-size-base);
-            font-weight: 600;
             .money {
               color: #ff5040;
             }
@@ -355,9 +359,6 @@
               font-size: var(--hr-font-size-xxxs);
               display: flex;
               margin-top: 4rpx;
-              .quantity {
-                margin-left: 40rpx;
-              }
             }
           }
           .right {

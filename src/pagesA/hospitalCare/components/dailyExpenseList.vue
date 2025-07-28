@@ -21,15 +21,17 @@
             :key="j"
           >
             <view
-              class="details"
               v-for="(m, n) in i.costListResultList"
               :key="n"
               @click="gotoListExpenses(m)"
+              class="details"
             >
-              <view class="date">{{ m.costDate }}</view>
-              <view class="details-right">
-                <view class="money">{{ m.cost }}元</view>
-                <view class="iconfont right">&#xe66b;</view>
+              <view class="flex justify-between items-center">
+                <view class="date">{{ m.costDate }}</view>
+                <view class="details-right">
+                  <view class="money">{{ m.cost }}元</view>
+                  <view class="iconfont right">&#xe66b;</view>
+                </view>
               </view>
             </view>
           </view>
@@ -219,9 +221,6 @@
           border-radius: 16rpx;
           padding: 32rpx;
           margin-top: 16rpx;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
         }
         .date {
           font-size: var(--hr-font-size-xl);
