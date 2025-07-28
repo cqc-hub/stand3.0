@@ -163,6 +163,7 @@ export interface costList {
   subCostList: subCostList[];
 }
 export interface subCostList {
+  orderedDate?: string;
   costName?: string;
   //费用名称
   quantity?: string;

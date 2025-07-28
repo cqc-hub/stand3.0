@@ -162,9 +162,7 @@
   const secondHosDeptId = ref(
     (props.secondHosDeptId && decodeURIComponent(props.secondHosDeptId)) || ''
   );
-  const waitRegDialog = ref<any>('');
   const flagTitle9 = ref('');
-  const waitRegClickData = ref({} as { scheme: TSchInfo });
 
   const deptName = ref(decodeURIComponent(props.deptName));
   const {
@@ -196,6 +194,9 @@
     isOrderPreSourceShow,
     preregistrationRegNumbers,
     goPreregistration,
+    waitRegDialog,
+    waitRegClickData,
+    showWaitRegDialog,
   } = useOrder(ref({ ...props }));
 
   const _allDocList = computed(() => {
@@ -253,42 +254,6 @@
   onLoad((opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
-
-  const showWaitRegDialog = async (data) => {
-    const {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-      addedNum,
-    } = data.scheme;
-    let query: any = {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-    };
-    pageConfig.value.isOpenAddedNum === '1' && (query.addedNum = addedNum);
-
-    const { result } = await api.canRegAlternate(query);
-    if (result) {
-      waitRegClickData.value = data;
-      waitRegDialog.value.show();
-    } else {
-      gStores.messageStore.showMessage(
-        '当前时段候补人数已达上限，暂不支持候补!',
-        3000
-      );
-    }
-  };
 
   const dateChange = (item: IChooseDays) => {
     checkedDay.value = item.fullDay;

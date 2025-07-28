@@ -540,8 +540,6 @@
   const selOutHosId = ref('');
   const selOutHosDay = ref('');
   const flagTitle9 = ref('');
-  const waitRegClickData = ref({} as { scheme: TSchInfo });
-  const waitRegDialog = ref<any>('');
   const docHosSchHeight = ref(100);
   const isMultHosDoc = ref(false);
 
@@ -648,6 +646,9 @@
     isOrderPreSourceShow,
     preregistrationRegNumbers,
     goPreregistration,
+    waitRegDialog,
+    waitRegClickData,
+    showWaitRegDialog,
   } = useOrder(props as any);
   const regDialogConfirm = ref<any>('');
 
@@ -665,41 +666,6 @@
       }.png`
     );
   });
-
-  const showWaitRegDialog = async (data) => {
-    const {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-      addedNum,
-    } = data.scheme;
-    let query: any = {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-    };
-    orderConfig.value.isOpenAddedNum === '1' && (query.addedNum = addedNum);
-    const { result } = await api.canRegAlternate(query);
-    if (result) {
-      waitRegClickData.value = data;
-      waitRegDialog.value.show();
-    } else {
-      gStores.messageStore.showMessage(
-        '当前时段候补人数已达上限，暂不支持候补!',
-        3000
-      );
-    }
-  };
 
   const previewImg = () => {
     const photo = docDetail.value.docPhoto;
@@ -790,10 +756,10 @@
       } else {
         o.checkedDay = undefined;
       }
-      return o
+      return o;
     });
     console.log('tabChange', idx, docHosSchList.value);
-    
+
     tabCurrent.value = idx;
   };
   const groupedByHosId = (originalArray) => {

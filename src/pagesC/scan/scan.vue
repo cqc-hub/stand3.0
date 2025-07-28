@@ -32,8 +32,9 @@
        * - 2 温附二 满意度问卷
        * - 3 温附二 化验排队
        * - 4 江苏省中 用药详情
+       * - 5 江苏省中电子发票
        */
-      type: '1' | '2' | '3' | '4' | 'btn';
+      type: '1' | '2' | '3' | '4' | '5';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -156,6 +157,21 @@
     });
   };
 
+  const initInvoice = () => {
+    const { params, patientName, sex } = pageProps.value;
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/eletronicInvoice/eletronicInvoice',
+      extraData: {
+        params,
+        patientName,
+        sex,
+      },
+    });
+  };
+
   const init = async () => {
     const { type, btn, _type } = pageProps.value;
 
@@ -196,6 +212,10 @@
 
       case '4':
         initDrugDetail35();
+        break;
+
+      case '5':
+        initInvoice();
         break;
 
       default:
