@@ -509,7 +509,7 @@
   onMounted(() => {
     setTimeout(() => {
       // useTBanner(healthRecord)
-      // useTBanner(我的收藏);
+      useTBanner(省中云诊室);
       // useTBanner(queryCase);
     }, 1000);
   });

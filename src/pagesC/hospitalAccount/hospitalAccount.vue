@@ -56,6 +56,7 @@
           </view>
         </view>
         <view class="f-button p24">
+          <!-- @vue-expect-error -->
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
