@@ -275,6 +275,15 @@
     }"
     type="jy"
   />
+  <view class="z-999 relative">
+    <g-copyurl-popup
+      :copyDataUrl="copyDataUrl"
+      title="下载链接"
+      ref="popupCopy"
+      class=""
+    />
+  </view>
+
   <g-message />
 </template>
 <script lang="ts" setup>
@@ -352,7 +361,15 @@
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
 
   const { patChoose: pat } = storeToRefs(gStores.userStore);
-  const pageProps = ref(<any>{});
+  const pageProps = ref(
+    <
+      {
+        // 分享
+        s?: '0';
+        [key: string]: any;
+      }
+    >{}
+  );
   const patName = computed(() => {
     return (
       pageProps.value.patientName ||
@@ -375,7 +392,12 @@
         break;
 
       case 'downReport':
-        goReportPdf();
+        if (gStores.globalStore.sysCode === '1001035') {
+          copyDataUrl.value = checkoutReportList.value.pdfUrl!;
+          popupCopy.value.show();
+        } else {
+          goReportPdf();
+        }
         break;
 
       case 'askDoc':
@@ -473,7 +495,7 @@
     getShareTotalUrl(
       {
         ...pageProps.value,
-        watermarkText: undefined,
+        s: '0',
       },
       'pagesB/reportQuery/InspectionDetails'
     ).then((url) => {
@@ -507,6 +529,9 @@
       },
     });
   };
+
+  const copyDataUrl = ref('');
+  const popupCopy = ref('' as any);
   const goReportPdf = () => {
     let { repId, repName } = checkoutReportList.value;
 
