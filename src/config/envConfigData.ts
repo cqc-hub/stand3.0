@@ -15,6 +15,7 @@ export const sysConfigEnv = <const>{
   // 'person.realNameAuth': ['ocrVerify', 'faceVerify'],
   // 'person.isSkipPerfect': '1',
   // 'order.isOrderPreSettle': '1',
+  // 'order.isShowClinicalType': '1',
   // 'order.wxOrderSubscribeMessage': [
   //   '1SqO2V7A19EdxKrIzZQ4wQqwR5zpjwYyKMsT-OLvwM0',
   // ],

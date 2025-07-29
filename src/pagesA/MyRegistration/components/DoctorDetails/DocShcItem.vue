@@ -4,38 +4,48 @@
     :patient="patient"
     @handler-next="regClick(item)"
   >
-    <view @click="regClick(item)" class="scheme-item">
-      <view class="flex-between">
-        <view class="flex">
-          <view
-            v-if="pageConfig.isShowClinicalType === '1'"
-            class="flex flex-wrap f24 mb4"
-          >
-            <view
+    <view @click="regClick(item)" class="scheme-item items-start f28">
+      <view class="flex-between items-start">
+        <view class="">
+          <text v-if="pageConfig.isShowClinicalType === '1'" class="f24 mb4">
+            <text
               v-if="['3', '4', '6'].includes(item.clinicalType!)"
-              class="tag tag-dark mr12"
+              class="g-tag tag-dark mr12"
             >
               网络就诊
-            </view>
-            <view v-else class="tag tag-light mr12">到院就诊</view>
+            </text>
+            <text v-else class="g-tag tag-light mr12">到院就诊</text>
 
-            <view
+            <text
               v-if="['2', '6'].includes(item.clinicalType!)"
-              class="tag tag-brown mr12"
+              class="g-tag tag-brown mr12"
             >
               <text v-if="item.clinicalType === '2'">膏方</text>
               <text v-if="item.clinicalType === '6'">专病</text>
-            </view>
-          </view>
-          <view class="scheme-item-ampm-name">
-            <view class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</view>
-            <view v-if="item.fee" class="ampm-fee f28 mr16 g-bold">
+            </text>
+          </text>
+
+          <text v-if="item.specialClinicIndex" class="g-tag tag-danger mr12">
+            {{ item.specialClinicIndex }}
+          </text>
+          <text v-if="item.SymptomIndicator" class="g-tag tag-light mr12">
+            {{ item.SymptomIndicator }}
+          </text>
+
+          <text class="">
+            <text class="mr16 g-bold text-no-wrap">{{ item.ampmName }}</text>
+            <text v-if="item.fee" class="ampm-fee mr16 g-bold">
               {{ item.fee }}元
-            </view>
-            <view v-if="item.categorName && gStores.globalStore.sysCode === '1001067'" class="mr16">
+            </text>
+            <text
+              v-if="
+                item.categorName && gStores.globalStore.sysCode === '1001067'
+              "
+              class="mr16"
+            >
               {{ item.categorName }}
-            </view>
-          </view>
+            </text>
+          </text>
         </view>
 
         <view
@@ -190,12 +200,6 @@
     border-radius: 8rpx;
     padding: 18rpx 24rpx;
 
-    .scheme-item-ampm-name {
-      font-size: var(--hr-font-size-xs);
-      display: flex;
-      align-items: center;
-    }
-
     .scheme-item-detail {
       display: flex;
       align-items: center;
@@ -243,26 +247,5 @@
 
   .disabled-btn {
     background-color: var(--hr-neutral-color-4);
-  }
-
-  .tag {
-    border-radius: 2px;
-    text-align: center;
-    padding: 0 8rpx;
-
-    &.tag-dark {
-      background-color: #5f494a;
-      color: #ffe2c1;
-    }
-
-    &.tag-brown {
-      background: linear-gradient(270deg, #d26900, #ac4b1c);
-      color: #fff;
-    }
-
-    &.tag-light {
-      background-color: #ffe2c1;
-      color: #5f494a;
-    }
   }
 </style>

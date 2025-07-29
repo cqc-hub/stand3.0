@@ -14,6 +14,32 @@
   gap: 12rpx;
 }
 
+.g-tag {
+  border-radius: 2px;
+  text-align: center;
+  padding: 0 8rpx;
+
+  &.tag-dark {
+    background-color: #5f494a;
+    color: #ffe2c1;
+  }
+
+  &.tag-brown {
+    background: linear-gradient(270deg, #d26900, #ac4b1c);
+    color: #fff;
+  }
+
+  &.tag-light {
+    background-color: #ffe2c1;
+    color: #5f494a;
+  }
+
+  &.tag-danger {
+    background-color: var(--hr-error-color-1);
+    color: var(--hr-error-color-6);
+  }
+}
+
 @mixin text-overflow($line: 1) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -245,7 +271,6 @@ image {
   color: var(--hr-neutral-color-7) !important;
 }
 
-
 .color-fff,
 .text-white {
   color: #fff !important;
@@ -287,6 +312,36 @@ image {
 .m-0 {
   margin: 0;
 }
+.m12c {
+  margin-left: 12rpx !important;
+  margin-right: 12rpx !important;
+}
+.m12v {
+  margin-top: 12rpx !important;
+  margin-bottom: 12rpx !important;
+}
+
+.m12 {
+  margin: 12rpx !important;
+}
+
+.m24c {
+  margin-left: 24rpx !important;
+  margin-right: 24rpx !important;
+}
+.m24v {
+  margin-top: 24rpx !important;
+  margin-bottom: 24rpx !important;
+}
+
+.m24 {
+  margin: 24rpx !important;
+}
+
+.m32c {
+  margin-left: 32rpx !important;
+  margin-right: 32rpx !important;
+}
 
 .m32v {
   margin-top: 32rpx !important;
@@ -295,19 +350,6 @@ image {
 
 .m32 {
   margin: 32rpx !important;
-}
-
-.p48 {
-  padding: 48rpx !important;
-}
-
-.p48v {
-  padding-top: 48rpx !important;
-  padding-bottom: 48rpx !important;
-}
-
-.p48c {
-  padding: 0 48rpx !important;
 }
 
 .p32 {
@@ -327,16 +369,24 @@ image {
   padding: 0 24rpx !important;
 }
 
-.p24b {
-  padding-bottom: 24rpx !important;
-}
-
 .p24v {
   padding: 24rpx 0 !important;
 }
 
 .p24 {
   padding: 24rpx !important;
+}
+
+.p12c {
+  padding: 0 12rpx !important;
+}
+
+.p12v {
+  padding: 12rpx 0 !important;
+}
+
+.p12 {
+  padding: 12rpx !important;
 }
 
 .p40 {
@@ -378,7 +428,13 @@ image {
 .f48 {
   font-size: var(--hr-font-size-xxl) !important;
 }
+.f56 {
+  font-size: 56rpx !important;
+}
 
+.f60 {
+  font-size: 60rpx !important;
+}
 .f80 {
   font-size: 80rpx !important;
 }
@@ -399,6 +455,30 @@ image {
 
 .bg-red {
   background-color: red;
+}
+
+.text-ellipsis {
+  @include text-overflow(1);
+}
+
+.ellipsis-line-clamp2 {
+  @include text-overflow(2);
+}
+
+.ellipsis-line-clamp5 {
+  @include text-overflow(5);
+}
+
+.text-no-wrap {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@mixin text-overflow($line: 1) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
 }
 
 @for $i from 4 through 70 {
