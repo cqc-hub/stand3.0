@@ -228,10 +228,10 @@
         </view>
       </template>
     </view>
-    
+
     <view class="tips">
       <view>{{ tips.title }}：</view>
-       <rich-text :nodes="tips.content" />
+      <rich-text :nodes="tips.content" />
     </view>
 
     <Bottom-Nav
@@ -317,6 +317,15 @@
       </view>
     </view>
   </g-popup>
+
+  <view class="z-999 relative">
+    <g-copyurl-popup
+      :copyDataUrl="copyDataUrl"
+      title="下载链接"
+      ref="popupCopy"
+      class=""
+    />
+  </view>
   <g-message />
 </template>
 <script lang="ts" setup>
@@ -594,9 +603,12 @@
       }
     }
     examineReportList.value = result;
-    if(gStores.globalStore.sysCode === '1001035' && result.examClass === '病理'){
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      result.examClass === '病理'
+    ) {
       getTips(661);
-    }else{
+    } else {
       getTips(6);
     }
 
@@ -610,9 +622,20 @@
   };
   const goReportPdf = (item) => {
     let { repId, repName, pdfPath } = item;
+    const { pdfPath: pdfPath1001035 } = examineReportList.value;
+
+    if (['1001035'].includes(gStores.globalStore.sysCode) && pdfPath1001035) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+          url: encodeURIComponent(pdfPath1001035 as string),
+          name: repName,
+        }),
+      });
+      return;
+    }
 
     if (pdfPath) {
-      if (gStores.globalStore.sysCode === '1001048') {
+      if (['1001048'].includes(gStores.globalStore.sysCode)) {
         useTBanner({
           type: 'h5',
           path: pdfPath,
@@ -694,7 +717,15 @@
     });
   };
   const actionSheet = ref();
+  const copyDataUrl = ref('');
+  const popupCopy = ref('' as any);
+
   const downloadReport = () => {
+    if (['1001035'].includes(gStores.globalStore.sysCode)) {
+      copyDataUrl.value = examineReportList.value.pdfPath!;
+      popupCopy.value.show();
+      return;
+    }
     if (btnNumber.value && btnNumber.value > 1) {
       actionSheet.value.showActionSheet();
     } else {
@@ -881,7 +912,7 @@
       useTBanner({
         type: 'h5',
         path: url,
-      })
+      });
     } else {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesA/webView/webView', {

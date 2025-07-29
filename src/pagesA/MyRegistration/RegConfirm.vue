@@ -388,7 +388,6 @@
     }
     // #endif
 
-
     // 预约类型：1.预约挂号，2.当日挂号
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;
@@ -425,7 +424,6 @@
       ageReminderCode: isOverLimit.value,
       quickAppoint: '',
     };
-
 
     if (quickPat.value.patientName) {
       const { patientId: _patientId } =
@@ -472,7 +470,6 @@
       requestArg.freeSignData = freeSignData;
     }
 
-
     // true ? 免密代扣 :  正常挂号
     const actionApi = isOpenSignExist ? api.addOrder : api.addReg;
 
@@ -482,8 +479,30 @@
       if (e) {
         const { respCode, message, code } = e;
 
+        if (respCode === 999301 && !quickPat.value.patientName) {
+          await new Promise((r) => {
+            gStores.messageStore.showMessage(
+              '档案已合并，请删除就诊人重新绑定',
+              1500,
+              {
+                useDialog: true,
+                dialogOpt: {
+                  title: '提示',
+                  isShowCancel: false,
+                  isMaskClick: false,
+                },
+                closeCallBack: r,
+              }
+            );
+          });
+
+          gStores.userStore.updatePatClick(gStores.userStore.patChoose);
+          uni.navigateTo({
+            url: '/pagesA/medicalCardMan/medicalCardDetail',
+          });
+        }
         // 限制欠费用户预约挂号
-        if (respCode === 999225) {
+        else if (respCode === 999225) {
           gStores.messageStore.closeMessage();
           preventOrderStr.value = message;
           isPreventOrder.value = true;
