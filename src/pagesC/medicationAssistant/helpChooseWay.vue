@@ -346,7 +346,7 @@
       return [aimValue.value, addressList.value];
     },
     ([aim, address]) => {
-      if (aim?.length && address?.length) {
+      if (aim?.length && address?.length&&pageConfig.value.isPayOnline) {
         getExpressFee();
       }
     }
