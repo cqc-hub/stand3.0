@@ -46,13 +46,15 @@
             </template>
             <template v-else>
               <view class="w100 flex">
-                <view class="my-disabled flex1" @click.prevent="goSearch">
+              <view @click.prevent="goSearch" class="flex1">
+                <view class="my-disabled" >
                   <uni-search-input
                     :type="'2'"
                     inputBorder
                     :placeholder="viewerStore.homeSearchPlaceholder"
                   />
                 </view>
+                 </view>
                 <view v-if="gStores.globalStore.sysCode === '1001063'" @click="goClinicPay" class="ico_my_scon icon-size">&#xe6e4;</view>
               </view>
             </template>
@@ -625,6 +627,8 @@
     const pageConfig = await ServerStaticData.getSystemConfig(
       'Electronic_Consultation_Sheet'
     );
+    console.log('嗲你',pageConfig)
+
     if (pageConfig?.intelMedicalAssistConfig?.isReplaceHomeSearch === '1') {
       uni.navigateTo({
         url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
@@ -649,12 +653,20 @@
 
   const goClinicPay = () => {
     uni.scanCode({
-      complete(res) {
-        console.warn('扫码完成',res);
+        success(res) {
+        console.warn('扫码内容', res);
+        let data = JSON.parse(res.result)
+        if (data.no || data.pid || data.sid) {
           uni.navigateTo({
             url: '/pagesA/clinicPay/clinicPayDetail',
           });
-      },
+        }else{
+           gStores.messageStore.showMessage(
+              "请扫描正确的二维码",
+              1500
+            ); 
+        }
+      }, 
     });
 
   };
