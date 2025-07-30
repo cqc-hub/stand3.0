@@ -730,6 +730,14 @@
           },
         ];
         docHosSchList.value.push(...schListByhosId);
+        nextTick(() => {
+          if (props.value.hosId && docHosSchList.value.length > 1) {
+            tabCurrent.value = docHosSchList.value.findIndex(
+              (o) => o.hosId === props.value.hosId
+            );
+          }
+          // tabCurrent.value=
+        });
       }
     }
 

@@ -56,20 +56,23 @@
           </view>
         </view>
         <view class="f-button p24">
-          <button
-            v-if="isCash == '1' && lists.accountBalance !== '0' && isRefoundExist"
-            @click="confirmForm1('refound')"
-            class="mr8 btn btn-primary btn-border btn-plain f-base"
-          >
-            {{ '申请实名退款' }}
-          </button>
-
+          <!-- @vue-expect-error -->
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
             class="f-b1 mr8 btn btn-primary f-base"
           >
-            {{ '提现' }}
+            {{ '原路退回' }}
+          </button>
+
+          <button
+            v-if="
+              isCash == '1' && lists.accountBalance !== '0' && isRefoundExist
+            "
+            @click="confirmForm1('refound')"
+            class="mr8 btn btn-primary btn-border btn-plain w-full"
+          >
+            {{ '申请实名转账退款' }}
           </button>
 
           <button
@@ -105,13 +108,14 @@
           <view>
             <view class="dialog-t f32 mb32">
               <text class="dt-width color-888">
-                当前可{{ isRefound ? '退款' : '提现' }}
+                <text v-if="isRefound">当前可退款</text>
+                <text v-else>可原路返回金额</text>
               </text>
               <text class="dt-red g-bolder">
-              <text v-if="isRefound">{{ lists.accountBalance }}元</text>
-              <text v-else>
-                {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
-              </text>
+                <text v-if="isRefound">{{ lists.accountBalance }}元</text>
+                <text v-else>
+                  {{ lists.allowOnLineCash ? lists.allowOnLineCash : '0' }}元
+                </text>
               </text>
             </view>
           </view>
@@ -222,7 +226,6 @@
   //       cardNumber: '30039971',
   //     },
   //   });
-
 
   interface IPageProps {
     hosId: string;
@@ -498,7 +501,11 @@
       // 退款不存在可提现金额
       const { accountBalance: refundFee, accountNo } = lists.value;
       const { hosId, isCash } = pageProps.value;
-      const { patientPhone: patPhone, patientName, idCard: patIdCard } = gStores.userStore.patChoose;
+      const {
+        patientPhone: patPhone,
+        patientName,
+        idCard: patIdCard,
+      } = gStores.userStore.patChoose;
 
       // if (!familyList.value.length) {
       //   await getFamilyList();
@@ -518,7 +525,6 @@
       //   return;
       // }
 
-
       // 申请实名打款
       useTBanner({
         type: 'h5',
@@ -534,7 +540,7 @@
           patientName,
           // openAccountName,
           // openAccountIdCard,
-          patIdCard
+          patIdCard,
         },
         addition: {
           token: 'token',
@@ -604,7 +610,7 @@
   .dialog-t {
     .dt-width {
       display: inline-block;
-      width: 176rpx;
+      width: 8em;
     }
   }
   .dt-red {

@@ -151,7 +151,7 @@
       </view>
       <button
         :class="{
-          'btn-disabled': !feeDetail.totalCost,
+          'btn-disabled': !feeDetail.totalCost&&globalGl.SYS_CODE === '1001035',
         }"
         @click="submit"
         class="btn btn-primary flex1"
@@ -346,7 +346,7 @@
       return [aimValue.value, addressList.value];
     },
     ([aim, address]) => {
-      if (aim?.length && address?.length) {
+      if (aim?.length && address?.length&&pageConfig.value.isPayOnline) {
         getExpressFee();
       }
     }

@@ -624,13 +624,13 @@ const scJson: Record<string, ISConfig> = {
    * 温州人民
    */
   1001083: {
-    login: {
+    // login: {
       // isAliAuthBase: '1',
-    },
+    // },
   },
   1001084: {
     login: {
-      // isAliAuthBase: '1',
+      isAliAuthBase: '1',
     },
   },
   /**

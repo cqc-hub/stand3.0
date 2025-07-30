@@ -85,9 +85,9 @@
       receptionMode: '4',
     },
     {
-      img: 'card_doctor_mbfz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
-      // title: '在线问诊',
-      title: '线上问诊',
+      img:
+        'card_doctor_mbfz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
+      title: globalGl.SYS_CODE === '1001067' ? '线上问诊' : '复诊开药',
       fee: 0,
       util: '次',
       key: 'jsonParam',

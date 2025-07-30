@@ -74,6 +74,13 @@
       compareData.isDownloadRepor = '';
     }
 
+    if (gStores.globalStore.sysCode === '1001035') {
+      const downPath = props.addition?.pdfPath || props.addition?.pdfUrl;
+      if (!downPath) {
+        compareData.isDownloadRepor = '';
+      }
+    }
+
     return prop.every((p) => {
       if (
         [
