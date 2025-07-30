@@ -628,7 +628,7 @@
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           url: encodeURIComponent(pdfPath1001035 as string),
-          name: repName,
+          name: '',
         }),
       });
       return;
