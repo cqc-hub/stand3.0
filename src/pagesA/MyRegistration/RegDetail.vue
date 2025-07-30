@@ -499,6 +499,13 @@
   // #endif
 
   const isShowFooter = computed(() => {
+    if (
+      !orderRegInfo.value.hosDocId &&
+      orderRegInfo.value.orderStatus === '43'
+    ) {
+      return false;
+    }
+
     if (isWaitReg.value) {
       return orderRegInfo.value.orderStatus === '1';
     }
