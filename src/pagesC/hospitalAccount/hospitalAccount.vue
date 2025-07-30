@@ -60,7 +60,7 @@
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
-            class="f-b1 mr8 btn btn-primary btn-border btn-plain f-base"
+            class="btn btn-primary btn-border btn-plain f-base"
           >
             {{ '原路退回' }}
           </button>
@@ -70,7 +70,7 @@
               isCash == '1' && lists.accountBalance !== '0' && isRefoundExist
             "
             @click="confirmForm1('refound')"
-            class="mr8 btn btn-primary btn-border btn-plain w-full"
+            class="btn btn-primary btn-border btn-plain w-full"
           >
             {{ '申请实名转账退款' }}
           </button>
@@ -78,7 +78,7 @@
           <button
             v-if="pageConfig.isHideAccountRefillBtn !== '1'"
             @click="confirmForm"
-            class="f-b2 ml8 btn btn-primary f-base"
+            class="btn btn-primary f-base"
           >
             充值
           </button>
@@ -577,9 +577,6 @@
           // flex: 1 1 50%;
           background: var(--hr-brand-color-1);
           color: var(--hr-brand-color-6);
-        }
-        .f-b2 {
-          width: 100%;
         }
       }
     }

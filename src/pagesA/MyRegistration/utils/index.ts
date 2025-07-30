@@ -139,7 +139,7 @@ export type TSchInfo = {
   addFlag?: string;
 
   /** 专病 */
-  specialClinicIndex?: string;
+  specialClinicIndex?: '1';
   /** 症状 */
   symptomIndicator?: string;
 } & IDocRow;
@@ -625,7 +625,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     selectOrderSourceNumId.value = numId;
 
     // 云门诊
-    if (clinicalType && ['4', '3', '6'].includes(clinicalType)) {
+    if (
+      clinicalType &&
+      ['4', '3', '6'].includes(clinicalType) &&
+      gStores.globalStore.sysCode === '1001035'
+    ) {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesA/MyRegistration/addDescribe', {
           ...pageArg,
@@ -698,46 +702,49 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   const waitRegClickData = ref({} as { scheme: TSchInfo });
 
   const showWaitRegDialog = async (data: { scheme }) => {
-    const config = await ServerStaticData.getSystemConfig('order');
-    const { patientId } = gStores.userStore.patChoose;
-    const {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-      addedNum,
-      hosDeptId,
-    } = data.scheme;
-    const query = {
-      ampm,
-      categor,
-      clinicalType,
-      hosDocId,
-      docName,
-      hosId,
-      schDate,
-      schId,
-      addedNum: undefined,
-      patientId,
-      hosDeptId,
-    };
+    waitRegClickData.value = data;
+    waitRegDialog.value.show();
 
-    config.isOpenAddedNum === '1' && (query.addedNum = addedNum);
+    // const config = await ServerStaticData.getSystemConfig('order');
+    // const { patientId } = gStores.userStore.patChoose;
+    // const {
+    //   ampm,
+    //   categor,
+    //   clinicalType,
+    //   hosDocId,
+    //   docName,
+    //   hosId,
+    //   schDate,
+    //   schId,
+    //   addedNum,
+    //   hosDeptId,
+    // } = data.scheme;
+    // const query = {
+    //   ampm,
+    //   categor,
+    //   clinicalType,
+    //   hosDocId,
+    //   docName,
+    //   hosId,
+    //   schDate,
+    //   schId,
+    //   addedNum: undefined,
+    //   patientId,
+    //   hosDeptId,
+    // };
 
-    const { result } = await api.canRegAlternate(query);
-    if (result) {
-      waitRegClickData.value = data;
-      waitRegDialog.value.show();
-    } else {
-      gStores.messageStore.showMessage(
-        '当前时段候补人数已达上限，暂不支持候补!',
-        3000
-      );
-    }
+    // config.isOpenAddedNum === '1' && (query.addedNum = addedNum);
+
+    // const { result } = await api.canRegAlternate(query);
+    // if (result) {
+    //   waitRegClickData.value = data;
+    //   waitRegDialog.value.show();
+    // } else {
+    //   gStores.messageStore.showMessage(
+    //     '当前时段候补人数已达上限，暂不支持候补!',
+    //     3000
+    //   );
+    // }
   };
 
   return {

@@ -728,7 +728,54 @@
       };
     });
   };
+
+  const checkWaitReg = async () => {
+    const { isOpenAddedNum } = pageConfig.value;
+    const { patientId } = gStores.userStore.patChoose;
+
+    const {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+      addedNum,
+      hosDeptId,
+    } = props.value;
+    const query = {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+      addedNum: undefined as any,
+      patientId,
+      hosDeptId,
+    };
+
+    if (isOpenAddedNum === '1') {
+      query.addedNum = addedNum;
+    }
+
+    const { result } = await api.canRegAlternate(query);
+
+    if (!result) {
+      gStores.messageStore.showMessage(
+        '当前时段候补人数已达上限，暂不支持候补!',
+        1500
+      );
+      throw new Error('当前时段候补人数已达上限，暂不支持候补');
+    }
+  };
+
   const waitReg = async () => {
+    await checkWaitReg();
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
     waitRegSchSecondResultList.value = schSecondResultList;
@@ -788,6 +835,8 @@
           url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
         });
       }
+    } else {
+      gStores.messageStore.showMessage('暂无可候补就诊时段', 1500);
     }
   };
 

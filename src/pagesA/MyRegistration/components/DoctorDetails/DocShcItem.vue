@@ -25,10 +25,16 @@
             </text>
           </text>
 
-          <text v-if="item.specialClinicIndex" class="g-tag tag-danger mr12">
-            {{ item.specialClinicIndex }}
+          <text
+            v-if="item.specialClinicIndex === '1'"
+            class="g-tag tag-danger mr12"
+          >
+            {{ '专病' }}
           </text>
-          <text v-if="item.symptomIndicator" class="g-tag tag-light mr12">
+          <text
+            v-if="item.symptomIndicator"
+            class="g-tag tag-light mr12"
+          >
             {{ item.symptomIndicator }}
           </text>
 
