@@ -495,7 +495,7 @@
     getShareTotalUrl(
       {
         ...pageProps.value,
-        s: '0',
+        s: '1',
       },
       'pagesB/reportQuery/InspectionDetails'
     ).then((url) => {
@@ -516,10 +516,9 @@
     uni.setClipboardData({
       data,
       success: () => {
-        isOperation.value = true;
         uni.getClipboardData({
           success: function (res) {
-            gStores.messageStore.showMessage('内容已复制');
+            isOperation.value = true;
           },
         });
       },

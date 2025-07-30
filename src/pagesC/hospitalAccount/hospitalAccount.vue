@@ -60,7 +60,7 @@
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
-            class="f-b1 mr8 btn btn-primary f-base"
+            class="f-b1 mr8 btn btn-primary btn-border btn-plain f-base"
           >
             {{ '原路退回' }}
           </button>

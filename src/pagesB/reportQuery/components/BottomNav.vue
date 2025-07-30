@@ -62,6 +62,9 @@
     let compareData = {
       ...(props.addition || {}),
     };
+    if (compareData.s === '1') {
+      compareData._local = '';
+    }
 
     if (isTjreport) {
       compareData.btnAskDoc = '';

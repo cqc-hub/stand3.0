@@ -28,8 +28,8 @@
           <text v-if="item.specialClinicIndex" class="g-tag tag-danger mr12">
             {{ item.specialClinicIndex }}
           </text>
-          <text v-if="item.SymptomIndicator" class="g-tag tag-light mr12">
-            {{ item.SymptomIndicator }}
+          <text v-if="item.symptomIndicator" class="g-tag tag-light mr12">
+            {{ item.symptomIndicator }}
           </text>
 
           <text class="">

@@ -141,7 +141,7 @@ export type TSchInfo = {
   /** 专病 */
   specialClinicIndex?: string;
   /** 症状 */
-  SymptomIndicator?: string;
+  symptomIndicator?: string;
 } & IDocRow;
 
 type TSchDocAmPm = Pick<TSchInfo, 'ampm' | 'ampmName'> & {

@@ -544,6 +544,8 @@
   const pageProps = ref(
     <
       {
+        // 分享进来
+        s?: '1';
         params?: string;
         [key: string]: any;
       }
@@ -673,7 +675,7 @@
     getShareTotalUrl(
       {
         ...pageProps.value,
-        watermarkText: undefined,
+        s: '1',
       },
       'pagesB/reportQuery/inspectionReport'
     ).then((url) => {
