@@ -113,7 +113,7 @@
           3: '无号',
         };
 
-        return stateMap[this.getOrderSchState] || '无号';
+        return stateMap[this.getOrderSchState] || '无排班';
       },
     },
 
