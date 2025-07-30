@@ -1,5 +1,12 @@
 import { assignType } from '@/typeUtils';
-import { GStores, useTBanner, TBannerConfig, packageAuthParams, LoginUtils } from '@/utils';
+import {
+  GStores,
+  useTBanner,
+  TBannerConfig,
+  packageAuthParams,
+  LoginUtils,
+  getLocation,
+} from '@/utils';
 import { useRouterStore } from '@/stores';
 import { joinQuery } from '@/common';
 import globalGl from '@/config/global';
@@ -102,19 +109,15 @@ export const checkGrid = (item: IRoute) => {
 // 判断登录是否过期
 const checkLoginExpired = async (): Promise<boolean> => {
   try {
-    const result  = await api.allinoneAuthApi(
-      packageAuthParams(
-        {},
-        '/modifyUserInfo/userInfoByToken',
-        {
-          isOutArgs: true,
-        }
-      )
+    const result = await api.allinoneAuthApi(
+      packageAuthParams({}, '/modifyUserInfo/userInfoByToken', {
+        isOutArgs: true,
+      })
     );
-    if (result && result.code == '0') { 
-      return false;// 没有过期
-    }else{
-      return true; 
+    if (result && result.code == '0') {
+      return false; // 没有过期
+    } else {
+      return true;
     }
   } catch (error) {
     console.error('检查登录状态失败:', error);
@@ -122,7 +125,7 @@ const checkLoginExpired = async (): Promise<boolean> => {
   }
 };
 const interceptorRoute = async function (item: any) {
-   const gStores = new GStores();
+  const gStores = new GStores();
   let query = item.query;
 
   if (query) {
@@ -133,26 +136,26 @@ const interceptorRoute = async function (item: any) {
     }
 
     if (query?._type === 'useTBanner') {
-      if(query?.isExpired){ // 新增第三方过期拦截判断
+      if (query?.isExpired) {
+        // 新增第三方过期拦截判断
         const isExpired = await checkLoginExpired();
-          if (isExpired) {
-            // 登录过期，引导重新登录
-            uni.reLaunch({
-              url: '/pages/home/my?_isOutLogin=1',  
-            });
-            new LoginUtils().outLogin({
-              isHideMessage: true,
-              isGoLoginPage: false,
-            });
-            throw new Error('登录已过期，请重新登录');
-          } 
-        } 
-         useTBanner(query, 'navigateTo', gStores.globalStore.h5MenuExtraData);
-        throw new Error('使用 useTBanner函数跳转');
+        if (isExpired) {
+          // 登录过期，引导重新登录
+          uni.reLaunch({
+            url: '/pages/home/my?_isOutLogin=1',
+          });
+          new LoginUtils().outLogin({
+            isHideMessage: true,
+            isGoLoginPage: false,
+          });
+          throw new Error('登录已过期，请重新登录');
+        }
+      }
+      useTBanner(query, 'navigateTo', gStores.globalStore.h5MenuExtraData);
+      throw new Error('使用 useTBanner函数跳转');
     }
   }
 };
-
 
 //grid的登录完善就诊人的拦截跳转方法
 export const useCommonTo = async (item, payload: IPayLoad = {}) => {
@@ -430,17 +433,26 @@ const sendMeg = (item, payload) => {
   });
 };
 //获取地理位置
-const getAddress = (item) => {
-  return new Promise((resolve) =>
-    uni.getLocation({
-      complete: resolve,
-      success: function (res) {
-        const obj = {
-          latitude: res.latitude.toFixed(6),
-          longitude: res.longitude.toFixed(6),
-        };
-        item.path += '&' + joinQuery('', obj).slice(1);
-      },
-    })
-  );
+const getAddress = async (item) => {
+  const { longitude, latitude } = await getLocation(true);
+
+  item.path +=
+    '&' +
+    joinQuery('', {
+      longitude,
+      latitude,
+    }).slice(1);
+
+  // return new Promise((resolve) =>
+  //   uni.getLocation({
+  //     complete: resolve,
+  //     success: function (res) {
+  //       const obj = {
+  //         latitude: res.latitude.toFixed(6),
+  //         longitude: res.longitude.toFixed(6),
+  //       };
+  //       item.path += '&' + joinQuery('', obj).slice(1);
+  //     },
+  //   })
+  // );
 };
