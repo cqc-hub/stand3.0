@@ -96,7 +96,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      :confirmText="!isRefound ? '提现' : '申请退款'"
+      :confirmText="!isRefound ? '原路退回' : '申请退款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
@@ -122,7 +122,7 @@
 
           <view v-if="!isRefound" class="dialog-t f32">
             <text class="dt-width color-888">到账账户</text>
-            <text class="g-bolder">原路返回</text>
+            <text class="g-bolder">原路退回</text>
           </view>
 
           <!-- <view v-if="isRefound">
@@ -165,7 +165,7 @@
 <script lang="ts" setup>
   import { computed, ref, provide } from 'vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
     debounce,

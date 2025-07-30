@@ -32,10 +32,10 @@
             {{ '专病' }}
           </text>
           <text
-            v-if="item.symptomIndicator"
+            v-if="item.symptomIndicator === '1'"
             class="g-tag tag-light mr12"
           >
-            {{ item.symptomIndicator }}
+            {{ '症状' }}
           </text>
 
           <text class="">
