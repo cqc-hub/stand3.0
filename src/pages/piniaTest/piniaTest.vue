@@ -12,7 +12,7 @@
   import { GStores, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
   import { joinQuery } from '../../common/utils';
-  import { encryptDes } from '@/common';
+  import { encryptDes, encryptedAes } from '@/common';
 
   const gStores = new GStores();
   const { source } = gStores.globalStore.browser;

@@ -339,6 +339,11 @@
         type: 'h5',
         path,
       });
+    } else {
+      uni.navigateTo({
+        // 跳转到智能客服,报告列表?type=report，直接解读报告?type=report&reportId=xxx
+        url: '/pagesA/intelMedicalAssist/intelMedicalAssist?type=report',
+      });
     }
   };
 
@@ -822,11 +827,11 @@
   const getYunBannerData = async () => {
     const { listYun } = pageConfig.value;
 
-   // 优先处理 sysCode 为 '1001035' 的情况
-  //  if(gStores.globalStore.sysCode === '1001035'){
-  //      getJSSZYunUrl();
-  //      return;
-  //   }
+    // 优先处理 sysCode 为 '1001035' 的情况
+    //  if(gStores.globalStore.sysCode === '1001035'){
+    //      getJSSZYunUrl();
+    //      return;
+    //   }
 
     if (listYun) {
       const { imgUrl } = listYun;
@@ -853,8 +858,6 @@
         }
       }
     }
-
-
   };
   //查询省中云影像地址
   const getJSSZYunUrl = async () => {
@@ -867,14 +870,12 @@
         patientId,
       });
       loading.value = false;
-      console.log(2222,result)
+      console.log(2222, result);
       if (result) {
         uni.navigateTo({
-          url: `/pagesA/webView/webView?https=${encodeURIComponent(
-            result
-          )}`,
+          url: `/pagesA/webView/webView?https=${encodeURIComponent(result)}`,
         });
-      }  
+      }
     }
   };
   //查询第三方检查报告地址
