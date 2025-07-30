@@ -109,7 +109,7 @@
             <view class="dialog-t f32 mb32">
               <text class="dt-width color-888">
                 <text v-if="isRefound">当前可退款</text>
-                <text v-else>可原路返回金额</text>
+                <text v-else>可原路退回金额</text>
               </text>
               <text class="dt-red g-bolder">
                 <text v-if="isRefound">{{ lists.accountBalance }}元</text>
