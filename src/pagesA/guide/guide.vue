@@ -567,6 +567,13 @@
                 o.completionStatus =
                   (itemList.every((p) => p.disposeStatus === '3') && 1) || 0;
               }
+              
+              if (t.itemList.some(item => item.completionStatus === 0)) {
+                t.completionStatus = 0;
+              }else{
+                  t.completionStatus = 1;
+              }
+
             });
           }
 
@@ -705,16 +712,35 @@
   };
 
   const handlerAddressMap = (item) => {
-    useTBanner(
-      {
-        type: 'otherProgram',
-        path: 'pages/index?id=QFadbKUMCl',
-        text: '院内导航',
-        appId: 'wx0fb39a1dc27c5e6d',
-      },
-      'navigateTo',
-      item
-    );
+    if(gStores.globalStore.sysCode === '1001052'){
+        useTBanner(
+          {
+            type: 'otherProgram',
+            path: 'pages/index?id=QFadbKUMCl',
+            text: '院内导航',
+            appId: 'wx0fb39a1dc27c5e6d',
+          },
+          'navigateTo',
+          item
+        );
+        return;
+    }
+      if(gStores.globalStore.sysCode === '1001040'){
+        useTBanner(
+          {
+            type: 'otherProgram',
+            path: '/packageNav/pages/nav/nav?mallId=472&uuid=788bbbe89dbb40e3b17506fd0e8198ff&routeId=562',
+            text: '院内导航',
+            appId: 'wxd7b5b33407656cf7',
+          },
+          'navigateTo',
+          {
+            thirdName:item.deptName
+          }
+        );
+        return;
+    }
+
   };
 
   const goPagePage = (item) => {
@@ -745,7 +771,6 @@
 
   const btnClick = ({ btn, item }) => {
     const { patChoose } = gStores.userStore;
-
     useTBanner(btn, 'navigateTo', {
       ...patChoose,
       ...item,
@@ -781,6 +806,7 @@
   };
 
   const goDocDetail = (item) => {
+    console.log(22222,item)
     const { hosId, hosDocId } = item;
 
     uni.navigateTo({

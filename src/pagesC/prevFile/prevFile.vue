@@ -84,6 +84,7 @@
     });
   };
   const downWithStream = (url, name) => {
+    name = name || new Date().getTime() + '';
     uni.downloadFile({
       // url: 'https://xinjiang.eheren.com/image?uid=8d74fcdb5c33a273f4398750c334138a1b67f770e74dcd54fd8883c42031483e', //自定义的文件地址
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',

@@ -205,7 +205,11 @@
                 <template #showbody="{ item, value }">
                   <view
                     @click="goDoctorCard"
-                    v-if="item.key === 'docName' && !isWaitForPay"
+                    v-if="
+                      item.key === 'docName' &&
+                      !isWaitForPay &&
+                      orderRegInfo.hosDocId
+                    "
                     class="color-blue flex-normal doc-name"
                   >
                     <view class="doc-name-value">
@@ -328,7 +332,11 @@
         </button>
 
         <block v-if="orderRegInfo.orderStatus === '70'">
-          <button @click="againOrder" class="btn g-border btn-normal">
+          <button
+            v-if="orderRegInfo.hosDocId"
+            @click="againOrder"
+            class="btn g-border btn-normal"
+          >
             再次预约
           </button>
 
@@ -363,7 +371,8 @@
 
         <button
           v-if="
-            ['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus)
+            ['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus) &&
+            orderRegInfo.hosDocId
           "
           class="btn g-border btn-primary"
           @click="againOrder"
@@ -490,6 +499,13 @@
   // #endif
 
   const isShowFooter = computed(() => {
+    if (
+      !orderRegInfo.value.hosDocId &&
+      orderRegInfo.value.orderStatus === '43'
+    ) {
+      return false;
+    }
+
     if (isWaitReg.value) {
       return orderRegInfo.value.orderStatus === '1';
     }

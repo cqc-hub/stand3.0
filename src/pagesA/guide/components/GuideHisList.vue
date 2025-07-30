@@ -8,12 +8,22 @@
           <view
             class="bg-white pr32 pl32 pt16 pb16 rounded-xl g-border flex items-center justify-between"
           >
-            <view>
-              <text class="f40 color-666">
+            <view class="flex items-center justify-between w-100%">
+              <view class="f40 color-666">
                 {{
                   `${dayjs(item.disposeTime).format('MM-DD')} ${item.deptName}`
                 }}
-              </text>
+              </view>
+                <view class="flex-1"></view>
+                 <view class="mr60 absolute tag-status">
+                  <!-- 仅展示未完成标识 -->
+                    <Tag-Status
+                    v-if="item.completionStatus === 0"
+                      color="#ffb5a5"
+                      text-color="#d23028"
+                      text="未完成"
+                    />
+                  </view>
             </view>
 
             <text
@@ -55,6 +65,7 @@
 <script lang="ts" setup>
   import { ApiParamsConfig, TButtonConfig } from '@/types';
   import GuideContentList from './GuideContentList.vue';
+  import TagStatus from './TagStatus.vue';
   import { ref } from 'vue';
   import dayjs from 'dayjs';
   import { wait } from '@/utils';
@@ -112,5 +123,8 @@
       border-left: 1px dashed #cccccc;
       z-index: 0;
     }
+  }
+  .tag-status {
+    right: 2.8em;
   }
 </style>
