@@ -304,5 +304,9 @@ export const aliPayOldSystemPayType = () => {
     // #endif
   }
 
+  if (sysCode === '1001071') {
+    channel = 'CITIC_WX_JSAPI'; 
+  }
+
   return channel;
 };
