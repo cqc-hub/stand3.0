@@ -7,7 +7,7 @@
       paddingTop: `${navLocationInfo?.top}px`,
     }"
   >
-    <view class="back-icon" @click="goBack">
+    <view class="back-icon" v-if="props?.showBack" @click="goBack">
       <image
         :src="globalGl.BASE_IMG + 'back-icon.png'"
         class="w-full"
@@ -17,25 +17,27 @@
         }"
       />
     </view>
-    <view class="tilte">
-      <view
-        class="text f32"
-        :style="{
-          left: `${navLocationInfo.titleLeft}px;`,
-        }"
-      >
-        {{ props.title || '默认标题' }}
+    <slot/>
+    <!-- <view class="tilte"> -->
+      <view class="text f32">
+        {{ props.title || '' }}
       </view>
-    </view>
+    <!-- </view> -->
   </view>
   <!--  #endif -->
 </template>
 <script setup lang="ts">
-  import { ref, onBeforeMount } from 'vue';
+  import { ref, onBeforeMount, withDefaults } from 'vue';
   import globalGl from '@/config/global';
-  const props = defineProps<{
-    title?: string;
-  }>();
+  const props = withDefaults(
+    defineProps<{
+      title?: string;
+      showBack: boolean;
+    }>(),
+    {
+      showBack: true,
+    }
+  );
   const navLocationInfo = ref({
     top: 51,
     height: 32,
@@ -71,22 +73,24 @@
     z-index: 999;
     background-color: #ffffff00;
     display: flex;
+    position: relative;
+    width: 100vw;
+    align-items: center;
     .back-icon {
       image {
         padding-top: 2px;
       }
     }
-    .tilte {
-      display: flex;
-      // flex: 1 1 auto;
-      align-items: center;
-      justify-content: center;
+    // .tilte {
+    //   width: 100vw;
+    //   position: relative;
 
       .text {
-        position: relative;
+        position: absolute;
+        left: 50%;
         transform: translate(-50%, 0px);
         font-weight: 600;
       }
-    }
+    // }
   }
 </style>

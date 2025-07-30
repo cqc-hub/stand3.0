@@ -30,6 +30,7 @@
             flex: scroll ? '' : 1,
             padding: paddingItem,
             minWidth: itemMinWidth,
+            transitionDuration: transitionDuration + 's',
           }"
           @click="change(i)"
         >
@@ -56,6 +57,7 @@
             left: pillsLeft + 'px',
             width: currentWidth + 'px',
             height,
+            transitionDuration: transitionDuration + 's',
           }"
         ></view>
       </view>
@@ -65,6 +67,7 @@
       :style="{
         height: fixed ? height : '0',
         padding,
+        transitionDuration: transitionDuration + 's',
       }"
     ></view>
   </view>
@@ -94,11 +97,16 @@
    * @property {String} field 如果是对象，显示的键名
    * @property {Boolean} fixed = [true | false] 是否固定
    * @property {String} paddingItem = '0 22rpx' 选项的边距
-   *
+   *@property {String} transitionDuration '0.4' 动画速度
+    *
    * @event {Function(current)} change 改变标签触发
    */
   export default {
     props: {
+      transitionDuration: {
+        type: String,
+        default: '0.4',
+      },
       itemMinWidth: {
         type: String,
         default: 'auto',

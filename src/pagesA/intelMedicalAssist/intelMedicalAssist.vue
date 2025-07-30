@@ -85,7 +85,7 @@
     sysCode?: string;
     source?: string;
     herenId?: string; //埋点
-    type?: 'report';
+    type?: 'report'|'homePage';
     reportId?: string; //报告id
   }>();
 

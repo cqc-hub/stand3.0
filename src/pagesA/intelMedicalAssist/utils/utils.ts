@@ -80,6 +80,7 @@ export const styleConfig = ref<StyleConfigType>({
   isMessage: false, //通知效果
   simpleHeadInit: false, //初始服务居中
   historyMess: false,
+  headerLineMenu: 'back',
 });
 
 export const chunkStatus = ref<ChunkStatusType>({
@@ -119,17 +120,43 @@ export const init = async (props) => {
     isMessage: false, //通知效果
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
+    headerLineMenu: props?.type.includes('homePage') ? 'homePage' : 'back',
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
-  props?.isMess&& props?.isMess === '2' && initWithTheMess(props?.openid);
+  props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
+  props?.type.includes('report') && ininWithReport(props?.reportId);
   reload(props?.isMess);
+};
+export const ininWithReport = async (reportId?: string) => {
+  console.log('ininWithReport', reportId);
+  if (reportId) {
+    msgState.value.msgLoad = true;
+    const args: any[] = [];
+    args.push({
+      sysCode: globalGl.SYS_CODE,
+      source: 1,
+      repId: reportId,
+      repType: 1,
+    });
+    // #ifndef  H5
+    typeInAsk(args, 'report');
+    // #endif
+    // #ifdef  H5
+    typeInAskH5(args, 'report');
+    // #endif
+  } else {
+    setTimeout(() => {
+      reportShow();
+      isPhoto.value = false;
+    }, 1000);
+  }
 };
 export const initWithTheMess = async (openid) => {
   const gStores = new GStores();
   let openId = openid || gStores.globalStore.openId;
   let str = `AI_${openId}`;
   const { result } = await api.getHistoryRecord({ str, source: 1 });
-  if (result&&result.length) {
+  if (result && result.length) {
     styleConfig.value = {
       transition: false, //初始过渡效果
       showHeader: false, //展示首页
@@ -145,7 +172,6 @@ export const initWithTheMess = async (openid) => {
       },
     ];
   }
- 
 };
 
 export const initWithMess = async () => {
@@ -589,7 +615,11 @@ export const sendImg = async () => {
     const { data } = await apiAsync(uni.uploadFile, {
       // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
 
-      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${gStores.globalStore.sysCode}&type=${type}&herenId=${gStores.globalStore.herenId || propsPbj.value?.herenId}&source=1`,
+      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${
+        gStores.globalStore.sysCode
+      }&type=${type}&herenId=${
+        gStores.globalStore.herenId || propsPbj.value?.herenId
+      }&source=1`,
       filePath: tempFilePaths[0],
       // timeout: 60000,
       name: 'file',
@@ -744,14 +774,14 @@ export const gotoGuide = (item) => {
   });
 };
 export const goDoctorCard = (item) => {
-  const { docName, docId, hosId, deptName,hosDeptId } = item;
+  const { docName, docId, hosId, deptName, hosDeptId } = item;
   uni.navigateTo({
     url: joinQuery('/pagesA/MyRegistration/DoctorDetails', {
       hosDocId: docId,
       hosId,
       docName,
       deptName,
-      hosDeptId
+      hosDeptId,
     }),
   });
 };
@@ -1504,4 +1534,3 @@ export const regConfirm = async (pageArg) => {
 export const handleSourceChoose = (pageArg) => {
   regConfirm(pageArg);
 };
-

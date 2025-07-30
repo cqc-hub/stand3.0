@@ -9,7 +9,31 @@
   >
     <!-- #ifdef MP-WEIXIN -->
     <view class="navBar">
-      <GCustomNavbar :title="'智能医助'" />
+      <GCustomNavbar
+        :title="headerConfig?.headerLineMenu !== 'homePage' ? '智能医助' : ''"
+        :showBack="headerConfig?.headerLineMenu !== 'homePage'"
+      >
+        <template v-if="headerConfig?.headerLineMenu === 'homePage'">
+          <g-tabs
+            v-model:value="tabCurrent"
+            :tabs="tabField"
+            @change="tabChange"
+            :bgColor="'#0000'"
+            :lineScale="0"
+            :allBlod="false"
+            :transitionDuration="'0'"
+          />
+          <!--  <g-tabs
+          v-show="tabField.length && tabField.length > 1 && !isModeMedicalHelp"
+          v-model:value="tabCurrent"
+          :tabs="tabField"
+          :scroll="false"
+          @change="tabChange"
+          field="label"
+          style="width: 100%"
+        /> -->
+        </template>
+      </GCustomNavbar>
     </view>
     <!-- #endif -->
 
@@ -19,18 +43,18 @@
       id="bg-img"
     />
     <!-- <view class="wihite-mask"></view> -->
-    <view class="person-img  relative">
+    <view class="person-img relative">
       <img
-        v-if="gStores.globalStore.sysCode === '1001017'" 
+        v-if="gStores.globalStore.sysCode === '1001017'"
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person_1001017.png'"
         class="img-1001017"
       />
-       <img
-       v-else
+      <img
+        v-else
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person.png'"
         class="w-full"
       />
-    </view> 
+    </view>
 
     <view class="header-hello">
       <view class="en f32 pb24 flex-normal">
@@ -97,8 +121,8 @@
 </template>
 <script setup lang="ts">
   import { computed, ref } from 'vue';
-  import { GStores } from '@/utils';
-
+  import { useTBanner, GStores } from '@/utils';
+  import { joinQueryForUrl } from '@/common';
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
   import { popipHasShow, isPhoto, initWithMess } from '../utils/utils';
@@ -112,6 +136,8 @@
     headerConfig: StyleConfigType;
     isMess?: string;
   }>();
+  const tabField = ['首页', '服务'];
+  const tabCurrent = ref(0);
   const emits = defineEmits(['click-guess']);
 
   const askArray = computed(() => {
@@ -129,6 +155,16 @@
     }
   });
 
+  const tabChange = (value) => {
+    tabCurrent.value = value;
+    if (value) {
+      let url = 'pages/home/home';
+      useTBanner({
+        type: 'self',
+        path: url,
+      });
+    }
+  };
   const handleClickGuess = (guessItem) => {
     emits('click-guess', guessItem);
   };
@@ -185,15 +221,15 @@
         width: 140rpx !important;
         height: 300rpx !important;
       }
-      .img-1001017{ 
+      .img-1001017 {
         width: 140rpx !important;
         height: 160rpx !important;
         position: absolute;
-        left: 4px !important; 
+        left: 4px !important;
         bottom: 16px !important;
       }
     }
- 
+
     .header-hello {
       z-index: 2;
       /* #ifndef H5 */
@@ -252,14 +288,14 @@
         width: 140rpx !important;
         height: 300rpx !important;
       }
-      // .img-1001017{ 
+      // .img-1001017{
       //   width: 140rpx !important;
-      //   height: 140rpx !important; 
+      //   height: 140rpx !important;
       // }
     }
     .header-hello {
-       /* #ifndef H5 */
-       top: 180rpx !important ;
+      /* #ifndef H5 */
+      top: 180rpx !important ;
       /* #endif */
       /* #ifdef H5 */
       top: 50rpx !important ;
@@ -343,11 +379,11 @@
         width: 240rpx;
         height: 500rpx;
       }
-      .img-1001017{ 
-        width: 330rpx  ;
-        height: 400rpx ; 
+      .img-1001017 {
+        width: 330rpx;
+        height: 400rpx;
         position: absolute;
-        left: -30rpx; 
+        left: -30rpx;
         bottom: 40px;
       }
     }

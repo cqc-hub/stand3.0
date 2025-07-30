@@ -5,6 +5,7 @@ export type StyleConfigType = {
   isMessage: boolean;
   simpleHeadInit?: boolean;
   historyMess?: boolean;
+  headerLineMenu?: string; // 'back' | 'homePage' | 'none'
 };
 
 export type MsgListType = {
