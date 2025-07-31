@@ -37,6 +37,12 @@
       });
     }
     // #endif
+
+    if(globalStore.sysCode === '1001082'){
+      uni.reLaunch({
+        url: 'pagesA/intelMedicalAssist/intelMedicalAssist',
+      });
+    }
   });
 
   onShow(async (opt) => {

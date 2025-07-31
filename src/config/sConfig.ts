@@ -619,6 +619,7 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isAliAuthBase: '1',
     },
+    isOpenWechatSI: true,
   },
   /**
    * 温州人民
