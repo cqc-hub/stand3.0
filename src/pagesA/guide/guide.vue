@@ -452,8 +452,8 @@
 
           const info = {
             deptId,
-            deptName,
-            disposeTime,
+            categorName:deptName,
+            appointmentTime:disposeTime,
             hosId,
             hosName,
             visitNo,

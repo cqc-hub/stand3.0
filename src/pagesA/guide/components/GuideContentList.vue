@@ -247,6 +247,15 @@
                       @go-address-map="handlerAddressMap"
                     />
 
+
+                    <GuideBtns
+                      :item="item"
+                      :lab="lab"
+                      :btns="jcBtns"
+                      @btn-click="(v) => emits('btn-click', v)"
+                    />
+
+
                     <view
                       v-if="p !== item.others.length - 1"
                       class="drug-placeholder mb24 mt24"

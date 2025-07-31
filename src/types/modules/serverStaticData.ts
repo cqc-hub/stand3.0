@@ -717,6 +717,7 @@ export type TBannerConfig = XOR<
 export type TButtonConfig = Omit<TBannerConfig, 'src'> & {
   text: string;
   icon?: string;
+  isExpired?: string;
 };
 
 /** 挂号记录*/
