@@ -136,7 +136,7 @@
     headerConfig: StyleConfigType;
     isMess?: string;
   }>();
-  const tabField = ['首页', '服务'];
+  const tabField = ['首页', '服务','我的'];
   const tabCurrent = ref(0);
   const emits = defineEmits(['click-guess']);
 
@@ -157,8 +157,14 @@
 
   const tabChange = (value) => {
     tabCurrent.value = value;
-    if (value) {
+    if (value === 1) {
       let url = 'pages/home/home';
+      useTBanner({
+        type: 'self',
+        path: url,
+      });
+    }else if (value === 2) {
+      let url = 'pages/home/my';
       useTBanner({
         type: 'self',
         path: url,

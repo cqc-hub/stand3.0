@@ -1,4 +1,4 @@
-import { GStores } from '@/utils';
+import { apiAsync, GStores } from '@/utils';
 export class FileUtil {
   downLoadFileBase64(base64: string, fileName: string) {
     // #ifdef H5
@@ -81,7 +81,7 @@ export class FileUtil {
           },
         });
       },
-       fail: (res) => {
+      fail: (res) => {
         console.error('写入文件失败：', res);
         gStores.messageStore.showMessage('下载文件失败', 3000, {
           uniToast: true,
@@ -90,4 +90,140 @@ export class FileUtil {
     });
     // #endif
   };
+}
+
+/**
+ * 图片下载与保存工具类
+ * 支持微信小程序、H5、App等多端
+ */
+export class ImageDownloader {
+  /**
+   * 下载图片并保存到相册
+   * @param {string} imageUrl - 图片地址
+   * @returns {Promise<string>} 操作结果
+   */
+  static async downloadAndSaveImage(imageUrl: string): Promise<string> {
+    try {
+      // 检查权限
+      await this.checkPermission();
+
+      // 下载图片
+      const tempFilePath = await this.downloadImage(imageUrl);
+
+      // 保存到相册
+      await this.saveToAlbum(tempFilePath);
+
+      return '图片已成功保存到相册';
+    } catch (error) {
+      console.error('下载保存失败:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : '图片保存失败，请稍后重试';
+      return errorMessage;
+    }
+  }
+
+  /**
+   * 检查保存图片权限
+   */
+  static async checkPermission(): Promise<void> {
+    // #ifdef MP-WEIXIN
+    const setting = await apiAsync(uni.getSetting, {});
+
+    if (!setting.authSetting['scope.writePhotosAlbum']) {
+      try {
+        await uni.authorize({ scope: 'scope.writePhotosAlbum' });
+      } catch (err) {
+        // 引导用户打开权限设置
+        const modalRes = await uni.showModal({
+          title: '权限申请',
+          content: '需要获取保存图片到相册的权限，请在设置中开启',
+          confirmText: '去设置',
+          cancelText: '取消',
+        });
+
+        // @ts-expect-error
+        if (modalRes.confirm) {
+          await uni.openSetting();
+          const newSetting = await await apiAsync(uni.getSetting, {});
+          if (!newSetting.authSetting['scope.writePhotosAlbum']) {
+            throw new Error('未获得保存权限，无法保存图片');
+          }
+        } else {
+          throw new Error('取消保存图片');
+        }
+      }
+    }
+    // #endif
+
+    // #ifdef APP-PLUS
+    // @ts-ignore
+    const perm = await plus.android.requestPermissions([
+      'android.permission.WRITE_EXTERNAL_STORAGE',
+    ]);
+    if (perm[0].granted !== true) {
+      throw new Error('未获得存储权限，无法保存图片');
+    }
+    // #endif
+
+    // H5通常不需要特殊权限
+  }
+
+  /**
+   * 下载图片
+   * @param {string} url - 图片地址
+   * @returns {Promise<string>} 临时文件路径
+   */
+  static async downloadImage(url: string): Promise<string> {
+    // 处理跨域问题，H5可能需要后端代理
+    return new Promise((resolve, reject) => {
+      uni.downloadFile({
+        url,
+        success: (res) => {
+          if (res.statusCode === 200 && res.tempFilePath) {
+            resolve(res.tempFilePath);
+          } else {
+            reject(new Error('图片下载失败'));
+          }
+        },
+        fail: (err) => {
+          reject(new Error(`下载失败: ${err.errMsg}`));
+        },
+      });
+    });
+  }
+
+  /**
+   * 保存图片到相册
+   * @param {string} tempFilePath - 临时文件路径
+   */
+  static async saveToAlbum(tempFilePath: string): Promise<void> {
+    let isH5 = false;
+    // #ifdef H5
+    isH5 = true;
+    // #endif
+
+    if (isH5) {
+      // H5通过创建a标签下载
+      const link = document.createElement('a');
+      link.href = tempFilePath;
+      link.download = `image_${new Date().getTime()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
+
+    // 小程序和App使用官方API
+    return new Promise((resolve, reject) => {
+      uni.saveImageToPhotosAlbum({
+        filePath: tempFilePath,
+        success: () => {
+          resolve();
+        },
+        fail: (err) => {
+          reject(new Error(`保存失败: ${err.errMsg}`));
+        },
+      });
+    });
+  }
 }

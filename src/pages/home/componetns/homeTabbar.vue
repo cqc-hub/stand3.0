@@ -164,7 +164,7 @@ onMounted(async () => {
 });
 
 const getMenuBtn = () => {
-  const tabBarList = [
+  let tabBarList = [
     {
       label: "首页",
       icon: "/static/image/home.png",
@@ -172,7 +172,7 @@ const getMenuBtn = () => {
       url: "/pages/home/home",
       loginInterception: "0",
       sort: 1,
-    },
+    }, 
     {
       label: "互联网医院",
       icon: "/static/image/wlyy.png",
@@ -215,6 +215,14 @@ const getMenuBtn = () => {
       sort: 2,
     },
     {
+      label: "服务",
+      icon: "/static/image/wlyy.png",
+      iconActive: `/static/image/wlyy_active${gStores.globalStore.isTcmStyle ? "-tcm" : ""}.png`,
+      url: "/pages/home/home",
+      loginInterception: "0",
+      sort: 2,
+    },
+    {
       label: "消息中心",
       icon: "/static/image/wlyy.png",
       iconActive: `/static/image/wlyy_active${gStores.globalStore.isTcmStyle ? "-tcm" : ""}.png`,
@@ -230,8 +238,8 @@ const getMenuBtn = () => {
       url: "/pages/home/my",
       loginInterception: "0",
       sort: 4,
-    },
-  ] as const;
+    }
+  ] ;
 
   const tabList: typeof tabBarList[number]["label"][] = ["首页", "我的"];
 
@@ -259,6 +267,12 @@ const getMenuBtn = () => {
     tabList.push("云诊室");
     tabList.push("健康商城");
   }
+
+  if (global.SYS_CODE === "1001082") {
+    tabList.push("服务");
+    tabBarList[0].url = "/pagesA/intelMedicalAssist/intelMedicalAssist";
+  }
+
 
   tabBars.value = tabBarList.filter((o) => tabList.includes(o.label)).sort((a, b) => a.sort - b.sort);
 };

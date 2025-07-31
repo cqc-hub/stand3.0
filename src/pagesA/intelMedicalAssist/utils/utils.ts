@@ -30,6 +30,7 @@ import type { TInstance } from '@/components/g-form/index';
 import { IPat, useDeptStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
+import { checkLoginExpired } from '@/common/checkJump';
 import HTMLParser from '@/common/html-parser';
 import globalGl from '@/config/global';
 import api from '@/service/api';
@@ -120,7 +121,7 @@ export const init = async (props) => {
     isMessage: false, //通知效果
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
-    headerLineMenu: props?.type.includes('homePage') ? 'homePage' : 'back',
+    headerLineMenu: props?.type.includes('homePage') || globalGl.SYS_CODE === '1001082' ? 'homePage' : 'back',
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -668,7 +669,7 @@ export const handleGuess = (item) => {
   sendMsg(item.value, 1);
 };
 
-export const handleServer = (
+export const handleServer = async (
   item: TButtonConfig & { isSelfMethod?: string },
   source?: string
 ) => {
@@ -688,7 +689,22 @@ export const handleServer = (
         ),
       });
     }
-    useTBanner(item);
+      if (item?.isExpired) {
+        // 新增第三方过期拦截判断
+        const isExpired = await checkLoginExpired();
+        if (isExpired) {
+          // 登录过期，引导重新登录
+          uni.reLaunch({
+            url: '/pages/home/my?setOutLogin=1',
+          });
+          throw new Error('登录已过期，请重新登录');
+        }else{
+            useTBanner(item);
+        }
+      }else{
+          useTBanner(item);
+      }
+
   }
 };
 export const openServicesChat = (query) => {

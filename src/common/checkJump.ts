@@ -107,7 +107,7 @@ export const checkGrid = (item: IRoute) => {
   // }
 };
 // 判断登录是否过期
-const checkLoginExpired = async (): Promise<boolean> => {
+export const checkLoginExpired = async (): Promise<boolean> => {
   try {
     const result = await api.allinoneAuthApi(
       packageAuthParams({}, '/modifyUserInfo/userInfoByToken', {
@@ -142,11 +142,7 @@ const interceptorRoute = async function (item: any) {
         if (isExpired) {
           // 登录过期，引导重新登录
           uni.reLaunch({
-            url: '/pages/home/my?_isOutLogin=1',
-          });
-          new LoginUtils().outLogin({
-            isHideMessage: true,
-            isGoLoginPage: false,
+            url: '/pages/home/my?setOutLogin=1',
           });
           throw new Error('登录已过期，请重新登录');
         }
