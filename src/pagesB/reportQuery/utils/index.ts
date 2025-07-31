@@ -182,6 +182,7 @@ export interface examineReportDetails {
   age?: string;
   //年龄
 
+  pdfType?: 'JPG' | 'pdf';
   diacrisis?: string;
   applyDoc?: string;
   //开单医生

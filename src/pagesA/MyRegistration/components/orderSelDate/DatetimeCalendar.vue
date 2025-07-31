@@ -652,8 +652,8 @@
 
         if (this.enableDays[fullDate] !== '0') {
           new GStores().messageStore.showMessage(
-            '当日未查询到医生排班信息',
-            3000
+            '未查询到可预约的排班信息',
+            1500
           );
           return;
         }
