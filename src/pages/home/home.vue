@@ -46,16 +46,22 @@
             </template>
             <template v-else>
               <view class="w100 flex">
-              <view @click.prevent="goSearch" class="flex1">
-                <view class="my-disabled" >
-                  <uni-search-input
-                    :type="'2'"
-                    inputBorder
-                    :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
+                <view @click.prevent="goSearch" class="flex1">
+                  <view class="my-disabled">
+                    <uni-search-input
+                      :type="'2'"
+                      inputBorder
+                      :placeholder="viewerStore.homeSearchPlaceholder"
+                    />
+                  </view>
                 </view>
-                 </view>
-                <view v-if="gStores.globalStore.sysCode === '1001063'" @click="goClinicPay" class="ico_my_scon icon-size">&#xe6e4;</view>
+                <view
+                  v-if="gStores.globalStore.sysCode === '1001063'"
+                  @click="goClinicPay"
+                  class="ico_my_scon icon-size"
+                >
+                  &#xe6e4;
+                </view>
               </view>
             </template>
           </view>
@@ -149,29 +155,45 @@
                   @open-share="openShare"
                 />
               </view>
-
               <view
                 class="notice flex-normal g-fade-in"
-                v-if="viewerStore.homeNoticeText"
+                 @click="goToNotice1"
+                v-if="
+                  viewerStore.homeNoticeText ||
+                  healthCounselConfig.noticeReplaceParam
+                "
               >
-                <text  v-if="!gStores.globalStore.isTcmStyle" class="icon-font img_announcement icon-size"></text>
-                <image v-if="gStores.globalStore.isTcmStyle"
-                  :src="
-                    $global.BASE_IMG +
-                    `img_announcement-tcm@3x.png`
-                  "
-                  mode="widthFix"
-                  class="icon-font icon-size "
-                />
+                <template
+                  v-if="healthCounselConfig.noticeReplaceParam?.buttonName"
+                >
+                  <text class="notice-button g-bold">
+                    {{ healthCounselConfig.noticeReplaceParam.buttonName }}
+                  </text>
+                </template>
+                <template v-else>
+                  <text
+                    v-if="!gStores.globalStore.isTcmStyle"
+                    class="icon-font img_announcement icon-size"
+                  ></text>
+                  <image
+                    v-if="gStores.globalStore.isTcmStyle"
+                    :src="$global.BASE_IMG + `img_announcement-tcm@3x.png`"
+                    mode="widthFix"
+                    class="icon-font icon-size"
+                  />
+                </template>
                 <view class="bar-swiper">
                   <uni-notice-bar
-                    :text="viewerStore.homeNoticeText"
+                    :text="
+                      healthCounselConfig.noticeReplaceParam?.text ||
+                      viewerStore.homeNoticeText
+                    "
                     :speed="80"
                     scrollable
                     color="--hr-neutral-color-10"
                     style="width: 100%"
                     background-color="transparent"
-                    @click="goToNotice1"
+                   
                   />
                 </view>
               </view>
@@ -203,7 +225,10 @@
               <text v-if="viewerStore.homeBallList[0].detail">
                 {{ viewerStore.homeBallList[0].detail }}
               </text>
-              <image :src="viewerStore.homeBallList[0].iconfont" mode="heightFix"></image>
+              <image
+                :src="viewerStore.homeBallList[0].iconfont"
+                mode="heightFix"
+              ></image>
             </view>
           </drag-button>
 
@@ -421,6 +446,7 @@
   const h5QrCodeData = ref();
   const personConfig = ref(<ISystemConfig['person']>{});
   const orderConfig = ref(<ISystemConfig['order']>{});
+  const healthCounselConfig = ref(<ISystemConfig['HEALTH_COUNSEL']>{});
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
@@ -486,6 +512,9 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
+    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
+      'HEALTH_COUNSEL'
+    );
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     //设置顶部标题
@@ -595,6 +624,15 @@
   };
 
   const goToNotice1 = () => {
+    if (healthCounselConfig.value?.noticeReplaceParam) {
+      const { noticeReplaceParam: query } = healthCounselConfig.value;
+      if (query.path === 'showCareModel') {
+        openShare(query.addition);
+        return;
+      }
+      useCommonTo(query);
+      return;
+    }
     //跳咨询列表页面
     uni.navigateTo({
       url: '/pagesC/cloudHospital/myPath?path=/pagesA/healthAdvisory/healthAdvisory&_type=1',
@@ -627,7 +665,7 @@
     const pageConfig = await ServerStaticData.getSystemConfig(
       'Electronic_Consultation_Sheet'
     );
-    console.log('嗲你',pageConfig)
+    console.log('嗲你', pageConfig);
 
     if (pageConfig?.intelMedicalAssistConfig?.isReplaceHomeSearch === '1') {
       uni.navigateTo({
@@ -653,22 +691,18 @@
 
   const goClinicPay = () => {
     uni.scanCode({
-        success(res) {
+      success(res) {
         console.warn('扫码内容', res);
-        let data = JSON.parse(res.result)
+        let data = JSON.parse(res.result);
         if (data.no || data.pid || data.sid) {
           uni.navigateTo({
             url: '/pagesA/clinicPay/clinicPayDetail',
           });
-        }else{
-           gStores.messageStore.showMessage(
-              "请扫描正确的二维码",
-              1500
-            ); 
+        } else {
+          gStores.messageStore.showMessage('请扫描正确的二维码', 1500);
         }
-      }, 
+      },
     });
-
   };
   // #ifdef MP-ALIPAY
   //支付宝——首页消息推送
@@ -739,7 +773,7 @@
     .w100 {
       width: 100%;
     }
-    .icon-size{
+    .icon-size {
       width: 88rpx;
       margin-left: 20rpx;
       display: inline-block;
@@ -925,7 +959,11 @@
         border-radius: 0 0 24rpx 24rpx;
         box-shadow: 0 2rpx 0 0 var(--hr-brand-color-3) inset;
         padding: 0 31rpx;
-
+        .notice-button {
+          color: var(--hr-brand-color-6);
+          display: inline-block;
+          line-height: 60rpx;
+        }
         .icon-size {
           width: 64rpx;
           height: 64rpx;

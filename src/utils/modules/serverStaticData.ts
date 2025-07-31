@@ -632,7 +632,7 @@ export class ServerStaticData {
       //REPORT_QUERY_CONFIG报告查询 药品配送 DRUG_DELIVERY_CONFIG
       const { result } = await api.getParamsMoreBySysCode({
         paramCode:
-          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG,SELF_BILLING,Electronic_Consultation_Sheet,FAMOUS_DOCTOR_DEPT,BusinessMenu,RestOfConfig',
+          'PERSON_FAMILY_CARDMAN,MEDICAL_CASE_COPY,ORDER_REGISTER,PATIENT_SERVICE_CONFIG,CLINIC_PAY_CONFIG,REPORT_QUERY_CONFIG,DRUG_DELIVERY_CONFIG,SELF_BILLING,Electronic_Consultation_Sheet,FAMOUS_DOCTOR_DEPT,BusinessMenu,RestOfConfig,HEALTH_COUNSEL ',
       });
 
       try {
@@ -654,7 +654,7 @@ export class ServerStaticData {
           result.Electronic_Consultation_Sheet || '{}'
         );
         const BusinessMenu = JSON.parse(result.BusinessMenu || '{}');
-
+        const HEALTH_COUNSEL = JSON.parse(result.HEALTH_COUNSEL  || '{}');
         systemConfig = <ISystemConfig>{
           person,
           order,
@@ -668,6 +668,7 @@ export class ServerStaticData {
           FAMOUS_DOCTOR_DEPT,
           BusinessMenu,
           RestOfConfig,
+          HEALTH_COUNSEL
         };
 
         for (const key in systemConfig) {
