@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <button @click="useTBanner(testbuttonConfig)">
+    <button @click="init">
       杭口质保卡正式环境（测试用）
     </button>
   </view>
@@ -9,7 +9,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
 
-  import { GStores, type TButtonConfig, useTBanner } from '@/utils';
+  import { GStores, LoginUtils, type TButtonConfig, useTBanner } from '@/utils';
   import globalGl from '@/config/global';
   import { joinQuery } from '../../common/utils';
   import { encryptDes, encryptedAes } from '@/common';
@@ -508,9 +508,16 @@
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
-      // useTBanner(healthRecord)
-      useTBanner(省中云诊室);
-      // useTBanner(queryCase);
+
+      init();
     }, 1000);
   });
+
+  const init = async () => {
+    const r = await new LoginUtils().faceVerifyAndPData({
+      name: '陈钦川',
+      idCardNumber: '330326199908286713',
+    });
+    console.log(r, 'rrr');
+  };
 </script>
