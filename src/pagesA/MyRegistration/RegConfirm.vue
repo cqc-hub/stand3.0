@@ -480,21 +480,27 @@
         const { respCode, message, code } = e;
 
         if (respCode === 999301 && !quickPat.value.patientName) {
-          await new Promise((r) => {
+          const { confirm } = await new Promise<any>((r: any) => {
             gStores.messageStore.showMessage(
               '档案已合并，请删除就诊人重新绑定',
-              1500,
+              0,
               {
                 useDialog: true,
                 dialogOpt: {
-                  title: '提示',
-                  isShowCancel: false,
+                  title: '温馨提示',
+                  isShowCancel: true,
                   isMaskClick: false,
+                  confirmColor: 'var(--hr-error-color-6)',
+                  confirmText: '去删除',
                 },
                 closeCallBack: r,
               }
             );
           });
+
+          if (!confirm) {
+            throw new Error('取消删除就诊人');
+          }
 
           gStores.userStore.updatePatClick(gStores.userStore.patChoose);
           uni.navigateTo({
@@ -728,7 +734,54 @@
       };
     });
   };
+
+  const checkWaitReg = async () => {
+    const { isOpenAddedNum } = pageConfig.value;
+    const { patientId } = gStores.userStore.patChoose;
+
+    const {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+      addedNum,
+      hosDeptId,
+    } = props.value;
+    const query = {
+      ampm,
+      categor,
+      clinicalType,
+      hosDocId,
+      docName,
+      hosId,
+      schDate,
+      schId,
+      addedNum: undefined as any,
+      patientId,
+      hosDeptId,
+    };
+
+    if (isOpenAddedNum === '1') {
+      query.addedNum = addedNum;
+    }
+
+    const { result } = await api.canRegAlternate(query);
+
+    if (!result) {
+      gStores.messageStore.showMessage(
+        '当前时段候补人数已达上限，暂不支持候补!',
+        1500
+      );
+      throw new Error('当前时段候补人数已达上限，暂不支持候补');
+    }
+  };
+
   const waitReg = async () => {
+    await checkWaitReg();
     const { schSecondResultList, alternateData } = await getWaitRegSch();
 
     waitRegSchSecondResultList.value = schSecondResultList;
@@ -788,6 +841,8 @@
           url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
         });
       }
+    } else {
+      gStores.messageStore.showMessage('暂无可候补就诊时段', 1500);
     }
   };
 
@@ -890,7 +945,7 @@
       }
     }
     if (isAddedNumSelf.value) {
-      const locationInfo = await getLocation(true);
+      // const locationInfo = await getLocation(true);
       priorityReg.value = pageConfig.value.isAddedNumSelf !== '1';
     }
   });

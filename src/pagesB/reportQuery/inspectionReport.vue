@@ -346,6 +346,7 @@
     ServerStaticData,
     apiAsync,
     useTBanner,
+    ImageDownloader,
   } from '@/utils';
   import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -624,9 +625,16 @@
   };
   const goReportPdf = (item) => {
     let { repId, repName, pdfPath } = item;
-    const { pdfPath: pdfPath1001035 } = examineReportList.value;
+    const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
 
     if (['1001035'].includes(gStores.globalStore.sysCode) && pdfPath1001035) {
+      if (pdfType === 'JPG') {
+        uni.previewImage({
+          urls: [pdfPath1001035],
+        });
+        return;
+      }
+
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
           url: encodeURIComponent(pdfPath1001035 as string),
@@ -722,9 +730,31 @@
   const copyDataUrl = ref('');
   const popupCopy = ref('' as any);
 
-  const downloadReport = () => {
+  const downloadReport = async () => {
     if (['1001035'].includes(gStores.globalStore.sysCode)) {
-      copyDataUrl.value = examineReportList.value.pdfPath!;
+      const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
+      if (!pdfPath1001035) {
+        return;
+      }
+
+      if (pdfType === 'JPG') {
+        uni.showLoading({});
+        try {
+          const msg = await ImageDownloader.downloadAndSaveImage(
+            pdfPath1001035
+          );
+          gStores.messageStore.showMessage(msg, 1500);
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : '保存失败';
+          gStores.messageStore.showMessage(errorMessage, 1500);
+        } finally {
+          uni.hideLoading();
+        }
+        return;
+      }
+
+      copyDataUrl.value = pdfPath1001035!;
       popupCopy.value.show();
       return;
     }

@@ -60,7 +60,7 @@
           <button
             v-if="isCash == '1' && lists.accountBalance !== '0'"
             @click="confirmForm1"
-            class="f-b1 mr8 btn btn-primary btn-border btn-plain f-base"
+            class="btn btn-primary btn-border btn-plain f-base"
           >
             {{ '原路退回' }}
           </button>
@@ -70,7 +70,7 @@
               isCash == '1' && lists.accountBalance !== '0' && isRefoundExist
             "
             @click="confirmForm1('refound')"
-            class="mr8 btn btn-primary btn-border btn-plain w-full"
+            class="btn btn-primary btn-border btn-plain w-full"
           >
             {{ '申请实名转账退款' }}
           </button>
@@ -78,7 +78,7 @@
           <button
             v-if="pageConfig.isHideAccountRefillBtn !== '1'"
             @click="confirmForm"
-            class="f-b2 ml8 btn btn-primary f-base"
+            class="btn btn-primary f-base"
           >
             充值
           </button>
@@ -96,7 +96,7 @@
       :title="confirmFgTitle"
       @confirm="goWithdrawal"
       height="50vh"
-      :confirmText="!isRefound ? '提现' : '申请退款'"
+      :confirmText="!isRefound ? '原路退回' : '申请退款'"
       cannerText="取消"
       headerIcon=""
       ref="regDialogConfirm"
@@ -109,7 +109,7 @@
             <view class="dialog-t f32 mb32">
               <text class="dt-width color-888">
                 <text v-if="isRefound">当前可退款</text>
-                <text v-else>可原路返回金额</text>
+                <text v-else>可原路退回金额</text>
               </text>
               <text class="dt-red g-bolder">
                 <text v-if="isRefound">{{ lists.accountBalance }}元</text>
@@ -122,7 +122,7 @@
 
           <view v-if="!isRefound" class="dialog-t f32">
             <text class="dt-width color-888">到账账户</text>
-            <text class="g-bolder">原路返回</text>
+            <text class="g-bolder">原路退回</text>
           </view>
 
           <!-- <view v-if="isRefound">
@@ -165,7 +165,7 @@
 <script lang="ts" setup>
   import { computed, ref, provide } from 'vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
     debounce,
@@ -577,9 +577,6 @@
           // flex: 1 1 50%;
           background: var(--hr-brand-color-1);
           color: var(--hr-brand-color-6);
-        }
-        .f-b2 {
-          width: 100%;
         }
       }
     }
