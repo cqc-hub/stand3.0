@@ -56,7 +56,7 @@
           </view>
         </view>
 
-        <view @click.stop="emits('go-doc', item)" class="row f28 mb10">
+        <view  v-if="item.docName" @click.stop="emits('go-doc', item)" class="row f28 mb10">
           <view class="label color-888">医生</view>
           <view class="body color-blue">
             {{ item.docName }}

@@ -809,7 +809,9 @@
     result._appointmentDate = [appointmentDate, ampmName, appointmentTime]
       .filter((o) => o)
       .join(' ');
-    result._fee = (result.fee || result.totalCost) + '元';
+      if(result.fee || result.totalCost){
+        result._fee = (result.fee || result.totalCost) + '元';
+      }
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
     qrCodeOpt.value.code = result[qrCode];
