@@ -185,7 +185,7 @@
       {
         thRegisterId?: string;
         allPData?: '1';
-        type?: 'waitReg'; // 候补预约
+        type?: 'waitReg' | 'forwardReg'; // 候补预约
         tabIndex?: '0' | '1' | '2';
         typeId?: number;
       }
@@ -258,6 +258,9 @@
     }
 
     if ([0, 3].includes(tabCurrentDetail.value?.typeId)) {
+      return api.getRegOrderList;
+    }
+    if ([4].includes(tabCurrentDetail.value?.typeId)) {
       return api.getRegOrderList;
     }
 
@@ -399,6 +402,8 @@
       !orderId
     ) {
       _type = 'waitReg';
+    } else if (tabCurrentDetail.value?.typeId === 4) {
+      _type = 'forwardReg';
     }
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
@@ -520,6 +525,13 @@
         typeId: 3,
         headerName: 'APP挂号',
         searchType: '1',
+      });
+    }
+    if (gStores.globalStore.sysCode === '1001036') {
+      tabs.value.push({
+        typeId: 4,
+        headerName: '远期预约',
+        searchType: '2',
       });
     }
 

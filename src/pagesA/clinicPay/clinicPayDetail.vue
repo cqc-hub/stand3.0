@@ -467,17 +467,17 @@
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
       pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
 
-      if (pageProps.value.params) {
-        pageProps.value.deParams = decryptForPage(pageProps.value.params);
+      // if (pageProps.value.params) {
+      //   pageProps.value.deParams = decryptForPage(pageProps.value.params);
 
-        console.warn(
-          '获取到加密参数',
-          pageProps.value.params,
-          pageProps.value.deParams
-        );
+      //   console.warn(
+      //     '获取到加密参数',
+      //     pageProps.value.params,
+      //     pageProps.value.deParams
+      //   );
 
-        gStores.globalStore.onAppLaunch({});
-      }
+      //   gStores.globalStore.onAppLaunch({});
+      // }
     }
 
     // await wait(600);

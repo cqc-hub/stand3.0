@@ -139,7 +139,6 @@
       );
     }
     init();
-    console.log('pageProps.value.deParams1', pageProps.value.deParams);
   });
 
   const init = async () => {
@@ -256,9 +255,11 @@
       // #ifdef MP-ALIPAY
       payType = 'ALI_MINI';
       // #endif
+      const { params: sign } = pageProps.value;
       const params = {
-        cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
-        patientId: pageProps.value?.deParams?.patientId || patientId,
+        sign,
+        cardNumber,
+        patientId,
         payType,
         source,
         patientName,
