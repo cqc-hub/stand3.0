@@ -130,14 +130,14 @@
     }
     await wait(650);
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (pageProps.value.params) {
-      pageProps.value.deParams = decryptForPage(pageProps.value.params);
-      console.warn(
-        '获取到加密参数',
-        pageProps.value.params,
-        pageProps.value.deParams
-      );
-    }
+    // if (pageProps.value.params) {
+    //   pageProps.value.deParams = decryptForPage(pageProps.value.params);
+    //   console.warn(
+    //     '获取到加密参数',
+    //     pageProps.value.params,
+    //     pageProps.value.deParams
+    //   );
+    // }
     init();
   });
 
@@ -159,12 +159,15 @@
   const fetchList = async () => {
     console.log('pageProps.value.deParams', pageProps.value.deParams);
     const { cardNumber, patientId } = gStores.userStore.patChoose;
+    const { params: sign } = pageProps.value;
+
     const actionApi = pageProps.value.deParams
       ? api.getChineseMedicineListNl
       : api.getChineseMedicineList;
     const { result } = await actionApi({
-      cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
-      patientId: pageProps.value?.deParams?.patientId || patientId,
+      sign,
+      cardNumber,
+      patientId,
     });
     unPayList.value = (result?.results || []).map((item) => {
       return {
@@ -274,7 +277,6 @@
       const actionApi = pageProps.value.deParams
         ? api.chineseMedicinePayNl
         : api.chineseMedicinePay;
-
       const {
         result: { paySign, phsOrderNo },
       } = await actionApi(params);
