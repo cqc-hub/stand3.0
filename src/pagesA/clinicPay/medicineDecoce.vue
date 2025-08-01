@@ -161,7 +161,7 @@
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const { params: sign } = pageProps.value;
 
-    const actionApi = pageProps.value.deParams
+    const actionApi = sign
       ? api.getChineseMedicineListNl
       : api.getChineseMedicineList;
     const { result } = await actionApi({
@@ -274,7 +274,7 @@
         prescId: selUnPayList.value.map((o) => o.prescId).join(','),
         subIds: selUnPayList.value.map((o) => o.phsOrderId).join(','),
       };
-      const actionApi = pageProps.value.deParams
+      const actionApi = sign
         ? api.chineseMedicinePayNl
         : api.chineseMedicinePay;
       const {
@@ -288,7 +288,8 @@
         phsOrderSource: 5,
         hosId: params.hosId,
         patientName,
-        cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
+        sign,
+        cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
       handlePayAfter();
