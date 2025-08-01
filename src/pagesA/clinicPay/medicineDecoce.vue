@@ -144,20 +144,23 @@
   const init = async () => {
     await fetchList();
     if (unPayList.value?.length == 0) {
-      useTBanner(
-        {
-          type: 'self',
-          path: 'pagesB/medicationAssistant/medicalHelp',
-          extraData: {
-            params: pageProps.value.params || '',
-          },
+      gStores.messageStore.showMessage('暂无可下单的代煎药品', 3000, {
+        closeCallBack: () => {
+          useTBanner(
+            {
+              type: 'self',
+              path: 'pagesB/medicationAssistant/medicalHelp',
+              extraData: {
+                params: pageProps.value.params || '',
+              },
+            },
+            'reLaunch'
+          );
         },
-        'reLaunch'
-      );
+      });
     }
   };
   const fetchList = async () => {
-    console.log('pageProps.value.deParams', pageProps.value.deParams);
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const { params: sign } = pageProps.value;
 
