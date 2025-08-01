@@ -161,12 +161,69 @@
   }>();
 
   const emits = defineEmits(['reg-click', 'wait-reg-click', 'avatar-click']);
+  // [hosId, hosDocId] | [hosId, hosDeptId, hosDocId]
+  const isWaitRegDisabledList = computed(() => {
+    const { orderWaitingDisabled = {} } = props.pageConfig;
+    const disabledList: ([string, string, string] | [string, string])[] = [];
+
+    for (const hosId in orderWaitingDisabled) {
+      const v = orderWaitingDisabled[hosId];
+
+      if (Array.isArray(v)) {
+        disabledList.push(
+          ...v.map((hosDocId) => [hosId, hosDocId] as [string, string])
+        );
+        continue;
+      }
+
+      for (const hosDeptId in v) {
+        disabledList.push(
+          ...v[hosDeptId].map(
+            (hosDocId) =>
+              [hosId, hosDeptId, hosDocId] as [string, string, string]
+          )
+        );
+      }
+    }
+
+    return disabledList;
+  });
+
+  const isTSchInfoDisabled = (item: TSchInfo) => {
+    const { hosId, hosDeptId, hosDocId } = item;
+
+    const r1 = isWaitRegDisabledList.value.filter((o) => o.length === 2);
+    const r2 = isWaitRegDisabledList.value.filter((o) => o.length === 3);
+
+    let isDisabled = false;
+    if (r1.length) {
+      isDisabled = !!r1.find((o) => {
+        const [hosId1, hosDocId1] = o;
+
+        return hosId1 === hosId && hosDocId1 === hosDocId;
+      });
+    }
+
+    if (!isDisabled && r2.length) {
+      isDisabled = !!r2.find((o) => {
+        const [hosId1, hosDeptId1, hosDocId1] = o;
+
+        return (
+          hosId1 === hosId && hosDeptId1 === hosDeptId && hosDocId1 === hosDocId
+        );
+      });
+    }
+
+    return isDisabled;
+  };
+
   const isExistOrderWait = computed(() => {
     const { pageConfig, item } = props;
 
     if (
       dayjs(props.item.schDate).format('YYYY-MM-DD') ===
-      dayjs().format('YYYY-MM-DD')
+        dayjs().format('YYYY-MM-DD') ||
+      isTSchInfoDisabled(item)
     ) {
       return false;
     }

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf544358f2736cd20",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -77,9 +72,8 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
-    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104674058"
+    "appid": "2021003104670597"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -91,7 +85,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "浙江省人民医院毕节医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

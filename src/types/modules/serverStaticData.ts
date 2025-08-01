@@ -88,6 +88,14 @@ export interface ISystemConfig_ {
     isOrderPreSettle?: '1';
     /** 候补预约 */
     isOpenOrderWaiting?: '1';
+    // 对应的医生不显示候补按钮
+    orderWaitingDisabled?: {
+      [hosId: string]:
+        | string[]
+        | {
+            [hosDeptId: string]: string[];
+          }; // hosDocId[];
+    };
     /**开启后候补加号（候补兼容加号模式）*/
     isOpenAddedNum?: '1';
     /**开启后候补挂号与加号分离（目前只供演示用）*/
@@ -377,7 +385,7 @@ export interface ISystemConfig_ {
     /** 待缴费点击缴费时候提示的协议编号 (不配没有) */
     confirmPayFg?: string;
     // 已缴费底部的按钮
-    payedFooterBtn?: TButtonConfig|TButtonConfig[];
+    payedFooterBtn?: TButtonConfig | TButtonConfig[];
     /** 预结算 */
     isPreSettle?: '1';
 
@@ -515,7 +523,7 @@ export interface ISystemConfig_ {
     // '' 咨询  '1' 视频
     listTopTab: IOptions<'' | '1'>[];
     //首页的公告替换成别的轮播内容与点击事件
-    noticeReplaceParam?:TButtonConfig&{ buttonName?: string }
+    noticeReplaceParam?: TButtonConfig & { buttonName?: string };
   };
 
   /** 自助开单 SELF_BILLING */
