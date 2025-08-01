@@ -279,6 +279,7 @@ export class LoginUtils extends GStores {
       // https://opendocs.alipay.com/open/03oebe?pathHash=23ac7ae7&ref=api 本身是收费项目 BD可申请免费
       const {
         browser: { source },
+        aliFaceType,
       } = this.globalStore;
       const {
         result: { url, certifyId, verifyResult },
@@ -288,12 +289,12 @@ export class LoginUtils extends GStores {
         idCard: idCardNumber,
         returnUrl: '/',
         idType: '01',
+        type: aliFaceType,
       });
       const res = await apiAsync(my.startAPVerify, {
         url,
         certifyId,
       });
-
       const { result, resultStatus } = res;
 
       // resultStatus 6001

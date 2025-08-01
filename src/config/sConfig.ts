@@ -475,6 +475,7 @@ const scJson: Record<string, ISConfig> = {
   },
   /*浙江省人民医院毕节医院金海湖院区 */
   1001069: {
+    isOpenWechatSI:true,
     // medicalMHelp: {
     //   // alipay: {
     //     // medicalNation: {},

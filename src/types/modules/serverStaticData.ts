@@ -514,6 +514,8 @@ export interface ISystemConfig_ {
   HEALTH_COUNSEL: {
     // '' 咨询  '1' 视频
     listTopTab: IOptions<'' | '1'>[];
+    //首页的公告替换成别的轮播内容与点击事件
+    noticeReplaceParam?:TButtonConfig&{ buttonName?: string }
   };
 
   /** 自助开单 SELF_BILLING */
