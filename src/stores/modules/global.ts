@@ -110,7 +110,7 @@ const globalStore = defineStore('global', {
 
     // 是否中医style
     isTcmStyle(): boolean {
-      return ['1001035', '1001077',  '1001086'].includes(this.sysCode);
+      return ['1001035', '1001077', '1001086'].includes(this.sysCode);
       // return false
     },
 
@@ -131,11 +131,22 @@ const globalStore = defineStore('global', {
     h5MenuExtraData() {
       const userStore = useUserStore();
       return {
-          PATIENTID: userStore.patChoose.patientId,
-          HERENID: this.herenId,
-          TOKEN: this.token.accessToken,
-          OPENID: this.openId,
+        PATIENTID: userStore.patChoose.patientId,
+        HERENID: this.herenId,
+        TOKEN: this.token.accessToken,
+        OPENID: this.openId,
       };
+    },
+
+    /**
+     * 实名认证模式 1 身份认证 2 人脸认证. (都属于人脸, 俩种模式, 1 是老的人脸  2 新对接的人脸)
+     */
+    aliFaceType() {
+      if (['1001035'].includes(this.sysCode)) {
+        return '2'; // 人脸认证
+      }
+
+      return '1';
     },
   },
 

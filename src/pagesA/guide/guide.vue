@@ -685,12 +685,23 @@
       }),
     });
   };
-  const goOrder = () => {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
-        _url: '/pagesA/MyRegistration/selDepartment?clinicalType=1',
-      }),
-    });
+ 
+  const goOrder = async () => {
+     const hosList  = await ServerStaticData.getHosList();
+      if(hosList.length === 1){
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesA/MyRegistration/selDepartment', {
+            clinicalType: '1',
+            hosId: hosList[0].hosId,
+          }),
+        });
+      }else{
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
+            _url: '/pagesA/MyRegistration/selDepartment?clinicalType=1',
+          }),
+        });
+      }
   };
 
   const patChange = async ({ item } = {} as any) => {
