@@ -76,9 +76,14 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": ""
+    "appid": "2021003104670597"
   },
   "mp-baidu": {
     "usingComponents": true
@@ -90,7 +95,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "健康温州",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {
