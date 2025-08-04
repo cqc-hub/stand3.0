@@ -188,17 +188,21 @@
   const drayWaySelList = ref<IOptions[]>([]);
 
   const selPat = computed(() => {
-    if (pageProps.value.params) {
+    if (pageProps.value.deParams) {
+      return {
+        patientName: pageProps.value.deParams?.patientName || '就诊人',
+        _showId:
+          pageProps.value.deParams?.cardNumber ||
+          pageProps.value.deParams?.patientId,
+      };
+    } else if (pageProps.value.params) {
       if (
         gStores.userStore.patChoose.cardNumber ===
         pageProps.value.deParams?.cardNumber
       ) {
         return gStores.userStore.patChoose;
       } else {
-        return {
-          patientName: pageProps.value.deParams?.patientName || '就诊人',
-          _showId: pageProps.value.deParams?.cardNumber || '',
-        };
+        return {};
       }
     } else {
       return gStores.userStore.patChoose;
@@ -446,8 +450,8 @@
     });
     if (sign && result.drugList && result.drugList.length) {
       pageProps.value.deParams = {
-        cardNumber: result.drugList[0].cardNumber,
-        patientName: result.drugList[0].patientName,
+        cardNumber: result.cardNumber||result.patientId,
+        patientName: result.patientName,
       };
     } else {
       pageProps.value.deParams = {};

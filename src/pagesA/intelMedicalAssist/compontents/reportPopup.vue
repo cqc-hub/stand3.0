@@ -127,7 +127,7 @@
           上传报告图片
         </button>
         <!-- #ifndef H5 -->
-        <button class="btn btn-border btn-primary" @click="changeTtype">
+        <button class="btn btn-border btn-primary" @click="changeTtype" v-if="pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'">
           {{ isPhoto ? '解读本院报告' : '进行报告解读' }}
         </button>
         <!-- #endif -->
@@ -137,7 +137,7 @@
 </template>
 <script setup lang="ts">
   import { ref, nextTick, computed, onMounted, onUpdated } from 'vue';
-  import { reportPopupRef, isPhoto } from '../utils/utils';
+  import { reportPopupRef, isPhoto  } from '../utils/utils';
   import {
     ServerStaticData,
     ISystemConfig,
@@ -154,6 +154,7 @@
   import dayjs from 'dayjs';
 
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
+  const pageConfigEle=ref(<ISystemConfig['Electronic_Consultation_Sheet']>{});
   const pageList = ref<Record<string, any[]>>({});
   const tabCurrent = ref(0);
   const tabs = ref<any[]>([
@@ -420,6 +421,7 @@
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
+    pageConfigEle.value = await ServerStaticData.getSystemConfig('Electronic_Consultation_Sheet');
     // ImgUploadOption.value = {
     //   count: 3,
     //   title: '选择我的报告',

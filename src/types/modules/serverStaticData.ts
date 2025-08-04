@@ -572,7 +572,7 @@ export interface ISystemConfig_ {
       //微信小程序是否启用流文本形式Api
       isWXStreamApi?: '1';
       //是否开启报告解读
-      isReportAnalysis?: '1';
+      isReportAnalysis?: '1'|'2';//1:开启上传报告解读和本院报告解读功能，2:仅开启上传报告进行解读
       guessAskList?: Array<{ label: string; value: string }>;
       //isSelfMethod:reportAnalysis 报告解读功能
       //isSelfMethod:openWxService 唤起企业微信 在 "extraData"中跟isOpenWxServiceBtn的参数一致

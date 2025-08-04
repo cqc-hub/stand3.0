@@ -261,7 +261,7 @@
       return api.getRegOrderList;
     }
     if ([4].includes(tabCurrentDetail.value?.typeId)) {
-      return api.getRegOrderList;
+      return api.getForwardRegList;
     }
 
     return api.getAlternateList;

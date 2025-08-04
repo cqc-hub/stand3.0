@@ -319,11 +319,10 @@ const queryApi = {
     service.post('/phs-query/delivery/drugDeliveryCost', parm(data), {
       hideLoading: false,
     }),
-     getScanExpressDrugCost: (data) =>
+  getScanExpressDrugCost: (data) =>
     service.post('/phs-query/delivery/getScanExpressDrugCost', parm(data), {
       hideLoading: false,
     }),
-
 
   getScanDrugDelivery: (data) =>
     service.post('/phs-query/delivery/getScanDrugDelivery', parm(data), {
@@ -526,7 +525,6 @@ const queryApi = {
   // 江苏省中获取云影像
   getJSYunURL: (data) =>
     service.post<any>('/phs-query/examine/getJSYunURL', parm(data)),
-
 };
 
 // 挂号服务
@@ -1190,6 +1188,19 @@ const userApi = {
     service.post('/phs-extend/tcShop/getToken', parm(data), {
       hideLoading: false,
     }),
+  //东总远期预约
+  cancelForwardReg: (data: any) =>
+    service.post('/phs-reg/forwardReg/cancelForwardReg', parm(data)),
+  updateRegDate: (data: any) =>
+    service.post('/phs-reg/forwardReg/updateRegDate', parm(data)),
+  getNumberSource: (data: any) =>
+    service.post('/phs-reg/reg/getNumberSource', parm(data)),
+  getSchDateByDeptAndDoc: (data: any) =>
+    service.post('/phs-reg/forwardReg/getSchDateByDeptAndDoc', parm(data)),
+  getRegRecordInfo: (data: any) =>
+    service.post('/phs-reg/forwardReg/getRegRecordInfo', parm(data)),
+  getForwardRegList: (data: any) =>
+    service.post('/phs-reg/forwardReg/getForwardRegList', parm(data)),
 };
 //统一认证服务
 const authApi = {
