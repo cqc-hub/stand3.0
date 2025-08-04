@@ -94,12 +94,14 @@
           img: `https://phsdevoss.eheren.com/pcloud/image/yylx_gfyy@2x.png`,
           value: '2',
         },
-        {
-          tip: '网络线上就诊',
-          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
-          value: '',
-          path: '/pagesA/MyRegistration/registrationType?type=1',
-        },
+        // 在线云门诊
+        // {
+        //   tip: '网络线上就诊',
+        //   img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
+        //   value: '',
+        //   path: '/pagesA/MyRegistration/registrationType?type=1',
+        // },
+
         // {
         //   tip: ' ',
         //   img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
