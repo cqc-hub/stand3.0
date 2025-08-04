@@ -339,6 +339,7 @@ export class LoginUtils extends GStores {
   async faceVerifyAndPData({ name, idCardNumber }) {
     const {
       browser: { source },
+      aliFaceType,
     } = this.globalStore;
     const { verifyResult } = await this.faceVerify({ name, idCardNumber });
 
@@ -350,6 +351,7 @@ export class LoginUtils extends GStores {
     } = await actionApi({
       verifyResult,
       idCard: idCardNumber,
+      type: aliFaceType,
       source,
     });
 

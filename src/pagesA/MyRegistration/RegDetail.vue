@@ -1232,6 +1232,18 @@
       return refoundWaitOrder();
     }
 
+    if(pageProps.value._type === 'znpz'){
+      await RegDetailUtil.getInstance().refoundOrder({
+        returnUrl: joinQueryForUrl(
+          '/pagesA/guide/guide',
+          {
+            tabKey:1, 
+          }
+        ),
+      });
+      return
+    }
+  
     await RegDetailUtil.getInstance().refoundOrder({
       returnUrl: joinQueryForUrl(
         '/pagesA/MyRegistration/RegDetail',

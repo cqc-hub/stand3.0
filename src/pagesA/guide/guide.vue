@@ -682,6 +682,7 @@
         orderId: item.orderId,
         hosOrderId: item.hosOrderId,
         preWz: item.orderStatus === '10' && '1',
+        _type:'znpz'
       }),
     });
   };

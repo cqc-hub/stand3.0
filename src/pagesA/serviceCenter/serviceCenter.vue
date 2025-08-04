@@ -42,6 +42,12 @@
           <text class="desc">在线投诉建议</text>
         </view>
       </button>
+
+      <!-- <contact-button
+        tnt-inst-id="V1a_a38d"
+        scene="SCE01319285"
+        size="50px"
+      /> -->
       <!-- 微信没配置默认展示 -->
       <button
         v-if="isWx && pageConfig.isTxService"

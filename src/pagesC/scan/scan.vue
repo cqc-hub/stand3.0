@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
@@ -33,14 +33,40 @@
        * - 3 温附二 化验排队
        * - 4 江苏省中 用药详情
        * - 5 江苏省中电子发票
+       * - 6 满意度评价
+       * - 7 电子发票
+       * - 8 报告查询
+       * - 9 用药提醒
+       * - 10 电子导致单
+       * - 11 健康咨询
+       * - 12 健康咨询-详情
        */
-      type: '1' | '2' | '3' | '4' | '5';
+      type:
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
       btn?: string;
     }
   );
+
+  const _props = computed(() => {
+    return {
+      ...pageProps.value,
+      type: undefined,
+    };
+  });
 
   const initAddPat = async () => {
     const { params } = pageProps.value;
@@ -172,8 +198,146 @@
     });
   };
 
+  const goQuestion = () => {
+    useTBanner({
+      path: 'pagesC/question/questionAfterVisit',
+      type: 'h5',
+      isSelfH5: '1',
+      addition: { patientId: '_p' },
+      text: '满意度',
+      extraData: {
+        /**
+         * tab 1 门诊 2 住院
+         */
+        ..._props.value,
+      },
+    });
+  };
+
+  const goInvoice = () => {
+    const addition: any = {};
+    const { params } = pageProps.value;
+    if (!params) {
+      Object.assign(addition, {
+        token: 'token',
+        herenId: 'herenId',
+      });
+    }
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/eletronicInvoice/eletronicInvoice',
+      text: '电子发票',
+      addition,
+      extraData: {
+        /**
+         * params 扫码带
+         */
+        ..._props.value,
+      },
+      isLocal: '1',
+    });
+  };
+
+  const goReport = () => {
+    const addition: any = {};
+    const { params } = pageProps.value;
+    if (!params) {
+      Object.assign(addition, {
+        token: 'token',
+        herenId: 'herenId',
+      });
+    }
+    useTBanner({
+      type: 'self',
+      isSelfH5: '1',
+      path: 'pagesB/reportQuery/reportQuery',
+      text: '报告查询',
+      addition,
+      extraData: {
+        /**
+         * params 扫码带
+         */
+        ..._props.value,
+      },
+      isLocal: '1',
+    });
+  };
+
+  const goMedicationQuery = () => {
+    // 用药查询  出院带药
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/medicationQuery/medicationQuery',
+      text: '用药查询',
+      isLocal: '1',
+      addition: {
+        patientId: '_patientId',
+      },
+      extraData: {
+        /**
+         * tab 1, 2, 3
+         */
+        ..._props.value,
+      },
+    });
+  };
+
+  const goMedicalAssistant = () => {
+    const addition: any = {};
+    const { params } = pageProps.value;
+    if (!params) {
+      Object.assign(addition, {
+        patientId: '_patientId',
+      });
+    }
+
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesC/medicalAssistant/medicalAssistant',
+      text: '电子导诊单',
+      addition,
+      extraData: {
+        ..._props.value,
+      },
+      isLocal: '1',
+    });
+  };
+
+  const healthAdvisory = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/healthAdvisory/healthAdvisory',
+      text: '健康咨询',
+      isLocal: '1',
+    });
+  };
+
+  const healthAdvisoryDetail = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/healthAdvisory/healthAdvisoryDetail',
+      text: '健康咨询详情',
+      isLocal: '1',
+      extraData: {
+        /**
+         * id
+         */
+        ..._props.value,
+      },
+    });
+  };
+
   const init = async () => {
-    const { type, btn, _type } = pageProps.value;
+    const { type, btn, _type, params } = pageProps.value;
+    const _props = {
+      ...pageProps.value,
+      type: undefined,
+    };
 
     if (btn) {
       const btnParse = JSON.parse(btn) as TBannerConfig;
@@ -198,24 +362,62 @@
     }
 
     switch (type) {
+      // 温附二+3.0基线】扫描院内纸质凭条二维码，快捷绑定就诊人
       case '1':
         initAddPat();
         break;
 
+      // 2 温附二 满意度问卷
       case '2':
         initQuestion();
         break;
 
+      // 3 温附二 化验排队
       case '3':
         initTakeNumber();
         break;
 
+      // 江苏省中 用药详情
       case '4':
         initDrugDetail35();
         break;
 
+      // 5 中电子发票
       case '5':
         initInvoice();
+        break;
+
+      // 满意度评价
+      case '6':
+        goQuestion();
+        break;
+
+      // 电子发票
+      case '7':
+        goInvoice();
+        break;
+
+      // 报告查询
+      case '8':
+        goReport();
+        break;
+
+      // 用药提醒
+      case '9':
+        goMedicationQuery();
+        break;
+
+      // 电子导诊单
+      case '10':
+        goMedicalAssistant();
+        break;
+
+      case '11':
+        healthAdvisory();
+        break;
+
+      case '12':
+        healthAdvisoryDetail();
         break;
 
       default:

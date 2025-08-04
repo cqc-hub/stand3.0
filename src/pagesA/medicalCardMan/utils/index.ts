@@ -1339,6 +1339,7 @@ export const useAuthPerson = () => {
 
     const { patientName, patientId, idCardEncry } = pat;
     const { source } = gStores.globalStore.browser;
+    const { aliFaceType } = gStores.globalStore;
 
     const {
       result: { idCard },
@@ -1359,6 +1360,7 @@ export const useAuthPerson = () => {
       verifyResult,
       idCard,
       source,
+      type: aliFaceType,
     });
 
     await api.upRealNameAuth({
@@ -1427,6 +1429,6 @@ export const useAuthPerson = () => {
     realNameAuth,
     init,
     imgCanvas,
-    getRealNameAuth
+    getRealNameAuth,
   };
 };
