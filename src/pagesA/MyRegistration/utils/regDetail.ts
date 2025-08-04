@@ -27,7 +27,7 @@ export interface IPageProps {
   thRegisterId?: string;
   orderStatus: string; // 挂号状态
   alternateId?: string; // orderStatus === 3 候补预约时候有
-  _type?: 'waitReg';
+  _type?: 'waitReg' | 'znpz'; // 候补预约  znpz 智能陪诊点进详情
   searchType?: '1'; // 省中区别app挂号  不传为查询3.0接口  传1  查询2.0接口
 }
 
