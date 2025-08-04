@@ -276,6 +276,7 @@ export const aliPayOldSystemPayType = () => {
   channel = 'ALI_MINI';
   const aliMiniSystemList = [
     '1001033',
+    '1001035',
     '2001013',
     '1001052',
     '1001046',
@@ -305,7 +306,7 @@ export const aliPayOldSystemPayType = () => {
   }
 
   if (sysCode === '1001071') {
-    channel = 'CITIC_WX_JSAPI'; 
+    channel = 'CITIC_WX_JSAPI';
   }
 
   return channel;
