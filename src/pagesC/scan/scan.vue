@@ -38,8 +38,22 @@
        * - 8 报告查询
        * - 9 用药提醒
        * - 10 电子导致单
+       * - 11 健康咨询
+       * - 12 健康咨询-详情
        */
-      type: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
+      type:
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | '11'
+        | '12';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -292,6 +306,32 @@
     });
   };
 
+  const healthAdvisory = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/healthAdvisory/healthAdvisory',
+      text: '健康咨询',
+      isLocal: '1',
+    });
+  };
+
+  const healthAdvisoryDetail = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/healthAdvisory/healthAdvisoryDetail',
+      text: '健康咨询详情',
+      isLocal: '1',
+      extraData: {
+        /**
+         * id
+         */
+        ..._props.value,
+      },
+    });
+  };
+
   const init = async () => {
     const { type, btn, _type, params } = pageProps.value;
     const _props = {
@@ -370,6 +410,14 @@
       // 电子导诊单
       case '10':
         goMedicalAssistant();
+        break;
+
+      case '11':
+        healthAdvisory();
+        break;
+
+      case '12':
+        healthAdvisoryDetail();
         break;
 
       default:
