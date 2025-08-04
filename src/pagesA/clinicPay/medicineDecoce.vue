@@ -130,42 +130,47 @@
     }
     await wait(650);
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (pageProps.value.params) {
-      pageProps.value.deParams = decryptForPage(pageProps.value.params);
-      console.warn(
-        '获取到加密参数',
-        pageProps.value.params,
-        pageProps.value.deParams
-      );
-    }
+    // if (pageProps.value.params) {
+    //   pageProps.value.deParams = decryptForPage(pageProps.value.params);
+    //   console.warn(
+    //     '获取到加密参数',
+    //     pageProps.value.params,
+    //     pageProps.value.deParams
+    //   );
+    // }
     init();
-    console.log('pageProps.value.deParams1', pageProps.value.deParams);
   });
 
   const init = async () => {
     await fetchList();
     if (unPayList.value?.length == 0) {
-      useTBanner(
-        {
-          type: 'self',
-          path: 'pagesB/medicationAssistant/medicalHelp',
-          extraData: {
-            params: pageProps.value.params || '',
-          },
+      gStores.messageStore.showMessage('暂无可下单的代煎药品', 3000, {
+        closeCallBack: () => {
+          useTBanner(
+            {
+              type: 'self',
+              path: 'pagesB/medicationAssistant/medicalHelp',
+              extraData: {
+                params: pageProps.value.params || '',
+              },
+            },
+            'reLaunch'
+          );
         },
-        'reLaunch'
-      );
+      });
     }
   };
   const fetchList = async () => {
-    console.log('pageProps.value.deParams', pageProps.value.deParams);
     const { cardNumber, patientId } = gStores.userStore.patChoose;
-    const actionApi = pageProps.value.deParams
+    const { params: sign } = pageProps.value;
+
+    const actionApi = sign
       ? api.getChineseMedicineListNl
       : api.getChineseMedicineList;
     const { result } = await actionApi({
-      cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
-      patientId: pageProps.value?.deParams?.patientId || patientId,
+      sign,
+      cardNumber,
+      patientId,
     });
     unPayList.value = (result?.results || []).map((item) => {
       return {
@@ -256,9 +261,11 @@
       // #ifdef MP-ALIPAY
       payType = 'ALI_MINI';
       // #endif
+      const { params: sign } = pageProps.value;
       const params = {
-        cardNumber: pageProps.value?.deParams?.cardNumber || cardNumber,
-        patientId: pageProps.value?.deParams?.patientId || patientId,
+        sign,
+        cardNumber,
+        patientId,
         payType,
         source,
         patientName,
@@ -270,10 +277,9 @@
         prescId: selUnPayList.value.map((o) => o.prescId).join(','),
         subIds: selUnPayList.value.map((o) => o.phsOrderId).join(','),
       };
-      const actionApi = pageProps.value.deParams
+      const actionApi = sign
         ? api.chineseMedicinePayNl
         : api.chineseMedicinePay;
-
       const {
         result: { paySign, phsOrderNo },
       } = await actionApi(params);
@@ -285,7 +291,8 @@
         phsOrderSource: 5,
         hosId: params.hosId,
         patientName,
-        cardNumber: cardNumber || pageProps.value.deParams.cardNumber,
+        sign,
+        cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
       handlePayAfter();

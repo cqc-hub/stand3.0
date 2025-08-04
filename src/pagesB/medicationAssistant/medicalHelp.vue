@@ -7,7 +7,8 @@
   >
     <g-flag isShowFg typeFg="48" />
     <g-choose-pat
-      v-if="!pageProps.params"
+      :disabled="pageProps.params"
+      :pat="selPat"
       @choose-pat="tabChange(tabCurrent)"
     />
     <view v-if="tabField.length > 1" class="g-border-bottom">
@@ -166,6 +167,7 @@
     {} as {
       tabIndex: number;
       params?: string;
+      deParams?: any;
     }
   );
   const tabCurrent = ref(0);
@@ -184,6 +186,25 @@
   const selList = ref<IWaitListItem[]>([]);
   const seledList = ref<IWaitListItem[]>([]);
   const drayWaySelList = ref<IOptions[]>([]);
+
+  const selPat = computed(() => {
+    if (pageProps.value.params) {
+      if (
+        gStores.userStore.patChoose.cardNumber ===
+        pageProps.value.deParams?.cardNumber
+      ) {
+        return gStores.userStore.patChoose;
+      } else {
+        return {
+          patientName: pageProps.value.deParams?.patientName || '就诊人',
+          _showId: pageProps.value.deParams?.cardNumber || '',
+        };
+      }
+    } else {
+      return gStores.userStore.patChoose;
+    }
+  });
+
   const currentTabKey = computed(() => {
     return tabField.value[tabCurrent.value].key;
   });
@@ -423,6 +444,14 @@
     const { result = {} } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
+    if (sign && result.drugList && result.drugList.length) {
+      pageProps.value.deParams = {
+        cardNumber: result.drugList[0].cardNumber,
+        patientName: result.drugList[0].patientName,
+      };
+    } else {
+      pageProps.value.deParams = {};
+    }
 
     const { drugList: rList, patientId: _patientId } = result;
     rPatientId = _patientId;

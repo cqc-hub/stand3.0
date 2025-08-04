@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001069",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -24,7 +24,7 @@
 
     "1001036": {
       "wxAppid": "wx90dd2c3c4be8355a",
-      "h5Appid": "",
+      "h5Appid": "wxab05eba59d902b5f",
       "alipayAppid": "2021003120612222",
       "isvAlipayAppid": "2021003120637143",
       "name": "中国人民解放军东部战区总医院",
@@ -370,7 +370,7 @@
       "h5Appid": "",
       "alipayAppid": "2021005178602372",
       "isvAlipayAppid": "2021005172668444",
-      "name": "温州人民医院",
+      "name": "温州市人民医院",
       "isStartComeTest": false,
       "isOpenOcr": false
     },
