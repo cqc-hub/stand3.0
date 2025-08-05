@@ -35,7 +35,7 @@
           </view>
         </view>
         <view class="content relative">
-          <view class="upload-description pt32 p48c">
+          <view class="upload-description pt32 pl32 p48c">
             <text class="color-444 f28">图片上传示例</text>
             <text class="color-888 f26">请上传图文清晰、边框完整的图片</text>
           </view>

@@ -23,7 +23,7 @@
         class="g-flex-rc-cc hos-location-prefix"
       >
         <view class="iconfont icon-location">&#xe6d7;</view>
-        <view v-if="item.distanceFormat">距离{{ item.distanceFormat }}km</view>
+        <view v-if="item.distanceFormat && item.gisLat">距离{{ item.distanceFormat }}km</view>
         <view v-else>导航</view>
       </view>
 

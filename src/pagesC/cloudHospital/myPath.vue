@@ -124,43 +124,45 @@
     if (options.type !== '1') {
       query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&isTcmStyle=${isTcmStyle}&`;
     }
-
-    if (options.query) {
-      let queryArray: A[];
+   console.log('options.query',options.query)
+     if (options.query && typeof options.query === 'string') {
+    try {
+      let queryArray: A[] = [];
+      const parsedQuery = JSON.parse(options.query);
+      
       if (options.type == '1') {
-        queryArray = JSON.parse(options.query as string)?.query;
+        // 安全访问嵌套属性
+        queryArray = parsedQuery?.query ?? [];
       } else {
-        queryArray = JSON.parse(options.query as string);
+        queryArray = Array.isArray(parsedQuery) ? parsedQuery : [];
       }
-      try {
-        queryArray.map((item) => {
-          if (item in allData) {
-            // #ifdef MP-WEIXIN
-            if (
-              item === 'h5OpenId' &&
-              !gStores.globalStore.h5OpenId &&
-              globalGl.h5AppId
-            ) {
-              uni.reLaunch({
-                url: '/pages/home/startCome',
-              });
-            }
-            // #endif
-            query = query + item + '=' + allData[item] + '&';
-          } else {
-            // messageStore.showMessage(`携带${item}参数有误`, 1000);
-            console.warn(`携带${item}参数有误`);
+      
+      queryArray.forEach((item) => {
+        if (item in allData) {
+          // #ifdef MP-WEIXIN
+          if (
+            item === 'h5OpenId' &&
+            !gStores.globalStore.h5OpenId &&
+            globalGl.h5AppId
+          ) {
+            uni.reLaunch({
+              url: '/pages/home/startCome',
+            });
           }
-        });
-      } catch (e) {
-        console.warn(e);
-        return '';
-      }
-
-      return query.slice(0, -1);
-    } else {
-      return query.slice(0, -1);
+          // #endif
+          query = query + item + '=' + allData[item] + '&';
+        } else {
+          console.warn(`携带${item}参数有误`);
+        }
+      });
+    } catch (e) {
+      console.warn('JSON解析错误:', e);
     }
+    
+    return query.slice(0, -1);
+  } else {
+    return query.slice(0, -1);
+  }
   };
 
   const handleMessage = (evt) => {

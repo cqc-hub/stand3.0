@@ -65,10 +65,10 @@ Request.interceptors.request((request: IRequest) => {
   }
 
   // ========== 动态修改内网部署 baseURL 的逻辑放在这里 ==========
-  const skipBaseURLChangeApis = ['/phs-user/authUser/allinoneAuthApi'];
+  const skipBaseURLChangeApis = ['/phs-user/authUser/allinoneAuthApi','/phs-extend/customer/evaluate'];
   if (
     globalStore.sysCode === '1001082' &&
-    !request.url.includes(skipBaseURLChangeApis[0])
+    !skipBaseURLChangeApis.some(api => request.url.includes(api))
   ) {
     request.baseURL = 'https://eservice.wzswsj.gov.cn/gateway';
   }

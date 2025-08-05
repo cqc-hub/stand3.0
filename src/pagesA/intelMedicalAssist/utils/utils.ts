@@ -101,7 +101,7 @@ export const init = async (props) => {
   pageConfig.value = await ServerStaticData.getSystemConfig(
     'Electronic_Consultation_Sheet'
   );
-  if (pageConfig.value?.intelMedicalAssistConfig?.isReportAnalysis === '1') {
+  if (pageConfig.value?.intelMedicalAssistConfig?.isReportAnalysis) {
     isReportAnalysis.value = true;
   }
   if (pageConfig.value?.intelMedicalAssistConfig?.isWXStreamApi === '1') {
