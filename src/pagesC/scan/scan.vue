@@ -19,7 +19,13 @@
   import { computed, onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, TBannerConfig, useTBanner, wait } from '@/utils';
+  import {
+    getLocation,
+    GStores,
+    TBannerConfig,
+    useTBanner,
+    wait,
+  } from '@/utils';
   import api from '@/service/api';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { BASE_IMG } from '@/config/global';
@@ -147,6 +153,7 @@
   // 化验排队 https://h5.eheren.com/scan/1001067/scan?type=3&windowId=233
   const initTakeNumber = async () => {
     const { windowId } = pageProps.value;
+    const { longitude, latitude } = await getLocation(true);
 
     useTBanner({
       type: 'h5',
@@ -156,6 +163,8 @@
       extraData: {
         windowId,
         type: '3',
+        longitude,
+        latitude,
       },
       addition: {
         herenId: 'herenId',

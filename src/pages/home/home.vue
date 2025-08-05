@@ -193,7 +193,7 @@
                     color="--hr-neutral-color-10"
                     style="width: 100%"
                     background-color="transparent"
-                   
+
                   />
                 </view>
               </view>

@@ -278,7 +278,7 @@
     .banner-back1 {
       background: var(--hr-banner-color-1);
       border: 2rpx solid var(--hr-brand-color-3);
-    } 
+    }
     // 绿色
     .icon-size2 {
       font-size: var(--h-size-46);
@@ -293,11 +293,11 @@
     .banner-back2 {
       background: var(--hr-banner-color-2);
       border: 2rpx solid var(--h-color-border-1);
-    } 
+    }
     .banner-back3 {
       background: var(--hr-banner-color-1);
       border: 2rpx solid var(--hr-brand-color-3);
-    } 
+    }
     // 背景样式
     .icon-size-back1 {
       color: var(--hr-brand-color-6);
