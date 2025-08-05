@@ -82,7 +82,7 @@
       field: 'input-text',
     },
     {
-      label: '科室名称',
+      label: '就诊科室',
       field: 'input-text',
       key: 'deptName',
     },
