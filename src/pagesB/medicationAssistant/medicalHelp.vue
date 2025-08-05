@@ -454,7 +454,7 @@
         patientName: result.patientName,
       };
     } else {
-      pageProps.value.deParams = {};
+      pageProps.value.deParams = undefined;
     }
 
     const { drugList: rList, patientId: _patientId } = result;
