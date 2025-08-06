@@ -129,6 +129,7 @@ export type TSchInfo = {
   // 排班日期
   schDate: string;
   schId: string;
+  enData: string;
   visitingArea: string;
 
   // 排班状态 0有号 1停诊 2约满 3未放号
@@ -587,6 +588,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       hosId,
       schDate,
       schId,
+      enData,
       schQukCategor,
       docTitleName,
       regVerificationMode,
@@ -597,6 +599,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const clinicalType = props.value.clinicalType || selectSchInfo.clinicalType;
 
     const pageArg = {
+      enData,
       disNo,
       numId,
       timeDesc,

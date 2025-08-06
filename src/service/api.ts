@@ -1197,8 +1197,8 @@ const userApi = {
     service.post('/phs-reg/forwardReg/getSchDateByDeptAndDoc', parm(data)),
   getRegRecordInfo: (data: any) =>
     service.post('/phs-reg/forwardReg/getRegRecordInfo', parm(data)),
-  getForwardRegList: (data: any) =>
-    service.post('/phs-reg/forwardReg/getForwardRegList', parm(data)),
+  getForwardRegList: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/forwardReg/getForwardRegList', parm(data)),
 };
 //统一认证服务
 const authApi = {
@@ -1219,8 +1219,8 @@ const authApi = {
     });
   },
 
-  getAppletsOpenId: (data) => {
-    return service.post('/wx/getAppletsOpenId', parm(data, { outArg: true }), {
+  getAppletsOpenId: <T = any>(data) => {
+    return service.post<T>('/wx/getAppletsOpenId', parm(data, { outArg: true }), {
       baseURL: global.authUrl,
     });
   },

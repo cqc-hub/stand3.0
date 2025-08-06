@@ -93,7 +93,8 @@
               v-if="
                 orderConfig.isOrderWithoutTime !== '1' &&
                 isWaitForPay &&
-                !isWaitReg
+                !isWaitReg &&
+                pageProps.typeId !== '3'
               "
               class="out-time-info f28 color-error"
             >
@@ -500,8 +501,9 @@
 
   const isShowFooter = computed(() => {
     if (
-      !orderRegInfo.value.hosDocId &&
-      orderRegInfo.value.orderStatus === '43'
+      (!orderRegInfo.value.hosDocId &&
+        orderRegInfo.value.orderStatus === '43') ||
+      pageProps.value.typeId === '3'
     ) {
       return false;
     }
@@ -813,9 +815,9 @@
     result._appointmentDate = [appointmentDate, ampmName, appointmentTime]
       .filter((o) => o)
       .join(' ');
-      if(result.fee || result.totalCost){
-        result._fee = (result.fee || result.totalCost) + '元';
-      }
+    if (result.fee || result.totalCost) {
+      result._fee = (result.fee || result.totalCost) + '元';
+    }
     result._category = result.schQukCategor || result.categorName;
     orderRegInfo.value = result;
     qrCodeOpt.value.code = result[qrCode];
@@ -1236,18 +1238,15 @@
       return refoundWaitOrder();
     }
 
-    if(pageProps.value._type === 'znpz'){
+    if (pageProps.value._type === 'znpz') {
       await RegDetailUtil.getInstance().refoundOrder({
-        returnUrl: joinQueryForUrl(
-          '/pagesA/guide/guide',
-          {
-            tabKey:1, 
-          }
-        ),
+        returnUrl: joinQueryForUrl('/pagesA/guide/guide', {
+          tabKey: 1,
+        }),
       });
-      return
+      return;
     }
-  
+
     await RegDetailUtil.getInstance().refoundOrder({
       returnUrl: joinQueryForUrl(
         '/pagesA/MyRegistration/RegDetail',

@@ -17,6 +17,7 @@ export interface IPageProps {
   visitingArea: string;
   schDate: string;
   schId: string;
+  enData: string;
   schQukCategor: string;
   clinicalType: string;
   promptMessage?: string; // 就诊提示

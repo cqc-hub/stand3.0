@@ -352,6 +352,7 @@
       docTitleName,
       thRegisterId,
       regVerificationMode,
+      enData
     } = props.value;
     let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -399,6 +400,7 @@
       secondDeptName: secondDept?.deptName,
       secondHosDeptId: secondDept?.deptId,
       ampm,
+      enData,
       categor,
       categorName,
       clinicalType: clinicalType === 'null' ? '1' : clinicalType || '1',
