@@ -117,6 +117,14 @@
             </view>
           </view>
         </view>
+         <view v-if="item.deliveryType==='2'&&gStores.globalStore.sysCode === '1001035'" class="item-box f28">
+          <view class="row flex-normal">
+            <view class="row-label color-888">备注</view>
+            <view class="flex1 g-break-word color-444 flex-normal">
+              <view class="text-ellipsis">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
+            </view>
+          </view>
+        </view>
 
         <view
           v-if="item.takenDrugType && !showStatus &&!item.deliveryType "
@@ -158,7 +166,9 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { type IWaitListItem, getShowDrugName } from '../utils/medicalHelp';
+  import { GStores } from '@/utils';
 
+  const gStores = new GStores();
   const props = withDefaults(
     defineProps<{
       list: IWaitListItem[];

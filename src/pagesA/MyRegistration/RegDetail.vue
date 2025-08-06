@@ -518,6 +518,10 @@
     return pageProps.value._type === 'waitReg';
   });
 
+  const isForwardReg = computed(() => {
+    return pageProps.value._type === 'forwardReg';
+  });
+
   const isWaitForPay = computed(() => {
     return ['10', '101'].includes(orderRegInfo.value.orderStatus);
   });

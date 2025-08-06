@@ -27,7 +27,7 @@ export interface IPageProps {
   thRegisterId?: string;
   orderStatus: string; // 挂号状态
   alternateId?: string; // orderStatus === 3 候补预约时候有
-  _type?: 'waitReg' | 'znpz'; // 候补预约  znpz 智能陪诊点进详情
+  _type?: 'waitReg' | 'znpz' | 'forwardReg'; // 候补预约  znpz 智能陪诊点进详情 forwardReg远期预约
   searchType?: '1'; // 省中区别app挂号  不传为查询3.0接口  传1  查询2.0接口
 }
 
@@ -472,14 +472,25 @@ export class RegDetailUtil {
     const { result } = await api.getRegOrderInfo<IRegInfo>({
       orderId,
       source: this.gStores.globalStore.browser.source,
-      searchType
+      searchType,
+    });
+
+    return result;
+  }
+   /** 请求内部数据库 */
+  async getForWardDetailData(): Promise<IRegInfo> {
+    const { hosOrderId} = this.prop.value;
+
+    const { result } = await api.getRegRecordInfo({
+      hosOrderId,
+      source: this.gStores.globalStore.browser.source,
     });
 
     return result;
   }
 
   async getDataDetail(): Promise<IRegInfo> {
-    const { orderId, hosOrderId } = this.prop.value;
+    const { orderId, hosOrderId, _type } = this.prop.value;
 
     if (orderId) {
       this.orderRegInfo = await this.getDetailDataClassic();
@@ -487,6 +498,8 @@ export class RegDetailUtil {
       await wait(200);
       // 院内数据库直接在列表全部返回了(数据全部拼接成url)
       this.orderRegInfo = <any>this.prop.value;
+    } else if (hosOrderId && _type == 'forwardReg') {
+      this.orderRegInfo = await this.getForWardDetailData();
     } else {
       this.gStores.messageStore.showMessage('入参错误, 调用详情失败');
       throw new Error('入参错误, 调用详情失败');
@@ -499,7 +512,7 @@ export class RegDetailUtil {
     return await api.cancelReg({
       orderId: this.prop.value.orderId,
       source: this.gStores.globalStore.browser.source,
-      hisResult:this.prop.value.hisResult,
+      hisResult: this.prop.value.hisResult,
       hosOrderId: this.prop.value.hosOrderId,
     });
   }
