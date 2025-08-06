@@ -1193,8 +1193,6 @@ const userApi = {
     service.post('/phs-reg/forwardReg/cancelForwardReg', parm(data)),
   updateRegDate: (data: any) =>
     service.post('/phs-reg/forwardReg/updateRegDate', parm(data)),
-  getNumberSource: (data: any) =>
-    service.post('/phs-reg/reg/getNumberSource', parm(data)),
   getSchDateByDeptAndDoc: (data: any) =>
     service.post('/phs-reg/forwardReg/getSchDateByDeptAndDoc', parm(data)),
   getRegRecordInfo: (data: any) =>

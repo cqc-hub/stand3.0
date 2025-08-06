@@ -1367,7 +1367,6 @@ export const usePayPage = () => {
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
     const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
     const isNavgateToZLminiProm = getIsNavToMini();
-
     const payTypeList = determinePayType(
       isMedicalMode,
       isDigitalPay,
