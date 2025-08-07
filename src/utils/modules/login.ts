@@ -8,7 +8,13 @@ import {
 } from '@/stores';
 import { getSysCode, joinQuery } from '@/common';
 import { getOpenId, getOpenidTtResult } from '@/components/g-pay/index';
-import { apiAsync, cacheUtil, getTcMallToken, nameConvert } from '@/utils';
+import {
+  apiAsync,
+  cacheUtil,
+  getTcMallToken,
+  nameConvert,
+  ServerStaticData,
+} from '@/utils';
 import { useViewerStore } from '@/stores/modules/viewer';
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -165,6 +171,35 @@ export class LoginUtils extends GStores {
 
       await api.wfePatSync(reqData);
     }
+  }
+  //判断是否需要前往手机号登录
+  async judgeLoginByPhoneVerify() {
+    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
+      'RestOfConfig'
+    );
+    if (isLoginByPhoneVerify === '1') {
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        this.messageStore.showMessage(
+          '已取消一键授权登录，是否前往进行手机号登录？',
+          0,
+          {
+            useDialog: true,
+            dialogOpt: {
+              isShowCancel: true,
+              title: '登录',
+              cancelText: '暂不登录',
+              confirmText: '手机号登录',
+            },
+            closeCallBack,
+          }
+        );
+      });
+      if (confirm) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
   async getUerInfo(type?: 'alone', justGetInfo?: boolean) {
@@ -619,6 +654,10 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     const { isSkipPerfect, isLoginByOpenId } = await this.getConfig();
 
     if (detail.errMsg !== 'getPhoneNumber:ok') {
+      if (await this.judgeLoginByPhoneVerify()) {
+        uni.navigateTo({ url: '/pages/login/h5' });
+        return;
+      }
       this.messageStore.showMessage('用户取消授权', 3000);
       return Promise.reject(payload);
     }
@@ -799,6 +838,10 @@ export class AliPayLoginHandler extends LoginUtils implements LoginHandler {
         const { errorMessage } = error;
 
         if (errorMessage) {
+          if (await this.judgeLoginByPhoneVerify()) {
+            uni.navigateTo({ url: '/pages/login/h5' });
+            return;
+          }
           this.messageStore.showMessage(errorMessage);
         }
 

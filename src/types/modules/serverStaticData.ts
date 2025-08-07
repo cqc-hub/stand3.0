@@ -596,6 +596,8 @@ export interface ISystemConfig_ {
 
   /** 杂乱配置 */
   RestOfConfig: {
+    //手机号验证码登录
+    isLoginByPhoneVerify?: '1';
     // 客服中心  pagesA/serviceCenter/serviceCenter
     // 意见反馈使用自定义的页面?
     isCustomFeedback?: '1';

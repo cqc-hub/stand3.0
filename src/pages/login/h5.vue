@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    class="g-page"
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+  >
     <view class="container">
       <view class="header flex-normal flex-column">
         <image :src="hosLogo" class="hos-logo" />
@@ -14,8 +19,24 @@
           ref="gform"
         />
 
-        <view class="p32c mt70">
-          <button @click="gform.submit" class="btn btn-primary btn-round">
+        <view class="mb24 mt70 p32c">
+          <Fg-Agree
+            v-model:isCheck="isCheck"
+            :systemModeOld="gStores.globalStore.modeOld"
+          />
+        </view>
+        <view class="p32c">
+          <button
+            @click="gform.submit"
+            class="btn btn-primary btn-round"
+            :class="{
+              'btn-disabled':
+                !isCheck ||
+                !formData.cellPhoneNum ||
+                (!formData.code && props.isOpenPassword !== '1') ||
+                (!formData.password && props.isOpenPassword === '1'),
+            }"
+          >
             登录
           </button>
         </view>
@@ -31,6 +52,7 @@
   import { joinQueryForUrl } from '@/common';
   import { useGlobalStore, useUserStore } from '@/stores';
   import { getOpenId } from '@/components/g-pay/index';
+  import FgAgree from './components/fgAgree.vue';
   import {
     ServerStaticData,
     GStores,
@@ -44,12 +66,13 @@
 
   // https://health.eheren.com/taizhou_pc/#/taizhou_pc/user/login
 
-const props = defineProps({
-  isOpenPassword: {
-    type: String,
-    default: '',
-  },
-});
+  const props = defineProps({
+    isOpenPassword: {
+      type: String,
+      default: '',
+    },
+  });
+  const isCheck = ref(false);
   const hosLogo = ref('');
   const gStores = new GStores();
   const loginUtils = new LoginUtils();
@@ -120,45 +143,50 @@ const props = defineProps({
           rule: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
         },
       ],
-    }
+    },
   ]);
 
   const formSubmit = async ({ data }) => {
+     if (!isCheck.value) {
+        gStores.messageStore.showMessage('请先勾选同意书', 3000);
+        return;
+      }
     const userStore = useUserStore();
     let resultResponst;
     //登录之前清除缓存
     useGlobalStore().clearStore();
     useUserStore().clearStore();
-    if(props.isOpenPassword === '1'){
-    const reqArg = {
-      loginName:data.cellPhoneNum,
-      password:data.password,
-      sysCode: getSysCode(),
-    };
-    const payload = {
-      isOutArgs:true
-    }
-    const requestUrl = joinQueryForUrl('/login/usePasswordLogin',reqArg)
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(reqArg,requestUrl , payload)
-    );
-    getOpenId()
-    resultResponst = result
-    }else{
+    if (props.isOpenPassword === '1') {
+      const reqArg = {
+        loginName: data.cellPhoneNum,
+        password: data.password,
+        sysCode: getSysCode(),
+      };
+      const payload = {
+        isOutArgs: true,
+      };
+      const requestUrl = joinQueryForUrl('/login/usePasswordLogin', reqArg);
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(reqArg, requestUrl, payload)
+      );
+      getOpenId();
+      resultResponst = result;
+    } else {
       if (!isSendedVerify) {
-      gStores.messageStore.showMessage('请先获取验证码', 2000);
-      return;
-    }
-    const reqArg = {
-      ...data,
-      sysCode: getSysCode(),
-      accountType: '5',
-    };
+        gStores.messageStore.showMessage('请先获取验证码', 2000);
+        return;
+      }
+     
+      const reqArg = {
+        ...data,
+        sysCode: getSysCode(),
+        accountType: '5',
+      };
 
-    const { result } = await api.allinoneAuthApi(
-      packageAuthParams(reqArg, '/login/registerAndLogin')
-    );
-    resultResponst = result
+      const { result } = await api.allinoneAuthApi(
+        packageAuthParams(reqArg, '/login/registerAndLogin')
+      );
+      resultResponst = result;
     }
 
     const { accessToken, refreshToken } = resultResponst;
@@ -180,9 +208,9 @@ const props = defineProps({
   });
 
   onMounted(() => {
-    if(props.isOpenPassword === '1'){
+    if (props.isOpenPassword === '1') {
       formList.value.splice(1, 1);
-    }else{
+    } else {
       formList.value.pop();
     }
     gform.value.setList(formList.value);
@@ -212,6 +240,11 @@ const props = defineProps({
 <style lang="scss" scoped>
   .g-page {
     background-color: #fff;
+    --h-m-main-c: var(--hr-brand-color-2);
+
+    &.system-style-medical {
+      --h-m-main-c: #edd3c7;
+    }
   }
 
   .header {

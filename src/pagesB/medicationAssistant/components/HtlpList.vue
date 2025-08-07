@@ -44,7 +44,7 @@
             </text>
           </view>
 
-          <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow flex1">
+          <view @click.stop="arrowClick(item)" class="g-flex-rc-cc arrow ">
             <!-- <view
               v-if="
                 showStatus &&
