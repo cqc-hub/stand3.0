@@ -93,6 +93,12 @@ const manifestFileDataObj: any = {
     plugins: {},
     mergeVirtualHostAttributes: true,
     appid: '2021002139602458',
+
+    window: {
+      navigationStyle: 'custom',
+      defaultTitle: '',
+      titleBarColor: '#ffffff',
+    },
   },
   'mp-baidu': {
     usingComponents: true,

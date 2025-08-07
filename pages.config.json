@@ -7,10 +7,18 @@
     {
       "path": "pages/home/home",
       "style": {
-        "navigationBarTitleText": "",
-        // #ifdef MP-WEIXIN
-        "navigationStyle": "custom"
-        // #endif
+        "navigationBarTitleText": " ",
+        "defaultTitle": "",
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        },
+        "mp-alipay": {
+          "navigationStyle": "custom",
+          "transparentTitle": "always",
+          "titlePenetrate": "YES",
+          "defaultTitle": ""
+        }
       }
     },
     {
@@ -265,7 +273,7 @@
             "navigationBarTitleText": "授权确认"
           }
         },
-           {
+        {
           "path": "clinicPay/medicineDecoce",
           "style": {
             "navigationBarTitleText": "草药代煎登记"

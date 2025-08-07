@@ -73,7 +73,12 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597"
+    "appid": "2021003104670597",
+    "window": {
+      "navigationStyle": "custom",
+      "defaultTitle": "",
+      "titleBarColor": "#ffffff"
+    }
   },
   "mp-baidu": {
     "usingComponents": true
