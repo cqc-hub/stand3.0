@@ -93,7 +93,7 @@
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
-  import { ServerStaticData, GStores, LoginUtils } from '@/utils';
+  import {  GStores, LoginUtils } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
   import global from '@/config/global';
@@ -159,7 +159,7 @@
      * myhosType  '0' 需要登录  '1' 需要就诊人
      * query: '{}'
      * returnUrl  'pages/v3/collect/collectList'
-     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序 
+     * myEnvir  'hosnet'  互联网医院  'thirdmini'  第三方微信小程序
      */
 
     let { myhosType, returnUrl, query, myEnvir } = opt;
@@ -182,7 +182,7 @@
       fullUrl = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
         _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
       });
-    }  
+    }
 
     await beforeEach({
       url: fullUrl,

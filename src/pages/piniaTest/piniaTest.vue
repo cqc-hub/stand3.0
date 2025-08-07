@@ -1,8 +1,6 @@
 <template>
   <view class="">
-    <button @click="init">
-      杭口质保卡正式环境（测试用）
-    </button>
+    <button @click="init">杭口质保卡正式环境（测试用）</button>
   </view>
 </template>
 
@@ -327,6 +325,19 @@
     },
   };
 
+  const 省中体检预约: TButtonConfig = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '省中体检预约',
+    extraData: {
+      _type: 'tjyy1001035',
+    },
+    addition: {
+      patientId: '_patientId',
+    },
+  };
+
   const 种植档案: TButtonConfig = {
     type: 'h5',
     isSelfH5: '1',
@@ -508,16 +519,11 @@
   const testbuttonConfig = ref(杭口质保卡);
   onMounted(() => {
     setTimeout(() => {
-
       init();
     }, 1000);
   });
 
   const init = async () => {
-    const r = await new LoginUtils().faceVerifyAndPData({
-      name: '陈钦川',
-      idCardNumber: '330326199908286713',
-    });
-    console.log(r, 'rrr');
+    useTBanner(省中体检预约);
   };
 </script>

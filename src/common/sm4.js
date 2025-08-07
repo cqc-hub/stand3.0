@@ -7,6 +7,7 @@
 
 import base64js from './base64.js'
 
+const defaultSecretKey = 'hr895sm4c43a9fposd300k55c86ftbcc'
 export function sm4_ecb_encrypt(data) {
   var sm4 = new SM4Util();
   var encrypted = sm4.encryptData_ECB(data);
@@ -17,10 +18,10 @@ export function sm4_ecb_decrypt(data) {
   var decrypted = sm4.decryptData_ECB(data);
   return decrypted;
 }
- 
-function SM4Util() {
-  this.secretKey = 'hr895sm4c43a9fposd300k55c86ftbcc';
-  this.iv = '';
+
+export function SM4Util(secretKey = defaultSecretKey, iv = '') {
+  this.secretKey = secretKey;
+  this.iv = iv;
 
   this.decryptData_ECB = function (data) {
     var byteEcb = base64js.toByteArray(data);

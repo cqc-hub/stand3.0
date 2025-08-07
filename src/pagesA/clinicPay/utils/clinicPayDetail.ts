@@ -362,6 +362,11 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   return fCode;
 };
 
+// 省中微信智捷付
+export const getWxMedicalAuth = async () => {
+  globalGl.systemConfig
+};
+
 export const _getQxMedicalNation = async (
   payload = {} as {
     returnUrl?: string;

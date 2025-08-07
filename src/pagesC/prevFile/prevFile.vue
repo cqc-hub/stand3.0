@@ -98,6 +98,8 @@
         uni.openDocument({
           filePath: filePath,
           fileType: 'pdf',
+          // @ts-expect-error
+          showMenu: true,
           fail(e) {
             console.log('prev fail', e);
           },
