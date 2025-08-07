@@ -157,7 +157,7 @@
               </view>
               <view
                 class="notice flex-normal g-fade-in"
-                 @click="goToNotice1"
+                @click="goToNotice1"
                 v-if="
                   viewerStore.homeNoticeText ||
                   healthCounselConfig.noticeReplaceParam
@@ -193,7 +193,6 @@
                     color="--hr-neutral-color-10"
                     style="width: 100%"
                     background-color="transparent"
-
                   />
                 </view>
               </view>
@@ -350,7 +349,14 @@
               </view>
             </view>
             <view class="isCloseOld flex-normal" @tap="openModeOld">
-              <view class="iconfont icon-size">&#xe700;</view>
+              <view
+                :class="{
+                  'color-444': gStores.globalStore.getPageClass,
+                }"
+                class="iconfont icon-size"
+              >
+                &#xe700;
+              </view>
               关闭长辈模式
             </view>
             <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
