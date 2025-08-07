@@ -596,6 +596,8 @@ export interface ISystemConfig_ {
 
   /** 杂乱配置 */
   RestOfConfig: {
+    // home 页面底部产品图标
+    homeProductionIcon?: string;
     //手机号验证码登录
     isLoginByPhoneVerify?: '1';
     // 客服中心  pagesA/serviceCenter/serviceCenter

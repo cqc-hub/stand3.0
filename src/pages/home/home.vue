@@ -264,12 +264,7 @@
             <view v-if="global.sConfig.isOpenPopularSci">
               <homeArticle ref="HomeArticleRef" />
             </view>
-            <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-              <image
-                :src="$global.BASE_IMG + 'img_logo@3x.png'"
-                mode="widthFix"
-              />
-            </view>
+            <homeButtomProductionIcon />
 
             <view></view>
           </view>
@@ -367,12 +362,7 @@
                 </view>
                 关闭长辈模式
               </view>
-              <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-                <image
-                  :src="$global.BASE_IMG + 'img_logo@3x.png'"
-                  mode="widthFix"
-                />
-              </view>
+              <homeButtomProductionIcon />
             </view>
           </view>
         </ls-skeleton>
@@ -442,6 +432,7 @@
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import homeArticle from './componetns/homeArticle/index.vue';
   import homeDocCommend from './componetns/homeDocCommend.vue';
+  import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
   import { useCommonTo } from '@/common/checkJump';
@@ -1007,15 +998,7 @@
     .fun-list {
       margin-top: var(--h-margin-24);
     }
-    .bg-back {
-      margin: 30rpx auto 20rpx;
-      text-align: center;
 
-      image {
-        width: 180rpx;
-        height: 80rpx;
-      }
-    }
   }
 
   .uni-noticebar {
