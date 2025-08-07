@@ -362,6 +362,11 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   return fCode;
 };
 
+// 省中微信智捷付
+export const getWxMedicalAuth = async () => {
+  globalGl.systemConfig
+};
+
 export const _getQxMedicalNation = async (
   payload = {} as {
     returnUrl?: string;
@@ -1367,7 +1372,6 @@ export const usePayPage = () => {
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
     const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
     const isNavgateToZLminiProm = getIsNavToMini();
-
     const payTypeList = determinePayType(
       isMedicalMode,
       isDigitalPay,

@@ -29,6 +29,7 @@ export interface IPageProps {
   alternateId?: string; // orderStatus === 3 候补预约时候有
   _type?: 'waitReg' | 'znpz' | 'forwardReg'; // 候补预约  znpz 智能陪诊点进详情 forwardReg远期预约
   searchType?: '1'; // 省中区别app挂号  不传为查询3.0接口  传1  查询2.0接口
+  typeId?: '1' | '2' | '3'; // 3 app挂号
 }
 
 /**
@@ -477,9 +478,9 @@ export class RegDetailUtil {
 
     return result;
   }
-   /** 请求内部数据库 */
+  /** 请求内部数据库 */
   async getForWardDetailData(): Promise<IRegInfo> {
-    const { hosOrderId} = this.prop.value;
+    const { hosOrderId } = this.prop.value;
 
     const { result } = await api.getRegRecordInfo({
       hosOrderId,

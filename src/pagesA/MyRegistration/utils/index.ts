@@ -41,6 +41,7 @@ export interface IOrderSource {
   timeDesc: string;
   serialType: string;
   visitingArea: string;
+  enData: string;
   consultType?: keyof typeof consultTypeMap;
   disabled?: boolean;
 }
@@ -129,6 +130,7 @@ export type TSchInfo = {
   // 排班日期
   schDate: string;
   schId: string;
+  // enData: string;
   visitingArea: string;
 
   // 排班状态 0有号 1停诊 2约满 3未放号
@@ -592,11 +594,12 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       regVerificationMode,
       visitingArea,
     } = selectSchInfo;
-    const { disNo, numId, timeDesc } = item;
+    const { disNo, numId, timeDesc, enData } = item;
     const { promptMessage, thRegisterId, hosId: _pHosId } = props.value;
     const clinicalType = props.value.clinicalType || selectSchInfo.clinicalType;
 
     const pageArg = {
+      enData,
       disNo,
       numId,
       timeDesc,

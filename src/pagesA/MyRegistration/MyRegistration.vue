@@ -384,9 +384,10 @@
     }
   };
 
-  const goDetail = (item: IRegistrationCardItem) => {
+  const goDetail = async (item: IRegistrationCardItem) => {
     const { patList } = gStores.userStore;
-    const { patientId, orderId } = item;
+    const { patientId, orderId, orderStatus } = item;
+    const typeId = tabCurrentDetail.value?.typeId;
 
     if (patientId && patList.length) {
       const pat = patList.find((o) => o.patientId === patientId);
@@ -396,15 +397,28 @@
       }
     }
     let _type = props.value.type;
-    if (
-      props.value.type !== 'waitReg' &&
-      tabCurrentDetail.value?.typeId === 2 &&
-      !orderId
-    ) {
+    if (props.value.type !== 'waitReg' && typeId === 2 && !orderId) {
       _type = 'waitReg';
     } else if (tabCurrentDetail.value?.typeId === 4) {
       _type = 'forwardReg';
     }
+
+    // app 挂号
+    if (tabCurrentDetail.value?.typeId === 3 && orderStatus === '10') {
+      const { title, content } = await gStores.getSysAppMore('1232');
+      await new Promise(async (r) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: false,
+            confirmText: '确认',
+          },
+          closeCallBack: r,
+        });
+      });
+    }
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
         ...item,
@@ -414,6 +428,7 @@
         preWz: item.orderStatus === '10' && '1',
         thRegisterId: props.value.thRegisterId,
         _type,
+        typeId,
       }),
     });
   };

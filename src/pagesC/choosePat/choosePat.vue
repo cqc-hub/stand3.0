@@ -51,7 +51,12 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { GStores, PatientUtils, TButtonConfig, useTBanner } from '@/utils';
   import { IPat } from '@/stores';
-  import { deQueryForUrl, joinQuery } from '@/common';
+  import {
+    deQueryForUrl,
+    encryptedAes,
+    joinQuery,
+    joinQueryForUrl,
+  } from '@/common';
   import { HK_hook } from './utils';
   import globalGl from '@/config/global';
 
@@ -63,6 +68,8 @@
       {
         type:
           | 'xx'
+          // 省中体检预约
+          | 'tjyy1001035'
           // 乐清产科预约
           | 'lqckyy'
           | 'yxzndz'
@@ -99,6 +106,10 @@
 
       case 'lqckyy':
         lqCkyy();
+        break;
+
+      case 'tjyy1001035':
+        tjyy1001035();
         break;
 
       default:
@@ -161,6 +172,29 @@
         patientId: 'patientId',
       },
       isLocal: '1',
+    });
+  };
+
+  const tjyy1001035 = async () => {
+    const { patientName, cardNumber: patientId } = gStores.userStore.patChoose;
+
+    const { idCard } = await patientUtils.getPatientPersonalInfo({
+      idCard: true,
+    });
+
+    const d = {
+      patientId,
+      patientName,
+      idCard,
+    };
+
+    for (const key in d) {
+      d[key] = encryptedAes(d[key], '5X2ZkYTQ3OGJkY2E');
+    }
+
+    useTBanner({
+      type: 'h5',
+      path: joinQueryForUrl('https://appoint.st120.cn', d),
     });
   };
 

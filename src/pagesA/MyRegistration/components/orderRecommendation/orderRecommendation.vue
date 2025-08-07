@@ -1,15 +1,30 @@
 <template>
   <view class="">
     <block v-if="deptInfo.deptName && isShow">
-      <view @click="regDialogConfirm.show" class="flex-between content">
-        <view class="flex-normal">
-          <text class="iconfont order-icon color-blue f40">&#xe6dc;</text>
-          <text class="f32 g-bold">{{ deptInfo.deptName }}</text>
-        </view>
+      <view class="pt22 pb22 pr32 pl32 bg-white under-line relative">
+        <view
+          @click="regDialogConfirm.show"
+          class="flex-between1 ellipsis-line-clamp2 text-ellipsis"
+        >
+          <text class="">
+            <text class="iconfont mr-12 color-blue f40 relative icon-dept">
+              &#xe6dc;
+            </text>
+            <!-- <text class="f32 g-bold">{{ deptInfo.deptName }}</text> -->
+          </text>
 
-        <view class="flex-normal">
-          <text class="color-888 f28">科室简介</text>
-          <text class="iconfont arrow-icon color-888 f40">&#xe66b;</text>
+          <text class="f28 color-888">
+            {{ deptInfo.recommendation || `${deptInfo.deptName} 科室简介` }}
+          </text>
+
+          <!-- <text class="">
+            <text class="color-888 f28">科室简介</text>
+            <text class="iconfont arrow-icon color-888 f40">&#xe66b;</text>
+          </text> -->
+
+          <view class="arrow-icon1 absolute f28 color-blue">
+            <text class="iconfont color-888 f40">&#xe66b;</text>
+          </view>
         </view>
       </view>
 
@@ -19,7 +34,6 @@
         confirmText="确定"
         cannerText="取消"
         ref="regDialogConfirm"
-        :headerIcon="$global.BASE_IMG + 'v3-order-reg-confirm-add.png'"
         isHideFooter
       >
         <view>
@@ -100,9 +114,13 @@
 </script>
 
 <style lang="scss" scoped>
+  .under-line {
+    box-shadow: 0 -1rpx 0 0 var(--hr-neutral-color-2) inset;
+  }
+
   .content {
-    padding: 22rpx 32rpx;
-    background-color: #fff;
+    // padding: 22rpx 32rpx;
+    // background-color: #fff;
     box-shadow: 0 -1rpx 0 0 var(--hr-neutral-color-2) inset;
 
     .order-icon {
@@ -117,5 +135,16 @@
   .title-icon {
     width: 48rpx;
     height: 48rpx;
+  }
+
+  .arrow-icon1 {
+    // bottom: 22rpx;
+    right: 12rpx;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .icon-dept {
+    top: 6rpx;
   }
 </style>
