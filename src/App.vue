@@ -7,10 +7,10 @@
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
   import './styles/index.scss';
+  import env from '@/config/env';
 
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
-  import { joinQuery } from './common';
   // #endif
 
   const globalStore = useGlobalStore();
@@ -38,7 +38,7 @@
     }
     // #endif
 
-    if(globalStore.sysCode === '1001082'){
+    if (globalStore.sysCode === '1001082') {
       uni.reLaunch({
         url: 'pagesA/intelMedicalAssist/intelMedicalAssist',
       });
@@ -180,6 +180,41 @@
         });
       }
     }
+
+    if (globalStore.sysCode === '1001035') {
+      console.log('------------------www');
+      // const r = await (() => import('@/cacheUtil/1001035Util'))()
+      // console.log(r);
+      // // @ts-expect-error
+      // require('./cacheUtil/shadowlib/shadowlib.js', mod => {
+      //   console.log(mod, '233');
+      // })
+
+    }
+
+    // uni.addInterceptor('request', {
+    //   invoke(args) {
+    //     // #ifdef MP-WEIXIN
+    //     let vs = new Date().getTime();
+    //     let url = env.baseApi;
+    //     let encr = shadowlib.ar_shadow_addparametertourl(
+    //       JSON.stringify(wx.getSystemInfoSync()),
+    //       vs
+    //     );
+    //     if (args.url.includes(url)) {
+    //       if (args.method == 'GET' || args.method == 'get') {
+    //         args.data.arshadowurlqueryparamid = encr;
+    //       } else {
+    //         if (args.url.includes('?')) {
+    //           args.url += '&arshadowurlqueryparamid=' + encr;
+    //         } else {
+    //           args.url += '?arshadowurlqueryparamid=' + encr;
+    //         }
+    //       }
+    //     }
+    //     // #endif
+    //   },
+    // });
   });
 </script>
 <style lang="scss">

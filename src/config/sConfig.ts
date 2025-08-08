@@ -131,6 +131,11 @@ export interface ISConfig {
 
       /** 医保开启亲情付 */
       isGbFamilyPayment?: '1';
+
+      /**
+       * wx省中智捷付
+       */
+      medical1001035?: '1';
     };
   };
 
@@ -475,7 +480,7 @@ const scJson: Record<string, ISConfig> = {
   },
   /*浙江省人民医院毕节医院金海湖院区 */
   1001069: {
-    isOpenWechatSI:true,
+    isOpenWechatSI: true,
     // medicalMHelp: {
     //   // alipay: {
     //     // medicalNation: {},
@@ -627,7 +632,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001083: {
     // login: {
-      // isAliAuthBase: '1',
+    // isAliAuthBase: '1',
     // },
   },
   1001084: {
@@ -641,6 +646,12 @@ const scJson: Record<string, ISConfig> = {
   1001035: {
     // isDrugDelivery: '1',
     isOpenHelpOld: '1',
+    // medicalMHelp: {
+    //   wx: {
+    //     medicalDefault: '1',
+    //     medical1001035: '1',
+    //   },
+    // },
   },
 };
 
