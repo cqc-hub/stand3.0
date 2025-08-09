@@ -92,6 +92,7 @@
         hosId,
         hosDeptId,
         deptName,
+        clinicalType:'1'
       }),
     });
     // #endif

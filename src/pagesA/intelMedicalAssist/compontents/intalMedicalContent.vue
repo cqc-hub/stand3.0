@@ -209,7 +209,7 @@
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
               <text user-select selectable class="g-break-word g-blod">
-                正在为您解答
+                正在理解您的问题
               </text>
               <view
                 class="loading-cricle relative"
