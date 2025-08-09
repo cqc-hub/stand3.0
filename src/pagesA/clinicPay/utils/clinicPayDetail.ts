@@ -363,8 +363,23 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 };
 
 // 省中微信智捷付
-export const getWxMedicalAuth = async () => {
-  globalGl.systemConfig
+export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
+  const { wxAppid: appid } = globalGl;
+  const gStores = new GStores();
+
+  uni.navigateToMiniProgram({
+    appId: 'wxfde9fffbfa82be54',
+    path: 'pages/allOutPayCashier/authUniPro/authUni', //定值写死
+    envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+
+    extraData: {
+      appid,
+      userName,
+      idCard,
+    },
+  });
+
+  // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
 };
 
 export const _getQxMedicalNation = async (

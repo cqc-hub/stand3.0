@@ -865,6 +865,12 @@
         }
       ],
       "pagesE-plugins": ""
+    },
+    {
+      "root": "cacheUtil",
+      "pages": [],
+      "pagesE-plugins": "",
+      "__desc": "该分包存大容量函数"
     }
   ],
   "globalStyle": {

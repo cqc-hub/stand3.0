@@ -243,8 +243,9 @@
     usePayPage,
     _getQxMedicalNation,
     IPayListItem,
+    getWxMedicalAuth1001035,
   } from './utils/clinicPayDetail';
-  import { useTBanner, wait } from '@/utils';
+  import { apiAsync, useTBanner, wait } from '@/utils';
   import {
     deQueryForUrl,
     setLocalStorage,
@@ -436,13 +437,13 @@
     }
   });
 
-  const clickBtn=async(btn)=>{
+  const clickBtn = async (btn) => {
     if (btn.isOpenDrug === '1') {
       await getChineseMedicineList();
     } else {
-      useTBanner(btn!, 'navigateTo', pageProps.value)
+      useTBanner(btn!, 'navigateTo', pageProps.value);
     }
-  }
+  };
 
   // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
   onLoad(async (opt) => {
@@ -523,6 +524,16 @@
           pageProps.value
         );
     }
+
+    // const { confirm } = await apiAsync(uni.showModal, {
+    //   content: 'hint',
+    //   cancelText: '稍后缴费',
+    //   confirmText: '立即缴费',
+    // });
+    // getWxMedicalAuth1001035({
+    //   idCard: '320322199204236243',
+    //   userName: '路鑫瑶',
+    // });
   });
 </script>
 

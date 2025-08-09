@@ -524,6 +524,6 @@
   });
 
   const init = async () => {
-    useTBanner(省中体检预约);
+    useTBanner(queryNumber);
   };
 </script>
