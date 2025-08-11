@@ -900,16 +900,17 @@ const dealShowType7 = (list, requestId, chatId) => {
   }, 1000);
 };
 
-const dealShowType6 = async (list, requestId, chatId,tips) => { 
-  // #ifndef H5
-  // h5暂时不支持距离
-  if (!hosData.value?.length) {
-    msgState.value.msgLoad = true;
+// 建议修改为非阻塞的异步加载方式
+const loadHosDataAsync = async () => {
+  try {
+    // 不设置 msgState.value.msgLoad = true，避免阻塞主流程
     const location: any = await getLocation().catch((err) => {
-      console.error(err);
+      console.error('获取位置失败:', err);
+      // 提供默认位置或空值处理
+      return { longitude: '', latitude: '' };
     });
 
-    hosData.value = await ServerStaticData.getHosList(
+    const hosList = await ServerStaticData.getHosList(
       {
         gisLng: location?.longitude,
         gisLat: location?.latitude,
@@ -918,8 +919,21 @@ const dealShowType6 = async (list, requestId, chatId,tips) => {
         noCache: true,
       }
     );
-    msgState.value.msgLoad = false;
+    
+    hosData.value = hosList;
+  } catch (error) {
+    console.error('加载医院数据失败:', error);
+    // 可以设置默认值或错误状态
+    hosData.value = [];
   }
+};
+
+// 在适当时机调用，如组件挂载后或空闲时
+// loadHosData();
+const dealShowType6 = async (list, requestId, chatId,tips) => { 
+  // #ifndef H5
+  // h5暂时不支持距离 
+  loadHosDataAsync();
   // #endif
   msgList.value.push({
     my: false,
