@@ -7,11 +7,10 @@
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
   import './styles/index.scss';
-  import env from '@/config/env';
-
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
+  // import { shadowlib } from './uni_modules/shadowlib/config.js';
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
@@ -183,13 +182,15 @@
 
     if (globalStore.sysCode === '1001035') {
       console.log('------------------www');
-      // const r = await (() => import('@/cacheUtil/1001035Util'))()
-      // console.log(r);
+      // const { shadowlib } = require('./uni_modules/shadowlib/shadowen.js');
+      // console.log(shadowlib);
+
+      // const r = await (() => import('@/cacheUtil/1001035Util'))();
+      // console.log(r, '23');
       // // @ts-expect-error
       // require('./cacheUtil/shadowlib/shadowlib.js', mod => {
       //   console.log(mod, '233');
       // })
-
     }
 
     // uni.addInterceptor('request', {
