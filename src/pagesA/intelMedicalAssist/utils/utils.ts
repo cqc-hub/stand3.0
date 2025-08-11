@@ -121,7 +121,10 @@ export const init = async (props) => {
     isMessage: false, //通知效果
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
-    headerLineMenu: props?.type.includes('homePage') || globalGl.SYS_CODE === '1001082' ? 'homePage' : 'back',
+    headerLineMenu:
+      props?.type.includes('homePage') || globalGl.SYS_CODE === '1001082'
+        ? 'homePage'
+        : 'back',
   };
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -689,22 +692,21 @@ export const handleServer = async (
         ),
       });
     }
-      if (item?.isExpired) {
-        // 新增第三方过期拦截判断
-        const isExpired = await checkLoginExpired();
-        if (isExpired) {
-          // 登录过期，引导重新登录
-          uni.reLaunch({
-            url: '/pages/home/my?setOutLogin=1',
-          });
-          throw new Error('登录已过期，请重新登录');
-        }else{
-            useTBanner(item);
-        }
-      }else{
-          useTBanner(item);
+    if (item?.isExpired) {
+      // 新增第三方过期拦截判断
+      const isExpired = await checkLoginExpired();
+      if (isExpired) {
+        // 登录过期，引导重新登录
+        uni.reLaunch({
+          url: '/pages/home/my?setOutLogin=1',
+        });
+        throw new Error('登录已过期，请重新登录');
+      } else {
+        useTBanner(item);
       }
-
+    } else {
+      useTBanner(item);
+    }
   }
 };
 export const openServicesChat = (query) => {
@@ -831,6 +833,7 @@ const dealShowType1withStream = async (
     }
     let index = 0; // 当前添加的字符索引
     msgList.value[typeInIndex].msg += answer;
+    // console.log('msgList.value[typeInIndex].msg',msgList.value[typeInIndex].msg)
     scrollToNewMsg();
     rl('');
     // const interval = setInterval(() => {
@@ -1250,6 +1253,16 @@ export const stopChunkRequest = () => {
   taskQueue.clearTask();
 };
 
+const keepOnlyFirstSpace = (str) => {
+  const firstSpaceIndex = str.indexOf(' ');
+  if (firstSpaceIndex === -1) return str.trim();
+
+  return (
+    str.slice(0, firstSpaceIndex).trim() +
+    ' ' +
+    str.slice(firstSpaceIndex + 1).replace(/\s+/g, '')
+  );
+};
 const handleOneChunk = async (chunk: string, typeInIndex: number) => {
   if (chunk.includes('event:message')) {
     const idMatch = chunk.match(/id:(.*)/);
@@ -1267,7 +1280,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     // #ifdef MP-ALIPAY
     dataMatch = chunk.match(/data:([\s\S]*?)event:message/);
     // #endif
-    const data = dataMatch ? dataMatch[1].trim() : null;
+    const data = dataMatch ? keepOnlyFirstSpace(dataMatch[1]) : null;
     // console.warn('文本：', data);
     id && (msgState.value.lastChatId = id);
     questionId && (msgState.value.requestId = questionId);
