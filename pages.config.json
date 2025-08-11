@@ -868,7 +868,11 @@
     },
     {
       "root": "cacheUtil",
-      "pages": [],
+      "pages": [
+        {
+          "path": "index"
+        }
+      ],
       "pagesE-plugins": "",
       "__desc": "该分包存大容量函数"
     }
@@ -883,5 +887,8 @@
     // #ifdef MP-WEIXIN || H5 || MP-TOUTIAO
     "navigationBarBackgroundColor": "#fff"
     // #endif
-  }
+  },
+  "sideEffects": [
+    "src/cacheUtil/shadowlib/**/*.js"
+  ]
 }

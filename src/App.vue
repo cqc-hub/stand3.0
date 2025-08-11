@@ -10,7 +10,23 @@
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
-  // import { shadowlib } from './uni_modules/shadowlib/config.js';
+  // import { shadowlib } from './uni_modules/libshadowesm/shadowlib.js';
+  // import shadowlib from './uni_modules/libshadowesm/shadowlib.js';
+  // const uni_modules_libshadowesm_shadowlib = require('./uni_modules/libshadowesm/shadowlib.js');
+  // const uni_modules_libshadowesm_config = require('./uni_modules/libshadowesm/config.js');
+  // const t = require('./uni_modules/libshadowesm/tt.js');
+  // import { fn } from './uni_modules/libshadowesm/tt.js'
+  // import { fn } from '@/utils/tt.js'
+  // const fn1 = require('./utils/tt.js');
+
+  console.log({
+    // fn,
+    // fn,
+    // fn1,
+    // uni_modules_libshadowesm_shadowlib,
+    // uni_modules_libshadowesm_config,
+    // shadowlib,
+  });
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
