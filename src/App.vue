@@ -7,11 +7,26 @@
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
   import './styles/index.scss';
-
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
-  import { joinQuery } from './common';
   // #endif
+  // import { shadowlib } from './uni_modules/libshadowesm/shadowlib.js';
+  // import shadowlib from './uni_modules/libshadowesm/shadowlib.js';
+  // const uni_modules_libshadowesm_shadowlib = require('./uni_modules/libshadowesm/shadowlib.js');
+  // const uni_modules_libshadowesm_config = require('./uni_modules/libshadowesm/config.js');
+  // const t = require('./uni_modules/libshadowesm/tt.js');
+  // import { fn } from './uni_modules/libshadowesm/tt.js'
+  // import { fn } from '@/utils/tt.js'
+  // const fn1 = require('./utils/tt.js');
+
+  console.log({
+    // fn,
+    // fn,
+    // fn1,
+    // uni_modules_libshadowesm_shadowlib,
+    // uni_modules_libshadowesm_config,
+    // shadowlib,
+  });
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
@@ -38,7 +53,7 @@
     }
     // #endif
 
-    if(globalStore.sysCode === '1001082'){
+    if (globalStore.sysCode === '1001082') {
       uni.reLaunch({
         url: 'pagesA/intelMedicalAssist/intelMedicalAssist',
       });
@@ -180,6 +195,43 @@
         });
       }
     }
+
+    if (globalStore.sysCode === '1001035') {
+      console.log('------------------www');
+      // const { shadowlib } = require('./uni_modules/shadowlib/shadowen.js');
+      // console.log(shadowlib);
+
+      // const r = await (() => import('@/cacheUtil/1001035Util'))();
+      // console.log(r, '23');
+      // // @ts-expect-error
+      // require('./cacheUtil/shadowlib/shadowlib.js', mod => {
+      //   console.log(mod, '233');
+      // })
+    }
+
+    // uni.addInterceptor('request', {
+    //   invoke(args) {
+    //     // #ifdef MP-WEIXIN
+    //     let vs = new Date().getTime();
+    //     let url = env.baseApi;
+    //     let encr = shadowlib.ar_shadow_addparametertourl(
+    //       JSON.stringify(wx.getSystemInfoSync()),
+    //       vs
+    //     );
+    //     if (args.url.includes(url)) {
+    //       if (args.method == 'GET' || args.method == 'get') {
+    //         args.data.arshadowurlqueryparamid = encr;
+    //       } else {
+    //         if (args.url.includes('?')) {
+    //           args.url += '&arshadowurlqueryparamid=' + encr;
+    //         } else {
+    //           args.url += '?arshadowurlqueryparamid=' + encr;
+    //         }
+    //       }
+    //     }
+    //     // #endif
+    //   },
+    // });
   });
 </script>
 <style lang="scss">

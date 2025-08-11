@@ -198,7 +198,7 @@
 
     <view :id="`smartChatRoomItem_load`" key="smartChatRoomItem_load">
       <view
-        v-show="msgState.msgLoad && !chunkStatus.isTyping"
+      v-show="msgState.msgLoad && !chunkStatus.isTyping"
         class="flex-column smartChatRoom-item"
       >
         <view
@@ -209,8 +209,9 @@
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
               <text user-select selectable class="g-break-word g-blod">
-                正在为您解答
+               正在理解您的问题
               </text>
+               <text class="progress-text">{{ progressWidth }}%</text> 
               <view
                 class="loading-cricle relative"
                 v-for="(item, index) in 4"
@@ -225,7 +226,7 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref, computed, getCurrentInstance, onMounted } from 'vue';
+  import { ref, computed, getCurrentInstance, onMounted, watch, onUnmounted } from 'vue';
   import { type StyleConfigType } from '../utils/types';
   import {
     msgState,
@@ -257,12 +258,51 @@
   }>();
 
   const sysAppMore = ref('');
+  let progressTimer: number | null = null;
+  const progressWidth = ref(0);
+
+ watch(() => msgState.value.msgLoad, (newVal) => {
+    if (newVal) { 
+      // 重置进度条
+      progressWidth.value = 0;
+      
+      // 清除之前的进度定时器
+      if (progressTimer) {
+        clearInterval(progressTimer);
+      }
+      
+      // 启动进度条动画
+      progressTimer = setInterval(() => {
+        // 模拟不规律的进度增长
+        const increment = Math.random() * 4 + 2; // 2-10之间的随机数
+        progressWidth.value =Math.floor(Math.min(progressWidth.value + increment, 95));
+      }, 400);
+      
+    } else { 
+      
+      // 清除进度条定时器并完成进度
+      if (progressTimer) {
+        clearInterval(progressTimer);
+        progressTimer = null;
+      }
+      
+      // 瞬间完成进度条
+      progressWidth.value = 100;
+    }
+  });
 
   onMounted(async () => {
     const gStores = new GStores();
     const { title, content } = await gStores.getSysAppMore('1222');
     sysAppMore.value = content;
   });
+
+  onUnmounted(() => {
+  if (progressTimer) {
+      clearInterval(progressTimer);
+      progressTimer = null;
+    }
+});
 
   const previewImage = (url) => {
     uni.previewImage({
@@ -329,6 +369,13 @@
 
   .smartChatRoomItem_load {
     align-items: center;
+
+     .progress-text {
+        font-size: 24rpx;
+        color: var(--hr-brand-color-6); 
+        margin: 0 6px;
+      }
+    
     .loading-cricle {
       width: 16rpx;
       height: 16rpx;

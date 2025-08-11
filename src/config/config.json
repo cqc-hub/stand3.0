@@ -19,7 +19,8 @@
       "name": "江苏省中医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-      "isSearchInHos": true
+      "isSearchInHos": true,
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png"
     },
 
     "1001036": {

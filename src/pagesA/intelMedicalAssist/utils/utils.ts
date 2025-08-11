@@ -91,6 +91,12 @@ export const chunkStatus = ref<ChunkStatusType>({
   newMessage: '',
 });
 
+const test = async () => {
+  const data = {"showType":6,"tips":"123132","list":[{"hosId":"330301010","hosName":"温州市健康妇幼指导中心","hosType":17,"tel":"0577-88865516","address":"温州市鹿城区新城大道41号温州市健康妇幼指导中心2-3楼","gisLng":120.711258,"gisLat":27.996367},{"hosId":"330301002","hosName":"温州市中西医结合医院","hosType":24,"hosLevel":1,"tel":"0577-88910524","address":"温州市锦绣路75号","gisLng":120.701466,"gisLat":28.004984},{"hosId":"330304015","hosName":"温州市瓯海区第三人民医院","hosType":1,"hosLevel":6,"tel":"0577-56953791","address":" 温州市瓯海区瓯越大道2286号","gisLng":120.690610,"gisLat":27.979925},{"hosId":"330302037","hosName":"温州建国医院","hosType":1,"hosLevel":6,"tel":"0577-56889999","address":"浙江省温州市鹿城区温州大道洛河路2号","gisLng":120.671975,"gisLat":27.987707},{"hosId":"330301008","hosName":"温州医科大学附属眼视光医院","hosType":1,"hosLevel":1,"tel":"0577-88068888","address":"温州市学院西路270号","gisLng":120.678605,"gisLat":28.012890}]};
+  const { showType, list } = data;
+  switchHandleResult(showType, list, '', '',undefined,'提示语');
+  
+};
 export const reload = async (isMess) => {
   popipHasShow.value = false;
   isPhoto.value = true;
@@ -130,6 +136,7 @@ export const init = async (props) => {
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
   props?.type.includes('report') && ininWithReport(props?.reportId);
   reload(props?.isMess);
+  // test()
 };
 export const ininWithReport = async (reportId?: string) => {
   console.log('ininWithReport', reportId);
@@ -340,7 +347,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   // #endif
 
   const {
-    result: { showType, list, requestId, chatId },
+    result: { showType, list, requestId, chatId, tips },
   } = await api
     .customerAIask({
       content: value,
@@ -356,7 +363,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   msgState.value.lastChatId = chatId;
   msgState.value.requestId = requestId;
 
-  switchHandleResult(showType, list, requestId, chatId);
+  switchHandleResult(showType, list, requestId, chatId,undefined,tips);
 };
 
 const switchHandleResult = async (
@@ -364,7 +371,8 @@ const switchHandleResult = async (
   list: Array<any>,
   requestId: string,
   chatId: string,
-  typeInIndex?: number
+  typeInIndex?: number,
+  tips?:string
 ) => {
   if (!(list && list.length)) {
     msgList.value.push({
@@ -395,7 +403,7 @@ const switchHandleResult = async (
         break;
       //科室列表
       case 6:
-        await dealShowType6(list, requestId, chatId);
+        await dealShowType6(list, requestId, chatId,tips);
         break;
       case 9:
         //地址
@@ -414,6 +422,11 @@ const switchHandleResult = async (
       case 12:
         dealShowType12(list, requestId, chatId);
         break;
+      
+     case 101:
+      //推荐有胸痛、卒中相关展示最近医院
+        dealShowType101(list, requestId, chatId);
+        break;
 
       default:
         msgList.value.push({
@@ -424,7 +437,7 @@ const switchHandleResult = async (
         break;
     }
   }
-
+  
   scrollToNewMsg();
 };
 
@@ -885,18 +898,22 @@ const dealShowType7 = (list, requestId, chatId) => {
     chatId,
     isSysAppMore: false,
   });
+    setTimeout(() => {
+    scrollToNewMsg();
+  }, 1000);
 };
 
-const dealShowType6 = async (list, requestId, chatId) => {
-  // #ifndef H5
-  // h5暂时不支持距离
-  if (!hosData.value?.length) {
-    msgState.value.msgLoad = true;
+// 建议修改为非阻塞的异步加载方式
+const loadHosDataAsync = async () => {
+  try {
+    // 不设置 msgState.value.msgLoad = true，避免阻塞主流程
     const location: any = await getLocation().catch((err) => {
-      console.error(err);
+      console.error('获取位置失败:', err);
+      // 提供默认位置或空值处理
+      return { longitude: '', latitude: '' };
     });
 
-    hosData.value = await ServerStaticData.getHosList(
+    const hosList = await ServerStaticData.getHosList(
       {
         gisLng: location?.longitude,
         gisLat: location?.latitude,
@@ -905,12 +922,25 @@ const dealShowType6 = async (list, requestId, chatId) => {
         noCache: true,
       }
     );
-    msgState.value.msgLoad = false;
+    
+    hosData.value = hosList;
+  } catch (error) {
+    console.error('加载医院数据失败:', error);
+    // 可以设置默认值或错误状态
+    hosData.value = [];
   }
+};
+
+// 在适当时机调用，如组件挂载后或空闲时
+// loadHosData();
+const dealShowType6 = async (list, requestId, chatId,tips) => { 
+  // #ifndef H5
+  // h5暂时不支持距离 
+  loadHosDataAsync();
   // #endif
   msgList.value.push({
     my: false,
-    msg: '建议您到以下科室挂号就诊',
+    msg: tips ? tips : '建议您到以下科室挂号就诊',
     type: 62,
     addRessList: list,
     hosData: hosData.value,
@@ -918,6 +948,9 @@ const dealShowType6 = async (list, requestId, chatId) => {
     chatId,
     isSysAppMore: false,
   });
+  setTimeout(() => {
+    scrollToNewMsg();
+  }, 1000);
 };
 
 const dealShowType9 = (list, requestId, chatId) => {
@@ -1039,6 +1072,55 @@ const dealShowType12 = (lists, requestId, chatId) => {
   scrollToNewMsg();
 };
 
+//为卒中新增的类型 但实际没用
+const dealShowType101 = (list, requestId, chatId) => { 
+    if (list?.length) {
+      
+    list.forEach((item, index) => {
+
+    const {
+        hosName: title,
+        address: subTitle,
+        latitude,
+        longitude,
+        tel:phones,
+      } = item
+      msgList.value.push({
+        my: false,
+        msg: index == 0 ? '以下是为您推荐的医院' : '',
+        type: 3,
+           addRessInfo: {
+          title,
+          subTitle,
+          latitude,
+          longitude,
+          phones:[phones],
+          distance:"8.9Km"
+         },
+        requestId,
+        chatId,
+        isSysAppMore: judgeIsSysAppMore(requestId),
+      });
+    });
+  }
+  // msgList.value.push({
+  //   my: false,
+  //   msg: '以下是为您推荐的科室。请注意，如果您有胸痛、卒中的迹象，请立即到就近的医院或卫生院就诊，以免耽误病情。',
+  //   type: 3,
+  //   requestId,
+  //   chatId,
+  //   isSysAppMore: judgeIsSysAppMore(requestId),
+  //   addRessInfo: {
+  //     title,
+  //     subTitle,
+  //     latitude,
+  //     longitude,
+  //     phones,
+  //     distance:"8.9Km"
+  //   },
+  // }); 
+};
+
 const judgeIsSysAppMore = (requestIdStr) => {
   if (requestIdStr && msgList.value?.length) {
     let lastQuesetIdStr = '';
@@ -1074,10 +1156,11 @@ const processChunks = (chunkTemp: string, typeInIndex: number) => {
 let requestTask: any = null;
 let taskQueue = new TaskQueue();
 
-const typeInAsk = (value, answertype) => {
+const typeInAsk = async (value, answertype) => {
   const gStores = new GStores();
+  let baseApi =  gStores.globalStore.sysCode === '1001082'?'https://eservice.wzswsj.gov.cn':'https://netphs.eheren.com/gateway';
   const settings = {
-    url: `${env.baseApi}/phs-extend/customer/aiStreamAsk`,
+    url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
     timeout: 0,
     responseType: 'text',
@@ -1093,7 +1176,7 @@ const typeInAsk = (value, answertype) => {
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
-        type: answertype,
+        type: answertype
       },
     }),
   };
@@ -1204,7 +1287,7 @@ const typeInAskH5 = (value: any, answertype) => {
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 3 || xhr.readyState === 4) {
-      const newResponse = xhr.responseText;
+      const newResponse = xhr.responseText; 
       const newChunk = newResponse.substring(previousResponse.length);
       previousResponse = newResponse;
       if (newChunk) {
@@ -1304,7 +1387,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     const jsonMatch = chunk.replaceAll('\r\n', '').match(/data:(\{.*\})/);
     const jsonData = JSON.parse(jsonMatch?.length ? jsonMatch[1] : '{}');
     console.log('提取的 JSON 数据:', jsonData);
-    const { showType, list, requestId, chatId } = jsonData;
+    const { showType, list, requestId, chatId, tips } = jsonData;
     if (JSON.stringify({}) === '[{}]') {
       msgList.value.push({
         my: false,
@@ -1316,7 +1399,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     }
     chatId && (msgState.value.lastChatId = chatId);
     requestId && (msgState.value.requestId = requestId);
-    switchHandleResult(showType, list, requestId, chatId, typeInIndex);
+    switchHandleResult(showType, list, requestId, chatId, typeInIndex,tips);
   }
 };
 

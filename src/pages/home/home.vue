@@ -5,48 +5,39 @@
     }"
     class="g-page"
   >
-    <home-Nav />
     <scroll-view
       @scroll="pageScroll"
       @scrolltolower="handePageBottom"
       class="scroll-page g-container"
       scroll-y
     >
-      <ls-skeleton
-        :skeleton="skeletonProps.skeleton"
-        :loading="viewerStore.loading"
-      >
-        <!-- 正常版本 -->
-        <view
-          class="homePage"
-          v-if="!gStores.globalStore.modeOld"
-          :class="{
-            [gStores.globalStore.getPageClass]: true,
-          }"
+      <img
+        v-if="gStores.globalStore.isTcmStyle"
+        :src="$global.BASE_IMG + `stand3_home_nav_bg-tcm.png`"
+        class="w-full absolute"
+        mode="widthFix nav-img-bg"
+      />
+      <view class="relative z-1">
+        <home-Nav />
+        <ls-skeleton
+          :skeleton="skeletonProps.skeleton"
+          :loading="viewerStore.loading"
         >
+          <!-- 正常版本 -->
           <view
-            class="search flex-between"
-            v-if="global.sConfig.isHideHomeSearch != '1'"
+            class="homePage"
+            v-if="!gStores.globalStore.modeOld"
+            :class="{
+              [gStores.globalStore.getPageClass]: true,
+            }"
           >
-            <!-- 在有搜索框的前提下 是否开启助老版本 -->
-            <template v-if="global.sConfig.isOpenHelpOld == '1'">
-              <view class="w70" @click.prevent="goSearch">
-                <view class="my-disabled">
-                  <uni-search-input
-                    :type="'2'"
-                    inputBorder
-                    :placeholder="viewerStore.homeSearchPlaceholder"
-                  />
-                </view>
-              </view>
-              <view class="openOld" @tap="openModeOld">
-                <view class="iconfont icon-size">&#xe700;</view>
-                长辈模式
-              </view>
-            </template>
-            <template v-else>
-              <view class="w100 flex">
-                <view @click.prevent="goSearch" class="flex1">
+            <view
+              class="search flex-between"
+              v-if="global.sConfig.isHideHomeSearch != '1'"
+            >
+              <!-- 在有搜索框的前提下 是否开启助老版本 -->
+              <template v-if="global.sConfig.isOpenHelpOld == '1'">
+                <view class="w70" @click.prevent="goSearch">
                   <view class="my-disabled">
                     <uni-search-input
                       :type="'2'"
@@ -55,23 +46,236 @@
                     />
                   </view>
                 </view>
+                <view class="openOld" @tap="openModeOld">
+                  <view class="iconfont icon-size">&#xe700;</view>
+                  长辈模式
+                </view>
+              </template>
+              <template v-else>
+                <view class="w100 flex">
+                  <view @click.prevent="goSearch" class="flex1">
+                    <view class="my-disabled">
+                      <uni-search-input
+                        :type="'2'"
+                        inputBorder
+                        :placeholder="viewerStore.homeSearchPlaceholder"
+                      />
+                    </view>
+                  </view>
+                  <view
+                    v-if="gStores.globalStore.sysCode === '1001063'"
+                    @click="goClinicPay"
+                    class="ico_my_scon icon-size"
+                  >
+                    &#xe6e4;
+                  </view>
+                </view>
+              </template>
+            </view>
+
+            <view class="card">
+              <g-login @handler-next="routerJump">
+                <!-- 登录之后 -->
+                <block v-if="globalStore.isLogin">
+                  <view
+                    class="top-card flex-normal-between animate__animated animate__fadeIn"
+                  >
+                    <!-- 有就诊人时 -->
+                    <block v-if="gStores.userStore.patChoose.patientName">
+                      <view class="flex-normal">
+                        <view
+                          v-if="personConfig.isQrCodeDisabled !== '1'"
+                          @tap="cardClick"
+                          class="iconfont icon-size"
+                        >
+                          &#xe6a7;
+                        </view>
+                        <view class="patient">
+                          <text>
+                            {{ gStores.userStore.choosePatName }}
+                          </text>
+                          <text
+                            v-if="
+                              !isAreaProgram() &&
+                              gStores.userStore.patChoose._showId
+                            "
+                          >
+                            ID
+                            {{ gStores.userStore.patChoose._showId }}
+                          </text>
+                        </view>
+                      </view>
+                      <view class="switchPatient" @tap="chooseAction">
+                        更换就诊人
+                      </view>
+                    </block>
+                    <!-- 没有就诊人时 -->
+                    <block v-else>
+                      <view class="flex-normal">
+                        <view class="patient">
+                          <text v-if="globalGl.SYS_CODE === '1001081'">
+                            请认真填写问卷内容，保证如实填写
+                          </text>
+                          <text v-else>暂无就诊人</text>
+                        </view>
+                      </view>
+                      <view
+                        v-if="globalGl.SYS_CODE !== '1001081'"
+                        class="switchPatient"
+                        @tap="addPatient"
+                      >
+                        添加就诊人
+                      </view>
+                    </block>
+                  </view>
+                </block>
+                <block v-else>
+                  <!-- 未登录 -->
+                  <view
+                    class="top-card flex-normal-between animate__animated animate__fadeIn"
+                  >
+                    <view class="flex-normal no-login">
+                      <!-- <g-login @handler-next="routerJump"> -->
+                      <text>请登录</text>
+                      <text>登录后享受更多服务</text>
+                      <!-- </g-login> -->
+                    </view>
+
+                    <!-- <g-login @handler-next="routerJump"> -->
+                    <!-- #ifdef MP-ALIPAY -->
+                    <view class="switchPatient no-login-tip">请登录</view>
+                    <!-- #endif -->
+
+                    <!-- #ifdef MP-WEIXIN | H5 -->
+                    <button class="login-btn">请登录</button>
+                    <!-- #endif -->
+                    <!-- </g-login> -->
+                  </view>
+                </block>
+              </g-login>
+
+              <view class="top-menu">
+                <view class="box" v-if="viewerStore.homeTopMenuList.length">
+                  <homeGrid
+                    :list="viewerStore.homeTopMenuList"
+                    :type="1"
+                    @open-share="openShare"
+                  />
+                </view>
                 <view
-                  v-if="gStores.globalStore.sysCode === '1001063'"
-                  @click="goClinicPay"
-                  class="ico_my_scon icon-size"
+                  class="notice flex-normal g-fade-in"
+                  @click="goToNotice1"
+                  v-if="
+                    viewerStore.homeNoticeText ||
+                    healthCounselConfig.noticeReplaceParam
+                  "
                 >
-                  &#xe6e4;
+                  <template
+                    v-if="healthCounselConfig.noticeReplaceParam?.buttonName"
+                  >
+                    <text class="notice-button g-bold">
+                      {{ healthCounselConfig.noticeReplaceParam.buttonName }}
+                    </text>
+                  </template>
+                  <template v-else>
+                    <text
+                      v-if="!gStores.globalStore.isTcmStyle"
+                      class="icon-font img_announcement icon-size"
+                    ></text>
+                    <image
+                      v-if="gStores.globalStore.isTcmStyle"
+                      :src="$global.BASE_IMG + `img_announcement-tcm@3x.png`"
+                      mode="widthFix"
+                      class="icon-font icon-size"
+                    />
+                  </template>
+                  <view class="bar-swiper">
+                    <uni-notice-bar
+                      :text="
+                        healthCounselConfig.noticeReplaceParam?.text ||
+                        viewerStore.homeNoticeText
+                      "
+                      :speed="80"
+                      scrollable
+                      color="--hr-neutral-color-10"
+                      style="width: 100%"
+                      background-color="transparent"
+                    />
+                  </view>
                 </view>
               </view>
-            </template>
+            </view>
+
+            <view class="banner-menu">
+              <homeBanner
+                :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
+                :functionList="viewerStore.homeBannerFunctionList"
+                @open-share="openShare"
+              />
+            </view>
+
+            <!-- 首页悬浮球 -->
+            <drag-button
+              v-if="
+                viewerStore.homeBallList &&
+                viewerStore.homeBallList.length === 1
+              "
+              :right="1"
+              :edge="100"
+              :offsetHeight="0"
+              zid="33"
+              @btnClick="useCommonTo(viewerStore.homeBallList[0])"
+              isDock
+              scrollY
+            >
+              <view class="auto-person g-fade-in">
+                <text v-if="viewerStore.homeBallList[0].detail">
+                  {{ viewerStore.homeBallList[0].detail }}
+                </text>
+                <image
+                  :src="viewerStore.homeBallList[0].iconfont"
+                  mode="heightFix"
+                ></image>
+              </view>
+            </drag-button>
+
+            <!-- #ifdef MP-WEIXIN -->
+            <view>
+              <official-account></official-account>
+            </view>
+            <!-- #endif -->
+            <!-- #ifdef MP-ALIPAY -->
+            <view v-if="global.sConfig.isOpenAlipayFollow">
+              <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
+            </view>
+            <!-- #endif -->
+            <view class="fun-list" v-if="viewerStore.homeMenuList.length">
+              <homeMenu
+                :list="viewerStore.homeMenuList"
+                :tabIndex="props.tabIndex"
+                @open-share="openShare"
+              />
+            </view>
+
+            <view v-if="docRecommendList.length" class="mt24 mb24">
+              <homeDocCommend :list="docRecommendList" />
+            </view>
+
+            <view v-if="global.sConfig.isOpenPopularSci">
+              <homeArticle ref="HomeArticleRef" />
+            </view>
+            <homeButtomProductionIcon />
+
+            <view></view>
           </view>
 
-          <view class="card">
-            <g-login @handler-next="routerJump">
+          <!-- 老年版本 -->
+          <view v-else class="homePage">
+            <view class="card">
               <!-- 登录之后 -->
               <block v-if="globalStore.isLogin">
                 <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
+                  class="top-card-old flex-normal-between animate__animated animate__fadeIn"
                 >
                   <!-- 有就诊人时 -->
                   <block v-if="gStores.userStore.patChoose.patientName">
@@ -85,7 +289,7 @@
                       </view>
                       <view class="patient">
                         <text>
-                          {{ gStores.userStore.choosePatName }}
+                          {{ gStores.userStore.patChoose.patientNameEncry }}
                         </text>
                         <text
                           v-if="
@@ -105,18 +309,12 @@
                   <!-- 没有就诊人时 -->
                   <block v-else>
                     <view class="flex-normal">
-                      <view class="patient">
-                        <text v-if="globalGl.SYS_CODE === '1001081'">
-                          请认真填写问卷内容，保证如实填写
-                        </text>
-                        <text v-else>暂无就诊人</text>
+                      <view class="patient-old">
+                        <text>暂无就诊人</text>
                       </view>
                     </view>
-                    <view
-                      v-if="globalGl.SYS_CODE !== '1001081'"
-                      class="switchPatient"
-                      @tap="addPatient"
-                    >
+
+                    <view class="switchPatient" @tap="addPatient">
                       添加就诊人
                     </view>
                   </block>
@@ -125,243 +323,50 @@
               <block v-else>
                 <!-- 未登录 -->
                 <view
-                  class="top-card flex-normal-between animate__animated animate__fadeIn"
+                  class="top-card-old flex-normal-between animate__animated animate__fadeIn"
                 >
-                  <view class="flex-normal no-login">
-                    <!-- <g-login @handler-next="routerJump"> -->
+                  <view class="no-login">
                     <text>请登录</text>
                     <text>登录后享受更多服务</text>
-                    <!-- </g-login> -->
                   </view>
-
-                  <!-- <g-login @handler-next="routerJump"> -->
                   <!-- #ifdef MP-ALIPAY -->
-                  <view class="switchPatient no-login-tip">请登录</view>
+                  <view class="switchPatient no-login-tip" @tap="goLogin">
+                    请登录
+                  </view>
                   <!-- #endif -->
-
-                  <!-- #ifdef MP-WEIXIN | H5 -->
-                  <button class="login-btn">请登录</button>
+                  <!-- #ifdef MP-WEIXIN -->
+                  <button
+                    open-type="getPhoneNumber"
+                    @getphonenumber="goLogin"
+                    class="login-btn text-no-wrap"
+                  >
+                    请登录
+                  </button>
                   <!-- #endif -->
-                  <!-- </g-login> -->
                 </view>
               </block>
-            </g-login>
 
-            <view class="top-menu">
-              <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid
-                  :list="viewerStore.homeTopMenuList"
-                  :type="1"
-                  @open-share="openShare"
-                />
+              <view class="top-menu-old">
+                <view class="box" v-if="viewerStore.homeTopMenuList.length">
+                  <homeGrid :list="viewerStore.homeTopMenuList" :type="3" />
+                </view>
               </view>
-              <view
-                class="notice flex-normal g-fade-in"
-                 @click="goToNotice1"
-                v-if="
-                  viewerStore.homeNoticeText ||
-                  healthCounselConfig.noticeReplaceParam
-                "
-              >
-                <template
-                  v-if="healthCounselConfig.noticeReplaceParam?.buttonName"
+              <view class="isCloseOld flex-normal" @tap="openModeOld">
+                <view
+                  :class="{
+                    'color-444': gStores.globalStore.getPageClass,
+                  }"
+                  class="iconfont icon-size"
                 >
-                  <text class="notice-button g-bold">
-                    {{ healthCounselConfig.noticeReplaceParam.buttonName }}
-                  </text>
-                </template>
-                <template v-else>
-                  <text
-                    v-if="!gStores.globalStore.isTcmStyle"
-                    class="icon-font img_announcement icon-size"
-                  ></text>
-                  <image
-                    v-if="gStores.globalStore.isTcmStyle"
-                    :src="$global.BASE_IMG + `img_announcement-tcm@3x.png`"
-                    mode="widthFix"
-                    class="icon-font icon-size"
-                  />
-                </template>
-                <view class="bar-swiper">
-                  <uni-notice-bar
-                    :text="
-                      healthCounselConfig.noticeReplaceParam?.text ||
-                      viewerStore.homeNoticeText
-                    "
-                    :speed="80"
-                    scrollable
-                    color="--hr-neutral-color-10"
-                    style="width: 100%"
-                    background-color="transparent"
-
-                  />
+                  &#xe700;
                 </view>
+                关闭长辈模式
               </view>
+              <homeButtomProductionIcon />
             </view>
           </view>
-
-          <view class="banner-menu">
-            <homeBanner
-              :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
-              :functionList="viewerStore.homeBannerFunctionList"
-              @open-share="openShare"
-            />
-          </view>
-
-          <!-- 首页悬浮球 -->
-          <drag-button
-            v-if="
-              viewerStore.homeBallList && viewerStore.homeBallList.length === 1
-            "
-            :right="1"
-            :edge="100"
-            :offsetHeight="0"
-            zid="33"
-            @btnClick="useCommonTo(viewerStore.homeBallList[0])"
-            isDock
-            scrollY
-          >
-            <view class="auto-person g-fade-in">
-              <text v-if="viewerStore.homeBallList[0].detail">
-                {{ viewerStore.homeBallList[0].detail }}
-              </text>
-              <image
-                :src="viewerStore.homeBallList[0].iconfont"
-                mode="heightFix"
-              ></image>
-            </view>
-          </drag-button>
-
-          <!-- #ifdef MP-WEIXIN -->
-          <view>
-            <official-account></official-account>
-          </view>
-          <!-- #endif -->
-          <!-- #ifdef MP-ALIPAY -->
-          <view v-if="global.sConfig.isOpenAlipayFollow">
-            <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
-          </view>
-          <!-- #endif -->
-          <view class="fun-list" v-if="viewerStore.homeMenuList.length">
-            <homeMenu
-              :list="viewerStore.homeMenuList"
-              :tabIndex="props.tabIndex"
-              @open-share="openShare"
-            />
-          </view>
-
-          <view v-if="docRecommendList.length" class="mt24 mb24">
-            <homeDocCommend :list="docRecommendList" />
-          </view>
-
-          <view v-if="global.sConfig.isOpenPopularSci">
-            <homeArticle ref="HomeArticleRef" />
-          </view>
-          <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-            <image
-              :src="$global.BASE_IMG + 'img_logo@3x.png'"
-              mode="widthFix"
-            />
-          </view>
-
-          <view></view>
-        </view>
-
-        <!-- 老年版本 -->
-        <view v-else class="homePage">
-          <view class="card">
-            <!-- 登录之后 -->
-            <block v-if="globalStore.isLogin">
-              <view
-                class="top-card-old flex-normal-between animate__animated animate__fadeIn"
-              >
-                <!-- 有就诊人时 -->
-                <block v-if="gStores.userStore.patChoose.patientName">
-                  <view class="flex-normal">
-                    <view
-                      v-if="personConfig.isQrCodeDisabled !== '1'"
-                      @tap="cardClick"
-                      class="iconfont icon-size"
-                    >
-                      &#xe6a7;
-                    </view>
-                    <view class="patient">
-                      <text>
-                        {{ gStores.userStore.patChoose.patientNameEncry }}
-                      </text>
-                      <text
-                        v-if="
-                          !isAreaProgram() &&
-                          gStores.userStore.patChoose._showId
-                        "
-                      >
-                        ID
-                        {{ gStores.userStore.patChoose._showId }}
-                      </text>
-                    </view>
-                  </view>
-                  <view class="switchPatient" @tap="chooseAction">
-                    更换就诊人
-                  </view>
-                </block>
-                <!-- 没有就诊人时 -->
-                <block v-else>
-                  <view class="flex-normal">
-                    <view class="patient-old">
-                      <text>暂无就诊人</text>
-                    </view>
-                  </view>
-
-                  <view class="switchPatient" @tap="addPatient">
-                    添加就诊人
-                  </view>
-                </block>
-              </view>
-            </block>
-            <block v-else>
-              <!-- 未登录 -->
-              <view
-                class="top-card-old flex-normal-between animate__animated animate__fadeIn"
-              >
-                <view class="no-login">
-                  <text>请登录</text>
-                  <text>登录后享受更多服务</text>
-                </view>
-                <!-- #ifdef MP-ALIPAY -->
-                <view class="switchPatient no-login-tip" @tap="goLogin">
-                  请登录
-                </view>
-                <!-- #endif -->
-                <!-- #ifdef MP-WEIXIN -->
-                <button
-                  open-type="getPhoneNumber"
-                  @getphonenumber="goLogin"
-                  class="login-btn text-no-wrap"
-                >
-                  请登录
-                </button>
-                <!-- #endif -->
-              </view>
-            </block>
-
-            <view class="top-menu-old">
-              <view class="box" v-if="viewerStore.homeTopMenuList.length">
-                <homeGrid :list="viewerStore.homeTopMenuList" :type="3" />
-              </view>
-            </view>
-            <view class="isCloseOld flex-normal" @tap="openModeOld">
-              <view class="iconfont icon-size">&#xe700;</view>
-              关闭长辈模式
-            </view>
-            <view class="bg-back" v-if="!global.systemInfo.isHideHomeLogo">
-              <image
-                :src="$global.BASE_IMG + 'img_logo@3x.png'"
-                mode="widthFix"
-              />
-            </view>
-          </view>
-        </view>
-      </ls-skeleton>
+        </ls-skeleton>
+      </view>
     </scroll-view>
 
     <g-message
@@ -391,6 +396,7 @@
     onShow,
     onShareTimeline,
     onReachBottom,
+    onReady,
   } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
@@ -426,6 +432,7 @@
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import homeArticle from './componetns/homeArticle/index.vue';
   import homeDocCommend from './componetns/homeDocCommend.vue';
+  import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
   import { useCommonTo } from '@/common/checkJump';
@@ -517,10 +524,6 @@
     );
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
-    //设置顶部标题
-    uni.setNavigationBarTitle({
-      title: global.systemInfo.name,
-    });
     // #ifdef MP-WEIXIN
     if (props.value.code) {
       const getNoPublicOpenIdOnly =
@@ -995,15 +998,7 @@
     .fun-list {
       margin-top: var(--h-margin-24);
     }
-    .bg-back {
-      margin: 30rpx auto 20rpx;
-      text-align: center;
 
-      image {
-        width: 180rpx;
-        height: 80rpx;
-      }
-    }
   }
 
   .uni-noticebar {
@@ -1096,5 +1091,13 @@
     view.no-login-tip {
       width: 124rpx;
     }
+  }
+
+  .nav-img-bg {
+    top: 0;
+  }
+
+  ::v-deep .uni-page-head {
+    display: none !important;
   }
 </style>
