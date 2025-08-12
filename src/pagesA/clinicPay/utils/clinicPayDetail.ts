@@ -391,13 +391,13 @@ export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
       };
     }
 
-    const { extraData } = medicalConfig1001035;
+    const { extraData } = medicalConfig1001035.auth;
     await new Promise((success, j) => {
       setLocalStorage({
         'get-wx-medical-auth-code': '1',
       });
       uni.navigateToMiniProgram({
-        ...medicalConfig1001035,
+        ...medicalConfig1001035.auth,
         envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
         extraData: {
           ...extraData,
@@ -435,7 +435,6 @@ export const _getQxMedicalNation = async (
     returnUrl = '/pagesA/clinicPay/clinicPayDetail',
     params: enHosPatientId,
   } = payload;
-
   const gStores = new GStores();
   const cacheStore = useCacheStore();
   const qrCode = await getMedicalAuthCode();
@@ -540,6 +539,24 @@ export const getQxMedicalNation = async (
     params?: string;
   }
 ) => {
+  const gStores = new GStores();
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+  if (gStores.globalStore.ev === 'wx' && medicalMHelp?.wx?.medical1001035) {
+    const { patientName } = gStores.userStore.patChoose;
+    const { idCard } = await new PatientUtils().getPatientPersonalInfo({
+      idCard: true,
+    });
+
+    const authorize = await getWxMedicalAuth1001035({
+      userName: patientName,
+      idCard,
+    });
+
+    return authorize as TWxAuthorize;
+  }
+
   const { returnUrl = '/pagesA/clinicPay/clinicPayDetail', params } = payload;
   const result = (await _getQxMedicalNation({
     returnUrl,
@@ -1984,6 +2001,7 @@ export const usePayPage = () => {
 
         if (authorize) {
           callback(authorize as TWxAuthorize);
+          return authorize;
         }
       } else if (medicalPlugin === '1') {
         wxPryMoneyMedicalDialog.value.show();
@@ -1992,6 +2010,7 @@ export const usePayPage = () => {
           params: pageProps.value.params,
         });
         callback(authorize);
+        return authorize;
       }
     }
   };

@@ -307,6 +307,14 @@
 
   const isShowPatComponent = ref(false);
   const itemClick = (item: IPayListItem) => {
+    // 省中限制进入详情
+    if (gStores.globalStore.sysCode === '1001035') {
+      if (tabCurrent.value === 0) {
+        selPayListItem(item);
+      }
+      return;
+    }
+
     if (isModeMedicalHelp.value) {
       const { cardNumber } = pageProps.value.deParams;
       const { visitNo } = item;

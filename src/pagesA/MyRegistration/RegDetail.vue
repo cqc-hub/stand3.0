@@ -873,9 +873,6 @@
     );
 
     setTimeout(() => {
-      console.log('setList', _regInfoTempList, _patientTempList);
-      console.log('refForm.value', refForm.value);
-      console.log('refFormPatient.value', refFormPatient.value);
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(_patientTempList);
       uni.hideLoading();
@@ -916,6 +913,7 @@
       //   }
       // })
       if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.payAuthNo ||
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
         isAlilAuth
       ) {
@@ -1075,10 +1073,11 @@
     }
   ) => {
     const { hosId, orderId } = orderRegInfo.value;
-    const { userLongitudeLatitude, payAuthNo } = auth;
+    const { userLongitudeLatitude = {}, payAuthNo } = auth;
     const { source } = gStores.globalStore.browser;
 
     const requestArg = {
+      ...auth,
       ...userLongitudeLatitude,
       accountUseFlag: true,
       businessType: payload.businessType,
