@@ -138,7 +138,7 @@ export interface ISConfig {
       medical1001035?: {
         appId: string;
         path: string;
-        envVersion: 'release' | 'trial';
+        envVersion?: 'release' | 'trial';
         extraData: {
           appid: string;
           userName?: string;
@@ -658,11 +658,9 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
-        // medicalDefault: '1',
         medical1001035: {
           appId: 'wxfde9fffbfa82be54',
           path: 'pages/allOutPayCashier/authUniPro/authUni',
-          envVersion: 'trial',
           extraData: {
             appid: 'c4097ed72fc64e71818e6990dc6f9512',
           },

@@ -50,6 +50,12 @@ export type TWxAuthorize = {
     latitude: string;
     longitude: string;
   };
+
+  /**
+   * 1001035 省中微信智捷付 独有
+   */
+  ocToken?: string;
+  userCardNo?: string;
 };
 export type IPayListItem = {
   diseaseType?: string;
@@ -278,9 +284,9 @@ export const getIsMedicalMode = () => {
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalPlugin, medicalNation } = wx;
+      const { medicalPlugin, medicalNation, medical1001035 } = wx;
 
-      if (medicalPlugin === '1' || medicalNation) {
+      if (medicalPlugin === '1' || medicalNation || medical1001035) {
         return true;
       }
     }
@@ -309,7 +315,7 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   } = globalGl;
   const { alipay, wx: _wx } = medicalMHelp!;
 
-  // #ifdef  MP-WEIXIN
+  // #ifdef MP-WEIXIN
   const qrCode =
     gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
 
@@ -369,20 +375,54 @@ export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
   const { ev } = gStores.globalStore;
   const medicalConfig1001035 = sConfig.medicalMHelp?.wx?.medical1001035;
 
-  console.log(medicalConfig1001035, '233', ev);
   if (medicalConfig1001035 && ev === 'wx') {
-    const { extraData } = medicalConfig1001035;
-    uni.navigateToMiniProgram({
-      ...medicalConfig1001035,
-      extraData: {
-        ...extraData,
-        userName,
-        idCard,
-      },
-    });
-  }
+    const authInfo =
+      gStores.globalStore.appShowData.referrerInfo?.extraData || {};
+    const { ocToken, payAuthNo, userCardNo } = authInfo;
 
-  // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+    if (ocToken && payAuthNo) {
+      gStores.globalStore.onAppShow({});
+
+      return {
+        ocToken,
+        payAuthNo,
+        userCardNo,
+        userName,
+      };
+    }
+
+    const { extraData } = medicalConfig1001035;
+    await new Promise((success, j) => {
+      setLocalStorage({
+        'get-wx-medical-auth-code': '1',
+      });
+      uni.navigateToMiniProgram({
+        ...medicalConfig1001035,
+        envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+        extraData: {
+          ...extraData,
+          userName,
+          idCard,
+        },
+
+        fail({ errMsg }) {
+          if (errMsg.includes('fail cancel')) {
+            setLocalStorage({
+              'get-wx-medical-auth-code': '',
+            });
+
+            gStores.messageStore.showMessage(
+              '未完成电子医保凭证授权,无法继续医保结算'
+            );
+          }
+          j('取消请求授权...');
+        },
+        success,
+      });
+    });
+
+    return Promise.reject('请求授权...');
+  }
 };
 
 export const _getQxMedicalNation = async (
@@ -539,10 +579,12 @@ export const medicalNationUpload = async (
   // #endif
 
   const gStores = new GStores();
-  const {
-    userLongitudeLatitude: { longitude, latitude },
-    userName,
-  } = auth;
+  const { userLongitudeLatitude, userName } = auth;
+  let [longitude, latitude] = ['', ''];
+  if (userLongitudeLatitude) {
+    longitude = userLongitudeLatitude.longitude;
+    latitude = userLongitudeLatitude.latitude;
+  }
 
   const { patientId } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
@@ -1807,11 +1849,15 @@ export const usePayPage = () => {
     const cardNumber = pageProps.value.deParams?.cardNumber || pat.cardNumber;
     const patientName =
       pageProps.value.deParams?.patientName || pat.patientName;
-    await getDetailData({
-      cardNumber,
-      ...pageProps.value,
-      ...item,
-    });
+
+    if (gStores.globalStore.sysCode === '1001035') {
+    } else {
+      await getDetailData({
+        cardNumber,
+        ...pageProps.value,
+        ...item,
+      });
+    }
 
     uni.showLoading({
       title: '正在预结算...',
@@ -1916,11 +1962,30 @@ export const usePayPage = () => {
     } = globalGl;
 
     const { wx } = medicalMHelp!;
+    const patientUtil = new PatientUtils();
 
     if (wx) {
-      const { medicalNation, medicalPlugin } = wx!;
+      const { medicalNation, medicalPlugin, medical1001035 } = wx!;
 
-      if (medicalPlugin === '1') {
+      if (medical1001035) {
+        // 省中医保需要 name + idCard， 目前仅先接入登录流程
+        if (pageProps.value.params) {
+          throw new Error('暂未接入扫码医保');
+        }
+        const { patientName } = gStores.userStore.patChoose;
+        const { idCard } = await patientUtil.getPatientPersonalInfo({
+          idCard: true,
+        });
+
+        const authorize = await getWxMedicalAuth1001035({
+          userName: patientName,
+          idCard,
+        });
+
+        if (authorize) {
+          callback(authorize as TWxAuthorize);
+        }
+      } else if (medicalPlugin === '1') {
         wxPryMoneyMedicalDialog.value.show();
       } else if (medicalNation) {
         const authorize = await getQxMedicalNation({
