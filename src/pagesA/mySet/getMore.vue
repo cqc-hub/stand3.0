@@ -51,15 +51,15 @@
   const policyList = ref([
     {
       label: '用户协议',
-      type: '0',
+      type: 0,
     },
     {
       label: '业务条款',
-      type: '1',
+      type: 1,
     },
     {
       label: '政策法规',
-      type: '2',
+      type: 2,
     },
   ]);
 

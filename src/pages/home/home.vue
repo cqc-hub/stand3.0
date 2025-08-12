@@ -526,8 +526,8 @@
     );
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
-    if (isOpenAIPolicy === '1' || (policyList && policyList[0])) {
-      const list = (policyList && policyList[0]) || undefined;
+    if (isOpenAIPolicy === '1' || (policyList && policyList.length&&policyList[0].length)) {
+      const list = (policyList&&policyList.length && policyList[0].length)? policyList[0]: undefined;
       cacheStore.changeFlagList(list, isOpenAIPolicy === '1');
     }
     const { isOpenHomeDoctorBanner } = orderConfig.value;

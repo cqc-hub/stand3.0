@@ -42,10 +42,11 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { useCacheStore } from '@/stores';
+  import { ServerStaticData } from '@/utils';
   const cacheStore = useCacheStore();
   const pageProps = ref(
     {} as {
-      type: string;
+      type: number;
     }
   );
   const tabCurrent = ref(0);
@@ -71,21 +72,10 @@
         flag: '9',
       },
       {
-        label: '取号须知',
-        flag: '5',
-      },
-      {
         label: '就诊人绑定须知',
         flag: '108',
       },
-      {
-        label: '预交金充值须知',
-        flag: '30',
-      },
-      {
-        label: '手术进度查询须知',
-        flag: '53',
-      },
+
       {
         label: '挂号订单查询须知',
         flag: '405',
@@ -93,10 +83,6 @@
       {
         label: '归档病历资料复印须知 ',
         flag: '508',
-      },
-      {
-        label: '中草药煎服须知',
-        flag: '1231',
       },
     ],
     [
@@ -139,7 +125,15 @@
   };
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    tabCurrent.value = pageProps.value.type;
     defaultFlagList.value[0] = cacheStore.flagList;
+    const { policyList } = await ServerStaticData.getSystemConfig(
+      'RestOfConfig'
+    );
+    if (policyList && policyList.length) {
+      policyList[1].length && (defaultFlagList.value[1] = policyList[1]);
+      policyList[2].length && (defaultFlagList.value[2] = policyList[2]);
+    }
   });
 </script>
 

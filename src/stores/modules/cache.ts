@@ -35,6 +35,10 @@ const cacheStore = defineStore('cache', {
           label: '第三方信息共享清单',
           flag: '1211',
         },
+        {
+          label: '儿童隐私保护声明',
+          flag: '1249',
+        },
       ],
     };
   },
@@ -78,6 +82,10 @@ const cacheStore = defineStore('cache', {
         {
           label: '第三方信息共享清单',
           flag: '1211',
+        },
+        {
+          label: '儿童隐私保护声明',
+          flag: '1249',
         },
       ];
       isOpenAIPolicy &&
