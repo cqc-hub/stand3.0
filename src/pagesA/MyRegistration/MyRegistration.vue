@@ -556,7 +556,7 @@
     if (gStores.globalStore.sysCode === '1001036') {
       tabs.value.push({
         typeId: 4,
-        headerName: '远期预约',
+        headerName: '远期预约（肾脏科）',
         searchType: '2',
       });
     }
@@ -630,7 +630,7 @@
         _showLabel: getPatLabel(o),
       })),
     ];
-    tabCurrentDetail.value?.typeId !== 1 &&
+    ![1, 4].includes(tabCurrentDetail.value?.typeId) &&
       (list = [
         {
           patientId: '',
