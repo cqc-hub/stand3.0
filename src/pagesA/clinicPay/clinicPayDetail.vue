@@ -525,15 +525,15 @@
         );
     }
 
-    // const { confirm } = await apiAsync(uni.showModal, {
-    //   content: 'hint',
-    //   cancelText: '稍后缴费',
-    //   confirmText: '立即缴费',
-    // });
-    // getWxMedicalAuth1001035({
-    //   idCard: '320322199204236243',
-    //   userName: '路鑫瑶',
-    // });
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: 'hint',
+      cancelText: '稍后缴费',
+      confirmText: '立即缴费',
+    });
+    getWxMedicalAuth1001035({
+      idCard: '320322199204236243',
+      userName: '路鑫瑶',
+    });
   });
 </script>
 

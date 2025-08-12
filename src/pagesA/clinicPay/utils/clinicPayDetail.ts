@@ -364,20 +364,23 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 
 // 省中微信智捷付
 export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
-  const { wxAppid: appid } = globalGl;
+  const { sConfig } = globalGl;
   const gStores = new GStores();
+  const { ev } = gStores.globalStore;
+  const medicalConfig1001035 = sConfig.medicalMHelp?.wx?.medical1001035;
 
-  uni.navigateToMiniProgram({
-    appId: 'wxfde9fffbfa82be54',
-    path: 'pages/allOutPayCashier/authUniPro/authUni', //定值写死
-    envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-
-    extraData: {
-      appid,
-      userName,
-      idCard,
-    },
-  });
+  console.log(medicalConfig1001035, '233', ev);
+  if (medicalConfig1001035 && ev === 'wx') {
+    const { extraData } = medicalConfig1001035;
+    uni.navigateToMiniProgram({
+      ...medicalConfig1001035,
+      extraData: {
+        ...extraData,
+        userName,
+        idCard,
+      },
+    });
+  }
 
   // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
 };
