@@ -1241,15 +1241,16 @@
       type: 'h5',
       isSelfH5: '1',
       path: 'pagesA/dongzong/updateRegDate',
+      isLocal: '1',
+      addition: {
+        patientId: '_patientId',
+        herenId: 'herenId',
+        token: 'token',
+      },
       extraData: {
         orderRegInfo: JSON.stringify({
           ...orderRegInfo.value,
         }),
-        addition: {
-          patientId: '_patientId',
-          token: 'token',
-          herenId: 'herenId',
-        },
       },
     });
   };
