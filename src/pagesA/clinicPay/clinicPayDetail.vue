@@ -420,6 +420,7 @@
       }
 
       if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.payAuthNo ||
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
         isAliAuth
       ) {
