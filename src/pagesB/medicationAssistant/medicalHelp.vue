@@ -195,15 +195,6 @@
           pageProps.value.deParams?.cardNumber ||
           pageProps.value.deParams?.patientId,
       };
-    } else if (pageProps.value.params) {
-      if (
-        gStores.userStore.patChoose.cardNumber ===
-        pageProps.value.deParams?.cardNumber
-      ) {
-        return gStores.userStore.patChoose;
-      } else {
-        return {};
-      }
     } else {
       return gStores.userStore.patChoose;
     }
@@ -444,17 +435,19 @@
     }
 
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
-
+    pageProps.value.deParams = sign ? {} : undefined;
+    
     const { result = {} } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
+
+    
+
     if (sign && result.drugList && result.drugList.length) {
       pageProps.value.deParams = {
-        cardNumber: result.cardNumber||result.patientId,
+        cardNumber: result.cardNumber || result.patientId,
         patientName: result.patientName,
       };
-    } else {
-      pageProps.value.deParams = undefined;
     }
 
     const { drugList: rList, patientId: _patientId } = result;

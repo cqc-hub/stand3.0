@@ -43,8 +43,8 @@ const cacheStore = defineStore('cache', {
     changeMedicalHelpSelList(list) {
       this.medicalHelpSelList = list;
     },
-    changeHealthCardCache(healthCardData:any){
-      this.healthCardCache=healthCardData
+    changeHealthCardCache(healthCardData: any) {
+      this.healthCardCache = healthCardData;
     },
     changeHosId(hosId: string) {
       this.hosId = hosId;
@@ -60,6 +60,32 @@ const cacheStore = defineStore('cache', {
 
     changeMedicalAuthArg(arg: Record<string, any>) {
       this.medicalAuthArg = arg;
+    },
+    changeFlagList(arg?: any[], isOpenAIPolicy?: boolean) {
+      let flagList = arg || [
+        {
+          label: '用户条款',
+          flag: '1212',
+        },
+        {
+          label: '隐私条款',
+          flag: '1213',
+        },
+        {
+          label: '个人信息清单',
+          flag: '1210',
+        },
+        {
+          label: '第三方信息共享清单',
+          flag: '1211',
+        },
+      ];
+      isOpenAIPolicy &&
+        flagList.push({
+          label: 'AI助手用户协议',
+          flag: '1240',
+        });
+      this.flagList = flagList;
     },
   },
 });

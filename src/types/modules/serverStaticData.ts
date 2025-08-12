@@ -594,8 +594,13 @@ export interface ISystemConfig_ {
     isOpenSubscribe?: '1';
   };
 
-  /** 杂乱配置 */
+  /** 杂项配置（客服、意见反馈、隐私政策)- */
   RestOfConfig: {
+    //隐私政策
+     isOpenAIPolicy?:'1';
+     //自定义隐私政策列表，为空则展示默认值
+     policyList?:Array<Array<{label:string,flag:string}>>
+
     // home 页面底部产品图标
     homeProductionIcon?: string;
     //手机号验证码登录

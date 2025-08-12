@@ -291,6 +291,12 @@
             "navigationBarTitleText": " "
           }
         },
+         {
+          "path": "mySet/policyList",
+          "style": {
+            "navigationBarTitleText": "条款协议"
+          }
+        },
         {
           "path": "MyRegistration/Register",
           "style": {
