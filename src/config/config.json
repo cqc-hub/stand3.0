@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001036",
+  "sysCode": "1001074",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -321,7 +321,7 @@
     },
     "1001077": {
       "wxAppid": "wx9dcb98a8c18d44ea",
-      "h5Appid": "wx97fd54c614de79b4",
+      "h5Appid1": "wx97fd54c614de79b4",
       "alipayAppid": "2021005131642589",
       "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",

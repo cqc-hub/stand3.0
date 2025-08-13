@@ -181,18 +181,21 @@
     <
       {
         hosId?: string; // 采血取号 需要
-        _type?: 'blood'; //区分普通取号和 濮阳采血取号
-        type?: '0' | '1' | '2'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
+        _type?: 'blood' | 'pharmacy'; //区分普通取号和 濮阳采血取号
+        type?: '0' | '1' | '2' | '3'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
       }
     >{}
   );
   const headBtns = ref(<TButtonConfig[]>[]);
 
+  //药房签到
+  const isPharmacy = computed(() => pageProps.value._type === 'pharmacy');
   // 采血取号
   const isBloodSign = computed(() => pageProps.value._type === 'blood');
   // 在线签到
   const isOnlineSign = computed(
-    () => !isBloodSign.value && pageProps.value.type === '1'
+    () =>
+      !isBloodSign.value && !isPharmacy.value && pageProps.value.type === '1'
   );
 
   const locationInfo = ref({

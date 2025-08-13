@@ -151,7 +151,8 @@
       </view>
       <button
         :class="{
-          'btn-disabled': !feeDetail.totalCost&&globalGl.SYS_CODE === '1001035',
+          'btn-disabled':
+            !feeDetail.totalCost && globalGl.SYS_CODE === '1001035',
         }"
         @click="submit"
         class="btn btn-primary flex1"
@@ -192,6 +193,7 @@
       cardNumber?: string;
       params?: string;
       scan?: 1 | 0;
+      isYouzhen?: boolean;
     }
   );
 
@@ -320,7 +322,6 @@
         costs: expressList,
         totalCost: totalFee,
       };
-      
 
       if (gStores.globalStore.sysCode === '1001035') {
         const aim = aimList.value.find(
@@ -346,7 +347,7 @@
       return [aimValue.value, addressList.value];
     },
     ([aim, address]) => {
-      if (aim?.length && address?.length&&pageConfig.value.isPayOnline) {
+      if (aim?.length && address?.length && pageConfig.value.isPayOnline) {
         getExpressFee();
       }
     }
@@ -423,7 +424,7 @@
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
       provinces,
-      iceBagNum: iceBagNum.value||0,
+      iceBagNum: iceBagNum.value || 0,
       remark: remark.value,
     };
     if (pageConfig.value.isPayOnline === '1') {
@@ -535,7 +536,8 @@
 
     if (len) {
       aimList.value = companyList;
-
+      pageProps.value.isYouzhen &&
+        aimList.value.filter((item) => item.label.includes('邮政'));
       if (len === 1) {
         aimValue.value = [companyList[0].value];
       }
@@ -585,7 +587,7 @@
     }
     await init();
     if (gStores.globalStore.sysCode == '1001035') {
-       uni.setNavigationBarTitle({
+      uni.setNavigationBarTitle({
         title: '药品代煎快递办理',
       });
       isIncludeChineseMedicalFriedAndDelivery.value = false;
