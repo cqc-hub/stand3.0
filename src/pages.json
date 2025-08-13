@@ -127,6 +127,11 @@
           "style": {
             "navigationBarTitleText": "全部评论"
           }
+        },    {
+          "path": "MyRegistration/FamousDoctors",
+          "style": {
+            "navigationBarTitleText": "名医温州汇"
+          }
         },
         {
           "path": "hospitalCare/hospitalRecordList",
@@ -865,13 +870,13 @@
         }
       ],
       "pagesE-plugins": ""
-    },
-    {
-      "root": "cacheUtil",
-      "pages": [],
-      "pagesE-plugins": "",
-      "__desc": "该分包存大容量函数"
     }
+    // {
+    //   "root": "cacheUtil",
+    //   "pages": [],
+    //   "pagesE-plugins": "",
+    //   "__desc": "该分包存大容量函数"
+    // }
   ],
   "globalStyle": {
     "app-plus": {
