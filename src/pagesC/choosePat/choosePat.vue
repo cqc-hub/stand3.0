@@ -192,9 +192,11 @@
       d[key] = encryptedAes(d[key], '5X2ZkYTQ3OGJkY2E');
     }
 
+    // https://report.jshtcm.com/pacs/medicallist?areacode=10&patientid=%2FzIpjtscEFIw140%2BZx1w6g==
     useTBanner({
       type: 'h5',
-      path: joinQueryForUrl('https://appoint.st120.cn', d),
+      path: joinQueryForUrl('https://report.jshtcm.com/pacs/medicallist', d),
+      // path: joinQueryForUrl('https://appoint.st120.cn', d),
     });
   };
 

@@ -296,6 +296,12 @@
             "navigationBarTitleText": " "
           }
         },
+         {
+          "path": "mySet/policyList",
+          "style": {
+            "navigationBarTitleText": "条款协议"
+          }
+        },
         {
           "path": "MyRegistration/Register",
           "style": {
@@ -870,13 +876,17 @@
         }
       ],
       "pagesE-plugins": ""
+    },
+    {
+      "root": "cacheUtil",
+      "pages": [
+        {
+          "path": "index"
+        }
+      ],
+      "pagesE-plugins": "",
+      "__desc": "该分包存大容量函数"
     }
-    // {
-    //   "root": "cacheUtil",
-    //   "pages": [],
-    //   "pagesE-plugins": "",
-    //   "__desc": "该分包存大容量函数"
-    // }
   ],
   "globalStyle": {
     "app-plus": {
@@ -888,5 +898,8 @@
     // #ifdef MP-WEIXIN || H5 || MP-TOUTIAO
     "navigationBarBackgroundColor": "#fff"
     // #endif
-  }
+  },
+  "sideEffects": [
+    "src/cacheUtil/shadowlib/**/*.js"
+  ]
 }

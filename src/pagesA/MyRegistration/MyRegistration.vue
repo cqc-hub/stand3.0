@@ -292,6 +292,8 @@
     }
     let patientId =
       pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
+    let cardNumber =
+      pat.value?.cardNumber ?? gStores.userStore.patChoose?.cardNumber;
 
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     selStatus.value = '';
@@ -306,8 +308,10 @@
       _patChange(gStores.userStore.patChoose);
       patientId =
         pat.value?.patientId ?? gStores.userStore.patChoose?.patientId;
+      cardNumber =
+        pat.value?.cardNumber ?? gStores.userStore.patChoose?.cardNumber;
     }
-    await getList(patientId);
+    await getList(patientId, cardNumber);
   };
 
   // const getStatusConfig = (status: OrderStatus) => {
@@ -321,7 +325,7 @@
   //   }
   // };
 
-  const getList = async (patientId = '') => {
+  const getList = async (patientId = '', cardNumber = '') => {
     isComplete.value = false;
     list.value = [];
     const { result } = await listApi
@@ -330,6 +334,7 @@
         herenId: gStores.globalStore.herenId,
         searchType: tabCurrentDetail.value.searchType,
         patientId,
+        cardNumber,
       })
       .finally(() => {
         isComplete.value = true;
@@ -418,18 +423,21 @@
         });
       });
     }
-
+    const query = {
+      ...item,
+      searchType: tabCurrentDetail.value.searchType,
+      orderId,
+      hosOrderId: item.hosOrderId,
+      preWz: item.orderStatus === '10' && '1',
+      thRegisterId: props.value.thRegisterId,
+      _type,
+      typeId,
+    };
+    tabCurrentDetail.value.typeId === 4 &&
+      (query.cardNumber =
+        pat.value?.cardNumber ?? gStores.userStore.patChoose?.cardNumber);
     uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-        ...item,
-        searchType: tabCurrentDetail.value.searchType,
-        orderId,
-        hosOrderId: item.hosOrderId,
-        preWz: item.orderStatus === '10' && '1',
-        thRegisterId: props.value.thRegisterId,
-        _type,
-        typeId,
-      }),
+      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', query),
     });
   };
 
@@ -450,7 +458,7 @@
 
   const patientChange = async ({ item }) => {
     _patChange(item);
-    await getList(item.patientId || '');
+    await getList(item.patientId || '', item.cardNumber || '');
 
     if (item.patientId) {
       gStores.userStore.updatePatChoose(item);
@@ -458,7 +466,10 @@
   };
 
   const orderStatusChange = async () => {
-    getList(gStores.userStore.patChoose.patientId || '');
+    getList(
+      gStores.userStore.patChoose.patientId || '',
+      gStores.userStore.patChoose.cardNumber || ''
+    );
   };
 
   const getConfig = async () => {
@@ -545,7 +556,7 @@
     if (gStores.globalStore.sysCode === '1001036') {
       tabs.value.push({
         typeId: 4,
-        headerName: '远期预约',
+        headerName: '远期预约（肾脏科）',
         searchType: '2',
       });
     }
@@ -619,7 +630,7 @@
         _showLabel: getPatLabel(o),
       })),
     ];
-    tabCurrentDetail.value?.typeId !== 1 &&
+    ![1, 4].includes(tabCurrentDetail.value?.typeId) &&
       (list = [
         {
           patientId: '',

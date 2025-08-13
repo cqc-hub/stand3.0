@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wx90dd2c3c4be8355a",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -73,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597",
+    "appid": "2021003120612222",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -90,7 +90,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "江苏省中医院",
+  "name": "中国人民解放军东部战区总医院",
   "h5": {
     "optimization": {
       "treeShaking": {

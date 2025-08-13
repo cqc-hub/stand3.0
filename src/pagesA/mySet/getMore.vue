@@ -5,8 +5,12 @@
         :src="$global.BASE_IMG + 'getmore-img_heren@3x.png'"
         mode="widthFix"
       ></image>
-      <view>当前首页版本 {{ getLocalStorage('systemConfigVersion')[0]?.version }}</view>
-      <view>当前系统版本 {{ getLocalStorage('systemConfigVersion')[1]?.version }}</view>
+      <view>
+        当前首页版本 {{ getLocalStorage('systemConfigVersion')[0]?.version }}
+      </view>
+      <view>
+        当前系统版本 {{ getLocalStorage('systemConfigVersion')[1]?.version }}
+      </view>
     </view>
     <view class="more-content">
       <!-- #ifdef MP-WEIXIN -->
@@ -16,11 +20,11 @@
       </view>
       <!-- #endif -->
       <navigator
-        v-for="item in cacheStore.flagList"
-        :key="item.flag"
+        v-for="item in policyList"
+        :key="item.type"
         :url="
-          joinQueryForUrl('/pagesA/mySet/userPolicy', {
-            typeFg: item.flag,
+          joinQueryForUrl('/pagesA/mySet/policyList', {
+            type: item.type,
           })
         "
       >
@@ -40,11 +44,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { joinQueryForUrl, getLocalStorage } from '@/common';
   import { useCacheStore } from '@/stores';
 
-  const cacheStore = useCacheStore();
+  const policyList = ref([
+    {
+      label: '用户协议',
+      type: 0,
+    },
+    {
+      label: '业务条款',
+      type: 1,
+    },
+    {
+      label: '政策法规',
+      type: 2,
+    },
+  ]);
 
   const goInfoPage = () => {
     uni.navigateTo({

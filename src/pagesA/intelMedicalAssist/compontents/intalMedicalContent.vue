@@ -119,7 +119,7 @@
                 :class="{ 'b-bottom': msgItem.type.type === 2 }"
                 class="flex"
               >
-                <view class="flex1">
+                <view class="flex1 auto">
                   <text
                     user-select
                     selectable
@@ -421,5 +421,8 @@
   }
   .mWidth80 {
     min-width: 80vw;
+  }
+  .auto{
+    overflow: auto;
   }
 </style>

@@ -174,6 +174,7 @@ export class LoginUtils extends GStores {
   }
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
+    let flag = false;
     const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
       'RestOfConfig'
     );
@@ -194,12 +195,9 @@ export class LoginUtils extends GStores {
           }
         );
       });
-      if (confirm) {
-        return true;
-      }
-      return false;
+      flag = confirm;
     }
-    return false;
+    return flag;
   }
 
   async getUerInfo(type?: 'alone', justGetInfo?: boolean) {

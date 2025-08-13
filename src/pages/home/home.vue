@@ -435,6 +435,7 @@
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
+  import { useCacheStore } from '@/stores';
   import { useCommonTo } from '@/common/checkJump';
   import globalGl from '@/config/global';
 
@@ -444,6 +445,7 @@
     openId: '',
   });
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const patientUtils = new PatientUtils();
   const loginUtils = new LoginUtils();
   const viewerStore = useViewerStore();
@@ -522,6 +524,12 @@
     healthCounselConfig.value = await ServerStaticData.getSystemConfig(
       'HEALTH_COUNSEL'
     );
+    const { isOpenAIPolicy, policyList } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
+    if (isOpenAIPolicy === '1' || (policyList && policyList.length&&policyList[0].length)) {
+      const list = (policyList&&policyList.length && policyList[0].length)? policyList[0]: undefined;
+      cacheStore.changeFlagList(list, isOpenAIPolicy === '1');
+    }
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     // #ifdef MP-WEIXIN
@@ -998,7 +1006,6 @@
     .fun-list {
       margin-top: var(--h-margin-24);
     }
-
   }
 
   .uni-noticebar {

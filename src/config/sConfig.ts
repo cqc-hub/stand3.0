@@ -135,7 +135,29 @@ export interface ISConfig {
       /**
        * wx省中智捷付
        */
-      medical1001035?: '1';
+      medical1001035?: {
+        // 授权地址
+        auth: {
+          appId: string;
+          path: string;
+          envVersion?: 'release' | 'trial';
+          extraData: {
+            appid: string;
+            userName?: string;
+            idCard?: string;
+            [key: string]: any;
+          };
+        };
+        // 支付地址
+        pay: {
+          appId: string;
+          path: string;
+          envVersion?: 'release' | 'trial';
+          extraData?: {
+            [key: string]: any;
+          };
+        };
+      };
     };
   };
 
@@ -646,12 +668,27 @@ const scJson: Record<string, ISConfig> = {
   1001035: {
     // isDrugDelivery: '1',
     isOpenHelpOld: '1',
-    // medicalMHelp: {
-    //   wx: {
-    //     medicalDefault: '1',
-    //     medical1001035: '1',
-    //   },
-    // },
+    medicalMHelp: {
+      wx: {
+        isMedicalOrder: '1',
+        medical1001035: {
+          auth: {
+            appId: 'wxfde9fffbfa82be54',
+            path: 'pages/allOutPayCashier/authUniPro/authUni',
+            extraData: {
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+            },
+          },
+          pay: {
+            appId: 'wxfde9fffbfa82be54',
+            path: 'pages/allOutPayCashier/authUniPro/authUni',
+            extraData: {
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+            },
+          },
+        },
+      },
+    },
   },
 };
 

@@ -25,6 +25,7 @@ interface IStateGlobal {
   appShowData: BaseObject;
   appLaunchData: BaseObject;
   cacheData: BaseObject;
+  ev: T_ENV_H5;
   envH5: T_ENV_H5;
   isShowFlag: boolean; // 宁口隐私政策
   sysCode: string;
@@ -49,6 +50,7 @@ const globalStore = defineStore('global', {
   persist: {
     key: 'global',
     paths: [
+      'ev',
       'token',
       'openId',
       'h5OpenId',
@@ -66,6 +68,7 @@ const globalStore = defineStore('global', {
 
   state: (): IStateGlobal => {
     return {
+      ev: null,
       // 所有这些属性都将自动推断其类型
       token: {
         accessToken: '',
@@ -267,6 +270,7 @@ const globalStore = defineStore('global', {
     initBrowser() {
       const { updateBrowser } = this;
       // #ifdef H5
+      this.ev = 'web';
       const browser = navigator.userAgent.toLowerCase();
 
       if (browser) {
@@ -295,6 +299,7 @@ const globalStore = defineStore('global', {
       // #endif
 
       // #ifdef MP-WEIXIN
+      this.ev = 'wx';
       updateBrowser({
         source: 19,
         accountType: 11,
@@ -302,6 +307,7 @@ const globalStore = defineStore('global', {
       // #endif
 
       // #ifdef MP-ALIPAY
+      this.ev = 'alipay';
       updateBrowser({
         source: 21,
         accountType: 22,
