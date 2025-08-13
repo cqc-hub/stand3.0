@@ -96,7 +96,7 @@
   ]);
   const isComplete = ref(false);
 
-  const init = (item: IDocService) => {
+  const init = async (item: IDocService) => {
     isComplete.value = false;
     serList.value = serList.value.filter((o) => {
       const { key } = o;

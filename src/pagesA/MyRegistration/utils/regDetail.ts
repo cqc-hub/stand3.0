@@ -389,12 +389,14 @@ export interface IRegInfo {
   orderId: string;
   docName: string;
   categorName: string;
+  categor: string;
   _category: string;
   schQukCategor: string;
   _appointmentDate: string;
   appointmentDate: string;
   appointmentTime: string;
   ampmName: string;
+  ampm: string;
   fee: number;
   _fee: string;
   clinicalType: string;

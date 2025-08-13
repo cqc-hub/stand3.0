@@ -185,6 +185,9 @@
         });
       }
     } else if (fd.invokeData) {
+      uni.showLoading({})
+      await wait(600);
+      uni.hideLoading();
       wxPay(data);
     }
 
