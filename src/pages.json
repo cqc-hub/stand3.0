@@ -127,6 +127,11 @@
           "style": {
             "navigationBarTitleText": "全部评论"
           }
+        },    {
+          "path": "MyRegistration/FamousDoctors",
+          "style": {
+            "navigationBarTitleText": "名医温州汇"
+          }
         },
         {
           "path": "hospitalCare/hospitalRecordList",

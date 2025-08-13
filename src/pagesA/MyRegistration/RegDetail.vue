@@ -1072,13 +1072,14 @@
       businessType: 3,
     }
   ) => {
-    const { hosId, orderId } = orderRegInfo.value;
+    const { hosId, orderId, ampm } = orderRegInfo.value;
     const { userLongitudeLatitude = {}, payAuthNo } = auth;
     const { source } = gStores.globalStore.browser;
 
     const requestArg = {
       ...auth,
       ...userLongitudeLatitude,
+      timeDesc: ampm === '1' ? 'A' : 'P',
       accountUseFlag: true,
       businessType: payload.businessType,
       hosId,

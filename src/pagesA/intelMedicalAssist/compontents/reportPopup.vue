@@ -9,7 +9,7 @@
       <view class="title">
         <view class="flex-between">
           <view class="popup-title text-ellipsis f48 pt32 pb32">
-            报告AI解读
+            检验报告AI解读
           </view>
           <view
             @click="reportPopupRef?.hide"
@@ -124,7 +124,7 @@
 
       <view class="footer f32">
         <button class="btn btn-primary btn-border" @click="addPhoto">
-          上传报告图片
+          上传检验报告图片
         </button>
         <!-- #ifndef H5 -->
         <button class="btn btn-border btn-primary" @click="changeTtype" v-if="pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'">
