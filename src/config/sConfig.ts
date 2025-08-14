@@ -667,6 +667,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001035: {
     // isDrugDelivery: '1',
+    isOpenPopularSci: '1',
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {

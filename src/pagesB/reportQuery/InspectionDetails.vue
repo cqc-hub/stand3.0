@@ -47,9 +47,12 @@
             :reportInfo="checkoutReportList"
           />
 
-          <view v-if="checkoutReportList.pdfUrl" class="button-list">
+          <view
+            v-if="checkoutReportList.pdfUrl"
+            class="button-list mt32 flex relative flex-between pr32 pl32"
+          >
             <button
-              class="button"
+              class="button flex-1"
               :class="{ onlyOneButton: 1 }"
               @click="goPdfUrl"
             >
@@ -666,15 +669,11 @@
             // }
           }
           .button-list {
-            margin-top: 32rpx;
-            display: flex;
-            position: relative;
-            justify-content: space-evenly;
             z-index: 99;
+            gap: 32rpx;
             .button {
               border-radius: 16rpx;
               height: 80rpx;
-              width: 304rpx;
               border: 2rpx solid #cccccc;
               background-color: #fff;
               line-height: 80rpx;

@@ -2,14 +2,22 @@
   <view
     :style="{
       'background-image': `url(${
-        globalGl.BASE_IMG + 'stand3-home-doc-recommend-bg.png'
+        globalGl.BASE_IMG +
+        `stand3-home-doc-recommend-bg${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`
       })`,
     }"
     class="bg container-doc flex flex-col"
   >
     <view class="pt32 pl32 pb30 flex items-center">
       <image
-        :src="globalGl.BASE_IMG + 'stand3-home-doc-recommend-icon-bg.png'"
+        :src="
+          globalGl.BASE_IMG +
+          `stand3-home-doc-recommend-icon-bg${
+            gStores.globalStore.isTcmStyle ? '-tcm' : ''
+          }.png`
+        "
         mode="scaleToFill"
         class="icon-bg mr12"
       />
@@ -55,7 +63,12 @@
 
             <view class="flex">
               <image
-                :src="globalGl.BASE_IMG + 'v3_doctor_card_major.png'"
+                :src="
+                  $global.BASE_IMG +
+                  `v3_doctor_card_major${
+                    gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                  }.png`
+                "
                 class="doc-major-goodat mr12"
                 mode="widthFix"
               />
