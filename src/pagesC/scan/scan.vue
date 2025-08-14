@@ -157,6 +157,10 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      // 加密参数重新编码一次
+      if (pageProps.value.params) {
+        pageProps.value.params = encodeURIComponent(pageProps.value.params);
+      }
     }
 
     console.log('获取到参数', pageProps.value);
