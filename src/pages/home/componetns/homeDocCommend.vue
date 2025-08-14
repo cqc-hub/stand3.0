@@ -55,7 +55,12 @@
 
             <view class="flex">
               <image
-                :src="globalGl.BASE_IMG + 'v3_doctor_card_major.png'"
+                :src="
+                  $global.BASE_IMG +
+                  `v3_doctor_card_major${
+                    gStores.globalStore.isTcmStyle ? '-tcm' : ''
+                  }.png`
+                "
                 class="doc-major-goodat mr12"
                 mode="widthFix"
               />
