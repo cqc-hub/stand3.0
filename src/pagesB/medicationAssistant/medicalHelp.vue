@@ -194,7 +194,10 @@
   const selPat = computed(() => {
     if (pageProps.value.deParams) {
       return {
-        patientName: pageProps.value.deParams?.patientName || pageProps.value?.patientName|| '就诊人',
+        patientName:
+          pageProps.value.deParams?.patientName ||
+          pageProps.value?.patientName ||
+          '就诊人',
         _showId:
           pageProps.value.deParams?.cardNumber ||
           pageProps.value.deParams?.patientId,
@@ -479,6 +482,9 @@
       ...item,
       scan: pageProps.value?.params ? 1 : 0,
     };
+    if (pageProps.value?.params) {
+      pageArg.cardNumber = pageProps.value.deParams?.cardNumber;
+    }
 
     if (item.takenDrugType !== '0') {
       pageArg.takenDrug = '1';

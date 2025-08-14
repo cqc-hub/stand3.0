@@ -279,14 +279,14 @@
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
 
-    const { hosId, prescId } = pageProps.value;
+    const { hosId, prescId, } = pageProps.value;
     const actionApi =
       pageProps.value.scan == 1
         ? api.getScanDrugDeliveryDetail
         : api.getDrugDeliveryDetail;
     const { result } = await actionApi({
-      cardNumber,
-      patientId,
+      cardNumber:pageProps.value.scan == 1?pageProps.value?.cardNumber:cardNumber,
+      patientId:pageProps.value.scan == 1?'':patientId,
       hosId,
       prescId,
     });

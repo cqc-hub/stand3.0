@@ -25,6 +25,7 @@ export interface IWaitListItem {
   prescVisitType?: string;
   _id: string;
   scan?: number;
+  cardNumber?:string;
 }
 
 interface IDrugDetailListItem {
