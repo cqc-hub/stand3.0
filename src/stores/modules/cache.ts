@@ -1,4 +1,4 @@
-import { joinQuery } from '@/common';
+import { getSysCode, joinQuery } from '@/common';
 import globalGl from '@/config/global';
 import { defineStore } from 'pinia';
 

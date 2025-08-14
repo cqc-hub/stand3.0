@@ -52,7 +52,7 @@
   const tabCurrent = ref(0);
   const tabField = ref([
     {
-      label: '用户协议',
+      label: '服务条款',
       key: '0',
     },
     {

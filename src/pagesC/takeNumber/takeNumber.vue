@@ -510,7 +510,7 @@
       takeNumberAfterBtnForGoQueueNumber === '1';
 
     // headBtns.value =
-    if (isOnlineSign.value) {
+    if (isOnlineSign.value || isPharmacy.value) {
       headBtns.value = [...(onlineSignHeadBtns || [])];
       confirmAfterBtn.value = onlineSignConfirmAfterBtn;
     } else {
@@ -605,7 +605,11 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     uni.setNavigationBarTitle({
-      title: isOnlineSign.value ? '在线签到' : '门诊取号',
+      title: isOnlineSign.value
+        ? '在线签到'
+        : isPharmacy.value
+        ? '药房签到'
+        : '门诊取号',
     });
 
     if (isBloodSign.value) {

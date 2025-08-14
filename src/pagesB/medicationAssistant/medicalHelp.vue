@@ -171,6 +171,7 @@
       params?: string;
       deParams?: any;
       type?: string;
+      patientName?: string;
     }
   );
   const tabCurrent = ref(0);
@@ -193,7 +194,7 @@
   const selPat = computed(() => {
     if (pageProps.value.deParams) {
       return {
-        patientName: pageProps.value.deParams?.patientName || '就诊人',
+        patientName: pageProps.value.deParams?.patientName || pageProps.value?.patientName|| '就诊人',
         _showId:
           pageProps.value.deParams?.cardNumber ||
           pageProps.value.deParams?.patientId,
