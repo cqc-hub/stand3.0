@@ -72,7 +72,7 @@ const cacheStore = defineStore('cache', {
           flag: '1212',
         },
         {
-          label: '隐私条款',
+          label: '隐私保护政策',
           flag: '1213',
         },
         {
