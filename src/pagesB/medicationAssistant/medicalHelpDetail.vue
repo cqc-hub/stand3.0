@@ -31,9 +31,7 @@
             <view
               v-else-if="
                 takenDrugTypeMap[
-                  isSZShowExpress
-                    ? detailData.takenDrugType
-                    : detailData.takenDrugType || pageProps.takenDrugType
+                  detailData.takenDrugType || pageProps.takenDrugType
                 ]
               "
               class="g-bold f48"
@@ -195,6 +193,7 @@
     4: '窗口已取药',
     20: '快递已发货',
     50: '快递已签收',
+    21: '快递配送',
   };
 
   const refqrcode = ref('' as any);
@@ -204,7 +203,7 @@
   const isSZShowExpress = computed(() => {
     if (
       gStores.globalStore.sysCode === '1001035' &&
-      ['20', '50'].includes(detailData.value.takenDrugType) &&
+      ['20', '50', '4', '21'].includes(detailData.value.takenDrugType) &&
       detailData.value.expressNo
     ) {
       return true;
@@ -279,19 +278,20 @@
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
 
-    const { hosId, prescId, } = pageProps.value;
+    const { hosId, prescId } = pageProps.value;
     const actionApi =
       pageProps.value.scan == 1
         ? api.getScanDrugDeliveryDetail
         : api.getDrugDeliveryDetail;
     const { result } = await actionApi({
-      cardNumber:pageProps.value.scan == 1?pageProps.value?.cardNumber:cardNumber,
-      patientId:pageProps.value.scan == 1?'':patientId,
+      cardNumber:
+        pageProps.value.scan == 1 ? pageProps.value?.cardNumber : cardNumber,
+      patientId: pageProps.value.scan == 1 ? '' : patientId,
       hosId,
       prescId,
     });
 
-    const { expressParam, expressStatus, acceptTime } = result;
+    let{ expressParam, expressStatus, acceptTime } = result;
 
     if (expressParam) {
       let _keyMap = {
@@ -300,14 +300,18 @@
         50: '已签收',
         10: '待取件',
         30: '运输中',
+        21: '快递配送',
       };
       if (gStores.globalStore.sysCode === '1001035') {
-       _keyMap = {
+        result.expressNo && (result.takenDrugType = '21');
+        expressParam=''
+        _keyMap = {
           40: '派送中',
-          20: '已下单',
+          20: '快递配送',
           50: '已签收',
           10: '待取件',
           30: '运输中',
+          21: '快递配送',
         };
       }
 
