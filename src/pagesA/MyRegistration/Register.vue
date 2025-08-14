@@ -194,8 +194,11 @@
      * - 3: 药店指南（只展示药店 搜索框 不展示距离）
      * - 4: 1001046 专用 院内导航
      * - 5: MDT ( 需要通过 mdtHosOpened 过滤医院列表)
+     * - 6: 附近停车场
+     * - 7: 服务电话
+     *
      */
-    _type: '1' | '2' | '3' | '4' | '5';
+    _type: '1' | '2' | '3' | '4' | '5' | '6' | '7';
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
@@ -301,7 +304,10 @@
   };
 
   const itemClick = (item: IHosInfo) => {
-    if (globalGl.SYS_CODE === '1001046' && props.value._type === '4') {
+    const { _type } = props.value;
+    const { hosId } = item;
+
+    if (globalGl.SYS_CODE === '1001046' && _type === '4') {
       useTBanner(
         HosNavData[item.hosId](item, props.value._type),
         'navigateTo',
@@ -312,6 +318,43 @@
     //药店不可点击
     if (item.hosLevel == 9) {
       return;
+    }
+
+    if (_type) {
+      const typeMap = {
+        // 附近停车场
+        '6'() {
+          useTBanner({
+            type: 'h5',
+            isSelfH5: '1',
+            path: 'pages/nearbyParking/nearbyParking',
+            text: '附近停车场',
+            extraData: {
+              hosId,
+            },
+            isLocal: '1',
+          });
+        },
+
+        // 服务电话
+        '7'() {
+          useTBanner({
+            type: 'h5',
+            isSelfH5: '1',
+            path: 'pages/helplines/helplines',
+            text: '服务电话',
+            extraData: {
+              hosId,
+            },
+            isLocal: '1',
+          });
+        },
+      };
+
+      if (_type in typeMap) {
+        typeMap[_type]();
+        return;
+      }
     }
 
     if (isMedCopy.value) {
@@ -325,7 +368,7 @@
       }
     }
 
-    if (props.value._type && props.value._type !== '3' && !props.value._url) {
+    if (_type && _type !== '3' && !props.value._url) {
       //院区跳转问卷页面
       if (props.value._questionId) {
         //跳转问卷页面-h5
