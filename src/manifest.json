@@ -83,13 +83,20 @@
       "navigationStyle": "custom",
       "defaultTitle": "",
       "titleBarColor": "#ffffff"
+    },
+    "mini.project.json": {
+      "compileOptions": {
+        "codeObfuscation": {
+          "enable": true,
+          "type": "strong"
+        }
+      }
     }
   },
   "mp-baidu": {
     "usingComponents": true
   },
   "mp-toutiao": {
-    "usingComponents": true
     "usingComponents": true
   },
   "uniStatistics": {
