@@ -670,27 +670,27 @@ const scJson: Record<string, ISConfig> = {
     // isDrugDelivery: '1',
     isOpenPopularSci: '1',
     isOpenHelpOld: '1',
-    medicalMHelp: {
-      // wx: {
-      //   isMedicalOrder: '1',
-      //   medical1001035: {
-      //     auth: {
-      //       appId: 'wxfde9fffbfa82be54',
-      //       path: 'pages/allOutPayCashier/authUniPro/authUni',
-      //       extraData: {
-      //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
-      //       },
-      //     },
-      //     pay: {
-      //       appId: 'wxfde9fffbfa82be54',
-      //       path: 'pages/allOutPayCashier/authUniPro/authUni',
-      //       extraData: {
-      //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
-      //       },
-      //     },
-      //   },
-      // },
-    },
+    // medicalMHelp: {
+    // wx: {
+    //   isMedicalOrder: '1',
+    //   medical1001035: {
+    //     auth: {
+    //       appId: 'wxfde9fffbfa82be54',
+    //       path: 'pages/allOutPayCashier/authUniPro/authUni',
+    //       extraData: {
+    //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
+    //       },
+    //     },
+    //     pay: {
+    //       appId: 'wxfde9fffbfa82be54',
+    //       path: 'pages/allOutPayCashier/authUniPro/authUni',
+    //       extraData: {
+    //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
+    //       },
+    //     },
+    //   },
+    // },
+    // },
   },
 };
 

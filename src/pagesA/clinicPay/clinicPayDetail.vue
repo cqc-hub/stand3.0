@@ -311,8 +311,8 @@
     if (gStores.globalStore.sysCode === '1001035') {
       if (tabCurrent.value === 0) {
         selPayListItem(item);
+        return;
       }
-      return;
     }
 
     if (isModeMedicalHelp.value) {
