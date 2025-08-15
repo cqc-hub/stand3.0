@@ -1797,4 +1797,8 @@ const JSEncrypt = function() {
   t[1](0, i, e);
   return i.default;
 }();
-exports.JSEncrypt = JSEncrypt;
+// ES6 模块导出
+export { JSEncrypt };
+
+// 也可以使用默认导出
+export default JSEncrypt;

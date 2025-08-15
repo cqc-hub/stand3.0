@@ -19,7 +19,10 @@
     ></code-btn>
     <!-- #endif -->
     <scroll-view scroll-y class="scroll-container">
-      <view v-if="orderRegInfo.patientId" class="box">
+      <view
+        v-if="orderRegInfo.patientId || orderRegInfo.cardNumber"
+        class="box"
+      >
         <view class="reg-header flex-between">
           <view
             :style="{
@@ -305,7 +308,7 @@
 
     <!-- 取消、退号 是两个概念 退号要退钱， 取消是取消锁号-->
     <view
-      v-if="orderRegInfo.patientId && isShowFooter"
+      v-if="(orderRegInfo.patientId || orderRegInfo.cardNumber) && isShowFooter"
       class="footer g-border-top"
     >
       <view @click="goHome" class="home g-flex-rc-cc">
@@ -367,6 +370,23 @@
             class="btn btn-warning pay-btn"
           >
             {{ orderRegInfo.fee }}元 立即支付
+          </button>
+        </block>
+
+        <block v-if="isForwardReg">
+          <button
+            v-if="['10', '110', '0', '101'].includes(orderRegInfo.orderStatus)"
+            @click="refoundOrder"
+            class="btn g-border btn-normal"
+          >
+            取消预约
+          </button>
+          <button
+            v-if="orderRegInfo.canUpdateStatus === '0'"
+            @click="goUpdateRegDate"
+            class="btn g-border btn-primary"
+          >
+            推迟预约日期
           </button>
         </block>
 
@@ -511,9 +531,18 @@
     if (isWaitReg.value) {
       return orderRegInfo.value.orderStatus === '1';
     }
-    return ['23', '45', '10', '70', '0', '20', '43', '42', '101'].includes(
-      orderRegInfo.value.orderStatus
-    );
+    return [
+      '23',
+      '45',
+      '10',
+      '70',
+      '0',
+      '20',
+      '43',
+      '42',
+      '101',
+      '110',
+    ].includes(orderRegInfo.value.orderStatus);
   });
 
   const isWaitReg = computed(() => {
@@ -884,6 +913,7 @@
       //   }
       // })
       if (
+        gStores.globalStore.appShowData.referrerInfo?.extraData?.payAuthNo ||
         gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode ||
         isAlilAuth
       ) {
@@ -1042,12 +1072,14 @@
       businessType: 3,
     }
   ) => {
-    const { hosId, orderId } = orderRegInfo.value;
-    const { userLongitudeLatitude, payAuthNo } = auth;
+    const { hosId, orderId, ampm } = orderRegInfo.value;
+    const { userLongitudeLatitude = {}, payAuthNo } = auth;
     const { source } = gStores.globalStore.browser;
 
     const requestArg = {
+      ...auth,
       ...userLongitudeLatitude,
+      timeDesc: ampm === '1' ? 'A' : 'P',
       accountUseFlag: true,
       businessType: payload.businessType,
       hosId,
@@ -1204,6 +1236,25 @@
     init();
   };
 
+  const goUpdateRegDate = () => {
+    useTBanner({
+      type: 'h5',
+      isSelfH5: '1',
+      path: 'pagesA/dongzong/updateRegDate',
+      isLocal: '1',
+      addition: {
+        patientId: '_patientId',
+        herenId: 'herenId',
+        token: 'token',
+      },
+      extraData: {
+        orderRegInfo: JSON.stringify({
+          ...orderRegInfo.value,
+        }),
+      },
+    });
+  };
+
   const refoundWaitOrder = async () => {
     dialogContent.value = '确定取消候补预约吗?';
     isCancelOrderDialogShow.value = true;
@@ -1233,9 +1284,39 @@
     });
   };
 
+  const refoundForwardReg = async () => {
+    dialogContent.value = '确定取消远期预约吗?';
+    isCancelOrderDialogShow.value = true;
+
+    await new Promise((confirm) => {
+      cancelOrderDialogConfirm = confirm;
+    });
+    isCancelOrderDialogShow.value = false;
+
+    await api.cancelForwardReg({
+      hosId: orderRegInfo.value.hosId,
+      hosOrderId: orderRegInfo.value.hosOrderId,
+      cardNumber: orderRegInfo.value.cardNumber,
+      resDate: orderRegInfo.value.appointmentDate,
+      schId: orderRegInfo.value.schId,
+      source: gStores.globalStore.browser.source,
+    });
+
+    gStores.messageStore.showMessage('取消远期预约成功', 3000, {
+      closeCallBack() {
+        uni.reLaunch({
+          url: '/pagesA/MyRegistration/MyRegistration?typeId=4',
+        });
+      },
+    });
+  };
+
   const refoundOrder = async () => {
     if (isWaitReg.value) {
       return refoundWaitOrder();
+    }
+    if (isForwardReg.value) {
+      return refoundForwardReg();
     }
 
     if (pageProps.value._type === 'znpz') {

@@ -1,8 +1,13 @@
 <script setup lang="ts">
   import { onLaunch, onShow } from '@dcloudio/uni-app';
   import { useGlobalStore, useUserStore } from '@/stores';
+  import { getCurrentInstance, ref } from 'vue';
   import { beforeEach } from '@/router';
-  import { getSysCode } from '@/common/useToken';
+  import {
+    getLocalStorage,
+    getSysCode,
+    setLocalStorage,
+  } from '@/common/useToken';
   import global from '@/config/global';
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
@@ -10,7 +15,10 @@
   // #ifdef MP-ALIPAY
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
-  // import { shadowlib } from './uni_modules/libshadowesm/shadowlib.js';
+  import { shadowlib } from './uni_modules/libshadowesm/shadowlib.js';
+  import uni_modules_libshadowesm_config from './uni_modules/libshadowesm/config.js';
+  import env from './config/env';
+  import { wait } from './utils';
   // import shadowlib from './uni_modules/libshadowesm/shadowlib.js';
   // const uni_modules_libshadowesm_shadowlib = require('./uni_modules/libshadowesm/shadowlib.js');
   // const uni_modules_libshadowesm_config = require('./uni_modules/libshadowesm/config.js');
@@ -19,23 +27,117 @@
   // import { fn } from '@/utils/tt.js'
   // const fn1 = require('./utils/tt.js');
 
-  console.log({
-    // fn,
-    // fn,
-    // fn1,
-    // uni_modules_libshadowesm_shadowlib,
-    // uni_modules_libshadowesm_config,
-    // shadowlib,
-  });
-
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
     showTime = 0;
 
+  const initPublicKey = async () => {
+    const requestOptions = {
+      url: uni_modules_libshadowesm_config.ar_shadow_publickeyurl,
+      method: 'GET',
+      success: (res) => {
+        var _a;
+        console.log(res, 'res');
+        if (
+          res.statusCode === 200 &&
+          ((_a = res.data) == null ? void 0 : _a.publicKey)
+        ) {
+          // @ts-expect-error
+          app.globalData.isPubKeyInit = true;
+          setLocalStorage({
+            ar_shadow_publicKey: res.data.publicKey,
+          });
+        } else {
+          console.error('返回数据错误:');
+          setLocalStorage({
+            ar_shadow_publicKey: '',
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('初始化公钥失败:', err);
+        setLocalStorage({
+          ar_shadow_publicKey: '',
+        });
+      },
+    };
+
+    uni.request(requestOptions as any);
+  };
+
+  const app = getCurrentInstance()!.proxy;
+  const arshadow$vData = ref({
+    gyroscope: { x: 0, y: 0, z: 0 },
+    sysv: '',
+    battery: 100,
+    brand: '',
+    arlang: '',
+    touchStartCount: 0,
+    touchMoveCount: 0,
+    inputCount: 0,
+  });
+  const clientData = ref('');
+  const encryptUrl = ref('');
+  const getClientData = () => {
+    let u = getLocalStorage('ar_shadow_token1017');
+    const {
+      gyroscope: o,
+      battery: e,
+      sysv: l,
+      brand: g,
+      arlang: n,
+      touchStartCount: $,
+      touchMoveCount: b,
+      inputCount: d,
+    } = arshadow$vData.value;
+    let r = `x:${o.x} y:${o.y} z:${o.z}`;
+    let D = Math.floor(10 * Math.random());
+    let y = `0000000000000000000${
+      /* @__PURE__ */ new Date().getTime()
+    }||||${u}|${String(
+      /* @__PURE__ */ new Date().getTime()
+    )}||-$-$-$-$-$${b}$${$}$${d}$1$-$-$4$${r}$${e}$${l}$${g}$-$${n}$-$-$-|||||||||${D}|`;
+    clientData.value = y;
+    return y;
+  };
   onLaunch(async (opt) => {
     // console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
+    if (globalStore.sysCode === '1001035') {
+      initPublicKey();
+
+      uni.addInterceptor('request', {
+        invoke(args) {
+          const publicKey = getLocalStorage('publicKey');
+          let encr = shadowlib.ar_shadow_addparametertourl(
+            args.url,
+            '',
+            getClientData(),
+            publicKey
+          );
+
+          args.url = encr.requrl;
+          encryptUrl.value = encr.requrl;
+          Object.assign(arshadow$vData.value, {
+            touchStartCount: 0,
+            touchMoveCount: 0,
+            inputCount: 0,
+          });
+        },
+      });
+
+      let arshadowtoken = getLocalStorage('ar_shadow_token1017');
+      if (!arshadowtoken) {
+        arshadowtoken = (
+          shadowlib.ar_shadow_getrandom() + /* @__PURE__ */ new Date().getTime()
+        ).padStart(32, '0');
+        setLocalStorage({ ar_shadow_token1017: arshadowtoken });
+      }
+      if (globalStore.sysCode === '1001035') {
+        globalStore.setShowFlag(true);
+      }
+    }
 
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
@@ -195,43 +297,6 @@
         });
       }
     }
-
-    if (globalStore.sysCode === '1001035') {
-      console.log('------------------www');
-      // const { shadowlib } = require('./uni_modules/shadowlib/shadowen.js');
-      // console.log(shadowlib);
-
-      // const r = await (() => import('@/cacheUtil/1001035Util'))();
-      // console.log(r, '23');
-      // // @ts-expect-error
-      // require('./cacheUtil/shadowlib/shadowlib.js', mod => {
-      //   console.log(mod, '233');
-      // })
-    }
-
-    // uni.addInterceptor('request', {
-    //   invoke(args) {
-    //     // #ifdef MP-WEIXIN
-    //     let vs = new Date().getTime();
-    //     let url = env.baseApi;
-    //     let encr = shadowlib.ar_shadow_addparametertourl(
-    //       JSON.stringify(wx.getSystemInfoSync()),
-    //       vs
-    //     );
-    //     if (args.url.includes(url)) {
-    //       if (args.method == 'GET' || args.method == 'get') {
-    //         args.data.arshadowurlqueryparamid = encr;
-    //       } else {
-    //         if (args.url.includes('?')) {
-    //           args.url += '&arshadowurlqueryparamid=' + encr;
-    //         } else {
-    //           args.url += '?arshadowurlqueryparamid=' + encr;
-    //         }
-    //       }
-    //     }
-    //     // #endif
-    //   },
-    // });
   });
 </script>
 <style lang="scss">

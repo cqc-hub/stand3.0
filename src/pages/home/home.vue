@@ -136,7 +136,7 @@
                   >
                     <view class="flex-normal no-login">
                       <!-- <g-login @handler-next="routerJump"> -->
-                      <text>请登录</text>
+                      <text>请登录  {{ h5QrCodeData }}</text>
                       <text>登录后享受更多服务</text>
                       <!-- </g-login> -->
                     </view>
@@ -167,14 +167,14 @@
                   @click="goToNotice1"
                   v-if="
                     viewerStore.homeNoticeText ||
-                    healthCounselConfig.noticeReplaceParam
+                    healthCounselConfig?.noticeReplaceParam
                   "
                 >
                   <template
-                    v-if="healthCounselConfig.noticeReplaceParam?.buttonName"
+                    v-if="healthCounselConfig?.noticeReplaceParam?.buttonName"
                   >
                     <text class="notice-button g-bold">
-                      {{ healthCounselConfig.noticeReplaceParam.buttonName }}
+                      {{ healthCounselConfig?.noticeReplaceParam.buttonName }}
                     </text>
                   </template>
                   <template v-else>
@@ -192,7 +192,7 @@
                   <view class="bar-swiper">
                     <uni-notice-bar
                       :text="
-                        healthCounselConfig.noticeReplaceParam?.text ||
+                        healthCounselConfig?.noticeReplaceParam?.text ||
                         viewerStore.homeNoticeText
                       "
                       :speed="80"
@@ -435,6 +435,7 @@
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl } from '@/common';
+  import { useCacheStore } from '@/stores';
   import { useCommonTo } from '@/common/checkJump';
   import globalGl from '@/config/global';
 
@@ -444,6 +445,7 @@
     openId: '',
   });
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const patientUtils = new PatientUtils();
   const loginUtils = new LoginUtils();
   const viewerStore = useViewerStore();
@@ -522,6 +524,12 @@
     healthCounselConfig.value = await ServerStaticData.getSystemConfig(
       'HEALTH_COUNSEL'
     );
+    const { isOpenAIPolicy, policyList } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
+    if (isOpenAIPolicy === '1' || (policyList && policyList.length&&policyList[0].length)) {
+      const list = (policyList&&policyList.length && policyList[0].length)? policyList[0]: undefined;
+      cacheStore.changeFlagList(list, isOpenAIPolicy === '1');
+    }
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     // #ifdef MP-WEIXIN
@@ -609,6 +617,7 @@
 
   //打开关注框
   const openShare = (item, type?) => {
+    console.log('openShare',item,type)
     if (type === 'attention') {
       h5QrCodeData.value = item.query && JSON.parse(item.query);
       clickShareItem.value = item;
@@ -998,7 +1007,6 @@
     .fun-list {
       margin-top: var(--h-margin-24);
     }
-
   }
 
   .uni-noticebar {

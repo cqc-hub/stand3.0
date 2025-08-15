@@ -119,7 +119,7 @@
                 :class="{ 'b-bottom': msgItem.type.type === 2 }"
                 class="flex"
               >
-                <view class="flex1">
+                <view class="flex1 auto">
                   <text
                     user-select
                     selectable
@@ -164,7 +164,7 @@
                     class="sysAppMore"
                   >
                     <rich-text :nodes="sysAppMore"></rich-text>
-                  </view>
+                  </view> 
 
 
                  <view v-if="msgItem.firstCommendList" class="pt20">
@@ -209,7 +209,7 @@
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
               <text user-select selectable class="g-break-word g-blod">
-               正在理解您的问题
+              {{msgState.msgText ? msgState.msgText: "正在理解您的问题"}} 
               </text>
                <text class="progress-text">{{ progressWidth }}%</text> 
               <view
@@ -421,5 +421,8 @@
   }
   .mWidth80 {
     min-width: 80vw;
+  }
+  .auto{
+    overflow: auto;
   }
 </style>

@@ -181,18 +181,21 @@
     <
       {
         hosId?: string; // 采血取号 需要
-        _type?: 'blood'; //区分普通取号和 濮阳采血取号
-        type?: '0' | '1' | '2'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
+        _type?: 'blood' | 'pharmacy'; //区分普通取号和 濮阳采血取号
+        type?: '0' | '1' | '2' | '3'; // 普通取号 区分为 0为门诊取号 1 为门诊签到 2采血
       }
     >{}
   );
   const headBtns = ref(<TButtonConfig[]>[]);
 
+  //药房签到
+  const isPharmacy = computed(() => pageProps.value._type === 'pharmacy');
   // 采血取号
   const isBloodSign = computed(() => pageProps.value._type === 'blood');
   // 在线签到
   const isOnlineSign = computed(
-    () => !isBloodSign.value && pageProps.value.type === '1'
+    () =>
+      !isBloodSign.value && !isPharmacy.value && pageProps.value.type === '1'
   );
 
   const locationInfo = ref({
@@ -507,7 +510,7 @@
       takeNumberAfterBtnForGoQueueNumber === '1';
 
     // headBtns.value =
-    if (isOnlineSign.value) {
+    if (isOnlineSign.value || isPharmacy.value) {
       headBtns.value = [...(onlineSignHeadBtns || [])];
       confirmAfterBtn.value = onlineSignConfirmAfterBtn;
     } else {
@@ -602,7 +605,11 @@
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     uni.setNavigationBarTitle({
-      title: isOnlineSign.value ? '在线签到' : '门诊取号',
+      title: isOnlineSign.value
+        ? '在线签到'
+        : isPharmacy.value
+        ? '药房签到'
+        : '门诊取号',
     });
 
     if (isBloodSign.value) {

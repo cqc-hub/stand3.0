@@ -9,7 +9,7 @@
     <g-choose-pat
       :disabled="pageProps.params"
       :pat="selPat"
-      @choose-pat="tabChange(tabCurrent)"
+      @choose-pat="patChange(tabCurrent)"
     />
     <view v-if="tabField.length > 1" class="g-border-bottom">
       <g-tabs
@@ -129,6 +129,7 @@
     wait,
     throttle,
     cacheUtil,
+    apiAsync,
   } from '@/utils';
   import { decryptForPage } from '@/common/des';
   import {
@@ -137,6 +138,7 @@
     isToBeFriedAndDelivery,
   } from './utils/medicalHelp';
   import {
+    joinQuery,
     setLocalStorage,
     getLocalStorage,
     joinQueryForUrl,
@@ -168,6 +170,8 @@
       tabIndex: number;
       params?: string;
       deParams?: any;
+      type?: string;
+      patientName?: string;
     }
   );
   const tabCurrent = ref(0);
@@ -190,20 +194,14 @@
   const selPat = computed(() => {
     if (pageProps.value.deParams) {
       return {
-        patientName: pageProps.value.deParams?.patientName || '就诊人',
+        patientName:
+          pageProps.value.deParams?.patientName ||
+          pageProps.value?.patientName ||
+          '就诊人',
         _showId:
           pageProps.value.deParams?.cardNumber ||
           pageProps.value.deParams?.patientId,
       };
-    } else if (pageProps.value.params) {
-      if (
-        gStores.userStore.patChoose.cardNumber ===
-        pageProps.value.deParams?.cardNumber
-      ) {
-        return gStores.userStore.patChoose;
-      } else {
-        return {};
-      }
     } else {
       return gStores.userStore.patChoose;
     }
@@ -271,6 +269,10 @@
   const selListOption1 = computed(() => {
     return getSelOptList(listNow.value);
   });
+  let patChange=(idx: number)=>{
+     pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
+     tabChange(idx)
+  }
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
@@ -444,17 +446,17 @@
     }
 
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
+    pageProps.value.deParams = sign ? {} : undefined;
 
     const { result = {} } = await actionApi(args).finally(() => {
       isComplete.value[takenDrug] = true;
     });
+
     if (sign && result.drugList && result.drugList.length) {
       pageProps.value.deParams = {
-        cardNumber: result.cardNumber||result.patientId,
+        cardNumber: result.cardNumber || result.patientId,
         patientName: result.patientName,
       };
-    } else {
-      pageProps.value.deParams = undefined;
     }
 
     const { drugList: rList, patientId: _patientId } = result;
@@ -484,6 +486,9 @@
       ...item,
       scan: pageProps.value?.params ? 1 : 0,
     };
+    if (pageProps.value?.params) {
+      pageArg.cardNumber = pageProps.value.deParams?.cardNumber;
+    }
 
     if (item.takenDrugType !== '0') {
       pageArg.takenDrug = '1';
@@ -568,13 +573,22 @@
     });
 
     cacheStore.changeMedicalHelpSelList(selList.value);
-
+    let isYouzhen = false;
+    isYouzhen =
+      gStores.globalStore.sysCode === '1001035' &&
+      selList.value.some((item) => {
+        // 只要包含中药自煎的 只可选择邮政配送
+        if (item.drugTypeCode == '1' && item.tcmDecoctionIndicator == '0') {
+          return true;
+        }
+      });
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: rPatientId,
           ...pageProps.value,
           scan: pageProps.value?.params ? 1 : 0,
+          isYouzhen,
         }),
       });
     }, 200);
@@ -634,9 +648,45 @@
       }
     }
   };
+  const getChineseMedicineList = async () => {
+    const { patientId, cardNumber } = gStores.userStore.patChoose;
+    try {
+      const { result } = await api.getChineseMedicineList({
+        cardNumber,
+        patientId,
+      });
+      if (result?.results && result.results.length) {
+        const { confirm, cancel } = await apiAsync(uni.showModal, {
+          content: '本次缴费项目中含有中草药处方，是否需要代煎？',
+          cancelText: '我要自煎',
+          confirmText: '选药代煎',
+        });
 
+        if (confirm) {
+          uni.navigateTo({
+            url: joinQuery('/pagesA/clinicPay/medicineDecoce', {
+              patientId,
+              cardNumber,
+            }),
+          });
+        }
+      }
+    } catch (error) {
+      console.error('获取中药代煎数据失败:', error);
+    }
+  };
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
+
+    uni.showLoading({});
+    if ((queryParams && !opt?.params) || opt?.q) {
+      await wait(650);
+      return;
+    }
+
+    if (opt) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+    }
     if (getSysCode() === '1001035') {
       uni.setNavigationBarTitle({
         title: '药品代煎快递办理',
@@ -651,15 +701,7 @@
           key: '1',
         },
       ];
-    }
-    uni.showLoading({});
-    if ((queryParams && !opt?.params) || opt?.q) {
-      await wait(650);
-      return;
-    }
-
-    if (opt) {
-      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
     }
 
     const { tabIndex, params } = pageProps.value;

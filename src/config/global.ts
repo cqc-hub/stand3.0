@@ -12,7 +12,7 @@ export let SYS_CODE = systemConfig.sysCode;
 SYS_CODE = getSysCode();
 // #endif
 
-let env = <'dev' | 'test' | 'prod'>'prod'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
@@ -54,6 +54,10 @@ const h5Url =
     : // : 'https://health.eheren.com/v3dev/#/';
       'https://health.eheren.com/v3/#/';
 
+const getK = (k: string) => {
+  return 're$v3'.replace('$', k);
+};
+
 const globalGl = {
   SYS_CODE,
   BASE_IMG,
@@ -74,6 +78,8 @@ const globalGl = {
   h5Url,
   sConfig: getSConfig(SYS_CODE),
   WEB_OUT_LOGIN_TIME,
+  q: getK('q'),
+  r: getK('s'),
 } as const;
 
 export default globalGl;

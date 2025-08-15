@@ -27,6 +27,7 @@
             <text style="color: var(--hr-brand-color-6)">检查报告</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">病历</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">药盒</text><text>、</text> -->
+             <text style="color: var(--hr-brand-color-6)">检查报告</text>、
             <text style="color: var(--hr-brand-color-6)">检验报告</text>
             <text>，智能医助将为您解读报告~</text>
           </view>

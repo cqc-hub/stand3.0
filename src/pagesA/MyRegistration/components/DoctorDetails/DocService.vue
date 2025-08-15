@@ -65,6 +65,7 @@
       util: '次',
       key: 'pictureParam',
       receptionMode: '1',
+      typeFlag: '1251', // 协议
     },
     {
       img:
@@ -74,6 +75,7 @@
       util: '次',
       key: 'phoneParam',
       receptionMode: '2',
+      typeFlag: '1252',
     },
     {
       img:
@@ -83,20 +85,22 @@
       util: '次',
       key: 'videoParam',
       receptionMode: '4',
+      typeFlag: '1253',
     },
     {
       img:
         'card_doctor_mbfz_n' + (gStores.globalStore.isTcmStyle ? '-tcm' : ''),
-      title: globalGl.SYS_CODE === '1001067' ? '线上问诊' : '复诊开药',
+      title: '复诊开药',
       fee: 0,
       util: '次',
       key: 'jsonParam',
       receptionMode: '8',
+      typeFlag: '1254',
     },
   ]);
   const isComplete = ref(false);
 
-  const init = (item: IDocService) => {
+  const init = async (item: IDocService) => {
     isComplete.value = false;
     serList.value = serList.value.filter((o) => {
       const { key } = o;
@@ -104,6 +108,19 @@
       const v = <TDocServiceItem>item[key];
       if (v) {
         o.fee = v.servicePrice;
+      }
+
+      if (key === 'jsonParam') {
+        if (gStores.globalStore.sysCode === '1001035') {
+          o.title = '图文问诊';
+          o.img =
+            'card_doctor_twzx_n' +
+            (gStores.globalStore.isTcmStyle ? '-tcm' : '');
+        }
+
+        if (gStores.globalStore.sysCode === '1001067') {
+          o.title = '线上问诊';
+        }
       }
 
       return v;
@@ -121,8 +138,27 @@
     isComplete.value = true;
   };
 
-  const goNetService = (item: (typeof serList.value)[number]) => {
-    const { receptionMode } = item;
+  const goNetService = async (item: (typeof serList.value)[number]) => {
+    const { receptionMode, typeFlag } = item;
+    const { title, content } = await gStores.getSysAppMore(typeFlag);
+
+    if (title) {
+      const { confirm } = await new Promise<any>(async (r) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: true,
+            confirmText: '确认',
+          },
+          closeCallBack: r,
+        });
+      });
+
+      if (!confirm) {
+        return;
+      }
+    }
 
     const arg = {
       receptionMode,

@@ -103,7 +103,7 @@
     {
       configData: () => {
         return {
-          imageCode: 'lqCode.jpg',
+          imageCode: '',
           theme: '公众号',
           title: '欢迎关注',
           subTitle: '长按识别二维码，关注公众号',
@@ -118,7 +118,6 @@
   };
   const close = () => {
     popup.value.close();
-    console.log(22222,'关闭')
     emits('close-pop-click');
   };
 

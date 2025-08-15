@@ -23,6 +23,7 @@ export interface IPageProps {
   hosOrderId: string;
   patientId: string;
   hisResult?: string;
+  cardNumber?: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
   orderStatus: string; // 挂号状态
@@ -156,6 +157,14 @@ export const orderStatusMap = {
     title: '已预约',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '110': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已预约',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
   // 成功
   '0': {
     headerClass: 'header-blue',
@@ -252,6 +261,14 @@ export const orderStatusMap = {
     headerBgIcon: '&#xe6de;',
     headerIcon: '&#xe6d5;',
     title: '已取消',
+    cardColor: 'var(--hr-neutral-color-7)',
+  },
+  '80': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '未就诊',
     cardColor: 'var(--hr-neutral-color-7)',
   },
   '81': {
@@ -372,12 +389,14 @@ export interface IRegInfo {
   orderId: string;
   docName: string;
   categorName: string;
+  categor: string;
   _category: string;
   schQukCategor: string;
   _appointmentDate: string;
   appointmentDate: string;
   appointmentTime: string;
   ampmName: string;
+  ampm: string;
   fee: number;
   _fee: string;
   clinicalType: string;
@@ -393,6 +412,8 @@ export interface IRegInfo {
   _totalCost: string;
   _hosAccountOffsetFee: string;
   tradeType?: '1' | '2'; // 1 只能自费 2 宜兴存在, 表示要医保退号
+  canUpdateStatus?: '0' | '1'; // 0 不可以 1 可以
+  schId?: string;
 }
 
 export const getStatusConfig = (status: string, isWaitReg: boolean) => {
@@ -480,14 +501,21 @@ export class RegDetailUtil {
   }
   /** 请求内部数据库 */
   async getForWardDetailData(): Promise<IRegInfo> {
-    const { hosOrderId } = this.prop.value;
-
-    const { result } = await api.getRegRecordInfo({
+    const { hosOrderId, _type, cardNumber } = this.prop.value;
+    const query = {
       hosOrderId,
       source: this.gStores.globalStore.browser.source,
-    });
+      cardNumber,
+    };
 
-    return result;
+    const { result } = await api.getRegRecordInfo(query);
+
+    return {
+      ...result,
+      orderId: result.appointId,
+      patientName: result.name,
+      patientPhone: result.phone,
+    };
   }
 
   async getDataDetail(): Promise<IRegInfo> {
@@ -501,6 +529,7 @@ export class RegDetailUtil {
       this.orderRegInfo = <any>this.prop.value;
     } else if (hosOrderId && _type == 'forwardReg') {
       this.orderRegInfo = await this.getForWardDetailData();
+      console.log();
     } else {
       this.gStores.messageStore.showMessage('入参错误, 调用详情失败');
       throw new Error('入参错误, 调用详情失败');

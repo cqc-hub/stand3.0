@@ -127,6 +127,11 @@
           "style": {
             "navigationBarTitleText": "全部评论"
           }
+        },    {
+          "path": "MyRegistration/FamousDoctors",
+          "style": {
+            "navigationBarTitleText": "名医温州汇"
+          }
         },
         {
           "path": "hospitalCare/hospitalRecordList",
@@ -289,6 +294,12 @@
           "path": "mySet/userPolicy",
           "style": {
             "navigationBarTitleText": " "
+          }
+        },
+         {
+          "path": "mySet/policyList",
+          "style": {
+            "navigationBarTitleText": "条款协议"
           }
         },
         {

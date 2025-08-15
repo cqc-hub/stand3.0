@@ -73,4 +73,8 @@ function crc32_str(str, seed = 0) {
 AR_SHADOW_CRC32.table = T0;
 AR_SHADOW_CRC32.bstr = crc32_bstr;
 AR_SHADOW_CRC32.buf = crc32_buf;
-exports.AR_SHADOW_CRC32 = AR_SHADOW_CRC32;
+// ES6 模块导出
+export { AR_SHADOW_CRC32 };
+
+// 也可以使用默认导出
+export default AR_SHADOW_CRC32;

@@ -142,7 +142,11 @@
     //   hosPatientld:100023882
     // }
     // }]
-    const { insuranceParams: insuranceParamsWx, payBackParams } = fd;
+    const {
+      insuranceParams: insuranceParamsWx,
+      payBackParams,
+      registerId,
+    } = fd;
 
     if (insuranceParamsWx) {
       if (
@@ -185,6 +189,24 @@
         });
       }
     } else if (fd.invokeData) {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '是否立即支付？',
+        cancelText: '取消',
+        confirmText: '确认',
+      });
+
+      if (!confirm) {
+        uni.navigateTo({
+          url: joinQuery('/pagesC/cloudHospital/cachePage', {
+            payment: 'back',
+            registerId,
+            payBackParams:
+              payBackParams &&
+              encodeURIComponent(JSON.stringify(payBackParams)),
+          }),
+        });
+        return;
+      }
       wxPay(data);
     }
 

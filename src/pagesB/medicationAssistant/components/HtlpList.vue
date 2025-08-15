@@ -121,7 +121,7 @@
           <view class="row flex-normal">
             <view class="row-label color-888">备注</view>
             <view class="flex1 g-break-word color-444 flex-normal">
-              <view class="text-ellipsis">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
+              <view class="text-ellipsis color-warn">{{ item.deliveryType == '2' ? '含有特殊药品，请前往医院窗口自提' : '可配送' }}</view>
             </view>
           </view>
         </view>
@@ -424,5 +424,8 @@
     .express-color {
       color: var(--hr-neutral-color-7);
     }
+  }
+  .color-warn{
+    color:$uni-color-warning;
   }
 </style>

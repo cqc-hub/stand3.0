@@ -5,6 +5,10 @@
     }"
     class="g-page"
   >
+    <g-choose-pat
+      v-if="pageProps.type === 'medicalHelp'"
+      @choose-pat="choosePat"
+    />
     <view class="swiper-item">
       <medicineDecoceList
         :list="unPayList"
@@ -117,6 +121,9 @@
       selUnPayList.value.length &&
       selUnPayList.value.length === unPayList.value.length
   );
+  const choosePat = async () => {
+    await fetchList();
+  };
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query
       ?.qrCode as string;
@@ -144,20 +151,34 @@
   const init = async () => {
     await fetchList();
     if (unPayList.value?.length == 0) {
-      gStores.messageStore.showMessage('暂无可下单的代煎药品', 3000, {
-        closeCallBack: () => {
-          useTBanner(
-            {
-              type: 'self',
-              path: 'pagesB/medicationAssistant/medicalHelp',
-              extraData: {
-                params: pageProps.value.params || '',
-              },
+      const { confirm } = await new Promise<any>((r: any) => {
+        gStores.messageStore.showMessage(
+          '暂无可下单的代煎药品,是否前往药品代煎快递办理？',
+          0,
+          {
+            useDialog: true,
+            dialogOpt: {
+              title: '温馨提示',
+              isShowCancel: true,
+              isMaskClick: true,
+              confirmText: '前往快递办理',
             },
-            'reLaunch'
-          );
-        },
+            closeCallBack: r,
+          }
+        );
       });
+      if (confirm) {
+        useTBanner(
+          {
+            type: 'self',
+            path: 'pagesB/medicationAssistant/medicalHelp',
+            extraData: {
+              params: pageProps.value.params || '',
+            },
+          },
+          'reLaunch'
+        );
+      }
     }
   };
   const fetchList = async () => {

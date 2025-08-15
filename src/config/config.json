@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001067",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -25,9 +25,9 @@
 
     "1001036": {
       "wxAppid": "wx90dd2c3c4be8355a",
-      "h5Appid": "wxab05eba59d902b5f",
+      "h5Appid1": "wxab05eba59d902b5f",
       "alipayAppid": "2021003120612222",
-      "isvAlipayAppid": "2021003120637143",
+      "isvAlipayAppid1": "2021003120637143",
       "name": "中国人民解放军东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false
@@ -306,7 +306,7 @@
         "healthCardText": "甘肃省卫生健康委员会",
         "hospitalId": "39894",
         "isCardQueryComp": true,
-        "isNewMode": true
+        "isNewMode": false
       }
     },
     "1001076": {
@@ -321,7 +321,7 @@
     },
     "1001077": {
       "wxAppid": "wx9dcb98a8c18d44ea",
-      "h5Appid": "wx97fd54c614de79b4",
+      "h5Appid1": "wx97fd54c614de79b4",
       "alipayAppid": "2021005131642589",
       "isvAlipayAppid": "2021005131668685",
       "name": "陕西省中医医院",

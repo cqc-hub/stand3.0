@@ -91,7 +91,8 @@
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=JR%2B2rwT0%2FFQlxXU7C0yqm3ztZHZEKzQ0xt6zmf60kXs%3D'
       url,
       // @ts-expect-error
-      filePath: uPath + '/' + name, //设置文件名
+      // filePath: uPath + '/' + name, //设置文件名
+      filePath: `${uPath}/${name}.pdf`, //设置文件名
       success: function (res) {
         // @ts-expect-error
         const filePath = res.filePath || res.tempFilePath;

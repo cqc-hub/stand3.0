@@ -13,7 +13,7 @@ import {
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useMessageStore } from '@/stores';
-import { LoginUtils, ServerStaticData, outLogin } from '@/utils';
+import { LoginUtils, ServerStaticData, getQKey, getRKey, outLogin } from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
 import { sm4_ecb_encrypt, sm4_ecb_decrypt } from '@/common/sm4.js';
@@ -293,8 +293,7 @@ const requestInterfaceEncrp = (request) => {
   if (isOpenSm4) {
     desData.signContent = sm4_ecb_encrypt(JSON.stringify(data.args));
   } else if (isDes) {
-    const key = 'reqv3-' + ('0' + new Date().getDate()).slice(-2);
-    desData.signContent = encryptDes(JSON.stringify(data.args), key);
+    desData.signContent = encryptDes(JSON.stringify(data.args), getQKey());
   }
   return desData;
 };
@@ -308,11 +307,10 @@ const responseInterfaceDecryp = (signContent) => {
       DecryptData = sm4_ecb_decrypt(signContent);
     }
   } else if (isDes) {
-    const key = 'resv3-' + ('0' + new Date().getDate()).slice(-2);
     try {
-      DecryptData = JSON.parse(decryptDes(signContent, key));
+      DecryptData = JSON.parse(decryptDes(signContent, getRKey()));
     } catch (e) {
-      DecryptData = decryptDes(signContent, key);
+      DecryptData = decryptDes(signContent, getRKey());
     }
   }
   return DecryptData;
