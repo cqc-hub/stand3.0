@@ -14,16 +14,18 @@
           blod
         />
       </view>
-      <view class="flex1" v-if="hasInit">
+      <!-- 首页不展示搜索框 -->
+      <!-- <view class="flex1" v-if="hasInit">
         <uni-search-input
           v-model:value="searchValue"
           @change="goSearch"
           placeholder="请输入资讯内容搜索"
         />
-      </view>
+      </view> -->
     </view>
     <view class="tab-box fade-in" v-show="!isSearch">
-      <g-tabs
+    <view class="tab-content">
+    <g-tabs
         v-if="tabs && tabs.length"
         v-model:value="tabCurrent"
         :tabs="tabs"
@@ -35,7 +37,14 @@
         @change="tabChange"
         field="typeName"
         blod
+        class="tabs-flex"
       />
+      <view v-if="tabs && tabs.length" class="more-btn" @click="readMore('all')">
+      <text class="f28 color-666 mr6">查看全部</text>
+       <text class="iconfont icon-size">&#xe66b;</text>
+      </view>
+    </view>
+
     </view>
     <swiper
       :current="tabCurrent"
@@ -52,6 +61,7 @@
           >
             <Advisory-Item
               v-for="(item, index) in pageList[tab.typeId]"
+              :key="index"
               :item="item"
               :isVideoTab="isVideoTab"
               @item-click="itemClick"
@@ -81,6 +91,7 @@
       <view class="container-scroll fade-in" :id="`Advisory-search-Item`">
         <Advisory-Item
           v-for="(item, index) in searchList"
+          :key="index"
           :item="item"
           :isVideoTab="isVideoTab"
           @item-click="itemClick"
@@ -299,6 +310,12 @@
         isSelfH5: '1',
         path: `pagesA/healthAdvisory/healthAdvisotySearch?searchValue=${searchValue.value}`,
       });
+    }else if(type === 'all'){
+      useTBanner({
+        type: 'h5',
+        isSelfH5: '1',
+        path: `pagesA/healthAdvisory/healthAdvisory`,
+      });
     } else {
       useTBanner({
         type: 'h5',
@@ -326,7 +343,36 @@
     }
 
     .tab-box {
-      padding: 0 10rpx 20rpx;
+      padding: 0 10rpx 20rpx; 
+
+      .tab-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .tabs-flex {
+          flex: 1;
+          min-width: 0; // 防止flex项目溢出
+        }
+        
+        .more-btn {
+          flex-shrink: 0; // 防止按钮被压缩
+          display: flex;
+          align-items: center;
+          margin-left: 16rpx;
+          padding: 10rpx 16rpx;
+          
+          .more-text {
+            font-size: var(--hr-font-size-s);
+            color: #666;
+            margin-right: 6rpx;
+          }
+          
+          .icon-size {
+            color: #888;
+          }
+        }
+      }
     }
     .container {
       flex: 1;
@@ -367,5 +413,5 @@
     // position: relative;
     transform: translateY(30%) !important;
     // padding: 30rpx 0;
-  }
+  } 
 </style>
