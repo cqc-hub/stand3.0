@@ -7,8 +7,11 @@
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
+import { useCacheStore } from '@/stores';
 
   let n = 0;
+  const cacheStore = useCacheStore()
+
   onShow(() => {
     if (n) {
       uni.navigateBack({
@@ -34,8 +37,9 @@
     uni.showLoading({
       title: '',
     });
-    console.log(url, name);
-    if (type && type == 'base64') {
+    if (type === 'cache') {
+      downWithStream(cacheStore.cacheData, name);
+    } else if (type == 'base64') {
       downWithBase64(url, name);
     } else {
       downWithStream(url, name);
@@ -84,7 +88,9 @@
     });
   };
   const downWithStream = (url, name) => {
-    name = name || new Date().getTime() + '';
+    // name = name || new Date().getTime() + '';
+    console.log(url, '-----url');
+    name = new Date().getTime() + '';
     uni.downloadFile({
       // url: 'https://xinjiang.eheren.com/image?uid=8d74fcdb5c33a273f4398750c334138a1b67f770e74dcd54fd8883c42031483e', //自定义的文件地址
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
@@ -94,13 +100,19 @@
       // filePath: uPath + '/' + name, //设置文件名
       filePath: `${uPath}/${name}.pdf`, //设置文件名
       success: function (res) {
+        console.log('下载成功-----');
+        console.log(res);
         // @ts-expect-error
         const filePath = res.filePath || res.tempFilePath;
         uni.openDocument({
-          filePath: filePath,
+          filePath,
           fileType: 'pdf',
           // @ts-expect-error
           showMenu: true,
+          complete(e) {
+            console.log('预览文件--', filePath);
+            console.log(e);
+          },
           fail(e) {
             console.log('prev fail', e);
           },

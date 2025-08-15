@@ -623,6 +623,7 @@
       getPowerEnerg(repId);
     }
   };
+
   const goReportPdf = (item) => {
     let { repId, repName, pdfPath } = item;
     const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
@@ -634,11 +635,12 @@
         });
         return;
       }
+      cacheStore.changeCacheData(pdfPath1001035);
 
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
-          url: encodeURIComponent(pdfPath1001035 as string),
           name: '',
+          type: 'cache',
         }),
       });
       return;
