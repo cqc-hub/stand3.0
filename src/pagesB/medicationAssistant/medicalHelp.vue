@@ -9,7 +9,7 @@
     <g-choose-pat
       :disabled="pageProps.params"
       :pat="selPat"
-      @choose-pat="tabChange(tabCurrent)"
+      @choose-pat="patChange(tabCurrent)"
     />
     <view v-if="tabField.length > 1" class="g-border-bottom">
       <g-tabs
@@ -269,6 +269,10 @@
   const selListOption1 = computed(() => {
     return getSelOptList(listNow.value);
   });
+  let patChange=(idx: number)=>{
+     pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
+     tabChange(idx)
+  }
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;

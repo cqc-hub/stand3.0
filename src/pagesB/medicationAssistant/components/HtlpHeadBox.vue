@@ -20,11 +20,17 @@
 
     <view class="item-content f28 mt32">
       <block v-for="_item in renderList" :key="_item.key">
-        <view v-if="renderRow[_item.key]&&renderRow[_item.key]!='undefined'" class="row flex-normal mb12">
+        <view
+          v-if="renderRow[_item.key] && renderRow[_item.key] != 'undefined'"
+          class="row flex-normal mb12"
+        >
           <view class="label text-no-wrap color-888">{{ _item.label }}</view>
 
           <view v-if="_item.key === 'masterDocName'" class="value">
-            <text class="g-split-line mr12 pr12">
+            <text
+              class="g-split-line mr12 pr12"
+              :class="{ 'clear-split-line': item.deptName }"
+            >
               {{ renderRow[_item.key] }}
             </text>
             <text>{{ item.deptName }}</text>
@@ -105,7 +111,11 @@
 <style lang="scss" scoped>
   .item {
     padding: 40rpx 32rpx;
-    background: linear-gradient(180deg, #ffffff 0%, var(--hr-brand-color-1) 100%);
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      var(--hr-brand-color-1) 100%
+    );
     border-radius: 8px 8px 0px 0px;
 
     .item-title {
@@ -145,6 +155,11 @@
           width: 170rpx;
         }
       }
+    }
+  }
+  .clear-split-line {
+    ::after {
+      width: 0 !important;
     }
   }
 </style>

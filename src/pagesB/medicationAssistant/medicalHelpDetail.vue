@@ -291,7 +291,7 @@
       prescId,
     });
 
-    let{ expressParam, expressStatus, acceptTime } = result;
+    let { expressParam, expressStatus, acceptTime } = result;
 
     if (expressParam) {
       let _keyMap = {
@@ -302,18 +302,6 @@
         30: '运输中',
         21: '快递配送',
       };
-      if (gStores.globalStore.sysCode === '1001035') {
-        result.expressNo && (result.takenDrugType = '21');
-        expressParam=''
-        _keyMap = {
-          40: '派送中',
-          20: '快递配送',
-          50: '已签收',
-          10: '待取件',
-          30: '运输中',
-          21: '快递配送',
-        };
-      }
 
       const date = dayjs(acceptTime).format('MM-DD');
 
@@ -322,6 +310,17 @@
           title: _keyMap[expressStatus] || '未知',
           date,
           desc: expressParam,
+        },
+      };
+    }
+    if (gStores.globalStore.sysCode === '1001035' && result.expressNo) {
+      result.expressNo && (result.takenDrugType = '21');
+      const date = dayjs(acceptTime).format('MM-DD');
+      expressInfo.value = {
+        pointNow: {
+          title: '快递配送',
+          date,
+          desc: '',
         },
       };
     }
@@ -352,7 +351,7 @@
       pointEnd: {
         title:
           detailData.value.deliveryAddress || detailData.value.addresseeAddress,
-        desc: `${detailData.value.addresseeName} ${detailData.value.addresseePhone}`,
+        desc: `${detailData.value.addresseeName||''} ${detailData.value.addresseePhone||''}`,
       },
     };
   });
