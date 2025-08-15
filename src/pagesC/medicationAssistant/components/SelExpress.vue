@@ -21,7 +21,10 @@
         }"
         class="item g-flex-rc-cc text-ellipsis"
       >
-        <view class="iconfont check-box-icon">
+        <view
+          class="iconfont check-box-icon"
+          :class="{ disabled: item?.disabled }"
+        >
           {{
             isAllActive || isActive(item[field.value]) ? '&#xe6d0;' : '&#xe6ce;'
           }}
@@ -124,6 +127,13 @@
       };
 
       const itemClick = (item) => {
+        if (item?.disabled) {
+          gStores.messageStore.showMessage(
+            '当前订单中含有暂不支持该快递方式的药品',
+            3000
+          );
+          return;
+        }
         emit('item-click', item);
         const value = item[props.field.value];
 
@@ -225,5 +235,8 @@
       background-color: var(--hr-brand-color-6);
       border-radius: 16rpx;
     }
+  }
+  .disabled {
+    color: #aaa;
   }
 </style>

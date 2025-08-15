@@ -573,7 +573,7 @@
     });
 
     cacheStore.changeMedicalHelpSelList(selList.value);
-    let isYouzhen = false;
+    let isYouzhen = 0;
     isYouzhen =
       gStores.globalStore.sysCode === '1001035' &&
       selList.value.some((item) => {
@@ -581,13 +581,13 @@
         if (item.drugTypeCode == '1' && item.tcmDecoctionIndicator == '0') {
           return true;
         }
-      });
+      })?1:0;
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: rPatientId,
           ...pageProps.value,
-          scan: pageProps.value?.params ? 1 : 0,
+          scan: pageProps.value?.params ? '1' : '0',
           isYouzhen,
         }),
       });

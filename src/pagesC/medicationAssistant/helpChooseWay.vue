@@ -193,7 +193,7 @@
       cardNumber?: string;
       params?: string;
       scan?: 1 | 0;
-      isYouzhen?: boolean;
+      isYouzhen?: '1' | '0';
     }
   );
 
@@ -536,8 +536,11 @@
 
     if (len) {
       aimList.value = companyList;
-      pageProps.value.isYouzhen &&
-        aimList.value.filter((item) => item.label.includes('邮政'));
+      pageProps.value.isYouzhen === '1' &&
+        (aimList.value = aimList.value.map((item) => {
+          return { ...item, disabled: !item.label.includes('邮政') };
+        }));
+
       if (len === 1) {
         aimValue.value = [companyList[0].value];
       }
