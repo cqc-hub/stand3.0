@@ -180,7 +180,8 @@
                 @click="goReportPdf(item)"
                 v-if="
                   (pageProps.isDownloadRepor === '1' &&
-                    pageProps.isGraphic == 1) ||
+                    pageProps.isGraphic == 1 &&
+                    gStores.globalStore.sysCode !== '1001035') ||
                   item?.pdfPath
                 "
               >
