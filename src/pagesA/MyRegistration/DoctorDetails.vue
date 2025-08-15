@@ -62,8 +62,8 @@
 
                 <view class="p32c header-content">
                   <view class="flex-normal">
-                    <view class="doc-name mr24 f48 g-bold text-no-wrap">
-                      <text class="text-ellipsis">{{ docDetail.docName }}</text>
+                    <view class="doc-name mr24 f48 g-bold ">
+                      <text class="---text-ellipsis">{{ docDetail.docName }}</text>
                     </view>
 
                     <view
