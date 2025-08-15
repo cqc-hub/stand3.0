@@ -43,6 +43,7 @@ export const pageConfig = ref(
 export const pageOrderConfig = ref({} as ISystemConfig['order']);
 export const msgList = ref<Array<MsgListType>>([]);
 export const msgState = ref<MsgStatusType>({
+  msgText:'',
   msgLoad: false,
   lastChatId: '',
   requestId: '',
@@ -114,6 +115,7 @@ export const init = async (props) => {
     chunkStatus.value.isWXStreamApi = true;
   }
   msgState.value = {
+    msgText:'',
     msgLoad: false,
     lastChatId: '',
     requestId: '',
@@ -617,22 +619,27 @@ export const sendImg = async () => {
         reportPopupRef.value.hide();
       } catch (e) {}
     }
-    msgState.value.msgLoad = true;
     msgList.value.push({
       my: true,
       imgUrl: tempFilePaths[0],
       type: 5,
     });
-    scrollToNewMsg();
     let type = 'mini';
     // #ifdef  H5
     type = 'h5';
     // #endif
+    setTimeout(() => {
+       msgState.value.msgText = "正在分析您的报告";
+       msgState.value.msgLoad = true;
+      scrollToNewMsg();
+    }, 500);
+
+    const gStores = new GStores();
+    let baseApi =  gStores.globalStore.sysCode === '1001082'?'https://eservice.wzswsj.gov.cn':'https://netphs.eheren.com/gateway';
+
     // @ts-expect-error
     const { data } = await apiAsync(uni.uploadFile, {
-      // url: `${env.baseApi}/phs-extend/customer/picTrans?sysCode=${gStores.globalStore.sysCode}`,
-
-      url: `${env.baseApi}/phs-extend/customer/picOcr?sysCode=${
+      url: `${baseApi}/phs-extend/customer/picOcr?sysCode=${
         gStores.globalStore.sysCode
       }&type=${type}&herenId=${
         gStores.globalStore.herenId || propsPbj.value?.herenId
@@ -654,6 +661,7 @@ export const sendImg = async () => {
         type: -1,
       });
       msgState.value.msgLoad = false;
+      msgState.value.msgText = "";
       console.error('picOcr接口报错', JSON.parse(data));
       return;
     }
@@ -672,6 +680,7 @@ export const sendImg = async () => {
     });
   } finally {
     msgState.value.msgLoad = false;
+    msgState.value.msgText = "";
   }
 };
 
@@ -1181,7 +1190,7 @@ const typeInAsk = async (value, answertype) => {
     }),
   };
   if (answertype === 'ocr') {
-    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamOcrAsk`;
+    settings.url = `${baseApi}/phs-extend/customer/aiStreamOcrAsk`;
     settings.data = JSON.stringify({
       args: {
         ocrId: value,
@@ -1192,7 +1201,7 @@ const typeInAsk = async (value, answertype) => {
     });
   }
   if (answertype == 'report') {
-    settings.url = `${env.baseApi}/phs-extend/customer/aiStreamReportAsk`;
+    settings.url = `${baseApi}/phs-extend/customer/aiStreamReportAsk`;
     settings.data = JSON.stringify({
       args: value,
     });
@@ -1205,7 +1214,8 @@ const typeInAsk = async (value, answertype) => {
     success: (response) => {},
     fail: (err) => {
       console.log('errror', err);
-      msgState.value.msgLoad = false;
+      msgState.value.msgLoad = false; 
+      msgState.value.msgText = "";
       if (err.errMsg == 'request:fail abort') {
         gStores.messageStore.showMessage('已暂停生成', 3000);
       } else {
@@ -1219,6 +1229,7 @@ const typeInAsk = async (value, answertype) => {
     },
     complete: () => {
       msgState.value.msgLoad = false;
+      msgState.value.msgText = "";
       requestTask?.offChunkReceived();
       chunkStatus.value.chunkTemp = '';
       chunkStatus.value.isTyping = false;
@@ -1300,10 +1311,12 @@ const typeInAskH5 = (value: any, answertype) => {
           // 处理成功响应
           chunkStatus.value.isTyping = false;
           msgState.value.msgLoad = false;
+          msgState.value.msgText = "";
         } else {
           // 处理错误响应
           console.log('errror', xhr.statusText);
           msgState.value.msgLoad = false;
+          msgState.value.msgText = "";
           msgList.value.push({
             my: false,
             msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
@@ -1318,6 +1331,7 @@ const typeInAskH5 = (value: any, answertype) => {
   xhr.onerror = () => {
     console.log('请求出错');
     msgState.value.msgLoad = false;
+    msgState.value.msgText = "";
     msgList.value.push({
       my: false,
       msg: '啊哦～网络连接异常，请稍后尝试。',

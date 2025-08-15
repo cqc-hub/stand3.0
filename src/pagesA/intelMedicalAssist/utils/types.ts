@@ -26,6 +26,7 @@ export type MsgListType = {
 };
 
 export type MsgStatusType = {
+  msgText?: string;
   msgLoad: boolean;
   lastChatId?: string;
   requestId?:string;

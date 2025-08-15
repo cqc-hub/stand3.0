@@ -9,7 +9,7 @@
       <view class="title">
         <view class="flex-between">
           <view class="popup-title text-ellipsis f48 pt32 pb32">
-            检验报告AI解读
+            报告AI解读
           </view>
           <view
             @click="reportPopupRef?.hide"
@@ -27,6 +27,7 @@
             <text style="color: var(--hr-brand-color-6)">检查报告</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">病历</text><text>、</text>
             <text style="color: var(--hr-brand-color-6)">药盒</text><text>、</text> -->
+             <text style="color: var(--hr-brand-color-6)">检查报告</text>、
             <text style="color: var(--hr-brand-color-6)">检验报告</text>
             <text>，智能医助将为您解读报告~</text>
           </view>
@@ -124,7 +125,7 @@
 
       <view class="footer f32">
         <button class="btn btn-primary btn-border" @click="addPhoto">
-          上传检验报告图片
+          上传报告图片
         </button>
         <!-- #ifndef H5 -->
         <button class="btn btn-border btn-primary" @click="changeTtype" v-if="pageConfigEle.intelMedicalAssistConfig?.isReportAnalysis !== '2'">
