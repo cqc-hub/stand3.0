@@ -284,7 +284,6 @@
       idCardEncry,
       patientId,
     });
-    // const idCard = '330326199908286712';
 
     result = result || [];
 

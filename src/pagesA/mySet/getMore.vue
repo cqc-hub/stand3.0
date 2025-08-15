@@ -50,7 +50,7 @@
 
   const policyList = ref([
     {
-      label: '用户协议',
+      label: '服务条款',
       type: 0,
     },
     {

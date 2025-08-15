@@ -134,6 +134,9 @@
         ).padStart(32, '0');
         setLocalStorage({ ar_shadow_token1017: arshadowtoken });
       }
+      if (globalStore.sysCode === '1001035') {
+        globalStore.setShowFlag(true);
+      }
     }
 
     // #ifdef MP-ALIPAY

@@ -9,7 +9,7 @@
     <g-choose-pat
       :disabled="pageProps.params"
       :pat="selPat"
-      @choose-pat="tabChange(tabCurrent)"
+      @choose-pat="patChange(tabCurrent)"
     />
     <view v-if="tabField.length > 1" class="g-border-bottom">
       <g-tabs
@@ -171,6 +171,7 @@
       params?: string;
       deParams?: any;
       type?: string;
+      patientName?: string;
     }
   );
   const tabCurrent = ref(0);
@@ -193,7 +194,10 @@
   const selPat = computed(() => {
     if (pageProps.value.deParams) {
       return {
-        patientName: pageProps.value.deParams?.patientName || '就诊人',
+        patientName:
+          pageProps.value.deParams?.patientName ||
+          pageProps.value?.patientName ||
+          '就诊人',
         _showId:
           pageProps.value.deParams?.cardNumber ||
           pageProps.value.deParams?.patientId,
@@ -265,6 +269,10 @@
   const selListOption1 = computed(() => {
     return getSelOptList(listNow.value);
   });
+  let patChange=(idx: number)=>{
+     pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
+     tabChange(idx)
+  }
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
@@ -478,6 +486,9 @@
       ...item,
       scan: pageProps.value?.params ? 1 : 0,
     };
+    if (pageProps.value?.params) {
+      pageArg.cardNumber = pageProps.value.deParams?.cardNumber;
+    }
 
     if (item.takenDrugType !== '0') {
       pageArg.takenDrug = '1';
