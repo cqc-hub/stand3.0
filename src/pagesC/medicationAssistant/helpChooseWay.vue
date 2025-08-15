@@ -48,7 +48,7 @@
                 <Sel-Express
                   :selectLength="3"
                   :list="aimList"
-                  :column="2"
+                  :column="pageProps?.isYouzhen === '1' ? 1 : 2"
                   v-model:value="aimValue"
                 />
               </view>
@@ -538,7 +538,7 @@
       aimList.value = companyList;
       pageProps.value.isYouzhen === '1' &&
         (aimList.value = aimList.value.map((item) => {
-          return { ...item, disabled: !item.label.includes('邮政') };
+          return { ...item, noShow: !item.label.includes('邮政') };
         }));
 
       if (len === 1) {

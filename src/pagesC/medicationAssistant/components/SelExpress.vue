@@ -5,10 +5,11 @@
     }"
     class="selpopup-container"
   >
+  <template  v-for="item in list"  :key="item[field.value]">
     <view
-      v-for="item in list"
+      v-if="!item?.noShow"
       @click="itemClick(item)"
-      :key="item[field.value]"
+     
       :class="{
         'item-active-border': isAllActive || isActive(item[field.value]),
         'g-bold': isAllActive || isActive(item[field.value]),
@@ -35,7 +36,7 @@
         <!-- <view class="label f28">{{ item[field.label] }}</view> -->
       </view>
     </view>
-
+</template>
     <view
       v-if="$slots.default && !disabled"
       class="item g-flex-rc-cc item-content-outline"
