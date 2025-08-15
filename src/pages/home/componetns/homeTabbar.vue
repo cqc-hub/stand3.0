@@ -257,8 +257,8 @@ const getMenuBtn = () => {
     tabList.push("健康管理");
   }
 
-  // #ifdef MP-WEIXIN
-  if (global.SYS_CODE === "1001063") {
+  // #ifdef MP-WEIXIN 
+  if(['1001063', '1001066', '1001078', '1001076', '1001071'].includes(global.SYS_CODE)) {
     tabList.push("口腔商城");
   }
   // #endif

@@ -1,5 +1,7 @@
 import env from '@/config/env';
 import { getCurrentInstance } from 'vue';
+import { getSysCode } from '@/common/useToken'; 
+
 
 //公用方法
 /**
@@ -316,7 +318,7 @@ export const getTcMallToken = (app?) => {
       },
       data: JSON.stringify({
         args: {
-          sysCode: 1001063,
+          sysCode: getSysCode(),
         },
       }),
       success: (res) => {

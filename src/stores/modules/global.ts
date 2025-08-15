@@ -38,6 +38,14 @@ interface IStateGlobal {
   };
 }
 
+const SYS_CODE_MALL_APP_ID_MAP = {
+  '1001063': 'mallM39dpe4692n7',
+  '1001066': 'mallMXXXXXXX', // 请替换为实际的 mallAppId
+  '1001078': 'mallMYYYYYYY', // 请替换为实际的 mallAppId
+  '1001076': 'mallMZZZZZZZ', // 请替换为实际的 mallAppId
+  '1001071': 'mallMAAAAAAA', // 请替换为实际的 mallAppId
+};
+
 //页面存储token brower等
 const globalStore = defineStore('global', {
   /**
@@ -202,11 +210,11 @@ const globalStore = defineStore('global', {
         // #endif
 
         // #ifdef MP-WEIXIN
-        if (this.sysCode === '1001063') {
+        if (['1001063', '1001066', '1001078', '1001076', '1001071'].includes(this.sysCode)) {
           this.updateOralMallData();
         }
 
-        if (this.sysCode === '1001066' && !this.token.accessToken) {
+        if (['1001063', '1001066', '1001078', '1001076', '1001071'].includes(this.sysCode) && !this.token.accessToken) {
           this.setShowFlag(true);
         }
         // #endif
@@ -241,11 +249,12 @@ const globalStore = defineStore('global', {
       // 口腔商城
       let appData = app || getCurrentInstance()!.proxy;
       if (appData) {
+        // 获取当前 sysCode 对应的 mallAppId，如果没有则使用默认值
+        const mallAppId = SYS_CODE_MALL_APP_ID_MAP[this.sysCode] || 'mallM39dpe4692n7';
         // @ts-ignore
         appData.globalData.configData = {
-          env: 1, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
-          from: 1, // 小程序的渠道值，具体咨询组件方
-          mallAppId: 'mallM39dpe4692n7',
+          env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
+          mallAppId: mallAppId,
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
           token: this.token.accessToken,
           openId: this.openId,
