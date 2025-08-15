@@ -33,11 +33,12 @@
       next-margin="40rpx"
       circular
     >
-      <view class="pl16">
+      <view class="pl16 h-full">
         <swiper-item
           v-for="(item, index) in list"
           @click="docCLick(item)"
           :key="index"
+          class="h-full"
         >
           <view class="item-doc bg-white mr16 p32">
             <view class="flex items-start mb24 pb24 doc-info">

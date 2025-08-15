@@ -239,7 +239,7 @@
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
     // #ifdef MP-WEIXIN
-    if (gStores.globalStore.sysCode === '1001063') {
+    if(['1001063', '1001066', '1001078', '1001076', '1001071'].includes(gStores.globalStore.sysCode)) {
       if (!gStores.globalStore.isLogin) {
         viewerStore.clearMyMenuCellMessage();
         return;

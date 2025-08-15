@@ -477,7 +477,7 @@ export class LoginUtils extends GStores {
     useRouterStore().clear();
 
     // #ifdef MP-WEIXIN
-    if (this.globalStore.sysCode === '1001063') {
+    if (['1001063','1001066', '1001078', '1001076', '1001071'].includes(this.globalStore.sysCode)) {
       const viewerStore = useViewerStore();
       const appInstance = getApp();
       if (appInstance && appInstance.globalData) {
@@ -722,7 +722,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       });
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
       // #ifdef MP-WEIXIN
-      if (this.globalStore.sysCode === '1001063') {
+      if (['1001063','1001066', '1001078', '1001076', '1001071'].includes(this.globalStore.sysCode)) {
         const appInstance = getApp();
         const viewerStore = useViewerStore();
         if (appInstance && appInstance.globalData) {

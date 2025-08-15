@@ -136,7 +136,7 @@
                   >
                     <view class="flex-normal no-login">
                       <!-- <g-login @handler-next="routerJump"> -->
-                      <text>请登录  {{ h5QrCodeData }}</text>
+                      <text>请登录</text>
                       <text>登录后享受更多服务</text>
                       <!-- </g-login> -->
                     </view>
