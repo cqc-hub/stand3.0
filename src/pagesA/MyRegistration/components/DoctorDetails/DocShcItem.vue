@@ -4,7 +4,7 @@
     :patient="patient"
     @handler-next="regClick(item)"
   >
-    <view @click="regClick(item)" class="scheme-item items-start f28">
+    <view @click="regClick(item)" class="scheme-item items-start f32">
       <view class="flex-between items-start">
         <view class="">
           <text v-if="pageConfig.isShowClinicalType === '1'" class="f24 mb4">
@@ -94,7 +94,7 @@
         </view>
       </view>
 
-      <view class="f24 color-666 flex-between items-start">
+      <view class="f28 color-666 flex-between items-start">
         <view class="flex">
           <!-- text-ellipsis -->
           <view class="mr12">
