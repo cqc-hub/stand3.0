@@ -490,3 +490,47 @@ export const getTcMallToken = ()=>{
 
 })
   };
+ 
+/**
+ * 获取当前运行平台
+ */
+export const getPlatform = (): 'wx' | 'alipay' | 'h5' => {
+  // #ifdef MP-WEIXIN
+  return 'wx';
+  // #endif
+  
+  // #ifdef MP-ALIPAY
+  return 'alipay';
+  // #endif
+  
+  // #ifdef H5
+  return 'h5';
+  // #endif
+  
+  
+  return 'wx'; // 默认值
+};
+
+/**
+ * 判断功能是否在当前平台开启
+ * @param config 配置项，可以是 '1' 或平台配置对象
+ * @returns boolean 是否开启
+ */
+export const isFeatureEnabled = (
+  config: '1' | { wx?: '1'; alipay?: '1' } | undefined
+): boolean => {
+  // 未配置则不开启
+  if (!config) return false;
+  
+  // 简单配置方式：'1' 表示所有平台都开启
+  if (config === '1') return true;
+  
+  // 对象配置方式：按平台判断
+  const platform = getPlatform();
+  
+  // 检查对应平台是否开启
+  if (platform === 'wx' && config.wx === '1') return true;
+  if (platform === 'alipay' && config.alipay === '1') return true;
+  
+  return false;
+};

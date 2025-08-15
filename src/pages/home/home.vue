@@ -261,7 +261,7 @@
               <homeDocCommend :list="docRecommendList" />
             </view>
 
-            <view v-if="global.sConfig.isOpenPopularSci">
+            <view v-if="isFeatureEnabled(global.sConfig.isOpenPopularSci)">
               <homeArticle ref="HomeArticleRef" />
             </view>
             <homeButtomProductionIcon />
@@ -417,6 +417,7 @@
     type TButtonConfig,
     type ISystemConfig,
     wait,
+    isFeatureEnabled
   } from '@/utils';
 
   import global from '@/config/global';
@@ -599,7 +600,7 @@
   //当用户将页面滑倒底部
   const handePageBottom = () => {
     //有开启健康科普
-    if (global.sConfig.isOpenPopularSci) {
+    if (isFeatureEnabled(global.sConfig.isOpenPopularSci)) {
       //查询列表
       HomeArticleRef.value.init();
     }
