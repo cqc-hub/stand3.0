@@ -99,6 +99,15 @@ const manifestFileDataObj: any = {
       defaultTitle: '',
       titleBarColor: '#ffffff',
     },
+
+    'mini.project.json': {
+      compileOptions: {
+        codeObfuscation: {
+          enable: true, // 启用混淆
+          type: 'strong', // 混淆强度：normal/strong
+        },
+      },
+    },
   },
   'mp-baidu': {
     usingComponents: true,

@@ -90,6 +90,7 @@
   },
   "mp-toutiao": {
     "usingComponents": true
+    "usingComponents": true
   },
   "uniStatistics": {
     "enable": false

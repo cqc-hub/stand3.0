@@ -54,6 +54,10 @@ const h5Url =
     : // : 'https://health.eheren.com/v3dev/#/';
       'https://health.eheren.com/v3/#/';
 
+const getK = (k: string) => {
+  return 're$v3'.replace('$', k);
+};
+
 const globalGl = {
   SYS_CODE,
   BASE_IMG,
@@ -74,6 +78,8 @@ const globalGl = {
   h5Url,
   sConfig: getSConfig(SYS_CODE),
   WEB_OUT_LOGIN_TIME,
+  q: getK('q'),
+  r: getK('s'),
 } as const;
 
 export default globalGl;
