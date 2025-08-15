@@ -118,7 +118,6 @@
   };
   const close = () => {
     popup.value.close();
-    console.log(22222,'关闭')
     emits('close-pop-click');
   };
 

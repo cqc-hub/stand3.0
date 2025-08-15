@@ -136,7 +136,7 @@
                   >
                     <view class="flex-normal no-login">
                       <!-- <g-login @handler-next="routerJump"> -->
-                      <text>请登录</text>
+                      <text>请登录  {{ h5QrCodeData }}</text>
                       <text>登录后享受更多服务</text>
                       <!-- </g-login> -->
                     </view>
@@ -167,14 +167,14 @@
                   @click="goToNotice1"
                   v-if="
                     viewerStore.homeNoticeText ||
-                    healthCounselConfig.noticeReplaceParam
+                    healthCounselConfig?.noticeReplaceParam
                   "
                 >
                   <template
-                    v-if="healthCounselConfig.noticeReplaceParam?.buttonName"
+                    v-if="healthCounselConfig?.noticeReplaceParam?.buttonName"
                   >
                     <text class="notice-button g-bold">
-                      {{ healthCounselConfig.noticeReplaceParam.buttonName }}
+                      {{ healthCounselConfig?.noticeReplaceParam.buttonName }}
                     </text>
                   </template>
                   <template v-else>
@@ -192,7 +192,7 @@
                   <view class="bar-swiper">
                     <uni-notice-bar
                       :text="
-                        healthCounselConfig.noticeReplaceParam?.text ||
+                        healthCounselConfig?.noticeReplaceParam?.text ||
                         viewerStore.homeNoticeText
                       "
                       :speed="80"
@@ -617,6 +617,7 @@
 
   //打开关注框
   const openShare = (item, type?) => {
+    console.log('openShare',item,type)
     if (type === 'attention') {
       h5QrCodeData.value = item.query && JSON.parse(item.query);
       clickShareItem.value = item;

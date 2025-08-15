@@ -585,9 +585,9 @@
       idx > -1 && (tabCurrent.value = idx);
     }
 
-    uni.setNavigationBarTitle({
-      title: isWaitReg.value ? '候补记录' : '我的挂号',
-    });
+    // uni.setNavigationBarTitle({
+    //   title: isWaitReg.value ? '候补记录' : '我的挂号',
+    // });
 
     await handlerWeChatThRegLogin(props.value);
     let _isPatient = true;
