@@ -32,14 +32,14 @@
                     @click="dateClick(date)"
                     class="date-item g-flex-rc-cc animate__animated"
                   >
-                    <view
+                    <text
                       :class="{
                         animate__fadeIn: isCollapse,
                       }"
-                      class="animate__animated"
+                      class="animate__animated text-no-wrap"
                     >
                       {{ getDateFormatter(date.schDate) }}
-                    </view>
+                    </text>
                   </view>
                 </g-login>
               </block>
