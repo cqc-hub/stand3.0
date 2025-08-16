@@ -14,7 +14,7 @@
       <img
         v-if="gStores.globalStore.isTcmStyle"
         :src="$global.BASE_IMG + `stand3_home_nav_bg-tcm.png`"
-        class="w-full absolute"
+        class="w-full absolute home-nav-bg"
         mode="widthFix nav-img-bg"
       />
       <view class="relative z-1">
@@ -417,7 +417,7 @@
     type TButtonConfig,
     type ISystemConfig,
     wait,
-    isFeatureEnabled
+    isFeatureEnabled,
   } from '@/utils';
 
   import global from '@/config/global';
@@ -527,8 +527,14 @@
     );
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
-    if (isOpenAIPolicy === '1' || (policyList && policyList.length&&policyList[0].length)) {
-      const list = (policyList&&policyList.length && policyList[0].length)? policyList[0]: undefined;
+    if (
+      isOpenAIPolicy === '1' ||
+      (policyList && policyList.length && policyList[0].length)
+    ) {
+      const list =
+        policyList && policyList.length && policyList[0].length
+          ? policyList[0]
+          : undefined;
       cacheStore.changeFlagList(list, isOpenAIPolicy === '1');
     }
     const { isOpenHomeDoctorBanner } = orderConfig.value;
@@ -618,7 +624,7 @@
 
   //打开关注框
   const openShare = (item, type?) => {
-    console.log('openShare',item,type)
+    console.log('openShare', item, type);
     if (type === 'attention') {
       h5QrCodeData.value = item.query && JSON.parse(item.query);
       clickShareItem.value = item;
@@ -757,6 +763,21 @@
     &.system-style-medical {
       --h-h-main-c: #a4695b;
     }
+  }
+
+  .home-nav-bg {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) calc(100% - 40px),
+      rgba(0, 0, 0, 0) 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) calc(100% - 40px),
+      rgba(0, 0, 0, 0) 100%
+    );
   }
   .auto-person {
     position: relative;
