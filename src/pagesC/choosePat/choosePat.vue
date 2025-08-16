@@ -189,13 +189,21 @@
     };
 
     for (const key in d) {
-      d[key] = encryptedAes(d[key], '5X2ZkYTQ3OGJkY2E');
+      let v = encryptedAes(d[key], '5X2ZkYTQ3OGJkY2E');
+      // #ifdef MP-ALIPAY
+      v = encodeURIComponent(encodeURIComponent(v));
+      // #endif
+      d[key] = v;
     }
 
     // https://report.jshtcm.com/pacs/medicallist?areacode=10&patientid=%2FzIpjtscEFIw140%2BZx1w6g==
+    const path = joinQueryForUrl(
+      'https://report.jshtcm.com/pacs/medicallist',
+      d
+    );
     useTBanner({
       type: 'h5',
-      path: joinQueryForUrl('https://report.jshtcm.com/pacs/medicallist', d),
+      path,
       // path: joinQueryForUrl('https://appoint.st120.cn', d),
     });
   };
