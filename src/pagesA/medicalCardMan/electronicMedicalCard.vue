@@ -6,9 +6,16 @@
     }"
     class="page"
   >
-    <g-flag isShowFg typeFg="113" />
-    <view class="card-content">
-      <view class="card-header flex-between">
+    <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
+    <view class="top-bg z-0 my-disabled" />
+
+    <view class="card-content p32 z-1">
+      <view
+        :class="{
+          'card-header-bg-tcm': gStores.globalStore.isTcmStyle,
+        }"
+        class="card-header flex-between"
+      >
         <view>{{ title }}</view>
 
         <view
@@ -35,9 +42,20 @@
       <view
         :class="{
           'card-health': showHealthCode,
+          'card-body-bg-tcm': gStores.globalStore.isTcmStyle,
         }"
         class="card-body"
       >
+        <view
+          v-if="globalGl.systemInfo.homeNavTitleLogo"
+          class="flex justify-center pt24"
+        >
+          <image
+            :src="globalGl.systemInfo.homeNavTitleLogo"
+            mode="widthFix"
+            class="logo"
+          />
+        </view>
         <view class="pt70 mb12" v-if="isShowRefreshQrCode">
           <refreshQrcode :patientId="clickPat.patientId" />
         </view>
@@ -90,6 +108,8 @@
         <!-- #endif -->
       </view>
     </view>
+
+    <!-- <view>233</view> -->
 
     <g-message />
   </view>
@@ -341,6 +361,9 @@
   });
 
   onMounted(async () => {
+    if (!clickPat.value.patientName) {
+      gStores.userStore.updatePatClick(gStores.userStore.patChoose);
+    }
     changeShowName();
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
@@ -369,28 +392,63 @@
   .page {
     width: 100%;
     height: 100vh;
-    background-color: var(--hr-brand-color-6);
+    // background-color: var(--hr-brand-color-6);
+  }
+
+  .logo {
+    height: 66rpx;
+    max-width: 500rpx;
+  }
+
+  .top-bg {
+    height: 500upx;
+    width: 100%;
+    position: absolute;
+
+    background: linear-gradient(
+        160deg,
+        var(--hr-brand-color-6-light),
+        var(--hr-brand-color-6-light),
+        rgba(255, 0, 0, 0) 50%
+      ),
+      linear-gradient(
+        -180deg,
+        var(--hr-brand-color-3-light),
+        var(--hr-brand-color-3-light),
+        rgba(255, 255, 255, 0) 50%
+      );
+
+    // background: linear-gradient(160deg, #13b8ff2a, #13b8ff2a, rgba(255, 0, 0, 0) 50%),
+    //   linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
   }
 
   .card-content {
-    padding: 32rpx;
     position: relative;
     z-index: 1;
     .card-header {
       // background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));
-      background: linear-gradient(180deg, var(--hr-brand-color-6-light-3), var(--hr-brand-color-6));
+      background: linear-gradient(
+        180deg,
+        var(--hr-brand-color-6-light-3),
+        var(--hr-brand-color-6)
+      );
       border: 1px solid var(--hr-brand-color-6);
       border-radius: 16rpx 16rpx 0 0;
       font-weight: 600;
       color: var(--h-color-white);
       padding: 32rpx;
       font-size: var(--hr-font-size-xl);
+
+      &.card-header-bg-tcm {
+        background: linear-gradient(0deg, #b68272, #c89c8c 100%);
+        border-color: transparent;
+      }
     }
 
     .card-body {
       background-color: var(--hr-neutral-color-1);
       border-radius: 0 0 16rpx 16rpx;
-      background-color: #fff;
+      background: #fff;
 
       .card-qrcode {
         padding-top: 40rpx;
@@ -406,6 +464,11 @@
           padding-top: 16rpx;
           padding-bottom: 40rpx;
         }
+      }
+
+      &.card-body-bg-tcm {
+        background: radial-gradient(#ffffff, #fff8ef);
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.05);
       }
     }
 
