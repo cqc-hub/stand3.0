@@ -38,17 +38,9 @@
         <view :style="item.bodyStyle" class="container-body">
           <block v-if="item.isForShow">
             <view class="content-show" :style="item.showBodyStyle">
-              <!-- #ifdef MP-ALIPAY -->
-              <text>
-                {{ getShowLabel(item) }}
-              </text>
-              <!-- #endif -->
-
-              <!-- #ifndef MP-ALIPAY -->
               <slot :item="item" :value="getShowLabel(item)" name="showbody">
                 {{ getShowLabel(item) }}
               </slot>
-              <!-- #endif -->
             </view>
           </block>
 
@@ -252,7 +244,7 @@
               <view>身份证识别</view>
             </view>
           </block>
-          <slot name="suffix" :item="item" />
+          <slot name="suffix" :item="item" :value="getShowLabel(item)" />
 
           <view
             v-if="item.showSuffixArrowIcon"
