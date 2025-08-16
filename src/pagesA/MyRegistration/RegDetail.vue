@@ -523,7 +523,7 @@
     if (
       (!orderRegInfo.value.hosDocId &&
         orderRegInfo.value.orderStatus === '43') ||
-      pageProps.value.typeId === '3'
+      (pageProps.value.typeId === '3' && orderRegInfo.value.orderStatus !== '0')
     ) {
       return false;
     }

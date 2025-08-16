@@ -549,7 +549,7 @@
     if (gStores.globalStore.sysCode === '1001035') {
       tabs.value.push({
         typeId: 3,
-        headerName: 'APP挂号',
+        headerName: '老版挂号',
         searchType: '1',
       });
     }
