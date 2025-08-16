@@ -391,13 +391,7 @@
 </template>
 <script setup lang="ts">
   import { ref } from 'vue';
-  import {
-    onLoad,
-    onShow,
-    onShareTimeline,
-    onReachBottom,
-    onReady,
-  } from '@dcloudio/uni-app';
+  import { onLoad, onShow, onShareTimeline } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
   import { useViewerStore } from '@/stores/modules/viewer';
@@ -585,17 +579,6 @@
       !uni.getStorageSync('hospital_order') &&
       authorization();
     // #endif
-
-    if (globalStore.envH5 === 'web' && !gStores.globalStore.isLogin) {
-      Login.handler(LoginType.PassWord, {
-        cellPhoneNum: '15797812958',
-        password: '123456',
-      });
-    }
-
-    if (isOpenHomeDoctorBanner === '1') {
-      getDocRecommendList();
-    }
   });
 
   const getDocRecommendList = async () => {
@@ -605,10 +588,16 @@
 
   //当用户将页面滑倒底部
   const handePageBottom = () => {
+    const { isOpenHomeDoctorBanner } = orderConfig.value;
+
     //有开启健康科普
     if (isFeatureEnabled(global.sConfig.isOpenPopularSci)) {
       //查询列表
       HomeArticleRef.value.init();
+    }
+
+    if (isOpenHomeDoctorBanner === '1' && !docRecommendList.value.length) {
+      getDocRecommendList();
     }
   };
   // #ifdef MP-WEIXIN

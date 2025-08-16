@@ -524,6 +524,6 @@
   });
 
   const init = async () => {
-    useTBanner(queryNumber);
+    useTBanner(queryCase);
   };
 </script>

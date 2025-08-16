@@ -861,6 +861,12 @@
           "style": {
             "navigationBarTitleText": " "
           }
+        },
+        {
+          "path": "recommendDocList/recommendDocList",
+          "style": {
+            "navigationBarTitleText": "名医推荐"
+          }
         }
       ],
       "pagesD-plugins": ""
