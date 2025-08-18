@@ -169,6 +169,28 @@
       labelWidth,
       required: true,
       showRequireIcon: true,
+      label: '民族',
+      field: 'select',
+      placeholder: '请选择',
+      key: 'nation',
+      options: [],
+      autoOptions: 'nationTerms', 
+    filterOptions(opt, search) {
+      if (search) {
+        return opt.filter((o) => {
+          const { label } = o;
+
+          return label.includes(search);
+        });
+      }
+      return opt;
+    }, 
+      showSuffixArrowIcon: true,
+    },
+    {
+      labelWidth,
+      required: true,
+      showRequireIcon: true,
       label: '婚姻状况',
       field: 'select',
       placeholder: '请选择',
