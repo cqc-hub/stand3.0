@@ -29,7 +29,7 @@
           <view v-if="_item.key === 'masterDocName'" class="value">
             <text
               class="g-split-line mr12 pr12"
-              :class="{ 'clear-split-line': item.deptName }"
+              :class="{ 'clear-split-line': !item.deptName }"
             >
               {{ renderRow[_item.key] }}
             </text>
@@ -159,7 +159,7 @@
   }
   .clear-split-line {
     ::after {
-      width: 0 !important;
+      height: 0 !important;
     }
   }
 </style>
