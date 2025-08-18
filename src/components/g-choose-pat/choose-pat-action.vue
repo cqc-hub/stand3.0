@@ -3,9 +3,9 @@
     :class="{
       [gStores.globalStore.getPageClass]: true,
     }"
-    class="choose-pat"
+    class="choose-pat relative z-999"
   >
-    <g-popup :title="title" ref="actionSheet">
+    <g-popup :title="title" @hide="onActionSheetHide" ref="actionSheet">
       <view class="choose-pat-container g-flex-rc-cc">
         <view style="width: 100%">
           <Pat-List :isShowAll="isShowAll" @choose-pat="actionSheetItemClick" />
@@ -31,7 +31,7 @@
   import PatList from './choose-pat-list.vue';
 
   export default defineComponent({
-    emits: ['choose-pat'],
+    emits: ['choose-pat', 'hide'],
 
     props: {
       title: {
@@ -106,12 +106,17 @@
         }
       };
 
+      const onActionSheetHide = () => {
+        ctx.emit('hide');
+      };
+
       return {
         actionSheet,
         actionSheetItemClick,
         show,
         gStores,
         goAddPat,
+        onActionSheetHide,
       };
     },
   });

@@ -8,6 +8,7 @@
 			:style="{width:info.orient == 'vertical' ? info.height : info.width,height: info.orient == 'vertical' ? info.width : info.height}"
 			v-for="item in info.listCode"
 			:key="item.id"
+			class="relative z-1"
 			@error="handleError"></canvas>
 	</view>
 </template>
@@ -42,7 +43,7 @@
 	    }
 	});
 	const emits = defineEmits(['generate','press','error'])
-	const opt = props.options;
+	let opt = props.options;
 	const that = getCurrentInstance();
 	const HSize = opt.text ? opt.text.size || 40 +  opt.text.padding || 20 : 0;
 	let info = reactive({
@@ -61,6 +62,7 @@
 		})
 	});
 	watch(()=>props.options,(val)=>{
+		opt = val;
 		SpecialTreatment(val);
 		const HSize = val.text ? val.text.size || 40 +  val.text.padding || 20 : 0;
 		info.destWidth= GetPixelRatio() * GetPx(val.width) + 'px',
@@ -86,6 +88,7 @@
 		}catch(e){console.warn(e)}
 	};
 	const SpecialTreatment = (val) => {//渲染多个canvas特殊处理
+		console.log(val, '我执行了');
 		let obj = deepClone(val);
 		obj.id = info.id;
 		info.listCode = [obj];
@@ -146,6 +149,7 @@
 			this.info.destWidth = GetPx(this.options.width) * GetPixelRatio() + 'px';
 			this.SpecialTreatment(this.options)
 			this.$nextTick(()=>{
+				this.id = getUUid();
 				this.generateCode();
 			})
 		},
