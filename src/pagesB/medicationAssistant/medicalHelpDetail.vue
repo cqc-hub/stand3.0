@@ -101,7 +101,7 @@
           v-if="
             detailData.qrCode &&
             (pageProps.takenDrugType === '1' ||
-              isSZShowExpress ||
+              gStores.globalStore.sysCode == '1001035' ||
               pageProps.linkRecordId)
           "
           class="g-border box page-first-item mb16 p32"
