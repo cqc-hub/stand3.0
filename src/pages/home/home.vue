@@ -870,7 +870,7 @@
 
           border-radius: 24rpx 24rpx 15% 15%;
 
-          background: #c79178;
+          background: var(--h-h-main-c);
         }
         .no-login {
           text {
