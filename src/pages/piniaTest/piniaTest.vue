@@ -515,8 +515,17 @@
     addition: {},
     isLocal: '1',
   } as TButtonConfig;
+  //药品详情
+  const medicineDetail: TButtonConfig = {
+    type: 'self',
+    path: 'pagesB/medicationAssistant/medicalHelpDetail',
+    text: '用药详情',
+    extraData: {
+      linkRecordId: 'tIQQjB798AFfB',
+    },
+  };
 
-  const testbuttonConfig = ref(杭口质保卡);
+  const testbuttonConfig = ref(medicineDetail);
   onMounted(() => {
     setTimeout(() => {
       init();
@@ -524,6 +533,6 @@
   });
 
   const init = async () => {
-    useTBanner(queryCase);
+    useTBanner(medicineDetail);
   };
 </script>

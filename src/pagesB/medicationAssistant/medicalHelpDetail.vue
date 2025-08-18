@@ -100,7 +100,9 @@
         <view
           v-if="
             detailData.qrCode &&
-            (pageProps.takenDrugType === '1' || isSZShowExpress)
+            (pageProps.takenDrugType === '1' ||
+              isSZShowExpress ||
+              pageProps.linkRecordId)
           "
           class="g-border box page-first-item mb16 p32"
         >
@@ -277,19 +279,22 @@
 
   const getData = async () => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
-
+    console.log('pageProps.value', pageProps.value);
     const { hosId, prescId } = pageProps.value;
     const actionApi =
-      pageProps.value.scan == 1
+      pageProps.value.scan == 1 || pageProps.value.linkRecordId
         ? api.getScanDrugDeliveryDetail
         : api.getDrugDeliveryDetail;
-    const { result } = await actionApi({
+    let args: any = {
       cardNumber:
         pageProps.value.scan == 1 ? pageProps.value?.cardNumber : cardNumber,
       patientId: pageProps.value.scan == 1 ? '' : patientId,
       hosId,
       prescId,
-    });
+    };
+    pageProps.value.linkRecordId &&
+      (args.linkRecordId = pageProps.value.linkRecordId);
+    const { result } = await actionApi(args);
 
     let { expressParam, expressStatus, acceptTime } = result;
 

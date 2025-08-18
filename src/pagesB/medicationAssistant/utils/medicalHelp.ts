@@ -26,6 +26,7 @@ export interface IWaitListItem {
   _id: string;
   scan?: number;
   cardNumber?:string;
+  linkRecordId?:string
 }
 
 interface IDrugDetailListItem {

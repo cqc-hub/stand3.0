@@ -101,10 +101,15 @@
       label: '开单时间',
       key: 'prescTime',
     },
+     {
+      label: '取药单号',
+      key: 'medicineNo',
+    },
     {
       label: '处方号',
       key: 'prescNo',
     },
+    
   ];
 </script>
 

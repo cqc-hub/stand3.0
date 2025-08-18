@@ -156,14 +156,13 @@ export const useScan = () => {
     const { queryDes } = pageProps.value;
 
     useTBanner({
-      type: 'h5',
-      isSelfH5: '1',
-      path: 'pagesC/medicationQuery/medicineDetail',
+      type:'self',
+      path: 'pagesB/medicationAssistant/medicalHelpDetail',
       text: '用药详情',
       extraData: {
         linkRecordId: queryDes,
       },
-      isLocal: '1',
+  
     });
   };
 
