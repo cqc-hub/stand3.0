@@ -6,16 +6,35 @@
     }"
     class="tabbar"
   >
-    <view class="tabbar-container">
-      <view v-for="(item, i) in tabBars" :key="i" class="tabbar-item">
+    <view class="tabbar-container relative">
+      <view v-if="hasCenterCode" class="center-code-mask"></view>
+      <view
+        v-for="(item, i) in tabBars"
+        :key="i"
+        :class="{
+          'n-item': !isCenterCode(item),
+        }"
+        class="tabbar-item"
+      >
         <g-login
           class="w100p h100p"
           @handler-next="changeTab(item)"
           :disabled="item.loginInterception === '0'"
         >
           <view class="w100p h100p" @click="changeTab(item)">
-            <view class="pt20 column">
+            <view
+              :class="{
+                'center-code': isCenterCode(item),
+              }"
+              class="pt20 column"
+            >
+              <view v-if="isCenterCode(item)" class="center-code-ico-box flex">
+                <view class="center-code-ico flex justify-center items-center">
+                  <view class="iconfont icon-size color-fff f48">&#xe6a7;</view>
+                </view>
+              </view>
               <image
+                v-else
                 :src="
                   currentPath === getPath(item.url)
                     ? item.iconActive
@@ -28,7 +47,14 @@
                 mode="heightFix"
                 class="animate__animated animate__fast"
               />
-              <text class="label">{{ item.label }}</text>
+              <text
+                :class="{
+                  'color-blue': isCenterCode(item),
+                }"
+                class="label"
+              >
+                {{ item.label }}
+              </text>
               <view class="badge" v-if="item.label === '消息中心' && unreadMes">
                 new
               </view>
@@ -190,6 +216,7 @@
     }
   });
 
+  const hasCenterCode = ref(false);
   const getMenuBtn = () => {
     let tabBarList = [
       {
@@ -334,8 +361,11 @@
         sort: 4,
       };
       tabBars.value.splice(tabBars.value.length / 2, 0, d);
+      hasCenterCode.value = true;
     }
   };
+
+  const isCenterCode = (item) => item.label === '就诊码/医保码';
 
   // 提取路径部分的函数
   const getPath = (url: string) => {
@@ -385,8 +415,10 @@
         position: relative;
         flex: 1;
 
-        &:active {
-          background-color: var(--hr-neutral-color-1);
+        &.n-item {
+          &:active {
+            background-color: var(--hr-neutral-color-1);
+          }
         }
 
         .label {
@@ -433,5 +465,49 @@
         }
       }
     }
+  }
+
+  .center-code {
+    position: relative;
+    bottom: 24px;
+    .tabbar-item {
+      .label {
+        color: var(--hr-brand-color-6);
+      }
+    }
+
+    .center-code-ico-box {
+      background: #fff;
+      // box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+      border-radius: 50% 50% 0 0;
+
+      padding: 12px;
+      padding-bottom: 0;
+    }
+
+    .center-code-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.04);
+      background: linear-gradient(
+        0deg,
+        var(--h-qrcode-1),
+        var(--h-qrcode-2) 100%
+      );
+    }
+  }
+
+  .center-code-mask {
+    background: transparent;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 52px;
+    height: 42px;
+    top: -15px;
+    left: 50%;
+    pointer-events: none;
   }
 </style>
