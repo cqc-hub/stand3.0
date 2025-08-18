@@ -25,6 +25,10 @@
           </text>
         </view>
       </template>
+
+      <template #showbody="{ value }">
+        <text>{{ value }}</text>
+      </template>
     </g-form>
 
     <g-message />

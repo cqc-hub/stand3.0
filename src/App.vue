@@ -109,21 +109,25 @@
 
       uni.addInterceptor('request', {
         invoke(args) {
-          const publicKey = getLocalStorage('publicKey');
-          let encr = shadowlib.ar_shadow_addparametertourl(
-            args.url,
-            '',
-            getClientData(),
-            publicKey
-          );
+          try {
+            const publicKey = getLocalStorage('publicKey');
+            let encr = shadowlib.ar_shadow_addparametertourl(
+              args.url,
+              '',
+              getClientData(),
+              publicKey
+            );
 
-          args.url = encr.requrl;
-          encryptUrl.value = encr.requrl;
-          Object.assign(arshadow$vData.value, {
-            touchStartCount: 0,
-            touchMoveCount: 0,
-            inputCount: 0,
-          });
+            args.url = encr.requrl;
+            encryptUrl.value = encr.requrl;
+            Object.assign(arshadow$vData.value, {
+              touchStartCount: 0,
+              touchMoveCount: 0,
+              inputCount: 0,
+            });
+          } catch (error) {
+            console.error('省中加密报错----', error);
+          }
         },
       });
 

@@ -320,6 +320,7 @@
   import CollectBtn from './components/CollectBtn.vue';
   import { storeToRefs } from 'pinia';
   import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
+import { useCacheStore } from '@/stores';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -551,13 +552,17 @@
     });
   };
 
+  const cacheStore = useCacheStore()
   const goPdfUrl = () => {
     const { repName } = checkoutReportList.value;
+    cacheStore.changeCacheData(checkoutReportList.value.pdfUrl);
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
         // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
-        url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
+        // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
         name: repName,
+        type: 'cache'
       }),
     });
     // uni.navigateTo({

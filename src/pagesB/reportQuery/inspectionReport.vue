@@ -180,7 +180,8 @@
                 @click="goReportPdf(item)"
                 v-if="
                   (pageProps.isDownloadRepor === '1' &&
-                    pageProps.isGraphic == 1) ||
+                    pageProps.isGraphic == 1 &&
+                    gStores.globalStore.sysCode !== '1001035') ||
                   item?.pdfPath
                 "
               >
@@ -623,6 +624,7 @@
       getPowerEnerg(repId);
     }
   };
+
   const goReportPdf = (item) => {
     let { repId, repName, pdfPath } = item;
     const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
@@ -634,11 +636,12 @@
         });
         return;
       }
+      cacheStore.changeCacheData(pdfPath1001035);
 
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
-          url: encodeURIComponent(pdfPath1001035 as string),
           name: '',
+          type: 'cache',
         }),
       });
       return;

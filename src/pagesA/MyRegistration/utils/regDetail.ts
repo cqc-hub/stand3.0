@@ -127,8 +127,8 @@ export const formatterTemp = (list: TInstance[], modeOld = false) => {
     o.showBodyStyle = 'text-align: left;';
     o.labelStyle =
       'padding-top: 0; color: var(--hr-neutral-color-7);font-size: var(--hr-font-size-base);';
-    o.bodyStyle = 'padding-top: 4rpx;font-size: var(--hr-font-size-base);';
-    o.rowStyle = 'margin-top: -15rpx;margin-bottom: 16rpx;';
+    // o.bodyStyle = 'font-size: var(--hr-font-size-base);';
+    o.rowStyle = 'margin-top: -20rpx;margin-bottom: 16rpx;';
 
     o.disabled = true;
     o.isForShow = true;

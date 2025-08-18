@@ -8,24 +8,76 @@
         }.png`
       })`,
     }"
-    class="bg container-doc flex flex-col"
+    :class="{
+      'container-doc': !is1001035,
+    }"
+    class="bg flex flex-col"
   >
-    <view class="pt32 pl32 pb30 flex items-center">
-      <image
-        :src="
-          globalGl.BASE_IMG +
-          `stand3-home-doc-recommend-icon-bg${
-            gStores.globalStore.isTcmStyle ? '-tcm' : ''
-          }.png`
-        "
-        mode="scaleToFill"
-        class="icon-bg mr12"
-      />
+    <view class="pt32 pl32 pb30 flex items-center justify-between">
+      <view class="flex items-center">
+        <image
+          :src="
+            globalGl.BASE_IMG +
+            `stand3-home-doc-recommend-icon-bg${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png`
+          "
+          mode="scaleToFill"
+          class="icon-bg mr12"
+        />
 
-      <text class="f36 font-semibold">热门医生推荐</text>
+        <text v-if="is1001035" class="f36 font-semibold">名医推荐</text>
+        <text v-else class="f36 font-semibold">热门医生推荐</text>
+      </view>
+
+      <view v-if="is1001035" @click="goDocList" class="color-666 f28 pr32">
+        <text>查看全部</text>
+        <text class="iconfont">&#xe66b;</text>
+      </view>
     </view>
 
+    <scroll-view v-if="is1001035" scroll-x class="">
+      <view class="flex pb32">
+        <view
+          v-for="(item, index) in list"
+          :key="index"
+          :class="{
+            pl16: !index,
+            pr16: index === list.length - 1,
+          }"
+          class="mr36"
+          @click="docCLick(item)"
+        >
+          <image
+            :src="
+              item.docPhoto ||
+              `/static/image/order/order-doctor-avatar${
+                gStores.globalStore.isTcmStyle ? '-tcm' : ''
+              }.png`
+            "
+            class="doc-info-avatar-1"
+            mode="aspectFill"
+          />
+
+          <view class="font-semibold text-center">
+            {{ item.docName }}
+          </view>
+
+          <view
+            v-if="item.docTitleName"
+            class="f24 text-center doc-title-name-1"
+          >
+            {{ item.docTitleName }}
+          </view>
+
+          <view v-if="item.deptName" class="f28 text-center color-444">
+            {{ item.deptName }}
+          </view>
+        </view>
+      </view>
+    </scroll-view>
     <swiper
+      v-else
       class="flex-1"
       :indicator-dots="list.length > 1"
       @change="change"
@@ -86,7 +138,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
 
   import globalGl from '@/config/global';
   import { joinQueryForUrl } from '@/common';
@@ -99,9 +151,16 @@
   const current = ref(0);
   const swiperDotIndex = ref(0);
   const gStores = new GStores();
+  const is1001035 = computed(() => gStores.globalStore.sysCode === '1001035');
 
   const change = (e) => {
     current.value = e;
+  };
+
+  const goDocList = () => {
+    uni.navigateTo({
+      url: '/pagesD/recommendDocList/recommendDocList',
+    });
   };
 
   const docCLick = (item) => {
@@ -155,5 +214,17 @@
 
   .doc-info {
     border-bottom: 1px solid #f3f3f3;
+  }
+
+  .doc-info-avatar-1 {
+    border-radius: 500px;
+    width: 64px;
+    height: 64px;
+    border: 0.5px solid #dddddd;
+  }
+  .doc-title-name-1 {
+    color: #a4695b;
+    border: 0.5px solid #a4695b;
+    border-radius: 2px;
   }
 </style>

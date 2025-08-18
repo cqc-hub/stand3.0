@@ -1,5 +1,10 @@
 <template>
-  <view class="g-page">
+  <view
+    :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }"
+    class="g-page"
+  >
     <view v-if="isSelf" class="mb24 flex flex-col items-center justify-center">
       <view class="pt70 safe-height"></view>
       <uv-qrcode :value="qrCode" :loading="false" size="380rpx" auto start />
