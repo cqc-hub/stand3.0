@@ -533,6 +533,6 @@
   });
 
   const init = async () => {
-    useTBanner(medicineDetail);
+    useTBanner(queryCase);
   };
 </script>

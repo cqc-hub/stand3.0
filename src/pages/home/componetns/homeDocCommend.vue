@@ -64,10 +64,16 @@
           </view>
 
           <view
-            v-if="item.docTitleName"
+            v-if="item.docTitleName || item.docJobName"
             class="f24 text-center doc-title-name-1"
           >
-            {{ item.docTitleName }}
+            <text
+              v-for="n in getNameArr(item.docJobName || item.docTitleName)"
+              :key="n"
+              class="text-no-wrap"
+            >
+              {{ n }}
+            </text>
           </view>
 
           <view v-if="item.deptName" class="f28 text-center color-444">
@@ -161,6 +167,14 @@
     uni.navigateTo({
       url: '/pagesD/recommendDocList/recommendDocList',
     });
+  };
+
+  const getNameArr = (name: string) => {
+    if (!name) {
+      return [];
+    }
+
+    return name.split(' ');
   };
 
   const docCLick = (item) => {

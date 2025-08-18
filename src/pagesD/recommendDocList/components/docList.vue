@@ -30,26 +30,34 @@
           </view>
 
           <view class="doc-info-introduce-goodat text-ellipsis">
-            <text>
-              {{ item.docTitleName }}
+            <text
+              v-for="(job, j) in getJobName(item)"
+              :key="j"
+              :class="{
+                'doc-job-name': j !== getJobName(item).length - 1,
+              }"
+            >
+              {{ job }}
             </text>
           </view>
         </view>
       </view>
 
       <view>
-        <view
-          v-if="item.intro"
-          class="doc-intro text-ellipsis ellipsis-line-clamp2"
-        >
+        <view v-if="item.intro" class="doc-intro ellipsis-line-clamp2">
           <image
-            :src="$global.BASE_IMG + 'department-doc-intro-text.png'"
+            :src="
+              $global.BASE_IMG +
+              `v3_doctor_card_major${
+                gStores.globalStore.isTcmStyle ? '-tcm' : ''
+              }.png`
+            "
             mode="widthFix"
-            class="logo-intro-text"
+            class="logo-intro-text mr12 relative"
           />
 
           <text class="color-888 f28">
-            {{ item.intro }}
+            {{ item.goodAt || '' }}
           </text>
         </view>
       </view>
@@ -68,6 +76,12 @@
 
   const itemClick = (item) => {
     emits('item-click', item);
+  };
+
+  const getJobName = (item) => {
+    const { docJobName, docTitleName } = item;
+
+    return [docJobName, docTitleName].filter((o) => o);
   };
 </script>
 
@@ -147,9 +161,9 @@
     }
 
     .logo-intro-text {
-      width: 60rpx;
-      margin-right: 12rpx;
-      margin-top: 7rpx;
+      width: 64rpx;
+      height: 64rpx;
+      top: 2rpx;
     }
 
     .doc-intro {

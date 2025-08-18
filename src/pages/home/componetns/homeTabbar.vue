@@ -242,16 +242,6 @@
       },
 
       {
-        label: '就诊码/医保码',
-        icon: '/static/image/my.png',
-        iconActive: `/static/image/my_active${
-          gStores.globalStore.isTcmStyle ? '-tcm' : ''
-        }.png`,
-        url: '/pagesA/medicalCardMan/electronicMedicalCard',
-        loginInterception: '0',
-        sort: 4,
-      },
-      {
         label: '口腔商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
@@ -320,7 +310,6 @@
     if (global.SYS_CODE === '1001035') {
       // tabList.push("云诊室");
       // tabList.push("健康商城");
-      tabList.push('就诊码/医保码');
     }
 
     if (global.SYS_CODE === '1001082') {
@@ -331,6 +320,21 @@
     tabBars.value = tabBarList
       .filter((o) => tabList.includes(o.label))
       .sort((a, b) => a.sort - b.sort);
+
+    // 固定插入中间
+    if (!(tabBars.value.length % 2)) {
+      const d = {
+        label: '就诊码/医保码',
+        icon: '/static/image/my.png',
+        iconActive: `/static/image/my_active${
+          gStores.globalStore.isTcmStyle ? '-tcm' : ''
+        }.png`,
+        url: '/pagesA/medicalCardMan/electronicMedicalCard',
+        loginInterception: '0',
+        sort: 4,
+      };
+      tabBars.value.splice(tabBars.value.length / 2, 0, d);
+    }
   };
 
   // 提取路径部分的函数
