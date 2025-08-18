@@ -31,6 +31,14 @@
               [gStores.globalStore.getPageClass]: true,
             }"
           >
+            <view v-if="gStores.globalStore.sysCode === '1001035'" class="pt24">
+              <homeBanner
+                :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
+                :functionList="viewerStore.homeBannerFunctionList"
+                @open-share="openShare"
+              />
+            </view>
+
             <view
               class="search flex-between"
               v-if="global.sConfig.isHideHomeSearch != '1'"
@@ -206,7 +214,10 @@
               </view>
             </view>
 
-            <view class="banner-menu">
+            <view
+              v-if="gStores.globalStore.sysCode !== '1001035'"
+              class="pt24 pb24"
+            >
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -859,7 +870,7 @@
 
           border-radius: 24rpx 24rpx 15% 15%;
 
-          background: var(--h-h-main-c);
+          background: #c79178;
         }
         .no-login {
           text {
@@ -1004,10 +1015,6 @@
       }
     }
 
-    .banner-menu {
-      margin: var(--h-margin-24) 0;
-    }
-
     .official-list {
       height: 82rpx;
       width: 100%;
@@ -1118,5 +1125,22 @@
 
   ::v-deep .uni-page-head {
     display: none !important;
+  }
+
+  .system-style-medical {
+    .homePage {
+      .card {
+        .top-menu {
+          border-radius: 0 0 24rpx 24rpx;
+        }
+        .top-card,
+        .top-card-old {
+          margin: 0;
+          &::after {
+            background: #c79178 !important;
+          }
+        }
+      }
+    }
   }
 </style>
