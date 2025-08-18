@@ -6,12 +6,19 @@
     }"
     class="page"
   >
-    <g-flag isShowFg typeFg="113" />
-    <view class="card-content">
-      <view class="card-header flex-between">
+    <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
+    <view class="top-bg z-0 my-disabled" />
+
+    <view class="card-content p32 z-1">
+      <view
+        :class="{
+          'card-header-bg-tcm': gStores.globalStore.isTcmStyle,
+        }"
+        class="card-header flex-between"
+      >
         <view>{{ title }}</view>
 
-        <view
+        <!-- <view
           v-if="toggleList.length > 1"
           @click="toggleQrCode"
           class="flex-normal g-border toggle-card color-blue f26"
@@ -26,8 +33,24 @@
           </text>
 
           <view class="f26">
-            <!-- 切换{{ showHealthCode ? '电子就诊卡' : '电子健康卡' }} -->
             {{ toggleQrLabel }}
+          </view>
+        </view> -->
+        <view
+          @click="chooseAction"
+          class="flex-normal g-border toggle-card color-blue f26"
+        >
+          <text
+            :class="{
+              'icon-reverse': showHealthCode,
+            }"
+            class="iconfont qr-toggle-icon color-blue"
+          >
+            &#xe6f9;
+          </text>
+
+          <view class="f26">
+            {{ '切换就诊人' }}
           </view>
         </view>
       </view>
@@ -35,17 +58,30 @@
       <view
         :class="{
           'card-health': showHealthCode,
+          'is-tcm': gStores.globalStore.isTcmStyle,
         }"
-        class="card-body"
+        class="card-body relative"
       >
+        <view
+          v-if="globalGl.systemInfo.homeNavTitleLogo"
+          class="flex justify-center pt24 relative z-1"
+        >
+          <image
+            :src="globalGl.systemInfo.homeNavTitleLogo"
+            mode="widthFix"
+            class="logo"
+          />
+        </view>
         <view class="pt70 mb12" v-if="isShowRefreshQrCode">
           <refreshQrcode :patientId="clickPat.patientId" />
         </view>
 
         <view v-else class="card-qrcode">
           <block>
-            <block v-if="!showHealthCode">
-              <view class="bar-code"><w-barcode :options="barCodeOpt" /></view>
+            <block v-if="!showHealthCode && isBarCodeShow">
+              <view class="bar-code relative z-1">
+                <w-barcode :options="barCodeOpt" ref="refBarCode" />
+              </view>
             </block>
 
             <!-- <w-qrcode :options="qrOptions" /> -->
@@ -91,7 +127,52 @@
       </view>
     </view>
 
+    <view v-if="pageConfig.isMedicalQrChoose === '1'" class="pl32 pr32">
+      <view
+        :style="{
+          'background-image': `url(${
+            globalGl.BASE_IMG
+          }electronicMedicalCard-bg-medical${
+            gStores.globalStore.isTcmStyle ? '-tcm' : ''
+          }.png)`,
+        }"
+        :class="{
+          'is-tcm': gStores.globalStore.isTcmStyle,
+        }"
+        class="medical-entry flex flex-col p32"
+        @click="_goElectronicMedicalCard('byMedical')"
+      >
+        <view class="flex items-center justify-between">
+          <view class="flex items-center">
+            <img
+              class="program-medical-logo mr12"
+              :src="`${globalGl.BASE_IMG}program-medical-logo.jpg`"
+            />
+            <text class="color-fff f36 font-semibold">医保电子凭证</text>
+          </view>
+          <view>
+            <text class="iconfont f40 arrow-icon">&#xe66b;</text>
+          </view>
+        </view>
+        <view class="flex-1" />
+        <view
+          class="color-blue flex items-center justify-center f28 pt14 pb14 medical-btn"
+        >
+          出示医保码
+        </view>
+      </view>
+    </view>
+
+    <view class="safe-height" />
+
     <g-message />
+  </view>
+  <view class="relative z-999">
+    <ChoosePatAction
+      ref="actionSheet"
+      @choose-pat="choosePatHandler"
+      @hide="patActionHide"
+    />
   </view>
 </template>
 
@@ -100,7 +181,7 @@
   import { storeToRefs } from 'pinia';
   import { onReady } from '@dcloudio/uni-app';
 
-  import { isAreaProgram } from '@/stores';
+  import { IPat, isAreaProgram } from '@/stores';
   import {
     GStores,
     wait,
@@ -118,8 +199,9 @@
   import globalGl from '@/config/global';
 
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
+  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
 
-  const isPageRender = ref(false);
+  const isPageRender = ref(true);
   const gStores = new GStores();
   const { clickPat } = storeToRefs(gStores.userStore);
   const title = ref('电子就诊卡');
@@ -127,6 +209,7 @@
   const pageConfig = ref(<ISystemConfig['person']>{});
   const patientUtils = new PatientUtils();
   const isShowRefreshQrCode = ref(false);
+  const refBarCode = ref('' as any);
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
 
@@ -157,6 +240,27 @@
       : clickPat.value.healthQrCodeText || clickPat.value._showId,
     img: '',
   });
+
+  const isBarCodeShow = ref(true);
+  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+  const chooseAction = () => {
+    if (actionSheet.value) {
+      isBarCodeShow.value = false;
+      actionSheet.value.show();
+    }
+  };
+  const choosePatHandler = ({ item }: { item: IPat; number: number }) => {
+    gStores.userStore.updatePatChoose(item);
+    gStores.userStore.updatePatClick(item);
+    init();
+  };
+  const patActionHide = async () => {
+    isBarCodeShow.value = true;
+    // await wait(20);
+    // refBarCode.value?.SpecialTreatment(barCodeOpt.value);
+    // await wait(20);
+    // refBarCode.value?.generateCode();
+  };
 
   // @ts-expect-error
   uni.getSystemInfo({}).then(({ screenWidth }) => {
@@ -340,28 +444,40 @@
     setStatus();
   });
 
-  onMounted(async () => {
-    changeShowName();
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+  const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
+
+    changeShowName();
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesA/medicalCardMan/electronicMedicalCard'
     );
     isPageRender.value = true;
+    options.value.code = isAreaProgram()
+      ? clickPat.value.idCardEncry
+      : clickPat.value.healthQrCodeText || clickPat.value._showId;
+    barCodeOpt.value.code = options.value.code;
+  };
 
-    if (isHasHealthCode.value) {
-      toggleList.value.push({
-        label: '电子健康卡',
-        key: '1',
-      });
+  onMounted(async () => {
+    if (!clickPat.value.patientName) {
+      gStores.userStore.updatePatClick(gStores.userStore.patChoose);
     }
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    init();
 
-    if (pageConfig.value.isMedicalQrChoose === '1') {
-      toggleList.value.push({
-        label: '医保码',
-        key: '2',
-      });
-    }
+    // if (isHasHealthCode.value) {
+    //   toggleList.value.push({
+    //     label: '电子健康卡',
+    //     key: '1',
+    //   });
+    // }
+
+    // if (pageConfig.value.isMedicalQrChoose === '1') {
+    //   toggleList.value.push({
+    //     label: '医保码',
+    //     key: '2',
+    //   });
+    // }
   });
 </script>
 
@@ -369,28 +485,64 @@
   .page {
     width: 100%;
     height: 100vh;
-    background-color: var(--hr-brand-color-6);
+    // background-color: var(--hr-brand-color-6);
+  }
+
+  .logo {
+    height: 66rpx;
+    max-width: 500rpx;
+  }
+
+  .top-bg {
+    height: 500upx;
+    width: 100%;
+    position: absolute;
+
+    background: linear-gradient(
+        160deg,
+        var(--hr-brand-color-6-light),
+        var(--hr-brand-color-6-light),
+        rgba(255, 0, 0, 0) 50%
+      ),
+      linear-gradient(
+        -180deg,
+        var(--hr-brand-color-3-light),
+        var(--hr-brand-color-3-light),
+        rgba(255, 255, 255, 0) 50%
+      );
+
+    // background: linear-gradient(160deg, #13b8ff2a, #13b8ff2a, rgba(255, 0, 0, 0) 50%),
+    //   linear-gradient(-160deg, #c1d4ff97, #c1d4ff59, rgba(0, 255, 0, 0) 50%);
   }
 
   .card-content {
-    padding: 32rpx;
     position: relative;
     z-index: 1;
     .card-header {
       // background: linear-gradient(180deg, #53a8ff, var(--hr-brand-color-6));
-      background: linear-gradient(180deg, var(--hr-brand-color-6-light-3), var(--hr-brand-color-6));
+      background: linear-gradient(
+        180deg,
+        var(--hr-brand-color-6-light-3),
+        var(--hr-brand-color-6)
+      );
       border: 1px solid var(--hr-brand-color-6);
       border-radius: 16rpx 16rpx 0 0;
       font-weight: 600;
       color: var(--h-color-white);
       padding: 32rpx;
       font-size: var(--hr-font-size-xl);
+
+      &.card-header-bg-tcm {
+        background: linear-gradient(0deg, #b68272, #c89c8c 100%);
+        border-color: transparent;
+      }
     }
 
     .card-body {
       background-color: var(--hr-neutral-color-1);
       border-radius: 0 0 16rpx 16rpx;
-      background-color: #fff;
+      background: #fff;
+      overflow: hidden;
 
       .card-qrcode {
         padding-top: 40rpx;
@@ -405,6 +557,37 @@
           font-size: var(--hr-font-size-xs);
           padding-top: 16rpx;
           padding-bottom: 40rpx;
+        }
+      }
+
+      &.is-tcm {
+        background: radial-gradient(#ffffff, #fff8ef);
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.05);
+
+        &::after {
+          content: '';
+          top: -50rpx;
+          left: 0;
+          right: 0;
+          height: 200rpx;
+          position: absolute;
+          z-index: 0;
+          background: radial-gradient(
+            circle at 35% 0,
+            #ff9400,
+            rgba(164, 105, 91, 0)
+          );
+          opacity: 0.2;
+          -webkit-mask-image: radial-gradient(
+            ellipse closest-side,
+            rgba(0, 0, 0, 1) 30%,
+            rgba(0, 0, 0, 0) 100%
+          );
+          // mask-image: radial-gradient(
+          //   circle closest-side,
+          //   rgba(0, 0, 0, 1) 30%,
+          //   rgba(0, 0, 0, 0) 100%
+          // );
         }
       }
     }
@@ -458,6 +641,30 @@
   .system-mode-old {
     .f26 {
       font-size: var(--hr-font-size-xl) !important;
+    }
+  }
+
+  .medical-entry {
+    $bg-mix: #fff;
+
+    .program-medical-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 100%;
+    }
+
+    &.is-tcm {
+      $bg-mix: #edd3c7;
+    }
+    height: 192rpx;
+
+    background-repeat: no-repeat;
+    background-position: right 0 bottom 0;
+    background-size: 100% 100%;
+
+    .medical-btn {
+      background: linear-gradient(180deg, #ffffff, $bg-mix);
+      border-radius: 18px;
     }
   }
 </style>

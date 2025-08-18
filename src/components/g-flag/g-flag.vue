@@ -6,7 +6,13 @@
     class="f32"
   >
     <slot :title="mTitle" :text="text">
-      <view v-if="isShowFg && text" class="real-top row">
+      <view
+        v-if="isShowFg && text"
+        :class="{
+          'real-top-bg': isShowFgBg,
+        }"
+        class="real-top row"
+      >
         <rich-text :nodes="text" />
       </view>
 
@@ -28,6 +34,7 @@
     typeFg: string; //协议编号
     value?: string;
     isShowFg?: boolean; //顶部
+    isShowFgBg?: boolean; // 顶部时候底色
     isShowFgTip?: boolean; //底部
     isHideTitle?: boolean;
     disabledFormatterParse?: boolean;
@@ -37,6 +44,7 @@
   const props = withDefaults(defineProps<IProps>(), {
     value: '',
     isShowFg: false,
+    isShowFgBg: true,
   });
   const gStores = new GStores();
 
@@ -88,10 +96,13 @@
 <style lang="scss" scoped>
   .real-top {
     padding: 12rpx 32rpx;
-    background: var(--hr-brand-color-1);
     text-align: left;
     color: var(--hr-brand-color-6);
     line-height: 40rpx;
+
+    .real-top-bg {
+      background: var(--hr-brand-color-1);
+    }
   }
 
   .tip {
