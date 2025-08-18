@@ -326,6 +326,8 @@
     }
 
     detailData.value = { ...result, qrCode: result.prescNo };
+    gStores.globalStore.sysCode === '1001035' &&
+      (detailData.value.qrCode = result.medicineNo);
 
     if (detailData.value.qrCode) {
       capture();
@@ -351,7 +353,9 @@
       pointEnd: {
         title:
           detailData.value.deliveryAddress || detailData.value.addresseeAddress,
-        desc: `${detailData.value.addresseeName||''} ${detailData.value.addresseePhone||''}`,
+        desc: `${detailData.value.addresseeName || ''} ${
+          detailData.value.addresseePhone || ''
+        }`,
       },
     };
   });
