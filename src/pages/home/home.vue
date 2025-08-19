@@ -597,6 +597,7 @@
     docRecommendList.value = result;
   };
 
+  let popularDocRequested = false;
   //当用户将页面滑倒底部
   const handePageBottom = () => {
     const { isOpenHomeDoctorBanner } = orderConfig.value;
@@ -608,7 +609,10 @@
     }
 
     if (isOpenHomeDoctorBanner === '1' && !docRecommendList.value.length) {
-      getDocRecommendList();
+      if (!popularDocRequested) {
+        popularDocRequested = true;
+        getDocRecommendList();
+      }
     }
   };
   // #ifdef MP-WEIXIN
