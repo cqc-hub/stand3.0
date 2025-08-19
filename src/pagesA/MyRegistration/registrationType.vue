@@ -95,12 +95,13 @@
           value: '2',
         },
         // 在线云门诊
-        // {
-        //   tip: '网络线上就诊',
-        //   img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
-        //   value: '',
-        //   path: '/pagesA/MyRegistration/registrationType?type=1',
-        // },
+        {
+          tip: '网络线上就诊',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
+          value: '',
+          path: '/pagesA/MyRegistration/registrationType',
+          // path: '/pagesA/MyRegistration/registrationType?type=1',
+        },
 
         // {
         //   tip: ' ',
