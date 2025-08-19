@@ -106,7 +106,12 @@
 
   const pages = getCurrentPages();
   const currentPage = pages.slice(-1)[0];
-  const currentPath = '/' + currentPage.route;
+  // @ts-expect-error
+  let currentPath = currentPage?.$page?.fullPath;
+  if (!currentPath) {
+    currentPath = '/' + currentPage.route;
+  }
+
   const isIos = ref(false);
   const unreadMes = ref(false);
 
@@ -166,9 +171,15 @@
       //   });
       // } else {
 
-      uni.reLaunch({
-        url: item.url,
-      });
+      if (isCenterCode(item)) {
+        uni.navigateTo({
+          url: item.url,
+        });
+      } else {
+        uni.reLaunch({
+          url: item.url,
+        });
+      }
       // }
     }
   };
@@ -356,7 +367,7 @@
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
-        url: '/pagesA/medicalCardMan/electronicMedicalCard',
+        url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1',
         loginInterception: '0',
         sort: 4,
       };

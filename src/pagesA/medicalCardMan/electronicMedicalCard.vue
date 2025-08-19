@@ -4,21 +4,24 @@
     :class="{
       [gStores.globalStore.getPageClass]: true,
     }"
-    class="page"
+    class="g-page"
   >
-    <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
-    <view class="top-bg z-0 my-disabled" />
+    <scroll-view scroll-y class="g-container">
+      <view class="relative z-1">
+        <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
+      </view>
+      <view class="top-bg z-0 my-disabled" />
 
-    <view class="card-content p32 z-1">
-      <view
-        :class="{
-          'card-header-bg-tcm': gStores.globalStore.isTcmStyle,
-        }"
-        class="card-header flex-between"
-      >
-        <view>{{ title }}</view>
+      <view class="card-content p32 z-1">
+        <view
+          :class="{
+            'card-header-bg-tcm': gStores.globalStore.isTcmStyle,
+          }"
+          class="card-header flex-between pr32 pl32 pt24 pb24"
+        >
+          <view>{{ title }}</view>
 
-        <!-- <view
+          <!-- <view
           v-if="toggleList.length > 1"
           @click="toggleQrCode"
           class="flex-normal g-border toggle-card color-blue f26"
@@ -36,136 +39,154 @@
             {{ toggleQrLabel }}
           </view>
         </view> -->
-        <view
-          @click="chooseAction"
-          class="flex-normal g-border toggle-card color-blue f26"
-        >
-          <text
-            :class="{
-              'icon-reverse': showHealthCode,
-            }"
-            class="iconfont qr-toggle-icon color-blue"
+          <view
+            @click="chooseAction"
+            class="flex-normal g-border toggle-card color-blue f26"
           >
-            &#xe6f9;
-          </text>
+            <text
+              :class="{
+                'icon-reverse': showHealthCode,
+              }"
+              class="iconfont qr-toggle-icon color-blue"
+            >
+              &#xe6f9;
+            </text>
 
-          <view class="f26">
-            {{ '切换就诊人' }}
+            <view class="f26">
+              {{ '切换就诊人' }}
+            </view>
           </view>
         </view>
-      </view>
 
-      <view
-        :class="{
-          'card-health': showHealthCode,
-          'is-tcm': gStores.globalStore.isTcmStyle,
-        }"
-        class="card-body relative"
-      >
         <view
-          v-if="globalGl.systemInfo.homeNavTitleLogo"
-          class="flex justify-center relative z-1"
+          :class="{
+            'card-health': showHealthCode,
+            'is-tcm': gStores.globalStore.isTcmStyle,
+          }"
+          class="card-body relative"
         >
-          <image
-            :src="globalGl.systemInfo.homeNavTitleLogo"
-            mode="widthFix"
-            class="logo"
-          />
-        </view>
-        <view class="pt32 mb12" v-if="isShowRefreshQrCode">
-          <refreshQrcode :patientId="clickPat.patientId" />
-        </view>
-
-        <view v-else class="card-qrcode mt20 pb20">
-          <block>
-            <block v-if="!showHealthCode && isBarCodeShow">
-              <view class="bar-code relative z-1">
-                <w-barcode :options="barCodeOpt" ref="refBarCode" />
-              </view>
-            </block>
-
-            <!-- <w-qrcode :options="qrOptions" /> -->
-            <uv-qrcode
-              :options="qrOptions2"
-              :value="qrOptions.code"
-              @change="qrComplete"
-              size="380rpx"
+          <view
+            v-if="globalGl.systemInfo.homeNavTitleLogo"
+            class="flex justify-center relative z-1"
+          >
+            <image
+              :src="globalGl.systemInfo.homeNavTitleLogo"
+              mode="widthFix"
+              class="logo"
             />
-          </block>
-        </view>
+          </view>
+          <view class="pt32 mb12" v-if="isShowRefreshQrCode">
+            <refreshQrcode :patientId="clickPat.patientId" />
+          </view>
 
-        <view class="info-content">
-          <view class="g-flex-rc-cc info-name mb12">
-            <view class="f32">
-              {{
-                isNameEncry ? clickPat.patientNameEncry : clickPat.patientName
-              }}
+          <view v-else class="card-qrcode mt20 pb20">
+            <block>
+              <block v-if="!showHealthCode">
+                <view
+                  :class="{
+                    'my-display-none': !isBarCodeShow,
+                  }"
+                  class="mb40"
+                >
+                  <w-barcode :options="barCodeOpt" ref="refBarCode" />
+                </view>
+              </block>
+
+              <!-- <w-qrcode :options="qrOptions" /> -->
+              <uv-qrcode
+                :options="qrOptions2"
+                :value="qrOptions.code"
+                @change="qrComplete"
+                size="380rpx"
+              />
+            </block>
+          </view>
+
+          <view class="info-content">
+            <view class="g-flex-rc-cc info-name mb12">
+              <view class="f32">
+                {{
+                  isNameEncry ? clickPat.patientNameEncry : clickPat.patientName
+                }}
+              </view>
+
+              <text @click="eyesClick" class="iconfont eyes-icon color-888">
+                {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
+              </text>
             </view>
 
-            <text @click="eyesClick" class="iconfont eyes-icon color-888">
-              {{ isNameEncry ? '&#xe6d4;' : ' &#xe6db;' }}
-            </text>
-          </view>
+            <view class="g-flex-rc-cc color-888 f28 mb12">
+              {{ clickPat._showId }}
+            </view>
 
-          <view class="g-flex-rc-cc color-888 f28 mb12">
-            {{ clickPat._showId }}
+            <view class="g-flex-rc-cc mt24">
+              <text @click="goDetail" class="color-blue f28">更多信息</text>
+            </view>
           </view>
-
-          <view class="g-flex-rc-cc mt24">
-            <text @click="goDetail" class="color-blue f28">更多信息</text>
+          <!-- #ifdef  MP-WEIXIN -->
+          <view
+            v-if="showHealthCode"
+            @click="goHealCardPackage"
+            class="color-blue g-bold g-flex-rc-cc p24 g-border-top"
+          >
+            添加到卡包
           </view>
-        </view>
-        <!-- #ifdef  MP-WEIXIN -->
-        <view
-          v-if="showHealthCode"
-          @click="goHealCardPackage"
-          class="color-blue g-bold g-flex-rc-cc p24 g-border-top"
-        >
-          添加到卡包
-        </view>
-        <!-- #endif -->
-      </view>
-    </view>
-
-    <view class="pl32 pr32">
-      <view
-        :style="{
-          'background-image': `url(${
-            globalGl.BASE_IMG
-          }electronicMedicalCard-bg-medical${
-            gStores.globalStore.isTcmStyle ? '-tcm' : ''
-          }.png)`,
-        }"
-        :class="{
-          'is-tcm': gStores.globalStore.isTcmStyle,
-        }"
-        class="medical-entry flex flex-col p32"
-        @click="_goElectronicMedicalCard('byMedical')"
-      >
-        <view class="flex items-center justify-between">
-          <view class="flex items-center">
-            <img
-              class="program-medical-logo mr12"
-              :src="`${globalGl.BASE_IMG}program-medical-logo.jpg`"
-            />
-            <text class="color-fff f36 font-semibold">医保电子凭证</text>
-          </view>
-          <view>
-            <text class="iconfont f40 arrow-icon">&#xe66b;</text>
-          </view>
-        </view>
-        <view class="flex-1" />
-        <view
-          class="color-blue flex items-center justify-center f28 pt14 pb14 medical-btn"
-        >
-          出示医保码
+          <!-- #endif -->
         </view>
       </view>
-    </view>
 
-    <view class="safe-height" />
+      <view class="pl32 pr32">
+        <view
+          :style="{
+            'background-image': `url(${
+              globalGl.BASE_IMG
+            }electronicMedicalCard-bg-medical${
+              gStores.globalStore.isTcmStyle ? '-tcm' : ''
+            }.png)`,
+          }"
+          :class="{
+            'is-tcm': gStores.globalStore.isTcmStyle,
+          }"
+          class="medical-entry flex flex-col pl32 pr32 pt24 pb24"
+          @click="_goElectronicMedicalCard('byMedical')"
+        >
+          <view class="flex items-center justify-between">
+            <view class="flex items-center">
+              <img
+                class="program-medical-logo mr12"
+                :src="`${globalGl.BASE_IMG}program-medical-logo.jpg`"
+              />
+              <text class="color-fff f36 font-semibold">医保电子凭证</text>
+            </view>
+            <view>
+              <text class="iconfont f40 arrow-icon">&#xe66b;</text>
+            </view>
+          </view>
+          <view class="flex-1" />
+          <view
+            class="color-blue flex items-center justify-center f28 pt14 pb14 medical-btn"
+          >
+            出示医保码
+          </view>
+        </view>
+      </view>
+
+      <view v-if="pageProps.showNavBar === '1'">
+        <view class="safe-height" />
+        <view class="safe-height" />
+        <view class="safe-height" />
+        <view class="safe-height" />
+        <view class="safe-height" />
+        <view class="safe-height" />
+      </view>
+    </scroll-view>
 
     <g-message />
+
+    <homeTabbar
+      v-if="pageProps.showNavBar === '1'"
+      :systemModeOld="gStores.globalStore.modeOld"
+    />
   </view>
   <view class="relative z-999">
     <ChoosePatAction
@@ -179,7 +200,7 @@
 <script lang="ts" setup>
   import { onMounted, ref, computed } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { onReady } from '@dcloudio/uni-app';
+  import { onLoad, onReady } from '@dcloudio/uni-app';
 
   import { IPat, isAreaProgram } from '@/stores';
   import {
@@ -192,7 +213,7 @@
     cacheUtil,
   } from '@/utils';
 
-  import { setLocalStorage, getLocalStorage } from '@/common';
+  import { setLocalStorage, getLocalStorage, deQueryForUrl } from '@/common';
   import { _goElectronicMedicalCard } from '@/pages/home/utils';
 
   import api from '@/service/api';
@@ -200,7 +221,13 @@
 
   import refreshQrcode from '@/components/refresh-qrcode/refresh-qrcode.vue';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
+  import homeTabbar from '@/pages/home/componetns/homeTabbar.vue';
 
+  const pageProps = ref(
+    {} as {
+      showNavBar?: '1';
+    }
+  );
   const isPageRender = ref(true);
   const gStores = new GStores();
   const { clickPat } = storeToRefs(gStores.userStore);
@@ -483,15 +510,13 @@
     //   });
     // }
   });
+
+  onLoad((opt) => {
+    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  });
 </script>
 
 <style lang="scss" scoped>
-  .page {
-    width: 100%;
-    height: 100vh;
-    // background-color: var(--hr-brand-color-6);
-  }
-
   .logo {
     height: 66rpx;
     max-width: 500rpx;
@@ -533,7 +558,6 @@
       border-radius: 16rpx 16rpx 0 0;
       font-weight: 600;
       color: var(--h-color-white);
-      padding: 32rpx;
       font-size: var(--hr-font-size-xl);
 
       &.card-header-bg-tcm {
@@ -598,9 +622,6 @@
       padding-top: 80rpx;
     }
 
-    .bar-code {
-      margin-bottom: 40rpx;
-    }
   }
 
   .btns {
@@ -658,7 +679,8 @@
     &.is-tcm {
       $bg-mix: #edd3c7;
     }
-    height: 192rpx;
+    // height: 192rpx;
+    height: 162rpx;
 
     background-repeat: no-repeat;
     background-position: right 0 bottom 0;
