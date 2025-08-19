@@ -264,47 +264,48 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const _enabledDays: Record<string, string> = {};
     // 优化版本
     if (allList && allList.length) {
-    const eDaysEnabledSet = new Set<string>();
-  
+      const eDaysEnabledSet = new Set<string>();
+
       // 使用传统for循环提高性能
       for (let i = 0; i < allList.length; i++) {
         const docInfo = allList[i];
         const { docPhoto, visitingArea } = docInfo;
         const filteredSchedules: TAllDayTScInfo[] = [];
-        
+
         // 处理排班信息
         for (let j = 0; j < docInfo.schDocSubResultList.length; j++) {
           const schedule = docInfo.schDocSubResultList[j];
           const { schDate, schState, schDocAmPm } = schedule;
-          
+
           // 优化enabledDays处理逻辑
           if (!eDaysEnabledSet.has(schDate)) {
             eDaysEnabledSet.add(schDate);
             eDaysEnabled.push(schDate);
           }
-          
+
           // 更新_enabledDays
           const enabledDaysValue = _enabledDays[schDate];
           if (enabledDaysValue !== '0') {
             _enabledDays[schDate] = schState;
           }
-          
+
           // 判断是否应该保留该排班
-          const isValidSchedule = isShowFilterOrderSourceBtn === '1' 
-            ? ['0', '2'].includes(schState) 
-            : schState === '0';
-          
+          const isValidSchedule =
+            isShowFilterOrderSourceBtn === '1'
+              ? ['0', '2'].includes(schState)
+              : schState === '0';
+
           if (isValidSchedule && schDocAmPm && schDocAmPm.length) {
             // 处理时间段信息
             for (let k = 0; k < schDocAmPm.length; k++) {
               const orderList = schDocAmPm[k];
-              
+
               if (orderList.amPmResults && orderList.amPmResults.length) {
                 // 过滤掉非有效状态的号源
                 orderList.amPmResults = orderList.amPmResults.filter(
                   (oi) => oi.schState === '0'
                 );
-                
+
                 // 为有效号源添加医生信息
                 if (orderList.amPmResults.length) {
                   for (let l = 0; l < orderList.amPmResults.length; l++) {
@@ -315,17 +316,18 @@ export const useOrder = (props: Ref<IOrderProps>) => {
                 }
               }
             }
-            
+
             filteredSchedules.push(schedule);
           }
         }
-        
+
         docInfo.schDocSubResultList = filteredSchedules;
       }
-      
+
       // 过滤掉没有有效排班的医生
       allDocList.value = allList.filter(
-        (docInfo) => docInfo.schDocSubResultList.length > 0
+        (docInfo) =>
+          docInfo.schDocSubResultList && docInfo.schDocSubResultList.length > 0
       );
     }
 
