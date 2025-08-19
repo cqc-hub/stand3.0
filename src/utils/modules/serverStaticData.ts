@@ -208,6 +208,7 @@ export const useTBanner = async (
 
       herenId && (extraData[herenId] = gStores.globalStore.herenId);
       extraData.token = gStores.globalStore.getToken;
+      // extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
 
     for (const key in addition) {
