@@ -28,7 +28,7 @@
     <g-message />
 
     <view class="pr32 pl32">
-      <g-flag :typeFg="isYunOrder ? 112 : 4" isShowFgTip aaa />
+      <g-flag :typeFg="isYunOrder ? 1260 : 4" isShowFgTip aaa />
     </view>
   </view>
 </template>
@@ -37,7 +37,7 @@
   import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
@@ -130,6 +130,22 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    await wait(120);
+    if (isYunOrder.value) {
+      const { title, content } = await gStores.getSysAppMore('1260');
+
+      await new Promise<{ confirm: boolean }>((r) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: false,
+          },
+          closeCallBack: r,
+        });
+      });
+    }
   });
 </script>
 
