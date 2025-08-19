@@ -112,11 +112,22 @@ export const packageAuthParams = (
 };
 
 export class GStores {
-  constructor(
-    public messageStore = useMessageStore(),
-    public userStore = useUserStore(),
-    public globalStore = useGlobalStore()
-  ) {}
+  messageStore: ReturnType<typeof useMessageStore>;
+  userStore: ReturnType<typeof useUserStore>;
+  globalStore: ReturnType<typeof useGlobalStore>;
+  constructor() // public messageStore = useMessageStore(),
+  // public userStore = useUserStore(),
+  // public globalStore = useGlobalStore()
+  {
+    this.messageStore = '' as any;
+    this.userStore = '' as any;
+    this.globalStore = '' as any;
+    setTimeout(() => {
+      this.messageStore = useMessageStore();
+      this.userStore = useUserStore();
+      this.globalStore = useGlobalStore();
+    }, 0);
+  }
 
   async getSysAppMore(
     typeFlag: any

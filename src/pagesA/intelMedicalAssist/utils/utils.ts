@@ -96,7 +96,7 @@ const test = async () => {
   const data = {"showType":6,"tips":"123132","list":[{"hosId":"330301010","hosName":"温州市健康妇幼指导中心","hosType":17,"tel":"0577-88865516","address":"温州市鹿城区新城大道41号温州市健康妇幼指导中心2-3楼","gisLng":120.711258,"gisLat":27.996367},{"hosId":"330301002","hosName":"温州市中西医结合医院","hosType":24,"hosLevel":1,"tel":"0577-88910524","address":"温州市锦绣路75号","gisLng":120.701466,"gisLat":28.004984},{"hosId":"330304015","hosName":"温州市瓯海区第三人民医院","hosType":1,"hosLevel":6,"tel":"0577-56953791","address":" 温州市瓯海区瓯越大道2286号","gisLng":120.690610,"gisLat":27.979925},{"hosId":"330302037","hosName":"温州建国医院","hosType":1,"hosLevel":6,"tel":"0577-56889999","address":"浙江省温州市鹿城区温州大道洛河路2号","gisLng":120.671975,"gisLat":27.987707},{"hosId":"330301008","hosName":"温州医科大学附属眼视光医院","hosType":1,"hosLevel":1,"tel":"0577-88068888","address":"温州市学院西路270号","gisLng":120.678605,"gisLat":28.012890}]};
   const { showType, list } = data;
   switchHandleResult(showType, list, '', '',undefined,'提示语');
-  
+
 };
 export const reload = async (isMess) => {
   popipHasShow.value = false;
@@ -424,7 +424,7 @@ const switchHandleResult = async (
       case 12:
         dealShowType12(list, requestId, chatId);
         break;
-      
+
      case 101:
       //推荐有胸痛、卒中相关展示最近医院
         dealShowType101(list, requestId, chatId);
@@ -439,7 +439,7 @@ const switchHandleResult = async (
         break;
     }
   }
-  
+
   scrollToNewMsg();
 };
 
@@ -634,7 +634,6 @@ export const sendImg = async () => {
       scrollToNewMsg();
     }, 500);
 
-    const gStores = new GStores();
     let baseApi =  gStores.globalStore.sysCode === '1001082'?'https://eservice.wzswsj.gov.cn':'https://netphs.eheren.com/gateway';
 
     // @ts-expect-error
@@ -931,7 +930,7 @@ const loadHosDataAsync = async () => {
         noCache: true,
       }
     );
-    
+
     hosData.value = hosList;
   } catch (error) {
     console.error('加载医院数据失败:', error);
@@ -942,9 +941,9 @@ const loadHosDataAsync = async () => {
 
 // 在适当时机调用，如组件挂载后或空闲时
 // loadHosData();
-const dealShowType6 = async (list, requestId, chatId,tips) => { 
+const dealShowType6 = async (list, requestId, chatId,tips) => {
   // #ifndef H5
-  // h5暂时不支持距离 
+  // h5暂时不支持距离
   loadHosDataAsync();
   // #endif
   msgList.value.push({
@@ -1082,9 +1081,9 @@ const dealShowType12 = (lists, requestId, chatId) => {
 };
 
 //为卒中新增的类型 但实际没用
-const dealShowType101 = (list, requestId, chatId) => { 
+const dealShowType101 = (list, requestId, chatId) => {
     if (list?.length) {
-      
+
     list.forEach((item, index) => {
 
     const {
@@ -1127,7 +1126,7 @@ const dealShowType101 = (list, requestId, chatId) => {
   //     phones,
   //     distance:"8.9Km"
   //   },
-  // }); 
+  // });
 };
 
 const judgeIsSysAppMore = (requestIdStr) => {
@@ -1214,7 +1213,7 @@ const typeInAsk = async (value, answertype) => {
     success: (response) => {},
     fail: (err) => {
       console.log('errror', err);
-      msgState.value.msgLoad = false; 
+      msgState.value.msgLoad = false;
       msgState.value.msgText = "";
       if (err.errMsg == 'request:fail abort') {
         gStores.messageStore.showMessage('已暂停生成', 3000);
@@ -1298,7 +1297,7 @@ const typeInAskH5 = (value: any, answertype) => {
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 3 || xhr.readyState === 4) {
-      const newResponse = xhr.responseText; 
+      const newResponse = xhr.responseText;
       const newChunk = newResponse.substring(previousResponse.length);
       previousResponse = newResponse;
       if (newChunk) {
