@@ -17,7 +17,7 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
     // #endif
   } else {
     uni.navigateTo({
-      url: '/pagesA/medicalCardMan/electronicMedicalCard',
+      url: '/pagesA/medicalCardMan/electronicMedicalCard?dp=1',
     });
   }
 };

@@ -234,6 +234,7 @@
   const pageProps = ref(
     {} as {
       showNavBar?: '1';
+      dp?: '1'; // 更新 clickPat 为 patChoose
     }
   );
   const isPageRender = ref(true);
@@ -512,9 +513,11 @@
   };
 
   onMounted(async () => {
-    if (!clickPat.value.patientName) {
+    const { dp } = pageProps.value;
+    if (!clickPat.value.patientName || dp === '1') {
       gStores.userStore.updatePatClick(gStores.userStore.patChoose);
     }
+
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     init();
 
