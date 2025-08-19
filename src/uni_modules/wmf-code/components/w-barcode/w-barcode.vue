@@ -88,7 +88,6 @@
 		}catch(e){console.warn(e)}
 	};
 	const SpecialTreatment = (val) => {//渲染多个canvas特殊处理
-		console.log(val, '我执行了');
 		let obj = deepClone(val);
 		obj.id = info.id;
 		info.listCode = [obj];
