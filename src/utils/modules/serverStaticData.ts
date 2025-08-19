@@ -195,7 +195,6 @@ export const useTBanner = async (
     if (herenId) {
       isLogin = true;
     }
-
     if (config.isSelfH5 === '1' || config.type === 'h5') {
       _d._herenId = gStores.globalStore.herenId;
       _d.herenId = gStores.globalStore.herenId;
@@ -249,7 +248,7 @@ export const useTBanner = async (
     // debugger
     if (config.isSelfH5) {
       let baseUrl: string = globalGl.h5Url;
-      const { modeOld, sysCode } = gStores.globalStore;
+      const { modeOld, sysCode, isTcmStyle } = gStores.globalStore;
 
       if ((await getMiniProgramEnv()) === 'develop') {
         baseUrl = h5UrlLocal;
@@ -261,6 +260,7 @@ export const useTBanner = async (
       fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),
         modeOld: modeOld && '1',
+        isTcmStyle:(isTcmStyle  && '1') || '0',
         sysCode,
       });
     }
