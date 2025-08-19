@@ -182,7 +182,7 @@
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
         hosDocId,
-        hosId,
+        // hosId,
         hosDeptId,
       }),
     });

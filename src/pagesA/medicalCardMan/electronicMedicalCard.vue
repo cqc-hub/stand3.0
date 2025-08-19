@@ -477,7 +477,6 @@
 
   const barCodeImg = ref('');
   const barCodeGenerate = (res) => {
-    console.log(res, 'www');
     const { img = {} } = res;
 
     barCodeImg.value = img.tempFilePath || '';
