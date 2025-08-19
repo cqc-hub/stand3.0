@@ -112,16 +112,11 @@ export const packageAuthParams = (
 };
 
 export class GStores {
-  messageStore: ReturnType<typeof useMessageStore>;
-  userStore: ReturnType<typeof useUserStore>;
-  globalStore: ReturnType<typeof useGlobalStore>;
-  constructor() // public messageStore = useMessageStore(),
-  // public userStore = useUserStore(),
-  // public globalStore = useGlobalStore()
-  {
-    this.messageStore = '' as any;
-    this.userStore = '' as any;
-    this.globalStore = '' as any;
+  constructor(
+    public messageStore = '' as unknown as ReturnType<typeof useMessageStore>,
+    public userStore = '' as unknown as ReturnType<typeof useUserStore>,
+    public globalStore = '' as unknown as ReturnType<typeof useGlobalStore>
+  ) {
     setTimeout(() => {
       this.messageStore = useMessageStore();
       this.userStore = useUserStore();
