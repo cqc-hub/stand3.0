@@ -31,14 +31,6 @@
               [gStores.globalStore.getPageClass]: true,
             }"
           >
-            <view v-if="gStores.globalStore.sysCode === '1001035'" class="pt24">
-              <homeBanner
-                :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
-                :functionList="viewerStore.homeBannerFunctionList"
-                @open-share="openShare"
-              />
-            </view>
-
             <view
               class="search flex-between"
               v-if="global.sConfig.isHideHomeSearch != '1'"
@@ -79,6 +71,14 @@
                   </view>
                 </view>
               </template>
+            </view>
+
+            <view v-if="gStores.globalStore.sysCode === '1001035'" class="pt24">
+              <homeBanner
+                :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
+                :functionList="viewerStore.homeBannerFunctionList"
+                @open-share="openShare"
+              />
             </view>
 
             <view class="card">
@@ -597,6 +597,7 @@
     docRecommendList.value = result;
   };
 
+  let popularDocRequested = false;
   //当用户将页面滑倒底部
   const handePageBottom = () => {
     const { isOpenHomeDoctorBanner } = orderConfig.value;
@@ -608,7 +609,10 @@
     }
 
     if (isOpenHomeDoctorBanner === '1' && !docRecommendList.value.length) {
-      getDocRecommendList();
+      if (!popularDocRequested) {
+        popularDocRequested = true;
+        getDocRecommendList();
+      }
     }
   };
   // #ifdef MP-WEIXIN

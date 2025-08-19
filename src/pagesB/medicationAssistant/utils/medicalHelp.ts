@@ -72,7 +72,7 @@ export interface IItemDetail {
   addresseePhone: string;
 }
 
-export const isChineseMedical = (item: IWaitListItem) => {
+export const isChineseMedical = (item) => {
   return !!(item.drugTypeName && item.drugTypeName.includes('中药'));
 };
 
