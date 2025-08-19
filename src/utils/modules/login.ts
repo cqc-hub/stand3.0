@@ -117,11 +117,21 @@ export class GStores {
     public userStore = '' as unknown as ReturnType<typeof useUserStore>,
     public globalStore = '' as unknown as ReturnType<typeof useGlobalStore>
   ) {
-    setTimeout(() => {
+    const init = () => {
       this.messageStore = useMessageStore();
       this.userStore = useUserStore();
       this.globalStore = useGlobalStore();
+    };
+    // #ifndef H5
+    init();
+    // #endif
+
+
+    // #ifdef h5
+    setTimeout(() => {
+      init();
     }, 0);
+    // #endif
   }
 
   async getSysAppMore(
