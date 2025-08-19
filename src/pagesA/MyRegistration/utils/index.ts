@@ -262,130 +262,62 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     );
 
     const _enabledDays: Record<string, string> = {};
-    // 优化版本
+
     if (allList && allList.length) {
-      const eDaysEnabledSet = new Set<string>();
-
-      // 使用传统for循环提高性能
-      for (let i = 0; i < allList.length; i++) {
-        const docInfo = allList[i];
+      allList.map((docInfo) => {
         const { docPhoto, visitingArea } = docInfo;
-        const filteredSchedules: TAllDayTScInfo[] = [];
+        docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
+          (o, i) => {
+            const { schDate, schState } = o;
 
-        // 处理排班信息
-        for (let j = 0; j < docInfo.schDocSubResultList.length; j++) {
-          const schedule = docInfo.schDocSubResultList[j];
-          const { schDate, schState, schDocAmPm } = schedule;
+            if (!eDaysEnabled.includes(schDate)) {
+              eDaysEnabled.push(schDate);
+            }
 
-          // 优化enabledDays处理逻辑
-          if (!eDaysEnabledSet.has(schDate)) {
-            eDaysEnabledSet.add(schDate);
-            eDaysEnabled.push(schDate);
+            const enabledDaysValue = _enabledDays[schDate];
+
+            if (enabledDaysValue !== '0') {
+              _enabledDays[schDate] = schState;
+            }
+
+            if (isShowFilterOrderSourceBtn === '1') {
+              return ['0', '2'].includes(schState);
+            } else {
+              return schState === '0';
+            }
           }
+        );
 
-          // 更新_enabledDays
-          const enabledDaysValue = _enabledDays[schDate];
-          if (enabledDaysValue !== '0') {
-            _enabledDays[schDate] = schState;
-          }
+        docInfo.schDocSubResultList.map((o) => {
+          const { schDate, schDocAmPm } = o;
 
-          // 判断是否应该保留该排班
-          const isValidSchedule =
-            isShowFilterOrderSourceBtn === '1'
-              ? ['0', '2'].includes(schState)
-              : schState === '0';
+          if (schDocAmPm && schDocAmPm.length) {
+            schDocAmPm.map((orderList) => {
+              const { amPmResults } = orderList;
 
-          if (isValidSchedule && schDocAmPm && schDocAmPm.length) {
-            // 处理时间段信息
-            for (let k = 0; k < schDocAmPm.length; k++) {
-              const orderList = schDocAmPm[k];
-
-              if (orderList.amPmResults && orderList.amPmResults.length) {
-                // 过滤掉非有效状态的号源
+              if (amPmResults && amPmResults.length) {
+                // if (isShowFilterOrderSourceBtn === '1') {
                 orderList.amPmResults = orderList.amPmResults.filter(
                   (oi) => oi.schState === '0'
                 );
+                // }
 
-                // 为有效号源添加医生信息
                 if (orderList.amPmResults.length) {
-                  for (let l = 0; l < orderList.amPmResults.length; l++) {
-                    const amPmItem = orderList.amPmResults[l];
+                  orderList.amPmResults.map((amPmItem) => {
                     amPmItem.docPhoto = docPhoto;
                     amPmItem.visitingArea = visitingArea;
-                  }
+                  });
                 }
               }
-            }
-
-            filteredSchedules.push(schedule);
+            });
           }
-        }
-
-        docInfo.schDocSubResultList = filteredSchedules;
-      }
-
-      // 过滤掉没有有效排班的医生
-      allDocList.value = allList.filter(
-        (docInfo) =>
-          docInfo.schDocSubResultList && docInfo.schDocSubResultList.length > 0
-      );
+        });
+      });
+      allDocList.value = allList.filter((o) => {
+        return true;
+        // return o.schDocSubResultList && o.schDocSubResultList.length
+      });
     }
-
-    // if (allList && allList.length) {
-    //   allList.map((docInfo) => {
-    //     const { docPhoto, visitingArea } = docInfo;
-    //     docInfo.schDocSubResultList = docInfo.schDocSubResultList.filter(
-    //       (o, i) => {
-    //         const { schDate, schState } = o;
-
-    //         if (!eDaysEnabled.includes(schDate)) {
-    //           eDaysEnabled.push(schDate);
-    //         }
-
-    //         const enabledDaysValue = _enabledDays[schDate];
-
-    //         if (enabledDaysValue !== '0') {
-    //           _enabledDays[schDate] = schState;
-    //         }
-
-    //         if (isShowFilterOrderSourceBtn === '1') {
-    //           return ['0', '2'].includes(schState);
-    //         } else {
-    //           return schState === '0';
-    //         }
-    //       }
-    //     );
-
-    //     docInfo.schDocSubResultList.map((o) => {
-    //       const { schDate, schDocAmPm } = o;
-
-    //       if (schDocAmPm && schDocAmPm.length) {
-    //         schDocAmPm.map((orderList) => {
-    //           const { amPmResults } = orderList;
-
-    //           if (amPmResults && amPmResults.length) {
-    //             // if (isShowFilterOrderSourceBtn === '1') {
-    //             orderList.amPmResults = orderList.amPmResults.filter(
-    //               (oi) => oi.schState === '0'
-    //             );
-    //             // }
-
-    //             if (orderList.amPmResults.length) {
-    //               orderList.amPmResults.map((amPmItem) => {
-    //                 amPmItem.docPhoto = docPhoto;
-    //                 amPmItem.visitingArea = visitingArea;
-    //               });
-    //             }
-    //           }
-    //         });
-    //       }
-    //     });
-    //   });
-    //   allDocList.value = allList.filter((o) => {
-    //     return true;
-    //     // return o.schDocSubResultList && o.schDocSubResultList.length
-    //   });
-    // }
 
     // _enabledDays['2022-11-22'] = '3';
     enabledDays.value = _enabledDays;
