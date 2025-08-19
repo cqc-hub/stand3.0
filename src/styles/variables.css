@@ -2,8 +2,8 @@
 component,
 page {
 
-  --h-qrcode-1: #8e493b;
-  --h-qrcode-2: #b68272;
+  --h-qrcode-1: var(--hr-brand-color-6);
+  --h-qrcode-2: var(--hr-brand-color-6-light-3);
 
   /* 颜色 */
   --hr-neutral-color-1: #f6f6f6;

@@ -6,10 +6,14 @@
     }"
     class="g-page"
   >
+    <view class="relative z-1">
+      <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
+    </view>
+    <view @click="isBarCodeShow = false">
+      <g-choose-pat @hide="patActionHide" @choose-pat="choosePatHandler1" />
+    </view>
+
     <scroll-view scroll-y class="g-container">
-      <view class="relative z-1">
-        <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
-      </view>
       <view class="top-bg z-0 my-disabled" />
 
       <view class="card-content p32 z-1">
@@ -39,7 +43,7 @@
             {{ toggleQrLabel }}
           </view>
         </view> -->
-          <view
+          <!-- <view
             @click="chooseAction"
             class="flex-normal g-border toggle-card color-blue f26"
           >
@@ -55,7 +59,7 @@
             <view class="f26">
               {{ '切换就诊人' }}
             </view>
-          </view>
+          </view> -->
         </view>
 
         <view
@@ -102,7 +106,7 @@
             </block>
           </view>
 
-          <view class="info-content">
+          <!-- <view class="info-content">
             <view class="g-flex-rc-cc info-name mb12">
               <view class="f32">
                 {{
@@ -122,7 +126,7 @@
             <view class="g-flex-rc-cc mt24">
               <text @click="goDetail" class="color-blue f28">更多信息</text>
             </view>
-          </view>
+          </view> -->
           <!-- #ifdef  MP-WEIXIN -->
           <view
             v-if="showHealthCode"
@@ -171,14 +175,14 @@
         </view>
       </view>
 
-      <view v-if="pageProps.showNavBar === '1'">
+      <!-- <view v-if="pageProps.showNavBar === '1'">
         <view class="safe-height" />
         <view class="safe-height" />
         <view class="safe-height" />
         <view class="safe-height" />
         <view class="safe-height" />
         <view class="safe-height" />
-      </view>
+      </view> -->
     </scroll-view>
 
     <g-message />
@@ -281,6 +285,15 @@
     gStores.userStore.updatePatClick(item);
     init();
   };
+
+  const choosePatHandler1 = () => {
+    const pat = gStores.userStore.patChoose;
+    gStores.userStore.updatePatClick(pat);
+    gStores.userStore.updatePatClick(pat);
+
+    init();
+  };
+
   const patActionHide = async () => {
     isBarCodeShow.value = true;
     // await wait(20);
@@ -621,7 +634,6 @@
     .card-health {
       padding-top: 80rpx;
     }
-
   }
 
   .btns {
@@ -668,7 +680,7 @@
   }
 
   .medical-entry {
-    $bg-mix: #fff;
+    --bg-mix: var(--hr-brand-color-3-light);
 
     .program-medical-logo {
       width: 28px;
@@ -677,7 +689,7 @@
     }
 
     &.is-tcm {
-      $bg-mix: #edd3c7;
+      --bg-mix: #edd3c7;
     }
     // height: 192rpx;
     height: 162rpx;
@@ -687,7 +699,7 @@
     background-size: 100% 100%;
 
     .medical-btn {
-      background: linear-gradient(180deg, #ffffff, $bg-mix);
+      background: linear-gradient(180deg, #ffffff, var(--bg-mix));
       border-radius: 18px;
     }
   }
