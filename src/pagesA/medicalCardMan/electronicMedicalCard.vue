@@ -9,9 +9,7 @@
     <view class="relative z-1">
       <g-flag isShowFg typeFg="113" :isShowFgBg="false" />
     </view>
-    <view @click="isBarCodeShow = false">
-      <g-choose-pat @hide="patActionHide" @choose-pat="choosePatHandler1" />
-    </view>
+    <g-choose-pat @hide="patActionHide" @choose-pat="choosePatHandler1" />
 
     <scroll-view scroll-y class="g-container">
       <view class="top-bg z-0 my-disabled" />
@@ -86,18 +84,24 @@
           <view v-else class="card-qrcode mt20 pb20">
             <block>
               <block v-if="!showHealthCode">
-                <view
-                  :class="{
-                    'my-display-none': !isBarCodeShow,
-                  }"
-                  class="mb40"
-                >
-                  <w-barcode :options="barCodeOpt" ref="refBarCode" />
+                <view class="mb40 my-display-none">
+                  <w-barcode
+                    :options="barCodeOpt"
+                    @generate="barCodeGenerate"
+                    ref="refBarCode"
+                  />
+                </view>
+
+                <view class="w-full mb40">
+                  <view class="pr32 pl32">
+                    <img :src="barCodeImg" class="bar-code-img w-full" />
+                  </view>
                 </view>
               </block>
 
               <!-- <w-qrcode :options="qrOptions" /> -->
               <uv-qrcode
+                v-if="qrOptions.code"
                 :options="qrOptions2"
                 :value="qrOptions.code"
                 @change="qrComplete"
@@ -272,11 +276,9 @@
     img: '',
   });
 
-  const isBarCodeShow = ref(true);
   const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
   const chooseAction = () => {
     if (actionSheet.value) {
-      isBarCodeShow.value = false;
       actionSheet.value.show();
     }
   };
@@ -295,7 +297,6 @@
   };
 
   const patActionHide = async () => {
-    isBarCodeShow.value = true;
     // await wait(20);
     // refBarCode.value?.SpecialTreatment(barCodeOpt.value);
     // await wait(20);
@@ -471,6 +472,14 @@
     } else {
       gStores.messageStore.showMessage('获取订单失败', 3000);
     }
+  };
+
+  const barCodeImg = ref('');
+  const barCodeGenerate = (res) => {
+    console.log(res, 'www');
+    const { img = {} } = res;
+
+    barCodeImg.value = img.tempFilePath || '';
   };
 
   onReady(() => {
@@ -702,5 +711,9 @@
       background: linear-gradient(180deg, #ffffff, var(--bg-mix));
       border-radius: 18px;
     }
+  }
+
+  .bar-code-img {
+    height: 120rpx;
   }
 </style>

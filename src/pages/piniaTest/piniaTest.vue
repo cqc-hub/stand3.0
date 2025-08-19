@@ -533,6 +533,6 @@
   });
 
   const init = async () => {
-    useTBanner(queryCase);
+    useTBanner(省中云诊室);
   };
 </script>

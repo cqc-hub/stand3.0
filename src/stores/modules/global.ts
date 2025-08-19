@@ -121,7 +121,7 @@ const globalStore = defineStore('global', {
 
     // 是否中医style
     isTcmStyle(): boolean {
-      return ['10010351', '1001077', '1001086'].includes(this.sysCode);
+      return ['1001035', '1001077', '1001086'].includes(this.sysCode);
       // return false
     },
 

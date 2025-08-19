@@ -512,7 +512,6 @@
   const pageHook = async ({ _isPatient = false }) => {
     const routeArg = {
       url: joinQueryForUrl('/pagesA/MyRegistration/MyRegistration', props),
-      _isLogin: true,
       _isPatient: true,
     };
 
