@@ -64,7 +64,7 @@
       >
         <view
           v-if="globalGl.systemInfo.homeNavTitleLogo"
-          class="flex justify-center pt24 relative z-1"
+          class="flex justify-center relative z-1"
         >
           <image
             :src="globalGl.systemInfo.homeNavTitleLogo"
@@ -72,11 +72,11 @@
             class="logo"
           />
         </view>
-        <view class="pt70 mb12" v-if="isShowRefreshQrCode">
+        <view class="pt32 mb12" v-if="isShowRefreshQrCode">
           <refreshQrcode :patientId="clickPat.patientId" />
         </view>
 
-        <view v-else class="card-qrcode">
+        <view v-else class="card-qrcode mt20 pb20">
           <block>
             <block v-if="!showHealthCode && isBarCodeShow">
               <view class="bar-code relative z-1">
@@ -111,7 +111,7 @@
             {{ clickPat._showId }}
           </view>
 
-          <view class="g-flex-rc-cc mt32">
+          <view class="g-flex-rc-cc mt24">
             <text @click="goDetail" class="color-blue f28">更多信息</text>
           </view>
         </view>
@@ -127,7 +127,7 @@
       </view>
     </view>
 
-    <view v-if="pageConfig.isMedicalQrChoose === '1'" class="pl32 pr32">
+    <view class="pl32 pr32">
       <view
         :style="{
           'background-image': `url(${
@@ -277,7 +277,11 @@
     };
   });
 
-  const barCodeOpt = ref({ ...options.value });
+  const barCodeOpt = ref({
+    ...options.value,
+
+    height: 120, // 高度 单位rpx
+  });
 
   const formData = ref({
     ...clickPat.value,
@@ -545,8 +549,6 @@
       overflow: hidden;
 
       .card-qrcode {
-        padding-top: 40rpx;
-        padding-bottom: 40rpx;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -556,7 +558,7 @@
           color: var(--hr-neutral-color-7);
           font-size: var(--hr-font-size-xs);
           padding-top: 16rpx;
-          padding-bottom: 40rpx;
+          padding-bottom: 20rpx;
         }
       }
 
@@ -625,7 +627,7 @@
   }
 
   .info-content {
-    padding-bottom: 72rpx;
+    padding-bottom: 32rpx;
     .info-name {
       position: relative;
 

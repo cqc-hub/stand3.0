@@ -7,10 +7,10 @@
 
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
-import { useCacheStore } from '@/stores';
+  import { useCacheStore } from '@/stores';
 
   let n = 0;
-  const cacheStore = useCacheStore()
+  const cacheStore = useCacheStore();
 
   onShow(() => {
     if (n) {
@@ -26,6 +26,9 @@ import { useCacheStore } from '@/stores';
   let uPath = uni.env?.USER_DATA_PATH;
   onLoad(async (opt) => {
     const { url, name, type } = deQueryForUrl(deQueryForUrl(opt));
+    console.log('获取到url----');
+    console.log(url);
+
     // #ifdef MP-WEIXIN
     uPath = wx.env.USER_DATA_PATH;
     // #endif
@@ -89,6 +92,8 @@ import { useCacheStore } from '@/stores';
   };
   const downWithStream = (url, name) => {
     name = name || new Date().getTime() + '';
+    uni.showLoading({});
+
     console.log(url, '-----url');
     // name = new Date().getTime() + '';
     uni.downloadFile({
