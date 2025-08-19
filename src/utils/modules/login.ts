@@ -146,7 +146,7 @@ export class GStores {
 
     const oldData = this.globalStore.flagCaches[typeFlag];
     if (oldData) {
-      // return oldData;
+      return oldData;
     }
 
     const { title, content } = await new Promise<any>((r) => {
