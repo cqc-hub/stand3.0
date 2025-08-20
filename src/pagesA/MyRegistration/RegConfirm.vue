@@ -5,7 +5,7 @@
     }"
     class="page"
   >
-    <view class="container">
+    <view scroll-y class="container">
       <view class="container-view">
         <view class="container-view-card">
           <Reg-Confirm-Card
@@ -141,6 +141,11 @@
         <rich-text :nodes="HTMLParser(preventOrderStr)" />
       </view>
     </xy-dialog>
+
+    <view class="safe-height"></view>
+    <view class="safe-height"></view>
+    <view class="safe-height"></view>
+    <view class="safe-height"></view>
 
     <view class="g-footer flex-column">
       <view class="fg-agree" v-if="!isWaitReg">
@@ -957,14 +962,14 @@
   .page {
     height: 100vh;
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
   }
 
   .container {
-    height: 1px;
-    flex: 1;
-    overflow-y: scroll;
+    // height: 1px;
+    // flex: 1;
+    // overflow-y: scroll;
 
     .container-view {
       padding: 0 32rpx;
@@ -1001,5 +1006,12 @@
     .check-box {
       font-size: 48rpx;
     }
+  }
+
+  .g-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 </style>

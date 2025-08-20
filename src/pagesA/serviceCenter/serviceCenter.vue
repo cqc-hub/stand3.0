@@ -163,8 +163,13 @@
   };
 
   const getSecondList = async () => {
-    const { result } = await api.getCmsListBySubType({
+    const actionApi =
+      gStores.globalStore.sysCode === '1001035'
+        ? api.getCmsListByWordSearch
+        : api.getCmsListBySubType;
+    const { result } = await actionApi({
       subType,
+      searchContent: subType,
     });
 
     list.value = result;

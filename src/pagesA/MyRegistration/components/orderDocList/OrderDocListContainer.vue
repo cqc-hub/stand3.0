@@ -2,7 +2,7 @@
   <view class="doc-info">
     <view class="doc-info-container">
       <!-- <g-login @handler-next="avatarClick"> -->
-      <image
+      <img
         :src="
           item.docPhoto ||
           `/static/image/order/order-doctor-avatar${
