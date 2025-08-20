@@ -524,8 +524,17 @@
       linkRecordId: 'tIQQjB798AFfB',
     },
   };
+  //h5首页
+ const index = {
+    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pages/index/index',
+    text: 'h5首页',
+    isLocal: '1',
+  } as TButtonConfig;
 
-  const testbuttonConfig = ref(medicineDetail);
+  const testbuttonConfig = ref(index);
   onMounted(() => {
     setTimeout(() => {
       init();
@@ -533,6 +542,6 @@
   });
 
   const init = async () => {
-    useTBanner(queryCase);
+    useTBanner(index);
   };
 </script>

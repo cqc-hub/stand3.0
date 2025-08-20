@@ -92,7 +92,12 @@ export const payMoneyOnline = async (
   return result;
 };
 
-type ITrackType = '门诊缴费' | '住院缴费' | '挂号缴费' | '药品配送下单'|'中药代煎';
+type ITrackType =
+  | '门诊缴费'
+  | '住院缴费'
+  | '挂号缴费'
+  | '药品配送下单'
+  | '中药代煎';
 
 //微信获取小程序的openid
 export const getOpenid = async (): Promise<string> => {
@@ -308,6 +313,11 @@ export const aliPayOldSystemPayType = () => {
   if (sysCode === '1001071') {
     channel = 'CITIC_WX_JSAPI';
   }
+  // #ifdef MP-ALIPAY
+  if (sysCode === '1001036') {
+    channel = 'BCM_ALI_MINI';
+  }
+  // #endif
 
   return channel;
 };

@@ -100,10 +100,11 @@
     color: var(--hr-brand-color-6);
     line-height: 40rpx;
 
-    .real-top-bg {
+   
+  }
+   .real-top-bg {
       background: var(--hr-brand-color-1);
     }
-  }
 
   .tip {
     line-height: 40rpx;

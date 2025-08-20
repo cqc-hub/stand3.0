@@ -174,6 +174,14 @@ export const orderStatusMap = {
     title: '已预约',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '3': {
+    headerClass: 'header-dark',
+    color: '#fff',
+    headerBgIcon: '&#xe6de;',
+    headerIcon: '&#xe6d5;',
+    title: '已过期',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
   // 已挂号
   '100': {
     headerClass: 'header-blue',
