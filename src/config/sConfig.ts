@@ -46,10 +46,12 @@ export interface ISConfig {
   //是否开启助老版
   isOpenHelpOld?: '1';
   //是否开启健康科普
-  isOpenPopularSci?: '1' | {
-    wx?: '1';
-    alipay?: '1';
-  };
+  isOpenPopularSci?:
+    | '1'
+    | {
+        wx?: '1';
+        alipay?: '1';
+      };
   //首页是否展示支付宝的关注组件
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
@@ -672,30 +674,30 @@ const scJson: Record<string, ISConfig> = {
   1001035: {
     // isDrugDelivery: '1',
     isOpenPopularSci: {
-      wx: '1',  
+      wx: '1',
     },
     isOpenHelpOld: '1',
-    // medicalMHelp: {
-    // wx: {
-    //   isMedicalOrder: '1',
-    //   medical1001035: {
-    //     auth: {
-    //       appId: 'wxfde9fffbfa82be54',
-    //       path: 'pages/allOutPayCashier/authUniPro/authUni',
-    //       extraData: {
-    //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
-    //       },
-    //     },
-    //     pay: {
-    //       appId: 'wxfde9fffbfa82be54',
-    //       path: 'pages/allOutPayCashier/authUniPro/authUni',
-    //       extraData: {
-    //         appid: 'c4097ed72fc64e71818e6990dc6f9512',
-    //       },
-    //     },
-    //   },
-    // },
-    // },
+    medicalMHelp: {
+      wx: {
+        isMedicalOrder: '1',
+        medical1001035: {
+          auth: {
+            appId: 'wxfde9fffbfa82be54',
+            path: 'pages/allOutPayCashier/authUniPro/authUni',
+            extraData: {
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+            },
+          },
+          pay: {
+            appId: 'wxfde9fffbfa82be54',
+            path: 'pages/allOutPayCashier/authUniPro/authUni',
+            extraData: {
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+            },
+          },
+        },
+      },
+    },
   },
 };
 
