@@ -698,7 +698,7 @@
           const hosOrderId = gStores.userStore.patChoose.cardNumber;
           const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
           const OPENID = gStores.globalStore.openId;
-          const MEDORGORD =
+          const MEDORGORD =props.value?.serialNo||
             selList.value.map((item) => item.serialNo).join(',') ||
             selUnPayList.value.map((item) => item.serialNo).join(',');
           const ORGCODG = 'H32028200358';

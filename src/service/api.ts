@@ -525,6 +525,9 @@ const queryApi = {
   // 江苏省中获取云影像
   getJSYunURL: (data) =>
     service.post<any>('/phs-query/examine/getJSYunURL', parm(data)),
+   // 病历查询 列表
+  getOutpatientList: (data) =>
+    service.post<any>('/phs-query/operation/getOutpatientList', parm(data)),
 };
 
 // 挂号服务
