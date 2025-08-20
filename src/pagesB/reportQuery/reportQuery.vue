@@ -232,6 +232,7 @@
   import globalGl from '@/config/global';
   import { joinQueryForUrl, encryptedAes } from '@/common';
   import { deepClone, deQueryForUrl, joinQuery } from '@/common/utils';
+  import { beforeEach } from '@/router';
 
   import api from '@/service/api';
   import { useCacheStore } from '@/stores';
@@ -911,6 +912,16 @@
   });
 
   onLoad(async (p) => {
+    const pages = getCurrentPages();
+
+    if (pages.length) {
+      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+
+      await beforeEach({
+        url: fullUrl,
+        _isPatient: true,
+      });
+    }
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));

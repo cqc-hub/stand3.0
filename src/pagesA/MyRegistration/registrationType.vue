@@ -28,7 +28,7 @@
     <g-message />
 
     <view class="pr32 pl32">
-      <g-flag :typeFg="isYunOrder ? 112 : 4" isShowFgTip aaa />
+      <g-flag :typeFg="isYunOrder ? 1260 : 4" isShowFgTip aaa />
     </view>
   </view>
 </template>
@@ -37,7 +37,7 @@
   import { computed, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
 
   const gStores = new GStores();
@@ -76,6 +76,7 @@
           value: '7',
           path: '/pagesC/cloudHospital/cloudHospital',
         },
+        // 院内制剂
         // {
         //   tip: ' ',
         //   img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
@@ -95,13 +96,13 @@
           value: '2',
         },
         // 在线云门诊
-        // {
-        //   tip: '网络线上就诊',
-        //   img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
-        //   value: '',
-        //   path: '/pagesA/MyRegistration/registrationType?type=1',
-        // },
-
+        {
+          tip: '网络线上就诊',
+          img: `https://phsdevoss.eheren.com/pcloud/image/yylx_zxymz@2x.png`,
+          value: '',
+          path: '/pagesA/MyRegistration/registrationType?type=1',
+        },
+        // 院内制剂
         // {
         //   tip: ' ',
         //   img: `https://phsdevoss.eheren.com/pcloud/image/jssz_kjmy@3x.png`,
@@ -129,6 +130,22 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+    await wait(120);
+    if (isYunOrder.value) {
+      const { title, content } = await gStores.getSysAppMore('1260');
+
+      await new Promise<{ confirm: boolean }>((r) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title,
+            isShowCancel: false,
+          },
+          closeCallBack: r,
+        });
+      });
+    }
   });
 </script>
 

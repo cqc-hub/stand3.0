@@ -93,7 +93,7 @@
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
-  import {  GStores, LoginUtils } from '@/utils';
+  import {  GStores, LoginUtils, wait } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
   import global from '@/config/global';
@@ -183,7 +183,7 @@
         _url: encodeURIComponent(joinQueryForUrl(returnUrl, query)),
       });
     }
-
+    await wait(120);
     await beforeEach({
       url: fullUrl,
       _isLogin: myhosType === '0',

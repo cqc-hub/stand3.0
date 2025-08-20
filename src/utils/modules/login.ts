@@ -113,10 +113,26 @@ export const packageAuthParams = (
 
 export class GStores {
   constructor(
-    public messageStore = useMessageStore(),
-    public userStore = useUserStore(),
-    public globalStore = useGlobalStore()
-  ) {}
+    public messageStore = '' as unknown as ReturnType<typeof useMessageStore>,
+    public userStore = '' as unknown as ReturnType<typeof useUserStore>,
+    public globalStore = '' as unknown as ReturnType<typeof useGlobalStore>
+  ) {
+    const init = () => {
+      this.messageStore = useMessageStore();
+      this.userStore = useUserStore();
+      this.globalStore = useGlobalStore();
+    };
+    // #ifndef H5
+    init();
+    // #endif
+
+
+    // #ifdef h5
+    setTimeout(() => {
+      init();
+    }, 0);
+    // #endif
+  }
 
   async getSysAppMore(
     typeFlag: any
@@ -130,7 +146,7 @@ export class GStores {
 
     const oldData = this.globalStore.flagCaches[typeFlag];
     if (oldData) {
-      // return oldData;
+      return oldData;
     }
 
     const { title, content } = await new Promise<any>((r) => {
@@ -477,7 +493,11 @@ export class LoginUtils extends GStores {
     useRouterStore().clear();
 
     // #ifdef MP-WEIXIN
-    if (['1001063','1001066', '1001078', '1001076', '1001071'].includes(this.globalStore.sysCode)) {
+    if (
+      ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+        this.globalStore.sysCode
+      )
+    ) {
       const viewerStore = useViewerStore();
       const appInstance = getApp();
       if (appInstance && appInstance.globalData) {
@@ -722,7 +742,11 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
       });
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
       // #ifdef MP-WEIXIN
-      if (['1001063','1001066', '1001078', '1001076', '1001071'].includes(this.globalStore.sysCode)) {
+      if (
+        ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+          this.globalStore.sysCode
+        )
+      ) {
         const appInstance = getApp();
         const viewerStore = useViewerStore();
         if (appInstance && appInstance.globalData) {

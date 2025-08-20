@@ -13,7 +13,13 @@ import {
 } from '@/common';
 import { IRequest, IResponseWrapper } from './type';
 import { useGlobalStore, useMessageStore } from '@/stores';
-import { LoginUtils, ServerStaticData, getQKey, getRKey, outLogin } from '@/utils';
+import {
+  LoginUtils,
+  ServerStaticData,
+  getQKey,
+  getRKey,
+  outLogin,
+} from '@/utils';
 import { beforeEach } from '@/router';
 import globalGl from '@/config/global';
 import { sm4_ecb_encrypt, sm4_ecb_decrypt } from '@/common/sm4.js';
@@ -23,7 +29,6 @@ import monitor from '@/js_sdk/alipay/alipayLogger.js';
 // #endif
 
 const Request = new requestClass();
-const globalStore = useGlobalStore();
 
 let outLoginTimer: number;
 
@@ -33,9 +38,10 @@ const isDes = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenDes;
 // const isOpenSm4 = (globalGl.env as string) === 'prod' ? true : globalGl.isOpenSm4;
 export const isOpenSm4 = false;
 
-
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
+  const globalStore = useGlobalStore();
+
   // #ifdef H5
   if (
     globalStore.isLogin &&
@@ -65,10 +71,15 @@ Request.interceptors.request((request: IRequest) => {
   }
 
   // ========== 动态修改内网部署 baseURL 的逻辑放在这里 ==========
-  const skipBaseURLChangeApis = ['/phs-user/authUser/allinoneAuthApi','/phs-extend/customer/evaluate','/phs-base/cms/getCmsTypeList','/phs-base/cms/getCmsList'];
+  const skipBaseURLChangeApis = [
+    '/phs-user/authUser/allinoneAuthApi',
+    '/phs-extend/customer/evaluate',
+    '/phs-base/cms/getCmsTypeList',
+    '/phs-base/cms/getCmsList',
+  ];
   if (
     globalStore.sysCode === '1001082' &&
-    !skipBaseURLChangeApis.some(api => request.url.includes(api))
+    !skipBaseURLChangeApis.some((api) => request.url.includes(api))
   ) {
     request.baseURL = 'https://eservice.wzswsj.gov.cn/gateway';
   }
@@ -254,6 +265,7 @@ const alipayRequestTrack = (response: IResponseWrapper) => {
 function deepEqualClean(localVersion, newVersion) {
   const keys1 = Object.keys(localVersion);
   const keys2 = Object.keys(newVersion);
+  const globalStore = useGlobalStore();
 
   for (let index = 0; index < keys1.length; index++) {
     const val1 = localVersion[keys1[index]];
@@ -278,11 +290,7 @@ function deepEqualClean(localVersion, newVersion) {
 //接口加密
 const requestInterfaceEncrp = (request) => {
   //禁止删除
-  console.log(
-    '入参----',
-    request.url,
-    request.data
-  );
+  console.log('入参----', request.url, request.data);
 
   const data = JSON.parse(JSON.stringify(request.data));
   const desData = {

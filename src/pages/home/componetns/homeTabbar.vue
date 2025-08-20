@@ -367,7 +367,7 @@
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
-        url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1',
+        url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1&dp=1',
         loginInterception: '0',
         sort: 4,
       };

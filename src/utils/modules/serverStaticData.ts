@@ -208,7 +208,7 @@ export const useTBanner = async (
 
       herenId && (extraData[herenId] = gStores.globalStore.herenId);
       extraData.token = gStores.globalStore.getToken;
-      extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
+      // extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
 
     for (const key in addition) {
@@ -227,7 +227,8 @@ export const useTBanner = async (
   const pages = getCurrentPages();
   if (pages.length > 0) {
     const currentPage = pages[pages.length - 1];
-    const _fullUrl: string = (currentPage as any).route || (currentPage as any).$page?.fullPath;
+    const _fullUrl: string =
+      (currentPage as any).route || (currentPage as any).$page?.fullPath;
     await beforeEach({
       url: _fullUrl,
       _isLogin: isLogin,
@@ -260,7 +261,7 @@ export const useTBanner = async (
       fullUrl = joinQueryForUrl(fullUrl, {
         _d: encodeURIComponent(encryptDesParam(_d)),
         modeOld: modeOld && '1',
-        isTcmStyle:(isTcmStyle  && '1') || '0',
+        isTcmStyle: (isTcmStyle && '1') || '0',
         sysCode,
       });
     }
@@ -654,7 +655,7 @@ export class ServerStaticData {
           result.Electronic_Consultation_Sheet || '{}'
         );
         const BusinessMenu = JSON.parse(result.BusinessMenu || '{}');
-        const HEALTH_COUNSEL = JSON.parse(result.HEALTH_COUNSEL  || '{}');
+        const HEALTH_COUNSEL = JSON.parse(result.HEALTH_COUNSEL || '{}');
         systemConfig = <ISystemConfig>{
           person,
           order,
@@ -668,7 +669,7 @@ export class ServerStaticData {
           FAMOUS_DOCTOR_DEPT,
           BusinessMenu,
           RestOfConfig,
-          HEALTH_COUNSEL
+          HEALTH_COUNSEL,
         };
 
         for (const key in systemConfig) {
@@ -690,7 +691,7 @@ export class ServerStaticData {
           // #endif
         }
 
-        if (this.env === 'develop'|| this.env=== 'trial') {
+        if (this.env === 'develop' || this.env === 'trial') {
           // ...
           insertsObject(sysConfigEnv, systemConfig);
         }

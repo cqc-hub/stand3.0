@@ -542,6 +542,6 @@
   });
 
   const init = async () => {
-    useTBanner(index);
+    useTBanner(省中云诊室);
   };
 </script>

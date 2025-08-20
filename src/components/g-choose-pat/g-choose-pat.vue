@@ -1,9 +1,7 @@
 <template>
   <view
     class="choose-pat"
-    v-if="
-      gStores.userStore.patChoose.patientName || (pat && pat._showId)
-    "
+    v-if="gStores.userStore.patChoose.patientName || (pat && pat._showId)"
   >
     <view class="container" @click="chooseAction">
       <image
@@ -15,7 +13,7 @@
       />
 
       <view class="user-info text-ellipsis">
-        {{ getShowPat.patientName  || `${gStores.userStore.choosePatName}` }} 
+        {{ getShowPat.patientName || `${gStores.userStore.choosePatName}` }}
         <text>
           {{ `${(!isAreaProgram() && getShowPat._showId) || ''}` }}
         </text>
@@ -29,6 +27,7 @@
 
     <Choose-Pat
       @choose-pat="choosePatHandler"
+      @hide="emits('hide')"
       :isShowAll="isShowAll"
       :pat="pat"
       ref="actionSheet"
@@ -52,7 +51,7 @@
   }>();
   const gStores = new GStores();
   const actionSheet = ref<InstanceType<typeof ChoosePat>>();
-  const emits = defineEmits(['choose-pat']);
+  const emits = defineEmits(['choose-pat', 'hide']);
   const isLoad = ref(false);
 
   const getShowPat = computed(() => {
