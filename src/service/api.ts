@@ -552,7 +552,10 @@ const regApi = {
     service.post<T>('/phs-reg/regAlt/getAlternateList', parm(data)),
 
   addRegAlternate: <T = any>(data: any) =>
-    service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data)),
+    service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data),{
+      hideLoading: false,
+      showMessage: false,
+    }),
 
   canRegAlternate: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/canRegAlternate', parm(data)),
