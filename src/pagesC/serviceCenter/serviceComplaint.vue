@@ -1,9 +1,14 @@
 <template>
   <view class="g-page">
     <view class="g-container">
+      <g-choose-pat
+        v-if="options.selectRecords === '2'"
+        @choose-pat="patChange"
+      />
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
+        @selectChange="handleSelect"
         :show-require-icon="false"
         bodyBold
         ref="gform"
@@ -27,7 +32,8 @@
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { GStores } from '@/utils';
+  import { generateUuid, GStores } from '@/utils';
+
   import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
   import { deQueryForUrl } from '@/common';
@@ -116,7 +122,7 @@
 
     {
       required: true,
-      label: '您投诉的部门',
+      label: '您投诉的对象',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
@@ -220,7 +226,7 @@
 
     {
       required: true,
-      label: '您投诉的部门',
+      label: '您投诉的对象',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
@@ -258,7 +264,70 @@
   const tempList3: TInstance[] = [
     {
       required: true,
-      label: '您投诉的部门',
+      label: '您投诉的对象',
+      field: 'input-text',
+      placeholder: '请输入',
+      maxlength: 11,
+      key: 'compDept',
+      labelWidth: '220rpx',
+    },
+
+    {
+      required: true,
+      inputType: 'textarea',
+      label: '意见反馈',
+      subLabel: '您的意见将帮助我们改进产品和服务',
+      field: 'input-text',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+      maxlength: 200,
+      key: 'compContext',
+      direction: 'horizontal',
+      rowStyle: 'margin-top: 16rpx;',
+      bodyStyle: 'margin-top: 12rpx;',
+      labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
+      validator: async (v: any) => {
+        if (v && v.length > 4) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+            success: false,
+          };
+        }
+      },
+    },
+  ];
+  const tempList4: TInstance[] = [
+    {
+      required: true,
+      label: '手机号',
+      field: 'input-text',
+      placeholder: '请输入',
+      maxlength: 11,
+      key: 'phone',
+      rule: [
+        {
+          message: '请确认手机号是否有误',
+          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        },
+      ],
+      labelWidth: '220rpx',
+    },
+    {
+      required: true,
+      label: '就诊记录',
+      placeholder: '请选择',
+      key: 'visitUid',
+      labelWidth: '220rpx',
+      field: 'select',
+      options: [],
+    },
+
+    {
+      required: true,
+      label: '您投诉的对象',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
@@ -314,6 +383,22 @@
           },
         ],
       };
+    } else if (options.value.selectRecords === '2') {
+      args = {
+        ...options.value,
+        ...data,
+        photo: uploadImgList.value.toString(),
+        openIds: [
+          {
+            source: gStores.globalStore.browser.source,
+            openId: gStores.globalStore.openId,
+          },
+          {
+            source: 3,
+            openId: gStores.globalStore.h5OpenId,
+          },
+        ],
+      };
     }
     await api.complainsAndSuggestions(args);
     gStores.messageStore.showMessage('反馈成功,感谢您的支持', 3000, {
@@ -325,6 +410,56 @@
     });
   };
   const gform = ref<any>('');
+
+  const patChange = () => {
+    getListData();
+  };
+
+  const getListData = async () => {
+    let tempList: any = [];
+    try {
+      const { result } = await api.getOutpatientHospitalList({
+        patientId: gStores.userStore.patChoose.patientId,
+        type: 3,
+      });
+      tempList = tempList4.map((item: any) => {
+        if (item.key == 'visitUid') {
+          item.options = result.map((i) => {
+            item.placeholder = '请选择就诊记录';
+            item.disabled=false
+            return {
+              ...i,
+              label: `${i.admissionTime} ${i.deptName}`,
+              value: generateUuid(),
+            };
+          });
+        }
+        return item;
+      });
+    } catch (e) {
+      tempList = tempList4.map((item: any) => {
+        if (item.key == 'visitUid') {
+          item.placeholder = '暂未查询到您的就诊记录！';
+          item.options=[]
+          item.disabled=true
+        }
+        return item;
+      });
+    }
+
+    gform.value.setList(tempList);
+  };
+
+  const handleSelect = ({ item, value }) => {
+    const { options } = item;
+    const target = options.find((e) => e.value === value);
+    console.log(target);
+    formData.value.visitLabel = `${target.diagnosis}-${target.admissionTime}`;
+    formData.value.visitDate = target.admissionTime;
+    formData.value.visitNo = target.visitNo;
+    formData.value.deptName = target.deptName;
+    formData.value.compDept = target.deptName;
+  };
 
   onMounted(() => {
     if (options.value.isAnonymous === '1') {
@@ -348,6 +483,8 @@
       formData.value.name = options.value.name;
       formData.value.visitLabel = `${options.value.diagnosis}-${options.value.visitDate}`;
       gform.value.setList(tempList2);
+    } else if (options.value.selectRecords === '2') {
+      getListData();
     } else {
       gform.value.setList(tempList);
     }

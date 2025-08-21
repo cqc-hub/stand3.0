@@ -18,7 +18,6 @@
         isCheck
       />
     </view>
-
     <view class="g-footer flex-column">
       <view class="fg-agree">
         <view
@@ -316,8 +315,8 @@
         cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
-      handlePayAfter();
     }
+    
   };
 </script>
 
@@ -326,6 +325,7 @@
     height: 100%;
     padding: 0 32rpx;
     width: calc(100% - 64rpx);
+        overflow: scroll;
   }
   .g-footer {
     .footer-check {

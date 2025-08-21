@@ -320,7 +320,7 @@
     }
     if (gStores.globalStore.sysCode === '1001035' && result.expressNo) {
       result.expressNo && (result.takenDrugType = '21');
-      const date = dayjs(acceptTime).format('MM-DD');
+      const date = '';
       expressInfo.value = {
         pointNow: {
           title: '快递配送',

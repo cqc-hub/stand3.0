@@ -43,7 +43,7 @@
   import ComplaintList from './components/ComplaintList.vue';
 
   const _props = ref<{
-    selectRecords?: '1'; // 需要选择就诊记录---台州?
+    selectRecords?: '0' | '1' | '2'; // 需要选择就诊记录---台州?
     tab?: string; //手动添加选择就诊记录页面的tab内容
   }>();
   const gStores = new GStores();
@@ -76,25 +76,28 @@
         return;
       }
     }
-    if (_props.value?.selectRecords === '1') {
-      let extraData = {
-        sysCode: gStores.globalStore.sysCode,
-        pageType: '2',
-      };
-      _props.value?.tab && (extraData[`tab`] = _props.value.tab);
-      useTBanner(
-        {
-          type: 'h5',
-          isSelfH5: '1',
-          path: 'pagesC/queryCase/queryCase',
-          extraData: extraData,
-          addition: {
-            herenId: 'herenId',
-            patientId: 'patientId',
-          },
-        },
-        'navigateTo'
-      );
+    if (_props.value?.selectRecords && _props.value?.selectRecords != '0') {
+      uni.navigateTo({
+        url: '/pagesC/serviceCenter/serviceComplaint?selectRecords=2',
+      });
+      // let extraData = {
+      //   sysCode: gStores.globalStore.sysCode,
+      //   pageType: '2',
+      // };
+      // _props.value?.tab && (extraData[`tab`] = _props.value.tab);
+      // useTBanner(
+      //   {
+      //     type: 'h5',
+      //     isSelfH5: '1',
+      //     path: 'pagesC/queryCase/queryCase',
+      //     extraData: extraData,
+      //     addition: {
+      //       herenId: 'herenId',
+      //       patientId: 'patientId',
+      //     },
+      //   },
+      //   'navigateTo'
+      // );
     } else {
       uni.navigateTo({
         url: '/pagesC/serviceCenter/serviceComplaint',

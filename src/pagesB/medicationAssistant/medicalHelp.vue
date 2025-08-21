@@ -689,7 +689,7 @@
     }
     if (getSysCode() === '1001035') {
       uni.setNavigationBarTitle({
-        title: '药品代煎快递办理',
+        title: '药品快递办理',
       });
       defaultField = [
         {
