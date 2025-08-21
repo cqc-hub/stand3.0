@@ -190,6 +190,7 @@
   const cacheStore = useCacheStore();
   const pageProps = ref(
     {} as {
+      patientName?: string;
       cardNumber?: string;
       params?: string;
       scan?: 1 | 0;
@@ -305,8 +306,14 @@
       iceBagNum: 0,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
-      hosPatientId: cardNumber || gStores.userStore.patChoose.cardNumber,
-      cardNumber: cardNumber || gStores.userStore.patChoose.cardNumber,
+      hosPatientId:
+        pageProps.value.scan == 1
+          ? cardNumber
+          : gStores.userStore.patChoose.cardNumber,
+      cardNumber:
+        pageProps.value.scan == 1
+          ? cardNumber
+          : gStores.userStore.patChoose.cardNumber,
     };
     try {
       const actionApi =
@@ -416,9 +423,9 @@
       expressCompany: deliveryType === '3' ? undefined : expressCompany,
       expressName: senderName,
       expressPhone: senderPhone,
-      cardNumber: pageProps.value.cardNumber || cardNumber,
+      cardNumber: params ? pageProps.value.cardNumber : cardNumber,
       patientId: params ? undefined : patientId,
-      patientName: params ? undefined : patientName,
+      patientName: params ? pageProps.value.patientName : patientName,
       herenId,
       hosId,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
@@ -475,7 +482,7 @@
 
     if (confirm) {
       const { source } = gStores.globalStore.browser;
-      const { patientName } = gStores.userStore.patChoose;
+      const { patientName, cardNumber } = gStores.userStore.patChoose;
       let payType = 'WX_MINI';
       // #ifdef MP-ALIPAY
       payType = 'ALI_MINI';
@@ -503,7 +510,10 @@
         source,
         phsOrderSource: 7,
         hosId,
-        patientName,
+        cardNumber:
+          pageProps.value.scan == 1 ? pageProps.value.cardNumber : cardNumber,
+        patientName:
+          pageProps.value.scan == 1 ? pageProps.value.patientName : patientName,
         businessType: args.expressCompany == '1' ? 8 : 9, //8顺丰，9邮政
       });
       await toPayPull(payRes, '药品配送下单');
@@ -514,13 +524,15 @@
   const handlePayAfter = () => {
     gStores.messageStore.showMessage('快递下单成功', 2000, {
       closeCallBack: () => {
+        const extraData: any = {
+          tabIndex: '1',
+        };
+        pageProps.value.params && (extraData.params = pageProps.value.params);
         useTBanner(
           {
             type: 'self',
             path: 'pagesB/medicationAssistant/medicalHelp',
-            extraData: {
-              tabIndex: '1',
-            },
+            extraData,
           },
           'reLaunch'
         );

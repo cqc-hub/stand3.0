@@ -165,6 +165,17 @@
   >
     仅账号本人可更新为医保用户，是否更新为医保用户？
   </Order-Reg-Confirm>
+  <Order-Reg-Confirm
+    :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`"
+    title="人脸识别须知"
+    @confirm="resolve()"
+    @cancel="reject()"
+    ref="faceDialog"
+  >
+    <g-flag title="人脸识别须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+  </Order-Reg-Confirm>
 </template>
 
 <script lang="ts" setup>
@@ -227,10 +238,13 @@
   const pageConfig = ref(<ISystemConfig['person']>{});
   provide('pageConfig', () => readonly(pageConfig.value));
   const regDialogMedicalFiling: Ref<any> = ref('');
+  const faceDialog: Ref<any> = ref('');
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
   const isNewHealthCard = ref(false);
 
+  let resolve: (...any) => any = () => { console.log(8818)};
+  let reject: (...any) => any = () => { console.log(8288)};
   const {
     getRealNameAuth,
     realNameAuth: _realNameAuth,
@@ -238,6 +252,16 @@
     imgCanvas,
   } = useAuthPerson();
   const realNameAuth = async (pat: IPat) => {
+    await new Promise((rl, rj) => {
+      resolve = rl;
+      reject = () => {
+        console.log(888)
+        gStores.messageStore.showMessage('取消人脸识别', 3000);
+        rj();
+      };
+      faceDialog.value.show();
+
+    });
     await _realNameAuth(pat);
     await patientUtils.getPatCardList();
     routerJump();

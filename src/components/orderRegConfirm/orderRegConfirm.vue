@@ -1,5 +1,7 @@
 <template>
-  <view class="">
+  <view  :class="{
+      [gStores.globalStore.getPageClass]: true,
+    }">
     <wyb-popup
       ref="popup"
       height="10"

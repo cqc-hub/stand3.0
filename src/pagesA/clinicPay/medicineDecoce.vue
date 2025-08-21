@@ -87,7 +87,7 @@
 </template>
 <script lang="ts" setup>
   import { onMounted, ref, computed } from 'vue';
-  import { onLoad } from '@dcloudio/uni-app';
+  import { onLoad, onShow } from '@dcloudio/uni-app';
   import { useTBanner, wait } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import { decryptForPage } from '@/common/des';
@@ -146,6 +146,7 @@
     // }
     init();
   });
+
 
   const init = async () => {
     await fetchList();
@@ -274,8 +275,7 @@
     });
 
     if (confirm) {
-      const { cardNumber, patientName, patientId } =
-        gStores.userStore.patChoose;
+      let { cardNumber, patientName, patientId } = gStores.userStore.patChoose;
       const { source } = gStores.globalStore.browser;
       let payType = 'WX_MINI';
       // #ifdef MP-ALIPAY
@@ -301,8 +301,17 @@
         ? api.chineseMedicinePayNl
         : api.chineseMedicinePay;
       const {
-        result: { paySign, phsOrderNo },
+        result: {
+          paySign,
+          phsOrderNo,
+          cardNumber: _cardNumber,
+          patientName: _patientName,
+        },
       } = await actionApi(params);
+      if (sign) {
+        cardNumber = _cardNumber;
+        patientName = _patientName;
+      }
       const payRes = await payMoneyOnline({
         paySign,
         phsOrderNo,
@@ -315,8 +324,9 @@
         cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
+      await fetchList()
+      handlePayAfter();
     }
-    
   };
 </script>
 
@@ -325,7 +335,7 @@
     height: 100%;
     padding: 0 32rpx;
     width: calc(100% - 64rpx);
-        overflow: scroll;
+    overflow: scroll;
   }
   .g-footer {
     .footer-check {
