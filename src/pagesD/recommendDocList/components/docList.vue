@@ -20,13 +20,18 @@
 
         <view class="doc-info-introduce">
           <view class="doc-info-introduce-header">
-            <view class="doc-info-introduce-name f36 text-no-wrap">
-              {{ item.docName }}
-            </view>
+            <view>
+              <view class="doc-info-introduce-name f36 text-no-wrap">
+                {{ item.docName || item.hosDocName }}
+              </view>
 
-            <view v-if="item.isCharge === '1'" class="charge-icon f24">
-              组长
+              <view v-if="item.isCharge === '1'" class="charge-icon f24">
+                组长
+              </view>
             </view>
+            <button v-if="item.docAppointStatus==='1'" class="btn btn-primary f26"  @click="itemClick(item)" >
+              立即预约
+            </button>
           </view>
 
           <view class="doc-info-introduce-goodat text-ellipsis">
@@ -44,7 +49,7 @@
       </view>
 
       <view>
-        <view v-if="item.intro" class="doc-intro ellipsis-line-clamp2">
+        <view v-if="item.goodAt " class="doc-intro ellipsis-line-clamp2">
           <image
             :src="
               $global.BASE_IMG +
@@ -119,6 +124,7 @@
         .doc-info-introduce-header {
           display: flex;
           align-items: center;
+          justify-content: space-between;
           .doc-info-introduce-name {
             font-weight: 600;
             color: var(--hr-neutral-color-10);
@@ -135,6 +141,13 @@
           .doc-info-introduce-title {
             color: var(--hr-neutral-color-7);
           }
+        }
+        .btn{ 
+          padding: 8rpx 24rpx;
+          background: #296fff;
+          border-radius: 28rpx;
+          height: 56rpx;
+          box-sizing: border-box;
         }
 
         .doc-info-introduce-goodat {

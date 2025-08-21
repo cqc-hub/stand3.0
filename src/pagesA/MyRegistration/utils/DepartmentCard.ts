@@ -28,3 +28,15 @@ export type TDepartmentDetail = {
   netHosUrl: string;
   recommendation: string;
 };
+
+export type THosItem = {
+  hosId: string;
+  hosName: string;
+  hosIntroduce?: string;
+};
+
+export type hosListItem =  {
+  hosInfoList: THosItem[];
+  famousDoctorType: string;
+  hosDeptIntroduce?: string;
+};

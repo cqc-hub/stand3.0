@@ -773,7 +773,15 @@ const regApi = {
     }),
   smartGuideDft: (data: any) =>
     service.post('/phs-reg/regIntelligence/smartGuideDft', parm(data)),
-};
+  
+  //按名医类别查询科室
+  getDeptByFamousDoctorType: (data: any) =>
+    service.post('/phs-reg/deptDoc/getDeptByFamousDoctorType', parm(data)),
+
+  // 按科室和机构查询名医
+  getDoctorByDeptAndHos: (data: any) =>
+      service.post('/phs-reg/deptDoc/getDoctorByDeptAndHos', parm(data)), 
+}; 
 
 // 用户服务
 const userApi = {

@@ -327,6 +327,12 @@
           }
         },
         {
+          "path": "MyRegistration/DepartmentHosCard",
+          "style": {
+            "navigationBarTitleText": "名医推荐"
+          }
+        },
+        {
           "path": "MyRegistration/DepartmentCardDetail",
           "style": {
             "navigationBarTitleText": "科室详情"
@@ -866,6 +872,12 @@
           "path": "recommendDocList/recommendDocList",
           "style": {
             "navigationBarTitleText": "名医推荐"
+          }
+        },
+        {
+          "path": "recommendDocList/famousDocList",
+          "style": {
+            "navigationBarTitleText": "名医温州汇"
           }
         }
       ],
