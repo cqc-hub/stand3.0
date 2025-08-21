@@ -123,6 +123,18 @@
       key: 'detailedAddress',
       emptyMessage: '请输入街道、小区、门牌号等',
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
+      validator: async (v: any) => {
+        if (v && v.length > 7) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '详细地址至少输入7个字及以上',
+            success: false,
+          };
+        }
+      },
     },
     {
       required: false,

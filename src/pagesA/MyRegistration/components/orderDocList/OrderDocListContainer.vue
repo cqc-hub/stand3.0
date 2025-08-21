@@ -17,27 +17,22 @@
 
       <view @click="avatarClick" class="doc-info-introduce">
         <view class="flex-between flex1">
-          <view class="doc-info-introduce-header">
-            <view class="doc-info-introduce-name text-ellipsis f36">
+          <text class="doc-info-introduce-header">
+            <text class="doc-info-introduce-name f36 text-no-wrap">
               <text class="">{{ item.docName }}</text>
-            </view>
-            <view
-              v-if="item.docTitleName"
-              class="doc-info-introduce-title flex-normal"
+            </text>
+
+            <text
+              v-for="(t, ti) in getSuffixTitle()"
+              :key="t"
+              :class="{
+                'g-split-line1 mr12 pr12': ti !== getSuffixTitle().length - 1,
+              }"
+              class="color-888"
             >
-              <view
-                :class="{
-                  'g-split-line': item.docJobName,
-                }"
-                class="mr12 pr12 text-no-wrap"
-              >
-                {{ item.docTitleName }}
-              </view>
-              <view v-if="item.docJobName" class="text-ellipsis">
-                {{ item.docJobName }}
-              </view>
-            </view>
-          </view>
+              {{ t }}
+            </text>
+          </text>
 
           <view
             v-if="item.preStatus === '1'"
@@ -158,6 +153,12 @@
   };
 
   const splitSpecialDeptName = (name: string) => name.split(',');
+
+  const getSuffixTitle = (): string[] => {
+    const { docJobName, docTitleName } = props.item;
+
+    return [docJobName, docTitleName].filter((o) => o);
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -189,8 +190,8 @@
         // justify-content: space-between;
 
         .doc-info-introduce-header {
-          display: flex;
-          align-items: center;
+          // display: flex;
+          // align-items: center;
           .doc-info-introduce-name {
             font-weight: 600;
             color: var(--hr-neutral-color-10);

@@ -5,7 +5,14 @@
         <view class="title g-border-bottom text-ellipsis">
           {{ subType || '常见问题' }}
         </view>
+
+        <view v-if="pageConfig.serviceProblemMode === '1'">
+          <!-- @vue-expect-error -->
+          <serviceList2 :list="list" />
+        </view>
+
         <service-List
+          v-else
           :list="list"
           :rowStyle="getRowStyle"
           @item-click="itemClick"
@@ -121,13 +128,13 @@
   import api from '@/service/api';
 
   import serviceList from './components/serviceList.vue';
+  import serviceList2 from './components/serviceList2.vue';
 
   const props = defineProps<{
     subType?: string;
   }>();
   const gStores = new GStores();
   const pageConfig = ref(<ISystemConfig['RestOfConfig']>{});
-  console.log('pageConfig', pageConfig);
   const subType = props.subType && decodeURIComponent(props.subType!);
   const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
@@ -187,7 +194,7 @@
 
   const init = async () => {
     await getConfig();
-    if (getLv.value) {
+    if (getLv.value && pageConfig.value.serviceProblemMode !== '1') {
       await getSecondList();
     } else {
       await getFirstList();

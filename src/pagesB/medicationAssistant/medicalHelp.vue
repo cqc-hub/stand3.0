@@ -585,7 +585,8 @@
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
-          cardNumber: rPatientId,
+          cardNumber: selPat.value._showId,
+          patientName:selPat.value.patientName,
           ...pageProps.value,
           scan: pageProps.value?.params ? '1' : '0',
           isYouzhen,

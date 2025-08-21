@@ -190,6 +190,7 @@
   const cacheStore = useCacheStore();
   const pageProps = ref(
     {} as {
+      patientName?: string;
       cardNumber?: string;
       params?: string;
       scan?: 1 | 0;
@@ -285,7 +286,7 @@
     feeDetail.value.iceBagCharges = iceFee;
     feeDetail.value.totalCost = feeDetail.value.totalFee * 1 + iceFee;
   };
-  const getExpressFee = async () => {
+  const getExpressFee = async (type?: string) => {
     feeDetail.value.hosOrderId = '';
     feeDetail.value.costs = '';
     const { cardNumber } = pageProps.value;
@@ -302,11 +303,17 @@
       expressPhone: senderPhone,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
-      iceBagNum: 0,
+      iceBagNum: type === 'SZYouZhen' ? iceBagNum.value : 0,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
-      hosPatientId: cardNumber || gStores.userStore.patChoose.cardNumber,
-      cardNumber: cardNumber || gStores.userStore.patChoose.cardNumber,
+      hosPatientId:
+        pageProps.value.scan == 1
+          ? cardNumber
+          : gStores.userStore.patChoose.cardNumber,
+      cardNumber:
+        pageProps.value.scan == 1
+          ? cardNumber
+          : gStores.userStore.patChoose.cardNumber,
     };
     try {
       const actionApi =
@@ -315,13 +322,25 @@
           : api.drugDeliveryCost;
       const { result } = await actionApi(params);
       const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
-      feeDetail.value = {
-        totalFee,
-        iceBagCharges,
-        hosOrderId,
-        costs: expressList,
-        totalCost: totalFee,
-      };
+
+      if (type === 'SZYouZhen') {
+        feeDetail.value = {
+          totalFee: feeDetail.value.totalFee,
+          iceBagCharges,
+          hosOrderId,
+          costs: expressList,
+          totalCost: totalFee,
+        };
+        return;
+      } else {
+        feeDetail.value = {
+          totalFee,
+          iceBagCharges,
+          hosOrderId,
+          costs: expressList,
+          totalCost: totalFee,
+        };
+      }
 
       if (gStores.globalStore.sysCode === '1001035') {
         const aim = aimList.value.find(
@@ -416,9 +435,9 @@
       expressCompany: deliveryType === '3' ? undefined : expressCompany,
       expressName: senderName,
       expressPhone: senderPhone,
-      cardNumber: pageProps.value.cardNumber || cardNumber,
+      cardNumber: params ? pageProps.value.cardNumber : cardNumber,
       patientId: params ? undefined : patientId,
-      patientName: params ? undefined : patientName,
+      patientName: params ? pageProps.value.patientName : patientName,
       herenId,
       hosId,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
@@ -428,6 +447,14 @@
       remark: remark.value,
     };
     if (pageConfig.value.isPayOnline === '1') {
+      //省中邮政his算冰袋价格
+      if (
+        gStores.globalStore.sysCode === '1001035' &&
+        expressCompany == '2' &&
+        iceBagNum.value > 0
+      ) {
+        getExpressFee(`SZYouZhen`);
+      }
       gotoExpressPay(args);
       return;
     }
@@ -475,7 +502,7 @@
 
     if (confirm) {
       const { source } = gStores.globalStore.browser;
-      const { patientName } = gStores.userStore.patChoose;
+      const { patientName, cardNumber } = gStores.userStore.patChoose;
       let payType = 'WX_MINI';
       // #ifdef MP-ALIPAY
       payType = 'ALI_MINI';
@@ -503,7 +530,10 @@
         source,
         phsOrderSource: 7,
         hosId,
-        patientName,
+        cardNumber:
+          pageProps.value.scan == 1 ? pageProps.value.cardNumber : cardNumber,
+        patientName:
+          pageProps.value.scan == 1 ? pageProps.value.patientName : patientName,
         businessType: args.expressCompany == '1' ? 8 : 9, //8顺丰，9邮政
       });
       await toPayPull(payRes, '药品配送下单');
@@ -514,13 +544,15 @@
   const handlePayAfter = () => {
     gStores.messageStore.showMessage('快递下单成功', 2000, {
       closeCallBack: () => {
+        const extraData: any = {
+          tabIndex: '1',
+        };
+        pageProps.value.params && (extraData.params = pageProps.value.params);
         useTBanner(
           {
             type: 'self',
             path: 'pagesB/medicationAssistant/medicalHelp',
-            extraData: {
-              tabIndex: '1',
-            },
+            extraData,
           },
           'reLaunch'
         );

@@ -572,7 +572,7 @@ export interface ISystemConfig_ {
       //微信小程序是否启用流文本形式Api
       isWXStreamApi?: '1';
       //是否开启报告解读
-      isReportAnalysis?: '1'|'2';//1:开启上传报告解读和本院报告解读功能，2:仅开启上传报告进行解读
+      isReportAnalysis?: '1' | '2'; //1:开启上传报告解读和本院报告解读功能，2:仅开启上传报告进行解读
       guessAskList?: Array<{ label: string; value: string }>;
       //isSelfMethod:reportAnalysis 报告解读功能
       //isSelfMethod:openWxService 唤起企业微信 在 "extraData"中跟isOpenWxServiceBtn的参数一致
@@ -597,19 +597,23 @@ export interface ISystemConfig_ {
   /** 杂项配置（客服、意见反馈、隐私政策)- */
   RestOfConfig: {
     //隐私政策
-     isOpenAIPolicy?:'1';
-     //自定义隐私政策列表，为空则展示默认值
-     policyList?:Array<Array<{label:string,flag:string}>>
+    isOpenAIPolicy?: '1';
+    //自定义隐私政策列表，为空则展示默认值
+    policyList?: Array<Array<{ label: string; flag: string }>>;
 
     // home 页面底部产品图标
     homeProductionIcon?: string;
     //手机号验证码登录
     isLoginByPhoneVerify?: '1';
+
     // 客服中心  pagesA/serviceCenter/serviceCenter
     // 意见反馈使用自定义的页面?
     isCustomFeedback?: '1';
     //匿名意见反馈
     anonymousFeedback?: '1';
+    // 常见问题模式 默认一层层点页面
+    serviceProblemMode?: '1'; // 1 抽屉模式
+
     // 开启咨询客服弹窗
     isOpenMyService?: {
       extInfo: string;
