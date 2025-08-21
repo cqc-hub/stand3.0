@@ -991,11 +991,17 @@ export const usePayPage = () => {
     }
 
     unPayList.value = [];
-    if (result && result.clinicalSettlementResultList) {
-      const resList = result.clinicalSettlementResultList;
-      dealPayList(resList, { payState: '1' });
 
-      unPayList.value = resList;
+    const { clinicalSettlementResultList, cardNumber, patientName } =
+      result || {};
+
+    dealPayList(clinicalSettlementResultList, { payState: '1' });
+    unPayList.value = clinicalSettlementResultList;
+    if (cardNumber) {
+      pageProps.value.deParams = {
+        cardNumber,
+        patientName,
+      };
     }
   };
 

@@ -102,22 +102,7 @@ image {
   will-change: transform;
 }
 
-.g-split-line {
-  position: relative;
-
-  &::after {
-    content: "";
-    display: inline-block;
-    width: 2rpx;
-    height: 24rpx;
-    background-color: #999999;
-    right: 0;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}
-
+.g-split-line,
 .g-split-line1 {
   &::after {
     content: "|";

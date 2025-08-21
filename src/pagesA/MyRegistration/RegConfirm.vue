@@ -523,9 +523,12 @@
           //超限就诊提示
           OverlimiMessage(e);
         } else if (respCode === 999231 && realNameAuth === '0') {
-          // 去实名认证
+          // 医生号源 去实名认证 -温附二
           await handlerConfirmPatReal();
-        } else if (code !== 4000) {
+        } else if (respCode === 884802) {
+          //接口拦截 去实名认证 —— 省中
+          await handlerConfirmPatReal();
+        }  else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
       }
@@ -837,6 +840,20 @@
         patientId: gStores.userStore.patChoose.patientId,
         source: gStores.globalStore.browser.source,
         addFlag,
+      }).catch(async (e) => {
+      if (e) {
+        const { respCode,code,message } = e;
+        if (respCode === 884802) {
+          //接口拦截 去实名认证 —— 省中
+          await handlerConfirmPatReal();
+        }else if (respCode === 884803) {
+          //接口拦截 更新监护人信息 —— 省中
+          await handlerConfirmPatReal();
+        }  else if (code !== 4000) {
+          message && gStores.messageStore.showMessage(message, 3000);
+        }
+      }
+      throw new Error(e);
       });
 
       if (pageConfig.value?.isTabWaitReg === '1') {

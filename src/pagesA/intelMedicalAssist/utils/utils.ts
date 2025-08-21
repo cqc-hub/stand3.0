@@ -1614,7 +1614,10 @@ export const regConfirm = async (pageArg) => {
         //超限就诊提示
         message && gStores.messageStore.showMessage(message, 3000);
       } else if (respCode === 999231 && realNameAuth === '0') {
-        // 去实名认证
+        //医生号源 去实名认证 -温附二
+        await handlerConfirmPatReal();
+      } else if (respCode === 884802) {
+          //接口拦截 去实名认证 —— 省中
         await handlerConfirmPatReal();
       } else if (code !== 4000) {
         message && gStores.messageStore.showMessage(message, 3000);
