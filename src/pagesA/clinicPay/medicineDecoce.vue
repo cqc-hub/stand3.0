@@ -136,17 +136,8 @@
     }
     await wait(650);
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    // if (pageProps.value.params) {
-    //   pageProps.value.deParams = decryptForPage(pageProps.value.params);
-    //   console.warn(
-    //     '获取到加密参数',
-    //     pageProps.value.params,
-    //     pageProps.value.deParams
-    //   );
-    // }
     init();
   });
-
 
   const init = async () => {
     await fetchList();
@@ -188,19 +179,25 @@
     const actionApi = sign
       ? api.getChineseMedicineListNl
       : api.getChineseMedicineList;
-    const { result } = await actionApi({
-      sign,
-      cardNumber,
-      patientId,
-    });
-    unPayList.value = (result?.results || []).map((item) => {
-      return {
-        ...item,
-        totalCost: item.drugCost,
-        payState: '1',
-        childOrder: item.prescId,
-      };
-    });
+    try {
+      const { result } = await actionApi({
+        sign,
+        cardNumber,
+        patientId,
+      });
+      unPayList.value = (result?.results || []).map((item) => {
+        return {
+          ...item,
+          totalCost: item.drugCost,
+          payState: '1',
+          childOrder: item.prescId,
+        };
+      });
+    } catch (e: any) {
+      console.error(e);
+      gStores.messageStore.showMessage(e?.message || e?.innerMessage, 2000);
+      await wait(3000);
+    }
   };
 
   const selPayListItem = (item: IPayListItem) => {
@@ -324,7 +321,7 @@
         cardNumber,
       });
       await toPayPull(payRes, '中药代煎');
-      await fetchList()
+      await fetchList();
       handlePayAfter();
     }
   };
