@@ -58,7 +58,7 @@
         <view class="s-btn-container">
           <text class="iconfont icon-kefu">&#xe6e2;</text>
           <text class="title">在线客服</text>
-          <text class="desc">工作时间咨询</text>
+          <text class="desc">仅供软件咨询</text>
         </view>
       </button>
       <button
