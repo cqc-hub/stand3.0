@@ -66,36 +66,49 @@
       >
         <template #footer="{ pat }: { pat: IPat }">
           <view>
-            <view
-              v-if="getRealNameAuth.length"
-              class="pat-btns flex-normal mt16"
-            >
+            <view class="button-line">
               <view
-                v-if="pat.realNameAuth === '0'"
-                @click="realNameAuth(pat)"
-                class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                v-if="getRealNameAuth.length"
+                class="pat-btns flex-normal mt16 ml12"
               >
-                去认证
+                <view
+                  v-if="pat.realNameAuth === '0'"
+                  @click="realNameAuth(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  去认证
+                </view>
               </view>
-            </view>
-            <!-- #ifdef MP-ALIPAY -->
-            <view
-              v-if="
-                $global.sConfig.medicalMHelp &&
-                $global.sConfig.medicalMHelp.alipay &&
-                $global.sConfig.medicalMHelp.alipay.medicalFiling === '1' &&
-                pat.healthCardUser !== '2'
-              "
-              class="pat-btns flex-normal mt16"
-            >
               <view
-                @click="goMedicalFiling(pat)"
-                class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                v-if="pageConfig.isEditPatPhone == '1' && pat?.idType == '01'"
+                class="pat-btns flex-normal mt16 ml12"
               >
-                医保建档
+                <view
+                  @click="editPatPhone(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  修改手机号
+                </view>
               </view>
+              <!-- #ifdef MP-ALIPAY -->
+              <view
+                v-if="
+                  $global.sConfig.medicalMHelp &&
+                  $global.sConfig.medicalMHelp.alipay &&
+                  $global.sConfig.medicalMHelp.alipay.medicalFiling === '1' &&
+                  pat.healthCardUser !== '2'
+                "
+                class="pat-btns flex-normal mt16 ml12"
+              >
+                <view
+                  @click="goMedicalFiling(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  医保建档
+                </view>
+              </view>
+              <!-- #endif -->
             </view>
-            <!-- #endif -->
             <!-- #ifdef MP-WEIXIN -->
             <block
               v-if="
@@ -169,12 +182,18 @@
     :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
       gStores.globalStore.isTcmStyle ? '-tcm' : ''
     }.png`"
-    title="人脸识别须知"
     @confirm="resolve()"
     @cancel="reject()"
     ref="faceDialog"
+    :title="'人脸识别认证须知'"
   >
-    <g-flag title="人脸识别须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
   </Order-Reg-Confirm>
 </template>
 
@@ -189,7 +208,7 @@
     healthCardBind,
     useAuthPerson,
   } from './utils/index';
-  import { deQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
   import {
     GStores,
@@ -243,8 +262,8 @@
   const isMedicalFiling = ref(false);
   const isNewHealthCard = ref(false);
 
-  let resolve: (...any) => any = () => { console.log(8818)};
-  let reject: (...any) => any = () => { console.log(8288)};
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
   const {
     getRealNameAuth,
     realNameAuth: _realNameAuth,
@@ -255,16 +274,51 @@
     await new Promise((rl, rj) => {
       resolve = rl;
       reject = () => {
-        console.log(888)
+        console.log(888);
         gStores.messageStore.showMessage('取消人脸识别', 3000);
         rj();
       };
       faceDialog.value.show();
-
     });
     await _realNameAuth(pat);
     await patientUtils.getPatCardList();
     routerJump();
+  };
+
+  const editPatPhone = async (pat: IPat) => {
+    gStores.userStore.updatePatClick(pat);
+    const { isChangeHosPhoneWay } = pageConfig.value;
+    let q: any = {};
+    // #ifdef  MP-WEIXIN
+    if (isChangeHosPhoneWay) {
+      const chooseList = [
+        {
+          label: '使用人脸验证',
+          value: 'face',
+        },
+        {
+          label: '上传证件验证',
+          value: 'ocr',
+        },
+        // @ts-expect-error
+      ].filter((o) => isChangeHosPhoneWay.includes(o.value));
+
+      const { tapIndex } = await apiAsync(
+        // @ts-expect-error
+        uni.showActionSheet,
+        {
+          title: '选择验证方式',
+          alertText: '选择验证方式',
+          itemList: chooseList.map((o) => o.label),
+        }
+      );
+
+      q.verifyType = chooseList[tapIndex].value;
+    }
+    // #endif
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
+    });
   };
 
   // #ifdef MP-WEIXIN
@@ -488,8 +542,12 @@
     font-size: var(--hr-font-size-xs);
     margin-top: 24rpx;
   }
-
+  .button-line {
+    display: flex;
+    flex-direction: row-reverse;
+  }
   .pat-btns {
     flex-direction: row-reverse;
+    width: fit-content;
   }
 </style>

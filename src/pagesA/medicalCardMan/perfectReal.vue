@@ -154,6 +154,17 @@
       </button>
     </view>
   </view>
+  <Order-Reg-Confirm
+    :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`"
+    @confirm="resolve()"
+    @cancel="reject()"
+    ref="faceDialog"
+    :title="'人脸识别认证须知'"
+  >
+    <g-flag title="人脸识别认证须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+  </Order-Reg-Confirm>
 </template>
 
 <script lang="ts" setup>
@@ -259,6 +270,7 @@
   const dialogContent = ref('');
   const regDialogMedicalFiling: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
+  const faceDialog: Ref<any> = ref('');
   let dialogConfirm = () => {};
   const cardPatList = ref(<TCardPat[]>[]);
   const dialogConfirmRRR = () => {
@@ -277,6 +289,10 @@
     init: useAuthPersonInit,
     imgCanvas,
   } = useAuthPerson();
+
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
   const realNameAuth = async (pat: IPat) => {
     const { title, content } = await gStores.getSysAppMore('95');
 
@@ -299,6 +315,15 @@
     });
 
     if (isConfirm) {
+      await new Promise((rl, rj) => {
+        resolve = rl;
+        reject = () => {
+          console.log(888);
+          gStores.messageStore.showMessage('取消人脸识别', 3000);
+          rj();
+        };
+        faceDialog.value.show();
+      });
       await _realNameAuth(pat);
       await patientUtil.getPatCardList();
     }

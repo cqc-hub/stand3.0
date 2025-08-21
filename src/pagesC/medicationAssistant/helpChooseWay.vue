@@ -286,7 +286,7 @@
     feeDetail.value.iceBagCharges = iceFee;
     feeDetail.value.totalCost = feeDetail.value.totalFee * 1 + iceFee;
   };
-  const getExpressFee = async () => {
+  const getExpressFee = async (type?: string) => {
     feeDetail.value.hosOrderId = '';
     feeDetail.value.costs = '';
     const { cardNumber } = pageProps.value;
@@ -303,7 +303,7 @@
       expressPhone: senderPhone,
       prescIdList: cacheStore.medicalHelpSelList.map((o) => o.prescId),
       prescNoList: cacheStore.medicalHelpSelList.map((o) => o.prescNo),
-      iceBagNum: 0,
+      iceBagNum: type === 'SZYouZhen' ? iceBagNum.value : 0,
       remark: remark.value,
       patientId: gStores.userStore.patChoose.patientId,
       hosPatientId:
@@ -322,13 +322,25 @@
           : api.drugDeliveryCost;
       const { result } = await actionApi(params);
       const { totalFee, iceBagCharges, hosOrderId, expressList } = result;
-      feeDetail.value = {
-        totalFee,
-        iceBagCharges,
-        hosOrderId,
-        costs: expressList,
-        totalCost: totalFee,
-      };
+
+      if (type === 'SZYouZhen') {
+        feeDetail.value = {
+          totalFee: feeDetail.value.totalFee,
+          iceBagCharges,
+          hosOrderId,
+          costs: expressList,
+          totalCost: totalFee,
+        };
+        return;
+      } else {
+        feeDetail.value = {
+          totalFee,
+          iceBagCharges,
+          hosOrderId,
+          costs: expressList,
+          totalCost: totalFee,
+        };
+      }
 
       if (gStores.globalStore.sysCode === '1001035') {
         const aim = aimList.value.find(
@@ -435,6 +447,14 @@
       remark: remark.value,
     };
     if (pageConfig.value.isPayOnline === '1') {
+      //省中邮政his算冰袋价格
+      if (
+        gStores.globalStore.sysCode === '1001035' &&
+        expressCompany == '2' &&
+        iceBagNum.value > 0
+      ) {
+        getExpressFee(`SZYouZhen`);
+      }
       gotoExpressPay(args);
       return;
     }

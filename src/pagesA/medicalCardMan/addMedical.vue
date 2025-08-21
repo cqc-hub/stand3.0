@@ -133,6 +133,17 @@
       <!-- #endif -->
     </view>
   </view>
+  <Order-Reg-Confirm
+    :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`"
+    @confirm="resolve()"
+    @cancel="reject()"
+    :title="'人脸识别认证须知'"
+    ref="faceDialog"
+  >
+    <g-flag title="人脸识别认证须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+  </Order-Reg-Confirm>
 </template>
 
 <script lang="ts" setup>
@@ -186,6 +197,7 @@
   const pageConfig = ref(<ISystemConfig['person']>{});
   const refPay = ref<any>('');
   const refPayList = ref<any[]>([]);
+  const faceDialog: Ref<any> = ref('');
   const selVerifyWay = ({ item }) => {
     _resolve(item.key);
   };
@@ -401,6 +413,9 @@
     }
   };
 
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
     const formKeyNow = formList.value.map((o) => o.key);
@@ -448,7 +463,16 @@
       // useFaceVerifyInChangePhone,
     } = pageConfig.value;
     const isIDCard = formData.value[formKey.idType] === '01';
-
+    isFace === '1' &&
+      (await new Promise((rl, rj) => {
+        resolve = rl;
+        reject = () => {
+          console.log(888);
+          gStores.messageStore.showMessage('取消人脸识别', 3000);
+          rj();
+        };
+        faceDialog.value.show();
+      }));
     if (
       isIDCard &&
       isFaceRemote === '1' &&

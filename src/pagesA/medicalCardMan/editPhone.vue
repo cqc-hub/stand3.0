@@ -52,6 +52,23 @@
 
     <g-message />
   </view>
+  <Order-Reg-Confirm
+    :title="'人脸识别认证须知'"
+    :headerIcon="`${$global.BASE_IMG}v3-order-reg-confirm${
+      gStores.globalStore.isTcmStyle ? '-tcm' : ''
+    }.png`"
+    @confirm="resolve()"
+    @cancel="reject()"
+    ref="faceDialog"
+  >
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
+  </Order-Reg-Confirm>
 </template>
 
 <script lang="ts" setup>
@@ -68,6 +85,7 @@
     type ISystemConfig,
   } from '@/utils';
   import { TInstance } from '@/components/g-form';
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue'
   import api from '@/service/api';
 
   const gStores = new GStores();
@@ -82,6 +100,7 @@
   const gform = ref<any>('');
   const idCardUrl = ref('');
   const isComplete = ref(false);
+  const faceDialog = ref<any>('');
   const pData = ref('');
   const imgCanvas = ref({
     imgWidth: 0,
@@ -171,12 +190,24 @@
     }
   };
 
+  let resolve: (...any) => any = () => {};
+  let reject: (...any) => any = () => {};
+
   const formSubmit = async ({ data }) => {
     const { phone, verifyCode, patientId } = data;
     const { source } = gStores.globalStore.browser;
     let _pData = '';
 
     if (isUseFaceVerify.value) {
+      await new Promise((rl, rj) => {
+        resolve = rl;
+        reject = () => {
+          console.log(888);
+          gStores.messageStore.showMessage('取消人脸识别', 3000);
+          rj();
+        };
+        faceDialog.value.show();
+      });
       const { pData, idCard } = await patientUtils.faceVerifyAndPDataForPat(
         gStores.userStore.clickPat
       );
