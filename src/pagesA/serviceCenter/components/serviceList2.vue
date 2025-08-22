@@ -33,12 +33,15 @@
         <view class="bg-white collapse-content f28 row">
           <view v-if="getContent(item)" class="pl24 pr24 pt32 pb32 bg-white">
             <view
-              v-for="p in getContent(item).list"
+              v-for="(p, pi) in getContent(item).list"
               :key="p.id"
               @click="goDetail(p)"
+              :class="{
+                mb24: pi !== getContent(item).list.length - 1,
+              }"
               class="flex"
             >
-              <view class="flex-1">{{ p.title }}</view>
+              <view class="flex-1 f32">{{ p.title }}</view>
               <view class="iconfont color-888 f48">&#xe66b;</view>
             </view>
 
@@ -111,10 +114,7 @@
   };
 
   const getSecondList = async (subType) => {
-    const actionApi =
-      gStores.globalStore.sysCode === '1001035'
-        ? api.getCmsListByWordSearch
-        : api.getCmsListBySubType;
+    const actionApi = api.getCmsListBySubType;
     const { result } = await actionApi({
       subType,
       searchContent: subType,
