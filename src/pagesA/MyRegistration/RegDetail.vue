@@ -1088,6 +1088,9 @@
       source,
     };
 
+    console.log(JSON.stringify(requestArg));
+    // return
+
     uni.showLoading({
       title: '预上传...',
       mask: true,

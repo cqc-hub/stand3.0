@@ -168,7 +168,6 @@
 
   onShow(async (opt) => {
     console.log('App Show', opt);
-    const options = opt;
 
     globalStore.onAppShow(opt);
 

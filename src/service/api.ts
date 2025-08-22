@@ -13,8 +13,10 @@ const options = {
 let parm = (data: any, payload: any = {}) => {
   const { outArg } = payload;
   const globalStore = useGlobalStore();
+  const sysCode = globalStore.sysCode;
+
   const body = {
-    sysCode: getSysCode(),
+    sysCode,
     herenId: globalStore.herenId,
     psnId: globalStore.herenId,
     ...data,
@@ -34,8 +36,9 @@ let parm = (data: any, payload: any = {}) => {
 let parmsysCode = (data: any, payload: any = {}) => {
   const { outArg } = payload;
   const globalStore = useGlobalStore();
+  const sysCode = globalStore.sysCode;
   const body = {
-    sysCode: getSysCode(),
+    sysCode,
     herenId: globalStore.herenId,
     ...data,
   };
@@ -46,7 +49,7 @@ let parmsysCode = (data: any, payload: any = {}) => {
 
   return {
     args: body,
-    sysCode: getSysCode(),
+    sysCode,
     token: globalStore.token.accessToken,
     funcode: data.funcode,
   };
@@ -525,7 +528,7 @@ const queryApi = {
   // 江苏省中获取云影像
   getJSYunURL: (data) =>
     service.post<any>('/phs-query/examine/getJSYunURL', parm(data)),
-   // 病历查询 列表
+  // 病历查询 列表
   getOutpatientList: (data) =>
     service.post<any>('/phs-query/operation/getOutpatientList', parm(data)),
 };
@@ -552,7 +555,7 @@ const regApi = {
     service.post<T>('/phs-reg/regAlt/getAlternateList', parm(data)),
 
   addRegAlternate: <T = any>(data: any) =>
-    service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data),{
+    service.post<T>('/phs-reg/regAlt/addRegAlternate', parm(data), {
       hideLoading: false,
       showMessage: false,
     }),
@@ -779,15 +782,15 @@ const regApi = {
     }),
   smartGuideDft: (data: any) =>
     service.post('/phs-reg/regIntelligence/smartGuideDft', parm(data)),
-  
+
   //按名医类别查询科室
   getDeptByFamousDoctorType: (data: any) =>
     service.post('/phs-reg/deptDoc/getDeptByFamousDoctorType', parm(data)),
 
   // 按科室和机构查询名医
   getDoctorByDeptAndHos: (data: any) =>
-      service.post('/phs-reg/deptDoc/getDoctorByDeptAndHos', parm(data)), 
-}; 
+    service.post('/phs-reg/deptDoc/getDoctorByDeptAndHos', parm(data)),
+};
 
 // 用户服务
 const userApi = {
@@ -1234,9 +1237,13 @@ const authApi = {
   },
 
   getAppletsOpenId: <T = any>(data) => {
-    return service.post<T>('/wx/getAppletsOpenId', parm(data, { outArg: true }), {
-      baseURL: global.authUrl,
-    });
+    return service.post<T>(
+      '/wx/getAppletsOpenId',
+      parm(data, { outArg: true }),
+      {
+        baseURL: global.authUrl,
+      }
+    );
   },
 
   wxLoginByPhoneNumberCode: (data) => {
