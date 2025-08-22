@@ -214,8 +214,12 @@
   // const listDisableName = ref('ifClick');
   const hosIntro = ref('');
 
+  const isForOrder = computed(() =>
+    dirUrl.value.includes('/pagesA/MyRegistration/selDepartment')
+  );
+
   const getTypeNow = computed(() => {
-    if (dirUrl.value.includes('/pagesA/MyRegistration/selDepartment')) {
+    if (isForOrder.value) {
       return '预约挂号';
     } else if (dirUrl.value.includes('/pagesC/medRecordApply/recordApply')) {
       return '病案复印';
@@ -232,7 +236,7 @@
   // 对应的值 '1' 禁
   const listDisableName = computed(() => {
     const _type = getTypeNow.value;
-    if (_type === '预约挂号') {
+    if (isForOrder.value) {
       return 'ifClick';
     }
 
@@ -305,7 +309,7 @@
 
   const itemClick = (item: IHosInfo) => {
     const { _type } = props.value;
-    const { hosId } = item;
+    const { hosId, gisLat } = item;
 
     if (globalGl.SYS_CODE === '1001046' && _type === '4') {
       useTBanner(
@@ -391,10 +395,15 @@
         });
       }
     } else {
+      const q: any = {
+        hosId: item.hosId,
+      };
+
+      if (isForOrder.value && !isAuthLocation.value) {
+        q.unPoi = '1';
+      }
       uni.navigateTo({
-        url: joinQuery(props.value._url, {
-          hosId: item.hosId,
-        }),
+        url: joinQuery(props.value._url, q),
       });
     }
   };
@@ -495,6 +504,8 @@
         });
       });
     } else {
+      console.log('233');
+
       hosList.value = await ServerStaticData.getHosList(
         {
           type,
