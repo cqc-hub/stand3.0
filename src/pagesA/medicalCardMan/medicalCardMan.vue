@@ -289,7 +289,6 @@
     gStores.userStore.updatePatClick(pat);
     const { isChangeHosPhoneWay } = pageConfig.value;
     let q: any = {};
-    // #ifdef  MP-WEIXIN
     if (isChangeHosPhoneWay) {
       const chooseList = [
         {
@@ -315,7 +314,7 @@
 
       q.verifyType = chooseList[tapIndex].value;
     }
-    // #endif
+   
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
     });

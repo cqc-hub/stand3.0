@@ -1,6 +1,6 @@
 <template>
   <view class="">
-    <button @click="init">杭口质保卡正式环境（测试用）</button>
+    <button @click="init">智能客服</button>
   </view>
 </template>
 
@@ -534,14 +534,20 @@
     isLocal: '1',
   } as TButtonConfig;
 
-  const testbuttonConfig = ref(index);
+  const 智能客服={
+    text:'智能客服',
+    path:'pagesA/intelMedicalAssist/intelMedicalAssist',
+    type:'self'
+  }as TButtonConfig
+
+  const testbuttonConfig = ref(智能客服);
   onMounted(() => {
     setTimeout(() => {
-      init();
+      // init();
     }, 1000);
   });
 
   const init = async () => {
-    useTBanner(省中云诊室);
+    useTBanner(智能客服);
   };
 </script>
