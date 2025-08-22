@@ -346,8 +346,8 @@
 
   onLoad(async (opt = {}) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (pageProps.value.unPoi) {
-      unNeedPosition.value = false;
+    if (pageProps.value.unPoi === '1') {
+      unNeedPosition.value = true;
     }
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
