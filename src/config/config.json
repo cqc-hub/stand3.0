@@ -30,7 +30,8 @@
       "isvAlipayAppid": "2021003120637143",
       "name": "中国人民解放军东部战区总医院",
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "1001038": {
       "wxAppid": "wxf64e84cf578fe0a7",

@@ -142,7 +142,13 @@
     :title="'人脸识别认证须知'"
     ref="faceDialog"
   >
-    <g-flag title="人脸识别认证须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
   </Order-Reg-Confirm>
 </template>
 
@@ -371,6 +377,14 @@
           (!selWay && useFaceVerifyInChangePhone === '1') ||
           selWay === 'face'
         ) {
+          await new Promise((rl, rj) => {
+            resolve = rl;
+            reject = () => {
+              gStores.messageStore.showMessage('取消人脸识别', 3000);
+              rj();
+            };
+            faceDialog.value.show();
+          });
           const { pData } = await patientUtils.faceVerifyAndPData({
             idCardNumber: formData.value[formKey.idCard],
             name: formData.value[formKey.patientName],
@@ -463,16 +477,7 @@
       // useFaceVerifyInChangePhone,
     } = pageConfig.value;
     const isIDCard = formData.value[formKey.idType] === '01';
-    isFace === '1' &&
-      (await new Promise((rl, rj) => {
-        resolve = rl;
-        reject = () => {
-          console.log(888);
-          gStores.messageStore.showMessage('取消人脸识别', 3000);
-          rj();
-        };
-        faceDialog.value.show();
-      }));
+
     if (
       isIDCard &&
       isFaceRemote === '1' &&
@@ -543,6 +548,14 @@
         }
 
         if (shouldProceed) {
+          await new Promise((rl, rj) => {
+            resolve = rl;
+            reject = () => {
+              gStores.messageStore.showMessage('取消人脸识别', 3000);
+              rj();
+            };
+            faceDialog.value.show();
+          });
           const { pData } = await patientUtils.faceVerifyAndPData({
             idCardNumber: formData.value[formKey.idCard],
             name: formData.value[formKey.patientName],

@@ -328,22 +328,29 @@ export const getLocation = async function (isForce?: boolean): Promise<{
   longitude: string;
 }> {
   return new Promise(async (success, fail) => {
-    const res = await apiAsync(uni.getLocation, {}).catch((err) => {
-      console.error('getLocation',err);
-      
-      if (err?.errCode === 2 || err?.extError === 12) {
-        const gStores = new GStores();
-        gStores.messageStore.showMessage('请检查设备是否开启定位', 5000, {
-          uniToast: true,
-        });
-        throw new Error(err);
-      }
+    const errCb = (err) => {
       if (!isForce) {
         fail(err);
+      } else {
         throw new Error(err);
       }
-    });
+    };
 
+    const res = await apiAsync(uni.getLocation, {}).catch((err) => {
+      console.error('getLocation', err);
+
+      if (err?.errCode === 2 || err?.extError === 12) {
+        const gStores = new GStores();
+        gStores.messageStore.showMessage('请检查设备是否开启定位', 1500, {
+          closeCallBack: () => {
+            errCb(err);
+          },
+        });
+      } else {
+        errCb(err);
+      }
+    });
+    console.log(res);
     // 授权成功
     if (res) {
       const { latitude, longitude } = res;
@@ -359,7 +366,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         const { authSetting } = await apiAsync(uni.getSetting, {});
         const qx = authSetting['scope.userLocation'];
         if (qx) {
-          success(await getLocation(isForce));
+          isForce && success(await getLocation(isForce));
         } else {
           await apiAsync(uni.showModal, {
             content: '获取定位失败, 请重新授权',
@@ -373,7 +380,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         // #endif
 
         // #ifndef MP-WEIXIN
-        success(await getLocation(isForce));
+        isForce && success(await getLocation(isForce));
         // #endif
       };
 
@@ -398,15 +405,22 @@ export const addHosIdForSelfH5Path = (path: string) => {
 
 /**第三方自费支付 兼容2.0数据 */
 export const thirdWxPay = (V3PageData) => {
-  if(V3PageData && V3PageData.paymentData){
+  if (V3PageData && V3PageData.paymentData) {
     // 2.0 支付参数
     V3PageData = {
       ...V3PageData.paymentData,
-      miniUrl:V3PageData.returnUrl?.successUrl || '',
-      successUrl:V3PageData.returnUrl?.errorUrl || ''
-    }
+      miniUrl: V3PageData.returnUrl?.successUrl || '',
+      successUrl: V3PageData.returnUrl?.errorUrl || '',
+    };
   }
-  const { nonceStr, paySign, signType, timeStamp,miniUrl ='' ,successUrl =''} = V3PageData;
+  const {
+    nonceStr,
+    paySign,
+    signType,
+    timeStamp,
+    miniUrl = '',
+    successUrl = '',
+  } = V3PageData;
   !miniUrl && successUrl && (V3PageData.miniUrl = successUrl);
   const invokeData = {
     nonceStr,
@@ -465,32 +479,36 @@ export const thirdWxPay = (V3PageData) => {
     });
 };
 
-
 /**
  * 修改 \n 成换行 -> rich-text
  */
-export const throughCharacterLineFeed = (str: string, replaceStr = '<div />') => {
+export const throughCharacterLineFeed = (
+  str: string,
+  replaceStr = '<div />'
+) => {
   if (str) {
-    str = str.replace(/[\r\n]/g, replaceStr)
+    str = str.replace(/[\r\n]/g, replaceStr);
   }
 
-  return str
-}
-export const getTcMallToken = ()=>{ 
+  return str;
+};
+export const getTcMallToken = () => {
   return new Promise((resolve, reject) => {
-    const appInstance = getApp() 
-    api.getTcToken({}).then((res)=>{
-      if (appInstance && appInstance.globalData) {
-        appInstance.globalData.configData.mallToken = res.result.token
-      }
-      resolve(res.result.token)
-    }).catch(()=>{
-      reject('未获取到token')
-    })
+    const appInstance = getApp();
+    api
+      .getTcToken({})
+      .then((res) => {
+        if (appInstance && appInstance.globalData) {
+          appInstance.globalData.configData.mallToken = res.result.token;
+        }
+        resolve(res.result.token);
+      })
+      .catch(() => {
+        reject('未获取到token');
+      });
+  });
+};
 
-})
-  };
- 
 /**
  * 获取当前运行平台
  */
@@ -498,16 +516,15 @@ export const getPlatform = (): 'wx' | 'alipay' | 'h5' => {
   // #ifdef MP-WEIXIN
   return 'wx';
   // #endif
-  
+
   // #ifdef MP-ALIPAY
   return 'alipay';
   // #endif
-  
+
   // #ifdef H5
   return 'h5';
   // #endif
-  
-  
+
   return 'wx'; // 默认值
 };
 
@@ -521,16 +538,16 @@ export const isFeatureEnabled = (
 ): boolean => {
   // 未配置则不开启
   if (!config) return false;
-  
+
   // 简单配置方式：'1' 表示所有平台都开启
   if (config === '1') return true;
-  
+
   // 对象配置方式：按平台判断
   const platform = getPlatform();
-  
+
   // 检查对应平台是否开启
   if (platform === 'wx' && config.wx === '1') return true;
   if (platform === 'alipay' && config.alipay === '1') return true;
-  
+
   return false;
 };
