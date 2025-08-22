@@ -343,14 +343,14 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         const gStores = new GStores();
         gStores.messageStore.showMessage('请检查设备是否开启定位', 1500, {
           closeCallBack: () => {
-            errCb(err);
+            fail(err);
           },
         });
       } else {
-        errCb(err);
+        fail(err);
       }
     });
-    console.log(res);
+    console.log('res', res);
     // 授权成功
     if (res) {
       const { latitude, longitude } = res;
@@ -368,13 +368,14 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         if (qx) {
           isForce && success(await getLocation(isForce));
         } else {
-          await apiAsync(uni.showModal, {
+          const { confirm } = await apiAsync(uni.showModal, {
             content: '获取定位失败, 请重新授权',
-            showCancel: false,
+            showCancel: !isForce,
           });
-
-          await apiAsync(uni.openSetting, {});
-          isForce && reAuth();
+          if (confirm) {
+            await apiAsync(uni.openSetting, {});
+            isForce && reAuth();
+          }
         }
 
         // #endif
@@ -384,7 +385,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         // #endif
       };
 
-      isForce && reAuth();
+      reAuth();
     }
   });
 };
