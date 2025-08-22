@@ -374,7 +374,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
           });
 
           await apiAsync(uni.openSetting, {});
-          isForce &&reAuth();
+          isForce && reAuth();
         }
 
         // #endif
