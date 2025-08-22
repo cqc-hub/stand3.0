@@ -1,3 +1,4 @@
+import { useGlobalStore } from '@/stores';
 import manifest from '../manifest.json';
 import systemConfig from './config.json';
 import { getSConfig } from './sConfig';
@@ -9,10 +10,10 @@ export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静�
 export let SYS_CODE = systemConfig.sysCode;
 
 // #ifdef H5
-SYS_CODE = getSysCode();
+// SYS_CODE = getSysCode();
 // #endif
 
-let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'prod'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;
@@ -37,10 +38,6 @@ if (env === 'prod') {
 }
 
 const systemInfo: ISystemGlobalItem = systemConfig.sysConfig[SYS_CODE];
-let h5AppId = systemInfo?.h5Appid;
-if (systemInfo?.h5AppidDisabledInTest && env !== 'prod') {
-  h5AppId = '';
-}
 
 const netUrl =
   env === 'prod'
@@ -66,7 +63,7 @@ const globalGl = {
   env,
   authUrl,
   wxAppid,
-  h5AppId,
+  h5AppId: '',
   systemInfo,
   systemConfig: systemConfig.sysConfig[SYS_CODE] || {},
   addPersonUrl: systemInfo?.isSearchInHos
@@ -80,6 +77,35 @@ const globalGl = {
   WEB_OUT_LOGIN_TIME,
   q: getK('q'),
   r: getK('s'),
-} as const;
+};
+
+Object.defineProperties(globalGl, {
+  systemInfo: {
+    get() {
+      return systemConfig.sysConfig[globalGl.SYS_CODE] || {};
+    },
+  },
+
+  wxAppid: {
+    get() {
+      return this.systemInfo.wxAppid;
+    },
+  },
+
+  h5AppId: {
+    get() {
+      if (this.systemInfo.h5AppidDisabledInTest && env !== 'prod') {
+        return '';
+      }
+      return this.systemInfo.h5Appid;
+    },
+  },
+
+  sConfig: {
+    get() {
+      return getSConfig(this.SYS_CODE);
+    },
+  },
+});
 
 export default globalGl;

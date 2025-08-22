@@ -71,6 +71,7 @@ const globalStore = defineStore('global', {
       'envH5',
       'isShowFlag',
       'flagCaches',
+      'sysCode',
     ],
   },
 
@@ -213,11 +214,20 @@ const globalStore = defineStore('global', {
         // #endif
 
         // #ifdef MP-WEIXIN
-        if (['1001063', '1001066', '1001078', '1001076', '1001071'].includes(this.sysCode)) {
+        if (
+          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+            this.sysCode
+          )
+        ) {
           this.updateOralMallData();
         }
 
-        if (['1001063', '1001066', '1001078', '1001076', '1001071'].includes(this.sysCode) && !this.token.accessToken) {
+        if (
+          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+            this.sysCode
+          ) &&
+          !this.token.accessToken
+        ) {
           this.setShowFlag(true);
         }
         // #endif
@@ -246,6 +256,8 @@ const globalStore = defineStore('global', {
         uni.setStorageSync('mini_v3_sysCode_openId', openid);
       }
       // #endif
+
+      globalGl.SYS_CODE = this.sysCode;
     },
 
     async updateOralMallData(app?, type?) {
@@ -253,7 +265,8 @@ const globalStore = defineStore('global', {
       let appData = app || getCurrentInstance()!.proxy;
       if (appData) {
         // 获取当前 sysCode 对应的 mallAppId，如果没有则使用默认值
-        const mallAppId = SYS_CODE_MALL_APP_ID_MAP[this.sysCode] || 'mallM39dpe4692n7';
+        const mallAppId =
+          SYS_CODE_MALL_APP_ID_MAP[this.sysCode] || 'mallM39dpe4692n7';
         // @ts-ignore
         appData.globalData.configData = {
           env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
