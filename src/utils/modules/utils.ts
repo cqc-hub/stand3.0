@@ -384,7 +384,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         // #endif
       };
 
-      reAuth();
+      isForce && reAuth();
     }
   });
 };
