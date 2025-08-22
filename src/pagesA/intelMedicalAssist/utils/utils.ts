@@ -1496,6 +1496,7 @@ const handlerConfirmPatReal = async () => {
         isShowCancel: true,
         cancelText: '暂不预约',
         confirmText: '去实名认证',
+        isMaskClick: false, 
       },
       closeCallBack: r,
     });

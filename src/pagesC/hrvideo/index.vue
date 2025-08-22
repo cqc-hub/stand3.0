@@ -7,8 +7,8 @@
 				正在跳转
 			</view>
 			<view class='btns'>
-				<view @tap="onClick" class='btn open'>打开小程序接听</view>
 				<view @tap="onClickCancel" class='btn reject'>拒绝</view>
+				<view @tap="onClick" class='btn open'>打开小程序接听</view>
 			</view>
 			<view v-if="err">跳转错误:{{err}}</view>
 		</view>
