@@ -112,26 +112,30 @@ export const packageAuthParams = (
 };
 
 export class GStores {
-  constructor(
-    public messageStore = '' as unknown as ReturnType<typeof useMessageStore>,
-    public userStore = '' as unknown as ReturnType<typeof useUserStore>,
-    public globalStore = '' as unknown as ReturnType<typeof useGlobalStore>
-  ) {
-    const init = () => {
-      this.messageStore = useMessageStore();
-      this.userStore = useUserStore();
-      this.globalStore = useGlobalStore();
-    };
-    // #ifndef H5
-    init();
-    // #endif
+  _messageStore = '' as unknown as ReturnType<typeof useMessageStore>;
+  _userStore = '' as unknown as ReturnType<typeof useUserStore>;
+  _globalStore = '' as unknown as ReturnType<typeof useGlobalStore>;
 
+  get messageStore() {
+    if (!this._messageStore) {
+      this._messageStore = useMessageStore();
+    }
 
-    // #ifdef h5
-    setTimeout(() => {
-      init();
-    }, 0);
-    // #endif
+    return this._messageStore;
+  }
+
+  get userStore() {
+    if (!this._userStore) {
+      this._userStore = useUserStore();
+    }
+    return this._userStore;
+  }
+
+  get globalStore() {
+    if (!this._globalStore) {
+      this._globalStore = useGlobalStore();
+    }
+    return this._globalStore;
   }
 
   async getSysAppMore(
