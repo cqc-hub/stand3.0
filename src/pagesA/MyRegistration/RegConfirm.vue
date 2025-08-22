@@ -302,6 +302,7 @@
           isShowCancel: true,
           cancelText: '暂不预约',
           confirmText: '去实名认证',
+          isMaskClick: false,
         },
         closeCallBack: r,
       });
@@ -846,10 +847,12 @@
         if (respCode === 884802) {
           //接口拦截 去实名认证 —— 省中
           await handlerConfirmPatReal();
-        }else if (respCode === 884803) {
-          //接口拦截 更新监护人信息 —— 省中
-          await handlerConfirmPatReal();
-        }  else if (code !== 4000) {
+        }
+        // else if (respCode === 884803) {
+        //   //接口拦截 更新监护人信息 —— 省中
+        //   await handlerConfirmPatReal();
+        // } 
+         else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
       }
