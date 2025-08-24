@@ -62,8 +62,10 @@
 
                 <view class="p32c header-content">
                   <view class="flex-normal">
-                    <view class="doc-name mr24 f48 g-bold ">
-                      <text class="---text-ellipsis">{{ docDetail.docName }}</text>
+                    <view class="doc-name mr24 f48 g-bold">
+                      <text class="---text-ellipsis">
+                        {{ docDetail.docName }}
+                      </text>
                     </view>
 
                     <view
@@ -1005,7 +1007,13 @@
       return;
     }
 
-    if (gStores.globalStore.sysCode === '1001035') {
+    const { clinicalType } = props.value;
+
+    if (
+      clinicalType &&
+      gStores.globalStore.sysCode === '1001035' &&
+      !['3', '4', '6'].includes(clinicalType)
+    ) {
       props.value.clinicalType = undefined;
     }
 
