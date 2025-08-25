@@ -75,6 +75,8 @@
   import { joinQueryForUrl } from '@/common';
 
   import {
+    getMedical1001035Info,
+    handlerMedical1001035Pay,
     TMedicalNationUploadRes,
     TWxAuthorize,
   } from './utils/clinicPayDetail';
@@ -112,6 +114,8 @@
 
   let payRes: any = null;
   const getPay = async () => {
+
+
     if (!payRes) {
       let channel = 'ALI_MINI_INSURANCE';
       // #ifdef  MP-WEIXIN

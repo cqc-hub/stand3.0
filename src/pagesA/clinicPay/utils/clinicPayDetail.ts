@@ -370,10 +370,9 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 
 // 省中微信智捷付
 export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
-  const { sConfig } = globalGl;
   const gStores = new GStores();
   const { ev } = gStores.globalStore;
-  const medicalConfig1001035 = sConfig.medicalMHelp?.wx?.medical1001035;
+  const medicalConfig1001035 = await getMedical1001035Info();
 
   if (medicalConfig1001035 && ev === 'wx') {
     const authInfo =
@@ -540,10 +539,8 @@ export const getQxMedicalNation = async (
   }
 ) => {
   const gStores = new GStores();
-  const {
-    sConfig: { medicalMHelp },
-  } = globalGl;
-  if (gStores.globalStore.ev === 'wx' && medicalMHelp?.wx?.medical1001035) {
+  const medical1001035 = await getMedical1001035Info();
+  if (medical1001035) {
     const { patientName } = gStores.userStore.patChoose;
     const { idCard } = await new PatientUtils().getPatientPersonalInfo({
       idCard: true,
@@ -1988,8 +1985,9 @@ export const usePayPage = () => {
     const patientUtil = new PatientUtils();
 
     if (wx) {
-      const { medicalNation, medicalPlugin, medical1001035 } = wx!;
+      const { medicalNation, medicalPlugin } = wx!;
 
+      const medical1001035 = await getMedical1001035Info();
       if (medical1001035) {
         // 省中医保需要 name + idCard， 目前仅先接入登录流程
         if (pageProps.value.params) {
@@ -2533,4 +2531,56 @@ export const reDealMedicalFiling = async () => {
     },
   });
   // #endif
+};
+
+export const getMedical1001035Info = async () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+
+  const gStores = new GStores();
+  const { wx: mwx } = medicalMHelp || {};
+  if (gStores.globalStore.ev === 'wx' && mwx) {
+    return mwx.medical1001035;
+  }
+};
+
+export const handlerMedical1001035Pay = async (opt: {
+  phsOrderSource: '1' | '2';
+}) => {
+  const { phsOrderSource } = opt;
+  const medical1001035 = await getMedical1001035Info();
+
+  const gStores = new GStores();
+
+  if (medical1001035) {
+    const { uploadRes, info } = gStores.globalStore.cacheData;
+    const { ocToken: octoken, payAuthNo: payAuthno } = info.extend;
+    const { payOrderId: orderId } = uploadRes;
+
+    const extraData = {
+      ...medical1001035.pay.extraData,
+      ...uploadRes,
+      sourcebusinessBj: phsOrderSource === '1' ? '11' : '12',
+      orderId,
+      payAuthno,
+      octoken,
+    };
+    console.log('拉医保extraData---');
+    console.log(extraData);
+
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '即将打开医保小程序?',
+    });
+
+    if (!confirm) {
+      return Promise.reject('客户取消支付');
+    }
+
+    uni.navigateToMiniProgram({
+      ...medical1001035.pay,
+      extraData,
+      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+    });
+  }
 };

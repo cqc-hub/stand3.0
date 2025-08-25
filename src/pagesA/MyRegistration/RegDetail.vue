@@ -487,6 +487,8 @@
     getMedicalConfigInfo,
     getMedicalArgWithFamily,
     getMedicalAuthCode,
+    getMedical1001035Info,
+    handlerMedical1001035Pay,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -1109,6 +1111,19 @@
       uploadRes: result,
       info,
     });
+
+    const medical1001035 = await getMedical1001035Info();
+
+    if (medical1001035) {
+      setLocalStorage({
+        'reg-detail-init': '1',
+      });
+
+      handlerMedical1001035Pay({
+        phsOrderSource: '1',
+      });
+      return;
+    }
 
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
