@@ -422,6 +422,9 @@
         patientId: gStores.userStore.patChoose.patientId,
         type: 3,
       });
+      if(!result||!result.length){
+        throw new Error()
+      }
       tempList = tempList4.map((item: any) => {
         if (item.key == 'visitUid') {
           item.options = result.map((i) => {

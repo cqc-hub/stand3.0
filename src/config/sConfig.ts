@@ -475,10 +475,10 @@ const scJson: Record<string, ISConfig> = {
         navgateToZLminiProm: {
           orgId: { 12930: 'H33060200131' },
         },
-        // medicalPlugin: {
-        //   orgId: { 12930: 'H33060200131' },
-        //   cardType: '01',
-        // },
+        medicalPlugin: {
+          orgId: { 12930: 'H33060200131' },
+          cardType: '01',
+        },
       },
     },
 
