@@ -12,7 +12,7 @@ export type TOutHosInfo = {
   inpatientBed: string;
   outTime: string;
   visitNo: string;
-  isArchived:string;
+  isArchived: string;
   _id: string;
 };
 
@@ -213,6 +213,11 @@ export type CaseCopeItemDetail = Flatten<
     printCount?: { purpose: string; count: number }[];
     expressStatus: string;
     _outInfo?: TOutInfo[];
+    commentResultList?: {
+      createName: string;
+      createTime: string;
+      docMessage: string;
+    }[];
     expressFee?: string;
     refundFee?: string;
     copyFee?: string;

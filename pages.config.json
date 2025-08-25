@@ -755,6 +755,15 @@
           }
         },
         {
+          "path": "medRecordApply/_recordApplyCommentAll",
+          "extend": {
+            "patient": true
+          },
+          "style": {
+            "navigationBarTitleText": "医生留言"
+          }
+        },
+        {
           "path": "medRecordApply/_recordApply",
           "extend": {
             "patient": true

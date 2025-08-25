@@ -24,7 +24,7 @@ interface IStateGlobal {
   herenId: string;
   appShowData: BaseObject;
   appLaunchData: BaseObject;
-  cacheData: BaseObject;
+  cacheData: any;
   ev: T_ENV_H5;
   envH5: T_ENV_H5;
   isShowFlag: boolean; // 宁口隐私政策

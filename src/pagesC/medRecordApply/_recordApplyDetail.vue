@@ -134,7 +134,10 @@
                 <Record-Card :list="info._outInfo" />
               </block>
 
-              <view v-if="info.pickupType && pickupTypeOpt.length" class="mt32 _row">
+              <view
+                v-if="info.pickupType && pickupTypeOpt.length"
+                class="mt32 _row"
+              >
                 <view class="_title">取件方式</view>
                 <view class="_content">
                   {{
@@ -181,8 +184,18 @@
             </view>
 
             <view
+              v-if="info.commentResultList && info.commentResultList.length"
+              class="container-box g-border p32 mb16"
+            >
+              <medRecordComment
+                :total="`${info.commentResultList.length}`"
+                :list="info.commentResultList"
+              />
+            </view>
+
+            <view
               v-if="info.addresseeAddress && expressInfo"
-              class="container-box order-patient g-border p32 mb16"
+              class="container-box order-patient g-border p32 mb16 pt24"
             >
               <view class="_row">
                 <view class="_content">
@@ -309,6 +322,7 @@
   import orderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import ExpressStep from './components/ExpressStep.vue';
   import RecordCard from './components/RecordCard.vue';
+  import medRecordComment from './components/medRecordComment.vue';
 
   const props = defineProps<{
     phsOrderNo: string;
@@ -367,7 +381,7 @@
     }
   });
 
-  const info = ref<CaseCopeItemDetail>({} as CaseCopeItemDetail);
+  const info = ref({} as CaseCopeItemDetail);
   const expressInfo = ref<{
     // pointEnd: {
     //   title: string;

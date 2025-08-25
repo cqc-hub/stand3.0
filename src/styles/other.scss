@@ -80,6 +80,10 @@
   @include text-overflow(2);
 }
 
+.ellipsis-line-clamp3 {
+  @include text-overflow(3);
+}
+
 .ellipsis-line-clamp5 {
   @include text-overflow(5);
 }
