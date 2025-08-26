@@ -504,8 +504,6 @@
         });
       });
     } else {
-      console.log('233');
-
       hosList.value = await ServerStaticData.getHosList(
         {
           type,

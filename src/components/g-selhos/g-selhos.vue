@@ -2,7 +2,7 @@
   <view class="">
     <view
       :class="{
-        'my-display-none': (hosList.length < 2) || isHide,
+        'my-display-none': hosList.length < 2 || isHide,
       }"
       class="bread-crumbs flex-between"
       @click="toggleHos"
@@ -35,7 +35,13 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import { GStores, ServerStaticData, IHosInfo, getLocation } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    getLocation,
+    wait,
+  } from '@/utils';
   import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
@@ -95,6 +101,8 @@
   };
 
   const getHosList = async () => {
+    console.log(props.unNeedPosition, '233');
+    await wait(20);
     const location: any = props.unNeedPosition
       ? {}
       : await getLocation().catch((err) => {

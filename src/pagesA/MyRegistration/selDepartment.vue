@@ -23,8 +23,8 @@
       disabled
     />
     <!-- #endif -->
-
     <g-selhos
+      v-if="isRender"
       v-model:hosId="hosId"
       :unNeedPosition="unNeedPosition"
       :isHide="pageProps.hideSelHos === '1'"
@@ -344,11 +344,10 @@
     };
   });
 
+  const isRender = ref(false);
   onLoad(async (opt = {}) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    if (pageProps.value.unPoi === '1') {
-      unNeedPosition.value = true;
-    }
+    unNeedPosition.value = pageProps.value.unPoi === '1';
     deptStore.changeActiveLv1({} as any);
     deptStore.changeActiveLv2({} as any);
     deptStore.changeActiveLv3({} as any);
@@ -363,10 +362,15 @@
     if (pages && pages.length > 1) {
       const prevRoute = pages[pages.length - 2];
       // 判断是否 单/多 院区， 单院区不需要调定位
-      if (prevRoute.route === 'pagesA/MyRegistration/Register') {
+      if (
+        prevRoute.route === 'pagesA/MyRegistration/Register' &&
+        !unNeedPosition.value
+      ) {
         unNeedPosition.value = false;
       }
     }
+
+    isRender.value = true;
   });
 
   const goSearch = () => {
