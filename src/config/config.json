@@ -383,7 +383,8 @@
       "isvAlipayAppid": "2021005178607990",
       "name": "溧阳市人民医院",
       "isStartComeTest": false,
-      "isOpenOcr": false
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "1001085": {
       "wxAppid": "wx3a24f824ca86d6dc",
