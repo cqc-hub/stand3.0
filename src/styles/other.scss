@@ -80,6 +80,10 @@
   @include text-overflow(2);
 }
 
+.ellipsis-line-clamp3 {
+  @include text-overflow(3);
+}
+
 .ellipsis-line-clamp5 {
   @include text-overflow(5);
 }
@@ -466,7 +470,7 @@ image {
   overflow: hidden;
 }
 
-@for $i from 4 through 70 {
+@for $i from 0 through 70 {
   @each $key, $value in (r: right, l: left, t: top, b: bottom) {
     .m#{$key}#{$i} {
       margin-#{$value}: #{$i}rpx !important;

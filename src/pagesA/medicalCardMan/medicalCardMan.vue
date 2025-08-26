@@ -90,6 +90,17 @@
                   修改手机号
                 </view>
               </view>
+              <view
+                v-if="isCanAddGuardian(pat)"
+                class="pat-btns flex-normal mt16 ml12"
+              >
+                <view
+                  @click="editUpName(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  补充监护人
+                </view>
+              </view>
               <!-- #ifdef MP-ALIPAY -->
               <view
                 v-if="
@@ -314,9 +325,36 @@
 
       q.verifyType = chooseList[tapIndex].value;
     }
-   
+
     uni.navigateTo({
       url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
+    });
+  };
+
+  const isCanAddGuardian = (pat: IPat) => {
+    const { isCanAddGuardian, isGuardianWithIdCard } = pageConfig.value;
+
+    let r = false;
+
+    if (isCanAddGuardian === '1' && isGuardianWithIdCard) {
+      const { patientAge, upName, idType } = pat;
+      if (
+        !upName &&
+        idType === '01' &&
+        (patientAge as unknown as number) * 1 <= isGuardianWithIdCard
+      ) {
+        r = true;
+      }
+    }
+
+    return r;
+  };
+
+  const editUpName = (pat: IPat) => {
+    gStores.userStore.updatePatClick(pat);
+
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/addUpName',
     });
   };
 

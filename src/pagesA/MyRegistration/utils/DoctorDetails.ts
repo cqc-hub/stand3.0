@@ -82,6 +82,7 @@ export type TDocServiceItem = {
 };
 
 export interface IDocService {
+  satisfaction: number;
   jsonParam?: TDocServiceItem;
   pictureParam?: TDocServiceItem;
   phoneParam?: TDocServiceItem;

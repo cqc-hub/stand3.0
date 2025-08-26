@@ -293,17 +293,14 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { onMounted, ref, computed } from 'vue';
 
-  import {
-    checkoutReportDetails,
-    getShareTotalUrl,
-    addWatermark,
-  } from './utils';
+  import { checkoutReportDetails, addWatermark } from './utils';
   import {
     GStores,
     nameConvert,
     wait,
     ServerStaticData,
     ISystemConfig,
+    getShareTotalUrl,
   } from '@/utils';
   import { joinQuery, encryptDes, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -320,7 +317,7 @@
   import CollectBtn from './components/CollectBtn.vue';
   import { storeToRefs } from 'pinia';
   import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
-import { useCacheStore } from '@/stores';
+  import { useCacheStore } from '@/stores';
 
   const alipayPid = global.systemInfo.alipayPid;
 
@@ -552,7 +549,7 @@ import { useCacheStore } from '@/stores';
     });
   };
 
-  const cacheStore = useCacheStore()
+  const cacheStore = useCacheStore();
   const goPdfUrl = () => {
     const { repName } = checkoutReportList.value;
     cacheStore.changeCacheData(checkoutReportList.value.pdfUrl);
@@ -562,7 +559,7 @@ import { useCacheStore } from '@/stores';
         // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
         // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
         name: repName,
-        type: 'cache'
+        type: 'cache',
       }),
     });
     // uni.navigateTo({

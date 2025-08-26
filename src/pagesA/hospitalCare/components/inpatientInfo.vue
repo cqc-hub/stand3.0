@@ -327,6 +327,26 @@
   };
 
   const goOrder = () => {
+    let sysCode = gStores.globalStore.sysCode;
+    if (sysCode === '1001038') {
+      goOrderJE();
+    } else if (sysCode === '1001060') {
+      goOrderSE();
+    }
+  };
+  const goOrderSE = () => {
+    console.log(hosInfoResObj);
+    useTBanner({
+      type: 'h5',
+      path: joinQuery('https://sxey-wechat.leanin.com.cn/', {
+        wardCode: hosInfoResObj.value.inpatientWard,
+        bedNo: hosInfoResObj.value.inpatientBed,
+      }),
+      text: '订餐',
+    });
+  };
+
+  const goOrderJE = () => {
     const base64Encode = (str) => {
       let CHARS =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
