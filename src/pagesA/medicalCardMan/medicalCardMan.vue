@@ -339,7 +339,7 @@
     if (isCanAddGuardian === '1' && isGuardianWithIdCard) {
       const { patientAge, upName, idType } = pat;
       if (
-        // !upName &&
+        !upName &&
         idType === '01' &&
         (patientAge as unknown as number) * 1 <= isGuardianWithIdCard
       ) {
