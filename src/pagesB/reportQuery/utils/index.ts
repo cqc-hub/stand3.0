@@ -305,60 +305,7 @@ export interface medicalReportDetails {
   suggest?: string;
   visitNo?: string;
 }
-export const getShareTotalUrl = (query, path) => {
-  // const source = getBrowser().source;
-  query = deQueryForUrl(deQueryForUrl(query));
 
-  // const data = cloneUtil(query);
-  const args: any = {};
-  for (const key in query) {
-    const v = query[key];
-    args[key] = v;
-  }
-  const data = {
-    ...args,
-    // #ifdef MP-WEIXIN
-    _scan: '1',
-    // #endif
-  };
-  const bUrl =
-    (globalGl.env as string) === 'prod'
-      ? 'https://h5.eheren.com/note'
-      : 'https://health.eheren.com/note';
-
-  const outTime = 7;
-  const _query = joinQueryForUrl('', data).slice(1);
-
-  return new Promise((resolve, reject) => {
-    const envWx = (globalGl.env as string) === 'prod' ? 'release' : 'trial'; // develop | release | trial
-    uni.showLoading({
-      title: '请求中..',
-      mask: true,
-    });
-    // if (source == 19) {
-    // }
-    api
-      .getScheme({
-        days: outTime,
-        envVersion: envWx,
-        path,
-        // query: 'mq' + encodeURIComponent(JSON.stringify(data)),
-        query: _query,
-      })
-      .then(({ result, message }) => {
-        uni.hideLoading();
-        if (result) {
-          resolve(bUrl + '?' + result.split('?')[1]);
-          // resolve(result);
-        } else {
-          reject(message);
-        }
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-};
 //添加水印方法
 export const addWatermark = (text) => {
   var ctx = uni.createCanvasContext('watermarkCanvas');
