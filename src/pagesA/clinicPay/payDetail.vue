@@ -698,7 +698,8 @@
           const hosOrderId = gStores.userStore.patChoose.cardNumber;
           const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
           const OPENID = gStores.globalStore.openId;
-          const MEDORGORD =props.value?.serialNo||
+          const MEDORGORD =
+            props.value?.serialNo ||
             selList.value.map((item) => item.serialNo).join(',') ||
             selUnPayList.value.map((item) => item.serialNo).join(',');
           const ORGCODG = 'H32028200358';
@@ -1200,6 +1201,11 @@
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
     selUnPayList.value = [props.value as any];
+    uni.setNavigationBarTitle({
+      title: `${props.value.payState === '0' ? '已' : '待'}${
+        gStores.globalStore.sysCode === '1001035' ? '交费' : '缴费'
+      }明细`,
+    });
   });
 
   const pageLoad = async () => {
@@ -1218,14 +1224,6 @@
 
   onMounted(async () => {
     pageLoad();
-  });
-
-  onReady(() => {
-    if (props.value.payState === '0') {
-      uni.setNavigationBarTitle({
-        title: '已缴费明细',
-      });
-    }
   });
 </script>
 

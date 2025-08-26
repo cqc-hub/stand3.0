@@ -800,16 +800,20 @@ export const usePayPage = () => {
   const tabCurrent = ref(0);
   const hosId = ref('');
   const isPayListRequestComplete = ref(false);
-  const tabField = ref([
+  const tabField = computed(() => [
     {
-      label: '待缴费',
+      label: '待' + kw1.value,
       key: 0,
     },
     {
-      label: '已缴费',
+      label: '已' + kw1.value,
       key: 1,
     },
   ]);
+
+  const kw1 = computed(() =>
+    gStores.globalStore.sysCode === '1001035' ? '交费' : '缴费'
+  );
   const refPay = ref<any>('');
   const payArg = ref<BaseObject>({});
   const refPayList = ref([
@@ -2283,6 +2287,7 @@ export const usePayPage = () => {
     getFamilyArgs,
     isModeMedicalHelp,
     getChineseMedicineList,
+    kw1,
   };
 };
 

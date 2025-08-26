@@ -259,7 +259,7 @@
         {
           "path": "clinicPay/payDetail",
           "style": {
-            "navigationBarTitleText": "待缴费明细",
+            "navigationBarTitleText": " ",
             "usingComponents": {
               // #ifdef  MP-WEIXIN
               "code-btn": "plugin://crossProgramPlugins/code-pop-btn"

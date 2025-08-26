@@ -138,7 +138,7 @@
         class="btn g-border btn-warning pay-btn"
         @click="handlerPay"
       >
-        缴费
+        {{ kw1 }}
       </button>
     </view>
 
@@ -252,7 +252,7 @@
     getLocalStorage,
     joinQueryForUrl,
   } from '@/common';
-  import { decryptForPage, encryptDes } from '@/common/des';
+  import { encryptDes } from '@/common/des';
   import { beforeEach } from '@/router';
   import { IPat } from '@/stores/type/index';
 
@@ -303,7 +303,9 @@
     wxCrossProgramInfo,
     isModeMedicalHelp,
     getChineseMedicineList,
+    kw1
   } = usePayPage();
+
 
   const isShowPatComponent = ref(false);
   const itemClick = (item: IPayListItem) => {
@@ -499,7 +501,7 @@
       });
     } else {
       uni.setNavigationBarTitle({
-        title: '门诊缴费',
+        title: `门诊${kw1.value}`,
       });
     }
 
