@@ -121,8 +121,8 @@
     },
 
     {
-      required: true,
-      label: '您投诉的对象',
+      required: false,
+      label: '您投诉的部门',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
