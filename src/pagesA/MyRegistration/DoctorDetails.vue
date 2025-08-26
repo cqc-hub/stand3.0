@@ -377,7 +377,8 @@
             <text class="f36 g-bold mr24">在线服务</text>
             <text v-if="docServiceInfo.satisfaction" class="f28">
               <text class="mr12">评分</text>
-              <text class="color-warn">{{ docServiceInfo.satisfaction }}分</text>
+              <text class="color-warn ">{{ docServiceInfo.satisfaction }}分</text>
+              <text class="f26">/5分</text>
             </text>
           </view>
           <scroll-view class="service-content" scroll-x>

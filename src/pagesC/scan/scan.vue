@@ -27,7 +27,7 @@
     wait,
   } from '@/utils';
   import api from '@/service/api';
-  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import { BASE_IMG } from '@/config/global';
   import { useScan } from './utils';
 
@@ -46,7 +46,7 @@
     initTakeNumber,
     initQuestion,
     initAddPat,
-    tjyy1001067
+    tjyy1001067,
   } = useScan();
 
   const init = async () => {
@@ -157,6 +157,23 @@
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+      // pageProps.value = {
+      //   k: '',
+      //   h: '2025-08-25',
+      //   e: '温附二鹿城院区(学院路)',
+      //   b: '24762175',
+      //   category: '50',
+      //   i: '20250825019115',
+      //   c: '',
+      //   n: '13012',
+      //   d: '20250825019115',
+      //   l: '',
+      //   f: '儿童急诊医学科',
+      //   g: '叶楚远',
+      //   type: '2',
+      //   a: '',
+      // } as any;
+      console.log(joinQuery('', pageProps.value));
       // 加密参数重新编码一次
       if (pageProps.value.params) {
         pageProps.value.params = encodeURIComponent(pageProps.value.params);

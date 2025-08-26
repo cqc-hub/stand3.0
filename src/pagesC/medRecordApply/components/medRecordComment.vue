@@ -7,8 +7,9 @@
     class="g-comment f32"
   >
     <view class="header flex-between">
-      <view class="flex-normal">
-        <text class="g-bold f36">医生留言</text>
+      <view class="flex-normal items-center">
+        <text class="f80 color-red">·</text>
+        <text class="g-bold f36">病案室工作人员留言</text>
         <text class="f28">({{ total }})</text>
       </view>
 

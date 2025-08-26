@@ -760,7 +760,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "医生留言"
+            "navigationBarTitleText": "病案室工作人员留言"
           }
         },
         {

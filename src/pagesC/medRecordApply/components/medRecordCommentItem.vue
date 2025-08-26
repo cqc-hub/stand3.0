@@ -1,8 +1,8 @@
 <template>
   <view class="comment-item f32">
-    <view class="flex f26">
-      <text class="mr24">{{ item.createName }}</text>
-      <text class="color-888">{{ item.createTime }}</text>
+    <view class="flex f26 color-888">
+      <!-- <text class="mr12 iconfont">&#xe6d6;</text> -->
+      <text class="">{{ item.createTime }}</text>
     </view>
 
     <view

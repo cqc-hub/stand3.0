@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
   import api from '@/service/api';
-  import { LoginUtils } from '@/utils';
+  import { getShareTotalUrl, LoginUtils } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
   import { ref } from 'vue';
@@ -43,7 +43,25 @@
   });
 
   const testClick = async (e) => {
-    console.log('23333');
+    getShareTotalUrl(
+      {
+        k: '',
+        h: '2025-08-25',
+        e: '温附二鹿城院区(学院路)',
+        b: '24762175',
+        category: '50',
+        i: '20250825019115',
+        c: '',
+        n: '13012',
+        d: '20250825019115',
+        l: '',
+        f: '儿童急诊医学科',
+        g: '叶楚远',
+        type: '2',
+        a: '',
+      },
+      '/pagesC/scan/scan'
+    );
   };
 </script>
 
