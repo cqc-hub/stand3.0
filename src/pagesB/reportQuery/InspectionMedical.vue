@@ -205,7 +205,6 @@
 
   import {
     medicalReportDetails,
-    getShareTotalUrl,
     addWatermark,
   } from './utils';
   import {
@@ -214,6 +213,7 @@
     wait,
     ServerStaticData,
     ISystemConfig,
+    getShareTotalUrl,
   } from '@/utils';
   import { joinQuery, encryptDes } from '@/common';
   import { deQueryForUrl } from '@/common';

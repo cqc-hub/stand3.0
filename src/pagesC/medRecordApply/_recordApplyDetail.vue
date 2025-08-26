@@ -89,16 +89,6 @@
           </view>
 
           <view class="container mt24">
-            <view v-if="expressInfo" class="container-box p32 mb32 g-border">
-              <Express-Step
-                :pointEnd="_expressInfo.pointEnd"
-                :pointNow="_expressInfo.pointNow"
-                :expressNo="info.expressNo"
-                :expressCompany="info.expressCompany"
-                @go-detail="goDetailExpress"
-              />
-            </view>
-
             <view
               v-if="info.addresseeAddress && !expressInfo"
               class="container-box order-patient g-border p32 mb16"
@@ -114,6 +104,26 @@
                   <text>{{ info.addresseePhone }}</text>
                 </view>
               </view>
+            </view>
+
+            <view v-if="expressInfo" class="container-box p32 mb32 g-border">
+              <Express-Step
+                :pointEnd="_expressInfo.pointEnd"
+                :pointNow="_expressInfo.pointNow"
+                :expressNo="info.expressNo"
+                :expressCompany="info.expressCompany"
+                @go-detail="goDetailExpress"
+              />
+            </view>
+
+            <view
+              v-if="info.commentResultList && info.commentResultList.length"
+              class="container-box g-border p32 mb32"
+            >
+              <medRecordComment
+                :total="`${info.commentResultList.length}`"
+                :list="info.commentResultList"
+              />
             </view>
 
             <view
@@ -181,16 +191,6 @@
                 <view class="_title">备注内容</view>
                 <view class="_content">{{ info.remark }}</view>
               </view>
-            </view>
-
-            <view
-              v-if="info.commentResultList && info.commentResultList.length"
-              class="container-box g-border p32 mb16"
-            >
-              <medRecordComment
-                :total="`${info.commentResultList.length}`"
-                :list="info.commentResultList"
-              />
             </view>
 
             <view

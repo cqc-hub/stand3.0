@@ -335,7 +335,6 @@
 
   import {
     examineReportDetails,
-    getShareTotalUrl,
     addWatermark,
   } from './utils';
   import {
@@ -348,6 +347,7 @@
     apiAsync,
     useTBanner,
     ImageDownloader,
+    getShareTotalUrl,
   } from '@/utils';
   import { joinQuery, encryptDes, getSysCode, joinQueryForUrl } from '@/common';
   import { deQueryForUrl } from '@/common';
@@ -364,7 +364,6 @@
   import { payMoneyOnline, toPayPull } from '@/components/g-pay';
   import { useCacheStore } from '@/stores';
   import ReportDetailPatInfo from './components/reportDetailPatInfo.vue';
-
   const pageConfig = ref(<ISystemConfig['reportQuery']>{});
   const alipayPid = global.systemInfo.alipayPid;
   const cacheStore = useCacheStore();

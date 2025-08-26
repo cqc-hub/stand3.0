@@ -81,6 +81,7 @@ export const useScan = () => {
   };
 
   const initQuestion = async () => {
+
     const {
       category, //  50 门诊  55 住院
       a: patientName,
@@ -120,7 +121,7 @@ export const useScan = () => {
         hosName,
       },
       addition: {
-        patientId: 'patientId',
+        // patientId: 'patientId',
       },
     });
   };
@@ -156,13 +157,12 @@ export const useScan = () => {
     const { queryDes } = pageProps.value;
 
     useTBanner({
-      type:'self',
+      type: 'self',
       path: 'pagesB/medicationAssistant/medicalHelpDetail',
       text: '用药详情',
       extraData: {
         linkRecordId: queryDes,
       },
-  
     });
   };
 
