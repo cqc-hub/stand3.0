@@ -323,7 +323,7 @@
   const handlerConfirmPatReal1 = async () => {
     const pages = getCurrentPages();
     const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-    const { title, content } = await gStores.getSysAppMore('1204');
+    const { title, content } = await gStores.getSysAppMore('1262');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
       gStores.messageStore.showMessage(content, 0, {
         useDialog: true,

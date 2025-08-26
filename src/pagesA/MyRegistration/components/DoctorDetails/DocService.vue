@@ -119,7 +119,7 @@
         }
 
         if (gStores.globalStore.sysCode === '1001067') {
-          o.title = '线上问诊';
+          o.title = '在线问诊';
         }
       }
 

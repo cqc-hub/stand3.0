@@ -42,12 +42,14 @@
     upName: '',
     upIdCard: '',
     upPhone: '',
+    relationShip: '',
   });
 
   const formSubmit = async ({}) => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
-    const { upName, upIdCard, upPhone } = formData.value;
+    const { upName, upIdCard, upPhone, relationShip } = formData.value;
     await api.updateGuardianInfo({
+      ...formData.value,
       cardNumber,
       patientId,
       // "01身份证 03护照等",
@@ -55,6 +57,7 @@
       upName,
       upIdCard,
       upPhone,
+      relationShip,
     });
 
     gStores.messageStore.showMessage('更新成功', 1500, {

@@ -81,7 +81,6 @@ export const useScan = () => {
   };
 
   const initQuestion = async () => {
-
     const {
       category, //  50 门诊  55 住院
       a: patientName,
@@ -98,6 +97,14 @@ export const useScan = () => {
       l: hospitalWard,
       n: hosId,
     } = pageProps.value;
+
+    const addition: any = {
+      // patientId: 'patientId',
+    };
+
+    if (!cardNumber) {
+      addition.patientId = 'patientId';
+    }
 
     useTBanner({
       type: 'h5',
@@ -120,9 +127,7 @@ export const useScan = () => {
         patientPhone,
         hosName,
       },
-      addition: {
-        // patientId: 'patientId',
-      },
+      addition,
     });
   };
 
