@@ -319,6 +319,36 @@
     throw new Error('实名?');
   };
 
+  //  更新监护人信息 —— 省中
+  const handlerConfirmPatReal1 = async () => {
+    const pages = getCurrentPages();
+    const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
+    const { title, content } = await gStores.getSysAppMore('1204');
+    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: true,
+          cancelText: '取消',
+          confirmText: '确认',
+          isMaskClick: false,
+        },
+        closeCallBack: r,
+      });
+    });
+
+    if (confirm) {
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+          _url: fullUrl,
+        }),
+      });
+    }
+
+    throw new Error('更新监护人信息?');
+  };
+
   const patChoose = () => {
     quickPat.value = {} as any;
   };
@@ -358,7 +388,7 @@
       docTitleName,
       thRegisterId,
       regVerificationMode,
-      enData
+      enData,
     } = props.value;
     let { patientId, realNameAuth } = gStores.userStore.patChoose;
     const { source } = gStores.globalStore.browser;
@@ -529,7 +559,7 @@
         } else if (respCode === 884802) {
           //接口拦截 去实名认证 —— 省中
           await handlerConfirmPatReal();
-        }  else if (code !== 4000) {
+        } else if (code !== 4000) {
           message && gStores.messageStore.showMessage(message, 3000);
         }
       }
@@ -834,30 +864,30 @@
           return;
         }
       }
-      await api.addRegAlternate({
-        ...props.value,
-        ...selSchItem,
-        alternateData,
-        patientId: gStores.userStore.patChoose.patientId,
-        source: gStores.globalStore.browser.source,
-        addFlag,
-      }).catch(async (e) => {
-      if (e) {
-        const { respCode,code,message } = e;
-        if (respCode === 884802) {
-          //接口拦截 去实名认证 —— 省中
-          await handlerConfirmPatReal();
-        }
-        // else if (respCode === 884803) {
-        //   //接口拦截 更新监护人信息 —— 省中
-        //   await handlerConfirmPatReal();
-        // } 
-         else if (code !== 4000) {
-          message && gStores.messageStore.showMessage(message, 3000);
-        }
-      }
-      throw new Error(e);
-      });
+      await api
+        .addRegAlternate({
+          ...props.value,
+          ...selSchItem,
+          alternateData,
+          patientId: gStores.userStore.patChoose.patientId,
+          source: gStores.globalStore.browser.source,
+          addFlag,
+        })
+        .catch(async (e) => {
+          if (e) {
+            const { respCode, code, message } = e;
+            if (respCode === 884802) {
+              //接口拦截 去实名认证 —— 省中
+              await handlerConfirmPatReal();
+            } else if (respCode === 884803) {
+              //接口拦截 更新监护人信息 —— 省中
+              await handlerConfirmPatReal1();
+            } else if (code !== 4000) {
+              message && gStores.messageStore.showMessage(message, 3000);
+            }
+          }
+          throw new Error(e);
+        });
 
       if (pageConfig.value?.isTabWaitReg === '1') {
         uni.reLaunch({

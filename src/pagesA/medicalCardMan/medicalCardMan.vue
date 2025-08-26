@@ -351,7 +351,7 @@
   };
 
   const editUpName = (pat: IPat) => {
-    gStores.userStore.updatePatClick(pat);
+    gStores.userStore.updatePatChoose(pat);
 
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/addUpName',

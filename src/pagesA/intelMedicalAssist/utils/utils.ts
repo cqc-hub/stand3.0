@@ -43,7 +43,7 @@ export const pageConfig = ref(
 export const pageOrderConfig = ref({} as ISystemConfig['order']);
 export const msgList = ref<Array<MsgListType>>([]);
 export const msgState = ref<MsgStatusType>({
-  msgText:'',
+  msgText: '',
   msgLoad: false,
   lastChatId: '',
   requestId: '',
@@ -93,10 +93,63 @@ export const chunkStatus = ref<ChunkStatusType>({
 });
 
 const test = async () => {
-  const data = {"showType":6,"tips":"123132","list":[{"hosId":"330301010","hosName":"温州市健康妇幼指导中心","hosType":17,"tel":"0577-88865516","address":"温州市鹿城区新城大道41号温州市健康妇幼指导中心2-3楼","gisLng":120.711258,"gisLat":27.996367},{"hosId":"330301002","hosName":"温州市中西医结合医院","hosType":24,"hosLevel":1,"tel":"0577-88910524","address":"温州市锦绣路75号","gisLng":120.701466,"gisLat":28.004984},{"hosId":"330304015","hosName":"温州市瓯海区第三人民医院","hosType":1,"hosLevel":6,"tel":"0577-56953791","address":" 温州市瓯海区瓯越大道2286号","gisLng":120.690610,"gisLat":27.979925},{"hosId":"330302037","hosName":"温州建国医院","hosType":1,"hosLevel":6,"tel":"0577-56889999","address":"浙江省温州市鹿城区温州大道洛河路2号","gisLng":120.671975,"gisLat":27.987707},{"hosId":"330301008","hosName":"温州医科大学附属眼视光医院","hosType":1,"hosLevel":1,"tel":"0577-88068888","address":"温州市学院西路270号","gisLng":120.678605,"gisLat":28.012890}]};
+  const data = {
+    showType: 6,
+    tips: '123132',
+    list: [
+      {
+        hosId: '330301010',
+        hosName: '温州市健康妇幼指导中心',
+        hosType: 17,
+        tel: '0577-88865516',
+        address: '温州市鹿城区新城大道41号温州市健康妇幼指导中心2-3楼',
+        gisLng: 120.711258,
+        gisLat: 27.996367,
+      },
+      {
+        hosId: '330301002',
+        hosName: '温州市中西医结合医院',
+        hosType: 24,
+        hosLevel: 1,
+        tel: '0577-88910524',
+        address: '温州市锦绣路75号',
+        gisLng: 120.701466,
+        gisLat: 28.004984,
+      },
+      {
+        hosId: '330304015',
+        hosName: '温州市瓯海区第三人民医院',
+        hosType: 1,
+        hosLevel: 6,
+        tel: '0577-56953791',
+        address: ' 温州市瓯海区瓯越大道2286号',
+        gisLng: 120.69061,
+        gisLat: 27.979925,
+      },
+      {
+        hosId: '330302037',
+        hosName: '温州建国医院',
+        hosType: 1,
+        hosLevel: 6,
+        tel: '0577-56889999',
+        address: '浙江省温州市鹿城区温州大道洛河路2号',
+        gisLng: 120.671975,
+        gisLat: 27.987707,
+      },
+      {
+        hosId: '330301008',
+        hosName: '温州医科大学附属眼视光医院',
+        hosType: 1,
+        hosLevel: 1,
+        tel: '0577-88068888',
+        address: '温州市学院西路270号',
+        gisLng: 120.678605,
+        gisLat: 28.01289,
+      },
+    ],
+  };
   const { showType, list } = data;
-  switchHandleResult(showType, list, '', '',undefined,'提示语');
-
+  switchHandleResult(showType, list, '', '', undefined, '提示语');
 };
 export const reload = async (isMess) => {
   popipHasShow.value = false;
@@ -115,7 +168,7 @@ export const init = async (props) => {
     chunkStatus.value.isWXStreamApi = true;
   }
   msgState.value = {
-    msgText:'',
+    msgText: '',
     msgLoad: false,
     lastChatId: '',
     requestId: '',
@@ -365,7 +418,7 @@ export const sendMsg = async (str: string, answertype?: 1 | 0) => {
   msgState.value.lastChatId = chatId;
   msgState.value.requestId = requestId;
 
-  switchHandleResult(showType, list, requestId, chatId,undefined,tips);
+  switchHandleResult(showType, list, requestId, chatId, undefined, tips);
 };
 
 const switchHandleResult = async (
@@ -374,7 +427,7 @@ const switchHandleResult = async (
   requestId: string,
   chatId: string,
   typeInIndex?: number,
-  tips?:string
+  tips?: string
 ) => {
   if (!(list && list.length)) {
     msgList.value.push({
@@ -405,7 +458,7 @@ const switchHandleResult = async (
         break;
       //科室列表
       case 6:
-        await dealShowType6(list, requestId, chatId,tips);
+        await dealShowType6(list, requestId, chatId, tips);
         break;
       case 9:
         //地址
@@ -425,8 +478,8 @@ const switchHandleResult = async (
         dealShowType12(list, requestId, chatId);
         break;
 
-     case 101:
-      //推荐有胸痛、卒中相关展示最近医院
+      case 101:
+        //推荐有胸痛、卒中相关展示最近医院
         dealShowType101(list, requestId, chatId);
         break;
 
@@ -629,12 +682,15 @@ export const sendImg = async () => {
     type = 'h5';
     // #endif
     setTimeout(() => {
-       msgState.value.msgText = "正在分析您的报告";
-       msgState.value.msgLoad = true;
+      msgState.value.msgText = '正在分析您的报告';
+      msgState.value.msgLoad = true;
       scrollToNewMsg();
     }, 500);
 
-    let baseApi =  gStores.globalStore.sysCode === '1001082'?'https://eservice.wzswsj.gov.cn':'https://netphs.eheren.com/gateway';
+    let baseApi =
+      gStores.globalStore.sysCode === '1001082'
+        ? 'https://eservice.wzswsj.gov.cn'
+        : 'https://netphs.eheren.com/gateway';
 
     // @ts-expect-error
     const { data } = await apiAsync(uni.uploadFile, {
@@ -660,7 +716,7 @@ export const sendImg = async () => {
         type: -1,
       });
       msgState.value.msgLoad = false;
-      msgState.value.msgText = "";
+      msgState.value.msgText = '';
       console.error('picOcr接口报错', JSON.parse(data));
       return;
     }
@@ -679,7 +735,7 @@ export const sendImg = async () => {
     });
   } finally {
     msgState.value.msgLoad = false;
-    msgState.value.msgText = "";
+    msgState.value.msgText = '';
   }
 };
 
@@ -906,7 +962,7 @@ const dealShowType7 = (list, requestId, chatId) => {
     chatId,
     isSysAppMore: false,
   });
-    setTimeout(() => {
+  setTimeout(() => {
     scrollToNewMsg();
   }, 1000);
 };
@@ -941,7 +997,7 @@ const loadHosDataAsync = async () => {
 
 // 在适当时机调用，如组件挂载后或空闲时
 // loadHosData();
-const dealShowType6 = async (list, requestId, chatId,tips) => {
+const dealShowType6 = async (list, requestId, chatId, tips) => {
   // #ifndef H5
   // h5暂时不支持距离
   loadHosDataAsync();
@@ -1082,29 +1138,27 @@ const dealShowType12 = (lists, requestId, chatId) => {
 
 //为卒中新增的类型 但实际没用
 const dealShowType101 = (list, requestId, chatId) => {
-    if (list?.length) {
-
+  if (list?.length) {
     list.forEach((item, index) => {
-
-    const {
+      const {
         hosName: title,
         address: subTitle,
         latitude,
         longitude,
-        tel:phones,
-      } = item
+        tel: phones,
+      } = item;
       msgList.value.push({
         my: false,
         msg: index == 0 ? '以下是为您推荐的医院' : '',
         type: 3,
-           addRessInfo: {
+        addRessInfo: {
           title,
           subTitle,
           latitude,
           longitude,
-          phones:[phones],
-          distance:"8.9Km"
-         },
+          phones: [phones],
+          distance: '8.9Km',
+        },
         requestId,
         chatId,
         isSysAppMore: judgeIsSysAppMore(requestId),
@@ -1166,7 +1220,10 @@ let taskQueue = new TaskQueue();
 
 const typeInAsk = async (value, answertype) => {
   const gStores = new GStores();
-  let baseApi =  gStores.globalStore.sysCode === '1001082'?'https://eservice.wzswsj.gov.cn':'https://netphs.eheren.com/gateway';
+  let baseApi =
+    gStores.globalStore.sysCode === '1001082'
+      ? 'https://eservice.wzswsj.gov.cn'
+      : 'https://netphs.eheren.com/gateway';
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',
@@ -1184,7 +1241,7 @@ const typeInAsk = async (value, answertype) => {
         source: gStores.globalStore.browser.source == 19 ? 1 : 2,
         chatId: msgState.value.lastChatId,
         requestId: msgState.value.requestId,
-        type: answertype
+        type: answertype,
       },
     }),
   };
@@ -1214,7 +1271,7 @@ const typeInAsk = async (value, answertype) => {
     fail: (err) => {
       console.log('errror', err);
       msgState.value.msgLoad = false;
-      msgState.value.msgText = "";
+      msgState.value.msgText = '';
       if (err.errMsg == 'request:fail abort') {
         gStores.messageStore.showMessage('已暂停生成', 3000);
       } else {
@@ -1228,7 +1285,7 @@ const typeInAsk = async (value, answertype) => {
     },
     complete: () => {
       msgState.value.msgLoad = false;
-      msgState.value.msgText = "";
+      msgState.value.msgText = '';
       requestTask?.offChunkReceived();
       chunkStatus.value.chunkTemp = '';
       chunkStatus.value.isTyping = false;
@@ -1310,12 +1367,12 @@ const typeInAskH5 = (value: any, answertype) => {
           // 处理成功响应
           chunkStatus.value.isTyping = false;
           msgState.value.msgLoad = false;
-          msgState.value.msgText = "";
+          msgState.value.msgText = '';
         } else {
           // 处理错误响应
           console.log('errror', xhr.statusText);
           msgState.value.msgLoad = false;
-          msgState.value.msgText = "";
+          msgState.value.msgText = '';
           msgList.value.push({
             my: false,
             msg: xhr.statusText || '啊哦～网络连接异常，请稍后尝试。',
@@ -1330,7 +1387,7 @@ const typeInAskH5 = (value: any, answertype) => {
   xhr.onerror = () => {
     console.log('请求出错');
     msgState.value.msgLoad = false;
-    msgState.value.msgText = "";
+    msgState.value.msgText = '';
     msgList.value.push({
       my: false,
       msg: '啊哦～网络连接异常，请稍后尝试。',
@@ -1412,7 +1469,7 @@ const handleOneChunk = async (chunk: string, typeInIndex: number) => {
     }
     chatId && (msgState.value.lastChatId = chatId);
     requestId && (msgState.value.requestId = requestId);
-    switchHandleResult(showType, list, requestId, chatId, typeInIndex,tips);
+    switchHandleResult(showType, list, requestId, chatId, typeInIndex, tips);
   }
 };
 
@@ -1496,7 +1553,7 @@ const handlerConfirmPatReal = async () => {
         isShowCancel: true,
         cancelText: '暂不预约',
         confirmText: '去实名认证',
-        isMaskClick: false, 
+        isMaskClick: false,
       },
       closeCallBack: r,
     });
@@ -1618,7 +1675,7 @@ export const regConfirm = async (pageArg) => {
         //医生号源 去实名认证 -温附二
         await handlerConfirmPatReal();
       } else if (respCode === 884802) {
-          //接口拦截 去实名认证 —— 省中
+        //接口拦截 去实名认证 —— 省中
         await handlerConfirmPatReal();
       } else if (code !== 4000) {
         message && gStores.messageStore.showMessage(message, 3000);

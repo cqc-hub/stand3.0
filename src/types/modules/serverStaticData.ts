@@ -230,6 +230,8 @@ export interface ISystemConfig_ {
     isSmsVerify?: '1';
     /** 就诊人列表存在补充监护人入口 */
     isCanAddGuardian?: '1';
+    // 新增就诊人是否监护人手机号
+    isUpNamePhone?: '1';
     /** 新增、完善就诊人时候 根据监护人证件号（身份证）判断监护人（至少 guardianAge 岁） */
     ageGuardian: number;
     /** 新增、完善就诊人时候 根据 生日｜身份证 判断 新生儿（至多 ageChildren 月） */

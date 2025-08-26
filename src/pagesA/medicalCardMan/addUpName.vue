@@ -45,8 +45,8 @@
   });
 
   const formSubmit = async ({}) => {
-    const { cardNumber, patientId } = gStores.userStore.clickPat;
-    const { upName, upIdCard } = formData.value;
+    const { cardNumber, patientId } = gStores.userStore.patChoose;
+    const { upName, upIdCard, upPhone } = formData.value;
     await api.updateGuardianInfo({
       cardNumber,
       patientId,
@@ -54,6 +54,7 @@
       upIdType: '01',
       upName,
       upIdCard,
+      upPhone,
     });
 
     gStores.messageStore.showMessage('更新成功', 1500, {
@@ -64,7 +65,7 @@
   };
 
   onLoad(async () => {
-    const { patientName } = gStores.userStore.clickPat;
+    const { patientName } = gStores.userStore.patChoose;
     formData.value.patientName = patientName;
   });
 
@@ -122,6 +123,22 @@
             message: '请确认证件号码是否有误',
           });
         },
+        labelWidth: '220rpx',
+      },
+
+      {
+        required: true,
+        label: '监护人手机号',
+        field: 'input-text',
+        placeholder: '请输入',
+        maxlength: 11,
+        key: 'upPhone',
+        rule: [
+          {
+            message: '请确认手机号是否有误',
+            rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          },
+        ],
         labelWidth: '220rpx',
       },
     ]);

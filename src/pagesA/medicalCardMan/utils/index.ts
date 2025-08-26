@@ -37,6 +37,7 @@ export const formKey = <const>{
   sex: 'sex',
   upName: 'upName',
   upIdCard: 'upIdCard',
+  upPhone: 'upPhone',
   address: 'address',
   location: 'location',
   verifyCode: 'verifyCode',
@@ -85,17 +86,6 @@ export const tempList: TInstance[] = [
     options: [],
     autoOptions: 'RelationShipList',
     labelWidth: '220rpx',
-
-    filterOptions(opt, search) {
-      if (search) {
-        return opt.filter((o) => {
-          const { label } = o;
-
-          return label.includes(search);
-        });
-      }
-      return opt;
-    },
   },
 
   {
@@ -314,6 +304,22 @@ export const tempList: TInstance[] = [
         message: '请确认证件号码是否有误',
       });
     },
+    labelWidth: '220rpx',
+  },
+
+  {
+    required: true,
+    label: '监护人手机号',
+    field: 'input-text',
+    placeholder: '请输入',
+    maxlength: 11,
+    key: formKey.upPhone,
+    rule: [
+      {
+        message: '请确认手机号是否有误',
+        rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+      },
+    ],
     labelWidth: '220rpx',
   },
 
