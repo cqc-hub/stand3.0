@@ -72,7 +72,7 @@
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
-                  v-if="pat.realNameAuth === '0'"
+                  v-if="pat.realNameAuth === '0' && pat.idType === '01'"
                   @click="realNameAuth(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
                 >
@@ -80,7 +80,7 @@
                 </view>
               </view>
               <view
-                v-if="pageConfig.isEditPatPhone == '1' && pat?.idType == '01'"
+                v-if="pageConfig.isEditPatPhone == '1' && pat.idType == '01'"
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
