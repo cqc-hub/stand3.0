@@ -104,6 +104,7 @@ export interface ISelectInstance extends IBaseInstance {
   field: 'select';
   options: ISelectOptions[];
   autoOptions?:
+    | string
     | 'nationTerms'
     | 'patientTypeTerms'
     | 'idTypeTerms'

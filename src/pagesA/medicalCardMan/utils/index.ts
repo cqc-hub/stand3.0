@@ -26,6 +26,7 @@ import { IPat } from '@/stores';
  */
 // 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
+  relationShip: 'relationShip',
   patientType: 'patientType',
   // patientType: 'patientType',
   idType: 'idType',
@@ -72,6 +73,29 @@ export const tempList: TInstance[] = [
     options: [],
     autoOptions: 'patientTypeTerms',
     labelWidth: '220rpx',
+  },
+
+  {
+    required: true,
+    showSuffixArrowIcon: true,
+    label: '关系',
+    placeholder: '请选择',
+    key: formKey.relationShip,
+    field: 'select',
+    options: [],
+    autoOptions: 'RelationShipList',
+    labelWidth: '220rpx',
+
+    filterOptions(opt, search) {
+      if (search) {
+        return opt.filter((o) => {
+          const { label } = o;
+
+          return label.includes(search);
+        });
+      }
+      return opt;
+    },
   },
 
   {

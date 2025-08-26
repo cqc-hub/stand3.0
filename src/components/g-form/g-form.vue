@@ -333,7 +333,7 @@
     IImgInstance,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
-  import { ServerStaticData, upImgOss, useOcr, wait } from '@/utils';
+  import { cacheUtil, ServerStaticData, upImgOss, useOcr, wait } from '@/utils';
   import api from '@/service/api';
 
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
@@ -548,6 +548,7 @@
         const { autoOptions, options } = o;
 
         if (!options.length && autoOptions) {
+          console.log(autoOptions, 'autoOptionsautoOptionsautoOptions');
           switch (autoOptions) {
             case 'nationTerms':
               o.options = await ServerStaticData.getNationTerms();
@@ -566,6 +567,16 @@
               break;
 
             default:
+              const r = await cacheUtil.getSystemConfig(autoOptions)();
+              if (r[autoOptions]) {
+                o.options = r[autoOptions];
+              } else {
+                console.error(
+                  'g-form: autoOptions 获取数据失败---',
+                  autoOptions
+                );
+              }
+
               break;
           }
         }

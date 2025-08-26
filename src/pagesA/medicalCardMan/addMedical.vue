@@ -832,6 +832,7 @@
       isDropNation,
       isUserInfoShareAgree,
       formExtraKeys = [],
+      relationShip,
     } = pageConfig.value;
 
     const addressArr: any[] = [];
@@ -851,9 +852,16 @@
       addressArr.push(formKey.address, formKey.location);
     }
 
-    const listArr: TFormKeys[] = [formKey.patientType];
+    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationShip];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo = [formKey.upName, formKey.upIdCard];
+    if (relationShip !== '1') {
+      const idx = listArr.findIndex((o) => o === formKey.relationShip);
+      if (idx !== -1) {
+        listArr.splice(idx, 1);
+      }
+    }
+
     const _patientInfo: TFormKeys[] = [
       ...addressArr,
       formKey.patientPhone,
@@ -863,6 +871,7 @@
       formKey.defaultFalg,
       // formKey.referenceId,
     ];
+
 
     // 判断是否需要民族
     if (isDropNation !== '1') {
@@ -972,6 +981,7 @@
     } else {
       oldFormList = [...listArr];
     }
+
 
     formList.value = pickTempItem(listArr);
 
