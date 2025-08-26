@@ -832,8 +832,8 @@
       isDropNation,
       isUserInfoShareAgree,
       formExtraKeys = [],
-      relationShip,
-      isUpNamePhone,
+      // relationShip,
+      // isUpNamePhone,
     } = pageConfig.value;
 
     const addressArr: any[] = [];
@@ -853,21 +853,22 @@
       addressArr.push(formKey.address, formKey.location);
     }
 
-    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
+    // const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
+    const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo: (keyof typeof formKey)[] = [
       formKey.upName,
       formKey.upIdCard,
     ];
-    if (isUpNamePhone === '1') {
-      _parentInfo.push(formKey.upPhone);
-    }
-    if (relationShip !== '1') {
-      const idx = listArr.findIndex((o) => o === formKey.relationship);
-      if (idx !== -1) {
-        listArr.splice(idx, 1);
-      }
-    }
+    // if (isUpNamePhone === '1') {
+    //   _parentInfo.push(formKey.upPhone);
+    // }
+    // if (relationShip !== '1') {
+    //   const idx = listArr.findIndex((o) => o === formKey.relationship);
+    //   if (idx !== -1) {
+    //     listArr.splice(idx, 1);
+    //   }
+    // }
 
     const _patientInfo: TFormKeys[] = [
       ...addressArr,

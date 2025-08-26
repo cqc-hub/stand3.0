@@ -84,6 +84,18 @@
 
       {
         required: true,
+        showSuffixArrowIcon: true,
+        label: '关系',
+        placeholder: '请选择',
+        key: 'relationShip',
+        field: 'select',
+        options: [],
+        autoOptions: 'RelationShipList',
+        labelWidth: '220rpx',
+      },
+
+      {
+        required: true,
         label: '监护人姓名',
         field: 'input-text',
         placeholder: '请输入',
