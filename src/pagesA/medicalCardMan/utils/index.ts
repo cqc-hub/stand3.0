@@ -26,7 +26,7 @@ import { IPat } from '@/stores';
  */
 // 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
-  relationShip: 'relationShip',
+  relationship: 'relationship',
   patientType: 'patientType',
   // patientType: 'patientType',
   idType: 'idType',
@@ -81,7 +81,7 @@ export const tempList: TInstance[] = [
     showSuffixArrowIcon: true,
     label: '关系',
     placeholder: '请选择',
-    key: formKey.relationShip,
+    key: formKey.relationship,
     field: 'select',
     options: [],
     autoOptions: 'RelationShipList',

@@ -853,7 +853,7 @@
       addressArr.push(formKey.address, formKey.location);
     }
 
-    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationShip];
+    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo: (keyof typeof formKey)[] = [
       formKey.upName,
@@ -863,7 +863,7 @@
       _parentInfo.push(formKey.upPhone);
     }
     if (relationShip !== '1') {
-      const idx = listArr.findIndex((o) => o === formKey.relationShip);
+      const idx = listArr.findIndex((o) => o === formKey.relationship);
       if (idx !== -1) {
         listArr.splice(idx, 1);
       }
