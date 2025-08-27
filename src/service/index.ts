@@ -65,7 +65,10 @@ Request.interceptors.request((request: IRequest) => {
   //   request.url = request.url + '?' + request.data
   // }
   //网关限流——除开发环境
-  if (globalGl.env === 'prod') {
+  if (
+    globalGl.env === 'prod' &&
+    !['https://phs.jshtcm.com'].includes(request.baseURL || '')
+  ) {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
 
@@ -89,9 +92,10 @@ Request.interceptors.request((request: IRequest) => {
   request._data = request.data;
 
   if (
-    (isDes || isOpenSm4) &&
+    isDes ||
+    isOpenSm4
     // 不是所有接口都支持加密
-    !['https://szphs.eheren.com'].includes(request.baseURL || '')
+    // !['https://szphs.eheren.com'].includes(request.baseURL || '')
   ) {
     request.data = requestInterfaceEncrp(request);
   }

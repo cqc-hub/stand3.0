@@ -219,7 +219,12 @@ export class UseDoctorDetail extends GStores {
       source,
     };
 
-    const { result } = await api.getDocSch(args);
+    const action =
+      this.globalStore.sysCode === '1001035'
+        ? api.getDocSch1001035
+        : api.getDocSch;
+
+    const { result } = await action(args);
 
     if (result && result.length) {
       const { schList: _schList, enabledDays: _enabledDays } =

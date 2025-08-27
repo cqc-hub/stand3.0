@@ -301,7 +301,12 @@
           sysCode,
         };
 
-        const { result } = await api.getNumberSource<IOrderSource[]>(args);
+        const action =
+          gStores.globalStore.sysCode === '1001035'
+            ? api.getNumberSource1001035
+            : api.getNumberSource;
+
+        const { result } = await action<IOrderSource[]>(args);
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
 

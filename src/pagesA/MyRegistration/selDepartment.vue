@@ -226,7 +226,12 @@
     };
 
     isComplete.value = false;
-    const { result } = await api.getDeptList(requestArg).finally(() => {
+    const actionApi =
+      gStores.globalStore.sysCode === '1001035'
+        ? api.getDeptList1001035
+        : api.getDeptList;
+
+    const { result } = await actionApi(requestArg).finally(() => {
       isComplete.value = true;
     });
 

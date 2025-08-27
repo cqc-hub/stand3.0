@@ -746,7 +746,6 @@ const regApi = {
       reportCmPV_YLName: '挂号记录查询',
     }),
 
-  // 科室列表
   getDeptList: (data: any) =>
     service.post('/phs-reg/reg/getDeptList', parm(data), {
       hideLoading: false,
@@ -1306,12 +1305,50 @@ const authApi = {
   },
 };
 
+const api1001035 = {
+  baseURL: 'https://phs.jshtcm.com',
+  // 科室列表
+  getDeptList1001035: (data: any) => {
+    return service.post('/reg/getDeptList', parm(data), {
+      hideLoading: false,
+      reportCmPV_YLName: '科室介绍',
+      baseURL: api1001035.baseURL,
+    });
+  },
+
+  getDeptSchByDate1001035: <T>(data: any) => {
+    return service.post<T>('/reg/getDeptSchByDate', parm(data), {
+      hideLoading: false,
+      baseURL: api1001035.baseURL,
+    });
+  },
+  getDeptSchForDoc1001035: <T>(data: any) => {
+    return service.post<T>('/reg/getDeptSchForDoc', parm(data), {
+      hideLoading: false,
+      baseURL: api1001035.baseURL,
+    });
+  },
+  getDocSch1001035: (data: any) => {
+    return service.post('/reg/getDocSch', parm(data), {
+      hideLoading: false,
+      baseURL: api1001035.baseURL,
+    });
+  },
+
+  getNumberSource1001035: <T>(data: any) =>
+    service.post<T>('/reg/getNumberSource', parm(data), {
+      hideLoading: false,
+      baseURL: api1001035.baseURL,
+    }),
+};
+
 export default {
   ...baseApi,
   ...queryApi,
   ...regApi,
   ...userApi,
   ...authApi,
+  ...api1001035,
 
   // 获取国籍
   getCountryList: async () => {

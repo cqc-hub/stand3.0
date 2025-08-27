@@ -245,10 +245,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const eDaysEnabled: string[] = [];
     isComplete.value = false;
 
-    const asyncListFnc =
-      orderConfig.value.orderMode === '1'
-        ? api.dtSchByDoc
+    const normalApi =
+      gStores.globalStore.sysCode === '1001035'
+        ? api.getDeptSchForDoc1001035
         : api.getDeptSchForDoc;
+
+    const asyncListFnc =
+      orderConfig.value.orderMode === '1' ? api.dtSchByDoc : normalApi;
 
     uni.showLoading({
       title: '获取医生排班数据..',
@@ -357,11 +360,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       isExpertDeptId,
     };
     isComplete.value = false;
+    const normalApi =
+      gStores.globalStore.sysCode === '1001035'
+        ? api.getDeptSchByDate1001035
+        : api.getDeptSchByDate;
 
     const asyncListFnc =
-      orderConfig.value.orderMode === '1'
-        ? api.dtSchByDate
-        : api.getDeptSchByDate;
+      orderConfig.value.orderMode === '1' ? api.dtSchByDate : normalApi;
 
     const { result } = await asyncListFnc<IDocListByDate[]>(args).finally(
       () => {
@@ -551,11 +556,14 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
     orderSourceList.value = [];
     isComplete.value = false;
-    let { result } = await api
-      .getNumberSource<IOrderSource[]>(arg)
-      .finally(() => {
-        isComplete.value = true;
-      });
+    const action =
+      gStores.globalStore.sysCode === '1001035'
+        ? api.getNumberSource1001035
+        : api.getNumberSource;
+
+    let { result } = await action<IOrderSource[]>(arg).finally(() => {
+      isComplete.value = true;
+    });
 
     // if (result && result.length) {
     //   // 过滤剩余号源数为零的(精确号源是从 1 开始的)
