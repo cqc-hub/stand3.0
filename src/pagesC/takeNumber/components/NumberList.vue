@@ -7,7 +7,7 @@
           <view>{{ item.docName }}</view>
         </view>
 
-        <view>
+        <view v-if="isShowFlagLabel()">
           <text
             :class="{
               'color-888': ['1', '2'].includes(item.reportFlag),
@@ -50,7 +50,12 @@
           </view>
         </view>
 
-        <view class="g-flex-rc-cc f28 mt24" v-if="item?.ifPay==='1'&&item?.tip">{{ item.tip }}</view>
+        <view
+          class="g-flex-rc-cc f28 mt24"
+          v-if="item?.ifPay === '1' && item?.tip"
+        >
+          {{ item.tip }}
+        </view>
         <view
           v-if="getTakeNumberStatus(item).reLocation"
           @click="refrashData"
@@ -93,7 +98,7 @@
 <script lang="ts" setup>
   import { defineComponent, ref, onMounted, computed } from 'vue';
   import { type TTakeNumberListItem } from '../utils/takeNumber';
-  import { ServerStaticData, ISystemConfig } from '@/utils';
+  import { ServerStaticData, ISystemConfig, GStores } from '@/utils';
 
   const props = defineProps<{
     list: TTakeNumberListItem[];
@@ -102,6 +107,7 @@
     isTakeNumberAfterBtnForGoQueueNumber: boolean;
   }>();
   const pageConfig = ref(<ISystemConfig['order']>{});
+  const gStores = new GStores();
 
   onMounted(async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
@@ -113,8 +119,6 @@
     'sign-in',
     'pay-page',
   ]);
-
-
 
   const reportFlagMap = computed(() => {
     const typeLabel = props.isOnlineSign ? '签到' : '取号';
@@ -154,10 +158,20 @@
     );
   };
 
+  const isShowFlagLabel = () => {
+    if (
+      props.isOnlineSign &&
+      ['1001084'].includes(gStores.globalStore.sysCode)
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const getTakeNumberStatus = (item: TTakeNumberListItem) => {
     const status = {
       enabeleTakeNumber: false,
-      reLocation:false,
+      reLocation: false,
       showMess: '',
     };
     status.enabeleTakeNumber = item.signIn;
@@ -167,8 +181,8 @@
         ? '签到'
         : '取号'
       : '不在取号范围';
-    if(item?.ifPay==='1'&&item?.tip){
-      status.showMess='不符合取号条件'
+    if (item?.ifPay === '1' && item?.tip) {
+      status.showMess = '不符合取号条件';
     }
     return status;
   };
@@ -202,7 +216,7 @@
     .take-number {
       width: 280rpx;
       height: 280rpx;
-      padding:20rpx;
+      padding: 20rpx;
       background: var(--hr-brand-color-6);
       border-radius: 50%;
       color: #fff;
