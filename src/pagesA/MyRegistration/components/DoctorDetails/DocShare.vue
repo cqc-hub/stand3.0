@@ -555,7 +555,7 @@
     ctx.save();
 
     ctx.setFontSize(14);
-    ctx.setFillStyle('#444444');
+    ctx.setFillStyle('#444');
 
     const goodAt = '         ' + _goodAt;
 

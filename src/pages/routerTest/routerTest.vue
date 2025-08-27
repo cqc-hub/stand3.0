@@ -1,5 +1,6 @@
 <template>
   <view class="g-page">
+  <!-- <web-view src="https://h5.eheren.com/v3/#/pagesC/queueNumber/queueNumber?_d=f9%2F7ZB3FyR2yucaAhk%2F6mKYykAGXBuzmjCHzvSRtzXypGmFQH6HkFaHVNfPNYtqMIe1BAUnBbvVSHOIC5RlXDxnZm267jW5eaNRgHHhW44E%3D&sysCode=1001035&modeOld=false&isTcmStyle=1&token=a6e8289c389d8ece73750fe57fc1201152898898f684f119d7a0ca6668102698ca3dd7cdc5a19fbdf58f6595ad3b9117346368fdc9d5fbd11abe6ccef7ce7e45e1c0eea280a81b81a2dcb67d30b4526f01e9c9fecaf225ab506683889b9cd0b773410849e14649ca3f4945298a0a426cf511979de9adb4b2f7fb60fd186a56b9b47d2c0b2f90f072d0f6cbfac60dc9becf8ce05fd86e3aed6d9f2cbd8900fcdebf6c16000cbab01dd04511141285f12138d29ec90a890ec0b3f75aed2477ff6a7454bea23b6b3e677aa4595d33a2588209f0241d3425518c090caf87d5a4a36b52b7847c79f202d6cfb35460b82bb87b91aa9c6dff459592040268cf3c8b358672b0a21557a61c7fb4bb35a7671c3e77"></web-view> -->
     <view
       :style="{
         '--circle-color': color,
@@ -38,7 +39,7 @@
 
 <script lang="ts" setup>
   import api from '@/service/api';
-  import { getShareTotalUrl, LoginUtils } from '@/utils';
+  import { getShareTotalUrl, LoginUtils, wait } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import sm from 'miniprogram-sm-crypto';
   import { getCurrentInstance, onMounted, ref } from 'vue';
@@ -85,18 +86,14 @@
 
   // 绘制文字和图片
   const drawContent = (ctx, displayWidth, displayHeight) => {
-    // 1. 绘制文字（旧模式用 setFillStyle 而非 fillStyle =）
-    ctx.setFillStyle('#888888');
+    ctx.setFillStyle('#e4786c');
     ctx.setFontSize(16);
-    // 坐标需 ÷ dpr（因为已 scale(dpr, dpr)，实际会 × dpr 还原）
+
     ctx.fillText('旧模式文字', 20 / dpr.value, 40 / dpr.value);
     ctx.save();
     ctx.draw();
   };
   onMounted(async () => {
-    const is2DSupported = uni.canIUse('createCanvasContext.type.2d');
-    console.log('2D 模式是否支持：', is2DSupported);
-    // 1. 获取设备像素比
     // @ts-expect-error
     const { devicePixelRatio } = await getSystemInfo();
     dpr.value = devicePixelRatio || 2;

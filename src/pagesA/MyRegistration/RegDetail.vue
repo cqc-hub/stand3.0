@@ -961,6 +961,12 @@
   };
 
   const payOrder = async () => {
+    const { fee } = orderRegInfo.value;
+    if (fee === 0) {
+      toPay();
+      return;
+    }
+
     // 先只做微信国标模式
     const medicalMHelp = getMedicalConfigInfo() || {};
     const { isFamilyPayment, isGbFamilyPayment } = medicalMHelp;

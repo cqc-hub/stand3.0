@@ -42,8 +42,8 @@ export const isOpenSm4 = false;
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
 
-  // #ifdef H5
   if (
+    globalStore.ev === 'web' &&
     globalStore.isLogin &&
     globalStore.envH5 === 'web' &&
     globalGl.WEB_OUT_LOGIN_TIME
@@ -58,7 +58,6 @@ Request.interceptors.request((request: IRequest) => {
       });
     }, globalGl.WEB_OUT_LOGIN_TIME);
   }
-  // #endif
 
   if (!request.hideLoading) showLoading();
   // if (request.method === 'GET') {
@@ -78,6 +77,7 @@ Request.interceptors.request((request: IRequest) => {
     '/phs-base/cms/getCmsList',
   ];
   if (
+    globalStore.ev === 'web' &&
     globalStore.sysCode === '1001082' &&
     !skipBaseURLChangeApis.some((api) => request.url.includes(api))
   ) {
@@ -88,7 +88,11 @@ Request.interceptors.request((request: IRequest) => {
   // @ts-expect-error
   request._data = request.data;
 
-  if (isDes || isOpenSm4) {
+  if (
+    (isDes || isOpenSm4) &&
+    // 不是所有接口都支持加密
+    !['https://szphs.eheren.com'].includes(request.baseURL || '')
+  ) {
     request.data = requestInterfaceEncrp(request);
   }
 

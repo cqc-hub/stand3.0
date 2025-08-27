@@ -752,6 +752,7 @@ const regApi = {
   getDeptSchForDoc: <T>(data: any) =>
     service.post<T>('/phs-reg/reg/getDeptSchForDoc', parm(data), {
       hideLoading: false,
+      // baseURL: 'https://api.51phs.com',
     }),
 
   dtSchByDoc: <T>(data: any) =>
