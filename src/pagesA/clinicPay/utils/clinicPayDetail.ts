@@ -1874,14 +1874,19 @@ export const usePayPage = () => {
     const patientName =
       pageProps.value.deParams?.patientName || pat.patientName;
 
-    if (gStores.globalStore.sysCode === '1001035') {
-    } else {
-      await getDetailData({
-        cardNumber,
-        ...pageProps.value,
-        ...item,
-      });
-    }
+    // if (gStores.globalStore.sysCode === '1001035') {
+    // } else {
+    //   await getDetailData({
+    //     cardNumber,
+    //     ...pageProps.value,
+    //     ...item,
+    //   });
+    // }
+    await getDetailData({
+      cardNumber,
+      ...pageProps.value,
+      ...item,
+    });
 
     uni.showLoading({
       title: '正在预结算...',

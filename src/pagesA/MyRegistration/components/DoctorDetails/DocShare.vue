@@ -494,7 +494,7 @@
     ctx.setFillStyle(blockTextColor);
     const docTitle = docTitleName;
 
-    ctx.setFontSize(13);
+    ctx.setFontSize(14);
 
     if (docTitle) {
       fillRoundRect(
