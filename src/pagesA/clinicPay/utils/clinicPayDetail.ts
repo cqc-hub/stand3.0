@@ -616,7 +616,12 @@ export const medicalNationUpload = async (
     authorizeTypeDesc,
   };
 
-  const { result } = await api.medicalCostInfoUpload<any>(requestArg, true);
+  const actionApi =
+    gStores.globalStore.sysCode === '1001035'
+      ? api.medicalCostInfoUploadSz
+      : api.medicalCostInfoUpload;
+
+  const { result } = await actionApi<any>(requestArg, true);
 
   return <TMedicalNationUploadRes>result;
 };

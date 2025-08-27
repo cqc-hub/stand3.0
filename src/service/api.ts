@@ -197,6 +197,11 @@ const queryApi = {
     service.post<T>('/phs-query/medical/medicalCostInfoUpload', parm(data), {
       hideLoading,
     }),
+  // 医保授权
+  medicalCostInfoUploadSz: <T>(data, hideLoading = false) =>
+    service.post<T>('/phs-query/medical/medicalCostInfoUploadSz', parm(data), {
+      hideLoading,
+    }),
 
   getTodayVisit: <T = any>(data, hideLoading = false) =>
     service.post<T>('/phs-query/medical/getTodayVisit', parm(data), {
