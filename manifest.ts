@@ -290,8 +290,8 @@ if (sysCode === '1001035') {
   );
 
   dynamicUtilBodyData.push(
-    'console.log(shadowlib);',
-    'console.log(uni_modules_libshadowesm_config);'
+    'shadowlib;',
+    'uni_modules_libshadowesm_config;'
   );
 }
 
