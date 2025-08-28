@@ -1802,3 +1802,4 @@ export { JSEncrypt };
 
 // 也可以使用默认导出
 export default JSEncrypt;
+exports.JSEncrypt = JSEncrypt;

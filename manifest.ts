@@ -16,6 +16,7 @@ const sConfig = getSConfig(sysCode);
 
 let manifestFileUrl = `${__dirname}/src/manifest.json`;
 let pagesExportFileUrl = `${__dirname}/src/pages.json`;
+const dynamicUtilUrl = `${__dirname}/src/utils/dynamicUtil.ts`;
 
 // let manifestFileData = fs.readFileSync(manifestFileUrl, { encoding: 'utf8' });
 // // 移除注释
@@ -266,6 +267,29 @@ Object.entries(pagesPlugins).forEach(([k, v]) => {
 });
 
 fs.writeFileSync(pagesExportFileUrl, pagesConfig, {
+  encoding: 'utf8',
+});
+
+// let dynamicUtilData = `
+//   import { shadowlib } from './libshadowesm1001035/shadowlib.js';
+//   import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';
+//   console.log(shadowlib);
+//   console.log(uni_modules_libshadowesm_config);
+//   export {}
+// `;
+
+const dynamicUtilData = ['export {};'];
+
+if (sysCode === '1001035') {
+  dynamicUtilData.unshift(
+    "import { shadowlib } from './libshadowesm1001035/shadowlib.js';",
+    "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';",
+    'console.log(shadowlib);',
+    'console.log(uni_modules_libshadowesm_config);'
+  );
+}
+
+fs.writeFileSync(dynamicUtilUrl, dynamicUtilData.join('\n'), {
   encoding: 'utf8',
 });
 
