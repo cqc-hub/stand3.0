@@ -10,7 +10,7 @@
   import monitor from '@/js_sdk/alipay/alipayLogger.js';
   // #endif
   import '@/utils/dynamicUtil';
-  import { useLunchInit1001035 } from './utils/1001035';
+  import { useLunchInit1001035 } from '@/utils/1001035';
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',

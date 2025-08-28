@@ -4,7 +4,6 @@
 import * as uni_modules_libshadowesm_config from "./config.js";
 import * as uni_modules_libshadowesm_shadowen from "./shadowen.js";
 import * as uni_modules_libshadowesm_crc32c from "./crc32c.js";
-console.log(uni_modules_libshadowesm_crc32c, 'uni_modules_libshadowesm_crc32c--------');
 
 var AR_SHADOW_CryptoJS = AR_SHADOW_CryptoJS || function(u, l) {
   var d = {}, n = d.lib = {}, p = function() {

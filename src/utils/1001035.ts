@@ -17,10 +17,19 @@ export const useLunchInit1001035 = () => {
   const globalStore = useGlobalStore();
   const encryptUrl = ref('');
   const app = getCurrentInstance()!.proxy;
-  // @ts-expect-error
-  const uni_modules_libshadowesm_config = require('./libshadowesm1001035/config.js');
-  // @ts-expect-error
-  const { shadowlib } = require('./libshadowesm1001035/shadowlib.js');
+  let uni_modules_libshadowesm_config: any = '';
+  let shadowlib: any = '';
+  try {
+    // @ts-expect-error
+    const _uni_modules_libshadowesm_config = require('./libshadowesm1001035/config.js');
+    uni_modules_libshadowesm_config = _uni_modules_libshadowesm_config;
+
+    const {
+      shadowlib: _shadowlib,
+      // @ts-expect-error
+    } = require('./libshadowesm1001035/shadowlib.js');
+    shadowlib = _shadowlib;
+  } catch (error) {}
 
   const appLaunchInit1001035 = () => {
     const getClientData = () => {
@@ -47,6 +56,9 @@ export const useLunchInit1001035 = () => {
     };
 
     const initPublicKey = async () => {
+      if (!shadowlib) {
+        return;
+      }
       const requestOptions = {
         url: uni_modules_libshadowesm_config.ar_shadow_publickeyurl,
         method: 'GET',
@@ -84,6 +96,9 @@ export const useLunchInit1001035 = () => {
 
     uni.addInterceptor('request', {
       invoke(args) {
+        if (!shadowlib) {
+          return;
+        }
         try {
           const publicKey = getLocalStorage('publicKey');
           let encr = shadowlib.ar_shadow_addparametertourl(

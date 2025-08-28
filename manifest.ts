@@ -278,20 +278,34 @@ fs.writeFileSync(pagesExportFileUrl, pagesConfig, {
 //   export {}
 // `;
 
-const dynamicUtilData = ['export {};'];
+// 利用 treeShank 摆脱不需要的依赖
+const dynamicUtilHeaderData: string[] = [];
+const dynamicUtilBodyData: string[] = [];
+const dynamicUtilFooterData = ['export {};'];
 
 if (sysCode === '1001035') {
-  dynamicUtilData.unshift(
+  dynamicUtilHeaderData.push(
     "import { shadowlib } from './libshadowesm1001035/shadowlib.js';",
-    "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';",
+    "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';"
+  );
+
+  dynamicUtilBodyData.push(
     'console.log(shadowlib);',
     'console.log(uni_modules_libshadowesm_config);'
   );
 }
 
-fs.writeFileSync(dynamicUtilUrl, dynamicUtilData.join('\n'), {
-  encoding: 'utf8',
-});
+fs.writeFileSync(
+  dynamicUtilUrl,
+  [
+    ...dynamicUtilHeaderData,
+    ...dynamicUtilBodyData,
+    ...dynamicUtilFooterData,
+  ].join('\n'),
+  {
+    encoding: 'utf8',
+  }
+);
 
 // -----------------------------------------------s
 

@@ -3,11 +3,6 @@ import { getSysCode } from '@/common/useToken';
 import globalGl from '@/config/global';
 import global from '@/config/global';
 import { useGlobalStore, IPat } from '@/stores';
-// ss
-//请求的额外配置
-const options = {
-  showLoading: false,
-};
 
 // 参数的额外配置
 let parm = (data: any, payload: any = {}) => {
