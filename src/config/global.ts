@@ -1,19 +1,12 @@
-import { useGlobalStore } from '@/stores';
 import manifest from '../manifest.json';
 import systemConfig from './config.json';
 import { getSConfig } from './sConfig';
-// #ifdef H5
-import { getSysCode } from '@/common/useToken';
-// #endif
 export const BASE_IMG = 'https://phsdevoss.eheren.com/pcloud/phs3.0/'; //oss静态资源服务器
 
 export let SYS_CODE = systemConfig.sysCode;
 
-// #ifdef H5
-// SYS_CODE = getSysCode();
-// #endif
 
-let env = <'dev' | 'test' | 'prod'>'prod'; // dev 开发； test 测试； prod 生产
+let env = <'dev' | 'test' | 'prod'>'test'; // dev 开发； test 测试； prod 生产
 
 const WEB_OUT_LOGIN_TIME = 0; // web 环境下自动退出登录时间 ms
 const wxAppid = manifest['mp-weixin'].appid;

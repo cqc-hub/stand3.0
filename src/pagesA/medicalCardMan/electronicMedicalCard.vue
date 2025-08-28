@@ -23,24 +23,24 @@
         >
           <view>{{ title }}</view>
 
-          <!-- <view
-          v-if="toggleList.length > 1"
-          @click="toggleQrCode"
-          class="flex-normal g-border toggle-card color-blue f26"
-        >
-          <text
-            :class="{
-              'icon-reverse': showHealthCode,
-            }"
-            class="iconfont qr-toggle-icon color-blue"
+          <view
+            v-if="toggleList.length > 1"
+            @click="toggleQrCode"
+            class="flex-normal g-border toggle-card color-blue f26"
           >
-            &#xe6f9;
-          </text>
+            <text
+              :class="{
+                'icon-reverse': showHealthCode,
+              }"
+              class="iconfont qr-toggle-icon color-blue"
+            >
+              &#xe6f9;
+            </text>
 
-          <view class="f26">
-            {{ toggleQrLabel }}
+            <view class="f26">
+              {{ toggleQrLabel }}
+            </view>
           </view>
-        </view> -->
           <!-- <view
             @click="chooseAction"
             class="flex-normal g-border toggle-card color-blue f26"
@@ -289,12 +289,18 @@
     init();
   };
 
-  const choosePatHandler1 = () => {
+  const choosePatHandler1 = async () => {
     const pat = gStores.userStore.patChoose;
     gStores.userStore.updatePatClick(pat);
     gStores.userStore.updatePatClick(pat);
 
-    init();
+    await init();
+
+    if (isHasHealthCode.value) {
+      showHealthCode.value = true;
+      toggleListCurrent.value = 1;
+      setStatus();
+    }
   };
 
   const patActionHide = async () => {
@@ -396,9 +402,6 @@
     }
 
     showHealthCode.value = key === '1';
-    setLocalStorage({
-      showHealthCodeHis: showHealthCode.value,
-    });
     setStatus();
     uni.showLoading({
       mask: true,
@@ -482,20 +485,6 @@
     barCodeImg.value = img.tempFilePath || '';
   };
 
-  onReady(() => {
-    const showHealthCodeHis = getLocalStorage('showHealthCodeHis');
-    if (clickPat.value.healthQrCodeText) {
-      if (showHealthCodeHis === '') {
-        showHealthCode.value = !!clickPat.value.healthQrCodeText;
-      } else {
-        showHealthCode.value = showHealthCodeHis;
-      }
-    } else {
-      showHealthCode.value = false;
-    }
-
-    setStatus();
-  });
 
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
@@ -520,12 +509,14 @@
     pageConfig.value = await ServerStaticData.getSystemConfig('person');
     init();
 
-    // if (isHasHealthCode.value) {
-    //   toggleList.value.push({
-    //     label: '电子健康卡',
-    //     key: '1',
-    //   });
-    // }
+    if (isHasHealthCode.value) {
+      toggleList.value.push({
+        label: '电子健康卡',
+        key: '1',
+      });
+
+      toggleQrCode();
+    }
 
     // if (pageConfig.value.isMedicalQrChoose === '1') {
     //   toggleList.value.push({

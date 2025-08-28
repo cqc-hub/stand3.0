@@ -17,7 +17,7 @@
     showTime = 0;
 
   onLaunch(async (opt) => {
-    // console.log('App Launch', opt);
+    console.log('App Launch', opt);
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
 
