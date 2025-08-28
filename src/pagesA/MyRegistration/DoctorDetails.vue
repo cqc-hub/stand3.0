@@ -377,7 +377,8 @@
             <text class="f36 g-bold mr24">在线服务</text>
             <text
               v-if="
-                pageConfig.isShowDocScore === '1' && docServiceInfo.satisfaction
+                gStores.globalStore.sysCode === '1001067' &&
+                docServiceInfo.satisfaction
               "
               class="f28"
             >
