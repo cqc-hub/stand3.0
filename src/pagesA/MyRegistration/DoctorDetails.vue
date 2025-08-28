@@ -375,7 +375,12 @@
         <block v-if="isDocServiceShow">
           <view class="mb16 mt56 p32c">
             <text class="f36 g-bold mr24">在线服务</text>
-            <text v-if="docServiceInfo.satisfaction" class="f28">
+            <text
+              v-if="
+                pageConfig.isShowDocScore === '1' && docServiceInfo.satisfaction
+              "
+              class="f28"
+            >
               <text class="mr12">评分</text>
               <text class="color-warn">
                 {{ docServiceInfo.satisfaction }}分

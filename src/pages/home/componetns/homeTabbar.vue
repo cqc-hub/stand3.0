@@ -368,7 +368,7 @@
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
         }.png`,
         url: '/pagesA/medicalCardMan/electronicMedicalCard?showNavBar=1&dp=1',
-        loginInterception: '0',
+        loginInterception: '1',
         sort: 4,
       };
       tabBars.value.splice(tabBars.value.length / 2, 0, d);

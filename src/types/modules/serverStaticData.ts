@@ -133,6 +133,8 @@ export interface ISystemConfig_ {
     isSchNoDept?: '1';
     // 请求排班不区分医院
     isSchNoHos?: '1';
+    // 在线服务-评分展示
+    isShowDocScore?: '1';
 
     /** 挂号记录 */
     //页面顶部按钮(仅我的挂号页面)
