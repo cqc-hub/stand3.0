@@ -1223,7 +1223,7 @@ const typeInAsk = async (value, answertype) => {
   let baseApi =
     gStores.globalStore.sysCode === '1001082'
       ? 'https://eservice.wzswsj.gov.cn'
-      : 'https://netphs.eheren.com/gateway';
+      : `https://${globalGl.env === 'prod'?'net':'test'}phs.eheren.com/gateway`;
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',

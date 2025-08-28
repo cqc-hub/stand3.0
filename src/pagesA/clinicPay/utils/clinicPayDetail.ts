@@ -770,7 +770,8 @@ export const isMedicalSelf = async (
         if (isFamilyPayment === '1') {
           return true;
         } else {
-          return await isCanUseMedical(cardNumber);
+          // return await isCanUseMedical(cardNumber);
+          return true;
         }
       }
     }
@@ -784,7 +785,8 @@ export const isMedicalSelf = async (
         if (medicalPlugin) {
           return true;
         } else {
-          return await isCanUseMedicalNational();
+          // return await isCanUseMedicalNational();
+          return true;
         }
       }
     }
@@ -1417,7 +1419,6 @@ export const usePayPage = () => {
     isMedicalPlugin: boolean,
     isNavgateToZLminiProm: boolean
   ) => {
-    isMedicalSelf = true;
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {

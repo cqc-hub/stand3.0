@@ -54,6 +54,7 @@
     docName: '',
     diagnosis: '',
     isAnonymous: '',
+    selectType: 0, //1-选择就诊记录 0-不选择
   });
   const uploadImgList = ref(<string[]>[]);
   const gStores = new GStores();
@@ -404,7 +405,9 @@
     gStores.messageStore.showMessage('反馈成功,感谢您的支持', 3000, {
       closeCallBack() {
         uni.reLaunch({
-          url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${options.value.selectRecords}`,
+          url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
+            options.value.selectRecords || options.value.selectType ? '2' : '1'
+          }`,
         });
       },
     });
@@ -422,14 +425,14 @@
         patientId: gStores.userStore.patChoose.patientId,
         type: 3,
       });
-      if(!result||!result.length){
-        throw new Error()
+      if (!result || !result.length) {
+        throw new Error();
       }
       tempList = tempList4.map((item: any) => {
         if (item.key == 'visitUid') {
           item.options = result.map((i) => {
             item.placeholder = '请选择就诊记录';
-            item.disabled=false
+            item.disabled = false;
             return {
               ...i,
               label: `${i.admissionTime} ${i.deptName}`,
@@ -443,8 +446,8 @@
       tempList = tempList4.map((item: any) => {
         if (item.key == 'visitUid') {
           item.placeholder = '暂未查询到您的就诊记录！';
-          item.options=[]
-          item.disabled=true
+          item.options = [];
+          item.disabled = true;
         }
         return item;
       });
