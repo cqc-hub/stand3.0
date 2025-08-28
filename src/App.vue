@@ -17,8 +17,6 @@
   // #endif
   import { shadowlib } from './uni_modules/libshadowesm/shadowlib.js';
   import uni_modules_libshadowesm_config from './uni_modules/libshadowesm/config.js';
-  import env from './config/env';
-  import { wait } from './utils';
   // import shadowlib from './uni_modules/libshadowesm/shadowlib.js';
   // const uni_modules_libshadowesm_shadowlib = require('./uni_modules/libshadowesm/shadowlib.js');
   // const uni_modules_libshadowesm_config = require('./uni_modules/libshadowesm/config.js');

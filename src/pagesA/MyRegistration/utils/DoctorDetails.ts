@@ -3,6 +3,7 @@ import { GStores, ServerStaticData } from '@/utils';
 import { TSchInfo } from './index';
 
 import api from '@/service/api';
+import globalGl from '@/config/global';
 
 export interface ICommentItem {
   adviseForDoc: string;
@@ -219,12 +220,12 @@ export class UseDoctorDetail extends GStores {
       source,
     };
 
-    const action =
-      this.globalStore.sysCode === '1001035'
-        ? api.getDocSch1001035
-        : api.getDocSch;
+    let actionApi = api.getDocSch;
+    if (this.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getDocSch1001035;
+    }
 
-    const { result } = await action(args);
+    const { result } = await actionApi(args);
 
     if (result && result.length) {
       const { schList: _schList, enabledDays: _enabledDays } =

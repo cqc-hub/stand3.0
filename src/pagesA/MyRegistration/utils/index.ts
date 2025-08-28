@@ -13,6 +13,7 @@ import {
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
 import { pageConfig } from '../../intelMedicalAssist/utils/utils';
+import globalGl from '@/config/global';
 
 dayjs.extend(isoWeek);
 
@@ -245,13 +246,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     const eDaysEnabled: string[] = [];
     isComplete.value = false;
 
-    const normalApi =
-      gStores.globalStore.sysCode === '1001035'
-        ? api.getDeptSchForDoc1001035
-        : api.getDeptSchForDoc;
+    let actionApi = api.getDeptSchForDoc;
+    if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getDeptSchForDoc1001035;
+    }
 
     const asyncListFnc =
-      orderConfig.value.orderMode === '1' ? api.dtSchByDoc : normalApi;
+      orderConfig.value.orderMode === '1' ? api.dtSchByDoc : actionApi;
 
     uni.showLoading({
       title: '获取医生排班数据..',
@@ -360,13 +361,13 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       isExpertDeptId,
     };
     isComplete.value = false;
-    const normalApi =
-      gStores.globalStore.sysCode === '1001035'
-        ? api.getDeptSchByDate1001035
-        : api.getDeptSchByDate;
+    let actionApi = api.getDeptSchByDate;
+    if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getDeptSchByDate1001035;
+    }
 
     const asyncListFnc =
-      orderConfig.value.orderMode === '1' ? api.dtSchByDate : normalApi;
+      orderConfig.value.orderMode === '1' ? api.dtSchByDate : actionApi;
 
     const { result } = await asyncListFnc<IDocListByDate[]>(args).finally(
       () => {
@@ -556,12 +557,14 @@ export const useOrder = (props: Ref<IOrderProps>) => {
 
     orderSourceList.value = [];
     isComplete.value = false;
-    const action =
-      gStores.globalStore.sysCode === '1001035'
-        ? api.getNumberSource1001035
-        : api.getNumberSource;
 
-    let { result } = await action<IOrderSource[]>(arg).finally(() => {
+    let actionApi = api.getNumberSource;
+    if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getNumberSource1001035;
+    }
+
+
+    let { result } = await actionApi<IOrderSource[]>(arg).finally(() => {
       isComplete.value = true;
     });
 

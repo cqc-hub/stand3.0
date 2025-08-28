@@ -226,10 +226,11 @@
     };
 
     isComplete.value = false;
-    const actionApi =
-      gStores.globalStore.sysCode === '1001035'
-        ? api.getDeptList1001035
-        : api.getDeptList;
+    let actionApi = api.getDeptList;
+
+    if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
+      actionApi = api.getDeptList1001035;
+    }
 
     const { result } = await actionApi(requestArg).finally(() => {
       isComplete.value = true;

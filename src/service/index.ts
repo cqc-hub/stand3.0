@@ -41,6 +41,7 @@ export const isOpenSm4 = false;
 // 请求拦截器
 Request.interceptors.request((request: IRequest) => {
   const globalStore = useGlobalStore();
+  const specialUrls1001035 = ['https://phs.jshtcm.com'];
 
   if (
     globalStore.ev === 'web' &&
@@ -67,7 +68,7 @@ Request.interceptors.request((request: IRequest) => {
   //网关限流——除开发环境
   if (
     globalGl.env === 'prod' &&
-    !['https://phs.jshtcm.com'].includes(request.baseURL || '')
+    !specialUrls1001035.includes(request.baseURL || '')
   ) {
     request.url = request.url + '=' + encryptDes(getSysCode(), 'hrtest22');
   }
@@ -93,9 +94,8 @@ Request.interceptors.request((request: IRequest) => {
 
   if (
     isDes ||
-    isOpenSm4
-    // 不是所有接口都支持加密
-    // !['https://szphs.eheren.com'].includes(request.baseURL || '')
+    isOpenSm4 ||
+    specialUrls1001035.includes(request.baseURL || '')
   ) {
     request.data = requestInterfaceEncrp(request);
   }
@@ -306,23 +306,28 @@ const requestInterfaceEncrp = (request) => {
     signContent: '',
     token: data.token,
   };
-  if (isOpenSm4) {
-    desData.signContent = sm4_ecb_encrypt(JSON.stringify(data.args));
-  } else if (isDes) {
-    desData.signContent = encryptDes(JSON.stringify(data.args), getQKey());
-  }
+
+  desData.signContent = encryptDes(JSON.stringify(data.args), getQKey());
+
+  // if (isOpenSm4) {
+  //   desData.signContent = sm4_ecb_encrypt(JSON.stringify(data.args));
+  // } else if (isDes) {
+  //   desData.signContent = encryptDes(JSON.stringify(data.args), getQKey());
+  // }
+
   return desData;
 };
 
 const responseInterfaceDecryp = (signContent) => {
   let DecryptData = {};
+
   if (isOpenSm4) {
     try {
       DecryptData = JSON.parse(sm4_ecb_decrypt(signContent) || '{}');
     } catch (e) {
       DecryptData = sm4_ecb_decrypt(signContent);
     }
-  } else if (isDes) {
+  } else {
     try {
       DecryptData = JSON.parse(decryptDes(signContent, getRKey()));
     } catch (e) {

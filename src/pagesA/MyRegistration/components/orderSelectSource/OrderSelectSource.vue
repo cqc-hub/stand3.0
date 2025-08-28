@@ -189,6 +189,7 @@
 
   import orderSelectSourceList from './OrderSourceList.vue';
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   const pageConfig = ref({} as ISystemConfig['order']);
   const popup = ref<any>('');
@@ -301,12 +302,16 @@
           sysCode,
         };
 
-        const action =
-          gStores.globalStore.sysCode === '1001035'
-            ? api.getNumberSource1001035
-            : api.getNumberSource;
+        let actionApi = api.getNumberSource;
+        if (
+          gStores.globalStore.sysCode === '1001035' &&
+          globalGl.env === 'prod'
+        ) {
+          actionApi = api.getNumberSource1001035;
+        }
 
-        const { result } = await action<IOrderSource[]>(args);
+
+        const { result } = await actionApi<IOrderSource[]>(args);
         dealNumberSourceList(result || []);
         collapseOrderSourceList.value[listKey] = result || [];
 
