@@ -30,7 +30,8 @@
           mode="date"
           :value="date"
           fields="month"
-          :start="startDate"
+          :start="getPickerDateFormat(startDate)"
+          :end="getPickerDateFormat(endDate)"
           @change="bindDateChange"
         >
           <text class="uni-calendar__header-text">
@@ -193,6 +194,7 @@
   import timePicker from './time-picker.vue';
   import { initVueI18n } from '@dcloudio/uni-i18n';
   import messages from './i18n/index.js';
+  import dayjs from 'dayjs';
   const { t } = initVueI18n(messages);
   /**
    * Calendar 日历
@@ -500,6 +502,14 @@
       // 取消穿透
       clean() {
         this.close();
+      },
+
+      getPickerDateFormat(date) {
+        if (date) {
+          return dayjs(date).format('YYYY-MM');
+        }
+
+        return '';
       },
 
       clearCalender() {
