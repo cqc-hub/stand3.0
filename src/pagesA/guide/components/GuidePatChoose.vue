@@ -20,7 +20,9 @@
           </view>
 
           <view>
-            <view class="f36">{{ patChoose.patientNameEncry }}</view>
+            <view class="f36">
+              {{ patChoose.patientNameEncry || patChoose.patientName }}
+            </view>
             <view v-if="getPatIdForShow" class="flex f26 pat-info-id">
               <view class="mr12">就诊ID</view>
               <view>{{ getPatIdForShow }}</view>
