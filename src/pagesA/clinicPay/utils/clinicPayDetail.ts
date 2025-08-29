@@ -779,15 +779,10 @@ export const isMedicalSelf = async (
 
     // #ifdef  MP-WEIXIN
     if (wx) {
-      const { medicalNation, medicalPlugin } = wx;
+      const { medicalNation, medicalPlugin, medical1001035 } = wx;
 
-      if (medicalNation || medicalPlugin) {
-        if (medicalPlugin) {
-          return true;
-        } else {
-          // return await isCanUseMedicalNational();
-          return true;
-        }
+      if (medicalNation || medicalPlugin || medical1001035) {
+        return true;
       }
     }
     // #endif
@@ -1410,15 +1405,25 @@ export const usePayPage = () => {
     }
   };
 
-  const determinePayType = (
-    isMedicalMode: boolean,
-    isDigitalPay: boolean,
-    hasMedicalItem: boolean,
-    isMedicalSelf: boolean,
-    isBizTypeMedical: boolean,
-    isMedicalPlugin: boolean,
-    isNavgateToZLminiProm: boolean
-  ) => {
+  const determinePayType = (opt: {
+    isMedicalMode: boolean;
+    isDigitalPay: boolean;
+    hasMedicalItem: boolean;
+    isMedicalSelf: boolean;
+    isBizTypeMedical: boolean;
+    isMedicalPlugin: boolean;
+    isNavgateToZLminiProm: boolean;
+  }) => {
+    const {
+      isMedicalMode,
+      isDigitalPay,
+      hasMedicalItem,
+      isMedicalSelf,
+      isBizTypeMedical,
+      isMedicalPlugin,
+      isNavgateToZLminiProm,
+    } = opt;
+    console.log(opt, '222');
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
@@ -1462,11 +1467,12 @@ export const usePayPage = () => {
       medicalMHelp?.crossProgramBizType?.clinic !== undefined;
     const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
     const isNavgateToZLminiProm = getIsNavToMini();
-    const payTypeList = determinePayType(
+    const payTypeList = determinePayType({
       isMedicalMode,
       isDigitalPay,
       hasMedicalItem,
-      isOpenFamilyMedical ||
+      isMedicalSelf:
+        isOpenFamilyMedical ||
         (await isMedicalSelf(
           pageProps.value.deParams?.cardNumber ||
             gStores.userStore.patChoose.cardNumber,
@@ -1474,8 +1480,8 @@ export const usePayPage = () => {
         )),
       isBizTypeMedical,
       isMedicalPlugin,
-      isNavgateToZLminiProm
-    );
+      isNavgateToZLminiProm,
+    });
 
     let additionalList: any[] = [];
     if (globalGl.SYS_CODE === '1001052') {
@@ -1929,6 +1935,15 @@ export const usePayPage = () => {
       info,
     });
 
+    const medical1001035 = await getMedical1001035Info();
+
+    if (medical1001035) {
+      handlerMedical1001035Pay({
+        phsOrderSource: '2',
+      });
+      return;
+    }
+
     uni.navigateTo({
       url: '/pagesA/clinicPay/clinicPayMedical',
     });
@@ -2362,7 +2377,6 @@ export const executeConfigPayAfter = async (
   additionData: any = {}
 ) => {
   //新增定制跳转 温附二互联网缴费跳转三方
-  console.log(9999, additionData);
   const { payNextActionParams } = additionData;
 
   if (payNextActionParams) {
@@ -2561,6 +2575,11 @@ export const getMedical1001035Info = async () => {
   }
 };
 
+/**
+ *
+ * @param opt phsOrderSource 1-挂号 2-门诊
+ * @returns
+ */
 export const handlerMedical1001035Pay = async (opt: {
   phsOrderSource: '1' | '2';
 }) => {
