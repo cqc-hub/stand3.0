@@ -48,12 +48,9 @@
         v-if="gStores.globalStore.sysCode === '1001017'"
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person_1001017.png'"
         class="img-1001017"
+       
       />
-      <img
-        v-else
-        :src="globalGl.BASE_IMG + 'intelMedicalAssist_person.png'"
-        class="w-full"
-      />
+      <img v-else :src="globalGl.BASE_IMG + distinctiveImage" class="w-full"  @click="personImgClick" />
     </view>
 
     <view class="header-hello">
@@ -125,7 +122,13 @@
   import { joinQueryForUrl } from '@/common';
   import globalGl from '@/config/global';
   import { type StyleConfigType } from '../utils/types';
-  import { popipHasShow, isPhoto, initWithMess } from '../utils/utils';
+  import {
+    popipHasShow,
+    isPhoto,
+    initWithMess,
+    personImgClick,
+    distinctiveImage,
+  } from '../utils/utils';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
 
@@ -136,7 +139,7 @@
     headerConfig: StyleConfigType;
     isMess?: string;
   }>();
-  const tabField = ['首页', '服务','我的'];
+  const tabField = ['首页', '服务', '我的'];
   const tabCurrent = ref(0);
   const emits = defineEmits(['click-guess']);
 
@@ -163,7 +166,7 @@
         type: 'self',
         path: url,
       });
-    }else if (value === 2) {
+    } else if (value === 2) {
       let url = 'pages/home/my';
       useTBanner({
         type: 'self',

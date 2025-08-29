@@ -81,7 +81,6 @@ Request.interceptors.request((request: IRequest) => {
     '/phs-base/cms/getCmsList',
   ];
   if (
-    globalStore.ev === 'web' &&
     globalStore.sysCode === '1001082' &&
     !skipBaseURLChangeApis.some((api) => request.url.includes(api))
   ) {

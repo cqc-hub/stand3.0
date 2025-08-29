@@ -42,6 +42,7 @@
     <view v-if="showOrder">
       <Doc-Sch-Order :orderInfo="schOrderInfo"></Doc-Sch-Order>
     </view>
+    <distinctiveImagePopup/>
 
     <g-message />
   </view>
@@ -60,6 +61,7 @@
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
   import reportPopup from './compontents/reportPopup.vue';
   import DocSchOrder from './compontents/DocSchOrder.vue';
+  import distinctiveImagePopup from './compontents/distinctiveImagePopup.vue'
   import {
     styleConfig,
     pageConfig,

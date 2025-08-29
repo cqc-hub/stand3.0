@@ -53,6 +53,8 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
+export const distinctiveImage = ref<string>('intelMedicalAssist_person.png');
+export const distinctiveImagePopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
 export const popipHasShow = ref<boolean>(false);
@@ -187,6 +189,11 @@ export const init = async (props) => {
         ? 'homePage'
         : 'back',
   };
+  const distinctiveImageList =
+    pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList;
+  distinctiveImageList?.length &&
+    (distinctiveImage.value = distinctiveImageList[0]);
+
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
   props?.type.includes('report') && ininWithReport(props?.reportId);
@@ -850,6 +857,17 @@ export const formatterTemp = (list: TInstance[], modeOld = false) => {
   });
 };
 
+export const personImgClick = () => {
+  if (
+    pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList
+      ?.length
+  ) {
+    console.log('clcik');
+    
+    distinctiveImagePopupRef.value.show();
+  }
+};
+
 export const goLocation = (item) => {
   const gStores = new GStores();
   const { gisLat, gisLng, hosName, address } = item;
@@ -1223,7 +1241,9 @@ const typeInAsk = async (value, answertype) => {
   let baseApi =
     gStores.globalStore.sysCode === '1001082'
       ? 'https://eservice.wzswsj.gov.cn'
-      : `https://${globalGl.env === 'prod'?'net':'test'}phs.eheren.com/gateway`;
+      : `https://${
+          globalGl.env === 'prod' ? 'net' : 'test'
+        }phs.eheren.com/gateway`;
   const settings = {
     url: `${baseApi}/phs-extend/customer/aiStreamAsk`,
     method: 'POST',

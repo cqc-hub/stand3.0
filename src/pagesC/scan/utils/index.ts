@@ -18,6 +18,7 @@ export const useScan = () => {
        * - 10 电子导致单
        * - 11 健康咨询
        * - 12 健康咨询-详情
+       * - 13 濮阳满意度问卷
        * - _1 温附二 特检预约
        */
       type:
@@ -33,7 +34,8 @@ export const useScan = () => {
         | '9'
         | '10'
         | '11'
-        | '12';
+        | '12'
+        | '13';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -77,6 +79,25 @@ export const useScan = () => {
 
     uni.reLaunch({
       url: `/pages/home/home`,
+    });
+  };
+
+  const initQuestionList58 = async () => {
+    const {
+      tab, //  50 门诊  55 住院
+    } = pageProps.value;
+    useTBanner({
+      type: 'h5',
+      isLocal: '1',
+      isSelfH5: '1',
+      path: 'pagesC/question/questionAfterVisit',
+      extraData: {
+        tab,
+      },
+      addition: {
+        herenId: 'herenId',
+        token: 'token',
+      },
     });
   };
 
@@ -333,6 +354,7 @@ export const useScan = () => {
     initDrugDetail35,
     initTakeNumber,
     initQuestion,
+    initQuestionList58,
     initAddPat,
     tjyy1001067() {
       useTBanner({

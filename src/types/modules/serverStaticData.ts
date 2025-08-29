@@ -411,6 +411,9 @@ export interface ISystemConfig_ {
     //支付后已缴费列表是否查询草药代煎列表
     isQueryChineseMedicine?: '1';
 
+    //门诊缴费列表支持分项支付
+    isListCanPayedItem?: '1';
+
     /**
      * 详情页
      */
@@ -566,6 +569,11 @@ export interface ISystemConfig_ {
     navBtns?: TButtonConfig[];
     //智能医助
     intelMedicalAssistConfig?: {
+      //选择智能医助虚拟人物
+      distinctiveImage?: {
+        imageList?:Array<string>,
+        noLoginNotice?:string,
+      };
       //企微客服按钮，例{"extInfo": "https://work.weixin.qq.com/kfid/kfc0987f35e21a6f2bd","corpId": "wwdbaea46632b03769"}
       isOpenWxServiceBtn?: Object;
       //开启和仁导诊
