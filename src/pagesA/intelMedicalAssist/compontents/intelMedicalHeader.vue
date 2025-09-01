@@ -10,7 +10,7 @@
     <!-- #ifdef MP-WEIXIN -->
     <view class="navBar">
       <GCustomNavbar
-        :title="headerConfig?.headerLineMenu !== 'homePage' ? '智能医助' : ''"
+        :title="headerConfig?.headerLineMenu !== 'homePage' ? title : ''"
         :showBack="headerConfig?.headerLineMenu !== 'homePage'"
       >
         <template v-if="headerConfig?.headerLineMenu === 'homePage'">
@@ -80,7 +80,7 @@
           />
         </view>
       </view>
-      <view class="cn f26">智能医助为您服务~</view>
+      <view class="cn f26">{{title}}为您服务~</view>
     </view>
     <view class="person-say pt12 pb12 pl32 pr32">
       <view class="key-in">
@@ -137,6 +137,7 @@
     initWithMess,
     personImgClick,
     distinctiveImage,
+    title
   } from '../utils/utils';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';

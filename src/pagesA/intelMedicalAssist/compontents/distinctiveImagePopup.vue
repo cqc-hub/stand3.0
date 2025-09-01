@@ -6,9 +6,11 @@
         [gStores.globalStore.getPageClass]: true,
       }"
     >
-      <view class="header flex flex-between pt24">
+      <view class="header flex flex-between pt24 pb24 g-border-bottom">
         <view @clcik="handelCancel" class="cancel f32 p24c">取消</view>
-        <view @clcik="handelCancel"  class="title f36 g-bold">选择您的智能健康助理</view>
+        <view @clcik="handelCancel" class="title f36 g-bold">
+          选择您的{{ title }}
+        </view>
         <view @click="confirm" class="confirm f32 p24c">确定</view>
       </view>
       <view class="content flex flex-wrap flex3 p12 pt24">
@@ -35,6 +37,7 @@
     distinctiveImagePopupRef,
     pageConfig,
     distinctiveImage,
+    title,
   } from '../utils/utils';
 
   const gStores = new GStores();
@@ -54,12 +57,14 @@
       const { result } = await api.intAssistantSave({
         content: currentImg.value,
       });
+    } else {
+      gStores.messageStore.showMessage('登录后可以长期保存更换的形象', 3000);
     }
     globalStore.setIntAssistantImg(currentImg.value);
-    distinctiveImage.value=currentImg.value
+    distinctiveImage.value = currentImg.value;
     distinctiveImagePopupRef.value.hide();
   };
-    const handelCancel = () => {    
+  const handelCancel = () => {
     distinctiveImagePopupRef.value.hide();
   };
 </script>
