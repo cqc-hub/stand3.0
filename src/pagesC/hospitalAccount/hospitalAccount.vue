@@ -323,7 +323,6 @@
       .getHospitalAccountDetail<IHospitalAccountDetail>(arg)
       .finally(() => {});
     lists.value = result || [];
-    console.log(result);
   };
 
   getListData = debounce(getListData, 80);
@@ -472,6 +471,19 @@
 
   const confirmForm1 = (type = '') => {
     isRefound.value = type === 'refound';
+
+    if (lists.value.stopIndicator === '0' && isRefound.value) {
+      gStores.messageStore.showMessage('账户已停用，请到现场窗口咨询！', 0, {
+        useDialog: true,
+        dialogOpt: {
+          title: '温馨提示',
+          isShowCancel: false,
+          confirmText: '确认',
+        },
+      });
+      return;
+    }
+
     if (!isCanRefound.value) {
       const c = ((lists.value.accountBalance || 0) as unknown as number) * 1;
       if (!c) {
@@ -479,6 +491,7 @@
         return;
       }
     }
+
     // if (isRefoundExist.value && !allowOnLineCash) {
     //   // 退款
     //   return
