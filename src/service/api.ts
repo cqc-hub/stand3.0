@@ -1,3 +1,4 @@
+import { envBasic } from '@/config/env';
 import service from './index';
 import { getSysCode } from '@/common/useToken';
 import globalGl from '@/config/global';
@@ -504,9 +505,13 @@ const queryApi = {
   getScheme: <T = any>(data) =>
     service.post('/phs-user/message/getScheme', parm(data)),
   getCmsList: <T = any>(data) =>
-    service.post('/phs-base/cms/getCmsList', parm(data)),
+    service.post('/phs-base/cms/getCmsList', parm(data), {
+      baseURL: envBasic.baseApi,
+    }),
   getCmsTypeList: <T = any>(data) =>
-    service.post('/phs-base/cms/getCmsTypeList', parm(data)),
+    service.post('/phs-base/cms/getCmsTypeList', parm(data), {
+      baseURL: envBasic.baseApi,
+    }),
   getCmsListByWordSearch: <T = any>(data) =>
     service.post('/phs-base/cms/getCmsListByWordSearch', parm(data)),
   //电子导诊单
@@ -808,6 +813,7 @@ const userApi = {
     service.post<T>('/phs-user/authUser/allinoneAuthApi', parm(data), {
       isAuth: true,
       hideLoading: false,
+      baseURL: envBasic.baseApi,
     }),
 
   allinoneAuthApi1: (data) =>
@@ -1193,6 +1199,7 @@ const userApi = {
   customerEvaluate: (data: any) =>
     service.post('/phs-extend/customer/evaluate', parm(data), {
       hideLoading: false,
+      baseURL: envBasic.baseApi,
     }),
   ///检验分析
   inspectionAnalysis: (data: any) =>
