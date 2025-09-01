@@ -377,7 +377,7 @@
           orderId,
           hosDeptId,
           hosOrderId,
-          hosData,
+          hosData:encodeURIComponent(hosData as string),
           patientId,
         },
         addition: {
