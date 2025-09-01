@@ -199,8 +199,8 @@ export const init = async (props) => {
       globalStore.intAssistantImg || distinctiveImageList[0];
     if (gStores.globalStore.herenId && !globalStore.intAssistantImg) {
       const { result } = await api.intAssistantQuery({});
-      distinctiveImage.value = result?.content;
-      globalStore.setIntAssistantImg(result?.content);
+      result?.content && (distinctiveImage.value = result?.content);
+      result?.content && globalStore.setIntAssistantImg(result?.content);
     }
   }
 
