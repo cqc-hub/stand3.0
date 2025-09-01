@@ -531,6 +531,10 @@ const queryApi = {
   // 病历查询 列表
   getOutpatientList: (data) =>
     service.post<any>('/phs-query/operation/getOutpatientList', parm(data)),
+  intAssistantQuery: (data) =>
+    service.post<any>('/phs-query/intAssistant/query', parm(data)),
+  intAssistantSave: (data) =>
+    service.post<any>('/phs-query/intAssistant/save', parm(data)),
 };
 
 // 挂号服务

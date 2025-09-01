@@ -27,7 +27,7 @@ import {
   getLocalStorage,
 } from '@/common';
 import type { TInstance } from '@/components/g-form/index';
-import { IPat, useDeptStore } from '@/stores';
+import { IPat, useDeptStore, useGlobalStore } from '@/stores';
 import { isOpenSm4 } from '@/service';
 import { getMyPowerQx } from '@/components/greenPower';
 import { checkLoginExpired } from '@/common/checkJump';
@@ -53,7 +53,7 @@ export const msgState = ref<MsgStatusType>({
 export const messFormData = ref<Array<MessFormListType>>([]);
 export const messHisFormData = ref<Array<Array<MessFormListType>>>([[]]);
 export const reportPopupRef = ref<any>();
-export const distinctiveImage = ref<string>('intelMedicalAssist_person.png');
+export const distinctiveImage = ref<string>('');
 export const distinctiveImagePopupRef = ref<any>();
 export const isReportAnalysis = ref<boolean>(false);
 export const isPhoto = ref(true);
@@ -189,10 +189,22 @@ export const init = async (props) => {
         ? 'homePage'
         : 'back',
   };
+  const gStores = new GStores();
   const distinctiveImageList =
     pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList;
-  distinctiveImageList?.length &&
-    (distinctiveImage.value = distinctiveImageList[0]);
+  if (distinctiveImageList?.length) {
+    const globalStore = useGlobalStore();
+    if (globalStore.intAssistantImg) {
+      distinctiveImage.value = globalStore.intAssistantImg;
+    } else {
+      if (gStores.globalStore.herenId) {
+        const { result } = await api.intAssistantQuery({});
+        distinctiveImage.value = result?.conten;
+      } else {
+        distinctiveImage.value = distinctiveImageList[0];
+      }
+    }
+  }
 
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
@@ -862,8 +874,6 @@ export const personImgClick = () => {
     pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList
       ?.length
   ) {
-    console.log('clcik');
-    
     distinctiveImagePopupRef.value.show();
   }
 };

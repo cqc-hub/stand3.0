@@ -244,7 +244,11 @@
                   {{ viewerStore.homeBallList[0].detail }}
                 </text>
                 <image
-                  :src="viewerStore.homeBallList[0].iconfont"
+                  :src="
+                    globalStore.intAssistantImg
+                      ? `${globalGl.BASE_IMG}menu/${globalStore.intAssistantImg}`
+                      : viewerStore.homeBallList[0].iconfont
+                  "
                   mode="heightFix"
                 ></image>
               </view>

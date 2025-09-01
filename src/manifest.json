@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx86a78f7ced7dc55f",
+    "appid": "wx7c53b0e82e20494e",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004144623038",
+    "appid": "",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -103,7 +103,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "濮阳市人民医院",
+  "name": "健康温州",
   "h5": {
     "optimization": {
       "treeShaking": {

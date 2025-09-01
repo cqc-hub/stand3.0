@@ -37,6 +37,8 @@ interface IStateGlobal {
       content: string;
     };
   };
+
+  intAssistantImg: string;
 }
 
 const SYS_CODE_MALL_APP_ID_MAP = {
@@ -71,6 +73,7 @@ const globalStore = defineStore('global', {
       'envH5',
       'isShowFlag',
       'flagCaches',
+      'intAssistantImg',
       'sysCode',
     ],
   },
@@ -101,6 +104,7 @@ const globalStore = defineStore('global', {
       envH5: null,
       isShowFlag: false,
       flagCaches: {},
+      intAssistantImg: '',
     };
   },
 
@@ -165,6 +169,12 @@ const globalStore = defineStore('global', {
   },
 
   actions: {
+    setIntAssistantImg(data) {
+      this.intAssistantImg = data;
+    },
+    clearIntAssistantImg() {
+      this.intAssistantImg = '';
+    },
     setFlagCaches(key, { content, title }) {
       this.flagCaches[key] = {
         content,

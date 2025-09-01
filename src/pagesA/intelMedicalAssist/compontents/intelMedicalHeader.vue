@@ -48,9 +48,18 @@
         v-if="gStores.globalStore.sysCode === '1001017'"
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person_1001017.png'"
         class="img-1001017"
-       
       />
-      <img v-else :src="globalGl.BASE_IMG + distinctiveImage" class="w-full"  @click="personImgClick" />
+
+      <img
+        v-else
+        :src="
+          globalGl.BASE_IMG + distinctiveImage ||
+          'intelMedicalAssist_person.png'
+        "
+        class="w-full"
+        :class="{ 'img-1001017': distinctiveImage ? true : false }"
+        @click="personImgClick"
+      />
     </view>
 
     <view class="header-hello">
@@ -231,7 +240,7 @@
         height: 300rpx !important;
       }
       .img-1001017 {
-        width: 140rpx !important;
+        width: 120rpx !important;
         height: 160rpx !important;
         position: absolute;
         left: 4px !important;
