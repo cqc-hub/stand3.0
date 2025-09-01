@@ -61,7 +61,7 @@ export const popipHasShow = ref<boolean>(false);
 export const hosData = ref<any>([]);
 export const showOrder = ref(false);
 export const schOrderInfo = ref<any>({});
-export const title=ref<string>('智能医助');
+export const title = ref<string>('智能医助');
 const propsPbj = ref<any>({});
 const deptStore = useDeptStore();
 
@@ -195,21 +195,17 @@ export const init = async (props) => {
     pageConfig.value.intelMedicalAssistConfig?.distinctiveImage?.imageList;
   if (distinctiveImageList?.length) {
     const globalStore = useGlobalStore();
-    if (globalStore.intAssistantImg) {
-      distinctiveImage.value = globalStore.intAssistantImg;
-    } else {
-      if (gStores.globalStore.herenId) {
-        const { result } = await api.intAssistantQuery({});
-        distinctiveImage.value = result?.content;
-        globalStore.setIntAssistantImg(result?.content);
-      } else {
-        distinctiveImage.value = distinctiveImageList[0];
-      }
+    distinctiveImage.value =
+      globalStore.intAssistantImg || distinctiveImageList[0];
+    if (gStores.globalStore.herenId && !globalStore.intAssistantImg) {
+      const { result } = await api.intAssistantQuery({});
+      distinctiveImage.value = result?.content;
+      globalStore.setIntAssistantImg(result?.content);
     }
   }
 
-  if(gStores.globalStore.sysCode==='1001082'){
-    title.value='健康瓯管家'
+  if (gStores.globalStore.sysCode === '1001082') {
+    title.value = '健康瓯管家';
   }
 
   props?.isMess && props?.isMess == '1' && initWithMess();
