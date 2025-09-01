@@ -6,6 +6,7 @@
  * ? 新的系统参数直接配置到 apiConfig.ts
  */
 
+
 export interface ISConfig {
   // 小程序登录相关 ----------------------------
   login?: {
@@ -118,6 +119,7 @@ export interface ISConfig {
       // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
       // https://docs.qq.com/doc/DV3lxV3hSbXFudVBE
       // 第三方提供的链接拼接工具(参数查看 测试环境反馈单) https://yb.qq.com/yibao-payment/doc/generateLink?nodeId=2
+      // auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=cityCode&channel=渠道号&orgChnlCrtfCodg=机构渠道认证编码&orgCodg=定点医疗机构编码&orgAppId=定点医疗机构小程序/H5应用ID
       medicalNation?: {
         appId: string;
         path: string;
@@ -202,19 +204,19 @@ const scJson: Record<string, ISConfig> = {
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
 
-    medicalMHelp: {
-      alipay: {
-        medicalPlugin: {
-          orgId: {
-            13012: 'H33030200034',
-            13013: 'H33030200034',
-            13009: 'H33030200034',
-            13011: 'H33030200034',
-          },
-          cardType: '01',
-        },
-      },
-    },
+    // medicalMHelp: {
+    //   alipay: {
+    //     medicalPlugin: {
+    //       orgId: {
+    //         13012: 'H33030200034',
+    //         13013: 'H33030200034',
+    //         13009: 'H33030200034',
+    //         13011: 'H33030200034',
+    //       },
+    //       cardType: '01',
+    //     },
+    //   },
+    // },
   },
 
   /**
@@ -680,6 +682,19 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isAliAuthBase: '1',
       isLoginByOpenId: '1',
+    },
+
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320481'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
+        },
+        isMedicalOrder: '1',
+        isGbFamilyPayment: '1',
+        // medicalDefault: '1'
+        // isGbFamilyPayment: '1',
+      },
     },
   },
   /**
