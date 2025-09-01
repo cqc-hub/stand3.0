@@ -472,8 +472,15 @@
   const confirmForm1 = (type = '') => {
     isRefound.value = type === 'refound';
 
-    if (lists.value.stopIndicator === '0') {
-      gStores.messageStore.showMessage('账户已停用，请到现场窗口咨询！', 1500);
+    if (lists.value.stopIndicator === '0' && isRefound.value) {
+      gStores.messageStore.showMessage('账户已停用，请到现场窗口咨询！', 0, {
+        useDialog: true,
+        dialogOpt: {
+          title: '温馨提示',
+          isShowCancel: false,
+          confirmText: '确认',
+        },
+      });
       return;
     }
 
