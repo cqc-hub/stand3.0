@@ -245,8 +245,8 @@
                 </text>
                 <image
                   :src="
-                    globalStore.intAssistantImg
-                      ? `${globalGl.BASE_IMG}menu/${globalStore.intAssistantImg}`
+                    assistantImg
+                      ? `${globalGl.BASE_IMG}menu/${assistantImg}`
                       : viewerStore.homeBallList[0].iconfont
                   "
                   mode="heightFix"
@@ -466,6 +466,7 @@
   const personConfig = ref(<ISystemConfig['person']>{});
   const orderConfig = ref(<ISystemConfig['order']>{});
   const healthCounselConfig = ref(<ISystemConfig['HEALTH_COUNSEL']>{});
+  const assistantImg = ref('');
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
@@ -534,6 +535,16 @@
     healthCounselConfig.value = await ServerStaticData.getSystemConfig(
       'HEALTH_COUNSEL'
     );
+    const { intelMedicalAssistConfig } = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    );
+
+    if (intelMedicalAssistConfig?.distinctiveImage?.imageList?.length) {
+      assistantImg.value =
+        globalStore?.intAssistantImg ||
+        intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
+    }
+
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
     if (

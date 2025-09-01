@@ -6,7 +6,7 @@
         [gStores.globalStore.getPageClass]: true,
       }"
     >
-      <view class="header flex flex-between pt12">
+      <view class="header flex flex-between pt24">
         <view @clcik="handelCancel" class="cancel f32 p24c">取消</view>
         <view @clcik="handelCancel"  class="title f36 g-bold">选择您的智能健康助理</view>
         <view @click="confirm" class="confirm f32 p24c">确定</view>

@@ -171,16 +171,22 @@
     tabCurrent.value = value;
     if (value === 1) {
       let url = 'pages/home/home';
-      useTBanner({
-        type: 'self',
-        path: url,
-      });
+      useTBanner(
+        {
+          type: 'self',
+          path: url,
+        },
+        'reLaunch'
+      );
     } else if (value === 2) {
       let url = 'pages/home/my';
-      useTBanner({
-        type: 'self',
-        path: url,
-      });
+      useTBanner(
+        {
+          type: 'self',
+          path: url,
+        },
+        'reLaunch'
+      );
     }
   };
   const handleClickGuess = (guessItem) => {
