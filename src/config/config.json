@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001044",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -13,7 +13,7 @@
     },
     "1001035": {
       "wxAppid": "wxacb96ee66c3dee84",
-      // "h5Appid": "wxa5cb8c1829e5603e",
+      "h5Appid": "wxa5cb8c1829e5603e",
       "alipayAppid": "2021003104670597",
       "isvAlipayAppid": "2021003104670597",
       "name": "江苏省中医院",
@@ -57,6 +57,16 @@
       "wxAppid": "wx1b81e5b0858757ba",
       "h5Appid": "",
       "name": "大医二院普湾院区",
+      "isSearchInHos": false,
+      "isStartComeTest": false,
+      "isOpenOcr": false
+    },
+    "1001044": {
+      "wxAppid": "wxb54f397780bfacbc",
+      "h5Appid": "wx43649b293a6ef63c",
+      "alipayAppid": "2021003164605058",
+      "isvAlipayAppid": "2021003164621092",
+      "name": "安康市中医医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
@@ -413,7 +423,7 @@
       "isStartComeTest": false,
       "isOpenOcr": false
     },
-   "1001088": {
+    "1001088": {
       "wxAppid": "wx01a21ac04e7a9f37",
       "alipayAppid": "",
       "h5Appid": "",

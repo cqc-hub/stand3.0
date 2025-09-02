@@ -705,6 +705,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenPopularSci: {
       wx: '1',
     },
+    isOpenWechatSI: true,
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
@@ -729,6 +730,28 @@ const scJson: Record<string, ISConfig> = {
             },
           },
         },
+      },
+    },
+  },
+   /**
+   * 安康中医医院
+   */
+  1001044: {
+    login: {
+      isAliAuthBase: '1',
+    },
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          // 生产
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610900&channel=AAEfZXu8U-gLigchujuuMHOR&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv7ltjDddRhreS6tc6M0416&orgCodg=H61090200044&orgAppId=1GTNPT4M90H576430B0A0000D5352BB7',
+
+          //测试
+          // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610101&channel=AAEoVvqZuWU8BNSYVtMM15px&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv2/NlHf1H5KZT+T46wCMi1&orgCodg=H61010400913&orgAppId=1IOS9I97D1CO4460C80A00004B82B3CD',
+        },
+        isMedicalOrder: '1',
+  
       },
     },
   },
