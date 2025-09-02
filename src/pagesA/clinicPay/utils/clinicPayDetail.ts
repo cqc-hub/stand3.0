@@ -320,7 +320,12 @@ export const getMedicalAuthCode = async (): Promise<string> => {
     gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
 
   if (!qrCode) {
-    const { appId, path } = _wx!.medicalNation!;
+    const w = _wx!;
+    const { pathExtraData, medicalNation } = w;
+    let { appId, path } = medicalNation!;
+    if (pathExtraData) {
+      path = joinQuery(path, pathExtraData);
+    }
 
     setLocalStorage({
       'get-wx-medical-auth-code': '1',
@@ -331,8 +336,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
         appId,
         // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
         path: joinQuery(path, cacheStore.medicalPathArg),
-        envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-        // envVersion: 'release',
+        // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+        envVersion: 'release',
         fail({ errMsg }) {
           if (errMsg.includes('fail cancel')) {
             setLocalStorage({

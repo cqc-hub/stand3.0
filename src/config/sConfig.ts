@@ -6,7 +6,6 @@
  * ? 新的系统参数直接配置到 apiConfig.ts
  */
 
-
 export interface ISConfig {
   // 小程序登录相关 ----------------------------
   login?: {
@@ -111,6 +110,8 @@ export interface ISConfig {
           [hosId: string]: string;
         };
       };
+
+      pathExtraData?: BaseObject;
     };
 
     wx?: {
@@ -179,6 +180,9 @@ export interface ISConfig {
           };
         };
       };
+
+      // 拼接到授权时候path
+      pathExtraData?: BaseObject;
     };
   };
 
@@ -614,10 +618,21 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320200'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
+          // path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320200'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
+          path: `auth/pages/bindcard/auth/index`,
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
+        pathExtraData: {
+          openType: 'getAuthCode',
+          cityCode: '320200',
+          channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
+          orgChnlCrtfCodg:
+            'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+          orgCodg: 'H32028200358',
+          bizType: '04107',
+          orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+        },
         // medicalDefault: '1'
         // isGbFamilyPayment: '1',
       },
@@ -688,12 +703,21 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
-          path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320481'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
+          path: 'auth/pages/bindcard/auth/index',
         },
         isMedicalOrder: '1',
-        isGbFamilyPayment: '1',
+        // isGbFamilyPayment: '1',
         // medicalDefault: '1'
         // isGbFamilyPayment: '1',
+        pathExtraData: {
+          openType: 'getAuthCode',
+          cityCode: '320400',
+          orgCodg: 'H32048100095',
+          orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
+          bizType: '04107',
+          orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
+          channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
+        },
       },
     },
   },
