@@ -76,12 +76,13 @@
   const isCollapseListLv1 = ref(false);
   const isHideLv1 = ref(false);
 
-    const getHosList = async () => {
+    const getHosList = async ( searchContent?) => {
 
     clearData();
     const { result } = await api
       .getDeptByFamousDoctorType({
         famousDoctorType: pageProp.value.famousDoctorType,
+         searchContent,
       })
       .finally(() => {
         isComplete.value = true;
@@ -131,32 +132,8 @@
       const searchContent = searchValue.value;
       clearData();
       isHideLv1.value = false;
-
-      if (searchContent) {
-        const { famousDoctorType } = pageProp.value;
-
-        const requestArg = {
-          searchContent,
-          famousDoctorType,
-        };
-        isCollapseListLv1.value = true;
-
-        const { result } = await api
-          .getDeptCardListSearch(requestArg)
-          .finally(() => {
-            setTimeout(() => {
-              isComplete.value = true;
-            }, 300);
-          });
-
-        setTimeout(() => {
-          isHideLv1.value = true;
-          listLv2.value = result || [];
-        }, 300);
-      } else {
         isCollapseListLv1.value = false;
-        await getHosList();
-      }
+        await getHosList(searchContent); 
     },
     600,
     false

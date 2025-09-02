@@ -37,16 +37,17 @@
         </view>
 
         <view class="flex justify-center">
-        <view class="submit-btn flex">
+        <!-- <view class="submit-btn flex">
           <view class="iconfont">&#xe6b9;</view>
           <text>提出优化建议</text>
-        </view>
-        </view>
-
-        <view class="flex items-center bottom-box">
+        </view> -->
+     <view class="flex items-center bottom-box">
           <image :src="$global.BASE_IMG + 'jkwz_logo.png'" alt="" />
           <text class="ml8">温州市卫生健康委</text>
         </view>
+        </view>
+
+   
       </view>
     </view>
   </view>

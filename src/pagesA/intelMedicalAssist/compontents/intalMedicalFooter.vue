@@ -530,7 +530,7 @@
   };
 
   const getGuessServerBottom = () => {
-    return;
+    // return;
     setTimeout(() => {
       query
         .selectAll(`.guess-server`)
@@ -538,7 +538,7 @@
           guessServerBottom.value = `calc(100vh - 800rpx - ${data[0].height}px)`;
         })
         .exec();
-    }, 0);
+    }, 100);
   };
 
   const getAuth = () => {
