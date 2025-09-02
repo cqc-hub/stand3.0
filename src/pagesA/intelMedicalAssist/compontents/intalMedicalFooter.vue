@@ -266,7 +266,7 @@
   const serverArray = computed(() => {
     getGuessServerBottom();
     if (props.headerConfig.showHeader) {
-      return props?.guessServerList?.slice(0, 9);
+      return props?.guessServerList;
     } else {
       return props?.guessServerList?.slice(0, 6);
     }
