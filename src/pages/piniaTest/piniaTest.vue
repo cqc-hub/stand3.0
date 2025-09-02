@@ -407,6 +407,13 @@
     addition: { patientId: '_p' },
     text: '满意度',
   };
+  const 天水处方查询: TButtonConfig = {
+    path: 'pagesC/question/questionAfterVisit3',
+    type: 'h5',
+    isSelfH5: '1',
+    addition: { patientId: '_p' },
+    text: '天水处方查询',
+  };
 
   const 多住院记录: TButtonConfig = {
     path: 'pagesA/hospitalCare/choosePatient',
@@ -543,11 +550,11 @@
   const testbuttonConfig = ref(智能客服);
   onMounted(() => {
     setTimeout(() => {
-      // init();
+      init();
     }, 1000);
   });
 
   const init = async () => {
-    useTBanner(智能客服);
+    useTBanner(天水处方查询);
   };
 </script>
