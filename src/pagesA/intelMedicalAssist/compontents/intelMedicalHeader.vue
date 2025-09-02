@@ -53,8 +53,8 @@
       <img
         v-else
         :src="
-          globalGl.BASE_IMG + distinctiveImage ||
-          'intelMedicalAssist_person.png'
+          globalGl.BASE_IMG +
+          (distinctiveImage || 'intelMedicalAssist_person.png')
         "
         class="w-full"
         :class="{ 'img-1001017': distinctiveImage ? true : false }"
@@ -80,7 +80,7 @@
           />
         </view>
       </view>
-      <view class="cn f26">{{title}}为您服务~</view>
+      <view class="cn f26">{{ title }}为您服务~</view>
     </view>
     <view class="person-say pt12 pb12 pl32 pr32">
       <view class="key-in">
@@ -137,7 +137,7 @@
     initWithMess,
     personImgClick,
     distinctiveImage,
-    title
+    title,
   } from '../utils/utils';
   import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
   import GCustomNavbar from '@/components/g-custom-navbar/g-custom-navbar.vue';
