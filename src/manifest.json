@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb54f397780bfacbc",
+    "appid": "wxa50129d260033b82",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -73,7 +73,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003164605058",
+    "appid": "2021005176652664",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -98,7 +98,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "安康市中医医院",
+  "name": "溧阳市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

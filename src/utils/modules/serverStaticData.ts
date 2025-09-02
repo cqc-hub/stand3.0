@@ -691,7 +691,7 @@ export class ServerStaticData {
           // #endif
         }
 
-        if (this.env === 'develop' || this.env === 'trial') {
+        if (this.env === 'develop') {
           // ...
           insertsObject(sysConfigEnv, systemConfig);
         }
