@@ -64,7 +64,6 @@ export const useLunchInit1001035 = () => {
         method: 'GET',
         success: (res) => {
           var _a;
-          console.log(res, 'res');
           if (
             res.statusCode === 200 &&
             ((_a = res.data) == null ? void 0 : _a.publicKey)

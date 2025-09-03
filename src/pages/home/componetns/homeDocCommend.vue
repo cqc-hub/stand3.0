@@ -55,6 +55,7 @@
                 gStores.globalStore.isTcmStyle ? '-tcm' : ''
               }.png`
             "
+            lazy-load
             class="doc-info-avatar-1"
             mode="aspectFill"
           />
