@@ -12,6 +12,7 @@
         @click="avatarClick"
         class="doc-info-avatar mr24"
         mode="aspectFill"
+        lazy-load
       />
       <!-- </g-login> -->
 

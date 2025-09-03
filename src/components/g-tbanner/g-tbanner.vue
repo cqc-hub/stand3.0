@@ -7,6 +7,7 @@
         class="nav"
         :src="config.src"
         mode="widthFix"
+        lazy-load
       />
     </view>
   </view>

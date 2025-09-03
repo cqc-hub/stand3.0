@@ -14,7 +14,7 @@
               <view class="item-title text-ellipsis">
                 {{ item.label }}
               </view>
-              <image class="right-image" :src="img_url + 'lxfy-arraw.png'" />
+              <image class="right-image" :src="img_url + 'lxfy-arraw.png'" lazy-load />
             </view>
 
             <view class="item-row-right">

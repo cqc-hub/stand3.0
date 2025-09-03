@@ -56,6 +56,7 @@
               }  `"
               :src="item.iconfont"
               mode="widthFix"
+              lazy-load
             />
             <text
               v-else
@@ -96,6 +97,7 @@
               :class="`icon-font grid-resize`"
               :src="item.iconfont"
               mode="widthFix"
+              lazy-load
             />
             <text v-else :class="`icon-font grid-resize ${item.iconfont}`" />
             <view class="grid-label text-ellipsis">{{ item.title }}</view>

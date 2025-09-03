@@ -15,6 +15,7 @@
                   : 'img_old@3x.png'
               }`"
               alt=""
+              lazy-load
             />
           </view>
           <view class="old-title" v-if="!gStores.globalStore.modeOld">

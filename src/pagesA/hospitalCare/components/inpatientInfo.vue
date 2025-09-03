@@ -16,6 +16,7 @@
             :src="getAvatar(gStores.userStore.patChoose.patientSex)"
             mode="widthFix"
             @load="loadImg"
+            lazy-load
           ></image>
 
           <view class="user-info">

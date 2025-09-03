@@ -18,6 +18,7 @@
         class="user-avatar"
         :src="getAvatar(pat.patientSex)"
         mode="widthFix"
+        lazy-load
       />
       <view class="user-label f36 text-ellipsis">
         <text class="user-name">{{ gStores.userStore.getPatName(pat) }}</text>

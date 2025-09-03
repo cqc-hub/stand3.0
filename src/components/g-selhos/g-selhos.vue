@@ -11,6 +11,7 @@
         <image
           :src="$global.BASE_IMG + 'v3-gsel-hos-icon.png'"
           class="hos-icon mr24"
+          lazy-load
         />
         <view class="f32 text-ellipsis">{{ getHosName }}</view>
       </view>

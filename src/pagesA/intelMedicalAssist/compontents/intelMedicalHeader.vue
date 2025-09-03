@@ -41,6 +41,7 @@
       :src="globalGl.BASE_IMG + 'intelMedicalAssist_bg.png'"
       class="w-full bg-img relative"
       id="bg-img"
+      lazy-load
     />
     <!-- <view class="wihite-mask"></view> -->
     <view class="person-img relative">
@@ -48,6 +49,7 @@
         v-if="gStores.globalStore.sysCode === '1001017'"
         :src="globalGl.BASE_IMG + 'intelMedicalAssist_person_1001017.png'"
         class="img-1001017"
+        lazy-load
       />
 
       <img
@@ -59,6 +61,7 @@
         class="w-full"
         :class="{ 'img-1001017': distinctiveImage ? true : false }"
         @click="personImgClick"
+        lazy-load
       />
     </view>
 
@@ -77,6 +80,7 @@
           <img
             :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
             class="w-full ml8"
+            lazy-load
           />
         </view>
       </view>

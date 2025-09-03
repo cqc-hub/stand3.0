@@ -94,7 +94,7 @@
 
                 <view class="w-full mb40">
                   <view class="pr32 pl32">
-                    <img :src="barCodeImg" class="bar-code-img w-full" />
+                    <img :src="barCodeImg" class="bar-code-img w-full" lazy-load />
                   </view>
                 </view>
               </block>

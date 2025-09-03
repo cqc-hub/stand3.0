@@ -14,6 +14,7 @@
         class="power-tip"
         mode="widthFix"
         :src="$global.BASE_IMG + 'shaox_tip.png'"
+        lazy-load
       />
     </view>
 
@@ -24,6 +25,7 @@
             class="power-hos-img"
             mode="widthFix"
             :src="$global.BASE_IMG + 'shaox_hos_绿色能量@2x.png'"
+            lazy-load
           />
         </view>
 

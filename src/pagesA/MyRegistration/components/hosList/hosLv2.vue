@@ -16,6 +16,7 @@
         :src="$global.BASE_IMG + 'department-card-list-bg1.png'"
         mode="widthFix"
         class="bg-logo my-disabled"
+        lazy-load
       />
     </view>
 

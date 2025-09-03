@@ -6,7 +6,7 @@
       @click="itemClick(item)"
       class="flex-normal"
     >
-      <img :src="$global.BASE_IMG+item.ico" class="mr8 menu-ico" />
+      <img :src="$global.BASE_IMG+item.ico" class="mr8 menu-ico" lazy-load />
       <view class="f32 color-blue">{{ item.label }}</view>
     </view>
   </view>

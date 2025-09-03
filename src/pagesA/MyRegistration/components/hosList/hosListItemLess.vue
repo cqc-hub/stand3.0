@@ -4,7 +4,7 @@
       <view v-if="item.intro" @click="introClick" class="hos-intro f24">
         介绍
       </view>
-      <image :src="item.hosPhoto" @click="imgClick" @err="loadErr" />
+      <image :src="item.hosPhoto" @click="imgClick" @err="loadErr" lazy-load />
     </view>
 
     <view class="content" @click="itemClick">

@@ -6,7 +6,7 @@
       @click="goNetService(item)"
       class="item g-flex-rc-cc g-border"
     >
-      <image :src="item.img" class="item-img" mode="" />
+      <image :src="item.img" class="item-img" mode="" lazy-load />
 
       <view class="g-bold f36 text-no-wrap">{{ item.title }}</view>
 
