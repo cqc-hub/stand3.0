@@ -332,12 +332,15 @@ export const getMedicalAuthCode = async (): Promise<string> => {
     });
 
     await new Promise((success, j) => {
+      let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
+      if (['1001084'].includes(gStores.globalStore.sysCode)) {
+        envVersion = 'release';
+      }
       uni.navigateToMiniProgram({
         appId,
         // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
         path: joinQuery(path, cacheStore.medicalPathArg),
-        // envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-        envVersion: 'release',
+        envVersion,
         fail({ errMsg }) {
           if (errMsg.includes('fail cancel')) {
             setLocalStorage({
