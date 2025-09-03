@@ -76,7 +76,7 @@
 
   import {
     getMedical1001035Info,
-    handlerMedical1001035Pay,
+    handlerMedicalPay1001035,
     TMedicalNationUploadRes,
     TWxAuthorize,
   } from './utils/clinicPayDetail';

@@ -124,6 +124,19 @@ export interface ISConfig {
       medicalNation?: {
         appId: string;
         path: string;
+
+        // 拼接到授权时候path - 东软医保模式必有以下可选字段
+        pathExtraData?: {
+          openType?: string;
+          cityCode?: string;
+          orgCodg?: string;
+          orgChnlCrtfCodg?: string;
+          bizType?: string;
+          orgAppId?: string;
+          channel?: string;
+        } & BaseObject;
+        // 是否东软医保模式
+        isModeDongRuanMedical?: '1';
       };
       //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: {
@@ -180,9 +193,6 @@ export interface ISConfig {
           };
         };
       };
-
-      // 拼接到授权时候path
-      pathExtraData?: BaseObject;
     };
   };
 
@@ -620,19 +630,21 @@ const scJson: Record<string, ISConfig> = {
           appId: 'wxe183cd55df4b4369',
           // path: `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${'320200'}&channel=${'AAGDjhBtPzo4LJTh9gCenRkB'}&orgChnlCrtfCodg=${'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe'}&orgCodg=${'H32028200358'}&bizType=04107&orgAppId=${'1GU9S5QVB01M76430B0A000038F064B8'}`,
           path: `auth/pages/bindcard/auth/index`,
+          pathExtraData: {
+            openType: 'getAuthCode',
+            cityCode: '320200',
+            channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
+            orgCodg: 'H32028200358',
+            bizType: '04107',
+            orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
+          },
+          isModeDongRuanMedical: '1',
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
-        pathExtraData: {
-          openType: 'getAuthCode',
-          cityCode: '320200',
-          channel: 'AAGDjhBtPzo4LJTh9gCenRkB',
-          orgChnlCrtfCodg:
-            'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvGdh09Ghvhyk/swHL2NBPe',
-          orgCodg: 'H32028200358',
-          bizType: '04107',
-          orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
-        },
+
         // medicalDefault: '1'
         // isGbFamilyPayment: '1',
       },
@@ -704,20 +716,20 @@ const scJson: Record<string, ISConfig> = {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            cityCode: '320400',
+            orgCodg: 'H32048100095',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
+            bizType: '04107',
+            orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
+            channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
+          },
+          isModeDongRuanMedical: '1',
         },
         isMedicalOrder: '1',
-        // isGbFamilyPayment: '1',
-        // medicalDefault: '1'
-        // isGbFamilyPayment: '1',
-        pathExtraData: {
-          openType: 'getAuthCode',
-          cityCode: '320400',
-          orgCodg: 'H32048100095',
-          orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
-          bizType: '04107',
-          orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
-          channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
-        },
+        isGbFamilyPayment: '1',
       },
     },
   },
@@ -757,7 +769,7 @@ const scJson: Record<string, ISConfig> = {
       },
     },
   },
-   /**
+  /**
    * 安康中医医院
    */
   1001044: {
@@ -775,7 +787,6 @@ const scJson: Record<string, ISConfig> = {
           // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610101&channel=AAEoVvqZuWU8BNSYVtMM15px&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv2/NlHf1H5KZT+T46wCMi1&orgCodg=H61010400913&orgAppId=1IOS9I97D1CO4460C80A00004B82B3CD',
         },
         isMedicalOrder: '1',
-  
       },
     },
   },

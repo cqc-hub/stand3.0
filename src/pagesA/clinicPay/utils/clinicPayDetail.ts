@@ -253,6 +253,15 @@ export const getMedicalConfigInfo = ():
   return null;
 };
 
+export const getMedicalNationInfo = () => {
+  const res = getMedicalConfigInfo();
+  if (res) {
+    return res.medicalNation;
+  }
+
+  return null;
+};
+
 /** 是否医保插件模式 */
 export const getIsMedicalModePlugin = () => {
   return !!getMedicalConfigInfo()?.medicalPlugin;
@@ -321,8 +330,8 @@ export const getMedicalAuthCode = async (): Promise<string> => {
 
   if (!qrCode) {
     const w = _wx!;
-    const { pathExtraData, medicalNation } = w;
-    let { appId, path } = medicalNation!;
+    const { medicalNation } = w;
+    let { appId, path, pathExtraData } = medicalNation!;
     if (pathExtraData) {
       path = joinQuery(path, pathExtraData);
     }
@@ -1653,6 +1662,7 @@ export const usePayPage = () => {
       }
 
       if (isMedicalMode) {
+        const medicalNationInfo = getMedicalNationInfo();
         const cardNumber = pageProps.value.params
           ? pageProps.value.deParams?.cardNumber
           : '';
@@ -1665,16 +1675,19 @@ export const usePayPage = () => {
         }
         await getMedicalArgWithFamily(pageProps.value.params);
 
-        if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
-          const authCode = await getMedicalAuthCode();
-          const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-          const OPENID = gStores.globalStore.openId;
-          const MEDORGORD = selUnPayList.value
-            .map((item) => item.serialNo)
-            .join(',');
-          const ORGCODG = 'H32028200358';
-          const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+        // #ifdef MP-ALIPAY
+        if (getIsAliMedicalNation()) {
+          payAliMedicalNation();
+        } else {
+          payMoneyMedicalPlugin();
+        }
+        // #endif
 
+        // #ifdef  MP-WEIXIN
+        if (
+          medicalNationInfo &&
+          medicalNationInfo.isModeDongRuanMedical === '1'
+        ) {
           const resultConfig = encodeURIComponent(
             JSON.stringify({
               cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
@@ -1682,25 +1695,17 @@ export const usePayPage = () => {
                 '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
             })
           );
-          uni.setStorageSync('resultConfig', resultConfig);
-          const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-          useTBanner({
-            type: 'h5',
-            path: url,
-          });
-          return;
-        } else {
-          // #ifdef MP-ALIPAY
-          if (getIsAliMedicalNation()) {
-            payAliMedicalNation();
-          } else {
-            payMoneyMedicalPlugin();
-          }
-          // #endif
-        }
+          const medOrgOrd = selUnPayList.value
+            .map((item) => item.serialNo)
+            .join(',');
 
-        // #ifdef  MP-WEIXIN
-        wxPayMoneyMedicalPlugin(medicalNationWx);
+          handlerMedicalPayDongRuan({
+            resultConfig,
+            medOrgOrd,
+          });
+        } else {
+          wxPayMoneyMedicalPlugin(medicalNationWx);
+        }
         // #endif
       }
     } else if (item.key === 'digital') {
@@ -1945,7 +1950,7 @@ export const usePayPage = () => {
     const medical1001035 = await getMedical1001035Info();
 
     if (medical1001035) {
-      handlerMedical1001035Pay({
+      handlerMedicalPay1001035({
         phsOrderSource: '2',
       });
       return;
@@ -2587,7 +2592,7 @@ export const getMedical1001035Info = async () => {
  * @param opt phsOrderSource 1-挂号 2-门诊
  * @returns
  */
-export const handlerMedical1001035Pay = async (opt: {
+export const handlerMedicalPay1001035 = async (opt: {
   phsOrderSource: '1' | '2';
 }) => {
   const { phsOrderSource } = opt;
@@ -2625,4 +2630,47 @@ export const handlerMedical1001035Pay = async (opt: {
       envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
     });
   }
+};
+
+/**
+ * 东软医保
+ * @example
+ *  resultConfig = encodeURIComponent(JSON.stringify({
+ *    cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
+ *    orderStatusRedirectUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1
+ *  }))
+ *
+ */
+export const handlerMedicalPayDongRuan = async ({
+  medOrgOrd,
+  resultConfig,
+}) => {
+  const medicalNationInfo = getMedicalNationInfo();
+  const gStores = new GStores();
+
+  if (!medicalNationInfo) {
+    throw new Error('不存在医保配置');
+  }
+  const pathExtraData = medicalNationInfo.pathExtraData!;
+  const { orgCodg, orgAppId: appId } = pathExtraData;
+  const authCode = await getMedicalAuthCode();
+  const openid = gStores.globalStore.openId;
+  uni.setStorageSync('resultConfig', resultConfig);
+
+  const url = joinQuery(
+    'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
+    {
+      openid,
+      medOrgOrd,
+      orgCodg,
+      appId,
+      authCode,
+      resultConfig,
+    }
+  );
+
+  useTBanner({
+    type: 'h5',
+    path: url,
+  });
 };
