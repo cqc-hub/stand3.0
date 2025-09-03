@@ -125,8 +125,8 @@ export interface ISConfig {
         appId: string;
         path: string;
 
-        // 拼接到授权时候path - 东软医保模式必有以下可选字段
         pathExtraData?: {
+          // 拼接到授权时候path - 东软医保模式必有以下可选字段
           openType?: string;
           cityCode?: string;
           orgCodg?: string;
@@ -135,8 +135,10 @@ export interface ISConfig {
           orgAppId?: string;
           channel?: string;
         } & BaseObject;
-        // 是否东软医保模式
-        isModeDongRuanMedical?: '1';
+        // 走东软医保模式
+        dongRuanMedicalInfo?: {
+          h5BaseUrl: string;
+        };
       };
       //微信跨端插件(微信吱口令跳支付宝) https://mp.weixin.qq.com/wxopen/plugindevdoc?appid=wx12cec70855c0cacf&token=&lang=zh_CN
       crossProgramBizType?: {
@@ -640,7 +642,9 @@ const scJson: Record<string, ISConfig> = {
             bizType: '04107',
             orgAppId: '1GU9S5QVB01M76430B0A000038F064B8',
           },
-          isModeDongRuanMedical: '1',
+          dongRuanMedicalInfo: {
+            h5BaseUrl: 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui',
+          },
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
@@ -726,7 +730,9 @@ const scJson: Record<string, ISConfig> = {
             orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
             channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
           },
-          isModeDongRuanMedical: '1',
+          dongRuanMedicalInfo: {
+            h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
+          },
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',

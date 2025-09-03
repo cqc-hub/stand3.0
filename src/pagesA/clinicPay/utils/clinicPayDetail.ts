@@ -1684,10 +1684,7 @@ export const usePayPage = () => {
         // #endif
 
         // #ifdef  MP-WEIXIN
-        if (
-          medicalNationInfo &&
-          medicalNationInfo.isModeDongRuanMedical === '1'
-        ) {
+        if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
           const resultConfig = encodeURIComponent(
             JSON.stringify({
               cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
@@ -2652,22 +2649,20 @@ export const handlerMedicalPayDongRuan = async ({
     throw new Error('不存在医保配置');
   }
   const pathExtraData = medicalNationInfo.pathExtraData!;
+  const dongRuanMedicalInfo = medicalNationInfo.dongRuanMedicalInfo!
   const { orgCodg, orgAppId: appId } = pathExtraData;
   const authCode = await getMedicalAuthCode();
   const openid = gStores.globalStore.openId;
   uni.setStorageSync('resultConfig', resultConfig);
-
-  const url = joinQuery(
-    'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui/#/pay-loading',
-    {
-      openid,
-      medOrgOrd,
-      orgCodg,
-      appId,
-      authCode,
-      resultConfig,
-    }
-  );
+  // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
+  const url = joinQueryForUrl(`${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`, {
+    openid,
+    medOrgOrd,
+    orgCodg,
+    appId,
+    authCode,
+    resultConfig,
+  });
 
   useTBanner({
     type: 'h5',

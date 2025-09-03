@@ -1034,10 +1034,7 @@
 
           await getMedicalArgWithFamily();
           // #ifdef  MP-WEIXIN
-          if (
-            medicalNationInfo &&
-            medicalNationInfo.isModeDongRuanMedical === '1'
-          ) {
+          if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
             const { patientId } = gStores.userStore.patChoose;
             const {
               hosOrderId: medOrgOrd,
