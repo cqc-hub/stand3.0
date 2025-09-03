@@ -8,12 +8,12 @@
     <view class="mt24 ml16 flex items-center justify-between">
       <view class="department-doc-title g-bold f36"> 名医列表({{ _allDocList.length }}) </view>
 
-      <view @click="isFilterDoctor = !isFilterDoctor" class="flex-normal pt6 pb6 mr32">
+      <!-- <view @click="isFilterDoctor = !isFilterDoctor" class="flex-normal pt6 pb6 mr32">
         <text class="iconfont f48">
           {{ isFilterDoctor ? "&#xe6d0;" : "&#xe6ce;" }}
         </text>
         <text>只看有号</text>
-      </view>
+      </view> -->
     </view>
     <view v-if="isComplete && _allDocList.length" class="pr24 pl24">
       <view class="safe-height"></view>
@@ -78,13 +78,14 @@ const _allDocList = computed(() => {
   return list.value;
 });
 const docCLick = (item) => {
-  const { hosDocId, hosId, hosDeptId, docAppointStatus } = item;
-    // 有排班
+  const { hosDocId, hosId,hosDocName,docTitleName, goodAt,introduce } = item;
+    // 有排班-只查询医生下面
     uni.navigateTo({
       url: joinQueryForUrl("/pagesA/MyRegistration/DoctorDetails", {
         hosDocId,
         hosId,
-        hosDeptId,
+        docName:hosDocName,
+        docTitleName, 
       }),
     });
 };

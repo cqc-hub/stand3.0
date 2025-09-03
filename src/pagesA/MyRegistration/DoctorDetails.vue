@@ -64,7 +64,7 @@
                   <view class="flex-normal">
                     <view class="doc-name mr24 f48 g-bold">
                       <text class="---text-ellipsis">
-                        {{ docDetail.docName }}
+                        {{ props.docName || docDetail.docName }}
                       </text>
                     </view>
 

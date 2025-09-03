@@ -29,9 +29,9 @@
                 组长
               </view>
             </view>
-            <button v-if="item.docAppointStatus==='1'" class="btn btn-primary f26"  @click="itemClick(item)" >
+            <!-- <button v-if="item.docAppointStatus==='1'" class="btn btn-primary f26"  @click="itemClick(item)" >
               立即预约
-            </button>
+            </button> -->
           </view>
 
           <view class="doc-info-introduce-goodat text-ellipsis">
