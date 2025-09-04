@@ -532,7 +532,7 @@
     },
   };
   //h5首页
- const index = {
+  const index = {
     _type: 'useTBanner',
     type: 'h5',
     isSelfH5: '1',
@@ -541,11 +541,11 @@
     isLocal: '1',
   } as TButtonConfig;
 
-  const 智能客服={
-    text:'智能客服',
-    path:'pagesA/intelMedicalAssist/intelMedicalAssist',
-    type:'self'
-  }as TButtonConfig
+  const 智能客服 = {
+    text: '智能客服',
+    path: 'pagesA/intelMedicalAssist/intelMedicalAssist',
+    type: 'self',
+  } as TButtonConfig;
 
   const testbuttonConfig = ref(智能客服);
   onMounted(() => {
@@ -555,6 +555,10 @@
   });
 
   const init = async () => {
-    useTBanner(天水处方查询);
+    // useTBanner(天水处方查询);
+    useTBanner({
+      type: 'h5',
+      path: 'https://wx.wzhealth.com/feymobileweb/common/redirect?redirectUrl=user%2Fcenter'
+    });
   };
 </script>
