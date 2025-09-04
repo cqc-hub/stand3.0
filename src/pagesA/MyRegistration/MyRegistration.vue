@@ -363,10 +363,7 @@
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
-      const { orderId, hosDeptId, hosOrderId, hosData } = item;
-      const patientId = isShowFilterOrderStatus.value
-        ? pat.value?.patientId || gStores.userStore.patChoose?.patientId
-        : '';
+      const { orderId, hosDeptId, hosOrderId, hosData = '', patientId } = item;
       const preConsultation: TButtonConfig = {
         type: 'h5',
         isSelfH5: '1',
@@ -377,7 +374,7 @@
           orderId,
           hosDeptId,
           hosOrderId,
-          hosData:encodeURIComponent(hosData as string),
+          hosData: encodeURIComponent(hosData as string),
           patientId,
         },
         addition: {
