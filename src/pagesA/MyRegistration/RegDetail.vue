@@ -669,7 +669,6 @@
     qrCodeOpt.value.size = 0;
   };
 
-  const isShowConsultationDialog = ref(false);
 
   const showConsultationDialog1001048 = async () => {
     if (gStores.globalStore.sysCode !== '1001048') {
@@ -681,7 +680,6 @@
       cancelOrderDialogConfirm = confirm;
     });
 
-    isShowConsultationDialog.value = false;
     goPreConsultation();
   };
 
@@ -703,13 +701,11 @@
         cancelOrderDialogConfirm = confirm;
       });
 
-      isShowConsultationDialog.value = false;
       goPreConsultation();
     }
   };
 
   const goPreConsultation = () => {
-    isShowConsultationDialog.value = false;
     if (orderConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
       useTBanner(
