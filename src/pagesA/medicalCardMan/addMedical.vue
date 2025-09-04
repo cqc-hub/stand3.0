@@ -824,7 +824,7 @@
    */
   let oldFormList: any[] = [];
   const medicalTypeChange = async (value: '-1' | '0' | '1' | '2') => {
-    const {
+    let {
       isGuardianWithIdCard,
       isHidePatientTypeInPerfect,
       isSmsVerify,
@@ -880,11 +880,6 @@
       // formKey.referenceId,
     ];
 
-    // 判断是否需要民族
-    if (isDropNation !== '1') {
-      _patientInfo.unshift(formKey.nation);
-    }
-
     if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
@@ -938,10 +933,7 @@
           // }
 
           // 非身份证不需要民族
-          const nationIdx = _patientInfo.findIndex((o) => o === formKey.nation);
-          if (nationIdx > -1) {
-            _patientInfo.splice(nationIdx, 1);
-          }
+          isDropNation = '1';
         }
 
         // 显示监护人
@@ -955,6 +947,7 @@
             ..._sexAndBirth,
             formKey.idType,
             formKey.idCard,
+            formKey.nation,
             ..._parentInfo,
             ..._patientInfo,
           ]
@@ -967,6 +960,7 @@
           ...[
             formKey.patientName,
             ..._sexAndBirth,
+            formKey.nation,
             ..._parentInfo,
             ..._patientInfo,
           ]
@@ -976,6 +970,13 @@
       default:
         gStores.messageStore.showMessage('未知的就诊人类型');
         break;
+    }
+
+    if (isDropNation === '1') {
+      const nationIdx = listArr.findIndex((o) => o === formKey.nation);
+      if (nationIdx > -1) {
+        listArr.splice(nationIdx, 1);
+      }
     }
 
     if (_isPageFirst.value && isUserInfoShareAgree === '1') {

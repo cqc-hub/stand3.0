@@ -97,7 +97,6 @@ export const tempList: TInstance[] = [
     field: 'select',
     options: [],
     autoOptions: 'nationTerms',
-    rowStyle: 'margin-bottom: 16rpx;',
     labelWidth: '220rpx',
     filterOptions(opt, search) {
       if (search) {
@@ -331,6 +330,7 @@ export const tempList: TInstance[] = [
     key: formKey.address,
     field: 'address',
     labelWidth: '220rpx',
+    rowStyle: 'margin-top: 16rpx;',
   },
 
   {

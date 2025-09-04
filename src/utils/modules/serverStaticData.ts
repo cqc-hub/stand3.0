@@ -251,7 +251,10 @@ export const useTBanner = async (
       let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode, isTcmStyle } = gStores.globalStore;
 
-      if ((await getMiniProgramEnv()) === 'develop') {
+      if (
+        (await getMiniProgramEnv()) === 'develop' &&
+        globalGl.env !== 'prod'
+      ) {
         baseUrl = h5UrlLocal;
       }
 

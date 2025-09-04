@@ -555,10 +555,7 @@
   });
 
   const init = async () => {
-    // useTBanner(天水处方查询);
-    useTBanner({
-      type: 'h5',
-      path: 'https://wx.wzhealth.com/feymobileweb/common/redirect?redirectUrl=user%2Fcenter'
-    });
+    useTBanner(天水处方查询);
+    // useTBanner(用药查询);
   };
 </script>
