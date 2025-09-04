@@ -40,7 +40,7 @@
                     :key="'grid-item' + index"
                     @click="handleClickServer(item)"
                   >
-                    <img :src="imgUrl + item.icon" alt="" class="icon" />
+                    <img :src="imgUrl + item.icon" alt="" class="icon" lazy-load />
                     <view class="label f28">{{ item.text }}</view>
                   </view>
                 </view>

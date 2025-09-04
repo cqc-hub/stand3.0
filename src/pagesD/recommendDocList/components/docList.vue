@@ -16,6 +16,7 @@
           "
           class="doc-info-avatar"
           mode="aspectFill"
+          lazy-load
         />
 
         <view class="doc-info-introduce">
@@ -29,9 +30,9 @@
                 组长
               </view>
             </view>
-            <button v-if="item.docAppointStatus==='1'" class="btn btn-primary f26"  @click="itemClick(item)" >
+            <!-- <button v-if="item.docAppointStatus==='1'" class="btn btn-primary f26"  @click="itemClick(item)" >
               立即预约
-            </button>
+            </button> -->
           </view>
 
           <view class="doc-info-introduce-goodat text-ellipsis">
@@ -49,7 +50,7 @@
       </view>
 
       <view>
-        <view v-if="item.goodAt " class="doc-intro ellipsis-line-clamp2">
+        <view v-if="item.goodAt" class="doc-intro ellipsis-line-clamp2">
           <image
             :src="
               $global.BASE_IMG +
@@ -142,7 +143,7 @@
             color: var(--hr-neutral-color-7);
           }
         }
-        .btn{ 
+        .btn {
           padding: 8rpx 24rpx;
           background: #296fff;
           border-radius: 28rpx;

@@ -16,6 +16,7 @@
         :src="$global.BASE_IMG + `stand3_home_nav_bg-tcm.png`"
         class="w-full absolute home-nav-bg"
         mode="widthFix nav-img-bg"
+        lazy-load
       />
       <view class="relative z-1">
         <home-Nav />

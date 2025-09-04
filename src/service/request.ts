@@ -95,7 +95,7 @@ class requestClass {
       };
       options.fail = function (err) {
         uni.showToast({
-          title: '系统压力有点大~',
+          title: '网络连接异常，请尝试切换网络或开启飞行模式再恢复后重试！',
           icon: 'none',
           duration: 3000,
         });

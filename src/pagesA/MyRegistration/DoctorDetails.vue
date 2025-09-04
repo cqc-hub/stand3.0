@@ -64,7 +64,7 @@
                   <view class="flex-normal">
                     <view class="doc-name mr24 f48 g-bold">
                       <text class="---text-ellipsis">
-                        {{ docDetail.docName }}
+                        {{ props.docName || docDetail.docName }}
                       </text>
                     </view>
 
@@ -81,20 +81,15 @@
                     </view>
                   </view>
 
-                  <view class="mt12">
+                  <view class="mt12 color-444">
                     <text
+                      v-for="(item, i) in getShowRow2"
+                      :key="i"
                       :class="{
-                        'g-split-line':
-                          docDetail.deptName && pageConfig.orderMode !== '1',
+                        'g-split-line  mr12 pr12': i !== getShowRow2.length - 1,
                       }"
-                      class="color-444 mr12 pr12"
                     >
-                      <!-- {{ $global.systemInfo.name || '' }} -->
-                      {{ docDetail.hosName || '' }}
-                    </text>
-
-                    <text v-if="pageConfig.orderMode !== '1'" class="color-444">
-                      {{ docDetail.deptName || '' }}
+                      {{ item }}
                     </text>
                   </view>
 
@@ -583,6 +578,16 @@
     return [];
   });
 
+  const getShowRow2 = computed(() => {
+    const c: string[] = [];
+    if (pageConfig.value.orderMode !== '1') {
+      c.push(docDetail.value.hosName!);
+      c.push(docDetail.value.deptName!);
+    }
+
+    return c.filter((o) => o);
+  });
+
   const tableData = computed(() => {
     return [
       {
@@ -788,6 +793,7 @@
 
     tabCurrent.value = idx;
   };
+
   const groupedByHosId = (originalArray) => {
     return originalArray.reduce((acc, current) => {
       current.schDateList.forEach((item) => {

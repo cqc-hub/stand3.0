@@ -24,6 +24,7 @@
               mode="scaleToFill"
               :src="item.iconfont"
               @tap="gotoPath(item)"
+              lazy-load
             />
             <!-- </g-login> -->
           </swiper-item>
@@ -51,6 +52,7 @@
               <image
                 mode="scaleToFill"
                 :src="props.leftFunctionList[0].iconfont"
+                lazy-load
               />
               <!-- </g-login> -->
             </block>
@@ -82,6 +84,7 @@
                   class="banner-img"
                   mode="scaleToFill"
                   :src="item.iconfont"
+                  lazy-load
                 />
               </swiper-item>
             </swiper>

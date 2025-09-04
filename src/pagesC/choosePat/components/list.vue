@@ -19,6 +19,7 @@
         class="user-avatar"
         :src="getAvatar(pat.patientSex)"
         mode="widthFix"
+        lazy-load
       />
       <view>
         <view class="user-label text-ellipsis">

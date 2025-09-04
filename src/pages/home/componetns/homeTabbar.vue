@@ -46,6 +46,7 @@
                 }"
                 mode="heightFix"
                 class="animate__animated animate__fast"
+                lazy-load
               />
               <text
                 :class="{

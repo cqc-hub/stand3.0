@@ -10,6 +10,7 @@
         :src="getAvatar(getShowPat.patientSex)"
         mode="widthFix"
         @load="loadImg"
+        lazy-load
       />
 
       <view class="user-info text-ellipsis">

@@ -18,6 +18,7 @@
             'img-filter': !getShow(item.value),
           }"
           class="rate-img mb8"
+          lazy-load
         />
 
         <text

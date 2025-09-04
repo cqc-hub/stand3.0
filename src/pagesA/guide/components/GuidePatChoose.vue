@@ -5,6 +5,7 @@
         :src="globalGl.BASE_IMG + 'stand3-guide-user-bg.png'"
         class="w-full bg-img relative"
         mode="widthFix"
+        lazy-load
       />
 
       <view

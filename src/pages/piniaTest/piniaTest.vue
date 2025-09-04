@@ -407,6 +407,13 @@
     addition: { patientId: '_p' },
     text: '满意度',
   };
+  const 天水处方查询: TButtonConfig = {
+    path: 'pagesC/question/questionAfterVisit3',
+    type: 'h5',
+    isSelfH5: '1',
+    addition: { patientId: '_p' },
+    text: '天水处方查询',
+  };
 
   const 多住院记录: TButtonConfig = {
     path: 'pagesA/hospitalCare/choosePatient',
@@ -525,7 +532,7 @@
     },
   };
   //h5首页
- const index = {
+  const index = {
     _type: 'useTBanner',
     type: 'h5',
     isSelfH5: '1',
@@ -534,20 +541,21 @@
     isLocal: '1',
   } as TButtonConfig;
 
-  const 智能客服={
-    text:'智能客服',
-    path:'pagesA/intelMedicalAssist/intelMedicalAssist',
-    type:'self'
-  }as TButtonConfig
+  const 智能客服 = {
+    text: '智能客服',
+    path: 'pagesA/intelMedicalAssist/intelMedicalAssist',
+    type: 'self',
+  } as TButtonConfig;
 
   const testbuttonConfig = ref(智能客服);
   onMounted(() => {
     setTimeout(() => {
-      // init();
+      init();
     }, 1000);
   });
 
   const init = async () => {
-    useTBanner(智能客服);
+    useTBanner(天水处方查询);
+    // useTBanner(用药查询);
   };
 </script>

@@ -32,7 +32,7 @@
             <text>，智能医助将为您解读报告~</text>
           </view>
           <view class="report-img relative">
-            <img :src="globalGl.BASE_IMG + 'znyz_jxw.png'" class="w-full" />
+            <img :src="globalGl.BASE_IMG + 'znyz_jxw.png'" class="w-full" lazy-load />
           </view>
         </view>
         <view class="content relative">
@@ -41,8 +41,8 @@
             <text class="color-888 f26">请上传图文清晰、边框完整的图片</text>
           </view>
           <view class="report-img flex-normal p32c pt48">
-            <img :src="globalGl.BASE_IMG + 'znyz_jc.png'" class="w-full" />
-            <img :src="globalGl.BASE_IMG + 'znyz_jy.png'" class="w-full" />
+            <img :src="globalGl.BASE_IMG + 'znyz_jc.png'" class="w-full" lazy-load />
+            <img :src="globalGl.BASE_IMG + 'znyz_jy.png'" class="w-full" lazy-load />
           </view>
         </view>
       </view>

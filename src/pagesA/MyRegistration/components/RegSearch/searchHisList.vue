@@ -11,6 +11,7 @@
         class="hot-logo"
         :src="$global.BASE_IMG + 'order-reg-search-hot.png'"
         mode="widthFix"
+        lazy-load
       />
 
       <view class="f28 text-ellipsis label">{{ item.label }}</view>

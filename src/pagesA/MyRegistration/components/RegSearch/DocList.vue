@@ -13,6 +13,7 @@
             @click="avatarClick(item)"
             class="doc-info-avatar"
             mode="aspectFill"
+            lazy-load
           />
 
           <view @click="avatarClick(item)" class="doc-info-introduce">

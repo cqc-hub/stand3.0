@@ -435,6 +435,10 @@
     };
 
     const { result } = await api.getCaseCopyDetail<CaseCopeItemDetail>(arg);
+    if (!result) {
+      gStores.messageStore.showMessage('未获取到接口数据', 3000);
+      return;
+    }
 
     let {
       outInfo,

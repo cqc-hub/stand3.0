@@ -24,6 +24,7 @@
           "
           mode="scaleToFill"
           class="icon-bg mr12"
+          lazy-load
         />
 
         <text v-if="is1001035" class="f36 font-semibold">名医推荐</text>
@@ -55,6 +56,7 @@
                 gStores.globalStore.isTcmStyle ? '-tcm' : ''
               }.png`
             "
+            lazy-load
             class="doc-info-avatar-1"
             mode="aspectFill"
           />
@@ -109,6 +111,7 @@
                 "
                 class="doc-info-avatar mr24"
                 mode="aspectFill"
+                lazy-load
               />
               <view>
                 <view>
@@ -130,6 +133,7 @@
                 "
                 class="doc-major-goodat mr12"
                 mode="widthFix"
+                lazy-load
               />
 
               <view class="flex-1 text-ellipsis f28 color-888">

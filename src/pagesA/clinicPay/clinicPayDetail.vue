@@ -303,9 +303,8 @@
     wxCrossProgramInfo,
     isModeMedicalHelp,
     getChineseMedicineList,
-    kw1
+    kw1,
   } = usePayPage();
-
 
   const isShowPatComponent = ref(false);
   const itemClick = (item: IPayListItem) => {
@@ -445,6 +444,15 @@
           '未完成电子医保凭证授权,无法继续医保结算'
         );
       }
+    }
+
+    // 省中wx医保回来（成功）
+    if (
+      gStores.globalStore.sysCode === '1001035' &&
+      gStores.globalStore.appShowData.referrerInfo?.extraData?.statuscode ===
+        '0'
+    ) {
+      tabChange(1);
     }
   });
 

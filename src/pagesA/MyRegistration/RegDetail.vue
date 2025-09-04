@@ -328,11 +328,17 @@
 
       <template v-else>
         <button
-          v-if="['0'].includes(orderRegInfo.orderStatus)"
+          v-if="['0', '60'].includes(orderRegInfo.orderStatus)"
           @click="refoundOrder"
           class="btn btn-plain btn-error g-border"
         >
-          {{ orderConfig.isOrderPay === '1' ? '退号' : '取消预约' }}
+          {{
+            orderRegInfo.orderStatus === '60'
+              ? '取消预约'
+              : orderConfig.isOrderPay === '1'
+              ? '退号'
+              : '取消预约'
+          }}
         </button>
 
         <block v-if="orderRegInfo.orderStatus === '70'">
@@ -488,7 +494,9 @@
     getMedicalArgWithFamily,
     getMedicalAuthCode,
     getMedical1001035Info,
-    handlerMedical1001035Pay,
+    handlerMedicalPay1001035,
+    getMedicalNationInfo,
+    handlerMedicalPayDongRuan,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -537,6 +545,7 @@
       '23',
       '45',
       '10',
+      '60',
       '70',
       '0',
       '20',
@@ -579,16 +588,15 @@
     if (getIsMedicalMode()) {
       const medicalMHelp = globalGl.sConfig.medicalMHelp!;
 
-      // #ifdef  MP-WEIXIN
-      return medicalMHelp?.wx?.isMedicalOrder === '1';
-      // #endif
-
-      // #ifdef MP-ALIPAY
-      return medicalMHelp?.alipay?.isMedicalOrder === '1';
-      // #endif
-    } else {
-      return false;
+      if (gStores.globalStore.ev === 'wx') {
+        return medicalMHelp?.wx?.isMedicalOrder === '1';
+      }
+      if (gStores.globalStore.ev === 'alipay') {
+        return medicalMHelp?.alipay?.isMedicalOrder === '1';
+      }
     }
+
+    return false;
   };
 
   const _qrCodeOpt = computed(() => {
@@ -1017,6 +1025,7 @@
 
       case 'medicare':
         const isMedicalMode = _getIsMedicalMode();
+        const medicalNationInfo = getMedicalNationInfo();
 
         if (isMedicalMode) {
           await new PatientUtils().upToMedicalPat({
@@ -1024,42 +1033,37 @@
           });
 
           await getMedicalArgWithFamily();
-          // 宜兴仅wx
-          if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
-            const authCode = await getMedicalAuthCode();
-            // console.log(authCode, return)
-            const { hosOrderId, orderId, hosId, hosDeptId } =
-              orderRegInfo.value;
+          // #ifdef  MP-WEIXIN
+          if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
             const { patientId } = gStores.userStore.patChoose;
-            const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-            const OPENID = gStores.globalStore.openId;
-            const ORGCODG = 'H32028200358';
-            const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
+            const {
+              hosOrderId: medOrgOrd,
+              orderId,
+              hosId,
+              hosDeptId,
+            } = orderRegInfo.value;
+
             const resultConfig = encodeURIComponent(
               JSON.stringify({
                 cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
-                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&success1001048=1`,
+                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&successPay=1`,
               })
             );
-            uni.setStorageSync('resultConfig', resultConfig);
-            const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${hosOrderId}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-
-            useTBanner({
-              type: 'h5',
-              path: url,
+            handlerMedicalPayDongRuan({
+              resultConfig,
+              medOrgOrd,
             });
           } else {
-            // #ifdef  MP-WEIXIN
             medicalNationWx(await getQxMedicalNation());
-            // #endif
-
-            // #ifdef MP-ALIPAY
-            // 国标医保
-            if (getIsAliMedicalNation()) {
-              payAliMedicalNation();
-            }
-            // #endif
           }
+          // #endif
+
+          // #ifdef MP-ALIPAY
+          // 国标医保
+          if (getIsAliMedicalNation()) {
+            payAliMedicalNation();
+          }
+          // #endif
         }
 
         break;
@@ -1125,7 +1129,7 @@
         'reg-detail-init': '1',
       });
 
-      handlerMedical1001035Pay({
+      handlerMedicalPay1001035({
         phsOrderSource: '1',
       });
       return;
@@ -1469,7 +1473,7 @@
     }
     await beforeEach(routeArg);
     await init();
-    if (p?.success1001048) {
+    if (p?.successPay && gStores.globalStore.sysCode === '1001048') {
       showConsultationDialog1001048();
     }
   });

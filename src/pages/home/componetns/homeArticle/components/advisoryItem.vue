@@ -34,7 +34,7 @@
         </view>
 
         <view class="img-box" v-if="item.titleImg">
-          <image :src="item.titleImg" />
+          <image :src="item.titleImg" lazy-load />
         </view>
       </view>
     </view>

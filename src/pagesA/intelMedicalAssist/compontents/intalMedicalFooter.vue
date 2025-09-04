@@ -181,6 +181,7 @@
       </view>
       <view class="title f28">松开发送</view>
     </view>
+      <text class="f22 color-888 mb30">本服务为AI生成内容，结果仅供参考</text>
   </view>
 </template>
 <script setup lang="ts">
@@ -767,7 +768,7 @@
     height: 78rpx;
     width: 100%;
     // position: relative;
-    margin-bottom: 30rpx;
+    // margin-bottom: 30rpx;
   }
   .flex-row-around {
     display: flex;
@@ -916,6 +917,9 @@
 
   .float-from-top {
     animation: floatFromTop 1s ease-out forwards;
+  }
+    .f22{
+    font-size: 22rpx;
   }
 
   //   $duration: 0.5s; // 动画持续时间

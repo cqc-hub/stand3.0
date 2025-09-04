@@ -16,6 +16,7 @@
           "
           class="doc-info-avatar"
           mode="aspectFill"
+          lazy-load
         />
 
         <view class="doc-info-introduce">
@@ -46,6 +47,7 @@
             :src="$global.BASE_IMG + 'department-doc-intro-text.png'"
             mode="widthFix"
             class="logo-intro-text"
+            lazy-load
           />
 
           <text class="color-888 f28">

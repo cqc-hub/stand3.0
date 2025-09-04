@@ -251,8 +251,11 @@ export const useTBanner = async (
       let baseUrl: string = globalGl.h5Url;
       const { modeOld, sysCode, isTcmStyle } = gStores.globalStore;
 
-      if ((await getMiniProgramEnv()) === 'develop') {
-        // baseUrl = h5UrlLocal;
+      if (
+        (await getMiniProgramEnv()) === 'develop' &&
+        globalGl.env !== 'prod'
+      ) {
+        baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;
@@ -691,7 +694,7 @@ export class ServerStaticData {
           // #endif
         }
 
-        if (this.env === 'develop' || this.env === 'trial') {
+        if (this.env === 'develop') {
           // ...
           insertsObject(sysConfigEnv, systemConfig);
         }
