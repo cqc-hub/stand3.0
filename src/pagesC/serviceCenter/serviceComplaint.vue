@@ -1,4 +1,5 @@
 <template>
+   <g-flag isShowFg typeFg="1263" />
   <view class="g-page">
     <view class="g-container">
       <g-choose-pat
@@ -54,6 +55,7 @@
     docName: '',
     diagnosis: '',
     isAnonymous: '',
+    compDept:'',
     selectType: 0, //1-选择就诊记录 0-不选择
   });
   const uploadImgList = ref(<string[]>[]);
@@ -123,7 +125,7 @@
 
     {
       required: false,
-      label: '您投诉的部门',
+      label: '您投诉的对象',
       field: 'input-text',
       placeholder: '请输入',
       maxlength: 11,
@@ -365,6 +367,7 @@
   ];
 
   const formSubmit = async ({ data }) => {
+    let message='反馈成功,感谢您的支持'
     let args = {
       ...data,
     };
@@ -401,16 +404,25 @@
         ],
       };
     }
+    if(gStores.globalStore.sysCode==='1001058'){
+      args.compDept = '-'
+      message='感谢您的关注支持，祝您身体健康，生活愉快！'
+    }
     await api.complainsAndSuggestions(args);
-    gStores.messageStore.showMessage('反馈成功,感谢您的支持', 3000, {
-      closeCallBack() {
-        uni.reLaunch({
-          url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
-            options.value.selectRecords || options.value.selectType ? '2' : '1'
-          }`,
-        });
-      },
-    });
+    gStores.messageStore.showMessage(message,
+      3000,
+      {
+        closeCallBack() {
+          uni.reLaunch({
+            url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
+              options.value.selectRecords || options.value.selectType
+                ? '2'
+                : '1'
+            }`,
+          });
+        },
+      }
+    );
   };
   const gform = ref<any>('');
 
@@ -491,6 +503,26 @@
       gform.value.setList(tempList2);
     } else if (options.value.selectRecords === '2') {
       getListData();
+    } else if (gStores.globalStore.sysCode === '1001058') {
+      tempList[2] = {
+        required: true,
+        label: '投诉人性别',
+        placeholder: '请选择',
+        key: 'patientSex',
+        labelWidth: '220rpx',
+        field: 'select',
+        options: [
+          {
+            value: '男',
+            label: '男',
+          },
+          {
+            value: '女',
+            label: '女',
+          },
+        ],
+      };
+      gform.value.setList(tempList);
     } else {
       gform.value.setList(tempList);
     }

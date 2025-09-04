@@ -48,6 +48,7 @@
     initAddPat,
     tjyy1001067,
     initQuestionList58,
+    initQuestion52,
   } = useScan();
 
   const init = async () => {
@@ -142,8 +143,13 @@
         healthAdvisoryDetail();
         break;
       //濮阳满意度问卷
-       case '13':
+      case '13':
         initQuestionList58();
+        break;
+
+      //濮阳满意度问卷
+      case '14':
+        initQuestion52();
         break;
 
       default:

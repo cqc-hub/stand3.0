@@ -19,6 +19,7 @@ export const useScan = () => {
        * - 11 健康咨询
        * - 12 健康咨询-详情
        * - 13 濮阳满意度问卷
+       * - 14 乐清满意度
        * - _1 温附二 特检预约
        */
       type:
@@ -35,7 +36,8 @@ export const useScan = () => {
         | '10'
         | '11'
         | '12'
-        | '13';
+        | '13'
+        | '14';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -100,6 +102,57 @@ export const useScan = () => {
       },
     });
   };
+  
+   const initQuestion52= async () => {
+    const {
+      category, //  50 门诊  55 住院
+      a: patientName,
+      b: cardNumber,
+      c: patientPhone,
+      d: visitNo,
+      e: hosName,
+      f: deptName,
+      g: docName,
+      h: visitDate,
+      i: inHospitalNo,
+      j: source = gStores.globalStore.browser.source,
+      k: outTime,
+      l: hospitalWard,
+      n: hosId,
+    } = pageProps.value;
+
+    const addition: any = {
+      // patientId: 'patientId',
+    };
+
+    if (!cardNumber) {
+      addition.patientId = 'patientId';
+    }
+
+    useTBanner({
+      type: 'h5',
+      isLocal: '1',
+      isSelfH5: '1',
+      path: 'pagesC/question/questionAfterVisit1',
+      extraData: {
+        category,
+        patientName,
+        cardNumber,
+        hospitalWard,
+        deptName,
+        docName,
+        visitDate,
+        visitNo,
+        outTime,
+        hosId,
+        source,
+        inHospitalNo,
+        patientPhone,
+        hosName,
+      },
+      addition,
+    });
+  };
 
   const initQuestion = async () => {
     const {
@@ -117,6 +170,7 @@ export const useScan = () => {
       k: outTime,
       l: hospitalWard,
       n: hosId,
+      m:typeName
     } = pageProps.value;
 
     const addition: any = {
@@ -356,6 +410,7 @@ export const useScan = () => {
     initQuestion,
     initQuestionList58,
     initAddPat,
+    initQuestion52,
     tjyy1001067() {
       useTBanner({
         type: 'h5',

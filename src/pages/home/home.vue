@@ -526,6 +526,15 @@
     //   });
     //   (() => import('@/js_sdk/webfunny.min.js'))();
     // }
+    const { intelMedicalAssistConfig } = await ServerStaticData.getSystemConfig(
+      'Electronic_Consultation_Sheet'
+    );
+    if (intelMedicalAssistConfig?.distinctiveImage?.imageList?.length) {
+      assistantImg.value =
+        globalStore?.intAssistantImg ||
+        intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
+    }
+
   });
 
   onLoad(async (opt) => {
@@ -535,16 +544,7 @@
     healthCounselConfig.value = await ServerStaticData.getSystemConfig(
       'HEALTH_COUNSEL'
     );
-    const { intelMedicalAssistConfig } = await ServerStaticData.getSystemConfig(
-      'Electronic_Consultation_Sheet'
-    );
-
-    if (intelMedicalAssistConfig?.distinctiveImage?.imageList?.length) {
-      assistantImg.value =
-        globalStore?.intAssistantImg ||
-        intelMedicalAssistConfig?.distinctiveImage?.imageList[0];
-    }
-
+    
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
     if (
