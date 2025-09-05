@@ -536,11 +536,18 @@
       tabCurrent.value === 0 &&
       !unPayList.value.length
     ) {
+      const btnAdditionalData = {
+        ...pageProps.value,
+      };
+
+      if (btnAdditionalData.params) {
+        btnAdditionalData.params = encodeURIComponent(btnAdditionalData.params);
+      }
       pageConfig.value.scanPayEmptyAction &&
         useTBanner(
           pageConfig.value.scanPayEmptyAction,
           'navigateTo',
-          pageProps.value
+          btnAdditionalData
         );
     }
 
