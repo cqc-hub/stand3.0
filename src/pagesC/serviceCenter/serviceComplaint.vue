@@ -1,5 +1,5 @@
 <template>
-   <g-flag isShowFg typeFg="1263" />
+  <g-flag isShowFg typeFg="1263" />
   <view class="g-page">
     <view class="g-container">
       <g-choose-pat
@@ -55,7 +55,7 @@
     docName: '',
     diagnosis: '',
     isAnonymous: '',
-    compDept:'',
+    compDept: '',
     selectType: 0, //1-选择就诊记录 0-不选择
   });
   const uploadImgList = ref(<string[]>[]);
@@ -365,9 +365,149 @@
       },
     },
   ];
+  const tempList5: TInstance[] = [
+    {
+      required: true,
+      label: '姓名',
+      field: 'input-text',
+      placeholder: '请输入',
+      key: 'name',
+      labelWidth: '220rpx',
+      maxlength: 50,
+      validator(value) {
+        const v = <string>value;
+
+        if (v) {
+          if (v.length < 2) {
+            return Promise.resolve({
+              success: false,
+              message: '姓名需要大于2个字符',
+            });
+          }
+          const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
+
+          if (isEng) {
+            return Promise.resolve({
+              success: true,
+            });
+          } else {
+            if (v.length > 50) {
+              return Promise.resolve({
+                success: false,
+                message: '姓名不能大于 50 个字符',
+              });
+            }
+          }
+        }
+
+        return Promise.resolve({
+          success: true,
+        });
+      },
+    },
+    {
+      required: true,
+      label: '性别',
+      placeholder: '请选择',
+      key: 'patientSex',
+      labelWidth: '220rpx',
+      field: 'select',
+      options: [
+        {
+          value: '男',
+          label: '男',
+        },
+        {
+          value: '女',
+          label: '女',
+        },
+      ],
+    },
+    {
+      required: true,
+      label: '手机号',
+      field: 'input-text',
+      placeholder: '请输入',
+      maxlength: 11,
+      key: 'phone',
+      rule: [
+        {
+          message: '请确认手机号是否有误',
+          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        },
+      ],
+      labelWidth: '220rpx',
+    },
+
+    {
+      required: false,
+      label: '意见建议类别',
+      placeholder: '请选择',
+      field: 'select',
+      options: [
+        {
+          value: '就医环境',
+          label: '就医环境',
+        },
+        {
+          value: '就医流程',
+          label: '就医流程',
+        },
+        {
+          value: '医患沟通',
+          label: '医患沟通',
+        },
+        {
+          value: '诊疗水平',
+          label: '诊疗水平',
+        },
+        {
+          value: '医保政策',
+          label: '医保政策',
+        },
+        {
+          value: '医疗费用',
+          label: '医疗费用',
+        },
+        {
+          value: '其他',
+          label: '其他',
+        },
+      ],
+      key: 'compDept',
+      labelWidth: '220rpx',
+    },
+
+    {
+      required: true,
+      inputType: 'textarea',
+      label: '意见反馈',
+      subLabel: '您的意见将帮助我们改进产品和服务',
+      field: 'input-text',
+      placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+      maxlength: 200,
+      key: 'compContext',
+      direction: 'horizontal',
+      rowStyle: 'margin-top: 16rpx;',
+      bodyStyle: 'margin-top: 12rpx;',
+      labelStyle: 'color: #111111; font-size: 36rpx;font-weight: 600;',
+      validator: async (v: any) => {
+        if (v && v.length > 4) {
+          return {
+            success: true,
+          };
+        } else {
+          return {
+            message: '请填写5字及以上的问题描述以使我们提供更好的帮助',
+            success: false,
+          };
+        }
+      },
+    },
+  ];
 
   const formSubmit = async ({ data }) => {
-    let message='反馈成功,感谢您的支持'
+    let message = '反馈成功,感谢您的支持';
     let args = {
       ...data,
     };
@@ -404,25 +544,20 @@
         ],
       };
     }
-    if(gStores.globalStore.sysCode==='1001058'){
-      args.compDept = '-'
-      message='感谢您的关注支持，祝您身体健康，生活愉快！'
+    if (gStores.globalStore.sysCode === '1001058') {
+      message = '感谢您的关注支持，祝您身体健康，生活愉快！';
     }
     await api.complainsAndSuggestions(args);
-    gStores.messageStore.showMessage(message,
-      3000,
-      {
-        closeCallBack() {
-          uni.reLaunch({
-            url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
-              options.value.selectRecords || options.value.selectType
-                ? '2'
-                : '1'
-            }`,
-          });
-        },
-      }
-    );
+    gStores.messageStore.showMessage(message, 3000, {
+      closeCallBack() {
+        uni.reLaunch({
+          url: `/pagesC/serviceCenter/serviceCenter?selectRecords=${
+            options.value.selectRecords ||
+            (options.value.selectType ? '2' : '0')
+          }`,
+        });
+      },
+    });
   };
   const gform = ref<any>('');
 
@@ -504,25 +639,7 @@
     } else if (options.value.selectRecords === '2') {
       getListData();
     } else if (gStores.globalStore.sysCode === '1001058') {
-      tempList[2] = {
-        required: true,
-        label: '投诉人性别',
-        placeholder: '请选择',
-        key: 'patientSex',
-        labelWidth: '220rpx',
-        field: 'select',
-        options: [
-          {
-            value: '男',
-            label: '男',
-          },
-          {
-            value: '女',
-            label: '女',
-          },
-        ],
-      };
-      gform.value.setList(tempList);
+      gform.value.setList(tempList5);
     } else {
       gform.value.setList(tempList);
     }
