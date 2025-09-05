@@ -667,12 +667,12 @@ export const sendImg = async () => {
   }
   const gStores = new GStores();
   const maxSize = 4 * 1024 * 1024; // 4MB 限制大小
+  const { tempFilePaths } = await apiAsync(uni.chooseImage, {
+    count: 1,
+    sizeType: ['compressed'],
+    sourceType: ['album', 'camera'],
+  });
   try {
-    const { tempFilePaths } = await apiAsync(uni.chooseImage, {
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-    });
     if (tempFilePaths.length === 0) {
       return;
     }
