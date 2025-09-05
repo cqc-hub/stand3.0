@@ -753,6 +753,8 @@ const scJson: Record<string, ISConfig> = {
       wx: {
         isMedicalOrder: '1',
 
+        isGbFamilyPayment: '1',
+
         medical1001035: {
           auth: {
             appId: 'wxfde9fffbfa82be54',

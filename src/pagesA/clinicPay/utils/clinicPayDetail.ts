@@ -1947,7 +1947,7 @@ export const usePayPage = () => {
     const medical1001035 = await getMedical1001035Info();
 
     if (medical1001035) {
-      await payBeforeCreateData();
+      // await payBeforeCreateData();
       handlerMedicalPay1001035({
         phsOrderSource: '2',
       });
@@ -2078,7 +2078,15 @@ export const usePayPage = () => {
       gStores.userStore.patChoose.cardNumber;
     const { clinicType } = selUnPayList.value[0];
 
-    await executeConfigPayAfter(clinicType, cardNumber, pageProps.value);
+    const btnAdditionalData = {
+      ...pageProps.value,
+    };
+
+    for (const key in btnAdditionalData) {
+      btnAdditionalData[key] = encodeURIComponent(btnAdditionalData[key]);
+    }
+
+    await executeConfigPayAfter(clinicType, cardNumber, btnAdditionalData);
 
     selUnPayList.value = [];
     payedList.value = [];
@@ -2650,20 +2658,23 @@ export const handlerMedicalPayDongRuan = async ({
     throw new Error('不存在医保配置');
   }
   const pathExtraData = medicalNationInfo.pathExtraData!;
-  const dongRuanMedicalInfo = medicalNationInfo.dongRuanMedicalInfo!
+  const dongRuanMedicalInfo = medicalNationInfo.dongRuanMedicalInfo!;
   const { orgCodg, orgAppId: appId } = pathExtraData;
   const authCode = await getMedicalAuthCode();
   const openid = gStores.globalStore.openId;
   uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
-  const url = joinQueryForUrl(`${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`, {
-    openid,
-    medOrgOrd,
-    orgCodg,
-    appId,
-    authCode,
-    resultConfig,
-  });
+  const url = joinQueryForUrl(
+    `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
+    {
+      openid,
+      medOrgOrd,
+      orgCodg,
+      appId,
+      authCode,
+      resultConfig,
+    }
+  );
 
   useTBanner({
     type: 'h5',

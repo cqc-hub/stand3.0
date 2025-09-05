@@ -527,18 +527,14 @@
           "style": {
             "navigationBarTitleText": "客服中心"
           },
-          "extend": {
-            "herenId": true
-          }
+          "extend": {}
         },
         {
           "path": "serviceCenter/serviceCenterDetail",
           "style": {
             "navigationBarTitleText": "客服中心"
           },
-          "extend": {
-            "herenId": true
-          }
+          "extend": {}
         },
         {
           "path": "webView/webView",

@@ -159,8 +159,13 @@
           {{ (isCheck && '&#xe6d0;') || '&#xe6ce;' }}
         </view>
 
-        <view class="fg-agree-text">
-          <text @click.stop="flagClick">我已阅读并同意</text>
+        <view
+          :class="{
+            'border-warning animate__bounce': isFlagWarning,
+          }"
+          class="pl8 g-border animate__animated animate__fast"
+        >
+          <text @click.stop="flagClick" class="">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
             {{ isWaitReg ? '《候补预约须知》' : '《预约挂号须知》' }}
           </text>
@@ -354,7 +359,11 @@
   };
 
   const regConfirm = throttle(async () => {
-    const { isOrderPay, wxOrderSubscribeMessage } = pageConfig.value;
+    const {
+      isOrderPay,
+      wxOrderSubscribeMessage,
+      isConfirmOrderWithConfirmDialog,
+    } = pageConfig.value;
     /**
      * 未填写参数
      *
@@ -401,7 +410,16 @@
     }
 
     if (!isCheck.value && !isWaitReg.value) {
-      regDialogConfirm.value.show();
+      if (isConfirmOrderWithConfirmDialog === '1') {
+        regDialogConfirm.value.show();
+      } else {
+        gStores.messageStore.showMessage('请先确认并同意预约挂号须知', 1500, {
+          closeCallBack() {
+            isFlagWarning.value = true;
+          },
+        });
+      }
+
       return;
     }
 
@@ -651,11 +669,18 @@
     });
   };
 
+  const isFlagWarning = ref(false);
   const flagClick = () => {
+    const { isConfirmOrderWithConfirmDialog } = pageConfig.value;
     if (isCheck.value) {
       isCheck.value = false;
     } else {
-      regDialogConfirm.value.show();
+      isFlagWarning.value = false;
+      if (isConfirmOrderWithConfirmDialog === '1') {
+        regDialogConfirm.value.show();
+      } else {
+        isCheck.value = true;
+      }
     }
   };
 
@@ -1039,6 +1064,14 @@
     font-size: var(--hr-font-size-xs);
     align-items: flex-start;
 
+    .g-border {
+      border-color: transparent;
+
+      &.border-warning {
+        border-color: var(--hr-error-color-7);
+      }
+    }
+
     .fg-agree-name {
       color: var(--hr-brand-color-6);
     }
@@ -1046,7 +1079,7 @@
     .check-box {
       color: var(--hr-neutral-color-7);
       font-size: var(--h-size-40);
-      margin-right: 4rpx;
+      // margin-right: 4rpx;
       transform: translateY(-5rpx);
 
       &.is-check {
