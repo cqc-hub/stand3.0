@@ -540,8 +540,8 @@
         ...pageProps.value,
       };
 
-      if (btnAdditionalData.params) {
-        btnAdditionalData.params = encodeURIComponent(btnAdditionalData.params);
+      for (const key in btnAdditionalData) {
+        btnAdditionalData[key] = encodeURIComponent(btnAdditionalData[key]);
       }
       pageConfig.value.scanPayEmptyAction &&
         useTBanner(
