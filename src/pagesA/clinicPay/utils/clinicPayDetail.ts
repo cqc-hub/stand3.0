@@ -1947,7 +1947,7 @@ export const usePayPage = () => {
     const medical1001035 = await getMedical1001035Info();
 
     if (medical1001035) {
-      await payBeforeCreateData();
+      // await payBeforeCreateData();
       handlerMedicalPay1001035({
         phsOrderSource: '2',
       });
