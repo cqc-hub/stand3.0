@@ -91,7 +91,7 @@
     });
   };
   const downWithStream = (url, name) => {
-    name = name || new Date().getTime() + '';
+    name = new Date().getTime() + '';
     uni.showLoading({});
 
     console.log(url, '-----url');
