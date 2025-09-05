@@ -698,6 +698,7 @@ export const sendImg = async () => {
       imgUrl: tempFilePaths[0],
       type: 5,
     });
+    scrollToNewMsg();
     let type = 'mini';
     // #ifdef  H5
     type = 'h5';

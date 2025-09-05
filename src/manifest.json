@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx08440928b105c3bf",
+    "appid": "wx86a78f7ced7dc55f",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,14 +76,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002129645591",
+    "appid": "2021004144623038",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -108,7 +103,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "温医附二院就医助手",
+  "name": "濮阳市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
