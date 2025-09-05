@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001058",
+  "sysCode": "1001092",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -432,6 +432,14 @@
       "isSearchInHos": false,
       "isStartComeTest": false,
       "isOpenOcr": false
+    },
+    "1001092": {
+      "wxAppid": "wxbf7aab8afef3603a",
+      "h5Appid": "",
+      "name": "延安市人民医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
     },
     "2001004": {
       "wxAppid": "wx101158c57640d854",
