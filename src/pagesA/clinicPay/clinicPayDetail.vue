@@ -164,7 +164,7 @@
       </block>
       <button
         v-if="!Array.isArray(pageConfig.payedFooterBtn)"
-        @click="useTBanner(pageConfig.payedFooterBtn!, 'navigateTo', pageProps)"
+        @click="clickBtn(pageConfig.payedFooterBtn!)"
         class="btn btn-primary"
       >
         {{ pageConfig.payedFooterBtn.text }}
@@ -457,10 +457,17 @@
   });
 
   const clickBtn = async (btn) => {
+    const btnAdditionalData = {
+      ...pageProps.value,
+    };
+
+    for (const key in btnAdditionalData) {
+      btnAdditionalData[key] = encodeURIComponent(btnAdditionalData[key]);
+    }
     if (btn.isOpenDrug === '1') {
       await getChineseMedicineList();
     } else {
-      useTBanner(btn!, 'navigateTo', pageProps.value);
+      useTBanner(btn!, 'navigateTo', btnAdditionalData);
     }
   };
 
