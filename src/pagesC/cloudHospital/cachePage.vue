@@ -150,7 +150,7 @@
     } = fd;
 
     if (cardNumber) {
-      if (gStores.userStore.patChoose.cardNumber != cardNumber) {
+      if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
         const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
         gStores.userStore.updatePatChoose(pat!);
       }
