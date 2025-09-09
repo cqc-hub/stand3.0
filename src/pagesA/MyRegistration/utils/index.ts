@@ -258,10 +258,11 @@ export const useOrder = (props: Ref<IOrderProps>) => {
       title: '获取医生排班数据..',
     });
 
-    const { result: allList } = await asyncListFnc<IDocListAll[]>(args).finally(
-      () => {
+    const { result: allList } = await asyncListFnc<IDocListAll[]>(args).catch(
+      (err) => {
         isComplete.value = true;
         uni.hideLoading();
+        throw new Error(err);
       }
     );
 
@@ -326,6 +327,8 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     // _enabledDays['2022-11-22'] = '3';
     enabledDays.value = _enabledDays;
     filterChooseDays();
+    isComplete.value = true;
+    uni.hideLoading();
   };
 
   const filterChooseDays = () => {
@@ -562,7 +565,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     if (gStores.globalStore.sysCode === '1001035' && globalGl.env === 'prod') {
       actionApi = api.getNumberSource1001035;
     }
-
 
     let { result } = await actionApi<IOrderSource[]>(arg).finally(() => {
       isComplete.value = true;

@@ -146,7 +146,15 @@
       insuranceParams: insuranceParamsWx,
       payBackParams,
       registerId,
+      cardNumber,
     } = fd;
+
+    if (cardNumber) {
+      if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
+        const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
+        gStores.userStore.updatePatChoose(pat!);
+      }
+    }
 
     if (insuranceParamsWx) {
       if (

@@ -105,6 +105,8 @@
     const options = globalStore.appShowData;
     const authCode =
       gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
+    const authInfo =
+      gStores.globalStore.appShowData.referrerInfo?.extraData || {};
     // 微信医保小程序跳回来后中断了链路 重新走下
     if (getLocalStorage('get-wx-medical-auth-code') === '1' && authCode) {
       await wait(300);
@@ -131,6 +133,7 @@
             url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
               _url: resultConfig.path,
               ...resultConfig.query,
+              ...authInfo,
               authCode: authCode,
             }),
           });

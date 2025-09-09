@@ -123,12 +123,12 @@
 
           if (userStore.patList.length) {
             if (_pd) {
-              if (userStore.patChoose.patientId != _pd) {
+              if (userStore.patChoose.patientId !== _pd) {
                 const pat = userStore.patList.find((o) => o.patientId === _pd);
                 userStore.updatePatChoose(pat!);
               }
             } else if (_hosPd) {
-              if (userStore.patChoose.cardNumber != _hosPd) {
+              if (userStore.patChoose.cardNumber !== _hosPd) {
                 const pat = userStore.patList.find(
                   (o) => o.cardNumber === _hosPd
                 );
