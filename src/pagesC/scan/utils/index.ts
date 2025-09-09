@@ -102,8 +102,8 @@ export const useScan = () => {
       },
     });
   };
-  
-   const initQuestion52= async () => {
+
+  const initQuestion52 = async () => {
     const {
       category, //  50 门诊  55 住院
       a: patientName,
@@ -133,7 +133,7 @@ export const useScan = () => {
       type: 'h5',
       isLocal: '1',
       isSelfH5: '1',
-      path: 'pagesC/question/questionAfterVisit1',
+      path: `pagesC/question/yqQuestion${category == '55' ? 2 : 1}`,
       extraData: {
         category,
         patientName,
@@ -170,7 +170,7 @@ export const useScan = () => {
       k: outTime,
       l: hospitalWard,
       n: hosId,
-      m:typeName
+      m: typeName,
     } = pageProps.value;
 
     const addition: any = {

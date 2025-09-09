@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001058",
+  "sysCode": "1001060",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -384,7 +384,9 @@
       "isvAlipayAppid": "2021005172668444",
       "name": "温州市人民医院",
       "isStartComeTest": false,
+       "isSearchInHos": true,
       "isOpenOcr": false
+      
     },
     "1001084": {
       "wxAppid": "wxa50129d260033b82",

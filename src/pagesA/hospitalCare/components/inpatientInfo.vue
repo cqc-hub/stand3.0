@@ -337,10 +337,16 @@
   };
   const goOrderSE = () => {
     console.log(hosInfoResObj);
+    let extend:any={}
+    try{
+      extend=JSON.parse(hosInfoResObj.value.extend||'')
+    }catch(e){
+      gStores.messageStore.showMessage('接口返回数据extend异常')
+    }
     useTBanner({
       type: 'h5',
       path: joinQuery('https://sxey-wechat.leanin.com.cn/', {
-        wardCode: hosInfoResObj.value.inpatientWard,
+        wardCode: extend.deptId,
         bedNo: hosInfoResObj.value.inpatientBed,
       }),
       text: '订餐',

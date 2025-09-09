@@ -255,7 +255,7 @@ export const useTBanner = async (
         (await getMiniProgramEnv()) === 'develop' &&
         globalGl.env !== 'prod'
       ) {
-        baseUrl = h5UrlLocal;
+        // baseUrl = h5UrlLocal;
       }
 
       fullUrl = baseUrl + fullUrl;
