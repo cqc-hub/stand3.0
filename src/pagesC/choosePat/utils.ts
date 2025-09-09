@@ -1,6 +1,7 @@
+import globalGl from '@/config/global';
 import api from '@/service/api';
 import { IPat } from '@/stores';
-import { apiAsync, cacheUtil, useTBanner } from '@/utils';
+import { apiAsync, cacheUtil, useTBanner, GStores } from '@/utils';
 
 // 杭口
 export const HK_hook = () => {
@@ -71,4 +72,21 @@ export const HK_hook = () => {
   };
 };
 
-// 宜兴
+// 郸城导诊
+export const daozen1001045 = async (pat: IPat) => {
+  const gStores = new GStores();
+
+  const { patientId } = pat;
+  const { openId } = gStores.globalStore;
+
+  const { result: path } = await api.getGuidanceUrl({
+    patientId,
+    openId,
+    appId: globalGl.wxAppid,
+  });
+
+  useTBanner({
+    path,
+    type: 'h5',
+  });
+};

@@ -547,6 +547,16 @@
     type: 'self',
   } as TButtonConfig;
 
+  const 医院指南 = {
+    text: '医院指南',
+    path: 'pages/hospitalGuide/hospitalGuide',
+    type: 'h5',
+    isSelfH5: '1',
+    extraData: {
+      hosId: '12675'
+    }
+  } as TButtonConfig;
+
   const testbuttonConfig = ref(智能客服);
   onMounted(() => {
     setTimeout(() => {
@@ -555,7 +565,7 @@
   });
 
   const init = async () => {
-    useTBanner(天水处方查询);
+    useTBanner(医院指南);
     // useTBanner(用药查询);
   };
 </script>

@@ -604,9 +604,9 @@ export class LoginUtils extends GStores {
 
     // console.log(JSON.stringify(reqArg));
     // return
-
+    // 以下逻辑有问题，调用接口失败的话根据系统码判断下
     let url = '';
-    if (this.globalStore.sysCode === '1001048') {
+    if (['1001048', '1001045'].includes(this.globalStore.sysCode)) {
       url = '/aliUserLogin/getTPAlipayUserInfoShare';
     } else if (isLoginByOpenId === '1') {
       url = '/login/authLogin';

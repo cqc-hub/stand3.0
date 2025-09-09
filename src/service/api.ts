@@ -554,6 +554,15 @@ const regApi = {
   getAlternateSch: <T = any>(data: any) =>
     service.post<T>('/phs-reg/regAlt/getAlternateSch', parm(data)),
 
+  getGuidanceUrl: <T = any>(data: any) =>
+    service.post<T>('/phs-reg/regIntelligence/getGuidanceUrl', parm(data)),
+
+  getConsultationUrl: <T = any>(data: any) =>
+    service.post<T>(
+      '/phs-reg/regIntelligence/getConsultationUrl',
+      parm(data)
+    ),
+
   addDiseaseInformation: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/addDiseaseInformation', parm(data)),
 

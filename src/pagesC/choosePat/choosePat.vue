@@ -57,17 +57,17 @@
     joinQuery,
     joinQueryForUrl,
   } from '@/common';
-  import { HK_hook } from './utils';
+  import { daozen1001045, HK_hook } from './utils';
   import globalGl from '@/config/global';
 
   import PList from './components/list.vue';
-  import api from '@/service/api';
 
   const pageProps = ref(
     <
       {
         type:
           | 'xx'
+          | 'daozen1001045'
           // 省中体检预约
           | 'tjyy1001035'
           // 乐清产科预约
@@ -110,6 +110,10 @@
 
       case 'tjyy1001035':
         tjyy1001035();
+        break;
+
+      case 'daozen1001045':
+        daozen1001045(pat);
         break;
 
       default:
