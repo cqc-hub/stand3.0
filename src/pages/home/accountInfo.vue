@@ -17,7 +17,7 @@
 
     <xy-dialog
       title=""
-      content="是否注销该账号?"
+      content="注销账号后在线预约记录及候补订单将无法查询或支付，但不影响报告等其它业务数据查询，是否确认注销?"
       :show="isShow"
       @cancelButton="isShow = false"
       @confirmButton="deletePat"

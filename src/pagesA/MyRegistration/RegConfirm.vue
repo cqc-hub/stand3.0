@@ -73,7 +73,7 @@
         gStores.globalStore.isTcmStyle ? '-tcm' : ''
       }.png`"
       :title="flagTitle9"
-      @confirm="isCheck = true"
+      @confirm="regDialogConfirm1"
       ref="regDialogConfirm"
     >
       <g-flag
@@ -167,7 +167,7 @@
         >
           <text @click.stop="flagClick" class="">我已阅读并同意</text>
           <text @click.stop="regDialogConfirm.show" class="fg-agree-name">
-            {{ isWaitReg ? '《候补预约须知》' : '《预约挂号须知》' }}
+            {{ agreeText }}
           </text>
         </view>
       </view>
@@ -295,6 +295,19 @@
     return pageConfig.value.isAddedNumSelf && isWaitReg.value;
   });
 
+  const agreeText = computed(() => {
+    if (isWaitReg.value) {
+      return '《候补预约须知》';
+    }
+
+    return '《预约挂号须知》';
+  });
+
+  const regDialogConfirm1 = () => {
+    isCheck.value = true;
+    isFlagWarning.value = false;
+  };
+
   const handlerConfirmPatReal = async () => {
     const pages = getCurrentPages();
     const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
@@ -413,11 +426,19 @@
       if (isConfirmOrderWithConfirmDialog === '1') {
         regDialogConfirm.value.show();
       } else {
-        gStores.messageStore.showMessage('请先确认并同意预约挂号须知', 1500, {
-          closeCallBack() {
-            isFlagWarning.value = true;
-          },
-        });
+        gStores.messageStore.showMessage(
+          `请先阅读并同意${agreeText.value}`,
+          3000,
+          {
+            closeCallBack() {
+              isFlagWarning.value = true;
+            },
+            // useDialog: true,
+            dialogOpt: {
+              title: '温馨提示',
+            },
+          }
+        );
       }
 
       return;
