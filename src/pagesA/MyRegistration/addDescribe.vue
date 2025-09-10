@@ -57,11 +57,14 @@
   const gformList = ref([] as TInstance[]);
   const formData = ref({} as any);
   const formSubmit = async ({ data }) => {
+    const { ceshiData = [], ceshiData1 = [] } = data;
+
+    const photoList = [, ...ceshiData1, ...ceshiData];
     const {
       result: { diseaseId },
     } = await api.addDiseaseInformation({
       ...data,
-      illPic: (data.ceshiData || []).map((o) => o.url),
+      illPic: photoList.map((o) => o.url),
     });
 
     uni.navigateTo({
@@ -98,6 +101,16 @@
         direction: 'horizontal',
         showRequireIcon: true,
         emptyMessage: '请填写病情描述',
+      },
+      {
+        required: true,
+        showRequireIcon: true,
+
+        label: '舌苔照片',
+        field: 'file-image',
+        key: 'ceshiData1',
+        imgLimit: 6,
+        direction: 'horizontal',
       },
       {
         label: '添加病历照片',

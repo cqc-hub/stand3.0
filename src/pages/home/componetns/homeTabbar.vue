@@ -52,7 +52,7 @@
                 :class="{
                   'color-blue': isCenterCode(item),
                 }"
-                class="label"
+                class="label text-no-wrap"
               >
                 {{ item.label }}
               </text>
