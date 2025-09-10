@@ -228,7 +228,7 @@ const queryApi = {
 
   sendMedicalMessage: <T>(data) =>
     service.post<T>('/phs-query/clinical/sendMedicalMessage', parm(data), {
-      hideLoading: false,
+      hideLoading: true,
     }),
 
   qrCodeQuery: <T>(data) =>

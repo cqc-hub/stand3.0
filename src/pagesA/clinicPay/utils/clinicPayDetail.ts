@@ -1952,7 +1952,7 @@ export const usePayPage = () => {
 
     if (medical1001035) {
       // await payBeforeCreateData();
-      await api.sendMedicalMessage({
+      api.sendMedicalMessage({
         phsOrderId: uploadRes.payOrderId,
         hosId,
       });
