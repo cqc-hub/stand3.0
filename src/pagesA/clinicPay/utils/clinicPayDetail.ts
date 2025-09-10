@@ -1954,7 +1954,7 @@ export const usePayPage = () => {
       // await payBeforeCreateData();
       api.sendMedicalMessage({
         phsOrderId: uploadRes.payOrderId,
-        hosId,
+        hosId: item.hosId,
       });
 
       handlerMedicalPay1001035({

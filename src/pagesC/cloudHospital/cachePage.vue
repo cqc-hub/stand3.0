@@ -7,7 +7,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
-  import { useGlobalStore } from '@/stores';
+  import { useCacheStore, useGlobalStore } from '@/stores';
   import {
     encryptDes,
     joinQuery,
@@ -32,6 +32,7 @@
   const globalStore = useGlobalStore();
   const shareData = ref<any>({});
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const getAuthCodeWx = async () => {
     return new Promise(async (r, j) => {
@@ -163,6 +164,12 @@
       if (globalStore.sysCode === '1001048' && registerType) {
         await wait(60);
         handleMessage1001048(fd);
+        return;
+      }
+
+      if (globalStore.sysCode === '1001035') {
+        cacheStore.changeCacheData(fd);
+
         return;
       }
 
@@ -335,6 +342,8 @@
       });
     });
   };
+
+  // const
 
   onShareAppMessage((res) => {
     console.warn('分享', res, shareData.value);

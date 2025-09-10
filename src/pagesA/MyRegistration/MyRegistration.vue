@@ -141,7 +141,12 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
+  import {
+    onPullDownRefresh,
+    onShow,
+    onLoad,
+    onReady,
+  } from '@dcloudio/uni-app';
 
   import {
     IRegistrationCardItem,
@@ -581,10 +586,6 @@
       idx > -1 && (tabCurrent.value = idx);
     }
 
-    uni.setNavigationBarTitle({
-      title: '我的挂号',
-    });
-
     await handlerWeChatThRegLogin(props.value);
     let _isPatient = true;
     if (pageConfig.value.isOrderWithoutPat === '1') {
@@ -597,6 +598,12 @@
 
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
+  });
+
+  onReady(() => {
+    uni.setNavigationBarTitle({
+      title: '我的挂号',
+    });
   });
 
   const getPatLabel = (o) => {
