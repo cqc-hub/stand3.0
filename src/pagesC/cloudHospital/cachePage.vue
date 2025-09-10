@@ -68,7 +68,7 @@
       });
 
       if (!confirm) {
-        j('取消');
+        j('取消请求授权...');
         return;
       }
 
@@ -199,12 +199,19 @@
       }
 
       if (globalStore.sysCode === '1001035') {
-        const { userName, idCard } = fd;
+        const { userName, idCard, registerId } = fd;
         cacheStore.changeCacheData(fd);
-        getAuthCodeWx1001035({
+        await getAuthCodeWx1001035({
           userName,
           idCard,
+        }).catch((err) => {
+          console.log(err);
+          if (err === '取消请求授权...') {
+
+          }
+          throw new Error(err);
         });
+
         return;
       }
 
