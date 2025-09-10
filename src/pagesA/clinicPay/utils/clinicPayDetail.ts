@@ -313,8 +313,12 @@ export const getIsMedicalMode = () => {
   return false;
 };
 
-export const getMedicalAuthCode = async (): Promise<string> => {
+export const getMedicalAuthCode = async (opt?: {
+  userName?: string;
+  idCard?: string;
+}): Promise<string> => {
   let fCode = '';
+  const { userName, idCard } = opt || {};
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -1948,6 +1952,11 @@ export const usePayPage = () => {
 
     if (medical1001035) {
       // await payBeforeCreateData();
+      await api.sendMedicalMessage({
+        phsOrderId: uploadRes.payOrderId,
+        hosId,
+      });
+
       handlerMedicalPay1001035({
         phsOrderSource: '2',
       });

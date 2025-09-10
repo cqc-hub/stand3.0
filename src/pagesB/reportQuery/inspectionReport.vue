@@ -333,10 +333,7 @@
   import { onLoad, onPageScroll } from '@dcloudio/uni-app';
   import { ref, onMounted, computed, nextTick, onUpdated } from 'vue';
 
-  import {
-    examineReportDetails,
-    addWatermark,
-  } from './utils';
+  import { examineReportDetails, addWatermark } from './utils';
   import {
     GStores,
     nameConvert,
@@ -939,21 +936,10 @@
       }
     }
 
-    if (gStores.globalStore.sysCode === '1001048') {
-      // uni.navigateTo({
-      //   url: `/pagesA/webView/webView?https=${url}`,
-      // });
-      useTBanner({
-        type: 'h5',
-        path: url,
-      });
-    } else {
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/webView/webView', {
-          https: url,
-        }),
-      });
-    }
+    useTBanner({
+      type: 'h5',
+      path: url,
+    });
   };
 
   const yunPayAfter = (url) => {

@@ -17,6 +17,7 @@ import {
   addHosIdForSelfH5Path,
 } from '@/utils';
 import { sysConfigEnv, apiConfigEnv } from '@/config/envConfigData';
+import { useCacheStore } from '@/stores';
 
 import api from '@/service/api';
 import globalGl from '@/config/global';
@@ -154,6 +155,8 @@ export const useTBanner = async (
   additionData: BaseObject = {}
 ) => {
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
+
   const { source } = gStores.globalStore.browser;
   const {
     type,
@@ -280,8 +283,10 @@ export const useTBanner = async (
 
     // #ifndef H5
     console.log('跳转路径-----', fullUrl);
+    cacheStore.changeCacheData(fullUrl);
     const url = joinQueryForUrl('/pagesA/webView/webView', {
-      https: encodeURIComponent(fullUrl),
+      // https: encodeURIComponent(fullUrl),
+      cache: '1',
     });
 
     uni[routeType]({

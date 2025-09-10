@@ -12,13 +12,17 @@
   import { handWebMessage, thirdWxPay, GStores, useTBanner } from '@/utils';
   import { deQueryForUrl } from '@/common';
   import { CanWrite } from '@/typeUtils';
+  import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   // pagesA/webView/webView
   const props = defineProps<{
     https: string;
     query?: any;
+
+    cache?: '1';
   }>();
   const pageProps = ref({} as CanWrite<typeof props>);
   const src = ref('');
@@ -44,7 +48,11 @@
   };
 
   const init = () => {
-    if (pageProps.value.https) {
+    const { https, cache } = pageProps.value;
+
+    if (cache === '1') {
+      src.value = cacheStore.cacheData;
+    } else if (https) {
       console.warn(decodeURIComponent(pageProps.value.https));
       src.value = decodeURIComponent(pageProps.value.https);
     }

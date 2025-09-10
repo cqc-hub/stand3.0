@@ -149,18 +149,18 @@
       cardNumber,
     } = fd;
 
-    if (cardNumber) {
-      if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
-        const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
-        gStores.userStore.updatePatChoose(pat!);
-      }
-    }
+    // if (cardNumber) {
+    //   if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
+    //     const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
+    //     gStores.userStore.updatePatChoose(pat!);
+    //   }
+    // }
+
+    const registerType =
+      insuranceParamsWx.registerType || payBackParams.registerType;
 
     if (insuranceParamsWx) {
-      if (
-        globalStore.sysCode === '1001048' &&
-        (insuranceParamsWx.registerType || payBackParams.registerType)
-      ) {
+      if (globalStore.sysCode === '1001048' && registerType) {
         await wait(60);
         handleMessage1001048(fd);
         return;
