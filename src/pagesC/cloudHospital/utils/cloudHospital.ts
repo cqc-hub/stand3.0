@@ -62,6 +62,7 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
   return fCode;
 };
 
+
 /**微信自费支付 */
 export const wxPay = (data) => {
   var paymentData = data[0].invokeData;

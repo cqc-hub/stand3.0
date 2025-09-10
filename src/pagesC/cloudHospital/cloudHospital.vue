@@ -25,16 +25,18 @@
   import { onLoad, onShow } from '@dcloudio/uni-app';
 
   import { BASE_IMG } from '@/config/global';
-  import { useGlobalStore } from '@/stores';
+  import { useCacheStore, useGlobalStore } from '@/stores';
   import { wait, GStores, useTBanner } from '@/utils';
   import {
     setLocalStorage,
     getLocalStorage,
     joinQueryForUrl,
     joinQuery,
+    encryptDes,
   } from '@/common';
   const globalStore = useGlobalStore();
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const gotoNext = (options) => {
     setTimeout(() => {
@@ -101,12 +103,25 @@
     });
   };
 
+  const afterGetMedicalAuthCode1001035 = async () => {
+    const { registerId } = cacheStore.cacheData;
+    console.log(gStores.globalStore.appShowData, '----hhhh');
+    const authInfo = gStores.globalStore.appShowData.referrerInfo.extraData;
+
+    const params = encodeURIComponent(encryptDes(JSON.stringify(authInfo)));
+
+    await wait(20);
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+        _url: `pages/v3/order/detail?registerId=${registerId}&payAuthNo=1&params=${params}`,
+      }),
+    });
+  };
+
   onShow(async () => {
-    const options = globalStore.appShowData;
-    const authCode =
-      gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode;
     const authInfo =
       gStores.globalStore.appShowData.referrerInfo?.extraData || {};
+    const authCode = authInfo.authCode || authInfo.payAuthNo;
     // 微信医保小程序跳回来后中断了链路 重新走下
     if (getLocalStorage('get-wx-medical-auth-code') === '1' && authCode) {
       await wait(300);
@@ -117,6 +132,10 @@
       if (gStores.globalStore.sysCode === '1001048') {
         goYB1001048(authCode);
         return;
+      }
+
+      if (gStores.globalStore.sysCode === '1001035') {
+        afterGetMedicalAuthCode1001035();
       }
       // 获取授权码
       if (getLocalStorage('get-wx-medical-netWork-path')) {

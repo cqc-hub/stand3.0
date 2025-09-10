@@ -60,6 +60,35 @@
       });
     });
   };
+
+  const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
+    return new Promise(async (r, j) => {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '请点击确定跳转医保小程序?',
+      });
+
+      if (!confirm) {
+        j('取消');
+        return;
+      }
+
+      uni.showLoading({});
+
+      // @ts-expect-error
+      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+        uni.hideLoading();
+        const authCode = await utils
+          .getWxMedicalAuth1001035({ userName, idCard })
+          .catch((err) => {
+            console.log(err, 'err');
+            if (!(typeof err === 'string' && err === '请求授权...')) {
+              j(err);
+            }
+          });
+        r(authCode);
+      });
+    });
+  };
   //封装网络医院参数
   const getparams = (options) => {
     const opt = options._outPara ? {} : options;
@@ -152,7 +181,9 @@
 
     // if (cardNumber) {
     //   if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
-    //     const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
+    //     const pat = gStores.userStore.patList.find(
+    //       (o) => o.cardNumber === cardNumber
+    //     );
     //     gStores.userStore.updatePatChoose(pat!);
     //   }
     // }
@@ -168,8 +199,12 @@
       }
 
       if (globalStore.sysCode === '1001035') {
+        const { userName, idCard } = fd;
         cacheStore.changeCacheData(fd);
-
+        getAuthCodeWx1001035({
+          userName,
+          idCard,
+        });
         return;
       }
 
