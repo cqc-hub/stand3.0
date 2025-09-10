@@ -176,13 +176,10 @@
     };
     status.enabeleTakeNumber = item.signIn;
     status.reLocation = !item.signIn;
-    status.showMess = item.signIn
-      ? props.isOnlineSign
-        ? '签到'
-        : '取号'
-      : '不在取号范围';
+    let statusName = props.isOnlineSign ? '签到' : '取号';
+    status.showMess = item.signIn ? statusName : `不在${statusName}范围`;
     if (item?.ifPay === '1' && item?.tip) {
-      status.showMess = '不符合取号条件';
+      status.showMess = `不符合${statusName}条件`;
     }
     return status;
   };

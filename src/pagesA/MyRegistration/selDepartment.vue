@@ -321,7 +321,7 @@
     }
 
     queryArg.promptMessage = encodeURIComponent(item.promptMessage || '');
-    if (celebratedDeptData.value.includes(item.hosDeptId)) {
+    if (celebratedDeptData.value?.includes(item.hosDeptId)) {
       const query = {
         hosId: item.hosId || (hosId.value === '全院区' ? '' : hosId.value),
         hosDeptId: encodeURIComponent(item.hosDeptId),

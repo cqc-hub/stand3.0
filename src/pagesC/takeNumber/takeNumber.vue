@@ -144,8 +144,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-
-  import { deQueryForUrl, joinQuery } from '@/common';
+  import { deQueryForUrl, joinQuery, joinQueryForUrl } from '@/common';
   import {
     GStores,
     ServerStaticData,
@@ -156,7 +155,6 @@
     apiAsync,
     cacheUtil,
   } from '@/utils';
-  import { joinQueryForUrl } from '@/common';
   import { type TTakeNumberListItem } from './utils/takeNumber';
 
   import api from '@/service/api';
@@ -440,7 +438,9 @@
 
     // init();
     uni.redirectTo({
-      url: '/pagesC/takeNumber/takeNumber',
+      url: joinQueryForUrl('/pagesC/takeNumber/takeNumber', {
+        ...pageProps.value,
+      }),
     });
   };
 
