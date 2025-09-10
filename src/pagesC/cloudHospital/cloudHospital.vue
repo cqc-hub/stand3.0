@@ -105,15 +105,15 @@
 
   const afterGetMedicalAuthCode1001035 = async () => {
     const { registerId } = cacheStore.cacheData;
-    console.log(gStores.globalStore.appShowData, '----hhhh');
     const authInfo = gStores.globalStore.appShowData.referrerInfo.extraData;
 
-    const params = encodeURIComponent(encryptDes(JSON.stringify(authInfo)));
+    // const params = encodeURIComponent(encryptDes(JSON.stringify(authInfo)));
 
     await wait(20);
     uni.navigateTo({
       url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
-        _url: `pages/v3/order/detail?registerId=${registerId}&payAuthNo=1&params=${params}`,
+        _url: `pages/v3/order/detail?registerId=${registerId}&payAuthNo=1`,
+        ...authInfo,
       }),
     });
   };

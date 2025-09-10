@@ -17,6 +17,7 @@ import {
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 import { IRegistrationCardItem } from './MyRegistration';
 import md5s from 'js-md5';
+import globalGl from '@/config/global';
 
 export interface IPageProps {
   orderId: string;
@@ -766,6 +767,24 @@ export const goAskForDoc1001048 = (orderInfo) => {
   useTBanner({
     type: 'h5',
     path: url,
+  });
+};
+
+// 郸城预问诊（wx）
+export const goAskForDoc1001045 = async (orderInfo) => {
+  const gStores = new GStores();
+  const { patientId } = orderInfo;
+  const { openId } = gStores.globalStore;
+
+  const { result: path } = await api.getConsultationUrl({
+    patientId,
+    openId,
+    appId: globalGl.wxAppid,
+  });
+
+  useTBanner({
+    path,
+    type: 'h5',
   });
 };
 

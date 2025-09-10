@@ -478,6 +478,7 @@
     getOrderStatusTitle,
     RegDetailUtil,
     goAskForDoc1001048,
+    goAskForDoc1001045,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
 
@@ -669,7 +670,6 @@
     qrCodeOpt.value.size = 0;
   };
 
-
   const showConsultationDialog1001048 = async () => {
     if (gStores.globalStore.sysCode !== '1001048') {
       return;
@@ -718,6 +718,11 @@
 
     if (gStores.globalStore.sysCode === '1001048') {
       goAskForDoc1001048(orderRegInfo.value);
+      return;
+    }
+
+    if (gStores.globalStore.sysCode === '1001045') {
+      goAskForDoc1001045(orderRegInfo.value);
       return;
     }
 

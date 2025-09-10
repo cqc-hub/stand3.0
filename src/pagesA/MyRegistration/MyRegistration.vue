@@ -171,6 +171,7 @@
     orderStatusMap,
     getOrderStatusTitle,
     getStatusConfig,
+    goAskForDoc1001045,
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -364,7 +365,9 @@
   };
 
   const ywzClick = async (item: IRegistrationCardItem) => {
-    if (pageConfig.value.preConsultationBtn) {
+    if (gStores.globalStore.sysCode === '1001045') {
+      goAskForDoc1001045(item);
+    } else if (pageConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
