@@ -88,7 +88,7 @@ interface IRouteBase {
   loginInterception?: string; //是否登录拦截 1拦截 0 不拦截
   patientInterception?: string; //就诊人拦截  1拦截 0 不拦截
   selectPatientPage?: string; //跳转第三方是否需要就诊人选择页面
-  gridLabel?: string; //角标 0 默认无角标 1 绿色能量 2 立减五元 3 维护中
+  gridLabel?: string; //角标 0 默认无角标 1 绿色能量 2 医保 3 维护中
   messageNum?:number; // 消息提醒数量
 }
 

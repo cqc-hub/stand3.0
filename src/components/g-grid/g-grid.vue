@@ -19,7 +19,7 @@
           >
             <!-- 绿色能量角标 -->
             <!-- v-if="item.enabled == 0 "  -->
-            <!-- gridLabel  0 默认无角标 1 绿色能量 2 立减五元 3 维护中 -->
+            <!-- gridLabel  0 默认无角标 1 绿色能量 2 医保 3 维护中 -->
             <view
               :class="`${
                 options.type == 1 && options.list.length == 3
@@ -33,7 +33,8 @@
             <view class="gree-label" v-if="item.gridLabel == '1'">
               绿色能量
             </view>
-            <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
+            <!-- 之前为立减五元 郭20250911要求改为 医保 -->
+            <view class="warn-label" v-if="item.gridLabel == '2'">医保</view>
             <view
               class="warn-label badge"
               v-if="
@@ -91,7 +92,7 @@
             <view class="gree-label" v-if="item.gridLabel == '1'">
               绿色能量
             </view>
-            <view class="warn-label" v-if="item.gridLabel == '2'">立减5元</view>
+            <view class="warn-label" v-if="item.gridLabel == '2'">医保</view>
             <img
               v-if="isImg(item.iconfont)"
               :class="`icon-font grid-resize`"
