@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001060",
+  "sysCode": "1001082",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -370,7 +370,7 @@
     },
     "1001082": {
       "wxAppid": "wx7c53b0e82e20494e",
-      "h5Appid": "",
+      "h5Appid": "wxa158d3a050857e9c",
       "alipayAppid": "",
       "isvAlipayAppid": "",
       "name": "健康温州",

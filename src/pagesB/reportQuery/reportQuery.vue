@@ -10,6 +10,7 @@
       v-if="cacheStore.isShowChooseHos"
       v-model:hosId="hosId"
       :autoGetData="false"
+      :visibleHosIds="allowedHosIds"
       @change="choosePat"
       ref="selHosRef"
     />
@@ -250,6 +251,8 @@
     registerOrderId?: string;
   }
   const pageProps = ref(<IPageProps>{});
+    // 在父组件中
+const allowedHosIds = ref(['330301001', '330301002','330301003','330301004','330301009']);
 
   const tabs = ref<ITab[]>([]);
   const tabCurrent = ref(0);
@@ -367,7 +370,7 @@
     });
 
     if (tabs.value?.length) {
-      tabs.value.map(({ typeId }, i) => {
+      tabs.value?.map(({ typeId }, i) => {
         pageList.value[typeId] = [];
         if (typeId == _typeId.value) {
           //查找当前对应的tabCurrent

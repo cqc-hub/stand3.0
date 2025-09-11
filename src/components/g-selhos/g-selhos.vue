@@ -56,25 +56,30 @@
       autoGetData?: boolean;
       unNeedPosition?: boolean;
       isHide?: boolean;
+      // 新增属性：只显示指定hosId的医院
+      visibleHosIds?: string[];
     }>(),
     {
       autoGetData: true,
       isHide: false,
+      visibleHosIds: () => []
     }
   );
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);
 
   const getHosName = computed(() => {
     if (hosList.value.length) {
+      const currentHosId = cacheStore.hosId || props.hosId;
       const item = hosList.value.find(
-        (o) => o.hosId === (cacheStore.hosId || props.hosId)
+        (o) => o.hosId === currentHosId
       );
       if (item) {
         return item.hosName;
-      } else {
-        return cacheStore.hosId;
+      } 
+         return hosList.value[0]?.hosName || '';
+        // return cacheStore.hosId;
         // return props.hosId;
-      }
+      
     } else {
       return '';
     }
@@ -102,7 +107,6 @@
   };
 
   const getHosList = async () => {
-    console.log(props.unNeedPosition, '233');
     await wait(20);
     const location: any = props.unNeedPosition
       ? {}
@@ -123,22 +127,30 @@
     if (props.type === 'selDepartment') {
       list = list.filter((o) => o.ifClick !== '1');
     }
+       
+    // 新增：如果传入了visibleHosIds，则只显示这些医院
+    if (props.visibleHosIds && props.visibleHosIds.length > 0) {
+      list = list.filter((item) => props.visibleHosIds.includes(item.hosId));
+    }
 
     hosList.value = list;
+ 
 
     if (list && list.length) {
-      if (!props.hosId) {
-        let hosItem =
-          (cacheStore.hosId &&
-            list.find((o) => o.hosId === cacheStore.hosId)) ||
-          list[0];
-
+        let hosItem;
+        const currentHosId = props.hosId || cacheStore.hosId;
+        if (currentHosId) {
+           hosItem = list.find((o) => o.hosId === currentHosId);
+        }
+        if (!hosItem) {
+          hosItem = list[0];
+        }
+          
         if (props.autoGetData) {
           change({ item: hosItem });
         } else {
-          emits('update:hosId', cacheStore.hosId || list[0].hosId);
-        }
-      }
+          emits('update:hosId', hosItem.hosId);
+        } 
 
       emits('get-list', {
         list,
