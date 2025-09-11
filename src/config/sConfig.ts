@@ -743,6 +743,7 @@ const scJson: Record<string, ISConfig> = {
    * 江苏省中医院
    */
   1001035: {
+    isOpenMessageAuth: '1',
     isMessageBtnShowNew: '1',
     isOpenPopularSci: {
       wx: '1',

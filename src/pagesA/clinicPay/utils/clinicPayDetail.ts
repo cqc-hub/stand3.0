@@ -1056,6 +1056,12 @@ export const usePayPage = () => {
     }
   };
 
+  /**
+   * - childOrder 是唯一标识， 重复会跪
+   * - subIds 同样表示可以一起勾选
+   *
+   * @param item
+   */
   const selPayListItem = (item: IPayListItem) => {
     const { childOrder } = item;
 
@@ -2434,7 +2440,7 @@ const dealPayList = (
 ) => {
   const setCostTypeCodeDefault = getIsMedicalTradeTypeDefault();
 
-  resList.map((o) => {
+  resList.map((o, i) => {
     o.payState = payState;
 
     if (setCostTypeCodeDefault && !o.costTypeCode) {
