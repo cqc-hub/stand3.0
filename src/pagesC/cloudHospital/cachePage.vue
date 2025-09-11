@@ -207,7 +207,11 @@
         }).catch((err) => {
           console.log(err);
           if (err === '取消请求授权...') {
-
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+                _url: `pages/v3/order/detail?registerId=${registerId}`,
+              }),
+            });
           }
           throw new Error(err);
         });
