@@ -385,7 +385,7 @@ export class LoginUtils extends GStores {
 
     return this.faceVerifyAndPData({
       name: upName || patientName,
-      idCardNumber: idCard || upIdCard,
+      idCardNumber: upIdCard || idCard,
     });
   }
 
