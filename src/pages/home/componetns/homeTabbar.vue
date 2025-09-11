@@ -52,7 +52,7 @@
                 :class="{
                   'color-blue': isCenterCode(item),
                 }"
-                class="label"
+                class="label text-no-wrap"
               >
                 {{ item.label }}
               </text>
@@ -197,7 +197,7 @@
   let getNum = () => {
     api
       .getStatus({
-        str: `OPENID_${gStores.globalStore.openId}/${gStores.userStore.phoneNum}`,
+        str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;

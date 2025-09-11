@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001082",
+  "sysCode": "1001083",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -63,7 +63,7 @@
     },
     "1001044": {
       "wxAppid": "wxb54f397780bfacbc",
-      "h5Appid": "wx43649b293a6ef63c",
+      "h5Appid1": "wx43649b293a6ef63c",
       "alipayAppid": "2021003164605058",
       "isvAlipayAppid": "2021003164621092",
       "name": "安康市中医医院",

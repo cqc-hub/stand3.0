@@ -325,19 +325,25 @@ export const getMiniProgramEnv = async function (): Promise<
  * @param isForce 强制获取定位?
  * @returns
  */
-export const getLocation = async function (isForce?: boolean): Promise<{
+export const getLocation = async function (
+  isForce?: boolean,
+  opt: {
+    timeoutMs?: number;
+    hasGetNumber: number;
+  } = {
+    hasGetNumber: 0,
+  }
+): Promise<{
   latitude: string;
   longitude: string;
 }> {
   return new Promise(async (success, fail) => {
-    const errCb = (err) => {
-      if (!isForce) {
-        fail(err);
-      } else {
-        throw new Error(err);
-      }
-    };
-
+    !isForce &&
+      setTimeout(() => {
+        fail(
+          new Error(`非强制定位在${opt?.timeoutMs || 5000}毫秒后自动超时报错`)
+        );
+      }, opt?.timeoutMs || 5000);
     const res = await apiAsync(uni.getLocation, {}).catch((err) => {
       console.error('getLocation', err);
 
@@ -368,7 +374,18 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         const { authSetting } = await apiAsync(uni.getSetting, {});
         const qx = authSetting['scope.userLocation'];
         if (qx) {
-          isForce && success(await getLocation(isForce));
+          opt.hasGetNumber++;
+          if (opt.hasGetNumber > 10) {
+            const { confirm } = await apiAsync(uni.showModal, {
+              content: '获取定位失败, 请检查设备是否开启定位',
+              confirmText:'再次获取'
+            });
+            if (!confirm) {
+              throw new Error('获取定位失败,用户取消定位');
+            }
+          }
+
+          isForce && success(await getLocation(isForce, opt));
         } else {
           const { confirm } = await apiAsync(uni.showModal, {
             content: '获取定位失败, 请重新授权',
@@ -383,7 +400,7 @@ export const getLocation = async function (isForce?: boolean): Promise<{
         // #endif
 
         // #ifndef MP-WEIXIN
-        isForce && success(await getLocation(isForce));
+        isForce && success(await getLocation(isForce, opt));
         // #endif
       };
 

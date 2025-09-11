@@ -174,7 +174,7 @@
   let getNum = () => {
     api
       .getStatus({
-        str: `OPENID_${gStores.globalStore.openId}/${gStores.userStore.phoneNum}`,
+        str: `OPENID_${gStores.globalStore.h5OpenId}/${gStores.userStore.phoneNum}`,
       })
       .then(({ result }) => {
         unreadMes.value = result as boolean;
@@ -198,6 +198,9 @@
     }
   });
   const gridClick = (item) => {
+    if (item.path?.includes('/pagesB/historicalMess/historicalMess')) {
+      unreadMes.value = false;
+    }
     emit('gridClick', item);
   };
 

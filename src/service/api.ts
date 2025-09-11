@@ -226,6 +226,11 @@ const queryApi = {
       hideLoading: false,
     }),
 
+  sendMedicalMessage: <T>(data) =>
+    service.post<T>('/phs-query/clinical/sendMedicalMessage', parm(data), {
+      hideLoading: true,
+    }),
+
   qrCodeQuery: <T>(data) =>
     service.post<T>('/phs-query/clinical/qrCodeQuery', parm(data), {
       hideLoading: false,
@@ -558,10 +563,7 @@ const regApi = {
     service.post<T>('/phs-reg/regIntelligence/getGuidanceUrl', parm(data)),
 
   getConsultationUrl: <T = any>(data: any) =>
-    service.post<T>(
-      '/phs-reg/regIntelligence/getConsultationUrl',
-      parm(data)
-    ),
+    service.post<T>('/phs-reg/regIntelligence/getConsultationUrl', parm(data)),
 
   addDiseaseInformation: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/addDiseaseInformation', parm(data)),

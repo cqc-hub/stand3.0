@@ -141,7 +141,12 @@
 
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import { onPullDownRefresh, onShow, onLoad } from '@dcloudio/uni-app';
+  import {
+    onPullDownRefresh,
+    onShow,
+    onLoad,
+    onReady,
+  } from '@dcloudio/uni-app';
 
   import {
     IRegistrationCardItem,
@@ -166,6 +171,7 @@
     orderStatusMap,
     getOrderStatusTitle,
     getStatusConfig,
+    goAskForDoc1001045,
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -359,7 +365,9 @@
   };
 
   const ywzClick = async (item: IRegistrationCardItem) => {
-    if (pageConfig.value.preConsultationBtn) {
+    if (gStores.globalStore.sysCode === '1001045') {
+      goAskForDoc1001045(item);
+    } else if (pageConfig.value.preConsultationBtn) {
       //指定的预问诊跳转
       useTBanner(pageConfig.value.preConsultationBtn, 'navigateTo', item);
     } else {
@@ -581,10 +589,6 @@
       idx > -1 && (tabCurrent.value = idx);
     }
 
-    uni.setNavigationBarTitle({
-      title: '我的挂号',
-    });
-
     await handlerWeChatThRegLogin(props.value);
     let _isPatient = true;
     if (pageConfig.value.isOrderWithoutPat === '1') {
@@ -597,6 +601,12 @@
 
     tabCurrentDetail.value = tabs.value[tabCurrent.value];
     await init();
+  });
+
+  onReady(() => {
+    uni.setNavigationBarTitle({
+      title: '我的挂号',
+    });
   });
 
   const getPatLabel = (o) => {

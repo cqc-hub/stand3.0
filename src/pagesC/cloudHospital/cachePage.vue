@@ -7,7 +7,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
-  import { useGlobalStore } from '@/stores';
+  import { useCacheStore, useGlobalStore } from '@/stores';
   import {
     encryptDes,
     joinQuery,
@@ -32,6 +32,7 @@
   const globalStore = useGlobalStore();
   const shareData = ref<any>({});
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   const getAuthCodeWx = async () => {
     return new Promise(async (r, j) => {
@@ -55,6 +56,35 @@
             j(err);
           }
         });
+        r(authCode);
+      });
+    });
+  };
+
+  const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
+    return new Promise(async (r, j) => {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '请点击确定跳转医保小程序?',
+      });
+
+      if (!confirm) {
+        j('取消请求授权...');
+        return;
+      }
+
+      uni.showLoading({});
+
+      // @ts-expect-error
+      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+        uni.hideLoading();
+        const authCode = await utils
+          .getWxMedicalAuth1001035({ userName, idCard })
+          .catch((err) => {
+            console.log(err, 'err');
+            if (!(typeof err === 'string' && err === '请求授权...')) {
+              j(err);
+            }
+          });
         r(authCode);
       });
     });
@@ -149,20 +179,39 @@
       cardNumber,
     } = fd;
 
-    if (cardNumber) {
-      if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
-        const pat = gStores.userStore.patList.find((o) => o.cardNumber === cardNumber);
-        gStores.userStore.updatePatChoose(pat!);
-      }
-    }
+    // if (cardNumber) {
+    //   if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
+    //     const pat = gStores.userStore.patList.find(
+    //       (o) => o.cardNumber === cardNumber
+    //     );
+    //     gStores.userStore.updatePatChoose(pat!);
+    //   }
+    // }
+
+    const registerType =
+      insuranceParamsWx.registerType || payBackParams.registerType;
 
     if (insuranceParamsWx) {
-      if (
-        globalStore.sysCode === '1001048' &&
-        (insuranceParamsWx.registerType || payBackParams.registerType)
-      ) {
+      if (globalStore.sysCode === '1001048' && registerType) {
         await wait(60);
         handleMessage1001048(fd);
+        return;
+      }
+
+      if (globalStore.sysCode === '1001035') {
+        const { userName, idCard, registerId } = fd;
+        cacheStore.changeCacheData(fd);
+        await getAuthCodeWx1001035({
+          userName,
+          idCard,
+        }).catch((err) => {
+          console.log(err);
+          if (err === '取消请求授权...') {
+
+          }
+          throw new Error(err);
+        });
+
         return;
       }
 
@@ -335,6 +384,8 @@
       });
     });
   };
+
+  // const
 
   onShareAppMessage((res) => {
     console.warn('分享', res, shareData.value);

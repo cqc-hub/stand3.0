@@ -1,6 +1,6 @@
 <template>
   <view class="g-page">
-  <!-- <web-view src="https://h5.eheren.com/v3/#/pagesC/queueNumber/queueNumber?_d=f9%2F7ZB3FyR2yucaAhk%2F6mKYykAGXBuzmjCHzvSRtzXypGmFQH6HkFaHVNfPNYtqMIe1BAUnBbvVSHOIC5RlXDxnZm267jW5eaNRgHHhW44E%3D&sysCode=1001035&modeOld=false&isTcmStyle=1&token=a6e8289c389d8ece73750fe57fc1201152898898f684f119d7a0ca6668102698ca3dd7cdc5a19fbdf58f6595ad3b9117346368fdc9d5fbd11abe6ccef7ce7e45e1c0eea280a81b81a2dcb67d30b4526f01e9c9fecaf225ab506683889b9cd0b773410849e14649ca3f4945298a0a426cf511979de9adb4b2f7fb60fd186a56b9b47d2c0b2f90f072d0f6cbfac60dc9becf8ce05fd86e3aed6d9f2cbd8900fcdebf6c16000cbab01dd04511141285f12138d29ec90a890ec0b3f75aed2477ff6a7454bea23b6b3e677aa4595d33a2588209f0241d3425518c090caf87d5a4a36b52b7847c79f202d6cfb35460b82bb87b91aa9c6dff459592040268cf3c8b358672b0a21557a61c7fb4bb35a7671c3e77"></web-view> -->
+    <!-- <web-view src="https://h5.eheren.com/v3/#/pagesC/queueNumber/queueNumber?_d=f9%2F7ZB3FyR2yucaAhk%2F6mKYykAGXBuzmjCHzvSRtzXypGmFQH6HkFaHVNfPNYtqMIe1BAUnBbvVSHOIC5RlXDxnZm267jW5eaNRgHHhW44E%3D&sysCode=1001035&modeOld=false&isTcmStyle=1&token=a6e8289c389d8ece73750fe57fc1201152898898f684f119d7a0ca6668102698ca3dd7cdc5a19fbdf58f6595ad3b9117346368fdc9d5fbd11abe6ccef7ce7e45e1c0eea280a81b81a2dcb67d30b4526f01e9c9fecaf225ab506683889b9cd0b773410849e14649ca3f4945298a0a426cf511979de9adb4b2f7fb60fd186a56b9b47d2c0b2f90f072d0f6cbfac60dc9becf8ce05fd86e3aed6d9f2cbd8900fcdebf6c16000cbab01dd04511141285f12138d29ec90a890ec0b3f75aed2477ff6a7454bea23b6b3e677aa4595d33a2588209f0241d3425518c090caf87d5a4a36b52b7847c79f202d6cfb35460b82bb87b91aa9c6dff459592040268cf3c8b358672b0a21557a61c7fb4bb35a7671c3e77"></web-view> -->
     <view
       :style="{
         '--circle-color': color,
@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { decryptDes } from '@/common';
   import api from '@/service/api';
   import { getShareTotalUrl, LoginUtils, wait } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
@@ -84,38 +85,11 @@
     );
   };
 
-  // 绘制文字和图片
-  const drawContent = (ctx, displayWidth, displayHeight) => {
-    ctx.setFillStyle('#e4786c');
-    ctx.setFontSize(16);
-
-    ctx.fillText('旧模式文字', 20 / dpr.value, 40 / dpr.value);
-    ctx.save();
-    ctx.draw();
-  };
   onMounted(async () => {
-    // @ts-expect-error
-    const { devicePixelRatio } = await getSystemInfo();
-    dpr.value = devicePixelRatio || 2;
-
-    // 2. 计算实际像素尺寸（显示尺寸 × dpr）
-    const displayWidth = 300;
-    const displayHeight = 200;
-    canvasWidth.value = displayWidth * dpr.value;
-    canvasHeight.value = displayHeight * dpr.value;
-
-    // 3. 获取 2D 上下文（Vue 3 中无需传递 this）
-    const canvasContext = createCanvasContext('myCanvas', inst);
-    if (!canvasContext) {
-      console.error('获取 2D 上下文失败');
-      return;
-    }
-
-    // 4. 缩放上下文（避免模糊）
-    canvasContext.scale(dpr.value, dpr.value);
-
-    // 5. 绘制内容
-    drawContent(canvasContext, displayWidth, displayHeight);
+    const p =
+      'H3tiGzGqpbh31rG5v/FV6smFfZbiVwlm2eAxqYEVQ5t+CnnGYyPy41bW+P20Ddt82/22gkcqfRYHm8rurptl/TrsO+GBNGjcpaW6lj4GcLzUAWynkCWxi+cgBYk8fAsTk1eGgUpwZbUyg4Txl3IrBtZjL+h1vTQ0gMmBOWAy5jIFCI5LKL0tC2AMZhg0iHojr34DFqYM1HXAPwaTt2NeOzidFwrEjQqMZMGaXnXkStzPFkRe/MDuBQ8sfxVjHTzj8umzsZ+uLCQeWSc5KLs1LoQqIUDGlHu3nWqrZw9JW6UoLz/D30Dt2oTIujk3bEWMC7Mz2uIgqMnmzqbm1enQHJL3Lj8HFqaH3XFY0Kk+xPLZXs7/CM2lZaZq8oyRBEDEzk4zHx9FoVESpU0sb5/Rb+kyUcEITXDCCxAIbeRBn+MHQIGmWK1aRRkhGtvl2eQism4/sYJmrTiTYJ/fGBhceOf0AvoBIbA4t32QG87KViQeGJlEJdhUbQ020v+R4pqIa74w85jk1IMpV+MvppVLTpP8xMNl1VPfVNRs0RK1lolzhvDVf38KeDt0kXYs5+0zJiGwobkeYi4o4xyO/wTybjC2mu7YIb0AmMkHytGcnCU7So97sdhbs+hhbhwvzN3bikOmGrRZGbtkn9x9z5F44WEXgEx5EQZCtFmJfvQdt19M2/O1kk3uoSPxQGNcZgJQ6t5u/OHxYywrb7z30w69W5fsVP2jZpZNEIurC5HRZOmUrA+3RtdO+ixCuLW6Dn/NYv+fc0ECkQJiD065Hqm1aQuT7vaW+mCoUAowmQojHwbhf9zJXvETWw==';
+    const r = decryptDes(p);
+    console.log(r);
   });
 </script>
 

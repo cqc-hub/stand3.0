@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx799315279808c901",
+    "appid": "wxc3ee6623e27269a7",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021004103625411",
+    "appid": "2021005178602372",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -103,7 +98,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴第二医院",
+  "name": "温州市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

@@ -313,8 +313,12 @@ export const getIsMedicalMode = () => {
   return false;
 };
 
-export const getMedicalAuthCode = async (): Promise<string> => {
+export const getMedicalAuthCode = async (opt?: {
+  userName?: string;
+  idCard?: string;
+}): Promise<string> => {
   let fCode = '';
+  const { userName, idCard } = opt || {};
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -383,62 +387,6 @@ export const getMedicalAuthCode = async (): Promise<string> => {
   // #endif
 
   return fCode;
-};
-
-// 省中微信智捷付
-export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
-  const gStores = new GStores();
-  const { ev } = gStores.globalStore;
-  const medicalConfig1001035 = await getMedical1001035Info();
-
-  if (medicalConfig1001035 && ev === 'wx') {
-    const authInfo =
-      gStores.globalStore.appShowData.referrerInfo?.extraData || {};
-    const { ocToken, payAuthNo, userCardNo } = authInfo;
-
-    if (ocToken && payAuthNo) {
-      gStores.globalStore.onAppShow({});
-
-      return {
-        ocToken,
-        payAuthNo,
-        userCardNo,
-        userName,
-      };
-    }
-
-    const { extraData } = medicalConfig1001035.auth;
-    await new Promise((success, j) => {
-      setLocalStorage({
-        'get-wx-medical-auth-code': '1',
-      });
-      uni.navigateToMiniProgram({
-        ...medicalConfig1001035.auth,
-        envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-        extraData: {
-          ...extraData,
-          userName,
-          idCard,
-        },
-
-        fail({ errMsg }) {
-          if (errMsg.includes('fail cancel')) {
-            setLocalStorage({
-              'get-wx-medical-auth-code': '',
-            });
-
-            gStores.messageStore.showMessage(
-              '未完成电子医保凭证授权,无法继续医保结算'
-            );
-          }
-          j('取消请求授权...');
-        },
-        success,
-      });
-    });
-
-    return Promise.reject('请求授权...');
-  }
 };
 
 export const _getQxMedicalNation = async (
@@ -1948,6 +1896,11 @@ export const usePayPage = () => {
 
     if (medical1001035) {
       // await payBeforeCreateData();
+      api.sendMedicalMessage({
+        phsOrderId: uploadRes.payOrderId,
+        hosId: item.hosId,
+      });
+
       handlerMedicalPay1001035({
         phsOrderSource: '2',
       });
@@ -2593,6 +2546,62 @@ export const getMedical1001035Info = async () => {
   }
 };
 
+// 省中微信智捷付
+export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
+  const gStores = new GStores();
+  const { ev } = gStores.globalStore;
+  const medicalConfig1001035 = await getMedical1001035Info();
+
+  if (medicalConfig1001035 && ev === 'wx') {
+    const authInfo =
+      gStores.globalStore.appShowData.referrerInfo?.extraData || {};
+    const { ocToken, payAuthNo, userCardNo } = authInfo;
+
+    if (ocToken && payAuthNo) {
+      gStores.globalStore.onAppShow({});
+
+      return {
+        ocToken,
+        payAuthNo,
+        userCardNo,
+        userName,
+      };
+    }
+
+    const { extraData } = medicalConfig1001035.auth;
+    await new Promise((success, j) => {
+      setLocalStorage({
+        'get-wx-medical-auth-code': '1',
+      });
+      uni.navigateToMiniProgram({
+        ...medicalConfig1001035.auth,
+        envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+        extraData: {
+          ...extraData,
+          userName,
+          idCard,
+        },
+
+        fail({ errMsg }) {
+          if (errMsg.includes('fail cancel')) {
+            setLocalStorage({
+              'get-wx-medical-auth-code': '',
+            });
+
+            gStores.messageStore.showMessage(
+              '未完成电子医保凭证授权,无法继续医保结算'
+            );
+          }
+          j('取消请求授权...');
+        },
+        success,
+      });
+    });
+
+    return Promise.reject('请求授权...');
+  }
+};
+
 /**
  *
  * @param opt phsOrderSource 1-挂号 2-门诊
@@ -2681,3 +2690,6 @@ export const handlerMedicalPayDongRuan = async ({
     path: url,
   });
 };
+
+declare const exports: any;
+exports.getWxMedicalAuth1001035 = getWxMedicalAuth1001035;
