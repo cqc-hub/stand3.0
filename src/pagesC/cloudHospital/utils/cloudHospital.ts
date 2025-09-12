@@ -62,7 +62,6 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
   return fCode;
 };
 
-
 /**微信自费支付 */
 export const wxPay = (data) => {
   var paymentData = data[0].invokeData;
@@ -193,6 +192,38 @@ export const aliPayMedicalPluginPay = (yibaoRegisterId, yibaoPayBackParams) => {
               payBackParams: JSON.stringify(yibaoPayBackParams.value),
             }),
           });
+        },
+      });
+    }
+  }
+};
+
+export const aliPayMedicalPluginPayInit = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+  if (medicalMHelp) {
+    const { alipay } = medicalMHelp;
+    if (alipay?.medicalPlugin) {
+      const authPayPlugin = requirePlugin('auth-pay-plugin');
+      const b = () => {
+        uni.reLaunch({
+          url: joinQuery('/pagesC/cloudHospital/cachePage', {}),
+        });
+      };
+      authPayPlugin.initMethods({
+        // 医保授权后，预结算接口报错回调函数（处理逻辑示例）
+        catchException: (error) => {
+          console.log('catchException error: ', error);
+          b();
+        },
+        // 支付回调函数
+        payComplete: (status, ampTraceId) => {
+          b();
+        },
+        // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
+        payCancelAuth: () => {
+          b();
         },
       });
     }

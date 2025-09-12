@@ -21,6 +21,7 @@
     aliPayMedicalPluginGetAuthCode,
     aliPayMedicalPluginPay,
     getMedicalAuthCode,
+    aliPayMedicalPluginPayInit,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
 
@@ -205,7 +206,6 @@
           userName,
           idCard,
         }).catch((err) => {
-          console.log(err);
           if (err === '取消请求授权...') {
             uni.navigateTo({
               url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
@@ -428,6 +428,7 @@
     //   const r = await getAuthCodeWx();
     //   console.log(r, 233);
     // }, 1000);
+    aliPayMedicalPluginPayInit();
   });
 
   onShow(() => {
