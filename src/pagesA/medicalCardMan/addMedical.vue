@@ -442,7 +442,8 @@
 
     const name = (isUpFace === '1' && upName) || patientName;
     const cardNo = (isUpFace === '1' && upIdCard) || idCard;
-    const isIDCard = idValidator.checkIdCardNo(idCard);
+    const isIDCard =
+      formData.value.idType === '01' && idValidator.checkIdCardNo(idCard);
 
     if (isIDCard && isFace === '1') {
       if (isFaceRemote === '1' && pageType !== 'perfectReal') {

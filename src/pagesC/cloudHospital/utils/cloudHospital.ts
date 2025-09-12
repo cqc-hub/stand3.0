@@ -115,7 +115,7 @@ export const aliPayMedicalPluginGetAuthCode = (insuranceParams) => {
     medOrgOrd: insuranceParams.medOrgOrd,
   };
   console.warn('获取到医保数据', insuranceParams);
-  const gStores = new GStores();
+  // const gStores = new GStores();
 
   // 调用支付方法前，需要获取授权
   my.getAuthCode({
@@ -208,7 +208,7 @@ export const aliPayMedicalPluginPayInit = () => {
       const authPayPlugin = requirePlugin('auth-pay-plugin');
       const b = () => {
         uni.reLaunch({
-          url: joinQuery('/pagesC/cloudHospital/cachePage', {}),
+          url: '/pagesC/cloudHospital/cachePage',
         });
       };
       authPayPlugin.initMethods({

@@ -279,7 +279,7 @@
     yibaoPayBackParams.value = data.payBackParams;
     yibaoRegisterId.value = data.registerId;
     if (insuranceParams) {
-      aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
+      // aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
       await wait(600);
 
       aliPayMedicalPluginGetAuthCode(insuranceParams);

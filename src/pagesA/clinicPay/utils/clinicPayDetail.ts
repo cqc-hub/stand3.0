@@ -2572,7 +2572,7 @@ export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
         ocToken,
         payAuthNo,
         userCardNo,
-        userName,
+        userName: authInfo.userName,
       };
     }
 
@@ -2625,7 +2625,12 @@ export const handlerMedicalPay1001035 = async (opt: {
 
   if (medical1001035) {
     const { uploadRes, info } = gStores.globalStore.cacheData;
-    const { ocToken: octoken, payAuthNo: payAuthno } = info.extend;
+    const {
+      ocToken: octoken,
+      payAuthNo: payAuthno,
+      userName: familyName,
+      userCardNo: familyIdNo,
+    } = info.extend;
     const { payOrderId: orderId } = uploadRes;
 
     const extraData = {
@@ -2635,6 +2640,8 @@ export const handlerMedicalPay1001035 = async (opt: {
       orderId,
       payAuthno,
       octoken,
+      familyName,
+      familyIdNo,
     };
     console.log('拉医保extraData---');
     console.log(extraData);

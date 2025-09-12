@@ -32,7 +32,13 @@
   import { onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
-  import { GStores, idValidator, routerJump, ServerStaticData } from '@/utils';
+  import {
+    GStores,
+    idValidator,
+    PatientUtils,
+    routerJump,
+    ServerStaticData,
+  } from '@/utils';
   import api from '@/service/api';
 
   const gStores = new GStores();
@@ -44,11 +50,18 @@
     upPhone: '',
     relationShip: '',
   });
+  const patientUtils = new PatientUtils();
 
   const formSubmit = async ({}) => {
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const { upName, upIdCard, upPhone, relationShip } = formData.value;
-    await api.updateGuardianInfo({
+
+    const { pData } = await patientUtils.faceVerifyAndPData({
+      idCardNumber: upIdCard,
+      name: upName,
+    });
+
+    const args = {
       ...formData.value,
       cardNumber,
       patientId,
@@ -58,7 +71,10 @@
       upIdCard,
       upPhone,
       relationShip,
-    });
+      pData,
+    };
+
+    await api.updateGuardianInfo(args);
 
     gStores.messageStore.showMessage('更新成功', 1500, {
       closeCallBack() {
