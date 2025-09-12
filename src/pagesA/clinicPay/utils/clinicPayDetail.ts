@@ -59,6 +59,7 @@ export type TWxAuthorize = {
 };
 export type IPayListItem = {
   diseaseType?: string;
+  medOrgOrd?: string;
   childOrder: string; // 唯一 !!
   deptId: string;
   deptName: string;
@@ -1243,6 +1244,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
       visitDate: selectList[0].visitDate,
       mergeOrder: selectList.map((o) => o.childOrder).join(','),
+      medOrgOrd: selectList.map((o) => o.medOrgOrd).join(','),
       deptCode: selectList.map((o) => o.deptId).join(','),
       deptName: selectList.map((o) => o.deptName).join(','),
       docCode: selectList.map((o) => o.docId).join(','),
