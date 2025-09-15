@@ -189,7 +189,7 @@
     // }
 
     const registerType =
-      insuranceParamsWx.registerType || payBackParams.registerType;
+      insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
       if (globalStore.sysCode === '1001048' && registerType) {
