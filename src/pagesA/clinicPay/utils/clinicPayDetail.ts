@@ -87,6 +87,8 @@ export type IPayListItem = {
   recipeNo?: string;
   autoPay?: '1'; // when attribute autoPay in the page props, auto choose item and pay
   tradeType: TTradeType;
+  tips?: string;
+  costList?: TCostList;
 };
 
 export type TPayedListItem = {} & IPayListItem;
@@ -781,6 +783,7 @@ export const usePayPage = () => {
   const kw1 = computed(() =>
     gStores.globalStore.sysCode === '1001035' ? '交费' : '缴费'
   );
+
   const refPay = ref<any>('');
   const payArg = ref<BaseObject>({});
   const refPayList = ref([
@@ -853,9 +856,15 @@ export const usePayPage = () => {
   const selUnPayList = ref<IPayListItem[]>([]);
   const payedList = ref<TPayedListItem[]>([]);
   const totalCost = computed(() => {
-    const _subCount = selUnPayList.value.reduce((prev, curr) => {
+    let _subCount = selUnPayList.value.reduce((prev, curr) => {
       return prev + (curr.totalCost as unknown as number) * 1;
     }, 0);
+    if (isListCanPayedItem.value) {
+      _subCount =
+        selUnPayList.value[0]?.costList?.reduce((prev, curr) => {
+          return prev + (curr.subCost as unknown as number) * 1;
+        }, 0) || 0;
+    }
 
     return Number((_subCount * 100).toFixed(2)) / 100;
   });
@@ -873,6 +882,44 @@ export const usePayPage = () => {
   // 模式-药品配送
   const isModeMedicalHelp = computed(() => {
     return pageProps.value.mode === 'medicalHelp';
+  });
+
+  //模式-门诊缴费列表分项支付
+  const isListCanPayedItem = computed(() => {
+    return pageConfig.value?.isListCanPayedItem === '1' || false;
+  });
+
+  // 可以选择性支付
+  const isCanSelServerFee = computed(() => {
+    let isMedicalPay = false;
+    const isMedicalModePlugin = getIsMedicalModePlugin();
+    const {
+      sConfig: { medicalMHelp },
+    } = globalGl;
+
+    if (isMedicalModePlugin) {
+      isMedicalPay = true;
+
+      if (medicalMHelp) {
+        const { wx: _wx } = medicalMHelp;
+        // #ifdef  MP-WEIXIN
+        if (_wx) {
+          const { medicalNation } = _wx;
+
+          if (medicalNation) {
+            // 微信国标可以选择缴费
+            isMedicalPay = false;
+          }
+        }
+        // #endif
+      }
+    }
+
+    isMedicalPay = isMedicalPay && selUnPayList.value[0].costTypeCode === '2';
+
+    return (
+      pageConfig.value.isSubitemPay === '1' && !isMedicalPay // 医保不支持选择
+    );
   });
 
   const isShowSelectAll = computed(() => {
@@ -971,6 +1018,44 @@ export const usePayPage = () => {
         patientName,
       };
     }
+    if (isListCanPayedItem.value) {
+      const allPromise: any = [];
+      unPayList.value.forEach((item, index) => {
+        const actionApi = desSecret
+          ? api.getScanClinicalPayDetailList
+          : api.getClinicalPayDetailList;
+        let promise = new Promise(async (rl, rj) => {
+          const requestArg: any = {
+            ...item,
+            patientId,
+            source: gStores.globalStore.browser.source,
+          };
+          if (desSecret) {
+            requestArg.patientId = undefined as unknown as any;
+            requestArg.desSecret = desSecret;
+          }
+          const { result } = await actionApi<TPayDetailInfo>(requestArg);
+          if (result) {
+            const { costList } = result;
+
+            costList &&
+              costList.map(({ costList }) => {
+                costList.map((o) => {
+                  const { amountRem } = o;
+
+                  if (amountRem === '0') {
+                    o.disabled = true;
+                  }
+                });
+              });
+            unPayList.value[index].costList = costList;
+          }
+          rl('success');
+        });
+        allPromise.push(promise);
+      });
+      await Promise.all(allPromise);
+    }
   };
 
   const getPayedList = async () => {
@@ -1056,7 +1141,7 @@ export const usePayPage = () => {
     }
   };
 
-  const selPayListItem = (item: IPayListItem) => {
+  const selPayListItem = (item: IPayListItem, type?: 'notMerge') => {
     const { childOrder } = item;
 
     const idx = selUnPayList.value.findIndex(
@@ -1064,8 +1149,8 @@ export const usePayPage = () => {
     );
 
     if (idx === -1) {
-      if (isUnPayListSelRadio.value) {
-        selUnPayList.value = [item];
+      if (isUnPayListSelRadio.value || type === 'notMerge') {
+        selUnPayList.value = [{ ...item }];
       } else {
         const sels = [
           ...new Set([...selUnPayList.value, item].map((o) => o.subIds)),
@@ -1081,7 +1166,41 @@ export const usePayPage = () => {
         }
       }
     } else {
+      if (
+        type === 'notMerge' &&
+        selUnPayList.value[0]?.costList?.length !== item?.costList?.length
+      ) {
+        selUnPayList.value = [{ ...item }];
+        return;
+      }
       selUnPayList.value.splice(idx, 1);
+    }
+  };
+
+  const selDeailtItem = (item: IPayListItem, detailItem: TCostList[number]) => {
+    // selUnPayList.value[0]=
+    if (
+      !selUnPayList?.value?.length ||
+      item.childOrder != selUnPayList.value[0].childOrder
+    ) {
+      selUnPayList.value = [{ ...item, costList: [] }];
+    }
+    const { serialNo, clinicId } = detailItem;
+    const idx = selUnPayList.value[0]?.costList?.findIndex(
+      (o) => o.serialNo === serialNo
+    );
+    if (idx === -1) {
+      const allItem = item.costList!.filter(
+        (o) => o.serialNo === serialNo || (clinicId && o.clinicId == clinicId)
+      );
+      selUnPayList.value[0]?.costList?.push(...allItem);
+    } else {
+      selUnPayList.value[0].costList = selUnPayList.value[0]?.costList?.filter(
+        (o) => o.serialNo !== serialNo
+      );
+      if (!selUnPayList.value[0].costList?.length) {
+        selUnPayList.value = [];
+      }
     }
   };
 
@@ -1282,6 +1401,71 @@ export const usePayPage = () => {
     } else {
       payArg.patientName = patientName;
     }
+    return payArg;
+  };
+
+  const payDetailBeforeCreateData = async () => {
+    const { patientId, patientName } = gStores.userStore.patChoose;
+    const _totalCost = totalCost.value + '';
+    const source = gStores.globalStore.browser.source;
+    const { cardNumber: _cardNumber, patientName: _patientName } =
+      gStores.userStore.patChoose;
+    let {
+      childOrder,
+      deptId,
+      docId,
+      hosName,
+      deptName,
+      docName,
+      hosId,
+      visitDate,
+      costTypeCode,
+      cardNumber = _cardNumber,
+      recipeNo,
+    } = selUnPayList.value[0];
+    const _patientId = pageProps.value.params ? '' : patientId;
+    let personalPayFee: any;
+    personalPayFee =
+      ((!costTypeCode || costTypeCode === '1') && totalCost.value) || undefined;
+
+    const serialNo = selUnPayList.value[0]?.costList
+      ?.map((o) => o.serialNo)
+      .filter((o) => o)
+      .join(',');
+    const args: any = {
+      personalPayFee,
+      patientName: _patientName,
+      businessType: '1',
+      patientId: _patientId,
+      source,
+      totalCost: _totalCost,
+      mergeOrder: childOrder,
+      deptCode: deptId,
+      hosName,
+      deptName,
+      docCode: docId,
+      docName,
+      hosId,
+      visitDate,
+      cardNumber,
+      recipeNo,
+      serialNo,
+    };
+    console.log('args', args);
+    const {
+      result: { phsOrderNo },
+    } = await api.createClinicOrder(args);
+
+    const payArg: BaseObject = {
+      phsOrderNo,
+      totalFee: _totalCost,
+      phsOrderSource: '2',
+      hosId,
+      hosName,
+      patientName: _patientName || patientName,
+      cardNumber,
+      patientId: _patientId,
+    };
     return payArg;
   };
 
@@ -1573,7 +1757,23 @@ export const usePayPage = () => {
     setLocalStorage({
       selUnPayList: selUnPayList.value,
     });
+    if (isUnPayListSelRadio.value) {
+      if (item.key === 'online') {
+        setLocalStorage({
+          selUnPayDetailList: {
+            selList: selUnPayList.value[0].costList,
+          },
+        });
 
+        const payArg = await payDetailBeforeCreateData();
+        const res = await payMoneyOnline(payArg);
+        await toPayPull(res, '门诊缴费');
+        payAfter();
+      } else {
+        gStores.messageStore.showMessage('暂仅支持在线自费缴费');
+      }
+      return;
+    }
     // item.key = 'medicare'
 
     // 自费
@@ -2285,6 +2485,9 @@ export const usePayPage = () => {
     isModeMedicalHelp,
     getChineseMedicineList,
     kw1,
+    isListCanPayedItem,
+    isCanSelServerFee,
+    selDeailtItem,
   };
 };
 

@@ -65,11 +65,26 @@
             isShowFg
             typeFg="15"
           />
-          <block v-if="isPayListRequestComplete && unPayList.length">
+          <block v-if="isPayListRequestComplete && unPayList.length&&!isListCanPayedItem">
             <Clinic-Pay-Detail-List
               :list="unPayList"
               @click-item="itemClick"
               @sel-item="selPayListItem"
+              :selUnPayList="selUnPayList"
+              :isListShowClinicType="isListShowClinicType"
+              :isHidePrice="isWaitPayListHidePrice"
+              :systemModeOld="gStores.globalStore.modeOld"
+              isCheck
+            />
+          </block>
+          <block v-else-if="isPayListRequestComplete && unPayList.length&&isListCanPayedItem">
+            <Clinic-Pay-Item-Detail-List
+              :list="unPayList"
+              @click-item="itemClick"
+              @sel-item="selPayListItem"
+              @sel-deailt-item="selDeailtItem"
+              :isDisabledCostList="pageConfig.isDisabledShowCostList === '1'"
+              :isCanSelServerFee="isCanSelServerFee"
               :selUnPayList="selUnPayList"
               :isListShowClinicType="isListShowClinicType"
               :isHidePrice="isWaitPayListHidePrice"
@@ -259,6 +274,7 @@
   import globalGl from '@/config/global';
 
   import ClinicPayDetailList from './components/ClinicPayDetailList.vue';
+  import ClinicPayItemDetailList from './components/ClinicPayItemDetailList.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import WxPayMoneyMedicalPopup from './components/WxPayMoneyMedicalPopup.vue';
 
@@ -304,6 +320,9 @@
     isModeMedicalHelp,
     getChineseMedicineList,
     kw1,
+    isListCanPayedItem,
+    isCanSelServerFee,
+    selDeailtItem
   } = usePayPage();
 
   const isShowPatComponent = ref(false);

@@ -497,6 +497,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
     medicalMHelp: {
+      isOpenPatToMedicalPat: {},
       wx: {
         crossProgramBizType: {
           clinic: '6f8FEzfB6q',
@@ -511,6 +512,7 @@ const scJson: Record<string, ISConfig> = {
           orgId: { 12930: 'H33060200131' },
           cardType: '01',
         },
+        medicalFiling: '1',
       },
     },
 
