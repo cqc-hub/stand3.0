@@ -407,6 +407,15 @@
           }
         },
         {
+          "path": "medicalCardMan/addPatInfo",
+          "extend": {
+            "login": true
+          },
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
+        {
           "path": "medicalCardMan/easyAssociate",
           "extend": {
             "herenId": true

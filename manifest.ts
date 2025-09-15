@@ -299,6 +299,7 @@ fs.writeFileSync(
   dynamicUtilUrl,
   [
     ...dynamicUtilHeaderData,
+    '\n',
     ...dynamicUtilBodyData,
     ...dynamicUtilFooterData,
   ].join('\n'),

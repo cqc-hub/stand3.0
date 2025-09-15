@@ -120,7 +120,7 @@
         required: true,
         showRequireIcon: true,
 
-        label: '舌苔照片',
+        label: '添加舌苔照片',
         field: 'file-image',
         key: 'ceshiData1',
         imgLimit: 3,

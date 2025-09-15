@@ -452,7 +452,7 @@
       gStores.globalStore.appShowData.referrerInfo?.extraData?.statuscode ===
         '0'
     ) {
-      tabChange(1);
+      payAfter();
     }
   });
 
