@@ -206,24 +206,31 @@ export const aliPayMedicalPluginPayInit = () => {
     const { alipay } = medicalMHelp;
     if (alipay?.medicalPlugin) {
       const authPayPlugin = requirePlugin('auth-pay-plugin');
-      const b = () => {
+      const b = (arg) => {
         uni.reLaunch({
-          url: '/pagesC/cloudHospital/cachePage',
+          url: joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', arg),
         });
       };
       authPayPlugin.initMethods({
         // 医保授权后，预结算接口报错回调函数（处理逻辑示例）
         catchException: (error) => {
           console.log('catchException error: ', error);
-          b();
+          b({
+            _url: 'pages/v3/prescriptionPay/list',
+          });
         },
         // 支付回调函数
         payComplete: (status, ampTraceId) => {
-          b();
+
+          b({
+            _url: 'pages/v3/prescriptionPay/list?current=1',
+          });
         },
         // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
         payCancelAuth: () => {
-          b();
+          b({
+            _url: 'pages/v3/prescriptionPay/list',
+          });
         },
       });
     }

@@ -19,7 +19,6 @@
   import {
     wxPay,
     aliPayMedicalPluginGetAuthCode,
-    aliPayMedicalPluginPay,
     getMedicalAuthCode,
     aliPayMedicalPluginPayInit,
   } from './utils/cloudHospital';

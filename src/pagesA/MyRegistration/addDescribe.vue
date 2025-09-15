@@ -123,8 +123,9 @@
         label: '舌苔照片',
         field: 'file-image',
         key: 'ceshiData1',
-        imgLimit: 6,
+        imgLimit: 3,
         direction: 'horizontal',
+        emptyMessage: '请添加舌苔照片',
       },
       {
         label: '添加病历照片',
