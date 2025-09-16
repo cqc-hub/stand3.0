@@ -101,6 +101,17 @@
                   补充监护人
                 </view>
               </view>
+              <view
+                v-if="isCanAddPatCardNo(pat)"
+                class="pat-btns flex-normal mt16 ml12"
+              >
+                <view
+                  @click="addPatInfo(pat)"
+                  class="btn btn-round btn-border btn-plain btn-size-small color-dark"
+                >
+                  补充信息
+                </view>
+              </view>
               <!-- #ifdef MP-ALIPAY -->
               <view
                 v-if="
@@ -337,12 +348,28 @@
     let r = false;
 
     if (isCanAddGuardian === '1' && isGuardianWithIdCard) {
-      const { patientAge, upName, idType } = pat;
+      const { patientAge, upIdCardEncry, idType } = pat;
       if (
-        !upName &&
+        !upIdCardEncry &&
         idType === '01' &&
         (patientAge as unknown as number) * 1 <= isGuardianWithIdCard
       ) {
+        r = true;
+      }
+    }
+
+    return r;
+  };
+
+  const isCanAddPatCardNo = (pat: IPat) => {
+    const { isCanAddPatCardNo } = pageConfig.value;
+    const { idCardEncry, idType } = pat;
+
+    let r = false;
+
+    if (isCanAddPatCardNo === '1' && idType === '01') {
+      return true;
+      if (!idCardEncry) {
         r = true;
       }
     }
@@ -355,6 +382,14 @@
 
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/addUpName',
+    });
+  };
+
+  const addPatInfo = (pat: IPat) => {
+    gStores.userStore.updatePatChoose(pat);
+
+    uni.navigateTo({
+      url: '/pagesA/medicalCardMan/addPatInfo',
     });
   };
 

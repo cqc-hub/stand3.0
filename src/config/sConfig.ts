@@ -747,33 +747,33 @@ const scJson: Record<string, ISConfig> = {
     },
     isOpenWechatSI: true,
     isOpenHelpOld: '1',
-    medicalMHelp: {
-      wx: {
-        isMedicalOrder: '1',
+    // medicalMHelp: {
+    //   wx: {
+    //     isMedicalOrder: '1',
 
-        isGbFamilyPayment: '1',
+    //     isGbFamilyPayment: '1',
 
-        medical1001035: {
-          auth: {
-            appId: 'wxfde9fffbfa82be54',
-            path: 'pages/allOutPayCashier/authUniPro/authUni',
-            extraData: {
-              appid: 'c4097ed72fc64e71818e6990dc6f9512',
-            },
-          },
-          pay: {
-            appId: 'wxfde9fffbfa82be54',
-            path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
-            extraData: {
-              appid: 'c4097ed72fc64e71818e6990dc6f9512',
-              channel_code: 'f6cd425b461444f3907808719fd30011',
-              fixmedinsCode: 'H32010400468',
-              fixmedinsName: '江苏省中医院',
-            },
-          },
-        },
-      },
-    },
+    //     medical1001035: {
+    //       auth: {
+    //         appId: 'wxfde9fffbfa82be54',
+    //         path: 'pages/allOutPayCashier/authUniPro/authUni',
+    //         extraData: {
+    //           appid: 'c4097ed72fc64e71818e6990dc6f9512',
+    //         },
+    //       },
+    //       pay: {
+    //         appId: 'wxfde9fffbfa82be54',
+    //         path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
+    //         extraData: {
+    //           appid: 'c4097ed72fc64e71818e6990dc6f9512',
+    //           channel_code: 'f6cd425b461444f3907808719fd30011',
+    //           fixmedinsCode: 'H32010400468',
+    //           fixmedinsName: '江苏省中医院',
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
   },
   /**
    * 安康中医医院

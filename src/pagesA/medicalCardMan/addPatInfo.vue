@@ -5,7 +5,6 @@
     }"
     class="page"
   >
-    <g-flag isShowFg typeFg="1264" />
     <view class="container" scroll-y>
       <g-form
         v-model:value="formData"
@@ -86,7 +85,10 @@
 
   onLoad(async () => {
     const { patientName } = gStores.userStore.patChoose;
-    formData.value.patientName = patientName;
+
+    Object.assign(formData.value, {
+      patientName,
+    })
   });
 
   onMounted(() => {
@@ -100,6 +102,17 @@
         labelWidth: '220rpx',
         maxlength: 50,
         disabled: true,
+      },
+
+      {
+        disabled: true,
+        label: '证件类型',
+        placeholder: '请选择',
+        key: 'idType',
+        field: 'select',
+        options: [],
+        autoOptions: 'idTypeTerms',
+        labelWidth: '220rpx',
       },
 
       {

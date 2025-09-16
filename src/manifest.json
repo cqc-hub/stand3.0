@@ -63,12 +63,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,7 +71,12 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "appid": "2021003120612222",
     "window": {
