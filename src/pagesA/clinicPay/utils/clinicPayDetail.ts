@@ -59,6 +59,7 @@ export type TWxAuthorize = {
 };
 export type IPayListItem = {
   diseaseType?: string;
+  medOrgOrd?: string;
   childOrder: string; // 唯一 !!
   deptId: string;
   deptName: string;
@@ -1141,7 +1142,13 @@ export const usePayPage = () => {
     }
   };
 
-  const selPayListItem = (item: IPayListItem, type?: 'notMerge') => {
+  /**
+   * - childOrder 是唯一标识， 重复会跪
+   * - subIds 同样表示可以一起勾选
+   *
+   * @param item
+   */
+  const selPayListItem = (item: IPayListItem) => {
     const { childOrder } = item;
 
     const idx = selUnPayList.value.findIndex(
@@ -1356,6 +1363,7 @@ export const usePayPage = () => {
       hosName: selectList[0].hosName,
       visitDate: selectList[0].visitDate,
       mergeOrder: selectList.map((o) => o.childOrder).join(','),
+      medOrgOrd: selectList.map((o) => o.medOrgOrd).join(','),
       deptCode: selectList.map((o) => o.deptId).join(','),
       deptName: selectList.map((o) => o.deptName).join(','),
       docCode: selectList.map((o) => o.docId).join(','),
@@ -2637,7 +2645,7 @@ const dealPayList = (
 ) => {
   const setCostTypeCodeDefault = getIsMedicalTradeTypeDefault();
 
-  resList.map((o) => {
+  resList.map((o, i) => {
     o.payState = payState;
 
     if (setCostTypeCodeDefault && !o.costTypeCode) {
@@ -2767,7 +2775,7 @@ export const getWxMedicalAuth1001035 = async ({ userName, idCard }) => {
         ocToken,
         payAuthNo,
         userCardNo,
-        userName,
+        userName: authInfo.userName,
       };
     }
 
@@ -2820,7 +2828,12 @@ export const handlerMedicalPay1001035 = async (opt: {
 
   if (medical1001035) {
     const { uploadRes, info } = gStores.globalStore.cacheData;
-    const { ocToken: octoken, payAuthNo: payAuthno } = info.extend;
+    const {
+      ocToken: octoken,
+      payAuthNo: payAuthno,
+      userName: familyName,
+      userCardNo: familyIdNo,
+    } = info.extend;
     const { payOrderId: orderId } = uploadRes;
 
     const extraData = {
@@ -2830,6 +2843,8 @@ export const handlerMedicalPay1001035 = async (opt: {
       orderId,
       payAuthno,
       octoken,
+      familyName,
+      familyIdNo,
     };
     console.log('拉医保extraData---');
     console.log(extraData);

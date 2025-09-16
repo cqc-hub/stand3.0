@@ -123,42 +123,53 @@
       gStores.globalStore.appShowData.referrerInfo?.extraData || {};
     const authCode = authInfo.authCode || authInfo.payAuthNo;
     // 微信医保小程序跳回来后中断了链路 重新走下
-    if (getLocalStorage('get-wx-medical-auth-code') === '1' && authCode) {
+    if (getLocalStorage('get-wx-medical-auth-code') === '1') {
       await wait(300);
       setLocalStorage({
         'get-wx-medical-auth-code': '',
       });
 
-      if (gStores.globalStore.sysCode === '1001048') {
-        goYB1001048(authCode);
-        return;
-      }
+      if (authCode) {
+        if (gStores.globalStore.sysCode === '1001048') {
+          goYB1001048(authCode);
+          return;
+        }
 
-      if (gStores.globalStore.sysCode === '1001035') {
-        afterGetMedicalAuthCode1001035();
-      }
-      // 获取授权码
-      if (getLocalStorage('get-wx-medical-netWork-path')) {
-        const resultConfig = JSON.parse(
-          decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
-        );
-        console.warn('有授权码的路径', resultConfig);
-        console.warn('有授权码的路径参数', resultConfig.query);
-        setLocalStorage({
-          'get-wx-medical-netWork-path': '',
-        });
-        try {
+        if (gStores.globalStore.sysCode === '1001035') {
+          afterGetMedicalAuthCode1001035();
+        }
+        // 获取授权码
+        if (getLocalStorage('get-wx-medical-netWork-path')) {
+          const resultConfig = JSON.parse(
+            decodeURIComponent(getLocalStorage('get-wx-medical-netWork-path'))
+          );
+          console.warn('有授权码的路径', resultConfig);
+          console.warn('有授权码的路径参数', resultConfig.query);
+          setLocalStorage({
+            'get-wx-medical-netWork-path': '',
+          });
+          try {
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
+                _url: resultConfig.path,
+                ...resultConfig.query,
+                ...authInfo,
+                authCode: authCode,
+              }),
+            });
+          } catch (error) {
+            gStores.messageStore.showMessage('网络医院地址参数配置错误', 2000);
+            console.error('网络医院地址参数配置错误', error);
+          }
+        }
+      } else {
+        const registerId = cacheStore.cacheData?.registerId;
+        if (registerId) {
           uni.navigateTo({
             url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
-              _url: resultConfig.path,
-              ...resultConfig.query,
-              ...authInfo,
-              authCode: authCode,
+              _url: `pages/v3/order/detail?registerId=${registerId}`,
             }),
           });
-        } catch (error) {
-          gStores.messageStore.showMessage('网络医院地址参数配置错误', 2000);
-          console.error('网络医院地址参数配置错误', error);
         }
       }
     }

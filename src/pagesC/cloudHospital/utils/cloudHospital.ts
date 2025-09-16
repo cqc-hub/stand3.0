@@ -62,7 +62,6 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
   return fCode;
 };
 
-
 /**微信自费支付 */
 export const wxPay = (data) => {
   var paymentData = data[0].invokeData;
@@ -116,7 +115,7 @@ export const aliPayMedicalPluginGetAuthCode = (insuranceParams) => {
     medOrgOrd: insuranceParams.medOrgOrd,
   };
   console.warn('获取到医保数据', insuranceParams);
-  const gStores = new GStores();
+  // const gStores = new GStores();
 
   // 调用支付方法前，需要获取授权
   my.getAuthCode({
@@ -192,6 +191,45 @@ export const aliPayMedicalPluginPay = (yibaoRegisterId, yibaoPayBackParams) => {
               registerId: yibaoRegisterId.value,
               payBackParams: JSON.stringify(yibaoPayBackParams.value),
             }),
+          });
+        },
+      });
+    }
+  }
+};
+
+export const aliPayMedicalPluginPayInit = () => {
+  const {
+    sConfig: { medicalMHelp },
+  } = globalGl;
+  if (medicalMHelp) {
+    const { alipay } = medicalMHelp;
+    if (alipay?.medicalPlugin) {
+      const authPayPlugin = requirePlugin('auth-pay-plugin');
+      const b = (arg) => {
+        uni.reLaunch({
+          url: joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', arg),
+        });
+      };
+      authPayPlugin.initMethods({
+        // 医保授权后，预结算接口报错回调函数（处理逻辑示例）
+        catchException: (error) => {
+          console.log('catchException error: ', error);
+          b({
+            _url: 'pages/v3/prescriptionPay/list',
+          });
+        },
+        // 支付回调函数
+        payComplete: (status, ampTraceId) => {
+
+          b({
+            _url: 'pages/v3/prescriptionPay/list?current=1',
+          });
+        },
+        // 支付模块-取消医保授权（处理逻辑示例，建议直接回跳至订单待支付页面）
+        payCancelAuth: () => {
+          b({
+            _url: 'pages/v3/prescriptionPay/list',
           });
         },
       });

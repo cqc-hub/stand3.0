@@ -220,19 +220,19 @@ const scJson: Record<string, ISConfig> = {
     // isOpenHomeTabBarMessageBtn: '1',
     // isOpenHomeTabBarNetWorkBtn: '1'
 
-    // medicalMHelp: {
-    //   alipay: {
-    //     medicalPlugin: {
-    //       orgId: {
-    //         13012: 'H33030200034',
-    //         13013: 'H33030200034',
-    //         13009: 'H33030200034',
-    //         13011: 'H33030200034',
-    //       },
-    //       cardType: '01',
-    //     },
-    //   },
-    // },
+    medicalMHelp: {
+      alipay: {
+        medicalPlugin: {
+          orgId: {
+            13012: 'H33030200034',
+            13013: 'H33030200034',
+            13009: 'H33030200034',
+            13011: 'H33030200034',
+          },
+          cardType: '01',
+        },
+      },
+    },
   },
 
   /**
@@ -264,18 +264,16 @@ const scJson: Record<string, ISConfig> = {
     },
     isSearchHosForAddPatHasMoreThanOneCard: '1',
 
-    medicalMHelp: {
-      // isOpenPatToMedicalPat: {},
+    // medicalMHelp: {
 
-      wx: {
-        medicalNation: {
-          appId: 'wxe183cd55df4b4369',
-          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
-        },
-        // medicalDefault: '1',
-        isMedicalOrder: '1',
-      },
-    },
+    //   wx: {
+    //     medicalNation: {
+    //       appId: 'wxe183cd55df4b4369',
+    //       path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
+    //     },
+    //     isMedicalOrder: '1',
+    //   },
+    // },
   },
 
   /**
@@ -650,9 +648,6 @@ const scJson: Record<string, ISConfig> = {
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
-
-        // medicalDefault: '1'
-        // isGbFamilyPayment: '1',
       },
     },
   },
@@ -745,6 +740,7 @@ const scJson: Record<string, ISConfig> = {
    * 江苏省中医院
    */
   1001035: {
+    isOpenMessageAuth: '1',
     isMessageBtnShowNew: '1',
     isOpenPopularSci: {
       wx: '1',

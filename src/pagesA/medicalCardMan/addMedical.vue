@@ -430,6 +430,94 @@
   let resolve: (...any) => any = () => {};
   let reject: (...any) => any = () => {};
 
+  const faceVerify = async (data) => {
+    let {
+      isFace,
+      isUpFace,
+      isFaceRemote,
+      faceAgeRange = [17, 60],
+    } = pageConfig.value;
+    const { pageType } = pageProps.value;
+    const { patientName, upName, idCard, upIdCard } = data;
+
+    const name = (isUpFace === '1' && upName) || patientName;
+    const cardNo = (isUpFace === '1' && upIdCard) || idCard;
+    const isIDCard =
+      formData.value.idType === '01' && idValidator.checkIdCardNo(idCard);
+
+    if (isIDCard && isFace === '1') {
+      if (isFaceRemote === '1' && pageType !== 'perfectReal') {
+        const list = [
+          {
+            label: '人脸认证',
+            key: 'isFace',
+          },
+          {
+            label: '远程人脸认证',
+            key: 'isFaceRemote',
+          },
+        ];
+
+        refPayList.value = list;
+        const v = await new Promise((r) => {
+          _resolve = r;
+          refPay.value.show();
+        });
+
+        if (v === 'isFaceRemote') {
+          isFace = undefined;
+        } else {
+          pageConfig.value.isFaceRemote = undefined;
+        }
+      }
+
+      if (isFace === '1') {
+        const [minAge, maxAge] = faceAgeRange;
+        const { sysCode } = gStores.globalStore;
+        let shouldProceed = false;
+
+        if (isUpFace === '1' && upIdCard) {
+          shouldProceed = true;
+        } else {
+          const { age } = idValidator.getIdCardInfo(idCard);
+          if (!shouldProceed && minAge && age >= minAge) {
+            shouldProceed = true;
+          }
+
+          if (!shouldProceed && maxAge && age < maxAge) {
+            shouldProceed = true;
+          }
+
+          if (minAge && maxAge) {
+            shouldProceed = age >= minAge && age <= maxAge;
+          }
+
+          // 新增判断 健康温州去除年龄判断
+          if (sysCode === '1001082') {
+            shouldProceed = true;
+          }
+        }
+
+        if (shouldProceed) {
+          await new Promise((rl, rj) => {
+            resolve = rl;
+            reject = () => {
+              gStores.messageStore.showMessage('取消人脸识别', 3000);
+              rj();
+            };
+            faceDialog.value.show();
+          });
+          const { pData } = await patientUtils.faceVerifyAndPData({
+            idCardNumber: cardNo,
+            name: name,
+          });
+          data.pData = pData;
+          data.realNameAuth = '1';
+        }
+      }
+    }
+  };
+
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
     const formKeyNow = formList.value.map((o) => o.key);
@@ -468,103 +556,9 @@
 
     await injectHealthCode(requestData);
 
-    let {
-      isFace,
-      isCanChangeHosPhone,
-      isFaceRemote,
-      faceAgeRange = [17, 60],
-      // isPayWithoutSecretAuth,
-      // useFaceVerifyInChangePhone,
-    } = pageConfig.value;
+    let { isCanChangeHosPhone } = pageConfig.value;
     const isIDCard = formData.value[formKey.idType] === '01';
-
-    if (
-      isIDCard &&
-      isFaceRemote === '1' &&
-      isFace === '1' &&
-      pageProps.value.pageType !== 'perfectReal'
-    ) {
-      const list = [
-        {
-          label: '人脸认证',
-          key: 'isFace',
-        },
-        {
-          label: '远程人脸认证',
-          key: 'isFaceRemote',
-        },
-      ];
-
-      // const { tapIndex } = await apiAsync(
-      //   // @ts-expect-error
-      //   uni.showActionSheet,
-      //   {
-      //     title: '选择认证方式',
-      //     alertText: '选择认证方式',
-      //     itemList: list.map((o) => o.label),
-      //   }
-      // );
-
-      // const v = list[tapIndex].key;
-      refPayList.value = list;
-      const v = await new Promise((r) => {
-        _resolve = r;
-        refPay.value.show();
-      });
-
-      if (v === 'isFaceRemote') {
-        isFace = undefined;
-      } else {
-        isFaceRemote = undefined;
-      }
-    }
-
-    if (isFace === '1') {
-      const [minAge, maxAge] = faceAgeRange || [];
-      if (isIDCard) {
-        const { sysCode } = gStores.globalStore;
-
-        const { age } = idValidator.getIdCardInfo(
-          formData.value[formKey.idCard]
-        );
-
-        let shouldProceed = false;
-
-        if (!shouldProceed && minAge && age >= minAge) {
-          shouldProceed = true;
-        }
-
-        if (!shouldProceed && maxAge && age < maxAge) {
-          shouldProceed = true;
-        }
-
-        if (minAge && maxAge) {
-          shouldProceed = age >= minAge && age <= maxAge;
-        }
-
-        // 新增判断 健康温州去除年龄判断
-        if (sysCode === '1001082') {
-          shouldProceed = true;
-        }
-
-        if (shouldProceed) {
-          await new Promise((rl, rj) => {
-            resolve = rl;
-            reject = () => {
-              gStores.messageStore.showMessage('取消人脸识别', 3000);
-              rj();
-            };
-            faceDialog.value.show();
-          });
-          const { pData } = await patientUtils.faceVerifyAndPData({
-            idCardNumber: formData.value[formKey.idCard],
-            name: formData.value[formKey.patientName],
-          });
-          requestData.pData = pData;
-          requestData.realNameAuth = '1';
-        }
-      }
-    }
+    await faceVerify(requestData);
 
     if (pageProps.value.pageType === 'perfectReal') {
       try {
@@ -601,17 +595,6 @@
             }
           });
 
-        // if (
-        //   isPayWithoutSecretAuth === '1' &&
-        //   gStores.userStore.patList.length
-        // ) {
-        //   uni.redirectTo({
-        //     url: '/pagesA/medicalCardMan/sign',
-        //   });
-        //   return;
-        // }
-
-        // await patientUtils.getPatCardList();
         if (pageProps.value._directUrl) {
           routerJump(pageProps.value._directUrl as `/${string}`);
         } else {
@@ -637,7 +620,7 @@
         return;
       }
 
-      if (isFaceRemote === '1' && isIDCard) {
+      if (pageConfig.value.isFaceRemote === '1' && isIDCard) {
         const sign = await patientUtils.addCachePatient(requestData);
         const { patientName, idCard } = formData.value;
 

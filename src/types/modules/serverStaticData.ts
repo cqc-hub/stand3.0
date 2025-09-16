@@ -251,6 +251,8 @@ export interface ISystemConfig_ {
      */
     ocr?: '0' | '1';
     isFace?: '1';
+    // 存在监护人 人脸使用监护人
+    isUpFace?: '1';
     /** 适用人脸范围 默认 [17, 60] */
     faceAgeRange?: [number, number];
     // 远程人脸

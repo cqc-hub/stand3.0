@@ -1361,42 +1361,15 @@ export const useAuthPerson = () => {
   };
 
   const realNameAuthFace = async (pat: IPat) => {
-    let isWx = true;
-    // #ifndef MP-WEIXIN
-    isWx = false;
-
-    // #endif
-
-    const { patientName, patientId, idCardEncry } = pat;
+    const { patientId } = pat;
     const { source } = gStores.globalStore.browser;
-    const { aliFaceType } = gStores.globalStore;
 
-    const {
-      result: { idCard },
-    } = await api.rpGetPlain({
-      source,
-      idCardEncry,
-      patientId,
-    });
-
-    const { verifyResult } = await new LoginUtils().faceVerify({
-      name: patientName,
-      idCardNumber: idCard,
-    });
-
-    const {
-      result: { pdata },
-    } = await api.faceResultAuth({
-      verifyResult,
-      idCard,
-      source,
-      type: aliFaceType,
-    });
+    const { pData } = await new LoginUtils().faceVerifyAndPDataForPat(pat);
 
     await api.upRealNameAuth({
       patientId,
       source,
-      pdata,
+      pdata: pData,
     });
   };
 
