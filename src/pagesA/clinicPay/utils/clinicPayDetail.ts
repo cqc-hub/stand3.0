@@ -1148,7 +1148,7 @@ export const usePayPage = () => {
    *
    * @param item
    */
-  const selPayListItem = (item: IPayListItem) => {
+  const selPayListItem = (item: IPayListItem, type?: 'notMerge') => {
     const { childOrder } = item;
 
     const idx = selUnPayList.value.findIndex(
