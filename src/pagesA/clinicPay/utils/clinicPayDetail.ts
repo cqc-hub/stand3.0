@@ -1765,7 +1765,7 @@ export const usePayPage = () => {
     setLocalStorage({
       selUnPayList: selUnPayList.value,
     });
-    if (isUnPayListSelRadio.value) {
+    if (isListCanPayedItem.value) {
       if (item.key === 'online') {
         setLocalStorage({
           selUnPayDetailList: {

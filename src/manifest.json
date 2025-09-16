@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx90dd2c3c4be8355a",
+    "appid": "wx8358079c24acea42",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -78,7 +78,7 @@
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003120612222",
+    "appid": "2021003144603328",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -103,7 +103,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "中国人民解放军东部战区总医院",
+  "name": "宜兴市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
