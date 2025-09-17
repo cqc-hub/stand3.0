@@ -809,7 +809,12 @@
 
   const validatorItem = async (item: TInstance, v: any) => {
     const { rule, key, required, emptyMessage, validator } = item;
-    const isFillValue = !!(v || v === 0);
+    let isFillValue: boolean;
+    if (Array.isArray(v)) {
+      isFillValue = !!v.length;
+    } else {
+      isFillValue = !!(v || v === 0);
+    }
 
     if (required && !isFillValue) {
       const defaultEmptyMessage = item.label + ' 不能为空';

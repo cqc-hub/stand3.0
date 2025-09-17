@@ -228,6 +228,8 @@ export interface ISystemConfig_ {
     isHidePatientTypeInPerfect?: '1' | '0';
     /** 开启短信验证？ 完善时候没有 */
     isSmsVerify?: '1';
+    // /** 就诊人列表存在补充证件号入口 */
+    isCanAddPatCardNo?: '1';
     /** 就诊人列表存在补充监护人入口 */
     isCanAddGuardian?: '1';
     // 新增就诊人是否监护人手机号

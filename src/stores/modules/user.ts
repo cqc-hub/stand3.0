@@ -226,12 +226,24 @@ export const getUserShowLabel = (pat: IPat) => {
 
 // 是否区域项目 不显示id
 export const isAreaProgram = (): boolean => {
-  const sysCode = globalGl.SYS_CODE;
+  const globalStore = useGlobalStore();
 
   if (
-    ['1001049', '1001063', '1001066', '1001068', '1001070', '1001076','1001078','1001082',"1001087","1001088","1001089","1001090","1001091"].includes(
-      sysCode
-    )
+    [
+      '1001049',
+      '1001063',
+      '1001066',
+      '1001068',
+      '1001070',
+      '1001076',
+      '1001078',
+      '1001082',
+      '1001087',
+      '1001088',
+      '1001089',
+      '1001090',
+      '1001091',
+    ].includes(globalStore.sysCode)
   ) {
     return true;
   }

@@ -1044,12 +1044,12 @@
               hosDeptId,
             } = orderRegInfo.value;
 
-            const resultConfig = encodeURIComponent(
+            const resultConfig = 
               JSON.stringify({
                 cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
                 orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&successPay=1`,
               })
-            );
+            ;
             handlerMedicalPayDongRuan({
               resultConfig,
               medOrgOrd,

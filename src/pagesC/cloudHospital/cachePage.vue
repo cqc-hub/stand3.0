@@ -19,8 +19,8 @@
   import {
     wxPay,
     aliPayMedicalPluginGetAuthCode,
-    aliPayMedicalPluginPay,
     getMedicalAuthCode,
+    aliPayMedicalPluginPayInit,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
 
@@ -189,7 +189,7 @@
     // }
 
     const registerType =
-      insuranceParamsWx.registerType || payBackParams.registerType;
+      insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
       if (globalStore.sysCode === '1001048' && registerType) {
@@ -205,7 +205,6 @@
           userName,
           idCard,
         }).catch((err) => {
-          console.log(err);
           if (err === '取消请求授权...') {
             uni.navigateTo({
               url: joinQueryForUrl('/pagesC/cloudHospital/cachePage', {
@@ -279,7 +278,7 @@
     yibaoPayBackParams.value = data.payBackParams;
     yibaoRegisterId.value = data.registerId;
     if (insuranceParams) {
-      aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
+      // aliPayMedicalPluginPay(yibaoRegisterId, yibaoPayBackParams);
       await wait(600);
 
       aliPayMedicalPluginGetAuthCode(insuranceParams);
@@ -428,6 +427,7 @@
     //   const r = await getAuthCodeWx();
     //   console.log(r, 233);
     // }, 1000);
+    aliPayMedicalPluginPayInit();
   });
 
   onShow(() => {
