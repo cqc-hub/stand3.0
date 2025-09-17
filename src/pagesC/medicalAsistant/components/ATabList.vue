@@ -84,7 +84,8 @@
 
   .safe-width {
     width: 400rpx;
-    height: 1px;
+    // height: 1px;
+    overflow-y: scroll;
     display: inline-block;
     opacity: 0;
   }

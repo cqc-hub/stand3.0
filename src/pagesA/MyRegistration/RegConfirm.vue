@@ -1066,9 +1066,9 @@
   }
 
   .container {
-    // height: 1px;
+    // // height: 1px;
     // flex: 1;
-    // overflow-y: scroll;
+    overflow-y: scroll;
 
     .container-view {
       padding: 0 32rpx;

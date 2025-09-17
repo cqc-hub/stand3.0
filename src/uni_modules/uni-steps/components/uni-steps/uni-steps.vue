@@ -214,7 +214,8 @@
 
 	.uni-steps__row-line {
 		flex: 1;
-		height: 1px;
+		// height: 1px;
+		overflow-y: scroll;
 		background-color: #B7BDC6;
 	}
 

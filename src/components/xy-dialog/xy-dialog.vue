@@ -251,7 +251,8 @@
         left: 0;
         bottom: -1px;
         right: 0;
-        height: 1px;
+        // height: 1px;
+        overflow-y: scroll;
         border-bottom: 2rpx solid #e6e6e6;
         transform-origin: 0 0;
         transform: scaleY(0.5);

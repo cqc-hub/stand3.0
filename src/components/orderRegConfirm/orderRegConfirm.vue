@@ -185,7 +185,8 @@
 
     .popup-scroll {
       flex: 1;
-      height: 1px;
+      // height: 1px;
+      overflow-y: scroll;
     }
 
     .popup-footer {

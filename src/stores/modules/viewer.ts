@@ -149,7 +149,10 @@ const viewerStore = defineStore('viewer', {
         this.viewConfig[5]?.functionList?.filter((item) => {
           try {
             const query = item.query && JSON.parse(item.query);
-            return !(query.key && query.key.startsWith('myOralCell-'));
+            if (query && typeof query === 'object' && query.key) {
+            return !query.key.startsWith('myOralCell-');
+          }
+          return true;
           } catch (e) {
             console.error('Failed to parse query:', e);
             return true; // 如果解析失败，保留该元素
@@ -170,7 +173,10 @@ const viewerStore = defineStore('viewer', {
           ?.filter((item) => {
             try {
               const query = item.query && JSON.parse(item.query);
-              return query.key && query.key.startsWith('myOralCell-');
+              if (query && typeof query === 'object' && query.key) {
+              return query.key.startsWith('myOralCell-');
+            }
+            return false;
             } catch (e) {
               console.error('Failed to parse query:', e);
               return false;
@@ -180,7 +186,11 @@ const viewerStore = defineStore('viewer', {
             try {
               const queryA = JSON.parse(a.query);
               const queryB = JSON.parse(b.query);
-              return (queryA.sort || 0) - (queryB.sort || 0);
+               // 确保 queryA 和 queryB 是对象
+          if (queryA && typeof queryA === 'object' && queryB && typeof queryB === 'object') {
+            return (queryA.sort || 0) - (queryB.sort || 0);
+          }
+          return 0;
             } catch (e) {
               console.error('Failed to parse query during sorting:', e);
               return 0;

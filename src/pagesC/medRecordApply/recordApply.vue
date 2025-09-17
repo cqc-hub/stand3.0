@@ -422,7 +422,7 @@
 
     .container {
       flex: 1;
-      height: 1px;
+      // height: 1px;
       overflow-y: scroll;
       padding: 0 32rpx;
     }

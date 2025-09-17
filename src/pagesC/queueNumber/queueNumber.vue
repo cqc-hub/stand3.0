@@ -74,7 +74,8 @@
 
     .container {
       flex: 1;
-      height: 1px;
+      // height: 1px;
+      overflow-y: scroll;
 
       .scroll-container {
         height: 100%;

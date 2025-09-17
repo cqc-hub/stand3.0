@@ -44,7 +44,7 @@
 
     if (globalStore.sysCode === '1001082') {
       uni.reLaunch({
-        url: 'pagesA/intelMedicalAssist/intelMedicalAssist',
+        url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
       });
     }
   });

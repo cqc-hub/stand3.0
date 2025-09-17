@@ -274,7 +274,7 @@
 
 <style lang="scss" scoped>
   .container {
-    height: 1px;
+    // height: 1px;
     flex: 1;
     overflow-y: scroll;
   }

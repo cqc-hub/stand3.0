@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx8358079c24acea42",
+    "appid": "wxb00075173e764492",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -63,7 +63,16 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      },
+      "crossProgramPlugins": {
+        "version": "latest",
+        "provider": "wx12cec70855c0cacf"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -75,10 +84,14 @@
       "ocrPlugin": {
         "version": "*",
         "provider": "2021001130678316"
+      },
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003144603328",
+    "appid": "2021003113623396",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -103,7 +116,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "宜兴市人民医院",
+  "name": "绍兴市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

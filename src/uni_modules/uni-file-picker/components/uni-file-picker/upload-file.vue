@@ -249,7 +249,7 @@
 	// .icon-files .icon-del {
 	// 	background-color: #333;
 	// 	width: 12px;
-	// 	height: 1px;
+	// 	// height: 1px;
 	// }
 
 
@@ -309,7 +309,8 @@
 
 	.icon-del {
 		width: 15px;
-		height: 1px;
+		// height: 1px;
+		overflow-y: scroll;
 		background-color: #333;
 		// border-radius: 1px;
 	}
