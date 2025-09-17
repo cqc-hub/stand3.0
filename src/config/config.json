@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001048",
+  "sysCode": "1001092",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -438,6 +438,8 @@
     },
     "1001092": {
       "wxAppid": "wxbf7aab8afef3603a",
+      "alipayAppid": "2021005190632301",
+      "isvAlipayAppid": "2021005194657067",
       "h5Appid": "",
       "name": "延安市人民医院",
       "isStartComeTest": false,

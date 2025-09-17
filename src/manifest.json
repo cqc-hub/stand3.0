@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx8358079c24acea42",
+    "appid": "wxbf7aab8afef3603a",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -71,14 +71,8 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003144603328",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -103,7 +97,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "宜兴市人民医院",
+  "name": "延安市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
