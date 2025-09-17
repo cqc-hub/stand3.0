@@ -508,7 +508,9 @@ const queryApi = {
   getCloudImageInfo: <T = any>(data) =>
     service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
-    service.post('/phs-user/message/getScheme', parm(data)),
+    service.post('/phs-user/message/getScheme', parm(data),{
+      baseURL: envBasic.baseApi,
+    }),
   getCmsList: <T = any>(data) =>
     service.post('/phs-base/cms/getCmsList', parm(data), {
       baseURL: envBasic.baseApi,
@@ -591,7 +593,7 @@ const regApi = {
 
   addCollect: (data: any) =>
     service.post('/phs-reg/collect/addCollect', parm(data), {
-      hideLoading: false,
+      hideLoading: false
     }),
 
   getCheckIn: (data: any) =>
