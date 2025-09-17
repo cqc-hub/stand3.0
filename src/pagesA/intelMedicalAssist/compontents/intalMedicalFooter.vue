@@ -536,7 +536,7 @@
       query
         .selectAll(`.guess-server`)
         .boundingClientRect((data: any) => {
-          guessServerBottom.value = `calc(100vh - 800rpx - ${data[0].height}px)`;
+          guessServerBottom.value = `calc(100vh - 800rpx - ${data[0]?.height||0}px)`;
         })
         .exec();
     }, 100);

@@ -1823,7 +1823,7 @@ export const usePayPage = () => {
           ? pageProps.value.deParams?.cardNumber
           : '';
 
-        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat) {
+        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat&&gStores.globalStore.sysCode!=='1001046') {
           await new PatientUtils().upToMedicalPat({
             pat: gStores.userStore.patChoose,
             cardNumber,
