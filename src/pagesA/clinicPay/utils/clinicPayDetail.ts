@@ -1841,12 +1841,12 @@ export const usePayPage = () => {
 
         // #ifdef  MP-WEIXIN
         if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-          const resultConfig = encodeURIComponent(
+          const resultConfig = 
             JSON.stringify({
               cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
               orderStatusRedirectUrl:
                 '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-            })
+            }
           );
           const medOrgOrd = selUnPayList.value
             .map((item) => item.serialNo)
@@ -2868,10 +2868,10 @@ export const handlerMedicalPay1001035 = async (opt: {
 /**
  * 东软医保
  * @example
- *  resultConfig = encodeURIComponent(JSON.stringify({
+ *  resultConfig = JSON.stringify({
  *    cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
  *    orderStatusRedirectUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1
- *  }))
+ *  })
  *
  */
 export const handlerMedicalPayDongRuan = async ({
