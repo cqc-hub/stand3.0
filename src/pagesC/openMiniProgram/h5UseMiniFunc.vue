@@ -47,6 +47,8 @@
           const { result } = await apiAsync(uni.scanCode, {
             autoZoom: true,
           });
+          console.log('scanCode',result);
+          
           backUrl.value.extraData = {
             ...backUrl.value.extraData,
             sacnData: result,
