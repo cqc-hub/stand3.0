@@ -48,6 +48,7 @@
     patientName: '',
     upName: '',
     upIdCard: '',
+    idCard: '',
     upPhone: '',
     relationShip: '',
   });
@@ -67,28 +68,64 @@
   });
 
   const formSubmit = async ({}) => {
-    const { cardNumber, patientId } = gStores.userStore.patChoose;
-    const { upName, upIdCard, upPhone, relationShip } = formData.value;
-
-    const { pData } = await patientUtils.faceVerifyAndPData({
-      idCardNumber: upIdCard,
-      name: upName,
-    });
-
-    const args = {
-      ...formData.value,
+    const {
       cardNumber,
       patientId,
-      // "01身份证 03护照等",
-      upIdType: '01',
-      upName,
-      upIdCard,
-      upPhone,
-      relationShip,
+      upIdCard: oldUpIdCard,
+      patientName,
+      idCard: oldIdCard,
+    } = gStores.userStore.patChoose;
+    const { upIdCard, upPhone, relationShip, idCard, upName } = formData.value;
+
+    let [name, idCardNumber] = ['', ''];
+    const pInfo = await patientUtils.getPatientPersonalInfo({
+      idCard: true,
+    });
+    // 儿童人脸取监护人
+    if (isChildren.value) {
+      name = upName;
+      if (oldUpIdCard) {
+        idCardNumber = pInfo.upIdCard;
+      } else {
+        idCardNumber = upIdCard;
+      }
+    } else {
+      name = patientName;
+      if (oldIdCard) {
+        idCardNumber = pInfo.idCard;
+      } else {
+        idCardNumber = idCard;
+      }
+    }
+
+    const { pData } = await patientUtils.faceVerifyAndPData({
+      idCardNumber,
+      name,
+    });
+
+    const args: any = {
+      cardNumber,
+      patientId,
       pData,
+      relationShip,
     };
 
-    await api.updateGuardianInfo(args);
+    if (isChildren.value && !oldUpIdCard) {
+      args.upIdType = '01';
+      args.upName = upName;
+      args.upIdCard = upIdCard;
+    }
+
+    if (!oldIdCard) {
+      args.idCard = idCard;
+      args.patientName = patientName;
+    }
+
+    // if (condition) {
+
+    // }
+
+    await api.updateUserInfo(args);
 
     gStores.messageStore.showMessage('更新成功', 1500, {
       closeCallBack() {
@@ -175,7 +212,17 @@
               success: true,
             };
           }
-          return idCardCheck(v as string);
+
+          if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
+            return Promise.resolve({
+              success: true,
+            });
+          }
+
+          return Promise.resolve({
+            success: false,
+            message: '请确认证件号码是否有误',
+          });
         },
         labelWidth: '220rpx',
       },
@@ -202,7 +249,30 @@
               success: true,
             };
           }
-          return idCardCheck(v as string);
+
+          if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
+            const { ageGuardian } = await ServerStaticData.getSystemConfig(
+              'person'
+            );
+
+            const info = idValidator.getIdCardInfo(v);
+
+            if (info.age < ageGuardian) {
+              return Promise.resolve({
+                success: false,
+                message: `监护人年龄必须大于: ${ageGuardian}岁`,
+              });
+            }
+
+            return Promise.resolve({
+              success: true,
+            });
+          }
+
+          return Promise.resolve({
+            success: false,
+            message: '请确认证件号码是否有误',
+          });
         },
         labelWidth: '220rpx',
       },
@@ -224,21 +294,23 @@
       // },
     ];
 
-    if (!isChildren.value) {
-      rList = rList.filter((o) => !['upIdCard', 'upName'].includes(o.key));
-    }
-
-    const disableItem = (k: string) => {
+    const changeDisableStatus = (k: string, status = true) => {
       const item = rList.find((o) => o.key === k);
 
       if (item) {
-        item.disabled = true;
+        item.disabled = status;
       }
     };
 
-    idCard && disableItem('idCard');
-    upName && disableItem('upName');
-    upIdCard && disableItem('upIdCard');
+    if (isChildren.value) {
+      // changeDisableStatus('idCard', false);
+    } else {
+      rList = rList.filter((o) => !['upIdCard', 'upName'].includes(o.key));
+    }
+
+    idCard && changeDisableStatus('idCard');
+    upName && changeDisableStatus('upName');
+    upIdCard && changeDisableStatus('upIdCard');
 
     gform.value.setList(rList);
   });

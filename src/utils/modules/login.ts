@@ -1146,12 +1146,13 @@ export class PatientUtils extends LoginUtils {
       arg.cellPhoneNumber = cellPhoneNumber;
     }
     const {
-      result: { patientPhone: _patientPhone, idCard: _idCard },
+      result: { patientPhone: _patientPhone, idCard: _idCard, upIdCard },
     } = await api.rpGetPlain(arg);
 
     return {
       phone: _patientPhone,
       idCard: _idCard,
+      upIdCard,
     };
   }
 

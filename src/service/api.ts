@@ -863,6 +863,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  updateUserInfo: (data) =>
+    service.post('/phs-user/rePat/updateUserInfo', parm(data), {
+      hideLoading: false,
+    }),
+
   updateGuardianInfo: (data) =>
     service.post('/phs-user/rePat/updateGuardianInfo', parm(data), {
       hideLoading: false,
