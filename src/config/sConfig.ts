@@ -756,6 +756,7 @@ const scJson: Record<string, ISConfig> = {
         // 测试
         // medical1001035: {
         //   auth: {
+        //     //
         //     appId: 'wxfde9fffbfa82be54',
         //     path: 'pages/allOutPayCashier/authUniPro/authUni',
         //     extraData: {

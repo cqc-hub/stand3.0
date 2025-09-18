@@ -28,7 +28,13 @@ export const compose =
   (arg) =>
     fns.reduce((acc, fn) => fn(acc), arg);
 
-export const wait = (wait: number) => new Promise((r) => setTimeout(r, wait));
+export const wait = (wait: number, cb: (...args: any[]) => any = () => {}) =>
+  new Promise((r) =>
+    setTimeout(() => {
+      r(void 0);
+      cb();
+    }, wait)
+  );
 
 export const callBackAsync = (fn: Function) => {
   return new Promise((r) => fn(r));
@@ -378,7 +384,7 @@ export const getLocation = async function (
           if (opt.hasGetNumber > 10) {
             const { confirm } = await apiAsync(uni.showModal, {
               content: '获取定位失败, 请检查设备是否开启定位',
-              confirmText:'再次获取'
+              confirmText: '再次获取',
             });
             if (!confirm) {
               throw new Error('获取定位失败,用户取消定位');
