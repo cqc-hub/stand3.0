@@ -208,7 +208,7 @@
   });
 
   const currentTabKey = computed(() => {
-    return tabField.value[tabCurrent.value].key;
+    return tabField.value[tabCurrent.value]?.key;
   });
 
   const isShowSelItem = computed(() => {
@@ -269,14 +269,14 @@
   const selListOption1 = computed(() => {
     return getSelOptList(listNow.value);
   });
-  let patChange=(idx: number)=>{
-     pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
-     tabChange(idx)
-  }
+  let patChange = (idx: number) => {
+    pageProps.value.type === 'medicineDecoce' && getChineseMedicineList();
+    tabChange(idx);
+  };
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
-    getListData(tabField.value[idx].key);
+    getListData(tabField.value[idx]?.key);
   };
 
   tabChange = throttle(tabChange, 120);
@@ -416,7 +416,7 @@
   };
 
   const listNow = computed(() => {
-    return tabField.value[tabCurrent.value].key === '0'
+    return tabField.value[tabCurrent.value]?.key === '0'
       ? waitSelList.value
       : seledList.value;
   });
@@ -546,7 +546,7 @@
       }
     }
 
-    await getListData(tabField.value[tabCurrent.value].key);
+    await getListData(tabField.value[tabCurrent.value]?.key);
     dealWith1001067();
   };
 
@@ -581,12 +581,15 @@
         if (item.drugTypeCode == '1' && item.tcmDecoctionIndicator == '0') {
           return true;
         }
-      })?1:0;
+      })
+        ? 1
+        : 0;
+    pageProps.value?.type === 'isYZ' && (isYouzhen = 1);
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
           cardNumber: selPat.value._showId,
-          patientName:selPat.value.patientName,
+          patientName: selPat.value.patientName,
           ...pageProps.value,
           scan: pageProps.value?.params ? '1' : '0',
           isYouzhen,
@@ -627,7 +630,7 @@
 
   onShow(() => {
     if (getLocalStorage('medicalHelp')) {
-      getListData(tabField.value[tabCurrent.value].key);
+      getListData(tabField.value[tabCurrent.value]?.key);
       setLocalStorage({
         medicalHelp: '',
       });
@@ -681,8 +684,12 @@
 
     uni.showLoading({});
     if ((queryParams && !opt?.params) || opt?.q) {
-      await wait(650);
-      return;
+      if (opt?.a === '1' || opt?.type === 'isYZ') {
+        await wait(650);
+      } else {
+        await wait(650);
+        return;
+      }
     }
 
     if (opt) {

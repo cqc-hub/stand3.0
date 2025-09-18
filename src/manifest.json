@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxbf7aab8afef3603a",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -67,10 +67,6 @@
       "SIPlugin": {
         "version": "0.3.6",
         "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -82,6 +78,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
+    "appid": "2021003104670597",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -106,7 +103,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "延安市人民医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {
