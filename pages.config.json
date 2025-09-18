@@ -700,6 +700,12 @@
             "navigationBarTitleText": " "
           }
         },
+         {
+          "path": "openMiniProgram/h5UseMiniFunc",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
         {
           "path": "medRecordApply/medRecordDetails",
           "extend": {
