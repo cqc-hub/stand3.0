@@ -241,7 +241,7 @@
   };
 
   const takeNumber = async () => {
-    const { ampm, visitDate, visitId, hosId, extend } = cacheItem;
+    const { ampm, visitDate, visitId, hosId, extend, deptName } = cacheItem;
     const { source } = gStores.globalStore.browser;
     const { patientId } = gStores.userStore.patChoose;
     const { type } = pageProps.value;
@@ -255,6 +255,7 @@
       hosId,
       extend,
       type,
+      deptName
     };
     isFgShow451.value = false;
 
