@@ -81,11 +81,12 @@
     ServerStaticData,
     apiAsync,
     base64Src,
+    rulePhone,
     useOcr,
     type ISystemConfig,
   } from '@/utils';
   import { TInstance } from '@/components/g-form';
-  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue'
+  import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
   import api from '@/service/api';
 
   const gStores = new GStores();
@@ -137,7 +138,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
       placeholder: '请输入新的手机号',

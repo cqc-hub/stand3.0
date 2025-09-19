@@ -75,12 +75,13 @@
 
 <script setup lang="ts">
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import api from '@/service/api';
-  import { GStores } from '@/utils';
   import { ref } from 'vue';
+  import { GStores } from '@/utils';
   import { useMessageStore } from '@/stores';
   import { joinQuery } from '@/common';
   import { getScopeAddress } from '@/common/utils';
+
+  import api from '@/service/api';
 
   const props = defineProps<{
     redir?: string;
@@ -153,6 +154,12 @@
     });
   };
   const getAddress = async (data) => {
+    const {
+      userName,
+      telNumber
+    } = data;
+
+
     await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,
       senderName: data.userName,

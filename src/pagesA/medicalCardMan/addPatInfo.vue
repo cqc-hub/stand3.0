@@ -29,12 +29,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { computed, onMounted, ref } from 'vue';
 
   import { onLoad } from '@dcloudio/uni-app';
   import {
     GStores,
     idValidator,
+    ISystemConfig,
     PatientUtils,
     routerJump,
     ServerStaticData,
@@ -47,34 +48,85 @@
     patientName: '',
     upName: '',
     upIdCard: '',
+    idCard: '',
     upPhone: '',
     relationShip: '',
   });
   const patientUtils = new PatientUtils();
+  const pageConfig = ref(<ISystemConfig['person']>{});
+  const isChildren = computed(() => {
+    let _c = false;
+
+    const { patientName, patientAge } = gStores.userStore.patChoose;
+    const { isGuardianWithIdCard } = pageConfig.value;
+
+    if (isGuardianWithIdCard) {
+      _c = (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
+    }
+
+    return _c;
+  });
 
   const formSubmit = async ({}) => {
-    const { cardNumber, patientId } = gStores.userStore.patChoose;
-    const { upName, upIdCard, upPhone, relationShip } = formData.value;
-
-    const { pData } = await patientUtils.faceVerifyAndPData({
-      idCardNumber: upIdCard,
-      name: upName,
-    });
-
-    const args = {
-      ...formData.value,
+    const {
       cardNumber,
       patientId,
-      // "01身份证 03护照等",
-      upIdType: '01',
-      upName,
-      upIdCard,
-      upPhone,
+      upIdCard: oldUpIdCard,
+      patientName,
+      idCard: oldIdCard,
+    } = gStores.userStore.patChoose;
+    const { upIdCard, relationShip, idCard, upName } = formData.value;
+
+    let [name, idCardNumber] = ['', ''];
+    const pInfo = await patientUtils.getPatientPersonalInfo({
+      idCard: true,
+    });
+    // 儿童人脸取监护人
+    if (isChildren.value) {
+      name = upName;
+      if (oldUpIdCard) {
+        idCardNumber = pInfo.upIdCard;
+      } else {
+        idCardNumber = upIdCard;
+      }
+    } else {
+      name = patientName;
+      if (oldIdCard) {
+        idCardNumber = pInfo.idCard;
+      } else {
+        idCardNumber = idCard;
+      }
+    }
+
+    const { pData } = await patientUtils.faceVerifyAndPData({
+      idCardNumber,
+      name,
+    });
+
+    const args: any = {
+      cardNumber,
+      patientId,
+      pdata: pData,
       relationShip,
-      pData,
+      checkIdCard: idCardNumber,
     };
 
-    await api.updateGuardianInfo(args);
+    if (isChildren.value && !oldUpIdCard) {
+      args.upIdType = '01';
+      args.upName = upName;
+      args.upIdCard = upIdCard;
+    }
+
+    if (!oldIdCard) {
+      args.idCard = idCard;
+      args.patientName = patientName;
+    }
+
+    // if (condition) {
+
+    // }
+
+    await api.updateUserInfo(args);
 
     gStores.messageStore.showMessage('更新成功', 1500, {
       closeCallBack() {
@@ -83,16 +135,50 @@
     });
   };
 
-  onLoad(async () => {
-    const { patientName } = gStores.userStore.patChoose;
+  const idCardCheck = async (v: string) => {
+    if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
+      const { ageGuardian } = await ServerStaticData.getSystemConfig('person');
+
+      const info = idValidator.getIdCardInfo(v);
+
+      if (info.age < ageGuardian) {
+        return Promise.resolve({
+          success: false,
+          message: `监护人年龄必须大于: ${ageGuardian}岁`,
+        });
+      }
+
+      return Promise.resolve({
+        success: true,
+      });
+    }
+
+    return Promise.resolve({
+      success: false,
+      message: '请确认证件号码是否有误',
+    });
+  };
+
+  onLoad(async () => {});
+
+  onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    const {
+      patientName,
+      idCard = '',
+      upName = '',
+      upIdCard = '',
+    } = gStores.userStore.patChoose;
 
     Object.assign(formData.value, {
       patientName,
-    })
-  });
+      idCard,
+      upName,
+      upIdCard,
+      idType: '01',
+    });
 
-  onMounted(() => {
-    gform.value.setList([
+    let rList = [
       {
         required: true,
         label: '患者姓名',
@@ -117,13 +203,28 @@
 
       {
         required: true,
-        showSuffixArrowIcon: true,
-        label: '关系',
-        placeholder: '请选择',
-        key: 'relationShip',
-        field: 'select',
-        options: [],
-        autoOptions: 'RelationShipList',
+        label: '证件号码',
+        field: 'input-text',
+        placeholder: '请输入',
+        key: 'idCard',
+        validator: async (v: unknown, item: any) => {
+          if (item.disabled) {
+            return {
+              success: true,
+            };
+          }
+
+          if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
+            return Promise.resolve({
+              success: true,
+            });
+          }
+
+          return Promise.resolve({
+            success: false,
+            message: '请确认证件号码是否有误',
+          });
+        },
         labelWidth: '220rpx',
       },
 
@@ -144,6 +245,12 @@
         placeholder: '请输入',
         key: 'upIdCard',
         validator: async (v: unknown, item: any) => {
+          if (item.disabled) {
+            return {
+              success: true,
+            };
+          }
+
           if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
             const { ageGuardian } = await ServerStaticData.getSystemConfig(
               'person'
@@ -171,22 +278,42 @@
         labelWidth: '220rpx',
       },
 
-      {
-        required: true,
-        label: '监护人手机号',
-        field: 'input-text',
-        placeholder: '请输入',
-        maxlength: 11,
-        key: 'upPhone',
-        rule: [
-          {
-            message: '请确认手机号是否有误',
-            rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
-          },
-        ],
-        labelWidth: '220rpx',
-      },
-    ]);
+      // {
+      //   required: true,
+      //   label: '监护人手机号',
+      //   field: 'input-text',
+      //   placeholder: '请输入',
+      //   maxlength: 11,
+      //   key: 'upPhone',
+      //   rule: [
+      //     {
+      //       message: '请确认手机号是否有误',
+      //       rule: rulePhone,
+      //     },
+      //   ],
+      //   labelWidth: '220rpx',
+      // },
+    ];
+
+    const changeDisableStatus = (k: string, status = true) => {
+      const item = rList.find((o) => o.key === k);
+
+      if (item) {
+        item.disabled = status;
+      }
+    };
+
+    if (isChildren.value) {
+      // changeDisableStatus('idCard', false);
+    } else {
+      rList = rList.filter((o) => !['upIdCard', 'upName'].includes(o.key));
+    }
+
+    idCard && changeDisableStatus('idCard');
+    upName && changeDisableStatus('upName');
+    upIdCard && changeDisableStatus('upIdCard');
+
+    gform.value.setList(rList);
   });
 </script>
 

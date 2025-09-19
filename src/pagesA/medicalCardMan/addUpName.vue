@@ -38,6 +38,7 @@
     idValidator,
     PatientUtils,
     routerJump,
+    rulePhone,
     ServerStaticData,
   } from '@/utils';
   import api from '@/service/api';
@@ -168,7 +169,7 @@
         rule: [
           {
             message: '请确认手机号是否有误',
-            rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+            rule: rulePhone,
           },
         ],
         labelWidth: '220rpx',

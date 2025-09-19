@@ -63,6 +63,7 @@
   import { joinQuery, getSysCode } from '@/common';
 
   import api from '@/service/api';
+  import { rulePhone } from '@/utils/modules/verify';
 
   // https://health.eheren.com/taizhou_pc/#/taizhou_pc/user/login
 
@@ -93,7 +94,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
     },
@@ -147,10 +148,10 @@
   ]);
 
   const formSubmit = async ({ data }) => {
-     if (!isCheck.value) {
-        gStores.messageStore.showMessage('请先勾选同意书', 3000);
-        return;
-      }
+    if (!isCheck.value) {
+      gStores.messageStore.showMessage('请先勾选同意书', 3000);
+      return;
+    }
     const userStore = useUserStore();
     let resultResponst;
     //登录之前清除缓存
@@ -176,7 +177,7 @@
         gStores.messageStore.showMessage('请先获取验证码', 2000);
         return;
       }
-     
+
       const reqArg = {
         ...data,
         sysCode: getSysCode(),

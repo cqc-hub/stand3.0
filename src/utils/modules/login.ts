@@ -1130,11 +1130,12 @@ export class PatientUtils extends LoginUtils {
     opt: { phone?: boolean; idCard?: boolean } = {}
   ) {
     const { phone, idCard } = opt;
-    const { patientId, cellPhoneNumber, idCardEncry } =
+    const { patientId, cellPhoneNumber, idCardEncry, upIdCardEncry } =
       this.userStore.patChoose;
 
     const arg: any = {
       source: this.globalStore.browser.source,
+      upIdCardEncry,
       patientId,
     };
 
@@ -1146,12 +1147,13 @@ export class PatientUtils extends LoginUtils {
       arg.cellPhoneNumber = cellPhoneNumber;
     }
     const {
-      result: { patientPhone: _patientPhone, idCard: _idCard },
+      result: { patientPhone: _patientPhone, idCard: _idCard, upIdCard },
     } = await api.rpGetPlain(arg);
 
     return {
       phone: _patientPhone,
       idCard: _idCard,
+      upIdCard,
     };
   }
 

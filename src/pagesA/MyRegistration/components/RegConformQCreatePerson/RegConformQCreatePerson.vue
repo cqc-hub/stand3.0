@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
   import { TInstance } from '@/components/g-form';
-  import { idValidator, ServerStaticData, wait } from '@/utils';
+  import { idValidator, rulePhone, ServerStaticData, wait } from '@/utils';
   import dayjs from 'dayjs';
   import { ref, watch } from 'vue';
 
@@ -254,7 +254,7 @@
         rule: [
           {
             message: '请确认联系电话是否有误',
-            rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+            rule: rulePhone,
           },
         ],
         labelWidth: '220rpx',

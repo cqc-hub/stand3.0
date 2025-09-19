@@ -264,16 +264,16 @@ const scJson: Record<string, ISConfig> = {
     },
     isSearchHosForAddPatHasMoreThanOneCard: '1',
 
-    // medicalMHelp: {
+    medicalMHelp: {
 
-    //   wx: {
-    //     medicalNation: {
-    //       appId: 'wxe183cd55df4b4369',
-    //       path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
-    //     },
-    //     isMedicalOrder: '1',
-    //   },
-    // },
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=410901&channel=AAESBm3dgscMbm3owOheQVk0&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtJRKQswprsB52V1kSQVkyD&orgCodg=H41090200004&orgAppId=1HPSM9AQ20183F60C80A000061EF761F',
+        },
+        isMedicalOrder: '1',
+      },
+    },
   },
 
   /**
@@ -712,29 +712,29 @@ const scJson: Record<string, ISConfig> = {
       isLoginByOpenId: '1',
     },
 
-    medicalMHelp: {
-      wx: {
-        medicalNation: {
-          appId: 'wxe183cd55df4b4369',
-          path: 'auth/pages/bindcard/auth/index',
-          pathExtraData: {
-            openType: 'getAuthCode',
-            cityCode: '320400',
-            orgCodg: 'H32048100095',
-            orgChnlCrtfCodg:
-              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
-            bizType: '04107',
-            orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
-            channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
-          },
-          dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
-          },
-        },
-        isMedicalOrder: '1',
-        isGbFamilyPayment: '1',
-      },
-    },
+    // medicalMHelp: {
+    //   wx: {
+    //     medicalNation: {
+    //       appId: 'wxe183cd55df4b4369',
+    //       path: 'auth/pages/bindcard/auth/index',
+    //       pathExtraData: {
+    //         openType: 'getAuthCode',
+    //         cityCode: '320400',
+    //         orgCodg: 'H32048100095',
+    //         orgChnlCrtfCodg:
+    //           'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
+    //         bizType: '04107',
+    //         orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
+    //         channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
+    //       },
+    //       dongRuanMedicalInfo: {
+    //         h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
+    //       },
+    //     },
+    //     isMedicalOrder: '1',
+    //     isGbFamilyPayment: '1',
+    //   },
+    // },
   },
   /**
    * 江苏省中医院
@@ -754,46 +754,47 @@ const scJson: Record<string, ISConfig> = {
         isGbFamilyPayment: '1',
 
         // 测试
-        // medical1001035: {
-        //   auth: {
-        //     appId: 'wxfde9fffbfa82be54',
-        //     path: 'pages/allOutPayCashier/authUniPro/authUni',
-        //     extraData: {
-        //       appid: 'c4097ed72fc64e71818e6990dc6f9512',
-        //     },
-        //   },
-        //   pay: {
-        //     appId: 'wxfde9fffbfa82be54',
-        //     path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
-        //     extraData: {
-        //       appid: 'c4097ed72fc64e71818e6990dc6f9512',
-        //       channel_code: 'f6cd425b461444f3907808719fd30011',
-        //       fixmedinsCode: 'H32010400468',
-        //       fixmedinsName: '江苏省中医院',
-        //     },
-        //   },
-        // },
-
-        // 正式
         medical1001035: {
           auth: {
+            //
             appId: 'wxfde9fffbfa82be54',
             path: 'pages/allOutPayCashier/authUniPro/authUni',
             extraData: {
-              appid: '96391c9afe2c46b3bba52436351dd418',
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
             },
           },
           pay: {
             appId: 'wxfde9fffbfa82be54',
             path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
             extraData: {
-              appid: '96391c9afe2c46b3bba52436351dd418',
-              channel_code: 'b756bf71948144f993bcc768fe7b0910',
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+              channel_code: 'f6cd425b461444f3907808719fd30011',
               fixmedinsCode: 'H32010400468',
               fixmedinsName: '江苏省中医院',
             },
           },
         },
+
+        // 正式
+        // medical1001035: {
+        //   auth: {
+        //     appId: 'wxfde9fffbfa82be54',
+        //     path: 'pages/allOutPayCashier/authUniPro/authUni',
+        //     extraData: {
+        //       appid: '96391c9afe2c46b3bba52436351dd418',
+        //     },
+        //   },
+        //   pay: {
+        //     appId: 'wxfde9fffbfa82be54',
+        //     path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
+        //     extraData: {
+        //       appid: '96391c9afe2c46b3bba52436351dd418',
+        //       channel_code: 'b756bf71948144f993bcc768fe7b0910',
+        //       fixmedinsCode: 'H32010400468',
+        //       fixmedinsName: '江苏省中医院',
+        //     },
+        //   },
+        // },
       },
     },
   },

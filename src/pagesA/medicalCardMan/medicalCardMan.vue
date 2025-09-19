@@ -109,7 +109,7 @@
                   @click="addPatInfo(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
                 >
-                  补充信息
+                  补充档案信息
                 </view>
               </view>
               <!-- #ifdef MP-ALIPAY -->
@@ -362,13 +362,22 @@
   };
 
   const isCanAddPatCardNo = (pat: IPat) => {
-    const { isCanAddPatCardNo } = pageConfig.value;
-    const { idCardEncry, idType } = pat;
+    const { isCanAddPatCardNo, isGuardianWithIdCard } = pageConfig.value;
+    const { idCardEncry, idType, patientAge, upIdCardEncry } = pat;
 
     let r = false;
 
     if (isCanAddPatCardNo === '1' && idType === '01') {
-      return true;
+      let isChildren = false;
+      if (isGuardianWithIdCard) {
+        isChildren =
+          (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
+      }
+
+      if (isChildren && !upIdCardEncry) {
+        return true;
+      }
+
       if (!idCardEncry) {
         r = true;
       }

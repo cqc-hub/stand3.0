@@ -46,6 +46,7 @@
   import { useCacheStore } from '@/stores';
   import api from '@/service/api';
   import { deQueryForUrl } from '@/common';
+import { rulePhone } from '@/utils/modules/verify';
   const cacheStore = useCacheStore();
 
   // const props = withDefaults(
@@ -98,7 +99,7 @@
       rule: [
         {
           message: '请填写正确的手机号',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
     },

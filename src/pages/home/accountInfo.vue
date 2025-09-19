@@ -94,6 +94,7 @@
     // uni.reLaunch({
     //   url: '/pagesA/medicalCardMan/medicalCardMan'
     // });
+    isShow.value = false;
     await loginUtils.logoutUser();
     gStores.messageStore.showMessage('注销账号成功', 1000, {
       closeCallBack: () => {

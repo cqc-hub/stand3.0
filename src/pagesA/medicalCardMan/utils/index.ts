@@ -16,6 +16,7 @@ import {
   LoginUtils,
   useOcr,
   ISystemConfig,
+  rulePhone,
 } from '@/utils';
 import api from '@/service/api';
 import globalGl, { SYS_CODE } from '@/config/global';
@@ -223,7 +224,7 @@ export const tempList: TInstance[] = [
     rule: [
       {
         message: '请确认手机号是否有误',
-        rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        rule: rulePhone,
       },
     ],
     labelWidth: '220rpx',
@@ -316,7 +317,7 @@ export const tempList: TInstance[] = [
     rule: [
       {
         message: '请确认手机号是否有误',
-        rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        rule: rulePhone,
       },
     ],
     labelWidth: '220rpx',

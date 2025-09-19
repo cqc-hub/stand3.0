@@ -26,7 +26,7 @@
   import { onLoad } from '@dcloudio/uni-app';
   import { deQueryForUrl } from '@/common';
   import { TInstance } from '@/components/g-form';
-  import { GStores, ISystemConfig, ServerStaticData, apiAsync } from '@/utils';
+  import { GStores, ISystemConfig, ServerStaticData, apiAsync, rulePhone } from '@/utils';
 
   import dayjs from 'dayjs';
   import api from '@/service/api';
@@ -54,7 +54,7 @@
   const phoneRule = [
     {
       message: '请确认手机号是否有误',
-      rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+      rule: rulePhone,
     },
   ];
 
