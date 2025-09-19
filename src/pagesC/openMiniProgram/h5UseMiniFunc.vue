@@ -12,7 +12,7 @@
   const pageProps = ref(
     <
       {
-        type: 'scanCode'; //scanCode:扫码
+        type: 'scanCode' | 'getUserProfile'; //scanCode:扫码
         backUrl: string; //返回路径
         routeType?: 'redirectTo' | 'reLaunch';
       }
@@ -20,13 +20,7 @@
   );
   let count = 0;
   const backUrl = ref(<TButtonConfig>{});
-  onShow(() => {
-    if (count) {
-      useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
-    } else {
-      count++;
-    }
-  });
+  onShow(() => {});
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     try {
@@ -47,14 +41,15 @@
           const { result } = await apiAsync(uni.scanCode, {
             autoZoom: true,
           });
-          console.log('scanCode',result);
-          
+          console.log('扫码反参', result);
           backUrl.value.extraData = {
             ...backUrl.value.extraData,
-            sacnData: result,
+            sacnData: encodeURIComponent(result),
           };
         }
       }
+
+      useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
     });
   });
 </script>

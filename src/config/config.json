@@ -273,7 +273,7 @@
       "h5Appid": "",
       "name": "浙江省人民医院毕节医院",
       "isStartComeTest": true,
-      "isSearchInHos": true,
+      "isSearchInHos": false,
       "isOpenOcr": false
     },
     "1001070": {
