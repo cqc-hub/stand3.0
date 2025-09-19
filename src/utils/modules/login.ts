@@ -1130,11 +1130,12 @@ export class PatientUtils extends LoginUtils {
     opt: { phone?: boolean; idCard?: boolean } = {}
   ) {
     const { phone, idCard } = opt;
-    const { patientId, cellPhoneNumber, idCardEncry } =
+    const { patientId, cellPhoneNumber, idCardEncry, upIdCardEncry } =
       this.userStore.patChoose;
 
     const arg: any = {
       source: this.globalStore.browser.source,
+      upIdCardEncry,
       patientId,
     };
 

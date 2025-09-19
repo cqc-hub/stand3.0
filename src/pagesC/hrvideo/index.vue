@@ -1,22 +1,27 @@
 <template>
   <view class="page" :class="{ 'page-other': otherApplets }">
-    <view v-if="!otherApplets" class="wrap">
+    <view v-if="!otherApplets" class="wrap f36">
       <view class="name">{{ hrOptions.displayData.doctorName || '医生' }}</view>
-      <view class="info">邀请通话</view>
+      <view class="info">邀请您参与视频通话</view>
       <view class="btns" v-if="isJumping">正在跳转</view>
       <view
-        v-if="gStores.globalStore.sysCode === '1001035'"
+        v-if="gStores.globalStore && gStores.globalStore.sysCode === '1001035'"
         class="flex justify-center flex-col"
         @tap="onClick"
       >
-        <view class="f48 g-bold open-1001035 flex justify-center items-center">
-          <img
-            :src="globalGl.BASE_IMG + 'stand3-phone-receive.png'"
-            class="phone-icon"
-            lazy-load
-          />
+        <view style="width: 100vw" class="">
+          <view
+            class="f56 g-bold open-1001035 flex justify-center items-center p32 pt24 pb24 mr32 ml32"
+          >
+            <img
+              :src="globalGl.BASE_IMG + 'stand3-phone-receive.png'"
+              class="phone-icon"
+              lazy-load
+            />
+
+            <text class="text-center text-semibold">点击接听视频</text>
+          </view>
         </view>
-        <view class="text-center text-semibold mt24">接听</view>
       </view>
       <view v-else class="btns">
         <view @tap="onClickCancel" class="btn reject">拒绝</view>
@@ -42,7 +47,7 @@
     data() {
       return {
         globalGl,
-        gStores: '',
+        gStores: new GStores(),
         otherApplets: false,
         hrOptions: {
           displayData: {
@@ -56,7 +61,6 @@
       };
     },
     onLoad(options) {
-      this.gStores = new GStores();
       let trans = (field) => {
         try {
           opt[field] = decodeURIComponent(opt[field]);
@@ -157,13 +161,13 @@
 
   .open-1001035 {
     background-color: #58be6a;
-    border-radius: 100%;
-    width: 3em;
-    height: 3em;
+    border-radius: 8888px;
+    // width: 3em;
+    // height: 3em;
 
     .phone-icon {
-      width: 2em;
-      height: 2em;
+      width: 1.5em;
+      height: 1.5em;
     }
   }
 </style>

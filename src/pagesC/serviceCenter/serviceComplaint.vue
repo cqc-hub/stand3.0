@@ -33,7 +33,7 @@
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted } from 'vue';
   import { onShow, onLoad } from '@dcloudio/uni-app';
-  import { generateUuid, GStores } from '@/utils';
+  import { generateUuid, GStores, rulePhone } from '@/utils';
 
   import { decryptDes } from '@/common/des';
   import type { TInstance } from '@/components/g-form/index';
@@ -117,7 +117,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
       labelWidth: '220rpx',
@@ -212,7 +212,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
       labelWidth: '220rpx',
@@ -313,7 +313,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
       labelWidth: '220rpx',
@@ -433,7 +433,7 @@
       rule: [
         {
           message: '请确认手机号是否有误',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
       labelWidth: '220rpx',

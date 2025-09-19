@@ -52,6 +52,7 @@
     IHosInfo,
     getLocation,
     wait,
+    rulePhone,
   } from '@/utils';
 
   import dayjs from 'dayjs';
@@ -102,7 +103,7 @@
   const phoneRule = [
     {
       message: '请确认手机号是否有误',
-      rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+      rule: rulePhone,
     },
   ];
   const labelWidth = '200rpx';
@@ -174,7 +175,7 @@
       placeholder: '请选择',
       key: 'nation',
       options: [],
-      autoOptions: 'nationTerms', 
+      autoOptions: 'nationTerms',
     filterOptions(opt, search) {
       if (search) {
         return opt.filter((o) => {
@@ -184,7 +185,7 @@
         });
       }
       return opt;
-    }, 
+    },
       showSuffixArrowIcon: true,
     },
     {

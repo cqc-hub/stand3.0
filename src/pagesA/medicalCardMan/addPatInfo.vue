@@ -75,7 +75,7 @@
       patientName,
       idCard: oldIdCard,
     } = gStores.userStore.patChoose;
-    const { upIdCard, upPhone, relationShip, idCard, upName } = formData.value;
+    const { upIdCard, relationShip, idCard, upName } = formData.value;
 
     let [name, idCardNumber] = ['', ''];
     const pInfo = await patientUtils.getPatientPersonalInfo({
@@ -108,6 +108,7 @@
       patientId,
       pData,
       relationShip,
+      checkIdCard: idCardNumber,
     };
 
     if (isChildren.value && !oldUpIdCard) {
@@ -287,7 +288,7 @@
       //   rule: [
       //     {
       //       message: '请确认手机号是否有误',
-      //       rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+      //       rule: rulePhone,
       //     },
       //   ],
       //   labelWidth: '220rpx',

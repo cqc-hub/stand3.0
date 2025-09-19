@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults } from 'vue';
-  import { GStores, wait } from '@/utils';
+  import { GStores, rulePhone, wait } from '@/utils';
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { useMessageStore } from '@/stores';
   import api from '@/service/api';
@@ -120,7 +120,7 @@
       rule: [
         {
           message: '请填写正确的手机号',
-          rule: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+          rule: rulePhone,
         },
       ],
     },

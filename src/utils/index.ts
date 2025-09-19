@@ -8,4 +8,5 @@ export * from './modules/classUtil';
 export * from './modules/file';
 export * from './modules/webUtil';
 export * from './modules/d';
+export * from './modules/verify';
 // export * from './modules/is';
