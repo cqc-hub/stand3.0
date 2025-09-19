@@ -59,7 +59,7 @@
   const formSubmit = async ({ data }) => {
     const { ceshiData = [], ceshiData1 = [] } = data;
 
-    const photoList = [, ...ceshiData1, ...ceshiData];
+    const photoList = [...ceshiData1, ...ceshiData];
     const {
       result: { diseaseId },
     } = await api.addDiseaseInformation({

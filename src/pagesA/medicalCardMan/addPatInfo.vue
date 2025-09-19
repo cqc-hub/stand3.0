@@ -106,7 +106,7 @@
     const args: any = {
       cardNumber,
       patientId,
-      pData,
+      pdata: pData,
       relationShip,
       checkIdCard: idCardNumber,
     };
