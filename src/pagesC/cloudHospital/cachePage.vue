@@ -89,6 +89,54 @@
       });
     });
   };
+
+  const handleWxMedicalPay1001035 = async ({ uploadRes, info }) => {
+    const { orderIdSM4, sourcebusinessBj, medOrgOrd, orderId, payOrderId } =
+      uploadRes;
+
+    const { openid, source, userName, userCardNo, payAuthNo, ocToken } = info;
+
+    return new Promise(async (r, j) => {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '请点击确定跳转医保小程序?',
+      });
+
+      if (!confirm) {
+        j('取消请求授权...');
+        return;
+      }
+
+      uni.showLoading({});
+      gStores.globalStore.assignCacheData({
+        uploadRes: {
+          ...uploadRes,
+          orderIdSM4,
+          sourcebusinessBj,
+          medOrgOrd,
+          orderId,
+          payOrderId,
+        },
+        info: {
+          ...info,
+          openid,
+          source,
+          userName,
+          userCardNo,
+          payAuthNo,
+          ocToken,
+        },
+      });
+
+      // @ts-expect-error
+      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+        uni.hideLoading();
+        await utils.handlerMedicalPay1001035({
+          phsOrderSource: sourcebusinessBj === '11' ? '1' : '2',
+        });
+      });
+    });
+  };
+
   //封装网络医院参数
   const getparams = (options) => {
     const opt = options._outPara ? {} : options;
@@ -176,8 +224,12 @@
       insuranceParams: insuranceParamsWx,
       payBackParams,
       registerId,
-      cardNumber,
+      insuranceParams1001035,
     } = fd;
+
+    if (insuranceParams1001035) {
+      handleWxMedicalPay1001035(insuranceParams1001035);
+    }
 
     // if (cardNumber) {
     //   if (gStores.userStore.patChoose.cardNumber !== cardNumber) {

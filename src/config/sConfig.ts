@@ -712,29 +712,29 @@ const scJson: Record<string, ISConfig> = {
       isLoginByOpenId: '1',
     },
 
-    // medicalMHelp: {
-    //   wx: {
-    //     medicalNation: {
-    //       appId: 'wxe183cd55df4b4369',
-    //       path: 'auth/pages/bindcard/auth/index',
-    //       pathExtraData: {
-    //         openType: 'getAuthCode',
-    //         cityCode: '320400',
-    //         orgCodg: 'H32048100095',
-    //         orgChnlCrtfCodg:
-    //           'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
-    //         bizType: '04107',
-    //         orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
-    //         channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
-    //       },
-    //       dongRuanMedicalInfo: {
-    //         h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
-    //       },
-    //     },
-    //     isMedicalOrder: '1',
-    //     isGbFamilyPayment: '1',
-    //   },
-    // },
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            cityCode: '320400',
+            orgCodg: 'H32048100095',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvXg/++7e1yfc/kbkno5H2B',
+            bizType: '04107',
+            orgAppId: '1I4IKUE4808A8C430B0A000072CBC284',
+            channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
+          },
+          dongRuanMedicalInfo: {
+            h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
+          },
+        },
+        isMedicalOrder: '1',
+        isGbFamilyPayment: '1',
+      },
+    },
   },
   /**
    * 江苏省中医院

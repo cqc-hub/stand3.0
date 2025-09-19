@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001067",
+  "sysCode": "1001084",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -391,7 +391,7 @@
     },
     "1001084": {
       "wxAppid": "wxa50129d260033b82",
-      "h5Appid": "",
+      "h5Appid": "wx679f3d1ba8fc1635",
       "alipayAppid": "2021005176652664",
       "isvAlipayAppid": "2021005178607990",
       "name": "溧阳市人民医院",
