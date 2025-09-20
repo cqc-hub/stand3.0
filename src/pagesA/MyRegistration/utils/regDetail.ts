@@ -698,7 +698,6 @@ export class RegDetailUtil {
         throw new Error(errMsg);
       }
 
-      console.log(args);
       // return
       await api.refundOrder(args);
     } else {

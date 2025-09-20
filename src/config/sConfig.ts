@@ -265,7 +265,6 @@ const scJson: Record<string, ISConfig> = {
     isSearchHosForAddPatHasMoreThanOneCard: '1',
 
     medicalMHelp: {
-
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',
@@ -733,6 +732,7 @@ const scJson: Record<string, ISConfig> = {
         },
         isMedicalOrder: '1',
         isGbFamilyPayment: '1',
+        // medicalDefault: '1',
       },
     },
   },
@@ -823,7 +823,7 @@ const scJson: Record<string, ISConfig> = {
   1001092: {
     login: {
       isAliAuthBase: '1',
-      isSkipPerfect: '1'
+      isSkipPerfect: '1',
     },
   },
 };

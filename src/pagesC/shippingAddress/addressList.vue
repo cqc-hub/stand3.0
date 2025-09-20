@@ -76,7 +76,7 @@
 <script setup lang="ts">
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { ref } from 'vue';
-  import { GStores } from '@/utils';
+  import { GStores, verifyEmoji, verifyPhone } from '@/utils';
   import { useMessageStore } from '@/stores';
   import { joinQuery } from '@/common';
   import { getScopeAddress } from '@/common/utils';
@@ -154,11 +154,14 @@
     });
   };
   const getAddress = async (data) => {
-    const {
-      userName,
-      telNumber
-    } = data;
+    const { telNumber, detailInfo } = data;
 
+    if (!verifyPhone(telNumber)) {
+      return gStores.messageStore.showMessage('手机号校验失败', 1500);
+    }
+    if (verifyEmoji(detailInfo)) {
+      return gStores.messageStore.showMessage('地址不支持输入表情符号', 1500);
+    }
 
     await api.addExpressAddress({
       herenId: gStores.globalStore.herenId,

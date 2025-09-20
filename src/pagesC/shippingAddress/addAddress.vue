@@ -62,11 +62,12 @@
 
 <script lang="ts" setup>
   import { ref, onMounted, computed, withDefaults } from 'vue';
-  import { GStores, rulePhone, wait } from '@/utils';
+  import { GStores, rulePhone, verifyEmoji, wait } from '@/utils';
   import { onReady, onLoad } from '@dcloudio/uni-app';
   import { useMessageStore } from '@/stores';
   import api from '@/service/api';
   import { deQueryForUrl } from '@/common';
+  import { TInstance } from '@/components/g-form';
   const messageStore = useMessageStore();
 
   // const props = withDefaults(
@@ -98,7 +99,7 @@
     defaultFlag: false,
   });
 
-  const formList = [
+  const formList: TInstance[] = [
     {
       required: true,
       maxlength: 50,
@@ -140,11 +141,21 @@
       label: '详细地址',
       field: 'input-text',
       inputType: 'textarea',
-      autoHeight: true,
       placeholder: '请输入街道、小区、门牌号等',
       key: 'detailedAddress',
       emptyMessage: '请输入街道、小区、门牌号等',
       rowStyle: 'border-radius: 0 0 16rpx 16rpx;',
+      async validator(v, item) {
+        if (verifyEmoji(v)) {
+          return {
+            success: false,
+            message: '地址不支持输入表情符号',
+          };
+        }
+        return {
+          success: true,
+        };
+      },
     },
     {
       required: false,
@@ -180,7 +191,7 @@
         getAddress(res);
       },
       fail(res) {
-        console.error(res)
+        console.error(res);
       },
     });
   };

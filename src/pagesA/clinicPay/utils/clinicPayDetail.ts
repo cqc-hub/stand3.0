@@ -1823,7 +1823,10 @@ export const usePayPage = () => {
           ? pageProps.value.deParams?.cardNumber
           : '';
 
-        if (globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat&&gStores.globalStore.sysCode!=='1001046') {
+        if (
+          globalGl.sConfig.medicalMHelp?.isOpenPatToMedicalPat &&
+          gStores.globalStore.sysCode !== '1001046'
+        ) {
           await new PatientUtils().upToMedicalPat({
             pat: gStores.userStore.patChoose,
             cardNumber,
@@ -1841,13 +1844,11 @@ export const usePayPage = () => {
 
         // #ifdef  MP-WEIXIN
         if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-          const resultConfig = 
-            JSON.stringify({
-              cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
-              orderStatusRedirectUrl:
-                '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-            }
-          );
+          const resultConfig = JSON.stringify({
+            cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
+            orderStatusRedirectUrl:
+              '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+          });
           const medOrgOrd = selUnPayList.value
             .map((item) => item.serialNo)
             .join(',');
