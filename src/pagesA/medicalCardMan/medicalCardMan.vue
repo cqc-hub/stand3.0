@@ -229,6 +229,7 @@
     backWithFaceVerify,
     healthCardBind,
     useAuthPerson,
+    isShowAddPatCardNo,
   } from './utils/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
@@ -277,12 +278,13 @@
   const isShowHealthCardMode = ref(false);
   const patientUtils = new PatientUtils();
   const pageConfig = ref(<ISystemConfig['person']>{});
-  provide('pageConfig', () => readonly(pageConfig.value));
   const regDialogMedicalFiling: Ref<any> = ref('');
   const faceDialog: Ref<any> = ref('');
   const medicalFilingPat: Ref<any> = ref('');
   const isMedicalFiling = ref(false);
   const isNewHealthCard = ref(false);
+
+  provide('pageConfig', () => readonly(pageConfig.value));
 
   let resolve: (...any) => any = () => {};
   let reject: (...any) => any = () => {};
@@ -362,28 +364,7 @@
   };
 
   const isCanAddPatCardNo = (pat: IPat) => {
-    const { isCanAddPatCardNo, isGuardianWithIdCard } = pageConfig.value;
-    const { idCardEncry, idType, patientAge, upIdCardEncry } = pat;
-
-    let r = false;
-
-    if (isCanAddPatCardNo === '1' && idType === '01') {
-      let isChildren = false;
-      if (isGuardianWithIdCard) {
-        isChildren =
-          (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
-      }
-
-      if (isChildren && !upIdCardEncry) {
-        return true;
-      }
-
-      if (!idCardEncry) {
-        r = true;
-      }
-    }
-
-    return r;
+    return isShowAddPatCardNo(pat, pageConfig.value);
   };
 
   const editUpName = (pat: IPat) => {

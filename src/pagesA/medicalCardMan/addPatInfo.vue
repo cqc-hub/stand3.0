@@ -129,33 +129,10 @@
     await api.updateUserInfo(args);
 
     gStores.messageStore.showMessage('更新成功', 1500, {
-      closeCallBack() {
+      async closeCallBack() {
+        await patientUtils.getPatCardList();
         routerJump('/pagesA/medicalCardMan/medicalCardMan');
       },
-    });
-  };
-
-  const idCardCheck = async (v: string) => {
-    if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-      const { ageGuardian } = await ServerStaticData.getSystemConfig('person');
-
-      const info = idValidator.getIdCardInfo(v);
-
-      if (info.age < ageGuardian) {
-        return Promise.resolve({
-          success: false,
-          message: `监护人年龄必须大于: ${ageGuardian}岁`,
-        });
-      }
-
-      return Promise.resolve({
-        success: true,
-      });
-    }
-
-    return Promise.resolve({
-      success: false,
-      message: '请确认证件号码是否有误',
     });
   };
 

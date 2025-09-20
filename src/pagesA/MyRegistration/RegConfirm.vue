@@ -237,12 +237,16 @@
   import GreenPower from '@/components/greenPower/greenPower.vue';
   import GreenToast from '@/components/greenPower/greenToast.vue';
   import RegConformQCreatePerson from './components/RegConformQCreatePerson/RegConformQCreatePerson.vue';
-  import { useProgramPaySign } from '@/pagesA/medicalCardMan/utils';
+  import {
+    isShowAddPatCardNo,
+    useProgramPaySign,
+  } from '@/pagesA/medicalCardMan/utils';
   import { beforeEach } from '@/router';
 
   const gStores = new GStores();
   const props = ref({} as IPageProps);
   const pageConfig = ref({} as ISystemConfig['order']);
+  const personConfig = ref({} as ISystemConfig['person']);
   const deptStore = useDeptStore();
   const quickPat = ref(
     {} as IPat & {
@@ -509,6 +513,34 @@
       patientId = _patientId;
       requestArg.patientId = patientId;
       requestArg.quickAppoint = 'quickAppoint';
+    } else {
+      // 没有证件号去补充
+      if (isShowAddPatCardNo(gStores.userStore.patChoose, personConfig.value)) {
+        const { title, content } = await gStores.getSysAppMore('1265');
+        const { confirm } = await new Promise<any>((closeCallBack) => {
+          gStores.messageStore.showMessage(content, 0, {
+            useDialog: true,
+            dialogOpt: {
+              isShowCancel: true,
+              title,
+            },
+            closeCallBack,
+          });
+        });
+
+        if (confirm) {
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+              _url: joinQueryForUrl(
+                '/pagesA/MyRegistration/RegConfirm',
+                props.value
+              ),
+            }),
+          });
+        }
+
+        return;
+      }
     }
 
     let alipayAuthCode = '';
@@ -954,6 +986,7 @@
 
   const getPageConfig = async () => {
     pageConfig.value = await ServerStaticData.getSystemConfig('order');
+    personConfig.value = await ServerStaticData.getSystemConfig('person');
   };
 
   const signAfterContinueOrder = async () => {

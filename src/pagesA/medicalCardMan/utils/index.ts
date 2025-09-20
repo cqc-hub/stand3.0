@@ -1436,3 +1436,31 @@ export const useAuthPerson = () => {
     getRealNameAuth,
   };
 };
+
+export const isShowAddPatCardNo = (
+  pat: IPat,
+  config: ISystemConfig['person']
+) => {
+  const { isCanAddPatCardNo, isGuardianWithIdCard } = config;
+  const { idCardEncry, idType, patientAge, upIdCardEncry } = pat;
+
+  let r = false;
+
+  if (isCanAddPatCardNo === '1' && idType === '01') {
+    let isChildren = false;
+    if (isGuardianWithIdCard) {
+      isChildren =
+        (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
+    }
+
+    if (isChildren && !upIdCardEncry) {
+      return true;
+    }
+
+    if (!idCardEncry) {
+      r = true;
+    }
+  }
+
+  return r;
+};
