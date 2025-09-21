@@ -1045,22 +1045,10 @@
     await getPageConfig();
     uni.hideLoading();
 
-    const pages = getCurrentPages();
-    if (pages.length) {
-      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
-      const routeArg = {
-        url: fullUrl,
-        _isLogin: true,
-        _isPatient: true,
-      };
-
-      if (isOrderWithoutPat.value) {
-        routeArg._isPatient = false;
-      }
-
-      await beforeEach(routeArg);
-    }
+    await beforeEach({
+      _isLogin: true,
+      _isPatient: true,
+    });
 
     const { isConfirmOrderWithDeptTip } = pageConfig.value;
     if (isConfirmOrderWithDeptTip === '1') {

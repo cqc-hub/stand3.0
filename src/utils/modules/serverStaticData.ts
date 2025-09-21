@@ -227,17 +227,10 @@ export const useTBanner = async (
   let fullUrl = joinQueryForUrl(path, extraData);
   //  登录和就诊人拦截
   // #ifndef H5
-  const pages = getCurrentPages();
-  if (pages.length > 0) {
-    const currentPage = pages[pages.length - 1];
-    const _fullUrl: string =
-      (currentPage as any).route || (currentPage as any).$page?.fullPath;
-    await beforeEach({
-      url: _fullUrl,
-      _isLogin: isLogin,
-      _isPatient: isPatient,
-    });
-  }
+  await beforeEach({
+    _isLogin: isLogin,
+    _isPatient: isPatient,
+  });
   // #endif
 
   // #ifdef H5

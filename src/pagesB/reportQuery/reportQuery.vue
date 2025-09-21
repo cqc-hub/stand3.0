@@ -251,8 +251,14 @@
     registerOrderId?: string;
   }
   const pageProps = ref(<IPageProps>{});
-    // 在父组件中
-const allowedHosIds = ref(['330301001', '330301002','330301003','330301004','330301009']);
+  // 在父组件中
+  const allowedHosIds = ref([
+    '330301001',
+    '330301002',
+    '330301003',
+    '330301004',
+    '330301009',
+  ]);
 
   const tabs = ref<ITab[]>([]);
   const tabCurrent = ref(0);
@@ -915,16 +921,9 @@ const allowedHosIds = ref(['330301001', '330301002','330301003','330301004','330
   });
 
   onLoad(async (p) => {
-    const pages = getCurrentPages();
-
-    if (pages.length) {
-      const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
-      await beforeEach({
-        url: fullUrl,
-        _isPatient: true,
-      });
-    }
+    await beforeEach({
+      _isPatient: true,
+    });
     pageConfig.value = await ServerStaticData.getSystemConfig('reportQuery');
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));

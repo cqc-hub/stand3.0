@@ -641,15 +641,9 @@
     await wait(200);
     const patList = gStores.userStore.patList;
     if (!patList.length) {
-      const pages = getCurrentPages();
-
-      if (pages.length) {
-        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-        await beforeEach({
-          url: fullUrl,
-          _isPatient: true,
-        });
-      }
+      await beforeEach({
+        _isPatient: true,
+      });
     }
   };
   const getChineseMedicineList = async () => {

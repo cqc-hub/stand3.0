@@ -172,15 +172,9 @@
       uni.showLoading({});
       await wait(600);
 
-      const pages = getCurrentPages();
-      if (pages.length) {
-        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
-        await beforeEach({
-          url: fullUrl,
-          _isPatient: true,
-        });
-      }
+      await beforeEach({
+        _isPatient: true,
+      });
 
       let pat = patientId
         ? gStores.userStore.patList.find((o) => o.patientId === patientId)
