@@ -49,6 +49,7 @@
     tjyy1001067,
     initQuestionList58,
     initQuestion52,
+    childNewborn10001067,
   } = useScan();
 
   const init = async () => {
@@ -152,6 +153,10 @@
         initQuestion52();
         break;
 
+      case '15':
+        childNewborn10001067();
+        break;
+
       default:
         break;
     }
@@ -184,7 +189,6 @@
       //   type: '2',
       //   a: '',
       // } as any;
-      console.log(joinQuery('', pageProps.value));
       // 加密参数重新编码一次
       if (pageProps.value.params) {
         pageProps.value.params = encodeURIComponent(pageProps.value.params);

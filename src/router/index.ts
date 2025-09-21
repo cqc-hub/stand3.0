@@ -33,12 +33,24 @@ type TRoute = {
   _isHerenId?: boolean;
 };
 export const beforeEach = async (
-  options: UniNamespace.ReLaunchOptions &
+  options: Partial<
     UniNamespace.ReLaunchOptions &
-    UniApp.RedirectToOptions &
-    TRoute
+      UniNamespace.ReLaunchOptions &
+      UniApp.RedirectToOptions &
+      TRoute
+  >
 ) => {
-  const fullUrl = options.url[0] === '/' ? options.url : '/' + options.url;
+  let fullUrl = '';
+  if (options.url) {
+    // @ts-expect-error
+    fullUrl = options.url[0] === '/' ? options.url : '/' + options.url;
+  } else {
+    const pages = getCurrentPages();
+    if (pages.length) {
+      fullUrl = (pages[pages.length - 1] as any).$page.fullPath;
+    }
+  }
+
   const url = fullUrl.split('?')[0];
   const currentRoute = getCurrentRoute(url) || {};
   const globalStore = useGlobalStore();

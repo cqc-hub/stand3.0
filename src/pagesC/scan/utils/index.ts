@@ -1,7 +1,8 @@
 import { computed, ref } from 'vue';
 import { getLocation, GStores, TBannerConfig, useTBanner, wait } from '@/utils';
-import { joinQueryForUrl } from '@/common';
+import { encryptDes, joinQueryForUrl } from '@/common';
 import api from '@/service/api';
+import { beforeEach } from '@/router';
 export const useScan = () => {
   const pageProps = ref(
     {} as {
@@ -20,6 +21,7 @@ export const useScan = () => {
        * - 12 健康咨询-详情
        * - 13 濮阳满意度问卷
        * - 14 乐清满意度
+       * - 15 温附二跳转新生儿筛查登录
        * - _1 温附二 特检预约
        */
       type:
@@ -37,7 +39,8 @@ export const useScan = () => {
         | '11'
         | '12'
         | '13'
-        | '14';
+        | '14'
+        | '15';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -395,8 +398,36 @@ export const useScan = () => {
     });
   };
 
+  /**
+   * 新生儿筛查登录校验
+   */
+  const childNewborn10001067 = async () => {
+    await beforeEach({
+      _isLogin: true,
+    });
+
+    const { openId } = gStores.globalStore;
+    const params = encryptDes(
+      JSON.stringify({
+        openId,
+      }),
+      'phsDesKey'
+    );
+
+    useTBanner({
+      type: 'h5',
+      path: joinQueryForUrl(
+        'https://crm.wzhealth.com/sso/h5-login/fey/Y06/pages/home/index',
+        {
+          params,
+        }
+      ),
+    });
+  };
+
   return {
     pageProps,
+    childNewborn10001067,
     healthAdvisoryDetail,
     healthAdvisory,
     goMedicalAssistant,

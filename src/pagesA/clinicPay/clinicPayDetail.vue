@@ -65,7 +65,13 @@
             isShowFg
             typeFg="15"
           />
-          <block v-if="isPayListRequestComplete && unPayList.length&&!isListCanPayedItem">
+          <block
+            v-if="
+              isPayListRequestComplete &&
+              unPayList.length &&
+              !isListCanPayedItem
+            "
+          >
             <Clinic-Pay-Detail-List
               :list="unPayList"
               @click-item="itemClick"
@@ -77,7 +83,11 @@
               isCheck
             />
           </block>
-          <block v-else-if="isPayListRequestComplete && unPayList.length&&isListCanPayedItem">
+          <block
+            v-else-if="
+              isPayListRequestComplete && unPayList.length && isListCanPayedItem
+            "
+          >
             <Clinic-Pay-Item-Detail-List
               :list="unPayList"
               @click-item="itemClick"
@@ -322,7 +332,7 @@
     kw1,
     isListCanPayedItem,
     isCanSelServerFee,
-    selDeailtItem
+    selDeailtItem,
   } = usePayPage();
 
   const isShowPatComponent = ref(false);
@@ -390,16 +400,9 @@
     await wait(200);
     const patList = gStores.userStore.patList;
     if (!patList.length) {
-      const pages = getCurrentPages();
-
-      if (pages.length) {
-        const fullUrl: string = (pages[pages.length - 1] as any).$page.fullPath;
-
-        await beforeEach({
-          url: fullUrl,
-          _isPatient: true,
-        });
-      }
+      await beforeEach({
+        _isPatient: true,
+      });
     }
   };
 
