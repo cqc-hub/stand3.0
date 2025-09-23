@@ -27,8 +27,10 @@
   import { apiAsync, GStores, wait } from '@/utils';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { BASE_IMG } from '@/config/global';
+  import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
   const pageProps = ref(
     {} as {
       payParams: string;
@@ -45,9 +47,9 @@
   const resultConfig = ref(
     {} as {
       // 取消、失败
-      cancelAuthRedirectUrl: string;
+      cancelUrl: string;
       // 成功
-      orderStatusRedirectUrl: string;
+      successUrl: string;
     }
   );
 
@@ -87,22 +89,30 @@
     });
   };
 
+  const suffixUrl = (url: string) => {
+    if (url && !url.startsWith('/')) {
+      url = `/${url}`;
+    }
+
+    return url;
+  };
   const payAfter = async () => {
     uni.showLoading({});
-    await wait(3000);
+    await wait(6000);
     uni.hideLoading();
     uni.reLaunch({
-      url: resultConfig.value.orderStatusRedirectUrl,
+      url: resultConfig.value.successUrl,
     });
   };
   const payCancel = () => {
     uni.reLaunch({
-      url: resultConfig.value.cancelAuthRedirectUrl,
+      url: resultConfig.value.cancelUrl,
     });
   };
 
   onLoad(async (opt) => {
     uni.showLoading({});
+    resultConfig.value = cacheStore.cacheData2;
 
     if (opt) {
       pageProps.value = deQueryForUrl(deQueryForUrl(opt));
@@ -114,12 +124,6 @@
       } catch (error) {
         payParams.value = pageProps.value.payParams as any;
       }
-    }
-
-    try {
-      resultConfig.value = JSON.parse(getLocalStorage('resultConfig'));
-    } catch (error) {
-      resultConfig.value = getLocalStorage('resultConfig');
     }
 
     console.log('获取到参数', pageProps.value);
@@ -147,11 +151,10 @@
 
   onShow(async () => {
     const { scene } = gStores.globalStore.appShowData;
-    const globalStore = gStores.globalStore;
+    // const globalStore = gStores.globalStore;
 
     if (
       scene === 1038 &&
-      ['1001048', '1001084'].includes(globalStore.sysCode) &&
       getLocalStorage('payed1001048') &&
       getLocalStorage('resultConfig')
     ) {
@@ -183,5 +186,8 @@
         });
       }
     }
+
+    // 三方医保回来也会携带authcode参数， 但是过期..
+    gStores.globalStore.onAppShow({});
   });
 </script>
