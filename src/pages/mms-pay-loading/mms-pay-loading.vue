@@ -54,19 +54,15 @@
   const wxRequestMedicalInsurancePay = async () => {
     const { mixTradeNo } = payParams.value;
 
-    wx.requestMedicalInsurancePay({
-      mixTradeNo,
-      success(e) {
-        console.log('支付成功了', e);
-      },
-    });
-
     await apiAsync(wx.requestMedicalInsurancePay, {
       mixTradeNo,
     }).catch((r) => {
       payCancel();
       console.error(r);
+      throw new Error(r);
     });
+
+    payAfter();
   };
 
   const wxMedicalProgram = () => {
@@ -91,16 +87,17 @@
     });
   };
 
-  const payAfter = () => {};
+  const payAfter = async () => {
+    uni.showLoading({});
+    await wait(3000);
+    uni.hideLoading();
+    uni.reLaunch({
+      url: resultConfig.value.orderStatusRedirectUrl,
+    });
+  };
   const payCancel = () => {
-    console.log('我自信了');
-    console.log(resultConfig.value);
-
     uni.reLaunch({
       url: resultConfig.value.cancelAuthRedirectUrl,
-      complete(r) {
-        console.log(r);
-      },
     });
   };
 
