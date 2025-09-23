@@ -63,7 +63,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -71,7 +76,6 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
     "plugins": {},
     "mergeVirtualHostAttributes": true,
     "appid": "2021003104670597",

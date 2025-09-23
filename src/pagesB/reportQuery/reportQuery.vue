@@ -14,7 +14,7 @@
       @change="choosePat"
       ref="selHosRef"
     />
-    <g-choose-pat @choose-pat="choosePat" />
+    <g-choose-pat :onlySelf="onlySelf" :disabled="true" @choose-pat="choosePat" />
     <g-tbanner
       v-if="gStores.userStore.patChoose.patientId"
       :config="yunBannerConfig"
@@ -276,6 +276,7 @@
   const verifyData = ref('');
   const verifyIdCardVal = ref('');
   const refVerifyIdCardPopup = ref('' as any);
+  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
@@ -783,6 +784,9 @@
   });
   //切换就诊人
   const choosePat = () => {
+    if(onlySelf){
+      return ;
+    }
     pageList.value = { '0': [], '1': [], '2': [] };
     isRefresh.value = [true, true, true];
     nextTick(() => {

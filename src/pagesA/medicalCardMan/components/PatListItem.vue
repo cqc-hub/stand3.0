@@ -5,6 +5,12 @@
         <!-- <text class="pat-name bold">{{pat.healthQrCodeText ? pat.patientNameEncry : pat.patientName }}</text> -->
         <text class="pat-name bold">{{ gStores.userStore.getPatName(pat) }}</text>
         <text class="pat-sex bold">{{ pat.patientSex }}</text>
+          <g-tag
+          v-if="pageConfig().relationShip === '1' && pat.relationship"
+          type="blue"
+          :text="pat.relationship"
+          class="mr12"
+        />
         <g-tag
           v-if="pat.defaultFlag === '1'"
           type="yellow"

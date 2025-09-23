@@ -70,12 +70,12 @@
         <!-- {{ `Hi,亲爱的用户` }} -->
         <view>
           {{
-            `Hi,${gStores?.userStore?.patChoose?.patientName || '亲爱的用户'}`
+            `Hi,${ (onlySelf ? getSelfPat()?.patientName : gStores?.userStore?.patChoose?.patientName) || '亲爱的用户'}`
           }}
         </view>
         <view
           @click="chooseAction"
-          v-if="gStores?.userStore?.patChoose?.patientName"
+          v-if="gStores?.userStore?.patChoose?.patientName && !onlySelf"
         >
           <img
             :src="globalGl.BASE_IMG + 'intelMedica-swich.png'"
@@ -126,7 +126,7 @@
         </view>
       </view>
     </view>
-    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+    <choose-pat-action ref="actionSheet" :onlySelf="onlySelf" @choose-pat="choosePatHandler" />
   </view>
 </template>
 <script setup lang="ts">
@@ -134,6 +134,7 @@
   import { useTBanner, GStores } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import globalGl from '@/config/global';
+  import { type IPat } from '@/stores';
   import { type StyleConfigType } from '../utils/types';
   import {
     popipHasShow,
@@ -153,9 +154,17 @@
     headerConfig: StyleConfigType;
     isMess?: string;
   }>();
+  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
   const tabField = ['首页', '服务', '我的'];
   const tabCurrent = ref(0);
   const emits = defineEmits(['click-guess']);
+
+  const getSelfPat = (): IPat  => {
+    const selfPat = gStores.userStore.patList.find(
+      (pat: IPat) => pat.relationship === '本人'
+    );
+    return selfPat || gStores.userStore.patList[0];
+  };
 
   const askArray = computed(() => {
     if (props.guessAskList && props.guessAskList.length) {

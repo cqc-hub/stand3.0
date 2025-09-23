@@ -1128,13 +1128,13 @@
         o.required = cardType === '01' || value === '0' || false;
       }
 
-      // 地址不强制填写
+      // 地址+地区不强制填写
       if (
         ['1001082'].includes(gStores.globalStore.sysCode) &&
-        key === formKey.location
+        [formKey.address, formKey.location].includes(key as any)
       ) {
         o.required = false;
-      }
+      } 
     });
 
     gform.value.setList([]);

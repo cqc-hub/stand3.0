@@ -90,7 +90,7 @@
                     class="top-card flex-normal-between animate__animated animate__fadeIn"
                   >
                     <!-- 有就诊人时 -->
-                    <block v-if="gStores.userStore.patChoose.patientName">
+                    <block v-if="gStores.userStore.patChoose.patientName && (!onlySelf || (onlySelf && getSelfPat()?.patientName))">
                       <view class="flex-normal">
                         <view
                           v-if="personConfig.isQrCodeDisabled !== '1'"
@@ -101,20 +101,20 @@
                         </view>
                         <view class="patient">
                           <text>
-                            {{ gStores.userStore.choosePatName }}
+                            {{ onlySelf ? getSelfPat()?.patientName : gStores.userStore.choosePatName }}
                           </text>
                           <text
                             v-if="
                               !isAreaProgram() &&
-                              gStores.userStore.patChoose._showId
+                              (onlySelf ? getSelfPat()?._showId : gStores.userStore.patChoose._showId)
                             "
                           >
                             ID
-                            {{ gStores.userStore.patChoose._showId }}
+                             {{ onlySelf ? getSelfPat()?._showId : gStores.userStore.patChoose._showId }}
                           </text>
                         </view>
                       </view>
-                      <view class="switchPatient" @tap="chooseAction">
+                      <view v-if="!onlySelf" class="switchPatient" @tap="chooseAction">
                         更换就诊人
                       </view>
                     </block>
@@ -294,7 +294,7 @@
                   class="top-card-old flex-normal-between animate__animated animate__fadeIn"
                 >
                   <!-- 有就诊人时 -->
-                  <block v-if="gStores.userStore.patChoose.patientName">
+                  <block v-if="gStores.userStore.patChoose.patientName && (!onlySelf || (onlySelf && getSelfPat()?.patientName))">
                     <view class="flex-normal">
                       <view
                         v-if="personConfig.isQrCodeDisabled !== '1'"
@@ -305,7 +305,7 @@
                       </view>
                       <view class="patient">
                         <text>
-                          {{ gStores.userStore.patChoose.patientNameEncry }}
+                          {{ onlySelf ? getSelfPat()?.patientNameEncry : gStores.userStore.patChoose.patientNameEncry }}
                         </text>
                         <text
                           v-if="
@@ -314,11 +314,11 @@
                           "
                         >
                           ID
-                          {{ gStores.userStore.patChoose._showId }}
+                           {{ onlySelf ? getSelfPat()?._showId : gStores.userStore.patChoose._showId }}
                         </text>
                       </view>
                     </view>
-                    <view class="switchPatient" @tap="chooseAction">
+                    <view v-if="!onlySelf" class="switchPatient" @tap="chooseAction">
                       更换就诊人
                     </view>
                   </block>
@@ -393,7 +393,7 @@
     />
     <g-message v-else />
 
-    <choose-pat-action ref="actionSheet" @choose-pat="choosePatHandler" />
+    <choose-pat-action ref="actionSheet" :onlySelf="onlySelf" @choose-pat="choosePatHandler" />
 
     <homePopup ref="refOldDialog" />
     <homeH5SharePopup
@@ -471,6 +471,7 @@
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
+  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -491,7 +492,7 @@
   // 就诊人
 
   const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
-  const chooseAction = () => {
+  const chooseAction = () => { 
     if (actionSheet.value) {
       actionSheet.value.show();
     }
@@ -502,6 +503,16 @@
 
   onShow(async () => {
     viewerStore.init();
+    
+     if (onlySelf) {
+    const selfPat = gStores.userStore.patList.find(
+      (pat: IPat) => pat.relationship === '本人'
+    );
+    // 如果找到了关系为"本人"的就诊人，且当前选择的不是本人
+    if (selfPat && gStores.userStore.patChoose.relationship !== '本人') {
+      gStores.userStore.updatePatChoose(selfPat);
+    }
+  }
 
     // if (global.SYS_CODE === '1001067' && globalStore.openId) {
     //   if (!uni.getStorageSync('wmUserInfo')) {
@@ -694,8 +705,13 @@
       url: '/pagesA/medicalCardMan/medicalCardMan',
     });
   };
-
-  const cardClick = (pat: IPat) => {
+  const getSelfPat = (): IPat  => {
+    const selfPat = gStores.userStore.patList.find(
+      (pat: IPat) => pat.relationship === '本人'
+    );
+    return selfPat || gStores.userStore.patList[0];
+  };
+  const cardClick = (pat: IPat) => { 
     gStores.userStore.updatePatClick(gStores.userStore.patChoose);
     goElectronicMedicalCard();
   };
@@ -704,7 +720,6 @@
     const pageConfig = await ServerStaticData.getSystemConfig(
       'Electronic_Consultation_Sheet'
     );
-    console.log('嗲你', pageConfig);
 
     if (pageConfig?.intelMedicalAssistConfig?.isReplaceHomeSearch === '1') {
       uni.navigateTo({
