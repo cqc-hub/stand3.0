@@ -573,8 +573,8 @@
     });
 
     cacheStore.changeMedicalHelpSelList(selList.value);
-    let isYouzhen = 0;
-    isYouzhen =
+    let mailMethod: any = undefined;
+    mailMethod =
       gStores.globalStore.sysCode === '1001035' &&
       selList.value.some((item) => {
         // 只要包含中药自煎的 只可选择邮政配送
@@ -582,9 +582,9 @@
           return true;
         }
       })
-        ? 1
-        : 0;
-    pageProps.value?.type === 'isYZ' && (isYouzhen = 1);
+        ? 'isYZ'
+        : undefined;
+    pageProps.value?.type && (mailMethod = pageProps.value.type);
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
@@ -592,7 +592,7 @@
           patientName: selPat.value.patientName,
           ...pageProps.value,
           scan: pageProps.value?.params ? '1' : '0',
-          isYouzhen,
+          mailMethod,
         }),
       });
     }, 200);
