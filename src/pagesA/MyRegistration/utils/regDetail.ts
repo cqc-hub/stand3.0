@@ -27,6 +27,7 @@ export interface IPageProps {
   cardNumber?: string;
   preWz?: '1'; // 第一次挂号进来
   thRegisterId?: string;
+  needOrderStatus?: string; // 医保回来要不停调用接口（1次/3s/共2次）直到状态和这个一样
   orderStatus: string; // 挂号状态
   alternateId?: string; // orderStatus === 3 候补预约时候有
   _type?: 'waitReg' | 'znpz' | 'forwardReg'; // 候补预约  znpz 智能陪诊点进详情 forwardReg远期预约

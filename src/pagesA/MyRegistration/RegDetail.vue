@@ -670,6 +670,21 @@
     qrCodeOpt.value.size = 0;
   };
 
+  const captureStatus = async (count = 0) => {
+    if (count > 3) {
+      gStores.messageStore.showMessage('查询医保状态失败', 1500);
+      return;
+    }
+    uni.showLoading({
+      title: '查询中',
+    });
+    await wait(3000);
+    await init();
+    if (pageProps.value.needOrderStatus !== orderRegInfo.value.orderStatus) {
+      captureStatus(++count);
+    }
+  };
+
   const showConsultationDialog1001048 = async () => {
     if (gStores.globalStore.sysCode !== '1001048') {
       return;
@@ -1041,7 +1056,7 @@
             handlerMedicalPayDongRuan({
               resultConfig: {
                 cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}`,
-                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&orderStatus=0`,
+                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&needOrderStatus=0`,
               },
               medOrgOrd,
             });
@@ -1454,6 +1469,7 @@
       title: isWaitReg.value ? '候补详情' : '挂号详情',
     });
     await getConfig();
+    const { needOrderStatus } = pageProps.value;
     await handlerWeChatThRegLogin(pageProps.value);
     const routeArg = {
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),
@@ -1467,6 +1483,10 @@
     await init();
     if (p?.successPay && gStores.globalStore.sysCode === '1001048') {
       showConsultationDialog1001048();
+    }
+
+    if (needOrderStatus && orderRegInfo.value.orderStatus !== needOrderStatus) {
+      captureStatus();
     }
   });
 </script>

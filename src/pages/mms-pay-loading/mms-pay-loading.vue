@@ -42,6 +42,11 @@
       pay_url: string;
       mixTradeNo: string;
       pay_appid: string;
+      timeStamp?: string;
+      nonceStr?: string;
+      package?: string;
+      signType?: string;
+      paySign?: string;
     }
   );
   const resultConfig = ref(
@@ -54,10 +59,23 @@
   );
 
   const wxRequestMedicalInsurancePay = async () => {
-    const { mixTradeNo } = payParams.value;
+    const {
+      mixTradeNo,
+      timeStamp,
+      nonceStr,
+      package: _package,
+      signType,
+      paySign,
+    } = payParams.value;
 
     await apiAsync(wx.requestMedicalInsurancePay, {
+      ...payParams.value,
       mixTradeNo,
+      timeStamp,
+      nonceStr,
+      package: _package,
+      signType,
+      paySign,
     }).catch((r) => {
       payCancel();
       console.error(r);
