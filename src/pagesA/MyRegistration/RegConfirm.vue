@@ -452,6 +452,37 @@
       await handlerConfirmPatReal();
     }
 
+    // 没有证件号去补充
+    if (
+      !quickPat.value.patientName &&
+      isShowAddPatCardNo(gStores.userStore.patChoose, personConfig.value)
+    ) {
+      const { title, content } = await gStores.getSysAppMore('1265');
+      const { confirm } = await new Promise<any>((closeCallBack) => {
+        gStores.messageStore.showMessage(content, 0, {
+          useDialog: true,
+          dialogOpt: {
+            isShowCancel: true,
+            title,
+          },
+          closeCallBack,
+        });
+      });
+
+      if (confirm) {
+        uni.navigateTo({
+          url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+            _url: joinQueryForUrl(
+              '/pagesA/MyRegistration/RegConfirm',
+              props.value
+            ),
+          }),
+        });
+      }
+
+      return;
+    }
+
     if (isWaitReg.value) {
       waitReg();
       return;
@@ -514,33 +545,6 @@
       requestArg.patientId = patientId;
       requestArg.quickAppoint = 'quickAppoint';
     } else {
-      // 没有证件号去补充
-      if (isShowAddPatCardNo(gStores.userStore.patChoose, personConfig.value)) {
-        const { title, content } = await gStores.getSysAppMore('1265');
-        const { confirm } = await new Promise<any>((closeCallBack) => {
-          gStores.messageStore.showMessage(content, 0, {
-            useDialog: true,
-            dialogOpt: {
-              isShowCancel: true,
-              title,
-            },
-            closeCallBack,
-          });
-        });
-
-        if (confirm) {
-          uni.navigateTo({
-            url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-              _url: joinQueryForUrl(
-                '/pagesA/MyRegistration/RegConfirm',
-                props.value
-              ),
-            }),
-          });
-        }
-
-        return;
-      }
     }
 
     let alipayAuthCode = '';

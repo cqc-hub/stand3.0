@@ -1845,8 +1845,8 @@ export const usePayPage = () => {
         // #ifdef  MP-WEIXIN
         if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
           const resultConfig = {
-            cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
-            orderStatusRedirectUrl:
+            cancelUrl: '/pagesA/clinicPay/clinicPayDetail',
+            successUrl:
               '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
           };
           const medOrgOrd = selUnPayList.value
@@ -2892,7 +2892,6 @@ export const handlerMedicalPayDongRuan = async ({
   const authCode = await getMedicalAuthCode();
   const openid = gStores.globalStore.openId;
   cacheStore.changeCacheData2(resultConfig);
-  console.log('这了', resultConfig);
   // uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
   await wait(20);
@@ -2908,7 +2907,6 @@ export const handlerMedicalPayDongRuan = async ({
     }
   );
 
-  console.log(url);
   // return
 
   useTBanner({
