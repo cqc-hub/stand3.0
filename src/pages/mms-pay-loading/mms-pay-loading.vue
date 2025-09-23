@@ -42,6 +42,14 @@
       pay_appid: string;
     }
   );
+  const resultConfig = ref(
+    {} as {
+      // 取消、失败
+      cancelAuthRedirectUrl: string;
+      // 成功
+      orderStatusRedirectUrl: string;
+    }
+  );
 
   const wxRequestMedicalInsurancePay = async () => {
     const { mixTradeNo } = payParams.value;
@@ -84,7 +92,17 @@
   };
 
   const payAfter = () => {};
-  const payCancel = () => {};
+  const payCancel = () => {
+    console.log('我自信了');
+    console.log(resultConfig.value);
+
+    uni.reLaunch({
+      url: resultConfig.value.cancelAuthRedirectUrl,
+      complete(r) {
+        console.log(r);
+      },
+    });
+  };
 
   onLoad(async (opt) => {
     uni.showLoading({});
@@ -99,6 +117,12 @@
       } catch (error) {
         payParams.value = pageProps.value.payParams as any;
       }
+    }
+
+    try {
+      resultConfig.value = JSON.parse(getLocalStorage('resultConfig'));
+    } catch (error) {
+      resultConfig.value = getLocalStorage('resultConfig');
     }
 
     console.log('获取到参数', pageProps.value);

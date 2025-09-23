@@ -222,7 +222,7 @@ export interface ISystemConfig_ {
     formExtraKeys?: ['referenceId' | 'countries'];
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
-    // relationShip?: '1'; // 开启后新增就诊人页面有关系一行
+    relationShip?: '1'; // 开启后新增就诊人页面有关系一行
     isVerifyIdCardLastFourNumber?: '1';
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '1' | '0';
