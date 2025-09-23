@@ -2904,6 +2904,9 @@ export const handlerMedicalPayDongRuan = async ({
     }
   );
 
+  console.log(url);
+  // return
+
   useTBanner({
     type: 'h5',
     path: url,

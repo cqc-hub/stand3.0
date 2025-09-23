@@ -1454,7 +1454,7 @@ export const isShowAddPatCardNo = (
     }
 
     if (isChildren && !upIdCardEncry) {
-      return true;
+      r = true;
     }
 
     if (!idCardEncry) {
