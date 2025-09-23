@@ -17,7 +17,7 @@ const cacheStore = defineStore('cache', {
       cacheData: <any>{},
       medicalHelpSelList: <any[]>[],
       hosId: '',
-      isShowChooseHos: ['1001063', '1001066','1001082'].includes(globalGl.SYS_CODE), // 杭口用. 部分场景下选择医院展示的组件; hodId 的传入
+      isShowChooseHos: ['1001063', '1001066'].includes(globalGl.SYS_CODE), // 杭口用. 部分场景下选择医院展示的组件; hodId 的传入
       flagList: [
         {
           label: '用户条款',

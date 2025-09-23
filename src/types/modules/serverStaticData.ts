@@ -40,9 +40,9 @@ export interface ISystemConfig_ {
 
     /** 科室列表页面 */
     // 选科室上面 banner
-    bannerOrder?: TBannerConfig;
+    bannerOrder?: TBannerConfig  | TBannerConfig[];
     //选科室上面 banner-支付宝
-    bannerOrderAlipay?: TBannerConfig;
+    bannerOrderAlipay?: TBannerConfig  | TBannerConfig[];
     //跳转名医名科模式,若开启则会请求医院参数CELEBRATED_DEPT
     isCelebratedDeptMode?: '1';
     /** 预约挂号温馨提示 */

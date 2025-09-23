@@ -7,21 +7,25 @@
     class="g-page"
   >
     <!-- #ifndef MP-ALIPAY -->
-    <g-tbanner
-      :config="orderConfig.bannerOrder"
-      @click="handleDzClick(orderConfig.bannerOrder)"
-      disabled
-    />
+    <view v-for="(banner, index) in bannerOrderList" :key="index">
+      <g-tbanner
+        :config="banner"
+        @click="handleDzClick(banner)"
+        disabled
+      />
+    </view>
     <!-- #endif -->
 
     <!-- #ifdef MP-ALIPAY -->
-    <g-tbanner
-      :config="orderConfig.bannerOrderAlipay || orderConfig.bannerOrder"
-      @click="
-        handleDzClick(orderConfig.bannerOrderAlipay || orderConfig.bannerOrder)
-      "
-      disabled
-    />
+   <view v-for="(banner, index) in bannerOrderAlipayList" :key="index">
+      <g-tbanner
+        :config="banner"
+        @click="
+          handleDzClick(banner)
+        "
+        disabled
+      />
+    </view>
     <!-- #endif -->
     <g-selhos
       v-if="isRender"
@@ -59,9 +63,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { onShareAppMessage, onLoad } from '@dcloudio/uni-app';
-  import { deepClone } from '@/common/utils';
+  import { deepClone, normalizeBannerConfig } from '@/common/utils';
 
   import {
     GStores,
@@ -121,6 +125,16 @@
   const celebratedDeptData = ref<Array<string>>([]);
   let deptStep: any[] = [];
 
+  const bannerOrderList = computed(() => {
+  return normalizeBannerConfig(orderConfig.value.bannerOrder);
+});
+
+const bannerOrderAlipayList = computed(() => {
+  const banner = orderConfig.value.bannerOrderAlipay || orderConfig.value.bannerOrder;
+  return normalizeBannerConfig(banner);
+});
+
+  
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');
     let { deptDialogBtnCannel } = data;
