@@ -5,6 +5,8 @@
     }"
     class="page"
   >
+    <g-flag isShowFg typeFg="1266" />
+
     <view class="container" scroll-y>
       <g-form
         v-model:value="formData"

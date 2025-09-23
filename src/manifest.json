@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxacb96ee66c3dee84",
+    "appid": "wxa50129d260033b82",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -72,9 +72,8 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
-    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003104670597",
+    "appid": "2021005176652664",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -99,7 +98,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "江苏省中医院",
+  "name": "溧阳市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

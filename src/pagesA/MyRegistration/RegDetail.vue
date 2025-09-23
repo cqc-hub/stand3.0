@@ -1036,22 +1036,13 @@
           await getMedicalArgWithFamily();
           // #ifdef  MP-WEIXIN
           if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-            const { patientId } = gStores.userStore.patChoose;
-            const {
-              hosOrderId: medOrgOrd,
-              orderId,
-              hosId,
-              hosDeptId,
-            } = orderRegInfo.value;
+            const { hosOrderId: medOrgOrd, orderId } = orderRegInfo.value;
 
-            const resultConfig = 
-              JSON.stringify({
-                cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
-                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&successPay=1`,
-              })
-            ;
             handlerMedicalPayDongRuan({
-              resultConfig,
+              resultConfig: {
+                cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}`,
+                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}`,
+              },
               medOrgOrd,
             });
           } else {
