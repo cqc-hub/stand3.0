@@ -18,6 +18,7 @@
     <view class="g-container">
       <!-- {{ detailData.einvoiceUrl }} -->
       <view class="head-bg" />
+
       <view class="container">
         <block v-if="payState === '0'">
           <block v-if="qrCode">
@@ -31,11 +32,6 @@
               />
             </view>
             <view v-else class="g-border box page-first-item mb16">
-              <view class="my-display-none">
-                <w-qrcode :options="_qrOpt" ref="refqrcode" />
-                <w-barcode :options="_barOpt" ref="refqrbarcode" />
-              </view>
-
               <view class="g-flex-rc-cc g-bold f32 mb32">
                 <!-- 请凭二维码到药房窗口取药 -->
               </view>
@@ -224,6 +220,11 @@
         </block>
       </view>
     </block>
+
+    <view class="my-display-none">
+      <w-qrcode :options="_qrOpt" ref="refqrcode" />
+      <w-barcode :options="_barOpt" ref="refqrbarcode" />
+    </view>
 
     <g-pay
       :list="refPayList"
@@ -1237,8 +1238,10 @@
       return;
     }
     await init();
-    await wait(200);
     if (!isShowRefreshQrCode.value && payState.value === '0' && qrCode.value) {
+      uni.showLoading({});
+      await wait(1000);
+      uni.hideLoading();
       capture();
     }
   };
