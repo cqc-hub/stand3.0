@@ -321,7 +321,6 @@ export const getMedicalAuthCode = async (opt?: {
   idCard?: string;
 }): Promise<string> => {
   let fCode = '';
-  const { userName, idCard } = opt || {};
 
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -349,9 +348,6 @@ export const getMedicalAuthCode = async (opt?: {
 
     await new Promise((success, j) => {
       let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
-      if (['1001084'].includes(gStores.globalStore.sysCode)) {
-        envVersion = 'release';
-      }
       uni.navigateToMiniProgram({
         appId,
         // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
@@ -2908,14 +2904,12 @@ export const handlerMedicalPayDongRuan = async ({
       orgCodg,
       appId,
       authCode,
-      // resultConfig,
     }
   );
 
   // return
 
   console.log(url);
-  // return;
   useTBanner({
     type: 'h5',
     path: url,
