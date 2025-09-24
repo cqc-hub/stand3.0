@@ -680,6 +680,10 @@
     });
     await wait(3000);
     await init();
+    await wait(620);
+    uni.showLoading({
+      title: '查询中',
+    });
     if (pageProps.value.needOrderStatus !== orderRegInfo.value.orderStatus) {
       captureStatus(++count);
     }
