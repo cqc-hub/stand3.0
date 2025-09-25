@@ -1,6 +1,8 @@
 import env from '@/config/env';
 import { getCurrentInstance } from 'vue';
 import { getSysCode } from '@/common/useToken'; 
+import type { TBannerConfig } from '@/types/modules/serverStaticData';
+
 
 
 //公用方法
@@ -345,4 +347,9 @@ export const getTcMallToken = (app?) => {
       },
     });
   });
+};
+
+export const normalizeBannerConfig = (bannerConfig: TBannerConfig | TBannerConfig[] | undefined): TBannerConfig[] => {
+  if (!bannerConfig) return [];
+  return Array.isArray(bannerConfig) ? bannerConfig : [bannerConfig];
 };

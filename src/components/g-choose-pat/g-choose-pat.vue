@@ -30,6 +30,7 @@
       @choose-pat="choosePatHandler"
       @hide="emits('hide')"
       :isShowAll="isShowAll"
+      :onlySelf="onlySelf"
       :pat="pat"
       ref="actionSheet"
     />
@@ -47,6 +48,7 @@
   const props = defineProps<{
     isShowAll?: boolean;
     disabled?: boolean;
+    onlySelf?: boolean;
     pat?: IPat;
     cusTomList?: IPat[];
   }>();
@@ -56,6 +58,12 @@
   const isLoad = ref(false);
 
   const getShowPat = computed(() => {
+    if(props.onlySelf){
+      const selfPat = gStores.userStore.patList.find(
+        (pat: IPat) => pat.relationship === '本人'
+      );
+      return selfPat || props.pat || gStores.userStore.patChoose;
+    }
     return props.pat || gStores.userStore.patChoose;
   });
 

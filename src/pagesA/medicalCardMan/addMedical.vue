@@ -815,7 +815,7 @@
       isDropNation,
       isUserInfoShareAgree,
       formExtraKeys = [],
-      // relationShip,
+      relationShip,
       // isUpNamePhone,
     } = pageConfig.value;
 
@@ -836,8 +836,8 @@
       addressArr.push(formKey.address, formKey.location);
     }
 
-    // const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
-    const listArr: TFormKeys[] = [formKey.patientType];
+    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
+    // const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo: (keyof typeof formKey)[] = [
       formKey.upName,
@@ -846,12 +846,12 @@
     // if (isUpNamePhone === '1') {
     //   _parentInfo.push(formKey.upPhone);
     // }
-    // if (relationShip !== '1') {
-    //   const idx = listArr.findIndex((o) => o === formKey.relationship);
-    //   if (idx !== -1) {
-    //     listArr.splice(idx, 1);
-    //   }
-    // }
+    if (relationShip !== '1') {
+      const idx = listArr.findIndex((o) => o === formKey.relationship);
+      if (idx !== -1) {
+        listArr.splice(idx, 1);
+      }
+    }
 
     const _patientInfo: TFormKeys[] = [
       ...addressArr,
@@ -1127,6 +1127,14 @@
         // 证件类型身份证 , 新生儿 时候必填,  其余可选
         o.required = cardType === '01' || value === '0' || false;
       }
+
+      // 地址+地区不强制填写
+      if (
+        ['1001082'].includes(gStores.globalStore.sysCode) &&
+        [formKey.address, formKey.location].includes(key as any)
+      ) {
+        o.required = false;
+      } 
     });
 
     gform.value.setList([]);

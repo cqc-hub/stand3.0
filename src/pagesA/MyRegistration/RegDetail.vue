@@ -670,6 +670,25 @@
     qrCodeOpt.value.size = 0;
   };
 
+  const captureStatus = async (count = 0) => {
+    if (count > 3) {
+      gStores.messageStore.showMessage('查询医保状态失败', 1500);
+      return;
+    }
+    uni.showLoading({
+      title: '查询中',
+    });
+    await wait(3000);
+    await init();
+    await wait(620);
+    uni.showLoading({
+      title: '查询中',
+    });
+    if (pageProps.value.needOrderStatus !== orderRegInfo.value.orderStatus) {
+      captureStatus(++count);
+    }
+  };
+
   const showConsultationDialog1001048 = async () => {
     if (gStores.globalStore.sysCode !== '1001048') {
       return;
@@ -1036,22 +1055,13 @@
           await getMedicalArgWithFamily();
           // #ifdef  MP-WEIXIN
           if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-            const { patientId } = gStores.userStore.patChoose;
-            const {
-              hosOrderId: medOrgOrd,
-              orderId,
-              hosId,
-              hosDeptId,
-            } = orderRegInfo.value;
+            const { hosOrderId: medOrgOrd, orderId } = orderRegInfo.value;
 
-            const resultConfig = 
-              JSON.stringify({
-                cancelAuthRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patienId=${patientId}&hosId=${hosId}`,
-                orderStatusRedirectUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&standardDeptCode=${hosDeptId}&hosId=${hosId}&successPay=1`,
-              })
-            ;
             handlerMedicalPayDongRuan({
-              resultConfig,
+              resultConfig: {
+                cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}`,
+                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&needOrderStatus=0`,
+              },
               medOrgOrd,
             });
           } else {
@@ -1463,6 +1473,7 @@
       title: isWaitReg.value ? '候补详情' : '挂号详情',
     });
     await getConfig();
+    const { needOrderStatus } = pageProps.value;
     await handlerWeChatThRegLogin(pageProps.value);
     const routeArg = {
       url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', pageProps.value),
@@ -1476,6 +1487,10 @@
     await init();
     if (p?.successPay && gStores.globalStore.sysCode === '1001048') {
       showConsultationDialog1001048();
+    }
+
+    if (needOrderStatus && orderRegInfo.value.orderStatus !== needOrderStatus) {
+      captureStatus();
     }
   });
 </script>

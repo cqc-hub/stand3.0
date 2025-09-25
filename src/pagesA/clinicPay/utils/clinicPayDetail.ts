@@ -1844,11 +1844,10 @@ export const usePayPage = () => {
 
         // #ifdef  MP-WEIXIN
         if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-          const resultConfig = JSON.stringify({
-            cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
-            orderStatusRedirectUrl:
-              '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-          });
+          const resultConfig = {
+            cancelUrl: '/pagesA/clinicPay/clinicPayDetail',
+            successUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+          };
           const medOrgOrd = selUnPayList.value
             .map((item) => item.serialNo)
             .join(',');
@@ -2869,10 +2868,10 @@ export const handlerMedicalPay1001035 = async (opt: {
 /**
  * 东软医保
  * @example
- *  resultConfig = JSON.stringify({
- *    cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
- *    orderStatusRedirectUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1
- *  })
+ *  resultConfig = {
+ *    cancelUrl: '/pagesA/clinicPay/clinicPayDetail',
+ *    successUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1
+ *  }
  *
  */
 export const handlerMedicalPayDongRuan = async ({
@@ -2881,6 +2880,7 @@ export const handlerMedicalPayDongRuan = async ({
 }) => {
   const medicalNationInfo = getMedicalNationInfo();
   const gStores = new GStores();
+  const cacheStore = useCacheStore();
 
   if (!medicalNationInfo) {
     throw new Error('不存在医保配置');
@@ -2890,8 +2890,16 @@ export const handlerMedicalPayDongRuan = async ({
   const { orgCodg, orgAppId: appId } = pathExtraData;
   const authCode = await getMedicalAuthCode();
   const openid = gStores.globalStore.openId;
-  uni.setStorageSync('resultConfig', resultConfig);
+  cacheStore.changeCacheData2(resultConfig);
+  if (gStores.globalStore.sysCode === '1001084') {
+    // await api.familyPayment({
+    //   medOrgOrd,
+    //   status: '1',
+    // });
+  }
+  // uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
+  await wait(20);
   const url = joinQueryForUrl(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
     {
@@ -2900,10 +2908,14 @@ export const handlerMedicalPayDongRuan = async ({
       orgCodg,
       appId,
       authCode,
-      resultConfig,
+      // resultConfig,
     }
   );
 
+  // return
+
+  console.log(url);
+  // return;
   useTBanner({
     type: 'h5',
     path: url,

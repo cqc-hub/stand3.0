@@ -42,13 +42,19 @@
         >
           <block>
             <block v-if="aimList.length > 1">
-              <view id="_express" class="g-bold f36">选择快递方式</view>
+              <view id="_express" class="g-bold f36">
+                选择快递方式
+              </view>
 
               <view class="mt24 pb32 g-border-bottom">
                 <Sel-Express
                   :selectLength="3"
                   :list="aimList"
-                  :column="pageProps?.isYouzhen === '1' ? 1 : 2"
+                  :column="
+                    ['isYZ', 'isSF'].includes(pageProps?.mailMethod || '')
+                      ? 1
+                      : 2
+                  "
                   v-model:value="aimValue"
                 />
               </view>
@@ -195,6 +201,7 @@
       params?: string;
       scan?: 1 | 0;
       isYouzhen?: '1' | '0';
+      mailMethod?: 'isYZ' | 'isSF';
     }
   );
 
@@ -568,10 +575,15 @@
 
     if (len) {
       aimList.value = companyList;
-      pageProps.value.isYouzhen === '1' &&
-        (aimList.value = aimList.value.map((item) => {
+      if (pageProps.value?.mailMethod === 'isYZ') {
+        aimList.value = aimList.value.map((item) => {
           return { ...item, noShow: !item.label.includes('邮政') };
-        }));
+        });
+      } else if (pageProps.value?.mailMethod === 'isSF') {
+        aimList.value = aimList.value.map((item) => {
+          return { ...item, noShow: !item.label.includes('顺丰') };
+        });
+      }
 
       if (len === 1) {
         aimValue.value = [companyList[0].value];

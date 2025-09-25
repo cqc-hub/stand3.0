@@ -45,6 +45,7 @@
 
   const props = defineProps<{
     isShowAll?: boolean;
+    onlySelf?: boolean; // 新增属性，控制是否只显示本人
   }>();
 
   const gStores = new GStores();
@@ -69,9 +70,18 @@
       item: pat,
       index,
     });
-  };
+};
 
-  const patList = computed(() => cusTomList() || gStores.userStore.patList);
+  const patList = computed(() => {
+  const list = cusTomList() || gStores.userStore.patList;
+  
+  // 如果设置了 onlySelf，则只返回 relationshipCode 为 '1' 的就诊人
+  if (props.onlySelf) {
+    return list.filter(pat => pat.relationshipCode === '1');
+  }
+  
+  return list;
+});
 
   const getShowPat = computed(() => activePat() || gStores.userStore.patChoose);
 </script>

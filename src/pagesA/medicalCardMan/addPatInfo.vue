@@ -5,10 +5,13 @@
     }"
     class="page"
   >
+    <g-flag isShowFg typeFg="1266" />
+
     <view class="container" scroll-y>
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
+        @input-blur="formInputBlur"
         bodyBold
         ref="gform"
       />
@@ -57,8 +60,17 @@
   const isChildren = computed(() => {
     let _c = false;
 
-    const { patientName, patientAge } = gStores.userStore.patChoose;
+    let { patientAge } = gStores.userStore.patChoose;
     const { isGuardianWithIdCard } = pageConfig.value;
+
+    if (
+      formData.value.idCard &&
+      idValidator.checkIdCardNo(formData.value.idCard)
+    ) {
+      const { age } = idValidator.getIdCardInfo(formData.value.idCard);
+      // @ts-expect-error
+      patientAge = age;
+    }
 
     if (isGuardianWithIdCard) {
       _c = (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
@@ -136,24 +148,16 @@
     });
   };
 
-  onLoad(async () => {});
+  const formInputBlur = (e) => {
+    const { item } = e;
 
-  onMounted(async () => {
-    pageConfig.value = await ServerStaticData.getSystemConfig('person');
-    const {
-      patientName,
-      idCard = '',
-      upName = '',
-      upIdCard = '',
-    } = gStores.userStore.patChoose;
+    if (item.key === 'idCard') {
+      initForm();
+    }
+  };
 
-    Object.assign(formData.value, {
-      patientName,
-      idCard,
-      upName,
-      upIdCard,
-      idType: '01',
-    });
+  const initForm = async () => {
+    const { idCard = '', upName = '', upIdCard = '' } = formData.value;
 
     let rList = [
       {
@@ -286,11 +290,33 @@
       rList = rList.filter((o) => !['upIdCard', 'upName'].includes(o.key));
     }
 
-    idCard && changeDisableStatus('idCard');
-    upName && changeDisableStatus('upName');
-    upIdCard && changeDisableStatus('upIdCard');
+    gStores.userStore.patChoose.idCard && changeDisableStatus('idCard');
+    gStores.userStore.patChoose.upName && changeDisableStatus('upName');
+    gStores.userStore.patChoose.upIdCard && changeDisableStatus('upIdCard');
 
     gform.value.setList(rList);
+  };
+
+  onLoad(async () => {});
+
+  onMounted(async () => {
+    pageConfig.value = await ServerStaticData.getSystemConfig('person');
+    const {
+      patientName,
+      idCard = '',
+      upName = '',
+      upIdCard = '',
+    } = gStores.userStore.patChoose;
+
+    Object.assign(formData.value, {
+      patientName,
+      idCard,
+      upName,
+      upIdCard,
+      idType: '01',
+    });
+
+    initForm();
   });
 </script>
 

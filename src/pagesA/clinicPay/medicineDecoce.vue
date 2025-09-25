@@ -88,9 +88,8 @@
 <script lang="ts" setup>
   import { onMounted, ref, computed } from 'vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
-  import { useTBanner, wait } from '@/utils';
+  import { useTBanner, wait, apiAsync } from '@/utils';
   import { deQueryForUrl } from '@/common';
-  import { decryptForPage } from '@/common/des';
   import { payMoneyOnline, toPayPull } from '@/components/g-pay/index';
   import { GStores } from '@/utils';
   import { IPayListItem } from './utils/clinicPayDetail';
@@ -169,6 +168,22 @@
           },
           'reLaunch'
         );
+      }
+    } else {
+      const { confirm, cancel } = await apiAsync(uni.showModal, {
+        content: '本次缴费项目中含有中草药处方，是否需要代煎？',
+        cancelText: '我要自煎',
+        confirmText: '选药代煎',
+      });
+
+      if (!confirm) {
+        useTBanner({
+          type: 'self',
+          path: 'pagesB/medicationAssistant/medicalHelp',
+          extraData: {
+            params: pageProps.value.params || '',
+          },
+        });
       }
     }
   };

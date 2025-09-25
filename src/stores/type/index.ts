@@ -1,4 +1,4 @@
-export interface IPat {
+export type IPat = {
   address: string;
   aliFreeSignId: string;
   birthday: string;
@@ -31,4 +31,4 @@ export interface IPat {
   /** 实名认证? 0 未认证 1 已认证 */
   realNameAuth: '0' | '1';
   _showId: string;
-}
+} & BaseObject;
