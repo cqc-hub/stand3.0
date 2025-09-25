@@ -50,6 +50,7 @@
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
+        await utils.getMedicalArgWithFamily();
         const authCode = await utils.getMedicalAuthCode().catch((err) => {
           console.log(err, 'err');
           if (!(typeof err === 'string' && err === '请求授权...')) {

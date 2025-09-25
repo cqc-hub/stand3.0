@@ -2888,10 +2888,10 @@ export const handlerMedicalPayDongRuan = async ({
   const openid = gStores.globalStore.openId;
   cacheStore.changeCacheData2(resultConfig);
   if (gStores.globalStore.sysCode === '1001084') {
-    // await api.familyPayment({
-    //   medOrgOrd,
-    //   status: '1',
-    // });
+    await api.familyPayment({
+      medOrgOrd,
+      status: '1',
+    });
   }
   // uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
