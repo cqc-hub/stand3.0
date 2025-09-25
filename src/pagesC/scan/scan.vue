@@ -50,6 +50,10 @@
     initQuestionList58,
     initQuestion52,
     childNewborn10001067,
+    aijiance1001082,
+    wenxinzaixian1001082,
+    yun1001082,
+    healthMall1001035
   } = useScan();
 
   const init = async () => {
@@ -155,6 +159,26 @@
 
       case '15':
         childNewborn10001067();
+        break;
+
+      //健康温州—艾检测
+      case '16':
+        aijiance1001082();
+        break;
+
+      //健康温州—温心在线
+      case '17':
+        wenxinzaixian1001082();
+        break;
+
+      //健康温州—云影像
+      case '18':
+        yun1001082();
+        break;
+ 
+      //江苏省中—健康商城
+      case '19':
+        healthMall1001035();
         break;
 
       default:

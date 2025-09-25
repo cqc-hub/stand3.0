@@ -43,9 +43,14 @@
     // #endif
 
     if (globalStore.sysCode === '1001082') {
-      uni.reLaunch({
-        url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
-      });
+      const hasVisited = uni.getStorageSync('hasVisited_1001082');
+      if (!hasVisited) {
+         // 首次访问，跳转并设置标记
+          uni.setStorageSync('hasVisited_1001082', 'true');
+          uni.reLaunch({
+            url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
+          });
+        }
     }
   });
 
