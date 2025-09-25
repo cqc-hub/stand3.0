@@ -806,6 +806,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
     },
     medicalMHelp: {
+      isOpenPatToMedicalPat: {},
       wx: {
         medicalNation: {
           appId: 'wxe183cd55df4b4369',

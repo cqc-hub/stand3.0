@@ -140,6 +140,7 @@
 
   const init = async () => {
     await fetchList();
+    const { params: sign } = pageProps.value;
     if (unPayList.value?.length == 0) {
       const { confirm } = await new Promise<any>((r: any) => {
         gStores.messageStore.showMessage(
@@ -169,7 +170,7 @@
           'reLaunch'
         );
       }
-    } else {
+    } else if(sign){
       const { confirm, cancel } = await apiAsync(uni.showModal, {
         content: '本次缴费项目中含有中草药处方，是否需要代煎？',
         cancelText: '我要自煎',
