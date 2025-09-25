@@ -50,6 +50,7 @@
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
+        await utils.getMedicalArgWithFamily();
         const authCode = await utils.getMedicalAuthCode().catch((err) => {
           console.log(err, 'err');
           if (!(typeof err === 'string' && err === '请求授权...')) {
@@ -225,20 +226,24 @@
       payBackParams,
       registerId,
       insuranceParams1001035,
+      cardNumber,
     } = fd;
+
+    if (cardNumber) {
+      if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
+        const pat = gStores.userStore.patList.find(
+          (o) => o.cardNumber === cardNumber
+        );
+
+        if (pat) {
+          gStores.userStore.updatePatChoose(pat);
+        }
+      }
+    }
 
     if (insuranceParams1001035) {
       handleWxMedicalPay1001035(insuranceParams1001035);
     }
-
-    // if (cardNumber) {
-    //   if (gStores.userStore.patChoose.cardNumber !== cardNumber) {
-    //     const pat = gStores.userStore.patList.find(
-    //       (o) => o.cardNumber === cardNumber
-    //     );
-    //     gStores.userStore.updatePatChoose(pat!);
-    //   }
-    // }
 
     const registerType =
       insuranceParamsWx?.registerType || payBackParams?.registerType;

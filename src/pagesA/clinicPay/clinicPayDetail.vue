@@ -423,6 +423,7 @@
   };
 
   onShow(async () => {
+    const { sysCode } = gStores.globalStore;
     const medicalWx = getLocalStorage('get-wx-medical-auth-code');
     const medicalAli = getLocalStorage('get-ali-medical-auth-code');
 
@@ -470,11 +471,20 @@
 
     // 省中wx医保回来（成功）
     if (
-      gStores.globalStore.sysCode === '1001035' &&
+      sysCode === '1001035' &&
       gStores.globalStore.appShowData.referrerInfo?.extraData?.statuscode ===
         '0'
     ) {
       payAfter();
+    }
+
+
+    // 医保结算退回依然会携带旧的授权码
+    if (
+      sysCode === '1001038' &&
+      gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode
+    ) {
+      gStores.globalStore.onAppShow({});
     }
   });
 

@@ -182,6 +182,9 @@ const queryApi = {
   getProcessState: (data) =>
     service.post<any[]>('/phs-query/medical/getProcessState', parm(data)),
 
+  familyPayment: (data) =>
+    service.post<any[]>('/phs-query/medical/familyPayment', parm(data)),
+
   // 医保授权(微信国标)
   authorize: <T>(data) =>
     service.post<T>('/phs-base/medical/authorize', parm(data), {
@@ -508,7 +511,7 @@ const queryApi = {
   getCloudImageInfo: <T = any>(data) =>
     service.post('/phs-query/appointment/getCloudImageInfo', parm(data)),
   getScheme: <T = any>(data) =>
-    service.post('/phs-user/message/getScheme', parm(data),{
+    service.post('/phs-user/message/getScheme', parm(data), {
       baseURL: envBasic.baseApi,
     }),
   getCmsList: <T = any>(data) =>
@@ -565,7 +568,10 @@ const regApi = {
     service.post<T>('/phs-query/regIntelligence/getGuidanceUrl', parm(data)),
 
   getConsultationUrl: <T = any>(data: any) =>
-    service.post<T>('/phs-query/regIntelligence/getConsultationUrl', parm(data)),
+    service.post<T>(
+      '/phs-query/regIntelligence/getConsultationUrl',
+      parm(data)
+    ),
 
   addDiseaseInformation: <T = any>(data: any) =>
     service.post<T>('/phs-reg/reg/addDiseaseInformation', parm(data)),
@@ -593,7 +599,7 @@ const regApi = {
 
   addCollect: (data: any) =>
     service.post('/phs-reg/collect/addCollect', parm(data), {
-      hideLoading: false
+      hideLoading: false,
     }),
 
   getCheckIn: (data: any) =>

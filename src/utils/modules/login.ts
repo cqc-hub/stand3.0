@@ -257,6 +257,22 @@ export class LoginUtils extends GStores {
         this.globalStore.setHerenId(herenId);
 
         // #ifdef MP-WEIXIN
+        // 口腔商城特殊处理
+          if (
+            ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+              this.globalStore.sysCode
+            )
+          ) {
+            const appInstance = getApp();
+            const viewerStore = useViewerStore();
+            if (appInstance && appInstance.globalData) {
+              this.globalStore.updateOralMallData(appInstance, 'login');
+              appInstance.globalData.configData.mallToken = await getTcMallToken();
+            }
+            console.log('小程序登录后全局参数',appInstance.globalData)
+            viewerStore.getMyOralCellMessage();
+          }
+
         if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
             url: '/pages/home/startCome',
@@ -671,7 +687,6 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     if (!payload) {
       throw new Error('未获取到 wx payload');
     }
-
     const { target, detail, onlyLogin } = payload;
     const { isSkipPerfect, isLoginByOpenId } = await this.getConfig();
 
@@ -745,22 +760,7 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
         refreshToken,
       });
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
-      // #ifdef MP-WEIXIN
-      if (
-        ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-          this.globalStore.sysCode
-        )
-      ) {
-        const appInstance = getApp();
-        const viewerStore = useViewerStore();
-        if (appInstance && appInstance.globalData) {
-          this.globalStore.updateOralMallData(appInstance, 'login');
-          appInstance.globalData.configData.mallToken = await getTcMallToken();
-        }
-        viewerStore.getMyOralCellMessage();
-      }
 
-      // #endif
     }
   }
 

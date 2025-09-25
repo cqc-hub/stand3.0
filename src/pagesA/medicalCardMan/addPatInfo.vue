@@ -121,6 +121,7 @@
       pdata: pData,
       relationShip,
       checkIdCard: idCardNumber,
+      idType: '01',
     };
 
     if (isChildren.value && !oldUpIdCard) {

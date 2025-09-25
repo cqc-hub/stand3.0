@@ -14,6 +14,7 @@ import {
   getMedicalAuthCode,
   getQxMedicalNation,
   getMedicalArgWithFamily,
+  getMedicalNationInfo,
 } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 import { IRegistrationCardItem } from './MyRegistration';
 import md5s from 'js-md5';
@@ -635,6 +636,8 @@ export class RegDetailUtil {
         source: this.gStores.globalStore.browser.source,
         payAuthNo: '',
       };
+      const medicalNationInfo = getMedicalNationInfo();
+
       let isAlipay = false;
       let isWx = false;
 
@@ -665,7 +668,7 @@ export class RegDetailUtil {
           'get-wx-medical-auth-code-order': '1',
         });
 
-        if (this.gStores.globalStore.sysCode === '1001048') {
+        if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
           // 宜兴仅wx
           args.payAuthNo = await getMedicalAuthCode();
         } else {

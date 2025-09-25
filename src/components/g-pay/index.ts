@@ -272,11 +272,14 @@ export const aliPayOldSystemPayType = () => {
   const gStores = new GStores();
   const { sysCode } = gStores.globalStore;
   let channel = '';
-  // #ifdef  MP-WEIXIN
-  channel = 'WX_MINI';
-  const wxICBCJFTSystem = ['1001063'];
-  wxICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
-  // #endif
+
+  if (gStores.globalStore.ev === 'wx') {
+    channel = 'WX_MINI';
+    const wxICBCJFTSystem = ['1001063'];
+    wxICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
+  } else if (gStores.globalStore.ev === 'alipay') {
+  }
+
   // #ifdef MP-ALIPAY
   channel = 'ALI_MINI';
   const aliMiniSystemList = [
