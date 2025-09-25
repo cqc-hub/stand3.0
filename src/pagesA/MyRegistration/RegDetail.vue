@@ -454,6 +454,7 @@
     apiAsync,
     cacheUtil,
     callBackAsync,
+    setDefaultPatient,
   } from '@/utils';
   import md5s from 'js-md5';
 
@@ -1059,7 +1060,7 @@
 
             handlerMedicalPayDongRuan({
               resultConfig: {
-                cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}`,
+                cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patientId=${gStores.userStore.patChoose.patientId}&needOrderStatus=0`,
                 successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&needOrderStatus=0`,
               },
               medOrgOrd,
@@ -1468,10 +1469,14 @@
       'pagesA/medicalCardMan/electronicMedicalCard'
     );
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
+    const { patientId } = pageProps.value;
     isRender.value = true;
     uni.setNavigationBarTitle({
       title: isWaitReg.value ? '候补详情' : '挂号详情',
     });
+    if (patientId) {
+      setDefaultPatient(patientId);
+    }
     await getConfig();
     const { needOrderStatus } = pageProps.value;
     await handlerWeChatThRegLogin(pageProps.value);
