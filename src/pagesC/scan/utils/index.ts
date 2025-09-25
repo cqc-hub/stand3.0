@@ -497,7 +497,7 @@ export const useScan = () => {
     });
   };
   /**
-   * 江苏省中——健康商城
+   * 江苏省中——健康商城(有问题)
    */
   const healthMall1001035 = () => {
     useTBanner({

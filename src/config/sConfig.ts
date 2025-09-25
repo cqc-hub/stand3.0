@@ -255,6 +255,14 @@ const scJson: Record<string, ISConfig> = {
   },
 
   /**
+   * 宁波耳鼻喉医院
+   */
+  1001068: {
+    isOpenWechatSI: true,
+  },
+     
+
+  /**
    * 濮阳市人民医院
    */
   1001058: {
