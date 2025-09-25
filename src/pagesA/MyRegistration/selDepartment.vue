@@ -134,7 +134,7 @@ const bannerOrderAlipayList = computed(() => {
   return normalizeBannerConfig(banner);
 });
 
-  
+
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');
     let { deptDialogBtnCannel } = data;
@@ -199,11 +199,13 @@ const bannerOrderAlipayList = computed(() => {
     }
 
     // 处理 智能导诊逻辑 当path为 zndz 时 根据接口获取path
-    if (data.bannerOrder?.path == 'zndz') {
-      const { result } = await api.getTXGuidanceUrl({
-        source: gStores.globalStore.browser.source,
-      });
-      data.bannerOrder.path = (result as any).url;
+    if (!Array.isArray(data.bannerOrder)) {
+      if (data.bannerOrder?.path == 'zndz') {
+        const { result } = await api.getTXGuidanceUrl({
+          source: gStores.globalStore.browser.source,
+        });
+        data.bannerOrder.path = (result as any).url;
+      }
     }
   };
 

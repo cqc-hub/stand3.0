@@ -693,6 +693,7 @@
     }
   };
 
+  let firstWarningIdType = true;
   const selectChange = async (e) => {
     const { item, value } = e;
 
@@ -730,6 +731,36 @@
         await wait(0);
         medicalTypeChange(formData.value[formKey.patientType]);
 
+        break;
+
+      case formKey.relationship:
+        if (gStores.globalStore.sysCode === '1001084') {
+          const itemIdType = formList.value.find(
+            (o) => o.key === formKey.idType
+          );
+
+          if (itemIdType) {
+            // 溧阳本人仅能身份证(需要亲情付需要查询本人身份证)
+            if (value === '1') {
+              if (firstWarningIdType) {
+                gStores.messageStore.showMessage(
+                  '关系为本人的就诊人仅支持身份证类型',
+                  3000
+                );
+                firstWarningIdType = false;
+              }
+              formData.value[formKey.idType] = '01';
+              selectChange({ item: itemIdType, value: '01' });
+              itemIdType.disabled = true;
+              itemIdType.showSuffixArrowIcon = false;
+            } else {
+              itemIdType.disabled = false;
+              itemIdType.showSuffixArrowIcon = true;
+            }
+
+            gform.value.setList(formList.value);
+          }
+        }
         break;
 
       default:
@@ -1134,7 +1165,7 @@
         [formKey.address, formKey.location].includes(key as any)
       ) {
         o.required = false;
-      } 
+      }
     });
 
     gform.value.setList([]);

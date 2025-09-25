@@ -2888,6 +2888,25 @@ export const handlerMedicalPayDongRuan = async ({
   const openid = gStores.globalStore.openId;
   cacheStore.changeCacheData2(resultConfig);
   if (gStores.globalStore.sysCode === '1001084') {
+    const { patList } = gStores.userStore;
+
+    const selfPat = patList.find((o) => o.relationshipCode === '1');
+    if (!selfPat) {
+      gStores.messageStore.showMessage(
+        '请先绑定本人就诊人信息再继续医保支付',
+        5000,
+        {
+          closeCallBack() {
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
+                _url: resultConfig.cancelUrl,
+              }),
+            });
+          },
+        }
+      );
+      return;
+    }
     await api.familyPayment({
       medOrgOrd,
       status: '1',
