@@ -174,6 +174,10 @@
         }
       }
     }
+
+    if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
+      gStores.globalStore.onAppShow({});
+    }
   });
 
   onLoad(async (options) => {
