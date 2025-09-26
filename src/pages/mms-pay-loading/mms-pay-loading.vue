@@ -68,6 +68,25 @@
       paySign,
     } = payParams.value;
 
+    console.log('------拿到医保参数');
+    console.log({
+      ...payParams.value,
+      mixTradeNo,
+      timeStamp,
+      nonceStr,
+      package: _package,
+      signType,
+      paySign,
+    });
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '即将打开医保支付?',
+    });
+
+    if (!confirm) {
+      payCancel();
+      return;
+    }
+
     await apiAsync(wx.requestMedicalInsurancePay, {
       ...payParams.value,
       mixTradeNo,

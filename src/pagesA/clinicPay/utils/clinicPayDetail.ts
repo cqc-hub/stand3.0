@@ -2898,7 +2898,7 @@ export const handlerMedicalPayDongRuan = async ({
           {
             closeCallBack() {
               uni.navigateTo({
-                url: joinQueryForUrl('/pagesA/medicalCardMan/addMedical', {
+                url: joinQueryForUrl(globalGl.addPersonUrl, {
                   _url: resultConfig.cancelUrl,
                 }),
               });

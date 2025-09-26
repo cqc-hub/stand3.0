@@ -480,10 +480,6 @@
 
     console.warn('跳转网络医院携带数据', para);
     console.warn('跳转网络医院的路径', src.value);
-    // setTimeout(async () => {
-    //   const r = await getAuthCodeWx();
-    //   console.log(r, 233);
-    // }, 1000);
     aliPayMedicalPluginPayInit();
   });
 

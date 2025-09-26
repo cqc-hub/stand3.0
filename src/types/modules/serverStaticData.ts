@@ -218,8 +218,15 @@ export interface ISystemConfig_ {
      * 表单填写补充字段
      * referenceId - 备注
      * countries - 国籍
+     * relationship - 关系
      */
-    formExtraKeys?: string[]; // ['referenceId' | 'countries'];
+    formExtraKeys?: (
+      | string
+      | {
+          key: string;
+          sort: number; // 排序
+        }
+    )[];
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     relationShip?: '1'; // 开启后新增就诊人页面有关系一行

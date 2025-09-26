@@ -845,13 +845,18 @@
       isDropAddress,
       isDropNation,
       isUserInfoShareAgree,
-      formExtraKeys = [],
+      formExtraKeys: _formExtraKeys = [],
       relationShip,
       // isUpNamePhone,
     } = pageConfig.value;
 
     const addressArr: any[] = [];
     const endArr: any[] = [];
+
+    let formExtraKeys = _formExtraKeys.filter((o) => typeof o === 'string');
+    const sortFormExtraKeys = _formExtraKeys.filter(
+      (o) => typeof o !== 'string'
+    );
 
     if (formExtraKeys.length) {
       if (formExtraKeys.includes('countries')) {
@@ -892,7 +897,7 @@
     const _patientInfo: TFormKeys[] = [
       ...addressArr,
       formKey.patientPhone,
-      // ...formExtraKeys,
+      ...formExtraKeys,
       ...endArr,
 
       formKey.defaultFalg,
