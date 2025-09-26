@@ -462,48 +462,46 @@
        * -如果是成人 本人身份证信息不能为空
        * -非身份证件类型患者不做任何校验
        */
-      const { idType, patientAge, idCardEncry, upIdCardEncry } =
+      const { patientAge, idCardEncry, upIdCardEncry } =
         gStores.userStore.patChoose;
 
-      if (idType === '-1') {
-        let isCanOrder = true;
-        const isChildren =
-          patientAge &&
-          isGuardianWithIdCard &&
-          (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
+      let isCanOrder = true;
+      const isChildren =
+        patientAge &&
+        isGuardianWithIdCard &&
+        (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
 
-        if (isChildren) {
-          isCanOrder = !!upIdCardEncry;
-        } else {
-          isCanOrder = !!idCardEncry;
-        }
+      if (isChildren) {
+        isCanOrder = !!upIdCardEncry || !!idCardEncry;
+      } else {
+        isCanOrder = !!idCardEncry;
+      }
 
-        if (!isCanOrder) {
-          const { title, content } = await gStores.getSysAppMore('1265');
-          const { confirm } = await new Promise<any>((closeCallBack) => {
-            gStores.messageStore.showMessage(content, 0, {
-              useDialog: true,
-              dialogOpt: {
-                isShowCancel: true,
-                title,
-              },
-              closeCallBack,
-            });
+      if (!isCanOrder) {
+        const { title, content } = await gStores.getSysAppMore('1265');
+        const { confirm } = await new Promise<any>((closeCallBack) => {
+          gStores.messageStore.showMessage(content, 0, {
+            useDialog: true,
+            dialogOpt: {
+              isShowCancel: true,
+              title,
+            },
+            closeCallBack,
           });
+        });
 
-          if (confirm) {
-            uni.navigateTo({
-              url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-                _url: joinQueryForUrl(
-                  '/pagesA/MyRegistration/RegConfirm',
-                  props.value
-                ),
-              }),
-            });
-          }
-
-          return;
+        if (confirm) {
+          uni.navigateTo({
+            url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+              _url: joinQueryForUrl(
+                '/pagesA/MyRegistration/RegConfirm',
+                props.value
+              ),
+            }),
+          });
         }
+
+        return;
       }
     }
 
