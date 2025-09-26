@@ -46,6 +46,7 @@ export interface checkoutReportDetails {
    * 图文
    */
   pdfUrl?: string;
+  pdfUrls?: string[];
   extend?: string;
   age?: string;
   //年龄

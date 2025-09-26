@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
   import { shallowRef, ref, onMounted } from 'vue';
-  import { onShow, onLoad } from '@dcloudio/uni-app';
+  import { onReady, onLoad } from '@dcloudio/uni-app';
   import { generateUuid, GStores, rulePhone } from '@/utils';
 
   import { decryptDes } from '@/common/des';
@@ -66,6 +66,8 @@
     // compDept: '消化内科',
     // compContext: '好好好哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
   });
+  const pageTitle =
+    gStores.globalStore.sysCode === '1001033' ? '投诉' : '意见反馈';
   const tempList: TInstance[] = [
     {
       required: true,
@@ -136,7 +138,7 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '意见反馈',
+      label: pageTitle,
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
@@ -240,7 +242,7 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '意见反馈',
+      label: pageTitle,
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
@@ -278,7 +280,7 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '意见反馈',
+      label: pageTitle,
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
@@ -341,7 +343,7 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '意见反馈',
+      label: pageTitle,
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
@@ -481,7 +483,7 @@
     {
       required: true,
       inputType: 'textarea',
-      label: '意见反馈',
+      label: pageTitle,
       subLabel: '您的意见将帮助我们改进产品和服务',
       field: 'input-text',
       placeholder: '请填写5字及以上的问题描述以使我们提供更好的帮助',
@@ -652,6 +654,11 @@
     } else if (opt?.isAnonymous) {
       options.value.isAnonymous = opt.isAnonymous;
     }
+  });
+  onReady(() => {
+    uni.setNavigationBarTitle({
+      title: pageTitle,
+    });
   });
 </script>
 

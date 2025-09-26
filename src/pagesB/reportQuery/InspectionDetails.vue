@@ -48,7 +48,10 @@
           />
 
           <view
-            v-if="checkoutReportList.pdfUrl"
+            v-if="
+              checkoutReportList.pdfUrl ||
+              (checkoutReportList.pdfUrls && checkoutReportList.pdfUrls.length)
+            "
             class="button-list mt32 flex relative flex-between pr32 pl32"
           >
             <button
@@ -268,6 +271,12 @@
       </view>
     </view>
   </g-popup>
+  <g-pay
+    :list="refPayList"
+    @pay-click="selVerifyWay"
+    ref="refPay"
+    title="请选择查看页码"
+  ></g-pay>
 
   <Hover-Tip
     :config="pageConfig"
@@ -324,9 +333,15 @@
   const { contentTitle, greenToastContent, greenToastDuration, getPowerEnerg } =
     useReportPowerEnerg();
   const isClose = ref(true);
-
+  const refPay = ref<any>('');
   const isShow = ref(false);
   const checkoutReportList = ref<checkoutReportDetails>({} as any);
+  const refPayList = ref([
+    {
+      label: '第一页',
+      key: '',
+    },
+  ]);
 
   const queryCompData = ref(<
     {
@@ -552,21 +567,39 @@
   const cacheStore = useCacheStore();
   const goPdfUrl = () => {
     const { repName } = checkoutReportList.value;
-    cacheStore.changeCacheData(checkoutReportList.value.pdfUrl);
+    if (checkoutReportList.value.pdfUrl) {
+      cacheStore.changeCacheData(checkoutReportList.value.pdfUrl);
 
+      uni.navigateTo({
+        url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
+          // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
+          // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
+          name: repName,
+          type: 'cache',
+        }),
+      });
+    } else {
+      refPayList.value =
+        checkoutReportList.value?.pdfUrls?.map((item, index) => {
+          return {
+            label: `第${index + 1}页`,
+            key: item,
+          };
+        }) || [];
+      refPay.value.show();
+    }
+  };
+
+  const selVerifyWay = ({item}) => {
+    console.log(item);
+    const { repName } = checkoutReportList.value;
+    cacheStore.changeCacheData(item.key);
     uni.navigateTo({
       url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
-        // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
-        // url: encodeURIComponent(checkoutReportList.value.pdfUrl as string),
         name: repName,
         type: 'cache',
       }),
     });
-    // uni.navigateTo({
-    //   url: joinQueryForUrl('/pagesA/webView/webView', {
-    //     https: checkoutReportList.value.yunUrl,
-    //   }),
-    // });
   };
 
   onMounted(async () => {
