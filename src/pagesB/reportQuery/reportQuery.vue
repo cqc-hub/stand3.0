@@ -14,7 +14,7 @@
       @change="choosePat"
       ref="selHosRef"
     />
-    <g-choose-pat :onlySelf="onlySelf" :disabled="true" @choose-pat="choosePat" />
+    <g-choose-pat :onlySelf="onlySelf" :disabled="onlySelf?true:false" @choose-pat="choosePat" />
     <g-tbanner
       v-if="gStores.userStore.patChoose.patientId"
       :config="yunBannerConfig"
