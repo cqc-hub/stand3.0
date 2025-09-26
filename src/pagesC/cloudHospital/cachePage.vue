@@ -363,7 +363,7 @@
     payBackParams,
     registerId,
   }) => {
-    // registerType 1 医保支付 2 医保退号
+    // registerType 1 医保支付 2 医保退号( 2 暂时不存在)
     const { registerType } = insuranceParams;
 
     if ([1].includes(registerType)) {

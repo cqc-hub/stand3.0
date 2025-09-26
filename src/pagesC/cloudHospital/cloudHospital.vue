@@ -49,6 +49,7 @@
   };
 
   const goYB1001048 = (authCode) => {
+    // 退号 暂无这个逻辑
     if (uni.getStorageSync('netWorkghback')) {
       uni.setStorageSync('netWorkghback', false);
       if (uni.getStorageSync('resultConfig')) {

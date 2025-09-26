@@ -2873,6 +2873,16 @@ export const handlerMedicalPay1001035 = async (opt: {
 export const handlerMedicalPayDongRuan = async ({
   medOrgOrd,
   resultConfig,
+}: {
+  /**
+   * - cancelUrl 失败、取消回调
+   * - successUrl 成功支付回调
+   */
+  resultConfig: {
+    cancelUrl: string;
+    successUrl: string;
+  };
+  medOrgOrd: string;
 }) => {
   const medicalNationInfo = getMedicalNationInfo();
   const gStores = new GStores();
