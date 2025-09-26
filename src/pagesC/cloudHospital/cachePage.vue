@@ -202,10 +202,6 @@
   };
 
   const handleMessage = async (evt) => {
-    // if (globalStore.sysCode === '1001048') {
-    //   handleMessage1001048(evt);
-    //   return;
-    // }
     var data = evt.target.data;
     const fd = data[0] || {};
     console.warn('获取到返回--------------', data && fd);
@@ -249,7 +245,10 @@
       insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
-      if (globalStore.sysCode === '1001048' && registerType) {
+      if (
+        ['1001048', '1001084'].includes(gStores.globalStore.sysCode) &&
+        registerType
+      ) {
         await wait(60);
         handleMessage1001048(fd);
         return;
@@ -364,7 +363,7 @@
     payBackParams,
     registerId,
   }) => {
-    // registerType 1 医保支付 2 医保退号
+    // registerType 1 医保支付 2 医保退号( 2 暂时不存在)
     const { registerType } = insuranceParams;
 
     if ([1].includes(registerType)) {
@@ -480,10 +479,6 @@
 
     console.warn('跳转网络医院携带数据', para);
     console.warn('跳转网络医院的路径', src.value);
-    // setTimeout(async () => {
-    //   const r = await getAuthCodeWx();
-    //   console.log(r, 233);
-    // }, 1000);
     aliPayMedicalPluginPayInit();
   });
 

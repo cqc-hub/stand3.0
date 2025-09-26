@@ -1,4 +1,4 @@
-import { useRouterStore } from '@/stores';
+import { useRouterStore, useUserStore } from '@/stores';
 import { ServerStaticData } from './serverStaticData';
 import { useCommonTo } from '@/common/checkJump';
 import { IsAny } from '@/typeUtils';
@@ -631,4 +631,13 @@ export const getShareTotalUrl = (query, path) => {
         reject(e);
       });
   });
+};
+
+export const setDefaultPatient = async (patientId: string) => {
+  const userStore = useUserStore();
+
+  const pat = userStore.patList.find((o) => o.patientId === patientId);
+  if (pat) {
+    userStore.updatePatChoose(pat);
+  }
 };

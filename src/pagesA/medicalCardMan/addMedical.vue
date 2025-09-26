@@ -693,6 +693,7 @@
     }
   };
 
+  let firstWarningIdType = true;
   const selectChange = async (e) => {
     const { item, value } = e;
 
@@ -730,6 +731,36 @@
         await wait(0);
         medicalTypeChange(formData.value[formKey.patientType]);
 
+        break;
+
+      case formKey.relationship:
+        if (gStores.globalStore.sysCode === '1001084') {
+          const itemIdType = formList.value.find(
+            (o) => o.key === formKey.idType
+          );
+
+          if (itemIdType) {
+            // 溧阳本人仅能身份证(需要亲情付需要查询本人身份证)
+            if (value === '1') {
+              if (firstWarningIdType) {
+                gStores.messageStore.showMessage(
+                  '关系为本人的就诊人仅支持身份证类型',
+                  3000
+                );
+                firstWarningIdType = false;
+              }
+              formData.value[formKey.idType] = '01';
+              selectChange({ item: itemIdType, value: '01' });
+              itemIdType.disabled = true;
+              itemIdType.showSuffixArrowIcon = false;
+            } else {
+              itemIdType.disabled = false;
+              itemIdType.showSuffixArrowIcon = true;
+            }
+
+            gform.value.setList(formList.value);
+          }
+        }
         break;
 
       default:
@@ -814,13 +845,18 @@
       isDropAddress,
       isDropNation,
       isUserInfoShareAgree,
-      formExtraKeys = [],
+      formExtraKeys: _formExtraKeys = [],
       relationShip,
       // isUpNamePhone,
     } = pageConfig.value;
 
     const addressArr: any[] = [];
     const endArr: any[] = [];
+
+    let formExtraKeys = _formExtraKeys.filter((o) => typeof o === 'string');
+    const sortFormExtraKeys = _formExtraKeys.filter(
+      (o) => typeof o !== 'string'
+    );
 
     if (formExtraKeys.length) {
       if (formExtraKeys.includes('countries')) {
@@ -830,6 +866,11 @@
       if (formExtraKeys.includes('referenceId')) {
         endArr.push('referenceId');
       }
+
+      formExtraKeys = formExtraKeys.filter(
+        // 这几个特殊判断
+        (key) => !['countries', 'referenceId', 'relationship'].includes(key)
+      );
     }
 
     if (isDropAddress !== '1') {
@@ -856,14 +897,14 @@
     const _patientInfo: TFormKeys[] = [
       ...addressArr,
       formKey.patientPhone,
-      // ...formExtraKeys,
+      ...formExtraKeys,
       ...endArr,
 
       formKey.defaultFalg,
       // formKey.referenceId,
     ];
 
-    if (!globalGl.systemInfo.isSearchInHos) {
+    if (globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;
@@ -1134,7 +1175,7 @@
         [formKey.address, formKey.location].includes(key as any)
       ) {
         o.required = false;
-      } 
+      }
     });
 
     gform.value.setList([]);

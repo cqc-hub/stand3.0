@@ -214,7 +214,6 @@
     ServerStaticData,
     wait,
     apiAsync,
-    getLocation,
     ISystemConfig,
     nameConvert,
     PatientUtils,
@@ -381,6 +380,7 @@
       wxOrderSubscribeMessage,
       isConfirmOrderWithConfirmDialog,
     } = pageConfig.value;
+    const { isGuardianWithIdCard } = personConfig.value;
     /**
      * 未填写参数
      *
@@ -457,30 +457,54 @@
       !quickPat.value.patientName &&
       isShowAddPatCardNo(gStores.userStore.patChoose, personConfig.value)
     ) {
-      const { title, content } = await gStores.getSysAppMore('1265');
-      const { confirm } = await new Promise<any>((closeCallBack) => {
-        gStores.messageStore.showMessage(content, 0, {
-          useDialog: true,
-          dialogOpt: {
-            isShowCancel: true,
-            title,
-          },
-          closeCallBack,
-        });
-      });
+      /**
+       * -如果是儿童 儿童必须要有监护人身份信息, 儿童有监护人信息 就可以预约挂号
+       * -如果是成人 本人身份证信息不能为空
+       * -非身份证件类型患者不做任何校验
+       */
+      const { idType, patientAge, idCardEncry, upIdCardEncry } =
+        gStores.userStore.patChoose;
 
-      if (confirm) {
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
-            _url: joinQueryForUrl(
-              '/pagesA/MyRegistration/RegConfirm',
-              props.value
-            ),
-          }),
-        });
+      if (idType === '-1') {
+        let isCanOrder = true;
+        const isChildren =
+          patientAge &&
+          isGuardianWithIdCard &&
+          (patientAge as unknown as number) * 1 <= isGuardianWithIdCard * 1;
+
+        if (isChildren) {
+          isCanOrder = !!upIdCardEncry;
+        } else {
+          isCanOrder = !!idCardEncry;
+        }
+
+        if (!isCanOrder) {
+          const { title, content } = await gStores.getSysAppMore('1265');
+          const { confirm } = await new Promise<any>((closeCallBack) => {
+            gStores.messageStore.showMessage(content, 0, {
+              useDialog: true,
+              dialogOpt: {
+                isShowCancel: true,
+                title,
+              },
+              closeCallBack,
+            });
+          });
+
+          if (confirm) {
+            uni.navigateTo({
+              url: joinQueryForUrl('/pagesA/medicalCardMan/medicalCardMan', {
+                _url: joinQueryForUrl(
+                  '/pagesA/MyRegistration/RegConfirm',
+                  props.value
+                ),
+              }),
+            });
+          }
+
+          return;
+        }
       }
-
-      return;
     }
 
     if (isWaitReg.value) {
@@ -1092,7 +1116,8 @@
 
   .container {
     // // height: 1px;
-    // flex: 1;
+    height: 100vh;
+
     overflow-y: scroll;
 
     .container-view {

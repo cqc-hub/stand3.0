@@ -2,6 +2,7 @@ import { computed, ref } from 'vue';
 import { getLocation, GStores, TBannerConfig, useTBanner, wait } from '@/utils';
 import { encryptDes, joinQueryForUrl } from '@/common';
 import api from '@/service/api';
+import globalGl from '@/config/global';
 import { beforeEach } from '@/router';
 export const useScan = () => {
   const pageProps = ref(
@@ -23,6 +24,10 @@ export const useScan = () => {
        * - 14 乐清满意度
        * - 15 温附二跳转新生儿筛查登录
        * - _1 温附二 特检预约
+       * - 16 健康温州 艾检测
+       * - 17 健康温州 温心在线
+       * - 18 健康温州 云影像
+       * - 19 江苏省中 健康商城
        */
       type:
         | '_1'
@@ -40,7 +45,11 @@ export const useScan = () => {
         | '12'
         | '13'
         | '14'
-        | '15';
+        | '15'
+        | '16'
+        | '17'
+        | '18'  
+        | '19';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -425,6 +434,89 @@ export const useScan = () => {
     });
   };
 
+  /**
+   * 健康温州——艾检测
+   */
+  const aijiance1001082 = () => {
+    useTBanner({
+      "isExpired": "1",
+      "type": "h5",
+      "path": "https://azyy.wzswsj.gov.cn/index.html",
+      "addition": {
+        "token": "token",
+        "patientId": "patientId",
+        "herenId": "herenId"
+      },
+      "extraData": {
+        "sysCode": "1001082",
+        "reqForward": "true",
+        "source": "19"
+      }
+    });
+  };
+
+    /**
+   * 健康温州——云影像
+   */
+  const yun1001082 = () => {
+    useTBanner({
+      "isExpired": "1",
+      "type": "h5",
+      "path": " https://cloud-exam-view-wzswsj.wzxcpacs.kayicloud.com/hisLogin",
+      "addition": {
+        "token": "token",
+        "patientId": "patientId",
+        "herenId": "herenId"
+      },
+      "extraData": {
+        "sysCode": "1001082",
+        "reqForward": "true",
+        "source": "19"
+      }
+    });
+  };
+
+    /**
+   * 健康温州——温心在线
+   */
+  const wenxinzaixian1001082 = () => {
+    useTBanner({
+      "isExpired": "1", 
+      "type": "h5",
+      "path": "https://xljk.wzswsj.gov.cn/municipalCitizen/#/pages/skip/index?origin=%E6%B8%A9%E5%B7%9E%E6%99%BA%E5%BA%B7",
+      "addition": {
+        "token": "token",
+        "patientId": "patientId",
+        "herenId": "herenId"
+      },
+      "extraData": {
+        "sysCode": "1001082",
+        "reqForward": "true",
+        "source": "19"
+      }
+    });
+  };
+  /**
+   * 江苏省中——健康商城(有问题)
+   */
+  const healthMall1001035 = () => {
+    useTBanner({
+        type: 'h5',
+        path: globalGl.env === 'prod'? 'https://shop.jshtcm.com/mobile/pages/login/index':"https://jksc.eheren.com/mobile/pages/login/index",
+        addition: {
+          TOKEN: 'token',
+          PATIENTID: 'patientId',
+          HERENID: 'herenId',
+          OPENID: 'openId',
+        },
+        extraData: {
+          sysCode: gStores.globalStore.sysCode,
+          reqForward: 'true',
+          source: gStores.globalStore.browser.source,
+          },
+      });
+  };
+
   return {
     pageProps,
     childNewborn10001067,
@@ -456,5 +548,9 @@ export const useScan = () => {
         },
       });
     },
+    aijiance1001082,
+    yun1001082,
+    wenxinzaixian1001082,
+    healthMall1001035
   };
 };

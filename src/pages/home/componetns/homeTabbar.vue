@@ -76,6 +76,7 @@
   import { useTBanner, throttle, GStores } from '@/utils';
   import api from '@/service/api';
   import { isAreaProgram } from '@/stores';
+  import globalGl from '@/config/global';
 
   defineProps<{ systemModeOld: boolean }>();
   const gStores = new GStores();
@@ -138,7 +139,7 @@
         extraData: {
           _type: 'useTBanner',
           type: 'h5',
-          path: 'https://jksc.eheren.com/mobile/pages/login/index',
+          path: globalGl.env === 'prod'? 'https://shop.jshtcm.com/mobile/pages/login/index':"https://jksc.eheren.com/mobile/pages/login/index",
           addition: {
             TOKEN: 'token',
             PATIENTID: 'patientId',

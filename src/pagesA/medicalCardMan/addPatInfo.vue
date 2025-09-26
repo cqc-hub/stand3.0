@@ -90,13 +90,14 @@
     const { upIdCard, relationShip, idCard, upName } = formData.value;
 
     let [name, idCardNumber] = ['', ''];
-    const pInfo = await patientUtils.getPatientPersonalInfo({
-      idCard: true,
-    });
+
     // 儿童人脸取监护人
     if (isChildren.value) {
       name = upName;
       if (oldUpIdCard) {
+        const pInfo = await patientUtils.getPatientPersonalInfo({
+          idCard: true,
+        });
         idCardNumber = pInfo.upIdCard;
       } else {
         idCardNumber = upIdCard;
@@ -104,6 +105,9 @@
     } else {
       name = patientName;
       if (oldIdCard) {
+        const pInfo = await patientUtils.getPatientPersonalInfo({
+          idCard: true,
+        });
         idCardNumber = pInfo.idCard;
       } else {
         idCardNumber = idCard;

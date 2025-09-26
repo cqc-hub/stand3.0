@@ -163,7 +163,13 @@
     ref="faceDialog"
     :title="'人脸识别认证须知'"
   >
-    <g-flag title="人脸识别认证须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
   </Order-Reg-Confirm>
 </template>
 
@@ -741,7 +747,17 @@
 
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
-    const { formExtraKeys = [] } = pageConfig.value;
+    let { formExtraKeys = [] } = pageConfig.value;
+    formExtraKeys = formExtraKeys.filter(
+      (key) => !['countries'].includes(typeof key === 'string' ? key : key.key)
+    );
+
+    const defaultFormExtraKeys = formExtraKeys.filter(
+      (o) => typeof o === 'string'
+    );
+    const sortFormExtraKeys = formExtraKeys.filter(
+      (o) => typeof o !== 'string'
+    );
 
     let formListKeys: TFormKeys[] = [
       'patientType',
@@ -749,9 +765,29 @@
       'patientPhone',
       'verifyCode',
       'isUserInfoShareAgree',
-      ...formExtraKeys.filter((key) => !['countries'].includes(key)),
+      ...defaultFormExtraKeys,
       'defaultFalg',
-    ];
+    ] as any;
+
+    let formListKeyLen = 0;
+    while (formListKeyLen < formListKeys.length) {
+      const idxsNow = sortFormExtraKeys.filter(
+        (o) => o.sort === formListKeyLen
+      );
+      if (idxsNow.length) {
+        formListKeys.splice(
+          formListKeyLen,
+          0,
+          ...idxsNow.map((o) => o.key as any)
+        );
+      }
+
+      formListKeyLen++;
+    }
+
+    console.log('-------');
+    console.log(formListKeys);
+
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
 

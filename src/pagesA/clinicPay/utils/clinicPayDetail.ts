@@ -2873,6 +2873,16 @@ export const handlerMedicalPay1001035 = async (opt: {
 export const handlerMedicalPayDongRuan = async ({
   medOrgOrd,
   resultConfig,
+}: {
+  /**
+   * - cancelUrl 失败、取消回调
+   * - successUrl 成功支付回调
+   */
+  resultConfig: {
+    cancelUrl: string;
+    successUrl: string;
+  };
+  medOrgOrd: string;
 }) => {
   const medicalNationInfo = getMedicalNationInfo();
   const gStores = new GStores();
@@ -2885,26 +2895,58 @@ export const handlerMedicalPayDongRuan = async ({
   const dongRuanMedicalInfo = medicalNationInfo.dongRuanMedicalInfo!;
   const { orgCodg, orgAppId: appId } = pathExtraData;
   const authCode = await getMedicalAuthCode();
-  const openid = gStores.globalStore.openId;
   cacheStore.changeCacheData2(resultConfig);
+  // 溧阳亲情付拦截就诊中必须带 “本人” 标识的就诊人
   if (gStores.globalStore.sysCode === '1001084') {
-    await api.familyPayment({
-      medOrgOrd,
-      status: '1',
-    });
+    const { patList, patChoose } = gStores.userStore;
+    if (patChoose.relationshipCode !== '1') {
+      const selfPat = patList.find((o) => o.relationshipCode === '1');
+      if (!selfPat) {
+        gStores.messageStore.showMessage(
+          '请先绑定本人就诊人信息再继续医保支付',
+          5000,
+          {
+            closeCallBack() {
+              uni.navigateTo({
+                url: joinQueryForUrl(globalGl.addPersonUrl, {
+                  _url: resultConfig.cancelUrl,
+                }),
+              });
+            },
+          }
+        );
+        return;
+      }
+      await api.familyPayment({
+        medOrgOrd,
+        status: '1',
+      });
+    }
   }
-  // uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
   await wait(20);
+  const pageArg: any = {
+    openid: gStores.globalStore.openId,
+    medOrgOrd,
+    orgCodg,
+    appId,
+    authCode,
+  };
+
+  if (gStores.globalStore.sysCode === '1001048') {
+    const {
+      cancelUrl: cancelAuthRedirectUrl,
+      successUrl: orderStatusRedirectUrl,
+    } = resultConfig;
+
+    pageArg.resultConfig = JSON.stringify({
+      cancelAuthRedirectUrl,
+      orderStatusRedirectUrl,
+    });
+  }
   const url = joinQueryForUrl(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
-    {
-      openid,
-      medOrgOrd,
-      orgCodg,
-      appId,
-      authCode,
-    }
+    pageArg
   );
 
   // return
