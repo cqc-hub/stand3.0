@@ -863,7 +863,8 @@
       }
 
       formExtraKeys = formExtraKeys.filter(
-        (key) => !['countries', 'referenceId'].includes(key)
+        // 这几个特殊判断
+        (key) => !['countries', 'referenceId', 'relationship'].includes(key)
       );
     }
 
