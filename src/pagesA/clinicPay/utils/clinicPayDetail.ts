@@ -2895,8 +2895,8 @@ export const handlerMedicalPayDongRuan = async ({
   const dongRuanMedicalInfo = medicalNationInfo.dongRuanMedicalInfo!;
   const { orgCodg, orgAppId: appId } = pathExtraData;
   const authCode = await getMedicalAuthCode();
-  const openid = gStores.globalStore.openId;
   cacheStore.changeCacheData2(resultConfig);
+  // 溧阳亲情付拦截就诊中必须带 “本人” 标识的就诊人
   if (gStores.globalStore.sysCode === '1001084') {
     const { patList, patChoose } = gStores.userStore;
     if (patChoose.relationshipCode !== '1') {
@@ -2923,18 +2923,30 @@ export const handlerMedicalPayDongRuan = async ({
       });
     }
   }
-  // uni.setStorageSync('resultConfig', resultConfig);
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
   await wait(20);
+  const pageArg: any = {
+    openid: gStores.globalStore.openId,
+    medOrgOrd,
+    orgCodg,
+    appId,
+    authCode,
+  };
+
+  if (gStores.globalStore.sysCode === '1001048') {
+    const {
+      cancelUrl: cancelAuthRedirectUrl,
+      successUrl: orderStatusRedirectUrl,
+    } = resultConfig;
+
+    pageArg.resultConfig = JSON.stringify({
+      cancelAuthRedirectUrl,
+      orderStatusRedirectUrl,
+    });
+  }
   const url = joinQueryForUrl(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
-    {
-      openid,
-      medOrgOrd,
-      orgCodg,
-      appId,
-      authCode,
-    }
+    pageArg
   );
 
   // return

@@ -189,40 +189,47 @@
   onShow(async () => {
     const { scene } = gStores.globalStore.appShowData;
     // const globalStore = gStores.globalStore;
+    await wait(200);
 
-    if (
-      scene === 1038 &&
-      getLocalStorage('payed1001048') &&
-      getLocalStorage('resultConfig')
-    ) {
-      await wait(200);
-      const resultConfig = JSON.parse(uni.getStorageSync('resultConfig'));
-      removeLocation('resultConfig');
+    // 跳第三方小程序拉起支付后没法判断是否付钱了
+    if (scene === 1038 && getLocalStorage('payed1001048')) {
       removeLocation('payed1001048');
-
-      if (
-        resultConfig.orderStatusRedirectUrl ==
-        '/pagesC/cloudHospital/cloudHospital'
-      ) {
-        const resultConfigQuery = JSON.parse(
-          decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-        );
-        uni.removeStorage({
-          key: 'resultConfigQuery',
-        });
-
-        uni.navigateTo({
-          url: joinQueryForUrl(
-            resultConfigQuery.path,
-            resultConfigQuery.successQuery
-          ),
-        });
-      } else {
-        uni.reLaunch({
-          url: resultConfig.orderStatusRedirectUrl,
-        });
-      }
+      payCancel();
     }
+
+    // if (
+    //   scene === 1038 &&
+    //   getLocalStorage('payed1001048') &&
+    //   getLocalStorage('resultConfig')
+    // ) {
+    //   await wait(200);
+    //   const resultConfig = JSON.parse(uni.getStorageSync('resultConfig'));
+    //   removeLocation('resultConfig');
+    //   removeLocation('payed1001048');
+
+    //   if (
+    //     resultConfig.orderStatusRedirectUrl ==
+    //     '/pagesC/cloudHospital/cloudHospital'
+    //   ) {
+    //     const resultConfigQuery = JSON.parse(
+    //       decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
+    //     );
+    //     uni.removeStorage({
+    //       key: 'resultConfigQuery',
+    //     });
+
+    //     uni.navigateTo({
+    //       url: joinQueryForUrl(
+    //         resultConfigQuery.path,
+    //         resultConfigQuery.successQuery
+    //       ),
+    //     });
+    //   } else {
+    //     uni.reLaunch({
+    //       url: resultConfig.orderStatusRedirectUrl,
+    //     });
+    //   }
+    // }
 
     // 三方医保回来也会携带authcode参数， 但是过期..
     gStores.globalStore.onAppShow({});

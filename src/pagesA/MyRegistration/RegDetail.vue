@@ -1061,7 +1061,7 @@
             handlerMedicalPayDongRuan({
               resultConfig: {
                 cancelUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&patientId=${gStores.userStore.patChoose.patientId}`,
-                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&needOrderStatus=0`,
+                successUrl: `/pagesA/MyRegistration/RegDetail?orderId=${orderId}&needOrderStatus=0&preWz=1`,
               },
               medOrgOrd,
             });
