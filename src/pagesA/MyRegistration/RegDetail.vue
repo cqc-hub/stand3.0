@@ -1490,7 +1490,11 @@
     }
     await beforeEach(routeArg);
     await init();
-    if (p?.successPay && gStores.globalStore.sysCode === '1001048') {
+    if (
+      pageProps.value.preWz === '1' &&
+      orderRegInfo.value.orderStatus === '0' &&
+      gStores.globalStore.sysCode === '1001048'
+    ) {
       showConsultationDialog1001048();
     }
 

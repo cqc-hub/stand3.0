@@ -16,6 +16,7 @@ const cacheStore = defineStore('cache', {
       healthCardCache: <any>{},
       cacheData: <any>{},
       cacheData2: <any>{},
+      cacheData3: <any>{},
       medicalHelpSelList: <any[]>[],
       hosId: '',
       isShowChooseHos: ['1001063', '1001066'].includes(globalGl.SYS_CODE), // 杭口用. 部分场景下选择医院展示的组件; hodId 的传入
@@ -60,6 +61,9 @@ const cacheStore = defineStore('cache', {
     },
     changeCacheData2(data) {
       this.cacheData2 = data;
+    },
+    changeCacheData3(data) {
+      this.cacheData3 = data;
     },
 
     changeMedicalPathArg(arg: Record<string, string>) {
