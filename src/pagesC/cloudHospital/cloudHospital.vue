@@ -130,7 +130,7 @@
       });
 
       if (authCode) {
-        if (gStores.globalStore.sysCode === '1001048') {
+        if (['1001048'].includes(gStores.globalStore.sysCode)) {
           goYB1001048(authCode);
           return;
         }

@@ -202,10 +202,6 @@
   };
 
   const handleMessage = async (evt) => {
-    // if (globalStore.sysCode === '1001048') {
-    //   handleMessage1001048(evt);
-    //   return;
-    // }
     var data = evt.target.data;
     const fd = data[0] || {};
     console.warn('获取到返回--------------', data && fd);
@@ -249,7 +245,10 @@
       insuranceParamsWx?.registerType || payBackParams?.registerType;
 
     if (insuranceParamsWx) {
-      if (globalStore.sysCode === '1001048' && registerType) {
+      if (
+        ['1001048', '1001084'].includes(gStores.globalStore.sysCode) &&
+        registerType
+      ) {
         await wait(60);
         handleMessage1001048(fd);
         return;
