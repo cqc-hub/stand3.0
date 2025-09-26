@@ -163,7 +163,13 @@
     ref="faceDialog"
     :title="'人脸识别认证须知'"
   >
-    <g-flag title="人脸识别认证须知" :typeFg="'1250'" isShowFgTip isHideTitle aaa />
+    <g-flag
+      title="人脸识别认证须知"
+      :typeFg="'1250'"
+      isShowFgTip
+      isHideTitle
+      aaa
+    />
   </Order-Reg-Confirm>
 </template>
 
@@ -751,7 +757,7 @@
       'isUserInfoShareAgree',
       ...formExtraKeys.filter((key) => !['countries'].includes(key)),
       'defaultFalg',
-    ];
+    ] as any;
     let { isSmsVerify, isHidePatientTypeInPerfect, isUserInfoShareAgree } =
       pageConfig.value;
 

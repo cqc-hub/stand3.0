@@ -861,6 +861,10 @@
       if (formExtraKeys.includes('referenceId')) {
         endArr.push('referenceId');
       }
+
+      formExtraKeys = formExtraKeys.filter(
+        (key) => !['countries', 'referenceId'].includes(key)
+      );
     }
 
     if (isDropAddress !== '1') {
@@ -894,7 +898,7 @@
       // formKey.referenceId,
     ];
 
-    if (!globalGl.systemInfo.isSearchInHos) {
+    if (globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;

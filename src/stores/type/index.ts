@@ -25,6 +25,8 @@ export type IPat = {
   thirdOpenId: string;
   upIdCard: string;
   upName: string;
+  /** 1 本人 */
+  relationshipCode: string;
   healthQrCodeText?: string;
   /** 是否是医保用户 1自费 2医保 */
   healthCardUser: '1' | '2';

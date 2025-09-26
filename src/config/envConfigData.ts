@@ -6,6 +6,7 @@ import { type TBannerConfig } from '@/utils';
 
 export const sysConfigEnv = <const>{
   'person.isSmsVerify': '0',
+  // 'person.formExtraKeys': ['relationship'],
   // 'person.isCanAddPatCardNo': '1',
 };
 

@@ -40,9 +40,9 @@ export interface ISystemConfig_ {
 
     /** 科室列表页面 */
     // 选科室上面 banner
-    bannerOrder?: TBannerConfig  | TBannerConfig[];
+    bannerOrder?: TBannerConfig | TBannerConfig[];
     //选科室上面 banner-支付宝
-    bannerOrderAlipay?: TBannerConfig  | TBannerConfig[];
+    bannerOrderAlipay?: TBannerConfig | TBannerConfig[];
     //跳转名医名科模式,若开启则会请求医院参数CELEBRATED_DEPT
     isCelebratedDeptMode?: '1';
     /** 预约挂号温馨提示 */
@@ -219,7 +219,7 @@ export interface ISystemConfig_ {
      * referenceId - 备注
      * countries - 国籍
      */
-    formExtraKeys?: ['referenceId' | 'countries'];
+    formExtraKeys?: string[]; // ['referenceId' | 'countries'];
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     relationShip?: '1'; // 开启后新增就诊人页面有关系一行
@@ -576,8 +576,8 @@ export interface ISystemConfig_ {
     intelMedicalAssistConfig?: {
       //选择智能医助虚拟人物
       distinctiveImage?: {
-        imageList?:Array<string>,
-        noLoginNotice?:string,
+        imageList?: Array<string>;
+        noLoginNotice?: string;
       };
       //企微客服按钮，例{"extInfo": "https://work.weixin.qq.com/kfid/kfc0987f35e21a6f2bd","corpId": "wwdbaea46632b03769"}
       isOpenWxServiceBtn?: Object;
