@@ -920,7 +920,11 @@
           (key) => key === formKey.patientPhone
         );
 
-        if (phone_idx !== -1 && !isFilterSmsVerify) {
+        if (
+          phone_idx !== -1 &&
+          !isFilterSmsVerify &&
+          !formData.value[formKey.verifyCode]
+        ) {
           _patientInfo.splice(phone_idx + 1, 0, formKey.verifyCode);
         }
       }
