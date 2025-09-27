@@ -34,6 +34,18 @@
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
+  const getClinicUtils = async () => {
+    return new Promise(async (r, j) => {
+      uni.showLoading({});
+
+      // @ts-expect-error
+      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+        uni.hideLoading();
+        r(utils);
+      });
+    });
+  };
+
   const getAuthCodeWx = async () => {
     return new Promise(async (r, j) => {
       const { confirm } = await apiAsync(uni.showModal, {
@@ -62,7 +74,50 @@
     });
   };
 
+  const handlerMedicalPayDongRuan = async ({
+    medOrgOrd,
+    resultConfig,
+  }: {
+    /**
+     * - cancelUrl 失败、取消回调
+     * - successUrl 成功支付回调
+     */
+    resultConfig: {
+      cancelUrl: string;
+      successUrl: string;
+    };
+    medOrgOrd: string;
+  }) => {
+    return new Promise(async (r, j) => {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content: '请点击确定跳转医保小程序?',
+      });
+
+      if (!confirm) {
+        j('取消');
+        return;
+      }
+
+      uni.showLoading({});
+
+      // @ts-expect-error
+      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+        uni.hideLoading();
+        await utils.getMedicalArgWithFamily();
+        const authCode = await utils.getMedicalAuthCode().catch((err) => {
+          console.log(err, 'err');
+          if (!(typeof err === 'string' && err === '请求授权...')) {
+            j(err);
+          }
+        });
+        r(authCode);
+      });
+    });
+  };
+
   const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
+    // const clinicUtils = await getClinicUtils();
+
     return new Promise(async (r, j) => {
       const { confirm } = await apiAsync(uni.showModal, {
         content: '请点击确定跳转医保小程序?',
@@ -358,13 +413,17 @@
   };
 
   const resultConfig1001048 = ref('');
+  const resultConfig = ref({
+    cancelUrl: '',
+    successUrl: '',
+  });
   const handleMessage1001048 = async ({
     insuranceParams,
-    payBackParams,
+    payBackParams = {},
     registerId,
   }) => {
     // registerType 1 医保支付 2 医保退号( 2 暂时不存在)
-    const { registerType } = insuranceParams;
+    const { registerType, medOrgOrd } = insuranceParams;
 
     if ([1].includes(registerType)) {
       resultConfig1001048.value = encodeURIComponent(
@@ -398,6 +457,17 @@
         )
       );
     } else {
+      const url = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
+        payment: 'next',
+        registerId,
+        payBackParams: JSON.stringify(payBackParams),
+      });
+
+      resultConfig.value = {
+        cancelUrl: url,
+        successUrl: url,
+      };
+
       resultConfig1001048.value = encodeURIComponent(
         JSON.stringify({
           cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',

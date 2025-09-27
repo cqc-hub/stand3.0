@@ -2903,7 +2903,7 @@ export const handlerMedicalPayDongRuan = async ({
       const selfPat = patList.find((o) => o.relationshipCode === '1');
       if (!selfPat) {
         gStores.messageStore.showMessage(
-          '请先绑定本人就诊人信息再继续医保支付',
+          '请先绑定本人就诊人信息再继续医保支付，如已绑定但无法操作可从家庭成员中删除然后重新绑定！',
           5000,
           {
             closeCallBack() {
