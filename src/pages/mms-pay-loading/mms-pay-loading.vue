@@ -192,7 +192,6 @@
 
     // 跳第三方小程序拉起支付后没法判断是否付钱了
     if (scene === 1038 && getLocalStorage('payed1001048')) {
-      console.log('object');
       removeLocation('payed1001048');
       payCancel();
     }
