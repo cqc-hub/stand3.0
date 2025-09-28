@@ -21,6 +21,8 @@
     aliPayMedicalPluginGetAuthCode,
     getMedicalAuthCode,
     aliPayMedicalPluginPayInit,
+    getClinicUtils,
+    handlerMedicalPayDongRuan,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
 
@@ -34,86 +36,18 @@
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
-  const getClinicUtils = async () => {
-    return new Promise(async (r, j) => {
-      uni.showLoading({});
+  // const getClinicUtils = async () => {
+  //   return new Promise(async (r, j) => {
+  //     uni.showLoading({});
 
-      // @ts-expect-error
-      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
-        uni.hideLoading();
-        r(utils);
-      });
-    });
-  };
+  //     // @ts-expect-error
+  //     require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+  //       uni.hideLoading();
+  //       r(utils);
+  //     });
+  //   });
+  // };
 
-  const getAuthCodeWx = async () => {
-    return new Promise(async (r, j) => {
-      const { confirm } = await apiAsync(uni.showModal, {
-        content: '请点击确定跳转医保小程序?',
-      });
-
-      if (!confirm) {
-        j('取消');
-        return;
-      }
-
-      uni.showLoading({});
-
-      // @ts-expect-error
-      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
-        uni.hideLoading();
-        await utils.getMedicalArgWithFamily();
-        const authCode = await utils.getMedicalAuthCode().catch((err) => {
-          console.log(err, 'err');
-          if (!(typeof err === 'string' && err === '请求授权...')) {
-            j(err);
-          }
-        });
-        r(authCode);
-      });
-    });
-  };
-
-  const handlerMedicalPayDongRuan = async ({
-    medOrgOrd,
-    resultConfig,
-  }: {
-    /**
-     * - cancelUrl 失败、取消回调
-     * - successUrl 成功支付回调
-     */
-    resultConfig: {
-      cancelUrl: string;
-      successUrl: string;
-    };
-    medOrgOrd: string;
-  }) => {
-    return new Promise(async (r, j) => {
-      const { confirm } = await apiAsync(uni.showModal, {
-        content: '请点击确定跳转医保小程序?',
-      });
-
-      if (!confirm) {
-        j('取消');
-        return;
-      }
-
-      uni.showLoading({});
-
-      // @ts-expect-error
-      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
-        uni.hideLoading();
-        await utils.getMedicalArgWithFamily();
-        const authCode = await utils.getMedicalAuthCode().catch((err) => {
-          console.log(err, 'err');
-          if (!(typeof err === 'string' && err === '请求授权...')) {
-            j(err);
-          }
-        });
-        r(authCode);
-      });
-    });
-  };
 
   const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
     // const clinicUtils = await getClinicUtils();
@@ -133,6 +67,7 @@
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
+        await utils.getMedicalArgWithFamily();
         const authCode = await utils
           .getWxMedicalAuth1001035({ userName, idCard })
           .catch((err) => {
@@ -412,11 +347,6 @@
     }
   };
 
-  const resultConfig1001048 = ref('');
-  const resultConfig = ref({
-    cancelUrl: '',
-    successUrl: '',
-  });
   const handleMessage1001048 = async ({
     insuranceParams,
     payBackParams = {},
@@ -426,36 +356,13 @@
     const { registerType, medOrgOrd } = insuranceParams;
 
     if ([1].includes(registerType)) {
-      resultConfig1001048.value = encodeURIComponent(
-        JSON.stringify({
-          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-        })
-      );
-      uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
-
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital?myHosType=ybyjf',
-            successQuery: {},
-          })
-        )
-      );
-    } else if (registerType === 2) {
-      uni.setStorageSync('netWorkghback', true);
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital',
-            successQuery: {
-              payBackParams: payBackParams,
-            },
-          })
-        )
-      );
+      handlerMedicalPayDongRuan({
+        medOrgOrd,
+        resultConfig: {
+          cancelUrl: '/pagesC/cloudHospital/cloudHospital',
+          successUrl: '/pagesC/cloudHospital/cloudHospital',
+        },
+      });
     } else {
       const url = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
         payment: 'next',
@@ -463,55 +370,14 @@
         payBackParams: JSON.stringify(payBackParams),
       });
 
-      resultConfig.value = {
-        cancelUrl: url,
-        successUrl: url,
-      };
-
-      resultConfig1001048.value = encodeURIComponent(
-        JSON.stringify({
-          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-        })
-      );
-      uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
-
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital',
-            successQuery: {
-              payment: 'next',
-              registerId,
-              payBackParams,
-            },
-            failQuery: {
-              payment: 'back',
-              registerId,
-              payBackParams,
-            },
-          })
-        )
-      );
+      handlerMedicalPayDongRuan({
+        medOrgOrd,
+        resultConfig: {
+          cancelUrl: url,
+          successUrl: url,
+        },
+      });
     }
-    uni.setStorageSync('resultConfig', resultConfig1001048.value);
-    await getAuthCodeWx().catch(async (err) => {
-      console.error(err);
-
-      const resultConfig = JSON.parse(
-        decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-      );
-      //
-      uni.removeStorage({
-        key: 'resultConfig',
-      });
-
-      await wait(20);
-      uni.reLaunch({
-        url: joinQueryForUrl(resultConfig.path, resultConfig.failQuery),
-      });
-    });
   };
 
   // const
