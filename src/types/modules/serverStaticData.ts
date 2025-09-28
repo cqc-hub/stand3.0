@@ -426,6 +426,8 @@ export interface ISystemConfig_ {
     //门诊缴费列表支持分项支付
     isListCanPayedItem?: '1';
 
+    //门诊缴费支持库存调用释放
+    isDrugPreemption?: '1';
     /**
      * 详情页
      */

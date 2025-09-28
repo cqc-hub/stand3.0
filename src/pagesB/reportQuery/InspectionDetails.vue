@@ -567,8 +567,13 @@
   const cacheStore = useCacheStore();
   const goPdfUrl = () => {
     const { repName } = checkoutReportList.value;
-    if (checkoutReportList.value.pdfUrl) {
-      cacheStore.changeCacheData(checkoutReportList.value.pdfUrl);
+    if (
+      checkoutReportList.value.pdfUrl ||
+      checkoutReportList.value?.pdfUrls?.length === 1
+    ) {
+
+      //@ts-expect-error
+      cacheStore.changeCacheData(checkoutReportList.value.pdfUrl||checkoutReportList.value?.pdfUrls[0]);
 
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {
@@ -590,7 +595,7 @@
     }
   };
 
-  const selVerifyWay = ({item}) => {
+  const selVerifyWay = ({ item }) => {
     console.log(item);
     const { repName } = checkoutReportList.value;
     cacheStore.changeCacheData(item.key);

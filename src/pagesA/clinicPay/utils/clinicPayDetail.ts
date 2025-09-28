@@ -1761,6 +1761,7 @@ export const usePayPage = () => {
     setLocalStorage({
       selUnPayList: selUnPayList.value,
     });
+
     if (isListCanPayedItem.value) {
       if (item.key === 'online') {
         setLocalStorage({
@@ -2229,7 +2230,10 @@ export const usePayPage = () => {
     await wait(1000);
     uni.hideLoading();
 
-    //
+    // if(pageConfig.value?.isDrugPreemption){
+    //   //释放库存
+
+    // }
     const cardNumber =
       pageProps.value.deParams?.cardNumber ||
       gStores.userStore.patChoose.cardNumber;
