@@ -2907,7 +2907,7 @@ export const handlerMedicalPayDongRuan = async ({
       const selfPat = patList.find((o) => o.relationshipCode === '1');
       if (!selfPat) {
         gStores.messageStore.showMessage(
-          '请先绑定本人就诊人信息再继续医保支付',
+          '请先绑定本人就诊人信息再继续医保支付，如已绑定但无法操作可从家庭成员中删除然后重新绑定！',
           5000,
           {
             closeCallBack() {
@@ -2937,26 +2937,25 @@ export const handlerMedicalPayDongRuan = async ({
     authCode,
   };
 
-  if (gStores.globalStore.sysCode === '1001048') {
-    const {
-      cancelUrl: cancelAuthRedirectUrl,
-      successUrl: orderStatusRedirectUrl,
-    } = resultConfig;
+  // if (gStores.globalStore.sysCode === '1001048') {
+  //   const {
+  //     cancelUrl: cancelAuthRedirectUrl,
+  //     successUrl: orderStatusRedirectUrl,
+  //   } = resultConfig;
 
-    pageArg.resultConfig = JSON.stringify({
-      cancelAuthRedirectUrl,
-      orderStatusRedirectUrl,
-    });
-  }
+  //   pageArg.resultConfig = JSON.stringify({
+  //     cancelAuthRedirectUrl,
+  //     orderStatusRedirectUrl,
+  //   });
+  // }
   const url = joinQueryForUrl(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
     pageArg
   );
 
-  // return
-  console.log('-----');
 
   console.log(url);
+  // return
   useTBanner({
     type: 'h5',
     path: url,

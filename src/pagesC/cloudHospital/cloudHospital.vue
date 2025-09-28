@@ -34,6 +34,7 @@
     joinQuery,
     encryptDes,
   } from '@/common';
+  import { handlerMedicalPayDongRuan } from './utils/cloudHospital';
   const globalStore = useGlobalStore();
   const gStores = new GStores();
   const cacheStore = useCacheStore();
@@ -48,60 +49,8 @@
     }, 1000);
   };
 
-  const goYB1001048 = (authCode) => {
-    // 退号 暂无这个逻辑
-    if (uni.getStorageSync('netWorkghback')) {
-      uni.setStorageSync('netWorkghback', false);
-      if (uni.getStorageSync('resultConfig')) {
-        const resultConfig = JSON.parse(
-          decodeURIComponent(uni.getStorageSync('resultConfig'))
-        );
-        uni.removeStorage({
-          key: 'resultConfig',
-        });
-        if (
-          resultConfig.orderStatusRedirectUrl ==
-          '/pagesB/cloudHospital/cloudHospital1'
-        ) {
-          const resultConfigQuery = JSON.parse(
-            decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-          );
-          uni.removeStorage({
-            key: 'resultConfigQuery',
-          });
-          setTimeout(() => {
-            uni.navigateTo({
-              url: joinQueryForUrl(resultConfigQuery.path, {
-                authCode,
-                ...resultConfigQuery.successQuery,
-              }),
-            });
-          }, 100);
-        }
-      }
-
-      return;
-    }
-
-    let H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-    let OPENID = gStores.globalStore.openId;
-    let MEDORGORD = uni.getStorageSync('MEDORGORD');
-    let ORGCODG = 'H32028200358';
-    let APPID = '1GU9S5QVB01M76430B0A000038F064B8';
-    let resultConfig = uni.getStorageSync('resultConfig');
-    console.log(
-      'MEDORGORD',
-      uni.getStorageSync('MEDORGORD'),
-      MEDORGORD,
-      resultConfig
-    );
-    let url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-
-    console.log('------医保的url', url);
-    useTBanner({
-      type: 'h5',
-      path: url,
-    });
+  const goYB1001048 = () => {
+    handlerMedicalPayDongRuan(cacheStore.cacheData3);
   };
 
   const afterGetMedicalAuthCode1001035 = async () => {
@@ -132,7 +81,7 @@
 
       if (authCode) {
         if (['1001048'].includes(gStores.globalStore.sysCode)) {
-          goYB1001048(authCode);
+          goYB1001048();
           return;
         }
 
@@ -175,9 +124,9 @@
       }
     }
 
-    if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
-      gStores.globalStore.onAppShow({});
-    }
+    // if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
+    //   gStores.globalStore.onAppShow({});
+    // }
   });
 
   onLoad(async (options) => {

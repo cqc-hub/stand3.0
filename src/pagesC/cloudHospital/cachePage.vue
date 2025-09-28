@@ -21,6 +21,8 @@
     aliPayMedicalPluginGetAuthCode,
     getMedicalAuthCode,
     aliPayMedicalPluginPayInit,
+    getClinicUtils,
+    handlerMedicalPayDongRuan,
   } from './utils/cloudHospital';
   import { apiAsync, GStores, wait } from '@/utils';
 
@@ -34,35 +36,22 @@
   const gStores = new GStores();
   const cacheStore = useCacheStore();
 
-  const getAuthCodeWx = async () => {
-    return new Promise(async (r, j) => {
-      const { confirm } = await apiAsync(uni.showModal, {
-        content: '请点击确定跳转医保小程序?',
-      });
+  // const getClinicUtils = async () => {
+  //   return new Promise(async (r, j) => {
+  //     uni.showLoading({});
 
-      if (!confirm) {
-        j('取消');
-        return;
-      }
+  //     // @ts-expect-error
+  //     require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
+  //       uni.hideLoading();
+  //       r(utils);
+  //     });
+  //   });
+  // };
 
-      uni.showLoading({});
-
-      // @ts-expect-error
-      require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
-        uni.hideLoading();
-        await utils.getMedicalArgWithFamily();
-        const authCode = await utils.getMedicalAuthCode().catch((err) => {
-          console.log(err, 'err');
-          if (!(typeof err === 'string' && err === '请求授权...')) {
-            j(err);
-          }
-        });
-        r(authCode);
-      });
-    });
-  };
 
   const getAuthCodeWx1001035 = async ({ userName, idCard }) => {
+    // const clinicUtils = await getClinicUtils();
+
     return new Promise(async (r, j) => {
       const { confirm } = await apiAsync(uni.showModal, {
         content: '请点击确定跳转医保小程序?',
@@ -78,6 +67,7 @@
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
         uni.hideLoading();
+        await utils.getMedicalArgWithFamily();
         const authCode = await utils
           .getWxMedicalAuth1001035({ userName, idCard })
           .catch((err) => {
@@ -357,91 +347,37 @@
     }
   };
 
-  const resultConfig1001048 = ref('');
   const handleMessage1001048 = async ({
     insuranceParams,
-    payBackParams,
+    payBackParams = {},
     registerId,
   }) => {
     // registerType 1 医保支付 2 医保退号( 2 暂时不存在)
-    const { registerType } = insuranceParams;
+    const { registerType, medOrgOrd } = insuranceParams;
 
     if ([1].includes(registerType)) {
-      resultConfig1001048.value = encodeURIComponent(
-        JSON.stringify({
-          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-        })
-      );
-      uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
-
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital?myHosType=ybyjf',
-            successQuery: {},
-          })
-        )
-      );
-    } else if (registerType === 2) {
-      uni.setStorageSync('netWorkghback', true);
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital',
-            successQuery: {
-              payBackParams: payBackParams,
-            },
-          })
-        )
-      );
+      handlerMedicalPayDongRuan({
+        medOrgOrd,
+        resultConfig: {
+          cancelUrl: '/pagesC/cloudHospital/cloudHospital',
+          successUrl: '/pagesC/cloudHospital/cloudHospital',
+        },
+      });
     } else {
-      resultConfig1001048.value = encodeURIComponent(
-        JSON.stringify({
-          cancelAuthRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-          orderStatusRedirectUrl: '/pagesC/cloudHospital/cloudHospital',
-        })
-      );
-      uni.setStorageSync('MEDORGORD', insuranceParams.medOrgOrd);
+      const url = joinQueryForUrl('/pagesC/cloudHospital/cloudHospital', {
+        payment: 'next',
+        registerId,
+        payBackParams: JSON.stringify(payBackParams),
+      });
 
-      uni.setStorageSync(
-        'resultConfigQuery',
-        encodeURIComponent(
-          JSON.stringify({
-            path: '/pagesC/cloudHospital/cloudHospital',
-            successQuery: {
-              payment: 'next',
-              registerId,
-              payBackParams,
-            },
-            failQuery: {
-              payment: 'back',
-              registerId,
-              payBackParams,
-            },
-          })
-        )
-      );
+      handlerMedicalPayDongRuan({
+        medOrgOrd,
+        resultConfig: {
+          cancelUrl: url,
+          successUrl: url,
+        },
+      });
     }
-    uni.setStorageSync('resultConfig', resultConfig1001048.value);
-    await getAuthCodeWx().catch(async (err) => {
-      console.error(err);
-
-      const resultConfig = JSON.parse(
-        decodeURIComponent(uni.getStorageSync('resultConfigQuery'))
-      );
-      //
-      uni.removeStorage({
-        key: 'resultConfig',
-      });
-
-      await wait(20);
-      uni.reLaunch({
-        url: joinQueryForUrl(resultConfig.path, resultConfig.failQuery),
-      });
-    });
   };
 
   // const

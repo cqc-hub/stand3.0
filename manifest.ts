@@ -75,6 +75,9 @@ const manifestFileDataObj: any = {
     },
     optimization: {
       subPackages: true,
+      treeShaking: {
+        enable: false, // 临时关闭 Tree-Shaking 测试是否解决问题
+      },
     },
     permission: {
       'scope.userLocation': {
@@ -289,10 +292,7 @@ if (sysCode === '1001035') {
     "import uni_modules_libshadowesm_config from './libshadowesm1001035/config.js';"
   );
 
-  dynamicUtilBodyData.push(
-    'shadowlib;',
-    'uni_modules_libshadowesm_config;'
-  );
+  dynamicUtilBodyData.push('shadowlib;', 'uni_modules_libshadowesm_config;');
 }
 
 fs.writeFileSync(

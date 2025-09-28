@@ -2,6 +2,64 @@ import { joinQuery, joinQueryForUrl } from '@/common';
 import { GStores, apiAsync } from '@/utils';
 import globalGl from '@/config/global';
 import { setLocalStorage } from '@/common';
+import { useCacheStore } from '@/stores';
+
+export const getClinicUtils = async (): Promise<any> => {
+  return new Promise(async (r, j) => {
+    uni.showLoading({});
+
+    // @ts-expect-error
+    require('../../../pagesA/clinicPay/utils/clinicPayDetail', async (
+      utils
+    ) => {
+      uni.hideLoading();
+      r(utils);
+    });
+  });
+};
+
+export const handlerMedicalPayDongRuan = async ({
+  medOrgOrd,
+  resultConfig,
+}: {
+  /**
+   * - cancelUrl 失败、取消回调
+   * - successUrl 成功支付回调
+   */
+  resultConfig: {
+    cancelUrl: string;
+    successUrl: string;
+  };
+  medOrgOrd: string;
+}) => {
+  const clinicUtils = await getClinicUtils();
+  const cacheStore = useCacheStore();
+  await clinicUtils.getMedicalArgWithFamily();
+
+  return new Promise(async (r, j) => {
+    const { confirm } = await apiAsync(uni.showModal, {
+      content: '请点击确定跳转医保小程序?',
+    });
+
+    if (!confirm) {
+      uni.reLaunch({
+        url: resultConfig.cancelUrl,
+      });
+      j('取消');
+
+      return;
+    }
+
+    cacheStore.changeCacheData3({
+      medOrgOrd,
+      resultConfig,
+    });
+    await clinicUtils.handlerMedicalPayDongRuan({
+      medOrgOrd,
+      resultConfig,
+    });
+  });
+};
 
 export const getMedicalAuthCode = async (data): Promise<string> => {
   let fCode = '';
@@ -12,52 +70,52 @@ export const getMedicalAuthCode = async (data): Promise<string> => {
   } = globalGl;
   const { alipay, wx: _wx } = medicalMHelp!;
 
-  // #ifdef  MP-WEIXIN
-  // 授权码只能使用一次 每次必须重新授权
-  const { appId, path } = _wx!.medicalNation!;
+  if (gStores.globalStore.ev === 'wx') {
+    // 授权码只能使用一次 每次必须重新授权
+    const { appId, path } = _wx!.medicalNation!;
 
-  setLocalStorage({
-    'get-wx-medical-auth-code': '1',
-  });
-  let registerId = data[0].registerId;
-  let payBackParams = encodeURIComponent(JSON.stringify(data[0].payBackParams));
+    setLocalStorage({
+      'get-wx-medical-auth-code': '1',
+    });
+    let registerId = data[0].registerId;
+    let payBackParams = encodeURIComponent(
+      JSON.stringify(data[0].payBackParams)
+    );
 
-  uni.navigateToMiniProgram({
-    appId,
-    path,
-    envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
-    fail({ errMsg }) {
-      if (errMsg.includes('fail cancel')) {
-        setLocalStorage({
-          'get-wx-medical-auth-code': '',
-        });
-
-        gStores.messageStore.showMessage(
-          '未完成电子医保凭证授权,无法继续医保结算'
-        );
-        setTimeout(() => {
-          uni.navigateTo({
-            url: joinQuery('/pagesC/cloudHospital/cachePage', {
-              payment: 'back',
-              registerId: registerId,
-              payBackParams: payBackParams,
-            }),
+    uni.navigateToMiniProgram({
+      appId,
+      path,
+      envVersion: globalGl.env === 'prod' ? 'release' : 'trial',
+      fail({ errMsg }) {
+        if (errMsg.includes('fail cancel')) {
+          setLocalStorage({
+            'get-wx-medical-auth-code': '',
           });
-        }, 1000);
-      }
-    },
-  });
 
-  return Promise.reject('请求授权...');
-  // #endif
+          gStores.messageStore.showMessage(
+            '未完成电子医保凭证授权,无法继续医保结算'
+          );
+          setTimeout(() => {
+            uni.navigateTo({
+              url: joinQuery('/pagesC/cloudHospital/cachePage', {
+                payment: 'back',
+                registerId: registerId,
+                payBackParams: payBackParams,
+              }),
+            });
+          }, 1000);
+        }
+      },
+    });
 
-  // #ifdef MP-ALIPAY
-  const { authCode } = await apiAsync(my.getAuthCode, {
-    scopes: ['nhsamp', 'auth_user'],
-  });
+    return Promise.reject('请求授权...');
+  } else if (gStores.globalStore.ev === 'alipay') {
+    const { authCode } = await apiAsync(my.getAuthCode, {
+      scopes: ['nhsamp', 'auth_user'],
+    });
 
-  fCode = authCode;
-  // #endif
+    fCode = authCode;
+  }
 
   return fCode;
 };
@@ -221,7 +279,6 @@ export const aliPayMedicalPluginPayInit = () => {
         },
         // 支付回调函数
         payComplete: (status, ampTraceId) => {
-
           b({
             _url: 'pages/v3/prescriptionPay/list?current=1',
           });

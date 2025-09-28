@@ -458,7 +458,7 @@
       isShowAddPatCardNo(gStores.userStore.patChoose, personConfig.value)
     ) {
       /**
-       * -如果是儿童 儿童必须要有监护人身份信息, 儿童有监护人信息 就可以预约挂号
+       * - 如果是儿童 存在本人或者监护人证件号即可
        * -如果是成人 本人身份证信息不能为空
        * -非身份证件类型患者不做任何校验
        */

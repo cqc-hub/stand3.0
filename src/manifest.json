@@ -50,7 +50,10 @@
       "es6": true
     },
     "optimization": {
-      "subPackages": true
+      "subPackages": true,
+      "treeShaking": {
+        "enable": false
+      }
     },
     "permission": {
       "scope.userLocation": {
