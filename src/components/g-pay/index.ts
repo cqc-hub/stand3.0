@@ -274,53 +274,66 @@ export const aliPayOldSystemPayType = () => {
   let channel = '';
 
   if (gStores.globalStore.ev === 'wx') {
-    channel = 'WX_MINI';
-    const wxICBCJFTSystem = ['1001063'];
-    wxICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
+    switch (sysCode) {
+      case '1001063':
+        channel = 'ICBC_JFT_H5';
+        break;
+
+      case '1001048':
+        channel = 'UN_MINI_WX';
+        break;
+
+      case '1001071':
+        channel = 'CITIC_WX_JSAPI';
+        break;
+
+      default:
+        channel = 'WX_MINI';
+        break;
+    }
   } else if (gStores.globalStore.ev === 'alipay') {
-  }
+    const aliMiniSystemList = [
+      '1001033',
+      '1001035',
+      '2001013',
+      '1001052',
+      '1001046',
+      '1001060',
+      '1001055',
+      '1001054',
+      '1001056',
+      '1001057',
+      '1001058',
+      '1001040',
+      '1001045',
+      '1001066',
+      '1001038',
+      // '1001067',
+      // '1001074',
+    ];
 
-  // #ifdef MP-ALIPAY
-  channel = 'ALI_MINI';
-  const aliMiniSystemList = [
-    '1001033',
-    '1001035',
-    '2001013',
-    '1001052',
-    '1001046',
-    '1001060',
-    '1001055',
-    '1001054',
-    '1001056',
-    '1001057',
-    '1001058',
-    '1001040',
-    '1001045',
-    '1001066',
-    '1001038',
-    // '1001067',
-    // '1001074',
-  ];
-  const aliICBCJFTSystem = ['1001063'];
-  !aliMiniSystemList.includes(sysCode) && (channel = 'ALI_JSAPI');
-  aliICBCJFTSystem.includes(sysCode) && (channel = 'ICBC_JFT_H5');
-  // #endif
+    switch (sysCode) {
+      case '1001063':
+        channel = 'ICBC_JFT_H5';
+        break;
 
-  if (sysCode === '1001048') {
-    channel = 'UN_MINI_WX';
-    // #ifdef MP-ALIPAY
-    channel = 'UN_MINI_ALI';
-    // #endif
-  }
+      case '1001048':
+        channel = 'UN_MINI_ALI';
+        break;
 
-  if (sysCode === '1001071') {
-    channel = 'CITIC_WX_JSAPI';
+      case '1001036':
+        channel = 'BCM_ALI_MINI';
+        break;
+
+      default:
+        if (aliMiniSystemList.includes(sysCode)) {
+          channel = 'ALI_MINI';
+        } else {
+          channel = 'ALI_JSAPI';
+        }
+        break;
+    }
   }
-  // #ifdef MP-ALIPAY
-  if (sysCode === '1001036') {
-    channel = 'BCM_ALI_MINI';
-  }
-  // #endif
 
   return channel;
 };
