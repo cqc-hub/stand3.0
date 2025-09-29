@@ -734,8 +734,9 @@ export const isMedicalSelf = async (
         if (isFamilyPayment === '1') {
           return true;
         } else {
-          // return await isCanUseMedical(cardNumber);
-          return true;
+          //支付宝插件模式必须判断本人，不然会导致给其他就诊人医保支付
+          return await isCanUseMedical(cardNumber);
+          // return true;
         }
       }
     }
@@ -1576,7 +1577,6 @@ export const usePayPage = () => {
       isMedicalPlugin,
       isNavgateToZLminiProm,
     } = opt;
-    console.log(opt, '222');
     let payTypeList = [PayType.Online];
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
@@ -2952,7 +2952,6 @@ export const handlerMedicalPayDongRuan = async ({
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
     pageArg
   );
-
 
   console.log(url);
   // return
