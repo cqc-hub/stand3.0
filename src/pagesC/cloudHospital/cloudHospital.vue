@@ -49,10 +49,6 @@
     }, 1000);
   };
 
-  const goYB1001048 = () => {
-    handlerMedicalPayDongRuan(cacheStore.cacheData3);
-  };
-
   const afterGetMedicalAuthCode1001035 = async () => {
     const { registerId } = cacheStore.cacheData;
     const authInfo = gStores.globalStore.appShowData.referrerInfo.extraData;
@@ -80,8 +76,8 @@
       });
 
       if (authCode) {
-        if (['1001048'].includes(gStores.globalStore.sysCode)) {
-          goYB1001048();
+        if (['1001048', '1001084'].includes(gStores.globalStore.sysCode)) {
+          handlerMedicalPayDongRuan(cacheStore.cacheData3);
           return;
         }
 

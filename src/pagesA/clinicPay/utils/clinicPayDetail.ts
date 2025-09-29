@@ -2953,6 +2953,7 @@ export const handlerMedicalPayDongRuan = async ({
     pageArg
   );
 
+  console.log('---');
   console.log(url);
   // return
   useTBanner({
