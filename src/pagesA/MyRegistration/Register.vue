@@ -290,6 +290,8 @@
 
   const isMedCopy = ref(false);
   const medCopyConfigList = ref<ISystemConfig['medRecord']>([]);
+  const longitudeCurrent = ref(0);
+  const latitudeCurrent = ref(0);
 
   const changeInput = (e) => {
     searchValue.value = e;
@@ -442,6 +444,8 @@
     hosList.value = await ServerStaticData.getHosList(
       {
         areaId: item.value,
+        gisLng: longitudeCurrent.value,
+        gisLat: latitudeCurrent.value,
       },
       { noCache: true }
     );
@@ -478,7 +482,9 @@
       await new Promise((resolve, reject) => {
         uni.getLocation({
           async success(e) {
-            const { longitude, latitude } = e;
+            const { longitude, latitude } = e; 
+            longitudeCurrent.value = longitude;
+            latitudeCurrent.value = latitude;
             let hList = await ServerStaticData.getHosList(
               {
                 gisLng: longitude,

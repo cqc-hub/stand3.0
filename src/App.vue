@@ -41,16 +41,11 @@
       });
     }
     // #endif
-
-    if (globalStore.sysCode === '1001082') {
-      const hasVisited = uni.getStorageSync('hasVisited_1001082');
-      if (!hasVisited) {
-         // 首次访问，跳转并设置标记
-          uni.setStorageSync('hasVisited_1001082', 'true');
-          uni.reLaunch({
-            url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
-          });
-        }
+    if (globalStore.sysCode === '1001082' && opt.scene !== 1035) {
+      // 非自定义菜单的时候
+        uni.reLaunch({
+          url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
+        });
     }
   });
 
