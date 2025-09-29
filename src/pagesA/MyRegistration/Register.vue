@@ -12,8 +12,8 @@
     />
     <view v-if="_type === '3' || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
-        v-model:value="searchValue"
-        :placeholder="_type === '3' ? '请输入药店名称查询' : '请输入院区名称'"
+        v-model:value="searchValue" 
+        :placeholder="getPlaceholderText()"
         @change="changeInput"
         @confirm="confirmInput"
         @clear="clearInput"
@@ -202,6 +202,7 @@
     _questionId: number; //问卷id
     _isPay: number;
     isLogin?: '1'; // 需要登录?
+    isHos: '1'; //多医院（搜索框和顶部标题 为医院非院区）
   }>();
   const hosHisMaxLen = ref(0);
   const orderConfig = ref({} as ISystemConfig['order']);
@@ -275,6 +276,16 @@
       });
     }
   });
+
+  const getPlaceholderText = () => {
+  if (props.value._type === '3') {
+    return '请输入药店名称查询';
+  } else if (props.value.isHos === '1') {
+    return '请输入医院名称';
+  } else {
+    return '请输入院区名称';
+  }
+};
 
   const hosLvNow = ref('');
 
@@ -624,7 +635,17 @@
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
     console.log('---页面参数', props.value);
-    const { _type } = props.value;
+    const { _type, isHos } = props.value;
+
+    if(isHos === '1'){
+      uni.setNavigationBarTitle({
+        title: '选择医院',
+      });
+    }else{
+      uni.setNavigationBarTitle({
+        title: '选择院区',
+      });
+    }
 
     if (getTypeNow.value === '预约挂号') {
       orderConfig.value = await ServerStaticData.getSystemConfig('order');
