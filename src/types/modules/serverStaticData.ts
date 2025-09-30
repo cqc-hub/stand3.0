@@ -427,7 +427,7 @@ export interface ISystemConfig_ {
     isListCanPayedItem?: '1';
 
     //门诊缴费支持库存调用释放
-    isDrugPreemption?: '1';
+    // isDrugPreemption?: '1';
     /**
      * 详情页
      */

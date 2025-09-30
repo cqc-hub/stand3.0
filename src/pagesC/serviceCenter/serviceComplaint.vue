@@ -512,12 +512,13 @@
     let message = '反馈成功,感谢您的支持';
     let args = {
       ...data,
+       photo: uploadImgList.value.toString(),
     };
     if (options.value.selectRecords === '1') {
       args = {
         ...options.value,
         ...data,
-        photo: uploadImgList.value.toString(),
+       
         openIds: [
           {
             source: gStores.globalStore.browser.source,
@@ -533,7 +534,6 @@
       args = {
         ...options.value,
         ...data,
-        photo: uploadImgList.value.toString(),
         openIds: [
           {
             source: gStores.globalStore.browser.source,

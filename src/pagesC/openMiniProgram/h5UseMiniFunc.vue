@@ -1,26 +1,51 @@
 <template>
-  <view class=""></view>
+  <template>
+    <view class="g-page bg-white">
+      <g-message />
+
+      <view class="g-container flex justify-center pt70">
+        <image
+          mode="aspectFit"
+          class="cache-img pt70"
+          :src="BASE_IMG + 'img_h5bg@3x.png'"
+        />
+      </view>
+      <view class="color-888 f24 text-center pb70">
+        浙江和仁科技股份有限公司@技术支持
+      </view>
+    </view>
+  </template>
 </template>
 <script lang="ts" setup>
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import { nextTick, ref, warn } from 'vue';
   import { apiAsync, GStores, useTBanner, type TButtonConfig } from '@/utils';
-
+  import { BASE_IMG } from '@/config/global';
   import { deQueryForUrl, encryptDes } from '@/common';
 
   const gStores = new GStores();
+  const showNum = ref(0);
   const pageProps = ref(
     <
       {
-        type: 'scanCode' | 'getUserProfile'; //scanCode:扫码
+        type: 'scanCode' | 'openLocation'; //scanCode:扫码 openLocation:定位
         backUrl: string; //返回路径
         routeType?: 'redirectTo' | 'reLaunch';
+        [key: string]: any;
       }
     >{}
   );
-  let count = 0;
   const backUrl = ref(<TButtonConfig>{});
-  onShow(() => {});
+  onShow(() => {
+    switch (pageProps.value.type) {
+      case 'openLocation': {
+        showNum.value++;
+        if (showNum.value >= 2) {
+          uni.navigateBack();
+        }
+      }
+    }
+  });
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     try {
@@ -46,10 +71,21 @@
             ...backUrl.value.extraData,
             sacnData: encodeURIComponent(result),
           };
+          useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
+        }
+        case 'openLocation': {
+          const { gisLat, gisLng, hosName, address } = pageProps.value;
+          uni.openLocation({
+            latitude: Number(gisLat),
+            longitude: Number(gisLng),
+            name: hosName,
+            address: address,
+            success: (res) => {
+              console.log('success', res);
+            },
+          });
         }
       }
-
-      useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
     });
   });
 </script>
