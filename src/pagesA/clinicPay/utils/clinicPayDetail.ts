@@ -2948,7 +2948,7 @@ export const handlerMedicalPayDongRuan = async ({
   //     orderStatusRedirectUrl,
   //   });
   // }
-  const url = joinQueryForUrl(
+  const url = joinQuery(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
     pageArg
   );
