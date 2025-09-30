@@ -41,12 +41,6 @@
       });
     }
     // #endif
-    if (globalStore.sysCode === '1001082' && opt.scene !== 1035) {
-      // 非自定义菜单的时候
-        uni.reLaunch({
-          url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
-        });
-    }
   });
 
   onShow(async (opt) => {
@@ -70,7 +64,14 @@
       }, 3000);
     }
     // #endif
-
+    
+    if (globalStore.sysCode === '1001082' && opt.scene !== 1035) {
+      // 非自定义菜单的时候
+        uni.reLaunch({
+          url: '/pagesA/intelMedicalAssist/intelMedicalAssist',
+        });
+    }
+    
     if (opt && opt.query) {
       const { query, path, _pd } = opt as any;
 
