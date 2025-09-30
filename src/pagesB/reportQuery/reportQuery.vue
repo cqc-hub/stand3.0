@@ -932,6 +932,9 @@
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
+
+    console.log('获取到页面参数-----');
+    console.log(pageProps.value);
     if (cacheStore.isShowChooseHos) {
       await wait(300);
       await selHosRef.value.init();
