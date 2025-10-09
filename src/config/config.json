@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001082",
+  "sysCode": "1001085",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -69,6 +69,7 @@
       "name": "安康市中医医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/ankangzhongnavtitle.png",
       "isOpenOcr": false
     },
     "1001045": {
@@ -384,9 +385,8 @@
       "isvAlipayAppid": "2021005172668444",
       "name": "温州市人民医院",
       "isStartComeTest": false,
-       "isSearchInHos": true,
+      "isSearchInHos": true,
       "isOpenOcr": false
-
     },
     "1001084": {
       "wxAppid": "wxa50129d260033b82",

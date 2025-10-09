@@ -23,7 +23,7 @@
               v-if="
                 isMedicalFriedAndDelivery &&
                 getExpressAppId &&
-                gStores.globalStore.sysCode !== '1001038'
+                !['1001038','1001085'].includes(gStores.globalStore.sysCode)
               "
             >
               <text @click="goExpressApp" class="a-link f48">查看快递</text>

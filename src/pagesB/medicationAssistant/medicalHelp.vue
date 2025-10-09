@@ -276,6 +276,10 @@
 
   let tabChange = (idx: number) => {
     tabCurrent.value = idx;
+    if (!tabField.value[idx]?.key) {
+      console.error('takenDrug需必传');
+      return;
+    }
     getListData(tabField.value[idx]?.key);
   };
 
@@ -307,7 +311,8 @@
     if (
       takenDrugType === '0' ||
       supportEditAddr === '1' ||
-      (sign && gStores.globalStore.sysCode === '1001038' && !takenDrugType)
+      (sign && gStores.globalStore.sysCode === '1001038' && !takenDrugType) ||
+      (gStores.globalStore.sysCode === '1001085' && !takenDrugType)
     ) {
       const idx = selList.value.findIndex((o) => o._id === item._id);
 
@@ -436,6 +441,7 @@
       clinicCate: sign ? undefined : 0,
       sign,
     };
+
     //嘉二特殊处理
     if (sign && getSysCode() === '1001038') {
       const params = decryptForPage(sign);
@@ -443,6 +449,9 @@
         ...args,
         ...params,
       };
+    } else if (getSysCode() === '1001085') {
+      //温州中西医特殊处理
+      args.clinicCate = undefined;
     }
 
     const actionApi = sign ? api.getScanDrugDelivery : api.getDrugDelivery;
