@@ -1,20 +1,5 @@
 <template>
-  <template>
-    <view class="g-page bg-white">
-      <g-message />
-
-      <view class="g-container flex justify-center pt70">
-        <image
-          mode="aspectFit"
-          class="cache-img pt70"
-          :src="BASE_IMG + 'img_h5bg@3x.png'"
-        />
-      </view>
-      <view class="color-888 f24 text-center pb70">
-        浙江和仁科技股份有限公司@技术支持
-      </view>
-    </view>
-  </template>
+  <view class="g-page bg-white"></view>
 </template>
 <script lang="ts" setup>
   import { onLoad, onShow } from '@dcloudio/uni-app';

@@ -67,7 +67,12 @@
 
     if (
       globalStore.sysCode === '1001082' &&
-      ![1035, 1089, 1017].includes(opt.scene)
+      ![1035, 1017, 1001, 1035].includes(opt.scene) &&
+      ![
+        'pagesC/openMiniProgram/h5UseMiniFunc',
+        'pagesA/webView/webView',
+        'pagesC/cloudHospital/myPath',
+      ].includes(opt.path)
     ) {
       // 非自定义菜单的时候
       uni.reLaunch({
