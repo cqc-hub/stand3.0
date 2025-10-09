@@ -2,7 +2,7 @@
   <view class="">
     <view
       :class="{
-        'my-display-none': hosList.length < 2 || isHide,
+        'my-display-none': hosList.length < 2,
       }"
       class="bread-crumbs flex-between"
       @click="toggleHos"
@@ -11,7 +11,6 @@
         <image
           :src="$global.BASE_IMG + 'v3-gsel-hos-icon.png'"
           class="hos-icon mr24"
-          lazy-load
         />
         <view class="f32 text-ellipsis">{{ getHosName }}</view>
       </view>
@@ -36,13 +35,7 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import {
-    GStores,
-    ServerStaticData,
-    IHosInfo,
-    getLocation,
-    wait,
-  } from '@/utils';
+  import { GStores, ServerStaticData, IHosInfo, getLocation } from '@/utils';
   import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
@@ -55,31 +48,24 @@
       type?: 'selDepartment';
       autoGetData?: boolean;
       unNeedPosition?: boolean;
-      isHide?: boolean;
-      // 新增属性：只显示指定hosId的医院
-      visibleHosIds?: string[];
     }>(),
     {
       autoGetData: true,
-      isHide: false,
-      visibleHosIds: () => []
     }
   );
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);
 
   const getHosName = computed(() => {
     if (hosList.value.length) {
-      const currentHosId = cacheStore.hosId || props.hosId;
       const item = hosList.value.find(
-        (o) => o.hosId === currentHosId
+        (o) => o.hosId === (cacheStore.hosId || props.hosId)
       );
       if (item) {
         return item.hosName;
-      } 
-         return hosList.value[0]?.hosName || '';
-        // return cacheStore.hosId;
+      } else {
+        return cacheStore.hosId;
         // return props.hosId;
-      
+      }
     } else {
       return '';
     }
@@ -107,7 +93,6 @@
   };
 
   const getHosList = async () => {
-    await wait(20);
     const location: any = props.unNeedPosition
       ? {}
       : await getLocation().catch((err) => {
@@ -127,30 +112,22 @@
     if (props.type === 'selDepartment') {
       list = list.filter((o) => o.ifClick !== '1');
     }
-       
-    // 新增：如果传入了visibleHosIds，则只显示这些医院
-    if (props.visibleHosIds && props.visibleHosIds.length > 0) {
-      list = list.filter((item) => props.visibleHosIds.includes(item.hosId));
-    }
 
     hosList.value = list;
- 
 
     if (list && list.length) {
-        let hosItem;
-        const currentHosId = props.hosId || cacheStore.hosId;
-        if (currentHosId) {
-           hosItem = list.find((o) => o.hosId === currentHosId);
-        }
-        if (!hosItem) {
-          hosItem = list[0];
-        }
-          
+      if (!props.hosId) {
+        let hosItem =
+          (cacheStore.hosId &&
+            list.find((o) => o.hosId === cacheStore.hosId)) ||
+          list[0];
+
         if (props.autoGetData) {
           change({ item: hosItem });
         } else {
-          emits('update:hosId', hosItem.hosId);
-        } 
+          emits('update:hosId', cacheStore.hosId || list[0].hosId);
+        }
+      }
 
       emits('get-list', {
         list,
