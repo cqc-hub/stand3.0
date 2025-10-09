@@ -250,17 +250,19 @@
     apiAsync,
   } from '@/utils';
   import HTMLParser from '@/common/html-parser';
-  import { joinQuery } from '../../common/utils';
+  import { joinQuery, deQueryForUrl, joinQueryForUrl } from '@/common/utils';
   import { INucle } from './index';
 
-  const props = defineProps<{
-    billingType?: string;
-    hosName: string;
-    hosId: string;
-    isPay: string; //是否需要缴费 表示支付方式
-    openId: string;
-    type: string;
-  }>();
+  const pageProps = ref(
+    {} as {
+      billingType?: string;
+      hosName: string;
+      hosId: string;
+      isPay: string; //是否需要缴费 表示支付方式
+      openId: string;
+      type: string;
+    }
+  );
   const pageConfig = ref(<ISystemConfig['selfBilling']>{});
   const tabs = computed(() => {
     return pageConfig.value.tabs || [];
@@ -282,12 +284,15 @@
 
     uni.showLoading({});
     pageConfig.value = await ServerStaticData.getSystemConfig('selfBilling');
+    const { hosId } = pageProps.value;
 
-    if (queryParams && !props?.hosId) {
+    if (queryParams && !hosId) {
       return;
     }
     if (opt) {
-      if (props.hosId) {
+      pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+
+      if (hosId) {
         gStores.globalStore.onAppLaunch({});
       }
     }
@@ -325,10 +330,11 @@
   });
 
   const get1001048List = async (billingType: any) => {
+    const { hosId } = pageProps.value;
     const { result = [] } = await api
       .getConvenientServiceList({
         billingType,
-        hosId: props.hosId,
+        hosId,
       })
       .finally(() => {
         pageLoading.value = true;
@@ -366,6 +372,7 @@
   const getList = async (billingType: any) => {
     list.value.length = 0;
     sideList.value = [];
+    const { hosId } = pageProps.value;
 
     if (gStores.globalStore.sysCode === '1001048') {
       return await get1001048List(billingType);
@@ -373,7 +380,7 @@
     const { result = [] } = await api
       .getItemList({
         billingType,
-        hosId: props.hosId,
+        hosId,
       })
       .finally(() => {
         pageLoading.value = true;
@@ -417,15 +424,15 @@
   //初始化页面数据
   const initConfig = async () => {
     pageLoading.value = false;
-    let billingType = props.billingType
-      ? props.billingType
-      : props.type
-      ? props.type
-      : props.isPay === '1'
-      ? '3'
-      : '99999'; // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+    const { billingType: _billingType, type, isPay } = pageProps.value;
+    // 不配type 默认 3-需要支付 99999-去门诊不需要支付
+    let billingType = '99999';
 
-    if (tabs.value.length) {
+    if (isPay === '1') {
+      billingType = '3';
+    } else if (_billingType || type) {
+      billingType = _billingType || type;
+    } else if (tabs.value.length) {
       billingType = tabs.value[tabCurrent.value]?.value;
     }
     getList(billingType);
@@ -477,8 +484,12 @@
   //确定开单
   const submit = async () => {
     const { patientId, patientName, cardNumber } = gStores.userStore.patChoose;
+    const { hosId, isPay, hosName } = pageProps.value;
     const source = gStores.globalStore.browser.source;
-    const reBillingUrl = `/pagesC/selfService/nucleicBilling?hosId=${props.hosId}&isPay=${props.isPay}`;
+    const reBillingUrl = joinQueryForUrl('/pagesC/selfService/nucleicBilling', {
+      hosId,
+      isPay,
+    });
 
     const totalCost = selList.value.reduce((p, c) => {
       p += (c.fee as unknown as number) * 1;
@@ -504,20 +515,20 @@
 
     try {
       const { result } = await api.createBillingOrder({
-        hosId: props.hosId,
+        hosId,
         patientId: patientId,
         items: selList.value,
         totalCost,
         source: source,
-        hosName: props.hosName,
+        hosName,
         reBillingUrl: reBillingUrl, //再次开单路径
       });
 
-      if (props.isPay == '1') {
+      if (isPay == '1') {
         const data = {
           businessType: '',
-          hosId: props.hosId,
-          hosName: props.hosName,
+          hosId,
+          hosName,
           patientId: patientId,
           phsOrderNo: result.phsOrderNo,
           phsOrderSource: 11,

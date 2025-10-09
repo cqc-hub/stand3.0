@@ -56,7 +56,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
 
           const {
             tollMode,
-            price,
+            price = 1,
             sfz: _sfz,
             isCustomPatRecord,
             isToggleHos,
@@ -111,7 +111,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             hosId,
             photoConfig,
             isItemCount,
-            fee: (price && price * 1) || 1,
+            fee: isNaN(price * 1) ? 1 : price * 1,
             sfz,
             isCustomPatRecord,
             isToggleHos,
