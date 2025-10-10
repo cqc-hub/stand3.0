@@ -538,8 +538,7 @@
     const { hosId, isPay, hosName } = pageProps.value;
     const source = gStores.globalStore.browser.source;
     const reBillingUrl = joinQueryForUrl('/pagesC/selfService/nucleicBilling', {
-      hosId,
-      isPay,
+      ...pageProps.value,
     });
 
     const totalCost = selList.value.reduce((p, c) => {
@@ -564,10 +563,29 @@
       return;
     }
 
+    if (isWeiJingKaiDan1001067.value) {
+      useTBanner({
+        path: joinQueryForUrl('pagesC/question/question1001067', {
+          hosId,
+          source,
+          totalCost,
+          hosName,
+          reBillingUrl,
+          items: JSON.stringify(selList.value),
+        }),
+        addition: {
+          patientId: 'patientId',
+        },
+        type: 'h5',
+        isSelfH5: '1',
+      });
+      return;
+    }
+
     try {
       const { result } = await api.createBillingOrder({
         hosId,
-        patientId: patientId,
+        patientId,
         items: selList.value,
         totalCost,
         source: source,
