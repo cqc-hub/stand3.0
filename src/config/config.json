@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001085",
+  "sysCode": "1001033",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -28,7 +28,7 @@
       "h5Appid1": "wxab05eba59d902b5f",
       "alipayAppid": "2021003120612222",
       "isvAlipayAppid": "2021003120637143",
-      "name": "中国人民解放军东部战区总医院",
+      "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true
@@ -441,6 +441,34 @@
       "isvAlipayAppid": "2021005194657067",
       "h5Appid": "",
       "name": "延安市人民医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+    "1001093": {
+      "wxAppid": "wx2e06292a91e9f162",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "浙江省肿瘤医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+     "1001094": {
+      "wxAppid": "wx081a6fb9ee8778e4",
+      "h5Appid": "",
+      "name": "新疆维吾尔自治区中医医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+    "1001095": {
+      "wxAppid": "wx41ed9678ac802d7e",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "义乌市中心医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true

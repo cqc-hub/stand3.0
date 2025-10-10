@@ -593,7 +593,7 @@
       })
         ? 'isYZ'
         : undefined;
-    pageProps.value?.type && (mailMethod = pageProps.value.type);
+    !mailMethod && pageProps.value?.type && (mailMethod = pageProps.value.type);
     setTimeout(() => {
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/medicationAssistant/helpChooseWay', {
@@ -721,7 +721,7 @@
       await pageHook();
     }
 
-    init();
+   await init();
   });
 
   // onMounted(() => {

@@ -58,12 +58,12 @@
   const formData = ref({} as any);
   const formSubmit = async ({ data }) => {
     const { ceshiData = [], ceshiData1 = [] } = data;
-
     const photoList = [...ceshiData1, ...ceshiData];
     const {
       result: { diseaseId },
     } = await api.addDiseaseInformation({
       ...data,
+      illDescribe:data.illDescribe?.replaceAll(`"`,`'`),
       illPic: photoList.map((o) => o.url),
     });
 
