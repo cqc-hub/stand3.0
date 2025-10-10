@@ -2,9 +2,11 @@
   <view class="g-page">
     <g-flag typeFg="801" isShowFg />
     <g-choose-pat />
-    <view v-if="tabs.length" class="g-border-bottom">
+    <view
+      v-if="!pageProps.billingType && tabs.length > 1"
+      class="g-border-bottom"
+    >
       <g-tabs
-        v-if="tabs.length > 1"
         v-model:value="tabCurrent"
         :tabs="tabs"
         :scroll="false"
@@ -278,6 +280,13 @@
   const gStores = new GStores();
   const pageLoading = ref(false);
 
+  const isWeiJingKaiDan1001067 = computed(() => {
+    return (
+      gStores.globalStore.sysCode === '1001067' &&
+      pageProps.value.billingType === '1'
+    );
+  });
+
   onLoad(async (opt) => {
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
@@ -448,6 +457,7 @@
 
   const clickItem = async (item: INucle) => {
     const { disabled, tips } = item;
+    const { billingType } = pageProps.value;
 
     if (disabled === '1') {
       tips && gStores.messageStore.showMessage(tips, 3000);
@@ -480,7 +490,48 @@
     } else {
       selList.value = [item];
     }
+
+    if (isWeiJingKaiDan1001067.value) {
+      handleItem1001067(item);
+    }
   };
+
+  /**
+   * 有勾选无痛胃镜或无痛肠镜，则自动勾选心电图+心电向量图。
+   * @param item
+   */
+  const handleItem1001067 = (item: INucle) => {
+    const codes = ['202073', '202076']; //无痛胃镜202073 无痛肠镜202076
+    const xindiantyuCode = '202127'; // 心电图+心电向量图
+
+    const { itemCode } = item;
+    const itemSel202127 = selList.value.find(
+      (o) => o.itemCode === xindiantyuCode
+    );
+    const item202127 = list.value.find((o) => o.itemCode === xindiantyuCode)!;
+    // +
+    if (selList.value.find((o) => o.itemCode === itemCode)) {
+      if (codes.includes(itemCode) && !itemSel202127) {
+        selList.value.push(item202127);
+      }
+    } else {
+      // -
+      if (codes.includes(itemCode) && itemSel202127) {
+        const weijingItem = selList.value.find((o) =>
+          codes.includes(o.itemCode)
+        );
+
+        if (!weijingItem) {
+          selList.value = selList.value.filter(
+            (o) => o.itemCode !== xindiantyuCode
+          );
+        }
+      }
+    }
+
+    console.log(item);
+  };
+
   //确定开单
   const submit = async () => {
     const { patientId, patientName, cardNumber } = gStores.userStore.patChoose;
