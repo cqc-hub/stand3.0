@@ -47,6 +47,17 @@
         </view>
       </view>
       <view class="card-detail">
+        <view v-if="hosInfoResObj.prepaymentQuota" class="card-detail-item">
+          <view
+            @click.stop="showPrepaymentQuotaTip"
+            class="name flex items-center"
+          >
+            <text class="mr12">预交金额度</text>
+            <text class="iconfont refund-fee-icon">&#xe6d6;</text>
+          </view>
+          <text class="money">{{ hosInfoResObj.prepaymentQuota }}元</text>
+        </view>
+
         <view class="card-detail-item">
           <text class="name">已预交金额</text>
           <!-- <view class="record">
@@ -165,9 +176,14 @@
     }
   };
 
-  const toPayPage = () => {
+  const toPayPage = async () => {
     const { _m } = pageProps.value;
-    const { hosId, cardNumber, patientName, hosName } = hosInfoResObj.value;
+    const { hosId, cardNumber, patientName, hosName, prepaymentQuota } =
+      hosInfoResObj.value;
+
+    if (prepaymentQuota) {
+      await showPrepaymentQuotaTip();
+    }
     const data = {
       hosId,
       cardNumber,
@@ -184,12 +200,31 @@
     });
   };
 
+  const showPrepaymentQuotaTip = async () => {
+    const { title, content } = await gStores.getSysAppMore('1268');
+    const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+      gStores.messageStore.showMessage(content, 0, {
+        useDialog: true,
+        dialogOpt: {
+          title,
+          isShowCancel: true,
+        },
+        closeCallBack: r,
+      });
+    });
+
+    if (!confirm) {
+      throw new Error('取消操作');
+    }
+  };
+
   //根据姓名手机号查询的接口
   const init = async () => {
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
       patientName: pageProps.value.patientName,
       patientPhone: pageProps.value.patientPhone,
     });
+    // result.prepaymentQuota = '5654';
     hosInfoResObj.value = result;
     Obj.value = JSON.stringify(hosInfoResObj.value) == '{}';
   };
