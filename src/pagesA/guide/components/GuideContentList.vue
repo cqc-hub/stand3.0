@@ -302,6 +302,19 @@
                 />
               </view>
 
+              <view v-else-if="item.title === '就诊完成'">
+                <GuideContentListCol
+                  :cols="mzqhCol"
+                  :lab="item"
+                  @click-row="(v) => colRowClick(item, v)"
+                />
+                  <GuideBtns
+                  :item="item"
+                  :btns="jzwcBtns"
+                  @btn-click="(v) => emits('btn-click', v)"
+                />
+              </view>
+
               <view v-else>暂未实现</view>
             </view>
           </g-collapse>
@@ -359,6 +372,12 @@
     return props.config.mzjfBtns || [];
     // return [] as TGuideButtonConfig[];
   });
+    // 就诊完成下面按钮
+  const jzwcBtns = computed(() => {
+    return props.config.jzwcBtns || [];
+    // return [] as TGuideButtonConfig[];
+  });
+  
 
   const drugCol = ref([
     // {

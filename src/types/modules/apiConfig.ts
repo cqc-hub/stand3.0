@@ -13,6 +13,8 @@ export type ApiParamsConfig = {
     takeDrugBtns: TGuideButtonConfig[];
     // 门诊缴费下面按钮
     mzjfBtns: TGuideButtonConfig[];
+    // 就诊完成下面按钮
+    jzwcBtns: TGuideButtonConfig[];
 
     // 检查tip
     jcTip?: string;
