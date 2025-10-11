@@ -63,7 +63,7 @@
       result: { diseaseId },
     } = await api.addDiseaseInformation({
       ...data,
-      illDescribe:data.illDescribe?.replaceAll(`"`,`'`),
+      illDescribe: data.illDescribe.replaceAll(`"`, `'`).replaceAll(' ', ''),
       illPic: photoList.map((o) => o.url),
     });
 
@@ -97,6 +97,7 @@
         field: 'input-text',
         inputType: 'textarea',
         key: 'illDescribe',
+        maxlength: 300,
         placeholder: '填写病情描述,如疾病名称、症状、治疗经历及想要获得的帮助',
         direction: 'horizontal',
         showRequireIcon: true,
