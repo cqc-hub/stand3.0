@@ -77,7 +77,6 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(opt));
-    console.log(pageProps.value, '2222');
   });
 
   onMounted(() => {
