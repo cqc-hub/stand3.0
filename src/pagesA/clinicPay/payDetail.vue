@@ -820,6 +820,7 @@
         serialNo,
         totalCost: getTotalCostString.value,
         patientName,
+        desSecret:props.value.params
       }
     );
 

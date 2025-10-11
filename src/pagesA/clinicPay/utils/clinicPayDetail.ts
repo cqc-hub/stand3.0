@@ -566,13 +566,14 @@ export const medicalNationUpload = async (
 
   const { patientId } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
+  const desSecret = additional.params;
   const requestArg = {
     ...auth,
     ...detail,
     ...additional,
     patientName: additional.patientName,
     mergeOrder: detail.childOrder,
-    patientId,
+    patientId:desSecret?undefined:patientId,
     longitude,
     latitude,
     source,
@@ -1260,7 +1261,6 @@ export const usePayPage = () => {
         pageProps.value.deParams?.cardNumber ||
         gStores.userStore.patChoose.cardNumber,
       patientName: pageProps.value.deParams?.patientName,
-
       params: pageProps.value.params,
       costTypeCode,
       recipeNo,
@@ -1938,6 +1938,7 @@ export const usePayPage = () => {
         // businessType: '1',
         cardNumber,
         patientName,
+        desSecret:pageProps.value.params
       }
     );
 
@@ -2076,6 +2077,7 @@ export const usePayPage = () => {
         businessType: '1',
         cardNumber,
         patientName,
+        desSecret:pageProps.value.params
       }
     );
     uni.hideLoading();

@@ -199,8 +199,8 @@ export const useTBanner = async (
       isLogin = true;
     }
     if (config.isSelfH5 === '1' || config.type === 'h5') {
-      _d._herenId = gStores.globalStore.herenId;
-      _d.herenId = gStores.globalStore.herenId;
+      _d._herenId = gStores.globalStore.herenId||'';
+      _d.herenId = gStores.globalStore.herenId||'';
       _d._patientId = gStores.userStore.patChoose.patientId;
 
       patientId &&
@@ -209,7 +209,7 @@ export const useTBanner = async (
         (extraData[cardNumber] = gStores.userStore.patChoose.cardNumber);
       token && (extraData[token] = gStores.globalStore.getToken);
 
-      herenId && (extraData[herenId] = gStores.globalStore.herenId);
+      herenId && (extraData[herenId] = gStores.globalStore.herenId||'');
       extraData.token = gStores.globalStore.getToken;
       // extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
