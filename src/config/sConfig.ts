@@ -835,6 +835,12 @@ const scJson: Record<string, ISConfig> = {
       isSkipPerfect: '1',
     },
   },
+  1001093: {
+    login: {
+      isAliAuthBase: '1',
+      isSkipPerfect: '1',
+    },
+  },
 };
 
 const getSConfig = (sysCode: string) => {

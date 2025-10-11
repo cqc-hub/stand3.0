@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001082",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -28,7 +28,7 @@
       "h5Appid1": "wxab05eba59d902b5f",
       "alipayAppid": "2021003120612222",
       "isvAlipayAppid": "2021003120637143",
-      "name": "中国人民解放军东部战区总医院",
+      "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true
@@ -69,6 +69,7 @@
       "name": "安康市中医医院",
       "isSearchInHos": false,
       "isStartComeTest": false,
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/ankangzhongnavtitle.png",
       "isOpenOcr": false
     },
     "1001045": {
@@ -384,9 +385,8 @@
       "isvAlipayAppid": "2021005172668444",
       "name": "温州市人民医院",
       "isStartComeTest": false,
-       "isSearchInHos": true,
+      "isSearchInHos": true,
       "isOpenOcr": false
-
     },
     "1001084": {
       "wxAppid": "wxa50129d260033b82",
@@ -413,7 +413,11 @@
       "name": "新疆维吾尔自治区中医医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-      "isSearchInHos": false
+      "isSearchInHos": true,
+      "isOpenHealthCard": {
+        "healthCardText": "新疆维吾尔自治区卫生健康委员会",
+        "hospitalId": "35088"
+      }
     },
     "1001087": {
       "wxAppid": "wxe48cc8a9a8ec915f",
@@ -441,6 +445,34 @@
       "isvAlipayAppid": "2021005194657067",
       "h5Appid": "",
       "name": "延安市人民医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+    "1001093": {
+      "wxAppid": "wx2e06292a91e9f162",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "浙江省肿瘤医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+    "1001094": {
+      "wxAppid": "wx081a6fb9ee8778e4",
+      "h5Appid": "",
+      "name": "新疆维吾尔自治区中医医院",
+      "isStartComeTest": false,
+      "isOpenOcr": false,
+      "isSearchInHos": true
+    },
+    "1001095": {
+      "wxAppid": "wx41ed9678ac802d7e",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "h5Appid": "",
+      "name": "义乌市中心医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true

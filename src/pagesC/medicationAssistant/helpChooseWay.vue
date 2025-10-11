@@ -392,6 +392,7 @@
       hosId = '13014';
     }
     const expressCompany = aimValue.value[0];
+    console.log('aimValue.value',aimValue.value)
 
     const detailsAddressData = addressList.value[0];
     let detailsAddress = '';

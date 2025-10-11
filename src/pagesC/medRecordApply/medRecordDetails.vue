@@ -1600,7 +1600,11 @@
       hosName: getGetHosName.value,
     };
 
-    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
+    if (
+      pickupType.value === '3' ||
+      isPayWithoutSecretAuth.value ||
+      getPayMoneyNum.value === 0
+    ) {
       payAfter();
     } else {
       isShowFg32.value = true;

@@ -566,13 +566,14 @@ export const medicalNationUpload = async (
 
   const { patientId } = gStores.userStore.patChoose;
   const { source } = gStores.globalStore.browser;
+  const desSecret = additional.params;
   const requestArg = {
     ...auth,
     ...detail,
     ...additional,
     patientName: additional.patientName,
     mergeOrder: detail.childOrder,
-    patientId,
+    patientId:desSecret?undefined:patientId,
     longitude,
     latitude,
     source,
@@ -1260,7 +1261,6 @@ export const usePayPage = () => {
         pageProps.value.deParams?.cardNumber ||
         gStores.userStore.patChoose.cardNumber,
       patientName: pageProps.value.deParams?.patientName,
-
       params: pageProps.value.params,
       costTypeCode,
       recipeNo,
@@ -1528,12 +1528,18 @@ export const usePayPage = () => {
   };
 
   const handlerPay = async () => {
+    const { confirmPayFg, isGuideSelfPayFirst } = pageConfig.value;
+
     if (!selUnPayList.value.length) {
       gStores.messageStore.showMessage('请选择至少一项进行缴费', 3000);
       return;
     }
 
-    if (pageConfig.value.confirmPayFg) {
+    if (isGuideSelfPayFirst === '1') {
+      await handleGuideSelfPayFirst();
+    }
+
+    if (confirmPayFg) {
       const isMedicalMode = getIsMedicalMode();
 
       if (isMedicalMode) {
@@ -1605,7 +1611,42 @@ export const usePayPage = () => {
     return payTypeList;
   };
 
+  // 引导先缴自费
+  const handleGuideSelfPayFirst = async () => {
+    if (selUnPayList.value.length !== unPayList.value.length) {
+      const selKeys = selUnPayList.value.map((o) => o.childOrder);
+      const hasMedicalItem = selUnPayList.value.some(
+        (o) => o.costTypeCode === '2'
+      );
+      const restUnPayList = unPayList.value.filter(
+        (o) => !selKeys.includes(o.childOrder)
+      );
+      const hasSelfPayItem = restUnPayList.some((o) => o.costTypeCode !== '2');
+
+      if (hasMedicalItem && hasSelfPayItem) {
+        const { title, content } = await gStores.getSysAppMore('1267');
+        const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
+          gStores.messageStore.showMessage(content, 0, {
+            useDialog: true,
+            dialogOpt: {
+              title,
+              isShowCancel: true,
+              cancelText: '继续缴费',
+              confirmText: '重新选择',
+            },
+            closeCallBack: r,
+          });
+        });
+
+        if (confirm) {
+          throw new Error('重新选择');
+        }
+      }
+    }
+  };
+
   const getPay = async () => {
+    const { isGuideSelfPayFirst } = pageConfig.value;
     const isMedicalMode = getIsMedicalMode();
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
     const hasMedicalItem = selUnPayList.value.some(
@@ -1646,6 +1687,7 @@ export const usePayPage = () => {
     }
 
     changeRefPayList(payTypeList, additionalList);
+
     await wait(200);
     refPay.value.show();
   };
@@ -1938,6 +1980,7 @@ export const usePayPage = () => {
         // businessType: '1',
         cardNumber,
         patientName,
+        desSecret:pageProps.value.params
       }
     );
 
@@ -2076,6 +2119,7 @@ export const usePayPage = () => {
         businessType: '1',
         cardNumber,
         patientName,
+        desSecret:pageProps.value.params
       }
     );
     uni.hideLoading();
