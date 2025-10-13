@@ -1,6 +1,10 @@
 import { TButtonConfig } from './serverStaticData';
 
 export type ApiParamsConfig = {
+  HomeTabBar: {
+    tabs: string[];
+  };
+
   //pagesA/guide/guide
   GuideConfig: {
     // 检验下面按钮
