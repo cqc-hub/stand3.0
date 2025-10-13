@@ -349,8 +349,8 @@
     // #endif
 
     if (global.SYS_CODE === '1001035') {
-      // tabList.push("云诊室");
-      // tabList.push("健康商城");
+      tabList.push("云诊室");
+      tabList.push("健康商城");
     }
 
     if (global.SYS_CODE === '1001082') {

@@ -82,6 +82,14 @@
           >
             充值
           </button>
+
+          <button
+            v-if="isRefoundExist"
+            @click="goRefundRecord"
+            class="btn btn-primary btn-border btn-plain w-full"
+          >
+            查看退款申请记录
+          </button>
         </view>
       </view>
     </view>
@@ -468,6 +476,14 @@
     () => isAllowOnLineCash.value
     // (isRefoundExist.value && isAllowOnLineCash.value) || !isRefoundExist.value
   );
+
+  const goRefundRecord = () => {
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesC/hospitalAccount/refundRecord', {
+        ...pageProps.value,
+      }),
+    });
+  };
 
   const confirmForm1 = (type = '') => {
     isRefound.value = type === 'refound';

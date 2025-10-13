@@ -201,6 +201,22 @@ image {
   color: var(--hr-error-color-6) !important;
 }
 
+.color-111 {
+  color: var(--hr-neutral-color-10) !important;
+}
+
+.color-444 {
+  color: var(--hr-neutral-color-9) !important;
+}
+
+.color-666 {
+  color: var(--hr-neutral-color-8) !important;
+}
+
+.color-888 {
+  color: var(--hr-neutral-color-7) !important;
+}
+
 .color-warn {
   color: var(--hr-warning-color-6) !important;
 }
@@ -243,22 +259,6 @@ image {
 
 .color-error {
   color: var(--hr-error-color-6) !important;
-}
-
-.color-111 {
-  color: var(--hr-neutral-color-10) !important;
-}
-
-.color-444 {
-  color: var(--hr-neutral-color-9) !important;
-}
-
-.color-666 {
-  color: var(--hr-neutral-color-8) !important;
-}
-
-.color-888 {
-  color: var(--hr-neutral-color-7) !important;
 }
 
 .color-fff,

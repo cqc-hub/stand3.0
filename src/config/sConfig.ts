@@ -260,7 +260,7 @@ const scJson: Record<string, ISConfig> = {
   1001068: {
     isOpenWechatSI: true,
   },
-     
+
 
   /**
    * 濮阳市人民医院

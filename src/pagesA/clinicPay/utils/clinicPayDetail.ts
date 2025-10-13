@@ -134,7 +134,7 @@ export type TCostList = {
   clinicId: string;
   serialNo: string;
   require: '0' | '1';
-  disabled?: boolean;
+  disabled?: boolean; // 后端返回 "1" 既可
   costList: {
     amount: string; // 总数
     itemPrice: string;
@@ -147,7 +147,7 @@ export type TCostList = {
     detailNo: string;
     amountRem: string; // 可退费数量
 
-    disabled?: boolean;
+    disabled?: boolean; // 后端返回 "1" 既可
   }[];
 }[];
 
