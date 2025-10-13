@@ -133,6 +133,8 @@ export type TCostList = {
   subCostTypeName: string;
   clinicId: string;
   serialNo: string;
+  require: '0' | '1';
+  disabled?: boolean;
   costList: {
     amount: string; // 总数
     itemPrice: string;
@@ -573,7 +575,7 @@ export const medicalNationUpload = async (
     ...additional,
     patientName: additional.patientName,
     mergeOrder: detail.childOrder,
-    patientId:desSecret?undefined:patientId,
+    patientId: desSecret ? undefined : patientId,
     longitude,
     latitude,
     source,
@@ -1980,7 +1982,7 @@ export const usePayPage = () => {
         // businessType: '1',
         cardNumber,
         patientName,
-        desSecret:pageProps.value.params
+        desSecret: pageProps.value.params,
       }
     );
 
@@ -2119,7 +2121,7 @@ export const usePayPage = () => {
         businessType: '1',
         cardNumber,
         patientName,
-        desSecret:pageProps.value.params
+        desSecret: pageProps.value.params,
       }
     );
     uni.hideLoading();
@@ -2572,13 +2574,14 @@ export const usePayDetailPage = () => {
       const { costList } = result;
 
       costList &&
-        costList.map(({ costList }) => {
-          costList.map((o) => {
-            const { amountRem } = o;
+        costList.map((p) => {
+          const { costList, require, disabled } = p;
 
-            if (amountRem === '0') {
-              o.disabled = true;
-            }
+          p.disabled = require === '1' || (disabled as any) === '1';
+          costList.map((o) => {
+            const { amountRem, disabled } = o;
+
+            o.disabled = (disabled as any) === '1' || amountRem === '0';
           });
         });
     }
