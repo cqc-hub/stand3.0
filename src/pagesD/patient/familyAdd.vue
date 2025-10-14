@@ -71,9 +71,8 @@
       pdata: pData,
       contactIdCard: idCard,
       contactName: name,
-      contactIdType: '1',
+      contactIdType: '01',
     };
-
 
     await api.updateFamilyInfo(args);
 
@@ -118,6 +117,17 @@
         },
         labelWidth: '220rpx',
       },
+      // {
+      //   required: true,
+      //   showSuffixArrowIcon: true,
+      //   label: '关系',
+      //   placeholder: '请选择',
+      //   key: 'relationship',
+      //   field: 'select',
+      //   options: [],
+      //   autoOptions: 'RelationShipList',
+      //   labelWidth: '220rpx',
+      // },
     ];
 
     gform.value.setList(rList);
