@@ -756,7 +756,7 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     medicalMHelp: {
       wx: {
-        // isMedicalOrder: '1',
+        isMedicalOrder: '1',
 
         isGbFamilyPayment: '1',
 

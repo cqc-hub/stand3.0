@@ -751,7 +751,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "退款记录"
+            "navigationBarTitleText": "退款申请记录"
           }
         },
         {
@@ -904,7 +904,7 @@
         {
           "path": "patient/familyAdd",
           "style": {
-            "navigationBarTitleText": "补充联系人"
+            "navigationBarTitleText": "补充联系人信息"
           },
           "extend": {
             "patient": true

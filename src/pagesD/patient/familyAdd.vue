@@ -5,9 +5,9 @@
     }"
     class="page"
   >
-    <!-- <g-flag isShowFg typeFg="1266" /> -->
+    <g-flag isShowFg typeFg="1270" />
 
-    <view class="container" scroll-y>
+    <view class="container mb32" scroll-y>
       <g-form
         v-model:value="formData"
         @submit="formSubmit"
@@ -89,7 +89,7 @@
     let rList = [
       {
         required: true,
-        label: '姓名',
+        label: '联系人姓名',
         field: 'input-text',
         placeholder: '请输入',
         key: 'name',
@@ -159,7 +159,7 @@
 
   .container {
     // height: 1px;
-    flex: 1;
+    // flex: 1;
     overflow-y: scroll;
   }
 
