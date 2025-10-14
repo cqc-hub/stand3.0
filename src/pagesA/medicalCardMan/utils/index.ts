@@ -570,8 +570,10 @@ export const getDefaultFormData = async (
     // #endif
 
     // 完善默认展示本人 
-    data[formKey.relationship] = '本人'; 
-    data[formKey.relationshipCode] = '1';
+    if(globalGl.SYS_CODE === '1001082'){
+     data[formKey.relationship] = '本人';  //仅限健康温州  正常relationship为1
+     data[formKey.relationshipCode] = '1';
+    }
 
   } else {
     // #ifdef MP-ALIPAY
