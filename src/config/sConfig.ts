@@ -811,7 +811,7 @@ const scJson: Record<string, ISConfig> = {
    */
   1001044: {
     login: {
-      isAliAuthBase: '1',
+
     },
     medicalMHelp: {
       isOpenPatToMedicalPat: {},
@@ -824,7 +824,7 @@ const scJson: Record<string, ISConfig> = {
           //测试
           // path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=610101&channel=AAEoVvqZuWU8BNSYVtMM15px&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxv2/NlHf1H5KZT+T46wCMi1&orgCodg=H61010400913&orgAppId=1IOS9I97D1CO4460C80A00004B82B3CD',
         },
-        isMedicalOrder: '1',
+        // isMedicalOrder: '1',
       },
     },
   },
