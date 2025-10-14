@@ -60,15 +60,15 @@
     const { cardNumber, patientId } = gStores.userStore.patChoose;
     const { idCard, name } = formData.value;
 
-    // const { pData } = await patientUtils.faceVerifyAndPData({
-    //   idCardNumber: idCard,
-    //   name,
-    // });
+    const { pData } = await patientUtils.faceVerifyAndPData({
+      idCardNumber: idCard,
+      name,
+    });
 
     const args: any = {
       cardNumber,
       patientId,
-      // pdata: pData,
+      pdata: pData,
       contactIdCard: idCard,
       contactName: name,
       contactIdType: '1',
