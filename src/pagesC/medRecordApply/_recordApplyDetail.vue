@@ -598,7 +598,7 @@
 
   const payAfter = async () => {
     uni.showLoading({});
-    await wait(3000);
+    await wait(6000);
     uni.hideLoading();
     init();
   };
