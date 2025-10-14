@@ -700,7 +700,7 @@
             "navigationBarTitleText": " "
           }
         },
-         {
+        {
           "path": "openMiniProgram/h5UseMiniFunc",
           "style": {
             "navigationBarTitleText": " "
@@ -899,6 +899,15 @@
           "path": "common/useJump",
           "style": {
             "navigationBarTitleText": " "
+          }
+        },
+        {
+          "path": "patient/familyAdd",
+          "style": {
+            "navigationBarTitleText": "补充联系人"
+          },
+          "extend": {
+            "patient": true
           }
         },
         {

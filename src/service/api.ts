@@ -968,6 +968,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  updateFamilyInfo: (data) =>
+    service.post('/phs-user/relevantPatient/updateFamilyInfo', parm(data), {
+      hideLoading: false,
+    }),
+
   mdPhoneById: (data) =>
     service.post('/phs-user/relevantPatient/mdPhoneById', parm(data), {
       hideLoading: false,
