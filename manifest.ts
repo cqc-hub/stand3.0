@@ -76,7 +76,7 @@ const manifestFileDataObj: any = {
     optimization: {
       subPackages: true,
       treeShaking: {
-        enable: false, // 临时关闭 Tree-Shaking 测试是否解决问题
+        enable: true, // 启用 Tree-Shaking
       },
     },
     permission: {

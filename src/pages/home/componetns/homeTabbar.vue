@@ -73,12 +73,12 @@
   import { setLocalStorage, getLocalStorage } from '@/common';
 
   import global from '@/config/global';
-  import { useTBanner, throttle, GStores } from '@/utils';
+  import { useTBanner, throttle, GStores, cacheUtil } from '@/utils';
   import api from '@/service/api';
   import { isAreaProgram } from '@/stores';
   import globalGl from '@/config/global';
 
-  defineProps<{ systemModeOld: boolean }>();
+  const props = defineProps<{ systemModeOld: boolean }>();
   const gStores = new GStores();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
@@ -139,7 +139,10 @@
         extraData: {
           _type: 'useTBanner',
           type: 'h5',
-          path: globalGl.env === 'prod'? 'https://shop.jshtcm.com/mobile/pages/login/index':"https://jksc.eheren.com/mobile/pages/login/index",
+          path:
+            globalGl.env === 'prod'
+              ? 'https://shop.jshtcm.com/mobile/pages/login/index'
+              : 'https://jksc.eheren.com/mobile/pages/login/index',
           addition: {
             TOKEN: 'token',
             PATIENTID: 'patientId',
@@ -231,7 +234,7 @@
   });
 
   const hasCenterCode = ref(false);
-  const getMenuBtn = () => {
+  const getMenuBtn = async () => {
     let tabBarList = [
       {
         label: '首页',
@@ -349,14 +352,20 @@
     // #endif
 
     if (global.SYS_CODE === '1001035') {
-      // tabList.push("云诊室");
-      // tabList.push("健康商城");
+      // tabList.push('云诊室');
+      // tabList.push('健康商城');
     }
 
     if (global.SYS_CODE === '1001082') {
       tabList.push('服务');
       tabBarList[0].url = '/pagesA/intelMedicalAssist/intelMedicalAssist';
     }
+
+    const {
+      HomeTabBar: { tabs = [] },
+    } = await cacheUtil.getSystemConfig('HomeTabBar')();
+
+    tabList.push(...tabs);
 
     tabBars.value = tabBarList
       .filter((o) => tabList.includes(o.label))

@@ -1,6 +1,10 @@
 import { TButtonConfig } from './serverStaticData';
 
 export type ApiParamsConfig = {
+  HomeTabBar: {
+    tabs: string[];
+  };
+
   //pagesA/guide/guide
   GuideConfig: {
     // 检验下面按钮
@@ -13,6 +17,8 @@ export type ApiParamsConfig = {
     takeDrugBtns: TGuideButtonConfig[];
     // 门诊缴费下面按钮
     mzjfBtns: TGuideButtonConfig[];
+    // 就诊完成下面按钮
+    jzwcBtns: TGuideButtonConfig[];
 
     // 检查tip
     jcTip?: string;

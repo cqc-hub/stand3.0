@@ -248,6 +248,15 @@ const queryApi = {
       }
     ),
 
+  getRefundApplyByCardNumber: <T = any>(data) =>
+    service.post<T>(
+      '/phs-query/hospitalAccount/getRefundApplyByCardNumber',
+      parm(data),
+      {
+        hideLoading: false,
+      }
+    ),
+
   // 已缴费
   getPrepaidClinicList: <T>(data) =>
     service.post<T>('/phs-query/clinical/getPrepaidClinicList', parm(data), {

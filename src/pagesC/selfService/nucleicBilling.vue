@@ -283,7 +283,7 @@
   const isWeiJingKaiDan1001067 = computed(() => {
     return (
       gStores.globalStore.sysCode === '1001067' &&
-      pageProps.value.billingType === '1'
+      pageProps.value.billingType === '99996'
     );
   });
 

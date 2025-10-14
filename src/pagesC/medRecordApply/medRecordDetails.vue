@@ -469,16 +469,12 @@
       </scroll-view>
 
       <view class="g-footer g-border-top">
-        <view v-if="!isPayWithoutSecretAuth" class="fee-count flex-normal">
+        <view v-if="!isUnPayMode" class="fee-count flex-normal">
           <text class="color-666 f28 mr12">合计</text>
           <text class="color-error f36 g-bold">{{ getPayMoneyNum }}元</text>
         </view>
         <button @click="paySubmit" class="btn g-border btn-warning dialog-btn">
-          {{
-            pickupType === '3' || isPayWithoutSecretAuth
-              ? '立即申请'
-              : '立即支付'
-          }}
+          {{ isUnPayMode ? '立即申请' : '立即支付' }}
         </button>
       </view>
 
@@ -905,7 +901,7 @@
   const getPayMoneyNum = computed(() => {
     const _fee = pageConfig.value.fee;
     const isItemCount = pageConfig.value.isItemCount;
-    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
+    if (isUnPayMode.value) {
       return 0;
     }
 
@@ -926,6 +922,19 @@
       // 预收模式
       return _fee;
     }
+  });
+
+  const isUnPayMode = computed(() => {
+    if (pickupType.value === '3' || isPayWithoutSecretAuth.value) {
+      return true;
+    }
+    const { isItemCount, fee } = pageConfig.value;
+
+    if (isItemCount !== '1' && fee === 0) {
+      return true;
+    }
+
+    return false;
   });
 
   const imgCanvas = ref({

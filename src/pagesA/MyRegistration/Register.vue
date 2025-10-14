@@ -12,7 +12,7 @@
     />
     <view v-if="_type === '3' || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
-        v-model:value="searchValue" 
+        v-model:value="searchValue"
         :placeholder="getPlaceholderText()"
         @change="changeInput"
         @confirm="confirmInput"
@@ -278,14 +278,14 @@
   });
 
   const getPlaceholderText = () => {
-  if (props.value._type === '3') {
-    return '请输入药店名称查询';
-  } else if (props.value.isHos === '1') {
-    return '请输入医院名称';
-  } else {
-    return '请输入院区名称';
-  }
-};
+    if (props.value._type === '3') {
+      return '请输入药店名称查询';
+    } else if (props.value.isHos === '1') {
+      return '请输入医院名称';
+    } else {
+      return '请输入院区名称';
+    }
+  };
 
   const hosLvNow = ref('');
 
@@ -493,7 +493,7 @@
       await new Promise((resolve, reject) => {
         uni.getLocation({
           async success(e) {
-            const { longitude, latitude } = e; 
+            const { longitude, latitude } = e;
             longitudeCurrent.value = longitude;
             latitudeCurrent.value = latitude;
             let hList = await ServerStaticData.getHosList(
@@ -635,13 +635,13 @@
   onLoad(async (opt) => {
     props.value = deQueryForUrl(deQueryForUrl(opt));
     console.log('---页面参数', props.value);
-    const { _type, isHos } = props.value;
+    const { _type, isHos, _url = '' } = props.value;
 
-    if(isHos === '1'){
+    if (isHos === '1') {
       uni.setNavigationBarTitle({
         title: '选择医院',
       });
-    }else{
+    } else {
       uni.setNavigationBarTitle({
         title: '选择院区',
       });
@@ -650,7 +650,8 @@
     if (getTypeNow.value === '预约挂号') {
       orderConfig.value = await ServerStaticData.getSystemConfig('order');
     }
-    if (_type === '2') {
+
+    if (_type === '2' || _url.includes('/pagesC/selfService/nucleicBilling')) {
       selfBillingConfig.value = await ServerStaticData.getSystemConfig(
         'selfBilling'
       );

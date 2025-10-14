@@ -173,7 +173,7 @@
   };
 
   const isItemDisabled = (item: TCostList[number]) => {
-    return item.executionFlag === '1' || item.costList.every((o) => o.amountRem === '0');
+    return item.executionFlag === '1' || item.costList.every((o) => o.amountRem === '0') || item.disabled;
   };
 
   const isChildrenActive = (citem: TCostList[number]['costList'][number]) => {

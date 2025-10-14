@@ -17,17 +17,8 @@
         />
       </view>
 
-      <scroll-view
-        v-if="visitList.length && tabCurrentKey === '0'"
-        scroll-x
-        class="pt16 pb16 fix-top z-1 bg-white"
-      >
-        <Guide-Visit-List
-          :list="visitList"
-          :selItem="visitItemSel"
-          :jyBtns="jyBtns"
-          @item-click="visitItemClick"
-        />
+      <scroll-view v-if="visitList.length && tabCurrentKey === '0'" scroll-x class="pt16 pb16 fix-top z-1 bg-white">
+        <Guide-Visit-List :list="visitList" :selItem="visitItemSel" :jyBtns="jyBtns" @item-click="visitItemClick" />
       </scroll-view>
     </view>
 
@@ -36,11 +27,7 @@
       <view v-if="isShowEmpty" class="pt40">
         <g-empty
           :current="1"
-          :text="
-            tabCurrentKey === '1'
-              ? '您还未挂号，可以点击按钮进行预约挂号'
-              : '暂未查到相关信息'
-          "
+          :text="tabCurrentKey === '1' ? '您还未挂号，可以点击按钮进行预约挂号' : '暂未查到相关信息'"
           noTransformY
         >
           <template>
@@ -95,823 +82,793 @@
       <view class="safe-height" />
     </view>
 
-    <Choose-Pat-Action
-      @choose-pat="patChange"
-      :pat="gStores.userStore.patChoose"
-      ref="actionSheet"
-    />
+    <Choose-Pat-Action @choose-pat="patChange" :pat="gStores.userStore.patChoose" ref="actionSheet" />
     <g-message />
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+import { computed, ref } from "vue";
 
-  import { onLoad, onShow } from '@dcloudio/uni-app';
-  import {
-    ApiParamsConfig,
-    cacheUtil,
-    debounce,
-    generateUuid,
-    GStores,
-    ISystemConfig,
-    openLocation,
-    ServerStaticData,
-    TButtonConfig,
-    useTBanner,
-  } from '@/utils';
+import { onLoad, onShow } from "@dcloudio/uni-app";
+import {
+  ApiParamsConfig,
+  cacheUtil,
+  debounce,
+  generateUuid,
+  GStores,
+  ISystemConfig,
+  openLocation,
+  ServerStaticData,
+  TButtonConfig,
+  useTBanner,
+} from "@/utils";
 
-  import { titleMap, TVisitInfo, TVisitRecord } from './guide';
-  import {
-    deQueryForUrl,
-    getLocalStorage,
-    joinQueryForUrl,
-    setLocalStorage,
-  } from '@/common';
-  import { IRegistrationCardItem } from '../MyRegistration/utils/MyRegistration';
-  import {
-    getOrderStatusTitle,
-    RegDetailUtil,
-  } from '../MyRegistration/utils/regDetail';
+import { titleMap, TVisitInfo, TVisitRecord } from "./guide";
+import { deQueryForUrl, getLocalStorage, joinQueryForUrl, setLocalStorage } from "@/common";
+import { IRegistrationCardItem } from "../MyRegistration/utils/MyRegistration";
+import { getOrderStatusTitle, RegDetailUtil } from "../MyRegistration/utils/regDetail";
 
-  import api from '@/service/api';
-  import dayjs from 'dayjs';
+import api from "@/service/api";
+import dayjs from "dayjs";
 
-  import GuidePatChoose from './components/GuidePatChoose.vue';
-  import GuideVisitList from './components/GuideVisitList.vue';
-  import GuideContentList from './components/GuideContentList.vue';
-  import ChoosePatAction from '@/components/g-choose-pat/choose-pat-action.vue';
-  import GuideOrderList from './components/GuideOrderList.vue';
-  import GuideHisList from './components/GuideHisList.vue';
+import GuidePatChoose from "./components/GuidePatChoose.vue";
+import GuideVisitList from "./components/GuideVisitList.vue";
+import GuideContentList from "./components/GuideContentList.vue";
+import ChoosePatAction from "@/components/g-choose-pat/choose-pat-action.vue";
+import GuideOrderList from "./components/GuideOrderList.vue";
+import GuideHisList from "./components/GuideHisList.vue";
 
-  const pageProps = ref(
-    {} as {
-      tabKey: '0' | '1' | '2';
+const pageProps = ref(
+  {} as {
+    tabKey: "0" | "1" | "2";
 
-      // 未来就诊用 授权返回
-      orderId?: string;
-      // refoundOrder 取消预约
-      type?: 'refoundOrder';
-      // 今日就诊定位
-      visitNo?: string;
-    }
-  );
-  const gStores = new GStores();
-  const tabCurrent = ref(0);
-  const tabField = ref([
+    // 未来就诊用 授权返回
+    orderId?: string;
+    // refoundOrder 取消预约
+    type?: "refoundOrder";
+    // 今日就诊定位
+    visitNo?: string;
+  }
+);
+const gStores = new GStores();
+const tabCurrent = ref(0);
+const tabField = ref([
+  {
+    label: "今日就诊",
+    key: "0",
+  },
+  {
+    label: "未来就诊",
+    key: "1",
+  },
+  {
+    label: "历史就诊",
+    key: "2",
+  },
+] as const);
+const tabCurrentKey = computed(() => tabField.value[tabCurrent.value]?.key || "");
+const orderConfig = ref({} as ISystemConfig["order"]);
+const pageConfig = ref({} as ApiParamsConfig["GuideConfig"]);
+
+const isComplete = ref(false);
+let tabChange = (idx: number) => {
+  tabCurrent.value = idx;
+  patChange();
+
+  // getListData();
+};
+tabChange = debounce(tabChange, 80, false);
+
+const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
+const handlerChoosePatAction = () => {
+  const patList = gStores.userStore.patList;
+  if (!patList.length) {
+    gStores.messageStore.showMessage("暂无就诊人， 请先添加就诊人");
+    return;
+  }
+
+  if (actionSheet.value) {
+    actionSheet.value.show();
+  }
+};
+
+// 门诊取号下面的按钮
+const mzqhBtns = computed<TButtonConfig[]>(() => {
+  return [
     {
-      label: '今日就诊',
-      key: '0',
+      type: "h5",
+      isSelfH5: "1",
+      // path: 'pages/inquiries/inquiries3',
+      path: "pagesC/inquiries/inquiriesRes1",
+      text: "预问诊",
+      extraData: {
+        // orderId: "24121324832100498"
+      },
+      addition: {
+        token: "token",
+        herenId: "herenId",
+        orderId: "orderId",
+        patientId: "patientId",
+        hosDeptId: "hosDeptId",
+        hosOrderId: "hosOrderId",
+      },
     },
     {
-      label: '未来就诊',
-      key: '1',
+      type: "self",
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
+      },
+      text: "在线取号",
     },
     {
-      label: '历史就诊',
-      key: '2',
+      type: "self",
+      path: "pagesA/MyRegistration/MyRegistration",
+      addition: {
+        patientId: "patientId",
+      },
+      text: "取消预约",
     },
-  ] as const);
-  const tabCurrentKey = computed(
-    () => tabField.value[tabCurrent.value]?.key || ''
-  );
-  const orderConfig = ref({} as ISystemConfig['order']);
-  const pageConfig = ref({} as ApiParamsConfig['GuideConfig']);
+  ];
+});
 
-  const isComplete = ref(false);
-  let tabChange = (idx: number) => {
-    tabCurrent.value = idx;
-    patChange();
-
-    // getListData();
-  };
-  tabChange = debounce(tabChange, 80, false);
-
-  const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
-  const handlerChoosePatAction = () => {
-    const patList = gStores.userStore.patList;
-    if (!patList.length) {
-      gStores.messageStore.showMessage('暂无就诊人， 请先添加就诊人');
-      return;
-    }
-
-    if (actionSheet.value) {
-      actionSheet.value.show();
-    }
-  };
-
-  // 门诊取号下面的按钮
-  const mzqhBtns = computed<TButtonConfig[]>(() => {
-    return [
-      {
-        type: 'h5',
-        isSelfH5: '1',
-        // path: 'pages/inquiries/inquiries3',
-        path: 'pagesC/inquiries/inquiriesRes1',
-        text: '预问诊',
-        extraData: {
-          // orderId: "24121324832100498"
-        },
-        addition: {
-          token: 'token',
-          herenId: 'herenId',
-          orderId: 'orderId',
-          patientId: 'patientId',
-          hosDeptId: 'hosDeptId',
-          hosOrderId: 'hosOrderId',
-        },
+const jyBtns = computed(() => {
+  return [
+    {
+      labStatus: ["3"],
+      type: "self",
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
       },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
+      text: "预约查询及改约",
+    },
+    {
+      type: "self",
+      labStatus: ["4"],
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
       },
-      {
-        type: 'self',
-        path: 'pagesA/MyRegistration/MyRegistration',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '取消预约',
+      text: "在线取号在线取号在线取号在线取号",
+    },
+    {
+      type: "self",
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
       },
-    ];
-  });
-
-  const jyBtns = computed(() => {
-    return [
-      {
-        labStatus: ['3'],
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '预约查询及改约',
+      text: "在线取号",
+    },
+    {
+      type: "self",
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
       },
-      {
-        type: 'self',
-        labStatus: ['4'],
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号在线取号在线取号在线取号',
+      text: "在线取号",
+    },
+    {
+      type: "self",
+      path: "pagesC/takeNumber/takeNumber",
+      addition: {
+        patientId: "patientId",
       },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
-      },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
-      },
-      {
-        type: 'self',
-        path: 'pagesC/takeNumber/takeNumber',
-        addition: {
-          patientId: 'patientId',
-        },
-        text: '在线取号',
-      },
-    ];
-  });
+      text: "在线取号",
+    },
+  ];
+});
 
-  const visitList = ref(<TVisitRecord[]>[]);
-  const visitItemSel = ref(<TVisitRecord>{});
-  const visitInfoList = ref(<TVisitInfo[]>[]);
-  const visitItemClick = async (item: TVisitRecord) => {
-    const { patientId } = gStores.userStore.patChoose;
-    const { visitNo } = item;
+const visitList = ref(<TVisitRecord[]>[]);
+const visitItemSel = ref(<TVisitRecord>{});
+const visitInfoList = ref(<TVisitInfo[]>[]);
+const visitItemClick = async (item: TVisitRecord) => {
+  const { patientId } = gStores.userStore.patChoose;
+  const { visitNo } = item;
 
-    visitItemSel.value = item;
-    visitInfoList.value = [];
-    isComplete.value = false;
-    const { result } = await api
-      .getIntelligenceVisit({
-        patientId,
-        visitNo,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
+  visitItemSel.value = item;
+  visitInfoList.value = [];
+  isComplete.value = false;
+  const { result } = await api
+    .getIntelligenceVisit({
+      patientId,
+      visitNo,
+    })
+    .finally(() => {
+      isComplete.value = true;
+    });
 
-    const {
-      node1Info,
-      node2Info,
-      node3Info,
-      node4Info,
+  const {
+    node1Info,
+    node2Info,
+    node3Info,
+    node4Info,
 
-      node5Info,
-      node6Info,
-      node7Info,
-      node8Info,
-    } = result;
+    node5Info,
+    node6Info,
+    node7Info,
+    node8Info,
+  } = result;
 
-    let isBreak = false;
-    isComplete.value = true;
-    // 8个node必定存在
-    const rList: any[] = [
-      node1Info,
-      node2Info,
-      node3Info,
-      node4Info,
-
-      node5Info,
-      node6Info,
-      node7Info,
-      node8Info,
-    ]
-      .filter((o: any, i) => {
-        if (o) {
-          o.title = titleMap[i + 1];
-        }
-        return o;
-      })
-      .filter((o, i) => {
-        // 1-4 需要过滤  5-8 固定都有
-        if (i < 4) {
-          if (isBreak) {
-            return false;
-          }
-
-          if (o.completionStatus === 0) {
-            isBreak = true;
-          }
-        }
-        return true;
-      })
-      .filter((o: any) => {
-        const { title, others = [], labs = [] } = o;
-
-        if (title === '其他项目' && !others.length) {
+  let isBreak = false;
+  isComplete.value = true;
+  // 8个node必定存在
+  const rList: any[] = [node1Info, node2Info, node3Info, node4Info, node5Info, node6Info, node7Info, node8Info]
+    .filter((o: any, i) => {
+      if (o) {
+        o.title = titleMap[i + 1];
+      }
+      return o;
+    })
+    .filter((o, i) => {
+      // 1-4 需要过滤  5-8 固定都有
+      if (i < 4) {
+        if (isBreak) {
           return false;
         }
 
-        if (title === '检验项目') {
-          // return false;
+        if (o.completionStatus === 0) {
+          isBreak = true;
+        }
+      }
+      return true;
+    })
+    .filter((o: any) => {
+      const { title, others = [], labs = [] } = o;
+
+      if (title === "其他项目" && !others.length) {
+        return false;
+      }
+
+      if (title === "检验项目") {
+        // return false;
+      }
+
+      return true;
+    })
+    .reverse();
+
+  visitInfoList.value = rList;
+  // visitInfoList.value = visitInfoList.value.filter((o) => {
+  //   const { title, others = [] } = o;
+
+  //   if (title === '其他项目' && !others.length) {
+  //     return false;
+  //   }
+
+  //   return o;
+  // });
+};
+
+const isShowEmpty = computed(() => {
+  if (isComplete.value) {
+    if (tabCurrentKey.value === "0") {
+      return !visitInfoList.value.length;
+    }
+
+    if (tabCurrentKey.value === "1") {
+      return !orderList.value.length;
+    }
+
+    if (tabCurrentKey.value === "2") {
+      return !hisList.value.length;
+    }
+  }
+
+  return false;
+});
+
+const getToday = async () => {
+  const { patientId } = gStores.userStore.patChoose;
+  visitList.value = [];
+  visitInfoList.value = [];
+  isComplete.value = false;
+  let { result = [] } = await api
+    .getTodayVisit({
+      patientId,
+    })
+    .finally(() => {
+      isComplete.value = true;
+    });
+
+  if (result && result.length) {
+    visitList.value = result;
+    visitItemClick(result[0]);
+  }
+};
+
+const hisList = ref<any[]>([]);
+const getHistory = async () => {
+  const { patientId } = gStores.userStore.patChoose;
+  const toDay = dayjs().format("YYYY-MM-DD");
+
+  //
+  hisList.value = [];
+  isComplete.value = false;
+  let { result = [] } = await api
+    .getHosGuideSheet({
+      patientId,
+    })
+    .finally(async () => {
+      isComplete.value = true;
+    });
+
+  if (result && result.length) {
+    const _disposeStatusLabelMap = {
+      1: "未执行",
+      2: "部分执行",
+      3: "已执行",
+    };
+    result = result
+      .filter((o) => o.disposeTime !== toDay)
+      .map((t) => {
+        const { processResultList, deptId, deptName, disposeTime, hosId, hosName, visitNo,hosDocId } = t;
+
+        const info = {
+          deptId,
+          categorName: deptName,
+          appointmentTime: disposeTime,
+          hosId,
+          hosName,
+          visitNo,
+          hosDocId
+        };
+        t.itemList = [
+          {
+            ...info,
+            title: "门诊取号",
+            sort: 1,
+            completionStatus: (processResultList?.length && 1) || 0,
+          },
+          {
+            ...info,
+            title: "诊区签到",
+            sort: 2,
+            completionStatus: (processResultList?.length && 1) || 0,
+          },
+          {
+            ...info,
+            title: "门诊就诊",
+            sort: 3,
+            completionStatus: (processResultList?.length && 1) || 0,
+          },
+          //     {
+          //   ...info,
+          //   title: '就诊完成',
+          //   sort: 7,
+          //   completionStatus: (processResultList?.length && 1) || 0,
+          // },
+          // {
+          //   ...info,
+          //   title: '门诊缴费',
+          //   sort: 4,
+          //   // completionStatus: (processResultList?.length && 1) || 0,
+          // },
+        ];
+        t.uuid = generateUuid();
+        const typeMap = {
+          "-1": {
+            title: "其他项目",
+            key: "others",
+            sort: 7,
+          },
+          1: {
+            title: "门诊取药",
+            key: "drugs",
+            sort: 8,
+          },
+          2: {
+            title: "检验项目",
+            key: "labs",
+            sort: 5,
+          },
+          3: {
+            title: "检查项目",
+            key: "exams",
+            sort: 6,
+          },
+        };
+
+        if (processResultList && processResultList.length) {
+          processResultList.map((q) => {
+            // q.title =
+            const {
+              orderClass, // 1药品 2检验 3检查
+              disposeStatus, // 1 未执行 2部分执行 3已执行
+              reportPlace,
+            } = q;
+
+            const { title, key, sort } = typeMap[orderClass] || typeMap["-1"];
+
+            let item = t.itemList.find((o) => o.title === title);
+            if (!item) {
+              item = {
+                ...q,
+                title,
+                [key]: [],
+                completionStatus: -1,
+                sort,
+              };
+              t.itemList.push(item);
+            }
+
+            if (item.completionStatus === 1) {
+              item.completionStatus = (disposeStatus === "3" && 1) || 0;
+            }
+
+            if (reportPlace && !item.reportPlace) {
+              item.reportPlace = reportPlace;
+            }
+
+            item[key].push({
+              ...q,
+              itemAddress: q.address,
+              _disposeStatusLabel: _disposeStatusLabelMap[disposeStatus],
+              labStatus: "-1",
+              // 检验、检查转字段
+              hosDocId: q.hosDocId || q.billDocId,
+              hosDeptId: q.hosDeptId || q.billDeptId,
+            });
+          });
         }
 
-        return true;
-      })
-      .reverse();
+        if (t.itemList.length) {
+          t.itemList.map((o) => {
+            const {
+              orderClass, // 1药品 2检验 3检查
+            } = o;
 
-    visitInfoList.value = rList;
-    // visitInfoList.value = visitInfoList.value.filter((o) => {
-    //   const { title, others = [] } = o;
+            const { key } = typeMap[orderClass] || typeMap["-1"];
+            const itemList = o[key] || [];
+            o.completionStatus = o.completionStatus || 0;
 
-    //   if (title === '其他项目' && !others.length) {
-    //     return false;
-    //   }
+            if (itemList.length) {
+              o.completionStatus = (itemList.every((p) => p.disposeStatus === "3") && 1) || 0;
+            }
 
-    //   return o;
-    // });
-  };
+            if (t.itemList.some((item) => item.completionStatus === 0)) {
+              t.completionStatus = 0;
+            } else {
+              t.completionStatus = 1;
+            }
+          });
+        }
+        if (t.completionStatus === 0) {
+          //全部完成添加节点
+          t.itemList.push({
+            ...info,
+            title: "就诊完成",
+            sort: 9,
+            completionStatus: 1,
+          });
+        }
+        if (t.itemList.length) {
+          t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
+        }
+        console.log(8888, t.itemList);
+        return t;
+      });
+  }
+  hisList.value = result;
+};
 
-  const isShowEmpty = computed(() => {
-    if (isComplete.value) {
-      if (tabCurrentKey.value === '0') {
-        return !visitInfoList.value.length;
-      }
+const orderList = ref<IRegistrationCardItem[]>([]);
+const getOrderList = async () => {
+  const { patientId } = gStores.userStore.patChoose;
 
-      if (tabCurrentKey.value === '1') {
-        return !orderList.value.length;
-      }
+  isComplete.value = false;
+  orderList.value = [];
+  const { result = [] } = await api
+    .hosRegOrderList<IRegistrationCardItem[]>({
+      // .getRegOrderList<IRegistrationCardItem[]>({
+      source: gStores.globalStore.browser.source,
+      herenId: gStores.globalStore.herenId,
+      patientId,
+    })
+    .finally(() => {
+      isComplete.value = true;
+    });
 
-      if (tabCurrentKey.value === '2') {
-        return !hisList.value.length;
-      }
+  orderList.value = result.filter((o) => dayjs(o.appointmentDate).isAfter(dayjs()));
+
+  orderList.value.map((o) => {
+    o._statusLabel = getOrderStatusTitle(o.orderStatus, orderConfig.value.isOrderPay, false);
+
+    if (o._statusLabel.startsWith("未知")) {
+      // @ts-expect-error
+      o.orderStatus = "--";
     }
-
-    return false;
   });
-
-  const getToday = async () => {
-    const { patientId } = gStores.userStore.patChoose;
-    visitList.value = [];
-    visitInfoList.value = [];
-    isComplete.value = false;
-    let { result = [] } = await api
-      .getTodayVisit({
+};
+const ywzClick = async (item: IRegistrationCardItem) => {
+  if (orderConfig.value.preConsultationBtn) {
+    //指定的预问诊跳转
+    useTBanner(orderConfig.value.preConsultationBtn, "navigateTo", item);
+  } else {
+    const { orderId, hosDeptId, hosOrderId, hosData } = item;
+    const patientId = gStores.userStore.patChoose.patientId;
+    const preConsultation: TButtonConfig = {
+      type: "h5",
+      isSelfH5: "1",
+      // path: 'pages/inquiries/inquiries3',
+      path: "pagesC/inquiries/inquiriesRes1",
+      text: "预问诊",
+      extraData: {
+        orderId,
+        hosDeptId,
+        hosOrderId,
+        hosData: encodeURIComponent(hosData as string),
         patientId,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
-
-    if (result && result.length) {
-      visitList.value = result;
-      visitItemClick(result[0]);
-    }
-  };
-
-  const hisList = ref<any[]>([]);
-  const getHistory = async () => {
-    const { patientId } = gStores.userStore.patChoose;
-    const toDay = dayjs().format('YYYY-MM-DD');
-
-    //
-    hisList.value = [];
-    isComplete.value = false;
-    let { result = [] } = await api
-      .getHosGuideSheet({
-        patientId,
-      })
-      .finally(async () => {
-        isComplete.value = true;
-      });
-
-    if (result && result.length) {
-      const _disposeStatusLabelMap = {
-        1: '未执行',
-        2: '部分执行',
-        3: '已执行',
-      };
-      result = result
-        .filter((o) => o.disposeTime !== toDay)
-        .map((t) => {
-          const {
-            processResultList,
-            deptId,
-            deptName,
-            disposeTime,
-            hosId,
-            hosName,
-            visitNo,
-          } = t;
-
-          const info = {
-            deptId,
-            categorName:deptName,
-            appointmentTime:disposeTime,
-            hosId,
-            hosName,
-            visitNo,
-          };
-          t.itemList = [
-            {
-              ...info,
-              title: '门诊取号',
-              sort: 1,
-              completionStatus: (processResultList?.length && 1) || 0,
-            },
-            {
-              ...info,
-              title: '诊区签到',
-              sort: 2,
-              completionStatus: (processResultList?.length && 1) || 0,
-            },
-            {
-              ...info,
-              title: '门诊就诊',
-              sort: 3,
-              completionStatus: (processResultList?.length && 1) || 0,
-            },
-            // {
-            //   ...info,
-            //   title: '门诊缴费',
-            //   sort: 4,
-            //   // completionStatus: (processResultList?.length && 1) || 0,
-            // },
-          ];
-          t.uuid = generateUuid();
-          const typeMap = {
-            '-1': {
-              title: '其他项目',
-              key: 'others',
-              sort: 7,
-            },
-            1: {
-              title: '门诊取药',
-              key: 'drugs',
-              sort: 8,
-            },
-            2: {
-              title: '检验项目',
-              key: 'labs',
-              sort: 5,
-            },
-            3: {
-              title: '检查项目',
-              key: 'exams',
-              sort: 6,
-            },
-          };
-
-          if (processResultList && processResultList.length) {
-            processResultList.map((q) => {
-              // q.title =
-              const {
-                orderClass, // 1药品 2检验 3检查
-                disposeStatus, // 1 未执行 2部分执行 3已执行
-                reportPlace,
-              } = q;
-
-              const { title, key, sort } = typeMap[orderClass] || typeMap['-1'];
-
-              let item = t.itemList.find((o) => o.title === title);
-              if (!item) {
-                item = {
-                  ...q,
-                  title,
-                  [key]: [],
-                  completionStatus: -1,
-                  sort,
-                };
-                t.itemList.push(item);
-              }
-
-              if (item.completionStatus === 1) {
-                item.completionStatus = (disposeStatus === '3' && 1) || 0;
-              }
-
-              if (reportPlace && !item.reportPlace) {
-                item.reportPlace = reportPlace;
-              }
-
-              item[key].push({
-                ...q,
-                itemAddress: q.address,
-                _disposeStatusLabel: _disposeStatusLabelMap[disposeStatus],
-                labStatus: '-1',
-                // 检验、检查转字段
-                hosDocId: q.hosDocId || q.billDocId,
-                hosDeptId: q.hosDeptId || q.billDeptId,
-              });
-            });
-          }
-
-          if (t.itemList.length) {
-            t.itemList = t.itemList.sort((a, b) => b.sort - a.sort);
-
-            t.itemList.map((o) => {
-              const {
-                orderClass, // 1药品 2检验 3检查
-              } = o;
-
-              const { key } = typeMap[orderClass] || typeMap['-1'];
-              const itemList = o[key] || [];
-              o.completionStatus = o.completionStatus || 0;
-
-              if (itemList.length) {
-                o.completionStatus =
-                  (itemList.every((p) => p.disposeStatus === '3') && 1) || 0;
-              }
-              
-              if (t.itemList.some(item => item.completionStatus === 0)) {
-                t.completionStatus = 0;
-              }else{
-                  t.completionStatus = 1;
-              }
-
-            });
-          }
-
-          return t;
-        });
-    }
-    hisList.value = result;
-  };
-
-  const orderList = ref<IRegistrationCardItem[]>([]);
-  const getOrderList = async () => {
-    const { patientId } = gStores.userStore.patChoose;
-
-    isComplete.value = false;
-    orderList.value = [];
-    const { result = [] } = await api
-      .hosRegOrderList<IRegistrationCardItem[]>({
-        // .getRegOrderList<IRegistrationCardItem[]>({
-        source: gStores.globalStore.browser.source,
-        herenId: gStores.globalStore.herenId,
-        patientId,
-      })
-      .finally(() => {
-        isComplete.value = true;
-      });
-
-    orderList.value = result.filter((o) =>
-      dayjs(o.appointmentDate).isAfter(dayjs())
-    );
-
-    orderList.value.map((o) => {
-      o._statusLabel = getOrderStatusTitle(
-        o.orderStatus,
-        orderConfig.value.isOrderPay,
-        false
-      );
-
-      if (o._statusLabel.startsWith('未知')) {
-        // @ts-expect-error
-        o.orderStatus = '--';
-      }
-    });
-  };
-  const ywzClick = async (item: IRegistrationCardItem) => {
-    if (orderConfig.value.preConsultationBtn) {
-      //指定的预问诊跳转
-      useTBanner(orderConfig.value.preConsultationBtn, 'navigateTo', item);
-    } else {
-      const { orderId, hosDeptId, hosOrderId, hosData } = item;
-      const patientId = gStores.userStore.patChoose.patientId;
-      const preConsultation: TButtonConfig = {
-        type: 'h5',
-        isSelfH5: '1',
-        // path: 'pages/inquiries/inquiries3',
-        path: 'pagesC/inquiries/inquiriesRes1',
-        text: '预问诊',
-        extraData: {
-          orderId,
-          hosDeptId,
-          hosOrderId,
-          hosData:encodeURIComponent(hosData as string),
-          patientId,
-        },
-        addition: {
-          token: 'token',
-          herenId: 'herenId',
-        },
-      };
-      useTBanner(preConsultation);
-    }
-  };
-  const orderRefound = async (item: IRegistrationCardItem, opt = {} as {}) => {
-    const regDetailUtil = RegDetailUtil.getInstance(
-      {
-        prop: ref({
-          orderId: item.orderId,
-          hosOrderId: item.hosOrderId,
-        } as any),
-        orderConfig,
       },
-      true
-    );
-
-    const pageArg = {
-      ...pageProps.value,
-      orderId: item.orderId,
-      type: 'refoundOrder',
-      tabKey: tabCurrentKey.value,
+      addition: {
+        token: "token",
+        herenId: "herenId",
+      },
     };
-
-    if (tabCurrentKey.value === '0') {
-      pageArg.visitNo = visitItemSel.value.visitNo;
-    }
-
-    await regDetailUtil.getDataDetail();
-    await regDetailUtil.refoundOrder({
-      returnUrl: joinQueryForUrl('/pagesA/guide/guide', pageArg),
-    });
-
-    patChange();
-  };
-  const goRegDetail = (item: IRegistrationCardItem) => {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/RegDetail', {
-        ...item,
+    useTBanner(preConsultation);
+  }
+};
+const orderRefound = async (item: IRegistrationCardItem, opt = {} as {}) => {
+  const regDetailUtil = RegDetailUtil.getInstance(
+    {
+      prop: ref({
         orderId: item.orderId,
         hosOrderId: item.hosOrderId,
-        preWz: item.orderStatus === '10' && '1',
-        _type:'znpz'
-      }),
-    });
-  };
- 
-  const goOrder = async () => {
-     const hosList  = await ServerStaticData.getHosList();
-      if(hosList.length === 1){
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesA/MyRegistration/selDepartment', {
-            clinicalType: '1',
-            hosId: hosList[0].hosId,
-          }),
-        });
-      }else{
-        uni.navigateTo({
-          url: joinQueryForUrl('/pagesA/MyRegistration/Register', {
-            _url: '/pagesA/MyRegistration/selDepartment?clinicalType=1',
-          }),
-        });
-      }
+      } as any),
+      orderConfig,
+    },
+    true
+  );
+
+  const pageArg = {
+    ...pageProps.value,
+    orderId: item.orderId,
+    type: "refoundOrder",
+    tabKey: tabCurrentKey.value,
   };
 
-  const patChange = async ({ item } = {} as any) => {
-    if (item) {
-      gStores.userStore.updatePatChoose(item);
-    }
+  if (tabCurrentKey.value === "0") {
+    pageArg.visitNo = visitItemSel.value.visitNo;
+  }
 
-    if (tabCurrentKey.value === '0') {
-      await getToday();
-    }
+  await regDetailUtil.getDataDetail();
+  await regDetailUtil.refoundOrder({
+    returnUrl: joinQueryForUrl("/pagesA/guide/guide", pageArg),
+  });
 
-    if (tabCurrentKey.value === '1') {
-      await getOrderList();
-    }
-
-    if (tabCurrentKey.value === '2') {
-      await getHistory();
-    }
-  };
-
-  const handlerAddressMap = (item) => {
-    if(gStores.globalStore.sysCode === '1001052'){
-        useTBanner(
-          {
-            type: 'otherProgram',
-            path: 'pages/index?id=QFadbKUMCl',
-            text: '院内导航',
-            appId: 'wx0fb39a1dc27c5e6d',
-          },
-          'navigateTo',
-          item
-        );
-        return;
-    }
-      if(gStores.globalStore.sysCode === '1001040'){
-        useTBanner(
-          {
-            type: 'otherProgram',
-            path: '/packageNav/pages/nav/nav?mallId=472&uuid=788bbbe89dbb40e3b17506fd0e8198ff&routeId=562',
-            text: '院内导航',
-            appId: 'wxd7b5b33407656cf7',
-          },
-          'navigateTo',
-          {
-            thirdName:item.deptName
-          }
-        );
-        return;
-    }
-
-  };
-
-  const goPagePage = (item) => {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/clinicPay/clinicPayDetail', {
-        tabIndex: (item.completionStatus === 1 && '1') || '0',
-      }),
-    });
-  };
-
-  const goTakeNumber = () => {
-    useTBanner({
-      isSelfH5: '1',
-      type: 'h5',
-      path: 'pagesC/queueNumber/queueNumber',
-      addition: {
-        token: 'token',
-        herenId: 'herenId',
-      },
-    });
-  };
-
-  const goReport = ({ tabIndex }) => {
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesB/reportQuery/reportQuery', { tabIndex }),
-    });
-  };
-
-  const btnClick = ({ btn, item }) => {
-    const { patChoose } = gStores.userStore;
-    useTBanner(btn, 'navigateTo', {
-      ...patChoose,
+  patChange();
+};
+const goRegDetail = (item: IRegistrationCardItem) => {
+  uni.navigateTo({
+    url: joinQueryForUrl("/pagesA/MyRegistration/RegDetail", {
       ...item,
-    });
-  };
+      orderId: item.orderId,
+      hosOrderId: item.hosOrderId,
+      preWz: item.orderStatus === "10" && "1",
+      _type: "znpz",
+    }),
+  });
+};
 
-  const openHosLocation = async ({ hosId }) => {
-    const hosInfo = (await ServerStaticData.getHosList()).find(
-      (o) => o.hosId === hosId
+const goOrder = async () => {
+  const hosList = await ServerStaticData.getHosList();
+  if (hosList.length === 1) {
+    uni.navigateTo({
+      url: joinQueryForUrl("/pagesA/MyRegistration/selDepartment", {
+        clinicalType: "1",
+        hosId: hosList[0].hosId,
+      }),
+    });
+  } else {
+    uni.navigateTo({
+      url: joinQueryForUrl("/pagesA/MyRegistration/Register", {
+        _url: "/pagesA/MyRegistration/selDepartment?clinicalType=1",
+      }),
+    });
+  }
+};
+
+const patChange = async ({ item } = {} as any) => {
+  if (item) {
+    gStores.userStore.updatePatChoose(item);
+  }
+
+  if (tabCurrentKey.value === "0") {
+    await getToday();
+  }
+
+  if (tabCurrentKey.value === "1") {
+    await getOrderList();
+  }
+
+  if (tabCurrentKey.value === "2") {
+    await getHistory();
+  }
+};
+
+const handlerAddressMap = (item) => {
+  if (gStores.globalStore.sysCode === "1001052") {
+    useTBanner(
+      {
+        type: "otherProgram",
+        path: "pages/index?id=QFadbKUMCl",
+        text: "院内导航",
+        appId: "wx0fb39a1dc27c5e6d",
+      },
+      "navigateTo",
+      item
     );
+    return;
+  }
+  if (gStores.globalStore.sysCode === "1001040") {
+    useTBanner(
+      {
+        type: "otherProgram",
+        path: "/packageNav/pages/nav/nav?mallId=472&uuid=788bbbe89dbb40e3b17506fd0e8198ff&routeId=562",
+        text: "院内导航",
+        appId: "wxd7b5b33407656cf7",
+      },
+      "navigateTo",
+      {
+        thirdName: item.deptName,
+      }
+    );
+    return;
+  }
+};
 
-    if (hosInfo) {
-      const { gisLat, gisLng, hosName, address } = hosInfo;
+const goPagePage = (item) => {
+  uni.navigateTo({
+    url: joinQueryForUrl("/pagesA/clinicPay/clinicPayDetail", {
+      tabIndex: (item.completionStatus === 1 && "1") || "0",
+    }),
+  });
+};
 
-      openLocation([gisLat!, gisLng!], {
-        name: hosName,
-        address,
-      });
-    } else {
-      gStores.messageStore.showMessage('院区查找失败', 1500);
-    }
-  };
+const goTakeNumber = () => {
+  useTBanner({
+    isSelfH5: "1",
+    type: "h5",
+    path: "pagesC/queueNumber/queueNumber",
+    addition: {
+      token: "token",
+      herenId: "herenId",
+    },
+  });
+};
 
-  const goDept = (item) => {
-    const { hosId, hosDeptId, deptName } = item;
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/order', {
-        hosId,
-        hosDeptId,
-        deptName,
-      }),
+const goReport = ({ tabIndex }) => {
+  uni.navigateTo({
+    url: joinQueryForUrl("/pagesB/reportQuery/reportQuery", { tabIndex }),
+  });
+};
+
+const btnClick = ({ btn, item }) => {
+  const { patChoose } = gStores.userStore;
+  useTBanner(btn, "navigateTo", {
+    ...patChoose,
+    ...item,
+  });
+};
+
+const openHosLocation = async ({ hosId }) => {
+  const hosInfo = (await ServerStaticData.getHosList()).find((o) => o.hosId === hosId);
+
+  if (hosInfo) {
+    const { gisLat, gisLng, hosName, address } = hosInfo;
+
+    openLocation([gisLat!, gisLng!], {
+      name: hosName,
+      address,
     });
-  };
+  } else {
+    gStores.messageStore.showMessage("院区查找失败", 1500);
+  }
+};
 
-  const goDocDetail = (item) => {
-    console.log(22222,item)
-    const { hosId, hosDocId } = item;
+const goDept = (item) => {
+  const { hosId, hosDeptId, deptName } = item;
+  uni.navigateTo({
+    url: joinQueryForUrl("/pagesA/MyRegistration/order", {
+      hosId,
+      hosDeptId,
+      deptName,
+    }),
+  });
+};
 
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/MyRegistration/DoctorDetails', {
-        hosId,
-        hosDocId,
-      }),
+const goDocDetail = (item) => {
+  console.log(22222, item);
+  const { hosId, hosDocId } = item;
+
+  uni.navigateTo({
+    url: joinQueryForUrl("/pagesA/MyRegistration/DoctorDetails", {
+      hosId,
+      hosDocId,
+    }),
+  });
+};
+
+const getConfig = async () => {
+  pageConfig.value = (await cacheUtil.getSystemConfig("GuideConfig")()).GuideConfig;
+  orderConfig.value = await ServerStaticData.getSystemConfig("order");
+};
+
+const init = async () => {
+  await getConfig();
+  patChange();
+};
+
+const checkCb = async () => {
+  if (getLocalStorage("reg-detail-init") === "1") {
+    const { type, orderId, visitNo } = pageProps.value;
+    setLocalStorage({
+      "reg-detail-init": "",
     });
-  };
 
-  const getConfig = async () => {
-    pageConfig.value = (
-      await cacheUtil.getSystemConfig('GuideConfig')()
-    ).GuideConfig;
-    orderConfig.value = await ServerStaticData.getSystemConfig('order');
-  };
+    await patChange();
 
-  const init = async () => {
-    await getConfig();
-    patChange();
-  };
+    if (type === "refoundOrder" && orderId) {
+      let orderItem;
 
-  const checkCb = async () => {
-    if (getLocalStorage('reg-detail-init') === '1') {
-      const { type, orderId, visitNo } = pageProps.value;
-      setLocalStorage({
-        'reg-detail-init': '',
-      });
+      if (tabCurrentKey.value === "0" && visitNo && visitList.value) {
+        const visitItem = visitList.value.find((o) => o.visitNo === visitNo);
+        if (visitItem) {
+          await visitItemClick(visitItem);
 
-      await patChange();
+          const refoundItem = visitInfoList.value.find((o) => o.title === "门诊取号");
 
-      if (type === 'refoundOrder' && orderId) {
-        let orderItem;
-
-        if (tabCurrentKey.value === '0' && visitNo && visitList.value) {
-          const visitItem = visitList.value.find((o) => o.visitNo === visitNo);
-          if (visitItem) {
-            await visitItemClick(visitItem);
-
-            const refoundItem = visitInfoList.value.find(
-              (o) => o.title === '门诊取号'
-            );
-
-            if (refoundItem) {
-            }
+          if (refoundItem) {
           }
         }
+      }
 
-        if (tabCurrentKey.value === '1' && orderList.value.length) {
-          orderItem = orderList.value.find((o) => o.orderId === orderId);
-        }
+      if (tabCurrentKey.value === "1" && orderList.value.length) {
+        orderItem = orderList.value.find((o) => o.orderId === orderId);
+      }
 
-        if (orderItem) {
-          orderRefound(orderItem);
-        }
+      if (orderItem) {
+        orderRefound(orderItem);
       }
     }
-  };
+  }
+};
 
-  let rCount = 0;
-  onShow(async () => {
-    if (rCount) {
-      await patChange();
-      checkCb();
+let rCount = 0;
+onShow(async () => {
+  if (rCount) {
+    await patChange();
+    checkCb();
+  }
+  // dealContinueMedicalNationAuth();
+});
+
+onLoad(async (opt) => {
+  pageProps.value = deQueryForUrl(deQueryForUrl(opt));
+  const { tabKey } = pageProps.value;
+
+  if (tabKey) {
+    const tabIdx = tabField.value.findIndex((o) => o.key === tabKey);
+
+    if (tabIdx > -1) {
+      tabCurrent.value = tabIdx;
     }
-    // dealContinueMedicalNationAuth();
-  });
-
-  onLoad(async (opt) => {
-    pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    const { tabKey } = pageProps.value;
-
-    if (tabKey) {
-      const tabIdx = tabField.value.findIndex((o) => o.key === tabKey);
-
-      if (tabIdx > -1) {
-        tabCurrent.value = tabIdx;
-      }
-    }
-    await init();
-    await checkCb();
-    rCount++;
-    // visitItemClick({} as any);
-  });
+  }
+  await init();
+  await checkCb();
+  rCount++;
+  // visitItemClick({} as any);
+});
 </script>
 
 <style lang="scss" scoped>
-  .page-bg {
-    background: var(--hr-brand-color-1);
-  }
+.page-bg {
+  background: var(--hr-brand-color-1);
+}
 
-  .fix-top {
-    // position: sticky;
-    // top: 0;
-  }
+.fix-top {
+  // position: sticky;
+  // top: 0;
+}
 </style>

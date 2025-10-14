@@ -72,10 +72,7 @@ const getMedRecordConfig = async <T>(result: any): Promise<T> => {
             isItemCount: _isItemCount,
           } = value;
 
-          let isItemCount = _isItemCount;
-          if (tollMode === '1') {
-            isItemCount = '1';
-          }
+          const isItemCount = _isItemCount || tollMode;
           const sfz =
             isHandPhoto === '1'
               ? ['front', 'end', 'handler']

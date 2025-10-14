@@ -1229,6 +1229,15 @@ export class PatientUtils extends LoginUtils {
     }
   ) {
     const { addPatInterface } = options;
+    payload = {
+      ...payload
+    }
+       
+    if(this.globalStore.sysCode === '1001082'){
+      payload.relationship = '本人'; // 仅健康温州 实际relationship需要传的是1
+      payload.relationshipCode = 1;
+    } 
+
     const {
       idCard: idNo,
       idType,
@@ -1242,11 +1251,13 @@ export class PatientUtils extends LoginUtils {
       wechatCode, // 微信电子健康卡时候有
       cellPhoneNumber,
       idCardEncry,
+      relationship,
+      relationshipCode
     } = payload;
     const { accountType, source } = this.globalStore.browser;
 
     const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
-    const requestData = {
+    const requestData:any = {
       accountType,
       idNo,
       // 统一认证不区分 国内外 护照， 只有护照
@@ -1260,7 +1271,10 @@ export class PatientUtils extends LoginUtils {
       cellPhoneNumber,
       idCardEncry,
       source,
+      relationship,
+      relationshipCode
     };
+
 
     uni.showLoading({
       title: '完善就诊人中...',
@@ -1304,6 +1318,7 @@ export class PatientUtils extends LoginUtils {
         title: '添加就诊人中...',
         mask: true,
       });
+
 
       if (addPatInterface === 'hasBeenTreated') {
         await this.addPatient({

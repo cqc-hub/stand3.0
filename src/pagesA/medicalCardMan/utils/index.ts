@@ -28,6 +28,7 @@ import { IPat } from '@/stores';
 // 修改值  需要单独修改 addMedical 页面的 prop
 export const formKey = <const>{
   relationship: 'relationship',
+  relationshipCode: 'relationshipCode',
   patientType: 'patientType',
   // patientType: 'patientType',
   idType: 'idType',
@@ -567,6 +568,13 @@ export const getDefaultFormData = async (
     const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
     data[formKey.patientPhone] = wxPhone;
     // #endif
+
+    // 完善默认展示本人 
+    if(globalGl.SYS_CODE === '1001082'){
+     data[formKey.relationship] = '本人';  //仅限健康温州  正常relationship为1
+     data[formKey.relationshipCode] = '1';
+    }
+
   } else {
     // #ifdef MP-ALIPAY
     const patList = gStores.userStore.patList;

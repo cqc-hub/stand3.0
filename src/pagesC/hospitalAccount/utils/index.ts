@@ -16,3 +16,4 @@ export interface IHospitalAccountDetail {
 export interface IAccountWithdrawal {}
 
 export type hospitalPayResult = any[]
+export type TRefundRecord = any[]

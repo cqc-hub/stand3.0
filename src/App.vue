@@ -72,6 +72,7 @@
         'pagesC/openMiniProgram/h5UseMiniFunc',
         'pagesA/webView/webView',
         'pagesC/cloudHospital/myPath',
+        'pagesA/intelMedicalAssist/intelMedicalAssist'
       ].includes(opt.path)
     ) {
       // 非自定义菜单的时候

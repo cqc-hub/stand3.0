@@ -13,6 +13,7 @@ export interface getInHospitalInfoParam {
 export interface getInHospitalInfoResult {
   singleSelfPay?: string;
   prepaymentPayCount?: number;
+  prepaymentQuota?: string;
   accountBalance?: string;
   beHosDate?: string;
   clinicDiagnosis?: string;
