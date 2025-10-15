@@ -548,7 +548,6 @@
         const { autoOptions, options } = o;
 
         if (!options.length && autoOptions) {
-          console.log(autoOptions, 'autoOptionsautoOptionsautoOptions');
           switch (autoOptions) {
             case 'nationTerms':
               o.options = await ServerStaticData.getNationTerms();

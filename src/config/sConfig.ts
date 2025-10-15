@@ -844,6 +844,7 @@ const scJson: Record<string, ISConfig> = {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
     },
+    isOpenHelpOld: '1',
   },
 };
 

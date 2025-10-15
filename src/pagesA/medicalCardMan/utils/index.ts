@@ -17,6 +17,7 @@ import {
   useOcr,
   ISystemConfig,
   rulePhone,
+  TPersonExtraKey,
 } from '@/utils';
 import api from '@/service/api';
 import globalGl, { SYS_CODE } from '@/config/global';
@@ -569,12 +570,11 @@ export const getDefaultFormData = async (
     data[formKey.patientPhone] = wxPhone;
     // #endif
 
-    // 完善默认展示本人 
-    if(globalGl.SYS_CODE === '1001082'){
-     data[formKey.relationship] = '本人';  //仅限健康温州  正常relationship为1
-     data[formKey.relationshipCode] = '1';
+    // 完善默认展示本人
+    if (globalGl.SYS_CODE === '1001082') {
+      data[formKey.relationship] = '本人'; //仅限健康温州  正常relationship为1
+      data[formKey.relationshipCode] = '1';
     }
-
   } else {
     // #ifdef MP-ALIPAY
     const patList = gStores.userStore.patList;
@@ -1477,4 +1477,21 @@ export const isShowAddPatCardNo = (
   }
 
   return r;
+};
+
+export const insertSortFormExtraKey = (
+  list: Exclude<TPersonExtraKey, string>[],
+  insertList: string[]
+) => {
+  let formListKeyLen = 0;
+  while (formListKeyLen < insertList.length) {
+    const idxsNow = list.filter((o) => o.sort === formListKeyLen);
+    if (idxsNow.length) {
+      insertList.splice(formListKeyLen, 0, ...idxsNow.map((o) => o.key as any));
+    }
+
+    formListKeyLen++;
+  }
+
+  return insertList;
 };
