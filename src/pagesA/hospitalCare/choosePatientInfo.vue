@@ -201,12 +201,12 @@
   };
 
   const showPrepaymentQuotaTip = async () => {
-    const { title, content } = await gStores.getSysAppMore('1268');
+    const { content } = await gStores.getSysAppMore('1268');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
       gStores.messageStore.showMessage(content, 0, {
         useDialog: true,
         dialogOpt: {
-          title,
+          title: `预交金额度 ${hosInfoResObj.value.prepaymentQuota}元`,
           isShowCancel: true,
         },
         closeCallBack: r,
