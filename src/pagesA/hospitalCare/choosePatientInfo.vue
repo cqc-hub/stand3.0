@@ -49,7 +49,7 @@
       <view class="card-detail">
         <view v-if="hosInfoResObj.prepaymentQuota" class="card-detail-item">
           <view
-            @click.stop="showPrepaymentQuotaTip"
+            @click.stop="showPrepaymentQuotaTip(`您的预交金额度 ${hosInfoResObj.prepaymentQuota}元`)"
             class="name flex items-center"
           >
             <text class="mr12">预交金额度</text>
@@ -182,7 +182,9 @@
       hosInfoResObj.value;
 
     if (prepaymentQuota) {
-      await showPrepaymentQuotaTip();
+      await showPrepaymentQuotaTip(
+        `您的预交金额度 ${hosInfoResObj.value.prepaymentQuota}元, 是否继续缴费?`
+      );
     }
     const data = {
       hosId,
@@ -200,17 +202,21 @@
     });
   };
 
-  const showPrepaymentQuotaTip = async () => {
-    const { content } = await gStores.getSysAppMore('1268');
+  const showPrepaymentQuotaTip = async (tip) => {
+    // const { content } = await gStores.getSysAppMore('1268');
     const { confirm } = await new Promise<{ confirm: boolean }>((r) => {
-      gStores.messageStore.showMessage(content, 0, {
-        useDialog: true,
-        dialogOpt: {
-          title: `预交金额度 ${hosInfoResObj.value.prepaymentQuota}元`,
-          isShowCancel: true,
-        },
-        closeCallBack: r,
-      });
+      gStores.messageStore.showMessage(
+        tip,
+        0,
+        {
+          useDialog: true,
+          dialogOpt: {
+            title: '温馨提示',
+            isShowCancel: true,
+          },
+          closeCallBack: r,
+        }
+      );
     });
 
     if (!confirm) {
