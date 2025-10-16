@@ -898,6 +898,11 @@ const userApi = {
       hideLoading: false,
     }),
 
+  xjzyyPatSync: (data) =>
+    service.post('/phs-user/rePat/xjzyyPatSync', parm(data), {
+      hideLoading: false,
+    }),
+
   mdifPhone: (data) =>
     service.post('/phs-user/rePat/mdifPhone', parm(data), {
       hideLoading: false,
