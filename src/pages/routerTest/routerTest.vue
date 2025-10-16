@@ -63,27 +63,7 @@
     console.log('object');
   });
 
-  const testClick = async (e) => {
-    getShareTotalUrl(
-      {
-        e: '温附二(瓯江口院区)',
-        l: '',
-        h: '2025-08-26',
-        d: '20250826017084',
-        type: '2',
-        k: '',
-        c: '18858832891',
-        f: '内科门诊',
-        b: '30340263',
-        a: '王小平',
-        i: '20250826017084',
-        category: '50',
-        g: '侯翰凇',
-        n: '13011',
-      },
-      '/pagesC/scan/scan'
-    );
-  };
+  const testClick = async (e) => {};
 
   onMounted(async () => {
     const p =

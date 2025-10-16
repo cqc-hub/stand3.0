@@ -294,6 +294,7 @@ export const aliPayOldSystemPayType = () => {
   } else if (gStores.globalStore.ev === 'alipay') {
     const aliMiniSystemList = [
       '1001033',
+      '1001044',
       '1001035',
       '2001013',
       '1001052',

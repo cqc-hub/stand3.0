@@ -22,6 +22,7 @@
   );
   const backUrl = ref(<TButtonConfig>{});
   onShow(() => {
+    
     switch (pageProps.value.type) {
       case 'openLocation': {
         showNum.value++;
@@ -46,6 +47,7 @@
       };
     }
     nextTick(async () => {
+      console.log('pageProps.value.type',pageProps.value.type);
       switch (pageProps.value.type) {
         case 'scanCode': {
           const { result } = await apiAsync(uni.scanCode, {
@@ -57,6 +59,7 @@
             sacnData: encodeURIComponent(result),
           };
           useTBanner(backUrl.value, pageProps.value?.routeType || 'reLaunch');
+          break;
         }
         case 'openLocation': {
           const { gisLat, gisLng, hosName, address } = pageProps.value;
@@ -69,6 +72,7 @@
               console.log('success', res);
             },
           });
+          break;
         }
       }
     });
