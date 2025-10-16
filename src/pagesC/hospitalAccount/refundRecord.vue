@@ -35,6 +35,11 @@
             <view class="color-444 flex-1">{{ item.createTime }}</view>
           </view>
 
+          <view v-if="item.updateTime" class="flex">
+            <view class="label color-888 mr12">处理时间</view>
+            <view class="color-444 flex-1">{{ item.updateTime }}</view>
+          </view>
+
           <view v-if="item.statusName" class="flex">
             <view class="label color-888 mr12">状态</view>
             <view
@@ -46,6 +51,11 @@
             >
               {{ item.statusName }}
             </view>
+          </view>
+
+          <view v-if="item.financeRemarks" class="flex">
+            <view class="label color-888 mr12">备注</view>
+            <view class="color-444 flex-1">{{ item.financeRemarks }}</view>
           </view>
         </view>
       </view>
