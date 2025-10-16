@@ -183,13 +183,23 @@ export class GStores {
 export class LoginUtils extends GStores {
   // 登录后 获取就诊人列表前
   async onAfterLoginAndBeforeGetPatList() {
-    if (this.globalStore.sysCode === '1001067') {
+    const { sysCode, ev, openId } = this.globalStore;
+
+    if (sysCode === '1001067') {
       const reqData = getH5OpenidParam({
         loginData: this.globalStore.token.loginData,
         source: this.globalStore.browser.source,
       });
 
       await api.wfePatSync(reqData);
+    }
+
+    if (['1001086', '1001094'].includes(sysCode) && ev === 'wx') {
+      const reqData = getH5OpenidParam({
+        source: this.globalStore.browser.source,
+        wxOpenId: openId,
+      });
+      await api.xjzyyPatSync(reqData);
     }
   }
   //判断是否需要前往手机号登录
@@ -258,20 +268,21 @@ export class LoginUtils extends GStores {
 
         // #ifdef MP-WEIXIN
         // 口腔商城特殊处理
-          if (
-            ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-              this.globalStore.sysCode
-            )
-          ) {
-            const appInstance = getApp();
-            const viewerStore = useViewerStore();
-            if (appInstance && appInstance.globalData) {
-              this.globalStore.updateOralMallData(appInstance, 'login');
-              appInstance.globalData.configData.mallToken = await getTcMallToken();
-            }
-            console.log('小程序登录后全局参数',appInstance.globalData)
-            viewerStore.getMyOralCellMessage();
+        if (
+          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+            this.globalStore.sysCode
+          )
+        ) {
+          const appInstance = getApp();
+          const viewerStore = useViewerStore();
+          if (appInstance && appInstance.globalData) {
+            this.globalStore.updateOralMallData(appInstance, 'login');
+            appInstance.globalData.configData.mallToken =
+              await getTcMallToken();
           }
+          console.log('小程序登录后全局参数', appInstance.globalData);
+          viewerStore.getMyOralCellMessage();
+        }
 
         if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
           uni.reLaunch({
@@ -754,13 +765,13 @@ class WeChatLoginHandler extends LoginUtils implements LoginHandler {
     );
 
     if (loginResult) {
-      const { accessToken, refreshToken } = loginResult;
+      const { accessToken, refreshToken, loginData } = loginResult;
       this.globalStore.setToken({
         accessToken,
         refreshToken,
+        loginData,
       });
       await this.getUerInfo(...((onlyLogin && ['alone', true]) || []));
-
     }
   }
 
@@ -1230,13 +1241,13 @@ export class PatientUtils extends LoginUtils {
   ) {
     const { addPatInterface } = options;
     payload = {
-      ...payload
-    }
-       
-    if(this.globalStore.sysCode === '1001082'){
+      ...payload,
+    };
+
+    if (this.globalStore.sysCode === '1001082') {
       payload.relationship = '本人'; // 仅健康温州 实际relationship需要传的是1
       payload.relationshipCode = 1;
-    } 
+    }
 
     const {
       idCard: idNo,
@@ -1252,12 +1263,12 @@ export class PatientUtils extends LoginUtils {
       cellPhoneNumber,
       idCardEncry,
       relationship,
-      relationshipCode
+      relationshipCode,
     } = payload;
     const { accountType, source } = this.globalStore.browser;
 
     const _sex = (sex && (sex === '男' ? '1' : '2')) || '';
-    const requestData:any = {
+    const requestData: any = {
       accountType,
       idNo,
       // 统一认证不区分 国内外 护照， 只有护照
@@ -1272,9 +1283,8 @@ export class PatientUtils extends LoginUtils {
       idCardEncry,
       source,
       relationship,
-      relationshipCode
+      relationshipCode,
     };
-
 
     uni.showLoading({
       title: '完善就诊人中...',
@@ -1318,7 +1328,6 @@ export class PatientUtils extends LoginUtils {
         title: '添加就诊人中...',
         mask: true,
       });
-
 
       if (addPatInterface === 'hasBeenTreated') {
         await this.addPatient({
