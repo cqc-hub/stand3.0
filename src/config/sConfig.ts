@@ -120,6 +120,9 @@ export interface ISConfig {
       // 医保国标模式  https://iheren.feishu.cn/docs/doccngcVdD0Wt1kgIgKUDaizWRe
       // https://docs.qq.com/doc/DV3lxV3hSbXFudVBE
       // 第三方提供的链接拼接工具(参数查看 测试环境反馈单) https://yb.qq.com/yibao-payment/doc/generateLink?nodeId=2
+      /**
+       * cityCode、channel 在邮件里面看
+       */
       // auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=cityCode&channel=渠道号&orgChnlCrtfCodg=机构渠道认证编码&orgCodg=定点医疗机构编码&orgAppId=定点医疗机构小程序/H5应用ID
       medicalNation?: {
         appId: string;
@@ -830,6 +833,26 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isAliAuthBase: '1',
       isSkipPerfect: '1',
+    },
+
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            bizType: '04107',
+            cityCode: '610600',
+            channel: 'AAFjWNlsD_YjoGPGECfQP-LW',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxtVok110ttUbcrc5BbIj9rW',
+            orgCodg: 'H61060200365',
+            orgAppId: '1J600B2FR08K4460C80A00004B274D74',
+          },
+        },
+        isMedicalOrder: '1',
+      },
     },
   },
   1001086: {
