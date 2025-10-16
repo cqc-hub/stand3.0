@@ -202,6 +202,7 @@
     useProgramPaySign,
     gotoChosseVerifyPage,
     useAuthPerson,
+    insertSortFormExtraKey,
   } from './utils';
 
   import {
@@ -747,7 +748,8 @@
 
   const init = async () => {
     const { userName, mobile } = gStores.userStore.cacheUser;
-    let { formExtraKeys = [] } = pageConfig.value;
+    let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
+      pageConfig.value;
     formExtraKeys = formExtraKeys.filter(
       (key) => !['countries'].includes(typeof key === 'string' ? key : key.key)
     );
@@ -769,21 +771,8 @@
       'defaultFalg',
     ] as any;
 
-    let formListKeyLen = 0;
-    while (formListKeyLen < formListKeys.length) {
-      const idxsNow = sortFormExtraKeys.filter(
-        (o) => o.sort === formListKeyLen
-      );
-      if (idxsNow.length) {
-        formListKeys.splice(
-          formListKeyLen,
-          0,
-          ...idxsNow.map((o) => o.key as any)
-        );
-      }
-
-      formListKeyLen++;
-    }
+    insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
+    insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
 
     console.log('-------');
     console.log(formListKeys);

@@ -169,6 +169,7 @@
     useProgramPaySign,
     gotoChosseVerifyPage,
     getInfoFromIdCard,
+    insertSortFormExtraKey,
   } from './utils';
 
   import {
@@ -846,7 +847,7 @@
       isDropNation,
       isUserInfoShareAgree,
       formExtraKeys: _formExtraKeys = [],
-      relationShip,
+      formExtraKeysInAddPatPage = [],
       // isUpNamePhone,
     } = pageConfig.value;
 
@@ -869,7 +870,7 @@
 
       formExtraKeys = formExtraKeys.filter(
         // 这几个特殊判断
-        (key) => !['countries', 'referenceId', 'relationship'].includes(key)
+        (key) => !['countries', 'referenceId'].includes(key)
       );
     }
 
@@ -877,7 +878,7 @@
       addressArr.push(formKey.address, formKey.location);
     }
 
-    const listArr: TFormKeys[] = [formKey.patientType, formKey.relationship];
+    const listArr: TFormKeys[] = [formKey.patientType];
     // const listArr: TFormKeys[] = [formKey.patientType];
     const _sexAndBirth = [formKey.sex, formKey.birthday];
     const _parentInfo: (keyof typeof formKey)[] = [
@@ -887,12 +888,6 @@
     // if (isUpNamePhone === '1') {
     //   _parentInfo.push(formKey.upPhone);
     // }
-    if (relationShip !== '1') {
-      const idx = listArr.findIndex((o) => o === formKey.relationship);
-      if (idx !== -1) {
-        listArr.splice(idx, 1);
-      }
-    }
 
     const _patientInfo: TFormKeys[] = [
       ...addressArr,
@@ -1011,6 +1006,9 @@
       listArr.splice(listArr.length - 1, 0, 'isUserInfoShareAgree');
     }
 
+    insertSortFormExtraKey(sortFormExtraKeys, listArr);
+    insertSortFormExtraKey(formExtraKeysInAddPatPage, listArr);
+
     const completeFormList = listArr.join(',');
     if (completeFormList === oldFormList.join(',')) {
       return;
@@ -1082,7 +1080,7 @@
           o.disabled = true;
         }
         // #endif
-         if (key === formKey.relationship) {
+        if (key === formKey.relationship) {
           o.disabled = true;
         }
       } else {

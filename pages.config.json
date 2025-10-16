@@ -700,7 +700,7 @@
             "navigationBarTitleText": " "
           }
         },
-         {
+        {
           "path": "openMiniProgram/h5UseMiniFunc",
           "style": {
             "navigationBarTitleText": " "
@@ -751,7 +751,7 @@
             "patient": true
           },
           "style": {
-            "navigationBarTitleText": "退款记录"
+            "navigationBarTitleText": "退款申请记录"
           }
         },
         {
@@ -899,6 +899,15 @@
           "path": "common/useJump",
           "style": {
             "navigationBarTitleText": " "
+          }
+        },
+        {
+          "path": "patient/familyAdd",
+          "style": {
+            "navigationBarTitleText": "补充联系人信息"
+          },
+          "extend": {
+            "patient": true
           }
         },
         {

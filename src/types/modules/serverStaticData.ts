@@ -1,6 +1,13 @@
 import { type XOR } from '@/typeUtils';
 import { MEDICAL_PHOTOS } from '@/static/staticData';
 
+export type TPersonExtraKey =
+  | string
+  | {
+      key: string;
+      sort: number; // 排序
+    };
+
 /**
  *  未指定说明的 '0' 均为 false '1' true
  */
@@ -220,16 +227,11 @@ export interface ISystemConfig_ {
      * countries - 国籍
      * relationship - 关系
      */
-    formExtraKeys?: (
-      | string
-      | {
-          key: string;
-          sort: number; // 排序
-        }
-    )[];
+    formExtraKeys?: TPersonExtraKey[]; // 一起加
+    formExtraKeysInAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅添加就诊人详情页面
+    formExtraKeysInQuickAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅快速添加就诊人页面
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
-    relationShip?: '1'; // 开启后新增就诊人页面有关系一行
     isVerifyIdCardLastFourNumber?: '1';
     /** 新增就诊人页面 (medicalCardMan/perfectReal)页面是否有 '就诊人类型' 一行 */
     isHidePatientTypeInPerfect?: '1' | '0';
