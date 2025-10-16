@@ -898,8 +898,7 @@
       formKey.defaultFalg,
       // formKey.referenceId,
     ];
-
-    if (globalGl.systemInfo.isSearchInHos) {
+    if (!globalGl.systemInfo.isSearchInHos) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;
