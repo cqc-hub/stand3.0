@@ -834,7 +834,9 @@ const scJson: Record<string, ISConfig> = {
   },
   1001086: {
     login: {
-      isLoginByOpenId: '1',
+      // isLoginByOpenId: '1',
+      isSkipPerfect: '1',
+      isAliAuthBase: '1',
     },
   },
   1001093: {
