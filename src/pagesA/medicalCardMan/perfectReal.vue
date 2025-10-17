@@ -747,7 +747,7 @@
   };
 
   const init = async () => {
-    const { userName, mobile } = gStores.userStore.cacheUser;
+    const { mobile } = gStores.userStore.cacheUser;
     let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
       pageConfig.value;
     formExtraKeys = formExtraKeys.filter(

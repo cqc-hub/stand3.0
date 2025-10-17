@@ -245,6 +245,7 @@
     //健康卡
     _healthType?: 'addPat';
     authCode?: string;
+    [key: string]: any;
   }
   const pageProps = ref(<TPageType>{});
   const patientUtils = new PatientUtils();
@@ -521,7 +522,11 @@
 
   const formSubmit = async ({ data }) => {
     data = formatterSubPatientData(data);
-    const formKeyNow = formList.value.map((o) => o.key);
+    const formKeyNow = [
+      'relationship',
+      'relationshipCode',
+      ...formList.value.map((o) => o.key),
+    ];
     const filterData = Object.fromEntries(
       Object.entries(data).map(([key, value]) => {
         return [key, formKeyNow.includes(key) ? value : undefined];
@@ -898,7 +903,7 @@
       formKey.defaultFalg,
       // formKey.referenceId,
     ];
-    if (!globalGl.systemInfo.isSearchInHos) {
+    if (!pageProps.value.verifyCode) {
       // 插入验证码(框)
       if (isSmsVerify === '1' && pageProps.value.pageType !== 'perfectReal') {
         let isFilterSmsVerify = false;
@@ -1267,12 +1272,6 @@
       })
     );
 
-    // 默认身份证
-    formData.value[formKey.idType] = '01';
-
-    // 默认成人,儿童 有证件
-    formData.value[formKey.patientType] =
-      formData.value[formKey.patientType] || '-1';
     verifyCode = formData.value[formKey.verifyCode];
 
     const defaultValue = await getDefaultFormData(

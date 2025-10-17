@@ -581,26 +581,36 @@ export const getDefaultFormData = async (
 ) => {
   const data: Record<string, any> = {};
   const gStores = new GStores();
+  const { ev } = gStores.globalStore;
+
+  // 默认身份证
+  if (!data[formKey.idType]) {
+    data[formKey.idType] = '01';
+  }
+
+  // 默认成人,儿童 有证件
+  if (!data[formKey.patientType]) {
+    data[formKey.patientType] = '-1';
+  }
 
   if (pageType === 'perfectReal') {
-    // #ifdef MP-ALIPAY
-    const { userName, mobile } = gStores.userStore.cacheUser;
-    data[formKey.patientName] = userName;
-    data[formKey.patientPhone] = mobile;
-    // #endif
+    if (ev === 'alipay') {
+      const { userName, mobile } = gStores.userStore.cacheUser;
+      data[formKey.patientName] = userName;
+      data[formKey.patientPhone] = mobile;
+    }
 
-    // #ifdef MP-WEIXIN
-    const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
-    data[formKey.patientPhone] = wxPhone;
-    // #endif
+    if (ev === 'wx') {
+      const wxPhone = decryptDes(gStores.userStore.phoneNum, 'N1@ae^T:phone');
+      data[formKey.patientPhone] = wxPhone;
+    }
 
     // 完善默认展示本人
     if (globalGl.SYS_CODE === '1001082') {
       data[formKey.relationship] = '本人'; //仅限健康温州  正常relationship为1
       data[formKey.relationshipCode] = '1';
     }
-  } else {
-    // #ifdef MP-ALIPAY
+  } else if (ev === 'alipay') {
     const patList = gStores.userStore.patList;
 
     if (!patList.length) {
@@ -615,7 +625,6 @@ export const getDefaultFormData = async (
         data[formKey.idCard] = certNo;
       }
     }
-    // #endif
   }
 
   return data;
