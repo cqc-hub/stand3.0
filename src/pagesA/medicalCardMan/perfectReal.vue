@@ -771,9 +771,6 @@
       'defaultFalg',
     ] as any;
 
-    insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
-    insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
-
     console.log('-------');
     console.log(formListKeys);
 
@@ -811,6 +808,9 @@
     ) {
       formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
     }
+
+    insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
+    insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
 
     formList = pickTempItem(formListKeys);
     const defaultValue = await getDefaultFormData(
