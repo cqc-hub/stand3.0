@@ -49,6 +49,8 @@ export const formKey = <const>{
   isUserInfoShareAgree: 'isUserInfoShareAgree',
   referenceId: 'referenceId',
   countries: 'countries',
+  height: 'height',
+  weight: 'weight',
 };
 
 export type TCardPat = {
@@ -273,6 +275,28 @@ export const tempList: TInstance[] = [
     key: formKey.upName,
     labelWidth: '220rpx',
     maxlength: 50,
+  },
+
+  {
+    required: true,
+    label: '身高(厘米)',
+    field: 'input-text',
+    placeholder: '请输入',
+    key: formKey.height,
+    labelWidth: '220rpx',
+    maxlength: 50,
+    inputType: 'digit',
+  },
+
+  {
+    required: true,
+    label: '体重(公斤)',
+    field: 'input-text',
+    placeholder: '请输入',
+    key: formKey.weight,
+    labelWidth: '220rpx',
+    maxlength: 50,
+    inputType: 'digit',
   },
 
   {
