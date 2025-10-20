@@ -747,7 +747,7 @@
   };
 
   const init = async () => {
-    const { userName, mobile } = gStores.userStore.cacheUser;
+    const { mobile } = gStores.userStore.cacheUser;
     let { formExtraKeys = [], formExtraKeysInQuickAddPatPage = [] } =
       pageConfig.value;
     formExtraKeys = formExtraKeys.filter(
@@ -770,9 +770,6 @@
       ...defaultFormExtraKeys,
       'defaultFalg',
     ] as any;
-
-    insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
-    insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
 
     console.log('-------');
     console.log(formListKeys);
@@ -811,6 +808,9 @@
     ) {
       formListKeys = formListKeys.filter((key) => key !== 'verifyCode');
     }
+
+    insertSortFormExtraKey(sortFormExtraKeys, formListKeys);
+    insertSortFormExtraKey(formExtraKeysInQuickAddPatPage, formListKeys);
 
     formList = pickTempItem(formListKeys);
     const defaultValue = await getDefaultFormData(

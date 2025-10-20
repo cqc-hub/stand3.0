@@ -2984,17 +2984,6 @@ export const handlerMedicalPayDongRuan = async ({
     authCode,
   };
 
-  // if (gStores.globalStore.sysCode === '1001048') {
-  //   const {
-  //     cancelUrl: cancelAuthRedirectUrl,
-  //     successUrl: orderStatusRedirectUrl,
-  //   } = resultConfig;
-
-  //   pageArg.resultConfig = JSON.stringify({
-  //     cancelAuthRedirectUrl,
-  //     orderStatusRedirectUrl,
-  //   });
-  // }
   const url = joinQuery(
     `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
     pageArg
