@@ -52,7 +52,8 @@ const getWeChatBase64ImageByUrl = function (
     wx.getFileSystemManager().readFile({
       filePath: url, //选择图片返回的相对路径
       encoding: 'base64', //编码格式
-      success: ({ data }) => {
+      success: (res) => {
+        const { data } = res;
         r({
           success: true,
           base64: data,
@@ -96,8 +97,14 @@ const getAliPayBase64ImageByUrl = function (
       success: async (res) => {
         const { width, height } = res;
 
-        imgCanvas.value.imgWidth = width;
-        imgCanvas.value.imgHeight = height;
+        if (imgCanvas.value) {
+          imgCanvas.value.imgWidth = width;
+          imgCanvas.value.imgHeight = height;
+        } else {
+          imgCanvas.imgWidth = width;
+          imgCanvas.imgHeight = height;
+        }
+
         const canvas = my.createCanvasContext('canvasForBase64');
         canvas.drawImage(imagePath, 0, 0); // 1. 绘制图片至canvas
         // 绘制完成后执行回调
@@ -166,16 +173,8 @@ const checkFileSize = ({
   });
 };
 
-// 获取 base64
-export const chooseImg = (
-  payload: {
-    extension?: ('jpg' | 'jpeg' | 'image')[];
-    fileSize?: number;
-    imgCanvas?: any; // 支付宝必传
-  } = {}
-): Promise<TChooseImgBase64Res> => {
-  // 支付宝需要手动添加
-  /*
+// 支付宝需要手动添加
+/*
   const imgCanvas = ref({
     imgWidth: 0,
     imgHeight: 0,
@@ -189,7 +188,31 @@ export const chooseImg = (
       id="canvasForBase64"
     />
   */
+export const handlerImgToBase64 = async (opt: {
+  filePath: string;
+  imgCanvas?: any; // 支付宝必传
+}) => {
+  const globalStore = useGlobalStore();
+  const { ev } = globalStore;
+  const { filePath, imgCanvas } = opt;
 
+  if (ev === 'wx') {
+    return getWeChatBase64ImageByUrl(filePath);
+  } else if (ev === 'alipay') {
+    return getAliPayBase64ImageByUrl(filePath, imgCanvas);
+  } else {
+    return Promise.reject('未定义的图片压缩');
+  }
+};
+
+// 获取 base64
+export const chooseImg = (
+  payload: {
+    extension?: ('jpg' | 'jpeg' | 'image')[];
+    fileSize?: number;
+    imgCanvas?: any; // 支付宝必传
+  } = {}
+): Promise<TChooseImgBase64Res> => {
   const { extension, fileSize, imgCanvas } = payload;
 
   return new Promise((resolve, reject) => {
@@ -208,20 +231,12 @@ export const chooseImg = (
             });
           }
 
-          // #ifdef MP-WEIXIN
-          return resolve(await getWeChatBase64ImageByUrl(tempFilePaths[0]));
-          // #endif
-
-          // #ifdef MP-ALIPAY
-          return resolve(
-            await getAliPayBase64ImageByUrl(tempFilePaths[0], imgCanvas)
-          );
-          // #endif
-
-          reject({
-            success: false,
-            evt: '未定义的类型',
+          const res = await handlerImgToBase64({
+            filePath: tempFilePaths[0],
+            imgCanvas,
           });
+
+          return resolve(res);
         } else {
           reject({
             success: false,
@@ -402,15 +417,8 @@ export const useOcr = async (
 ): Promise<OcrFindRes> => {
   const { aliThroughByEnd, imgCanvas } = opt;
   // const messageStore = useMessageStore();
-  let env = '';
-
-  // #ifdef MP-WEIXIN
-  env = 'wx';
-  // #endif
-
-  // #ifdef MP-ALIPAY
-  env = 'alipay';
-  // #endif
+  const globalStore = useGlobalStore();
+  const env = globalStore.ev;
 
   if (env === 'wx') {
     return await ocrForWX();

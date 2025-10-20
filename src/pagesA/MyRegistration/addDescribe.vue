@@ -33,6 +33,7 @@
     <view class="footer">
       <button @click="gform.submit" class="btn btn-primary">提交</button>
     </view>
+
   </view>
 </template>
 
@@ -52,6 +53,8 @@
     imgWidth: 0,
     imgHeight: 0,
   });
+
+
 
   const gform = ref<any>('');
   const gformList = ref([] as TInstance[]);

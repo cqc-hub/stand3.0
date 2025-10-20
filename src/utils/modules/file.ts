@@ -1,5 +1,6 @@
 import { apiAsync, GStores } from '@/utils';
-export class FileUtil {
+import { getCurrentInstance } from 'vue';
+export class FileUtil extends GStores {
   downLoadFileBase64(base64: string, fileName: string) {
     // #ifdef H5
     const aLink = document.createElement('a');
@@ -90,6 +91,78 @@ export class FileUtil {
     });
     // #endif
   };
+
+  /*
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
+
+  <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      style="opacity: 0; position: absolute; pointer-events: none"
+      id="canvasForBase64"
+    />
+  */
+  convertToJPG({ filePath, imgCanvas }) {
+    return new Promise((resolve, reject) => {
+      uni.getImageInfo({
+        src: filePath,
+        success: async (res) => {
+          const { width, height } = res;
+
+          if (imgCanvas.value) {
+            imgCanvas.value.imgWidth = width;
+            imgCanvas.value.imgHeight = height;
+          } else {
+            imgCanvas.imgWidth = width;
+            imgCanvas.imgHeight = height;
+          }
+
+          const canvas = uni.createCanvasContext('canvasForBase64');
+          canvas.clearRect(0, 0, width, height);
+          canvas.drawImage(filePath, 0, 0); // 1. 绘制图片至canvas
+
+          // 绘制完成后执行回调
+          canvas.draw(false, async () => {
+            uni.canvasToTempFilePath({
+              canvasId: 'canvasForBase64',
+              fileType: 'jpg',
+              quality: 0.9,
+              success: (res) => {
+                resolve(res.tempFilePath);
+              },
+              fail: (err) => {
+                reject('转换 JPG 失败：' + err.errMsg);
+              },
+            });
+          });
+        },
+
+        fail(e) {
+          reject(e);
+        },
+      });
+    });
+  }
+
+  async compressImage({ filePath, imgCanvas, quality = 80 }): Promise<string> {
+    if (this.globalStore.ev === 'alipay') {
+      filePath = await this.convertToJPG({
+        filePath,
+        imgCanvas,
+      });
+    }
+
+    const r: any = await uni.compressImage({
+      src: filePath,
+      quality,
+    });
+
+    return r.tempFilePath;
+  }
 }
 
 /**

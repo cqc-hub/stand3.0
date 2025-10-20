@@ -316,6 +316,15 @@
         <view />
       </uni-data-picker>
     </view>
+
+    <canvas
+      v-show="false"
+      :width="imgCanvas.imgWidth"
+      :height="imgCanvas.imgHeight"
+      id="canvasForBase64"
+      canvas-id="canvasForBase64"
+      class="my-display-none"
+    />
   </view>
 </template>
 
@@ -333,7 +342,14 @@
     IImgInstance,
   } from '@/components/g-form/index';
   import { useMessageStore } from '@/stores';
-  import { cacheUtil, ServerStaticData, upImgOss, useOcr, wait } from '@/utils';
+  import {
+    cacheUtil,
+    FileUtil,
+    ServerStaticData,
+    upImgOss,
+    useOcr,
+    wait,
+  } from '@/utils';
   import api from '@/service/api';
 
   import wybActionSheet from '@/components/wyb-action-sheet/wyb-action-sheet.vue';
@@ -362,6 +378,11 @@
       showRequireIcon: false,
     }
   );
+  const fileUtil = new FileUtil();
+  const imgCanvas = ref({
+    imgWidth: 0,
+    imgHeight: 0,
+  });
 
   const warningKeys = ref<string[]>([]);
   const messageOptions = computed(() => {
@@ -649,6 +670,20 @@
     const { tempFiles } = e;
     const { key } = item;
     const waitList: any[] = [];
+
+    const compressedResults = await Promise.all(
+      tempFiles.map((o) =>
+        fileUtil.compressImage({
+          filePath: o.path,
+          quality: 50,
+          imgCanvas,
+        })
+      )
+    );
+
+    compressedResults.map((path, i) => {
+      tempFiles[i].path = path;
+    });
 
     tempFiles.map((o) => {
       waitList.push(
