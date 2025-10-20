@@ -54,6 +54,7 @@
     openId: gStores.globalStore.openId,
     h5OpenId: gStores.globalStore.h5OpenId,
     phone: gStores.userStore.phoneNum, //账号下的手机号（仅微信）
+    name:gStores.userStore.name
   };
   type A = keyof typeof allData;
 
