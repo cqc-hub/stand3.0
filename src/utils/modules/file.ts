@@ -148,7 +148,34 @@ export class FileUtil extends GStores {
     });
   }
 
+  /**
+   * 图片压缩
+   *
+   *  <canvas
+        v-show="false"
+        :width="imgCanvas.imgWidth"
+        :height="imgCanvas.imgHeight"
+        id="canvasForBase64"
+        canvas-id="canvasForBase64"
+        class="my-display-none"
+      />
+
+
+     const imgCanvas = ref({
+        imgWidth: 0,
+        imgHeight: 0,
+      });
+   */
   async compressImage({ filePath, imgCanvas, quality = 80 }): Promise<string> {
+    const info: any = await uni.getFileInfo({
+      filePath,
+    });
+
+    // 小于500k 直接返回
+    if (info.size < 500000) {
+      return filePath;
+    }
+    console.log(info);
     if (this.globalStore.ev === 'alipay') {
       filePath = await this.convertToJPG({
         filePath,
