@@ -120,6 +120,7 @@ export interface ISystemConfig_ {
     isConfirmOrderWithDeptTip?: '1';
     /** 挂号确认页面点击我已阅读时候需要弹窗 */
     isConfirmOrderWithConfirmDialog?: '1';
+
     /** 医生名片 */
     // 对应网络医院那边维护的 hosId， 他们不用区分院区的吗？(不用 固定的)
     netHosId?: string; // isOpenDocCardOnlineService === '1' 时候必给
@@ -162,6 +163,7 @@ export interface ISystemConfig_ {
     isCancelOlineReg?: '1';
     //开启后新增候补挂号tab
     isTabWaitReg?: '1';
+
     /**
      * 挂号详情页
      */
