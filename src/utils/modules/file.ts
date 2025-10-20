@@ -106,7 +106,10 @@ export class FileUtil extends GStores {
       id="canvasForBase64"
     />
   */
-  convertToJPG({ filePath, imgCanvas }) {
+  convertToJPG({ filePath, imgCanvas, canvasId = 'canvasForBase64' }) {
+    if (this.globalStore.ev !== 'alipay') {
+      throw '仅支付宝';
+    }
     return new Promise((resolve, reject) => {
       uni.getImageInfo({
         src: filePath,
@@ -121,14 +124,14 @@ export class FileUtil extends GStores {
             imgCanvas.imgHeight = height;
           }
 
-          const canvas = uni.createCanvasContext('canvasForBase64');
+          const canvas = uni.createCanvasContext(canvasId);
           canvas.clearRect(0, 0, width, height);
           canvas.drawImage(filePath, 0, 0); // 1. 绘制图片至canvas
 
           // 绘制完成后执行回调
           canvas.draw(false, async () => {
             uni.canvasToTempFilePath({
-              canvasId: 'canvasForBase64',
+              canvasId,
               fileType: 'jpg',
               quality: 0.9,
               success: (res) => {
@@ -166,7 +169,12 @@ export class FileUtil extends GStores {
         imgHeight: 0,
       });
    */
-  async compressImage({ filePath, imgCanvas, quality = 80 }): Promise<string> {
+  async compressImage({
+    filePath,
+    imgCanvas,
+    quality = 80,
+    canvasId = 'canvasForBase64',
+  }): Promise<string> {
     const info: any = await uni.getFileInfo({
       filePath,
     });
@@ -175,11 +183,11 @@ export class FileUtil extends GStores {
     if (info.size < 500000) {
       return filePath;
     }
-    console.log(info);
     if (this.globalStore.ev === 'alipay') {
       filePath = await this.convertToJPG({
         filePath,
         imgCanvas,
+        canvasId,
       });
     }
 

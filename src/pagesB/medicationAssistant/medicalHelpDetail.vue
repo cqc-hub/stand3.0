@@ -5,6 +5,7 @@
     }"
     class="f32 g-page"
   >
+    <g-flag isShowFg typeFg="1271" />
     <view class="g-container">
       <block v-if="pageProps.takenDrug === '1'">
         <view
@@ -23,7 +24,7 @@
               v-if="
                 isMedicalFriedAndDelivery &&
                 getExpressAppId &&
-                !['1001038','1001085'].includes(gStores.globalStore.sysCode)
+                !['1001038', '1001085'].includes(gStores.globalStore.sysCode)
               "
             >
               <text @click="goExpressApp" class="a-link f48">查看快递</text>

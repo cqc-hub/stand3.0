@@ -148,33 +148,32 @@ export class GStores {
       };
     }
 
+    let isSuccess = true;
     const oldData = this.globalStore.flagCaches[typeFlag];
     if (oldData) {
       return oldData;
     }
 
-    const { title, content } = await new Promise<any>((r) => {
-      api
-        .getSysAppMore({
-          typeFlag,
-        })
-        .then(({ result }) => {
-          const { content, title } = result;
+    let { result } = await api
+      .getSysAppMore({
+        typeFlag,
+      })
+      .catch(() => {
+        isSuccess = false;
+        return {} as any;
+      });
 
-          r({
-            title,
-            content: HTMLParser(content),
-          });
-        })
-        .catch((e) => {
-          r({
-            title: '',
-            content: HTMLParser('未获取到协议 ' + typeFlag),
-          });
-        });
-    });
+    if (!result) {
+      result = {
+        title: '',
+        content: '未获取到协议 ' + typeFlag,
+      };
+    }
 
-    this.globalStore.setFlagCaches(typeFlag, { title, content });
+    const title = result.title;
+    const content = HTMLParser(result.content);
+
+    isSuccess && this.globalStore.setFlagCaches(typeFlag, { title, content });
 
     return { title, content };
   }
