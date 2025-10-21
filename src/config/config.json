@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001094",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -417,7 +417,8 @@
       "isOpenHealthCard": {
         "healthCardText": "新疆维吾尔自治区卫生健康委员会",
         "hospitalId": "35088"
-      }
+      },
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png"
     },
     "1001087": {
       "wxAppid": "wxe48cc8a9a8ec915f",
@@ -466,7 +467,8 @@
       "name": "新疆维吾尔自治区中医医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-      "isSearchInHos": true
+      "isSearchInHos": true,
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png"
     },
     "1001095": {
       "wxAppid": "wx41ed9678ac802d7e",

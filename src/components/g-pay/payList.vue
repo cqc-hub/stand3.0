@@ -10,10 +10,12 @@
       }"
       class="pat-item mb16"
     >
+      <img v-if="getIconSrc(item)" :src="getIconSrc(item)" class="pay-icon" />
       <view
+        v-else
         :class="{
           'ico_share-blue': item.key === 'isFaceRemote',
-          'ico_camera': item.key === 'isFace',
+          ico_camera: item.key === 'isFace',
           ico_pay: item.key === 'online' || item.key === 'digital',
           ico_card: item.key === 'medicare' || item.key === 'familyPay',
           ico_hospital:
@@ -40,10 +42,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { ref } from 'vue';
   import { GStores } from '@/utils';
   import { IGPay } from './index';
-  import { IPat, getAvatar, isAreaProgram } from '@/stores';
+  import globalGl from '@/config/global';
 
   const props = defineProps<{
     list: IGPay[];
@@ -59,6 +61,41 @@
     });
 
     curr.value = index;
+  };
+
+  const getIconSrc = (item: IGPay) => {
+    const { key } = item;
+    const { ev } = gStores.globalStore;
+    let iconName = '';
+
+    switch (key) {
+      case 'online':
+        if (ev === 'wx') {
+          iconName = 'stand3-g-pay-wx.png';
+        } else if (ev === 'alipay') {
+          iconName = 'stand3-g-pay-alipay.png';
+        }
+        break;
+
+      case 'medicare':
+      case 'bizType':
+      case 'navToMini':
+        iconName = 'stand3-g-pay-yibao.png';
+        break;
+
+      case 'digital':
+        iconName = 'stand3-g-pay-shuzi.png';
+        break;
+
+      default:
+        break;
+    }
+
+    if (iconName) {
+      return globalGl.BASE_IMG + iconName;
+    }
+
+    return '';
   };
 </script>
 

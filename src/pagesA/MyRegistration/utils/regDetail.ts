@@ -609,7 +609,7 @@ export class RegDetailUtil {
       returnUrl: string;
     } = {} as any
   ) {
-    const { isOrderPay, wxOrderSubscribeMessage } = this.orderConfig.value;
+    const { isOrderPay, wxOrderSubscribeMessage = [] } = this.orderConfig.value;
     let errMsg = '';
 
     // if (!Object.keys(this.orderRegInfo).length) {
@@ -630,6 +630,7 @@ export class RegDetailUtil {
     if (isOrderPay === '1') {
       const { refundNeedAuth, source, tradeType } = this.orderRegInfo;
       const { orderId, searchType } = this.prop.value;
+      const { ev } = this.gStores.globalStore;
       const args = {
         orderId,
         searchType,
@@ -638,29 +639,19 @@ export class RegDetailUtil {
       };
       const medicalNationInfo = getMedicalNationInfo();
 
-      let isAlipay = false;
-      let isWx = false;
-
-      // #ifdef MP-ALIPAY
-      isAlipay = true;
-      // #endif
-
-      // #ifdef MP-WEIXIN
-      isWx = true;
-      // #endif
-
       if (refundNeedAuth === '0') {
-        if (isAlipay && source === 19) {
+        if (ev === 'alipay' && source === 19) {
           errMsg = '本次挂号属于微信医保挂号, 暂不支持支付宝端退费';
           this.gStores.messageStore.showMessage(errMsg, 3000);
         }
 
-        if (isWx && source === 21) {
+        if (ev === 'wx' && source === 21) {
           errMsg = '本次挂号属于支付宝医保挂号, 暂不支持微信端退费';
           this.gStores.messageStore.showMessage(errMsg, 3000);
         }
 
         if (errMsg) {
+          this.gStores.messageStore.showMessage(errMsg, 1500);
           throw new Error(errMsg);
         }
 
