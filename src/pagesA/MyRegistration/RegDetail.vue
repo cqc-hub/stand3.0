@@ -671,6 +671,7 @@
     qrCodeOpt.value.size = 0;
   };
 
+  const getDataDelay = 600;
   const captureStatus = async (count = 0) => {
     if (count > 3) {
       gStores.messageStore.showMessage('查询医保状态失败', 1500);
@@ -681,7 +682,7 @@
     });
     await wait(3000);
     await init();
-    await wait(620);
+    await wait(getDataDelay + 20);
     uni.showLoading({
       title: '查询中',
     });
@@ -907,7 +908,7 @@
       refForm.value.setList(_regInfoTempList);
       refFormPatient.value.setList(_patientTempList);
       uni.hideLoading();
-    }, 600);
+    }, getDataDelay);
 
     dealContinueMedicalNationAuth();
   };
@@ -1228,7 +1229,7 @@
     });
     isFirstIn.value = true;
 
-    await wait(4000);
+    await wait(6000);
     uni.hideLoading();
 
     init();
