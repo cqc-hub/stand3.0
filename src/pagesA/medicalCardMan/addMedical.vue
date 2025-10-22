@@ -959,7 +959,7 @@
           // 非身份证不需要民族
           isDropNation = '1';
 
-          if (['03'].includes(idType)) {
+          if (['032'].includes(idType)) {
             _patientInfo.unshift('countries');
           }
         }

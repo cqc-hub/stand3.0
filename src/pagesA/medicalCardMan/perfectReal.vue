@@ -736,11 +736,10 @@
 
         o.inputMask = (v, item) => {
           if (v) {
-            const idReg = /(\d{3})\d*(\d{4})/;
-            return v.replace(idReg, '$1******$2');
-          } else {
-            return '';
+            return v.replace(/(\d{3})\d*(\d{4})/, '$1******$2');
           }
+
+          return '';
         };
       }
     });

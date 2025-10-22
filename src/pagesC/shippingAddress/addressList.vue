@@ -136,7 +136,8 @@
       obj = {
         senderName: item.senderName,
         senderPhone: item.senderPhone,
-        address: item.province + item.county + item.city,
+        // address: item.province + item.county + item.city,
+        address: item.province + item.city + item.county,
         detailedAddress: item.detailedAddress,
         postcode: item.postcode,
         id: item.id,
