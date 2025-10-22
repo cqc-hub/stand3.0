@@ -125,12 +125,13 @@ export class UseRegSearch extends GStores {
     } = item;
 
     const { clinicalType } = this.pageProp.value;
+    const sysCode = this.globalStore.sysCode;
 
     const args = {
       // deptName,
       docName,
       hosDocId,
-      hosId: this.cacheStore.isShowChooseHos ? hosId : '',
+      hosId: (this.cacheStore.isShowChooseHos || sysCode === '1001082') ? hosId : '',
       docTitleName,
       hosDeptId,
       clinicalType

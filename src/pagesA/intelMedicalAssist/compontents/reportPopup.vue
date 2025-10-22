@@ -29,7 +29,7 @@
             <text style="color: var(--hr-brand-color-6)">药盒</text><text>、</text> -->
              <text style="color: var(--hr-brand-color-6)">检查报告</text>、
             <text style="color: var(--hr-brand-color-6)">检验报告</text>
-            <text>，智能医助将为您解读报告~</text>
+            <text>，大模型将为您进行智能解读~</text>
           </view>
           <view class="report-img relative">
             <img :src="globalGl.BASE_IMG + 'znyz_jxw.png'" class="w-full" lazy-load />
