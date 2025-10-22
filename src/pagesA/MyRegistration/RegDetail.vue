@@ -1229,7 +1229,7 @@
     });
     isFirstIn.value = true;
 
-    await wait(6000);
+    await wait(4000);
     uni.hideLoading();
 
     init();

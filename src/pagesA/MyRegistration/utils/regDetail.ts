@@ -508,6 +508,7 @@ export class RegDetailUtil {
       searchType,
     });
 
+
     return result;
   }
   /** 请求内部数据库 */

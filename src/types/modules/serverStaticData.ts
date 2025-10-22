@@ -440,7 +440,6 @@ export interface ISystemConfig_ {
     /**
      * 详情页
      */
-
     /** 待缴费详情页面 的费用总额是否可以让用户选择缴费 */
     isSubitemPay?: '1';
     /** 待缴费详情页禁用查看费用明细 */

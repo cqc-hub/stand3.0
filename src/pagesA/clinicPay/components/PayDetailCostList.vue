@@ -9,7 +9,9 @@
                 <view @click.stop="selItem(item, idx)" class="flex-normal">
                   <text
                     :class="{
-                      'color-blue': isActive(item) || isActiveItemNums(item),
+                      'color-blue':
+                        !isItemDisabled(item) &&
+                        (isActive(item) || isActiveItemNums(item)),
                       'color-888': isItemDisabled(item),
                     }"
                     class="sel-icon mr12 iconfont animate__animated animate__fadeIn"
@@ -173,7 +175,11 @@
   };
 
   const isItemDisabled = (item: TCostList[number]) => {
-    return item.executionFlag === '1' || item.costList.every((o) => o.amountRem === '0') || item.disabled;
+    return (
+      item.executionFlag === '1' ||
+      item.costList.every((o) => o.amountRem === '0') ||
+      item.disabled
+    );
   };
 
   const isChildrenActive = (citem: TCostList[number]['costList'][number]) => {
@@ -199,7 +205,7 @@
 
   const selItem = (item: TCostList[number], idx) => {
     if (isItemDisabled(item)) {
-      return
+      return;
     }
 
     if (props.mulitChildren) {
