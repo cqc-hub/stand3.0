@@ -54,7 +54,7 @@
     openId: gStores.globalStore.openId,
     h5OpenId: gStores.globalStore.h5OpenId,
     phone: gStores.userStore.phoneNum, //账号下的手机号（仅微信）
-    name:gStores.userStore.name
+    name: gStores.userStore.name,
   };
   type A = keyof typeof allData;
 
@@ -64,6 +64,8 @@
 
     allData.hosId = pageProp.value.hosId || '';
     let query = getQueryPath(pageProp.value);
+    console.log('query', query, pageProp.value);
+
     if (pageProp.value.type == '1') {
       //第三方的h5  ?sysCode=${allData.sysCode}
       let newQuery = getQueryPath(pageProp.value);
@@ -120,50 +122,51 @@
       ? '1'
       : gStores.globalStore.modeOld;
 
-    let query = '?';
+    let query = options?.path?.includes('?') ? '&' : '?';
+
     let isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     if (options.type !== '1') {
       query = `?_d=${_d}&sysCode=${allData.sysCode}&modeOld=${modeOld}&isTcmStyle=${isTcmStyle}&`;
     }
-   console.log('options.query',options.query)
-     if (options.query && typeof options.query === 'string') {
-    try {
-      let queryArray: A[] = [];
-      const parsedQuery = JSON.parse(options.query);
-      
-      if (options.type == '1') {
-        // 安全访问嵌套属性
-        queryArray = parsedQuery?.query ?? [];
-      } else {
-        queryArray = Array.isArray(parsedQuery) ? parsedQuery : [];
-      }
-      
-      queryArray.forEach((item) => {
-        if (item in allData) {
-          // #ifdef MP-WEIXIN
-          if (
-            item === 'h5OpenId' &&
-            !gStores.globalStore.h5OpenId &&
-            globalGl.h5AppId
-          ) {
-            uni.reLaunch({
-              url: '/pages/home/startCome',
-            });
-          }
-          // #endif
-          query = query + item + '=' + allData[item] + '&';
+    console.log('options.query', options.query);
+    if (options.query && typeof options.query === 'string') {
+      try {
+        let queryArray: A[] = [];
+        const parsedQuery = JSON.parse(options.query);
+
+        if (options.type == '1') {
+          // 安全访问嵌套属性
+          queryArray = parsedQuery?.query ?? [];
         } else {
-          console.warn(`携带${item}参数有误`);
+          queryArray = Array.isArray(parsedQuery) ? parsedQuery : [];
         }
-      });
-    } catch (e) {
-      console.warn('JSON解析错误:', e);
+
+        queryArray.forEach((item) => {
+          if (item in allData) {
+            // #ifdef MP-WEIXIN
+            if (
+              item === 'h5OpenId' &&
+              !gStores.globalStore.h5OpenId &&
+              globalGl.h5AppId
+            ) {
+              uni.reLaunch({
+                url: '/pages/home/startCome',
+              });
+            }
+            // #endif
+            query = query + item + '=' + allData[item] + '&';
+          } else {
+            console.warn(`携带${item}参数有误`);
+          }
+        });
+      } catch (e) {
+        console.warn('JSON解析错误:', e);
+      }
+
+      return query.slice(0, -1);
+    } else {
+      return query.slice(0, -1);
     }
-    
-    return query.slice(0, -1);
-  } else {
-    return query.slice(0, -1);
-  }
   };
 
   const handleMessage = (evt) => {

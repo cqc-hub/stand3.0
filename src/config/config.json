@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001055",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -477,6 +477,17 @@
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true
+    },
+     "1001097": {
+      "wxAppid": "wx868bfb27a64b370c",
+      "h5Appid": "",
+      "alipayAppid": "",
+      "isvAlipayAppid": "",
+      "name": "舟山市普陀区人民医院",
+      "h5AppidDisabledInTest": true,
+      "isStartComeTest": false,
+      "isSearchInHos": true,
+      "isOpenOcr": false
     },
     "2001004": {
       "wxAppid": "wx101158c57640d854",

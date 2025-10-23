@@ -23,8 +23,9 @@
 
     if (globalStore.sysCode === '1001035') {
       const { appLaunchInit1001035 } = useLunchInit1001035();
-
       appLaunchInit1001035();
+    } else {
+      globalStore.setShowFlag(true);
     }
     // #ifdef MP-ALIPAY
     const alipayPid = global.systemInfo.alipayPid;
@@ -72,7 +73,7 @@
         'pagesC/openMiniProgram/h5UseMiniFunc',
         'pagesA/webView/webView',
         'pagesC/cloudHospital/myPath',
-        'pagesA/intelMedicalAssist/intelMedicalAssist'
+        'pagesA/intelMedicalAssist/intelMedicalAssist',
       ].includes(opt.path)
     ) {
       // 非自定义菜单的时候
