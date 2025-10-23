@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001094",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -418,7 +418,8 @@
         "healthCardText": "新疆维吾尔自治区卫生健康委员会",
         "hospitalId": "35088"
       },
-      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png"
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png",
+      "desc": "过渡"
     },
     "1001087": {
       "wxAppid": "wxe48cc8a9a8ec915f",
