@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     //文件路径在解析时 基本的url
     "baseUrl": "./",
     //路径解析 类似webpack的alias
