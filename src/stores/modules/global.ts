@@ -46,7 +46,7 @@ const SYS_CODE_MALL_APP_ID_MAP = {
   '1001066': 'mallMXXXXXXX', // 请替换为实际的 mallAppId
   '1001078': 'mallMYYYYYYY', // 请替换为实际的 mallAppId
   '1001076': 'mallMZZZZZZZ', // 请替换为实际的 mallAppId
-  '1001071': 'mallMAAAAAAA', // 请替换为实际的 mallAppId
+  '1001071': 'mallMc58a05711ba6', // 请替换为实际的 mallAppId
 };
 
 //页面存储token brower等
@@ -279,9 +279,10 @@ const globalStore = defineStore('global', {
           SYS_CODE_MALL_APP_ID_MAP[this.sysCode] || 'mallM39dpe4692n7';
         // @ts-ignore
         appData.globalData.configData = {
-          env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
+          // env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
           mallAppId: mallAppId,
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
+          homePage:'/pages/home/home',
           token: this.token.accessToken,
           openId: this.openId,
           sysCode: this.sysCode,
