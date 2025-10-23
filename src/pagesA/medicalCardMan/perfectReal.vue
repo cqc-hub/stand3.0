@@ -736,11 +736,10 @@
 
         o.inputMask = (v, item) => {
           if (v) {
-            const idReg = /(\d{3})\d*(\d{4})/;
-            return v.replace(idReg, '$1******$2');
-          } else {
-            return '';
+            return v.replace(/(\d{3})\d*(\d{4})/, '$1******$2');
           }
+
+          return '';
         };
       }
     });
@@ -848,15 +847,26 @@
           });
         }
       } else {
-        // #ifdef MP-ALIPAY
-        // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
-        if (!patList.length && mobile) {
-          maskInfo(formList, {
-            keys: ['patientName', 'patientPhone'],
-            disabled: true,
-          });
+        if (gStores.globalStore.ev === 'alipay') {
+          // 支付宝第一个就诊人自动带入信息并加密(新增就诊人)
+          if (!patList.length && mobile) {
+            const maskKeys: any[] = [];
+            const { userName, mobile, certNo } = gStores.userStore.cacheUser;
+
+            if (userName) {
+              maskKeys.push('patientName');
+            }
+
+            if (mobile) {
+              maskKeys.push('patientPhone');
+            }
+
+            maskInfo(formList, {
+              keys: maskKeys,
+              // disabled: true,
+            });
+          }
         }
-        // #endif
       }
     }
 

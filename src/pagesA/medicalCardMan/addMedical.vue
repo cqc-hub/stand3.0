@@ -865,17 +865,13 @@
     );
 
     if (formExtraKeys.length) {
-      if (formExtraKeys.includes('countries')) {
-        addressArr.push('countries');
-      }
-
       if (formExtraKeys.includes('referenceId')) {
         endArr.push('referenceId');
       }
 
       formExtraKeys = formExtraKeys.filter(
         // 这几个特殊判断
-        (key) => !['countries', 'referenceId'].includes(key)
+        (key) => !['referenceId'].includes(key)
       );
     }
 
@@ -932,9 +928,10 @@
     switch (value) {
       case '-1':
         let lessThenSix: boolean = false;
+        const idType = formData.value[formKey.idType];
 
         // 证件类型： 身份证
-        if (formData.value[formKey.idType] === '01') {
+        if (idType === '01') {
           const idCard = formData.value[formKey.idCard];
 
           // 有身份证不需要填写 生日、性别
@@ -961,6 +958,10 @@
 
           // 非身份证不需要民族
           isDropNation = '1';
+
+          if (['032'].includes(idType)) {
+            _patientInfo.unshift('countries');
+          }
         }
 
         // 显示监护人
@@ -1023,6 +1024,16 @@
     console.log(listArr, '---listArr---');
 
     formList.value = pickTempItem(listArr);
+
+    // 添加分隔
+    const patientInfoItemFirst = _patientInfo[0];
+    if (patientInfoItemFirst) {
+      const findItem = formList.value.find(
+        (o) => o.key === patientInfoItemFirst
+      )!;
+
+      findItem.rowStyle = 'margin-top: 16rpx;';
+    }
 
     const idCardItem = formList.value.find((o) => o.key === formKey.idCard);
     if (idCardItem) {

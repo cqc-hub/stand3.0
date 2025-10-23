@@ -17,33 +17,18 @@
         待完成
       </view>
     </view>
+
+    <g-pay ref="refPay"></g-pay>
     <view class="g-footer">
       <button @click="testClick" class="btn1">233</button>
     </view>
-
-    <canvas
-      canvas-id="myCanvas"
-      id="myCanvas"
-      style="
-        width: 300px;
-        height: 200px;
-        background: #f5f5f5;
-        border: 1px solid #ccc;
-      "
-      :width="canvasWidth"
-      :height="canvasHeight"
-    />
-    <view style="margin-top: 20px">Canvas 调试区域</view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { decryptDes } from '@/common';
-  import api from '@/service/api';
-  import { getShareTotalUrl, LoginUtils, wait } from '@/utils';
-  import { onLoad, onShow } from '@dcloudio/uni-app';
-  import sm from 'miniprogram-sm-crypto';
-  import { getCurrentInstance, onMounted, ref } from 'vue';
+  import { wait } from '@/utils';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { ref } from 'vue';
 
   const props = withDefaults(
     defineProps<{
@@ -53,24 +38,14 @@
       color: 'var(--hr-brand-color-6)',
     }
   );
-  const inst = getCurrentInstance();
-  const { createCanvasContext, getSystemInfo, getImageInfo } = uni;
-  const canvasWidth = ref(300);
-  const canvasHeight = ref(200);
-  const dpr = ref(1);
+  const refPay = ref<any>('');
 
   onLoad(async () => {
-    console.log('object');
+    await wait(1500);
+    refPay.value.show();
   });
 
   const testClick = async (e) => {};
-
-  onMounted(async () => {
-    const p =
-      'H3tiGzGqpbh31rG5v/FV6smFfZbiVwlm2eAxqYEVQ5t+CnnGYyPy41bW+P20Ddt82/22gkcqfRYHm8rurptl/TrsO+GBNGjcpaW6lj4GcLzUAWynkCWxi+cgBYk8fAsTk1eGgUpwZbUyg4Txl3IrBtZjL+h1vTQ0gMmBOWAy5jIFCI5LKL0tC2AMZhg0iHojr34DFqYM1HXAPwaTt2NeOzidFwrEjQqMZMGaXnXkStzPFkRe/MDuBQ8sfxVjHTzj8umzsZ+uLCQeWSc5KLs1LoQqIUDGlHu3nWqrZw9JW6UoLz/D30Dt2oTIujk3bEWMC7Mz2uIgqMnmzqbm1enQHJL3Lj8HFqaH3XFY0Kk+xPLZXs7/CM2lZaZq8oyRBEDEzk4zHx9FoVESpU0sb5/Rb+kyUcEITXDCCxAIbeRBn+MHQIGmWK1aRRkhGtvl2eQism4/sYJmrTiTYJ/fGBhceOf0AvoBIbA4t32QG87KViQeGJlEJdhUbQ020v+R4pqIa74w85jk1IMpV+MvppVLTpP8xMNl1VPfVNRs0RK1lolzhvDVf38KeDt0kXYs5+0zJiGwobkeYi4o4xyO/wTybjC2mu7YIb0AmMkHytGcnCU7So97sdhbs+hhbhwvzN3bikOmGrRZGbtkn9x9z5F44WEXgEx5EQZCtFmJfvQdt19M2/O1kk3uoSPxQGNcZgJQ6t5u/OHxYywrb7z30w69W5fsVP2jZpZNEIurC5HRZOmUrA+3RtdO+ixCuLW6Dn/NYv+fc0ECkQJiD065Hqm1aQuT7vaW+mCoUAowmQojHwbhf9zJXvETWw==';
-    const r = decryptDes(p);
-    console.log(r);
-  });
 </script>
 
 <style lang="scss" scoped>

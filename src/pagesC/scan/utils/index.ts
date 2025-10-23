@@ -28,6 +28,7 @@ export const useScan = () => {
        * - 17 健康温州 温心在线
        * - 18 健康温州 云影像
        * - 19 江苏省中 健康商城
+       * - 20 健康温州 学生体检
        */
       type:
         | '_1'
@@ -49,7 +50,8 @@ export const useScan = () => {
         | '16'
         | '17'
         | '18'  
-        | '19';
+        | '19'
+        | '20';
       _type: 'useTBanner';
       [key: string]: any;
       // TBannerConfig
@@ -496,6 +498,27 @@ export const useScan = () => {
       }
     });
   };
+
+    /**
+   * 健康温州——学生体检
+   */
+  const healthCheckUp1001082 = () => {
+    useTBanner({
+      "isExpired": "1", 
+      "type": "h5",
+      "path": "https://health.wzswsj.gov.cn/wzwjwh5_wzapp/#/pages/parent/home/home",
+      "addition": {
+        "token": "token",
+        "patientId": "patientId",
+        "herenId": "herenId"
+      },
+      "extraData": {
+        "sysCode": "1001082",
+        "reqForward": "true",
+        "source": "19"
+      }
+    });
+  };
   /**
    * 江苏省中——健康商城(有问题)
    */
@@ -551,6 +574,7 @@ export const useScan = () => {
     aijiance1001082,
     yun1001082,
     wenxinzaixian1001082,
+    healthCheckUp1001082,
     healthMall1001035
   };
 };

@@ -53,7 +53,8 @@
     aijiance1001082,
     wenxinzaixian1001082,
     yun1001082,
-    healthMall1001035
+    healthMall1001035,
+    healthCheckUp1001082
   } = useScan();
 
   const init = async () => {
@@ -179,6 +180,11 @@
       //江苏省中—健康商城
       case '19':
         healthMall1001035();
+        break;
+
+      //健康温州—学生体检
+      case '20':
+        healthCheckUp1001082();
         break;
 
       default:

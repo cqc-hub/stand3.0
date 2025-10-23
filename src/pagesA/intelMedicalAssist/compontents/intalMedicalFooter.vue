@@ -109,7 +109,7 @@
             @confirm="sendMsg"
             :disabled="msgState.msgLoad"
             placeholder-class="my-neirong-sm f28"
-            placeholder="请输入症状/药品/疾病..."
+            placeholder="请输入医生/症状/药品/疾病..."
             confirm-type="search"
             :focus="msgState.focus"
             @blur="onBlur"
@@ -119,7 +119,7 @@
             class="dh-input f28"
             disabled="true"
             placeholder-class="my-neirong-sm f28"
-            placeholder="请输入症状/药品/疾病..."
+            placeholder="请输入医生/症状/药品/疾病..."
           />
         </view>
       </view>

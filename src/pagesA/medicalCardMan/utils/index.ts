@@ -357,7 +357,6 @@ export const tempList: TInstance[] = [
     key: formKey.address,
     field: 'address',
     labelWidth: '220rpx',
-    rowStyle: 'margin-top: 16rpx;',
   },
 
   {
