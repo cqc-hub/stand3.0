@@ -102,7 +102,7 @@
             <view class="row-value g-break-word color-444">
               {{ item.tips }}元
             </view>
-          </view> 
+          </view>
         </view>
       </view>
     </view>
@@ -117,13 +117,13 @@
     tradeType,
     getIsMedicalTradeTypeDefault,
   } from '../utils/clinicPayDetail';
-  
+
   const gStores = new GStores();
 
   const props = withDefaults(
     defineProps<{
       list: IPayListItem[];
-      selUnPayList: IPayListItem[];
+      selUnPayList?: IPayListItem[];
       isListShowClinicType?: boolean;
       isCheck?: boolean;
       // 药品配送

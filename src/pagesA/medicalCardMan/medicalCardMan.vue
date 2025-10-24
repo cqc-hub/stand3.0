@@ -327,7 +327,6 @@
       ].filter((o) => isChangeHosPhoneWay.includes(o.value));
 
       const { tapIndex } = await apiAsync(
-        // @ts-expect-error
         uni.showActionSheet,
         {
           title: '选择验证方式',

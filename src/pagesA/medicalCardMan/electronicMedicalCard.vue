@@ -94,7 +94,11 @@
 
                 <view class="w-full mb40">
                   <view class="pr32 pl32">
-                    <img :src="barCodeImg" class="bar-code-img w-full" lazy-load />
+                    <img
+                      :src="barCodeImg"
+                      class="bar-code-img w-full"
+                      lazy-load
+                    />
                   </view>
                 </view>
               </block>
@@ -310,7 +314,6 @@
     // refBarCode.value?.generateCode();
   };
 
-  // @ts-expect-error
   uni.getSystemInfo({}).then(({ screenWidth }) => {
     if (screenWidth > 390) {
       options.value.size = 500;
@@ -375,15 +378,11 @@
     let { key } = toggleList.value[toggleListCurrent.value];
     if (toggleList.value.length > 2) {
       const tip = '切换卡类型';
-      const { tapIndex } = await apiAsync(
-        // @ts-expect-error
-        uni.showActionSheet,
-        {
-          title: tip,
-          alertText: tip,
-          itemList: toggleList.value.map((o) => o.label),
-        }
-      );
+      const { tapIndex } = await apiAsync(uni.showActionSheet, {
+        title: tip,
+        alertText: tip,
+        itemList: toggleList.value.map((o) => o.label),
+      });
 
       toggleListCurrent.value = tapIndex;
     } else {
@@ -485,7 +484,6 @@
     barCodeImg.value = img.tempFilePath || '';
   };
 
-
   const init = async () => {
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
 
@@ -542,7 +540,8 @@
     width: 100%;
     position: absolute;
 
-    background: linear-gradient(
+    background:
+      linear-gradient(
         160deg,
         var(--hr-brand-color-6-light),
         var(--hr-brand-color-6-light),

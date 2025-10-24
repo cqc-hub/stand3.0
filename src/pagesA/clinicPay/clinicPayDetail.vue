@@ -504,7 +504,7 @@
   };
 
   // 注意如果需要单纯跳门诊缴费（不免密）， 二维码随便带个参数
-  onLoad(async (opt) => {
+  onLoad(async (opt: any) => {
     /**
      * 支付宝端
      * queryParams - https://h5.eheren.com/xxxx?xxx=xxx
