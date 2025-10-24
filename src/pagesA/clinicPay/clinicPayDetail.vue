@@ -154,7 +154,7 @@
         <text class="color-444 f28 mr8">合计</text>
         <text class="f36 g-bold color-error">{{ totalCost }}元</text>
       </view>
-      <!-- @click="handlerPay" -->
+      <!-- 缴费 -->
       <button
         :class="{
           'btn-disabled': !selUnPayList.length,

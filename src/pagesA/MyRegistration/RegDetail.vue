@@ -499,6 +499,7 @@
     handlerMedicalPay1001035,
     getMedicalNationInfo,
     handlerMedicalPayDongRuan,
+    getOnlineMedicalConfig,
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
 
   import globalGl from '@/config/global';
@@ -997,21 +998,18 @@
       return;
     }
 
-    // 先只做微信国标模式
-    const medicalMHelp = getMedicalConfigInfo() || {};
-    const { isFamilyPayment, isGbFamilyPayment } = medicalMHelp;
-
     const isMedicalMode = _getIsMedicalMode();
-    const { cardNumber } = gStores.userStore.patChoose;
+    const onlineMedicalConfig = await getOnlineMedicalConfig();
+
     const isSelf = true;
-    // const isSelf =
-    //   isMedicalMode &&
-    //   (isFamilyPayment === '1' ||
-    //     isGbFamilyPayment === '1' ||
-    //     (await isMedicalSelf(cardNumber)));
     const payList = [] as any;
 
-    if (orderRegInfo.value.tradeType !== '1' && isMedicalMode && isSelf) {
+    if (
+      orderRegInfo.value.tradeType !== '1' &&
+      isMedicalMode &&
+      onlineMedicalConfig.isMedicalOrder === '1' &&
+      isSelf
+    ) {
       payList.push(PayType.Medicare);
     } else {
       payList.push(PayType.Online);
