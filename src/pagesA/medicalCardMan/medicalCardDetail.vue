@@ -136,8 +136,7 @@
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
-      pat.idType === '01' &&
-      isWx.value
+      pat.idType === '01' 
     ) {
       let q: any = {};
 
@@ -221,7 +220,7 @@
     }
 
     const { isEditPatPhone } = pageConfig.value;
-    if (isEditPatPhone === '1' && isWx.value) {
+    if (isEditPatPhone === '1' ) {
       formList.map((o) => {
         const { key } = o;
         // 仅支持身份证类型修改
