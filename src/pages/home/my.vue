@@ -129,7 +129,7 @@
     ],
   });
 
-  interface TPageType extends ILoginBack {
+  interface TPageType extends /* @vue-ignore */ ILoginBack {
     isWarningLogin?: '1';
 
     // 微信小程序必须显示写出来， 否则接收不到
