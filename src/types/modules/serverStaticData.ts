@@ -728,6 +728,7 @@ export interface IHosInfo {
   hosLogo: string;
   tcHosId?: string; // 通策的一级hosId
   tcSubHosId?: string; // 通策的二级hosId
+  schTime?: string; //  点击院区时，支持弹框显示 就诊提醒
 }
 
 export type TBannerConfigBase = {

@@ -5,11 +5,7 @@
     }"
     class="page g-page"
   >
-    <g-flag
-      v-if="dirUrl.includes('/pagesA/MyRegistration/selDepartment')"
-      isShowFg
-      typeFg="84"
-    />
+    <g-flag v-if="isForOrder" isShowFg typeFg="84" />
     <view v-if="_type === '3' || hosHisMaxLen > 5" class="search-input">
       <uni-search-input
         v-model:value="searchValue"
@@ -320,9 +316,25 @@
     }
   };
 
-  const itemClick = (item: IHosInfo) => {
+  const itemClick = async (item: IHosInfo) => {
     const { _type } = props.value;
-    const { hosId, gisLat } = item;
+    const { hosId, schTime } = item;
+
+    if (isForOrder.value && schTime) {
+      await new Promise((r) => {
+        gStores.messageStore.showMessage(schTime, 0, {
+          useDialog: true,
+          dialogOpt: {
+            title: '温馨提示',
+            isShowCancel: false,
+            maxHeight: 900,
+          },
+          closeCallBack({ confirm }) {
+            r(confirm);
+          },
+        });
+      });
+    }
 
     if (globalGl.SYS_CODE === '1001046' && _type === '4') {
       useTBanner(
