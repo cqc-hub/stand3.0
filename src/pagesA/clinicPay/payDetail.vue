@@ -332,6 +332,7 @@
     getMedicalAuthCode,
     getMedicalNationInfo,
     handlerMedicalPayDongRuan,
+    getOnlineMedicalConfig,
   } from './utils/clinicPayDetail';
   import {
     type IGPay,
@@ -820,7 +821,7 @@
         serialNo,
         totalCost: getTotalCostString.value,
         patientName,
-        desSecret:props.value.params
+        desSecret: props.value.params,
       }
     );
 
@@ -917,7 +918,8 @@
   const handlerPay = async () => {
     const { costTypeCode } = props.value;
     const isMedicalMode = getIsMedicalMode();
-    const { cardNumber } = gStores.userStore.patChoose;
+    const onlineMedicalConfig = await getOnlineMedicalConfig();
+
     const {
       sConfig: { medicalMHelp },
     } = globalGl;
@@ -932,7 +934,7 @@
 
     let flag = false;
 
-    if (isMedicalMode) {
+    if (isMedicalMode && onlineMedicalConfig.isMedicalPay === '1') {
       //现在不判断是否本人医保,交给微信医保去判断
       // flag = await isMedicalSelf(
       //   props.value.cardNumber || cardNumber,

@@ -318,6 +318,20 @@ export const getIsMedicalMode = () => {
   return false;
 };
 
+/**
+ * 额外单独配置医保入口
+ */
+export const getOnlineMedicalConfig = async () => {
+  const config = await ServerStaticData.getSystemConfig('pay');
+  const { medical = {} } = config;
+  const { isMedicalOrder = '1', isMedicalPay = '1' } = medical;
+
+  return {
+    isMedicalOrder,
+    isMedicalPay,
+  };
+};
+
 export const getMedicalAuthCode = async (opt?: {
   userName?: string;
   idCard?: string;
@@ -961,49 +975,47 @@ export const usePayPage = () => {
       cardNumber: '';
       patientName: '';
     };
-
     const desSecret = pageProps.value.params;
-    if (desSecret) {
-      const { result: r } = await api
-        .getScanUnpaidClinicList<{
+
+    try {
+      if (desSecret) {
+        const { result: r } = await api.getScanUnpaidClinicList<{
           clinicalSettlementResultList: IPayListItem[];
           cardNumber: '';
           patientName: '';
         }>({
           desSecret,
-        })
-        .finally(() => {
-          isPayListRequestComplete.value = true;
         });
 
-      result = r;
+        result = r;
 
-      if (result) {
-        pageProps.value.deParams = {
-          cardNumber: result.cardNumber,
-          patientName: result.patientName,
-        };
+        if (result) {
+          pageProps.value.deParams = {
+            cardNumber: result.cardNumber,
+            patientName: result.patientName,
+          };
+        } else {
+          pageProps.value.deParams = {};
+        }
       } else {
-        pageProps.value.deParams = {};
-      }
-    } else {
-      const { result: r } = await api
-        .getUnpaidClinicList<{
+        const { result: r } = await api.getUnpaidClinicList<{
           clinicalSettlementResultList: IPayListItem[];
           cardNumber: '';
           patientName: '';
         }>({
           patientId,
           hosId: hosId.value,
-        })
-        .finally(() => {
-          isPayListRequestComplete.value = true;
         });
 
-      result = r;
+        result = r;
 
-      uni.hideLoading();
-      pageProps.value.deParams = {};
+        uni.hideLoading();
+        pageProps.value.deParams = {};
+      }
+    } catch (error) {
+      throw new Error(error as any);
+    } finally {
+      isPayListRequestComplete.value = true;
     }
 
     unPayList.value = [];
@@ -1648,7 +1660,7 @@ export const usePayPage = () => {
   };
 
   const getPay = async () => {
-    const { isGuideSelfPayFirst } = pageConfig.value;
+    const onlineMedicalConfig = await getOnlineMedicalConfig();
     const isMedicalMode = getIsMedicalMode();
     const isDigitalPay = getIsDigitalPay(pageConfig.value);
     const hasMedicalItem = selUnPayList.value.some(
@@ -1664,7 +1676,7 @@ export const usePayPage = () => {
     const isMedicalPlugin = medicalMHelp?.medicalPlugin === '1';
     const isNavgateToZLminiProm = getIsNavToMini();
     const payTypeList = determinePayType({
-      isMedicalMode,
+      isMedicalMode: isMedicalMode && onlineMedicalConfig.isMedicalPay === '1',
       isDigitalPay,
       hasMedicalItem,
       isMedicalSelf:

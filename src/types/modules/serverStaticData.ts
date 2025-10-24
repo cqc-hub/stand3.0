@@ -474,6 +474,14 @@ export interface ISystemConfig_ {
 
     // 缴费完成后跳转 与 pageNextAdress 区别是不看 clinicType 且 pageNextAdress 优先
     payNextAction?: TButtonConfig;
+
+    // 医保在线配置(个别项目需要支持医保退费但不需要医保支付)-  默认开启， 关闭时候设置 '0'
+    medical?: {
+      // 开启挂号医保
+      isMedicalOrder?: '0' | '1';
+      // 开启门诊医保
+      isMedicalPay?: '0' | '1';
+    };
   };
 
   //报告查询 REPORT_QUERY_CONFIG
@@ -720,6 +728,7 @@ export interface IHosInfo {
   hosLogo: string;
   tcHosId?: string; // 通策的一级hosId
   tcSubHosId?: string; // 通策的二级hosId
+  schTime?: string; //  点击院区时，支持弹框显示 就诊提醒
 }
 
 export type TBannerConfigBase = {
