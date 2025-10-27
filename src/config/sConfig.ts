@@ -45,6 +45,8 @@ export interface ISConfig {
   isHideHomeSearch?: '1';
   //是否开启助老版
   isOpenHelpOld?: '1';
+  /** 维吾尔语切换 */
+  isLangUygur?: '1';
   //是否开启健康科普
   isOpenPopularSci?:
     | '1'
@@ -864,6 +866,9 @@ const scJson: Record<string, ISConfig> = {
     },
   },
   1001094: {
+    isOpenHelpOld: '1',
+    isLangUygur: '1',
+
     login: {
       isLoginByOpenId: '1',
     },

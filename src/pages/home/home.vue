@@ -37,41 +37,29 @@
               v-if="global.sConfig.isHideHomeSearch != '1'"
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->
-              <template v-if="global.sConfig.isOpenHelpOld == '1'">
-                <view class="w70" @click.prevent="goSearch">
-                  <view class="my-disabled">
-                    <uni-search-input
-                      :type="'2'"
-                      inputBorder
-                      :placeholder="viewerStore.homeSearchPlaceholder"
-                    />
-                  </view>
+              <view class="w-full" @click.prevent="goSearch">
+                <view class="my-disabled">
+                  <uni-search-input
+                    :type="'2'"
+                    inputBorder
+                    :placeholder="viewerStore.homeSearchPlaceholder"
+                  />
                 </view>
-                <view class="openOld" @tap="openModeOld">
-                  <view class="iconfont icon-size">&#xe700;</view>
-                  长辈模式
-                </view>
-              </template>
-              <template v-else>
-                <view class="w100 flex">
-                  <view @click.prevent="goSearch" class="flex1">
-                    <view class="my-disabled">
-                      <uni-search-input
-                        :type="'2'"
-                        inputBorder
-                        :placeholder="viewerStore.homeSearchPlaceholder"
-                      />
-                    </view>
-                  </view>
-                  <view
-                    v-if="gStores.globalStore.sysCode === '1001063'"
-                    @click="goClinicPay"
-                    class="ico_my_scon icon-size"
-                  >
-                    &#xe6e4;
-                  </view>
-                </view>
-              </template>
+              </view>
+              <view
+                @click="goClinicPay"
+                v-if="gStores.globalStore.sysCode === '1001063'"
+                class="ico_my_scon icon-font scan-icon ml32"
+              />
+
+              <view
+                v-if="global.sConfig.isOpenHelpOld == '1'"
+                class="openOld ml32"
+                @tap="openModeOld"
+              >
+                <view class="iconfont icon-size">&#xe700;</view>
+                长辈模式
+              </view>
             </view>
 
             <view v-if="gStores.globalStore.sysCode === '1001035'" class="pt24">
@@ -592,9 +580,8 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     personConfig.value = await ServerStaticData.getSystemConfig('person');
     orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    healthCounselConfig.value = await ServerStaticData.getSystemConfig(
-      'HEALTH_COUNSEL'
-    );
+    healthCounselConfig.value =
+      await ServerStaticData.getSystemConfig('HEALTH_COUNSEL');
 
     const { isOpenAIPolicy, policyList } =
       await ServerStaticData.getSystemConfig('RestOfConfig');
@@ -885,11 +872,9 @@
     .w100 {
       width: 100%;
     }
-    .icon-size {
+    .scan-icon {
       width: 88rpx;
-      margin-left: 20rpx;
-      display: inline-block;
-      color: var(--h-color-white);
+      height: 88rpx;
     }
     .openOld {
       width: 200rpx;

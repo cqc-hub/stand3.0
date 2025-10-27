@@ -54,9 +54,9 @@
                 }"
                 class="label text-no-wrap"
               >
-                {{ item.label }}
+                {{ getLangLabel(item.label) }}
               </text>
-              <view class="badge" v-if="item.label === '消息中心' && unreadMes">
+              <view class="badge" v-if="item.label === 'home-tabbar:消息中心' && unreadMes">
                 new
               </view>
             </view>
@@ -68,17 +68,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, onUpdated } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   import { setLocalStorage, getLocalStorage } from '@/common';
 
-  import global from '@/config/global';
   import { useTBanner, throttle, GStores, cacheUtil } from '@/utils';
-  import api from '@/service/api';
   import { isAreaProgram } from '@/stores';
-  import globalGl from '@/config/global';
+  import { getLangLabel } from '@/config/lang';
 
-  const props = defineProps<{ systemModeOld: boolean }>();
+  import globalGl from '@/config/global';
+  import global from '@/config/global';
+  import api from '@/service/api';
+
+  defineProps<{ systemModeOld: boolean }>();
   const gStores = new GStores();
 
   const SYS_TAB_KEY = 'SYS_TAB_KEY';
@@ -86,7 +88,7 @@
   const current = ref('');
   const tabBars = ref([
     {
-      label: '首页',
+      label: 'home-tabbar:首页',
       icon: '/static/image/home.png',
       iconActive: `/static/image/home_active${
         gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -96,7 +98,7 @@
       sort: 1,
     },
     {
-      label: '我的',
+      label: 'home-tabbar:我的',
       icon: '/static/image/my.png',
       iconActive: `/static/image/my_active${
         gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -215,7 +217,6 @@
     getMenuBtn();
     if (systemInfo === '') {
       const e = await uni.getSystemInfo({});
-      // @ts-expect-error
       const { system, osName } = e;
       isIos.value = system.startsWith('iOS') || osName === 'ios';
 
@@ -237,7 +238,7 @@
   const getMenuBtn = async () => {
     let tabBarList = [
       {
-        label: '首页',
+        label: 'home-tabbar:首页',
         icon: '/static/image/home.png',
         iconActive: `/static/image/home_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -247,7 +248,7 @@
         sort: 1,
       },
       {
-        label: '互联网医院',
+        label: 'home-tabbar:互联网医院',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -257,7 +258,7 @@
         sort: 2,
       },
       {
-        label: '云诊室',
+        label: 'home-tabbar:云诊室',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -267,7 +268,7 @@
         sort: 2,
       },
       {
-        label: '健康商城',
+        label: 'home-tabbar:健康商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: `/static/image/oral-mall-home-icon-active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -277,7 +278,7 @@
         sort: 3,
       },
       {
-        label: '健康管理',
+        label: 'home-tabbar:健康管理',
         icon: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
         iconActive: global.BASE_IMG + 'leqin-mdisease-home-icon.png',
         url: 'mDisease',
@@ -286,7 +287,7 @@
       },
 
       {
-        label: '口腔商城',
+        label: 'home-tabbar:口腔商城',
         icon: global.BASE_IMG + 'oral-mall-home-icon.png',
         iconActive: global.BASE_IMG + 'oral-mall-home-icon-active.png',
         url: '/pagesE/miniprogram_dist/pages/oralMall/oralMall?hospitalId=202505190001&subhospitalId=202505191001&isHome=true',
@@ -294,7 +295,7 @@
         sort: 2,
       },
       {
-        label: '服务',
+        label: 'home-tabbar:服务',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -304,7 +305,7 @@
         sort: 2,
       },
       {
-        label: '消息中心',
+        label: 'home-tabbar:消息中心',
         icon: '/static/image/wlyy.png',
         iconActive: `/static/image/wlyy_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -314,7 +315,7 @@
         sort: 3,
       },
       {
-        label: '我的',
+        label: 'home-tabbar:我的',
         icon: '/static/image/my.png',
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -325,20 +326,23 @@
       },
     ];
 
-    const tabList: (typeof tabBarList)[number]['label'][] = ['首页', '我的'];
+    const tabList: (typeof tabBarList)[number]['label'][] = [
+      'home-tabbar:首页',
+      'home-tabbar:我的',
+    ];
 
     if (global.sConfig.isOpenHomeTabBarNetWorkBtn) {
-      tabList.push('互联网医院');
+      tabList.push('home-tabbar:互联网医院');
     }
 
     if (global.sConfig.isOpenHomeTabBarMessageBtn) {
       // #ifdef MP-WEIXIN
-      tabList.push('消息中心');
+      tabList.push('home-tabbar:消息中心');
       // #endif
     }
 
     if (global.SYS_CODE === '1001052') {
-      tabList.push('健康管理');
+      tabList.push('home-tabbar:健康管理');
     }
 
     // #ifdef MP-WEIXIN
@@ -347,17 +351,17 @@
         global.SYS_CODE
       )
     ) {
-      tabList.push('口腔商城');
+      tabList.push('home-tabbar:口腔商城');
     }
     // #endif
 
     if (global.SYS_CODE === '1001035') {
-      // tabList.push('云诊室');
-      // tabList.push('健康商城');
+      // tabList.push('home-tabbar:云诊室');
+      // tabList.push('home-tabbar:健康商城');
     }
 
     if (global.SYS_CODE === '1001082') {
-      tabList.push('服务');
+      tabList.push('home-tabbar:服务');
       tabBarList[0].url = '/pagesA/intelMedicalAssist/intelMedicalAssist';
     }
 
@@ -374,7 +378,7 @@
     // 固定插入中间
     if (!(tabBars.value.length % 2) && !isAreaProgram()) {
       const d = {
-        label: '就诊码/医保码',
+        label: 'home-tabbar:就诊码/医保码',
         icon: '/static/image/my.png',
         iconActive: `/static/image/my_active${
           gStores.globalStore.isTcmStyle ? '-tcm' : ''
@@ -388,7 +392,7 @@
     }
   };
 
-  const isCenterCode = (item) => item.label === '就诊码/医保码';
+  const isCenterCode = (item) => item.label === 'home-tabbar:就诊码/医保码';
 
   // 提取路径部分的函数
   const getPath = (url: string) => {

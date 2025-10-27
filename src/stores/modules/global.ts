@@ -18,6 +18,7 @@ interface IStateGlobal {
     accountType: number;
     payType: string;
   };
+  lang: 'zh' | 'en' | 'uygur';
 
   openId: string;
   h5OpenId: string;
@@ -61,6 +62,7 @@ const globalStore = defineStore('global', {
     key: 'global',
     paths: [
       'ev',
+      'lang',
       'token',
       'openId',
       'h5OpenId',
@@ -80,6 +82,7 @@ const globalStore = defineStore('global', {
 
   state: (): IStateGlobal => {
     return {
+      lang: 'en',
       ev: null,
       // 所有这些属性都将自动推断其类型
       token: {
@@ -282,7 +285,7 @@ const globalStore = defineStore('global', {
           // env: 2, //不设或0或'或空-线上，1=测试，2=模测，3=预发布，4=开发环境env:1，//
           mallAppId: mallAppId,
           loginPage: '/pages/home/my?isWarningLogin=1', // 小程序的登录页面地址
-          homePage:'/pages/home/home',
+          homePage: '/pages/home/home',
           token: this.token.accessToken,
           openId: this.openId,
           sysCode: this.sysCode,
