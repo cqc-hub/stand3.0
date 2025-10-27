@@ -514,7 +514,7 @@
   .is-input-error-border {
     border-color: $uni-error;
     .uni-easyinput__placeholder-class {
-      color: mix(#fff, $uni-error, 50%);
+      color: color-mix(#fff, $uni-error, 50%);
     }
   }
 

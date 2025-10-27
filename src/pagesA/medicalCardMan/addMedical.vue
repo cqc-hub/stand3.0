@@ -361,7 +361,6 @@
             selWay = chooseList[0].value;
           } else {
             const { tapIndex } = await apiAsync(
-              // @ts-expect-error
               uni.showActionSheet,
               {
                 title: '选择验证方式',

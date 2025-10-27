@@ -164,7 +164,7 @@
                     class="sysAppMore"
                   >
                     <rich-text :nodes="sysAppMore"></rich-text>
-                  </view> 
+                  </view>
 
 
                  <view v-if="msgItem.firstCommendList" class="pt20">
@@ -209,9 +209,9 @@
               class="chat-system-item margin-left padding-chat by-cyan flex-normal smartChatRoomItem_load"
             >
               <text user-select selectable class="g-break-word g-blod">
-              {{msgState.msgText ? msgState.msgText: "正在理解您的问题"}} 
+              {{msgState.msgText ? msgState.msgText: "正在理解您的问题"}}
               </text>
-               <text class="progress-text">{{ progressWidth }}%</text> 
+               <text class="progress-text">{{ progressWidth }}%</text>
               <view
                 class="loading-cricle relative"
                 v-for="(item, index) in 4"
@@ -262,30 +262,30 @@
   const progressWidth = ref(0);
 
  watch(() => msgState.value.msgLoad, (newVal) => {
-    if (newVal) { 
+    if (newVal) {
       // 重置进度条
       progressWidth.value = 0;
-      
+
       // 清除之前的进度定时器
       if (progressTimer) {
         clearInterval(progressTimer);
       }
-      
+
       // 启动进度条动画
       progressTimer = setInterval(() => {
         // 模拟不规律的进度增长
         const increment = Math.random() * 4 + 2; // 2-10之间的随机数
         progressWidth.value =Math.floor(Math.min(progressWidth.value + increment, 95));
       }, 400);
-      
-    } else { 
-      
+
+    } else {
+
       // 清除进度条定时器并完成进度
       if (progressTimer) {
         clearInterval(progressTimer);
         progressTimer = null;
       }
-      
+
       // 瞬间完成进度条
       progressWidth.value = 100;
     }
@@ -311,7 +311,7 @@
   };
 </script>
 <style lang="scss" scoped>
-  @import './intalMedicalAssists.scss';
+  @use './intalMedicalAssists.scss';
   .smartChatRoom-item {
     font-size: 28rpx;
   }
@@ -372,10 +372,10 @@
 
      .progress-text {
         font-size: 24rpx;
-        color: var(--hr-brand-color-6); 
+        color: var(--hr-brand-color-6);
         margin: 0 6px;
       }
-    
+
     .loading-cricle {
       width: 16rpx;
       height: 16rpx;

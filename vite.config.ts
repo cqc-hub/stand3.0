@@ -1,7 +1,4 @@
-import {
-  defineConfig,
-  loadEnv
-} from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import uni from '@dcloudio/vite-plugin-uni';
 import { resolve } from 'path';
 import h5ProdEffectPlugin from 'uni-vite-plugin-h5-prod-effect';
@@ -42,7 +39,8 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/styles/variable.scss";`,
+          additionalData: `@use "@/styles/variable.scss" as *;`,
+          api: 'modern-compiler',
         },
       },
     },
