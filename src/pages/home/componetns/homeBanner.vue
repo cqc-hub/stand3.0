@@ -4,6 +4,11 @@
       <!-- 首页一个入口  leftFunctionList >0 且  functionList =0 -->
       <view
         class="uni-margin-wrap"
+        :style="{
+          height: `${
+            $global.systemInfo?.homeTopBanner?.bannerHeight || 160
+          }rpx`,
+        }"
         v-if="
           props.leftFunctionList.length > 0 && props.functionList.length == 0
         "

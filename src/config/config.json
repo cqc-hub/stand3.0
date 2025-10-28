@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001035",
+  "sysCode": "1001036",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -20,17 +20,24 @@
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true,
+      "homeTopBanner":{
+        "topShow":true
+      },
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png"
     },
 
     "1001036": {
       "wxAppid": "wx90dd2c3c4be8355a",
-      "h5Appid1": "wxab05eba59d902b5f",
+      "h5Appid": "wxab05eba59d902b5f",
       "alipayAppid": "2021003120612222",
       "isvAlipayAppid": "2021003120637143",
       "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
+      "homeTopBanner":{
+        "topShow":true,
+        "bannerHeight":200
+      },
       "isSearchInHos": true
     },
     "1001038": {

@@ -74,7 +74,7 @@
               </template>
             </view>
 
-            <view v-if="gStores.globalStore.sysCode === '1001035'" class="pt24">
+            <view v-if="$global.systemInfo?.homeTopBanner?.topShow" class="pt24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -235,7 +235,7 @@
             </view>
 
             <view
-              v-if="gStores.globalStore.sysCode !== '1001035'"
+              v-if="!$global.systemInfo?.homeTopBanner?.topShow"
               class="pt24 pb24"
             >
               <homeBanner
