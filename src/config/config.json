@@ -476,7 +476,11 @@
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true,
-      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png"
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png",
+      "isOpenHealthCard": {
+        "healthCardText": "新疆维吾尔自治区卫生健康委员会",
+        "hospitalId": "35088"
+      }
     },
     "1001095": {
       "wxAppid": "wx41ed9678ac802d7e",

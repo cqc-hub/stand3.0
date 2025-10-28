@@ -153,7 +153,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import './style/pop-list.scss';
+  @use './style/pop-list.scss';
 
   .consult-type {
     position: absolute;

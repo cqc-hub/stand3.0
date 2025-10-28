@@ -523,6 +523,10 @@ const queryApi = {
     service.post('/phs-user/message/getScheme', parm(data), {
       baseURL: envBasic.baseApi,
     }),
+  applyForAuth: <T = any>(data) =>
+    service.post('/phs-user/trdfce/applyForAuth', parm(data), {
+      // baseURL: envBasic.baseApi,
+    }),
   getCmsList: <T = any>(data) =>
     service.post('/phs-base/cms/getCmsList', parm(data), {
       baseURL: envBasic.baseApi,

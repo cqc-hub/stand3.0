@@ -483,7 +483,7 @@ export const _getQxMedicalNation = async (
   }
 
   // #ifdef MP-ALIPAY
-  let { latitude, longitude } = await apiAsync(uni.getLocation, {});
+  let { latitude, longitude } = (await apiAsync(uni.getLocation, {})) as any;
   if (!(longitude && latitude)) {
     gStores.messageStore.showMessage('获取定位失败, 无法继续医保结算...');
     return Promise.reject('获取定位失败, 无法继续医保结算...');
@@ -3010,5 +3010,4 @@ export const handlerMedicalPayDongRuan = async ({
   });
 };
 
-declare const exports: any;
 exports.getWxMedicalAuth1001035 = getWxMedicalAuth1001035;

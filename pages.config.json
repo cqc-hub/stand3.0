@@ -42,7 +42,7 @@
     {
       "path": "pages/home/my",
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationBarTitleText": " "
       }
     },
     {

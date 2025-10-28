@@ -45,6 +45,8 @@ export interface ISConfig {
   isHideHomeSearch?: '1';
   //是否开启助老版
   isOpenHelpOld?: '1';
+  /** 维吾尔语切换 */
+  isLangUygur?: '1';
   //是否开启健康科普
   isOpenPopularSci?:
     | '1'
@@ -764,47 +766,47 @@ const scJson: Record<string, ISConfig> = {
         isGbFamilyPayment: '1',
 
         // 测试
-        // medical1001035: {
-        //   auth: {
-        //     //
-        //     appId: 'wxfde9fffbfa82be54',
-        //     path: 'pages/allOutPayCashier/authUniPro/authUni',
-        //     extraData: {
-        //       appid: 'c4097ed72fc64e71818e6990dc6f9512',
-        //     },
-        //   },
-        //   pay: {
-        //     appId: 'wxfde9fffbfa82be54',
-        //     path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
-        //     extraData: {
-        //       appid: 'c4097ed72fc64e71818e6990dc6f9512',
-        //       channel_code: 'f6cd425b461444f3907808719fd30011',
-        //       fixmedinsCode: 'H32010400468',
-        //       fixmedinsName: '江苏省中医院',
-        //     },
-        //   },
-        // },
-
-        // 正式
         medical1001035: {
           auth: {
+            //
             appId: 'wxfde9fffbfa82be54',
             path: 'pages/allOutPayCashier/authUniPro/authUni',
             extraData: {
-              appid: '96391c9afe2c46b3bba52436351dd418',
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
             },
           },
           pay: {
             appId: 'wxfde9fffbfa82be54',
             path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
             extraData: {
-              appid: '96391c9afe2c46b3bba52436351dd418',
-              channel_code: 'b756bf71948144f993bcc768fe7b0910',
+              appid: 'c4097ed72fc64e71818e6990dc6f9512',
+              channel_code: 'f6cd425b461444f3907808719fd30011',
               fixmedinsCode: 'H32010400468',
               fixmedinsName: '江苏省中医院',
             },
           },
         },
+
+        // 正式
+        // medical1001035: {
+        //   auth: {
+        //     appId: 'wxfde9fffbfa82be54',
+        //     path: 'pages/allOutPayCashier/authUniPro/authUni',
+        //     extraData: {
+        //       appid: '96391c9afe2c46b3bba52436351dd418',
+        //     },
+        //   },
+        //   pay: {
+        //     appId: 'wxfde9fffbfa82be54',
+        //     path: 'pages/allOutPayCashier/cashierUniPro/cashierUni',
+        //     extraData: {
+        //       appid: '96391c9afe2c46b3bba52436351dd418',
+        //       channel_code: 'b756bf71948144f993bcc768fe7b0910',
+        //       fixmedinsCode: 'H32010400468',
+        //       fixmedinsName: '江苏省中医院',
+        //     },
+        //   },
+        // },
       },
     },
   },
@@ -864,6 +866,9 @@ const scJson: Record<string, ISConfig> = {
     },
   },
   1001094: {
+    isOpenHelpOld: '1',
+    isLangUygur: '1',
+
     login: {
       isLoginByOpenId: '1',
     },

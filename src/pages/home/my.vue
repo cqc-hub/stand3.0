@@ -93,7 +93,7 @@
   import { useViewerStore } from '@/stores/modules/viewer';
 
   import { onLoad, onShareTimeline } from '@dcloudio/uni-app';
-  import {  GStores, LoginUtils, wait } from '@/utils';
+  import { GStores, LoginUtils, wait } from '@/utils';
   import { joinQueryForUrl } from '@/common';
   import { beforeEach } from '@/router/index';
   import global from '@/config/global';
@@ -129,7 +129,7 @@
     ],
   });
 
-  interface TPageType extends ILoginBack {
+  interface TPageType extends /* @vue-ignore */ ILoginBack {
     isWarningLogin?: '1';
 
     // 微信小程序必须显示写出来， 否则接收不到
@@ -204,6 +204,10 @@
     });
     // #endif
 
+    uni.setNavigationBarTitle({
+      title: '我的',
+    });
+
     if (opt) {
       const { myEnvir } = opt;
 
@@ -239,7 +243,11 @@
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
     // #ifdef MP-WEIXIN
-    if(['1001063', '1001066', '1001078', '1001076', '1001071'].includes(gStores.globalStore.sysCode)) {
+    if (
+      ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+        gStores.globalStore.sysCode
+      )
+    ) {
       if (!gStores.globalStore.isLogin) {
         viewerStore.clearMyMenuCellMessage();
         return;
@@ -292,7 +300,8 @@
     pointer-events: none;
     z-index: 1;
 
-    background: linear-gradient(
+    background:
+      linear-gradient(
         160deg,
         var(--hr-brand-color-6-light),
         var(--hr-brand-color-6-light),
