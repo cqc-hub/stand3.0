@@ -2,9 +2,13 @@ import { GStores } from '@/utils';
 
 export const langMap = {
   zh: {
+    home: {},
     'home-tabbar': {},
   },
   uygur: {
+    home: {
+      请登录: 'سىغىنىش',
+    },
     'home-tabbar': {
       '就诊码/医保码': 'دوختۇرخانا كودى/ ساغلاملىق كودى',
       首页: 'باش بەت',
