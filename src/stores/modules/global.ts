@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
-import globalGl from '@/config/global';
 import { getCurrentInstance } from 'vue';
 import { getTcMallToken } from '@/common/utils';
 import { useUserStore } from '@/stores';
+
+import globalGl from '@/config/global';
 
 type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
 
@@ -82,7 +83,7 @@ const globalStore = defineStore('global', {
 
   state: (): IStateGlobal => {
     return {
-      lang: 'en',
+      lang: 'zh',
       ev: null,
       // 所有这些属性都将自动推断其类型
       token: {
@@ -169,9 +170,22 @@ const globalStore = defineStore('global', {
 
       return '1';
     },
+
+    selectLangs() {
+      const langs = [{ label: '中', value: 'zh' }];
+      if (globalGl.sConfig.isLangUygur === '1') {
+        // langs.push({ label: 'EN', value: 'en' });
+        langs.push({ label: 'UY', value: 'uygur' });
+      }
+      return langs;
+    },
   },
 
   actions: {
+    setLang(lang: IStateGlobal['lang']) {
+      this.lang = lang;
+    },
+
     setIntAssistantImg(data) {
       this.intAssistantImg = data;
     },

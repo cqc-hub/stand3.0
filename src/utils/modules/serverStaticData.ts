@@ -196,8 +196,8 @@ export const useTBanner = async (
       isLogin = true;
     }
     if (config.isSelfH5 === '1' || config.type === 'h5') {
-      _d._herenId = gStores.globalStore.herenId||'';
-      _d.herenId = gStores.globalStore.herenId||'';
+      _d._herenId = gStores.globalStore.herenId || '';
+      _d.herenId = gStores.globalStore.herenId || '';
       _d._patientId = gStores.userStore.patChoose.patientId;
 
       patientId &&
@@ -206,7 +206,7 @@ export const useTBanner = async (
         (extraData[cardNumber] = gStores.userStore.patChoose.cardNumber);
       token && (extraData[token] = gStores.globalStore.getToken);
 
-      herenId && (extraData[herenId] = gStores.globalStore.herenId||'');
+      herenId && (extraData[herenId] = gStores.globalStore.herenId || '');
       extraData.token = gStores.globalStore.getToken;
       // extraData.isTcmStyle = (gStores.globalStore.isTcmStyle && '1') || '0';
     }
@@ -278,7 +278,7 @@ export const useTBanner = async (
       // https: encodeURIComponent(fullUrl),
       cache: '1',
     });
-
+    // @ts-expect-error
     uni[routeType]({
       url,
     });
@@ -298,11 +298,13 @@ export const useTBanner = async (
     });
     // #endif
     // #ifndef H5
+    // @ts-expect-error
     uni[routeType]({
       url,
     });
     // #endif
   } else if (type === 'netHospital') {
+    // @ts-expect-error
     uni[routeType]({
       url: joinQuery('/pagesC/cloudHospital/cloudHospital', extraData),
     });
@@ -582,7 +584,7 @@ export class ServerStaticData {
   /**
    * 首页配置的数据
    */
-  static async getHomeConfig(type?): Promise<any[]> {
+  static async getHomeConfig(source = ''): Promise<any[]> {
     const gStores = new GStores();
     //type:home 首页每次都调用一下
     const arg = {
@@ -636,9 +638,8 @@ export class ServerStaticData {
 
       try {
         const person = JSON.parse(result.PERSON_FAMILY_CARDMAN || '{}');
-        const medRecord = await getMedRecordConfig<ISystemConfig['medRecord']>(
-          result
-        );
+        const medRecord =
+          await getMedRecordConfig<ISystemConfig['medRecord']>(result);
         const order = JSON.parse(result.ORDER_REGISTER || '{}');
         const hospitalCare = JSON.parse(result.PATIENT_SERVICE_CONFIG || '{}');
         const pay = JSON.parse(result.CLINIC_PAY_CONFIG || '{}');
@@ -727,7 +728,7 @@ export const cacheUtil = new (class {
     return async <
       R extends Partial<Record<Split<T, ','>[number], any>> = Partial<
         Record<Split<T, ','>[number], any>
-      >
+      >,
     >(): Promise<
       Required<
         Merge<

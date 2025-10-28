@@ -34,7 +34,7 @@
           >
             <view
               class="search flex-between"
-              v-if="global.sConfig.isHideHomeSearch != '1'"
+              v-if="globalGl.sConfig.isHideHomeSearch != '1'"
             >
               <!-- 在有搜索框的前提下 是否开启助老版本 -->
               <view class="w-full" @click.prevent="goSearch">
@@ -49,12 +49,16 @@
               <view
                 @click="goClinicPay"
                 v-if="gStores.globalStore.sysCode === '1001063'"
-                class="ico_my_scon icon-font scan-icon ml32"
+                class="ico_my_scon icon-font scan-icon ml16"
               />
 
+              <view v-if="globalGl.sConfig.isLangUygur === '1'" class="ml16">
+                <chooseLang />
+              </view>
+
               <view
-                v-if="global.sConfig.isOpenHelpOld == '1'"
-                class="openOld ml32"
+                v-if="globalGl.sConfig.isOpenHelpOld === '1'"
+                class="openOld ml16"
                 @tap="openModeOld"
               >
                 <view class="iconfont icon-size">&#xe700;</view>
@@ -78,12 +82,7 @@
                     class="top-card flex-normal-between animate__animated animate__fadeIn"
                   >
                     <!-- 有就诊人时 -->
-                    <block
-                      v-if="
-                        gStores.userStore.patChoose.patientName &&
-                        (!onlySelf || (onlySelf && getSelfPat()?.patientName))
-                      "
-                    >
+                    <block v-if="getShowName">
                       <view class="flex-normal">
                         <view
                           v-if="personConfig.isQrCodeDisabled !== '1'"
@@ -94,26 +93,11 @@
                         </view>
                         <view class="patient">
                           <text>
-                            {{
-                              onlySelf
-                                ? getSelfPat()?.patientName
-                                : gStores.userStore.choosePatName
-                            }}
+                            {{ getShowName }}
                           </text>
-                          <text
-                            v-if="
-                              !isAreaProgram() &&
-                              (onlySelf
-                                ? getSelfPat()?._showId
-                                : gStores.userStore.patChoose._showId)
-                            "
-                          >
+                          <text v-if="getShowPatId">
                             ID
-                            {{
-                              onlySelf
-                                ? getSelfPat()?._showId
-                                : gStores.userStore.patChoose._showId
-                            }}
+                            {{ getShowPatId }}
                           </text>
                         </view>
                       </view>
@@ -151,21 +135,26 @@
                     class="top-card flex-normal-between animate__animated animate__fadeIn"
                   >
                     <view class="flex-normal no-login">
-                      <!-- <g-login @handler-next="routerJump"> -->
                       <text>请登录</text>
                       <text>登录后享受更多服务</text>
-                      <!-- </g-login> -->
                     </view>
 
-                    <!-- <g-login @handler-next="routerJump"> -->
-                    <!-- #ifdef MP-ALIPAY -->
-                    <view class="switchPatient no-login-tip">请登录</view>
-                    <!-- #endif -->
+                    <view
+                      v-if="gStores.globalStore.ev === 'alipay'"
+                      class="switchPatient no-login-tip"
+                    >
+                      请登录
+                    </view>
 
-                    <!-- #ifdef MP-WEIXIN | H5 -->
-                    <button class="login-btn">请登录</button>
-                    <!-- #endif -->
-                    <!-- </g-login> -->
+                    <button
+                      v-if="
+                        gStores.globalStore.ev &&
+                        ['wx', 'web'].includes(gStores.globalStore.ev)
+                      "
+                      class="login-btn"
+                    >
+                      请登录
+                    </button>
                   </view>
                 </block>
               </g-login>
@@ -268,8 +257,8 @@
             </view>
             <!-- #endif -->
             <!-- #ifdef MP-ALIPAY -->
-            <view v-if="global.sConfig.isOpenAlipayFollow">
-              <lifestyle :sceneId="global.sConfig.isOpenAlipayFollow" />
+            <view v-if="globalGl.sConfig.isOpenAlipayFollow">
+              <lifestyle :sceneId="globalGl.sConfig.isOpenAlipayFollow" />
             </view>
             <!-- #endif -->
             <view class="fun-list" v-if="viewerStore.homeMenuList.length">
@@ -284,7 +273,7 @@
               <homeDocCommend :list="docRecommendList" />
             </view>
 
-            <view v-if="isFeatureEnabled(global.sConfig.isOpenPopularSci)">
+            <view v-if="isFeatureEnabled(globalGl.sConfig.isOpenPopularSci)">
               <homeArticle ref="HomeArticleRef" />
             </view>
             <homeButtomProductionIcon />
@@ -301,12 +290,7 @@
                   class="top-card-old flex-normal-between animate__animated animate__fadeIn"
                 >
                   <!-- 有就诊人时 -->
-                  <block
-                    v-if="
-                      gStores.userStore.patChoose.patientName &&
-                      (!onlySelf || (onlySelf && getSelfPat()?.patientName))
-                    "
-                  >
+                  <block v-if="getShowName">
                     <view class="flex-normal">
                       <view
                         v-if="personConfig.isQrCodeDisabled !== '1'"
@@ -317,24 +301,11 @@
                       </view>
                       <view class="patient">
                         <text>
-                          {{
-                            onlySelf
-                              ? getSelfPat()?.patientNameEncry
-                              : gStores.userStore.patChoose.patientNameEncry
-                          }}
+                          {{ getShowName }}
                         </text>
-                        <text
-                          v-if="
-                            !isAreaProgram() &&
-                            gStores.userStore.patChoose._showId
-                          "
-                        >
+                        <text v-if="getShowPatId">
                           ID
-                          {{
-                            onlySelf
-                              ? getSelfPat()?._showId
-                              : gStores.userStore.patChoose._showId
-                          }}
+                          {{ getShowPatId }}
                         </text>
                       </view>
                     </view>
@@ -369,20 +340,21 @@
                     <text>请登录</text>
                     <text>登录后享受更多服务</text>
                   </view>
-                  <!-- #ifdef MP-ALIPAY -->
-                  <view class="switchPatient no-login-tip" @tap="goLogin">
+                  <view
+                    v-if="gStores.globalStore.ev === 'alipay'"
+                    class="switchPatient no-login-tip"
+                    @tap="goLogin"
+                  >
                     请登录
                   </view>
-                  <!-- #endif -->
-                  <!-- #ifdef MP-WEIXIN -->
                   <button
+                    v-if="gStores.globalStore.ev === 'wx'"
                     open-type="getPhoneNumber"
                     @getphonenumber="goLogin"
                     class="login-btn text-no-wrap"
                   >
                     请登录
                   </button>
-                  <!-- #endif -->
                 </view>
               </block>
 
@@ -434,7 +406,7 @@
   </view>
 </template>
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { onLoad, onShow, onShareTimeline } from '@dcloudio/uni-app';
 
   import { useGlobalStore, isAreaProgram, type IPat } from '@/stores';
@@ -447,19 +419,18 @@
     GStores,
     routerJump,
     LoginUtils,
-    Login,
-    LoginType,
     PatientUtils,
     ServerStaticData,
-    useTBanner,
-    type TButtonConfig,
     type ISystemConfig,
-    wait,
     isFeatureEnabled,
   } from '@/utils';
+  import { goElectronicMedicalCard } from './utils';
+  import { deQueryForUrl, joinQueryForUrl } from '@/common';
+  import { useCacheStore } from '@/stores';
+  import { useCommonTo } from '@/common/checkJump';
 
-  import global from '@/config/global';
   import api from '@/service/api';
+  import globalGl from '@/config/global';
 
   import homeBanner from './componetns/homeBanner.vue';
   import homeMenu from './componetns/homeMenu.vue';
@@ -472,11 +443,7 @@
   import homeArticle from './componetns/homeArticle/index.vue';
   import homeDocCommend from './componetns/homeDocCommend.vue';
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
-  import { goElectronicMedicalCard } from './utils';
-  import { deQueryForUrl, joinQueryForUrl } from '@/common';
-  import { useCacheStore } from '@/stores';
-  import { useCommonTo } from '@/common/checkJump';
-  import globalGl from '@/config/global';
+  import chooseLang from './componetns/chooseLang.vue';
 
   const props = ref({
     code: '',
@@ -499,7 +466,6 @@
   const HomeArticleRef = ref('' as any);
   const clickShareItem = ref<any>({});
   const docRecommendList = ref([] as any[]);
-  const onlySelf = gStores.globalStore.sysCode === '1001082' ? true : false;
 
   //骨架屏配置
   const skeletonProps = ref({
@@ -517,7 +483,6 @@
       'card-sm+card-sm+card-sm+card-sm',
     ],
   });
-  // 就诊人
 
   const actionSheet = ref<InstanceType<typeof ChoosePatAction>>();
   const chooseAction = () => {
@@ -529,10 +494,30 @@
     gStores.userStore.updatePatChoose(item);
   };
 
+  const onlySelf = computed(() => gStores.globalStore.sysCode === '1001082');
+  const getShowName = computed(() => {
+    if (onlySelf.value) {
+      return getSelfPat()?.patientName;
+    }
+
+    return gStores.userStore.patChoose.patientName;
+  });
+  const getShowPatId = computed(() => {
+    if (isAreaProgram()) {
+      return '';
+    }
+
+    if (onlySelf.value) {
+      return getSelfPat()?._showId;
+    }
+
+    return gStores.userStore.patChoose._showId;
+  });
+
   onShow(async () => {
     viewerStore.init();
 
-    if (onlySelf) {
+    if (onlySelf.value) {
       const selfPat = gStores.userStore.patList.find(
         (pat: IPat) => pat.relationship === '本人'
       );
@@ -637,7 +622,7 @@
     // #ifdef MP-ALIPAY
     //对接支付宝首页消息提醒
     const alipayPid =
-      global.systemInfo.alipayPid || global.sConfig.isOpenMessageAuth;
+      globalGl.systemInfo.alipayPid || globalGl.sConfig.isOpenMessageAuth;
     alipayPid &&
       globalStore.isLogin &&
       !uni.getStorageSync('hospital_order') &&
@@ -656,7 +641,7 @@
     const { isOpenHomeDoctorBanner } = orderConfig.value;
 
     //有开启健康科普
-    if (isFeatureEnabled(global.sConfig.isOpenPopularSci)) {
+    if (isFeatureEnabled(globalGl.sConfig.isOpenPopularSci)) {
       //查询列表
       HomeArticleRef.value.init();
     }
@@ -672,7 +657,7 @@
   //分享到朋友圈
   onShareTimeline(() => {
     return {
-      title: global.systemInfo.name,
+      title: globalGl.systemInfo.name,
       query: '',
     };
   });
@@ -764,7 +749,7 @@
       });
     } else {
       let url =
-        (global.env as string) === 'prod'
+        (globalGl.env as string) === 'prod'
           ? 'https://h5.eheren.com/V3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom'
           : 'https://health.eheren.com/v3_h5/#/pagesA/diseaseCyclopedia/smartChatRoom';
       uni.navigateTo({

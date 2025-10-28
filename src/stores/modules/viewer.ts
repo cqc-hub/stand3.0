@@ -18,15 +18,15 @@ const viewerStore = defineStore('viewer', {
   },
 
   actions: {
-    async init() {
+    async init(source = '') {
       if (!this.viewConfig.length) {
         this.version = '';
       }
 
-      this.getVersion();
+      this.getVersion(source);
     },
 
-    async getViewConfig() {
+    async getViewConfig(source = '') {
       this.loading = true;
       this.viewConfig = await ServerStaticData.getHomeConfig()
         .catch((e) => {
@@ -78,7 +78,7 @@ const viewerStore = defineStore('viewer', {
         item.messageNum = 0;
       });
     },
-    async getVersion() {
+    async getVersion(source = '') {
       const oldVersion = this.version;
       if (!oldVersion) {
         this.loading = true;
@@ -89,7 +89,7 @@ const viewerStore = defineStore('viewer', {
 
       if (oldVersion !== result) {
         this.clearStore();
-        await this.getViewConfig();
+        await this.getViewConfig(source);
       }
 
       this.version = result;
@@ -108,7 +108,9 @@ const viewerStore = defineStore('viewer', {
       const gStores = new GStores();
       const sysCode = gStores.globalStore.sysCode;
       return this.viewConfig[8]?.showFlag == 1
-        ? (sysCode === '1001082' ? '点击前往智能对话搜索科室/医生/症状/药品/...' : '搜索科室、医生或疾病')
+        ? sysCode === '1001082'
+          ? '点击前往智能对话搜索科室/医生/症状/药品/...'
+          : '搜索科室、医生或疾病'
         : '搜索疾病、症状或药品';
     },
 
@@ -152,9 +154,9 @@ const viewerStore = defineStore('viewer', {
           try {
             const query = item.query && JSON.parse(item.query);
             if (query && typeof query === 'object' && query.key) {
-            return !query.key.startsWith('myOralCell-');
-          }
-          return true;
+              return !query.key.startsWith('myOralCell-');
+            }
+            return true;
           } catch (e) {
             console.error('Failed to parse query:', e);
             return true; // 如果解析失败，保留该元素
@@ -176,9 +178,9 @@ const viewerStore = defineStore('viewer', {
             try {
               const query = item.query && JSON.parse(item.query);
               if (query && typeof query === 'object' && query.key) {
-              return query.key.startsWith('myOralCell-');
-            }
-            return false;
+                return query.key.startsWith('myOralCell-');
+              }
+              return false;
             } catch (e) {
               console.error('Failed to parse query:', e);
               return false;
@@ -188,11 +190,16 @@ const viewerStore = defineStore('viewer', {
             try {
               const queryA = JSON.parse(a.query);
               const queryB = JSON.parse(b.query);
-               // 确保 queryA 和 queryB 是对象
-          if (queryA && typeof queryA === 'object' && queryB && typeof queryB === 'object') {
-            return (queryA.sort || 0) - (queryB.sort || 0);
-          }
-          return 0;
+              // 确保 queryA 和 queryB 是对象
+              if (
+                queryA &&
+                typeof queryA === 'object' &&
+                queryB &&
+                typeof queryB === 'object'
+              ) {
+                return (queryA.sort || 0) - (queryB.sort || 0);
+              }
+              return 0;
             } catch (e) {
               console.error('Failed to parse query during sorting:', e);
               return 0;

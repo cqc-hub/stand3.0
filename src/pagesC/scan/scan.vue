@@ -176,7 +176,7 @@
       case '18':
         yun1001082();
         break;
- 
+
       //江苏省中—健康商城
       case '19':
         healthMall1001035();
@@ -193,7 +193,7 @@
   };
 
   let isContinue = true;
-  onLoad(async (opt) => {
+  onLoad(async (opt: any) => {
     const queryParams = gStores.globalStore.appShowData?.query?.qrCode;
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       console.log('截止-----', queryParams);
