@@ -14,7 +14,11 @@
       @change="choosePat"
       ref="selHosRef"
     />
-    <g-choose-pat :onlySelf="onlySelf" :disabled="onlySelf?true:false" @choose-pat="choosePat" />
+    <g-choose-pat
+      :onlySelf="onlySelf"
+      :disabled="onlySelf ? true : false"
+      @choose-pat="choosePat"
+    />
     <g-tbanner
       v-if="gStores.userStore.patChoose.patientId"
       :config="yunBannerConfig"
@@ -218,8 +222,6 @@
 <script lang="ts" setup>
   import { ref, nextTick, computed } from 'vue';
   import { ITab, ICms } from './utils';
-  import advisoryItem from './components/advisoryItem.vue';
-  import repShare from './components/repShare.vue';
   import { onLoad, onShow } from '@dcloudio/uni-app';
   import {
     GStores,
@@ -230,15 +232,24 @@
     TButtonConfig,
     useTBanner,
   } from '@/utils';
-  import globalGl from '@/config/global';
-  import { joinQueryForUrl, encryptedAes } from '@/common';
-  import { deepClone, deQueryForUrl, joinQuery } from '@/common/utils';
+  import {
+    joinQueryForUrl,
+    encryptedAes,
+    deepClone,
+    deQueryForUrl,
+    joinQuery,
+  } from '@/common';
   import { beforeEach } from '@/router';
+  import { useCacheStore } from '@/stores';
+  import { getUtils1001082 } from '../common/utils';
 
   import api from '@/service/api';
-  import { useCacheStore } from '@/stores';
-  import TimeChoosePopup from './components/TimeChoosePopup.vue';
   import dayjs from 'dayjs';
+  import globalGl from '@/config/global';
+
+  import TimeChoosePopup from './components/TimeChoosePopup.vue';
+  import advisoryItem from './components/advisoryItem.vue';
+  import repShare from './components/repShare.vue';
 
   interface IPageProps {
     tabIndex: number;
@@ -249,6 +260,9 @@
     orderId?: string;
     redirectUrl?: string;
     registerOrderId?: string;
+
+    // 1001082
+    verify1001082?: '1';
   }
   const pageProps = ref(<IPageProps>{});
   // 在父组件中
@@ -276,7 +290,7 @@
   const verifyData = ref('');
   const verifyIdCardVal = ref('');
   const refVerifyIdCardPopup = ref('' as any);
-  const onlySelf =  gStores.globalStore.sysCode === '1001082'? true : false;
+  const onlySelf = gStores.globalStore.sysCode === '1001082' ? true : false;
   const isOpenFilterTime = computed(
     () => pageConfig.value.isOpenFilterReportByTime === '1'
   );
@@ -784,8 +798,8 @@
   });
   //切换就诊人
   const choosePat = () => {
-    if(onlySelf){
-      return ;
+    if (onlySelf) {
+      return;
     }
     pageList.value = { '0': [], '1': [], '2': [] };
     isRefresh.value = [true, true, true];
@@ -932,6 +946,11 @@
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
+    if (pageProps.value.verify1001082 === '1') {
+      const u = await getUtils1001082();
+      console.log(u, '233');
+      await u.useFaceVerify1001082().applyForAuth();
+    }
 
     console.log('获取到页面参数-----');
     console.log(pageProps.value);
@@ -941,8 +960,8 @@
     }
 
     init();
-    // #ifdef MP-WEIXIN
     if (
+      gStores.globalStore.ev === 'wx' &&
       globalGl.systemInfo?.isOpenHealthCard &&
       globalGl.systemInfo.isOpenHealthCard?.isNewMode
     ) {
@@ -983,8 +1002,6 @@
         });
       }
     }
-
-    // #endif
   });
 </script>
 <style lang="scss" scoped>

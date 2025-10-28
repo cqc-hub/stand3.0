@@ -3010,5 +3010,4 @@ export const handlerMedicalPayDongRuan = async ({
   });
 };
 
-declare const exports: any;
 exports.getWxMedicalAuth1001035 = getWxMedicalAuth1001035;

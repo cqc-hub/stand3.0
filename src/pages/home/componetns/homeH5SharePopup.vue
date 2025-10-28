@@ -91,7 +91,7 @@
 
   const props = withDefaults(
     defineProps<{
-      configData: {
+      configData?: {
         imageCode?: string;//展示图片地址
         theme?: string;//主题 公众号
         title?: string;//主标题
