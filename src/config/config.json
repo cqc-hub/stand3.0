@@ -20,9 +20,6 @@
       "isStartComeTest": false,
       "isOpenOcr": false,
       "isSearchInHos": true,
-      "homeTopBanner":{
-        "topShow":true
-      },
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/jiangsushengzhonnavtitle.png"
     },
 
@@ -34,10 +31,7 @@
       "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-      "homeTopBanner":{
-        "topShow":true,
-        "bannerHeight":200
-      },
+       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/image/1001036logo.png",
       "isSearchInHos": true
     },
     "1001038": {

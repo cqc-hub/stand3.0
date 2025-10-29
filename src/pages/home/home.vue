@@ -66,7 +66,7 @@
               </view>
             </view>
 
-            <view v-if="$global.systemInfo?.homeTopBanner?.topShow" class="pt24">
+            <view v-if="$global.sConfig?.homeTopBanner?.topShow" class="pt24">
               <homeBanner
                 :leftFunctionList="viewerStore.homeBannerLeftFunctionList"
                 :functionList="viewerStore.homeBannerFunctionList"
@@ -212,7 +212,7 @@
             </view>
 
             <view
-              v-if="!$global.systemInfo?.homeTopBanner?.topShow"
+              v-if="!$global.sConfig?.homeTopBanner?.topShow"
               class="pt24 pb24"
             >
               <homeBanner

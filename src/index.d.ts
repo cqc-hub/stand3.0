@@ -53,12 +53,6 @@ interface ISystemGlobalItem {
   isOpenOcr: boolean;
   isHideHomeLogo: boolean;
   homeNavTitleLogo?: string;
-  
-  //首页banner置顶
-  homeTopBanner?: {
-    topShow?: boolean;
-    bannerHeight?: number;
-  };
 
   // 中医样式
   systemStyle?: '1';

@@ -637,7 +637,7 @@ export interface ISystemConfig_ {
     isOpenSubscribe?: '1';
   };
 
-  /** 杂项配置（客服、意见反馈、隐私政策)- */
+  /** 杂项配置（客服、意见反馈、隐私政策、入口选择页)- */
   RestOfConfig: {
     //隐私政策
     isOpenAIPolicy?: '1';
@@ -676,6 +676,14 @@ export interface ISystemConfig_ {
       subLabel?: string; // 副标题
       icon?: string; //icon
       config: TBannerConfig;
+    }[];
+
+    //入口选择页pagesD/common/chooseTabJump
+    tabJumpConfig?: {
+      title?: string; //页面标题，无则标题展示空
+      showFlag?: number; //页面底部协议，无则不展示
+      entryType?: string; 
+      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string;}>; //bgSrc背景图
     }[];
   };
 }

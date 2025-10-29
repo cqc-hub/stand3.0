@@ -6,7 +6,7 @@
         class="uni-margin-wrap"
         :style="{
           height: `${
-            $global.systemInfo?.homeTopBanner?.bannerHeight || 160
+            $global.sConfig?.homeTopBanner?.bannerHeight || 160
           }rpx`,
         }"
         v-if="

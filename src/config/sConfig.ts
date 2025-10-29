@@ -58,6 +58,12 @@ export interface ISConfig {
   isOpenAlipayFollow?: string;
   //首页是否支持展示咨询文章
   isOpenHomeArticle?: string;
+  //首页banner置顶
+  homeTopBanner?: {
+    topShow?: boolean;
+    bannerHeight?: number;
+  };
+
   //是否对接支付宝的智能分诊插件-开启这个表示支付宝的智能导诊配置zndz 跳转去插件了
   isOpenAlipayZndz?: boolean;
   //付宝的智能分诊插件 https://opendocs.alipay.com/pre-open/03l73o#4.2%20%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6
@@ -759,6 +765,9 @@ const scJson: Record<string, ISConfig> = {
     },
     isOpenWechatSI: true,
     isOpenHelpOld: '1',
+    homeTopBanner: {
+      topShow: true,
+    },
     medicalMHelp: {
       wx: {
         isMedicalOrder: '1',
@@ -808,6 +817,16 @@ const scJson: Record<string, ISConfig> = {
         //   },
         // },
       },
+    },
+  },
+  /**
+   * 东部战区总医院医院
+   */
+  1001036: {
+    isOpenHomeTabBarNetWorkBtn:"1",
+    homeTopBanner: {
+      topShow: true,
+      bannerHeight: 200,
     },
   },
   /**

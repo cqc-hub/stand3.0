@@ -901,6 +901,12 @@
             "navigationBarTitleText": " "
           }
         },
+         {
+          "path": "common/chooseTabJump",
+          "style": {
+            "navigationBarTitleText": " "
+          }
+        },
         {
           "path": "patient/familyAdd",
           "style": {
