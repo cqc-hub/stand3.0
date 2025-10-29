@@ -346,7 +346,7 @@
 
   const goApplyRecord = () => {
     uni.navigateTo({
-      url: joinQuery('/pagesC/medRecordApply/_recordApply', {
+      url: joinQuery('/pagesC/medRecordApply/_recordApply1', {
         hosId: getRealHosId.value,
       }),
     });

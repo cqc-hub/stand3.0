@@ -44,7 +44,7 @@
     // #endif
   });
 
-  onShow(async (opt) => {
+  onShow(async (opt: any) => {
     console.log('App Show', opt);
 
     globalStore.onAppShow(opt);

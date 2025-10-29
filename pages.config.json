@@ -794,7 +794,7 @@
           }
         },
         {
-          "path": "medRecordApply/_recordApply",
+          "path": "medRecordApply/_recordApply1",
           "extend": {
             "patient": true
           },
