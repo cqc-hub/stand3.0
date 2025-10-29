@@ -135,15 +135,15 @@
                     class="top-card flex-normal-between animate__animated animate__fadeIn"
                   >
                     <view class="flex-normal no-login">
-                      <text>请登录</text>
-                      <text>登录后享受更多服务</text>
+                      <text>{{ getLangLabel('home:请登录') }}</text>
+                      <text>{{ getLangLabel('home:登录后享受更多服务') }}</text>
                     </view>
 
                     <view
                       v-if="gStores.globalStore.ev === 'alipay'"
                       class="switchPatient no-login-tip"
                     >
-                      请登录
+                      {{ getLangLabel('home:请登录') }}
                     </view>
 
                     <button
@@ -153,7 +153,7 @@
                       "
                       class="login-btn"
                     >
-                      请登录
+                      {{ getLangLabel('home:请登录') }}
                     </button>
                   </view>
                 </block>
@@ -337,15 +337,15 @@
                   class="top-card-old flex-normal-between animate__animated animate__fadeIn"
                 >
                   <view class="no-login">
-                    <text>请登录</text>
-                    <text>登录后享受更多服务</text>
+                    <text>{{ getLangLabel('home:请登录') }}</text>
+                    <text>{{ getLangLabel('home:登录后享受更多服务') }}</text>
                   </view>
                   <view
                     v-if="gStores.globalStore.ev === 'alipay'"
                     class="switchPatient no-login-tip"
                     @tap="goLogin"
                   >
-                    请登录
+                    {{ getLangLabel('home:请登录') }}
                   </view>
                   <button
                     v-if="gStores.globalStore.ev === 'wx'"
@@ -353,7 +353,7 @@
                     @getphonenumber="goLogin"
                     class="login-btn text-no-wrap"
                   >
-                    请登录
+                    {{ getLangLabel('home:请登录') }}
                   </button>
                 </view>
               </block>
@@ -428,6 +428,7 @@
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { useCacheStore } from '@/stores';
   import { useCommonTo } from '@/common/checkJump';
+  import { getLangLabel } from '@/config/lang';
 
   import api from '@/service/api';
   import globalGl from '@/config/global';

@@ -30,8 +30,6 @@
       return;
     }
     gStores.globalStore.setLang(value);
-    viewerStore.clearStore();
-
   };
 </script>
 

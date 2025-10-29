@@ -889,7 +889,7 @@ const scJson: Record<string, ISConfig> = {
     isLangUygur: '1',
 
     login: {
-      isLoginByOpenId: '1',
+      isSkipPerfect: '1',
     },
     medicalMHelp: {
       wx: {
