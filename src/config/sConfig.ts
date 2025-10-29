@@ -887,6 +887,7 @@ const scJson: Record<string, ISConfig> = {
   1001094: {
     isOpenHelpOld: '1',
     isLangUygur: '1',
+    isOpenPopularSci: '1',
 
     login: {
       isSkipPerfect: '1',
@@ -897,7 +898,6 @@ const scJson: Record<string, ISConfig> = {
           appId: 'wxe183cd55df4b4369',
           path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAFnB6FxCsnf4D2WcS3JifN8&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV&orgCodg=H65017100367&orgAppId=1H16HC3ND00I3F60C80A0000EEF6825C',
         },
-        // isMedicalOrder: '1',
       },
     },
   },

@@ -54,6 +54,12 @@ interface ISystemGlobalItem {
   isHideHomeLogo: boolean;
   homeNavTitleLogo?: string;
 
+  //首页banner置顶
+  homeTopBanner?: {
+    topShow?: boolean;
+    bannerHeight?: number;
+  };
+
   // 中医样式
   systemStyle?: '1';
 }
@@ -79,6 +85,8 @@ interface IRouteBase {
   showNo?: number; //后端的排序
   title: string; //主标题
   detail?: string; //副标题
+  engDetail?: string; //副标题
+  otherDetail?: string; //副标题
   iconfont?: string; //图标
   terminalType?: string; //终端类型 h5:三方h5 mini:三方微信小程序 alipay:三方支付宝小程序 my:自研 netHospital:网络医院
   appId?: string; //appid

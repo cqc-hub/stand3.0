@@ -105,6 +105,7 @@
   import homeH5SharePopup from './componetns/homeH5SharePopup.vue';
   import { useCommonTo } from '@/common/checkJump';
   import api from '@/service/api';
+  import { getLangLabel } from '@/config/lang';
 
   const homeH5SharePopupRef = ref('' as any);
   const h5QrCodeData = ref({});
@@ -205,7 +206,7 @@
     // #endif
 
     uni.setNavigationBarTitle({
-      title: '我的',
+      title: getLangLabel('home-tabbar:我的'),
     });
 
     if (opt) {

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx90dd2c3c4be8355a",
+    "appid": "wx081a6fb9ee8778e4",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,7 +76,6 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003120612222",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -101,7 +100,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "东部战区总医院",
+  "name": "新疆维吾尔自治区中医医院",
   "h5": {
     "optimization": {
       "treeShaking": {

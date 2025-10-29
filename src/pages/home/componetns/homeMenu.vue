@@ -2,7 +2,7 @@
   <view class="menu-list menu-style">
     <view class="menu-pannel-style">
       <homeMenuTabs
-        v-model:value="tabIndex"
+        v-model:value="tabIndex1"
         :tabs="props.list"
         @change="activeMenu"
         :itemWidth="100 / props.list.length + '%'"
@@ -25,7 +25,7 @@
         }"
         class="swiper menu-swiper-style"
         :indicator-dots="false"
-        :current="tabIndex"
+        :current="tabIndex1"
         @change="changeIndex"
         :duration="300"
       >
@@ -54,7 +54,7 @@
 
   const emits = defineEmits(['open-share']);
 
-  let tabIndex = ref(0);
+  let tabIndex1 = ref(0);
   const height = ref(0);
   const inst = getCurrentInstance();
   interface IhomeMenu {
@@ -104,27 +104,27 @@
   );
 
   onMounted(() => {
-    props.tabIndex && (tabIndex.value = props.tabIndex);
+    props.tabIndex && (tabIndex1.value = props.tabIndex);
   });
 
   const activeMenu = (index) => {
-    tabIndex.value = index;
+    tabIndex1.value = index;
   };
 
   const changeIndex = (e) => {
-    tabIndex.value = e.detail.current;
+    tabIndex1.value = e.detail.current;
     queryHeight();
   };
 
-  const openShare = (item,type?) => {
-    emits('open-share', item,type);
+  const openShare = (item, type?) => {
+    emits('open-share', item, type);
   };
 
   const queryHeight = () => {
     const view = uni
       .createSelectorQuery()
       .in(inst)
-      .select(`#home-menu-${tabIndex.value}`);
+      .select(`#home-menu-${tabIndex1.value}`);
     view
       .boundingClientRect((data) => {
         if (data) {
@@ -180,7 +180,7 @@
     }
     .menu-swiper-style {
       background: #fff;
-       padding-top: 24rpx;
+      padding-top: 24rpx;
       //  border-radius: 16rpx;
     }
   }
