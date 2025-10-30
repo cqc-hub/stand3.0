@@ -31,6 +31,7 @@ import type {
 
 // #ifdef H5
 import wxH5 from 'weixin-js-sdk';
+import { getUtils1001082 } from '../1001082';
 // #endif
 
 const _cacheMap = new WeakMap();
@@ -146,6 +147,22 @@ const h5LoginFun = (options) => {
   }
 };
 
+const tBannerIntercept = async (
+  extraData: BaseObject,
+  inst: (...args: any[]) => any = () => {}
+) => {
+  const gStores = new GStores();
+
+  if (gStores.globalStore.sysCode === '1001082') {
+    const { verify1001082 } = extraData;
+
+    if (verify1001082 === '1') {
+      const u = await getUtils1001082();
+      await u.useFaceVerify1001082().intercept1001082(inst);
+    }
+  }
+};
+
 export const useTBanner = async (
   config: TBannerConfig | TButtonConfig,
   routeType: 'reLaunch' | 'redirectTo' | 'navigateTo' = 'navigateTo',
@@ -238,6 +255,9 @@ export const useTBanner = async (
   // })
   // #endif
 
+  await tBannerIntercept(extraData, () =>
+    useTBanner(config, routeType, addition)
+  );
   if (type === 'h5') {
     // debugger
     if (config.isSelfH5) {
@@ -276,6 +296,7 @@ export const useTBanner = async (
     cacheStore.changeCacheData(fullUrl);
     const url = joinQueryForUrl('/pagesA/webView/webView', {
       // https: encodeURIComponent(fullUrl),
+      ...extraData,
       cache: '1',
     });
     // @ts-expect-error

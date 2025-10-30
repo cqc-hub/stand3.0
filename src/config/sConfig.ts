@@ -823,7 +823,7 @@ const scJson: Record<string, ISConfig> = {
    * 东部战区总医院医院
    */
   1001036: {
-    isOpenHomeTabBarNetWorkBtn:"1",
+    isOpenHomeTabBarNetWorkBtn: '1',
     homeTopBanner: {
       topShow: true,
       bannerHeight: 200,
@@ -888,6 +888,10 @@ const scJson: Record<string, ISConfig> = {
     isOpenHelpOld: '1',
     // isLangUygur: '1',
     isOpenPopularSci: '1',
+    homeTopBanner: {
+      topShow: true,
+      bannerHeight: 200,
+    },
 
     login: {
       isSkipPerfect: '1',

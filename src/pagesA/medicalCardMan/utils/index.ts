@@ -1432,7 +1432,6 @@ export const useAuthPerson = () => {
 
       const list = listMap.filter((o) => getRealNameAuth.value.includes(o.key));
       const { tapIndex } = await apiAsync(
-        // @ts-expect-error
         uni.showActionSheet,
         {
           title: tip,
