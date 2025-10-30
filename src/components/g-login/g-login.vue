@@ -107,7 +107,7 @@
 
     if (gStores.globalStore.sysCode === '1001082') {
       const u = await getUtils1001082();
-      await u.useFaceVerify1001082().intercept1001082(nextStep);
+      await u.useFaceVerify1001082().intercept1001082();
     }
     nextStep();
   };

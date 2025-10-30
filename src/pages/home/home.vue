@@ -445,7 +445,6 @@
   import homeDocCommend from './componetns/homeDocCommend.vue';
   import homeButtomProductionIcon from './componetns/homeButtomProductionIcon.vue';
   import chooseLang from './componetns/chooseLang.vue';
-  import { getUtils1001082 } from '@/utils/1001082';
 
   const props = ref({
     code: '',
@@ -601,10 +600,6 @@
           getNoPublicOpenIdOnly
         );
 
-        if (gStores.globalStore.sysCode === '1001082') {
-          const u = await getUtils1001082();
-          await u.useFaceVerify1001082().intercept1001082(routerJump);
-        }
         routerJump();
       }
       if (props.value.openId) {

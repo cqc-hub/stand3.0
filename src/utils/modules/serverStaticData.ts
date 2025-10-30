@@ -5,6 +5,9 @@ import {
   insertsObject,
   joinQuery,
 } from '@/common';
+// #ifdef H5
+import wxH5 from 'weixin-js-sdk';
+// #endif
 import { ISelectOptions, TAddress } from '@/components/g-form';
 import { GStores } from './login';
 import { encryptDesParam } from '@/common/des';
@@ -28,11 +31,7 @@ import type {
   IHosInfo,
   TButtonConfig,
 } from '@/types';
-
-// #ifdef H5
-import wxH5 from 'weixin-js-sdk';
 import { getUtils1001082 } from '../1001082';
-// #endif
 
 const _cacheMap = new WeakMap();
 
@@ -158,7 +157,7 @@ const tBannerIntercept = async (
 
     if (verify1001082 === '1') {
       const u = await getUtils1001082();
-      await u.useFaceVerify1001082().intercept1001082(inst);
+      await u.useFaceVerify1001082().intercept1001082();
     }
   }
 };
