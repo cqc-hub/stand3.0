@@ -565,12 +565,15 @@
   });
 
   const a = {
-    text: ' ',
-    path: 'pagesB/reportQuery/reportQuery',
-    type: 'self',
-    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '住院点餐',
     extraData: {
-      verify1001082: '1',
+      _type: 'zydc1001094',
+    },
+    addition: {
+      patientId: '_patientId',
     },
   } as TButtonConfig;
 

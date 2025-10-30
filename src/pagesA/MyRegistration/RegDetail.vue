@@ -328,16 +328,16 @@
 
       <template v-else>
         <button
-          v-if="['0', '60'].includes(orderRegInfo.orderStatus)"
+          v-if="['0', '60', '111'].includes(orderRegInfo.orderStatus)"
           @click="refoundOrder"
           class="btn btn-plain btn-error g-border"
         >
           {{
-            orderRegInfo.orderStatus === '60'
+            ['60', '111'].includes(orderRegInfo.orderStatus)
               ? '取消预约'
               : orderConfig.isOrderPay === '1'
-              ? '退号'
-              : '取消预约'
+                ? '退号'
+                : '取消预约'
           }}
         </button>
 

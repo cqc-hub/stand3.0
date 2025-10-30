@@ -326,16 +326,17 @@
         // @ts-expect-error
       ].filter((o) => isChangeHosPhoneWay.includes(o.value));
 
-      const { tapIndex } = await apiAsync(
-        uni.showActionSheet,
-        {
+      if (chooseList.length === 1) {
+        q.verifyType = chooseList[0].value;
+      } else {
+        const { tapIndex } = await apiAsync(uni.showActionSheet, {
           title: '选择验证方式',
           alertText: '选择验证方式',
           itemList: chooseList.map((o) => o.label),
-        }
-      );
+        });
 
-      q.verifyType = chooseList[tapIndex].value;
+        q.verifyType = chooseList[tapIndex].value;
+      }
     }
 
     uni.navigateTo({
