@@ -578,6 +578,7 @@ export const patCardDetailTempList: TInstance[] = [
 export const getDefaultFormData = async (
   pageType: 'addPatient' | 'perfectReal'
 ) => {
+  const pageConfig = await ServerStaticData.getSystemConfig('person');
   const data: Record<string, any> = {};
   const gStores = new GStores();
   const { ev } = gStores.globalStore;
@@ -625,7 +626,11 @@ export const getDefaultFormData = async (
       }
     }
   }
-
+  if (pageConfig?.formNotDisableKeysInQuickAddPatPage) {
+    pageConfig?.formNotDisableKeysInQuickAddPatPage.forEach((item) => {
+      delete data[item.key];
+    });
+  }
   return data;
 };
 
@@ -1431,14 +1436,11 @@ export const useAuthPerson = () => {
       ] as const;
 
       const list = listMap.filter((o) => getRealNameAuth.value.includes(o.key));
-      const { tapIndex } = await apiAsync(
-        uni.showActionSheet,
-        {
-          title: tip,
-          alertText: tip,
-          itemList: list.map((o) => o.label),
-        }
-      );
+      const { tapIndex } = await apiAsync(uni.showActionSheet, {
+        title: tip,
+        alertText: tip,
+        itemList: list.map((o) => o.label),
+      });
 
       authType = list[tapIndex].key;
     }

@@ -32,9 +32,12 @@
             minWidth: itemMinWidth,
             transitionDuration: transitionDuration + 's',
           }"
-          @click="change(i)"
         >
-          {{ field ? v[field] : v }}
+          <view @click="change(i)">
+            <slot :label="field ? v[field] : v" :idx="i">
+              {{ field ? v[field] : v }}
+            </slot>
+          </view>
         </view>
         <view
           v-if="!pills"
@@ -98,7 +101,7 @@
    * @property {Boolean} fixed = [true | false] 是否固定
    * @property {String} paddingItem = '0 22rpx' 选项的边距
    *@property {String} transitionDuration '0.4' 动画速度
-    *
+   *
    * @event {Function(current)} change 改变标签触发
    */
   export default {
@@ -163,7 +166,8 @@
       },
       lineColor: {
         type: String,
-        default: 'linear-gradient(180deg,var(--hr-brand-color-3),var(--hr-brand-color-6) 80%)',
+        default:
+          'linear-gradient(180deg,var(--hr-brand-color-3),var(--hr-brand-color-6) 80%)',
         // default: 'linear-gradient(270deg,#53a8ff, var(--hr-brand-color-6))',
       },
       lineHeight: {

@@ -20,7 +20,9 @@
 
     <g-pay ref="refPay"></g-pay>
     <view class="g-footer">
-      <button @click="testClick" class="btn1">233</button>
+      <view @click="testClick" class="btn1">
+        <view @click.stop="test233">233</view>
+      </view>
     </view>
   </view>
 </template>
@@ -41,11 +43,20 @@
   const refPay = ref<any>('');
 
   onLoad(async () => {
-    await wait(1500);
-    refPay.value.show();
+    // await wait(1500);
+    // refPay.value.show();
   });
 
-  const testClick = async (e) => {};
+  const testClick = async (e) => {
+    console.log('testClick');
+  };
+
+  const test233 = async (e) => {
+    console.log('test233');
+    e.stopPropagation();
+    e.preventDefault();
+    return false
+  };
 </script>
 
 <style lang="scss" scoped>

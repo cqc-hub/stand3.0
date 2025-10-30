@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001082",
+  "sysCode": "1001040",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -31,7 +31,7 @@
       "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/image/1001036logo.png",
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/image/1001036logo3.png",
       "isSearchInHos": true
     },
     "1001038": {

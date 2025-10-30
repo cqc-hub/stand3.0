@@ -70,6 +70,7 @@
       //第三方的h5  ?sysCode=${allData.sysCode}
       let newQuery = getQueryPath(pageProp.value);
       src.value = `${pageProp.value.path}${newQuery}`;
+      console.warn('第三方的h5页面路径：', src.value);
     } else {
       //自研h5
       const baseUrl = global.h5Url.slice(0, -1);
@@ -99,7 +100,7 @@
           src.value = `${baseUrl}${pageProp.value.path}${query}${newQuery}`;
         }
       }
-      console.warn('v3页面路径', src.value);
+      console.warn('v3页面路径：', src.value);
     }
   });
   const getQueryPath = (options) => {

@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx7c53b0e82e20494e",
+    "appid": "wxfa6c5f0835eedf08",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -79,9 +79,14 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "auth-pay-plugin": {
+        "version": "*",
+        "provider": "2021003147699046"
+      }
+    },
     "mergeVirtualHostAttributes": true,
-    "appid": "",
+    "appid": "2021002143620963",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -106,7 +111,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "健康温州",
+  "name": "湖州市第三人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
