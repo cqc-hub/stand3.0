@@ -41,7 +41,11 @@
   },
   "quickapp": {},
   "mp-weixin": {
+<<<<<<< HEAD
     "appid": "wxc3ee6623e27269a7",
+=======
+    "appid": "wx7c53b0e82e20494e",
+>>>>>>> ef44353f8707e541906d9f2d7f6e40758f0ccc2c
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,7 +70,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -76,7 +85,11 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
+<<<<<<< HEAD
     "appid": "2021005178602372",
+=======
+    "appid": "",
+>>>>>>> ef44353f8707e541906d9f2d7f6e40758f0ccc2c
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -101,7 +114,11 @@
     "enable": false
   },
   "vueVersion": "3",
+<<<<<<< HEAD
   "name": "温州市人民医院",
+=======
+  "name": "健康温州",
+>>>>>>> ef44353f8707e541906d9f2d7f6e40758f0ccc2c
   "h5": {
     "optimization": {
       "treeShaking": {

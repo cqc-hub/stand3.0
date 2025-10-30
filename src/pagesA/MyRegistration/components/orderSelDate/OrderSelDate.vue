@@ -89,8 +89,8 @@
   const props = withDefaults(
     defineProps<{
       chooseDays: IChooseDays[];
-      enableDays: Record<string, string>;
-      value: string;
+      enableDays?: Record<string, string>;
+      value?: string;
       isShowAllDate?: boolean;
     }>(),
     {

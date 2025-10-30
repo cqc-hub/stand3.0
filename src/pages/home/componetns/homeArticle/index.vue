@@ -30,7 +30,7 @@
         v-model:value="tabCurrent"
         :tabs="tabs"
         :height="(isShowTopTab && '55rpx') || '88rpx'"
-        :lineColor="isShowTopTab && '#fff'"
+        :lineColor="isShowTopTab && '#fff' || undefined"
         :fontSize="
           isShowTopTab ? 'var(--hr-font-size-s)' : 'var(--hr-font-size-base)'
         "
@@ -343,31 +343,31 @@
     }
 
     .tab-box {
-      padding: 0 10rpx 20rpx; 
+      padding: 0 10rpx 20rpx;
 
       .tab-content {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        
+
         .tabs-flex {
           flex: 1;
           min-width: 0; // 防止flex项目溢出
         }
-        
+
         .more-btn {
           flex-shrink: 0; // 防止按钮被压缩
           display: flex;
           align-items: center;
           margin-left: 16rpx;
           padding: 10rpx 16rpx;
-          
+
           .more-text {
             font-size: var(--hr-font-size-s);
             color: #666;
             margin-right: 6rpx;
           }
-          
+
           .icon-size {
             color: #888;
           }
@@ -413,5 +413,5 @@
     // position: relative;
     transform: translateY(30%) !important;
     // padding: 30rpx 0;
-  } 
+  }
 </style>

@@ -1639,7 +1639,7 @@
     uni.hideLoading();
 
     uni.redirectTo({
-      url: '/pagesC/medRecordApply/_recordApply?hosId=' + _hosId.value,
+      url: '/pagesC/medRecordApply/_recordApply1?hosId=' + _hosId.value,
     });
   };
 

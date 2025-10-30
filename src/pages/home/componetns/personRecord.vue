@@ -26,7 +26,7 @@
             <button
               class="user-name login-btn animate__animated animate__fadeIn"
             >
-              请登录
+              {{ getLangLabel('home:请登录') }}
             </button>
           </block>
         </view>
@@ -105,6 +105,7 @@
 
   import global from '@/config/global';
   import { computed } from 'vue';
+  import { getLangLabel } from '@/config/lang';
 
   const gStores = new GStores();
   const viewerStore = useViewerStore();

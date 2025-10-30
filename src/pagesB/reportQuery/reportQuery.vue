@@ -241,7 +241,6 @@
   } from '@/common';
   import { beforeEach } from '@/router';
   import { useCacheStore } from '@/stores';
-  import { getUtils1001082 } from '../common/utils';
 
   import api from '@/service/api';
   import dayjs from 'dayjs';
@@ -250,6 +249,7 @@
   import TimeChoosePopup from './components/TimeChoosePopup.vue';
   import advisoryItem from './components/advisoryItem.vue';
   import repShare from './components/repShare.vue';
+  import { getUtils1001082 } from '@/utils/1001082';
 
   interface IPageProps {
     tabIndex: number;
@@ -948,8 +948,7 @@
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
     if (pageProps.value.verify1001082 === '1') {
       const u = await getUtils1001082();
-      console.log(u, '233');
-      await u.useFaceVerify1001082().applyForAuth();
+      await u.useFaceVerify1001082().intercept1001082(init);
     }
 
     console.log('获取到页面参数-----');

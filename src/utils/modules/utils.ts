@@ -47,7 +47,7 @@ export const apiAsync: <
       opt: { success(any): any; fail(any): any; [key: string]: any },
       ...restOpt: any[]
     ): any;
-  }
+  },
 >(
   api: T,
   opt: Omit<TFirstParams<Parameters<T>>, 'success' | 'fail'>,
@@ -350,7 +350,7 @@ export const getLocation = async function (
           new Error(`非强制定位在${opt?.timeoutMs || 5000}毫秒后自动超时报错`)
         );
       }, opt?.timeoutMs || 5000);
-    const res = await apiAsync(uni.getLocation, {}).catch((err) => {
+    const res: any = await apiAsync(uni.getLocation, {}).catch((err) => {
       console.error('getLocation', err);
 
       if (err?.errCode === 2 || err?.extError === 12) {
@@ -368,9 +368,7 @@ export const getLocation = async function (
     // 授权成功
     if (res) {
       const { latitude, longitude } = res;
-      // @ts-expect-error
       res.longitude = longitude + '';
-      // @ts-expect-error
       res.latitude = latitude + '';
 
       success(res as any);

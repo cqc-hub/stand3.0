@@ -780,7 +780,7 @@
     }
   };
 
-  let tabChange = (idx: number) => {
+  let tabChange = async (idx: number) => {
     docHosSchList.value = docHosSchList.value.map((o, index) => {
       if (index === idx) {
         o.checkedDay = o.schList[0].schDate;
@@ -789,7 +789,6 @@
       }
       return o;
     });
-    console.log('tabChange', idx, docHosSchList.value);
 
     tabCurrent.value = idx;
   };

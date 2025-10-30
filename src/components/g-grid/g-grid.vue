@@ -67,7 +67,9 @@
                   : 'grid-resize'
               } ${item.iconfont}`"
             />
-            <view class="grid-label text-ellipsis">{{ item.title }}</view>
+            <view class="grid-label text-ellipsis">
+              {{ getShowTitle(item, type) }}
+            </view>
             <!-- <text
               v-if="type == 1 && item.detail"
               class="grid-title  f22"
@@ -75,9 +77,9 @@
               {{ item.detail }}
             </text> -->
             <rich-text
-              v-if="type == 1 && item.detail"
+              v-if="type == 1 && getSubtitle(item)"
               class="grid-title f22"
-              :nodes="$HTMLParser(item.detail.replaceAll('  ', '<br/>'))"
+              :nodes="$HTMLParser(getSubtitle(item).replaceAll('  ', '<br/>'))"
             ></rich-text>
           </view>
           <view
@@ -101,7 +103,9 @@
               lazy-load
             />
             <text v-else :class="`icon-font grid-resize ${item.iconfont}`" />
-            <view class="grid-label text-ellipsis">{{ item.title }}</view>
+            <view class="grid-label text-ellipsis">
+              {{ getShowTitle(item, type) }}
+            </view>
           </view>
         </g-login>
       </uni-grid-item>
@@ -113,8 +117,15 @@
   import { withDefaults, computed, ref, onMounted } from 'vue';
   import { useRouterStore } from '@/stores';
   import { throttle, GStores } from '@/utils';
+  import { getShowTitle, getSubtitle } from './utils';
+
   import global from '@/config/global';
   import api from '@/service/api';
+
+  interface IGridProps {
+    list: IRoute[];
+    type?: 1 | 2 | 3; //首页图标样式1 默认2
+  }
 
   /**
    * g-grid 网格布局
@@ -125,11 +136,21 @@
    */
 
   const emit = defineEmits(['gridClick']);
+  const gStores = new GStores();
+  // const getShowTitle = (item: IRoute) => {
+  //   const { engDetail, otherDetail, title } = item;
+  //   const { type } = props;
 
-  interface IGridProps {
-    list: IRoute[];
-    type?: 1 | 2 | 3; //首页图标样式1 默认2
-  }
+  //   if ([2, 3].includes(type)) {
+  //     if (gStores.globalStore.lang === 'en' && engDetail) {
+  //       return engDetail;
+  //     } else if (gStores.globalStore.lang === 'uygur' && otherDetail) {
+  //       return otherDetail;
+  //     }
+  //   }
+
+  //   return `${title}`;
+  // };
 
   const isImg = (src?: string) => {
     if (src) {
@@ -185,19 +206,6 @@
 
   getNum = throttle(getNum, 1000);
 
-  const gStores = new GStores();
-
-  onMounted(async () => {
-    if (
-      global.sConfig.isMessageBtnShowNew &&
-      gStores.userStore.patChoose.patientId
-    ) {
-      const hasMes = options.value.list.find((item) =>
-        item.path?.includes('/pagesB/historicalMess/historicalMess')
-      );
-      hasMes && getNum();
-    }
-  });
   const gridClick = (item) => {
     if (item.path?.includes('/pagesB/historicalMess/historicalMess')) {
       unreadMes.value = false;
@@ -210,6 +218,18 @@
     routerStore.update_P();
     routerStore.updateId(item.id);
   };
+
+  onMounted(async () => {
+    if (
+      global.sConfig.isMessageBtnShowNew &&
+      gStores.userStore.patChoose.patientId
+    ) {
+      const hasMes = options.value.list.find((item) =>
+        item.path?.includes('/pagesB/historicalMess/historicalMess')
+      );
+      hasMes && getNum();
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

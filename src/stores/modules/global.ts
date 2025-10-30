@@ -51,6 +51,7 @@ const SYS_CODE_MALL_APP_ID_MAP = {
   '1001071': 'mallMc58a05711ba6', // 请替换为实际的 mallAppId
 };
 
+let onAppShowCb: null | ((...args: any[]) => any);
 //页面存储token brower等
 const globalStore = defineStore('global', {
   /**
@@ -223,6 +224,10 @@ const globalStore = defineStore('global', {
       this.envH5 = env;
     },
 
+    setAppShowCb(cb: (...args: any[]) => any) {
+      onAppShowCb = cb;
+    },
+
     onAppShow(opt: any) {
       if (opt) {
         this.appShowData = opt;
@@ -230,6 +235,11 @@ const globalStore = defineStore('global', {
         // #ifdef H5
         this.updataH5Info(opt);
         // #endif
+      }
+
+      if (onAppShowCb) {
+        onAppShowCb();
+        onAppShowCb = null;
       }
     },
 

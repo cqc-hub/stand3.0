@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "sysCode": "1001083",
+=======
+  "sysCode": "1001082",
+>>>>>>> ef44353f8707e541906d9f2d7f6e40758f0ccc2c
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -31,7 +35,7 @@
       "name": "东部战区总医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
-       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/image/1001036logo.png",
+      "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/image/1001036logo.png",
       "isSearchInHos": true
     },
     "1001038": {
@@ -473,7 +477,7 @@
       "homeNavTitleLogo": "https://phsdevoss.eheren.com/pcloud/phs3.0/xinjiangzhongyinavtitle.png",
       "isOpenHealthCard": {
         "healthCardText": "新疆维吾尔自治区卫生健康委员会",
-        "hospitalId": "35088"
+        "hospitalId": "40652"
       }
     },
     "1001095": {
@@ -486,7 +490,7 @@
       "isOpenOcr": false,
       "isSearchInHos": true
     },
-     "1001097": {
+    "1001097": {
       "wxAppid": "wx868bfb27a64b370c",
       "h5Appid": "",
       "alipayAppid": "",
