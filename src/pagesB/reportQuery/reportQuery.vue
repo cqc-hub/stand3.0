@@ -249,7 +249,6 @@
   import TimeChoosePopup from './components/TimeChoosePopup.vue';
   import advisoryItem from './components/advisoryItem.vue';
   import repShare from './components/repShare.vue';
-  import { getUtils1001082 } from '@/utils/1001082';
 
   interface IPageProps {
     tabIndex: number;
@@ -946,10 +945,6 @@
 
     pageProps.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     pageProps.value.hosId && cacheStore.changeHosId(pageProps.value.hosId);
-    if (pageProps.value.verify1001082 === '1') {
-      const u = await getUtils1001082();
-      await u.useFaceVerify1001082().intercept1001082(init);
-    }
 
     console.log('获取到页面参数-----');
     console.log(pageProps.value);

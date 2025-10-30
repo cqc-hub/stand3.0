@@ -68,7 +68,7 @@
 
     if (
       globalStore.sysCode === '1001082' &&
-      ![1035, 1017, 1001, 1035].includes(opt.scene) &&
+      ![1035, 1017, 1001, 1035, 1038].includes(opt.scene) &&
       ![
         'pagesC/openMiniProgram/h5UseMiniFunc',
         'pagesA/webView/webView',

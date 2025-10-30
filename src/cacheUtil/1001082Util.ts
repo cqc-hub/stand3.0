@@ -1,10 +1,12 @@
+import { joinQuery } from '@/common';
 import api from '@/service/api';
 import { apiAsync, GStores } from '@/utils';
 import { ref } from 'vue';
 
 export const useFaceVerify1001082 = () => {
   const gStores = new GStores();
-  const uuid = ref('wjw-jkwz');
+  const appId = 'wxcb3a8be439f06ad2';
+  const app_scene = 'wjw-jkwz';
   const authInfo = ref(
     {} as {
       applyId: string;
@@ -32,8 +34,33 @@ export const useFaceVerify1001082 = () => {
     if (!confirm) {
       throw new Error('1001082-人脸认证拦截-拒绝授权');
     }
+    console.log(
+      JSON.stringify({
+        appId,
+        path: joinQuery('/pages/appScene', {
+          app_scene,
+          uuid: authInfo.value.applyId,
+          action_type: 'faceAuth',
+        }),
+        envVersion: 'release',
+      })
+    );
 
-
+    await new Promise((success, j) => {
+      uni.navigateToMiniProgram({
+        appId,
+        path: joinQuery('/pages/appScene', {
+          app_scene,
+          uuid: authInfo.value.applyId,
+          action_type: 'faceAuth',
+        }),
+        envVersion: 'release',
+        fail({ errMsg }) {
+          j('取消请求授权...');
+        },
+        success,
+      });
+    });
   };
 
   const intercept1001082 = async (init: (...args: any[]) => any = () => {}) => {
@@ -41,7 +68,7 @@ export const useFaceVerify1001082 = () => {
     await applyForAuth();
 
     if (authInfo.value.applyStatus !== '已授权') {
-      goAuth();
+      await goAuth();
     }
     cb();
     throw new Error('1001082-人脸认证拦截');
