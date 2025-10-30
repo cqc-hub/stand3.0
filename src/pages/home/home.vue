@@ -581,54 +581,54 @@
           : undefined;
       cacheStore.changeFlagList(list, isOpenAIPolicy === '1');
     }
-    const { isOpenHomeDoctorBanner } = orderConfig.value;
 
-    // #ifdef MP-WEIXIN
-    if (props.value.code) {
-      const getNoPublicOpenIdOnly =
-        getLocalStorage('getNoPublicOpenIdOnly') === '1';
+    if (gStores.globalStore.ev === 'wx') {
+      if (props.value.code) {
+        const getNoPublicOpenIdOnly =
+          getLocalStorage('getNoPublicOpenIdOnly') === '1';
 
-      // 免完善扫码进来
-      if (getNoPublicOpenIdOnly) {
-        if (gStores.globalStore.herenId) {
-          await patientUtils.getPatCardList();
+        // 免完善扫码进来
+        if (getNoPublicOpenIdOnly) {
+          if (gStores.globalStore.herenId) {
+            await patientUtils.getPatCardList();
+          }
+
+          removeLocation('getNoPublicOpenIdOnly');
+        }
+        await loginUtils.getNoPublicOpenId(
+          props.value.code,
+          getNoPublicOpenIdOnly
+        );
+
+        routerJump();
+      }
+      if (props.value.openId) {
+        globalStore.setH5OpenId(props.value.openId);
+
+        if (globalStore.herenId) {
+          loginUtils.sysPatOpenIdAssignment(props.value.openId);
         }
 
-        removeLocation('getNoPublicOpenIdOnly');
+        if (globalStore.token.accessToken) {
+          await loginUtils.getUerInfo();
+        }
+        routerJump();
       }
-      await loginUtils.getNoPublicOpenId(
-        props.value.code,
-        getNoPublicOpenIdOnly
-      );
-      routerJump();
+      wx.showShareMenu({
+        // 要求小程序返回分享目标信息
+        withShareTicket: true,
+      });
     }
-    if (props.value.openId) {
-      globalStore.setH5OpenId(props.value.openId);
 
-      if (globalStore.herenId) {
-        loginUtils.sysPatOpenIdAssignment(props.value.openId);
-      }
-
-      if (globalStore.token.accessToken) {
-        await loginUtils.getUerInfo();
-      }
-      routerJump();
+    if (gStores.globalStore.ev === 'alipay') {
+      //对接支付宝首页消息提醒
+      const alipayPid =
+        globalGl.systemInfo.alipayPid || globalGl.sConfig.isOpenMessageAuth;
+      alipayPid &&
+        globalStore.isLogin &&
+        !uni.getStorageSync('hospital_order') &&
+        authorization();
     }
-    wx.showShareMenu({
-      // 要求小程序返回分享目标信息
-      withShareTicket: true,
-    });
-    // #endif
-
-    // #ifdef MP-ALIPAY
-    //对接支付宝首页消息提醒
-    const alipayPid =
-      globalGl.systemInfo.alipayPid || globalGl.sConfig.isOpenMessageAuth;
-    alipayPid &&
-      globalStore.isLogin &&
-      !uni.getStorageSync('hospital_order') &&
-      authorization();
-    // #endif
   });
 
   const getDocRecommendList = async () => {

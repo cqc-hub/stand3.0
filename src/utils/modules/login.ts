@@ -204,9 +204,8 @@ export class LoginUtils extends GStores {
   //判断是否需要前往手机号登录
   async judgeLoginByPhoneVerify() {
     let flag = false;
-    const { isLoginByPhoneVerify } = await ServerStaticData.getSystemConfig(
-      'RestOfConfig'
-    );
+    const { isLoginByPhoneVerify } =
+      await ServerStaticData.getSystemConfig('RestOfConfig');
     if (isLoginByPhoneVerify === '1') {
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.messageStore.showMessage(
@@ -265,32 +264,32 @@ export class LoginUtils extends GStores {
 
         this.globalStore.setHerenId(herenId);
 
-        // #ifdef MP-WEIXIN
-        // 口腔商城特殊处理
-        if (
-          ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-            this.globalStore.sysCode
-          )
-        ) {
-          const appInstance = getApp();
-          const viewerStore = useViewerStore();
-          if (appInstance && appInstance.globalData) {
-            this.globalStore.updateOralMallData(appInstance, 'login');
-            appInstance.globalData.configData.mallToken =
-              await getTcMallToken();
+        if (this.globalStore.ev === 'wx') {
+          // 口腔商城特殊处理
+          if (
+            ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+              this.globalStore.sysCode
+            )
+          ) {
+            const appInstance = getApp();
+            const viewerStore = useViewerStore();
+            if (appInstance && appInstance.globalData) {
+              this.globalStore.updateOralMallData(appInstance, 'login');
+              appInstance.globalData.configData.mallToken =
+                await getTcMallToken();
+            }
+            console.log('小程序登录后全局参数', appInstance.globalData);
+            viewerStore.getMyOralCellMessage();
           }
-          console.log('小程序登录后全局参数', appInstance.globalData);
-          viewerStore.getMyOralCellMessage();
-        }
 
-        if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
-          uni.reLaunch({
-            url: '/pages/home/startCome',
-          });
+          if (!this.globalStore.h5OpenId && globalGl.h5AppId) {
+            uni.reLaunch({
+              url: '/pages/home/startCome',
+            });
 
-          return Promise.reject('未获取 h5openid');
+            return Promise.reject('未获取 h5openid');
+          }
         }
-        // #endif
 
         if (!herenId && !justGetInfo) {
           this.messageStore.showMessage('未完善，请先完善', 1000);
@@ -1116,9 +1115,8 @@ export class Login extends LoginUtils {
 export class PatientUtils extends LoginUtils {
   usePatDynamicCode = {
     async isOpen(path: string) {
-      const { GlobalConfig } = await cacheUtil.getSystemConfig(
-        'GlobalConfig'
-      )();
+      const { GlobalConfig } =
+        await cacheUtil.getSystemConfig('GlobalConfig')();
 
       return (GlobalConfig.refreshQrCode || []).includes(path);
     },
@@ -1436,9 +1434,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;
@@ -1490,9 +1487,8 @@ export class PatientUtils extends LoginUtils {
     const isNewMode = globalGl.systemInfo.isOpenHealthCard?.isNewMode;
     getH5OpenidParam(requestArg);
     if (wechatCode && !isNewMode) {
-      const { healthCardId, qrCodeText } = await this.regHealthCardByPatInfo(
-        data
-      );
+      const { healthCardId, qrCodeText } =
+        await this.regHealthCardByPatInfo(data);
 
       requestArg.qrCodeText = qrCodeText;
       requestArg.healthCardId = healthCardId;

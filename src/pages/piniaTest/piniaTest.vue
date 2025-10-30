@@ -553,8 +553,8 @@
     type: 'h5',
     isSelfH5: '1',
     extraData: {
-      hosId: '12675'
-    }
+      hosId: '12675',
+    },
   } as TButtonConfig;
 
   const testbuttonConfig = ref(智能客服);
@@ -564,8 +564,18 @@
     }, 1000);
   });
 
+  const a = {
+    text: ' ',
+    path: 'pagesB/reportQuery/reportQuery',
+    type: 'self',
+    _type: 'useTBanner',
+    extraData: {
+      verify1001082: '1',
+    },
+  } as TButtonConfig;
+
   const init = async () => {
-    useTBanner(医院指南);
+    useTBanner(a);
     // useTBanner(用药查询);
   };
 </script>
