@@ -580,6 +580,12 @@ const regApi = {
   getGuidanceUrl: <T = any>(data: any) =>
     service.post<T>('/phs-query/regIntelligence/getGuidanceUrl', parm(data)),
 
+   addContribOrder: <T = any>(data: any) =>
+    service.post<T>('/phs-query/contribution/addContribOrder', parm(data)),
+
+    contribPayInform: <T = any>(data: any) =>
+    service.post<T>('/contribution/contribution/contribPayInform', parm(data)),
+
   getConsultationUrl: <T = any>(data: any) =>
     service.post<T>(
       '/phs-query/regIntelligence/getConsultationUrl',

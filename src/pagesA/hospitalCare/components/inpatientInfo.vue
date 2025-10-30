@@ -333,8 +333,13 @@
       goOrderJE();
     } else if (sysCode === '1001060') {
       goOrderSE();
+    }else if (sysCode === '1001052') {
+      goOrder1001052();
     }
   };
+  const goOrder1001052 = ()=>{
+    
+  }
   const goOrderSE = () => {
     console.log(hosInfoResObj);
     let extend:any={}

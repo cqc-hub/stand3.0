@@ -933,6 +933,12 @@
           "style": {
             "navigationBarTitleText": "名医温州汇"
           }
+        },
+        {
+          "path": "donation/donation",
+          "style": {
+            "navigationBarTitleText": "慈善捐款"
+          }
         }
       ],
       "pagesD-plugins": ""

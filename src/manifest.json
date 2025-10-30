@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wx90dd2c3c4be8355a",
+    "appid": "wxc3ee6623e27269a7",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -76,7 +76,7 @@
     "usingComponents": true,
     "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003120612222",
+    "appid": "2021005178602372",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -101,7 +101,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "东部战区总医院",
+  "name": "温州市人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {

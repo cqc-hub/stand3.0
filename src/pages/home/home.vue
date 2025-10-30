@@ -889,11 +889,11 @@
         margin: 0 26rpx;
         position: relative;
         box-sizing: border-box;
-
+        background-color: var(--hr-brand-color-3);
         border: 2rpx solid var(--hr-brand-color-3);
         backdrop-filter: blur(30rpx);
-        border-radius: 24rpx;
-
+        border-top-left-radius: 24rpx;
+        border-top-right-radius: 24rpx;
         height: 100rpx;
 
         .patient {
