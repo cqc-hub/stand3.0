@@ -12,7 +12,6 @@ import {
 } from '@/utils';
 import { joinQueryForUrl, deQueryForUrl } from '@/common/utils';
 import { type XOR } from '@/typeUtils/obj';
-import { pageConfig } from '../../intelMedicalAssist/utils/utils';
 import globalGl from '@/config/global';
 
 dayjs.extend(isoWeek);
@@ -488,7 +487,9 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     if (schState === '1') {
       warnMsg = '该日期已停诊';
     } else if (schState === '2') {
-      warnMsg = '该日期已约满';
+      warnMsg = orderConfig.value?.isOpenOrderWaiting
+        ? '当前日期约满，您可点击医生姓名进入医生名片提交候补登记！'
+        : '该日期已约满';
     } else if (schState === '3') {
       warnMsg = '该日期未放号';
     }
