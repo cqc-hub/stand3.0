@@ -34,27 +34,22 @@ export const useFaceVerify1001082 = () => {
     if (!confirm) {
       throw new Error('1001082-人脸认证拦截-拒绝授权');
     }
-    console.log(
-      JSON.stringify({
-        appId,
-        path: joinQuery('/pages/appScene', {
-          app_scene,
-          uuid: authInfo.value.applyId,
-          action_type: 'faceAuth',
-        }),
-        envVersion: 'release',
-      })
-    );
+
+    const programOpt = {
+      appId,
+      path: joinQuery('/pages/appScene', {
+        app_scene,
+        apply_id: authInfo.value.applyId,
+        // action_type: 'faceAuth',
+      }),
+      envVersion: 'release',
+    } as const;
+
+    console.log(JSON.stringify(programOpt));
 
     await new Promise((success, j) => {
       uni.navigateToMiniProgram({
-        appId,
-        path: joinQuery('/pages/appScene', {
-          app_scene,
-          uuid: authInfo.value.applyId,
-          action_type: 'faceAuth',
-        }),
-        envVersion: 'release',
+        ...programOpt,
         fail({ errMsg }) {
           j('取消请求授权...');
         },
