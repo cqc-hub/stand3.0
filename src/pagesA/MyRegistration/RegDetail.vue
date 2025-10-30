@@ -556,6 +556,7 @@
       '42',
       '101',
       '110',
+      '111',
     ].includes(orderRegInfo.value.orderStatus);
   });
 
