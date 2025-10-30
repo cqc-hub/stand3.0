@@ -186,7 +186,7 @@
     ISystemConfig,
     ServerStaticData,
   } from '@/utils';
-  import { joinQuery, joinQueryForUrl } from '@/common';
+  import { joinQuery, joinQueryForUrl, encryptDes } from '@/common';
   import {
     getInHospitalInfoParam,
     getInHospitalInfoResult,
@@ -333,20 +333,26 @@
       goOrderJE();
     } else if (sysCode === '1001060') {
       goOrderSE();
-    }else if (sysCode === '1001052') {
+    } else if (sysCode === '1001052') {
       goOrder1001052();
     }
   };
-  const goOrder1001052 = ()=>{
-    
-  }
+  const goOrder1001052 = () => {
+    useTBanner({
+      type: 'h5',
+      path: joinQuery(' https://yingyang.yqrmyy.com', {
+        patId: encryptDes(hosInfoResObj.value.cardNumber||'', 'phsDesKey'),
+      }),
+      text: '订餐',
+    });
+  };
   const goOrderSE = () => {
     console.log(hosInfoResObj);
-    let extend:any={}
-    try{
-      extend=JSON.parse(hosInfoResObj.value.extend||'')
-    }catch(e){
-      gStores.messageStore.showMessage('接口返回数据extend异常')
+    let extend: any = {};
+    try {
+      extend = JSON.parse(hosInfoResObj.value.extend || '');
+    } catch (e) {
+      gStores.messageStore.showMessage('接口返回数据extend异常');
     }
     useTBanner({
       type: 'h5',

@@ -232,6 +232,7 @@ export interface ISystemConfig_ {
     formExtraKeys?: TPersonExtraKey[]; // 一起加
     formExtraKeysInAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅添加就诊人详情页面
     formExtraKeysInQuickAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅快速添加就诊人页面
+    
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     isVerifyIdCardLastFourNumber?: '1';
