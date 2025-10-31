@@ -917,6 +917,7 @@ const scJson: Record<string, ISConfig> = {
               'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
             orgCodg: 'H65010300208',
             orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+            sourceapp: 'wx081a6fb9ee8778e4-1',
           },
         },
       },
