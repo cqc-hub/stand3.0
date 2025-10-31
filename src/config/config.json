@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001044",
+  "sysCode": "1001094",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -465,7 +465,7 @@
     },
     "1001094": {
       "wxAppid": "wx081a6fb9ee8778e4",
-      "h5Appid": "",
+      "h5Appid": "wx082515d97bb4b974",
       "name": "新疆维吾尔自治区中医医院",
       "isStartComeTest": false,
       "isOpenOcr": false,
