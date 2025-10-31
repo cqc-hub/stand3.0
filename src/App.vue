@@ -22,8 +22,8 @@
     globalStore.onAppLaunch(opt);
 
     if (globalStore.sysCode === '1001035') {
-      const { appLaunchInit1001035 } = useLunchInit1001035();
-      appLaunchInit1001035();
+      // const { appLaunchInit1001035 } = useLunchInit1001035();
+      // appLaunchInit1001035();
     } else {
       globalStore.setShowFlag(true);
     }
