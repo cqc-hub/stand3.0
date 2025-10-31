@@ -18,7 +18,9 @@
       </view>
     </view>
     <view class="g-footer">
-      <button @click="gform.submit" class="btn btn-primary flex1">确认捐款</button>
+      <button @click="gform.submit" class="btn btn-primary flex1">
+        确认捐款
+      </button>
     </view>
     <g-message />
   </view>
@@ -130,10 +132,10 @@
       phsOrderSource: 15,
       hosId: hosId,
       patientName,
-      cardNumber:''
+      cardNumber: '',
     });
     await toPayPull(payRes);
-    gStores.messageStore.showMessage('捐款成功，感谢您的爱心奉献！')
+    gStores.messageStore.showMessage('捐款成功，感谢您的爱心奉献！', 5000);
     // console.log('result', result);
   };
 </script>
