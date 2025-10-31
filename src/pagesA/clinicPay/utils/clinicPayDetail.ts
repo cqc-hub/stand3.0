@@ -815,29 +815,29 @@ export const usePayPage = () => {
     extInfo: {},
   });
 
-  const isWx = ref(false);
-
   // #ifdef  MP-WEIXIN
-  isWx.value = true;
-  const {
-    sConfig: { medicalMHelp },
-    systemConfig: { alipayAppid },
-  } = globalGl;
-  if (medicalMHelp) {
-    const { wx } = medicalMHelp;
-    if (wx) {
-      const clinicBizType = wx?.crossProgramBizType?.clinic || '';
-      const regBizType = wx?.crossProgramBizType?.reg || '';
-      if (clinicBizType || regBizType) {
-        wxCrossProgramInfo.value = {
-          appId: alipayAppid,
-          bizType: clinicBizType,
-          bizTypeReg: regBizType,
-          extInfo: {},
-        };
+  if (gStores.globalStore.ev === 'wx') {
+    const {
+      sConfig: { medicalMHelp },
+      systemConfig: { alipayAppid },
+    } = globalGl;
+    if (medicalMHelp) {
+      const { wx } = medicalMHelp;
+      if (wx) {
+        const clinicBizType = wx?.crossProgramBizType?.clinic || '';
+        const regBizType = wx?.crossProgramBizType?.reg || '';
+        if (clinicBizType || regBizType) {
+          wxCrossProgramInfo.value = {
+            appId: alipayAppid,
+            bizType: clinicBizType,
+            bizTypeReg: regBizType,
+            extInfo: {},
+          };
+        }
       }
     }
   }
+
   // #endif
 
   let tabChange = (idx: number) => {

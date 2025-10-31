@@ -84,7 +84,7 @@
                 class="pat-btns flex-normal mt16 ml12"
               >
                 <view
-                  @click="editPatPhone(pat)"
+                  @click="goEditPhone(pat)"
                   class="btn btn-round btn-border btn-plain btn-size-small color-dark"
                 >
                   修改手机号
@@ -230,6 +230,7 @@
     healthCardBind,
     useAuthPerson,
     isShowAddPatCardNo,
+    goEditPhone,
   } from './utils/index';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
   import { goElectronicMedicalCard } from '@/pages/home/utils';
@@ -307,41 +308,6 @@
     await _realNameAuth(pat);
     await patientUtils.getPatCardList();
     routerJump();
-  };
-
-  const editPatPhone = async (pat: IPat) => {
-    gStores.userStore.updatePatClick(pat);
-    const { isChangeHosPhoneWay } = pageConfig.value;
-    let q: any = {};
-    if (isChangeHosPhoneWay) {
-      const chooseList = [
-        {
-          label: '使用人脸验证',
-          value: 'face',
-        },
-        {
-          label: '上传证件验证',
-          value: 'ocr',
-        },
-        // @ts-expect-error
-      ].filter((o) => isChangeHosPhoneWay.includes(o.value));
-
-      if (chooseList.length === 1) {
-        q.verifyType = chooseList[0].value;
-      } else {
-        const { tapIndex } = await apiAsync(uni.showActionSheet, {
-          title: '选择验证方式',
-          alertText: '选择验证方式',
-          itemList: chooseList.map((o) => o.label),
-        });
-
-        q.verifyType = chooseList[tapIndex].value;
-      }
-    }
-
-    uni.navigateTo({
-      url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
-    });
   };
 
   const isCanAddGuardian = (pat: IPat) => {

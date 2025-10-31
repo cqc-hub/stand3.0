@@ -315,13 +315,8 @@ export class LoginUtils extends GStores {
   }
 
   async faceVerify({ name, idCardNumber }) {
-    let env = 'isWx';
-    // #ifdef MP-ALIPAY
-    env = 'isAli';
-    // #endif
-
     // https://developers.weixin.qq.com/community/business/doc/000442d352c1202bd498ecb105c00d
-    if (env === 'isWx') {
+    if (this.globalStore.ev === 'wx') {
       return new Promise<{ verifyResult: string }>((resolve, reject) => {
         wx.checkIsSupportFacialRecognition({
           checkAliveType: 2,
@@ -353,7 +348,7 @@ export class LoginUtils extends GStores {
           },
         });
       });
-    } else if (env === 'isAli') {
+    } else if (this.globalStore.ev === 'alipay') {
       // https://opendocs.alipay.com/open/03oebe?pathHash=23ac7ae7&ref=api 本身是收费项目 BD可申请免费
       const {
         browser: { source },

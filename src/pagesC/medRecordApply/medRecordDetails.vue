@@ -997,10 +997,6 @@
 
   const chooseIdCardFront = async () => {
     const { isOcrSfz } = pageConfig.value;
-    let iswx = false;
-    // #ifdef MP-WEIXIN
-    iswx = true;
-    // #endif
 
     if (isOcrSfz === '1') {
       try {
@@ -1009,7 +1005,7 @@
 
         if (image) {
           if (name === gStores.userStore.patChoose.patientName) {
-            if (iswx) {
+            if (gStores.globalStore.ev === 'wx') {
               idCardImg.value.frontIdCardUrl = await base64Src(image);
             } else {
               idCardImg.value.frontIdCardUrl = image;
@@ -1782,7 +1778,7 @@
     }
   });
 
-  onLoad((opt) => {
+  onLoad((opt: any) => {
     if (opt) {
       opt = deQueryForUrl(deQueryForUrl(opt));
       if (opt.hosId) {

@@ -239,7 +239,6 @@
                   >
                     <view class="flex">
                       <view class="mr12">{{ orderRegInfo.deptName }}</view>
-                      <!-- v-if="gStores.globalStore.sysCode === '1001048' && isWx" -->
                       <view
                         v-if="
                           orderConfig.regDeptButton &&
@@ -527,10 +526,6 @@
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
-  const isWx = ref(false);
-  // #ifdef MP-WEIXIN
-  isWx.value = true;
-  // #endif
 
   const isShowFooter = computed(() => {
     if (

@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
-import { cloneUtil } from '@/common';
+import { cloneUtil, joinQueryForUrl } from '@/common';
 import { decryptDes } from '@/common/des';
 import {
   idValidator,
@@ -307,9 +307,8 @@ export const tempList: TInstance[] = [
     key: formKey.upIdCard,
     validator: async (v: unknown, item: any) => {
       if (typeof v === 'string' && v && idValidator.checkIdCardNo(v)) {
-        const { ageGuardian } = await ServerStaticData.getSystemConfig(
-          'person'
-        );
+        const { ageGuardian } =
+          await ServerStaticData.getSystemConfig('person');
 
         const info = idValidator.getIdCardInfo(v);
 
@@ -912,9 +911,8 @@ export const useProgramPaySign = () => {
     regDialogConfirmSign,
     isSignExist,
     async initSign() {
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
 
       if (isPayWithoutSecretAuth === '1') {
         // regDialogConfirmSign.value.show();
@@ -925,9 +923,8 @@ export const useProgramPaySign = () => {
     async goPaySign(patientId, payload = {} as TSingnPayload) {
       const { type = 'addPat', cb } = payload;
 
-      const { isPayWithoutSecretAuth } = await ServerStaticData.getSystemConfig(
-        'person'
-      );
+      const { isPayWithoutSecretAuth } =
+        await ServerStaticData.getSystemConfig('person');
       if (isPayWithoutSecretAuth !== '1') {
         return;
       }
@@ -1527,4 +1524,42 @@ export const insertSortFormExtraKey = (
   }
 
   return insertList;
+};
+
+export const goEditPhone = async (pat: IPat) => {
+  const gStores = new GStores();
+  const personConfig = await ServerStaticData.getSystemConfig('person');
+  const { isChangeHosPhoneWay } = personConfig;
+
+  if (isChangeHosPhoneWay) {
+    let q: any = {};
+    const chooseList = [
+      {
+        label: '使用人脸验证',
+        value: 'face',
+      },
+      {
+        label: '上传证件验证',
+        value: 'ocr',
+      },
+      // @ts-expect-error
+    ].filter((o) => isChangeHosPhoneWay.includes(o.value));
+
+    if (chooseList.length === 1) {
+      q.verifyType = chooseList[0].value;
+    } else {
+      const { tapIndex } = await apiAsync(uni.showActionSheet, {
+        title: '选择验证方式',
+        alertText: '选择验证方式',
+        itemList: chooseList.map((o) => o.label),
+      });
+
+      q.verifyType = chooseList[tapIndex].value;
+    }
+    gStores.userStore.updatePatClick(pat);
+
+    uni.navigateTo({
+      url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
+    });
+  }
 };

@@ -176,10 +176,6 @@
     config: ISystemConfig['order'];
   }>();
   const emits = defineEmits(['ywz-click', 'go-detail', 'go-hos-navigate']);
-  const isWx = ref(false);
-  // #ifdef  MP-WEIXIN
-  isWx.value = true;
-  // #endif
   const getCustomBtns = computed(() => {
     const list = [...(props.config.regListItemCustomButtons || [])];
     if (gStores.globalStore.sysCode === '1001048') {
@@ -275,7 +271,7 @@
     if (props.isWaitReg) {
       return false;
     }
-    if (isWx.value) {
+    if (gStores.globalStore.ev === 'wx') {
       if (gStores.globalStore.sysCode === '1001046') {
         return true;
       }

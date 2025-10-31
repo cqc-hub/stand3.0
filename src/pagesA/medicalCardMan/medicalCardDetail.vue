@@ -66,6 +66,7 @@
     patCardDetailTempList,
     PatCardKeys,
     patCardDetailFormKey,
+    goEditPhone,
   } from './utils';
   import {
     apiAsync,
@@ -82,16 +83,11 @@
   } from '@/pagesA/clinicPay/utils/clinicPayDetail';
   import xyDialog from '@/components/xy-dialog/xy-dialog.vue';
   import OrderRegConfirm from '@/components/orderRegConfirm/orderRegConfirm.vue';
-  import { joinQueryForUrl } from '@/common';
 
   type PagePropType = Record<PatCardKeys, any>;
   const isShow = ref(false);
   const gStores = new GStores();
   const pat = gStores.userStore.clickPat;
-  const isWx = ref(false);
-  // #ifdef  MP-WEIXIN
-  isWx.value = true;
-  // #endif
 
   const patientUtils = new PatientUtils();
   const formData = ref({} as PagePropType);
@@ -131,43 +127,14 @@
 
   const rowClick = async (item) => {
     const { key } = item;
-    const { isEditPatPhone, isChangeHosPhoneWay } = pageConfig.value;
+    const { isEditPatPhone } = pageConfig.value;
 
     if (
       key === 'patientPhone' &&
       isEditPatPhone === '1' &&
       pat.idType === '01'
     ) {
-      let q: any = {};
-
-      if (isChangeHosPhoneWay) {
-        const chooseList = [
-          {
-            label: '使用人脸验证',
-            value: 'face',
-          },
-          {
-            label: '上传证件验证',
-            value: 'ocr',
-          },
-          // @ts-expect-error
-        ].filter((o) => isChangeHosPhoneWay.includes(o.value));
-
-        if (chooseList.length === 1) {
-          q.verifyType = chooseList[0].value;
-        } else {
-          const { tapIndex } = await apiAsync(uni.showActionSheet, {
-            title: '选择验证方式',
-            alertText: '选择验证方式',
-            itemList: chooseList.map((o) => o.label),
-          });
-
-          q.verifyType = chooseList[tapIndex].value;
-        }
-      }
-      uni.navigateTo({
-        url: joinQueryForUrl('/pagesA/medicalCardMan/editPhone', q),
-      });
+      goEditPhone(pat);
     }
   };
   const goMedicalFiling = (pat) => {
