@@ -232,7 +232,7 @@ export interface ISystemConfig_ {
     formExtraKeys?: TPersonExtraKey[]; // 一起加
     formExtraKeysInAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅添加就诊人详情页面
     formExtraKeysInQuickAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 仅快速添加就诊人页面
-    formNotDisableKeysInQuickAddPatPage?: Exclude<TPersonExtraKey, string>[];// 快速添加就诊人页面,默认值取消
+    formNotDisableKeysInQuickAddPatPage?: Exclude<TPersonExtraKey, string>[]; // 快速添加就诊人页面,默认值取消
 
     // medicalCardMan/perfectReal  pagesA/medicalCardMan/addMedical
     isVerifyIdCardLastFourNumber?: '1';
@@ -254,8 +254,13 @@ export interface ISystemConfig_ {
     isGuardianWithIdCard?: number;
     // 不需要地址
     isDropAddress?: '1';
-    // 默认地址
+
     defaultAddress?: { provinces?: string; citys?: string; areas?: string };
+    // 所在地区排序
+    sortProvinces?: string[];
+    sortCitys?: string[];
+    sortAreas?: string[];
+
     // 不需要民族
     isDropNation?: '1';
     /**
@@ -683,8 +688,8 @@ export interface ISystemConfig_ {
     tabJumpConfig?: {
       title?: string; //页面标题，无则标题展示空
       showFlag?: number; //页面底部协议，无则不展示
-      entryType?: string; 
-      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string;}>; //bgSrc背景图
+      entryType?: string;
+      tabs?: Array<TButtonConfig & { bgSrc?: string; subTitle?: string }>; //bgSrc背景图
     }[];
   };
 }
@@ -827,3 +832,6 @@ export interface IPayListObj {
 }
 
 type TMedRecordSfz = 'front' | 'end' | 'handler' | 'handlerBack' | 'hkb';
+
+const a = [2, 3, 90, 22];
+console.log(a.sort((c, n) => 0));

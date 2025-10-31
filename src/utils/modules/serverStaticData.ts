@@ -410,9 +410,42 @@ export class ServerStaticData {
     }
   }
 
-  static async getAddressByLevel(upDivision = ''): Promise<TAddress[]> {
-    const { result } = await api.getDivisionByLevel({
+  /**
+   *
+   * @param upDivision
+   * @param divisionType undefined -> provinces; 1 -> citys; 2 -> areas
+   * @returns
+   */
+  static async getAddressByLevel(
+    upDivision = '',
+    divisionType?: '1' | '2'
+  ): Promise<TAddress[]> {
+    let { result = [] } = await api.getDivisionByLevel({
       upDivision,
+    });
+    const personConfig = await this.getSystemConfig('person');
+    const { sortProvinces = [], sortCitys = [], sortAreas = [] } = personConfig;
+    let sortAddress = sortProvinces;
+
+    if (divisionType === '1') {
+      sortAddress = sortCitys;
+    } else if (divisionType === '2') {
+      sortAddress = sortAreas;
+    }
+    const addressValue: string[] = result.map((o) => o.value);
+    sortAddress = sortAddress.filter((v) => addressValue.includes(v));
+
+    result.sort((c, n) => {
+      const ci = sortAddress.indexOf(c.value);
+      const ni = sortAddress.indexOf(n.value);
+
+      if (ci !== -1 && ni !== -1) {
+        return ci - ni;
+      } else if (ci !== -1) {
+        return -1;
+      }
+
+      return 1;
     });
 
     return result;
