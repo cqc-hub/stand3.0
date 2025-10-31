@@ -138,13 +138,20 @@ export interface ISConfig {
 
         pathExtraData?: {
           // 拼接到授权时候path - 东软医保模式必有以下可选字段
-          openType?: string;
-          cityCode?: string;
-          orgCodg?: string;
-          orgChnlCrtfCodg?: string;
-          bizType?: string;
-          orgAppId?: string;
-          channel?: string;
+          /** 固定值 getAuthCode */
+          openType: 'getAuthCode';
+          /** 固定值 04107 */
+          bizType: '04107';
+          /** 城市编码 */
+          cityCode: string;
+          /** 渠道号 */
+          channel: string;
+          /** 机构渠道认证编码 */
+          orgChnlCrtfCodg: string;
+          /** 定点医疗机构编码 */
+          orgCodg: string;
+          /** 定点医疗机构小程序/H5应用ID */
+          orgAppId: string;
         } & BaseObject;
         // 走东软医保模式
         dongRuanMedicalInfo?: {
@@ -896,14 +903,25 @@ const scJson: Record<string, ISConfig> = {
     login: {
       isSkipPerfect: '1',
     },
-    // medicalMHelp: {
-    //   wx: {
-    //     medicalNation: {
-    //       appId: 'wxe183cd55df4b4369',
-    //       path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=650100&channel=AAFnB6FxCsnf4D2WcS3JifN8&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxup9p6OTEwpdxuIGgYrHBhV&orgCodg=H65017100367&orgAppId=1H16HC3ND00I3F60C80A0000EEF6825C',
-    //     },
-    //   },
-    // },
+    medicalMHelp: {
+      wx: {
+        medicalNation: {
+          appId: 'wxe183cd55df4b4369',
+          path: 'auth/pages/bindcard/auth/index',
+          pathExtraData: {
+            openType: 'getAuthCode',
+            bizType: '04107',
+            cityCode: '650100',
+            channel: 'AAEZDc60WgTiVxo5xtoqTx-g',
+            orgChnlCrtfCodg:
+              'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNriL3sY3GfFVjZHL7b0de',
+            orgCodg: 'H65010300208',
+            orgAppId: '1GJ8TA8QI0IE75430B0A0000F938BFC7',
+            sourceapp: 'wx081a6fb9ee8778e4-1',
+          },
+        },
+      },
+    },
   },
   1001097: {
     isDrugDelivery: '1',

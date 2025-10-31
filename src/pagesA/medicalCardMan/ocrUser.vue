@@ -193,12 +193,8 @@
     });
     const { image, name, idCard, idCardOcrEn, patientNameOcrEn, pdata } = res;
 
-    let iswx = false;
-    // #ifdef MP-WEIXIN
-    iswx = true;
-    // #endif
     if (image) {
-      if (iswx) {
+      if (gStores.globalStore.ev === 'wx') {
         idCardUrl.value = await base64Src(image);
       } else {
         idCardUrl.value = image;

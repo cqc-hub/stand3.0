@@ -168,6 +168,14 @@ export const orderStatusMap = {
     title: '已预约',
     cardColor: 'var(--hr-brand-color-6)',
   },
+  '111': {
+    headerClass: 'header-blue',
+    headerBgIcon: '&#xe6d0;',
+    headerIcon: '&#xe6c7;',
+    color: '#fff',
+    title: '已预约',
+    cardColor: 'var(--hr-brand-color-6)',
+  },
   // 成功
   '0': {
     headerClass: 'header-blue',
@@ -508,7 +516,6 @@ export class RegDetailUtil {
       searchType,
     });
 
-
     return result;
   }
   /** 请求内部数据库 */
@@ -612,6 +619,7 @@ export class RegDetailUtil {
   ) {
     const { isOrderPay, wxOrderSubscribeMessage = [] } = this.orderConfig.value;
     let errMsg = '';
+    const { refundNeedAuth, source, orderStatus } = this.orderRegInfo;
 
     // if (!Object.keys(this.orderRegInfo).length) {
     //   await this.getDataDetail();
@@ -628,8 +636,7 @@ export class RegDetailUtil {
     }
     // #endif
 
-    if (isOrderPay === '1') {
-      const { refundNeedAuth, source, tradeType } = this.orderRegInfo;
+    if (isOrderPay === '1' && !['111'].includes(orderStatus)) {
       const { orderId, searchType } = this.prop.value;
       const { ev } = this.gStores.globalStore;
       const args = {
@@ -752,6 +759,7 @@ export const goAskForDoc1001048 = (orderInfo) => {
   const secretkey = 'V7lH3cKlj42kmZ3';
   const callback = '/pagesA/MyRegistration/MyRegistration';
   const needJm = `${deptcode}${regno}${hisid}${callback}${secretkey}`;
+  // @ts-expect-error
   const sign = md5s(needJm).toLowerCase();
   const url = `https://inquiry.iflyhealth.com/wx#/official/3202002?deptcode=${deptcode}&regno=${regno}&callback=${encodeURIComponent(
     callback

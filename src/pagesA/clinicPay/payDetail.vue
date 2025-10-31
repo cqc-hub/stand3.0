@@ -371,10 +371,6 @@
 
   const selList = ref<TCostList>([]);
   const selListChildren = ref<TCostList[number]['costList']>([]);
-  const isWx = ref(false);
-  // #ifdef  MP-WEIXIN
-  isWx.value = true;
-  // #endif
 
   const { getDetailData, detailData } = usePayDetailPage();
   const {
@@ -698,63 +694,36 @@
         });
         await getMedicalArgWithFamily(props.value.params);
 
-        // if (gStores.globalStore.sysCode === '1001048' && isWx.value) {
-        //   const authCode = await getMedicalAuthCode();
-        //   const H5_BASE_URL = 'https://ybj.jszwfw.gov.cn/mms/hsa-tiap-ui';
-        //   const OPENID = gStores.globalStore.openId;
-        //   const MEDORGORD =
-        //     props.value?.serialNo ||
-        //     selList.value.map((item) => item.serialNo).join(',') ||
-        //     selUnPayList.value.map((item) => item.serialNo).join(',');
-        //   const ORGCODG = 'H32028200358';
-        //   const APPID = '1GU9S5QVB01M76430B0A000038F064B8';
-
-        //   const resultConfig = encodeURIComponent(
-        //     JSON.stringify({
-        //       cancelAuthRedirectUrl: '/pagesA/clinicPay/clinicPayDetail',
-        //       orderStatusRedirectUrl:
-        //         '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-        //     })
-        //   );
-        //   uni.setStorageSync('resultConfig', resultConfig);
-        //   const url = `${H5_BASE_URL}/#/pay-loading?openid=${OPENID}&medOrgOrd=${MEDORGORD}&orgCodg=${ORGCODG}&appId=${APPID}&authCode=${authCode}&resultConfig=${resultConfig}`;
-        //   useTBanner({
-        //     type: 'h5',
-        //     path: url,
-        //   });
-        //   return;
-        // }
-
-        // #ifdef MP-ALIPAY
-        if (getIsAliMedicalNation()) {
-          payAliMedicalNation();
-        } else {
-          payMoneyMedicalPlugin();
+        if (gStores.globalStore.ev === 'alipay') {
+          if (getIsAliMedicalNation()) {
+            payAliMedicalNation();
+          } else {
+            payMoneyMedicalPlugin();
+          }
         }
-        // #endif
 
-        // #ifdef  MP-WEIXIN
-        if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
-          const resultConfig = {
-            cancelUrl: joinQueryForUrl(
-              '/pagesA/clinicPay/payDetail',
-              props.value
-            ),
-            successUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
-          };
-          const medOrgOrd =
-            props.value?.serialNo ||
-            selList.value.map((item) => item.serialNo).join(',') ||
-            selUnPayList.value.map((item) => item.serialNo).join(',');
+        if (gStores.globalStore.ev === 'wx') {
+          if (medicalNationInfo && medicalNationInfo.dongRuanMedicalInfo) {
+            const resultConfig = {
+              cancelUrl: joinQueryForUrl(
+                '/pagesA/clinicPay/payDetail',
+                props.value
+              ),
+              successUrl: '/pagesA/clinicPay/clinicPayDetail?tabIndex=1',
+            };
+            const medOrgOrd =
+              props.value?.serialNo ||
+              selList.value.map((item) => item.serialNo).join(',') ||
+              selUnPayList.value.map((item) => item.serialNo).join(',');
 
-          handlerMedicalPayDongRuan({
-            resultConfig,
-            medOrgOrd,
-          });
-        } else {
-          wxPayMoneyMedicalPlugin(medicalNationWx);
+            handlerMedicalPayDongRuan({
+              resultConfig,
+              medOrgOrd,
+            });
+          } else {
+            wxPayMoneyMedicalPlugin(medicalNationWx);
+          }
         }
-        // #endif
       }
     } else if (item.key === 'digital') {
       let payArg = await payBeforeCreateData();

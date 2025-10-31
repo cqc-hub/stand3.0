@@ -75,6 +75,7 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {},
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "appid": "2021003164605058",
     "window": {

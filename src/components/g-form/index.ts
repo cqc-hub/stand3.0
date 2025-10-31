@@ -170,13 +170,17 @@ export const useAddress = () => {
     }
   };
 
-  const _getList = async (payload?: TAddress) => {
+  const _getList = async (payload = {} as TAddress) => {
     const listHis = addressMap.get(payload?.uuid);
+    const { divisionType } = payload;
     if (listHis) {
       return listHis;
     }
 
-    const list = await ServerStaticData.getAddressByLevel(payload?.id || '');
+    const list = await ServerStaticData.getAddressByLevel(
+      payload?.id || '',
+      divisionType as any
+    );
 
     list.map((o) => {
       o.uuid = generateUuid();

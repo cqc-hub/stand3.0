@@ -564,18 +564,30 @@
     }, 1000);
   });
 
-  const a = {
-    text: ' ',
-    path: 'pagesB/reportQuery/reportQuery',
-    type: 'self',
-    _type: 'useTBanner',
+  const 住院点餐 = {
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/choosePat/choosePat',
+    text: '住院点餐',
     extraData: {
-      verify1001082: '1',
+      _type: 'zydc1001094',
     },
+    addition: {
+      patientId: '_patientId',
+    },
+    _type: 'useTBanner',
+  } as TButtonConfig;
+
+  const 住院点餐1 = {
+    appId: 'wx081a6fb9ee8778e4',
+    type: 'otherProgram',
+    path: 'pages/home/home',
+    text: ' ',
+    _type: 'useTBanner',
   } as TButtonConfig;
 
   const init = async () => {
-    useTBanner(a);
+    useTBanner(住院点餐);
     // useTBanner(用药查询);
   };
 </script>

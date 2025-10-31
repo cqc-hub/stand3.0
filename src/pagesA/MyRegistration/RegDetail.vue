@@ -239,7 +239,6 @@
                   >
                     <view class="flex">
                       <view class="mr12">{{ orderRegInfo.deptName }}</view>
-                      <!-- v-if="gStores.globalStore.sysCode === '1001048' && isWx" -->
                       <view
                         v-if="
                           orderConfig.regDeptButton &&
@@ -328,16 +327,16 @@
 
       <template v-else>
         <button
-          v-if="['0', '60'].includes(orderRegInfo.orderStatus)"
+          v-if="['0', '60', '111'].includes(orderRegInfo.orderStatus)"
           @click="refoundOrder"
           class="btn btn-plain btn-error g-border"
         >
           {{
-            orderRegInfo.orderStatus === '60'
+            ['60', '111'].includes(orderRegInfo.orderStatus)
               ? '取消预约'
               : orderConfig.isOrderPay === '1'
-              ? '退号'
-              : '取消预约'
+                ? '退号'
+                : '取消预约'
           }}
         </button>
 
@@ -527,10 +526,6 @@
   const payArg = ref<BaseObject>({});
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
-  const isWx = ref(false);
-  // #ifdef MP-WEIXIN
-  isWx.value = true;
-  // #endif
 
   const isShowFooter = computed(() => {
     if (
@@ -556,6 +551,7 @@
       '42',
       '101',
       '110',
+      '111',
     ].includes(orderRegInfo.value.orderStatus);
   });
 

@@ -194,7 +194,13 @@
                     :scroll="true"
                     field="hosName"
                     @change="tabChange"
-                  />
+                  >
+                    <template #default="{ label, idx }">
+                      <text @click.stop="confirmChangeHos(idx)">
+                        {{ label }}
+                      </text>
+                    </template>
+                  </g-tabs>
                 </view>
                 <view
                   v-if="docSchList.length"
@@ -517,6 +523,7 @@
     type ISystemConfig,
     useTBanner,
     throughCharacterLineFeed,
+    apiAsync,
   } from '@/utils';
   import HTMLParser from '@/common/html-parser';
 
@@ -971,6 +978,22 @@
         hosDocId: docDetail.value.hosDocId,
       }),
     });
+  };
+
+  let isFirstChangeHos = false;
+  const confirmChangeHos = async (idx: number) => {
+    if (!isFirstChangeHos) {
+      const { confirm } = await apiAsync(uni.showModal, {
+        content:
+          '您当前正在进行院区切换，请注意不同院区地址不同，是否继续切换预约对应院区号源？',
+      });
+
+      if (!confirm) {
+        return;
+      }
+      isFirstChangeHos = true;
+    }
+    tabChange(idx);
   };
 
   const init = async () => {

@@ -175,12 +175,8 @@
     formData.value._idCard = idCard;
     formData.value._patientName = name;
 
-    let iswx = false;
-    // #ifdef MP-WEIXIN
-    iswx = true;
-    // #endif
     if (image) {
-      if (iswx) {
+      if (gStores.globalStore.ev === 'wx') {
         idCardUrl.value = await base64Src(image);
       } else {
         // idCardUrl.value = `data:image/jpeg;base64,${image}`;

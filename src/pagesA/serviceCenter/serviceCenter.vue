@@ -27,7 +27,7 @@
     <view class="footer" v-if="isShowFooter">
       <!-- 需求：底部按钮支持5个可配置功能 自研版（咨询客服  电话咨询  意见反馈 ） （腾讯微信）在线客服 意见反馈 -->
       <button
-        v-if="pageConfig.isOpenMyService && isWx"
+        v-if="pageConfig.isOpenMyService && gStores.globalStore.ev === 'wx'"
         class="s-btn g-border-right"
         @click="openServicesChat"
       >
@@ -57,7 +57,7 @@
       /> -->
       <!-- 微信没配置默认展示 -->
       <button
-        v-if="isWx && pageConfig.isTxService"
+        v-if="gStores.globalStore.ev === 'wx' && pageConfig.isTxService"
         open-type="contact"
         bindcontact="handleContact"
         class="s-btn g-border-right"
@@ -69,7 +69,7 @@
         </view>
       </button>
       <button
-        v-if="isWx && pageConfig.isTxFeedback"
+        v-if="gStores.globalStore.ev === 'wx' && pageConfig.isTxFeedback"
         open-type="feedback"
         class="s-btn"
       >
@@ -138,11 +138,7 @@
   const subType = props.subType && decodeURIComponent(props.subType!);
   const isComplete = ref(false);
   const list = ref<(string | ISecondItemService)[]>([]);
-  const isWx = ref(false);
   const homeH5SharePopupRef = ref('' as any);
-  // #ifdef MP-WEIXIN
-  isWx.value = true;
-  // #endif
 
   // true 二级页面
   const getLv = computed(() => !!props.subType);

@@ -10,29 +10,31 @@ export const HK_hook = () => {
     async patClick(pat: IPat, props) {
       const { patientId } = pat;
       const { hosId } = props;
-      console.log(pat);
+      const gStores = new GStores();
 
       const requestArg = {
         patientId,
         hosId,
         type: '14', //当日就诊类型
       };
-
       await api.getOutpatientHospitalList(requestArg, {
         showMessage: true,
       });
-      const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
-        'ChoosePatJump'
-      )();
+      const { ChoosePatJump: config } =
+        await cacheUtil.getSystemConfig('ChoosePatJump')();
 
       const { chooseThirdPath } = config;
       const item = chooseThirdPath.find((o) => o.hosId === hosId);
 
       if (item) {
-        useTBanner({
-          path: item.path,
-          type: 'h5',
-        });
+        if (item.path) {
+          useTBanner({
+            path: item.path,
+            type: 'h5',
+          });
+        } else if (item.msg) {
+          gStores.messageStore.showMessage(item.msg, 3000);
+        }
       } else {
         console.log('暂未配置相关跳转地址');
       }
@@ -40,33 +42,37 @@ export const HK_hook = () => {
 
     async scanClick(props) {
       const { hosId } = props;
+      const gStores = new GStores();
 
-      const { result } = await apiAsync(uni.scanCode, {
-        scanType: ['qrCode'],
-        // scanType: ['barCode', 'qrCode'],
-      });
+      // 先获取配置信息
+      const { ChoosePatJump: config } =
+        await cacheUtil.getSystemConfig('ChoosePatJump')();
 
-      if (result && typeof result === 'string') {
-        await api.qrCodeQuery({
-          codeStr: result.replace(/\<#jn\>/g, ''),
-          hosId,
+      const { chooseThirdPath } = config;
+      const item = chooseThirdPath.find((o) => o.hosId === hosId);
+      // 如果配置了 msg，直接展示，不调用扫码和接口
+      if (item && item.msg) {
+        gStores.messageStore.showMessage(item.msg, 3000);
+        return;
+      }
+      if (item && item.path) {
+        const { result } = await apiAsync(uni.scanCode, {
+          scanType: ['qrCode'],
+          // scanType: ['barCode', 'qrCode'],
         });
 
-        const { ChoosePatJump: config } = await cacheUtil.getSystemConfig(
-          'ChoosePatJump'
-        )();
-
-        const { chooseThirdPath } = config;
-        const item = chooseThirdPath.find((o) => o.hosId === hosId);
-
-        if (item) {
+        if (result && typeof result === 'string') {
+          await api.qrCodeQuery({
+            codeStr: result.replace(/\<#jn\>/g, ''),
+            hosId,
+          });
           useTBanner({
             path: item.path,
             type: 'h5',
           });
-        } else {
-          console.error('暂未配置相关跳转地址');
         }
+      } else {
+        console.error('暂未配置相关跳转地址');
       }
     },
   };

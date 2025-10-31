@@ -22,8 +22,8 @@
     globalStore.onAppLaunch(opt);
 
     if (globalStore.sysCode === '1001035') {
-      const { appLaunchInit1001035 } = useLunchInit1001035();
-      appLaunchInit1001035();
+      // const { appLaunchInit1001035 } = useLunchInit1001035();
+      // appLaunchInit1001035();
     } else {
       globalStore.setShowFlag(true);
     }
@@ -69,12 +69,13 @@
     if (
       globalStore.sysCode === '1001082' &&
       ![1035, 1017, 1001, 1035, 1038].includes(opt.scene) &&
-      ![
-        'pagesC/openMiniProgram/h5UseMiniFunc',
-        'pagesA/webView/webView',
-        'pagesC/cloudHospital/myPath',
-        'pagesA/intelMedicalAssist/intelMedicalAssist',
-      ].includes(opt.path)
+      opt.path === 'pages/home/home'
+      // ![
+      //   'pagesC/openMiniProgram/h5UseMiniFunc',
+      //   'pagesA/webView/webView',
+      //   'pagesC/cloudHospital/myPath',
+      //   'pagesA/intelMedicalAssist/intelMedicalAssist',
+      // ].includes(opt.path)
     ) {
       // 非自定义菜单的时候
       uni.reLaunch({
