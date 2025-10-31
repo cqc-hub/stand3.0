@@ -528,16 +528,18 @@
   const isFirstIn = ref(true);
 
   const isShowFooter = computed(() => {
+    const { orderStatus, hosDocId, hosOrderId, orderId } = orderRegInfo.value;
     if (
-      (!orderRegInfo.value.hosDocId &&
-        orderRegInfo.value.orderStatus === '43') ||
-      (pageProps.value.typeId === '3' && orderRegInfo.value.orderStatus !== '0')
+      (!hosDocId && orderStatus === '43') ||
+      // 全部挂号下， 不允许退号
+      (hosOrderId && orderStatus === '0' && !orderId) ||
+      (pageProps.value.typeId === '3' && orderStatus !== '0')
     ) {
       return false;
     }
 
     if (isWaitReg.value) {
-      return orderRegInfo.value.orderStatus === '1';
+      return orderStatus === '1';
     }
     return [
       '23',
@@ -552,7 +554,7 @@
       '101',
       '110',
       '111',
-    ].includes(orderRegInfo.value.orderStatus);
+    ].includes(orderStatus);
   });
 
   const isWaitReg = computed(() => {
