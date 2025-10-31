@@ -832,6 +832,3 @@ export interface IPayListObj {
 }
 
 type TMedRecordSfz = 'front' | 'end' | 'handler' | 'handlerBack' | 'hkb';
-
-const a = [2, 3, 90, 22];
-console.log(a.sort((c, n) => 0));
