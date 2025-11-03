@@ -54,6 +54,42 @@
       key: 'contribName',
       labelWidth: '220rpx',
       maxlength: 50,
+      validator(value) {
+        const v = <string>value;
+
+        if (v) {
+          if (v.length < 2) {
+            return Promise.resolve({
+              success: false,
+              message: '姓名需要大于2个字符',
+            });
+          }
+          if (/^\s*$/.test(v)) {
+            return Promise.resolve({
+              success: false,
+              message: '姓名不能由空格组成',
+            });
+          }
+          const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
+
+          if (isEng) {
+            return Promise.resolve({
+              success: true,
+            });
+          } else {
+            if (v.length > 50) {
+              return Promise.resolve({
+                success: false,
+                message: '姓名不能大于 50 个字符',
+              });
+            }
+          }
+        }
+
+        return Promise.resolve({
+          success: true,
+        });
+      },
     },
     {
       required: true,
@@ -78,6 +114,34 @@
       key: 'deptName',
       labelWidth: '220rpx',
       maxlength: 50,
+      validator(value) {
+        const v = <string>value;
+        if (v) {
+          if (v.length < 2) {
+            return Promise.resolve({
+              success: false,
+              message: '科室名称需要大于2个字符',
+            });
+          }
+          if (/^\s*$/.test(v)) {
+            return Promise.resolve({
+              success: false,
+              message: '科室名称不能由空格组成',
+            });
+          }
+          const isEng = v.match(/^[A-Za-z]+\s?[A-Za-z]+$/);
+
+          if (v.length > 50) {
+            return Promise.resolve({
+              success: false,
+              message: '科室名称名不能大于 50 个字符',
+            });
+          }
+        }
+        return Promise.resolve({
+          success: true,
+        });
+      },
     },
     {
       rowStyle: 'margin-top: 16rpx;',
@@ -135,7 +199,11 @@
       cardNumber: '',
     });
     await toPayPull(payRes);
-    gStores.messageStore.showMessage('捐款成功，感谢您的爱心奉献！', 5000);
+    gStores.messageStore.showMessage('捐款成功，感谢您的爱心奉献！', 3000, {
+      closeCallBack: () => {
+        formData.value = {};
+      },
+    });
     // console.log('result', result);
   };
 </script>
