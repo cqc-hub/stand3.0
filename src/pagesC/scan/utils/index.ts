@@ -452,7 +452,8 @@ export const useScan = () => {
       "extraData": {
         "sysCode": "1001082",
         "reqForward": "true",
-        "source": "19"
+        "source": "19",
+         "verify1001082":"1"
       }
     });
   };
@@ -473,7 +474,8 @@ export const useScan = () => {
       "extraData": {
         "sysCode": "1001082",
         "reqForward": "true",
-        "source": "19"
+        "source": "19",
+        "verify1001082":"1"
       }
     });
   };
