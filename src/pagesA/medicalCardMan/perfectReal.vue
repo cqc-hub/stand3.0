@@ -897,7 +897,7 @@
   onReady(() => {
     if (pageProps.value.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
-        title: '完善账号实名信息',
+        title: '完善本人实名信息',
       });
     }
   });

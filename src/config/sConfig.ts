@@ -754,7 +754,8 @@ const scJson: Record<string, ISConfig> = {
             channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
           },
           dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
+            h5BaseUrl: 'https://ybj.jscz.org.cn/cashierui',
+            // h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
           },
         },
         isMedicalOrder: '1',

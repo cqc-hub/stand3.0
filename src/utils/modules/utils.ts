@@ -180,11 +180,11 @@ const getMenuById = (_id: string, _list: any[]) => {
 };
 
 // 存在回调情况下 跳某个地址(回调优先)
-export const routerJump = async (url?: `/${string}`) => {
+export const routerJump = async (url?: `/${string}`,type?:string) => {
   const gStores = new GStores();
 
   const routerStore = useRouterStore();
-  if (gStores.globalStore.sysCode === '1001082') {
+  if (gStores.globalStore.sysCode === '1001082' && type !='add') {
     const u = await getUtils1001082();
     await u.useFaceVerify1001082().intercept1001082();
   }

@@ -5,7 +5,13 @@
     }"
     class="page"
   >
+    <g-flag
+      v-if="gStores.globalStore.sysCode == '1001082' && pageProps.pageType === 'addPatient'"
+      isShowFg
+      typeFg="55"
+    />
     <view class="container" scroll-y>
+
       <view class="form-container">
         <g-form
           v-model:value="formData"
@@ -472,50 +478,50 @@
         }
       }
 
-      if (isFace === '1') {
-        const [minAge, maxAge] = faceAgeRange;
-        const { sysCode } = gStores.globalStore;
-        let shouldProceed = false;
+      // if (isFace === '1') {
+      //   const [minAge, maxAge] = faceAgeRange;
+      //   const { sysCode } = gStores.globalStore;
+      //   let shouldProceed = false;
 
-        if (isUpFace === '1' && upIdCard) {
-          shouldProceed = true;
-        } else {
-          const { age } = idValidator.getIdCardInfo(idCard);
-          if (!shouldProceed && minAge && age >= minAge) {
-            shouldProceed = true;
-          }
+      //   if (isUpFace === '1' && upIdCard) {
+      //     shouldProceed = true;
+      //   } else {
+      //     const { age } = idValidator.getIdCardInfo(idCard);
+      //     if (!shouldProceed && minAge && age >= minAge) {
+      //       shouldProceed = true;
+      //     }
 
-          if (!shouldProceed && maxAge && age < maxAge) {
-            shouldProceed = true;
-          }
+      //     if (!shouldProceed && maxAge && age < maxAge) {
+      //       shouldProceed = true;
+      //     }
 
-          if (minAge && maxAge) {
-            shouldProceed = age >= minAge && age <= maxAge;
-          }
+      //     if (minAge && maxAge) {
+      //       shouldProceed = age >= minAge && age <= maxAge;
+      //     }
 
-          // 新增判断 健康温州去除年龄判断
-          if (sysCode === '1001082') {
-            shouldProceed = true;
-          }
-        }
+      //     // 新增判断 健康温州去除年龄判断
+      //     if (sysCode === '1001082') {
+      //       shouldProceed = true;
+      //     }
+      //   }
 
-        if (shouldProceed) {
-          await new Promise((rl, rj) => {
-            resolve = rl;
-            reject = () => {
-              gStores.messageStore.showMessage('取消人脸识别', 3000);
-              rj();
-            };
-            faceDialog.value.show();
-          });
-          const { pData } = await patientUtils.faceVerifyAndPData({
-            idCardNumber: cardNo,
-            name: name,
-          });
-          data.pData = pData;
-          data.realNameAuth = '1';
-        }
-      }
+      //   if (shouldProceed) {
+      //     await new Promise((rl, rj) => {
+      //       resolve = rl;
+      //       reject = () => {
+      //         gStores.messageStore.showMessage('取消人脸识别', 3000);
+      //         rj();
+      //       };
+      //       faceDialog.value.show();
+      //     });
+      //     const { pData } = await patientUtils.faceVerifyAndPData({
+      //       idCardNumber: cardNo,
+      //       name: name,
+      //     });
+      //     data.pData = pData;
+      //     data.realNameAuth = '1';
+      //   }
+      // }
     }
   };
 
@@ -593,17 +599,19 @@
                 await apiAsync(uni.showModal, {
                   content: errMsg + ' 系统将为您注册账号，但不进行绑定就诊人！',
                   showCancel: false,
-                });
+                }); 
               }
             } else {
               throw new Error(err);
             }
-          });
+          }); 
 
         if (pageProps.value._directUrl) {
-          routerJump(pageProps.value._directUrl as `/${string}`);
+          //额外调用就诊人列表接口-查询下就诊人
+          await patientUtils.getPatCardList();
+          routerJump(pageProps.value._directUrl as `/${string}`,'add');
         } else {
-          routerJump('/pagesA/medicalCardMan/medicalCardMan');
+          routerJump('/pagesA/medicalCardMan/medicalCardMan','add');
         }
       } catch (error) {
         if ((error as any)?.errorType === 'add') {
@@ -1077,6 +1085,15 @@
           o.disabled = true;
         }
       }
+        // 添加对 sortFormExtraKeys 中配置的处理
+      sortFormExtraKeys.forEach(extraConfig => {
+        if (extraConfig.key === key) {
+          // 处理 showSuffixArrowIcon 配置
+          if (extraConfig.showSuffixArrowIcon !== undefined) {
+            o.showSuffixArrowIcon = extraConfig.showSuffixArrowIcon;
+          }
+        }
+      });
 
       if (pageProps.value.pageType === 'perfectReal') {
         // #ifdef MP-ALIPAY
@@ -1315,7 +1332,7 @@
   onReady(() => {
     if (pageProps.value.pageType === 'perfectReal') {
       uni.setNavigationBarTitle({
-        title: '完善账号实名信息',
+        title: '完善本人实名信息',
       });
     }
   });
