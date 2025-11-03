@@ -752,7 +752,8 @@ const scJson: Record<string, ISConfig> = {
             channel: 'AAGIeU0wtURqrsaTlQYAvi6z',
           },
           dongRuanMedicalInfo: {
-            h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
+            h5BaseUrl: 'https://ybj.jscz.org.cn/cashierui',
+            // h5BaseUrl: 'https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui',
           },
         },
         isMedicalOrder: '1',
@@ -830,7 +831,7 @@ const scJson: Record<string, ISConfig> = {
    * 东部战区总医院医院
    */
   1001036: {
-    isOpenHomeTabBarNetWorkBtn: '1',
+    // isOpenHomeTabBarNetWorkBtn: '1',
     homeTopBanner: {
       topShow: true,
       bannerHeight: 200,

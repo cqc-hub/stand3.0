@@ -109,10 +109,9 @@ export const checkGrid = (item: IRoute) => {
 // 判断登录是否过期
 export const checkLoginExpired = async (): Promise<boolean> => {
   try {
+    const { source } = new GStores().globalStore.browser;
     const result = await api.allinoneAuthApi(
-      packageAuthParams({}, '/modifyUserInfo/userInfoByToken', {
-        isOutArgs: true,
-      })
+      packageAuthParams({ source }, '/modifyUserInfo/userInfoByToken', {})
     );
     if (result && result.code == '0') {
       return false; // 没有过期

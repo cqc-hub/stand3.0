@@ -2988,16 +2988,25 @@ export const handlerMedicalPayDongRuan = async ({
   }
   // https://ybj.jscz.org.cn/tiap/hsa-pmc-tiap-ui/
   await wait(20);
+
   const pageArg: any = {
     openid: gStores.globalStore.openId,
     medOrgOrd,
     orgCodg,
     appId,
     authCode,
+    // retCode: 0,
+    // resultConfig: encodeURIComponent(
+    //   JSON.stringify({
+    //     cancelAuthRedirectUrl: resultConfig.cancelUrl,
+    //     orderStatusRedirectUrl: resultConfig.successUrl,
+    //   })
+    // ),
   };
 
   const url = joinQuery(
-    `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
+    // `${dongRuanMedicalInfo.h5BaseUrl}/#/pay-loading`,
+    `${dongRuanMedicalInfo.h5BaseUrl}/`,
     pageArg
   );
 

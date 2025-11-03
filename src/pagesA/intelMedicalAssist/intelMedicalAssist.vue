@@ -60,7 +60,7 @@
   import intalMedicalFooter from './compontents/intalMedicalFooter.vue';
   import intalMedicalContent from './compontents/intalMedicalContent.vue';
   import reportPopup from './compontents/reportPopup.vue';
-  import DocSchOrder from './compontents/DocSchOrder.vue';
+  // import DocSchOrder from './compontents/DocSchOrder.vue';
   import distinctiveImagePopup from './compontents/distinctiveImagePopup.vue'
   import {
     styleConfig,
