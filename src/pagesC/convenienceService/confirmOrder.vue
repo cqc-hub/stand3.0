@@ -146,7 +146,7 @@
   };
 
   const payAfter = async (patientId) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(4000);
     uni.hideLoading();
     //去我的开单页面

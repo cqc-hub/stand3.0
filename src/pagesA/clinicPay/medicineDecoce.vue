@@ -125,7 +125,7 @@
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query
       ?.qrCode as string;
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
 
     if ((queryParams && !Object.keys(opt).length) || opt?.q) {
       let url = deQueryForUrl(deQueryForUrl({ q: queryParams || opt?.q })).q;

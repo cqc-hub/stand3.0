@@ -1069,7 +1069,7 @@
 
   const payAfter = async () => {
     const { clinicType, cardNumber } = props.value;
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(1000);
     uni.hideLoading();
 
@@ -1211,7 +1211,7 @@
     }
     await init();
     if (!isShowRefreshQrCode.value && payState.value === '0' && qrCode.value) {
-      uni.showLoading({});
+      uni.showLoading({ title: '加载中'});;
       await wait(1000);
       uni.hideLoading();
       capture();

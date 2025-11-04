@@ -423,6 +423,7 @@
     ServerStaticData,
     type ISystemConfig,
     isFeatureEnabled,
+    wait,
   } from '@/utils';
   import { goElectronicMedicalCard } from './utils';
   import { deQueryForUrl, joinQueryForUrl } from '@/common';
@@ -529,17 +530,15 @@
     }
 
     // if (global.SYS_CODE === '1001067' && globalStore.openId) {
+    //   const { ev } = gStores.globalStore;
+    //   const userTag =
+    //     ev === 'wx' ? '温附二微信小程序项目' : '温附二支付宝小程序项目';
     //   if (!uni.getStorageSync('wmUserInfo')) {
     //     uni.setStorageSync(
     //       'wmUserInfo',
     //       JSON.stringify({
     //         userId: globalStore.openId,
-    //         // #ifdef MP-WEIXIN
-    //         userTag: '温附二微信小程序项目',
-    //         // #endif
-    //         // #ifdef MP-ALIPAY
-    //         userTag: '温附二支付宝小程序项目',
-    //         // #endif
+    //         userTag,
     //         projectVersion: '1.0.0',
     //         env: 'pro',
     //       })
@@ -629,8 +628,6 @@
         !uni.getStorageSync('hospital_order') &&
         authorization();
     }
-
-
   });
 
   const getDocRecommendList = async () => {
@@ -656,15 +653,16 @@
       }
     }
   };
-  // #ifdef MP-WEIXIN
-  //分享到朋友圈
-  onShareTimeline(() => {
-    return {
-      title: globalGl.systemInfo.name,
-      query: '',
-    };
-  });
-  // #endif
+
+  if (gStores.globalStore.ev === 'wx') {
+    //分享到朋友圈
+    onShareTimeline(() => {
+      return {
+        title: globalGl.systemInfo.name,
+        query: '',
+      };
+    });
+  }
   //用户滑倒底部
 
   //打开关注框
@@ -708,13 +706,13 @@
   };
 
   const goLogin = async (e: any) => {
-    // #ifdef MP-ALIPAY
-    await aliLogin();
-    // #endif
+    const { ev } = gStores.globalStore;
 
-    // #ifdef MP-WEIXIN
-    await wxLogin(e);
-    // #endif
+    if (ev === 'alipay') {
+      await aliLogin();
+    } else if (ev === 'wx') {
+      await wxLogin(e);
+    }
 
     routerJump();
   };

@@ -38,7 +38,7 @@
 
   // const getClinicUtils = async () => {
   //   return new Promise(async (r, j) => {
-  //     uni.showLoading({});
+  //     uni.showLoading({ title: '加载中'});;
 
   //     // @ts-expect-error
   //     require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
@@ -62,7 +62,7 @@
         return;
       }
 
-      uni.showLoading({});
+      uni.showLoading({ title: '加载中'});;
 
       // @ts-expect-error
       require('../../pagesA/clinicPay/utils/clinicPayDetail', async (utils) => {
@@ -97,7 +97,7 @@
         return;
       }
 
-      uni.showLoading({});
+      uni.showLoading({ title: '加载中'});;
       gStores.globalStore.assignCacheData({
         uploadRes: {
           ...uploadRes,

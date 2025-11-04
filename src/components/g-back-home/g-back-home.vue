@@ -38,6 +38,7 @@
       url: props.zurl,
     });
   };
+  const sys = uni.getSystemInfoSync();
 
   onMounted(() => {
     const pages = getCurrentPages();

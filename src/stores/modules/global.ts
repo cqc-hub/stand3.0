@@ -329,6 +329,8 @@ const globalStore = defineStore('global', {
     },
     initBrowser() {
       const { updateBrowser } = this;
+      this.ev = 'wx';
+
       // #ifdef H5
       this.ev = 'web';
       const browser = navigator.userAgent.toLowerCase();

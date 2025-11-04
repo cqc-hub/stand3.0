@@ -378,7 +378,7 @@
 
     //针对支付宝扫普通二维码跳转的处理 一开始没拿到参数不掉接口
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
-    // uni.showLoading({});
+    // uni.showLoading({ title: '加载中'});;
     if (queryParams && !opt?.hosId) {
       return;
     }

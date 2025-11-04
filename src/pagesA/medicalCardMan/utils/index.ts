@@ -1296,7 +1296,7 @@ const wxFacialVerifyByKey = async (
 ): Promise<{ verifyResult: string; errCode: string; errMsg: string }> => {
   const gStores = new GStores();
   return new Promise((rl, rj) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     wx.checkIsSupportFacialRecognition({
       checkAliveType: 2,
       success() {

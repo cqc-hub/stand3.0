@@ -49,22 +49,22 @@
 
     globalStore.onAppShow(opt);
 
-    // #ifdef MP-WEIXIN
-    if (!showTime) {
-      showTime = ((new Date() as unknown as number) * 1) / 1000;
-      wx.login();
-    } else {
-      setTimeout(() => {
-        const nowTime = ((new Date() as unknown as number) * 1) / 1000;
-        const difTimeHour = Math.ceil(nowTime - showTime) / 60 / 60 / 6;
+    if (globalStore.ev === 'wx') {
+      if (!showTime) {
+        showTime = ((new Date() as unknown as number) * 1) / 1000;
+        wx.login();
+      } else {
+        setTimeout(() => {
+          const nowTime = ((new Date() as unknown as number) * 1) / 1000;
+          const difTimeHour = Math.ceil(nowTime - showTime) / 60 / 60 / 6;
 
-        if (difTimeHour >= 6) {
-          showTime = ((new Date() as unknown as number) * 1) / 1000;
-          wx.login();
-        }
-      }, 3000);
+          if (difTimeHour >= 6) {
+            showTime = ((new Date() as unknown as number) * 1) / 1000;
+            wx.login();
+          }
+        }, 3000);
+      }
     }
-    // #endif
 
     if (
       globalStore.sysCode === '1001082' &&

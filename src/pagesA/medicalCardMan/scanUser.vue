@@ -98,7 +98,7 @@
   });
 
   onLoad(() => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
   });
 </script>
 

@@ -683,7 +683,7 @@ export class RegDetailUtil {
         }
       }
 
-      uni.showLoading({});
+      uni.showLoading({ title: '加载中'});;
       const { title, content } = await this.gStores.getSysAppMore('1100');
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.gStores.messageStore.showMessage(content, 0, {

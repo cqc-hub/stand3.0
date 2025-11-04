@@ -749,7 +749,7 @@
       }
 
       if (pdfType === 'JPG') {
-        uni.showLoading({});
+        uni.showLoading({ title: '加载中'});;
         try {
           const msg = await ImageDownloader.downloadAndSaveImage(
             pdfPath1001035
@@ -975,7 +975,7 @@
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
 
     if ((queryParams && !opt?.params) || opt?.q) {
       return;

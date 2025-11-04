@@ -92,7 +92,7 @@
   };
   const downWithStream = (url, name) => {
     name = new Date().getTime() + '';
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
 
     console.log(url, '-----url');
     // name = new Date().getTime() + '';

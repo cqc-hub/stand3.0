@@ -146,7 +146,7 @@
 
   onLoad(async (opt) => {
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     uni.setNavigationBarTitle({
       title: '新增就诊人',
     });

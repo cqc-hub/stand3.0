@@ -56,7 +56,10 @@
               >
                 {{ getLangLabel(item.label) }}
               </text>
-              <view class="badge" v-if="item.label === 'home-tabbar:消息中心' && unreadMes">
+              <view
+                class="badge"
+                v-if="item.label === 'home-tabbar:消息中心' && unreadMes"
+              >
                 new
               </view>
             </view>
@@ -335,25 +338,25 @@
       tabList.push('home-tabbar:互联网医院');
     }
 
-    if (global.sConfig.isOpenHomeTabBarMessageBtn) {
-      // #ifdef MP-WEIXIN
+    if (
+      global.sConfig.isOpenHomeTabBarMessageBtn &&
+      gStores.globalStore.ev === 'wx'
+    ) {
       tabList.push('home-tabbar:消息中心');
-      // #endif
     }
 
     if (global.SYS_CODE === '1001052') {
       tabList.push('home-tabbar:健康管理');
     }
 
-    // #ifdef MP-WEIXIN
     if (
+      gStores.globalStore.ev === 'wx' &&
       ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
         global.SYS_CODE
       )
     ) {
       tabList.push('home-tabbar:口腔商城');
     }
-    // #endif
 
     if (global.SYS_CODE === '1001035') {
       // tabList.push('home-tabbar:云诊室');

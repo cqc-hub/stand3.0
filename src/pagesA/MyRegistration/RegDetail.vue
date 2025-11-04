@@ -786,7 +786,7 @@
 
   let init = async () => {
     const { isOrderWithoutTime } = orderConfig.value;
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(800);
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
@@ -887,7 +887,7 @@
     isFirstIn.value = false;
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await callBackAsync(nextTick);
     await wait(600);
     !isShowRefreshQrCode.value && qrCodeOpt.value.code && capture();
@@ -1460,7 +1460,7 @@
   });
 
   onLoad(async (p) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesA/medicalCardMan/electronicMedicalCard'
