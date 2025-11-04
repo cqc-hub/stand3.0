@@ -7,7 +7,7 @@
           :src="$global.BASE_IMG + 'stand3-doctor-detail-clock.png'"
           class="icon-clock"
         />
-        <text>门诊时间</text>
+        <text>就诊提醒</text>
       </view>
       <view class="color-444 f32 g-break-word mb40">
         <rich-text :nodes="HTMLParser(throughCharacterLineFeed(detail.clinicTime))" />

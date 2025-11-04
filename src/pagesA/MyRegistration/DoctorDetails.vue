@@ -110,6 +110,27 @@
                       {{ place }}
                     </text>
                   </view>
+                  <view
+                    v-if="docDetail.clinicTime"
+                    class="flex-normal doc-goodat"
+                    @click="regDialogConfirm.show"
+                  >
+                    <text class="color-fff tags mr16 mb12">就诊提醒</text>
+                    <view
+                      class="color-666 f28 clinicTime-content text-ellipsis"
+                    >
+                      <!-- <text v-if="docDetail.goodAt">{{ docDetail.goodAt }}</text> -->
+                      <rich-text
+                        v-if="docDetail.clinicTime"
+                        :nodes="
+                          HTMLParser(
+                            throughCharacterLineFeed(docDetail.clinicTime),
+                            '\n'
+                          )
+                        "
+                      />
+                    </view>
+                  </view>
                 </view>
 
                 <view class="flex-normal p32c doc-goodat">
@@ -1153,7 +1174,10 @@
         top: 8rpx;
         // #endif
       }
-
+      .clinicTime-content {
+        -webkit-line-clamp: 1;
+        flex: 1;
+      }
       .doc-goodat-content {
         -webkit-line-clamp: 2;
         flex: 1;
@@ -1265,12 +1289,18 @@
   }
 
   .work-place {
-    .tag {
-      background: #dcad6c;
-      border-radius: 4rpx;
-      padding: 0 4rpx;
-      line-height: 42rpx;
-    }
     flex-wrap: wrap;
+  }
+  .tag {
+    background: #dcad6c;
+    border-radius: 4rpx;
+    padding: 0 4rpx;
+    line-height: 42rpx;
+  }
+  .tags {
+    background: var(--hr-brand-color-6);
+    border-radius: 4rpx;
+    padding: 0 4rpx;
+    // line-height: 42rpx;
   }
 </style>

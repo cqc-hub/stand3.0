@@ -23,7 +23,7 @@ export interface IDocResItem {
   hosDocId: string;
   intro: string;
   hosId: string;
-
+  clinicTime: string;
   schQukCategor: string;
   specialClinicName: string;
   docJobName: string;

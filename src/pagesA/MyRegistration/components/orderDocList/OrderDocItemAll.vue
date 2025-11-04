@@ -16,7 +16,7 @@
             class="date-container"
           >
             <view class="sel-date">
-              <view class="sel-label g-flex-rc-cc text-no-wrap">出诊日期:</view>
+              <view class="sel-label g-flex-rc-cc text-no-wrap">出诊日期</view>
               <block v-if="getSelectData && getSelectData.length">
                 <g-login
                   v-for="date in getSelectData"

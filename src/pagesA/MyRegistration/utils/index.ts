@@ -478,7 +478,7 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   const dateClick = async (e: {
     item: IDocListAll;
     schInfo: TAllDayTScInfo;
-  }) => {
+  },cb:Function) => {
     const { item, schInfo } = e;
     const schDocAmPm = schInfo.schDocAmPm;
     const { schDate, schState } = schInfo;
@@ -487,15 +487,15 @@ export const useOrder = (props: Ref<IOrderProps>) => {
     if (schState === '1') {
       warnMsg = '该日期已停诊';
     } else if (schState === '2') {
-      warnMsg = orderConfig.value?.isOpenOrderWaiting
-        ? '当前日期约满，您可点击医生姓名进入医生名片提交候补登记！'
-        : '该日期已约满';
+      warnMsg = '该日期已约满';
     } else if (schState === '3') {
       warnMsg = '该日期未放号';
     }
 
     if (warnMsg) {
-      return gStores.messageStore.showMessage(warnMsg, 1500);
+      return gStores.messageStore.showMessage(warnMsg, 2000,{closeCallBack:()=>{
+        cb(item)
+      }});
     }
 
     selectSchInfos.value = [];

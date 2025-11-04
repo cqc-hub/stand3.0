@@ -40,7 +40,7 @@
             :item="item"
             :pageConfig="pageConfig"
             :patient="pageConfig.isOrderWithoutPat !== '1'"
-            @date-click="dateClick"
+            @date-click="(e) => dateClick(e, avatarClick)"
             @avatar-click="avatarClick"
             @preregistration-click="preregistrationClick"
           />

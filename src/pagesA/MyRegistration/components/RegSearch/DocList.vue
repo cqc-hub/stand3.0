@@ -40,7 +40,16 @@
             </view>
           </view>
         </view>
-
+         <view @click="avatarClick(item)" class="flex mb12" v-if="item.clinicTime">
+          <text class="color-fff  ico_major pr12 pl12 tags mr12">就诊提醒</text>
+          <view class="flex-1">
+            <rich-text
+              v-if="item.goodAt"
+              class="color-888 f28 text-ellipsis ellipsis-line-clamp1"
+              :nodes="HTMLParser(throughCharacterLineFeed(item.clinicTime, '\n'))"
+            />
+          </view>
+        </view>
         <view @click="avatarClick(item)" class="flex">
           <text class="icon-font ico_major good_at_icon mr12" />
           <view class="flex-1">
@@ -157,5 +166,11 @@
     position: relative;
     top: 4rpx;
     flex-basis: 60rpx;
+  }
+  .tags {
+    background: var(--hr-brand-color-6);
+    border-radius: 4rpx;
+    padding: 0 4rpx;
+    // line-height: 42rpx;
   }
 </style>

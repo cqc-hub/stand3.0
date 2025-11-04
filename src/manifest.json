@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxb00075173e764492",
+    "appid": "wxfa6c5f0835eedf08",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -70,10 +70,6 @@
       "SIPlugin": {
         "version": "0.3.6",
         "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
       }
     },
     "mergeVirtualHostAttributes": true,
@@ -84,17 +80,13 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003113623396",
+    "appid": "2021002143620963",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -119,7 +111,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "绍兴市人民医院",
+  "name": "湖州市第三人民医院",
   "h5": {
     "optimization": {
       "treeShaking": {
