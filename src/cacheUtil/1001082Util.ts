@@ -55,7 +55,7 @@ export const useFaceVerify1001082 = () => {
         fail({ errMsg }) {
           j('取消请求授权...');
         },
-        success,
+        success: j,
       });
     });
   };

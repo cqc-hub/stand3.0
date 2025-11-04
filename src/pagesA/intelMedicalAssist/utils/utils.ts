@@ -186,7 +186,7 @@ export const init = async (props) => {
     simpleHeadInit: false, //初始服务居中
     historyMess: false,
     headerLineMenu:
-      props?.type.includes('homePage') || globalGl.SYS_CODE === '1001082'
+      props?.type?.includes('homePage') || globalGl.SYS_CODE === '1001082'
         ? 'homePage'
         : 'back',
   };
@@ -203,14 +203,13 @@ export const init = async (props) => {
       result?.content && globalStore.setIntAssistantImg(result?.content);
     }
   }
-
   if (gStores.globalStore.sysCode === '1001082') {
     title.value = '健康瓯管家';
   }
 
   props?.isMess && props?.isMess == '1' && initWithMess();
   props?.isMess && props?.isMess === '2' && initWithTheMess(props?.openid);
-  props?.type.includes('report') && ininWithReport(props?.reportId);
+  props?.type?.includes('report') && ininWithReport(props?.reportId);
   reload(props?.isMess);
   // test()
 };
