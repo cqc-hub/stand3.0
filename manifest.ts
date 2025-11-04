@@ -113,6 +113,9 @@ const manifestFileDataObj: any = {
       },
     },
   },
+  'mp-harmony': {
+    distribute: {},
+  },
   'mp-baidu': {
     usingComponents: true,
   },
@@ -150,6 +153,7 @@ const {
   isOpenHealthCard,
   isOpenOcr,
   toutiaoAppid,
+  harmonyBundleName,
 } = sysConfig;
 
 const { medicalMHelp, isOpenAlipayZndz, isOpenWechatSI } = sConfig;
@@ -157,6 +161,7 @@ const { medicalMHelp, isOpenAlipayZndz, isOpenWechatSI } = sConfig;
 const wxConfig = manifestFileDataObj['mp-weixin'];
 const aliConfig = manifestFileDataObj['mp-alipay'];
 const toutiaoConfig = manifestFileDataObj['mp-toutiao'];
+const harmonyConfig = manifestFileDataObj['mp-harmony'];
 //主包引入插件
 const wxPlugin: any = {};
 const aliPlugin: any = {};
@@ -228,12 +233,14 @@ if (medicalMHelp) {
 wxConfig.appid = wxAppid;
 aliConfig.appid = alipayAppid;
 toutiaoConfig.appid = toutiaoAppid;
+harmonyConfig.distribute.bundleName = harmonyBundleName;
 
 wxConfig.plugins = wxPlugin;
 aliConfig.plugins = aliPlugin;
 manifestFileDataObj['mp-weixin'] = wxConfig;
 manifestFileDataObj['mp-alipay'] = aliConfig;
 manifestFileDataObj['mp-toutiao'] = toutiaoConfig;
+manifestFileDataObj['mp-harmony'] = harmonyConfig;
 manifestFileDataObj['name'] = sysName;
 
 fs.writeFileSync(

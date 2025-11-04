@@ -1,5 +1,5 @@
 {
-  "sysCode": "1001046",
+  "sysCode": "1001035",
   "sysConfig": {
     "1001033": {
       "wxAppid": "wxe26143481567cb97",
@@ -16,6 +16,7 @@
       "h5Appid": "wxa5cb8c1829e5603e",
       "alipayAppid": "2021003104670597",
       "isvAlipayAppid": "2021003104670597",
+      "harmonyBundleName": "com.atomicservice.6917564602329951506",
       "name": "江苏省中医院",
       "isStartComeTest": false,
       "isOpenOcr": false,

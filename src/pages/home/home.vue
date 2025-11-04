@@ -629,6 +629,8 @@
         !uni.getStorageSync('hospital_order') &&
         authorization();
     }
+
+
   });
 
   const getDocRecommendList = async () => {
