@@ -648,13 +648,11 @@ export class ServerStaticData {
     if (gStores.globalStore.modeOld) {
       arg.source = 7;
     } else {
-      // #ifdef MP-ALIPAY
-      arg.source = 2;
-      // #endif
-
-      // #ifdef H5
-      arg.source = 3;
-      // #endif
+      if (gStores.globalStore.ev === 'alipay') {
+        arg.source = 2;
+      } else if (gStores.globalStore.ev === 'web') {
+        arg.source = 3;
+      }
     }
 
     const { result } = await api.queryHospitalPattern(arg);
