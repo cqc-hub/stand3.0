@@ -90,6 +90,10 @@ export interface ISConfig {
         orgId: {
           [hosId: string]: string;
         };
+        //多院区同一个orgid的情况传入appId
+        appId?: {
+          [hosId: string]: string;
+        };
         // 院内卡类型
         cardType: string;
       };
@@ -527,11 +531,9 @@ const scJson: Record<string, ISConfig> = {
         medicalPlugin: '1',
       },
       alipay: {
-        navgateToZLminiProm: {
-          orgId: { 12930: 'H33060200131' },
-        },
         medicalPlugin: {
-          orgId: { 12930: 'H33060200131' },
+          orgId: { 12930: 'H33060200131', 13178: 'H33060200131' },
+          appId: { 13178: '20' },
           cardType: '01',
         },
         medicalFiling: '1',

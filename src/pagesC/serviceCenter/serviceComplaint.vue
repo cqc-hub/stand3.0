@@ -518,7 +518,6 @@
       args = {
         ...options.value,
         ...data,
-       
         openIds: [
           {
             source: gStores.globalStore.browser.source,
@@ -622,8 +621,8 @@
       return;
     }
     // #ifdef MP-ALIPAY
-    const { userName, mobile } = gStores.userStore.cacheUser;
-    formData.value.name = userName;
+    const { patientName, mobile } = gStores.userStore.patChoose||gStores.userStore.cacheUser;
+    formData.value.name = patientName;
     formData.value.phone = mobile;
     // #endif
 
