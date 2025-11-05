@@ -130,6 +130,8 @@
             院内导航
           </button>
 
+          <slot :item="item" />
+
           <block v-for="btn in getCustomBtns" :key="btn.text">
             <!-- useTBanner(btn, 'navigateTo', item) -->
 

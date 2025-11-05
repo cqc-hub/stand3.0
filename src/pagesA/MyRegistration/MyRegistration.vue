@@ -53,7 +53,35 @@
           @ywz-click="ywzClick"
           @go-detail="goDetail"
           @go-hos-navigate="goHosNavigate"
-        />
+        >
+          <template #default="{ item }">
+            <view class="footer-btns flex">
+              <button
+                v-if="isShowRegCancel(getBtnData(item))"
+                @click="goDetail(item)"
+                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
+              >
+                取消预约
+              </button>
+
+              <button
+                v-if="isShowRegPay(getBtnData(item))"
+                @click="goDetail(item)"
+                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
+              >
+                去支付
+              </button>
+
+              <button
+                v-if="isShowRegRefound(getBtnData(item))"
+                @click="goDetail(item)"
+                class="btn btn-round btn-size-small btn-border cancel-btn color-111"
+              >
+                去退号
+              </button>
+            </view>
+          </template>
+        </My-Registration-List-Card>
       </block>
 
       <view class="empty-list" v-else-if="isComplete">
@@ -164,14 +192,12 @@
     TButtonConfig,
     useTBanner,
     handlerWeChatThRegLogin,
-    wait,
   } from '@/utils';
   import {
-    OrderStatus,
-    orderStatusMap,
     getOrderStatusTitle,
     getStatusConfig,
     goAskForDoc1001045,
+    useRegBtnShows,
   } from './utils/regDetail';
 
   import api from '@/service/api';
@@ -320,16 +346,23 @@
     await getList(patientId, cardNumber);
   };
 
-  // const getStatusConfig = (status: OrderStatus) => {
-  //   if (orderStatusMap[status]) {
-  //     return orderStatusMap[status];
-  //   } else {
-  //     return {
-  //       title: `未知(${status})`,
-  //       cardColor: 'var(--hr-neutral-color-7)',
-  //     };
-  //   }
-  // };
+  const {
+    isShowRegPay,
+    isShowRegComment,
+    isShowRegCommentViews,
+    isShowRegReorder,
+    isShowRegRefound,
+    isShowRegCancel,
+    isShowCancelRegWait,
+    isShowRegDateDelay,
+  } = useRegBtnShows();
+
+  const getBtnData = (item) => {
+    return {
+      typeId: tabCurrentDetail.value?.typeId,
+      ...item,
+    };
+  };
 
   const getList = async (patientId = '', cardNumber = '') => {
     isComplete.value = false;
@@ -710,6 +743,16 @@
     :deep(.v-tabs__container-item) {
       flex: 1;
       justify-content: center;
+    }
+  }
+
+  .footer-btns {
+    button {
+      white-space: nowrap;
+
+      &:not(:last-child) {
+        margin-right: 16rpx;
+      }
     }
   }
 </style>

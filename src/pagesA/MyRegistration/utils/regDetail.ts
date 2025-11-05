@@ -823,9 +823,6 @@ export const useRegBtnShows = () => {
     const { isOrderPay } = orderConfig.value;
 
     if (orderStatus === '0' && orderId) {
-      if (hosOrderId) {
-        return false;
-      }
 
       return typeId !== '3' && isOrderPay === '1';
     }
