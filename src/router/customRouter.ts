@@ -11,6 +11,7 @@ uni.reLaunch = async (options: UniNamespace.ReLaunchOptions) => {
   reLaunch(options);
 };
 
+// @ts-expect-error
 uni.navigateTo = async (options: UniApp.NavigateToOptions) => {
   const thRegisterId = <string>getQueryUrl(<string>options.url)?.thRegisterId;
 

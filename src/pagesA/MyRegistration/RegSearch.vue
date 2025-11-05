@@ -15,12 +15,13 @@
           focus
         >
           <template #suffixRight>
-            <view
-              v-if="r.searchText.value"
-              class="suffix-right f28"
-              @click="cancelInput"
-            >
-              取消
+            <view v-if="r.searchText.value" class="flex">
+              <view class="suffix-right f28 mr12" @click="cancelInput">
+                取消
+              </view>
+              <view class="suffix-right f28 color-blue" @click="confirmInput">
+                查询
+              </view>
             </view>
           </template>
         </uni-search-input>

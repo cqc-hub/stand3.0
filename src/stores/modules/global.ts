@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores';
 
 import globalGl from '@/config/global';
 
-type T_ENV_H5 = null | 'web' | 'wx' | 'alipay';
+type T_ENV_H5 = 'web' | 'wx' | 'alipay';
 
 interface IStateGlobal {
   token: {
@@ -85,7 +85,7 @@ const globalStore = defineStore('global', {
   state: (): IStateGlobal => {
     return {
       lang: 'zh',
-      ev: null,
+      ev: 'wx',
       // 所有这些属性都将自动推断其类型
       token: {
         accessToken: '',
@@ -106,7 +106,7 @@ const globalStore = defineStore('global', {
       sysCode: globalGl.SYS_CODE,
       modeOld: false,
       cacheData: {},
-      envH5: null,
+      envH5: 'wx',
       isShowFlag: false,
       flagCaches: {},
       intAssistantImg: '',
@@ -329,7 +329,6 @@ const globalStore = defineStore('global', {
     },
     initBrowser() {
       const { updateBrowser } = this;
-      this.ev = 'wx';
 
       // #ifdef H5
       this.ev = 'web';
