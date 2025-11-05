@@ -315,97 +315,78 @@
         <view>首页</view>
       </view>
 
-      <template v-if="isWaitReg">
-        <button
-          v-if="['1'].includes(orderRegInfo.orderStatus)"
-          @click="refoundOrder"
-          class="btn btn-plain btn-error g-border"
-        >
-          {{ '取消候补' }}
-        </button>
-      </template>
+      <button
+        v-if="isShowCancelRegWait(_d)"
+        @click="refoundOrder"
+        class="btn btn-plain btn-error g-border"
+      >
+        {{ '取消候补' }}
+      </button>
 
-      <template v-else>
-        <button
-          v-if="['0', '60', '111'].includes(orderRegInfo.orderStatus)"
-          @click="refoundOrder"
-          class="btn btn-plain btn-error g-border"
-        >
-          {{
-            ['60', '111'].includes(orderRegInfo.orderStatus)
-              ? '取消预约'
-              : orderConfig.isOrderPay === '1'
-                ? '退号'
-                : '取消预约'
-          }}
-        </button>
+      <button
+        v-if="isShowRegCancel(_d)"
+        @click="refoundOrder"
+        class="btn g-border"
+        :class="{
+          [isShowRegPay(_d) ? 'btn-normal' : 'btn-plain btn-error']: 1,
+        }"
+      >
+        {{ '取消预约' }}
+      </button>
 
-        <block v-if="orderRegInfo.orderStatus === '70'">
-          <button
-            v-if="orderRegInfo.hosDocId"
-            @click="againOrder"
-            class="btn g-border btn-normal"
-          >
-            再次预约
-          </button>
+      <button
+        v-if="isShowRegRefound(_d)"
+        @click="refoundOrder"
+        class="btn btn-plain btn-error g-border"
+      >
+        {{ '退号' }}
+      </button>
 
-          <button
-            v-if="
-              orderRegInfo.rateFlag !== 1 &&
-              orderConfig.isOpenComment === '1' &&
-              orderRegInfo.orderId
-            "
-            @click="goRatePage"
-            class="btn g-border btn-primary"
-          >
-            {{ orderRegInfo.rateFlag === 0 ? '查看评价' : '服务评价' }}
-          </button>
-        </block>
+      <button
+        v-if="isShowRegReorder(_d)"
+        @click="againOrder"
+        class="btn g-border"
+        :class="{
+          [orderRegInfo.orderStatus === '70' ? 'btn-normal' : 'btn-primary']: 1,
+        }"
+      >
+        再次预约
+      </button>
 
-        <block v-if="isWaitForPay">
-          <button @click="cancelOrder" class="btn g-border btn-normal">
-            取消预约
-          </button>
+      <button
+        v-if="isShowRegCommentViews(_d)"
+        @click="goRatePage"
+        class="btn g-border btn-primary"
+      >
+        查看评价
+      </button>
 
-          <button
-            @click="payOrder"
-            :class="{
-              'btn-disabled': timeTravel.downTime <= 0,
-            }"
-            class="btn btn-warning pay-btn"
-          >
-            {{ orderRegInfo.fee }}元 立即支付
-          </button>
-        </block>
+      <button
+        v-if="isShowRegComment(_d)"
+        @click="goRatePage"
+        class="btn g-border btn-primary"
+      >
+        服务评价
+      </button>
 
-        <block v-if="isForwardReg">
-          <button
-            v-if="['10', '110', '0', '101'].includes(orderRegInfo.orderStatus)"
-            @click="refoundOrder"
-            class="btn g-border btn-normal"
-          >
-            取消预约
-          </button>
-          <button
-            v-if="orderRegInfo.canUpdateStatus === '0'"
-            @click="goUpdateRegDate"
-            class="btn g-border btn-primary"
-          >
-            推迟预约日期
-          </button>
-        </block>
+      <button
+        v-if="isShowRegPay(_d)"
+        @click="payOrder"
+        :class="{
+          'btn-disabled': timeTravel.downTime <= 0,
+        }"
+        class="btn btn-warning pay-btn"
+      >
+        {{ orderRegInfo.fee }}元 立即支付
+      </button>
 
-        <button
-          v-if="
-            ['20', '23', '42', '43', '45'].includes(orderRegInfo.orderStatus) &&
-            orderRegInfo.hosDocId
-          "
-          class="btn g-border btn-primary"
-          @click="againOrder"
-        >
-          再次预约
-        </button>
-      </template>
+      <button
+        v-if="isShowRegDateDelay(_d)"
+        @click="goUpdateRegDate"
+        class="btn g-border btn-primary"
+      >
+        推迟预约日期
+      </button>
     </view>
 
     <xy-dialog
@@ -479,6 +460,7 @@
     RegDetailUtil,
     goAskForDoc1001048,
     goAskForDoc1001045,
+    useRegBtnShows,
   } from './utils/regDetail';
   import { payMoneyOnline, toPayPull, IGPay } from '@/components/g-pay/index';
 
@@ -527,34 +509,35 @@
   const refPay = ref<any>('');
   const isFirstIn = ref(true);
 
-  const isShowFooter = computed(() => {
-    const { orderStatus, hosDocId, hosOrderId, orderId } = orderRegInfo.value;
-    if (
-      (!hosDocId && orderStatus === '43') ||
-      // 全部挂号下， 不允许退号
-      (hosOrderId && orderStatus === '0' && !orderId) ||
-      (pageProps.value.typeId === '3' && orderStatus !== '0')
-    ) {
-      return false;
-    }
+  const {
+    isShowRegPay,
+    isShowRegComment,
+    isShowRegCommentViews,
+    isShowRegReorder,
+    isShowRegRefound,
+    isShowRegCancel,
+    isShowCancelRegWait,
+    isShowRegDateDelay,
+  } = useRegBtnShows();
 
-    if (isWaitReg.value) {
-      return orderStatus === '1';
-    }
-    return [
-      '23',
-      '45',
-      '10',
-      '60',
-      '70',
-      '0',
-      '20',
-      '43',
-      '42',
-      '101',
-      '110',
-      '111',
-    ].includes(orderStatus);
+  const _d = computed(() => {
+    return {
+      ...pageProps.value,
+      ...orderRegInfo.value,
+    };
+  });
+
+  const isShowFooter = computed(() => {
+    return (
+      isShowRegDateDelay(_d.value) ||
+      isShowCancelRegWait(_d.value) ||
+      isShowRegPay(_d.value) ||
+      isShowRegComment(_d.value) ||
+      isShowRegCommentViews(_d.value) ||
+      isShowRegCancel(_d.value) ||
+      isShowRegRefound(_d.value) ||
+      isShowRegReorder(_d.value)
+    );
   });
 
   const isWaitReg = computed(() => {
@@ -786,7 +769,7 @@
 
   let init = async () => {
     const { isOrderWithoutTime } = orderConfig.value;
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await wait(800);
     qrCodeOpt.value.width = 600;
     qrCodeOpt.value.size = 350;
@@ -887,7 +870,7 @@
     isFirstIn.value = false;
 
     _regInfoTempList = _regInfoTempList.filter((o) => result[o.key]);
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     await callBackAsync(nextTick);
     await wait(600);
     !isShowRefreshQrCode.value && qrCodeOpt.value.code && capture();
@@ -1460,7 +1443,7 @@
   });
 
   onLoad(async (p) => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     const { GlobalConfig } = await cacheUtil.getSystemConfig('GlobalConfig')();
     isShowRefreshQrCode.value = (GlobalConfig.refreshQrCode || []).includes(
       'pagesA/medicalCardMan/electronicMedicalCard'

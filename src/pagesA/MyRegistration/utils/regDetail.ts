@@ -1,4 +1,4 @@
-import { Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import type { TInstance } from '@/components/g-form/index';
 import {
   GStores,
@@ -683,7 +683,7 @@ export class RegDetailUtil {
         }
       }
 
-      uni.showLoading({ title: '加载中'});;
+      uni.showLoading({ title: '加载中' });
       const { title, content } = await this.gStores.getSysAppMore('1100');
       const { confirm } = await new Promise<any>((closeCallBack) => {
         this.gStores.messageStore.showMessage(content, 0, {
@@ -789,4 +789,126 @@ export const goAskForDoc1001045 = async (orderInfo) => {
     path,
     type: 'h5',
   });
+};
+
+export const useRegBtnShows = () => {
+  const orderConfig = ref({} as ISystemConfig['order']);
+
+  const initConfig = async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+  };
+  initConfig();
+
+  /**
+   *
+   * 取消预约
+   */
+  const isShowRegCancel = (item) => {
+    const { orderStatus } = item;
+    const { isOrderPay } = orderConfig.value;
+
+    if (['0', '10', '60', '101', '110', '111'].includes(orderStatus)) {
+      if (orderStatus === '0' && isOrderPay === '1') {
+        return false;
+      }
+      return true;
+    }
+
+    return false;
+  };
+
+  /** 退号 */
+  const isShowRegRefound = (item) => {
+    const { orderStatus, typeId, hosOrderId, orderId } = item;
+    const { isOrderPay } = orderConfig.value;
+
+    if (orderStatus === '0' && orderId) {
+      if (hosOrderId) {
+        return false;
+      }
+
+      return typeId !== '3' && isOrderPay === '1';
+    }
+
+    return false;
+  };
+
+  /** 再次预约 */
+  const isShowRegReorder = (item) => {
+    const { orderStatus, hosDocId } = item;
+
+    return (
+      hosDocId && ['20', '23', '42', '43', '45', '70'].includes(orderStatus)
+    );
+  };
+
+  /** 查看评价 */
+  const isShowRegCommentViews = (item) => {
+    const { orderId, rateFlag, orderStatus, typeId } = item;
+    const { isOpenComment } = orderConfig.value;
+
+    if (typeId === '3') {
+      return false;
+    }
+
+    return (
+      orderId && isOpenComment === '1' && rateFlag === 0 && orderStatus === '70'
+    );
+  };
+
+  /** 服务评价 */
+  const isShowRegComment = (item) => {
+    const { orderId, rateFlag, orderStatus, typeId } = item;
+    const { isOpenComment } = orderConfig.value;
+
+    if (typeId === '3') {
+      return false;
+    }
+
+    return (
+      orderId &&
+      isOpenComment === '1' &&
+      rateFlag !== 0 &&
+      rateFlag !== 1 &&
+      orderStatus === '70'
+    );
+  };
+
+  /** 立即支付 */
+  const isShowRegPay = (item) => {
+    const { orderStatus, typeId } = item;
+    if (typeId === '3') {
+      return false;
+    }
+
+    return ['10', '101'].includes(orderStatus);
+  };
+
+  /** 取消候补 */
+  const isShowCancelRegWait = (item) => {
+    const { orderStatus, _type } = item;
+
+    return _type === 'waitReg' && orderStatus === '1';
+  };
+
+  /** 推迟预约日期 */
+  const isShowRegDateDelay = (item) => {
+    const { canUpdateStatus, typeId } = item;
+
+    if (typeId === '3') {
+      return false;
+    }
+    return canUpdateStatus === '0';
+  };
+
+  return {
+    isShowRegDateDelay,
+    isShowCancelRegWait,
+    isShowRegPay,
+    isShowRegComment,
+    isShowRegCommentViews,
+    isShowRegReorder,
+    isShowRegRefound,
+    isShowRegCancel,
+  };
 };
