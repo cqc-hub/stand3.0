@@ -84,11 +84,9 @@
   } from '@/stores';
 
   import api from '@/service/api';
-  import HTMLParser from '@/common/html-parser';
 
   import DepartmentList from './components/departmentList/DepartmentList.vue';
   import globalGl from '@/config/global';
-  import { assignType } from '@/typeUtils';
 
   const props = defineProps<{
     // 不需要温馨提示
