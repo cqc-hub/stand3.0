@@ -364,7 +364,7 @@
 
   // https://uniapp.dcloud.net.cn/api/canvas/CanvasContext.html#canvascontext-shadowoffsetx-number
   // https://blog.csdn.net/qq_30907845/article/details/126853488
-  let [_avatar_img, _head_bg_img, _good_at_img] = ['', '', ''];
+  let [_avatar_img, _head_bg_img, _good_at_img, _cpc_img] = ['', '', '', ''];
   const initCanvas = async () => {
     let {
       docPhoto,
@@ -374,6 +374,7 @@
       deptName,
       docJobName,
       hosName,
+      politicalStatus,
     } = props.detail;
     // docPhoto = '';
     const blockBgColor = gStores.globalStore.isTcmStyle ? '#f6ede8' : '#ccddff';
@@ -392,6 +393,8 @@
       gStores.globalStore.isTcmStyle ? '-tcm' : ''
     }.png`;
 
+    let cpc_img = `${globalGl.BASE_IMG}CPC-icon.png`;
+
     // #ifdef MP-TOUTIAO
     avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;
     // #endif
@@ -402,6 +405,9 @@
       // #ifdef MP-TOUTIAO
       _avatar_img = await downFile(avatar_img);
       // #endif
+    }
+    if (['中共党员', '中共预备党员'].includes(politicalStatus || '')) {
+      _cpc_img = await downFile(cpc_img);
     }
 
     let [head_bg_img, good_at_img] = ['', ''];
@@ -452,7 +458,7 @@
     };
     //头像的白色边框
     ctx.arc(avatarBox.left, avatarBox.top, avatarBox.width / 2, 0, 2 * Math.PI);
-    ctx.setFillStyle('rgba(255,255,255,0.50)');
+    ctx.setFillStyle('rgba(255,255,255,1)');
     ctx.fill();
 
     ctx.save();
@@ -481,6 +487,16 @@
     );
 
     ctx.restore();
+
+    if (_cpc_img) {
+      ctx.drawImage(
+        _cpc_img,
+        avatarBox.left - 28,
+        avatarBox.top / 2 + 63,
+        painWidthAvatar - 15,
+        painHeightAvatar -46
+      );
+    }
 
     // 医生名字
     ctx.setFillStyle('#111111');

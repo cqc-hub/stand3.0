@@ -43,6 +43,7 @@ export interface IDocDetail {
   hosName?: string;
   multiplePracticeLocation: string;
   preStatus?: '1';
+  politicalStatus?: string;
 }
 
 export interface IDocSchListItem {

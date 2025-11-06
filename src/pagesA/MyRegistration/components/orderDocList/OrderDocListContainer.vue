@@ -1,6 +1,6 @@
 <template>
   <view class="doc-info">
-    <view class="doc-info-container">
+    <view class="doc-info-container" :class="!isAllDate&&isPliticalDoc ? 'mb48' : ''">
       <!-- <g-login @handler-next="avatarClick"> -->
       <img
         :src="
@@ -14,6 +14,11 @@
         mode="aspectFill"
         lazy-load
       />
+      <image
+        v-if="isPliticalDoc"
+        class="CPC-icon"
+        :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+      ></image>
       <!-- </g-login> -->
 
       <view @click="avatarClick" class="doc-info-introduce">
@@ -131,8 +136,9 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed } from 'vue';
   import { GStores, throughCharacterLineFeed } from '@/utils';
-  import { IDocListAll } from '../../utils';
+  import globalGl from '@/config/global';
   import HTMLParser from '@/common/html-parser';
 
   const props = defineProps<{
@@ -142,6 +148,13 @@
     isShowHosNameWithDeptName?: boolean;
   }>();
   const gStores = new GStores();
+
+  const isPliticalDoc = computed(() => {
+    return (
+      props.item?.politicalStatus &&
+      ['中共党员', '中共预备党员'].includes(props.item.politicalStatus)
+    );
+  });
 
   const emits = defineEmits(['avatar-click', 'preregistration-click']);
 
@@ -175,6 +188,7 @@
     &-container {
       display: flex;
       margin-bottom: 24rpx;
+      position: relative;
 
       .doc-info-avatar {
         border-radius: 50%;
@@ -182,6 +196,12 @@
         width: 96rpx;
         height: 96rpx;
         flex-shrink: 0;
+      }
+      .CPC-icon {
+        width: 96rpx;
+        height: 45rpx;
+        position: absolute;
+        top: 78rpx;
       }
 
       .doc-info-introduce {

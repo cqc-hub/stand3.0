@@ -2,7 +2,10 @@
   <view class="">
     <block v-if="list.length">
       <view v-for="item in list" :key="item.hosDocId" class="doc-info">
-        <view class="doc-info-container">
+        <view
+          class="doc-info-container"
+          :class="isPliticalDoc(item) ? 'mb32' : ''"
+        >
           <image
             :src="
               item.docPhoto ||
@@ -15,6 +18,11 @@
             mode="aspectFill"
             lazy-load
           />
+          <image
+            v-if="isPliticalDoc(item)"
+            class="CPC-icon"
+            :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+          ></image>
 
           <view @click="avatarClick(item)" class="doc-info-introduce">
             <view class="doc-info-introduce-header">
@@ -40,13 +48,19 @@
             </view>
           </view>
         </view>
-         <view @click="avatarClick(item)" class="flex mb12" v-if="item.clinicTime">
-          <text class="color-fff  ico_major pr12 pl12 tags mr12">就诊提醒</text>
+        <view
+          @click="avatarClick(item)"
+          class="flex mb12"
+          v-if="item.clinicTime"
+        >
+          <text class="color-fff ico_major pr12 pl12 tags mr12">就诊提醒</text>
           <view class="flex-1">
             <rich-text
               v-if="item.goodAt"
               class="color-888 f28 text-ellipsis ellipsis-line-clamp1"
-              :nodes="HTMLParser(throughCharacterLineFeed(item.clinicTime, '\n'))"
+              :nodes="
+                HTMLParser(throughCharacterLineFeed(item.clinicTime, '\n'))
+              "
             />
           </view>
         </view>
@@ -70,9 +84,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, computed } from 'vue';
   import { IDocResItem } from '../../utils/RegSearch';
   import HTMLParser from '@/common/html-parser';
+  import globalGl from '@/config/global';
   import { GStores, throughCharacterLineFeed } from '@/utils';
 
   defineProps<{
@@ -84,6 +99,12 @@
 
   const avatarClick = (item: IDocResItem) => {
     emits('item-click', item);
+  };
+  const isPliticalDoc = (item) => {
+    return (
+      item?.politicalStatus &&
+      ['中共党员', '中共预备党员'].includes(item.politicalStatus)
+    );
   };
 </script>
 
@@ -107,6 +128,7 @@
     &-container {
       display: flex;
       margin-bottom: 24rpx;
+      position: relative;
 
       .doc-info-avatar {
         border-radius: 50%;
@@ -114,6 +136,12 @@
         width: 96rpx;
         height: 96rpx;
         margin-right: 24rpx;
+      }
+      .CPC-icon {
+        width: 96rpx;
+        height: 45rpx;
+        position: absolute;
+        bottom: -22rpx;
       }
 
       .doc-info-introduce {

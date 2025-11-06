@@ -182,7 +182,11 @@
                     >
                       <text class="g-break-word">{{ item.itemVal }}</text>
                       {{
-                        (item.flag && item.flag.includes('阳') && item.flag) ||
+                        (item.itemVal !== '阳性' &&
+                          item.itemVal !== '阳' &&
+                          item.flag &&
+                          item.flag.includes('阳') &&
+                          item.flag) ||
                         ''
                       }}
                       <text class="color-blue" v-if="item.flag == 'L'">↓</text>
@@ -571,9 +575,10 @@
       checkoutReportList.value.pdfUrl ||
       checkoutReportList.value?.pdfUrls?.length === 1
     ) {
-
       //@ts-expect-error
-      cacheStore.changeCacheData(checkoutReportList.value.pdfUrl||checkoutReportList.value?.pdfUrls[0]);
+      cacheStore.changeCacheData(
+        checkoutReportList.value.pdfUrl || checkoutReportList.value?.pdfUrls[0]
+      );
 
       uni.navigateTo({
         url: joinQueryForUrl('/pagesC/prevFile/prevFile', {

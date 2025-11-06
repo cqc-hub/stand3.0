@@ -235,7 +235,6 @@
   const {
     isCanUse: isCanUseTranslate,
     isListening,
-    getAuthority,
     startRecord,
     stopRecord,
   } = useTranslateVoiceHook();
@@ -332,9 +331,6 @@
     if (hasWechatSI.value && hasSIPolicy.value) {
       isVoice.value = !isVoice.value;
       // #ifdef  H5
-      console.log('getAuthority');
-      
-      getAuthority()
        // #endif
       // #ifdef  MP-WEIXIN
       if (!SImanager) {

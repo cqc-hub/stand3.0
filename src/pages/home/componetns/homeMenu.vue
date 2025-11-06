@@ -6,7 +6,7 @@
         :tabs="props.list"
         @change="activeMenu"
         :itemWidth="100 / props.list.length + '%'"
-        :itemMinWidth="'180rpx'"
+        :itemMinWidth="getSysCode() == '1001036' ? '20rpx' : '180rpx'"
         field="typeName"
         pillsColor="#fff"
         bgColor="#fff0"
@@ -51,6 +51,7 @@
   import homeGrid from './homeGrid.vue';
   import homeMenuTabs from './homeMenuTabs.vue';
   import { wait } from '@/utils';
+  import { getSysCode } from '@/common';
 
   const emits = defineEmits(['open-share']);
 

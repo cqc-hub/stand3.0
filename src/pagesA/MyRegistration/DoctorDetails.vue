@@ -17,17 +17,26 @@
           mode="widthFix"
           class="header-bg my-disabled"
         />
+
         <view class="content">
           <view class="header-box f28">
             <view class="content-box header-content-box g-border">
               <view class="header-transform">
-                <view class="header mb16 flex-between">
+                <view
+                  class="header flex-between"
+                  :class="isPliticalDoc ? 'mb48' : 'mb16'"
+                >
                   <image
                     :src="headerBg"
                     @click="previewImg"
                     mode="aspectFill"
                     class="doc-avatar g-border"
                   />
+                  <image
+                    v-if="isPliticalDoc"
+                    class="CPC-icon"
+                    :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+                  ></image>
 
                   <view class="flex-normal header-btn">
                     <g-login @handler-next="collectDoc">
@@ -524,6 +533,7 @@
   import { computed, nextTick, ref, getCurrentInstance } from 'vue';
   import { onLoad, onShareAppMessage } from '@dcloudio/uni-app';
 
+  import globalGl from '@/config/global';
   import { useOrder, IChooseDays, TSchInfo, getChooseDays } from './utils';
 
   import {
@@ -582,6 +592,13 @@
   const flagTitle9 = ref('');
   const docHosSchHeight = ref(100);
   const isMultHosDoc = ref(false);
+
+  const isPliticalDoc = computed(() => {
+    return (
+      docDetail.value?.politicalStatus &&
+      ['中共党员', '中共预备党员'].includes(docDetail.value.politicalStatus)
+    );
+  });
 
   const schToday = computed(() => {
     if (checkedDay.value) {
@@ -1136,6 +1153,7 @@
       position: relative;
       z-index: 2;
       align-items: flex-start;
+      position: relative;
 
       .doc-avatar {
         width: 136rpx;
@@ -1143,6 +1161,13 @@
         border-radius: 50%;
         overflow: hidden;
         background-color: #fff;
+      }
+      .CPC-icon {
+        width: 116rpx;
+        height: 50rpx;
+        position: absolute;
+        bottom: -35rpx;
+        margin:0 10rpx;
       }
 
       .header-btn {

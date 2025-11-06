@@ -798,65 +798,22 @@
     await new Promise((r, j) => {
       waitChooseDialog.value = true;
       resolve = async () => {
-        await api.addRegAlternate(args);
         waitChooseDialog.value = false;
-        if (priorityReg.value) {
-          gStores.messageStore.showMessage(
-            '您符合地处省外用户患者优先预约条件，将为您进行优先预约!',
-            0,
-            {
-              useDialog: true,
-              dialogOpt: {
-                title: '优先预约温馨提示',
-              },
-              closeCallBack: async () => {
-                const {
-                  patientId,
-                  hosDocId,
-                  hosId,
-                  docName,
-                  categorName,
-                  fee,
-                  hosName,
-                } = args;
-                const requestArg = {
-                  status: '0',
-                  patientId,
-                  docId: hosDocId,
-                  hosId,
-                  docName,
-                  categorName,
-                  // categorNamePy: categorNamePY,
-                  regNumber: 9,
-                  hosName,
-                  fee,
-                };
-
-                await api.preregistrationSave(requestArg);
-                if (pageConfig.value?.isTabWaitReg === '1') {
-                  uni.reLaunch({
-                    url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
-                  });
-                } else {
-                  uni.reLaunch({
-                    url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-                  });
-                }
-              },
+        await api.addRegAlternate(args).catch(async (e) => {
+          if (e) {
+            const { respCode, code, message } = e;
+            if (respCode === 884802) {
+              //接口拦截 去实名认证 —— 省中
+              await handlerConfirmPatReal();
+            } else if (respCode === 884803) {
+              //接口拦截 更新监护人信息 —— 省中
+              await handlerConfirmPatReal1();
+            } else if (code !== 4000) {
+              message && gStores.messageStore.showMessage(message, 3000);
             }
-          );
-        } else {
-          if (pageConfig.value?.isTabWaitReg === '1') {
-            uni.reLaunch({
-              url: '/pagesA/MyRegistration/MyRegistration?typeId=2',
-            });
-          } else {
-            uni.reLaunch({
-              url: '/pagesA/MyRegistration/MyRegistration?type=waitReg',
-            });
           }
-        }
-
+          throw new Error(e);
+        });
         r('sueess');
       };
       reject = () => {
