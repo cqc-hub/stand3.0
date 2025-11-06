@@ -52,7 +52,19 @@ export const HK_hook = () => {
       const item = chooseThirdPath.find((o) => o.hosId === hosId);
       // 如果配置了 msg，直接展示，不调用扫码和接口
       if (item && item.msg) {
-        gStores.messageStore.showMessage(item.msg, 3000);
+        uni.scanCode({
+          success: function (res) {
+            console.log('条码类型: ' + res.scanType);
+            console.log('条码内容: ' + res.result);
+            if (res.result && typeof res.result === 'string') {
+              useTBanner({
+                path: res.result, // 直接使用扫码结果作为跳转路径
+                type: 'h5',
+              });
+            }
+          },
+        });
+        // gStores.messageStore.showMessage(item.msg, 3000);
         return;
       }
       if (item && item.path) {
