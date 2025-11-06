@@ -8,23 +8,13 @@
   >
     <!-- #ifndef MP-ALIPAY -->
     <view v-for="(banner, index) in bannerOrderList" :key="index">
-      <g-tbanner
-        :config="banner"
-        @click="handleDzClick(banner)"
-        disabled
-      />
+      <g-tbanner :config="banner" @click="handleDzClick(banner)" disabled />
     </view>
     <!-- #endif -->
 
     <!-- #ifdef MP-ALIPAY -->
-   <view v-for="(banner, index) in bannerOrderAlipayList" :key="index">
-      <g-tbanner
-        :config="banner"
-        @click="
-          handleDzClick(banner)
-        "
-        disabled
-      />
+    <view v-for="(banner, index) in bannerOrderAlipayList" :key="index">
+      <g-tbanner :config="banner" @click="handleDzClick(banner)" disabled />
     </view>
     <!-- #endif -->
     <g-selhos
@@ -126,14 +116,14 @@
   let deptStep: any[] = [];
 
   const bannerOrderList = computed(() => {
-  return normalizeBannerConfig(orderConfig.value.bannerOrder);
-});
+    return normalizeBannerConfig(orderConfig.value.bannerOrder);
+  });
 
-const bannerOrderAlipayList = computed(() => {
-  const banner = orderConfig.value.bannerOrderAlipay || orderConfig.value.bannerOrder;
-  return normalizeBannerConfig(banner);
-});
-
+  const bannerOrderAlipayList = computed(() => {
+    const banner =
+      orderConfig.value.bannerOrderAlipay || orderConfig.value.bannerOrder;
+    return normalizeBannerConfig(banner);
+  });
 
   const init = async () => {
     const data = await ServerStaticData.getSystemConfig('order');

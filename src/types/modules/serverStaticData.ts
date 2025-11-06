@@ -39,6 +39,12 @@ export interface ISystemConfig_ {
     regSearchWithHosId?: '1';
 
     /**
+     * pagesA/MyRegistration/Register
+     */
+    /** 获取医院列表时候带入定位信息 */
+    getHosListWithLocation?: '1';
+
+    /**
      * 选择医院页面
      */
     // 选医院上面 banner
