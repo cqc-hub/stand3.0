@@ -1,20 +1,21 @@
 import { GStores, ServerStaticData, apiAsync, useTBanner } from '@/utils';
 
 export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
+  const gStores = new GStores();
   if (type === 'byMedical') {
-    // #ifdef MP-WEIXIN
-    useTBanner({
-      type: 'otherProgram',
-      appId: 'wx81ce904580cc0ff1',
-      path: '/views/home/index',
-    });
-    // #endif
+    if (gStores.globalStore.ev === 'wx') {
+      useTBanner({
+        type: 'otherProgram',
+        appId: 'wx81ce904580cc0ff1',
+        path: '/views/home/index',
+      });
+    }
 
-    // #ifdef MP-ALIPAY
-    my.ap.openURL({
-      url: 'alipays://platformapi/startapp?appId=77700284&page=pages%2Fmedical%2Findex%3FchInfo%3Dquyuyibaominiapp',
-    });
-    // #endif
+    if (gStores.globalStore.ev === 'alipay') {
+      my.ap.openURL({
+        url: 'alipays://platformapi/startapp?appId=77700284&page=pages%2Fmedical%2Findex%3FchInfo%3Dquyuyibaominiapp',
+      });
+    }
   } else {
     uni.navigateTo({
       url: '/pagesA/medicalCardMan/electronicMedicalCard?dp=1',
@@ -23,9 +24,8 @@ export const _goElectronicMedicalCard = (type: 'bySelf' | 'byMedical') => {
 };
 
 export const goElectronicMedicalCard = async () => {
-  const { isMedicalQrChoose } = await ServerStaticData.getSystemConfig(
-    'person'
-  );
+  const { isMedicalQrChoose } =
+    await ServerStaticData.getSystemConfig('person');
 
   let type: 'bySelf' | 'byMedical' = 'bySelf';
 

@@ -71,7 +71,6 @@
             uni.openDocument({
               filePath: filePath,
               fileType: 'pdf', //指定为pdf文件
-              // @ts-expect-error
               showMenu: true, //true 可以右上角转发和分享
               fail: function (res) {
                 uni.hideLoading();
@@ -92,7 +91,7 @@
   };
   const downWithStream = (url, name) => {
     name = new Date().getTime() + '';
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
 
     console.log(url, '-----url');
     // name = new Date().getTime() + '';
@@ -101,18 +100,15 @@
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=HlWMHi2cnDqTjKpSipDFgNT712DVuGX7NbYiFMt%2FLpU%3D',
       // url: 'https://hrsms.wzhealth.com/phs/pro/v3/phoenix-wz/image?uid=JR%2B2rwT0%2FFQlxXU7C0yqm3ztZHZEKzQ0xt6zmf60kXs%3D'
       url,
-      // @ts-expect-error
       // filePath: uPath + '/' + name, //设置文件名
       filePath: `${uPath}/${name}.pdf`, //设置文件名
       success: function (res) {
         console.log('下载成功-----');
         console.log(res);
-        // @ts-expect-error
         const filePath = res.filePath || res.tempFilePath;
         uni.openDocument({
           filePath,
           fileType: 'pdf',
-          // @ts-expect-error
           showMenu: true,
           complete(e) {
             console.log('预览文件--', filePath);

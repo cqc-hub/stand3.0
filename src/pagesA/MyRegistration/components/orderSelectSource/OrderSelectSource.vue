@@ -321,7 +321,7 @@
   };
 
   const tabCurrent = ref(0);
-  const show = () => {
+  const handleShow = () => {
     popup.value.show();
   };
 
@@ -383,7 +383,7 @@
     () => props.show,
     (v) => {
       if (v) {
-        show();
+        handleShow();
         resetData();
         initAmPmResList();
       }

@@ -597,7 +597,7 @@
   };
 
   const payAfter = async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(6000);
     uni.hideLoading();
     init();

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  // #ifdef MP-ALIPAY
+  import monitor from '@/js_sdk/alipay/alipayLogger.js';
+  // #endif
   import { onLaunch, onShow } from '@dcloudio/uni-app';
   import { useGlobalStore, useUserStore } from '@/stores';
   import { beforeEach } from '@/router';
@@ -6,11 +9,9 @@
   import 'polyfill-object.fromentries';
   import '@/router/customRouter';
   import './styles/index.scss';
-  // #ifdef MP-ALIPAY
-  import monitor from '@/js_sdk/alipay/alipayLogger.js';
-  // #endif
   import '@/utils/dynamicUtil';
   import { useLunchInit1001035 } from '@/utils/1001035';
+  import { reloadUni } from './utils/reloadUni';
 
   const globalStore = useGlobalStore();
   let _cacheChangePatTime = '',
@@ -18,6 +19,7 @@
 
   onLaunch(async (opt) => {
     console.log('App Launch', opt);
+    reloadUni();
     globalStore.initBrowser();
     globalStore.onAppLaunch(opt);
 
@@ -49,22 +51,22 @@
 
     globalStore.onAppShow(opt);
 
-    // #ifdef MP-WEIXIN
-    if (!showTime) {
-      showTime = ((new Date() as unknown as number) * 1) / 1000;
-      wx.login();
-    } else {
-      setTimeout(() => {
-        const nowTime = ((new Date() as unknown as number) * 1) / 1000;
-        const difTimeHour = Math.ceil(nowTime - showTime) / 60 / 60 / 6;
+    if (globalStore.ev === 'wx') {
+      if (!showTime) {
+        showTime = ((new Date() as unknown as number) * 1) / 1000;
+        wx.login();
+      } else {
+        setTimeout(() => {
+          const nowTime = ((new Date() as unknown as number) * 1) / 1000;
+          const difTimeHour = Math.ceil(nowTime - showTime) / 60 / 60 / 6;
 
-        if (difTimeHour >= 6) {
-          showTime = ((new Date() as unknown as number) * 1) / 1000;
-          wx.login();
-        }
-      }, 3000);
+          if (difTimeHour >= 6) {
+            showTime = ((new Date() as unknown as number) * 1) / 1000;
+            wx.login();
+          }
+        }, 3000);
+      }
     }
-    // #endif
 
     if (
       globalStore.sysCode === '1001082' &&

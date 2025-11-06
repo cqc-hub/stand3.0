@@ -229,7 +229,7 @@
 
   const payAfter = async () => {
     const _url = pageProps.value._url;
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(1000);
     uni.hideLoading();
     if (_url) {

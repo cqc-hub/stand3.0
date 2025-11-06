@@ -160,6 +160,7 @@ export const getOpenId = async () => {
 
 export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
   const gStores = new GStores();
+  const { ev } = gStores.globalStore;
   return new Promise(async (resolve, reject) => {
     const { invokeData } = data;
 
@@ -177,56 +178,56 @@ export const toPayPull = async (data: IPayRes, type?: ITrackType) => {
       paySign,
     };
 
-    // #ifdef MP-WEIXIN || MP-ALIPAY
-    await new Promise((resolve) => {
-      uni.getProvider({
-        service: 'payment',
-        success(result) {
-          // @ts-expect-error
-          payData.provider = result.provider[0];
-          resolve(void 0);
-        },
+    if (['wx', 'alipay'].includes(ev || '')) {
+      await new Promise((resolve) => {
+        uni.getProvider({
+          service: 'payment',
+          success(result) {
+            // @ts-expect-error
+            payData.provider = result.provider[0];
+            resolve(void 0);
+          },
 
-        fail: reject,
+          fail: reject,
+        });
       });
-    });
 
-    uni.requestPayment({
-      ...payData,
-      success(e) {
-        // #ifdef MP-ALIPAY
-        alipayTrack(true, type);
+      uni.requestPayment({
+        ...payData,
+        success(e) {
+          // #ifdef MP-ALIPAY
+          alipayTrack(true, type);
 
-        if (e.resultCode == '9000') {
-          //支付宝成功支付
+          if (e.resultCode == '9000') {
+            //支付宝成功支付
+            resolve({
+              payedRes: e,
+              payRes: payData,
+            });
+          } else {
+            gStores.messageStore.showMessage('取消支付', 1500);
+          }
+          // #endif
+
+          // #ifdef  MP-WEIXIN
           resolve({
             payedRes: e,
             payRes: payData,
           });
-        } else {
+          // #endif
+        },
+
+        fail(err) {
+          console.error('支付错误---', err);
+
+          // #ifdef MP-ALIPAY
+          alipayTrack(false, type);
+          // #endif
           gStores.messageStore.showMessage('取消支付', 1500);
-        }
-        // #endif
-
-        // #ifdef  MP-WEIXIN
-        resolve({
-          payedRes: e,
-          payRes: payData,
-        });
-        // #endif
-      },
-
-      fail(err) {
-        console.error('支付错误---', err);
-
-        // #ifdef MP-ALIPAY
-        alipayTrack(false, type);
-        // #endif
-        gStores.messageStore.showMessage('取消支付', 1500);
-        reject(err);
-      },
-    });
-    // #endif
+          reject(err);
+        },
+      });
+    }
   });
 };
 

@@ -403,7 +403,7 @@
       }
     }
 
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
   };
 
   let listLenHis = 0;
@@ -572,7 +572,7 @@
   //电子健康卡
   const handleFacility = async () => {
     // #ifdef MP-WEIXIN
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     let scene = '0101082';
     if (tabs.value[tabCurrent.value]?.headerType === 'jy') {
       scene = '0101082';

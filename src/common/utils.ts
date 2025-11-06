@@ -1,9 +1,8 @@
 import env from '@/config/env';
 import { getCurrentInstance } from 'vue';
-import { getSysCode } from '@/common/useToken'; 
+import { getSysCode } from '@/common/useToken';
 import type { TBannerConfig } from '@/types/modules/serverStaticData';
-
-
+import { GStores } from '@/utils';
 
 //公用方法
 /**
@@ -111,22 +110,24 @@ export const deQueryForUrl = <T = BaseObject>(props): T => {
  * @returns
  */
 export const getChooseAddress = function (): Promise<UniApp.ChooseAddressRes> {
+  const gStores = new GStores();
+  const { ev } = gStores.globalStore;
   return new Promise((resolve, reject) => {
     uni.chooseAddress({
       success(res) {
-        // #ifdef MP-ALIPAY
-        if ((res as any).resultStatus == '9000') {
-          // 针对支付宝单独处理
-          res.countyName = (res as any).result.area;
-          res.detailInfo = res.detailInfo.split('-').pop() as string;
-          resolve(res);
-        } else {
-          reject('未选择地址');
+        if (ev === 'alipay') {
+          if ((res as any).resultStatus == '9000') {
+            // 针对支付宝单独处理
+            res.countyName = (res as any).result.area;
+            res.detailInfo = res.detailInfo.split('-').pop() as string;
+            resolve(res);
+          } else {
+            reject('未选择地址');
+          }
         }
-        // #endif
-        // #ifdef MP-WEIXIN
-        resolve(res);
-        // #endif
+        if (ev === 'wx') {
+          resolve(res);
+        }
       },
       fail(err) {
         console.error(err);
@@ -210,7 +211,7 @@ export const getQueryUrl = function (url: string): BaseObject {
  */
 export const insertObject = <
   T extends { key: string; value: any },
-  K extends BaseObject
+  K extends BaseObject,
 >(
   opt: T,
   target: K
@@ -259,7 +260,7 @@ export const insertObject = <
 
 export const insertsObject = function <
   T extends BaseObject,
-  K extends BaseObject
+  K extends BaseObject,
 >(source: T, target: K): K {
   for (const key in source) {
     insertObject(
@@ -349,7 +350,9 @@ export const getTcMallToken = (app?) => {
   });
 };
 
-export const normalizeBannerConfig = (bannerConfig: TBannerConfig | TBannerConfig[] | undefined): TBannerConfig[] => {
+export const normalizeBannerConfig = (
+  bannerConfig: TBannerConfig | TBannerConfig[] | undefined
+): TBannerConfig[] => {
   if (!bannerConfig) return [];
   return Array.isArray(bannerConfig) ? bannerConfig : [bannerConfig];
 };

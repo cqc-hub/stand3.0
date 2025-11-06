@@ -169,7 +169,7 @@
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
     const { patientId, patientName } = pageProps.value;
     if (patientId || !patientName) {
-      uni.showLoading({});
+      uni.showLoading({ title: '加载中'});;
       await wait(600);
 
       await beforeEach({

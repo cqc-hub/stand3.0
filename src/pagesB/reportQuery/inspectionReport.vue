@@ -182,7 +182,9 @@
                   (pageProps.isDownloadRepor === '1' &&
                     pageProps.isGraphic == 1 &&
                     gStores.globalStore.sysCode !== '1001035') ||
-                  item?.pdfPath
+                  item?.pdfPath ||
+                  (gStores.globalStore.sysCode === '1001035' &&
+                    examineReportList.pdfPath)
                 "
               >
                 <view class="icon-font ico_sy_paper1"></view>
@@ -626,7 +628,8 @@
     const { pdfPath: pdfPath1001035, pdfType } = examineReportList.value;
 
     if (['1001035'].includes(gStores.globalStore.sysCode) && pdfPath1001035) {
-      if (pdfType === 'JPG') {
+      // pdf PDF JPG jpg
+      if (pdfType && ['JPG', 'jpg'].includes(pdfType)) {
         uni.previewImage({
           urls: [pdfPath1001035],
         });
@@ -749,11 +752,10 @@
       }
 
       if (pdfType === 'JPG') {
-        uni.showLoading({});
+        uni.showLoading({ title: '加载中' });
         try {
-          const msg = await ImageDownloader.downloadAndSaveImage(
-            pdfPath1001035
-          );
+          const msg =
+            await ImageDownloader.downloadAndSaveImage(pdfPath1001035);
           gStores.messageStore.showMessage(msg, 1500);
         } catch (error) {
           const errorMessage =
@@ -975,7 +977,7 @@
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中' });
 
     if ((queryParams && !opt?.params) || opt?.q) {
       return;

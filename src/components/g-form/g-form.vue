@@ -288,7 +288,6 @@
       @itemclick="actionItemClick"
       title=""
     >
-      <!-- @vue-expect-error -->
       <template #header>
         <view v-if="isShowSelectSearch" class="bg-white w-full">
           <view class="pr12 pt12 pl12 pb12">

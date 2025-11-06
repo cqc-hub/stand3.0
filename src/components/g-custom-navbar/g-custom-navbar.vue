@@ -17,11 +17,11 @@
         }"
       />
     </view>
-    <slot/>
+    <slot />
     <!-- <view class="tilte"> -->
-      <view class="text f32">
-        {{ props.title || '' }}
-      </view>
+    <view class="text f32">
+      {{ props.title || '' }}
+    </view>
     <!-- </view> -->
   </view>
   <!--  #endif -->
@@ -29,6 +29,7 @@
 <script setup lang="ts">
   import { ref, onBeforeMount, withDefaults } from 'vue';
   import globalGl from '@/config/global';
+  import { GStores } from '@/utils';
   const props = withDefaults(
     defineProps<{
       title?: string;
@@ -38,6 +39,8 @@
       showBack: true,
     }
   );
+  const gStores = new GStores();
+
   const navLocationInfo = ref({
     top: 51,
     height: 32,
@@ -53,19 +56,20 @@
     }
   };
   onBeforeMount(() => {
-    // #ifdef MP-WEIXIN
-    let menuButtonInfo = uni.getMenuButtonBoundingClientRect();
-    uni.getSystemInfo({
-      success: function (window) {
-        navLocationInfo.value = {
-          top: menuButtonInfo[0]?.top || 51,
-          height: menuButtonInfo[0]?.height || 32,
-          bottom: menuButtonInfo[0]?.bottom || 83,
-          titleLeft: window.screenWidth / 2 - (menuButtonInfo[0]?.height || 32),
-        };
-      },
-    });
-    // #endif
+    if (gStores.globalStore.ev === 'wx') {
+      let menuButtonInfo = uni.getMenuButtonBoundingClientRect();
+      uni.getSystemInfo({
+        success: function (window) {
+          navLocationInfo.value = {
+            top: menuButtonInfo[0]?.top || 51,
+            height: menuButtonInfo[0]?.height || 32,
+            bottom: menuButtonInfo[0]?.bottom || 83,
+            titleLeft:
+              window.screenWidth / 2 - (menuButtonInfo[0]?.height || 32),
+          };
+        },
+      });
+    }
   });
 </script>
 <style lang="scss" scoped>
@@ -85,12 +89,12 @@
     //   width: 100vw;
     //   position: relative;
 
-      .text {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0px);
-        font-weight: 600;
-      }
+    .text {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0px);
+      font-weight: 600;
+    }
     // }
   }
 </style>

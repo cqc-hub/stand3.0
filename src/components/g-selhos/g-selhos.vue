@@ -35,7 +35,13 @@
 
 <script lang="ts" setup>
   import { computed, ref, onMounted } from 'vue';
-  import { GStores, ServerStaticData, IHosInfo, getLocation } from '@/utils';
+  import {
+    GStores,
+    ServerStaticData,
+    IHosInfo,
+    getLocation,
+    ISystemConfig,
+  } from '@/utils';
   import { useCacheStore } from '@/stores';
 
   const gStores = new GStores();
@@ -53,7 +59,14 @@
       autoGetData: true,
     }
   );
+  const orderConfig = ref({} as ISystemConfig['order']);
+
   const emits = defineEmits(['update:hosId', 'get-list', 'change']);
+  const isGetLocation = computed(() => {
+    return (
+      !props.unNeedPosition && orderConfig.value.getHosListWithLocation === '1'
+    );
+  });
 
   const getHosName = computed(() => {
     if (hosList.value.length) {
@@ -93,11 +106,14 @@
   };
 
   const getHosList = async () => {
-    const location: any = props.unNeedPosition
-      ? {}
-      : await getLocation().catch((err) => {
-          console.error(err);
-        });
+    let location: any = {};
+
+    if (isGetLocation.value) {
+      location = await getLocation().catch((err) => {
+        console.error(err);
+        return {};
+      });
+    }
 
     let list = await ServerStaticData.getHosList(
       {
@@ -143,7 +159,9 @@
     await getHosList();
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
+
     if (props.autoGetData) {
       init();
     }

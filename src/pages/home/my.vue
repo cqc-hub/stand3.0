@@ -198,12 +198,12 @@
       viewerStore.init();
     }
     uni.hideLoading();
-    // #ifdef MP-WEIXIN
-    wx.showShareMenu({
-      // 要求小程序返回分享目标信息
-      withShareTicket: true,
-    });
-    // #endif
+    if (gStores.globalStore.ev === 'wx') {
+      wx.showShareMenu({
+        // 要求小程序返回分享目标信息
+        withShareTicket: true,
+      });
+    }
 
     uni.setNavigationBarTitle({
       title: getLangLabel('home-tabbar:我的'),
@@ -221,15 +221,16 @@
       }
     }
   });
-  // #ifdef MP-WEIXIN
-  //分享到朋友圈
-  onShareTimeline(() => {
-    return {
-      title: global.systemInfo.name,
-      query: '',
-    };
-  });
-  // #endif
+
+  if (gStores.globalStore.ev === 'wx') {
+    //分享到朋友圈
+    onShareTimeline(() => {
+      return {
+        title: global.systemInfo.name,
+        query: '',
+      };
+    });
+  }
   onMounted(() => {
     routeStore.receiveQuery(props);
     if (props.setOutLogin === '1') {
@@ -243,20 +244,21 @@
     } else if (props._isOutLogin) {
       messageStore.showMessage('登录过期,请重新登录', 1000);
     }
-    // #ifdef MP-WEIXIN
-    if (
-      ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
-        gStores.globalStore.sysCode
-      )
-    ) {
-      if (!gStores.globalStore.isLogin) {
-        viewerStore.clearMyMenuCellMessage();
-        return;
-      } else {
-        viewerStore.getMyOralCellMessage();
+
+    if (gStores.globalStore.ev === 'wx') {
+      if (
+        ['1001063', '1001066', '1001078', '1001076', '1001071'].includes(
+          gStores.globalStore.sysCode
+        )
+      ) {
+        if (!gStores.globalStore.isLogin) {
+          viewerStore.clearMyMenuCellMessage();
+          return;
+        } else {
+          viewerStore.getMyOralCellMessage();
+        }
       }
     }
-    // #endif
   });
 
   const openModeOld = () => {

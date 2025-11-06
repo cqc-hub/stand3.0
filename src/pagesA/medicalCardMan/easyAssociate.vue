@@ -33,7 +33,7 @@
       };
 
       getH5OpenidParam(requestArg);
-  uni.showLoading({});
+  uni.showLoading({ title: '加载中'});;
       await api
         .quickLinkHealthCard(requestArg)
         .then(() => {

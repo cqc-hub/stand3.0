@@ -134,7 +134,7 @@
     return url;
   };
   const payAfter = async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(6000);
     uni.hideLoading();
     uni.reLaunch({
@@ -148,7 +148,7 @@
   };
 
   onLoad(async (opt) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     resultConfig.value = cacheStore.cacheData2;
 
     if (opt) {

@@ -270,7 +270,7 @@
   };
 
   const handlerYunPayAfter = async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(1500);
     uni.hideLoading();
     gStores.messageStore.showMessage('缴费成功', 0, {
@@ -534,7 +534,7 @@
   };
 
   const payAfter = async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(1000);
     uni.hideLoading();
     const { mzParams, deParams } = pageProps.value;
@@ -575,7 +575,7 @@
   };
 
   onLoad(async (opt) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     if (!(opt && Object.keys(opt).length)) {
       return;
     }

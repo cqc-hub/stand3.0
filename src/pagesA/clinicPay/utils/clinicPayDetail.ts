@@ -345,61 +345,62 @@ export const getMedicalAuthCode = async (opt?: {
     sConfig: { medicalMHelp },
   } = globalGl;
   const { alipay, wx: _wx } = medicalMHelp!;
+  const { ev } = gStores.globalStore;
 
-  // #ifdef MP-WEIXIN
-  const qrCode =
-    gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
+  if (ev === 'wx') {
+    const qrCode =
+      gStores.globalStore.appShowData.referrerInfo?.extraData?.authCode || '';
 
-  if (!qrCode) {
-    const w = _wx!;
-    const { medicalNation } = w;
-    let { appId, path, pathExtraData } = medicalNation!;
-    if (pathExtraData) {
-      path = joinQuery(path, pathExtraData);
-    }
+    if (!qrCode) {
+      const w = _wx!;
+      const { medicalNation } = w;
+      let { appId, path, pathExtraData } = medicalNation!;
+      if (pathExtraData) {
+        path = joinQuery(path, pathExtraData);
+      }
 
-    setLocalStorage({
-      'get-wx-medical-auth-code': '1',
-    });
-
-    await new Promise((success, j) => {
-      let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
-      uni.navigateToMiniProgram({
-        appId,
-        // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
-        path: joinQuery(path, cacheStore.medicalPathArg),
-        envVersion,
-        fail({ errMsg }) {
-          if (errMsg.includes('fail cancel')) {
-            setLocalStorage({
-              'get-wx-medical-auth-code': '',
-            });
-
-            gStores.messageStore.showMessage(
-              '未完成电子医保凭证授权,无法继续医保结算'
-            );
-          }
-          j('取消请求授权...');
-        },
-        success,
+      setLocalStorage({
+        'get-wx-medical-auth-code': '1',
       });
+
+      await new Promise((success, j) => {
+        let envVersion: any = globalGl.env === 'prod' ? 'release' : 'trial';
+        uni.navigateToMiniProgram({
+          appId,
+          // path: path + `&familyId=${wMd5.hex_md5_32('王童蛟0738'.toUpperCase())}`,
+          path: joinQuery(path, cacheStore.medicalPathArg),
+          envVersion,
+          fail({ errMsg }) {
+            if (errMsg.includes('fail cancel')) {
+              setLocalStorage({
+                'get-wx-medical-auth-code': '',
+              });
+
+              gStores.messageStore.showMessage(
+                '未完成电子医保凭证授权,无法继续医保结算'
+              );
+            }
+            j('取消请求授权...');
+          },
+          success,
+        });
+      });
+
+      return Promise.reject('请求授权...');
+    } else {
+      fCode = qrCode;
+
+      gStores.globalStore.onAppShow({});
+    }
+  }
+
+  if (ev === 'alipay') {
+    const { authCode } = await apiAsync(my.getAuthCode, {
+      scopes: ['nhsamp', 'auth_user'],
     });
 
-    return Promise.reject('请求授权...');
-  } else {
-    fCode = qrCode;
-
-    gStores.globalStore.onAppShow({});
+    fCode = authCode;
   }
-  // #endif
-
-  // #ifdef MP-ALIPAY
-  const { authCode } = await apiAsync(my.getAuthCode, {
-    scopes: ['nhsamp', 'auth_user'],
-  });
-
-  fCode = authCode;
-  // #endif
 
   return fCode;
 };
@@ -1601,14 +1602,15 @@ export const usePayPage = () => {
     if (isMedicalMode) {
       if (hasMedicalItem || isDefaultMedical()) {
         if (isMedicalSelf) {
-          // #ifdef MP-ALIPAY
-          payTypeList.push(PayType.Medicare);
-          // #endif
-          // #ifdef MP-WEIXIN
-          if (!isMedicalPlugin || !isBizTypeMedical) {
+          if (gStores.globalStore.ev === 'alipay') {
             payTypeList.push(PayType.Medicare);
           }
-          // #endif
+
+          if (gStores.globalStore.ev === 'wx') {
+            if (!isMedicalPlugin || !isBizTypeMedical) {
+              payTypeList.push(PayType.Medicare);
+            }
+          }
         }
         if (isBizTypeMedical) {
           payTypeList.push(PayType.BizType);
@@ -1718,25 +1720,24 @@ export const usePayPage = () => {
       labelPay: '自费支付',
       medicalPay: '医保支付',
     };
+    if (gStores.globalStore.ev === 'wx') {
+      payMethodConfig.medicalPay = '微信医保支付';
+      if (wx) {
+        const { medicalNation, medicalPlugin } = wx!;
 
-    // #ifdef MP-WEIXIN
-    payMethodConfig.medicalPay = '微信医保支付';
-    if (wx) {
-      const { medicalNation, medicalPlugin } = wx!;
+        if (medicalPlugin === '1') {
+          payMethodConfig.medicalPay = '支付宝医保支付';
+        }
+      }
+      payMethodConfig.labelPay = '微信自费支付';
+    }
 
-      if (medicalPlugin === '1') {
-        payMethodConfig.medicalPay = '支付宝医保支付';
+    if (gStores.globalStore.ev === 'alipay') {
+      payMethodConfig.labelPay = '支付宝自费支付';
+      if (getIsFamilyPayment()) {
+        payMethodConfig.medicalPay = '支付宝医保支付(支持亲情付)';
       }
     }
-    payMethodConfig.labelPay = '微信自费支付';
-    // #endif
-
-    // #ifdef MP-ALIPAY
-    payMethodConfig.labelPay = '支付宝自费支付';
-    if (getIsFamilyPayment()) {
-      payMethodConfig.medicalPay = '支付宝医保支付(支持亲情付)';
-    }
-    // #endif
 
     return payMethodConfig;
   };
@@ -2284,7 +2285,7 @@ export const usePayPage = () => {
   };
 
   const payAfter = async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中' });
     await wait(1000);
     uni.hideLoading();
 
@@ -2393,7 +2394,7 @@ export const usePayPage = () => {
            */
           aliPayDone: (status: string, ampTraceId: string) => {
             // do something
-            uni.showLoading({});
+            uni.showLoading({ title: '加载中' });
             setTimeout(() => {
               uni.hideLoading();
               uni.reLaunch({
@@ -2431,7 +2432,7 @@ export const usePayPage = () => {
             });
 
             if (finalStatus === 'SUCCESS') {
-              uni.showLoading({});
+              uni.showLoading({ title: '加载中' });
               setTimeout(() => {
                 uni.hideLoading();
                 uni.reLaunch({

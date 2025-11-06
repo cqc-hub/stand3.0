@@ -1016,7 +1016,7 @@
   });
 
   onLoad(async (p) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     console.log(props.value);
     isOver.value = true;

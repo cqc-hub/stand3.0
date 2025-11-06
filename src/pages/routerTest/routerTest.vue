@@ -17,18 +17,18 @@
         待完成
       </view>
     </view>
-
+    <g-message />
     <g-pay ref="refPay"></g-pay>
     <view class="g-footer">
-      <view @click="testClick" class="btn1">
-        <view @click.stop="test233">233</view>
-      </view>
+      <!-- <view @click="testClick" class="btn1"> -->
+      <button @click="test233">testbtn233</button>
+      <!-- </view> -->
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import { wait } from '@/utils';
+  import { GStores, wait } from '@/utils';
   import { onLoad } from '@dcloudio/uni-app';
   import { ref } from 'vue';
 
@@ -41,9 +41,16 @@
     }
   );
   const refPay = ref<any>('');
+  const gStores = new GStores();
+  uni.$emit('hahah');
 
   onLoad(async () => {
-    // await wait(1500);
+    await wait(1500);
+    console.log('23332');
+    uni.setNavigationBarTitle({
+      title: '初学者1',
+    });
+    // gStores.messageStore.showMessage('test', 0);
     // refPay.value.show();
   });
 
@@ -52,14 +59,55 @@
   };
 
   const test233 = async (e) => {
-    console.log('test233');
-    e.stopPropagation();
-    e.preventDefault();
-    return false
+    // uni.showToast({
+    //   title: 'hahha',
+    //   duration: 2000,
+    // });
+
+    // uni.showModal({
+    //   title: '', // 必须添加，空字符串也生效
+    //   content: '冲冲冲咯出来',
+    // });
+
+    const { confirm, maskClose } = await new Promise<any>((closeCallBack) => {
+      gStores.messageStore.showMessage('content', 0, {
+        useDialog: true,
+        dialogOpt: {
+          isShowCancel: true,
+          title: 'title',
+          cancelColor: '#333',
+          cancelText: '自费扫码',
+          confirmColor: '#333',
+          confirmText: '医保扫码',
+        },
+        closeCallBack,
+      });
+    });
+
+    uni.showLoading({
+      title: '加载中',
+    });
+    await wait(1000);
+    uni.showLoading({
+      title: '加载中2',
+    });
+
+
+    await wait(1000);
+
+    uni.showLoading({
+      title: '加载中3',
+    });
+    await wait(2000);
+
+    uni.hideLoading();
   };
 </script>
 
 <style lang="scss" scoped>
+  .g-page {
+    background-color: red;
+  }
   .container-circle {
     $circleOutSize: 120rpx;
     $circleInSize: $circleOutSize * 0.7;

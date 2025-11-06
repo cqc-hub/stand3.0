@@ -586,8 +586,23 @@
     _type: 'useTBanner',
   } as TButtonConfig;
 
+  const 住院满意度问卷 = {
+    _type: 'useTBanner',
+    type: 'h5',
+    isSelfH5: '1',
+    path: 'pagesC/question/question1001063',
+    text: '地址随便填的',
+    extraData: {
+      category: '50',
+    },
+    addition: {
+      herenId: 'herenId',
+    },
+    isLocal: '1',
+  } as TButtonConfig;
+
   const init = async () => {
-    useTBanner(住院点餐);
+    useTBanner(住院满意度问卷);
     // useTBanner(用药查询);
   };
 </script>

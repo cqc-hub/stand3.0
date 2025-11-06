@@ -28,7 +28,7 @@
   );
 
   onLoad(async (opt) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     await wait(500);
     uni.hideLoading();
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));

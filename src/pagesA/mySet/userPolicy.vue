@@ -41,7 +41,7 @@
   );
 
   onLoad(async (opt) => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
     pageProps.value = deQueryForUrl(deQueryForUrl(opt));
   });
 </script>

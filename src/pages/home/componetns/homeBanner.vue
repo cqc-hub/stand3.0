@@ -5,9 +5,7 @@
       <view
         class="uni-margin-wrap"
         :style="{
-          height: `${
-            $global.sConfig?.homeTopBanner?.bannerHeight || 160
-          }rpx`,
+          height: `${$global.sConfig?.homeTopBanner?.bannerHeight || 160}rpx`,
         }"
         v-if="
           props.leftFunctionList.length > 0 && props.functionList.length == 0
@@ -155,9 +153,11 @@
     openServicesChat,
     isSubscribeWx,
   } from '@/common/checkJump';
+  import { GStores } from '@/utils';
 
   // 2/3
   // const type = ref(2);
+  const gStores = new GStores();
 
   const emits = defineEmits(['open-share']);
   const props = withDefaults(
@@ -188,15 +188,14 @@
   //跳转对应地址
   const gotoPath = async (item) => {
     // 新增功能页面弹出关注弹窗 attention 为1  和showCareModel不可同时配置
-    // #ifdef MP-WEIXIN
     if (
+      gStores.globalStore.ev === 'wx' &&
       item.query &&
       JSON.parse(item.query).attention == '1' &&
       !(await isSubscribeWx())
     ) {
       emits('open-share', item, 'attention');
     } else {
-      // #endif
       if (item.path && item.path == 'showCareModel') {
         //关注组件拦截跳转 弹框
         emits('open-share', item.query && JSON.parse(item.query));
@@ -205,9 +204,7 @@
       } else {
         useCommonTo(item);
       }
-      // #ifdef MP-WEIXIN
     }
-    // #endif
   };
 </script>
 

@@ -70,17 +70,12 @@
             <view class="grid-label text-ellipsis">
               {{ getShowTitle(item, type) }}
             </view>
-            <!-- <text
-              v-if="type == 1 && item.detail"
-              class="grid-title  f22"
-            >
-              {{ item.detail }}
-            </text> -->
-            <rich-text
-              v-if="type == 1 && getSubtitle(item)"
-              class="grid-title f22"
-              :nodes="$HTMLParser(getSubtitle(item).replaceAll('  ', '<br/>'))"
-            ></rich-text>
+
+            <view v-if="type === 1" class="grid-title f22">
+              <view v-for="(sitem, i) in getSubTitleType1(item)" :key="i">
+                {{ sitem }}
+              </view>
+            </view>
           </view>
           <view
             class="grid-item-box3 g-fade-in"
@@ -217,6 +212,12 @@
     const routerStore = useRouterStore();
     routerStore.update_P();
     routerStore.updateId(item.id);
+  };
+
+  const getSubTitleType1 = (item) => {
+    const title = getSubtitle(item) || '';
+
+    return title.split(' ').filter((o) => o);
   };
 
   onMounted(async () => {

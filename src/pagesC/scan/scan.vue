@@ -229,7 +229,7 @@
   });
 
   onMounted(async () => {
-    uni.showLoading({});
+    uni.showLoading({ title: '加载中'});;
 
     if (!isContinue) {
       return;

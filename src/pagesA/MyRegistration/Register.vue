@@ -496,9 +496,8 @@
     }
     if (getTypeNow.value === '病案复印') {
       isMedCopy.value = true;
-      medCopyConfigList.value = await ServerStaticData.getSystemConfig(
-        'medRecord'
-      );
+      medCopyConfigList.value =
+        await ServerStaticData.getSystemConfig('medRecord');
     }
 
     if (isRequestApi) {
@@ -602,36 +601,41 @@
 
   const init = async () => {
     let isAuth = false;
+    const { getHosListWithLocation } = orderConfig.value;
+    const { ev } = gStores.globalStore;
 
-    // #ifndef H5
-    await new Promise((resolve) =>
-      uni.getLocation({
-        complete: resolve,
-        success() {
-          isAuth = true;
-        },
-      })
-    );
-    // #endif
+    if (getHosListWithLocation === '1') {
+      if (ev === 'web') {
+        await new Promise((resolve) =>
+          uni.getLocation({
+            complete: resolve,
+            success() {
+              isAuth = true;
+            },
+          })
+        );
+      }
 
-    // #ifdef  MP-WEIXIN
-    await new Promise((resolve, reject) => {
-      uni.getSetting({
-        async success({ authSetting }) {
-          const qx = authSetting['scope.userLocation'];
-          if (!qx) {
-            setTimeout(() => {
-              isWxRequestQxDialogShow.value = true;
-            }, 500);
-            reject('未授权 Location');
-          } else {
-            resolve(void 0);
-          }
-        },
-      });
-    });
-    // #endif
-    getList(isAuth);
+      if (ev === 'wx') {
+        await new Promise((resolve, reject) => {
+          uni.getSetting({
+            async success({ authSetting }) {
+              const qx = authSetting['scope.userLocation'];
+              if (!qx) {
+                setTimeout(() => {
+                  isWxRequestQxDialogShow.value = true;
+                }, 500);
+                reject('未授权 Location');
+              } else {
+                resolve(void 0);
+              }
+            },
+          });
+        });
+      }
+    }
+
+    getList(isAuth && getHosListWithLocation === '1');
   };
 
   const getAreaList = async () => {
@@ -648,6 +652,7 @@
     props.value = deQueryForUrl(deQueryForUrl(opt));
     console.log('---页面参数', props.value);
     const { _type, isHos, _url = '' } = props.value;
+    orderConfig.value = await ServerStaticData.getSystemConfig('order');
 
     if (isHos === '1') {
       uni.setNavigationBarTitle({
@@ -659,14 +664,9 @@
       });
     }
 
-    if (getTypeNow.value === '预约挂号') {
-      orderConfig.value = await ServerStaticData.getSystemConfig('order');
-    }
-
     if (_type === '2' || _url.includes('/pagesC/selfService/nucleicBilling')) {
-      selfBillingConfig.value = await ServerStaticData.getSystemConfig(
-        'selfBilling'
-      );
+      selfBillingConfig.value =
+        await ServerStaticData.getSystemConfig('selfBilling');
     }
     if (_type === '4') {
       uni.setNavigationBarTitle({
