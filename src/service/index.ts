@@ -6,7 +6,6 @@ import {
   getSysCode,
   getToken,
   showLoading,
-  hideLoading,
   getLocalStorage,
   setLocalStorage,
   deepClone,
@@ -110,10 +109,6 @@ Request.interceptors.response(
     const messageStore = useMessageStore();
     const { hideLoading: iHideLoading } = responseOptions || {};
 
-    if (!iHideLoading) {
-      hideLoading();
-    }
-
     const {
       code,
       message,
@@ -192,7 +187,6 @@ Request.interceptors.response(
       err.data.message || err.data.error || '网络连接异常，请尝试切换网络或开启飞行模式再恢复后重试！',
       3000
     );
-    uni.hideLoading();
 
     return err.data;
   }

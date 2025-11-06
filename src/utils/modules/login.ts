@@ -149,10 +149,10 @@ export class GStores {
     }
 
     let isSuccess = true;
-    const oldData = this.globalStore.flagCaches[typeFlag];
-    if (oldData) {
-      return oldData;
-    }
+    // const oldData = this.globalStore.flagCaches[typeFlag];
+    // if (oldData) {
+    //   return oldData;
+    // }
 
     let { result } = await api
       .getSysAppMore({
