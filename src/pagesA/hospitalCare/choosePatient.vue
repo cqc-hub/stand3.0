@@ -111,6 +111,7 @@
 
   const inputChange = () => {
     hosInfoParam.value.patientId = '';
+    hosInfoParam.value.cardNumber = '';
   };
   const checkPatientPhone = (val) => {
     phoneStatus.value = /^1[3-9]\d{9}$/.test(val);
@@ -133,6 +134,7 @@
     phoneStatus.value = /^1[3-9]\d{9}$/.test(message);
     hosInfoParam.value.patientPhone = message;
     hosInfoParam.value.patientId = item.patientId;
+    hosInfoParam.value.cardNumber = item.cardNumber;
   };
   const init = async () => {
     const { result } = await api.getInHospitalInfo<getInHospitalInfoResult>({
@@ -148,9 +150,11 @@
     const type = pageProps.value.type;
     if (type) {
       if (type === '1') {
+        const { patientName, patientPhone, cardNumber } = hosInfoParam.value;
         const extraData = {
-          patientName: hosInfoParam.value.patientName,
-          patientPhone: hosInfoParam.value.patientPhone,
+          patientName,
+          patientPhone,
+          cardNumber,
         };
 
         /** 手术查询 */
