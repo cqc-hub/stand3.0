@@ -160,7 +160,7 @@
               </g-login>
 
               <view class="top-menu">
-                <view class="box">
+                <view v-if="viewerStore.homeTopMenuList.length" class="box">
                   <homeGrid
                     :list="viewerStore.homeTopMenuList"
                     :type="1"
