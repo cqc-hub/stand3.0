@@ -470,7 +470,6 @@
       if (page === 1) {
         willChangeList.length = 0;
       }
-      console.log('willChangeList', willChangeList);
       if (result && result.length) {
         if (willChangeList.length) {
           result.map((o) => {

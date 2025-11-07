@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf64e84cf578fe0a7",
+    "appid": "wxacb96ee66c3dee84",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,7 +66,12 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {},
+    "plugins": {
+      "SIPlugin": {
+        "version": "0.3.6",
+        "provider": "wx069ba97219f66d99"
+      }
+    },
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -74,18 +79,9 @@
   "mp-alipay": {
     "component2": true,
     "usingComponents": true,
-    "plugins": {
-      "ocrPlugin": {
-        "version": "*",
-        "provider": "2021001130678316"
-      },
-      "auth-pay-plugin": {
-        "version": "*",
-        "provider": "2021003147699046"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
-    "appid": "2021002182620396",
+    "appid": "2021003104670597",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -101,7 +97,9 @@
     }
   },
   "mp-harmony": {
-    "distribute": {}
+    "distribute": {
+      "bundleName": "com.atomicservice.6917564602329951506"
+    }
   },
   "mp-baidu": {
     "usingComponents": true
@@ -113,7 +111,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "嘉兴市第二医院",
+  "name": "江苏省中医院",
   "h5": {
     "optimization": {
       "treeShaking": {

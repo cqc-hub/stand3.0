@@ -511,8 +511,28 @@
     });
   };
 
-  const dealWith1001038 = () => {
-    //嘉二，不考虑是否已经选择
+  const dealWith1001035 = () => {
+    //省中默认选择与第一条数据符合多选的数据
+    if (
+      globalGl.SYS_CODE === '1001035' &&
+      tabField.value[tabCurrent.value]?.key == '0' &&
+      waitSelList.value.length
+    ) {
+      const firstItem = waitSelList.value[0];
+      selPayListItem(firstItem);
+      const otherItems = waitSelList.value.slice(1);
+      if (otherItems.length) {
+        otherItems.forEach((item) => {
+          if (
+            item.hosId === firstItem.hosId &&
+            item.prescVisitType === firstItem.prescVisitType &&
+            item.deliveryType === firstItem.deliveryType
+          ) {
+            selPayListItem(item);
+          }
+        });
+      }
+    }
   };
 
   const dealWith1001067 = () => {
@@ -557,6 +577,7 @@
 
     await getListData(tabField.value[tabCurrent.value]?.key);
     dealWith1001067();
+    dealWith1001035();
   };
 
   const wayClick = (item: IOptions) => {
@@ -685,7 +706,7 @@
   onLoad(async (opt) => {
     const queryParams = gStores.globalStore.appLaunchData?.query?.qrCode;
 
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     if ((queryParams && !opt?.params) || opt?.q) {
       if (opt?.a === '1' || opt?.type === 'isYZ') {
         await wait(650);
@@ -721,7 +742,7 @@
       await pageHook();
     }
 
-   await init();
+    await init();
   });
 
   // onMounted(() => {

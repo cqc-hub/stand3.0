@@ -525,7 +525,7 @@
     const resType = (dayjs().format('YYYY-MM-DD') === schDate && '2') || '1';
     const [firstDept, secondDept] = deptStore.deptClickStep;
 
-    const requestArg = {
+    const requestArg: any = {
       freeSignData: '',
       firstDeptName: firstDept?.deptName,
       firstHosDeptId: firstDept?.deptId,
@@ -537,7 +537,6 @@
       categorName,
       clinicalType: clinicalType === 'null' ? '1' : clinicalType || '1',
       deptName,
-      disNo,
       docTitleName,
       docName,
       diseaseId,
@@ -558,6 +557,7 @@
       ageReminderCode: isOverLimit.value,
       quickAppoint: '',
     };
+    pageConfig.value?.isOrderBlur === '1' && (requestArg.disNo = disNo);
 
     if (quickPat.value.patientName) {
       const { patientId: _patientId } =
@@ -1016,7 +1016,7 @@
   });
 
   onLoad(async (p) => {
-    uni.showLoading({ title: '加载中'});;
+    uni.showLoading({ title: '加载中' });
     props.value = deQueryForUrl<IPageProps>(deQueryForUrl(p));
     console.log(props.value);
     isOver.value = true;
