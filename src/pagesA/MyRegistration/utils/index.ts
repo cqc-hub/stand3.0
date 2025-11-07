@@ -723,47 +723,6 @@ export const useOrder = (props: Ref<IOrderProps>) => {
   const showWaitRegDialog = async (data: { scheme }) => {
     waitRegClickData.value = data;
     waitRegDialog.value.show();
-
-    // const config = await ServerStaticData.getSystemConfig('order');
-    // const { patientId } = gStores.userStore.patChoose;
-    // const {
-    //   ampm,
-    //   categor,
-    //   clinicalType,
-    //   hosDocId,
-    //   docName,
-    //   hosId,
-    //   schDate,
-    //   schId,
-    //   addedNum,
-    //   hosDeptId,
-    // } = data.scheme;
-    // const query = {
-    //   ampm,
-    //   categor,
-    //   clinicalType,
-    //   hosDocId,
-    //   docName,
-    //   hosId,
-    //   schDate,
-    //   schId,
-    //   addedNum: undefined,
-    //   patientId,
-    //   hosDeptId,
-    // };
-
-    // config.isOpenAddedNum === '1' && (query.addedNum = addedNum);
-
-    // const { result } = await api.canRegAlternate(query);
-    // if (result) {
-    //   waitRegClickData.value = data;
-    //   waitRegDialog.value.show();
-    // } else {
-    //   gStores.messageStore.showMessage(
-    //     '当前时段候补人数已达上限，暂不支持候补!',
-    //     3000
-    //   );
-    // }
   };
 
   return {
