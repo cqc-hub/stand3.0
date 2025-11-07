@@ -302,6 +302,7 @@
     pageConfig,
     getSysConfig,
     regDialogConfirm,
+    // 立即支付
     handlerPay,
     confirmFgTitle,
     getPay,
