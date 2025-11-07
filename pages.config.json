@@ -973,6 +973,9 @@
       "pages": [
         {
           "path": "index"
+        },
+        {
+          "path": "index1"
         }
       ],
       "pagesE-plugins": "",

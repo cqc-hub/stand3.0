@@ -1,6 +1,9 @@
 <template>
   <view class="doc-info">
-    <view class="doc-info-container" :class="!isAllDate&&isPliticalDoc ? 'mb48' : ''">
+    <view
+      class="doc-info-container"
+      :class="!isAllDate && isPliticalDoc ? 'mb48' : ''"
+    >
       <!-- <g-login @handler-next="avatarClick"> -->
       <img
         :src="
@@ -93,6 +96,23 @@
           </text>
         </view>
 
+        <view
+          v-if="item.multiplePracticeLocation"
+          class="color-444 ellipsis-line-clamp2 g-break-word"
+        >
+          <text
+            v-for="(place, pi) in getDicMultiplePracticeLocation(item)"
+            :class="{
+              'g-split-line':
+                pi !== getDicMultiplePracticeLocation(item).length - 1,
+            }"
+            :key="place"
+            class="color-444 mr12 pr12 g-break-world"
+          >
+            {{ place }}
+          </text>
+        </view>
+
         <!-- <view
           v-if="item.visitingArea"
           :class="{
@@ -172,6 +192,15 @@
     const { docJobName, docTitleName } = props.item;
 
     return [docJobName, docTitleName].filter((o) => o);
+  };
+
+  const getDicMultiplePracticeLocation = (item) => {
+    const { multiplePracticeLocation } = item;
+    if (multiplePracticeLocation) {
+      return multiplePracticeLocation.split(',');
+    }
+
+    return [];
   };
 </script>
 

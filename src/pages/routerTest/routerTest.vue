@@ -59,22 +59,14 @@
   };
 
   const test233 = async (e) => {
-    // uni.showToast({
-    //   title: 'hahha',
-    //   duration: 2000,
-    // });
-
-    // uni.showModal({
-    //   title: '', // 必须添加，空字符串也生效
-    //   content: '冲冲冲咯出来',
-    // });
+    const { title, content } = await gStores.getSysAppMore('4');
 
     const { confirm, maskClose } = await new Promise<any>((closeCallBack) => {
-      gStores.messageStore.showMessage('content', 0, {
+      gStores.messageStore.showMessage(content, 0, {
         useDialog: true,
         dialogOpt: {
           isShowCancel: true,
-          title: 'title',
+          title: title,
           cancelColor: '#333',
           cancelText: '自费扫码',
           confirmColor: '#333',
@@ -84,23 +76,9 @@
       });
     });
 
-    uni.showLoading({
-      title: '加载中',
+    uni.navigateTo({
+      url: '/cacheUtil/index1',
     });
-    await wait(1000);
-    uni.showLoading({
-      title: '加载中2',
-    });
-
-
-    await wait(1000);
-
-    uni.showLoading({
-      title: '加载中3',
-    });
-    await wait(2000);
-
-    uni.hideLoading();
   };
 </script>
 

@@ -71,7 +71,7 @@ class requestClass {
   }
 
   request<T = any>(
-    options: UniApp.RequestOptions & { baseURL?: string }
+    options: UniApp.RequestOptions & { baseURL?: string; hideLoading?: boolean }
   ): Promise<IResData<T>> {
     options.baseURL = options.baseURL || this[config].baseURL;
     // options.dataType = options.dataType || this[config].dataType;
@@ -104,7 +104,14 @@ class requestClass {
       };
       uni.request({
         ...options,
-        url: `${options.baseURL}${options.url}`
+        url: `${options.baseURL}${options.url}`,
+        complete() {
+          const { hideLoading } = options;
+
+          if (hideLoading !== true) {
+            uni.hideLoading();
+          }
+        },
       });
     });
   }

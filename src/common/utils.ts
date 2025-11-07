@@ -17,11 +17,7 @@ export const showLoading = (tips: string = '加载中...') => {
     mask: true,
     // #endif
   });
-  uni.showNavigationBarLoading();
-};
-export const hideLoading = () => {
-  uni.hideLoading();
-  uni.hideNavigationBarLoading();
+  // uni.showNavigationBarLoading();
 };
 
 export function cloneUtil<T = any>(target: T): T {
