@@ -260,7 +260,8 @@ export interface ISystemConfig_ {
     isGuardianWithIdCard?: number;
     // 不需要地址
     isDropAddress?: '1';
-
+    // 不可删除本人
+    isNotDeleteSelf?: '1';
     defaultAddress?: { provinces?: string; citys?: string; areas?: string };
     // 所在地区排序
     sortProvinces?: string[];

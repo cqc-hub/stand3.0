@@ -471,6 +471,7 @@ export const patCardDetailFormKey = <const>{
   upName: 'upName',
   upIdCard: 'upIdCard',
   defaultFlag: 'defaultFlag',
+  relationship: 'relationship',
 };
 
 export type PatCardKeys = keyof typeof patCardDetailFormKey;
