@@ -20,7 +20,7 @@
       <image
         v-if="isPliticalDoc"
         class="CPC-icon"
-        :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+        :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
       ></image>
       <!-- </g-login> -->
 
@@ -227,10 +227,11 @@
         flex-shrink: 0;
       }
       .CPC-icon {
-        width: 96rpx;
+        width: 136rpx;
         height: 45rpx;
         position: absolute;
         top: 78rpx;
+         transform: translate(-20rpx, 0px);
       }
 
       .doc-info-introduce {

@@ -35,7 +35,7 @@
                   <image
                     v-if="isPliticalDoc"
                     class="CPC-icon"
-                    :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+                    :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
                   ></image>
 
                   <view class="flex-normal header-btn">
@@ -1163,11 +1163,11 @@
         background-color: #fff;
       }
       .CPC-icon {
-        width: 116rpx;
+        width: 156rpx;
         height: 50rpx;
         position: absolute;
         bottom: -35rpx;
-        margin:0 10rpx;
+        transform: translate(-10rpx, 0px);
       }
 
       .header-btn {

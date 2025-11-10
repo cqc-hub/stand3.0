@@ -393,7 +393,7 @@
       gStores.globalStore.isTcmStyle ? '-tcm' : ''
     }.png`;
 
-    let cpc_img = `${globalGl.BASE_IMG}CPC-icon.png`;
+    let cpc_img = `${globalGl.BASE_IMG}CPC-icon2.png`;
 
     // #ifdef MP-TOUTIAO
     avatar_img = `${globalGl.BASE_IMG}order-doctor-avatar.png`;
@@ -491,10 +491,10 @@
     if (_cpc_img) {
       ctx.drawImage(
         _cpc_img,
-        avatarBox.left - 28,
+        avatarBox.left - 40,
         avatarBox.top / 2 + 63,
-        painWidthAvatar - 15,
-        painHeightAvatar -46
+        painWidthAvatar + 10,
+        painHeightAvatar - 66
       );
     }
 

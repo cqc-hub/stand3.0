@@ -41,7 +41,7 @@
   },
   "quickapp": {},
   "mp-weixin": {
-    "appid": "wxf582e1fd4eb0142a",
+    "appid": "wxf64e84cf578fe0a7",
     "__usePrivacyCheck__": true,
     "setting": {
       "urlCheck": false,
@@ -66,16 +66,7 @@
       "chooseAddress"
     ],
     "usingComponents": true,
-    "plugins": {
-      "SIPlugin": {
-        "version": "0.3.6",
-        "provider": "wx069ba97219f66d99"
-      },
-      "crossProgramPlugins": {
-        "version": "latest",
-        "provider": "wx12cec70855c0cacf"
-      }
-    },
+    "plugins": {},
     "mergeVirtualHostAttributes": true,
     "lazyCodeLoading": "requiredComponents",
     "libVersion": "latest"
@@ -84,13 +75,17 @@
     "component2": true,
     "usingComponents": true,
     "plugins": {
+      "ocrPlugin": {
+        "version": "*",
+        "provider": "2021001130678316"
+      },
       "auth-pay-plugin": {
         "version": "*",
         "provider": "2021003147699046"
       }
     },
     "mergeVirtualHostAttributes": true,
-    "appid": "2021003173668243",
+    "appid": "2021002182620396",
     "window": {
       "navigationStyle": "custom",
       "defaultTitle": "",
@@ -118,7 +113,7 @@
     "enable": false
   },
   "vueVersion": "3",
-  "name": "乐清市人民医院",
+  "name": "嘉兴市第二医院",
   "h5": {
     "optimization": {
       "treeShaking": {

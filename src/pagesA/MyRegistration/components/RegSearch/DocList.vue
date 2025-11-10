@@ -21,7 +21,7 @@
           <image
             v-if="isPliticalDoc(item)"
             class="CPC-icon"
-            :src="globalGl.BASE_IMG + 'CPC-icon.png'"
+            :src="globalGl.BASE_IMG + 'CPC-icon2.png'"
           ></image>
 
           <view @click="avatarClick(item)" class="doc-info-introduce">
@@ -138,10 +138,11 @@
         margin-right: 24rpx;
       }
       .CPC-icon {
-        width: 96rpx;
+        width: 136rpx;
         height: 45rpx;
         position: absolute;
         bottom: -22rpx;
+        transform: translate(-20rpx, 0px);
       }
 
       .doc-info-introduce {
